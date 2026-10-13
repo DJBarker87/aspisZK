@@ -51,8 +51,11 @@ at least ceil(9558/4)=2390 second-fold fibres. Second-fold matching restores a
 degree-255 message matching the intermediate committed word on all four
 children of each such parent. Its intersection with the original matching
 set still contains those 9558 initial fibres, permitting the existing first
-fold's extraction route. This is the intended support argument; the new
-line-domain fold identities and binding theorem must be supplied.
+fold's extraction route. This support argument, the actual stored line-domain geometry, both
+restoration steps and the identification with a member of the literal joint
+list now compile through `TwoFoldExtraction.lean` and `ConcreteBinding.lean`.
+The matching equations are still field-level premises, not consequences of
+proved Rust/Fiat--Shamir correspondence.
 
 The initial 29-lane curve and first-fold caps remain in E. Their current
 counts are approximately 2^48.3 and 2^43.1, which would yield only about
@@ -60,10 +63,10 @@ counts are approximately 2^48.3 and 2^43.1, which would yield only about
 degree alone would ignore the correlated-agreement obligation.
 
 The intended largest per-query error remains the existing q22 expression
-(1+delta0)*choose(9557,22)/choose(262144,22), about 2^-105.136. Re-instancing
-the second fold, OOD list-to-unique step, semantic/opening glue and rho row is
-required before that expression applies to R1. The direct joint-list route
-below supersedes the proposed separate OOD uniqueness step. The final FS statement must
+(1+delta0)*choose(9557,22)/choose(262144,22), about 2^-105.136. The concrete second-fold extraction and direct joint-list binding now
+compile. The query sampler instantiation, semantic/opening glue and rho row
+are still required before that expression applies to R1. The direct
+joint-list route below supersedes the separate OOD uniqueness step. The final FS statement must
 retain Qtot and the hash/oracle collision term. It is not an absolute
 2^-100 bound for arbitrarily many oracle queries.
 
@@ -149,11 +152,14 @@ The generic direct-functional comparison now compiles in
 `lean/JointFunctionalBinding.lean`: it derives the discrepancy polynomials
 and all per-lane consequences, with the 16,800/600 bounds.
 `lean/TwoRoundPairing.lean` also derives both true round boundaries from
-the specified folds and performs the two comparisons. This is not yet a
-compiled R1 binding theorem: it still needs the exact second-fold
-code/commutation/restoration instance, identification with the concrete joint
-list and functionals, and the source/Fiat--Shamir re-instance. It avoids
-assuming a unique decoded message or charging a conjectural OOD error.
+the specified folds and performs the two comparisons. `lean/ConcreteBinding.lean` now combines the concrete stored-domain
+restoration/extraction, the literal joint list and its cap, both comparisons,
+and weights derived from the six linear functionals. It proves a deterministic
+field-level binding theorem with explicit matching-support, accepted-equation
+and bad-set-exclusion premises. Identifying the actual Rust functionals and
+verifier equations with this model, and composing semantic/query/Fiat--Shamir
+results, remain open. No uniqueness premise or conjectural OOD error is used.
+See `CONCRETE-BINDING.md` for the exact scope and NUC receipts.
 
 ## Two-transaction settlement architecture
 

@@ -1,4 +1,13 @@
-import Mathlib
+import Mathlib.Algebra.Field.Basic
+import Mathlib.Data.Fin.VecNotation
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Algebra.Field.ZMod
+import Mathlib.LinearAlgebra.Pi
+import Mathlib.Tactic.FinCases
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.NormNum.Prime
+import Mathlib.Tactic.Ring
+import Lean.Elab.Tactic.Omega
 
 /-!
 # v5 Component C: concrete fixed-challenge fold linearity

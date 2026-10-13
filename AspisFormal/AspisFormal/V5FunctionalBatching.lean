@@ -1,4 +1,6 @@
-import Mathlib
+import Mathlib.Algebra.Polynomial.Roots
+import Mathlib.Data.Fintype.Card
+import Mathlib.Tactic.NormNum
 import AspisFormal.SoundnessLedger
 
 /-!

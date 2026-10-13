@@ -1,4 +1,12 @@
-import Mathlib
+import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Positivity
+import Mathlib.Tactic.Ring
+import Lean.Elab.Tactic.Omega
 import AspisFormal.CircleFibreRoots
 import AspisFormal.CircleGroupOrder
 

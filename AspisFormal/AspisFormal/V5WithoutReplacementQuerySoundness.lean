@@ -1,4 +1,7 @@
-import Mathlib
+import Mathlib.Data.Fintype.CardEmbedding
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Positivity
 import AspisFormal.SoundnessLedger
 
 /-!

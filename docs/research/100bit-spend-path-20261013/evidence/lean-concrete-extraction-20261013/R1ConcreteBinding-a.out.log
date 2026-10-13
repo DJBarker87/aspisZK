@@ -1,0 +1,42 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ConcreteBinding.lean:129:13: error(lean.unknownIdentifier): Unknown constant `Finset.not_mem_union.mp`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ConcreteBinding.lean:128:52: error: unsolved goals
+K : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod P) K
+W : Fin 29 → InitialWord K
+V : FinalWord K
+F : Fin 6 → Functional K
+F0 : Functional K
+Y : Fin 6 → Fin 29 → K
+c0 gamma kappa alpha0 alpha1 : K
+p0 p1 : K[X]
+f : ConcreteProjection.SmallMessage K
+hgamma_ne : gamma ≠ 0
+hgamma : gamma ∉ gammaBad W F Y
+hkappa : kappa ∉ kappaBad W F F0 Y c0 gamma
+hfirst : alpha0 ∉ firstBad W gamma (FunctionalWeights.weights F F0 kappa) p0
+hsecond : alpha1 ∉ secondBad W V gamma alpha0 (FunctionalWeights.weights F F0 kappa) p1
+M : Finset (Fin 262144)
+hM : 9558 ≤ M.card
+hmatch0 : ∀ i ∈ M, FirstFold.foldWord alpha0 (TwoFoldExtraction.batchedWord W gamma) i = V i
+hmatch1 :
+  ∀ i ∈ M,
+    AspisV5FriDegreeThreeCorrelatedAgreement.curveValue (SecondFoldRestoration.channels V) alpha1 (parentIndex i) =
+      ConcreteProjection.secondEncoder f (parentIndex i)
+hfinal :
+  eval alpha1 p1 =
+    RoundPairing.dot f
+      (RoundPairing.dualFold alpha1 (RoundPairing.dualFold alpha0 (FunctionalWeights.weights F F0 kappa)))
+hboundary1 : TwoRoundComparison.boundary p1 = RoundPairing.quarter * eval alpha0 p0
+hboundary0 :
+  TwoRoundComparison.boundary p0 = RoundPairing.quarter * JointFunctionalBinding.claimedValue Y c0 gamma kappa
+⊢ ∃ t ∈ candidates W, (∀ (j : Fin 6) (l : Fin 29), (F j) (t l) = Y j l) ∧ F0 (exactInitialMessageCurve t gamma) = c0
+'AspisR1.ConcreteBinding.candidates_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ConcreteBinding.gammaBad_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ConcreteBinding.kappaBad_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ConcreteBinding.firstBad_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ConcreteBinding.secondBad_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ConcreteBinding.binding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

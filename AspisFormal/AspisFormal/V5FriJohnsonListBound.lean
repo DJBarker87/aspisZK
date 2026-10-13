@@ -1,4 +1,13 @@
-import Mathlib
+import Mathlib.Algebra.BigOperators.Group.Finset.Basic
+import Mathlib.Algebra.Order.Chebyshev
+import Mathlib.Data.Fintype.Card
+import Mathlib.Data.Finset.Card
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Positivity
+import Mathlib.Tactic.Ring
+import Lean.Elab.Tactic.Omega
 
 /-!
 # A direct Johnson list bound for the initial V5 FRI word

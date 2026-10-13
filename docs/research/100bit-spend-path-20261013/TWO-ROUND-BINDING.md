@@ -1,8 +1,9 @@
 # Two round-polynomial comparisons
 
-Root proof design, 2026-10-13. This records the finite bad-set route to be
-instantiated after the repeated-lift extraction. It is not a compiled R1
-binding or Fiat-Shamir theorem.
+Root proof design and checked algebraic composition, 2026-10-13.
+`ConcreteBinding.binding` now instantiates this route with the concrete
+extraction and literal committed-word list. Fiat--Shamir and source
+correspondence remain open.
 
 Fix the literal committed word tuple W. Its joint candidate list Lambda(W)
 is fixed before gamma and has at most 100 entries. For each candidate t,
@@ -38,9 +39,9 @@ message with the batch of a member of Lambda(W).
 
 The generic finite-family root bounds (100 times 6, and 600 times 28) are
 compiled in `lean/FunctionalBatch.lean`. The proposed fold-row caps are
-therefore 9396508281246 + 600 each, sampled in WideExact. The earlier first
-and second round source boundary identities, encoder/fold commutation,
-matching extraction, and full FS row instantiation remain to be connected.
+therefore 9396508281246 + 600 each, sampled in WideExact. The concrete encoder/fold restoration and matching extraction now compose
+with these comparison lemmas. Runtime source correspondence and the full FS
+row instantiation remain to be connected.
 No work or grinding factor is used in these caps.
 
 ## Focused formal progress
@@ -66,5 +67,9 @@ from a final vector extracted by two folds. Extraction itself remains a
 premise. `lean/JointFunctionalBinding.lean` proves the subsequent gamma/kappa
 comparison for six linear functionals on 29-entry tuples, including the
 actual discrepancy-polynomial construction, coefficient identities and
-16,800/600 bounds. The tuple family is an explicit input; identifying it
-with the concrete committed-word list is the remaining instantiation.
+16,800/600 bounds. `ConcreteBinding.lean` now supplies the literal list `Lambda W`, its proved
+100-entry cap, the candidate from `TwoFoldExtraction.lean`, and coefficient
+weights derived from six linear functionals and the inactive functional. The
+result recovers all six per-lane claims without a uniqueness premise.
+The actual Rust functional constructors and probabilistic/FS interfaces are
+still separate obligations; see `CONCRETE-BINDING.md`.

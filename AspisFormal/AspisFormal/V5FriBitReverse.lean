@@ -1,4 +1,7 @@
-import Mathlib
+import Mathlib.Data.Fin.Basic
+import Mathlib.Tactic.IntervalCases
+import Mathlib.Tactic.Ring
+import Lean.Elab.Tactic.Omega
 
 /-!
 # Fixed-width bit reversal used by the V5 circle and line domains

@@ -1,4 +1,7 @@
-import Mathlib
+import Mathlib.Combinatorics.Colex
+import Mathlib.LinearAlgebra.Matrix.Block
+import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
+import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 import AspisFormal.CircleNaturalBasisEval
 
 /-!

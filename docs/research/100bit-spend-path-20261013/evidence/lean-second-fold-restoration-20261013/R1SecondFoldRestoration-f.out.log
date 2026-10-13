@@ -1,0 +1,99 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SecondFoldRestoration.lean:37:0: warning: automatically included section variable(s) unused in theorem `AspisR1.SecondFoldRestoration.concreteGeometry`:
+  [Fintype K]
+  [DecidableEq K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [DecidableEq K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SecondFoldRestoration.lean:54:0: warning: automatically included section variable(s) unused in theorem `AspisR1.SecondFoldRestoration.x0_ne_zero`:
+  [Fintype K]
+  [DecidableEq K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [DecidableEq K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SecondFoldRestoration.lean:75:0: warning: automatically included section variable(s) unused in theorem `AspisR1.SecondFoldRestoration.x1_ne_zero`:
+  [Fintype K]
+  [DecidableEq K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [DecidableEq K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SecondFoldRestoration.lean:142:12: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SecondFoldRestoration.lean:144:4: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SecondFoldRestoration.lean:97:64: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SecondFoldRestoration.lean:180:55: error(lean.unknownIdentifier): Unknown identifier `x2_ne_zero`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SecondFoldRestoration.lean:205:0: warning: automatically included section variable(s) unused in theorem `AspisR1.SecondFoldRestoration.lane_join`:
+  [Fintype K]
+  [DecidableEq K]
+  [Algebra (ZMod P) K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [DecidableEq K] [Algebra (ZMod P) K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SecondFoldRestoration.lean:213:28: error: unsolved goals
+K : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod P) K
+alpha : K
+b : Fin 4 → SmallMessage K
+i : Fin 64
+⊢ b 0 i + alpha * b 1 ⟨(4 * ↑i + 1) / 4, ⋯⟩ + alpha ^ 2 * b 2 ⟨(4 * ↑i + 2) / 4, ⋯⟩ +
+      alpha ^ 3 * b 3 ⟨(4 * ↑i + 3) / 4, ⋯⟩ =
+    b 0 i + alpha * b 1 i + alpha ^ 2 * b 2 i + alpha ^ 3 * b 3 i
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SecondFoldRestoration.lean:312:10: error: Invalid rewrite argument: The pattern to be substituted is a metavariable (`?m.223`) in this equality
+  ?m.223 =
+    AspisV5ComponentCConcreteFoldLinearity.childIndex (AspisV5FriConcreteEncoderCommutation.parentIndex ?m.223)
+      (AspisV5FriConcreteEncoderCommutation.slotIndex ?m.223)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SecondFoldRestoration.lean:339:48: error: unsolved goals
+K : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod P) K
+V : FinalWord K
+S : Finset (Fin 65536)
+b : Fin 4 → SmallMessage K
+hchannels : ∀ i ∈ S, ∀ (s : Fin 4), channels V s i = ConcreteProjection.secondEncoder (b s) i
+k : Fin (4 * 65536)
+hk : k ∈ fullQuartetSet S
+hi : parentIndex k ∈ S
+i : Fin 65536 := AspisV5FriConcreteEncoderCommutation.parentIndex k
+s : Fin 4 := AspisV5FriConcreteEncoderCommutation.slotIndex k
+hchannels_i : ∀ (t : Fin 4), channels V t i = secondEncoderLinear (b t) i
+hvalue : (radix4Evaluate (x0 i) (x1 i) (x2 i) fun s => channels V s i) = fun t => V (childIndex i t)
+hslot : radix4Evaluate (x0 i) (x1 i) (x2 i) (fun s => channels V s i) s = V (childIndex i s)
+⊢ 4 * (↑k / 4) + ↑k % 4 = ↑k
+'AspisR1.SecondFoldRestoration.x0_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SecondFoldRestoration.x1_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SecondFoldRestoration.lean:357:14: error(lean.unknownIdentifier): Unknown constant `x2_ne_zero`
+'AspisR1.SecondFoldRestoration.inverse_products' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SecondFoldRestoration.channel_decode_evaluate' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.SecondFoldRestoration.channel_encode_decode' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.SecondFoldRestoration.lane_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SecondFoldRestoration.fold_join' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SecondFoldRestoration.secondFoldRestoration' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

@@ -1,4 +1,4 @@
-import Mathlib
+import Mathlib.Data.Real.Basic
 
 /-!
 # Knowledge-extractor interfaces for Pool V1

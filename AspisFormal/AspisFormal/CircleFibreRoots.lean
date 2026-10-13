@@ -1,4 +1,11 @@
-import Mathlib
+import Mathlib.Data.Int.ModEq
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Algebra.Field.ZMod
+import Mathlib.Tactic.LinearCombination
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.NormNum.Prime
+import Mathlib.Tactic.Ring
+import Lean.Elab.Tactic.Omega
 
 /-!
 # Kernel-checked circle fibre-root distinctness (Check 4)

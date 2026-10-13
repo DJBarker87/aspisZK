@@ -1,8 +1,9 @@
 # Reusing the existing decoder for the second fold
 
 Root design, 2026-10-13. This replaces the proposed new interpolation instance
-in `SecondFoldBudget.lean` on the preferred proof path. It does not yet claim a
-compiled R1 binding theorem.
+in `SecondFoldBudget.lean` on the preferred proof path. The concrete algebraic
+chain now compiles through `ConcreteBinding.binding`; this is not a
+probabilistic, source-correspondence, or Fiat--Shamir theorem.
 
 Let `E256` be the repository's exact final encoder: 256 natural coefficients,
 262144 distinct line nodes, and overlap at most 255 for unequal messages.
@@ -63,37 +64,32 @@ intermediate word on all four children of S, hence on M itself. The first
 fold's existing response extraction then applies on M, restoring the original
 word on at least `4*9558=38232` coordinates (the initial cutoff is 38230).
 
-Source/formal work still required:
+The concrete chain now compiles on the NUC:
 
-1. Prove the final-domain quartet identities for `storedFirstLineX18` and
-   identify the runtime's depth-two node with `T4(x)`.
-2. Instantiate the existing `naturalCoefficientPolynomial_eval_radix4`
-   identity, coefficient injection L, and averaging projection P.
-3. Prove the complete-quartet cardinality and descent lemmas, then wrap the
-   existing matched-response theorem. No new large certificate is needed.
-4. Connect the runtime channel recovery and fold to those encoders;
-   `lean/LineFold.lean` already proves the field recovery identities.
-5. Complete the two round-polynomial comparisons, direct joint-list binding,
-   and the new Fiat--Shamir schedule/source correspondence.
+1. `Line18Geometry.lean` proves the actual `storedFirstLineX18` quartet
+   geometry and its embedding in the challenge field.
+2. `ConcreteProjection.lean` connects natural evaluation to the existing
+   polynomial encoder, proves sparse-lift and mean identities, and uses the
+   existing overlap cap to prove descent.
+3. `SecondFoldMatched.lean` transfers the existing exact-final matched-response
+   theorem with its unchanged 9,396,508,281,246 cap.
+4. `SecondFoldRestoration.lean` derives all inverse-coordinate nonzero facts
+   from stored-domain injectivity and restores complete quartets.
+5. `TwoFoldExtraction.lean` combines both folds and the existing width-29
+   theorem to obtain a member of the literal list `Lambda W`.
+6. `ConcreteBinding.lean` uses that same candidate through both round
+   comparisons and the direct functional comparison.
 
-Relevant existing sources are `Wide/FinalEncoder.lean`,
-`Wide/MatchedInstances.lean`, `R0/ListsResponses.lean`, and
-`AspisFormal/V5FriConcreteEncoderApplicability.lean` (natural coefficient
-radix-four expansion). These are mathematical dependencies, not evidence that
-the final R1 theorem has already been compiled.
+The final extraction theorem assumes the two matching field equations on a
+support of size at least 9558 and exclusions from the three decoder bad sets.
+The binding theorem additionally assumes the accepted round-boundary and
+final-pairing field equations and the comparison bad-set exclusions. It does
+not assume encoder overlap, inverse correctness, a new decoder, candidate
+uniqueness, or that the extracted candidate belongs to an abstract supplied
+list: those algebraic facts are now derived from the existing concrete code.
 
-The abstract repeated-support cardinality and projection-descent steps now
-compile in `lean/RepeatedLift.lean` (five standard-axiom audits). Its mean
-identity and encoder overlap remain explicit hypotheses; the concrete E256
-instantiation listed above is still pending. The exhaustive source lift gate
-is recorded in `evidence/second-fold-lift-v2/`.
-
-`lean/NaturalProjection.lean` now proves sparse-lift injectivity and
-linearity, the natural-basis radix-four evaluator identity, and the complete
-quartet mean identity. `lean/ParentSupport.lean` proves that the flat union
-of complete quartets has cardinality four times its parent support, contains
-the original support, and sends 9558 original coordinates to at least 2390
-parents. Both compile with standard axioms. Concrete stored-domain geometry,
-the polynomial-evaluator bridge, encoder overlap instantiation and the
-matched-response wrapper remain to be connected; the generic proofs do not
-silently assume those steps are complete.
+The remaining connections are the Rust-to-field formulas (including the
+runtime depth-two node), authenticated commitment binding, the query and rho
+sampling rows, the actual functional constructors, semantic extraction, and
+the new Fiat--Shamir instantiation. See `CONCRETE-BINDING.md` for exact theorem
+scope, counts and receipts. No new large generated certificate was needed.

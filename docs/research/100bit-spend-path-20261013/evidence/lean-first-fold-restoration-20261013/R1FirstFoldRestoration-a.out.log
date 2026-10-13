@@ -1,0 +1,51 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FirstFoldRestoration.lean:26:32: error: Application type mismatch: The argument
+  k
+has type
+  Fin 1024
+but is expected to have type
+  Fin (4 * ?m.9 k)
+in the application
+  slotIndex k
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FirstFoldRestoration.lean:31:2: error: 'change' tactic failed, pattern
+  a (slotIndex (childIndex i s)) (parentIndex (childIndex i s)) = a s i
+is not definitionally equal to target
+  (coefficientLane 256 s) (join a) i = a s i
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FirstFoldRestoration.lean:38:6: error(lean.unknownIdentifier): Unknown identifier `exactFinalMessageCurve`
+
+Note: It is not possible to treat `exactFinalMessageCurve` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FirstFoldRestoration.lean:56:12: error(lean.unknownIdentifier): Unknown identifier `exactInitialEncoder`
+
+Note: It is not possible to treat `exactInitialEncoder` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FirstFoldRestoration.lean:68:34: error(lean.unknownIdentifier): Unknown identifier `exactInitialEncoder`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FirstFoldRestoration.lean:77:44: error(lean.unknownIdentifier): Unknown identifier `exactInitialEncoder`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FirstFoldRestoration.lean:83:31: error(lean.unknownIdentifier): Unknown identifier `exactInitialEncoder`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FirstFoldRestoration.lean:97:33: error(lean.unknownIdentifier): Unknown identifier `exactInitialEncoder`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FirstFoldRestoration.lean:99:8: error(lean.unknownIdentifier): Unknown identifier `exactInitialEncoder`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FirstFoldRestoration.lean:96:6: error: Tactic `rfl` failed: The left-hand side
+  R (childIndex (parentIndex k) s)
+is not definitionally equal to the right-hand side
+  FirstFold.fibre R (parentIndex (childIndex (parentIndex k) s)) s
+
+K : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod P) K
+R : InitialWord K
+a : Fin 4 → FinalMessage K
+M : Finset (Fin 262144)
+ha : M ⊆ jointAgreementSet exactFinalEncoder (FirstFold.channels R) a
+k : Fin (4 * 262144)
+hk : k ∈ fullQuartetSet M
+hi_mem : parentIndex k ∈ M
+hmatch : ∀ (t : Fin 4), FirstFold.channels R t (parentIndex k) = exactFinalEncoder (a t) (parentIndex k)
+hencoded : ∀ (t : Fin 4), FirstFold.channels sorry t (parentIndex k) = exactFinalEncoder (a t) (parentIndex k)
+hchannels : (fun t => FirstFold.channels R t (parentIndex k)) = fun t => FirstFold.channels sorry t (parentIndex k)
+hfibre : FirstFold.fibre R (parentIndex k) = FirstFold.fibre sorry (parentIndex k)
+s : Fin 4 := slotIndex k
+hindex : childIndex (parentIndex k) s = k
+⊢ R (childIndex (parentIndex k) s) = FirstFold.fibre R (parentIndex (childIndex (parentIndex k) s)) s
+'AspisR1.FirstFoldRestoration.coefficientLane_join' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FirstFoldRestoration.fold_join' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FirstFoldRestoration.restore' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
