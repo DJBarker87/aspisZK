@@ -3850,3 +3850,103 @@ below 1,076, report the per-round and per-limb deficit and the excess
 support — that is a finding, not an error. Same caps, receipts, manifest and
 evidence format as Z7; `FINDINGS-Z8.txt`. T2b-2b stays held until Z8 lands.
 Research under the current verdict (PLAN, 2026-10-11): v7 stands.
+
+### Lead acceptance of Z8 (2026-10-13); decision D20‴ — the batching gap closes numerically; the hold on T2b-2b lifts into a proof-design job
+
+Z8 (`c052a8f09` on `codex/z8-wide-batching-20261013`, cherry-picked; `z4/z8.rs`
+as a `probe.rs` module with a `--z8` dispatch, `run-z8.py`, `FINDINGS-Z8.txt`
+(lead copy `FINDINGS-Z8.md`), `summary-Z8.json`, `evidence-Z8.json`,
+`probe-Z8.log`, `z8-runs/`) is accepted. Reviewed: only `z4/` changed; no
+zero-batched-word proxy and no D-lift; silence is every non-semantic
+`linearPayload` coordinate — per lane the Z4c set, and across lanes the 264
+`WideExact` values `.inactiveSum` (1), `.openingCoeff` (7), `.finalCoeff`
+(256), eliminated over M31 as 2,112 limbs; the opening layer is the R0 Rust
+(`prover::quotient` column-wise, Lean's `totalWeights` from
+`chord::quotient_weights`, `prover::round_polynomial`, `fold::fold_message`)
+with a per-job check that the whole-column pipeline equals the sum of per-row
+vectors on all 264 coordinates; `ch.opening 0..3` uniform in `WideExact`;
+Z4c's 20 challenge lines and 25 terminal values replayed. Host receipts
+(nuc, 3G/4G/swap 0): full scope 1,301.6 s, peak child RSS 145,732 KiB,
+swaps 0; 207 source hashes match. One Rust/Lean mismatch was found and
+handled inside the probe: `OpeningData::weights` omits Lean's `κ⁴ • libraWeight`
+term; the probe adds it to match Lean. This is D14's fourth weight row, which
+the Rust reference prover does not implement because R-H is held (D16); no
+consequence under the current verdict, recorded for R-H.
+
+**Results (identical on all 5 vectors per structure).**
+
+| Structure | Silent | Initial retained | (i′) | (ii′) | Round-7 silent |
+|---|---:|---:|---:|---:|---:|
+| (A) α uniform | 1,076 | 1,080 | 25/25 | 25/25 | 112 |
+| (B) all α ∈ F | 1,038 | 1,042 | 0/25 | 25/25 | 93 |
+| (I) all α ∈ K₂ = F(i) | 1,068 | 1,072 | 0/25 | 25/25 | 108 |
+| (J) α₀ ∈ K₄ generic, α₁..α₆ ∈ F | 1,076 | 1,080 | 25/25 | 25/25 | 112 |
+
+Every other round is at its maximum (108 at rounds 0 and 9, 112 elsewhere)
+in all four structures. (B)'s supports and pivots are Z7's exactly; (I)'s
+Chain0 excess is 8 with pivots `(7, 24–27, {u, iu})`. In (ii′) the 2,112
+batched limbs of the witness difference were matched exactly for every pair.
+
+**D20‴.1 (what the numbers settle).** Under the proved protocol's
+`WideExact` batching and its actual silence coordinates, the silent image is
+the full `Chain0₄` (1,076) on generic challenges, and both clauses of
+`MaskImageOn` hold numerically on Z4c's honest targets. The modelling gap of
+D20′.2 is closed as a question of fact; what the Z4b/Z4c/Z5 gates certified
+with the QM31 proxy, Z8 certifies for the real payload on the same vectors.
+Rank is lost only when `Λ₇ = span_F{eqPrefix(α, ℓ)}` lies inside a proper
+subfield of `K₄` (`F` in (B), `K₂` in (I)); (J) shows that a two-dimensional
+`Λ₇ = span_F{1, α₀}` with `α₀ ∉ K₂` already suffices — the lane directions
+`τ_c · Λ₇` then rotate across all four limbs.
+
+**D20‴.2 (predicate).** `Good₂` as fixed in D20″.2 stands for the proof route
+(it gives `Λ₆ = Λ₇ = K₄`, so lane spans are `K₄`-spans and the round argument
+is `K₄`-linear), with one addition forced by `sRem`'s `K₄`-valuedness: all
+semantic challenges, not only α, must lie in `K₄` (`λ, χ, θ, zc, μ, η` enter
+the terminal), so
+
+```
+Good₂ ch := Good ch ∧ (∀ i : Fin 25, ch.sem i ∈ K₄) ∧
+            Submodule.span F {1, alpha ch 0, …, alpha ch 5} = K₄
+```
+
+(mass 0 for the second clause under the decoder; ≈ 2^-124 for the third).
+Recorded alternative, numerically sufficient by (J) and with a trivial density
+proof (`((1+δ_Q)/|F|²)^7 ≈ 2^-434`): `Good₂′ := Good ∧ (∀ i, ch.sem i ∈ K₄) ∧
+∃ i < 7, alpha ch i ∉ K₂`; it needs the direction-rotation argument instead
+of `K₄`-linearity and is kept as the fallback if the design below prefers it.
+
+**D20‴.3 (T2b-2b becomes a design job before a statement).** The hold is
+lifted, but `Chain0₄ ⊆ A(silentMasks)` is a global rank statement about the
+real silence kernel, and no Lean statement is fixed until its proof is
+designed. **T2b-2b-D (design; Claude agent on Fable; no Lean, no host):**
+write the complete mathematical argument for `Chain0₄ ch ⊆ (A h.transport B
+ch ∘ inlM)(silentMasks …)` on `Good₂` with every nondegeneracy condition on
+`ch.circle`/`ch.opening` made explicit, as a sequence of lemmas whose
+statements transcribe to Lean, each tagged *structural* (provable for all
+challenges, e.g. Vandermonde independence of evaluations at distinct points,
+the `K₄`-linear leading-degree argument of D20.1/D20″) or *conditional*
+(holds off an explicit bad set of challenges, with the set and its density
+named). Decomposition to validate or replace: **(P) PCS cancellation** — the
+264 batched coordinates and `D`'s own 112 observations are cancelled by `D`'s
+round-free coefficients 56–1023 (968 `K₄`-coordinates) together with `G`'s
+inactive-row sum (`D` alone reaches only the `K₄`-line `γ^28·K₄` of
+`.inactiveSum`); **(Q) round spanning** — the round images of the mask-only
+lanes' own-silence kernels (claims = MLE at the three α-points and the fourth
+row, OOD = natural-basis evaluation at the circle points under π, opened =
+codeword symbols at the 88 queried positions under π), of `G`'s own-silence
+kernel with zero inactive-row sum, and of `D`'s Libra coefficients 0–55 span
+`Chain0₄`; the design must state exactly which rank facts (Q) needs where the
+row basis (claims, rounds) meets the coefficient basis (OOD, opened) through
+the transport, and which of them are structural. Deliverable
+`t2b2b/DESIGN-T2b-2b.txt`; the lead writes D21 (the Lean statement and the
+T2b-2b job) from it. **Z8b (numeric; probe agent, same branch family):** on
+Z8's (A) vectors check the decomposition — (1) the `F`-rank of the batched 264
+coordinates plus `D`'s own 112 observations restricted to `D`'s coefficients
+56–1023 (2,560 if full; 2,556 if `.inactiveSum` is short by the `K₄`-line),
+and the same with `G`'s inactive-row sum added; (2) the `F`-rank of the round
+image of {mask-only lanes ∩ own-silence} + {`G` ∩ own-silence ∩ zero
+inactive-row sum} + {`D` coefficients 0–55} (expect 1,076); (3) the silent
+rank of the subspace assembled from (1) and (2) (expect 1,076 — equality with
+Z8's silent rank means the decomposition loses nothing). Any shortfall is a
+finding that redirects the design. Research under the current verdict (PLAN,
+2026-10-11): v7 stands.
