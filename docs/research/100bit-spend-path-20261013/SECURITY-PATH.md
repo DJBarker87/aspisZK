@@ -191,6 +191,14 @@ opening tail. The existing independent-answer per-prefix bounds have a
 checked sum `303100 * (1+deltaQ)/P^4`; shared-oracle accounting and source
 correspondence are still required. See `SEMANTIC-PREFIX-BRIDGE.md`.
 
+`SpendExtraction.large_matching_extracts` now strengthens the same candidate
+to bounded natural values with integer conservation, input-note extraction,
+and recipient/change note commitments under the actual variant/Option guards.
+It reuses the existing production value, copy, Poseidon, schedule, asset, and
+digest theorems; no positivity lane is assumed. This closes the note-level
+deterministic extraction extension, not append correctness, source refinement,
+shared-oracle soundness, or privacy. See `SPEND-NOTE-BRIDGE.md`.
+
 ## Two-transaction settlement architecture
 
 Uploads/staging are outside the user's count. Pool anchor checkpoints are

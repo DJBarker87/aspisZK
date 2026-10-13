@@ -84,6 +84,12 @@ adds its own fold/query/rho schedule. The old 32-round D3 or Fiat–Shamir
 theorem is not applied to that schedule. Full settlement/output-value
 extraction and zero knowledge remain separate obligations.
 
+The subsequent [`SPEND-NOTE-BRIDGE.md`](SPEND-NOTE-BRIDGE.md) checkpoint
+discharges the bounded-value and output-note extension. Its
+`strengthen_candidate_result` accepts this prefix theorem's conclusion
+without additional semantic premises. Append/settlement correctness,
+source correspondence, shared-oracle accounting, and privacy remain open.
+
 ## Verification
 
 The final `R1SemanticPrefixCheckpoint` passed on the NUC in 1.38 s with

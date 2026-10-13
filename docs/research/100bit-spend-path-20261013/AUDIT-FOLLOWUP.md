@@ -57,3 +57,13 @@ R1/R0 candidate predicates. The independent-answer per-prefix budgets sum
 to `303100 * (1+deltaQ)/P^4`; the new shared-oracle success bound, Rust
 correspondence, full settlement extraction, and privacy remain open. The
 combined prefix checkpoint and seven axiom audits pass on the NUC.
+
+`SPEND-NOTE-BRIDGE.md` strengthens the extracted candidate with three bounded
+natural amounts, integer conservation, and recipient/change note commitments
+using the existing production gates. It does not import the research-only
+positivity lane. The public variant/Option guards remain explicit. Six focused
+targets and the combined eight-axiom audit pass on the NUC; no historical
+theorem or constraint was changed. Append correctness, source correspondence,
+shared-oracle accounting, and privacy remain open. `APPEND-REUSE-NEXT.md`
+and `FS-REUSE-NEXT.md` identify the next reusable abstract results and the
+specific current-protocol premises they still require.

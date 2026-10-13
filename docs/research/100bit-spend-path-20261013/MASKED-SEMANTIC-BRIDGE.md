@@ -49,3 +49,9 @@ parsed semantic rounds. It reuses the old padding and prefix lemmas and
 proves exact equality of the R1/R0 candidate predicates. The old per-prefix
 sampler bounds therefore refer to the same model events. Source
 correspondence and the new shared-oracle instantiation remain open.
+
+The later [`SPEND-NOTE-BRIDGE.md`](SPEND-NOTE-BRIDGE.md) checkpoint reuses
+the production constraints in this conclusion to derive bounded integer
+conservation and output-note bindings. Its R1 extraction theorem keeps the
+same opening and semantic premises. Full append/settlement correctness and
+privacy remain separate obligations.

@@ -14,6 +14,7 @@ order, field embeddings, and transcript schedule must be discharged again.
 | Four codeword/message subfield-descent theorems | `Wide/SubfieldDescentCore`, `CandidateDescent` | Every candidate in the literal R1 list has the required lane field types when the committed words are typed. |
 | Original R0 Boolean weights and coefficient reindexing | `R0/OpeningWeights`, `D18OpeningWeights`, `SemanticOpening` | The D18 point rows give exactly the older transported point functionals; the derived candidate satisfies the point/extra/codeword-typing interface. |
 | Masked semantic sumcheck and extraction | `SemanticTransport`, `MaskedSemantic` apply existing `R0P.Mask` and extraction theorems | The deterministic R1 candidate-to-input-note connection is checked, with explicit bad-event exclusions. The old 32-round masked D3 theorem cannot be applied unchanged to the new 33-round schedule. |
+| Production value rows, copy registry, Poseidon/schedule/asset/digest gates | `SpendValues`, `OutputCopyLinks`, `OutputNotes`, `SpendExtraction` | The actual R1 candidate now gives bounded integer conservation and recipient/change note bindings, with explicit variant/public-option guards. Append correctness remains separate. |
 
 ## New typed-candidate connection
 
@@ -74,8 +75,9 @@ production constraints, copy balance, and `InputNoteExtracted`.
 Source construction/embedding, public-input and committed-word typing,
 accepted parsed checks, and the early/eta/alpha exclusions with the new
 transcript's timing still need correspondence and probability arguments.
-The semantic relation is the existing input-note relation, not full
-settlement, output-range, or privacy security. See
+The newer spend-note checkpoint adds bounded integer balance and output-note
+bindings to that relation, while full settlement and privacy remain open. See
+[`SPEND-NOTE-BRIDGE.md`](SPEND-NOTE-BRIDGE.md) and
 [`MASKED-SEMANTIC-BRIDGE.md`](MASKED-SEMANTIC-BRIDGE.md).
 
 The new `SamplerWord` and `SamplerWordPass` proofs connect actual Lean
@@ -155,3 +157,21 @@ passed on the NUC in 1.38 s at 3,566,892 KiB, with zero swap and standard
 axioms only. See [`SEMANTIC-PREFIX-BRIDGE.md`](SEMANTIC-PREFIX-BRIDGE.md)
 for the exact theorem inputs, timing argument, and remaining source,
 Fiat–Shamir, full settlement, and privacy obligations.
+
+## Spend-note connection
+
+The production value and copy lemmas now prove three `<2^30` values and
+integer conservation without the research-only positivity lane. The existing
+Poseidon and schedule interfaces, with six named copy links and the asset
+and digest equations, prove change-note extraction for both variants and
+recipient-note extraction for private transfers with a present public
+recipient. `SpendExtraction.large_matching_extracts` applies these results
+to the same literal R1 candidate under unchanged opening/semantic premises.
+
+The combined checkpoint passed in 1.40 s at 3,568,284 KiB peak RSS with zero
+swap and eight standard-only axiom audits. No historical source or theorem
+was modified. See [`SPEND-NOTE-BRIDGE.md`](SPEND-NOTE-BRIDGE.md) for exact
+scope and receipts. The source-only inventories
+[`APPEND-REUSE-NEXT.md`](APPEND-REUSE-NEXT.md) and
+[`FS-REUSE-NEXT.md`](FS-REUSE-NEXT.md) distinguish reusable generic results
+from the current append-gate and 33-round protocol obligations still open.
