@@ -1,5 +1,10 @@
 # Frozen pair empty-table and full-capacity append boundary
 
+Later result: [APPEND-TREE-BRIDGE.md](APPEND-TREE-BRIDGE.md) supplies kernel
+certificates for all 21 rows and a chronological-root bridge covering both
+carry outcomes. The following inventory remains pinned to its earlier
+snapshot; its then-open table obligation is now closed in the Lean model.
+
 Source snapshot: `2fefd09653112d36ac284854b0ffa677bcbe9ef0` (branch `codex/100bit-spend-path-20261013`). This is a source inventory. No Lean target was compiled for this note; there is no compiled Lean theorem here establishing the frozen table recurrence.
 
 ## Empty-root table

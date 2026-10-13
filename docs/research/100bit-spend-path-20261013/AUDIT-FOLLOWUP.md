@@ -76,3 +76,10 @@ All nine focused final targets passed on the capped NUC; the combined
 checkpoint reports twelve standard-only axiom audits. This advances the
 semantic bridge without closing frozen-table recurrence, chronological
 tree/source correspondence, shared-oracle soundness, or privacy.
+
+The subsequent [tree checkpoint](APPEND-TREE-BRIDGE.md) proves all 21
+frozen empty-root equations and connects the literal append root to the
+existing chronological-tree result for both carry outcomes. It retains
+the authenticated old-frontier invariant. Stored-frontier preservation,
+Rust/account correspondence, shared-oracle soundness, and privacy remain
+open; the combined NUC checkpoint passed with ten standard-only axiom audits.

@@ -271,3 +271,11 @@ complete-frontier result retains an explicit non-carry public-check premise.
 The focused NUC import/axioms checkpoint passed with standard axioms only.
 It does not close frozen-table generation, chronological tree correctness,
 Rust correspondence, the shared-oracle reduction, or privacy.
+
+The next [concrete table and tree bridge](APPEND-TREE-BRIDGE.md) closes the
+frozen-table recurrence and chronological append-root equality in the Lean
+field model. It retains the authenticated old-frontier invariant, handles
+the final full-capacity insertion, and strengthens the same R1 candidate.
+The actual stored-frontier invariant and Rust/account refinement are still
+required; shared-oracle soundness and privacy are not consequences of this
+deterministic root theorem.

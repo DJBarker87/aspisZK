@@ -1,0 +1,191 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:35:30: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:54:2: error: unsolved goals
+case pos
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+s : State K
+i : Fin 16
+hxs : List.map (⇑f) (List.ofFn fun j => s j.succ) = List.ofFn fun j => f (s j.succ)
+hi : ↑i = 0
+⊢ List.foldl (fun x1 x2 => x1 + x2) (f 0) (List.ofFn fun j => f (s j.succ)) - f (s 0) =
+    List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun i => f (s i.succ)) - f (s 0)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:56:2: error: unsolved goals
+case neg
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+s : State K
+i : Fin 16
+hxs : List.map (⇑f) (List.ofFn fun j => s j.succ) = List.ofFn fun j => f (s j.succ)
+hi : ¬↑i = 0
+⊢ List.foldl (fun x1 x2 => x1 + x2) (f 0) (List.ofFn fun j => f (s j.succ)) + f (s 0) +
+      f (s i) * ↑(1 <<< poseidonInternalShifts ⟨↑i - 1, ⋯⟩) =
+    List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun i => f (s i.succ)) + f (s 0) +
+      f (s i) * ↑(1 <<< poseidonInternalShifts ⟨↑i - 1, ⋯⟩)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:75:70: error: unsolved goals
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+s : State K
+c : K
+hinput :
+  (mapState f fun i => if i = 0 then poseidonPow5 (s 0 + c) else s i) = fun i =>
+    if i = 0 then poseidonPow5 (mapState f s 0 + f c) else mapState f s i
+⊢ (poseidonInternalLinear fun i => if i = 0 then poseidonPow5 (mapState f s 0 + f c) else mapState f s i) =
+    poseidonInternalRound (mapState f s) (f c)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:105:16: error: fail to show termination for
+  _private.R1PoseidonMap.0.AspisR1.PoseidonMap.map_fullRoundFold
+with errors
+failed to infer structural recursion:
+Not considering parameter K of _private.R1PoseidonMap.0.AspisR1.PoseidonMap.map_fullRoundFold:
+  it is unchanged in the recursive calls
+Not considering parameter L of _private.R1PoseidonMap.0.AspisR1.PoseidonMap.map_fullRoundFold:
+  it is unchanged in the recursive calls
+Not considering parameter #3 of _private.R1PoseidonMap.0.AspisR1.PoseidonMap.map_fullRoundFold:
+  it is unchanged in the recursive calls
+Not considering parameter #4 of _private.R1PoseidonMap.0.AspisR1.PoseidonMap.map_fullRoundFold:
+  it is unchanged in the recursive calls
+Not considering parameter f of _private.R1PoseidonMap.0.AspisR1.PoseidonMap.map_fullRoundFold:
+  it is unchanged in the recursive calls
+Not considering parameter s of _private.R1PoseidonMap.0.AspisR1.PoseidonMap.map_fullRoundFold:
+  its type is not an inductive
+Cannot use parameter cs:
+  failed to eliminate recursive application
+    map_fullRoundFold f✝ cs (poseidonFullRound s c)
+
+
+failed to prove termination, possible solutions:
+  - Use `have`-expressions to prove the remaining goals
+  - Use `termination_by` to specify a different well-founded relation
+  - Use `decreasing_by` to specify your own tactic for discharging this kind of goal
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+_x : (_ : List (State K)) ×' State K
+a✝¹ :
+  ∀ (y : (_ : List (State K)) ×' State K),
+    (invImage (fun x => PSigma.casesOn x fun cs s => cs) sizeOfWFRel).1 y _x →
+      mapState f (List.foldl poseidonFullRound y.2 y.1) =
+        List.foldl poseidonFullRound (mapState f y.2) (List.map (mapState f) y.1)
+cs✝ : List (State K)
+s✝ : State K
+a✝ :
+  ∀ (y : (_ : List (State K)) ×' State K),
+    (invImage (fun x => PSigma.casesOn x fun cs s => cs) sizeOfWFRel).1 y ⟨cs✝, s✝⟩ →
+      mapState f (List.foldl poseidonFullRound y.2 y.1) =
+        List.foldl poseidonFullRound (mapState f y.2) (List.map (mapState f) y.1)
+c : State K
+cs : List (State K)
+ih :
+  ∀ (s : State K),
+    mapState f (List.foldl poseidonFullRound s cs) =
+      List.foldl poseidonFullRound (mapState f s) (List.map (mapState f) cs)
+s : State K
+⊢ sizeOf cs < sizeOf cs✝
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:116:16: error: fail to show termination for
+  _private.R1PoseidonMap.0.AspisR1.PoseidonMap.map_internalRoundFold
+with errors
+failed to infer structural recursion:
+Not considering parameter K of _private.R1PoseidonMap.0.AspisR1.PoseidonMap.map_internalRoundFold:
+  it is unchanged in the recursive calls
+Not considering parameter L of _private.R1PoseidonMap.0.AspisR1.PoseidonMap.map_internalRoundFold:
+  it is unchanged in the recursive calls
+Not considering parameter #3 of _private.R1PoseidonMap.0.AspisR1.PoseidonMap.map_internalRoundFold:
+  it is unchanged in the recursive calls
+Not considering parameter #4 of _private.R1PoseidonMap.0.AspisR1.PoseidonMap.map_internalRoundFold:
+  it is unchanged in the recursive calls
+Not considering parameter f of _private.R1PoseidonMap.0.AspisR1.PoseidonMap.map_internalRoundFold:
+  it is unchanged in the recursive calls
+Not considering parameter s of _private.R1PoseidonMap.0.AspisR1.PoseidonMap.map_internalRoundFold:
+  its type is not an inductive
+Cannot use parameter cs:
+  failed to eliminate recursive application
+    map_internalRoundFold f✝ cs (poseidonInternalRound s c)
+
+
+failed to prove termination, possible solutions:
+  - Use `have`-expressions to prove the remaining goals
+  - Use `termination_by` to specify a different well-founded relation
+  - Use `decreasing_by` to specify your own tactic for discharging this kind of goal
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+_x : (_ : List K) ×' State K
+a✝¹ :
+  ∀ (y : (_ : List K) ×' State K),
+    (invImage (fun x => PSigma.casesOn x fun cs s => cs) sizeOfWFRel).1 y _x →
+      mapState f (List.foldl poseidonInternalRound y.2 y.1) =
+        List.foldl poseidonInternalRound (mapState f y.2) (List.map (⇑f) y.1)
+cs✝ : List K
+s✝ : State K
+a✝ :
+  ∀ (y : (_ : List K) ×' State K),
+    (invImage (fun x => PSigma.casesOn x fun cs s => cs) sizeOfWFRel).1 y ⟨cs✝, s✝⟩ →
+      mapState f (List.foldl poseidonInternalRound y.2 y.1) =
+        List.foldl poseidonInternalRound (mapState f y.2) (List.map (⇑f) y.1)
+c : K
+cs : List K
+ih :
+  ∀ (s : State K),
+    mapState f (List.foldl poseidonInternalRound s cs) =
+      List.foldl poseidonInternalRound (mapState f s) (List.map (⇑f) cs)
+s : State K
+⊢ sizeOf cs < sizeOf cs✝
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:130:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mapState ?f (poseidonExternalLinear ?s)
+in the target expression
+  mapState f
+      (List.foldl poseidonFullRound
+        (List.foldl poseidonInternalRound
+          (List.foldl poseidonFullRound (poseidonExternalLinear s)
+            (List.ofFn fun round => poseidonExternalInitial round))
+          (List.ofFn fun round => poseidonInternalConstants round))
+        (List.ofFn fun round => poseidonExternalFinal round)) =
+    List.foldl poseidonFullRound
+      (List.foldl poseidonInternalRound
+        (List.foldl poseidonFullRound (poseidonExternalLinear (mapState f s))
+          (List.ofFn fun round => poseidonExternalInitial round))
+        (List.ofFn fun round => poseidonInternalConstants round))
+      (List.ofFn fun round => poseidonExternalFinal round)
+
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+s : State K
+⊢ mapState f
+      (List.foldl poseidonFullRound
+        (List.foldl poseidonInternalRound
+          (List.foldl poseidonFullRound (poseidonExternalLinear s)
+            (List.ofFn fun round => poseidonExternalInitial round))
+          (List.ofFn fun round => poseidonInternalConstants round))
+        (List.ofFn fun round => poseidonExternalFinal round)) =
+    List.foldl poseidonFullRound
+      (List.foldl poseidonInternalRound
+        (List.foldl poseidonFullRound (poseidonExternalLinear (mapState f s))
+          (List.ofFn fun round => poseidonExternalInitial round))
+        (List.ofFn fun round => poseidonInternalConstants round))
+      (List.ofFn fun round => poseidonExternalFinal round)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:162:2: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'AspisR1.PoseidonMap.map_poseidonPow5' depends on axioms: [propext, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonMat4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonExternalLinear' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonInternalLinear' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonFullRound' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonInternalRound' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonExternalInitial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonExternalFinal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonInternalConstants' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonPermutation' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PoseidonMap.map_nodeCompress' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

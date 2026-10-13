@@ -1,0 +1,66 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:160:86: error: unexpected token 'have'; expected ')', ',' or ':'
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:146:62: error: unsolved goals
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+s : State K
+⊢ mapState f
+      (List.foldl poseidonFullRound
+        (List.foldl poseidonInternalRound
+          (List.foldl poseidonFullRound (poseidonExternalLinear s) (List.ofFn fun r => poseidonExternalInitial r))
+          (List.ofFn fun r => poseidonInternalConstants r))
+        (List.ofFn fun r => poseidonExternalFinal r)) =
+    List.foldl poseidonFullRound
+      (List.foldl poseidonInternalRound
+        (List.foldl poseidonFullRound (poseidonExternalLinear (mapState f s))
+          (List.ofFn fun r => poseidonExternalInitial r))
+        (List.ofFn fun r => poseidonInternalConstants r))
+      (List.ofFn fun r => poseidonExternalFinal r)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:209:8: error: Type mismatch
+  congrArg (fun z => f (b 7) - z) (map_natCast f 1051521018)
+has type
+  f (b 7) - f ↑1051521018 = f (b 7) - ↑1051521018
+but is expected to have type
+  f (if h : ↑15 < 8 then a ⟨↑15, h⟩ else if ↑15 = 15 then b 7 - 1051521018 else b ⟨↑15 - 8, ⋯⟩) =
+    if h : False then f (a ⟨↑15, ⋯⟩) else if ↑15 = 15 then f (b 7) - 1051521018 else f (b ⟨↑15 - 8, ⋯⟩)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:204:21: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [h₁,̵ ̵i̵f̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:208:29: warning: This simp argument is unused:
+  if_neg h₁
+
+Hint: Omit it from the simp argument list.
+  simp only [mapState, if_n̵e̵g̵ ̵h̵₁̵,̵ ̵i̵f̵_̵pos rfl, map_sub]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:208:40: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [mapState, if_neg h₁, i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵ ̵map_sub]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:208:52: warning: This simp argument is unused:
+  map_sub
+
+Hint: Omit it from the simp argument list.
+  simp only [mapState, if_neg h₁, if_pos rfl,̵ ̵m̵a̵p̵_̵s̵u̵b̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PoseidonMap.map_poseidonPow5' depends on axioms: [propext, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonMat4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonExternalLinear' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonInternalLinear' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonFullRound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonInternalRound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonExternalInitial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonExternalFinal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonInternalConstants' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonPermutation' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PoseidonMap.map_nodeCompress' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

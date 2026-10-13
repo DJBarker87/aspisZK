@@ -1,5 +1,10 @@
 # Literal append gates from R1 extraction
 
+Later checkpoint: [APPEND-TREE-BRIDGE.md](APPEND-TREE-BRIDGE.md) proves the
+frozen-table recurrence and chronological root correspondence, retaining
+the authenticated source-frontier invariant as an explicit premise. The
+scope below describes the earlier literal-gate checkpoint.
+
 The checked R1 candidate now carries the ordered output pair, all twenty
 append-node equations, the next-root equality, and the carried frontier
 entry. An explicit model of the host's checks on the other frontier entries

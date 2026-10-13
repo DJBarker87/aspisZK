@@ -1,0 +1,58 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonChain.lean:42:2: error: Type mismatch
+  foldl_compose_steps states (fun i state => round state (parameters i)) h
+has type
+  List.foldl (fun state (step : σ → σ) => step state) (states 0) (List.ofFn fun i state => round state (parameters i)) =
+    states (Fin.last n)
+but is expected to have type
+  List.foldl (fun state (i : Fin n) => round state (parameters i)) (states 0) (List.ofFn fun i => i) =
+    states (Fin.last n)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonChain.lean:71:4: error: Type mismatch: After simplification, term
+  hinitial r
+ has type
+  y ⟨2 + ↑r, ⋯⟩ = poseidonFullRound (y ⟨1 + ↑r, ⋯⟩) (poseidonExternalInitial r)
+but is expected to have type
+  y ⟨1 + (↑r + 1), ⋯⟩ = poseidonFullRound (y ⟨1 + ↑r, ⋯⟩) (poseidonExternalInitial r)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonChain.lean:76:4: error: Type mismatch: After simplification, term
+  hinternal r
+ has type
+  y ⟨6 + ↑r, ⋯⟩ = poseidonInternalRound (y ⟨5 + ↑r, ⋯⟩) (poseidonInternalConstants r)
+but is expected to have type
+  y ⟨5 + (↑r + 1), ⋯⟩ = poseidonInternalRound (y ⟨5 + ↑r, ⋯⟩) (poseidonInternalConstants r)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonChain.lean:81:4: error: Type mismatch: After simplification, term
+  hfinal r
+ has type
+  y ⟨20 + ↑r, ⋯⟩ = poseidonFullRound (y ⟨19 + ↑r, ⋯⟩) (poseidonExternalFinal r)
+but is expected to have type
+  y ⟨19 + (↑r + 1), ⋯⟩ = poseidonFullRound (y ⟨19 + ↑r, ⋯⟩) (poseidonExternalFinal r)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonChain.lean:83:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  y 1
+in the target expression
+  (have state := poseidonExternalLinear (y 0);
+    have state := List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalInitial round);
+    have state := List.foldl poseidonInternalRound state (List.ofFn fun round => poseidonInternalConstants round);
+    List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalFinal round)) =
+    y 23
+
+K : Type
+inst✝ : Field K
+y : Fin 24 → Fin 16 → K
+hlead : y 1 = poseidonExternalLinear (y 0)
+hinitial : ∀ (r : Fin 4), y ⟨2 + ↑r, ⋯⟩ = poseidonFullRound (y ⟨1 + ↑r, ⋯⟩) (poseidonExternalInitial r)
+hinternal : ∀ (r : Fin 14), y ⟨6 + ↑r, ⋯⟩ = poseidonInternalRound (y ⟨5 + ↑r, ⋯⟩) (poseidonInternalConstants r)
+hfinal : ∀ (r : Fin 4), y ⟨20 + ↑r, ⋯⟩ = poseidonFullRound (y ⟨19 + ↑r, ⋯⟩) (poseidonExternalFinal r)
+initialStates : Fin 5 → Fin 16 → K := fun i => y ⟨1 + ↑i, ⋯⟩
+internalStates : Fin 15 → Fin 16 → K := fun i => y ⟨5 + ↑i, ⋯⟩
+finalStates : Fin 5 → Fin 16 → K := fun i => y ⟨19 + ↑i, ⋯⟩
+hInitial :
+  ∀ (r : Fin 4), initialStates r.succ = poseidonFullRound (initialStates r.castSucc) (poseidonExternalInitial r)
+hInternal :
+  ∀ (r : Fin 14),
+    internalStates r.succ = poseidonInternalRound (internalStates r.castSucc) (poseidonInternalConstants r)
+hFinal : ∀ (r : Fin 4), finalStates r.succ = poseidonFullRound (finalStates r.castSucc) (poseidonExternalFinal r)
+⊢ (have state := poseidonExternalLinear (y 0);
+    have state := List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalInitial round);
+    have state := List.foldl poseidonInternalRound state (List.ofFn fun round => poseidonInternalConstants round);
+    List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalFinal round)) =
+    y 23
+'R0P.poseidon_chain' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

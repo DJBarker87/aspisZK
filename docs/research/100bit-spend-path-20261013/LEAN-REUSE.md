@@ -191,3 +191,17 @@ statements and proof bodies are unchanged. See
 [APPEND-GATE-BRIDGE.md](APPEND-GATE-BRIDGE.md). The frozen-table recurrence,
 chronological tree correspondence including the final full-capacity
 insertion, Rust refinement, shared-oracle law, and privacy remain open.
+
+## Concrete table and chronological root connection
+
+The later [tree bridge](APPEND-TREE-BRIDGE.md) closes the frozen-table
+recurrence and chronological-root correspondence in the field model. It
+reuses the old round-split certificate pattern and the existing generic
+append/reconstruction theorems for both ordinary and full-capacity carries.
+The same R1 candidate now has the correct root for old leaves plus its
+ordered output pair, given the authenticated old-frontier invariant.
+
+All 53 final focused targets passed. The combined checkpoint took 1.39 s
+at 3,590,024 KiB with zero swap and ten standard-only axiom audits. Stored
+frontier preservation, actual source/account correspondence, shared-oracle
+soundness, and privacy remain separate obligations.

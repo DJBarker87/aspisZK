@@ -1,0 +1,107 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReconstructChain.lean:31:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  match none with
+  | none => parent (y 0) (recursiveEmptyRoot parent emptyLeaf (level + 0))
+  | some left => parent left (y 0)
+in the target expression
+  reconstructFrom parent emptyLeaf (level + 1) (parent (y 0) (recursiveEmptyRoot parent emptyLeaf level))
+      (List.ofFn fun i => slots i.succ) =
+    y (n + 1)
+
+case succ.none
+α : Type
+parent : α → α → α
+emptyLeaf : α
+n : ℕ
+ih :
+  ∀ (level : ℕ) (y : ℕ → α) (slots : Fin n → Option α),
+    (∀ (i : Fin n),
+        y (↑i + 1) =
+          match slots i with
+          | none => parent (y ↑i) (recursiveEmptyRoot parent emptyLeaf (level + ↑i))
+          | some left => parent left (y ↑i)) →
+      reconstructFrom parent emptyLeaf level (y 0) (List.ofFn slots) = y n
+level : ℕ
+y : ℕ → α
+slots : Fin (n + 1) → Option α
+h :
+  ∀ (i : Fin (n + 1)),
+    y (↑i + 1) =
+      match slots i with
+      | none => parent (y ↑i) (recursiveEmptyRoot parent emptyLeaf (level + ↑i))
+      | some left => parent left (y ↑i)
+hs : slots 0 = none
+h0 :
+  y 1 =
+    match none with
+    | none => parent (y 0) (recursiveEmptyRoot parent emptyLeaf (level + 0))
+    | some left => parent left (y 0)
+⊢ reconstructFrom parent emptyLeaf (level + 1) (parent (y 0) (recursiveEmptyRoot parent emptyLeaf level))
+      (List.ofFn fun i => slots i.succ) =
+    y (n + 1)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReconstructChain.lean:53:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  match some left with
+  | none => parent (y 0) (recursiveEmptyRoot parent emptyLeaf (level + 0))
+  | some left => parent left (y 0)
+in the target expression
+  reconstructFrom parent emptyLeaf (level + 1) (parent left (y 0)) (List.ofFn fun i => slots i.succ) = y (n + 1)
+
+case succ.some
+α : Type
+parent : α → α → α
+emptyLeaf : α
+n : ℕ
+ih :
+  ∀ (level : ℕ) (y : ℕ → α) (slots : Fin n → Option α),
+    (∀ (i : Fin n),
+        y (↑i + 1) =
+          match slots i with
+          | none => parent (y ↑i) (recursiveEmptyRoot parent emptyLeaf (level + ↑i))
+          | some left => parent left (y ↑i)) →
+      reconstructFrom parent emptyLeaf level (y 0) (List.ofFn slots) = y n
+level : ℕ
+y : ℕ → α
+slots : Fin (n + 1) → Option α
+h :
+  ∀ (i : Fin (n + 1)),
+    y (↑i + 1) =
+      match slots i with
+      | none => parent (y ↑i) (recursiveEmptyRoot parent emptyLeaf (level + ↑i))
+      | some left => parent left (y ↑i)
+left : α
+hs : slots 0 = some left
+h0 :
+  y 1 =
+    match some left with
+    | none => parent (y 0) (recursiveEmptyRoot parent emptyLeaf (level + 0))
+    | some left => parent left (y 0)
+⊢ reconstructFrom parent emptyLeaf (level + 1) (parent left (y 0)) (List.ofFn fun i => slots i.succ) = y (n + 1)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReconstructChain.lean:22:50: warning: This simp argument is unused:
+  Nat.zero_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [List.ofFn_zero, reconstructFrom, N̵a̵t̵.̵z̵e̵r̵o̵_̵e̵q̵,̵ ̵Nat.add_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReconstructChain.lean:22:63: warning: This simp argument is unused:
+  Nat.add_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [List.ofFn_zero, reconstructFrom, Nat.zero_eq,̵ ̵N̵a̵t̵.̵a̵d̵d̵_̵z̵e̵r̵o̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReconstructChain.lean:30:38: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [reconstructFrom,̵ ̵h̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReconstructChain.lean:52:38: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [reconstructFrom,̵ ̵h̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisPool.IncrementalMerkleV1.reconstruct_ofFn_chain' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

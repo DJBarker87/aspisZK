@@ -1,0 +1,118 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:41:11: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:96:2: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:154:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mapState ?f (poseidonExternalLinear ?s)
+in the target expression
+  mapState f
+      (have state := poseidonExternalLinear s;
+      have state := List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalInitial round);
+      have state := List.foldl poseidonInternalRound state (List.ofFn fun round => poseidonInternalConstants round);
+      List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalFinal round)) =
+    have state := poseidonExternalLinear (mapState f s);
+    have state := List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalInitial round);
+    have state := List.foldl poseidonInternalRound state (List.ofFn fun round => poseidonInternalConstants round);
+    List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalFinal round)
+
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+s : State K
+⊢ mapState f
+      (have state := poseidonExternalLinear s;
+      have state := List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalInitial round);
+      have state := List.foldl poseidonInternalRound state (List.ofFn fun round => poseidonInternalConstants round);
+      List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalFinal round)) =
+    have state := poseidonExternalLinear (mapState f s);
+    have state := List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalInitial round);
+    have state := List.foldl poseidonInternalRound state (List.ofFn fun round => poseidonInternalConstants round);
+    List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalFinal round)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:199:4: error: unsolved goals
+case pos
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+a b : Digest K
+l : Fin 16
+h₁ : ↑l < 8
+⊢ mapState f (fun l => if h : ↑l < 8 then a ⟨↑l, h⟩ else if ↑l = 15 then b 7 - 1051521018 else b ⟨↑l - 8, ⋯⟩) l =
+    f (a ⟨↑l, ⋯⟩)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:202:6: error: unsolved goals
+case pos
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+a b : Digest K
+l : Fin 16
+h₁ : ¬↑l < 8
+h₂ : ↑l = 15
+⊢ mapState f (fun l => if h : ↑l < 8 then a ⟨↑l, h⟩ else if ↑l = 15 then b 7 - 1051521018 else b ⟨↑l - 8, ⋯⟩) l =
+    f (b 7) - 1051521018
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:203:6: error: unsolved goals
+case neg
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+a b : Digest K
+l : Fin 16
+h₁ : ¬↑l < 8
+h₂ : ¬↑l = 15
+⊢ mapState f (fun l => if h : ↑l < 8 then a ⟨↑l, h⟩ else if ↑l = 15 then b 7 - 1051521018 else b ⟨↑l - 8, ⋯⟩) l =
+    f (b ⟨↑l - 8, ⋯⟩)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:205:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mapState f (poseidonPermutation ?m.285) ⟨↑i, ?m.288⟩
+in the target expression
+  f
+      (poseidonPermutation
+        (fun l => if h : ↑l < 8 then a ⟨↑l, h⟩ else if ↑l = 15 then b 7 - 1051521018 else b ⟨↑l - 8, ⋯⟩) ⟨↑i, ⋯⟩) =
+    nodeCompress (mapDigest f a) (mapDigest f b) i
+
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+a b : Digest K
+hinput :
+  (mapState f fun l => if h : ↑l < 8 then a ⟨↑l, h⟩ else if ↑l = 15 then b 7 - 1051521018 else b ⟨↑l - 8, ⋯⟩) = fun l =>
+    if h : ↑l < 8 then f (a ⟨↑l, h⟩) else if ↑l = 15 then f (b 7) - 1051521018 else f (b ⟨↑l - 8, ⋯⟩)
+i : Fin 8
+⊢ f
+      (poseidonPermutation
+        (fun l => if h : ↑l < 8 then a ⟨↑l, h⟩ else if ↑l = 15 then b 7 - 1051521018 else b ⟨↑l - 8, ⋯⟩) ⟨↑i, ⋯⟩) =
+    nodeCompress (mapDigest f a) (mapDigest f b) i
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:200:21: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [h₁,̵ ̵i̵f̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:202:18: warning: This simp argument is unused:
+  map_sub
+
+Hint: Omit it from the simp argument list.
+  simp [h₂, map_s̵u̵b̵,̵ ̵m̵a̵p̵_̵natCast]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:202:27: warning: This simp argument is unused:
+  map_natCast
+
+Hint: Omit it from the simp argument list.
+  simp [h₂, map_sub,̵ ̵m̵a̵p̵_̵n̵a̵t̵C̵a̵s̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PoseidonMap.map_poseidonPow5' depends on axioms: [propext, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonMat4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonExternalLinear' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonInternalLinear' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonFullRound' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonInternalRound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonExternalInitial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonExternalFinal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonInternalConstants' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonPermutation' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PoseidonMap.map_nodeCompress' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

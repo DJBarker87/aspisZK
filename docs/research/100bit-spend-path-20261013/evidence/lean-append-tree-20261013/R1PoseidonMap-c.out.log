@@ -1,0 +1,97 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:41:38: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  f (localK ?g ?c)
+in the target expression
+  f (poseidonMat4 (fun lane => s ⟨4 * (↑i / 4) + ↑lane, ⋯⟩) ⟨↑i % 4, ⋯⟩) +
+      (f 0 + localL 0 ⟨↑i % 4, ⋯⟩ + localL 1 ⟨↑i % 4, ⋯⟩ + localL 2 ⟨↑i % 4, ⋯⟩ + localL 3 ⟨↑i % 4, ⋯⟩) =
+    poseidonMat4 (fun lane => f (s ⟨4 * (↑i / 4) + ↑lane, ⋯⟩)) ⟨↑i % 4, ⋯⟩ +
+      (0 + poseidonMat4 (fun lane => f (s ⟨4 * ↑0 + ↑lane, ⋯⟩)) ⟨↑i % 4, ⋯⟩ +
+            poseidonMat4 (fun lane => f (s ⟨4 * ↑1 + ↑lane, ⋯⟩)) ⟨↑i % 4, ⋯⟩ +
+          poseidonMat4 (fun lane => f (s ⟨4 * ↑2 + ↑lane, ⋯⟩)) ⟨↑i % 4, ⋯⟩ +
+        poseidonMat4 (fun lane => f (s ⟨4 * ↑3 + ↑lane, ⋯⟩)) ⟨↑i % 4, ⋯⟩)
+
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+s : State K
+localK : Fin 4 → Fin 4 → K := fun g => poseidonMat4 fun lane => s ⟨4 * ↑g + ↑lane, ⋯⟩
+localL : Fin 4 → Fin 4 → L := fun g => poseidonMat4 fun lane => f (s ⟨4 * ↑g + ↑lane, ⋯⟩)
+hlocal : ∀ (g c : Fin 4), f (localK g c) = localL g c
+i : Fin 16
+⊢ f (poseidonMat4 (fun lane => s ⟨4 * (↑i / 4) + ↑lane, ⋯⟩) ⟨↑i % 4, ⋯⟩) +
+      (f 0 + localL 0 ⟨↑i % 4, ⋯⟩ + localL 1 ⟨↑i % 4, ⋯⟩ + localL 2 ⟨↑i % 4, ⋯⟩ + localL 3 ⟨↑i % 4, ⋯⟩) =
+    poseidonMat4 (fun lane => f (s ⟨4 * (↑i / 4) + ↑lane, ⋯⟩)) ⟨↑i % 4, ⋯⟩ +
+      (0 + poseidonMat4 (fun lane => f (s ⟨4 * ↑0 + ↑lane, ⋯⟩)) ⟨↑i % 4, ⋯⟩ +
+            poseidonMat4 (fun lane => f (s ⟨4 * ↑1 + ↑lane, ⋯⟩)) ⟨↑i % 4, ⋯⟩ +
+          poseidonMat4 (fun lane => f (s ⟨4 * ↑2 + ↑lane, ⋯⟩)) ⟨↑i % 4, ⋯⟩ +
+        poseidonMat4 (fun lane => f (s ⟨4 * ↑3 + ↑lane, ⋯⟩)) ⟨↑i % 4, ⋯⟩)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:40:56: warning: This simp argument is unused:
+  localK
+
+Hint: Omit it from the simp argument list.
+  simp only [poseidonExternalLinear, mapState, map_add, localK̵,̵ ̵l̵o̵c̵a̵l̵L]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:40:64: warning: This simp argument is unused:
+  localL
+
+Hint: Omit it from the simp argument list.
+  simp only [poseidonExternalLinear, mapState, map_add, localK,̵ ̵l̵o̵c̵a̵l̵L̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:60:4: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:62:4: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:86:4: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:87:4: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:127:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mapState ?f (poseidonExternalLinear ?s)
+in the target expression
+  mapState f
+      (have state := poseidonExternalLinear s;
+      have state := List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalInitial round);
+      have state := List.foldl poseidonInternalRound state (List.ofFn fun round => poseidonInternalConstants round);
+      List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalFinal round)) =
+    have state := poseidonExternalLinear (mapState f s);
+    have state := List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalInitial round);
+    have state := List.foldl poseidonInternalRound state (List.ofFn fun round => poseidonInternalConstants round);
+    List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalFinal round)
+
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+s : State K
+⊢ mapState f
+      (have state := poseidonExternalLinear s;
+      have state := List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalInitial round);
+      have state := List.foldl poseidonInternalRound state (List.ofFn fun round => poseidonInternalConstants round);
+      List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalFinal round)) =
+    have state := poseidonExternalLinear (mapState f s);
+    have state := List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalInitial round);
+    have state := List.foldl poseidonInternalRound state (List.ofFn fun round => poseidonInternalConstants round);
+    List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalFinal round)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:165:36: error: Application type mismatch: The argument
+  i
+has type
+  Fin 8
+but is expected to have type
+  Fin 16
+in the application
+  poseidonPermutation (fun l => if h : ↑l < 8 then a ⟨↑l, h⟩ else if ↑l = 15 then b 7 - 1051521018 else b ⟨↑l - 8, ⋯⟩) i
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonMap.lean:161:2: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'AspisR1.PoseidonMap.map_poseidonPow5' depends on axioms: [propext, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonMat4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonExternalLinear' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonInternalLinear' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonFullRound' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonInternalRound' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonExternalInitial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonExternalFinal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonInternalConstants' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonMap.map_poseidonPermutation' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PoseidonMap.map_nodeCompress' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

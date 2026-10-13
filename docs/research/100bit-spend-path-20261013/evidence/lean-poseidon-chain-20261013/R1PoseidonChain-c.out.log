@@ -1,0 +1,62 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonChain.lean:24:6: error: Application type mismatch: The argument
+  round
+has type
+  σ → α → σ
+of sort `Type` but is expected to have type
+  ∀ (i : Fin n), states i.succ.succ = round (states i.castSucc.succ) (parameters i.succ)
+of sort `Prop` in the application
+  ih (fun i => states i.succ) (fun i => parameters i.succ) round
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonChain.lean:92:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.foldl (fun state parameter => poseidonFullRound state parameter) (initialStates 0)
+    (List.ofFn poseidonExternalInitial)
+in the target expression
+  (have state := y 1;
+    have state := List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalInitial round);
+    have state := List.foldl poseidonInternalRound state (List.ofFn fun round => poseidonInternalConstants round);
+    List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalFinal round)) =
+    y 23
+
+K : Type
+inst✝ : Field K
+y : Fin 24 → Fin 16 → K
+hlead : y 1 = poseidonExternalLinear (y 0)
+hinitial : ∀ (r : Fin 4), y ⟨2 + ↑r, ⋯⟩ = poseidonFullRound (y ⟨1 + ↑r, ⋯⟩) (poseidonExternalInitial r)
+hinternal : ∀ (r : Fin 14), y ⟨6 + ↑r, ⋯⟩ = poseidonInternalRound (y ⟨5 + ↑r, ⋯⟩) (poseidonInternalConstants r)
+hfinal : ∀ (r : Fin 4), y ⟨20 + ↑r, ⋯⟩ = poseidonFullRound (y ⟨19 + ↑r, ⋯⟩) (poseidonExternalFinal r)
+initialStates : Fin 5 → Fin 16 → K := fun i => y ⟨1 + ↑i, ⋯⟩
+internalStates : Fin 15 → Fin 16 → K := fun i => y ⟨5 + ↑i, ⋯⟩
+finalStates : Fin 5 → Fin 16 → K := fun i => y ⟨19 + ↑i, ⋯⟩
+hInitial :
+  ∀ (r : Fin 4), initialStates r.succ = poseidonFullRound (initialStates r.castSucc) (poseidonExternalInitial r)
+hInternal :
+  ∀ (r : Fin 14),
+    internalStates r.succ = poseidonInternalRound (internalStates r.castSucc) (poseidonInternalConstants r)
+hFinal : ∀ (r : Fin 4), finalStates r.succ = poseidonFullRound (finalStates r.castSucc) (poseidonExternalFinal r)
+⊢ (have state := y 1;
+    have state := List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalInitial round);
+    have state := List.foldl poseidonInternalRound state (List.ofFn fun round => poseidonInternalConstants round);
+    List.foldl poseidonFullRound state (List.ofFn fun round => poseidonExternalFinal round)) =
+    y 23
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonChain.lean:58:17: warning: This simp argument is unused:
+  Fin.val_mk
+
+Hint: Omit it from the simp argument list.
+  simp only [Fin.val_m̵k̵,̵ ̵F̵i̵n̵.̵v̵a̵l̵_̵succ]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonChain.lean:72:17: warning: This simp argument is unused:
+  Fin.val_mk
+
+Hint: Omit it from the simp argument list.
+  simp only [Fin.val_m̵k̵,̵ ̵F̵i̵n̵.̵v̵a̵l̵_̵succ]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PoseidonChain.lean:86:17: warning: This simp argument is unused:
+  Fin.val_mk
+
+Hint: Omit it from the simp argument list.
+  simp only [Fin.val_m̵k̵,̵ ̵F̵i̵n̵.̵v̵a̵l̵_̵succ]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R0P.poseidon_chain' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
