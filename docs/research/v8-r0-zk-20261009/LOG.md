@@ -4032,3 +4032,22 @@ to `L π B ch (pureTrace B m)` after `balance 0`) and items 1 and 3 (as
 corrected by T2b-2a′) are unchanged. Check: `d = 28` gives `e = 0`, `m = 9`,
 mask total `1024`, round-9 polynomial `1`, matching the counterexample.
 Research under the current verdict (PLAN, 2026-10-11): v7 stands.
+
+### Cross-reference (2026-10-13): the R1 programme in the Rust PLAN; privacy merge
+
+The Rust PLAN section "Lead review of the `codex/100bit-spend-path-20261013`
+checkpoint (2026-10-13)" amends the P2 verdict (the ordinary two-transaction
+case now measures 1.34M/1.37M CU with the Pool adapter; the rollover case
+fails; headroom is 25–57K) and re-states the fit gate as G_R1. For this
+track it adds: **Z9** — the Z8 gate on the R1 payload (two folds, 64 final
+values, D18 π, γ ∈ WideExact, ρ ∈ QM31) with real coordinates and no proxy,
+on the checkpoint's two γ limb sets and structures (A)/(B)/(I)/(J); the
+T2b-2b design to be stated for a payload family covering R0 and R1; ZF1 for
+the 33-row schedule; **ZF2** — an efficient simulator obligation (the
+checkpoint's PRIVACY-RANK-PATH is right that `Classical.choose` is not an
+algorithm; the public mask-map route is to be fixed as a lead decision after
+T2b-2b). The checkpoint found the γ-in-QM31 gap of D20′.2 independently and
+compensates with both K₄-valued pads, as D20′.2 requires; its probe reaches
+silent rank 1,076 on the actual R1 payload. Nothing in T2a, T2b-1, T2b-2a or
+the D20 series changes. Standing verdict: v7 stands; R1 is a live candidate
+under G_R1.
