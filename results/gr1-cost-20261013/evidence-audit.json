@@ -1,0 +1,944 @@
+{
+  "schema": "aspis.gr1-cost.audit.v1",
+  "scope": "Rust cost/conditional parser coverage only; no security/release claims",
+  "all_checks_passed": true,
+  "copied_files_hash_verified": 287,
+  "new_scoped_commands": 32,
+  "caps": "MemoryHigh=4G MemoryMax=6G MemorySwapMax=0",
+  "all_new_scopes_zero_swap": true,
+  "adapter_operations_each_five_runs": 4,
+  "random_d18_operation_transaction_cells_each_five_runs": 4,
+  "mutations_per_operation_per_entrypoint": 5675,
+  "native_dense_entries_per_operation": 10699,
+  "strict_authenticated_tx2_entries_per_operation": 9253,
+  "release_equivalence_tests_passed": 15,
+  "repair_or_expected_failure": {
+    "native-full-random.json": "Archive omitted unrelated Cargo workspace members: copied missing member files, preserved every archive source member; retry native-full-random-r2 passed.",
+    "withdrawal-stage-d18.json": "Old P2 transport proof is incompatible with D18: tx2 rejects at Relation. Retained failure; final D18 column uses its existing five successful regenerated-proof runs, not a rerun of incompatible bytes."
+  },
+  "receipts": [
+    {
+      "path": "adapter-dense.json",
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo",
+        "run",
+        "--release",
+        "--locked",
+        "--offline",
+        "-p",
+        "aspis-r1-cost-probe",
+        "--features",
+        "prover,optimized-terminal",
+        "--example",
+        "gr1_adapter_trace",
+        "--",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/adapter-dense-result.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-public-asf8.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-public-asf8.bin"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 1.0009021940641105,
+      "peak_aggregate_rss_bytes_sampled": 240717824,
+      "cgroup_memory_peak_bytes": 113147904,
+      "child_peak_rss_kib": 168840,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "d18-full-random-transfer.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-p2-20261010/target/release/aspis-r1-cu-probe",
+        "acceptance",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/d18/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/full-random",
+        "transfer",
+        "10"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.500821728957817,
+      "peak_aggregate_rss_bytes_sampled": 13533184,
+      "cgroup_memory_peak_bytes": 26890240,
+      "child_peak_rss_kib": 24444,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "d18-full-random-withdrawal.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-p2-20261010/target/release/aspis-r1-cu-probe",
+        "acceptance",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/d18/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/full-random",
+        "withdrawal",
+        "10"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5005615201080218,
+      "peak_aggregate_rss_bytes_sampled": 13283328,
+      "cgroup_memory_peak_bytes": 26697728,
+      "child_peak_rss_kib": 24296,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "equivalence.json",
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo",
+        "test",
+        "--release",
+        "--locked",
+        "--offline",
+        "-p",
+        "aspis-r1-cost-probe",
+        "--features",
+        "prover,optimized-terminal",
+        "--lib",
+        "--tests"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 2.5023637890117243,
+      "peak_aggregate_rss_bytes_sampled": 417329152,
+      "cgroup_memory_peak_bytes": 203665408,
+      "child_peak_rss_kib": 220820,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "mask-tape-audit.json",
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo",
+        "run",
+        "--release",
+        "--locked",
+        "--offline",
+        "-p",
+        "aspis-r1-cost-probe",
+        "--features",
+        "prover,optimized-terminal",
+        "--example",
+        "gr1_mask_tape",
+        "--",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/mask-tape.json",
+        "b00dbfdb0ef5cb2a4a4fc3a762331c04c6f1d3187fa58442263bac5a4bec6780"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 1.0011483950074762,
+      "peak_aggregate_rss_bytes_sampled": 201306112,
+      "cgroup_memory_peak_bytes": 115298304,
+      "child_peak_rss_kib": 177112,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "native-full-random-r2.json",
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo",
+        "run",
+        "--release",
+        "--locked",
+        "--offline",
+        "-p",
+        "aspis-r1-cost-probe",
+        "--features",
+        "prover,optimized-terminal",
+        "--example",
+        "gr1_native_gate",
+        "--",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/full-random",
+        "b00dbfdb0ef5cb2a4a4fc3a762331c04c6f1d3187fa58442263bac5a4bec6780"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 42.03773858898785,
+      "peak_aggregate_rss_bytes_sampled": 1041620992,
+      "cgroup_memory_peak_bytes": 763277312,
+      "child_peak_rss_kib": 470732,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "native-full-random.json",
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo",
+        "run",
+        "--release",
+        "--locked",
+        "--offline",
+        "-p",
+        "aspis-r1-cost-probe",
+        "--features",
+        "prover,optimized-terminal",
+        "--example",
+        "gr1_native_gate",
+        "--",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/full-random",
+        "b00dbfdb0ef5cb2a4a4fc3a762331c04c6f1d3187fa58442263bac5a4bec6780"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 101,
+      "wall_seconds": 0.5007969280704856,
+      "peak_aggregate_rss_bytes_sampled": 13324288,
+      "cgroup_memory_peak_bytes": 10043392,
+      "child_peak_rss_kib": 20752,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v2-transfer-1.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v2/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-transfer-1-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-transfer-1-task",
+        "transfer",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v1"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5008021449903026,
+      "peak_aggregate_rss_bytes_sampled": 13549568,
+      "cgroup_memory_peak_bytes": 34975744,
+      "child_peak_rss_kib": 33116,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v2-transfer-2.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v2/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-transfer-2-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-transfer-2-task",
+        "transfer",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v1"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5007460940396413,
+      "peak_aggregate_rss_bytes_sampled": 13365248,
+      "cgroup_memory_peak_bytes": 35069952,
+      "child_peak_rss_kib": 33356,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v2-transfer-3.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v2/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-transfer-3-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-transfer-3-task",
+        "transfer",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v1"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5008433120092377,
+      "peak_aggregate_rss_bytes_sampled": 13250560,
+      "cgroup_memory_peak_bytes": 35041280,
+      "child_peak_rss_kib": 33320,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v2-transfer-4.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v2/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-transfer-4-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-transfer-4-task",
+        "transfer",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v1"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5007131620077416,
+      "peak_aggregate_rss_bytes_sampled": 13357056,
+      "cgroup_memory_peak_bytes": 35078144,
+      "child_peak_rss_kib": 33272,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v2-transfer-5.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v2/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-transfer-5-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-transfer-5-task",
+        "transfer",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v1"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5007738820277154,
+      "peak_aggregate_rss_bytes_sampled": 13344768,
+      "cgroup_memory_peak_bytes": 35323904,
+      "child_peak_rss_kib": 33244,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v2-withdrawal-1.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v2/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-withdrawal-1-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-withdrawal-1-task",
+        "withdrawal",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v1"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.500697129056789,
+      "peak_aggregate_rss_bytes_sampled": 13328384,
+      "cgroup_memory_peak_bytes": 34983936,
+      "child_peak_rss_kib": 33008,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v2-withdrawal-2.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v2/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-withdrawal-2-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-withdrawal-2-task",
+        "withdrawal",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v1"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.500755566987209,
+      "peak_aggregate_rss_bytes_sampled": 13258752,
+      "cgroup_memory_peak_bytes": 34852864,
+      "child_peak_rss_kib": 33128,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v2-withdrawal-3.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v2/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-withdrawal-3-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-withdrawal-3-task",
+        "withdrawal",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v1"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5005781019572169,
+      "peak_aggregate_rss_bytes_sampled": 13451264,
+      "cgroup_memory_peak_bytes": 35012608,
+      "child_peak_rss_kib": 33116,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v2-withdrawal-4.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v2/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-withdrawal-4-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-withdrawal-4-task",
+        "withdrawal",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v1"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5006137799937278,
+      "peak_aggregate_rss_bytes_sampled": 13328384,
+      "cgroup_memory_peak_bytes": 34877440,
+      "child_peak_rss_kib": 33164,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v2-withdrawal-5.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v2/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-withdrawal-5-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v2-withdrawal-5-task",
+        "withdrawal",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v1"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5006504560587928,
+      "peak_aggregate_rss_bytes_sampled": 13389824,
+      "cgroup_memory_peak_bytes": 34684928,
+      "child_peak_rss_kib": 33044,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v3b-transfer-1.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v3b/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-transfer-1-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-transfer-1-task",
+        "transfer",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v0"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5006749299354851,
+      "peak_aggregate_rss_bytes_sampled": 13344768,
+      "cgroup_memory_peak_bytes": 35360768,
+      "child_peak_rss_kib": 33264,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v3b-transfer-2.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v3b/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-transfer-2-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-transfer-2-task",
+        "transfer",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v0"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5006441270234063,
+      "peak_aggregate_rss_bytes_sampled": 13312000,
+      "cgroup_memory_peak_bytes": 35012608,
+      "child_peak_rss_kib": 33164,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v3b-transfer-3.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v3b/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-transfer-3-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-transfer-3-task",
+        "transfer",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v0"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5007076560286805,
+      "peak_aggregate_rss_bytes_sampled": 13479936,
+      "cgroup_memory_peak_bytes": 35102720,
+      "child_peak_rss_kib": 33456,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v3b-transfer-4.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v3b/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-transfer-4-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-transfer-4-task",
+        "transfer",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v0"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5007205499568954,
+      "peak_aggregate_rss_bytes_sampled": 13320192,
+      "cgroup_memory_peak_bytes": 35524608,
+      "child_peak_rss_kib": 33144,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v3b-transfer-5.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v3b/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-transfer-5-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-transfer-5-task",
+        "transfer",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-transfer-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v0"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5008404100080952,
+      "peak_aggregate_rss_bytes_sampled": 13299712,
+      "cgroup_memory_peak_bytes": 34942976,
+      "child_peak_rss_kib": 33196,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v3b-withdrawal-1.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v3b/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-withdrawal-1-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-withdrawal-1-task",
+        "withdrawal",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v0"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5007058489136398,
+      "peak_aggregate_rss_bytes_sampled": 13295616,
+      "cgroup_memory_peak_bytes": 35364864,
+      "child_peak_rss_kib": 32948,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v3b-withdrawal-2.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v3b/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-withdrawal-2-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-withdrawal-2-task",
+        "withdrawal",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v0"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5007208080496639,
+      "peak_aggregate_rss_bytes_sampled": 13225984,
+      "cgroup_memory_peak_bytes": 35258368,
+      "child_peak_rss_kib": 33172,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v3b-withdrawal-3.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v3b/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-withdrawal-3-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-withdrawal-3-task",
+        "withdrawal",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v0"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5007526299450547,
+      "peak_aggregate_rss_bytes_sampled": 13369344,
+      "cgroup_memory_peak_bytes": 34824192,
+      "child_peak_rss_kib": 33052,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v3b-withdrawal-4.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v3b/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-withdrawal-4-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-withdrawal-4-task",
+        "withdrawal",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v0"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5008877529762685,
+      "peak_aggregate_rss_bytes_sampled": 13336576,
+      "cgroup_memory_peak_bytes": 35336192,
+      "child_peak_rss_kib": 33264,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "pool-v3b-withdrawal-5.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-v0/frozen-driver-copy/pool_gate-v3b",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_pool.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-adapter-v3b/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-input-artifacts/aspis_registry.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-withdrawal-5-evidence.json",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/pool-v3b-withdrawal-5-task",
+        "withdrawal",
+        "success",
+        "--reuse",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pool-withdrawal-v1-task/r1-s2-public-asf8.bin",
+        "--tx-version",
+        "v0"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5007077989866957,
+      "peak_aggregate_rss_bytes_sampled": 13365248,
+      "cgroup_memory_peak_bytes": 34746368,
+      "child_peak_rss_kib": 33220,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "withdrawal-stage-d18.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-p2-20261010/target/release/aspis-r1-cu-probe",
+        "diagnostic",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/d18/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/withdrawal-stages/d18/S2",
+        "withdrawal",
+        "10"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 1,
+      "wall_seconds": 0.5006851089419797,
+      "peak_aggregate_rss_bytes_sampled": 13332480,
+      "cgroup_memory_peak_bytes": 26304512,
+      "child_peak_rss_kib": 23824,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "withdrawal-stage-geometry-dots.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-p2-20261010/target/release/aspis-r1-cu-probe",
+        "diagnostic",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/geometry-dots/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/withdrawal-stages/geometry-dots/S2",
+        "withdrawal",
+        "10"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5005787720438093,
+      "peak_aggregate_rss_bytes_sampled": 13295616,
+      "cgroup_memory_peak_bytes": 25899008,
+      "child_peak_rss_kib": 23680,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "withdrawal-stage-pairing.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-p2-20261010/results/r1-precheck-20261010/bin/r1-cu-driver",
+        "diagnostic",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/pairing/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/withdrawal-stages/pairing/S2",
+        "withdrawal",
+        "10"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.500573730096221,
+      "peak_aggregate_rss_bytes_sampled": 13332480,
+      "cgroup_memory_peak_bytes": 25157632,
+      "child_peak_rss_kib": 22808,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "withdrawal-stage-rho-clean.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-p2-20261010/target/release/aspis-r1-cu-probe",
+        "diagnostic",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/rho-clean/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/withdrawal-stages/rho-clean/S2",
+        "withdrawal",
+        "10"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5006344430148602,
+      "peak_aggregate_rss_bytes_sampled": 13307904,
+      "cgroup_memory_peak_bytes": 26181632,
+      "child_peak_rss_kib": 23688,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    },
+    {
+      "path": "withdrawal-stage-terminal.json",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-p2-20261010/results/r1-precheck-20261010/bin/r1-cu-driver",
+        "diagnostic",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/terminal/bin/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/gr1-cost-20261013/withdrawal-stages/terminal/S2",
+        "withdrawal",
+        "10"
+      ],
+      "source_revision": "628054cd4+gr1-cost-20261013+frozen-v3b-a810048410e72612d757353f53555b8c586115a13b519060989ed6ab533733f2",
+      "exit_status": 0,
+      "wall_seconds": 0.5006305150454864,
+      "peak_aggregate_rss_bytes_sampled": 13324288,
+      "cgroup_memory_peak_bytes": 26066944,
+      "child_peak_rss_kib": 23956,
+      "cgroup_swap_current_bytes": 0,
+      "caps": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0"
+      }
+    }
+  ],
+  "limitations": [
+    "D18 transport and rho-field transitions are not a P2 security-equivalence claim.",
+    "v2 historical build has no complete source-file manifest; retained ELF and build/stack/input hashes pinned.",
+    "Full-random measurements are the selected standalone d18 ELF; adapter fixtures are separately measured.",
+    "Rollover deliverable is a design note; no successful 255-pair spend claimed.",
+    "One recorded random tape per operation, five runtime repetitions; no worst-case CU bound."
+  ]
+}
