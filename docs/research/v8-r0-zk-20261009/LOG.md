@@ -3519,3 +3519,127 @@ item 3 is its unfolding, not a separate statement. No new definitions.
 identifies with `p₀(0) + p₀(1)`. This is consistent with the corrected item 3
 (the mask sum is exactly the initial-sum coordinate) and nothing in items 1–2
 moves. Research under the current verdict (PLAN, 2026-10-11): v7 stands.
+
+### Lead decision D20 (2026-10-13) — spanning fails on `Good` over the base field; predicate refinement; probe Z7; ZF1-0 inventory
+
+While T2b-2a runs, the T2b-2b statement was prepared from the closed forms of
+"User direction (2026-10-12)" item 2. A dimension count shows that the
+intended statement, `Chain0 ch ⊆ roundProjection (A (silentMasks))` for every
+`Good ch`, is **false**, so the predicate must be refined before T2b-2b is
+written. Nothing proved so far is affected: T2a's chain
+`MaskImageOn P → HVZK_on P → ZK_FS (ε_fs + badMass P)` holds for every `P`,
+and T2b-1/T2b-2a hold on `Good` as stated. What changes is the predicate on
+which `MaskImageOn` will be proved and the ledger term attached to it.
+
+**D20.1 (the obstruction).** Let `F` be the mask base field (the `PackBasis`
+subfield; M31 in the source) and take `ch` with every `alpha ch i ∈ F \ {0,1}`
+and `alpha ch 9 ≠ 1/2`, so `Good ch` holds. At round 7, the tower-limb-`u`
+component (`towerBasis` index 2) of the silent image has `F`-dimension at most
+24, while `Chain0`'s round-7 component is all of `K[X]_{≤27}` (its only
+coupling is the one chain condition), whose `u`-component has dimension 28:
+
+- mask-only lane `c` has an `F`-valued word and factor
+  `τ_c · (maskLinear 0 a)^{e_c}` with `τ_c = towerBasis ((16+c) mod 4)`; the
+  `u`-lanes are `c = 2` (`e = 5`) and `c = 6` (`e = 15`). The round-7 row
+  polynomial is `eqPrefix(α, r_<7) · (r_7 ? X : 1−X) · (w_7 X + β_7(r))^{e_c}`
+  with `β_7(r) = Σ_{i<7} w_i α_i + Σ_{i>7} w_i r_i`; with `α ∈ F^10` every
+  coefficient is in `F`, there are four tails (bits 8, 9) and two values of
+  `r_7`, so the lane's image is `τ_c · (F-span of ≤ 8 polynomials in
+  F[X]_{≤ e_c+1})`: `u`-component ≤ 7 + 8 = 15 dimensions;
+- `G`'s word is `K`-valued; its round-7 polynomials
+  `(r_7 ? X : 1−X)(1 + (w'_7 X + β'_7(r))^26)` lie in `F[X]` for `α ∈ F^10`
+  (four tails, two bits), so its image is `K ⊗_F (≤ 8-dimensional F-space)`:
+  `u`-component ≤ 8;
+- the Libra lane `D` contributes a constant at rounds `j < 8` (Z4c table):
+  `u`-component ≤ 1; the H1 padding is not a mask lane (it lives in `N`).
+
+Total ≤ 24 < 28. The same count at `α ∈ {0,1}^10` is what Z4c observed
+(constructed ranks 1,022 and 1,038, supports at `(7,d,k)` with `k ∈ {2,3}`);
+the point here is that `Good` does not exclude the base-field case, which has
+mass `(|F|/|K|)^10` under a uniform α-row. The mechanism is that the
+mask-only lanes acquire `K`-multiples only through the low-bit scalars
+`Λ_j := span_F { eqPrefix(α, ℓ) : ℓ ∈ {0,1}^j } ⊇ span_F {1, α_0, …, α_{j−1}}`;
+`G` and `D` carry `K`-valued words and need no such scalars. With
+`w_i = 3 + 22 i` an arithmetic progression, the distinct tail sums at round
+`j` number 512, 256, 128, 42, 26, 15, 8, 4, 2, 1 for `j = 0..9` (subset sums
+of an arithmetic progression collide: e.g. `w_6 + w_9 = w_7 + w_8`). By the
+leading-degree (divided-difference) argument, `G` alone spans all 28 degrees at
+rounds 0–3, degrees 1–27 at round 4 (degree 0 from `D`'s constant), degrees
+12–27 at round 5, 19–27 at round 6 and 23–27 at round 7; `D` spans rounds 8
+and 9 entirely (`h8`, `h9` monomials). The mask-only lanes, under `Λ_j = K`,
+span degrees 0–22 at every round by the same argument (lane `e` contributes
+leading degrees `e−3 … e+1`; the ten exponents cover 0–22 without gaps). So
+`Λ_5 = Λ_6 = Λ_7 = K` is sufficient, and the base-field case shows some such
+condition is necessary.
+
+**D20.2 (predicate, provisional).** The candidate refinement is
+`Good₂ ch := Good ch ∧ span_F {1, alpha ch 0, …, alpha ch 4} = K`
+(then `Λ_5 ⊆ Λ_6 ⊆ Λ_7` are all `K`). Its failure mass under a uniform α-row
+is at most `(#3-dimensional F-subspaces containing 1) · (|F|^3/|K|)^5 =
+(|F|^2+|F|+1)·|F|^15/|K|^5`. In the proved protocol the α-row is drawn in
+`K = SemE = WideExact` (SemD3Glue.lean:528), where this is negligible; for a
+QM31 instantiation it is ≈ 2^-93, and the sharper bound using the products
+`α_i α_k ∈ Λ_5` would be needed to stay below 2^-100. The exact predicate is
+fixed after Z7 reports; the T2b-2b statement is written then.
+
+**Z7 (numeric probe; Claude agent; Rust; no Lean; no host Lean job).** Extend
+`z4/probe.rs`'s Z4c machinery (`Ech`, `lane_eliminate`, `pure_c`, `full_c`,
+`gate_c`, Z4c's D13 transport and challenge replay, `summarize`) into
+`z4/z7.rs` + `run-z7.py`, keeping the base routines byte-for-byte. For each
+α-structure below, report per round `j` the `F`-rank of the round-`j`
+projection of (a) the constructed silent image and (b) the unconstrained pure
+image, the total silent rank, and Z4c-style excess supports `(j,d,k)` against
+`Chain0`-targets, on 5 challenge vectors per structure (all other challenges
+as Z4c; `alpha 9 ≠ 1/2` and `α_i ∉ {0,1}` enforced):
+ (A) α uniform in K (control; expect 112 per round, 1,076 total);
+ (B) all `α_i ∈ F \ {0,1}` (expect the D20.1 deficiency at rounds 6–7, and
+     the measured round-5 behaviour);
+ (C) `α_0..α_4 ∈ W`, `W` a random 3-dimensional `F`-subspace containing 1,
+     `α_5..α_9` uniform in K; (D) `α_0..α_5 ∈ W`; (E) `α_0..α_6 ∈ W`;
+ (F) `α_0, α_1 ∈ span_F{1, α_0}` (2-dimensional), rest uniform;
+ (G) `α_0..α_4` uniform, `α_5..α_9 ∈ F` (late coordinates only; expect no loss);
+ (H) as (A) but with mask-only words restricted to rows with low bits
+     `r_<j = 0` for the round-`j` matrix (diagnostic for the `Λ_j` mechanism).
+Also print the distinct-tail-sum counts per round and, for (A), the
+leading-degree pivot sets per lane at rounds 5–7. Optimised build under a
+cgroup with explicit caps (`run-z7.py` in the style of `run.py`), source
+manifest, receipts; findings as `z4/FINDINGS-Z7.txt` + `summary-Z7.json` +
+`evidence-Z7.json` (the lead converts the findings to `.md`). No production
+or Lean source changes. Stop rule: if (A) does not reproduce 1,076 on every
+vector, stop and report.
+
+**ZF1-0 (inventory and proposal; Claude agent; no proofs; no host).** Produce
+`zf1/INVENTORY-ZF1.txt`: exact names, files and lines of every object ZF1
+composes — `FsStatement` (`ROMView`, `FSExperiments`, `ZK_FS`, `ROMBridge`,
+`ROMReduction`, `middleReal/Ideal`, `zkfs_of_hvzk_perfect`), `FsGood`
+(`badMass`, `zkfs_of_hvzk_on`, `zkfs_of_maskImageOn_good`), `ZkStatement`
+(`ModelSamplers`, `SamplerLaw`, `honestRows`, `honestView`,
+`combinedSamplers`, `R0Obligations`, the 32-row schedule at line 449),
+`FS2.Duplex` (`Params`, `samp`, `stateOf`, `absorbA/squeezeA/advanceA` and
+their injectivity/disjointness lemmas, `Chal`), `FS2.Statement`
+(`Sampler`, `toProgram`), `AspisV8R19.MemoizedProgramLaw` (`Program`, `eval`,
+`lazyMean`, `Table`, `put`, `complete`), `AspisV8R19.AdaptiveFirstReadLaw`
+(`FreshFrom`, `lazyMean_eq_independentMean`,
+`complete_oracle_eq_independentMean`, `empty_oracle_eq_independentMean`,
+`squeezeProgram_fresh_iff`, `independentMean_bind`), the decoders
+(`R0C.V3.DQ.σQ`, `R0C.ModuloField.ordinary/gamma`, `ordinary_mass`,
+`ordinary_mass_257`, `ordinary_event`), `R0P.SemDuplex.combinedOwn_law` and
+`samp_mean`, and the field of the α-row (`SemE := WideExact`). Then a
+proposal, as text with Lean signatures but no proofs: (1) the concrete
+`FSExperiments` instance — adversary as a view-dependent oracle program with
+its own coins, real experiment = the honest 31-round duplex program evaluated
+on a uniform oracle function followed by the adversary's program, observer
+log = its reads, ideal = the same with the simulator's instance; (2) the
+`ROMBridge` — coins = the per-round absorb/squeeze/advance states, a fresh
+table for the adversary's other reads and its coins; `draw` = the challenges
+`σ_i` of the squeeze states in the 32-row schedule; `extend` = answering the
+adversary's reads at prover addresses (recomputable from the view's messages)
+from the recorded states, otherwise from the fresh table; (3) `ε_real`,
+`ε_ideal` = the `FreshFrom`-failure mass (an adversary read hitting a prover
+address before the prover does, or a prover address repeating), with the
+bound shape in terms of the query count and `|State|` and the lemmas that
+give it; (4) the `badMass Good` identification — per α-round mass of
+`{0, 1}` (and `1/2` at round 23) under the semantic decoder through
+`ordinary_mass`/`combinedOwn_law`, naming which `Params.σ` the semantic rounds
+14–23 use in `R0Obligations` and what is data there. List every gap or
+mismatch found. The lead fixes the ZF1 statements from this report.
