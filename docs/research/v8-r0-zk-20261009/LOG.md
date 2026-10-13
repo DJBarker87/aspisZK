@@ -3950,3 +3950,53 @@ rank of the subspace assembled from (1) and (2) (expect 1,076 — equality with
 Z8's silent rank means the decomposition loses nothing). Any shortfall is a
 finding that redirects the design. Research under the current verdict (PLAN,
 2026-10-11): v7 stands.
+
+### Lead acceptance of Z8b (2026-10-13); decision D20⁗ — the decomposition loses nothing globally, but its PCS block is not full rank; the design is redirected
+
+Z8b (`166ed47cd` on `codex/z8b-decomposition-20261013`, cherry-picked;
+`z4/z8b.rs` as a `probe.rs` module behind `--z8b`, `run-z8b.py`,
+`FINDINGS-Z8b.txt` (lead copy `FINDINGS-Z8b.md`), `summary-Z8b.json`,
+`evidence-Z8b.json`, `probe-Z8b.log`, `z8b-runs/`) is accepted. Only `z4/`
+changed; Z8's WideExact batching and real silence coordinates; 5 (A) vectors,
+identical numbers on each; host receipts (nuc, 3G/4G/swap 0): full scope
+516.8 s, peak child RSS 217,884 KiB, swaps 0; 208 source hashes match.
+
+**Correction of counts.** A `K₄`-valued lane (G, D) has 94 own observations
+(3 point claims, 1 extra claim, 2 OOD, 88 opened, each `K₄`-valued) = 376
+limbs, not 448; the "112" of an M31 lane is a limb count. Block (1) of
+D20‴.3 therefore has 2,112 + 376 = 2,488 limb-functionals.
+
+**Results.**
+- Per-lane own-silence ranks on Z8's fibre set: mask-only lanes 16–25: 112
+  each; G: 376 (380 with its inactive-row sum); D: 376; D restricted to
+  coefficients 0–55: 224; to 56–1023: 372.
+- **(1) PCS block on D's coefficients 56–1023:** rank 2,184 of 2,488; with
+  G's inactive-row sum 2,188. Breakdown: batched 2,000 of 2,112 (2,004 with
+  G); D-own 372 of 376; `.inactiveSum` 4 of 8 limbs (8 with G — the
+  `K₄`-line effect predicted in D20‴.3); opening+final 1,996 of 2,104 (27
+  `K₄`-functionals short). **The block is 300 limbs short of full rank**; the
+  `.inactiveSum` line accounts for 4 of them.
+- **(2) Round image of the (Q) generators** (mask-lane own-kernels, G's
+  own-kernel with zero inactive-row sum, D's coefficients 0–55): 112 per
+  round, 1,084 retained, 1,080 with initial zero (the terminal is not forced
+  to zero because D's 0–55 are free there); Chain0 and (i′) targets already
+  inside; the generators' silent part alone is only 988.
+- **(3) Assembled** ((Q) generators + D's 56–1023): span 3,376 with 2,296
+  silence pivots; initial-retained 1,080; **silent 1,076 = Z8's**; per round
+  108, 112, …, 112, 108; Chain0 excess 0; (i′) 25/25; derivative 25/25.
+
+**D20⁗.1 (what this means).** The modular picture "D's round-free
+coefficients cancel the PCS coordinates; the lanes span the rounds" is false
+as a lemma: D's high coefficients plus G's inactive sum cancel 2,188 of the
+2,488 batched/own limbs, and the remaining 300 are cancelled by the surplus
+of the other lanes' own-silence kernels (each mask-only lane has a
+912-limb kernel of which only a bounded part carries round image). The
+global statement stands — the assembled subspace is exactly the silent image
+on these vectors — so the proof must be organised around a global
+kernel-rank fact (the observation functionals restricted to the round-kernel
+`ker R` have full rank, or an equivalent) or around a decomposition that uses
+the lanes' surplus explicitly. The T2b-2b-D agent has been given these
+numbers and asked to restructure accordingly, keeping the
+STRUCTURAL/CONDITIONAL tagging and naming the numeric check that would
+confirm each restructured lemma. D21 waits for the revised design. Research
+under the current verdict (PLAN, 2026-10-11): v7 stands.
