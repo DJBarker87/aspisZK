@@ -163,3 +163,75 @@ and that evidence JSON are committed; no binaries, co-author trailer or push.
 L1 alone closes no ledger row. L2's matched-response wrapper, the round
 comparisons and all other pending obligations remain open. Verdict unchanged:
 v7 stands; R1 is a live candidate under G_R1.
+
+### L2 completed — second-fold matched responses (2026-10-13)
+
+**Scope and base.** On `codex/r1-l2-second-fold-matched`, based on completed
+L1 commit `364f53b602584a4b763ea0b5ce7ecb392dd2f368`. The user explicitly
+confirmed starting L2 from this commit after L1 passed. The reference head
+was still `4edacd5bd` when checked; no lead acceptance is inferred. Added
+`lean/R1/SecondFoldMatched.lean`, importing `R1.RepeatedLift`. Both definitions
+and L2.1–L2.4 from `L1-L2-REPEATED-LIFT.md` are preserved, including the exact
+thresholds 2389 and 9557 and the existing `foldChallengeCap`.
+
+**Proofs.** The lifted support is the union of complete child quartets. A
+symbolic reindexing by `fibreIndexEquiv` identifies it with the image of
+`S × Fin 4`, proving its size is exactly `4 * S.card`. The pointwise curve
+identity and L1's `exactFinalLinear_lift` then transport valid responses;
+`2389 < S.card` implies `9557 < 4 * S.card`.
+
+For `matchingDecomposition_descend`, the indicative route in the fixed
+document cites a support-size bound not present in the statement. The proof
+uses projection instead, preserving the statement without adding a premise:
+take the zero coefficient lane of each upper component. L1.5 and L1.4 show
+that its lower encoding is the quartet average, so it agrees with the lower
+received lane at every supported parent, including on small or empty
+supports. Apply the linear zero-lane map to the candidate equality supplied
+by `final_matchingDecomposition_iff`; this map is a left inverse of
+`liftCoefficients`, yielding the lower candidate curve. L1.6's support bound
+is not needed for this route.
+
+Finally, `mem_badStrategy_good_iff`, validity lifting and the contrapositive
+of matching descent put the second-fold bad-challenge set inside the existing
+final-encoder bad-challenge set. `exactFinal_bad_response_challenges_card_le`
+gives the unchanged cap. No decoder instance, list-size premise or certificate
+is added.
+
+**Host replay and audit.** Used the pinned workspace
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006` on
+`dombarker@100.108.41.90`, Lean v4.32.0 and its existing cache. Before attempt
+3422, verified all 89 checked Wide/R0, directly used AspisFormal and L1
+dependency sources, the compiled L1 object, and the host lakefile's R1
+registration with Wide, R0 and AspisFormal dependencies. These remained
+unchanged after 3425; no host configuration or dependency repair was needed.
+
+Attempts 3422–3425 ran `sh run2.sh N R1/SecondFoldMatched 7000 7` directly,
+one module at a time, with the launcher's own lock. Caps stayed at MemoryHigh
+5G, MemoryMax 7G, MemorySwapMax 0, TasksMax 128, timeout 900 s and Lean
+`-j1 -M7000 -DElab.async=false`. Reservations were 26 + 7 GiB for 3422 and
+24 + 7 GiB thereafter, below 55 GiB. No package build, dependency rebuild or
+unchanged full regression was run.
+
+3422 found a missing namespace opening for the existing final message/word
+types; 3423 passed L2.1–L2.2. 3424 required replacing a conditional simplifier
+in the zero-lane left-inverse proof after its condition had already reduced
+to `True`. Final attempt **3425** passed the complete committed source:
+**exit 0, 3.27 s wall, peak RSS 6,780,408 KiB, swaps 0**, with no warnings or
+diagnostics. No resource failure or cap increase occurred. Next attempt:
+**3426**.
+
+All four printed L2 results have exactly
+`[propext, Classical.choice, Quot.sound]`, including the required
+`secondFold_bad_response_challenges_card_le`. The new source has no `sorry`,
+`axiom` declaration, `native_decide`, `admit`, `maxRecDepth`, `maxHeartbeats`
+or `decide`. Its explicit `Finset.univ` terms and expanded sums are over
+`Fin 4`; no large coordinate universe is enumerated.
+[r1/l2/evidence.json](r1/l2/evidence.json), in the T2b-1 format, records all
+attempts, source identities, host setup, metrics, diagnostics, repairs,
+axioms and receipt hashes. Only the new Lean module, this appended section
+and the evidence JSON are committed; no binaries, co-author trailer or push.
+
+L1 and L2 now supply the second-fold matched-response bound. Round comparisons,
+the q22 support count, runtime domain commutation and the remaining ledger
+obligations stay open; no row is closed here. Verdict unchanged: v7 stands;
+R1 is a live candidate under G_R1.
