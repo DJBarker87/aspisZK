@@ -3244,3 +3244,80 @@ the four results, evidence under `t2b1/`. The branch
 `codex/t2b1-chain-20261012` created at 29314d487 continues; it rebases onto
 this head before its first commit. Research under the current verdict
 (PLAN, 2026-10-11): v7 stands.
+
+### Lead decision T2b-1″ (2026-10-13) — item 4 corrected: H1 padding is a zero-sum shift (Lemma C); the second stop is accepted
+
+The T2b-1 worker stopped a second time, correctly. Item 4 (and T2b-1′.2)
+asserted that `fOrig … (actual … (0,n)) (ofBool b)` and `fOrig … (actual … 0)
+(ofBool b)` agree termwise by Lemma A. They do not: `N K F = ExtTape F ×
+EligibleNoise K F` (Partition.lean:17), `aff (0,n)` places `n.1` in extension
+slot 1 (Partition.lean:22), and `applyAff` adds `h1Padding B (Sum.elim 0 tape)`
+to lane 26 (MaskLayout.lean:109–117). Lemma A covers `applyEligible` only.
+The worker's counterexample stands: with `n.2 = 0`, `n.1` supported at
+(row 15, limb 0) with value 1, `μ = η = 1`, row 15 is copy-inactive
+(`copyActiveRowMasks 0 = 6144`, bits 11 and 12 only; CopyConstants.lean:31),
+the Copy residual there is the prescribed zero (`copy_inactive_residuals`,
+Copy.lean:618), and the terminal moves by `μ·1 + μ²·(1−0)·1 = 2`.
+
+**T2b-1″.1 (η).** `fOrig` already carries `η = ch.sem 14` (Shift.lean:367).
+The initial sums in item 4 and T2b-1′.2 are `bsumB 10 (fun b => fOrig … (ofBool b))`
+with no further factor.
+
+**T2b-1″.2 (Lemma C — the H1 padding shifts terminal rows by a zero-sum amount).**
+Three statements, in `R0Z/TerminalEligible.lean` (or `R0Z/Chain.lean`):
+
+```
+terminal_applyAff (pub : Public K) (B : PackBasis F) (u : Trace K) (tape : AffTape K F)
+    (ch : Challenges K) (b : Fin 10 → Bool) :
+  terminalValue pub (ch.sem 0) (ch.sem 1) (ch.sem 2) (ch.sem 13) (zc ch) B
+      (honestClaims (applyAff B u tape) (ofBool b)) (ofBool b)
+    = terminalValue pub (ch.sem 0) (ch.sem 1) (ch.sem 2) (ch.sem 13) (zc ch) B
+        (honestClaims u (ofBool b)) (ofBool b)
+      + (ch.sem 13 + ch.sem 13 ^ 2) * h1Padding B (Sum.elim 0 tape) (rowOf b)
+
+h1Padding_sum (B : PackBasis F) (tape : MaskTape K F) :
+  ∑ r : Fin 1024, h1Padding B tape r = 0
+
+h1Padding_bsumB (B : PackBasis F) (tape : MaskTape K F) :
+  bsumB 10 (fun b => h1Padding B tape (rowOf b)) = 0
+```
+
+Route for `terminal_applyAff`: `honestClaims_ofBool` (SemHonest.lean:158);
+`applyAff` keeps columns 0..15 at every row and sets lane 26 to
+`u 26 r + h1Padding B (Sum.elim 0 tape) r`; `terminalValue` reads only the
+column-0..15 openings (`Fin.castLE`) and `y 0 26` (SemDecision.lean:74–80);
+`laneAt` reads `h1` only in lane 28 (SemDecision.lean:45–49). Split on
+`CopyActiveRow (rowOf b)`. Active: `h1Padding` is zero there by definition
+(zero on `CopyActiveRow` rows; the dependent row 0 is inactive since
+`Nat.testBit 6144 0 = false`, a tiny `decide`), so both claim vectors agree on
+everything read. Inactive: `copy_inactive_residuals` makes lane 28 equal to 0
+on both sides, `activeAt_ofBool` (SemHonest.lean:193) with the inactive
+selector gives `activeAt = 0`, and the two explicit helper terms contribute
+`μ·p + μ²·(1 − 0)·p`. Route for `h1Padding_sum`: split off `r = 0`; `balance 0`
+writes minus the sum over `copyInactiveRows.erase 0` of the padded word; the
+sum over `r ≠ 0` of `if CopyActiveRow r then 0 else extensionRaw B tape 1 r`
+is the same sum (`Finset.sum_filter`; `copyInactiveRows` stays `irreducible`
+as in HonestView.lean:18 — never enumerated). `h1Padding_bsumB` is
+`bsumB_rowOf` (LaneMap.lean:933, public) applied to `h1Padding_sum`.
+
+**T2b-1″.3 (item 4, corrected route).** Write `u_e := prepare pub
+(applyEligible (h.build w) n.2) ch` and `u_0 := prepare pub (applyEligible
+(h.build w) 0) ch`, so `actual … (0,n) = applyAff B u_e (aff (0,n))` and
+`actual … 0 = applyAff B u_0 0` (PayloadSplit.lean:70–72; `aff 0 = 0`). At
+every Boolean `b`, `terminal_applyAff` gives
+`fOrig … (actual … (0,n)) (ofBool b) = η·(T(u_e, b) + (μ+μ²)·h1Padding B (Sum.elim 0 (aff (0,n))) (rowOf b))`
+and `fOrig … (actual … 0) (ofBool b) = η·T(u_0, b)` (the zero tape pads by
+zero: `extensionRaw` of 0 is 0 and `balance 0` of the zero word is 0).
+Lemma A twice: `T(u_e, b) = T(prepare pub (h.build w) ch, b) = T(u_0, b)`.
+So the termwise difference is `η·(μ+μ²)·h1Padding … (rowOf b)`, and its Boolean
+sum is 0 by `h1Padding_bsumB` with `bsumB_add`/`bsumB_smul`
+(Zerocheck.lean:59–72). With `rounds_initial` applied to both `fOrig`s
+(`vdeg_fOrig`), `g`'s round-0 polynomial sums to 0 on {0,1}. The chain,
+terminal and `nonRound` parts of item 4 are unchanged.
+
+**T2b-1″.4 (`applyAff_zero` withdrawn).** `applyAff B u 0 = u` is false:
+lanes 16–25, 27 and 28 are rewritten from the zero tape. Its terminal-level
+role is `terminal_applyAff` at `tape = 0`, which is the form item 4 uses.
+`#print axioms` is additionally required for `terminal_applyAff` and
+`h1Padding_bsumB`. Everything else in T2b-1 and T2b-1′ stands. Research under
+the current verdict (PLAN, 2026-10-11): v7 stands.
