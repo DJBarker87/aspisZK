@@ -236,3 +236,17 @@ Five focused targets passed, including a 1.39 s combined checkpoint at
 these literal trace facts to one concrete secret/nullifier/forest witness
 remains the next semantic step. The source, shared-oracle, and privacy
 obligations remain open.
+
+## One concrete input relation
+
+The [input-witness bridge](INPUT-WITNESS-BRIDGE.md) now exposes the old
+extraction proof's actual secret, salt and path, and joins them to the same
+candidate's occupied input pair. Its other commitment is proved to be the
+first path sibling; the first path step hashes that exact ordered pair.
+The old bounded-value theorem gives the input value and integer conservation.
+
+Five focused NUC targets passed on their first attempt, including a 1.51 s
+checkpoint at 3,591,584 KiB, zero swap and six standard-only axiom reports.
+Existing historical declarations are byte-identical. Authorization of the
+public anchor from account state, Rust refinement, the 33-row shared-oracle
+instantiation and privacy remain open.

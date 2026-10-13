@@ -348,6 +348,35 @@ theorem input_note_extracted (pub : Public K) (A : Trace K)
           (noteCommitment (ownerKey (traceSk A)) (A 10 1008) pub.assetId (traceSalt A))
           (tracePath A) := by rw [extraction_commitment pub A hs ha hpo hb]
 
+theorem input_note_trace_witness (pub : Public K) (A : Trace K)
+    (hs : Holds scheduleFamily pub A) (hp : Holds pathFamily pub A)
+    (hd : Holds digestFamily pub A) (ha : Holds assetFamily pub A)
+    (hpo : Holds poseidonScalarFamily pub A) (hb : CopyLinkBalance pub A) :
+    pub.nullifier = nullifierHash (traceSk A) (traceSalt A) ∧
+      pub.anchor = merkleRoot
+        (noteCommitment (ownerKey (traceSk A)) (A 10 1008) pub.assetId (traceSalt A))
+        (tracePath A) ∧
+      digestOf (poseidonState A 3 11) =
+        noteCommitment (ownerKey (traceSk A)) (A 10 1008) pub.assetId (traceSalt A) := by
+  refine ⟨?_, ?_, ?_⟩
+  · calc
+      pub.nullifier = extractionOutput A 26 := by
+        funext i
+        exact (((digest_holds_iff pub A).mp hd).2.1 i).symm
+      _ = nullifierHash (traceSk A) (traceSalt A) := extraction_nullifier pub A hs hpo hb
+  · calc
+      pub.anchor = extractionOutput A 56 := by
+        funext i
+        exact (((digest_holds_iff pub A).mp hd).1 i).symm
+      _ = merkleRoot (extractionOutput A 3) (tracePath A) :=
+        (extraction_membership pub A hs hp hpo hb).symm
+      _ = merkleRoot
+          (noteCommitment (ownerKey (traceSk A)) (A 10 1008) pub.assetId (traceSalt A))
+          (tracePath A) := by rw [extraction_commitment pub A hs ha hpo hb]
+  · simpa only [extractionOutput] using extraction_commitment pub A hs ha hpo hb
+
+#print axioms input_note_trace_witness
+
 #print axioms extraction_block_step
 #print axioms extraction_initial
 #print axioms extraction_initial_owner

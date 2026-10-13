@@ -63,3 +63,8 @@ concrete trace witnesses and assemble one theorem joining ownership,
 nullifier, selected pair, and the complete authenticated forest path.
 No full input/forest relation, Rust/account refinement, shared-oracle
 Fiat–Shamir instantiation, or privacy theorem is claimed here.
+
+The later [input-witness bridge](INPUT-WITNESS-BRIDGE.md) now joins the
+concrete ownership/nullifier/path witnesses and occupied pair. Account
+root authorization and the remaining source/FS/privacy boundaries stay
+explicit.
