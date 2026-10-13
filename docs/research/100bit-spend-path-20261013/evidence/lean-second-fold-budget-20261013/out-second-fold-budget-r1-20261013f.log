@@ -1,0 +1,27 @@
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/SecondFoldBudgetStage6.lean:110:20: error(lean.unknownIdentifier): Unknown constant `Finset.mul_sum`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/SecondFoldBudgetStage6.lean:107:19: error: unsolved goals
+hterm :
+  ∀ j ∈ Finset.range yRows,
+    (xBound - messageDegree * (yRows - 1 - j)) * (zBound - curveDegree * (yRows - 1 - j)) =
+      (114 + 63 * j) * (2197 + 3 * j)
+hpoly : ∀ (j : ℕ), (114 + 63 * j) * (2197 + 3 * j) = 114 * 2197 + (114 * 3 + 63 * 2197) * j + 63 * 3 * j ^ 2
+⊢ yRows * (114 * 2197) + ∑ x ∈ Finset.range yRows, (114 * 3 + 63 * 2197) * x +
+      ∑ x ∈ Finset.range yRows, 63 * 3 * x ^ 2 =
+    yRows * (114 * 2197) + (114 * 3 + 63 * 2197) * ∑ j ∈ Finset.range yRows, j +
+      63 * 3 * ∑ j ∈ Finset.range yRows, j ^ 2
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/SecondFoldBudgetStage6.lean:116:8: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ c ≤ 474599
+  b ≥ 0
+  a ≥ 0
+  83486*a + 46251*b + 63*c ≥ 0
+where
+ a := ↑yRows
+ b := ↑(∑ j ∈ Finset.range yRows, j)
+ c := ↑(∑ j ∈ Finset.range yRows, j ^ 2)
+'AspisR1.SecondFoldBudget.exact_weighted_sum' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SecondFoldBudget.numeric_feasibility_certificate' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

@@ -59,14 +59,17 @@ impl WideExact {
         }
     }
 
+    #[inline(always)]
     pub const fn c0(self) -> QM31 {
         self.c0
     }
+    #[inline(always)]
     pub const fn c1(self) -> QM31 {
         self.c1
     }
 
     /// The field embedding `x -> x + 0*v`; canonicalizes raw QM31 limbs.
+    #[inline(always)]
     pub fn from_qm31(value: QM31) -> Self {
         Self {
             c0: canonical_qm31(value),
@@ -74,6 +77,7 @@ impl WideExact {
         }
     }
 
+    #[inline(always)]
     pub fn add(self, rhs: Self) -> Self {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EAdd);
@@ -83,6 +87,7 @@ impl WideExact {
         }
     }
 
+    #[inline(always)]
     pub fn sub(self, rhs: Self) -> Self {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::ESub);
@@ -92,6 +97,7 @@ impl WideExact {
         }
     }
 
+    #[inline(always)]
     pub fn neg(self) -> Self {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::ENeg);
@@ -102,6 +108,7 @@ impl WideExact {
     }
 
     /// `(a+b*v)(c+d*v) = (ac+u*bd) + (ad+bc)*v`.
+    #[inline(always)]
     pub fn mul(self, rhs: Self) -> Self {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMul);
@@ -128,6 +135,7 @@ impl WideExact {
     }
 
     /// `(a+b*v)^2 = (a^2+u*b^2) + (2ab)*v`.
+    #[inline(always)]
     pub fn square(self) -> Self {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::ESquare);
@@ -166,6 +174,7 @@ impl WideExact {
     }
 
     /// Mixed multiplication `(a+b*v)*r = ar + br*v`, for `r` in QM31.
+    #[inline(always)]
     pub fn mul_qm31(self, rhs: QM31) -> Self {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMulK);
@@ -177,6 +186,7 @@ impl WideExact {
     }
 
     /// Scalar multiplication without lifting to a full E product.
+    #[inline(always)]
     pub fn mul_m31(self, rhs: M31) -> Self {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMulF);
@@ -193,6 +203,7 @@ impl WideExact {
 
     /// Decode eight base-P digits without reduction; rejects any digit >= P.
     /// This is `digitsField`, not the natural-number cast of a base-P rank.
+    #[inline(always)]
     pub fn from_limbs(limbs: [u32; Self::LIMB_COUNT]) -> Option<Self> {
         if limbs.iter().any(|&limb| limb >= P) {
             return None;
@@ -222,6 +233,7 @@ impl WideExact {
         })
     }
 
+    #[inline(always)]
     pub const fn to_limbs(self) -> [u32; Self::LIMB_COUNT] {
         [
             self.c0.c0.a.0,
@@ -238,6 +250,7 @@ impl WideExact {
     /// Exactly 32 bytes: eight little-endian u32 limbs in `digitsField` order.
     /// Rejects both wrong lengths and noncanonical limbs, without slicing an
     /// unvalidated input. This is a field encoding, not the R-B block sampler.
+    #[inline(always)]
     pub fn from_le_bytes(bytes: &[u8]) -> Option<Self> {
         let bytes: &[u8; Self::BYTE_LEN] = bytes.try_into().ok()?;
         let mut limbs = [0; Self::LIMB_COUNT];
@@ -247,6 +260,7 @@ impl WideExact {
         Self::from_limbs(limbs)
     }
 
+    #[inline(always)]
     pub fn to_le_bytes(self) -> [u8; Self::BYTE_LEN] {
         let mut bytes = [0; Self::BYTE_LEN];
         for (chunk, limb) in bytes.chunks_exact_mut(4).zip(self.to_limbs()) {
@@ -256,6 +270,7 @@ impl WideExact {
     }
 }
 
+#[inline(always)]
 fn canonical_qm31(value: QM31) -> QM31 {
     let reduce = |x: M31| M31(x.0 % P);
     QM31 {
@@ -271,6 +286,7 @@ fn canonical_qm31(value: QM31) -> QM31 {
 }
 
 /// `u*(a+b*u) = (2+i)*b + a*u`.
+#[inline(always)]
 fn mul_u(value: QM31) -> QM31 {
     QM31 {
         c0: super::mul_by_r(value.c1),

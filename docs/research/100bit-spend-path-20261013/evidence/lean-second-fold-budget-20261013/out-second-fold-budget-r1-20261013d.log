@@ -1,0 +1,52 @@
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/SecondFoldBudgetStage4.lean:59:8: error: linarith failed to find a contradiction
+case neg.h1
+m : ℕ
+ih : (∑ j ∈ Finset.range m, j ^ 2) * 6 = m * (m - 1) * (2 * m - 1)
+hm : ¬m = 0
+hm1 : 1 ≤ m
+hsub : m - 1 + 1 = m
+hs : m + 1 - 1 = m
+htwo : 2 * (m + 1) - 1 = 2 * m + 1
+a✝ : (∑ x ∈ Finset.range m, x ^ 2 + m ^ 2) * 6 < (m + 1) * m * (2 * m + 1)
+⊢ False
+failed
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/SecondFoldBudgetStage4.lean:74:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 1
+  0 ≤ a ≤ 112
+where
+ a := ↑j
+ b := ↑(114 + 63 * j) * ↑(2197 + 3 * j)
+ c := ↑(7170 - 63 * (112 - j)) * ↑(2533 - 3 * (112 - j))
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/SecondFoldBudgetStage4.lean:102:53: error(lean.unknownIdentifier): Unknown constant `Finset.mul_sum`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/SecondFoldBudgetStage4.lean:101:14: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/SecondFoldBudgetStage4.lean:107:6: error: linarith failed to find a contradiction
+case h1
+hterm :
+  ∀ j ∈ Finset.range yRows,
+    (xBound - messageDegree * (yRows - 1 - j)) * (zBound - curveDegree * (yRows - 1 - j)) =
+      (114 + 63 * j) * (2197 + 3 * j)
+hpoly : ∀ (j : ℕ), (114 + 63 * j) * (2197 + 3 * j) = 114 * 2197 + (114 * 3 + 63 * 2197) * j + 63 * 3 * j ^ 2
+hsum :
+  ∑ j ∈ Finset.range yRows, (114 + 63 * j) * (2197 + 3 * j) =
+    yRows * (114 * 2197) + (114 * 3 + 63 * 2197) * ∑ j ∈ Finset.range yRows, j +
+      63 * 3 * ∑ j ∈ Finset.range yRows, j ^ 2
+hs1 : ∑ i ∈ Finset.range 113, i = 6328
+hs2 : (∑ j ∈ Finset.range 113, j ^ 2) * 6 = 2847600
+a✝ :
+  yRows * (114 * 2197) + (114 * 3 + 63 * 2197) * ∑ j ∈ Finset.range yRows, j +
+      63 * 3 * ∑ j ∈ Finset.range yRows, j ^ 2 <
+    996030138
+⊢ False
+failed
+'AspisR1.SecondFoldBudget.exact_weighted_sum' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SecondFoldBudget.numeric_feasibility_certificate' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
