@@ -106,6 +106,37 @@ def ROMReduction (h : HonestProver K) (B : PackBasis F)
         |mean (middleIdeal h B outputs fs bridge adv x hx) -
           mean (idealTest h B outputs fs adv x hx)| ≤ epsilon_ideal
 
+/-- D20′.3: the two real-game comparison bounds for a specified bridge. -/
+def ROMReductionWith (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (fs : FSExperiments K CommitHandle Aux F)
+    [Fintype fs.RealRand] [Nonempty fs.RealRand]
+    [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
+    (bridge : ROMBridge K CommitHandle Aux fs.Adversary)
+    (x : Statement K CommitHandle) (ε_real ε_ideal : ℚ) : Prop :=
+  0 ≤ ε_real ∧ 0 ≤ ε_ideal ∧
+  ∀ (hx : InLanguage h x) (adv : fs.Adversary) (w : h.Instance), h.public w = x.1 →
+    |mean (realTest h B outputs fs adv x w) -
+      mean (middleReal h B outputs fs bridge adv x w)| ≤ ε_real ∧
+    |mean (middleIdeal h B outputs fs bridge adv x hx) -
+      mean (idealTest h B outputs fs adv x hx)| ≤ ε_ideal
+
+/-- The original reduction existentially packages a bridge and its two bounds. -/
+theorem romReduction_iff (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (fs : FSExperiments K CommitHandle Aux F)
+    [Fintype fs.RealRand] [Nonempty fs.RealRand]
+    [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
+    (x : Statement K CommitHandle) (ε : ℚ) :
+    ROMReduction h B outputs fs x ε ↔
+      ∃ bridge ε_real ε_ideal,
+        ROMReductionWith h B outputs fs bridge x ε_real ε_ideal ∧ ε_real + ε_ideal ≤ ε := by
+  constructor
+  · rintro ⟨bridge, ε_real, ε_ideal, hr, hi, hsum, hb⟩
+    exact ⟨bridge, ε_real, ε_ideal, ⟨hr, hi, hb⟩, hsum⟩
+  · rintro ⟨bridge, ε_real, ε_ideal, ⟨hr, hi, hb⟩, hsum⟩
+    exact ⟨bridge, ε_real, ε_ideal, hr, hi, hsum, hb⟩
+
 theorem middle_means_eq (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
     (fs : FSExperiments K CommitHandle Aux F)
@@ -139,6 +170,8 @@ theorem zkfs_of_hvzk_perfect (h : HonestProver K) (B : PackBasis F)
 
 #print axioms ZK_FS
 #print axioms ROMReduction
+#print axioms ROMReductionWith
+#print axioms romReduction_iff
 #print axioms middle_means_eq
 #print axioms zkfs_of_hvzk_perfect
 end R0Z.FsStatement

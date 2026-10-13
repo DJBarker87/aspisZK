@@ -4183,3 +4183,54 @@ proved protocol's payload.
 base the commit carrying this section, attempts from 3408. Research under the
 current verdict (PLAN, 2026-10-13): v7 stands; R1 is a live candidate under
 G_R1.
+
+### ZF-A completed — bridge exposed in FS composition (2026-10-13)
+
+Branch `codex/zfa-bridge-composition-20261013`, base
+`4edacd5bda84f7808a87a29a466f7ff8eb6e6e26` (carrying T2b-2a acceptance).
+The four statements fixed in D20′.3 compile as given, with no added or
+weakened premise. `FsStatement.lean` adds `ROMReductionWith` immediately
+after `ROMReduction`, retaining the two nonnegative comparison bounds for
+the specified bridge, and `romReduction_iff`, which recovers the original
+existential packaging and sum bound. `FsGood.lean` adds
+`zkfs_of_hvzk_on_bridge` and `zkfs_of_maskImageOn_good_bridge`: the bad-mass
+hypothesis now concerns the same bridge supplied to `ROMReductionWith`, and
+the conclusion has error `ε_real + ε_ideal + ε_bad`.
+
+The existing triangle-inequality proof transfers with the bridge supplied
+as an argument. `middle_means_close` is byte-identical to the base, as are
+the existing theorem declarations and proofs. Both old FsGood theorems
+remain with the docstring “superseded by the `_bridge` forms (D20′.3)”. No
+concrete bridge, ROM comparison certificate, challenge law, or numerical
+bad-mass bound is supplied by this composition result.
+
+Host: `dombarker@100.108.41.90`, pinned workspace
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006`. All 106 base
+R0Z/R0P modules matched the staged host sources before the first attempt.
+The existing Lean v4.32.0 / Mathlib cache was reused. Each module ran once,
+in this order, using `sh run2.sh N Module 7000 7` directly; the launcher took
+its own lock. Caps were MemoryHigh 5G, MemoryMax 7G, MemorySwapMax 0,
+TasksMax 128, timeout 900 s, Lean `-j1 -M7000 -DElab.async=false`. Both
+launches admitted 24 GiB populated plus this job's 7 GiB below 55 GiB.
+
+| Attempt | Final target | Exit | Wall time | Peak RSS (KiB) | Swaps |
+|---|---|---|---|---|---|
+| 3408 | `R0Z/FsStatement` | 0 | 3.17 s | 6,847,708 | 0 |
+| 3409 | `R0Z/FsGood` | 0 | 3.46 s | 6,859,556 | 0 |
+
+All four required `#print axioms` results are exactly
+`[propext, Classical.choice, Quot.sound]`: `ROMReductionWith`,
+`romReduction_iff`, `zkfs_of_hvzk_on_bridge`,
+`zkfs_of_maskImageOn_good_bridge`. All eleven printed declarations across
+the two modules have that same result. No failed Lean attempt, cap increase,
+dependency rebuild or unchanged full regression. Next host attempt: 3410.
+[zfa/evidence.json](zfa/evidence.json), in the T2b-1 format, records source
+SHA-256 and Git blob identities, dependency identity, commands, metrics,
+axioms, and host receipt paths and hashes.
+
+Only the two prescribed Lean files, this LOG section and that evidence JSON
+changed. Neither target contains `sorry`, an `axiom` declaration,
+`native_decide`, `admit`, `maxRecDepth`, `maxHeartbeats` or `decide`. No new
+enumeration or broad unfolding; no binaries, co-author trailer or push.
+This closes ZF-A only. The research verdict is unchanged: v7 stands; R1
+remains a live candidate under G_R1.
