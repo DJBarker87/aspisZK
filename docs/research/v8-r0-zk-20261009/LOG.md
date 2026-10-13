@@ -3321,3 +3321,105 @@ role is `terminal_applyAff` at `tape = 0`, which is the form item 4 uses.
 `#print axioms` is additionally required for `terminal_applyAff` and
 `h1Padding_bsumB`. Everything else in T2b-1 and T2b-1′ stands. Research under
 the current verdict (PLAN, 2026-10-11): v7 stands.
+
+### T2b-1 completed — remainder in the chain space (2026-10-13)
+
+Implemented T2b-1 with the T2b-1′ and T2b-1″ corrections on
+`codex/t2b1-chain-20261012`, rebased before the first commit onto
+`6853b7827a6e6f330bf2ed11e6a64532d73b9387`. The two accepted stops remain
+recorded above and in `t2b1/evidence.json.previous_stops`. The only new
+source modules are `R0Z/TerminalEligible.lean` and `R0Z/Chain.lean`;
+`D12.lean`, `Shift.lean` and all R0P/R0/R0FS/R0C files are untouched.
+
+**Lemma A and the family audit.** Namespace `R0Z.TerminalEligible` proves
+`terminal_row_eligible` in the specified prepared-trace form. Its stronger
+intermediate `terminal_eligible` applies to any trace, and
+`prepare_eligible` uses `HelperInvariant.helper_eligible` to commute
+preparation with eligible masking. `honestClaims_ofBool` and `selAt_ofBool`
+reduce the terminal to its literal Boolean-row reads.
+
+- Schedule uses the existing `schedule_initial_row` and
+  `schedule_absorption_row`: selected cells are below row 912, at local
+  row 0 or 12. Digest's entire key catalogue likewise reads below 912
+  at local rows at most 12, including the symbolic frontier/carry cases.
+- Path constructs the `forestPathUsed` witness from its six blocks and
+  four base rows per block, protecting current columns 0–8 and all
+  successor columns. Value supplies the translated `pairAuxUsed` witness
+  for its three records, columns 0–10 at current/successor/xor12 rows.
+  Conservation protects columns 0–2 at row 1014 and 0–1 at row 1015.
+  Occupancy protects columns 0–10 at 1017 and 0–9 at 1018; its column-10
+  term at 1018 has zero selector. Asset protects its four selected reads.
+- Copy's endpoint accumulator, including its LogUp compression and all
+  positivity links, is invariant by `HelperInvariant.protected_registry`.
+  A generic list-fold congruence composes the endpoint facts without
+  unfolding the registry or relying on private R0P lemmas. The terminal
+  has one `copyFamily` lane for these reads, not separate LogUp/positivity
+  terminal lanes.
+- Poseidon uses the block selector and the local leading/full/internal
+  weights. Current/successor reads at local rows 0–10 are protected;
+  xor12 is used only at local row 0 and reads local row 12. At local rows
+  at least 11 every branch weight is zero. No recurrence or permutation
+  is evaluated. Every effective C1 read excludes row 1023.
+
+**Lemma C.** In the same module, `terminal_applyAff` has exactly the
+T2b-1″ correction `(μ + μ²) * h1Padding B (Sum.elim 0 tape) (rowOf b)`.
+On active rows the padding is zero (row 0 is inactive); on inactive rows
+`copy_inactive_residuals` removes the H1-dependent lane. `h1Padding_sum`
+applies generic finite-set balancing to the literal inactive support;
+`mem_inactive` unfolds only filter membership, never its universe.
+`h1Padding_bsumB` follows from the public `bsumB_rowOf`. The false
+`applyAff_zero` trace identity is not asserted.
+
+**Lemma B and the chain space.** Namespace `R0Z.Chain` proves
+`rounds_initial` with `bsumB 10 (fun b => f (ofBool b))`, and `rounds_chain`
+with the specified `j.succ`/`j.castSucc` indices. Both use
+`rounds_eval_of_vdeg`, symbolic Boolean sums and `Fin.cons` tail
+re-indexing. `roundPoly j` generalizes `round9Poly` (their equality at
+j = 9 is definitional). `Chain0 ch : Submodule K (Payload K)` is the
+intersection of K-linear kernels; `mem_chain0_iff` exposes exactly the
+nonround-zero, initial-zero, nine boundary, and terminal-zero conditions.
+`nonRoundK_apply` identifies the K-linear projection with D12's existing
+F-linear projection on every payload.
+
+`original_bsum_actual` combines A and C for each tape: `fOrig` carries eta
+once, and the H1 correction has zero Boolean sum. Thus `g` satisfies the
+initial and boundary conditions by B. `dir` satisfies those same conditions
+with round-9 polynomial `X - C (1/2)`; subtracting its scalar multiple
+preserves them. The terminal condition is `Phi0_sRem`, since `claimMask`
+vanishes on the round-only remainder. The final theorem is
+`sRem_mem_chain0 (hgood : alpha ch 9 ≠ 1/2) : sRem h B x w ch n ∈ Chain0 ch`.
+It needs no witness-validity premise and no stronger `Good` assumption.
+
+**Replay evidence.** All 103 unchanged R0Z/R0P worktree sources were
+SHA-256 checked against the staged host sources before attempt 3377.
+The prescribed pinned workspace and cache on `dombarker@100.108.41.90`
+were reused. Attempts 3377–3394 ran one module at a time with
+`sh run2.sh N Module 7000 7` directly; the launcher took its own lock.
+Each scope had MemoryHigh 5G, MemoryMax 7G, MemorySwapMax 0, TasksMax 128,
+and timeout 900 s. Observed reservation: 24 GiB populated + 7 GiB,
+below the 55 GiB safe limit. No cap was raised. Lean v4.32.0; Mathlib
+`81a5d257c8e410db227a6665ed08f64fea08e997`.
+
+There were 18 focused attempts: four successful stages (C at 3379,
+final TerminalEligible at 3385, B at 3390, final Chain at 3394) and
+14 elaboration failures, all retained with hashes, diagnostics and repairs
+in [t2b1/evidence.json](t2b1/evidence.json). No resource failure occurred.
+Final `R0Z/TerminalEligible`: exit 0, 7.55 s, peak RSS 6,933,404 KiB.
+Final `R0Z/Chain`: exit 0, 4.67 s, peak RSS 6,887,404 KiB. Maximum wall time
+and RSS across all attempts were 7.55 s and 6,933,404 KiB; swaps were 0
+throughout. The JSON records the base revision, each staged target SHA-256,
+commands, receipts, and final source Git blob identities. No unchanged
+full regression was repeated.
+
+All six required `#print axioms` results are exactly
+`[propext, Classical.choice, Quot.sound]`: `terminal_row_eligible`,
+`terminal_applyAff`, `h1Padding_bsumB`, `rounds_initial`, `rounds_chain`,
+and `sRem_mem_chain0`. Source scan: no prohibited proof escape or resource
+option; `decide` only for the permitted bit-zero check and `0 ≠ 9` in
+`Fin 10`. Explicit `Finset.univ` occurs only over the abstract index type
+of the generic balancing lemma; no row, state or field universe is
+computed. No binaries, no co-author trailer, no push.
+
+This closes T2b-1's chain-membership obligation only. Nothing proves,
+assumes or weakens `MaskImageOn Good`; the spanning/image obligations
+remain research work. The deployment verdict is unchanged: v7 stands.
