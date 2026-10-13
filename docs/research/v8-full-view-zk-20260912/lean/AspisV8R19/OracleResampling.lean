@@ -1,5 +1,7 @@
 import AspisV8R17.AdaptiveOracle
-import Mathlib.Tactic
+import Mathlib.Algebra.BigOperators.Field
+import Mathlib.Tactic.Ring
+import Mathlib.Tactic.NormNum
 
 /-! Uniform finite-oracle resampling by a concrete swap bijection.
 No assumption that an adaptive execution never repeats an address. -/

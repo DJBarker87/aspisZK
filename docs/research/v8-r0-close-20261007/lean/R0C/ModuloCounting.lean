@@ -1,4 +1,6 @@
 import R0C.Counting
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.Linarith
 
 /-! Balanced reduction bounds, proved before any concrete byte/field instance.
 The input and output encodings are equivalences, not distribution hypotheses.

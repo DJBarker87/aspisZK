@@ -24,8 +24,11 @@ the final equation checks P(rho)=0, where P(T)=sum(i=0..21) residual_i*T^i
 over E. If some residual is nonzero, P is nonzero of degree at most 21. An
 injective embedding K -> E therefore gives at most 21 bad rho values in K.
 The source's 256-bit modulo sampler gives probability at most
-21*ceil(2^256/|K|)/2^256, about 2^-119.608. `lean/SubfieldBatch.lean` proves
-the algebraic root bound; it does not prove the commitment/Fiat--Shamir glue.
+21*ceil(2^256/|K|)/2^256, about 2^-119.608. `lean/QueryResidualBridge.lean` now connects the explicit accumulator
+recurrence to this residual polynomial. `lean/RhoSamplerBound.lean` proves
+the independent-answer modulo density, and `lean/RhoAcceptance.lean` bounds
+acceptance when a fixed query misses the matching set. The byte/field rank
+encodings and commitment/Fiat--Shamir glue remain separate obligations.
 Merkle binding is necessary here: openings arrive after rho, but committed
 values must already be fixed except on the separately charged binding event.
 
@@ -64,8 +67,11 @@ degree alone would ignore the correlated-agreement obligation.
 
 The intended largest per-query error remains the existing q22 expression
 (1+delta0)*choose(9557,22)/choose(262144,22), about 2^-105.136. The concrete second-fold extraction and direct joint-list binding now
-compile. The query sampler instantiation, semantic/opening glue and rho row
-are still required before that expression applies to R1. The direct
+compile. `lean/BoundedQueries.lean` now applies the existing bounded, stopped
+sampler theorem to the concrete matching set under independent-answer
+semantics, without conditioning on success. The source/shared-oracle
+instantiation and semantic/opening glue are still required before that
+expression applies to R1. The direct
 joint-list route below supersedes the separate OOD uniqueness step. The final FS statement must
 retain Qtot and the hash/oracle collision term. It is not an absolute
 2^-100 bound for arbitrarily many oracle queries.
@@ -159,7 +165,9 @@ field-level binding theorem with explicit matching-support, accepted-equation
 and bad-set-exclusion premises. Identifying the actual Rust functionals and
 verifier equations with this model, and composing semantic/query/Fiat--Shamir
 results, remain open. No uniqueness premise or conjectural OOD error is used.
-See `CONCRETE-BINDING.md` for the exact scope and NUC receipts.
+See `CONCRETE-BINDING.md` and `QUERY-BINDING.md` for the exact scope and
+NUC receipts. The query/residual field equations and independent-answer laws
+now compose, while semantic and shared-oracle instantiation remain open.
 
 ## Two-transaction settlement architecture
 

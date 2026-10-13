@@ -1,5 +1,6 @@
 import FS.LemmaA
 import FS.LemmaB
+import Mathlib.Logic.Equiv.Fin.Basic
 
 /-! # Composition: the §4 theorem
 

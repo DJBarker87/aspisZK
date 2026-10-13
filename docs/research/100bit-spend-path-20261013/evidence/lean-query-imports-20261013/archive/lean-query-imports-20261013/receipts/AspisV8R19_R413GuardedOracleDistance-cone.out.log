@@ -1,0 +1,80 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AspisV8R19/R413GuardedOracleDistance.lean:16:36: error(lean.unknownIdentifier): Unknown constant `Finset.sum_le_sum`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AspisV8R19/R413GuardedOracleDistance.lean:32:18: error(lean.unknownIdentifier): Unknown identifier `abs_div`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AspisV8R19/R413GuardedOracleDistance.lean:33:36: error(lean.unknownIdentifier): Unknown constant `Finset.abs_sum_le_sum_abs`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AspisV8R19/R413GuardedOracleDistance.lean:33:71: error: failed to synthesize
+  Zero ?m.16
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AspisV8R19/R413GuardedOracleDistance.lean:32:26: warning: This simp argument is unused:
+  abs_of_nonneg (show 0 ≤ (Fintype.card X : ℚ) by positivity)
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵m̵e̵a̵n̵,̵a̵b̵s̵_̵d̵i̵v̵,̵a̵b̵s̵_̵o̵f̵_̵n̵o̵n̵n̵e̵g̵ ̵(̵s̵h̵o̵w̵ ̵0̵ ̵≤̵ ̵(̵F̵i̵n̵t̵y̵p̵e̵.̵c̵a̵r̵d̵ ̵X̵ ̵:̵ ̵ℚ̵)̵ ̵b̵y̵ ̵p̵o̵s̵i̵t̵i̵v̵i̵t̵y̵)̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲m̲e̲a̲n̲,̲ ̲a̲b̲s̲_̲d̲i̲v̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AspisV8R19/R413GuardedOracleDistance.lean:81:27: error: unknown tactic
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AspisV8R19/R413GuardedOracleDistance.lean:73:15: error: unsolved goals
+case ask.some.left
+I A O : Type
+inst✝² : Fintype A
+inst✝¹ : Nonempty A
+inst✝ : DecidableEq I
+i : I
+next : A → Program I A O
+ih :
+  ∀ (a : A) (t : Table I A) (observe : View I A O → ℚ),
+    (∀ (v : View I A O), 0 ≤ observe v ∧ observe v ≤ 1) →
+      |lazyMean (next a) t observe - independentMean (next a) observe| ≤
+        independentMean (guardFresh (next a) t) fun v => if v.2 = none then 1 else 0
+t : Table I A
+observe : View I A O → ℚ
+bounded : ∀ (v : View I A O), 0 ≤ observe v ∧ observe v ≤ 1
+a : A
+ht : t i = some a
+hl0 : 0 ≤ lazyMean (Program.ask i next) t observe
+hl1 : lazyMean (Program.ask i next) t observe ≤ 1
+hr0 : 0 ≤ mean fun a => independentMean (next a) fun r => observe ((i, a) :: r.1, r.2)
+hr1 : (mean fun a => independentMean (next a) fun r => observe ((i, a) :: r.1, r.2)) ≤ 1
+⊢ -1 ≤
+    lazyMean (Program.ask i next) t observe -
+      mean fun a => independentMean (next a) fun r => observe ((i, a) :: r.1, r.2)
+
+case ask.some.right
+I A O : Type
+inst✝² : Fintype A
+inst✝¹ : Nonempty A
+inst✝ : DecidableEq I
+i : I
+next : A → Program I A O
+ih :
+  ∀ (a : A) (t : Table I A) (observe : View I A O → ℚ),
+    (∀ (v : View I A O), 0 ≤ observe v ∧ observe v ≤ 1) →
+      |lazyMean (next a) t observe - independentMean (next a) observe| ≤
+        independentMean (guardFresh (next a) t) fun v => if v.2 = none then 1 else 0
+t : Table I A
+observe : View I A O → ℚ
+bounded : ∀ (v : View I A O), 0 ≤ observe v ∧ observe v ≤ 1
+a : A
+ht : t i = some a
+hl0 : 0 ≤ lazyMean (Program.ask i next) t observe
+hl1 : lazyMean (Program.ask i next) t observe ≤ 1
+hr0 : 0 ≤ mean fun a => independentMean (next a) fun r => observe ((i, a) :: r.1, r.2)
+hr1 : (mean fun a => independentMean (next a) fun r => observe ((i, a) :: r.1, r.2)) ≤ 1
+⊢ (lazyMean (Program.ask i next) t observe -
+      mean fun a => independentMean (next a) fun r => observe ((i, a) :: r.1, r.2)) ≤
+    1
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AspisV8R19/R413GuardedOracleDistance.lean:72:6: error: Alternative `none` has not been provided
+'AspisV8R19.R413GuardedOracleDistance.mean_mono' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R413GuardedOracleDistance.mean_interval' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R413GuardedOracleDistance.mean_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisV8R19.R413GuardedOracleDistance.abs_mean_le' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R413GuardedOracleDistance.independent_interval' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisV8R19.R413GuardedOracleDistance.lazy_interval' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisV8R19.R413GuardedOracleDistance.guarded_distance' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

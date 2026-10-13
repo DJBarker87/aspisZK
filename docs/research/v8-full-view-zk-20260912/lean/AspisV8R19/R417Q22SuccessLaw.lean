@@ -1,5 +1,6 @@
 import AspisV8R19.R411EqualLegalQueryMass
 import AspisV8R19.R412LegalQueryEnumeration
+import Mathlib.Tactic.FieldSimp
 
 /-! The bounded independent-answer q22 kernel has a uniform successful
 marginal, multiplied by its actual success mass. Failure is not conditioned

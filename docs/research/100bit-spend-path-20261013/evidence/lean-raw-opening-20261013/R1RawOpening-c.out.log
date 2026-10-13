@@ -1,0 +1,76 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawOpening.lean:50:2: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawOpening.lean:76:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  RoundPairing.dot ?f
+    (RoundPairing.dualFold ?alpha1
+      (RoundPairing.dualFold ?alpha0
+        (FunctionalWeights.weights (RawFunctionalWeights.rawFunctionals ?iota ?raw)
+          (RawFunctionalWeights.rawBaseFunctional ?iota ?raw) ?kappa)))
+in the target expression
+  Polynomial.eval (withRows iota raw d).alpha1 (withRows iota raw d).p1 =
+    RoundPairing.dot (withRows iota raw d).f
+      (RoundPairing.dualFold (withRows iota raw d).alpha1
+        (RoundPairing.dualFold (withRows iota raw d).alpha0
+          (FunctionalWeights.weights (withRows iota raw d).F (withRows iota raw d).F0 (withRows iota raw d).kappa)))
+
+case mp
+K E : Type
+inst✝⁴ : Field K
+inst✝³ : Field E
+inst✝² : Fintype E
+inst✝¹ : DecidableEq E
+inst✝ : Algebra (ZMod P) E
+iota : K →+* E
+raw : Fin 7 → Fin 1024 → K
+d : MatchingSupport.Data E
+hfinal :
+  Polynomial.eval (withRows iota raw d).alpha1 (withRows iota raw d).p1 =
+    RoundPairing.dot (withRows iota raw d).f
+      (RoundPairing.dualFold (withRows iota raw d).alpha1
+        (RoundPairing.dualFold (withRows iota raw d).alpha0
+          (FunctionalWeights.weights (withRows iota raw d).F (withRows iota raw d).F0 (withRows iota raw d).kappa)))
+hboundary1 :
+  TwoRoundComparison.boundary (withRows iota raw d).p1 =
+    RoundPairing.quarter * Polynomial.eval (withRows iota raw d).alpha0 (withRows iota raw d).p0
+hboundary0 :
+  TwoRoundComparison.boundary (withRows iota raw d).p0 =
+    RoundPairing.quarter *
+      JointFunctionalBinding.claimedValue (withRows iota raw d).Y (withRows iota raw d).c0 (withRows iota raw d).gamma
+        (withRows iota raw d).kappa
+⊢ rawAcceptedPairing iota raw d
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawOpening.lean:79:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ k,
+    ?kappa ^ ↑k *
+      RoundPairing.dot ?f
+        (RoundPairing.dualFold ?alpha1 (RoundPairing.dualFold ?alpha0 (RawPairing.embeddedRow ?iota (?raw k))))
+in the target expression
+  MatchingSupport.AcceptedPairing (withRows iota raw d)
+
+case mpr
+K E : Type
+inst✝⁴ : Field K
+inst✝³ : Field E
+inst✝² : Fintype E
+inst✝¹ : DecidableEq E
+inst✝ : Algebra (ZMod P) E
+iota : K →+* E
+raw : Fin 7 → Fin 1024 → K
+d : MatchingSupport.Data E
+hfinal :
+  Polynomial.eval d.alpha1 d.p1 =
+    ∑ k,
+      d.kappa ^ ↑k *
+        RoundPairing.dot d.f
+          (RoundPairing.dualFold d.alpha1 (RoundPairing.dualFold d.alpha0 (RawPairing.embeddedRow iota (raw k))))
+hboundary1 : TwoRoundComparison.boundary d.p1 = RoundPairing.quarter * Polynomial.eval d.alpha0 d.p0
+hboundary0 :
+  TwoRoundComparison.boundary d.p0 = RoundPairing.quarter * JointFunctionalBinding.claimedValue d.Y d.c0 d.gamma d.kappa
+⊢ MatchingSupport.AcceptedPairing (withRows iota raw d)
+'AspisR1.RawOpening.claims_iff_raw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RawOpening.accepted_pairing_iff_raw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RawOpening.large_matching_implies_raw_claims' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

@@ -1,5 +1,5 @@
 import Mathlib.Data.List.OfFn
-import Mathlib.Tactic
+import Lean.Elab.Tactic.Omega
 
 /-! Exact flattened transcript framing. Addresses are bytes, not a disjoint
 sum that would silently exclude other users of the shared oracle. -/

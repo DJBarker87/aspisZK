@@ -1,0 +1,51 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/FS/LemmaA.lean:161:19: error: unknown tactic
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/FS/LemmaA.lean:159:69: error: unsolved goals
+I A O : Type
+inst✝² : DecidableEq I
+inst✝¹ : Fintype A
+inst✝ : Nonempty A
+bad : I → Table I A → A → Prop
+ε : ℚ
+hε : 0 ≤ ε
+hbad : ∀ (i : I) (t : Table I A), (mean fun a => indicator (bad i t a)) ≤ ε
+i : I
+next : A → Program I A O
+ih :
+  ∀ (a : A) (t : Table I A) (N : ℕ),
+    FirstReadsBound (next a) t N → (lazyMean (next a) t fun v => indicator (hitsBad bad t v.1)) ≤ ↑N * ε
+t : Table I A
+N : ℕ
+ht : t i = none
+hpos : 0 < N
+hrest : ∀ (a : A), FirstReadsBound (next a) (put t i a) (N - 1)
+a : A
+this : (lazyMean (next a) (put t i a) fun v => indicator (hitsBad bad (put t i a) v.1)) ≤ ↑(N - 1) * ε
+⊢ (indicator (bad i t a) + lazyMean (next a) (put t i a) fun r => indicator (hitsBad bad (put t i a) r.1)) ≤
+    indicator (bad i t a) + ↑(N - 1) * ε
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/FS/LemmaA.lean:141:13: error: unsolved goals
+case ask.none
+I A O : Type
+inst✝² : DecidableEq I
+inst✝¹ : Fintype A
+inst✝ : Nonempty A
+bad : I → Table I A → A → Prop
+ε : ℚ
+hε : 0 ≤ ε
+hbad : ∀ (i : I) (t : Table I A), (mean fun a => indicator (bad i t a)) ≤ ε
+i : I
+next : A → Program I A O
+ih :
+  ∀ (a : A) (t : Table I A) (N : ℕ),
+    FirstReadsBound (next a) t N → (lazyMean (next a) t fun v => indicator (hitsBad bad t v.1)) ≤ ↑N * ε
+t : Table I A
+N : ℕ
+ht : t i = none
+hpos : 0 < N
+hrest : ∀ (a : A), FirstReadsBound (next a) (put t i a) (N - 1)
+step :
+  ∀ (a : A),
+    (lazyMean (next a) (put t i a) fun r => indicator (hitsBad bad t ((i, a) :: r.1))) ≤
+      indicator (bad i t a) + ↑(N - 1) * ε
+⊢ (mean fun a => lazyMean (next a) (put t i a) fun r => indicator (hitsBad bad t ((i, a) :: r.1))) ≤ ↑N * ε
+'FS.lemmaA' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

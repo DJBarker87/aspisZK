@@ -1,4 +1,7 @@
 import AspisV8R19.GuardedFirstRead
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Algebra.Order.Field.Basic
+import Mathlib.Tactic.Linarith
 
 /-! A quantitative comparison that charges cache hits instead of assuming
 whole-program freshness. It includes arbitrary trace/result tests in [0,1].

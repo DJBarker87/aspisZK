@@ -1,4 +1,5 @@
 import FS.Statement
+import Mathlib.Tactic.Linarith
 
 /-! # Lemma A: first-read union bound
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Small exact-rational parameter check, NOT an R1 security theorem.
 
-The proposed R1 caps must still be connected to source, extraction and FS.
+Several deterministic R1 caps now have focused Lean checks; source, semantic
+composition, actual sampler laws and FS instantiation remain open.
 Only 22 binomial factors are evaluated; no finite-field enumeration occurs.
 """
 import json
@@ -12,7 +13,8 @@ from pathlib import Path
 p = 2**31 - 1
 K, E, H = p**4, p**8, 2**256
 ceil_div = lambda a, b: (a + b - 1) // b
-query = Fraction(257 * E, H) * Fraction(math.comb(9557, 22), math.comb(262144, 22))
+query_exact = Fraction(math.comb(9557, 22), math.comb(262144, 22))
+query = Fraction(257 * E, H) * query_exact
 rows = {
     "semantic_conservative_max": 435200 * (Fraction(1, K) + Fraction(1, H)),
     "gamma_joint_list_and_functionals": Fraction((336869026605739 + 16800) * ceil_div(H, E - 1), H),
@@ -30,14 +32,24 @@ def describe(x):
             "negative_log2_approx": math.log2(x.denominator) - math.log2(x.numerator)}
 
 out = {
-    "status": "proposed_R1_caps_arithmetic_only_not_source_instantiated",
+    "status": "R1_arithmetic_ledger_deterministic_caps_checked_not_protocol_instantiated",
     "field_p": p, "query_count": 22,
     "no_work_or_grinding_credit": True,
     "rows": {k: describe(v) for k, v in rows.items()},
     "max_row": "query22_existing_envelope",
     "intended_fs_bound": "Qtot * max_row + separately justified hash/oracle collision term",
-    "open_obligations": ["second-fold extraction", "direct-list binding", "two round comparisons",
-                         "source correspondence", "FS row instantiation", "privacy simulator and ROM reduction"],
+    "checked_deterministic_steps": {
+        "two_concrete_folds_and_literal_joint_list": "lean/TwoFoldExtraction.lean",
+        "joint_functionals_and_round_comparisons": "lean/ConcreteBinding.lean",
+        "false_claims_matching_support_cap": "lean/MatchingSupport.lean",
+        "subfield_residual_and_query_containment": "lean/QueryResidualBridge.lean",
+    },
+    "query22_exact_independent_answer_model": describe(query_exact),
+    "query22_model_note": "The bounded formal sampler's successful-event mass is at most the exact ratio; exhaustion contributes zero. The retained legacy envelope is conservative, not a necessary query-sampler bias factor.",
+    "open_obligations": ["actual semantic functional identification and relation composition",
+                         "source correspondence including checkpoint and commitments",
+                         "R1 sampler and shared-oracle FS row instantiation",
+                         "privacy simulator and ROM reduction"],
     "privacy_gamma_in_subfield_event_only": describe(Fraction((K-1)*ceil_div(H,E-1), H)),
 }
 path = Path(__file__).with_name("security-ledger.json")

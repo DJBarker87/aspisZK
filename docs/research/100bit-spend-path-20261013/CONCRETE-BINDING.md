@@ -48,8 +48,12 @@ to the model must be accounted for in the sampling/Fiat--Shamir proof.
 The final theorem's remaining premises are explicit: matching field equations
 on the stated support, absence from the four counted bad sets, and the
 accepted round-boundary/final-pairing field equations. The support size is
-not inferred merely from 22 successful queries. Turning false binding into a
-small matching set and bounding the query event is the next probability step.
+not inferred merely from 22 successful queries. `MatchingSupport` now proves
+the contrapositive support cap, and `BoundedQueries` applies the existing
+independent-answer bounded sampler law to that set. `QueryResidualBridge`
+and `RhoAcceptance` connect the subfield accumulator check to query matching.
+See `QUERY-BINDING.md` for the scope and explicit remaining correspondence
+obligations.
 
 The six functionals are arbitrary supplied linear maps with derived weights.
 The theorem does not identify Rust's weight constructors with these maps. It

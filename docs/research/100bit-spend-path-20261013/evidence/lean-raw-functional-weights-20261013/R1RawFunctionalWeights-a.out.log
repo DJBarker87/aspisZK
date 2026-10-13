@@ -1,0 +1,60 @@
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawFunctionalWeights.lean:20:19: error: unsolved goals
+K E : Type
+inst✝¹ : Field K
+inst✝ : Field E
+n : ℕ
+iota : K →+* E
+w : Fin n → K
+c : E
+x : Fin n → E
+i : Fin n
+hi : i ∈ Finset.univ
+⊢ c * x i * iota (w i) = x i * iota (w i) * (RingHom.id E) c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawFunctionalWeights.lean:28:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawFunctionalWeights.lean:52:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (rowMap ?iota ?w) (Pi.single ?i 1)
+in the target expression
+  (rawBaseFunctional iota raw) (Pi.single i 1) + (∑ j, kappa ^ (↑j + 1) • rawFunctionals iota raw j) (Pi.single i 1) =
+    ∑ k, kappa ^ ↑k * iota (raw k i)
+
+K E : Type
+inst✝¹ : Field K
+inst✝ : Field E
+n : ℕ
+iota : K →+* E
+raw : Fin 7 → Fin n → K
+kappa : E
+i : Fin n
+⊢ (rawBaseFunctional iota raw) (Pi.single i 1) + (∑ j, kappa ^ (↑j + 1) • rawFunctionals iota raw j) (Pi.single i 1) =
+    ∑ k, kappa ^ ↑k * iota (raw k i)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawFunctionalWeights.lean:51:34: warning: This simp argument is unused:
+  Finset.sum_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [LinearMap.add_apply, F̵i̵n̵s̵e̵t̵.̵s̵u̵m̵_̵a̵p̵p̵l̵y̵,̵ ̵Pi.smul_apply, smul_eq_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawFunctionalWeights.lean:51:52: warning: This simp argument is unused:
+  Pi.smul_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [LinearMap.add_apply, Finset.sum_apply, P̵i̵.̵s̵m̵u̵l̵_̵a̵p̵p̵l̵y̵,̵ ̵smul_eq_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawFunctionalWeights.lean:51:67: warning: This simp argument is unused:
+  smul_eq_mul
+
+Hint: Omit it from the simp argument list.
+  simp only [LinearMap.add_apply, Finset.sum_apply, Pi.smul_apply,̵ ̵s̵m̵u̵l̵_̵e̵q̵_̵m̵u̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.RawFunctionalWeights.rowMap_single' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RawFunctionalWeights.weights_eq_raw_rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RawFunctionalWeights.rowMap_eq_dot' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

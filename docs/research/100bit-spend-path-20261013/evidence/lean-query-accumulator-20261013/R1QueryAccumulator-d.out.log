@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryAccumulator.lean:135:13: error: unexpected token 'calc'; expected ':='
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryAccumulator.lean:134:41: error: Function expected at
+  values i
+but this term has type
+  E
+
+Note: Expected a function because this term is being applied to the argument
+  rw
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryAccumulator.lean:133:2: error: invalid 'calc' step, left-hand side is
+  ?m.207 : E
+but previous right-hand side is
+  ∑ i, rho ^ ↑i * basis i j : K
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryAccumulator.lean:117:53: error: unsolved goals
+case refine_2
+K E : Type
+inst✝¹ : Field K
+inst✝ : Field E
+iota : K →+* E
+rho : K
+values : Fin 22 → E
+basis : Fin 22 → Fin 64 → K
+hpower : (run iota rho (extend22 values) (extend22 basis) 22).power = rho ^ 22
+hnext : (run iota rho (extend22 values) (extend22 basis) 22).next = 22
+hweights :
+  ∀ (j : Fin 64),
+    (run iota rho (extend22 values) (extend22 basis) 22).weights j = ∑ i ∈ Finset.range 22, rho ^ i * extend22 basis i j
+hrhs :
+  (run iota rho (extend22 values) (extend22 basis) 22).rhs = ∑ i ∈ Finset.range 22, iota rho ^ i * extend22 values i
+⊢ (run22 iota rho values basis).rhs = ∑ i, iota rho ^ ↑i * values i
+'AspisR1.QueryAccumulator.run_closed_forms' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.QueryAccumulator.run_power' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.QueryAccumulator.run_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.QueryAccumulator.run_weights' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.QueryAccumulator.run_rhs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.QueryAccumulator.run22_closed_forms' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.QueryAccumulator.run22_next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.QueryAccumulator.run22_power' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.QueryAccumulator.run22_weights' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.QueryAccumulator.run22_rhs' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

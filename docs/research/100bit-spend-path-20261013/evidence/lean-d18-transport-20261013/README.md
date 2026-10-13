@@ -1,0 +1,5 @@
+# D18 arithmetic transport focused Lean target
+
+`R1D18Transport.lean` compiles the specified radix-four row permutation, its five digit identities, its involution on values below 1024, and the induced self-inverse `Fin 1024` equivalence. This is an arithmetic-model result only; it does not establish Rust bitwise refinement or source-semantic correspondence.
+
+The pinned NUC overlay compiled the focused target with `MemoryHigh=4G`, `MemoryMax=6G`, `MemorySwapMax=0`. All attempts a–e and their receipts, time logs, source hashes, and Lean output are retained here. Attempts a–d failed during proof development; attempt e passed in 2.56 seconds with peak RSS 1,556,616 KiB and swap 0. Each declaration has a `#print axioms` record in the successful output; these list `[propext, Quot.sound]` and no `sorryAx`. Machine-readable source/receipt linkage is in `provenance.json`. The NUC workspace was an overlay, not a git checkout, so the local worktree revision is recorded without implying a NUC git revision.
