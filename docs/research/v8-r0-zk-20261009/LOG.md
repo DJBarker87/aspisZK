@@ -3194,3 +3194,53 @@ silence constraints are then satisfied by solving inside each lane's kernel
 (912-dimensional per M31 lane). Whether the argument is per round or global
 is decided from the closed forms; a numeric probe of the per-round
 triangular structure may precede the statement.
+
+### Lead decision T2b-1′ (2026-10-13) — Lemma B retyped; the worker's stop is accepted
+
+The T2b-1 worker stopped under the fixed-statement rule: `rounds_initial` as
+written in the T2b-1 spec is ill-typed. `rounds ch j` is a linear map on
+`PayloadSplit.PointFunction K = (Fin 10 → K) → K` (PayloadSplit.lean:15, 31),
+and `VDeg 10 (fun _ => 27) f` is stated for the same `f`, whereas
+`bsumB 10 : ((Fin 10 → Bool) → K) → K` (Zerocheck.lean:32). The stop is
+correct and the statement is amended as follows; nothing else in T2b-1 moves.
+
+**T2b-1′.1 (Lemma B, typed form).** For `f : PayloadSplit.PointFunction K`
+with `VDeg 10 (fun _ => 27) f`:
+
+```
+rounds_initial : (rounds ch 0 f).eval 0 + (rounds ch 0 f).eval 1
+               = bsumB 10 (fun b => f (ofBool b))
+rounds_chain (j : Fin 9) :
+  (rounds ch j.succ f).eval 0 + (rounds ch j.succ f).eval 1
+               = (rounds ch j.castSucc f).eval (alpha ch j.castSucc)
+```
+
+`ofBool` is `R0P`'s `Zerocheck.ofBool` (Zerocheck.lean:22), the same map at
+which Lemma A is already stated, so the two lemmas compose without change.
+The right-hand side of `rounds_initial` is `bsum 10 f` by `bsum_eq_bsumB`
+(Zerocheck.lean:36); the worker may prove either side first but the statement
+is the `bsumB` form above.
+
+**T2b-1′.2 (item 4, same composition).** The initial sums of `g`'s two
+`originalRounds` read `η · bsumB 10 (fun b => fOrig … (actual … (0,n)) (ofBool b))`
+and `η · bsumB 10 (fun b => fOrig … (actual … 0) (ofBool b))`; Lemma A gives
+equality termwise at every `ofBool b`, which is what item 4 needs.
+
+**Route note (not binding).** `rounds_eval_of_vdeg` turns each side of
+`rounds_initial` into `∑ tail : Fin 9 → Bool, f (roundPoint ch 0 z tail)` for
+`z = 0, 1`; `roundPoint ch 0 z tail = Fin.cons z (ofBool tail)` up to the
+`Fin 9` re-indexing in HonestView.lean:169–172; `bsumB`'s recursion peels the
+leading coordinate (`bsumB 10 g = bsumB 9 (g ∘ Fin.cons false) + bsumB 9
+(g ∘ Fin.cons true)`), and `bsumB 9 h = ∑ b, h b` is the private
+`lane_bsumB_eq_sum` in LaneMap.lean:915 — restate it in `R0Z/Chain.lean`
+rather than widen its visibility in R0P. For `rounds_chain` the same peel at
+coordinate `j+1` after the first `j+1` coordinates are fixed at `alpha`.
+
+Everything else in T2b-1 stands as specified: Lemma A, `Chain0`,
+`sRem_mem_chain0 (hgood : alpha ch 9 ≠ 1/2)`, the file split
+(`R0Z/TerminalEligible.lean`, `R0Z/Chain.lean`), the hard rules, host attempts
+from 3377 (one module at a time, `run2.sh` run directly), `#print axioms` for
+the four results, evidence under `t2b1/`. The branch
+`codex/t2b1-chain-20261012` created at 29314d487 continues; it rebases onto
+this head before its first commit. Research under the current verdict
+(PLAN, 2026-10-11): v7 stands.
