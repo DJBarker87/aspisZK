@@ -1,0 +1,19 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FrontierIndex.lean:18:2: error: Unnecessary `generalizing` argument: Variable `values` is generalized automatically
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FrontierIndex.lean:19:9: error: unsolved goals
+case zero
+α : Type
+index : ℕ
+values : Fin 0 → α
+⊢ 0 = index % 1
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FrontierIndex.lean:35:6: error: 'change' tactic failed, pattern
+  (if index &&& 1 = 0 then 2 * frontierValue (indexedSlots n (index >>> 1) fun i => values i.succ)
+    else 1 + 2 * frontierValue (indexedSlots n (index >>> 1) fun i => values i.succ)) =
+    index % 2 ^ (n + 1)
+is not definitionally equal to target
+  frontierValue
+      ((if index >>> ↑0 &&& 1 = 0 then none else some (values 0)) ::
+        indexedSlots n (index >>> 1) fun i => values i.succ) =
+    index % 2 ^ (n + 1)
+'AspisR1.FrontierIndex.indexedSlots_frontierValue' depends on axioms: [propext, sorryAx]
+'AspisR1.FrontierIndex.indexedSlots_frontierValue_of_lt' depends on axioms: [propext, sorryAx]
+exit=1

@@ -1,0 +1,97 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1AppendFrontierShape.lean:35:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if BitZero (pub.nextPairIndex + 1) ↑level then ?m.79 else ?m.80
+in the target expression
+  (if (pub.nextPairIndex + 1) >>> ↑level &&& 1 = 0 then none else some (pub.nextFrontier level)) =
+    if ↑level < digestCarry pub.nextPairIndex then none
+    else
+      if ↑level = digestCarry pub.nextPairIndex then
+        some (AppendPath.pathPrefix pub leaf (digestCarry pub.nextPairIndex))
+      else frontierSlots pub level
+
+case pos
+K : Type
+inst✝ : Field K
+pub : Public K
+leaf : Digest K
+hf : pub.nextFrontier = AppendSemantics.expectedFrontier pub leaf
+level : Fin 20
+hb :
+  BitZero (pub.nextPairIndex + 1) ↑level ↔
+    ↑level < digestCarry pub.nextPairIndex ∨ digestCarry pub.nextPairIndex < ↑level ∧ digestBitZero pub level
+hl : ↑level < digestCarry pub.nextPairIndex
+⊢ (if (pub.nextPairIndex + 1) >>> ↑level &&& 1 = 0 then none else some (pub.nextFrontier level)) =
+    if ↑level < digestCarry pub.nextPairIndex then none
+    else
+      if ↑level = digestCarry pub.nextPairIndex then
+        some (AppendPath.pathPrefix pub leaf (digestCarry pub.nextPairIndex))
+      else frontierSlots pub level
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1AppendFrontierShape.lean:42:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if BitZero (pub.nextPairIndex + 1) ↑level then ?m.121 else ?m.122
+in the target expression
+  (if (pub.nextPairIndex + 1) >>> ↑level &&& 1 = 0 then none else some (pub.nextFrontier level)) =
+    if ↑level = digestCarry pub.nextPairIndex then some (AppendPath.pathPrefix pub leaf (digestCarry pub.nextPairIndex))
+    else frontierSlots pub level
+
+case pos
+K : Type
+inst✝ : Field K
+pub : Public K
+leaf : Digest K
+hf : pub.nextFrontier = AppendSemantics.expectedFrontier pub leaf
+level : Fin 20
+hb :
+  BitZero (pub.nextPairIndex + 1) ↑level ↔
+    ↑level < digestCarry pub.nextPairIndex ∨ digestCarry pub.nextPairIndex < ↑level ∧ digestBitZero pub level
+hl : ¬↑level < digestCarry pub.nextPairIndex
+he : ↑level = digestCarry pub.nextPairIndex
+hn : ¬BitZero (pub.nextPairIndex + 1) ↑level
+⊢ (if (pub.nextPairIndex + 1) >>> ↑level &&& 1 = 0 then none else some (pub.nextFrontier level)) =
+    if ↑level = digestCarry pub.nextPairIndex then some (AppendPath.pathPrefix pub leaf (digestCarry pub.nextPairIndex))
+    else frontierSlots pub level
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1AppendFrontierShape.lean:48:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if BitZero (pub.nextPairIndex + 1) ↑level then ?m.168 else ?m.169
+in the target expression
+  (if (pub.nextPairIndex + 1) >>> ↑level &&& 1 = 0 then none else some (pub.nextFrontier level)) = none
+
+case pos
+K : Type
+inst✝ : Field K
+pub : Public K
+leaf : Digest K
+hf : pub.nextFrontier = AppendSemantics.expectedFrontier pub leaf
+level : Fin 20
+hb :
+  BitZero (pub.nextPairIndex + 1) ↑level ↔
+    ↑level < digestCarry pub.nextPairIndex ∨ digestCarry pub.nextPairIndex < ↑level ∧ digestBitZero pub level
+hl : ¬↑level < digestCarry pub.nextPairIndex
+he : ¬↑level = digestCarry pub.nextPairIndex
+hg : digestCarry pub.nextPairIndex < ↑level
+hz : digestBitZero pub level
+⊢ (if (pub.nextPairIndex + 1) >>> ↑level &&& 1 = 0 then none else some (pub.nextFrontier level)) = none
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1AppendFrontierShape.lean:52:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if BitZero (pub.nextPairIndex + 1) ↑level then ?m.194 else ?m.195
+in the target expression
+  (if (pub.nextPairIndex + 1) >>> ↑level &&& 1 = 0 then none else some (pub.nextFrontier level)) =
+    if digestBitZero pub level then none else some (pub.snapshotFrontier level)
+
+case neg
+K : Type
+inst✝ : Field K
+pub : Public K
+leaf : Digest K
+hf : pub.nextFrontier = AppendSemantics.expectedFrontier pub leaf
+level : Fin 20
+hb :
+  BitZero (pub.nextPairIndex + 1) ↑level ↔
+    ↑level < digestCarry pub.nextPairIndex ∨ digestCarry pub.nextPairIndex < ↑level ∧ digestBitZero pub level
+hl : ¬↑level < digestCarry pub.nextPairIndex
+he : ¬↑level = digestCarry pub.nextPairIndex
+hg : digestCarry pub.nextPairIndex < ↑level
+hz : ¬digestBitZero pub level
+hn : ¬BitZero (pub.nextPairIndex + 1) ↑level
+⊢ (if (pub.nextPairIndex + 1) >>> ↑level &&& 1 = 0 then none else some (pub.nextFrontier level)) =
+    if digestBitZero pub level then none else some (pub.snapshotFrontier level)
+'AspisR1.AppendFrontierShape.slots_correct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.AppendFrontierShape.empty_inactive' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.AppendFrontierShape.full_frontier_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1

@@ -1,0 +1,92 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:26:49: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  b ≥ 0
+  b - d ≤ -1
+  a ≥ 0
+  a - b ≥ 1
+  a - d ≥ 0
+where
+ a := ↑n
+ b := ↑c
+ d := ↑↑⟨0, ⋯⟩
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:53:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  parent left (y 0)
+in the target expression
+  appendCarry parent (y 0) (slots 0 :: List.ofFn fun i => slots i.succ) =
+    AppendResult.more (List.ofFn fun i => if ↑i < c + 1 then none else if ↑i = c + 1 then some (y (c + 1)) else slots i)
+
+case succ.succ
+α : Type
+parent : α → α → α
+n : ℕ
+ih :
+  ∀ {c : ℕ},
+    c ≤ n →
+      c < n →
+        ∀ (slots : Fin n → Option α) (y : ℕ → α),
+          (∀ (i : Fin n), ↑i < c → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)) →
+            (∀ (h : c < n), slots ⟨c, h⟩ = none) →
+              appendCarry parent (y 0) (List.ofFn slots) =
+                AppendResult.more (List.ofFn fun i => if ↑i < c then none else if ↑i = c then some (y c) else slots i)
+slots : Fin (n + 1) → Option α
+y : ℕ → α
+c : ℕ
+hc : c + 1 ≤ n + 1
+hcn : c + 1 < n + 1
+hbelow : ∀ (i : Fin (n + 1)), ↑i < c + 1 → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)
+hstop : ∀ (h : c + 1 < n + 1), slots ⟨c + 1, h⟩ = none
+left : α
+hy : y (↑⟨0, ⋯⟩ + 1) = parent left (y ↑⟨0, ⋯⟩)
+hleft : slots 0 = some left
+hy1 : y 1 = parent left (y 0)
+tailSlots : Fin n → Option α := fun i => slots i.succ
+tailY : ℕ → α := fun i => y (i + 1)
+hbelow' : ∀ (i : Fin n), ↑i < c → ∃ left, tailSlots i = some left ∧ tailY (↑i + 1) = parent left (tailY ↑i)
+hstop' : ∀ (h : c < n), tailSlots ⟨c, h⟩ = none
+hc' : c ≤ n
+hcn' : c < n
+hrec :
+  appendCarry parent (tailY 0) (List.ofFn tailSlots) =
+    AppendResult.more (List.ofFn fun i => if ↑i < c then none else if ↑i = c then some (tailY c) else tailSlots i)
+happend :
+  appendCarry parent (y 1) (List.ofFn tailSlots) =
+    AppendResult.more (List.ofFn fun i => if ↑i < c then none else if ↑i = c then some (y (c + 1)) else tailSlots i)
+⊢ appendCarry parent (y 0) (slots 0 :: List.ofFn fun i => slots i.succ) =
+    AppendResult.more (List.ofFn fun i => if ↑i < c + 1 then none else if ↑i = c + 1 then some (y (c + 1)) else slots i)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:92:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  parent left (y 0)
+in the target expression
+  appendCarry parent (y 0) (slots 0 :: List.ofFn fun i => slots i.succ) = AppendResult.full (y (n + 1))
+
+case succ
+α : Type
+parent : α → α → α
+n : ℕ
+ih :
+  ∀ (slots : Fin n → Option α) (y : ℕ → α),
+    n ≤ n →
+      (∀ (i : Fin n), ↑i < n → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)) →
+        (∀ (h : n < n), slots ⟨n, h⟩ = none) → appendCarry parent (y 0) (List.ofFn slots) = AppendResult.full (y n)
+slots : Fin (n + 1) → Option α
+y : ℕ → α
+hc : n + 1 ≤ n + 1
+hbelow : ∀ (i : Fin (n + 1)), ↑i < n + 1 → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)
+hstop : ∀ (h : n + 1 < n + 1), slots ⟨n + 1, h⟩ = none
+left : α
+hy : y (↑⟨0, ⋯⟩ + 1) = parent left (y ↑⟨0, ⋯⟩)
+hleft : slots 0 = some left
+hy1 : y 1 = parent left (y 0)
+tailSlots : Fin n → Option α := fun i => slots i.succ
+tailY : ℕ → α := fun i => y (i + 1)
+hbelow' : ∀ (i : Fin n), ↑i < n → ∃ left, tailSlots i = some left ∧ tailY (↑i + 1) = parent left (tailY ↑i)
+hstop' : ∀ (h : n < n), tailSlots ⟨n, h⟩ = none
+hrec : appendCarry parent (tailY 0) (List.ofFn tailSlots) = AppendResult.full (tailY n)
+happend : appendCarry parent (y 1) (List.ofFn tailSlots) = AppendResult.full (y (n + 1))
+⊢ appendCarry parent (y 0) (slots 0 :: List.ofFn fun i => slots i.succ) = AppendResult.full (y (n + 1))
+'AspisPool.IncrementalMerkleV1.appendCarry_indexed_more' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisPool.IncrementalMerkleV1.appendCarry_indexed_full' depends on axioms: [propext, sorryAx]
+exit=1

@@ -1,0 +1,84 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:22:13: error: unsolved goals
+case succ.zero
+α : Type
+parent : α → α → α
+n : ℕ
+ih :
+  ∀ {c : ℕ},
+    c ≤ n →
+      c < n →
+        ∀ (slots : Fin n → Option α) (y : ℕ → α),
+          (∀ (i : Fin n), ↑i < c → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)) →
+            (∀ (h : c < n), slots ⟨c, h⟩ = none) →
+              appendCarry parent (y 0) (List.ofFn slots) =
+                AppendResult.more (List.ofFn fun i => if ↑i < c then none else if ↑i = c then some (y c) else slots i)
+slots : Fin (n + 1) → Option α
+y : ℕ → α
+hc : 0 ≤ n + 1
+hcn : 0 < n + 1
+hbelow : ∀ (i : Fin (n + 1)), ↑i < 0 → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)
+hstop : ∀ (h : 0 < n + 1), slots ⟨0, h⟩ = none
+hzero : slots 0 = none
+⊢ appendCarry parent (y 0) (none :: List.ofFn fun i => slots i.succ) =
+    AppendResult.more (some (y 0) :: List.ofFn fun i => slots i.succ)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:26:49: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  b ≥ 0
+  b - d ≤ -1
+  a ≥ 0
+  a - b ≥ 1
+  a - d ≥ 0
+where
+ a := ↑n
+ b := ↑c
+ d := ↑↑⟨0, ⋯⟩
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:54:10: error: Type mismatch: After simplification, term
+  happend
+ has type
+  appendCarry parent (y 1) (List.ofFn fun i => slots i.succ) =
+    AppendResult.more (List.ofFn fun i => if ↑i < c then none else if ↑i = c then some (y (c + 1)) else slots i.succ)
+but is expected to have type
+  (match appendCarry parent (parent left (y 0)) (List.ofFn fun i => slots i.succ) with
+    | AppendResult.more updated => AppendResult.more (none :: updated)
+    | AppendResult.full root => AppendResult.full root) =
+    AppendResult.more
+      (none :: List.ofFn fun i => if ↑i < c then none else if ↑i = c then some (y (c + 1)) else slots i.succ)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:53:41: warning: This simp argument is unused:
+  hy1
+
+Hint: Omit it from the simp argument list.
+  simp only [appendCarry, hleft,̵ ̵h̵y̵1̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:79:67: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:86:32: error: Application type mismatch: The argument
+  Nat.le_refl n
+has type
+  n ≤ n
+of sort `Prop` but is expected to have type
+  ℕ → α
+of sort `Type` in the application
+  ih tailSlots (Nat.le_refl n)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:91:6: error: Type mismatch: After simplification, term
+  happend
+ has type
+  appendCarry parent (y 1) (List.ofFn fun i => slots i.succ) = AppendResult.full (y (n + 1))
+but is expected to have type
+  (match appendCarry parent (parent left (y 0)) (List.ofFn fun i => slots i.succ) with
+    | AppendResult.more updated => AppendResult.more (none :: updated)
+    | AppendResult.full root => AppendResult.full root) =
+    AppendResult.full (y (n + 1))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:90:37: warning: This simp argument is unused:
+  hy1
+
+Hint: Omit it from the simp argument list.
+  simp only [appendCarry, hleft,̵ ̵h̵y̵1̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisPool.IncrementalMerkleV1.appendCarry_indexed_more' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisPool.IncrementalMerkleV1.appendCarry_indexed_full' depends on axioms: [propext, sorryAx]
+exit=1

@@ -1,0 +1,160 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:22:13: error: unsolved goals
+case succ.zero
+α : Type
+parent : α → α → α
+y : ℕ → α
+n : ℕ
+slots : Fin (n + 1) → Option α
+ih :
+  0 ≤ n →
+    0 < n →
+      ∀ (slots : Fin n → Option α),
+        (∀ (i : Fin n), ↑i < 0 → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)) →
+          (∀ (h : 0 < n), slots ⟨0, h⟩ = none) →
+            appendCarry parent (y 0) (List.ofFn slots) =
+              AppendResult.more (List.ofFn fun i => if ↑i < 0 then none else if ↑i = 0 then some (y 0) else slots i)
+hc : 0 ≤ n + 1
+hcn : 0 < n + 1
+hbelow : ∀ (i : Fin (n + 1)), ↑i < 0 → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)
+hstop : ∀ (h : 0 < n + 1), slots ⟨0, h⟩ = none
+hzero : slots ⟨0, hcn⟩ = none
+⊢ appendCarry parent (y 0) (slots 0 :: List.ofFn fun i => slots i.succ) =
+    AppendResult.more (some (y 0) :: List.ofFn fun i => slots i.succ)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:26:49: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≥ 1
+where
+ a := ↑↑⟨0, ⋯⟩
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:25:15: error: unsolved goals
+case rec
+α : Type
+parent : α → α → α
+y : ℕ → α
+n : ℕ
+slots : Fin (n + 1) → Option α
+c : ℕ
+ih :
+  c + 1 ≤ n →
+    c + 1 < n →
+      ∀ (slots : Fin n → Option α),
+        (∀ (i : Fin n), ↑i < c + 1 → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)) →
+          (∀ (h : c + 1 < n), slots ⟨c + 1, h⟩ = none) →
+            appendCarry parent (y 0) (List.ofFn slots) =
+              AppendResult.more
+                (List.ofFn fun i => if ↑i < c + 1 then none else if ↑i = c + 1 then some (y (c + 1)) else slots i)
+hc : c + 1 ≤ n + 1
+hcn : c + 1 < n + 1
+hbelow : ∀ (i : Fin (n + 1)), ↑i < c + 1 → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)
+hstop : ∀ (h : c + 1 < n + 1), slots ⟨c + 1, h⟩ = none
+left : α
+hleft : slots ⟨0, ⋯⟩ = some left
+hy : y (↑⟨0, ⋯⟩ + 1) = parent left (y ↑⟨0, ⋯⟩)
+tailSlots : Fin n → Option α := fun i => slots i.succ
+tailY : ℕ → α := fun i => y (i + 1)
+hbelow' : ∀ (i : Fin n), ↑i < c → ∃ left, tailSlots i = some left ∧ tailY (↑i + 1) = parent left (tailY ↑i)
+hstop' : ∀ (h : c < n), tailSlots ⟨c, h⟩ = none
+hc' : c ≤ n
+hcn' : c < n
+⊢ ?m.277
+
+case succ.succ
+α : Type
+parent : α → α → α
+y : ℕ → α
+n : ℕ
+slots : Fin (n + 1) → Option α
+c : ℕ
+ih :
+  c + 1 ≤ n →
+    c + 1 < n →
+      ∀ (slots : Fin n → Option α),
+        (∀ (i : Fin n), ↑i < c + 1 → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)) →
+          (∀ (h : c + 1 < n), slots ⟨c + 1, h⟩ = none) →
+            appendCarry parent (y 0) (List.ofFn slots) =
+              AppendResult.more
+                (List.ofFn fun i => if ↑i < c + 1 then none else if ↑i = c + 1 then some (y (c + 1)) else slots i)
+hc : c + 1 ≤ n + 1
+hcn : c + 1 < n + 1
+hbelow : ∀ (i : Fin (n + 1)), ↑i < c + 1 → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)
+hstop : ∀ (h : c + 1 < n + 1), slots ⟨c + 1, h⟩ = none
+left : α
+hleft : slots ⟨0, ⋯⟩ = some left
+hy : y (↑⟨0, ⋯⟩ + 1) = parent left (y ↑⟨0, ⋯⟩)
+tailSlots : Fin n → Option α := fun i => slots i.succ
+tailY : ℕ → α := fun i => y (i + 1)
+hbelow' : ∀ (i : Fin n), ↑i < c → ∃ left, tailSlots i = some left ∧ tailY (↑i + 1) = parent left (tailY ↑i)
+hstop' : ∀ (h : c < n), tailSlots ⟨c, h⟩ = none
+hc' : c ≤ n
+hcn' : c < n
+rec : ?m.277
+⊢ appendCarry parent (y 0) (List.ofFn slots) =
+    AppendResult.more (List.ofFn fun i => if ↑i < c + 1 then none else if ↑i = c + 1 then some (y (c + 1)) else slots i)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:24:16: warning: This simp argument is unused:
+  appendCarry
+
+Hint: Omit it from the simp argument list.
+  simp [a̵p̵p̵e̵n̵d̵C̵a̵r̵r̵y̵,̵ ̵List.ofFn_succ, hzero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:24:45: warning: This simp argument is unused:
+  hzero
+
+Hint: Omit it from the simp argument list.
+  simp [appendCarry, List.ofFn_succ,̵ ̵h̵z̵e̵r̵o̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:43:19: error: unexpected token ':='; expected command
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:63:14: error: unsolved goals
+case rec
+α : Type
+parent : α → α → α
+y : ℕ → α
+n : ℕ
+ih :
+  ∀ (slots : Fin n → Option α),
+    n ≤ n →
+      (∀ (i : Fin n), ↑i < n → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)) →
+        (∀ (h : n < n), slots ⟨n, h⟩ = none) → appendCarry parent (y 0) (List.ofFn slots) = AppendResult.full (y n)
+slots : Fin (n + 1) → Option α
+hc : n + 1 ≤ n + 1
+hbelow : ∀ (i : Fin (n + 1)), ↑i < n + 1 → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)
+hstop : ∀ (h : n + 1 < n + 1), slots ⟨n + 1, h⟩ = none
+left : α
+hleft : slots ⟨0, ⋯⟩ = some left
+hy : y (↑⟨0, ⋯⟩ + 1) = parent left (y ↑⟨0, ⋯⟩)
+tailSlots : Fin n → Option α := fun i => slots i.succ
+tailY : ℕ → α := fun i => y (i + 1)
+hbelow' : ∀ (i : Fin n), ↑i < n → ∃ left, tailSlots i = some left ∧ tailY (↑i + 1) = parent left (tailY ↑i)
+hstop' : ∀ (h : n < n), tailSlots ⟨n, h⟩ = none
+⊢ ?m.180
+
+case succ
+α : Type
+parent : α → α → α
+y : ℕ → α
+n : ℕ
+ih :
+  ∀ (slots : Fin n → Option α),
+    n ≤ n →
+      (∀ (i : Fin n), ↑i < n → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)) →
+        (∀ (h : n < n), slots ⟨n, h⟩ = none) → appendCarry parent (y 0) (List.ofFn slots) = AppendResult.full (y n)
+slots : Fin (n + 1) → Option α
+hc : n + 1 ≤ n + 1
+hbelow : ∀ (i : Fin (n + 1)), ↑i < n + 1 → ∃ left, slots i = some left ∧ y (↑i + 1) = parent left (y ↑i)
+hstop : ∀ (h : n + 1 < n + 1), slots ⟨n + 1, h⟩ = none
+left : α
+hleft : slots ⟨0, ⋯⟩ = some left
+hy : y (↑⟨0, ⋯⟩ + 1) = parent left (y ↑⟨0, ⋯⟩)
+tailSlots : Fin n → Option α := fun i => slots i.succ
+tailY : ℕ → α := fun i => y (i + 1)
+hbelow' : ∀ (i : Fin n), ↑i < n → ∃ left, tailSlots i = some left ∧ tailY (↑i + 1) = parent left (tailY ↑i)
+hstop' : ∀ (h : n < n), tailSlots ⟨n, h⟩ = none
+rec : ?m.180
+⊢ appendCarry parent (y 0) (List.ofFn slots) = AppendResult.full (y (n + 1))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/AppendCarryIndexed.lean:78:15: error: unexpected token ':='; expected command
+'AspisPool.IncrementalMerkleV1.appendCarry_indexed_more' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisPool.IncrementalMerkleV1.appendCarry_indexed_full' depends on axioms: [propext, sorryAx]
+exit=1

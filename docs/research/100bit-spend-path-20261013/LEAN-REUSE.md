@@ -205,3 +205,20 @@ All 53 final focused targets passed. The combined checkpoint took 1.39 s
 at 3,590,024 KiB with zero swap and ten standard-only axiom audits. Stored
 frontier preservation, actual source/account correspondence, shared-oracle
 soundness, and privacy remain separate obligations.
+
+## Saved frontier and invariant continuation
+
+The [state bridge](APPEND-STATE-BRIDGE.md) now identifies the literal saved
+frontier with the existing generic carry result, using symbolic bit and list
+proofs. It reuses `FrontierInvariant.append_preserves`,
+`append_terminal_correct`, and `genesis_invariant`. The same R1 candidate
+therefore carries the chronological root, canonical inactive cells, and the
+post-append frontier invariant. The final insertion gets the full-root and
+empty-frontier result, without claiming that a full tree can be appended to.
+
+Initialization and continuation are proved in the model under the explicit
+index/frontier read-write link. Eight focused targets passed, including the
+combined checkpoint: 1.47 s, 3,591,216 KiB, zero swap, thirteen standard-only
+axiom reports. Rust/account enforcement of the link and guards, the complete
+input-pair membership semantics, shared-oracle soundness, and privacy remain
+open. No historical theorem statement or proof body was changed in this step.

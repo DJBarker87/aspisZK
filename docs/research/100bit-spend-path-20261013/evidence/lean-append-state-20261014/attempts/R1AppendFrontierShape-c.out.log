@@ -1,0 +1,32 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1AppendFrontierShape.lean:39:4: error: unsolved goals
+case pos
+K : Type
+inst✝ : Field K
+pub : Public K
+leaf : Digest K
+hf : pub.nextFrontier = AppendSemantics.expectedFrontier pub leaf
+level : Fin 20
+hb :
+  (pub.nextPairIndex + 1) >>> ↑level &&& 1 = 0 ↔
+    ↑level < digestCarry pub.nextPairIndex ∨ digestCarry pub.nextPairIndex < ↑level ∧ digestBitZero pub level
+hl : ¬↑level < digestCarry pub.nextPairIndex
+he : ↑level = digestCarry pub.nextPairIndex
+hn : ¬(pub.nextPairIndex + 1) >>> ↑level &&& 1 = 0
+⊢ some
+      (if True then AppendPath.pathPrefix pub leaf (digestCarry pub.nextPairIndex)
+      else
+        if digestCarry pub.nextPairIndex < digestCarry pub.nextPairIndex ∨ digestBitZero pub level then
+          AppendNode.frozenEmpty level.castSucc
+        else pub.snapshotFrontier level) =
+    some (AppendPath.pathPrefix pub leaf (digestCarry pub.nextPairIndex))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1AppendFrontierShape.lean:44:51: warning: This simp argument is unused:
+  if_pos he
+
+Hint: Omit it from the simp argument list.
+  simp only [AppendSemantics.expectedFrontier, i̵f̵_̵p̵o̵s̵ ̵h̵e̵,̵ ̵he]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.AppendFrontierShape.slots_correct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.AppendFrontierShape.empty_inactive' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.AppendFrontierShape.full_frontier_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1

@@ -8,8 +8,9 @@ invariant. The last insertion, which fills the tree, is included.
 
 This is a field-model theorem. It retains the old-frontier invariant as an
 explicit input and does not prove that Rust execution or stored accounts
-satisfy it. Preservation of the stored next-frontier representation,
-source refinement, shared-oracle soundness, and privacy remain open.
+satisfy it. The subsequent [state-preservation bridge](APPEND-STATE-BRIDGE.md)
+proves the stored frontier representation and abstract invariant continuation.
+Source refinement, shared-oracle soundness, and privacy remain open.
 
 ## Concrete table certificates
 
@@ -104,8 +105,9 @@ statements and proof bodies are unchanged.
 
 This focused dependency chain was checked once through its final combined
 target. It is not a replay of the complete historical release manifest.
-The remaining frontier obligation is to identify the stored next frontier
-with the generic carry result and preserve the account-level invariant,
-including the full-capacity state. The source/codec/settlement, Fiat–Shamir,
-and zero-knowledge obligations remain explicit; these new deterministic
-theorems do not alone establish a 100-bit private spend.
+The subsequent [state-preservation bridge](APPEND-STATE-BRIDGE.md) identifies
+the stored next frontier with the generic carry result, including the
+full-capacity state, and proves abstract initialization/continuation under
+an explicit state link. Account-level source/codec/settlement, Fiat–Shamir,
+and zero-knowledge obligations remain explicit; these deterministic theorems
+do not alone establish a 100-bit private spend.
