@@ -222,3 +222,17 @@ combined checkpoint: 1.47 s, 3,591,216 KiB, zero swap, thirteen standard-only
 axiom reports. Rust/account enforcement of the link and guards, the complete
 input-pair membership semantics, shared-oracle soundness, and privacy remain
 open. No historical theorem statement or proof body was changed in this step.
+
+## Input-pair selection connection
+
+The [input-pair bridge](INPUT-PAIR-BRIDGE.md) reuses the old pair-occupancy
+model, path constraints, and copy/Poseidon interfaces. Two literal copy
+records connect the input pair's second commitment and selected side bit.
+The same R1 candidate now has a valid input pair, an occupied selected slot,
+and a selected commitment equal to the input-note hash block's output.
+
+Five focused targets passed, including a 1.39 s combined checkpoint at
+3,592,484 KiB, zero swap, and nine standard-only axiom audits. Connecting
+these literal trace facts to one concrete secret/nullifier/forest witness
+remains the next semantic step. The source, shared-oracle, and privacy
+obligations remain open.

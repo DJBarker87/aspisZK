@@ -1,0 +1,120 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:11:24: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (A 0 913 = 0)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:26:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => A ⟨_a, ⋯⟩ 914 = A ⟨_a, ⋯⟩ 64 + if ↑i = 7 then 1051521018 else 0
+Error: Application type mismatch: The argument
+  a✝
+has type
+  ¬_a < 29
+but is expected to have type
+  ¬↑i + 8 < 29
+in the application
+  right_path._proof_2 i a✝
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+K : Type
+inst✝ : Field K
+pub : Public K
+A : Trace K
+hb : CopyLinkBalance pub A
+i : Fin 8
+h : A ⟨↑i + 8, ⋯⟩ 914 = A ⟨↑i + 8, ⋯⟩ 64 + if ↑i = 7 then 1051521018 else 0
+⊢ (InputPair.leaf A).secondCommitment i = A ⟨8 + ↑i, ⋯⟩ 914
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:29:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:37:4: warning: 'rw [if_pos hz]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:38:4: warning: 'change (InputPair.leaf A).firstCommitment = OutputNotes.output A 3' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:39:4: warning: 'funext i' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:40:4: warning: 'rw [left_path pub A hb i]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:41:4: warning: 'have h := hpath.2.1 i' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:42:4: warning: 'rw [hz] at h' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:43:4: warning: 'have he : A (i.castAdd 21) 914 = A ⟨i.val + 1, by omega⟩ 913 := by
+  simpa only [sub_zero, one_mul, sub_eq_zero] using h' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:45:4: warning: 'exact he.trans (hcurrent i).symm' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:46:4: warning: 'rw [if_neg hz]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:47:4: warning: 'change (InputPair.leaf A).secondCommitment = OutputNotes.output A 3' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:48:4: warning: 'funext i' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:49:4: warning: 'rw [right_path pub A hb i]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:50:4: warning: 'have h := hpath.2.2 i' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:51:4: warning: 'have he : A ⟨8 + i.val, by omega⟩ 914 = A ⟨i.val + 1, by omega⟩ 913 :=
+  sub_eq_zero.mp ((mul_eq_zero.mp h).resolve_left hz)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:53:4: warning: 'exact he.trans (hcurrent i).symm' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:38:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:39:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:40:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:41:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:42:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:43:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:45:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:47:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:48:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:49:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:50:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:51:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:53:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InputPairSelection.lean:63:9: error(lean.unknownIdentifier): Unknown identifier `ProductionHolds`
+
+Note: It is not possible to treat `ProductionHolds` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+'AspisR1.InputPairSelection.selected_output' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.InputPairSelection.of_production' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
