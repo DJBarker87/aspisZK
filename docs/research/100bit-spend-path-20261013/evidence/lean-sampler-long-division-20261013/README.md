@@ -1,0 +1,9 @@
+# Sampler long-division arithmetic
+
+`../../lean/SamplerLongDivision.lean` proves one-pass bounds and the processed-prefix quotient/remainder invariant for a Nat radix loop. The recursive list theorem is stronger than the requested bounded-digit case: it preserves the invariant and `remainder < divisor` for any list, while the premise that every digit is below the radix is retained by the public theorem. This is arithmetic only; it does not model Rust `u64` operations or establish source correspondence or a sampler probability statement.
+
+The focused target `R1SamplerLongDivision` compiled on the pinned NUC workspace `/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013` using `bash compile-one.sh R1SamplerLongDivision d`. The guarded scope used `MemoryHigh=4G`, `MemoryMax=6G`, `MemorySwapMax=0`, `TasksMax=128`, and Lean threshold `-M5000`. Attempt d exited 0 in 0.88 s at 1,609,724 KiB maximum RSS with zero swaps. `#print axioms` reported `[propext]` for all six exported theorems; no `sorryAx` appeared.
+
+Attempts a–c are preserved in `remote-evidence/`. Attempt a stopped at an unavailable `Mathlib.Tactic.Omega.olean`; the import was narrowed to `Mathlib.Tactic.Ring` because no omega tactic is needed. Attempt b identified the orientation/order mismatch around `Nat.mod_add_div`; attempt c identified the calc substitution issue in the invariant proof. Attempt d contains the corrected source and successful focused compile. The source SHA-256 for d is `6b0a35daf77c00c8cb45fe627b0e4fbdf07f50da714a3737dc045939f790ed8c`; compiled object SHA-256 is `de0c309055c4b765ae8821fd89f9f456fd2b0eeefb060d704b41d8985560c890`.
+
+The cached target source is `sources/R1SamplerLongDivision.lean` in the pinned workspace, and the output is `objects/R1SamplerLongDivision.olean`. No package build or dependency replay was run. Full receipts, logs, timings, source hashes, and the compiled object are archived under `remote-evidence/`.

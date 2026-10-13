@@ -1,0 +1,33 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1D18PointWeights.lean:52:46: warning: Variable name `hk` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1D18PointWeights.lean:61:32: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1D18PointWeights.lean:73:81: error: Application type mismatch: The argument
+  Eq.symm hin
+has type
+  j / 4 ^ ↑d % 4 / 2 ^ ↑u % 2 = j / 2 ^ (2 * ↑d + ↑u) % 2
+but is expected to have type
+  j / 4 ^ ↑d % 4 / 2 ^ ↑u % 2 = j / 4 ^ ↑d % 4 / 2 ^ ↑u % 2
+in the application
+  Eq.trans (congrArg (fun x => x / 2 ^ ↑u % 2) hdigit) (Eq.symm hin)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1D18PointWeights.lean:96:10: error(lean.unknownIdentifier): Unknown constant `Fintype.prod_prod`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1D18PointWeights.lean:95:37: error: unsolved goals
+K : Type
+inst✝ : Field K
+p : Fin 10 → K
+j : Fin 1024
+⊢ (∏ x,
+      if rowNat ↑j / 2 ^ ↑(d18BitIndexEquiv x) % 2 = 0 then 1 - p ⟨9 - ↑(d18BitIndexEquiv x), ⋯⟩
+      else p ⟨9 - ↑(d18BitIndexEquiv x), ⋯⟩) =
+    ∏ d, pairFactor (p ⟨9 - 2 * ↑(d18Tau d), ⋯⟩) (p ⟨8 - 2 * ↑(d18Tau d), ⋯⟩) (↑j / 4 ^ ↑d % 4)
+'AspisR1.d18Tau_involutive' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R1D18PointWeights.0.AspisR1.rowBit_eq_digitBit' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.rowPoint_eq_tensorPoint' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

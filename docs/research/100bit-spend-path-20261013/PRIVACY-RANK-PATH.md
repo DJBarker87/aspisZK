@@ -20,8 +20,11 @@ d=gamma^28, and c=gamma^lane. In the basis 1,e of E/K, define
 Then c+g*u+d*v=0. Since d=gamma*g,
 `det = gamma.c1 * Norm(g)`, which is nonzero when gamma is outside K.
 The two coordinate identities and determinant expansion are compiled in
-`lean/DualPad.lean`. Connecting them to the concrete field's norm and the
-mask layout remains necessary. The exceptional gamma-in-K probability is
+`lean/DualPad.lean`. `lean/DualPadQuadratic.lean` now proves the determinant
+nonzero and the embedded correction for the exponents 27 and 28 in any
+rootless quadratic extension when gamma.im is nonzero. Identifying the
+concrete source field operations and legal mask layout remains necessary.
+See `SAMPLER-TRANSPORT.md` for scope and evidence. The exceptional gamma-in-K probability is
 about 1/|K| under the actual modulo sampler, not zero.
 
 ## A sufficient linear construction

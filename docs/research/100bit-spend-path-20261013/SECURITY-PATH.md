@@ -29,6 +29,10 @@ recurrence to this residual polynomial. `lean/RhoSamplerBound.lean` proves
 the independent-answer modulo density, and `lean/RhoAcceptance.lean` bounds
 acceptance when a fixed query misses the matching set. The byte/field rank
 encodings and commitment/Fiat--Shamir glue remain separate obligations.
+`lean/SamplerNatModel.lean` now derives the intended 4/8-digit modulo laws
+from natural-number division and carry models, with positional tuple ranking
+and the concrete quotient bound; it does not prove Rust refinement. See
+`SAMPLER-TRANSPORT.md`.
 Merkle binding is necessary here: openings arrive after rho, but committed
 values must already be fixed except on the separately charged binding event.
 
@@ -98,7 +102,10 @@ For det=Gcoef.c0*Dcoef.c1-Gcoef.c1*Dcoef.c0, set
     v=(Gcoef.c1*gc.c0-Gcoef.c0*gc.c1)/det.
 
 Then gc+Gcoef*u+Dcoef*v=0, with u,v in K. For nonzero gamma outside K the
-determinant is nonzero. Add u*t to G and v*t to D, and account for both
+determinant is nonzero. This implication and the embedded 27/28-power
+correction now compile for a rootless quadratic extension in
+`lean/DualPadQuadratic.lean`; source and mask-layout correspondence remain
+open. Add u*t to G and v*t to D, and account for both
 their sumcheck effects. Independent G directions disappear from the older
 silent-generator family, so its rank must be checked again, not assumed.
 The new `privacy-wide` probe tests this exact construction. Even a full-rank

@@ -1,0 +1,56 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerAddDigits.lean:49:15: error(lean.unknownIdentifier): Unknown identifier `result`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerAddDigits.lean:49:8: error: Type mismatch: After simplification, term
+  hih
+ has type
+  digitsValue p (addDigits p (s / p) digits).1 + p ^ digits.length * (addDigits p (s / p) digits).2 =
+    digitsValue p digits + s / p
+but is expected to have type
+  digitsValue p out + p ^ digits.length * carry = digitsValue p digits + s / p
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerAddDigits.lean:50:62: error(lean.unknownIdentifier): Unknown identifier `result`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerAddDigits.lean:52:8: error: invalid 'calc' step, left-hand side is
+  s % p + p * digitsValue p out + p ^ (digits.length + 1) * carry : ℕ
+but is expected to be
+  (digit + addend) % p + p * digitsValue p (addDigits p ((digit + addend) / p) digits).1 +
+    p ^ (digits.length + 1) * (addDigits p ((digit + addend) / p) digits).2 : ℕ
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerAddDigits.lean:57:8: error: invalid 'calc' step, right-hand side is
+  digit + addend + p * digitsValue p digits : ℕ
+but is expected to be
+  digit + p * digitsValue p digits + addend : ℕ
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerAddDigits.lean:57:57: error: unsolved goals
+p digit : ℕ
+digits : List ℕ
+ih :
+  ∀ (addend : ℕ),
+    digitsValue p (addDigits p addend digits).1 + p ^ digits.length * (addDigits p addend digits).2 =
+      digitsValue p digits + addend
+addend : ℕ
+s : ℕ := digit + addend
+out : List ℕ
+carry : ℕ
+hih :
+  digitsValue p (addDigits p (s / p) digits).1 + p ^ digits.length * (addDigits p (s / p) digits).2 =
+    digitsValue p digits + s / p
+hdivision : s % p + p * (s / p) = s
+hstep : s = p * (s / p) + s % p
+hih' : digitsValue p out + p ^ digits.length * carry = digitsValue p digits + s / p
+⊢ p * digitsValue p digits + p * ((p * (s / p) + s % p) / p) + (p * (s / p) + s % p) % p =
+    p * digitsValue p digits + digit + addend
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerAddDigits.lean:50:59: warning: This simp argument is unused:
+  s
+
+Hint: Omit it from the simp argument list.
+  simp only [List.length_cons, addDigits, digitsValue, s̵,̵ ̵result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SamplerAddDigits.addDigits_length' depends on axioms: [propext]
+'AspisR1.SamplerAddDigits.addDigits_value_conservation' depends on axioms: [propext, sorryAx]
+'AspisR1.SamplerAddDigits.addDigits_output_digits_lt' depends on axioms: [propext, Quot.sound]
+'AspisR1.SamplerAddDigits.final_carry_le_one_of_addend_le_one' depends on axioms: [propext, Quot.sound]
+'AspisR1.SamplerAddDigits.final_carry_le_one_nonempty' depends on axioms: [propext, Quot.sound]
+exit=1

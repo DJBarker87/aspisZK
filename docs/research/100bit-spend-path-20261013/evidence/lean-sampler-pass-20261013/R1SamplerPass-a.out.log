@@ -1,0 +1,58 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerPass.lean:51:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  e ≥ 0
+  e + f ≥ 0
+  e + f - g ≤ -1
+  d ≥ 0
+  c ≥ 0
+  c - d ≤ 0
+  b ≥ 1
+  b - c ≥ 1
+  b - f ≥ 1
+  a ≥ 1
+where
+ a := ↑radix
+ b := ↑divisor
+ c := ↑(SamplerLongDivision.process radix divisor SamplerLongDivision.initialState digits).remainder
+ d := ↑(List.foldl (fun a d => a * radix + d) SamplerLongDivision.initialState.processedValue digits)
+ e := ↑divisor * ↑finalState.quotient
+ f := ↑finalState.remainder
+ g := ↑finalState.quotient * ↑divisor
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerPass.lean:61:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  i ≥ 0
+  g ≥ 0
+  g - i ≥ 1
+  f ≥ 0
+  e ≥ 0
+  e + g ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≤ 0
+  b ≥ 1
+  b - c ≥ 1
+  b - g ≥ 1
+  a ≥ 1
+where
+ a := ↑radix
+ b := ↑divisor
+ c := ↑(SamplerLongDivision.process radix divisor SamplerLongDivision.initialState digits).remainder
+ d := ↑(List.foldl (fun a d => a * radix + d) SamplerLongDivision.initialState.processedValue digits)
+ e := ↑divisor * ↑finalState.quotient
+ f := ↑finalState.quotient
+ g := ↑(divisor * finalState.quotient + finalState.remainder) % ↑divisor
+ i := ↑(numeral radix digits) % ↑divisor
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerPass.lean:62:25: error: Application type mismatch: The argument
+  hmod
+has type
+  numeral radix digits % divisor = finalState.remainder
+but is expected to have type
+  (SamplerLongDivision.process radix divisor SamplerLongDivision.initialState digits).remainder =
+    numeral radix digits % divisor
+in the application
+  ⟨Eq.symm hquotient, hmod⟩
+'AspisR1.SamplerPass.process_processedValue' does not depend on any axioms
+'AspisR1.SamplerPass.initialState_process_quotient_remainder' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

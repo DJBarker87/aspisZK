@@ -1,0 +1,69 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1D18PointWeights.lean:44:12: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ↑(d18Tau ⟨_a, ⋯⟩) = ↑d
+Error: Application type mismatch: The argument
+  a✝
+has type
+  ¬_a < 5
+but is expected to have type
+  ¬(↑u + 2 * ↑(d18Tau d)) / 2 < 5
+in the application
+  d18BitIndexEquiv._proof_5 d u hquot a✝
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case fst
+K : Type
+inst✝ : Field K
+d : Fin 5
+u : Fin 2
+hquot : (↑u + 2 * ↑(d18Tau d)) / 2 = ↑(d18Tau d)
+⊢ ↑(d18Tau ⟨(↑u + 2 * ↑(d18Tau d)) / 2, ⋯⟩) = ↑d
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1D18PointWeights.lean:77:46: warning: Variable name `hk` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1D18PointWeights.lean:86:32: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1D18PointWeights.lean:133:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  rowNat ↑j / 2 ^ (2 * ↑(d18Tau d)) % 2
+in the target expression
+  ((if rowNat ↑j / 2 ^ (↑0 + 2 * ↑(d18Tau d)) % 2 = 0 then 1 - p ⟨9 - (↑0 + 2 * ↑(d18Tau d)), ⋯⟩
+      else p ⟨9 - (↑0 + 2 * ↑(d18Tau d)), ⋯⟩) *
+      if rowNat ↑j / 2 ^ (↑1 + 2 * ↑(d18Tau d)) % 2 = 0 then 1 - p ⟨9 - (↑1 + 2 * ↑(d18Tau d)), ⋯⟩
+      else p ⟨9 - (↑1 + 2 * ↑(d18Tau d)), ⋯⟩) =
+    pairFactor (p ⟨9 - 2 * ↑(d18Tau d), ⋯⟩) (p ⟨8 - 2 * ↑(d18Tau d), ⋯⟩) (↑j / 4 ^ ↑d % 4)
+
+K : Type
+inst✝ : Field K
+p : Fin 10 → K
+j : Fin 1024
+d : Fin 5
+hd : d ∈ Finset.univ
+hbit0 : rowNat ↑j / 2 ^ (2 * ↑(d18Tau d) + ↑0) % 2 = ↑j / 4 ^ ↑d % 4 / 2 ^ ↑0 % 2
+hbit1 : rowNat ↑j / 2 ^ (2 * ↑(d18Tau d) + ↑1) % 2 = ↑j / 4 ^ ↑d % 4 / 2 ^ ↑1 % 2
+hbit0' : rowNat ↑j / 2 ^ (2 * ↑(d18Tau d)) % 2 = ↑j / 4 ^ ↑d % 4 % 2
+hbit1' : rowNat ↑j / 2 ^ (1 + 2 * ↑(d18Tau d)) % 2 = ↑j / 4 ^ ↑d % 4 / 2 % 2
+⊢ ((if rowNat ↑j / 2 ^ (↑0 + 2 * ↑(d18Tau d)) % 2 = 0 then 1 - p ⟨9 - (↑0 + 2 * ↑(d18Tau d)), ⋯⟩
+      else p ⟨9 - (↑0 + 2 * ↑(d18Tau d)), ⋯⟩) *
+      if rowNat ↑j / 2 ^ (↑1 + 2 * ↑(d18Tau d)) % 2 = 0 then 1 - p ⟨9 - (↑1 + 2 * ↑(d18Tau d)), ⋯⟩
+      else p ⟨9 - (↑1 + 2 * ↑(d18Tau d)), ⋯⟩) =
+    pairFactor (p ⟨9 - 2 * ↑(d18Tau d), ⋯⟩) (p ⟨8 - 2 * ↑(d18Tau d), ⋯⟩) (↑j / 4 ^ ↑d % 4)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl (9 - (↑0 + 2 * ↑(d18Tau d)))
+  has type
+    @Eq ℕ (9 - (↑0 + 2 * ↑(d18Tau d))) (9 - (↑0 + 2 * ↑(d18Tau d)))
+  but is expected to have type
+    @Eq ℕ (9 - ↑(d18BitIndexEquiv (d, 0))) (9 - (↑0 + 2 * ↑(d18Tau d)))
+  in the application
+    id (Eq.refl (9 - (↑0 + 2 * ↑(d18Tau d))))
+'AspisR1.d18Tau_involutive' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R1D18PointWeights.0.AspisR1.rowBit_eq_digitBit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.rowPoint_eq_tensorPoint' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

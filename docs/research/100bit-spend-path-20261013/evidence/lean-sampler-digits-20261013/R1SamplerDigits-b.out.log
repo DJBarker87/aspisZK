@@ -1,0 +1,54 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerDigits.lean:27:8: error: Type mismatch
+  Nat.div_div_eq_div_mul x p (p ^ n)
+has type
+  x / p / p ^ n = x / (p * p ^ n)
+but is expected to have type
+  x / p / p ^ n = x / (p ^ n * p)
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerDigits.lean:21:14: error: unsolved goals
+case succ
+p : ℕ
+hp : 0 < p
+n : ℕ
+ih : ∀ {x : ℕ}, x = lowValue p n x + p ^ n * (x / p ^ n)
+x : ℕ
+hdiv : x / p = lowValue p n (x / p) + p ^ n * (x / (p ^ n * p))
+hmod : x = x % p + p * (x / p)
+hquot : x / p / p ^ n = x / (p ^ n * p)
+⊢ x % p + p * p ^ n * (x / (p * p ^ n)) + p * lowValue p n (x / p) =
+    p * p ^ n * ((x % p + p * p ^ n * (x / (p * p ^ n)) + p * lowValue p n (x / p)) / (p * p ^ n)) +
+        p * lowValue p n ((x % p + p * p ^ n * (x / (p * p ^ n)) + p * lowValue p n (x / p)) / p) +
+      (x % p + p * p ^ n * (x / (p * p ^ n)) + p * lowValue p n (x / p)) % p
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerDigits.lean:40:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 1
+  b ≥ 0
+  b + e - f ≥ 0
+  a ≥ 1
+  a - b ≥ 1
+where
+ a := ↑p
+ b := ↑x % ↑p
+ c := ↑(p ^ n)
+ d := ↑(lowValue p n (x / p))
+ e := ↑p * ↑(lowValue p n (x / p))
+ f := ↑(p ^ n) * ↑p
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerDigits.lean:43:34: error: unsolved goals
+p n x : ℕ
+hp : 0 < p
+hdecomp : x = lowValue p n x + p ^ n * (x / p ^ n)
+hlow : lowValue p n x < p ^ n
+⊢ lowValue p n (lowValue p n x + p ^ n * (x / p ^ n)) = lowValue p n x % p ^ n
+'AspisR1.SamplerDigits.lowValue_decomposition' depends on axioms: [propext, sorryAx]
+'AspisR1.SamplerDigits.lowValue_lt_pow' depends on axioms: [propext, sorryAx]
+'AspisR1.SamplerDigits.lowValue_eq_mod_pow' depends on axioms: [propext, sorryAx]
+exit=1

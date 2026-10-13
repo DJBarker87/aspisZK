@@ -23,3 +23,10 @@ The proposed soundness ledger still has an approximately 105.136-bit
 per-oracle-query coefficient. A final theorem must retain the actual query
 count and hash/oracle collision terms. No work or grinding factor is credited,
 and no absolute 100-bit claim is made while these obligations remain open.
+
+The later sampler/transport checkpoint (`SAMPLER-TRANSPORT.md`) derives the
+optimized sampler's intended modulo laws at the Nat/list level, composes D18
+tensor weights with the explicit Boolean row functional, and proves the
+two-pad determinant/cancellation in a rootless quadratic extension. These
+strengthen components of the argument; the source, semantic, Fiat--Shamir
+and full privacy obligations listed above remain open.

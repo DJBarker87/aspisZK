@@ -1,0 +1,36 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerDigits.lean:33:44: error: unsolved goals
+p : ℕ
+hp : 0 < p
+n : ℕ
+ih : ∀ {x : ℕ}, x = lowValue p n x + p ^ n * (x / p ^ n)
+x : ℕ
+hdiv : x / p = lowValue p n (x / p) + p ^ n * (x / (p ^ n * p))
+hmod : x = x % p + p * (x / p)
+hquot : x / p / p ^ n = x / (p ^ n * p)
+⊢ x % p + p * (lowValue p n (x / p) + p ^ n * (x / (p ^ n * p))) =
+    x % p + p * (lowValue p n (lowValue p n (x / p) + p ^ n * (x / (p ^ n * p))) + p ^ n * (x / (p ^ n * p)))
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerDigits.lean:51:27: error: unsolved goals
+p : ℕ
+hp : 0 < p
+n : ℕ
+ih : ∀ {x : ℕ}, lowValue p n x < p ^ n
+x : ℕ
+hmod : x % p < p
+hlow : lowValue p n (x / p) < p ^ n
+⊢ p + p * p ^ n = p * p ^ n
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerDigits.lean:58:73: error: unsolved goals
+p n x : ℕ
+hp : 0 < p
+hdecomp : x = lowValue p n x + p ^ n * (x / p ^ n)
+hlow : lowValue p n x < p ^ n
+⊢ lowValue p n x % p ^ n = lowValue p n x
+'AspisR1.SamplerDigits.lowValue_decomposition' depends on axioms: [propext, sorryAx]
+'AspisR1.SamplerDigits.lowValue_lt_pow' depends on axioms: [propext, sorryAx]
+'AspisR1.SamplerDigits.lowValue_eq_mod_pow' depends on axioms: [propext, sorryAx]
+exit=1

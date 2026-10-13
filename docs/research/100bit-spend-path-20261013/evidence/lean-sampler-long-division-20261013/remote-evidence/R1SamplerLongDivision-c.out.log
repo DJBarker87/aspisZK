@@ -1,0 +1,72 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerLongDivision.lean:16:5: warning: Variable name `hradix` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerLongDivision.lean:16:26: warning: Variable name `hdivisor` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerLongDivision.lean:85:52: error: unsolved goals
+radix divisor : ℕ
+hradix : 0 < radix
+hdivisor : 0 < divisor
+state : State
+digit : ℕ
+hinvariant : state.processedValue = divisor * state.quotient + state.remainder
+hremainder : state.remainder < divisor
+hdigit : digit < radix
+n : ℕ := dividend radix state.remainder digit
+hdivision :
+  dividend radix state.remainder digit =
+    divisor * (dividend radix state.remainder digit / divisor) + dividend radix state.remainder digit % divisor
+hdivision' : n = divisor * (n / divisor) + n % divisor
+⊢ digit + (state.remainder + divisor * state.quotient) * radix =
+    divisor * state.quotient * radix + dividend radix state.remainder digit
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerLongDivision.lean:88:55: error: unsolved goals
+radix divisor : ℕ
+hradix : 0 < radix
+hdivisor : 0 < divisor
+state : State
+digit : ℕ
+hinvariant : state.processedValue = divisor * state.quotient + state.remainder
+hremainder : state.remainder < divisor
+hdigit : digit < radix
+n : ℕ := dividend radix state.remainder digit
+hdivision :
+  dividend radix state.remainder digit =
+    divisor * (dividend radix state.remainder digit / divisor) + dividend radix state.remainder digit % divisor
+hdivision' : n = divisor * (n / divisor) + n % divisor
+⊢ divisor * state.quotient * radix + (divisor * (n / divisor) + n % divisor) =
+    divisor * state.quotient * radix +
+      (divisor * ((divisor * (n / divisor) + n % divisor) / divisor) +
+        (divisor * (n / divisor) + n % divisor) % divisor)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerLongDivision.lean:86:23: warning: This simp argument is unused:
+  Nat.mul_add
+
+Hint: Omit it from the simp argument list.
+  simp [n, N̵a̵t̵.̵m̵u̵l̵_̵a̵d̵d̵,̵ ̵Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerLongDivision.lean:86:36: warning: This simp argument is unused:
+  Nat.add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [n, Nat.mul_add, N̵a̵t̵.̵a̵d̵d̵_̵a̵s̵s̵o̵c̵,̵ ̵Nat.add_comm, Nat.add_left_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerLongDivision.lean:86:65: warning: This simp argument is unused:
+  Nat.add_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp [n, Nat.mul_add, Nat.add_assoc, Nat.add_comm,̵ ̵N̵a̵t̵.̵a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SamplerLongDivision.dividend_lt_mul' depends on axioms: [propext]
+'AspisR1.SamplerLongDivision.quotient_lt_radix' depends on axioms: [propext]
+'AspisR1.SamplerLongDivision.dividend_eq_division' depends on axioms: [propext]
+'AspisR1.SamplerLongDivision.step_preserves_invariant' depends on axioms: [propext, sorryAx]
+'AspisR1.SamplerLongDivision.process_preserves_invariant' depends on axioms: [propext, sorryAx]
+'AspisR1.SamplerLongDivision.initialState_process_correct' depends on axioms: [propext, sorryAx]
+exit=1

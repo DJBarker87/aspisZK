@@ -1,0 +1,44 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1D18PointWeights.lean:52:46: warning: Variable name `hk` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1D18PointWeights.lean:61:32: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1D18PointWeights.lean:107:10: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    ((if rowNat ↑j / 2 ^ _a % 2 = 0 then 1 - p ⟨9 - _a, ⋯⟩ else p ⟨9 - _a, ⋯⟩) *
+        if rowNat ↑j / 2 ^ ↑(d18BitIndexEquiv (d, 1)) % 2 = 0 then 1 - p ⟨9 - ↑(d18BitIndexEquiv (d, 1)), ⋯⟩
+        else p ⟨9 - ↑(d18BitIndexEquiv (d, 1)), ⋯⟩) =
+      pairFactor (p ⟨9 - 2 * ↑(d18Tau d), ⋯⟩) (p ⟨8 - 2 * ↑(d18Tau d), ⋯⟩) (↑j / 4 ^ ↑d % 4)
+Error: invalid have declaration, term
+  (d18BitIndexEquiv (d, 0)).isLt
+has type
+  ↑(d18BitIndexEquiv (d, 0)) < 10
+but is expected to have type
+  _a < 10
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+K : Type
+inst✝ : Field K
+p : Fin 10 → K
+j : Fin 1024
+d : Fin 5
+hd : d ∈ Finset.univ
+hbit0 : rowNat ↑j / 2 ^ (2 * ↑(d18Tau d) + ↑0) % 2 = ↑j / 4 ^ ↑d % 4 / 2 ^ ↑0 % 2
+hbit1 : rowNat ↑j / 2 ^ (2 * ↑(d18Tau d) + ↑1) % 2 = ↑j / 4 ^ ↑d % 4 / 2 ^ ↑1 % 2
+hidx0 : ↑(d18BitIndexEquiv (d, 0)) = 2 * ↑(d18Tau d)
+hidx1 : ↑(d18BitIndexEquiv (d, 1)) = 1 + 2 * ↑(d18Tau d)
+⊢ ((if rowNat ↑j / 2 ^ ↑(d18BitIndexEquiv (d, 0)) % 2 = 0 then 1 - p ⟨9 - ↑(d18BitIndexEquiv (d, 0)), ⋯⟩
+      else p ⟨9 - ↑(d18BitIndexEquiv (d, 0)), ⋯⟩) *
+      if rowNat ↑j / 2 ^ ↑(d18BitIndexEquiv (d, 1)) % 2 = 0 then 1 - p ⟨9 - ↑(d18BitIndexEquiv (d, 1)), ⋯⟩
+      else p ⟨9 - ↑(d18BitIndexEquiv (d, 1)), ⋯⟩) =
+    pairFactor (p ⟨9 - 2 * ↑(d18Tau d), ⋯⟩) (p ⟨8 - 2 * ↑(d18Tau d), ⋯⟩) (↑j / 4 ^ ↑d % 4)
+'AspisR1.d18Tau_involutive' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R1D18PointWeights.0.AspisR1.rowBit_eq_digitBit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.rowPoint_eq_tensorPoint' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

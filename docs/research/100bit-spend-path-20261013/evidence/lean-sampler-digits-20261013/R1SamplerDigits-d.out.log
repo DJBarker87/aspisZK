@@ -1,0 +1,37 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerDigits.lean:17:46: warning: Variable name `hp` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerDigits.lean:52:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?n + ?m) * ?k
+in the target expression
+  p * (lowValue p n (x / p)).succ ≤ p * p ^ n
+
+p : ℕ
+hp : 0 < p
+n : ℕ
+ih : ∀ {x : ℕ}, lowValue p n x < p ^ n
+x : ℕ
+hmod : x % p < p
+hlow : lowValue p n (x / p) < p ^ n
+hmod' : x % p + 1 ≤ p
+h : p * (lowValue p n (x / p)).succ ≤ p * p ^ n
+⊢ p * lowValue p n (x / p) + p ≤ p * p ^ n
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerDigits.lean:63:73: error: unsolved goals
+p n x : ℕ
+hp : 0 < p
+hdecomp : x = lowValue p n x + p ^ n * (x / p ^ n)
+hlow : lowValue p n x < p ^ n
+⊢ lowValue p n x % p ^ n = lowValue p n x
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SamplerDigits.lean:65:10: warning: This simp argument is unused:
+  Nat.mul_mod
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵N̵a̵t̵.̵m̵u̵l̵_̵m̵o̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SamplerDigits.lowValue_decomposition' depends on axioms: [propext]
+'AspisR1.SamplerDigits.lowValue_lt_pow' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.SamplerDigits.lowValue_eq_mod_pow' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
