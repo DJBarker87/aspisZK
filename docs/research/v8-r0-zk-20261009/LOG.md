@@ -3423,3 +3423,61 @@ computed. No binaries, no co-author trailer, no push.
 This closes T2b-1's chain-membership obligation only. Nothing proves,
 assumes or weakens `MaskImageOn Good`; the spanning/image obligations
 remain research work. The deployment verdict is unchanged: v7 stands.
+
+### Lead acceptance of T2b-1 (2026-10-13) — the remainder lies in the chain space; T2b-2a released
+
+T2b-1 (`3058917af` on `codex/t2b1-chain-20261012`, one commit on
+`6853b7827`) is accepted and cherry-picked onto `v8-reference`. Reviewed
+against the evidence:
+
+- **Statements.** `terminal_row_eligible` (Lemma A), `rounds_initial` and
+  `rounds_chain` (Lemma B in the T2b-1′ typed form), `terminal_applyAff`,
+  `h1Padding_sum`, `h1Padding_bsumB` (Lemma C of T2b-1″), `roundPoly j`
+  (with `roundPoly_nine : roundPoly 9 = round9Poly` by `rfl`),
+  `Chain0 ch : Submodule K (Payload K)` as the meet of four K-linear kernels
+  with `mem_chain0_iff` exposing exactly the four D17.3 conditions, and
+  `sRem_mem_chain0 … (hgood : alpha ch 9 ≠ 1/2) : sRem h B x w ch n ∈ Chain0 ch`
+  — every statement is as fixed in the LOG. No premise was added; no
+  `Good` clause beyond `alpha ch 9 ≠ 1/2`; nothing touches `MaskImageOn`.
+- **Proof substance (lead inspection).** Lemma A is the per-family audit:
+  Schedule and Digest read below row 912 at local rows ≤ 12; Path and Value
+  construct the `forestPathUsed`/`pairAuxUsed` witnesses; Conservation,
+  Occupancy and Asset protect their fixed cells; Copy (one terminal lane,
+  including LogUp compression and positivity links) is invariant by
+  `protected_registry` through a generic list-fold congruence; Poseidon by
+  the FINDINGS-Z6 rule (current/successor reads at local rows 0–10, xor12
+  only at local row 0 reading local row 12, every weight zero at local rows
+  ≥ 11, blocks ≥ 57 selected off) — no permutation or recurrence evaluated.
+  `prepare_eligible` commutes preparation with eligible masking via
+  `helper_eligible`. Lemma C splits on `CopyActiveRow (rowOf b)` exactly as
+  specified (`zero_inactive` from `copyActiveRowMasks 0 = 6144`,
+  `copy_inactive_residuals` on inactive rows); `h1Padding_sum` is a generic
+  finite-set balancing lemma applied with `copyInactiveRows` irreducible.
+  `original_bsum_actual` is stronger than the item 4 route: for every tape
+  `r : T K F`, `bsumB 10 (fOrig … (actual … r) ∘ ofBool) = bsumB 10 (fOrig …
+  (prepare pub t ch) ∘ ofBool)`; the two instances `(0,n)` and `0` give `g`'s
+  zero initial sum, Lemma B gives its chain, `dir` lies in `InitialChain0`
+  (`two_ne_zero` from `nodes_injOn`), and the terminal condition is
+  `Phi0_sRem` with `claimMask` vanishing on the round-only remainder.
+- **Hard rules.** No `sorry`/`axiom`/`native_decide`/`admit`/`maxRecDepth`/
+  `maxHeartbeats`; `decide` only on `Nat.testBit 6144 0` and `(0 : Fin 10) ≠ 9`;
+  `fin_cases` only over `Fin 3`; `Finset.univ` only over the abstract index
+  of the balancing lemma. Only the two new modules, the LOG section and
+  `t2b1/evidence.json` changed; D12, Shift, R0P/R0/R0FS/R0C untouched.
+- **Replay evidence (verified on the host).** Attempts 3377–3394, one module
+  at a time, `run2.sh` run directly, caps 5G/7G/swap 0/900 s, no cap raised;
+  103 unchanged modules hash-checked before 3377. Final `R0Z/TerminalEligible`
+  attempt 3385: exit 0, 7.55 s, peak RSS 6,933,404 KiB, swaps 0; final
+  `R0Z/Chain` attempt 3394: exit 0, 4.67 s, peak RSS 6,887,404 KiB, swaps 0.
+  `evidence/sha-3385.txt` and `sha-3394.txt` match the committed sources
+  (`236743…df805`, `c0e5ce…a4e8`) and the staged host copies. Both
+  `out-N.log` files carry the six `#print axioms` lines, each exactly
+  `[propext, Classical.choice, Quot.sound]`. Host attempt counter: next 3395.
+
+**Decision D19.** D17.3 clause (i′) is now split: `sRem … ∈ Chain0 ch` is
+proved for every `n` with `alpha ch 9 ≠ 1/2` (T2b-1). What remains of (i′)
+is `Chain0 ch ⊆ range (A ∘ inlM)` on `Good` (T2b-2a: `silent_mem_chain0`,
+the closed forms; T2b-2b: spanning), and (ii′) `cTilde w − cTilde w' ∈ range A`.
+T2b-2a is released as specified in "User direction (2026-10-12)", base this
+commit, attempts from 3395. Research under the current verdict (PLAN,
+2026-10-11): v7 stands.
