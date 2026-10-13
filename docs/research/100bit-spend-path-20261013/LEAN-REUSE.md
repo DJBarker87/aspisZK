@@ -138,3 +138,20 @@ sumcheck-chain identities. Its payload-dependent statements use the old
 one-fold output, so they require a separate R1 correspondence; surjectivity
 definitions are not proofs of the required mask rank. The pinned source-only
 inventory is [`PURE-ROUND-REUSE.md`](PURE-ROUND-REUSE.md).
+
+## Semantic prefix connection
+
+The next checked bridge, `SemanticPrefix.large_matching_extracts_of_prefix`,
+derives the candidate exclusions from the explicit semantic classifier at
+each of the first 25 parsed rows, then applies the R1 opening and extraction
+theorems. It reuses the old pre-C2 padding argument for lambda/chi, so it
+does not assume H1/G was committed before those challenges. The literal R1
+and R0 candidate lists are proved equivalent.
+
+The existing per-prefix sampler bounds are retained. `SemanticBudget`
+proves their 25-row sum is `303100 * (1+deltaQ)/P^4`; this accounting does
+not supply the missing shared-oracle reduction. The combined checkpoint
+passed on the NUC in 1.38 s at 3,566,892 KiB, with zero swap and standard
+axioms only. See [`SEMANTIC-PREFIX-BRIDGE.md`](SEMANTIC-PREFIX-BRIDGE.md)
+for the exact theorem inputs, timing argument, and remaining source,
+Fiat–Shamir, full settlement, and privacy obligations.

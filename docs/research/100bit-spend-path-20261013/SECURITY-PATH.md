@@ -184,6 +184,13 @@ correspondence, supplying and bounding those exclusions for the new
 transcript, and the shared-oracle instantiation remain open. See
 `MASKED-SEMANTIC-BRIDGE.md`; this does not establish full settlement or privacy.
 
+The later `SemanticPrefix.large_matching_extracts_of_prefix` derives the
+semantic candidate exclusions from the first 25 parsed prefix events,
+including the old pre-C2 padding argument for lambda/chi. It uses no old
+opening tail. The existing independent-answer per-prefix bounds have a
+checked sum `303100 * (1+deltaQ)/P^4`; shared-oracle accounting and source
+correspondence are still required. See `SEMANTIC-PREFIX-BRIDGE.md`.
+
 ## Two-transaction settlement architecture
 
 Uploads/staging are outside the user's count. Pool anchor checkpoints are

@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticHit.lean:37:10: error: Type mismatch: After simplification, term
+  hi
+ has type
+  @roundBad E E inst✝³ inst✝³ inst✝² inst✝¹ inst✝ inst✝ X (SemMsgZ E) W Sfield s
+    { statement := x, rounds := prev ++ (m, c) :: List.take (↑i) rs } rs[↑i].1 rs[↑i].2
+but is expected to have type
+  @roundBad E E inst✝³ inst✝³ inst✝² inst✝¹ inst✝ inst✝ X (SemMsgZ E) W Sfield s
+    { statement := x, rounds := prev ++ List.take (↑i.succ) ((m, c) :: rs) } ((m, c) :: rs)[↑i.succ].1
+    ((m, c) :: rs)[↑i.succ].2
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticHit.lean:55:75: error: unsolved goals
+E : Type
+inst✝³ : Field E
+inst✝² : Fintype E
+inst✝¹ : DecidableEq E
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) E
+Sfield : Fin 29 → Subfield E
+F : Subfield E
+x : TypedContext E Sfield
+fallback1 : AspisR0.ChordGeometry.Point E
+maskClaims : (Fin 29 → E) → (Fin 29 → E) → (Fin 10 → E) → E
+B : PackBasis F
+rs : List (MsgZ E × ChalZ E)
+cs : List E
+i : Fin rs.length
+sm : SemMsgZ E
+hslot : rs[↑i] = (Msg.semantic sm, Chal.semantic (cs.getD (↑i) 0))
+hlen : rs.length ≤ 25
+htake : (List.take (↑i) rs).length = ↑i
+hlt : (List.take (↑i) rs).length < 25
+⊢ semanticBadZ maskClaims B { statement := x, rounds := List.take (↑i) rs } sm (cs[↑i]?.getD 0) → ↑i < 25
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticHit.lean:60:60: warning: This simp argument is unused:
+  hlt
+
+Hint: Omit it from the simp argument list.
+  simp [roundBad, sourceDataWithFallbackZ, FS.Prefix.round,̵ ̵h̵l̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SemanticHit.hitFrom_iff_indexed_roundBad' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticHit.no_hitFrom_iff_all_semanticBadZ_excluded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

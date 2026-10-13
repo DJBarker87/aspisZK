@@ -42,3 +42,10 @@ must supply and bound the exclusions with the correct message timing and
 actual samplers; the old 32-round D3/Fiat–Shamir theorem is not applied.
 Neither shared-oracle Fiat–Shamir security nor a simulator follows from
 this deterministic candidate-level implication.
+
+The subsequent [`SEMANTIC-PREFIX-BRIDGE.md`](SEMANTIC-PREFIX-BRIDGE.md)
+checkpoint now derives these candidate-level exclusions from the first 25
+parsed semantic rounds. It reuses the old padding and prefix lemmas and
+proves exact equality of the R1/R0 candidate predicates. The old per-prefix
+sampler bounds therefore refer to the same model events. Source
+correspondence and the new shared-oracle instantiation remain open.

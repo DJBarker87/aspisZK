@@ -49,3 +49,11 @@ import and six axiom audits pass with standard axioms only. The same
 checkpoint composes the existing extracted four-byte decoder with the
 eight-word machine division pass; full mutable/repeated sampler refinement
 is still open.
+
+`SEMANTIC-PREFIX-BRIDGE.md` now derives the candidate exclusions from the
+explicit classifier at each of the first 25 parsed semantic rows. The proof
+reuses the pre-C2 padding argument for lambda/chi and proves equality of the
+R1/R0 candidate predicates. The independent-answer per-prefix budgets sum
+to `303100 * (1+deltaQ)/P^4`; the new shared-oracle success bound, Rust
+correspondence, full settlement extraction, and privacy remain open. The
+combined prefix checkpoint and seven axiom audits pass on the NUC.
