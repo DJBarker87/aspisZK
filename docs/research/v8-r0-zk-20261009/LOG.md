@@ -3766,3 +3766,87 @@ conversions), G9 (`absorbA` injectivity), G10, G11 (`R0Z.mean` vs
 T2b-2b) → ZF1a (definitions, bridge, G3/G6/G7) → ZF1b (ε via freshness) →
 ZF1c (badMass). Research under the current verdict (PLAN, 2026-10-11): v7
 stands.
+
+### Lead acceptance of Z7 (2026-10-13); decision D20″ — corrections to D20.1, the predicate fixed as `Good₂`, Z8 issued
+
+Z7 (`8dfaa3a4c` on `codex/z7-alpha-structures-20261013`, cherry-picked;
+`z4/z7.rs` as a module of `probe.rs` with a `--z7` dispatch, `run-z7.py`,
+`FINDINGS-Z7.txt` (lead copy `FINDINGS-Z7.md`), `summary-Z7.json`,
+`evidence-Z7.json`, `probe-Z7.log`, `z7-runs/`) is accepted. Reviewed: only
+`z4/` changed; Z4c's rank and target routines are called unchanged; all 40
+jobs replay Z4c's challenge lines byte-for-byte; structure (A) reproduces
+silent rank 1,076 and the Z4c (i′)/derivative/(ii′) passes on 5/5 vectors;
+host receipts (nuc, `MemoryHigh=3G`/`MemoryMax=4G`/swap 0): full scope
+618.9 s, peak child RSS 75,200 KiB, swaps 0; 206 source hashes match.
+
+**Results (identical on all 5 vectors per structure).** Silent per-round
+`F`-ranks (max 108 at rounds 0 and 9 — the initial-sum and terminal conditions
+each cut one `K`-dimension — and 112 elsewhere): (A), (C), (D), (E), (F), (G)
+all attain the maximum at every round, total 1,076, excess 0. (B), all
+`α_i ∈ F∖{0,1}`: round 7 drops to 93 (unconstrained 103), total 1,038; limbs
+`(1, i, u, iu)` at round 7 are 24, 26, 21, 22 silent and 27, 28, 23, 25
+unconstrained; Chain0 targets have excess 38, all at round 7; Z4c's (i′) and
+derivative targets fail 5/5 with pivots `(7,14,2), (7,15,2), (7,16,2),
+(7,16,3), (7,17,2)`; (ii′) passes. Rounds 5 and 6 do **not** lose rank under
+(B). (H) (mask-only rows with low bits zero) loses only at round 7 in the
+unconstrained projection (108); its silent drops at rounds 6–7 are an
+artefact of too few rows for the 113 raw observations.
+
+**D20″.1 (corrections to D20.1).** The `u`-limb count (≤ 24) is confirmed
+(measured 23 unconstrained). Three details of D20.1 were wrong and are
+replaced by the measured values: the distinct tail sums at rounds 0–2 are
+130, 93, 64 (not 512, 256, 128; the counts 42, 26, 15, 8, 4, 2, 1 for rounds
+3–9 stand); `G`'s unconstrained pivot coverage is degrees 0–27 at round 5,
+12–27 at round 6 and 20–27 at round 7 (the leading-degree argument gives only
+a lower bound on pivots; the actual span of `{q_B, X·q_B}` is `2·#tails`
+dimensional); and consequently round 5 is spanned by `G` alone and round 6 by
+`G` plus `F`-scalar lanes, so **only round 7 needs the `K₄`-scalar mechanism**.
+The subspace structures (C)–(F) pass because `Λ_j` contains the products
+`α_i α_k`, which leave any 3-dimensional subspace (none is a subalgebra); the
+failing cases are those where all low-bit scalars stay inside a proper
+subfield, of which (B) is the extreme.
+
+**D20″.2 (predicate fixed).** With `K₄` the `F`-span of the pack basis
+(the QM31 subfield for the tower basis), the predicate for `MaskImageOn` and
+for the ledger is
+
+```
+Good₂ ch := Good ch ∧ (∀ i, alpha ch i ∈ K₄) ∧
+            Submodule.span F {1, alpha ch 0, alpha ch 1, alpha ch 2, alpha ch 3, alpha ch 4, alpha ch 5} = K₄
+```
+
+It implies `Λ_6 = Λ_7 = K₄` (`Λ_7 ⊇ Λ_6 ⊇ span_F{1, α_0, …, α_5}` by summing
+`eqPrefix` over the trailing bit), which is what the spanning proof needs at
+rounds 6–7 (round 6 may not need it, per Z7; using it there is the safe
+choice). Failure mass under independent `semChal`-distributed coordinates:
+a proper `F`-subspace of `K₄` containing `1` and all six values has dimension
+≤ 3; there are `|F|²+|F|+1` three-dimensional ones, and each coordinate lands
+in a given one with mass ≤ `(1+δ_Q)/|F|`, so
+`badMass(span) ≤ (|F|²+|F|+1)·((1+δ_Q)/|F|)^6 ≈ |F|^-4 ≈ 2^-124`, below the
+2^-100 line; the `{0,1,½}` part is `21·(1+δ_Q)/P^4` (`semChal_event`); the
+`∈ K₄` part has mass 0 under the decoder. The exact Lean form of `K₄` and of
+the span condition is fixed in D21 with the T2b-2b statement, **after Z8**.
+
+**Z8 (numeric; Claude agent, continuing Z7's branch and workspace).** The
+gate must be redone for the proved protocol's payload (D20′.2): batching
+challenges `ch.opening 0..3` uniform in `WideExact` (aspis-core's type; no
+QM31 proxy), and silence defined by the actual `linearPayload` coordinates —
+`.inactiveSum` (1 `WideExact` value), `.openingCoeff` (7), `.finalCoeff`
+(256), computed with the R0 opening-layer functions (`batchLinear`: chord
+quotient at `ch.circle 0/1` of each column's π-permuted natural-basis
+coefficients, weighted by `γ^c`; the relation polynomial with
+`openingWeights`; the fold by `ch.opening 3`), each `WideExact` value
+eliminated over `F` as 8 coordinates — plus the per-lane `.pointClaim`,
+`.extraClaim`, `.ood`, `.opened` as in Z4c. No zero-batched-word proxy and no
+D-lift. Report, on 5 Z4c vectors: silent rank against 1,076 (= `dim_F
+Chain0₄`), per-round ranks, (i′)/(ii′) passes with the targets' PCS
+coordinates recomputed under `WideExact` batching, for structures (A) and (B),
+plus (I) all `α_i` in the quadratic subfield `K₂ = F(i)` and (J) `α_0`
+uniform in `K₄`, `α_1..α_6 ∈ F`, `α_7..α_9` uniform (both test `Λ_7` inside a
+proper subfield or a 2-dimensional span). Stop rule: if the opening-layer
+functionals cannot be evaluated column-wise from the existing Rust, stop and
+report what is missing; if (A) under `WideExact` batching gives a silent rank
+below 1,076, report the per-round and per-limb deficit and the excess
+support — that is a finding, not an error. Same caps, receipts, manifest and
+evidence format as Z7; `FINDINGS-Z8.txt`. T2b-2b stays held until Z8 lands.
+Research under the current verdict (PLAN, 2026-10-11): v7 stands.
