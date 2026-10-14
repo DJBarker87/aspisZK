@@ -74,10 +74,11 @@ adaptive source-execution bound.
 
 ## Remaining composition
 
-The next connection must combine these records and pending squeeze cells
-with the existing q22 selected-prefix recovery and rho component. It must
-also preserve pending semantic answers through the reseeded row and handle
-the next ordinary sampler's trace following. The complete completing decoder,
+The later [joint-prefix connection](JOINT-PREFIX-BRIDGE.md) now combines
+these records and pending squeeze cells with q22 selected-prefix recovery
+and the following round's trace component. It uses one deduplicated answer
+list and derives the ordinary known-state facts at the later first-read
+table. The complete address/table-only typed decoder, all round cases,
 generic injection/density and D1/D2/D3 instance remain open.
 
 The runtime has not changed. Rust/public/committed-word correspondence,

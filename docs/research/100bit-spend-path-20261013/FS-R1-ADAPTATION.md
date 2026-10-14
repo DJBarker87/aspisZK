@@ -202,3 +202,20 @@ It does not yet supply the full pending-list freshness, trace following or
 q22/rho composition required by `Inj3` and the adaptive density instance.
 The concrete byte codec, full source/account correspondence and privacy
 remain separate.
+
+## Shared completion of the ordinary prefix and q22
+
+[JOINT-PREFIX-BRIDGE.md](JOINT-PREFIX-BRIDGE.md) extends recovery to the
+table before the round following q22. The query absorb is proved to precede
+that round; the ordinary records are recovered at the later table and their
+known-state facts are derived from the explicit chains. One deduplicated
+missing-answer list completes both ordinary rounds and q22, so a shared
+hash address cannot receive two independent answers.
+
+The combined trace-following theorem now returns the actual ordinary prefix,
+query address/result and following challenge. The background law and adaptive
+continuation bound reuse the old `blaw_split`, `samp_mean` and `chainB` results
+with an explicit fixed-completion bound. This closes this component's
+pending-list and trace composition, not the complete generic theorem
+instance. Query/following-message binding in the address-only typed decoder,
+all other round cases, R1 D1/D2/D3, source refinement and privacy remain open.

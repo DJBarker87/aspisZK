@@ -1,0 +1,30 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1JointNextLaw.lean:59:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  output p T rs endpoint i ?m.117 (as ++ ?m.116)
+in the target expression
+  blaw (fun x bs => output p T rs endpoint i x (as ++ bs)) obs (QueryNextLaw.own p a) [] =
+    mean fun b => mean fun x => obs (JointPrefixAnswers.fromAnswers p T rs endpoint as, p.σ i b, x)
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+T : Table (Addr L) State
+rs : List (Rec M)
+endpoint : State
+a : Addr L
+i : ℕ
+obs : Completed M Cv L × Chal Cv → ℚ
+hsplit :
+  blaw (output p T rs endpoint i) obs (QueryNextLaw.own p a)
+      (List.map (fun c => (c, none)) (JointPrefixAnswers.missing p T rs endpoint)) =
+    pmean (fun as => blaw (fun x bs => output p T rs endpoint i x (as ++ bs)) obs (QueryNextLaw.own p a) [])
+      (List.map (fun c => (c, none)) (JointPrefixAnswers.missing p T rs endpoint))
+as : List State
+has : as.length = (List.map (fun c => (c, none)) (JointPrefixAnswers.missing p T rs endpoint)).length
+hlen : as.length = (JointPrefixAnswers.missing p T rs endpoint).length
+⊢ blaw (fun x bs => output p T rs endpoint i x (as ++ bs)) obs (QueryNextLaw.own p a) [] =
+    mean fun b => mean fun x => obs (JointPrefixAnswers.fromAnswers p T rs endpoint as, p.σ i b, x)
+'AspisR1.JointNextLaw.output_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JointNextLaw.background_law' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JointNextLaw.background_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JointNextLaw.background_sampler_law' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

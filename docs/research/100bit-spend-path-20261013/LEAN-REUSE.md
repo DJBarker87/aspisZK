@@ -5,11 +5,13 @@ work is chiefly a set of explicit bridges. A theorem for the old protocol does
 not automatically become a theorem for the new verifier: its premises, index
 order, field embeddings, and transcript schedule must be discharged again.
 
-The latest [opening-prefix connection](OPENING-PREFIX-BRIDGE.md) combines
-initialization, ordinary records and the domain transition, then reuses the
-old record-completion and background-sampler results. Its fifteen focused
-targets are checked; the combined checkpoint reports 38 standard-only axiom
-audits. The complete protocol and privacy proofs remain open.
+The latest [joint-prefix connection](JOINT-PREFIX-BRIDGE.md) combines
+initialized ordinary records, the domain transition, q22 and the following
+challenge. It reuses the old record completion, first-read order, background
+sampler and adaptive-chain bound. Shared hash addresses use one deduplicated
+answer list. Eleven focused targets are checked; the combined checkpoint
+reports 22 standard-only axiom audits. The complete protocol and privacy
+proofs remain open.
 
 | Existing result | Reuse in R1 | Scope of the checked result |
 |---|---|---|
