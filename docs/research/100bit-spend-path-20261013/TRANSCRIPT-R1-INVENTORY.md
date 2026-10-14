@@ -134,3 +134,13 @@ HEAD above.
 
 No builds, prover runs, verifier runs, or source edits were performed for this
 inventory.
+
+## Later continuation-state clarification
+
+At the subsequent `e8b1a73c6` audit the central sources above were unchanged.
+The eight query pairs are all computed, but `queries_from_pairs` returns the
+scan-selected advance, which can precede the eighth. `Transcript::queries`
+sets its state to that returned value before rho. This behavior is mirrored
+by Lean `Q22.scanOut`; the later [adaptation audit](FS-R1-ADAPTATION.md)
+tracks the resulting decoder obligation and the separate opening-domain
+hash edge. The row count alone does not describe those state transitions.

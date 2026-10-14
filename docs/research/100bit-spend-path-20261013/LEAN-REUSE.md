@@ -250,3 +250,19 @@ checkpoint at 3,591,584 KiB, zero swap and six standard-only axiom reports.
 Existing historical declarations are byte-identical. Authorization of the
 public anchor from account state, Rust refinement, the 33-row shared-oracle
 instantiation and privacy remain open.
+
+## Reuse toward the actual R1 Fiat–Shamir schedule
+
+The [transcript adaptation audit](FS-R1-ADAPTATION.md) identifies why the
+old 32-row theorem cannot simply be renamed: R1 has a q22 round followed
+by rho, q22 can select an earlier continuation state, later extra claims
+arrive in row 25, and there is a domain-transition hash before opening.
+
+Six focused targets now reuse the old semantic classifier and no-hit
+characterization, q22 scan definition, and no-collision table lemmas.
+They prove invariance of the early semantic checks under replacing the
+extra vector and recovery of the predecessor path for the actual selected
+query state. The 1.37 s combined checkpoint used 3,557,136 KiB, zero swap,
+and reported ten standard-only axiom audits. The full new decoder, its
+completion law, D1/D2/D3 instance, source correspondence and privacy remain
+open; these structural results do not close those obligations.

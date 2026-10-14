@@ -1,0 +1,25 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexRewind.lean:31:14: error: unsolved goals
+case succ
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+T : Table (Addr L) State
+s : ℕ → State
+n : ℕ
+ih :
+  (∀ j < n, theUnique (advPre p T (s (j + 1))) = some (s j)) →
+    rewind p T n (s n) = some (List.map s (List.range (n + 1)))
+hpre : ∀ j < n + 1, theUnique (advPre p T (s (j + 1))) = some (s j)
+⊢ Option.map (fun x => x ++ [s (n + 1)]) (some (List.map s (List.range n) ++ [s n])) =
+    some (List.map s (List.range n) ++ [s n] ++ [s (n + 1)])
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexRewind.lean:32:44: warning: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  simp only [rewind, hpre n (by omega),̵ ̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.DuplexRewind.rewind_of_preimages' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.DuplexRewind.unique_advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DuplexRewind.rewind_of_noColl' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

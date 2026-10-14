@@ -56,3 +56,11 @@ The masked extensions in `MaskD3Glue.lean` and `MaskFiatShamir.lean` use shifted
 | `docs/research/v8-fs-generic-20261006/lean/FS2/DuplexWalk.lean` | `206f5cf79a51b4254d9bf60a70ba85c1b7c188f00e1bbe49445a6319681c875c` |
 | `docs/research/v8-fs-generic-20261006/lean/FS2/DuplexDecode.lean` | `9aa6e9a61007ad3ec6b6dd23cf5cb6edf466306032d9e28de9ce04dddf673f3c` |
 | `docs/research/v8-fs-generic-20261006/lean/FS2/DuplexDecodes.lean` | `e0bc8715cb65768fcfaa6dfa1a16fc417693797c0ff0478cc7aba596d169fe93` |
+
+## Later compatibility audit
+
+The [R1 adaptation audit](FS-R1-ADAPTATION.md) records additional exact
+constraints: q22 is followed by rho, its continuation state can be an
+earlier advance, row 25 carries later extra claims, and the Rust opening
+transcript inserts a domain-transition hash. A round-count-only instance
+of the old concrete decoder does not cover these operations.
