@@ -1,0 +1,133 @@
+{
+  "source_revision": "eb1b410e87539f4840de396b98af04f50d54f184",
+  "branch": "codex/100bit-spend-path-20261013",
+  "scope": "Mechanical source inventory only; no security assessment or protocol-equivalence conclusion.",
+  "initialization": {
+    "source": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+    "sha256": "73f4b49dfae90be8a5cafd9d69eaf9ed06a01009f3daabc5627b42e6cf31c996",
+    "domain": {
+      "line": 12,
+      "ascii": "UNPROVED:R1:PRIVATE-SALTED:SEMANTIC:P3",
+      "length_bytes": 38,
+      "decimal_bytes": [85,78,80,82,79,86,69,68,58,82,49,58,80,82,73,86,65,84,69,45,83,65,76,84,69,68,58,83,69,77,65,78,84,73,67,58,80,51],
+      "cfg": "feature=private-leaf-salts; cfg without this feature selects the distinct legacy R0 domain at line 10"
+    },
+    "constructor": {
+      "declaration": "SemanticTranscript::new",
+      "lines": "173-181",
+      "inputs": [
+        {"part": "DOMAIN", "length": 38},
+        {"part": "[0] framing byte", "length": 1},
+        {"part": "u32 little-endian public_bytes.len()", "length": 4},
+        {"part": "public_bytes", "length": "variable, explicitly converted to u32"},
+        {"part": "c1_root", "length": 32}
+      ],
+      "expression": "hash(&[DOMAIN, &[0], &length.to_le_bytes(), public_bytes, c1_root])",
+      "length_check": "u32::try_from(public_bytes.len()).map_err(|_| Error::Public)? (line 175)",
+      "state": "constructor stores the resulting 32-byte hash output and sets next_row=0"
+    }
+  },
+  "public_bytes": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+    "sha256": "2bb7db64dc53c8a268e42b0fe46da64ab1afcb03d28bbec2569b2abc30cbc074",
+    "declaration": "r0::Public::public_bytes",
+    "lines": "1989-2041",
+    "exclusion_comment": "Lines 1999-2001 say pool/domain/sequence and source current root are not fields of R0P.Public and are not silently hashed here.",
+    "field_encoding": "Each M31 field is canonicality-checked against P then emitted as 4-byte little-endian (lines 2003-2010). Digest is [M31; 8], hence 32 bytes (poseidon2.rs lines 56-60). Pair-tree depth/frontier length is 20 (pair_tree_profile.rs lines 32-35, 403).",
+    "private_transfer_order": [
+      {"field": "variant byte 0", "bytes": 1},
+      {"field": "anchor digest", "bytes": 32},
+      {"field": "nullifier digest", "bytes": 32},
+      {"field": "asset_id", "bytes": 4},
+      {"field": "recipient-present byte 1", "bytes": 1},
+      {"field": "recipient digest", "bytes": 32},
+      {"field": "change digest", "bytes": 32},
+      {"field": "withdrawal-present byte 0", "bytes": 1},
+      {"field": "live_snapshot.next_pair_index LE", "bytes": 8},
+      {"field": "live_snapshot.frontier: 20 digests", "bytes": 640},
+      {"field": "candidate_afterstate.next_root", "bytes": 32},
+      {"field": "candidate_afterstate.next_frontier: 20 digests", "bytes": 640}
+    ],
+    "private_transfer_length_bytes": 1455,
+    "withdrawal_order": [
+      {"field": "variant byte 1", "bytes": 1},
+      {"field": "anchor digest", "bytes": 32},
+      {"field": "nullifier digest", "bytes": 32},
+      {"field": "asset_id", "bytes": 4},
+      {"field": "recipient-present byte 0", "bytes": 1},
+      {"field": "change digest", "bytes": 32},
+      {"field": "withdrawal-present byte 1", "bytes": 1},
+      {"field": "amount encoded as M31 LE", "bytes": 4},
+      {"field": "live_snapshot.next_pair_index LE", "bytes": 8},
+      {"field": "live_snapshot.frontier: 20 digests", "bytes": 640},
+      {"field": "candidate_afterstate.next_root", "bytes": 32},
+      {"field": "candidate_afterstate.next_frontier: 20 digests", "bytes": 640}
+    ],
+    "withdrawal_length_bytes": 1427,
+    "underlying_public_type_fields": "payment_relation.rs lines 42-68; semantic projection private_public/withdrawal_public in pair_forest_semantic_terminal.rs lines 1312-1346"
+  },
+  "row_zero": {
+    "source": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+    "sha256": "73f4b49dfae90be8a5cafd9d69eaf9ed06a01009f3daabc5627b42e6cf31c996",
+    "shape": "row_shape(0) = Some((0,0)) (lines 38-48): record tag 0, payload size zero",
+    "canonical_record_bytes": [0,0,0,0,0],
+    "record_encoding": "tag byte followed by 4-byte LE payload length and payload (lines 76-86)",
+    "transcript_address": "sample_block_validated hashes [state, [0, 0xa0 + row], framed] (line 198); for row 0 the absorb label is 0xa0. It then hashes [absorbed, [1]] for squeeze and [absorbed, [2]] for advance (lines 199-200)."
+  },
+  "callers": [
+    {
+      "role": "sender/prover semantic transcript construction",
+      "source": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
+      "sha256": "113a367ae1e01d8fbd808ce3756b87040fd31ab359d94bad50b7c55c89c284bf",
+      "lines": "81-91",
+      "call": "obtains C1 root at line 81; constructs SemanticTranscript from public.public_bytes() and c1_root at line 82; appends row 0 and samples it at lines 84-91"
+    },
+    {
+      "role": "sender/prover top-level callers",
+      "source": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "sha256": "a7e20e5eb2fb706f2bdb51371466d4ee02c6fcabc67a427495a3b9276d9495fd",
+      "lines": "46-53, 117-129, 131-140, 170",
+      "call": "prove calls host_semantic::build (52); feature-enabled attempt routes through prove_masked_with_attempt (117-140) and build_with_material (170)"
+    },
+    {
+      "role": "verifier semantic transcript construction",
+      "source": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+      "sha256": "964f008a0841246fe3638ce2e492d12d18d78302565aa57f8c7df4d079579ce3",
+      "lines": "57-78",
+      "call": "verify_observed parses Prefix, initializes from public_bytes and prefix.c1_root at lines 70-76, then consumes rows via wire::begin at line 77"
+    },
+    {
+      "role": "verifier top-level caller",
+      "source": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "sha256": "2cab573be46ca69b5d82837e5221a9a499d3b6dc1f89b801e388b4e8b1fe01cd",
+      "lines": "341-349",
+      "call": "tx1 invokes r1_semantic::verify_observed at line 345"
+    },
+    {
+      "role": "parallel R1 semantic verifier entry",
+      "source": "crates/aspis-r1-cost-probe/src/semantic.rs",
+      "sha256": "75d83ce86b203023c3a9a9d35420853b6a5a9196b634a971859f6f4b98b0d0c5",
+      "lines": "46-50",
+      "call": "verify initializes SemanticTranscript from public_bytes and prefix.c1_root"
+    },
+    {
+      "role": "state-only prover path caller",
+      "source": "crates/aspis-prover/src/state_only_candidate_prefix.rs",
+      "sha256": "a04147941fc2f8e0c9667caf9dc7f1f4e0bd8ce8add740bbe6bee88c2c3e05b5",
+      "lines": "814-819",
+      "call": "after obtaining C1 root, initializes SemanticTranscript from public_bytes and c1_root"
+    },
+    {
+      "role": "state-only verifier paths",
+      "source": "crates/aspis-statement/src/state_only_verify.rs",
+      "sha256": "7474d788882e79a5ecf7d2b5adbc33f88ad88f0876c1181cf822a5953a80253f",
+      "lines": "1170-1179, 1235-1244",
+      "call": "verify_semantics and verify_semantics_heap initialize SemanticTranscript from public_bytes and parsed c1_root"
+    }
+  ],
+  "source_hashes_for_component_lengths": [
+    {"path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs", "sha256": "8a7a4c7bdd3fe0ecd14d6fc920182be434ab92536924de22d269d906be3387b2"},
+    {"path": "crates/aspis-statement/src/poseidon2.rs", "sha256": "3f1d60cf5feb48e56fa3c9379a74f2ccb9b2a7ea78365abf0e06e36e562d54cb"},
+    {"path": "crates/aspis-r1-cost-probe/src/semantic_wire.rs", "sha256": "58c671cee016246aa464a35ba443009813581e4a53bce37dd528d048009f2db7"}
+  ]
+}

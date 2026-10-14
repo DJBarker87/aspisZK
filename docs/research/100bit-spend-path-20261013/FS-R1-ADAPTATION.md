@@ -166,3 +166,22 @@ The complete earlier-prefix reconstruction must validate the recovered
 domain frame and replace row 26's carried state by the reseed output.
 Initial public/C1 hashing and the complete R1 instance remain separate
 obligations; the local components are not a full `Inj3` proof.
+
+## Initialization and ordinary prefix: checked local route
+
+[INITIAL-EDGE-BRIDGE.md](INITIAL-EDGE-BRIDGE.md) adds the initializer query
+explicitly to the row-zero sampler. A strict parser checks the literal
+public prefix and recovers C1 from the queried address. The old `bfollow_ok`
+and sampler-law theorems prove local trace following and the independent
+completion law. `Params.iv` is not replaced by an oracle-dependent value.
+
+An ordinary-prefix decoder now stops at the parsed initializer. Old
+output-uniqueness and first-read-order lemmas derive its predecessor lookups
+from the table before the next absorb. The exact ordinary records and C1
+are returned under explicit whole-trace, chain and collision premises.
+The opening-domain decoder now checks its complete fixed domain/tag frame.
+
+These additions close the local initialization and strict frame duties,
+while complete typed-prefix reconstruction, missing-answer completion across
+the reseed and query boundaries, and the R1 generic theorem instance still
+need composition. Rust/account correspondence and privacy remain open.

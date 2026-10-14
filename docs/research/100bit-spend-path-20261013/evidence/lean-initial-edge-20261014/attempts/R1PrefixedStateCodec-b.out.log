@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PrefixedStateCodec.lean:24:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.getD ?m.20 ?m.21 ?m.22
+in the target expression
+  stateOfBytes b ⟨i, ⋯⟩ = b[i]
+
+case h
+b : Bytes
+hlen : List.length b = 32
+i : ℕ
+hi : i < List.length (bytes (stateOfBytes b))
+hi' : i < List.length b
+⊢ stateOfBytes b ⟨i, ⋯⟩ = b[i]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl (List.ofFn (stateOfBytes b))
+  has type
+    @Eq (List Byte) (List.ofFn (stateOfBytes b)) (List.ofFn (stateOfBytes b))
+  but is expected to have type
+    @Eq Bytes (bytes (stateOfBytes b)) (List.ofFn (stateOfBytes b))
+  in the application
+    id (Eq.refl (List.ofFn (stateOfBytes b)))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PrefixedStateCodec.lean:33:38: error: `simp` made no progress
+'AspisR1.PrefixedStateCodec.bytes_stateOfBytes' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PrefixedStateCodec.parse_frameAddr' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PrefixedStateCodec.parse_sound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

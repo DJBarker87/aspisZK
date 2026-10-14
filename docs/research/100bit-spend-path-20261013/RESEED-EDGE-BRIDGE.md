@@ -61,6 +61,12 @@ work/grinding credit nor remove the generic `Qtot * maxErr` factor.
 
 ## Integration still required
 
+Subsequent progress is recorded in [INITIAL-EDGE-BRIDGE.md](INITIAL-EDGE-BRIDGE.md):
+the strict local domain/tag validator and explicit initializer sampler now
+compile, as does ordinary-prefix recovery. The following paragraphs record
+the obligations at this reseed checkpoint; complete protocol assembly is
+still open.
+
 The complete decoder must reconstruct every earlier message, validate the
 recovered domain/variant frame, and carry the reseeded state at the row-26
 boundary while preserving the semantic challenge value. The local

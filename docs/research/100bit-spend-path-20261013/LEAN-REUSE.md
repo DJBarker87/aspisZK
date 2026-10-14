@@ -5,6 +5,12 @@ work is chiefly a set of explicit bridges. A theorem for the old protocol does
 not automatically become a theorem for the new verifier: its premises, index
 order, field embeddings, and transcript schedule must be discharged again.
 
+The latest [initialization and ordinary-prefix connection](INITIAL-EDGE-BRIDGE.md)
+also reuses the old first-read, output-uniqueness and background-sampler
+results. Its fifteen focused targets are checked; the combined checkpoint
+reports 33 standard-only axiom audits. The complete protocol and privacy
+proofs remain open.
+
 | Existing result | Reuse in R1 | Scope of the checked result |
 |---|---|---|
 | Exact initial decoder/agreement and width-29 correlated agreement | `InitialResponses`, `TwoFoldExtraction`, `ConcreteBinding` | The existing initial thresholds and challenge cap are retained. |
@@ -325,3 +331,19 @@ The combined checkpoint passed in 1.42 s at 3,526,844 KiB, zero swap, with
 25 standard-only axiom reports. Initialization, strict full-prefix parsing,
 the full FS/source instance and privacy remain open. The local recovery
 function is not itself a strict domain validator.
+
+## Initial public/commitment hash and strict prefix recovery
+
+The [initial-edge bridge](INITIAL-EDGE-BRIDGE.md) now models initialization as
+an actual hash query and proves a strict public-prefix/C1 parser. The old
+`bfollow_ok` theorem and independent sampler law recover the actual row-zero
+challenge and state. A backward decoder reuses output uniqueness and
+advance-predecessor recovery to return the earlier ordinary records and C1
+from the table before the next absorb. The table cells and lookup success
+are derived from trace facts. The strict opening-domain parser also closes
+the local validation duty described in the preceding checkpoint.
+
+Fifteen final targets passed on the capped NUC. The combined checkpoint took
+1.41 s at 3,529,016 KiB, zero swap, with 33 standard-only axiom reports.
+Typed row validation, complete missing-answer and reseed/query composition,
+the full FS/source instance, account correspondence and privacy remain open.

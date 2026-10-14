@@ -1,0 +1,97 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOutputMap.lean:12:0: warning: automatically included section variable(s) unused in theorem `AspisR1.BackgroundOutputMap.finished_map`:
+  [DecidableEq I]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq I] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOutputMap.lean:22:40: error(lean.unknownIdentifier): Unknown identifier `Table`
+
+Note: It is not possible to treat `Table` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOutputMap.lean:35:13: error: unsolved goals
+case cons.none.isTrue
+I A X C D : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+f : C → D
+g : X → List A → C
+rest : List (I × A)
+l : I
+a : A
+own : BS I A X
+pend : List (I × Option A)
+T : sorry
+ih :
+  ∀ (own : BS I A X) (pend : List (I × Option A)) (T : sorry ()),
+    bfollow (fun x as => f (g x as)) rest own pend (sorry ()) = Option.map f (bfollow g rest own pend (sorry ()))
+hf : finished g (pushSpawns own pend).1 (pushSpawns own pend).2 = none
+h✝ : ownCell (pushSpawns own pend).1 = some l
+⊢ (if waits l (pushSpawns own pend).2 = true then none
+    else
+      if sorry () l = none then
+        bfollow (fun x as => f (g x as)) rest (stepAsk (pushSpawns own pend).1 a) (pushSpawns own pend).2
+          (AspisV8PairedCommitment.put (sorry ()) l a)
+      else none) =
+    Option.map f
+      (if waits l (pushSpawns own pend).2 = true then none
+      else
+        if sorry () l = none then
+          bfollow g rest (stepAsk (pushSpawns own pend).1 a) (pushSpawns own pend).2
+            (AspisV8PairedCommitment.put (sorry ()) l a)
+        else none)
+
+case cons.none.isFalse
+I A X C D : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+f : C → D
+g : X → List A → C
+rest : List (I × A)
+l : I
+a : A
+own : BS I A X
+pend : List (I × Option A)
+T : sorry
+ih :
+  ∀ (own : BS I A X) (pend : List (I × Option A)) (T : sorry ()),
+    bfollow (fun x as => f (g x as)) rest own pend (sorry ()) = Option.map f (bfollow g rest own pend (sorry ()))
+hf : finished g (pushSpawns own pend).1 (pushSpawns own pend).2 = none
+h✝ : ¬ownCell (pushSpawns own pend).1 = some l
+⊢ (if waits l (pushSpawns own pend).2 = true then
+      if sorry () l = none then
+        bfollow (fun x as => f (g x as)) rest (pushSpawns own pend).1 (record l a (pushSpawns own pend).2)
+          (AspisV8PairedCommitment.put (sorry ()) l a)
+      else none
+    else
+      bfollow (fun x as => f (g x as)) rest (pushSpawns own pend).1 (pushSpawns own pend).2
+        (AspisV8PairedCommitment.put (sorry ()) l a)) =
+    Option.map f
+      (if waits l (pushSpawns own pend).2 = true then
+        if sorry () l = none then
+          bfollow g rest (pushSpawns own pend).1 (record l a (pushSpawns own pend).2)
+            (AspisV8PairedCommitment.put (sorry ()) l a)
+        else none
+      else bfollow g rest (pushSpawns own pend).1 (pushSpawns own pend).2 (AspisV8PairedCommitment.put (sorry ()) l a))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOutputMap.lean:36:21: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵f̵,̵ ̵Option.map_none]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOutputMap.lean:37:30: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp_all ̵[̵i̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOutputMap.lean:39:16: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵f̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.BackgroundOutputMap.finished_map' depends on axioms: [propext]
+'AspisR1.BackgroundOutputMap.bfollow_map' depends on axioms: [propext, sorryAx]
+exit=1
