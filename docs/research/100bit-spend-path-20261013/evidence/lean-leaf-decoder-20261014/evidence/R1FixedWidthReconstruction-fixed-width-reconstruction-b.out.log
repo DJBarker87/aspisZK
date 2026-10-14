@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthReconstruction.lean:39:21: error: unknown tactic
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthReconstruction.lean:15:32: error(lean.unknownIdentifier): Unknown constant `List.length_eq_zero.mp`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthReconstruction.lean:21:36: error(lean.unknownIdentifier): Unknown constant `List.length_eq_zero.mp`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthReconstruction.lean:35:46: error: unsolved goals
+B : Type
+bytes : List B
+n k : ℕ
+hlen : bytes.length = (n + 1) * (k + 1)
+N : ℕ := (n + 1) * (k + 1)
+f : Fin N → B := fun j => bytes.get ⟨↑j, ⋯⟩
+hN : bytes.length = N
+i : Fin (n + 1)
+j : Fin (k + 1)
+hi : ↑i + 1 ≤ n + 1
+hj : ↑j < k + 1
+⊢ (k + 1) * ↑i + ↑j < (n + 1) * (k + 1)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthReconstruction.lean:32:15: error: Missing cases:
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthReconstruction.lean:23:15: error: unsolved goals
+case succ.succ
+B : Type
+bytes : List B
+n k : ℕ
+hlen : bytes.length = (n + 1) * (k + 1)
+N : ℕ := (n + 1) * (k + 1)
+f : Fin N → B := fun j => bytes.get ⟨↑j, ⋯⟩
+hN : bytes.length = N
+hblock :
+  ∀ (i : Fin (n + 1)), List.take (k + 1) (List.drop ((k + 1) * ↑i) bytes) = List.ofFn fun j => f ⟨(k + 1) * ↑i + ↑j, ⋯⟩
+⊢ (List.ofFn fun i => List.take (k + 1) (List.drop ((k + 1) * ↑i) bytes)).flatten = bytes
+'AspisR1.FixedWidthReconstruction.slices_flatten' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

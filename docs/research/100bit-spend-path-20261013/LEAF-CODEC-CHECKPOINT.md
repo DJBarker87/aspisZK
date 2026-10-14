@@ -76,10 +76,11 @@ diff hash, logs and independent root audit are in
 `evidence/parser-all-limbs-20261014/`. This test exercises `parse_record`,
 not the mixed leaf decoder or the authenticated checkpoint lifecycle.
 
-## Still required
+## Follow-up and remaining requirements
 
-An arbitrary 480/128-byte mixed-leaf decoder must be connected to these
-encoders and their component reads. The recovered Merkle bytes must then
+[LEAF-DECODER-CHECKPOINT.md](LEAF-DECODER-CHECKPOINT.md) now supplies strict
+480/128-byte model decoders and their encoder/offset connections. The recovered
+Merkle bytes must still
 be connected to the typed candidate word, including the actual index and
 lane order. Current Rust parsing, checkpoint provenance, authenticated
 resume, arithmetic, and settlement need their source correspondence.

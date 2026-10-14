@@ -1,5 +1,13 @@
 # Current parser, commitment-hash, and tx2 reload source targets
 
+**Follow-up:** [LEAF-DECODER-CHECKPOINT.md](LEAF-DECODER-CHECKPOINT.md) now
+provides the mixed 480/128-byte Lean parser and byte reconstruction that were
+missing at this inventory's base revision. The tables below preserve that
+earlier inventory; they do not describe the later model decoder as absent.
+[Current field-parser reuse](CURRENT-FIELD-PARSER-REUSE.md) records the next
+source boundary. No Rust/caller or authenticated-checkpoint refinement has
+been inferred from either model result.
+
 Read-only inventory pinned to worktree HEAD `d08448d3a0bcd78a777217eaa6594fc658115cc2`. The note was updated after locating the existing V5 per-field list decoders, exact-tower codec, and K1 successful-decode re-encoding lemmas. No builds were run. This note distinguishes the current cost-probe source from older Aeneas/Lean representation work; it does not assert a source refinement.
 
 ## Current Rust path

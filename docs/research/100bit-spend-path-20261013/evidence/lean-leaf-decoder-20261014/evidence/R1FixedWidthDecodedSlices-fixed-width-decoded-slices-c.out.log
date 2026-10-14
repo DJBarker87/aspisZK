@@ -1,0 +1,20 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthDecodedSlices.lean:51:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.ofFn fun i => f (xs i)
+in the target expression
+  (List.ofFn (f ∘ xs)).flatten = bytes
+
+B A : Type
+d : List B → Option A
+f : A → List B
+k n : ℕ
+bytes : List B
+xs : Fin n → A
+hlen : ∀ (a : A), (f a).length = k
+hround : ∀ (a : A), d (f a) = some a
+hback : ∀ (bs : List B) (a : A), d bs = some a → f a = bs
+hbytes : bytes.length = n * k
+hreads : ∀ (i : Fin n), d (List.take k (List.drop (k * ↑i) bytes)) = some (xs i)
+hblocks : ∀ (i : Fin n), f (xs i) = List.take k (List.drop (k * ↑i) bytes)
+⊢ (List.ofFn (f ∘ xs)).flatten = bytes
+'AspisR1.FixedWidthDecodedSlices.decode_eq_some_iff' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

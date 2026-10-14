@@ -580,4 +580,21 @@ New wrappers prove exact-length list roundtrips and successful-decode byte
 recovery. The current 480-byte C1 and 128-byte C2 model encoders have checked
 lengths and injectivity; the 34-report combined checkpoint is green.
 An exhaustive semantic-record limb-position regression also passed on the
-NUC. Mixed-leaf parsing and Rust/source correspondence remain open.
+NUC. At that checkpoint mixed-leaf parsing and Rust/source correspondence
+remained open. The subsequent decoder checkpoint below closes the model
+parser portion.
+
+
+## Strict mixed leaf decoders and extracted word arithmetic
+
+[LEAF-DECODER-CHECKPOINT.md](LEAF-DECODER-CHECKPOINT.md) composes the retained
+V5/K1 field codecs into constructive C1/C2 byte-list decoders. It proves
+successful parsing is equivalent to literal encoding, derives the exact
+480/128-byte lengths, and relates recursive fixed-width parsing to all
+per-offset reads. The old R76 `SamplerWordBridge.four_bytes` theorem is
+reused directly to connect the Aeneas U32 word value to the retained codec.
+The combined 24-declaration checkpoint passed under the existing NUC cap.
+[The source comparison](CURRENT-FIELD-PARSER-REUSE.md) and its executable
+checker also show the three current field-parser bodies match the historical
+R492/R567 source bodies. This identity does not discharge the old explicit
+Rust decoder-equality premise; actual parser/caller correspondence remains.

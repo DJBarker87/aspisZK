@@ -1,5 +1,11 @@
 # Current mixed C1/C2 leaf codec reuse inventory
 
+The later [decoder checkpoint](LEAF-DECODER-CHECKPOINT.md) now supplies the
+arbitrary mixed C1/C2 model parsers and exact byte reconstruction. The earlier
+inventory below remains useful for the old declaration/source pins; its
+missing-decoder statements describe the state before that checkpoint. Rust
+caller/source correspondence remains open.
+
 ## Current checkpoint update
 
 The original inventory below records the earlier source review. The later
