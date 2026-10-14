@@ -1,0 +1,23 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedCanonicalProver.lean:46:81: error: unsolved goals
+M Cv : Type
+L : ℕ
+W : Type
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+decision :
+  Prefix (UnifiedSampler.Public L) (TranscriptView.Message M) (TranscriptView.Challenge Cv) →
+    TranscriptView.Message M → Bool
+pub : UnifiedSampler.Public L
+H : Addr L → State
+m0 : M
+P : Program (Addr L) State (UnifiedProtocol.Proof M)
+⊢ (eval H P).1 ++
+      (eval H
+          (UnifiedVerifier.verifier p hD extract decision pub
+            ((eval H P).2.1, UnifiedPayloadZero.payload m0 (eval H P).2.2))).1 =
+    (eval H P).1 ++ (eval H (UnifiedVerifier.verifier p hD extract decision pub (eval H P).2)).1
+'AspisR1.UnifiedCanonicalProver.eval_prover' depends on axioms: [propext]
+'AspisR1.UnifiedCanonicalProver.codec' depends on axioms: [propext]
+'AspisR1.UnifiedCanonicalProver.experiment_trace_eq' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

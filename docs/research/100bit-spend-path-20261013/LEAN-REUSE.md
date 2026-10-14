@@ -5,12 +5,18 @@ work is chiefly a set of explicit bridges. A theorem for the old protocol does
 not automatically become a theorem for the new verifier: its premises, index
 order, field embeddings, and transcript schedule must be discharged again.
 
-The latest [query-decoder connection](UNIFIED-QUERY-DECODER.md) reuses the
-old query-chain and background-follow machinery for row 31. Its decoder now
-recovers the actual prover/verifier experiment's prefix, message, and query
-result, including the selected continuation state. Together with the earlier
-cases, individual decoder theorems cover all 33 rounds under their stated
-premises. Correct global dispatch and the full security instance remain open.
+The latest [conditional Fiat–Shamir theorem](UNIFIED-FIAT-SHAMIR.md) reuses
+the existing v3 security theorem with one decoder covering all 33 rounds.
+Global dispatch, actual-experiment injection, and the adaptive decoder-density
+connection are now checked. The bound retains `Qtot * maxErr + 3*Qtot²/2²⁵⁶`.
+The concrete extractor/decision/classifier and D1/D2/D3 numerical instance,
+source correspondence, and complete privacy remain open.
+
+The old existential extractors also need care: the inspected R0FS/R0C
+definitions choose a witness if one exists and ignore the oracle table.
+Their reuse does not establish efficient knowledge extraction for a spend.
+The new conditional theorem leaves the extractor explicit, and that security
+obligation remains open.
 
 The [unified sampler connection](UNIFIED-SAMPLER-BRIDGE.md) puts initialization,
 the domain-transition hash, q22, and rho into one schedule. The
@@ -25,7 +31,8 @@ Source/account correspondence and complete privacy remain separate obligations.
 | Exact initial decoder/agreement and width-29 correlated agreement | `InitialResponses`, `TwoFoldExtraction`, `ConcreteBinding` | The existing initial thresholds and challenge cap are retained. |
 | Exact 256-coefficient degree-three matched-response theorem | `SecondFoldMatched`, `SecondFoldRestoration` | A fourfold repeated lift reuses the theorem for the 256-to-64 fold; both folds then recover one tuple in the literal joint list. |
 | Joint committed-word list bound of 100 | `JointList`, `InitialResponses`, `ConcreteBinding` | Functional and round comparisons union over that same list; candidate uniqueness is not assumed. |
-| Stopped, bounded 22-query sampling law | `BoundedQueries`, `RawQueryBound` | The checked independent-answer law includes sampler exhaustion; it is not yet the new shared-oracle Fiat–Shamir instantiation. |
+| Stopped, bounded 22-query sampling law | `BoundedQueries`, `RawQueryBound`, unified query decoder | The independent-answer law includes exhaustion. The actual shared-oracle decoder now connects to the generic FS theorem; concrete D2 remains open. |
+| Existing v3 Fiat–Shamir theorem | `UnifiedInj`, `UnifiedChainDensity`, `UnifiedFiatShamir` | The unified transcript satisfies the decoder interfaces and gives a conditional bound with D1/D2/D3 explicit. |
 | Four codeword/message subfield-descent theorems | `Wide/SubfieldDescentCore`, `CandidateDescent` | Every candidate in the literal R1 list has the required lane field types when the committed words are typed. |
 | Original R0 Boolean weights and coefficient reindexing | `R0/OpeningWeights`, `D18OpeningWeights`, `SemanticOpening` | The D18 point rows give exactly the older transported point functionals; the derived candidate satisfies the point/extra/codeword-typing interface. |
 | Masked semantic sumcheck and extraction | `SemanticTransport`, `MaskedSemantic` apply existing `R0P.Mask` and extraction theorems | The deterministic R1 candidate-to-input-note connection is checked, with explicit bad-event exclusions. The old 32-round masked D3 theorem cannot be applied unchanged to the new 33-round schedule. |
@@ -39,7 +46,8 @@ background trace-following machinery. It supplies their phase and read facts
 from the unified run, including earlier prover queries. The guarded row-32
 decoder now returns the literal prefix/message/challenge on that experiment
 trace under the explicit codec, query-budget, and collision premises. The later
-case bridges now cover the other rounds; global dispatch and full security/privacy
+case bridges now cover the other rounds. The later conditional FS theorem
+composes their global dispatch and injection; the concrete security/privacy
 conclusions remain open.
 
 ## New typed-candidate connection
@@ -118,9 +126,10 @@ composes those reads, in reversed eight-word order, with the checked machine
 division pass. The remaining 32-byte rank identity and mutable/repeated
 sampler execution are not asserted by these theorems.
 
-The shared-oracle Fiat–Shamir instantiation, complete source correspondence,
-universal masking/simulator argument, and final private-spend security claim
-remain open. No grinding or work-normalization credit is added by this reuse.
+The generic shared-oracle Fiat–Shamir connection is now checked. Its concrete
+D1/D2/D3 and numerical instance, complete source correspondence, universal
+masking/simulator argument, and final private-spend security claim remain
+open. No grinding or work-normalization credit is added by this reuse.
 
 ## Earlier checked reuse checkpoint
 

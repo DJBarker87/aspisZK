@@ -1,0 +1,103 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedDecoderBound.lean:43:74: error: Application type mismatch: The argument
+  pub
+has type
+  UnifiedSampler.Public L
+but is expected to have type
+  Addr L
+in the application
+  DecoderStateList.lift_sound (UnifiedInitialDecoder.decode p hD pub) pub
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedDecoderBound.lean:42:11: error: Tactic `rcases` failed: `x✝ : ?m.102` is not an inductive datatype
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedDecoderBound.lean:61:74: error: Application type mismatch: The argument
+  pub
+has type
+  UnifiedSampler.Public L
+but is expected to have type
+  Addr L
+in the application
+  DecoderStateList.lift_sound (UnifiedSemanticDecoder.decode p pub) pub
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedDecoderBound.lean:60:13: error: Tactic `rcases` failed: `x✝ : ?m.155` is not an inductive datatype
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedDecoderBound.lean:89:74: error: Application type mismatch: The argument
+  pub
+has type
+  UnifiedSampler.Public L
+but is expected to have type
+  Addr L
+in the application
+  DecoderStateList.lift_sound (UnifiedReseedDecoder.decode p pub) pub
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedDecoderBound.lean:88:15: error: Tactic `rcases` failed: `x✝ : ?m.205` is not an inductive datatype
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedDecoderBound.lean:115:16: error: Function expected at
+  UnifiedQueryLaw.decoded_bound p hD pub a T own pend g hcomponent obs B ?m.245
+but this term has type
+  blaw g obs own pend ≤ B
+
+Note: Expected a function because this term is being applied to the argument
+  exact
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedDecoderBound.lean:121:16: error: 'change' tactic failed, pattern
+  (ordinary ctx.c1
+        (PrefixAnswers.fromAnswers p T 0 ctx.records
+          (List.take (PrefixAnswers.missing p T ctx.records).length as))).length =
+    31
+is not definitionally equal to target
+  (UnifiedSemanticLaw.mkPrefix p pub T ctx as).rounds.length = 31
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedDecoderBound.lean:116:13: error: unsolved goals
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+pub : UnifiedSampler.Public L
+a : Addr L
+T : Table (Addr L) State
+own : BS (Addr L) State (List State)
+pend : List (Addr L × Option State)
+g : List State → List State → JointTranscriptView.Output M Cv L
+obs : JointTranscriptView.Output M Cv L → ℚ
+B : ℚ
+hfixed :
+  ∀ (i : ℕ) (P : UnifiedSampler.Prefix M Cv L) (m : Message M),
+    i < 33 →
+      P.rounds.length = i → (independentMean (UnifiedSampler.samp p hD i P m).toProgram fun w => obs (P, m, w.2)) ≤ B
+hn : 31 < 33
+hcomponent : UnifiedQueryDecoder.decode p pub a T = some (own, pend, g)
+h0 : ¬31 = 0
+hsem : ¬31 < 26
+h26 : ¬31 = 26
+ctx : UnifiedSemanticContext.Context M
+hp : UnifiedOpeningDecoder.parse p pub a T = some ctx
+hlen : ctx.records.length = 31
+as : List State
+has : as.length = (PrefixAnswers.missing p T ctx.records).length
+hround : (UnifiedSemanticLaw.mkPrefix p pub T ctx as).rounds.length = 31
+⊢ (independentMean
+      (UnifiedSampler.samp p hD 31 (UnifiedSemanticLaw.mkPrefix p pub T ctx as) (Message.payload ctx.message)).toProgram
+      fun w => obs (UnifiedSemanticLaw.mkPrefix p pub T ctx as, Message.payload ctx.message, w.2)) ≤
+    B
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedDecoderBound.lean:112:6: error: unsolved goals
+case neg
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+pub : UnifiedSampler.Public L
+n : ℕ
+hn : n < 33
+a : Addr L
+T : Table (Addr L) State
+own : BS (Addr L) State (List State)
+pend : List (Addr L × Option State)
+g : List State → List State → JointTranscriptView.Output M Cv L
+hcomponent : UnifiedDecoder.component p hD pub n a T = some (own, pend, g)
+obs : JointTranscriptView.Output M Cv L → ℚ
+B : ℚ
+hfixed :
+  ∀ (i : ℕ) (P : UnifiedSampler.Prefix M Cv L) (m : Message M),
+    i < 33 →
+      P.rounds.length = i → (independentMean (UnifiedSampler.samp p hD i P m).toProgram fun w => obs (P, m, w.2)) ≤ B
+h0 : ¬n = 0
+hsem : ¬n < 26
+h26 : ¬n = 26
+h31 : ¬n = 31
+⊢ blaw g obs own pend ≤ B
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedDecoderBound.lean:126:57: error: unexpected token ')'; expected command
+'AspisR1.UnifiedDecoderBound.component_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.UnifiedDecoderBound.decoded_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

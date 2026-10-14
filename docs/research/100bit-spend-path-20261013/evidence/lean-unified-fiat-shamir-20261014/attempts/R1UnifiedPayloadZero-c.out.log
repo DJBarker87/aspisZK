@@ -1,0 +1,60 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedPayloadZero.lean:96:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UnifiedRun.transcript ?p ?hD ?H ?pub ?c1 (payload ?m0 ?f) ?n
+in the target expression
+  UnifiedSampler.samp p hD i (UnifiedRun.transcript p hD H pub (proof m0 π).1 (proof m0 π).2 i)
+      (UnifiedRun.message (proof m0 π).1 (proof m0 π).2 i) =
+    UnifiedSampler.samp p hD i (UnifiedRun.transcript p hD H pub π.1 π.2 i) (UnifiedRun.message π.1 π.2 i)
+
+M Cv : Type
+L : ℕ
+W : Type
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+H : Addr L → State
+pub : UnifiedSampler.Public L
+π : UnifiedProtocol.Proof M
+m0 : M
+i : ℕ
+⊢ UnifiedSampler.samp p hD i (UnifiedRun.transcript p hD H pub (proof m0 π).1 (proof m0 π).2 i)
+      (UnifiedRun.message (proof m0 π).1 (proof m0 π).2 i) =
+    UnifiedSampler.samp p hD i (UnifiedRun.transcript p hD H pub π.1 π.2 i) (UnifiedRun.message π.1 π.2 i)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedPayloadZero.lean:106:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UnifiedRun.transcript ?p ?hD ?H ?pub ?c1 (payload ?m0 ?f) ?n
+in the target expression
+  (eval H
+        (UnifiedSampler.samp p hD i (UnifiedRun.transcript p hD H pub (proof m0 π).1 (proof m0 π).2 i)
+            (UnifiedRun.message (proof m0 π).1 (proof m0 π).2 i)).toProgram).2 =
+    (eval H
+        (UnifiedSampler.samp p hD i (UnifiedRun.transcript p hD H pub π.1 π.2 i)
+            (UnifiedRun.message π.1 π.2 i)).toProgram).2
+
+M Cv : Type
+L : ℕ
+W : Type
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+H : Addr L → State
+pub : UnifiedSampler.Public L
+π : UnifiedProtocol.Proof M
+m0 : M
+i : ℕ
+⊢ (eval H
+        (UnifiedSampler.samp p hD i (UnifiedRun.transcript p hD H pub (proof m0 π).1 (proof m0 π).2 i)
+            (UnifiedRun.message (proof m0 π).1 (proof m0 π).2 i)).toProgram).2 =
+    (eval H
+        (UnifiedSampler.samp p hD i (UnifiedRun.transcript p hD H pub π.1 π.2 i)
+            (UnifiedRun.message π.1 π.2 i)).toProgram).2
+'AspisR1.UnifiedPayloadZero.payload_zero' depends on axioms: [propext]
+'AspisR1.UnifiedPayloadZero.payload_ne_zero' depends on axioms: [propext]
+'AspisR1.UnifiedPayloadZero.message_eq' does not depend on any axioms
+'AspisR1.UnifiedPayloadZero.transcript_eq' depends on axioms: [propext, Quot.sound]
+'AspisR1.UnifiedPayloadZero.challenge_eq' depends on axioms: [propext, Quot.sound]
+'AspisR1.UnifiedPayloadZero.state_eq' depends on axioms: [propext, Quot.sound]
+'AspisR1.UnifiedPayloadZero.protocol_message_eq' depends on axioms: [propext, Quot.sound]
+'AspisR1.UnifiedPayloadZero.protocol_transcript_eq' depends on axioms: [propext, Quot.sound]
+'AspisR1.UnifiedPayloadZero.protocol_chain_eq' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.UnifiedPayloadZero.protocol_challenge_eq' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.UnifiedPayloadZero.verifier_eq' depends on axioms: [propext, Quot.sound]
+exit=1

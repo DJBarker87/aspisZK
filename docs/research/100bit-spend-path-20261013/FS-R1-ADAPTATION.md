@@ -1,21 +1,24 @@
 # R1 Fiat–Shamir adaptation: exact reuse boundaries
 
-This is a root-owned implementation plan and dependency audit at base
-`e8b1a73c6e3fd764ca01701c9c936cd705ce74b1`, not a Fiat–Shamir theorem.
-The generic FS2 first-read framework and per-round sampler interface remain
-reusable. The old concrete masked instance is not the actual R1 protocol.
+This began as a root-owned implementation plan and dependency audit at base
+`e8b1a73c6e3fd764ca01701c9c936cd705ce74b1`. The later
+[unified conditional theorem](UNIFIED-FIAT-SHAMIR.md) now instantiates the
+generic v3 first-read framework with the 33-round transcript and decoder.
+Concrete D1/D2/D3 and numerical bounds remain to be supplied. The old concrete
+masked instance is not the actual R1 protocol.
 
 The later [unified sampler connection](UNIFIED-SAMPLER-BRIDGE.md) gives one
 definition for the 33-row schedule and proves the selected query-state
-continuation into rho. The complete decoder/classifier instance and source
-correspondence are still open; this does not apply the old concrete theorem
-by changing its round count.
+continuation into rho. The complete decoder is now connected to the generic
+theorem; the concrete classifier instance and source correspondence are still
+open. This does not apply the old concrete theorem by changing its round count.
 
 The subsequent [unified decoder connection](UNIFIED-DECODER-BRIDGE.md)
 connects completed records to that run and gives a guarded row-32 component
 in the old `R0C.V3.Dec` interface. The later case bridges supply whole-trace
-injection for individual rounds; the full decoder/classifier instance remains
-open.
+injection for individual rounds; the newest theorem composes these cases.
+The concrete classifier and security instance remain open. The sections below
+record the successive checkpoints and their boundaries at the time.
 
 ## Facts that prevent a round-count-only substitution
 
@@ -329,3 +332,24 @@ dispatch, discharge of the concrete codec premises, `Inj3`, D1/D2/D3, the
 numerical instance, source/account correspondence, and full privacy remain
 open. The final focused NUC checkpoint passed 39 axiom audits; the sealed
 bundle retains all 38 attempts and exact hashes. No runtime source changed.
+
+
+## Conditional unified Fiat–Shamir theorem
+
+[UNIFIED-FIAT-SHAMIR.md](UNIFIED-FIAT-SHAMIR.md) supplies one decoder for all
+33 rounds, its actual-experiment `Inj3` instance, and `ChainDensity3` from
+`FS2.D2`. It directly applies the existing `R0C.V3.theorem43` to obtain
+`Qtot * maxErr rb.ε 33 + 3*Qtot²/2²⁵⁶`. D1, D2, D3, the extractor, final
+decision, and classifier remain explicit inputs. The numerical instance is
+not asserted, and the query factor is not dropped.
+
+The intermediate row-zero payload restriction is removed by an exact prover
+canonicalization: that slot is unobserved, all messages/chains/verifier code
+are unchanged, and the replacement adds no oracle queries. Only existence
+of a fixed empty-record codec value remains as a parameter premise.
+
+Eleven focused NUC targets passed; the combined checkpoint passed in 1.43 s
+at 3,536,428 KiB with zero swap and 33 standard-only axiom audits. All 22
+attempts are retained in the sealed evidence bundle. Runtime sources are
+unchanged. Concrete security/extraction, Rust/account/settlement correspondence,
+and complete privacy remain open.
