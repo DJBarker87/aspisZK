@@ -1,0 +1,36 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryMissingFacts.lean:19:53: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [h̵,̵ ̵List.nodup_dedup]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryMissingFacts.lean:44:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  s j
+in the target expression
+  b = squeezeA p z
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+T : Table (Addr L) State
+endpoint : State
+a : Addr L
+s : ℕ → State
+n : ℕ
+hseek : DuplexSeek.seek p T 9 endpoint = some (a, QueryStateList.states s n)
+b : Addr L
+hb : b ∈ missing p T endpoint
+z : State
+hz : z ∈ List.map s (List.range n)
+hzb : b = squeezeA p z
+hT : T b = none
+j : ℕ
+hj : j ∈ List.range n
+hjs : s j = z
+⊢ b = squeezeA p (s j)
+'AspisR1.QueryDecoder.missing_nodup' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.QueryDecoder.missing_mem_of_seek' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.QueryDecoder.missing_mem_states' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.QueryDecoder.parseAbsorb_squeeze_none' depends on axioms: [propext, Quot.sound]
+exit=1

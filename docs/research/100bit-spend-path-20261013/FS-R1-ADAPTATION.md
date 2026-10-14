@@ -142,3 +142,13 @@ alone is not a bound for the adversarial source execution.
 
 The next local trace-following connection and exact reusable interfaces are
 recorded in [QUERY-INJECTION-NEXT.md](QUERY-INJECTION-NEXT.md).
+
+## Local trace-following connection
+
+[QUERY-TRACE-BRIDGE.md](QUERY-TRACE-BRIDGE.md) closes the local q22-to-next-
+round trace-following obligation under the unchanged whole-trace collision
+and read premises. An address/table decoder now returns the actual query
+component and following challenge. The old `chainB` and 21-root results
+also supply the local adaptive accepted-miss bound under explicit sampler
+and fixed-data premises. The full earlier prefix and hash edges are not
+part of this component; the complete R1 instance remains open.

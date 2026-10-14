@@ -296,3 +296,18 @@ Six focused final targets passed, with a 1.36 s combined checkpoint at
 3,518,516 KiB, zero swap, and twelve standard-only axiom reports. The
 trace-following/injection connection and the complete R1 prefix, hash-edge
 and D1/D2/D3 instance remain open.
+
+## Actual trace following and local adaptive rho bound
+
+The [trace bridge](QUERY-TRACE-BRIDGE.md) now derives the selected missing
+list's freshness, disjointness and suffix reads, then reuses `bfollow_ok`
+to recover the actual query and following challenge. Its local decoder
+gets the predecessor state from the queried address. `chainB` and the
+existing 21-root and accepted-query results give a local adaptive accepted-
+miss bound below `2^-119`, under explicit modulo-sampler and fixed-data
+premises. This is the final batching term, not the full spend's security.
+
+Ten focused targets passed. The combined checkpoint took 1.36 s at
+3,525,648 KiB, zero swap, with eighteen standard-only axiom reports.
+Earlier records, hash transitions, the full R1 instance, source refinement
+and privacy remain open.

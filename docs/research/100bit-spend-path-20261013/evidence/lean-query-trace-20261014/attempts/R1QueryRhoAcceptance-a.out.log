@@ -1,0 +1,68 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryRhoAcceptance.lean:56:4: error: Tactic `apply` failed: could not unify the conclusion of `@lazyMean_mono`
+  lazyMean ?p ?t ?f ≤ lazyMean ?p ?t ?g
+with the goal
+  (lazyMean q T fun v =>
+      indicator
+        (∃ out,
+          bfollow (QueryNextLaw.output p T endpoint i) v.1 (QueryNextLaw.own p c)
+                (List.map (fun b => (b, none)) (QueryDecoder.missing p T endpoint)) T =
+              some out ∧
+            QueryRhoBound.bad iota rhoOf dataOf queriesOf out)) ≤
+    RhoSamplerBound.rhoCap
+
+Note: The full type of `@lazyMean_mono` is
+  ∀ {I A O : Type} [inst : DecidableEq I] [inst_1 : Fintype A] (p : Program I A O) (t : Table I A)
+    {f g : View I A O → ℚ}, (∀ (v : View I A O), f v ≤ g v) → lazyMean p t f ≤ lazyMean p t g
+
+M Cv O K E : Type
+L : ℕ
+inst✝⁶ : Field K
+inst✝⁵ : Fintype K
+inst✝⁴ : Field E
+inst✝³ : Fintype E
+inst✝² : DecidableEq E
+inst✝¹ : Algebra (ZMod P) K
+inst✝ : Algebra (ZMod P) E
+p : Params M Cv L
+T : Table (Addr L) State
+endpoint : State
+c : Addr L
+i : ℕ
+q : Program (Addr L) State O
+input : State ≃ Fin (2 ^ 256)
+output : Fin (P ^ 4) ≃ K
+rhoOf : Cv → K
+hsigma : ∀ (b : State), rhoOf (p.σ i b) = output (R0C.ModuloCounting.reduce ⋯ (input b))
+iota : K →+* E
+dataOf : QueryNextLaw.Recovered L → Data E
+queriesOf : QueryNextLaw.Recovered L → Fin 22 → Fin 262144
+⊢ (lazyMean q T fun v =>
+      indicator
+        (∃ out,
+          bfollow (QueryNextLaw.output p T endpoint i) v.1 (QueryNextLaw.own p c)
+                (List.map (fun b => (b, none)) (QueryDecoder.missing p T endpoint)) T =
+              some out ∧
+            QueryRhoBound.bad iota rhoOf dataOf queriesOf out)) ≤
+    RhoSamplerBound.rhoCap
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryRhoAcceptance.lean:61:21: error: Application type mismatch: The argument
+  QueryRhoBound.continuation_rho_lt_two_neg_119 p T endpoint c i q input output rhoOf hsigma iota dataOf queriesOf
+has type
+  (lazyMean q T fun v =>
+      indicator
+        (∃ out,
+          bfollow (QueryNextLaw.output p T endpoint i) v.1 (QueryNextLaw.own p c)
+                (List.map (fun b => (b, none)) (QueryDecoder.missing p T endpoint)) T =
+              some out ∧
+            QueryRhoBound.bad iota rhoOf dataOf queriesOf out)) <
+    1 / 2 ^ 119
+but is expected to have type
+  RhoSamplerBound.rhoCap < ?m.178
+in the application
+  LE.le.trans_lt hle
+    (QueryRhoBound.continuation_rho_lt_two_neg_119 p T endpoint c i q input output rhoOf hsigma iota dataOf queriesOf)
+'AspisR1.QueryRhoAcceptance.bad_implies_rho_bad' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.QueryRhoAcceptance.continuation_accepted_miss_lt_two_neg_119' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

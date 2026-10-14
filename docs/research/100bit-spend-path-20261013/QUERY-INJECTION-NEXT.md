@@ -1,8 +1,9 @@
 # Next connection: trace following for query completion
 
-The independent-answer [completion law](QUERY-COMPLETION-LAW.md) is checked.
-The next obligation is to connect its sampler to the actual consistent
-oracle trace, using the older background-read framework.
+This note records the root-selected route following `84de41db1`. The local
+connection described below is now checked in
+[QUERY-TRACE-BRIDGE.md](QUERY-TRACE-BRIDGE.md). The complete R1 instance
+and hash-edge obligations remain open.
 
 ## Existing interface
 
@@ -63,6 +64,7 @@ Useful generic names include `noColl_injective`, `noColl_prefix_after`,
 `squeezeA_injective`, `squeezeA_ne_advanceA'`, `squeezeA_ne_absorbA`,
 `advanceA_ne_absorbA`, `before_ne`, `tableBefore_self`, and `traceFrom_eq`.
 
-No proof in this note is claimed complete. The initial/public hash edge,
-opening-domain transition, earlier messages and R1 D1/D2/D3 remain the
-larger instance obligations.
+The local trace-following component and adaptive-continuation bound are
+now checked; see the linked bridge for exact premises and evidence. The
+initial/public hash edge, opening-domain transition, earlier messages and
+R1 D1/D2/D3 remain the larger instance obligations.

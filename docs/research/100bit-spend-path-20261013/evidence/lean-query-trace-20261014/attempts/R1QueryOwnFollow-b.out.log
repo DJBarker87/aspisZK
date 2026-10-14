@@ -1,0 +1,113 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryOwnFollow.lean:27:15: error: don't know how to synthesize implicit argument `A`
+  @waiting (Addr L) ?m.100 (List.map (fun b => (b, none)) miss)
+context:
+M Cv : Type
+L : ℕ
+inst✝² : DecidableEq (Addr L)
+inst✝¹ : Inhabited State
+inst✝ : Fintype State
+p : Params M Cv L
+H : Addr L → State
+tr : List (Addr L × State)
+T : Table (Addr L) State
+c : Addr L
+miss : List (Addr L)
+C : Type
+g : State → List State → C
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hnd : (miss ++ [c, squeezeA p (H c), advanceA p (H c)]).Nodup
+hfresh : ∀ b ∈ miss ++ [c, squeezeA p (H c), advanceA p (H c)], T b = none ∧ Read tr b
+hsq : Before tr c (squeezeA p (H c))
+had : Before tr c (advanceA p (H c))
+⊢ Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryOwnFollow.lean:27:24: error: don't know how to synthesize implicit argument `β`
+  @List.map (Addr L) (Addr L × Option ?m.100) (fun b => (b, none)) miss
+context:
+M Cv : Type
+L : ℕ
+inst✝² : DecidableEq (Addr L)
+inst✝¹ : Inhabited State
+inst✝ : Fintype State
+p : Params M Cv L
+H : Addr L → State
+tr : List (Addr L × State)
+T : Table (Addr L) State
+c : Addr L
+miss : List (Addr L)
+C : Type
+g : State → List State → C
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hnd : (miss ++ [c, squeezeA p (H c), advanceA p (H c)]).Nodup
+hfresh : ∀ b ∈ miss ++ [c, squeezeA p (H c), advanceA p (H c)], T b = none ∧ Read tr b
+hsq : Before tr c (squeezeA p (H c))
+had : Before tr c (advanceA p (H c))
+⊢ Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryOwnFollow.lean:27:42: error: don't know how to synthesize implicit argument `β`
+  @Prod.mk (Addr L) (Option ?m.100) b none
+context:
+M Cv : Type
+L : ℕ
+inst✝² : DecidableEq (Addr L)
+inst✝¹ : Inhabited State
+inst✝ : Fintype State
+p : Params M Cv L
+H : Addr L → State
+tr : List (Addr L × State)
+T : Table (Addr L) State
+c : Addr L
+miss : List (Addr L)
+C : Type
+g : State → List State → C
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hnd : (miss ++ [c, squeezeA p (H c), advanceA p (H c)]).Nodup
+hfresh : ∀ b ∈ miss ++ [c, squeezeA p (H c), advanceA p (H c)], T b = none ∧ Read tr b
+hsq : Before tr c (squeezeA p (H c))
+had : Before tr c (advanceA p (H c))
+b : Addr L
+⊢ Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryOwnFollow.lean:27:46: error: don't know how to synthesize implicit argument `α`
+  @none ?m.100
+context:
+M Cv : Type
+L : ℕ
+inst✝² : DecidableEq (Addr L)
+inst✝¹ : Inhabited State
+inst✝ : Fintype State
+p : Params M Cv L
+H : Addr L → State
+tr : List (Addr L × State)
+T : Table (Addr L) State
+c : Addr L
+miss : List (Addr L)
+C : Type
+g : State → List State → C
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hnd : (miss ++ [c, squeezeA p (H c), advanceA p (H c)]).Nodup
+hfresh : ∀ b ∈ miss ++ [c, squeezeA p (H c), advanceA p (H c)], T b = none ∧ Read tr b
+hsq : Before tr c (squeezeA p (H c))
+had : Before tr c (advanceA p (H c))
+b : Addr L
+⊢ Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryOwnFollow.lean:26:51: error: unsolved goals
+M Cv : Type
+L : ℕ
+inst✝² : DecidableEq (Addr L)
+inst✝¹ : Inhabited State
+inst✝ : Fintype State
+p : Params M Cv L
+H : Addr L → State
+tr : List (Addr L × State)
+T : Table (Addr L) State
+c : Addr L
+miss : List (Addr L)
+C : Type
+g : State → List State → C
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hnd : (miss ++ [c, squeezeA p (H c), advanceA p (H c)]).Nodup
+hfresh : ∀ b ∈ miss ++ [c, squeezeA p (H c), advanceA p (H c)], T b = none ∧ Read tr b
+hsq : Before tr c (squeezeA p (H c))
+had : Before tr c (advanceA p (H c))
+⊢ bfollow g tr (own p c) (List.map (fun b => (b, none)) miss) T =
+    some (g (H (advanceA p (H c))) (List.map H miss ++ [H (squeezeA p (H c))]))
+'AspisR1.QueryOwnFollow.follow' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

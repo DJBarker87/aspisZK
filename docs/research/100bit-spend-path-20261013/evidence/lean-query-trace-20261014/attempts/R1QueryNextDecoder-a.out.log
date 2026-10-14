@@ -1,0 +1,44 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryNextDecoder.lean:44:14: error: Tactic `rfl` failed: The left-hand side
+  match some (endpoint, lbl, data) with
+  | none => none
+  | some (endpoint_1, fst, snd) =>
+    match DuplexSeek.seek p T 9 endpoint_1 with
+    | none => none
+    | some val =>
+      some
+        (QueryNextLaw.own p (absorbA p endpoint lbl data hlen),
+          List.map (fun b => (b, none)) (QueryDecoder.missing p T endpoint_1), QueryNextLaw.output p T endpoint_1 i)
+is not definitionally equal to the right-hand side
+  some
+    (QueryNextLaw.own p (absorbA p endpoint lbl data hlen),
+      List.map (fun b => (b, none)) (QueryDecoder.missing p T endpoint), QueryNextLaw.output p T endpoint i)
+
+case some
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+i : ℕ
+T : Table (Addr L) State
+endpoint : State
+lbl : Byte
+data : Bytes
+hlen : List.length data ≤ p.D
+hseek : (DuplexSeek.seek p T 9 endpoint).isSome = true
+r : Addr L × List State
+hs : DuplexSeek.seek p T 9 endpoint = some r
+⊢ (match some (endpoint, lbl, data) with
+    | none => none
+    | some (endpoint_1, fst, snd) =>
+      match DuplexSeek.seek p T 9 endpoint_1 with
+      | none => none
+      | some val =>
+        some
+          (QueryNextLaw.own p (absorbA p endpoint lbl data hlen),
+            List.map (fun b => (b, none)) (QueryDecoder.missing p T endpoint_1),
+            QueryNextLaw.output p T endpoint_1 i)) =
+    some
+      (QueryNextLaw.own p (absorbA p endpoint lbl data hlen),
+        List.map (fun b => (b, none)) (QueryDecoder.missing p T endpoint), QueryNextLaw.output p T endpoint i)
+'AspisR1.QueryNextDecoder.decode_absorb' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.QueryNextDecoder.decodes_after_query' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
