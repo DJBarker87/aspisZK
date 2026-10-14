@@ -542,3 +542,13 @@ checkpoint has thirty standard-only axiom reports.
 The [GRS decoder route](GS-DECODER-REUSE-PATH.md) also reuses the existing
 exact circle-to-GRS conversion. Neither result alone supplies an efficient
 extractor, the concrete causal classifier, source correspondence, or privacy.
+
+## Incremental candidate completeness
+
+[INCREMENTAL-CANDIDATE-MERGE.md](INCREMENTAL-CANDIDATE-MERGE.md) reuses the
+old full-list projection, 100-candidate bound, and semantic zero padding.
+The new loop returns exactly the old joint list given complete lane lists;
+it keeps at most 100 candidates after each step. With 100-entry lane lists,
+the checked 29-step pair count is at most 290,000. The twenty-report
+checkpoint passes with standard axioms only. Per-lane decoding, executable
+refinement, and full security composition remain separate obligations.

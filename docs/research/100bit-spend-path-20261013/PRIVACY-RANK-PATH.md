@@ -3,6 +3,8 @@
 Root design, 2026-10-13. This is a proof plan with finite experimental
 support, not a privacy certificate for the R1 program.
 
+Related read-only inventories: [payload and transcript reuse](PRIVACY-PAYLOAD-REUSE.md) and [rank and mask-interface reuse](PRIVACY-RANK-REUSE.md).
+
 ## Why the older experiment cannot simply be reused
 
 R1 samples gamma in E = WideExact, a quadratic extension of K = QM31.

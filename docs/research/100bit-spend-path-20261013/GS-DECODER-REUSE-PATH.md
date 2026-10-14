@@ -55,10 +55,12 @@ an executable inverse or a runtime certificate.
 
 Step 4 avoids materializing the product of all lane lists. With at most
 100 retained partial tuples and at most 100 next-lane candidates, each
-merge considers at most 10,000 pairs before pruning. This is an algorithm
-plan; the full loop, completeness invariant, and cost refinement still
-need to be supplied. The existing finite-filter definitions are useful
-specifications, but are not the intended implementation.
+merge considers at most 10,000 pairs before pruning. The subsequent
+[incremental merge checkpoint](INCREMENTAL-CANDIDATE-MERGE.md) proves that
+the finite loop returns exactly the old joint list given complete per-lane
+lists. It also bounds a 29-lane run by 290,000 candidate pairs. This is a
+pair-count bound, not a field-operation or runtime bound. The finite-set
+specification still needs an executable representation and refinement.
 
 The old multiplicity-three proof already checks an interpolation budget:
 6,480,098 coefficients, 6,291,456 constraints, Y-degree 112 and weighted
@@ -79,3 +81,7 @@ An extractor with appropriately justified randomized running time is a
 possible route, subject to the chosen knowledge definition and failure
 accounting. No such instantiation is claimed here. This route also does not
 prove the causal classifier, Fiat–Shamir composition, or zero knowledge.
+
+The [inverse reuse inventory](GRS-INVERSE-REUSE-INVENTORY.md) records the
+existing polynomial uniqueness and parity facts, and distinguishes them
+from a constructive inverse of the full message-to-polynomial map.
