@@ -1,0 +1,115 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedRecordCompletion.lean:40:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UnifiedRun.challenge p hD H pub c1 payload 0
+in the target expression
+  [(Message.initial c1,
+        liftChallenge
+          (p.σ 0
+              ((emptyTable
+                    (squeezeA p
+                      (UnifiedRecords.previous p hD H pub c1 payload 0, UnifiedRecords.absorbed p hD H pub c1 payload 0,
+                            payload 0, UnifiedRun.state p hD H pub c1 payload (0 + 1)).2.1)).getD
+                (H
+                  (squeezeA p
+                    (UnifiedRecords.previous p hD H pub c1 payload 0, UnifiedRecords.absorbed p hD H pub c1 payload 0,
+                          payload 0, UnifiedRun.state p hD H pub c1 payload (0 + 1)).2.1))),
+            (UnifiedRecords.previous p hD H pub c1 payload 0, UnifiedRecords.absorbed p hD H pub c1 payload 0,
+                    payload 0, UnifiedRun.state p hD H pub c1 payload (0 + 1)).2.2.2))] =
+    (UnifiedRun.transcript p hD H pub c1 payload (0 + 1)).rounds
+
+case succ.zero
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+H : Addr L → State
+pub : UnifiedSampler.Public L
+c1 : State
+payload : ℕ → M
+hl : p.lbl 0 = 160
+he : p.enc (payload 0) = PublicInitFrame.emptyRecord
+ih :
+  0 ≤ 31 →
+    ordinary c1 (completeRounds p emptyTable H 0 (UnifiedRecords.records p hD H pub c1 payload 0)) =
+      (UnifiedRun.transcript p hD H pub c1 payload 0).rounds
+hn : 0 + 1 ≤ 31
+⊢ [(Message.initial c1,
+        liftChallenge
+          (p.σ 0
+              ((emptyTable
+                    (squeezeA p
+                      (UnifiedRecords.previous p hD H pub c1 payload 0, UnifiedRecords.absorbed p hD H pub c1 payload 0,
+                            payload 0, UnifiedRun.state p hD H pub c1 payload (0 + 1)).2.1)).getD
+                (H
+                  (squeezeA p
+                    (UnifiedRecords.previous p hD H pub c1 payload 0, UnifiedRecords.absorbed p hD H pub c1 payload 0,
+                          payload 0, UnifiedRun.state p hD H pub c1 payload (0 + 1)).2.1))),
+            (UnifiedRecords.previous p hD H pub c1 payload 0, UnifiedRecords.absorbed p hD H pub c1 payload 0,
+                    payload 0, UnifiedRun.state p hD H pub c1 payload (0 + 1)).2.2.2))] =
+    (UnifiedRun.transcript p hD H pub c1 payload (0 + 1)).rounds
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedRecordCompletion.lean:60:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UnifiedRun.challenge p hD H pub c1 payload (k + 1)
+in the target expression
+  (UnifiedRun.transcript p hD H pub c1 payload (k + 1)).rounds ++
+      [(Message.payload
+            (UnifiedRecords.previous p hD H pub c1 payload (k + 1),
+                    UnifiedRecords.absorbed p hD H pub c1 payload (k + 1), payload (k + 1),
+                    UnifiedRun.state p hD H pub c1 payload (k + 2)).2.2.1,
+          liftChallenge
+            (p.σ (k + 1)
+                ((emptyTable
+                      (squeezeA p
+                        (UnifiedRecords.previous p hD H pub c1 payload (k + 1),
+                              UnifiedRecords.absorbed p hD H pub c1 payload (k + 1), payload (k + 1),
+                              UnifiedRun.state p hD H pub c1 payload (k + 2)).2.1)).getD
+                  (H
+                    (squeezeA p
+                      (UnifiedRecords.previous p hD H pub c1 payload (k + 1),
+                            UnifiedRecords.absorbed p hD H pub c1 payload (k + 1), payload (k + 1),
+                            UnifiedRun.state p hD H pub c1 payload (k + 2)).2.1))),
+              (UnifiedRecords.previous p hD H pub c1 payload (k + 1),
+                      UnifiedRecords.absorbed p hD H pub c1 payload (k + 1), payload (k + 1),
+                      UnifiedRun.state p hD H pub c1 payload (k + 2)).2.2.2))] =
+    (UnifiedRun.transcript p hD H pub c1 payload (k + 1 + 1)).rounds
+
+case succ.succ
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+H : Addr L → State
+pub : UnifiedSampler.Public L
+c1 : State
+payload : ℕ → M
+hl : p.lbl 0 = 160
+he : p.enc (payload 0) = PublicInitFrame.emptyRecord
+k : ℕ
+ih :
+  k + 1 ≤ 31 →
+    ordinary c1 (completeRounds p emptyTable H 0 (UnifiedRecords.records p hD H pub c1 payload (k + 1))) =
+      (UnifiedRun.transcript p hD H pub c1 payload (k + 1)).rounds
+hn : k + 1 + 1 ≤ 31
+hbound : k + 1 ≤ 31
+hnonempty : UnifiedRecords.records p hD H pub c1 payload (k + 1) ≠ []
+⊢ (UnifiedRun.transcript p hD H pub c1 payload (k + 1)).rounds ++
+      [(Message.payload
+            (UnifiedRecords.previous p hD H pub c1 payload (k + 1),
+                    UnifiedRecords.absorbed p hD H pub c1 payload (k + 1), payload (k + 1),
+                    UnifiedRun.state p hD H pub c1 payload (k + 2)).2.2.1,
+          liftChallenge
+            (p.σ (k + 1)
+                ((emptyTable
+                      (squeezeA p
+                        (UnifiedRecords.previous p hD H pub c1 payload (k + 1),
+                              UnifiedRecords.absorbed p hD H pub c1 payload (k + 1), payload (k + 1),
+                              UnifiedRun.state p hD H pub c1 payload (k + 2)).2.1)).getD
+                  (H
+                    (squeezeA p
+                      (UnifiedRecords.previous p hD H pub c1 payload (k + 1),
+                            UnifiedRecords.absorbed p hD H pub c1 payload (k + 1), payload (k + 1),
+                            UnifiedRun.state p hD H pub c1 payload (k + 2)).2.1))),
+              (UnifiedRecords.previous p hD H pub c1 payload (k + 1),
+                      UnifiedRecords.absorbed p hD H pub c1 payload (k + 1), payload (k + 1),
+                      UnifiedRun.state p hD H pub c1 payload (k + 2)).2.2.2))] =
+    (UnifiedRun.transcript p hD H pub c1 payload (k + 1 + 1)).rounds
+'AspisR1.UnifiedRecordCompletion.completed_eq_transcript' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

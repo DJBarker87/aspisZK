@@ -6,6 +6,11 @@ oracle-program evaluation, background-answer laws and q22 scan. This is a
 model integration step; it does not instantiate the complete Fiat–Shamir
 security theorem or prove correspondence with Rust execution.
 
+The subsequent [decoder connection](UNIFIED-DECODER-BRIDGE.md) now proves
+the exact completed-record view through the q22 prefix and provides the
+guarded row-32 decoder interface and law. Whole-trace injection and the
+remaining protocol cases still require composition.
+
 ## Schedule and reuse
 
 `UnifiedSampler.Public` contains public bytes, their address-size bound and

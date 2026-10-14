@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedQueryRun.lean:90:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (UnifiedRun.transcript p hD H pub c1 payload 31).rounds
+in the target expression
+  withQuery c1 (completeRounds p emptyTable H 0 (UnifiedRecords.records p hD H pub c1 payload 31)) (payload 31)
+      (queryResult p hD H pub c1 payload) =
+    (Prefix.ext (UnifiedRun.transcript p hD H pub c1 payload 31) (UnifiedRun.message c1 payload 31)
+        (UnifiedRun.challenge p hD H pub c1 payload 31)).rounds
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+H : Addr L → State
+pub : UnifiedSampler.Public L
+c1 : State
+payload : ℕ → M
+hl : p.lbl 0 = 160
+he : p.enc (payload 0) = PublicInitFrame.emptyRecord
+⊢ withQuery c1 (completeRounds p emptyTable H 0 (UnifiedRecords.records p hD H pub c1 payload 31)) (payload 31)
+      (queryResult p hD H pub c1 payload) =
+    (Prefix.ext (UnifiedRun.transcript p hD H pub c1 payload 31) (UnifiedRun.message c1 payload 31)
+        (UnifiedRun.challenge p hD H pub c1 payload 31)).rounds
+'AspisR1.UnifiedQueryRun.query_challenge' depends on axioms: [propext, Quot.sound]
+'AspisR1.UnifiedQueryRun.query_state' depends on axioms: [propext, Quot.sound]
+'AspisR1.UnifiedQueryRun.rho_address' depends on axioms: [propext, Quot.sound]
+'AspisR1.UnifiedQueryRun.rho_challenge' depends on axioms: [propext, Quot.sound]
+'AspisR1.UnifiedQueryRun.prefix32' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

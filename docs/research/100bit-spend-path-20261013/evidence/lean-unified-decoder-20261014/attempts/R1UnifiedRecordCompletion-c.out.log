@@ -1,0 +1,47 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedRecordCompletion.lean:35:13: error: unsolved goals
+case succ.zero
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+H : Addr L → State
+pub : UnifiedSampler.Public L
+c1 : State
+payload : ℕ → M
+hl : p.lbl 0 = 160
+he : p.enc (payload 0) = PublicInitFrame.emptyRecord
+ih :
+  0 ≤ 31 →
+    ordinary c1 (completeRounds p emptyTable H 0 (UnifiedRecords.records p hD H pub c1 payload 0)) =
+      (UnifiedRun.transcript p hD H pub c1 payload 0).rounds
+hn : 0 + 1 ≤ 31
+⊢ (UnifiedRun.transcript p hD H pub c1 payload 0).rounds = []
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedRecordCompletion.lean:44:15: error: unsolved goals
+case succ.succ
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+H : Addr L → State
+pub : UnifiedSampler.Public L
+c1 : State
+payload : ℕ → M
+hl : p.lbl 0 = 160
+he : p.enc (payload 0) = PublicInitFrame.emptyRecord
+k : ℕ
+ih :
+  k + 1 ≤ 31 →
+    ordinary c1 (completeRounds p emptyTable H 0 (UnifiedRecords.records p hD H pub c1 payload (k + 1))) =
+      (UnifiedRun.transcript p hD H pub c1 payload (k + 1)).rounds
+hn : k + 1 + 1 ≤ 31
+hbound : k + 1 ≤ 31
+hnonempty : UnifiedRecords.records p hD H pub c1 payload (k + 1) ≠ []
+⊢ (UnifiedRun.transcript p hD H pub c1 payload k).rounds ++
+      [(match k with
+          | 0 => Message.initial c1
+          | i.succ => Message.payload (payload (i + 1)),
+          UnifiedRun.challenge p hD H pub c1 payload k),
+        (Message.payload (payload (k + 1)), UnifiedRun.challenge p hD H pub c1 payload (k + 1))] =
+    (UnifiedRun.transcript p hD H pub c1 payload (k + 1 + 1)).rounds
+'AspisR1.UnifiedRecordCompletion.completed_eq_transcript' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

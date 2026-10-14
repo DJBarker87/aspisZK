@@ -5,6 +5,13 @@ work is chiefly a set of explicit bridges. A theorem for the old protocol does
 not automatically become a theorem for the new verifier: its premises, index
 order, field embeddings, and transcript schedule must be discharged again.
 
+The [unified decoder connection](UNIFIED-DECODER-BRIDGE.md) proves that the
+older record completion reconstructs the new run's ordinary prefix, and
+that q22 extends it to the exact prefix before rho. A guarded row-32 decoder
+now uses the existing `R0C.V3.Dec` interface with the unified sampler law.
+Actual full-trace injection and the remaining decoder/classifier cases are
+still open.
+
 The [unified sampler connection](UNIFIED-SAMPLER-BRIDGE.md) now puts
 initialization, the domain-transition hash, q22 and rho into one schedule.
 It reuses the existing independent-answer laws and stopped q22 scan, and

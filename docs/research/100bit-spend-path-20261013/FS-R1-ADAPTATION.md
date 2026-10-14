@@ -11,6 +11,11 @@ continuation into rho. The complete decoder/classifier instance and source
 correspondence are still open; this does not apply the old concrete theorem
 by changing its round count.
 
+The subsequent [unified decoder connection](UNIFIED-DECODER-BRIDGE.md)
+connects completed records to that run and gives a guarded row-32 component
+in the old `R0C.V3.Dec` interface. This does not yet supply the component's
+whole-trace injection or the full decoder/classifier instance.
+
 ## Facts that prevent a round-count-only substitution
 
 1. R1 has 33 challenge rows. Its q22 sampler is row 31 and rho is row 32.

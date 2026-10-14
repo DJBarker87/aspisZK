@@ -1,0 +1,29 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1JointActualView.lean:48:8: error: Tactic `subst` failed: did not find equation for eliminating 'statement'
+
+case mk
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+H : Addr L → State
+pub : UnifiedSampler.Public L
+c1 : State
+payload : ℕ → M
+hl : p.lbl 0 = 160
+he : p.enc (payload 0) = PublicInitFrame.emptyRecord
+statement : UnifiedSampler.Public L
+rounds : List (Message M × Challenge Cv)
+hrun : UnifiedRun.transcript p hD H pub c1 payload 32 = { statement := statement, rounds := rounds }
+hstatement : { statement := statement, rounds := rounds }.statement = pub
+hrounds :
+  withQuery c1 (completeRounds p emptyTable H 0 (UnifiedRecords.records p hD H pub c1 payload 31)) (payload 31)
+      (UnifiedQueryRun.queryResult p hD H pub c1 payload) =
+    { statement := statement, rounds := rounds }.rounds
+⊢ { statement := pub,
+      rounds :=
+        withQuery c1 (completeRounds p emptyTable H 0 (UnifiedRecords.records p hD H pub c1 payload 31)) (payload 31)
+          (UnifiedQueryRun.queryResult p hD H pub c1 payload) } =
+    { statement := statement, rounds := rounds }
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1JointActualView.lean:56:2: error: No goals to be solved
+'AspisR1.JointActualView.actual_output' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
