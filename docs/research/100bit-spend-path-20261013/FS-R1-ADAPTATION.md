@@ -219,3 +219,22 @@ with an explicit fixed-completion bound. This closes this component's
 pending-list and trace composition, not the complete generic theorem
 instance. Query/following-message binding in the address-only typed decoder,
 all other round cases, R1 D1/D2/D3, source refinement and privacy remain open.
+
+## Address/table component decoder and canonical final messages
+
+[JOINT-DECODER-BRIDGE.md](JOINT-DECODER-BRIDGE.md) supplies the address/table
+decoder for the combined component. Successful parsing exposes the recovered
+C1 and ordinary records, expected query/following labels, and equality between
+the decoded messages' encodings and the hashed payloads. The trace theorem
+derives this successful parse from the explicit chains and returns the actual
+messages and challenges. The decoder's adaptive continuation bound retains
+the fixed-completion premise. The local rho bound now allows residual data to
+depend on all earlier completed rounds as well as q22, while remaining fixed
+before rho.
+
+The new transcript view keeps C1 as the prover's first message and tags query
+challenge values separately. Its list lift still needs the fixed row-zero
+sampler/byte connection and the complete 33-round protocol definition. It is
+not legitimate to make C1 part of the fixed public statement merely to reuse
+the old protocol type. Full round dispatch, D1/D2/D3, source correspondence
+and privacy remain open.

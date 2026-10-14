@@ -66,13 +66,13 @@ theorems do not turn that premise into an R1 classifier bound by themselves.
 
 ## Remaining obligations
 
-The combined component returns ordinary rounds, a query address/result,
-and the following challenge. The address/table-only decoder must still
-assemble the complete typed protocol prefix, check the query and following
-round labels/payloads, and bind their messages. The full round-wise decoder,
-injection/density and R1 D1/D2/D3 instantiation remain open. Pending-prefix
-composition at the initializer, ordinary and reseeded round cases must also
-be included in that complete instance.
+The later [joint-decoder connection](JOINT-DECODER-BRIDGE.md) now recovers
+C1 and this component from the queried address and earlier table, checks the
+query/following labels and payload encodings, and preserves both messages.
+Assembly of the generic protocol's full typed prefix, the complete round-wise
+decoder, injection/density and R1 D1/D2/D3 instantiation remain open.
+Pending-prefix composition at the initializer, ordinary and reseeded round
+cases must also be included in that complete instance.
 
 The concrete byte codec, Rust/committed-word/account correspondence,
 settlement guards, universal masking/simulator argument and final private

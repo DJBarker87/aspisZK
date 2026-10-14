@@ -5,13 +5,14 @@ work is chiefly a set of explicit bridges. A theorem for the old protocol does
 not automatically become a theorem for the new verifier: its premises, index
 order, field embeddings, and transcript schedule must be discharged again.
 
-The latest [joint-prefix connection](JOINT-PREFIX-BRIDGE.md) combines
-initialized ordinary records, the domain transition, q22 and the following
-challenge. It reuses the old record completion, first-read order, background
-sampler and adaptive-chain bound. Shared hash addresses use one deduplicated
-answer list. Eleven focused targets are checked; the combined checkpoint
-reports 22 standard-only axiom audits. The complete protocol and privacy
-proofs remain open.
+The latest [joint-decoder connection](JOINT-DECODER-BRIDGE.md) recovers the
+earlier rounds, q22 and the following challenge from the queried address and
+earlier table. It checks both final messages and reuses the old completion
+and adaptive-chain laws. The
+21-root rho bound now permits residual data to depend on the entire completed
+earlier prefix. Eleven focused targets are checked; the combined checkpoint
+reports 25 axiom audits using only standard axioms or none. The complete
+protocol and privacy proofs remain open.
 
 | Existing result | Reuse in R1 | Scope of the checked result |
 |---|---|---|

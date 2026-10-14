@@ -1,0 +1,82 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1JointContext.lean:49:44: error: unsolved goals
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+pubBytes : Bytes
+tag : Byte
+semanticFuel openingFuel : ℕ
+c : Addr L
+T : Table (Addr L) State
+endpoint : State
+nl : Byte
+nd : Bytes
+a : Addr L
+xs : List State
+previous : State
+ql : Byte
+qd : Bytes
+c1 : State
+rs : List (Rec M)
+qm nm : M
+hc : parseAbsorb c = some (endpoint, nl, nd)
+hs : DuplexSeek.seek p T 9 endpoint = some (a, xs)
+ha : parseAbsorb a = some (previous, ql, qd)
+ht : OpeningPrefixCompletion.typed p pubBytes tag T semanticFuel openingFuel previous = some (c1, rs)
+hq : IndexedMessage.read p rs.length ql qd = some qm
+hn : IndexedMessage.read p (rs.length + 1) nl nd = some nm
+⊢ (do
+      let __x ← some (endpoint, nl, nd)
+      let __x_1 ← DuplexSeek.seek p T 9 __x.1
+      let __x_2 ← parseAbsorb __x_1.1
+      let __x_3 ← OpeningPrefixCompletion.typed p pubBytes tag T semanticFuel openingFuel __x_2.1
+      let qm ← IndexedMessage.read p __x_3.2.length __x_2.2.1 __x_2.2.2
+      let nm ← IndexedMessage.read p (__x_3.2.length + 1) __x.2.1 __x.2.2
+      pure
+          { endpoint := __x.1, queryAddress := __x_1.1, c1 := __x_3.1, records := __x_3.2, queryMessage := qm,
+            nextMessage := nm }) =
+    some { endpoint := endpoint, queryAddress := a, c1 := c1, records := rs, queryMessage := qm, nextMessage := nm }
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1JointContext.lean:50:24: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [parse, hc, hs̵,̵ ̵h̵a, ht, hq, hn, Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1JointContext.lean:50:28: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [parse, hc, hs, ha̵,̵ ̵h̵t, hq, hn, Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1JointContext.lean:50:32: warning: This simp argument is unused:
+  ht
+
+Hint: Omit it from the simp argument list.
+  simp only [parse, hc, hs, ha, ht̵,̵ ̵h̵q, hn, Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1JointContext.lean:50:36: warning: This simp argument is unused:
+  hq
+
+Hint: Omit it from the simp argument list.
+  simp only [parse, hc, hs, ha, ht, hq̵,̵ ̵h̵n, Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1JointContext.lean:50:40: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [parse, hc, hs, ha, ht, hq, h̵n̵,̵ ̵Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1JointContext.lean:50:44: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [parse, hc, hs, ha, ht, hq, hn,̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JointContext.parse_of_checks' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JointContext.parse_encoded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
