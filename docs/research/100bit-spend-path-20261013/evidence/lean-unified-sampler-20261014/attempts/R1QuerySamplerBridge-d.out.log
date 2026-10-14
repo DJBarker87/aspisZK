@@ -1,0 +1,21 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QuerySamplerBridge.lean:27:2: error: Type mismatch: After simplification, term
+  QuerySampler.chain_out p H (fun bs xs => G (Q22.scanOut 8 Q22.q0 bs xs (H a))) 8 (H a) [] []
+ has type
+  @Eq C (eval H (QuerySampler.chain p (fun bs xs => G (Q22.scanOut 8 Q22.q0 bs xs (H a))) 8 (H a) [] []).toProgram).2
+    (G
+      (Q22.scanOut 8 Q22.q0 (List.map (fun k => H (squeezeA p (QuerySampler.state p H (H a) k))) (List.range 8))
+        (List.map (fun k => QuerySampler.state p H (H a) (k + 1)) (List.range 8)) (H a)))
+but is expected to have type
+  @Eq C
+    (eval H
+        (Sampler.ask a fun s =>
+            QuerySampler.chain p (fun bs xs => G (Q22.scanOut 8 Q22.q0 bs xs s)) 8 s [] []).toProgram).2
+    (G
+      (Q22.scanOut 8 Q22.q0 (List.map (fun j => H (squeezeA p (QuerySampler.state p H (H a) j))) (List.range 8))
+        (List.map (fun j => QuerySampler.state p H (H a) (j + 1)) (List.range 8)) (QuerySampler.state p H (H a) 0)))
+'AspisR1.QuerySamplerBridge.output' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.QuerySamplerBridge.reads_absorb' depends on axioms: [propext, Quot.sound]
+'AspisR1.QuerySamplerBridge.reads_pairs' depends on axioms: [propext, Quot.sound]
+'AspisR1.QuerySamplerBridge.state_step' depends on axioms: [propext, Quot.sound]
+'AspisR1.QuerySamplerBridge.state_initial' depends on axioms: [propext, Quot.sound]
+exit=1

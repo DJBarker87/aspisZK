@@ -5,6 +5,12 @@ This is a root-owned implementation plan and dependency audit at base
 The generic FS2 first-read framework and per-round sampler interface remain
 reusable. The old concrete masked instance is not the actual R1 protocol.
 
+The later [unified sampler connection](UNIFIED-SAMPLER-BRIDGE.md) gives one
+definition for the 33-row schedule and proves the selected query-state
+continuation into rho. The complete decoder/classifier instance and source
+correspondence are still open; this does not apply the old concrete theorem
+by changing its round count.
+
 ## Facts that prevent a round-count-only substitution
 
 1. R1 has 33 challenge rows. Its q22 sampler is row 31 and rho is row 32.

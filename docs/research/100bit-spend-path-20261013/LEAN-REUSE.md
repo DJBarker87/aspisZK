@@ -5,6 +5,12 @@ work is chiefly a set of explicit bridges. A theorem for the old protocol does
 not automatically become a theorem for the new verifier: its premises, index
 order, field embeddings, and transcript schedule must be discharged again.
 
+The [unified sampler connection](UNIFIED-SAMPLER-BRIDGE.md) now puts
+initialization, the domain-transition hash, q22 and rho into one schedule.
+It reuses the existing independent-answer laws and stopped q22 scan, and
+proves that rho's absorb uses the state selected by q22. The full decoder,
+round-classifier and source/privacy connections remain separate obligations.
+
 The latest [joint-decoder connection](JOINT-DECODER-BRIDGE.md) recovers the
 earlier rounds, q22 and the following challenge from the queried address and
 earlier table. It checks both final messages and reuses the old completion

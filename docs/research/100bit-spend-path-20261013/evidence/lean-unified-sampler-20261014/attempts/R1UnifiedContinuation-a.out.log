@@ -1,0 +1,29 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedContinuation.lean:20:8: error: Ambiguous term
+  absorb
+Possible interpretations:
+  UnifiedSampler.absorb : Params ?m.23 ?m.24 ?m.25 → ℕ → UnifiedSampler.Prefix ?m.23 ?m.24 ?m.25 → ?m.23 → Addr ?m.25
+  
+  AspisV8R19.DuplexFrames.absorb : Bytes → Byte → Bytes → Bytes
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedContinuation.lean:20:2: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedContinuation.lean:44:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UnifiedSampler.stateOf ?p
+    (Prefix.ext ?P (Message.payload ?qm) (eval ?H (UnifiedSampler.samp ?p ?hD 31 ?P (Message.payload ?qm)).toProgram).2)
+in the target expression
+  absorbA p (eval H (UnifiedSampler.samp p hD 31 P (Message.payload qm)).toProgram).2.2 (p.lbl 32) (p.enc rm) ⋯ =
+    absorbA p qr.2 (p.lbl 32) (p.enc rm) ⋯
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+P : UnifiedSampler.Prefix M Cv L
+qm rm : M
+H : Addr L → State
+a : Addr L := UnifiedSampler.absorb p 31 P qm
+qr : AspisV8R19.Q22SamplerProgram.Result := QueryFirstRead.result p H (QuerySampler.state p H (H a))
+⊢ absorbA p (eval H (UnifiedSampler.samp p hD 31 P (Message.payload qm)).toProgram).2.2 (p.lbl 32) (p.enc rm) ⋯ =
+    absorbA p qr.2 (p.lbl 32) (p.enc rm) ⋯
+'AspisR1.UnifiedContinuation.absorb_ext' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.UnifiedContinuation.query_then_rho_state' depends on axioms: [propext, Quot.sound]
+'AspisR1.UnifiedContinuation.query_then_rho_firstCell' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

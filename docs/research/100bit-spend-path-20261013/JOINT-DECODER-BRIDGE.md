@@ -68,10 +68,11 @@ connection. These list identities are not that source or protocol theorem.
 
 The checked decoder currently returns a structured component, not yet the
 generic FS protocol's complete prefix/message/challenge tuple. The next step
-is a single R1 sampler/transcript definition covering initialization, ordinary
-rows, the reseeded row 26, q22 at 31 and rho at 32, with C1 as the first message.
-The transcript view and all completing-decoder cases must be shown equal to
-that definition, including the fixed row-zero payload and message-type checks.
+uses the [single R1 sampler definition](UNIFIED-SAMPLER-BRIDGE.md), which now
+covers initialization, ordinary rows, the reseeded row 26, q22 at 31 and rho
+at 32, with C1 as the first message. The transcript view and all completing-
+decoder cases must still be shown equal to that definition, including the
+fixed row-zero payload and message-type checks.
 
 The round classifiers and full D1/D2/D3/injection/density instance remain
 open. Concrete byte/public/committed-word and account/settlement correspondence,
