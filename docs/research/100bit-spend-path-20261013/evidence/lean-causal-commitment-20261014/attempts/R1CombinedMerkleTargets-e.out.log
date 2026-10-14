@@ -1,0 +1,64 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CombinedMerkleTargets.lean:61:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pred j a
+in the target expression
+  ParsedStateCollision.bad (MerkleChildTargets.pred i) Qtot a T f
+
+L Qtot : ℕ
+a : Addr L
+T : Table (Addr L) State
+f : State
+j : Fin 10
+hj : ParsedStateCollision.bad (pred j) Qtot a T f
+h : ↑j < 8
+i : Fin 8 := ⟨↑j, h⟩
+hpred : pred j a = MerkleChildTargets.pred i a
+⊢ ParsedStateCollision.bad (MerkleChildTargets.pred i) Qtot a T f
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CombinedMerkleTargets.lean:71:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pred j a
+in the target expression
+  ParsedStateCollision.bad (CommitmentRootTargets.pred i) Qtot a T f
+
+L Qtot : ℕ
+a : Addr L
+T : Table (Addr L) State
+f : State
+j : Fin 10
+hj : ParsedStateCollision.bad (pred j) Qtot a T f
+h : ¬↑j < 8
+i : Fin 2 := ⟨↑j - 8, ⋯⟩
+hz : ⟨8 + ↑i, ⋯⟩ = j
+hpred : pred j a = CommitmentRootTargets.pred i a
+⊢ ParsedStateCollision.bad (CommitmentRootTargets.pred i) Qtot a T f
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CombinedMerkleTargets.lean:80:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pred j a
+in the target expression
+  ParsedStateCollision.bad (pred j) Qtot a T f
+
+L Qtot : ℕ
+a : Addr L
+T : Table (Addr L) State
+f : State
+i : Fin 8
+hi : ParsedStateCollision.bad (MerkleChildTargets.pred i) Qtot a T f
+j : Fin 10 := ⟨↑i, ⋯⟩
+hpred : pred j a = MerkleChildTargets.pred i a
+⊢ ParsedStateCollision.bad (pred j) Qtot a T f
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CombinedMerkleTargets.lean:88:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pred j a
+in the target expression
+  ParsedStateCollision.bad (pred j) Qtot a T f
+
+L Qtot : ℕ
+a : Addr L
+T : Table (Addr L) State
+f : State
+i : Fin 2
+hi : ParsedStateCollision.bad (CommitmentRootTargets.pred i) Qtot a T f
+j : Fin 10 := ⟨8 + ↑i, ⋯⟩
+hpred : pred j a = CommitmentRootTargets.pred i a
+⊢ ParsedStateCollision.bad (pred j) Qtot a T f
+'AspisR1.CombinedMerkleTargets.pred_child' depends on axioms: [propext, Quot.sound]
+'AspisR1.CombinedMerkleTargets.pred_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CombinedMerkleTargets.bad_equiv' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CombinedMerkleTargets.mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1

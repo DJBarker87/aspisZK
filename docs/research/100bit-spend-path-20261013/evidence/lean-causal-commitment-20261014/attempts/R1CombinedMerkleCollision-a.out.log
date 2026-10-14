@@ -1,0 +1,46 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CombinedMerkleCollision.lean:49:24: error(lean.unknownIdentifier): Unknown identifier `hmiss`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CombinedMerkleCollision.lean:50:77: error(lean.unknownIdentifier): Unknown identifier `hr`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CombinedMerkleCollision.lean:51:17: error(lean.unknownIdentifier): Unknown identifier `htail`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CombinedMerkleCollision.lean:51:28: error: Tactic `rcases` failed: `x✝ : ?m.193` is not an inductive datatype
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CombinedMerkleCollision.lean:46:6: error: unsolved goals
+case cons.mpr.inr.inr
+L Qtot : ℕ
+rest : List (Addr L × State)
+ih :
+  ∀ (T : Table (Addr L) State),
+    hitsBad (ParsedTargetsCollision.bad CombinedMerkleTargets.pred Qtot) T rest ↔
+      hitsBad (ParsedTargetsCollision.bad MerkleChildTargets.pred Qtot) T rest ∨
+        hitsBad (ParsedTargetsCollision.bad CommitmentRootTargets.pred Qtot) T rest
+T : Table (Addr L) State
+a : Addr L
+f : State
+htail : hitsBad (ParsedTargetsCollision.bad CommitmentRootTargets.pred Qtot) (put T a f) rest
+⊢ T a = none ∧ ParsedTargetsCollision.bad CombinedMerkleTargets.pred Qtot a T f ∨
+    hitsBad (ParsedTargetsCollision.bad CombinedMerkleTargets.pred Qtot) (put T a f) rest
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CombinedMerkleCollision.lean:81:45: error: Application type mismatch: The argument
+  hcombined
+has type
+  ¬hitsBad (ParsedTargetsCollision.bad CombinedMerkleTargets.pred Qtot) emptyTable v.1
+but is expected to have type
+  hitsBad (ParsedTargetsCollision.bad CombinedMerkleTargets.pred Qtot) emptyTable v.1
+in the application
+  (hits_equiv Qtot emptyTable v.1).mp hcombined
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CombinedMerkleCollision.lean:98:6: error: Type mismatch: After simplification, term
+  hbad
+ has type
+  True
+but is expected to have type
+  (dom T).card < Qtot ∧
+    (TrailingStateFrame.tailState a = some f ∨ ∃ a, ¬T a = none ∧ TrailingStateFrame.tailState a = some f)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CombinedMerkleCollision.lean:100:4: error: Type mismatch
+  htail
+has type
+  hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable v.1
+but is expected to have type
+  hitsBad (fun a T f => 0 < 2) emptyTable v.1
+'AspisR1.CombinedMerkleCollision.hits_equiv' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CombinedMerkleCollision.hitsBad_mono' depends on axioms: [propext]
+'AspisR1.CombinedMerkleCollision.outside' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CombinedMerkleCollision.old_included' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CombinedMerkleCollision.mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1

@@ -1,0 +1,58 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleWalkWitness.lean:56:30: error: don't know how to synthesize implicit argument `slots`
+  @inputTrace hash (?m.232 :: slots) (Path.cons cs tailPath) leaf
+context:
+hash : List Byte → Digest
+nodes : Nodes
+hcons : Consistent hash nodes
+slot : Fin 8
+slots : List (Fin 8)
+ih :
+  ∀ (root leaf : Digest),
+    walk nodes slots root = some leaf →
+      ∃ path,
+        foldPath hash path leaf = root ∧
+          ∀ (input : List Byte), input ∈ inputTrace hash path leaf → input ∈ nodeInputs nodes
+root leaf : Digest
+h : walk nodes (slot :: slots) root = some leaf
+parent : Digest
+hw : walk nodes slots root = some parent
+hmap : Option.map (fun cs => cs slot) (lookup nodes parent) = some leaf
+cs : Children
+hl : lookup nodes parent = some cs
+hvalue : cs slot = leaf
+hentry : (cs, parent) ∈ nodes
+tailPath : Path slots
+htailFold : foldPath hash tailPath parent = root
+htailInputs : ∀ (input : List Byte), input ∈ inputTrace hash tailPath parent → input ∈ nodeInputs nodes
+hfill : fillChild slot cs leaf = cs
+⊢ List (Fin 8)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleWalkWitness.lean:56:60: error: don't know how to synthesize implicit argument `slot`
+  @Path.cons ?m.232 slots cs tailPath
+context:
+hash : List Byte → Digest
+nodes : Nodes
+hcons : Consistent hash nodes
+slot : Fin 8
+slots : List (Fin 8)
+ih :
+  ∀ (root leaf : Digest),
+    walk nodes slots root = some leaf →
+      ∃ path,
+        foldPath hash path leaf = root ∧
+          ∀ (input : List Byte), input ∈ inputTrace hash path leaf → input ∈ nodeInputs nodes
+root leaf : Digest
+h : walk nodes (slot :: slots) root = some leaf
+parent : Digest
+hw : walk nodes slots root = some parent
+hmap : Option.map (fun cs => cs slot) (lookup nodes parent) = some leaf
+cs : Children
+hl : lookup nodes parent = some cs
+hvalue : cs slot = leaf
+hentry : (cs, parent) ∈ nodes
+tailPath : Path slots
+htailFold : foldPath hash tailPath parent = root
+htailInputs : ∀ (input : List Byte), input ∈ inputTrace hash tailPath parent → input ∈ nodeInputs nodes
+hfill : fillChild slot cs leaf = cs
+⊢ Fin 8
+'AspisR1.MerkleWalkWitness.walk_witness' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

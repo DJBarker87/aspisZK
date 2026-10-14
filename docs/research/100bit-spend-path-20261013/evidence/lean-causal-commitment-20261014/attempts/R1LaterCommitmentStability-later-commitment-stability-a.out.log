@@ -1,0 +1,101 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LaterCommitmentStability.lean:60:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  CommitmentRootFrames.c2Addr state root hframe
+in the target expression
+  recover (nodes (CanonicalOracleLog.byteLog midpre)) (leaves 241 128 (CanonicalOracleLog.byteLog midpre)) slots root =
+    recover (nodes (CanonicalOracleLog.byteLog pre)) (leaves 241 128 (CanonicalOracleLog.byteLog pre)) slots root
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+Qtot : ℕ
+H : Addr L → State
+pre post : List (Addr L × State)
+state : State
+hframe : 71 ≤ L
+root answer : State
+hsize : 162 ≤ L
+hnode : 257 ≤ L
+hcons : ∀ q ∈ pre ++ [(CommitmentRootFrames.c2Addr state root hframe, answer)] ++ post, q.2 = H q.1
+hQ : firstReads emptyTable (pre ++ [(CommitmentRootFrames.c2Addr state root hframe, answer)] ++ post) ≤ Qtot
+hnoColl :
+  ¬hitsBad (badColl p Qtot) emptyTable (pre ++ [(CommitmentRootFrames.c2Addr state root hframe, answer)] ++ post)
+hnoChild :
+  ¬hitsBad (ParsedTargetsCollision.bad MerkleChildTargets.pred Qtot) emptyTable
+      (pre ++ [(CommitmentRootFrames.c2Addr state root hframe, answer)] ++ post)
+hnoRoot :
+  ¬hitsBad (ParsedTargetsCollision.bad CommitmentRootTargets.pred Qtot) emptyTable
+      (pre ++ [(CommitmentRootFrames.c2Addr state root hframe, answer)] ++ post)
+slots : List (Fin 8)
+bs : Bytes := CommitmentRootFrames.c2Frame state root
+hfits : List.length bs ≤ L
+haddr : CommitmentRootFrames.c2Addr state root hframe = Addr.ofBytes bs hfits
+frameAddr : Addr L := CommitmentRootFrames.c2Addr state root hframe
+midpre : List (Addr L × State) := pre ++ [(frameAddr, answer)]
+hcommit : Read midpre frameAddr
+hstable :
+  CanonicalRecoveryStability.recoverAt 241 128 midpre slots root =
+    CanonicalRecoveryStability.recoverAt 241 128 (midpre ++ post) slots root
+hfixed :
+  recover (nodes (CanonicalOracleLog.byteLog (pre ++ [(Addr.ofBytes bs hfits, answer)])))
+      (leaves 241 128 (CanonicalOracleLog.byteLog (pre ++ [(Addr.ofBytes bs hfits, answer)]))) slots root =
+    recover (nodes (CanonicalOracleLog.byteLog pre)) (leaves 241 128 (CanonicalOracleLog.byteLog pre)) slots root
+⊢ recover (nodes (CanonicalOracleLog.byteLog midpre)) (leaves 241 128 (CanonicalOracleLog.byteLog midpre)) slots root =
+    recover (nodes (CanonicalOracleLog.byteLog pre)) (leaves 241 128 (CanonicalOracleLog.byteLog pre)) slots root
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LaterCommitmentStability.lean:137:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  CommitmentRootFrames.foldedAddr state root tail htail hframe
+in the target expression
+  recover (nodes (CanonicalOracleLog.byteLog midpre)) (leaves 114 128 (CanonicalOracleLog.byteLog midpre)) slots root =
+    recover (nodes (CanonicalOracleLog.byteLog pre)) (leaves 114 128 (CanonicalOracleLog.byteLog pre)) slots root
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+Qtot : ℕ
+H : Addr L → State
+pre post : List (Addr L × State)
+state : State
+tail : Bytes
+htail : List.length tail = 224
+hframe : 294 ≤ L
+root answer : State
+hsize : 162 ≤ L
+hnode : 257 ≤ L
+hcons : ∀ q ∈ pre ++ [(CommitmentRootFrames.foldedAddr state root tail htail hframe, answer)] ++ post, q.2 = H q.1
+hQ :
+  firstReads emptyTable (pre ++ [(CommitmentRootFrames.foldedAddr state root tail htail hframe, answer)] ++ post) ≤ Qtot
+hnoColl :
+  ¬hitsBad (badColl p Qtot) emptyTable
+      (pre ++ [(CommitmentRootFrames.foldedAddr state root tail htail hframe, answer)] ++ post)
+hnoChild :
+  ¬hitsBad (ParsedTargetsCollision.bad MerkleChildTargets.pred Qtot) emptyTable
+      (pre ++ [(CommitmentRootFrames.foldedAddr state root tail htail hframe, answer)] ++ post)
+hnoRoot :
+  ¬hitsBad (ParsedTargetsCollision.bad CommitmentRootTargets.pred Qtot) emptyTable
+      (pre ++ [(CommitmentRootFrames.foldedAddr state root tail htail hframe, answer)] ++ post)
+slots : List (Fin 8)
+bs : Bytes := CommitmentRootFrames.foldedFrame state root tail
+hfits : List.length bs ≤ L
+haddr : CommitmentRootFrames.foldedAddr state root tail htail hframe = Addr.ofBytes bs hfits
+frameAddr : Addr L := CommitmentRootFrames.foldedAddr state root tail htail hframe
+midpre : List (Addr L × State) := pre ++ [(frameAddr, answer)]
+hcommit : Read midpre frameAddr
+hstable :
+  CanonicalRecoveryStability.recoverAt 114 128 midpre slots root =
+    CanonicalRecoveryStability.recoverAt 114 128 (midpre ++ post) slots root
+hfixed :
+  recover (nodes (CanonicalOracleLog.byteLog (pre ++ [(Addr.ofBytes bs hfits, answer)])))
+      (leaves 114 128 (CanonicalOracleLog.byteLog (pre ++ [(Addr.ofBytes bs hfits, answer)]))) slots root =
+    recover (nodes (CanonicalOracleLog.byteLog pre)) (leaves 114 128 (CanonicalOracleLog.byteLog pre)) slots root
+⊢ recover (nodes (CanonicalOracleLog.byteLog midpre)) (leaves 114 128 (CanonicalOracleLog.byteLog midpre)) slots root =
+    recover (nodes (CanonicalOracleLog.byteLog pre)) (leaves 114 128 (CanonicalOracleLog.byteLog pre)) slots root
+'AspisR1.LaterCommitmentStability.c2_recover_stable' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LaterCommitmentStability.c2_word_stable' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LaterCommitmentStability.folded_recover_stable' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LaterCommitmentStability.folded_word_stable' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

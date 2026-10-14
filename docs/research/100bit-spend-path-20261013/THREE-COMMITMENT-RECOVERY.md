@@ -48,10 +48,13 @@ bound. Choosing that prefix at the correct commitment time remains
 essential. An arbitrary later prefix would not establish that the word
 was fixed before the challenges.
 
-This checkpoint charges events on `pre ++ openingTrace`. The actual
-experiment can contain intervening queries, other openings, and checkpoint
-hashes. Their common full-trace integration is the next obligation; the
-separate event bounds cannot simply be added to the final ledger yet.
+This original checkpoint charges events on `pre ++ openingTrace`. The later
+[causal stability checkpoint](CAUSAL-COMMITMENT-STABILITY.md) permits
+intervening queries and other openings in a common full trace, and proves
+the entire recovered function is fixed before each literal frame read.
+It also checks a common hash-event bound of `12*Qtot^2/2^256`, including
+the duplex event without counting the trailing-root reader twice. Actual
+protocol/source composition and final ledger instantiation remain open.
 Rust path indexing, folded-tree padding, field parsing, and checkpoint
 provenance still require correspondence. Efficient candidate extraction,
 the causal knowledge classifier, and the privacy simulator remain open.

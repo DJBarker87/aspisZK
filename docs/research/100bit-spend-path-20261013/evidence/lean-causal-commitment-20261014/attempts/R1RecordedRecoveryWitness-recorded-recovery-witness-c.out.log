@@ -1,0 +1,37 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordedRecoveryWitness.lean:42:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  hash (leafInput tag packed salt)
+in the target expression
+  foldPath hash path digest = root
+
+case some
+hash : List Merkle32Path.Byte → Digest
+log : Log
+hcons : MerkleRecordedLog.Consistent hash log
+tag : Merkle32Path.Byte
+width : ℕ
+slots : List (Fin 8)
+root : Digest
+packed salt : List Merkle32Path.Byte
+hrec : (walk (nodes log) slots root).bind (lookupLeaf (leaves tag width log)) = some (packed, salt)
+digest : Digest
+hwalk : walk (nodes log) slots root = some digest
+hlookup : lookupLeaf (leaves tag width log) digest = some (packed, salt)
+hleafMem : ((packed, salt), digest) ∈ leaves tag width log
+recordedInput : List MerkleRecordedLog.Byte
+hlogInput : (recordedInput, digest) ∈ log
+hparse : MerkleLeafCodec.parse tag width recordedInput = some (packed, salt)
+hwidth : (packed, salt).1.length = width
+hsalt : (packed, salt).2.length = 32
+hinput : leafInput tag (packed, salt).1 (packed, salt).2 = recordedInput
+hhash : hash (leafInput tag packed salt) = digest
+path : Path slots
+hfold : foldPath hash path digest = root
+hinputs : ∀ (input : List Merkle32Path.Byte), input ∈ inputTrace hash path digest → input ∈ nodeInputs (nodes log)
+⊢ packed.length = width ∧
+    salt.length = 32 ∧
+      ∃ path,
+        foldPath hash path (hash (leafInput tag packed salt)) = root ∧
+          ∀ (input : List Merkle32Leaf.Byte),
+            input ∈ fullTrace hash path (leafInput tag packed salt) → input ∈ List.map Prod.fst log
+'AspisR1.RecordedRecoveryWitness.recover_witness' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

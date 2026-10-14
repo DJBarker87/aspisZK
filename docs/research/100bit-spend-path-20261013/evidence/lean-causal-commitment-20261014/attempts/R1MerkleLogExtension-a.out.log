@@ -1,0 +1,49 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleLogExtension.lean:16:71: error(lean.unknownIdentifier): Unknown identifier `FS2.Duplex.State`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleLogExtension.lean:16:71: error(lean.unknownIdentifier): Unknown identifier `FS2.Duplex.State`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleLogExtension.lean:28:29: error: Ambiguous term
+  Byte
+Possible interpretations:
+  MerkleLeafRecovery.Byte : Type
+  
+  Merkle32Path.Byte : Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleLogExtension.lean:86:31: error: don't know how to synthesize implicit argument `extra`
+  @lookup_append nodes ?m.158 parent cs hlookup
+context:
+nodes extra : Nodes
+slot : Fin 8
+slots : List (Fin 8)
+ih : ∀ (root digest : Digest), walk nodes slots root = some digest → walk (nodes ++ extra) slots root = some digest
+root digest : Digest
+h : walk nodes (slot :: slots) root = some digest
+parent : Digest
+hwalk : walk nodes slots root = some parent
+hmap : Option.map (fun cs => cs slot) (lookup nodes parent) = some digest
+cs : Children
+hlookup : lookup nodes parent = some cs
+hslot : cs slot = digest
+hrec : walk (nodes ++ extra) slots root = some parent
+⊢ Nodes
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleLogExtension.lean:86:19: error: failed to infer `have` declaration type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleLogExtension.lean:100:23: error: don't know how to synthesize implicit argument `extra`
+  @lookupLeaf_append leaves ?m.71 digest data hlookup
+context:
+nodes extraNodes : Nodes
+leaves extraLeaves : Leaves
+slots : List (Fin 8)
+root : Digest
+data : LeafData
+h : recover nodes leaves slots root = some data
+digest : Digest
+hwalk : walk nodes slots root = some digest
+hlookup : lookupLeaf leaves digest = some data
+hwalk' : walk (nodes ++ extraNodes) slots root = some digest
+⊢ Leaves
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleLogExtension.lean:100:11: error: failed to infer `have` declaration type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleLogExtension.lean:103:14: error(lean.unknownIdentifier): Unknown constant `canonical_byteLog_append`
+'AspisR1.MerkleLogExtension.nodes_append' depends on axioms: [propext, Quot.sound]
+'AspisR1.MerkleLogExtension.leaves_append' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.MerkleLogExtension.lookup_append' depends on axioms: [propext, Quot.sound]
+'AspisR1.MerkleLogExtension.lookupLeaf_append' depends on axioms: [propext, Quot.sound]
+'AspisR1.MerkleLogExtension.walk_append' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.MerkleLogExtension.recover_append' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

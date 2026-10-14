@@ -1,0 +1,80 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecoveredRootRecorded.lean:36:17: error: unsolved goals
+case cons.cons.none
+nodes : Nodes
+root leaf : Digest
+slot next : Fin 8
+rest : List (Fin 8)
+hnonempty : slot :: next :: rest ≠ []
+hwalk :
+  (((MerkleTable.walk nodes rest root).bind fun parent => Option.map (fun cs => cs next) (lookup nodes parent)).bind
+      fun parent => Option.map (fun cs => cs slot) (lookup nodes parent)) =
+    some leaf
+htail : MerkleTable.walk nodes (next :: rest) root = none
+⊢ ∃ cs, (cs, root) ∈ nodes
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecoveredRootRecorded.lean:39:41: error: Application type mismatch: The argument
+  next :: rest
+has type
+  List (Fin 8)
+but is expected to have type
+  Digest
+in the application
+  walk_root_recorded nodes (next :: rest)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecoveredRootRecorded.lean:39:69: error: unsolved goals
+nodes : Nodes
+root leaf : Digest
+slot next : Fin 8
+rest : List (Fin 8)
+hnonempty : slot :: next :: rest ≠ []
+hwalk : MerkleTable.walk nodes (slot :: next :: rest) root = some leaf
+parent : Digest
+htail : MerkleTable.walk nodes (next :: rest) root = some parent
+⊢ MerkleTable.walk nodes ?m.180 (sorry ()) = some root
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecoveredRootRecorded.lean:38:21: error: Tactic `rcases` failed: `x✝ : ?m.185` is not an inductive datatype
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecoveredRootRecorded.lean:36:52: warning: This simp argument is unused:
+  htail
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1.MerkleTable.walk,̵ ̵h̵t̵a̵i̵l̵] at hwalk
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecoveredRootRecorded.lean:54:46: error: Application type mismatch: The argument
+  slots
+has type
+  List (Fin 8)
+but is expected to have type
+  Digest
+in the application
+  walk_root_recorded (nodes log) slots
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecoveredRootRecorded.lean:53:13: error: Tactic `rcases` failed: `x✝ : ?m.54` is not an inductive datatype
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecoveredRootRecorded.lean:75:2: error: Tactic `apply` failed: could not unify the conclusion of `List.mem_map.mpr`
+  ?m.119 ∈ List.map ?m.120 ?m.121
+with the goal
+  (q.1, root) ∈ tr
+
+Note: The full type of `List.mem_map.mpr` is
+  (∃ a ∈ ?m.121, ?m.120 a = ?m.119) → ?m.119 ∈ List.map ?m.120 ?m.121
+
+L : ℕ
+tr : List (Addr L × State)
+tag : Merkle32Path.Byte
+width : ℕ
+slots : List (Fin 8)
+root : Digest
+data : LeafData
+hnonempty : slots ≠ []
+hrec :
+  recover (nodes (CanonicalOracleLog.byteLog tr)) (leaves tag width (CanonicalOracleLog.byteLog tr)) slots root =
+    some data
+hroot : root ∈ List.map Prod.snd (List.map (fun q => (q.1.toBytes, q.2)) (CanonicalOracleLog.canonicalTrace tr))
+entry : AspisV8R19.DuplexFrames.Bytes × Digest
+hentry : entry ∈ List.map (fun q => (q.1.toBytes, q.2)) (CanonicalOracleLog.canonicalTrace tr)
+hrootval : entry.2 = root
+q : Addr L × State
+hq : q ∈ CanonicalOracleLog.canonicalTrace tr
+hpair : (q.1.toBytes, q.2) = entry
+hqroot : q.2 = root
+⊢ (q.1, root) ∈ tr
+'AspisR1.RecoveredRootRecorded.walk_root_recorded' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.RecoveredRootRecorded.recover_root_recorded' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.RecoveredRootRecorded.canonical_root_read' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

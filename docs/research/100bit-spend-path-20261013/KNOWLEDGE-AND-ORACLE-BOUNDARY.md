@@ -73,8 +73,12 @@ The finite lookup is constructive. The later
 consistency from canonical queries in the full trace, proves opening-read
 inclusion, and connects child and initial-C1 root targets to the existing
 first-read events. The [three-commitment extension](THREE-COMMITMENT-RECOVERY.md)
-adds C2/folded root cases and the common collision event. The actual
-commitment-time prefix and complete source/protocol composition remain open.
+adds C2/folded root cases and the common collision event. The later
+[causal stability checkpoint](CAUSAL-COMMITMENT-STABILITY.md) proves that
+the entire Option-valued recovery function is fixed before each literal
+commitment-frame read, outside events on one common full trace. Selecting
+those cuts in the actual execution and completing source/protocol
+composition remain open.
 
 ## The round-table interface also needs justification
 
@@ -103,10 +107,10 @@ argument.
 2. The 32-byte literal path and three salted leaf adaptations now compile
    in `Merkle32Path` and `Merkle32Leaf`. Identify all accepted source hashes
    with these preimages, including the folded tree's actual padded layout.
-3. Define commitment-time table reconstruction with explicit handling of
-   missing preimages. Prove later accepted openings agree with the fixed
-   words outside precisely charged collision and preimage events. Carry
-   the proof through the actual shared oracle and checkpoint lifecycle.
+3. Commitment-time table reconstruction now handles missing preimages and
+   proves causal stability for all slots outside the combined hash event.
+   Instantiate the frame cuts and accepted literal openings in the actual
+   shared-oracle decision and carry them through the checkpoint lifecycle.
 4. Supply an efficient list-decoding/extraction procedure matching the old
    decoder guarantees, then apply the already checked semantic witness
    extraction. Prove the round classifier and its knowledge conditions

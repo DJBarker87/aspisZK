@@ -503,3 +503,17 @@ new components and their combined checkpoint passed; the checkpoint has
 28 standard-only axiom reports. Commitment-time prefix selection and the
 actual full trace, efficient extraction, source correspondence, and the
 complete security/privacy instantiation remain separate obligations.
+
+## Causal commitment stability and full-trace events
+
+[CAUSAL-COMMITMENT-STABILITY.md](CAUSAL-COMMITMENT-STABILITY.md) joins the
+existing finite lookup, literal path, parser soundness, canonical log,
+first-hit target, and duplex collision proofs. The new result fixes the
+entire recovered leaf function, including missing entries, before each of
+the three commitment-frame reads. The common hash event is bounded by
+`12*Qtot^2/2^256`; the existing trailing-state reader is already included.
+
+The fourteen-report checkpoint is checked on the capped NUC. This is causal
+model progress, not a discharge of the old arbitrary-table D2 premise or a
+complete extractor/security/privacy proof. Existing proofs remain the first
+route for the terminal trace transport and subsequent causal classifier.
