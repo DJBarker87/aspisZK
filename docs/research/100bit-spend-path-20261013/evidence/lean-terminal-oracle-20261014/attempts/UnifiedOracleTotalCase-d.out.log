@@ -1,0 +1,56 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/UnifiedOracleTotalCase.lean:120:4: error: Type mismatch: After simplification, term
+  hdecode
+ has type
+  @Eq
+    (Option
+      (BS (Addr L) State (List State) ×
+        List (Addr L × Option State) ×
+          (List State →
+            List State → Prefix (UnifiedSampler.Public L) (Message M) (Challenge Cv) × Message M × Challenge Cv)))
+    (UnifiedDecoder.decode p hD pub a
+      (tableBefore emptyTable
+        (eval H
+            (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract (fun x x_1 => true) x pf) pub)).1
+        a))
+    (some (own, pend, g))
+but is expected to have type
+  @Eq
+    (Option
+      (BS (Addr L) State (List State) ×
+        List (Addr L × Option State) ×
+          (List State →
+            List State → Prefix (UnifiedSampler.Public L) (Message M) (Challenge Cv) × Message M × Challenge Cv)))
+    (UnifiedDecoder.decode p hD pub a
+      (tableBefore emptyTable
+        (eval H (FS2.experiment prover (UnifiedVerifier.verifier p hD extract fun x x_1 => true) pub)).1 a))
+    (some (own, pend, g))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/UnifiedOracleTotalCase.lean:129:12: error: Type mismatch: After simplification, term
+  hfollow
+ has type
+  @Eq (Option (Prefix (UnifiedSampler.Public L) (Message M) (Challenge Cv) × Message M × Challenge Cv))
+    (bfollow g
+      (traceFrom
+        (eval H
+            (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract (fun x x_1 => true) x pf) pub)).1
+        a)
+      own pend
+      (tableBefore emptyTable
+        (eval H
+            (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract (fun x x_1 => true) x pf) pub)).1
+        a))
+    (some
+      ((UnifiedProtocol.protocol p hD extract).transcript H pub (eval H prover).2 n,
+        (UnifiedProtocol.protocol p hD extract).msg (eval H prover).2 n,
+        (UnifiedProtocol.protocol p hD extract).chal H pub (eval H prover).2 n))
+but is expected to have type
+  @Eq (Option (Prefix (UnifiedSampler.Public L) (Message M) (Challenge Cv) × Message M × Challenge Cv))
+    (bfollow g
+      (traceFrom (eval H (FS2.experiment prover (UnifiedVerifier.verifier p hD extract fun x x_1 => true) pub)).1 a) own
+      pend
+      (tableBefore emptyTable
+        (eval H (FS2.experiment prover (UnifiedVerifier.verifier p hD extract fun x x_1 => true) pub)).1 a))
+    (some
+      ((UnifiedProtocol.protocol p hD extract).transcript H pub π n, (UnifiedProtocol.protocol p hD extract).msg π n,
+        (UnifiedProtocol.protocol p hD extract).chal H pub π n))
+'AspisR1.UnifiedOracleTotalCase.decodes_and_follows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

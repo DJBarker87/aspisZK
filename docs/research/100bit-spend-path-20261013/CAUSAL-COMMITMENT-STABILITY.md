@@ -98,9 +98,9 @@ must define a concrete causal first-hit classifier and prove its local
 density and accepted-proof containment, or justify another valid knowledge
 reduction. No classifier or theorem premise has been silently weakened.
 
-The terminal-oracle wrapper and trace-append transport are a separate next
-checkpoint. They are intended to reuse the completed 33-row decoder proof
-when terminal Merkle reads are included. The actual terminal decision,
+The [terminal-oracle transport](TERMINAL-ORACLE-TRANSPORT.md) is a separate
+checked checkpoint. It reuses the completed 33-row decoder proof when
+a terminal oracle-reading decision is included. The actual terminal decision,
 field canonicality, checkpoint lifecycle, efficient extraction, and privacy
 simulation remain obligations.
 

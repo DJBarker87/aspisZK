@@ -1,0 +1,310 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/UnifiedOracleTotalCase.lean:93:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  tr
+in the target expression
+  firstReads emptyTable (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1 ≤
+    Qtot
+
+M Cv W : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+decision : UnifiedSampler.Prefix M Cv L → Message M → Program (Addr L) State Bool
+H : Addr L → State
+pub : UnifiedSampler.Public L
+prover : Program (Addr L) State (UnifiedProtocol.Proof M)
+hpub : List.length pub.pubBytes < 2 ^ 32
+hl : ∀ n < 33, p.lbl n = UnifiedLabels.label n
+m0 : M
+he0 : p.enc m0 = PublicInitFrame.emptyRecord
+Qtot : ℕ
+hQ :
+  firstReads emptyTable (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1 ≤
+    Qtot
+hold :
+  ¬hitsBad (badColl p Qtot) emptyTable
+      (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+htail :
+  ¬hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable
+      (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+n : ℕ
+hn : n < 33
+a : Addr L
+hfirst : firstCell ((UnifiedProtocol.protocol p hD extract).chain H pub (eval H prover).2 n) = some a
+π : UnifiedProtocol.Proof M := (eval H prover).2
+tr : List (Addr L × State) :=
+  (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+base : List (Addr L × State) :=
+  (eval H (FS2.experiment prover (UnifiedVerifier.verifier p hD extract fun x x_1 => true) pub)).1
+terminal : List (Addr L × State) :=
+  (eval H
+      (decision ((UnifiedProtocol.protocol p hD extract).transcript H pub π 33)
+        ((UnifiedProtocol.protocol p hD extract).msg π 33))).1
+hsplit : tr = base ++ terminal
+hchain : a ∈ List.map Prod.fst (eval H ((UnifiedProtocol.protocol p hD extract).chain H pub π n).toProgram).1
+hV : a ∈ List.map Prod.fst (eval H (UnifiedVerifier.verifier p hD extract (fun x x_1 => true) pub π)).1
+hreadBase : Read base a
+⊢ firstReads emptyTable base ≤ Qtot
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/UnifiedOracleTotalCase.lean:98:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  tr
+in the target expression
+  hitsBad (badColl p Qtot) emptyTable
+    (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+
+M Cv W : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+decision : UnifiedSampler.Prefix M Cv L → Message M → Program (Addr L) State Bool
+H : Addr L → State
+pub : UnifiedSampler.Public L
+prover : Program (Addr L) State (UnifiedProtocol.Proof M)
+hpub : List.length pub.pubBytes < 2 ^ 32
+hl : ∀ n < 33, p.lbl n = UnifiedLabels.label n
+m0 : M
+he0 : p.enc m0 = PublicInitFrame.emptyRecord
+Qtot : ℕ
+hQ :
+  firstReads emptyTable (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1 ≤
+    Qtot
+hold :
+  ¬hitsBad (badColl p Qtot) emptyTable
+      (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+htail :
+  ¬hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable
+      (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+n : ℕ
+hn : n < 33
+a : Addr L
+hfirst : firstCell ((UnifiedProtocol.protocol p hD extract).chain H pub (eval H prover).2 n) = some a
+π : UnifiedProtocol.Proof M := ⋯
+tr : List (Addr L × State) := ⋯
+base : List (Addr L × State) := ⋯
+terminal : List (Addr L × State) := ⋯
+hsplit : tr = base ++ terminal
+hchain : a ∈ List.map Prod.fst (eval H ((UnifiedProtocol.protocol p hD extract).chain H pub π n).toProgram).1
+hV : a ∈ List.map Prod.fst (eval H (UnifiedVerifier.verifier p hD extract (fun x x_1 => true) pub π)).1
+hreadBase : Read base a
+hQbase : firstReads emptyTable base ≤ Qtot
+hbad : hitsBad (badColl p Qtot) emptyTable base
+⊢ hitsBad (badColl p Qtot) emptyTable
+    (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/UnifiedOracleTotalCase.lean:104:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  tr
+in the target expression
+  hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable
+    (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+
+M Cv W : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+decision : UnifiedSampler.Prefix M Cv L → Message M → Program (Addr L) State Bool
+H : Addr L → State
+pub : UnifiedSampler.Public L
+prover : Program (Addr L) State (UnifiedProtocol.Proof M)
+hpub : List.length pub.pubBytes < 2 ^ 32
+hl : ∀ n < 33, p.lbl n = UnifiedLabels.label n
+m0 : M
+he0 : p.enc m0 = PublicInitFrame.emptyRecord
+Qtot : ℕ
+hQ :
+  firstReads emptyTable (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1 ≤
+    Qtot
+hold :
+  ¬hitsBad (badColl p Qtot) emptyTable
+      (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+htail :
+  ¬hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable
+      (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+n : ℕ
+hn : n < 33
+a : Addr L
+hfirst : firstCell ((UnifiedProtocol.protocol p hD extract).chain H pub (eval H prover).2 n) = some a
+π : UnifiedProtocol.Proof M := ⋯
+tr : List (Addr L × State) := ⋯
+base : List (Addr L × State) := ⋯
+terminal : List (Addr L × State) := ⋯
+hsplit : tr = base ++ terminal
+hchain : a ∈ List.map Prod.fst (eval H ((UnifiedProtocol.protocol p hD extract).chain H pub π n).toProgram).1
+hV : a ∈ List.map Prod.fst (eval H (UnifiedVerifier.verifier p hD extract (fun x x_1 => true) pub π)).1
+hreadBase : Read base a
+hQbase : firstReads emptyTable base ≤ Qtot
+holdBase : ¬hitsBad (badColl p Qtot) emptyTable base
+hbad : hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable base
+⊢ hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable
+    (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/UnifiedOracleTotalCase.lean:111:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  tr
+in the target expression
+  UnifiedDecoder.decode p hD pub a
+      (tableBefore emptyTable
+        (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1 a) =
+    some (own, pend, g)
+
+case refine_1
+M Cv W : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+decision : UnifiedSampler.Prefix M Cv L → Message M → Program (Addr L) State Bool
+H : Addr L → State
+pub : UnifiedSampler.Public L
+prover : Program (Addr L) State (UnifiedProtocol.Proof M)
+hpub : List.length pub.pubBytes < 2 ^ 32
+hl : ∀ n < 33, p.lbl n = UnifiedLabels.label n
+m0 : M
+he0 : p.enc m0 = PublicInitFrame.emptyRecord
+Qtot : ℕ
+hQ :
+  firstReads emptyTable (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1 ≤
+    Qtot
+hold :
+  ¬hitsBad (badColl p Qtot) emptyTable
+      (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+htail :
+  ¬hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable
+      (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+n : ℕ
+hn : n < 33
+a : Addr L
+hfirst : firstCell ((UnifiedProtocol.protocol p hD extract).chain H pub (eval H prover).2 n) = some a
+π : UnifiedProtocol.Proof M := (eval H prover).2
+tr : List (Addr L × State) :=
+  (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+base : List (Addr L × State) :=
+  (eval H (FS2.experiment prover (UnifiedVerifier.verifier p hD extract fun x x_1 => true) pub)).1
+terminal : List (Addr L × State) :=
+  (eval H
+      (decision ((UnifiedProtocol.protocol p hD extract).transcript H pub π 33)
+        ((UnifiedProtocol.protocol p hD extract).msg π 33))).1
+hsplit : tr = base ++ terminal
+hchain : a ∈ List.map Prod.fst (eval H ((UnifiedProtocol.protocol p hD extract).chain H pub π n).toProgram).1
+hV : a ∈ List.map Prod.fst (eval H (UnifiedVerifier.verifier p hD extract (fun x x_1 => true) pub π)).1
+hreadBase : Read base a
+hQbase : firstReads emptyTable base ≤ Qtot
+holdBase : ¬hitsBad (badColl p Qtot) emptyTable base
+htailBase : ¬hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable base
+own : BS (Addr L) State (List State)
+pend : List (Addr L × Option State)
+g : List State → List State → Prefix (UnifiedSampler.Public L) (Message M) (Challenge Cv) × Message M × Challenge Cv
+hdecode :
+  UnifiedDecoder.decode p hD pub a
+      (tableBefore emptyTable
+        (eval H
+            (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract (fun x x_1 => true) x pf) pub)).1
+        a) =
+    some (own, pend, g)
+hfollow :
+  bfollow g
+      (traceFrom
+        (eval H
+            (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract (fun x x_1 => true) x pf) pub)).1
+        a)
+      own pend
+      (tableBefore emptyTable
+        (eval H
+            (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract (fun x x_1 => true) x pf) pub)).1
+        a) =
+    some
+      ((UnifiedProtocol.protocol p hD extract).transcript H pub (eval H prover).2 n,
+        (UnifiedProtocol.protocol p hD extract).msg (eval H prover).2 n,
+        (UnifiedProtocol.protocol p hD extract).chal H pub (eval H prover).2 n)
+⊢ UnifiedDecoder.decode p hD pub a
+      (tableBefore emptyTable
+        (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1 a) =
+    some (own, pend, g)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/UnifiedOracleTotalCase.lean:113:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  tr
+in the target expression
+  bfollow g (traceFrom (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1 a)
+      own pend
+      (tableBefore emptyTable
+        (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1 a) =
+    some
+      ((UnifiedProtocol.protocol p hD extract).transcript H pub (eval H prover).2 n,
+        (UnifiedProtocol.protocol p hD extract).msg (eval H prover).2 n,
+        (UnifiedProtocol.protocol p hD extract).chal H pub (eval H prover).2 n)
+
+case refine_2
+M Cv W : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+decision : UnifiedSampler.Prefix M Cv L → Message M → Program (Addr L) State Bool
+H : Addr L → State
+pub : UnifiedSampler.Public L
+prover : Program (Addr L) State (UnifiedProtocol.Proof M)
+hpub : List.length pub.pubBytes < 2 ^ 32
+hl : ∀ n < 33, p.lbl n = UnifiedLabels.label n
+m0 : M
+he0 : p.enc m0 = PublicInitFrame.emptyRecord
+Qtot : ℕ
+hQ :
+  firstReads emptyTable (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1 ≤
+    Qtot
+hold :
+  ¬hitsBad (badColl p Qtot) emptyTable
+      (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+htail :
+  ¬hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable
+      (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+n : ℕ
+hn : n < 33
+a : Addr L
+hfirst : firstCell ((UnifiedProtocol.protocol p hD extract).chain H pub (eval H prover).2 n) = some a
+π : UnifiedProtocol.Proof M := (eval H prover).2
+tr : List (Addr L × State) :=
+  (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1
+base : List (Addr L × State) :=
+  (eval H (FS2.experiment prover (UnifiedVerifier.verifier p hD extract fun x x_1 => true) pub)).1
+terminal : List (Addr L × State) :=
+  (eval H
+      (decision ((UnifiedProtocol.protocol p hD extract).transcript H pub π 33)
+        ((UnifiedProtocol.protocol p hD extract).msg π 33))).1
+hsplit : tr = base ++ terminal
+hchain : a ∈ List.map Prod.fst (eval H ((UnifiedProtocol.protocol p hD extract).chain H pub π n).toProgram).1
+hV : a ∈ List.map Prod.fst (eval H (UnifiedVerifier.verifier p hD extract (fun x x_1 => true) pub π)).1
+hreadBase : Read base a
+hQbase : firstReads emptyTable base ≤ Qtot
+holdBase : ¬hitsBad (badColl p Qtot) emptyTable base
+htailBase : ¬hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable base
+own : BS (Addr L) State (List State)
+pend : List (Addr L × Option State)
+g : List State → List State → Prefix (UnifiedSampler.Public L) (Message M) (Challenge Cv) × Message M × Challenge Cv
+hdecode :
+  UnifiedDecoder.decode p hD pub a
+      (tableBefore emptyTable
+        (eval H
+            (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract (fun x x_1 => true) x pf) pub)).1
+        a) =
+    some (own, pend, g)
+hfollow :
+  bfollow g
+      (traceFrom
+        (eval H
+            (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract (fun x x_1 => true) x pf) pub)).1
+        a)
+      own pend
+      (tableBefore emptyTable
+        (eval H
+            (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract (fun x x_1 => true) x pf) pub)).1
+        a) =
+    some
+      ((UnifiedProtocol.protocol p hD extract).transcript H pub (eval H prover).2 n,
+        (UnifiedProtocol.protocol p hD extract).msg (eval H prover).2 n,
+        (UnifiedProtocol.protocol p hD extract).chal H pub (eval H prover).2 n)
+⊢ bfollow g (traceFrom (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1 a)
+      own pend
+      (tableBefore emptyTable
+        (eval H (FS2.experiment prover (UnifiedOracleVerifier.verifier p hD extract decision) pub)).1 a) =
+    some
+      ((UnifiedProtocol.protocol p hD extract).transcript H pub (eval H prover).2 n,
+        (UnifiedProtocol.protocol p hD extract).msg (eval H prover).2 n,
+        (UnifiedProtocol.protocol p hD extract).chal H pub (eval H prover).2 n)
+'AspisR1.UnifiedOracleTotalCase.decodes_and_follows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

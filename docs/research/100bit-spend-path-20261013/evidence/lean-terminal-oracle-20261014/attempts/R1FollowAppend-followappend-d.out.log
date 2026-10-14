@@ -1,0 +1,77 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:21:8: error: unsolved goals
+case nil.done
+I A C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+tail : List (I × A)
+c : C
+t : Table I A
+c✝ : C
+h : c✝ = c
+⊢ c✝ = c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:26:15: error: unsolved goals
+case cons.done
+I A C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+tail : List (I × A)
+c : C
+rest : List (I × A)
+ih : ∀ (s : Sampler I A C) (t : Table I A), follow s t rest = some c → follow s t (rest ++ tail) = some c
+t : Table I A
+l : I
+a : A
+d : C
+h : follow (Sampler.done d) t ((l, a) :: rest) = some c
+⊢ d = c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:32:14: error: Type mismatch
+  ih (k a) (put t i a) h
+has type
+  follow (k a) (put t i a) (rest ++ tail) = some c
+but is expected to have type
+  follow (Sampler.ask i k) t ((i, a) :: rest ++ tail) = some c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:35:12: error: Type mismatch
+  ih (Sampler.ask i k) (put t l a) h
+has type
+  follow (Sampler.ask i k) (put t l a) (rest ++ tail) = some c
+but is expected to have type
+  follow (Sampler.ask i k) t ((l, a) :: rest ++ tail) = some c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:40:14: error: Type mismatch
+  ih (stepMulti i cs nd k l a) (put t l a) h
+has type
+  follow (stepMulti i cs nd k l a) (put t l a) (rest ++ tail) = some c
+but is expected to have type
+  follow (Sampler.multi i cs nd k) t ((l, a) :: rest ++ tail) = some c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:43:12: error: Type mismatch
+  ih (Sampler.multi i cs nd k) (put t l a) h
+has type
+  follow (Sampler.multi i cs nd k) (put t l a) (rest ++ tail) = some c
+but is expected to have type
+  follow (Sampler.multi i cs nd k) t ((l, a) :: rest ++ tail) = some c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:31:37: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [FS2.follow, if_pos r̵f̵l̵,̵ ̵i̵f̵_̵p̵o̵s̵ ̵hfresh] at h ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:62:10: error: Tactic `assumption` failed
+
+case nil.cons
+I A X C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+g : X → List A → C
+c : C
+own : BS I A X
+pend : List (I × Option A)
+t : Table I A
+h : finished g (pushSpawns own pend).1 (pushSpawns own pend).2 = some c
+rest : List (I × A)
+l : I
+a : A
+⊢ bfollow g ((l, a) :: rest) own pend t = some c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:65:6: error: `simp` made no progress
+'AspisR1.FollowAppend.follow_append_of_some' depends on axioms: [propext, sorryAx]
+'AspisR1.FollowAppend.bfollow_append_of_some' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

@@ -39,13 +39,18 @@ bound for any selected lane subset padded with zeros. It supplies a bound
 for retaining partial tuples during a proposed incremental lane merge;
 it does not supply the efficient per-lane decoder.
 
-## The current verifier interface omits terminal hash reads
+## The old verifier interface and terminal hash reads
 
 `UnifiedVerifier.verifier` invokes the existing `FS2.verifier`. It runs the
 33 sampler chains, then returns a Boolean `decision` of the final prefix
 and message. That decision has no oracle-program interface. The model's
 trace therefore does not include Merkle authentication performed inside
 the terminal decision.
+
+The new [terminal-oracle transport](TERMINAL-ORACLE-TRANSPORT.md) now supplies
+an oracle-reading unified wrapper and reuses the complete decoder through
+an exact trace-suffix proof. Its terminal program is still a parameter;
+the result does not instantiate the Rust verifier's actual hash checks.
 
 The Rust `query_with_geometry` instead calls `HashFn` for salted C1/C2
 leaves, both authentication paths, and the intermediate-word commitment.
@@ -100,10 +105,10 @@ argument.
 
 ## Concrete continuation
 
-1. The generic terminal-oracle interface, exact trace decomposition, read
-   inclusions and old-verifier specialization now compile in `OracleVerifier`.
-   Lift the unified experiment/decoder arguments and instantiate the actual
-   terminal program; those are not supplied by the interface result.
+1. The generic and unified terminal-oracle interfaces, exact trace
+   decomposition, decoder transport, and `Inj3` adapter now compile.
+   Instantiate the actual terminal decision and its accepted-opening/read
+   facts; the adapter alone does not supply those facts.
 2. The 32-byte literal path and three salted leaf adaptations now compile
    in `Merkle32Path` and `Merkle32Leaf`. Identify all accepted source hashes
    with these preimages, including the folded tree's actual padded layout.

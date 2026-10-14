@@ -517,3 +517,14 @@ The fourteen-report checkpoint is checked on the capped NUC. This is causal
 model progress, not a discharge of the old arbitrary-table D2 premise or a
 complete extractor/security/privacy proof. Existing proofs remain the first
 route for the terminal trace transport and subsequent causal classifier.
+
+## Terminal oracle reads reuse the complete decoder
+
+[TERMINAL-ORACLE-TRANSPORT.md](TERMINAL-ORACLE-TRANSPORT.md) extends the
+actual experiment by the terminal decision's query trace and transports
+the old `UnifiedTotalCase` result through that suffix. It reuses all 33
+decoder cases and the existing sampler-follow interfaces. The resulting
+`Inj3` adapter uses the combined Merkle event on the same complete experiment.
+The thirteen-report checkpoint passes with the standard axioms only.
+The terminal decision and extractor are still parameters; this result
+does not discharge the concrete knowledge or privacy obligations.

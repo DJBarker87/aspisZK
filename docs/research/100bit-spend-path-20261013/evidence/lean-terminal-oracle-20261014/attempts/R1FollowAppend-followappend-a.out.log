@@ -1,0 +1,53 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:14:55: error(lean.unknownIdentifier): Unknown identifier `Table`
+
+Note: It is not possible to treat `Table` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:19:8: error: unsolved goals
+case nil.done
+I A C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+tail : List (I × A)
+c : C
+t : sorry
+c✝ : C
+h : c✝ = c
+⊢ c✝ = c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:24:15: error: unsolved goals
+case cons.done
+I A C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+tail : List (I × A)
+c : C
+rest : List (I × A)
+ih : ∀ (s : Sampler I A C) (t : sorry), follow s sorry rest = some c → follow s sorry (rest ++ tail) = some c
+t : sorry
+l : I
+a : A
+d : C
+h : follow (Sampler.done d) sorry ((l, a) :: rest) = some c
+⊢ d = c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:33:33: error(lean.unknownIdentifier): Unknown identifier `put`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:41:41: error(lean.unknownIdentifier): Unknown identifier `put`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:50:38: error(lean.unknownIdentifier): Unknown identifier `Table`
+
+Note: It is not possible to treat `Table` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FollowAppend.lean:60:10: error: Tactic `assumption` failed
+
+case nil.cons
+I A X C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+g : X → List A → C
+c : C
+own : BS I A X
+pend : List (I × Option A)
+t : sorry
+h : finished g (pushSpawns own pend).1 (pushSpawns own pend).2 = some c
+rest : List (I × A)
+l : I
+a : A
+⊢ bfollow g ((l, a) :: rest) own pend (sorry ()) = some c
+'AspisR1.FollowAppend.follow_append_of_some' depends on axioms: [propext, sorryAx]
+'AspisR1.FollowAppend.bfollow_append_of_some' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
