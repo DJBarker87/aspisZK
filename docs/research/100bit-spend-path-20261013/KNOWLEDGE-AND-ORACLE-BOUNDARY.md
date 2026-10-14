@@ -34,6 +34,12 @@ an executable GS decoder or a refinement theorem. The older
 runtime unanalyzed. A practical on-chain decoder is unnecessary, but an
 efficient extractor and a justified complexity bound are still needed.
 
+The subsequent [GRS reuse analysis](GS-DECODER-REUSE-PATH.md) identifies the
+already checked circle-to-GRS conversion and an applicable standard
+list-decoding route. This avoids requiring a new code-specific algorithm;
+it does not yet supply an implementation, its refinement, or its complexity
+proof.
+
 The new `PartialJointList` projection result preserves the 100-candidate
 bound for any selected lane subset padded with zeros. It supplies a bound
 for retaining partial tuples during a proposed incremental lane merge;
@@ -82,8 +88,10 @@ adds C2/folded root cases and the common collision event. The later
 [causal stability checkpoint](CAUSAL-COMMITMENT-STABILITY.md) proves that
 the entire Option-valued recovery function is fixed before each literal
 commitment-frame read, outside events on one common full trace. Selecting
-those cuts in the actual execution and completing source/protocol
-composition remain open.
+the first such read and connecting recovery to its functional table are now
+covered by the [table recovery checkpoint](CAUSAL-TABLE-RECOVERY.md), given
+a consistent finite table representation. Identifying the actual source
+frame reads and completing source/protocol composition remain open.
 
 ## The round-table interface also needs justification
 

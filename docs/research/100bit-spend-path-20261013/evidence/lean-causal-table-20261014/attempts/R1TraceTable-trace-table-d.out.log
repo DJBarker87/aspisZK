@@ -1,0 +1,51 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1TraceTable.lean:33:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  replay (put t i v) rest i
+in the target expression
+  List.foldl (fun T q => put T q.1 q.2) (put t i v) rest i =
+    if i ∈ List.map Prod.fst ((i, v) :: rest) then some (H i) else t i
+
+case pos
+I A : Type
+inst✝ : DecidableEq I
+H : I → A
+rest : List (I × A)
+t : Table I A
+i : I
+v : A
+hcons : ∀ q ∈ (i, v) :: rest, q.2 = H q.1
+hv : v = H i
+hrest : ∀ q ∈ rest, q.2 = H q.1
+ih :
+  ∀ (t : Table I A),
+    (∀ q ∈ rest, q.2 = H q.1) → replay t rest i = if i ∈ List.map Prod.fst rest then some (H i) else t i
+⊢ List.foldl (fun T q => put T q.1 q.2) (put t i v) rest i =
+    if i ∈ List.map Prod.fst ((i, v) :: rest) then some (H i) else t i
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1TraceTable.lean:39:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  replay (put t i v) rest a
+in the target expression
+  List.foldl (fun T q => put T q.1 q.2) (put t i v) rest a =
+    if a = i ∨ a ∈ List.map Prod.fst rest then some (H a) else t a
+
+case neg
+I A : Type
+inst✝ : DecidableEq I
+H : I → A
+a : I
+rest : List (I × A)
+ih :
+  ∀ (t : Table I A),
+    (∀ q ∈ rest, q.2 = H q.1) → replay t rest a = if a ∈ List.map Prod.fst rest then some (H a) else t a
+t : Table I A
+i : I
+v : A
+hcons : ∀ q ∈ (i, v) :: rest, q.2 = H q.1
+hv : v = H i
+hrest : ∀ q ∈ rest, q.2 = H q.1
+hia : ¬i = a
+htail : replay (put t i v) rest a = if a ∈ List.map Prod.fst rest then some (H a) else put t i v a
+⊢ List.foldl (fun T q => put T q.1 q.2) (put t i v) rest a =
+    if a = i ∨ a ∈ List.map Prod.fst rest then some (H a) else t a
+'AspisR1.TraceTable.replay_append' depends on axioms: [propext, Quot.sound]
+'AspisR1.TraceTable.replay_empty_apply' depends on axioms: [propext, sorryAx]
+'AspisR1.TraceTable.tableBefore_cut' depends on axioms: [propext, Quot.sound]
+exit=1

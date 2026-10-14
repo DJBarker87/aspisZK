@@ -1,0 +1,24 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleNodeLookupExt.lean:31:31: error: Application type mismatch: The argument
+  (hmem cs1 digest).mpr
+has type
+  (cs1, digest) ∈ nodes2 → (cs1, digest) ∈ nodes1
+but is expected to have type
+  (cs1, digest) ∈ nodes1
+in the application
+  huniq cs1 cs2 digest (hmem cs1 digest).mpr
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleNodeLookupExt.lean:47:6: error: Type mismatch
+  (lookup_some_iff nodes2 digest cs1 huniq2).mpr hmem2
+has type
+  lookup nodes2 digest = some cs1
+but is expected to have type
+  some cs1 = lookup nodes2 digest
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleNodeLookupExt.lean:61:6: error: Type mismatch
+  congrArg (fun o => Option.map (fun cs => cs slot) o) (hlookup ?m.64)
+has type
+  Option.map (fun cs => cs slot) (lookup nodes1 ?m.64) = Option.map (fun cs => cs slot) (lookup nodes2 ?m.64)
+but is expected to have type
+  ((walk nodes2 slots root).bind fun a => Option.map (fun cs => cs slot) (lookup nodes1 a)) =
+    (walk nodes2 slots root).bind fun parent => Option.map (fun cs => cs slot) (lookup nodes2 parent)
+'AspisR1.MerkleNodeLookupExt.lookup_eq' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.MerkleNodeLookupExt.walk_eq' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

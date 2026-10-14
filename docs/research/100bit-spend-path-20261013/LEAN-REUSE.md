@@ -528,3 +528,17 @@ decoder cases and the existing sampler-follow interfaces. The resulting
 The thirteen-report checkpoint passes with the standard axioms only.
 The terminal decision and extractor are still parameters; this result
 does not discharge the concrete knowledge or privacy obligations.
+
+## Functional tables and first commitment reads
+
+[CAUSAL-TABLE-RECOVERY.md](CAUSAL-TABLE-RECOVERY.md) connects consistent
+finite logs representing the same functional table to identical Merkle
+recovery. It derives hash separation from the old full-trace collision
+theorem, then selects the actual first occurrence of each literal commitment
+frame. It reuses the existing lookup, parser, and commitment-stability
+results, and the old joint-list cap for C1 lanes 0–25 and 28. The final
+checkpoint has thirty standard-only axiom reports.
+
+The [GRS decoder route](GS-DECODER-REUSE-PATH.md) also reuses the existing
+exact circle-to-GRS conversion. Neither result alone supplies an efficient
+extractor, the concrete causal classifier, source correspondence, or privacy.
