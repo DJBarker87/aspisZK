@@ -1,0 +1,25 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedFramework.lean:29:8: error(lean.unknownIdentifier): Unknown identifier `R0C.V3.DQ.firstCell_mem`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedFramework.lean:39:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UnifiedSampler.samp ?p ?hD 32 ?P (Message.payload ?m)
+in the target expression
+  firstCell
+      (UnifiedSampler.samp p hD 32 (UnifiedRun.transcript p hD H pub (c1, payload).1 (c1, payload).2 32)
+        (UnifiedRun.message (c1, payload).1 (c1, payload).2 32)) =
+    some (UnifiedQueryRun.rhoAddress p hD H pub c1 payload)
+
+M Cv W : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+H : Addr L → State
+pub : UnifiedSampler.Public L
+c1 : State
+payload : ℕ → M
+⊢ firstCell
+      (UnifiedSampler.samp p hD 32 (UnifiedRun.transcript p hD H pub (c1, payload).1 (c1, payload).2 32)
+        (UnifiedRun.message (c1, payload).1 (c1, payload).2 32)) =
+    some (UnifiedQueryRun.rhoAddress p hD H pub c1 payload)
+'AspisR1.UnifiedFramework.readsChains' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.UnifiedFramework.rho_firstCell' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

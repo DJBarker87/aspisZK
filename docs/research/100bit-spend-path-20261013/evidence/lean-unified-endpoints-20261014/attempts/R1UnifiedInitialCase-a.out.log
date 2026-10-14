@@ -1,0 +1,55 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedInitialCase.lean:70:15: error: don't know how to synthesize implicit argument `M`
+  @UnifiedInitialDecoder.follows_map ?m.463 Cv L pub g (traceFrom tr init) own pend T
+    (π.1, p.σ 0 (H (squeezeA p (H start))), H (advanceA p (H start))) hf
+context:
+M Cv W : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+decision : UnifiedSampler.Prefix M Cv L → Message M → Bool
+H : Addr L → State
+pub : UnifiedSampler.Public L
+prover : Program (Addr L) State (UnifiedProtocol.Proof M)
+hpub : List.length pub.pubBytes < 2 ^ 32
+Qtot : ℕ
+hQ :
+  firstReads emptyTable
+      (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1 ≤
+    Qtot
+hold :
+  ¬hitsBad (badColl p Qtot) emptyTable
+      (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1
+π : UnifiedProtocol.Proof M := ⋯
+prior : List (Addr L × State) := ⋯
+tr : List (Addr L × State) := ⋯
+init : Addr L := ⋯
+start : Addr L := ⋯
+T : Table (Addr L) State := ⋯
+hinit :
+  firstCell ((UnifiedProtocol.protocol p hD extract).chain H pub (π.1, π.2) 0) =
+    some (PublicInitFrame.addr pub.pubBytes ⋯ π.1)
+hfirst : firstCell ((UnifiedProtocol.protocol p hD extract).chain H pub (eval H prover).2 0) = some init
+htrace : tr = UnifiedPrefixedReads.trace p hD extract decision H pub π.1 π.2 prior
+hreads :
+  have init := PublicInitFrame.addr pub.pubBytes ⋯ π.1;
+  have a := PublicInitFrame.row0 p hD (H init);
+  Read tr init ∧ Read tr a ∧ Read tr (squeezeA p (H a)) ∧ Read tr (advanceA p (H a))
+hcons : ∀ q ∈ tr, q.2 = H q.1
+own : BS (Addr L) State State
+pend : List (Addr L × Option State)
+g : State → List State → InitialDecoder.Output Cv
+hd :
+  InitialDecoder.decode p hD pub.pubBytes (PublicInitFrame.addr pub.pubBytes ⋯ π.1)
+      (tableBefore emptyTable tr (PublicInitFrame.addr pub.pubBytes ⋯ π.1)) =
+    some (own, pend, g)
+hf :
+  bfollow g (traceFrom tr (PublicInitFrame.addr pub.pubBytes ⋯ π.1)) own pend
+      (tableBefore emptyTable tr (PublicInitFrame.addr pub.pubBytes ⋯ π.1)) =
+    some
+      (π.1, p.σ 0 (H (squeezeA p (H (PublicInitFrame.row0 p hD (H (PublicInitFrame.addr pub.pubBytes ⋯ π.1)))))),
+        H (advanceA p (H (PublicInitFrame.row0 p hD (H (PublicInitFrame.addr pub.pubBytes ⋯ π.1))))))
+⊢ Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedInitialCase.lean:70:9: error: failed to infer `have` declaration type
+'AspisR1.UnifiedInitialCase.decodes_and_follows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

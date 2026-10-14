@@ -390,3 +390,17 @@ Fifteen focused targets passed. The combined checkpoint took 1.38 s at
 3,530,180 KiB, zero swap, with 38 standard-only axiom reports. The complete
 adaptive trace-following and q22/rho composition, concrete message/source
 instance, account/settlement correspondence and privacy remain open.
+
+
+## Endpoint cases and early-prefix recovery
+
+[UNIFIED-ENDPOINTS.md](UNIFIED-ENDPOINTS.md) connects the initial and rho
+decoders to the exact `FS2.Protocol` first-cell/output interface on the actual
+experiment. The initial sampler law reuses the existing initial-law proof.
+The two recovery collision events now have one checked union bound of
+`3 * Qtot^2 / 2^256`. A typed-prefix theorem derives the earlier records
+before every row 1 through 26 from the actual reads and transitions.
+
+Completing and dispatching the middle-round decoders, all of `Inj3`, the
+full D1/D2/D3 and numerical instance, source correspondence and privacy
+remain open. No old theorem statement or proof body is changed here.

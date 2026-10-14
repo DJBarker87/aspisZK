@@ -1,0 +1,25 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedInitialLaw.lean:31:31: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  independentMean (DuplexSamplers.initial ?p ?init ?begin ?i ?G).toProgram fun w => ?obs w.2
+in the target expression
+  (mean fun b => mean fun x => obs (UnifiedInitialDecoder.view pub (c1, p.σ 0 b, x))) =
+    independentMean
+      (DuplexSamplers.initial p (PublicInitFrame.addr (emptyPrefix pub).statement.pubBytes ⋯ c1)
+          (PublicInitFrame.row0 p hD) 0 liftChallenge).toProgram
+      fun w => obs (emptyPrefix pub, Message.initial c1, w.2)
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+pub : UnifiedSampler.Public L
+a : Addr L
+c1 : State
+obs : JointTranscriptView.Output M Cv L → ℚ
+⊢ (mean fun b => mean fun x => obs (UnifiedInitialDecoder.view pub (c1, p.σ 0 b, x))) =
+    independentMean
+      (DuplexSamplers.initial p (PublicInitFrame.addr (emptyPrefix pub).statement.pubBytes ⋯ c1)
+          (PublicInitFrame.row0 p hD) 0 liftChallenge).toProgram
+      fun w => obs (emptyPrefix pub, Message.initial c1, w.2)
+'AspisR1.UnifiedInitialLaw.sampler_law' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.UnifiedInitialLaw.decoded_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

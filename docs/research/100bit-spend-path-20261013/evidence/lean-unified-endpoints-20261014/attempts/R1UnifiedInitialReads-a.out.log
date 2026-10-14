@@ -1,0 +1,27 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedInitialReads.lean:34:7: error(lean.unknownIdentifier): Unknown identifier `eval`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedInitialReads.lean:29:28: error: unsolved goals
+M Cv W : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+decision : Prefix (UnifiedSampler.Public L) (Message M) (Challenge Cv) → Message M → Bool
+H : Addr L → State
+pub : UnifiedSampler.Public L
+c1 : State
+payload : ℕ → M
+prior : List (Addr L × State)
+init : Addr L := PublicInitFrame.addr pub.pubBytes ⋯ c1
+a : Addr L := PublicInitFrame.row0 p hD (H init)
+⊢ Read (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+      (PublicInitFrame.addr pub.pubBytes ⋯ c1) ∧
+    Read (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+        (PublicInitFrame.row0 p hD (H (PublicInitFrame.addr pub.pubBytes ⋯ c1))) ∧
+      Read (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+          (squeezeA p (H (PublicInitFrame.row0 p hD (H (PublicInitFrame.addr pub.pubBytes ⋯ c1))))) ∧
+        Read (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+          (advanceA p (H (PublicInitFrame.row0 p hD (H (PublicInitFrame.addr pub.pubBytes ⋯ c1)))))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedInitialReads.lean:87:70: error: unexpected token ','; expected ':=', 'where' or '|'
+'AspisR1.UnifiedInitialReads.initial_reads' depends on axioms: [propext, sorryAx, Quot.sound]
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedInitialReads.lean:94:14: error(lean.unknownIdentifier): Unknown constant `initial_challenge`
+exit=1
