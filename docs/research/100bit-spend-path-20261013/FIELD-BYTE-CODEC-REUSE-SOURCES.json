@@ -1,0 +1,37 @@
+{
+  "module": "AspisR1.RetainedFieldByteCodec",
+  "output": "docs/research/100bit-spend-path-20261013/lean/RetainedFieldByteCodec.lean",
+  "imports": ["Mathlib.Tactic"],
+  "sources": {
+    "sampler": {
+      "path": "AspisFormal/AspisFormal/V5ComponentCRejectionSampler.lean",
+      "sha256": "3605064a7da5267b2b1ba347f84663f57136adf07a4f8e1a3bacfe46ca72901e",
+      "lines": ["abbrev rawCandidateCount : Nat := 2 ^ 31", "abbrev rawWordCount : Nat := 2 ^ 32", "abbrev m31Modulus : Nat := rawCandidateCount - 1", "abbrev RawWord := Fin rawWordCount", "abbrev M31Value := Fin m31Modulus", "abbrev qm31LimbCount : Nat := 4", "abbrev QM31Limbs := Fin qm31LimbCount → M31Value"]
+    },
+    "representation": {
+      "path": "AspisFormal/AspisFormal/V5ComponentCQM31Representation.lean",
+      "sha256": "a1be2908debd5f94bbb3570132a89818f582e061691b508557ad7e52691fb283",
+      "start": "abbrev Byte := Fin 256",
+      "end": "/-! ## Four limbs versus the canonical field of order `P^4` -/"
+    },
+    "transcript": {
+      "path": "AspisFormal/AspisFormal/K1/V7Tag73SemanticTranscriptBridge.lean",
+      "sha256": "91ada7d79b858d045eacb57a4b8a34b5e01594800f8829fea0888b4820c3f189",
+      "chunks": [
+        ["theorem encodeWordLE_decodeWordLE (wordBytes", "theorem encodeQM31LE_of_decodeQM31LE"],
+        ["theorem encodeQM31LE_of_decodeQM31LE", "theorem encodeTagQM31ExactLE_of_decode"]
+      ]
+    },
+    "merkle": {
+      "path": "AspisFormal/AspisFormal/V5MerkleConsumedValueBridge.lean",
+      "sha256": "8b5b329c813a208a81df8e219c901ac519ed48ef17192377004b9c526ac4c214",
+      "start": "def fixedBytes? (width : Nat)",
+      "end": "def decodeM31At (bytes : List Byte) (offset : Nat) :="
+    }
+  },
+  "allowed_qualifier_replacement": {
+    "from": "AspisV5ComponentCQM31Representation.",
+    "to": "AspisR1.RetainedFieldByteCodec.",
+    "expected_count": 3
+  }
+}

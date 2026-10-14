@@ -64,7 +64,11 @@ fn prefix_and_public_transcript_reject_bad_framing_and_field_encodings() {
         let mut transcript = SemanticTranscript::new(test_hash, b"public", &[0; 32]).unwrap();
         for row in 0..14 {
             transcript
-                .semantic(row, &valid[row_offset(row)..row_offset(row) + 5 + r1_wire::row_shape(row).unwrap().1])
+                .semantic(
+                    row,
+                    &valid
+                        [row_offset(row)..row_offset(row) + 5 + r1_wire::row_shape(row).unwrap().1],
+                )
                 .unwrap();
         }
         let framed = &malformed[field - 5..field - 5 + 5 + 32];
@@ -98,4 +102,67 @@ fn prefix_and_public_transcript_reject_bad_framing_and_field_encodings() {
         Err(Error::NonCanonical { row: 25, value: 0 })
     ));
     assert_eq!(transcript.next_row(), 25);
+}
+
+#[test]
+fn semantic_rows_reject_noncanonical_limbs_at_every_wide_position() {
+    const WIDE_BYTES: usize = 32;
+    const LIMB_BYTES: usize = 4;
+    const LIMBS_PER_VALUE: usize = WIDE_BYTES / LIMB_BYTES;
+    let p = aspis_core::field::P;
+
+    for row in 14..=26 {
+        let (tag, payload_len) = r1_wire::row_shape(row).unwrap();
+        let value_count = payload_len / WIDE_BYTES;
+        let zero_payload = vec![0u8; payload_len];
+        let zero_record = r1_wire::record(row, &zero_payload).unwrap();
+        assert_eq!(
+            r1_wire::parse_record(row, &zero_record),
+            Ok(&zero_payload[..])
+        );
+
+        for value in 0..value_count {
+            for limb in 0..LIMBS_PER_VALUE {
+                let offset = value * WIDE_BYTES + limb * LIMB_BYTES;
+
+                // Every canonical low-half boundary is accepted independently.
+                if limb < LIMBS_PER_VALUE / 2 {
+                    let mut payload = zero_payload.clone();
+                    payload[offset..offset + LIMB_BYTES].copy_from_slice(&(p - 1).to_le_bytes());
+                    let record = r1_wire::record(row, &payload).unwrap();
+                    assert_eq!(r1_wire::parse_record(row, &record), Ok(&payload[..]));
+                }
+
+                // Out-of-range representatives fail at this value position.
+                for bad in [p, p + 1, u32::MAX] {
+                    let mut payload = zero_payload.clone();
+                    payload[offset..offset + LIMB_BYTES].copy_from_slice(&bad.to_le_bytes());
+                    let mut framed = Vec::with_capacity(5 + payload_len);
+                    framed.push(tag);
+                    framed.extend_from_slice(&(payload_len as u32).to_le_bytes());
+                    framed.extend_from_slice(&payload);
+                    assert_eq!(
+                        r1_wire::parse_record(row, &framed),
+                        Err(Error::NonCanonical { row, value }),
+                        "row {row}, value {value}, limb {limb}, bad {bad}"
+                    );
+                }
+
+                // The upper four limbs encode the forbidden high component.
+                if limb >= LIMBS_PER_VALUE / 2 {
+                    let mut payload = zero_payload.clone();
+                    payload[offset..offset + LIMB_BYTES].copy_from_slice(&1u32.to_le_bytes());
+                    let mut framed = Vec::with_capacity(5 + payload_len);
+                    framed.push(tag);
+                    framed.extend_from_slice(&(payload_len as u32).to_le_bytes());
+                    framed.extend_from_slice(&payload);
+                    assert_eq!(
+                        r1_wire::parse_record(row, &framed),
+                        Err(Error::NonCanonical { row, value }),
+                        "row {row}, value {value}, high limb {limb}"
+                    );
+                }
+            }
+        }
+    }
 }

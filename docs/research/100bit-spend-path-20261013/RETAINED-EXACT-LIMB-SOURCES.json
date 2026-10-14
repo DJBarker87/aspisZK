@@ -1,0 +1,25 @@
+{
+  "module": "AspisR1.RetainedExactLimbCodec",
+  "output": "docs/research/100bit-spend-path-20261013/lean/RetainedExactLimbCodec.lean",
+  "imports": [
+    "R1RetainedFieldByteCodec",
+    "AspisV8R15.ExactTowerBase"
+  ],
+  "source": {
+    "path": "AspisFormal/AspisFormal/V5ComponentCQM31TowerExact.lean",
+    "sha256": "75404d16b5a71f67146b91ca35739b111f81bb730beb77432267f2b5385cebe5",
+    "start": "/-! ## Literal tower coordinates -/",
+    "end": "noncomputable instance cm31ExactFintype"
+  },
+  "namespace": "AspisR1.RetainedExactLimbCodec",
+  "opens": [
+    "AspisR1.RetainedFieldByteCodec",
+    "AspisV8R15.ExactTowerBase"
+  ],
+  "proof_replacement": {
+    "from": "by\n  funext j\n  fin_cases j <;> simp [qm31ExactToLimbs, limbsToQM31Exact]",
+    "to": "by\n  funext j\n  fin_cases j\n  \u00b7 simp [qm31ExactToLimbs, limbsToQM31Exact]\n  \u00b7 simp [qm31ExactToLimbs, limbsToQM31Exact]\n  \u00b7 exact congrArg x (Fin.ext rfl)\n  \u00b7 exact congrArg x (Fin.ext rfl)",
+    "expected_count": 1,
+    "reason": "The retained alias requires explicit proof-irrelevant Fin index equality for the final two coordinates; theorem statement/premises unchanged."
+  }
+}

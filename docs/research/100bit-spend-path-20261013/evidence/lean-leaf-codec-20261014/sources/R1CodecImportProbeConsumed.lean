@@ -1,0 +1,2 @@
+import AspisFormal.V5MerkleConsumedValueBridge
+#check AspisV5MerkleConsumedValueBridge.fixedBytes?

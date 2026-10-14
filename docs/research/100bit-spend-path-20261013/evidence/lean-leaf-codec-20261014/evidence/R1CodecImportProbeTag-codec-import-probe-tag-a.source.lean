@@ -1,0 +1,2 @@
+import AspisFormal.K1.V7Tag73SemanticTranscriptBridge
+#check AspisK1.V7Tag73SemanticTranscriptBridge.encodeWordLE_decodeWordLE

@@ -1,0 +1,100 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ListFieldCodec.lean:22:41: error: Application type mismatch: The argument
+  congrArg List.ofFn (Eq.symm hfun)
+has type
+  List.ofFn f = List.ofFn fun i => xs.get ⟨↑i, ⋯⟩
+but is expected to have type
+  xs = ?m.61
+in the application
+  Eq.trans (List.ofFn_get xs) (congrArg List.ofFn (Eq.symm hfun))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ListFieldCodec.lean:35:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (have word := decodeWordLE bytes;
+    if h : ↑word < m31Modulus then some ⟨↑word, h⟩ else none) =
+    some value
+of `h`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+bytes : WordBytes
+value : M31Value
+h :
+  (have word := decodeWordLE bytes;
+    if h : ↑word < m31Modulus then some ⟨↑word, h⟩ else none) =
+    some value
+⊢ encodeM31LE value = bytes
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ListFieldCodec.lean:47:58: error: unsolved goals
+value : M31Value
+⊢ ((fixedBytes? 4 [encodeM31LE value 0, encodeM31LE value 1, encodeM31LE value 2, encodeM31LE value 3]).bind fun a =>
+      decodeM31LE a) =
+    some value
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ListFieldCodec.lean:48:40: warning: This simp argument is unused:
+  fixedBytes?_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp [decodeM31Bytes, encodeM31Bytes, f̵i̵x̵e̵d̵B̵y̵t̵e̵s̵?̵_̵o̵f̵F̵n̵,̵decodeM31LE_encodeM31LE]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ListFieldCodec.lean:49:4: warning: This simp argument is unused:
+  decodeM31LE_encodeM31LE
+
+Hint: Omit it from the simp argument list.
+  simp [decodeM31Bytes, encodeM31Bytes, fixedBytes?_ofFn,̵
+  ̵ ̵ ̵ ̵ ̵d̵e̵c̵o̵d̵e̵M̵3̵1̵L̵E̵_̵e̵n̵c̵o̵d̵e̵M̵3̵1̵L̵E̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ListFieldCodec.lean:60:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  wordBytes
+in the target expression
+  encodeM31Bytes value = bytes
+
+case some
+bytes : List Byte
+value : M31Value
+h : (fixedBytes? 4 bytes).bind decodeM31LE = some value
+wordBytes : Fin 4 → Byte
+hf : fixedBytes? 4 bytes = some wordBytes
+hdecode : decodeM31LE wordBytes = some value
+⊢ encodeM31Bytes value = bytes
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ListFieldCodec.lean:64:60: error: unsolved goals
+limbs : QM31Limbs
+⊢ ((fixedBytes? 16
+          [encodeQM31LE limbs 0, encodeQM31LE limbs 1, encodeQM31LE limbs 2, encodeQM31LE limbs 3, encodeQM31LE limbs 4,
+            encodeQM31LE limbs 5, encodeQM31LE limbs 6, encodeQM31LE limbs 7, encodeQM31LE limbs 8,
+            encodeQM31LE limbs 9, encodeQM31LE limbs 10, encodeQM31LE limbs 11, encodeQM31LE limbs 12,
+            encodeQM31LE limbs 13, encodeQM31LE limbs 14, encodeQM31LE limbs 15]).bind
+      fun a => decodeQM31LE a) =
+    some limbs
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ListFieldCodec.lean:65:42: warning: This simp argument is unused:
+  fixedBytes?_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp [decodeQM31Bytes, encodeQM31Bytes, f̵i̵x̵e̵d̵B̵y̵t̵e̵s̵?̵_̵o̵f̵F̵n̵,̵decodeQM31LE_encodeQM31LE]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ListFieldCodec.lean:66:4: warning: This simp argument is unused:
+  decodeQM31LE_encodeQM31LE
+
+Hint: Omit it from the simp argument list.
+  simp [decodeQM31Bytes, encodeQM31Bytes, fixedBytes?_ofFn,̵
+  ̵ ̵ ̵ ̵ ̵d̵e̵c̵o̵d̵e̵Q̵M̵3̵1̵L̵E̵_̵e̵n̵c̵o̵d̵e̵Q̵M̵3̵1̵L̵E̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ListFieldCodec.lean:77:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  qmBytes
+in the target expression
+  encodeQM31Bytes limbs = bytes
+
+case some
+bytes : List Byte
+limbs : QM31Limbs
+h : (fixedBytes? 16 bytes).bind decodeQM31LE = some limbs
+qmBytes : Fin 16 → Byte
+hf : fixedBytes? 16 bytes = some qmBytes
+hdecode : decodeQM31LE qmBytes = some limbs
+⊢ encodeQM31Bytes limbs = bytes
+'AspisR1.ListFieldCodec.fixedBytes?_ofFn' depends on axioms: [propext, Quot.sound]
+'AspisR1.ListFieldCodec.fixedBytes?_sound' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.ListFieldCodec.decodeM31Bytes_encode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ListFieldCodec.encodeM31Bytes_of_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ListFieldCodec.decodeQM31Bytes_encode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ListFieldCodec.encodeQM31Bytes_of_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

@@ -571,3 +571,13 @@ refinement and decoder complexity still open.
 sampler event bound and exact tower cardinality. It bounds the two-pad
 exception by `2^-123` for an independent block in that model, without
 claiming source or adaptive-oracle privacy correspondence.
+
+## Canonical field bytes and mixed leaf encodings
+
+[LEAF-CODEC-CHECKPOINT.md](LEAF-CODEC-CHECKPOINT.md) retains the existing
+V5/K1 byte codec and exact tower proofs with machine-checked source pins.
+New wrappers prove exact-length list roundtrips and successful-decode byte
+recovery. The current 480-byte C1 and 128-byte C2 model encoders have checked
+lengths and injectivity; the 34-report combined checkpoint is green.
+An exhaustive semantic-record limb-position regression also passed on the
+NUC. Mixed-leaf parsing and Rust/source correspondence remain open.
