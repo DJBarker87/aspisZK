@@ -1,0 +1,30 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedReseedDecoder.lean:84:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UnifiedSemanticDecoder.output p pub T ctx
+in the target expression
+  (g x as).1.rounds.length = 26
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+pub : UnifiedSampler.Public L
+a : Addr L
+T : Table (Addr L) State
+own' : BS (Addr L) State State
+pend : List (Addr L × Option State)
+g : State → List State → JointTranscriptView.Output M Cv L
+hd : decode p pub a T = some (own', pend, g)
+x : State
+as : List State
+ctx : UnifiedSemanticContext.Context M
+hp : UnifiedSemanticContext.parse p pub.pubBytes a T = some ctx
+hlen : ctx.records.length = 26
+heq :
+  (own p pub a, List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records),
+      UnifiedSemanticDecoder.output p pub T ctx) =
+    (own', pend, g)
+hfun : UnifiedSemanticDecoder.output p pub T ctx = g
+⊢ (g x as).1.rounds.length = 26
+'AspisR1.UnifiedReseedDecoder.decode_of_parse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.UnifiedReseedDecoder.decode_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.UnifiedReseedDecoder.decoded_round' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

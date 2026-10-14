@@ -1,0 +1,35 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedReseedLaw.lean:48:4: error: Type mismatch: After simplification, term
+  hbackground
+ has type
+  @Eq ℚ
+    (blaw
+      (fun y as =>
+        (PrefixAnswers.fromAnswers p T 0 ctx.records (List.take (PrefixAnswers.missing p T ctx.records).length as),
+          p.σ ctx.records.length ((List.drop (PrefixAnswers.missing p T ctx.records).length as).headD default), y))
+      (fun out => obs (UnifiedSemanticDecoder.view pub ctx out))
+      (ReseedSamplerLaw.own p a (OpeningReseedFrame.addr pub.tag ⋯))
+      (List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records)))
+    (pmean
+      (fun as =>
+        mean fun b =>
+          mean fun y =>
+            obs
+              (UnifiedSemanticDecoder.view pub ctx
+                (PrefixAnswers.fromAnswers p T 0 ctx.records as, p.σ ctx.records.length b, y)))
+      (List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records)))
+but is expected to have type
+  @Eq ℚ
+    (blaw (PrefixNextLaw.output p T ctx.records) (fun out => obs (UnifiedSemanticDecoder.view pub ctx out))
+      (ReseedSamplerLaw.own p a (OpeningReseedFrame.addr pub.tag ⋯))
+      (List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records)))
+    (pmean
+      (fun as =>
+        mean fun b =>
+          mean fun y =>
+            obs
+              (UnifiedSemanticDecoder.view pub ctx
+                (PrefixAnswers.fromAnswers p T 0 ctx.records as, p.σ ctx.records.length b, y)))
+      (List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records)))
+'AspisR1.UnifiedReseedLaw.background_sampler_law' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.UnifiedReseedLaw.decoded_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

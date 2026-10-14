@@ -294,3 +294,19 @@ bound. Reseed/opening/query cases, correct global dispatch, the full generic
 security instance, source correspondence and privacy remain open. The combined
 NUC checkpoint passed with fifteen standard-only axiom reports; exact attempts
 and source/object hashes are preserved in its evidence bundle.
+
+
+## Reseed and ordinary opening cases
+
+[UNIFIED-RESEED-OPENING.md](UNIFIED-RESEED-OPENING.md) connects row 26 and
+rows 27–30 to the actual experiment using the existing reseed sampler,
+opening-prefix walk, table-cell and completion proofs. The extra P3 hash
+remains in row 26's next state. Prefix recovery and known-cell/read facts
+also hold before query row 31, while that row's completing decoder remains
+separate.
+
+The new sampler-law and bound-transfer theorems keep their fixed-prefix bounds
+explicit. Query-case completion, correct global dispatch, the full generic
+security and numerical instance, source correspondence and privacy remain
+open. Sixteen focused targets passed on the NUC; the final combined checkpoint
+has 24 standard-only axiom reports and recorded source/object/resource evidence.
