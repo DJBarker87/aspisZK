@@ -48,10 +48,13 @@ time polynomial in the field's cardinality.
    accepted-check premises are derived from the proof.
 
 Steps 1–3 are our proposed application of the checked conversion to the
-standard algorithm. The inverse image test must use the actual linear
-encoder transformations, not assume every ambient polynomial is a circle
-message. The generic `ExactGRSConversion` record stores injectivity, not
-an executable inverse or a runtime certificate.
+standard algorithm. The subsequent [exact inverse checkpoint](GRS-MESSAGE-INVERSE.md)
+now supplies a finite algebraic inverse and an exact image test using the
+actual encoder transformations. It retains the distinction between circle
+messages and the larger ambient polynomial space. The generic
+`ExactGRSConversion` record still stores injectivity rather than an
+executable inverse or runtime certificate; the new separate specification
+also needs executable refinement.
 
 Step 4 avoids materializing the product of all lane lists. With at most
 100 retained partial tuples and at most 100 next-lane candidates, each

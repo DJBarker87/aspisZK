@@ -1,5 +1,11 @@
 # Reusing the existing Lean development
 
+Working rule: before adding a proof, search the existing branches, research
+snapshots, and imported library for the needed result. Record the reused
+statement and check its premises, representation, and source revision. Add
+only the missing bridge; a similarly named definition or conditional theorem
+does not discharge its assumptions. This is the default for subsequent work.
+
 The R1 path reuses the expensive decoder, list, and sampling results. The new
 work is chiefly a set of explicit bridges. A theorem for the old protocol does
 not automatically become a theorem for the new verifier: its premises, index
@@ -552,3 +558,16 @@ it keeps at most 100 candidates after each step. With 100-entry lane lists,
 the checked 29-step pair count is at most 290,000. The twenty-report
 checkpoint passes with standard axioms only. Per-lane decoding, executable
 refinement, and full security composition remain separate obligations.
+
+## GRS image inversion and the two-pad exception
+
+[GRS-MESSAGE-INVERSE.md](GRS-MESSAGE-INVERSE.md) combines the existing parity
+identities, natural-basis inverse matrix, polynomial-pair injectivity, and
+exact GRS identity with a new symbolic fractional-lift inverse. The result
+is an exact algebraic message inverse and image test, with executable
+refinement and decoder complexity still open.
+
+[GAMMA-SUBFIELD-BOUND.md](GAMMA-SUBFIELD-BOUND.md) reuses the old modulo
+sampler event bound and exact tower cardinality. It bounds the two-pad
+exception by `2^-123` for an independent block in that model, without
+claiming source or adaptive-oracle privacy correspondence.

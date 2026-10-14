@@ -1,0 +1,35 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FractionalLiftInvolution.lean:53:26: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (1 + u) ^ d * (1 + x) ^ d
+in the target expression
+  eval x p * (1 + u) ^ d * (1 + x) ^ d = 2 ^ d * eval x p
+
+K : Type u_1
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : NeZero 2
+d : ℕ
+hcard : d + 1 < Fintype.card K
+p : K[X]
+hp : p.natDegree ≤ d
+sample : Finset K := Finset.univ.erase (-1)
+x : K
+hx : x ∈ sample
+hxneg : x ≠ -1
+hden : 1 + x ≠ 0
+u : K := (1 - x) / (1 + x)
+hinv :
+  have u := (1 - x) / (1 + x);
+  1 + u ≠ 0 ∧ (1 - u) / (1 + u) = x
+hdenU : 1 + u ≠ 0
+hreturn : (1 - u) / (1 + u) = x
+hprod : (1 + u) * (1 + x) = 2
+hpow : (1 + u) ^ d * (1 + x) ^ d = 2 ^ d
+houter : eval x (fractionalLift d (fractionalLift d p)) = eval u (fractionalLift d p) * (1 + x) ^ d
+hinner : eval u (fractionalLift d p) = eval x p * (1 + u) ^ d
+⊢ eval x p * (1 + u) ^ d * (1 + x) ^ d = 2 ^ d * eval x p
+'AspisV5FriCircleEncoderDistance.fractionalLift_involution' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
