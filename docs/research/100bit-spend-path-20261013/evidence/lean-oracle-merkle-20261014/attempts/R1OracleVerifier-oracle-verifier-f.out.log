@@ -1,0 +1,66 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OracleVerifier.lean:63:6: error: Tactic `apply` failed: could not unify the conclusion of `@List.map_congr_left`
+  List.map ?f ?l = List.map ?g ?l
+with the goal
+  (List.map
+        (fun j =>
+          (eval H (pr.samp (pr.r - n + j) (pr.transcript H x π (pr.r - n + j)) (pr.msg π (pr.r - n + j))).toProgram).1)
+        (List.range n)).flatten =
+    (List.map
+        ((fun j =>
+            (eval H
+                (pr.samp (pr.r - (n + 1) + j) (pr.transcript H x π (pr.r - (n + 1) + j))
+                    (pr.msg π (pr.r - (n + 1) + j))).toProgram).1) ∘
+          Nat.succ)
+        (List.range n)).flatten
+
+Note: The full type of `@List.map_congr_left` is
+  ∀ {α : Type ?u.138} {l : List α} {α_1 : Type ?u.137} {f g : α → α_1},
+    (∀ a ∈ l, f a = g a) → List.map f l = List.map g l
+
+case succ.e_a.e_a
+X M C W Pf I A : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+pr : FS2.Protocol X M C W Pf I A
+decision : Prefix X M C → M → Program I A Bool
+H : I → A
+x : X
+π : Pf
+n : ℕ
+ih :
+  n ≤ pr.r →
+    eval H (verifierFrom pr decision π n (pr.transcript H x π (pr.r - n))) =
+      ((List.map (fun j => (eval H (pr.chain H x π (pr.r - n + j)).toProgram).1) (List.range n)).flatten ++
+          (eval H (decision (pr.transcript H x π pr.r) (pr.msg π pr.r))).1,
+        (eval H (decision (pr.transcript H x π pr.r) (pr.msg π pr.r))).2)
+hn : n + 1 ≤ pr.r
+hi : pr.r - (n + 1) + 1 = pr.r - n
+hstep :
+  (pr.transcript H x π (pr.r - (n + 1))).ext (pr.msg π (pr.r - (n + 1)))
+      (eval H
+          (pr.samp (pr.r - (n + 1)) (pr.transcript H x π (pr.r - (n + 1))) (pr.msg π (pr.r - (n + 1)))).toProgram).2 =
+    pr.transcript H x π (pr.r - n)
+⊢ (List.map
+        (fun j =>
+          (eval H (pr.samp (pr.r - n + j) (pr.transcript H x π (pr.r - n + j)) (pr.msg π (pr.r - n + j))).toProgram).1)
+        (List.range n)).flatten =
+    (List.map
+        ((fun j =>
+            (eval H
+                (pr.samp (pr.r - (n + 1) + j) (pr.transcript H x π (pr.r - (n + 1) + j))
+                    (pr.msg π (pr.r - (n + 1) + j))).toProgram).1) ∘
+          Nat.succ)
+        (List.range n)).flatten
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OracleVerifier.lean:40:26: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp [verifierFrom,̵ ̵e̵v̵a̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.OracleVerifier.verifierFrom_eval' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OracleVerifier.verifier_eval' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OracleVerifier.verifier_chain_reads' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OracleVerifier.verifier_terminal_reads' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OracleVerifier.verifier_specializes_done' depends on axioms: [Quot.sound]
+exit=1

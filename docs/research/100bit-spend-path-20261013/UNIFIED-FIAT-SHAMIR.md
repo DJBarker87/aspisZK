@@ -96,6 +96,15 @@ argument and supplies no running-time or witness-validity theorem for it.
 The private-spend release needs a separate, justified knowledge-extraction
 statement and relation correspondence; this checkpoint does not close it.
 
+The Boolean `decision` is another concrete boundary. `FS2.verifier` records
+the sampler chains and then returns that Boolean, whereas Rust also calls
+the hash oracle during Merkle authentication and checkpoint handling. This
+theorem has not yet incorporated those terminal calls or justified the
+commitment-time words they authenticate. An oracle-capable terminal checker,
+its read budget, and the causal commitment-binding/extraction argument are
+needed before source instantiation. See
+[`KNOWLEDGE-AND-ORACLE-BOUNDARY.md`](KNOWLEDGE-AND-ORACLE-BOUNDARY.md).
+
 The byte-level Rust correspondence, authenticated checkpoint/account parsing,
 settlement refinement, and complete masking/simulator proof remain separate
 open obligations. This change contains only Lean proofs and evidence; it does

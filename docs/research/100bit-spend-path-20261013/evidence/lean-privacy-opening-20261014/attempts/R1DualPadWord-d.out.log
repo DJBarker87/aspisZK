@@ -1,0 +1,63 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DualPadWord.lean:26:2: error: Tactic `apply` failed: could not unify the conclusion of `@Submodule.sum_mem`
+  ∑ i ∈ ?t, ?f i ∈ ?p
+with the goal
+  (fun i => ∑ c, u c * (delta c i - noise c i)) ∈ B
+
+Note: The full type of `@Submodule.sum_mem` is
+  ∀ {R : Type ?u.55} {M : Type ?u.54} {ι : Type ?u.53} [inst : Semiring R] [inst_1 : AddCommMonoid M]
+    {module_M : Module R M} (p : Submodule R M) {t : Finset ι} {f : ι → M}, (∀ c ∈ t, f c ∈ p) → ∑ i ∈ t, f i ∈ p
+
+K : Type u_1
+inst✝¹ : Field K
+C : Type u_3
+I : Type u_4
+inst✝ : Fintype C
+B : Submodule K (I → K)
+u : C → K
+delta noise : C → I → K
+hdelta : ∀ (c : C), delta c ∈ B
+hnoise : ∀ (c : C), noise c ∈ B
+⊢ (fun i => ∑ c, u c * (delta c i - noise c i)) ∈ B
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DualPadWord.lean:36:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?f (-?a)
+in the target expression
+  (raw fun i => -∑ c, u c * (delta c i - noise c i)) = 0
+
+K : Type u_1
+inst✝³ : Field K
+C : Type u_3
+I : Type u_4
+inst✝² : Fintype C
+O : Type u_5
+inst✝¹ : AddCommGroup O
+inst✝ : Module K O
+raw : (I → K) →ₗ[K] O
+u : C → K
+delta noise : C → I → K
+heq : ∀ (c : C), raw (noise c) = raw (delta c)
+⊢ (raw fun i => -∑ c, u c * (delta c i - noise c i)) = 0
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DualPadWord.lean:53:3: error: unknown tactic
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DualPadWord.lean:48:6: error(lean.unknownIdentifier): Unknown constant `Finset.mul_sum`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DualPadWord.lean:44:56: error: unsolved goals
+K : Type u_1
+E : Type u_2
+inst✝³ : Field K
+inst✝² : Field E
+inst✝¹ : Algebra K E
+C : Type u_3
+I : Type u_4
+inst✝ : Fintype C
+a : C → E
+g d : E
+u v : C → K
+delta noise : C → I → K
+hcancel : ∀ (c : C), a c + g * (algebraMap K E) (u c) + d * (algebraMap K E) (v c) = 0
+i : I
+⊢ ∑ c, a c * (algebraMap K E) (noise c i) + g • (algebraMap K E) (-∑ c, u c * (delta c i - noise c i)) +
+      d • (algebraMap K E) (-∑ c, v c * (delta c i - noise c i)) =
+    ∑ c, a c * (algebraMap K E) (delta c i)
+'AspisR1.DualPadWord.repair_mem' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.DualPadWord.repair_raw_zero' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.DualPadWord.full_word_eq' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.DualPadWord.correction' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

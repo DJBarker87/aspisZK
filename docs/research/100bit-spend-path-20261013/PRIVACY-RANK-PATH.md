@@ -56,6 +56,14 @@ remaining difference without changing other observations. The existing
 `R0Z/Chain.lean` proves a remainder-membership statement for its R0 model;
 its exact applicability to the R1 source payload must be established.
 
+`DualPadWord.correction` and `DualPadLift.correction` now prove the balanced
+membership, zero raw observations, and whole-word equality under the stated
+preimage and subspace hypotheses. `observations_eq` transfers that equality
+through any fixed deterministic observation. See
+[the exact theorem boundary](DUAL-PAD-WORD-BRIDGE.md). In particular, the
+common QM31-linear pad space does not remove the M31 restriction on eligible
+C1 noise; that source correspondence remains separate.
+
 This construction is universal *conditional on the stated linear-map
 properties and payload identities*. It does not replace those properties
 with a rank observed on one example.

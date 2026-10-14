@@ -18,6 +18,24 @@ Their reuse does not establish efficient knowledge extraction for a spend.
 The new conditional theorem leaves the extractor explicit, and that security
 obligation remains open.
 
+Two further checked connections reuse the field and counting development:
+[whole-word dual-pad correction](DUAL-PAD-WORD-BRIDGE.md) lifts the quadratic
+identity to legal pad-space repairs with zero raw observations, given
+explicit eligible noise preimages; [opening sampler bounds](OPENING-SAMPLER-BOUNDS.md)
+apply the old modulo-counting theorem to all four WideExact opening bad sets.
+The corrected gamma adapter uses modulo `P^8-1` and excludes zero. Their
+combined fourteen-audit checkpoint is green. Universal mask ranks and the
+adaptive source/protocol instantiation remain open.
+
+The [knowledge and oracle boundary](KNOWLEDGE-AND-ORACLE-BOUNDARY.md)
+records why an existence extractor, bounded mathematical decoder, and
+Merkle path-binding theorem are separate ingredients. It also identifies
+terminal hash reads missing from the current Boolean-decision verifier.
+The [new oracle/Merkle checkpoint](ORACLE-MERKLE-REUSE.md) supplies a generic
+terminal-oracle verifier interface and adapts the old path/leaf proof to
+32-byte hashes and R1's three salted leaf layouts. Connecting those results
+to the unified security theorem and source is still required.
+
 The [unified sampler connection](UNIFIED-SAMPLER-BRIDGE.md) puts initialization,
 the domain-transition hash, q22, and rho into one schedule. The
 [trace-recovery connection](UNIFIED-TRACE-RECOVERY.md) handles the row after q22;

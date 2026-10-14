@@ -1,0 +1,44 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DualPadWord.lean:67:2: error: ring failed, ring expressions not equal
+K : Type u_1
+E : Type u_2
+inst✝³ : Field K
+inst✝² : Field E
+inst✝¹ : Algebra K E
+C : Type u_3
+I : Type u_4
+inst✝ : Fintype C
+a : C → E
+g d : E
+u v : C → K
+delta noise : C → I → K
+hcancel : ∀ (c : C), a c + g * (algebraMap K E) (u c) + d * (algebraMap K E) (v c) = 0
+i : I
+c : C
+hc : c ∈ Finset.univ
+h : a c + g * (algebraMap K E) (u c) + d * (algebraMap K E) (v c) = 0
+⊢ a c ^ Nat.rawCast 1 * ((algebraMap K E) (noise c i) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+      (a c ^ Nat.rawCast 1 * ((algebraMap K E) (delta c i) ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+        (a c ^ Nat.rawCast 1 * ((algebraMap K E) (noise c i - delta c i) ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) +
+          ((algebraMap K E) (noise c i) ^ Nat.rawCast 1 *
+              (g ^ Nat.rawCast 1 * ((algebraMap K E) (u c) ^ Nat.rawCast 1 * Nat.rawCast 1)) +
+            ((algebraMap K E) (noise c i) ^ Nat.rawCast 1 *
+                (d ^ Nat.rawCast 1 * ((algebraMap K E) (v c) ^ Nat.rawCast 1 * Nat.rawCast 1)) +
+              (g ^ Nat.rawCast 1 *
+                  ((algebraMap K E) (u c) ^ Nat.rawCast 1 *
+                    ((algebraMap K E) (delta c i) ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast)) +
+                (g ^ Nat.rawCast 1 *
+                    ((algebraMap K E) (u c) ^ Nat.rawCast 1 *
+                      ((algebraMap K E) (noise c i - delta c i) ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast)) +
+                  ((algebraMap K E) (delta c i) ^ Nat.rawCast 1 *
+                      (d ^ Nat.rawCast 1 * ((algebraMap K E) (v c) ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast)) +
+                    (d ^ Nat.rawCast 1 *
+                        ((algebraMap K E) (v c) ^ Nat.rawCast 1 *
+                          ((algebraMap K E) (noise c i - delta c i) ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast)) +
+                      0)))))))) =
+    0
+'AspisR1.DualPadWord.repair_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DualPadWord.repair_eq' depends on axioms: [propext, Quot.sound]
+'AspisR1.DualPadWord.repair_raw_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DualPadWord.full_word_eq' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.DualPadWord.correction' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

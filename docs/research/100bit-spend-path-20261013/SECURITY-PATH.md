@@ -10,6 +10,15 @@ spread; these are finite measurements, not a constant-cost theorem. R1 soundness
 outstanding gates; a roughly 105-bit proposed per-oracle-query coefficient is
 not an implemented security theorem.
 
+The latest reuse checkpoints add a conditional unified Fiat–Shamir bound,
+independent-answer bounds for the four opening challenges, and a whole-word
+two-pad correction. They still leave an explicit knowledge-extraction and
+committed-word boundary: the old existence extractors and Boolean-decision
+verifier do not establish recovery of a spend witness from the actual
+Merkle/oracle experiment. See [the audited boundary and continuation](KNOWLEDGE-AND-ORACLE-BOUNDARY.md),
+[opening bounds](OPENING-SAMPLER-BOUNDS.md), and
+[pad correction](DUAL-PAD-WORD-BRIDGE.md).
+
 ## Selected protocol
 
 Reuse the Pair Forest semantic relation, 29 committed lanes, 22 distinct queried
