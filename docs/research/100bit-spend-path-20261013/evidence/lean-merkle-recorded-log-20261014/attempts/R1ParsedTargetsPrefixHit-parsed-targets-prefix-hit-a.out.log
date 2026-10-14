@@ -1,0 +1,61 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ParsedTargetsPrefixHit.lean:36:33: error: unsolved goals
+L : ℕ
+a : Addr L
+post rest : List (Addr L × State)
+ih : ¬Read rest a → firstIdx a (rest ++ post) = rest.length + firstIdx a post
+i : Addr L
+v : State
+hna : ¬Read ((i, v) :: rest) a
+hne : i ≠ a
+h : Read rest a
+⊢ a = i ∨ ∃ x, (a, x) ∈ rest
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ParsedTargetsPrefixHit.lean:30:19: error: unsolved goals
+case cons
+L : ℕ
+a : Addr L
+post rest : List (Addr L × State)
+ih : ¬Read rest a → firstIdx a (rest ++ post) = rest.length + firstIdx a post
+i : Addr L
+v : State
+hna : ¬Read ((i, v) :: rest) a
+hne : i ≠ a
+hr : ¬Read rest a
+⊢ rest.length + firstIdx a post + 1 = rest.length + 1 + firstIdx a post
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ParsedTargetsPrefixHit.lean:39:20: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [Read,̵ ̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ParsedTargetsPrefixHit.lean:46:11: error: invalid `▸` notation, expected result type of cast is 
+  Read (pre ++ post) b
+however, the equality 
+  firstIdx_append_of_read b pre post hb
+of type 
+  firstIdx b (pre ++ post) = firstIdx b pre
+does not contain the expected result type on either the left or the right hand side
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ParsedTargetsPrefixHit.lean:61:4: error: Type mismatch
+  List.mem_append.mpr (Or.inr ha)
+has type
+  a ∈ ?m.57 ++ List.map Prod.fst post
+but is expected to have type
+  Read (pre ++ post) a
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ParsedTargetsPrefixHit.lean:62:4: error: Type mismatch
+  before_of_prefix a b pre post hb hna
+has type
+  Before (pre ++ post) b a
+but is expected to have type
+  b = a ∨ Before (pre ++ post) b a
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ParsedTargetsPrefixHit.lean:63:4: error: Type mismatch
+  hb
+has type
+  Read pre b
+but is expected to have type
+  pred ?j b = some (H a)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ParsedTargetsPrefixHit.lean:65:2: error: No goals to be solved
+'AspisR1.ParsedTargetsPrefixHit.firstIdx_append_of_read' depends on axioms: [propext, Quot.sound]
+'AspisR1.ParsedTargetsPrefixHit.firstIdx_append_of_not_read' depends on axioms: [propext, sorryAx]
+'AspisR1.ParsedTargetsPrefixHit.before_of_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ParsedTargetsPrefixHit.prefix_hit' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

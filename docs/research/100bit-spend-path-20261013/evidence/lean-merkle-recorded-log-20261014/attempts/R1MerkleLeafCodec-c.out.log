@@ -1,0 +1,22 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleLeafCodec.lean:28:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  2 + w - 2
+in the target expression
+  List.drop (2 + w) (16 :: tag :: (packed ++ salt)) = salt
+
+tag : Byte
+packed salt : List Byte
+w : ℕ
+hpacked : packed.length = w
+hsalt : salt.length = 32
+htake : List.take w (List.drop 2 (Merkle32Leaf.leafInput tag packed salt)) = packed
+⊢ List.drop (2 + w) (16 :: tag :: (packed ++ salt)) = salt
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleLeafCodec.lean:27:47: warning: This simp argument is unused:
+  List.drop_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1.Merkle32Leaf.leafInput,̵ ̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵c̵o̵n̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MerkleLeafCodec.parse_leafInput' depends on axioms: [propext, sorryAx]
+'AspisR1.MerkleLeafCodec.parse_sound' depends on axioms: [propext]
+exit=1

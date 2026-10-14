@@ -43,6 +43,14 @@ target-parser union bound and the old joint-list bound for partial lanes
 are also checked. The accompanying D2 interface audit prevents treating
 an arbitrary-table existence reduction as a completed knowledge proof.
 
+The [recorded byte-log connection](MERKLE-RECORDED-LOG.md) now applies that
+recovery theorem to strict node/leaf parsers, proving that missing preimages
+are absent from the supplied query log. It also reuses the old first-read
+calculus to cover later hits on earlier parsed child targets. The supplied
+root case, canonical bounded-address/byte-log correspondence, and complete
+knowledge-security application remain explicit obligations. The focused
+combined checkpoint has 29 standard-only axiom reports.
+
 The [unified sampler connection](UNIFIED-SAMPLER-BRIDGE.md) puts initialization,
 the domain-transition hash, q22, and rho into one schedule. The
 [trace-recovery connection](UNIFIED-TRACE-RECOVERY.md) handles the row after q22;

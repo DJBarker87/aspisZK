@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleNodeCodec.lean:20:40: error: unsolved goals
+cs : Children
+child : Fin 8
+byte : Fin 32
+idx : ℕ := ↑child * 32 + ↑byte
+hidx : idx < 256
+hpos : 1 + ↑child * 32 + ↑byte = idx + 1
+hdiv : idx / 32 = ↑child
+hmod : idx % 32 = ↑byte
+⊢ (if ↑child * 32 + ↑byte < 256 then some (cs child byte) else none).getD 0 = cs child byte
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleNodeCodec.lean:33:33: warning: This simp argument is unused:
+  if_pos hidx
+
+Hint: Omit it from the simp argument list.
+  simp only [List.getElem?_ofFn, i̵f̵_̵p̵o̵s̵ ̵h̵i̵d̵x̵,̵ ̵Option.getD_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleNodeCodec.lean:33:46: warning: This simp argument is unused:
+  Option.getD_some
+
+Hint: Omit it from the simp argument list.
+  simp only [List.getElem?_ofFn, if_pos hidx,̵ ̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MerkleNodeCodec.readChildren_nodeInput' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.MerkleNodeCodec.parse_nodeInput' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.MerkleNodeCodec.parse_sound' depends on axioms: [propext, Quot.sound]
+exit=1

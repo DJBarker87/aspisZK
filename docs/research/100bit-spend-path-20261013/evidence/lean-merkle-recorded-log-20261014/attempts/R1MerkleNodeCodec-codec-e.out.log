@@ -1,0 +1,19 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleNodeCodec.lean:35:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if idx < 256 then ?m.179 else ?m.180
+in the target expression
+  (if h : idx < 256 then some (childByte cs ⟨idx, h⟩) else none).getD 0 = cs child byte
+
+cs : Children
+child : Fin 8
+byte : Fin 32
+idx : ℕ := ↑child * 32 + ↑byte
+hidx : idx < 256
+hactual : ↑child * 32 + ↑byte < 256
+hpos : 1 + ↑child * 32 + ↑byte = idx + 1
+hdiv : idx / 32 = ↑child
+hmod : idx % 32 = ↑byte
+⊢ (if h : idx < 256 then some (childByte cs ⟨idx, h⟩) else none).getD 0 = cs child byte
+'AspisR1.MerkleNodeCodec.readChildren_nodeInput' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.MerkleNodeCodec.parse_nodeInput' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.MerkleNodeCodec.parse_sound' depends on axioms: [propext, Quot.sound]
+exit=1
