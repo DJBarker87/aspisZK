@@ -58,10 +58,10 @@ missing squeeze cells on the recovered path and reconstruct the q22 result
 from a truncated `scanOut`. Equality to the actual full result needs a
 separate stopping/truncation lemma under the state-distinctness condition.
 
-The current focused lemmas establish only deterministic pieces: advance
+At `52023cce5`, the focused lemmas established only deterministic pieces: advance
 rewinding under the existing no-collision/table premises, and membership of
-the selected query state among the eight advances. The full decoder still
-needs to discover the correct boundary, handle the domain-transition edge,
+the selected query state among the eight advances. At that checkpoint, the full decoder still needed to discover the correct
+boundary, handle the domain-transition edge,
 complete missing cells with the correct law, and satisfy the generic
 first-read/injection obligations. In particular, state membership alone is
 not a decoder or an independence theorem.
@@ -128,3 +128,17 @@ path from the earlier table, and proves exact scan-prefix equality. Its
 completion wrapper needs coherence only on its computed finite missing
 list. No probability estimate or protocol source changed. The completion
 sampler law and full transcript instance remain separate obligations.
+
+## Background completion law
+
+The [completion-law bridge](QUERY-COMPLETION-LAW.md) proves the exact
+independent-answer law for the new query recovery component followed by
+a single duplex round. It reuses the old answer-list lookup, background
+mean splitting, and fresh sampler law. Actual oracle answers yield the
+actual query result under the first-read theorem's existing premises.
+The remaining probability connection is trace following/injection plus
+the full prefix and R1 D1/D2/D3 instance; an independent-answer calculation
+alone is not a bound for the adversarial source execution.
+
+The next local trace-following connection and exact reusable interfaces are
+recorded in [QUERY-INJECTION-NEXT.md](QUERY-INJECTION-NEXT.md).

@@ -281,3 +281,18 @@ at 1,828,696 KiB, zero swap, with 28 standard-only axiom reports. The new
 finite-missing-list wrapper is suitable for the existing list-based
 completion interface; this deterministic equality does not establish that
 interface's probability law or injection for the full R1 transcript.
+
+## Reusing the completion-sampler law
+
+The [completion-law bridge](QUERY-COMPLETION-LAW.md) now reuses the old
+`DQ.accFrom_map`, `BSOk.blaw_split`, `pmean_le`, and duplex `samp_mean`
+theorems. The recovered q22 component accepts the same positional answer
+list as the old decoder. Its actual oracle-answer list recovers the
+actual result, and the following single-round independent-answer law
+separates exactly into an outer background mean and the old fresh sampler
+law. The fixed-completion bound remains explicit.
+
+Six focused final targets passed, with a 1.36 s combined checkpoint at
+3,518,516 KiB, zero swap, and twelve standard-only axiom reports. The
+trace-following/injection connection and the complete R1 prefix, hash-edge
+and D1/D2/D3 instance remain open.

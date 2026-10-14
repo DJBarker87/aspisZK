@@ -1,0 +1,26 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryNextLaw.lean:43:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  QueryDecoder.fromAnswers p T endpoint (List.take (QueryDecoder.missing p T endpoint).length (as ++ bs))
+in the target expression
+  (have n := (QueryDecoder.missing p T endpoint).length;
+    (QueryDecoder.fromAnswers p T endpoint (List.take n (as ++ bs)), p.σ i ((List.drop n (as ++ bs)).headD default),
+      x)) =
+    (QueryDecoder.fromAnswers p T endpoint as, p.σ i (bs.headD default), x)
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+T : Table (Addr L) State
+endpoint : State
+i : ℕ
+as bs : List State
+x : State
+hlen : as.length = (QueryDecoder.missing p T endpoint).length
+⊢ (have n := (QueryDecoder.missing p T endpoint).length;
+    (QueryDecoder.fromAnswers p T endpoint (List.take n (as ++ bs)), p.σ i ((List.drop n (as ++ bs)).headD default),
+      x)) =
+    (QueryDecoder.fromAnswers p T endpoint as, p.σ i (bs.headD default), x)
+'AspisR1.QueryNextLaw.own_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.QueryNextLaw.output_append' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.QueryNextLaw.background_law' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.QueryNextLaw.background_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

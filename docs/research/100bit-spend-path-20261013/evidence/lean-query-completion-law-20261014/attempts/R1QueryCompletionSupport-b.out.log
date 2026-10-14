@@ -1,0 +1,37 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryCompletionSupport.lean:27:18: warning: This simp argument is unused:
+  hT
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵T̵,̵ ̵h̵[̲h̲ s hs hT]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryCompletionSupport.lean:28:20: warning: This simp argument is unused:
+  hT
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵T̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryCompletionSupport.lean:52:6: error: Tactic `apply` failed: could not unify the conclusion of `congrArg fun z => (r.1, z)`
+  (r.1, ?m.62) = (r.1, ?m.63)
+with the goal
+  some (r.1, QueryCompletion.complete p T acc1 r.2) = some (r.1, QueryCompletion.complete p T acc2 r.2)
+
+Note: The full type of `congrArg fun z => (r.1, z)` is
+  ?m.62 = ?m.63 → (r.1, ?m.62) = (r.1, ?m.63)
+
+case some
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+T : Table (Addr L) State
+acc1 acc2 : Addr L → State
+endpoint : State
+h : ∀ b ∈ missing p T endpoint, acc1 b = acc2 b
+r : Addr L × List State
+hs : DuplexSeek.seek p T 9 endpoint = some r
+⊢ some (r.1, QueryCompletion.complete p T acc1 r.2) = some (r.1, QueryCompletion.complete p T acc2 r.2)
+'AspisR1.QueryCompletion.complete_congr' depends on axioms: [propext, Quot.sound]
+'AspisR1.QueryDecoder.recover_congr_on_missing' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.QueryDecoder.recover_update' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

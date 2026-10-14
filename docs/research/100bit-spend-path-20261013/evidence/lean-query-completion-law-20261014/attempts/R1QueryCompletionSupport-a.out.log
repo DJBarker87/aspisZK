@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryCompletionSupport.lean:27:18: warning: This simp argument is unused:
+  hT
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵T̵,̵ ̵h̵[̲h̲ s hs hT]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryCompletionSupport.lean:28:20: warning: This simp argument is unused:
+  hT
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵T̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryCompletionSupport.lean:53:6: error: Tactic `apply` failed: could not unify the conclusion of `@QueryCompletion.complete_congr`
+  QueryCompletion.complete ?p ?T ?acc1 ?xs = QueryCompletion.complete ?p ?T ?acc2 ?xs
+with the goal
+  (r.1, QueryCompletion.complete p T acc1 r.2) = (r.1, QueryCompletion.complete p T acc2 r.2)
+
+Note: The full type of `@QueryCompletion.complete_congr` is
+  ∀ {M Cv : Type} {L : ℕ} (p : Params M Cv L) (T : Table (Addr L) QueryCompletion.State)
+    (acc1 acc2 : Addr L → QueryCompletion.State) (xs : List QueryCompletion.State),
+    (∀ s ∈ xs.dropLast, T (squeezeA p s) = none → acc1 (squeezeA p s) = acc2 (squeezeA p s)) →
+      QueryCompletion.complete p T acc1 xs = QueryCompletion.complete p T acc2 xs
+
+case some
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+T : Table (Addr L) State
+acc1 acc2 : Addr L → State
+endpoint : State
+h : ∀ b ∈ missing p T endpoint, acc1 b = acc2 b
+r : Addr L × List State
+hs : DuplexSeek.seek p T 9 endpoint = some r
+⊢ (r.1, QueryCompletion.complete p T acc1 r.2) = (r.1, QueryCompletion.complete p T acc2 r.2)
+'AspisR1.QueryCompletion.complete_congr' depends on axioms: [propext, Quot.sound]
+'AspisR1.QueryDecoder.recover_congr_on_missing' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.QueryDecoder.recover_update' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
