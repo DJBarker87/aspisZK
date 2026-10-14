@@ -1,0 +1,37 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/TrailingStateFrame.lean:17:8: error(lean.unknownIdentifier): Unknown identifier `bytes_injective`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/TrailingStateFrame.lean:18:2: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/TrailingStateFrame.lean:22:45: error: Invalid argument name `n` for function `List.drop_append_of_le_length`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `α`: n̵α̲
+  • `l₁`: n̵l̲₁̲
+  • `l₂`: n̵l̲₂̲
+  • `i`: n̵i̲
+  • `h`: n̵h̲
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/TrailingStateFrame.lean:22:67: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/TrailingStateFrame.lean:29:5: warning: Variable name `h` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/TrailingStateFrame.lean:39:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ?m.22 then ?m.26 else ?m.27
+in the target expression
+  (if h : 32 ≤ List.length (frame pre s) then
+      some (stateOfBytes (List.drop (List.length (frame pre s) - 32) (frame pre s)))
+    else none) =
+    some s
+
+L : ℕ
+pre : Bytes
+s : State
+h : List.length (frame pre s) ≤ L
+hlen : List.length (frame pre s) = List.length pre + 32
+⊢ (if h : 32 ≤ List.length (frame pre s) then
+      some (stateOfBytes (List.drop (List.length (frame pre s) - 32) (frame pre s)))
+    else none) =
+    some s
+'AspisR1.TrailingStateFrame.frame_injective' depends on axioms: [sorryAx]
+'AspisR1.TrailingStateFrame.frame_drop_prefix' depends on axioms: [propext]
+'AspisR1.TrailingStateFrame.tailState_frameAddr' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

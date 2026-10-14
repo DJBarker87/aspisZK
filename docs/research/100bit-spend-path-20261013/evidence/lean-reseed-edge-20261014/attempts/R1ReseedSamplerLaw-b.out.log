@@ -1,0 +1,41 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReseedSamplerLaw.lean:22:61: error: unsolved goals
+M Cv : Type
+L : ℕ
+C : Type
+p : Params M Cv L
+a : Addr L
+reseed : State → Addr L
+i : ℕ
+G : Cv → State → C
+obs : C → ℚ
+⊢ (mean fun y => mean fun x => mean fun a => obs (G (p.σ i a) y)) = mean fun b => mean fun y => obs (G (p.σ i b) y)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReseedSamplerLaw.lean:34:45: error: unsolved goals
+M Cv : Type
+L : ℕ
+X : Type
+p : Params M Cv L
+a : Addr L
+reseed : State → Addr L
+i : ℕ
+pend : List (Addr L × Option State)
+pref : List State → X
+obs : X × Cv × State → ℚ
+hsplit :
+  blaw (fun y as => (pref (List.take pend.length as), p.σ i ((List.drop pend.length as).headD default), y)) obs
+      (own p a reseed) pend =
+    pmean
+      (fun as =>
+        blaw
+          (fun x bs =>
+            (pref (List.take pend.length (as ++ bs)), p.σ i ((List.drop pend.length (as ++ bs)).headD default), x))
+          obs (own p a reseed) [])
+      pend
+as : List State
+hlen : as.length = pend.length
+htake : ∀ (b : State), List.take pend.length (as ++ [b]) = as
+hdrop : ∀ (b : State), List.drop pend.length (as ++ [b]) = [b]
+⊢ (mean fun y => mean fun x => mean fun a => obs (pref as, p.σ i a, y)) =
+    mean fun b => mean fun y => obs (pref as, p.σ i b, y)
+'AspisR1.ReseedSamplerLaw.own_law' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ReseedSamplerLaw.background_law' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

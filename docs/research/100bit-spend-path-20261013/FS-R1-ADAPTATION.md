@@ -152,3 +152,17 @@ component and following challenge. The old `chainB` and 21-root results
 also supply the local adaptive accepted-miss bound under explicit sampler
 and fixed-data premises. The full earlier prefix and hash edges are not
 part of this component; the complete R1 instance remains open.
+
+## Opening-domain edge: checked local route
+
+[RESEED-EDGE-BRIDGE.md](RESEED-EDGE-BRIDGE.md) now supplies a checked local
+route for the source's trailing-state domain hash. It adds the parsed-state
+collision event explicitly and recovers the reseed/predecessor from the
+table before gamma's absorb. A sampler ending row 26 with the reseed has
+the same challenge law as the older ordinary duplex sampler, and its local
+trace following is checked. This retains the current hash-input bytes.
+
+The complete earlier-prefix reconstruction must validate the recovered
+domain frame and replace row 26's carried state by the reseed output.
+Initial public/C1 hashing and the complete R1 instance remain separate
+obligations; the local components are not a full `Inj3` proof.

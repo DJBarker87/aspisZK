@@ -1,0 +1,24 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReseedRound.lean:52:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  independentMean (sampler ?p ?a ?reseed ?i).toProgram fun w => ?obs w.2
+in the target expression
+  (independentMean (sampler p a reseed i).toProgram fun w => indicator (bad w.2)) =
+    independentMean (samp p i pre m).toProgram fun w => indicator (bad w.2)
+
+M Cv : Type
+L : ℕ
+X : Type
+p : Params M Cv L
+a : Addr L
+reseed : State → Addr L
+i : ℕ
+pre : Prefix X M (Chal Cv)
+m : M
+bad : Chal Cv → Prop
+⊢ (independentMean (sampler p a reseed i).toProgram fun w => indicator (bad w.2)) =
+    independentMean (samp p i pre m).toProgram fun w => indicator (bad w.2)
+'AspisR1.ReseedRound.firstCell_sampler' depends on axioms: [propext, Quot.sound]
+'AspisR1.ReseedRound.sampler_eval' depends on axioms: [propext, Quot.sound]
+'AspisR1.ReseedRound.sampler_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ReseedRound.own_matches_sampler' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ReseedRound.same_challenge_law' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

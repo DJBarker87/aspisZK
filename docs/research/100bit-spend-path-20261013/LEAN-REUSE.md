@@ -311,3 +311,17 @@ Ten focused targets passed. The combined checkpoint took 1.36 s at
 3,525,648 KiB, zero swap, with eighteen standard-only axiom reports.
 Earlier records, hash transitions, the full R1 instance, source refinement
 and privacy remain open.
+
+## Opening-domain hash connection
+
+The [reseed edge bridge](RESEED-EDGE-BRIDGE.md) preserves the source's P3
+domain hash and models it at the end of row 26. It reuses the old table
+uniqueness, first-read bound, trace-following and sampler-law machinery.
+An added parsed-state event accounts for the trailing-state frame; the
+combined collision bound is `3 * Qtot^2 / 2^256`. Recovery before the next
+absorb, the literal P3 frame, and the local reseeded sampler now compile.
+
+The combined checkpoint passed in 1.42 s at 3,526,844 KiB, zero swap, with
+25 standard-only axiom reports. Initialization, strict full-prefix parsing,
+the full FS/source instance and privacy remain open. The local recovery
+function is not itself a strict domain validator.

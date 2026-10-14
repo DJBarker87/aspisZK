@@ -1,0 +1,60 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReseedBoundary.lean:68:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  tableBefore emptyTable tr c a
+in the target expression
+  T a = some (H a)
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+tag : Byte
+hL : 62 ≤ L
+H : Addr L → State
+tr : List (Addr L × State)
+Qtot : ℕ
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hQ : firstReads emptyTable tr ≤ Qtot
+hold : ¬hitsBad (badColl p Qtot) emptyTable tr
+htail : ¬hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable tr
+a c : Addr L
+ha : Read tr a
+hc : Read tr c
+hr : Read tr (OpeningReseedFrame.addr tag hL (H a))
+hp : List.take 32 c.toBytes = bytes (H (OpeningReseedFrame.addr tag hL (H a)))
+r : Addr L := OpeningReseedFrame.addr tag hL (H a)
+T : Table (Addr L) State := tableBefore emptyTable tr c
+har : Before tr a r
+hrc : Before tr r c
+hac : Before tr a c
+⊢ T a = some (H a)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReseedBoundary.lean:70:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  tableBefore emptyTable tr c r
+in the target expression
+  T r = some (H r)
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+tag : Byte
+hL : 62 ≤ L
+H : Addr L → State
+tr : List (Addr L × State)
+Qtot : ℕ
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hQ : firstReads emptyTable tr ≤ Qtot
+hold : ¬hitsBad (badColl p Qtot) emptyTable tr
+htail : ¬hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable tr
+a c : Addr L
+ha : Read tr a
+hc : Read tr c
+hr : Read tr (OpeningReseedFrame.addr tag hL (H a))
+hp : List.take 32 c.toBytes = bytes (H (OpeningReseedFrame.addr tag hL (H a)))
+r : Addr L := OpeningReseedFrame.addr tag hL (H a)
+T : Table (Addr L) State := tableBefore emptyTable tr c
+har : Before tr a r
+hrc : Before tr r c
+hac : Before tr a c
+hacell : T a = some (H a)
+⊢ T r = some (H r)
+'AspisR1.ReseedBoundary.findCell_correct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ReseedBoundary.recover_before_next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
