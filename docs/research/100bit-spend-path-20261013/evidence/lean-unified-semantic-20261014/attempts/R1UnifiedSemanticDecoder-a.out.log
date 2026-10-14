@@ -1,0 +1,58 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedSemanticDecoder.lean:70:23: error: Application type mismatch: The argument
+  hp
+has type
+  UnifiedSemanticContext.parse p pub.pubBytes a T = some ctx
+but is expected to have type
+  some ctx = some ctx
+in the application
+  And.intro hp
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedSemanticDecoder.lean:71:10: error: Type mismatch: After simplification, term
+  hd
+ has type
+  (if True ∧ True then
+      some
+        (QueryNextLaw.own p a, List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records),
+          output p pub T ctx)
+    else none) =
+    some (own, pend, g)
+but is expected to have type
+  (QueryNextLaw.own p a, List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records), output p pub T ctx) =
+    (own, pend, g)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedSemanticDecoder.lean:93:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (own, pend, g).2.2 x as
+in the target expression
+  0 < (g x as).1.rounds.length ∧ (g x as).1.rounds.length < 26
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+pub : UnifiedSampler.Public L
+a : Addr L
+T : Table (Addr L) State
+own : BS (Addr L) State State
+pend : List (Addr L × Option State)
+g : State → List State → JointTranscriptView.Output M Cv L
+hd : decode p pub a T = some (own, pend, g)
+x : State
+as : List State
+ctx : UnifiedSemanticContext.Context M
+hp : UnifiedSemanticContext.parse p pub.pubBytes a T = some ctx
+hlo : 0 < ctx.records.length
+hhi : ctx.records.length < 26
+heq :
+  (QueryNextLaw.own p a, List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records), output p pub T ctx) =
+    (own, pend, g)
+hfun :
+  (QueryNextLaw.own p a, List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records), output p pub T ctx).2.2
+      x as =
+    (own, pend, g).2.2 x as
+⊢ 0 < (g x as).1.rounds.length ∧ (g x as).1.rounds.length < 26
+'AspisR1.UnifiedSemanticDecoder.decode_of_parse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.UnifiedSemanticDecoder.decode_sound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.UnifiedSemanticDecoder.output_round' depends on axioms: [propext, Quot.sound]
+'AspisR1.UnifiedSemanticDecoder.decoded_round_bounds' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.UnifiedSemanticDecoder.follows_map' depends on axioms: [propext]
+exit=1

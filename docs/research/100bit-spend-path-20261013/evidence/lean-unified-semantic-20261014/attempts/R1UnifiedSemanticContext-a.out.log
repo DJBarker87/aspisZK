@@ -1,0 +1,45 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedSemanticContext.lean:54:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UnifiedSemanticRecovery.typed p pubBytes T 27 endpoint
+in the target expression
+  ((some (endpoint, label, data)).bind fun x =>
+      match x with
+      | (endpoint, label, data) =>
+        (UnifiedSemanticRecovery.typed p pubBytes T 27 endpoint).bind fun x =>
+          match x with
+          | (c1, rs) =>
+            Option.map (fun m => { c1 := c1, records := rs, message := m })
+              (IndexedMessage.read p rs.length label data)) =
+    some ctx
+
+case some.some
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+pubBytes : Bytes
+a : Addr L
+T : Table (Addr L) State
+ctx : Context M
+endpoint : State
+label : Byte
+data : Bytes
+h :
+  ((some (endpoint, label, data)).bind fun x =>
+      match x with
+      | (endpoint, label, data) =>
+        (UnifiedSemanticRecovery.typed p pubBytes T 27 endpoint).bind fun x =>
+          match x with
+          | (c1, rs) =>
+            Option.map (fun m => { c1 := c1, records := rs, message := m })
+              (IndexedMessage.read p rs.length label data)) =
+    some ctx
+habs : parseAbsorb a = some (endpoint, label, data)
+c1 : State
+rs : List (Rec M)
+htyped : UnifiedSemanticRecovery.typed p pubBytes T 27 endpoint = some (c1, rs)
+⊢ ∃ endpoint_1 label_1 data_1,
+    some (endpoint, label, data) = some (endpoint_1, label_1, data_1) ∧
+      UnifiedSemanticRecovery.typed p pubBytes T 27 endpoint_1 = some (ctx.c1, ctx.records) ∧
+        IndexedMessage.read p ctx.records.length label_1 data_1 = some ctx.message
+'AspisR1.UnifiedSemanticContext.parse_of_checks' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.UnifiedSemanticContext.parse_sound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

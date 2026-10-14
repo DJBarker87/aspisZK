@@ -1,0 +1,44 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedSemanticDecoder.lean:74:10: error: Tactic `injection` failed: equality expected
+
+case pos
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+pub : UnifiedSampler.Public L
+a : Addr L
+T : Table (Addr L) State
+own : BS (Addr L) State State
+pend : List (Addr L × Option State)
+g : State → List State → JointTranscriptView.Output M Cv L
+ctx : UnifiedSemanticContext.Context M
+hp : UnifiedSemanticContext.parse p pub.pubBytes a T = some ctx
+hlo : 0 < ctx.records.length
+hhi : ctx.records.length < 26
+hd :
+  QueryNextLaw.own p a = own ∧
+    List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records) = pend ∧ output p pub T ctx = g
+⊢ (QueryNextLaw.own p a, List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records), output p pub T ctx) =
+    (own, pend, g)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedSemanticDecoder.lean:76:16: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp [hp̵,̵ ̵h̵lo, hhi] at hd
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedSemanticDecoder.lean:77:14: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp [hp̵,̵ ̵h̵lo] at hd
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.UnifiedSemanticDecoder.decode_of_parse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.UnifiedSemanticDecoder.decode_sound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.UnifiedSemanticDecoder.output_round' depends on axioms: [propext, Quot.sound]
+'AspisR1.UnifiedSemanticDecoder.decoded_round_bounds' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.UnifiedSemanticDecoder.follows_map' depends on axioms: [propext]
+exit=1

@@ -404,3 +404,19 @@ before every row 1 through 26 from the actual reads and transitions.
 Completing and dispatching the middle-round decoders, all of `Inj3`, the
 full D1/D2/D3 and numerical instance, source correspondence and privacy
 remain open. No old theorem statement or proof body is changed here.
+
+
+## Completing semantic rows 1–25 with existing proofs
+
+[UNIFIED-SEMANTIC-DECODER.md](UNIFIED-SEMANTIC-DECODER.md) gives one generic
+address/table decoder case for all 25 ordinary semantic rounds. The actual
+experiment theorem derives typed prefix recovery, known cells, missing-answer
+freshness and trace following, then returns the exact protocol triple.
+It reuses the existing prefix table, backward walk, completion, sampler-law
+and evaluator proofs without altering their statements or bodies.
+
+The completing sampler law and bound transfer retain an explicit fixed-prefix
+bound. Reseed/opening/query cases, correct global dispatch, the full generic
+security instance, source correspondence and privacy remain open. The combined
+NUC checkpoint passed with fifteen standard-only axiom reports; exact attempts
+and source/object hashes are preserved in its evidence bundle.
