@@ -46,6 +46,22 @@ scoped prover subtotal. Raw calls are not distinct oracle inputs; the
 inventory supplies no full-experiment `Q` bound. It must not be substituted
 for the theorem's distinct-read hypothesis.
 
+The later native measurement accepted both phases of one saved P3 S2 proof
+and observed 583 raw calls over 452 distinct full byte strings. Its evidence
+is in `evidence/hash-input-counter-p3-20261014/`. This is one verifier run,
+not an adversarial full-experiment upper bound. For scale, substituting 452
+into the conditional expression gives about 96.316296 bits; this does not
+turn a run measurement into a security theorem. A complete instantiation
+must include prover queries and every additional charged event.
+
+`fs_budget_q_sweep.py` varies only the query term for q=22 through 40,
+keeping all other ledger rows fixed. At q=23 the semantic row takes over,
+so the best coefficient improves from 105.136475 to only 105.268681 bits.
+Further queries alone do not improve this maximum. The exact JSON checks
+Q scenarios 2^20, 2^32, 2^40, and 2^64; none meets a total 2^-100 bound under
+these fixed-row assumptions. This is an arithmetic limitation of that
+parameter-only modification, not a protocol impossibility result.
+
 No total protocol failure probability is certified by this arithmetic.
 The concrete classifier, knowledge reduction, and protocol/source/privacy
 premises remain open, and additional terminal Merkle events are not fully

@@ -493,3 +493,13 @@ Fourteen final targets passed on the capped NUC. The combined checkpoint has
 initialization/absorb separation are checked prerequisites for the next
 combined dispatcher; that dispatcher and the full security, source, and
 privacy results remain open.
+
+## Three commitment roots and finite-table recovery
+
+[THREE-COMMITMENT-RECOVERY.md](THREE-COMMITMENT-RECOVERY.md) reuses the
+canonical byte log, literal Merkle program, finite lookup, parsed first-hit
+events, and duplex collision theorem for C1, C2, and the folded root. Eight
+new components and their combined checkpoint passed; the checkpoint has
+28 standard-only axiom reports. Commitment-time prefix selection and the
+actual full trace, efficient extraction, source correspondence, and the
+complete security/privacy instantiation remain separate obligations.

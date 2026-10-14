@@ -83,10 +83,11 @@ the reconstructed word was fixed before the protocol challenges.
 
 ## Remaining gates
 
-The C2 and folded-root frame connections remain open. Cross-trace collisions
-still need their explicit lift to the common finite-oracle collision event,
-and the terminal Merkle program must be composed with the actual transcript
-and checkpoint verifier. The source's actual slot indexing, folded-tree
+The subsequent [three-commitment checkpoint](THREE-COMMITMENT-RECOVERY.md)
+adds the C2 and folded-root frames and lifts cross-trace collisions to the
+common finite-oracle collision event. The terminal Merkle program still
+must be composed with the actual transcript and checkpoint verifier,
+including intervening queries. The source's actual slot indexing, folded-tree
 padding, parser/account provenance, and commitment-time prefix selection
 also require correspondence.
 

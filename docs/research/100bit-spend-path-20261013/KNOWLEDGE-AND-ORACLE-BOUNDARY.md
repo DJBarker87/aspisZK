@@ -72,8 +72,9 @@ The finite lookup is constructive. The later
 [canonical oracle-program connection](CANONICAL-MERKLE-RECOVERY.md) derives
 consistency from canonical queries in the full trace, proves opening-read
 inclusion, and connects child and initial-C1 root targets to the existing
-first-read events. The actual commitment-time prefix, C2/folded root cases,
-common collision event, and source/protocol composition remain open.
+first-read events. The [three-commitment extension](THREE-COMMITMENT-RECOVERY.md)
+adds C2/folded root cases and the common collision event. The actual
+commitment-time prefix and complete source/protocol composition remain open.
 
 ## The round-table interface also needs justification
 

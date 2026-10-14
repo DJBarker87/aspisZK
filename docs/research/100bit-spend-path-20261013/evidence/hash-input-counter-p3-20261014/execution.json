@@ -1,0 +1,93 @@
+{
+  "schema": "aspis.r1-host-hash-input-counter.v1",
+  "source_revision": "eac8ca7d792be9438200ec839b30102a5204881d",
+  "host": "nuc",
+  "toolchain": {
+    "rustc": "1.94.1 (e408947bf 2026-03-25)",
+    "cargo": "1.94.1 (29ea6fb6a 2026-03-24)",
+    "profile": "release",
+    "dependency_resolution": "standalone tools/r1-hash-input-counter/Cargo.lock; offline final build"
+  },
+  "fixture": {
+    "proof_source": "docs/research/100bit-spend-path-20261013/evidence/p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/r1-s2-proof.bin",
+    "proof_sha256": "8569435667420b36a980493477f8fef7ef47e7351122647cf3747054079d4d62",
+    "proof_bytes": 124343,
+    "public_source": "docs/research/100bit-spend-path-20261013/evidence/p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/r1-s2-public-asf8.bin",
+    "public_sha256": "72f067d263af326b017284579f30e3da7c843c6cbb29f1c6df94c8afbb1f2172",
+    "public_bytes": 1880,
+    "public_reconstruction": "decode_pool_v1_pair_forest_terminal_statement_v1 followed by encode_pool_v1_pair_forest_terminal_statement_v1; byte-for-byte round trip asserted; statement_public derives verifier Public",
+    "variant": "P3 S2 (two-fold)",
+    "proof_generation": false
+  },
+  "counting_method": {
+    "identity": "complete concatenated byte vector of all HashFn input slices, used directly as HashMap<Vec<u8>, Counts> key",
+    "hash_digest_identity": false,
+    "phases": "only calls inside verifier::tx1 and verifier::tx2; public decode/re-encode is completed before counting starts",
+    "tx1_k": 11,
+    "report": "hash-input-counts.json; repeated_exact_inputs contains complete exact input bytes as hex; each SHA-256 field is display annotation only"
+  },
+  "acceptance": {
+    "tx1": true,
+    "tx2": true,
+    "checkpoint_bytes": 1768
+  },
+  "counts": {
+    "tx1_raw_calls": 349,
+    "tx1_distinct_inputs": 297,
+    "tx2_raw_calls": 234,
+    "tx2_distinct_inputs": 179,
+    "combined_raw_calls": 583,
+    "combined_distinct_inputs": 452,
+    "exact_inputs_repeated_across_or_within_phases": 30,
+    "repeat_calls_beyond_first_for_each_exact_input": 131,
+    "distinct_inputs_shared_between_tx1_and_tx2": 24
+  },
+  "build": {
+    "command": "systemd-run --user --scope -p MemoryHigh=4G -p MemoryMax=6G -p MemorySwapMax=0 bash -lc 'cd /home/dombarker/project-offloads/aspis-hash-input-counter-eac8ca7d && /usr/bin/time -v cargo build --release --offline --manifest-path tools/r1-hash-input-counter/Cargo.toml'",
+    "exit_status": 0,
+    "wall_seconds": 0.35,
+    "peak_rss_kib": 185924,
+    "swap_bytes": 0,
+    "systemd_invocation_id": "0eb89977379e432c8999e5a314cabbb7"
+  },
+  "verifier_run": {
+    "command": "systemd-run --user --scope -p MemoryHigh=4G -p MemoryMax=6G -p MemorySwapMax=0 bash -lc 'cd /home/dombarker/project-offloads/aspis-hash-input-counter-eac8ca7d && /usr/bin/time -v tools/r1-hash-input-counter/target/release/r1-hash-input-counter fixtures/proof.bin fixtures/public.bin results/hash-input-counter.json eac8ca7d792be9438200ec839b30102a5204881d'",
+    "exit_status": 0,
+    "wall_seconds_reported_by_time": 0.00,
+    "peak_rss_kib": 4224,
+    "swap_bytes": 0,
+    "systemd_invocation_id": "1a2ef2d471f04488adf8feb5c83af692"
+  },
+  "resource_preflight": {
+    "active_rust_lean_scopes_before_run": 0,
+    "host_memory_total_gib": 62,
+    "host_available_memory_gib": 51,
+    "task_memory_max_gib": 6,
+    "external_reserve_gib": 24,
+    "task_cap_plus_external_reserve_gib": 30
+  },
+  "source_hashes_sha256": {
+    "tools/r1-hash-input-counter/Cargo.toml": "26cd86f1471384952ed7c0484ab9c36a81df24e03523b53a0c5c9b8480a99773",
+    "tools/r1-hash-input-counter/Cargo.lock": "75ae10b6a3a5e6c9a0484b82c7f5429a10c751db87d71265021a8cfdb0033445",
+    "tools/r1-hash-input-counter/src/main.rs": "9998ea2d172ef4fb9fd4fde721ba0ca30dc1699ca4bb9b5b765133a14151d040",
+    "Cargo.toml": "55e9bc9f106a3826e72dc782b29a013dd192a4d9b4c9c0da5f6332b095bf8fe4",
+    "crates/aspis-r1-cost-probe/src/verifier.rs": "2cab573be46ca69b5d82837e5221a9a499d3b6dc1f89b801e388b4e8b1fe01cd",
+    "crates/aspis-r1-cost-probe/src/transcript.rs": "c91ffe824a55ff62659e8a194d2ea201032383e4e11e5f60625404a30c691ef6",
+    "crates/aspis-prover/src/lib.rs": "2d9fba825112af0f19865c39638d34bfe74a69bcaa9118f90d199e3c68607439",
+    "crates/aspis-prover/src/r0_fixture.rs": "eb04b2fb826c245b0b98dadcc60a3f6977845f568d97a275e50293039a0c43ba",
+    "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs": "becc01f162f23cd9b4a7fd3780be5a441c9b7265f3078282244cc938da63a16c"
+  },
+  "artifact_hashes_sha256": {
+    "hash-input-counts.json": "5af1c64b24c64adbb8d1252cd006e1a59a4177032766e324c06e17830da3479b",
+    "build.log": "adb0403f58be5acc30c01dc6dec3452bff88fbd81b6f8ed5cd42138ae47cd77a",
+    "run.log": "d424a243b52680209d2756c31ff2d9135a9398631ff56185de8ba615e40a3299"
+  },
+  "attempt_notes": [
+    "Initial focused build surfaced a counter-local u64/usize subtraction type error; the driver cast the distinct-input count to u64 and the capped release build then passed.",
+    "Initial run used the unrelated deterministic r0 fixture helper and failed the public-byte assertion before tx1. Driver was corrected to use the existing ASF8 statement decoder/re-encoder and statement_public helper for the saved LiteSVM fixture. Final run accepted both verifier phases."
+  ],
+  "scope_limitations": [
+    "This measures exact HashFn input strings for the native verifier's tx1 and tx2 calls on this one saved proof/public fixture.",
+    "It does not measure the on-chain verifier, prover calls, generated proofs, or a distinct-input bound over other fixtures."
+  ]
+}

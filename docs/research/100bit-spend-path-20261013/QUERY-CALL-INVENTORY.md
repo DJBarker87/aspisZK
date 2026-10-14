@@ -28,7 +28,14 @@ That is a scoped subtotal, not an upper bound for all honest-prover work. In par
 
 The R1 `Observer` records phase events, including `Phase::Merkle(i)`, rather than raw hash calls (`crates/aspis-r1-cost-probe/src/verifier.rs:20-24, 264`; `r1_semantic.rs:63-68`). I found no R1 instrumentation that counts distinct oracle inputs or raw hash invocations across the complete prover/verifier run. `crates/aspis-core/src/verify.rs:1530-1543, 1589-1598` has a `HASH_CALLS` counter for a separate OOD-sampling probe; its test checks a 20-call delta and does not cover R1 proof Merkle paths or distinct inputs.
 
-The existing R1 runtime measurement JSON under `docs/research/100bit-spend-path-20261013/evidence/latest/results/100bit-path-20261013/d18-native/S2/measurements/` records verifier transaction measurements, and the summaries record resource/cost results. They do not report hash-call totals or unique oracle-input cardinalities. No measured R1 hash-count artifact was found in this inspection.
+The existing R1 runtime measurement JSON under `docs/research/100bit-spend-path-20261013/evidence/latest/results/100bit-path-20261013/d18-native/S2/measurements/` records verifier transaction measurements, and the summaries record resource/cost results. They do not report hash-call totals or unique oracle-input cardinalities. No measured R1 hash-count artifact was found in that initial inspection.
+
+A subsequent [native P3 measurement](evidence/hash-input-counter-p3-20261014/README.md)
+at base `eac8ca7d792be9438200ec839b30102a5204881d` accepted both phases and
+confirmed the 583 raw calls on one saved proof. Complete input-byte keys
+gave 452 union-distinct inputs: 297 in tx1, 179 in tx2, with 24 shared.
+The driver is isolated under `tools/r1-hash-input-counter/`. It excludes
+prover execution and supplies no full-experiment query upper bound.
 
 ## Source hashes
 

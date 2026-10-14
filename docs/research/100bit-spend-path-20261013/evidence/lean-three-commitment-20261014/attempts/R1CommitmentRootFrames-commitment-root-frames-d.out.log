@@ -1,0 +1,35 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CommitmentRootFrames.lean:49:2: error: Type mismatch: After simplification, term
+  CommitmentRootTargets.pred_tail (PublicInitFrame.pre pub) root
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg LE.le
+            (Eq.trans List.length_append
+              (congr (congrArg HAdd.hAdd (PublicInitFrame.pre_length pub)) (bytes_length root))))
+          L))
+      (Decidable.byContradiction fun a => pred_c1._proof_1 pub hL a))
+ has type
+  @Eq (Option State) (CommitmentRootTargets.pred 0 (TrailingStateFrame.frameAddr (PublicInitFrame.pre pub) root ⋯))
+    (some root)
+but is expected to have type
+  @Eq (Option State) (CommitmentRootTargets.pred 0 (Addr.ofBytes (PublicInitFrame.pre pub ++ bytes root) ⋯)) (some root)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CommitmentRootFrames.lean:61:21: error: unsolved goals
+L : ℕ
+state root : State
+hL : 71 ≤ L
+⊢ Addr.ofBytes (c2Prefix state ++ bytes root) ⋯ = TrailingStateFrame.frameAddr (c2Prefix state) root ⋯
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CommitmentRootFrames.lean:62:27: warning: This simp argument is unused:
+  TrailingStateFrame.frame
+
+Hint: Omit it from the simp argument list.
+  simp [c2Addr, c2Frame,̵ ̵T̵r̵a̵i̵l̵i̵n̵g̵S̵t̵a̵t̵e̵F̵r̵a̵m̵e̵.̵f̵r̵a̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CommitmentRootFrames.c2Prefix_length' depends on axioms: [propext, Quot.sound]
+'AspisR1.CommitmentRootFrames.c2Frame_length' depends on axioms: [propext, Quot.sound]
+'AspisR1.CommitmentRootFrames.foldedPrefix_length' depends on axioms: [propext, Quot.sound]
+'AspisR1.CommitmentRootFrames.foldedFrame_length' depends on axioms: [propext, Quot.sound]
+'AspisR1.CommitmentRootFrames.pred_c1' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.CommitmentRootFrames.pred_c2' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.CommitmentRootFrames.pred_folded' depends on axioms: [propext, Quot.sound]
+exit=1
