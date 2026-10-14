@@ -598,3 +598,16 @@ The combined 24-declaration checkpoint passed under the existing NUC cap.
 checker also show the three current field-parser bodies match the historical
 R492/R567 source bodies. This identity does not discharge the old explicit
 Rust decoder-equality premise; actual parser/caller correspondence remains.
+
+## Current M31 parser refinement
+
+[FIELD-PARSER-EXTRACTION.md](FIELD-PARSER-EXTRACTION.md) now retains the
+actual current M31 parser declarations produced by the pinned extraction
+tools. The checked refinement reuses the old four-byte word theorem and
+V5/K1 codec, and the arbitrary-array adapter reuses the old byte roundtrip.
+Acceptance is exactly the canonical range test, including rejection of
+every noncanonical word; successful values equal the literal decoded word.
+The twelve-report combined checkpoint is green with standard axioms only.
+CM31/QM31 extraction still fails in a standard-library cleanup match. The
+failure artifacts are preserved; compiler/model trust, callers, WideExact,
+complete privacy, and final security composition remain explicit obligations.

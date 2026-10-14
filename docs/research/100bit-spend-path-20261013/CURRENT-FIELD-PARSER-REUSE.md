@@ -134,3 +134,86 @@ four-byte input, but it does not by itself prove Rust's M31 range check,
 `Option` behavior, CM31/QM31 slice assembly, or current call-site/source
 correspondence. The earlier V5 decoder-equality premise remains necessary for
 those parts until an explicit bridge is proved.
+
+## Existing Option, Result, and fixed-slice reuse
+
+The R259/R260 work contains useful Aeneas plumbing for the same Rust `Option`
+control flow. `AspisR259PrivateInputRaw` defines
+`core.option.Option.Insts.CoreOpsTry_traitTry.branch` and
+`core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual`
+from the R256 generated declarations, with a local `Discriminant (Option T)
+Isize` instance (`optionTag_none`/`optionTag_some` bind `None` to 0 and `Some`
+to 1). The saved R259 audit byte-compares those two selected declaration
+blocks against the R256 generated file: branch hash
+`dd85c07aa0f8447ff660f6b9dfb9bc47a4db960d94d3f0aa34f5e9f0b0e2f81b`, residual
+hash `549ee437c575a3e68e27ad8a9cb988d8e892e2dbb6a4f7423696ca5f0967f303`.
+The raw helper body checks the residual discriminant is zero and returns
+`Result.ok none`. Its dependent `residual_complete` theorem in
+`AspisV8R19.R260PrivateInputExecution` handles all `Option Infallible`
+residuals; `input_complete` then proves the generated C-input result is
+`Result.ok (if x.a.val < P ∧ x.b.val < P then some (x.a,x.b) else none)`.
+These are R256/R259 representations, not a theorem about current field parser
+source.
+
+The current extraction attempt b's raw LLBC snapshot
+(`evidence/field-parser-extraction-20261014/field-parser-extraction-attempts.tar.gz`,
+`attempts/b/R1FieldParser.llbc`, SHA-256
+`5f66319bec86ceaab0e40d6d64903e4c9349cda9870696413c4dc16e79bb9a5a`) does
+contain the core Option declarations: def_id 8 is `Option::branch` at
+`core/option.rs:2779–2784`, and def_id 9 is `Option::from_residual` at
+`core/option.rs:2793–2797`. Attempt a's generated CM31/QM31 functions call
+those same helper names, but its `FunsExternal_Template.lean` leaves them as
+axioms (template SHA-256
+`456c7ca58a08db13f6394860f73aa990d3713f44b02f252521ab093d3ebf34cb`). The
+R259 helpers implement the corresponding None/Some branch and None residual
+behavior through Aeneas's `ControlFlow` and the pinned discriminant model.
+This is reusable control-flow structure, but it is not a byte-identical Lean
+body reuse from b: the current b artifact is LLBC, while R259's audited bodies
+are a generated Lean adapter with an explicit discriminant binding. The
+current translation attempt b failed in the `core/result.rs:713–717` region,
+and the standalone C extraction intentionally retains only M31, so there is
+not yet a current Lean theorem connecting the LLBC helpers to the retained
+definitions. More precisely, the LLBC identifies the same core functions and
+source spans as the retained helpers, but the saved evidence does not hash- or
+proof-compare the current LLBC bodies against the old generated Lean bodies.
+R259's `byte_identical` flag compares its copied Lean declaration blocks to
+R256 generated Lean blocks, not to this current b LLBC. So actual reuse is
+source-structure correspondence only; body identity modulo names/types has
+not been established.
+
+Keep Rust's `Result::ok` method distinct from Lean's `Result.ok` constructor.
+The current b LLBC contains `Result::ok` as def_id 7 at
+`core/result.rs:708–717`. Attempt a's external template also leaves
+`core.result.Result.ok` as an axiom, and the older R259 Option adapter does not
+define or prove that method. Existing generated proofs routinely reduce
+successful binds with `bind_tc_ok` and extract values from successful-result
+equalities with `Result.ok.inj` (for example,
+`AspisV8R19.R487ParserScalarMask` and `R479CallerBatchSlices`); these are
+constructor/monad proof tools, not a body for Rust's method.
+
+The closest exact-length slice conversion facts are in
+`AspisV8R19.SamplerWordRead` (`lean/AspisV8R19/SamplerWordRead.lean`, source
+SHA-256 `bb8ec7e56a78fea545f582b0fe930525a994d887b4d9dd03d7488b6ad42dc49d`).
+`conversion_success` proves `TryFromArrayCopySlice.try_from 4 CopyU8
+(Array.to_slice a) = .ok (.Ok a)` for `a : Array U8 4`; `unwrap_success`
+reduces the successful `DebugTryFromSliceError` unwrap; `slice_success`
+builds that exact four-byte array from a 32-byte array when the start index is
+at most 28; and `read_success` composes these facts for `j.val < 8`.
+`R137SamplerWordRead.sourceRead_eq_checked` and `sourceRead_success`
+(`lean/AspisV8R19/R137SamplerWordRead.lean`, SHA-256
+`b47aa34b5ad8c43bd785982849385aad695e0b6f11bd976e0f24bc388998c5ea`)
+reuse the same conversion and unwrap lemmas for the wrapping-index source
+read under `j.val < 8`. The R577 receipt records a green focused compile and
+pins R137SamplerWordRead as a direct imported source (2.85 s, 3,776,780 KiB,
+zero swaps); it is not a separate direct compile receipt for SamplerWordRead.
+This API covers a fixed array after slicing. It does not establish the current
+CM31/QM31 call-site width behavior or current Rust compiler refinement.
+
+The evidence receipts for the old Option reuse are
+`evidence/r259-current-private-input-raw/manifest.json` (target source SHA-256
+`de1fa32d535bf4e3d10bac3235300b9c71d7ec1a2234fb9ebc91f8e56d8b5255`, exit 0,
+1.06 s, 2,533,552 KiB, no swap, six standard-only axiom reports) and
+`evidence/r260-current-private-input-execution/manifest.json` (source SHA-256
+`e0528fca8161ffad2f04f6d7a5b9febc45c97826955b4d92724ed874107e8cce`, exit 0,
+1.58 s, 3,707,096 KiB, no swap, six standard-only reports). R577's receipt is
+`evidence/r577-current-inner-sampler-execution/final.receipt.json`.
