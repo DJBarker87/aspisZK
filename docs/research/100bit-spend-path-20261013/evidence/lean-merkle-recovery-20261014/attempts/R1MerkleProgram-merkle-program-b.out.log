@@ -1,0 +1,36 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleProgram.lean:31:38: error: unsolved goals
+case cons
+H : List Merkle32Path.Byte → Digest
+slots✝ : List (Fin 8)
+slot : Fin 8
+slots : List (Fin 8)
+siblings : Children
+tail : Path slots
+ih :
+  ∀ (current : Digest),
+    eval H (pathProgram tail current) =
+      (List.map (fun input => (input, H input)) (inputTrace H tail current), foldPath H tail current)
+current : Digest
+⊢ ((nodeInput (fillChild slot siblings current), H (nodeInput (fillChild slot siblings current))) ::
+        (List.map (fun input => (input, H input)) (inputTrace H tail (H (nodeInput (fillChild slot siblings current)))),
+            foldPath H tail (H (nodeInput (fillChild slot siblings current)))).1,
+      (List.map (fun input => (input, H input)) (inputTrace H tail (H (nodeInput (fillChild slot siblings current)))),
+          foldPath H tail (H (nodeInput (fillChild slot siblings current)))).2) =
+    (List.map (fun input => (input, H input))
+        (nodeInput (fillChild slot siblings current) ::
+          inputTrace H tail (H (nodeInput (fillChild slot siblings current)))),
+      foldPath H tail (H (nodeInput (fillChild slot siblings current))))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleProgram.lean:41:37: error: unsolved goals
+H : List Merkle32Path.Byte → Digest
+slots : List (Fin 8)
+path : Path slots
+leaf : List Merkle32Path.Byte
+⊢ ((leaf, H leaf) ::
+        (List.map (fun input => (input, H input)) (inputTrace H path (H leaf)), foldPath H path (H leaf)).1,
+      (List.map (fun input => (input, H input)) (inputTrace H path (H leaf)), foldPath H path (H leaf)).2) =
+    (List.map (fun input => (input, H input)) (leaf :: inputTrace H path (H leaf)), foldPath H path (H leaf))
+'AspisR1.MerkleProgram.eval_pathProgram' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.MerkleProgram.eval_leafProgram' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.MerkleProgram.pathProgram_accepts_iff' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.MerkleProgram.leafProgram_accepts_iff' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

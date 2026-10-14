@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ParsedTargetsCollision.lean:53:50: error: failed to prove positivity/nonnegativity/nonzeroness
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ParsedTargetsCollision.lean:62:2: error: Tactic `apply` failed: could not unify the conclusion of `FS.lemmaA (FS2.experiment P V x) emptyTable Qtot
+  (bad pred Qtot) (↑B * ↑Qtot / 256 ^ 32) hε hdens`
+  (lazyMean (FS2.experiment P V x) emptyTable fun v => indicator (hitsBad (bad pred Qtot) emptyTable v.1)) ≤
+    ↑Qtot * (↑B * ↑Qtot / 256 ^ 32)
+with the goal
+  (lazyMean (FS2.experiment P V x) (fun x => none) fun v => indicator (hitsBad (bad pred Qtot) emptyTable v.1)) ≤
+    ↑B * ↑Qtot ^ 2 / 256 ^ 32
+
+Note: The full type of `FS.lemmaA (FS2.experiment P V x) emptyTable Qtot (bad pred Qtot) (↑B * ↑Qtot / 256 ^ 32) hε
+  hdens` is
+  FirstReadsBound (FS2.experiment P V x) emptyTable Qtot →
+    (lazyMean (FS2.experiment P V x) emptyTable fun v => indicator (hitsBad (bad pred Qtot) emptyTable v.1)) ≤
+      ↑Qtot * (↑B * ↑Qtot / 256 ^ 32)
+
+L B : ℕ
+X Pf : Type
+pred : Fin B → Addr L → Option State
+Qtot : ℕ
+P : Program (Addr L) State Pf
+V : X → Pf → Program (Addr L) State Bool
+x : X
+hQ : ∀ (H : Addr L → State), FS2.distinctFirstReads (eval H (FS2.experiment P V x)) ≤ Qtot
+hε : 0 ≤ ↑B * ↑Qtot / 256 ^ 32
+hdens :
+  ∀ (a : Addr L) (T : Table (Addr L) State), (mean fun f => indicator (bad pred Qtot a T f)) ≤ ↑B * ↑Qtot / 256 ^ 32
+⊢ (lazyMean (FS2.experiment P V x) (fun x => none) fun v => indicator (hitsBad (bad pred Qtot) emptyTable v.1)) ≤
+    ↑B * ↑Qtot ^ 2 / 256 ^ 32
+'AspisR1.ParsedTargetsCollision.density' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ParsedTargetsCollision.mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

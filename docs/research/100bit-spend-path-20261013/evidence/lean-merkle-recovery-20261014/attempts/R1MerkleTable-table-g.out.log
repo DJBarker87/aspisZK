@@ -1,0 +1,63 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleTable.lean:23:26: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (h = d)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleTable.lean:33:6: error: unsolved goals
+case pos
+d : Digest
+rest : List (Children × Digest)
+recorded : Children
+root : Digest
+heq : root = d
+ih : lookup rest d = some recorded → List.Mem (recorded, d) rest
+h : lookup ((recorded, root) :: rest) d = some recorded
+⊢ List.Mem (recorded, d) ((recorded, d) :: rest)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleTable.lean:29:17: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleTable.lean:43:11: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleTable.lean:49:15: error(lean.unknownIdentifier): Unknown identifier `recorded`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleTable.lean:49:25: error: unsolved goals
+cs : Children
+d : Digest
+rest : List (Children × Digest)
+ih : List.Mem (cs, d) rest → ∃ cs', lookup rest d = some cs'
+h : List.Mem (cs, d) ((cs, d) :: rest)
+hhead : (cs, d) = (cs, d)
+⊢ sorry () = some (sorry ())
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleTable.lean:52:27: error: unsolved goals
+cs : Children
+d : Digest
+rest : List (Children × Digest)
+ih : List.Mem (cs, d) rest → ∃ cs', lookup rest d = some cs'
+recorded : Children
+root : Digest
+h : List.Mem (cs, d) ((recorded, root) :: rest)
+htail : (cs, d) ∈ rest
+cs' : Children
+hc : lookup rest d = some cs'
+heq : root = d
+⊢ sorry () = some recorded
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleTable.lean:52:44: warning: This simp argument is unused:
+  heq
+
+Hint: Omit it from the simp argument list.
+  simp [lookup,̵ ̵h̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleTable.lean:60:38: warning: This simp argument is unused:
+  List.length_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp [targets, List.length_flatMap,̵ ̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵o̵f̵F̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MerkleTable.lookup_mem' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.MerkleTable.lookup_exists' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.MerkleTable.targets_length' depends on axioms: [propext, Quot.sound]
+'AspisR1.MerkleTable.root_mem_targets' depends on axioms: [propext, Quot.sound]
+'AspisR1.MerkleTable.child_mem_targets' depends on axioms: [propext, Quot.sound]
+'AspisR1.MerkleTable.walk_mem_targets' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1MerkleTable.lean:114:0: error: Unexpected name `AspisR1.MerkleTable` after `end`: The current section is unnamed
+
+Hint: Delete the name `AspisR1.MerkleTable` to end the current unnamed scope; outer named scopes can then be closed using additional `end` command(s):
+  end ̵A̵s̵p̵i̵s̵R̵1̵.̵M̵e̵r̵k̵l̵e̵T̵a̵b̵l̵e̵
+exit=1

@@ -34,6 +34,11 @@ an executable GS decoder or a refinement theorem. The older
 runtime unanalyzed. A practical on-chain decoder is unnecessary, but an
 efficient extractor and a justified complexity bound are still needed.
 
+The new `PartialJointList` projection result preserves the 100-candidate
+bound for any selected lane subset padded with zeros. It supplies a bound
+for retaining partial tuples during a proposed incremental lane merge;
+it does not supply the efficient per-lane decoder.
+
 ## The current verifier interface omits terminal hash reads
 
 `UnifiedVerifier.verifier` invokes the existing `FS2.verifier`. It runs the
@@ -59,6 +64,31 @@ Even the correctly adapted path theorem would not construct a committed
 word from a partial table. A root or child digest whose preimage had not
 yet been queried also requires a causal preimage/guessing argument; a
 two-existing-preimage collision alternative alone does not cover it.
+
+The [finite-table recovery checkpoint](MERKLE-TABLE-RECOVERY.md) now makes
+that alternative explicit: recover the exact leaf, expose a collision,
+or identify a missing node/leaf preimage for a fixed root/child target.
+The finite lookup is constructive. Parsing and completeness for a real
+oracle prefix, causal freshness, and the probability containment remain
+open.
+
+## The round-table interface also needs justification
+
+`FS2.D2` quantifies over arbitrary tables `T'` and `T`, rather than only
+causally related tables from one execution. `D2TableBoundary.table_flip_cost`
+now checks a consequence: if a prefix is doomed at `T'` and every next
+challenge produces a non-doomed extension at `T`, D2 forces the round
+error to be at least one.
+
+This rules out silently replacing the old witness-nonexistence classifier
+with a naive table-availability classifier: if changing the table alone
+provides the witness and makes every challenge good, the old small-error
+premise no longer holds. It does not prove that every knowledge classifier
+is impossible. A concrete classifier must justify the actual quantified
+premise, or a causal/IOP knowledge reduction must be provided instead.
+The current conditional Fiat–Shamir theorem remains valid within its
+stated premises; it cannot close knowledge merely by changing its extractor
+argument.
 
 ## Concrete continuation
 

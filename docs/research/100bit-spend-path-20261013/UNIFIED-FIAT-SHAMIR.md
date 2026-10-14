@@ -105,6 +105,13 @@ its read budget, and the causal commitment-binding/extraction argument are
 needed before source instantiation. See
 [`KNOWLEDGE-AND-ORACLE-BOUNDARY.md`](KNOWLEDGE-AND-ORACLE-BOUNDARY.md).
 
+The later `D2TableBoundary.table_flip_cost` also audits the arbitrary-table
+quantification of D2: a table change that makes every next challenge escape
+a doomed prefix costs probability one. A naive witness-availability
+classifier therefore cannot simply replace the old existence classifier
+while retaining a small D2 error. Knowledge needs a justified classifier
+or a separate causal/IOP reduction.
+
 The byte-level Rust correspondence, authenticated checkpoint/account parsing,
 settlement refinement, and complete masking/simulator proof remain separate
 open obligations. This change contains only Lean proofs and evidence; it does

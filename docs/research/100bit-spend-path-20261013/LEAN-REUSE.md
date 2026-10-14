@@ -36,6 +36,13 @@ terminal-oracle verifier interface and adapts the old path/leaf proof to
 32-byte hashes and R1's three salted leaf layouts. Connecting those results
 to the unified security theorem and source is still required.
 
+[Finite-table Merkle recovery](MERKLE-TABLE-RECOVERY.md) now gives a
+constructive lookup and an exact recovery/collision/missing-preimage
+alternative, plus literal oracle-program trace equations. A symbolic
+target-parser union bound and the old joint-list bound for partial lanes
+are also checked. The accompanying D2 interface audit prevents treating
+an arbitrary-table existence reduction as a completed knowledge proof.
+
 The [unified sampler connection](UNIFIED-SAMPLER-BRIDGE.md) puts initialization,
 the domain-transition hash, q22, and rho into one schedule. The
 [trace-recovery connection](UNIFIED-TRACE-RECOVERY.md) handles the row after q22;
