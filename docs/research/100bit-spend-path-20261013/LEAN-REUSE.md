@@ -47,9 +47,15 @@ The [recorded byte-log connection](MERKLE-RECORDED-LOG.md) now applies that
 recovery theorem to strict node/leaf parsers, proving that missing preimages
 are absent from the supplied query log. It also reuses the old first-read
 calculus to cover later hits on earlier parsed child targets. The supplied
-root case, canonical bounded-address/byte-log correspondence, and complete
-knowledge-security application remain explicit obligations. The focused
-combined checkpoint has 29 standard-only axiom reports.
+root case and canonical bounded-address/byte-log correspondence were explicit
+obligations at that checkpoint, which has 29 standard-only axiom reports.
+The [canonical recovery connection](CANONICAL-MERKLE-RECOVERY.md) now derives
+byte-log consistency by filtering only the recovery records, reuses evaluator
+renaming for the literal opening program, and covers the initial-C1 root case
+using the existing public-initializer parser. Its 27-audit checkpoint is green.
+The full trace and query budget retain every adversarial read. C2/folded roots,
+commitment-time prefix selection, source correspondence, and complete knowledge
+security remain open.
 
 The [unified sampler connection](UNIFIED-SAMPLER-BRIDGE.md) puts initialization,
 the domain-transition hash, q22, and rho into one schedule. The

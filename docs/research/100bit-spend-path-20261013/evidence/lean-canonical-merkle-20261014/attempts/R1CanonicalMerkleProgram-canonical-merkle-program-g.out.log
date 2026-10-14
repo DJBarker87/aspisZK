@@ -1,0 +1,17 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CanonicalMerkleProgram.lean:27:51: error: unsolved goals
+L : ℕ
+H : Addr L → State
+slots : List (Fin 8)
+path : Path slots
+leaf : Bytes
+⊢ List.map (fun x => (CanonicalByteHash.encode x, H (CanonicalByteHash.encode x)))
+        (fullTrace (fun x => H (CanonicalByteHash.encode x)) path leaf) =
+      List.map (fun input => (CanonicalByteHash.encode input, H (CanonicalByteHash.encode input)))
+        (fullTrace (CanonicalByteHash.hashBytes H) path leaf) ∧
+    foldPath (fun x => H (CanonicalByteHash.encode x)) path (H (CanonicalByteHash.encode leaf)) =
+      foldPath (CanonicalByteHash.hashBytes H) path (H (CanonicalByteHash.encode leaf))
+'AspisR1.CanonicalMerkleProgram.eval_program' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.CanonicalMerkleProgram.read_of_input' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.CanonicalMerkleProgram.fullTrace_bounded' depends on axioms: [propext, Quot.sound]
+'AspisR1.CanonicalMerkleProgram.reads_canonical' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

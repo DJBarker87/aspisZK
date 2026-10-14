@@ -79,6 +79,12 @@ itself prove consistency with one byte-string hash. A canonical-address
 restriction or filtered-log construction is required at that interface; no
 such consistency is silently assumed as a universal fact here.
 
+The subsequent [canonical oracle-program bridge](CANONICAL-MERKLE-RECOVERY.md)
+supplies that filtered-log construction and opening-read inclusion at the
+model level, retaining the unfiltered experiment trace and budget. It also
+covers the initial-C1 root predictor. Source correspondence and the remaining
+commitment cases are still separate.
+
 The earlier D2 table-quantifier issue, efficient list decoding and knowledge
 extraction, source correspondence, full privacy, and the absolute security
 accounting remain open. The conditional Fiat–Shamir bound still includes

@@ -1,0 +1,23 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CanonicalMerkleProgram.lean:30:2: error: 'change' tactic failed, pattern
+  (List.map (fun (input : Bytes) => (CanonicalByteHash.encode input, H (CanonicalByteHash.encode input)))
+        (fullTrace (fun input => H (CanonicalByteHash.encode input)) path leaf),
+      foldPath (fun input => H (CanonicalByteHash.encode input)) path (H (CanonicalByteHash.encode leaf))) =
+    (List.map (fun input => (CanonicalByteHash.encode input, H (CanonicalByteHash.encode input)))
+        (fullTrace (fun input => H (CanonicalByteHash.encode input)) path leaf),
+      foldPath (fun input => H (CanonicalByteHash.encode input)) path (H (CanonicalByteHash.encode leaf)))
+is not definitionally equal to target
+  (List.map (fun (p : Bytes × State) => (CanonicalByteHash.encode p.1, p.2))
+        (List.map (fun input => (input, (H ∘ CanonicalByteHash.encode) input))
+              (fullTrace (H ∘ CanonicalByteHash.encode) path leaf),
+            foldPath (H ∘ CanonicalByteHash.encode) path ((H ∘ CanonicalByteHash.encode) leaf)).1,
+      (List.map (fun input => (input, (H ∘ CanonicalByteHash.encode) input))
+            (fullTrace (H ∘ CanonicalByteHash.encode) path leaf),
+          foldPath (H ∘ CanonicalByteHash.encode) path ((H ∘ CanonicalByteHash.encode) leaf)).2) =
+    (List.map (fun input => (CanonicalByteHash.encode input, CanonicalByteHash.hashBytes H input))
+        (fullTrace (CanonicalByteHash.hashBytes H) path leaf),
+      foldPath (CanonicalByteHash.hashBytes H) path (CanonicalByteHash.hashBytes H leaf))
+'AspisR1.CanonicalMerkleProgram.eval_program' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.CanonicalMerkleProgram.read_of_input' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.CanonicalMerkleProgram.fullTrace_bounded' depends on axioms: [propext, Quot.sound]
+'AspisR1.CanonicalMerkleProgram.reads_canonical' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

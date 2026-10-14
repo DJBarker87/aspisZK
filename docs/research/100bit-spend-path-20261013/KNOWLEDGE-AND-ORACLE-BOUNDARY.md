@@ -68,9 +68,12 @@ two-existing-preimage collision alternative alone does not cover it.
 The [finite-table recovery checkpoint](MERKLE-TABLE-RECOVERY.md) now makes
 that alternative explicit: recover the exact leaf, expose a collision,
 or identify a missing node/leaf preimage for a fixed root/child target.
-The finite lookup is constructive. Parsing and completeness for a real
-oracle prefix, causal freshness, and the probability containment remain
-open.
+The finite lookup is constructive. The later
+[canonical oracle-program connection](CANONICAL-MERKLE-RECOVERY.md) derives
+consistency from canonical queries in the full trace, proves opening-read
+inclusion, and connects child and initial-C1 root targets to the existing
+first-read events. The actual commitment-time prefix, C2/folded root cases,
+common collision event, and source/protocol composition remain open.
 
 ## The round-table interface also needs justification
 

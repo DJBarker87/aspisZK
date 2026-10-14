@@ -1,0 +1,27 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CanonicalMerkleProgram.lean:29:2: error: Tactic `rfl` failed: The left-hand side
+  mapView CanonicalByteHash.encode
+    (List.map (fun input => (input, (H ∘ CanonicalByteHash.encode) input))
+        (fullTrace (H ∘ CanonicalByteHash.encode) path leaf),
+      foldPath (H ∘ CanonicalByteHash.encode) path ((H ∘ CanonicalByteHash.encode) leaf))
+is not definitionally equal to the right-hand side
+  (List.map (fun input => (CanonicalByteHash.encode input, CanonicalByteHash.hashBytes H input))
+      (fullTrace (CanonicalByteHash.hashBytes H) path leaf),
+    foldPath (CanonicalByteHash.hashBytes H) path (CanonicalByteHash.hashBytes H leaf))
+
+L : ℕ
+H : Addr L → State
+slots : List (Fin 8)
+path : Path slots
+leaf : Bytes
+⊢ mapView CanonicalByteHash.encode
+      (List.map (fun input => (input, (H ∘ CanonicalByteHash.encode) input))
+          (fullTrace (H ∘ CanonicalByteHash.encode) path leaf),
+        foldPath (H ∘ CanonicalByteHash.encode) path ((H ∘ CanonicalByteHash.encode) leaf)) =
+    (List.map (fun input => (CanonicalByteHash.encode input, CanonicalByteHash.hashBytes H input))
+        (fullTrace (CanonicalByteHash.hashBytes H) path leaf),
+      foldPath (CanonicalByteHash.hashBytes H) path (CanonicalByteHash.hashBytes H leaf))
+'AspisR1.CanonicalMerkleProgram.eval_program' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.CanonicalMerkleProgram.read_of_input' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.CanonicalMerkleProgram.fullTrace_bounded' depends on axioms: [propext, Quot.sound]
+'AspisR1.CanonicalMerkleProgram.reads_canonical' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
