@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PublicInitAbsorbSeparation.lean:21:4: error: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+case hnc
+L : ℕ
+pubBytes : Bytes
+a : Addr L
+c1 : State
+h : PublicInitParse.parse pubBytes a = some c1
+hs :
+  List.length pubBytes < 2 ^ 32 ∧
+    a.toBytes =
+      PublicInitFrame.domain ++ [0] ++ PublicInitFrame.lengthBytes (List.length pubBytes) ++ pubBytes ++ bytes c1
+htag : List.getD a.toBytes 32 1 = 84
+⊢ ¬(34 ≤ List.length a.toBytes ∧ List.getD a.toBytes 32 1 = 0)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PublicInitAbsorbSeparation.lean:22:2: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PublicInitAbsorbSeparation.lean:35:23: error: Application type mismatch: The argument
+  Option.noConfusion ?m.79
+has type
+  ?m.76 ≍ ?m.78 → Option.noConfusionType ?m.74 ?m.76 ?m.78
+but is expected to have type
+  False
+in the application
+  False.elim (Option.noConfusion ?m.79)
+'AspisR1.PublicInitAbsorbSeparation.parseAbsorb_none_of_init' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.PublicInitAbsorbSeparation.parse_init_absorb_none' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

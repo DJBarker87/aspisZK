@@ -1,0 +1,128 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryChainTraceFacts.lean:51:28: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  s (j + 1 + 1)
+in the target expression
+  bytes (s (j + 1)) = bytes (H (advanceA p (s j)))
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+H : Addr L → State
+tr : List (Addr L × State)
+Qtot : ℕ
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hQ : firstReads emptyTable tr ≤ Qtot
+hcoll : ¬hitsBad (badColl p Qtot) emptyTable tr
+c : Addr L
+hc : Read tr c
+n : ℕ
+hreads :
+  ∀ k < n, Read tr (squeezeA p (QuerySampler.state p H (H c) k)) ∧ Read tr (advanceA p (QuerySampler.state p H (H c) k))
+s : ℕ → State := QuerySampler.state p H (H c)
+hstep : ∀ j < n, s (j + 1) = H (advanceA p (s j))
+j : ℕ
+hj : j + 1 < n
+hadv : Read tr (advanceA p (QuerySampler.state p H (H c) j))
+hsq : Read tr (squeezeA p (QuerySampler.state p H (H c) (j + 1)))
+hadv' : Read tr (advanceA p (QuerySampler.state p H (H c) (j + 1)))
+hps : List.take 32 (squeezeA p (s (j + 1))).toBytes = bytes (H (advanceA p (s j)))
+⊢ bytes (s (j + 1)) = bytes (H (advanceA p (s j)))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryChainTraceFacts.lean:62:69: error: unsolved goals
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+H : Addr L → State
+tr : List (Addr L × State)
+Qtot : ℕ
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hQ : firstReads emptyTable tr ≤ Qtot
+hcoll : ¬hitsBad (badColl p Qtot) emptyTable tr
+c : Addr L
+hc : Read tr c
+n : ℕ
+hreads :
+  ∀ k < n, Read tr (squeezeA p (QuerySampler.state p H (H c) k)) ∧ Read tr (advanceA p (QuerySampler.state p H (H c) k))
+s : ℕ → State := QuerySampler.state p H (H c)
+hstep : ∀ j < n, s (j + 1) = H (advanceA p (s j))
+hadj :
+  ∀ (j : ℕ),
+    j + 1 < n →
+      Before tr (advanceA p (s j)) (squeezeA p (s (j + 1))) ∧ Before tr (advanceA p (s j)) (advanceA p (s (j + 1)))
+hk : 0 < n
+hsq : Read tr (squeezeA p (QuerySampler.state p H (H c) 0))
+hadv : Read tr (advanceA p (QuerySampler.state p H (H c) 0))
+⊢ bytes (s 0) = bytes (H c)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryChainTraceFacts.lean:64:69: error: unsolved goals
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+H : Addr L → State
+tr : List (Addr L × State)
+Qtot : ℕ
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hQ : firstReads emptyTable tr ≤ Qtot
+hcoll : ¬hitsBad (badColl p Qtot) emptyTable tr
+c : Addr L
+hc : Read tr c
+n : ℕ
+hreads :
+  ∀ k < n, Read tr (squeezeA p (QuerySampler.state p H (H c) k)) ∧ Read tr (advanceA p (QuerySampler.state p H (H c) k))
+s : ℕ → State := QuerySampler.state p H (H c)
+hstep : ∀ j < n, s (j + 1) = H (advanceA p (s j))
+hadj :
+  ∀ (j : ℕ),
+    j + 1 < n →
+      Before tr (advanceA p (s j)) (squeezeA p (s (j + 1))) ∧ Before tr (advanceA p (s j)) (advanceA p (s (j + 1)))
+hk : 0 < n
+hsq : Read tr (squeezeA p (QuerySampler.state p H (H c) 0))
+hadv : Read tr (advanceA p (QuerySampler.state p H (H c) 0))
+hps : List.take 32 (squeezeA p (s 0)).toBytes = bytes (H c)
+⊢ bytes (s 0) = bytes (H c)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryChainTraceFacts.lean:106:28: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  s (j + 1 + 1)
+in the target expression
+  bytes (s (j + 1)) = bytes (H (advanceA p (s j)))
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+H : Addr L → State
+tr : List (Addr L × State)
+Qtot : ℕ
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hQ : firstReads emptyTable tr ≤ Qtot
+hcoll : ¬hitsBad (badColl p Qtot) emptyTable tr
+c : Addr L
+n : ℕ
+hreads :
+  ∀ k < n, Read tr (squeezeA p (QuerySampler.state p H (H c) k)) ∧ Read tr (advanceA p (QuerySampler.state p H (H c) k))
+s : ℕ → State := QuerySampler.state p H (H c)
+hstep : ∀ j < n, s (j + 1) = H (advanceA p (s j))
+j : ℕ
+hj : j + 1 < n
+hadv : Read tr (advanceA p (QuerySampler.state p H (H c) j))
+hsq : Read tr (squeezeA p (QuerySampler.state p H (H c) (j + 1)))
+hadv' : Read tr (advanceA p (QuerySampler.state p H (H c) (j + 1)))
+hps : List.take 32 (squeezeA p (s (j + 1))).toBytes = bytes (H (advanceA p (s j)))
+⊢ bytes (s (j + 1)) = bytes (H (advanceA p (s j)))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryChainTraceFacts.lean:116:25: error: Application type mismatch: The argument
+  hjk'
+has type
+  j < k
+of sort `Prop` but is expected to have type
+  ℕ
+of sort `Type` in the application
+  ih hjk'
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryChainTraceFacts.lean:133:24: error: unexpected token ','; expected ':=', 'where' or '|'
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryChainTraceFacts.lean:183:32: error: Application type mismatch: The argument
+  hcadv
+has type
+  Before tr c (advanceA p (QuerySampler.state p H (H c) (k' + 1)))
+but is expected to have type
+  Before tr c (advanceA p (QuerySampler.state p H (H c) k'))
+in the application
+  before_trans tr hbc hcadv
+'AspisR1.QueryChainTraceFacts.root_before' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.QueryChainTraceFacts.advance_before' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.QueryChainTraceFacts.states_ne' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.QueryChainTraceFacts.known_ne_state' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

@@ -5,28 +5,20 @@ work is chiefly a set of explicit bridges. A theorem for the old protocol does
 not automatically become a theorem for the new verifier: its premises, index
 order, field embeddings, and transcript schedule must be discharged again.
 
-The [unified decoder connection](UNIFIED-DECODER-BRIDGE.md) proves that the
-older record completion reconstructs the new run's ordinary prefix, and
-that q22 extends it to the exact prefix before rho. A guarded row-32 decoder
-now uses the existing `R0C.V3.Dec` interface with the unified sampler law.
-The later [trace-recovery connection](UNIFIED-TRACE-RECOVERY.md) derives
-row-32 decoder success and trace following from the actual prover/verifier
-experiment. The remaining decoder/classifier cases are still open.
+The latest [query-decoder connection](UNIFIED-QUERY-DECODER.md) reuses the
+old query-chain and background-follow machinery for row 31. Its decoder now
+recovers the actual prover/verifier experiment's prefix, message, and query
+result, including the selected continuation state. Together with the earlier
+cases, individual decoder theorems cover all 33 rounds under their stated
+premises. Correct global dispatch and the full security instance remain open.
 
-The [unified sampler connection](UNIFIED-SAMPLER-BRIDGE.md) now puts
-initialization, the domain-transition hash, q22 and rho into one schedule.
-It reuses the existing independent-answer laws and stopped q22 scan, and
-proves that rho's absorb uses the state selected by q22. The full decoder,
-round-classifier and source/privacy connections remain separate obligations.
-
-The latest [joint-decoder connection](JOINT-DECODER-BRIDGE.md) recovers the
-earlier rounds, q22 and the following challenge from the queried address and
-earlier table. It checks both final messages and reuses the old completion
-and adaptive-chain laws. The
-21-root rho bound now permits residual data to depend on the entire completed
-earlier prefix. Eleven focused targets are checked; the combined checkpoint
-reports 25 axiom audits using only standard axioms or none. The complete
-protocol and privacy proofs remain open.
+The [unified sampler connection](UNIFIED-SAMPLER-BRIDGE.md) puts initialization,
+the domain-transition hash, q22, and rho into one schedule. The
+[trace-recovery connection](UNIFIED-TRACE-RECOVERY.md) handles the row after q22;
+the [semantic cases](UNIFIED-SEMANTIC-DECODER.md) and
+[reseed/opening cases](UNIFIED-RESEED-OPENING.md) cover the middle rounds.
+These bridges apply existing proofs without changing the old theorem statements.
+Source/account correspondence and complete privacy remain separate obligations.
 
 | Existing result | Reuse in R1 | Scope of the checked result |
 |---|---|---|
@@ -46,8 +38,9 @@ read-inclusion and evaluator-consistency theorems, prefix/query recovery, and
 background trace-following machinery. It supplies their phase and read facts
 from the unified run, including earlier prover queries. The guarded row-32
 decoder now returns the literal prefix/message/challenge on that experiment
-trace under the explicit codec, query-budget, and collision premises. The
-other round cases and full security/privacy conclusions remain open.
+trace under the explicit codec, query-budget, and collision premises. The later
+case bridges now cover the other rounds; global dispatch and full security/privacy
+conclusions remain open.
 
 ## New typed-candidate connection
 
@@ -436,3 +429,19 @@ explicit. Query-case completion, correct global dispatch, the full generic
 security and numerical instance, source correspondence and privacy remain
 open. Sixteen focused targets passed on the NUC; the final combined checkpoint
 has 24 standard-only axiom reports and recorded source/object/resource evidence.
+
+
+## Query case and shared decoder representation
+
+[UNIFIED-QUERY-DECODER.md](UNIFIED-QUERY-DECODER.md) connects query row 31 to
+the actual experiment. The background sampler lets squeeze reads arrive in
+arbitrary order relative to their same-step advances, retains the advance
+list, and uses the existing bounded scan's exact output. The law transfer
+keeps the fixed-prefix bound explicit. Generic singleton-result adapters
+preserve the existing state-valued decoders' follow and law behavior.
+
+Fourteen final targets passed on the capped NUC. The combined checkpoint has
+39 standard-only or empty axiom reports. Symbolic label injectivity and
+initialization/absorb separation are checked prerequisites for the next
+combined dispatcher; that dispatcher and the full security, source, and
+privacy results remain open.

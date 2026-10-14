@@ -1,0 +1,19 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PrefixQueryTrace.lean:128:2: error: Type mismatch: After simplification, term
+  hfollow
+ has type
+  @Eq (Option C) (bfollow g (traceFrom tr c) own (List.map (fun b => (b, none)) miss) T)
+    (some
+      (g (H c :: List.map (fun k => QuerySampler.state p H (H c) (k + 1)) (List.range n))
+        (List.map ((fun p => p.2.getD (H p.1)) ∘ fun b => (b, none)) miss ++
+          List.map (H ∘ fun k => squeezeA p (QuerySampler.state p H (H c) k)) (List.range n))))
+but is expected to have type
+  @Eq (Option C)
+    (bfollow g (traceFrom tr c) (BS.ask c fun s => QueryBackgroundChain.chainBS p n s [s])
+      (List.map (fun b => (b, none)) (PrefixAnswers.missing p (tableBefore emptyTable tr c) rs))
+      (tableBefore emptyTable tr c))
+    (some
+      (g (H c :: List.map (fun k => QuerySampler.state p H (H c) (k + 1)) (List.range n))
+        (List.map H (PrefixAnswers.missing p (tableBefore emptyTable tr c) rs) ++
+          List.map (fun k => H (squeezeA p (QuerySampler.state p H (H c) k))) (List.range n))))
+'AspisR1.PrefixQueryTrace.follows_after_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

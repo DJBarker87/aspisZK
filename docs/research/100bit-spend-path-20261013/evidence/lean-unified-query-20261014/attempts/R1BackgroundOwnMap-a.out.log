@@ -1,0 +1,318 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:30:39: error(lean.unknownIdentifier): Unknown identifier `C`
+
+Note: It is not possible to treat `C` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:32:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Inhabited A
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:33:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Inhabited A
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:58:42: error(lean.unknownIdentifier): Unknown identifier `finished_map`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:56:8: error: unsolved goals
+case nil
+I A X Y C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+f : X → Y
+g : Y → List A → C
+own : BS I A X
+pend : List (I × Option A)
+T : Table I A
+⊢ finished g (map f (pushSpawns own pend).1) (pushSpawns own pend).2 =
+    finished (fun x as => g (f x) as) (pushSpawns own pend).1 (pushSpawns own pend).2
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:62:42: error(lean.unknownIdentifier): Unknown identifier `finished_map`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:68:12: error: unsolved goals
+case pos
+I A X Y C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+f : X → Y
+g : Y → List A → C
+rest : List (I × A)
+ih :
+  ∀ (own : BS I A X) (pend : List (I × Option A)) (T : Table I A),
+    bfollow g rest (map f own) pend T = bfollow (fun x as => g (f x) as) rest own pend T
+l : I
+a : A
+own : BS I A X
+pend : List (I × Option A)
+T : Table I A
+hf : finished (fun x as => g (f x) as) (pushSpawns own pend).1 (pushSpawns own pend).2 = none
+hown : ownCell (pushSpawns own pend).1 = some l
+hwait : waits l (pushSpawns own pend).2 = true
+ht : T l = none
+⊢ (match finished g (map f (pushSpawns own pend).1) (pushSpawns own pend).2 with
+    | some c => some c
+    | none => none) =
+    none
+
+case neg
+I A X Y C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+f : X → Y
+g : Y → List A → C
+rest : List (I × A)
+ih :
+  ∀ (own : BS I A X) (pend : List (I × Option A)) (T : Table I A),
+    bfollow g rest (map f own) pend T = bfollow (fun x as => g (f x) as) rest own pend T
+l : I
+a : A
+own : BS I A X
+pend : List (I × Option A)
+T : Table I A
+hf : finished (fun x as => g (f x) as) (pushSpawns own pend).1 (pushSpawns own pend).2 = none
+hown : ownCell (pushSpawns own pend).1 = some l
+hwait : waits l (pushSpawns own pend).2 = true
+ht : ¬T l = none
+⊢ (match finished g (map f (pushSpawns own pend).1) (pushSpawns own pend).2 with
+    | some c => some c
+    | none => none) =
+    none
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:69:12: error: unsolved goals
+case pos
+I A X Y C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+f : X → Y
+g : Y → List A → C
+rest : List (I × A)
+ih :
+  ∀ (own : BS I A X) (pend : List (I × Option A)) (T : Table I A),
+    bfollow g rest (map f own) pend T = bfollow (fun x as => g (f x) as) rest own pend T
+l : I
+a : A
+own : BS I A X
+pend : List (I × Option A)
+T : Table I A
+hf : finished (fun x as => g (f x) as) (pushSpawns own pend).1 (pushSpawns own pend).2 = none
+hown : ownCell (pushSpawns own pend).1 = some l
+hwait : ¬waits l (pushSpawns own pend).2 = true
+ht : T l = none
+⊢ (match finished g (map f (pushSpawns own pend).1) (pushSpawns own pend).2 with
+    | some c => some c
+    | none =>
+      bfollow (fun x as => g (f x) as) rest (stepAsk (pushSpawns own pend).1 a) (pushSpawns own pend).2 (put T l a)) =
+    bfollow (fun x as => g (f x) as) rest (stepAsk (pushSpawns own pend).1 a) (pushSpawns own pend).2 (put T l a)
+
+case neg
+I A X Y C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+f : X → Y
+g : Y → List A → C
+rest : List (I × A)
+ih :
+  ∀ (own : BS I A X) (pend : List (I × Option A)) (T : Table I A),
+    bfollow g rest (map f own) pend T = bfollow (fun x as => g (f x) as) rest own pend T
+l : I
+a : A
+own : BS I A X
+pend : List (I × Option A)
+T : Table I A
+hf : finished (fun x as => g (f x) as) (pushSpawns own pend).1 (pushSpawns own pend).2 = none
+hown : ownCell (pushSpawns own pend).1 = some l
+hwait : ¬waits l (pushSpawns own pend).2 = true
+ht : ¬T l = none
+⊢ (match finished g (map f (pushSpawns own pend).1) (pushSpawns own pend).2 with
+    | some c => some c
+    | none => none) =
+    none
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:71:12: error: unsolved goals
+case pos
+I A X Y C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+f : X → Y
+g : Y → List A → C
+rest : List (I × A)
+ih :
+  ∀ (own : BS I A X) (pend : List (I × Option A)) (T : Table I A),
+    bfollow g rest (map f own) pend T = bfollow (fun x as => g (f x) as) rest own pend T
+l : I
+a : A
+own : BS I A X
+pend : List (I × Option A)
+T : Table I A
+hf : finished (fun x as => g (f x) as) (pushSpawns own pend).1 (pushSpawns own pend).2 = none
+hown : ¬ownCell (pushSpawns own pend).1 = some l
+hwait : waits l (pushSpawns own pend).2 = true
+ht : T l = none
+⊢ (match finished g (map f (pushSpawns own pend).1) (pushSpawns own pend).2 with
+    | some c => some c
+    | none =>
+      bfollow (fun x as => g (f x) as) rest (pushSpawns own pend).1 (record l a (pushSpawns own pend).2) (put T l a)) =
+    bfollow (fun x as => g (f x) as) rest (pushSpawns own pend).1 (record l a (pushSpawns own pend).2) (put T l a)
+
+case neg
+I A X Y C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+f : X → Y
+g : Y → List A → C
+rest : List (I × A)
+ih :
+  ∀ (own : BS I A X) (pend : List (I × Option A)) (T : Table I A),
+    bfollow g rest (map f own) pend T = bfollow (fun x as => g (f x) as) rest own pend T
+l : I
+a : A
+own : BS I A X
+pend : List (I × Option A)
+T : Table I A
+hf : finished (fun x as => g (f x) as) (pushSpawns own pend).1 (pushSpawns own pend).2 = none
+hown : ¬ownCell (pushSpawns own pend).1 = some l
+hwait : waits l (pushSpawns own pend).2 = true
+ht : ¬T l = none
+⊢ (match finished g (map f (pushSpawns own pend).1) (pushSpawns own pend).2 with
+    | some c => some c
+    | none => none) =
+    none
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:72:12: error: unsolved goals
+case pos
+I A X Y C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+f : X → Y
+g : Y → List A → C
+rest : List (I × A)
+ih :
+  ∀ (own : BS I A X) (pend : List (I × Option A)) (T : Table I A),
+    bfollow g rest (map f own) pend T = bfollow (fun x as => g (f x) as) rest own pend T
+l : I
+a : A
+own : BS I A X
+pend : List (I × Option A)
+T : Table I A
+hf : finished (fun x as => g (f x) as) (pushSpawns own pend).1 (pushSpawns own pend).2 = none
+hown : ¬ownCell (pushSpawns own pend).1 = some l
+hwait : ¬waits l (pushSpawns own pend).2 = true
+ht : T l = none
+⊢ (match finished g (map f (pushSpawns own pend).1) (pushSpawns own pend).2 with
+    | some c => some c
+    | none => bfollow (fun x as => g (f x) as) rest (pushSpawns own pend).1 (pushSpawns own pend).2 (put T l a)) =
+    bfollow (fun x as => g (f x) as) rest (pushSpawns own pend).1 (pushSpawns own pend).2 (put T l a)
+
+case neg
+I A X Y C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+f : X → Y
+g : Y → List A → C
+rest : List (I × A)
+ih :
+  ∀ (own : BS I A X) (pend : List (I × Option A)) (T : Table I A),
+    bfollow g rest (map f own) pend T = bfollow (fun x as => g (f x) as) rest own pend T
+l : I
+a : A
+own : BS I A X
+pend : List (I × Option A)
+T : Table I A
+hf : finished (fun x as => g (f x) as) (pushSpawns own pend).1 (pushSpawns own pend).2 = none
+hown : ¬ownCell (pushSpawns own pend).1 = some l
+hwait : ¬waits l (pushSpawns own pend).2 = true
+ht : ¬T l = none
+⊢ (match finished g (map f (pushSpawns own pend).1) (pushSpawns own pend).2 with
+    | some c => some c
+    | none => bfollow (fun x as => g (f x) as) rest (pushSpawns own pend).1 (pushSpawns own pend).2 (put T l a)) =
+    bfollow (fun x as => g (f x) as) rest (pushSpawns own pend).1 (pushSpawns own pend).2 (put T l a)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:73:15: error: unsolved goals
+case cons.some
+I A X Y C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+f : X → Y
+g : Y → List A → C
+rest : List (I × A)
+ih :
+  ∀ (own : BS I A X) (pend : List (I × Option A)) (T : Table I A),
+    bfollow g rest (map f own) pend T = bfollow (fun x as => g (f x) as) rest own pend T
+l : I
+a : A
+own : BS I A X
+pend : List (I × Option A)
+T : Table I A
+c : C
+hf : finished (fun x as => g (f x) as) (pushSpawns own pend).1 (pushSpawns own pend).2 = some c
+⊢ (match finished g (map f (pushSpawns own pend).1) (pushSpawns own pend).2 with
+    | some c => some c
+    | none =>
+      if ownCell (pushSpawns own pend).1 = some l then
+        if waits l (pushSpawns own pend).2 = true then none
+        else
+          if T l = none then
+            bfollow g rest (map f (stepAsk (pushSpawns own pend).1 a)) (pushSpawns own pend).2 (put T l a)
+          else none
+      else
+        if waits l (pushSpawns own pend).2 = true then
+          if T l = none then
+            bfollow g rest (map f (pushSpawns own pend).1) (record l a (pushSpawns own pend).2) (put T l a)
+          else none
+        else bfollow g rest (map f (pushSpawns own pend).1) (pushSpawns own pend).2 (put T l a)) =
+    some c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:68:49: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp [hf̵,̵ ̵h̵own, hwait, ht, ih]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:68:66: warning: This simp argument is unused:
+  ht
+
+Hint: Omit it from the simp argument list.
+  simp [hf, hown, hwait, h̵t̵,̵ ̵ih]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:68:70: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [hf, hown, hwait, ht,̵ ̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:69:49: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp [hf̵,̵ ̵h̵own, hwait, ht, ih]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:71:49: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp [hf̵,̵ ̵h̵own, hwait, ht, ih]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:72:49: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp [hf̵,̵ ̵h̵own, hwait, ht, ih]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:72:66: warning: This simp argument is unused:
+  ht
+
+Hint: Omit it from the simp argument list.
+  simp [hf, hown, hwait, h̵t̵,̵ ̵ih]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:73:24: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵f̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:85:29: error(lean.unknownIdentifier): Unknown identifier `pend`
+'AspisR1.BackgroundOwnMap.map' does not depend on any axioms
+'AspisR1.BackgroundOwnMap.pushSpawns_map' does not depend on any axioms
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1BackgroundOwnMap.lean:102:14: error(lean.unknownIdentifier): Unknown constant `finished_map`
+'AspisR1.BackgroundOwnMap.ownCell_map' does not depend on any axioms
+'AspisR1.BackgroundOwnMap.stepAsk_map' depends on axioms: [propext]
+'AspisR1.BackgroundOwnMap.bfollow_map' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.BackgroundOwnMap.blaw_map' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

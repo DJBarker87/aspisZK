@@ -1,0 +1,39 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedQueryLaw.lean:38:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  blaw (UnifiedQueryDecoder.output p pub T ctx) obs (QueryBackgroundChain.chainBS p 8 ?s ?xs) ?pre
+in the target expression
+  (mean fun a =>
+      blaw (UnifiedQueryDecoder.output p pub T ctx) obs (QueryBackgroundChain.chainBS p 8 a [a])
+        (List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records))) =
+    pmean
+      (fun as =>
+        independentMean
+          (UnifiedSampler.samp p hD 31 (UnifiedSemanticLaw.mkPrefix p pub T ctx as)
+              (Message.payload ctx.message)).toProgram
+          fun w => obs (UnifiedSemanticLaw.mkPrefix p pub T ctx as, Message.payload ctx.message, w.2))
+      (List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records))
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+pub : UnifiedSampler.Public L
+T : Table (Addr L) State
+ctx : UnifiedSemanticContext.Context M
+a : Addr L
+obs : JointTranscriptView.Output M Cv L → ℚ
+hlen : ctx.records.length = 31
+pend : List (Addr L × Option State) := List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records)
+hlenAs : ∀ (as : List State), as.length = pend.length → as.length = (PrefixAnswers.missing p T ctx.records).length
+⊢ (mean fun a =>
+      blaw (UnifiedQueryDecoder.output p pub T ctx) obs (QueryBackgroundChain.chainBS p 8 a [a])
+        (List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records))) =
+    pmean
+      (fun as =>
+        independentMean
+          (UnifiedSampler.samp p hD 31 (UnifiedSemanticLaw.mkPrefix p pub T ctx as)
+              (Message.payload ctx.message)).toProgram
+          fun w => obs (UnifiedSemanticLaw.mkPrefix p pub T ctx as, Message.payload ctx.message, w.2))
+      (List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records))
+'AspisR1.UnifiedQueryLaw.background_sampler_law' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.UnifiedQueryLaw.decoded_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

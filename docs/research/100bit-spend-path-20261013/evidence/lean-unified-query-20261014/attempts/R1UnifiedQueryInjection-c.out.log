@@ -1,0 +1,184 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedQueryInjection.lean:107:71: error: unexpected token ':='; expected ')', ',' or ':'
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedQueryInjection.lean:45:60: error: unsolved goals
+case hfollow'
+M Cv W : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+decision : UnifiedSampler.Prefix M Cv L → Message M → Bool
+H : Addr L → State
+pub : UnifiedSampler.Public L
+c1 : State
+payload : ℕ → M
+prior : List (Addr L × State)
+hprior : ∀ q ∈ prior, q.2 = H q.1
+hpub : List.length pub.pubBytes < 2 ^ 32
+hl : p.lbl 0 = 160
+he : p.enc (payload 0) = PublicInitFrame.emptyRecord
+Qtot : ℕ
+hQ : firstReads emptyTable (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior) ≤ Qtot
+hold : ¬hitsBad (badColl p Qtot) emptyTable (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+htail :
+  ¬hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable
+      (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+tr : List (Addr L × State) := UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior
+c : Addr L := UnifiedSteps.address p hD H pub c1 payload 31
+T : Table (Addr L) State := tableBefore emptyTable tr c
+rs : List (Rec M) := UnifiedRecords.records p hD H pub c1 payload 31
+ctx : UnifiedSemanticContext.Context M := { c1 := c1, records := rs, message := payload 31 }
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hqueryreads :
+  have a := UnifiedQueryRun.queryAddress p hD H pub c1 payload;
+  a ∈ List.map Prod.fst (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior) ∧
+    ∀ j < 8,
+      squeezeA p (QuerySampler.state p H (H a) j) ∈
+          List.map Prod.fst (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior) ∧
+        advanceA p (QuerySampler.state p H (H a) j) ∈
+          List.map Prod.fst (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+hc : Read tr c
+hparse : parseAbsorb c = some (UnifiedRecords.previous p hD H pub c1 payload 31, p.lbl 31, p.enc (payload 31))
+hparsec : (parseAbsorb c).isSome = true
+hreads :
+  ∀ j < 8, Read tr (squeezeA p (QuerySampler.state p H (H c) j)) ∧ Read tr (advanceA p (QuerySampler.state p H (H c) j))
+htyped :
+  OpeningPrefixCompletion.typed p pub.pubBytes pub.tag
+      (tableBefore emptyTable (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+        (UnifiedSteps.address p hD H pub c1 payload (27 + 4)))
+      27 4 (UnifiedPhases.openingState p hD H pub c1 payload 4) =
+    some (c1, UnifiedRecords.records p hD H pub c1 payload (27 + 4))
+hknown :
+  ∀ r ∈ UnifiedRecords.records p hD H pub c1 payload (27 + 4),
+    ∃ b,
+      tableBefore emptyTable (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+          (UnifiedSteps.address p hD H pub c1 payload (27 + 4)) b =
+        some r.2.1
+hprefixreads :
+  ∀ r ∈ UnifiedRecords.records p hD H pub c1 payload (27 + 4),
+    Read (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior) (squeezeA p r.2.1)
+hlen : rs.length = 31
+hcontext : UnifiedOpeningDecoder.parse p pub c T = some ctx
+hfollow :
+  bfollow (UnifiedQueryDecoder.output p pub T ctx) (traceFrom tr c)
+      (BS.ask c fun s => QueryBackgroundChain.chainBS p 8 s [s])
+      (List.map (fun b => (b, none)) (PrefixAnswers.missing p (tableBefore emptyTable tr c) rs))
+      (tableBefore emptyTable tr c) =
+    some
+      (UnifiedQueryDecoder.output p pub T ctx
+        ([H c] ++ List.map (fun k => QuerySampler.state p H (H c) (k + 1)) (List.range 8))
+        (List.map H (PrefixAnswers.missing p (tableBefore emptyTable tr c) rs) ++
+          List.map (fun k => H (squeezeA p (QuerySampler.state p H (H c) k))) (List.range 8)))
+hT : ∀ (b : Addr L) (v : State), T b = some v → v = H b
+hc_eq : c = UnifiedQueryRun.queryAddress p hD H pub c1 payload
+hactual :
+  UnifiedQueryDecoder.output p pub T
+      { c1 := c1, records := UnifiedRecords.records p hD H pub c1 payload 31, message := payload 31 }
+      (QueryStateList.states (QuerySampler.state p H (H c)) 8)
+      (List.map H (PrefixAnswers.missing p T (UnifiedRecords.records p hD H pub c1 payload 31)) ++
+        QueryStateList.blocks p H (QuerySampler.state p H (H c)) 8) =
+    (UnifiedRun.transcript p hD H pub c1 payload 31, UnifiedRun.message c1 payload 31,
+      UnifiedRun.challenge p hD H pub c1 payload 31)
+⊢ bfollow (UnifiedQueryDecoder.output p pub T ctx) (traceFrom tr c) (UnifiedQueryDecoder.own p c)
+      (List.map (fun b => (b, none)) (PrefixAnswers.missing p T rs)) T =
+    some
+      (UnifiedQueryDecoder.output p pub T ctx
+        ([H c] ++ List.map (fun k => QuerySampler.state p H (H c) (k + 1)) (List.range 8))
+        (List.map H (PrefixAnswers.missing p T rs) ++
+          List.map (fun k => H (squeezeA p (QuerySampler.state p H (H c) k))) (List.range 8)))
+
+M Cv W : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+decision : UnifiedSampler.Prefix M Cv L → Message M → Bool
+H : Addr L → State
+pub : UnifiedSampler.Public L
+c1 : State
+payload : ℕ → M
+prior : List (Addr L × State)
+hprior : ∀ q ∈ prior, q.2 = H q.1
+hpub : List.length pub.pubBytes < 2 ^ 32
+hl : p.lbl 0 = 160
+he : p.enc (payload 0) = PublicInitFrame.emptyRecord
+Qtot : ℕ
+hQ : firstReads emptyTable (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior) ≤ Qtot
+hold : ¬hitsBad (badColl p Qtot) emptyTable (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+htail :
+  ¬hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable
+      (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+tr : List (Addr L × State) := UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior
+c : Addr L := UnifiedSteps.address p hD H pub c1 payload 31
+T : Table (Addr L) State := tableBefore emptyTable tr c
+rs : List (Rec M) := UnifiedRecords.records p hD H pub c1 payload 31
+ctx : UnifiedSemanticContext.Context M := { c1 := c1, records := rs, message := payload 31 }
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hqueryreads :
+  have a := UnifiedQueryRun.queryAddress p hD H pub c1 payload;
+  a ∈ List.map Prod.fst (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior) ∧
+    ∀ j < 8,
+      squeezeA p (QuerySampler.state p H (H a) j) ∈
+          List.map Prod.fst (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior) ∧
+        advanceA p (QuerySampler.state p H (H a) j) ∈
+          List.map Prod.fst (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+hc : Read tr c
+hparse : parseAbsorb c = some (UnifiedRecords.previous p hD H pub c1 payload 31, p.lbl 31, p.enc (payload 31))
+hparsec : (parseAbsorb c).isSome = true
+hreads :
+  ∀ j < 8, Read tr (squeezeA p (QuerySampler.state p H (H c) j)) ∧ Read tr (advanceA p (QuerySampler.state p H (H c) j))
+htyped :
+  OpeningPrefixCompletion.typed p pub.pubBytes pub.tag
+      (tableBefore emptyTable (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+        (UnifiedSteps.address p hD H pub c1 payload (27 + 4)))
+      27 4 (UnifiedPhases.openingState p hD H pub c1 payload 4) =
+    some (c1, UnifiedRecords.records p hD H pub c1 payload (27 + 4))
+hknown :
+  ∀ r ∈ UnifiedRecords.records p hD H pub c1 payload (27 + 4),
+    ∃ b,
+      tableBefore emptyTable (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+          (UnifiedSteps.address p hD H pub c1 payload (27 + 4)) b =
+        some r.2.1
+hprefixreads :
+  ∀ r ∈ UnifiedRecords.records p hD H pub c1 payload (27 + 4),
+    Read (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior) (squeezeA p r.2.1)
+hlen : rs.length = 31
+hcontext : UnifiedOpeningDecoder.parse p pub c T = some ctx
+hfollow :
+  bfollow (UnifiedQueryDecoder.output p pub T ctx) (traceFrom tr c)
+      (BS.ask c fun s => QueryBackgroundChain.chainBS p 8 s [s])
+      (List.map (fun b => (b, none)) (PrefixAnswers.missing p (tableBefore emptyTable tr c) rs))
+      (tableBefore emptyTable tr c) =
+    some
+      (UnifiedQueryDecoder.output p pub T ctx
+        ([H c] ++ List.map (fun k => QuerySampler.state p H (H c) (k + 1)) (List.range 8))
+        (List.map H (PrefixAnswers.missing p (tableBefore emptyTable tr c) rs) ++
+          List.map (fun k => H (squeezeA p (QuerySampler.state p H (H c) k))) (List.range 8)))
+hT : ∀ (b : Addr L) (v : State), T b = some v → v = H b
+hc_eq : c = UnifiedQueryRun.queryAddress p hD H pub c1 payload
+hactual :
+  UnifiedQueryDecoder.output p pub T
+      { c1 := c1, records := UnifiedRecords.records p hD H pub c1 payload 31, message := payload 31 }
+      (QueryStateList.states (QuerySampler.state p H (H c)) 8)
+      (List.map H (PrefixAnswers.missing p T (UnifiedRecords.records p hD H pub c1 payload 31)) ++
+        QueryStateList.blocks p H (QuerySampler.state p H (H c)) 8) =
+    (UnifiedRun.transcript p hD H pub c1 payload 31, UnifiedRun.message c1 payload 31,
+      UnifiedRun.challenge p hD H pub c1 payload 31)
+hfollow' :
+  bfollow (UnifiedQueryDecoder.output p pub T ctx) (traceFrom tr c) (UnifiedQueryDecoder.own p c)
+      (List.map (fun b => (b, none)) (PrefixAnswers.missing p T rs)) T =
+    some
+      (UnifiedQueryDecoder.output p pub T ctx
+        ([H c] ++ List.map (fun k => QuerySampler.state p H (H c) (k + 1)) (List.range 8))
+        (List.map H (PrefixAnswers.missing p T rs) ++
+          List.map (fun k => H (squeezeA p (QuerySampler.state p H (H c) k))) (List.range 8)))
+⊢ bfollow (UnifiedQueryDecoder.output p pub T ctx)
+      (traceFrom (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+        (UnifiedSteps.address p hD H pub c1 payload 31))
+      (UnifiedQueryDecoder.own p c) (List.map (fun b => (b, none)) (PrefixAnswers.missing p T rs))
+      (tableBefore emptyTable (UnifiedPrefixedReads.trace p hD extract decision H pub c1 payload prior)
+        (UnifiedSteps.address p hD H pub c1 payload 31)) =
+    some
+      (UnifiedRun.transcript p hD H pub c1 payload 31, UnifiedRun.message c1 payload 31,
+        UnifiedRun.challenge p hD H pub c1 payload 31)
+'AspisR1.UnifiedQueryInjection.decodes_and_follows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

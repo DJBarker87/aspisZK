@@ -1,0 +1,74 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedQueryLaw.lean:78:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Q22.chainE
+    (fun moreBs moreXs =>
+      obs
+        (UnifiedSemanticLaw.mkPrefix p pub T ctx as, Message.payload ctx.message,
+          UnifiedSampler.liftQuery (Q22.scanOut 8 Q22.q0 ([] ++ moreBs) ([] ++ moreXs) s)))
+    8
+in the target expression
+  Q22.chainE
+      (fun moreBs moreXs =>
+        obs
+          (UnifiedSemanticLaw.mkPrefix p pub T ctx as, Message.payload ctx.message,
+            UnifiedSampler.liftQuery (Q22.scanOut 8 Q22.q0 moreBs moreXs s)))
+      8 =
+    independentMean
+      (QuerySampler.chain p (fun bs xs => UnifiedSampler.liftQuery (Q22.scanOut 8 Q22.q0 bs xs s)) 8 s [] []).toProgram
+      fun w => obs (UnifiedSemanticLaw.mkPrefix p pub T ctx as, Message.payload ctx.message, w.2)
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+pub : UnifiedSampler.Public L
+T : Table (Addr L) State
+ctx : UnifiedSemanticContext.Context M
+a : Addr L
+obs : JointTranscriptView.Output M Cv L → ℚ
+hlen : ctx.records.length = 31
+pend : List (Addr L × Option State) := List.map (fun b => (b, none)) (PrefixAnswers.missing p T ctx.records)
+hlenAs : ∀ (as : List State), as.length = pend.length → as.length = (PrefixAnswers.missing p T ctx.records).length
+hbg :
+  (fun s => blaw (UnifiedQueryDecoder.output p pub T ctx) obs (QueryBackgroundChain.chainBS p 8 s [s]) pend) = fun s =>
+    pmean (fun as => Q22.chainE (fun bs ys => obs (UnifiedQueryDecoder.output p pub T ctx ([s] ++ ys) (as ++ bs))) 8)
+      pend
+as : List State
+has : as.length = pend.length
+haslen : as.length = (PrefixAnswers.missing p T ctx.records).length
+s : State
+hout :
+  ∀ (moreBs moreXs : List State),
+    UnifiedQueryDecoder.output p pub T ctx ([s] ++ moreXs) (as ++ moreBs) =
+      (UnifiedSemanticLaw.mkPrefix p pub T ctx as, Message.payload ctx.message,
+        UnifiedSampler.liftQuery (Q22.scanOut 8 Q22.q0 moreBs moreXs s))
+hchain :
+  (independentMean
+      (QuerySampler.chain p (fun moreBs moreXs => UnifiedSampler.liftQuery (Q22.scanOut 8 Q22.q0 moreBs moreXs s)) 8 s
+          [] []).toProgram
+      fun w => obs (UnifiedSemanticLaw.mkPrefix p pub T ctx as, Message.payload ctx.message, w.2)) =
+    Q22.chainE
+      (fun moreBs moreXs =>
+        obs
+          (UnifiedSemanticLaw.mkPrefix p pub T ctx as, Message.payload ctx.message,
+            UnifiedSampler.liftQuery (Q22.scanOut 8 Q22.q0 ([] ++ moreBs) ([] ++ moreXs) s)))
+      8
+houtput :
+  Q22.chainE (fun moreBs moreXs => obs (UnifiedQueryDecoder.output p pub T ctx ([s] ++ moreXs) (as ++ moreBs))) 8 =
+    Q22.chainE
+      (fun moreBs moreXs =>
+        obs
+          (UnifiedSemanticLaw.mkPrefix p pub T ctx as, Message.payload ctx.message,
+            UnifiedSampler.liftQuery (Q22.scanOut 8 Q22.q0 moreBs moreXs s)))
+      8
+⊢ Q22.chainE
+      (fun moreBs moreXs =>
+        obs
+          (UnifiedSemanticLaw.mkPrefix p pub T ctx as, Message.payload ctx.message,
+            UnifiedSampler.liftQuery (Q22.scanOut 8 Q22.q0 moreBs moreXs s)))
+      8 =
+    independentMean
+      (QuerySampler.chain p (fun bs xs => UnifiedSampler.liftQuery (Q22.scanOut 8 Q22.q0 bs xs s)) 8 s [] []).toProgram
+      fun w => obs (UnifiedSemanticLaw.mkPrefix p pub T ctx as, Message.payload ctx.message, w.2)
+'AspisR1.UnifiedQueryLaw.background_sampler_law' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.UnifiedQueryLaw.decoded_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

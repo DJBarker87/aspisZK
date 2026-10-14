@@ -13,8 +13,9 @@ by changing its round count.
 
 The subsequent [unified decoder connection](UNIFIED-DECODER-BRIDGE.md)
 connects completed records to that run and gives a guarded row-32 component
-in the old `R0C.V3.Dec` interface. This does not yet supply the component's
-whole-trace injection or the full decoder/classifier instance.
+in the old `R0C.V3.Dec` interface. The later case bridges supply whole-trace
+injection for individual rounds; the full decoder/classifier instance remains
+open.
 
 ## Facts that prevent a round-count-only substitution
 
@@ -310,3 +311,21 @@ explicit. Query-case completion, correct global dispatch, the full generic
 security and numerical instance, source correspondence and privacy remain
 open. Sixteen focused targets passed on the NUC; the final combined checkpoint
 has 24 standard-only axiom reports and recorded source/object/resource evidence.
+
+
+## Query-row completion and dispatcher prerequisites
+
+[UNIFIED-QUERY-DECODER.md](UNIFIED-QUERY-DECODER.md) now supplies the row-31
+case on the actual experiment. It reuses the old background-chain proofs,
+no-collision order and injectivity consequences, and exact stopped scan.
+All 33 rows have individual decoder cases under their explicit premises.
+A generic singleton-list adapter preserves the other cases' output and law,
+so the query chain can carry every advance state in the shared interface.
+
+The inspected source uses unique labels `0xa0 + row` through row 32. A
+symbolic Lean label model proves injectivity and row recovery, and the
+initialization parser is proved disjoint from absorb parsing. Correct global
+dispatch, discharge of the concrete codec premises, `Inj3`, D1/D2/D3, the
+numerical instance, source/account correspondence, and full privacy remain
+open. The final focused NUC checkpoint passed 39 axiom audits; the sealed
+bundle retains all 38 attempts and exact hashes. No runtime source changed.
