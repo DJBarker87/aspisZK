@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryTruncation.lean:21:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case zero
+k : ℕ
+q : ScanState
+bs xs : List State
+s : State
+hk : k ≤ 0
+htail : (Q22.scanOut 0 q bs xs s).2 ∉ List.drop k xs
+⊢ Q22.scanOut k q (List.take k bs) (List.take k xs) s = Q22.scanOut 0 q bs xs s
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryTruncation.lean:26:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case succ
+n : ℕ
+ih :
+  ∀ (k : ℕ) (q : ScanState) (bs xs : List State) (s : State),
+    k ≤ n →
+      (Q22.scanOut n q bs xs s).2 ∉ List.drop k xs →
+        Q22.scanOut k q (List.take k bs) (List.take k xs) s = Q22.scanOut n q bs xs s
+k : ℕ
+q : ScanState
+bs xs : List State
+s : State
+hk : k ≤ n + 1
+htail : (Q22.scanOut (n + 1) q bs xs s).2 ∉ List.drop k xs
+⊢ Q22.scanOut k q (List.take k bs) (List.take k xs) s = Q22.scanOut (n + 1) q bs xs s
+'AspisR1.QueryTruncation.scanOut_truncate' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

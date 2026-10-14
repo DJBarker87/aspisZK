@@ -1,0 +1,23 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexAbsorb.lean:69:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+T : Table (Addr L) State
+H : Addr L → State
+tr : List (Addr L × State)
+Qtot : ℕ
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hQ : firstReads emptyTable tr ≤ Qtot
+hcoll : ¬hitsBad (badColl p Qtot) emptyTable tr
+hT : ∀ (a : Addr L) (v : State), T a = some v → v = H a ∧ Read tr a
+s : State
+hcell : T (advanceA p s) = some (H (advanceA p s))
+a : Addr L
+hempty : (a ∈ ∅) = False
+⊢ T a = some (H (advanceA p s)) ∧ (parseAbsorb a).isSome = true ↔ False
+'AspisR1.DuplexAbsorb.parseAbsorb_advance_none' depends on axioms: [propext, Quot.sound]
+'AspisR1.DuplexAbsorb.theUnique_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DuplexAbsorb.unique_absorb' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DuplexAbsorb.absCells_advance_empty' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

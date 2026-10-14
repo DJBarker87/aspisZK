@@ -50,11 +50,13 @@ with R1's decision, and does not by itself establish a causal oracle law.
 
 Preserve the actual selected-state q22 behavior. Reuse the old no-collision
 lemmas to recover unique advance predecessors; recover the query absorb
-boundary by following those predecessors. Recover the complete eight-pair
-spine from table lookups, even when the subsequent rho absorb starts at an
-earlier selected advance. A prefix-completion record must store enough of
-that spine to enumerate all earlier missing squeeze cells and reconstruct
-the q22 challenge from the existing `scanOut` definition.
+boundary by following those predecessors. Recover only the advance path that ends at the selected state. An adversary
+can first-read the rho absorb after obtaining that state and before reading
+the unused query-chain tail, so the complete eight-pair spine need not be
+in that first-read table. A prefix-completion record must enumerate the
+missing squeeze cells on the recovered path and reconstruct the q22 result
+from a truncated `scanOut`. Equality to the actual full result needs a
+separate stopping/truncation lemma under the state-distinctness condition.
 
 The current focused lemmas establish only deterministic pieces: advance
 rewinding under the existing no-collision/table premises, and membership of
@@ -112,3 +114,17 @@ candidates, with their source and first-read premises still to be proved.
 All 14 Rust source/manifest fingerprints in the source inventory were
 independently rechecked unchanged during the root audit. No source or CU
 claim is inferred from these Lean structural checks.
+
+## First-read table correction (after `52023cce5`)
+
+The verifier's full eight-pair execution order does not force an adversary's
+first rho absorb query to occur after all eight advances. The committed
+`QueryRecovery.selected_path_recovered` remains a valid deterministic
+statement with its explicit eight-cell premises, but those premises must
+not be silently assumed for a first-read completing decoder. The checked
+[first-read bridge](QUERY-FIRST-READ-BRIDGE.md) now locates the nearest
+absorb boundary from the selected state, derives the required predecessor
+path from the earlier table, and proves exact scan-prefix equality. Its
+completion wrapper needs coherence only on its computed finite missing
+list. No probability estimate or protocol source changed. The completion
+sampler law and full transcript instance remain separate obligations.

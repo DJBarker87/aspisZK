@@ -1,0 +1,37 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexSeek.lean:38:18: error: unsolved goals
+case zero.succ
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+T : Table (Addr L) State
+s : ℕ → State
+a : Addr L
+hroot : theUnique (absCells T (s 0)) = some a
+hnone : ∀ j < 0, absCells T (s (j + 1)) = ∅
+hpre : ∀ j < 0, theUnique (advPre p T (s (j + 1))) = some (s j)
+fuel : ℕ
+hfuel : 0 + 1 ≤ fuel + 1
+⊢ some (a, [s 0]) = some (a, List.map s (List.range (0 + 1)))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexSeek.lean:38:45: warning: This simp argument is unused:
+  List.range_one
+
+Hint: Omit it from the simp argument list.
+  simp only [seek, hroot, List.r̵a̵n̵g̵e̵_̵o̵n̵e̵,̵ ̵L̵i̵s̵t̵.̵map_cons, List.map_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexSeek.lean:38:61: warning: This simp argument is unused:
+  List.map_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [seek, hroot, List.range_one, L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵ ̵List.map_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexSeek.lean:38:76: warning: This simp argument is unused:
+  List.map_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [seek, hroot, List.range_one, List.map_cons,̵ ̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.DuplexSeek.seek_of_spine' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

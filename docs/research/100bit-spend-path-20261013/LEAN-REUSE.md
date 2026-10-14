@@ -266,3 +266,18 @@ query state. The 1.37 s combined checkpoint used 3,557,136 KiB, zero swap,
 and reported ten standard-only axiom audits. The full new decoder, its
 completion law, D1/D2/D3 instance, source correspondence and privacy remain
 open; these structural results do not close those obligations.
+
+## Query recovery before rho's first read
+
+The [first-read bridge](QUERY-FIRST-READ-BRIDGE.md) extends the old
+no-collision, first-read order, and q22 scan lemmas. It derives the selected
+advance prefix from the table before the following endpoint, discovers the
+query absorb boundary, and reconstructs the exact query result by completing
+only missing squeeze answers. It does not assume the unused advance tail
+is already in that table.
+
+Twelve focused targets passed. The final combined checkpoint took 0.74 s
+at 1,828,696 KiB, zero swap, with 28 standard-only axiom reports. The new
+finite-missing-list wrapper is suitable for the existing list-based
+completion interface; this deterministic equality does not establish that
+interface's probability law or injection for the full R1 transcript.

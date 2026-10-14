@@ -1,0 +1,35 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryCompletion.lean:33:18: warning: This simp argument is unused:
+  hcell
+
+Hint: Omit it from the simp argument list.
+  simp [hc̵e̵l̵l̵,̵ ̵h̵missing hcell]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryCompletion.lean:34:20: warning: This simp argument is unused:
+  hcell
+
+Hint: Omit it from the simp argument list.
+  simp [hc̵e̵l̵l̵,̵ ̵h̵T c v hcell]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryCompletion.lean:54:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.map (fun j => readCell p T acc (s j)) (List.range n)
+in the target expression
+  Q22.scanOut n Q22.q0 (List.map (readCell p T acc ∘ s) (List.range n)) (QueryStateList.advances s n) (s 0) =
+    Q22.scanOut n Q22.q0 (QueryStateList.blocks p H s n) (QueryStateList.advances s n) (s 0)
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+T : Table (Addr L) State
+acc H : Addr L → State
+s : ℕ → State
+n : ℕ
+hcoh : ∀ j < n, readCell p T acc (s j) = H (squeezeA p (s j))
+hlen : (QueryStateList.states s n).length - 1 = n
+hblocks : List.map (fun j => readCell p T acc (s j)) (List.range n) = QueryStateList.blocks p H s n
+⊢ Q22.scanOut n Q22.q0 (List.map (readCell p T acc ∘ s) (List.range n)) (QueryStateList.advances s n) (s 0) =
+    Q22.scanOut n Q22.q0 (QueryStateList.blocks p H s n) (QueryStateList.advances s n) (s 0)
+'AspisR1.QueryCompletion.getter_correct' depends on axioms: [propext]
+'AspisR1.QueryCompletion.complete_states' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

@@ -1,0 +1,42 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryDecoder.lean:36:6: error: Type mismatch
+  some (a, (QueryFirstRead.result p H s).2)
+has type
+  Option (Addr L × State)
+but is expected to have type
+  Option (Addr L × AspisV8R19.Q22SamplerProgram.Result)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryDecoder.lean:37:9: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+H : Addr L → State
+tr : List (Addr L × State)
+Qtot : ℕ
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hQ : firstReads emptyTable tr ≤ Qtot
+hcoll : ¬hitsBad (badColl p Qtot) emptyTable tr
+s : ℕ → State
+hstep : ∀ j < 8, s (j + 1) = H (advanceA p (s j))
+hread : ∀ j < 8, Read tr (advanceA p (s j))
+a c : Addr L
+haread : Read tr a
+hcread : Read tr c
+hparse : (parseAbsorb a).isSome = true
+hroot : s 0 = H a
+hprefix : List.take 32 c.toBytes = bytes (QueryFirstRead.result p H s).2
+acc : Addr L → State
+hmissing : ∀ (b : Addr L), tableBefore emptyTable tr c b = none → acc b = H b
+x✝ :
+  ∃ k < 8,
+    (QueryFirstRead.result p H s).2 = s (k + 1) ∧
+      DuplexSeek.seek p (tableBefore emptyTable tr c) 9 (QueryFirstRead.result p H s).2 =
+          some (a, QueryStateList.states s (k + 1)) ∧
+        ∀ (acc : Addr L → State),
+          (∀ j < k + 1,
+              tableBefore emptyTable tr c (squeezeA p (s j)) = none → acc (squeezeA p (s j)) = H (squeezeA p (s j))) →
+            QueryCompletion.complete p (tableBefore emptyTable tr c) acc (QueryStateList.states s (k + 1)) =
+              QueryFirstRead.result p H s
+⊢ sorry
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryDecoder.lean:49:14: error(lean.unknownIdentifier): Unknown constant `recover_correct`
+exit=1

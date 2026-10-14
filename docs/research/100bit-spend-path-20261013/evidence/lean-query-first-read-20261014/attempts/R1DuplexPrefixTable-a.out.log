@@ -1,0 +1,77 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexPrefixTable.lean:32:6: error: Type mismatch: After simplification, term
+  hstep (n - 1) (Decidable.byContradiction fun a => before_endpoint._proof_2 tr Qtot n j hn a)
+ has type
+  s (n - 1 + 1) = H (advanceA p (s (n - 1)))
+but is expected to have type
+  s n = H (advanceA p (s (n - 1)))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexPrefixTable.lean:71:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  s 0
+in the target expression
+  List.take 32 c.toBytes = bytes (H a)
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+H : Addr L → State
+tr : List (Addr L × State)
+Qtot : ℕ
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hQ : firstReads emptyTable tr ≤ Qtot
+hcoll : ¬hitsBad (badColl p Qtot) emptyTable tr
+s : ℕ → State
+c a : Addr L
+hcread : Read tr c
+haread : Read tr a
+hroot : s 0 = H a
+hstep : ∀ j < 0, s (j + 1) = H (advanceA p (s j))
+hread : ∀ j < 0, Read tr (advanceA p (s j))
+hprefix : List.take 32 c.toBytes = bytes (s 0)
+⊢ List.take 32 c.toBytes = bytes (H a)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexPrefixTable.lean:77:39: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  H (advanceA p (s 0))
+in the target expression
+  bytes (s 0) = bytes (s 0)
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+H : Addr L → State
+tr : List (Addr L × State)
+Qtot : ℕ
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hQ : firstReads emptyTable tr ≤ Qtot
+hcoll : ¬hitsBad (badColl p Qtot) emptyTable tr
+s : ℕ → State
+n : ℕ
+hstep : ∀ j < n, s (j + 1) = H (advanceA p (s j))
+hread : ∀ j < n, Read tr (advanceA p (s j))
+c a : Addr L
+hcread : Read tr c
+haread : Read tr a
+hprefix : List.take 32 c.toBytes = bytes (s n)
+hroot : s 0 = H a
+hn : ¬n = 0
+hnpos : 0 < n
+hfirst : Read tr (advanceA p (s 0))
+hfirststep : s 1 = H (advanceA p (s 0))
+⊢ bytes (s 0) = bytes (s 0)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexPrefixTable.lean:85:24: error: Application type mismatch: The argument
+  hroot
+has type
+  s 0 = H a
+but is expected to have type
+  H a = s 0
+in the application
+  congrArg some hroot
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexPrefixTable.lean:89:24: error: Application type mismatch: The argument
+  hstep j hj
+has type
+  s (j + 1) = H (advanceA p (s j))
+but is expected to have type
+  H (advanceA p (s j)) = s (j + 1)
+in the application
+  congrArg some (hstep j hj)
+'AspisR1.DuplexPrefixTable.before_endpoint' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.DuplexPrefixTable.table_consistent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DuplexPrefixTable.table_cells' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

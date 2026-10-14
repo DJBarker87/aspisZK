@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryTruncation.lean:52:20: error: unsolved goals
+case pos
+n : ℕ
+ih :
+  ∀ (k : ℕ) (q : ScanState) (bs xs : List State) (s : State),
+    k ≤ n →
+      (Q22.scanOut n q bs xs s).2 ∉ List.drop k xs →
+        Q22.scanOut k q (List.take k bs) (List.take k xs) s = Q22.scanOut n q bs xs s
+q : ScanState
+s : State
+k : ℕ
+hk : k + 1 ≤ n + 1
+hk' : k ≤ n
+b : State
+bs : List State
+x : State
+xs : List State
+htail : (Q22.scanOut (n + 1) q (b :: bs) (x :: xs) s).2 ∉ List.drop (k + 1) (x :: xs)
+hdraw : q.draws < 64
+hstop : (scan q (AspisV8R19.SamplerWords.words 18 b)).2 = true
+⊢ Q22.scanOut (k + 1) q (b :: List.take k bs) (x :: List.take k xs) s =
+    (finish (scan q (AspisV8R19.SamplerWords.words 18 b)).1, x)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryTruncation.lean:58:24: error: Type mismatch: After simplification, term
+  htail
+ has type
+  (Q22.scanOut (n + 1) q (b :: bs) (x :: xs) s).2 ∉ List.drop k xs
+but is expected to have type
+  (Q22.scanOut n (scan q (AspisV8R19.SamplerWords.words 18 b)).1 bs xs x).2 ∉ List.drop k xs
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryTruncation.lean:63:22: error: Type mismatch: After simplification, term
+  hrec
+ has type
+  Q22.scanOut k (scan q (AspisV8R19.SamplerWords.words 18 b)).1 (List.take k bs) (List.take k xs) x =
+    Q22.scanOut n (scan q (AspisV8R19.SamplerWords.words 18 b)).1 bs xs x
+but is expected to have type
+  Q22.scanOut (k + 1) q (b :: List.take k bs) (x :: List.take k xs) s =
+    Q22.scanOut n (scan q (AspisV8R19.SamplerWords.words 18 b)).1 bs xs x
+'AspisR1.QueryTruncation.scanOut_truncate' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
