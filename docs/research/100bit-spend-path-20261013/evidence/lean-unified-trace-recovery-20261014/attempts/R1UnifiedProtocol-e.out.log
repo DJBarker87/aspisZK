@@ -1,0 +1,63 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedProtocol.lean:42:14: error: unsolved goals
+case succ
+M Cv : Type
+L : ℕ
+W : Type
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+H : Addr L → State
+pub : UnifiedSampler.Public L
+π : Proof M
+n : ℕ
+ih : (protocol p hD extract).transcript H pub π n = UnifiedRun.transcript p hD H pub π.1 π.2 n
+⊢ ({ r := 33, msg := fun π => UnifiedRun.message π.1 π.2, samp := UnifiedSampler.samp p hD, decode := fun x x_1 => none,
+              extract := extract }.transcript
+          H pub π n).ext
+      (UnifiedRun.message π.1 π.2 n)
+      (eval H
+          (UnifiedSampler.samp p hD n
+              ({ r := 33, msg := fun π => UnifiedRun.message π.1 π.2, samp := UnifiedSampler.samp p hD,
+                    decode := fun x x_1 => none, extract := extract }.transcript
+                H pub π n)
+              (UnifiedRun.message π.1 π.2 n)).toProgram).2 =
+    Prefix.ext (UnifiedRun.transcript p hD H pub π.1 π.2 n) (UnifiedRun.message π.1 π.2 n)
+      (eval H
+          (UnifiedSampler.samp p hD n (UnifiedRun.transcript p hD H pub π.1 π.2 n)
+              (UnifiedRun.message π.1 π.2 n)).toProgram).2
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedProtocol.lean:43:70: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [FS2.Protocol.transcript, protocol, UnifiedRun.transcript,̵ ̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedProtocol.lean:51:42: error: unsolved goals
+M Cv : Type
+L : ℕ
+W : Type
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+H : Addr L → State
+pub : UnifiedSampler.Public L
+π : Proof M
+i : ℕ
+⊢ UnifiedSampler.samp p hD i
+      ({ r := 33, msg := fun π => UnifiedRun.message π.1 π.2, samp := UnifiedSampler.samp p hD,
+            decode := fun x x_1 => none, extract := extract }.transcript
+        H pub π i)
+      (UnifiedRun.message π.1 π.2 i) =
+    UnifiedSampler.samp p hD i (UnifiedRun.transcript p hD H pub π.1 π.2 i) (UnifiedRun.message π.1 π.2 i)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedProtocol.lean:52:38: warning: This simp argument is unused:
+  transcript_eq
+
+Hint: Omit it from the simp argument list.
+  simp [FS2.Protocol.chain, protocol,̵ ̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.UnifiedProtocol.transcript_eq' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.UnifiedProtocol.chain_eq' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.UnifiedProtocol.chal_eq' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.UnifiedProtocol.chainsRead' depends on axioms: [propext, Quot.sound]
+exit=1

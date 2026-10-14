@@ -1,0 +1,32 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedVerifier.lean:37:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (UnifiedProtocol.protocol p hD extract).chain H pub π i
+in the target expression
+  a ∈
+    List.map Prod.fst
+      (eval H
+          (UnifiedSampler.samp p hD i (UnifiedRun.transcript p hD H pub π.1 π.2 i)
+              (UnifiedRun.message π.1 π.2 i)).toProgram).1
+
+M Cv : Type
+L : ℕ
+W : Type
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+decision : Prefix (UnifiedSampler.Public L) (Message M) (Challenge Cv) → Message M → Bool
+H : Addr L → State
+pub : UnifiedSampler.Public L
+π : UnifiedProtocol.Proof M
+i : ℕ
+hi : i < 33
+a : Addr L
+ha :
+  a ∈
+    List.map Prod.fst
+      (eval H
+          (UnifiedSampler.samp p hD i (UnifiedRun.transcript p hD H pub π.1 π.2 i)
+              (UnifiedRun.message π.1 π.2 i)).toProgram).1
+⊢ a ∈ List.map Prod.fst (eval H ((UnifiedProtocol.protocol p hD extract).chain H pub π i).toProgram).1
+'AspisR1.UnifiedVerifier.reads' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.UnifiedVerifier.trace_consistent' depends on axioms: [propext, Quot.sound]
+exit=1

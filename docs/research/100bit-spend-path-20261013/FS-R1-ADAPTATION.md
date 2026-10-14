@@ -249,3 +249,18 @@ sampler/byte connection and the complete 33-round protocol definition. It is
 not legitimate to make C1 part of the fixed public statement merely to reuse
 the old protocol type. Full round dispatch, D1/D2/D3, source correspondence
 and privacy remain open.
+
+
+## Unified row-32 recovery on the actual experiment
+
+[UNIFIED-TRACE-RECOVERY.md](UNIFIED-TRACE-RECOVERY.md) now derives the old
+prefix/query recovery premises from the unified 33-row sampler run. It
+includes initialization, the domain-transition hash, every query pair, and
+rho, and proves that the two-segment record representation equals the run's
+first 31 records. The guarded row-32 decoder recovers and follows the exact
+prefix/message/challenge on the prover-plus-verifier experiment trace.
+
+The earlier prover queries are part of the table and of the explicit
+first-read budget and collision exclusions. This closes that deterministic
+rho-case connection; other decoder cases, combined dispatch, D1/D2/D3, the
+concrete numerical instance, source correspondence and privacy remain open.

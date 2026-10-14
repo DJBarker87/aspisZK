@@ -6,9 +6,11 @@ actual q22 result gives the run's exact prefix before rho. A guarded decoder
 returns this representation in the existing `R0C.V3.Dec` interface, and its
 background law is expressed using the unified row-32 sampler.
 
-This closes representation and local law connections. It does not yet prove
-that the guarded decoder succeeds on every required first read of the run,
-nor instantiate the complete Fiat–Shamir security theorem.
+This checkpoint closes representation and local law connections. The later
+[trace-recovery connection](UNIFIED-TRACE-RECOVERY.md) also proves guarded
+row-32 decoder success and trace following for the actual prover/verifier
+experiment, under explicit codec, budget, and collision premises. The full
+round dispatch and complete Fiat–Shamir security instance remain open.
 
 ## Deterministic run and completed records
 

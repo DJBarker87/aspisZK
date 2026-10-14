@@ -9,8 +9,9 @@ The [unified decoder connection](UNIFIED-DECODER-BRIDGE.md) proves that the
 older record completion reconstructs the new run's ordinary prefix, and
 that q22 extends it to the exact prefix before rho. A guarded row-32 decoder
 now uses the existing `R0C.V3.Dec` interface with the unified sampler law.
-Actual full-trace injection and the remaining decoder/classifier cases are
-still open.
+The later [trace-recovery connection](UNIFIED-TRACE-RECOVERY.md) derives
+row-32 decoder success and trace following from the actual prover/verifier
+experiment. The remaining decoder/classifier cases are still open.
 
 The [unified sampler connection](UNIFIED-SAMPLER-BRIDGE.md) now puts
 initialization, the domain-transition hash, q22 and rho into one schedule.
@@ -37,6 +38,16 @@ protocol and privacy proofs remain open.
 | Original R0 Boolean weights and coefficient reindexing | `R0/OpeningWeights`, `D18OpeningWeights`, `SemanticOpening` | The D18 point rows give exactly the older transported point functionals; the derived candidate satisfies the point/extra/codeword-typing interface. |
 | Masked semantic sumcheck and extraction | `SemanticTransport`, `MaskedSemantic` apply existing `R0P.Mask` and extraction theorems | The deterministic R1 candidate-to-input-note connection is checked, with explicit bad-event exclusions. The old 32-round masked D3 theorem cannot be applied unchanged to the new 33-round schedule. |
 | Production value rows, copy registry, Poseidon/schedule/asset/digest gates | `SpendValues`, `OutputCopyLinks`, `OutputNotes`, `SpendExtraction` | The actual R1 candidate now gives bounded integer conservation and recipient/change note bindings, with explicit variant/public-option guards. Append correctness remains separate. |
+
+## Actual experiment trace recovery
+
+The [new trace connection](UNIFIED-TRACE-RECOVERY.md) reuses the old verifier
+read-inclusion and evaluator-consistency theorems, prefix/query recovery, and
+background trace-following machinery. It supplies their phase and read facts
+from the unified run, including earlier prover queries. The guarded row-32
+decoder now returns the literal prefix/message/challenge on that experiment
+trace under the explicit codec, query-budget, and collision premises. The
+other round cases and full security/privacy conclusions remain open.
 
 ## New typed-candidate connection
 

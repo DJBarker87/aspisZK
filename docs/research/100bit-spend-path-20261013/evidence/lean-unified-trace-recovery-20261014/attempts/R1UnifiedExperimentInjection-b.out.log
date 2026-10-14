@@ -1,0 +1,29 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedExperimentInjection.lean:58:2: error: Type mismatch
+  UnifiedRhoInjection.decodes_and_follows p hD extract decision H pub π.1 π.2 prior (eval_consistent H prover) hpub hl
+    he Qtot hQ hold htail
+has type
+  have tr := UnifiedPrefixedReads.trace p hD extract decision H pub π.1 π.2 prior;
+  have c := UnifiedQueryRun.rhoAddress p hD H pub π.1 π.2;
+  have T := tableBefore emptyTable tr c;
+  ∃ own pend g,
+    JointUnifiedDecoder.decode p pub 27 4 c T = some (own, pend, g) ∧
+      bfollow g (traceFrom tr c) own pend T =
+        some
+          (UnifiedRun.transcript p hD H pub π.1 π.2 32, UnifiedRun.message π.1 π.2 32,
+            UnifiedRun.challenge p hD H pub π.1 π.2 32)
+but is expected to have type
+  let π := (eval H prover).2;
+  let tr := (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1;
+  let c := UnifiedQueryRun.rhoAddress p hD H pub π.1 π.2;
+  let T := tableBefore emptyTable tr c;
+  ∃ own pend g,
+    JointUnifiedDecoder.decode p pub 27 4 c T = some (own, pend, g) ∧
+      bfollow g (traceFrom tr c) own pend T =
+        some
+          (UnifiedRun.transcript p hD H pub π.1 π.2 32, UnifiedRun.message π.1 π.2 32,
+            UnifiedRun.challenge p hD H pub π.1 π.2 32)
+'AspisR1.UnifiedExperimentInjection.decodes_and_follows' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
