@@ -69,6 +69,11 @@ This closes the local frame-validation duty left open in that bridge.
 
 ## Limits and next connection
 
+The subsequent [opening-prefix bridge](OPENING-PREFIX-BRIDGE.md) now composes
+ordinary recovery across the strict reseed boundary and connects abstract
+message decoding and missing-answer completion. The following paragraph
+records this initializer checkpoint's boundary; full R1 assembly remains open.
+
 An ordinary-record walk returns raw labels and payloads. The complete R1
 decoder must still validate the typed row sequence, reconstruct every
 challenge including missing squeeze answers, cross the reseed edge with the

@@ -1,0 +1,22 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CarryLast.lean:36:6: error: 'change' tactic failed, pattern
+  q :: apply endpoint (qs ++ [r]) =
+    q :: (qs ++ [{ prev := r.prev, absorbed := r.absorbed, label := r.label, data := r.data, next := endpoint }])
+is not definitionally equal to target
+  apply endpoint (q :: (qs ++ [r])) =
+    q :: (qs ++ [{ prev := r.prev, absorbed := r.absorbed, label := r.label, data := r.data, next := endpoint }])
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CarryLast.lean:47:18: error: unsolved goals
+case cons.cons
+endpoint : State
+r s : InitialWalk.RawRec
+rs : List InitialWalk.RawRec
+ih :
+  List.map (fun r => (r.prev, r.absorbed, r.label, r.data)) (apply endpoint (s :: rs)) =
+    List.map (fun r => (r.prev, r.absorbed, r.label, r.data)) (s :: rs)
+⊢ (r.prev, r.absorbed, r.label, r.data) :: List.map (fun r => (r.prev, r.absorbed, r.label, r.data)) (s :: rs) =
+    (r.prev, r.absorbed, r.label, r.data) ::
+      (s.prev, s.absorbed, s.label, s.data) :: List.map (fun r => (r.prev, r.absorbed, r.label, r.data)) rs
+'AspisR1.CarryLast.length_apply' depends on axioms: [propext]
+'AspisR1.CarryLast.apply_append_singleton' depends on axioms: [propext, sorryAx]
+'AspisR1.CarryLast.map_projection' depends on axioms: [propext, sorryAx]
+'AspisR1.CarryLast.records_succ' depends on axioms: [propext, sorryAx]
+exit=1

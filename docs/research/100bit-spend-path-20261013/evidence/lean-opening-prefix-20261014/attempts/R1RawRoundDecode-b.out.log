@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundDecode.lean:100:81: error: unexpected identifier; expected '}'
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundDecode.lean:100:18: error: unexpected syntax
+  failed to pretty print term (use 'set_option pp.rawOnError true' for raw representation)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundDecode.lean:87:41: error: unsolved goals
+case neg
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+r : Rec M
+rs : List RawRec
+ih :
+  ∀ (j : ℕ) (out : List (Rec M)),
+    decode p j rs = some out → decode p j (rs ++ [rawOf p (j + rs.length) r]) = some (out ++ [r])
+j : ℕ
+out : List (Rec M)
+prev absorbed : State
+label : Byte
+data : Bytes
+next : State
+h : decode p j ({ prev := prev, absorbed := absorbed, label := label, data := data, next := next } :: rs) = some out
+hl : ¬label = p.lbl j
+⊢ decode p j
+      ({ prev := prev, absorbed := absorbed, label := label, data := data, next := next } :: rs ++
+        [rawOf p (j + ({ prev := prev, absorbed := absorbed, label := label, data := data, next := next } :: rs).length)
+            r]) =
+    some (out ++ [r])
+'AspisR1.RawRoundDecode.decode_encode' depends on axioms: [propext, Quot.sound]
+'AspisR1.RawRoundDecode.encode_length' depends on axioms: [propext]
+'AspisR1.RawRoundDecode.decode_length' depends on axioms: [propext, Quot.sound]
+'AspisR1.RawRoundDecode.decode_append_one' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

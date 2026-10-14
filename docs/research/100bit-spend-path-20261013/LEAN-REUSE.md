@@ -5,11 +5,11 @@ work is chiefly a set of explicit bridges. A theorem for the old protocol does
 not automatically become a theorem for the new verifier: its premises, index
 order, field embeddings, and transcript schedule must be discharged again.
 
-The latest [initialization and ordinary-prefix connection](INITIAL-EDGE-BRIDGE.md)
-also reuses the old first-read, output-uniqueness and background-sampler
-results. Its fifteen focused targets are checked; the combined checkpoint
-reports 33 standard-only axiom audits. The complete protocol and privacy
-proofs remain open.
+The latest [opening-prefix connection](OPENING-PREFIX-BRIDGE.md) combines
+initialization, ordinary records and the domain transition, then reuses the
+old record-completion and background-sampler results. Its fifteen focused
+targets are checked; the combined checkpoint reports 38 standard-only axiom
+audits. The complete protocol and privacy proofs remain open.
 
 | Existing result | Reuse in R1 | Scope of the checked result |
 |---|---|---|
@@ -347,3 +347,19 @@ Fifteen final targets passed on the capped NUC. The combined checkpoint took
 1.41 s at 3,529,016 KiB, zero swap, with 33 standard-only axiom reports.
 Typed row validation, complete missing-answer and reseed/query composition,
 the full FS/source instance, account correspondence and privacy remain open.
+
+## Recovery across the domain transition and challenge completion
+
+The [opening-prefix bridge](OPENING-PREFIX-BRIDGE.md) now derives the semantic
+and ordinary-opening record lists from the table before the next absorb,
+including strict recovery of both special hash edges. It carries the reseed
+output at the end of the last semantic round while preserving that round's
+message and squeeze state. The indexed abstract message decoder, the older
+`completeRounds` function and `DQ.accFrom_map` recover the actual challenges
+from the computed missing-answer list. The older background-mean split and
+ordinary sampler law apply to every fixed prefix completion.
+
+Fifteen focused targets passed. The combined checkpoint took 1.38 s at
+3,530,180 KiB, zero swap, with 38 standard-only axiom reports. The complete
+adaptive trace-following and q22/rho composition, concrete message/source
+instance, account/settlement correspondence and privacy remain open.

@@ -1,0 +1,41 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReseedSeparation.lean:11:5: error: unknown namespace `AspisV8R19.AdaptiveFirstHitLaw`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReseedSeparation.lean:16:54: error(lean.unknownIdentifier): Unknown identifier `Byte`
+
+Note: It is not possible to treat `Byte` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReseedSeparation.lean:39:11: error(lean.unknownIdentifier): Unknown identifier `Byte`
+
+Note: It is not possible to treat `Byte` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReseedSeparation.lean:41:67: error: unsolved goals
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+H : Addr L → State
+tr : List (Addr L × State)
+Qtot : ℕ
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hQ : firstReads emptyTable tr ≤ Qtot
+hcoll : ¬hitsBad (badColl p Qtot) emptyTable tr
+T : Table (Addr L) State
+hT : ∀ (b : Addr L) (v : State), T b = some v → v = H b ∧ Read tr b
+tag : sorry
+s : State
+hcell : T (advanceA p s) = some (H (advanceA p s))
+hfind : ReseedBoundary.findCell T (H (advanceA p s)) = some (advanceA p s)
+⊢ StrictReseedDecoder.parse (sorry ()) (advanceA p s) = none
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReseedSeparation.lean:44:44: warning: This simp argument is unused:
+  parse_advance_none
+
+Hint: Omit it from the simp argument list.
+  simp [StrictReseedDecoder.recover, hfind,̵ ̵p̵a̵r̵s̵e̵_̵a̵d̵v̵a̵n̵c̵e̵_̵n̵o̵n̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReseedSeparation.lean:46:60: error(lean.unknownIdentifier): Unknown identifier `Bytes`
+
+Note: It is not possible to treat `Bytes` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReseedSeparation.lean:47:11: error(lean.unknownIdentifier): Unknown identifier `Byte`
+
+Note: It is not possible to treat `Byte` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+'AspisR1.ReseedSeparation.parse_advance_none' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.ReseedSeparation.recover_advance_none' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ReseedSeparation.decode_advance_none' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

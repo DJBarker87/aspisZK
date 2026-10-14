@@ -1,0 +1,55 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundDecode.lean:69:16: error: Type mismatch: After simplification, term
+  h
+ has type
+  (prev, absorbed, m, next) :: decoded = out
+but is expected to have type
+  out = (prev, absorbed, m, next) :: decoded
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundDecode.lean:96:16: error: Type mismatch: After simplification, term
+  h
+ has type
+  (prev, absorbed, m, next) :: outTail = out
+but is expected to have type
+  out = (prev, absorbed, m, next) :: outTail
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundDecode.lean:94:27: error: unsolved goals
+case pos.some.some
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+r : Rec M
+rs : List RawRec
+ih :
+  ∀ (j : ℕ) (out : List (Rec M)),
+    decode p j rs = some out → decode p j (rs ++ [rawOf p (j + rs.length) r]) = some (out ++ [r])
+j : ℕ
+prev absorbed : State
+label : Byte
+data : Bytes
+next : State
+hl : label = p.lbl j
+m : M
+hd : p.dec data = some m
+outTail : List (Rec M)
+htail : decode p (j + 1) rs = some outTail
+h :
+  decode p j ({ prev := prev, absorbed := absorbed, label := label, data := data, next := next } :: rs) =
+    some ((prev, absorbed, m, next) :: outTail)
+ih' : decode p (j + 1) (rs ++ [rawOf p (j + 1 + rs.length) r]) = some (outTail ++ [r])
+⊢ Option.map (fun out => (prev, absorbed, m, next) :: out)
+      (decode p (j + 1)
+        (rs ++
+          [rawOf p
+              (j + ({ prev := prev, absorbed := absorbed, label := label, data := data, next := next } :: rs).length)
+              r])) =
+    some ((prev, absorbed, m, next) :: (outTail ++ [r]))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundDecode.lean:99:66: warning: This simp argument is unused:
+  ih'
+
+Hint: Omit it from the simp argument list.
+  simp only [List.cons_append, decode, if_pos hl, hd,̵ ̵i̵h̵'̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.RawRoundDecode.decode_encode' depends on axioms: [propext, Quot.sound]
+'AspisR1.RawRoundDecode.encode_length' depends on axioms: [propext]
+'AspisR1.RawRoundDecode.decode_length' depends on axioms: [propext, sorryAx]
+'AspisR1.RawRoundDecode.decode_append_one' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

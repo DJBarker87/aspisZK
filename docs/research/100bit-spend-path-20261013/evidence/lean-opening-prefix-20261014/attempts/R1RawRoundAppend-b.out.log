@@ -1,0 +1,26 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundAppend.lean:40:67: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundAppend.lean:42:14: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundAppend.lean:79:19: error: unsolved goals
+case cons
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+T : Table (Addr L) State
+acc : Addr L → State
+right : List (Rec M)
+r : Rec M
+left : List (Rec M)
+ih :
+  ∀ (j : ℕ),
+    completeRounds p T acc j (left ++ right) =
+      completeRounds p T acc j left ++ completeRounds p T acc (j + left.length) right
+j : ℕ
+⊢ (r.2.2.1, p.σ j ((T (squeezeA p r.2.1)).getD (acc (squeezeA p r.2.1))), r.2.2.2) ::
+      (completeRounds p T acc (j + 1) left ++ completeRounds p T acc (j + (left.length + 1)) right) =
+    (r.2.2.1, p.σ j ((T (squeezeA p r.2.1)).getD (acc (squeezeA p r.2.1))), r.2.2.2) ::
+      (completeRounds p T acc (j + 1) left ++ completeRounds p T acc (j + (r :: left).length) right)
+'AspisR1.RawRoundAppend.decode_append' depends on axioms: [propext, sorryAx]
+'AspisR1.RawRoundAppend.decode_records_offset' depends on axioms: [propext, Quot.sound]
+'AspisR1.RawRoundAppend.completeRounds_append_list' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

@@ -1,0 +1,68 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundDecode.lean:74:8: error: unsolved goals
+case neg
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+raw : List RawRec
+ih : ∀ (j : ℕ) (out : List (Rec M)), decode p j raw = some out → out.length = raw.length
+j : ℕ
+prev absorbed : State
+label : Byte
+data : Bytes
+next : State
+out : List (Rec M)
+hl : ¬label = p.lbl j
+h : none = some out
+⊢ out.length = ({ prev := prev, absorbed := absorbed, label := label, data := data, next := next } :: raw).length
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundDecode.lean:100:18: error: unsolved goals
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+r : Rec M
+rs : List RawRec
+ih :
+  ∀ (j : ℕ) (out : List (Rec M)),
+    decode p j rs = some out → decode p j (rs ++ [rawOf p (j + rs.length) r]) = some (out ++ [r])
+j : ℕ
+prev absorbed : State
+label : Byte
+data : Bytes
+next : State
+hl : label = p.lbl j
+m : M
+hd : p.dec data = some m
+outTail : List (Rec M)
+htail : decode p (j + 1) rs = some outTail
+h :
+  decode p j ({ prev := prev, absorbed := absorbed, label := label, data := data, next := next } :: rs) =
+    some ((prev, absorbed, m, next) :: outTail)
+ih' : decode p (j + 1) (rs ++ [rawOf p (j + 1 + rs.length) r]) = some (outTail ++ [r])
+⊢ j + (rs.length + 1) = j + 1 + rs.length
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundDecode.lean:104:8: error: unsolved goals
+case neg
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+r : Rec M
+rs : List RawRec
+ih :
+  ∀ (j : ℕ) (out : List (Rec M)),
+    decode p j rs = some out → decode p j (rs ++ [rawOf p (j + rs.length) r]) = some (out ++ [r])
+j : ℕ
+out : List (Rec M)
+prev absorbed : State
+label : Byte
+data : Bytes
+next : State
+hl : ¬label = p.lbl j
+h : none = some out
+⊢ decode p j
+      ({ prev := prev, absorbed := absorbed, label := label, data := data, next := next } :: rs ++
+        [rawOf p (j + ({ prev := prev, absorbed := absorbed, label := label, data := data, next := next } :: rs).length)
+            r]) =
+    some (out ++ [r])
+'AspisR1.RawRoundDecode.decode_encode' depends on axioms: [propext, Quot.sound]
+'AspisR1.RawRoundDecode.encode_length' depends on axioms: [propext]
+'AspisR1.RawRoundDecode.decode_length' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.RawRoundDecode.decode_append_one' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

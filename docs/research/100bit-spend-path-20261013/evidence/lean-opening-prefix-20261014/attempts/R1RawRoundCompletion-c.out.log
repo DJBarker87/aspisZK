@@ -1,0 +1,23 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundCompletion.lean:48:6: error: Type mismatch: After simplification, term
+  hdecode
+ has type
+  RawRoundDecode.decode p 0
+      (List.map
+          (fun j => { prev := s j, absorbed := absorbed j, label := p.lbl j, data := p.enc (msg j), next := s (j + 1) })
+          (List.range n) ++
+        [{ prev := s n, absorbed := absorbed n, label := p.lbl n, data := p.enc (msg n), next := s (n + 1) }]) =
+    some (recs s absorbed msg (fun j => s (j + 1)) n ++ [(s n, absorbed n, msg n, s (n + 1))])
+but is expected to have type
+  RawRoundDecode.decode p 0
+      (List.map
+          (fun j => { prev := s j, absorbed := absorbed j, label := p.lbl j, data := p.enc (msg j), next := s (j + 1) })
+          (List.range n) ++
+        [{ prev := s n, absorbed := absorbed n, label := p.lbl n, data := p.enc (msg n), next := s (n + 1) }]) =
+    some (recs s absorbed msg (fun j => s (j + 1)) (n + 1))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundCompletion.lean:70:88: error: unexpected token ':='; expected ')', ',' or ':'
+'AspisR1.RawRoundCompletion.recs_length' depends on axioms: [propext]
+'AspisR1.RawRoundCompletion.recs_succ' depends on axioms: [propext]
+'AspisR1.RawRoundCompletion.decode_records' depends on axioms: [propext, sorryAx]
+'AspisR1.RawRoundCompletion.decode_carried_records_succ' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.RawRoundCompletion.complete_recs' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

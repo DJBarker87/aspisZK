@@ -1,0 +1,20 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CarryLast.lean:39:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  apply endpoint (s :: rs ++ [r])
+in the target expression
+  q :: apply endpoint (s :: (rs ++ [r])) =
+    q :: s :: (rs ++ [{ prev := r.prev, absorbed := r.absorbed, label := r.label, data := r.data, next := endpoint }])
+
+case cons.cons
+endpoint : State
+r q s : InitialWalk.RawRec
+rs : List InitialWalk.RawRec
+ih :
+  apply endpoint (s :: rs ++ [r]) =
+    s :: rs ++ [{ prev := r.prev, absorbed := r.absorbed, label := r.label, data := r.data, next := endpoint }]
+⊢ q :: apply endpoint (s :: (rs ++ [r])) =
+    q :: s :: (rs ++ [{ prev := r.prev, absorbed := r.absorbed, label := r.label, data := r.data, next := endpoint }])
+'AspisR1.CarryLast.length_apply' depends on axioms: [propext]
+'AspisR1.CarryLast.apply_append_singleton' depends on axioms: [propext, sorryAx]
+'AspisR1.CarryLast.map_projection' depends on axioms: [propext]
+'AspisR1.CarryLast.records_succ' depends on axioms: [propext, sorryAx]
+exit=1

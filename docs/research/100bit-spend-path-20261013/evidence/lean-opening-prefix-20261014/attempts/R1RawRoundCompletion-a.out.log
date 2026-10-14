@@ -1,0 +1,58 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundCompletion.lean:44:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  RawRoundDecode.decode p 0
+    (records s absorbed p.lbl (fun j => p.enc (msg j)) n ++
+      [RawRoundDecode.rawOf p (0 + (records s absorbed p.lbl (fun j => p.enc (msg j)) n).length)
+          (s n, absorbed n, msg n, s (n + 1))])
+in the target expression
+  RawRoundDecode.decode p 0
+      (records s absorbed p.lbl (fun j => p.enc (msg j)) n ++
+        [{ prev := s n, absorbed := absorbed n, label := p.lbl n, data := p.enc (msg n), next := s (n + 1) }]) =
+    some (recs s absorbed msg (fun j => s (j + 1)) (n + 1))
+
+case succ
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+s absorbed : ℕ → State
+msg : ℕ → M
+n : ℕ
+ih :
+  RawRoundDecode.decode p 0 (records s absorbed p.lbl (fun j => p.enc (msg j)) n) =
+    some (recs s absorbed msg (fun j => s (j + 1)) n)
+hrecords :
+  records s absorbed p.lbl (fun j => p.enc (msg j)) (n + 1) =
+    records s absorbed p.lbl (fun j => p.enc (msg j)) n ++
+      [{ prev := s n, absorbed := absorbed n, label := p.lbl n, data := p.enc (msg n), next := s (n + 1) }]
+⊢ RawRoundDecode.decode p 0
+      (records s absorbed p.lbl (fun j => p.enc (msg j)) n ++
+        [{ prev := s n, absorbed := absorbed n, label := p.lbl n, data := p.enc (msg n), next := s (n + 1) }]) =
+    some (recs s absorbed msg (fun j => s (j + 1)) (n + 1))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundCompletion.lean:58:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  RawRoundDecode.decode p 0
+    (records s absorbed p.lbl (fun j => p.enc (msg j)) n ++
+      [RawRoundDecode.rawOf p (0 + (records s absorbed p.lbl (fun j => p.enc (msg j)) n).length)
+          (s n, absorbed n, msg n, endpoint)])
+in the target expression
+  RawRoundDecode.decode p 0
+      (records s absorbed p.lbl (fun j => p.enc (msg j)) n ++
+        [{ prev := s n, absorbed := absorbed n, label := p.lbl n, data := p.enc (msg n), next := endpoint }]) =
+    some (recs s absorbed msg (fun j => s (j + 1)) n ++ [(s n, absorbed n, msg n, endpoint)])
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+s absorbed : ℕ → State
+msg : ℕ → M
+n : ℕ
+endpoint : State
+⊢ RawRoundDecode.decode p 0
+      (records s absorbed p.lbl (fun j => p.enc (msg j)) n ++
+        [{ prev := s n, absorbed := absorbed n, label := p.lbl n, data := p.enc (msg n), next := endpoint }]) =
+    some (recs s absorbed msg (fun j => s (j + 1)) n ++ [(s n, absorbed n, msg n, endpoint)])
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundCompletion.lean:71:18: error: unexpected token ':='; expected ')', ',' or ':'
+'AspisR1.RawRoundCompletion.recs_length' depends on axioms: [propext]
+'AspisR1.RawRoundCompletion.recs_succ' depends on axioms: [propext]
+'AspisR1.RawRoundCompletion.decode_records' depends on axioms: [propext, sorryAx]
+'AspisR1.RawRoundCompletion.decode_carried_records_succ' depends on axioms: [propext, sorryAx]
+'AspisR1.RawRoundCompletion.complete_recs' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

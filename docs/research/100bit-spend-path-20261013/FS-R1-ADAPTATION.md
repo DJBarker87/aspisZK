@@ -185,3 +185,20 @@ These additions close the local initialization and strict frame duties,
 while complete typed-prefix reconstruction, missing-answer completion across
 the reseed and query boundaries, and the R1 generic theorem instance still
 need composition. Rust/account correspondence and privacy remain open.
+
+## Crossing the domain transition and completing ordinary prefixes
+
+[OPENING-PREFIX-BRIDGE.md](OPENING-PREFIX-BRIDGE.md) now combines the strict
+domain decoder with both ordinary record segments. Whole-trace first-read
+ordering supplies every required earlier table cell. The recovered last
+semantic record carries the reseed output, while its absorbed state and
+payload remain unchanged. Label/offset checking connects the raw list to
+the abstract message codec and the old `completeRounds` representation.
+
+Actual answers on the computed missing squeeze list recover the expected
+challenge sequence. The independent-answer law for that prefix followed
+by a fresh ordinary round reuses the old background split and `samp_mean`.
+It does not yet supply the full pending-list freshness, trace following or
+q22/rho composition required by `Inj3` and the adaptive density instance.
+The concrete byte codec, full source/account correspondence and privacy
+remain separate.

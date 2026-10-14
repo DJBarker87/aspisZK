@@ -1,0 +1,50 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningWalk.lean:54:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case zero
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+T : Table (Addr L) State
+base : Base
+s absorbed : ℕ → State
+label : ℕ → Byte
+data : ℕ → Bytes
+c1 : State
+pre : List InitialWalk.RawRec
+hbase : base (s 0) = some (c1, pre)
+fuel : ℕ
+hle : 0 ≤ fuel
+hadv : ∀ j < 0, theUnique (advPre p T (s (j + 1))) = some (absorbed j)
+habs : ∀ j < 0, ∃ a, ReseedBoundary.findCell T (absorbed j) = some a ∧ parseAbsorb a = some (s j, label j, data j)
+hstop : ∀ (j : ℕ), 0 < j → j ≤ 0 → base (s j) = none
+⊢ walk p T base fuel (s 0) = some (c1, pre ++ InitialWalk.records s absorbed label data 0)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningWalk.lean:59:12: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case succ
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+T : Table (Addr L) State
+base : Base
+s absorbed : ℕ → State
+label : ℕ → Byte
+data : ℕ → Bytes
+c1 : State
+pre : List InitialWalk.RawRec
+hbase : base (s 0) = some (c1, pre)
+n : ℕ
+ih :
+  ∀ (fuel : ℕ),
+    n ≤ fuel →
+      (∀ j < n, theUnique (advPre p T (s (j + 1))) = some (absorbed j)) →
+        (∀ j < n, ∃ a, ReseedBoundary.findCell T (absorbed j) = some a ∧ parseAbsorb a = some (s j, label j, data j)) →
+          (∀ (j : ℕ), 0 < j → j ≤ n → base (s j) = none) →
+            walk p T base fuel (s n) = some (c1, pre ++ InitialWalk.records s absorbed label data n)
+fuel : ℕ
+hle : n + 1 ≤ fuel
+hadv : ∀ j < n + 1, theUnique (advPre p T (s (j + 1))) = some (absorbed j)
+habs : ∀ j < n + 1, ∃ a, ReseedBoundary.findCell T (absorbed j) = some a ∧ parseAbsorb a = some (s j, label j, data j)
+hstop : ∀ (j : ℕ), 0 < j → j ≤ n + 1 → base (s j) = none
+⊢ walk p T base fuel (s (n + 1)) = some (c1, pre ++ InitialWalk.records s absorbed label data (n + 1))
+'AspisR1.OpeningWalk.walk_of_lookups' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

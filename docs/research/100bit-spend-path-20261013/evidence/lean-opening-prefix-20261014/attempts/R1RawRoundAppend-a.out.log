@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundAppend.lean:22:11: error: Type mismatch: After simplification, term
+  hr
+ has type
+  RawRoundDecode.decode p j right = some rout
+but is expected to have type
+  RawRoundDecode.decode p j right = some (lout ++ rout)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundAppend.lean:37:16: error: Type mismatch: After simplification, term
+  hr
+ has type
+  RawRoundDecode.decode p (j + (left.length + 1)) right = some rout
+but is expected to have type
+  RawRoundDecode.decode p (j + (1 + left.length)) right = some rout
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundAppend.lean:40:58: error: Application type mismatch: The argument
+  hrest
+has type
+  RawRoundDecode.decode p (j + 1) (left ++ right) = some (ltail ++ rout)
+but is expected to have type
+  ?m.264 = ?m.265
+in the application
+  congrArg (fun o => (prev, absorbed, m, next) :: o) hrest
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRoundAppend.lean:76:19: error: unsolved goals
+case cons.e_tail.e_a
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+T : Table (Addr L) State
+acc : Addr L → State
+right : List (Rec M)
+r : Rec M
+left : List (Rec M)
+ih :
+  ∀ (j : ℕ),
+    completeRounds p T acc j (left ++ right) =
+      completeRounds p T acc j left ++ completeRounds p T acc (j + left.length) right
+j : ℕ
+⊢ completeRounds p T acc (j + 1 + left.length) right = completeRounds p T acc (j + (left.length + 1)) right
+'AspisR1.RawRoundAppend.decode_append' depends on axioms: [propext, sorryAx]
+'AspisR1.RawRoundAppend.decode_records_offset' depends on axioms: [propext, Quot.sound]
+'AspisR1.RawRoundAppend.completeRounds_append_list' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
