@@ -1,0 +1,54 @@
+CLASSIFIER — proposal, not a proved instance
+
+Scope and definition
+Base a17829a776d533d7cd0beeb1f8676dcc793a909c; gap ledger e6744568e. No build performed. The requested raw UnifiedProtocol instance remains OPEN: its public object contains bytes, its messages contain commitment roots, and no table-independent prefix adapter selects their literal words. Existentially ranging over words inside a bad event invalidates the fixed-word cardinality bounds.
+
+Propose an enriched literal-word view A, preserving commitment chronology, with deterministic partial parsers semView(P,m), openingView(P,m), queryView(P,m), rhoView(P,m). These are NEW obligations, not existing helpers. Each returns only data fixed before that row's challenge; C1 precedes lambda, C2 precedes theta, V precedes alpha1, f precedes q22, and q precedes rho. R0P.Mask.early_candidate_to_prefixZ covers pre-C2 padding on parsed literal words; the raw-word adapter remains OPEN. A cannot consult the arbitrary D2 table or future messages.
+
+Propose R(pub,t) := ∃x, parsePublic pub = some x ∧ InputNoteExtracted x.pub t, and:
+  hitFrom prev [] := False
+  hitFrom prev ((m,c)::rs) := bad prev m c ∨ hitFrom (prev++[(m,c)]) rs
+  rbA.doomed P _ := (¬∃t, R P.statement t) ∧ ¬hitFrom [] P.rounds
+  rbA.ε := eps
+The parsers reject wrong tags, lengths, degrees, or inconsistent prefixes. bad=False on parse failure, wrong challenge constructor, or rows >=33; terminal acceptance rejects those cases. Prefix parsing must be stable under extension. chooseWitness ignores its table and satisfies chooseWitness_eq_none_iff; D1 then follows at the empty prefix. This is membership soundness only; an efficient extractor does not inherit D1.
+
+Rows and D2
+Dispatch classes are not error classes: row0 samples lambda; rows0–24 are the 25 semantic challenges; row25 samples z0; row26 samples z1 and reseeds. Require sigma equalities to semChal, circleSample0/1, gammaSample, ordinary sample, and qm31Sample at those respective rows.
+
+Using fixed parsed arguments, bad is:
+  0..24: R0P.Mask.semanticBadZ at the unshifted semantic prefix;
+  25: R0P.SemSource.z0Bad'; 26: R0C.SemStatement.z1Bad z0;
+  27..30: membership respectively in ConcreteBinding.gammaBad,
+    kappaBad, firstBad, secondBad (degree guards p0,p1 <=6);
+  31: matchingSet(d).card<=9557 ∧ S.card=22 ∧ S⊆matchingSet(d);
+  32: rho∈QueryResidualBridge.rhoBad iota d q.
+The 31 parser fixes d including f before sampling S; the 32 parser fixes the ordered 22 queries before rho. Exhaustion contributes False.
+
+Let N=2^256, p=2^31-1, a=1/p^4+1/N, b(n)=(N/n+1)/N with natural-number division, and qcap=(1+R0C.SlackStatement.delta0)*choose(9557,22)/choose(262144,22). Define ledger eps:
+  0..24:435200*a; 25..26:2/p^4;
+  27:336869026622539*b(p^8-1); 28:600*b(p^8);
+  29..30:9396508281846*b(p^8); 31:qcap; 32:21*b(p^4); otherwise:0.
+SemanticBudget.budget_eq proves sharper semantic roots
+217600,54400,2800,100(x10),200,100,2700(x10).
+R0P.Mask.semantic_round_densityZ, circleSample0_mass/circleSample1_mass,
+OpeningSamplerBound.{gamma,kappa,first,second}_mass_le,
+R0C.V3.Q22.q22_bound, and RhoSamplerBound.modulo_bad_mass provide fixed-data densities. Row26 needs z0!=circleFallback1, supplied by no earlier hit. UnifiedSampler.unified_law and UnifiedQueryLaw transfer sampler laws. OPEN D2 job: prove escape implies current bad for every P,m,T',T and every decoder completion; never restrict this quantifier to honest or causal tables.
+
+D3, composition, and ordered jobs
+Proposed literal-word theorem:
+  accepted P m → ¬hitFrom [] P.rounds → ∃t, R P.statement t.
+Derive Good d and AcceptedPairing d from parsed degree/check equations and four exclusions. QueryResidualBridge.accumulated_equation_implies_residual_batch plus queries_match require the accepted accumulator, every first-fold equality, and rho exclusion. They put all 22 sampled fibres in matchingSet d. No row31 hit forces its cardinality >=9558. SemanticPrefix.large_matching_extracts_of_prefix then yields a candidate and InputNoteExtracted. Its indispensable premises are word typing, lane-field equalities, public typing, transport=rowEquiv, parsed 25-row semantic challenges/claim/polynomials/C2, d.W=c2Words, every semantic exclusion, the actual six functional rows, and accepted sumcheck checks. MatchingSupport.no_claims_card_le and false_claims_query_containment give the equivalent false-claims contradiction. All these premises need adapter proofs; accepted queries alone do not supply typing or commitment-time words.
+
+R0P.Mask.combined_fiat_shamirZ is the construction pattern, not an applicable R1 theorem. For the pure decision, propose D3 from the theorem above, then UnifiedFiatShamir.soundness_bound. For the oracle terminal, CausalCommitmentStability is conditional on no hash event, whereas FS2.D3 quantifies over every H and arbitrary T. An OPEN D3Outside theorem43 variant and concrete terminal refinement are needed; changing a classifier to table availability fails D2TableBoundary.table_flip_cost. Existing extractFails observes the table before row0's first cell; efficient full-log extraction needs a separate failure event/reduction.
+
+Read-only exact-rational measurement constructed 33 entries, checked seven ledger classes against security-ledger.json, and found unique maximum row31, approximately 2^-105.136475. The Lean equation maxErr eps 33=qcap remains OPEN. Conditional targets are Qtot*qcap+3*Qtot^2/N for the pure wrapper, or Qtot*qcap+12*Qtot^2/N after the oracle-terminal adaptation; hQ is still a premise.
+
+Ordered Lean jobs: (1) define enriched syntax, causal word-view contract, rejection branches, hit extension, existence extractor/D1; (2) prove all row adapters and fixed-context D2, including init/reseed and every decoder completion; (3) prove literal-word D3 and maxErr; (4) prove D3Outside transport and terminal acceptance-to-word/field checks; (5) compose and audit axioms, then one frozen-manifest replay. Raw commitment selection, efficient knowledge reduction, source/account correspondence, hQ, and release replay remain OPEN.
+
+Explicit proposed contracts (enriched literal-word prA; all OPEN)
+  D1 : ∀x T, chooseWitness x T=none → rbA.doomed (emptyPrefix x) T
+  D2 : ∀i P m T' T, P.round=i → i<33 → rbA.doomed P T' →
+    independentMean (prA.samp i P m).toProgram
+      (fun v => indicator (¬rbA.doomed (P.ext m v.2) T)) ≤ eps i
+  D3 : ∀H x pf T, rbA.doomed (prA.transcript H x pf 33) T →
+    (eval H (V x pf)).2=false
