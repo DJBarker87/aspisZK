@@ -1,0 +1,43 @@
+# J7 executable decoder reuse inventory
+
+Read-only inventory at worktree revision `c4c34246e4963483728dc10850855e1d4f484a59` (2026-10-15). This records existing algorithms and formal specifications for the decoder backend contract: return the complete candidate list of size at most 100, or an explicit failure; check every returned witness; and establish a polynomial cost in the code length and output-list size. It does not claim that this contract is met.
+
+## Lean: exact list-decoding mathematics exists, executable GS does not
+
+`[AlgorithmicCircleDecoderV7.lean](../../../../AspisFormal/AspisFormal/Pool/AlgorithmicCircleDecoderV7.lean)` provides the generic boundary. It fixes the initial code as `InitialMessage K := Fin 1024 → K`, received length `InitialWord K := Fin 1048576 → K`, agreement threshold 38,230, and list cap 100 (lines 23–40). `ExactGRSConversion` (64–79) records the exact conversion data, including distinct points, nonzero column multipliers, injective message-polynomial map, degree bound, and coordinate equation. `ExactDecoderInstantiation` (194–220) requires complete and sound initial/final decoders and output bounds. Its `initialDeterministicPolynomialTime` and `finalDeterministicPolynomialTime` fields are only propositions; they contain no algorithm, cost function, or complexity theorem. `initialAlgorithm` / `finalAlgorithm` (263–286) merely package those supplied fields into the common interface.
+
+The V7 multiplicity-three development in `[MultiplicityThreeGS.lean](../../v8-wide-reference-20261005/lean/Wide/MultiplicityThreeGS.lean)` proves the interpolation existence and list claims mathematically:
+
+- `exactInitialInterpolationBudget` (84–91): 6,480,098 weighted monomials, more than 6,291,456 homogeneous constraints, and weighted degree 114,689 below `3 * 38,230`. The analogous final budget is `exactFinalInterpolationBudget` (72–79).
+- `exists_exactInitialInterpolation` (807–817) proves a nonzero interpolation solution exists for every received word.
+- `exactInitialInterpolationCoefficients` (1006 onward) selects such a solution using `Classical.choose`. The root candidate set `exactInitialRootCandidates` and decoded candidate set `exactInitialDecodedCandidates` are `noncomputable` finite-universe filters; `exactInitialGSDecode` converts the latter to a list (1024–1070).
+- `exactInitialGSDecode_mem_iff` proves exact completeness and soundness at agreement threshold 38,230, and `exactInitialGSDecode_length_le_100` proves the list cap (around 1084–1185). The final decoder has the corresponding threshold 9,558 and cap 99.
+- `exactInitialMultiplicityThreeGS` / `exactFinalMultiplicityThreeGS` package these facts into `ExactMultiplicityThreeGSBoundary` (1193–1265). That boundary describes interpolation coefficients, root candidates, decode membership, and output bound, but it does not define a runnable interpolation solver or polynomial-factor/root-finding procedure.
+
+Thus, the proved Lean result is stronger than an abstract “GS applies” statement: it establishes exact candidate membership and the 100-item cap. But the delivered function is specified by choice and finite-set filtering over the message universe, not by a computational decoder. No theorem here bounds field operations, bit operations, memory, or runtime in code length and list size.
+
+The current R1 composition has the same distinction. `[ConcreteBinding.lean](../lean/ConcreteBinding.lean)` defines `candidates W := AspisR1.InitialResponses.Lambda W` (26–27), and `candidates_card` proves this joint finite candidate set has cardinality at most 100 (55–56). That is an algebraic/list-size bound after lane candidates are available; it does not provide the missing per-lane decoder. The separate [`GS-DECODER-REUSE-PATH.md`](../GS-DECODER-REUSE-PATH.md) proposes rescaling, ambient GRS list decoding, exact-image filtering, and incremental merging. Its 290,000 pair bound is a count of merge pairs, not a measured or proved running-time bound.
+
+The inverse bridge is also not an executable backend. [`GRS-INVERSE-COMPUTABILITY.md`](../GRS-INVERSE-COMPUTABILITY.md) records that the message-image inverse uses a fixed matrix inverse and `inverseLift`; these are marked noncomputable, although they avoid choosing from the whole message space. The image test is an exact proposition, not an algorithm with a cost theorem.
+
+## Rust research code: runnable unique decoding, different contract
+
+`[c1_gao.rs](../../v8-no-work-100-20260907/experiments/c1_gao.rs)` contains a concrete `Decoder::new` and `Decoder::decode` (21–57). The implementation builds a vanishing polynomial and Lagrange basis, interpolates the received word, runs an extended-Euclidean/Gao loop, divides to obtain a candidate polynomial, and checks the error count. It returns one polynomial and its error count or a `Failure`; it is a unique-decoding routine, not a list decoder. For its parameters `(n,k)`, it rejects when the error count exceeds `(n-k)/2` (54–57), which does not implement the V7 threshold of 38,230 agreements for the 1,048,576-symbol code or the full list of up to 100 messages.
+
+The module includes small control checks and `completeness_controls` (72–105). The latter enumerates only declared finite coefficient/error alphabets at small lengths `n≤9`; these are runtime tests, not a universal correctness proof. The research recovery adapter `recover` uses 1,153 sampled points (`k=1025`) and global cap 16 (107–110, 124–158). `recover_near` uses fixed deterministic hash-derived test coins, samples 513 fibres / 2,052 points, and states in its own comment that the probability theorem needs independent uniform private draws (111–123). These experiments do not establish a randomized law for that deterministic seed, source-level refinement to the released encoder, or polynomial cost theorem for the target full list decoder. The file header explicitly says the source-basis correctness is a finite gate rather than a completed universal Rust/Lean encoder theorem.
+
+`[payment_extraction.rs](../../v8-no-work-100-20260907/experiments/payment_extraction.rs)` contains `interpolate_degree27` and a producer for the 28-point semantic polynomial checks (around lines 56 and 93 onward). This is a small fixed-degree interpolation helper used by the research payment run, not Reed–Solomon list decoding or polynomial factorization. Its header identifies the whole file as a synthetic same-execution experiment with an explicit extra-opening oracle, not a real replay extractor.
+
+The repository search found no implemented multiplicity-three GS list decoder, no polynomial-factorization/root-enumeration backend for that Lean specification, and no completeness-plus-polynomial-cost theorem for such a backend. The formal ambient GRS conversion and interpolation/list bounds remain reusable once an executable algorithm and its refinement/cost proof are supplied.
+
+## Source pins and provenance
+
+| Source | SHA-256 | Recorded provenance |
+|---|---|---|
+| `AspisFormal/AspisFormal/Pool/AlgorithmicCircleDecoderV7.lean` | `2faaf875cf3237c9409a19bf2bbb2dd3d302288ed24b059aabb90fac5ddd6471` | Latest file commit `186565a23395a78b1a557c8de433b03704c2da6f`, 2026-08-27, “proof: formalize exact V7 multiplicity-three GS decoders” |
+| `docs/research/v8-wide-reference-20261005/lean/Wide/MultiplicityThreeGS.lean` | `73252b85be6db2b7a0180d9f942e1872a75a57e6257dfb36124139bb27f277b5` | Latest file commit `1aa58a9e9dac2c9c9cc6b6b09998e4a38d25a2c4`, 2026-10-06, “research(v8): prove agreement theorems over a generic wide field” |
+| `docs/research/100bit-spend-path-20261013/lean/ConcreteBinding.lean` | `d7f87db3d7c6d49f6c5c660812b049982fc9314450eeaef202eff7021942876f` | Current worktree source; joint candidate theorem is explicitly not a decoder implementation |
+| `docs/research/v8-no-work-100-20260907/experiments/c1_gao.rs` | `2316cb792fe20f5b502d2d0c079e5b7a3f64d167c2d90efc953c24c9e482f413` | Latest file commit `89f3ca9d8d0db58fd1766777c158a58da158a64b`, 2026-09-08, “research(v8): measure NUC prover and SBF callback; prove bounded C1 decoding” |
+| `docs/research/v8-no-work-100-20260907/experiments/payment_extraction.rs` | `a8c18d8999623a71fe97da9b85dd7f010dc3c5bc23d44943fc5bcb123881ac82` | Latest file commit `d3963b99c580bc5b906b1fb03e681d0a226017d5`, 2026-09-09, “research(v8): prove exact-fold recovery and positive terminal bridges” |
+| `docs/research/100bit-spend-path-20261013/GS-DECODER-REUSE-PATH.md` | `ad27d3986a75c55d793fa3de99fc9b0ced6bcd6b87f242eb3af134b941f5c9e2` | Existing route inventory |
+| `docs/research/100bit-spend-path-20261013/GRS-INVERSE-COMPUTABILITY.md` | `72443fe2d317f11b29ab69c76ab949123786d2353f7be8b873f067727cf6b738` | Existing inverse computability boundary |

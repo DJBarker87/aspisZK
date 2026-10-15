@@ -1,0 +1,63 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningRecordCodec.lean:90:11: error: unsolved goals
+case second
+root : State
+coefficients : Fin 7 → Wide
+⊢ 256 = payloadSize Row.second
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningRecordCodec.lean:112:6: error: Type mismatch: After simplification, term
+  FoldedLeafCodec.decodeWide_encode payload
+ has type
+  @Eq (Option FoldedLeafCodec.Wide) (FoldedLeafCodec.decodeWide (FoldedLeafCodec.encodeWide payload)) (some payload)
+but is expected to have type
+  @Eq (Option (Payload Row.kappa)) (FoldedLeafCodec.decodeWide (encodePayload Row.kappa payload)) (some payload)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningRecordCodec.lean:115:11: error: unsolved goals
+case second
+root : State
+coefficients : Fin 7 → Wide
+hread :
+  PublicByteCursor.read 32 SemanticRecordCodec.decodeState
+      (stateBytes root ++ SelectedFieldSequenceCodec.encodeWide coefficients) =
+    some (root, SelectedFieldSequenceCodec.encodeWide coefficients)
+⊢ ((PublicByteCursor.read 32 SemanticRecordCodec.decodeState (encodePayload Row.second (root, coefficients))).bind
+      fun __x => (SelectedFieldSequenceCodec.decodeWide 7 __x.2).bind fun coefficients => some (__x.1, coefficients)) =
+    some (root, coefficients)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningRecordCodec.lean:125:27: warning: This simp argument is unused:
+  hread
+
+Hint: Omit it from the simp argument list.
+  simp [decodePayload, h̵r̵e̵a̵d̵,̵ ̵SelectedFieldSequenceCodec.decodeWide_encode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningRecordCodec.lean:125:34: warning: This simp argument is unused:
+  SelectedFieldSequenceCodec.decodeWide_encode
+
+Hint: Omit it from the simp argument list.
+  simp [decodePayload, hread,̵ ̵S̵e̵l̵e̵c̵t̵e̵d̵F̵i̵e̵l̵d̵S̵e̵q̵u̵e̵n̵c̵e̵C̵o̵d̵e̵c̵.̵d̵e̵c̵o̵d̵e̵W̵i̵d̵e̵_̵e̵n̵c̵o̵d̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningRecordCodec.lean:146:8: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq (Option (Payload Row.kappa)) (FoldedLeafCodec.decodeWide bytes) (some payload)
+but is expected to have type
+  @Eq (Option FoldedLeafCodec.Wide) (FoldedLeafCodec.decodeWide bytes) (some payload)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningRecordCodec.lean:151:6: error: 'change' tactic failed, pattern
+  ((PublicByteCursor.read 32 SemanticRecordCodec.decodeState bytes).bind fun pair =>
+      Option.map (fun coeffs => (pair.1, coeffs)) (SelectedFieldSequenceCodec.decodeWide 7 pair.2)) =
+    some (root, coefficients)
+is not definitionally equal to target
+  decodePayload Row.second bytes = some (root, coefficients)
+'AspisR1.OpeningRecordCodec.encodePayload_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OpeningRecordCodec.encode_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OpeningRecordCodec.encode_length_le' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OpeningRecordCodec.decodePayload_encodePayload' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OpeningRecordCodec.decode_encode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OpeningRecordCodec.encodePayload_of_decodePayload' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OpeningRecordCodec.encode_of_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OpeningRecordCodec.decoded_message_unique' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

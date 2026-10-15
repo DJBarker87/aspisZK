@@ -1,0 +1,7 @@
+# Sampler block-rank evidence audit
+
+Read-only audit of [`lean-sampler-block-rank-20261015`](../lean-sampler-block-rank-20261015/). Bundle checksums pass. Both recorded attempts retain their source snapshot, receipt, logs, and sidecars: attempt a failed, and attempt b compiled successfully. The b snapshot and current worktree source match the recorded SHA. Direct import sources also match their pinned historical files, and the object archive members match manifest hashes and sizes.
+
+The final theorem `AspisR1.SamplerBlockRank.word_numeral_eq_rank` states an unconditional positional identity between the reversed eight-word numeral and `R0C.ModuloField.blockRank`'s value, using the existing word/block-rank model. The green log reports `[propext, Classical.choice, Quot.sound]` and no `sorryAx`. This result does not establish Rust sampler execution or a probability law.
+
+Audit history: the first independent review found the bundle manifest listed zero axiom reports for failed attempt a, while the preserved log contained one report including `sorryAx`. The attempt exited 1 and was never successful-target evidence. The bundle manifest was subsequently corrected to count that report and document the failure; its corrected hash is recorded in `review.json`. The original discrepancy remains recorded there for audit history. The successful-target axiom audit concerns b and remains consistent.

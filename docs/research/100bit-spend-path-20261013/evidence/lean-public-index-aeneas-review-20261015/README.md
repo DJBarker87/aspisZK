@@ -1,0 +1,5 @@
+# Public index Aeneas bridge evidence audit
+
+Read-only audit of [`lean-public-index-aeneas-20261015`](../lean-public-index-aeneas-20261015/). The bundle checksum list validates; all four attempt snapshots match their receipt/manifest source hashes and the duplicated attempt/evidence copies are identical. Attempts a–c failed proof plumbing; d exited 0 at 2.22 s, 3,804,904 KiB peak RSS, zero swap, under 4G/6G/0 caps. Its single printed result reports `[propext, Classical.choice, Quot.sound]`.
+
+The final source and all declared archived objects match their hashes. The current worktree final source matches the green source. The `SamplerWordBridge` source pin matches the retained full-view file; its object was resolved from the existing pinned NUC cache rather than included as a custom archive member. This audit concerns the Aeneas U64 primitive and retained 8-byte index codec only; it does not establish the current Rust parser or caller correspondence. Machine-readable details are in [`review.json`](review.json).

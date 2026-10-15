@@ -1,0 +1,33 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SourceSamplerByteRank.lean:64:59: error: unsolved goals
+b : Std.Array U8 32#usize
+⊢ endAround P (rank b / P ^ 8) (ordinaryDigits (rank b)) = endAround P (rank b / P ^ 8) (lowDigits P 8 (rank b))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SourceSamplerByteRank.lean:72:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ↑(R0C.ModuloField.blockRank (AspisV8R19.SqueezeOracleBridge.decodeState b)) < _a
+Error: Application type mismatch: The argument
+  R0C.ModuloField.blockRank
+has type
+  AspisV8R19.SourceDuplexStep.State ≃ Fin (256 ^ 32)
+but is expected to have type
+  AspisV8R19.SourceDuplexStep.State ≃ Fin _a
+in the application
+  ⇑R0C.ModuloField.blockRank
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+b : Std.Array U8 32#usize
+h : ↑(R0C.ModuloField.blockRank (AspisV8R19.SqueezeOracleBridge.decodeState b)) < 256 ^ 32
+hpow : 256 ^ 32 = 2 ^ 256
+⊢ rank b < 2 ^ 256
+'AspisR1.SourceSamplerByteRank.word_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SourceSamplerByteRank.run_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SourceSamplerByteRank.run4_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SourceSamplerByteRank.run8_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SourceSamplerByteRank.remaining8_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SourceSamplerByteRank.gammaBytes_eq_gammaDigits' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.SourceSamplerByteRank.gammaBytes_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

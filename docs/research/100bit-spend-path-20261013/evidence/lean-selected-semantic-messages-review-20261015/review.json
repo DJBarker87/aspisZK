@@ -1,0 +1,59 @@
+{
+  "audit": "independent prepublication check; read-only, no builds",
+  "bundle": "../lean-selected-semantic-messages-20261015",
+  "base_source_revision": "764bf20a6fe0392951b670f73748a54f70c9f272",
+  "result": "source, object, runner and scope checks pass; failed-attempt axiom-report metadata discrepancy noted",
+  "bundle_sha256sum": "pass",
+  "source_manifest_sha256": "e000e9392d52136d1b9c9affb4437286b0d70d648afea3b2817a7ae9e41e035d",
+  "target_sources": {
+    "SelectedTranscriptParams.lean": "489f8b49c6a102f85c511ad4f4907dbeca479322b7184a563eda8c4a17c2dce0",
+    "SelectedChallengeMap.lean": "36bcd2bb277dcb2b34564656c71ebb7b14742c584ce931328a2ad1dbe03e5aad",
+    "SelectedSemanticMessages.lean": "c3664c130913f29caed63a89326d9d37b3b2bf7f7e838e68da6db23ae3ac550c"
+  },
+  "published_source_pins": {
+    "J1-SOURCE-CONFIGURATION-20261015.md": {
+      "sha256": "f0e52b25e27c72b0202ff26641a3bfc02a4689b9b34d5b354ebd8ca4bd0bcf7d",
+      "pinned_source_paths_checked": 24,
+      "mismatches": 0
+    },
+    "J1-HASH-INPUT-LENGTH-INVENTORY-20261015.md": {
+      "sha256": "5efe75e414ed5d00a62097caae26f5f3b635a5a9c0317985163a07f2df73dd24",
+      "pinned_source_paths_checked": 11,
+      "cross_document_pins_checked": 2,
+      "mismatches": 0
+    }
+  },
+  "bundle_checks": {
+    "attempt_snapshots_and_receipts": "pass: both source hashes match snapshot, receipt and sidecar; exit statuses match",
+    "current_target_source": "pass: current SelectedSemanticMessages source matches final green hash",
+    "direct_import_sources": "pass: SelectedTranscriptParams and SemanticPayloadView sources match manifest pins",
+    "archive": "pass: all three object members match manifest hashes and sizes",
+    "runner": "pass: compile-snapshot.sh, environment-base.json and run2.py hashes match",
+    "final_axioms": "pass: four reports contain only propext, Classical.choice, Quot.sound; no sorryAx",
+    "attempt_metadata_issue": "resolved: failed attempt a manifest records three emitted reports, matching its preserved failed log. Failed attempts are retained for provenance; only exit-0 attempts contribute to the successful-target audit."
+  },
+  "contract_scope_review": {
+    "SelectedTranscriptParams": "raw message carrier enforces only byte length <= 3717; publicStatement additionally requires an explicit successful SemanticPublicWire.parsePublic result, as designed. No hidden acceptance or row-validity premise found.",
+    "SelectedChallengeMap": "total sigma map; rows 25 and 26 retain raw embedded QM31 challenge and expose row-specific circleSampleParameter0/1 conversion lemmas; row 31 is totalized to zero. No validity or acceptance premise added.",
+    "SelectedSemanticMessages": "typed rows 0..24 encode/decode through RowPayload validity; max encoded size theorem is 901 bytes. toSemantic keeps recoverC2 as an explicit callback. No public acceptance, semantic correctness, or callback-recovery premise is asserted.",
+    "excluded_claims": "No Rust refinement, full protocol decision, probability claim, or C2 recovery derivation."
+  },
+  "framing_cross_check": {
+    "semantic_record": "r1_wire/semantic_wire record encodings include one P1 tag byte + 4-byte little-endian payload length + payload (5+payload); absorb prefixes state and two bytes [0, 0xa0+row].",
+    "opening_transcript": "transcript.rs opening absorb prefixes state and [0, 0xa0+row], then a 4-byte little-endian payload length and payload; there is no semantic P1 tag in this opening absorb framing.",
+    "inventory_consistency": "both inventories preserve this distinction; semantic row 25 S2 size is 3712 payload in r1_wire versus 2784 in the separate semantic_wire layout, and row-25 framed semantic hash input is 3751 bytes; opening row payload examples use 2+4+payload framing."
+  },
+  "bundle_manifest_discrepancy_history": [
+    {
+      "original_review_finding": "Failed attempt a manifest listed zero axiom report lines while preserved failed log contained three.",
+      "resolution": "fs corrected manifest count to three and clarified emitted-versus-successful audit counts; the attempt remains exit 1.",
+      "corrected_source_manifest_sha256": "e000e9392d52136d1b9c9affb4437286b0d70d648afea3b2817a7ae9e41e035d",
+      "manifest_emitted_count": 3,
+      "preserved_log_count": 3,
+      "count_matches": true,
+      "successful_target_report_count": 4,
+      "count_semantics": "axiom_report_lines records every emitted #print axioms report; only exit-0 final attempts contribute to successful_target_report_lines/allowed_reports.",
+      "original_finding_retained": true
+    }
+  ]
+}

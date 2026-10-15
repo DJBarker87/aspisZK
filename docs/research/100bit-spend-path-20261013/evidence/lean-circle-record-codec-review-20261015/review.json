@@ -1,0 +1,45 @@
+{
+  "audit": "independent read-only CircleRecordCodec evidence and shape audit",
+  "bundle": "../lean-circle-record-codec-20261015",
+  "source_base_revision": "764bf20a6fe0392951b670f73748a54f70c9f272",
+  "result": "pass",
+  "manifest_sha256": "24978d1d9ef65fb0d62f556f9abaf2f3963fe04ef32c1ea703de8627bb956738",
+  "bundle_checksums": "pass",
+  "final_source_sha256": "b1fba8dced40f86c1b7d1f28eef2c6c25df720f36ffd9a18b464d6a57296f71f",
+  "current_source_matches": true,
+  "attempt": {
+    "tag": "R1CircleRecordCodec-a",
+    "exit_status": 0,
+    "source_snapshot_receipt_sidecar_match": true,
+    "wall_time": "1.66 s",
+    "max_rss_kib": 3571352,
+    "swap": 0,
+    "cgroup": "MemoryHigh=4G MemoryMax=6G MemorySwapMax=0 TasksMax=128",
+    "axiom_reports_manifest_vs_log": "7 vs 7",
+    "axioms": ["propext", "Classical.choice", "Quot.sound"],
+    "sorryAx": false
+  },
+  "imports": {
+    "R1RecordFrameCodec": {"source_sha256": "aa077eb03d0a5044f4198b369c4b5977ed543418eb5a518abd3db1b4875e6352", "source_matches": true, "object_matches_archive": true},
+    "R1SelectedFieldSequenceCodec": {"source_sha256": "20b160b54b5db27d09e0d5461aeb9839897d454546924d5695bde87854261342", "source_matches": true, "object_matches_archive": true},
+    "R1SelectedTranscriptParams": {"source_sha256": "489f8b49c6a102f85c511ad4f4907dbeca479322b7184a563eda8c4a17c2dce0", "source_matches": true, "object_matches_archive": true}
+  },
+  "runner_hashes_match": true,
+  "archive_members_hash_and_size_match": true,
+  "rust_source_pins": {
+    "r1_wire.rs": "73f4b49dfae90be8a5cafd9d69eaf9ed06a01009f3daabc5627b42e6cf31c996",
+    "r1_semantic.rs": "964f008a0841246fe3638ce2e492d12d18d78302565aa57f8c7df4d079579ce3",
+    "semantic_wire.rs": "58c671cee016246aa464a35ba443009813581e4a53bce37dd528d048009f2db7",
+    "transcript.rs": "c91ffe824a55ff62659e8a194d2ea201032383e4e11e5f60625404a30c691ef6"
+  },
+  "shape_check": {
+    "CircleRecordCodec_row0": "count 116 LowWide values; tag 4; payload 116*32=3712 bytes; RecordFrameCodec adds tag plus 4-byte length, framed length 3717.",
+    "CircleRecordCodec_row1": "count 29 LowWide values; tag 5; payload 29*32=928 bytes; framed length 933.",
+    "claims_and_extra": "pointClaims indexes 29*point+lane for three points, covering 0..86; extra indexes 87+lane, covering 87..115; all 116 values remain represented.",
+    "beforeZ1": "row 1 maps all 29 payload entries by lane.",
+    "Rust_match": "r1_wire rows 25 and 26 match these tag/length shapes; r1_semantic decodes 29 row-25 extra values beginning at offset 87. This is a syntactic shape comparison only.",
+    "separate_semantic_wire": "semantic_wire row 25 is CLAIMS*32=2784 payload bytes; it remains distinct from the 3712-byte r1_wire row-25 S2 shape.",
+    "opening_absorb": "LengthFrameCodec models four-byte little-endian length followed by payload; Transcript.absorb adds state and [0,row], then the 4-byte length and payload, with no P1 record tag. The LengthFrameCodec source was inspected but is not part of this CircleRecordCodec compiled bundle."
+  },
+  "scope_limit": "Framing and generic sequence-codec identities only; no semantic opening-view interpretation, Rust parser refinement, or probability/security claim."
+}

@@ -1,0 +1,67 @@
+{
+  "review": "independent evidence and scope audit",
+  "bundle_path": "docs/research/100bit-spend-path-20261013/evidence/lean-selected-challenge-map-20261015",
+  "base_source_revision": "764bf20a6fe0392951b670f73748a54f70c9f272",
+  "bundle_checksums": "PASS",
+  "current_sources": {
+    "SelectedChallengeMap.lean": {
+      "path": "docs/research/100bit-spend-path-20261013/lean/SelectedChallengeMap.lean",
+      "sha256": "36bcd2bb277dcb2b34564656c71ebb7b14742c584ce931328a2ad1dbe03e5aad",
+      "matches_final_snapshot": true
+    },
+    "SelectedSamplerRanks.lean": {
+      "path": "docs/research/100bit-spend-path-20261013/lean/SelectedSamplerRanks.lean",
+      "sha256": "5e80166fd121340b45df200ee9b14b51e83895ff8382a2e95a59f9f793d1bf11",
+      "matches_import_snapshot": true
+    }
+  },
+  "attempts": [
+    {
+      "tag": "selected-challenge-map-a",
+      "classification": "superseded-success",
+      "exit_status": 0,
+      "source_sha256": "58315287c9ef6beec886a91fc164d1253fb375b29f923d81c1f81eabaafae2b5",
+      "snapshot_and_sidecar_match": true,
+      "elapsed": "1.68s",
+      "peak_rss_kib": 3560884,
+      "swap": 0,
+      "axiom_audit_lines": 6,
+      "axiom_names": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "tag": "selected-challenge-map-b",
+      "classification": "final",
+      "exit_status": 0,
+      "source_sha256": "36bcd2bb277dcb2b34564656c71ebb7b14742c584ce931328a2ad1dbe03e5aad",
+      "snapshot_and_sidecar_match": true,
+      "matches_current_source": true,
+      "elapsed": "1.70s",
+      "peak_rss_kib": 3561144,
+      "swap": 0,
+      "axiom_audit_lines": 8,
+      "axiom_names": ["propext", "Classical.choice", "Quot.sound"]
+    }
+  ],
+  "object_archive": {
+    "path": "compiled-objects.tar.gz",
+    "sha256": "965a234bdb882db46154c9deb3269c86f81c7a80f53e19ae50fa0ac91cd689eb",
+    "members_verified": {
+      "objects/R1SelectedChallengeMap.olean": "9004e788deaff205132ee00f163f2f08226d3ed09b0e3bd8bad44b3c0f013a0e",
+      "objects/R1SelectedSamplerRanks.olean": "44e27e3f7ff71020edd828758c637d1c5207f2de769f90f9b748cc8e47dec69f"
+    }
+  },
+  "scope_review": {
+    "selected_challenge_map_exports": [
+      "semantic_row", "gamma_row", "opening_row", "semChal_re",
+      "circle_parameter_rows", "first_circle_view", "second_circle_view", "rho_row"
+    ],
+    "model_mapping": "Rows 0–24 use semChal. Rows 25 and 26 also use semChal and rhoOf extracts its QM31 value; the two old row-specific circle maps then equal circleSample0 and circleSample1. Row 27 maps to the existing gammaSample model; rows 28–30 to the existing ordinary sample model; row 31 is totalized to zero; row 32 maps to the reduced QM31 rank model.",
+    "raw_circle_parameter_scope": "The imported R0P definitions use qm31Sample : State → QM31Exact; semChal embeds that value into WideExact. The selected module proves rhoOf (sigma 25/26 s) = qm31Sample s, and equates the resulting parameterized circle views with the existing circleSample0/1 definitions. It does not prove the Rust rho bytes or sampler execution refine these models.",
+    "explicit_exclusions": [
+      "no Rust sampler/source refinement",
+      "no complete R1 transcript or decision-protocol connection",
+      "no D1/D2/D3 closure"
+    ]
+  },
+  "review_result": "Evidence pins and declared scope are consistent; no checksum, source, import, receipt, archive-member, or axiom-report discrepancy found."
+}
