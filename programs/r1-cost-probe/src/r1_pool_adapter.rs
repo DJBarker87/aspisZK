@@ -412,7 +412,7 @@ fn decode_lane_from_pool_release(
         || bytes[6] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8
         || bytes[7] != POOL_V1_PAIR_TREE_DEPTH as u8
         || bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING
-        || bytes[72..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]
+        || bytes[73..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]
             .iter()
             .any(|byte| *byte != 0)
     {
@@ -464,6 +464,7 @@ fn decode_lane_from_pool_release(
         return Err(ProgramError::InvalidAccountData);
     }
     Ok(Box::new(PoolV1PairForestLaneStateV1 {
+        bump: bytes[72],
         master,
         lane_id: bytes[5],
         tree: IncrementalMerkleTreeV1 {
@@ -484,6 +485,9 @@ fn authenticate_invariant_release_registry(
     entry_account: &AccountInfo<'_>,
     current_slot: u64,
 ) -> ProgramResult {
+    // Versioned, owner-authenticated registry images carry the canonical bumps
+    // saved by their initializers. Address checks below perform one derivation;
+    // they neither search for a bump nor establish canonicality independently.
     if pool_program.to_bytes() != AUDIT_POOL_PROGRAM
         || master.verifier_policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY == 0
         || master.verifier_policy.registry_program != AUDIT_REGISTRY_PROGRAM
@@ -500,18 +504,25 @@ fn authenticate_invariant_release_registry(
         master.verifier_policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT != 0;
     if immutable_deployment {
         let loader = bpf_loader_upgradeable::id();
-        let expected_registry = Pubkey::find_program_address(
-            &[VERIFIER_REGISTRY_V2_SEED, master_account.key.as_ref()],
+        let registry = decode_verifier_registry_v2(&registry_account.try_borrow_data()?)
+            .map_err(|_| ProgramError::InvalidAccountData)?;
+        let expected_registry = Pubkey::create_program_address(
+            &[
+                VERIFIER_REGISTRY_V2_SEED,
+                master_account.key.as_ref(),
+                &[registry.bump],
+            ],
             &registry_program,
         )
-        .0;
+        .map_err(|_| ProgramError::InvalidAccountData)?;
         if registry_account.key != &expected_registry {
             return Err(ProgramError::InvalidAccountData);
         }
-        let registry = decode_verifier_registry_v2(&registry_account.try_borrow_data()?)
-            .map_err(|_| ProgramError::InvalidAccountData)?;
-        let registry_programdata =
-            Pubkey::find_program_address(&[registry_program.as_ref()], &loader).0;
+        let registry_programdata = Pubkey::create_program_address(
+            &[registry_program.as_ref(), &[registry.programdata_bump]],
+            &loader,
+        )
+        .map_err(|_| ProgramError::InvalidAccountData)?;
         if registry.pool != master_account.key.to_bytes()
             || registry.authority != master.verifier_policy.registry_authority
             || registry.policy_binding != master.verifier_policy.policy_binding
@@ -524,23 +535,27 @@ fn authenticate_invariant_release_registry(
             return Err(ProgramError::InvalidAccountData);
         }
         require_readonly_account(entry_account, &registry_program)?;
-        let expected_entry = Pubkey::find_program_address(
+        let entry = decode_verifier_registry_entry_v2(&entry_account.try_borrow_data()?)
+            .map_err(|_| ProgramError::InvalidAccountData)?;
+        let expected_entry = Pubkey::create_program_address(
             &[
                 VERIFIER_ENTRY_V2_SEED,
                 master_account.key.as_ref(),
                 &PROFILE_BINDING,
                 &RELEASE_BINDING,
+                &[entry.bump],
             ],
             &registry_program,
         )
-        .0;
+        .map_err(|_| ProgramError::InvalidAccountData)?;
         if entry_account.key != &expected_entry {
             return Err(ProgramError::InvalidAccountData);
         }
-        let entry = decode_verifier_registry_entry_v2(&entry_account.try_borrow_data()?)
-            .map_err(|_| ProgramError::InvalidAccountData)?;
-        let verifier_programdata =
-            Pubkey::find_program_address(&[verifier_program.as_ref()], &loader).0;
+        let verifier_programdata = Pubkey::create_program_address(
+            &[verifier_program.as_ref(), &[entry.programdata_bump]],
+            &loader,
+        )
+        .map_err(|_| ProgramError::InvalidAccountData)?;
         if entry.pool != master_account.key.to_bytes()
             || entry.policy_binding != AUDIT_POLICY_BINDING
             || entry.verifier_program != verifier_program.to_bytes()
@@ -557,16 +572,20 @@ fn authenticate_invariant_release_registry(
         return Ok(());
     }
 
-    let expected_registry = Pubkey::find_program_address(
-        &[VERIFIER_REGISTRY_SEED, master_account.key.as_ref()],
+    let registry = decode_verifier_registry_v1(&registry_account.try_borrow_data()?)
+        .map_err(|_| ProgramError::InvalidAccountData)?;
+    let expected_registry = Pubkey::create_program_address(
+        &[
+            VERIFIER_REGISTRY_SEED,
+            master_account.key.as_ref(),
+            &[registry.bump],
+        ],
         &registry_program,
     )
-    .0;
+    .map_err(|_| ProgramError::InvalidAccountData)?;
     if registry_account.key != &expected_registry {
         return Err(ProgramError::InvalidAccountData);
     }
-    let registry = decode_verifier_registry_v1(&registry_account.try_borrow_data()?)
-        .map_err(|_| ProgramError::InvalidAccountData)?;
     if registry.pool != master_account.key.to_bytes()
         || registry.authority != master.verifier_policy.registry_authority
         || registry.policy_binding != master.verifier_policy.policy_binding
@@ -576,21 +595,22 @@ fn authenticate_invariant_release_registry(
         return Err(ProgramError::InvalidAccountData);
     }
     require_readonly_account(entry_account, &registry_program)?;
-    let expected_entry = Pubkey::find_program_address(
+    let entry = decode_verifier_registry_entry_v1(&entry_account.try_borrow_data()?)
+        .map_err(|_| ProgramError::InvalidAccountData)?;
+    let expected_entry = Pubkey::create_program_address(
         &[
             VERIFIER_ENTRY_SEED,
             master_account.key.as_ref(),
             &PROFILE_BINDING,
             &RELEASE_BINDING,
+            &[entry.bump],
         ],
         &registry_program,
     )
-    .0;
+    .map_err(|_| ProgramError::InvalidAccountData)?;
     if entry_account.key != &expected_entry {
         return Err(ProgramError::InvalidAccountData);
     }
-    let entry = decode_verifier_registry_entry_v1(&entry_account.try_borrow_data()?)
-        .map_err(|_| ProgramError::InvalidAccountData)?;
     if entry.pool != master_account.key.to_bytes()
         || entry.policy_binding != AUDIT_POLICY_BINDING
         || entry.verifier_program != verifier_program.to_bytes()
@@ -639,14 +659,15 @@ fn authenticate_asq8_accounts(
     let master = decode_master_box(&master_account.try_borrow_data()?)?;
     if master.identity.pool != master_account.key.to_bytes()
         || master.initialized_lane_mask != POOL_V1_PAIR_FOREST_ALL_LANES_MASK
-        || Pubkey::find_program_address(
+        || Pubkey::create_program_address(
             &[
                 PAIR_FOREST_MASTER_SEED,
                 Pubkey::new_from_array(master.identity.asset_mint).as_ref(),
+                &[master.bump],
             ],
             pool_program,
         )
-        .0 != *master_account.key
+        .map_err(|_| ProgramError::InvalidAccountData)? != *master_account.key
     {
         return Err(ProgramError::InvalidAccountData);
     }
@@ -663,30 +684,32 @@ fn authenticate_asq8_accounts(
     let checkpoint = decode_checkpoint_box(&checkpoint_account.try_borrow_data()?)?;
     if checkpoint.master != master_account.key.to_bytes()
         || checkpoint.deployment_domain != master.identity.deployment_domain
-        || Pubkey::find_program_address(
+        || Pubkey::create_program_address(
             &[
                 PAIR_FOREST_CHECKPOINT_SEED,
                 master_account.key.as_ref(),
                 &checkpoint.checkpoint_sequence.to_le_bytes(),
+                &[checkpoint.bump],
             ],
             pool_program,
         )
-        .0 != *checkpoint_account.key
+        .map_err(|_| ProgramError::InvalidAccountData)? != *checkpoint_account.key
     {
         return Err(ProgramError::InvalidAccountData);
     }
     let selected_lane = decode_lane_from_pool_release(&lane_account.try_borrow_data()?)?;
     if selected_lane.master != master_account.key.to_bytes()
         || selected_lane.lane_id != output_lane
-        || Pubkey::find_program_address(
+        || Pubkey::create_program_address(
             &[
                 PAIR_FOREST_LANE_SEED,
                 master_account.key.as_ref(),
                 &[output_lane],
+                &[selected_lane.bump],
             ],
             pool_program,
         )
-        .0 != *lane_account.key
+        .map_err(|_| ProgramError::InvalidAccountData)? != *lane_account.key
     {
         return Err(ProgramError::InvalidAccountData);
     }

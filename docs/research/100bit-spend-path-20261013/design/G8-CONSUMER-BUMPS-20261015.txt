@@ -1,0 +1,26 @@
+G8 consumer integration; base b711e9aba1369c5fc40b3ccb2865f48df3a14a03.
+
+R1 authentication replaces all find_program_address calls with single
+create_program_address calls using bumps decoded from owner-checked, versioned
+Pool/registry accounts. Invalid seeds and address mismatches reject; there is
+no search fallback or instruction-supplied bump. All existing policy, owner,
+flags, key, profile/release, loader, ProgramData, activation and Pool bindings
+remain. Canonicality depends on the owning initializer storing the canonical
+bump; create_program_address alone does not prove maximality.
+
+Source inventory: nine textual creation sites, with seven reached on a fully
+accepted immutable-registry authentication and five on V1. This is source
+inspection, not a proved source/runtime correspondence or universal hash cap.
+
+Both manual lane decoders read bump byte72 and require bytes73..80 zero.
+V7 legacy authentication retains its searches. Owned V7 fixture constructors
+retain canonical SDK bumps, including ProgramData. Reconstruction-only R1
+fixtures use explicitly unauthenticated dummy bumps.
+
+Four added R1 tests construct canonical account pairs, exercise both complete
+authentication branches, reject each of the five/seven altered stored bumps,
+reject wrong owners and old versions, and check lane reserved-byte handling.
+Together with G9 there are 22 tests. These native fixtures do not prove account
+creation history. No builds run here: schema integration and optimized native
+verification are coordinator work. Rustfmt parsed all three changed Rust files;
+git diff --check passed.

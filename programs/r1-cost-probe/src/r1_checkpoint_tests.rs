@@ -6,7 +6,14 @@
 //! The checkpoint checksum is unkeyed and is not a forgery barrier.
 
 use super::*;
-use aspis_statement::pool_v1::{PoolIdentityV1, VerifierPolicyV1};
+use aspis_statement::pool_v1::{
+    encode_pool_v1_pair_forest_checkpoint_v1, encode_pool_v1_pair_forest_lane_state_v1,
+    encode_pool_v1_pair_forest_master_v1, encode_verifier_registry_entry_v1,
+    encode_verifier_registry_entry_v2, encode_verifier_registry_v1, encode_verifier_registry_v2,
+    PoolIdentityV1, VerifierEntryStatusV1, VerifierPolicyV1, VerifierRegistryEntryV1,
+    VerifierRegistryEntryV2, VerifierRegistryV1, VerifierRegistryV2,
+    POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT, POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE,
+};
 use std::{cell::Cell, sync::OnceLock};
 
 const PROOF: &[u8] = include_bytes!(concat!(
@@ -369,6 +376,7 @@ fn reconstruction_inputs(
         checkpoint_account: common.checkpoint_account,
         selected_lane_account: common.selected_lane_account,
         master: Box::new(PoolV1PairForestMasterV1 {
+            bump: 0, // Reconstruction-only input; this helper does not authenticate PDAs.
             identity: PoolIdentityV1 {
                 pool: snapshot.pool,
                 asset_mint: [1; 32],
@@ -388,6 +396,7 @@ fn reconstruction_inputs(
             last_checkpoint_lane_sequences: [0; POOL_V1_PAIR_FOREST_LANE_COUNT],
         }),
         checkpoint: Box::new(PoolV1PairForestCheckpointV1 {
+            bump: 0, // Reconstruction-only input; this helper does not authenticate PDAs.
             master: common.master_account,
             deployment_domain: snapshot.deployment_domain,
             checkpoint_sequence: common.checkpoint_sequence,
@@ -395,6 +404,7 @@ fn reconstruction_inputs(
             lane_sequences: [0; POOL_V1_PAIR_FOREST_LANE_COUNT],
         }),
         selected_lane: Box::new(PoolV1PairForestLaneStateV1 {
+            bump: 0, // Reconstruction-only input; this helper does not authenticate PDAs.
             master: common.master_account,
             lane_id: common.output_lane,
             tree: IncrementalMerkleTreeV1 {
@@ -499,4 +509,309 @@ fn unkeyed_checksum_does_not_establish_checkpoint_provenance() {
     let mut fixture = Stage1Fixture::new();
     fixture.accounts[2].data = checkpoint;
     fixture.reject_without_writes(ProgramError::AccountAlreadyInitialized);
+}
+
+/// Canonical SDK address/bump pairs model the owning programs' initializers.
+/// Tests exercise account authentication only; no proof generation is involved.
+struct PdaFixture {
+    program: Pubkey,
+    pool: Pubkey,
+    lane: u8,
+    accounts: [TestAccount; 7],
+}
+
+impl PdaFixture {
+    fn new(immutable_deployment: bool) -> Self {
+        let program = Pubkey::new_unique();
+        let pool = Pubkey::new_from_array(AUDIT_POOL_PROGRAM);
+        let registry_program = Pubkey::new_from_array(AUDIT_REGISTRY_PROGRAM);
+        let mint = Pubkey::new_unique();
+        let (master_key, master_bump) =
+            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool);
+        let lane = 3;
+        let (lane_key, lane_bump) = Pubkey::find_program_address(
+            &[PAIR_FOREST_LANE_SEED, master_key.as_ref(), &[lane]],
+            &pool,
+        );
+        let sequence = 7u64;
+        let (checkpoint_key, checkpoint_bump) = Pubkey::find_program_address(
+            &[
+                PAIR_FOREST_CHECKPOINT_SEED,
+                master_key.as_ref(),
+                &sequence.to_le_bytes(),
+            ],
+            &pool,
+        );
+        let master = PoolV1PairForestMasterV1 {
+            bump: master_bump,
+            identity: PoolIdentityV1 {
+                pool: master_key.to_bytes(),
+                asset_mint: mint.to_bytes(),
+                token_program: Pubkey::new_unique().to_bytes(),
+                asset_id: M31(17),
+                deployment_domain: [5; 32],
+            },
+            verifier_policy: VerifierPolicyV1 {
+                flags: POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY
+                    | if immutable_deployment {
+                        POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT
+                    } else {
+                        0
+                    },
+                registry_program: registry_program.to_bytes(),
+                registry_authority: [0; 32],
+                policy_binding: AUDIT_POLICY_BINDING,
+            },
+            initialized_lane_mask: POOL_V1_PAIR_FOREST_ALL_LANES_MASK,
+            has_checkpoint: true,
+            next_checkpoint_sequence: sequence + 1,
+            last_checkpoint_lane_sequences: [0; POOL_V1_PAIR_FOREST_LANE_COUNT],
+        };
+        let empty = v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS;
+        let lane_state = PoolV1PairForestLaneStateV1 {
+            bump: lane_bump,
+            master: master_key.to_bytes(),
+            lane_id: lane,
+            tree: IncrementalMerkleTreeV1 {
+                next_leaf_index: 0,
+                root: empty[POOL_V1_PAIR_TREE_DEPTH],
+                frontier: core::array::from_fn(|level| empty[level]),
+            },
+        };
+        let checkpoint = PoolV1PairForestCheckpointV1 {
+            bump: checkpoint_bump,
+            master: master_key.to_bytes(),
+            deployment_domain: master.identity.deployment_domain,
+            checkpoint_sequence: sequence,
+            global_root: [M31(1); 8],
+            lane_sequences: [0; POOL_V1_PAIR_FOREST_LANE_COUNT],
+        };
+        let registry_seed = if immutable_deployment {
+            VERIFIER_REGISTRY_V2_SEED
+        } else {
+            VERIFIER_REGISTRY_SEED
+        };
+        let entry_seed = if immutable_deployment {
+            VERIFIER_ENTRY_V2_SEED
+        } else {
+            VERIFIER_ENTRY_SEED
+        };
+        let (registry_key, registry_bump) =
+            Pubkey::find_program_address(&[registry_seed, master_key.as_ref()], &registry_program);
+        let (entry_key, entry_bump) = Pubkey::find_program_address(
+            &[
+                entry_seed,
+                master_key.as_ref(),
+                &PROFILE_BINDING,
+                &RELEASE_BINDING,
+            ],
+            &registry_program,
+        );
+        let (registry_data, entry_data) = if immutable_deployment {
+            let loader = bpf_loader_upgradeable::id();
+            let (registry_programdata, registry_programdata_bump) =
+                Pubkey::find_program_address(&[registry_program.as_ref()], &loader);
+            let (verifier_programdata, verifier_programdata_bump) =
+                Pubkey::find_program_address(&[program.as_ref()], &loader);
+            let registry = VerifierRegistryV2 {
+                bump: registry_bump,
+                programdata_bump: registry_programdata_bump,
+                flags: POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE,
+                pool: master_key.to_bytes(),
+                authority: [0; 32],
+                policy_binding: AUDIT_POLICY_BINDING,
+                generation: 1,
+                minimum_activation_delay_slots: 1,
+                registry_program: registry_program.to_bytes(),
+                loader_program: loader.to_bytes(),
+                programdata_address: registry_programdata.to_bytes(),
+                executable_hash: [0xa5; 32],
+            };
+            let entry = VerifierRegistryEntryV2 {
+                bump: entry_bump,
+                programdata_bump: verifier_programdata_bump,
+                status: VerifierEntryStatusV1::Active,
+                statement_version: POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
+                pool: master_key.to_bytes(),
+                verifier_program: program.to_bytes(),
+                profile_binding: PROFILE_BINDING,
+                release_binding: RELEASE_BINDING,
+                loader_program: loader.to_bytes(),
+                programdata_address: verifier_programdata.to_bytes(),
+                executable_hash: [0x5a; 32],
+                expected_upgrade_authority: [0; 32],
+                activation_slot: 0,
+                retirement_slot: POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT,
+                policy_binding: AUDIT_POLICY_BINDING,
+            };
+            (
+                encode_verifier_registry_v2(&registry).unwrap().to_vec(),
+                encode_verifier_registry_entry_v2(&entry).unwrap().to_vec(),
+            )
+        } else {
+            let registry = VerifierRegistryV1 {
+                bump: registry_bump,
+                flags: POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE,
+                pool: master_key.to_bytes(),
+                authority: [0; 32],
+                policy_binding: AUDIT_POLICY_BINDING,
+                generation: 1,
+                minimum_activation_delay_slots: 1,
+            };
+            let entry = VerifierRegistryEntryV1 {
+                bump: entry_bump,
+                status: VerifierEntryStatusV1::Active,
+                statement_version: POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
+                pool: master_key.to_bytes(),
+                verifier_program: program.to_bytes(),
+                profile_binding: PROFILE_BINDING,
+                release_binding: RELEASE_BINDING,
+                activation_slot: 0,
+                retirement_slot: POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT,
+                policy_binding: AUDIT_POLICY_BINDING,
+            };
+            (
+                encode_verifier_registry_v1(&registry).unwrap().to_vec(),
+                encode_verifier_registry_entry_v1(&entry).unwrap().to_vec(),
+            )
+        };
+        let mut accounts = [
+            TestAccount::new(Pubkey::new_unique(), Vec::new(), false),
+            TestAccount::new(
+                pool,
+                encode_pool_v1_pair_forest_master_v1(&master)
+                    .unwrap()
+                    .to_vec(),
+                false,
+            ),
+            TestAccount::new(
+                pool,
+                encode_pool_v1_pair_forest_checkpoint_v1(&checkpoint)
+                    .unwrap()
+                    .to_vec(),
+                false,
+            ),
+            TestAccount::new(
+                pool,
+                encode_pool_v1_pair_forest_lane_state_v1(&lane_state)
+                    .unwrap()
+                    .to_vec(),
+                false,
+            ),
+            TestAccount::new(registry_program, registry_data, false),
+            TestAccount::new(registry_program, entry_data, false),
+            TestAccount::new(
+                program,
+                vec![0; verifier::checkpoint_size(Variant::S2)],
+                false,
+            ),
+        ];
+        accounts[1].key = master_key;
+        accounts[2].key = checkpoint_key;
+        accounts[3].key = lane_key;
+        accounts[4].key = registry_key;
+        accounts[5].key = entry_key;
+        Self {
+            program,
+            pool,
+            lane,
+            accounts,
+        }
+    }
+
+    fn authenticate(&mut self) -> Result<AuthenticatedAsq8Accounts, ProgramError> {
+        let infos: Vec<_> = self.accounts.iter_mut().map(TestAccount::info).collect();
+        authenticate_asq8_accounts(&self.program, &infos, &self.pool, self.lane, 0)
+    }
+}
+
+#[test]
+fn canonical_stored_bumps_authenticate_both_registry_branches() {
+    for immutable in [false, true] {
+        let mut fixture = PdaFixture::new(immutable);
+        let authenticated = fixture.authenticate().unwrap();
+        assert_eq!(authenticated.master.bump, fixture.accounts[1].data[7]);
+        assert_eq!(authenticated.checkpoint.bump, fixture.accounts[2].data[7]);
+        assert_eq!(
+            authenticated.selected_lane.bump,
+            fixture.accounts[3].data[72]
+        );
+    }
+}
+
+#[test]
+fn authentication_rejects_each_wrong_stored_bump_without_fallback() {
+    for immutable in [false, true] {
+        let mut fixture = PdaFixture::new(immutable);
+        fixture.authenticate().unwrap();
+        let locations: &[(usize, usize)] = if immutable {
+            &[
+                (1, 7),
+                (2, 7),
+                (3, 72),
+                (4, 7),
+                (4, 248),
+                (5, 312),
+                (5, 313),
+            ]
+        } else {
+            &[(1, 7), (2, 7), (3, 72), (4, 6), (5, 7)]
+        };
+        for &(account, offset) in locations {
+            let original = fixture.accounts[account].data[offset];
+            fixture.accounts[account].data[offset] ^= 1;
+            assert!(
+                matches!(
+                    fixture.authenticate(),
+                    Err(ProgramError::InvalidAccountData)
+                ),
+                "accepted altered bump in account {account} at {offset}, immutable={immutable}"
+            );
+            fixture.accounts[account].data[offset] = original;
+        }
+        fixture.authenticate().unwrap();
+    }
+}
+
+#[test]
+fn authentication_rejects_wrong_owners_and_old_account_versions() {
+    for immutable in [false, true] {
+        let mut fixture = PdaFixture::new(immutable);
+        fixture.authenticate().unwrap();
+        for account in 1..=5 {
+            let owner = fixture.accounts[account].owner;
+            fixture.accounts[account].owner = Pubkey::new_unique();
+            assert!(matches!(
+                fixture.authenticate(),
+                Err(ProgramError::InvalidAccountData)
+            ));
+            fixture.accounts[account].owner = owner;
+            let version = fixture.accounts[account].data[4];
+            fixture.accounts[account].data[4] -= 1;
+            assert!(matches!(
+                fixture.authenticate(),
+                Err(ProgramError::InvalidAccountData)
+            ));
+            fixture.accounts[account].data[4] = version;
+        }
+        fixture.authenticate().unwrap();
+    }
+}
+
+#[test]
+fn manual_lane_decoder_preserves_bump_and_rejects_remaining_reserved_bytes() {
+    let fixture = PdaFixture::new(true);
+    let mut bytes = fixture.accounts[3].data.clone();
+    assert_eq!(
+        decode_lane_from_pool_release(&bytes).unwrap().bump,
+        bytes[72]
+    );
+    for offset in 73..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES {
+        bytes[offset] = 1;
+        assert!(matches!(
+            decode_lane_from_pool_release(&bytes),
+            Err(ProgramError::InvalidAccountData)
+        ));
+        bytes[offset] = 0;
+    }
 }
