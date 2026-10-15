@@ -4248,3 +4248,41 @@ Classical.choice, Quot.sound]`; no cap raised. The vacuity found by ZF1-0
 for one exhibited bridge. Open on this track: T2b-2b (design agent stopped by
 a provider session limit before writing; relaunched 2026-10-15), (ii′), ZF1,
 ZF2. Host counter: next 3426.
+
+### Lead acceptance of the T2b-2b design as a proposal (2026-10-15); Z8c issued; D21 waits for Z8c
+
+The T2b-2b-D design (`5bedc6303`, cherry-picked; `t2b2b/DESIGN-T2b-2b.txt`,
+Opus agent) is accepted as the working proposal, not as fixed statements.
+What it establishes and what it changes:
+
+- **Reduction.** The spanning half splits into (Q′) round cover — every
+  K₄-valued chain vector with terminal 0 is the round image of an own-silent
+  tape — and (B) the batched opening coordinates on own-silent round-kernel
+  tapes reach what they reach on all own-silent tapes. This replaces the
+  refuted (P)/(Q) split (D20⁗). On own-silent tapes the observations satisfy
+  exactly 24 K-relations (192 limbs) from existing R0 lemmas (`round_eval`,
+  `round_boundary`, `fold_encoded` on the 22 fibres), matching Z8's 1,920.
+- **Why Z8b's (P) block fell short.** On D's coefficients 56–1023 with zero
+  OOD values the chord quotient is divisible by x^28, so its fold vanishes on
+  fibres 0–13; G's 56 low rows supply them.
+- **Model gap (correction F4).** In Lean every mask lane is balanced at row 0
+  (`balance 0`), so each lane's word space is a hyperplane and the inactive sum
+  vanishes identically. Z8/Z8b used unbalanced unit sources, a superset of the
+  Lean mask space by up to 10 limbs. **1,076 is therefore an upper bound for
+  the Lean model, not yet a measurement.** Z8c decides it.
+- **Predicate.** The route needs Λ₄ = K₄, which Good₂ does not give. Proposed
+  `Good₃ := Good ∧ (∀ i, ch.sem i ∈ K₄) ∧ (at least three of α₀..α₃ ∉ K₂)`,
+  plus explicit nondegeneracy conditions on the circle points and fold
+  challenge. K₄ as a subfield needs a premise PackBasis lacks (i² ∈ F,
+  u² ∈ F + F·i; true for QM31). Total conditional mass excluding the open
+  item ≈ 2^-104.3 (privacy ledger term; about 4 bits of margin), with the
+  minor bounds valid only once nonvanishing witnesses exist.
+- **Main risk (OT-open).** Transversality of the 88 opened symbols to each
+  lane's round kernel has no proof route for all query sets. If none is found
+  it enters the theorem as an explicit, numerically checked premise, labelled
+  as such in the ledger.
+- Clause (ii′) is not covered. The R1 payload changes every count.
+
+Next: **Z8c** (probe, §3.3 of the design; Opus agent) on the balanced Lean
+model; J1–J3 and J5a can be written independently of Z8c; D21 after Z8c; an
+OT-open research item before J6. Verdict unchanged.
