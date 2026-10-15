@@ -1,0 +1,53 @@
+J1.R4 M31 PUBLIC CARRIER -- CHECKED CONTINUATION
+
+Base: 136b746805f3438507732622c9b4e50f36bf49f9.
+PublicBaseProjection.lean and PublicTraceWitness.lean passed focused local
+compilation. The original uncompiled proposal is retained in the evidence
+bundle as history; the checked Lean sources are authoritative.
+
+1. Carrier and fixed statements
+
+AspisR1.PublicBaseProjection.projectPublic maps every scalar of the wide
+Public through ExactBaseProjection.project. For F = embed.fieldRange:
+
+publicBase_map: PublicBase F (mapPublic embed pubM31)
+project_map: projectPublic (mapPublic embed pubM31) = pubM31
+embed_project: PublicBase F pub -> mapPublic embed (projectPublic pub) = pub
+publicBase_iff_embed_project gives the equivalence.
+
+PublicBase supplies nine coordinate-membership conjuncts, including both
+frontiers and optional recipient/amount values. It is an explicit premise;
+Rspend alone does not imply it. The projection is not a ring homomorphism.
+
+2. Relation, checker and extraction composition
+
+canonical_project_iff and optionCheck_project_iff preserve the canonical
+option condition under PublicBase. rspend_mapped_witness_iff preserves all
+six Rspend conjuncts, including AppendBinding. rspend_project and
+spendCheck_project additionally assume SpendBaseDescent.BaseCoordinates w
+and descend both public statement and witness.
+
+PublicTraceWitness.extract_complete_of_typed_public composes this public
+projection with TraceWitnessExtract.complete_of_production. It assumes
+PublicBase, canonical options, BaseTyped trace and the existing production
+and CopyLinkBalance facts, and returns an executable checked M31 witness.
+It does not obtain those premises from oracle acceptance or prove efficient
+oracle-table extraction.
+
+3. Verification
+
+Evidence: evidence/lean-public-base-projection-20261015/.
+R1PublicBaseProjection: exit 0; 20.22 s; RSS 2,492,383,232 bytes; swap 0.
+R1PublicTraceWitness: exit 0; 81.45 s; RSS 3,929,047,040 bytes; swap 0.
+The sampled aggregate peaks are 3,011,376 and 3,913,184 KiB, respectively.
+Nine public descent declarations and the trace bridge report only
+propext, Classical.choice and Quot.sound. Exact source/object hashes,
+commands, attempt history and the retained-cache provenance are bundled.
+No full replay, dependency build or build-host Lean ran.
+
+4. Remaining boundary
+
+The section 9 byte codec is checked separately in PublicByteCodec/Laws.
+The Rust value map, source serializer refinement, ASF8 outer statement and
+Pool binding remain separate obligations. The carrier proof does not
+silently assert these source correspondences or J1 completion.

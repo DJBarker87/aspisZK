@@ -1,0 +1,65 @@
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1TypedPrefixParser.lean:30:19: error: unsolved goals
+case cons.some.some
+Raw : Type
+Payload : ℕ → Type
+one : (row : ℕ) → Raw → Option (Payload row)
+suffix : List Raw
+raw : Raw
+rest : List Raw
+ih :
+  ∀ (row : ℕ),
+    decode one row (rest ++ suffix) =
+      (decode one row rest).bind fun pre => Option.map (fun post => pre ++ post) (decode one (row + rest.length) suffix)
+row : ℕ
+value : Payload row
+hfirst : one row raw = some value
+val✝ : List (Sigma Payload)
+hrest : decode one (row + 1) rest = some val✝
+⊢ ((Option.map (fun post => val✝ ++ post) (decode one (row + (rest.length + 1)) suffix)).bind fun tail =>
+      some (⟨row, value⟩ :: tail)) =
+    Option.map (fun post => ⟨row, value⟩ :: (val✝ ++ post)) (decode one (row + (rest.length + 1)) suffix)
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1TypedPrefixParser.lean:32:37: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [decode, hfirst,̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1TypedPrefixParser.lean:35:18: warning: This simp argument is unused:
+  hrest
+
+Hint: Omit it from the simp argument list.
+  simp [h̵r̵e̵s̵t̵,̵ ̵Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1TypedPrefixParser.lean:35:25: warning: This simp argument is unused:
+  Nat.add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [hrest, N̵a̵t̵.̵a̵d̵d̵_̵a̵s̵s̵o̵c̵,̵ ̵Nat.add_comm, Nat.add_left_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1TypedPrefixParser.lean:70:17: error: invalid 'by' tactic, expected type has not been provided
+'AspisR1.TypedPrefixParser.decode_append' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.TypedPrefixParser.decode_length' depends on axioms: [propext, Quot.sound]
+'AspisR1.TypedPrefixParser.decode_append_some' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.TypedPrefixParser.prefix_stable' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.TypedPrefixParser.failure_persists' depends on axioms: [propext, sorryAx, Quot.sound]
+       15.03 real         1.43 user         2.24 sys
+          2764161024  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              169918  page reclaims
+              125050  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               24494  voluntary context switches
+              106755  involuntary context switches
+          4264072891  instructions retired
+          1909285672  cycles elapsed
+           133158328  peak memory footprint

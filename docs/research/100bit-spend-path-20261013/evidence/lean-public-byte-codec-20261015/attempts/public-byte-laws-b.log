@@ -1,0 +1,176 @@
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:57:28: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ((a, b), rest).2
+in the target expression
+  c.emit a' ++ d.emit b' ++ rest = bytes
+
+case back.some.some
+A B : Type
+c : PrefixCodec A
+d : PrefixCodec B
+hc : c.Lawful
+hd : d.Lawful
+bytes : Bytes
+a : A
+b : B
+rest : Bytes
+h : (c.pair d).parse bytes = some ((a, b), rest)
+a' : A
+mid : Bytes
+hc0 : c.parse bytes = some (a', mid)
+b' : B
+last : Bytes
+hd0 : d.parse mid = some (b', last)
+heq : ((a', b'), last) = ((a, b), rest)
+ha : a' = a
+hb : b' = b
+hr : ((a', b'), last).2 = ((a, b), rest).2
+⊢ c.emit a' ++ d.emit b' ++ rest = bytes
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:74:8: error: `dsimp` made no progress
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:94:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (oa, rest).2
+in the target expression
+  c.option.emit none ++ rest = tag :: tail
+
+case pos
+A : Type
+c : PrefixCodec A
+hc : c.Lawful
+oa : Option A
+rest : Bytes
+tag : Byte
+tail : List Byte
+h : c.option.parse (tag :: tail) = some (oa, rest)
+h0 : tag = 0
+heq : (none, tail) = (oa, rest)
+ho : none = oa
+hr : (none, tail).2 = (oa, rest).2
+⊢ c.option.emit none ++ rest = tag :: tail
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:106:26: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (oa, rest).2
+in the target expression
+  c.option.emit (some a) ++ rest = tag :: tail
+
+case pos.some
+A : Type
+c : PrefixCodec A
+hc : c.Lawful
+oa : Option A
+rest : Bytes
+tag : Byte
+tail : List Byte
+h : c.option.parse (tag :: tail) = some (oa, rest)
+h0 : ¬tag = 0
+h1 : tag = 1
+a : A
+last : Bytes
+hp : c.parse tail = some (a, last)
+heq : (some a, last) = (oa, rest)
+ho : some a = oa
+hr : (some a, last).2 = (oa, rest).2
+⊢ c.option.emit (some a) ++ rest = tag :: tail
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:98:36: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp [option, h0̵,̵ ̵h̵1, hp] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:155:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (v, rest).2
+in the target expression
+  variantCodec.emit Variant.privateTransfer ++ rest = tag :: tail
+
+case pos
+v : Variant
+rest : Bytes
+tag : Byte
+tail : List Byte
+h : variantCodec.parse (tag :: tail) = some (v, rest)
+h0 : tag = 0
+heq : (Variant.privateTransfer, tail) = (v, rest)
+hv : Variant.privateTransfer = v
+hr : (Variant.privateTransfer, tail).2 = (v, rest).2
+⊢ variantCodec.emit Variant.privateTransfer ++ rest = tag :: tail
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:163:22: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (v, rest).2
+in the target expression
+  variantCodec.emit Variant.withdrawal ++ rest = tag :: tail
+
+case pos
+v : Variant
+rest : Bytes
+tag : Byte
+tail : List Byte
+h : variantCodec.parse (tag :: tail) = some (v, rest)
+h0 : ¬tag = 0
+h1 : tag = 1
+heq : (Variant.withdrawal, tail) = (v, rest)
+hv : Variant.withdrawal = v
+hr : (Variant.withdrawal, tail).2 = (v, rest).2
+⊢ variantCodec.emit Variant.withdrawal ++ rest = tag :: tail
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:176:10: error(lean.unknownIdentifier): Unknown identifier `ListFieldCodec.fixedBytes?`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:210:8: warning: This simp argument is unused:
+  List.length_flatMap
+
+Hint: Omit it from the simp argument list.
+  simp [List.length_f̵l̵a̵t̵M̵a̵p̵,̵ ̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵ofFn, ExactLeafFieldCodec.encodeM31_length]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:210:29: warning: This simp argument is unused:
+  List.length_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp [List.length_flatMap, L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵o̵f̵F̵n̵,̵ ̵ExactLeafFieldCodec.encodeM31_length]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:227:8: warning: This simp argument is unused:
+  List.length_flatMap
+
+Hint: Omit it from the simp argument list.
+  simp [List.length_f̵l̵a̵t̵M̵a̵p̵,̵ ̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵ofFn, encodeDigest_length]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:227:29: warning: This simp argument is unused:
+  List.length_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp [List.length_flatMap, L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵o̵f̵F̵n̵,̵ ̵encodeDigest_length]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PublicByteCodec.PrefixCodec.fixed_lawful' depends on axioms: [propext, Quot.sound]
+'AspisR1.PublicByteCodec.PrefixCodec.pair_lawful' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PublicByteCodec.PrefixCodec.transport_lawful' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PublicByteCodec.PrefixCodec.option_lawful' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PublicByteCodec.u32_lawful' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.u64_lawful' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.digest_lawful' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.frontier_lawful' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.public_lawful' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.parseRaw_eq_some_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.decode_eq_some_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.roundtrip' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.parseRaw_trailing' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.parseRaw_truncated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.parseRaw_bad_variant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.parseRaw_bad_recipient_tag' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.parseRaw_bad_amount_tag' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.decode_zero_withdrawal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.encode_unique' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       13.23 real         3.66 user         2.08 sys
+          2867609600  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              194635  page reclaims
+              102566  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               19489  voluntary context switches
+               97517  involuntary context switches
+          3244851215  instructions retired
+          1421555500  cycles elapsed
+           132994488  peak memory footprint
