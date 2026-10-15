@@ -44,3 +44,9 @@ change this extraction's field.rs, wide_exact.rs or state_only_hiding.rs.
 The NUC is reachable again; the next host task inventories and ports the
 matching library/cache under explicit resource limits. No unchanged full
 regression is implied by this integration.
+
+The [16 October follow-up](J1-CURRENT-MASK-LEAN432-20261016.md) has now completed
+that focused port on the NUC. All fourteen maintained modules, the six pure
+field modules, the two generated modules and two scalar additions pass on the
+pinned 4.32 kernel. This supersedes the port-pending statement above for these
+components only; whole-mask and actual acceptance composition remain open.
