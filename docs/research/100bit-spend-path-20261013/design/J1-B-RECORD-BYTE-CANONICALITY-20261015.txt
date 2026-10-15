@@ -1,0 +1,50 @@
+Actual extracted 32-byte decoder
+
+Target: lean/ExtractedRecordByteCanonicality.lean. It uses the actual
+attempt-F WideExact.from_le_bytes and the checked actual-F eight-limb
+constructor theorem. No generated function or production Rust is edited.
+
+The fixed carrier is an Aeneas Array U8 32 with bounded Fin32 byte reads.
+For each Fin8 index i, wordLE reads bytes4i..4i+3 through the same existing
+core.num.U32.from_le_bytes primitive as the generated decoder. These are
+exact primitive calls, not a newly asserted arithmetic decoding function.
+The fixed-reads theorem connects all32 generated reads to the eight-word
+array. The fixed-success iff gives canonical bounds on all eight words and
+their unchanged packing. The arbitrary-slice success theorem additionally
+proves length32 and exhibits an array whose to_slice equals the input.
+
+There is no fallback byte in this representation. The equality is within
+the extracted value model; it proves no Rust pointer/provenance property.
+Existing candidate-parser proofs are only a source-inspection aid and are
+not imported or silently transported to the actual generated namespace.
+
+Remaining boundaries
+
+The high component may still be nonzero: the parser's c1=QM31.ZERO guard
+requires a separate derived-equality theorem. Whole-record canonicality
+also needs the actual ChunksExact/Enumerate validator invariant and byte
+coverage from payload divisibility. Framing, these byte/limb facts, and a
+future loop proof must then be composed. Prefixes, challenges, first reads,
+Rust/Lean refinement, and main-project Lean4.32 integration remain separate.
+
+Validation
+
+Final focused Lean4.31 check passed in 17.317 s, sampled group RSS2802096 KiB,
+maximum process RSS2236710912 bytes, process swaps0. System swap usage fell
+from12587.44M to12579.44M. The 4 GiB sampled stop and Lean -M3500 were active.
+All four public #print axioms reports contain only propext, Classical.choice
+and Quot.sound. A harmless unnecessary-<;> lint remains; no replay was run
+only to change that syntax.
+
+The first attempt proved byte reads and wrong-length rejection but failed
+the last singleton quantifier simplification when changing list membership
+to Fin8 quantification. Its source/log/receipt are retained as failed
+evidence, not a theorem result. The correction adds forall_eq and bounded
+Fin-index definitional equality. Both attempts pin generated sources and
+objects, the constructor predecessor, Lean --version and runtime dylibs.
+
+Final source SHA
+3ad68b76909d82ba93126b0de4ac5eca66df6e628f246e6d2e1688c2c304825d.
+Generated Funs SHA remains
+f6a3d5b95b781458af5a0118b76d39a14243b77958ef86eb9e5cac50ac45a2b1.
+No production edit, extraction rerun or native regression was required.
