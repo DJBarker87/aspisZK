@@ -232,7 +232,7 @@ axiom, or claim of extraction is supplied in this file. -/
 structure SourceSimulation {Cfg Input : Type}
     (SourcePrefix : PrefixRelation Cfg Input) (Admitted : Cfg → Input → Prop)
     (routeOf : Cfg → Input → Route) : Prop where
-  prefix : ∀ cfg input H stop tr,
+  preservesPrefix : ∀ cfg input H stop tr,
     Admitted cfg input → SourcePrefix cfg input H stop tr →
       ModelPrefix (routeOf cfg input) stop tr
 
@@ -242,7 +242,7 @@ theorem source_count_of_simulation {Cfg Input : Type}
     (simulation : SourceSimulation SourcePrefix Admitted routeOf) :
     AllPrefixCount SourcePrefix Admitted verifierBudget := by
   intro cfg input H stop tr hadmitted hsource
-  exact model_prefix_bound (simulation.prefix cfg input H stop tr hadmitted hsource)
+  exact model_prefix_bound (simulation.preservesPrefix cfg input H stop tr hadmitted hsource)
 
 theorem source_obligation_of_simulation {Cfg Input : Type}
     {SourcePrefix : PrefixRelation Cfg Input} {Admitted : Cfg → Input → Prop}
