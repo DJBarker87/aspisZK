@@ -1,0 +1,63 @@
+J1.R17: Aeneas backend port checked; extracted-chain closure still pending
+
+Result and pins
+The AeneasMeta and Aeneas roots now compile on Lean 4.32.0: 237 required
+backend modules, including embedded tests. This is the backend port, not an
+R1 full replay or a source-refinement result. The serializer/parser theorem
+chains and their #print axioms audits are checked separately by worker B.
+No downgrade, new axiom, production source change or live protocol edit.
+
+R1 base b40d1cfffadbdf967f84cca23ea4e7f1553d564f; production remains equal
+to 2ed5bc48393ba51e38ec62167134f55755b11649. Lead review c441facae.
+Aeneas source 220c7ff9cce569dead1e72ef199775b3417493b7; generator binary
+b59d5188c082f704a418c7cb4e52ad69328002d1 has matching functional backend
+sources. Lean commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35; Mathlib
+81a5d257c8e410db227a6665ed08f64fea08e997 and nine pinned packages.
+The original b876 input pin predates b40's two status notes; neither changes
+these production or Lean inputs. The final manifest records both provenance
+and all 241 source/configuration hashes, with 12 changed files.
+
+Compatibility changes
+1. Enum realization: Lean's BVDecide modules moved and enum generators became
+private. Use executeReservedNameAction for the same three exact suffixes,
+then getConstInfo. A namespace-resolving first draft failed on PUnit; the
+exact-name replacement passed the helper and Aeneas.Std.Primitives.
+2. Simp: explicit Option.some results and HashSet FVarId annotation preserve
+None versus Some, including an empty surviving-variable set.
+3. ZMod simproc: match Mathlib's NPow.toPow/Monoid.toNPow instance hierarchy.
+4. BvTac: use relocated Elab config and Meta tactic context/entry point.
+5. Array: register existing Lean getElem!_set!_ne with the same simp attributes.
+Its xs/i/j/x arguments are now explicit; no affected named use was found in
+the backend or staged extracted cone.
+6. Vector: retain conjunction-shaped rules as getElem_set!_eq_of and
+getElem_set!_ne_of, proved from core self/ne laws with both original simp
+attributes. Core owns the old names with different signatures.
+7. Step: add explicit pure res to the terminal nested-do binding. Lean4.31's
+legacy elaborator returned the RHS; Lean4.32 requires an explicit continuation.
+8. StepArraySpec: qualify the declModifiers syntax-kind annotation.
+9. StepStar: correct the result annotation to Array(TaskOrDone(Option Tactic)).
+The remaining three changed files pin toolchain, Lake dependencies and manifest.
+Each changed module passed a focused check before its dependent root resumed.
+
+Resources and evidence
+Own host workspace: /home/dombarker/project-offloads/aspis-r1-j17-port-20261015.
+Serial systemd user scopes: MemoryHigh=6GiB, MemoryMax=8GiB, MemorySwapMax=0;
+no outer flock. Commands use lake --no-cache env lean -j1 -M0 with a ten-minute
+per-target watchdog. Hash-matching successful predecessors are reused.
+Maximum successful target wall time: 54.469s (Async.Test); peak process RSS:
+5,513,252 KiB; maximum sampled cgroup charge: 4,331,773,952 bytes. All recorded
+process swaps and cgroup swap usage are zero; memory-event counters are zero.
+These maxima are across individual targets, not a measured aggregate duration.
+
+Evidence: evidence/aeneas-lean432-port-20261016 contains original source archive,
+reconstructible patch, 241 input pins, all successful per-target receipts,
+10 failed compile attempts with sources/logs, runtime pins and commands.
+verify-evidence.py checks patch reconstruction and source/import receipt hashes
+without compiling. This library build makes no blanket axioms assertion; exact
+extracted theorem audits are required for R17 closure.
+
+The separate prefix agreement checks used the same hard cap with -M0 after
+an import-only diagnostic isolated Lean's whole-RSS heuristic. That option
+leaves the cgroup cap in force. Source: Lean4.32 src/runtime/memory.cpp:136-147.
+All three prefix files passed with nine standard-only theorem audits; their
+historical failures remain in their separate evidence bundle.
