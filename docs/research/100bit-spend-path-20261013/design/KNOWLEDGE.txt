@@ -1,0 +1,113 @@
+KNOWLEDGE DESIGN -- PROPOSED, ALL NEW OBLIGATIONS OPEN
+Base and inspected spend branch: a17829a776d533d7cd0beeb1f8676dcc793a909c.
+Gap list: origin/v8-reference:docs/research/v8-r1-20261011/R1_SOUNDNESS.md,
+Consolidated status.
+GRSConversion/MultiplicityThreeGS abbreviate AspisWide namespaces;
+other abbreviated project namespaces are AspisR1.
+
+1. Required statement
+Define executable Rspend(pub,w), where w contains the input secret key,
+salt, value, authentication path, and output-note data. Require
+pub.nullifier = nullifierHash w.sk w.salt and
+pub.anchor = merkleRoot (noteCommitment (ownerKey w.sk) w.vin
+pub.assetId w.salt) w.path, together with bounded integer conservation,
+output commitment equations and canonical public-option shape. Exact
+byte/field relation refinement is OPEN; SpendSemantics.NoteFacts alone
+does not include public-option shape or settlement.
+
+Proposed full-log knowledge theorem: for each public statement and any
+randomized prover, with auxiliary input and at most Q distinct reads in
+the complete prover/verifier experiment,
+Pr[accept(v) AND NOT (exists w, E(pub,proof(v),firstReadLog(v);coins)=some w
+AND Rspend(pub,w))] <= Q*epsilon + 12*Q^2/2^256 + deltaE.
+Here E is one uniform algorithm, runs after one execution without rewinding
+or oracle programming, and has the cost contract below. Probability includes
+oracle, prover and extractor coins. Adaptive public-statement selection
+needs an additional experiment refinement, OPEN.
+
+Counterexample to the existence interface: Alice's valid note/spend statement
+has witness wA while another user lacks its secret key. Classical.choose
+can return a witness independently of that user's computation or query log;
+its failure event is empty on this statement. Thus bounding that event
+does not establish knowledge. This is a logical counterexample, not a
+demonstrated forgery.
+
+2. Executable decoder proposal
+Initial lanes use (n,d,t)=(1048576,1024,38230): divide by GRS multipliers,
+decode degree-at-most-1024 polynomials, test the exact image, invert, and
+check agreement. Reuse GRSConversion.exactInitial38230_transport and
+GRSMessageInverse.{inverse_messagePolynomial,messagePolynomial_inverse_iff}.
+Use the proved degree bound 1024; image membership is checked explicitly.
+OPEN refinement: decode0(w).toFinset = InitialResponses.Close w.
+
+Fold one uses (262144,255,9558), via
+GRSConversion.exactFinal9558_transport. Fold two's native code has 64
+coefficients, length 65536, threshold 2390. Repeat each symbol four times,
+decode with fold one's instance, retain sparseLift-image candidates, project
+their zero lane, and recheck native agreement. ConcreteProjection.exactFinal_sparseLift_child
+and AspisR1.fullQuartetSet_card give completeness: 2390 parents yield
+9560 children, exceeding 9558. OPEN: executable inverse/filter and exact
+second-code list equality; no new native GRS instance assumed.
+
+Merge 29 complete initial lists using IncrementalCandidateLoop.candidates_eq_lambda;
+check every surviving candidate's trace/witness directly with Rspend.
+SpendExtraction.large_matching_extracts supplies existential semantic reuse
+only under its typed-word, good-opening, matching-support, sumcheck and
+outside-semantic-bad premises. Deriving them from actual acceptance is OPEN.
+
+3. Conditional cost contract -- OPEN
+Propose E[time(E)] <= R + 29G0 + 2G1 +
+O(290000*n0 + 100*Crel), using cached agreement bitsets; Crel is one
+relation check. Two fold calls decode V and its second-fold received word.
+Require per-call completeness failure <= deltaE/31 and polynomial expected
+bit cost Gi. Scalar lists must refine Close and deduplicate before merging:
+InitialResponses.{Close_card,Lambda_card} give 100; IncrementalCandidateCost.initial_pairs_le_290000
+requires 29 steps and every supplied list cardinality <=100. Pair counts
+alone do not bound runtime.
+
+One conservative backend contract is
+Gi = O(Mi^3*c(b) + F(Di,112,b,deltaE/31) + 112*(ni*di+di^3)*c(b)),
+where b=ceil(log2|E|), c(b) bounds field operations and F is a certified
+randomized root-finding cost, polynomial in degree, b and log(31/deltaE).
+MultiplicityThreeGS.exactInitialInterpolationBudget
+and exactFinalInterpolationBudget give (M0,D0)=(6480098,114689),
+(M1,D1)=(1626522,28673). This is theoretical, not practical dense-elimination
+guidance. Recovery scanning can target R=O((Q+N*h)*(Q+1)*L), with N slots,
+depth h and address length L. Executable field/basis arithmetic, recovery,
+GS completeness, failure accounting and every cost refinement remain OPEN.
+GS Theorem 7/sections 1-2 support the randomized polynomial-time route:
+https://people.csail.mit.edu/madhu/papers/1998/gs.pdf
+
+4. Rewinding-free composition -- OPEN
+Retain the chronological first-read log, including terminal/checkpoint reads.
+C1TableStability.c1_table_word_of_read and
+LaterTableStability.{c2,folded}_table_word_of_read identify commitment-cut
+Option-valued recovery with full-log recovery, assuming consistent log/table
+representations, literal frame reads, size bounds, Q and excluded combined
+events. Parse recovered payloads and complete missing slots deterministically.
+Accepted-opening equality, sufficient support, typed words and relation
+correspondence still need source instantiation; default completion proves
+none of these.
+
+Let decK := UnifiedDecoder.decode p hD pub and
+Coll := CombinedMerkleCollision.Coll p Q.
+Propose knowledge_bad_chain:
+accept(v) AND FullExtractFail(v) AND NOT Coll v
+AND DecoderComplete(v) -> R0C.V3.hitsChain3 decK badK emptyTable v.1.
+Propose knowledge_density, for every a,T,own,pend,g:
+decK a T = some (own,pend,g) -> R0C.V3.blaw g
+(fun out => indicator (badK out.1 out.2.1 T out.2.2)) own pend <= epsilon.
+R0C.V3.lemmaA3 then charges Q*epsilon, given epsilon>=0 and FirstReadsBound.
+Both proposed statements,
+the concrete classifier and terminal D3Outside composition are OPEN.
+CombinedMerkleCollision.mass proves the 12*Q^2/2^256 event budget given
+full-experiment hQ. Its Q factor remains; epsilon is OPEN.
+
+UnifiedOracleTrace.trace_decomposition and UnifiedOracleInj.inj supply
+transport, not extraction. FS2.extractFails examines tableBefore row zero's
+first cell, whereas E consumes the full log: no equivalence is claimed.
+FS2.D3 is unconditional over H,T. Keep worker A's existence/agreement
+classifier separate: D2TableBoundary.table_flip_cost forces error >=1
+when table replacement alone makes every challenge escape. A candidate-linked
+survivor/recovery bridge is OPEN. Concrete hQ, source correspondence and frozen replay
+remain OPEN; this design closes no release gap.
