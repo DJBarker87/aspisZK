@@ -1,0 +1,172 @@
+J1 CONTINUATION FOR LEAD REVIEW -- 2026-10-15
+
+Branch: codex/r1-j1-r4-review-20261015.
+Base: 136b746805f3438507732622c9b4e50f36bf49f9, fetched before work.
+All work used the isolated r1-j1-r4-review-20261015 worktree. The live
+100bit-spend-path worktree and its branch were not edited. J1.R4 remains
+OPEN. J5 and J2 have not started.
+
+1. Lead-fixed J1.R2
+
+1aca98e95 already implemented the exact AppendBinding statement from
+b0bf558cd: outputPair, nextRoot and the carry frontier cell. It is the sixth
+Rspend/check conjunct; check_eq_true_iff and of_production include it through
+AppendSemantics.of_production with no additional production premise.
+136b74680 refreshed the map, M31 descent and executable witness chain.
+The audit verifies current relation/extraction sources match their retained
+green snapshots, including all 45 checksum entries and archived objects.
+The two specifically requested focused targets are also checked locally in
+this continuation: exit 0, 15.92 / 12.74 seconds, RSS 2,891,350,016 /
+2,871,476,224 bytes, zero swap, with six axiom reports containing only
+standard axioms. Evidence: lean-j1-r2-requested-check-20261015. These are
+requested individual-file checks, not an unchanged full regression.
+
+2. New checked public carrier and trace-witness bridge
+
+PublicBaseProjection.projectPublic maps wide public coordinates to M31.
+embed_project proves recovery under the nine PublicBase membership clauses;
+project_map proves the converse on embedded M31 statements. Canonical
+options and all six Rspend clauses are preserved. rspend_project and
+spendCheck_project additionally require BaseCoordinates of the witness.
+PublicTraceWitness.extract_complete_of_typed_public composes the public
+projection with the existing executable trace-witness extractor under
+BaseTyped, canonical options, ProductionHolds and CopyLinkBalance.
+PublicBase and production facts remain explicit; Rspend does not supply
+PublicBase automatically. This is not oracle-table extraction.
+
+3. New checked public bytes and symbolic lengths
+
+PublicByteCodec and PublicByteCodecLaws implement section 9 declaration
+order, canonical M31 little-endian limbs, strict 0/1 variant/option tags,
+u64 index and complete input consumption. Fixed statements now proved:
+
+parseRaw bytes = some pub <-> encode pub = some bytes
+decode bytes = some pub <->
+  encode pub = some bytes and PublicOptionShape.check pub = true
+canonical pub -> pub.nextPairIndex < 2^64 ->
+  exists bytes, encode pub = some bytes and decode bytes = some pub
+
+The parser rejects nonempty trailing suffixes, every proper truncation of
+an encoded public value, invalid tags, and checked zero withdrawals.
+PublicByteCodecLengths.decoded_transfer_length / decoded_withdrawal_length
+prove 1455 / 1427 bytes respectively; decoded_length combines the cases.
+The source field-order review matches Rust Public::public_bytes at
+crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs:1999-2040.
+That review is inspection, not formal source refinement. The serializer can
+emit zero withdrawal; checked round-trip needs successful source validation
+or a nonzero-amount premise. The amount <2^30 validator remains external.
+The inner semantic bytes and ASF8's 1880 bytes are distinct encodings.
+
+4. New checked semantic prefixes
+
+TypedPrefixParser proves append composition, length, consecutive logical
+row indices, prefix stability and failure persistence for already delimited
+records. SemanticPrefixCodec instantiates it with the existing strict
+SemanticRecordCodec for its 25 semantic payload rows 0..24. decodeFull
+constructs the dependent payload vector by direct indexing and transport.
+Its two key contracts are:
+
+decodeFull (encodeFull values) = some values
+decodeFull raws = some values -> encodeFull values = raws
+
+The component also proves per-row/list back laws and prefix stability.
+Do not shift these payload row indices by one: the old semantic vector
+includes the fixed empty row-zero record, while Unified row zero carries C1
+and constructs that record internally. Unified component-dispatch names
+(semantic 1..25) are not an identification with this payload vector. Exact
+row-zero/source/challenge alignment is still an obligation.
+These are completed-record laws, not streaming partial-byte-prefix laws.
+No later-row decoder or complete Unified Params instance is asserted.
+
+5. Source-pin repair and resource evidence
+
+The R1SemanticPayloadView bundle now retains R1SemanticRecordCodec and
+R0P.MaskView source snapshots and hashes. Both match the historical revision
+and current source. Its 147 manifest members and 148 checksums verify.
+Historical object hashes, measurements, receipts and reviews are unchanged;
+the original manifest hash resolves through its exact Git object. This is
+retrospective packaging, not a new historical source-to-object attestation.
+
+All new checks ran sequentially and locally using lake env lean with
+retained dependencies, -M6000 and a 7 GiB aggregate-process monitor. Missing
+R0/FS2 cache objects were copied read-only from the pinned host workspace;
+no Lean process or build ran there, and no dependency rebuild was launched.
+The cache-provenance report distinguishes current source/object pins from
+historical compile attestations. Exact sources, commands, failures, green
+receipts, objects, wall time, RSS, swap and #print axioms are bundled.
+All new target checks report only subsets of propext, Classical.choice and
+Quot.sound; no sorryAx, zero swap, no memory kill. The largest new-target
+sampled aggregate peak was 4,311,680 KiB. No full manifest replay was run.
+
+Focused targets (seconds; maximum process RSS bytes):
+R1TypedPrefixParser        17.78; 2,830,811,136
+R1PublicBaseProjection     20.22; 2,492,383,232
+R1PublicTraceWitness       81.45; 3,929,047,040
+R1PublicByteCodec          15.44; 2,827,173,888
+R1PublicByteCodecLaws       7.99; 2,915,500,032
+R1PublicByteCodecLengths    6.75; 2,863,874,048
+R1SemanticPrefixCodec     53.81; 4,194,402,304
+
+Evidence lives in the matching lean-*-20261015 bundles; the coordinator
+bundle contains the source audit and cache resolution. Independent read-only
+review verified all five new proof bundles' checksums, final sources, green
+receipts, import snapshots, objects and 60 printed axiom reports.
+
+6. Remaining ordered Lean jobs and exact boundaries -- OPEN
+
+J1.a Source public correspondence. Define RustPublicRel and prove, for a
+successful source serializer and correctly mapped values:
+  public_bytes source = Ok bs -> RustPublicRel source pub ->
+    PublicByteCodec.encode pub = some bs.
+Add canonical options from the actual successful validator before invoking
+checked decode. Separately bind ASF8/Pool fields omitted from R0P.Public,
+including the program's non-carry frontier checks required by J1.R3.
+
+J1.b Typed prefix integration. Prove the concrete row-zero empty record and
+that actual semantic records decode to the 25-vector above; compose
+SemanticPayloadView and SemanticPayloadOpeningView.opening_view_of_payloads
+with the actual challenges and recovered C2 callback. Add the remaining
+circle/opening/query/rho payload codecs and preserve earlier challenges as
+well as payloads under extension. Current UnifiedProtocol.decode is still
+none. Do not make Sigma row, RowPayload row the current Params.M: empty
+records at distinct rows encode identically, violating its row-independent
+inverse requirement. Keep row typing at the parser boundary or change the
+protocol interface explicitly.
+
+J1.c Concrete commitment cuts. Establish actual row 0/2/30 addresses and
+read membership for the PublicInitFrame, C2 and folded-root frames. Use
+FirstReadCut.tableBefore_representation to obtain the represented prefix
+logs, then TypedRecoveryStability.typed_word_stable and
+FoldedRecoveredWord.folded_word_table_of_read for their views. Keep all
+prior adversary reads, full/cut consistency, first-read budget, collision,
+child-target and root-target exclusions, and the folded 224-byte polynomial
+tail premise. Existing conditional lemmas do not prove actual-source cuts.
+
+J1.d Fixed sampler/configuration. Pin the S2/private-leaf-salts/P3 feature
+closure, exact byte labels and sigma coordinate order/fallback behavior.
+The intended challenge schedule uses QM31 rows 0..24, circles 25/26,
+nonzero wide gamma 27, wide 28..30, query31 and QM31 rho32. Matching these
+maps to concrete source reads and state carry is still OPEN; the component
+dispatch names in UNIFIED-FIAT-SHAMIR are not a coordinate proof.
+
+J1.e All-input source bound. J1-CONFIG-BOUNDARY-PROPOSED-20261015.txt gives a
+proposed experiment over exactly the Pool stage1/stage2 routes. The fixed
+obligation quantifies every finite designated hash-call trace prefix,
+including rejection, panic and allocation failure, with arbitrary raw
+account/input bytes:
+  ConfigOK c -> PoolRoute i.data -> SourceShapeBound c <= L ->
+    SourcePrefix c i H tr -> forall b in tr, b.length <= L.
+No acceptance/authenticity premise may drop rejected calls. The proposed
+maximum 124343 is source arithmetic and OPEN as a universal source theorem.
+Direct checkpoint/resume/transcript helpers and legacy dispatch remain
+outside this proposed route scope unless explicit input/state length
+premises are supplied. PDA/runtime/CPI hashes need separate accounting if
+the shared oracle includes them. Qtot/QV first-read bounds are still OPEN.
+CanonicalByteHash's overlength fallback is not source-hash correspondence.
+The admitted entrypoint boundary is a lead decision, not an implemented
+source guard. No proof cap or source behavior was changed here.
+
+Only after these J1 adapters are accepted should J5 and J2 proceed in
+parallel under the lead's idealized-word protocol / Merkle compiler split.
+This continuation does not claim J1 closure, knowledge soundness, D1-D3,
+a numerical private-spend bound, or full Rust/Pool refinement.

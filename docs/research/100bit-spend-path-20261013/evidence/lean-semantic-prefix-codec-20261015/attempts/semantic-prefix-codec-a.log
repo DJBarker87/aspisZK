@@ -1,0 +1,72 @@
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1SemanticPrefixCodec.lean:63:64: error(lean.unknownIdentifier): Unknown identifier `decoded`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1SemanticPrefixCodec.lean:86:6: error: Tactic `assumption` failed
+
+case cons
+tail : List Entry
+ih :
+  ∀ (row : ℕ),
+    List.map Sigma.fst tail = List.range' row tail.length → decodeFrom row (List.map encodeEntry tail) = some tail
+row : ℕ
+value : At row
+hrows : row :: List.map Sigma.fst tail = row :: List.range' (row + 1) tail.length
+ht : List.map Sigma.fst tail = List.range' (row + 1) tail.length
+⊢ ((TypedPrefixParser.decode decodeOne (row + 1) (List.map encodeEntry tail)).bind fun tail =>
+      some (⟨row, value⟩ :: tail)) =
+    some (⟨row, value⟩ :: tail)
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1SemanticPrefixCodec.lean:129:62: error: unsolved goals
+raws : List Bytes
+out : List Entry
+hlen : raws.length = 25
+h : decodeFrom 0 raws = some out
+⊢ (match h : decodeFrom 0 raws with
+    | none => none
+    | some out => some (fullOfDecoded raws out ⋯ h)) =
+    some (fullOfDecoded raws out hlen h)
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1SemanticPrefixCodec.lean:130:26: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [decodeFull, hlen,̵ ̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1SemanticPrefixCodec.lean:143:2: error: unsolved goals
+case h
+values : Full
+i : ℕ
+hi : i < (List.map Sigma.fst (entriesOf values)).length
+hj : i < (List.range' 0 25).length
+⊢ [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24][i] = i
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1SemanticPrefixCodec.lean:156:72: error: unsolved goals
+values : Full
+i : Fin 25
+⊢ ⋯ ▸ (List.ofFn fun i => ⟨↑i, { isLt := ⋯, value := values i }⟩)[↑i].snd.value = values i
+'AspisR1.SemanticPrefixCodec.decodeOne_reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.decodeFrom_reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.decodeOne_encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.encode_of_decodeOne' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.prefix_stable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.failure_persists' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.decode_encode_entries' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.decoded_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.decodeFull_wrong_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.entriesOf_rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.decode_encodeFull' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.decodeFull_encodeFull' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       58.95 real         2.97 user         7.45 sys
+          4055007232  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              256351  page reclaims
+              496391  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               52139  voluntary context switches
+              485087  involuntary context switches
+          5193137434  instructions retired
+          2335011026  cycles elapsed
+           133174712  peak memory footprint
