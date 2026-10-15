@@ -1,0 +1,33 @@
+Historical source audit after the parser helper refactor
+
+The policy archived in this bundle pins integrated production revision
+bc7ec2be833b7408cabc0f79a415b0b1456ee92e. This includes G9/G8, the public
+serializer rewrite and the parser helper change. Historical 4c2 and 781
+evidence remains untouched and independently reproduces with its retained
+policy. The new bundle is evidence/j1e-source-effect-audit-post-parser-20261015.
+
+Only crates/aspis-r1-cost-probe/src/r1_wire.rs changed among the preceding
+32 full-file pins. Its SHA256 is
+0034e4251d7ce650ec5a6d2d9c6cf612e0ad80596ccb29a88753a0d5b285f582.
+All preceding 52 inventoried function spans remain byte-identical. Four exact
+source spans are added: Prefix::parse at 278–298, row_shape at 39–49,
+parse_record at 63–79, and validate_record_fields at 51–59.
+
+The audit records source-candidate links from semantic verification through
+Prefix::parse to parse_record, row_shape and the new validator. Expanded links
+mean that the candidate body is inventoried; they do not prove name resolution,
+semantic refinement or absence of hidden SHA effects. All transitive effects
+and both newly inventoried iterator loops remain OPEN. No cost is assigned
+merely because a helper lacks an explicit hash call.
+
+The resulting inventory has 56 spans, 333 opaque-call obligations and 30
+opaque-loop obligations. These are outstanding classification obligations,
+not execution counts. Current and both historical --checks pass. Requiring
+effect closure still exits 2. No Rust, Lean or extraction job was run for this
+refresh; prior build receipts are not relabelled as new source attestations.
+
+User decision: keep the release runtime pin OPEN for lead selection. Local
+Solana 4.2.1 source/replay dependency pins are supporting evidence, not a
+selected release runtime or live-validator attestation. This decision is
+recorded in the archived policy and audit. The 349/472 source-prefix
+count and the actual-source simulation remain OPEN.
