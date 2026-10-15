@@ -1,0 +1,1 @@
+pub const POOL_V1_LEAF_CAPACITY: u64 = 1u64 << POOL_V1_TREE_DEPTH;
