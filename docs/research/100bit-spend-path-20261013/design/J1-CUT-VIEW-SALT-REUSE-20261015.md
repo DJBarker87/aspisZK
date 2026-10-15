@@ -128,15 +128,57 @@ imaginary-part accepted branch and fallback behavior. The old
 is 25 or 26; these selected challenge-view lemmas do not add classifier or
 density coverage for those lengths.
 
-Remaining interfaces are: (1) a source-backed row-specific parser connecting
-the bounded raw message codec to `SemanticRecordCodec` payload constructors;
-(2) deriving the `payloads`, challenge list, and `recoverC2` callback consumed
-by `SemanticPayloadOpeningView.opening_view_of_payloads` from the typed
-before-row records and C2 openings; (3) deriving its C2-base, point
-distinctness, and non-rationality premises from the selected source
-execution; and (4) source/caller proofs that selected labels, challenge
-views, and the classifier use these model interfaces. This inventory does
-not select premises or claim those interfaces are closed.
+The selected byte-to-payload parser layer is now present as model plumbing:
+`SelectedIndexedRead.readTyped` combines the indexed message label/encoding
+check with a supplied row decoder; `readTyped_sound` and the encoded-read
+lemmas characterize that wrapper. `SelectedSemanticRead.read` sequences the
+25 dependent semantic-row decoders at indices 0--24 and provides
+`read_eq_some_iff` and `read_append_stable`. `SelectedOpeningRead.read`
+reads rows 25--31 (two circle payloads followed by gamma, kappa, first,
+second, and final opening payloads) and provides the corresponding exact-read
+characterization and prefix stability. `SelectedTranscriptRead.read` combines
+those results with the row-32 rho decoder. Its `readExact` additionally
+requires `rs.length = 33`; its theorem `readExact_eq_some_iff` states exactly
+that length condition plus all `Reads` facts. The separate `read_append_stable`
+lemmas are conditional: they preserve parsing only when every required index
+is already inside the original record list (`24 < length` for semantic rows,
+`31 < length` for opening rows, and `32 < length` for all 33 rows). Thus
+prefix-stable reads do not imply successful reads from a shorter prefix.
+
+The parsed opening payloads also have an existing algebraic interface.
+`SelectedOpeningClaims.Y` and `.parts` arrange six 29-entry vectors from the
+row-25, row-26, and gamma payloads. `SelectedOpeningData.Payloads` packages
+rows 25--31, and `SelectedOpeningData.data` inserts those payload-derived
+claims/polynomials together with explicitly supplied `W`, `V`, functionals,
+and challenges into `MatchingSupport.Data`. `SelectedOpeningPairing.acceptedPairing_iff_coefficientChecks`
+rewrites the existing accepted-pairing predicate as the three coefficient
+checks on the parsed payloads. These constructors consume supplied parsed
+payloads and model inputs; they do not establish that an accepted unified
+run supplies them.
+
+Relevant current source pins at this inspection are:
+
+| Module | Source SHA-256 | Status note |
+|---|---|---|
+| `SelectedIndexedRead.lean` | `0c44871e4c84fc545381a6df9bb2d8fa23102f4d2af229da2b6600fa56003b35` | indexed label and decoder wrappers |
+| `SelectedPrefixRead.lean` | `6ecff471af039433f7ffe7103db006dc10c847b309ec3756c4c10bbb9eb02dab` | indexed reads and append stability |
+| `SelectedSemanticRead.lean` | `ac332f97ddbcb98feaf6d4df30f54995fcec4e430ccb374f07d1afafc1d0eb59` | 25 dependent row decoders |
+| `SelectedOpeningRead.lean` | `9a0f72a9e447f1d87a625dec7fc0cdffdd8093f91e7dae2cee3ecec534cc7dcc` | rows 25--31; focused attempt b green (source SHA recorded above) |
+| `SelectedTranscriptRead.lean` | `11bcce167ce868f86692d0fe654f6066187bd1da4c0714f6a3165036dbc80557` | all 33 rows and exact-length wrapper |
+| `SelectedOpeningClaims.lean` | `e219644ff5ac0049f4a153c8d228bccafc4d4722d23a06bdbf8dfb722710864c` | six-vector/parts model |
+| `SelectedOpeningData.lean` | `035c7d6b52c7eb80f250414ed68e9711b0dd88e35a04247fa95dab55a2b4a824` | payload-to-`MatchingSupport.Data` packaging |
+| `SelectedOpeningPairing.lean` | `bf227c7e561bd3ef66c537f0769565f365d6abff3aaff93aa71c62b3369c1c7c` | accepted-pairing coefficient equivalence |
+
+Remaining interfaces are: (1) connect these model reads to the actual selected
+source transcript/caller and its challenge values, including the source-level
+row labels and serializer; (2) derive the `payloads`, challenge list, and
+`recoverC2` callback consumed by `SemanticPayloadOpeningView.opening_view_of_payloads`
+from a source-backed accepted run; (3) derive its C2-base, point distinctness,
+and non-rationality premises from that execution; and (4) prove the relevant
+source/caller and classifier interfaces. The byte-model parser itself is no
+longer absent, but no source refinement or J1/security conclusion follows from
+these parser theorems. This inventory does not select premises or claim those
+remaining interfaces are closed.
 
 ## S2, private salts, and row challenge maps
 

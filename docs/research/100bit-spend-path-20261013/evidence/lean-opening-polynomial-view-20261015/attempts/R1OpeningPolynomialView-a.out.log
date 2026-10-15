@@ -1,0 +1,71 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningPolynomialView.lean:32:2: error: unsolved goals
+case h₀
+n : ℕ
+coefficients : Fin n → E
+i j : Fin n
+hj : j ∈ Finset.univ
+hji : j ≠ i
+hval : ↑j ≠ ↑i
+⊢ ↑i = ↑j → coefficients j = 0
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningPolynomialView.lean:36:10: warning: This simp argument is unused:
+  hval
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵v̵a̵l̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningPolynomialView.lean:49:49: error: unsolved goals
+n : ℕ
+coefficients : Fin n → E
+x : E
+⊢ eval x (∑ i, C (coefficients i) * X ^ ↑i) = ∑ i, coefficients i * x ^ ↑i
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningPolynomialView.lean:77:4: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (polynomial payload).coeff ↑0
+in the target expression
+  (polynomial payload).coeff 0 + (polynomial payload).coeff 4 = payload 0 + payload 4
+
+payload : OpeningRecordCodec.Payload OpeningRecordCodec.Row.first
+⊢ (polynomial payload).coeff 0 + (polynomial payload).coeff 4 = payload 0 + payload 4
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    payload
+  has type
+    OpeningRecordCodec.Payload OpeningRecordCodec.Row.first
+  but is expected to have type
+    Fin 7 → E
+  in the application
+    polynomial payload
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningPolynomialView.lean:84:4: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (polynomial payload.2).coeff ↑0
+in the target expression
+  (polynomial payload.2).coeff 0 + (polynomial payload.2).coeff 4 = payload.2 0 + payload.2 4
+
+payload : OpeningRecordCodec.Payload OpeningRecordCodec.Row.second
+⊢ (polynomial payload.2).coeff 0 + (polynomial payload.2).coeff 4 = payload.2 0 + payload.2 4
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    payload
+  has type
+    OpeningRecordCodec.Payload OpeningRecordCodec.Row.second
+  but is expected to have type
+    OpeningRecordCodec.State × (Fin 7 → OpeningRecordCodec.Wide)
+  in the application
+    payload.2
+'AspisR1.OpeningPolynomialView.coeff_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OpeningPolynomialView.polynomial_natDegree_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OpeningPolynomialView.polynomial_eval' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OpeningPolynomialView.firstPolynomial_natDegree_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OpeningPolynomialView.secondPolynomial_natDegree_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OpeningPolynomialView.firstPolynomial_boundary' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OpeningPolynomialView.secondPolynomial_boundary' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

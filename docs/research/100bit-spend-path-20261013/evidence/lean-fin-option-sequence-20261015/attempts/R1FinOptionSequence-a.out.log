@@ -1,0 +1,26 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FinOptionSequence.lean:15:4: warning: Variable name `n` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FinOptionSequence.lean:69:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun i => Fin.cases (values 0) (fun j => values j.succ) i
+in the target expression
+  Option.map (fun tail i => Fin.cases (values 0) tail i) (some fun j => values j.succ) = some values
+
+case succ.mpr
+n : ℕ
+ih :
+  ∀ (A : Fin n → Type) (f : (i : Fin n) → Option (A i)) (values : (i : Fin n) → A i),
+    sequence A f = some values ↔ ∀ (i : Fin n), f i = some (values i)
+A : Fin (n + 1) → Type
+f : (i : Fin (n + 1)) → Option (A i)
+values : (i : Fin (n + 1)) → A i
+hvalues : ∀ (i : Fin (n + 1)), f i = some (values i)
+hhead : f 0 = some (values 0)
+htailValues : ∀ (j : Fin n), f j.succ = some (values j.succ)
+htail : (sequence (fun j => A j.succ) fun j => f j.succ) = some fun j => values j.succ
+happly : (fun i => Fin.cases (values 0) (fun j => values j.succ) i) = values
+⊢ Option.map (fun tail i => Fin.cases (values 0) tail i) (some fun j => values j.succ) = some values
+'AspisR1.FinOptionSequence.sequence_eq_some_iff' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
