@@ -3,9 +3,12 @@
 //! These pure byte formats keep the append-only Pool state independent of any
 //! one proof release. Solana PDA/owner checks and verifier dispatch belong to
 //! the separate Pool program layer.
+//! The current account revisions carry bumps computed by registry creation.
+//! Older revisions are rejected; their reserved zero bytes never certified a
+//! bump. Pure decoding does not itself establish PDA canonicality.
 
 pub const POOL_V1_VERIFIER_REGISTRY_MAGIC: [u8; 4] = *b"ASRG";
-pub const POOL_V1_VERIFIER_REGISTRY_VERSION: u8 = 1;
+pub const POOL_V1_VERIFIER_REGISTRY_VERSION: u8 = 2;
 pub const POOL_V1_VERIFIER_REGISTRY_BYTES: usize = 128;
 pub const POOL_V1_VERIFIER_REGISTRY_FLAG_PAUSED: u8 = 1 << 0;
 pub const POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE: u8 = 1 << 1;
@@ -13,7 +16,7 @@ pub const POOL_V1_VERIFIER_REGISTRY_FLAGS_MASK: u8 =
     POOL_V1_VERIFIER_REGISTRY_FLAG_PAUSED | POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE;
 
 pub const POOL_V1_VERIFIER_ENTRY_MAGIC: [u8; 4] = *b"ASRE";
-pub const POOL_V1_VERIFIER_ENTRY_VERSION: u8 = 1;
+pub const POOL_V1_VERIFIER_ENTRY_VERSION: u8 = 2;
 pub const POOL_V1_VERIFIER_ENTRY_BYTES: usize = 192;
 pub const POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT: u64 = u64::MAX;
 
@@ -21,10 +24,10 @@ pub const POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT: u64 = u64::MAX;
 /// V1 governance fields while additionally certifying that the registry
 /// program itself was an immutable loader-v3 deployment when initialized.
 pub const POOL_V1_VERIFIER_REGISTRY_V2_MAGIC: [u8; 4] = *b"ASR2";
-pub const POOL_V1_VERIFIER_REGISTRY_V2_VERSION: u8 = 2;
+pub const POOL_V1_VERIFIER_REGISTRY_V2_VERSION: u8 = 3;
 pub const POOL_V1_VERIFIER_REGISTRY_V2_BYTES: usize = 256;
 pub const POOL_V1_VERIFIER_ENTRY_V2_MAGIC: [u8; 4] = *b"ASE2";
-pub const POOL_V1_VERIFIER_ENTRY_V2_VERSION: u8 = 2;
+pub const POOL_V1_VERIFIER_ENTRY_V2_VERSION: u8 = 3;
 pub const POOL_V1_VERIFIER_ENTRY_V2_BYTES: usize = 320;
 pub const POOL_V1_VERIFIER_DEPLOYMENT_MODE_IMMUTABLE_LOADER_V3: u8 = 1;
 
@@ -70,11 +73,13 @@ impl TryFrom<u8> for VerifierEntryStatusV1 {
 /// One canonical registry account per Pool.
 ///
 /// Layout (128 bytes):
-/// `magic[4] || version || flags || reserved[2] || pool[32] || authority[32]
+/// `magic[4] || version || flags || bump || reserved || pool[32] || authority[32]
 /// || policy_binding[32] || generation_le[8] || min_delay_le[8] || reserved[8]`.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct VerifierRegistryV1 {
     pub flags: u8,
+    /// Canonical registry PDA bump established by initialization.
+    pub bump: u8,
     pub pool: [u8; 32],
     pub authority: [u8; 32],
     pub policy_binding: [u8; 32],
@@ -95,7 +100,7 @@ impl VerifierRegistryV1 {
 /// One exact verifier/profile/release entry under a Pool registry.
 ///
 /// Layout (192 bytes):
-/// `magic[4] || version || status || statement_version || reserved || pool[32]
+/// `magic[4] || version || status || statement_version || bump || pool[32]
 /// || verifier_program[32] || profile_binding[32] || release_binding[32]
 /// || activation_slot_le[8] || retirement_slot_le[8] || policy_binding[32]
 /// || reserved[8]`.
@@ -103,6 +108,8 @@ impl VerifierRegistryV1 {
 pub struct VerifierRegistryEntryV1 {
     pub status: VerifierEntryStatusV1,
     pub statement_version: u8,
+    /// Canonical entry PDA bump established by scheduling.
+    pub bump: u8,
     pub pool: [u8; 32],
     pub verifier_program: [u8; 32],
     pub profile_binding: [u8; 32],
@@ -114,13 +121,15 @@ pub struct VerifierRegistryEntryV1 {
 
 /// Canonical V2 registry image (256 bytes):
 ///
-/// `magic[4] || version || flags || deployment_mode || reserved || pool[32]
+/// `magic[4] || version || flags || deployment_mode || bump || pool[32]
 /// || authority[32] || policy_binding[32] || generation_le[8]
 /// || min_delay_le[8] || registry_program[32] || loader_program[32]
-/// || programdata[32] || executable_sha256[32] || reserved[8]`.
+/// || programdata[32] || executable_sha256[32] || programdata_bump || reserved[7]`.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct VerifierRegistryV2 {
     pub flags: u8,
+    /// Canonical registry PDA bump established by initialization.
+    pub bump: u8,
     pub pool: [u8; 32],
     pub authority: [u8; 32],
     pub policy_binding: [u8; 32],
@@ -129,6 +138,8 @@ pub struct VerifierRegistryV2 {
     pub registry_program: [u8; 32],
     pub loader_program: [u8; 32],
     pub programdata_address: [u8; 32],
+    /// Canonical loader-v3 ProgramData bump established by deployment authentication.
+    pub programdata_bump: u8,
     pub executable_hash: [u8; 32],
 }
 
@@ -149,17 +160,21 @@ impl VerifierRegistryV2 {
 /// || release_binding[32] || loader_program[32] || programdata[32]
 /// || executable_sha256[32] || expected_upgrade_authority[32]
 /// || activation_slot_le[8] || retirement_slot_le[8] || policy_binding[32]
-/// || flags_and_reserved[8]`.
+/// || bump || programdata_bump || reserved[6]`.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct VerifierRegistryEntryV2 {
     pub status: VerifierEntryStatusV1,
     pub statement_version: u8,
+    /// Canonical entry PDA bump established by scheduling.
+    pub bump: u8,
     pub pool: [u8; 32],
     pub verifier_program: [u8; 32],
     pub profile_binding: [u8; 32],
     pub release_binding: [u8; 32],
     pub loader_program: [u8; 32],
     pub programdata_address: [u8; 32],
+    /// Canonical loader-v3 ProgramData bump established by deployment authentication.
+    pub programdata_bump: u8,
     pub executable_hash: [u8; 32],
     /// Production V2 requires this to be all zero, denoting `None`.
     pub expected_upgrade_authority: [u8; 32],
@@ -252,6 +267,7 @@ pub fn encode_verifier_registry_v1(
     output[..4].copy_from_slice(&POOL_V1_VERIFIER_REGISTRY_MAGIC);
     output[4] = POOL_V1_VERIFIER_REGISTRY_VERSION;
     output[5] = registry.flags;
+    output[6] = registry.bump;
     output[8..40].copy_from_slice(&registry.pool);
     output[40..72].copy_from_slice(&registry.authority);
     output[72..104].copy_from_slice(&registry.policy_binding);
@@ -272,11 +288,12 @@ pub fn decode_verifier_registry_v1(
     if bytes[4] != POOL_V1_VERIFIER_REGISTRY_VERSION {
         return Err(PoolV1VerifierRegistryFormatError::WrongVersion);
     }
-    if bytes[6..8] != [0u8; 2] || bytes[120..128] != [0u8; 8] {
+    if bytes[7] != 0 || bytes[120..128] != [0u8; 8] {
         return Err(PoolV1VerifierRegistryFormatError::NonZeroReserved);
     }
     let registry = VerifierRegistryV1 {
         flags: bytes[5],
+        bump: bytes[6],
         pool: bytes[8..40].try_into().unwrap(),
         authority: bytes[40..72].try_into().unwrap(),
         policy_binding: bytes[72..104].try_into().unwrap(),
@@ -316,6 +333,7 @@ pub fn encode_verifier_registry_entry_v1(
     output[4] = POOL_V1_VERIFIER_ENTRY_VERSION;
     output[5] = entry.status as u8;
     output[6] = entry.statement_version;
+    output[7] = entry.bump;
     output[8..40].copy_from_slice(&entry.pool);
     output[40..72].copy_from_slice(&entry.verifier_program);
     output[72..104].copy_from_slice(&entry.profile_binding);
@@ -338,12 +356,13 @@ pub fn decode_verifier_registry_entry_v1(
     if bytes[4] != POOL_V1_VERIFIER_ENTRY_VERSION {
         return Err(PoolV1VerifierRegistryFormatError::WrongVersion);
     }
-    if bytes[7] != 0 || bytes[184..192] != [0u8; 8] {
+    if bytes[184..192] != [0u8; 8] {
         return Err(PoolV1VerifierRegistryFormatError::NonZeroReserved);
     }
     let entry = VerifierRegistryEntryV1 {
         status: VerifierEntryStatusV1::try_from(bytes[5])?,
         statement_version: bytes[6],
+        bump: bytes[7],
         pool: bytes[8..40].try_into().unwrap(),
         verifier_program: bytes[40..72].try_into().unwrap(),
         profile_binding: bytes[72..104].try_into().unwrap(),
@@ -389,6 +408,7 @@ pub fn encode_verifier_registry_v2(
     output[4] = POOL_V1_VERIFIER_REGISTRY_V2_VERSION;
     output[5] = registry.flags;
     output[6] = POOL_V1_VERIFIER_DEPLOYMENT_MODE_IMMUTABLE_LOADER_V3;
+    output[7] = registry.bump;
     output[8..40].copy_from_slice(&registry.pool);
     output[40..72].copy_from_slice(&registry.authority);
     output[72..104].copy_from_slice(&registry.policy_binding);
@@ -398,6 +418,7 @@ pub fn encode_verifier_registry_v2(
     output[152..184].copy_from_slice(&registry.loader_program);
     output[184..216].copy_from_slice(&registry.programdata_address);
     output[216..248].copy_from_slice(&registry.executable_hash);
+    output[248] = registry.programdata_bump;
     Ok(output)
 }
 
@@ -416,11 +437,12 @@ pub fn decode_verifier_registry_v2(
     if bytes[6] != POOL_V1_VERIFIER_DEPLOYMENT_MODE_IMMUTABLE_LOADER_V3 {
         return Err(PoolV1VerifierRegistryFormatError::InvalidDeploymentMode);
     }
-    if bytes[7] != 0 || bytes[248..256] != [0u8; 8] {
+    if bytes[249..256] != [0u8; 7] {
         return Err(PoolV1VerifierRegistryFormatError::NonZeroReserved);
     }
     let registry = VerifierRegistryV2 {
         flags: bytes[5],
+        bump: bytes[7],
         pool: bytes[8..40].try_into().unwrap(),
         authority: bytes[40..72].try_into().unwrap(),
         policy_binding: bytes[72..104].try_into().unwrap(),
@@ -429,6 +451,7 @@ pub fn decode_verifier_registry_v2(
         registry_program: bytes[120..152].try_into().unwrap(),
         loader_program: bytes[152..184].try_into().unwrap(),
         programdata_address: bytes[184..216].try_into().unwrap(),
+        programdata_bump: bytes[248],
         executable_hash: bytes[216..248].try_into().unwrap(),
     };
     validate_verifier_registry_v2(&registry)?;
@@ -482,6 +505,8 @@ pub fn encode_verifier_registry_entry_v2(
     output[264..272].copy_from_slice(&entry.activation_slot.to_le_bytes());
     output[272..280].copy_from_slice(&entry.retirement_slot.to_le_bytes());
     output[280..312].copy_from_slice(&entry.policy_binding);
+    output[312] = entry.bump;
+    output[313] = entry.programdata_bump;
     Ok(output)
 }
 
@@ -500,18 +525,20 @@ pub fn decode_verifier_registry_entry_v2(
     if bytes[7] != POOL_V1_VERIFIER_DEPLOYMENT_MODE_IMMUTABLE_LOADER_V3 {
         return Err(PoolV1VerifierRegistryFormatError::InvalidDeploymentMode);
     }
-    if bytes[312..320] != [0u8; 8] {
+    if bytes[314..320] != [0u8; 6] {
         return Err(PoolV1VerifierRegistryFormatError::NonZeroReserved);
     }
     let entry = VerifierRegistryEntryV2 {
         status: VerifierEntryStatusV1::try_from(bytes[5])?,
         statement_version: bytes[6],
+        bump: bytes[312],
         pool: bytes[8..40].try_into().unwrap(),
         verifier_program: bytes[40..72].try_into().unwrap(),
         profile_binding: bytes[72..104].try_into().unwrap(),
         release_binding: bytes[104..136].try_into().unwrap(),
         loader_program: bytes[136..168].try_into().unwrap(),
         programdata_address: bytes[168..200].try_into().unwrap(),
+        programdata_bump: bytes[313],
         executable_hash: bytes[200..232].try_into().unwrap(),
         expected_upgrade_authority: bytes[232..264].try_into().unwrap(),
         activation_slot: u64::from_le_bytes(bytes[264..272].try_into().unwrap()),
@@ -529,6 +556,7 @@ mod tests {
     fn registry() -> VerifierRegistryV1 {
         VerifierRegistryV1 {
             flags: 0,
+            bump: 253,
             pool: [1u8; 32],
             authority: [2u8; 32],
             policy_binding: [3u8; 32],
@@ -541,6 +569,7 @@ mod tests {
         VerifierRegistryEntryV1 {
             status: VerifierEntryStatusV1::Active,
             statement_version: 1,
+            bump: 252,
             pool: [1u8; 32],
             verifier_program: [2u8; 32],
             profile_binding: [3u8; 32],
@@ -639,6 +668,7 @@ mod tests {
     fn registry_v2() -> VerifierRegistryV2 {
         VerifierRegistryV2 {
             flags: 0,
+            bump: 253,
             pool: [1u8; 32],
             authority: [2u8; 32],
             policy_binding: [3u8; 32],
@@ -647,6 +677,7 @@ mod tests {
             registry_program: [6u8; 32],
             loader_program: [7u8; 32],
             programdata_address: [8u8; 32],
+            programdata_bump: 251,
             executable_hash: [9u8; 32],
         }
     }
@@ -655,12 +686,14 @@ mod tests {
         VerifierRegistryEntryV2 {
             status: VerifierEntryStatusV1::Active,
             statement_version: 1,
+            bump: 252,
             pool: [1u8; 32],
             verifier_program: [2u8; 32],
             profile_binding: [3u8; 32],
             release_binding: [4u8; 32],
             loader_program: [5u8; 32],
             programdata_address: [6u8; 32],
+            programdata_bump: 250,
             executable_hash: [7u8; 32],
             expected_upgrade_authority: [0u8; 32],
             activation_slot: 10,
@@ -695,6 +728,92 @@ mod tests {
                 ..entry
             }),
             Err(PoolV1VerifierRegistryFormatError::InvalidAuthorityMode)
+        );
+    }
+
+    #[test]
+    fn bump_fields_have_exact_offsets_and_remaining_reserved_bytes_stay_zero() {
+        let registry = encode_verifier_registry_v1(&registry()).unwrap();
+        let entry = encode_verifier_registry_entry_v1(&entry()).unwrap();
+        let registry_v2 = encode_verifier_registry_v2(&registry_v2()).unwrap();
+        let entry_v2 = encode_verifier_registry_entry_v2(&entry_v2()).unwrap();
+        assert_eq!((registry[4], registry[6]), (2, 253));
+        assert_eq!((entry[4], entry[7]), (2, 252));
+        assert_eq!(
+            (registry_v2[4], registry_v2[7], registry_v2[248]),
+            (3, 253, 251)
+        );
+        assert_eq!((entry_v2[4], entry_v2[312], entry_v2[313]), (3, 252, 250));
+
+        for index in core::iter::once(7).chain(120..128) {
+            assert_eq!(registry[index], 0);
+            let mut malformed = registry;
+            malformed[index] = 1;
+            assert_eq!(
+                decode_verifier_registry_v1(&malformed),
+                Err(PoolV1VerifierRegistryFormatError::NonZeroReserved)
+            );
+        }
+        for index in 184..192 {
+            assert_eq!(entry[index], 0);
+            let mut malformed = entry;
+            malformed[index] = 1;
+            assert_eq!(
+                decode_verifier_registry_entry_v1(&malformed),
+                Err(PoolV1VerifierRegistryFormatError::NonZeroReserved)
+            );
+        }
+        for index in 249..256 {
+            assert_eq!(registry_v2[index], 0);
+            let mut malformed = registry_v2;
+            malformed[index] = 1;
+            assert_eq!(
+                decode_verifier_registry_v2(&malformed),
+                Err(PoolV1VerifierRegistryFormatError::NonZeroReserved)
+            );
+        }
+        for index in 314..320 {
+            assert_eq!(entry_v2[index], 0);
+            let mut malformed = entry_v2;
+            malformed[index] = 1;
+            assert_eq!(
+                decode_verifier_registry_entry_v2(&malformed),
+                Err(PoolV1VerifierRegistryFormatError::NonZeroReserved)
+            );
+        }
+    }
+
+    #[test]
+    fn old_zero_reserved_images_are_never_reinterpreted_as_attested_bumps() {
+        let mut registry = encode_verifier_registry_v1(&registry()).unwrap();
+        registry[4] = 1;
+        registry[6] = 0;
+        assert_eq!(
+            decode_verifier_registry_v1(&registry),
+            Err(PoolV1VerifierRegistryFormatError::WrongVersion)
+        );
+        let mut entry = encode_verifier_registry_entry_v1(&entry()).unwrap();
+        entry[4] = 1;
+        entry[7] = 0;
+        assert_eq!(
+            decode_verifier_registry_entry_v1(&entry),
+            Err(PoolV1VerifierRegistryFormatError::WrongVersion)
+        );
+        let mut registry_v2 = encode_verifier_registry_v2(&registry_v2()).unwrap();
+        registry_v2[4] = 2;
+        registry_v2[7] = 0;
+        registry_v2[248] = 0;
+        assert_eq!(
+            decode_verifier_registry_v2(&registry_v2),
+            Err(PoolV1VerifierRegistryFormatError::WrongVersion)
+        );
+        let mut entry_v2 = encode_verifier_registry_entry_v2(&entry_v2()).unwrap();
+        entry_v2[4] = 2;
+        entry_v2[312] = 0;
+        entry_v2[313] = 0;
+        assert_eq!(
+            decode_verifier_registry_entry_v2(&entry_v2),
+            Err(PoolV1VerifierRegistryFormatError::WrongVersion)
         );
     }
 }

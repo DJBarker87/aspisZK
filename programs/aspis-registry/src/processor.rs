@@ -201,6 +201,7 @@ fn require_payer_and_system_program(
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 struct ImmutableLoaderV3DeploymentV2 {
     programdata_address: [u8; 32],
+    programdata_bump: u8,
     executable_hash: [u8; 32],
 }
 
@@ -245,11 +246,10 @@ fn authenticate_immutable_loader_v3_deployment_v2(
             _ => return Err(RegistryProgramErrorV1::InvalidVerifierProgram.into()),
         }
     };
-    let derived_programdata = Pubkey::find_program_address(&[expected_program.as_ref()], &loader)
-        .0
-        .to_bytes();
+    let (derived_programdata, programdata_bump) =
+        Pubkey::find_program_address(&[expected_program.as_ref()], &loader);
     if linked_programdata != programdata_account.key.to_bytes()
-        || linked_programdata != derived_programdata
+        || linked_programdata != derived_programdata.to_bytes()
     {
         return Err(RegistryProgramErrorV1::InvalidProgramData.into());
     }
@@ -280,6 +280,7 @@ fn authenticate_immutable_loader_v3_deployment_v2(
     }
     Ok(ImmutableLoaderV3DeploymentV2 {
         programdata_address: linked_programdata,
+        programdata_bump,
         executable_hash,
     })
 }
@@ -399,7 +400,8 @@ fn load_registry(
             .map_err(|_| RegistryProgramErrorV1::InvalidRegistryAccount)?
     };
     let pool = Pubkey::new_from_array(registry.pool);
-    if account.key != &pool_v1_verifier_registry_address(program_id, &pool).0 {
+    let (expected_address, bump) = pool_v1_verifier_registry_address(program_id, &pool);
+    if account.key != &expected_address || registry.bump != bump {
         return Err(RegistryProgramErrorV1::InvalidRegistryAddress.into());
     }
     Ok(registry)
@@ -423,15 +425,13 @@ fn load_entry(
             .map_err(|_| RegistryProgramErrorV1::InvalidEntryAccount)?
     };
     let pool = Pubkey::new_from_array(entry.pool);
-    if account.key
-        != &pool_v1_verifier_entry_address(
-            program_id,
-            &pool,
-            &entry.profile_binding,
-            &entry.release_binding,
-        )
-        .0
-    {
+    let (expected_address, bump) = pool_v1_verifier_entry_address(
+        program_id,
+        &pool,
+        &entry.profile_binding,
+        &entry.release_binding,
+    );
+    if account.key != &expected_address || entry.bump != bump {
         return Err(RegistryProgramErrorV1::InvalidEntryAddress.into());
     }
     Ok(entry)
@@ -455,11 +455,15 @@ fn load_registry_v2(
     };
     let pool = Pubkey::new_from_array(registry.pool);
     let loader = bpf_loader_upgradeable::id();
-    let expected_programdata = Pubkey::find_program_address(&[program_id.as_ref()], &loader).0;
-    if account.key != &pool_v1_verifier_registry_v2_address(program_id, &pool).0
+    let (expected_programdata, programdata_bump) =
+        Pubkey::find_program_address(&[program_id.as_ref()], &loader);
+    let (expected_address, bump) = pool_v1_verifier_registry_v2_address(program_id, &pool);
+    if account.key != &expected_address
+        || registry.bump != bump
         || registry.registry_program != program_id.to_bytes()
         || registry.loader_program != loader.to_bytes()
         || registry.programdata_address != expected_programdata.to_bytes()
+        || registry.programdata_bump != programdata_bump
     {
         return Err(RegistryProgramErrorV1::InvalidRegistryAddress.into());
     }
@@ -486,18 +490,19 @@ fn load_entry_v2(
     let pool = Pubkey::new_from_array(entry.pool);
     let loader = bpf_loader_upgradeable::id();
     let verifier_program = Pubkey::new_from_array(entry.verifier_program);
-    let expected_programdata =
-        Pubkey::find_program_address(&[verifier_program.as_ref()], &loader).0;
-    if account.key
-        != &pool_v1_verifier_entry_v2_address(
-            program_id,
-            &pool,
-            &entry.profile_binding,
-            &entry.release_binding,
-        )
-        .0
+    let (expected_programdata, programdata_bump) =
+        Pubkey::find_program_address(&[verifier_program.as_ref()], &loader);
+    let (expected_address, bump) = pool_v1_verifier_entry_v2_address(
+        program_id,
+        &pool,
+        &entry.profile_binding,
+        &entry.release_binding,
+    );
+    if account.key != &expected_address
+        || entry.bump != bump
         || entry.loader_program != loader.to_bytes()
         || entry.programdata_address != expected_programdata.to_bytes()
+        || entry.programdata_bump != programdata_bump
         || entry.expected_upgrade_authority != [0u8; 32]
     {
         return Err(RegistryProgramErrorV1::InvalidEntryAddress.into());
@@ -651,8 +656,11 @@ fn process_initialize<R: RegistryCpiRuntimeV1>(
     require_initial_authority(authority)?;
     require_payer_and_system_program(payer, system_program_account)?;
 
+    let pool_key = Pubkey::new_from_array(pool);
+    let (expected_address, bump) = pool_v1_verifier_registry_address(program_id, &pool_key);
     let registry = VerifierRegistryV1 {
         flags: 0,
+        bump,
         pool,
         authority: authority.key.to_bytes(),
         policy_binding,
@@ -661,8 +669,6 @@ fn process_initialize<R: RegistryCpiRuntimeV1>(
     };
     let image =
         registry_image(&registry).map_err(|_| RegistryProgramErrorV1::InvalidInstruction)?;
-    let pool_key = Pubkey::new_from_array(pool);
-    let (expected_address, bump) = pool_v1_verifier_registry_address(program_id, &pool_key);
     let preparation = plan_fresh_program_pda(
         registry_account,
         program_id,
@@ -723,9 +729,13 @@ fn process_schedule<R: RegistryCpiRuntimeV1>(
     if activation_slot < earliest {
         return Err(RegistryProgramErrorV1::ActivationDelayNotElapsed.into());
     }
+    let pool = Pubkey::new_from_array(registry.pool);
+    let (expected_address, bump) =
+        pool_v1_verifier_entry_address(program_id, &pool, &profile_binding, &release_binding);
     let entry = VerifierRegistryEntryV1 {
         status: VerifierEntryStatusV1::Pending,
         statement_version,
+        bump,
         pool: registry.pool,
         verifier_program,
         profile_binding,
@@ -738,9 +748,6 @@ fn process_schedule<R: RegistryCpiRuntimeV1>(
         entry_image(&entry).map_err(|_| RegistryProgramErrorV1::InvalidInstruction)?;
     let next_registry = incremented_registry(registry)?;
     let encoded_registry = registry_image(&next_registry)?;
-    let pool = Pubkey::new_from_array(registry.pool);
-    let (expected_address, bump) =
-        pool_v1_verifier_entry_address(program_id, &pool, &profile_binding, &release_binding);
     let preparation = plan_fresh_program_pda(
         entry_account,
         program_id,
@@ -923,8 +930,11 @@ fn process_initialize_v2<R: RegistryCpiRuntimeV1>(
         return Err(RegistryProgramErrorV1::ExecutableHashMismatch.into());
     }
 
+    let pool_key = Pubkey::new_from_array(pool);
+    let (expected_address, bump) = pool_v1_verifier_registry_v2_address(program_id, &pool_key);
     let registry = VerifierRegistryV2 {
         flags: 0,
+        bump,
         pool,
         authority: authority.key.to_bytes(),
         policy_binding,
@@ -933,12 +943,11 @@ fn process_initialize_v2<R: RegistryCpiRuntimeV1>(
         registry_program: program_id.to_bytes(),
         loader_program: bpf_loader_upgradeable::id().to_bytes(),
         programdata_address: deployment.programdata_address,
+        programdata_bump: deployment.programdata_bump,
         executable_hash: deployment.executable_hash,
     };
     let image =
         registry_image_v2(&registry).map_err(|_| RegistryProgramErrorV1::InvalidInstruction)?;
-    let pool_key = Pubkey::new_from_array(pool);
-    let (expected_address, bump) = pool_v1_verifier_registry_v2_address(program_id, &pool_key);
     let preparation = plan_fresh_program_pda(
         registry_account,
         program_id,
@@ -1010,15 +1019,20 @@ fn process_schedule_v2<R: RegistryCpiRuntimeV1>(
         return Err(RegistryProgramErrorV1::ExecutableHashMismatch.into());
     }
 
+    let pool = Pubkey::new_from_array(registry.pool);
+    let (expected_address, bump) =
+        pool_v1_verifier_entry_v2_address(program_id, &pool, &profile_binding, &release_binding);
     let entry = VerifierRegistryEntryV2 {
         status: VerifierEntryStatusV1::Pending,
         statement_version,
+        bump,
         pool: registry.pool,
         verifier_program,
         profile_binding,
         release_binding,
         loader_program: bpf_loader_upgradeable::id().to_bytes(),
         programdata_address: deployment.programdata_address,
+        programdata_bump: deployment.programdata_bump,
         executable_hash: deployment.executable_hash,
         expected_upgrade_authority: [0u8; 32],
         activation_slot,
@@ -1029,9 +1043,6 @@ fn process_schedule_v2<R: RegistryCpiRuntimeV1>(
         entry_image_v2(&entry).map_err(|_| RegistryProgramErrorV1::InvalidInstruction)?;
     let next_registry = incremented_registry_v2(registry)?;
     let encoded_registry = registry_image_v2(&next_registry)?;
-    let pool = Pubkey::new_from_array(registry.pool);
-    let (expected_address, bump) =
-        pool_v1_verifier_entry_v2_address(program_id, &pool, &profile_binding, &release_binding);
     let preparation = plan_fresh_program_pda(
         entry_account,
         program_id,
