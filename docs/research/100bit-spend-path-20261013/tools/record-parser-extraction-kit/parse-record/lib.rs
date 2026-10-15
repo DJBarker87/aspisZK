@@ -173,7 +173,7 @@ pub fn parse_record(row: u8, record: &[u8]) -> Result<&[u8], Error> {
     if record[0] != tag {
         return Err(Error::Tag { row });
     }
-    if u32::from_le_bytes(record[1..5].try_into().unwrap()) as usize != size {
+    if u32::from_le_bytes([record[1], record[2], record[3], record[4]]) as usize != size {
         return Err(Error::Length { row });
     }
     let payload = &record[5..];

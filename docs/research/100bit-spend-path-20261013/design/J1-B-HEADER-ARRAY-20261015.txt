@@ -1,0 +1,34 @@
+Header extraction follow-up
+
+The central Lean 4.31 audit of parser attempt E found an actual target
+axiom dependency on Aeneas.Std.core.fmt.Formatter. Generated parse_record
+called core.result.Result.unwrap with core.fmt.DebugTryFromSliceError for
+record[1..5].try_into().unwrap(). The preceding exact-length guard ensures
+these four header bytes exist, but the translation still retains that Debug
+argument. This is distinct from the unused derived Error.fmt declaration,
+whose additional native-decision dependencies must remain disclosed.
+
+The authorized production change replaces only that four-byte conversion
+with [record[1], record[2], record[3], record[4]], after the same length and
+tag guards. Error order, payload slicing, canonical-field validation and
+all derives are unchanged. The old parser in the differential test retains
+the previous slice/try_into/unwrap expression. No extraction-only shim is
+introduced. Wire SHA changes from
+0034e4251d7ce650ec5a6d2d9c6cf612e0ad80596ccb29a88753a0d5b285f582 to
+ed6e426c460c97248d124727e8be7985c1ea75f89bd0f5baef0570ec44ec4b03.
+
+Both exact-source manifests are regenerated because they pin the whole wire
+source; row_shape's declaration bytes and its generated output are unchanged.
+Attempt F uses the previous successful narrow Result / actual Option-body
+configuration. Charon exits 0 in 1.58 s, Aeneas exits 0 in 2.29 s; sampled
+process-group peaks 226064/133792 KiB, per-process swaps 0, unchanged system
+swap. The 3 GiB RSS guard remains below the authorized 3.5 GiB ceiling.
+The emitted target uses four Slice.index_usize calls and Array.make before
+from_le_bytes. It contains no unwrap/Debug argument; generated Types is
+byte-identical to E. No Rust/Lean refinement or target axioms result is
+inferred from this source inspection. Central focused Funs/importer/axioms
+checks and the changed-source differential regression remain to be recorded.
+
+All earlier attempts, including E and its original target dependency, are
+retained. Source-to-codec, prefix boundaries, first-read and challenge-frame
+bridges remain OPEN. This change does not establish parser correctness.
