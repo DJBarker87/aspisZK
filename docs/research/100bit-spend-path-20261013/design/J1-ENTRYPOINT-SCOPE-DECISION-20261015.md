@@ -1,4 +1,11 @@
-# Lead decision: admitted verifier entrypoints and hash-input bounds
+# Superseded interim entrypoint decision
+
+The binding [lead review](LEAD-REVIEW-J1-R4-20261015.md), commit `f5a04e0bb`, supersedes the interim decision below. The soundness oracle is over **all finite byte strings**; no global input-length cap or empty-address fallback belongs in the soundness theorem. The all-input query-count obligation remains. Pool release builds must reject the legacy `[1,k]` and `[2]` routes before account access. Lifecycle routes are retained for proof/public-account preparation and will be brought into the state-transition/immutability theorem under J1.R8.3(b); that obligation remains open. Verifier-side PDA hash calls must be counted unless the required byte-format separation is proved. The source guard is being implemented as G_R1.7; it is not yet a checked release artifact.
+
+The checked bounded literal sampler components remain reusable mathematical results. Their transport to the full byte-string oracle is now a required adapter; the existing cap is not silently retained as an adversary restriction. No source/all-program query bound, compiler theorem, or final security claim follows from this note.
+
+## Historical interim decision (superseded)
+
 
 The first source hash-input theorem covers the pinned Pool verification routes of `process_r1_cost_probe_instruction`: exact stage-1 instructions `[3,10]` and `[3,11]`, and every stage-2 instruction whose bytes start with `ASQ8`. The latter includes malformed, truncated and overlength requests; successful request decoding is not an admission premise. The configuration is S2, P3 profile/release bindings, `pool-adapter`, `private-leaf-salts`, default custom heap and the pinned transitive feature closure. This accepts the route boundary proposed in `J1-CONFIG-BOUNDARY-PROPOSED-20261015.txt`, with the qualifications below.
 
