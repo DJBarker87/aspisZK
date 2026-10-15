@@ -4234,3 +4234,17 @@ changed. Neither target contains `sorry`, an `axiom` declaration,
 enumeration or broad unfolding; no binaries, co-author trailer or push.
 This closes ZF-A only. The research verdict is unchanged: v7 stands; R1
 remains a live candidate under G_R1.
+
+### Lead acceptance of ZF-A (2026-10-15)
+
+ZF-A (`0782fa3a7`, fast-forwarded onto `v8-reference` with L1 and L2) is
+accepted: `ROMReductionWith`, `romReduction_iff`, `zkfs_of_hvzk_on_bridge`,
+`zkfs_of_maskImageOn_good_bridge` as fixed in D20′.3; the old theorems keep
+their "superseded" docstrings. Host attempts 3408 (`R0Z/FsStatement`, exit 0,
+SHA `e79a9ae2…`) and 3409 (`R0Z/FsGood`, exit 0, SHA `9d3ec489…`) verified
+against the host receipts; all axiom lines exactly `[propext,
+Classical.choice, Quot.sound]`; no cap raised. The vacuity found by ZF1-0
+(gap G2) is closed: the bad-mass hypothesis now quantifies over adversaries
+for one exhibited bridge. Open on this track: T2b-2b (design agent stopped by
+a provider session limit before writing; relaunched 2026-10-15), (ii′), ZF1,
+ZF2. Host counter: next 3426.

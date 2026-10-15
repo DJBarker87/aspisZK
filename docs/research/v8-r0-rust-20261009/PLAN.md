@@ -1163,3 +1163,33 @@ as a lead decision after T2b-2b.
    runs must respect the one-Lean-job rule).
 5. Standing verdict: **v7 stands; R1 is a live candidate under G_R1**; no
    deployment step, release or key handling until G_R1 closes.
+
+## Lead note (2026-10-15): spend-path status against G_R1
+
+The `codex/100bit-spend-path-20261013` branch (now `a17829a77`, 49 commits
+after the reviewed checkpoint, ≈ 477 focused Lean files, no `sorry`/`axiom`
+found by scan; not yet reviewed in detail) reports, with full-random-mask
+proofs and the strict wide parser adopted:
+
+| Case | Verification tx | Settlement tx |
+|---|---:|---:|
+| Transfer, 13 pairs | 1,392,386 | 1,303,475 |
+| Transfer, 255 pairs (rollover) | 1,392,164 | 1,369,686 |
+| Withdrawal, 255 pairs (rollover) | 1,390,833 | 1,385,823 |
+| Transfer, 1,023 pairs (rollover) | 1,392,237 | 1,366,505 |
+| Withdrawal, 1,023 pairs (rollover) | 1,390,915 | 1,382,595 |
+
+Against G_R1: **rollover now fits the 1.4M cap** (G_R1.1's "must fit" met at
+the cap); **G_R1.1's ≤ 1.3M bound is not met** — the verification transaction
+has ≈ 8K CU headroom after the strict parser, the settlement transaction
+≈ 14K–97K. G_R1.2 (`RECONCILIATION-P2.md`, `P2-CU-RECONCILIATION.*`) and
+G_R1.3 (`AUTHENTICATED-TX2.md`, `AUTHENTICATED-PARSER-AUDIT.md`) deliverables
+exist and await lead review. **Soundness statement shape:** the branch's
+conditional FS bound is `Q·max_row + 3Q²/2^256` with max_row ≈ 2^-105.1,
+which is below 2^-100 only for Q ≤ 35 oracle queries. This is the same
+per-query form as R0's proved bound (`Qtot·2^-105`); it is a statement about
+the definition of "100-bit", not an attack: a per-query 2^-105 bound is the
+standard FS reading, an absolute 2^-100 bound for arbitrary Q is not
+available from this route. **This is a user decision** (accept per-query
+security, or require more queries — which moves cost — or a tighter bound).
+Verdict unchanged: v7 stands; R1 is a live candidate under G_R1.

@@ -235,3 +235,25 @@ L1 and L2 now supply the second-fold matched-response bound. Round comparisons,
 the q22 support count, runtime domain commutation and the remaining ledger
 obligations stay open; no row is closed here. Verdict unchanged: v7 stands;
 R1 is a live candidate under G_R1.
+
+## Lead acceptance of L1 and L2 (2026-10-15)
+
+L1 (`364f53b60`, `R1/RepeatedLift.lean`) and L2 (`80f31c364`,
+`R1/SecondFoldMatched.lean`) are accepted as fixed in
+`L1-L2-REPEATED-LIFT.md`. Reviewed: statements verbatim (L1.1 via
+`Nat.bitIndices_two_pow_mul` and `Polynomial.prod_comp`; L1.3 by exponent
+arithmetic; L1.5 by reducing the projection to the lift; L1.6 through the 255
+overlap cap with the quartet set built by `fibreIndexEquiv`; L2.4 by subset
+into the lifted bad set and `exactFinal_bad_response_challenges_card_le`);
+no forbidden tokens; `Finset.univ` only over `Fin 4`. Host receipts verified:
+L1 attempts 3410–3421, final 3421 exit 0, SHA `4be70e8f…`, eight axiom audits;
+L2 attempts 3422–3425, final 3425 exit 0, SHA `d66eb5f9…`, four audits; all
+exactly `[propext, Classical.choice, Quot.sound]`; no cap raised.
+
+**Row α₁ (matched response): closed** at cap `foldChallengeCap =
+9,396,508,281,246` on the `2^16` stored line domain, 64-coefficient natural
+code, threshold 2389 (lifted 9557), with no new decoder instance. Still open
+in row α₁: the round-1 comparison (L3) and the runtime fold/domain
+commutation (Src). Next Lean job: L3 (statement to be fixed by the lead;
+the checkpoint branch's `TwoRoundComparison.lean`/`ConcreteBinding.lean` are
+to be read first for reuse).
