@@ -1,0 +1,42 @@
+{
+  "format": 1,
+  "purpose": "isolated Charon/Aeneas input preparation for current QM31 add/mul callgraph; not run",
+  "proof_worktree": "/Users/dominic/ZK/.worktrees/100bit-spend-path",
+  "proof_worktree_head": "ccb6f8463f9411f6fc3ed7e6c5cd53f32c5a42b3",
+  "inputs": {
+    "src/field.rs": {
+      "origin": "/Users/dominic/ZK/.worktrees/100bit-spend-path/crates/aspis-core/src/field.rs",
+      "role": "byte-for-byte production field module",
+      "sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea"
+    },
+    "src/field/wide_exact.rs": {
+      "origin": "/Users/dominic/ZK/.worktrees/100bit-spend-path/crates/aspis-core/src/field/wide_exact.rs",
+      "role": "byte-for-byte module required by field.rs",
+      "sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b"
+    },
+    "src/lib.rs": {
+      "origin": null,
+      "role": "new probe entrypoint only; calls production QM31::add and QM31::mul",
+      "sha256": "b11111b702706158851c4a630cec3d26607da48f077c9997c038a71bcee0f903"
+    },
+    "Cargo.toml": {
+      "origin": null,
+      "role": "isolated no-dependency extraction crate; defaults/features disabled",
+      "sha256": "e53faece5d9253a3044664b5538de2e29283f7c1a4b1deac9300bf08aaa132ac"
+    }
+  },
+  "features": {
+    "default": false,
+    "r0-op-count": false,
+    "r0-r91-audit": false,
+    "r0-e4-reference": false
+  },
+  "third_party_dependencies": [],
+  "entry": "crate::qm31_add_mul_probe",
+  "probe_body": "(x.add(y), x.mul(y))",
+  "source_semantics": "only the helper entrypoint is new; field.rs and field/wide_exact.rs are copied byte-for-byte",
+  "not_run": true,
+  "tool_pins_path": "tool-pins.json",
+  "expected_commands_path": "expected-commands.json",
+  "readme_path": "README.md"
+}

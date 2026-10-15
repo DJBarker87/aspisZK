@@ -1,0 +1,49 @@
+{
+  "preflight_cli": [
+    "/Users/dominic/ZK/external/aeneas/aeneas-verif-workspace/charon/bin/charon cargo --help",
+    "/Users/dominic/ZK/external/aeneas/aeneas-verif-workspace/aeneas/bin/aeneas -version",
+    "rustup run nightly-2026-06-01 rustc --version --verbose"
+  ],
+  "prepare_lock": [
+    "cargo generate-lockfile --offline"
+  ],
+  "charon": [
+    "/Users/dominic/ZK/external/aeneas/aeneas-verif-workspace/charon/bin/charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--sysroot",
+    "default",
+    "--start-from",
+    "crate::qm31_add_mul_probe",
+    "--dest-file",
+    "/tmp/aspis-r1-qm31-arithmetic-20261015/output/QM31Arithmetic.llbc",
+    "--",
+    "--locked",
+    "--offline",
+    "--release",
+    "--lib",
+    "--no-default-features"
+  ],
+  "aeneas": [
+    "/Users/dominic/ZK/external/aeneas/aeneas-verif-workspace/aeneas/bin/aeneas",
+    "-sequential",
+    "-no-progress-bar",
+    "-abort-on-error",
+    "-backend",
+    "lean",
+    "-namespace",
+    "AspisR1Qm31ArithmeticProbe",
+    "-dest",
+    "/tmp/aspis-r1-qm31-arithmetic-20261015/output/generated",
+    "-subdir",
+    "AspisR1Qm31ArithmeticProbe",
+    "-split-files",
+    "-emit-json",
+    "/tmp/aspis-r1-qm31-arithmetic-20261015/output/QM31Arithmetic.llbc"
+  ],
+  "invocation_scope": "Charon --start-from selects the free-function probe and its reachable call graph. --include and --exclude exist but are not needed to identify this concrete entrypoint; no promise that the graph contains only two methods (their transitive field helpers are expected).",
+  "planned_only": true
+}
