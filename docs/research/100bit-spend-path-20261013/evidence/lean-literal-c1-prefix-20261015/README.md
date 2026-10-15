@@ -1,0 +1,9 @@
+# Literal C1 prefix focused Lean evidence
+
+This bundle records the local focused compile of `AspisR1.LiteralC1Prefix.c1At_take_current`. The theorem states that extending the prefix with the current indexed message leaves the first-message C1 projection unchanged, for every in-range index. It is list/index plumbing only; it does not establish source correspondence, acceptance, or a security result.
+
+Three source-identical attempts are retained. Attempts a and b failed while resolving the imported R0P CircleSampler object. Attempt c passed after verified fallback object links were added to the isolated local overlay. The source hash is `ad315183c6a62c23ea4f5cf9375e96d78310096b437599ce2e0911e924272790`; final object hash is `5bfc2d26a6046b8c29c57111b4e80a248d73d80d274f0b920716584d9b49bc62`. The green attempt took 79.835 seconds by runner timing (79.89 seconds in `/usr/bin/time -l`), sampled peak process-group RSS 3,821,328 KiB (time log: 3,843,702,784 bytes), and zero swap. Its sole printed axiom report is the standard `[propext, Classical.choice, Quot.sound]`.
+
+The successful command ran in `/Users/dominic/ZK/AspisFormal` via `lake env`, with Lean memory cap `-M5000`, sampled process-group stop threshold 7 GiB, and timeout 900 seconds. It was not run in a cgroup. The earlier failed attempts used different fallback path setups; each exact command and receipt is preserved rather than treating the runner configuration as identical.
+
+The object archive intentionally contains only the target and its direct imported module `R1LiteralTranscript`. Transitive dependencies were supplied from the isolated overlay and retained local merge cache. The source/import closure and fallback object path/hash inventory are included for provenance, with the limitation that these records do not attest a single historical build invocation for every transitive object. No cache or source files were changed by packaging.

@@ -1,0 +1,40 @@
+/tmp/aspis-root-local-semantic-20261015/sources/R1LiteralSemanticViewComponents.lean:43:15: error: unsolved goals
+B : PackBasis F
+P : Prefix
+m : LiteralTranscript.Message
+c : LiteralSemanticView.E
+hrow : FS.Prefix.round P < 25
+pub : R0P.Public SemanticPublicWire.M31
+c1 : C1Word
+rs : List (SemMsgZ LiteralSemanticView.E × LiteralSemanticView.E)
+sm : SemMsgZ LiteralSemanticView.E
+hpub : SemanticPublicWire.parsePublic P.statement.pubBytes = some pub
+hc1 : c1At (P.rounds ++ [(m, Value.ordinary 0, 0)]) = some c1
+hread : LiteralSemanticPrefix.read eK 0 P.rounds = some rs
+hmsg : LiteralSemanticPrefix.parseMessage eK ⟨FS.Prefix.round P, hrow⟩ m = some sm
+⊢ (match hread : LiteralSemanticPrefix.read eK 0 P.rounds with
+    | none => none
+    | some rounds =>
+      some
+        {
+          context :=
+            LiteralTypedContext.context ExactBaseProjection.embed eK
+              (SpendDataMap.mapPublic (⇑ExactBaseProjection.embed) pub) ⋯ c1 fun x => 0,
+          rounds := rounds, length_eq := ⋯, message := sm }) =
+    some
+      {
+        context :=
+          LiteralTypedContext.context ExactBaseProjection.embed eK
+            (SpendDataMap.mapPublic (⇑ExactBaseProjection.embed) pub) ⋯ c1 fun x => 0,
+        rounds := rs, length_eq := ⋯, message := sm }
+/tmp/aspis-root-local-semantic-20261015/sources/R1LiteralSemanticViewComponents.lean:44:53: warning: This simp argument is unused:
+  hread
+
+Hint: Omit it from the simp argument list.
+  simp [LiteralSemanticView.read, hrow, hpub, hc1, hr̵e̵a̵d̵,̵ ̵h̵msg]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.LiteralSemanticViewComponents.bad_iff_semanticBadZ' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

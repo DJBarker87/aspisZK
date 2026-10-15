@@ -1,0 +1,7 @@
+# Literal semantic no-hit focused compile
+
+This bundle records `AspisR1.LiteralSemanticNoHit` at source revision `9ac54d0ec0a42bfbd8adec8a1706e854f9858bef`. It proves event-exclusion statements under explicit parsing and no-hit assumptions; it does not connect those assumptions to Rust execution or establish acceptance/security closure.
+
+Attempts a and b are retained. a failed in proof plumbing; b succeeded. Final source SHA-256 `0f91577221a3480d3d066b4ddf8db86226671a064dc72923c39cab6db616e1de`; final object SHA-256 `1aff38a52e94b7aa4618df95bb45cc3b1470fc96e10a4a00896c55268b241a02`. Attempt b took 63.116s by runner JSON, sampled process-group RSS 4,579,776 KiB, and zero swap. It printed two successful standard axiom reports. Both exact `run-next.py` runner source and per-attempt `/usr/bin/time -l` records are included.
+
+The local `lake env` run used `-M5000`, a sampled 7 GiB process-group RSS stop threshold and 900-second timeout, without a systemd cgroup. The requested r7/r8 cache was absent. The Lean command searched only the isolated object overlay, which had been populated with verified retained/fallback objects; the r11/r12 merge cache itself was not a direct Lean search path. The 350-module closure scan and fallback-link inventory are retained as provenance, not as a cold-build or uniform historical-build claim. Direct imports are pinned in the manifest/archive; identical copies in multiple archives are explicitly listed where applicable.
