@@ -307,8 +307,9 @@ fn require_program_owned_zeroed(
     Ok(())
 }
 
-fn genesis_lane_state(master: &Pubkey, lane_id: u8) -> PoolV1PairForestLaneStateV1 {
+fn genesis_lane_state(master: &Pubkey, lane_id: u8, bump: u8) -> PoolV1PairForestLaneStateV1 {
     PoolV1PairForestLaneStateV1 {
+        bump,
         master: master.to_bytes(),
         lane_id,
         tree: IncrementalMerkleTreeV1 {
@@ -331,7 +332,9 @@ fn decode_master_account(
     let master = decode_pool_v1_pair_forest_master_v1(&account.try_borrow_data()?)
         .map_err(|_| PoolV1ProgramError::InvalidAccountType)?;
     let mint = Pubkey::new_from_array(master.identity.asset_mint);
-    if account.key != &pool_v1_pair_forest_master_address(program_id, &mint).0
+    let (expected, bump) = pool_v1_pair_forest_master_address(program_id, &mint);
+    if account.key != &expected
+        || master.bump != bump
         || master.identity.pool != account.key.to_bytes()
     {
         return Err(PoolV1ProgramError::InvalidPoolStateAddress.into());
@@ -347,9 +350,8 @@ fn decode_lane_account(
     writable: bool,
 ) -> Result<PoolV1PairForestLaneStateV1, ProgramError> {
     require_program_account(account, program_id, writable)?;
-    if account.is_signer
-        || account.key != &pool_v1_pair_forest_lane_address(program_id, master, expected_lane)?.0
-    {
+    let (expected, bump) = pool_v1_pair_forest_lane_address(program_id, master, expected_lane)?;
+    if account.is_signer || account.key != &expected {
         return Err(PoolV1ProgramError::InvalidPoolStateAddress.into());
     }
     let lane = decode_pool_v1_pair_forest_lane_state_v1(
@@ -357,7 +359,7 @@ fn decode_lane_account(
         &POOL_V1_PAIR_EMPTY_ROOTS,
     )
     .map_err(|_| PoolV1ProgramError::InvalidAccountType)?;
-    if lane.master != master.to_bytes() || lane.lane_id != expected_lane {
+    if lane.master != master.to_bytes() || lane.lane_id != expected_lane || lane.bump != bump {
         return Err(PoolV1ProgramError::StateHistoryMismatch.into());
     }
     Ok(lane)
@@ -381,9 +383,8 @@ fn decode_lane_account_from_program_invariant_v1(
     writable: bool,
 ) -> Result<PoolV1PairForestLaneStateV1, ProgramError> {
     require_program_account(account, program_id, writable)?;
-    if account.is_signer
-        || account.key != &pool_v1_pair_forest_lane_address(program_id, master, expected_lane)?.0
-    {
+    let (expected, bump) = pool_v1_pair_forest_lane_address(program_id, master, expected_lane)?;
+    if account.is_signer || account.key != &expected {
         return Err(PoolV1ProgramError::InvalidPoolStateAddress.into());
     }
     let data = account.try_borrow_data()?;
@@ -394,7 +395,7 @@ fn decode_lane_account_from_program_invariant_v1(
         || data[6] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8
         || data[7] != POOL_V1_PAIR_TREE_DEPTH as u8
         || data[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING
-        || data[72..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]
+        || data[73..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]
             .iter()
             .any(|byte| *byte != 0)
     {
@@ -404,6 +405,7 @@ fn decode_lane_account_from_program_invariant_v1(
     if encoded_master == [0u8; 32]
         || encoded_master != master.to_bytes()
         || data[5] != expected_lane
+        || data[72] != bump
     {
         return Err(PoolV1ProgramError::StateHistoryMismatch.into());
     }
@@ -435,6 +437,7 @@ fn decode_lane_account_from_program_invariant_v1(
         return Err(PoolV1ProgramError::StateHistoryMismatch.into());
     }
     Ok(PoolV1PairForestLaneStateV1 {
+        bump: data[72],
         master: encoded_master,
         lane_id: expected_lane,
         tree: IncrementalMerkleTreeV1 {
@@ -482,6 +485,7 @@ fn encode_lane_from_authenticated_result_v1(
     output[7] = POOL_V1_PAIR_TREE_DEPTH as u8;
     output[8..40].copy_from_slice(&POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING);
     output[40..72].copy_from_slice(&lane.master);
+    output[72] = lane.bump;
     let tree = &mut output[POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES..];
     tree[..4].copy_from_slice(&POOL_V1_TREE_STATE_MAGIC);
     tree[4] = POOL_V1_TREE_STATE_VERSION;
@@ -578,14 +582,14 @@ pub fn plan_pair_forest_checkpoint_accounts_v1(
         decode_checkpoint_lanes_box_v1(program_id, master_account.key, lane_accounts)?;
     let lane_roots = lane_states.each_ref().map(|lane| lane.tree.root);
     let global_root = pool_v1_pair_forest_global_root_v1(&lane_roots);
-    let pure = plan_pool_v1_pair_forest_checkpoint_v1(&master, &lane_states, global_root)
-        .map_err(|_| PoolV1ProgramError::StateHistoryMismatch)?;
-    let expected_checkpoint = pool_v1_pair_forest_checkpoint_address(
+    let (expected_checkpoint, checkpoint_bump) = pool_v1_pair_forest_checkpoint_address(
         program_id,
         master_account.key,
-        pure.checkpoint.checkpoint_sequence,
-    )
-    .0;
+        master.next_checkpoint_sequence,
+    );
+    let pure =
+        plan_pool_v1_pair_forest_checkpoint_v1(&master, &lane_states, global_root, checkpoint_bump)
+            .map_err(|_| PoolV1ProgramError::StateHistoryMismatch)?;
     plan_fresh_program_pda(
         checkpoint_account,
         program_id,
@@ -743,6 +747,7 @@ fn prepare_deposit_append_v1(
     #[cfg(feature = "pair-forest-deposit-invariant-audit")]
     let (next_tree, append) = append_pair_leaf_from_program_invariant_v1(&lane.tree, pair_leaf)?;
     let next_lane = Box::new(PoolV1PairForestLaneStateV1 {
+        bump: lane.bump,
         master: lane.master,
         lane_id,
         tree: next_tree,
@@ -1174,6 +1179,7 @@ fn next_pair_forest_lane_v1(
     }
     Ok(PoolV1PairForestLaneStateV1 {
         master: lane.master,
+        bump: lane.bump,
         lane_id: lane.lane_id,
         tree: IncrementalMerkleTreeV1 {
             next_leaf_index: afterstate.next_pair_index,
@@ -1706,8 +1712,10 @@ fn decode_forest_initialization_box_v1(
 fn forest_master_image_box_v1(
     expected_master: &Pubkey,
     initialization: &PoolInitializationV1,
+    master_bump: u8,
 ) -> Result<Box<[u8; POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES]>, ProgramError> {
     let master_state = Box::new(PoolV1PairForestMasterV1 {
+        bump: master_bump,
         identity: PoolIdentityV1 {
             pool: expected_master.to_bytes(),
             asset_mint: initialization.asset_mint,
@@ -1731,8 +1739,9 @@ fn forest_master_image_box_v1(
 fn genesis_lane_image_box_v1(
     expected_master: &Pubkey,
     lane_id: u8,
+    lane_bump: u8,
 ) -> Result<Box<[u8; POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES]>, ProgramError> {
-    let lane = Box::new(genesis_lane_state(expected_master, lane_id));
+    let lane = Box::new(genesis_lane_state(expected_master, lane_id, lane_bump));
     Ok(Box::new(
         encode_pool_v1_pair_forest_lane_state_v1(&lane, &POOL_V1_PAIR_EMPTY_ROOTS)
             .map_err(|_| PoolV1ProgramError::StateHistoryMismatch)?,
@@ -1791,10 +1800,14 @@ pub(crate) fn process_pair_forest_initialize_with_runtime_v1<'info, R: PoolCpiRu
     }
 
     // Freeze every program-owned output image before the first CPI.
-    let master_image = forest_master_image_box_v1(&expected_master, &initialization)?;
+    let master_image = forest_master_image_box_v1(&expected_master, &initialization, master_bump)?;
     let mut lane_images = Vec::with_capacity(POOL_V1_PAIR_FOREST_LANE_COUNT);
     for lane in 0..POOL_V1_PAIR_FOREST_LANE_COUNT {
-        lane_images.push(genesis_lane_image_box_v1(&expected_master, lane as u8)?);
+        lane_images.push(genesis_lane_image_box_v1(
+            &expected_master,
+            lane as u8,
+            lane_bumps[lane],
+        )?);
     }
 
     if master_preparation == FreshPdaPreparationV1::CreateOrAllocateSystemOwned {
@@ -1902,12 +1915,10 @@ pub(crate) fn process_pair_forest_checkpoint_with_runtime_v1<'info, R: PoolCpiRu
         POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES,
     )?;
     if preparation == FreshPdaPreparationV1::CreateOrAllocateSystemOwned {
-        let sequence = decode_pool_v1_pair_forest_checkpoint_v1(&planned.checkpoint_image)
-            .map_err(|_| PoolV1ProgramError::StateHistoryMismatch)?
-            .checkpoint_sequence;
-        let sequence_bytes = sequence.to_le_bytes();
-        let bump = pool_v1_pair_forest_checkpoint_address(program_id, master.key, sequence).1;
-        let bump_bytes = [bump];
+        let checkpoint_state = decode_pool_v1_pair_forest_checkpoint_v1(&planned.checkpoint_image)
+            .map_err(|_| PoolV1ProgramError::StateHistoryMismatch)?;
+        let sequence_bytes = checkpoint_state.checkpoint_sequence.to_le_bytes();
+        let bump_bytes = [checkpoint_state.bump];
         let seeds: &[&[u8]] = &[
             POOL_V1_PAIR_FOREST_CHECKPOINT_SEED,
             master.key.as_ref(),
@@ -1952,14 +1963,14 @@ pub fn decode_retained_pair_forest_checkpoint_account_v1(
     }
     let checkpoint = decode_pool_v1_pair_forest_checkpoint_v1(&account.try_borrow_data()?)
         .map_err(|_| PoolV1ProgramError::InvalidAccountType)?;
+    let (expected, bump) = pool_v1_pair_forest_checkpoint_address(
+        program_id,
+        expected_master,
+        checkpoint.checkpoint_sequence,
+    );
     if checkpoint.master != expected_master.to_bytes()
-        || account.key
-            != &pool_v1_pair_forest_checkpoint_address(
-                program_id,
-                expected_master,
-                checkpoint.checkpoint_sequence,
-            )
-            .0
+        || account.key != &expected
+        || checkpoint.bump != bump
     {
         return Err(PoolV1ProgramError::StateHistoryMismatch.into());
     }
@@ -2243,10 +2254,11 @@ mod tests {
     }
 
     fn master(program_id: Pubkey, mint: Pubkey) -> (Pubkey, PoolV1PairForestMasterV1) {
-        let key = pool_v1_pair_forest_master_address(&program_id, &mint).0;
+        let (key, bump) = pool_v1_pair_forest_master_address(&program_id, &mint);
         (
             key,
             PoolV1PairForestMasterV1 {
+                bump,
                 identity: PoolIdentityV1 {
                     pool: key.to_bytes(),
                     asset_mint: mint.to_bytes(),
@@ -2268,8 +2280,22 @@ mod tests {
         )
     }
 
-    fn lane_state(master: Pubkey, lane: u8) -> PoolV1PairForestLaneStateV1 {
+    fn canonical_genesis_lane(
+        program_id: &Pubkey,
+        master: &Pubkey,
+        lane_id: u8,
+    ) -> PoolV1PairForestLaneStateV1 {
+        let bump = pool_v1_pair_forest_lane_address(program_id, master, lane_id)
+            .unwrap()
+            .1;
+        genesis_lane_state(master, lane_id, bump)
+    }
+
+    fn lane_state(program_id: Pubkey, master: Pubkey, lane: u8) -> PoolV1PairForestLaneStateV1 {
         PoolV1PairForestLaneStateV1 {
+            bump: pool_v1_pair_forest_lane_address(&program_id, &master, lane)
+                .unwrap()
+                .1,
             master: master.to_bytes(),
             lane_id: lane,
             tree: IncrementalMerkleTreeV1 {
@@ -2289,7 +2315,7 @@ mod tests {
         let program_id = Pubkey::new_unique();
         let master = Pubkey::new_unique();
         let lane_id = 3;
-        let mut lane = lane_state(master, lane_id);
+        let mut lane = lane_state(program_id, master, lane_id);
         for leaf in 0..13 {
             lane.tree = lane
                 .tree
@@ -2393,8 +2419,9 @@ mod tests {
     ))]
     #[test]
     fn authenticated_result_encoder_is_byte_exact_for_valid_lanes() {
+        let program_id = Pubkey::new_unique();
         let master = Pubkey::new_unique();
-        let mut lane = lane_state(master, 4);
+        let mut lane = lane_state(program_id, master, 4);
         for leaf in 0..14 {
             lane.tree = lane
                 .tree
@@ -2413,9 +2440,10 @@ mod tests {
     #[cfg(feature = "pair-forest-deposit-invariant-audit")]
     #[test]
     fn deposit_invariant_append_is_byte_exact_at_measured_boundaries() {
+        let program_id = Pubkey::new_unique();
         let master = Pubkey::new_unique();
         let lane_id = 2;
-        let mut lane = lane_state(master, lane_id);
+        let mut lane = lane_state(program_id, master, lane_id);
         let measured = [0u64, 1, 2, 3, 7, 15, 255];
 
         for source_index in 0u64..=255 {
@@ -2426,6 +2454,7 @@ mod tests {
                     .append_one_with_empty_roots(pair_leaf, &POOL_V1_PAIR_EMPTY_ROOTS)
                     .unwrap();
                 let strict_lane = PoolV1PairForestLaneStateV1 {
+                    bump: lane.bump,
                     master: master.to_bytes(),
                     lane_id,
                     tree: strict_tree,
@@ -2463,15 +2492,16 @@ mod tests {
     #[cfg(feature = "pair-forest-deposit-invariant-audit")]
     #[test]
     fn deposit_invariant_append_rejects_full_tree_and_noncanonical_leaf() {
+        let program_id = Pubkey::new_unique();
         let master = Pubkey::new_unique();
-        let mut full = lane_state(master, 0).tree;
+        let mut full = lane_state(program_id, master, 0).tree;
         full.next_leaf_index = POOL_V1_PAIR_CAPACITY;
         assert_eq!(
             append_pair_leaf_from_program_invariant_v1(&full, digest(50_000)),
             Err(PoolV1ProgramError::TreeFull.into()),
         );
 
-        let genesis = lane_state(master, 0).tree;
+        let genesis = lane_state(program_id, master, 0).tree;
         let mut noncanonical = digest(50_001);
         noncanonical[0] = M31(aspis_core::field::P);
         assert_eq!(
@@ -2479,7 +2509,7 @@ mod tests {
             Err(PoolV1ProgramError::NonCanonicalLeaf.into()),
         );
 
-        let mut oversized_lane = lane_state(master, 0);
+        let mut oversized_lane = lane_state(program_id, master, 0);
         oversized_lane.tree.next_leaf_index = POOL_V1_PAIR_CAPACITY + 1;
         assert!(encode_lane_from_authenticated_result_v1(&oversized_lane).is_err());
     }
@@ -2519,7 +2549,7 @@ mod tests {
             owner: program_id,
             lamports: 1,
             data: encode_pool_v1_pair_forest_lane_state_v1(
-                &lane_state(master_key, lane as u8),
+                &lane_state(program_id, master_key, lane as u8),
                 &POOL_V1_PAIR_EMPTY_ROOTS,
             )
             .unwrap()
@@ -2728,13 +2758,14 @@ mod tests {
         let lane_key = pool_v1_pair_forest_lane_address(&program_id, &master_key, lane_id)
             .unwrap()
             .0;
-        let lane = genesis_lane_state(&master_key, lane_id);
+        let lane = canonical_genesis_lane(&program_id, &master_key, lane_id);
         let next_tree = lane
             .tree
             .append_one_with_empty_roots(digest(9_777), &POOL_V1_PAIR_EMPTY_ROOTS)
             .unwrap()
             .0;
         let checkpoint = PoolV1PairForestCheckpointV1 {
+            bump: pool_v1_pair_forest_checkpoint_address(&program_id, &master_key, 0).1,
             master: master_key.to_bytes(),
             deployment_domain: master_state.identity.deployment_domain,
             checkpoint_sequence: 0,
@@ -3150,6 +3181,10 @@ mod tests {
         assert_eq!(decoded_master.identity.asset_mint, mint.to_bytes());
         assert_eq!(decoded_master.identity.deployment_domain, [5u8; 32]);
         assert_eq!(decoded_master.initialized_lane_mask, 0xff);
+        assert_eq!(
+            decoded_master.bump,
+            pool_v1_pair_forest_master_address(&program_id, &mint).1
+        );
         assert!(!decoded_master.has_checkpoint);
         for lane in 0..POOL_V1_PAIR_FOREST_LANE_COUNT {
             let decoded = decode_pool_v1_pair_forest_lane_state_v1(
@@ -3157,8 +3192,185 @@ mod tests {
                 &POOL_V1_PAIR_EMPTY_ROOTS,
             )
             .unwrap();
-            assert_eq!(decoded, genesis_lane_state(&accounts[0].key, lane as u8));
+            assert_eq!(
+                decoded,
+                canonical_genesis_lane(&program_id, &accounts[0].key, lane as u8)
+            );
         }
+    }
+
+    #[test]
+    fn canonical_bumps_persist_for_system_and_precreated_accounts() {
+        for create in [false, true] {
+            let program_id = Pubkey::new_unique();
+            let mint = Pubkey::new_unique();
+            let mut accounts = initialization_accounts(program_id, mint);
+            if create {
+                for account in &mut accounts[..9] {
+                    account.owner = system_program::id();
+                    account.lamports = 0;
+                    account.data.clear();
+                }
+            }
+            let (master_key, master_bump) = pool_v1_pair_forest_master_address(&program_id, &mint);
+            let (checkpoint_key, checkpoint_bump) =
+                pool_v1_pair_forest_checkpoint_address(&program_id, &master_key, 0);
+            let mut checkpoint = TestAccount {
+                key: checkpoint_key,
+                owner: if create {
+                    system_program::id()
+                } else {
+                    program_id
+                },
+                lamports: if create {
+                    0
+                } else {
+                    rent_lamports(POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES)
+                },
+                data: if create {
+                    vec![]
+                } else {
+                    vec![0; POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES]
+                },
+                signer: false,
+                writable: true,
+                executable: false,
+            };
+            let infos: Vec<_> = accounts.iter_mut().map(TestAccount::info).collect();
+            let mut runtime = MarkerSystemCpi {
+                pool_program: program_id,
+                calls: 0,
+            };
+            process_pair_forest_initialize_with_runtime_v1(
+                &program_id,
+                &infos,
+                &encode_pair_forest_initialize_instruction_v1(&forest_initialization(mint))
+                    .unwrap(),
+                &Rent::default(),
+                &mut runtime,
+            )
+            .unwrap();
+            let decoded = decode_master_account(&program_id, &infos[0], true).unwrap();
+            assert_eq!(decoded.bump, master_bump);
+            let mut checkpoint_infos = infos[..9].to_vec();
+            for (lane, info) in checkpoint_infos[1..9].iter_mut().enumerate() {
+                info.is_writable = false;
+                let state =
+                    decode_lane_account(&program_id, &master_key, lane as u8, info, false).unwrap();
+                assert_eq!(
+                    state.bump,
+                    pool_v1_pair_forest_lane_address(&program_id, &master_key, lane as u8)
+                        .unwrap()
+                        .1
+                );
+            }
+            let lane_images: Vec<_> = checkpoint_infos[1..9]
+                .iter()
+                .map(|info| info.try_borrow_data().unwrap().to_vec())
+                .collect();
+            checkpoint_infos.push(checkpoint.info());
+            checkpoint_infos.push(infos[12].clone());
+            checkpoint_infos.push(infos[13].clone());
+            process_pair_forest_checkpoint_with_runtime_v1(
+                &program_id,
+                &checkpoint_infos,
+                &encode_pair_forest_checkpoint_instruction_v1(),
+                &Rent::default(),
+                &mut runtime,
+            )
+            .unwrap();
+            assert_eq!(runtime.calls, if create { 10 } else { 0 });
+            assert_eq!(
+                decode_master_account(&program_id, &infos[0], true)
+                    .unwrap()
+                    .bump,
+                master_bump
+            );
+            checkpoint_infos[9].is_writable = false;
+            assert_eq!(
+                decode_retained_pair_forest_checkpoint_account_v1(
+                    &program_id,
+                    &master_key,
+                    &checkpoint_infos[9]
+                )
+                .unwrap()
+                .bump,
+                checkpoint_bump
+            );
+            for (lane, image) in lane_images.iter().enumerate() {
+                assert_eq!(
+                    checkpoint_infos[1 + lane]
+                        .try_borrow_data()
+                        .unwrap()
+                        .to_vec(),
+                    *image
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn stored_noncanonical_bumps_fail_pool_account_authentication() {
+        let program_id = Pubkey::new_unique();
+        let (mut master, mut lanes, mut checkpoint, master_key) = fixtures(program_id);
+        assert!(decode_master_account(&program_id, &master.info(), true).is_ok());
+        master.data[7] ^= 1;
+        assert!(decode_master_account(&program_id, &master.info(), true).is_err());
+        master.data[7] ^= 1;
+        for (lane_id, lane) in lanes.iter_mut().enumerate() {
+            assert!(decode_lane_account(
+                &program_id,
+                &master_key,
+                lane_id as u8,
+                &lane.info(),
+                false
+            )
+            .is_ok());
+            lane.data[72] ^= 1;
+            assert!(decode_lane_account(
+                &program_id,
+                &master_key,
+                lane_id as u8,
+                &lane.info(),
+                false
+            )
+            .is_err());
+            #[cfg(any(
+                feature = "pair-forest-source-invariant-audit",
+                feature = "pair-forest-deposit-invariant-audit"
+            ))]
+            assert!(decode_lane_account_from_program_invariant_v1(
+                &program_id,
+                &master_key,
+                lane_id as u8,
+                &lane.info(),
+                false
+            )
+            .is_err());
+            lane.data[72] ^= 1;
+        }
+        let plan = plan_pair_forest_checkpoint_accounts_v1(
+            &program_id,
+            &master.info(),
+            &lanes.iter_mut().map(TestAccount::info).collect::<Vec<_>>(),
+            &checkpoint.info(),
+        )
+        .unwrap();
+        checkpoint.data = plan.checkpoint_image.to_vec();
+        checkpoint.writable = false;
+        assert!(decode_retained_pair_forest_checkpoint_account_v1(
+            &program_id,
+            &master_key,
+            &checkpoint.info()
+        )
+        .is_ok());
+        checkpoint.data[7] ^= 1;
+        assert!(decode_retained_pair_forest_checkpoint_account_v1(
+            &program_id,
+            &master_key,
+            &checkpoint.info()
+        )
+        .is_err());
     }
 
     #[test]
@@ -3188,12 +3400,18 @@ mod tests {
             decode_pool_v1_pair_forest_lane_state_v1(&accounts[1].data, &POOL_V1_PAIR_EMPTY_ROOTS)
                 .unwrap();
         assert_eq!(lane.lane_id, lane_id);
+        assert_eq!(
+            lane.bump,
+            pool_v1_pair_forest_lane_address(&program_id, &accounts[0].key, lane_id)
+                .unwrap()
+                .1
+        );
         assert_eq!(lane.tree.next_leaf_index, 1);
         let witness = PoolV1PairLeafWitnessV1::single_output(commitment).unwrap();
         assert_eq!(witness.second_occupied, M31::ZERO);
         assert_eq!(witness.second_commitment, [M31::ZERO; 8]);
         assert_eq!(witness.second_occupancy_inverse, M31::ZERO);
-        let expected = genesis_lane_state(&accounts[0].key, lane_id)
+        let expected = canonical_genesis_lane(&program_id, &accounts[0].key, lane_id)
             .tree
             .append_one_with_empty_roots(witness.leaf_digest().unwrap(), &POOL_V1_PAIR_EMPTY_ROOTS)
             .unwrap()
@@ -3381,7 +3599,7 @@ mod tests {
         let program_id = Pubkey::new_unique();
         let mint = Pubkey::new_unique();
         let (mut accounts, instruction, lane_id, _) = genesis_deposit_fixture(program_id, mint);
-        let mut lane = genesis_lane_state(&accounts[0].key, lane_id);
+        let mut lane = canonical_genesis_lane(&program_id, &accounts[0].key, lane_id);
         let mut roots = Vec::with_capacity(POOL_V1_ROOT_HISTORY_CAPACITY);
         roots.push(lane.tree.root);
         for index in 0..POOL_V1_ROOT_HISTORY_CAPACITY - 1 {
@@ -4065,12 +4283,13 @@ mod tests {
         let lane_key = pool_v1_pair_forest_lane_address(&program_id, &master_key, lane_id)
             .unwrap()
             .0;
-        let lane = genesis_lane_state(&master_key, lane_id);
+        let lane = canonical_genesis_lane(&program_id, &master_key, lane_id);
         let (next_tree, _) = lane
             .tree
             .append_one_with_empty_roots(digest(9_000), &POOL_V1_PAIR_EMPTY_ROOTS)
             .unwrap();
         let checkpoint = PoolV1PairForestCheckpointV1 {
+            bump: pool_v1_pair_forest_checkpoint_address(&program_id, &master_key, 0).1,
             master: master_key.to_bytes(),
             deployment_domain: master_state.identity.deployment_domain,
             checkpoint_sequence: 0,
@@ -4287,6 +4506,7 @@ mod tests {
             decode_pool_v1_pair_forest_lane_state_v1(&accounts[2].data, &POOL_V1_PAIR_EMPTY_ROOTS)
                 .unwrap();
         assert_eq!(written_lane.tree, next_tree);
+        assert_eq!(written_lane.bump, lane.bump);
         assert!(accounts[4].data.iter().any(|byte| *byte != 0));
         assert_eq!(
             decode_pool_v1_pair_forest_master_v1(&accounts[0].data).unwrap(),
@@ -4334,12 +4554,13 @@ mod tests {
         let lane_key = pool_v1_pair_forest_lane_address(&program_id, &master_key, lane_id)
             .unwrap()
             .0;
-        let lane = genesis_lane_state(&master_key, lane_id);
+        let lane = canonical_genesis_lane(&program_id, &master_key, lane_id);
         let (next_tree, _) = lane
             .tree
             .append_one_with_empty_roots(digest(9_100), &POOL_V1_PAIR_EMPTY_ROOTS)
             .unwrap();
         let checkpoint = PoolV1PairForestCheckpointV1 {
+            bump: pool_v1_pair_forest_checkpoint_address(&program_id, &master_key, 0).1,
             master: master_key.to_bytes(),
             deployment_domain: master_state.identity.deployment_domain,
             checkpoint_sequence: 0,
