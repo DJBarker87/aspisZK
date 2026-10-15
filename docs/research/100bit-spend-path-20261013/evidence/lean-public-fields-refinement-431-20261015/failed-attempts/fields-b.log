@@ -1,0 +1,188 @@
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerFieldsRefinement431.lean:56:37: error: unsolved goals
+out : ByteVec
+s : Slice U8
+hcap : alloc.vec.Vec.length out + s.length ≤ Usize.max
+hclone : Slice.clone core.clone.CloneU8.clone s = ok s
+⊢ (match h' : Slice.clone (liftFun1 core.clone.impls.CloneU8.clone) s with
+    | ok s' => ok ⟨↑out ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div) =
+    ok ⟨↑out ++ ↑s, ⋯⟩
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerFieldsRefinement431.lean:63:60: warning: This simp argument is unused:
+  hclone
+
+Hint: Omit it from the simp argument list.
+  simp only [alloc.vec.Vec.extend_from_slice, dif_pos hcap,̵ ̵h̵c̵l̵o̵n̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerFieldsRefinement431.lean:94:82: error: unsolved goals
+it0 : Iter
+out0 : ByteVec
+hcap0 : alloc.vec.Vec.length out0 + 4 * (remaining it0).length ≤ Usize.max
+target : Status × List U8 := specFields (remaining it0) ↑out0
+it : Iter
+out : ByteVec
+hcap : alloc.vec.Vec.length (it, out).2 + 4 * (remaining (it, out).1).length ≤ Usize.max
+htarget : specFields (remaining (it, out).1) ↑(it, out).2 = target
+hi : it.i < (↑it.slice).length
+x : Field := (↑it.slice)[it.i]
+next : Iter := { slice := it.slice, i := it.i + 1 }
+hrem : remaining it = x :: remaining next
+⊢ it.slice[it.i] = (↑it.slice)[it.i]
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerFieldsRefinement431.lean:98:6: error: `simp` made no progress
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerFieldsRefinement431.lean:112:13: error: Invalid `⟨...⟩` notation: The expected type
+  (match
+      let (o, iter1) := (some x, next)
+      match o with
+      | none => ok (done (core.result.Result.Ok (), out))
+      | some value =>
+        if value ≥ aspis_core.field.P then
+          ok (done (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, out))
+        else do
+          let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (core.num.U32.to_le_bytes value).to_slice
+          ok (cont (iter1, out1)) with
+    | ok x => WP.wp_return x
+    | fail e => fun x => False
+    | div => fun x => False)
+    fun r =>
+    match r with
+    | done y => (y.1, ↑y.2) = target
+    | cont x' =>
+      (alloc.vec.Vec.length x'.2 + 4 * (remaining x'.1).length ≤ Usize.max ∧
+          specFields (remaining x'.1) ↑x'.2 = target) ∧
+        (remaining x'.1).length < (remaining it).length
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerFieldsRefinement431.lean:113:6: error: No goals to be solved
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerFieldsRefinement431.lean:124:4: error: Type mismatch: After simplification, term
+  htarget
+ has type
+  (core.result.Result.Ok (), ↑out) = target
+but is expected to have type
+  (let (o, iter1) := (none, it)
+    match o with
+    | none => ok (done (core.result.Result.Ok (), out))
+    | some value =>
+      if value ≥ aspis_core.field.P then
+        ok (done (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, out))
+      else do
+        let a ← lift (core.num.U32.to_le_bytes value)
+        let s ← lift a.to_slice
+        let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s
+        ok (cont (iter1, out1))) ⦃
+    r =>
+    match r with
+    | done y => (y.1, ↑y.2) = target
+    | cont x' =>
+      (alloc.vec.Vec.length x'.2 + 4 * (remaining x'.1).length ≤ Usize.max ∧
+          specFields (remaining x'.1) ↑x'.2 = target) ∧
+        (remaining x'.1).length < [].length ⦄
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerFieldsRefinement431.lean:105:17: warning: This simp argument is unused:
+  if_neg hbad
+
+Hint: Omit it from the simp argument list.
+  simp only [i̵f̵_̵n̵e̵g̵ ̵h̵b̵a̵d̵,̵ ̵lift, bind_tc_ok, hext, WP.spec_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerFieldsRefinement431.lean:105:48: warning: This simp argument is unused:
+  hext
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg hbad, lift, bind_tc_ok, h̵e̵x̵t̵,̵ ̵WP.spec_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerFieldsRefinement431.lean:105:54: warning: This simp argument is unused:
+  WP.spec_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg hbad, lift, bind_tc_ok, hext,̵ ̵W̵P̵.̵s̵p̵e̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerFieldsRefinement431.lean:123:52: warning: This simp argument is unused:
+  WP.spec_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [fields_loop.body, hnext, bind_tc_ok,̵ ̵W̵P̵.̵s̵p̵e̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerFieldsRefinement431.lean:176:13: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵d̵.̵f̵s̵t̵,̵ ̵P̵r̵o̵d̵.̵s̵n̵d̵]̵[̲P̲r̲o̲d̲.̲s̲n̲d̲]̲ at hs hb
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerFieldsRefinement431.lean:176:23: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [Prod.fst,̵ ̵P̵r̵o̵d̵.̵s̵n̵d̵] at hs hb
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerFieldsRefinement431.lean:191:13: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵d̵.̵f̵s̵t̵,̵ ̵P̵r̵o̵d̵.̵s̵n̵d̵]̵[̲P̲r̲o̲d̲.̲s̲n̲d̲]̲ at hs hb
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerFieldsRefinement431.lean:191:23: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [Prod.fst,̵ ̵P̵r̵o̵d̵.̵s̵n̵d̵] at hs hb
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1PublicSerializer.FieldsRefinement431.wordBytes_length' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicSerializer.FieldsRefinement431.wordBytes_eq_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1PublicSerializer.FieldsRefinement431.noncanonical_iff' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicSerializer.FieldsRefinement431.extend_u8' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1PublicSerializer.FieldsRefinement431.extend_word' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicSerializer.FieldsRefinement431.fields_loop_spec' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicSerializer.FieldsRefinement431.fields_spec' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicSerializer.FieldsRefinement431.specFields_canonical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicSerializer.FieldsRefinement431.specFields_first_bad' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicSerializer.FieldsRefinement431.fields_canonical_append' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicSerializer.FieldsRefinement431.fields_reject_first_bad' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+       21.32 real         2.83 user         4.31 sys
+          2162507776  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              148566  page reclaims
+              110719  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               22524  voluntary context switches
+              136058  involuntary context switches
+          5467892864  instructions retired
+          2681695361  cycles elapsed
+           132994392  peak memory footprint
