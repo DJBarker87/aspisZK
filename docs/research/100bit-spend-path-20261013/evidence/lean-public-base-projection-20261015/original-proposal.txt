@@ -1,0 +1,292 @@
+UNCOMPILED / PROPOSAL ONLY. No proof or compilation result is claimed.
+BASE: 136b746805f3438507732622c9b4e50f36bf49f9 (136b7468).
+Source inspection: worker B; isolated r1-j1-r4-review-20261015 worktree.
+No builds, commits, or live spend-path worktree edits performed by this worker.
+
+Proposed new Lean module PublicBaseProjection.lean
+
+The executable map reuses SpendDataMap.mapPublic. All scalar recovery uses
+ExactBaseProjection; projection is NOT asserted to be a ring hom. The first
+four public theorems would close the coordinate-carrier boundary, conditional on
+PublicBase for an arbitrary wide public statement. They do not parse bytes.
+The final two theorems also reuse existing witness descent, including the
+current append conjunct. Imports and signatures were read at BASE.
+
+BEGIN PROPOSED LEAN SOURCE
+import R1SpendRelationMap
+import R1ExactBaseProjection
+import R1SpendBaseDescent
+import R0P.CoreExt
+
+set_option autoImplicit false
+namespace AspisR1.PublicBaseProjection
+
+open R0P AspisWideTower AspisV8R15.ExactTowerBase
+
+abbrev E := WideExact
+abbrev F := ExactBaseProjection.embed.fieldRange
+
+def projectPublic (pub : Public E) : Public M31Exact :=
+  SpendDataMap.mapPublic ExactBaseProjection.project pub
+
+private theorem digest_recover (d : Digest E) (hd : ∀ i, d i ∈ F) :
+    SpendDataMap.digest ExactBaseProjection.embed
+      (SpendDataMap.digest ExactBaseProjection.project d) = d := by
+  funext i
+  exact ExactBaseProjection.embed_project_of_mem_fieldRange (hd i)
+
+theorem publicBase_map (pub : Public M31Exact) :
+    PublicBase F (SpendDataMap.mapPublic ExactBaseProjection.embed pub) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro i
+    exact ExactBaseProjection.embed.mem_fieldRange_self _
+  · intro i
+    exact ExactBaseProjection.embed.mem_fieldRange_self _
+  · exact ExactBaseProjection.embed.mem_fieldRange_self _
+  · intro r hr i
+    change pub.recipient.map (SpendDataMap.digest ExactBaseProjection.embed) = some r at hr
+    cases hv : pub.recipient with
+    | none => simp only [hv, Option.map_none] at hr; cases hr
+    | some d =>
+        have heq : SpendDataMap.digest ExactBaseProjection.embed d = r := by
+          simpa only [hv, Option.map_some, Option.some.injEq] using hr
+        rw [← heq]
+        exact ExactBaseProjection.embed.mem_fieldRange_self _
+  · intro i
+    exact ExactBaseProjection.embed.mem_fieldRange_self _
+  · intro a ha
+    change pub.withdrawalAmount.map ExactBaseProjection.embed = some a at ha
+    cases hv : pub.withdrawalAmount with
+    | none => simp only [hv, Option.map_none] at ha; cases ha
+    | some x =>
+        have heq : ExactBaseProjection.embed x = a := by
+          simpa only [hv, Option.map_some, Option.some.injEq] using ha
+        rw [← heq]
+        exact ExactBaseProjection.embed.mem_fieldRange_self _
+  · intro l i
+    exact ExactBaseProjection.embed.mem_fieldRange_self _
+  · intro i
+    exact ExactBaseProjection.embed.mem_fieldRange_self _
+  · intro l i
+    exact ExactBaseProjection.embed.mem_fieldRange_self _
+
+theorem project_map (pub : Public M31Exact) :
+    projectPublic (SpendDataMap.mapPublic ExactBaseProjection.embed pub) = pub := by
+  unfold projectPublic
+  rw [SpendDataMap.mapPublic_comp]
+  have hfun : ExactBaseProjection.project ∘
+      (ExactBaseProjection.embed : M31Exact → E) = id := by
+    funext x
+    exact ExactBaseProjection.project_embed x
+  rw [hfun, SpendDataMap.mapPublic_id]
+
+theorem embed_project (pub : Public E) (hbase : PublicBase F pub) :
+    SpendDataMap.mapPublic ExactBaseProjection.embed (projectPublic pub) = pub := by
+  rcases hbase with ⟨ha, hn, has, hr, hc, hw, hf, hroot, hnext⟩
+  have ha' := digest_recover pub.anchor ha
+  have hn' := digest_recover pub.nullifier hn
+  have has' := ExactBaseProjection.embed_project_of_mem_fieldRange has
+  have hc' := digest_recover pub.change hc
+  have hroot' := digest_recover pub.nextRoot hroot
+  have hr' : (pub.recipient.map (SpendDataMap.digest ExactBaseProjection.project)).map
+      (SpendDataMap.digest ExactBaseProjection.embed) = pub.recipient := by
+    cases hv : pub.recipient with
+    | none => simp only [hv, Option.map_none]
+    | some d =>
+        simp only [hv, Option.map_some]
+        exact congrArg some (digest_recover d (hr d hv))
+  have hw' : (pub.withdrawalAmount.map ExactBaseProjection.project).map
+      ExactBaseProjection.embed = pub.withdrawalAmount := by
+    cases hv : pub.withdrawalAmount with
+    | none => simp only [hv, Option.map_none]
+    | some x =>
+        simp only [hv, Option.map_some]
+        exact congrArg some (ExactBaseProjection.embed_project_of_mem_fieldRange (hw x hv))
+  have hf' : (fun l => SpendDataMap.digest ExactBaseProjection.embed
+      (SpendDataMap.digest ExactBaseProjection.project (pub.snapshotFrontier l))) =
+      pub.snapshotFrontier := by
+    funext l
+    exact digest_recover (pub.snapshotFrontier l) (hf l)
+  have hnext' : (fun l => SpendDataMap.digest ExactBaseProjection.embed
+      (SpendDataMap.digest ExactBaseProjection.project (pub.nextFrontier l))) =
+      pub.nextFrontier := by
+    funext l
+    exact digest_recover (pub.nextFrontier l) (hnext l)
+  change { pub with
+    anchor := SpendDataMap.digest ExactBaseProjection.embed
+      (SpendDataMap.digest ExactBaseProjection.project pub.anchor)
+    nullifier := SpendDataMap.digest ExactBaseProjection.embed
+      (SpendDataMap.digest ExactBaseProjection.project pub.nullifier)
+    assetId := ExactBaseProjection.embed (ExactBaseProjection.project pub.assetId)
+    recipient := (pub.recipient.map (SpendDataMap.digest ExactBaseProjection.project)).map
+      (SpendDataMap.digest ExactBaseProjection.embed)
+    change := SpendDataMap.digest ExactBaseProjection.embed
+      (SpendDataMap.digest ExactBaseProjection.project pub.change)
+    withdrawalAmount := (pub.withdrawalAmount.map ExactBaseProjection.project).map
+      ExactBaseProjection.embed
+    snapshotFrontier := fun l => SpendDataMap.digest ExactBaseProjection.embed
+      (SpendDataMap.digest ExactBaseProjection.project (pub.snapshotFrontier l))
+    nextRoot := SpendDataMap.digest ExactBaseProjection.embed
+      (SpendDataMap.digest ExactBaseProjection.project pub.nextRoot)
+    nextFrontier := fun l => SpendDataMap.digest ExactBaseProjection.embed
+      (SpendDataMap.digest ExactBaseProjection.project (pub.nextFrontier l)) } = pub
+  rw [ha', hn', has', hr', hc', hw', hf', hroot', hnext']
+
+theorem publicBase_iff_embed_project (pub : Public E) :
+    PublicBase F pub ↔
+      SpendDataMap.mapPublic ExactBaseProjection.embed (projectPublic pub) = pub := by
+  constructor
+  · exact embed_project pub
+  · intro h
+    rw [← h]
+    exact publicBase_map (projectPublic pub)
+
+theorem canonical_project_iff (pub : Public E) (hbase : PublicBase F pub) :
+    PublicOptionShape.canonical (projectPublic pub) ↔
+      PublicOptionShape.canonical pub := by
+  have h := SpendRelationMap.canonical_map_iff ExactBaseProjection.embed
+    ExactBaseProjection.embed.injective (projectPublic pub)
+  rw [embed_project pub hbase] at h
+  exact h.symm
+
+theorem optionCheck_project_iff (pub : Public E) (hbase : PublicBase F pub) :
+    PublicOptionShape.check (projectPublic pub) = true ↔
+      PublicOptionShape.check pub = true := by
+  rw [PublicOptionShape.check_eq_true_iff, PublicOptionShape.check_eq_true_iff]
+  exact canonical_project_iff pub hbase
+
+theorem rspend_mapped_witness_iff (pub : Public E) (hbase : PublicBase F pub)
+    (w : SpendRelation.Wspend) :
+    SpendRelation.Rspend pub (SpendDataMap.witness ExactBaseProjection.embed w) ↔
+      SpendRelation.Rspend (projectPublic pub) w := by
+  have h := SpendRelationMap.rspend_map_iff ExactBaseProjection.embed
+    (projectPublic pub) w
+  rw [embed_project pub hbase] at h
+  exact h
+
+theorem rspend_project (pub : Public E) (w : SpendRelation.Witness E)
+    (hpub : PublicBase F pub) (hw : SpendBaseDescent.BaseCoordinates w)
+    (h : SpendRelation.Rspend pub w) :
+    SpendRelation.Rspend (projectPublic pub) (SpendBaseDescent.projectWitness w) := by
+  apply SpendBaseDescent.rspend_project (projectPublic pub) w hw
+  rw [embed_project pub hpub]
+  exact h
+
+theorem spendCheck_project (pub : Public E) (w : SpendRelation.Witness E)
+    (hpub : PublicBase F pub) (hw : SpendBaseDescent.BaseCoordinates w)
+    (h : SpendRelation.Rspend pub w) :
+    SpendRelation.checkM31 (projectPublic pub) (SpendBaseDescent.projectWitness w) = true :=
+  (SpendRelation.check_eq_true_iff (projectPublic pub)
+    (SpendBaseDescent.projectWitness w)).mpr (rspend_project pub w hpub hw h)
+
+#print axioms publicBase_map
+#print axioms project_map
+#print axioms embed_project
+#print axioms publicBase_iff_embed_project
+#print axioms canonical_project_iff
+#print axioms optionCheck_project_iff
+#print axioms rspend_mapped_witness_iff
+#print axioms rspend_project
+#print axioms spendCheck_project
+end AspisR1.PublicBaseProjection
+END PROPOSED LEAN SOURCE
+
+Section 9 decoder scope and contracts (OPEN; no decoder is implemented here)
+
+Carrier: R0P.Public M31Exact already provides the required base-field public
+carrier. Do not duplicate its record. The wire subset additionally requires
+PublicOptionShape.canonical pub and pub.nextPairIndex < 2^64.
+
+Exact byte order from v8-r0-rust-20261009/SPEC.md section 9 and Rust
+pair_forest_semantic_terminal.rs Public::public_bytes (BASE lines 2002-2040):
+variant u8 (0 transfer / 1 withdrawal); anchor 8 M31; nullifier 8 M31;
+assetId M31; recipient option tag u8 and 8 M31 only if tag=1; change 8 M31;
+withdrawalAmount option tag u8 and one M31 only if tag=1; nextPairIndex u64LE;
+snapshotFrontier 20 x 8 M31; nextRoot 8 M31; nextFrontier 20 x 8 M31.
+Each M31 is four little-endian bytes with integer value < 2147483647.
+Reject invalid variant/option tags, truncated or trailing bytes, and
+noncanonical M31 values. Encoding must reject an index >= 2^64. The checked
+decoder then calls PublicOptionShape.check. Derived, not proved here, checked
+lengths are 1455 transfer bytes and 1427 withdrawal bytes.
+
+Keep parseRaw (syntax) and decode (parseRaw followed by option check) distinct
+if matching all successful source serialization is useful. Proposed signatures:
+  encode : Public M31Exact -> Option (List ExactLeafFieldCodec.Byte)
+  parseRaw : List ExactLeafFieldCodec.Byte -> Option (Public M31Exact)
+  decode : List ExactLeafFieldCodec.Byte -> Option (Public M31Exact)
+encode needs only the u64 index guard. decode is the canonical checked entry.
+
+Proposed theorem contracts, all OPEN until implemented and compiled:
+  encode pub = some bs -> pub.nextPairIndex < 2^64
+  PublicOptionShape.canonical pub -> pub.nextPairIndex < 2^64 ->
+    exists bs, encode pub = some bs and decode bs = some pub
+  decode bs = some pub -> encode pub = some bs
+  decode bs = some pub -> PublicOptionShape.check pub = true
+  decode bs = some pub -> pub.nextPairIndex < 2^64
+  decode bs = some pub ->
+    PublicBase ExactBaseProjection.embed.fieldRange
+      (SpendDataMap.mapPublic ExactBaseProjection.embed pub)
+The last theorem is immediate from proposed publicBase_map once that module
+is compiled; a successful parse is not needed to obtain this typing fact.
+
+Reusable declarations, read at BASE:
+ExactLeafFieldCodec.{encodeM31_length,decodeM31_encodeM31,
+encodeM31_of_decodeM31,encodeM31_injective}; strict four-byte canonical M31.
+FixedWidthDecoder.decode_encode needs fixed encoded width and element
+round-trip. FixedWidthDecoder.encode_of_decode needs element reconstruction
+from successful decode. Compose digest8/frontier20 codecs with these facts.
+The public-field sequence, one-byte tags and u64 codec still need assembly
+and proofs. PublicInitParse.parse_sound only identifies an initialization
+frame containing a fixed supplied pubBytes; it does NOT decode its contents.
+
+Source boundary still OPEN: prove actual typed source private_public and
+withdrawal_public map to this Public, and Public::public_bytes agrees with
+encode. Rust private_public always sets Some recipient / None amount;
+withdrawal_public sets None recipient / Some amount. Its public_bytes method
+alone checks amount < P but permits zero. The successful withdrawal validator
+(payment_relation.rs lines 232-247) supplies 0 < amount < VALUE_LIMIT.
+Thus source-to-checked-decoder round-trip must retain that validation premise
+(or at least amount != 0); do not infer canonical from serialization alone.
+The < 2^30 amount bound is an additional source/value guard, not a condition
+already included in PublicOptionShape.canonical.
+
+The ASF8 outer statement decoder and Pool state binding are separate source
+bridges. Pool, deployment domain, sequence and source current root are
+deliberately absent from this section 9 Public serialization. Proving this
+codec does not prove those external bindings or settlement properties.
+
+Smallest conditional typed consumer (optional separate companion module)
+
+This connects the proposed projection to the existing executable trace
+extractor. It does not manufacture source correspondence, public typing,
+production residuals, candidate traces, commitment recovery or list decoding.
+All four premises remain explicit. UNCOMPILED / PROPOSAL ONLY.
+
+BEGIN OPTIONAL COMPANION SOURCE
+import R1PublicBaseProjection
+import R1TraceWitnessExtract
+
+set_option autoImplicit false
+namespace AspisR1.PublicBaseProjection
+open R0P AspisWideTower AspisV8R15.ExactTowerBase
+
+theorem extract_complete_of_typed_public
+    (pub : Public E) (A : Trace E) (lam chi : E)
+    (hpub : PublicBase F pub) (hshape : PublicOptionShape.canonical pub)
+    (hbase : BaseTyped F A)
+    (h : ProductionHolds pub lam chi A ∧ CopyLinkBalance pub A) :
+    ∃ w : SpendRelation.Wspend,
+      TraceWitnessExtract.extract (projectPublic pub) A = some w ∧
+      SpendRelation.Rspend (projectPublic pub) w := by
+  have hshape' := (canonical_project_iff pub hpub).mpr hshape
+  have h' : ProductionHolds
+      (SpendDataMap.mapPublic ExactBaseProjection.embed (projectPublic pub)) lam chi A ∧
+      CopyLinkBalance
+        (SpendDataMap.mapPublic ExactBaseProjection.embed (projectPublic pub)) A := by
+    simpa only [embed_project pub hpub] using h
+  exact TraceWitnessExtract.complete_of_production
+    (projectPublic pub) A lam chi hshape' hbase h'
+
+#print axioms extract_complete_of_typed_public
+end AspisR1.PublicBaseProjection
+END OPTIONAL COMPANION SOURCE

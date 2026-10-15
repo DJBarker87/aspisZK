@@ -1,0 +1,94 @@
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1SemanticPrefixCodec.lean:88:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1SemanticPrefixCodec.lean:172:72: error: unsolved goals
+values : Full
+i : Fin 25
+⊢ ↑(List.ofFn fun i => ⟨↑i, { isLt := ⋯, value := values i }⟩)[↑i].snd.value = ↑(values i)
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1SemanticPrefixCodec.lean:177:24: warning: This simp argument is unused:
+  List.getElem_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp only [entriesOf,̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵_̵o̵f̵F̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1SemanticPrefixCodec.lean:222:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SemanticRecordCodec.encode (?h ▸ ?value)
+in the target expression
+  SemanticRecordCodec.encode (List.ofFn fun i => ⟨↑i, { isLt := ⋯, value := ⋯ ▸ out[↑i].snd.value }⟩)[i].snd.value =
+    SemanticRecordCodec.encode out[i].snd.value
+
+case h
+raws : List Bytes
+out : List Entry
+hlen : raws.length = 25
+h : decodeFrom 0 raws = some out
+hback : List.map encodeEntry out = raws
+houtlen : out.length = raws.length
+i : ℕ
+hi : i < (encodeFull (fullOfDecoded raws out hlen h)).length
+hj : i < (List.map encodeEntry out).length
+⊢ SemanticRecordCodec.encode (List.ofFn fun i => ⟨↑i, { isLt := ⋯, value := ⋯ ▸ out[↑i].snd.value }⟩)[i].snd.value =
+    SemanticRecordCodec.encode out[i].snd.value
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl
+      (List.map encodeEntry
+        (List.ofFn fun i => ⟨↑i, { isLt := entriesOf._proof_1 i, value := fullOfDecoded raws out hlen h i }⟩))
+  has type
+    @Eq (List Bytes)
+      (List.map encodeEntry (List.ofFn fun i => ⟨↑i, { isLt := ⋯, value := fullOfDecoded raws out hlen h i }⟩))
+      (List.map encodeEntry (List.ofFn fun i => ⟨↑i, { isLt := ⋯, value := fullOfDecoded raws out hlen h i }⟩))
+  but is expected to have type
+    @Eq (List Bytes) (encodeFull (fullOfDecoded raws out hlen h))
+      (List.map encodeEntry (List.ofFn fun i => ⟨↑i, { isLt := ⋯, value := fullOfDecoded raws out hlen h i }⟩))
+  in the application
+    id
+      (Eq.refl
+        (List.map encodeEntry
+          (List.ofFn fun i => ⟨↑i, { isLt := entriesOf._proof_1 i, value := fullOfDecoded raws out hlen h i }⟩)))
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1SemanticPrefixCodec.lean:220:60: warning: This simp argument is unused:
+  List.getElem_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp only [encodeFull, entriesOf, List.getElem_map, L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵_̵o̵f̵F̵n̵,̵ ̵encodeEntry]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SemanticPrefixCodec.encode_of_decodeFrom' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.encode_fullOfDecoded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.encodeFull_of_decodeFull' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.SemanticPrefixCodec.decodeOne_reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.decodeFrom_reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.decodeOne_encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.encode_of_decodeOne' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.prefix_stable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.failure_persists' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.decode_encode_entries' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.decoded_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.decodeFull_wrong_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.entriesOf_rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.decode_encodeFull' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPrefixCodec.decodeFull_encodeFull' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       60.27 real         2.82 user         7.40 sys
+          4148576256  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              247261  page reclaims
+              513663  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               55315  voluntary context switches
+              484170  involuntary context switches
+          4959429402  instructions retired
+          2281654171  cycles elapsed
+           133404112  peak memory footprint

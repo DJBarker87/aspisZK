@@ -1,0 +1,261 @@
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:34:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (a, rest).1
+in the target expression
+  emit a ++ rest = List.take n bytes ++ List.drop n bytes
+
+A : Type
+n : ℕ
+emit : A → Bytes
+dec : Bytes → Option A
+hlen : ∀ (a : A), List.length (emit a) = n
+hround : ∀ (a : A), dec (emit a) = some a
+hback : ∀ (bytes : Bytes) (a : A), dec bytes = some a → emit a = bytes
+bytes : Bytes
+a : A
+rest : Bytes
+h : Option.map (fun x => (x, List.drop n bytes)) (dec (List.take n bytes)) = some (a, rest)
+x : A
+hd : dec (List.take n bytes) = some x
+hp : (x, List.drop n bytes) = (a, rest)
+hx : (x, List.drop n bytes).1 = (a, rest).1
+hr : (x, List.drop n bytes).2 = (a, rest).2
+⊢ emit a ++ rest = List.take n bytes ++ List.drop n bytes
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:57:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ((a, b), rest).1.1
+in the target expression
+  c.emit a ++ d.emit b ++ rest = bytes
+
+case back.some.some
+A B : Type
+c : PrefixCodec A
+d : PrefixCodec B
+hc : c.Lawful
+hd : d.Lawful
+bytes : Bytes
+a : A
+b : B
+rest : Bytes
+h : (c.pair d).parse bytes = some ((a, b), rest)
+a' : A
+mid : Bytes
+hc0 : c.parse bytes = some (a', mid)
+b' : B
+last : Bytes
+hd0 : d.parse mid = some (b', last)
+heq : ((a', b'), last) = ((a, b), rest)
+ha : ((a', b'), last).1.1 = ((a, b), rest).1.1
+hb : ((a', b'), last).1.2 = ((a, b), rest).1.2
+hr : ((a', b'), last).2 = ((a, b), rest).2
+⊢ c.emit a ++ d.emit b ++ rest = bytes
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:74:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (b, rest).1
+in the target expression
+  c.emit (e.symm b) ++ rest = bytes
+
+case back.some
+A B : Type
+e : A ≃ B
+c : PrefixCodec A
+hc : c.Lawful
+bytes : Bytes
+b : B
+rest : Bytes
+h : (transport e c).parse bytes = some (b, rest)
+a : A
+tail : Bytes
+hp : c.parse bytes = some (a, tail)
+heq : (e a, tail) = (b, rest)
+hb : (e a, tail).1 = (b, rest).1
+hr : (e a, tail).2 = (b, rest).2
+⊢ c.emit (e.symm b) ++ rest = bytes
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:91:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (oa, rest).1
+in the target expression
+  c.option.emit oa ++ rest = tag :: tail
+
+case pos
+A : Type
+c : PrefixCodec A
+hc : c.Lawful
+oa : Option A
+rest : Bytes
+tag : Byte
+tail : List Byte
+h : c.option.parse (tag :: tail) = some (oa, rest)
+h0 : tag = 0
+heq : (none, tail) = (oa, rest)
+ho : (none, tail).1 = (oa, rest).1
+hr : (none, tail).2 = (oa, rest).2
+⊢ c.option.emit oa ++ rest = tag :: tail
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:102:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (oa, rest).1
+in the target expression
+  c.option.emit oa ++ rest = tag :: tail
+
+case pos.some
+A : Type
+c : PrefixCodec A
+hc : c.Lawful
+oa : Option A
+rest : Bytes
+tag : Byte
+tail : List Byte
+h : c.option.parse (tag :: tail) = some (oa, rest)
+h0 : ¬tag = 0
+h1 : tag = 1
+a : A
+last : Bytes
+hp : c.parse tail = some (a, last)
+heq : (some a, last) = (oa, rest)
+ho : (some a, last).1 = (oa, rest).1
+hr : (some a, last).2 = (oa, rest).2
+⊢ c.option.emit oa ++ rest = tag :: tail
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:95:36: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp [option, h0̵,̵ ̵h̵1, hp] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:150:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (v, rest).1
+in the target expression
+  variantCodec.emit v ++ rest = tag :: tail
+
+case pos
+v : Variant
+rest : Bytes
+tag : Byte
+tail : List Byte
+h : variantCodec.parse (tag :: tail) = some (v, rest)
+h0 : tag = 0
+heq : (Variant.privateTransfer, tail) = (v, rest)
+hv : (Variant.privateTransfer, tail).1 = (v, rest).1
+hr : (Variant.privateTransfer, tail).2 = (v, rest).2
+⊢ variantCodec.emit v ++ rest = tag :: tail
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:157:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (v, rest).1
+in the target expression
+  variantCodec.emit v ++ rest = tag :: tail
+
+case pos
+v : Variant
+rest : Bytes
+tag : Byte
+tail : List Byte
+h : variantCodec.parse (tag :: tail) = some (v, rest)
+h0 : ¬tag = 0
+h1 : tag = 1
+heq : (Variant.withdrawal, tail) = (v, rest)
+hv : (Variant.withdrawal, tail).1 = (v, rest).1
+hr : (Variant.withdrawal, tail).2 = (v, rest).2
+⊢ variantCodec.emit v ++ rest = tag :: tail
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:169:40: error: unsolved goals
+x : RetainedFieldByteCodec.RawWord
+⊢ ∃ a,
+    RetainedFieldByteCodec.fixedBytes? 4
+          [RetainedFieldByteCodec.encodeWordLE x 0, RetainedFieldByteCodec.encodeWordLE x 1,
+            RetainedFieldByteCodec.encodeWordLE x 2, RetainedFieldByteCodec.encodeWordLE x 3] =
+        some a ∧
+      RetainedFieldByteCodec.decodeWordLE a = x
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:170:30: warning: This simp argument is unused:
+  ListFieldCodec.fixedBytes?_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp [decodeU32, encodeU32, L̵i̵s̵t̵F̵i̵e̵l̵d̵C̵o̵d̵e̵c̵.̵f̵i̵x̵e̵d̵B̵y̵t̵e̵s̵?̵_̵o̵f̵F̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵RetainedFieldByteCodec.decodeWordLE_encodeWordLE]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:171:4: warning: This simp argument is unused:
+  RetainedFieldByteCodec.decodeWordLE_encodeWordLE
+
+Hint: Omit it from the simp argument list.
+  simp [decodeU32, encodeU32, ListFieldCodec.fixedBytes?_ofFn,̵
+  ̵ ̵ ̵ ̵ ̵R̵e̵t̵a̵i̵n̵e̵d̵F̵i̵e̵l̵d̵B̵y̵t̵e̵C̵o̵d̵e̵c̵.̵d̵e̵c̵o̵d̵e̵W̵o̵r̵d̵L̵E̵_̵e̵n̵c̵o̵d̵e̵W̵o̵r̵d̵L̵E̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:204:8: warning: This simp argument is unused:
+  List.length_flatMap
+
+Hint: Omit it from the simp argument list.
+  simp [List.length_f̵l̵a̵t̵M̵a̵p̵,̵ ̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵ofFn, ExactLeafFieldCodec.encodeM31_length]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:204:29: warning: This simp argument is unused:
+  List.length_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp [List.length_flatMap, L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵o̵f̵F̵n̵,̵ ̵ExactLeafFieldCodec.encodeM31_length]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:221:8: warning: This simp argument is unused:
+  List.length_flatMap
+
+Hint: Omit it from the simp argument list.
+  simp [List.length_f̵l̵a̵t̵M̵a̵p̵,̵ ̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵ofFn, encodeDigest_length]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:221:29: warning: This simp argument is unused:
+  List.length_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp [List.length_flatMap, L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵o̵f̵F̵n̵,̵ ̵encodeDigest_length]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:254:50: error: unsolved goals
+pub : WirePublic
+rest : Bytes
+⊢ (do
+      let __x ← some (pub, rest)
+      if __x.2 = [] then some ↑__x.1 else none) =
+    if rest = [] then some ↑pub else none
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:255:44: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [parseRaw, public_lawful.round,̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r4-review-20261015/.j1-local-check/R1PublicByteCodecLaws.lean:353:8: error: Type mismatch: After simplification, term
+  hq
+ has type
+  ∃ (h : q.nextPairIndex < 18446744073709551616), publicCodec.emit ⟨q, ⋯⟩ = preBytes
+but is expected to have type
+  publicCodec.emit ⟨q, hi⟩ = preBytes
+'AspisR1.PublicByteCodec.PrefixCodec.fixed_lawful' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PublicByteCodec.PrefixCodec.pair_lawful' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PublicByteCodec.PrefixCodec.transport_lawful' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PublicByteCodec.PrefixCodec.option_lawful' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.PublicByteCodec.u32_lawful' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.u64_lawful' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.digest_lawful' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.frontier_lawful' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.public_lawful' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.parseRaw_eq_some_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.decode_eq_some_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.roundtrip' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.parseRaw_trailing' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.parseRaw_truncated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.parseRaw_bad_variant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.parseRaw_bad_recipient_tag' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.parseRaw_bad_amount_tag' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.decode_zero_withdrawal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicByteCodec.encode_unique' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       11.96 real         3.55 user         2.05 sys
+          2866020352  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              198280  page reclaims
+               99081  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               11879  voluntary context switches
+               99358  involuntary context switches
+          4099621563  instructions retired
+          1830891052  cycles elapsed
+           132929024  peak memory footprint
