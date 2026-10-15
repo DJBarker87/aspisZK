@@ -1,0 +1,448 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:49:5: warning: Variable name `h` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:70:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if List.length (bytes root) = 32 then ?m.15 else ?m.16
+in the target expression
+  (if h : List.length (bytes root) = 32 then some (stateOfBytes (bytes root)) else none) = some root
+
+root : State
+hlen : List.length (bytes root) = 32
+⊢ (if h : List.length (bytes root) = 32 then some (stateOfBytes (bytes root)) else none) = some root
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:99:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑row = 2 then ?m.109 else ?m.110
+in the target expression
+  (if h2 : ↑row = 2 then
+      (RecordFrameCodec.parse 1 32 (encode ⟨Payload.empty, hvalid⟩)).bind fun payload =>
+        Option.map (fun root => ⟨Payload.c2Root root, ⋯⟩) (decodeState payload)
+    else
+      if h14 : ↑row = 14 then
+        (RecordFrameCodec.parse 3 32 (encode ⟨Payload.empty, hvalid⟩)).bind fun payload =>
+          Option.map (fun value => ⟨Payload.maskSum value, ⋯⟩) (decodeLow payload)
+      else
+        if hpoly : 15 ≤ ↑row then
+          (RecordFrameCodec.parse 2 896 (encode ⟨Payload.empty, hvalid⟩)).bind fun payload =>
+            Option.map (fun coefficients => ⟨Payload.polynomial coefficients, hpoly⟩) (decodeCoefficients payload)
+        else Option.map (fun x => ⟨Payload.empty, ⋯⟩) (RecordFrameCodec.parse 0 0 (encode ⟨Payload.empty, hvalid⟩))) =
+    some ⟨Payload.empty, hvalid⟩
+
+case empty
+row : Fin 25
+hvalid : validRow row Payload.empty
+hrow : ↑row < 2 ∨ 3 ≤ ↑row ∧ ↑row < 14
+hnot2 : ↑row ≠ 2
+hnot14 : ↑row ≠ 14
+hnotpoly : ¬15 ≤ ↑row
+hp : RecordFrameCodec.parse 0 0 (RecordFrameCodec.frame 0 []) = some []
+⊢ (if h2 : ↑row = 2 then
+      (RecordFrameCodec.parse 1 32 (encode ⟨Payload.empty, hvalid⟩)).bind fun payload =>
+        Option.map (fun root => ⟨Payload.c2Root root, ⋯⟩) (decodeState payload)
+    else
+      if h14 : ↑row = 14 then
+        (RecordFrameCodec.parse 3 32 (encode ⟨Payload.empty, hvalid⟩)).bind fun payload =>
+          Option.map (fun value => ⟨Payload.maskSum value, ⋯⟩) (decodeLow payload)
+      else
+        if hpoly : 15 ≤ ↑row then
+          (RecordFrameCodec.parse 2 896 (encode ⟨Payload.empty, hvalid⟩)).bind fun payload =>
+            Option.map (fun coefficients => ⟨Payload.polynomial coefficients, hpoly⟩) (decodeCoefficients payload)
+        else Option.map (fun x => ⟨Payload.empty, ⋯⟩) (RecordFrameCodec.parse 0 0 (encode ⟨Payload.empty, hvalid⟩))) =
+    some ⟨Payload.empty, hvalid⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    decode._proof_1 row h2
+  has type
+    ↑row = 2
+  but is expected to have type
+    validRow row (Payload.c2Root root)
+  in the application
+    ⟨Payload.c2Root root, ⋯⟩
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:104:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑row = 2 then ?m.133 else ?m.134
+in the target expression
+  (if h2 : ↑row = 2 then
+      (RecordFrameCodec.parse 1 32 (encode ⟨Payload.c2Root root, hvalid⟩)).bind fun payload =>
+        Option.map (fun root => ⟨Payload.c2Root root, ⋯⟩) (decodeState payload)
+    else
+      if h14 : ↑row = 14 then
+        (RecordFrameCodec.parse 3 32 (encode ⟨Payload.c2Root root, hvalid⟩)).bind fun payload =>
+          Option.map (fun value => ⟨Payload.maskSum value, ⋯⟩) (decodeLow payload)
+      else
+        if hpoly : 15 ≤ ↑row then
+          (RecordFrameCodec.parse 2 896 (encode ⟨Payload.c2Root root, hvalid⟩)).bind fun payload =>
+            Option.map (fun coefficients => ⟨Payload.polynomial coefficients, hpoly⟩) (decodeCoefficients payload)
+        else
+          Option.map (fun x => ⟨Payload.empty, ⋯⟩)
+            (RecordFrameCodec.parse 0 0 (encode ⟨Payload.c2Root root, hvalid⟩))) =
+    some ⟨Payload.c2Root root, hvalid⟩
+
+case c2Root
+row : Fin 25
+root : State
+hvalid : validRow row (Payload.c2Root root)
+hrow : ↑row = 2
+⊢ (if h2 : ↑row = 2 then
+      (RecordFrameCodec.parse 1 32 (encode ⟨Payload.c2Root root, hvalid⟩)).bind fun payload =>
+        Option.map (fun root => ⟨Payload.c2Root root, ⋯⟩) (decodeState payload)
+    else
+      if h14 : ↑row = 14 then
+        (RecordFrameCodec.parse 3 32 (encode ⟨Payload.c2Root root, hvalid⟩)).bind fun payload =>
+          Option.map (fun value => ⟨Payload.maskSum value, ⋯⟩) (decodeLow payload)
+      else
+        if hpoly : 15 ≤ ↑row then
+          (RecordFrameCodec.parse 2 896 (encode ⟨Payload.c2Root root, hvalid⟩)).bind fun payload =>
+            Option.map (fun coefficients => ⟨Payload.polynomial coefficients, hpoly⟩) (decodeCoefficients payload)
+        else
+          Option.map (fun x => ⟨Payload.empty, ⋯⟩)
+            (RecordFrameCodec.parse 0 0 (encode ⟨Payload.c2Root root, hvalid⟩))) =
+    some ⟨Payload.c2Root root, hvalid⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    decode._proof_1 row h2
+  has type
+    ↑row = 2
+  but is expected to have type
+    validRow row (Payload.c2Root root)
+  in the application
+    ⟨Payload.c2Root root, ⋯⟩
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:110:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ?m.154 then ?m.158 else ?m.159
+in the target expression
+  (if h2 : ↑row = 2 then
+      (RecordFrameCodec.parse 1 32 (encode ⟨Payload.maskSum value, hvalid⟩)).bind fun payload =>
+        Option.map (fun root => ⟨Payload.c2Root root, ⋯⟩) (decodeState payload)
+    else
+      if h14 : ↑row = 14 then
+        (RecordFrameCodec.parse 3 32 (encode ⟨Payload.maskSum value, hvalid⟩)).bind fun payload =>
+          Option.map (fun value => ⟨Payload.maskSum value, ⋯⟩) (decodeLow payload)
+      else
+        if hpoly : 15 ≤ ↑row then
+          (RecordFrameCodec.parse 2 896 (encode ⟨Payload.maskSum value, hvalid⟩)).bind fun payload =>
+            Option.map (fun coefficients => ⟨Payload.polynomial coefficients, hpoly⟩) (decodeCoefficients payload)
+        else
+          Option.map (fun x => ⟨Payload.empty, ⋯⟩)
+            (RecordFrameCodec.parse 0 0 (encode ⟨Payload.maskSum value, hvalid⟩))) =
+    some ⟨Payload.maskSum value, hvalid⟩
+
+case maskSum
+row : Fin 25
+value : LowWide
+hvalid : validRow row (Payload.maskSum value)
+hrow : ↑row = 14
+⊢ (if h2 : ↑row = 2 then
+      (RecordFrameCodec.parse 1 32 (encode ⟨Payload.maskSum value, hvalid⟩)).bind fun payload =>
+        Option.map (fun root => ⟨Payload.c2Root root, ⋯⟩) (decodeState payload)
+    else
+      if h14 : ↑row = 14 then
+        (RecordFrameCodec.parse 3 32 (encode ⟨Payload.maskSum value, hvalid⟩)).bind fun payload =>
+          Option.map (fun value => ⟨Payload.maskSum value, ⋯⟩) (decodeLow payload)
+      else
+        if hpoly : 15 ≤ ↑row then
+          (RecordFrameCodec.parse 2 896 (encode ⟨Payload.maskSum value, hvalid⟩)).bind fun payload =>
+            Option.map (fun coefficients => ⟨Payload.polynomial coefficients, hpoly⟩) (decodeCoefficients payload)
+        else
+          Option.map (fun x => ⟨Payload.empty, ⋯⟩)
+            (RecordFrameCodec.parse 0 0 (encode ⟨Payload.maskSum value, hvalid⟩))) =
+    some ⟨Payload.maskSum value, hvalid⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    decode._proof_1 row h2
+  has type
+    ↑row = 2
+  but is expected to have type
+    validRow row (Payload.c2Root root)
+  in the application
+    ⟨Payload.c2Root root, ⋯⟩
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:110:21: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:116:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ?m.183 then ?m.187 else ?m.188
+in the target expression
+  (if h2 : ↑row = 2 then
+      (RecordFrameCodec.parse 1 32 (encode ⟨Payload.polynomial coefficients, hvalid⟩)).bind fun payload =>
+        Option.map (fun root => ⟨Payload.c2Root root, ⋯⟩) (decodeState payload)
+    else
+      if h14 : ↑row = 14 then
+        (RecordFrameCodec.parse 3 32 (encode ⟨Payload.polynomial coefficients, hvalid⟩)).bind fun payload =>
+          Option.map (fun value => ⟨Payload.maskSum value, ⋯⟩) (decodeLow payload)
+      else
+        if hpoly : 15 ≤ ↑row then
+          (RecordFrameCodec.parse 2 896 (encode ⟨Payload.polynomial coefficients, hvalid⟩)).bind fun payload =>
+            Option.map (fun coefficients => ⟨Payload.polynomial coefficients, hpoly⟩) (decodeCoefficients payload)
+        else
+          Option.map (fun x => ⟨Payload.empty, ⋯⟩)
+            (RecordFrameCodec.parse 0 0 (encode ⟨Payload.polynomial coefficients, hvalid⟩))) =
+    some ⟨Payload.polynomial coefficients, hvalid⟩
+
+case polynomial
+row : Fin 25
+coefficients : Coefficients
+hvalid : validRow row (Payload.polynomial coefficients)
+hrow : 15 ≤ ↑row
+⊢ (if h2 : ↑row = 2 then
+      (RecordFrameCodec.parse 1 32 (encode ⟨Payload.polynomial coefficients, hvalid⟩)).bind fun payload =>
+        Option.map (fun root => ⟨Payload.c2Root root, ⋯⟩) (decodeState payload)
+    else
+      if h14 : ↑row = 14 then
+        (RecordFrameCodec.parse 3 32 (encode ⟨Payload.polynomial coefficients, hvalid⟩)).bind fun payload =>
+          Option.map (fun value => ⟨Payload.maskSum value, ⋯⟩) (decodeLow payload)
+      else
+        if hpoly : 15 ≤ ↑row then
+          (RecordFrameCodec.parse 2 896 (encode ⟨Payload.polynomial coefficients, hvalid⟩)).bind fun payload =>
+            Option.map (fun coefficients => ⟨Payload.polynomial coefficients, hpoly⟩) (decodeCoefficients payload)
+        else
+          Option.map (fun x => ⟨Payload.empty, ⋯⟩)
+            (RecordFrameCodec.parse 0 0 (encode ⟨Payload.polynomial coefficients, hvalid⟩))) =
+    some ⟨Payload.polynomial coefficients, hvalid⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    decode._proof_1 row h2
+  has type
+    ↑row = 2
+  but is expected to have type
+    validRow row (Payload.c2Root root)
+  in the application
+    ⟨Payload.c2Root root, ⋯⟩
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:116:21: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  15 ≤ a ≤ 24
+where
+ a := ↑↑row
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:128:6: error: unsolved goals
+case empty.isTrue
+row : Fin 25
+record : Bytes
+hvalid : validRow row Payload.empty
+h✝ : ↑row = 2
+h :
+  ((RecordFrameCodec.parse 1 32 record).bind fun a =>
+      Option.map (fun root => ⟨Payload.c2Root root, ⋯⟩) (decodeState a)) =
+    some ⟨Payload.empty, hvalid⟩
+⊢ encode ⟨Payload.empty, hvalid⟩ = record
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:130:8: error: unsolved goals
+case empty.isFalse.isTrue
+row : Fin 25
+record : Bytes
+hvalid : validRow row Payload.empty
+h✝ : ↑row = 14
+h :
+  ((RecordFrameCodec.parse 3 32 record).bind fun a =>
+      Option.map (fun value => ⟨Payload.maskSum value, ⋯⟩) (decodeLow a)) =
+    some ⟨Payload.empty, hvalid⟩
+⊢ encode ⟨Payload.empty, hvalid⟩ = record
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:132:10: error: unsolved goals
+case empty.isFalse.isFalse.isTrue
+row : Fin 25
+record : Bytes
+hvalid : validRow row Payload.empty
+h✝² : ¬↑row = 2
+h✝¹ : ¬↑row = 14
+h✝ : 15 ≤ ↑row
+h :
+  ((RecordFrameCodec.parse 2 896 record).bind fun a =>
+      Option.map (fun coefficients => ⟨Payload.polynomial coefficients, h✝⟩) (decodeCoefficients a)) =
+    some ⟨Payload.empty, hvalid⟩
+⊢ encode ⟨Payload.empty, hvalid⟩ = record
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:133:39: error: Application type mismatch: The argument
+  h
+has type
+  Option.map (fun x => ⟨Payload.empty, ⋯⟩) (RecordFrameCodec.parse 0 0 record) = some ⟨Payload.empty, hvalid⟩
+but is expected to have type
+  some ?m.126 = some ?m.127
+in the application
+  Option.some.inj h
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:141:60: error: Application type mismatch: The argument
+  hd
+has type
+  Option.map (fun root => ⟨Payload.c2Root root, ⋯⟩) (decodeState payloadBytes) = some ⟨Payload.c2Root root, hvalid⟩
+but is expected to have type
+  decodeState payloadBytes = some root
+in the application
+  encode_decodeState payloadBytes root hd
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:143:22: error: Invalid argument: Variable `payloadBytes` is not a proposition or let-declaration
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:138:6: error: unsolved goals
+case c2Root.isTrue
+row : Fin 25
+record : Bytes
+root : State
+hvalid : validRow row (Payload.c2Root root)
+h✝ : ↑row = 2
+payloadBytes : AspisV8R19.DuplexFrames.Bytes
+hp : RecordFrameCodec.parse 1 32 record = some payloadBytes
+hd : Option.map (fun root => ⟨Payload.c2Root root, ⋯⟩) (decodeState payloadBytes) = some ⟨Payload.c2Root root, hvalid⟩
+hbytes : bytes root = payloadBytes
+hsize : List.length payloadBytes = 32
+hrecord : record = RecordFrameCodec.frame 1 payloadBytes
+⊢ RecordFrameCodec.frame 1 (SemanticRecordCodec.payloadBytes (Payload.c2Root root)) =
+    RecordFrameCodec.frame 1 payloadBytes
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:144:6: error: unsolved goals
+case c2Root.isFalse
+row : Fin 25
+record : Bytes
+root : State
+hvalid : validRow row (Payload.c2Root root)
+h✝ : ¬↑row = 2
+h :
+  (if h : ↑row = 14 then
+      (RecordFrameCodec.parse 3 32 record).bind fun a =>
+        Option.map (fun value => ⟨Payload.maskSum value, ⋯⟩) (decodeLow a)
+    else
+      if h : 15 ≤ ↑row then
+        (RecordFrameCodec.parse 2 896 record).bind fun a =>
+          Option.map (fun coefficients => ⟨Payload.polynomial coefficients, ⋯⟩) (decodeCoefficients a)
+      else Option.map (fun x => ⟨Payload.empty, ⋯⟩) (RecordFrameCodec.parse 0 0 record)) =
+    some ⟨Payload.c2Root root, hvalid⟩
+⊢ encode ⟨Payload.c2Root root, hvalid⟩ = record
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:148:6: error: unsolved goals
+case maskSum.isTrue
+row : Fin 25
+record : Bytes
+value : LowWide
+hvalid : validRow row (Payload.maskSum value)
+h✝ : ↑row = 2
+h :
+  ((RecordFrameCodec.parse 1 32 record).bind fun a =>
+      Option.map (fun root => ⟨Payload.c2Root root, ⋯⟩) (decodeState a)) =
+    some ⟨Payload.maskSum value, hvalid⟩
+⊢ encode ⟨Payload.maskSum value, hvalid⟩ = record
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:153:64: error: Application type mismatch: The argument
+  hd
+has type
+  Option.map (fun value => ⟨Payload.maskSum value, ⋯⟩) (decodeLow payloadBytes) = some ⟨Payload.maskSum value, hvalid⟩
+but is expected to have type
+  decodeLow payloadBytes = some value
+in the application
+  encodeLow_of_decode payloadBytes value hd
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:155:24: error: Invalid argument: Variable `payloadBytes` is not a proposition or let-declaration
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:150:8: error: unsolved goals
+case maskSum.isFalse.isTrue
+row : Fin 25
+record : Bytes
+value : LowWide
+hvalid : validRow row (Payload.maskSum value)
+h✝¹ : ¬↑row = 2
+h✝ : ↑row = 14
+payloadBytes : AspisV8R19.DuplexFrames.Bytes
+hp : RecordFrameCodec.parse 3 32 record = some payloadBytes
+hd :
+  Option.map (fun value => ⟨Payload.maskSum value, ⋯⟩) (decodeLow payloadBytes) = some ⟨Payload.maskSum value, hvalid⟩
+hbytes : encodeLow value = payloadBytes
+hsize : List.length payloadBytes = 32
+hrecord : record = RecordFrameCodec.frame 3 payloadBytes
+⊢ RecordFrameCodec.frame 3 (SemanticRecordCodec.payloadBytes (Payload.maskSum value)) =
+    RecordFrameCodec.frame 3 payloadBytes
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:156:8: error: unsolved goals
+case maskSum.isFalse.isFalse
+row : Fin 25
+record : Bytes
+value : LowWide
+hvalid : validRow row (Payload.maskSum value)
+h✝¹ : ¬↑row = 2
+h✝ : ¬↑row = 14
+h :
+  (if h : 15 ≤ ↑row then
+      (RecordFrameCodec.parse 2 896 record).bind fun a =>
+        Option.map (fun coefficients => ⟨Payload.polynomial coefficients, ⋯⟩) (decodeCoefficients a)
+    else Option.map (fun x => ⟨Payload.empty, ⋯⟩) (RecordFrameCodec.parse 0 0 record)) =
+    some ⟨Payload.maskSum value, hvalid⟩
+⊢ encode ⟨Payload.maskSum value, hvalid⟩ = record
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:160:6: error: unsolved goals
+case polynomial.isTrue
+row : Fin 25
+record : Bytes
+coefficients : Coefficients
+hvalid : validRow row (Payload.polynomial coefficients)
+h✝ : ↑row = 2
+h :
+  ((RecordFrameCodec.parse 1 32 record).bind fun a =>
+      Option.map (fun root => ⟨Payload.c2Root root, ⋯⟩) (decodeState a)) =
+    some ⟨Payload.polynomial coefficients, hvalid⟩
+⊢ encode ⟨Payload.polynomial coefficients, hvalid⟩ = record
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:162:8: error: unsolved goals
+case polynomial.isFalse.isTrue
+row : Fin 25
+record : Bytes
+coefficients : Coefficients
+hvalid : validRow row (Payload.polynomial coefficients)
+h✝ : ↑row = 14
+h :
+  ((RecordFrameCodec.parse 3 32 record).bind fun a =>
+      Option.map (fun value => ⟨Payload.maskSum value, ⋯⟩) (decodeLow a)) =
+    some ⟨Payload.polynomial coefficients, hvalid⟩
+⊢ encode ⟨Payload.polynomial coefficients, hvalid⟩ = record
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:167:82: error: Application type mismatch: The argument
+  hd
+has type
+  Option.map (fun coefficients => ⟨Payload.polynomial coefficients, h✝⟩) (decodeCoefficients payloadBytes) =
+    some ⟨Payload.polynomial coefficients, hvalid⟩
+but is expected to have type
+  decodeCoefficients payloadBytes = some coefficients
+in the application
+  encodeCoefficients_of_decode payloadBytes coefficients hd
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:169:26: error: Invalid argument: Variable `payloadBytes` is not a proposition or let-declaration
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:164:10: error: unsolved goals
+case polynomial.isFalse.isFalse.isTrue
+row : Fin 25
+record : Bytes
+coefficients : Coefficients
+hvalid : validRow row (Payload.polynomial coefficients)
+h✝² : ¬↑row = 2
+h✝¹ : ¬↑row = 14
+h✝ : 15 ≤ ↑row
+payloadBytes : AspisV8R19.DuplexFrames.Bytes
+hp : RecordFrameCodec.parse 2 896 record = some payloadBytes
+hd :
+  Option.map (fun coefficients => ⟨Payload.polynomial coefficients, h✝⟩) (decodeCoefficients payloadBytes) =
+    some ⟨Payload.polynomial coefficients, hvalid⟩
+hbytes : encodeCoefficients coefficients = payloadBytes
+hsize : List.length payloadBytes = 896
+hrecord : record = RecordFrameCodec.frame 2 payloadBytes
+⊢ RecordFrameCodec.frame 2 (SemanticRecordCodec.payloadBytes (Payload.polynomial coefficients)) =
+    RecordFrameCodec.frame 2 payloadBytes
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:170:10: error: unsolved goals
+case polynomial.isFalse.isFalse.isFalse
+row : Fin 25
+record : Bytes
+coefficients : Coefficients
+hvalid : validRow row (Payload.polynomial coefficients)
+h✝² : ¬↑row = 2
+h✝¹ : ¬↑row = 14
+h✝ : ¬15 ≤ ↑row
+h : (∃ x, RecordFrameCodec.parse 0 0 record = some x) ∧ ⟨Payload.empty, ⋯⟩ = ⟨Payload.polynomial coefficients, hvalid⟩
+⊢ encode ⟨Payload.polynomial coefficients, hvalid⟩ = record
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:143:48: warning: This simp argument is unused:
+  hbytes
+
+Hint: Omit it from the simp argument list.
+  simp [encode, payloadBytes, payloadTag, hb̵y̵t̵e̵s̵,̵ ̵h̵record]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:155:50: warning: This simp argument is unused:
+  hbytes
+
+Hint: Omit it from the simp argument list.
+  simp [encode, payloadBytes, payloadTag, hb̵y̵t̵e̵s̵,̵ ̵h̵record]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticRecordCodec.lean:169:52: warning: This simp argument is unused:
+  hbytes
+
+Hint: Omit it from the simp argument list.
+  simp [encode, payloadBytes, payloadTag, hb̵y̵t̵e̵s̵,̵ ̵h̵record]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SemanticRecordCodec.decodeState_bytes' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.SemanticRecordCodec.encode_decodeState' depends on axioms: [propext, Quot.sound]
+'AspisR1.SemanticRecordCodec.decode_encode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticRecordCodec.encode_of_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticRecordCodec.polynomial_degree' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1

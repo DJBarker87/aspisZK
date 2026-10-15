@@ -145,6 +145,50 @@ into a semantic payload codec are:
 
 No source-correctness, probability, or security conclusion is made here.
 
+## Existing framing codec reuse
+
+The closest general parser is [`PrefixedStateCodec.lean`](lean/PrefixedStateCodec.lean:13).
+`parse pre a` requires the address bytes to have exactly `pre.length + 32`
+bytes and the exact prefix, then parses the final 32 bytes as a state.
+`parse_frameAddr` and `parse_sound` (lines 29–64) prove its roundtrip and
+reconstruction. This is reusable for fixed prefix plus one state, but it has
+no tag/u32-length/payload split and no variable-size payload parser.
+
+[`PublicInitFrame.lean`](lean/PublicInitFrame.lean:12) defines the P3 semantic
+initialization prefix and its four-byte length encoding. `frame` is that prefix
+followed by one state; `addr_bytes` exposes the flattened bytes. It also has
+the concrete row-zero `emptyRecord := [0,0,0,0,0]`, with `row0_bytes` proving
+those bytes are appended to `[0,160]` in the duplex address (lines 32–61).
+[`PublicInitParse.lean`](lean/PublicInitParse.lean:13) composes the fixed
+prefix parser with the public-byte `< 2^32` guard; `parse_sound` gives the
+entire exact initialization byte frame (lines 23–32). These declarations are
+initialization-specific, not reusable semantic row header parsing.
+
+[`TrailingStateFrame.lean`](lean/TrailingStateFrame.lean:14) supplies generic
+`frame pre s := pre ++ bytes s`, injectivity, suffix parsing, and
+`tailState_frameAddr` (lines 14–50). [`OpeningReseedFrame.lean`](lean/OpeningReseedFrame.lean:17)
+defines a distinct literal opening/reseed prefix plus one state, and
+`frame_binding` recovers its tag/state from equal frames (lines 39–45). Neither
+models a 5-byte record header.
+
+[`PrefixRecordFacts.lean`](lean/PrefixRecordFacts.lean:16) and
+[`PrefixRecordLength.lean`](lean/PrefixRecordLength.lean:15) establish
+membership, known-cell/read, and list-length facts for abstract typed `Rec M`
+sequences. They do not parse bytes. I found no existing Lean definition or
+theorem that parses `[tag][u32 little-endian length][payload]` generally or
+specializes it to rows 0–24. The immediate framing adapter still needs to
+validate the tag and declared length, isolate exactly that many payload bytes,
+and connect the concrete `LowWide`/coefficient payload decoders above to the
+generic `RawRoundDecode.Rec M` messages.
+
+The framing sources are pinned here for reuse: `PublicInitFrame.lean`
+SHA-256 `756b529e3685c3341064b9970f5cebe71991b67eeeb5c6476a93934359f9a65e`,
+`PublicInitParse.lean` `cd7137ec47e4374dc3e776ab01638b12cc7a842920a38980f6fccdb9dbdf775a`,
+`PrefixedStateCodec.lean` `4d1f42907769d91ec42dd81d7a66eac176386a5327c71411aa20dc8622bd1c4e`,
+`TrailingStateFrame.lean` `ebe717b3076421cc3f83b90a454c18bf1619f320feb65bc901aa3cb11c0e1711`,
+`OpeningReseedFrame.lean` `6624eb83586e4fff4b6e0f6686936baea1dca839c8174d81012bb64fc5fa032f`,
+and `PrefixRecordFacts.lean` `696a3982cbe3724e27bbd4b071087c6239ec8448779ddfd1eb8217007c25036f`.
+
 ## Source pins
 
 | File | SHA-256 |

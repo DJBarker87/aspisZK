@@ -1,0 +1,103 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordParserModel.lean:14:5: warning: Variable name `hlen` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordParserModel.lean:43:12: error: unsolved goals
+case mp.isTrue.nil
+tag : AspisV8R19.DuplexFrames.Byte
+size : ℕ
+payload : Bytes
+hsize : size < 2 ^ 32
+hlen : 0 = 5 + size
+hp :
+  (match [], hlen with
+    | [], hlen => none
+    | actualTag :: tail, hlen =>
+      if actualTag = tag then
+        match fixedBytes? 4 (List.take 4 tail) with
+        | none => none
+        | some wordBytes => if ↑(decodeWordLE wordBytes) = size then some (List.drop 4 tail) else none
+      else none) =
+    some payload
+⊢ List.length payload = size ∧ [] = RecordFrameCodec.frame tag payload
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordParserModel.lean:52:14: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordParserModel.lean:85:8: error: unsolved goals
+case h_2
+tag : AspisV8R19.DuplexFrames.Byte
+size : ℕ
+payload : Bytes
+hsize : size < 2 ^ 32
+actualTag : AspisV8R19.DuplexFrames.Byte
+tail : List AspisV8R19.DuplexFrames.Byte
+hlen : tail.length + 1 = 5 + size
+bytes✝ : Bytes
+hlen✝¹ : List.length bytes✝ = 5 + size
+actualTag✝ : AspisV8R19.DuplexFrames.Byte
+tail✝ : List AspisV8R19.DuplexFrames.Byte
+hlen✝ : (actualTag✝ :: tail✝).length = 5 + size
+heq✝¹ : actualTag :: tail = actualTag✝ :: tail✝
+heq✝ : hlen ≍ hlen✝
+hp :
+  actualTag✝ = tag ∧
+    (match fixedBytes? 4 (List.take 4 tail✝) with
+      | none => none
+      | some wordBytes => if ↑(decodeWordLE wordBytes) = size then some (List.drop 4 tail✝) else none) =
+      some payload
+⊢ List.length payload = size ∧ actualTag :: tail = RecordFrameCodec.frame tag payload
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordParserModel.lean:96:18: error(lean.unknownIdentifier): Unknown identifier `fixedBytes?_ofFn`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordParserModel.lean:87:2: error: unsolved goals
+case mpr
+tag : AspisV8R19.DuplexFrames.Byte
+size : ℕ
+payload : Bytes
+hsize : size < 2 ^ 32
+hplen : List.length payload = size
+word : RawWord := ⟨size, ⋯⟩
+hlen : List.length (RecordFrameCodec.frame tag payload) = 5 + size
+hbytes : PublicInitFrame.lengthBytes size = List.ofFn (encodeWordLE word)
+hfixed : fixedBytes? 4 (PublicInitFrame.lengthBytes size) = some (encodeWordLE word)
+⊢ size + 1 + 1 + 1 + 1 + 1 = 5 + size ∧
+    (match
+        fixedBytes? 4
+          [encodeWordLE ⟨size, ⋯⟩ 0, encodeWordLE ⟨size, ⋯⟩ 1, encodeWordLE ⟨size, ⋯⟩ 2, encodeWordLE ⟨size, ⋯⟩ 3] with
+      | none => none
+      | some wordBytes => if ↑(decodeWordLE wordBytes) = size then some payload else none) =
+      some payload
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordParserModel.lean:50:20: warning: This simp argument is unused:
+  hfixed
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵f̵i̵x̵e̵d̵]̵ ̵at hp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordParserModel.lean:98:13: warning: This simp argument is unused:
+  hlen
+
+Hint: Omit it from the simp argument list.
+  simp [parse, AspisR1.RecordFrameCodec.frame, AspisR1.RecordFrameCodec.header,
+  ̵  ̵ ̵ ̵ ̵ ̵hplen, hl̵b̲y̲t̲en̵s̲,
+  ̲ h̵b̵y̵t̵e̵s̵,̵  ̲ ̲ ̲ ̲hfixed, word, decodeWordLE_encodeWordLE]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordParserModel.lean:98:27: warning: This simp argument is unused:
+  hfixed
+
+Hint: Omit it from the simp argument list.
+  simp [parse, AspisR1.RecordFrameCodec.frame, AspisR1.RecordFrameCodec.header,
+  ̵  ̵ ̵ ̵ ̵ ̵hplen, hlen,
+  ̲  ̲ ̲ ̲ ̲ ̲hbytes, h̵f̵i̵x̵e̵d̵,̵ ̵word, decodeWordLE_encodeWordLE]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordParserModel.lean:98:41: warning: This simp argument is unused:
+  decodeWordLE_encodeWordLE
+
+Hint: Omit it from the simp argument list.
+  simp [parse, AspisR1.RecordFrameCodec.frame, AspisR1.RecordFrameCodec.header, hplen, hlen,
+  ̲  ̲ ̲ ̲ ̲ ̲hbytes, hfixed, w̵o̵r̵d̵,̵ ̵d̵e̵c̵o̵d̵e̵W̵o̵r̵d̵L̵E̵_̵e̵n̵c̵o̵d̵e̵W̵o̵r̵d̵L̵E̵]̵w̲o̲r̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.RecordParserModel.take_five_decomposition' depends on axioms: [propext]
+'AspisR1.RecordParserModel.parse_eq_some_iff' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.RecordParserModel.parse_eq_recordFrame_parse' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

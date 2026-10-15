@@ -1,0 +1,64 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:18:2: error: Tactic `apply` failed: could not unify the conclusion of `@List.ofFn_injective`
+  ?a₁ = ?a₂
+with the goal
+  PublicInitFrame.lengthBytes n = List.ofFn (encodeWordLE ⟨n, ⋯⟩)
+
+Note: The full type of `@List.ofFn_injective` is
+  ∀ {α : Type ?u.18} {n : ℕ}, Function.Injective List.ofFn
+
+n : ℕ
+hn : n < 2 ^ 32
+⊢ PublicInitFrame.lengthBytes n = List.ofFn (encodeWordLE ⟨n, ⋯⟩)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:34:47: error: Type mismatch
+  Eq.symm henc
+has type
+  encodeWordLE word = bytes
+but is expected to have type
+  bytes = encodeWordLE word
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:44:4: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:48:21: error: Ambiguous term
+  Byte
+Possible interpretations:
+  RetainedFieldByteCodec.Byte : Type
+  
+  AspisV8R19.DuplexFrames.Byte : Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:54:46: error: Ambiguous term
+  Byte
+Possible interpretations:
+  RetainedFieldByteCodec.Byte : Type
+  
+  AspisV8R19.DuplexFrames.Byte : Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:67:46: error: Ambiguous term
+  Byte
+Possible interpretations:
+  RetainedFieldByteCodec.Byte : Type
+  
+  AspisV8R19.DuplexFrames.Byte : Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:76:20: error: type expected, got
+  (List.take 4 (List.drop 1 bytes) : List AspisV8R19.DuplexFrames.Byte)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:71:2: error: unsolved goals
+case neg
+tag : sorry
+size : ℕ
+bytes : Bytes
+hsize : size < 2 ^ 32
+htotal : List.length bytes = 5 + size
+hlen5 : 5 ≤ List.length bytes
+hheader : ¬List.take 5 bytes = RecordFrameCodec.header sorry size
+⊢ rustParse tag size bytes = RecordFrameCodec.parse sorry size bytes
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:69:80: error: unsolved goals
+case neg
+tag : sorry
+size : ℕ
+bytes : Bytes
+hsize : size < 2 ^ 32
+htotal : ¬List.length bytes = 5 + size
+⊢ rustParse tag size bytes = RecordFrameCodec.parse sorry size bytes
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:76:43: error: unexpected token '='; expected command
+'AspisR1.RecordLengthCodec.lengthBytes_eq_encodeWordLE' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.RecordLengthCodec.decodeWordLE_val_eq_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RecordLengthCodec.rustParse_eq_recordFrame_parse' depends on axioms: [propext, sorryAx]
+exit=1

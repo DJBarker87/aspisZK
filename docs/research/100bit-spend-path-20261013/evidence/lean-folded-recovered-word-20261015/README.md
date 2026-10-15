@@ -1,0 +1,7 @@
+# Folded recovered word evidence
+
+This module defines the strict four-WideExact folded-leaf projection at six-level Merkle paths. Missing or malformed packed leaves map to the zero folded value. A successful strict folded decode selects the requested slot, and the existing folded first-read table-stability theorem transfers this total word from the represented pre-read table to the consistent full trace with its original size, event, read, consistency, and table premises. The module does not identify the folded value with C2 semantics, construct source paths, or establish protocol acceptance/security.
+
+Final green target `R1FoldedRecoveredWord`, attempt `folded-recovered-word-f`, exit 0, 1.76 s, peak RSS 3,332,916 KiB, zero swap; cgroup `MemoryHigh=4G`, `MemoryMax=6G`, `MemorySwapMax=0`, `TasksMax=128`. Its three public audits report `[propext, Classical.choice, Quot.sound]`, `[propext, Quot.sound]`, and `[propext, Classical.choice, Quot.sound]` in declaration order. Attempts b–e failed and are preserved. A zero-byte suffix-a source snapshot existed without a receipt; the runner refused to overwrite it, so it is retained as an unreceipted, uncompiled artifact, not a compile attempt.
+
+Final source SHA-256: `8d14ecd9132e285dfead8c0cf26f2ad9207ef65580e92859da867b87cbf1593f`. All attempt snapshots, receipts, output/time logs, imported source/object pins, and runner pins are recorded in `source-manifest.json`.

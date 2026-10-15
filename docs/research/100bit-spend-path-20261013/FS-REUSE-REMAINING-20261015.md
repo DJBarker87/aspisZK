@@ -111,3 +111,29 @@ implication. Circle values do not require an OOD uniqueness event in the new
 joint-list argument; this observation still needs to be reflected in the final
 concrete classifier. Hash-collision and root/child prediction events must also
 remain in the full experiment's accounting.
+
+## Fresh-attempt composition and typed representation progress
+
+`PerAttemptEnvelope` proves that all four event families fit
+`B = 15 / 2^109`, with `33B < 2^-100`. `UnifiedEventDensity` dispatches the
+actual semantic/opening/query/rho row indices and proves the uniform bound;
+it also retains the `N * B` causal first-hit conclusion. Rows 25 and 26 are
+false in this classifier, so the final acceptance implication must justify
+that choice using the joint-list extraction argument.
+
+`FreshAttemptBound` defines an adaptive 33-row interpreter with fresh sampler
+answers and explicit message choice/context update. `UnifiedFreshAttempt`
+composes the four existing density adapters to obtain a probability below
+`2^-100` for its classifier-hit event. It introduces no new density assumption
+beyond the adapters' existing callback and sampler parameters. The fresh
+experiment has no hidden retries and is not a shared-oracle execution;
+its result does not justify replacing a hash-query count by 33.
+
+The strict semantic record/coefficient codecs now reconstruct accepted
+payloads and provide the degree bound. The typed C1/C2 context and folded-word
+maps are supplied, and modeled accepted openings give their full-trace typed
+values under the existing no-hash-event premises. The next connections are
+the decoded record-to-semantic-prefix view, causal selection of each callback,
+and acceptance-to-hit-or-extraction. These representation results do not yet
+discharge those connections, a public efficient extractor, source refinement,
+or zero knowledge.

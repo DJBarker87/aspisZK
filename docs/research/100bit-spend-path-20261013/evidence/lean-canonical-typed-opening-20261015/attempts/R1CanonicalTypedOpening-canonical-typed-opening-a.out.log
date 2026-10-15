@@ -1,0 +1,106 @@
+'AspisR1.CanonicalTypedOpening.c1_decode_of_no_events' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CanonicalTypedOpening.c2_decode_of_no_events' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CanonicalTypedOpening.lean:128:15: error: Ambiguous term
+  Folded
+Possible interpretations:
+  FoldedRecoveredWord.Folded : Type
+  
+  FoldedLeafCodec.Folded : Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CanonicalTypedOpening.lean:129:17: error: Application type mismatch: The argument
+  FoldedRecoveredWord.packedAt (pre ++ post) root leaf
+has type
+  Option (List AspisV8R19.DuplexFrames.Byte)
+but is expected to have type
+  List RetainedFieldByteCodec.Byte
+in the application
+  decodeFolded (FoldedRecoveredWord.packedAt (pre ++ post) root leaf)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CanonicalTypedOpening.lean:140:17: error: Invalid argument: Variable `hdecode` is not a proposition or let-declaration
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CanonicalTypedOpening.lean:130:22: error: unsolved goals
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+Qtot : ℕ
+H : Addr L → State
+pre post : List (Addr L × State)
+hcons : ∀ q ∈ pre ++ post, q.2 = H q.1
+state : State
+tail : Bytes
+htail : List.length tail = 224
+hframe : 294 ≤ L
+hsize : 162 ≤ L
+hnode : 257 ≤ L
+packed salt : Bytes
+hw : List.length packed = 128
+hs : List.length salt = 32
+leaf : Fin 65536
+path : Merkle32Path.Path (slots 6 ↑leaf)
+root : State
+hcommit : Read pre (CommitmentRootFrames.foldedAddr state root tail htail hframe)
+haccept : (eval H (CanonicalMerkleProgram.program path (leafInput 114 packed salt))).2 = root
+hopen :
+  ∀ (a : Addr L),
+    Read (eval H (CanonicalMerkleProgram.program path (leafInput 114 packed salt))).1 a → Read (pre ++ post) a
+hQ : firstReads emptyTable (pre ++ post) ≤ Qtot
+hnoColl : ¬hitsBad (badColl p Qtot) emptyTable (pre ++ post)
+hnoChild : ¬hitsBad (ParsedTargetsCollision.bad MerkleChildTargets.pred Qtot) emptyTable (pre ++ post)
+hnoRoot : ¬hitsBad (ParsedTargetsCollision.bad CommitmentRootTargets.pred Qtot) emptyTable (pre ++ post)
+payload : sorry
+hdecode : sorry
+hbefore : recoverAt 114 128 pre (slots 6 ↑leaf) root = some (packed, salt)
+hfull : recoverAt 114 128 (pre ++ post) (slots 6 ↑leaf) root = some (packed, salt)
+hpacked : FoldedRecoveredWord.packedAt (pre ++ post) root leaf = some packed
+⊢ sorry ()
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CanonicalTypedOpening.lean:140:8: warning: This simp argument is unused:
+  hpacked
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵p̵a̵c̵k̵e̵d̵,̵ ̵h̵d̵e̵c̵o̵d̵e̵]̵[̲h̲d̲e̲c̲o̲d̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CanonicalTypedOpening.lean:142:14: error(lean.unknownIdentifier): Unknown constant `folded_decode_of_no_events`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CanonicalTypedOpening.lean:165:15: error: Ambiguous term
+  Folded
+Possible interpretations:
+  FoldedRecoveredWord.Folded : Type
+  
+  FoldedLeafCodec.Folded : Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CanonicalTypedOpening.lean:168:22: error(lean.unknownIdentifier): Unknown identifier `folded_decode_of_no_events`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CanonicalTypedOpening.lean:167:80: error: unsolved goals
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+Qtot : ℕ
+H : Addr L → State
+pre post : List (Addr L × State)
+hcons : ∀ q ∈ pre ++ post, q.2 = H q.1
+state : State
+tail : Bytes
+htail : List.length tail = 224
+hframe : 294 ≤ L
+hsize : 162 ≤ L
+hnode : 257 ≤ L
+packed salt : Bytes
+hw : List.length packed = 128
+hs : List.length salt = 32
+leaf : Fin 65536
+path : Merkle32Path.Path (slots 6 ↑leaf)
+root : State
+hcommit : Read pre (CommitmentRootFrames.foldedAddr state root tail htail hframe)
+haccept : (eval H (CanonicalMerkleProgram.program path (leafInput 114 packed salt))).2 = root
+hopen :
+  ∀ (a : Addr L),
+    Read (eval H (CanonicalMerkleProgram.program path (leafInput 114 packed salt))).1 a → Read (pre ++ post) a
+hQ : firstReads emptyTable (pre ++ post) ≤ Qtot
+hnoColl : ¬hitsBad (badColl p Qtot) emptyTable (pre ++ post)
+hnoChild : ¬hitsBad (ParsedTargetsCollision.bad MerkleChildTargets.pred Qtot) emptyTable (pre ++ post)
+hnoRoot : ¬hitsBad (ParsedTargetsCollision.bad CommitmentRootTargets.pred Qtot) emptyTable (pre ++ post)
+payload : sorry
+hdecode : sorry
+i : Fin 262144
+hindex : foldedIndex i = leaf
+⊢ wordAt (pre ++ post) root i = sorry
+'AspisR1.CanonicalTypedOpening.folded_word_of_no_events' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

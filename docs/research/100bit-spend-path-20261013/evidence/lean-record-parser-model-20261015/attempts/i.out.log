@@ -1,0 +1,45 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordParserModel.lean:96:20: error: unsolved goals
+tag : AspisV8R19.DuplexFrames.Byte
+size : ℕ
+payload : Bytes
+hsize : size < 2 ^ 32
+hplen : List.length payload = size
+word : RawWord := ⟨size, ⋯⟩
+hbytes : PublicInitFrame.lengthBytes size = List.ofFn (encodeWordLE word)
+⊢ 4 + size + 1 = 5 + size
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordParserModel.lean:119:6: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordParserModel.lean:120:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑(decodeWordLE (encodeWordLE word)) = size then ?m.536 else ?m.537
+in the target expression
+  (match some (encodeWordLE word) with
+    | none => none
+    | some wordBytes =>
+      if ↑(decodeWordLE wordBytes) = size then some (List.drop 4 (PublicInitFrame.lengthBytes size ++ payload))
+      else none) =
+    some payload
+
+case mpr
+tag : AspisV8R19.DuplexFrames.Byte
+size : ℕ
+payload : Bytes
+hsize : size < 2 ^ 32
+hplen : List.length payload = size
+word : RawWord := ⟨size, ⋯⟩
+hbytes : PublicInitFrame.lengthBytes size = List.ofFn (encodeWordLE word)
+hlen : (tag :: PublicInitFrame.lengthBytes size ++ payload).length = 5 + size
+htake : List.take 4 (PublicInitFrame.lengthBytes size ++ payload) = PublicInitFrame.lengthBytes size
+hfixed : fixedBytes? 4 (List.take 4 (PublicInitFrame.lengthBytes size ++ payload)) = some (encodeWordLE word)
+hdecode : ↑(decodeWordLE (encodeWordLE word)) = size
+⊢ (match some (encodeWordLE word) with
+    | none => none
+    | some wordBytes =>
+      if ↑(decodeWordLE wordBytes) = size then some (List.drop 4 (PublicInitFrame.lengthBytes size ++ payload))
+      else none) =
+    some payload
+'AspisR1.RecordParserModel.take_five_decomposition' depends on axioms: [propext]
+'AspisR1.RecordParserModel.parse_eq_some_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RecordParserModel.parse_eq_recordFrame_parse' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

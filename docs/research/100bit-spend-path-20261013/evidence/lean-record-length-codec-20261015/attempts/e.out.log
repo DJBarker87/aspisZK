@@ -1,0 +1,111 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:63:4: error: unsolved goals
+case isTrue.h.«0»
+xs : List AspisV8R19.DuplexFrames.Byte
+hlen : xs.length = 4
+i : ℕ
+hi1 : 0 < (List.ofFn fun index => xs.get ⟨↑index, ⋯⟩).length
+hi2 : 0 < xs.length
+hi4 : 0 < 4
+⊢ (Fin.foldr 4 (fun x1 x2 => xs[↑x1] :: x2) [])[0] = xs[0]
+
+case isTrue.h.«1»
+xs : List AspisV8R19.DuplexFrames.Byte
+hlen : xs.length = 4
+i : ℕ
+hi1 : 1 < (List.ofFn fun index => xs.get ⟨↑index, ⋯⟩).length
+hi2 : 1 < xs.length
+hi4 : 1 < 4
+⊢ (Fin.foldr 4 (fun x1 x2 => xs[↑x1] :: x2) [])[1] = xs[1]
+
+case isTrue.h.«2»
+xs : List AspisV8R19.DuplexFrames.Byte
+hlen : xs.length = 4
+i : ℕ
+hi1 : 2 < (List.ofFn fun index => xs.get ⟨↑index, ⋯⟩).length
+hi2 : 2 < xs.length
+hi4 : 2 < 4
+⊢ (Fin.foldr 4 (fun x1 x2 => xs[↑x1] :: x2) [])[2] = xs[2]
+
+case isTrue.h.«3»
+xs : List AspisV8R19.DuplexFrames.Byte
+hlen : xs.length = 4
+i : ℕ
+hi1 : 3 < (List.ofFn fun index => xs.get ⟨↑index, ⋯⟩).length
+hi2 : 3 < xs.length
+hi4 : 3 < 4
+⊢ (Fin.foldr 4 (fun x1 x2 => xs[↑x1] :: x2) [])[3] = xs[3]
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:62:12: warning: This simp argument is unused:
+  List.length_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵o̵f̵F̵n̵,̵ ̵h̵l̵e̵n̵]̵[̲h̲l̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:65:44: warning: This simp argument is unused:
+  hlen
+
+Hint: Omit it from the simp argument list.
+  simp [List.ofFn,̵ ̵h̵l̵e̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:80:8: error: Type mismatch: After simplification, term
+  hfield
+ has type
+  @Eq (List AspisV8R19.DuplexFrames.Byte) (List.take 4 (List.drop 1 (tag :: rest))) (PublicInitFrame.lengthBytes size)
+but is expected to have type
+  @Eq (List AspisV8R19.DuplexFrames.Byte) (List.take 4 rest) (PublicInitFrame.lengthBytes size)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:94:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if (List.take 4 (List.drop 1 bytes)).length = 4 then ?m.106 else ?m.107
+in the target expression
+  (if h : (List.take 4 (List.drop 1 bytes)).length = 4 then
+      some fun index => (List.take 4 (List.drop 1 bytes)).get ⟨↑index, ⋯⟩
+    else none) =
+    some words
+
+tag : AspisV8R19.DuplexFrames.Byte
+size : ℕ
+bytes : Bytes
+hsize : size < 2 ^ 32
+htotal : List.length bytes = 5 + size
+hlen5 : 5 ≤ List.length bytes
+hfieldlen : (List.take 4 (List.drop 1 bytes)).length = 4
+words : WordBytes := fun i => (List.take 4 (List.drop 1 bytes)).get ⟨↑i, ⋯⟩
+⊢ (if h : (List.take 4 (List.drop 1 bytes)).length = 4 then
+      some fun index => (List.take 4 (List.drop 1 bytes)).get ⟨↑index, ⋯⟩
+    else none) =
+    some words
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:89:30: warning: This simp argument is unused:
+  List.length_drop
+
+Hint: Omit it from the simp argument list.
+  simp [List.length_take,̵ ̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵d̵r̵o̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:125:22: warning: This simp argument is unused:
+  List.take_cons
+
+Hint: Omit it from the simp argument list.
+  simp [L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵c̵o̵n̵s̵,̵ ̵hrest]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:125:38: warning: This simp argument is unused:
+  hrest
+
+Hint: Omit it from the simp argument list.
+  simp [List.take_cons,̵ ̵h̵r̵e̵s̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RecordLengthCodec.lean:137:15: warning: This simp argument is unused:
+  if_pos htotal
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵f̵_̵p̵o̵s̵ ̵h̵t̵o̵t̵a̵l̵,̵ ̵h̵f̵i̵x̵e̵d̵,̵[̲h̲f̲i̲x̲e̲d̲,̲ Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.RecordLengthCodec.lengthBytes_eq_encodeWordLE' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RecordLengthCodec.decodeWordLE_val_eq_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RecordLengthCodec.rustParse_eq_recordFrame_parse' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
