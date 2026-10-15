@@ -3,9 +3,10 @@ import PublicRawAmountGuardAgreement
 import R1PublicSourceBoundary
 import R1PublicCodecAgreement
 
-/-! UNCOMPILED CANDIDATE: requires the extracted modules and their Aeneas
-dependencies to be checked in the same Lean 4.32 environment as the R1 codecs.
-Historical Lean 4.31 receipts do not check this composition.
+/-! One-kernel Lean 4.32 composition of the extracted modules and R1 codecs.
+Focused build, runtime, dependency and axiom receipts are retained in
+`evidence/extracted-primary-port-432-20261016`. Historical Lean 4.31 receipts
+are not used to check this composition.
 
 The input projection and byte conversion are fixed by RawBridge431. These
 statements concern the actual generated Lean computations, including an explicit
