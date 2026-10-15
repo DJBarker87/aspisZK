@@ -4395,3 +4395,53 @@ closed form is given); if no proof route is found, (B) enters the theorem as
 an explicit numerically checked premise, labelled in the ledger alongside
 OT-open, and the design says so. D21's Lean statement waits for it. J1–J3 and
 J5a remain releasable. Verdict unchanged. Host counter: next 3426.
+
+### Lead acceptance of T2b-2b-D′ (2026-10-15); D23: (B) enters as premise B-open; privacy claim stays conditional
+
+T2b-2b-D′ (`93e0830da`, Opus agent; `t2b2b/DESIGN-T2b-2b-Dprime.txt`, probe
+Z8e in `z4/z8e.rs`, `z4/z8e-runs/`) is accepted as the working design.
+Z8e receipts: structure A, vectors 0–4, all exit 0, swap 0, peak RSS 324 MB
+per job, cgroup peak 1.42 GB under MemoryMax 4G, launches gated on no other
+aspis scope (D22.4 satisfied), 211 source hashes match.
+
+**D23.1 D-high explained.** In the natural basis, V_D = B₀ ∩ {f0..f13 ∈
+lowShadow} ∩ ker etaRel 28 (1,912 − 96 − 8 = 1,808). "⊆" is argued in the
+design (Facts 1–2: multiplication by the chord line moves natural indices up
+by one or down only by clearing trailing ones; the conjugate round_eval
+relation); "=" is measured (annihilator 304 limbs = 25 relations + 96 Ψ_lo +
+8 etaRel, unexplained 0). V_G = B₀ ∩ ker etaRel 27 exactly (1,904). This
+replaces the withdrawn x^28 law.
+
+**D23.2 (B) is not proved for all query sets.** It reduces to DHighChar⊇ and
+GCover; the query-dependent parts (TP_D and Gb) have the same obstacle as
+OT-open (fixed or row-side functionals must stay independent of the opened
+evaluations at 22 arbitrary fibres; the dense inactive-row sum rules out the
+obvious uniform witness). The T2b-2b theorem takes `hBc : BCond` as a named
+hypothesis; narrower forms (assembly, DHighChar⊇ ∧ GCover, Ga ∧ Gb) are J7′
+lemmas so the theorem does not change when a piece is later proved.
+
+**D23.3 Ledger status.** B-open and OT-open are carried together as the
+"transversality premises" family, each checked numerically on the stated
+vectors and **with no failure-mass bound**. A premise checked on 35 challenge
+vectors is evidence, not a bound on the probability over the verifier's query
+draw. Therefore the R0 privacy result, once J1–J9 land, is: statistical HVZK
+and ZK_FS with the stated ledger terms **conditional on the transversality
+premises**. No release text may state unconditional statistical
+zero-knowledge until those premises carry a proved mass bound or are removed
+by a mask-design change. The new conditional rows (C_ll invertible, GoodWrap,
+G2, Ga, γ ∉ K₄, σ) enter the ledger only if BCond is later discharged by this
+route. Good₃ is unchanged.
+
+**D23.4 Job order.** J1, J2, J3, J5a unchanged and releasable; J4 next; J7 is
+replaced by J7′ (`R0Z/BatchedBlock.lean`, structural, writable before J5b–J6);
+J7a (`R0Z/NaturalShift.lean`, symbolic, needed only to narrow the premise);
+J5b, J5c, J6 unchanged; J9 takes hBc and the Q′ premises; J10 is the research
+item for TP_D, Gb and the transversality bound. The two Lean premises the
+route assumes (T_{2^k}(node) ≠ 0 at the line nodes; transport identity on rows
+≥ 479) are recorded as J7a/J10 obligations.
+
+**D23.5 Open for the user.** Removing the transversality premises by a
+mask-design change (extra mask randomness on D/G sized to the 22 openings) is
+a protocol change, not a proof task; it is listed, not decided.
+
+Verdict unchanged. Host counter: next 3426.
