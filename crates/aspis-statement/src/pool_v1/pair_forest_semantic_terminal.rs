@@ -2009,6 +2009,31 @@ pub mod r0 {
                 }
                 Ok(())
             }
+            // The fixed width is checked at both call sites. Explicit calls
+            // avoid nested frontier loops during source extraction.
+            fn frontier(out: &mut Vec<u8>, values: &[Digest; 20]) -> Result<(), Error> {
+                fields(out, &values[0])?;
+                fields(out, &values[1])?;
+                fields(out, &values[2])?;
+                fields(out, &values[3])?;
+                fields(out, &values[4])?;
+                fields(out, &values[5])?;
+                fields(out, &values[6])?;
+                fields(out, &values[7])?;
+                fields(out, &values[8])?;
+                fields(out, &values[9])?;
+                fields(out, &values[10])?;
+                fields(out, &values[11])?;
+                fields(out, &values[12])?;
+                fields(out, &values[13])?;
+                fields(out, &values[14])?;
+                fields(out, &values[15])?;
+                fields(out, &values[16])?;
+                fields(out, &values[17])?;
+                fields(out, &values[18])?;
+                fields(out, &values[19])?;
+                Ok(())
+            }
             let p = self.semantic();
             let mut out = Vec::new();
             out.push(match p.variant {
@@ -2030,13 +2055,9 @@ pub mod r0 {
             let source = p.transition.live_snapshot;
             let after = p.transition.candidate_afterstate;
             out.extend_from_slice(&source.next_pair_index.to_le_bytes());
-            for digest in &source.frontier {
-                fields(&mut out, digest)?;
-            }
+            frontier(&mut out, &source.frontier)?;
             fields(&mut out, &after.next_root)?;
-            for digest in &after.next_frontier {
-                fields(&mut out, digest)?;
-            }
+            frontier(&mut out, &after.next_frontier)?;
             Ok(out)
         }
         /// Fast K path. D is deliberately absent from the terminal formula,
@@ -2112,4 +2133,183 @@ pub mod r0 {
         values
     }
 
+}
+
+
+#[cfg(all(test, feature = "r0"))]
+mod public_serializer_tests {
+    use super::*;
+    use crate::pool_v1::{PoolV1PairLiveSnapshotV1, PoolV1PairVerifiedAfterstateV1};
+    use alloc::vec::Vec;
+    use aspis_core::{field::P, state_only_prefix::r0::Error};
+
+    fn digest(seed: u32) -> Digest {
+        core::array::from_fn(|limb| M31(seed + limb as u32))
+    }
+
+    fn fixture() -> (
+        PoolV1PrivateTransferPublicV1,
+        PoolV1WithdrawalPublicV1,
+        PoolV1PairLatePublicStatementV1,
+    ) {
+        let transfer = PoolV1PrivateTransferPublicV1 {
+            pool: [1; 32],
+            deployment_domain: [2; 32],
+            anchor_sequence: 3,
+            anchor_root: digest(10),
+            nullifier: digest(20),
+            asset_id: M31(30),
+            recipient_commitment: digest(40),
+            change_commitment: digest(50),
+        };
+        let withdrawal = PoolV1WithdrawalPublicV1 {
+            pool: transfer.pool,
+            deployment_domain: transfer.deployment_domain,
+            anchor_sequence: transfer.anchor_sequence,
+            anchor_root: transfer.anchor_root,
+            nullifier: transfer.nullifier,
+            asset_id: transfer.asset_id,
+            amount: 61,
+            destination_token_account: [7; 32],
+            change_commitment: transfer.change_commitment,
+        };
+        let transition = PoolV1PairLatePublicStatementV1 {
+            live_snapshot: PoolV1PairLiveSnapshotV1 {
+                pool: transfer.pool,
+                deployment_domain: transfer.deployment_domain,
+                sequence: 8,
+                next_pair_index: 0x0102_0304_0506_0708,
+                current_root: digest(70),
+                frontier: core::array::from_fn(|row| digest(100 + 8 * row as u32)),
+            },
+            candidate_afterstate: PoolV1PairVerifiedAfterstateV1 {
+                next_pair_index: 9,
+                next_root: digest(300),
+                next_frontier: core::array::from_fn(|row| digest(400 + 8 * row as u32)),
+            },
+        };
+        (transfer, withdrawal, transition)
+    }
+
+    // Retain the previous loop implementation as a differential oracle. The
+    // fixture performs no proof generation or Merkle-tree construction.
+    fn loop_reference(public: r0::Public<'_>) -> Result<Vec<u8>, Error> {
+        fn fields(out: &mut Vec<u8>, values: &[M31]) -> Result<(), Error> {
+            for value in values {
+                if value.0 >= P {
+                    return Err(Error::Public);
+                }
+                out.extend_from_slice(&value.0.to_le_bytes());
+            }
+            Ok(())
+        }
+        let p = match public {
+            r0::Public::Transfer(p, t) => private_public(p, t),
+            r0::Public::Withdrawal(p, t) => withdrawal_public(p, t),
+        };
+        let mut out = Vec::new();
+        out.push(match p.variant {
+            CompiledVariant::PrivateTransfer => 0,
+            CompiledVariant::Withdrawal => 1,
+        });
+        fields(&mut out, &p.anchor)?;
+        fields(&mut out, &p.nullifier)?;
+        fields(&mut out, &[p.asset_id])?;
+        out.push(u8::from(p.recipient.is_some()));
+        if let Some(value) = p.recipient {
+            fields(&mut out, &value)?;
+        }
+        fields(&mut out, &p.change)?;
+        out.push(u8::from(p.withdrawal_amount.is_some()));
+        if let Some(value) = p.withdrawal_amount {
+            fields(&mut out, &[M31(value)])?;
+        }
+        let source = p.transition.live_snapshot;
+        let after = p.transition.candidate_afterstate;
+        out.extend_from_slice(&source.next_pair_index.to_le_bytes());
+        for digest in &source.frontier {
+            fields(&mut out, digest)?;
+        }
+        fields(&mut out, &after.next_root)?;
+        for digest in &after.next_frontier {
+            fields(&mut out, digest)?;
+        }
+        Ok(out)
+    }
+
+    fn rejects_like_reference(public: r0::Public<'_>) {
+        assert_eq!(loop_reference(public), Err(Error::Public));
+        assert_eq!(public.public_bytes(), Err(Error::Public));
+    }
+
+    #[test]
+    fn explicit_frontiers_match_loop_serializer_for_both_variants() {
+        let (transfer, withdrawal, mut transition) = fixture();
+        for index in [0, 1, (1 << 20) - 1, u64::MAX] {
+            transition.live_snapshot.next_pair_index = index;
+            let variants = [
+                r0::Public::Transfer(&transfer, &transition),
+                r0::Public::Withdrawal(&withdrawal, &transition),
+            ];
+            for (variant, public) in variants.into_iter().enumerate() {
+                let actual = public.public_bytes().unwrap();
+                assert_eq!(actual, loop_reference(public).unwrap());
+                assert_eq!(actual[0], variant as u8);
+                assert_eq!(actual.len(), if variant == 0 { 1455 } else { 1427 });
+            }
+        }
+    }
+
+    #[test]
+    fn explicit_frontiers_reject_each_noncanonical_serialized_field() {
+        let (transfer, withdrawal, transition) = fixture();
+        for bad in [P, u32::MAX] {
+            for limb in 0..DIGEST_ELEMS {
+                for field in 0..4 {
+                    let mut p = transfer;
+                    match field {
+                        0 => p.anchor_root[limb] = M31(bad),
+                        1 => p.nullifier[limb] = M31(bad),
+                        2 => p.recipient_commitment[limb] = M31(bad),
+                        _ => p.change_commitment[limb] = M31(bad),
+                    }
+                    rejects_like_reference(r0::Public::Transfer(&p, &transition));
+                }
+                for field in 0..3 {
+                    let mut p = withdrawal;
+                    match field {
+                        0 => p.anchor_root[limb] = M31(bad),
+                        1 => p.nullifier[limb] = M31(bad),
+                        _ => p.change_commitment[limb] = M31(bad),
+                    }
+                    rejects_like_reference(r0::Public::Withdrawal(&p, &transition));
+                }
+                let mut t = transition;
+                t.candidate_afterstate.next_root[limb] = M31(bad);
+                rejects_like_reference(r0::Public::Transfer(&transfer, &t));
+                rejects_like_reference(r0::Public::Withdrawal(&withdrawal, &t));
+                for row in 0..20 {
+                    for after in [false, true] {
+                        let mut t = transition;
+                        if after {
+                            t.candidate_afterstate.next_frontier[row][limb] = M31(bad);
+                        } else {
+                            t.live_snapshot.frontier[row][limb] = M31(bad);
+                        }
+                        rejects_like_reference(r0::Public::Transfer(&transfer, &t));
+                        rejects_like_reference(r0::Public::Withdrawal(&withdrawal, &t));
+                    }
+                }
+            }
+            let mut p = transfer;
+            p.asset_id = M31(bad);
+            rejects_like_reference(r0::Public::Transfer(&p, &transition));
+            let mut p = withdrawal;
+            p.asset_id = M31(bad);
+            rejects_like_reference(r0::Public::Withdrawal(&p, &transition));
+            p = withdrawal;
+            p.amount = bad;
+            rejects_like_reference(r0::Public::Withdrawal(&p, &transition));
+        }
+    }
 }
