@@ -1,0 +1,53 @@
+J1.a: fixed projection from the extracted public serializer
+Base b029ff85a8ecb3cea2e37c485327f809dbd5357d; local focused Lean 4.31 checks.
+
+PublicRawCore.lean is a new pure Std carrier and serializer. Byte, Word and
+Index are Fin256, Fin(2^32) and Fin(2^64); digests/frontiers are sized functions.
+Canonicality quantifies the ordered list of serialized field words. The U64
+index is excluded from that predicate. Serialization checks canonicality and
+emits the literal two variant formats. Four-byte words use List.ofFn; the
+index uses exactly the existing low-word/high-word split. Core source SHA256:
+33386cb60100d583892e43cc9765e6b38fdd756a3af03950dd9688c102a78855.
+
+PublicExtractedRawBridge431.lean defines rawByte, rawWord and rawIndex by
+bv.toFin. These preserve raw values, with no M31 reduction. project copies
+each source field explicitly: anchor, nullifier, asset, change, live snapshot
+next_pair_index/frontier, candidate next_root/frontier, and the variant's
+recipient commitment or amount. Unserialized source metadata is not bound.
+
+The checked endpoint is RawBridge431.source_success_raw:
+  generated Public.public_bytes p = Result.ok (.Ok out) ->
+  PublicRawCore.serialize (project p) = some (out.val.map rawByte).
+It uses Whole431.source_success, which already proves successful return of
+the actual generated definition implies canonical serialized fields and the
+complete literal byte list. The bridge proves fixed-array enumeration, tags,
+field ordering, frontiers and LE4/LE8 agreement. Its canonicality follows from
+success; there is no capacity or assumed source-refinement premise.
+ExtractedReturns and extracted_refines_core package precisely this generated
+Lean computation, not concrete Rust runtime execution.
+
+Core checked in 6.204s, sampled group RSS1264064KiB. The complete bridge checked
+in 21.747s, sampled group RSS3113872KiB; both exit0 and process swaps0. All ten
+bridge axiom audits contain only propext, Classical.choice and Quot.sound.
+The final bridge SHA256 is
+b0552712c68171f3e8983f6696014606ee4a29723b08bc05db6fa918cd22ab2b.
+The evidence bundle lean-public-extracted-raw-bridge-431-20261015 retains all
+four attempted source/check stages, exact final sources, prerequisite pins,
+compiler/shared-library observations, runners, logs and optional objects.
+The sole failed full check and its sorryAx diagnostics are separated from
+the final green proof. No cold build, host Lean or full replay was used.
+
+The coordinator separately checked identical Core source under Lean 4.32
+and PublicRawCoreAgreement.serialize_fromCore, which relates that Core to
+unchanged PublicSourceRaw.serialize. mapped_of_core_success supplies the
+existing wire/PublicByteCodec encoding consequence. Its evidence is in
+lean-public-raw-core-agreement-432-20261015. This establishes matching checked
+interfaces in two toolchains, not a single-kernel cross-version composition.
+
+OPEN: a compatible single-toolchain integration; correctness of extraction,
+compiler and standard-library models relative to concrete Rust execution;
+actual runtime/allocation correspondence. Source and tool pins are evidence
+of identity, not proofs of those semantic links. Zero withdrawal is still
+serializable; the payment amount guard and checked-decoder nonzero premise
+remain separate. No complete J1.a, runtime budget or general source theorem
+is claimed.
