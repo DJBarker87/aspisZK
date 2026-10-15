@@ -1,0 +1,64 @@
+--- docs/research/100bit-spend-path-20261013/evidence/privacy-wide-query-pattern-stress-20261015/source/baseline-probe.rs	2026-10-15 11:00:15
++++ docs/research/100bit-spend-path-20261013/evidence/privacy-wide-query-pattern-stress-20261015/source/probe.rs	2026-10-15 10:59:58
+@@ -3071,7 +3071,23 @@
+     (image.rank, ambient, inactive_rows.len())
+ }
+ 
+-fn proof_rank_gate(proof_path: &str, public_path: &str) {
++fn stress_query_pattern(name: &str) -> Vec<usize> {
++    let queries: Vec<usize> = match name {
++        "consecutive" => (0..22).collect(),
++        "upper-boundary" => ((1 << 18) - 22..1 << 18).collect(),
++        "spaced" => (0..22).map(|i| i * (1 << 18) / 22).collect(),
++        _ => panic!("unknown query pattern: {name}"),
++    };
++    assert_eq!(queries.len(), 22);
++    assert!(queries.iter().all(|&q| q < (1 << 18)));
++    let mut unique = queries.clone();
++    unique.sort_unstable();
++    unique.dedup();
++    assert_eq!(unique.len(), 22, "stress pattern contains duplicate queries");
++    queries
++}
++
++fn proof_rank_gate(proof_path: &str, public_path: &str, pattern: Option<&str>) {
+     use aspis_core::HashFn;
+     use aspis_r1_cost_probe::{
+         r1_semantic,
+@@ -3136,7 +3152,12 @@
+         Point { x: prepared.z[0].x, y: prepared.z[0].y },
+         Point { x: prepared.z[1].x, y: prepared.z[1].y },
+     ];
+-    let queries: Vec<usize> = prepared.queries.iter().map(|&query| query as usize).collect();
++    let actual_queries: Vec<usize> = prepared.queries.iter().map(|&query| query as usize).collect();
++    let queries = match pattern {
++        Some(name) => stress_query_pattern(name),
++        None => actual_queries.clone(),
++    };
++    println!("RANK_STRESS pattern={} actual_queries={actual_queries:?} tested_queries={queries:?} challenges=retained_from_validated_fixture", pattern.unwrap_or("actual"));
+     let pi = d18_transport();
+ 
+     let (br, gr) = raw_c_with_transport(&a, &z, &queries, &pi);
+@@ -3182,10 +3203,19 @@
+ fn main() {
+     let args: Vec<String> = std::env::args().collect();
+     if let Some(index) = args.iter().position(|x| x == "--proof-rank-gate") {
+-        if args.len() != index + 3 {
+-            panic!("usage: probe --proof-rank-gate <proof.bin> <public-asf8.bin>");
++        let pattern = match args.len() {
++            n if n == index + 3 => None,
++            n if n == index + 5 && args[index + 3] == "--query-pattern" => {
++                Some(args[index + 4].as_str())
++            }
++            _ => {
++            panic!("usage: probe --proof-rank-gate <proof.bin> <public-asf8.bin> [--query-pattern consecutive|upper-boundary|spaced]");
++            }
++        };
++        if let Some(name) = pattern {
++            assert!(matches!(name, "consecutive" | "upper-boundary" | "spaced"));
+         }
+-        proof_rank_gate(&args[index + 1], &args[index + 2]);
++        proof_rank_gate(&args[index + 1], &args[index + 2], pattern);
+     }
+     else if args.iter().any(|x| x == "--wide-pure") {
+         let index = args.windows(2).find(|w| w[0] == "--gamma-index")

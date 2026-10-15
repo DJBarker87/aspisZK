@@ -83,3 +83,31 @@ predicates and their density bounds, causal recovery of their committed
 words, and acceptance implying a hit or successful extraction remain to be
 proved. The `N` factor remains; the theorem does not convert an arbitrary
 oracle-query budget into a single transcript attempt.
+
+
+## Fixed-context density adapters now checked
+
+The direct causal route now has explicit event-family adapters:
+
+- [UnifiedSemanticDensity](lean/UnifiedSemanticDensity.lean) reuses the old
+  25 semantic rows at indices 0–24 and their individual row budgets.
+- [UnifiedOpeningDensity](lean/UnifiedOpeningDensity.lean) handles gamma,
+  kappa and both fold challenges at rows 27–30, with degree-at-most-six
+  polynomial guards in its decoded context.
+- [UnifiedQueryDensity](lean/UnifiedQueryDensity.lean) proves the row-31
+  density for a pre-challenge decoded set with an explicit cardinality guard
+  of 9,557 and successful 22-element sampler output. It reuses `q22_bound`
+  through the current background sampler law.
+- [UnifiedRhoDensity](lean/UnifiedRhoDensity.lean) handles the row-32 residual
+  event using the specified encoded modulo sampler and the existing 21-root
+  theorem.
+
+The opening/query/rho adapters also instantiate the generic causal first-hit
+bound. None asserts that its arbitrary callback is the callback supplied by
+an accepted Rust proof. The next interface is equality of the causally
+recovered contexts with the authenticated words and parsed messages consumed
+by the deterministic extraction theorems, followed by an acceptance-to-hit
+implication. Circle values do not require an OOD uniqueness event in the new
+joint-list argument; this observation still needs to be reflected in the final
+concrete classifier. Hash-collision and root/child prediction events must also
+remain in the full experiment's accounting.

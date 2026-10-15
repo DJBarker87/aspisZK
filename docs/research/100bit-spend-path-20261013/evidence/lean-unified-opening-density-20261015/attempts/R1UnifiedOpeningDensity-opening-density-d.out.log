@@ -1,0 +1,318 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:37:46: warning: Variable name `hdeg` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:40:46: warning: Variable name `hdeg` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:138:63: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:143:32: error: unsolved goals
+M E : Type
+inst✝³ : Field E
+inst✝² : Fintype E
+inst✝¹ : DecidableEq E
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) E
+L : ℕ
+p : Params M E L
+hD : 5 ≤ p.D
+decoded : UnifiedSampler.Prefix M E L → Message M → Table (Addr L) State → Option (DecodedOpening E)
+input : State ≃ Fin (2 ^ 256)
+output : Fin (AspisCircleGroupOrder.P ^ 8) ≃ E
+outputNZ : Fin (AspisCircleGroupOrder.P ^ 8 - 1) ≃ { x // x ≠ 0 }
+hσ27 : ∀ (s : State), p.σ 27 s = OpeningSamplerBound.gammaSample input outputNZ s
+hσ28 : ∀ (s : State), p.σ 28 s = OpeningSamplerBound.sample input output s
+hσ29 : ∀ (s : State), p.σ 29 s = OpeningSamplerBound.sample input output s
+hσ30 : ∀ (s : State), p.σ 30 s = OpeningSamplerBound.sample input output s
+T : Table (Addr L) State
+P : UnifiedSampler.Prefix M E L
+hcap : 0 ≤ OpeningSamplerBound.openingCap
+hi : P.rounds.length < 33
+hi27 hlen : P.rounds.length = 27
+c1 : State
+hzero : ∀ (ch : Challenge E), openingBad decoded P (Message.initial c1) T ch = False
+w : View (Addr L) State (Challenge E)
+⊢ indicator False = 0
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:152:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  independentMean (UnifiedSampler.samp p hD 27 P (Message.payload msg)).toProgram fun w =>
+    indicator (openingBad decoded P (Message.payload msg) T w.2)
+in the target expression
+  (independentMean (UnifiedSampler.samp p hD P.rounds.length P (Message.payload msg)).toProgram fun w =>
+      indicator (openingBad decoded P (Message.payload msg) T w.2)) ≤
+    OpeningSamplerBound.openingCap
+
+case pos.payload
+M E : Type
+inst✝³ : Field E
+inst✝² : Fintype E
+inst✝¹ : DecidableEq E
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) E
+L : ℕ
+p : Params M E L
+hD : 5 ≤ p.D
+decoded : UnifiedSampler.Prefix M E L → Message M → Table (Addr L) State → Option (DecodedOpening E)
+input : State ≃ Fin (2 ^ 256)
+output : Fin (AspisCircleGroupOrder.P ^ 8) ≃ E
+outputNZ : Fin (AspisCircleGroupOrder.P ^ 8 - 1) ≃ { x // x ≠ 0 }
+hσ27 : ∀ (s : State), p.σ 27 s = OpeningSamplerBound.gammaSample input outputNZ s
+hσ28 : ∀ (s : State), p.σ 28 s = OpeningSamplerBound.sample input output s
+hσ29 : ∀ (s : State), p.σ 29 s = OpeningSamplerBound.sample input output s
+hσ30 : ∀ (s : State), p.σ 30 s = OpeningSamplerBound.sample input output s
+T : Table (Addr L) State
+P : UnifiedSampler.Prefix M E L
+hcap : 0 ≤ OpeningSamplerBound.openingCap
+hi : P.rounds.length < 33
+hi27 hlen : P.rounds.length = 27
+msg : M
+hlaw :
+  (independentMean (UnifiedSampler.samp p hD 27 P (Message.payload msg)).toProgram fun w =>
+      indicator (openingBad decoded P (Message.payload msg) T w.2)) =
+    mean fun b => mean fun x => indicator (openingBad decoded P (Message.payload msg) T (liftChallenge (p.σ 27 b, x)))
+⊢ (independentMean (UnifiedSampler.samp p hD P.rounds.length P (Message.payload msg)).toProgram fun w =>
+      indicator (openingBad decoded P (Message.payload msg) T w.2)) ≤
+    OpeningSamplerBound.openingCap
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:191:34: error: unsolved goals
+M E : Type
+inst✝³ : Field E
+inst✝² : Fintype E
+inst✝¹ : DecidableEq E
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) E
+L : ℕ
+p : Params M E L
+hD : 5 ≤ p.D
+decoded : UnifiedSampler.Prefix M E L → Message M → Table (Addr L) State → Option (DecodedOpening E)
+input : State ≃ Fin (2 ^ 256)
+output : Fin (AspisCircleGroupOrder.P ^ 8) ≃ E
+outputNZ : Fin (AspisCircleGroupOrder.P ^ 8 - 1) ≃ { x // x ≠ 0 }
+hσ27 : ∀ (s : State), p.σ 27 s = OpeningSamplerBound.gammaSample input outputNZ s
+hσ28 : ∀ (s : State), p.σ 28 s = OpeningSamplerBound.sample input output s
+hσ29 : ∀ (s : State), p.σ 29 s = OpeningSamplerBound.sample input output s
+hσ30 : ∀ (s : State), p.σ 30 s = OpeningSamplerBound.sample input output s
+T : Table (Addr L) State
+P : UnifiedSampler.Prefix M E L
+hcap : 0 ≤ OpeningSamplerBound.openingCap
+hi : P.rounds.length < 33
+hi27 : ¬P.rounds.length = 27
+hi28 hlen : P.rounds.length = 28
+c1 : State
+hzero : ∀ (ch : Challenge E), openingBad decoded P (Message.initial c1) T ch = False
+w : View (Addr L) State (Challenge E)
+⊢ indicator False = 0
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:200:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  independentMean (UnifiedSampler.samp p hD 28 P (Message.payload msg)).toProgram fun w =>
+    indicator (openingBad decoded P (Message.payload msg) T w.2)
+in the target expression
+  (independentMean (UnifiedSampler.samp p hD P.rounds.length P (Message.payload msg)).toProgram fun w =>
+      indicator (openingBad decoded P (Message.payload msg) T w.2)) ≤
+    OpeningSamplerBound.openingCap
+
+case pos.payload
+M E : Type
+inst✝³ : Field E
+inst✝² : Fintype E
+inst✝¹ : DecidableEq E
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) E
+L : ℕ
+p : Params M E L
+hD : 5 ≤ p.D
+decoded : UnifiedSampler.Prefix M E L → Message M → Table (Addr L) State → Option (DecodedOpening E)
+input : State ≃ Fin (2 ^ 256)
+output : Fin (AspisCircleGroupOrder.P ^ 8) ≃ E
+outputNZ : Fin (AspisCircleGroupOrder.P ^ 8 - 1) ≃ { x // x ≠ 0 }
+hσ27 : ∀ (s : State), p.σ 27 s = OpeningSamplerBound.gammaSample input outputNZ s
+hσ28 : ∀ (s : State), p.σ 28 s = OpeningSamplerBound.sample input output s
+hσ29 : ∀ (s : State), p.σ 29 s = OpeningSamplerBound.sample input output s
+hσ30 : ∀ (s : State), p.σ 30 s = OpeningSamplerBound.sample input output s
+T : Table (Addr L) State
+P : UnifiedSampler.Prefix M E L
+hcap : 0 ≤ OpeningSamplerBound.openingCap
+hi : P.rounds.length < 33
+hi27 : ¬P.rounds.length = 27
+hi28 hlen : P.rounds.length = 28
+msg : M
+hlaw :
+  (independentMean (UnifiedSampler.samp p hD 28 P (Message.payload msg)).toProgram fun w =>
+      indicator (openingBad decoded P (Message.payload msg) T w.2)) =
+    mean fun b => mean fun x => indicator (openingBad decoded P (Message.payload msg) T (liftChallenge (p.σ 28 b, x)))
+⊢ (independentMean (UnifiedSampler.samp p hD P.rounds.length P (Message.payload msg)).toProgram fun w =>
+      indicator (openingBad decoded P (Message.payload msg) T w.2)) ≤
+    OpeningSamplerBound.openingCap
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:240:36: error: unsolved goals
+M E : Type
+inst✝³ : Field E
+inst✝² : Fintype E
+inst✝¹ : DecidableEq E
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) E
+L : ℕ
+p : Params M E L
+hD : 5 ≤ p.D
+decoded : UnifiedSampler.Prefix M E L → Message M → Table (Addr L) State → Option (DecodedOpening E)
+input : State ≃ Fin (2 ^ 256)
+output : Fin (AspisCircleGroupOrder.P ^ 8) ≃ E
+outputNZ : Fin (AspisCircleGroupOrder.P ^ 8 - 1) ≃ { x // x ≠ 0 }
+hσ27 : ∀ (s : State), p.σ 27 s = OpeningSamplerBound.gammaSample input outputNZ s
+hσ28 : ∀ (s : State), p.σ 28 s = OpeningSamplerBound.sample input output s
+hσ29 : ∀ (s : State), p.σ 29 s = OpeningSamplerBound.sample input output s
+hσ30 : ∀ (s : State), p.σ 30 s = OpeningSamplerBound.sample input output s
+T : Table (Addr L) State
+P : UnifiedSampler.Prefix M E L
+hcap : 0 ≤ OpeningSamplerBound.openingCap
+hi : P.rounds.length < 33
+hi27 : ¬P.rounds.length = 27
+hi28 : ¬P.rounds.length = 28
+hi29 hlen : P.rounds.length = 29
+c1 : State
+hzero : ∀ (ch : Challenge E), openingBad decoded P (Message.initial c1) T ch = False
+w : View (Addr L) State (Challenge E)
+⊢ indicator False = 0
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:249:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  independentMean (UnifiedSampler.samp p hD 29 P (Message.payload msg)).toProgram fun w =>
+    indicator (openingBad decoded P (Message.payload msg) T w.2)
+in the target expression
+  (independentMean (UnifiedSampler.samp p hD P.rounds.length P (Message.payload msg)).toProgram fun w =>
+      indicator (openingBad decoded P (Message.payload msg) T w.2)) ≤
+    OpeningSamplerBound.openingCap
+
+case pos.payload
+M E : Type
+inst✝³ : Field E
+inst✝² : Fintype E
+inst✝¹ : DecidableEq E
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) E
+L : ℕ
+p : Params M E L
+hD : 5 ≤ p.D
+decoded : UnifiedSampler.Prefix M E L → Message M → Table (Addr L) State → Option (DecodedOpening E)
+input : State ≃ Fin (2 ^ 256)
+output : Fin (AspisCircleGroupOrder.P ^ 8) ≃ E
+outputNZ : Fin (AspisCircleGroupOrder.P ^ 8 - 1) ≃ { x // x ≠ 0 }
+hσ27 : ∀ (s : State), p.σ 27 s = OpeningSamplerBound.gammaSample input outputNZ s
+hσ28 : ∀ (s : State), p.σ 28 s = OpeningSamplerBound.sample input output s
+hσ29 : ∀ (s : State), p.σ 29 s = OpeningSamplerBound.sample input output s
+hσ30 : ∀ (s : State), p.σ 30 s = OpeningSamplerBound.sample input output s
+T : Table (Addr L) State
+P : UnifiedSampler.Prefix M E L
+hcap : 0 ≤ OpeningSamplerBound.openingCap
+hi : P.rounds.length < 33
+hi27 : ¬P.rounds.length = 27
+hi28 : ¬P.rounds.length = 28
+hi29 hlen : P.rounds.length = 29
+msg : M
+hlaw :
+  (independentMean (UnifiedSampler.samp p hD 29 P (Message.payload msg)).toProgram fun w =>
+      indicator (openingBad decoded P (Message.payload msg) T w.2)) =
+    mean fun b => mean fun x => indicator (openingBad decoded P (Message.payload msg) T (liftChallenge (p.σ 29 b, x)))
+⊢ (independentMean (UnifiedSampler.samp p hD P.rounds.length P (Message.payload msg)).toProgram fun w =>
+      indicator (openingBad decoded P (Message.payload msg) T w.2)) ≤
+    OpeningSamplerBound.openingCap
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:294:38: error: unsolved goals
+M E : Type
+inst✝³ : Field E
+inst✝² : Fintype E
+inst✝¹ : DecidableEq E
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) E
+L : ℕ
+p : Params M E L
+hD : 5 ≤ p.D
+decoded : UnifiedSampler.Prefix M E L → Message M → Table (Addr L) State → Option (DecodedOpening E)
+input : State ≃ Fin (2 ^ 256)
+output : Fin (AspisCircleGroupOrder.P ^ 8) ≃ E
+outputNZ : Fin (AspisCircleGroupOrder.P ^ 8 - 1) ≃ { x // x ≠ 0 }
+hσ27 : ∀ (s : State), p.σ 27 s = OpeningSamplerBound.gammaSample input outputNZ s
+hσ28 : ∀ (s : State), p.σ 28 s = OpeningSamplerBound.sample input output s
+hσ29 : ∀ (s : State), p.σ 29 s = OpeningSamplerBound.sample input output s
+hσ30 : ∀ (s : State), p.σ 30 s = OpeningSamplerBound.sample input output s
+T : Table (Addr L) State
+P : UnifiedSampler.Prefix M E L
+hcap : 0 ≤ OpeningSamplerBound.openingCap
+hi : P.rounds.length < 33
+hi27 : ¬P.rounds.length = 27
+hi28 : ¬P.rounds.length = 28
+hi29 : ¬P.rounds.length = 29
+hi30 hlen : P.rounds.length = 30
+c1 : State
+hzero : ∀ (ch : Challenge E), openingBad decoded P (Message.initial c1) T ch = False
+w : View (Addr L) State (Challenge E)
+⊢ indicator False = 0
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:303:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  independentMean (UnifiedSampler.samp p hD 30 P (Message.payload msg)).toProgram fun w =>
+    indicator (openingBad decoded P (Message.payload msg) T w.2)
+in the target expression
+  (independentMean (UnifiedSampler.samp p hD P.rounds.length P (Message.payload msg)).toProgram fun w =>
+      indicator (openingBad decoded P (Message.payload msg) T w.2)) ≤
+    OpeningSamplerBound.openingCap
+
+case pos.payload
+M E : Type
+inst✝³ : Field E
+inst✝² : Fintype E
+inst✝¹ : DecidableEq E
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) E
+L : ℕ
+p : Params M E L
+hD : 5 ≤ p.D
+decoded : UnifiedSampler.Prefix M E L → Message M → Table (Addr L) State → Option (DecodedOpening E)
+input : State ≃ Fin (2 ^ 256)
+output : Fin (AspisCircleGroupOrder.P ^ 8) ≃ E
+outputNZ : Fin (AspisCircleGroupOrder.P ^ 8 - 1) ≃ { x // x ≠ 0 }
+hσ27 : ∀ (s : State), p.σ 27 s = OpeningSamplerBound.gammaSample input outputNZ s
+hσ28 : ∀ (s : State), p.σ 28 s = OpeningSamplerBound.sample input output s
+hσ29 : ∀ (s : State), p.σ 29 s = OpeningSamplerBound.sample input output s
+hσ30 : ∀ (s : State), p.σ 30 s = OpeningSamplerBound.sample input output s
+T : Table (Addr L) State
+P : UnifiedSampler.Prefix M E L
+hcap : 0 ≤ OpeningSamplerBound.openingCap
+hi : P.rounds.length < 33
+hi27 : ¬P.rounds.length = 27
+hi28 : ¬P.rounds.length = 28
+hi29 : ¬P.rounds.length = 29
+hi30 hlen : P.rounds.length = 30
+msg : M
+hlaw :
+  (independentMean (UnifiedSampler.samp p hD 30 P (Message.payload msg)).toProgram fun w =>
+      indicator (openingBad decoded P (Message.payload msg) T w.2)) =
+    mean fun b => mean fun x => indicator (openingBad decoded P (Message.payload msg) T (liftChallenge (p.σ 30 b, x)))
+⊢ (independentMean (UnifiedSampler.samp p hD P.rounds.length P (Message.payload msg)).toProgram fun w =>
+      indicator (openingBad decoded P (Message.payload msg) T w.2)) ≤
+    OpeningSamplerBound.openingCap
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:347:78: error: unsolved goals
+M E : Type
+inst✝³ : Field E
+inst✝² : Fintype E
+inst✝¹ : DecidableEq E
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) E
+L : ℕ
+p : Params M E L
+hD : 5 ≤ p.D
+decoded : UnifiedSampler.Prefix M E L → Message M → Table (Addr L) State → Option (DecodedOpening E)
+input : State ≃ Fin (2 ^ 256)
+output : Fin (AspisCircleGroupOrder.P ^ 8) ≃ E
+outputNZ : Fin (AspisCircleGroupOrder.P ^ 8 - 1) ≃ { x // x ≠ 0 }
+hσ27 : ∀ (s : State), p.σ 27 s = OpeningSamplerBound.gammaSample input outputNZ s
+hσ28 : ∀ (s : State), p.σ 28 s = OpeningSamplerBound.sample input output s
+hσ29 : ∀ (s : State), p.σ 29 s = OpeningSamplerBound.sample input output s
+hσ30 : ∀ (s : State), p.σ 30 s = OpeningSamplerBound.sample input output s
+T : Table (Addr L) State
+i : ℕ
+P : UnifiedSampler.Prefix M E L
+m : Message M
+hi : i < 33
+hround : P.rounds.length = i
+hcap : 0 ≤ OpeningSamplerBound.openingCap
+hi27 : ¬i = 27
+hi28 : ¬i = 28
+hi29 : ¬i = 29
+hi30 : ¬i = 30
+hnot : i ≠ 27 ∧ i ≠ 28 ∧ i ≠ 29 ∧ i ≠ 30
+hzero : ∀ (ch : Challenge E), openingBad decoded P m T ch = False
+w : View (Addr L) State (Challenge E)
+⊢ indicator False = 0
+'AspisR1.UnifiedOpeningDensity.opening_density_bound' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

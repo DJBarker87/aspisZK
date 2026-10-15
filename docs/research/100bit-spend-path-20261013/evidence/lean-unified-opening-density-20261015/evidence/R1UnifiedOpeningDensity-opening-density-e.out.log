@@ -1,0 +1,147 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:37:46: warning: Variable name `hdeg` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:40:46: warning: Variable name `hdeg` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:139:63: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:158:12: error: Type mismatch
+  hcap
+has type
+  0 ≤ OpeningSamplerBound.openingCap
+but is expected to have type
+  indicator False ≤ OpeningSamplerBound.openingCap
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:189:65: error: unsolved goals
+M E : Type
+inst✝³ : Field E
+inst✝² : Fintype E
+inst✝¹ : DecidableEq E
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) E
+L : ℕ
+p : Params M E L
+hD : 5 ≤ p.D
+decoded : UnifiedSampler.Prefix M E L → Message M → Table (Addr L) State → Option (DecodedOpening E)
+input : State ≃ Fin (2 ^ 256)
+output : Fin (AspisCircleGroupOrder.P ^ 8) ≃ E
+outputNZ : Fin (AspisCircleGroupOrder.P ^ 8 - 1) ≃ { x // x ≠ 0 }
+hσ27 : ∀ (s : State), p.σ 27 s = OpeningSamplerBound.gammaSample input outputNZ s
+hσ28 : ∀ (s : State), p.σ 28 s = OpeningSamplerBound.sample input output s
+hσ29 : ∀ (s : State), p.σ 29 s = OpeningSamplerBound.sample input output s
+hσ30 : ∀ (s : State), p.σ 30 s = OpeningSamplerBound.sample input output s
+T : Table (Addr L) State
+P : UnifiedSampler.Prefix M E L
+hcap : 0 ≤ OpeningSamplerBound.openingCap
+hi : P.rounds.length < 33
+hi27 : ¬P.rounds.length = 27
+hi28 hlen : P.rounds.length = 28
+c1 : State
+ch : Challenge E
+⊢ (match P.rounds.length, Message.initial c1, ch.1, decoded P (Message.initial c1) T with
+    | 27, Message.payload m, Value.ordinary alpha, some ⟨d, property⟩ => alpha ∈ gammaBad d.W d.F d.Y
+    | 28, Message.payload m, Value.ordinary alpha, some ⟨d, property⟩ => alpha ∈ kappaBad d.W d.F d.F0 d.Y d.c0 d.gamma
+    | 29, Message.payload m, Value.ordinary alpha, some ⟨d, hdeg⟩ =>
+      alpha ∈ firstBad d.W d.gamma (weights d.F d.F0 d.kappa) d.p0
+    | 30, Message.payload m, Value.ordinary alpha, some ⟨d, hdeg⟩ =>
+      alpha ∈ secondBad d.W d.V d.gamma d.alpha0 (weights d.F d.F0 d.kappa) d.p1
+    | x, x_1, x_2, x_3 => False) =
+    False
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:208:14: error: Type mismatch
+  hcap
+has type
+  0 ≤ OpeningSamplerBound.openingCap
+but is expected to have type
+  indicator False ≤ OpeningSamplerBound.openingCap
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:240:67: error: unsolved goals
+M E : Type
+inst✝³ : Field E
+inst✝² : Fintype E
+inst✝¹ : DecidableEq E
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) E
+L : ℕ
+p : Params M E L
+hD : 5 ≤ p.D
+decoded : UnifiedSampler.Prefix M E L → Message M → Table (Addr L) State → Option (DecodedOpening E)
+input : State ≃ Fin (2 ^ 256)
+output : Fin (AspisCircleGroupOrder.P ^ 8) ≃ E
+outputNZ : Fin (AspisCircleGroupOrder.P ^ 8 - 1) ≃ { x // x ≠ 0 }
+hσ27 : ∀ (s : State), p.σ 27 s = OpeningSamplerBound.gammaSample input outputNZ s
+hσ28 : ∀ (s : State), p.σ 28 s = OpeningSamplerBound.sample input output s
+hσ29 : ∀ (s : State), p.σ 29 s = OpeningSamplerBound.sample input output s
+hσ30 : ∀ (s : State), p.σ 30 s = OpeningSamplerBound.sample input output s
+T : Table (Addr L) State
+P : UnifiedSampler.Prefix M E L
+hcap : 0 ≤ OpeningSamplerBound.openingCap
+hi : P.rounds.length < 33
+hi27 : ¬P.rounds.length = 27
+hi28 : ¬P.rounds.length = 28
+hi29 hlen : P.rounds.length = 29
+c1 : State
+ch : Challenge E
+⊢ (match P.rounds.length, Message.initial c1, ch.1, decoded P (Message.initial c1) T with
+    | 27, Message.payload m, Value.ordinary alpha, some ⟨d, property⟩ => alpha ∈ gammaBad d.W d.F d.Y
+    | 28, Message.payload m, Value.ordinary alpha, some ⟨d, property⟩ => alpha ∈ kappaBad d.W d.F d.F0 d.Y d.c0 d.gamma
+    | 29, Message.payload m, Value.ordinary alpha, some ⟨d, hdeg⟩ =>
+      alpha ∈ firstBad d.W d.gamma (weights d.F d.F0 d.kappa) d.p0
+    | 30, Message.payload m, Value.ordinary alpha, some ⟨d, hdeg⟩ =>
+      alpha ∈ secondBad d.W d.V d.gamma d.alpha0 (weights d.F d.F0 d.kappa) d.p1
+    | x, x_1, x_2, x_3 => False) =
+    False
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:259:16: error: Type mismatch
+  hcap
+has type
+  0 ≤ OpeningSamplerBound.openingCap
+but is expected to have type
+  indicator False ≤ OpeningSamplerBound.openingCap
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:296:69: error: unsolved goals
+M E : Type
+inst✝³ : Field E
+inst✝² : Fintype E
+inst✝¹ : DecidableEq E
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) E
+L : ℕ
+p : Params M E L
+hD : 5 ≤ p.D
+decoded : UnifiedSampler.Prefix M E L → Message M → Table (Addr L) State → Option (DecodedOpening E)
+input : State ≃ Fin (2 ^ 256)
+output : Fin (AspisCircleGroupOrder.P ^ 8) ≃ E
+outputNZ : Fin (AspisCircleGroupOrder.P ^ 8 - 1) ≃ { x // x ≠ 0 }
+hσ27 : ∀ (s : State), p.σ 27 s = OpeningSamplerBound.gammaSample input outputNZ s
+hσ28 : ∀ (s : State), p.σ 28 s = OpeningSamplerBound.sample input output s
+hσ29 : ∀ (s : State), p.σ 29 s = OpeningSamplerBound.sample input output s
+hσ30 : ∀ (s : State), p.σ 30 s = OpeningSamplerBound.sample input output s
+T : Table (Addr L) State
+P : UnifiedSampler.Prefix M E L
+hcap : 0 ≤ OpeningSamplerBound.openingCap
+hi : P.rounds.length < 33
+hi27 : ¬P.rounds.length = 27
+hi28 : ¬P.rounds.length = 28
+hi29 : ¬P.rounds.length = 29
+hi30 hlen : P.rounds.length = 30
+c1 : State
+ch : Challenge E
+⊢ (match P.rounds.length, Message.initial c1, ch.1, decoded P (Message.initial c1) T with
+    | 27, Message.payload m, Value.ordinary alpha, some ⟨d, property⟩ => alpha ∈ gammaBad d.W d.F d.Y
+    | 28, Message.payload m, Value.ordinary alpha, some ⟨d, property⟩ => alpha ∈ kappaBad d.W d.F d.F0 d.Y d.c0 d.gamma
+    | 29, Message.payload m, Value.ordinary alpha, some ⟨d, hdeg⟩ =>
+      alpha ∈ firstBad d.W d.gamma (weights d.F d.F0 d.kappa) d.p0
+    | 30, Message.payload m, Value.ordinary alpha, some ⟨d, hdeg⟩ =>
+      alpha ∈ secondBad d.W d.V d.gamma d.alpha0 (weights d.F d.F0 d.kappa) d.p1
+    | x, x_1, x_2, x_3 => False) =
+    False
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedOpeningDensity.lean:315:18: error: Type mismatch
+  hcap
+has type
+  0 ≤ OpeningSamplerBound.openingCap
+but is expected to have type
+  indicator False ≤ OpeningSamplerBound.openingCap
+'AspisR1.UnifiedOpeningDensity.opening_density_bound' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
