@@ -1,0 +1,7 @@
+# J1.R2 append-binding focused Lean evidence
+
+This bundle records the three green targets `R1SpendAppendBinding`, `R1SpendRelation`, and `R1SpendRelationExtraction` at source base `94281d6fb07be39b7f70c0b8de115a092b86c4e2`. The append-binding module defines the public output pair and proves its executable root/carry check equivalent to `AppendBinding`. The updated spend relation includes `AppendBinding` as its sixth conjunct and its checker equivalence includes that public check. The production bridge derives the append binding from `AppendSemantics.GateFacts` and adds it to the existing witness relation.
+
+All three attempts exited 0. `R1SpendAppendBinding` compiled in 1.43 s at 3,329,884 KiB peak RSS; `R1SpendRelation` in 1.70 s at 3,345,456 KiB; and `R1SpendRelationExtraction` in 1.48 s at 3,333,292 KiB. All recorded zero swap under MemoryHigh 4G, MemoryMax 6G, MemorySwapMax 0, TasksMax 128. The seven printed declarations report only `propext`, `Classical.choice`, and `Quot.sound`. Their source snapshots match the current local sources. Direct import source/object pins are included; target and direct-import objects appear both as loose files and in the deterministic archive.
+
+This is the focused J1.R2 relation component. It does not establish Rust source correspondence, the chronological tree invariant, or a broader security conclusion. Receipt, output, timing, runner, source, object and hash details are in `source-manifest.json` and `SHA256SUMS`.

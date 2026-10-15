@@ -1,6 +1,7 @@
 import R1SpendRelation
 import R1InputWitness
 import R1SpendSemantics
+import R1AppendSemantics
 
 /-! Reuse the existing production-trace witness facts for the explicit spend
 relation. This existential bridge does not implement the list decoder, field
@@ -12,6 +13,25 @@ open R0P SpendRelation
 variable {K : Type} [Field K] [DecidableEq K]
 
 attribute [local irreducible] poseidonPermutation nodeCompress merkleRoot
+
+/-- The production gates bind the public post-state root and carry cell to
+the append pair. The pair is recovered from the canonical public variant. -/
+theorem append_of_production (prime : Nat) [CharP K prime]
+    (hprime : prime = 2^31 - 1) (pub : Public K) (A : Trace K) (lam chi : K)
+    (hshape : PublicOptionShape.canonical pub)
+    (h : ProductionHolds pub lam chi A ∧ CopyLinkBalance pub A) :
+    SpendRelation.AppendBinding pub := by
+  have hg := AppendSemantics.of_production prime hprime pub A lam chi h
+  refine ⟨OutputNotes.output A 33, ?_, hg.root, hg.carry⟩
+  cases hv : pub.variant with
+  | privateTransfer =>
+      obtain ⟨recipient, hr, _⟩ :=
+        PublicOptionShape.private_transfer_shape pub hv hshape
+      rw [SpendRelation.outputPair, hv, hr]
+      exact congrArg some (hg.transferPair hv recipient hr).symm
+  | withdrawal =>
+      rw [SpendRelation.outputPair, hv]
+      exact congrArg some (hg.withdrawalPair hv).symm
 
 theorem of_production (prime : Nat) [CharP K prime]
     (hprime : prime = 2^31 - 1) (pub : Public K) (A : Trace K) (lam chi : K)
@@ -33,7 +53,8 @@ theorem of_production (prime : Nat) [CharP K prime]
       recipientSalt := OutputNotes.salt A 28 29
       changeOwner := OutputNotes.chunk A 30
       changeSalt := OutputNotes.salt A 31 32 }
-  refine ⟨w, hshape, hinput, hbalance, ?_, ?_⟩
+  refine ⟨w, hshape, hinput, hbalance, ?_, ?_,
+    append_of_production prime hprime pub A lam chi hshape h⟩
   · simpa only [changeCommitment, w, e2] using hfacts.change
   · cases hv : pub.variant with
     | privateTransfer =>
@@ -53,4 +74,5 @@ theorem of_production (prime : Nat) [CharP K prime]
         exact (hfacts.withdrawal hv amount ha).symm.trans e1
 
 #print axioms of_production
+#print axioms append_of_production
 end AspisR1.SpendRelationExtraction

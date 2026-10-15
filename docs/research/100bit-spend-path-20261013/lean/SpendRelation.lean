@@ -1,6 +1,7 @@
 import R1InputWitnessCheck
 import PublicOptionShape
 import AspisV8R15.ExactTowerBase
+import R1SpendAppendBinding
 
 /-! An explicit witness and decidable semantic spend relation. The concrete
 witness field is M31; the generic version supports the existing algebraic
@@ -43,7 +44,7 @@ def Rspend (pub : Public K) (w : Witness K) : Prop :=
     InputWitnessCore.Relation pub (w.inputValue.val : K) w.sk w.salt w.path w.pair ∧
     w.inputValue.val = w.outputValue.val + w.changeValue.val ∧
     pub.change = changeCommitment pub w ∧
-    variantOutput pub w
+    variantOutput pub w ∧ AppendBinding pub
 
 def variantOutputCheck (pub : Public K) (w : Witness K) : Bool :=
   match pub.variant with
@@ -61,7 +62,7 @@ def check (pub : Public K) (w : Witness K) : Bool :=
     InputWitnessCheck.check pub (w.inputValue.val : K) w.sk w.salt w.path w.pair &&
     decide (w.inputValue.val = w.outputValue.val + w.changeValue.val) &&
     InputWitnessCheck.digestEqCheck pub.change (changeCommitment pub w) &&
-    variantOutputCheck pub w
+    variantOutputCheck pub w && appendCheck pub
 
 /-- The concrete relation uses canonical M31 field elements for every key,
 salt, path digest, pair coordinate and output owner. -/
@@ -86,7 +87,7 @@ theorem check_eq_true_iff (pub : Public K) (w : Witness K) :
   simp only [check, Bool.and_eq_true, decide_eq_true_eq,
     PublicOptionShape.check_eq_true_iff, InputWitnessCheck.check_eq_true_iff,
     InputWitnessCheck.digestEqCheck_eq_true_iff, variantOutputCheck_eq_true_iff,
-    Rspend, and_assoc]
+    appendCheck_eq_true_iff, Rspend, and_assoc]
 
 theorem input_note_extracted (pub : Public K) (w : Witness K) (A : Trace K)
     (hvalue : A 10 1008 = (w.inputValue.val : K)) (h : Rspend pub w) :
