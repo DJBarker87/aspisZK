@@ -1,0 +1,44 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralQuerySample.lean:73:18: error: unsolved goals
+case payload
+H : Bytes → State
+P : LiteralTranscript.Prefix
+xs : List ℕ
+state : State
+bytes : LiteralTranscript.BytesMessage
+hm : LiteralTranscript.valid 31 (LiteralTranscript.Message.payload bytes)
+hout :
+  (eval H (LiteralByteSampler.samp 31 P (LiteralTranscript.Message.payload bytes)).toProgram).2 =
+    (Value.queries (Except.ok xs), state)
+p : Params SelectedTranscriptParams.Message AspisWideTower.WideExact SelectedTranscriptParams.L :=
+  SelectedTranscriptParams.params
+P' : UnifiedSampler.Prefix LiteralTranscript.BytesMessage LiteralTranscript.E SelectedTranscriptParams.L :=
+  LiteralTranscript.erasePrefix P
+msg : SelectedTranscriptParams.Message := bytes
+addr : Addr SelectedTranscriptParams.L := UnifiedSampler.absorb p 31 P' msg
+H' : Addr SelectedTranscriptParams.L → State := fun a => H a.toBytes
+qrun : AspisV8R19.Q22SamplerProgram.Result := result p H' (QuerySampler.state p H' (H' addr))
+hD : 5 ≤ p.D
+hrow : UnifiedSampler.samp p hD 31 P' (Message.payload msg) = sampler p addr UnifiedSampler.liftQuery
+hselected :
+  (eval H' (LiteralTranscript.samp 31 P (LiteralTranscript.Message.payload bytes)).toProgram).2 =
+    UnifiedSampler.liftQuery qrun
+hmap :
+  (eval H (LiteralByteSampler.samp 31 P (LiteralTranscript.Message.payload bytes)).toProgram).2 =
+    (mapView Addr.toBytes
+        (eval (fun a => H a.toBytes)
+          (LiteralTranscript.samp 31 P (LiteralTranscript.Message.payload bytes)).toProgram)).2
+hresult :
+  (eval H (LiteralByteSampler.samp 31 P (LiteralTranscript.Message.payload bytes)).toProgram).2 =
+    UnifiedSampler.liftQuery qrun
+hrun : UnifiedSampler.liftQuery qrun = (Value.queries (Except.ok xs), state)
+hxs : qrun.1 = Except.ok xs
+hvalidRun : ResultValid qrun.1
+hvalidXs : ResultValid (Except.ok xs)
+hshape : xs.Nodup ∧ xs.length = 22 ∧ ∀ x ∈ xs, x < 262144
+⊢ ∀ x ∈ xs, x < 262144
+'AspisR1.LiteralQuerySample.scanOut_result_valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LiteralQuerySample.valid_row31_success_decodes' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

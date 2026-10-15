@@ -1,0 +1,68 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralGammaSample.lean:47:36: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UnifiedSampler.samp p hD 27 P' (Message.payload msg)
+in the target expression
+  (eval H'
+        (UnifiedSampler.samp SelectedTranscriptParams.params LiteralTranscript.samp._proof_1 27
+            (LiteralTranscript.erasePrefix P)
+            (LiteralTranscript.erase (LiteralTranscript.Message.payload bytes))).toProgram).2 =
+    liftChallenge (p.σ 27 squeezed, advanced)
+
+H : Bytes → State
+P : LiteralTranscript.Prefix
+bytes : LiteralTranscript.BytesMessage
+hm : LiteralTranscript.valid 27 (LiteralTranscript.Message.payload bytes)
+p : Params SelectedTranscriptParams.Message AspisWideTower.WideExact SelectedTranscriptParams.L :=
+  SelectedTranscriptParams.params
+P' : UnifiedSampler.Prefix LiteralTranscript.BytesMessage LiteralTranscript.E SelectedTranscriptParams.L :=
+  LiteralTranscript.erasePrefix P
+msg : SelectedTranscriptParams.Message := bytes
+addr : Addr SelectedTranscriptParams.L := UnifiedSampler.absorb p 27 P' msg
+H' : Addr SelectedTranscriptParams.L → State := fun a => H a.toBytes
+squeezed : State := H' (squeezeA p (H' addr))
+advanced : State := H' (advanceA p (H' addr))
+hD : 5 ≤ p.D
+hrow : UnifiedSampler.samp p hD 27 P' (Message.payload msg) = DuplexSamplers.plain p addr 27 liftChallenge
+⊢ (eval H'
+        (UnifiedSampler.samp SelectedTranscriptParams.params LiteralTranscript.samp._proof_1 27
+            (LiteralTranscript.erasePrefix P)
+            (LiteralTranscript.erase (LiteralTranscript.Message.payload bytes))).toProgram).2 =
+    liftChallenge (p.σ 27 squeezed, advanced)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralGammaSample.lean:56:15: error(lean.unknownIdentifier): Unknown identifier `OracleProgramOps.mapView`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralGammaSample.lean:59:22: error(lean.unknownIdentifier): Unknown identifier `OracleProgramOps.mapView`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralGammaSample.lean:58:86: error: unsolved goals
+H : Bytes → State
+P : LiteralTranscript.Prefix
+bytes : LiteralTranscript.BytesMessage
+hm : LiteralTranscript.valid 27 (LiteralTranscript.Message.payload bytes)
+p : Params SelectedTranscriptParams.Message AspisWideTower.WideExact SelectedTranscriptParams.L :=
+  SelectedTranscriptParams.params
+P' : UnifiedSampler.Prefix LiteralTranscript.BytesMessage LiteralTranscript.E SelectedTranscriptParams.L :=
+  LiteralTranscript.erasePrefix P
+msg : SelectedTranscriptParams.Message := bytes
+addr : Addr SelectedTranscriptParams.L := UnifiedSampler.absorb p 27 P' msg
+H' : Addr SelectedTranscriptParams.L → State := fun a => H a.toBytes
+squeezed : State := H' (squeezeA p (H' addr))
+advanced : State := H' (advanceA p (H' addr))
+hD : 5 ≤ p.D
+hrow : UnifiedSampler.samp p hD 27 P' (Message.payload msg) = DuplexSamplers.plain p addr 27 liftChallenge
+hselected :
+  (eval H' (LiteralTranscript.samp 27 P (LiteralTranscript.Message.payload bytes)).toProgram).2 =
+    liftChallenge (p.σ 27 squeezed, advanced)
+hmap :
+  (eval H (LiteralByteSampler.samp 27 P (LiteralTranscript.Message.payload bytes)).toProgram).2 =
+    (mapView Addr.toBytes
+        (eval (fun a => H a.toBytes)
+          (LiteralTranscript.samp 27 P (LiteralTranscript.Message.payload bytes)).toProgram)).2
+⊢ sorry () = (eval H' (LiteralTranscript.samp 27 P (LiteralTranscript.Message.payload bytes)).toProgram).2
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralGammaSample.lean:62:8: error: Type mismatch: After simplification, term
+  hresult
+ has type
+  @Eq LiteralTranscript.Challenge
+    (eval H (LiteralByteSampler.samp 27 P (LiteralTranscript.Message.payload bytes)).toProgram).2
+    (Value.ordinary (p.σ 27 squeezed), advanced)
+but is expected to have type
+  @Eq LiteralTranscript.Challenge
+    (eval H (LiteralByteSampler.samp 27 P (LiteralTranscript.Message.payload bytes)).toProgram).2
+    (Value.ordinary (SelectedChallengeMap.sigma 27 squeezed), advanced)
+'AspisR1.LiteralGammaSample.valid_row27_nonzero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

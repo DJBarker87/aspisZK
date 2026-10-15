@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralByteRunFacts.lean:18:45: error(lean.unknownIdentifier): Unknown identifier `LiteralByteProtocol.Proof`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralByteRunFacts.lean:39:39: error: unexpected token ']'; expected ')'
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralByteRunFacts.lean:23:45: error(lean.unknownIdentifier): Unknown identifier `LiteralByteProtocol.Proof`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralByteRunFacts.lean:37:16: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  HAppend (List (Message × Challenge)) Std.Legacy.Range ?m.177
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralByteRunFacts.lean:31:14: error: unsolved goals
+case neg
+decoder : LiteralByteProtocol.Decoder
+H : Bytes → State
+pub : Public
+pf : sorry
+n : ℕ
+ih :
+  ∀ i < n,
+    ((LiteralByteProtocol.protocol decoder).transcript H pub sorry n).rounds[i]? =
+      some
+        (sorry,
+          (eval H
+              (LiteralByteSampler.samp i ((LiteralByteProtocol.protocol decoder).transcript H pub sorry i)
+                  sorry).toProgram).2)
+i : ℕ
+hi : i < n + 1
+pr : FS2.Protocol Public Message Challenge LiteralProtocol.Witness LiteralProtocol.Proof Bytes
+  LiteralByteProtocol.State :=
+  LiteralByteProtocol.protocol decoder
+hround : (pr.transcript H pub sorry n).rounds.length = n
+hlt : ¬i < n
+⊢ ((LiteralByteProtocol.protocol decoder).transcript H pub sorry (n + 1)).rounds[i]? =
+    some
+      (sorry,
+        (eval H
+            (LiteralByteSampler.samp i ((LiteralByteProtocol.protocol decoder).transcript H pub sorry i)
+                sorry).toProgram).2)
+'AspisR1.LiteralByteRunFacts.transcript_round' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LiteralByteRunFacts.transcript_index' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
