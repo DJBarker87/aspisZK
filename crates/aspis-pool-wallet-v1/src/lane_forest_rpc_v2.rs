@@ -1370,6 +1370,7 @@ mod tests {
 
     fn master_value(master: Pubkey, mint: Pubkey) -> PoolV1PairForestMasterV1 {
         PoolV1PairForestMasterV1 {
+            bump: 0,
             identity: PoolIdentityV1 {
                 pool: master.to_bytes(),
                 asset_mint: mint.to_bytes(),
@@ -1392,6 +1393,7 @@ mod tests {
 
     fn empty_lane(master: Pubkey, lane_id: u8) -> PoolV1PairForestLaneStateV1 {
         PoolV1PairForestLaneStateV1 {
+            bump: 0,
             master: master.to_bytes(),
             lane_id,
             tree: IncrementalMerkleTreeV1 {
@@ -1825,6 +1827,7 @@ mod tests {
             )
         });
         let checkpoint = PoolV1PairForestCheckpointV1 {
+            bump: 0,
             master: state.master().address,
             deployment_domain: state.master().value.identity.deployment_domain,
             checkpoint_sequence: state.master().value.next_checkpoint_sequence,

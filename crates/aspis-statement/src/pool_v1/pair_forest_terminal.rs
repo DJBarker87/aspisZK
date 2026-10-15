@@ -947,6 +947,7 @@ mod tests {
             checkpoint_account: common.checkpoint_account,
             selected_lane_account: common.selected_lane_account,
             master: PoolV1PairForestMasterV1 {
+                bump: 0,
                 identity: PoolIdentityV1 {
                     pool: common.master_account,
                     asset_mint: [5; 32],
@@ -966,6 +967,7 @@ mod tests {
                 last_checkpoint_lane_sequences: checkpoint_sequences,
             },
             checkpoint: PoolV1PairForestCheckpointV1 {
+                bump: 0,
                 master: common.master_account,
                 deployment_domain: source.deployment_domain,
                 checkpoint_sequence: common.checkpoint_sequence,
@@ -973,6 +975,7 @@ mod tests {
                 lane_sequences: checkpoint_sequences,
             },
             selected_lane: PoolV1PairForestLaneStateV1 {
+                bump: 0,
                 master: common.master_account,
                 lane_id: common.output_lane,
                 tree: IncrementalMerkleTreeV1 {

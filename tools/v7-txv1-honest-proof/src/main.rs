@@ -63,7 +63,7 @@ fn main() -> Result<()> {
     let nullifier = deterministic_v7_pair_forest_transfer_nullifier_v1();
     let lane_id = pool_v1_pair_forest_output_lane_v1(&nullifier)
         .map_err(|error| anyhow::anyhow!("derive output lane: {error:?}"))?;
-    let lane = pool_v1_pair_forest_lane_address(&pool_program, &master, lane_id)?.0;
+    let (lane, lane_bump) = pool_v1_pair_forest_lane_address(&pool_program, &master, lane_id)?;
     let checkpoint =
         pool_v1_pair_forest_checkpoint_address(&pool_program, &master, CHECKPOINT_SEQUENCE).0;
 
@@ -84,6 +84,7 @@ fn main() -> Result<()> {
             .0;
     }
     let lane_state = PoolV1PairForestLaneStateV1 {
+        bump: lane_bump,
         master: master.to_bytes(),
         lane_id,
         tree,

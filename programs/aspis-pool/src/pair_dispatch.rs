@@ -479,6 +479,7 @@ mod tests {
         let entry_key =
             pool_v1_verifier_entry_address(&registry_program, &pool, &profile, &release).0;
         let mut registry_data = encode_verifier_registry_v1(&VerifierRegistryV1 {
+            bump: 0,
             flags: 0,
             pool: pool.to_bytes(),
             authority: policy.registry_authority,
@@ -488,6 +489,7 @@ mod tests {
         })
         .unwrap();
         let mut entry_data = encode_verifier_registry_entry_v1(&VerifierRegistryEntryV1 {
+            bump: 0,
             status: VerifierEntryStatusV1::Active,
             statement_version: POOL_V1_HISTORICAL_ANCHOR_VERSION,
             pool: pool.to_bytes(),

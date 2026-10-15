@@ -120,13 +120,13 @@ const RELEASE_BINDING: [u8; 32] = [
 ];
 #[cfg(feature = "private-leaf-salts")]
 const PROFILE_BINDING: [u8; 32] = [
-    0x57,0x94,0x73,0x13,0xd2,0x32,0x64,0x1a,0xd8,0x15,0x7d,0x66,0xbf,0xaf,0xfa,0xb1,
-    0x1e,0x4c,0x3a,0x99,0x33,0x1d,0x18,0xf4,0x4b,0xfa,0xca,0xb6,0x89,0x97,0x37,0xd3,
+    0x57, 0x94, 0x73, 0x13, 0xd2, 0x32, 0x64, 0x1a, 0xd8, 0x15, 0x7d, 0x66, 0xbf, 0xaf, 0xfa, 0xb1,
+    0x1e, 0x4c, 0x3a, 0x99, 0x33, 0x1d, 0x18, 0xf4, 0x4b, 0xfa, 0xca, 0xb6, 0x89, 0x97, 0x37, 0xd3,
 ];
 #[cfg(feature = "private-leaf-salts")]
 const RELEASE_BINDING: [u8; 32] = [
-    0xe2,0x94,0xaf,0xbc,0x14,0xef,0x6a,0xfe,0x76,0xb8,0x47,0xde,0xf4,0x44,0x52,0xf8,
-    0x4c,0xc3,0x72,0x80,0x64,0x65,0x76,0x07,0xb5,0x44,0xa5,0x39,0xca,0x9b,0x32,0x3a,
+    0xe2, 0x94, 0xaf, 0xbc, 0x14, 0xef, 0x6a, 0xfe, 0x76, 0xb8, 0x47, 0xde, 0xf4, 0x44, 0x52, 0xf8,
+    0x4c, 0xc3, 0x72, 0x80, 0x64, 0x65, 0x76, 0x07, 0xb5, 0x44, 0xa5, 0x39, 0xca, 0x9b, 0x32, 0x3a,
 ];
 
 struct Args {
@@ -1178,7 +1178,7 @@ fn main() -> Result<()> {
     let verifier_program = LegacyPubkey::from_str(VERIFIER_PROGRAM_ID)?;
     let registry_program = legacy(REGISTRY_PROGRAM_BYTES);
     let mint = legacy([0x42; 32]);
-    let master_key = pool_v1_pair_forest_master_address(&pool_program, &mint).0;
+    let (master_key, master_bump) = pool_v1_pair_forest_master_address(&pool_program, &mint);
     let (historical_global_anchor, nullifier) = deterministic_anchor_and_nullifier()?;
 
     let policy = VerifierPolicyV1 {
@@ -1189,6 +1189,7 @@ fn main() -> Result<()> {
         policy_binding: POLICY_BINDING_BYTES,
     };
     let master = PoolV1PairForestMasterV1 {
+        bump: master_bump,
         identity: PoolIdentityV1 {
             pool: master_key.to_bytes(),
             asset_mint: mint.to_bytes(),
@@ -1205,7 +1206,8 @@ fn main() -> Result<()> {
 
     let output_lane = pool_v1_pair_forest_output_lane_v1(&nullifier)
         .map_err(|error| anyhow!("derive output lane: {error:?}"))?;
-    let lane_key = pool_v1_pair_forest_lane_address(&pool_program, &master_key, output_lane)?.0;
+    let (lane_key, lane_bump) =
+        pool_v1_pair_forest_lane_address(&pool_program, &master_key, output_lane)?;
     let mut tree = IncrementalMerkleTreeV1 {
         next_leaf_index: 0,
         root: POOL_V1_PAIR_EMPTY_ROOTS[POOL_V1_PAIR_TREE_DEPTH],
@@ -1223,15 +1225,17 @@ fn main() -> Result<()> {
         all_lane_roots.push(tree.root);
     }
     let lane = PoolV1PairForestLaneStateV1 {
+        bump: lane_bump,
         master: master_key.to_bytes(),
         lane_id: output_lane,
         tree,
     };
 
     let checkpoint_sequence = 42u64;
-    let checkpoint_key =
-        pool_v1_pair_forest_checkpoint_address(&pool_program, &master_key, checkpoint_sequence).0;
+    let (checkpoint_key, checkpoint_bump) =
+        pool_v1_pair_forest_checkpoint_address(&pool_program, &master_key, checkpoint_sequence);
     let checkpoint = PoolV1PairForestCheckpointV1 {
+        bump: checkpoint_bump,
         master: master_key.to_bytes(),
         deployment_domain: DEPLOYMENT_DOMAIN_BYTES,
         checkpoint_sequence,
