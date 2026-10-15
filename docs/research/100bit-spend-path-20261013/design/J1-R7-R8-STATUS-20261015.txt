@@ -1,0 +1,171 @@
+J1.R7/R8 CONTINUATION -- PROPOSAL FOR LEAD REVIEW
+
+1. Revisions and scope
+
+Requested base: 7dc4addc8467275ccba1c77073ae9fdb49ceb204.
+Fetched origin/codex/100bit-spend-path-20261013; before edits, fast-forwarded
+this isolated branch to e4a5808dd061cf373b27d130f7d66eb8f0214db9, incorporating
+the lead review f5a04e0bb and concurrent literal density/byte-sampler work.
+Branch: codex/r1-j1-r7-r8-20261015. No live 100bit worktree was accessed.
+Three parallel reviews supplied public, semantic-prefix and count proposals.
+The coordinator reviewed sources and ran all focused checks sequentially.
+No stash, push, build-host Lean, full manifest or SBF rebuild was performed.
+
+This report supersedes the CallsFit soundness obligation in the historical
+J1-R4-STATUS and J1-CONFIG-BOUNDARY proposals. Input lengths can still support
+individual typed encoding lemmas and engineering limits. They do not restrict
+adversary oracle addresses. J1.a--e are not claimed closed here.
+
+2. R7: unrestricted oracle and conditional theorem
+
+AllAddressFiatShamir.soundness_bound removes the finite-address assumption
+from the R0C.V3 first-bad argument. Its experiment law is memoized lazyMean
+on Program I A with arbitrary I and finite A. LazyInj retains raw-address
+first-cell decoder recovery and a collision-mass premise. Its proof reuses
+R0C.V3.lemmaA3, hitsChain3_of_first, FS.exists_flip and the finite potential
+support law. An internal extension outside a finite program's potential
+support is unobservable; it does not merge long inputs or limit oracle calls.
+
+LiteralByteProtocol.protocol has address type Bytes, 33 rows, and explicit
+decoder/extractor parameters. transcript_eq and erased_transcript identify
+its protocol-format sampler values with the bounded construction pulled back
+along Addr.toBytes. chainsRead and readsChains concern this ideal chain-running
+verifier. conditional_bound quantifies arbitrary raw-byte prover and verifier
+programs and yields Q*maxErr(eps,33)+kappa(Q), under D1, chain density, D3,
+ReadsChains, LazyInj and the distinct-first-read budget.
+
+No claim transports decoder injection through Addr.toBytes: it is not injective
+on the whole padded carrier. The legacy CanonicalByteHash fallback module is
+not used by the new theorem or oracle. The desired 12*Q^2/2^256 collision mass
+must still be proved in this raw-byte experiment. Neither D1--D3 nor efficient
+extraction is supplied by a parameterized theorem.
+
+3. R8 / G_R1.7 source guard
+
+The pool-adapter entrypoint now checks pool_route::admitted before touching
+accounts. Only exact [3,10], exact [3,11], and ASQ8-prefixed inputs reach the
+adapter. Every other input returns InvalidInstructionData directly. Legacy
+routing stays in cfg(not(feature="pool-adapter")); the release pin must enable
+pool-adapter. The source guard also rejects lifecycle 4/5/6. This is necessary:
+inspection shows lifecycle writes trusted proof/public bodies, so the requested
+blanket no-trusted-writes alternative would be false. No lifecycle SHA call
+was found, but that observation does not establish whole-history immutability.
+
+Focused native crate test held a conflicting proof-data borrow and verified
+legacy/lifecycle rejection and unchanged checkpoint bytes. It passed. A pure
+route harness additionally checked every 0/1/2-byte input and representative
+ASQ8/truncation/suffix cases. These are tests, not source-refinement theorems.
+SBF artifact rebuild, artifact pin, and release replay remain for the lead's
+queue. The old lifecycle-based upload/preparation harness cannot be assumed to
+work unchanged with this stricter binary. Provisioning must be reconciled
+before deployment; no replacement lifecycle route was silently added.
+
+4. J1.e proposed all-prefix call count
+
+The count proposal inventories the fixed HashFn, all salted leaf/parent hashes,
+proof/public/checkpoint hashing and PDA SHA trials. Repeated inputs count again.
+Source arithmetic gives stage1 118+21*k: 328 (k=10), 349 (k=11); stage2 core
+3+21*22=465 because arbitrary resumed next may be zero. Authentication has at
+most seven PDA searches on the immutable branch (five on v1). Both inspected
+native SDK and pinned local replay syscall use at most 255 trials per search,
+one SHA digest/trial. Candidate uniform QV is 2250; no domain exclusion is used.
+
+The count inventory is not a proved source/runtime cap. It requires the current
+source small-step prefix relation, exact SBF syscall implementation and all
+other reachable handlers' no-additional-SHA facts. Success, rejection, panic,
+allocation failure and compute exhaustion prefixes must all be covered.
+Qtot=QA+QV*charged_verifier_executions only follows after those obligations.
+The locally inspected replay runtime does not identify a live validator.
+
+5. J1.a/b adapters and the remaining source boundary
+
+J1.a adds PublicSourceRaw's raw-u32 serialized projection of the actual
+Transfer/Withdrawal enum, with literal field order and <P guards. RawMap and
+RawSuccess relate model success to canonical limbs, the exact wire encoding,
+and PublicByteCodec encode/decode. NonzeroWithdrawal is separate: the Rust
+serializer permits zero, but the payment validator rejects it. SourceBoundary
+states SourceSerializerRefines as a hypothesis on the pinned Rust successful-
+result relation and coordinate projection, and transports it to the codec.
+No current extracted public_bytes exists in the inspected retained Lean tree;
+the older selected semantic extraction supplies constructors, not this source
+serializer. Its extraction/refinement, validation call-path transport and
+ASF8/Pool omitted-field binding remain OPEN. A handwritten model is not Rust.
+
+J1.b adds LiteralSemanticCodecBridge: exact row-zero empty-record back law,
+successful literal semantic read -> completed Fin25 payload decode and exact
+re-encoding, and preservation of parsed message/challenge pairs under extension.
+LiteralSemanticPayloadBridge connects that decoded vector to SemanticPayloadView
+pairs/rounds, using the fixed C2 word actually carried at row 2 and the supplied
+ordinary challenge values/states; c2Base/c2Words link to LiteralTypedContext.
+The actual Rust Prefix::parse/parse_record/ValidatedRecord and challenge-state
+execution must still be related to these models. Remaining circle/opening/query/
+rho codecs and actual recovered-C2/compiler linkage remain OPEN.
+
+J1.c remains actual source commitment cuts, represented first-read logs and
+causal recovery under all exclusions, not merely names of conditional lemmas.
+J1.d remains exact selected source sampler coordinates, fallback policy and
+state carry. The new raw-byte theorem supplies a correct address carrier, not
+these source facts. J5 and J2 were not started: J1.a/b source closure has not
+landed and no substitution of abstract premises for that prerequisite is made.
+
+6. Independent review and ordered remaining jobs
+
+A separate source review found no hidden Fintype I assumption or invalid
+noninjective-map transport in the new oracle modules. Preserve these limits:
+FS2.extractFails examines the table before row 0's first read, not a full-log
+knowledge extractor; D3 quantifies all H/pub/proof/tables; witness validity is
+not supplied by choosing the extractor parameter. Protocol-format initFits,
+bounded message constructors and invalid-constructor totalization remain in
+the ideal sampler. They impose no bound on adversary/raw-verifier addresses,
+but source parsing/rejection correspondence is still required.
+
+Ordered work for the lead:
+1. Extract the current Rust public serializer and constructor projection; prove
+   SourceSerializerRefines, successful validator amount guard, and omitted-field
+   caller binding. The older extraction cannot be relabeled current-source.
+2. Connect actual semantic parser records, row 0 initialization, row 2 C2 word and
+   exact hash-produced challenges/states to the checked semantic bridges. Finish
+   the circle/opening/query/rho payload boundaries. Then land J1.a/b for J5/J2.
+3. J1.c: prove actual raw-byte commitment addresses/read cuts and causal table
+   recovery, retaining collision/child/root exclusions and the folded tail.
+4. J1.d: prove source sampler coordinates and fallback/state-carry equivalence;
+   use the raw-byte protocol without reintroducing a global length premise.
+5. J1.e: instantiate the all-prefix runtime relation and count each designated
+   digest, including PDA syscalls and failure prefixes. Prove QV before substituting
+   the candidate 2250. Add the charged-execution total and raw-byte collision mass.
+6. Rebuild/pin/replay the guarded SBF release in the lead's queue; reconcile
+   provisioning now that lifecycle entrypoints reject. No deployment occurred.
+
+No new lead decision on oracle domain or admitted routes is requested: R7/R8
+are applied. The live-validator runtime pin, provisioning path, extraction
+queue and acceptance of these conditional adapters still belong to the lead.
+
+7. Validation and handoff
+
+G_R1.7 source guard commit: 98c3165242ef473365cf81f10357c60aabff481a.
+Nine new Lean targets passed focused local Lean 4.32.0 checks; 53 axiom reports
+contain only subsets of propext, Classical.choice and Quot.sound. No sorryAx
+in final audits, no swap and no memory kill. All jobs ran sequentially with a
+7 GiB aggregate stop and Lean 6 GiB cap. Largest final sampled peak: 4,584,144 KiB.
+The native guard tests passed 1+2 cases; no SBF or whole-manifest replay ran.
+Exact source pins, objects, all attempts, commands, times, process/aggregate
+RSS, swap and axioms are in evidence/lean-j1-r7-r8-20261015 and
+rust-pool-release-guard-20261015. Retained dependency-cache provenance is
+explicitly weaker than a new bootstrap build; see its README.
+
+Final focused targets (wall seconds; sampled aggregate peak KiB):
+R1AllAddressFiatShamir: 9.544; 2132704
+R1LiteralByteProtocol: 50.395; 4499504
+R1PublicSourceRaw: 10.696; 3423840
+R1PublicSourceRawMap: 7.842; 3403648
+R1PublicSourceRawSuccess: 4.087; 3388656
+R1PublicSourceBoundary: 6.605; 3382016
+R1LiteralSemanticCodecBridge: 49.617; 4584144
+R1LiteralSemanticPayloadBridge: 54.617; 4580624
+R1VerifierCallBudget: 8.834; 2139696
+
+VerifierCallBudget additionally proves the small proposed-budget arithmetic
+and generic firstReads<=trace.length. SourceCountObligation explicitly requires
+prefix closure and the actual all-input count; it is not asserted as an axiom.
+All reviewed changes are proposals for the lead. J1 source closure, a numeric
+private-spend soundness bound and a deployable artifact are not claimed.

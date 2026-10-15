@@ -6,5 +6,5 @@ old lifecycle entrypoints must be reconciled before deployment.
 
 Native tests: conflicting proof borrow + unchanged checkpoint (1 passed);
 route predicate including every zero/one/two-byte input (2 passed).
-All checks exit0, zero swaps; exact times/RSS/source pins are adjacent.
+All checks exit 0, zero swaps; exact times/RSS/source pins are adjacent.
 The prior SBF artifact/replay is not evidence for this changed source.

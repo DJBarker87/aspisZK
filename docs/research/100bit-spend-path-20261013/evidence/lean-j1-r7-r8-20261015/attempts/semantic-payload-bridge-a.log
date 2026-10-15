@@ -1,0 +1,92 @@
+/Users/dominic/ZK/.worktrees/r1-j1-r7-r8-20261015/.j1-local-check/R1LiteralSemanticPayloadBridge.lean:94:15: error: unsolved goals
+eK : AspisV8R15.ExactTowerBase.QM31Exact →+* E
+word : C2Word
+message : Entry → Message
+challenge : Entry → E
+state : Entry → State
+tail : List Entry
+ih :
+  ∀ (row : ℕ),
+    List.map Sigma.fst tail = List.range' row tail.length →
+      (∀ e ∈ tail, LiteralTranscript.valid e.fst (message e)) →
+        (∀ e ∈ tail, record (message e) = SemanticPrefixCodec.encodeEntry e) →
+          (∀ e ∈ tail, CarriesC2 word (message e)) →
+            LiteralSemanticPrefix.read eK row
+                (List.map (fun e => (message e, TranscriptView.Value.ordinary (challenge e), state e)) tail) =
+              some
+                (List.map
+                  (fun e =>
+                    (SemanticPayloadView.toMessage (fun x => LiteralSemanticPrefix.c2Pair eK word) ↑e.snd.value,
+                      challenge e))
+                  tail)
+row : ℕ
+payload : SemanticPrefixCodec.At row
+hrows : row :: List.map Sigma.fst tail = row :: List.range' (row + 1) tail.length
+hv : ∀ e ∈ ⟨row, payload⟩ :: tail, LiteralTranscript.valid e.fst (message e)
+hb : ∀ e ∈ ⟨row, payload⟩ :: tail, record (message e) = SemanticPrefixCodec.encodeEntry e
+hc2 : ∀ e ∈ ⟨row, payload⟩ :: tail, CarriesC2 word (message e)
+ht : List.map Sigma.fst tail = List.range' (row + 1) tail.length
+⊢ ?m.113 = ⟨row, payload⟩ ∨ ?m.113 ∈ tail
+/Users/dominic/ZK/.worktrees/r1-j1-r7-r8-20261015/.j1-local-check/R1LiteralSemanticPayloadBridge.lean:146:4: error: Type mismatch: After simplification, term
+  hi
+ has type
+  [encode (payloads 0), encode (payloads 1), encode (payloads 2), encode (payloads 3), encode (payloads 4),
+        encode (payloads 5), encode (payloads 6), encode (payloads 7), encode (payloads 8), encode (payloads 9),
+        encode (payloads 10), encode (payloads 11), encode (payloads 12), encode (payloads 13), encode (payloads 14),
+        encode (payloads 15), encode (payloads 16), encode (payloads 17), encode (payloads 18), encode (payloads 19),
+        encode (payloads 20), encode (payloads 21), encode (payloads 22), encode (payloads 23),
+        encode (payloads 24)][↑i] =
+    [record (messages 0), record (messages 1), record (messages 2), record (messages 3), record (messages 4),
+        record (messages 5), record (messages 6), record (messages 7), record (messages 8), record (messages 9),
+        record (messages 10), record (messages 11), record (messages 12), record (messages 13), record (messages 14),
+        record (messages 15), record (messages 16), record (messages 17), record (messages 18), record (messages 19),
+        record (messages 20), record (messages 21), record (messages 22), record (messages 23),
+        record (messages 24)][↑i]
+but is expected to have type
+  encode (payloads i) = record (messages i)
+'AspisR1.LiteralSemanticPayloadBridge.callback_toMessage' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LiteralSemanticPayloadBridge.parseMessage_of_payload' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LiteralSemanticPayloadBridge.read_entries' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.LiteralSemanticPayloadBridge.read_of_payloads' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LiteralSemanticPayloadBridge.record_eq_of_decodeFull' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LiteralSemanticPayloadBridge.read_of_decodeFull' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LiteralSemanticPayloadBridge.lifted_read_of_decodeFull' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LiteralSemanticPayloadBridge.carriesC2_of_row_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LiteralSemanticPayloadBridge.read_of_decodeFull_atC2' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LiteralSemanticPayloadBridge.pair_c2Base' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.LiteralSemanticPayloadBridge.pair_c2Words' depends on axioms: [propext, Classical.choice, Quot.sound]
+       48.23 real         3.74 user         6.27 sys
+          4557783040  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              314441  page reclaims
+              405158  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               36719  voluntary context switches
+              374470  involuntary context switches
+          2867177828  instructions retired
+          1343548167  cycles elapsed
+           132732296  peak memory footprint
