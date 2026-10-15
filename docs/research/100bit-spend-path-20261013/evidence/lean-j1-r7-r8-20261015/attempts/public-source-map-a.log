@@ -1,0 +1,124 @@
+/Users/dominic/ZK/.worktrees/r1-j1-r7-r8-20261015/.j1-local-check/R1PublicSourceRawMap.lean:22:50: error: unsolved goals
+⊢ ↑(RetainedExactLimbCodec.m31ResidueEquiv.symm 0) = 0
+/Users/dominic/ZK/.worktrees/r1-j1-r7-r8-20261015/.j1-local-check/R1PublicSourceRawMap.lean:34:37: error: unsolved goals
+case mk
+anchor✝ nullifier✝ : Digest
+assetId✝ : Word
+change✝ : Digest
+nextPairIndex✝ : PublicIndexCodec.Index
+snapshotFrontier✝ : Frontier
+nextRoot✝ : Digest
+nextFrontier✝ : Frontier
+h :
+  commonCanonical
+    { anchor := anchor✝, nullifier := nullifier✝, assetId := assetId✝, change := change✝,
+      nextPairIndex := nextPairIndex✝, snapshotFrontier := snapshotFrontier✝, nextRoot := nextRoot✝,
+      nextFrontier := nextFrontier✝ }
+⊢ { anchor := rawDigest fun i => mapField (anchor✝ i) ⋯, nullifier := rawDigest fun i => mapField (nullifier✝ i) ⋯,
+      assetId := assetId✝, change := rawDigest fun i => mapField (change✝ i) ⋯, nextPairIndex := nextPairIndex✝,
+      snapshotFrontier := rawFrontier fun l i => mapField (snapshotFrontier✝ l i) ⋯,
+      nextRoot := rawDigest fun i => mapField (nextRoot✝ i) ⋯,
+      nextFrontier := rawFrontier fun l i => mapField (nextFrontier✝ l i) ⋯ } =
+    { anchor := anchor✝, nullifier := nullifier✝, assetId := assetId✝, change := change✝,
+      nextPairIndex := nextPairIndex✝, snapshotFrontier := snapshotFrontier✝, nextRoot := nextRoot✝,
+      nextFrontier := nextFrontier✝ }
+/Users/dominic/ZK/.worktrees/r1-j1-r7-r8-20261015/.j1-local-check/R1PublicSourceRawMap.lean:36:35: warning: This simp argument is unused:
+  rawDigest
+
+Hint: Omit it from the simp argument list.
+  simp only [rawCommon, mapCommon, rawD̵i̵g̵e̵s̵t̵,̵ ̵r̵a̵w̵Frontier, rawField_mapField]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r7-r8-20261015/.j1-local-check/R1PublicSourceRawMap.lean:36:46: warning: This simp argument is unused:
+  rawFrontier
+
+Hint: Omit it from the simp argument list.
+  simp only [rawCommon, mapCommon, rawDigest, r̵a̵w̵F̵r̵o̵n̵t̵i̵e̵r̵,̵ ̵rawField_mapField]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r7-r8-20261015/.j1-local-check/R1PublicSourceRawMap.lean:39:37: error: unsolved goals
+case transfer
+common✝ : Common
+recipient✝ : Digest
+h : Canonical (Public.transfer common✝ recipient✝)
+⊢ Public.transfer common✝ (rawDigest fun i => mapField (recipient✝ i) ⋯) = Public.transfer common✝ recipient✝
+/Users/dominic/ZK/.worktrees/r1-j1-r7-r8-20261015/.j1-local-check/R1PublicSourceRawMap.lean:41:58: warning: This simp argument is unused:
+  rawDigest
+
+Hint: Omit it from the simp argument list.
+  simp only [mapPublic, rawPublic, rawCommon_mapCommon, rawD̵i̵g̵e̵s̵t̵,̵ ̵r̵a̵w̵Field_mapField]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r7-r8-20261015/.j1-local-check/R1PublicSourceRawMap.lean:69:2: error: Type mismatch: After simplification, term
+  fields_rawFields (List.ofFn d)
+ has type
+  @Eq (Option Bytes) (fields (List.ofFn fun x => rawField (d x)))
+    (some (List.flatMap ExactLeafFieldCodec.encodeM31 (List.ofFn d)))
+but is expected to have type
+  @Eq (Option Bytes) (fields (List.ofFn (rawDigest d)))
+    (some (List.flatMap ExactLeafFieldCodec.encodeM31 (List.ofFn d)))
+/Users/dominic/ZK/.worktrees/r1-j1-r7-r8-20261015/.j1-local-check/R1PublicSourceRawMap.lean:82:2: error: Type mismatch: After simplification, term
+  digests_rawDigests (List.ofFn f)
+ has type
+  @Eq (Option Bytes) (digests (List.ofFn fun x => rawDigest (f x)))
+    (some (List.flatMap PublicFieldBlockCodec.encodeDigest (List.ofFn f)))
+but is expected to have type
+  @Eq (Option Bytes) (digests (List.ofFn (rawFrontier f)))
+    (some (List.flatMap PublicFieldBlockCodec.encodeDigest (List.ofFn f)))
+/Users/dominic/ZK/.worktrees/r1-j1-r7-r8-20261015/.j1-local-check/R1PublicSourceRawMap.lean:96:74: error: unsolved goals
+case transfer
+common✝ : SemanticPublicWire.Common
+recipient✝ : SemanticPublicWire.Digest
+⊢ ((digestBytes (rawCommon common✝).change).bind fun change =>
+      some
+        (0 ::
+          (SemanticPublicWire.header common✝ ++
+            1 ::
+              (PublicFieldBlockCodec.encodeDigest recipient✝ ++
+                (change ++ 0 :: SemanticPublicWire.afterBytes common✝))))) =
+    some
+      (0 ::
+        (SemanticPublicWire.header common✝ ++
+          1 ::
+            (PublicFieldBlockCodec.encodeDigest recipient✝ ++
+              (PublicFieldBlockCodec.encodeDigest common✝.change ++ 0 :: SemanticPublicWire.afterBytes common✝))))
+
+case withdrawal
+common✝ : SemanticPublicWire.Common
+amount✝ : SemanticPublicWire.M31
+⊢ ((digestBytes (rawCommon common✝).change).bind fun change =>
+      some
+        (1 ::
+          (SemanticPublicWire.header common✝ ++
+            0 :: (change ++ 1 :: (ExactLeafFieldCodec.encodeM31 amount✝ ++ SemanticPublicWire.afterBytes common✝))))) =
+    some
+      (1 ::
+        (SemanticPublicWire.header common✝ ++
+          0 ::
+            (PublicFieldBlockCodec.encodeDigest common✝.change ++
+              1 :: (ExactLeafFieldCodec.encodeM31 amount✝ ++ SemanticPublicWire.afterBytes common✝))))
+'AspisR1.PublicSourceRawMap.rawField_mapField' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicSourceRawMap.toWire_reifies' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicSourceRawMap.serialize_rawPublic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicSourceRawMap.serialize_of_toWire' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicSourceRawMap.mapped_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicSourceRawMap.encode_of_serialize' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicSourceRawMap.decode_of_serialize' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        5.89 real         1.56 user         1.53 sys
+          2821275648  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              256667  page reclaims
+               35987  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                5686  voluntary context switches
+               41620  involuntary context switches
+          3126530818  instructions retired
+          1344552065  cycles elapsed
+           132781448  peak memory footprint
