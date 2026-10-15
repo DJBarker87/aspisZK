@@ -93,7 +93,7 @@ trace suffix when the address was already read in the prefix. The two
 and opening typed parsers, so callers can reuse the exact parse result across
 such a suffix extension.
 
-## Selected typed bridges and remaining adapters (HEAD `764bf20a6fe0`)
+## Selected typed bridges and remaining adapters (HEAD `daa96e811d70`)
 
 [`../lean/SelectedTranscriptParams.lean`](../lean/SelectedTranscriptParams.lean)
 adds `SelectedTranscriptParams.params` with `L=131072`, `D=3717`, 33 rounds,
@@ -145,6 +145,44 @@ is already inside the original record list (`24 < length` for semantic rows,
 `31 < length` for opening rows, and `32 < length` for all 33 rows). Thus
 prefix-stable reads do not imply successful reads from a shorter prefix.
 
+The raw/typed record boundary now has an explicit canonicality route. The
+generic `RawRoundCanonical.encode_of_decode` requires the premise that every
+successful `p.dec` re-encodes to the same bytes; this is stronger than the
+generic `decEnc` field by itself. `SelectedRawCanonical.dec_sound` proves that
+premise for the selected bounded-message codec, and
+`SelectedRawCanonical.encode_of_decode` specializes the generic list theorem.
+`SelectedTypedReads.semantic_eq_raw_of_decode`, `.opening_eq_raw_of_decode`,
+and `.transcript_eq_raw_of_decode` then show that the selected readers run on
+an encoded typed `Rec` list exactly as they run on the original raw list,
+provided that raw list successfully decodes to those records. These theorems
+preserve all five raw record fields; the tuple layout is
+`(prev, absorbed, message, next)`, while `RawRec` separately stores
+`(prev, absorbed, label, data, next)`.
+
+`SelectedInitialRecord.row0_message_bytes` identifies the selected typed
+row-zero message bytes with `PublicInitFrame.emptyRecord`, and
+`.params_message_bound` establishes the selected message bound is at least
+the empty-record length. This is a byte-model connection for the initial
+record, not a caller/source parser result.
+
+There is also a separate challenge-bearing-prefix view. `SelectedSemanticPrefix.read`
+consumes `List (Message × E)` at a supplied starting offset, decodes semantic
+rows 0–24, and retains each supplied challenge. Its `read_length` and
+`read_append` establish successful-length preservation and exact append
+composition. `SelectedSemanticPrefixFacts.read_challenges` proves that the
+parser preserves the input challenge list; `.semChalsZ_lift` reuses the old
+`R0P.Mask.semChalsZ_of_pairs`, and `.semChalsZ_read` composes the two. These
+facts do not construct those challenge-bearing pairs from `Rec` records or
+prove the pair challenges equal the selected `p.σ` values.
+
+For challenge-timed opening reads, `SelectedOpeningStages` defines nested
+`Gamma`, `Kappa`, `First`, and `Second` stages. They read rows 25–27, then
+row 28, row 29, and row 30 respectively; each append-stability theorem is
+conditional on that stage's last row already lying in the original prefix.
+These stages intentionally stop before later payloads and carry no challenge
+or recovered-word fields. The full `SelectedOpeningRead` remains the separate
+parser for rows 25–31, and `SelectedTranscriptRead` for all 33 rows.
+
 The parsed opening payloads also have an existing algebraic interface.
 `SelectedOpeningClaims.Y` and `.parts` arrange six 29-entry vectors from the
 row-25, row-26, and gamma payloads. `SelectedOpeningData.Payloads` packages
@@ -168,8 +206,18 @@ Relevant current source pins at this inspection are:
 | `SelectedOpeningClaims.lean` | `e219644ff5ac0049f4a153c8d228bccafc4d4722d23a06bdbf8dfb722710864c` | six-vector/parts model |
 | `SelectedOpeningData.lean` | `035c7d6b52c7eb80f250414ed68e9711b0dd88e35a04247fa95dab55a2b4a824` | payload-to-`MatchingSupport.Data` packaging |
 | `SelectedOpeningPairing.lean` | `bf227c7e561bd3ef66c537f0769565f365d6abff3aaff93aa71c62b3369c1c7c` | accepted-pairing coefficient equivalence |
+| `RawRoundCanonical.lean` | `6eba5fad8a8916e9f2418a863a04e192bff1cc4ed3267cfc4b507b581cd107d8` | generic raw-list inverse under explicit decoder canonicality |
+| `SelectedRawCanonical.lean` | `f84ea3ad25ff6d037eb13b6cb823fdf00cc524073ef6e60292a8d52d1823f458` | selected bounded codec canonicality and specialization |
+| `SelectedTypedReads.lean` | `6536c236e8842e265d0442b8ae3d9aacedd4c9cec204ca035ca59e0a0a17a5f4` | raw/typed selected-reader equality and typed append stability |
+| `SelectedInitialRecord.lean` | `5bbe262f678158f9d8831626720de293438f606c1be8c23782e16c98ef7c0a52` | typed row-zero message equals the modeled empty record |
+| `SelectedSemanticPrefix.lean` | `1c465621c5924f3d0b275ad151b141329a3e541aee4d22c3a831b35451fd22e9` | challenge-bearing semantic-prefix parser, length and append laws |
+| `SelectedSemanticPrefixFacts.lean` | `733444507012726a2d29b8b087f6c21f37ba4a96bb94aef87f51e7776d21004b` | challenge preservation and `semChalsZ` adapter |
+| `SelectedOpeningStages.lean` | `c87ad5c67f3c57fbc37dc8394a390a8e45c6a6a638c8cae7d0839af4245c1786` | gamma/kappa/first/second indexed row stages |
 
-Remaining interfaces are: (1) connect these model reads to the actual selected
+The raw/typed round trip does not by itself identify a state-derived
+challenge-bearing input sequence, nor does the staged opening parser provide
+the words or callback expected by the old view. Remaining interfaces are:
+(1) connect these model reads to the actual selected
 source transcript/caller and its challenge values, including the source-level
 row labels and serializer; (2) derive the `payloads`, challenge list, and
 `recoverC2` callback consumed by `SemanticPayloadOpeningView.opening_view_of_payloads`

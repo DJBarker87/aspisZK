@@ -75,6 +75,31 @@ or row-27 gamma payload as entries of `Y`. The new selected view makes those
 payload positions explicit without asserting an equation between them and an
 accepted proof.
 
+## Selected opening read stages
+
+The strict raw-record reader now exposes four incremental stages in
+`AspisR1.SelectedOpeningStages`: `Gamma` contains rows 25–27, `Kappa` adds row
+28, `First` adds row 29, and `Second` adds row 30. Each append-stability theorem
+uses the matching cutoff: `27 < rs.length`, `28 < rs.length`, `29 < rs.length`,
+and `30 < rs.length`. `SelectedOpeningStageConsistency.stages_of_full` shows
+that a successful complete opening parse has these same stage values;
+`gamma_at_prefix`, `kappa_at_prefix`, `first_at_prefix`, and `second_at_prefix`
+transport those values back to a prefix when its corresponding cutoff holds.
+These results concern typed record parsing only. They do not establish
+selected challenge values, committed-word causality, or accepted-transcript
+correspondence.
+
+`SelectedOpeningStages` attempt a compiled in 1.57 s at 3,587,832 KiB peak RSS,
+with zero swap and four standard-only axiom reports. Its source SHA-256 is
+`c87ad5c67f3c57fbc37dc8394a390a8e45c6a6a638c8cae7d0839af4245c1786`;
+evidence is in
+[`lean-selected-opening-stages-20261015`](../evidence/lean-selected-opening-stages-20261015/README.md).
+`SelectedOpeningStageConsistency` compiled in 1.50 s at 3,582,868 KiB peak RSS,
+with zero swap and five standard-only axiom reports. Its source SHA-256 is
+`0890f2243440fbe87b617091e2fa016853bb3c68f5802e78e43490e11cc05279`; evidence
+is in
+[`lean-selected-opening-stage-consistency-20261015`](../evidence/lean-selected-opening-stage-consistency-20261015/README.md).
+
 ## Source pins
 
 The hashes below pin the source text cited above against source base
@@ -93,3 +118,13 @@ and six-vector results in their own evidence bundles.
 | `lean/CircleRecordCodec.lean` | typed row-25/26 payload accessors | `b1fba8dced40f86c1b7d1f28eef2c6c25df720f36ffd9a18b464d6a57296f71f` |
 | `lean/OpeningRecordCodec.lean` | typed row-27 gamma payload | `7ac150cff7ede99cf4916e81e8ba348bdcf785e6d7771cf46aa9622756fd6387` |
 | `v8-r0-sem-proof-20261008/lean/R0P/MaskView.lean` | `openingViewZ`, `openingViewZ_of_parsed` | `f27198834fa43256002cce83de7eeef675fecd88e89db0ee7a2bc00ef3a8b44b` |
+
+The staged reader additions and consistency bridge were compiled against the
+later base `daa96e811d70fc05d04fe102122d74f3a00d7f2d`; they are pinned
+separately here rather than retroactively attributed to the earlier source
+base:
+
+| Source | Relevant declarations | SHA-256 |
+|---|---|---|
+| `lean/SelectedOpeningStages.lean` | `readGamma`, `readKappa`, `readFirst`, `readSecond`, append-stability theorems | `c87ad5c67f3c57fbc37dc8394a390a8e45c6a6a638c8cae7d0839af4245c1786` |
+| `lean/SelectedOpeningStageConsistency.lean` | `stages_of_full`, `gamma_at_prefix`, `kappa_at_prefix`, `first_at_prefix`, `second_at_prefix` | `0890f2243440fbe87b617091e2fa016853bb3c68f5802e78e43490e11cc05279` |

@@ -1,0 +1,7 @@
+# Independent review: selected initial record
+
+The final source snapshot and local `SelectedInitialRecord.lean` match at SHA-256 `5bbe262f678158f9d8831626720de293438f606c1be8c23782e16c98ef7c0a52`. Attempt `R1SelectedInitialRecord-a` records exit 0, 1.47 s, 3,581,732 KiB peak RSS, zero swap, and the 4G/6G/0 cgroup. The log contains both expected `#print axioms` lines; each reports `[propext, Classical.choice, Quot.sound]`. The two archived `.olean` members match their manifest hashes and are listed in the deterministic object archive.
+
+The checked theorem scope matches the README: row-zero typed payload bytes equal the canonical empty record, and the selected message bound satisfies `5 ≤ D`. This is a model fact for the initial-walk premise, not a source-parser or accepted-transcript result.
+
+One provenance-path discrepancy remains in `source-manifest.json`: the direct-import source is recorded as `docs/research/100bit-spend-path-20261013/lean/R1SelectedSemanticMessages.lean`, but the repository source is named `lean/SelectedSemanticMessages.lean` (same SHA-256 `c3664c130913f29caed63a89326d9d37b3b2bf7f7e838e68da6db23ae3ac550c`). The bundled `import-sources/R1SelectedSemanticMessages.lean` is byte-identical to that repository file and the object is named `R1SelectedSemanticMessages.olean`. The existing bundle checksum file validates before this review was added; refreshed checksums below include this review.
