@@ -96,7 +96,7 @@ theorem prefix_potential {start count finish : Nat}
     count + potential finish ≤ potential start := by
   induction h with
   | refl => simp
-  | @snoc start mid finish count cost _ step ih =>
+  | @snoc mid finish count cost _ step ih =>
       have localBound := edgePotential ⟨mid, cost, finish⟩ step
       calc
         (count + cost) + potential finish =
