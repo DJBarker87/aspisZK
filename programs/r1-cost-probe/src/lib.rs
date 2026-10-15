@@ -28,13 +28,18 @@ fn first(public_bytes:&[u8],proof:&[u8],k:usize)->Result<Vec<u8>,ProgramError>{
 }
 #[cfg(feature="pool-adapter")]
 mod r1_pool_adapter;
+#[cfg(feature="pool-adapter")]
+mod pool_route;
 pub fn process_r1_cost_probe_instruction(program_id:&Pubkey,accounts:&[AccountInfo],data:&[u8])->ProgramResult{
     #[cfg(feature="pool-adapter")]
-    if matches!(data.first().copied(), Some(4 | 5 | 6)) || (data == &[3,10] || data == &[3,11]) || data.starts_with(b"ASQ8") {
+    {
+        // Reject before inspecting or borrowing any account. Lifecycle loaders
+        // are not part of the release instruction surface.
+        if !pool_route::admitted(data) {
+            return Err(ProgramError::InvalidInstructionData);
+        }
         return r1_pool_adapter::process(program_id,accounts,data);
     }
-    #[cfg(feature="pool-adapter")]
-    return Err(ProgramError::InvalidInstructionData);
 
     #[cfg(not(feature="pool-adapter"))]
     {
@@ -66,7 +71,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn pool_adapter_rejects_legacy_tags_before_borrowing_accounts() {
+    fn pool_adapter_rejects_other_routes_before_borrowing_accounts() {
         let program_id = Pubkey::new_unique();
         let proof_key = Pubkey::new_unique();
         let public_key = Pubkey::new_unique();
@@ -122,5 +127,17 @@ mod tests {
             Err(ProgramError::InvalidInstructionData),
             "legacy stage-2 tag [2] must be rejected before borrowing proof data",
         );
+        for tag in [4, 5, 6] {
+            for suffix in [&[][..], &[0, 1, 2], b"ASQ8"] {
+                let mut data = vec![tag];
+                data.extend_from_slice(suffix);
+                assert_eq!(
+                    process_r1_cost_probe_instruction(&program_id, &accounts, &data),
+                    Err(ProgramError::InvalidInstructionData),
+                    "lifecycle tag {tag} must be rejected before borrowing proof data",
+                );
+            }
+        }
+        assert_eq!(&**accounts[2].try_borrow_data().unwrap(), &[0]);
     }
 }
