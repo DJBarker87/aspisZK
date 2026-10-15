@@ -1,0 +1,47 @@
+Actual extracted eight-limb constructor
+
+Target: lean/ExtractedRecordLimbCanonicality.lean, importing the retained
+attempt-F AspisR1RecordParser.Funs. No production source edits. The exact
+normal form exposes the eight ordered modulus guards. The success iff says
+all eight input U32 values are below 2147483647 and the returned WideExact
+has their unchanged nested packing. It neither reduces noncanonical inputs
+modulo P nor restricts the high component to zero.
+
+The dependency cone is the actual generated WideExact.from_limbs, field.P,
+its field structures, and Aeneas array indexing/Result/scalar order. The
+older UnrolledWideLimbChecks theorem uses different candidate types and is
+not imported or relabeled. The new proof splits eight guards in order,
+giving nine paths; it performs no finite-field enumeration or loop replay.
+
+Follow-on obligations
+
+The actual from_le_bytes function still needs its length32/32-read/eight-U32
+decoder bridge to this constructor. The parser then requires a separate
+proof of its derived comparison against QM31.ZERO, so successful field
+validation implies c1=ZERO. The actual ChunksExact/Enumerate loop needs an
+invariant covering every complete field chunk, with payload divisibility
+proved from row_shape before claiming coverage of all bytes. Current parser
+framing already derives actual validator success for rows>=14, but these
+missing lemmas prevent a field-canonicality conclusion for parse_record.
+Typed prefixes, challenge frames, first reads, and Rust/Lean refinement
+remain separate obligations. Main-project Lean4.32 integration remains
+separate from this cached Lean4.31 result.
+
+Validation
+
+First focused check passed: 25.595 s, sampled group RSS 2409264 KiB, process
+maximum RSS 2103427072 bytes, process swaps 0. System swap usage decreased
+from 12610.06M to 12602.06M during the check. The 4 GiB sampled group stop
+and Lean -M3500 were active. Both public #print axioms reports contain only
+propext, Classical.choice and Quot.sound. No replay or native test rerun was
+needed for this proof-only change.
+
+Proof SHA 7b5f3c0bb7cb7dc610be6a309a38347788f5ba51dcf3e94fc4e91cad7ef42fb5.
+Attempt-F Funs SHA
+f6a3d5b95b781458af5a0118b76d39a14243b77958ef86eb9e5cac50ac45a2b1.
+Evidence records the checked source, readonly generated source/object pins,
+command, receipt, full log and Lean4.31 --version with SHA256 for bin/lean
+and all three libleanshared dylibs. The launcher alone is not a version pin.
+Unused generated Error.fmt is outside these theorem dependencies; no claim
+is made that every declaration in the imported generated module has only
+standard axioms.
