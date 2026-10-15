@@ -33,7 +33,9 @@ theorem of_production (pub : Public M31Exact) (A : Trace E) (lam chi : E)
   have hfacts := SpendSemantics.of_production P (by norm_num [P]) widePub A lam chi h
   let w := TraceSpendWitness.fromTrace A ⟨v0, h0⟩ ⟨v1, h1⟩ ⟨v2, h2⟩
   have hw : Rspend widePub w := by
-    refine ⟨hwideShape, hinput, hbalance, ?_, ?_⟩
+    refine ⟨hwideShape, hinput, hbalance, ?_, ?_,
+      SpendRelationExtraction.append_of_production P (by norm_num [P])
+        widePub A lam chi hwideShape h⟩
     · simpa only [changeCommitment, w, TraceSpendWitness.fromTrace, e2] using hfacts.change
     · cases hv : widePub.variant with
       | privateTransfer =>

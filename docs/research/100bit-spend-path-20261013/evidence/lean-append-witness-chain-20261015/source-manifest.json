@@ -1,0 +1,812 @@
+{
+  "schema": "focused-lean-evidence-v1",
+  "bundle": "lean-append-witness-chain-20261015",
+  "source_revision": "1aca98e95c815befa58ed61e65cccd21c7bf10b9",
+  "scope": "Six-target executable witness chain against the six-conjunct SpendRelation; not source refinement or cryptographic extraction.",
+  "historical_relation_provenance": {
+    "five_conjunct_bundles": [
+      "lean-spend-relation-20261015",
+      "lean-spend-relation-extraction-20261015"
+    ],
+    "historical_source_revision": "57edab99fe104f23b3d3c881d1e87c1abb0975c0",
+    "refreshed_six_conjunct_bundle": "lean-spend-append-binding-20261015",
+    "refreshed_source_revision": "94281d6fb07be39b7f70c0b8de115a092b86c4e2",
+    "note": "Historical green receipts are retained as earlier attempts when present; they do not validate the refreshed six-conjunct source.",
+    "preserved_prior_attempt": "R1ListWitnessExtract/list-witness-extract-a is retained as a failed attempt against the earlier relation chain; it is not a six-conjunct compile.",
+    "archive_binding": "The current object archive and direct-import object pins support only the six final append-chain-a targets; no historical attempt is claimed to have used these objects."
+  },
+  "targets": [
+    {
+      "module": "R1SpendBaseDescent",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/SpendBaseDescent.lean",
+      "source_sha256": "efe4cfad3ee89a60313534ab5fb2a950aa999131ffdbe860b2952a2c0f7eda78",
+      "source_matches_local": true,
+      "object_path": "objects/R1SpendBaseDescent.olean",
+      "object_sha256": "fd866be3dd798081f355f0fd3725a7e08efad1b46e80257e3f9812739d36ccd2",
+      "imports": [
+        "R1SpendRelationMap",
+        "R1ExactBaseProjection"
+      ],
+      "green_attempt": "append-chain-a",
+      "axiom_declarations": [
+        "AspisR1.SpendBaseDescent.witness_recover",
+        "AspisR1.SpendBaseDescent.rspend_project",
+        "AspisR1.SpendBaseDescent.check_project"
+      ],
+      "axiom_output": [
+        "'AspisR1.SpendBaseDescent.witness_recover' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.SpendBaseDescent.rspend_project' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.SpendBaseDescent.check_project' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "R1TraceSpendWitness",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/TraceSpendWitness.lean",
+      "source_sha256": "8417a429a940e07076fd65ac266b6a841e2655321be6e300da05fb6051a81640",
+      "source_matches_local": true,
+      "object_path": "objects/R1TraceSpendWitness.olean",
+      "object_sha256": "0b79ed7448ae0b9305a0e55db7b9c739bb82121103f4a5eabfd36d733e1b2c10",
+      "imports": [
+        "R1SpendBaseDescent",
+        "R1OutputNotes",
+        "R1InputPair"
+      ],
+      "green_attempt": "append-chain-a",
+      "axiom_declarations": [
+        "AspisR1.TraceSpendWitness.base_coordinates"
+      ],
+      "axiom_output": [
+        "'AspisR1.TraceSpendWitness.base_coordinates' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "R1ComputableTraceWitness",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/ComputableTraceWitness.lean",
+      "source_sha256": "2025bc75176168fcfb738453effcad4a506e561e97c27b9105ffd302dc00e0e1",
+      "source_matches_local": true,
+      "object_path": "objects/R1ComputableTraceWitness.olean",
+      "object_sha256": "b42ead4a64af7d22fcf67df3151659753e7f6fae4acd3b91cbe428fff5e8c3f3",
+      "imports": [
+        "R1TraceSpendWitness",
+        "R1SpendBaseDescent",
+        "R1SpendDataMap",
+        "R1ExactBaseProjection"
+      ],
+      "green_attempt": "append-chain-a",
+      "axiom_declarations": [
+        "AspisR1.ComputableTraceWitness.pathFromTrace_eq",
+        "AspisR1.ComputableTraceWitness.fromTrace_eq_projected_existing"
+      ],
+      "axiom_output": [
+        "'AspisR1.ComputableTraceWitness.pathFromTrace_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.ComputableTraceWitness.fromTrace_eq_projected_existing' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]"
+      ]
+    },
+    {
+      "module": "R1ConcreteSpendExtraction",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/ConcreteSpendExtraction.lean",
+      "source_sha256": "abe59059e1acc1f460afa5cd830187fb835d90dddc0c5a75fe5558b2b800f41a",
+      "source_matches_local": true,
+      "object_path": "objects/R1ConcreteSpendExtraction.olean",
+      "object_sha256": "349f2024b970f4064a7b1cbb6270744c7489ca866faa1c2b822a8d5f0fa7007c",
+      "imports": [
+        "R1TraceSpendWitness",
+        "R1CandidateBaseProjection",
+        "R1SpendRelationExtraction"
+      ],
+      "green_attempt": "append-chain-a",
+      "axiom_declarations": [
+        "AspisR1.ConcreteSpendExtraction.of_production",
+        "AspisR1.ConcreteSpendExtraction.candidate_checked_witness"
+      ],
+      "axiom_output": [
+        "'AspisR1.ConcreteSpendExtraction.of_production' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.ConcreteSpendExtraction.candidate_checked_witness' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "R1TraceWitnessExtract",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/TraceWitnessExtract.lean",
+      "source_sha256": "aa89c783d7ad70ab7740f8dbf665a0191fd19232eda6e9a20dc2a82f1401fb9e",
+      "source_matches_local": true,
+      "object_path": "objects/R1TraceWitnessExtract.olean",
+      "object_sha256": "261298748f10b6c42d58f3d69617057f0dd36ba79a0f367f946f51d58f954ee7",
+      "imports": [
+        "R1ComputableTraceWitness",
+        "R1TraceValueDecode",
+        "R1ConcreteSpendExtraction"
+      ],
+      "green_attempt": "append-chain-a",
+      "axiom_declarations": [
+        "AspisR1.TraceWitnessExtract.returned_checked",
+        "AspisR1.TraceWitnessExtract.returned_valid",
+        "AspisR1.TraceWitnessExtract.complete_of_production",
+        "AspisR1.TraceWitnessExtract.complete_of_candidate"
+      ],
+      "axiom_output": [
+        "'AspisR1.TraceWitnessExtract.returned_checked' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.TraceWitnessExtract.returned_valid' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.TraceWitnessExtract.complete_of_production' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.TraceWitnessExtract.complete_of_candidate' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "R1ListWitnessExtract",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/ListWitnessExtract.lean",
+      "source_sha256": "b1546a7694fb130c409c8f8369e24cbe7acbb4b48353e29b56d8af94c0df23ca",
+      "source_matches_local": true,
+      "object_path": "objects/R1ListWitnessExtract.olean",
+      "object_sha256": "de095bf98c28d134254604fbc382fbd2ee193264c68dd87749454dbd92127d7b",
+      "imports": [
+        "R1TraceWitnessExtract"
+      ],
+      "green_attempt": "append-chain-a",
+      "axiom_declarations": [
+        "AspisR1.ListWitnessExtract.returned_checked",
+        "AspisR1.ListWitnessExtract.returned_valid",
+        "AspisR1.ListWitnessExtract.some_result_of_member",
+        "AspisR1.ListWitnessExtract.scanCount_le_length",
+        "AspisR1.ListWitnessExtract.scanCount_le_100"
+      ],
+      "axiom_output": [
+        "'AspisR1.ListWitnessExtract.returned_checked' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.ListWitnessExtract.returned_valid' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.ListWitnessExtract.some_result_of_member' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.ListWitnessExtract.scanCount_le_length' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.ListWitnessExtract.scanCount_le_100' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    }
+  ],
+  "attempts": [
+    {
+      "target": "R1ComputableTraceWitness",
+      "suffix": "append-chain-a",
+      "receipt": "attempts/R1ComputableTraceWitness-append-chain-a.receipt.json",
+      "source_snapshot": "attempts/R1ComputableTraceWitness-append-chain-a.source.lean",
+      "out_log": "attempts/R1ComputableTraceWitness-append-chain-a.out.log",
+      "time_log": "attempts/R1ComputableTraceWitness-append-chain-a.time.log",
+      "sha_sidecar": "attempts/R1ComputableTraceWitness-append-chain-a.sha256",
+      "source_sha256": "2025bc75176168fcfb738453effcad4a506e561e97c27b9105ffd302dc00e0e1",
+      "exit_status": 0,
+      "elapsed_wall_clock": "0:01.86",
+      "max_rss_kib": "3336148",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "final-success"
+    },
+    {
+      "target": "R1ComputableTraceWitness",
+      "suffix": "computable-trace-witness-a",
+      "receipt": "attempts/R1ComputableTraceWitness-computable-trace-witness-a.receipt.json",
+      "source_snapshot": "attempts/R1ComputableTraceWitness-computable-trace-witness-a.source.lean",
+      "out_log": "attempts/R1ComputableTraceWitness-computable-trace-witness-a.out.log",
+      "time_log": "attempts/R1ComputableTraceWitness-computable-trace-witness-a.time.log",
+      "sha_sidecar": "attempts/R1ComputableTraceWitness-computable-trace-witness-a.sha256",
+      "source_sha256": "f275416923f20f8263983f74e5900d6cc56b39346bf641afd7401aac966d6adb",
+      "exit_status": 1,
+      "elapsed_wall_clock": "0:01.70",
+      "max_rss_kib": "3317224",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "historical-failure"
+    },
+    {
+      "target": "R1ComputableTraceWitness",
+      "suffix": "computable-trace-witness-b",
+      "receipt": "attempts/R1ComputableTraceWitness-computable-trace-witness-b.receipt.json",
+      "source_snapshot": "attempts/R1ComputableTraceWitness-computable-trace-witness-b.source.lean",
+      "out_log": "attempts/R1ComputableTraceWitness-computable-trace-witness-b.out.log",
+      "time_log": "attempts/R1ComputableTraceWitness-computable-trace-witness-b.time.log",
+      "sha_sidecar": "attempts/R1ComputableTraceWitness-computable-trace-witness-b.sha256",
+      "source_sha256": "13a881cd733b44c3732f71913f3850c547740fc3d3e4c71df46f936bb65bc695",
+      "exit_status": 1,
+      "elapsed_wall_clock": "0:01.67",
+      "max_rss_kib": "3317576",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "historical-failure"
+    },
+    {
+      "target": "R1ComputableTraceWitness",
+      "suffix": "computable-trace-witness-c",
+      "receipt": "attempts/R1ComputableTraceWitness-computable-trace-witness-c.receipt.json",
+      "source_snapshot": "attempts/R1ComputableTraceWitness-computable-trace-witness-c.source.lean",
+      "out_log": "attempts/R1ComputableTraceWitness-computable-trace-witness-c.out.log",
+      "time_log": "attempts/R1ComputableTraceWitness-computable-trace-witness-c.time.log",
+      "sha_sidecar": "attempts/R1ComputableTraceWitness-computable-trace-witness-c.sha256",
+      "source_sha256": "987a2323046288ea2b8156a279ee7f5b4118b14703651bdb112d8e2dcae236c5",
+      "exit_status": 1,
+      "elapsed_wall_clock": "0:01.75",
+      "max_rss_kib": "3320576",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "historical-failure"
+    },
+    {
+      "target": "R1ComputableTraceWitness",
+      "suffix": "computable-trace-witness-d",
+      "receipt": "attempts/R1ComputableTraceWitness-computable-trace-witness-d.receipt.json",
+      "source_snapshot": "attempts/R1ComputableTraceWitness-computable-trace-witness-d.source.lean",
+      "out_log": "attempts/R1ComputableTraceWitness-computable-trace-witness-d.out.log",
+      "time_log": "attempts/R1ComputableTraceWitness-computable-trace-witness-d.time.log",
+      "sha_sidecar": "attempts/R1ComputableTraceWitness-computable-trace-witness-d.sha256",
+      "source_sha256": "2025bc75176168fcfb738453effcad4a506e561e97c27b9105ffd302dc00e0e1",
+      "exit_status": 0,
+      "elapsed_wall_clock": "0:01.87",
+      "max_rss_kib": "3333972",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "earlier-green-same-source"
+    },
+    {
+      "target": "R1ConcreteSpendExtraction",
+      "suffix": "append-chain-a",
+      "receipt": "attempts/R1ConcreteSpendExtraction-append-chain-a.receipt.json",
+      "source_snapshot": "attempts/R1ConcreteSpendExtraction-append-chain-a.source.lean",
+      "out_log": "attempts/R1ConcreteSpendExtraction-append-chain-a.out.log",
+      "time_log": "attempts/R1ConcreteSpendExtraction-append-chain-a.time.log",
+      "sha_sidecar": "attempts/R1ConcreteSpendExtraction-append-chain-a.sha256",
+      "source_sha256": "abe59059e1acc1f460afa5cd830187fb835d90dddc0c5a75fe5558b2b800f41a",
+      "exit_status": 0,
+      "elapsed_wall_clock": "0:02.23",
+      "max_rss_kib": "3556804",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "final-success"
+    },
+    {
+      "target": "R1ConcreteSpendExtraction",
+      "suffix": "concrete-spend-extraction-a",
+      "receipt": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-a.receipt.json",
+      "source_snapshot": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-a.source.lean",
+      "out_log": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-a.out.log",
+      "time_log": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-a.time.log",
+      "sha_sidecar": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-a.sha256",
+      "source_sha256": "d17a144d0fbcef1f69e85a4d9250bdd111060bbfb78011cfd0afb134d0454cd2",
+      "exit_status": 1,
+      "elapsed_wall_clock": "0:01.91",
+      "max_rss_kib": "3531956",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "historical-failure"
+    },
+    {
+      "target": "R1ConcreteSpendExtraction",
+      "suffix": "concrete-spend-extraction-b",
+      "receipt": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-b.receipt.json",
+      "source_snapshot": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-b.source.lean",
+      "out_log": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-b.out.log",
+      "time_log": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-b.time.log",
+      "sha_sidecar": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-b.sha256",
+      "source_sha256": "09721361452e0838240c8c60eb34d43da79ea866f057faee2ae09b0a715b45ab",
+      "exit_status": 1,
+      "elapsed_wall_clock": "0:01.95",
+      "max_rss_kib": "3560056",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "historical-failure"
+    },
+    {
+      "target": "R1ConcreteSpendExtraction",
+      "suffix": "concrete-spend-extraction-c",
+      "receipt": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-c.receipt.json",
+      "source_snapshot": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-c.source.lean",
+      "out_log": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-c.out.log",
+      "time_log": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-c.time.log",
+      "sha_sidecar": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-c.sha256",
+      "source_sha256": "84aa5bcfd3292b3b21055e4487584ce0995c7ffb5a843160221d1b2ba2f00651",
+      "exit_status": 1,
+      "elapsed_wall_clock": "0:01.89",
+      "max_rss_kib": "3553680",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "historical-failure"
+    },
+    {
+      "target": "R1ConcreteSpendExtraction",
+      "suffix": "concrete-spend-extraction-d",
+      "receipt": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-d.receipt.json",
+      "source_snapshot": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-d.source.lean",
+      "out_log": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-d.out.log",
+      "time_log": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-d.time.log",
+      "sha_sidecar": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-d.sha256",
+      "source_sha256": "6ea5082367ceec8b1c0f44a4dc33c877553083067edace37d3614baf866a2a29",
+      "exit_status": 1,
+      "elapsed_wall_clock": "0:02.08",
+      "max_rss_kib": "3559892",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "historical-failure"
+    },
+    {
+      "target": "R1ConcreteSpendExtraction",
+      "suffix": "concrete-spend-extraction-e",
+      "receipt": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-e.receipt.json",
+      "source_snapshot": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-e.source.lean",
+      "out_log": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-e.out.log",
+      "time_log": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-e.time.log",
+      "sha_sidecar": "attempts/R1ConcreteSpendExtraction-concrete-spend-extraction-e.sha256",
+      "source_sha256": "2fd54924a8aa04c010359a76f1a92c3e067d4b389b59de4f33c68330997e6cc1",
+      "exit_status": 0,
+      "elapsed_wall_clock": "0:02.29",
+      "max_rss_kib": "3554160",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "superseded-green-earlier-source"
+    },
+    {
+      "target": "R1ListWitnessExtract",
+      "suffix": "append-chain-a",
+      "receipt": "attempts/R1ListWitnessExtract-append-chain-a.receipt.json",
+      "source_snapshot": "attempts/R1ListWitnessExtract-append-chain-a.source.lean",
+      "out_log": "attempts/R1ListWitnessExtract-append-chain-a.out.log",
+      "time_log": "attempts/R1ListWitnessExtract-append-chain-a.time.log",
+      "sha_sidecar": "attempts/R1ListWitnessExtract-append-chain-a.sha256",
+      "source_sha256": "b1546a7694fb130c409c8f8369e24cbe7acbb4b48353e29b56d8af94c0df23ca",
+      "exit_status": 0,
+      "elapsed_wall_clock": "0:01.64",
+      "max_rss_kib": "3552052",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "final-success"
+    },
+    {
+      "target": "R1ListWitnessExtract",
+      "suffix": "list-witness-extract-a",
+      "receipt": "attempts/R1ListWitnessExtract-list-witness-extract-a.receipt.json",
+      "source_snapshot": "attempts/R1ListWitnessExtract-list-witness-extract-a.source.lean",
+      "out_log": "attempts/R1ListWitnessExtract-list-witness-extract-a.out.log",
+      "time_log": "attempts/R1ListWitnessExtract-list-witness-extract-a.time.log",
+      "sha_sidecar": "attempts/R1ListWitnessExtract-list-witness-extract-a.sha256",
+      "source_sha256": "1cec10c69fed614d07bf2cebda3d509794a7efc5d55ec6da4e530c4fedf2223d",
+      "exit_status": 1,
+      "elapsed_wall_clock": "0:01.54",
+      "max_rss_kib": "3532632",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "historical-failure-earlier-relation-attempt"
+    },
+    {
+      "target": "R1SpendBaseDescent",
+      "suffix": "append-chain-a",
+      "receipt": "attempts/R1SpendBaseDescent-append-chain-a.receipt.json",
+      "source_snapshot": "attempts/R1SpendBaseDescent-append-chain-a.source.lean",
+      "out_log": "attempts/R1SpendBaseDescent-append-chain-a.out.log",
+      "time_log": "attempts/R1SpendBaseDescent-append-chain-a.time.log",
+      "sha_sidecar": "attempts/R1SpendBaseDescent-append-chain-a.sha256",
+      "source_sha256": "efe4cfad3ee89a60313534ab5fb2a950aa999131ffdbe860b2952a2c0f7eda78",
+      "exit_status": 0,
+      "elapsed_wall_clock": "0:01.89",
+      "max_rss_kib": "3332300",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "final-success"
+    },
+    {
+      "target": "R1SpendBaseDescent",
+      "suffix": "spend-base-descent-a",
+      "receipt": "attempts/R1SpendBaseDescent-spend-base-descent-a.receipt.json",
+      "source_snapshot": "attempts/R1SpendBaseDescent-spend-base-descent-a.source.lean",
+      "out_log": "attempts/R1SpendBaseDescent-spend-base-descent-a.out.log",
+      "time_log": "attempts/R1SpendBaseDescent-spend-base-descent-a.time.log",
+      "sha_sidecar": "attempts/R1SpendBaseDescent-spend-base-descent-a.sha256",
+      "source_sha256": "efe4cfad3ee89a60313534ab5fb2a950aa999131ffdbe860b2952a2c0f7eda78",
+      "exit_status": 0,
+      "elapsed_wall_clock": "0:01.88",
+      "max_rss_kib": "3332200",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "earlier-green-same-source"
+    },
+    {
+      "target": "R1TraceSpendWitness",
+      "suffix": "append-chain-a",
+      "receipt": "attempts/R1TraceSpendWitness-append-chain-a.receipt.json",
+      "source_snapshot": "attempts/R1TraceSpendWitness-append-chain-a.source.lean",
+      "out_log": "attempts/R1TraceSpendWitness-append-chain-a.out.log",
+      "time_log": "attempts/R1TraceSpendWitness-append-chain-a.time.log",
+      "sha_sidecar": "attempts/R1TraceSpendWitness-append-chain-a.sha256",
+      "source_sha256": "8417a429a940e07076fd65ac266b6a841e2655321be6e300da05fb6051a81640",
+      "exit_status": 0,
+      "elapsed_wall_clock": "0:01.96",
+      "max_rss_kib": "3340048",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "final-success"
+    },
+    {
+      "target": "R1TraceSpendWitness",
+      "suffix": "trace-spend-witness-a",
+      "receipt": "attempts/R1TraceSpendWitness-trace-spend-witness-a.receipt.json",
+      "source_snapshot": "attempts/R1TraceSpendWitness-trace-spend-witness-a.source.lean",
+      "out_log": "attempts/R1TraceSpendWitness-trace-spend-witness-a.out.log",
+      "time_log": "attempts/R1TraceSpendWitness-trace-spend-witness-a.time.log",
+      "sha_sidecar": "attempts/R1TraceSpendWitness-trace-spend-witness-a.sha256",
+      "source_sha256": "c6c091aa9db0889f7e348bc7de0bd79cbbd128e6be2c4eac975d7888209961f6",
+      "exit_status": 1,
+      "elapsed_wall_clock": "0:01.77",
+      "max_rss_kib": "3320932",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "historical-failure"
+    },
+    {
+      "target": "R1TraceSpendWitness",
+      "suffix": "trace-spend-witness-b",
+      "receipt": "attempts/R1TraceSpendWitness-trace-spend-witness-b.receipt.json",
+      "source_snapshot": "attempts/R1TraceSpendWitness-trace-spend-witness-b.source.lean",
+      "out_log": "attempts/R1TraceSpendWitness-trace-spend-witness-b.out.log",
+      "time_log": "attempts/R1TraceSpendWitness-trace-spend-witness-b.time.log",
+      "sha_sidecar": "attempts/R1TraceSpendWitness-trace-spend-witness-b.sha256",
+      "source_sha256": "5c68f3203c216c41b543f353cf931911344eecf7109dca7caac75a1fe6a978fc",
+      "exit_status": 1,
+      "elapsed_wall_clock": "0:01.79",
+      "max_rss_kib": "3321216",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "historical-failure"
+    },
+    {
+      "target": "R1TraceSpendWitness",
+      "suffix": "trace-spend-witness-c",
+      "receipt": "attempts/R1TraceSpendWitness-trace-spend-witness-c.receipt.json",
+      "source_snapshot": "attempts/R1TraceSpendWitness-trace-spend-witness-c.source.lean",
+      "out_log": "attempts/R1TraceSpendWitness-trace-spend-witness-c.out.log",
+      "time_log": "attempts/R1TraceSpendWitness-trace-spend-witness-c.time.log",
+      "sha_sidecar": "attempts/R1TraceSpendWitness-trace-spend-witness-c.sha256",
+      "source_sha256": "8417a429a940e07076fd65ac266b6a841e2655321be6e300da05fb6051a81640",
+      "exit_status": 0,
+      "elapsed_wall_clock": "0:02.00",
+      "max_rss_kib": "3337460",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "earlier-green-same-source"
+    },
+    {
+      "target": "R1TraceWitnessExtract",
+      "suffix": "append-chain-a",
+      "receipt": "attempts/R1TraceWitnessExtract-append-chain-a.receipt.json",
+      "source_snapshot": "attempts/R1TraceWitnessExtract-append-chain-a.source.lean",
+      "out_log": "attempts/R1TraceWitnessExtract-append-chain-a.out.log",
+      "time_log": "attempts/R1TraceWitnessExtract-append-chain-a.time.log",
+      "sha_sidecar": "attempts/R1TraceWitnessExtract-append-chain-a.sha256",
+      "source_sha256": "aa89c783d7ad70ab7740f8dbf665a0191fd19232eda6e9a20dc2a82f1401fb9e",
+      "exit_status": 0,
+      "elapsed_wall_clock": "0:02.23",
+      "max_rss_kib": "3559904",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "final-success"
+    },
+    {
+      "target": "R1TraceWitnessExtract",
+      "suffix": "trace-witness-extract-a",
+      "receipt": "attempts/R1TraceWitnessExtract-trace-witness-extract-a.receipt.json",
+      "source_snapshot": "attempts/R1TraceWitnessExtract-trace-witness-extract-a.source.lean",
+      "out_log": "attempts/R1TraceWitnessExtract-trace-witness-extract-a.out.log",
+      "time_log": "attempts/R1TraceWitnessExtract-trace-witness-extract-a.time.log",
+      "sha_sidecar": "attempts/R1TraceWitnessExtract-trace-witness-extract-a.sha256",
+      "source_sha256": "58144b7e2c826e191317ce1d5877808acf68cd69dbd54c0ff62dc0e0bc743224",
+      "exit_status": 1,
+      "elapsed_wall_clock": "0:02.29",
+      "max_rss_kib": "3541720",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "historical-failure"
+    },
+    {
+      "target": "R1TraceWitnessExtract",
+      "suffix": "trace-witness-extract-b",
+      "receipt": "attempts/R1TraceWitnessExtract-trace-witness-extract-b.receipt.json",
+      "source_snapshot": "attempts/R1TraceWitnessExtract-trace-witness-extract-b.source.lean",
+      "out_log": "attempts/R1TraceWitnessExtract-trace-witness-extract-b.out.log",
+      "time_log": "attempts/R1TraceWitnessExtract-trace-witness-extract-b.time.log",
+      "sha_sidecar": "attempts/R1TraceWitnessExtract-trace-witness-extract-b.sha256",
+      "source_sha256": "58779035a5b808e52d831337aecacf0903de327bac4b4ce45b5b153bc2c38f6c",
+      "exit_status": 0,
+      "elapsed_wall_clock": "0:02.28",
+      "max_rss_kib": "3559184",
+      "swaps": "0",
+      "cgroup": {
+        "MemoryHigh": "4G",
+        "MemoryMax": "6G",
+        "MemorySwapMax": "0",
+        "TasksMax": 128
+      },
+      "classification": "superseded-green-earlier-source"
+    }
+  ],
+  "direct_import_source_object_pins": {
+    "R1SpendRelationMap": {
+      "source_path": "sources/R1SpendRelationMap.lean",
+      "source_sha256": "c8cb949131d6e10c73e88ff83a4d4884332fdb805030537e873a651633d114fa",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/SpendRelationMap.lean",
+      "object_path": "objects/R1SpendRelationMap.olean",
+      "object_sha256": "ab96e2011ba32458e17b804dc5801dd30844289685cf17a5608c44c7def90748",
+      "compile_receipt_claimed": false
+    },
+    "R1ExactBaseProjection": {
+      "source_path": "sources/R1ExactBaseProjection.lean",
+      "source_sha256": "762d9cea59495ee9f227c2df2c0c8ec4182ea0f8f46bc714d351a2228eb31cec",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/ExactBaseProjection.lean",
+      "object_path": "objects/R1ExactBaseProjection.olean",
+      "object_sha256": "a1947b0c7941a14cef560eb4e7ed8b5123308890313edd47862b3f5dca405357",
+      "compile_receipt_claimed": false
+    },
+    "R1SpendBaseDescent": {
+      "source_path": "sources/R1SpendBaseDescent.lean",
+      "source_sha256": "efe4cfad3ee89a60313534ab5fb2a950aa999131ffdbe860b2952a2c0f7eda78",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/SpendBaseDescent.lean",
+      "object_path": "objects/R1SpendBaseDescent.olean",
+      "object_sha256": "fd866be3dd798081f355f0fd3725a7e08efad1b46e80257e3f9812739d36ccd2",
+      "compile_receipt_claimed": false
+    },
+    "R1OutputNotes": {
+      "source_path": "sources/R1OutputNotes.lean",
+      "source_sha256": "70899b6106486fc78418509dae3c7c3ff378358bb19e2e21f9ad7ac9c91a4fa2",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/OutputNotes.lean",
+      "object_path": "objects/R1OutputNotes.olean",
+      "object_sha256": "2a61f54e1b1c95cf693ef87220bfbf920b7161c915d70b7fe90bf49889ce5c5f",
+      "compile_receipt_claimed": false
+    },
+    "R1InputPair": {
+      "source_path": "sources/R1InputPair.lean",
+      "source_sha256": "e97853456b75cc9970db0504df22b398802cc81d03993d492eec59f2d348316e",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/InputPair.lean",
+      "object_path": "objects/R1InputPair.olean",
+      "object_sha256": "7394e63da70b38036b43a9a0105e1179991426b41542ab67ad3038e6f0ae3ee6",
+      "compile_receipt_claimed": false
+    },
+    "R1TraceSpendWitness": {
+      "source_path": "sources/R1TraceSpendWitness.lean",
+      "source_sha256": "8417a429a940e07076fd65ac266b6a841e2655321be6e300da05fb6051a81640",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/TraceSpendWitness.lean",
+      "object_path": "objects/R1TraceSpendWitness.olean",
+      "object_sha256": "0b79ed7448ae0b9305a0e55db7b9c739bb82121103f4a5eabfd36d733e1b2c10",
+      "compile_receipt_claimed": false
+    },
+    "R1SpendDataMap": {
+      "source_path": "sources/R1SpendDataMap.lean",
+      "source_sha256": "0f606c08fa0d796d4e36a9e46d225e71be2094184ba29eb8dd510ddc2de22813",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/SpendDataMap.lean",
+      "object_path": "objects/R1SpendDataMap.olean",
+      "object_sha256": "fcc96ce3621bda9813912a1143e4924298db861e4543890774a6ea319886e476",
+      "compile_receipt_claimed": false
+    },
+    "R1CandidateBaseProjection": {
+      "source_path": "sources/R1CandidateBaseProjection.lean",
+      "source_sha256": "cdae8d0b2c495e17aba07ba2815c9eeb14599466cce586eb06656ea5c7cf9a37",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/CandidateBaseProjection.lean",
+      "object_path": "objects/R1CandidateBaseProjection.olean",
+      "object_sha256": "a09cddac4b74b2c3c6e5a017dd79e29366cbc5eee90c37ee5cd8054dbee6b288",
+      "compile_receipt_claimed": false
+    },
+    "R1SpendRelationExtraction": {
+      "source_path": "sources/R1SpendRelationExtraction.lean",
+      "source_sha256": "03e5e2a62df094607631511b483113938e4c5f261ed65eed3f0d7b044936ba2a",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/SpendRelationExtraction.lean",
+      "object_path": "objects/R1SpendRelationExtraction.olean",
+      "object_sha256": "e3eb3462bc975df0a992e10e2e31572c3b8e48cab362988d0765806ef8f05626",
+      "compile_receipt_claimed": false
+    },
+    "R1ComputableTraceWitness": {
+      "source_path": "sources/R1ComputableTraceWitness.lean",
+      "source_sha256": "2025bc75176168fcfb738453effcad4a506e561e97c27b9105ffd302dc00e0e1",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/ComputableTraceWitness.lean",
+      "object_path": "objects/R1ComputableTraceWitness.olean",
+      "object_sha256": "b42ead4a64af7d22fcf67df3151659753e7f6fae4acd3b91cbe428fff5e8c3f3",
+      "compile_receipt_claimed": false
+    },
+    "R1TraceValueDecode": {
+      "source_path": "sources/R1TraceValueDecode.lean",
+      "source_sha256": "8f1c6d5f66a7ca7940cdbf3b2ffe517dbe8c6e867077c43d4b07e1133d9308a9",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/TraceValueDecode.lean",
+      "object_path": "objects/R1TraceValueDecode.olean",
+      "object_sha256": "877c93df66900e3d14fe902fa2b9223196c07c7e116cf03450f9eac230d63916",
+      "compile_receipt_claimed": false
+    },
+    "R1ConcreteSpendExtraction": {
+      "source_path": "sources/R1ConcreteSpendExtraction.lean",
+      "source_sha256": "abe59059e1acc1f460afa5cd830187fb835d90dddc0c5a75fe5558b2b800f41a",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/ConcreteSpendExtraction.lean",
+      "object_path": "objects/R1ConcreteSpendExtraction.olean",
+      "object_sha256": "349f2024b970f4064a7b1cbb6270744c7489ca866faa1c2b822a8d5f0fa7007c",
+      "compile_receipt_claimed": false
+    },
+    "R1TraceWitnessExtract": {
+      "source_path": "sources/R1TraceWitnessExtract.lean",
+      "source_sha256": "aa89c783d7ad70ab7740f8dbf665a0191fd19232eda6e9a20dc2a82f1401fb9e",
+      "local_source_path": "docs/research/100bit-spend-path-20261013/lean/TraceWitnessExtract.lean",
+      "object_path": "objects/R1TraceWitnessExtract.olean",
+      "object_sha256": "261298748f10b6c42d58f3d69617057f0dd36ba79a0f367f946f51d58f954ee7",
+      "compile_receipt_claimed": false
+    }
+  },
+  "runner_pins": {
+    "compile-one.sh": {
+      "path": "runner/compile-one.sh",
+      "sha256": "e567477ba2e054186b33f35b3dbf55a8a9c4399cd3baade5b5d145c1912dd901"
+    },
+    "compile-snapshot.sh": {
+      "path": "runner/compile-snapshot.sh",
+      "sha256": "b3950d1425327d53e074ed86a879aba9b9647d9c264812d49bb9b1c9ab1ac8b7"
+    },
+    "run2.py": {
+      "path": "runner/run2.py",
+      "sha256": "15e6cb788a5b69473c67456c71d1add7b6fe016bf0417ec68cbe2bee0549c9e2"
+    },
+    "environment-base.json": {
+      "path": "runner/environment-base.json",
+      "sha256": "d2f7294550dbdd9aa1cab186f25809c1a8b5a84d2fef74e3b3234052ced16c12"
+    }
+  },
+  "object_archive": {
+    "path": "objects/append-witness-chain-objects.tar.gz",
+    "sha256": "ddd0b0eb592bab86200195e298e11a964a8742091be07bf3b9ede7d769598faa",
+    "members": [
+      {
+        "path": "R1SpendBaseDescent.olean",
+        "sha256": "fd866be3dd798081f355f0fd3725a7e08efad1b46e80257e3f9812739d36ccd2"
+      },
+      {
+        "path": "R1TraceSpendWitness.olean",
+        "sha256": "0b79ed7448ae0b9305a0e55db7b9c739bb82121103f4a5eabfd36d733e1b2c10"
+      },
+      {
+        "path": "R1ComputableTraceWitness.olean",
+        "sha256": "b42ead4a64af7d22fcf67df3151659753e7f6fae4acd3b91cbe428fff5e8c3f3"
+      },
+      {
+        "path": "R1ConcreteSpendExtraction.olean",
+        "sha256": "349f2024b970f4064a7b1cbb6270744c7489ca866faa1c2b822a8d5f0fa7007c"
+      },
+      {
+        "path": "R1TraceWitnessExtract.olean",
+        "sha256": "261298748f10b6c42d58f3d69617057f0dd36ba79a0f367f946f51d58f954ee7"
+      },
+      {
+        "path": "R1ListWitnessExtract.olean",
+        "sha256": "de095bf98c28d134254604fbc382fbd2ee193264c68dd87749454dbd92127d7b"
+      },
+      {
+        "path": "R1SpendRelationMap.olean",
+        "sha256": "ab96e2011ba32458e17b804dc5801dd30844289685cf17a5608c44c7def90748"
+      },
+      {
+        "path": "R1ExactBaseProjection.olean",
+        "sha256": "a1947b0c7941a14cef560eb4e7ed8b5123308890313edd47862b3f5dca405357"
+      },
+      {
+        "path": "R1OutputNotes.olean",
+        "sha256": "2a61f54e1b1c95cf693ef87220bfbf920b7161c915d70b7fe90bf49889ce5c5f"
+      },
+      {
+        "path": "R1InputPair.olean",
+        "sha256": "7394e63da70b38036b43a9a0105e1179991426b41542ab67ad3038e6f0ae3ee6"
+      },
+      {
+        "path": "R1SpendDataMap.olean",
+        "sha256": "fcc96ce3621bda9813912a1143e4924298db861e4543890774a6ea319886e476"
+      },
+      {
+        "path": "R1CandidateBaseProjection.olean",
+        "sha256": "a09cddac4b74b2c3c6e5a017dd79e29366cbc5eee90c37ee5cd8054dbee6b288"
+      },
+      {
+        "path": "R1SpendRelationExtraction.olean",
+        "sha256": "e3eb3462bc975df0a992e10e2e31572c3b8e48cab362988d0765806ef8f05626"
+      },
+      {
+        "path": "R1TraceValueDecode.olean",
+        "sha256": "877c93df66900e3d14fe902fa2b9223196c07c7e116cf03450f9eac230d63916"
+      }
+    ],
+    "scope": "Exact cached dependency objects for the final append-chain-a targets only; these objects are not associated with historical attempts."
+  },
+  "import_provenance_note": "Direct-import source snapshots and cached object hashes are recorded for reproducibility; they are not individual compile receipts."
+}

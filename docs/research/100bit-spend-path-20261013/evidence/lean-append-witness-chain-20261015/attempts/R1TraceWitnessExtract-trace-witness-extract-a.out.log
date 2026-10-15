@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1TraceWitnessExtract.lean:85:2: error: Tactic `assumption` failed
+
+pub : Public M31Exact
+A : Trace E
+lam chi : E
+hshape : PublicOptionShape.canonical pub
+hbase : BaseTyped embed.fieldRange A
+h :
+  ProductionHolds (SpendDataMap.mapPublic (⇑embed) pub) lam chi A ∧
+    CopyLinkBalance (SpendDataMap.mapPublic (⇑embed) pub) A
+this : CharP E P := charP_of_injective_algebraMap (RingHom.injective (algebraMap M31Exact E)) P
+widePub : Public WideExact := SpendDataMap.mapPublic (⇑embed) pub
+hwideShape : PublicOptionShape.canonical widePub
+v0 v1 v2 : ℕ
+h0 : v0 < 2 ^ 30
+h1 : v1 < 2 ^ 30
+h2 : v2 < 2 ^ 30
+hbalance : v0 = v1 + v2
+e0 : A 10 1008 = ↑v0
+e1 : A 10 1010 = ↑v1
+e2 : A 10 1012 = ↑v2
+hinput : InputWitnessCore.Relation widePub (↑v0) (traceSk A) (traceSalt A) (tracePath A) (InputPair.leaf A)
+hfacts : SpendSemantics.NoteFacts widePub A
+ww : Witness TraceSpendWitness.E := TraceSpendWitness.fromTrace A ⟨v0, h0⟩ ⟨v1, h1⟩ ⟨v2, h2⟩
+hw : Rspend widePub ww
+w : Wspend := ComputableTraceWitness.fromTrace A ⟨v0, h0⟩ ⟨v1, h1⟩ ⟨v2, h2⟩
+hwvalid : Rspend pub w
+hcheck : checkM31 pub w = true
+hdecode : TraceValueDecode.decode A = some (⟨v0, h0⟩, ⟨v1, h1⟩, ⟨v2, h2⟩)
+⊢ (if checkM31 pub (ComputableTraceWitness.fromTrace A ⟨v0, h0⟩ ⟨v1, h1⟩ ⟨v2, h2⟩) = true then
+      some (ComputableTraceWitness.fromTrace A ⟨v0, h0⟩ ⟨v1, h1⟩ ⟨v2, h2⟩)
+    else none) =
+    some w
+'AspisR1.TraceWitnessExtract.returned_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.TraceWitnessExtract.returned_valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.TraceWitnessExtract.complete_of_production' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.TraceWitnessExtract.complete_of_candidate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

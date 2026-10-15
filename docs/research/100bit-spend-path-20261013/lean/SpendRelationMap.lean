@@ -1,5 +1,6 @@
 import R1SpendDataMap
 import R1NoteHashMap
+import R1AppendBindingMap
 
 /-! Ring-hom transport for the complete spend relation. This is a coordinate
 embedding equivalence for already mapped witnesses; it does not claim that
@@ -282,10 +283,11 @@ theorem rspend_map_iff (f : K →+* L) (pub : Public K) (w : Witness K) :
   have hf : Function.Injective f := f.injective
   constructor
   · intro h
-    rcases h with ⟨hcanonical, hrelation, hbalance, hchange, hvariant⟩
+    rcases h with ⟨hcanonical, hrelation, hbalance, hchange, hvariant, happend⟩
     have hvalue : f (w.inputValue.val : K) = (w.inputValue.val : L) := by simp
     refine ⟨(canonical_map_iff f hf pub).mp hcanonical, ?_,
-      ?_, ?_, (variantOutput_map_iff f hf pub w).mp hvariant⟩
+      ?_, ?_, (variantOutput_map_iff f hf pub w).mp hvariant,
+      (AppendBindingMap.appendBinding_map_iff f pub).mp happend⟩
     · have hm := (relation_map_iff f hf pub (w.inputValue.val : K) w.sk w.salt
         w.path w.pair).mp (by simpa [SpendDataMap.witness, hvalue] using hrelation)
       simpa [SpendDataMap.witness] using hm
@@ -296,10 +298,11 @@ theorem rspend_map_iff (f : K →+* L) (pub : Public K) (w : Witness K) :
             changeCommitment (SpendDataMap.mapPublic f pub) (SpendDataMap.witness f w) := hchange
         _ = SpendDataMap.digest f (changeCommitment pub w) := (map_changeCommitment f pub w).symm
   · intro h
-    rcases h with ⟨hcanonical, hrelation, hbalance, hchange, hvariant⟩
+    rcases h with ⟨hcanonical, hrelation, hbalance, hchange, hvariant, happend⟩
     have hvalue : f (w.inputValue.val : K) = (w.inputValue.val : L) := by simp
     refine ⟨(canonical_map_iff f hf pub).mpr hcanonical, ?_,
-      ?_, ?_, (variantOutput_map_iff f hf pub w).mpr hvariant⟩
+      ?_, ?_, (variantOutput_map_iff f hf pub w).mpr hvariant,
+      (AppendBindingMap.appendBinding_map_iff f pub).mpr happend⟩
     · have hm := (relation_map_iff f hf pub (w.inputValue.val : K) w.sk w.salt
         w.path w.pair).mpr hrelation
       simpa [SpendDataMap.witness, hvalue] using hm

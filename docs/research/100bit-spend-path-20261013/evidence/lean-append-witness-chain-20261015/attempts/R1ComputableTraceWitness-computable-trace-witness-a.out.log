@@ -1,0 +1,51 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ComputableTraceWitness.lean:70:2: error: unsolved goals
+case pos
+A : Trace E
+hA : BaseTyped F A
+level : Fin 24
+b : Fin 1024 := pathBaseRow level
+hzero : ExactBaseProjection.project (A 0 b) = 0 ↔ A 0 b = 0
+hz : A 0 b = 0
+hp : ExactBaseProjection.project (A 0 b) = 0
+⊢ (if ExactBaseProjection.project 0 = 0 then
+      (false, fun i => ExactBaseProjection.project (A ⟨8 + ↑i, ⋯⟩ (succRow (pathBaseRow level))))
+    else (true, fun i => ExactBaseProjection.project (A ⟨↑i, ⋯⟩ (succRow (pathBaseRow level))))) =
+    (false, SpendDataMap.digest ExactBaseProjection.project fun i => A ⟨8 + ↑i, ⋯⟩ (succRow (pathBaseRow level)))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ComputableTraceWitness.lean:72:2: error: unsolved goals
+case neg
+A : Trace E
+hA : BaseTyped F A
+level : Fin 24
+b : Fin 1024 := pathBaseRow level
+hzero : ExactBaseProjection.project (A 0 b) = 0 ↔ A 0 b = 0
+hz : ¬A 0 b = 0
+hp : ExactBaseProjection.project (A 0 b) ≠ 0
+⊢ (fun i => ExactBaseProjection.project (A ⟨↑i, ⋯⟩ (succRow (pathBaseRow level)))) =
+    SpendDataMap.digest ExactBaseProjection.project fun i => A ⟨↑i, ⋯⟩ (succRow (pathBaseRow level))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ComputableTraceWitness.lean:71:55: warning: This simp argument is unused:
+  SpendDataMap.digest
+
+Hint: Omit it from the simp argument list.
+  simp [pathFromTrace, tracePath, SpendDataMap.path, S̵p̵e̵n̵d̵D̵a̵t̵a̵M̵a̵p̵.̵d̵i̵g̵e̵s̵t̵,̵ ̵b, hz, hp]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ComputableTraceWitness.lean:71:83: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp [pathFromTrace, tracePath, SpendDataMap.path, SpendDataMap.digest, b, hz,̵ ̵h̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ComputableTraceWitness.lean:74:55: warning: This simp argument is unused:
+  SpendDataMap.digest
+
+Hint: Omit it from the simp argument list.
+  simp [pathFromTrace, tracePath, SpendDataMap.path, S̵p̵e̵n̵d̵D̵a̵t̵a̵M̵a̵p̵.̵d̵i̵g̵e̵s̵t̵,̵ ̵b, hz, hp]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.ComputableTraceWitness.pathFromTrace_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ComputableTraceWitness.fromTrace_eq_projected_existing' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

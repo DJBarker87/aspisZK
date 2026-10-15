@@ -31,20 +31,23 @@ existential quantification through enumeration. The `SpendRelation` and
 `SpendAppendBinding` targets passed focused compilation and axiom audits.
 The core production-trace bridge `SpendRelationExtraction.of_production`,
 including the append correction, has also passed its focused compile and
-axiom audit. The downstream M31/executable bridges remain separate obligations
-and have not been refreshed by that result.
+axiom audit. The downstream M31/executable bridges have separately passed
+their focused refresh against the six-conjunct relation.
 
 The downstream M31 bridge is `ConcreteSpendExtraction.candidate_checked_witness`:
 its intended inputs are a candidate of the typed recovered word, canonical
 public options, and that candidate's production/copy-link facts, with an
-M31 witness checked by `checkM31` as its result. The M31/executable bridge
-chain is being refreshed separately, so this document does not treat that
-chain as checked by the core production-trace result. The existing descent
+M31 witness checked by `checkM31` as its result. The separately checked descent
 components use `CandidateBaseProjection`, `TraceSpendWitness`,
 `SpendRelationMap.rspend_map_iff`, and `SpendBaseDescent`; the combined theorem
 is existential, and the old trace path selector is noncomputable. Neither
 accepted-proof recovery nor an efficient list decoder is established here.
-Executable reconstruction is being checked separately.
+`ComputableTraceWitness`, `TraceValueDecode` and `TraceWitnessExtract` now
+provide executable reconstruction from a supplied trace. The extractor
+returns only checked witnesses and succeeds under the same explicit
+production/base-typing premises. `ListWitnessExtract` scans a supplied list
+and bounds candidates inspected by its length; it does not supply that list
+or prove the full-log extractor's polynomial cost or failure allowance.
 
 The current production value theorem permits zero values. Accordingly this
 semantic relation uses bounded nonnegative values; the source's honest

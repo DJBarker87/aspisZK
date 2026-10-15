@@ -1,0 +1,86 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1AppendBindingMap.lean:44:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    SpendDataMap.digest (⇑f)
+        (if digestBitZero pub level then nodeCompress cur (AppendNode.frozenEmpty level.castSucc)
+        else nodeCompress (pub.snapshotFrontier level) cur) =
+      if _a then nodeCompress (SpendDataMap.digest (⇑f) cur) (AppendNode.frozenEmpty level.castSucc)
+      else nodeCompress ((SpendDataMap.mapPublic (⇑f) pub).snapshotFrontier level) (SpendDataMap.digest (⇑f) cur)
+Error: Application type mismatch: The argument
+  instDecidableEqNat ((SpendDataMap.mapPublic (⇑f) pub).nextPairIndex >>> ↑level &&& 1) 0
+has type
+  Decidable ((SpendDataMap.mapPublic (⇑f) pub).nextPairIndex >>> ↑level &&& 1 = 0)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite (R0P.Digest L) _a (instDecidableEqNat ((SpendDataMap.mapPublic (⇑f) pub).nextPairIndex >>> ↑level &&& 1) 0)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+pub : Public K
+level : Fin 20
+cur : R0P.Digest K
+hbit : digestBitZero (SpendDataMap.mapPublic (⇑f) pub) level = digestBitZero pub level
+⊢ SpendDataMap.digest (⇑f)
+      (if digestBitZero pub level then nodeCompress cur (AppendNode.frozenEmpty level.castSucc)
+      else nodeCompress (pub.snapshotFrontier level) cur) =
+    if digestBitZero (SpendDataMap.mapPublic (⇑f) pub) level then
+      nodeCompress (SpendDataMap.digest (⇑f) cur) (AppendNode.frozenEmpty level.castSucc)
+    else nodeCompress ((SpendDataMap.mapPublic (⇑f) pub).snapshotFrontier level) (SpendDataMap.digest (⇑f) cur)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1AppendBindingMap.lean:71:15: error: unsolved goals
+case withdrawal
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+pub : Public K
+hv : pub.variant = Variant.withdrawal
+⊢ (nodeCompress (SpendDataMap.digest (⇑f) pub.change) fun x => 0) =
+    nodeCompress (SpendDataMap.digest (⇑f) pub.change) (SpendDataMap.digest ⇑f fun x => 0)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1AppendBindingMap.lean:89:52: error: unsolved goals
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+pub : Public K
+hf : Function.Injective ⇑f
+hd : Function.Injective (SpendDataMap.digest ⇑f)
+pairL : R0P.Digest L
+hpairL : outputPair (SpendDataMap.mapPublic (⇑f) pub) = some pairL
+hrootL : (SpendDataMap.mapPublic (⇑f) pub).nextRoot = AppendPath.pathPrefix (SpendDataMap.mapPublic (⇑f) pub) pairL 20
+hcarryL :
+  ∀ (hc : digestCarry (SpendDataMap.mapPublic (⇑f) pub).nextPairIndex < 20),
+    (SpendDataMap.mapPublic (⇑f) pub).nextFrontier ⟨digestCarry (SpendDataMap.mapPublic (⇑f) pub).nextPairIndex, hc⟩ =
+      AppendPath.pathPrefix (SpendDataMap.mapPublic (⇑f) pub) pairL
+        (digestCarry (SpendDataMap.mapPublic (⇑f) pub).nextPairIndex)
+pairK : R0P.Digest K
+hpair : outputPair pub = some pairK
+⊢ Option.map (SpendDataMap.digest ⇑f) (some pairK) = some (SpendDataMap.digest (⇑f) pairK)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1AppendBindingMap.lean:127:4: error: unsolved goals
+case mpr.refine_1
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+pub : Public K
+hf : Function.Injective ⇑f
+hd : Function.Injective (SpendDataMap.digest ⇑f)
+pairK : R0P.Digest K
+hpairK : outputPair pub = some pairK
+hrootK : pub.nextRoot = AppendPath.pathPrefix pub pairK 20
+hcarryK :
+  ∀ (hc : digestCarry pub.nextPairIndex < 20),
+    pub.nextFrontier ⟨digestCarry pub.nextPairIndex, hc⟩ =
+      AppendPath.pathPrefix pub pairK (digestCarry pub.nextPairIndex)
+⊢ Option.map (SpendDataMap.digest ⇑f) (some pairK) = some (SpendDataMap.digest (⇑f) pairK)
+'AspisR1.AppendBindingMap.map_frozenEmpty' depends on axioms: [propext, Quot.sound]
+'AspisR1.AppendBindingMap.map_step' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.AppendBindingMap.map_pathPrefix' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.AppendBindingMap.map_outputPair' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.AppendBindingMap.appendBinding_map_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

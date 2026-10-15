@@ -1,0 +1,18 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1AppendBindingMap.lean:47:2: error: 'change' tactic failed, pattern
+  (if digestBitZero pub level then SpendDataMap.digest (⇑f) (nodeCompress cur (AppendNode.frozenEmpty level.castSucc))
+    else SpendDataMap.digest (⇑f) (nodeCompress (pub.snapshotFrontier level) cur)) =
+    if digestBitZero pub level then nodeCompress (SpendDataMap.digest (⇑f) cur) (AppendNode.frozenEmpty level.castSucc)
+    else nodeCompress (SpendDataMap.digest (⇑f) (pub.snapshotFrontier level)) (SpendDataMap.digest (⇑f) cur)
+is not definitionally equal to target
+  SpendDataMap.digest (⇑f)
+      (if digestBitZero pub level then nodeCompress cur (AppendNode.frozenEmpty level.castSucc)
+      else nodeCompress (pub.snapshotFrontier level) cur) =
+    if digestBitZero (SpendDataMap.mapPublic (⇑f) pub) level then
+      nodeCompress (SpendDataMap.digest (⇑f) cur) (AppendNode.frozenEmpty level.castSucc)
+    else nodeCompress ((SpendDataMap.mapPublic (⇑f) pub).snapshotFrontier level) (SpendDataMap.digest (⇑f) cur)
+'AspisR1.AppendBindingMap.map_frozenEmpty' depends on axioms: [propext, Quot.sound]
+'AspisR1.AppendBindingMap.map_step' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.AppendBindingMap.map_pathPrefix' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.AppendBindingMap.map_outputPair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.AppendBindingMap.appendBinding_map_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
