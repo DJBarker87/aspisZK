@@ -33,6 +33,11 @@ pub fn process_r1_cost_probe_instruction(program_id:&Pubkey,accounts:&[AccountIn
     if matches!(data.first().copied(), Some(4 | 5 | 6)) || (data == &[3,10] || data == &[3,11]) || data.starts_with(b"ASQ8") {
         return r1_pool_adapter::process(program_id,accounts,data);
     }
+    #[cfg(feature="pool-adapter")]
+    return Err(ProgramError::InvalidInstructionData);
+
+    #[cfg(not(feature="pool-adapter"))]
+    {
     if accounts.len()!=3||!matches!(data,[1,0..=22]|[2]) {return Err(ProgramError::InvalidInstructionData);}
     for (i,a) in accounts.iter().enumerate(){if a.owner!=program_id||a.executable||a.is_writable!=(i==2){return Err(ProgramError::InvalidAccountData);}}
     let proof=accounts[0].try_borrow_data()?;let public=accounts[1].try_borrow_data()?;let mut checkpoint=accounts[2].try_borrow_mut_data()?;
@@ -53,4 +58,69 @@ pub fn process_r1_cost_probe_instruction(program_id:&Pubkey,accounts:&[AccountIn
         msg!("r1:heap-high-water");solana_program::log::sol_log_64((solana_program::entrypoint::HEAP_START_ADDRESS as usize+256*1024-cursor+core::mem::size_of::<usize>())as u64,0,0,0,0);
     }
     Ok(())
+    }
+}
+
+#[cfg(all(test, feature="pool-adapter"))]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn pool_adapter_rejects_legacy_tags_before_borrowing_accounts() {
+        let program_id = Pubkey::new_unique();
+        let proof_key = Pubkey::new_unique();
+        let public_key = Pubkey::new_unique();
+        let checkpoint_key = Pubkey::new_unique();
+        let mut proof_lamports = 0;
+        let mut public_lamports = 0;
+        let mut checkpoint_lamports = 0;
+        let mut proof_data = [0u8; 1];
+        let mut public_data = [0u8; 1];
+        let mut checkpoint_data = [0u8; 1];
+        let proof = AccountInfo::new(
+            &proof_key,
+            false,
+            false,
+            &mut proof_lamports,
+            &mut proof_data,
+            &program_id,
+            false,
+            0,
+        );
+        let public = AccountInfo::new(
+            &public_key,
+            false,
+            false,
+            &mut public_lamports,
+            &mut public_data,
+            &program_id,
+            false,
+            0,
+        );
+        let checkpoint = AccountInfo::new(
+            &checkpoint_key,
+            false,
+            true,
+            &mut checkpoint_lamports,
+            &mut checkpoint_data,
+            &program_id,
+            false,
+            0,
+        );
+        let accounts = [proof, public, checkpoint];
+        let _held_proof_data = accounts[0].try_borrow_mut_data().unwrap();
+
+        for k in 0..=22 {
+            assert_eq!(
+                process_r1_cost_probe_instruction(&program_id, &accounts, &[1, k]),
+                Err(ProgramError::InvalidInstructionData),
+                "legacy stage-1 tag [1, {k}] must be rejected before borrowing proof data",
+            );
+        }
+        assert_eq!(
+            process_r1_cost_probe_instruction(&program_id, &accounts, &[2]),
+            Err(ProgramError::InvalidInstructionData),
+            "legacy stage-2 tag [2] must be rejected before borrowing proof data",
+        );
+    }
 }

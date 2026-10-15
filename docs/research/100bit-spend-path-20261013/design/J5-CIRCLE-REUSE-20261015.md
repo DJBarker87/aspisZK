@@ -101,3 +101,22 @@ SHA-256 of the cited source files at this inventory:
 | `docs/research/100bit-spend-path-20261013/lean/DuplexSamplers.lean` | `6ae5ba2277f2881deb909fa60667dab008be0a02b2d55f9ec5c20f698fa5e4a3` |
 | `docs/research/100bit-spend-path-20261013/lean/UnifiedPayloadStep.lean` | `a4c579f794fe58946e2001c8228f60e85e139724e4f36dd2d9bd4c253d2b2359` |
 | `docs/research/100bit-spend-path-20261013/lean/TranscriptView.lean` | `bce7a74ce7e9ed7c16aa9248b4c808d45847d8e7c455457086f976b65c1b5798` |
+
+## Current literal challenge-list adapter
+
+`lean/LiteralChallengeRead.lean` is now focused-green at source SHA-256
+`37e1456e07326dc33ec30fc6b0e93aa47692eb699d3a76ede57e51473327bdfc`;
+its evidence is in `evidence/lean-literal-challenge-read-20261015/`. The
+module proves that an ordinary value at a list index is preserved by appending
+a suffix and can be recovered as an indexed `(message, (ordinary value,
+state))` entry. It does not identify that value with an old circle challenge
+or establish a prior no-hit condition.
+
+`lean/LiteralCircleDensity.lean` is now focused-green (source SHA-256
+`e353554ab952041f34a53113b62840b319c7f41acb073ee81949e8701769e302`; bundle
+`evidence/lean-literal-circle-density-20261015/`). It proves fixed-input
+density adapters for selected rows 25 and 26 using the selected circle-view
+identities and old modulo-sampler mass lemmas. The row-26 event retains
+explicit prior `z0` and `z0 ≠ circleFallback1`; the module does not derive
+that guard from a transcript/no-hit prefix or establish terminal/source
+acceptance, full D2/D3, or source refinement.
