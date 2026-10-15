@@ -1,0 +1,652 @@
+DESIGN-T2b-2b-D′ — the (B) half of the T2b-2b spanning proof, redesigned in the natural basis
+=============================================================================================
+
+Job T2b-2b-D′ (LOG D22.5).  Worktree branch codex/t2b2b-dprime-20261015, base
+ccefdebd1.  Inputs: LOG "Lead acceptance of the T2b-2b design as a proposal",
+D21 (Z8c acceptance), D22 (Z8d acceptance); t2b2b/DESIGN-T2b-2b.txt (§2.5
+withdrawn by D22.2); z4/FINDINGS-Z8c.md; z4/FINDINGS-Z8d.md.
+
+Everything here is stated in the natural (Chebyshev-product) basis that Lean
+and Rust use (D22.1): a message c ∈ K^1024 means
+    p0 = Σ_j c[2j]·N_j(x),  p1 = Σ_j c[2j+1]·N_j(x),  N_j = ∏_{b∈bits j} T_{2^b}(x),
+c = coeffsLinear π u for a row word u (HonestView.lean:80), and foldMessage
+reads c[4d+s] directly (Fold.lean:71; foldMessage_eq_sum,
+RoundNormalization.lean:37).
+
+Status tags as in the T2b-2b design: STRUCTURAL = provable for every
+challenge from the stated algebra; CONDITIONAL = holds off a named bad set of
+continuous challenges, witness needed; MEASURED = an exact rank computed on
+the probe (structure, vectors named); PREMISE = carried as a hypothesis of
+the theorem, not proved.
+
+Sections
+  §0  Summary verdict
+  §1  Notation and the three natural-basis facts
+  §2  The route: lemmas with Lean statement sketches
+  §3  What is proved, what is measured
+  §4  Probes: Z8e (run) and toy checks (run, not evidence)
+  §5  Risks and open points
+  §6  Impact on the D21 Lean statement, on Good₃ and on J-job order
+
+§0  Summary verdict
+-------------------
+Verdict.  I found no proof of (B) that holds for every query set.  (B)
+should enter the T2b-2b theorem as an explicit, numerically checked premise
+(hBc : BCond), labelled "B-open" in the ledger next to OT-open (§6 gives the
+exact label and what is checked).  What this design does establish:
+
+ 1. The D-high deficit is now fully explained, in the natural basis, with
+    nothing left over.  V_D = bat(D-high ∩ ker own_D) is exactly
+        B₀ ∩ {f_0..f_13 ∈ lowShadow} ∩ ker etaRel 28        (1,912 − 96 − 8 = 1,808).
+    "⊆" is proved here; "=" is measured (Z8e: the 304-limb annihilator of
+    V_D is spanned by the 25 relations, 96 low-fold functionals Ψ_lo and the
+    8-limb conjugate relation, unexplained 0, on structure A, vectors 0–4).
+    Two facts produce the deficit:
+    (a) the low shadow (§2.2): multiplication by the chord line moves natural
+        indices down only by clearing trailing ones (Fact 1), so the natural
+        coordinates 0..55 of L·q depend only on q's coordinates 0..55 and on
+        15 wrap coordinates (Fact 2).  For a D-high message the quotient's low
+        block is therefore confined to a 4-dimensional K₄-space Wz, and the
+        14 low folds to the 16-limb space lowShadow = γ^28·Fold_lo(Wz).  This
+        replaces the withdrawn x^28 law: the low folds are not zero, they lie
+        in a small space with a closed form (W).
+    (b) the conjugate fold relation (§2.3): for a single K₄-valued lane,
+        round_eval at the K₄-conjugate ᾱ_f determines h(ᾱ_f) from f.  This is
+        8 limbs of the D-high deficit and the whole of G's (1,904 = 1,912 − 8,
+        Z8e: V_G's annihilator is the 25 relations plus etaRel 27, exactly).
+ 2. (B) reduces to two statements with this description (§2.1, §2.4–2.6):
+    DHighChar⊇ (D-high reaches everything not excluded by 1) and GCover
+    (G's own-silent round kernel reaches the 104-limb quotient B₀/V_D).
+    GCover splits further into G-low (220, the T2b-2b design's idea, now
+    correct), a query-free coefficient-side surjectivity G2 (80) and a
+    24-limb remainder G3; or, query-free versus query-dependent, into Ga
+    (rank 104 on G's round kernel without E: conditional, Schwartz–Zippel
+    shaped) and Gb (OT-open for G extended by the 104 functionals).
+    All are measured on structure A, vectors 0–4 (Z8e).
+ 3. What blocks a proof is the same thing that blocks OT-open: a fixed or
+    row-side family of functionals must stay independent of the opened
+    evaluations at 22 arbitrary queried fibres (TP_D for D-high, Gb for G).
+    No uniform witness exists in the obvious form, because the inactive-row
+    sum is a fixed dense functional.  §5 R2 gives a query-free sufficient
+    condition (Hankel rank / secant avoidance) as a research lead; it is
+    not proved.
+
+Good₃ is unchanged.  The D21 statement takes hBc : BCond as a hypothesis;
+the narrower premises of §2.6 are J7′ lemmas, so the theorem does not change
+when one of them is proved later.  New probe: Z8e (run on the build host,
+receipts in §4.1).
+
+§1  Notation and the three natural-basis facts
+----------------------------------------------
+Notation (as DESIGN-T2b-2b §0 unless redefined).
+  K₄ = QM31 (pack basis span), K = WideExact = K₄[v]/(v² − u), [K:K₄] = 2.
+  σ : K → K the K₄-automorphism v ↦ −v (σ fixes K₄ pointwise, σ² = id).
+  α := α_f = ch.opening 3 ∉ K₄ (K-deg, GoodOpen), ᾱ := σ(α).
+  γ = ch.opening 0; a lane ℓ ∈ {m₀..m₉ (16..25), G (27), D (28)} enters the
+  batch with γ^ℓ.  For a lane coefficient vector c (K₄- or F-valued),
+      β(c) := (roundPolynomial (Q c) w, foldMessage α (Q c)) ∈ K^7 × K^256,
+  Q = quotientLinear z₀ z₁ (prover::quotient; total, interpolant included),
+  w = totalWeights (Lean `weights` incl. κ⁴·libraWeight, then
+  quotient_weights, then τ·e1 + τ²·e2).  bat(m) = Σ_ℓ γ^ℓ β(c_ℓ(m)).
+  Channels of a message q: q^(s)_d := q[4d+s] (s = 0..3, d < 256); fold
+  fibre d reads exactly channel coordinate d of all four channels.
+  lo := message indices 0..55 = channel coordinates d < 14 of all channels.
+  f_lo := (f_0..f_13) ∈ K^14 (112 limbs).
+  E_ℓ := evaluation-type own functionals of lane ℓ (2 OOD + 88 opened).
+  Rw_ℓ := row-type own functionals (claim_0, claim_1, claim_2; extra).
+  B₀ := common zero set of the 25 verifier relations (ia, S1, S2, 22×S3_u)
+       in the batched space; dim_F B₀ = 1,912 (D21.2, MEASURED Z8c and
+       STRUCTURAL as an upper bound, design §2.2.4).
+  D-high := D words (balanced, `dWord`) whose natural coefficients 0..55
+       vanish, i.e. rows π⁻¹(0..55) = PAD_ROWS[0..56) are zero.  D-high ⊆
+       ker R_D (STRUCTURAL: pureRound_libra / L_pure_libra_coeff read only
+       coefficients < 56; Z8d asserts it row by row).
+  V_D := bat(D-high ∩ ker own_D)  (MEASURED 1,808, Z8c §5 control, Z8d §2).
+  V_G := bat(G words ∩ ker R_G ∩ ker own_G)  (MEASURED 1,904, Z8c §6).
+
+Fact 1 (x-multiplication law; STRUCTURAL).  For j < 511 let t be the number
+of trailing one bits of j.  Then
+    x·N_j = 2^{-t}·N_{j+1} + Σ_{s<t} 2^{-(s+1)}·N_{j-(2^{s+1}-1)}.
+Proof: N_j = x^{j₀}·N′_{j>>1}(T₂(x)) with N′ the natural basis in u = T₂(x)
+(N_{2m} = N′_m∘T₂ because T_{2^{b+1}} = T_{2^b}∘T₂).  For j even x·N_j =
+N_{j+1}.  For j odd, x² = (1+u)/2 gives x·N_j = ½N_{j-1} + ½·lift(u·N′_{j>>1}),
+and induction on the level.  (Checked exhaustively for all j < 511 in the toy
+of §4.2; Lean: an induction on the bits of j over naturalLinePoly,
+CircleNaturalBasisEval.lean:39.)
+Consequence: multiplication by x moves natural index j only up by one or
+down by clearing a run of trailing ones; the only way to reach an index
+below 28 from an index ≥ 28 is through j = 2^i − 1 (and, for x², through
+2^i − 2).
+
+Fact 2 (the wrap set; STRUCTURAL from Fact 1).  Let L = a + b·x + c·y be the
+chord line (Secant, chord.rs; chordMessage in Lean), acting on messages by
+(Lq)₀ = a·p0 + b·x·p0 + c·(1 − x²)·p1,  (Lq)₁ = c·p0 + a·p1 + b·x·p1
+(chord_message, chord.rs).  Then the natural coordinates 0..55 of Lq depend
+only on q_lo and on the 15 wrap coordinates
+    X = {61,62,63, 125,126,127, 253,254,255, 509,510,511, 1021,1022,1023}
+      = channel coordinates d ∈ {15, 31, 63, 127, 255}, channels s ∈ {1,2,3}:
+    (Lq)_lo = C_ll·q_lo + C_lX·q_X                                     (★)
+with C_ll, C_lX the corresponding blocks of the natural-coordinate matrix of
+q ↦ Lq (entries polynomial in a, b, c ∈ K₄).  The quotient image is
+{q : e1 q = e2 q = 0}; e1 reads only q[1023], e2 only q[1021], q[1022],
+q[1023] (FunctionalWeights.e1/e2, chord.rs), so both live on X.
+(Z8e: the measured set equals X on every vector; the toy of §4.2 too.)
+
+Fact 3 (the conjugate fold relation; STRUCTURAL).  round_eval
+(RoundNormalization.lean:55) holds for every evaluation point.  For a
+K₄-valued q, foldMessage_eq_sum gives σ(foldMessage α q) = foldMessage ᾱ q.
+Hence for every lane ℓ whose coefficient vector is K₄-valued (G, D) and
+every K₄-valued q:
+    η_ℓ(γ^ℓ·β-image) = 0,  where for (h, f) ∈ K^7 × K^256
+    η_ℓ(h, f) := h(ᾱ) − γ^ℓ·quarter·Σ_d σ(γ^{-ℓ}·f_d)·citedDualFold ᾱ w d.
+η_ℓ is σ-semilinear, hence F-linear (and K₄-linear) but not K-linear:
+one K-value, 8 F-functionals.  It is not a consequence of the 25 relations:
+for lanes ℓ ≠ ℓ′, η_ℓ evaluated on γ^{ℓ′}·β(c) equals
+(γ^{ℓ′} − γ^ℓ·σ(γ)^{ℓ′−ℓ})·roundPolynomial(Qc, w)(ᾱ), which is nonzero as
+soon as γ ∉ K₄ and the conjugate round value is nonzero.  F-valued mask
+lanes satisfy one such relation for every K/F-conjugate of α; they play no
+role below.
+
+§2  The route: lemmas with Lean statement sketches
+--------------------------------------------------
+Lean names used (all existing): dWord (R0Z/MaskLayout.lean:91), applyAff
+(MaskLayout.lean:116), coeffsLinear (R0Z/HonestView.lean:80), claimsLinear
+(:71), extraLinear (:86), oodLinear (:106), quotientLinear (:184),
+batchLinear (:191), openingWeights (:196), relationLinear (:200), foldLinear
+(:205), linearPayload (:208), D13Order (:24); chordLinear, e1, e2, image_iff,
+chordMessage_encoder, quotient_pairing, image_pairing (R0/ChordImage.lean
+:123, :70, :71, :81, :115, :144, :148); L, no_domain_zero, interpolant_values
+(R0/Chord.lean:25, :28, :70); foldMessage, fibre_inverse, channels
+(R0/Fold.lean:71, :80, :66); round_eval, round_boundary, foldMessage_eq_sum,
+citedDualFold (R0/RoundNormalization.lean:55, :69, :37, :25);
+naturalLinePoly (AF/CircleNaturalBasisEval.lean:39), naturalCoeffMatrix
+(AF/CircleNaturalBasis.lean:43), p0Linear/p1Linear (R0/PolynomialPair.lean
+:76/:79); mem_silentMasks_iff, silentMasks, inlM, A (R0Z PayloadSplit/D12);
+libraWeight; PureRounds pureRound_libra, L_pure_libra_coeff.
+Proposed new names are marked (new).  The shared objects of J3 are kept:
+ownMap, batMap, R (round part), BCond, exists_silent_of_cover.
+
+§2.1  Where (B) stands and what replaces §2.5
+
+(B) is BCond ch := (ker ownMap ⊓ ker R).map batMap = (ker ownMap).map batMap
+(J3, unchanged).  bat(ker own) = B₀ (D21.2).  The withdrawn §2.5 tried to
+prove (B) with a coordinate split of B₀ (f_0..f_13 from G, the rest from
+D-high).  In the natural basis that split does not exist (D22.2), but the
+two absorbers still assemble to 1,912 on every structure (D21.5, D22.3).
+This design keeps the two absorbers and replaces the coordinate split by an
+exact description of what D-high misses.
+
+  Lemma B-glue (new, STRUCTURAL; J3/J7).  Let
+     Dhigh   := {m : M K F | m.1 = 0 ∧ m.2.1 = 0 ∧
+                  ∀ k : Fin 1024, k.val < 56 → coeffsLinear π (dWord B m.2.2) k = 0}
+     Gonly   := {m : M K F | m.1 = 0 ∧ m.2.2 = 0}
+     V_D     := (Dhigh ⊓ ker ownMap).map batMap
+     V_G     := (Gonly ⊓ ker R ⊓ ker ownMap).map batMap
+  Then  GoodCircle ch → B0 ch ≤ V_D ⊔ V_G → BCond ch.
+  Proof.  Dhigh ≤ ker R (D's round vector reads only coefficients < 56:
+  pureRound_libra / L_pure_libra_coeff), so V_D ≤ (ker own ⊓ ker R).map bat;
+  likewise V_G.  bat(ker own) ≤ B₀ is bat_ker_own_le (J4).  Hence
+  bat(ker own ⊓ ker R) ≤ bat(ker own) ≤ B₀ ≤ V_D ⊔ V_G ≤ bat(ker own ⊓ ker R).  ∎
+  The hypothesis B₀ ≤ V_D ⊔ V_G is the assembly that Z8c §6 and Z8d §3
+  measured (1,912 on structures A, B, I, J, K, L, M and on four D-high
+  variants).  Everything below describes V_D exactly and reduces the
+  assembly to a statement about G alone.
+
+§2.2  The D-high deficit, part 1: the low shadow (STRUCTURAL)
+
+  def Wz (ch) : Submodule F (Fin 56 → K)  (new)
+    := the F-span of {q_lo | q : InitialMessage K, q K₄-valued,
+                      e1 q = 0, e2 (b c) q = 0,
+                      ∀ k < 56, chordLinear a b c q k = 0}
+    (a, b, c the secant coefficients of ch.circle 0, ch.circle 1; q_lo := q
+     restricted to message indices 0..55)
+  def lowFold (α) (v : Fin 56 → K) : Fin 14 → K := fun d => Σ_s α^s·v(4d+s)
+  def lowShadow (ch) : Submodule F (Fin 14 → K)  (new)
+    := Wz.map (γ^28 • lowFold α)
+
+  Lemma Vd_low (new, STRUCTURAL given GoodCircle).
+    ∀ b ∈ V_D, (fun d : Fin 14 => b.finalCoeff d) ∈ lowShadow ch.
+  Proof.  For m ∈ Dhigh ⊓ ker own put c := coeffsLinear π (dWord B m.2.2);
+  c is K₄-valued, c_k = 0 for k < 56 and oodLinear z_i c = 0.  With zero OOD
+  the interpolant vanishes (interpolant_values), so q := quotientLinear z₀ z₁ c
+  is the unique preimage of c under chordLinear in {e1 = e2 = 0} (image_iff,
+  chordMessage_encoder, injectivity of the exact encoder).  Thus
+  (chordLinear q)_k = c_k = 0 for k < 56, q_lo ∈ Wz, and the batched final
+  coefficients of the D-lane are γ^28·foldMessage α q, whose first 14
+  coordinates are γ^28·lowFold α q_lo (foldMessage_eq_sum).  ∎
+  No dimension of Wz is used in the proof.  Facts 1–2 explain why Wz is
+  small: (Lq)_lo = C_ll·q_lo + C_lX·q_X, so whenever C_ll is invertible
+     Wz = −C_ll⁻¹·C_lX·(Adm),  Adm := {q_X ∈ K₄^X : e1 = e2 = 0},      (W)
+  a closed form (C_ll, C_lX are explicit blocks of the natural-coordinate
+  multiplication matrix of L; Fact 1 gives their entries).  Z8e measures
+  rank C_ll = 56, a 13-dimensional solution space on lo ∪ X and
+  dim_K₄ Wz = 4 (rank of C_lX on Adm), hence lowShadow has F-dimension 16
+  limbs: exactly Z8c's "f[0..14) projection rank 16" on D-high (structure A,
+  §4.1; the toy of §4.2 gives the same).
+
+  This replaces §2.5.1.  In words: an OOD-zero message with natural
+  coefficients 0..55 equal to zero has a quotient whose natural low block is
+  determined by its 13 wrap coordinates through a rank-4 map, because
+  multiplication by x moves natural indices down only by clearing trailing
+  ones (Fact 1).  The x^28 picture was right that the low folds are
+  constrained, wrong about how: they are not zero, they lie in a 2-K-dimensional
+  space (16 limbs, not K-closed).
+
+§2.3  The D-high deficit, part 2: the conjugate relation (STRUCTURAL)
+
+  Lemma eta_single_lane (new, STRUCTURAL).  Let σ : K →+* K with σ x = x for
+  x ∈ K4 B hB.  For every K₄-valued q and every ℓ,
+    (relationLinear w (γ^ℓ • q)).eval (σ α)
+      = γ^ℓ * quarter * dot (fun d => σ (γ^ℓ⁻¹ * foldMessage α (γ^ℓ • q) d))
+                            (citedDualFold (σ α) w).
+  Proof: round_eval at σ α; foldMessage_eq_sum and σ(Σ α^s q_s) = Σ (σα)^s q_s
+  because q_s ∈ K₄.  ∎
+  def etaRel (ℓ) : bat coordinates → K  (new): left side minus right side,
+  with h the .openingCoeff cells and f the .finalCoeff cells.
+  Corollary Vd_eta: ∀ b ∈ V_D, etaRel 28 b = 0.  (Also ∀ b ∈ V_G, etaRel 27 b = 0.)
+  The automorphism σ is a premise of the same kind as PackField (§1.1 of the
+  T2b-2b design): for WideExact = QM31[v]/(v² − u) it is v ↦ −v.
+
+§2.4  The characterization of V_D (MEASURED; one direction STRUCTURAL)
+
+  Statement DHighChar:
+     V_D = B₀ ∩ {b | f_lo(b) ∈ lowShadow} ∩ ker etaRel 28.
+  ⊆ is STRUCTURAL: bat_ker_own_le, Vd_low, Vd_eta.
+  ⊇ is what Z8c/Z8d's 1,808 plus Z8e's left-kernel report establish
+  numerically: the annihilator of V_D (304 limbs) is spanned by the 25
+  relations (200), Ψ_lo := the 96 F-functionals on f_0..f_13 annihilating
+  lowShadow, and etaRel 28 (8).  (Z8e item 2; §4.1 gives the receipt.)
+  Count: 1,912 − 96 − 8 = 1,808.  The design's account of D-high is
+  therefore complete: nothing in V_D's deficit is unexplained.
+
+  Proof route for ⊇ (CONDITIONAL; one part not proved for all query sets).
+  Fix a target b = (h, f) on the right-hand side.  Write f = γ^28(f′ + α f″)
+  with f′, f″ K₄-valued (K = K₄ ⊕ αK₄, K-deg).  Unknown: a K₄-valued quotient
+  message q with channels (A₀, A₁, B₀, B₁) := (q^(0), q^(1), q^(2), q^(3)),
+  each a line polynomial of degree < 256 in the natural basis N′.
+  (i)  Fold: A₀ = f′ − p·B₀ − r·B₁, A₁ = f″ − q′·B₀ − s·B₁ with α² = p + q′α,
+       α³ = r + sα (p, q′, r, s ∈ K₄).  STRUCTURAL.
+  (ii) Opened: opened(Lq) = 0 ⇔ Enc q vanishes at the 88 children
+       (chordMessage_encoder, no_domain_zero) ⇔ all four channels vanish at
+       the 22 line nodes (fibre_inverse; x_u, y_u ≠ 0).  S3_u gives
+       f′(node_u) = f″(node_u) = 0 (node_u ∈ F), so (ii) ⇔ B₀, B₁ vanish at
+       the nodes.  STRUCTURAL.
+  (iii) The low/wrap block Z := lo ∪ X.  (Lq)_lo = 0 involves only q on Z
+       (Fact 2).  Choose q_X ∈ Adm with γ^28·lowFold(−C_ll⁻¹C_lX q_X) = f_lo
+       (possible: f_lo ∈ lowShadow) and with the channel-1 values at
+       d ∈ D_X := {15,31,63,127,255} matching f″_d − q′B₀,d − sB₁,d, where
+       B₀,d, B₁,d (d ∈ D_X) are themselves X-coordinates.  This needs the map
+       Adm → (lowFold∘(−C_ll⁻¹C_lX), f″ on D_X) to have image lowShadow-preimage
+       × K₄^5: CONDITIONAL in z and α_f (named GoodWrap).  At d = 255 the
+       X-coordinates are tied by e1 (q[1023] = 0) and e2 (q[1021] against
+       q[1022]), so f″_255 = (ρ + q′)·q[1022] with ρ = secantB/secantC (the
+       leading coefficients of N₅₁₁ and N₅₁₀ are both 2^502), so the top fibre
+       needs q′ ≠ −secantB/secantC: exactly the T2b-2b design's top-fibre
+       condition "α_f + α_f²·(secantC/secantB) ∉ K₄" (§4.1 there).  GoodWrap
+       is necessary for DHighChar ⊇ (the f″ components at D_X are functions
+       of X-coordinates alone), so it holds wherever ⊇ was measured.
+  (iv) Interpolation block: on the B-channel coordinates d ∈ J := [32, 54),
+       evaluation at any 22 distinct nodes is invertible, because
+       N′_{32+e} = N′_32·N′_e (e < 32) and N′_32(node) = T₃₂(node) ≠ 0.
+       STRUCTURAL given (NZ): T_{2^k}(node_u) ≠ 0 for k ≤ 7 and distinct
+       fibres have distinct nodes.  (NZ) is a circle-group order fact:
+       node_u = x(2P_u) with P_u of order 2^21, and x(R) = 0 iff R has order 4.
+       Not yet in Lean; small (fibre_coordinates_nonzero is the k = 0 case).
+  (v)  What is left: 12 K₄-linear conditions (48 limbs) on the remaining
+       B-coordinates: claim_0..2(Lq) = 0, ind(Lq) = 0 (the inactive-row sum;
+       S2 ties it to h₀ + h₄), and the 8 K₄-dimensions of h not fixed by S1,
+       S2 and etaRel 28.  They must be independent modulo the evaluation
+       block (iv).  This is a Schur complement R_O − R_J·Ev_J⁻¹·Ev_O whose
+       value depends on the query set through Ev.  I do not have a witness
+       valid for every query set: `ind` is a fixed dense functional
+       (810 of 1,024 rows are copy-inactive, Z8e layout line), so no choice of
+       challenges makes the conditions vanish on the block J, which is what a
+       uniform witness would need.  Call this TP_D (transversality of D-high);
+       it is OPEN.  A candidate structural route is in §5 (R2).
+  Hence DHighChar is: ⊆ proved; ⊇ MEASURED on structure A and reduced to
+  GoodWrap (conditional, query-free) and TP_D (query-dependent, OPEN).
+
+§2.5  The G part: what the assembly asks of G
+
+  With DHighChar, the assembly B₀ ≤ V_D ⊔ V_G is equivalent to
+     GCover:  T(V_G) = F^104,   T := (Ψ_lo, etaRel 28) restricted to B₀,
+  i.e. G's own-silent round kernel must reach the 104-limb quotient
+  B₀ / V_D.  MEASURED (Z8e item 3: rank of T on V_G).  GCover splits into
+  three statements by the size and nature of what they need:
+
+  Lemma lowfold_identity (new, STRUCTURAL given C_ll invertible; Facts 1–2).
+  For every lane ℓ and every lane word with oodLinear z_i c = 0:
+     f_lo(γ^ℓ·β(c)) − γ^ℓ·lowFold(C_ll⁻¹ c_lo) ∈ span_K (lowShadow).
+  Proof: q := Q c satisfies L q = c, so by (★) q_lo = C_ll⁻¹(c_lo − C_lX q_X);
+  the X-part q_X is admissible, so −C_ll⁻¹C_lX q_X ∈ Wz ⊗ K (take the message
+  with that low part, that X part and zeros elsewhere).  ∎
+  Let Ψ^K := the 80 F-functionals on f_0..f_13 annihilating span_K(lowShadow)
+  (span_K has 32 limbs).  On own-silent G words,
+     Ψ^K(f_lo(bat)) = Ψ^K(γ^27·lowFold(C_ll⁻¹·c_lo(G))),
+  a function of G's natural coefficients 0..55 only, i.e. of the 56 rows
+  PAD_ROWS[0..56) = π⁻¹(0..55).  (Z8e checks this identity exactly.)
+  Then GCover follows from:
+   (G1) G-low:  restriction of Gonly ⊓ ker R ⊓ ker own to the rows π⁻¹(0..55)
+        is ker(extra) ⊂ K₄^56 (220 limbs).  PREMISE; MEASURED (Z8c, Z8d, Z8e:
+        220).  This is the T2b-2b design's G-low, now with the extra claim
+        accounted for (D21.5) and in the correct basis.
+   (G2) Ψ^K∘γ^27∘lowFold∘C_ll⁻¹ maps ker(extra) onto F^80.  CONDITIONAL,
+        coefficient-side only (z, α_f, γ, α through libraWeight), no rows, no
+        queries; MEASURED (Z8e).
+   (G3) T has rank 24 on bat(Gonly ⊓ ker R ⊓ ker own ⊓ {c_lo = 0}).  PREMISE;
+        MEASURED (Z8e).  (On these words Ψ^K vanishes by lowfold_identity, so
+        they serve the 16 non-K limbs of the low shadow quotient and etaRel 28.)
+  Proof of GCover from G1–G3: Ψ^K ⊆ span(Ψ_lo); G1 + G2 + lowfold_identity
+  give Ψ^K(V_G) = F^80; G3 supplies a complement of rank 24 inside ker Ψ^K.  ∎
+
+  Query-free split (the form recommended for the ledger).  GCover also
+  follows from
+   (Ga) T has rank 104 on bat(Gonly ⊓ ker R ⊓ ker Rw) — no OOD, no opened:
+        CONDITIONAL in the continuous challenges only (α, z, γ, κ, τ, α_f);
+        MEASURED (Z8e);
+   (Gb) OT-open⁺_G: E_G (2 OOD + 88 opened, 360 limbs) has full rank on
+        Gonly ⊓ ker R ⊓ ker Rw ⊓ ker(T∘bat).  PREMISE; MEASURED (Z8e).
+  Proof: suppose Σλ·(T∘bat) = s + e on G words with s ∈ rowspace(R, Rw) and
+  e ∈ rowspace(E).  Then e vanishes on ker R ⊓ ker Rw ⊓ ker(T∘bat); by (Gb) no
+  nonzero member of rowspace(E) does, so e = 0; then Σλ·(T∘bat) ∈
+  rowspace(R, Rw) and λ = 0 by (Ga).  So T∘bat has rank 104 on
+  ker R ⊓ ker Rw ⊓ ker E = Gonly ⊓ ker R ⊓ ker own.  ∎
+  (Gb) is the OT-open item of the T2b-2b design for G with 104 more row-side
+  functionals; (Ga) has a Schwartz–Zippel bad set once a certified witness
+  exists.  The query dependence of (B)'s G part is therefore exactly one
+  extended OT-open statement.
+
+§2.6  The resulting statement of (B)
+
+  BCond ch ⇐ GoodCircle ∧ DHighChar⊇ ∧ GCover                 (B-glue + §2.4–2.5)
+  DHighChar⊇ ⇐ GoodWrap ∧ (NZ) ∧ K-deg ∧ TP_D                    (§2.4; TP_D OPEN)
+  GCover ⇐ G1 ∧ G2 ∧ G3   or   GCover ⇐ Ga ∧ Gb                 (§2.5)
+  No route found proves TP_D, G1, G3 or Gb for all query sets.  (B) therefore
+  enters the theorem as a premise (§6).  Every component above is a named
+  Lean Prop over existing definitions, so the premise can later be narrowed
+  without changing the theorem's shape.
+
+§3  What is proved, what is measured
+------------------------------------
+"Proved" below means proved in this text (paper proof, to be formalised by
+the J-job named); nothing here is a Lean proof.  "Measured" means an exact
+rank on the probe named, structure A, vectors 0–4 unless stated, every
+vector identical.
+
+  item                                         status            source
+  -------------------------------------------  ----------------  ------------------------------
+  Fact 1  x·N_j law                            proved (§1)       toy: all j < 511 (§4.2)
+  Fact 2  wrap set X (15 coords), e1/e2 on X   proved (§1)       Z8e: x_set = X, e1e2 outside 0
+  Fact 3  conjugate relation etaRel ℓ          proved (§2.3)     Z8e: holds on V_D (28), V_G (27)
+  B-glue  assembly → BCond                     proved (§2.1)     —
+  Vd_low  f_lo(V_D) ⊆ lowShadow                proved (§2.2)     Z8e: f_lo(V_D) = lowShadow (16)
+  Vd_eta, Vg_eta                               proved (§2.3)     Z8e
+  lowfold_identity (K-part on low rows)        proved (§2.5),    Z8e: 0 mismatches / 245,120
+                                               given C_ll inv.   checks per job, all nonzero
+  rank C_ll = 56 (K₄)                          measured          Z8e
+  dim Wz = 4 (K₄); 13-dim solution space       measured          Z8e (toy: 4, §4.2)
+  lowShadow 16 limbs, K-span 32                measured          Z8e
+  DHighChar ⊆                                  proved            —
+  DHighChar ⊇, i.e. ann(V_D) = 25 rel +        measured          Z8e: 304 = 200 + 96 + 8,
+    Ψ_lo + etaRel 28                                             unexplained 0
+  ann(V_G) = 25 rel + etaRel 27                measured          Z8e: 208, unexplained 0
+                                                                 (explains Z8c's 1,904)
+  T = (Ψ_lo, etaRel 28) rank 104 on B₀         measured          Z8e
+  GCover: T rank 104 on V_G                    measured          Z8e (⇔ assembly 1,912)
+  G1  G-low = 220                              measured          Z8c, Z8d, Z8e
+  G2  = 80                                     measured          Z8e
+  G3  = 24 (Ψ_lo 16, etaRel 28 8)              measured          Z8e
+  Ga  = 104 (query-free)                       measured          Z8e
+  Gb  E_G rank 360 on ker R ∩ ker Rw ∩ ker T   measured          Z8e
+  GoodWrap                                     measured (implied Z8e left kernel of V_D
+                                               by ann(V_D))
+  TP_D                                         OPEN              implied on A by DHighChar ⊇
+  BCond                                        measured          Z8c item (4): 7 structures ×
+                                                                 5 vectors; Z8e pass 1 on A
+  Rank accounting reproduced:  Z8c 1,808 = 1,912 − 96 − 8 (D-high);
+  Z8c 1,904 = 1,912 − 8 (G); Z8c "f[0..14) projection 16" = lowShadow;
+  Z8c 220/224 G-low = G1 with/without the extra claim; Z8d's f-prefix
+  ranks 8,8,8,8,16,16,16,24,32,64,96,160,416,928,1776 = lowShadow on
+  f_0..f_13 (16) plus free f_d for d ≥ 14 minus the 22 S3 relations: the
+  toy of §4.2, which has no rows, no rounds and random relation data,
+  reproduces this sequence exactly (in K₄ units 2,2,2,2,4,4,4,6,8,16,24,40,
+  104,232,444), so it is a property of the natural basis, the chord and the
+  fold, not of the transport or the challenges.
+
+§4  Probes
+----------
+§4.1  Z8e (run on the build host)
+Module z4/z8e.rs (`probe --z8e`), driver z4/run-z8e.py.  z8e.rs is z8d.rs
+lines 17–1195 (helpers and pass 1) verbatim with tags Z8D_ → Z8E_, plus new
+code after `// ---- Z8e`.  probe.rs gains the module line and one dispatch
+line.  Exact M31/QM31/WideExact arithmetic; not a Lean proof; no production
+or Lean source changed.  Structure A, vectors 0–4, Z4c replay (all 5
+CHALLENGE lines match probe-C.log), WideExact opening challenges, Lean
+totalWeights, balanced Lean mask sources, D13 transport.
+
+Expectations were written into the probe before the run (`expect=` fields).
+Results, identical on all five vectors (43 Z8E_ lines per job compared after
+removing labels and timings; the preflight A-0 output equals the full-run
+A-0 output except the preflight flag):
+  pass 1 (Z8c anchors): silent 1,076; bat(ker own) 1,912 = bat(ker own ∩ ker R);
+     the 25 relations annihilate exactly (16,542 carries, 0 violations);
+     annihilator 200, unexplained 0.
+  (1) wrap set measured = X of Fact 2; e1/e2 outside X: 0; rank C_ll = 56
+      (K₄); solution space on lo ∪ X 13 (K₄); dim Wz = 4 (K₄); lowShadow 16
+      limbs; span_K(lowShadow) 32 limbs; Ψ_lo 96, Ψ^K 80, etaRel 8 + 8.
+      On bat(ker own): ia, S1, S2, S3 hold; Ψ_lo, etaRel 28, etaRel 27 fail;
+      T = (Ψ_lo, etaRel 28) has rank 104.
+  (2) V_D (Z8c control block verbatim): rank 1,808; annihilator 304;
+      holding ia, S1, S2, S3, Ψ_lo, etaRel 28; failing etaRel 27;
+      explained 304, unexplained 0.  f_lo(V_D) rank 16 = lowShadow, joint 16.
+  (3) G: ker R_G ∩ ker own_G dim 3,064; V_G rank 1,904; annihilator 208;
+      holding ia, S1, S2, S3, etaRel 27; failing Ψ_lo, etaRel 28; explained
+      208, unexplained 0.  G1 (rows π⁻¹(0..55)) 220.  Assembly 1,912.
+      T rank on V_G 104 (GCover).  Identity of §2.5: 0 mismatches in
+      245,120 Ψ^K checks per job, every checked value nonzero.
+      G3: kernel with c_lo = 0 dim 2,844, T rank 24 (Ψ_lo 16, etaRel 28 8).
+      Ga/Gb: ker R_G ∩ ker Rw_G dim 3,424; T rank 104 (Ga); E_G rank 360;
+      joint 464, so E_G rank on ker T is 360 (Gb).  G2: ker(extra) 220,
+      rank 80.
+
+Host dombarker@100.108.41.90, staging
+/home/dombarker/project-offloads/aspis-z8e-20261015/ (fresh; repo/ = rsync of
+Cargo.toml, crates/aspis-{core,statement,prover}, z4/ without target/ and run
+directories).  Release profile (opt-level 3, overflow checks), rustc 1.94.1
+(e408947bf 2026-03-25).  Lean workspace and lock not touched.  Local work:
+cargo check only (plus the toy of §4.2).
+Launch gating (D22.4): launch.sh lists active user scopes and refuses to
+start unless only init.scope is active; both launches logged
+"user scopes active: []" (13:38:07 and 13:43:16 UTC) and no aspis system
+scope.  Reservation 4 GiB.
+
+  cd /home/dombarker/project-offloads/aspis-z8e-20261015/repo
+  /usr/bin/time -v -o ../{preflight,full}-time.txt systemd-run --user --scope \
+    --unit=aspis-z8e-{preflight,full} -p MemoryHigh=3G -p MemoryMax=4G -p MemorySwapMax=0 \
+    python3 docs/research/v8-r0-zk-20261009/z4/run-z8e.py \
+    --out .../{preflight,full}-evidence [--preflight | --vectors 5 --jobs 5]
+
+ scope / target        exit  wall s   peak child RSS KiB  cgroup peak B    swap
+ preflight / compile   0     56.4     544,716             890,851,328      0
+ preflight / A-0       0     225.0    323,172             890,851,328      0
+ preflight scope total 0     4:41.55 (time -v), max RSS 544,716 KiB, swaps 0
+ full / compile        0     0.1      28,676              27,893,760       0
+ full / A-0            0     330.7    323,312             1,419,296,768    0
+ full / A-1            0     283.7    322,776             1,419,296,768    0
+ full / A-2            0     326.6    323,632             1,419,296,768    0
+ full / A-3            0     337.3    322,520             1,419,296,768    0
+ full / A-4            0     330.3    322,408             1,419,296,768    0
+ full scope total      0     5:37.43 (time -v), max RSS 323,632 KiB, swaps 0
+ cgroup swap peak 0 in every receipt.  No Lean was run: #print axioms does
+ not apply.
+
+Source SHA-256 (evidence-Z8e.json records 211; all match this worktree):
+ 6417468a7a62a0709862099e27a2877184dcc237513552503060c9a264bf4ad9  z4/z8e.rs
+ a2a108404c9134b85d68f2066672623633437305fe5c81f9b80ff84d6406dd28  z4/probe.rs
+ d5504c95f7bf89f80415983ece9908dcee3caded0e599a01e397500d0ff000c9  z4/run-z8e.py
+ 966273329a3897b42e9435085d9eed8b79ec8380630dbdffd3549ed9bba185ad  z4/Cargo.toml
+ 7ef1459de53451f93bdf4ae30a4ff70201cce89027fd1fedf0c6b8a1c6d712f9  z4/Cargo.lock
+ 82d04e864271eb2eca59888282d2a615b697e138afb0cb2a1ef002cc9324830c  z4/probe-C.log
+ f557751312781a0dec538b9b3934436e20644f4430144c5a612cfe6bc8d06166  aspis-core r0/basis.rs
+ b3a3d096fec5f307613ad87525eea452bae5c13080a7f52816e0dc0b986f1868  aspis-core r0/chord.rs
+ 06afbfb2c1c03306b59136695fdbf89382e21ed420f123982a70e977c2f35e39  aspis-core r0/fold.rs
+ 6e34b6b2b264573e63f963fe2879d05eaed4f767e105bf7ca0c79d5b6dfc5c88  aspis-core r0/encoder.rs
+ 4d4d8634bcb872d372bd430ac56cd60aece6d60e87e505126ce9ab46d2ef6c28  aspis-core r0/prover.rs
+ ac892fa35fd6a8d697805770ece27fde79d1b91db619323870dff603b4f3045d  aspis-core r0/transport.rs
+ a262dfa32003f1661ee95d44de29ac885e745070fb88b41552d2b4cac31a1a96  aspis-core field/wide_exact.rs
+Artifacts: z4/z8e.rs, z4/run-z8e.py, z4/summary-Z8e.json, z4/evidence-Z8e.json,
+z4/probe-Z8e.log, z4/z8e-runs/ (driver logs, time -v outputs, per-job logs,
+preflight evidence).
+Not measured: structures other than A (B, I, J, K, L, M) for the Z8e items.
+
+§4.2  Toy checks (run locally; guidance only, not evidence for any claim)
+Python/numpy over F_p, p = 2³¹ − 1, scratch scripts (not committed), each a
+few seconds and well under 1 GB, before Z8e was written.  K₄ is modelled by
+F_p and K by a quadratic extension F_p(α) (two-channel fold); random
+F_p-rational circle points off the domain; real natural basis M_512, real
+chord multiplication with truncation, real e1/e2 rows and real fold layout;
+22 random domain fibres for the opened rows; random dense functionals in
+place of the claims and the inactive-row sum; a random w built as
+C^T·(those functionals + κ-powers + a random low-supported libra
+functional) + τ·e1 + τ²·e2, so that S2 holds by construction.  Results
+(seeds 5 and 9 for the full toy, identical; seeds 7 and 11 for the
+first prefix-rank checks): Fact 1 for all j < 511; X as in Fact 2; rank C_ll
+full; dim Wz = 4; D-high image 452 K₄-units (= 1,808/4)
+with annihilator 74, consistent with S1, S2, 22 S3, etaRel(γ^28) (50,
+checked) plus 24 low-fold relations (f_lo rank 4 of 28); a "G" lane with no round constraint and multiplier γ^27: 476 (= 1,904/4) with
+annihilator explained by S1, S2, S3, etaRel(γ^27); assembly 478
+(= 1,912/4); T rank 26 (= 104/4) on the G image; Ψ^K identity exact; G2 20,
+G3 6 (= 80/4, 24/4).  The toy has no round structure and no transport, so
+it says nothing about G1, Ga, Gb or TP_D.  These runs guided the design and
+the probe; every number used in §3 comes from Z8e or earlier probes.
+
+§5  Risks and open points
+-------------------------
+R1 (main) No proof route for (B) valid for all query sets.  Three of the
+   pieces are query-dependent transversality statements: TP_D (§2.4 (v)),
+   and G1/G3, or equivalently Gb = OT-open⁺_G (§2.5).  They are of the same
+   kind as the T2b-2b design's OT-open (F7/O1): row-side or fixed
+   functionals against evaluations at 22 queried fibres.  They are measured
+   only on structure A, vectors 0–4.  On the other six Z8c structures only
+   their joint consequence was measured (BCond and the assembly 1,912), not
+   each piece.  No probability bound exists for their failure.
+
+R2 Candidate route for TP_D and Gb (OPEN, not attempted beyond the
+   statement).  Both reduce to: a fixed, query-free linear family Φ of
+   functionals on a structured subspace S of messages must contain no
+   nonzero member that is a combination of ≤ 22 point evaluations per
+   channel.  On S := N′_128·K₄[u]_{<127} per B-channel (D-high: channel
+   coordinates d ∈ [128, 255), clear of lo and of D_X; 22 + 12 ≤ 127 leaves
+   room), or on G words
+   supported on rows 512..1023 (see R5), a combination of k point
+   evaluations is a functional of Hankel (moment) rank ≤ k.  So a sufficient,
+   query-free condition is "every nonzero member of Φ|_S has Hankel rank
+   ≥ 23 on some channel".  This is avoidance of a secant variety of a
+   rational normal curve by a challenge-dependent linear space: a proper
+   algebraic condition in the continuous challenges, whose bad set could be
+   bounded by an effective degree (elimination) bound and a witness.  None
+   of this is done: neither the degree bound nor a witness nor a check that
+   the dimensions leave room (for G, Φ includes rowspace R_G restricted to
+   the top half, up to 165 K₄-dimensions since rank R_G = 660 limbs).
+
+R3 GoodWrap (§2.4 (iii)) and the invertibility of C_ll are conditional in
+   the circle points only.  Each needs a nonvanishing witness and a degree
+   bound through the circle sampler's parametrisation.  Z8e measures
+   rank C_ll = 56 (K₄) on structure A; that is a witness for the polynomial
+   being nonzero only once the computation is certified (it is an exact
+   computation, but not a Lean one).
+
+R4 Fact 1 and Fact 2 in Lean.  Fact 1 is an induction over naturalLinePoly;
+   Fact 2 is its consequence for the 15-element wrap set and must be proved
+   symbolically (AGENTS: no evaluation of 1,024 unit vectors in the kernel).
+   Medium effort; the statement is small and the toy checks it exhaustively.
+
+R5 Upper-half tensor structure (a lead for R2, not used above).  PAD_ROWS ⊂
+   [13, 478], so the D13 transport is the identity on rows ≥ 479
+   (transport.rs order(): every coefficient ≥ 89 is the next unused row,
+   and all 89 pad rows are below 479).  On rows 512..1023 the row bits are
+   the natural-index bits: message index m = 4d + s with r_9 = part,
+   r_{8−b} = bit b of j = m>>1, so N_j(x)·y^part = ∏_i φ_i^{r_i} with
+   φ = (T₂₅₆(x), …, T₂(x), x, y).  There the opened values are multilinear
+   (monomial-basis) evaluations at the doubling points φ(P), the claims are
+   eq-MLE evaluations at the opening points, and the inactive-row sum is a
+   Boolean-face evaluation.  This makes OT-open-type statements statements
+   about multilinear evaluations.  D13Order does not give "identity on rows
+   ≥ 479"; Lean would need that registry fact as a refinement premise.
+
+R6 K-structure premises: σ (§2.3) and K-deg (α_f ∉ K₄) are used by the
+   structural lemmas; γ ∉ K₄ is needed for G3 to be true (if γ ∈ K₄, the
+   conjugate relations of all lanes coincide).  All three are one-coset
+   events with mass about P⁴·μ_W ≈ 2^-124 each, or field facts.
+
+R7 Scope.  Clause (ii′) is still not covered.  The R1 payload (two folds, 64
+   final values, D18 transport) changes the low block (the wrap set depends
+   on where the low coordinates end), so Z9 must redo §2.2–2.5; Facts 1 and 3
+   carry over unchanged.
+
+§6  Impact on the D21 Lean statement, on Good₃ and on J-job order
+-----------------------------------------------------------------
+D21 statement.  The T2b-2b theorem keeps the shape of design §1.4 and J3's
+reduction, with (B) as a named premise:
+
+  theorem chain0K4_le_silent
+      (hB : PackField B) (hπ : D13Order h.transport) (hG : P_final B hB ch)
+      (hQ : QPrime h.transport B ch)          -- or its OT premises, as D21 decides
+      (hBc : BCond h.transport B ch) :        -- (B), PREMISE "B-open"
+      Chain0K4 B hB ch ≤ (silentMasks h.transport B ch).map ((A h.transport B ch).comp inlM)
+
+  It is chain0K4_le_silent_of (J3) applied to hQ and hBc; no lemma of the
+  withdrawn §2.5 (x28_law, T0_bijective, B_hi_fold, B_hi_rel, G_low as
+  stated there) is used.  If D21 prefers the narrower premise, hBc can be
+  replaced by
+      hAsm : B0 ch ≤ V_D ⊔ V_G                 (the assembly)
+  with BCond obtained from B-glue; or by (DHighChar⊇ ∧ GCover), or by
+  (DHighChar⊇ ∧ Ga ∧ Gb).  All are Props over existing definitions (§2).
+  I recommend hBc in the theorem and the narrower forms as J7 lemmas, so
+  that the theorem does not change when a piece is later proved.
+
+Ledger label for the premise (proposal):
+  "B-open — numerically checked premise, no proved failure bound.
+   Checked: BCond, i.e. rank_F bat(ker own ∩ ker R) = rank_F bat(ker own)
+   = 1,912, exact arithmetic, balanced Lean mask model (balance 0), D13
+   transport, WideExact batching, Lean totalWeights; Z8c item (4) on
+   structures A, B, I, J, K, L, M, vectors 0–4 (35 challenge vectors);
+   assembly B₀ = V_D + V_G on the same 35 (Z8c §6) and on structure A with
+   four D-high variants (Z8d §3).  Decomposition checked by Z8e on
+   structure A, vectors 0–4: V_D = B₀ ∩ ker Ψ_lo ∩ ker etaRel 28 exactly,
+   V_G = B₀ ∩ ker etaRel 27 exactly, G1 = 220, G2 = 80, G3 = 24,
+   Ga = 104, Gb = 360."
+  OT-open stays a separate label.  Gb is OT-open⁺ for G; if the lead
+  prefers, B-open and OT-open can be carried as one family of
+  "transversality premises" with Gb and TP_D listed under it.
+
+Good₃.  Unchanged.  Nothing in this design needs more than Λ₄ = K₄ from
+the α-predicate, and (B) is not proved from the predicate.  The rows of the
+T2b-2b design's §4.2 that belonged to the withdrawn §2.5 ("B_hi relation
+part", "G-low (as OT-row for G)") leave GoodGeneric.  New conditional rows
+(C_ll invertible, GoodWrap, G2, Ga; γ ∉ K₄; the automorphism σ) enter the
+ledger only if BCond is later discharged by this route; while BCond is a
+premise they do not enter the theorem's bound.  The sum of the remaining
+closed-form rows can only decrease.
+
+J-job order.
+  J1, J2, J3, J5a: unchanged and releasable (as D22.5).
+  J4 (verifier relations): unchanged; next.
+  J7 is replaced by J7′ R0Z/BatchedBlock.lean (imports J3, J4):
+     defs Dhigh, Gonly, V_D, V_G, Wz, lowFold, lowShadow, etaRel,
+          DHighCharSup, GCover, G1, G2, G3, Ga, Gb, TP_D, GoodWrap;
+     STRUCTURAL lemmas: BCond_of_assembly (B-glue), Vd_low, eta_single_lane,
+          Vd_eta, Vg_eta, assembly_of_char (DHighCharSup → GCover → B₀ ≤
+          V_D ⊔ V_G), GCover_of_G123, GCover_of_Gab.
+     Difficulty medium; no rank computation; nothing about π beyond
+     D13Order.  It can be written before J5b–J6.
+  J7a (new, AF-level, no protocol imports) R0Z/NaturalShift.lean:
+     mul_x_naturalLinePoly (Fact 1), chord_low_support (Fact 2, the wrap
+     set as an explicit 15-element Finset), lowfold_identity (needs C_ll
+     invertible as a hypothesis).  Medium; must be symbolic (no unit-vector
+     evaluation of chordLinear).  Needed only for G1–G3 / Ga–Gb, i.e. only
+     when the premise is narrowed.
+  J5b, J5c, J6: unchanged.
+  J9: takes hBc (and the Q′ premises) as hypotheses.
+  J10 (research): TP_D, Gb (OT-open⁺_G) and the R2 route; witnesses and
+     degree bounds for C_ll, GoodWrap, G2, Ga.
