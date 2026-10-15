@@ -1,0 +1,83 @@
+J1.R18 sampler integration proposal; source-only, interfaces OPEN
+
+Inspection pin: 9e0d3842743fb7917f749dfbe49b4c60c23dc27a. Production sampler.rs
+and field.rs remain byte-identical to the old c111cbbf23b3a0f6ed5bebe75c72fe3089fe5be8
+cut. R17 must be green before any production change, extraction or Lean job.
+No current-QM31 module is modified or arithmetic operation re-extracted.
+Unqualified model/bridge names below use the AspisR1 namespace.
+
+Existing reusable interface
+CurrentQM is AspisR1Qm31ArithmeticProbe.field.QM31. Its generated Types.lean
+defines M31 reducibly as Aeneas.Std.U32, CM31 with a/b, and QM31 with c0/c1.
+The retained current-qm31-arithmetic-20261015/extraction/attempt-a/generated/
+AspisR1Qm31ArithmeticProbe/Types.lean and Funs.lean match R17's staged copies
+exactly (Types SHA256 c5a08408bb25ca84fcef1b3689904d27e65510c21775d6db8beeb271fbaa5b15;
+Funs 114552b863f61e970a2ceb4bb048566e4b464b61905c6d7a175f6b117f1aed4a).
+ExtractedCurrentQM31Exact.decode maps c0.a,c0.b,c1.a,c1.b to re.re,re.im,im.re,im.im.
+ExtractedCurrentQM31Equality.decode_eq_iff requires both CurrentCanonicalQM
+hypotheses. It supplies record equality only after canonicality, not sampler
+correctness. Existing add/mul/reducer proofs are imported unchanged if needed;
+the sampler itself performs integer division and construction, not QM31 arithmetic.
+
+Smallest proposed production/extraction split
+Introduce primitive-only qm31_div_pass([u32;8])->([u32;8],u32) and
+qm31_digits(&[u8;32])->[u32;4], names/interfaces proposed. Use value-owned
+rank arrays: initialize eight words with an explicit increasing index loop
+and four checked byte indices, avoiding from_fn/try_into/unwrap. For each pass,
+start j=8, decrement before indexing, compute the same shifted-or dividend,
+write rank[j]=quotient, update remainder. Four increasing passes explicitly
+assign both returned rank and digit. qm31_sample retains the ordered final
+CM31::new(M31(d0),M31(d1)), CM31::new(M31(d2),M31(d3)) construction.
+Only extract the primitive helper cone initially; it emits no QM31 type or
+operation. Pin actual post-refactor declarations and all primitive models;
+retain the old implementation for focused differential vectors, not as an axiom.
+
+Explicit write-back target, to prove on emitted declarations
+For a : Aeneas.Std.Array U32 8#usize, define
+  view(a) := (a.val.map (fun u => UInt32.ofNat u.val)).reverse.
+Required: for every a, there exist a',d with pass a = .ok (a',d),
+  d.val = (SamplerWordPass.machineProcess 0 (view a)).1.toNat,
+  view a' = (SamplerWordPass.machineProcess 0 (view a)).2, and d.val<P.
+This specifies the entire updated array, not just a remainder or final rank.
+The index invariant identifies processed high words and unchanged low words;
+index bounds, terminating counters, casts, division and modulo success are
+proved, not supplied as no-panic premises. SamplerMachineBounds.dividend_lt_two63,
+dividend_quotient_lt_B and dividend_remainder_lt_P supply arithmetic bounds.
+SamplerWord uses native UInt32/UInt64, so the emitted Aeneas U32/U64 operations
+still need a val-preserving bridge; these types are not silently identified.
+
+Final helper target and wrapper boundary
+Require forall b, exists d, digits b = .ok d and
+  d.val.map UScalar.val = SamplerNatModel.qm31Digits (SourceSamplerByteRank.rank b).
+Compose SamplerBytePass.digits, SamplerRepeatedPass.run_digits/run_digits_canonical
+and SourceSamplerByteRank.run4_bytes. Construct a CurrentQM directly from the
+four returned U32s; prove canonicality and exact decoding. No copied QM31
+operations or second arithmetic theory are needed.
+
+That packing function is not automatically the extracted qm31_sample wrapper.
+The old AspisR1Qm31Sampler.field.CM31/QM31 are nominally different records.
+If retaining that wrapper output, the explicit projection is
+  toCurrent q := {c0 := {a:=q.c0.a,b:=q.c0.b},c1 := {a:=q.c1.a,b:=q.c1.b}}.
+Its coordinate/round-trip lemmas are small; no arithmetic is repeated.
+For strict no-new-QM31 emission, a checked type/constructor-name mapping to
+the existing generated Types is required instead. No such plug-in mapping
+was verified in the pinned CLI. Keep that interface and actual wrapper-call
+correspondence OPEN; do not replace the function by arbitrary packCurrent.
+The live Funs has no CM31.new declaration: a constructor-only compatibility
+definition needs its own exact-body check, not an assumed external contract.
+
+Old failure retained
+Bundle evidence/qm31-sampler-extraction-20261015/attempt-a pins LLBC
+f0e70e3af6127e38a9a93aee565186a3502b347330882679613fa50cb74f0f6f and Funs
+ab3682e125ca899a8d13129c2812fd15abc6f326e73e31e1b2ca41daf41872ae.
+LLBC function6/statement369 retains quotient write. Under
+AspisR1Qm31Sampler.sampler.qm31_sample.closure_1.Insts,
+CoreOpsFunctionFnMutTupleUsizeU32.call_mut_loop.body discards the quotient
+and fourth Rev.next return. from_fn and IterMut.next_back
+remain opaque templates; from_fn's second caller expects an unexplained pair.
+Their missing contracts include closure-state threading and mutable-element
+write-back. Index loops should remove these dependencies, but that is untested.
+Any remaining opaque helper must be listed with an unproved contract and block
+closure; never supply an external axiom. No old failed artifact is overwritten.
+Actual callback/state timing, circle fallback, Rust lowering and acceptance
+correspondence remain separate obligations. No extraction/build was run here.
