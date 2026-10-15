@@ -1,10 +1,11 @@
-//! Default-off local lifecycle and Pool adapter for measuring the R1 S2 split.
+//! Default-off Pool adapter for the R1 S2 split.
 //!
 //! ASQ8 authentication and reconstruction are copied from the verifier's
 //! `v7_pair_forest_dispatch` path. This module keeps the audit-pinned Pool,
 //! registry, and policy bindings while replacing only its proof engine with
-//! the R1 `tx1`/`tx2` checkpoints. Lifecycle support is a local prototype,
-//! not a production account-lifecycle release.
+//! the R1 `tx1`/`tx2` checkpoints. Admitted routes read raw proof/public buffers
+//! of any owner and use a separate verifier-owned checkpoint. Legacy lifecycle
+//! helpers below are unreachable through the release entrypoint guard.
 
 extern crate alloc;
 
@@ -150,6 +151,27 @@ struct ValidatedAsqa {
 
 fn require_readonly_account(account: &AccountInfo<'_>, owner: &Pubkey) -> ProgramResult {
     if account.owner != owner || account.is_signer || account.is_writable || account.executable {
+        return Err(ProgramError::InvalidAccountData);
+    }
+    Ok(())
+}
+
+fn require_readonly_buffer(account: &AccountInfo<'_>) -> ProgramResult {
+    if account.is_signer || account.is_writable || account.executable {
+        return Err(ProgramError::InvalidAccountData);
+    }
+    Ok(())
+}
+
+fn require_verifier_checkpoint(
+    account: &AccountInfo<'_>,
+    program_id: &Pubkey,
+    writable: bool,
+) -> ProgramResult {
+    if account.owner != program_id || account.is_signer || account.executable
+        || account.is_writable != writable
+        || account.try_data_len()? != verifier::checkpoint_size(Variant::S2)
+    {
         return Err(ProgramError::InvalidAccountData);
     }
     Ok(())
@@ -590,16 +612,17 @@ fn authenticate_asq8_accounts(
     output_lane: u8,
     current_slot: u64,
 ) -> Result<AuthenticatedAsq8Accounts, ProgramError> {
-    let [proof_account, master_account, checkpoint_account, lane_account, registry_account, entry_account] =
+    let [proof_account, master_account, checkpoint_account, lane_account, registry_account, entry_account, verifier_checkpoint] =
         accounts
     else {
-        return Err(if accounts.len() < 6 {
+        return Err(if accounts.len() < 7 {
             ProgramError::NotEnoughAccountKeys
         } else {
             ProgramError::InvalidArgument
         });
     };
-    require_readonly_account(proof_account, verifier_program)?;
+    require_readonly_buffer(proof_account)?;
+    require_verifier_checkpoint(verifier_checkpoint, verifier_program, false)?;
     require_readonly_account(master_account, pool_program)?;
     require_readonly_account(checkpoint_account, pool_program)?;
     require_readonly_account(lane_account, pool_program)?;
@@ -610,6 +633,7 @@ fn authenticate_asq8_accounts(
         lane_account,
         registry_account,
         entry_account,
+        verifier_checkpoint,
     ])?;
 
     let master = decode_master_box(&master_account.try_borrow_data()?)?;
@@ -686,28 +710,16 @@ fn authenticate_asq8_accounts(
 }
 
 #[inline(never)]
-fn scan_aspu_body(bytes: &[u8]) -> Result<ScannedAsqaProof, ProgramError> {
+fn scan_proof_buffer(bytes: &[u8]) -> Result<ScannedAsqaProof, ProgramError> {
     let proof_length = verifier::View::proof_bytes(Variant::S2);
     let expected_body = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
         .checked_add(proof_length)
-        .and_then(|length| length.checked_add(CHECKPOINT_TAIL_BYTES))
         .ok_or(ProgramError::InvalidAccountData)?;
-    if bytes.len() != ASPU_HEADER + expected_body
-        || bytes.len() < ASPU_HEADER
-        || bytes[..4] != POOL_V1_VERIFIER_PROOF_ACCOUNT_MAGIC
-        || bytes[ASPU_AUTHORITY.clone()].iter().any(|byte| *byte != 0)
-        || u32::from_le_bytes(
-            bytes[4..8]
-                .try_into()
-                .map_err(|_| ProgramError::InvalidAccountData)?,
-        ) as usize
-            != expected_body
-    {
+    if bytes.len() != expected_body {
         return Err(ProgramError::InvalidAccountData);
     }
-    let candidate_start = ASPU_HEADER;
+    let candidate_start = 0;
     let proof_start = candidate_start + POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
-    let proof_end = proof_start + proof_length;
     let candidate_bytes = &bytes[candidate_start..proof_start];
     let candidate = Box::new(
         decode_pool_v1_pair_verified_afterstate_v1(candidate_bytes)
@@ -718,7 +730,6 @@ fn scan_aspu_body(bytes: &[u8]) -> Result<ScannedAsqaProof, ProgramError> {
         .as_ref()
         != candidate_bytes
         || bytes[proof_start + 8] != Variant::S2.tag()
-        || bytes[proof_end..].len() != CHECKPOINT_TAIL_BYTES
     {
         return Err(ProgramError::InvalidAccountData);
     }
@@ -832,7 +843,7 @@ fn validate_asq8(
         Clock::get()?.slot,
     )?;
     let proof_account = accounts.first().ok_or(ProgramError::NotEnoughAccountKeys)?;
-    let scanned = scan_aspu_body(&proof_account.try_borrow_data()?)?;
+    let scanned = scan_proof_buffer(&proof_account.try_borrow_data()?)?;
     let statement =
         reconstruct_asq8_statement(&request, &authenticated, &scanned.candidate_afterstate)?;
     Ok(ValidatedAsqa {
@@ -866,29 +877,22 @@ fn emit_result(statement: &PoolV1PairForestTerminalStatementV1) -> ProgramResult
 
 #[inline(never)]
 fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
-    if !(data == &[3, 10] || data == &[3, 11]) || accounts.len() != 2 {
+    if !(data == &[3, 10] || data == &[3, 11]) || accounts.len() != 3 {
         return Err(ProgramError::InvalidInstructionData);
     }
     let proof_account = &accounts[0];
     let public_account = &accounts[1];
-    if proof_account.key == public_account.key
-        || proof_account.owner != program_id
-        || !proof_account.is_writable
-        || proof_account.executable
-        || proof_account.is_signer
-        || public_account.owner != program_id
-        || public_account.is_writable
-        || public_account.executable
-        || public_account.is_signer
-    {
-        return Err(ProgramError::InvalidAccountData);
+    let checkpoint_account = &accounts[2];
+    require_distinct_accounts(&[proof_account, public_account, checkpoint_account])?;
+    require_readonly_buffer(proof_account)?;
+    require_readonly_buffer(public_account)?;
+    require_verifier_checkpoint(checkpoint_account, program_id, true)?;
+    let mut checkpoint_data = checkpoint_account.try_borrow_mut_data()?;
+    if checkpoint_data.iter().any(|byte| *byte != 0) {
+        return Err(ProgramError::AccountAlreadyInitialized);
     }
     let public_data = public_account.try_borrow_data()?;
-    if validate_lifecycle_header(&public_data, &Pubkey::default(), true)? != LifecycleKind::Public {
-        return Err(ProgramError::InvalidAccountData);
-    }
-    let public_bytes = &public_data[ASPU_HEADER..];
-    let statement = decode_public_statement_box(public_bytes)?;
+    let statement = decode_public_statement_box(&public_data)?;
     validate_pool_v1_pair_forest_terminal_statement_v1(&statement)
         .map_err(|_| ProgramError::InvalidAccountData)?;
     let candidate = encode_pool_v1_pair_verified_afterstate_v1(
@@ -896,41 +900,22 @@ fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> Pro
     )
     .map_err(|_| ProgramError::InvalidAccountData)?;
 
-    let mut proof_data = proof_account.try_borrow_mut_data()?;
+    let proof_data = proof_account.try_borrow_data()?;
     let proof_length = verifier::View::proof_bytes(Variant::S2);
-    let body_length = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
-        .checked_add(proof_length)
-        .and_then(|length| length.checked_add(CHECKPOINT_TAIL_BYTES))
+    let proof_start = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
+    let proof_end = proof_start.checked_add(proof_length)
         .ok_or(ProgramError::InvalidAccountData)?;
-    if verifier::checkpoint_size(Variant::S2) != CHECKPOINT_TAIL_BYTES
-        || proof_data.len() != ASPU_HEADER + body_length
-        || proof_data[..4] != POOL_V1_VERIFIER_PROOF_ACCOUNT_MAGIC
-        || proof_data[ASPU_AUTHORITY.clone()]
-            .iter()
-            .any(|byte| *byte != 0)
-        || u32::from_le_bytes(
-            proof_data[4..8]
-                .try_into()
-                .map_err(|_| ProgramError::InvalidAccountData)?,
-        ) as usize
-            != body_length
-    {
-        return Err(ProgramError::InvalidAccountData);
-    }
-    let candidate_start = ASPU_HEADER;
-    let proof_start = candidate_start + POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
-    let proof_end = proof_start + proof_length;
-    if proof_data[candidate_start..proof_start] != candidate
+    if proof_data.len() != proof_end
+        || proof_data[..proof_start] != candidate
         || proof_data[proof_start + 8] != Variant::S2.tag()
-        || proof_data[proof_end..].iter().any(|byte| *byte != 0)
     {
         return Err(ProgramError::InvalidAccountData);
     }
-    let checkpoint = super::first(public_bytes, &proof_data[proof_start..proof_end], data[1] as usize)?;
-    if checkpoint.len() != CHECKPOINT_TAIL_BYTES {
+    let checkpoint = super::first(&public_data, &proof_data[proof_start..proof_end], data[1] as usize)?;
+    if checkpoint.len() != checkpoint_data.len() {
         return Err(ProgramError::InvalidAccountData);
     }
-    proof_data[proof_end..].copy_from_slice(&checkpoint);
+    checkpoint_data.copy_from_slice(&checkpoint);
     msg!("r1:pool-adapter-stage1-checkpoint-written");
     solana_program::log::sol_log_compute_units();
     Ok(())
@@ -938,7 +923,7 @@ fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> Pro
 
 #[inline(never)]
 fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
-    if accounts.len() != 6 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..])
+    if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..])
     {
         return Err(ProgramError::InvalidInstructionData);
     }
@@ -946,20 +931,12 @@ fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> Pro
     msg!("r1:pool-adapter-stage2-begin");
     solana_program::log::sol_log_compute_units();
     let validated = validate_asq8(program_id, accounts, data)?;
-    let proof_account = accounts.first().ok_or(ProgramError::NotEnoughAccountKeys)?;
-    let proof_data = proof_account.try_borrow_data()?;
-    let proof_length = validated.proof_length;
-    let proof_start = ASPU_HEADER + POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
-    let proof_end = proof_start + proof_length;
-    let checkpoint_end = proof_end + CHECKPOINT_TAIL_BYTES;
-    if proof_data.len() != checkpoint_end
-        || u32::from_le_bytes(
-            proof_data[4..8]
-                .try_into()
-                .map_err(|_| ProgramError::InvalidAccountData)?,
-        ) as usize
-            != proof_data.len() - ASPU_HEADER
-    {
+    let proof_data = accounts[0].try_borrow_data()?;
+    let checkpoint_data = accounts[6].try_borrow_data()?;
+    let proof_start = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
+    let proof_end = proof_start.checked_add(validated.proof_length)
+        .ok_or(ProgramError::InvalidAccountData)?;
+    if proof_data.len() != proof_end {
         return Err(ProgramError::InvalidAccountData);
     }
     let public_bytes = encode_pool_v1_pair_forest_terminal_statement_v1(&validated.statement)
@@ -970,7 +947,7 @@ fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> Pro
     verifier::tx2_authenticated(
         &public_bytes,
         &proof_data[proof_start..proof_end],
-        &proof_data[proof_end..checkpoint_end],
+        &checkpoint_data,
         |parts| hashv(parts).to_bytes(),
         Some(super::mark),
     )
@@ -992,3 +969,7 @@ pub(super) fn process(
         _ => stage2(program_id, accounts, data),
     }
 }
+
+#[cfg(all(test, feature = "private-leaf-salts"))]
+#[path = "r1_checkpoint_tests.rs"]
+mod checkpoint_tests;

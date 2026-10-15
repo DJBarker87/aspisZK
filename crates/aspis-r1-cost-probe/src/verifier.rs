@@ -351,9 +351,9 @@ pub fn tx1(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:HashFn,
 /// Complete strict verification of an R1 proof and its checkpoint.
 ///
 /// Runtime precondition: the checkpoint must be an authentic output of `tx1`
-/// for these exact `proof` and `public_bytes`, and the proof must have remained
-/// protected against writes since `tx1`. `resume` checks the bound hashes and
-/// checkpoint checksum, but that checksum is an unkeyed hash, not a MAC, and
+/// for the proof and public statement bound by its hashes. `resume` recomputes
+/// both hashes from the current buffers: changes reject except for a collision.
+/// The checkpoint checksum is an unkeyed hash, not a MAC, and
 /// does not establish checkpoint provenance by itself. This strict entrypoint
 /// repeats the full canonical scan of proof fields and query values.
 #[inline(never)]
@@ -369,10 +369,10 @@ pub fn tx2(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:HashFn,obs:Obser
 /// established by the caller.
 ///
 /// Runtime precondition: the checkpoint must be an authentic output of `tx1`
-/// for these exact `proof` and `public_bytes`, and the proof must have remained
-/// protected against writes since `tx1`. This is also a precondition of strict
-/// `tx2`. The proof/public hashes and checkpoint checksum are checked by
-/// `resume`, but that checksum is an unkeyed hash, not a MAC, and does not
+/// for the proof and public statement bound by its hashes. This is also a
+/// precondition of strict `tx2`. `resume` recomputes the proof/public hashes;
+/// changed buffers reject except for a collision. The checkpoint checksum is
+/// an unkeyed hash, not a MAC, and does not
 /// establish checkpoint provenance by itself. This entrypoint only skips the
 /// redundant per-field canonical scan of the proof; use strict `tx2` when that
 /// scan is required.
