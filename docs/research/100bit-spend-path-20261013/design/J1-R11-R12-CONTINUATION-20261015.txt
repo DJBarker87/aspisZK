@@ -1,0 +1,102 @@
+J1.R11/R12 continuation for lead review, 2026-10-15
+
+Integration and source changes
+
+The requested step-1 merge was pushed normally as
+185d576e5e7f2e2aee01db7ddb1d74b09d77cc6a to origin/codex/100bit-spend-path-20261013.
+LiteralByteProtocol retains both the default existence classifier and explicit
+extractor API; Protocol, RunFacts and OpeningRunGood passed focused compiles
+and twelve standard/empty axioms reports. The live worktree was not accessed.
+Later work remains a proposal on codex/r1-j1-r11-r12-20261015, not pushed.
+
+G_R1.9 is integrated at b711e9aba. Raw proof/public buffers are read-only,
+any-owner, nonsigner and nonexecutable. Stage1 writes only a distinct,
+exact-size, all-zero verifier-owned checkpoint; stage2 receives that checkpoint
+separately from the Pool historical checkpoint. Resume recomputes proof/public
+hashes. System-created zero provenance and the guarded verifier's write history
+remain the trusted account-history premise; an unkeyed checksum is not provenance.
+The Pool r1-split-checkpoint feature is default-off and preserves old indices.
+
+G_R1.8 is integrated through 4c2d6478a, d6070d9fd and 5cbd3f9a2. Canonical
+initialization bumps are stored in revised Pool/registry account formats and
+preserved by mutations. Admitted R1 authentication has no PDA search/fallback:
+three common create_program_address calls plus four immutable or two V1 calls.
+Old format versions reject; no migration or deployment is supplied. Registry
+and Pool initialization/governance searches outside an R1 invocation must be
+charged separately if the experiment includes them; they are not silently
+excluded from Qtot. See J1-R11-R12-INTEGRATION-20261015.txt for offsets/versions.
+
+Final production source pin is c111cbbf23b3a0f6ed5bebe75c72fe3089fe5be8.
+Two small extraction-directed source refactors follow G8/G9: public serializer
+frontier loops become explicit fixed-width helper calls; record validation
+moves its unchanged loop into a private helper. The checked four-byte record
+header now uses explicit byte reads, removing its impossible unwrap. Both
+serializer and parser differential suites pass; the saved-proof hash-counter
+regression passes on this final source. The latter measures HashFn calls only.
+Release guard/SBF artifact/CU replay/provisioning harness remain J1.R13 (lead).
+
+Checked source components and exact limits
+
+Public serialization: the exact generated public_bytes success theorem is
+Whole431.source_success. RawBridge431.source_success_raw now proves
+  generated.public_bytes p = ok(Ok out) ->
+  PublicRawCore.serialize (project p) = some (out.val.map rawByte).
+The projection copies fixed input coordinates, including the live index; it
+uses raw bv.toFin, not reduction modulo P. No capacity/canonicality premise
+is assumed. PublicRawCoreAgreement.serialize_fromCore separately proves
+  PublicSourceRaw.serialize (fromCore p) = PublicRawCore.serialize p;
+mapped_of_core_success supplies the existing PublicByteCodec consequence.
+These are matching Lean4.31 and4.32 interfaces, not one cross-version kernel
+composition. The common source SHA is33386cb60100d583892e43cc9765e6b38fdd756a3af03950dd9688c102a78855.
+Root commits663f95eed and947c97671 retain both bundles. Actual caller validation,
+zero-withdrawal rejection and omitted ASF8/Pool metadata binding remain OPEN.
+
+Record parsing: ExtractedRowShape.row_shape_eq_table covers every U8 row.
+ExtractedRecordFraming.parse_record_success derives the exact tag, LE4 size,
+input/payload lengths, payload=record.drop5 and actual validator success for
+row>=14 solely from generated parse_record success. No validator-success
+premise is added. Root commit9c6415d06. Field canonicality, Prefix::parse,
+33-row correspondence, challenge/state carry and Rust refinement remain OPEN.
+The parser's unused derived Error.fmt retains Formatter/native.decide axioms;
+they are absent from these final target theorem dependencies.
+
+The final bridge/framing/agreement checks exit0 in21.747/20.993/33.357seconds,
+with sampled group peaks3113872/2619008/2918272KiB. Their10/3/8 axiom reports
+contain only subsets of propext,Classical.choice,Quot.sound. Process swaps0
+is not a claim that system swap is0. Commands, sources, failures, receipts,
+cache provenance and hashes are retained; local sampled RSS stops are not
+cgroups. No cold backend build, host job or repeated full regression ran.
+
+J1.e: VerifierPhaseCost.every_prefix_le_472 and failed_prefix_le_472 bound
+the explicit model, including stops. SourceSimulation.preservesPrefix is
+uninstantiated: source_count_of_simulation remains conditional. Candidate
+core bounds are stage1<=349,stage2<=465; adding stored-bump PDA creation gives
+immutable<=472,V1<=470. Neither a runtime QV theorem nor a Qtot substitution
+is claimed. The current lexical audit pins c111cbbf2, with331 opaque-call
+obligations and30 opaque loops; these are audit entries, not execution counts.
+PrivateLeafDispatch.finitePrefix_dispatch_le_one bounds one extracted graph's
+designated callback dispatch, not the SHA behavior of Rust/runtime callees.
+Release Agave version/commit remains OPEN for lead selection by user decision.
+
+Ordered remaining Lean/source jobs for lead review
+
+1. Select a compatible cached/build-queue toolchain for extracted and R1 modules.
+   Proposed fixed composition (OPEN until checked together):
+   PublicSourceBoundary.SourceSerializerRefines RawBridge431.ExtractedReturns
+     (PublicRawCoreAgreement.fromCore ∘ RawBridge431.project).
+   Its two component lemmas are checked above; concrete Rust execution remains
+   a separate trusted-extraction/runtime correspondence, not this definition.
+   Prove SourceValidationAmountGuard for the actual successful caller, and
+   bind the omitted ASF8/Pool coordinates to its authenticated accounts.
+2. Prove actual decoder canonicality, then validator iteration and Prefix::parse
+   correctness; connect semantic row0/row2, ordinary challenge values/states
+   and all opening/query/rho payloads. Only actual J1.a/b closure opens J5∥J2.
+3. J1.c: instantiate source commitment addresses/read cuts and causal recovery
+   with explicit collision/child/root exclusions and folded-tail obligations.
+4. J1.d: refine exact selected qm31/circle/query/rho samplers, coordinate order,
+   fallback paths and state carry; sampler-only lemmas do not prove read timing.
+5. J1.e: define actual source/runtime prefix semantics, discharge every reachable
+   effect, instantiate SourceSimulation, then prove Qtot and raw-byte collision
+   mass. Runtime selection remains the lead's explicit decision.
+6. Lead J1.R13: provision the new ABI and run the queued guarded SBF build,
+   artifact pin and CU replay. No deployment is part of this proposal.
