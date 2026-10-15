@@ -3357,6 +3357,14 @@
         }
       },
       "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs"
+    },
+    {
+      "anchor": "fn digest_is_canonical(",
+      "calls": {},
+      "fragment_sha256": "3e494592521c35f7e6f9190c2909da3818a7c94bbb37eb130a8e228b5bd1aa61",
+      "id": "payment_digest_canonical",
+      "loops": {},
+      "path": "crates/aspis-statement/src/pool_v1/payment_relation.rs"
     }
   ],
   "preservation_obligations": [
@@ -3365,9 +3373,10 @@
     "The query success edge must preserve exactly one a.next increment; intermediate failure must terminate without a retry edge.",
     "Actual runtime SHA256/create_program_address syscall implementations and no-extra-SHA runtime behavior must be tied to the experiment; package pins do not attest a live validator.",
     "Compiler/SBF execution and allocation/compute failure prefixes must refine the selected source semantics.",
-    "Release runtime selection is OPEN for lead selection by explicit user instruction; the local Solana 4.2.1 replay dependency is not release selection."
+    "Release runtime selection is OPEN for lead selection by explicit user instruction; the local Solana 4.2.1 replay dependency is not release selection.",
+    "The payment digest leaf has no lexical call or loop entries, but indexing, comparison, short-circuit evaluation, failure and compiler/runtime effects are unproved. An empty lexical inventory is not zero designated-SHA cost; opaque parent validation boundaries remain OPEN."
   ],
-  "revision": "c111cbbf23b3a0f6ed5bebe75c72fe3089fe5be8",
+  "revision": "2ed5bc48393ba51e38ec62167134f55755b11649",
   "sdk_lockfile": "tools/r1-cost-probe/Cargo.lock",
   "sdk_pins": [
     {
@@ -3460,6 +3469,7 @@
     "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs": "79948bb873e2abad726a33de9829eba646ac41192c0be8bec55286c11734f558",
     "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs": "0a446a7df661cabcf6f4c38c079f9970b03f21a7351cb2878e6fb76c62ab1ca1",
     "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs": "a2aee41c31800966659edb9eb8edee88ec2514dd2c0c0ccee06ccb1cba9fc4fd",
+    "crates/aspis-statement/src/pool_v1/payment_relation.rs": "0fedd7579aba09b67415f7f7f5e18942643444e1570af25ec7db76510ec57a35",
     "crates/aspis-statement/src/pool_v1/verifier_registry.rs": "594f8b53e6c8d7cd6265542e7730c5371f3233d778de06d220bedab7529d97d9",
     "docs/research/100bit-spend-path-20261013/tools/public-serializer-extraction-kit/extract.py": "bddaf79ed2ae8f5a6a627ee7b1c7b3c781be31bfb4ebba4316f14721fb26a0ab",
     "programs/r1-cost-probe/Cargo.toml": "1208d93c95f3e4e769fd1ba48f71bbb031c4ddd33793f09f5cc6405fe9da71f1",
