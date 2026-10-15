@@ -1,0 +1,264 @@
+PARALLEL R1 DESIGN REVIEW — PROPOSALS FOR LEAD REVIEW, 2026-10-15
+
+Scope and evidence
+
+Fetched origin/codex/100bit-spend-path-20261013 and pinned all three new
+branches to a17829a776d533d7cd0beeb1f8676dcc793a909c. The lead's gap list
+was read through origin/v8-reference at
+e6744568e48fa318c7745fa74d93d40eec6de3da. The three workers ran in parallel
+on Astra xhigh, explicitly confirmed by the user after the base correction.
+Drafts were copied from the earlier e6744568e worktrees; those worktrees
+remain intact. The live spend-path worktree was not accessed or modified.
+
+These are design proposals, not Lean implementations or release evidence.
+The coordinator checked cited declaration names, signatures and relevant
+bodies against the pinned sources. No Lean compilation, axioms audit,
+build-host work, replay, runtime measurement, push or stash was performed.
+An existing theorem below means its source declaration was inspected; its
+archived build evidence was not independently replayed in this review.
+Every proposed interface and source refinement remains OPEN until proved.
+
+Notation: S = docs/research/100bit-spend-path-20261013; unqualified R1
+module names below live in S/lean and namespace AspisR1. FS2 interfaces
+are in docs/research/v8-fs-generic-20261006/lean/FS2/Statement.lean;
+R0C.V3 interfaces are in docs/research/v8-r0-close-20261007/lean/R0C/V3.
+
+Source corrections and cross-proposal constraints
+
+1. Decoder dispatch categories are not the mathematical challenge schedule.
+UnifiedSampler routes row 0 through initialization and row 26 through
+reseed. The source r1_wire.rs/r1_semantic.rs and
+TRANSCRIPT-R1-INVENTORY.md instead identify semantic field challenges at
+rows 0--24 (lambda at 0), circle challenges at 25/26, gamma/kappa/alpha0/
+alpha1 at 27--30, q22 at 31, and rho at 32. No zero-error initialization
+or reseed row follows from the decoder labels.
+
+2. ConcreteBinding's caps are for fixed words and prefix data. An existential
+union over unknown words does not inherit those caps. Causal recovery fixes
+words on an actual trace outside a hash event; it does not make an arbitrary
+table-dependent classifier satisfy FS2.D2. D2 quantifies independently over
+T' and T. D2TableBoundary.table_flip_cost proves epsilon >= 1 if a change of
+table makes every challenge escape. A needs C's commitment-time word
+interface and B's extraction-failure event before the raw classifier can be
+fixed. A membership-only classifier cannot silently acquire knowledge D1.
+
+3. FS2.D3 is unconditional in H and T. C's recovery lemmas require absence
+of CombinedMerkleCollision.Coll. The proposed D3Outside/theorem43_outside
+extension must be proved; it is not an existing specialization. Inspection
+of R0C.V3.Gen.lemmaB3 shows that it already receives the no-collision
+premise locally, which gives a specific proof route for the extension.
+
+4. FS2.extractFails reads the table before the first address of row 0.
+B's proposed extractor uses the full first-read log, including later C2 and
+folded commitments. These are different events. A new event-containment
+and density argument is required; merely replacing the extractor parameter
+in UnifiedFiatShamir.soundness_bound does not prove B's theorem.
+
+5. UnifiedOracleInj.inj uses CombinedMerkleCollision.budget =
+12*Qtot^2/256^32. CombinedMerkleCollision.mass proves this under universal
+hQ, and old_included contains the old event. Do not retain the pure-decision
+3*Qtot^2 term or add it again. Additional events require separate accounting
+if not shown included. The 583 raw/452 distinct figures in the existing
+measurement are one successful verifier run, not a full-experiment bound.
+
+6. CanonicalByteHash.encode sends overlength inputs to the empty address.
+The source model needs a length bound for whole proof, public and checkpoint
+hash inputs as well as leaves/nodes. verifier.rs explicitly requires an
+authentic tx1 checkpoint and protected proof bytes in tx2/tx2_authenticated;
+an unkeyed checkpoint checksum does not prove account provenance.
+
+Proposal review
+
+A — CLASSIFIER.txt gives an existence/no-earlier-hit classifier on a proposed
+enriched literal-word view, explicit D1/D2/D3 contracts, malformed-input
+branches and all row events. It does NOT provide the requested concrete raw
+UnifiedProtocol instance: the word-view adapter is explicitly OPEN. The
+semantic route uses R0P.Mask.semantic_round_densityZ and early_candidate_to_prefixZ;
+the latter retains the pre-C2 padding argument rather than fixing C2 before
+lambda/chi. ConcreteBinding.{gammaBad_card,kappaBad_card,firstBad_card,
+secondBad_card} supply the four caps; the fold caps require degree <= 6.
+OpeningSamplerBound's four mass lemmas additionally require explicit byte
+and field equivalences. QueryResidualBridge.rhoBad_card and
+RhoSamplerBound.modulo_bad_mass give the rho row. The q22 bound applies only
+to a fixed matching set. SemanticPrefix.large_matching_extracts_of_prefix
+retains typing, parsed-prefix, transport, sumcheck and exclusion premises.
+
+Coordinator reproduced A's exact-rational calculation: 33 proposed entries,
+seven ledger classes equal to security-ledger.json, unique maximum row 31,
+qcap = (1+R0C.SlackStatement.delta0)*C(9557,22)/C(262144,22),
+-log2(qcap) approximately 105.13647507558767. Exit 0; no files generated.
+This is arithmetic evidence, not a compiled maxErr theorem or row closure.
+
+B — KNOWLEDGE.txt specifies a full-log, one-execution knowledge event and
+an executable relation rather than witness nonexistence. It proposes GRS
+decoding for initial (n,d,t)=(1048576,1024,38230), fold one
+(262144,255,9558), and native fold two (64 coefficients, length 65536,
+threshold 2390) through repeated lifting into fold one's code. No new
+native decoder is claimed. AspisWide.GRSConversion's two threshold transports and the R1
+GRSMessageInverse image test support the initial/final interfaces.
+ConcreteProjection.exactFinal_sparseLift_child and fullQuartetSet_card
+give the repeated-code route. IncrementalCandidateLoop.candidates_eq_lambda
+requires complete scalar lists and lane coverage. The 290000 pair bound
+additionally requires 29 steps and scalar list sizes <=100; it is not a
+runtime bound. The proposed randomized decoder, bit-cost contract and
+failure budget are all OPEN. Efficient full-spend witness production is
+stronger than SpendSemantics.NoteFacts and requires relation refinement.
+
+C — TERMINAL-D3.txt supplies proposed canonical hash, accepted-opening,
+commitment-time word, and D3Outside contracts. The checked recovery names
+are CanonicalMerkleRecovery.recover_or_events, the three
+ThreeCommitmentRecovery/ThreeCommitmentFullTrace specializations,
+CanonicalRecoveryStability.recover_stable, and the C1/LaterTableStability
+word-at-first-read theorems. Their prerequisites include consistent logs,
+literal commitment frame reads, bounded input lengths, accepted canonical
+paths/read inclusion, universal hQ and event exclusions. None directly
+identifies Rust payload coordinates, typed words or checkpoint provenance.
+The wrapper preserves repeated reads and uses one common collision event.
+The proposed outside-D3 theorem is a membership-bound extension; B still
+needs its distinct knowledge event and first-read density proof.
+
+Review corrections incorporated: actual challenge/error schedule, explicit
+unconditional D3 versus no-event recovery, correct eval namespace, and the
+V3 hitsChain3/blaw interface. UnifiedProtocol's own decode is none, so a
+knowledge argument cannot use that field's FS2.hitsChain while claiming
+reuse of UnifiedDecoder. New helper names in the proposals are obligations,
+not existing theorems. No rank or practical extractor-runtime claim passed
+this review because neither has been established here.
+
+Single ordered Lean job list — proposed fixed interfaces, all OPEN
+
+Use C's pr,V,v H,pf H,P H,Coll notation. In the following statements E is
+the extractor, Wspend the witness type, coins its random tape, and
+failE v coins := not (exists w, E pub v.2.1 (firstReadLog v.1) coins =
+some w and Rspend pub w). Rspend, the random-tape law and a cost semantics
+must be concrete definitions, not opaque proof assumptions.
+
+J1. Freeze the relation and views. Specify Wspend and executable Rspend,
+including note membership/secret, nullifier, bounded conservation, output
+bindings and canonical options. Define commitment-cut logs, deterministic
+default completion and typed prefix parsers. Fix source S2/private-salt
+configuration, public-byte encoding, row sigma maps and all input-length
+bounds. Prove parser stability under prefix extension. Decide whether the
+raw classifier has a justified adapter or knowledge uses a causal event
+family; do not claim a table-independent adapter already exists.
+
+J2. Instantiate terminal hashes and source acceptance. Proposed target:
+  sourceAccept H input -> modelAccept H input
+and, on accepted source executions, equality of literal canonical hash logs.
+Prove every authenticated opening-program read is included in v H and
+every commitment frame is the literal earlier frame. State checkpoint
+provenance/protected-account preconditions explicitly. Bound every input
+by L. For an adversary read bound QA and verifier bound QV, target
+  forall H, distinctFirstReads (v H) <= QA + QV.
+QA, QV remain symbolic until universally justified, including rejected runs;
+the 452 fixture measurement is not QV. If exact source/model traces differ
+on rejection, prove the required one-way acceptance and read bound instead.
+
+J3. Compose commitment recovery. For each commitment kind k and accepted
+query i, prove
+  not (Coll (v H)) -> accepts (v H) ->
+    recoverAtCut k H (slots k H i) =
+      some (openedPayload k H i, openedSalt k H i).
+Then prove payload decoding/coordinate equality to one fixed W,V at their
+proper cuts, with WordTyped and total-word completion. Reuse the three
+table-stability and common-trace recovery lemmas; preserve their size,
+consistency, frame-read and event hypotheses. None entries stay explicit
+until totalization, and accepted-slot equality must survive totalization.
+
+J4. Refine efficient decoding/extraction. Targets include
+  (decode0 w).toFinset = InitialResponses.Close w
+  (merge29 W).toFinset = InitialResponses.Lambda W
+and exact corresponding fold-code lists, outside the declared decoder
+failure event. Prove E-returned witness validity by checking Rspend and
+prove the expected bit-cost contract from KNOWLEDGE.txt with one explicit
+deltaE budget. Prove sufficient support and candidate completeness; do not
+infer them from Merkle acceptance. Refine the inverse/image test and finite
+merge into executable representations. No dense interpolation run is part
+of this job proposal.
+
+J5. Prove A's row predicates and the chosen failure interface. For the
+enriched membership protocol prA, prove the exact D1/D2 contracts printed
+in CLASSIFIER.txt and FS.maxErr eps 33 = qcap. D2 ranges over every prefix,
+message, unrelated T',T and every completing-sampler context. Its density
+arguments must use one fixed set of pre-challenge data, including the
+row-31 support and the row-32 residual vector. Prove actual sampler-map
+equalities and malformed-case rejection. Transfer to raw UnifiedProtocol
+only with the adapter theorem from J1/J3; otherwise keep this membership
+result explicitly separate from knowledge.
+
+J6. Prove terminal D3Outside and generic transport. Targets:
+  forall H T, not (Coll (v H)) -> rb.doomed (P H) T ->
+    (eval H (V pub (pf H))).2 = false
+and the same theorem43 conclusion with D3Outside replacing unconditional
+D3, retaining D1, ChainDensity3, ChainsRead, ReadsChains, Inj3 and hQ.
+Use J3's fixed words and semantic/fold/pairing/accumulator implications,
+then UnifiedOracleInj.inj; charge its combined event only once.
+
+J7. Prove the separate knowledge inclusion and density, using
+decK := UnifiedDecoder.decode p hD pub and a concrete new badK:
+  forall H coins, accepts (v H) -> failE (v H) coins ->
+    not (Coll (v H)) -> DecoderComplete (v H) coins ->
+    R0C.V3.hitsChain3 decK badK emptyTable (v H).1
+  forall a T own pend g, decK a T = some (own,pend,g) ->
+    R0C.V3.blaw g
+      (fun out => indicator (badK out.1 out.2.1 T out.2.2)) own pend <= epsK.
+Prove nonnegative epsK and decoder failure mass <=deltaE. Applying
+R0C.V3.lemmaA3 and the combined event mass would then target
+  Pr[accepts v and failE v coins] <= Q*epsK + 12*Q^2/2^256 + deltaE.
+The equality/bound epsK<=qcap is a separate OPEN obligation. A's membership
+D1 and the absence of hash events do not prove either knowledge target.
+
+J8. Complete source/account/settlement correspondence and the one-attempt
+experiment theorem, retaining the separate adaptive-Q formula. Only after
+focused statements and bridges are green: one axioms audit and one frozen
+manifest replay, with exact target/status/time/RSS/swap/revision/axioms
+receipts under AGENTS.md. The lead owns the reserved build-host queue;
+this proposal authorizes no host job or repeat of unchanged regressions.
+
+Late development-branch update and lead decisions
+
+During final review both the local and origin spend-path refs advanced to
+ce1fb7255213f5b390048d1ca709fea99176ae62. The proposal branches retain the
+head actually fetched for their creation, a17829a776d533d7cd0beeb1f8676dcc793a909c.
+The cited existing Lean files and verifier.rs are unchanged in that update.
+The coordinator inspected the new files through git show; no live worktree
+was read. Relevant additions:
+
+- TARGET-CLARIFICATION-20261015.md records the selected target as 100-bit
+  per-attempt soundness without grinding credit, rather than an absolute
+  error bound after an arbitrary adversarial query budget. This review
+  respects that clarification. The old Q<=35 arithmetic is not a parameter
+  blocker for that target; a proved one-attempt experiment and the adaptive
+  query-dependent statement are still distinct obligations.
+- SpendFailureSupport.matchingSet_card_le in the new SpendFailureSupport.lean
+  derives support <=9557 from the original SpendExtraction premises and
+  absence of a listed candidate satisfying production/copy/NoteFacts.
+  matchingSet_q22_successful_containment_bound applies the old q22 law to
+  that support. These are useful J5/J7 reuse targets, not a completed raw
+  classifier, knowledge extraction or unified sampler refinement.
+- CLASSIFIER-REUSE-INVENTORY-20261015.md documents the D1/D2/D3 mismatches.
+  Its decoder categories must not replace the mathematical challenge types
+  verified above; the initial and reseeded rows still sample lambda and z1.
+
+Decisions still required from the lead:
+1. Fix the full spend relation, statement-selection experiment and trusted
+   checkpoint/account preconditions; NoteFacts alone is insufficient.
+2. Choose the raw-classifier adapter or a causal knowledge-event reduction,
+   and approve the explicit J6/J7 interfaces. These proposals identify the
+   boundary but do not solve the fixed-word/arbitrary-table mismatch.
+3. Accept or replace the randomized expected-time decoder contract and fix
+   its cost model/failure allowance. No executable extractor is supplied.
+4. Fix the concrete terminal/source scope, universal query accounting, and
+   lead-owned verification/replay sequence. No release closure is claimed.
+
+Handoff (all paths under S/design, new files only)
+
+codex/100bit-r1-classifier-design-20261015:
+  CLASSIFIER.txt; PARALLEL-REPORT-20261015.txt
+codex/100bit-r1-knowledge-design-20261015:
+  KNOWLEDGE.txt
+codex/100bit-r1-terminal-oracle-design-20261015:
+  TERMINAL-D3.txt
+
+All three are proposals for lead acceptance. The prior r1-*-design
+worktrees and their uncommitted draft text were retained for lead cleanup.
