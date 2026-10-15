@@ -4,23 +4,26 @@ Read origin/local100bit 721d8d674d12f6734f581a9f4365abc927025325 and coordinator
 c195afba6599d8e5d4b9dc420c17ac5bb5d736c9. Their crates/programs are identical.
 The newer mask proofs add no caller/account theorem. This extends the existing
 J1-PUBLIC-CALLER-BOUNDARY and J1-AB-EXECUTION-LINKS inventories rather than
-replacing their predicates. All new names below are proposed theorem names
-in an additive source-boundary module; no Lean/source edit or job ran.
+replacing their predicates. Item1 reuses the existing bridge inspected at
+8b5661efb99efefefeaf4db0d3c5da27e19ba03f; later new theorem names are proposed.
+No Lean/source edit or job ran.
 
-1. Close the existing generated-public composition on the R17 kernel.
-Proposed withdrawal_publicParsed: for fixed serializer p,t,out, assumptions
-WithdrawalCarrier431.HelperValidated p and generated Public.public_bytes
-(.Withdrawal p t)=ok(.Ok out) imply existence of wire with
-PublicSourceRaw.toWire (PublicRawCoreAgreement.fromCore
-  (RawBridge431.project (.Withdrawal p t)))=some wire and
+1. Import/reuse ExtractedPublicCheckedBridge432; no duplicate composition.
+Within AspisR1PublicSerializer.ExtractedPublicCheckedBridge432, the existing
+validated_source_parsePublic takes p:WithdrawalCarrier431.SerializerPublic,
+t:Whole431.Transition, out:FieldsRefinement431.ByteVec,
+hv:WithdrawalCarrier431.HelperValidated p, and
+hs:pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
+  (.Withdrawal p t)=ok(.Ok out).
+It concludes existence of wire with
+PublicSourceRaw.toWire (projectRaw (.Withdrawal p t))=some wire and
 SemanticPublicWire.parsePublic (out.val.map RawBridge431.rawByte)=
   some (SemanticPublicWire.toPublic wire).
-Use AspisR1PublicSerializer.WithdrawalCarrier431.validated_source_success,
-AspisR1.PublicRawAmountGuardAgreement.decoded_of_guarded_core_success and
-PublicCodecAgreement.parsePublic_of_decode. This supplies the parser equation
-needed by Checks.publicParsed after the caller identifies the same bytes/value.
-Transfer uses RawBridge431.source_success_raw and the transfer amount guard,
-which is True by PublicRawAmountGuard.PaymentAmountGuard's definition.
+projectRaw is fixed as PublicRawCoreAgreement.fromCore after RawBridge431.project.
+Reuse helper_success_amount_guard and extracted_serializer_refines from that
+module for their existing contracts. Its same-kernel Lean 4.32 check is pending;
+historical Lean 4.31 receipts do not validate this composition. Caller identity and
+both generated successes remain obligations for Checks.publicParsed.
 
 2. Smallest new source-reachable caller lemma: aswp_encode_success_validated.
 Let E/V denote the exact emitted payment_relation.rs constants
