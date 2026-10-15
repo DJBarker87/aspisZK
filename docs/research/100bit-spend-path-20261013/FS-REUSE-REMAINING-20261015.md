@@ -9,6 +9,13 @@ grinding credit**; see [the target record](TARGET-CLARIFICATION-20261015.md).
 The absolute full-experiment `Q` scenarios below remain useful disclosures,
 but are not the numerical acceptance criterion for that clarified target.
 
+The subsequently merged [lead decisions](design/LEAD-DECISIONS-20261015.md)
+select an idealized word-message protocol followed by a Merkle compiler,
+with separate membership and full-log knowledge statements. Its combined
+hash-event budget is `12 * Qtot^2 / 2^256`, charged once. The older pure
+wrapper and its three-unit budget described below remain reusable theorem
+interfaces; they are not the complete committed-verifier release theorem.
+
 The current composition is [`UnifiedFiatShamir.soundness_bound`](lean/UnifiedFiatShamir.lean).
 It applies the unchanged `R0C.V3.theorem43` to the 33-round unified protocol.
 Its explicit inputs include `Params` with `5 ≤ p.D`, public byte length below

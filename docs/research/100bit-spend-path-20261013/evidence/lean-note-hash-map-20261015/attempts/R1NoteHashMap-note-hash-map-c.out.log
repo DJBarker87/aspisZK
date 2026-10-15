@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1NoteHashMap.lean:58:80: error: unsolved goals
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+pk : R0P.Digest K
+value asset : K
+salt : R0P.Digest K
+chunk2K : R0P.Digest K := fun i => if ↑i = 0 then value else if ↑i = 1 then asset else salt ⟨↑i - 2, ⋯⟩
+chunk2L : R0P.Digest L := fun i => if ↑i = 0 then f value else if ↑i = 1 then f asset else mapDigest f salt ⟨↑i - 2, ⋯⟩
+chunk3K : R0P.Digest K := fun i => if h : ↑i < 2 then salt ⟨↑i + 6, ⋯⟩ else 0
+chunk3L : R0P.Digest L := fun i => if h : ↑i < 2 then mapDigest f salt ⟨↑i + 6, ⋯⟩ else 0
+hchunk2 : mapDigest f chunk2K = chunk2L
+hchunk3 : mapDigest f chunk3K = chunk3L
+⊢ digestOf (spongeStep (spongeStep (spongeStep (spongeInit 1095958531 18) (mapDigest f pk)) chunk2L) chunk3L) =
+    digestOf
+      (spongeStep
+        (spongeStep (spongeStep (spongeInit 1095958531 18) (mapDigest f pk)) fun i =>
+          if ↑i = 0 then f value else if ↑i = 1 then f asset else mapDigest f salt ⟨↑i - 2, ⋯⟩)
+        fun i => if h : ↑i < 2 then mapDigest f salt ⟨↑i + 6, ⋯⟩ else 0)
+'AspisR1.NoteHashMap.map_spongeInit' depends on axioms: [propext, Quot.sound]
+'AspisR1.NoteHashMap.map_absorb' depends on axioms: [propext, Quot.sound]
+'AspisR1.NoteHashMap.map_spongeStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NoteHashMap.map_digestOf' depends on axioms: [propext, Quot.sound]
+'AspisR1.NoteHashMap.map_ownerKey' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NoteHashMap.map_nullifierHash' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NoteHashMap.map_noteCommitment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NoteHashMap.map_merkleStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NoteHashMap.map_merkleRootAux' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NoteHashMap.map_merkleRoot' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1

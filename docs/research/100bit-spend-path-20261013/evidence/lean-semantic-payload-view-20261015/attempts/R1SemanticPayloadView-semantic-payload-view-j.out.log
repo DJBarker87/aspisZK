@@ -1,0 +1,64 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:124:4: error: Type mismatch: After simplification, term
+  congrArg (Option.map fun q => (unmaskMsg q.1, q.2)) hget
+ has type
+  ∃ a,
+    (rounds recoverC2 payloads challenges)[2]? = some (a, R0C.SemStatement.Chal.semantic (challenges 2)) ∧
+      (match a with
+        | R0C.SemStatement.Msg.semantic m =>
+          R0C.SemStatement.Msg.semantic
+            (match m with
+            | SemMsgZ.base m => m
+            | SemMsgZ.maskSum claim => SemMsg.none)
+        | R0C.SemStatement.Msg.beforeZ0 y => R0C.SemStatement.Msg.beforeZ0 y
+        | R0C.SemStatement.Msg.beforeZ1 y => R0C.SemStatement.Msg.beforeZ1 y
+        | R0C.SemStatement.Msg.opening m => R0C.SemStatement.Msg.opening m) =
+        R0C.SemStatement.Msg.semantic
+          (match
+            match ↑(payloads 2) with
+            | Payload.empty => SemMsgZ.base SemMsg.none
+            | Payload.c2Root root => SemMsgZ.base (SemMsg.h1 (recoverC2 root).1 (recoverC2 root).2)
+            | Payload.maskSum value => SemMsgZ.maskSum ↑value
+            | Payload.polynomial coefficients => SemMsgZ.base (SemMsg.roundPoly (polynomial coefficients)) with
+          | SemMsgZ.base m => m
+          | SemMsgZ.maskSum claim => SemMsg.none)
+but is expected to have type
+  ∃ a,
+    (rounds recoverC2 payloads challenges)[2]? = some (a, R0C.SemStatement.Chal.semantic (challenges 2)) ∧
+      (match a with
+        | R0C.SemStatement.Msg.semantic m =>
+          R0C.SemStatement.Msg.semantic
+            (match m with
+            | SemMsgZ.base m => m
+            | SemMsgZ.maskSum claim => SemMsg.none)
+        | R0C.SemStatement.Msg.beforeZ0 y => R0C.SemStatement.Msg.beforeZ0 y
+        | R0C.SemStatement.Msg.beforeZ1 y => R0C.SemStatement.Msg.beforeZ1 y
+        | R0C.SemStatement.Msg.opening m => R0C.SemStatement.Msg.opening m) =
+        R0C.SemStatement.Msg.semantic (SemMsg.h1 (recoverC2 (rootAt2 payloads)).1 (recoverC2 (rootAt2 payloads)).2)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:129:2: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:146:62: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  0 ≤ a ≤ 9
+  a - b ≥ -15
+where
+ a := ↑↑j
+ b := ↑(rounds recoverC2 payloads challenges).length
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:153:27: warning: Variable name `recoverC2` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:154:50: warning: Variable name `challenges` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'AspisR1.SemanticPayloadView.rounds_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.rounds_get' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.rounds_getElem?' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.semChalsZ_rounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.c2OfZ_rounds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.claimOf_rounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.semPolysZ_rounds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.polynomial_degree' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1

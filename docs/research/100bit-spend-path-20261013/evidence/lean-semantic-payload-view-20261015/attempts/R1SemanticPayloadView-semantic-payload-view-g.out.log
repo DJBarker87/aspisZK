@@ -1,0 +1,127 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:73:39: error(lean.unknownIdentifier): Unknown identifier `rounds_length`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:73:32: error: unsolved goals
+recoverC2 : State → InitialWord × InitialWord
+payloads : (row : Fin 25) → RowPayload row
+challenges : Fin 25 → E
+i : Fin 25
+⊢ ↑i < (rounds recoverC2 payloads challenges).length
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:97:4: error: Type mismatch: After simplification, term
+  hget
+ has type
+  (rounds recoverC2 payloads challenges)[2]? =
+    some
+      (R0C.SemStatement.Msg.semantic
+          (match ↑(payloads 2) with
+          | Payload.empty => SemMsgZ.base SemMsg.none
+          | Payload.c2Root root => SemMsgZ.base (SemMsg.h1 (recoverC2 root).1 (recoverC2 root).2)
+          | Payload.maskSum value => SemMsgZ.maskSum ↑value
+          | Payload.polynomial coefficients => SemMsgZ.base (SemMsg.roundPoly (polynomial coefficients))),
+        R0C.SemStatement.Chal.semantic (challenges 2))
+but is expected to have type
+  ∃ a,
+    (rounds recoverC2 payloads challenges)[2]? = some (a, R0C.SemStatement.Chal.semantic (challenges 2)) ∧
+      (match a with
+        | R0C.SemStatement.Msg.semantic m =>
+          R0C.SemStatement.Msg.semantic
+            (match m with
+            | SemMsgZ.base m => m
+            | SemMsgZ.maskSum claim => SemMsg.none)
+        | R0C.SemStatement.Msg.beforeZ0 y => R0C.SemStatement.Msg.beforeZ0 y
+        | R0C.SemStatement.Msg.beforeZ1 y => R0C.SemStatement.Msg.beforeZ1 y
+        | R0C.SemStatement.Msg.opening m => R0C.SemStatement.Msg.opening m) =
+        R0C.SemStatement.Msg.semantic
+          (SemMsg.h1
+            (recoverC2
+                (match payloads 2 with
+                | ⟨Payload.empty, h⟩ => ⋯.elim
+                | ⟨Payload.c2Root root, property⟩ => root
+                | ⟨Payload.maskSum value, h⟩ => ⋯.elim
+                | ⟨Payload.polynomial coefficients, h⟩ => ⋯.elim)).1
+            (recoverC2
+                (match payloads 2 with
+                | ⟨Payload.empty, h⟩ => ⋯.elim
+                | ⟨Payload.c2Root root, property⟩ => root
+                | ⟨Payload.maskSum value, h⟩ => ⋯.elim
+                | ⟨Payload.polynomial coefficients, h⟩ => ⋯.elim)).2)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:101:2: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:105:82: error: unsolved goals
+recoverC2 : State → InitialWord × InitialWord
+payloads : (row : Fin 25) → RowPayload row
+challenges : Fin 25 → E
+hget :
+  (rounds recoverC2 payloads challenges)[↑⟨14, ⋯⟩]? =
+    some
+      (R0C.SemStatement.Msg.semantic (toMessage recoverC2 ↑(payloads ⟨14, ⋯⟩)),
+        R0C.SemStatement.Chal.semantic (challenges ⟨14, ⋯⟩))
+⊢ (match
+      some
+        (R0C.SemStatement.Msg.semantic
+            (match ↑(payloads 14) with
+            | Payload.empty => SemMsgZ.base SemMsg.none
+            | Payload.c2Root root => SemMsgZ.base (SemMsg.h1 (recoverC2 root).1 (recoverC2 root).2)
+            | Payload.maskSum value => SemMsgZ.maskSum ↑value
+            | Payload.polynomial coefficients => SemMsgZ.base (SemMsg.roundPoly (polynomial coefficients))),
+          R0C.SemStatement.Chal.semantic (challenges 14)) with
+    | some (R0C.SemStatement.Msg.semantic (SemMsgZ.maskSum claim), snd) => some claim
+    | x => none) =
+    some
+      (match payloads 14 with
+      | ⟨Payload.empty, h⟩ => ⋯.elim
+      | ⟨Payload.c2Root root, h⟩ => ⋯.elim
+      | ⟨Payload.maskSum value, property⟩ => ↑value
+      | ⟨Payload.polynomial coefficients, h⟩ => ⋯.elim)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:114:57: error: unsolved goals
+recoverC2 : State → InitialWord × InitialWord
+payloads : (row : Fin 25) → RowPayload row
+challenges : Fin 25 → E
+⊢ ∃ (h :
+    ∀ (j : Fin 10),
+      (match (rounds recoverC2 payloads challenges)[15 + ↑j].1 with
+          | R0C.SemStatement.Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+          | x => none).isSome =
+        true),
+    (fun j =>
+        (match (rounds recoverC2 payloads challenges)[15 + ↑j].1 with
+            | R0C.SemStatement.Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+            | x => none).get
+          ⋯) =
+      fun j =>
+      polynomial
+        (match payloads ⟨15 + ↑j, ⋯⟩ with
+        | ⟨Payload.empty, h⟩ => ⋯.elim
+        | ⟨Payload.c2Root root, h⟩ => ⋯.elim
+        | ⟨Payload.maskSum value, h⟩ => ⋯.elim
+        | ⟨Payload.polynomial coefficients, property⟩ => coefficients)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:116:34: warning: This simp argument is unused:
+  rounds_getElem?
+
+Hint: Omit it from the simp argument list.
+  simp [semPolysZ, rounds_length, r̵o̵u̵n̵d̵s̵_̵g̵e̵t̵E̵l̵e̵m̵?̵,̵ ̵toMessage, coeffAt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:116:51: warning: This simp argument is unused:
+  toMessage
+
+Hint: Omit it from the simp argument list.
+  simp [semPolysZ, rounds_length, rounds_getElem?, t̵o̵M̵e̵s̵s̵a̵g̵e̵,̵ ̵coeffAt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:118:27: warning: Variable name `recoverC2` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:119:50: warning: Variable name `challenges` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'AspisR1.SemanticPayloadView.rounds_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.rounds_get' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.rounds_getElem?' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.semChalsZ_rounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.c2OfZ_rounds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.claimOf_rounds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.semPolysZ_rounds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.polynomial_degree' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1

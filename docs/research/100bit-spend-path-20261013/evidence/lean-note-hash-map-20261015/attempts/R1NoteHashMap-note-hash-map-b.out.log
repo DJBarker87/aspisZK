@@ -1,0 +1,145 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1NoteHashMap.lean:46:2: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1NoteHashMap.lean:53:2: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1NoteHashMap.lean:74:4: error: unsolved goals
+case pos
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+pk : R0P.Digest K
+value asset : K
+salt : R0P.Digest K
+chunk2K : R0P.Digest K := fun i => if ↑i = 0 then value else if ↑i = 1 then asset else salt ⟨↑i - 2, ⋯⟩
+chunk2L : R0P.Digest L := fun i => if ↑i = 0 then f value else if ↑i = 1 then f asset else mapDigest f salt ⟨↑i - 2, ⋯⟩
+chunk3K : R0P.Digest K := fun i => if h : ↑i < 2 then salt ⟨↑i + 6, ⋯⟩ else 0
+chunk3L : R0P.Digest L := fun i => if h : ↑i < 2 then mapDigest f salt ⟨↑i + 6, ⋯⟩ else 0
+i : Fin 8
+h0 : ↑i = 0
+⊢ f (if i = 0 then value else salt 0) = if i = 0 then f value else mapDigest f salt 0
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1NoteHashMap.lean:76:6: error: unsolved goals
+case pos
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+pk : R0P.Digest K
+value asset : K
+salt : R0P.Digest K
+chunk2K : R0P.Digest K := fun i => if ↑i = 0 then value else if ↑i = 1 then asset else salt ⟨↑i - 2, ⋯⟩
+chunk2L : R0P.Digest L := fun i => if ↑i = 0 then f value else if ↑i = 1 then f asset else mapDigest f salt ⟨↑i - 2, ⋯⟩
+chunk3K : R0P.Digest K := fun i => if h : ↑i < 2 then salt ⟨↑i + 6, ⋯⟩ else 0
+chunk3L : R0P.Digest L := fun i => if h : ↑i < 2 then mapDigest f salt ⟨↑i + 6, ⋯⟩ else 0
+i : Fin 8
+h0 : ¬↑i = 0
+h1 : ↑i = 1
+⊢ f (if i = 0 then value else asset) = if i = 0 then f value else f asset
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1NoteHashMap.lean:77:6: error: unsolved goals
+case neg
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+pk : R0P.Digest K
+value asset : K
+salt : R0P.Digest K
+chunk2K : R0P.Digest K := fun i => if ↑i = 0 then value else if ↑i = 1 then asset else salt ⟨↑i - 2, ⋯⟩
+chunk2L : R0P.Digest L := fun i => if ↑i = 0 then f value else if ↑i = 1 then f asset else mapDigest f salt ⟨↑i - 2, ⋯⟩
+chunk3K : R0P.Digest K := fun i => if h : ↑i < 2 then salt ⟨↑i + 6, ⋯⟩ else 0
+chunk3L : R0P.Digest L := fun i => if h : ↑i < 2 then mapDigest f salt ⟨↑i + 6, ⋯⟩ else 0
+i : Fin 8
+h0 : ¬↑i = 0
+h1 : ¬↑i = 1
+⊢ f (if i = 0 then value else salt ⟨↑i - 2, ⋯⟩) = if i = 0 then f value else f (salt ⟨↑i - 2, ⋯⟩)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1NoteHashMap.lean:78:50: error: unsolved goals
+case pos
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+pk : R0P.Digest K
+value asset : K
+salt : R0P.Digest K
+chunk2K : R0P.Digest K := fun i => if ↑i = 0 then value else if ↑i = 1 then asset else salt ⟨↑i - 2, ⋯⟩
+chunk2L : R0P.Digest L := fun i => if ↑i = 0 then f value else if ↑i = 1 then f asset else mapDigest f salt ⟨↑i - 2, ⋯⟩
+chunk3K : R0P.Digest K := fun i => if h : ↑i < 2 then salt ⟨↑i + 6, ⋯⟩ else 0
+chunk3L : R0P.Digest L := fun i => if h : ↑i < 2 then mapDigest f salt ⟨↑i + 6, ⋯⟩ else 0
+hchunk2 : mapDigest f chunk2K = chunk2L
+i : Fin 8
+h : ↑i < 2
+⊢ f (if h : ↑i ≤ 1 then salt ⟨↑i + 6, ⋯⟩ else 0) = if h : ↑i ≤ 1 then f (salt ⟨↑i + 6, ⋯⟩) else 0
+
+case neg
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+pk : R0P.Digest K
+value asset : K
+salt : R0P.Digest K
+chunk2K : R0P.Digest K := fun i => if ↑i = 0 then value else if ↑i = 1 then asset else salt ⟨↑i - 2, ⋯⟩
+chunk2L : R0P.Digest L := fun i => if ↑i = 0 then f value else if ↑i = 1 then f asset else mapDigest f salt ⟨↑i - 2, ⋯⟩
+chunk3K : R0P.Digest K := fun i => if h : ↑i < 2 then salt ⟨↑i + 6, ⋯⟩ else 0
+chunk3L : R0P.Digest L := fun i => if h : ↑i < 2 then mapDigest f salt ⟨↑i + 6, ⋯⟩ else 0
+hchunk2 : mapDigest f chunk2K = chunk2L
+i : Fin 8
+h : ¬↑i < 2
+⊢ f (if h : ↑i ≤ 1 then salt ⟨↑i + 6, ⋯⟩ else 0) = if h : ↑i ≤ 1 then f (salt ⟨↑i + 6, ⋯⟩) else 0
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1NoteHashMap.lean:58:80: error: unsolved goals
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+pk : R0P.Digest K
+value asset : K
+salt : R0P.Digest K
+chunk2K : R0P.Digest K := fun i => if ↑i = 0 then value else if ↑i = 1 then asset else salt ⟨↑i - 2, ⋯⟩
+chunk2L : R0P.Digest L := fun i => if ↑i = 0 then f value else if ↑i = 1 then f asset else mapDigest f salt ⟨↑i - 2, ⋯⟩
+chunk3K : R0P.Digest K := fun i => if h : ↑i < 2 then salt ⟨↑i + 6, ⋯⟩ else 0
+chunk3L : R0P.Digest L := fun i => if h : ↑i < 2 then mapDigest f salt ⟨↑i + 6, ⋯⟩ else 0
+hchunk2 : mapDigest f chunk2K = chunk2L
+hchunk3 : mapDigest f chunk3K = chunk3L
+⊢ digestOf (spongeStep (spongeStep (spongeStep (spongeInit (f 1095958531) (f 18)) (mapDigest f pk)) chunk2L) chunk3L) =
+    digestOf
+      (spongeStep
+        (spongeStep (spongeStep (spongeInit 1095958531 18) (mapDigest f pk)) fun i =>
+          if ↑i = 0 then f value else if ↑i = 1 then f asset else mapDigest f salt ⟨↑i - 2, ⋯⟩)
+        fun i => if h : ↑i < 2 then mapDigest f salt ⟨↑i + 6, ⋯⟩ else 0)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1NoteHashMap.lean:76:32: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp [chunk2K, chunk2L, h0̵,̵ ̵h̵1]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1NoteHashMap.lean:77:32: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp [chunk2K, chunk2L, h0̵,̵ ̵h̵1, mapDigest]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1NoteHashMap.lean:81:55: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [chunk3K, chunk3L, h̵,̵ ̵mapDigest]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1NoteHashMap.lean:87:13: warning: This simp argument is unused:
+  map_natCast
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵m̵a̵p̵_̵n̵a̵t̵C̵a̵s̵t̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NoteHashMap.map_spongeInit' depends on axioms: [propext, Quot.sound]
+'AspisR1.NoteHashMap.map_absorb' depends on axioms: [propext, Quot.sound]
+'AspisR1.NoteHashMap.map_spongeStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NoteHashMap.map_digestOf' depends on axioms: [propext, Quot.sound]
+'AspisR1.NoteHashMap.map_ownerKey' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NoteHashMap.map_nullifierHash' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NoteHashMap.map_noteCommitment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NoteHashMap.map_merkleStep' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NoteHashMap.map_merkleRootAux' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NoteHashMap.map_merkleRoot' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1

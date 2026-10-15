@@ -1,0 +1,47 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:147:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (rounds recoverC2 payloads challenges)[↑⟨2, ?m.70⟩]
+in the target expression
+  (unmaskMsg (rounds recoverC2 payloads challenges)[2].1, (rounds recoverC2 payloads challenges)[2].2) =
+    (R0C.SemStatement.Msg.semantic (SemMsg.h1 (recoverC2 (rootAt2 payloads)).1 (recoverC2 (rootAt2 payloads)).2),
+      R0C.SemStatement.Chal.semantic (challenges ⟨2, ⋯⟩))
+
+recoverC2 : State → InitialWord × InitialWord
+payloads : (row : Fin 25) → RowPayload row
+challenges : Fin 25 → E
+hlenBase : (baseRoundsZ (rounds recoverC2 payloads challenges)).length = 25
+⊢ (unmaskMsg (rounds recoverC2 payloads challenges)[2].1, (rounds recoverC2 payloads challenges)[2].2) =
+    (R0C.SemStatement.Msg.semantic (SemMsg.h1 (recoverC2 (rootAt2 payloads)).1 (recoverC2 (rootAt2 payloads)).2),
+      R0C.SemStatement.Chal.semantic (challenges ⟨2, ⋯⟩))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl (List.map (fun q => (unmaskMsg q.1, q.2)) (rounds recoverC2 payloads challenges))
+  has type
+    @Eq (List (R0C.SemStatement.Msg E E (SemMsg E) × ChalZ E))
+      (List.map (fun q => (unmaskMsg q.1, q.2)) (rounds recoverC2 payloads challenges))
+      (List.map (fun q => (unmaskMsg q.1, q.2)) (rounds recoverC2 payloads challenges))
+  but is expected to have type
+    @Eq (List (R0C.SemStatement.Msg E E (SemMsg E) × ChalZ E)) (baseRoundsZ (rounds recoverC2 payloads challenges))
+      (List.map (fun q => (unmaskMsg q.1, q.2)) (rounds recoverC2 payloads challenges))
+  in the application
+    id (Eq.refl (List.map (fun q => (unmaskMsg q.1, q.2)) (rounds recoverC2 payloads challenges)))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:178:27: warning: Variable name `recoverC2` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPayloadView.lean:179:50: warning: Variable name `challenges` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'AspisR1.SemanticPayloadView.rounds_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.rounds_get' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.rounds_getElem?' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.semChalsZ_rounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.c2OfZ_rounds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.claimOf_rounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.semPolysZ_rounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPayloadView.polynomial_degree' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
