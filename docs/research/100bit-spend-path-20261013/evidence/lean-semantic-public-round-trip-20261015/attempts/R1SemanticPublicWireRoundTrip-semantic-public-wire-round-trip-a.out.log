@@ -1,0 +1,173 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:13:39: error: Ambiguous term
+  Digest
+Possible interpretations:
+  PublicFieldBlockCodec.Digest : Type
+  
+  SemanticPublicWire.Digest : Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:13:60: error: Ambiguous term
+  Byte
+Possible interpretations:
+  ExactLeafFieldCodec.Byte : Type
+  
+  PublicFieldBlockCodec.Byte : Type
+  
+  SemanticPublicWire.Byte : Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:18:38: error: Ambiguous term
+  M31
+Possible interpretations:
+  PublicFieldBlockCodec.M31 : Type
+  
+  SemanticPublicWire.M31 : Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:18:56: error: Ambiguous term
+  Byte
+Possible interpretations:
+  ExactLeafFieldCodec.Byte : Type
+  
+  PublicFieldBlockCodec.Byte : Type
+  
+  SemanticPublicWire.Byte : Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:23:75: error: Ambiguous term
+  Byte
+Possible interpretations:
+  ExactLeafFieldCodec.Byte : Type
+  
+  PublicFieldBlockCodec.Byte : Type
+  
+  SemanticPublicWire.Byte : Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:29:41: error: Ambiguous term
+  Frontier
+Possible interpretations:
+  PublicFieldBlockCodec.Frontier : Type
+  
+  SemanticPublicWire.Frontier : Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:29:64: error: Ambiguous term
+  Byte
+Possible interpretations:
+  ExactLeafFieldCodec.Byte : Type
+  
+  PublicFieldBlockCodec.Byte : Type
+  
+  SemanticPublicWire.Byte : Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:36:17: error(lean.unknownIdentifier): Unknown identifier `readFrontier_append`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:35:83: error: unsolved goals
+c : Common
+⊢ decodeAfter c.anchor c.nullifier c.assetId c.change (afterBytes c) = some c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:40:65: error: Ambiguous term
+  Digest
+Possible interpretations:
+  PublicFieldBlockCodec.Digest : Type
+  
+  SemanticPublicWire.Digest : Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:44:51: error(lean.unknownIdentifier): Unknown identifier `readDigest_append`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:45:4: error(lean.unknownIdentifier): Unknown identifier `readField_append`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:43:63: error: unsolved goals
+c : Common
+recipient : sorry
+⊢ ((readDigest
+          (encodeDigest c.anchor ++
+            (encodeDigest c.nullifier ++
+              (encodeM31 c.assetId ++
+                1 :: (encodeDigest (sorry ()) ++ (encodeDigest c.change ++ 0 :: afterBytes c)))))).bind
+      fun __x =>
+      (readDigest __x.2).bind fun __x_1 =>
+        (readField __x_1.2).bind fun __x_2 =>
+          (match __x_2.2 with
+              | [] => none
+              | x :: xs => if x = 1 then some xs else none).bind
+            fun rest =>
+            (readDigest rest).bind fun __x_3 =>
+              (readDigest __x_3.2).bind fun __x_4 =>
+                (match __x_4.2 with
+                    | [] => none
+                    | x :: xs => if x = 0 then some xs else none).bind
+                  fun rest =>
+                  (decodeAfter __x.1 __x_1.1 __x_2.1 __x_4.1 rest).bind fun c => some (Wire.transfer c __x_3.1)) =
+    some (Wire.transfer c (sorry ()))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:45:22: warning: This simp argument is unused:
+  decodeAfter_afterBytes
+
+Hint: Omit it from the simp argument list.
+  simp [decodeTransfer, header, List.append_assoc, readDigest_append, readField_append, d̵e̵c̵o̵d̵e̵A̵f̵t̵e̵r̵_̵a̵f̵t̵e̵r̵B̵y̵t̵e̵s̵,̵ ̵expect]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:47:64: error: Ambiguous term
+  M31
+Possible interpretations:
+  PublicFieldBlockCodec.M31 : Type
+  
+  SemanticPublicWire.M31 : Type
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:51:53: error(lean.unknownIdentifier): Unknown identifier `readDigest_append`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:52:4: error(lean.unknownIdentifier): Unknown identifier `readField_append`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:50:55: error: unsolved goals
+c : Common
+amount : sorry
+⊢ ((readDigest
+          (encodeDigest c.anchor ++
+            (encodeDigest c.nullifier ++
+              (encodeM31 c.assetId ++
+                0 :: (encodeDigest c.change ++ 1 :: (encodeM31 (sorry ()) ++ afterBytes c)))))).bind
+      fun __x =>
+      (readDigest __x.2).bind fun __x_1 =>
+        (readField __x_1.2).bind fun __x_2 =>
+          (match __x_2.2 with
+              | [] => none
+              | x :: xs => if x = 0 then some xs else none).bind
+            fun rest =>
+            (readDigest rest).bind fun __x_3 =>
+              (match __x_3.2 with
+                  | [] => none
+                  | x :: xs => if x = 1 then some xs else none).bind
+                fun rest =>
+                (readField rest).bind fun __x_4 =>
+                  (decodeAfter __x.1 __x_1.1 __x_2.1 __x_3.1 __x_4.2).bind fun c => some (Wire.withdrawal c __x_4.1)) =
+    some (Wire.withdrawal c (sorry ()))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:52:22: warning: This simp argument is unused:
+  decodeAfter_afterBytes
+
+Hint: Omit it from the simp argument list.
+  simp [decodeWithdrawal, header, List.append_assoc, readDigest_append, readField_append, d̵e̵c̵o̵d̵e̵A̵f̵t̵e̵r̵_̵a̵f̵t̵e̵r̵B̵y̵t̵e̵s̵,̵ ̵expect]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:56:25: error: unsolved goals
+case transfer
+c : Common
+recipient : SemanticPublicWire.Digest
+⊢ decodeTransfer (header c ++ 1 :: (encodeDigest recipient ++ (encodeDigest c.change ++ 0 :: afterBytes c))) =
+    some (Wire.transfer c recipient)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:58:24: error: unsolved goals
+case withdrawal
+c : Common
+amount : SemanticPublicWire.M31
+⊢ decodeWithdrawal (header c ++ 0 :: (encodeDigest c.change ++ 1 :: (encodeM31 amount ++ afterBytes c))) =
+    some (Wire.withdrawal c amount)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:57:28: warning: This simp argument is unused:
+  decodeTransfer_encoded
+
+Hint: Omit it from the simp argument list.
+  simp [encode, decode,̵ ̵d̵e̵c̵o̵d̵e̵T̵r̵a̵n̵s̵f̵e̵r̵_̵e̵n̵c̵o̵d̵e̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:59:28: warning: This simp argument is unused:
+  decodeWithdrawal_encoded
+
+Hint: Omit it from the simp argument list.
+  simp [encode, decode,̵ ̵d̵e̵c̵o̵d̵e̵W̵i̵t̵h̵d̵r̵a̵w̵a̵l̵_̵e̵n̵c̵o̵d̵e̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:74:25: error: unsolved goals
+case transfer
+c : Common
+recipient : SemanticPublicWire.Digest
+⊢ 68 + ((encodeDigest recipient).length + ((encodeDigest c.change).length + 1321) + 1) = 1454
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:76:24: error: unsolved goals
+case withdrawal
+c : Common
+amount : SemanticPublicWire.M31
+⊢ 68 + ((encodeDigest c.change).length + ((encodeM31 amount).length + 1320 + 1) + 1) = 1426
+'AspisR1.SemanticPublicWireRoundTrip.decode_encode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPublicWireRoundTrip.encode_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPublicWireRoundTrip.parsePublic_encode' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

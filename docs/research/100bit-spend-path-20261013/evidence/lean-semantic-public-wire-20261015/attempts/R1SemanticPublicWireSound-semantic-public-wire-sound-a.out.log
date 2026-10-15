@@ -1,0 +1,108 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireSound.lean:50:29: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireSound.lean:52:22: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireSound.lean:158:108: error: unsolved goals
+bytes : List Byte
+anchor : PublicFieldBlockCodec.Digest
+rest1 : List PublicByteCursor.Byte
+ha : readDigest bytes = some (anchor, rest1)
+nullifier : PublicFieldBlockCodec.Digest
+rest2 : List PublicByteCursor.Byte
+hn : readDigest rest1 = some (nullifier, rest2)
+asset : ExactLeafFieldCodec.M31Exact
+rest3 : List PublicByteCursor.Byte
+hx : readField rest2 = some (asset, rest3)
+rest4 : List Byte
+ht : expect 1 rest3 = some rest4
+rest5 : List PublicByteCursor.Byte
+changeRead : PublicFieldBlockCodec.Digest
+rest6 : List PublicByteCursor.Byte
+hc : readDigest rest5 = some (changeRead, rest6)
+rest7 : List Byte
+hz : expect 0 rest6 = some rest7
+c : Common
+recipient : Digest
+haft : decodeAfter anchor nullifier asset changeRead rest7 = some c
+hr : readDigest rest4 = some (recipient, rest5)
+h : Wire.transfer c recipient = Wire.transfer c recipient
+hanchor : c.anchor = anchor
+hnullifier : c.nullifier = nullifier
+hasset : c.assetId = asset
+hchange : c.change = changeRead
+hafter : rest7 = afterBytes c
+hAnchorBytes : bytes = PublicFieldBlockCodec.encodeDigest anchor ++ rest1
+hNullifierBytes : rest1 = PublicFieldBlockCodec.encodeDigest nullifier ++ rest2
+hAssetBytes : rest2 = ExactLeafFieldCodec.encodeM31 asset ++ rest3
+hRecipientBytes : rest4 = PublicFieldBlockCodec.encodeDigest recipient ++ rest5
+hChangeBytes : rest5 = PublicFieldBlockCodec.encodeDigest changeRead ++ rest6
+hSep1 : rest3 = 1 :: rest4
+hSep0 : rest6 = 0 :: rest7
+⊢ PublicFieldBlockCodec.encodeDigest c.anchor ++
+      (PublicFieldBlockCodec.encodeDigest c.nullifier ++
+        (ExactLeafFieldCodec.encodeM31 c.assetId ++
+          1 ::
+            (PublicFieldBlockCodec.encodeDigest recipient ++
+              (PublicFieldBlockCodec.encodeDigest c.change ++ 0 :: afterBytes c)))) =
+    PublicFieldBlockCodec.encodeDigest c.anchor ++
+      (PublicFieldBlockCodec.encodeDigest c.nullifier ++
+        (ExactLeafFieldCodec.encodeM31 c.assetId ++
+          ([1] ++
+            (PublicFieldBlockCodec.encodeDigest recipient ++
+              (PublicFieldBlockCodec.encodeDigest c.change ++ ([0] ++ afterBytes c))))))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireSound.lean:242:94: error: unsolved goals
+bytes : List Byte
+anchor : PublicFieldBlockCodec.Digest
+rest1 : List PublicByteCursor.Byte
+ha : readDigest bytes = some (anchor, rest1)
+nullifier : PublicFieldBlockCodec.Digest
+rest2 : List PublicByteCursor.Byte
+hn : readDigest rest1 = some (nullifier, rest2)
+asset : ExactLeafFieldCodec.M31Exact
+rest3 : List PublicByteCursor.Byte
+hx : readField rest2 = some (asset, rest3)
+rest4 : List Byte
+hz : expect 0 rest3 = some rest4
+changeRead : PublicFieldBlockCodec.Digest
+rest5 : List PublicByteCursor.Byte
+hc : readDigest rest4 = some (changeRead, rest5)
+rest6 : List Byte
+ht : expect 1 rest5 = some rest6
+rest7 : List PublicByteCursor.Byte
+c : Common
+amount : M31
+haFt : decodeAfter anchor nullifier asset changeRead rest7 = some c
+hm : readField rest6 = some (amount, rest7)
+h : Wire.withdrawal c amount = Wire.withdrawal c amount
+hanchor : c.anchor = anchor
+hnullifier : c.nullifier = nullifier
+hasset : c.assetId = asset
+hchange : c.change = changeRead
+hafter : rest7 = afterBytes c
+hAnchorBytes : bytes = PublicFieldBlockCodec.encodeDigest anchor ++ rest1
+hNullifierBytes : rest1 = PublicFieldBlockCodec.encodeDigest nullifier ++ rest2
+hAssetBytes : rest2 = ExactLeafFieldCodec.encodeM31 asset ++ rest3
+hChangeBytes : rest4 = PublicFieldBlockCodec.encodeDigest changeRead ++ rest5
+hAmountBytes : rest6 = ExactLeafFieldCodec.encodeM31 amount ++ rest7
+hSep0 : rest3 = 0 :: rest4
+hSep1 : rest5 = 1 :: rest6
+⊢ PublicFieldBlockCodec.encodeDigest c.anchor ++
+      (PublicFieldBlockCodec.encodeDigest c.nullifier ++
+        (ExactLeafFieldCodec.encodeM31 c.assetId ++
+          0 ::
+            (PublicFieldBlockCodec.encodeDigest c.change ++
+              1 :: (ExactLeafFieldCodec.encodeM31 amount ++ afterBytes c)))) =
+    PublicFieldBlockCodec.encodeDigest c.anchor ++
+      (PublicFieldBlockCodec.encodeDigest c.nullifier ++
+        (ExactLeafFieldCodec.encodeM31 c.assetId ++
+          ([0] ++
+            (PublicFieldBlockCodec.encodeDigest c.change ++
+              ([1] ++ (ExactLeafFieldCodec.encodeM31 amount ++ afterBytes c))))))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireSound.lean:267:16: warning: This simp argument is unused:
+  hzero
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵z̵e̵r̵o̵,̵ ̵h̵o̵n̵e̵]̵[̲h̲o̲n̲e̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SemanticPublicWireSound.decodeAfter_sound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPublicWireSound.encode_of_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

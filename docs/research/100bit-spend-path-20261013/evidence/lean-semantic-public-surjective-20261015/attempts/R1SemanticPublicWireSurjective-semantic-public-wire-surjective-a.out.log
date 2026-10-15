@@ -1,0 +1,83 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireSurjective.lean:22:8: error: Tactic `subst` failed: did not find equation for eliminating 'recipient'
+
+case mk.privateTransfer
+variant : R0P.Variant
+anchor nullifier : R0P.Digest M31
+assetId : M31
+recipient : Option (R0P.Digest M31)
+change : R0P.Digest M31
+withdrawalAmount : Option M31
+nextPairIndex : ℕ
+snapshotFrontier : Fin 20 → R0P.Digest M31
+nextRoot : R0P.Digest M31
+nextFrontier : Fin 20 → R0P.Digest M31
+hc :
+  PublicOptionShape.canonical
+    { variant := variant, anchor := anchor, nullifier := nullifier, assetId := assetId, recipient := recipient,
+      change := change, withdrawalAmount := withdrawalAmount, nextPairIndex := nextPairIndex,
+      snapshotFrontier := snapshotFrontier, nextRoot := nextRoot, nextFrontier := nextFrontier }
+hi :
+  { variant := variant, anchor := anchor, nullifier := nullifier, assetId := assetId, recipient := recipient,
+        change := change, withdrawalAmount := withdrawalAmount, nextPairIndex := nextPairIndex,
+        snapshotFrontier := snapshotFrontier, nextRoot := nextRoot, nextFrontier := nextFrontier }.nextPairIndex <
+    2 ^ 64
+hv : variant = R0P.Variant.privateTransfer
+recipientValue : R0P.Digest M31
+hrecipient :
+  { variant := variant, anchor := anchor, nullifier := nullifier, assetId := assetId, recipient := recipient,
+        change := change, withdrawalAmount := withdrawalAmount, nextPairIndex := nextPairIndex,
+        snapshotFrontier := snapshotFrontier, nextRoot := nextRoot, nextFrontier := nextFrontier }.recipient =
+    some recipientValue
+hwithdrawal :
+  { variant := variant, anchor := anchor, nullifier := nullifier, assetId := assetId, recipient := recipient,
+        change := change, withdrawalAmount := withdrawalAmount, nextPairIndex := nextPairIndex,
+        snapshotFrontier := snapshotFrontier, nextRoot := nextRoot, nextFrontier := nextFrontier }.withdrawalAmount =
+    none
+⊢ ∃ wire,
+    toPublic wire =
+      { variant := R0P.Variant.privateTransfer, anchor := anchor, nullifier := nullifier, assetId := assetId,
+        recipient := recipient, change := change, withdrawalAmount := withdrawalAmount, nextPairIndex := nextPairIndex,
+        snapshotFrontier := snapshotFrontier, nextRoot := nextRoot, nextFrontier := nextFrontier }
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireSurjective.lean:38:8: error: Tactic `subst` failed: did not find equation for eliminating 'recipient'
+
+case mk.withdrawal
+variant : R0P.Variant
+anchor nullifier : R0P.Digest M31
+assetId : M31
+recipient : Option (R0P.Digest M31)
+change : R0P.Digest M31
+withdrawalAmount : Option M31
+nextPairIndex : ℕ
+snapshotFrontier : Fin 20 → R0P.Digest M31
+nextRoot : R0P.Digest M31
+nextFrontier : Fin 20 → R0P.Digest M31
+hc :
+  PublicOptionShape.canonical
+    { variant := variant, anchor := anchor, nullifier := nullifier, assetId := assetId, recipient := recipient,
+      change := change, withdrawalAmount := withdrawalAmount, nextPairIndex := nextPairIndex,
+      snapshotFrontier := snapshotFrontier, nextRoot := nextRoot, nextFrontier := nextFrontier }
+hi :
+  { variant := variant, anchor := anchor, nullifier := nullifier, assetId := assetId, recipient := recipient,
+        change := change, withdrawalAmount := withdrawalAmount, nextPairIndex := nextPairIndex,
+        snapshotFrontier := snapshotFrontier, nextRoot := nextRoot, nextFrontier := nextFrontier }.nextPairIndex <
+    2 ^ 64
+hv : variant = R0P.Variant.withdrawal
+amount : M31
+hnonzero : amount ≠ 0
+hwithdrawal :
+  { variant := variant, anchor := anchor, nullifier := nullifier, assetId := assetId, recipient := recipient,
+        change := change, withdrawalAmount := withdrawalAmount, nextPairIndex := nextPairIndex,
+        snapshotFrontier := snapshotFrontier, nextRoot := nextRoot, nextFrontier := nextFrontier }.withdrawalAmount =
+    some amount
+hrecipient :
+  { variant := variant, anchor := anchor, nullifier := nullifier, assetId := assetId, recipient := recipient,
+        change := change, withdrawalAmount := withdrawalAmount, nextPairIndex := nextPairIndex,
+        snapshotFrontier := snapshotFrontier, nextRoot := nextRoot, nextFrontier := nextFrontier }.recipient =
+    none
+⊢ ∃ wire,
+    toPublic wire =
+      { variant := R0P.Variant.withdrawal, anchor := anchor, nullifier := nullifier, assetId := assetId,
+        recipient := recipient, change := change, withdrawalAmount := withdrawalAmount, nextPairIndex := nextPairIndex,
+        snapshotFrontier := snapshotFrontier, nextRoot := nextRoot, nextFrontier := nextFrontier }
+'AspisR1.SemanticPublicWireSurjective.exists_wire' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

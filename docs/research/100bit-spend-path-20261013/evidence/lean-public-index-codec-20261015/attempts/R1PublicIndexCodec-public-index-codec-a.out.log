@@ -1,0 +1,30 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PublicIndexCodec.lean:62:2: error: Type mismatch: After simplification, term
+  Nat.mod_add_div (↑x) (2 ^ 32)
+ has type
+  @Eq ℕ (↑x % 2 ^ 32 + 2 ^ 32 * (↑x / 2 ^ 32)) ↑x
+but is expected to have type
+  @Eq ℕ (↑x % 4294967296 + 4294967296 * (↑x / 4294967296)) ↑x
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PublicIndexCodec.lean:67:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(decode ?bytes)
+in the target expression
+  ↑(lowWord (decode bytes)) = ↑(decodeWordLE (lowWordBytes bytes))
+
+bytes : IndexBytes
+⊢ ↑(lowWord (decode bytes)) = ↑(decodeWordLE (lowWordBytes bytes))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PublicIndexCodec.lean:75:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(decode ?bytes)
+in the target expression
+  ↑(highWord (decode bytes)) = ↑(decodeWordLE (highWordBytes bytes))
+
+bytes : IndexBytes
+⊢ ↑(highWord (decode bytes)) = ↑(decodeWordLE (highWordBytes bytes))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1PublicIndexCodec.lean:96:4: error: Type mismatch: After simplification, term
+  hbytes
+ has type
+  encodeWordLE (decodeWordLE (highWordBytes bytes)) ⟨↑i - 4, ⋯⟩ = bytes ⟨↑i - 4 + 4, ⋯⟩
+but is expected to have type
+  encodeWordLE (decodeWordLE (highWordBytes bytes)) ⟨↑i - 4, ⋯⟩ = bytes i
+'AspisR1.PublicIndexCodec.decode_val' depends on axioms: [propext, Quot.sound]
+'AspisR1.PublicIndexCodec.decode_encode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicIndexCodec.encode_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

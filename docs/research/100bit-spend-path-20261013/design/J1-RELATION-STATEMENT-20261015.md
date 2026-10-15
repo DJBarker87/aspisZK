@@ -57,7 +57,12 @@ preparation checker is claimed. Public withdrawals must be nonzero through
 canonical option validation. A strict-positive protocol claim would require
 the missing production implication or a verifier change.
 
-The public carrier here is the semantic `R0P.Public`; the ASF8/payment byte
+The public carrier here is the semantic `R0P.Public`. The section-9 byte
+model now has exact decoding/encoding and a unique accepted byte list for
+every canonical M31 public record with index below `2^64`, as proved in
+`SemanticPublicCodecComplete`. Its projection preserves all public fields,
+and its length lemmas discharge the modeled initialization frame bound.
+The separate ASF8/payment byte
 decoder, its mapping to that carrier, candidate recovery, account binding and
 checkpoint/proof immutability assumptions remain separate J1/J2 obligations.
 The legacy depth-20 payment relation is not used as the current 24-direction

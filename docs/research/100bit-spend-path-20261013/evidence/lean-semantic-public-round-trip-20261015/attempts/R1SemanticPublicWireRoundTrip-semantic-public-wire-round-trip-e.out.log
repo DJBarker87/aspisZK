@@ -1,0 +1,57 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:54:23: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp [SemanticPublicWire.decodeAfter, SemanticPublicWire.afterBytes,
+  ̵  ̵ ̵ ̵SemanticPublicWire.readIndex,
+  ̲  ̲ ̲ ̲SemanticPublicWire.readFrontier,
+  ̵  ̵ ̵ ̵SemanticPublicWire.readDigest,
+  ̵  ̵ ̵ ̵List.append_assoc,
+  ̲ L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵  ̲ ̲readIndex_append,
+  ̵  ̵ ̵ ̵readFrontier_append, readDigest_append, hlast]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:82:6: error: Type mismatch: After simplification, term
+  decodeTransfer_encoded c recipient
+ has type
+  @Eq (Option Wire)
+    (decodeTransfer
+      (header c ++ [1] ++ PublicFieldBlockCodec.encodeDigest recipient ++ PublicFieldBlockCodec.encodeDigest c.change ++
+          [0] ++
+        afterBytes c))
+    (some (Wire.transfer c recipient))
+but is expected to have type
+  @Eq (Option Wire)
+    (match
+      0 :: header c ++ [1] ++ PublicFieldBlockCodec.encodeDigest recipient ++
+            PublicFieldBlockCodec.encodeDigest c.change ++
+          [0] ++
+        afterBytes c with
+    | [] => none
+    | tag :: rest => if tag = 0 then decodeTransfer rest else if tag = 1 then decodeWithdrawal rest else none)
+    (some (Wire.transfer c recipient))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:87:43: error(lean.unknownIdentifier): Unknown constant `Fin.one_ne_zero`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:86:6: error: Type mismatch: After simplification, term
+  decodeWithdrawal_encoded c amount
+ has type
+  @Eq (Option Wire)
+    (decodeWithdrawal
+      (header c ++ [0] ++ PublicFieldBlockCodec.encodeDigest c.change ++ [1] ++ ExactLeafFieldCodec.encodeM31 amount ++
+        afterBytes c))
+    (some (Wire.withdrawal c amount))
+but is expected to have type
+  @Eq (Option Wire)
+    (match
+      1 :: header c ++ [0] ++ PublicFieldBlockCodec.encodeDigest c.change ++ [1] ++
+          ExactLeafFieldCodec.encodeM31 amount ++
+        afterBytes c with
+    | [] => none
+    | tag :: rest => if tag = 0 then decodeTransfer rest else if tag = 1 then decodeWithdrawal rest else none)
+    (some (Wire.withdrawal c amount))
+'AspisR1.SemanticPublicWireRoundTrip.decode_encode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SemanticPublicWireRoundTrip.encode_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPublicWireRoundTrip.parsePublic_encode' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

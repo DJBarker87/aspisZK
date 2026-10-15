@@ -1,0 +1,229 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:47:52: error: unsolved goals
+c : Common
+⊢ ((Option.map
+          (fun a =>
+            (a,
+              List.drop 8
+                (PublicIndexListCodec.encode c.nextPairIndex ++
+                  (PublicFieldBlockCodec.encodeFrontier c.snapshotFrontier ++
+                    (PublicFieldBlockCodec.encodeDigest c.nextRoot ++
+                      PublicFieldBlockCodec.encodeFrontier c.nextFrontier)))))
+          (PublicIndexListCodec.decode
+            (List.take 8
+              (PublicIndexListCodec.encode c.nextPairIndex ++
+                (PublicFieldBlockCodec.encodeFrontier c.snapshotFrontier ++
+                  (PublicFieldBlockCodec.encodeDigest c.nextRoot ++
+                    PublicFieldBlockCodec.encodeFrontier c.nextFrontier)))))).bind
+      fun __x =>
+      (Option.map (fun a => (a, List.drop 640 __x.2)) (PublicFieldBlockCodec.decodeFrontier (List.take 640 __x.2))).bind
+        fun __x_1 =>
+        (Option.map (fun a => (a, List.drop 32 __x_1.2))
+              (PublicFieldBlockCodec.decodeDigest (List.take 32 __x_1.2))).bind
+          fun __x_2 =>
+          (Option.map (fun a => (a, List.drop 640 __x_2.2))
+                (PublicFieldBlockCodec.decodeFrontier (List.take 640 __x_2.2))).bind
+            fun __x_3 =>
+            if __x_3.2 = [] then
+              some
+                { anchor := c.anchor, nullifier := c.nullifier, assetId := c.assetId, change := c.change,
+                  nextPairIndex := __x.1, snapshotFrontier := __x_1.1, nextRoot := __x_2.1, nextFrontier := __x_3.1 }
+            else none) =
+    some c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:51:23: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp [SemanticPublicWire.decodeAfter, SemanticPublicWire.afterBytes,
+  ̵  ̵ ̵ ̵SemanticPublicWire.readIndex,
+  ̲  ̲ ̲ ̲SemanticPublicWire.readFrontier,
+  ̵  ̵ ̵ ̵SemanticPublicWire.readDigest, AspisR1.PublicByteCursor.read,
+      List.append_assoc, L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵ ̵readIndex_append,
+  ̵  ̵ ̵ ̵readFrontier_append, readDigest_append, Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:51:40: warning: This simp argument is unused:
+  readIndex_append
+
+Hint: Omit it from the simp argument list.
+  simp [SemanticPublicWire.decodeAfter, SemanticPublicWire.afterBytes,
+  ̵  ̵ ̵ ̵SemanticPublicWire.readIndex,
+  ̲  ̲ ̲ ̲SemanticPublicWire.readFrontier,
+  ̵  ̵ ̵ ̵SemanticPublicWire.readDigest, AspisR1.PublicByteCursor.read,
+      List.append_assoc, List.append_nil, readI̵n̵d̵e̵x̵_̵a̵p̵p̵e̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵r̵e̵a̵d̵Frontier_append, readDigest_append, Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:52:4: warning: This simp argument is unused:
+  readFrontier_append
+
+Hint: Omit it from the simp argument list.
+  simp [SemanticPublicWire.decodeAfter, SemanticPublicWire.afterBytes,
+  ̵  ̵ ̵ ̵SemanticPublicWire.readIndex,
+  ̲  ̲ ̲ ̲SemanticPublicWire.readFrontier,
+  ̵  ̵ ̵ ̵SemanticPublicWire.readDigest, AspisR1.PublicByteCursor.read,
+      List.append_assoc, List.append_nil, readIndex_append,
+  ̵  ̵ ̵ ̵readF̵r̵o̵n̵t̵i̵e̵r̵_̵a̵p̵p̵e̵n̵d̵,̵ ̵r̵e̵a̵d̵Digest_append, Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:52:25: warning: This simp argument is unused:
+  readDigest_append
+
+Hint: Omit it from the simp argument list.
+  simp [SemanticPublicWire.decodeAfter, SemanticPublicWire.afterBytes,
+  ̵  ̵ ̵ ̵SemanticPublicWire.readIndex,
+  ̲  ̲ ̲ ̲SemanticPublicWire.readFrontier,
+  ̵  ̵ ̵ ̵SemanticPublicWire.readDigest, AspisR1.PublicByteCursor.read,
+      List.append_assoc, List.append_nil, readIndex_append,
+  ̵  ̵ ̵ ̵readFrontier_append, r̵e̵a̵d̵D̵i̵g̵e̵s̵t̵_̵a̵p̵p̵e̵n̵d̵,̵ ̵Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:52:44: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp [SemanticPublicWire.decodeAfter, SemanticPublicWire.afterBytes,
+  ̵  ̵ ̵ ̵SemanticPublicWire.readIndex,
+  ̲  ̲ ̲ ̲SemanticPublicWire.readFrontier,
+  ̵  ̵ ̵ ̵SemanticPublicWire.readDigest, AspisR1.PublicByteCursor.read,
+      List.append_assoc, List.append_nil, readIndex_append,
+  ̵  ̵ ̵ ̵readFrontier_append, readDigest_append,̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:59:75: error: unsolved goals
+c : Common
+recipient : Digest
+⊢ ((readDigest
+          (PublicFieldBlockCodec.encodeDigest c.anchor ++
+            (PublicFieldBlockCodec.encodeDigest c.nullifier ++
+              (ExactLeafFieldCodec.encodeM31 c.assetId ++
+                1 ::
+                  (PublicFieldBlockCodec.encodeDigest recipient ++
+                    (PublicFieldBlockCodec.encodeDigest c.change ++ 0 :: afterBytes c)))))).bind
+      fun __x =>
+      (readDigest __x.2).bind fun __x_1 =>
+        (readField __x_1.2).bind fun __x_2 =>
+          (match __x_2.2 with
+              | [] => none
+              | x :: xs => if x = 1 then some xs else none).bind
+            fun rest =>
+            (readDigest rest).bind fun __x_3 =>
+              (readDigest __x_3.2).bind fun __x_4 =>
+                (match __x_4.2 with
+                    | [] => none
+                    | x :: xs => if x = 0 then some xs else none).bind
+                  fun rest =>
+                  (decodeAfter __x.1 __x_1.1 __x_2.1 __x_4.1 rest).bind fun c => some (Wire.transfer c __x_3.1)) =
+    some (Wire.transfer c recipient)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:61:23: warning: This simp argument is unused:
+  readDigest_append
+
+Hint: Omit it from the simp argument list.
+  simp [SemanticPublicWire.decodeTransfer, SemanticPublicWire.header,
+  ̵  ̵ ̵ ̵List.append_assoc,
+  ̲ r̵e̵a̵d̵D̵i̵g̵e̵s̵t̵_̵a̵p̵p̵e̵n̵d̵,̵  ̲ ̲readField_append,
+  ̵  ̵ ̵ ̵decodeAfter_afterBytes, SemanticPublicWire.expect]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:61:42: warning: This simp argument is unused:
+  readField_append
+
+Hint: Omit it from the simp argument list.
+  simp [SemanticPublicWire.decodeTransfer, SemanticPublicWire.header,
+  ̵  ̵ ̵ ̵List.append_assoc,
+  ̲  ̲ ̲ ̲readDigest_append, r̵e̵a̵dF̵i̵el̵d̵_̵a̵p̵p̵e̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵d̵e̵codeAfter_afterBytes, SemanticPublicWire.expect]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:62:4: warning: This simp argument is unused:
+  decodeAfter_afterBytes
+
+Hint: Omit it from the simp argument list.
+  simp [SemanticPublicWire.decodeTransfer, SemanticPublicWire.header, List.append_assoc,
+  ̲  ̲ ̲ ̲readDigest_append, readField_append, d̵e̵c̵o̵d̵e̵A̵f̵t̵e̵r̵_̵a̵f̵t̵e̵r̵B̵y̵t̵e̵s̵,̵ ̵SemanticPublicWire.expect]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:69:37: error: unsolved goals
+c : Common
+amount : M31
+⊢ ((readDigest
+          (PublicFieldBlockCodec.encodeDigest c.anchor ++
+            (PublicFieldBlockCodec.encodeDigest c.nullifier ++
+              (ExactLeafFieldCodec.encodeM31 c.assetId ++
+                0 ::
+                  (PublicFieldBlockCodec.encodeDigest c.change ++
+                    1 :: (ExactLeafFieldCodec.encodeM31 amount ++ afterBytes c)))))).bind
+      fun __x =>
+      (readDigest __x.2).bind fun __x_1 =>
+        (readField __x_1.2).bind fun __x_2 =>
+          (match __x_2.2 with
+              | [] => none
+              | x :: xs => if x = 0 then some xs else none).bind
+            fun rest =>
+            (readDigest rest).bind fun __x_3 =>
+              (match __x_3.2 with
+                  | [] => none
+                  | x :: xs => if x = 1 then some xs else none).bind
+                fun rest =>
+                (readField rest).bind fun __x_4 =>
+                  (decodeAfter __x.1 __x_1.1 __x_2.1 __x_3.1 __x_4.2).bind fun c => some (Wire.withdrawal c __x_4.1)) =
+    some (Wire.withdrawal c amount)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:71:23: warning: This simp argument is unused:
+  readDigest_append
+
+Hint: Omit it from the simp argument list.
+  simp [SemanticPublicWire.decodeWithdrawal, SemanticPublicWire.header,
+  ̵  ̵ ̵ ̵List.append_assoc,
+  ̲ r̵e̵a̵d̵D̵i̵g̵e̵s̵t̵_̵a̵p̵p̵e̵n̵d̵,̵  ̲ ̲readField_append,
+  ̵  ̵ ̵ ̵decodeAfter_afterBytes, SemanticPublicWire.expect]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:71:42: warning: This simp argument is unused:
+  readField_append
+
+Hint: Omit it from the simp argument list.
+  simp [SemanticPublicWire.decodeWithdrawal, SemanticPublicWire.header,
+  ̵  ̵ ̵ ̵List.append_assoc,
+  ̲  ̲ ̲ ̲readDigest_append, r̵e̵a̵dF̵i̵el̵d̵_̵a̵p̵p̵e̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵d̵e̵codeAfter_afterBytes, SemanticPublicWire.expect]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:72:4: warning: This simp argument is unused:
+  decodeAfter_afterBytes
+
+Hint: Omit it from the simp argument list.
+  simp [SemanticPublicWire.decodeWithdrawal, SemanticPublicWire.header, List.append_assoc,
+  ̲  ̲ ̲ ̲readDigest_append, readField_append, d̵e̵c̵o̵d̵e̵A̵f̵t̵e̵r̵_̵a̵f̵t̵e̵r̵B̵y̵t̵e̵s̵,̵ ̵SemanticPublicWire.expect]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:77:6: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:74:93: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:121:40: error(lean.unknownIdentifier): Unknown identifier `decode_encode`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:118:75: error: unsolved goals
+wire : Wire
+hcanonical : PublicOptionShape.canonical (toPublic wire)
+hcheck : PublicOptionShape.check (toPublic wire) = true
+⊢ ((decode (encode wire)).bind fun wire =>
+      if PublicOptionShape.check (toPublic wire) = true then some (toPublic wire) else none) =
+    some (toPublic wire)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:121:55: warning: This simp argument is unused:
+  hcheck
+
+Hint: Omit it from the simp argument list.
+  simp [SemanticPublicWire.parsePublic, decode_encode,̵ ̵h̵c̵h̵e̵c̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SemanticPublicWireRoundTrip.lean:125:14: error(lean.unknownIdentifier): Unknown constant `AspisR1.SemanticPublicWireRoundTrip.decode_encode`
+'AspisR1.SemanticPublicWireRoundTrip.encode_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SemanticPublicWireRoundTrip.parsePublic_encode' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
