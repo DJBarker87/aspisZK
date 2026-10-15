@@ -1,0 +1,1 @@
+pub type Digest = [M31; DIGEST_ELEMS];

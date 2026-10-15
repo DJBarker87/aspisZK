@@ -1,0 +1,68 @@
+J1.a caller obligations: amount and omitted metadata
+Read-only inventory at coordinator dee2c0ca09798eb58d23ce5e70df78ac3ba0c918.
+The payment helper/dependency sources equal worker base 953b7a55fdab799564b963060e4d9edc0d5545da.
+This inventory is source inspection, not a proved caller refinement.
+
+Amount target
+payment_relation.rs:232–247 validate_pool_v1_withdrawal_public_v1 is the
+smallest existing complete validator. Dependencies: withdrawal_common208–217,
+validate_common182–197, digest_is_canonical177–179, CommonPublicV1/type/error
+declarations and exact constants. It checks common bindings first, then
+amount==0 or amount>=VALUE_LIMIT, nonzero destination, and canonical change.
+VALUE_LIMIT is 1<<30 (spend.rs:9); M31 canonicality alone permits zero and
+values up to P-1. The subsequently checked extracted helper theorem is:
+  generated.validate_pool_v1_withdrawal_public_v1 p = ok (.Ok ()) ->
+  0 < p.amount.val AND p.amount.val < 2^30.
+It requires no fabricated validation predicate or assumed common success.
+The exact earlier errors must be preserved; invalid amount does not imply
+that InvalidWithdrawalAmount is the first error when common validation fails.
+
+Actual admitted callers
+Stage1 r1_pool_adapter.rs:918–920 decodes and validates ASF8. The ASF8 decoder
+pair_forest_terminal.rs:386–415 calls the withdrawal payment decoder via
+374–382; payment_relation.rs:447 calls the target validator. Terminal validation
+227–275 also calls the ASWP encoder245–247, which calls the validator at297.
+Stage2 validate_asq8 (adapter848) decodes ASQ8; terminal.rs:479 again reaches
+ASWP decoding and the target. reconstruct_asq8_statement818–837 selects
+withdrawal_statement_box803–809, which validates the terminal statement.
+ASF8 encoding at adapter965 revalidates. Independently, the semantic terminal
+composition_parts1235–1240 repeats the amount guard before validate_transition.
+That large field-arithmetic target is not needed for the smallest first lemma.
+
+Fixed metadata binding outside R0P.Public
+The R1 transcript uses the small public_bytes (r1_semantic.rs:72–76). That
+serialization omits pool/domain, anchor sequence, withdrawal destination,
+source sequence/current root and candidate next index, plus ASF8 common keys.
+Full ASF8 encoding (pair_forest_terminal.rs:278–315) retains them through its
+common fields, full live/afterstate record and ASWP payment. The checkpoint
+stores H(full ASF8) in verifier.rs:305–309; resume327–328 recomputes it.
+Equality of hashes still needs collision reasoning and checkpoint provenance.
+
+Stage2 authenticates owner/readonly/PDA/release/account images628–714, then
+constructs the live snapshot from master and selected lane716–723. asq8_common
+768–781 copies checkpoint sequence/root and account keys. Reconstruction
+818–828 checks candidate index+1 and asset identity. Terminal validation
+253–270 checks pool/master, deployment, snapshot pool, anchor sequence/root,
+and output lane. The late encoder (pair_tree_profile.rs:529–560) checks index+1;
+snapshot validation443–462 checks sequence/index equality, capacity and fields.
+
+The verifier's seven accounts do not include the withdrawal destination.
+The Pool custody path uses the request destination and amount in
+programs/aspis-pool/src/pair_forest.rs:1467–1479, invokes the planned transfer
+1554–1557 and checks the exact token delta1558. The host-only validate_accounts
+in pair_forest_terminal.rs:671 is not evidence for the on-chain adapter.
+
+OPEN after a helper theorem: extracted successful caller-to-validator transport;
+fixed mapping between separately extracted carrier types; ASF8/ASWP and late
+record encoder/decoder refinement; account and checkpoint provenance; hash
+binding; custody destination/delta transport; extraction/runtime trust and
+single-toolchain integration. A helper success theorem alone does not discharge
+SourceValidationAmountGuard for an arbitrary caller predicate. It can later
+supply its amount clause, from which NonzeroWithdrawal follows. No source,
+account or full J1.a closure is claimed here.
+
+Follow-up: the sole source change makes digest_is_canonical eight explicit guards.
+The target validator now starts at payment_relation.rs:239. Amount431 proves the
+amount theorem above and exact digest canonicality under Lean 4.31; see evidence
+withdrawal-validation-source-431-20261015. Caller locations above refer to the
+explicitly pinned pre-refactor revision; caller transport remains OPEN.

@@ -1,0 +1,63 @@
+J1.b exact Prefix extraction: retained first failure
+
+Source and cut
+
+Pin 0dbcc4dd0f7efa4ddb400746d1f24b98a511aab5; r1_wire.rs is byte-identical
+to c111cbbf23b3a0f6ed5bebe75c72fe3089fe5be8, SHA256
+ed6e426c460c97248d124727e8be7985c1ea75f89bd0f5baef0570ec44ec4b03.
+tools/prefix-parser-extraction-kit retains all 18 prior parser declarations
+byte-for-byte and adds nine exact declarations: ValidatedRecord at 113–120,
+row/framed/payload at 123–133; Prefix at 270–276, parse at 278–298,
+record/payload/validated_record at 299–313. Original derives, access levels,
+function bodies and both Prefix unwraps are unchanged. Only namespace/impl
+wrappers are supplied. The added source is 2,096 bytes across 60 lines.
+
+The cone reuses row_shape, parse_record, validate_record_fields and the existing
+WideExact byte decoder. It adds range iteration, borrowed-array conversion,
+fixed-array mutation, slice get/index, Option::copied and the payload map
+closure. Hash callbacks, samplers, point_claims allocation and decode_k are
+outside this cut. No external Cargo dependencies are introduced.
+
+Fixed proposed target: OPEN
+
+For every input byte slice b and actual extracted Prefix result p, success of
+the actual Prefix::parse must imply all of the following, without assuming
+record validity separately:
+  p.c1_root contains exactly b[0..32];
+  offset(0)=32 and offset(i+1)=offset(i)+5+payloadSize(i), for i<27;
+  p.records[i] equals b[offset(i)..offset(i+1)];
+  actual parse_record(i,p.records[i]) succeeds for every i<27;
+  b.length=offset(27), excluding trailing bytes;
+  actual validated_record(p,i) returns a token whose actual row/framed/payload
+  accessors give i, p.records[i], and p.records[i].drop(5).
+Here payloadSize is fixed by the actual row_shape/table agreement. The target
+is conditional on actual parser success, not a supplied relation asserting
+these conclusions. Arbitrarily constructed extracted tokens do not receive
+the successful-Prefix provenance premise automatically. The source sum 13,831
+is proposed arithmetic until separately proved; it is not an assumed length
+cap or a Prefix correctness theorem. No generated Prefix function exists from
+this attempt, so no concrete Lean theorem identifier is claimed.
+
+Attempt A
+
+Charon used the prior parser's exact flags: preset aeneas, MIR built,
+--include core::option, --include core::result::Result, and --start-from
+crate::r1_wire. Charon exited 0 in 6.845 seconds; sampled group peak 237,568 KiB,
+wait4 maximum RSS 205,438,976 bytes, process swaps 0. LLBC reports no errors
+and 190 ordered declarations. Function 30 contains the exact Prefix::parse
+body, mechanically compared with the source cut.
+
+Aeneas exited 2 in 7.575 seconds; sampled group peak 149,008 KiB, wait4 maximum
+RSS 152,666,112 bytes, process swaps 0. It reported "There should be no bottoms
+in the value" at generated lib.rs:231:27–34, the records operand in
+Ok(Self { c1_root, records }), corresponding to r1_wire.rs:297. The stack
+passes through loop fixed-point interpretation. No Lean files were emitted.
+This is a retained extraction failure, not evidence of a Rust defect or a
+proved diagnosis of the translation failure. The driver finishes packaging
+after translation failure; commands.json records the decisive stage exit 2.
+
+Both stages used one monitored attempt, a sampled 3.5 GiB process-group stop
+and 180-second timeout. No hard cgroup, Lean build, host job, production edit,
+source refactor or retry occurred. Evidence retains original logs, commands,
+source/tool pins, LLBC and the source-body equality checker. Compiler/translator
+preservation, runtime selection and complete Prefix refinement remain OPEN.

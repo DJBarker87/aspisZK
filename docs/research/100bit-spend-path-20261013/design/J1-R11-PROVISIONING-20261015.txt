@@ -1,0 +1,68 @@
+J1.R11 / G_R1.9 — source proposal for lead review
+
+Source base: 185d576e5e7f2e2aee01db7ddb1d74b09d77cc6a, the pushed merge
+of the raw-byte oracle and literal-classifier APIs plus remote advancement.
+
+Admitted verifier ABI
+
+stage1 [3,10] or [3,11] takes exactly three distinct accounts:
+0 proof buffer, read-only; 1 raw ASF8 public buffer, read-only;
+2 verifier checkpoint, writable and owned by the selected verifier program.
+The buffers may have any owner and have no lifecycle header. The proof buffer
+is the 688-byte canonical candidate afterstate followed by the exact S2 proof;
+there is no checkpoint tail. The public buffer is the exact 1,880-byte ASF8.
+The checkpoint has exactly verifier::checkpoint_size(S2) bytes (1,768), all
+zero before stage1. Nonzero bytes reject before parsing or hashing the buffers.
+Only a successful tx1 result is copied into this checkpoint.
+
+ASQ8 stage2 takes the existing six read-only accounts followed by a seventh,
+read-only verifier checkpoint. The historical Pool-owned ASC8 checkpoint at
+index 2 remains a different account. All seven accounts must be distinct.
+Proof ownership is unrestricted; the verifier checkpoint owner, flags and exact
+size are checked. Stage2 reconstructs ASF8 from the authenticated Pool state,
+request and proof-carried candidate, then resume checks the full proof and
+reconstructed public hashes against the checkpoint. Candidate changes are
+therefore bound through ASF8, even though the proof hash excludes its prefix.
+
+Checkpoint provenance and limits
+
+The intended provisioning operation is system-account creation with owner set
+to the verifier program and zero data of the required size. The verifier checks
+the resulting owner/size/zero image; AccountInfo alone does not attest creation
+history. Provenance also uses the pinned Solana runtime owner/write rules and
+the selected program's admitted instruction surface. G_R1.7 rejects lifecycle
+4/5/6 and legacy [1,k]/[2] before account access. Existing private lifecycle
+helpers are not alternate externally admitted writers. Stage2 does not write
+the checkpoint. This argument requires the guarded, immutable release binary;
+it is not established by the unkeyed checkpoint checksum. Arbitrary preloaded
+state or accounts written by an unverified earlier program version do not
+establish this history invariant.
+
+Proof/public immutability between transactions is not assumed. resume checks
+their present hashes; equality to their stage1 values follows only outside the
+charged hash-collision event. No new hash operation was added by this repair.
+The generic strict/authenticated tx2 comments now state this boundary.
+
+The Pool caller has a default-off r1-split-checkpoint feature. It appends the
+verifier checkpoint after the pre-existing top-level account list, including
+withdrawal token accounts, then forwards it as the seventh verifier CPI account.
+Existing proof/token indices and the default V7 sealed-proof path are retained.
+The R1 path still authenticates the selected program through the registry and
+keeps all Pool state, anchor and nullifier checks.
+
+Release work remains J1.R13: rewrite the provisioning/CU harness for this ABI,
+rebuild the selected SBF binaries once, pin artifacts/runtime and replay once.
+The old lifecycle provisioning harness is incompatible until that rewrite.
+No SBF replay, deployment or new closed soundness claim accompanies this source
+proposal. Native evidence is recorded separately when the focused checks finish.
+
+Validation
+
+Eighteen optimized saved-proof tests pass, including genuine stage1 splits10/11
+and strict/authenticated tx2, raw buffer flags/lengths/aliases, checkpoint
+owner/size/zero checks, every stage2 alias pair, and proof/public/candidate hash
+binding. A recomputed-checksum next=0 fixture demonstrates resume acceptance
+without claiming authentic provenance or final verification success. Pool's
+16 R1/legacy tests and combined callback compilation pass. The guard preflight
+also passes. No proof generation ran. Exact commands, source hashes, wall/RSS
+and zero-swap logs are in evidence/g-r1-9-native-20261015.

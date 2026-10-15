@@ -1,0 +1,78 @@
+J1.R11/R12 integration for lead review (2026-10-15)
+
+Step 1 completed: merge 185d576e5e7f2e2aee01db7ddb1d74b09d77cc6a was
+pushed normally to origin/codex/100bit-spend-path-20261013. The add/add
+LiteralByteProtocol conflict retains the lead's default existence classifier
+and the explicit-extractor interface. Protocol, RunFacts and OpeningRunGood
+compiled locally with twelve standard/empty axioms reports. Evidence:
+lean-literal-byte-merge-20261015. The live worktree was not used.
+Subsequent changes are proposals on codex/r1-j1-r11-r12-20261015, not pushed.
+
+G_R1.9 source is integrated at b711e9aba. Proof/public buffers are raw,
+read-only, nonsigner, nonexecutable and any-owner. Stage1 requires three
+distinct accounts and an exact-size all-zero verifier-owned checkpoint.
+Stage2 receives a seventh, distinct, read-only verifier checkpoint; the Pool
+historical checkpoint remains separate. Resume recomputes both buffer hashes.
+The Pool r1-split-checkpoint feature preserves old proof/token indices and is
+default-off. Checkpoint authentication still requires the System-created zero
+account and the fixed program's guarded write history; an unkeyed checksum is
+not provenance. Old preloaded/checkpoint-writing program histories are not
+attested. See J1-R11-PROVISIONING-20261015.txt and g-r1-9-native-20261015.
+
+G_R1.8 source is integrated by 149a502e6, 372a1266f, 9c79ce5f9 and
+4c2d6478a; test fixes/measurements are d6070d9fd and 5cbd3f9a2. Pool
+master/lane/checkpoint store canonical initialization bumps at bytes7/72/7;
+versions become2. Registry ASRG/ASRE store bumps at6/7 and become version2.
+ASR2 stores its bump at7 and ProgramData bump at248; ASE2 uses312/313;
+both become version3. Sizes, magic, seeds and instruction versions stay fixed.
+Old account versions reject, including reserved-zero old images. No migration
+or deployment is supplied. Real initializers derive canonical tuples before
+encoding; authenticated mutations preserve them. Synthetic codec-only fixture
+bumps are not evidence of canonical initialization.
+
+The R1 admitted authentication path now contains nine textual creation sites:
+three common plus either four immutable-deployment or two V1 calls, so seven
+or five per execution. It contains no find_program_address or fallback search.
+Owner/version checks precede bump use; runtime ownership and initializer
+history are the canonicality premise. Pool governance and V7 searches outside
+this R1 invocation remain outside QV and must be charged elsewhere if included
+in the same oracle experiment. They are not silently excluded from Qtot.
+
+Native verification: 5 Pool account codec, 6 registry codec, 18 registry
+processor, 24 Pool forest, 4 Pool dispatch, 23 R1 checkpoint/authentication,
+and 2 V7 consumer tests passed. The 24 Pool results comprise 23 initial
+passes and the isolated rent-stub correction rerun; no unchanged full replay.
+Wallet tests and both affected tooling binaries type-check. The R1 tool's
+first offline check lacked a locked crate; online --locked check then passed
+without a lockfile change. Evidence retains failures and their corrections.
+Maximum sampled native process-group RSS was 1,016,944 KiB; all recorded
+process swaps were zero. No SBF/host build, proof generation or deployment.
+
+J1.e remains OPEN as a Rust theorem. VerifierCallBudget arithmetic now gives
+stage1 328/349, stage2 core465, immutable472 and V1470. VerifierPhaseCost
+proves every_prefix_route_bound, every_prefix_le_472, failed_prefix_le_472,
+model_prefix_closed and arbitrary_checkpoint_query_prefix for an explicit
+phase/query operational model. SourceSimulation.preservesPrefix is an
+uninstantiated interface preserving the entire source call trace and exit.
+The conditional source_count_of_simulation is not an actual Rust instance.
+All finite prefixes and next=0..22 are included, without acceptance or
+checkpoint-provenance premises. The two Lean4.32 targets compiled with22
+standard/empty axioms reports; 14.229/20.049s, sampled aggregate RSS
+2,028,096/2,131,648KiB, zero process swaps. A reserved-field syntax error in
+the first phase attempt was fixed; failed evidence is retained separately.
+
+The saved private-salt proof measures328/349 tx1 calls and465 core tx2 calls
+when checkpoint.next is changed11 to0 and the checksum recomputed. That core
+run accepts: repeated valid equations still satisfy its relation. This is
+neither provenance nor an invalid-proof attack, and does not justify reducing
+the all-input query allowance. PDA digests are source/runtime obligations,
+not measured by the HashFn-only counter.
+
+J1.a now has a nonempty exact-source public serializer translation after
+781929374. It is being checked separately against cached Aeneas Lean4.31;
+4.32 rejected that cache. Neither translation nor compilation alone proves
+SourceSerializerRefines. J1.b actual record/prefix extraction, J1.c source
+commitment cuts and J1.d source sampler/state correspondence remain OPEN.
+J5/J2 have not started. The lead still owns J1.R13's provisioning rewrite,
+SBF artifact pin and CU replay; this document does not certify the old harness
+for the new G9 ABI. The release Agave runtime pin remains a lead decision.

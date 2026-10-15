@@ -397,6 +397,7 @@ mod tests {
 
     fn registry(pool: Pubkey, flags: u8) -> VerifierRegistryV1 {
         VerifierRegistryV1 {
+            bump: 0,
             flags,
             pool: pool.to_bytes(),
             authority: [7u8; 32],
@@ -409,6 +410,7 @@ mod tests {
     fn entry(pool: Pubkey) -> VerifierRegistryEntryV1 {
         let selection = selection();
         VerifierRegistryEntryV1 {
+            bump: 0,
             status: VerifierEntryStatusV1::Active,
             statement_version: selection.statement_version,
             pool: pool.to_bytes(),
@@ -438,6 +440,8 @@ mod tests {
         )
         .0;
         VerifierRegistryV2 {
+            bump: 0,
+            programdata_bump: 0,
             flags: POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE,
             pool: pool.to_bytes(),
             authority: [0u8; 32],
@@ -457,6 +461,8 @@ mod tests {
         let programdata =
             Pubkey::find_program_address(&[verifier.as_ref()], &bpf_loader_upgradeable::id()).0;
         VerifierRegistryEntryV2 {
+            bump: 0,
+            programdata_bump: 0,
             status: VerifierEntryStatusV1::Active,
             statement_version: selection.statement_version,
             pool: pool.to_bytes(),

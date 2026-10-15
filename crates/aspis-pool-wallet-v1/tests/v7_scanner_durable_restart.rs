@@ -1067,6 +1067,7 @@ mod lane_forest_restart {
         let mint = Pubkey::new_from_array([0xb2; 32]);
         let master = pool_v1_pair_forest_master_address(&program, &mint).0;
         let master_value = PoolV1PairForestMasterV1 {
+            bump: 0,
             identity: PoolIdentityV1 {
                 pool: master.to_bytes(),
                 asset_mint: mint.to_bytes(),
@@ -1092,6 +1093,7 @@ mod lane_forest_restart {
                     .unwrap()
                     .0;
                 let value = PoolV1PairForestLaneStateV1 {
+                    bump: 0,
                     master: master.to_bytes(),
                     lane_id,
                     tree: IncrementalMerkleTreeV1 {
@@ -1301,6 +1303,7 @@ mod lane_forest_restart {
             )
         });
         let checkpoint = PoolV1PairForestCheckpointV1 {
+            bump: 0,
             master: state.master().address,
             deployment_domain: state.master().value.identity.deployment_domain,
             checkpoint_sequence: state.master().value.next_checkpoint_sequence,

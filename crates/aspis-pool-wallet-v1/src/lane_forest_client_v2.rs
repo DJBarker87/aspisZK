@@ -553,6 +553,7 @@ mod tests {
     fn master(program: Pubkey, mint: Pubkey, registry_program: Pubkey) -> PoolV1PairForestMasterV1 {
         let init = initialization(mint, registry_program);
         PoolV1PairForestMasterV1 {
+            bump: 0,
             identity: PoolIdentityV1 {
                 pool: pool_v1_pair_forest_master_address(&program, &mint)
                     .0
@@ -602,6 +603,7 @@ mod tests {
                 .0;
         }
         PoolV1PairForestLaneStateV1 {
+            bump: 0,
             master: master.identity.pool,
             lane_id,
             tree,
@@ -787,6 +789,7 @@ mod tests {
             statement_version: 1,
         };
         let registry = VerifierRegistryV1 {
+            bump: 0,
             flags: 0,
             pool: master.identity.pool,
             authority: master.verifier_policy.registry_authority,
@@ -795,6 +798,7 @@ mod tests {
             minimum_activation_delay_slots: 10,
         };
         let entry = VerifierRegistryEntryV1 {
+            bump: 0,
             status: VerifierEntryStatusV1::Active,
             statement_version: 1,
             pool: master.identity.pool,
@@ -899,6 +903,8 @@ mod tests {
         let verifier_programdata =
             Pubkey::find_program_address(&[verifier_program.as_ref()], &loader).0;
         let registry = VerifierRegistryV2 {
+            bump: 0,
+            programdata_bump: 0,
             flags: aspis_statement::pool_v1::POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE,
             pool: master.identity.pool,
             authority: [0u8; 32],
@@ -911,6 +917,8 @@ mod tests {
             executable_hash: [86; 32],
         };
         let entry = VerifierRegistryEntryV2 {
+            bump: 0,
+            programdata_bump: 0,
             status: VerifierEntryStatusV1::Active,
             statement_version: request.statement_version,
             pool: master.identity.pool,
@@ -967,6 +975,7 @@ mod tests {
         // The policy-selected V2 family never falls back to syntactically
         // valid V1 accounts at their distinct legacy addresses.
         let legacy_registry = VerifierRegistryV1 {
+            bump: 0,
             flags: aspis_statement::pool_v1::POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE,
             pool: master.identity.pool,
             authority: [0u8; 32],
@@ -975,6 +984,7 @@ mod tests {
             minimum_activation_delay_slots: 10,
         };
         let legacy_entry = VerifierRegistryEntryV1 {
+            bump: 0,
             status: VerifierEntryStatusV1::Active,
             statement_version: request.statement_version,
             pool: master.identity.pool,

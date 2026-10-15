@@ -1,0 +1,49 @@
+J1.a: EXTRACTED PUBLIC SERIALIZER SUCCESS COMPOSITION
+CHECKED: all three modules pass Lean 4.31;14 standard-axiom audits.
+
+These three modules depend on the checked FieldsRefinement431 helper and the
+same byte-identical generated Types/Funs from frontier-c-enums. They reason
+about the actual Aeneas functions; no source-result axiom is introduced.
+
+Success431 unfolds one actual fields_loop step and proves by decreasing
+remaining-slice length that a successful result contains only canonical words
+and appends their exact U32 little-endian encoding. Its successful-return
+premise replaces the earlier total-return capacity premise. Backend failure
+and divergence cannot meet that premise. No real allocation success is proved.
+
+Frontier431 factors the actual generated twenty indexed fields calls into a
+finite chain. frontier_eq_chain proves their equality. Each indexed array
+row is visited in order 0 through 19. Chain success composes the actual helper
+results; it does not assume a correspondence between a handwritten loop and
+Rust. The result gives all 160 words' canonicality and their ordered bytes.
+
+Whole431 factors the two actual Public constructors into finite program steps.
+source_eq_program proves equality to the generated public_bytes function
+for each constructor, preserving the exact generated error behavior. The
+successful-result theorem then determines every output byte and every
+serialized word's canonicality. Transfer emits tags 0/1/0 and its recipient;
+withdrawal emits tags 1/0/1 and its amount. Both emit anchor, nullifier, asset,
+change, live next-pair index as U64 LE, live frontier, candidate root and
+candidate frontier in the actual source order.
+
+The source's omitted metadata remains omitted: no pool/domain/sequence binding
+is established here. A canonical withdrawal amount may be zero; the separate
+payment validation amount guard is still necessary. The successful theorem
+does not assert acceptance by the checked public decoder in that case.
+
+These are Lean 4.31 declarations against the retained standard-library backend.
+The generated-source-to-runtime extraction trust and actual allocation/panic
+semantics remain separate. The generated carrier/byte projection into the
+existing Lean 4.32 PublicSourceRaw.serialize and its codec transport remains
+OPEN; no compatible 4.32 backend cache is assumed and no cold port is attempted.
+Full J1.a closure is not claimed.
+
+Focused sequential checks: Success431: 22.445s/2605504KiB sampled group RSS;
+Frontier431: 17.718s/2674912KiB; Whole431: 12.974s/2770912KiB. All exit0 with
+process swaps0. Lean-M6000 plus a sampled 7GiB process-group stop applied.
+All retained attempts, exact final sources, receipts/logs/axioms, optional
+objects, runner and dependency pins are committed under
+evidence/lean-public-success-composition-431-20261015.
+The final theorem is Whole431.source_success: actual public_bytes p=ok(Ok out)
+implies canonical((sourceSteps p).flatMap stepWords) and
+out.val=(sourceSteps p).flatMap stepBytes, with no capacity premise.

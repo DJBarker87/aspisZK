@@ -23,6 +23,10 @@ pair-forest-account-evidence = []
 # CPI so an audit-only verifier lane-invariant reader can independently root
 # its capability in immutable selected-release configuration.
 pair-forest-verifier-lane-invariant-audit = ["pair-forest-account-evidence"]
+# R1 split verification uses a foreign read-only proof buffer and appends a
+# separate verifier-owned checkpoint to the terminal account list. The default
+# V7 sealed-proof account contract is unchanged.
+r1-split-checkpoint = ["pair-forest-verifier-lane-invariant-audit"]
 # Audit-only direct consumer for a canonical ASR8 already decoded and bound to
 # the selected verifier return program. It avoids reconstructing ASF8 and
 # re-encoding the same ASR8 bytes after the exact field checks.

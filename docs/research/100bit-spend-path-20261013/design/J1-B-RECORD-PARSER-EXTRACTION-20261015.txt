@@ -1,0 +1,75 @@
+Scope and source boundary
+
+Extract the real r1_wire::row_shape first, then r1_wire::parse_record.
+The new kit copies exact declaration spans from r1_wire.rs and the current
+M31/CM31/QM31/WideExact sources into namespace-only layouts. The final runtime change only moves the validation loop into a private
+helper; no field parser or error check is replaced by a handwritten model. Each stage has its own source manifest, dependency-free Cargo input,
+module extraction root, and generated-declaration presence check.
+
+The local Charon/Aeneas binaries and their source-provenance limitations are
+the same as the public-serializer extraction. Runs use separate targets,
+offline release compilation, one Cargo job, and a process-group RSS guard
+below 3.5 GiB. No broad crate or Lean dependency build is requested.
+
+Initial results
+
+row-shape-a: Charon exit 0 in 0.78 s, sampled group RSS 151872 KiB;
+Aeneas exit 0 in 0.74 s, sampled group RSS 63920 KiB. The actual emitted
+declaration is AspisR1RowShape.r1_wire.row_shape, returning Aeneas.Result
+(Option (U8 x Usize)). Checked arithmetic remains explicit, including CLAIMS.
+Types imports Aeneas; Funs additionally imports AspisR1RowShape.Types.
+
+parse-record-b: Charon exit 0 in 2.33 s with 124 ordered declarations;
+Aeneas exit 2 in 0.75 s at PrePasses.ml:586, "Early returns inside of loops
+are not supported yet", on the actual parse_record body. Sampled peaks were
+199472/59040 KiB. Per-process swaps were zero, but system swap increased
+during this attempt; these are different measurements. No generated parser
+success is claimed. The unconditional update_loops preprocessing runs before
+the loops-to-rec option could help, so that flag alone is not a useful rerun.
+
+parse-record-c-optimized changes only MIR selection, retaining the exact
+source. Charon succeeds in 1.23 s; Aeneas reaches symbolic interpretation but
+fails at InterpJoin.ml:1542, "Could not match the contexts", while matching
+the validation-loop fixed point. Sampled peaks are 233296/84128 KiB, and both
+process swap counts and the within-attempt system swap delta are zero.
+
+Final helper extraction and tests
+
+The authorized runtime refactor moves the existing loop, with unchanged
+statements, into private validate_record_fields(row, payload) -> Result<(),
+Error>, final Ok(()). parse_record calls it with ? only under row >= 14.
+The exact kit now has 18 parser declaration cuts. Attempt D translates but
+exposes one opaque external Option::ok_or; its incomplete output is retained.
+Attempt E additionally includes reachable core::option bodies while keeping
+core::result::Result narrow. This emits the actual ok_or implementation:
+16 functions, five types, six globals, zero opaque functions or external
+placeholder files. Charon exits 0 in 1.52 s, Aeneas 0 in 2.26 s; sampled peaks
+are 230448/134272 KiB. Per-process swaps and system-swap delta are zero.
+Current runner rejects any emitted opaque function; E separately passes that
+audit. Actual target: AspisR1RecordParser.r1_wire.parse_record. Types imports
+Aeneas; Funs also imports AspisR1RecordParser.Types. No new axiom/opaque/sorry
+declaration appears. Generated Lean has not been compiled by this worker.
+
+Both focused Rust tests pass with --release --features private-leaf-salts:
+all 256 row shapes, framing/error ordering, payload identity, every serialized
+limb's P/u32::MAX rejection, nonzero high limbs, and first failing value before
+a later malformed value. They compare the previous loop parser directly.
+Total command 47.81 s, sampled RSS 570880 KiB, maximum RSS 503545856 bytes,
+zero swaps; tests themselves 0.00 s. No proof generation is involved.
+
+Remaining obligations
+
+Successful row_shape generation is not its specification theorem. Prove its
+exact result for all U8 inputs, including None for 27..255 and the checked
+usize computations. For a future generated parse_record, prove framing,
+canonical limbs, zero high component, returned-payload identity, and the
+actual Error branches before relating rows 0..24 to SemanticRecordCodec.decode.
+Rows 25/26 additionally need their own opening-claim payload codecs.
+
+SemanticPrefixCodec's existing decode/re-encode and prefix-stability theorems
+remain byte-model theorems: this kit does not extract Prefix::parse, link its
+27 exact record boundaries to those typed values, or link ValidatedRecord to
+successful runtime parsing. SemanticTranscript challenge frames, row sigma
+maps, first-read/commitment-cut timing, all 33 UnifiedProtocol rows, and the
+Rust execution/refinement boundary remain separate OPEN obligations. No Lean
+compilation, axioms audit, or source-to-specification proof is claimed here.

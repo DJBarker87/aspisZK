@@ -1,0 +1,50 @@
+J1.a: EXTRACTED PUBLIC FIELD SERIALIZER HELPER
+
+PublicSerializerFieldsRefinement431.lean imports the actual generated
+AspisR1PublicSerializer.Funs module from worker A's
+.j1-a-local-extraction/frontier-c-enums-20261015/generated bundle.
+Generated Types SHA256:
+8de575dfea4e08388d9dbec042dd787a9075cceeb934bffe232925ca9d319c98.
+Generated Funs SHA256:
+81a559d23636ee9ef4fccca97efbb53f82890ef1ab8fd644e06a30be0e199656.
+The source helper is public_bytes::fields at extracted lib.rs205-213;
+Funs.lean112-158 contains its body, loop and entry definition.
+
+The proof follows the generated loop using the existing backend theorem
+Aeneas.Std.loop.spec_decr_nat. The measure is the remaining slice length.
+The invariant preserves the exact specified result and available vector
+capacity as each canonical word appends its four little-endian bytes.
+The list specification is a theorem target, not a replacement implementation.
+
+The checked public results are fields_canonical_append and
+fields_reject_first_bad. The first preserves the original output prefix and
+appends every canonical field's U32 little-endian bytes. The second stops at
+the first word >=2147483647, returns the generated inner Error.Public, and
+retains exactly the bytes of the preceding canonical prefix. Both retain the
+backend's explicit out.length + 4*values.length <= Usize.max premise.
+wordBytes_eq_le identifies the encoding with BitVec.toLEBytes, and
+wordBytes_length gives four bytes without expanding concrete large lists.
+
+This is a Lean 4.31 helper result against the retained Aeneas backend models.
+It does not yet refine the complete public serializer, canonical option
+checking, ASF8 mapping, raw-public mapping, or the R1 Lean 4.32 codec. Vector
+capacity in the backend does not establish actual allocator success. The
+source kit, Charon/Aeneas translation and standard-library models retain their
+separate source/runtime trust boundaries. No cross-version .olean reuse is
+claimed. Focused check receipts, including source hash, wall time, RSS and
+swaps, are committed in evidence/lean-public-fields-refinement-431-20261015;
+no package
+build, cold dependency compilation or host Lean run is used.
+
+Focused check fields-g: exit0, wall19.945s, sampled peak process-group RSS
+2510464KiB, time(1) peak process RSS2133639168bytes, swaps0. Lean used -M6000;
+the process group had a 7GiB sampled stop. All11 #print axioms outputs contain
+only propext, Classical.choice and Quot.sound (some subsets). No sorryAx or
+custom axiom occurs. Source SHA256:
+9077394be9eb60334dc7777f26d1e19db64cd4ace206b65f48fb3590448868a4.
+The evidence bundle separates final-green from failed-attempts a through f,
+retains the exact final source and optional object, and pins the generated
+Types/Funs and backend references. Earlier source snapshots were not saved;
+their receipt hashes and diagnostics remain. The final proof uses explicit
+dependent-match cases and typed reductions, with no backend edits or unsafe
+reducibility overrides.

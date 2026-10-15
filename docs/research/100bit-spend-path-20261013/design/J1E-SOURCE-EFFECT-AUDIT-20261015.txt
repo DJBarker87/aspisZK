@@ -1,0 +1,72 @@
+J1.e source bridge: executable audit, preservation OPEN
+
+Source revision: 4c2d6478a99ef6cf9487e4b95ff7a54b931ca5ad. The standalone
+tools/j1e-source-effect-audit.py reads git blobs, never a mutable checkout.
+Its reviewed policy pins 52 exact function spans, 32 repository files, selected
+release features, and six SDK/runtime sources against their crate archives and
+the tools/r1-cost-probe lockfile. Evidence is under
+evidence/j1e-source-effect-audit-20261015/. No Rust/Lean builds were run.
+
+Scope and limits
+
+The output is a lexical call/loop inventory, NOT a generated CFG, type-resolved
+call graph, feature-resolution certificate, or Rust refinement theorem.
+It retains cfg alternatives and records attributes. Every captured invocation
+and loop needs an explicit classification and multiplicity. Changed source
+hashes, unclassified calls/loops, changed multiplicities, unknown expanded
+targets and SDK/archive mismatches reject. Default output exposes 319 opaque
+call obligations, 28 opaque loop obligations, and preservation obligations;
+--require-closed-effects deliberately exits2. No opaque call receives cost0.
+Constructor/pattern occurrences are labelled, not counted as execution events.
+Eight negative/lexer tests check this audit mechanism, not Rust semantics.
+
+The older exact-public extraction kit provides verbatim spans and provenance,
+not this missing semantic bridge. Local Charon exists at
+external/aeneas/charon-cb50-metadata/bin/charon and Aeneas at
+external/aeneas/aeneas-verif-workspace/aeneas/bin/aeneas. Their equivalence to the
+previous host-pinned extraction pair is not assumed. Worker A coordinates
+their focused extraction and provenance; this audit launches neither tool.
+Inspection by worker B found that this Aeneas version rejects TFnPtr/Arrow
+types and has no stateful/cost flag. The first tiny HashFn extraction must
+record that actual diagnostic; successful callback translation is not assumed.
+
+Smallest useful proof sequence
+
+1. Extract actual typed control flow for the small hash-bearing helpers first:
+private_leaf_hash (aspis-core/src/state_only_private_merkle.rs:28-35), parent
+(aspis-core/src/r0/merkle.rs:20-32), verifier merkle_path:120-129, transcript
+new/absorb/block/scalar/scalar_k/queries:7-46, and r1_wire SemanticTranscript
+new/sample_block_validated:174-203. Preserve calls, errors and partial execution;
+do not substitute handwritten helper bodies. Prove finite-prefix effect bounds
+of the generated representation, using one explicit event at each designated
+digest primitive. Allocation, panic and runtime stop transitions may terminate
+at every intermediate state. Failure cannot restart a phase.
+
+2. Connect verifier.rs query_with_geometry:242-275 to accumulate:223-235.
+The only successful query increments next once at234; any earlier rejection or
+panic ends that prefix. Resume:325-340 permits every next0..22, so tx2_authenticated
+:380-386 needs at most22 queries without checkpoint-provenance assumptions.
+This is the key data-flow proof missing from a textual loop inventory.
+Then connect tx1:342-350, r1_semantic verify_observed:63-172 and begin in
+r1_wire:344-365. Worker B's VerifierPhaseCost proves the phase/query model bound;
+its SourceSimulation must be established, not replaced by an assumed count cap.
+
+3. Close the typed transitive effect graph before assigning zero to arithmetic,
+codecs, iterators, observers, macros, allocation or failure machinery. Audit
+labels identify each unresolved call. Route selection is lib.rs:33-42 plus
+pool_route.rs:3-5; S2 checks are adapter stage1:902-945/scan_proof:736-763.
+Adapter auth_registry:479-625 has four immutable-branch creations and returns
+before V1's two; auth_accounts:628-733 adds three. Preserve that branch structure
+when relating source prefixes to B's seven/five-PDA phase.
+
+Runtime boundary
+
+The candidate totals remain349/472 until source simulation is proved. SDK
+create_program_address and the pinned runtime create syscall perform one
+derivation, while the SHA syscall finalizes one digest after streaming slices.
+Their exact source ranges are in policy/sdk_pins. Package/archive equality does
+not attest the executed validator, compiler, SBF binary, panic behavior or
+absence of extra runtime SHA. Those remain explicit runtime obligations.
+An LLBC theorem alone proves the extracted representation; source-to-LLBC
+preservation needs a stated compiler/extractor trust boundary or a proved
+translation checker. Hash pinning cannot discharge it, and no axiom asserts it.

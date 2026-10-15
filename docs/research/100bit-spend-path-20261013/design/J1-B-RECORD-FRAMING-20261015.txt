@@ -1,0 +1,39 @@
+Successful extracted record framing
+
+New target: lean/ExtractedRecordFraming.lean against parser attempt F, whose
+actual production header uses four indexed reads after the same framing
+guards. No production edits in this task. The source dependency is the
+retained AspisR1RecordParser.r1_wire.parse_record, not a replacement parser.
+
+Proved conclusion from generated parse_record row record = ok(Ok payload):
+there are the table's tag/size and four actual header bytes, the input length
+is exactly 5+size, byte0 is the tag, bytes1..4 decode through the same U32
+little-endian function to size, payload equals record.drop5, and its length
+is size. In addition, row>=14 implies the actual validator returned Ok().
+No validator-success hypothesis is added to derive framing. The validator
+body remains opaque, so that consequence proves no field-canonicality fact.
+
+The separate row-shape kits are related by an explicit definition-equality
+proof, unfolding their copied constants, before applying the checked all-U8
+table theorem. No cross-module equality or Rust-source correspondence is
+silently assumed. The returned Slice equality is a value/list equality in
+the extracted model; it is not a Rust address/provenance theorem. Canonical
+fields, malformed/error completeness, typed prefix integration, first reads,
+challenge frames, and Rust/Lean refinement remain OPEN.
+
+Validation
+
+The exact row-definition bridge and generic inversion lemmas pass first.
+The complete success theorem passes in 20.993 s; sampled group RSS 2619008 KiB,
+process maximum RSS 2153398272 bytes, process swaps 0 and unchanged system swap.
+The 4 GiB group RSS stop and Lean -M3500 remain in force. All three public
+#print axioms results contain only propext, Classical.choice and Quot.sound.
+Proof SHA 49c86e11f99fc935c7abb3d9ea7e0dc6870319ef255288c8f303a2601715fdae.
+Exact attempt-F Funs SHA
+f6a3d5b95b781458af5a0118b76d39a14243b77958ef86eb9e5cac50ac45a2b1.
+
+Evidence retains a mistakenly targeted old-row check, its corrected runner,
+the successful predecessor, one failed full proof and its correction. The
+final check has two harmless unused-simp warnings. No extra replay was run
+to remove them. No native test rerun is needed for these proof-only files.
+Main-project Lean 4.32 integration remains separate from the 4.31 result.

@@ -1,0 +1,58 @@
+Actual extracted record-field validator
+
+Target: lean/ExtractedRecordValidator.lean. It composes the actual attempt-F
+validator loop/body with the checked byte decoder and high-zero comparison.
+The core contract is successful-return partial correctness: for arbitrary
+initial Enumerate count and ChunksExact remainder, success implies every
+remaining chunk decodes successfully and its returned high component equals
+the actual QM31.ZERO. No allocation/termination/counter-bound premise is
+added; an overflowing checked enumeration increment cannot satisfy success.
+
+Proof: unfold one actual loop step and induct on the remaining chunk
+list length. ChunksExact.next removes exactly the head; Enumerate.next
+performs its actual checked increment. Decode failure, noncanonical result,
+and nonzero high component contradict successful return. The accepted head
+uses the checked comparison equivalence and the recursive tail uses the
+strictly shorter list. This is symbolic list induction, not unrolling any
+concrete payload or replaying a field recurrence.
+
+The wrapper relates actual chunks_exact output to the complete chunks
+in List.toChunksExact32, then use the byte theorem to expose an equal
+32-byte array, all eight canonical LE4 words and exact packing with zero
+high component. No claim applies to the ignored remainder. Row-table
+divisibility and exact chunk/remainder partition are separate coordinator
+lemmas; full-payload coverage requires explicit composition with them.
+Rust/source refinement, prefix state, challenges and first reads remain
+separate boundaries. No production source is modified here.
+
+Focused predecessor validation
+
+The generic loop passed in17.395 s, sampled group RSS2793184 KiB, process
+maximum RSS2232221696 bytes and process swaps0. Both public axioms reports
+contain only propext, Classical.choice and Quot.sound. The proof uses an
+explicit change to the same monadic branch after tuple destructuring;
+kernel definitional equality verifies that local representation step.
+
+Four failed local attempts are retained: a tuple type annotation error,
+branch rewrites hidden by generated tuple-pattern lets, and an ineffective
+dsimp-only reduction. No assumption, resource limit or statement was weakened.
+The 4 GiB sampled process-group stop and Lean -M3500 stayed active. Exact
+source/generated/predecessor object pins, commands, logs, receipts, Lean
+version and all runtime dylib hashes are retained for every attempt.
+
+Wrapper result
+
+The first wrapper check passed in16.717 s, sampled group RSS2782176 KiB,
+process maximum RSS2232713216 bytes and process swaps0. System swap usage
+decreased from12444.06M to12428.06M. All five public theorem axioms reports
+contain only propext, Classical.choice and Quot.sound; the final file has
+no warnings. The wrapper proves the exact agreed complete-chunk predicate
+without adding decoder-success, counter-bound or divisibility assumptions.
+
+Final source SHA
+2cca8a06b6d821bb669743f94c125a098069eab542bcd5c6321bc7967ec46cb8.
+Attempt-F Funs SHA remains
+f6a3d5b95b781458af5a0118b76d39a14243b77958ef86eb9e5cac50ac45a2b1.
+No native rerun or source extraction was needed for these proof-only files.
+The coordinator owns the final composition with successful parser framing
+and complete byte coverage. Lean4.32 integration remains separate.

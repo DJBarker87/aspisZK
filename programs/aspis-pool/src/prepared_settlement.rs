@@ -1277,6 +1277,7 @@ mod tests {
         )
         .0;
         let registry_image = encode_verifier_registry_v1(&VerifierRegistryV1 {
+            bump: 0,
             flags: 0,
             pool: pool.to_bytes(),
             authority: policy.registry_authority,
@@ -1286,6 +1287,7 @@ mod tests {
         })
         .unwrap();
         let entry_image = encode_verifier_registry_entry_v1(&VerifierRegistryEntryV1 {
+            bump: 0,
             status,
             statement_version: selection.statement_version,
             pool: pool.to_bytes(),

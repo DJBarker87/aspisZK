@@ -1,11 +1,12 @@
 import FS2.Statement
 import AspisV8R19.DuplexFrames
 
-/-! Proposed all-prefix SHA call-count interface, not a source-count theorem.
-The numerical definitions below are proposed source caps. Only arithmetic and
-generic first-read bookkeeping are proved here. Source/runtime refinement,
-trace completeness (including PDA trials), and the count obligation remain
-OPEN. -/
+/-! Post-G8 SHA call budgets and a source-count interface.
+The selected verifier uses one create_program_address per stored bump, with
+at most seven calls in the immutable deployment branch or five in V1.
+Only arithmetic and generic first-read bookkeeping are proved here. The
+separate VerifierPhaseCost module proves an operational model's prefix bound.
+Source/runtime refinement and trace completeness remain OPEN. -/
 set_option autoImplicit false
 namespace AspisR1.VerifierCallBudget
 
@@ -19,7 +20,7 @@ inductive PrefixStop where
   | computeExhausted | runtimeFailure
 
 /-- Supplied independently from the budget: every designated digest evaluation,
-including repeated inputs and internal PDA trials, contributes one trace entry.
+including repeated inputs and each single-attempt PDA digest, contributes one trace entry.
 `Input` must retain all invocation data, accounts and relevant initial state. -/
 abbrev PrefixRelation (Cfg Input : Type) :=
   Cfg → Input → (Bytes → Digest) → PrefixStop → Trace → Prop
@@ -45,16 +46,18 @@ def queryBudget : Nat := 3 + 3 * 6
 def stage1Budget (k : Nat) : Nat :=
   semanticBudget + openingBudget + queryBudget * k + 3
 def stage2CoreBudget : Nat := 3 + queryBudget * 22
-def pdaTrialBudget : Nat := 255
-def pdaSearchBudget : Nat := 7
-def stage2Budget : Nat := stage2CoreBudget + pdaSearchBudget * pdaTrialBudget
+def immutablePdaBudget : Nat := 7
+def v1PdaBudget : Nat := 5
+def stage2Budget : Nat := stage2CoreBudget + immutablePdaBudget
+def stage2V1Budget : Nat := stage2CoreBudget + v1PdaBudget
 def verifierBudget : Nat := max (stage1Budget 11) stage2Budget
 
 theorem stage1Budget_ten : stage1Budget 10 = 328 := rfl
 theorem stage1Budget_eleven : stage1Budget 11 = 349 := rfl
 theorem stage2CoreBudget_value : stage2CoreBudget = 465 := rfl
-theorem stage2Budget_value : stage2Budget = 2250 := rfl
-theorem verifierBudget_value : verifierBudget = 2250 := rfl
+theorem stage2Budget_value : stage2Budget = 472 := rfl
+theorem stage2V1Budget_value : stage2V1Budget = 470 := rfl
+theorem verifierBudget_value : verifierBudget = 472 := rfl
 
 /-- OPEN integration obligation, parameterized by the actual source/runtime
 relation. There is deliberately no proof or axiom asserting this obligation. -/
@@ -90,6 +93,7 @@ theorem distinctFirstReads_of_totalCalls {Pf : Type}
 #print axioms stage1Budget_eleven
 #print axioms stage2CoreBudget_value
 #print axioms stage2Budget_value
+#print axioms stage2V1Budget_value
 #print axioms verifierBudget_value
 #print axioms firstReads_le_length
 #print axioms distinctFirstReads_le_totalCalls

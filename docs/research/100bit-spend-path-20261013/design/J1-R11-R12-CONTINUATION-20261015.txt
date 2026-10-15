@@ -1,0 +1,101 @@
+J1.R11/R12 continuation for lead review, 2026-10-15
+
+Status and source pin
+
+Step1 was merged and pushed as 185d576e5e7f2e2aee01db7ddb1d74b09d77cc6a to
+origin/codex/100bit-spend-path-20261013. Both LiteralByteProtocol APIs were
+retained; Protocol/RunFacts/OpeningRunGood passed focused compiles and twelve
+standard/empty axiom reports. The live worktree was never accessed.
+Subsequent work is an unpushed proposal on codex/r1-j1-r11-r12-20261015.
+
+Production source is pinned at 2ed5bc48393ba51e38ec62167134f55755b11649.
+Later commits add proofs/evidence/audit only. G_R1.9 (b711e9aba) uses any-owner,
+read-only raw buffers and a distinct exact-size/all-zero verifier-owned
+checkpoint. Resume recomputes proof/public hashes. System creation and guarded
+write history remain the account-history premise; checksum is not provenance.
+The Pool r1-split-checkpoint feature is default-off, preserving old indices.
+
+G_R1.8 (4c2d6478a,d6070d9fd,5cbd3f9a2) stores canonical initialization bumps
+in revised Pool/registry formats. Admitted R1 authentication has three common
+PDA creations plus four immutable or two V1 creations; no search/fallback.
+Old versions reject. Initialization/governance searches outside an invocation
+need separate accounting if included in the experiment. No migration/deploy.
+Offsets, versions and native evidence: J1-R11-R12-INTEGRATION-20261015.txt.
+
+Extraction-directed changes make fixed frontier calls and record header reads
+explicit, factor the unchanged record validator, and replace the digest's
+iter().all by eight ordered comparisons. Serializer/parser differential suites
+and saved-proof hash-counter regression passed before the final digest change.
+After that change, digest differential tests and existing statement-encoding
+and adversarial validation tests passed; no broader replay is claimed.
+
+Checked J1.a components
+
+RawBridge431.source_success_raw proves actual generated public_bytes success
+implies PublicRawCore.serialize(project p)=some(mapped output bytes), with a
+fixed fieldwise projection, raw bv.toFin and no capacity/canonicality premise.
+The frozen Core is unchanged. Amount431.success_amount_guard proves actual
+withdrawal-helper success implies 0 < amount < 2^30. WithdrawalCarrier431 copies
+all nine fields between extracted carriers and proves both roundtrips.
+Its validated_source_success combines actual helper AND serializer success
+on the same fixed input with the pure serialization/amount/nonzero facts.
+
+Separately under 4.32, PublicRawCoreAgreement.serialize_fromCore identifies
+Core with the existing raw serializer. PublicRawAmountGuardAgreement.
+decoded_of_guarded_core_success supplies the checked decoder consequence
+from Core serialization success plus its amount guard (11196afb6).
+Matching 4.31/4.32 source interfaces are not one kernel composition.
+Verifier caller reachability, omitted ASF8 metadata/account/custody binding,
+and Rust/runtime correspondence remain OPEN. Caller inventory is source
+inspection; it does not instantiate arbitrary SourceValidationAmountGuard.
+
+Checked J1.b components
+
+ExtractedRowShape and ExtractedRecordFraming identify the actual row table,
+framing, returned bytes and validator success from generated parse success.
+ExtractedRecordByteCanonicality/HighZero/Validator prove actual complete-chunk
+decoding, eight canonical LE4 words and packed c1=QM31.ZERO. RecordPayloadPartition
+proves empty remainder and exact byte coverage from successful row lengths.
+ExtractedRecordPayloadSoundness.parse_record_full_payload composes these with
+only row>=14 and actual parse success (15636b405). This is QM31 restriction,
+not M31 descent; root records below 14 are excluded from canonicality.
+
+The final payload check passed in 16.721 s with 2,801,440 KiB sampled group RSS; the 4.32
+amount agreement passed in 22.616 s with 3,478,816 KiB sampled group RSS. Target axioms are standard-only;
+process swaps 0, preexisting system swap separately recorded. Bundles retain
+source/runtime/object hashes, commands, receipts and earlier failed attempts.
+Sampled 4 GiB guards are not cgroups. No cold build or build-host job ran.
+Independent reviews found no hidden coverage, validation or projection premise.
+
+Extraction blockers and J1.e
+
+Exact Prefix extraction: Charon succeeds; Aeneas exits 2 at the returned records
+array, emitting no Lean. Exact QM31 sampler extraction emits unresolved
+array/iterator externals and unverified quotient write-back; no Lean check or
+translator-bug diagnosis is claimed. Both failures and fixed targets are saved.
+
+VerifierPhaseCost.every_prefix_le_472/failed_prefix_le_472 bound the model.
+SourceSimulation.preservesPrefix is uninstantiated. Source/runtime QV and Qtot
+remain OPEN; stage1<=349,core-stage2<=465,immutable<=472,V1<=470 are model bounds.
+The refreshed audit pins 2ed5bc483: 57 spans, 33 files, 331 opaque-call obligations,
+30 opaque loops. Current/four historical checks and eight negative tests pass;
+require-closed-effects intentionally exits 2. Lexical entries are not call counts.
+Release Agave pin remains OPEN for lead selection, as explicitly requested.
+
+Ordered remaining jobs (proposed, OPEN)
+
+1. Integrate extracted/R1 modules under one compatible toolchain. Prove fixed
+SourceSerializerRefines ExtractedReturns (fromCore o project); transport actual
+caller validation to the fixed helper and bind ASF8/account/custody metadata.
+2. Resolve Prefix extraction; prove actual success gives all 27 exact record
+slices, no trailing bytes and validated-token provenance. Connect all 33 rows,
+late records and challenge/state carry. J5/J2 start only after actual J1.a/b closure.
+3. Instantiate commitment read cuts and causal recovery with collision,
+child/root and folded-tail exclusions.
+4. Resolve sampler externals/write-back; prove actual coordinate maps,
+fallbacks and transcript first-read timing against the selected sampler model.
+5. Prove actual-source/runtime prefix preservation, discharge reachable effects,
+instantiate SourceSimulation, then Qtot and raw-byte collision mass.
+6. Lead J1.R13: new provisioning harness, guarded SBF artifact/CU replay. No deployment.
+
+Worker branch/commit handoff and ten-line summaries: J1-WORKER-HANDOFF-20261015.txt.
