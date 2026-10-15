@@ -33,3 +33,14 @@ and pure mask results have been identified for reuse. Their current adapters
 and whole-loop composition are not part of this checkpoint. The full actual
 acceptance-to-terminal contract, compiler/extraction, privacy and runtime
 release obligations remain open; no complete 100-bit claim is made.
+
+## Integration with the latest lead decision
+
+The fetched [J1.R17 decision](LEAD-REVIEW-J1-R11-R12-20261015.md) requires the
+final proof to use Lean 4.32 throughout. This checkpoint's Lean 4.31 results
+remain retained component evidence until the pinned Aeneas library and these
+modules are rechecked on 4.32. The newly merged Pool/parser work does not
+change this extraction's field.rs, wide_exact.rs or state_only_hiding.rs.
+The NUC is reachable again; the next host task inventories and ports the
+matching library/cache under explicit resource limits. No unchanged full
+regression is implied by this integration.
