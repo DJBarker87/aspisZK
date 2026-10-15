@@ -1,0 +1,1137 @@
+DESIGN-T2b-2b — proof design for the spanning half of R0's privacy theorem
+==========================================================================
+
+Job T2b-2b-D (design only; no Lean written, no host run).  Base: v8-reference
+0f25a792f.  Written against LOG decisions D17, D19, D20, D20′, D20″, D20‴,
+D20⁗, T2b-2a′, T2b-2a″, the accepted T2b-1 and T2b-2a modules, and the
+numeric record Z4c/Z5/Z7/Z8/Z8b.
+
+Target in one line: on P_final ch (Good₃ plus named conditions, §4), every K₄-valued element of Chain0 ch is the
+payload of a silent mask tape, i.e.
+    Chain0₄ ch ⊆ ((A h.transport B ch).comp inlM) '' silentMasks h.transport B ch.
+
+Headline findings of this design (details in the sections named):
+  F1 (§2.1)  The target follows from two statements, neither of which is the
+     modular (P)/(Q) lemma that D20⁗ refuted:
+       (Q′) R(ker own) ⊇ Chain_T0₄   (rounds are spanned by tapes silent in
+            every per-lane observation; initial sum left free), and
+       (B)  bat(ker own ∩ ker R) = bat(ker own)   (the batched opening
+            coordinates impose no condition on the rounds).
+     The glue is structural linear algebra plus maskSum = initial sum.
+  F2 (§2.2)  The left kernel of the observations on own-silent tapes is
+     exactly the verifier's own linear checks: R0's `round_eval` (1 K-relation),
+     `round_boundary` (1), and FRI fibre consistency `fold_encoded` at each of
+     the 22 queried fibres (22).  24 K-relations = 192 limbs, which is exactly
+     Z8's 2,112 − 1,920 and Z8b's 2,488 − 2,296.
+  F3 (§2.5)  D20⁗'s 300-limb (P) shortfall is explained structurally: on D's
+     coefficients 56–1023 with zero OOD values the chord quotient is divisible
+     by x^28, so its fold vanishes on the 14 low fibres d < 14 (fibre d reads
+     coefficients 4d..4d+3).  The resulting count reproduces Z8 exactly
+     (1,920) and Z8b to within 8 limbs (1,804 predicted vs 1,812 measured;
+     residual unexplained, in the harmless direction).  The low fibres must
+     be fed by a lane with low-coefficient freedom inside ker R (proposed: G).
+  F4 (§2.2, §3)  MODEL GAP.  Every mask lane in Lean is balanced at row 0
+     against copyInactiveRows (`maskOnlyColumns`, `dWord`, and G in
+     `applyAff`), so each lane's inactive-row sum is 0 and `.inactiveSum` ≡ 0
+     on mask tapes.  Z8 and Z8b used UNBALANCED mask-only/G/D row sources
+     (z8.rs `pure_sources`), a strict superset of the Lean mask space; Z7 kept
+     the per-lane inactive entry but used the QM31 batching proxy.  No probe
+     has run the proved protocol's payload on the Lean mask space.  A small
+     probe Z8c (§3.3) is required before D21.
+  F5 (§2.4)  The own-silence of lanes with exponent e ≥ 14 and of G is NOT
+     round-free: the claim at the xor12 point is a function of the lane's
+     round-6 polynomial (the 16 round-6 classes are singletons and
+     2·8 ≤ e+2), so per-lane own-silence imposes one extra round-6 condition
+     on those lanes.  Any per-lane transversality lemma must carry this.
+  F6 (§2.3, §4)  The proof route needs Λ₄ = K₄ (fresh mask-lane generators at
+     rounds 4–7), which D20‴'s Good₂ (span of 1, α₀..α₅ — giving only
+     Λ₆ = Λ₇ = K₄) does not imply.  Proposed predicate
+       Good₃ := Good ∧ (∀ i, ch.sem i ∈ K₄) ∧ at least three of α₀..α₃ ∉ K₂,
+     which implies Λ_j = K₄ for all j ≥ 4 by a stabiliser argument, with
+     failure mass ≤ 6·((1+δ_Q)/P²)² ≈ 2^-121.4 plus the 21-event part.
+     D20‴'s Good₂′ (∃ i < 7, α_i ∉ K₂) is not sufficient for this route
+     (it gives a two-dimensional Λ₇ only); whether the statement itself holds
+     under Good₂′ is an open numeric question (§3.3 (K)/(L)).
+  F7 (§2.4)  The remaining non-structural content is transversality of the
+     opened-symbol functionals at the queried fibres against the row-side
+     round kernels of the mask lanes and G (OT-open).  I have no proof route
+     with a usable bad-set density for it; it is the main risk.
+
+Sections
+  §0  Notation and conventions
+  §1  Target in Lean vocabulary (K₄, Good₂, Chain0₄, companion lemma)
+  §2  Argument: global kernel-rank structure
+      §2.1 Reduction to (Q′) and (B)
+      §2.2 Observation inventory, balancing, verifier relations, dimensions
+      §2.3 (i) Round cover: fresh generators, absorbers, per-round pivots
+      §2.4 (ii-a) Own transversality and the round-determined claims
+      §2.5 (ii-b) The batched block: D-high, the x^28 law, the low fibres
+      §2.6 Where the row basis meets the coefficient basis through π
+      §2.7 Alternatives considered
+  §3  Numeric cross-checks per lemma; probe Z8c specification
+  §4  Predicate and ledger
+  §5  Lean job plan
+  §6  Open points and honest unknowns
+
+§0  Notation and conventions
+----------------------------
+Fixed by the Lean sources (R0Z/HonestView, PayloadSplit, D12, Shift, Chain,
+PureRounds, Partition, MaskLayout; R0P/MaskValue; R0 opening modules):
+
+  F        the pack subfield (M31 in the source); B : PackBasis F with B.i, B.u.
+  K        the payload field (WideExact in the proved protocol; [K:K₄] = 2).
+  K₄       the F-span of the pack basis {1, i, u, iu} (§1.1); K₂ := F + F·i.
+  M K F    mask tapes: (Fin 10 × Fin 1024 → F) × ExtTape F × ExtTape F
+           (mask-only raw words, G raw limbs, D raw limbs).
+  lanes    ℓ ∈ {m₀..m₉ (trace columns 16..25, F-valued words), G (27),
+           D (28)}; K₄-valued for G and D (pack4).  H1 padding (26) lives in
+           N, not M, and plays no role here.
+  words    u_ℓ := the balanced word: maskOnlyColumns / balance 0 ∘ pack4 /
+           dWord.  W_ℓ := the space of balanced words; σ_ℓ(u) := Σ_{r∈I} u r
+           with I = copyInactiveRows; W_ℓ = ker σ_ℓ (row 0 ∈ I).
+  coeffs   c_ℓ := coeffsLinear π u_ℓ, c_ℓ k = u_ℓ (π.symm k), π = h.transport.
+  R        the round part of (A π B ch).comp inlM: tape ↦ (p_0..p_9),
+           p_j ∈ K[X]_{≤27}; R = Σ_ℓ R_ℓ.  Closed forms: pureRound_maskOnly,
+           pureRound_G, pureRound_libra and the honest-view bridges
+           L_pure_maskOnly_coeff, L_pure_G_coeff, L_pure_libra_coeff.
+  own_ℓ    per-lane observations: .pointClaim j ℓ (j<3), .extraClaim ℓ,
+           .ood j ℓ (j<2), .opened q s ℓ (q ∈ queries, s<4).
+  bat      the batched coordinates .openingCoeff i (7) and .finalCoeff d (256);
+           .inactiveSum is identically 0 on balanced mask tapes (§2.2).
+  O        all non-round coordinates: own, bat, .inactiveSum, .maskSum.
+  silent   silentMasks = ker(nonRound ∘ A ∘ inlM); by mem_silentMasks_iff,
+           m silent ⇔ maskSum = 0 ∧ own = 0 ∧ inactiveSum = 0 ∧ bat = 0.
+  Chain0   Chain.lean's submodule (round-only; initial sum 0; nine chain
+           equalities at alpha ch; terminal p_9(α₉) = 0).
+  Chain_T0 the same without the initial-sum condition (terminal kept).
+  α        alpha ch (ch.sem 15..24);  γ = ch.opening 0, κ = ch.opening 1,
+           τ = ch.opening 2, α_f = ch.opening 3;  z₀, z₁ = ch.circle 0/1.
+  eqPrefix, β, w        PureRounds.lean (w 0 j = 3+22j, w 16 j = 275+150j).
+  û_j      prefix fold of a word: û_j(b, x) = Σ_{ℓ'∈{0,1}^j} eqPrefix(α,ℓ')·u(ℓ', b, x)
+           for b ∈ {0,1}, x ∈ {0,1}^{9−j} (rowBits MSB-first order).
+  N_j      number of distinct tail sums Σ_{i>j} w_i x_i: 130, 93, 64, 42,
+           26, 15, 8, 4, 2, 1 (Z7 §5).
+  Λ_j      span_F{eqPrefix(α, ℓ') : ℓ' ∈ {0,1}^j} (D20.1).
+  "limb"   one F-coordinate; a K₄ value is 4 limbs, a K value 8.
+
+Tags.  STRUCTURAL = provable for every challenge from the stated algebra.
+CONDITIONAL = holds off an explicit bad set of challenge coordinates, whose
+density is named in §4.  OPEN = I do not have a proof route I would vouch for;
+the numeric evidence and a fallback are named.
+
+§1  Target in Lean vocabulary
+-----------------------------
+§1.1  K₄.  PackBasis F (R0P/CoreExt.lean:31) carries only i, u and F-linear
+independence of {1, i, u, iu}; it does not say that their span is closed under
+multiplication.  The spanning proof multiplies K₄ values constantly (eqPrefix,
+β powers, tower factors times words, (α₉ − ½)⁻¹ in sRem), so closure is a
+real premise.  Proposal (new module R0Z/K4.lean):
+
+  def PackField (B : PackBasis F) : Prop :=
+    B.i * B.i ∈ F ∧ ∃ a b : K, a ∈ F ∧ b ∈ F ∧ B.u * B.u = a + B.i * b
+    -- QM31 tower: i² = −1, u² = 2 + i; a refinement fact of the concrete B.
+
+  def K4set (B) : Set K := {x | ∃ v : Fin 4 → K, (∀ j, v j ∈ F) ∧ x = pack4 B v}
+  def K4 (B) (hB : PackField B) : Subfield K   -- carrier K4set B
+  def K2 (B) (hB) : Subfield K                 -- carrier {a + B.i * b | a b ∈ F}
+
+Closure facts to prove (all STRUCTURAL, small): zero/one/add/neg/mul (the six
+products of basis elements reduce by the two PackField relations); inv
+(a nonzero x ∈ K4set: left multiplication is an injective F-linear map of the
+4-dimensional K4set, hence surjective; or x⁻¹ = x^(|K4set|−2)); F ⊆ K4;
+B.i, B.u, towerBasis B j ∈ K4; pack4 B v ∈ K4 for F-valued v; the casts of
+naturals and (1/2 : K) lie in K4; K2 ≤ K4; F-independence (pack4_eq_zero_iff)
+gives finrank_F K4 = 4 and finrank_F K2 = 2.  Recommended alternative
+definition: IntermediateField.adjoin F {B.i, B.u}, with the lemma
+mem_K4_iff_pack4 under PackField; either is fine, but the carrier
+characterisation through pack4 is what every word lemma uses.
+
+Two field facts beyond K₄ itself are used, and should be premises of the
+final theorem rather than derived for abstract K:
+  (K-deg)   ∀ x : K, ∃ a b ∈ K4, x = a + ch.opening 3 * b
+            (true iff [K:K₄] = 2 and α_f ∉ K₄; WideExact has [K:K₄] = 2, so this
+            is the CONDITIONAL event α_f ∉ K₄ of §4);
+  (rot)     for α ∉ K₂ and 0 ≠ τ ∈ K₄: span_F{τ, iτ}·span_F{1, α} = K₄
+            (STRUCTURAL from finrank_{K₂} K₄ = 2).
+
+§1.2  The predicate.  As fixed in D20‴.2 (Lean form):
+
+  def Good2 (B) (hB) (ch : Challenges K) : Prop :=
+    Good ch ∧ (∀ i : Fin 25, ch.sem i ∈ K4 B hB) ∧
+    ∀ x ∈ K4 B hB, x ∈ Submodule.span F
+      (Set.insert 1 (Set.range fun i : Fin 6 => alpha ch ⟨i, by omega⟩))
+
+(Submodule.span F over the Subfield F acting on K; stated as an inclusion so no
+K4-as-F-submodule coercion is needed.)  This gives Λ₆ = Λ₇ = K₄ only.  The
+route of §2.3 needs Λ₄ = K₄, so the proposed predicate is
+
+  def Good3 (B) (hB) (ch) : Prop :=
+    Good ch ∧ (∀ i : Fin 25, ch.sem i ∈ K4 B hB) ∧
+    ∃ s : Finset (Fin 4), 3 ≤ s.card ∧ ∀ i ∈ s, alpha ch ⟨i, by omega⟩ ∉ K2 B hB
+
+Lemma lambda4_eq_K4 (STRUCTURAL): Good3 → Λ₄ = K₄ (hence Λ_j = K₄ for
+j ≥ 4, as Λ_{j+1} ⊇ Λ_j).  Proof: take i, m, k in s.  A_i := span_F{1, α_i}
+has stabiliser F (a larger stabiliser would be K₂ or K₄, making A_i a K₂-line
+through 1, i.e. A_i = K₂ ∋ α_i).  So α_k·A_i ≠ A_i and V := A_i + α_k·A_i
+has dimension ≥ 3; if 3, α_m·V ≠ V (else V is an F(α_m) = K₄-subspace), and
+two distinct 3-dimensional subspaces of K₄ span it.  Λ₄ contains the
+span of the products A_i·A_k·A_m (eqPrefix over coordinates 0..3 spans all
+multilinear monomials in α₀..α₃).  §4 gives the density.
+
+Additional CONDITIONAL hypotheses that the global rank needs (§2.4–2.5) are
+collected in §4 as GoodOpen ch (circle points, opening scalars, queries).  The
+final predicate is P_final := Good₃ ∧ GoodOpen ∧ GoodGeneric, where
+GoodGeneric is the set of polynomial non-vanishing conditions of §2.4/§2.5;
+§4 gives each with its density.
+
+§1.3  The target space.
+
+  def Chain0K4 (B) (hB) (ch) : Submodule F (Payload K) where
+    carrier := {v | v ∈ Chain0 ch ∧ ∀ cell, v cell ∈ K4 B hB}
+
+(Chain0 ch is a K-submodule; restrictScalars F, intersected with the
+K₄-valued cells, which form an F-submodule because K4 is closed under F-linear
+combinations.)  F-dimension 4·269 = 1,076 under α ∈ K₄^10 (not needed as a
+lemma; recorded for the cross-check).
+
+§1.4  The theorem (T2b-2b).
+
+  theorem chain0K4_le_silent (hB : PackField B) (hπ : D13Order h.transport)
+      (hG : P_final B hB ch) :
+      Chain0K4 B hB ch ≤
+        (silentMasks h.transport B ch).map ((A h.transport B ch).comp inlM)
+
+(equivalently ∀ v ∈ Chain0K4, ∃ m ∈ silentMasks, A (inlM m) = v).  Combined
+with T2b-2a's silent_mem_chain0 this gives equality of the silent image with
+Chain0K4 under α ∈ K₄^10; equality is not needed downstream.
+
+§1.5  Companion lemma: sRem is K₄-valued.
+
+  theorem sRem_mem_K4 (hB) (hsem : ∀ i, ch.sem i ∈ K4 B hB)
+      (hpub : PublicBase F x.1) (hw : witness trace values ∈ K4)
+      (hgood : alpha ch 9 ≠ 1/2) (n) (cell) :
+      sRem h B x w ch n cell ∈ K4 B hB
+
+and then sRem_mem_chain0K4 from sRem_mem_chain0 (T2b-1).  Route
+(STRUCTURAL): (a) every non-round cell of sRem is 0 (roundInclusion,
+nonRound_dir), and 0 ∈ K₄; (b) round cells: sRem = roundInclusion g − k•dir
+with dir's coefficients 1 and −½ in F; (c) g = originalRounds(actual(0,n)) −
+originalRounds(actual 0): each round polynomial is Lagrange.interpolate on the
+nodes 0..27 (∈ F) of values Σ_tail oracle(roundPoint ...); a lemma
+`interpolate_coeff_mem (S : Subfield K) (hx : nodes ∈ S) (hv : values ∈ S) :
+(Lagrange.interpolate s x v).coeff d ∈ S` (Lagrange basis coefficients are
+rational in the nodes; prove via Polynomial.map from S or via
+Polynomial.lifts) reduces (c) to the oracle values; (d) oracle values at
+points whose coordinates are α-prefix (∈ K₄), a node (∈ F) and Boolean bits
+are built by +, ·, ⁻¹ from: semantic challenges (hsem), public values (F),
+trace values (semantic lanes F-valued, H1 helper values = Σ weights·(χ −
+value)⁻¹ ∈ K₄ since `helper` uses the field inverse and K₄ is a subfield;
+H1 padding and the noise tape are pack4 of F-limbs), the eqWeight/libraWeight
+weights (products of K₄ values), maskFactors (towerBasis, maskLinear powers),
+terminalValue (rational in K₄ data); (e) k = Phi0(...)·(α₉ − ½)⁻¹ ∈ K₄.
+No challenge outside ch.sem enters a round cell: roundPoly reads oracle only
+(circle and opening challenges enter only non-round cells).  Difficulty:
+medium (bookkeeping through terminalValue/originalAt and helper; no rank
+argument).  Hypothesis hw is a typing fact of the honest prover (the C1
+lanes are F-valued: TypedContext.lanesF); state it as the same premise the
+soundness side already uses rather than re-deriving it.
+
+§2  Argument: global kernel-rank structure
+------------------------------------------
+§2.1  Reduction to (Q′) and (B)
+
+Write, for a mask tape m (all maps F-linear on M K F):
+  R m      ∈ RoundPayload K          (the ten round polynomials),
+  own m    := (own_ℓ (u_ℓ))_ℓ        (per-lane cells, lanes 16..25, 27, 28),
+  bat m    := (.openingCoeff i, .finalCoeff d) coordinates,
+  ms m     := .maskSum,  ia m := .inactiveSum.
+
+Facts already proved or STRUCTURAL:
+  (a) ia ≡ 0 on M (each balanced lane has σ_ℓ = 0; §2.2.1).
+  (b) ms m = p₀(0) + p₀(1) of R m (L_maskSum + rounds_initial, as in the proof
+      of silent_mem_chain0).
+  (c) R m satisfies the nine chain equalities (rounds_chain) and
+      evalRound9(R m) = claimMask(own m) (Phi0_A); on ker own the terminal is
+      0, so R(ker own) ⊆ Chain_T0.
+  (d) m ∈ silentMasks ⇔ ms m = 0 ∧ own m = 0 ∧ ia m = 0 ∧ bat m = 0
+      (mem_silentMasks_iff, grouping its eight clauses).
+
+Statements to prove:
+  (Q′)  ∀ t ∈ Chain_T0₄, ∃ x ∈ ker own, R x = t.
+        (Chain_T0₄ := K₄-valued round vectors with the nine chain equalities
+        and p₉(α₉) = 0, initial sum free; F-dim 4·270 = 1,080.)
+  (B)   bat(ker own ∩ ker R) = bat(ker own).
+
+Lemma (reduction; STRUCTURAL).  (Q′) ∧ (B) → Chain0K4 ≤ silent image.
+Proof.  Let v ∈ Chain0K4; its round part t lies in Chain_T0₄ with initial sum
+0.  By (Q′) pick x ∈ ker own with R x = t.  By (B) pick y ∈ ker own ∩ ker R
+with bat y = bat x.  Put m := x − y.  Then own m = 0, bat m = 0, ia m = 0 by
+(a), R m = t, and ms m = p₀(0)+p₀(1) = 0 by (b) and t ∈ Chain0.  By (d)
+m ∈ silentMasks, and A(inlM m) = roundInclusion t = v (the non-round cells of
+v are 0 because v ∈ Chain0, and those of A(inlM m) are 0 by silence).  ∎
+
+The lemma is pure linear algebra over F: a generic statement
+  `exists_silent_of_cover {V W₁ W₂ W₃ : F-modules} (R : V → W₁) (o : V → W₂)
+   (b : V → W₃) (T : Submodule) (hQ : T ≤ (ker o).map R)
+   (hB : (ker o ⊓ ker R).map b = (ker o).map b) : T ≤ (ker o ⊓ ker b).map R`
+and an instantiation that identifies own/bat/R/ms/ia with the payload cells.
+
+Equivalent global form (for comparison with D20⁗'s wording).  Let
+O := (own, bat, ms) on M.  Then (Q′) ∧ (B) is equivalent to
+  O(ker R) = O(M) ∩ {ms = 0, claimMask = 0}  together with  R(M) ⊇ Chain_T0₄,
+i.e. "the observations restricted to ker R have full rank modulo the two
+couplings that the sumcheck itself imposes (initial sum ↔ maskSum, terminal ↔
+claimMask)".  The split into (Q′) and (B) is preferred because own is
+lane-separable — ker own = ⊕_ℓ ker own_ℓ, so (Q′) is a sum over lanes —
+while bat is the only cross-lane block, and (B) can be proved with two
+explicit absorbers (D-high and G-low, §2.5).
+
+Why this is not D20‴'s modular split.  (Q) there was "own-silent kernels plus
+D(0..55) span the rounds" — that is (Q′), and Z8b(2) supports it.  (P) was "D's
+coefficients 56..1023 cancel all batched coordinates and D's own" — false
+(§2.5 explains why: the 14 low fold fibres are unreachable from D-high).  (B)
+replaces (P): it allows any own-silent round-kernel tape to cancel the batched
+coordinates, and §2.5 names the two families that do it.
+
+Numeric status of the reduction's inputs (details §3): Z8 (unbalanced
+sources, WideExact batching) gives R(ker own ∩ ker bat) = 1,080 = Chain_T0
+(initial retained), which implies (Q′) and (B) for the unbalanced model.  For
+the Lean (balanced) model neither has been measured; Z8c item (2)/(4) does.
+
+§2.2  Observation inventory, balancing, verifier relations, dimensions
+
+§2.2.1  Balancing (STRUCTURAL; model correction F4).  applyAff writes lane
+16+c as maskOnlyColumns = balance 0 (raw), lane 27 as balance 0 (pack4 raw G),
+lane 28 as dWord = balance 0 (pack4 raw D); `balance 0` replaces row 0 (the
+first inactive row) by minus the sum of the other inactive rows.  Hence
+σ_ℓ(u_ℓ) = 0 for every mask lane and
+  ia m = Σ_c γ^c σ_c(u_c) = 0                         (lemma ia_pure_zero)
+for every m : M (the H1 lane is in N).  Consequences: .inactiveSum is not a
+silence condition for mask tapes; the word space of each lane is the
+hyperplane W_ℓ = ker σ_ℓ; every row source in a probe must be the balanced
+e_r − e_0 (r ∈ I∖{0}) or e_r (r ∉ I).  Z8/Z8b used e_r for all r and imposed
+only the batched ia = 0 (8 limbs) instead of the twelve per-lane σ_ℓ = 0 (18
+limbs); their silent space is a superset of Lean's by up to 10 limbs, so
+1,076 is an upper bound for Lean, not yet a measurement (§3.3).
+
+§2.2.2  Per-lane own observations (row basis vs coefficient basis).
+  claims_j(u) = Σ_r eqWeight(openingPoints α j)(r)·u r        row basis
+      points: j=0 toR0 α; j=1 toR0 (successorPoint α); j=2 toR0 (xor12Point α)
+  extra(u)    = Σ_{k<56} libraWeight(α)_k · c_k                 coefficient basis
+  ood_i(u)    = evalMessage c z_i = p0(z_i.x) + z_i.y·p1(z_i.x)  coefficient basis
+  opened(u)   = Enc(c)(childIndex q s), q ∈ queries            codeword
+Limb counts on balanced words: F-lane 12 + 4 + 8 + 88 = 112; K₄-lane (G, D)
+4·(3 + 1 + 2 + 88) = 376.  Total own: 10·112 + 2·376 = 1,872.
+
+§2.2.3  The batched block.  With p_ℓ := c_ℓ, I_ℓ := interpolant z₀ z₁ (ood_ℓ),
+and Q := quotientLinear z₀ z₁ (the chord quotient),
+  q := batch = Σ_ℓ γ^ℓ · Q(c_ℓ) ∈ K^1024,   w := openingWeights π ch,
+  .openingCoeff i = coeff_i (roundPolynomial q w)   (relationLinear = R0's
+                     roundPolynomial up to the quarter; both carry it),
+  .finalCoeff d   = foldMessage α_f q d = Σ_s α_f^s q(4d+s)   (foldMessage_eq_sum).
+Over F these are 263 K-values = 2,104 limbs.
+
+§2.2.4  The verifier's linear checks are the left kernel (F2).  Let
+GoodCircle ch := z₀ ≠ z₁ ∧ ¬BaseRational z₀ ∧ ¬BaseRational z₁ (the last two
+hold for every sampler output: circleSampleParameterWith_not_rational).  Under
+GoodCircle, for every tape in ker own:
+  (S1) (roundPolynomial q w).eval α_f = quarter·dot (foldMessage α_f q)
+       (citedDualFold α_f w)                           [round_eval, all q, w]
+  (S2) coeff 0 + coeff 4 = quarter·dot q w = 0          [round_boundary;
+       dot q w = dot q qWeights + τ·e1 q + τ²·e2 q (FunctionalWeights.row_pairing);
+       e1 = e2 = 0 on the quotient image (image_iff); dot (Q p) qWeights =
+       dot (p − I) weights (image_pairing); weights pairs p into
+       Σ_j κ^{j+1} claims_j + σ + κ⁴·extra, all 0 on ker own; I = 0 since
+       ood = 0]
+  (S3_u) for each queried fibre u:
+       exactFinalEncoder (foldMessage α_f q) u = coefficientFoldValue α_f
+       (channels (Enc q) · u) = 0                       [fold_encoded,
+       encoded_channels; Enc q at the four children of u equals
+       Σ_ℓ γ^ℓ (opened_ℓ − Enc I_ℓ)/L = 0, using no_domain_zero and
+       chordMessage_encoder for "the quotient word is a codeword"]
+That is 1 + 1 + 22 = 24 K-relations = 192 limbs.  Define
+  B₀ := {(h, f) ∈ K^7 × K^256 | (S1), (S2), (S3_u) ∀ u ∈ queries}.
+Lemma bat_ker_own_le : bat(ker own) ⊆ B₀ — STRUCTURAL given GoodCircle
+(CONDITIONAL only through z₀ ≠ z₁).  On the unbalanced model, (S2) reads
+coeff 0 + coeff 4 = quarter·ia instead, which is why Z8 counted 264 − 24 = 240
+K-values = 1,920 limbs: exact agreement with "batched pivots 1,920".
+
+Independence of the 24 relations (needed for dim B₀, which the constructive
+side of (B) parametrises): the (S3_u) involve only f, through evaluation of
+the final code at 22 distinct points, and are independent on the final message
+space (STRUCTURAL: two final points with equal x differ in y, so p0/p1 parts
+separate and a Vandermonde in distinct x remains; fibre_coordinates_nonzero
+gives x, y ≠ 0).  On the h-coordinates (S1) reads Σ_i α_f^i h_i and (S2)
+reads h_0 + h_4; these are independent whenever α_f ≠ 0 (compare the h_1
+entries).  Hence dim_K B₀ = 263 − 24 = 239, dim_F B₀ = 1,912.
+
+§2.2.5  Predicted dimensions for the Lean (balanced) model on generic
+challenges (to be confirmed by Z8c; each follows from §2.3–2.5):
+  rank own on M                       1,872
+  rank bat on ker own                 1,912  (= dim B₀)
+  rank ms on ker own ∩ ker bat            4
+  dim R(M)                            1,084
+  dim R(ker own)                      1,080  (= Chain_T0₄)
+  dim R(silent)                       1,076  (= Chain0₄)
+  rank of O on M = 1,872 + 1,912 + 4 = 3,788; rank of O on ker R = 3,780
+  (= 3,788 − 4 (ms) − 4 (terminal)).
+
+§2.3  (i) Round cover
+
+§2.3.1  Prefix-fold form (STRUCTURAL, from pureRound_maskOnly/pureRound_G by
+regrouping rows r = (ℓ', b, x), ℓ' ∈ {0,1}^j the bits before j, b = bit j,
+x the bits after j).  For a lane with factor Φ (mask-only c: Φ(Y) = τ_c·Y^e,
+e = maskOnlyFactorExponent c; G: Φ(Y) = 1 + Y^26 with weights w 16):
+  R_{ℓ,j}(u) = Σ_{b, β'} S_{j,b,β'}(u) · (b ? X : 1−X) · Φ(w_j X + c_j + β'),
+  S_{j,b,β'}(u) := Σ_{x : w_{>j}·x = β'} û_j(b, x),   c_j := Σ_{i<j} w_i α_i.
+Lemma `rounds_prefixFold` (new; regrouping of the existing closed form; no
+new analysis).  For D, pureRound_libra and L_pure_libra_coeff already give
+the round vector of each coefficient cell d < 56; coefficients ≥ 56 have zero
+round vector (libraWeight is supported on k < 56).
+
+§2.3.2  Four generic polynomial facts (STRUCTURAL; no protocol import; char K
+= 2³¹−1 > 28 is used through "binomials C(n,k), n ≤ 27, are nonzero").
+  P1 (divided differences)  For e ≤ 26, w ≠ 0 and pairwise distinct
+     β₁..β_n: span_K{(wX+β_i)^e} has dimension min(n, e+1), and contains, for
+     each k < min(n, e+1), a polynomial of exact degree e−k (the k-th divided
+     difference in β; leading coefficient C(e,k)·w^{e−k}).
+  P2 (Hermite)  span_K{(wX+β_i)^e, X(wX+β_i)^e} = span_K{L_i^e, L_i^{e+1}}
+     (L_i = wX+β_i) has dimension min(2n, e+2) with leading degrees
+     e+1, e, …, e+2−min(2n, e+2) (confluent divided differences).
+  P3 (G factor)  the same two statements for 1 + L_i^26: dimension min(n, 27)
+     resp. min(2n, 28), leading degrees from 26 (resp. 27) downward.
+  P4 (pivot assembly)  Let V ≤ K[X]_{≤27} be an F-subspace and, for each
+     degree D in a set S, let the leading coefficients of the elements of V of
+     exact degree D span K₄ over F.  Then V ⊇ K₄-polynomials supported on
+     degrees in S modulo lower degrees (triangular elimination).
+P2 reproduces Z7 §7 exactly: at round 7 (n = N₇ = 4) a mask lane of exponent
+e ≥ 6 has leading degrees e−6..e+1 (mask3 e=7: 1–8, mask4 e=9: 3–10,
+mask6 e=15: 9–16, mask9 e=21: 15–22) and G has 20–27; at round 6 (n = 8) e15
+gives 1–16, e17 3–18, e19 5–20, e21 7–22, G 12–27.
+
+§2.3.3  Tail sums (STRUCTURAL, small arithmetic).  For bits after j there are
+n = 9−j positions; Σ w_i x_i = 3|x| + 22·Σ i (resp. 275|x| + 150·Σ i for G).
+Since 3 ∤ 22 and |x| ≤ 9, two subsets collide iff they have equal size and
+equal index sum (for G: 11·Δ|x| = −6·ΔΣ forces Δ|x| ∈ {0, ±6}, impossible
+within 9 positions — an omega argument).  Hence the distinct values number
+N_j = Σ_{k=0}^{n} (k(n−k)+1) = 130, 93, 64, 42, 26, 15, 8, 4, 2, 1, identical
+for G.  The design needs only lower bounds N_j ≥ 27 (j ≤ 3), 26, 15, 8, 4,
+proved by exhibiting that many explicit subsets (one per (size, sum) pair);
+all sums are < 2³¹−1, so integer-distinct implies distinct in F.
+
+§2.3.4  Fresh generators (STRUCTURAL given α_j ≠ 0).  Call u fresh at j if
+û_{j+1} ≡ 0, i.e. (1−α_j)·û_j(0,x) + α_j·û_j(1,x) = 0 for every suffix x.
+Then R_{ℓ,k}(u) = 0 for all k > j (later rounds read only folds of û_{j+1}),
+the lane's terminal and its claim at α are 0, and
+  R_{ℓ,j}(u) = ((α_j − X)/α_j) · Σ_{β'} S_{j,0,β'}(u) · Φ(w_j X + c_j + β').
+For G (K₄-valued) the S-values S_{j,0,·} are arbitrary in K₄^{N_j}.  For an
+F-lane they range over Λ_j ∩ ρ_j·Λ_j with ρ_j = −α_j/(1−α_j) (û_j(1,x) must be
+−((1−α_j)/α_j)·û_j(0,x) and both lie in Λ_j).  This is all of K₄ when
+Λ_j = K₄, and can be 0 when Λ_j = F and α_j ∉ F.  By P1/P3 the fresh round-j
+images, as product degrees of (X − α_j)·q, are:
+  G:            [max(1, 28 − N_j), 27]
+  mask lane e:  [max(1, e + 2 − N_j), e + 1]   (K₄-linear when Λ_j = K₄)
+
+§2.3.5  Absorbers.
+  Top (rounds 8, 9; D).  From pureRound_libra: cell (9,e) contributes X^e at
+  round 9 and constants 2^{8−k}·(2 if e=0 else 1) at k < 9; cell (8,e)
+  contributes 2X^e at round 8, α₈^e at round 9 and constants below.  Their
+  (p₈, p₉) projections span every chain-consistent pair (28 + 27 = 55
+  K₄-dims; triangular in e).  Lemma D_absorb: for every lane source s there
+  is a D-low combination d(s) with the same (p₈, p₉); since the lower
+  constants of any D combination are 2^{7−k}·c₇ with c₇ = p₈(0)+p₈(1) =
+  p₇(s)(α₇), s − d(s) has rounds 8, 9 zero, round 7 equal to p₇(s) −
+  p₇(s)(α₇), and lower rounds changed by constants only.  D-low itself is
+  made own-silent with D-high (§2.4, C-Dhigh).
+  Fresh-at-8/9 from D: (8,e) − α₈^e·(9,0) gives 2(X^e − α₈^e) at round 8 and
+  0 at round 9; (9,e) − α₉^e·(9,0) gives X^e − α₉^e at round 9 (terminal 0).
+
+§2.3.6  Round-by-round coverage.  Filtration W_j := {t ∈ ChainR₄ : p_k = 0
+for k > j}; W_j/W_{j−1} ≅ {p ∈ K₄[X]_{≤27} : p(α_j) = 0} (27 K₄-dims; for
+j = 0 add the initial direction).  Upward induction: given W_{j−1} ⊆ V, it
+suffices that the round-j projections of V ∩ W_j cover product degrees 1..27
+with K₄ leading coefficients (P4; the degree-0 coefficient is fixed by
+p(α_j) = 0).  Generators and coverage (G pivots from P3, lanes from P1/P2):
+  j = 0..3   G fresh: [1, 27] since N_j ≥ 27.                        done
+  j = 4      G fresh [2, 27]; degree 1 from any fresh mask lane.      Λ₄
+  j = 5      G fresh [13, 27]; lanes e=1..11 give [1, e+1]; e15..e21 give
+             [e−13, e+1]: degrees 1..12 covered.                       Λ₅
+  j = 6      G fresh [20, 27]; lanes [max(1, e−6), e+1]: 1..22.        Λ₆
+  j = 7      fresh gives G [24, 27] and lanes up to 22 — degree 23 is
+             missing.  Use instead s − d(s) for every G and lane source
+             (D_absorb): unconstrained round-7 spans, G [20, 27] (P3 with
+             n = 4), lanes [max(1, e−6), e+1].  Covered.                Λ₇
+  j = 8, 9   D fresh generators above.                                 —
+The column on the right is the scalar condition used.  "Λ_j" means: the
+F-lane leading coefficients at the degrees that G does not reach must span
+K₄.  Two mechanisms give this:
+  (Λ-full)  Λ_j = K₄ — then each lane is K₄-linear (and Λ_j ∩ ρ_jΛ_j = K₄).
+  (τ-class) the lanes covering degree D include all four tower classes
+            τ ∈ {1, i, u, iu} (c ≡ 0,1,2,3 mod 4) — only usable where F-lane
+            generators exist at all, i.e. not for fresh generators when
+            Λ_j ∩ ρ_jΛ_j = 0.
+With fresh generators, (τ-class) works at rounds 4–5 only if Λ_j ∩ ρ_jΛ_j ⊇ F,
+which fails exactly when Λ_j is a proper subfield-like span and α_j ∉ that
+span.  I therefore state the round cover under
+
+  H_Λ :  Λ₄ = K₄   (then Λ_j = K₄ for every j ≥ 4, since Λ_{j+1} ⊇ Λ_j).
+
+Lemma RC (STRUCTURAL under Good ∧ α ∈ K₄^10 ∧ H_Λ):
+  ChainR₄ ⊆ Σ_ℓ R_ℓ(all words of lane ℓ).
+
+D20‴'s Good₂ gives Λ₆ = Λ₇ = K₄ but not Λ₄, Λ₅; with Good₂ alone, rounds 4–5
+need non-fresh F-lane sources whose rounds 5..7 cancel, which I could not
+organise into a clean lemma.  §4 gives a predicate implying H_Λ with a clean
+density (three of α₀..α₃ outside K₂ ⇒ Λ₄ = K₄, by a stabiliser argument).
+Z7 structure (B) (all α_i ∈ F, so Λ_j = F and ρ_j ∈ F) is full at rounds 4–6
+and loses only round 7.  The fresh-generator argument alone would leave
+round-6 degrees 7–8 without the u tower class under (B), so the true span uses
+non-fresh sources there: H_Λ is sufficient for this proof, not necessary for
+the statement.
+
+§2.3.7  The own-compatible version RC⁺.  (Q′) needs the generators to be
+correctable into ker own (§2.4).  Two own-functionals are functions of the
+lane's rounds and so restrict the generators themselves:
+  terminal_ℓ ∝ claim_0,ℓ  (every lane; Phi0_L per lane),
+  claim_2,ℓ (xor12 point) for G and the mask lanes with e ≥ 14 (F5, §2.4).
+Fresh generators at j ≤ 5 satisfy both (û₆ = 0).  Fresh-at-6 generators
+satisfy terminal = 0 but have claim_2 = ((2α₆−1)/α₆)·Σ_x eq((1−α₇, α₈, α₉), x)·
+û₆(0, x), so in G and e15..e21 they must be restricted to a hyperplane;
+generators used at rounds ≥ 7 can have claim_2 repaired by adding a fresh-at-6
+element of the same lane (lower-round junk is harmless in the upward
+filtration).  Round-7 generators s − d(s) from G must have terminal_G = 0,
+again a hyperplane.  The degrees reached only by G are 23..27 at rounds 6
+and 7, so RC⁺ needs:
+  PR6 (CONDITIONAL)  claim_2 restricted to G's fresh round-6 span does not
+      vanish on its part of degree ≤ 22 (then the hyperplane keeps pivots
+      23..27; G or e21 keeps 22, and the overlapping lane ranges keep 13..21).
+  PR7 (CONDITIONAL)  claim_0 restricted to G's round-7 span (dimension 8,
+      pivots 20..27; its fresh part 24..27 is terminal-free) does not vanish on
+      its part of degree ≤ 22.
+Both are non-vanishing of one explicit polynomial in (α₆, α₇, α₈, α₉) built
+from an 8×8 Hermite system with integer data (the four G tail values
+{0, w'₈, w'₉, w'₈+w'₉} resp. eight for round 6); bad set density by
+Schwartz–Zippel ≤ deg·(1+δ_Q)/P⁴ with deg ≤ 8·4 = 32 (§4).  A witness for
+non-vanishing must still be exhibited (OPEN; a small exact computation, not a
+rank gate).  Mask lanes e ≥ 14 lose one direction each at round 6 but their
+ranges overlap; no lane-only degree exists there (§3 asks Z8c to confirm).
+
+§2.4  (ii-a) Own transversality: from the round cover to (Q′)
+
+Since ker own = ⊕_ℓ ker own_ℓ on balanced words, (Q′) is a per-lane matter:
+each RC⁺ generator g (a word of one lane ℓ) must be replaced by g − k with
+k ∈ ker R_ℓ and own_ℓ(k) = own_ℓ(g).  Write own⁺_ℓ := (own_ℓ, σ_ℓ) on ALL
+(unbalanced) words, so that balancing is one more observation (RC is proved
+on unbalanced words, §2.3).
+
+§2.4.1  Round-determined own functionals (F5; STRUCTURAL).
+  terminal: evalRound9(R_ℓ u) = factor_ℓ(α)·claim_0,ℓ(u) (Phi0_L per lane;
+    factor = τ_c·maskLinear0(α)^e, 1 + maskLinear16(α)^26, and for D the
+    extra claim enters with coefficient 1).  On ker R_ℓ, claim_0,ℓ = 0 if
+    factor_ℓ(α) ≠ 0 (CONDITIONAL: maskLinear 0 α ≠ 0 and
+    1 + maskLinear 16 α^26 ≠ 0; §4).
+  xor12 claim: at round 6 the classes (b, β') are singletons (N₆ = 8 tail
+    values for 3 bits), so R_{ℓ,6} = Σ_{s∈{0,1}^4} û₆(s)·(s₀?X:1−X)·Φ(…);
+    by P2/P3 these 16 polynomials are independent when 16 ≤ e+2, i.e. for G
+    and e ∈ {15, 17, 19, 21}.  Then û₆ is a linear function of R_{ℓ,6}, and
+    claim_2,ℓ(u) = Σ_s eq((1−α₆, 1−α₇, α₈, α₉), s)·û₆(s) (xor12Point flips
+    coordinates 6 and 7 only) is a function of the rounds.  For e ≤ 13 it is
+    not.  claim_1 (successorPoint changes every coordinate through the carry
+    chain), extra (coefficient basis), OOD, opened and σ are not
+    round-determined for any lane.
+  Hence the correct per-lane statement is
+
+  OT_ℓ :  own⁺_ℓ(ker R_ℓ) = own⁺_ℓ(all words) ∩ ker(Rel_ℓ),
+          Rel_ℓ = {claim_0} for e ≤ 13; {claim_0, claim_2} for G, e ≥ 14;
+          {extra} for D.
+
+and the RC⁺ generators satisfy Rel_ℓ by construction (§2.3.7).  OT_ℓ with
+RC⁺ gives (Q′).  Expected F-codimensions of own⁺_ℓ(ker R_ℓ) inside
+own⁺_ℓ(all): 4 (e ≤ 13), 8 (G, e ≥ 14), 4 (D).  §3 asks Z8c to measure them.
+
+§2.4.2  D: the D-high absorber (C-Dhigh).  R_D reads only coefficients 0..55,
+so D-high := {D words with c_k = 0 for k < 56} ⊆ ker R_D.  OT_D follows from
+  C-Dhigh: own⁺_D restricted to D-high has rank 4·(3 + 2 + 88 + 1) = 376
+           limbs (claims, OOD, opened, σ; extra vanishes there).
+Split:
+  (eval part, STRUCTURAL given conditions on z and the queries)  On the 90
+  coefficients 56..145, i.e. x^28·(p̃₀, p̃₁) with deg p̃ < 45, the 88 opened
+  values and 2 OOD values form an invertible 90×90 system: the four children
+  of fibre u are (x,y), (x,−y), (−x,−y), (−x,y) with x, y ≠ 0
+  (fibre_coordinates_nonzero), so they give p̃₀ and p̃₁ at ±x_u; distinct
+  fibres have distinct x² (same x² ⇒ same orbit), so 44 distinct x-values;
+  what remains is p̃₀ = a·V(x), p̃₁ = b·V(x) with V = ∏(x − x_t) over the 44
+  values, and the OOD equations z_i.x^28·V(z_i.x)·(a + z_i.y·b) = 0 force
+  a = b = 0 iff z_i.x ≠ 0, V(z_i.x) ≠ 0 (i = 0, 1) and z₀.y ≠ z₁.y.
+  (row part, CONDITIONAL in α)  claims_0..2 and σ on the complement: the
+  minor including three claim columns is a nonzero polynomial in α if some
+  α gives an invertible minor.  Boolean α makes eqWeight a unit row vector
+  (the three opening points of a Boolean point are Boolean rows: row(a),
+  its successor, its xor12 partner), so the witness reduces to choosing a
+  Boolean a whose three rows map under π outside the 90 eval columns and
+  outside σ's support — a fact about π and copyInactiveRows that must be
+  checked against the concrete transport (OPEN in Lean: the registry is
+  irreducible; D13Order only says rows of coefficients < 89 are inactive).
+  σ is handled the same way (one more column inside σ's support, e.g.
+  coefficient 56, which comes from an inactive row by D13Order).
+Z8b measured 372 = 4·93 for (claims, OOD, opened) on D-high (σ not imposed),
+matching the prediction.
+
+§2.4.3  Mask lanes and G.  No coordinate block of a mask lane or of G is
+round-free (every row enters round 9 with weight eqPrefix(α, r_<9) ≠ 0), so
+there is no explicit absorber; OT_ℓ is a transversality statement between
+the row-structured subspace rowspace(R_ℓ) and the coefficient-side
+functionals.  Margins are large: rank R_ℓ ≈ Σ_j dim Λ_j·min(2N_j, e+2) − 36
+≈ 520 limbs for e = 21 (fewer for smaller e), ≈ 760 for G out of 4,096, so
+ker R_ℓ has F-dimension ≈ 500 (e = 21) to ≈ 3,300 (G), against 113 resp.
+380 own⁺ functionals.  Split by challenge type:
+  (OT-ood, CONDITIONAL in z; clean)  Let V' ≤ (message space)* be the
+      span of rowspace(R_ℓ) and the other own⁺ functionals (z-independent),
+      with dim V'^⊥ ≥ 2.  A nonzero a·ev_{z₀} + b·ev_{z₁} ∈ V' forces
+      m₁(z₀)m₂(z₁) − m₂(z₀)m₁(z₁) = 0 for all m₁, m₂ ∈ V'^⊥.  Fix independent
+      m₁, m₂.  Bad z₀: common zeros of m₁, m₂ (≤ 2,048 circle points; a
+      nonzero p₀ + y·p₁ with deg p_i < 512 has at most 2·1,023 zeros on the
+      circle).  For good z₀, m₁(z₀)·m₂ − m₂(z₀)·m₁ is a nonzero message, so
+      bad z₁ are ≤ 2,048 points.  Each point has ≤ 2 sampler parameters.
+  (OT-row, CONDITIONAL in α)  claim_1, extra, σ, and claim_2 for e ≤ 13:
+      non-vanishing of explicit minors, polynomial in α of degree ≤ 10 per
+      claim row (successorPoint coordinates have degree ≤ 10 — check) and
+      ≤ 55 for extra.  Witness OPEN (Boolean α is a candidate as in
+      §2.4.2, but R_ℓ at Boolean α degenerates — Λ_j = F — so the minor
+      must be chosen to avoid round rows where Boolean α loses rank).
+  (OT-open, OPEN)  The 88 opened symbols at the queried fibres.  Bad query
+      sets are those for which span{ev_x : x child of a queried fibre} meets
+      V' := rowspace(R_ℓ) + span(other own functionals).  For a fixed query
+      set this is a polynomial condition in α (rowspace(R_ℓ) depends on α,
+      evaluation functionals do not), so Pr_{α, Q}[bad] ≤ max_Q Pr_α[bad | Q]
+      ≤ deg·(1+δ_Q)/P⁴ IF for every query set the polynomial is nonzero.
+      I do not have a witness argument valid for all query sets.  A Bezout
+      count over fibres instead gives only ~2^13 bad fibres out of 2^18 per
+      query, far too weak.  This is the main proof risk of the design.
+      Numeric support: Z8 and Z8b find full own rank on ker R on every
+      vector (implicitly, via the silent rank); Z8c item (3) measures it
+      directly.
+
+§2.4.4  Weaker sufficient form (recommended for the Lean statement).  (Q′)
+does not need OT_ℓ in full: a lane-ℓ correction k only has to satisfy
+R_ℓ(k) ∈ V_{≠ℓ} := Σ_{ℓ'≠ℓ} R_ℓ'(ker own⁺_ℓ') instead of R_ℓ(k) = 0, because
+the rounds of k can then be cancelled by own-silent words of other lanes.
+G's own-silent fresh generators (û₄ = 0 ⇒ claim_0 = claim_2 = 0) give all of
+rounds 0–3 once OT_G holds, and own-silent D-low combinations give rounds 8–9
+(D_absorb), so for a mask lane only rounds 4–7 constrain k: its effective
+kernel has codimension at most ≈ 4·(23 + 23 + 16 + 8) = 280 for e = 21,
+against ≈ 520 for ker R_ℓ.  Statement:
+  OT′_ℓ : own⁺_ℓ(R_ℓ^{-1}(V_{≠ℓ})) ⊇ own⁺_ℓ(span of the RC⁺ generators of ℓ),
+proved in the lane order D, G, then mask lanes (any order among them).
+
+§2.5  (ii-b) The batched block: (B) from two absorbers
+
+(B) asks bat(ker own ∩ ker R) ⊇ bat(ker own); by §2.2.4 it suffices to show
+bat(ker own ∩ ker R) ⊇ B₀.  B₀ splits by fold fibre:
+  B₀^hi := B₀ ∩ {f_d = 0 for d < 14},   dim_K = 263 − 14 − 24 = 225 (1,800 limbs)
+  low   := (f_d)_{d<14} ∈ K^14 (112 limbs), free in B₀ given B₀^hi.
+(The 24 relations stay independent on {f_low = 0}: the 22 final evaluations
+remain a Vandermonde system on final messages divisible by x^7, and (S1),
+(S2) are separated by their h-coefficients.)
+
+§2.5.1  The x^28 law (STRUCTURAL given z_i.x ≠ 0 and GoodCircle).  Let
+D-high := D's coefficient vectors c with c_k = 0 for k < 56.  In circle form
+c = x^28·(p̃₀ + y·p̃₁) (even index 2i ↔ x^i in p₀, odd 2i+1 ↔ x^i in p₁).  If
+ood(c) = 0 then p̃(z_i) = 0, so the line L through z₀, z₁ divides p̃ in the
+circle coordinate ring (the ideal of {z₀, z₁} is (L)), p̃ = L·Q̃, and
+  Q(c) = x^28·Q̃,   so Q(c)_k = 0 for k < 56 and
+  foldMessage α_f (Q c) d = 0 for d < 14,
+  foldMessage α_f (Q c) (d+14) = foldMessage α_f Q̃ d          (shift by 14 fibres,
+                                                              childIndex d s = 4d+s).
+Lean route: chordMessage_encoder / image_iff give Enc(Q c)·L = Enc(c) on the
+domain; exactInitialEncoder is injective; multiplication by x^28 commutes
+with lineWord multiplication; degrees fit (deg Q̃ < 483).
+Consequence: D-high can never produce the 14 low fold values — this is the
+structural reason for D20⁗'s (P) shortfall.  Cross-check against Z8b (which
+used unbalanced sources, so .inactiveSum is a coordinate there):
+  bat on D-high ∩ ker D-own: predicted 2,112 − 8·(14 + 22 + 1 + 1) − 4 = 1,804;
+     Z8b: 2,184 − 372 = 1,812.
+  bat on D-high: predicted 2,112 − (112 − 8) − 8 − 4 = 1,996 (the OOD values
+     feed at most 8 limbs into the low part); Z8b: 2,000.
+  bat on ker own (all lanes): predicted 2,112 − 192 = 1,920; Z8: 1,920.
+So the account is exact for Z8 and within 8 and 4 limbs for Z8b.  I cannot
+locate the residual; candidates are the (S1)/(S2) conventions of
+prover::round_polynomial on a single K₄-valued lane and my count of the
+(S2, .inactiveSum) pair.  Z8c item (5) identifies the left kernel exactly.
+The residual is in the upper-bound direction only (Z8b has MORE rank than
+predicted), so it cannot hide a failure of (B).
+
+§2.5.2  B-hi: D-high reaches B₀^hi.  Statement
+  B_hi : bat(D-high_bal ∩ ker own_D) = B₀^hi,
+  D-high_bal := D-high ∩ ker σ_D  (D words are balanced).
+D-high ⊆ ker R (§2.3.1), so this supplies the high part of (B).
+  (fold part, STRUCTURAL given (K-deg) and GoodCircle)  Write Q̃'s four
+  coefficient lanes λ_s := (Q̃(4d+s))_d (K₄-valued, 242 entries each).  By
+  encoded_channels/fibre_inverse, Q̃'s codeword vanishes at the four
+  children of a queried fibre iff Enc_final(λ_s)(u) = 0 for s = 0..3; and
+  opened(c) = 0 iff Q̃'s codeword vanishes there (L ≠ 0 on the domain by
+  no_domain_zero, x ≠ 0).  The fold is Σ_s α_f^s λ_s.  Since every λ_s ranges
+  over the K₄-solutions of 22 F-rational evaluation conditions and
+  K = K₄ + α_f·K₄ (K-deg), the fold image is exactly
+  {f ∈ K^242 : Enc_final(f)(u) = 0 ∀ u ∈ queries} (dim_K 220).  The top
+  fibre's e1/e2 constraints (Q̃'s top coefficients) leave fold_255 free iff
+  α_f + α_f²·(secantC/secantB) ∉ K₄ (CONDITIONAL, one K₄-coset; §4).
+  (relation part, CONDITIONAL)  The five h-directions left free by (S1), (S2)
+  must be independent of the fold on the subspace cut by D's claims (3) and
+  σ_D.  h is bilinear in (Q c, w) with w = totalWeights(κ, τ, α, z, π); this
+  is non-vanishing of explicit minors, polynomial in (κ, τ) of degree ≤ 2·5
+  for fixed (α, z, π) — witness OPEN (a candidate: τ = 0, κ = 0 reduces w
+  to coeffWeight π (indicator I) + quotient correction, an explicit sparse
+  vector).  The claims/σ part is the same α-condition as C-Dhigh.
+
+§2.5.3  B-lo: the low fibres from G (G-low).  Two structural facts and one
+conditional one.
+  T₀ (STRUCTURAL given z_i.x ≠ 0, z₀ ≠ z₁).  On {c : ood(c) = 0}, the low part
+     Q(c)_{<56} depends only on c_{<56}, via a linear T₀ : K^56 → K^56 that is
+     bijective and K₄-rational.  (Well-defined: two extensions differ by a
+     D-high-type vector with zero OOD, whose quotient has zero low part by
+     §2.5.1.  Injective: Q(c) ≡ 0 mod x^28 ⇒ c = L·Q(c) ≡ 0 mod x^28.  Every
+     low part extends with zero OOD because x^28·{1, y} evaluated at z₀, z₁
+     is invertible when z_i.x ≠ 0 and z₀.y ≠ z₁.y.)
+  Fold-onto (STRUCTURAL given K-deg).  f ↦ (Σ_s α_f^s v(4d+s))_{d<14} maps
+     K₄^56 onto K^14.
+  G-low (CONDITIONAL; same nature as OT_G).  The rows π.symm k, k < 56, are
+     copy-inactive (D13Order).  Statement: restriction to these 56 rows,
+     ker R_G ∩ ker own⁺_G → K₄^56, is onto (or the weaker form with
+     R_G^{-1}(V_{≠G}) of §2.4.4).  Margins: G's F-dimension 4,096 against
+     rank R_G + rank own⁺_G ≈ 760 + 380 and 224 prescribed limbs.
+Then for every target low ∈ K^14 there is g ∈ G-words ∩ ker R ∩ ker own with
+f_{<14}(bat g) = low: G's batched contribution is γ^27·Q(c_G), so choose the
+K₄-valued low rows c_low with Fold(T₀ c_low) = γ^{-27}·low (possible by
+Fold-onto and T₀ bijective) and complete them by G-low.  Only K₄-values are
+available in a G word, which is why K-deg (α_f ∉ K₄), not γ ∉ K₄, is the
+operative condition.  Mask lanes can serve instead
+(γ^{16+c}·F^56, ten lanes); G is the cleanest.
+
+§2.5.4  Assembly of (B) (STRUCTURAL glue).  Given b ∈ B₀: pick g (G-low) with
+low(bat g) = low(b); bat g ∈ B₀ since g ∈ ker own (§2.2.4), so
+b − bat g ∈ B₀^hi; pick d ∈ D-high_bal ∩ ker own_D with bat d = b − bat g
+(B_hi).  Then g + d ∈ ker own ∩ ker R and bat(g + d) = b.  ∎
+
+Remark (what D20⁗ called "surplus of the other lanes").  Of Z8b's 300-limb
+(P) shortfall, 192 are the verifier relations (never cancelled, they hold on
+every own-silent tape), 4 are the .inactiveSum half-line (moot under
+balancing), and the rest are the 14 low fibres (≈ 104–112 limbs), which
+G-low supplies.
+
+§2.6  Where the row basis meets the coefficient basis through π
+
+Row-indexed (u_ℓ(r)): the rounds R (prefix folds, eqPrefix, bit classes), the
+point claims (eqWeight(openingPoints α j)(r)), σ_ℓ (copyInactiveRows), and
+the balancing itself (row 0).  Coefficient-indexed (c_ℓ(k) = u_ℓ(π.symm k)):
+extra (libraWeight on k < 56), OOD (evalMessage), opened (exactInitialEncoder
+at childIndex q s), and the whole batched block (Q, foldMessage,
+roundPolynomial).  The batched weights w = openingWeights are row weights
+pushed through π (coeffWeight π), and (S2) is exactly the statement that this
+push-forward pairs the quotient back to the row-side claims (image_pairing);
+it holds for every π.  Facts about π used, all from D13Order h.transport:
+  (π1) k < 89 ⇒ π.symm k ∈ copyInactiveRows.  Used for: D-low cells are
+       inactive rows, so a D-low cell is realised in the balanced space as
+       e_{π.symm d} − e_{π.symm 56} (both inactive; the second is D-high,
+       round-free) — this is how pureRound_libra's cells become balanced
+       sources without touching row 0's coefficient; G-low's 56 rows are
+       inactive, so σ_G couples them to the other inactive rows; C-Dhigh's
+       σ column (coefficient 56).
+  (π2) π.symm monotone on k ≥ 89 and π 1023 = 1023: not used by any lemma
+       below; it would matter only for a structural witness of OT-row/C-Dhigh
+       that needs active rows with known coefficients (§2.4.2).
+Where the two bases meet non-structurally: (a) claims and σ restricted to
+coefficient-structured absorbers (D-high in C-Dhigh and B_hi; G's low rows in
+G-low) — conditional in α, witness via Boolean α plus a π/registry fact;
+(b) rowspace(R_ℓ) against OOD/opened in OT for mask lanes and G — OOD is
+conditional in z with a clean count, opened is OPEN.  Everything else is on
+one side: RC is purely row-side (D's cells enter through their coefficient
+indices but pureRound_libra already resolved them), the x^28 law, T₀,
+Fold-onto and the B_hi fold part are purely coefficient-side.
+The concrete permutation is the Rust ROW_TO_COEFFICIENT (z5::transport()),
+a refinement obligation; the Lean theorem takes D13Order as a premise.
+
+§2.7  Alternatives considered
+
+A1 (dual / "no hidden leakage").  Chain0₄ ⊆ R(ker O) iff every round
+functional φ with φ∘R ∈ rowspace(O) vanishes on Chain0₄; with §2.2.4 the
+expected left kernel of [R; O] is spanned by the nine chain equalities, the
+initial ↔ maskSum and terminal ↔ claimMask couplings, and the 24 verifier
+relations — the cleanest statement for a numeric gate and for exposition
+("the observations reveal no round functional beyond what the verifier's
+own checks fix").  As a proof it needs the same rank content; not easier.
+A2 (one Schwartz–Zippel over all challenges).  rank[R; O] ≥ 4,872 (Lean
+model: 1,084 + 3,788) as non-vanishing of one minor.  The degree bound is
+fine (§4), but a witness requires certifying a ≈ 4,900-dimensional minor at
+a concrete point; under AGENTS rules 2–3 this is not a kernel computation we
+may run, and a compact certificate (LU factors) is ~10^7 field entries.
+Rejected as the main route; acceptable only as a last resort for the small
+conditional minors (PR6, PR7: 8×8).
+A3 (modular (P)/(Q)).  Refuted by Z8b; §2.5.1 explains why (x^28 law) and
+§2.5.3 repairs it with one extra absorber (G-low).
+A4 (late generators / downward filtration).  Using generators whose rounds
+before j vanish (moment conditions on suffix class sums) avoids the ρ_j
+issue of fresh F-lane generators, but at rounds ≥ 5 G has no late
+generators (27 moment conditions against 2N_j ≤ 30 classes) and lanes with
+e ≥ 7 have none at round 7, so the downward route fails exactly where the
+upward one succeeds; a mixed route might remove H_Λ (§6).
+A5 (per-lane OT in full).  Replaced by OT′ (§2.4.4): proving the lanes in
+the order D, G, mask lanes lets each mask lane use the others' own-silent
+round images, roughly halving the transversality burden.
+A6 (protocol change: a round-free absorber block per lane, as D's
+coefficients 56–1023).  It would make OT structural, but the proved
+protocol is the specification (v8 is R0); not pursued.
+A7 (predicates).  Good₂ (span of 1, α₀..α₅) gives Λ₆ = Λ₇ = K₄ but not the
+Λ₄, Λ₅ that fresh F-lane generators need; Good₂′ (∃ i < 7, α_i ∉ K₂) gives
+only a two-dimensional Λ₇ and fresh round-6 F-lane generators may vanish
+(Λ₆ ∩ ρ₆Λ₆ can be 0); Good₂″ (i < 6) fixes rounds 6–7 by rotation but not
+rounds 4–5.  §4 proposes Good₃ (three of α₀..α₃ outside K₂), which implies
+H_Λ, with a clean density.
+
+§3  Numeric cross-checks per lemma; probe Z8c
+----------------------------------------------
+§3.1  What the existing record supports (all numbers identical on 5 vectors).
+
+  Lemma / claim                       Number                         Status
+  ----------------------------------  -----------------------------  --------
+  reduction (§2.1)                    Z8 (A): silent 1,076, initial  supports,
+                                      retained 1,080                  unbalanced
+  ia ≡ 0 under balancing (§2.2.1)     structural; probes unbalanced   gap → Z8c
+  verifier relations S1, S2, S3       Z8: bat pivots 1,920 =          exact
+    (§2.2.4)                          2,112 − 192; Z8b: silence
+                                      pivots 2,296 = 2,488 − 192
+  RC (§2.3), unconstrained cover      Z7 (b): 1,084 for A, C–G        supports
+  P1/P2 pivot ranges                  Z7 §7 table: mask3 1–8, mask4   exact
+                                      3–10, mask6 9–16, mask9 15–22,
+                                      G 20–27 at round 7; G 12–27,
+                                      e15 1–16 … e21 7–22 at round 6
+  tail-sum counts (§2.3.3)            Z7 §5: 130 … 1 = Σ(k(n−k)+1)    exact
+  Λ-mechanism (§2.3.6)                Z7 (B) loses round 7 only;      consistent
+                                      Z8 (I) (α ∈ K₂) loses 8 limbs
+                                      at round 7, limbs u, iu
+  RC⁺ PR6/PR7 (§2.3.7)                indirect: Z8 (A) rounds 6, 7    indirect
+                                      silent 112
+  F5 round-determined claim_2         none                            Z8c (3)
+  OT_ℓ / OT′_ℓ (§2.4)                 indirect via Z8 silent rank;    Z8c (3)
+                                      Z8b own ranks 112/376 (all
+                                      rows, not on ker R)
+  C-Dhigh (§2.4.2)                    Z8b: D-own on D-high 372 = 4·93 exact (σ
+                                                                      not imposed)
+  x^28 law, B_hi (§2.5.1–2)           Z8b 1,812 vs predicted 1,804;   within 8
+                                      2,000 vs 1,996                  limbs
+  G-low (§2.5.3)                      none                            Z8c (6)
+  Good₃ sufficient, not necessary     Z8 (J): α₀ generic, α₁..α₆ ∈ F  passes
+                                      passes (Good₃ fails for J)      although
+                                                                      Good₃ fails
+Z4c/Z5 used the QM31 batching proxy and are superseded for bat; their round
+numbers agree with Z7.
+
+§3.2  Arithmetic checks done for this design (by hand, not by probe).
+  Σ_{k=0}^{n}(k(n−k)+1) for n = 9..0 gives 130, 93, 64, 42, 26, 15, 8, 4, 2,
+  1 (matches Z7 §5).  G's weights 275+150i give the same collision pattern
+  (11Δ|x| = −6ΔΣ has no solution with |x| ≤ 9).  P2 with n = 4 and n = 8
+  reproduces every entry of Z7 §7's unconstrained rounds-6/7 columns.
+
+§3.3  Probe Z8c (Rust, Claude agent; no Lean; host run under caps).
+Base the commit carrying D21.  Extend z8b.rs into z8c.rs (module of probe.rs,
+`--z8c`), reusing Z8's trial replay, WideExact opening challenges, Lean
+totalWeights (with the κ⁴·libraWeight term) and column-wise prover::quotient,
+unchanged.  Sources MUST be the Lean mask space: for each mask-only lane and
+each limb of G and D, e_r for r ∉ I and e_r − e₀ for r ∈ I ∖ {0}
+(I = copyInactiveRows, `inactive`); no batched-ia proxy.  Report on Z8's 5
+vectors:
+ (1) gate: silent rank (expect 1,076) per round and per limb; initial
+     retained (1,080); rank R(M_bal) (1,084); chain0 excess; (i′)/(ii′) 25/25.
+ (2) dim R(ker own) (expect 1,080) — (Q′).
+ (3) per lane: rank R_ℓ; rank own_ℓ (112 / 376); rank own_ℓ on ker R_ℓ
+     (expect 108 for e ≤ 13, 104 for e ≥ 14, 368 for G, 372 for D) and on
+     R_ℓ^{-1}(V_{≠ℓ}) (OT′); whether claim_2 lies in rowspace(R_{ℓ,6}) for
+     e ≥ 14 and G and not for e ≤ 13 (F5).
+ (4) rank bat on ker own (expect 1,912) and on ker own ∩ ker R (expect
+     1,912) — (B).
+ (5) exact check that (S1), (S2), (S3_u) annihilate bat on ker own (residual
+     must be identically 0); rank bat on D-high_bal ∩ ker own_D (expect
+     1,800) with an explicit left-kernel basis; rerun Z8b's unbalanced (P)
+     block and print its left kernel, to locate the 8-limb residual of §2.5.1.
+ (6) G-low: rank of the restriction of ker R_G ∩ ker own_G to the 56 rows
+     π.symm(0..55) (expect 224); rank of the low-fold block (expect 112).
+ (7) PR6, PR7: values of claim_2 (round 6) and claim_0 (round 7) on a basis
+     of G's degree-≤22 round parts (expect not all zero).
+ (8) structures: A, B, I, J as Z8, plus (K) α₂, α₃ ∈ F, others uniform (Good₃
+     fails, two of α₀..α₃ outside K₂); (L) α₀..α₅ ∈ F, α₆ uniform in K₄ ∖ K₂,
+     α₇..α₉ uniform (Good₂′ with i = 6 only); (M) α₀, α₁, α₂ uniform,
+     α₃..α₆ ∈ F, α₇..α₉ uniform (Good₃ holds minimally; must pass).
+Stop rules: (A) silent rank below 1,076 under balancing → report per-round
+and per-limb deficit and supports (a finding: the Lean model differs from
+Z8's); any of (S1)/(S2)/(S3_u) not annihilating exactly → stop and report
+(the relation derivation is wrong).  Cost estimate: Z8b's jobs took
+440–520 s at ~218 MB; Z8c adds per-lane kernels of similar size; 5 vectors
+× 7 structures at 5 parallel jobs < 1 h under MemoryHigh=3G/MemoryMax=4G,
+swap 0; optimised build; receipts, source manifest, FINDINGS-Z8c.txt as
+for Z8b.
+
+§4  Predicate and ledger
+------------------------
+Notation: μ_Q := (1+δ_Q)/P⁴ with δ_Q = P⁴/256³² (semChal_mass, SemD2.lean:208;
+the α-row, all semantic rows); μ_W := 257/256³² (ordinary_mass_257 /
+gamma_mass_257, ModuloField.lean:103–109; rows 27–30); circle points
+z_i = circleSample_i (qm31Sample) with the same μ_Q per parameter
+(circleSampleParameterWith is injective on accepted parameters,
+embedCirclePoint_parameter_injective, and never base-rational).  P = 2³¹−1,
+P⁴ ≈ 2^124.  All events below are over independent row coins (ZF1's bridge);
+multivariate events use a generalised Schwartz–Zippel lemma: for independent
+coordinates each with point mass ≤ μ and a nonzero polynomial f of total
+degree d, Pr[f = 0] ≤ d·μ (new lemma, §5 J8; induction on variables).
+
+§4.1  Final predicate.
+  P_final ch := Good₃ ch ∧ GoodOpen ch ∧ GoodGeneric ch
+
+  Good₃      Good ∧ (∀ i, ch.sem i ∈ K₄) ∧ three of α₀..α₃ ∉ K₂        (§1.2)
+  GoodOpen   z₀ ≠ z₁ ∧ z₀.y ≠ z₁.y ∧ z_i.x ∉ {±x_u : u ∈ queries} ∧
+             α_f ∉ K₄ ∧ α_f + α_f²·(secantC/secantB) ∉ K₄ ∧ α_f ≠ 0 ∧
+             maskLinear 0 α ≠ 0 ∧ 1 + maskLinear 16 α ^ 26 ≠ 0 ∧ α₆ ≠ ½
+  GoodGeneric  non-vanishing of the explicit minors PR6, PR7 (α), OT-ood
+             (z, per lane), OT-row and C-Dhigh row part (α), B_hi relation
+             part (κ, τ), G-low (α, z) — each a named polynomial with a
+             degree bound; their non-vanishing as polynomials is the OPEN
+             witness obligation of §2.3.7/§2.4/§2.5.
+  (OT-open has no predicate: see §6.)
+
+§4.2  Closed-form densities (upper bounds on the failure mass).
+  Good (21 events α_i ∈ {0,1}, α₉ = ½)        21·μ_Q                 ≈ 2^-119.6
+  ch.sem ∈ K₄                                  0 (semChal lands in the QM31
+                                               image; needs the refinement fact
+                                               K4 B = image of QM31Exact)
+  Good₃ third clause (≥ 2 of α₀..α₃ in K₂)     C(4,2)·(P²·μ_Q)²
+                                               = 6(1+δ_Q)²/P⁴         ≈ 2^-121.4
+  maskLinear 0 α = 0                           μ_Q (solve for α₉)     ≈ 2^-124
+  1 + maskLinear 16 α^26 = 0                   26·μ_Q                 ≈ 2^-119.3
+  α₆ = ½                                       μ_Q
+  z₀ = z₁                                      ≤ 3·μ_Q (injective parameter
+                                               map; distinct fallbacks)
+  z₀.y = z₁.y                                  ≤ 4·μ_Q (≤ 2 points, ≤ 2 params)
+  z_i.x = ±x_u for a queried u                 ≤ 2·44·2·2·μ_Q = 352·μ_Q ≈ 2^-115.5
+                                               (z_i.x ∈ F is required; uses
+                                               independence of z and queries)
+  α_f ∈ K₄                                     P⁴·μ_W                 ≈ 2^-123.9
+  α_f + α_f²·r ∈ K₄ (r = secantC/secantB)       2P⁴·μ_W                ≈ 2^-122.9
+  α_f = 0                                      μ_W                    ≈ 2^-248
+  PR6, PR7 (degree ≤ 8·(26+3) = 232 in α)      2·232·μ_Q              ≈ 2^-115.1
+  OT-ood (12 lanes, ≤ 2·2,048 points each      12·2·4,096·2·μ_Q        ≈ 2^-106.4
+    for each of z₀, z₁, ≤ 2 params each)
+  OT-row, C-Dhigh row part (minors of size     ≤ 12·r_ℓ·35·μ_Q with
+    ≤ rank R_ℓ + 4, entries of α-degree ≤ 35)   r_ℓ ≤ 1,100             ≈ 2^-105.4
+  B_hi relation part (degree ≤ 10 in κ, τ)     10·μ_W                 ≈ 2^-244
+  G-low (as OT-row for G)                      ≤ 1,140·35·μ_Q          ≈ 2^-108.7
+  Sum (excluding OT-open)                      ≈ 2^-104.3
+The sum is dominated by the OT-row and OT-ood bounds, which are crude
+(determinant degree bounds); it stays below 2^-100 with ~4 bits to spare.
+The α-degree bound 35 for R_ℓ entries (eqPrefix degree ≤ 9 plus β-power
+degree ≤ 26) must be re-derived when the minors are fixed; if a lemma needs
+the full [R_ℓ; own_ℓ] minor of a mask lane its size is ≤ 1,024.
+
+§4.3  Could Good₂′ (∃ i < 7, α_i ∉ K₂) replace the span condition?
+For the STATEMENT, numerically plausible but unproved: Z8 (J) (only α₀
+outside F among α₀..α₆) passes; no probe has tested an α with only α₆
+outside K₂ ((L) in Z8c).  For THIS PROOF, no: (1) it gives only
+Λ₇ ⊇ span_F{1, α_i}, a two-dimensional space; at round 7 (generators
+s − d(s), no freshness) the rotation identity span_F{τ, iτ}·span_F{1, α} = K₄
+does suffice — every degree 1..22 at round 7 is covered by lanes containing a
+pair {1, i} or {u, iu} (checked degree by degree from the ranges of §2.3.6),
+and G covers 20..27; (2) but fresh mask-lane generators at rounds 4–6 need
+Λ_j ∩ ρ_jΛ_j ≠ 0, which a two-dimensional Λ_j does not guarantee, and with
+i = 6 even Λ₆ may be F.  The ledger term of Good₂′ is trivial
+(((1+δ_Q)/P²)^7 ≈ 2^-434), so if a proof of rounds 4–6 without H_Λ is found
+(§6, the mixed upward/downward route of A4) Good₂′ — or Good₂″ with i < 6 —
+would be the better predicate.  D20‴'s Good₂ (span of 1, α₀..α₅) has
+density ≈ 2^-124 but also fails to give Λ₄; Good₃ is recommended.
+
+§4.4  Ledger statement for ZF1.  badMass P_final ≤ ε_bad with ε_bad the sum
+above (≈ 2^-104.3, excluding OT-open).  Lean form: badMass_le_of_cover — a
+union bound over the named events, each discharged by semChal_event,
+ordinary_event / gamma_event, the circle-sampler injectivity, or the
+generalised Schwartz–Zippel lemma with a named polynomial.
+
+§5  Lean job plan
+-----------------
+Rules for every job: no sorry/axiom/admit/native_decide; no maxRecDepth or
+maxHeartbeats options; no concrete Finset.univ over rows (Fin 1024), states,
+Fin 262144 or Fin 1048576 — row sums stay symbolic and are regrouped through
+equivalences Fin 1024 ≃ (Fin j → Bool) × Bool × (Fin (9−j) → Bool); decide
+only on tiny numerals (e.g. explicit tail-subset sums < 1,100, Fin 10
+indices); one module per job, focused `lake env lean` first, host replay one
+module at a time under the standard caps; `#print axioms` for every listed
+theorem.  Conditional facts enter as named Prop hypotheses (never as axioms)
+until their witnesses exist.  Z8c (§3.3) should land before J5c/J6/J7 are
+issued, because three statements below are conditioned on its outcome.
+
+J1  R0Z/K4.lean  (imports R0P.CoreExt, R0P.Mask, R0Z.PureRounds)   low–medium
+    def PackField B; def K4 B hB : Subfield K; def K2 B hB : Subfield K
+    mem_K4_iff_pack4; towerBasis_mem_K4; pack4_mem_K4; natCast_mem_K4;
+    half_mem_K4; K2_le_K4; finrank lemmas (F-independence: pack4_eq_zero_iff)
+    def Lambda (a : Fin 10 → K) (j : Fin 10) : Submodule F K :=
+      span F (range fun r : Fin 1024 => eqPrefix a r j)       -- symbolic range
+    one_mem_Lambda; alpha_mem_Lambda (i < j); Lambda_mono
+    mem_K2_of_quadratic (hcard : Fintype.card F = q) :
+      x ∈ K4 → x*x ∈ span F {1, x} → x ∈ K2     -- via x^(q²) = x and the
+                                                -- root count of X^(q²) − X
+    lambda4_eq_K4 : Good3 → ∀ j ≥ 4, Lambda (alpha ch) j = K4 (as F-spaces)
+    def Good3 B hB ch
+    Uses: pack4_eq_zero_iff, eqPrefix.  Risk: low; the quadratic-subfield
+    lemma needs the card of F as a premise (P in the instance).
+
+J2  R0Z/K4Values.lean  (imports J1, R0Z.Chain)                         medium
+    interpolate_coeff_mem (S : Subfield K) : nodes ∈ S → values ∈ S →
+      (Lagrange.interpolate univ x v).coeff d ∈ S
+    oracle_mem_K4 : (all inputs ∈ K4) → oracle π pub B t ch a r ∈ K4
+    roundPoly_coeff_mem_K4, originalRounds_mem_K4
+    sRem_mem_K4 (hsem) (hpub : PublicBase F x.1) (hw) (hgood : α₉ ≠ ½) :
+      ∀ cell, sRem h B x w ch n cell ∈ K4 B hB
+    sRem_mem_chain0K4 := ⟨sRem_mem_chain0, sRem_mem_K4⟩
+    Uses: sRem_mem_chain0, roundPoly_originalRounds, Phi0_sRem, helper,
+    terminalValue_eq_originalAt.  Risk: the witness-typing premise hw must
+    match what the honest prover provides (TypedContext.lanesF).
+
+J3  R0Z/SilentReduction.lean  (imports J1, R0Z.PureRounds)            low–medium
+    exists_silent_of_cover (generic F-linear algebra, §2.1)
+    def ownMap, batMap : M K F →ₗ[F] _   (cells of §0)
+    ia_pure_zero : (A π B ch).comp inlM m .inactiveSum = 0     (balance)
+    ms_pure_eq_initial : … .maskSum = p₀(0) + p₀(1)            (L_maskSum,
+                                                                rounds_initial)
+    def QPrime ch : Prop := Chain_T0K4 ≤ (ker ownMap).map R
+    def BCond ch : Prop := (ker ownMap ⊓ ker R).map batMap = (ker ownMap).map batMap
+    chain0K4_le_silent_of (hQ : QPrime) (hB : BCond) : Chain0K4 ≤ silent image
+    Uses: mem_silentMasks_iff, A_pure, Phi0_A, rounds_chain.  STRUCTURAL.
+
+J4  R0Z/VerifierRelations.lean  (imports J3, R0 opening modules)      medium–hard
+    def GoodCircle ch := ch.circle 0 ≠ ch.circle 1 ∧ ¬BaseRational … ∧ …
+    quotient_on_image : ood c = 0 → Enc (quotientLinear z₀ z₁ c) = L·Enc c
+    S1_relation, S2_relation (on ker ownMap), S3_relation (u ∈ queries)
+    def B0 ch : Submodule F (Fin 7 → K) × (Fin 256 → K)
+    bat_ker_own_le : GoodCircle → (ker ownMap).map batMap ≤ B0
+    Uses: round_eval, round_boundary, image_iff, image_pairing,
+    quotient_pairing, row_pairing, fold_encoded, encoded_channels,
+    fibre_inverse, no_domain_zero, interpolant_values.
+    Risk: index alignment of `.opened q s c` (childIndex over
+    Fin 262144 × Fin 4) with Fold.fibre — same childIndex, expected fine;
+    the quarter conventions of relationLinear vs roundPolynomial must agree
+    (they do syntactically).  If Z8c (5) finds a relation failing, stop.
+
+J5a R0Z/HermiteSpan.lean  (Mathlib only)                              medium–hard
+    P1 divided_difference_degree, P2 hermite_span_dim, P3 for 1 + L^26,
+    P4 leading_coeff_cover (F-subspace, K₄ leading coefficients) — with
+    premise `∀ n ≤ 28, (n ! : K) ≠ 0`.  No protocol objects.
+
+J5b R0Z/RoundFold.lean  (imports J1, J5a, R0Z.PureRounds)               medium–hard
+    rounds_prefixFold (mask lane, G)   — regroup pureRound_maskOnly/G
+    fresh_rounds_zero, fresh_round_j   — §2.3.4 (α_j ≠ 0)
+    fresh_values_K4 : Lambda j = K4 → S-values of fresh F-lane words = K4
+    tailSum_card_ge (explicit subsets; omega/decide on small sums)
+    D_absorb  — from pureRound_libra / L_pure_libra_coeff, cells realised as
+      balanced e_{π.symm d} − e_{π.symm 56} (D13Order (π1))
+    Risk: rowBits MSB-first bookkeeping; must not enumerate Fin 1024.
+
+J5c R0Z/RoundCover.lean  (imports J5b)                                 hard
+    RC : Good3 → D13Order π → ChainR₄ ≤ Σ_ℓ (R_ℓ (all words))
+    RCplus (hPR6 : PR6 ch) (hPR7 : PR7 ch) : generators satisfying Rel_ℓ
+      span ChainT0₄ (statement over the lane-wise Rel-restricted spaces)
+    Upward filtration W_j; per-round coverage table of §2.3.6.
+    Where it might be false: PR6/PR7 as polynomials (Z8c (7)); the round-7
+    use of D_absorb (constant bookkeeping) — checked by hand in §2.3.5.
+
+J6  R0Z/OwnTransversality.lean  (imports J5c, J4)                      medium
+    def OT' ℓ ch : Prop   (§2.4.4 form, per lane)
+    C_Dhigh_eval : the 90×90 OOD/opened system on coefficients 56..145 is
+      invertible under GoodOpen  (Vandermonde; STRUCTURAL)
+    QPrime_of : RCplus → (∀ ℓ, OT' ℓ ch) → QPrime ch
+    Risk: Rel_ℓ list incomplete (Z8c (3)).
+
+J7  R0Z/BatchedBlock.lean  (imports J4, J6)                            hard
+    x28_law : c ∈ Dhigh → ood c = 0 → (quotientLinear z₀ z₁ c) k = 0 (k < 56)
+              ∧ fold shift by 14
+    T0_bijective; fold_low_onto (K-deg)
+    B_hi_fold (structural part); def B_hi_rel ch : Prop; def G_low ch : Prop
+    BCond_of : B_hi_rel → G_low → GoodOpen → BCond ch
+    Risk: B_hi as "= B₀^hi" fails if Z8c (5) finds a 25th relation on
+    D-high; then one more K-direction moves to G-low (statement change).
+
+J8  R0Z/GenericSZ.lean, R0Z/Good3Density.lean  (no protocol imports /
+    imports R0P.SemD2, R0C.ModuloField, R0P.CircleSampler)              medium
+    schwartz_zippel_pointMass (independent coordinates, mass ≤ μ)
+    good3_bad_le : mass (¬Good3) ≤ 21·μ_Q + 6·(P²·μ_Q)²
+    goodOpen_bad_le : the GoodOpen rows of §4.2
+
+J9  R0Z/MaskImageGood3.lean  (imports J2, J3, J6, J7, J8)              low
+    clause_i_prime_on : P_final ch → (GoodGeneric props) → (∀ ℓ, OT' ℓ ch) →
+      sRem h B x w ch n ∈ LinearMap.range ((A h.transport B ch).comp inlM)
+    Clause (ii′) (cTilde w − cTilde w' ∈ range A) is NOT covered by this
+    design; it needs the C1 encoder-restriction statement (c1_surjectivity)
+    plus a compatible lift, a separate design.
+
+J10 (research, not Lean)  witnesses for GoodGeneric (PR6, PR7: 8×8 exact
+    systems; OT-row, C-Dhigh row part, G-low, B_hi-rel), and a route for
+    OT-open (§6).  Until then J9's theorem carries them as hypotheses.
+
+Order: J1 → J2 → J3 (all independent of Z8c) ‖ J5a; then, after Z8c: J4 →
+J5b → J5c → J6 → J7 → J8 → J9.  Difficulty is concentrated in J5c, J7 and
+J10.
+
+§6  Open points and honest unknowns
+-----------------------------------
+O1 (main risk) OT-open.  Transversality of the 88 opened-symbol functionals
+   of a mask lane or G against its round kernel (or, in the OT′ form, against
+   R_ℓ^{-1}(V_{≠ℓ})).  For a fixed query set it is a polynomial condition in α,
+   but I have no witness valid for every query set, and the Bezout count over
+   fibres is too weak (~2^-5 per query).  Candidate routes: (a) a structured
+   α (not Boolean — Boolean α collapses Λ_j to F and loses round rank) at which
+   rowspace(R_ℓ) has an explicit "staircase" form whose intersection with any
+   88 evaluation functionals of distinct fibres can be shown trivial using the
+   circle code's interpolation property (any ≤ 1,023 evaluations independent);
+   (b) a dual-distance bound for the punctured code Enc(c(ker R_ℓ)); (c) if
+   neither works, the honest fallback is to carry OT-open as an explicit
+   hypothesis of the privacy theorem, supported by Z8/Z8c on random vectors —
+   that is a numerically checked premise, not a proof, and must be labelled
+   so in the release ledger.
+O2 Witnesses for GoodGeneric (PR6, PR7, OT-ood is already clean, OT-row,
+   C-Dhigh row part, G-low, B_hi relation part).  PR6/PR7 are 8×8 systems with
+   integer tail data and should be settled by a short exact computation; the
+   others are large minors and share O1's difficulty except that their
+   variables are continuous (α, κ, τ), so a single structured witness point
+   suffices.  None is in hand.
+O3 Model gap F4 (balancing).  1,076 is so far an upper bound for the Lean
+   mask space under WideExact batching.  Z8c (1) decides it.
+O4 Z8b residual.  My structural count gives 1,804 / 1,996 where Z8b has
+   1,812 / 2,000.  The residual is in the direction of more rank, so it cannot
+   hide a failure of (B); but if it means one of (S1)/(S2) is not an identity
+   for the probe's prover::round_polynomial, the Rust/Lean relation conventions
+   differ and R-H must know (cf. the κ⁴·libraWeight mismatch found by Z8).
+   Z8c (5) prints the left kernel.
+O5 Predicate.  The route needs Λ₄ = K₄; Good₃ supplies it with density
+   ≈ 2^-121.  Whether rounds 4–6 can be done without H_Λ (so that the much
+   cheaper Good₂′/Good₂″ suffices) is open; A4's mixed upward/downward
+   filtration is the candidate.  Whether the STATEMENT holds under Good₂′ with
+   only α₆ outside K₂ is untested (Z8c (L)).
+O6 Instance facts the final theorem assumes rather than proves: PackField for
+   the concrete pack basis (i² = −1, u² = 2 + i); K4 B = image of QM31Exact in
+   WideExact (for "ch.sem ∈ K₄ with mass 0"); [K : K₄] = 2; card F = P;
+   D13Order for ROW_TO_COEFFICIENT; that the honest trace's semantic lanes are
+   F-valued (hw).  Each is a refinement obligation, cheap but not free.
+O7 Degree bounds in §4.2 are crude and should be recomputed once the minors
+   are fixed; the sum (≈ 2^-104.3, OT-open excluded) has only ~4 bits of slack
+   against 2^-100, almost all from OT-row/OT-ood.
+O8 Scope.  This design covers clause (i′) of MaskImageOn only.  Clause (ii′)
+   (cTilde w − cTilde w' ∈ range A, with the semantic and H1 lanes) needs its
+   own design; Z8's (ii′) 25/25 is its numeric support.  The R1 payload (two
+   folds, 64 final values, D18 transport) changes the verifier relations
+   (two FRI layers) and the low-fibre count of the x^28 law; the structure
+   carries over but every number must be redone (Z9).
+O9 Efficiency (ZF2).  The reduction and RC are constructive; the conditional
+   rank steps produce preimages only through linear-algebra existence
+   (Classical.choice).  An efficient simulator needs explicit solving of the
+   same systems — feasible (they are linear) but not provided by this proof.
+
+Recommended next steps for the lead: (1) issue Z8c as specified in §3.3;
+(2) in parallel issue J1–J3 and J5a, which are independent of Z8c's outcome;
+(3) write D21 after Z8c with the statements of J4–J7, deciding between Good₃
+and a weaker predicate from Z8c (K)/(L)/(M); (4) open a research item for O1
+before committing to J6.
