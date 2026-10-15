@@ -1,0 +1,26 @@
+Source audit refresh after the public serializer change
+
+The default tools/j1e-source-effect-policy.json now pins exact revision
+78192937489e12a7f1d8b421622d32b1ad9beab3. The preceding 4c2d6478 snapshot and
+its audit evidence remain unchanged. The new evidence bundle
+j1e-source-effect-audit-post-serializer-20261015 retains both policies,
+the current audit, source delta, command receipts and checksums.
+
+Of the 32 pinned repository files, only
+crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs changed.
+Its SHA256 is now
+0a446a7df661cabcf6f4c38c079f9970b03f21a7351cb2878e6fb76c62ab1ca1.
+All 52 inventoried function spans have exactly the preceding hashes.
+The SDK/runtime source and archive pins are unchanged.
+
+The serializer adds a frontier helper with 20 explicit fields calls, invokes
+it twice, and removes two frontier loops. It remains outside the expanded
+52-span inventory: semantic.method::public_bytes is explicitly opaque in both
+policies. Therefore the audit still reports 319 opaque-call and 28 opaque-loop
+obligations. No zero-SHA claim or lower source cap follows from the rewrite.
+
+Current and historical reproducibility checks both pass; the eight negative
+lexer/classification tests pass. --require-closed-effects still exits 2, as
+required while runtime effects and source preservation remain OPEN. This
+refresh is source inspection only, with no Rust or Lean build and no new
+historical compile attestation.
