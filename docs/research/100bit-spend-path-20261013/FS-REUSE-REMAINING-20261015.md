@@ -4,6 +4,11 @@ This is a theorem-interface inventory for the current conditional R1
 Fiat–Shamir development. It records what the checked results require; it does
 not instantiate the missing premises or claim protocol closure.
 
+The user subsequently clarified **100-bit per-attempt soundness without
+grinding credit**; see [the target record](TARGET-CLARIFICATION-20261015.md).
+The absolute full-experiment `Q` scenarios below remain useful disclosures,
+but are not the numerical acceptance criterion for that clarified target.
+
 The current composition is [`UnifiedFiatShamir.soundness_bound`](lean/UnifiedFiatShamir.lean).
 It applies the unchanged `R0C.V3.theorem43` to the 33-round unified protocol.
 Its explicit inputs include `Params` with `5 ≤ p.D`, public byte length below
