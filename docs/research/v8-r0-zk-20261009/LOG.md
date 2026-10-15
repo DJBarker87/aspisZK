@@ -4286,3 +4286,68 @@ What it establishes and what it changes:
 Next: **Z8c** (probe, §3.3 of the design; Opus agent) on the balanced Lean
 model; J1–J3 and J5a can be written independently of Z8c; D21 after Z8c; an
 OT-open research item before J6. Verdict unchanged.
+
+### Lead acceptance of Z8c (2026-10-15); D21: design corrections, Z8d issued, Lean statement still waits
+
+Z8c (`6c93dfb64`, Opus agent; `z4/FINDINGS-Z8c.md`, `summary-Z8c.json`,
+`evidence-Z8c.json`) is accepted. Receipts: 36 per-process records, exit 0,
+swap 0, peak RSS 314 MB per job, cgroup peak 1.59 GB under MemoryMax 4G;
+209 source hashes match; all 35 CHALLENGE lines and A's 25 terminal triples
+match probe-C.log. Every number is identical across the 5 vectors of each
+structure.
+
+**D21.1 Model gap closed.** On the balanced Lean sources (`balance 0`, no
+`.inactiveSum` proxy) the silent rank is 1,076 for A, J, K and M. Z8 and Z8c
+agree on every per-round and per-limb rank; the only difference is the 8
+`.inactiveSum` limbs, now identically 0. 1,076 is a measured rank of the Lean
+model on these vectors, not only an upper bound (F4 resolved).
+
+**D21.2 Verifier relations exact.** The annihilator of bat(ker own) has
+dimension 200 and is spanned by `.inactiveSum` plus the 24 relations (S1, S2,
+22 × S3_u), which are independent. F2 is confirmed; the (B) target is fixed as
+"bat(ker own) = the common zero set of these 25 relations".
+
+**D21.3 Predicate.** L (α₀..α₅ ∈ F) fails at the statement level: silent 994,
+(ii′) 0/25, full conditioned image 1,073. Good₂′ at i = 6 alone is rejected.
+K passes with Good₃ false, so Good₃ is sufficient, not necessary. Good₃ stays
+the proof predicate: a sufficient predicate with a mass bound is all the
+ledger needs, and weakening it buys at most a fraction of a bit.
+
+**D21.4 OT_l correction.** On ker R_l the lane's own observations have rank 108
+only for e ∈ {1, 3, 5} and 104 for every e ≥ 7, not "108 for e ≤ 13". Rel_l in
+OT_l includes claim₂ for e ∈ {7, 9, 11} as well, using rounds beyond 6. The
+round-6-only statement F5 holds exactly as the design predicted. OT′ holds as
+designed (mask lanes 108, G 372, D 372).
+
+**D21.5 The x^28 law is not confirmed and (B)'s split is not the f0..f13
+split.** D-high misses 104 limbs (13 K-dims), not the 14 low-fibre
+coordinates; all of f0..f13 fail as relations. This accounts exactly for
+Z8b's 8-limb residual. The designer's §2.5.1 may be right in the monomial
+basis and simply mis-applied to coefficients in the encoder's basis
+(`basis::values`, NaturalBasis); that is the agent's hypothesis and is not
+checked. G-low is 220, not 224, because G's extra claim is a functional on
+exactly the rows π⁻¹(0..55); it is 224 without it. The assembly holds:
+bat(D-high_bal ∩ ker own_D) + bat(G ∩ ker R_G ∩ ker own_G) = 1,912 on every
+structure. PR6 and PR7 hold.
+
+**D21.6 Consequence for the Lean statement.** (Q′) and the (B) target are
+fixed by D21.2. The proof of (B) cannot use the x^28 coordinate split, and the
+Lean statement of the D-high/G decomposition is not written until the basis
+question is answered. Z8d is issued:
+
+1. Identify the coefficient basis of the D word in Lean (`R0Z/MaskLayout.lean`
+   `dWord` and the PCS encoder it feeds) and in the probe (`encoder::eval_pair`,
+   `basis::values`), and the change of basis to monomials.
+2. Rerun the D-high block with the condition "monomial-basis polynomial
+   divisible by x^28" (and with "NaturalBasis coefficients < 56 zero", as a
+   control equal to Z8c's 1,808). Report the rank, the left kernel modulo the
+   25 relations, and whether f0..f13 hold.
+3. Rerun G-low in the same basis, with and without G's extra claim.
+4. Structure A, vectors 0–4; one job per vector; MemoryMax 4G; same receipts.
+
+If (2) gives 1,800 with f0..f13 holding, §2.5 stands in the monomial basis and
+D21's Lean statement is written in that basis. Otherwise the designer revises
+§2.5 from Z8c §5's remainder support [h2..h6, f22..f255].
+
+J1–J3 and J5a of the T2b-2b plan do not depend on §2.5 and can be released.
+Verdict unchanged. Host counter: next 3426.
