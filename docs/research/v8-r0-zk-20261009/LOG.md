@@ -4351,3 +4351,47 @@ D21's Lean statement is written in that basis. Otherwise the designer revises
 
 J1–J3 and J5a of the T2b-2b plan do not depend on §2.5 and can be released.
 Verdict unchanged. Host counter: next 3426.
+
+### Lead acceptance of Z8d (2026-10-15); D22: §2.5 of the T2b-2b design withdrawn, (B) redesign issued
+
+Z8d (`de86b2306`, Opus agent; `z4/FINDINGS-Z8d.md`) is accepted. The control
+reproduces Z8c's 1,808 exactly. Structure A, vectors 0–4, identical outputs.
+Receipts: all exit 0, swap 0, peak RSS 340 MB per job, cgroup peak 1.69 GB
+under MemoryMax 4G; 210 source hashes and 5 CHALLENGE lines match.
+
+**D22.1 Basis.** Lean and Rust both index the D message (and every PCS
+message) in the natural Chebyshev-product basis N_j = ∏_{b ∈ bits j} T_{2^b}:
+`dWord` (MaskLayout.lean:91) → `coeffsLinear` (HonestView.lean:80, π only) →
+`naturalCoefficientPolynomial` (V5FriInitialCircleEncoderIdentity.lean:124;
+CircleNaturalBasis.lean:43); `foldMessage` reads natural coordinates directly
+(Fold.lean:71). Rust: encoder.rs:10, basis.rs:37, fold.rs:61.
+
+**D22.2 §2.5 of the design is withdrawn.** It treats c as monomial
+coefficients. Its quotient step is a correct polynomial fact, but the
+conclusion that f0..f13 vanish needs natural coefficients of the quotient
+below 56 to be zero, which X^28-divisibility does not give (checked: natural
+low coefficients 56/56 nonzero, low folds 14/14 nonzero). In the monomial
+condition D-high reaches 1,792, not 1,800 (1,700 inside ker R_D, where it is
+not round-free: R_D rank 216). No basis gives the design's split.
+
+**D22.3 What stands.** (Q′), the (B) target (D21.2: bat(ker own) is the common
+zero set of the 25 relations) and the assembly: every D-high variant plus G's
+batched image reaches 1,912 = bat(ker own). G-low is 224 in monomial
+coordinates with or without the extra claim. The remainder support
+[h2..h6, f22..f255] is the complement of the 25 relations' pivots and carries
+no structure; D21.6's instruction to revise from it is withdrawn.
+
+**D22.4 Host discipline.** The full run launched while another job's scope (a
+`timeout 900` Lean replay of aspis-r1-concrete-decoder) was active; the launch
+listed scopes but did not gate on them. No harm (4 GiB reservation, the other
+scope exited within moments), but the rule is unchanged: a launch gates on no
+other aspis scope being active, or on an explicit reservation sum check.
+
+**D22.5 Next.** A design revision of (B) (T2b-2b-D′, Opus agent) in the natural
+basis. Requirements: every claimed rank reproduces Z8c/Z8d on structure A;
+the decomposition must be one Lean can state (row sets or natural-coordinate
+conditions on named words, not dense change-of-basis conditions unless a
+closed form is given); if no proof route is found, (B) enters the theorem as
+an explicit numerically checked premise, labelled in the ledger alongside
+OT-open, and the design says so. D21's Lean statement waits for it. J1–J3 and
+J5a remain releasable. Verdict unchanged. Host counter: next 3426.
