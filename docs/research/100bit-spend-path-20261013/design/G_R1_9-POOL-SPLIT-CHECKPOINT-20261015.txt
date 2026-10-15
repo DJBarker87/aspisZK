@@ -1,0 +1,48 @@
+Pool G_R1.9 split-checkpoint transport
+
+Base: 185d576e5e7f2e2aee01db7ddb1d74b09d77cc6a.
+Branch: codex/r1-j1-r11-pool-20261015.
+
+The default-off r1-split-checkpoint feature enables the existing registry/lane
+account forwarding feature. Its terminal account layout appends one verifier
+checkpoint AFTER all existing accounts, including withdrawal custody accounts.
+The proof remains at index 10 (11 on history rollover); token_start remains 11
+(12 on rollover). R1 transfer counts are 12/13 and withdrawal counts 17/18.
+Without the feature, legacy counts, ownership, and sealed ASPU header checks
+remain unchanged. The V7 aggregate feature does not enable this R1 feature.
+
+Private verifier dispatch accepts Option<&AccountInfo> for the checkpoint.
+R1 requires Some, read-only, nonsigner, nonexecutable, selected-verifier ownership,
+and a key distinct from every other top-level account. The proof may have any
+owner and arbitrary bytes but must be read-only, nonsigner, and nonexecutable.
+Registry/profile/release/loader authentication is unchanged. The separate R1
+checkpoint does not replace the Pool-owned historical ASC8 checkpoint.
+
+Verifier CPI order is [proof, master, Pool checkpoint, lane, registry, entry,
+R1 verifier checkpoint]; every meta is read-only and nonsigner. Default V7 CPI
+retains its existing four/six account behavior. AccountInfos follow the same
+order, with the executable verifier program last. Private invoke also rejects
+checkpoint aliases before calling the runtime.
+
+Native checks: four dispatch tests and four terminal/layout tests passed for
+R1, and the same eight passed with pair-forest-account-evidence and R1 disabled.
+They cover foreign raw proof, checkpoint owner/flags/aliases, read-only CPI
+forwarding, malformed return data, genesis/same-page/rollover account counts,
+withdrawal offsets, marker rollback/replay, and custody checks. The layout-only
+test uses synthetic repeated retained roots; it does not assert a valid tree
+transition. A combined R1/full-ASF8 --no-run check passed. Literal default
+features compiled but selected zero forest tests because that module is gated.
+
+Evidence: ../evidence/g-r1-9-pool-native-20261015.json records commands, source
+hashes, exit statuses, wall times, process/aggregate RSS, zero swaps, and local
+log hashes. Checks were sequential, jobs=2, with a 7 GiB aggregate stop. Maximum
+sampled aggregate was 1,082,224 KiB. No source changed between these checks.
+
+Boundary: the verifier enforces exact checkpoint size/contents and proof/public
+binding. Pool unit tests mock the verifier; this does not close the raw-byte
+soundness, actual SBF/runtime, or Rust-to-Lean obligations. Stage1 initializes
+a writable checkpoint; the terminal uses it read-only in a later transaction.
+Transaction-wide writable promotion prevents treating a writable stage1 account
+as read-only merely by changing a later instruction meta. The full-ASF8 check
+is callback typechecking, not an assertion that the R1 adapter accepts ASF8.
+Client/harness account updates and deployed artifacts remain in the lead queue.
