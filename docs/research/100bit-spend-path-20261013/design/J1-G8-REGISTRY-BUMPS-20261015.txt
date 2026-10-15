@@ -1,0 +1,46 @@
+G8 registry bump persistence
+Base: b711e9aba1369c5fc40b3ccb2865f48df3a14a03.
+
+Public schema additions: bump:u8 on VerifierRegistryV1,
+VerifierRegistryEntryV1, VerifierRegistryV2 and VerifierRegistryEntryV2;
+programdata_bump:u8 on both V2 structures.
+
+Wire offsets and account revisions:
+ASRG: bump at 6, version 1 -> 2; byte 7 and 120..128 remain reserved zero.
+ASRE: bump at 7, version 1 -> 2; 184..192 remain reserved zero.
+ASR2: bump at 7, ProgramData bump at 248, version 2 -> 3;
+      249..256 remain reserved zero.
+ASE2: bump at 312, ProgramData bump at 313, version 2 -> 3;
+      314..320 remain reserved zero.
+Sizes, magic, PDA seeds, instruction versions and address-helper signatures
+are unchanged. Old account revisions reject before interpreting bump bytes;
+old reserved zeros are never treated as an initialized bump. No migration is
+provided.
+
+All four creation paths derive the canonical PDA tuple before encoding,
+persist its bump and reuse that bump for invoke_signed. V2 deployment
+authentication retains the canonical ProgramData bump only after checking
+the loader-owned Program/ProgramData link and immutable executable. Registry
+loaders compare stored PDA and ProgramData bumps with canonical derivations.
+Generation, pause/unpause, activate, retire and freeze updates preserve the
+fields through existing struct updates.
+
+The codec only carries bytes; it cannot certify canonicality without program
+and seeds. The source invariant requires accounts created/updated by this
+registry code and runtime ownership enforcement. Arbitrarily preloaded test
+accounts do not establish creation provenance. Governance retains canonical
+find_program_address calls; these are outside the selected verifier SHA cap.
+The capped verifier's single-attempt consumer checks are a separate change.
+This patch does not establish Lean source refinement or refresh old Aeneas
+source certificates.
+
+Added/extended focused tests cover exact offsets, reserved bytes, old-version
+rejection, canonical initialization/scheduling, all stored-bump corruption
+cases without writes, and preservation through governance updates. Runtime
+fixture factories derive canonical bumps for the selected program. A V1
+state template's placeholder bump is replaced before encoding an account.
+
+Validation at handoff: rustfmt succeeded; git diff --check succeeded; a
+static scan found no missing new fields in owned full constructors. Builds
+and tests were intentionally not run, pending central integration/resource
+coordination. No proof or test pass is claimed.
