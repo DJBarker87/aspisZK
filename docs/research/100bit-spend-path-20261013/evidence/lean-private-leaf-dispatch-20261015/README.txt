@@ -8,7 +8,7 @@ rerun, keeping all graph edges and theorem statements unchanged.
 Corrected module: exit0, wall3.965s, sampled process-group peak1277952KiB,
 process swaps0. All3axiom reports are [propext,Quot.sound], without sorryAx.
 The first failed elaboration's sorryAx reports are not accepted evidence.
-Local lake env lean uses Lean4.32.0-rc1, -M6000 and7GiB process-group stop;
+Local lake env lean uses Lean4.32.0, -M6000 and7GiB process-group stop;
 no host, package replay or cold dependency build. The module imports Std only;
 the retained merge overlay is on the search path but no local module is imported.
 Exact commands, sourceSHA and checkout revision are in the receipts.
