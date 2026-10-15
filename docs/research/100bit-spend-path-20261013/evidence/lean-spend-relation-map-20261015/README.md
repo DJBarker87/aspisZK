@@ -1,0 +1,7 @@
+# SpendRelationMap focused Lean evidence
+
+This bundle preserves focused attempts a–g for `R1SpendRelationMap`; attempts a–f failed during proof development, and attempt g compiled successfully from the exact included source snapshot. The two public results are `canonical_map_iff` and `rspend_map_iff`. The latter transports every modeled relation clause—including pair validity and selected-slot spendability, input commitment/sibling/nullifier/Merkle membership, natural-number value balance, change commitment, variant output, and canonical option shape—across an injective ring homomorphism.
+
+Attempt g exited 0 in 2.58 s with peak RSS 3,340,708 KiB and zero swap. The runner recorded `MemoryHigh=4G`, `MemoryMax=6G`, `MemorySwapMax=0`, and `TasksMax=128`. Both `#print axioms` reports are preserved: `[propext, Quot.sound]` for `canonical_map_iff` and `[propext, Classical.choice, Quot.sound]` for `rspend_map_iff`.
+
+The bundle includes exact source/object pins for the two direct imports, `R1SpendDataMap` and `R1NoteHashMap`, plus the target and direct-import objects in a deterministic archive. The focused receipt does not record the compile-time git revision; the manifest records the packaging revision separately. This module proves a mapped-relation equivalence for an injective field homomorphism. It does not establish arbitrary projection validity, runtime parser behavior, or Rust source refinement.

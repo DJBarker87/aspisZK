@@ -1,0 +1,51 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SpendRelationMap.lean:81:6: warning: This simp argument is unused:
+  SpendDataMap.pair
+
+Hint: Omit it from the simp argument list.
+  simp [PairLeaf.SelectedSlotIsSpendable, PairLeaf.selectedOccupied,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵S̵p̵e̵n̵d̵D̵a̵t̵a̵M̵a̵p̵.̵p̵a̵i̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SpendRelationMap.lean:95:10: warning: This simp argument is unused:
+  map_zero_iff f hf
+
+Hint: Omit it from the simp argument list.
+  simp [PublicOptionShape.canonical, SpendDataMap.mapPublic, hv, hr, ha,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵m̵a̵p̵_̵z̵e̵r̵o̵_̵i̵f̵f̵ ̵f̵ ̵h̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SpendRelationMap.lean:229:2: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SpendRelationMap.lean:238:2: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SpendRelationMap.lean:257:10: error: 'change' tactic failed, pattern
+  SpendDataMap.digest (⇑f) r = recipientCommitment (SpendDataMap.mapPublic (⇑f) pub) (SpendDataMap.witness (⇑f) w) ↔
+    r = recipientCommitment pub w
+is not definitionally equal to target
+  some (SpendDataMap.digest (⇑f) r) =
+      some
+        (recipientCommitment
+          { variant := Variant.privateTransfer, anchor := SpendDataMap.digest (⇑f) pub.anchor,
+            nullifier := SpendDataMap.digest (⇑f) pub.nullifier, assetId := f pub.assetId,
+            recipient := some (SpendDataMap.digest (⇑f) r), change := SpendDataMap.digest (⇑f) pub.change,
+            withdrawalAmount := Option.map (⇑f) pub.withdrawalAmount, nextPairIndex := pub.nextPairIndex,
+            snapshotFrontier := fun i => SpendDataMap.digest (⇑f) (pub.snapshotFrontier i),
+            nextRoot := SpendDataMap.digest (⇑f) pub.nextRoot,
+            nextFrontier := fun i => SpendDataMap.digest (⇑f) (pub.nextFrontier i) }
+          { inputValue := w.inputValue, outputValue := w.outputValue, changeValue := w.changeValue,
+            sk := SpendDataMap.digest (⇑f) w.sk, salt := SpendDataMap.digest (⇑f) w.salt,
+            path := SpendDataMap.path (⇑f) w.path, pair := SpendDataMap.pair (⇑f) w.pair,
+            recipientOwner := SpendDataMap.digest (⇑f) w.recipientOwner,
+            recipientSalt := SpendDataMap.digest (⇑f) w.recipientSalt,
+            changeOwner := SpendDataMap.digest (⇑f) w.changeOwner,
+            changeSalt := SpendDataMap.digest (⇑f) w.changeSalt }) ↔
+    some r = some (recipientCommitment pub w)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SpendRelationMap.lean:276:10: error: 'change' tactic failed, pattern
+  f amount = ↑↑w.outputValue ↔ amount = ↑↑w.outputValue
+is not definitionally equal to target
+  some (f amount) = some ↑↑w.outputValue ↔ some amount = some ↑↑w.outputValue
+'AspisR1.SpendRelationMap.canonical_map_iff' depends on axioms: [propext, Quot.sound]
+'AspisR1.SpendRelationMap.rspend_map_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

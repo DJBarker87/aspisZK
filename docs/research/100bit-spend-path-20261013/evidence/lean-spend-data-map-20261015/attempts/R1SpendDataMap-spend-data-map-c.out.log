@@ -1,0 +1,51 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SpendDataMap.lean:57:60: error: unsolved goals
+case mk
+K : Type
+variant✝ : Variant
+anchor✝ nullifier✝ : R0P.Digest K
+assetId✝ : K
+recipient✝ : Option (R0P.Digest K)
+change✝ : R0P.Digest K
+withdrawalAmount✝ : Option K
+nextPairIndex✝ : ℕ
+snapshotFrontier✝ : Fin 20 → R0P.Digest K
+nextRoot✝ : R0P.Digest K
+nextFrontier✝ : Fin 20 → R0P.Digest K
+⊢ digest id anchor✝ = anchor✝ ∧
+    digest id nullifier✝ = nullifier✝ ∧
+      Option.map (digest id) recipient✝ = recipient✝ ∧
+        digest id change✝ = change✝ ∧
+          (fun i => digest id (snapshotFrontier✝ i)) = snapshotFrontier✝ ∧
+            digest id nextRoot✝ = nextRoot✝ ∧ (fun i => digest id (nextFrontier✝ i)) = nextFrontier✝
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SpendDataMap.lean:59:19: warning: This simp argument is unused:
+  SpendDataMap.digest
+
+Hint: Omit it from the simp argument list.
+  simp [mapPublic,̵ ̵S̵p̵e̵n̵d̵D̵a̵t̵a̵M̵a̵p̵.̵d̵i̵g̵e̵s̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SpendDataMap.lean:62:57: error: unsolved goals
+K L M : Type
+f : K → L
+g : L → M
+p : Public K
+⊢ digest g (digest f p.anchor) = digest (fun x => g (f x)) p.anchor ∧
+    digest g (digest f p.nullifier) = digest (fun x => g (f x)) p.nullifier ∧
+      Option.map (fun x => digest g (digest f x)) p.recipient = Option.map (digest fun x => g (f x)) p.recipient ∧
+        digest g (digest f p.change) = digest (fun x => g (f x)) p.change ∧
+          ((fun i => digest g (digest f (p.snapshotFrontier i))) = fun i =>
+              digest (fun x => g (f x)) (p.snapshotFrontier i)) ∧
+            digest g (digest f p.nextRoot) = digest (fun x => g (f x)) p.nextRoot ∧
+              (fun i => digest g (digest f (p.nextFrontier i))) = fun i => digest (fun x => g (f x)) (p.nextFrontier i)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1SpendDataMap.lean:63:19: warning: This simp argument is unused:
+  SpendDataMap.digest
+
+Hint: Omit it from the simp argument list.
+  simp [mapPublic, S̵p̵e̵n̵d̵D̵a̵t̵a̵M̵a̵p̵.̵d̵i̵g̵e̵s̵t̵,̵ ̵Option.map_map, Function.comp_def]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SpendDataMap.witness_id' depends on axioms: [propext]
+'AspisR1.SpendDataMap.witness_comp' depends on axioms: [propext]
+'AspisR1.SpendDataMap.mapPublic_id' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.SpendDataMap.mapPublic_comp' depends on axioms: [propext, sorryAx]
+exit=1
