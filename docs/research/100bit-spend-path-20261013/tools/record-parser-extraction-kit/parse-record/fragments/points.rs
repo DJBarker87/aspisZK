@@ -1,0 +1,1 @@
+pub const POINTS: usize = 3;

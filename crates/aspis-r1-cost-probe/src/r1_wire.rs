@@ -48,6 +48,16 @@ pub const fn row_shape(row: u8) -> Option<(u8, usize)> {
     }
 }
 
+fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
+    for (value, bytes) in payload.chunks_exact(32).enumerate() {
+        let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
+        if x.c1() != QM31::ZERO {
+            return Err(Error::NonCanonical { row, value });
+        }
+    }
+    Ok(())
+}
+
 /// Reject malformed framing and every noncanonical E limb before hashing.
 /// UNPROVED P2 subset: reject any nonzero E high component at parse.
 pub fn parse_record(row: u8, record: &[u8]) -> Result<&[u8], Error> {
@@ -58,17 +68,12 @@ pub fn parse_record(row: u8, record: &[u8]) -> Result<&[u8], Error> {
     if record[0] != tag {
         return Err(Error::Tag { row });
     }
-    if u32::from_le_bytes(record[1..5].try_into().unwrap()) as usize != size {
+    if u32::from_le_bytes([record[1], record[2], record[3], record[4]]) as usize != size {
         return Err(Error::Length { row });
     }
     let payload = &record[5..];
     if row >= 14 {
-        for (value, bytes) in payload.chunks_exact(32).enumerate() {
-            let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
-            if x.c1() != QM31::ZERO {
-                return Err(Error::NonCanonical { row, value });
-            }
-        }
+        validate_record_fields(row, payload)?;
     }
     Ok(payload)
 }
@@ -415,6 +420,136 @@ mod validated_tests {
             }
             assert_eq!(checked.state(), validated.state());
             assert_eq!(checked.next_row(), validated.next_row());
+        }
+    }
+}
+
+#[cfg(test)]
+mod record_parser_tests {
+    use super::*;
+    use aspis_core::field::P;
+
+    // Previous parser retained as a differential oracle, including the
+    // original validation loop and exact error ordering.
+    fn parse_record_loop_reference(row: u8, record: &[u8]) -> Result<&[u8], Error> {
+        let (tag, size) = row_shape(row).ok_or(Error::InvalidRow)?;
+        if record.len() != 5 + size {
+            return Err(Error::Length { row });
+        }
+        if record[0] != tag {
+            return Err(Error::Tag { row });
+        }
+        if u32::from_le_bytes(record[1..5].try_into().unwrap()) as usize != size {
+            return Err(Error::Length { row });
+        }
+        let payload = &record[5..];
+        if row >= 14 {
+            for (value, bytes) in payload.chunks_exact(32).enumerate() {
+                let x =
+                    WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
+                if x.c1() != QM31::ZERO {
+                    return Err(Error::NonCanonical { row, value });
+                }
+            }
+        }
+        Ok(payload)
+    }
+
+    fn raw_frame(row: u8) -> Vec<u8> {
+        let (tag, size) = row_shape(row).unwrap();
+        let mut framed = alloc::vec![0u8; 5 + size];
+        framed[0] = tag;
+        framed[1..5].copy_from_slice(&(size as u32).to_le_bytes());
+        if row == 2 {
+            // Commitment roots are arbitrary bytes, not canonical field limbs.
+            framed[5..].fill(255);
+        } else if row >= 14 {
+            for (value, bytes) in framed[5..].chunks_exact_mut(32).enumerate() {
+                for limb in 0..4 {
+                    let n = if value % 2 == 0 {
+                        P - 1
+                    } else {
+                        1 + limb as u32
+                    };
+                    bytes[4 * limb..4 * limb + 4].copy_from_slice(&n.to_le_bytes());
+                }
+            }
+        }
+        framed
+    }
+
+    fn check_error(row: u8, frame: &[u8], error: Error) {
+        assert_eq!(parse_record_loop_reference(row, frame), Err(error));
+        assert_eq!(parse_record(row, frame), Err(error));
+    }
+
+    #[test]
+    fn parser_helper_preserves_all_shapes_and_framing_errors() {
+        let mut shapes = [(0u8, 0usize); 27];
+        shapes[2] = (1, 32);
+        shapes[14] = (3, 32);
+        shapes[15..25].fill((2, 896));
+        shapes[25] = (4, 3712);
+        shapes[26] = (5, 928);
+        for row in 0..=u8::MAX {
+            assert_eq!(row_shape(row), shapes.get(row as usize).copied());
+            if row > 26 {
+                check_error(row, &[], Error::InvalidRow);
+                check_error(row, &[255; 5], Error::InvalidRow);
+                continue;
+            }
+            let framed = raw_frame(row);
+            let actual = parse_record(row, &framed).unwrap();
+            assert_eq!(Ok(actual), parse_record_loop_reference(row, &framed));
+            assert_eq!(actual, &framed[5..]);
+            assert_eq!(actual.as_ptr(), framed[5..].as_ptr());
+            for length in 0..5 {
+                check_error(row, &framed[..length], Error::Length { row });
+            }
+            check_error(row, &framed[..framed.len() - 1], Error::Length { row });
+            let mut extra = framed.clone();
+            extra.push(0);
+            check_error(row, &extra, Error::Length { row });
+            let mut bad_tag = framed.clone();
+            bad_tag[0] ^= 255;
+            bad_tag[1..5].fill(255);
+            check_error(row, &bad_tag, Error::Tag { row });
+            let mut bad_length = framed.clone();
+            bad_length[1..5].fill(255);
+            check_error(row, &bad_length, Error::Length { row });
+        }
+    }
+
+    #[test]
+    fn parser_helper_preserves_canonicality_and_first_failing_value() {
+        for row in 14..=26 {
+            let framed = raw_frame(row);
+            let values = (framed.len() - 5) / 32;
+            for value in 0..values {
+                for limb in 0..8 {
+                    for bad in [P, u32::MAX] {
+                        let mut malformed = framed.clone();
+                        let offset = 5 + 32 * value + 4 * limb;
+                        malformed[offset..offset + 4].copy_from_slice(&bad.to_le_bytes());
+                        check_error(row, &malformed, Error::NonCanonical { row, value });
+                    }
+                }
+                for limb in 4..8 {
+                    let mut high_nonzero = framed.clone();
+                    let offset = 5 + 32 * value + 4 * limb;
+                    high_nonzero[offset..offset + 4].copy_from_slice(&1u32.to_le_bytes());
+                    check_error(row, &high_nonzero, Error::NonCanonical { row, value });
+                }
+                if value + 1 < values {
+                    let mut two_errors = framed.clone();
+                    let first_high = 5 + 32 * value + 16;
+                    two_errors[first_high..first_high + 4].copy_from_slice(&1u32.to_le_bytes());
+                    let later_noncanonical = 5 + 32 * (value + 1);
+                    two_errors[later_noncanonical..later_noncanonical + 4]
+                        .copy_from_slice(&P.to_le_bytes());
+                    check_error(row, &two_errors, Error::NonCanonical { row, value });
+                }
+            }
         }
     }
 }

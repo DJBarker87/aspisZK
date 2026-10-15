@@ -1,0 +1,1 @@
+pub const CLAIMS: usize = POINTS * LANES;

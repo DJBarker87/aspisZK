@@ -100,7 +100,7 @@ def main() -> int:
     run('lock', ['cargo', 'generate-lockfile', '--offline'])
     run('extract', [CHARON, 'cargo', '--preset', 'aeneas', '--mir', args.mir,
                     '--sysroot', 'default', *(['--monomorphize'] if args.monomorphize else []),
-                    '--include', 'core::option', '--include', 'core::result',
+                    '--include', 'core::option::Option', '--include', 'core::result::Result',
                     '--start-from', args.entry, '--dest-file', args.output / 'PublicSerializer.llbc',
                     '--', '--locked', '--offline', '--release', '--lib',
                     '--no-default-features', '--features', 'r0'])

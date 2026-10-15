@@ -1,0 +1,31 @@
+Actual high-component guard
+
+Target: lean/ExtractedRecordHighZero.lean, importing only the retained
+attempt-F AspisR1RecordParser.Funs. The generated QM31 comparison is derived
+through the actual nested CM31/M31 equality functions and the backend's
+PartialEq.ne default. Its false result is equivalent to equality of the
+two QM31 values. Composing the actual WideExact.c1 getter with this guard
+proves false iff the high component equals the actual QM31.ZERO constant.
+A separate theorem expands that constant into four zero U32 limbs.
+
+The proof checks four symbolic component comparisons; it assumes neither
+input canonicality nor any field algebra. No replacement PartialEq instance,
+production edit, Rust refinement, pointer equality or loop property is
+introduced. This is the predecessor needed by the validator loop, whose
+success still needs to imply the guard returned false on each complete
+chunk. Trailing remainder coverage remains separate from validation.
+
+Validation
+
+First focused Lean4.31 check passed in21.685 s with sampled group RSS2530912
+KiB, process maximum RSS2152955904 bytes, process swaps0 and unchanged system
+swap. The4GiB sampled process-group stop and Lean -M3500 were active. All
+three axioms reports are standard-only; qm31_ne_false_iff uses only propext
+and Quot.sound, while the other two also use Classical.choice. One harmless
+unused-simp warning is retained; no unchanged replay was run for it.
+
+Proof SHA b64c66b4667cc02c1bd8f86d6d17da1a463fef01a7bd974f47e3dda5eceda8a2.
+Evidence includes exact attempt-F source/object pins, source snapshot,
+command, log, receipt, Lean --version and all runtime dylib hashes. These
+are theorem-specific dependencies, not a claim that unused generated
+Error.fmt or every declaration in the imported module is standard-only.

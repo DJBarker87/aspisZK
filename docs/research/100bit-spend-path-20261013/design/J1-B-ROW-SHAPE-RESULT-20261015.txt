@@ -1,0 +1,38 @@
+Extracted row_shape result
+
+Target: AspisR1RowShape.r1_wire.row_shape from the retained row-shape-a
+actual-source extraction. New proof module: lean/ExtractedRowShape.lean.
+It imports the generated Types/Funs through the coordinator's readonly
+Lean 4.31 object cache and the existing cached IntervalCases tactic. No
+translation declarations or Rust code are replaced by a hand-written model.
+The specification is a typed Option (U8 x Usize) table; the proved result
+is equality of the generated Result to ok(table row) for every U8.
+
+Proof structure
+
+First prove generic checked scalar add/multiply equalities by reconstructing
+an existing bounded scalar value. Then prove CLAIMS = 87, CLAIMS + LANES =
+116, and the exact 3712/928/896 byte computations. This uses the result
+value's bound, without fixing usize to a particular platform width. Reject
+all values >=27 symbolically, then check the 27 valid cases using those named
+arithmetic facts. No 256-case generated certificate, large numeral reduction,
+field arithmetic, or package replay is involved.
+
+The table has (tag,size): rows0,1,3..13=(0,0), row2=(1,32), row14=(3,32),
+rows15..24=(2,896), row25=(4,3712), row26=(5,928); rows27..255=None.
+The final None-iff theorem proves that rejection interval is exact. This theorem concerns the pinned generated declaration only. Parser
+framing/canonicality, successful payload identity, typed prefix integration,
+challenge/first-read boundaries, and the Rust-to-Lean refinement remain OPEN.
+Lean 4.32 integration is also separate from this retained 4.31 cache.
+
+Validation
+
+Generic arithmetic predecessor passes first. The complete all-U8 theorem and
+exact rejection iff pass in 14.566 s, sampled aggregate RSS 2780560 KiB,
+process maximum RSS 2222047232 bytes, zero process swaps and unchanged system
+swap. The local guard is 4 GiB with Lean -M3500. All eight printed public
+theorem axiom lists contain only propext, Classical.choice and Quot.sound.
+No new axioms, native_decide, sorry, or admitted source-refinement hypothesis.
+Proof SHA: 6131a8817c0714bd2da55c8bc9ee8a37d19114c0233438469524934285dfa105.
+Evidence retains the two local elaboration failures, their source snapshots,
+corrected checks, exact commands and import hashes. No full replay was run.

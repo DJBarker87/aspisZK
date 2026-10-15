@@ -888,6 +888,7 @@ mod tests {
         .unwrap();
         let mut lane_values = core::array::from_fn::<_, POOL_V1_PAIR_FOREST_LANE_COUNT, _>(|id| {
             PoolV1PairForestLaneStateV1 {
+                bump: 0,
                 master: master_key.to_bytes(),
                 lane_id: id as u8,
                 tree: empty_tree,
@@ -904,6 +905,7 @@ mod tests {
         let global_root =
             decode_digest_canonical(&lane_forest_global_root_v2(&lane_roots).unwrap()).unwrap();
         let master_value = PoolV1PairForestMasterV1 {
+            bump: 0,
             identity: PoolIdentityV1 {
                 pool: master_key.to_bytes(),
                 asset_mint: mint_key.to_bytes(),
@@ -923,6 +925,7 @@ mod tests {
             last_checkpoint_lane_sequences: lane_sequences,
         };
         let checkpoint_value = PoolV1PairForestCheckpointV1 {
+            bump: 0,
             master: master_key.to_bytes(),
             deployment_domain: master_value.identity.deployment_domain,
             checkpoint_sequence: 0,

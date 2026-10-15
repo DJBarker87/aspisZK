@@ -966,6 +966,7 @@ mod tests {
         let mint = key(2);
         let master_address = pool_v1_pair_forest_master_address(&program, &mint).0;
         let master = PoolV1PairForestMasterV1 {
+            bump: 0,
             identity: PoolIdentityV1 {
                 pool: master_address.to_bytes(),
                 asset_mint: mint.to_bytes(),
@@ -985,6 +986,7 @@ mod tests {
             last_checkpoint_lane_sequences: [0; 8],
         };
         let mut lanes = core::array::from_fn(|lane_id| PoolV1PairForestLaneStateV1 {
+            bump: 0,
             master: master_address.to_bytes(),
             lane_id: lane_id as u8,
             tree: IncrementalMerkleTreeV1 {
@@ -1037,13 +1039,14 @@ mod tests {
         };
         let global_root =
             pool_v1_pair_forest_global_root_v1(&lanes.each_ref().map(|lane| lane.tree.root));
-        let planned = plan_pool_v1_pair_forest_checkpoint_v1(&master, &lanes, global_root).unwrap();
-        let checkpoint_address = pool_v1_pair_forest_checkpoint_address(
+        let (checkpoint_address, checkpoint_bump) = pool_v1_pair_forest_checkpoint_address(
             &program,
             &master_address,
-            planned.checkpoint.checkpoint_sequence,
-        )
-        .0;
+            master.next_checkpoint_sequence,
+        );
+        let planned =
+            plan_pool_v1_pair_forest_checkpoint_v1(&master, &lanes, global_root, checkpoint_bump)
+                .unwrap();
         let post_master = FinalizedForestAccountV2 {
             address: master_address.to_bytes(),
             owner: program.to_bytes(),

@@ -1,0 +1,1 @@
+pub const VALUE_LIMIT: u32 = 1 << 30;

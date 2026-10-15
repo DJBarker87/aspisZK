@@ -881,6 +881,7 @@ mod tests {
     fn master(program: Pubkey, mint: Pubkey, registry_program: Pubkey) -> PoolV1PairForestMasterV1 {
         let initialization = initialization(mint, registry_program);
         PoolV1PairForestMasterV1 {
+            bump: 0,
             identity: PoolIdentityV1 {
                 pool: pool_v1_pair_forest_master_address(&program, &mint)
                     .0
@@ -904,6 +905,7 @@ mod tests {
         sequence: u64,
     ) -> PoolV1PairForestLaneStateV1 {
         PoolV1PairForestLaneStateV1 {
+            bump: 0,
             master: master.identity.pool,
             lane_id,
             tree: IncrementalMerkleTreeV1 {

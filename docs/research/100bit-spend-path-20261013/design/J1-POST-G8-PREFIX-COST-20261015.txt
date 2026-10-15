@@ -1,0 +1,65 @@
+J1.e POST-G8 OPERATIONAL PREFIX COST
+Status: proposed Lean source; not compiled by worker B. No Rust refinement claimed.
+Worktree base: a522802e3c8165a931dc1dd75797e525ee18ad68.
+Post-G8 consumer inspected via git show 86316eb73.
+
+VerifierCallBudget replaces the obsolete 255-attempt PDA-search allowance with
+seven single create_program_address calls for immutable deployment or five for
+V1. Stage1 k=10/11 budgets are 328/349. Stage2 core is 465, giving 472/470
+including authentication. The common per-invocation bound is 472.
+
+VerifierPhaseCost imports only R1VerifierCallBudget. Its source-labelled model
+has semantic, opening, query-loop, checkpoint, PDA-authentication and resume
+phases. Each hash transition emits one complete input/output pair; repeated
+inputs count again. Successful query completion increments next exactly once.
+Resume chooses any next <= 22, including 0 and 22. No acceptance, honest-state,
+checkpoint-provenance or collision-freedom premise appears in the model bound.
+
+The potential remaining is attached to the current phase and loop counter.
+step_cost proves one-step amortization; exec_cost proves trace.length plus
+remaining potential is at most initial potential. every_prefix_route_bound
+and every_prefix_le_472 then bound every finite execution segment. exec_take
+and model_prefix_closed explicitly close the model under call-trace prefixes.
+Failure transitions are available everywhere for rejection, panic, allocation
+failure, compute exhaustion and other runtime failure; silent self-steps cover
+arbitrarily many hash-free operations. failed_prefix_le_472 includes all five.
+arbitrary_checkpoint_query_prefix gives 21*(22-next) for the query suffix.
+All public theorems have #print axioms commands. No sorry or axioms are added.
+
+Source inventory (line labels at 86316eb73):
+- crates/aspis-r1-cost-probe/src/r1_semantic.rs:63-131 and r1_wire.rs:
+  semantic init plus 27 challenge triples = 82.
+- crates/aspis-r1-cost-probe/src/verifier.rs Prepared::new, together with
+  transcript.rs:7-46: opening init, four scalar triples, one query absorb with
+  eight precomputed two-block pairs, and rho triple = 33.
+- verifier.rs:120-128,242-275: three leaves and three six-parent paths = 21
+  per S2 query; accumulate:224-234 advances next after successful work.
+- verifier.rs checkpoint/resume:299-339: at most three hashes each; resume
+  rejects next > 22, but does not establish checkpoint provenance.
+- verifier.rs:342-350,380-386: stage1 k queries; stage2 up to 22-next queries.
+- programs/r1-cost-probe/src/r1_pool_adapter.rs:479-732: three common PDA
+  checks plus four immutable-deployment or two V1 registry checks. Stage1
+  and stage2 entry routes are at 902-979; no PDA search is admitted there.
+
+OPEN source obligation: SourceSimulation requires preservation of the complete
+source call trace and exit label into this operational model. It is an ordinary
+Prop-valued interface with no instance or axiom. source_count_of_simulation is
+a conditional transport theorem, not evidence that the interface holds.
+The phase counters are hand-written abstractions; an actual extraction or
+checked lowering must justify phase entry, local hash counts, successful-loop
+increment, and every call/exit edge. It must cover fixed callback bindings,
+single-PDA internal digests, serializers and runtime/allocator/panic/log hooks,
+including proof that uncounted callees perform no designated SHA evaluations.
+Runtime input validity is the real VM ABI, not undefined-behavior states.
+
+The coordinator measured 328/349 stage1 calls and 465 core stage2 calls after
+changing checkpoint.next from 11 to 0 and recomputing the unkeyed checksum.
+That core run accepts despite repeating valid weighted equations. This is
+supporting measurement, not provenance or source/model simulation evidence.
+The model deliberately includes that case. No universal input-length bound,
+first-read density, extraction soundness, or end-to-end Rust theorem is claimed.
+
+Coordinator check: CallBudget and PhaseCost now compile with Lean4.32;
+22 axioms reports use only standard axioms or none. The reserved field name
+prefix was changed to preservesPrefix. Exact attempts/sources/objects are in
+evidence/lean-post-g8-prefix-cost-20261015. SourceSimulation remains OPEN.

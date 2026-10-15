@@ -1,0 +1,36 @@
+Payment-source audit refresh
+
+The default policy now pins 2ed5bc48393ba51e38ec62167134f55755b11649.
+This supersedes the default pin described by J1E-FINAL-SOURCE-AUDIT-20261015;
+the c111 bundle and every earlier policy/evidence file remain byte-identical.
+The new bundle is evidence/j1e-source-effect-audit-post-payment-20261015.
+
+The sole production difference from c111 is payment_relation.rs:
+digest_is_canonical replaces iter().all with eight ordered comparisons.
+Its full-file SHA256 is
+0fedd7579aba09b67415f7f7f5e18942643444e1570af25ec7db76510ec57a35.
+That file was outside the prior 32 full-file pins, behind existing opaque
+validation boundaries. This refresh adds its full-file pin and an explicit
+payment_digest_canonical span, lines 178–187, SHA256
+3e494592521c35f7e6f9190c2909da3818a7c94bbb37eb130a8e228b5bd1aa61.
+All prior 32 file pins and 56 inventoried bodies remain unchanged.
+
+The inventory now has 33 repository full-file pins and 57 spans. It retains
+331 opaque-call obligations and 30 opaque-loop obligations. The old iter/all
+sites were not in the historical inventory, so they are not subtracted from
+those totals. The new digest span has no lexical calls or loops; this proves
+neither zero SHA effects nor preservation of indexing, comparisons,
+short-circuit evaluation, failure or runtime behavior. Every old parent-call
+classification is retained. The default audit summary states this boundary.
+
+The current check and all four historical checks pass. Eight negative
+lexer/classification tests pass. --require-closed-effects still exits 2.
+Checksums cover the retained new bundle, and the source delta records hashes
+of all unchanged historical evidence. This refresh performed no Rust, Lean,
+extraction, runtime or host build; the coordinator retains the independent
+digest validation/extraction/proof receipts.
+
+Release runtime selection remains OPEN for lead selection by explicit user
+decision. Local Solana 4.2.1 dependencies do not select a release runtime.
+No actual-source prefix cap, Qtot substitution or source/runtime preservation
+theorem is established by this lexical audit.

@@ -1,0 +1,33 @@
+Final exact-source audit pin
+
+The default policy now pins c111cbbf23b3a0f6ed5bebe75c72fe3089fe5be8,
+the integrated G9/G8, serializer and parser source. The final bundle is
+evidence/j1e-source-effect-audit-final-20261015. Prior 4c2, 781 and bc7 bundles
+retain their exact artifacts and policies; all three historical --checks pass.
+
+Relative to bc7, only r1_wire.rs changes among the 32 full-file source pins.
+Its SHA256 is
+ed6e426c460c97248d124727e8be7985c1ea75f89bd0f5baef0570ec44ec4b03.
+The only changed inventoried span is parse_record at 63–79, whose SHA256 is
+52080617919069a56a8268e243a1e3ba828f6a8d2bf74adae5d408ad2aa0c6b2.
+It reads the four header bytes directly after the unchanged length guards.
+Only its absent try_into/unwrap lexical entries are removed. Other functions'
+calls and the differential test oracle are not silently removed from scope.
+All remaining 55 inventoried spans are byte-identical.
+
+The final inventory has 56 spans, 331 opaque-call obligations and 30 opaque-loop
+obligations. These are audit obligations, not execution counts. The new parser
+helper, iterator semantics, transitive effects and source/runtime preservation
+remain OPEN. Expanded source links do not assert zero SHA effects or prove
+Rust name resolution. The serializer method remains an explicit opaque boundary.
+
+The current reproducibility check and eight negative lexer/classification tests
+pass. --require-closed-effects still exits 2. Package checksums cover the exact
+retained files. This refresh ran no Rust, Lean, extraction or runtime build;
+the coordinator owns those independent validation receipts.
+
+Per explicit user decision, release runtime selection remains OPEN for the
+lead. The local Solana 4.2.1 source/replay dependency is not a selected release
+runtime. This distinction appears in the policy and default audit summary.
+The extracted private-leaf graph's one-dispatch theorem is separate evidence;
+neither it nor this audit closes the 349/472 actual-source prefix bound.

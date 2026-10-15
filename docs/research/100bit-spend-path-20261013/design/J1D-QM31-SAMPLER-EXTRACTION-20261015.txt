@@ -1,0 +1,88 @@
+J1.d exact QM31 byte-map target
+
+Pin: c111cbbf23b3a0f6ed5bebe75c72fe3089fe5be8. Target:
+crates/aspis-r1-cost-probe/src/sampler.rs::qm31_sample, lines 8–24.
+The declaration-cut kit under tools/qm31-sampler-extraction-kit retains the
+exact function, P, M31/CM31/QM31 declarations including derives, and CM31::new
+from field.rs:19,22–23,254–258,270–273,431–435. Only namespace/import/impl
+wrappers are supplied. No source loop, index, unwrap or field operation changes.
+The kit checker pins both full source files and every cut.
+
+Fixed refinement target (OPEN, independent of extraction success)
+
+Let F := AspisR1Qm31Sampler.sampler.qm31_sample, and raw4(q) :=
+[q.c0.a.val, q.c0.b.val, q.c1.a.val, q.c1.b.val]. Proposed statement:
+  ∀ b : Aeneas.Std.Array Aeneas.Std.U8 32#usize,
+    ∃ q, F b = .ok q ∧ raw4 q =
+      AspisR1.SamplerNatModel.qm31Digits
+        (AspisR1.SourceSamplerByteRank.rank b).
+F must be the extracted function, not a supplied function satisfying a model
+premise. This statement requires total successful execution, canonical output
+digits, and exact values; no no-panic premise or modeled-loop equality is
+assumed. Its field corollary interprets those coordinates using
+AspisV8R19.SamplerFieldDecode.decode4 and equals
+R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState b).
+
+Coordinates and existing bridge
+
+Bytes 0–3 form the least-significant u32, through bytes 28–31. Each division
+visits word indices 7 down to 0; four passes emit low base-P digits first.
+CM31::new does no reduction. The returned tuple is d0,d1,d2,d3, matching
+AspisV8R19.R599CanonicalFieldTuple.tupleFieldEquiv. This positional rank is
+not a natural-number cast into the extension field.
+
+Existing theorems in lean/SourceSamplerByteRank.lean include word_value,
+run4_bytes and rank_lt. SamplerRepeatedPass.run_digits/run_digits_canonical
+and SamplerNatModel.qm31Digits_value already prove the model's repeated-pass
+and modulo facts. SamplerMachineBounds.dividend_lt_two63 and
+dividend_quotient_lt_B justify the corresponding arithmetic bounds, not the
+Rust traversal. Remaining glue identifies the extracted closures, array
+initialization, mutable reverse iterator, quotient updates, four pass results,
+casts and final field construction with that existing model.
+
+Configuration and remaining obligations
+
+The pure declaration has no cfg, hash callback or transcript state. Admitted
+S2/private-leaf-salts fixes separate domain strings and row scheduling;
+extracting this cut neither authenticates that configuration nor selects a
+release runtime. Runtime selection remains OPEN by the user's decision.
+
+Actual r1_wire.rs SemanticTranscript::sample_block_validated checks next_row,
+absorbs the framed record, squeezes with [1], advances with [2] from the same
+absorbed state, then increments the row. semantic_validated applies this
+sampler at rows 0–24, including row 0's first semantic challenge after
+initialization. transcript.rs Transcript::scalar_k applies it at rho
+row 32 in S2. The initial semantic public bytes are the section-9 serializer
+output, not the raw ASF8 envelope. Call-site/state/address identification with
+LiteralByteSampler.eval_eq, SelectedChallengeMap.semantic_row/rho_row and
+SelectedTranscriptParams.params_sigma remains OPEN, including first-read
+timing and table consistency.
+
+Rows 25/26 instead use circle_sample: the same four-digit parameter feeds the
+rational circle map, followed by separate OOD/denominator checks and fixed
+First/Second fallback choice. SelectedChallengeMap.first_circle_view and
+second_circle_view describe that model; this cut does not prove the actual
+fallback map. Rows 27–30 use eight-digit gamma/ordinary samplers and are outside
+scope. The legacy aspis_core::transcript::Transcript::challenge_qm31 rejection
+sampler has different byte consumption and cannot serve as this refinement.
+
+Attempt A and next boundary
+
+The unchanged cut emitted F, five types and ten function entries; two functions
+are opaque: core.array.from_fn and IterMut.next_back. Iterator.rev also triggered
+a missing-model warning. LLBC function 6 statement 369 retains the quotient
+write through the mutable limb. Generated loop.body binds the quotient to `_`;
+its backward-update path is unverified. No translator correctness diagnosis or
+source refinement is claimed. The from_fn template returns Result(Array T N),
+but its second caller destructures (digits, _); type consistency is unverified.
+Missing externals were not filled with axioms.
+
+Charon exited 0 in 0.969 s (204,750,848 bytes wait4 RSS); Aeneas exited 0 in
+0.707 s (90,243,072 bytes); both zero wait4 swaps under a sampled 3.5 GiB/180 s
+guard. No Lean compile occurred. Evidence retains logs, LLBC, generated files,
+tool/source pins and commands. Binary/source rebuild correspondence is OPEN.
+
+First resolve the array/iterator model and verify quotient write-back; then
+prove the emitted closures implement SamplerBytePass.digits and
+SamplerRepeatedPass.run 4 and apply SourceSamplerByteRank.run4_bytes. Generated
+definitions alone establish neither Rust refinement nor a density theorem.
