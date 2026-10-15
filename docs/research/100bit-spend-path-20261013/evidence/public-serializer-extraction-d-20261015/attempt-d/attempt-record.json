@@ -1,0 +1,120 @@
+{
+  "attempt": "d",
+  "status": "failed_aeneas_translation",
+  "source_revision": "e4a5808dd061cf373b27d130f7d66eb8f0214db9",
+  "mir": "optimized",
+  "monomorphize": false,
+  "scope": {
+    "MemoryHigh": "4G",
+    "MemoryMax": "6G",
+    "MemorySwapMax": 0,
+    "TasksMax": 128
+  },
+  "outer": {
+    "wall_time": "0:01.06",
+    "max_rss_kib": 306592,
+    "swap_kib": 0,
+    "exit": 2
+  },
+  "phases": [
+    {
+      "command": [
+        "rustc",
+        "--version",
+        "--verbose"
+      ],
+      "exit": 0,
+      "label": "rustc-version"
+    },
+    {
+      "command": [
+        "cargo",
+        "generate-lockfile",
+        "--offline"
+      ],
+      "exit": 0,
+      "label": "lock"
+    },
+    {
+      "command": [
+        "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/bin/charon",
+        "cargo",
+        "--preset",
+        "aeneas",
+        "--mir",
+        "optimized",
+        "--sysroot",
+        "default",
+        "--include",
+        "core::option",
+        "--include",
+        "core::result",
+        "--start-from",
+        "crate::pool_v1::pair_forest_semantic_terminal::r0",
+        "--dest-file",
+        "/home/dombarker/project-offloads/aspis-r1-public-serializer-20261015-d/PublicSerializer.llbc",
+        "--",
+        "--locked",
+        "--offline",
+        "--release",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "r0"
+      ],
+      "exit": 0,
+      "label": "extract"
+    },
+    {
+      "command": [
+        "/home/dombarker/project-offloads/aspis-v7-aeneas-source-unblock-20260830/aeneas-repro-r1",
+        "-sequential",
+        "-no-progress-bar",
+        "-abort-on-error",
+        "-backend",
+        "lean",
+        "-namespace",
+        "AspisR1PublicSerializer",
+        "-dest",
+        "/home/dombarker/project-offloads/aspis-r1-public-serializer-20261015-d/generated",
+        "-subdir",
+        "AspisR1PublicSerializer",
+        "-split-files",
+        "-emit-json",
+        "/home/dombarker/project-offloads/aspis-r1-public-serializer-20261015-d/PublicSerializer.llbc"
+      ],
+      "exit": 2,
+      "label": "translate"
+    }
+  ],
+  "llbc_sha256": "eb3ca83ef2c979793a5637dec6c9965a366915186c7f3452df4a948b95330a7b",
+  "source_lib_sha256": "e60aa944757c91c79c101ab5fbb39110c540d19ad6cd8ff4a2e0af8045e5d5ae",
+  "tool_hashes": {
+    "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/bin/charon": "b2b0961a3c55aca64752b2fa4a4701ba0c06b860236979e5727c07de8ac2310c",
+    "/home/dombarker/project-offloads/aspis-v7-aeneas-source-unblock-20260830/aeneas-repro-r1": "e3e6e658ad26168421eb37627561930c1e13afa978f77b214a1201d9c4faa813"
+  },
+  "source_integrity": {
+    "manifest_items": 19,
+    "fragment_and_origin_checks": 38,
+    "all_match": true
+  },
+  "translation_failure": {
+    "kind": "Aeneas Unreachable exception",
+    "source_span": "lib.rs:239:12-243:9",
+    "aeneas_source": "interp/InterpAbs.ml:1964",
+    "stack_frames": [
+      "InterpAbs.merge_abs_conts_aux",
+      "InterpAbs.merge_abs_conts",
+      "InterpAbs.merge_abstractions",
+      "InterpAbs.merge_into_first_abstraction",
+      "InterpReduceCollapse.repeat_iter_borrows_merge.explore_merge",
+      "InterpLoops.eval_loop_symbolic_apply_loop"
+    ],
+    "same_first_error_as_attempts_b_and_c": true
+  },
+  "translation_output": "No Lean translation emitted; Aeneas terminated with exit 2.",
+  "target_dir_excluded": true,
+  "no_lean_compile": true,
+  "no_source_refinement_claim": true,
+  "remote_output": "/home/dombarker/project-offloads/aspis-r1-public-serializer-20261015-d"
+}

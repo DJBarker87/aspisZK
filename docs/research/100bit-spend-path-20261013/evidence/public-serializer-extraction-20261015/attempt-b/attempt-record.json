@@ -1,0 +1,111 @@
+{
+  "attempt": "b",
+  "status": "failed_aeneas_translation",
+  "source_revision": "e4a5808dd061cf373b27d130f7d66eb8f0214db9",
+  "scope": {
+    "MemoryHigh": "4G",
+    "MemoryMax": "6G",
+    "MemorySwapMax": 0,
+    "TasksMax": 128
+  },
+  "outer": {
+    "wall_time": "0:01.22",
+    "max_rss_kib": 306064,
+    "swap_kib": 0,
+    "exit": 2
+  },
+  "phases": [
+    {
+      "command": [
+        "rustc",
+        "--version",
+        "--verbose"
+      ],
+      "exit": 0,
+      "label": "rustc-version"
+    },
+    {
+      "command": [
+        "cargo",
+        "generate-lockfile",
+        "--offline"
+      ],
+      "exit": 0,
+      "label": "lock"
+    },
+    {
+      "command": [
+        "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/bin/charon",
+        "cargo",
+        "--preset",
+        "aeneas",
+        "--mir",
+        "built",
+        "--sysroot",
+        "default",
+        "--include",
+        "core::option",
+        "--include",
+        "core::result",
+        "--start-from",
+        "crate::pool_v1::pair_forest_semantic_terminal::r0",
+        "--dest-file",
+        "/home/dombarker/project-offloads/aspis-r1-public-serializer-20261015-b/PublicSerializer.llbc",
+        "--",
+        "--locked",
+        "--offline",
+        "--release",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "r0"
+      ],
+      "exit": 0,
+      "label": "extract"
+    },
+    {
+      "command": [
+        "/home/dombarker/project-offloads/aspis-v7-aeneas-source-unblock-20260830/aeneas-repro-r1",
+        "-sequential",
+        "-no-progress-bar",
+        "-abort-on-error",
+        "-backend",
+        "lean",
+        "-namespace",
+        "AspisR1PublicSerializer",
+        "-dest",
+        "/home/dombarker/project-offloads/aspis-r1-public-serializer-20261015-b/generated",
+        "-subdir",
+        "AspisR1PublicSerializer",
+        "-split-files",
+        "-emit-json",
+        "/home/dombarker/project-offloads/aspis-r1-public-serializer-20261015-b/PublicSerializer.llbc"
+      ],
+      "exit": 2,
+      "label": "translate"
+    }
+  ],
+  "translation_failure": {
+    "kind": "Aeneas Unreachable exception",
+    "source": "lib.rs",
+    "span": "239:12-243:9",
+    "aeneas_source": "interp/InterpAbs.ml:1964",
+    "stack_frames": [
+      "InterpAbs.merge_abs_conts_aux",
+      "InterpAbs.merge_abs_conts",
+      "InterpAbs.merge_abstractions",
+      "InterpAbs.merge_into_first_abstraction",
+      "InterpReduceCollapse.repeat_iter_borrows_merge.explore_merge",
+      "InterpLoops.eval_loop_symbolic_apply_loop"
+    ],
+    "mapped_source_excerpt": "source/lib.rs:239-243 is the loop over &after.next_frontier, calling fields(&mut out, digest)."
+  },
+  "translation_output": "No usable Lean translation emitted; Aeneas terminated with exit 2 before completion.",
+  "target_dir_excluded": true,
+  "no_lean_compile": true,
+  "no_source_refinement_claim": true,
+  "runner_sha256": "38dd5b031329f7ed094e3a7d121b544e1455768ab7abbe59c890eff0d1d0d89b",
+  "remote_input": "/home/dombarker/project-offloads/aspis-r1-public-serializer-input-20261015",
+  "remote_output": "/home/dombarker/project-offloads/aspis-r1-public-serializer-20261015-b",
+  "per_run_receipt": "not emitted; retained launch-b.json and commands.json are authoritative for this failed attempt"
+}

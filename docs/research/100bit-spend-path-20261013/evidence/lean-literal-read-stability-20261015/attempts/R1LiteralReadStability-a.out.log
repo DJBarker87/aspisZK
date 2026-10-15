@@ -1,0 +1,107 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralReadStability.lean:20:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (if hprefix : _a.length = 25 then do
+        let c1 ← c1At (rs ++ tail)
+        let c2 ← c2At (rs ++ tail)
+        match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 _a with
+          | none => none
+          | some semantic => do
+            let z0 ← LiteralChallengeRead.ordinaryAt (rs ++ tail) 25
+            let z1 ← LiteralChallengeRead.ordinaryAt (rs ++ tail) 26
+            have word : Fin 29 → AspisPool.AlgorithmicCircleDecoderV7.InitialWord AspisWideTower.WideExact :=
+              LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK c1 c2
+            have semanticChallenges : List LiteralSemanticPrefix.E := List.map Prod.snd semantic
+            have circlePoints : Fin 2 → AspisR0.ChordGeometry.Point AspisWideTower.WideExact := fun i =>
+              if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+              else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1)
+            pure
+                { c1 := c1, c2 := c2, word := word, semantic := semantic, semantic_length := ⋯, challenge25 := z0,
+                  challenge26 := z1, circlePoints := circlePoints,
+                  functionals := SelectedOpeningFunctionals.functionals semanticChallenges circlePoints,
+                  baseFunctional := SelectedOpeningFunctionals.rawBase semanticChallenges circlePoints }
+      else none) =
+      if hprefix : (List.take 25 rs).length = 25 then do
+        let c1 ← c1At rs
+        let c2 ← c2At rs
+        match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) with
+          | none => none
+          | some semantic => do
+            let z0 ← LiteralChallengeRead.ordinaryAt rs 25
+            let z1 ← LiteralChallengeRead.ordinaryAt rs 26
+            have word : Fin 29 → AspisPool.AlgorithmicCircleDecoderV7.InitialWord AspisWideTower.WideExact :=
+              LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK c1 c2
+            have semanticChallenges : List LiteralSemanticPrefix.E := List.map Prod.snd semantic
+            have circlePoints : Fin 2 → AspisR0.ChordGeometry.Point AspisWideTower.WideExact := fun i =>
+              if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+              else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1)
+            pure
+                { c1 := c1, c2 := c2, word := word, semantic := semantic, semantic_length := ⋯, challenge25 := z0,
+                  challenge26 := z1, circlePoints := circlePoints,
+                  functionals := SelectedOpeningFunctionals.functionals semanticChallenges circlePoints,
+                  baseFunctional := SelectedOpeningFunctionals.rawBase semanticChallenges circlePoints }
+      else none
+Error: Application type mismatch: The argument
+  hprefix
+has type
+  _a.length = 25
+but is expected to have type
+  (List.take 25 (rs ++ tail)).length = 25
+in the application
+  LiteralOpeningView.read._proof_1 (rs ++ tail) hprefix
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+rs tail : List (Message × Challenge)
+h : 26 < rs.length
+htake : List.take 25 (rs ++ tail) = List.take 25 rs
+⊢ (if hprefix : (List.take 25 (rs ++ tail)).length = 25 then do
+      let c1 ← c1At (rs ++ tail)
+      let c2 ← c2At (rs ++ tail)
+      match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 (rs ++ tail)) with
+        | none => none
+        | some semantic => do
+          let z0 ← LiteralChallengeRead.ordinaryAt (rs ++ tail) 25
+          let z1 ← LiteralChallengeRead.ordinaryAt (rs ++ tail) 26
+          have word : Fin 29 → AspisPool.AlgorithmicCircleDecoderV7.InitialWord AspisWideTower.WideExact :=
+            LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK c1 c2
+          have semanticChallenges : List LiteralSemanticPrefix.E := List.map Prod.snd semantic
+          have circlePoints : Fin 2 → AspisR0.ChordGeometry.Point AspisWideTower.WideExact := fun i =>
+            if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+            else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1)
+          pure
+              { c1 := c1, c2 := c2, word := word, semantic := semantic, semantic_length := ⋯, challenge25 := z0,
+                challenge26 := z1, circlePoints := circlePoints,
+                functionals := SelectedOpeningFunctionals.functionals semanticChallenges circlePoints,
+                baseFunctional := SelectedOpeningFunctionals.rawBase semanticChallenges circlePoints }
+    else none) =
+    if hprefix : (List.take 25 rs).length = 25 then do
+      let c1 ← c1At rs
+      let c2 ← c2At rs
+      match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) with
+        | none => none
+        | some semantic => do
+          let z0 ← LiteralChallengeRead.ordinaryAt rs 25
+          let z1 ← LiteralChallengeRead.ordinaryAt rs 26
+          have word : Fin 29 → AspisPool.AlgorithmicCircleDecoderV7.InitialWord AspisWideTower.WideExact :=
+            LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK c1 c2
+          have semanticChallenges : List LiteralSemanticPrefix.E := List.map Prod.snd semantic
+          have circlePoints : Fin 2 → AspisR0.ChordGeometry.Point AspisWideTower.WideExact := fun i =>
+            if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+            else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1)
+          pure
+              { c1 := c1, c2 := c2, word := word, semantic := semantic, semantic_length := ⋯, challenge25 := z0,
+                challenge26 := z1, circlePoints := circlePoints,
+                functionals := SelectedOpeningFunctionals.functionals semanticChallenges circlePoints,
+                baseFunctional := SelectedOpeningFunctionals.rawBase semanticChallenges circlePoints }
+    else none
+'AspisR1.LiteralReadStability.openingView_append_stable' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LiteralReadStability.matchingData_append_stable' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

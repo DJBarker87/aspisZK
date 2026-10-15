@@ -1,0 +1,144 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralReadStability.lean:15:73: error: unsolved goals
+case some.some.none
+rs tail : List (Message × Challenge)
+h : 26 < rs.length
+htake : List.take 25 (rs ++ tail) = List.take 25 rs
+hlen : (List.take 25 rs).length = 25
+hsem :
+  LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 (rs ++ tail)) =
+    LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs)
+val✝¹ : C1Word
+hc1 : c1At rs = some val✝¹
+val✝ : C2Word
+hc2 : c2At rs = some val✝
+hs : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) = none
+hs' : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 (rs ++ tail)) = none
+⊢ (match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 (rs ++ tail)) with
+    | none => none
+    | some semantic =>
+      (LiteralChallengeRead.ordinaryAt rs 25).bind fun z0 =>
+        (LiteralChallengeRead.ordinaryAt rs 26).bind fun z1 =>
+          pure
+            { c1 := val✝¹, c2 := val✝,
+              word := LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK val✝¹ val✝,
+              semantic := semantic, semantic_length := ⋯, challenge25 := z0, challenge26 := z1,
+              circlePoints := fun i =>
+                if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+              functionals :=
+                SelectedOpeningFunctionals.functionals (List.map Prod.snd semantic) fun i =>
+                  if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                  else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+              baseFunctional :=
+                SelectedOpeningFunctionals.rawBase (List.map Prod.snd semantic) fun i =>
+                  if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                  else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1) }) =
+    match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) with
+    | none => none
+    | some semantic =>
+      (LiteralChallengeRead.ordinaryAt rs 25).bind fun z0 =>
+        (LiteralChallengeRead.ordinaryAt rs 26).bind fun z1 =>
+          pure
+            { c1 := val✝¹, c2 := val✝,
+              word := LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK val✝¹ val✝,
+              semantic := semantic, semantic_length := ⋯, challenge25 := z0, challenge26 := z1,
+              circlePoints := fun i =>
+                if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+              functionals :=
+                SelectedOpeningFunctionals.functionals (List.map Prod.snd semantic) fun i =>
+                  if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                  else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+              baseFunctional :=
+                SelectedOpeningFunctionals.rawBase (List.map Prod.snd semantic) fun i =>
+                  if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                  else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1) }
+
+case some.some.some
+rs tail : List (Message × Challenge)
+h : 26 < rs.length
+htake : List.take 25 (rs ++ tail) = List.take 25 rs
+hlen : (List.take 25 rs).length = 25
+hsem :
+  LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 (rs ++ tail)) =
+    LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs)
+val✝² : C1Word
+hc1 : c1At rs = some val✝²
+val✝¹ : C2Word
+hc2 : c2At rs = some val✝¹
+val✝ : List (R0P.Mask.SemMsgZ LiteralSemanticPrefix.E × LiteralSemanticPrefix.E)
+hs : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) = some val✝
+hs' : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 (rs ++ tail)) = some val✝
+⊢ (match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 (rs ++ tail)) with
+    | none => none
+    | some semantic =>
+      (LiteralChallengeRead.ordinaryAt rs 25).bind fun z0 =>
+        (LiteralChallengeRead.ordinaryAt rs 26).bind fun z1 =>
+          pure
+            { c1 := val✝², c2 := val✝¹,
+              word := LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK val✝² val✝¹,
+              semantic := semantic, semantic_length := ⋯, challenge25 := z0, challenge26 := z1,
+              circlePoints := fun i =>
+                if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+              functionals :=
+                SelectedOpeningFunctionals.functionals (List.map Prod.snd semantic) fun i =>
+                  if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                  else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+              baseFunctional :=
+                SelectedOpeningFunctionals.rawBase (List.map Prod.snd semantic) fun i =>
+                  if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                  else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1) }) =
+    match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) with
+    | none => none
+    | some semantic =>
+      (LiteralChallengeRead.ordinaryAt rs 25).bind fun z0 =>
+        (LiteralChallengeRead.ordinaryAt rs 26).bind fun z1 =>
+          pure
+            { c1 := val✝², c2 := val✝¹,
+              word := LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK val✝² val✝¹,
+              semantic := semantic, semantic_length := ⋯, challenge25 := z0, challenge26 := z1,
+              circlePoints := fun i =>
+                if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+              functionals :=
+                SelectedOpeningFunctionals.functionals (List.map Prod.snd semantic) fun i =>
+                  if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                  else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+              baseFunctional :=
+                SelectedOpeningFunctionals.rawBase (List.map Prod.snd semantic) fun i =>
+                  if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                  else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1) }
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralReadStability.lean:32:73: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [LiteralOpeningView.read, htake, hlen, dif_pos,
+        LiteralTranscript.c1At_append rs tail (by omega),
+        LiteralTranscript.c2At_append rs tail (by omega),
+        LiteralChallengeRead.ordinaryAt_append rs tail 25 (by omega),
+        LiteralChallengeRead.ordinaryAt_append rs tail 26 h, ̲h̲c̲1̲,̲ ̲h̲c̲2̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲e̲q̲_̲b̲i̲n̲d̲,̲
+        h̵c̵1̵,̵ ̵h̵c̵2̵,̵ ̵Option.bind_e̵q̵_̵b̵i̵nd̵,̵ ̵O̵p̵t̵i̵on.̵b̵i̵n̵d̵_̵n̵o̵n̵e, Option.bind_some, hs,̵ ̵h̵s̵']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralReadStability.lean:32:77: warning: This simp argument is unused:
+  hs'
+
+Hint: Omit it from the simp argument list.
+  simp only [LiteralOpeningView.read, htake, hlen, dif_pos,
+        LiteralTranscript.c1At_append rs tail (by omega),
+        LiteralTranscript.c2At_append rs tail (by omega),
+        LiteralChallengeRead.ordinaryAt_append rs tail 25 (by omega),
+        LiteralChallengeRead.ordinaryAt_append rs tail 26 h, ̲h̲c̲1̲,̲ ̲h̲c̲2̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲e̲q̲_̲b̲i̲n̲d̲,̲
+        h̵c̵1̵,̵ ̵h̵c̵2̵,̵ ̵Option.bind_e̵q̵_̵b̵i̵nd̵,̵ ̵O̵p̵t̵i̵on.̵b̵i̵n̵d̵_̵n̵o̵n̵e, Option.bind_some, hs,̵ ̵h̵s̵'̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.LiteralReadStability.openingView_append_stable' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LiteralReadStability.matchingData_append_stable' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

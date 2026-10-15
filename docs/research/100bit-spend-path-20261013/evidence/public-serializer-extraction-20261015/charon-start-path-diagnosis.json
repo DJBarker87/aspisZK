@@ -1,0 +1,36 @@
+{
+  "charon_binary_sha256": "b2b0961a3c55aca64752b2fa4a4701ba0c06b860236979e5727c07de8ac2310c",
+  "charon_source_revision": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+  "source_files": [
+    {
+      "path": "charon/src/bin/charon-driver/translate/resolve_path.rs",
+      "sha256": "fe5a28d97ceacc40833a01bf4f6cdf5038f55d654c1d92b6f2d2a79ffa75d7f8",
+      "supporting_lines": "139-145",
+      "finding": "the inherent-impl pattern arm bails with \u201c--start-from does not support inherent impls\u201d"
+    },
+    {
+      "path": "charon/src/bin/charon-driver/translate/translate_crate.rs",
+      "sha256": "275279e88a372d7e978a0777efee1df11ae3e0cd494b3819ccdc439f6e888653",
+      "supporting_lines": "965-974",
+      "finding": "StartFrom::Pattern resolution uses if let Ok(...); a resolver error does not fail the run"
+    },
+    {
+      "path": "charon/src/transform/add_missing_info/reorder_decls.rs",
+      "supporting_lines": "303-317",
+      "finding": "ordered declarations are seeded by start_from pattern matches and reachable dependencies"
+    },
+    {
+      "path": "charon/src/transform/add_missing_info/reorder_decls.rs",
+      "sha256": "8a1176e29a51a83c82ff5a7df2aa11021e3e0c254e9fd6c656c0a92314ba2632",
+      "supporting_lines": "303-317",
+      "finding": "the ordered-declaration graph is seeded by patterns matching translated items and then traverses reachable dependencies"
+    }
+  ],
+  "attempt_start_from": "crate::pool_v1::pair_forest_semantic_terminal::r0::Public::public_bytes",
+  "target_metadata_name": "structured LLBC name path: crate / pool_v1 / pair_forest_semantic_terminal / r0 / Impl(Ty=Public with lifetime generic) / public_bytes",
+  "captured_effect": "the named method path is unsupported by this Charon start-from resolver; resulting LLBC records no ordered declarations",
+  "followup_default": "crate::pool_v1::pair_forest_semantic_terminal::r0",
+  "followup_status": "prepared only; not run",
+  "source_revision": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+  "corrective_rationale": "The resolver code explicitly rejects inherent impl start patterns, and the caller discards the resolve error; selecting the containing r0 module is the prepared workaround. The follow-up output guard verifies public_bytes emission rather than assuming this root yields it."
+}

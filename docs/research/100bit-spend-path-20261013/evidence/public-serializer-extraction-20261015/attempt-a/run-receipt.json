@@ -1,0 +1,43 @@
+{
+  "base_revision": "e4a5808dd061cf373b27d130f7d66eb8f0214db9",
+  "reservation_bytes": 25769803776,
+  "safe_limit_gib": 50,
+  "MemoryHigh": "4G",
+  "MemoryMax": "6G",
+  "MemorySwapMax": 0,
+  "TasksMax": 128,
+  "expected_phases": [
+    "isolated release compilation",
+    "Charon MIR extraction",
+    "Aeneas translation"
+  ],
+  "exit_status": 0,
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=aspis-public-serializer-extract-a",
+    "-p",
+    "MemoryHigh=4G",
+    "-p",
+    "MemoryMax=6G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=128",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/aspis-r1-public-serializer-input-20261015/launch-a.time.log",
+    "/usr/bin/timeout",
+    "600",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-r1-public-serializer-input-20261015/run-public-serializer-extraction.py",
+    "--input",
+    "/home/dombarker/project-offloads/aspis-r1-public-serializer-input-20261015",
+    "--output",
+    "/home/dombarker/project-offloads/aspis-r1-public-serializer-20261015-a"
+  ],
+  "evidence_note": "Outer launch receipt supplied with NUC run artifacts; phase metrics are in attempt-a/*.time.log."
+}

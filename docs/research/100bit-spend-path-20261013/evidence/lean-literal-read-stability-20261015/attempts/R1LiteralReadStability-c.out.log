@@ -1,0 +1,75 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralReadStability.lean:15:73: error: unsolved goals
+rs tail : List (Message × Challenge)
+h : 26 < rs.length
+htake : List.take 25 (rs ++ tail) = List.take 25 rs
+hsem :
+  LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 (rs ++ tail)) =
+    LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs)
+⊢ (if h : (List.take 25 rs).length = 25 then do
+      let c1 ← c1At rs
+      let c2 ← c2At rs
+      match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 (rs ++ tail)) with
+        | none => none
+        | some semantic => do
+          let z0 ← LiteralChallengeRead.ordinaryAt rs 25
+          let z1 ← LiteralChallengeRead.ordinaryAt rs 26
+          pure
+              { c1 := c1, c2 := c2,
+                word := LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK c1 c2,
+                semantic := semantic, semantic_length := ⋯, challenge25 := z0, challenge26 := z1,
+                circlePoints := fun i =>
+                  if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                  else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+                functionals :=
+                  SelectedOpeningFunctionals.functionals (List.map Prod.snd semantic) fun i =>
+                    if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                    else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+                baseFunctional :=
+                  SelectedOpeningFunctionals.rawBase (List.map Prod.snd semantic) fun i =>
+                    if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                    else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1) }
+    else none) =
+    if h : (List.take 25 rs).length = 25 then do
+      let c1 ← c1At rs
+      let c2 ← c2At rs
+      match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) with
+        | none => none
+        | some semantic => do
+          let z0 ← LiteralChallengeRead.ordinaryAt rs 25
+          let z1 ← LiteralChallengeRead.ordinaryAt rs 26
+          pure
+              { c1 := c1, c2 := c2,
+                word := LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK c1 c2,
+                semantic := semantic, semantic_length := ⋯, challenge25 := z0, challenge26 := z1,
+                circlePoints := fun i =>
+                  if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                  else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+                functionals :=
+                  SelectedOpeningFunctionals.functionals (List.map Prod.snd semantic) fun i =>
+                    if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                    else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+                baseFunctional :=
+                  SelectedOpeningFunctionals.rawBase (List.map Prod.snd semantic) fun i =>
+                    if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                    else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1) }
+    else none
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1LiteralReadStability.lean:20:45: warning: This simp argument is unused:
+  hsem
+
+Hint: Omit it from the simp argument list.
+  simp only [LiteralOpeningView.read, htake, h̵s̵e̵m̵,̵
+  ̵ ̵ ̵ ̵ ̵LiteralTranscript.c1At_append rs tail (by omega),
+      LiteralTranscript.c2At_append rs tail (by omega),
+      LiteralChallengeRead.ordinaryAt_append rs tail 25 (by omega),
+      LiteralChallengeRead.ordinaryAt_append rs tail 26 h]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.LiteralReadStability.openingView_append_stable' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LiteralReadStability.matchingData_append_stable' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
