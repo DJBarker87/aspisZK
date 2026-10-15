@@ -1,0 +1,60 @@
+J1.R16 runtime premises; J1.R19 release account formats
+
+Decision: LEAD-REVIEW-J1-R11-R12-20261015.md at
+c441facae60f957472b4b87180babcda4051eca3, read in base
+b8760b76ac8de6c5c903eb98ff3a85f6f9f532e8. This note supersedes the
+runtime-version-selection status in earlier audit/design notes, preserving
+their historical evidence. Production remains pinned at 2ed5bc48393ba51e38ec62167134f55755b11649.
+
+The release runtime premise consists of exactly two semantic statements:
+1. sol_sha256 computes FIPS 180-4 SHA-256 of concatenated input slices.
+2. At its derivation step, sol_create_program_address computes one SHA-256
+   of concatenated seeds, followed by program_id and ASCII
+   "ProgramDerivedAddress", and rejects an on-curve digest. The stored bump
+   is an ordinary seed; no search occurs. Admitted calls use at most five
+   seeds, each at most 32 bytes, within SDK seed limits 16/32. Generic
+   invalid-seed checks can return before hashing: their contribution is zero.
+
+The proof has no Agave-version parameter. At release, record the target
+cluster's observed Agave version and source references for these two syscalls.
+Those observations are PENDING, not performed by this update. Local 4.2.1
+pins/replays remain test evidence, not a release selection or live attestation.
+FIPS functional equality does not itself assert random-oracle behavior.
+
+Concrete reference paths, already pinned by the audit: solana-syscalls 4.2.1
+src/lib.rs:843-880 (SyscallCreateProgramAddress) and 2540-2600 (SyscallHash);
+solana-address 2.6.1 src/syscalls.rs:392-447 (create_program_address).
+These references explain the contract but do not identify a future cluster.
+Seed/memory/compute checks can stop before hashing; PDA output-memory failure
+can occur after hashing. On-curve rejection must retain that digest event.
+Hasher updates for individual slices are not separate complete SHA queries.
+
+Existing interface: AspisR1.VerifierCallBudget.PrefixRelation retains complete
+(Bytes, Digest) traces and explicit rejection, panic, allocation, compute and
+runtime failures. AspisR1.VerifierPhaseCost.SourceSimulation.preservesPrefix
+must preserve those traces into ModelPrefix. Its instantiation remains OPEN:
+the two syscall premises do not prove other callees SHA-free, source lowering, callback resolution,
+allocator/drop/observer effects, or failure-prefix preservation. No axiom or
+runtime implementation instance is introduced. Init/governance bump searches
+are adversary-side QA under the lead decision, outside invocation QV.
+
+The additive evidence/j1e-source-effect-audit-runtime-r16-20261015 saves the
+previous policy and replaces only obsolete runtime-decision metadata. All
+57 spans, 33 repository pins, 331 opaque-call obligations and 30 opaque-loop
+obligations remain. The current and historical-policy checks pass; eight
+negative tests pass; --require-closed-effects exits 2. All 29 historical bundle
+files remain byte-identical. Source/runtime preservation remains OPEN; no
+source cap or Qtot substitution is established by this policy update.
+
+Release note (J1.R19): the lead records that no live accounts or deployments
+exist for the R1 Pool route. Therefore no account migration is required or
+provided. This is the lead's release-state premise, not a new cluster scan.
+Old versions reject; the revised stored-bump formats are the release formats:
+- Pool master/lane/checkpoint: version 2; bump offsets 7/72/7.
+- ASRG/ASRE: version 2; bump offsets 6/7.
+- ASR2/ASE2: version 3; bump offsets 7/312 and ProgramData bumps 248/313.
+Sources: crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
+constants 25-35, decoder guards 263/346/428; verifier_registry.rs constants
+11-30, decoder guards 288/356/434/522. Sizes, magic and seeds remain as
+recorded in J1-R11-R12-INTEGRATION-20261015.txt. No deployment, account write,
+key cleanup or build was performed by this documentation change.

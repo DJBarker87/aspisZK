@@ -1,0 +1,78 @@
+J1.e count reconciliation (inspection and existing model theorems)
+
+Read-only comparison pin: b40d1cfffadbdf967f84cca23ea4e7f1553d564f.
+I = design/J1-HASH-CALL-COUNT-INVENTORY-20261015.md, retained unchanged:
+its historical source revision is 764bf20a6fe0392951b670f73748a54f70c9f272.
+B = lean/VerifierCallBudget.lean, namespace AspisR1.VerifierCallBudget.
+P = lean/VerifierPhaseCost.lean, namespace AspisR1.VerifierPhaseCost.
+V/T/W/S = crates/aspis-r1-cost-probe/src/verifier.rs/transcript.rs/
+r1_wire.rs/r1_semantic.rs. A = programs/r1-cost-probe/src/r1_pool_adapter.rs.
+Source locations below refer to the comparison pin; hashes are retained in
+evidence/j1e-source-effect-audit-runtime-r16-20261015/reconciliation-pins.json.
+Table numbers are schedule/model arithmetic upper bounds. They are not
+observations of every run or proved actual-source bounds; simulation is below.
+
+Item | I versus B/P | Resolution against pinned Rust
+Semantic | I=82; B.semanticBudget=82 | W:179-182 initializes once;
+W:194-207 emits three calls per row; W:349-361 and S:83-90,128-130
+cover rows 0-26. Rows 0-24 use QM31; 25/26 use circle sampling.
+Opening | I=33; B.openingBudget=33 | V:87-98 and T:7-43 give
+1+4*3+(1+8*2)+3. Eight pairs are precomputed even if selection fails.
+Query | I=21; B.queryBudget=21 | V:120-128,242-274: three leaves,
+three six-parent paths for S2. Salted and unsalted leaves each dispatch
+one callback; private-leaf-salts is selected. Short-circuiting can stop early.
+Stage1 | I k=10:328; B k=10:328,k=11:349 | A:902-937 admits both;
+V:342-349 performs k queries then three checkpoint hashes (V:302-316).
+B.stage1Budget_ten and B.stage1Budget_eleven prove model arithmetic,
+not Rust effects.
+Resume | I=465; B.stage2CoreBudget=465 | V:325-339 accepts next<=22,
+including zero; V:380-385 processes the remaining queries. Three hash
+comparisons short-circuit. P.Step.resumeDone admits every next<=22.
+Pair | I authentic k=10 pair:583; arbitrary k=10 pair:793 | Core
+arithmetic is 82+33+22*21+6=583 for a genuine pair, also when k=11.
+Unpaired k=11 permits arithmetic 349+465=814. P bounds individual
+invocations; it contains no theorem that establishes a genuine pairing.
+PDA | I excludes PDA; B adds 7 immutable or 5 V1 | A:662/687/703
+are common; immutable A:509/521/540/554 and V1 A:577/600 are exclusive.
+Hence B.stage2Budget_value=472, stage2V1Budget_value=470. These include
+PDA digests under R16, not merely HashFn callbacks. A:81-87,509-711 uses
+at most five seeds, each at most 32 bytes, satisfying SDK limits 16/32.
+No bump search/fallback; generic invalid-seed checks may return before SHA.
+Failures | I discusses rejection; P also permits panic/allocation/compute/
+runtime exits | P.failed_prefix_le_472 bounds model traces. Rust callee,
+unwind and runtime effects remain OPEN; finite stopping is not their proof.
+Distinctness | I raw calls; B.firstReads_le_length | Duplicates still count.
+B.distinctFirstReads_of_totalCalls is conditional bookkeeping, not a measured
+distinct-address count or the experiment's universal hQ.
+
+Actual execution, separately: evidence/hash-input-counter-p3-20261014/
+hash-input-counts.json records source eac8ca7d, saved S2 fixture k=11:
+349+234=583 core calls and 452 distinct concatenated inputs. This historical
+measurement includes no PDA overhead and is not universal hQ. No run occurred
+in this review; the source/model table is not a new measurement receipt.
+
+Provenance correction: I quotes obsolete proof-write protection comments.
+V:351-378 now requires authentic checkpoint provenance and states that resume
+rehashes current proof/public bytes, rejecting changes except collisions.
+The checksum is not a MAC. A:159-177,902-941 uses foreign read-only buffers
+and an exact-size, zero, verifier-owned checkpoint; A:948-978 reconstructs
+ASF8 public bytes, including candidate, before resume. Proof hashing excludes
+the candidate prefix; public reconstruction supplies its binding. G9 provenance
+relies on system zero-initialization and admitted-route write history, as
+accepted by the lead; checksum equality alone does not establish it.
+
+Release pool_route.rs:3-5 plus lib.rs:33-41 exclude legacy/lifecycle routes.
+Init/governance searches are QA under J1.R16, outside per-invocation QV.
+The prior 2250 search allowance is obsolete for this stored-bump route.
+
+No disagreement requires changing B/P arithmetic. The remaining exact premise
+is P.SourceSimulation.preservesPrefix for an independently defined complete
+SourcePrefix, admitted features/routes, arbitrary inputs/checkpoints and every
+finite stop; B.PrefixClosed is additionally needed by P.source_obligation_of_simulation.
+All opaque effects, callback binding and source/compiler/runtime correspondence
+remain OPEN. The syscall premises do not discharge them.
+
+AspisR1.CombinedMerkleCollision.budget is 12*Qtot^2/256^32 (=12*Qtot^2/2^256),
+used by UnifiedOracleInj. Its mass theorem requires hQ for all H over the full
+prover/verifier experiment. Neither 583, 814 nor the model's 472 instantiates
+that hypothesis or replaces the combined term with the old 3*Qtot^2 term.
