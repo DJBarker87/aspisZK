@@ -36,6 +36,7 @@ PARSER = [
  ('wide_from_limbs', WIDE, 'pub fn from_limbs(limbs: [u32; Self::LIMB_COUNT])'),
  ('wide_from_le_bytes', WIDE, 'pub fn from_le_bytes(bytes: &[u8]) -> Option<Self>'),
  ('wire_error', WIRE, 'pub enum Error {'),
+ ('validate_record_fields', WIRE, 'fn validate_record_fields(row: u8, payload: &[u8])'),
  ('parse_record', WIRE, 'pub fn parse_record(row: u8, record: &[u8])'),
 ]
 

@@ -20,6 +20,7 @@ CLI = argparse.ArgumentParser()
 CLI.add_argument('--target', choices=['row-shape', 'parse-record'], required=True)
 CLI.add_argument('--output', type=Path, required=True)
 CLI.add_argument('--mir', choices=['built', 'optimized'], default='built')
+CLI.add_argument('--include-option-methods', action='store_true')
 ARGS = CLI.parse_args()
 KIT_ROOT = Path(__file__).resolve().parent
 ROOT = KIT_ROOT.parents[4]
@@ -159,7 +160,8 @@ def main():
     lock = tomllib.loads((source / 'Cargo.lock').read_text())
     assert len(lock['package']) == 1 and not lock['package'][0].get('dependencies')
     run('extract', [CHARON, 'cargo', '--preset', 'aeneas', '--mir', ARGS.mir,
-                    '--sysroot', 'default', '--include', 'core::option::Option',
+                    '--sysroot', 'default', '--include',
+                    'core::option' if ARGS.include_option_methods else 'core::option::Option',
                     '--include', 'core::result::Result', '--start-from',
                     'crate::r1_wire',
                     '--dest-file', OUT / 'RecordParser.llbc', '--',
@@ -178,8 +180,11 @@ def main():
     translation = json.loads(translation_path.read_text())
     found = [f for f in translation.get('functions', [])
              if f.get('is_local') and f.get('rust_name', '').endswith('::' + TARGET_NAME)]
-    write_json(OUT / 'translation-audit.json', {'target_name': TARGET_NAME, 'emitted_target': found})
+    opaque = [f for f in translation.get('functions', []) if f.get('is_opaque')]
+    write_json(OUT / 'translation-audit.json', {
+        'target_name': TARGET_NAME, 'emitted_target': found, 'opaque_functions': opaque})
     assert len(found) == 1, 'Expected exactly one local target declaration'
+    assert not opaque, 'Unresolved opaque function: inspect includes and retained standard-library bodies'
     decl = found[0]
     generated = OUT / 'generated' / decl['lean_file']
     assert generated.is_file() and decl['lean_name'].rsplit('.', 1)[-1] in generated.read_text()

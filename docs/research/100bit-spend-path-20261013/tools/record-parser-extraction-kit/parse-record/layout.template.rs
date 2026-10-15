@@ -29,5 +29,6 @@ pub mod r1_wire {
     include!("fragments/claims.rs");
     include!("fragments/wire_error.rs");
     include!("fragments/row_shape.rs");
+    include!("fragments/validate_record_fields.rs");
     include!("fragments/parse_record.rs");
 }

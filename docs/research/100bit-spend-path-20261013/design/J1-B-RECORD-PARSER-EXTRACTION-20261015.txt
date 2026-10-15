@@ -2,9 +2,8 @@ Scope and source boundary
 
 Extract the real r1_wire::row_shape first, then r1_wire::parse_record.
 The new kit copies exact declaration spans from r1_wire.rs and the current
-M31/CM31/QM31/WideExact sources into namespace-only layouts. No runtime source
-is changed and no field parser or error check is replaced by a handwritten
-model. Each stage has its own source manifest, dependency-free Cargo input,
+M31/CM31/QM31/WideExact sources into namespace-only layouts. The final runtime change only moves the validation loop into a private
+helper; no field parser or error check is replaced by a handwritten model. Each stage has its own source manifest, dependency-free Cargo input,
 module extraction root, and generated-declaration presence check.
 
 The local Charon/Aeneas binaries and their source-provenance limitations are
@@ -34,14 +33,31 @@ fails at InterpJoin.ml:1542, "Could not match the contexts", while matching
 the validation-loop fixed point. Sampled peaks are 233296/84128 KiB, and both
 process swap counts and the within-attempt system swap delta are zero.
 
-Next source proposal and remaining obligations
+Final helper extraction and tests
 
-OPEN proposal: move the existing field-validation loop into a private
-validate_record_fields(row, payload) -> Result<(), Error> with final Ok(()),
-then call it under row >= 14. This could isolate the loop's early errors from
-the borrowed payload return. It is not applied or asserted sufficient.
-The iterator operations already have Aeneas builtin mappings; replacing the
-parser by an opaque function or changing canonicality checks is unnecessary.
+The authorized runtime refactor moves the existing loop, with unchanged
+statements, into private validate_record_fields(row, payload) -> Result<(),
+Error>, final Ok(()). parse_record calls it with ? only under row >= 14.
+The exact kit now has 18 parser declaration cuts. Attempt D translates but
+exposes one opaque external Option::ok_or; its incomplete output is retained.
+Attempt E additionally includes reachable core::option bodies while keeping
+core::result::Result narrow. This emits the actual ok_or implementation:
+16 functions, five types, six globals, zero opaque functions or external
+placeholder files. Charon exits 0 in 1.52 s, Aeneas 0 in 2.26 s; sampled peaks
+are 230448/134272 KiB. Per-process swaps and system-swap delta are zero.
+Current runner rejects any emitted opaque function; E separately passes that
+audit. Actual target: AspisR1RecordParser.r1_wire.parse_record. Types imports
+Aeneas; Funs also imports AspisR1RecordParser.Types. No new axiom/opaque/sorry
+declaration appears. Generated Lean has not been compiled by this worker.
+
+Both focused Rust tests pass with --release --features private-leaf-salts:
+all 256 row shapes, framing/error ordering, payload identity, every serialized
+limb's P/u32::MAX rejection, nonzero high limbs, and first failing value before
+a later malformed value. They compare the previous loop parser directly.
+Total command 47.81 s, sampled RSS 570880 KiB, maximum RSS 503545856 bytes,
+zero swaps; tests themselves 0.00 s. No proof generation is involved.
+
+Remaining obligations
 
 Successful row_shape generation is not its specification theorem. Prove its
 exact result for all U8 inputs, including None for 27..255 and the checked

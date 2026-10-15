@@ -154,6 +154,15 @@ pub const fn row_shape(row: u8) -> Option<(u8, usize)> {
         _ => None,
     }
 }
+fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
+    for (value, bytes) in payload.chunks_exact(32).enumerate() {
+        let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
+        if x.c1() != QM31::ZERO {
+            return Err(Error::NonCanonical { row, value });
+        }
+    }
+    Ok(())
+}
 /// Reject malformed framing and every noncanonical E limb before hashing.
 /// UNPROVED P2 subset: reject any nonzero E high component at parse.
 pub fn parse_record(row: u8, record: &[u8]) -> Result<&[u8], Error> {
@@ -169,12 +178,7 @@ pub fn parse_record(row: u8, record: &[u8]) -> Result<&[u8], Error> {
     }
     let payload = &record[5..];
     if row >= 14 {
-        for (value, bytes) in payload.chunks_exact(32).enumerate() {
-            let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
-            if x.c1() != QM31::ZERO {
-                return Err(Error::NonCanonical { row, value });
-            }
-        }
+        validate_record_fields(row, payload)?;
     }
     Ok(payload)
 }

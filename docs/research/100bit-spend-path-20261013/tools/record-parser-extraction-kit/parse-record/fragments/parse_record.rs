@@ -13,12 +13,7 @@ pub fn parse_record(row: u8, record: &[u8]) -> Result<&[u8], Error> {
     }
     let payload = &record[5..];
     if row >= 14 {
-        for (value, bytes) in payload.chunks_exact(32).enumerate() {
-            let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
-            if x.c1() != QM31::ZERO {
-                return Err(Error::NonCanonical { row, value });
-            }
-        }
+        validate_record_fields(row, payload)?;
     }
     Ok(payload)
 }
