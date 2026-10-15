@@ -1,0 +1,91 @@
+J1.R18 Prefix refactor proposal; read-only preparation
+
+Inspected 394497a6b and root 9e0d38427: r1_wire.rs is identical, SHA256
+ed6e426c460c97248d124727e8be7985c1ea75f89bd0f5baef0570ec44ec4b03.
+No production change, extraction or build has been performed for this proposal.
+R17 port success remains the prerequisite for implementation.
+
+Retained failure: evidence/prefix-parser-extraction-20261015/attempt-a has
+Charon success and Aeneas exit 2, "There should be no bottoms in the value",
+at generated lib.rs:231:27-34: records in Ok(Self { c1_root, records }). This
+maps to r1_wire.rs:297, through loop fixed-point interpretation. No Lean was
+emitted. It identifies the failing operand; it does not establish a Rust bug
+or prove that the following source shape will translate.
+
+Candidate patch: add this private function beside Prefix, then replace only
+Prefix::parse's offset/for/trailing block (284-296) with
+parse_records_into(bytes, &mut records)?;
+
+fn parse_records_into<'a>(
+    bytes: &'a [u8], records: &mut [&'a [u8]; 27],
+) -> Result<(), Error> {
+    let mut offset = 32;
+    let mut row = 0u8;
+    while row < 27 {
+        let length = 5 + row_shape(row).unwrap().1;
+        let framed = bytes
+            .get(offset..offset + length)
+            .ok_or(Error::Length { row })?;
+        parse_record(row, framed)?;
+        records[row as usize] = framed;
+        offset += length;
+        row += 1;
+    }
+    if offset != bytes.len() {
+        return Err(Error::TrailingBytes);
+    }
+    Ok(())
+}
+
+Prefix::parse retains its bytes.len()<32 rejection, borrowed C1 conversion,
+initialized fixed array and final Self construction. No public type, lifetime,
+method or caller changes. The loop-containing helper returns unit; the array
+is moved into Prefix only after the helper's mutable borrow ends. No Vec,
+unsafe, heap allocation, fixed-field structure or extra byte copy is proposed.
+Partial scratch writes on failure are private to parse and never returned.
+Both original unwraps remain; their extraction/dependency audits remain
+explicit obligations, especially the borrowed root conversion.
+
+Expected preserved order: short C1 -> Length{row:0}; for rows 0..26, fixed
+row-shape extent extraction -> Length{row}, then parse_record's tag/header/
+canonicality checks in their current order; only after successful validation
+store framed and advance offset. First bad row/value wins. TrailingBytes is
+checked after every row, so an earlier malformed record still wins over extra
+suffix bytes. Arbitrary root bytes remain accepted. No total-input-length
+precheck may replace the sequential checks. parse_record and field/QM code
+remain untouched. Slice identity, not merely equal copied bytes, is required.
+
+Verification proposal after R17 port:
+- Add a frozen old Prefix parser oracle in r1_wire tests. Compare success
+  c1/record/payload bytes and pointers for all 27 rows; compare exact errors
+  for short roots, every truncation, malformed tags/header lengths, canonical
+  and high-half errors, two bad rows/values, and trailing suffixes. Include
+  malformed earlier records combined with truncation or trailing bytes.
+- Existing r1_wire.rs:487/524 record_parser_tests cover all shapes and first
+  failing field; :400 validated_transcript_matches_checked_raw_path_for_every_row
+  compares challenge/state progression. These do not already establish whole
+  Prefix equivalence. Serializer differential tests remain at
+  pair_forest_semantic_terminal.rs:2246/2264; no serializer change is needed.
+- Saved-proof regression: programs/r1-cost-probe/src/r1_checkpoint_tests.rs:820,
+  measured_core_call_counts_include_zero_progress_checkpoint, release with
+  features pool-adapter,private-leaf-salts, one test thread. It checks k=10/11
+  counts and zero-progress 465. tools/r1-hash-input-counter/src/main.rs:24
+  separately consumes saved proof/public and reports exact-input multiplicities;
+  compare reports against the same fixture, not just successful execution.
+- Recut the exact new helper plus Prefix methods; keep the old failed kit.
+  The existing kit generator pins 0dbcc4dd0 and must not silently extract the
+  old parser. Check nonempty root/includes, source/LLBC pins and all opaque
+  dependencies. Translation and subsequent Lean correctness remain OPEN.
+
+CU replay boundary: tools/r1-cost-probe/src/bin/pool_gate.rs:257 supports
+--reuse proof public and fresh output; :1454 enforces exact public equality.
+However :2024 still sends TWO stage1 accounts and :2174-2200 omits the separate
+verifier checkpoint, whereas current adapter :903/:949 requires THREE/SEVEN.
+Its historical CU evidence cannot serve as a current-route replay until this
+interface is aligned. The standalone main.rs:39 runs five acceptance repetitions
+and targets the non-pool route, so it is not a ready one-replay Pool substitute.
+R18 already authorizes the reviewed refactor and one before/after CU replay;
+that replay needs a coordinated current-route harness and matching ELF/fixture
+pins. A narrow harness-alignment source proposal can be prepared on the worker
+branch without renewed permission. The full J1.R13 release artifact/provisioning
+and replay queue remains lead-owned. Retain all task keys.
