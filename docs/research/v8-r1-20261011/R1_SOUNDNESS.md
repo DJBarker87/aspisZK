@@ -257,3 +257,60 @@ in row α₁: the round-1 comparison (L3) and the runtime fold/domain
 commutation (Src). Next Lean job: L3 (statement to be fixed by the lead;
 the checkpoint branch's `TwoRoundComparison.lean`/`ConcreteBinding.lean` are
 to be read first for reuse).
+
+## Consolidated status (lead review of the spend-path Lean, 2026-10-15)
+
+The spend-path branch (`codex/100bit-spend-path-20261013` at `a17829a77`,
+477 Lean files under `docs/research/100bit-spend-path-20261013/lean/`)
+already contains most of the L-programme. Decision: **that tree is the R1
+soundness development**; the separate L-programme stops (L1/L2 stand as
+duplicates, L3 withdrawn). New R1 Lean jobs are issued only for the gaps
+below. The branch's Lean jobs used our host lock (`run2.sh`) and read our
+build cache; no concurrency violation found.
+
+### Rows
+
+| Row | Status | Where |
+|---|---|---|
+| γ joint list + six functionals | deterministic bound **proved**: `gammaBad_card ≤ 336,869,026,622,539` | `ConcreteBinding.lean` |
+| κ pairing | **proved**: `kappaBad_card ≤ 600` | `ConcreteBinding.lean` |
+| α₀ matched + round | **proved**: `firstBad_card ≤ 9,396,508,281,846` | `ConcreteBinding.lean`, `TwoRoundPairing.lean` |
+| α₁ matched + round | **proved**: `secondBad_card ≤ 9,396,508,281,846`; repeated lift in `SecondFoldMatched`/`SecondFoldRestoration` (and independently our L1/L2) | `ConcreteBinding.lean`, `TwoFoldExtraction.lean` |
+| deterministic binding | **proved**: `ConcreteBinding.binding` — outside the four bad sets, a large matching set yields a tuple in `Λ(W)` with all claims | `ConcreteBinding.lean`, `MatchingSupport.large_matching_implies_claims` |
+| q22 | **proved** deterministically (false claims ⇒ matching set ≤ 9,557 and every query inside it: `false_claims_query_containment`); probability via existing `R0C.V3.Q22.q22_bound` | `MatchingSupport.lean`, `QueryResidualBridge.lean` |
+| ρ | **proved**: `rhoBad_card ≤ 21` and the accumulator ⇒ residual-batch bridge | `QueryResidualBridge.lean` |
+| FS composition | **proved conditionally**: `UnifiedFiatShamir.soundness_bound` (33 rows, `theorem43` reused) gives `Qtot·maxErr + 3Qtot²/2^256`, given D1/D2/D3, an extractor, a decision and `hQ` | `UnifiedFiatShamir.lean` and the Unified* chain |
+| S semantic | R0's masked semantic layer; bridges `MaskedSemantic`, `SemanticPrefix*`; composition into the classifier open | — |
+| Src | strict wide parser **proved** (model-level); the rest open | `CandidateWideParser*`, `UnrolledWideParser*` |
+
+### Gaps (ordered)
+
+1. **The concrete round-by-round classifier for the 33-row protocol** and its
+   D1/D2/D3 proofs, wiring the deterministic results above (and the semantic
+   rows) into the doomed-prefix definitions, as `combined_fiat_shamirZ` did
+   for R0. No instance exists yet. This is the core remaining soundness proof.
+   `D2TableBoundary` records that a naive witness-availability classifier
+   fails D2; the classifier must be the existence/agreement kind used for R0.
+2. **Terminal hash calls in the verifier model.** The model's decision is a
+   pure Boolean; the Rust verifier hashes leaves, paths and the intermediate
+   commitment. The oracle-reading wrapper (`TERMINAL-ORACLE-TRANSPORT`) and
+   the causal commitment-recovery chain (`CanonicalMerkleRecovery`,
+   `ThreeCommitmentRecovery`, `CausalCommitmentStability`) exist; their
+   composition with D3 does not.
+3. **Knowledge soundness.** Every extractor in R0 and in this branch is
+   `Classical.choose`: the theorem is soundness of membership, not knowledge.
+   For a spend this matters: a statement naming another user's note can have
+   a witness the attacker does not know. An efficient extractor (list
+   decoding by the GRS route in `GS-DECODER-REUSE-PATH.md`, with a running-time
+   bound) and a knowledge-soundness statement are required before any
+   release claim. This also applies to R0's proved theorem as stated.
+4. **Query budget.** `hQ` is a parameter. The claim is the standard per-query
+   form (≈ 2^-105.1 per oracle query); no absolute bound for unbounded Q
+   exists for any hash-based argument.
+5. **Source correspondence** beyond the parser: transcript order, folds,
+   checkpoint/account parsing, settlement.
+6. **Replay.** Only focused replays were run. One frozen-manifest replay of
+   the whole tree under AGENTS.md rules is required before any row is cited
+   as closed.
+
+Privacy is tracked separately (privacy LOG; T2b-2b design running).
