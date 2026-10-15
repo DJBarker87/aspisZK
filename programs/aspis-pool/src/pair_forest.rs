@@ -3201,6 +3201,27 @@ mod tests {
 
     #[test]
     fn canonical_bumps_persist_for_system_and_precreated_accounts() {
+        // The System allocation helper obtains rent through Rent::get(); the
+        // native fixture supplies the same rent used for its precreated path.
+        struct RentStub;
+        impl solana_program::program_stubs::SyscallStubs for RentStub {
+            fn sol_get_rent_sysvar(&self, address: *mut u8) -> u64 {
+                // Solana's Sysvar::get passes a writable, aligned Rent pointer.
+                unsafe { address.cast::<Rent>().write(Rent::default()) };
+                0
+            }
+        }
+        struct RestoreStubs(Option<Box<dyn solana_program::program_stubs::SyscallStubs>>);
+        impl Drop for RestoreStubs {
+            fn drop(&mut self) {
+                if let Some(previous) = self.0.take() {
+                    solana_program::program_stubs::set_syscall_stubs(previous);
+                }
+            }
+        }
+        let _restore = RestoreStubs(Some(solana_program::program_stubs::set_syscall_stubs(
+            Box::new(RentStub),
+        )));
         for create in [false, true] {
             let program_id = Pubkey::new_unique();
             let mint = Pubkey::new_unique();
