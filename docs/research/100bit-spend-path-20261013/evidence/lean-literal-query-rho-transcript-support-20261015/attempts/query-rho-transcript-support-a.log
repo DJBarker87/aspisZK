@@ -1,0 +1,41 @@
+/tmp/aspis-root-local-semantic-20261015/sources/R1LiteralQueryRhoTranscriptSupport.lean:81:46: error: unsolved goals
+pub : Public
+rs : List (LiteralTranscript.Message × LiteralTranscript.Challenge)
+hlen : 33 ≤ rs.length
+d : MatchingSupport.Data AspisWideTower.WideExact
+hread : LiteralMatchingData.read rs = some d
+hno : ¬GenericNoHit.hitFrom LiteralClassifier.bad pub [] rs
+m31 : LiteralTranscript.Message
+xs : List ℕ
+s31 : State
+m32 : LiteralTranscript.Message
+rho : AspisWideTower.WideExact
+s32 : State
+h31 : rs[31]? = some (m31, Value.queries (Except.ok xs), s31)
+h32 : rs[32]? = some (m32, Value.ordinary rho, s32)
+hvalid31 : valid 31 m31
+hvalid32 : valid 32 m32
+q : Fin 22 → Fin 262144
+hdecode : LiteralQueryRead.decode xs = some q
+hfirst : ∀ (j : Fin 22), MatchingSupport.match0 d (q j)
+hbatch : ∑ j, LiteralOpeningView.eK (SelectedChallengeMap.rhoOf rho) ^ ↑j * QueryResidualBridge.residuals d q j = 0
+P : Prefix := { statement := pub, rounds := List.take 31 rs }
+hround : FS.Prefix.round P = 31
+hi31 : 31 < rs.length
+hi32 : 32 < rs.length
+hentry31 : rs[31] = (m31, Value.queries (Except.ok xs), s31)
+hentry32 : rs[32] = (m32, Value.ordinary rho, s32)
+hdata : LiteralMatchingData.atQuery P m31 = some d
+hno31 : ¬LiteralClassifier.bad P m31 (Value.queries (Except.ok xs), s31)
+P32 : FS.Prefix Public LiteralTranscript.Message LiteralTranscript.Challenge :=
+  FS.Prefix.ext P m31 (Value.queries (Except.ok xs), s31)
+h : ¬LiteralClassifier.bad { statement := pub, rounds := List.take 32 rs } rs[32].1 rs[32].2
+⊢ List.take 31 rs ++ [(m31, Value.queries (Except.ok xs), s31)] =
+    ({ statement := pub, rounds := List.take 31 rs }.ext m31 (Value.queries (Except.ok xs), s31)).rounds
+'AspisR1.LiteralQueryRhoTranscriptSupport.atQuery_current_eq_read' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LiteralQueryRhoTranscriptSupport.large_support_of_read_noHit' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

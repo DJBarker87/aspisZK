@@ -1,0 +1,17 @@
+/tmp/aspis-root-local-semantic-20261015/sources/R1LiteralSemanticPolynomialChecks.lean:82:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Polynomial.eval ?m.107 0
+in the target expression
+  Polynomial.eval 0 (OpeningPolynomialView.polynomial cs) = cs 0
+
+xs : Coefficients
+cs : Fin 28 → E := fun i => ↑(xs i)
+hfold : List.foldl (fun acc c => acc + c) (cs 0) (List.ofFn cs) = cs 0 + ∑ i, cs i
+hpoly : SemanticCoefficientCodec.polynomial xs = OpeningPolynomialView.polynomial cs
+⊢ Polynomial.eval 0 (OpeningPolynomialView.polynomial cs) = cs 0
+'AspisR1.LiteralSemanticPolynomialChecks.horner_eq_semantic_polynomial_eval' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.LiteralSemanticPolynomialChecks.boundary_add_eq_semantic_polynomial_evals' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

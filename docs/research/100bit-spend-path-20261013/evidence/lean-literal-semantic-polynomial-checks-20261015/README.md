@@ -1,0 +1,3 @@
+# Literal semantic polynomial checks
+
+The final focused compile proves two algebraic identities for the selected semantic coefficient model: reverse-Horner evaluation agrees with the retained polynomial evaluation, and the boundary accumulator agrees with the sum of evaluations at 0 and 1. The finite-list induction follows the older SourceMixing proof route without importing its larger generated dependency graph. Attempt a (wrong Polynomial.eval-zero API) and green attempt b are both retained. These are model identities only; there is no Rust arithmetic refinement, verifier acceptance, or security/probability claim.

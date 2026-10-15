@@ -1,0 +1,3 @@
+# Literal query/rho transcript support
+
+Under the explicitly stated successful row-31/32 entry, validity, decode, first-matching, residual-batch, successful matching-read, no-hit, and sufficient-length premises, the theorem concludes that the matching set has cardinality at least 9558. This composes deterministic transcript/list facts with the existing query/rho support theorem. It does not establish that source acceptance supplies those premises or prove a probability bound, source refinement, D3, or accepted-proof extraction. Attempt a's Prefix.ext reduction failure and green attempt b are both retained.

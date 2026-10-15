@@ -1,0 +1,3 @@
+# Literal pairing checks
+
+Under a successful `LiteralMatchingData.read`, this model theorem equates `AcceptedPairing` for the decoded matching data with the exact collection of successful literal opening/payload/challenge reads and the existing coefficient checks. It is a model identity only and does not identify the reader with Rust/Pool acceptance. Attempt b passed. The earlier attempt a failed during runner preflight because the cached checked `R1SelectedOpeningPairing` object was missing, so Lean was never launched; its source/time and exact restored-cache provenance are retained without inventing a compile receipt.
