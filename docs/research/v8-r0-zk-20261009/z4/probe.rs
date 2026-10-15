@@ -2890,8 +2890,11 @@ mod z7;
 mod z8;
 #[path = "z8b.rs"]
 mod z8b;
+#[path = "z8c.rs"]
+mod z8c;
 fn main() {
-    if std::env::args().any(|x| x == "--z8b") { z8b::main(); }
+    if std::env::args().any(|x| x == "--z8c") { z8c::main(); }
+    else if std::env::args().any(|x| x == "--z8b") { z8b::main(); }
     else if std::env::args().any(|x| x == "--z8") { z8::main(); }
     else if std::env::args().any(|x| x == "--z7") { z7::main(); }
     else if std::env::args().any(|x| x == "--z6") { z6::main(); }
