@@ -343,7 +343,7 @@ fn decode_lane_from_pool_release_invariant_box_v1(
         || bytes[6] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8
         || bytes[7] != POOL_V1_PAIR_TREE_DEPTH as u8
         || bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING
-        || bytes[72..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]
+        || bytes[73..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]
             .iter()
             .any(|byte| *byte != 0)
     {
@@ -395,6 +395,7 @@ fn decode_lane_from_pool_release_invariant_box_v1(
         return Err(ProgramError::InvalidAccountData);
     }
     Ok(Box::new(PoolV1PairForestLaneStateV1 {
+        bump: bytes[72],
         master,
         lane_id: bytes[5],
         tree: IncrementalMerkleTreeV1 {
@@ -1154,7 +1155,9 @@ mod tests {
         registry_program: Pubkey,
         proof_key: Pubkey,
         master_key: Pubkey,
+        master_bump: u8,
         checkpoint_key: Pubkey,
+        checkpoint_bump: u8,
         lane_key: Pubkey,
         checkpoint_sequence: u64,
         deployment_domain: [u8; 32],
@@ -1173,26 +1176,23 @@ mod tests {
         let token_program = fixed_pubkey(0x43);
         let registry_program = fixed_pubkey(0x44);
         let proof_key = fixed_pubkey(0x45);
-        let master_key =
-            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program)
-                .0;
+        let (master_key, master_bump) =
+            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program);
         let nullifier = deterministic_v7_pair_forest_transfer_nullifier_v1();
         let lane_id = pool_v1_pair_forest_output_lane_v1(&nullifier).unwrap();
-        let lane_key = Pubkey::find_program_address(
+        let (lane_key, lane_bump) = Pubkey::find_program_address(
             &[PAIR_FOREST_LANE_SEED, master_key.as_ref(), &[lane_id]],
             &pool_program,
-        )
-        .0;
+        );
         let checkpoint_sequence = 42u64;
-        let checkpoint_key = Pubkey::find_program_address(
+        let (checkpoint_key, checkpoint_bump) = Pubkey::find_program_address(
             &[
                 PAIR_FOREST_CHECKPOINT_SEED,
                 master_key.as_ref(),
                 &checkpoint_sequence.to_le_bytes(),
             ],
             &pool_program,
-        )
-        .0;
+        );
         let deployment_domain = [5; 32];
         let empty = V7_PAIR_EMPTY_ROOTS;
         let mut tree = IncrementalMerkleTreeV1::from_parts_with_empty_roots(
@@ -1209,6 +1209,7 @@ mod tests {
                 .0;
         }
         let lane = PoolV1PairForestLaneStateV1 {
+            bump: lane_bump,
             master: master_key.to_bytes(),
             lane_id,
             tree,
@@ -1229,7 +1230,9 @@ mod tests {
             registry_program,
             proof_key,
             master_key,
+            master_bump,
             checkpoint_key,
+            checkpoint_bump,
             lane_key,
             checkpoint_sequence,
             deployment_domain,
@@ -1259,6 +1262,7 @@ mod tests {
         aspis_core::v7_onefold::V7CompactOneFoldWire::parse(proof, frontier_nodes).unwrap();
 
         let master = PoolV1PairForestMasterV1 {
+            bump: context.master_bump,
             identity: PoolIdentityV1 {
                 pool: context.master_key.to_bytes(),
                 asset_mint: context.mint.to_bytes(),
@@ -1278,6 +1282,7 @@ mod tests {
             last_checkpoint_lane_sequences: [0; 8],
         };
         let checkpoint = PoolV1PairForestCheckpointV1 {
+            bump: context.checkpoint_bump,
             master: context.master_key.to_bytes(),
             deployment_domain: context.deployment_domain,
             checkpoint_sequence: context.checkpoint_sequence,
@@ -1385,29 +1390,27 @@ mod tests {
         let verifier = crate::id();
         let pool_program = Pubkey::new_unique();
         let mint = Pubkey::new_unique();
-        let master_key =
-            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program)
-                .0;
+        let (master_key, master_bump) =
+            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program);
         let mut nullifier = digest(100);
         nullifier[0] = M31(3);
         let lane_id = pool_v1_pair_forest_output_lane_v1(&nullifier).unwrap();
-        let lane_key = Pubkey::find_program_address(
+        let (lane_key, lane_bump) = Pubkey::find_program_address(
             &[PAIR_FOREST_LANE_SEED, master_key.as_ref(), &[lane_id]],
             &pool_program,
-        )
-        .0;
+        );
         let checkpoint_sequence = 7u64;
-        let checkpoint_key = Pubkey::find_program_address(
+        let (checkpoint_key, checkpoint_bump) = Pubkey::find_program_address(
             &[
                 PAIR_FOREST_CHECKPOINT_SEED,
                 master_key.as_ref(),
                 &checkpoint_sequence.to_le_bytes(),
             ],
             &pool_program,
-        )
-        .0;
+        );
         let empty = V7_PAIR_EMPTY_ROOTS;
         let lane = PoolV1PairForestLaneStateV1 {
+            bump: lane_bump,
             master: master_key.to_bytes(),
             lane_id,
             tree: IncrementalMerkleTreeV1 {
@@ -1417,6 +1420,7 @@ mod tests {
             },
         };
         let master = PoolV1PairForestMasterV1 {
+            bump: master_bump,
             identity: PoolIdentityV1 {
                 pool: master_key.to_bytes(),
                 asset_mint: mint.to_bytes(),
@@ -1436,6 +1440,7 @@ mod tests {
             last_checkpoint_lane_sequences: [0; 8],
         };
         let checkpoint = PoolV1PairForestCheckpointV1 {
+            bump: checkpoint_bump,
             master: master_key.to_bytes(),
             deployment_domain: master.identity.deployment_domain,
             checkpoint_sequence,
@@ -1508,26 +1513,23 @@ mod tests {
         let verifier = crate::id();
         let pool_program = Pubkey::new_unique();
         let mint = Pubkey::new_unique();
-        let master_key =
-            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program)
-                .0;
+        let (master_key, master_bump) =
+            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program);
         let nullifier = deterministic_v7_pair_forest_transfer_nullifier_v1();
         let lane_id = pool_v1_pair_forest_output_lane_v1(&nullifier).unwrap();
-        let lane_key = Pubkey::find_program_address(
+        let (lane_key, lane_bump) = Pubkey::find_program_address(
             &[PAIR_FOREST_LANE_SEED, master_key.as_ref(), &[lane_id]],
             &pool_program,
-        )
-        .0;
+        );
         let checkpoint_sequence = 42u64;
-        let checkpoint_key = Pubkey::find_program_address(
+        let (checkpoint_key, checkpoint_bump) = Pubkey::find_program_address(
             &[
                 PAIR_FOREST_CHECKPOINT_SEED,
                 master_key.as_ref(),
                 &checkpoint_sequence.to_le_bytes(),
             ],
             &pool_program,
-        )
-        .0;
+        );
         let proof_key = Pubkey::new_unique();
         let deployment_domain = [5; 32];
         let empty = V7_PAIR_EMPTY_ROOTS;
@@ -1545,6 +1547,7 @@ mod tests {
                 .0;
         }
         let lane = PoolV1PairForestLaneStateV1 {
+            bump: lane_bump,
             master: master_key.to_bytes(),
             lane_id,
             tree,
@@ -1573,6 +1576,7 @@ mod tests {
         assert_eq!(built.transition.live_snapshot, snapshot);
 
         let master = PoolV1PairForestMasterV1 {
+            bump: master_bump,
             identity: PoolIdentityV1 {
                 pool: master_key.to_bytes(),
                 asset_mint: mint.to_bytes(),
@@ -1592,6 +1596,7 @@ mod tests {
             last_checkpoint_lane_sequences: [0; 8],
         };
         let checkpoint = PoolV1PairForestCheckpointV1 {
+            bump: checkpoint_bump,
             master: master_key.to_bytes(),
             deployment_domain,
             checkpoint_sequence,
@@ -1663,26 +1668,23 @@ mod tests {
         let mint = Pubkey::new_unique();
         let token_program = Pubkey::new_unique();
         let destination_token_account = Pubkey::new_unique();
-        let master_key =
-            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program)
-                .0;
+        let (master_key, master_bump) =
+            Pubkey::find_program_address(&[PAIR_FOREST_MASTER_SEED, mint.as_ref()], &pool_program);
         let nullifier = deterministic_v7_pair_forest_withdrawal_nullifier_v1();
         let lane_id = pool_v1_pair_forest_output_lane_v1(&nullifier).unwrap();
-        let lane_key = Pubkey::find_program_address(
+        let (lane_key, lane_bump) = Pubkey::find_program_address(
             &[PAIR_FOREST_LANE_SEED, master_key.as_ref(), &[lane_id]],
             &pool_program,
-        )
-        .0;
+        );
         let checkpoint_sequence = 42u64;
-        let checkpoint_key = Pubkey::find_program_address(
+        let (checkpoint_key, checkpoint_bump) = Pubkey::find_program_address(
             &[
                 PAIR_FOREST_CHECKPOINT_SEED,
                 master_key.as_ref(),
                 &checkpoint_sequence.to_le_bytes(),
             ],
             &pool_program,
-        )
-        .0;
+        );
         let proof_key = Pubkey::new_unique();
         let deployment_domain = [6; 32];
         let empty = V7_PAIR_EMPTY_ROOTS;
@@ -1700,6 +1702,7 @@ mod tests {
                 .0;
         }
         let lane = PoolV1PairForestLaneStateV1 {
+            bump: lane_bump,
             master: master_key.to_bytes(),
             lane_id,
             tree,
@@ -1736,6 +1739,7 @@ mod tests {
         assert_eq!(built.transition.live_snapshot, snapshot);
 
         let master = PoolV1PairForestMasterV1 {
+            bump: master_bump,
             identity: PoolIdentityV1 {
                 pool: master_key.to_bytes(),
                 asset_mint: mint.to_bytes(),
@@ -1755,6 +1759,7 @@ mod tests {
             last_checkpoint_lane_sequences: [0; 8],
         };
         let checkpoint = PoolV1PairForestCheckpointV1 {
+            bump: checkpoint_bump,
             master: master_key.to_bytes(),
             deployment_domain,
             checkpoint_sequence,
@@ -1888,13 +1893,15 @@ mod tests {
         let pool_program = fixed_pubkey(0x41);
         let registry_program = fixed_pubkey(0x44);
         let loader = bpf_loader_upgradeable::id();
-        let master_key = fixed_pubkey(0x71);
-        let registry_key = Pubkey::find_program_address(
+        let (master_key, master_bump) = Pubkey::find_program_address(
+            &[PAIR_FOREST_MASTER_SEED, fixed_pubkey(0x72).as_ref()],
+            &pool_program,
+        );
+        let (registry_key, registry_bump) = Pubkey::find_program_address(
             &[VERIFIER_REGISTRY_V2_SEED, master_key.as_ref()],
             &registry_program,
-        )
-        .0;
-        let entry_key = Pubkey::find_program_address(
+        );
+        let (entry_key, entry_bump) = Pubkey::find_program_address(
             &[
                 VERIFIER_ENTRY_V2_SEED,
                 master_key.as_ref(),
@@ -1902,13 +1909,13 @@ mod tests {
                 &V7_POOL_PAIR_FOREST_TAG73_RELEASE_BINDING,
             ],
             &registry_program,
-        )
-        .0;
-        let registry_programdata =
-            Pubkey::find_program_address(&[registry_program.as_ref()], &loader).0;
-        let verifier_programdata =
-            Pubkey::find_program_address(&[verifier_program.as_ref()], &loader).0;
+        );
+        let (registry_programdata, registry_programdata_bump) =
+            Pubkey::find_program_address(&[registry_program.as_ref()], &loader);
+        let (verifier_programdata, verifier_programdata_bump) =
+            Pubkey::find_program_address(&[verifier_program.as_ref()], &loader);
         let master = PoolV1PairForestMasterV1 {
+            bump: master_bump,
             identity: PoolIdentityV1 {
                 pool: master_key.to_bytes(),
                 asset_mint: fixed_pubkey(0x72).to_bytes(),
@@ -1929,6 +1936,8 @@ mod tests {
             last_checkpoint_lane_sequences: [0; 8],
         };
         let registry = VerifierRegistryV2 {
+            bump: registry_bump,
+            programdata_bump: registry_programdata_bump,
             flags: POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE,
             pool: master_key.to_bytes(),
             authority: [0; 32],
@@ -1941,6 +1950,8 @@ mod tests {
             executable_hash: [0xa5; 32],
         };
         let entry = VerifierRegistryEntryV2 {
+            bump: entry_bump,
+            programdata_bump: verifier_programdata_bump,
             status: VerifierEntryStatusV1::Active,
             statement_version: POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
             pool: master_key.to_bytes(),
