@@ -22,17 +22,17 @@ pub const POOL_V1_PAIR_FOREST_LANE_COUNT: usize = 8;
 pub const POOL_V1_PAIR_FOREST_ALL_LANES_MASK: u8 = 0xff;
 
 pub const POOL_V1_PAIR_FOREST_MASTER_MAGIC: [u8; 4] = *b"ASM8";
-pub const POOL_V1_PAIR_FOREST_MASTER_VERSION: u8 = 1;
+pub const POOL_V1_PAIR_FOREST_MASTER_VERSION: u8 = 2;
 pub const POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES: usize = 384;
 
 pub const POOL_V1_PAIR_FOREST_LANE_MAGIC: [u8; 4] = *b"ASL8";
-pub const POOL_V1_PAIR_FOREST_LANE_VERSION: u8 = 1;
+pub const POOL_V1_PAIR_FOREST_LANE_VERSION: u8 = 2;
 pub const POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES: usize = 80;
 pub const POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES: usize =
     POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES + POOL_V1_TREE_STATE_ACCOUNT_BYTES;
 
 pub const POOL_V1_PAIR_FOREST_CHECKPOINT_MAGIC: [u8; 4] = *b"ASC8";
-pub const POOL_V1_PAIR_FOREST_CHECKPOINT_VERSION: u8 = 1;
+pub const POOL_V1_PAIR_FOREST_CHECKPOINT_VERSION: u8 = 2;
 pub const POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES: usize = 192;
 
 /// Separate binding for the account forest.  Existing V1 single-tree images
@@ -125,6 +125,8 @@ impl From<PoolV1TreeError> for PoolV1PairForestAccountErrorV1 {
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct PoolV1PairForestMasterV1 {
+    /// Canonical PDA bump persisted by Pool initialization (wire byte 7).
+    pub bump: u8,
     pub identity: PoolIdentityV1,
     pub verifier_policy: VerifierPolicyV1,
     pub initialized_lane_mask: u8,
@@ -136,6 +138,8 @@ pub struct PoolV1PairForestMasterV1 {
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct PoolV1PairForestLaneStateV1 {
+    /// Canonical PDA bump persisted by Pool initialization (wire byte 72).
+    pub bump: u8,
     pub master: [u8; 32],
     pub lane_id: u8,
     pub tree: IncrementalMerkleTreeV1,
@@ -143,6 +147,8 @@ pub struct PoolV1PairForestLaneStateV1 {
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct PoolV1PairForestCheckpointV1 {
+    /// Canonical PDA bump supplied by the account planner (wire byte 7).
+    pub bump: u8,
     pub master: [u8; 32],
     pub deployment_domain: [u8; 32],
     pub checkpoint_sequence: u64,
@@ -226,6 +232,7 @@ pub fn encode_pool_v1_pair_forest_master_v1(
     output[4] = POOL_V1_PAIR_FOREST_MASTER_VERSION;
     output[5] = POOL_V1_PAIR_FOREST_LANE_COUNT as u8;
     output[6] = POOL_V1_DIGEST_ENCODING_VERSION;
+    output[7] = master.bump;
     output[8..40].copy_from_slice(&POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING);
     output[MASTER_NEXT_CHECKPOINT_OFFSET..MASTER_INITIALIZED_MASK_OFFSET]
         .copy_from_slice(&master.next_checkpoint_sequence.to_le_bytes());
@@ -262,7 +269,7 @@ pub fn decode_pool_v1_pair_forest_master_v1(
     if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
         return Err(PoolV1PairForestAccountErrorV1::WrongDigestEncoding);
     }
-    if bytes[7] != 0 || bytes[50..64].iter().any(|byte| *byte != 0) || bytes[312..320] != [0u8; 8] {
+    if bytes[50..64].iter().any(|byte| *byte != 0) || bytes[312..320] != [0u8; 8] {
         return Err(PoolV1PairForestAccountErrorV1::NonZeroReserved);
     }
     if bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING {
@@ -283,6 +290,7 @@ pub fn decode_pool_v1_pair_forest_master_v1(
         *sequence = u64::from_le_bytes(bytes[start..start + 8].try_into().unwrap());
     }
     let master = PoolV1PairForestMasterV1 {
+        bump: bytes[7],
         identity,
         verifier_policy,
         initialized_lane_mask: bytes[MASTER_INITIALIZED_MASK_OFFSET],
@@ -320,6 +328,7 @@ pub fn encode_pool_v1_pair_forest_lane_state_v1(
     output[7] = POOL_V1_TREE_DEPTH as u8;
     output[8..40].copy_from_slice(&POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING);
     output[LANE_MASTER_OFFSET..72].copy_from_slice(&lane.master);
+    output[72] = lane.bump;
     output[LANE_TREE_OFFSET..].copy_from_slice(&tree);
     Ok(output)
 }
@@ -353,7 +362,7 @@ pub fn decode_pool_v1_pair_forest_lane_state_v1(
     if master == [0u8; 32] {
         return Err(PoolV1PairForestAccountErrorV1::ZeroRequiredBinding);
     }
-    if bytes[72..LANE_TREE_OFFSET].iter().any(|byte| *byte != 0) {
+    if bytes[73..LANE_TREE_OFFSET].iter().any(|byte| *byte != 0) {
         return Err(PoolV1PairForestAccountErrorV1::NonZeroReserved);
     }
     let tree = IncrementalMerkleTreeV1::decode_with_empty_roots(
@@ -364,6 +373,7 @@ pub fn decode_pool_v1_pair_forest_lane_state_v1(
         return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
     }
     Ok(PoolV1PairForestLaneStateV1 {
+        bump: bytes[72],
         master,
         lane_id: bytes[5],
         tree,
@@ -391,6 +401,7 @@ pub fn encode_pool_v1_pair_forest_checkpoint_v1(
     output[4] = POOL_V1_PAIR_FOREST_CHECKPOINT_VERSION;
     output[5] = POOL_V1_PAIR_FOREST_LANE_COUNT as u8;
     output[6] = POOL_V1_DIGEST_ENCODING_VERSION;
+    output[7] = checkpoint.bump;
     output[CHECKPOINT_MASTER_OFFSET..CHECKPOINT_DOMAIN_OFFSET].copy_from_slice(&checkpoint.master);
     output[CHECKPOINT_DOMAIN_OFFSET..CHECKPOINT_SEQUENCE_OFFSET]
         .copy_from_slice(&checkpoint.deployment_domain);
@@ -423,7 +434,7 @@ pub fn decode_pool_v1_pair_forest_checkpoint_v1(
     if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
         return Err(PoolV1PairForestAccountErrorV1::WrongDigestEncoding);
     }
-    if bytes[7] != 0 || bytes[176..].iter().any(|byte| *byte != 0) {
+    if bytes[176..].iter().any(|byte| *byte != 0) {
         return Err(PoolV1PairForestAccountErrorV1::NonZeroReserved);
     }
     let master: [u8; 32] = bytes[CHECKPOINT_MASTER_OFFSET..CHECKPOINT_DOMAIN_OFFSET]
@@ -450,6 +461,7 @@ pub fn decode_pool_v1_pair_forest_checkpoint_v1(
         }
     }
     Ok(PoolV1PairForestCheckpointV1 {
+        bump: bytes[7],
         master,
         deployment_domain,
         checkpoint_sequence: u64::from_le_bytes(
@@ -464,11 +476,13 @@ pub fn decode_pool_v1_pair_forest_checkpoint_v1(
 
 /// Validate a coherent fixed-order snapshot and prepare one immutable record.
 /// The caller supplies the global root computed by the separately reviewed
-/// forest combiner; this function owns only account/state chronology.
+/// forest combiner and the canonical checkpoint bump from PDA authentication;
+/// this function owns only account/state chronology and preserves that bump.
 pub fn plan_pool_v1_pair_forest_checkpoint_v1(
     master: &PoolV1PairForestMasterV1,
     lanes: &[PoolV1PairForestLaneStateV1; POOL_V1_PAIR_FOREST_LANE_COUNT],
     global_root: Digest,
+    checkpoint_bump: u8,
 ) -> Result<PoolV1PairForestCheckpointPlanV1, PoolV1PairForestAccountErrorV1> {
     validate_master(master)?;
     if master.initialized_lane_mask != POOL_V1_PAIR_FOREST_ALL_LANES_MASK {
@@ -507,6 +521,7 @@ pub fn plan_pool_v1_pair_forest_checkpoint_v1(
         .checked_add(1)
         .ok_or(PoolV1PairForestAccountErrorV1::CheckpointSequenceOverflow)?;
     let checkpoint = PoolV1PairForestCheckpointV1 {
+        bump: checkpoint_bump,
         master: master.identity.pool,
         deployment_domain: master.identity.deployment_domain,
         checkpoint_sequence: master.next_checkpoint_sequence,
@@ -550,6 +565,7 @@ mod tests {
 
     fn master() -> PoolV1PairForestMasterV1 {
         PoolV1PairForestMasterV1 {
+            bump: 251,
             identity: PoolIdentityV1 {
                 pool: [1u8; 32],
                 asset_mint: [2u8; 32],
@@ -573,6 +589,7 @@ mod tests {
     fn lanes(master: [u8; 32]) -> [PoolV1PairForestLaneStateV1; 8] {
         let empty = pair_empty_roots();
         core::array::from_fn(|lane| PoolV1PairForestLaneStateV1 {
+            bump: 250 - lane as u8,
             master,
             lane_id: lane as u8,
             tree: IncrementalMerkleTreeV1 {
@@ -632,6 +649,7 @@ mod tests {
             &master,
             &lanes(master.identity.pool),
             digest(100),
+            249,
         )
         .unwrap();
         let checkpoint_image = encode_pool_v1_pair_forest_checkpoint_v1(&plan.checkpoint).unwrap();
@@ -653,11 +671,12 @@ mod tests {
     fn checkpoint_chronology_rejects_duplicate_decrease_and_wrong_lane_order() {
         let master = master();
         let mut lanes = lanes(master.identity.pool);
-        let first = plan_pool_v1_pair_forest_checkpoint_v1(&master, &lanes, digest(100)).unwrap();
+        let first =
+            plan_pool_v1_pair_forest_checkpoint_v1(&master, &lanes, digest(100), 249).unwrap();
         assert_eq!(first.checkpoint.checkpoint_sequence, 0);
         assert_eq!(first.next_master.next_checkpoint_sequence, 1);
         assert_eq!(
-            plan_pool_v1_pair_forest_checkpoint_v1(&first.next_master, &lanes, digest(101)),
+            plan_pool_v1_pair_forest_checkpoint_v1(&first.next_master, &lanes, digest(101), 249),
             Err(PoolV1PairForestAccountErrorV1::DuplicateCheckpoint)
         );
 
@@ -668,22 +687,92 @@ mod tests {
             .unwrap()
             .0;
         let second =
-            plan_pool_v1_pair_forest_checkpoint_v1(&first.next_master, &lanes, digest(102))
+            plan_pool_v1_pair_forest_checkpoint_v1(&first.next_master, &lanes, digest(102), 249)
                 .unwrap();
         assert_eq!(second.checkpoint.lane_sequences[3], 1);
 
         let mut decreased_master = second.next_master;
         decreased_master.last_checkpoint_lane_sequences[2] = 1;
         assert_eq!(
-            plan_pool_v1_pair_forest_checkpoint_v1(&decreased_master, &lanes, digest(103)),
+            plan_pool_v1_pair_forest_checkpoint_v1(&decreased_master, &lanes, digest(103), 249),
             Err(PoolV1PairForestAccountErrorV1::LaneSequenceDecreased)
         );
 
         lanes.swap(0, 1);
         assert_eq!(
-            plan_pool_v1_pair_forest_checkpoint_v1(&master, &lanes, digest(104)),
+            plan_pool_v1_pair_forest_checkpoint_v1(&master, &lanes, digest(104), 249),
             Err(PoolV1PairForestAccountErrorV1::LaneOrderMismatch)
         );
+    }
+
+    #[test]
+    fn stored_bumps_have_exact_offsets_and_old_formats_fail_closed() {
+        let empty = pair_empty_roots();
+        for bump in [0, 1, 254, 255] {
+            let mut master = master();
+            master.bump = bump;
+            let mut lanes = lanes(master.identity.pool);
+            lanes[0].bump = bump;
+            let plan =
+                plan_pool_v1_pair_forest_checkpoint_v1(&master, &lanes, digest(100), bump).unwrap();
+            assert_eq!(plan.next_master.bump, bump);
+            assert_eq!(plan.checkpoint.bump, bump);
+            let mut master_image = encode_pool_v1_pair_forest_master_v1(&plan.next_master).unwrap();
+            let mut lane_image =
+                encode_pool_v1_pair_forest_lane_state_v1(&lanes[0], &empty).unwrap();
+            let mut checkpoint_image =
+                encode_pool_v1_pair_forest_checkpoint_v1(&plan.checkpoint).unwrap();
+            assert_eq!(master_image[7], bump);
+            assert_eq!(lane_image[72], bump);
+            assert_eq!(checkpoint_image[7], bump);
+            assert_eq!(
+                decode_pool_v1_pair_forest_master_v1(&master_image),
+                Ok(plan.next_master)
+            );
+            assert_eq!(
+                decode_pool_v1_pair_forest_lane_state_v1(&lane_image, &empty),
+                Ok(lanes[0])
+            );
+            assert_eq!(
+                decode_pool_v1_pair_forest_checkpoint_v1(&checkpoint_image),
+                Ok(plan.checkpoint)
+            );
+            assert!(master_image[50..64]
+                .iter()
+                .chain(&master_image[312..320])
+                .all(|b| *b == 0));
+            assert_eq!(&lane_image[73..80], &[0; 7]);
+            assert_eq!(&checkpoint_image[176..192], &[0; 16]);
+
+            master_image[4] = 1;
+            lane_image[4] = 1;
+            checkpoint_image[4] = 1;
+            assert_eq!(
+                decode_pool_v1_pair_forest_master_v1(&master_image),
+                Err(PoolV1PairForestAccountErrorV1::WrongVersion)
+            );
+            assert_eq!(
+                decode_pool_v1_pair_forest_lane_state_v1(&lane_image, &empty),
+                Err(PoolV1PairForestAccountErrorV1::WrongVersion)
+            );
+            assert_eq!(
+                decode_pool_v1_pair_forest_checkpoint_v1(&checkpoint_image),
+                Err(PoolV1PairForestAccountErrorV1::WrongVersion)
+            );
+
+            lane_image[4] = POOL_V1_PAIR_FOREST_LANE_VERSION;
+            lane_image[73] = 1;
+            checkpoint_image[4] = POOL_V1_PAIR_FOREST_CHECKPOINT_VERSION;
+            checkpoint_image[176] = 1;
+            assert_eq!(
+                decode_pool_v1_pair_forest_lane_state_v1(&lane_image, &empty),
+                Err(PoolV1PairForestAccountErrorV1::NonZeroReserved)
+            );
+            assert_eq!(
+                decode_pool_v1_pair_forest_checkpoint_v1(&checkpoint_image),
+                Err(PoolV1PairForestAccountErrorV1::NonZeroReserved)
+            );
+        }
     }
 
     #[test]
@@ -702,7 +791,8 @@ mod tests {
             plan_pool_v1_pair_forest_checkpoint_v1(
                 &incomplete,
                 &lanes(master.identity.pool),
-                digest(1)
+                digest(1),
+                249
             ),
             Err(PoolV1PairForestAccountErrorV1::InvalidMasterState)
         );
@@ -711,6 +801,7 @@ mod tests {
             &master,
             &lanes(master.identity.pool),
             digest(1),
+            249,
         )
         .unwrap();
         let mut image = encode_pool_v1_pair_forest_checkpoint_v1(&plan.checkpoint).unwrap();

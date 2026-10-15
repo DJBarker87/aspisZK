@@ -1,0 +1,42 @@
+G_R1.8 Pool stored canonical bumps
+
+Base b711e9aba1369c5fc40b3ccb2865f48df3a14a03. Branch
+codex/r1-j1-r12-pool-20261015. Owned changes: pair_forest_accounts.rs schema
+and programs/aspis-pool/src/pair_forest.rs processors/tests.
+
+Master/lane/checkpoint each gain pub bump: u8. Wire offsets are master7,
+lane72, checkpoint7. All three account versions advance from1 to2; their
+shared format binding follows the version constants. Sizes, magic, seeds,
+instruction versions, and remaining reserved-zero bytes stay unchanged.
+Initialized version1 bytes fail closed. There is no automatic migration.
+
+API: plan_pool_v1_pair_forest_checkpoint_v1(master, lanes, global_root,
+checkpoint_bump: u8) has a new trailing argument. Codecs and this pure planner
+preserve the supplied byte; they do not establish canonical PDA provenance.
+The public Pool account planner retains its old signature, derives the
+canonical checkpoint address/bump from the master's next sequence, and passes
+that bump into the pure planner. Both precreated-zero and System-created
+checkpoint paths persist that same image. System signer seeds use its bump.
+
+Initialization persists the existing canonical master/lane find results.
+Master updates preserve its bump through struct update; deposit and terminal
+lane successors explicitly preserve lane.bump. The manual invariant-backed
+lane encoder writes byte72, decoder reads it and reserves73..80. Strict and
+invariant-backed Pool account authentication compare stored bumps with the
+canonical find result. R1/V7 consumer create_program_address changes are
+coordinated separately; Pool retains canonical searches on its own paths.
+
+Added tests: byte offsets and round trips for bumps0/1/254/255, old versions,
+reserved bytes, preservation by the pure checkpoint planner, canonical master
+and all eight lane/checkpoint bumps for System-created and precreated-zero
+accounts, and rejection of mismatched stored bumps. Existing initialization,
+deposit, terminal, and manual-encoder tests also check bump preservation.
+The System mock checks signer seeds using create_program_address; this is
+native processor coverage, not an SBF/runtime equivalence claim.
+
+Validation at handoff: rustfmt parsed both edited Rust files; git diff --check
+passed. No compile/test run was started in this worktree, per coordinator
+instruction. Central focused checks must follow external caller/constructor
+updates. The existing255-append arithmetic boundary test should run optimized
+if selected. This note records source/test preparation, not a green release
+result or formal provenance theorem.
