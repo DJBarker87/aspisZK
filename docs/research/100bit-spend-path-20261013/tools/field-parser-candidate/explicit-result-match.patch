@@ -1,0 +1,21 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -408,8 +408,16 @@
+     }
+ 
+     pub fn from_le_bytes(bytes: &[u8]) -> Option<CM31> {
+-        let a = M31::from_le_bytes(bytes[0..4].try_into().ok()?)?;
+-        let b = M31::from_le_bytes(bytes[4..8].try_into().ok()?)?;
++        let a_bytes = match bytes[0..4].try_into() {
++            Ok(value) => value,
++            Err(_) => return None,
++        };
++        let a = M31::from_le_bytes(a_bytes)?;
++        let b_bytes = match bytes[4..8].try_into() {
++            Ok(value) => value,
++            Err(_) => return None,
++        };
++        let b = M31::from_le_bytes(b_bytes)?;
+         Some(CM31 { a, b })
+     }
+ 

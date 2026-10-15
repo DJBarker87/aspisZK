@@ -45,8 +45,9 @@ with the reused word/byte theorems. No runtime source changed.
 
 This proves the contract of the retained generated M31 definitions. It does
 not prove Charon, Aeneas, Rust compiler correctness, the Aeneas standard-library
-models, or equality to deployed SBF execution. CM31/QM31 helper translation,
-exact caller slice widths, WideExact parsing, leaf/caller composition, and
+models, or equality to deployed SBF execution. The unchanged-source CM31/QM31 helper translation remains blocked; the
+isolated candidate below translates successfully. Exact caller slice widths,
+WideExact parsing, leaf/caller composition, and
 checkpoint/account correspondence remain separate source obligations. The
 complete privacy and adaptive Fiat–Shamir security conclusions remain open.
 
@@ -60,4 +61,32 @@ The pinned Charon CLI advertises `--mir built`, `promoted`, `elaborated`, and `o
 
 Attempt **e** changed only Charon's MIR stage from `built` to `optimized`; it retained the same source, includes, monomorphization, and start item as d. Charon exited 0 and Aeneas exited 2 with the same `Result::ok` cleanup-match failure, so this pinned optimized-MIR run did not remove the failing control flow. The complete separate artifact is [evidence/field-parser-extraction-e-20261014](evidence/field-parser-extraction-e-20261014/README.md): its archive SHA-256 is `d2044674a6be21ae27a5b7703eb8bc6639b26a9b41344bd0a83c6d0838d6045f`; the e LLBC SHA-256 is `62e55ec16d6292ef40d958cae639a4e8d2c8cb4c5a3187de76bf91251d832a1e`.
 
-The concrete `Result::ok` use is reached from `CM31::from_le_bytes` at the pinned source `field.rs:410–413`: the `try_into()` result is contextually `Result<[u8; 4], core::array::TryFromSliceError>` before `.ok()?`. The same conversion occurs for its second M31 limb and in the QM31 parser. In pinned nightly core, `TryFromSliceError` is a unit struct deriving `Copy` and `Clone` at `core/src/array/mod.rs:183–185`; the successful payload is a four-byte array. Thus the payload types have no user-defined destructor in this path. This source fact does not prevent Charon from retaining a cleanup discriminant match for the generic `Result::ok` body.
+The concrete `Result::ok` use is reached from `CM31::from_le_bytes` at the pinned source `field.rs:410–413`: the `try_into()` result is contextually `Result<[u8; 4], core::array::TryFromSliceError>` before `.ok()?`. The same conversion occurs for its second M31 limb; the QM31 parser calls this CM31 parser twice. In pinned nightly core, `TryFromSliceError` is a unit struct deriving `Copy` and `Clone` at `core/src/array/mod.rs:183–185`; the successful payload is a four-byte array. Thus the payload types have no user-defined destructor in this path. This source fact does not prevent Charon from retaining a cleanup discriminant match for the generic `Result::ok` body.
+
+
+## Explicit-match candidate and strict decoder reuse
+
+The isolated [two-call patch](tools/field-parser-candidate/explicit-result-match.patch)
+replaces CM31's two generic `Result::ok` calls with explicit `Ok`/`Err`
+matches. Both Charon and Aeneas translate the candidate, including Option
+helpers, without external parser/helper axioms. The generated declarations
+are retained exactly with the previously checked R259 Option discriminant
+support and pinned LLBC tags.
+
+The [candidate checkpoint](CANDIDATE-FIELD-PARSER-CHECKPOINT.md) records ten
+successful focused Lean targets across two batches. They reuse the old M31
+canonical byte decoder, Aeneas array conversion, and Option support to prove
+CM31/QM31 parser refinement for every fixed-width input. The final QM31
+bridge proves equality to the existing strict `Fin 16 → Byte` decoder in
+the literal `(c0.a,c0.b,c1.a,c1.b)` limb order, including noncanonical
+rejection. The two batches retain all fifteen attempts, including five
+failed predecessors, and 56 successful axiom reports using only standard
+Lean axioms.
+
+The optimized native differential suite passed 443,194 comparisons. These
+are finite test results, separate from the all-input parser-model theorems.
+The exact rewrite is now applied on the research branch after the pinned
+v1.52 SBF build and exact-proof comparison reproduced the historical
+two-transaction cost. The failed v1.48 toolchain comparison is retained. Caller payload widths, WideExact
+parsing, the compiler/translator trust boundary, and the complete protocol
+security argument remain open.

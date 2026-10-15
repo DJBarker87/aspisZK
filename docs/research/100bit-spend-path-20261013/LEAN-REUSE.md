@@ -6,6 +6,15 @@ statement and check its premises, representation, and source revision. Add
 only the missing bridge; a similarly named definition or conditional theorem
 does not discharge its assumptions. This is the default for subsequent work.
 
+The latest [field-parser checkpoint](CANDIDATE-FIELD-PARSER-CHECKPOINT.md)
+reuses the retained V5/K1 canonical byte decoder, old `SamplerWordRead`
+array conversion, and R259 Option support. Ten focused targets now connect
+an isolated extractable CM31/QM31 parser candidate to the existing strict
+four-limb decoder, with exact byte order and no canonical-input premise.
+The exact source patch is applied on the research branch after a pinned
+NUC build reproduced the historical two-transaction cost on the same proof.
+Caller/source and full-security obligations remain explicit in the checkpoint.
+
 The R1 path reuses the expensive decoder, list, and sampling results. The new
 work is chiefly a set of explicit bridges. A theorem for the old protocol does
 not automatically become a theorem for the new verifier: its premises, index

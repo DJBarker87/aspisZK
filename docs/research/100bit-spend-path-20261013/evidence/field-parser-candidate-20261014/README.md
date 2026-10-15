@@ -1,0 +1,7 @@
+# Candidate explicit-match field parser extraction evidence
+
+This isolated candidate used a source-only patch replacing `try_into().ok()?` with explicit `match` handling in `CM31::from_le_bytes`. The runtime source was not changed. The recorded input source revision is `6e25cda9d35e52df0980dbcd6744522bd3caaab0`; candidate `field.rs` SHA-256 is `28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea`.
+
+Charon and Aeneas both exited 0. Translation retained four local functions (`M31::from_le_bytes`, `CM31::from_le_bytes`, `QM31::from_le_bytes`, and `parse_fields_probe`), three types, and the `P` global. It also retained bodies for the two non-local Option try helpers. `translation.json` reports `is_opaque: false` for all six functions; the generated Funs file has no external-template declarations. The standalone raw generated files were not compiled directly in this extraction layout. The corresponding retained declarations with pinned Option support are covered by seven green Lean targets in the sibling `lean-candidate-field-parsers-20261014` bundle. These results do not establish Rust compiler correspondence or caller-level parser behavior.
+
+The attempt archive is the authoritative copy of all attempt/a files and excludes only the remote Cargo `target/` cache. Its 27 members were byte-verified against the removed loose copies. The small generated files remain materialized separately for retention checks. See `manifest.json` for member hashes, commands, and resource receipt.

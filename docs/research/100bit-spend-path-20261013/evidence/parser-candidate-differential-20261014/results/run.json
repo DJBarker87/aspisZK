@@ -1,0 +1,50 @@
+{
+  "toolchain": "nightly-2026-06-01",
+  "rustc_commit_hash_expected": "14210df0e27ccd7d9e6a05b8085cbd438e4bbc65",
+  "inputs": {
+    "baseline.rs": "3046536d04e84357c7df7bd742ec9839d1e1dc47ccc0ecaa59eb79ddec453c68",
+    "baseline/wide_exact.rs": "56c26ce33cd0caee95f33474bfc351c5409503b6af665dba7c8837d6ec1068ea",
+    "field.rs": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "field/wide_exact.rs": "56c26ce33cd0caee95f33474bfc351c5409503b6af665dba7c8837d6ec1068ea",
+    "differential.rs": "bbd13f356af4ecb84d7e9bcc2791fea77dedbe60e6b7bdfa7b9c92c6fb182673"
+  },
+  "commands": [
+    {
+      "label": "rustc-version",
+      "command": [
+        "rustup",
+        "run",
+        "nightly-2026-06-01",
+        "rustc",
+        "--version",
+        "--verbose"
+      ],
+      "exit_status": 0,
+      "stdout": "results/rustc-version.log",
+      "time_log": "results/rustc-version.time.log"
+    },
+    {
+      "label": "compile",
+      "command": [
+        "rustup",
+        "run",
+        "nightly-2026-06-01",
+        "rustc",
+        "--test",
+        "--edition=2021",
+        "-C",
+        "opt-level=3",
+        "-C",
+        "overflow-checks=yes",
+        "differential.rs",
+        "-o",
+        "/home/dombarker/project-offloads/aspis-r1-parser-differential-input-20261014/results/parser-differential-tests"
+      ],
+      "exit_status": 1,
+      "stdout": "results/compile.log",
+      "time_log": "results/compile.time.log"
+    }
+  ],
+  "expected_vectors": 221597,
+  "expected_parser_comparisons": 443194
+}

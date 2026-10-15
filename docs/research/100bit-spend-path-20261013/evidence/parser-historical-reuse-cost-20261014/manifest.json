@@ -1,0 +1,98 @@
+{
+  "schema": "aspis-parser-historical-reuse-cost-gate.v1",
+  "source_base": "6e25cda9d35e52df0980dbcd6744522bd3caaab0",
+  "purpose": "Single historical-artifact reuse gate to inspect historical-vs-new-build cost behavior; no builds or further gates in this bundle.",
+  "selected_historical_sbf": {
+    "path": "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/p3-pool-13/bin/aspis_r1_cost_probe_program.so",
+    "sha256": "c94675d0f0682170ed9288e31feb31c76669f9698c554c36e9978c9a98835ab5",
+    "size_bytes": 1219640
+  },
+  "inputs_pinned_before_run": "input-pins.txt",
+  "gate": {
+    "scenario": "transfer success",
+    "pairs": 13,
+    "tx_version": "v0",
+    "reuse": true,
+    "proof_sha256": "86d4212e675b36ebd556ca2b08b1b5e554cae15e77dfcd74c93a6f419129ed7c",
+    "public_sha256": "f6bcd49446f1077d2c5ed4be940e91f0be444efc5ae83024ec0700b8c205c331",
+    "exit_status": 0,
+    "outcome": "success",
+    "compute_units": 1293571,
+    "compute_unit_limit": 1400000,
+    "serialized_transaction_bytes": 879,
+    "trace_reached": "r1:final",
+    "stage1": {
+      "compute_units": 1390128,
+      "serialized_transaction_bytes": 295,
+      "simulation_equals_execution": true,
+      "error": null,
+      "public_unchanged": true
+    },
+    "terminal": {
+      "compute_units": 1293571,
+      "serialized_transaction_bytes": 879,
+      "outcome": "accepted",
+      "error": null,
+      "simulation_equals_execution": true,
+      "limit": 1400000
+    },
+    "settlement_flags": {
+      "history_changed_exactly_on_success": true,
+      "lane_changed_exactly_on_success": true,
+      "nullifier_marker_changed_exactly_on_success": true,
+      "settled_history_equals_expected": true,
+      "settled_lane_equals_candidate": true,
+      "settled_marker_equals_expected": true,
+      "checkpoint_unchanged": true,
+      "entry_unchanged": true,
+      "master_unchanged": true,
+      "registry_unchanged": true
+    }
+  },
+  "resource_record": {
+    "file": "historical-reuse-run.json",
+    "scope": "aspis-r1-parser-historical-reuse-cost-20261014b.scope",
+    "invocation_id": "447a61bdba8f4abaa7a8af704a3ca7b4",
+    "memory_high_bytes": 4294967296,
+    "memory_max_bytes": 6442450944,
+    "memory_swap_max_bytes": 0,
+    "tasks_max": 128,
+    "wall_seconds": 0.5006524750497192,
+    "sampled_peak_aggregate_rss_bytes": 13291520,
+    "cgroup_memory_peak_bytes": 35143680,
+    "swap_current_bytes": 0,
+    "child_peak_rss_kib": 33372
+  },
+  "result_files": [
+    "historical-reuse-evidence.json",
+    "historical-reuse-evidence.asr2.bin",
+    "historical-reuse-evidence.ase2.bin",
+    "historical-reuse-run.log"
+  ],
+  "task_artifacts": {
+    "proof": "task-artifacts/r1-s2-proof.bin",
+    "public": "task-artifacts/r1-s2-public-asf8.bin",
+    "proof_and_public_match_pinned_inputs": true,
+    "keys_retained_remote_mode_0600_not_copied_or_deleted": true,
+    "retention_inventory": "task-retention-note.txt"
+  },
+  "attempt_note": "The first wrapper attempt failed before driver invocation because its recorder path was wrong; see setup-path-error.txt. The actual gate was run once with the corrected pinned recorder path.",
+  "previous_full_os_fixture": {
+    "bundle": "../p3-private-leaf-salts-20261013/p3-pool-13/transfer-13-os-evidence.json",
+    "stage1_compute_units": 1390049,
+    "stage1_serialized_transaction_bytes": 295,
+    "terminal_compute_units": 1293584,
+    "terminal_serialized_transaction_bytes": 879,
+    "delta_historical_minus_fixture": {
+      "stage1_compute_units": 79,
+      "terminal_compute_units": -13,
+      "stage1_serialized_transaction_bytes": 0,
+      "terminal_serialized_transaction_bytes": 0
+    },
+    "proof_sha256": "f04b11c9e5b725749ed8810c529cdeb25aab2161bca4dc3378647fc089b53ed3",
+    "public_sha256": "f6bcd49446f1077d2c5ed4be940e91f0be444efc5ae83024ec0700b8c205c331",
+    "proof_matches_historical_reuse_run": false,
+    "public_matches_historical_reuse_run": true,
+    "comparison_note": "The earlier fixture is a separate full-OS proof draw (proof SHA differs); the public bytes match. CU deltas compare observed fixtures, not identical proof inputs."
+  }
+}

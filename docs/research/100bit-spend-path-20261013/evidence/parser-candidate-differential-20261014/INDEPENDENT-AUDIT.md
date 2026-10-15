@@ -1,0 +1,7 @@
+# Independent evidence audit
+
+Audited read-only at source base `6e25cda9d35e52df0980dbcd6744522bd3caaab0`. Every pre-existing checksum entry verifies. The failed attempt-a archive hash and its embedded input pins/run log verify; its compile log records 34 Rust errors, including module-resolution errors, and the test was not run. The attempt-b archive hash, declared size, all 15 member hashes, and embedded input pins verify. Its baseline, candidate and `wide_exact.rs` copies match the local pins: baseline `3046536d04e84357c7df7bd742ec9839d1e1dc47ccc0ecaa59eb79ddec453c68`, candidate `28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea`, and `wide_exact.rs` `56c26ce33cd0caee95f33474bfc351c5409503b6af665dba7c8837d6ec1068ea`. The candidate is the patched source recorded in the companion field-parser-candidate bundle.
+
+The retained release run uses `nightly-2026-06-01`, rustc commit `14210df0e27ccd7d9e6a05b8085cbd438e4bbc65`, `-C opt-level=3`, and overflow checks. Its logs report compile exit 0 (5.18 s, peak RSS 295864 KiB, swap 0) and test exit 0 (0.14 s, peak RSS 2992 KiB, swap 0; 1 passed). The embedded run data reports 221597 input vectors and 443194 CM31/QM31 parser comparisons. The run is a finite differential suite, not exhaustive equivalence.
+
+**Manifest path correction:** I updated both `attempts.b.archive` and `b_archive.path` to `attempts/b/parser-candidate-differential-b.tar.gz`; the archive bytes and hash were unchanged. The prior manifest SHA-256 was `cca68613f6efc052b28a42a4b67c4ed797877bcaedd6fe4e2f0283108a8c9d84`.

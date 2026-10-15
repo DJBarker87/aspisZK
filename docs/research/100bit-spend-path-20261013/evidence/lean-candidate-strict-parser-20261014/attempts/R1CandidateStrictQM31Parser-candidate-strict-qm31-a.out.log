@@ -1,0 +1,185 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateStrictQM31Parser.lean:35:76: error: unsolved goals
+arr : Std.Array U8 16#usize
+bytes : QM31Bytes := CandidateParserByteOrder.arrayBytes16 arr
+limbCanonical : Fin 4 → Prop := fun i => ↑(decodeWordLE (qm31LimbBytes bytes i)) < m31Modulus
+hcanonical : ∀ (i : Fin 4), limbCanonical i
+limbs : QM31Limbs := fun i => ⟨↑(decodeWordLE (qm31LimbBytes bytes i)), ⋯⟩
+⊢ ↑(decodeWordLE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 0)) < m31Modulus ∧
+    ↑(decodeWordLE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 0)) =
+      ↑(decodeWordLE (qm31LimbBytes bytes 0))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateStrictQM31Parser.lean:43:76: error: unsolved goals
+arr : Std.Array U8 16#usize
+bytes : QM31Bytes := CandidateParserByteOrder.arrayBytes16 arr
+limbCanonical : Fin 4 → Prop := fun i => ↑(decodeWordLE (qm31LimbBytes bytes i)) < m31Modulus
+hcanonical : ∀ (i : Fin 4), limbCanonical i
+limbs : QM31Limbs := fun i => ⟨↑(decodeWordLE (qm31LimbBytes bytes i)), ⋯⟩
+h0 :
+  decodeM31LE (M31ParserArray.arrayBytes (CandidateCM31Parser.half0 (CandidateQM31Parser.half0 arr))) = some (limbs 0)
+⊢ ↑(decodeWordLE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 1)) < m31Modulus ∧
+    ↑(decodeWordLE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 1)) =
+      ↑(decodeWordLE (qm31LimbBytes bytes 1))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateStrictQM31Parser.lean:51:76: error: unsolved goals
+arr : Std.Array U8 16#usize
+bytes : QM31Bytes := CandidateParserByteOrder.arrayBytes16 arr
+limbCanonical : Fin 4 → Prop := fun i => ↑(decodeWordLE (qm31LimbBytes bytes i)) < m31Modulus
+hcanonical : ∀ (i : Fin 4), limbCanonical i
+limbs : QM31Limbs := fun i => ⟨↑(decodeWordLE (qm31LimbBytes bytes i)), ⋯⟩
+h0 :
+  decodeM31LE (M31ParserArray.arrayBytes (CandidateCM31Parser.half0 (CandidateQM31Parser.half0 arr))) = some (limbs 0)
+h1 :
+  decodeM31LE (M31ParserArray.arrayBytes (CandidateCM31Parser.half1 (CandidateQM31Parser.half0 arr))) = some (limbs 1)
+⊢ ↑(decodeWordLE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 2)) < m31Modulus ∧
+    ↑(decodeWordLE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 2)) =
+      ↑(decodeWordLE (qm31LimbBytes bytes 2))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateStrictQM31Parser.lean:59:76: error: unsolved goals
+arr : Std.Array U8 16#usize
+bytes : QM31Bytes := CandidateParserByteOrder.arrayBytes16 arr
+limbCanonical : Fin 4 → Prop := fun i => ↑(decodeWordLE (qm31LimbBytes bytes i)) < m31Modulus
+hcanonical : ∀ (i : Fin 4), limbCanonical i
+limbs : QM31Limbs := fun i => ⟨↑(decodeWordLE (qm31LimbBytes bytes i)), ⋯⟩
+h0 :
+  decodeM31LE (M31ParserArray.arrayBytes (CandidateCM31Parser.half0 (CandidateQM31Parser.half0 arr))) = some (limbs 0)
+h1 :
+  decodeM31LE (M31ParserArray.arrayBytes (CandidateCM31Parser.half1 (CandidateQM31Parser.half0 arr))) = some (limbs 1)
+h2 :
+  decodeM31LE (M31ParserArray.arrayBytes (CandidateCM31Parser.half0 (CandidateQM31Parser.half1 arr))) = some (limbs 2)
+⊢ ↑(decodeWordLE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 3)) < m31Modulus ∧
+    ↑(decodeWordLE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 3)) =
+      ↑(decodeWordLE (qm31LimbBytes bytes 3))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateStrictQM31Parser.lean:76:70: error: unsolved goals
+case «0»
+arr : Std.Array U8 16#usize
+bytes : QM31Bytes := CandidateParserByteOrder.arrayBytes16 arr
+limbCanonical : Fin 4 → Prop := fun i => ↑(decodeWordLE (qm31LimbBytes bytes i)) < m31Modulus
+hcanonical : ¬∀ (i : Fin 4), limbCanonical i
+hi : ¬limbCanonical ((fun i => i) ⟨0, ⋯⟩)
+hbad : decodeM31LE (qm31LimbBytes bytes ((fun i => i) ⟨0, ⋯⟩)) = none
+⊢ ∀ (a : AspisR1CandidateParser.field.CM31),
+    ((decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 0)).bind fun a =>
+          (decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 1)).bind fun b =>
+            some { a := M31ParserRefinement.valueToU32 a, b := M31ParserRefinement.valueToU32 b }) =
+        some a →
+      ∀ (a : AspisR1CandidateParser.field.CM31),
+        ¬((decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 2)).bind fun a =>
+              (decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 3)).bind fun b =>
+                some { a := M31ParserRefinement.valueToU32 a, b := M31ParserRefinement.valueToU32 b }) =
+            some a
+
+case «1»
+arr : Std.Array U8 16#usize
+bytes : QM31Bytes := CandidateParserByteOrder.arrayBytes16 arr
+limbCanonical : Fin 4 → Prop := fun i => ↑(decodeWordLE (qm31LimbBytes bytes i)) < m31Modulus
+hcanonical : ¬∀ (i : Fin 4), limbCanonical i
+hi : ¬limbCanonical ((fun i => i) ⟨1, ⋯⟩)
+hbad : decodeM31LE (qm31LimbBytes bytes ((fun i => i) ⟨1, ⋯⟩)) = none
+⊢ ∀ (a : AspisR1CandidateParser.field.CM31),
+    ((decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 0)).bind fun a =>
+          (decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 1)).bind fun b =>
+            some { a := M31ParserRefinement.valueToU32 a, b := M31ParserRefinement.valueToU32 b }) =
+        some a →
+      ∀ (a : AspisR1CandidateParser.field.CM31),
+        ¬((decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 2)).bind fun a =>
+              (decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 3)).bind fun b =>
+                some { a := M31ParserRefinement.valueToU32 a, b := M31ParserRefinement.valueToU32 b }) =
+            some a
+
+case «2»
+arr : Std.Array U8 16#usize
+bytes : QM31Bytes := CandidateParserByteOrder.arrayBytes16 arr
+limbCanonical : Fin 4 → Prop := fun i => ↑(decodeWordLE (qm31LimbBytes bytes i)) < m31Modulus
+hcanonical : ¬∀ (i : Fin 4), limbCanonical i
+hi : ¬limbCanonical ((fun i => i) ⟨2, ⋯⟩)
+hbad : decodeM31LE (qm31LimbBytes bytes ((fun i => i) ⟨2, ⋯⟩)) = none
+⊢ ∀ (a : AspisR1CandidateParser.field.CM31),
+    ((decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 0)).bind fun a =>
+          (decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 1)).bind fun b =>
+            some { a := M31ParserRefinement.valueToU32 a, b := M31ParserRefinement.valueToU32 b }) =
+        some a →
+      ∀ (a : AspisR1CandidateParser.field.CM31),
+        ¬((decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 2)).bind fun a =>
+              (decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 3)).bind fun b =>
+                some { a := M31ParserRefinement.valueToU32 a, b := M31ParserRefinement.valueToU32 b }) =
+            some a
+
+case «3»
+arr : Std.Array U8 16#usize
+bytes : QM31Bytes := CandidateParserByteOrder.arrayBytes16 arr
+limbCanonical : Fin 4 → Prop := fun i => ↑(decodeWordLE (qm31LimbBytes bytes i)) < m31Modulus
+hcanonical : ¬∀ (i : Fin 4), limbCanonical i
+hi : ¬limbCanonical ((fun i => i) ⟨3, ⋯⟩)
+hbad : decodeM31LE (qm31LimbBytes bytes ((fun i => i) ⟨3, ⋯⟩)) = none
+⊢ ∀ (a : AspisR1CandidateParser.field.CM31),
+    ((decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 0)).bind fun a =>
+          (decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 1)).bind fun b =>
+            some { a := M31ParserRefinement.valueToU32 a, b := M31ParserRefinement.valueToU32 b }) =
+        some a →
+      ∀ (a : AspisR1CandidateParser.field.CM31),
+        ¬((decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 2)).bind fun a =>
+              (decodeM31LE (qm31LimbBytes (CandidateParserByteOrder.arrayBytes16 arr) 3)).bind fun b =>
+                some { a := M31ParserRefinement.valueToU32 a, b := M31ParserRefinement.valueToU32 b }) =
+            some a
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateStrictQM31Parser.lean:85:48: error: unsolved goals
+arr : Std.Array U8 16#usize
+bytes : QM31Bytes := CandidateParserByteOrder.arrayBytes16 arr
+limbCanonical : Fin 4 → Prop := fun i => ↑(decodeWordLE (qm31LimbBytes bytes i)) < m31Modulus
+hcanonical : ¬∀ (i : Fin 4), limbCanonical i
+i : Fin 4
+hi : ¬limbCanonical i
+hbad : decodeM31LE (qm31LimbBytes bytes i) = none
+hcand : CandidateQM31Parser.decodeQM31 arr = none
+⊢ ∃ x, rawCandidateCount ≤ ↑(decodeWordLE (qm31LimbBytes bytes x)) + 1
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateStrictQM31Parser.lean:38:8: warning: This simp argument is unused:
+  hcanonical
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1.RetainedFieldByteCodec.decodeM31LE, limbs, limbCanonical,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵h̵c̵a̵n̵o̵n̵i̵c̵a̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateStrictQM31Parser.lean:46:8: warning: This simp argument is unused:
+  hcanonical
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1.RetainedFieldByteCodec.decodeM31LE, limbs, limbCanonical,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵h̵c̵a̵n̵o̵n̵i̵c̵a̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateStrictQM31Parser.lean:54:8: warning: This simp argument is unused:
+  hcanonical
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1.RetainedFieldByteCodec.decodeM31LE, limbs, limbCanonical,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵h̵c̵a̵n̵o̵n̵i̵c̵a̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateStrictQM31Parser.lean:62:8: warning: This simp argument is unused:
+  hcanonical
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1.RetainedFieldByteCodec.decodeM31LE, limbs, limbCanonical,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵h̵c̵a̵n̵o̵n̵i̵c̵a̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateStrictQM31Parser.lean:84:10: warning: This simp argument is unused:
+  hbad
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1.CandidateQM31Parser.decodeQM31,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1.CandidateCM31Parser.decodeCM31,
+            AspisR1.CandidateParserByteOrder.half00_bytes,
+            AspisR1.CandidateParserByteOrder.half10_bytes,
+            AspisR1.CandidateParserByteOrder.half01_bytes,
+            AspisR1.CandidateParserByteOrder.half11_bytes,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵h̵b̵a̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateStrictQM31Parser.lean:86:57: warning: This simp argument is unused:
+  hcanonical
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1.RetainedFieldByteCodec.decodeQM31LE,̵ ̵h̵c̵a̵n̵o̵n̵i̵c̵a̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CandidateStrictQM31Parser.decoder_refines' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CandidateStrictQM31Parser.source_refines' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
