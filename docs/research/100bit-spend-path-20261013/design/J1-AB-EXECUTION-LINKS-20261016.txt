@@ -64,8 +64,19 @@ LiteralSemanticPayloadBridge.read_of_decodeFull_atC2 additionally requires all
 25 messages valid, the fixed C2 word at row 2, and successful decodeFull;
 the literal committed word is a separate recovery obligation.
 
-33-row source link: semantic rows 0-24, circle 25/26, opening 27-30, queries31,
-rho32. UnifiedRecordCompletion.completed_eq_transcript requires hD, label0=160,
+Raw P1 wire rows 0-24 sample QM31; 25/26 sample circle z0/z1 (r1_wire.rs:220-246).
+Protocol numbering does not shift: UnifiedSampler.samp/row_zero combine C1
+initialization and the fixed empty raw-row0 challenge in row0's .initial c1.
+Rows 1-25 use .payload, with row25 already the first circle challenge; row26
+samples the second circle then reseeds (row_reseed). Rows 27-30 are opening,
+31 queries, 32 rho. TranscriptView.ordinary/ordinary_cons replace the first raw
+payload by .initial while retaining its challenge. SelectedChallengeMap.
+semantic_row requires i<25; first_circle_view/second_circle_view identify 25/26.
+LiteralTranscript.valid/erase refine rows 2/30 to c2/second before erasing them
+to payload; the Unified constructor schedule must not be confused with this.
+These are inspected source/model schedules, not a proved execution link.
+
+UnifiedRecordCompletion.completed_eq_transcript requires hD, label0=160,
 encoded row0=emptyRecord and n<=31. UnifiedPhases.semantic_step/opening_step
 preserve ordinary advances; semantic_end and opening_root distinguish the
 pre-reseed state from row26's returned reseeded state. UnifiedQueryRun.query_state
