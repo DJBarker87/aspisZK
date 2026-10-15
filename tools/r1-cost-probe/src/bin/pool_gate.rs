@@ -2081,6 +2081,7 @@ fn main() -> Result<()> {
             .map_err(|error| anyhow!("construct concurrent stale-lane append: {error:?}"))?
             .0;
         let stale_lane = PoolV1PairForestLaneStateV1 {
+            bump: lane.bump,
             master: lane.master,
             lane_id: lane.lane_id,
             tree: stale_tree,
@@ -2213,6 +2214,7 @@ fn main() -> Result<()> {
 
     let expected_lane_image = encode_pool_v1_pair_forest_lane_state_v1(
         &PoolV1PairForestLaneStateV1 {
+            bump: lane.bump,
             master: lane.master,
             lane_id: lane.lane_id,
             tree: next_tree,

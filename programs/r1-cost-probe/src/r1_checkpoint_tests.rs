@@ -693,7 +693,7 @@ impl PdaFixture {
             ),
             TestAccount::new(
                 pool,
-                encode_pool_v1_pair_forest_lane_state_v1(&lane_state)
+                encode_pool_v1_pair_forest_lane_state_v1(&lane_state, &empty)
                     .unwrap()
                     .to_vec(),
                 false,
@@ -814,4 +814,42 @@ fn manual_lane_decoder_preserves_bump_and_rejects_remaining_reserved_bytes() {
         ));
         bytes[offset] = 0;
     }
+}
+
+#[test]
+fn measured_core_call_counts_include_zero_progress_checkpoint() {
+    // These are measurements of this saved fixture and the concrete HashFn,
+    // not a universal source theorem or an instrumentation of PDA syscalls.
+    let statement = decode_pool_v1_pair_forest_terminal_statement_v1(PUBLIC).unwrap();
+    let public = match &statement {
+        PoolV1PairForestTerminalStatementV1::PrivateTransfer { common, public } => {
+            super::super::Public::Transfer(public, &common.lane_transition)
+        }
+        PoolV1PairForestTerminalStatementV1::Withdrawal { common, public } => {
+            super::super::Public::Withdrawal(public, &common.lane_transition)
+        }
+    };
+    for k in [10, 11] {
+        HASH_CALLS.with(|count| count.set(0));
+        let checkpoint = verifier::tx1(public, PUBLIC, PROOF, k, counted_sha256, None).unwrap();
+        HASH_CALLS.with(|count| assert_eq!(count.get(), 118 + 21 * k));
+        HASH_CALLS.with(|count| count.set(0));
+        verifier::tx2_authenticated(PUBLIC, PROOF, &checkpoint, counted_sha256, None).unwrap();
+        HASH_CALLS.with(|count| assert_eq!(count.get(), 3 + 21 * (22 - k)));
+    }
+    // Unkeyed checksum plus arbitrary account bytes admits next=0 at resume.
+    // All 22 query openings run. Repeating valid equations still satisfies the
+    // final relation for this honest proof, despite the checkpoint not being
+    // a tx1 output. This does not bypass the account-provenance requirement.
+    let mut checkpoint = saved_checkpoint().to_vec();
+    checkpoint[9] = 0;
+    let end = checkpoint.len() - 32;
+    let checksum = sha256(&[b"UNPROVED:R1:checkpoint", &checkpoint[..end]]);
+    checkpoint[end..].copy_from_slice(&checksum);
+    HASH_CALLS.with(|count| count.set(0));
+    assert_eq!(
+        verifier::tx2_authenticated(PUBLIC, PROOF, &checkpoint, counted_sha256, None),
+        Ok(())
+    );
+    HASH_CALLS.with(|count| assert_eq!(count.get(), 465));
 }
