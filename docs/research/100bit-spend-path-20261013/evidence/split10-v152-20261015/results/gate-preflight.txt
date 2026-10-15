@@ -1,0 +1,25 @@
+Preflight was run before every gate invocation. It checked the selected runner
+was executable; the split10 or historical split11 driver and candidate ELF
+were executable/present; each proof and public fixture matched
+fixture-pins.sha256; the new run JSON, evidence JSON, and per-run task directory
+did not already exist. The capped user scope was created for each invocation
+with MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0, TasksMax=128.
+
+Successful gate labels:
+- transfer-13-split10-success-b
+- transfer-13-split10-replay
+- transfer-255-split10
+- withdrawal-255-split10
+- transfer-1023-split10
+- withdrawal-1023-split10
+- transfer-13-split11-compat
+
+The old task directories from the preceding shared-point run were not reused;
+all gate wrappers require a previously absent task directory. The initial
+transfer-13-split10-success wrapper attempt failed before the recorder ran
+because of a malformed recorder path; its outer time log is retained. The
+corrected success-b run used a new task path.
+
+The four retained large fixtures and 13-pair fixture were verified against
+the recorded SHA-256 pins immediately before use. All proofs are retained
+fixtures; no mask entropy was regenerated.

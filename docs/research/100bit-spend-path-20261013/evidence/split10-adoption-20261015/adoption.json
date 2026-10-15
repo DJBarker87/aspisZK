@@ -1,0 +1,30 @@
+{
+  "status": "adopted-after-root-review",
+  "parent_revision": "ce1fb7255213f5b390048d1ca709fea99176ae62",
+  "source_files": {
+    "programs/r1-cost-probe/src/lib.rs": "294546036e6cf8bb8dcc1f1f4a65c5e0887ac04593cdda801f58c75a284d582a",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs": "b2adab8610189a5031fc6f28a7cdeef12c01aa292423743cb4696aa3ee1590a4",
+    "tools/r1-cost-probe/src/bin/pool_gate.rs": "f8986a966a6b17340c84c8d6a3514eed061f25cba8f8d65433d458dc8f379406"
+  },
+  "measured_elf_sha256": "5a91339444d14c2a9c63c9dbd22923003ebd79f63b76c97da175c2042aa62912",
+  "measurement_bundle_sha256sums": "a7b2d092415fb095e71eb4040ee4a7d71075a6fe373c21787bc31c937531f66d",
+  "selected_stage1_instruction": [
+    3,
+    10
+  ],
+  "compatible_stage1_instruction": [
+    3,
+    11
+  ],
+  "total_queries": 22,
+  "root_review": [
+    "Instruction length/value guard checked before data[1] access; accepts only 10 or 11.",
+    "Existing tx1 uses k to stop accumulator at k and serializes a.next.",
+    "Existing authenticated tx2 resumes a.next, processes through 22 and checks a.next == 22 in finish_relation.",
+    "Sealed-account, checkpoint-tail-zero, account-ownership and candidate checks unchanged.",
+    "All five retained full-OS-random-mask fixtures accepted below both transaction budgets; simulation equals execution.",
+    "Split11 compatibility, unsealed-stage1 rollback and duplicate-spend rejection checked in retained evidence."
+  ],
+  "scope": "Local LiteSVM behavior and source identity; no live deployment, universal cost claim, compiler theorem or complete protocol security theorem.",
+  "manifest_review": "../split10-v152-20261015/results/manifest-review.json"
+}

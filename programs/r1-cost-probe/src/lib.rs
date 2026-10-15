@@ -30,7 +30,7 @@ fn first(public_bytes:&[u8],proof:&[u8],k:usize)->Result<Vec<u8>,ProgramError>{
 mod r1_pool_adapter;
 pub fn process_r1_cost_probe_instruction(program_id:&Pubkey,accounts:&[AccountInfo],data:&[u8])->ProgramResult{
     #[cfg(feature="pool-adapter")]
-    if matches!(data.first().copied(), Some(4 | 5 | 6)) || data == &[3,11] || data.starts_with(b"ASQ8") {
+    if matches!(data.first().copied(), Some(4 | 5 | 6)) || (data == &[3,10] || data == &[3,11]) || data.starts_with(b"ASQ8") {
         return r1_pool_adapter::process(program_id,accounts,data);
     }
     if accounts.len()!=3||!matches!(data,[1,0..=22]|[2]) {return Err(ProgramError::InvalidInstructionData);}

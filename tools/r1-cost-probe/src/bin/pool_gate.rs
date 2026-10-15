@@ -1985,7 +1985,7 @@ fn main() -> Result<()> {
         let unsealed_stage1 = Instruction {
             program_id: address(&verifier_program),
             accounts: vec![meta(proof_key, true), meta(unsealed_public_key, false)],
-            data: vec![3, 11],
+            data: vec![3, 10],
         };
         let measure = failed_lifecycle_instruction_unchanged(
             &mut svm,
@@ -2018,7 +2018,7 @@ fn main() -> Result<()> {
     let stage1_instruction = Instruction {
         program_id: address(&verifier_program),
         accounts: vec![meta(proof_key, true), meta(public_key, false)],
-        data: vec![3, 11],
+        data: vec![3, 10],
     };
     let stage1_tx = transaction(&svm, &payer, stage1_instruction, args.tx_version)?;
     let stage1_bytes = wincode::serialize(&stage1_tx)?.len();
@@ -2527,7 +2527,7 @@ fn main() -> Result<()> {
                 "stage1_reads_finalized_asru": true,
                 "negative_checks": lifecycle_negative_checks,
             },
-            "stage1_instruction_data": [3, 11],
+            "stage1_instruction_data": [3, 10],
             "stage1_serialized_transaction_bytes": stage1_bytes,
             "stage1_compute_units": stage1_measurement.compute_units,
             "stage1_error": stage1_measurement.error,

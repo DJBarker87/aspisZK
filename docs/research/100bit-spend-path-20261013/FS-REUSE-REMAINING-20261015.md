@@ -34,7 +34,7 @@ The relevant legacy interface is `R0C.V3.theorem43` in
 [`Gen.lean`](../v8-r0-close-20261007/lean/R0C/V3/Gen.lean). It requires D1,
 `ChainDensity3`, D3, `ChainsRead`, `ReadsChains`, `Inj3`, and the same `hQ`
 bound on distinct first reads. Its conclusion is
-`Qtot * maxErr rb.ε pr.r + κ * Qtot`. The linear multiplier is part of this
+`Qtot * maxErr rb.ε pr.r + κ Qtot`. The linear multiplier is part of this
 existing theorem interface: the proof obtains a first-read union bound from
 `hQ`. The checked old R0FS/V3 theorem inventory has no stronger Q-free or
 work-normalized reduction that removes it.
@@ -65,3 +65,21 @@ an adversarial upper bound on distinct first reads of the full experiment.
 Accordingly, the concrete D1/D2/D3 instance, a full-experiment `Qtot` bound
 compatible with the desired numerical target, and source/account/privacy
 correspondence remain open. No work or grinding credit is assumed.
+
+## Direct causal route added on 15 October
+
+[`UnifiedCausalBound`](lean/UnifiedCausalBound.lean) now reuses the existing
+V3 `lemmaA3` directly with the current unified background decoder. For an
+arbitrary event on the decoded prefix, message, pre-read table and challenge,
+a uniform bound `B` on each fixed-row sampler implies a total first-hit bound
+`N * B`, under an explicit cap of `N` distinct first reads. Both the lazy
+experiment and empty-oracle mean versions compile. This includes the
+background laws for initial, reseed and query samplers; it needs no D1/D2/D3
+classifier. [The exact inventory](CAUSAL-FIRST-HIT-REUSE-20261015.md) records
+the theorem and premises.
+
+This supplies an alternative probability-accounting route. Concrete row
+predicates and their density bounds, causal recovery of their committed
+words, and acceptance implying a hit or successful extraction remain to be
+proved. The `N` factor remains; the theorem does not convert an arbitrary
+oracle-query budget into a single transcript attempt.
