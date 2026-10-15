@@ -1,0 +1,22 @@
+--- a/crates/aspis-core/src/field/wide_exact.rs
++++ b/crates/aspis-core/src/field/wide_exact.rs
+@@ -252,10 +252,17 @@
+     /// unvalidated input. This is a field encoding, not the R-B block sampler.
+     #[inline(always)]
+     pub fn from_le_bytes(bytes: &[u8]) -> Option<Self> {
+-        let bytes: &[u8; Self::BYTE_LEN] = bytes.try_into().ok()?;
++        let bytes: &[u8; Self::BYTE_LEN] = match bytes.try_into() {
++            Ok(value) => value,
++            Err(_) => return None,
++        };
+         let mut limbs = [0; Self::LIMB_COUNT];
+         for (limb, chunk) in limbs.iter_mut().zip(bytes.chunks_exact(4)) {
+-            *limb = u32::from_le_bytes(chunk.try_into().ok()?);
++            let word = match chunk.try_into() {
++                Ok(value) => value,
++                Err(_) => return None,
++            };
++            *limb = u32::from_le_bytes(word);
+         }
+         Self::from_limbs(limbs)
+     }

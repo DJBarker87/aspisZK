@@ -1,0 +1,188 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateWideParserRefinement.lean:39:76: error: unsolved goals
+case none.none
+arr : Std.Array U8 32#usize
+hlen : arr.to_slice.len = 32#usize
+h0 :
+  AspisR1CandidateParser.field.QM31.from_le_bytes (half0 arr).to_slice =
+    ok (Option.map CandidateStrictQM31Parser.limbsToCandidate (decodeQM31LE (lowBytes (arrayBytes32 arr))))
+h1 :
+  AspisR1CandidateParser.field.QM31.from_le_bytes (half1 arr).to_slice =
+    ok (Option.map CandidateStrictQM31Parser.limbsToCandidate (decodeQM31LE (highBytes (arrayBytes32 arr))))
+hx : decodeQM31LE (lowBytes (arrayBytes32 arr)) = none
+hy : decodeQM31LE (highBytes (arrayBytes32 arr)) = none
+⊢ (do
+      let s ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 16#usize } arr.to_slice
+      let o ← AspisR1CandidateParser.field.QM31.from_le_bytes s
+      let cf ← AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s1 ←
+            core.slice.index.SliceIndexRangeUsizeSlice.index { start := 16#usize, «end» := 32#usize } arr.to_slice
+          let o1 ← AspisR1CandidateParser.field.QM31.from_le_bytes s1
+          let cf1 ← AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitTry.branch o1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { c0 := val, c1 := val1 })
+            | core.ops.control_flow.ControlFlow.Break residual => ok none
+        | core.ops.control_flow.ControlFlow.Break residual => ok none) =
+    ok none
+
+case none.some
+arr : Std.Array U8 32#usize
+hlen : arr.to_slice.len = 32#usize
+h0 :
+  AspisR1CandidateParser.field.QM31.from_le_bytes (half0 arr).to_slice =
+    ok (Option.map CandidateStrictQM31Parser.limbsToCandidate (decodeQM31LE (lowBytes (arrayBytes32 arr))))
+h1 :
+  AspisR1CandidateParser.field.QM31.from_le_bytes (half1 arr).to_slice =
+    ok (Option.map CandidateStrictQM31Parser.limbsToCandidate (decodeQM31LE (highBytes (arrayBytes32 arr))))
+hx : decodeQM31LE (lowBytes (arrayBytes32 arr)) = none
+val✝ : QM31Limbs
+hy : decodeQM31LE (highBytes (arrayBytes32 arr)) = some val✝
+⊢ (do
+      let s ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 16#usize } arr.to_slice
+      let o ← AspisR1CandidateParser.field.QM31.from_le_bytes s
+      let cf ← AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s1 ←
+            core.slice.index.SliceIndexRangeUsizeSlice.index { start := 16#usize, «end» := 32#usize } arr.to_slice
+          let o1 ← AspisR1CandidateParser.field.QM31.from_le_bytes s1
+          let cf1 ← AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitTry.branch o1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { c0 := val, c1 := val1 })
+            | core.ops.control_flow.ControlFlow.Break residual => ok none
+        | core.ops.control_flow.ControlFlow.Break residual => ok none) =
+    ok none
+
+case some.none
+arr : Std.Array U8 32#usize
+hlen : arr.to_slice.len = 32#usize
+h0 :
+  AspisR1CandidateParser.field.QM31.from_le_bytes (half0 arr).to_slice =
+    ok (Option.map CandidateStrictQM31Parser.limbsToCandidate (decodeQM31LE (lowBytes (arrayBytes32 arr))))
+h1 :
+  AspisR1CandidateParser.field.QM31.from_le_bytes (half1 arr).to_slice =
+    ok (Option.map CandidateStrictQM31Parser.limbsToCandidate (decodeQM31LE (highBytes (arrayBytes32 arr))))
+val✝ : QM31Limbs
+hx : decodeQM31LE (lowBytes (arrayBytes32 arr)) = some val✝
+hy : decodeQM31LE (highBytes (arrayBytes32 arr)) = none
+⊢ (do
+      let s ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 16#usize } arr.to_slice
+      let o ← AspisR1CandidateParser.field.QM31.from_le_bytes s
+      let cf ← AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s1 ←
+            core.slice.index.SliceIndexRangeUsizeSlice.index { start := 16#usize, «end» := 32#usize } arr.to_slice
+          let o1 ← AspisR1CandidateParser.field.QM31.from_le_bytes s1
+          let cf1 ← AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitTry.branch o1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { c0 := val, c1 := val1 })
+            | core.ops.control_flow.ControlFlow.Break residual => ok none
+        | core.ops.control_flow.ControlFlow.Break residual => ok none) =
+    ok none
+
+case some.some
+arr : Std.Array U8 32#usize
+hlen : arr.to_slice.len = 32#usize
+h0 :
+  AspisR1CandidateParser.field.QM31.from_le_bytes (half0 arr).to_slice =
+    ok (Option.map CandidateStrictQM31Parser.limbsToCandidate (decodeQM31LE (lowBytes (arrayBytes32 arr))))
+h1 :
+  AspisR1CandidateParser.field.QM31.from_le_bytes (half1 arr).to_slice =
+    ok (Option.map CandidateStrictQM31Parser.limbsToCandidate (decodeQM31LE (highBytes (arrayBytes32 arr))))
+val✝¹ : QM31Limbs
+hx : decodeQM31LE (lowBytes (arrayBytes32 arr)) = some val✝¹
+val✝ : QM31Limbs
+hy : decodeQM31LE (highBytes (arrayBytes32 arr)) = some val✝
+⊢ (do
+      let s ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 16#usize } arr.to_slice
+      let o ← AspisR1CandidateParser.field.QM31.from_le_bytes s
+      let cf ← AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s1 ←
+            core.slice.index.SliceIndexRangeUsizeSlice.index { start := 16#usize, «end» := 32#usize } arr.to_slice
+          let o1 ← AspisR1CandidateParser.field.QM31.from_le_bytes s1
+          let cf1 ← AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitTry.branch o1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { c0 := val, c1 := val1 })
+            | core.ops.control_flow.ControlFlow.Break residual => ok none
+        | core.ops.control_flow.ControlFlow.Break residual => ok none) =
+    ok
+      (some
+        { c0 := CandidateStrictQM31Parser.limbsToCandidate val✝¹,
+          c1 := CandidateStrictQM31Parser.limbsToCandidate val✝ })
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateWideParserRefinement.lean:42:21: warning: This simp argument is unused:
+  Slice.length
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.len, S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵ ̵Array.to_slice, arr.property]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateWideParserRefinement.lean:61:12: warning: This simp argument is unused:
+  slice_half0
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1CandidateParser.field.wide_exact.WideExact.from_le_bytes,
+        AspisR1CandidateParser.field.wide_exact.WideExact.BYTE_LEN, hlen, s̵l̵i̵c̵e̵_̵h̵a̵l̵f̵0̵,̵ ̵slice_half1, h0, h1, hx, hy,
+  ̲  ̲ ̲ ̲ ̲ ̲decodeWideLE, limbsToCandidate, AspisR1.CandidateParserSupport.branch_none,
+        AspisR1.CandidateParserSupport.branch_some, AspisR1.CandidateParserSupport.residual_complete]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateWideParserRefinement.lean:61:25: warning: This simp argument is unused:
+  slice_half1
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1CandidateParser.field.wide_exact.WideExact.from_le_bytes,
+        AspisR1CandidateParser.field.wide_exact.WideExact.BYTE_LEN, hlen, slice_half0, s̵l̵i̵c̵e̵_̵h̵a̵l̵f̵1̵,̵ ̵h0, h1, hx, hy,
+  ̲  ̲ ̲ ̲ ̲ ̲decodeWideLE, limbsToCandidate, AspisR1.CandidateParserSupport.branch_none,
+        AspisR1.CandidateParserSupport.branch_some, AspisR1.CandidateParserSupport.residual_complete]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateWideParserRefinement.lean:61:38: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1CandidateParser.field.wide_exact.WideExact.from_le_bytes,
+        AspisR1CandidateParser.field.wide_exact.WideExact.BYTE_LEN, hlen, slice_half0, slice_half1,
+  ̲  ̲ ̲ ̲ ̲ ̲h̵0̵,̵ ̵h1, hx, hy, decodeWideLE, limbsToCandidate, AspisR1.CandidateParserSupport.branch_none,
+        AspisR1.CandidateParserSupport.branch_some, AspisR1.CandidateParserSupport.residual_complete]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateWideParserRefinement.lean:61:42: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1CandidateParser.field.wide_exact.WideExact.from_le_bytes,
+        AspisR1CandidateParser.field.wide_exact.WideExact.BYTE_LEN, hlen, slice_half0, slice_half1,
+  ̲  ̲ ̲ ̲ ̲ ̲h0, h̵1̵,̵ ̵hx, hy, decodeWideLE, limbsToCandidate, AspisR1.CandidateParserSupport.branch_none,
+        AspisR1.CandidateParserSupport.branch_some, AspisR1.CandidateParserSupport.residual_complete]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateWideParserRefinement.lean:62:24: warning: This simp argument is unused:
+  AspisR1.CandidateParserSupport.branch_none
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1CandidateParser.field.wide_exact.WideExact.from_le_bytes,
+        AspisR1CandidateParser.field.wide_exact.WideExact.BYTE_LEN, hlen, slice_half0, slice_half1,
+  ̲  ̲ ̲ ̲ ̲ ̲h0, h1, hx, hy, decodeWideLE, limbsToCandidate, A̵s̵p̵i̵s̵R̵1̵.̵C̵a̵n̵d̵i̵d̵a̵t̵e̵P̵a̵r̵s̵e̵r̵S̵u̵p̵p̵o̵r̵t̵.̵b̵r̵a̵n̵c̵h̵_̵n̵o̵n̵e̵,̵AspisR1.CandidateParserSupport.branch_some,
+        AspisR1.CandidateParserSupport.residual_complete]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateWideParserRefinement.lean:63:6: warning: This simp argument is unused:
+  AspisR1.CandidateParserSupport.branch_some
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1CandidateParser.field.wide_exact.WideExact.from_le_bytes,
+        AspisR1CandidateParser.field.wide_exact.WideExact.BYTE_LEN, hlen, slice_half0, slice_half1,
+  ̲  ̲ ̲ ̲ ̲ ̲h0, h1, hx, hy, decodeWideLE, limbsToCandidate, AspisR1.CandidateParserSupport.branch_none,
+        A̵s̵p̵i̵s̵R̵1̵.̵C̵a̵n̵d̵i̵d̵a̵t̵e̵P̵a̵r̵s̵e̵r̵S̵u̵p̵p̵o̵r̵t̵.̵b̵r̵a̵n̵c̵h̵_̵s̵o̵m̵e̵,̵AspisR1.CandidateParserSupport.residual_complete]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CandidateWideParserRefinement.wrong_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CandidateWideParserRefinement.source_refines' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

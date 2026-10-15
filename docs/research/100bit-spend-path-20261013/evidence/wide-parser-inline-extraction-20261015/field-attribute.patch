@@ -1,0 +1,10 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -1019,6 +1019,7 @@
+         self.try_inv().expect("cannot invert zero in QM31")
+     }
+ 
++    #[inline(always)]
+     pub fn from_le_bytes(bytes: &[u8]) -> Option<QM31> {
+         let c0 = CM31::from_le_bytes(&bytes[0..8])?;
+         let c1 = CM31::from_le_bytes(&bytes[8..16])?;

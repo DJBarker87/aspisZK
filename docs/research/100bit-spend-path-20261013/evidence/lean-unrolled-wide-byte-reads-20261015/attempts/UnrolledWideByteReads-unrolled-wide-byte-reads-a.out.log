@@ -1,0 +1,96 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/UnrolledWideByteReads.lean:30:105: error: unsolved goals
+arr : Std.Array U8 32#usize
+i : Usize
+hi : ↑i < 32
+hb : ↑i < (↑arr).length
+⊢ (match (↑arr)[↑i]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok (↑arr)[↑i]
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/UnrolledWideByteReads.lean:35:43: warning: This simp argument is unused:
+  List.getElem?_eq_getElem
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, Array.to_slice, L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵,̵ ̵hb]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/UnrolledWideByteReads.lean:35:69: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, Array.to_slice, List.getElem?_eq_getElem,̵ ̵h̵b̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/UnrolledWideByteReads.lean:52:43: error: unsolved goals
+arr : Std.Array U8 32#usize
+hlen : arr.to_slice.len = 32#usize
+⊢ (do
+      let i5 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [(↑arr)[0], (↑arr)[1], (↑arr)[2], (↑arr)[3]] ⋯))
+      let i10 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [(↑arr)[4], (↑arr)[5], (↑arr)[6], (↑arr)[7]] ⋯))
+      let i15 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [(↑arr)[8], (↑arr)[9], (↑arr)[10], (↑arr)[11]] ⋯))
+      let i20 ←
+        lift (core.num.U32.from_le_bytes (Array.make 4#usize [(↑arr)[12], (↑arr)[13], (↑arr)[14], (↑arr)[15]] ⋯))
+      let i25 ←
+        lift (core.num.U32.from_le_bytes (Array.make 4#usize [(↑arr)[16], (↑arr)[17], (↑arr)[18], (↑arr)[19]] ⋯))
+      let i30 ←
+        lift (core.num.U32.from_le_bytes (Array.make 4#usize [(↑arr)[20], (↑arr)[21], (↑arr)[22], (↑arr)[23]] ⋯))
+      let i35 ←
+        lift (core.num.U32.from_le_bytes (Array.make 4#usize [(↑arr)[24], (↑arr)[25], (↑arr)[26], (↑arr)[27]] ⋯))
+      let i40 ←
+        lift (core.num.U32.from_le_bytes (Array.make 4#usize [(↑arr)[28], (↑arr)[29], (↑arr)[30], (↑arr)[31]] ⋯))
+      AspisR1CandidateParser.field.wide_exact.WideExact.from_limbs_unrolled
+          (Array.make 8#usize [i5, i10, i15, i20, i25, i30, i35, i40] ⋯)) =
+    AspisR1CandidateParser.field.wide_exact.WideExact.from_limbs_unrolled
+      (Array.make 8#usize
+        [core.num.U32.from_le_bytes
+            (Array.make 4#usize
+              [(↑arr)[↑(finProdFinEquiv (0, 0))], (↑arr)[↑(finProdFinEquiv (0, 1))], (↑arr)[↑(finProdFinEquiv (0, 2))],
+                (↑arr)[↑(finProdFinEquiv (0, 3))]]
+              ⋯),
+          core.num.U32.from_le_bytes
+            (Array.make 4#usize
+              [(↑arr)[↑(finProdFinEquiv (1, 0))], (↑arr)[↑(finProdFinEquiv (1, 1))], (↑arr)[↑(finProdFinEquiv (1, 2))],
+                (↑arr)[↑(finProdFinEquiv (1, 3))]]
+              ⋯),
+          core.num.U32.from_le_bytes
+            (Array.make 4#usize
+              [(↑arr)[↑(finProdFinEquiv (2, 0))], (↑arr)[↑(finProdFinEquiv (2, 1))], (↑arr)[↑(finProdFinEquiv (2, 2))],
+                (↑arr)[↑(finProdFinEquiv (2, 3))]]
+              ⋯),
+          core.num.U32.from_le_bytes
+            (Array.make 4#usize
+              [(↑arr)[↑(finProdFinEquiv (3, 0))], (↑arr)[↑(finProdFinEquiv (3, 1))], (↑arr)[↑(finProdFinEquiv (3, 2))],
+                (↑arr)[↑(finProdFinEquiv (3, 3))]]
+              ⋯),
+          core.num.U32.from_le_bytes
+            (Array.make 4#usize
+              [(↑arr)[↑(finProdFinEquiv (0, 0)) + 16], (↑arr)[↑(finProdFinEquiv (0, 1)) + 16],
+                (↑arr)[↑(finProdFinEquiv (0, 2)) + 16], (↑arr)[↑(finProdFinEquiv (0, 3)) + 16]]
+              ⋯),
+          core.num.U32.from_le_bytes
+            (Array.make 4#usize
+              [(↑arr)[↑(finProdFinEquiv (1, 0)) + 16], (↑arr)[↑(finProdFinEquiv (1, 1)) + 16],
+                (↑arr)[↑(finProdFinEquiv (1, 2)) + 16], (↑arr)[↑(finProdFinEquiv (1, 3)) + 16]]
+              ⋯),
+          core.num.U32.from_le_bytes
+            (Array.make 4#usize
+              [(↑arr)[↑(finProdFinEquiv (2, 0)) + 16], (↑arr)[↑(finProdFinEquiv (2, 1)) + 16],
+                (↑arr)[↑(finProdFinEquiv (2, 2)) + 16], (↑arr)[↑(finProdFinEquiv (2, 3)) + 16]]
+              ⋯),
+          core.num.U32.from_le_bytes
+            (Array.make 4#usize
+              [(↑arr)[↑(finProdFinEquiv (3, 0)) + 16], (↑arr)[↑(finProdFinEquiv (3, 1)) + 16],
+                (↑arr)[↑(finProdFinEquiv (3, 2)) + 16], (↑arr)[↑(finProdFinEquiv (3, 3)) + 16]]
+              ⋯)]
+        ⋯)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/UnrolledWideByteReads.lean:55:21: warning: This simp argument is unused:
+  Slice.length
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.len, S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵ ̵Array.to_slice, arr.property]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.UnrolledWideByteReads.index_array32' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.UnrolledWideByteReads.wrong_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.UnrolledWideByteReads.fixed_reads' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

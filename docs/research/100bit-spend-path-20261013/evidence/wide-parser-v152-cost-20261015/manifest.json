@@ -1,0 +1,104 @@
+{
+  "schema": "aspis-wide-parser-v152-cost-gate.v1",
+  "source_base": "6e25cda9d35e52df0980dbcd6744522bd3caaab0",
+  "candidate_sbf": {
+    "bundle": "../wide-parser-v152-sbf-20261015",
+    "path": "/home/dombarker/project-offloads/aspis-100bit-wide-parser-candidate-20261015/bin-v152-wide-candidate/aspis_r1_cost_probe_program.so",
+    "sha256": "a12e57d6f4c0298543c615968f412cdb6e4d6e5e0a091ca85850c9de93c137be",
+    "size_bytes": 1217920,
+    "toolchain": "Solana cargo-build-sbf 3.1.13; platform-tools v1.52; rustc 1.89.0"
+  },
+  "inputs_pinned_before_run": "input-pins.txt; per-attempt exact hash lists in results/cost-input-pins-*.sha256",
+  "gate": {
+    "scenario": "transfer success",
+    "pairs": 13,
+    "tx_version": "v0",
+    "reuse": true,
+    "proof_sha256": "86d4212e675b36ebd556ca2b08b1b5e554cae15e77dfcd74c93a6f419129ed7c",
+    "public_sha256": "f6bcd49446f1077d2c5ed4be940e91f0be444efc5ae83024ec0700b8c205c331",
+    "mask_entropy_drawn_in_this_gate": false,
+    "result_json": "not produced; gate failed during stage 1",
+    "exit_status": 1,
+    "outcome": "stage-1 computational budget exceeded",
+    "stage1": {
+      "status": "failed",
+      "program_consumption_reported": 1399494,
+      "program_budget_reported": 1399550,
+      "error": "InstructionError(3, ComputationalBudgetExceeded)",
+      "serialized_transaction_bytes": null,
+      "simulation_equals_execution": null,
+      "public_unchanged": null
+    },
+    "terminal": {
+      "status": "not reached",
+      "compute_units": null,
+      "serialized_transaction_bytes": null,
+      "error": null
+    },
+    "settlement_flags": null
+  },
+  "resource_record": {
+    "resource_file": "results/reuse-b.resource.json",
+    "scope": "aspis-wide-parser-v152-cost-20261015-b.scope",
+    "invocation_id": "5164ad01774d435f8f6f1b3ea61bb511",
+    "memory_high_bytes": 4294967296,
+    "memory_max_bytes": 6442450944,
+    "memory_swap_max_bytes": 0,
+    "tasks_max": 128,
+    "wall_seconds": 0.5005175250116736,
+    "sampled_peak_aggregate_rss_bytes": 13357056,
+    "cgroup_memory_peak_bytes": 34865152,
+    "swap_current_bytes": 0,
+    "child_peak_rss_kib": 32756,
+    "exit_status": 1
+  },
+  "attempts": [
+    {
+      "label": "a",
+      "status": "driver refused pre-created task output directory before simulation",
+      "exit_status": 1,
+      "resource_file": "results/reuse-a.resource.json",
+      "driver_log": "results/reuse-a.driver.log",
+      "task_directory": "/home/dombarker/project-offloads/aspis-100bit-wide-parser-candidate-20261015/wide-parser-v152-reuse-task",
+      "generated_keys": false
+    },
+    {
+      "label": "b",
+      "status": "gate executed; stage 1 failed computational budget",
+      "exit_status": 1,
+      "resource_file": "results/reuse-b.resource.json",
+      "driver_log": "results/reuse-b.driver.log",
+      "task_directory": "/home/dombarker/project-offloads/aspis-100bit-wide-parser-candidate-20261015/wide-parser-v152-reuse-task-b",
+      "generated_keys_retained": true
+    }
+  ],
+  "comparison_to_prior_v152_gate": {
+    "prior_elf_sha256": "fca47fb42d1123116ba34b0da5a2af05af0897cfb0f92224ec01885aac56bea8",
+    "prior_stage1": {
+      "compute_units": 1390128,
+      "serialized_transaction_bytes": 295
+    },
+    "wide_candidate_stage1_reported_units": 1399494,
+    "prior_terminal": {
+      "compute_units": 1293571,
+      "serialized_transaction_bytes": 879
+    },
+    "wide_candidate_terminal": "not reached",
+    "prior_stage1_program_log_consumption": 1389622,
+    "new_failed_stage1_program_log_consumption": 1399494,
+    "difference_between_program_log_consumption": 9872,
+    "comparison_note": "The +9,872 value compares the prior successful simulation log total with the new failed-run program log total. The old stage1 execution metric (1,390,128 CU) is separately reported; the new run has no completed execution metric."
+  },
+  "artifacts": {
+    "resource_json": "results/reuse-b.resource.json",
+    "run_log": "results/reuse-b.driver.log",
+    "outer_log": "results/reuse-b.outer.log",
+    "outer_time": "results/reuse-b.outer.time.log",
+    "failed_prelaunch_attempt": "results/reuse-a.*",
+    "proof": "task-artifacts/r1-s2-proof.bin",
+    "public": "task-artifacts/r1-s2-public-asf8.bin",
+    "retention_inventory": "results/task-retention-inventory-b.txt"
+  },
+  "scope_note": "One local LiteSVM reuse test. Stage 1 failed, terminal and settlement were not observed. No further gate was run.",
+  "phase_cost_comparison": "results/phase-cost-comparison.md and results/phase-cost-comparison.json"
+}

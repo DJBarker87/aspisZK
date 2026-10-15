@@ -1,0 +1,82 @@
+{
+  "toolchain": "nightly-2026-06-01",
+  "rustc_commit_hash_expected": "14210df0e27ccd7d9e6a05b8085cbd438e4bbc65",
+  "inputs": {
+    "baseline.rs": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "baseline/wide_exact.rs": "56c26ce33cd0caee95f33474bfc351c5409503b6af665dba7c8837d6ec1068ea",
+    "field.rs": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "field/wide_exact.rs": "940e31f8056b6a3b9422d3fa31ae6cbe3c4084d79885bb8fd5b4a14c56dd7d06",
+    "differential.rs": "66f69b69f2204c47593058fba5c019d1c0e25c8c9ba69ad14649e8c983250f64"
+  },
+  "commands": [
+    {
+      "label": "rustc-version",
+      "command": [
+        "rustup",
+        "run",
+        "nightly-2026-06-01",
+        "rustc",
+        "--version",
+        "--verbose"
+      ],
+      "exit_status": 0,
+      "stdout": "results/rustc-version.log",
+      "time_log": "results/rustc-version.time.log"
+    },
+    {
+      "label": "compile",
+      "command": [
+        "rustup",
+        "run",
+        "nightly-2026-06-01",
+        "rustc",
+        "--test",
+        "--edition=2021",
+        "-C",
+        "opt-level=3",
+        "-C",
+        "overflow-checks=yes",
+        "differential.rs",
+        "-o",
+        "/home/dombarker/project-offloads/aspis-r1-wide-parser-differential-20261015/inputs/results/wide-parser-differential-tests"
+      ],
+      "exit_status": 0,
+      "stdout": "results/compile.log",
+      "time_log": "results/compile.time.log"
+    },
+    {
+      "label": "test",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-wide-parser-differential-20261015/inputs/results/wide-parser-differential-tests",
+        "--exact",
+        "wideexact_candidate_matches_baseline_field_module",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_status": 0,
+      "stdout": "results/test.log",
+      "time_log": "results/test.time.log"
+    }
+  ],
+  "coverage": {
+    "lengths_inclusive": [
+      0,
+      64
+    ],
+    "single_byte_values": 256,
+    "single_byte_positions": 32,
+    "limb_boundaries": [
+      0,
+      1,
+      "P-1",
+      "P",
+      "P+1",
+      "u32::MAX"
+    ],
+    "pairwise_boundary_limb_combinations": true,
+    "seeded_random_vectors_per_length": 256,
+    "canonical_eight_limb_vectors": 4096
+  },
+  "expected_input_vectors": 30055,
+  "expected_parser_calls": 60110
+}

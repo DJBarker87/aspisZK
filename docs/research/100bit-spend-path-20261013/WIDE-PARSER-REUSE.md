@@ -1,13 +1,14 @@
 # WideExact parser reuse inventory
 
-This note records checked Lean structures that may be reused for a future
-32-byte `WideExact` parser bridge. It is a source inventory, not a parser
-refinement or Rust/compiler correspondence claim.
+This note records the existing Lean results reused to prove the retained
+32-byte `WideExact` parser model and the exact candidate adopted on the
+research branch. Compiler correctness and the complete verifier caller path
+remain outside this parser checkpoint.
 
-The current Rust source is
+The baseline Rust source recorded in this inventory is
 [`crates/aspis-core/src/field/wide_exact.rs`](../../../crates/aspis-core/src/field/wide_exact.rs),
 SHA-256 `56c26ce33cd0caee95f33474bfc351c5409503b6af665dba7c8837d6ec1068ea`
-at source HEAD `6e25cda9d35e52df0980dbcd6744522bd3caaab0`. The prior R0-wideexact
+at baseline source revision `aba310f1daa065a27da89d15c6c47166037a8a71`. The prior R0-wideexact
 source snapshot is pinned by
 [`results/r0-wideexact-20261009/source-manifest.json`](../../../results/r0-wideexact-20261009/source-manifest.json):
 revision `73c502add062f5267146827117b4d1cf577475ab`, with
@@ -18,7 +19,7 @@ two method bodies are byte-identical. The extraction starts at each method
 signature and ends at its matching outer brace, excluding preceding comments
 and whitespace:
 
-| Rust method | Current and historical body SHA-256 | Literal behavior |
+| Rust method | Baseline and historical body SHA-256 | Literal behavior |
 | --- | --- | --- |
 | `WideExact::from_limbs` (`wide_exact.rs:207–234`) | `bce2506d3fad8aa068bee648ea792ae74950d263e61a3542cffe92c81106b131` | Accepts `[u32; 8]`; returns `None` if any limb is `>= P`; otherwise assembles two QM31 coordinates in limbs 0–3 and 4–7. |
 | `WideExact::from_le_bytes` (`wide_exact.rs:254–260`) | `e5beddf2508299af58a01e286ce6bc60018d4224f372013ac36af73dfb96b841` | Requires exactly 32 bytes via slice-to-array conversion; decodes eight consecutive little-endian u32 words; passes them to `from_limbs`. |
@@ -68,25 +69,73 @@ Other checked declarations give nearby pieces, with narrower types:
   `AspisV5ComponentCExactTowerDeployment.decodeQM31ExactLE_to_limbs` proves its
   decoder commutes with that four-limb representation (`:40–47`, file
   SHA-256 `6495cdf2d07a39d3204d101edff5be9253ebc9c96a0b96ac0af459082ad725d9`).
-- The separate strict candidate QM31 bridge is now checked for fixed 16-byte
+- The separate strict candidate QM31 bridge is checked for fixed 16-byte
   arrays by
   [`CandidateStrictQM31Parser.source_refines`](lean/CandidateStrictQM31Parser.lean)
   (source SHA-256
   `aeed259da29e525670c23e4a05341d563d3584c5a2f98bbd83c6b84fb57c390d`). It
-  can potentially be reused on two 16-byte halves to obtain two four-limb
-  values; that application would still need explicit split/join and outer
-  parser plumbing.
+  can be reused on two 16-byte halves; the candidate chain below supplies the
+  explicit split/join and outer parser model.
 
-I found no checked Aeneas-generated Lean body or theorem for
-`WideExact::from_le_bytes` or `WideExact::from_limbs`, and no `UW31` or
-`WideExact8` Lean aliases. The literal strings `WideExact8` in older search
-results are part of mangled Rust method symbols, not type aliases.
+## Checked two-half parser model
 
-The remaining parser-specific gap is the connection from a 32-byte slice to
-eight ordered little-endian words, exact-length rejection, the all-eight
-canonicality check, and `Option` assembly into `WideExact`. The canonical
-`Fin 8 → Fin P` domain of `digitsField` supplies the eight-limb mathematical
-representation once those words have been decoded and shown `< P`; it does
-not itself prove that byte-parser control flow or source implements that
-mapping. The current strict QM31 theorem does not close this outer 32-byte
-parser edge.
+The retained Lean chain is now recorded in the focused seven-module
+[checkpoint](evidence/lean-candidate-wide-checkpoint-20261015/README.md):
+
+1. `WideParserArrayHalves.slice_half0`, `slice_half1`, `half0_bytes`, and
+   `half1_bytes` connect the two 16-byte array slices to the corresponding
+   halves of the 32-byte list representation.
+2. `StrictWideByteCodec.decodeWideLE_encodeWideLE`, `successful_halves`, and
+   `encodeWideLE_of_decodeWideLE` establish codec round-trip, successful
+   halves, and byte reconstruction for the strict fixed-width list model.
+   Its `WideLimbs` type embeds canonicality. Dynamic slice-length rejection
+   and successful-parse length are handled by the outer parser theorems.
+3. `WideExactLimbCodec.pairExactEquiv_apply`, `pairExactEquiv_injective`, and
+   `pairToExact_eq_digitsField` connect the two decoded QM31 limb tuples to
+   the existing exact `WideExact` representation and `digitsField` model.
+4. `CandidateWideParserSource` retains the Aeneas-translated candidate parser
+   bodies. `CandidateWideParserRefinement.wrong_length` and `source_refines`
+   prove the isolated two-half candidate's wrong-length result and its exact
+   relationship to the strict decoder model on fixed 32-byte arrays.
+5. `CandidateWideParserContracts.total`, `fixed_success`, and
+   `slice_success_canonical` establish totality, successful-decode byte
+   reconstruction, and canonicality of both returned QM31 halves. No
+   canonical-input premise is required.
+
+The separate [unrolled strict bridge](lean/UnrolledWideParserRefinement.lean)
+(source SHA-256
+`e057b44f28ffb7b398c9439c6945ce7ab05537053f956dd4c70b28016cc00aa6`)
+is now green with six standard axiom reports. It proves that the unrolled
+candidate agrees with the old two-half parser on every slice, refines the
+strict 32-byte list decoder on every fixed-size array, and is total on every
+slice. A successful parse implies exact length 32 and canonicality of both
+QM31 halves without a canonical-input premise; on a fixed-size array,
+successful parsing also reconstructs the original 32 bytes from the decoded
+limbs. These are Lean model statements for the retained extracted candidate. The final combined checkpoint is now green; the research-branch adoption is recorded below.
+
+`ROOT-VALIDATION.json` records 21 focused attempts, including 14 retained
+failures, seven successful target modules, 38 successful axiom reports, 19
+checkpoint public items, and a passing source-retention checker. The scope is
+the exact retained two-half candidate model. It does not establish Rust or
+compiler correspondence, caller behavior, or verifier/security closure.
+
+The isolated candidate history has distinct outcomes. The half-parser `d`
+candidate and inline `g` variant failed the SBF stage-1 budget gate; see
+[`wide-parser-v152-cost-20261015`](evidence/wide-parser-v152-cost-20261015/README.md)
+and [`wide-parser-inline-v152-cost-20261015`](evidence/wide-parser-inline-v152-cost-20261015/README.md).
+The selected h2 unrolled candidate passed its recorded finite optimized native
+differential and a 13-pair v0 transfer cost gate; see
+[`wide-parser-unrolled-differential-20261015`](evidence/wide-parser-unrolled-differential-20261015/README.md)
+and [`wide-parser-unrolled-v152-cost-20261015`](evidence/wide-parser-unrolled-v152-cost-20261015/README.md).
+The 13-pair cost result is limited to that fixture and scenario. Four larger
+transfer/withdrawal cases at 255 and 1023 pairs also passed local acceptance
+and settlement checks; their exact fixtures and measurements are in
+[`wide-parser-unrolled-large-cases-20261015`](evidence/wide-parser-unrolled-large-cases-20261015/README.md).
+The strict Lean refinement and combined checkpoint are checked as described above. The adopted research-branch runtime parser is h2 at SHA-256 6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b; the previous baseline was 56c26ce33cd0caee95f33474bfc351c5409503b6af665dba7c8837d6ec1068ea.
+
+
+## Research-branch adoption status
+
+The root adopted the exact h2 unrolled WideExact::from_le_bytes implementation on the research branch. The current file crates/aspis-core/src/field/wide_exact.rs hashes to 6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b; crates/aspis-core/src/field.rs remains at 28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea. Adoption metadata is in [adoption.json](evidence/wide-parser-adoption-20261015/adoption.json), and the exact patch is in [runtime.patch](evidence/wide-parser-adoption-20261015/runtime.patch). The adoption record reports 457 other package-manifest entries matching and one test-only manifest difference.
+
+The final [unrolled-wide checkpoint](evidence/lean-unrolled-wide-checkpoint-20261015/source-manifest.json) records 12 standard-only axiom reports. Its selected theorem target proves retained extracted-model relationships; it does not establish Rust compiler correctness or whole-verifier/security closure. Earlier baseline evidence and cost outcomes above remain historical; adoption does not rewrite those snapshots.

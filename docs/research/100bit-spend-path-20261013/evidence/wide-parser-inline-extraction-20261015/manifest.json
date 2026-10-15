@@ -1,0 +1,271 @@
+{
+  "schema": "aspis-wide-parser-inline-extraction.v1",
+  "attempt": "g",
+  "source_revision": "aba310f1daa065a27da89d15c6c47166037a8a71",
+  "status": "translated",
+  "input_source_pins": {
+    "scope": "Isolated extraction candidate: same WideExact two-QM31-half parser source as v1.52 candidate; field.rs adds only #[inline(always)] before QM31::from_le_bytes.",
+    "source_revision": "aba310f1daa065a27da89d15c6c47166037a8a71",
+    "sources": {
+      "field.rs": {
+        "repository_path": "crates/aspis-core/src/field.rs",
+        "sha256": "9b9cda686b9051b36f35107fda334dfa4e6f0ccb70b82b27a1108c38b5ada7f0",
+        "baseline_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+        "attribute_only_change": "#[inline(always)] immediately before QM31::from_le_bytes; function body unchanged."
+      },
+      "field/wide_exact.rs": {
+        "repository_path": "crates/aspis-core/src/field/wide_exact.rs",
+        "sha256": "940e31f8056b6a3b9422d3fa31ae6cbe3c4084d79885bb8fd5b4a14c56dd7d06"
+      }
+    }
+  },
+  "input_files": {
+    "Cargo.toml": "4457f55f6486ef1384a3a4949010803b2631fc9d654b57d7b57ff47c63fa968d",
+    "candidate.patch": "6770797ec74360f9c3d54392f16d2a181be189de47461deda6f56ffd061985e8",
+    "extract-field-parsers.py": "3dccc0ea2c6ea0c4d5c40ef836aed287672bd64b59d8d87f1d8ab7d7c006841e",
+    "field/wide_exact.rs": "940e31f8056b6a3b9422d3fa31ae6cbe3c4084d79885bb8fd5b4a14c56dd7d06",
+    "field.rs": "9b9cda686b9051b36f35107fda334dfa4e6f0ccb70b82b27a1108c38b5ada7f0",
+    "lib.rs": "8ad6090eb01047a7e91fae483cf652cd69c01541fa2783a627d80d501cca807e",
+    "source-pins.json": "0e6fde07ca08896d0002490c6e179ad818f7f59a91002845eb6f8401c572432d"
+  },
+  "candidate_field_attribute_patch": {
+    "path": "field-attribute.patch",
+    "sha256": "8eef377dab5c165f6537feb953ce85a6f000714e176bcc48a05fae4e0e1ca5d0",
+    "only_change": "#[inline(always)] immediately before QM31::from_le_bytes; its Rust function body is byte-identical to baseline."
+  },
+  "prior_parser_candidate": {
+    "wide_exact_sha256": "940e31f8056b6a3b9422d3fa31ae6cbe3c4084d79885bb8fd5b4a14c56dd7d06",
+    "prior_extraction": "../wide-parser-extraction-20261015/attempt-d.tar.gz"
+  },
+  "tool_pins": {
+    "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/bin/charon": "b2b0961a3c55aca64752b2fa4a4701ba0c06b860236979e5727c07de8ac2310c",
+    "/home/dombarker/project-offloads/aspis-v7-aeneas-source-unblock-20260830/aeneas-repro-r1": "e3e6e658ad26168421eb37627561930c1e13afa978f77b214a1201d9c4faa813"
+  },
+  "environment": {
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/aspis-r1-wide-parser-inline-extraction-20261015/attempt-g/target",
+    "NO_DNA": "1",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "RUSTUP_TOOLCHAIN": "nightly-2026-06-01"
+  },
+  "rustc_version": "rustc 1.98.0-nightly (14210df0e 2026-05-31)\nbinary: rustc\ncommit-hash: 14210df0e27ccd7d9e6a05b8085cbd438e4bbc65\ncommit-date: 2026-05-31\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.0-nightly\nLLVM version: 22.1.6",
+  "commands": [
+    {
+      "command": [
+        "rustc",
+        "--version",
+        "--verbose"
+      ],
+      "exit": 0,
+      "label": "rustc-version"
+    },
+    {
+      "command": [
+        "cargo",
+        "generate-lockfile",
+        "--offline"
+      ],
+      "exit": 0,
+      "label": "lock"
+    },
+    {
+      "command": [
+        "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/bin/charon",
+        "cargo",
+        "--preset",
+        "aeneas",
+        "--mir",
+        "built",
+        "--sysroot",
+        "default",
+        "--include",
+        "core::option",
+        "--include",
+        "core::result",
+        "--start-from",
+        "crate::parse_wide_exact_probe",
+        "--dest-file",
+        "/home/dombarker/project-offloads/aspis-r1-wide-parser-inline-extraction-20261015/attempt-g/R1FieldParser.llbc",
+        "--",
+        "--locked",
+        "--offline",
+        "--release",
+        "--lib",
+        "--no-default-features"
+      ],
+      "exit": 0,
+      "label": "extract"
+    },
+    {
+      "command": [
+        "/home/dombarker/project-offloads/aspis-v7-aeneas-source-unblock-20260830/aeneas-repro-r1",
+        "-sequential",
+        "-no-progress-bar",
+        "-abort-on-error",
+        "-backend",
+        "lean",
+        "-namespace",
+        "AspisR1WideParser",
+        "-dest",
+        "/home/dombarker/project-offloads/aspis-r1-wide-parser-inline-extraction-20261015/attempt-g/generated",
+        "-subdir",
+        "AspisR1WideParser",
+        "-split-files",
+        "-emit-json",
+        "/home/dombarker/project-offloads/aspis-r1-wide-parser-inline-extraction-20261015/attempt-g/R1FieldParser.llbc"
+      ],
+      "exit": 0,
+      "label": "translate"
+    }
+  ],
+  "attempt_result": {
+    "attempt": "g",
+    "exit": 0,
+    "scope": {
+      "MemoryHigh": "4G",
+      "MemoryMax": "6G",
+      "MemorySwapMax": "0",
+      "TasksMax": 128
+    },
+    "mir": "built",
+    "monomorphize": false
+  },
+  "resource_measurement": {
+    "elapsed_wall_clock": "0:01.84",
+    "max_rss_kib": 306416,
+    "swap_kib": 0,
+    "cgroup": {
+      "MemoryHigh": "4G",
+      "MemoryMax": "6G",
+      "MemorySwapMax": "0",
+      "TasksMax": 128
+    }
+  },
+  "generated_comparison": "generated-comparison.json",
+  "generated_comparison_sha256": "383d28c7893c95e393b7ed8c0878818db84e73a9c801ecb3a0e7b163239dbe21",
+  "functions_nonopaque": 7,
+  "lean_compiled": false,
+  "output_artifacts": [
+    {
+      "path": "attempt-g/R1FieldParser.llbc",
+      "sha256": "81bb3280a33a3efe9e3fd5bb4fb4f9cbca2f3ba7b1880fe8080f7f19f2b8ccd4",
+      "size_bytes": 432481
+    },
+    {
+      "path": "attempt-g/artifact-pins.json",
+      "sha256": "d0bf1d4ce9a35f411ecf546f7fca7ed5ff7abe20e0fc3ff171d5cdfadaa73ad2",
+      "size_bytes": 973
+    },
+    {
+      "path": "attempt-g/commands.json",
+      "sha256": "6145bddc0d2a077fe87defa5726e4dcd98c6a8c1c977f666dc8987be655bb6fa",
+      "size_bytes": 1577
+    },
+    {
+      "path": "attempt-g/environment.json",
+      "sha256": "9e27dbccbbbf24c89a7738e835e49e63b4d0cde06bc195d77851864de33598de",
+      "size_bytes": 319
+    },
+    {
+      "path": "attempt-g/extract-runner.py",
+      "sha256": "3dccc0ea2c6ea0c4d5c40ef836aed287672bd64b59d8d87f1d8ab7d7c006841e",
+      "size_bytes": 5482
+    },
+    {
+      "path": "attempt-g/extract.log",
+      "sha256": "8fef744577465bf309df856901680580445c3e9aa172190f9135279e877a79fb",
+      "size_bytes": 193
+    },
+    {
+      "path": "attempt-g/extract.time.log",
+      "sha256": "45be72abc7faacacca1a4a6c4fb8e5b8f3f40ae63e4b44c631bd338f8c8a7a2c",
+      "size_bytes": 1121
+    },
+    {
+      "path": "attempt-g/generated/AspisR1WideParser/Funs.lean",
+      "sha256": "fd179215297a963713307b3483cf161775fef73023fb7ffa44a8c627ac588da1",
+      "size_bytes": 7643
+    },
+    {
+      "path": "attempt-g/generated/AspisR1WideParser/Types.lean",
+      "sha256": "bcaea7bdaf254ff94e734f23c99c63f5c6f84c5314343411dd011155180e45c6",
+      "size_bytes": 1194
+    },
+    {
+      "path": "attempt-g/generated/translation.json",
+      "sha256": "2bf9bc73adf3df0405aa4a29b89a8f12da2237850407c640ac8df927825bae73",
+      "size_bytes": 5687
+    },
+    {
+      "path": "attempt-g/input-pins.json",
+      "sha256": "56a7ba9f2598f9fa9778a557e8b889f018526b8e37db88c79be43e3b89366266",
+      "size_bytes": 432
+    },
+    {
+      "path": "attempt-g/lock.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "attempt-g/lock.time.log",
+      "sha256": "a65377167f6c0e255ae1bd2aecb191e75666de4e2761b093688f944e04da1a29",
+      "size_bytes": 750
+    },
+    {
+      "path": "attempt-g/rustc-version.log",
+      "sha256": "e6ea0da4a3301256a0a0dc0d67d11acf4e83e0d1bff5dd987ccdaa43708714bc",
+      "size_bytes": 212
+    },
+    {
+      "path": "attempt-g/rustc-version.time.log",
+      "sha256": "91a9e9728dbee06bd8396cf24852564c6dd6e728daed4e0dfb25d2d057c0d60d",
+      "size_bytes": 742
+    },
+    {
+      "path": "attempt-g/source/Cargo.lock",
+      "sha256": "f45ff3c42f0f08cf35abcf4d5d92b5d9107cf5c3e684033092b5fe7124bc5397",
+      "size_bytes": 154
+    },
+    {
+      "path": "attempt-g/source/Cargo.toml",
+      "sha256": "4457f55f6486ef1384a3a4949010803b2631fc9d654b57d7b57ff47c63fa968d",
+      "size_bytes": 159
+    },
+    {
+      "path": "attempt-g/source/field/wide_exact.rs",
+      "sha256": "940e31f8056b6a3b9422d3fa31ae6cbe3c4084d79885bb8fd5b4a14c56dd7d06",
+      "size_bytes": 20872
+    },
+    {
+      "path": "attempt-g/source/field.rs",
+      "sha256": "9b9cda686b9051b36f35107fda334dfa4e6f0ccb70b82b27a1108c38b5ada7f0",
+      "size_bytes": 121385
+    },
+    {
+      "path": "attempt-g/source/lib.rs",
+      "sha256": "8ad6090eb01047a7e91fae483cf652cd69c01541fa2783a627d80d501cca807e",
+      "size_bytes": 305
+    },
+    {
+      "path": "attempt-g/source/source-pins.json",
+      "sha256": "0e6fde07ca08896d0002490c6e179ad818f7f59a91002845eb6f8401c572432d",
+      "size_bytes": 826
+    },
+    {
+      "path": "attempt-g/tool-pins.json",
+      "sha256": "4d6296374547e69e13bbc6328a8ad58ed3e07ec813b8a0644f388d6424c5790f",
+      "size_bytes": 313
+    },
+    {
+      "path": "attempt-g/translate.log",
+      "sha256": "4792cc3039ba979c492744b1066352db81638bec1e2c896910288abfdbac4fbd",
+      "size_bytes": 824
+    },
+    {
+      "path": "attempt-g/translate.time.log",
+      "sha256": "6bf5ad42c1b002185971a3ebad6c7c1d6cdf2c22b0605a2585962cb55664b678",
+      "size_bytes": 1160
+    }
+  ]
+}

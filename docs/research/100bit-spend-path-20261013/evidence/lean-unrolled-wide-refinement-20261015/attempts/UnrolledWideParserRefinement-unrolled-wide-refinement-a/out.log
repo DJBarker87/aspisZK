@@ -1,0 +1,103 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/UnrolledWideParserRefinement.lean:53:4: error: Tactic `tauto` failed
+
+bytes : WideBytes
+⊢ ¬↑(decodeWordLE (qm31LimbBytes (lowBytes bytes) 0)) < m31Modulus ∨
+      ¬↑(decodeWordLE (qm31LimbBytes (lowBytes bytes) 1)) < m31Modulus ∨
+        ¬↑(decodeWordLE (qm31LimbBytes (lowBytes bytes) 2)) < m31Modulus ∨
+          ¬↑(decodeWordLE (qm31LimbBytes (lowBytes bytes) 3)) < m31Modulus ∨
+            ¬↑(decodeWordLE (qm31LimbBytes (highBytes bytes) 0)) < m31Modulus ∨
+              ¬↑(decodeWordLE (qm31LimbBytes (highBytes bytes) 1)) < m31Modulus ∨
+                ¬↑(decodeWordLE (qm31LimbBytes (highBytes bytes) 2)) < m31Modulus ∨
+                  ¬↑(decodeWordLE (qm31LimbBytes (highBytes bytes) 3)) < m31Modulus ↔
+    (¬↑(decodeWordLE (qm31LimbBytes (lowBytes bytes) 0)) < m31Modulus ∨
+        ¬↑(decodeWordLE (qm31LimbBytes (lowBytes bytes) (Fin.succ 0))) < m31Modulus ∨
+          ¬↑(decodeWordLE (qm31LimbBytes (lowBytes bytes) (Fin.succ 0).succ)) < m31Modulus ∨
+            ¬↑(decodeWordLE (qm31LimbBytes (lowBytes bytes) (Fin.succ 0).succ.succ)) < m31Modulus ∨
+              ¬∀ (i : Fin 0), ↑(decodeWordLE (qm31LimbBytes (lowBytes bytes) i.succ.succ.succ.succ)) < m31Modulus) ∨
+      ¬↑(decodeWordLE (qm31LimbBytes (highBytes bytes) 0)) < m31Modulus ∨
+        ¬↑(decodeWordLE (qm31LimbBytes (highBytes bytes) (Fin.succ 0))) < m31Modulus ∨
+          ¬↑(decodeWordLE (qm31LimbBytes (highBytes bytes) (Fin.succ 0).succ)) < m31Modulus ∨
+            ¬↑(decodeWordLE (qm31LimbBytes (highBytes bytes) (Fin.succ 0).succ.succ)) < m31Modulus ∨
+              ¬∀ (i : Fin 0), ↑(decodeWordLE (qm31LimbBytes (highBytes bytes) i.succ.succ.succ.succ)) < m31Modulus
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/UnrolledWideParserRefinement.lean:54:66: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    ok
+        (if _a then none
+        else
+          some
+            {
+              c0 :=
+                { c0 := { a := lowWord bytes 0, b := lowWord bytes 1 },
+                  c1 := { a := lowWord bytes 2, b := lowWord bytes 3 } },
+              c1 :=
+                { c0 := { a := highWord bytes 0, b := highWord bytes 1 },
+                  c1 := { a := highWord bytes 2, b := highWord bytes 3 } } }) =
+      ok (Option.map limbsToCandidate (decodeWideLE bytes))
+Error: Application type mismatch: The argument
+  instDecidableOr
+has type
+  Decidable
+    (lowWord bytes 0 ≥ AspisR1CandidateParser.field.P ∨
+      lowWord bytes 1 ≥ AspisR1CandidateParser.field.P ∨
+        lowWord bytes 2 ≥ AspisR1CandidateParser.field.P ∨
+          lowWord bytes 3 ≥ AspisR1CandidateParser.field.P ∨
+            highWord bytes 0 ≥ AspisR1CandidateParser.field.P ∨
+              highWord bytes 1 ≥ AspisR1CandidateParser.field.P ∨
+                highWord bytes 2 ≥ AspisR1CandidateParser.field.P ∨ highWord bytes 3 ≥ AspisR1CandidateParser.field.P)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite (Option AspisR1CandidateParser.field.wide_exact.WideExact) _a instDecidableOr
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+bytes : WideBytes
+hguards :
+  lowWord bytes 0 ≥ AspisR1CandidateParser.field.P ∨
+      lowWord bytes 1 ≥ AspisR1CandidateParser.field.P ∨
+        lowWord bytes 2 ≥ AspisR1CandidateParser.field.P ∨
+          lowWord bytes 3 ≥ AspisR1CandidateParser.field.P ∨
+            highWord bytes 0 ≥ AspisR1CandidateParser.field.P ∨
+              highWord bytes 1 ≥ AspisR1CandidateParser.field.P ∨
+                highWord bytes 2 ≥ AspisR1CandidateParser.field.P ∨ highWord bytes 3 ≥ AspisR1CandidateParser.field.P ↔
+    ¬((∀ (i : Fin 4), ↑(decodeWordLE (qm31LimbBytes (lowBytes bytes) i)) < m31Modulus) ∧
+        ∀ (i : Fin 4), ↑(decodeWordLE (qm31LimbBytes (highBytes bytes) i)) < m31Modulus)
+⊢ ok
+      (if
+          lowWord bytes 0 ≥ AspisR1CandidateParser.field.P ∨
+            lowWord bytes 1 ≥ AspisR1CandidateParser.field.P ∨
+              lowWord bytes 2 ≥ AspisR1CandidateParser.field.P ∨
+                lowWord bytes 3 ≥ AspisR1CandidateParser.field.P ∨
+                  highWord bytes 0 ≥ AspisR1CandidateParser.field.P ∨
+                    highWord bytes 1 ≥ AspisR1CandidateParser.field.P ∨
+                      highWord bytes 2 ≥ AspisR1CandidateParser.field.P ∨
+                        highWord bytes 3 ≥ AspisR1CandidateParser.field.P then
+        none
+      else
+        some
+          {
+            c0 :=
+              { c0 := { a := lowWord bytes 0, b := lowWord bytes 1 },
+                c1 := { a := lowWord bytes 2, b := lowWord bytes 3 } },
+            c1 :=
+              { c0 := { a := highWord bytes 0, b := highWord bytes 1 },
+                c1 := { a := highWord bytes 2, b := highWord bytes 3 } } }) =
+    ok (Option.map limbsToCandidate (decodeWideLE bytes))
+'AspisR1.UnrolledWideParserRefinement.limbs_refine' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.UnrolledWideParserRefinement.source_refines' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.UnrolledWideParserRefinement.source_eq_half_parser' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.UnrolledWideParserRefinement.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.UnrolledWideParserRefinement.slice_success_canonical' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.UnrolledWideParserRefinement.fixed_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

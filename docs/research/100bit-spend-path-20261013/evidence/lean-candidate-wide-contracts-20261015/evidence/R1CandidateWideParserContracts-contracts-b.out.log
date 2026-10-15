@@ -1,0 +1,54 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateWideParserContracts.lean:49:20: error: Application type mismatch: The argument
+  hd
+has type
+  decodeWideLE (arrayBytes32 arr) = some limbs
+but is expected to have type
+  some limbs = some limbs
+in the application
+  And.intro hd
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateWideParserContracts.lean:91:4: error: Type mismatch: After simplification, term
+  hhi
+ has type
+  @Eq (Option QM31Limbs) (decodeQM31LE (highBytes (arrayBytes32 arr))) (some limbs.2)
+but is expected to have type
+  @Eq (Option QM31Limbs) (decodeQM31LE fun i => arrayBytes32 arr ⟨16 + ↑i, ⋯⟩) (some limbs.2)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1CandidateWideParserContracts.lean:94:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decodeQM31LE (lowBytes (arrayBytes32 arr))
+in the target expression
+  ok (Option.map CandidateStrictQM31Parser.limbsToCandidate (decodeQM31LE fun i => arrayBytes32 arr ⟨↑i, ⋯⟩)) =
+    ok (some value.c0)
+
+bytes : Slice U8
+value : Wide
+h : AspisR1CandidateParser.field.wide_exact.WideExact.from_le_bytes bytes = ok (some value)
+out : Option Wide
+hout : AspisR1CandidateParser.field.wide_exact.WideExact.from_le_bytes bytes = ok out
+houtval : out = some value
+hlen : (↑bytes).length = 32
+arr : Std.Array U8 32#usize := ⟨↑bytes, ⋯⟩
+hs : arr.to_slice = bytes
+harr : AspisR1CandidateParser.field.wide_exact.WideExact.from_le_bytes arr.to_slice = ok (some value)
+limbs : WideLimbs
+hdecode : decodeWideLE (arrayBytes32 arr) = some limbs
+hv : limbsToCandidate limbs = value
+_hencode : encodeWideLE limbs = arrayBytes32 arr
+hlo : decodeQM31LE (lowBytes (arrayBytes32 arr)) = some limbs.1
+hhi : decodeQM31LE (highBytes (arrayBytes32 arr)) = some limbs.2
+hc0 : CandidateStrictQM31Parser.limbsToCandidate limbs.1 = value.c0
+hc1 : CandidateStrictQM31Parser.limbsToCandidate limbs.2 = value.c1
+hsrc0 :
+  AspisR1CandidateParser.field.QM31.from_le_bytes (half0 arr).to_slice =
+    ok (Option.map CandidateStrictQM31Parser.limbsToCandidate (decodeQM31LE fun i => arrayBytes32 arr ⟨↑i, ⋯⟩))
+hsrc1 :
+  AspisR1CandidateParser.field.QM31.from_le_bytes (half1 arr).to_slice =
+    ok (Option.map CandidateStrictQM31Parser.limbsToCandidate (decodeQM31LE fun i => arrayBytes32 arr ⟨16 + ↑i, ⋯⟩))
+hhi' : (decodeQM31LE fun i => arrayBytes32 arr ⟨16 + ↑i, ⋯⟩) = some limbs.2
+⊢ ok (Option.map CandidateStrictQM31Parser.limbsToCandidate (decodeQM31LE fun i => arrayBytes32 arr ⟨↑i, ⋯⟩)) =
+    ok (some value.c0)
+'AspisR1.CandidateWideParserContracts.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CandidateWideParserContracts.fixed_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CandidateWideParserContracts.slice_success_canonical' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

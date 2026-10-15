@@ -1,0 +1,55 @@
+{
+  "source_revision": "aba310f1daa065a27da89d15c6c47166037a8a71",
+  "scope": "Host-only differential of WideExact::from_le_bytes; current baseline full field source vs isolated candidate wide_exact.rs from input-b. No runtime source changes.",
+  "runtime_sources": {
+    "crates/aspis-core/src/field.rs": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "crates/aspis-core/src/field/wide_exact.rs": "56c26ce33cd0caee95f33474bfc351c5409503b6af665dba7c8837d6ec1068ea"
+  },
+  "candidate_sources": {
+    "field.rs": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "field/wide_exact.rs": "940e31f8056b6a3b9422d3fa31ae6cbe3c4084d79885bb8fd5b4a14c56dd7d06",
+    "origin": "evidence/wide-parser-extraction-20261015/input-b",
+    "candidate.patch_sha256": "6770797ec74360f9c3d54392f16d2a181be189de47461deda6f56ffd061985e8"
+  },
+  "harness_sha256": "66f69b69f2204c47593058fba5c019d1c0e25c8c9ba69ad14649e8c983250f64",
+  "runner_sha256": "6b2b9dd08edb0ee70b8704928422240fc26810b6d43c34ec79d982443e0c40cc",
+  "coverage": {
+    "lengths_inclusive": [
+      0,
+      64
+    ],
+    "single_byte_positions": 32,
+    "single_byte_values": 256,
+    "pairwise_boundary_limb_combinations": true,
+    "seeded_random_vectors_per_length": 256,
+    "canonical_eight_limb_vectors": 4096,
+    "expected_input_vectors": 30055,
+    "expected_parser_calls": 60110
+  },
+  "result": "PASS: 1 focused test passed; 30,055 vectors and 60,110 parser calls; no panic; all canonical-limb vectors returned their exact limbs.",
+  "execution": {
+    "host": "pinned NUC build host",
+    "workspace": "/home/dombarker/project-offloads/aspis-r1-wide-parser-differential-20261015",
+    "command": "ulimit -c 0; /usr/bin/time -v -o outer.time.log systemd-run --user --scope --quiet -p MemoryHigh=4G -p MemoryMax=6G -p MemorySwapMax=0 -p TasksMax=128 /usr/bin/timeout 900 python3 run-differential.py --kit \"$PWD/inputs\"",
+    "rustc": "rustc 1.98.0-nightly (14210df0e 2026-05-31), commit 14210df0e27ccd7d9e6a05b8085cbd438e4bbc65, LLVM 22.1.6",
+    "compile_exit": 0,
+    "compile_elapsed": "4.95 s",
+    "compile_peak_rss_kib": 290944,
+    "compile_swap_kib": 0,
+    "test_exit": 0,
+    "test_elapsed": "0.00 s",
+    "test_peak_rss_kib": 2816,
+    "test_swap_kib": 0,
+    "outer_command_exit": 0,
+    "outer_elapsed": "5.03 s",
+    "outer_max_rss_kib": 290944,
+    "outer_swap_kib": 0,
+    "cgroup": {
+      "MemoryHigh": "4G",
+      "MemoryMax": "6G",
+      "MemorySwapMax": 0,
+      "TasksMax": 128
+    },
+    "scope": "Focused native parser differential only; no SBF build or runtime source edit."
+  }
+}

@@ -15,6 +15,16 @@ The exact source patch is applied on the research branch after a pinned
 NUC build reproduced the historical two-transaction cost on the same proof.
 Caller/source and full-security obligations remain explicit in the checkpoint.
 
+The [WideExact parser reuse note](WIDE-PARSER-REUSE.md) records the seven-module
+two-half parser model, its 19-item axiom checkpoint, the unrolled parser
+refinement, and the final 12-item checkpoint. The unrolled bridge proves
+all-slice agreement with the retained two-half parser, strict-decoder
+refinement on fixed 32-byte arrays, totality, successful-output canonicality,
+and byte reconstruction. The exact h2 parser has been adopted on the research
+branch at the source hash and evidence link recorded in that note. Its Lean
+results concern the retained extracted model; they do not prove compiler
+correctness or whole-verifier/security closure.
+
 The R1 path reuses the expensive decoder, list, and sampling results. The new
 work is chiefly a set of explicit bridges. A theorem for the old protocol does
 not automatically become a theorem for the new verifier: its premises, index

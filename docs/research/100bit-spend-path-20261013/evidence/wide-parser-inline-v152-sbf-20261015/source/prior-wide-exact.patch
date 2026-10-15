@@ -1,0 +1,20 @@
+--- docs/research/100bit-spend-path-20261013/evidence/wide-parser-v152-sbf-20261015/source/wide_exact-original.rs	2026-10-15 08:55:58
++++ docs/research/100bit-spend-path-20261013/evidence/wide-parser-v152-sbf-20261015/source/wide_exact.rs	2026-10-15 08:55:33
+@@ -252,12 +252,12 @@
+     /// unvalidated input. This is a field encoding, not the R-B block sampler.
+     #[inline(always)]
+     pub fn from_le_bytes(bytes: &[u8]) -> Option<Self> {
+-        let bytes: &[u8; Self::BYTE_LEN] = bytes.try_into().ok()?;
+-        let mut limbs = [0; Self::LIMB_COUNT];
+-        for (limb, chunk) in limbs.iter_mut().zip(bytes.chunks_exact(4)) {
+-            *limb = u32::from_le_bytes(chunk.try_into().ok()?);
++        if bytes.len() != Self::BYTE_LEN {
++            return None;
+         }
+-        Self::from_limbs(limbs)
++        let c0 = QM31::from_le_bytes(&bytes[0..16])?;
++        let c1 = QM31::from_le_bytes(&bytes[16..32])?;
++        Some(Self { c0, c1 })
+     }
+ 
+     #[inline(always)]

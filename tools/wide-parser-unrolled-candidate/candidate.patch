@@ -1,0 +1,8 @@
+--- a/crates/aspis-core/src/field/wide_exact.rs
++++ b/crates/aspis-core/src/field/wide_exact.rs
+@@ WideExact::from_limbs
+- if limbs.iter().any(|&limb| limb >= P) { return None; }
++ explicit short-circuit checks limbs[0] through limbs[7] against P
+@@ WideExact::from_le_bytes
+- exact-slice conversion plus chunks_exact loop and inner conversion
++ exact byte-length guard, eight literal u32::from_le_bytes arrays, unchanged Self::from_limbs call

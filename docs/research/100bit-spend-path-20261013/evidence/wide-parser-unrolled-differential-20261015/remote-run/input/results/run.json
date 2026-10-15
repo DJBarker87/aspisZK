@@ -1,0 +1,87 @@
+{
+  "toolchain": "nightly-2026-06-01",
+  "rustc_commit_hash_expected": "14210df0e27ccd7d9e6a05b8085cbd438e4bbc65",
+  "inputs": {
+    "baseline.rs": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "baseline/wide_exact.rs": "56c26ce33cd0caee95f33474bfc351c5409503b6af665dba7c8837d6ec1068ea",
+    "field.rs": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "field/wide_exact.rs": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+    "source-pins.json": "22a13f05ca1457d01861a1d586000d71015fc242182dbbb705fdf61f3d345c17",
+    "candidate.patch": "e4b1dd436d2cf2ebedfdd10aeffef9bf69b5efe1e9eeea78a4639081e62de239",
+    "differential.rs": "a52d1e9159e70dcaa229ac49a5d4da0e2ec96a31852a7553b83f6878a8ce7bed"
+  },
+  "commands": [
+    {
+      "label": "rustc-version",
+      "command": [
+        "rustup",
+        "run",
+        "nightly-2026-06-01",
+        "rustc",
+        "--version",
+        "--verbose"
+      ],
+      "exit_status": 0,
+      "stdout": "results/rustc-version.log",
+      "time_log": "results/rustc-version.time.log"
+    },
+    {
+      "label": "compile",
+      "command": [
+        "rustup",
+        "run",
+        "nightly-2026-06-01",
+        "rustc",
+        "--test",
+        "--edition=2021",
+        "-C",
+        "opt-level=3",
+        "-C",
+        "overflow-checks=yes",
+        "differential.rs",
+        "-o",
+        "/home/dombarker/project-offloads/aspis-r1-wide-unrolled-differential-20261015/input/results/unrolled-wide-parser-tests"
+      ],
+      "exit_status": 0,
+      "stdout": "results/compile.log",
+      "time_log": "results/compile.time.log"
+    },
+    {
+      "label": "test",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-wide-unrolled-differential-20261015/input/results/unrolled-wide-parser-tests",
+        "--exact",
+        "unrolled_wideexact_parser_and_limbs_match_baseline",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_status": 0,
+      "stdout": "results/test.log",
+      "time_log": "results/test.time.log"
+    }
+  ],
+  "coverage": {
+    "input_lengths_inclusive": [
+      0,
+      64
+    ],
+    "single_byte_values": 256,
+    "single_byte_positions": 32,
+    "limb_boundaries": [
+      0,
+      1,
+      "P-1",
+      "P",
+      "P+1",
+      "u32::MAX"
+    ],
+    "pairwise_boundary_limb_combinations": true,
+    "seeded_random_vectors_per_length": 256,
+    "canonical_eight_limb_vectors": 4096,
+    "from_limbs_checked_for_every_exact_32_byte_vector": true
+  },
+  "expected_input_vectors": 30055,
+  "expected_parser_calls": 60110,
+  "expected_from_limbs_vectors": 13607,
+  "expected_from_limbs_calls": 27214
+}

@@ -1,0 +1,343 @@
+{
+  "schema": "aspis-wide-h2-source-correspondence-v1",
+  "scope": "Mechanical source-byte comparison only; no runtime edit, build, or security conclusion.",
+  "base_revision": "aba310f1daa065a27da89d15c6c47166037a8a71",
+  "current_worktree_head": "aba310f1daa065a27da89d15c6c47166037a8a71",
+  "source_pins": {
+    "runtime_field_rs": {
+      "path": "crates/aspis-core/src/field.rs",
+      "sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea"
+    },
+    "h2_built_field_rs": {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/wide-parser-unrolled-v152-sbf-20261015/source/field.rs",
+      "sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea"
+    },
+    "native_candidate_input_field_rs": {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/wide-parser-unrolled-extraction-20261015/input/field.rs",
+      "sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea"
+    },
+    "runtime_wide_exact_rs": {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "sha256": "56c26ce33cd0caee95f33474bfc351c5409503b6af665dba7c8837d6ec1068ea"
+    },
+    "h2_built_wide_exact_rs": {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/wide-parser-unrolled-v152-sbf-20261015/source/wide_exact.rs",
+      "sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b"
+    },
+    "native_candidate_input_wide_exact_rs": {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/wide-parser-unrolled-extraction-20261015/input/field/wide_exact.rs",
+      "sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b"
+    },
+    "h2_original_wide_exact_rs": {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/wide-parser-unrolled-v152-sbf-20261015/source/wide_exact-original.rs",
+      "sha256": "56c26ce33cd0caee95f33474bfc351c5409503b6af665dba7c8837d6ec1068ea"
+    },
+    "candidate_patch": {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/wide-parser-unrolled-v152-sbf-20261015/source/wide-unrolled.patch",
+      "sha256": "e4b1dd436d2cf2ebedfdd10aeffef9bf69b5efe1e9eeea78a4639081e62de239"
+    },
+    "native_candidate_input_source_pins": {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/wide-parser-unrolled-extraction-20261015/input/source-pins.json",
+      "sha256": "22a13f05ca1457d01861a1d586000d71015fc242182dbbb705fdf61f3d345c17"
+    },
+    "h2_full_source_manifest": {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/wide-parser-unrolled-v152-sbf-20261015/source/source-manifest.sha256",
+      "sha256": "488ee451a3f273a7c2297adc093158a5dc3834657ba60dbe1b5a300ca4e03abc",
+      "entries": 751
+    }
+  },
+  "direct_source_comparisons": {
+    "field_runtime_equals_h2_built_input_equals_native_candidate_input": true,
+    "wide_h2_built_input_equals_native_candidate_input": true,
+    "runtime_wide_equals_original_h2_baseline": true,
+    "wide_candidate_change_limited_to_two_functions": true,
+    "functions": [
+      {
+        "name": "from_limbs",
+        "attribute": "#[inline(always)]",
+        "change": "iter().any guard replaced by eight explicit limb comparisons; subsequent destructuring/constructor body unchanged"
+      },
+      {
+        "name": "from_le_bytes",
+        "attribute": "#[inline(always)]",
+        "change": "try_into/chunks_exact loop replaced by exact length guard and eight literal u32::from_le_bytes reads; Self::from_limbs call unchanged"
+      }
+    ],
+    "outside_those_function_blocks_byte_identical": true,
+    "function_attributes_and_signatures_unchanged": true
+  },
+  "sbf_build_manifest_validation": {
+    "prebuild_log": "docs/research/100bit-spend-path-20261013/evidence/wide-parser-unrolled-v152-sbf-20261015/results/source-manifest-prebuild.log",
+    "postbuild_log": "docs/research/100bit-spend-path-20261013/evidence/wide-parser-unrolled-v152-sbf-20261015/results/source-manifest-postbuild.log",
+    "recorded_result": "751 entries, zero mismatches pre- and post-build",
+    "build_elf_sha256": "ea9be844a7027f613cf310c5fedd54c8db9e6d669ba325af46d3b5908ef43796"
+  },
+  "current_worktree_vs_751_entry_manifest": {
+    "method": "For each manifest absolute path, compare its suffix after /source/ against the same relative path in this worktree.",
+    "matched": 547,
+    "missing": 198,
+    "mismatched": 6,
+    "mismatches": [
+      {
+        "path": "crates/aspis-core/src/field/wide_exact.rs",
+        "manifest_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+        "worktree_sha256": "56c26ce33cd0caee95f33474bfc351c5409503b6af665dba7c8837d6ec1068ea"
+      },
+      {
+        "path": "crates/aspis-r1-cost-probe/tests/validated_prefix.rs",
+        "manifest_sha256": "f3d2f3fa28bcc64fb917672980ee981c3116330010694bd6a48618c90a97909b",
+        "worktree_sha256": "e1d7c54e8981c724dcdf2490ccf55630fee72c8062eda466aa6951f43ea4e44b"
+      },
+      {
+        "path": "docs/research/100bit-spend-path-20261013/privacy-wide/Cargo.lock",
+        "manifest_sha256": "7ef1459de53451f93bdf4ae30a4ff70201cce89027fd1fedf0c6b8a1c6d712f9",
+        "worktree_sha256": "776b6a243de188e4cb3837d61cbc896ed7b9076e5fc93c7fcb0b3b0f48e9b5fb"
+      },
+      {
+        "path": "docs/research/100bit-spend-path-20261013/privacy-wide/Cargo.toml",
+        "manifest_sha256": "966273329a3897b42e9435085d9eed8b79ec8380630dbdffd3549ed9bba185ad",
+        "worktree_sha256": "9aca120df95df9d44c24a946e05981deb46c0f8e7864a736fcbb90b9673fcb19"
+      },
+      {
+        "path": "docs/research/100bit-spend-path-20261013/privacy-wide/probe.rs",
+        "manifest_sha256": "0772e89664c085872b4a6f18b4e25526d6a866ac9737e793660880d606160ae9",
+        "worktree_sha256": "54ec15ab6aa9205d3a07d4de56680cd301b6fdfb769dd6281d17b2fb7a13b531"
+      },
+      {
+        "path": "scripts/__pycache__/r1_path_stage.cpython-312.pyc",
+        "manifest_sha256": "b3942052b500862a426a8fb75712cfbf57d6e20f0dcdc349df0b47b7efe6d69c",
+        "worktree_sha256": "374126d0c8120c29c388cf61889b95b489cd5d0c5c01dea37327791a026d53d1"
+      }
+    ],
+    "missing_paths": [
+      "docs/research/100bit-spend-path-20261013/privacy-wide-proof-rank-20261013-v2/Cargo.lock",
+      "docs/research/100bit-spend-path-20261013/privacy-wide-proof-rank-20261013-v2/Cargo.toml",
+      "docs/research/100bit-spend-path-20261013/privacy-wide-proof-rank-20261013-v2/probe.rs",
+      "docs/research/100bit-spend-path-20261013/privacy-wide-proof-rank-20261013-v2/z5.rs",
+      "docs/research/100bit-spend-path-20261013/privacy-wide-proof-rank-20261013-v2/z6.rs",
+      "docs/research/100bit-spend-path-20261013/privacy-wide-proof-rank-20261013-v3/Cargo.lock",
+      "docs/research/100bit-spend-path-20261013/privacy-wide-proof-rank-20261013-v3/Cargo.toml",
+      "docs/research/100bit-spend-path-20261013/privacy-wide-proof-rank-20261013-v3/probe.rs",
+      "docs/research/100bit-spend-path-20261013/privacy-wide-proof-rank-20261013-v3/z5.rs",
+      "docs/research/100bit-spend-path-20261013/privacy-wide-proof-rank-20261013-v3/z6.rs",
+      "docs/research/100bit-spend-path-20261013/privacy-wide-proof-rank-20261013/Cargo.lock",
+      "docs/research/100bit-spend-path-20261013/privacy-wide-proof-rank-20261013/Cargo.toml",
+      "docs/research/100bit-spend-path-20261013/privacy-wide-proof-rank-20261013/probe.rs",
+      "docs/research/100bit-spend-path-20261013/privacy-wide-proof-rank-20261013/z5.rs",
+      "docs/research/100bit-spend-path-20261013/privacy-wide-proof-rank-20261013/z6.rs",
+      "r1-cost-probe/Cargo.lock",
+      "r1-cost-probe/Cargo.toml",
+      "r1-cost-probe/src/main.rs",
+      "tools/r1-cost-probe/target/.rustc_info.json",
+      "tools/r1-cost-probe/target/CACHEDIR.TAG",
+      "tools/r1-cost-probe/target/release/.cargo-lock",
+      "tools/r1-cost-probe/target/release/.fingerprint/autocfg-4969358b6ef648b7/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/autocfg-4969358b6ef648b7/output-lib-autocfg",
+      "tools/r1-cost-probe/target/release/.fingerprint/cfg-if-c54fcc77a12dbdf2/dep-lib-cfg_if",
+      "tools/r1-cost-probe/target/release/.fingerprint/cfg-if-c54fcc77a12dbdf2/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/cfg-if-c54fcc77a12dbdf2/lib-cfg_if",
+      "tools/r1-cost-probe/target/release/.fingerprint/cfg-if-c54fcc77a12dbdf2/lib-cfg_if.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/const-oid-86dc471425f73cea/dep-lib-const_oid",
+      "tools/r1-cost-probe/target/release/.fingerprint/const-oid-86dc471425f73cea/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/const-oid-86dc471425f73cea/lib-const_oid",
+      "tools/r1-cost-probe/target/release/.fingerprint/const-oid-86dc471425f73cea/lib-const_oid.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/cpufeatures-acc47049db9c3b1a/dep-lib-cpufeatures",
+      "tools/r1-cost-probe/target/release/.fingerprint/cpufeatures-acc47049db9c3b1a/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/cpufeatures-acc47049db9c3b1a/lib-cpufeatures",
+      "tools/r1-cost-probe/target/release/.fingerprint/cpufeatures-acc47049db9c3b1a/lib-cpufeatures.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/feature-probe-3ead15f3777d7c58/dep-lib-feature_probe",
+      "tools/r1-cost-probe/target/release/.fingerprint/feature-probe-3ead15f3777d7c58/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/feature-probe-3ead15f3777d7c58/lib-feature_probe",
+      "tools/r1-cost-probe/target/release/.fingerprint/feature-probe-3ead15f3777d7c58/lib-feature_probe.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/five8-14b9c8cd21ac26f3/dep-lib-five8",
+      "tools/r1-cost-probe/target/release/.fingerprint/five8-14b9c8cd21ac26f3/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/five8-14b9c8cd21ac26f3/lib-five8",
+      "tools/r1-cost-probe/target/release/.fingerprint/five8-14b9c8cd21ac26f3/lib-five8.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/five8_const-6497abb61bddc098/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/five8_const-6497abb61bddc098/output-lib-five8_const",
+      "tools/r1-cost-probe/target/release/.fingerprint/five8_core-8b4f868fc51ef55d/dep-lib-five8_core",
+      "tools/r1-cost-probe/target/release/.fingerprint/five8_core-8b4f868fc51ef55d/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/five8_core-8b4f868fc51ef55d/lib-five8_core",
+      "tools/r1-cost-probe/target/release/.fingerprint/five8_core-8b4f868fc51ef55d/lib-five8_core.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/getrandom-3d57f95e7f326e05/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/getrandom-3d57f95e7f326e05/output-build-script-build-script-build",
+      "tools/r1-cost-probe/target/release/.fingerprint/ident_case-bf75e9adb6fa9f26/dep-lib-ident_case",
+      "tools/r1-cost-probe/target/release/.fingerprint/ident_case-bf75e9adb6fa9f26/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/ident_case-bf75e9adb6fa9f26/lib-ident_case",
+      "tools/r1-cost-probe/target/release/.fingerprint/ident_case-bf75e9adb6fa9f26/lib-ident_case.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/libc-45f0c4ae39e35f00/build-script-build-script-build",
+      "tools/r1-cost-probe/target/release/.fingerprint/libc-45f0c4ae39e35f00/build-script-build-script-build.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/libc-45f0c4ae39e35f00/dep-build-script-build-script-build",
+      "tools/r1-cost-probe/target/release/.fingerprint/libc-45f0c4ae39e35f00/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/once_cell-c981dd6cd4af361a/dep-lib-once_cell",
+      "tools/r1-cost-probe/target/release/.fingerprint/once_cell-c981dd6cd4af361a/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/once_cell-c981dd6cd4af361a/lib-once_cell",
+      "tools/r1-cost-probe/target/release/.fingerprint/once_cell-c981dd6cd4af361a/lib-once_cell.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/pastey-2df48b5244ce3892/dep-lib-pastey",
+      "tools/r1-cost-probe/target/release/.fingerprint/pastey-2df48b5244ce3892/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/pastey-2df48b5244ce3892/lib-pastey",
+      "tools/r1-cost-probe/target/release/.fingerprint/pastey-2df48b5244ce3892/lib-pastey.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/proc-macro2-95e408b42308a26a/build-script-build-script-build",
+      "tools/r1-cost-probe/target/release/.fingerprint/proc-macro2-95e408b42308a26a/build-script-build-script-build.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/proc-macro2-95e408b42308a26a/dep-build-script-build-script-build",
+      "tools/r1-cost-probe/target/release/.fingerprint/proc-macro2-95e408b42308a26a/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/quote-594426f83af2b8ac/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/quote-594426f83af2b8ac/output-build-script-build-script-build",
+      "tools/r1-cost-probe/target/release/.fingerprint/semver-b7a8ed8e0e25185c/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/semver-b7a8ed8e0e25185c/output-lib-semver",
+      "tools/r1-cost-probe/target/release/.fingerprint/serde-dff487fd700155d9/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/serde-dff487fd700155d9/output-build-script-build-script-build",
+      "tools/r1-cost-probe/target/release/.fingerprint/serde_core-23df562a33711219/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/serde_core-23df562a33711219/output-build-script-build-script-build",
+      "tools/r1-cost-probe/target/release/.fingerprint/sha2-const-stable-36ac4ab3ce300625/dep-lib-sha2_const_stable",
+      "tools/r1-cost-probe/target/release/.fingerprint/sha2-const-stable-36ac4ab3ce300625/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/sha2-const-stable-36ac4ab3ce300625/lib-sha2_const_stable",
+      "tools/r1-cost-probe/target/release/.fingerprint/sha2-const-stable-36ac4ab3ce300625/lib-sha2_const_stable.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/solana-atomic-u64-e61c354c824e4b90/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/solana-atomic-u64-e61c354c824e4b90/output-lib-solana_atomic_u64",
+      "tools/r1-cost-probe/target/release/.fingerprint/solana-program-error-50122d2123fee4be/dep-lib-solana_program_error",
+      "tools/r1-cost-probe/target/release/.fingerprint/solana-program-error-50122d2123fee4be/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/solana-program-error-50122d2123fee4be/lib-solana_program_error",
+      "tools/r1-cost-probe/target/release/.fingerprint/solana-program-error-50122d2123fee4be/lib-solana_program_error.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/solana-sanitize-049337c94eea2150/dep-lib-solana_sanitize",
+      "tools/r1-cost-probe/target/release/.fingerprint/solana-sanitize-049337c94eea2150/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/solana-sanitize-049337c94eea2150/lib-solana_sanitize",
+      "tools/r1-cost-probe/target/release/.fingerprint/solana-sanitize-049337c94eea2150/lib-solana_sanitize.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/strsim-05537148d947767c/dep-lib-strsim",
+      "tools/r1-cost-probe/target/release/.fingerprint/strsim-05537148d947767c/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/strsim-05537148d947767c/lib-strsim",
+      "tools/r1-cost-probe/target/release/.fingerprint/strsim-05537148d947767c/lib-strsim.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/subtle-9c0707dbecbd6479/dep-lib-subtle",
+      "tools/r1-cost-probe/target/release/.fingerprint/subtle-9c0707dbecbd6479/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/subtle-9c0707dbecbd6479/lib-subtle",
+      "tools/r1-cost-probe/target/release/.fingerprint/subtle-9c0707dbecbd6479/lib-subtle.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/thiserror-496b464ce6f22f28/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/thiserror-496b464ce6f22f28/output-build-script-build-script-build",
+      "tools/r1-cost-probe/target/release/.fingerprint/typenum-f3474fe1afd54744/dep-lib-typenum",
+      "tools/r1-cost-probe/target/release/.fingerprint/typenum-f3474fe1afd54744/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/typenum-f3474fe1afd54744/lib-typenum",
+      "tools/r1-cost-probe/target/release/.fingerprint/typenum-f3474fe1afd54744/lib-typenum.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/unicode-ident-730a0328b14b1d39/dep-lib-unicode_ident",
+      "tools/r1-cost-probe/target/release/.fingerprint/unicode-ident-730a0328b14b1d39/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/unicode-ident-730a0328b14b1d39/lib-unicode_ident",
+      "tools/r1-cost-probe/target/release/.fingerprint/unicode-ident-730a0328b14b1d39/lib-unicode_ident.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/version_check-0a58015b5e65a818/dep-lib-version_check",
+      "tools/r1-cost-probe/target/release/.fingerprint/version_check-0a58015b5e65a818/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/version_check-0a58015b5e65a818/lib-version_check",
+      "tools/r1-cost-probe/target/release/.fingerprint/version_check-0a58015b5e65a818/lib-version_check.json",
+      "tools/r1-cost-probe/target/release/.fingerprint/zerocopy-aa1af0ddbefbfc81/invoked.timestamp",
+      "tools/r1-cost-probe/target/release/.fingerprint/zerocopy-aa1af0ddbefbfc81/output-build-script-build-script-build",
+      "tools/r1-cost-probe/target/release/build/getrandom-3d57f95e7f326e05/build_script_build-3d57f95e7f326e05.7q34dxu7pivh8f94hle7n98i7.rcgu.o",
+      "tools/r1-cost-probe/target/release/build/getrandom-3d57f95e7f326e05/build_script_build-3d57f95e7f326e05.build_script_build.d8aca38074e50cd4-cgu.0.rcgu.o",
+      "tools/r1-cost-probe/target/release/build/getrandom-3d57f95e7f326e05/build_script_build-3d57f95e7f326e05.d",
+      "tools/r1-cost-probe/target/release/build/libc-45f0c4ae39e35f00/build-script-build",
+      "tools/r1-cost-probe/target/release/build/libc-45f0c4ae39e35f00/build_script_build-45f0c4ae39e35f00",
+      "tools/r1-cost-probe/target/release/build/libc-45f0c4ae39e35f00/build_script_build-45f0c4ae39e35f00.d",
+      "tools/r1-cost-probe/target/release/build/proc-macro2-95e408b42308a26a/build-script-build",
+      "tools/r1-cost-probe/target/release/build/proc-macro2-95e408b42308a26a/build_script_build-95e408b42308a26a",
+      "tools/r1-cost-probe/target/release/build/proc-macro2-95e408b42308a26a/build_script_build-95e408b42308a26a.d",
+      "tools/r1-cost-probe/target/release/build/quote-594426f83af2b8ac/build_script_build-594426f83af2b8ac.blrk1exdrm682ubx6ejfjnt2y.rcgu.o",
+      "tools/r1-cost-probe/target/release/build/quote-594426f83af2b8ac/build_script_build-594426f83af2b8ac.build_script_build.cc422159483d0b3c-cgu.0.rcgu.o",
+      "tools/r1-cost-probe/target/release/build/quote-594426f83af2b8ac/build_script_build-594426f83af2b8ac.d",
+      "tools/r1-cost-probe/target/release/build/serde-dff487fd700155d9/build_script_build-dff487fd700155d9.5pa35zccxh74dyrncqzx949l5.rcgu.o",
+      "tools/r1-cost-probe/target/release/build/serde-dff487fd700155d9/build_script_build-dff487fd700155d9.build_script_build.26f6653541abf041-cgu.0.rcgu.o",
+      "tools/r1-cost-probe/target/release/build/serde-dff487fd700155d9/build_script_build-dff487fd700155d9.build_script_build.26f6653541abf041-cgu.1.rcgu.o",
+      "tools/r1-cost-probe/target/release/build/serde-dff487fd700155d9/build_script_build-dff487fd700155d9.d",
+      "tools/r1-cost-probe/target/release/build/serde_core-23df562a33711219/build_script_build-23df562a33711219.1ayawz3y6fijkid99c8t69w4t.rcgu.o",
+      "tools/r1-cost-probe/target/release/build/serde_core-23df562a33711219/build_script_build-23df562a33711219.build_script_build.d88de43700f60a4a-cgu.0.rcgu.o",
+      "tools/r1-cost-probe/target/release/build/serde_core-23df562a33711219/build_script_build-23df562a33711219.build_script_build.d88de43700f60a4a-cgu.1.rcgu.o",
+      "tools/r1-cost-probe/target/release/build/serde_core-23df562a33711219/build_script_build-23df562a33711219.d",
+      "tools/r1-cost-probe/target/release/build/thiserror-496b464ce6f22f28/build_script_build-496b464ce6f22f28.95ldamp5ntvaus5uq335q0goj.rcgu.o",
+      "tools/r1-cost-probe/target/release/build/thiserror-496b464ce6f22f28/build_script_build-496b464ce6f22f28.build_script_build.291066f5f1e7e4b3-cgu.0.rcgu.o",
+      "tools/r1-cost-probe/target/release/build/thiserror-496b464ce6f22f28/build_script_build-496b464ce6f22f28.build_script_build.291066f5f1e7e4b3-cgu.1.rcgu.o",
+      "tools/r1-cost-probe/target/release/build/thiserror-496b464ce6f22f28/build_script_build-496b464ce6f22f28.d",
+      "tools/r1-cost-probe/target/release/build/zerocopy-aa1af0ddbefbfc81/build_script_build-aa1af0ddbefbfc81.d",
+      "tools/r1-cost-probe/target/release/deps/autocfg-4969358b6ef648b7.d",
+      "tools/r1-cost-probe/target/release/deps/cfg_if-c54fcc77a12dbdf2.d",
+      "tools/r1-cost-probe/target/release/deps/const_oid-86dc471425f73cea.d",
+      "tools/r1-cost-probe/target/release/deps/cpufeatures-acc47049db9c3b1a.d",
+      "tools/r1-cost-probe/target/release/deps/feature_probe-3ead15f3777d7c58.d",
+      "tools/r1-cost-probe/target/release/deps/five8-14b9c8cd21ac26f3.d",
+      "tools/r1-cost-probe/target/release/deps/five8_core-8b4f868fc51ef55d.d",
+      "tools/r1-cost-probe/target/release/deps/ident_case-bf75e9adb6fa9f26.d",
+      "tools/r1-cost-probe/target/release/deps/libautocfg-4969358b6ef648b7.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libcfg_if-c54fcc77a12dbdf2.rlib",
+      "tools/r1-cost-probe/target/release/deps/libcfg_if-c54fcc77a12dbdf2.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libconst_oid-86dc471425f73cea.rlib",
+      "tools/r1-cost-probe/target/release/deps/libconst_oid-86dc471425f73cea.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libcpufeatures-acc47049db9c3b1a.rlib",
+      "tools/r1-cost-probe/target/release/deps/libcpufeatures-acc47049db9c3b1a.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libfeature_probe-3ead15f3777d7c58.rlib",
+      "tools/r1-cost-probe/target/release/deps/libfeature_probe-3ead15f3777d7c58.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libfive8-14b9c8cd21ac26f3.rlib",
+      "tools/r1-cost-probe/target/release/deps/libfive8-14b9c8cd21ac26f3.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libfive8_core-8b4f868fc51ef55d.rlib",
+      "tools/r1-cost-probe/target/release/deps/libfive8_core-8b4f868fc51ef55d.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libident_case-bf75e9adb6fa9f26.rlib",
+      "tools/r1-cost-probe/target/release/deps/libident_case-bf75e9adb6fa9f26.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libonce_cell-c981dd6cd4af361a.rlib",
+      "tools/r1-cost-probe/target/release/deps/libonce_cell-c981dd6cd4af361a.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libpastey-2df48b5244ce3892.so",
+      "tools/r1-cost-probe/target/release/deps/libsemver-b7a8ed8e0e25185c.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libsha2_const_stable-36ac4ab3ce300625.rlib",
+      "tools/r1-cost-probe/target/release/deps/libsha2_const_stable-36ac4ab3ce300625.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libsolana_atomic_u64-e61c354c824e4b90.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libsolana_program_error-50122d2123fee4be.rlib",
+      "tools/r1-cost-probe/target/release/deps/libsolana_program_error-50122d2123fee4be.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libsolana_sanitize-049337c94eea2150.rlib",
+      "tools/r1-cost-probe/target/release/deps/libsolana_sanitize-049337c94eea2150.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libstrsim-05537148d947767c.rlib",
+      "tools/r1-cost-probe/target/release/deps/libstrsim-05537148d947767c.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libsubtle-9c0707dbecbd6479.rlib",
+      "tools/r1-cost-probe/target/release/deps/libsubtle-9c0707dbecbd6479.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libtypenum-f3474fe1afd54744.rlib",
+      "tools/r1-cost-probe/target/release/deps/libtypenum-f3474fe1afd54744.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libunicode_ident-730a0328b14b1d39.rlib",
+      "tools/r1-cost-probe/target/release/deps/libunicode_ident-730a0328b14b1d39.rmeta",
+      "tools/r1-cost-probe/target/release/deps/libversion_check-0a58015b5e65a818.rlib",
+      "tools/r1-cost-probe/target/release/deps/libversion_check-0a58015b5e65a818.rmeta",
+      "tools/r1-cost-probe/target/release/deps/once_cell-c981dd6cd4af361a.d",
+      "tools/r1-cost-probe/target/release/deps/pastey-2df48b5244ce3892.d",
+      "tools/r1-cost-probe/target/release/deps/semver-b7a8ed8e0e25185c.d",
+      "tools/r1-cost-probe/target/release/deps/sha2_const_stable-36ac4ab3ce300625.d",
+      "tools/r1-cost-probe/target/release/deps/solana_atomic_u64-e61c354c824e4b90.d",
+      "tools/r1-cost-probe/target/release/deps/solana_program_error-50122d2123fee4be.d",
+      "tools/r1-cost-probe/target/release/deps/solana_sanitize-049337c94eea2150.d",
+      "tools/r1-cost-probe/target/release/deps/strsim-05537148d947767c.d",
+      "tools/r1-cost-probe/target/release/deps/subtle-9c0707dbecbd6479.d",
+      "tools/r1-cost-probe/target/release/deps/typenum-f3474fe1afd54744.d",
+      "tools/r1-cost-probe/target/release/deps/unicode_ident-730a0328b14b1d39.d",
+      "tools/r1-cost-probe/target/release/deps/version_check-0a58015b5e65a818.d"
+    ],
+    "package_source_subset": {
+      "manifest_counts": {
+        "crates": 377,
+        "programs": 82
+      },
+      "missing": 0,
+      "mismatched": 2,
+      "mismatches": [
+        {
+          "path": "crates/aspis-core/src/field/wide_exact.rs",
+          "manifest_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+          "worktree_sha256": "56c26ce33cd0caee95f33474bfc351c5409503b6af665dba7c8837d6ec1068ea"
+        },
+        {
+          "path": "crates/aspis-r1-cost-probe/tests/validated_prefix.rs",
+          "manifest_sha256": "f3d2f3fa28bcc64fb917672980ee981c3116330010694bd6a48618c90a97909b",
+          "worktree_sha256": "e1d7c54e8981c724dcdf2490ccf55630fee72c8062eda466aa6951f43ea4e44b"
+        }
+      ],
+      "note": "All manifest entries under crates/ and programs/ are present locally. The only package-tree mismatch besides the intentional wide_exact candidate is crates/aspis-r1-cost-probe/tests/validated_prefix.rs; it is a test file, not a production module compiled by cargo-build-sbf. Other full-manifest differences are outside crates/ and programs/."
+    },
+    "interpretation": "This checkout is not byte-identical to the entire copied 751-entry SBF source tree. Build-side pre/post verification is separately recorded above; do not infer a whole-checkout match from it."
+  },
+  "filename_only_key_scan": {
+    "directories": "All docs/research/100bit-spend-path-20261013/evidence/wide-parser* directories",
+    "matching_names": [
+      "docs/research/100bit-spend-path-20261013/evidence/wide-parser-inline-v152-sbf-20261015/keypair-retention.txt",
+      "docs/research/100bit-spend-path-20261013/evidence/wide-parser-v152-sbf-20261015/keypair-retention.txt"
+    ],
+    "assessment": "The only matching filenames are keypair-retention.txt notes; no keypair material filename was found. File contents were not read."
+  }
+}

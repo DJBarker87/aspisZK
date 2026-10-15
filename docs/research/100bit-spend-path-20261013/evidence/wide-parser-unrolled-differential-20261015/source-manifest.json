@@ -1,0 +1,53 @@
+{
+  "schema": "aspis-r1-wide-parser-unrolled-differential-v1",
+  "source_revision": "aba310f1daa065a27da89d15c6c47166037a8a71",
+  "scope": "Finite host-only differential; no runtime edit or SBF build",
+  "baseline": {
+    "field.rs": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "field/wide_exact.rs": "56c26ce33cd0caee95f33474bfc351c5409503b6af665dba7c8837d6ec1068ea"
+  },
+  "candidate_h2": {
+    "field.rs": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "field/wide_exact.rs": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+    "origin": "evidence/wide-parser-unrolled-extraction-20261015/attempt-h2/source/field/wide_exact.rs"
+  },
+  "pre-run_superseded_candidate_h": "c8d01761f5f1ae8749252655752c7ea156fb442bca4e07c97aa25acf76df9410",
+  "h2_patch_sha256": "e4b1dd436d2cf2ebedfdd10aeffef9bf69b5efe1e9eeea78a4639081e62de239",
+  "h2_source_pins_sha256": "22a13f05ca1457d01861a1d586000d71015fc242182dbbb705fdf61f3d345c17",
+  "source_kit_sha256_manifest": "input-files.sha256",
+  "execution": {
+    "host": "pinned NUC build host",
+    "workspace": "/home/dombarker/project-offloads/aspis-r1-wide-unrolled-differential-20261015",
+    "test": "unrolled_wideexact_parser_and_limbs_match_baseline",
+    "result": "PASS",
+    "input_vectors": 30055,
+    "parser_calls": 60110,
+    "from_limbs_vectors": 13607,
+    "from_limbs_calls": 27214,
+    "rustc": "rustc 1.98.0-nightly (14210df0e 2026-05-31), commit 14210df0e27ccd7d9e6a05b8085cbd438e4bbc65, LLVM 22.1.6",
+    "command": "ulimit -c 0; /usr/bin/time -v -o ../outer.time.log systemd-run --user --scope --quiet -p MemoryHigh=4G -p MemoryMax=6G -p MemorySwapMax=0 -p TasksMax=128 /usr/bin/timeout 900 python3 run-differential.py --kit \"$PWD\"",
+    "compile_exit": 0,
+    "compile_elapsed": "4.93 s",
+    "compile_peak_rss_kib": 297084,
+    "compile_swap_kib": 0,
+    "test_exit": 0,
+    "test_elapsed": "0.00 s",
+    "test_peak_rss_kib": 2816,
+    "test_swap_kib": 0,
+    "outer_elapsed": "4.99 s",
+    "outer_peak_rss_kib": 297084,
+    "outer_swap_kib": 0,
+    "cgroup": {
+      "MemoryHigh": "4G",
+      "MemoryMax": "6G",
+      "MemorySwapMax": 0,
+      "TasksMax": 128
+    }
+  },
+  "related_cost_evidence": {
+    "path": "../wide-parser-unrolled-v152-cost-20261015",
+    "source_variant": "unrolled-h2",
+    "candidate_elf_sha256": "ea9be844a7027f613cf310c5fedd54c8db9e6d669ba325af46d3b5908ef43796",
+    "scope": "separate 13-pair v0 transfer run reusing the pinned full-OS proof/public fixture"
+  }
+}

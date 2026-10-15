@@ -1,0 +1,69 @@
+[
+  {
+    "command": [
+      "rustc",
+      "--version",
+      "--verbose"
+    ],
+    "exit": 0,
+    "label": "rustc-version"
+  },
+  {
+    "command": [
+      "cargo",
+      "generate-lockfile",
+      "--offline"
+    ],
+    "exit": 0,
+    "label": "lock"
+  },
+  {
+    "command": [
+      "/home/dombarker/project-offloads/ZK-v5-formal/toolchains/charon/bin/charon",
+      "cargo",
+      "--preset",
+      "aeneas",
+      "--mir",
+      "built",
+      "--sysroot",
+      "default",
+      "--include",
+      "core::option",
+      "--include",
+      "core::result",
+      "--start-from",
+      "crate::parse_wide_exact_probe",
+      "--dest-file",
+      "/home/dombarker/project-offloads/aspis-r1-wide-parser-extraction-next-20261015/attempt-e/R1FieldParser.llbc",
+      "--",
+      "--locked",
+      "--offline",
+      "--release",
+      "--lib",
+      "--no-default-features"
+    ],
+    "exit": 0,
+    "label": "extract"
+  },
+  {
+    "command": [
+      "/home/dombarker/project-offloads/aspis-v7-aeneas-source-unblock-20260830/aeneas-repro-r1",
+      "-sequential",
+      "-no-progress-bar",
+      "-abort-on-error",
+      "-backend",
+      "lean",
+      "-namespace",
+      "AspisR1WideParser",
+      "-dest",
+      "/home/dombarker/project-offloads/aspis-r1-wide-parser-extraction-next-20261015/attempt-e/generated",
+      "-subdir",
+      "AspisR1WideParser",
+      "-split-files",
+      "-emit-json",
+      "/home/dombarker/project-offloads/aspis-r1-wide-parser-extraction-next-20261015/attempt-e/R1FieldParser.llbc"
+    ],
+    "exit": 2,
+    "label": "translate"
+  }
+]

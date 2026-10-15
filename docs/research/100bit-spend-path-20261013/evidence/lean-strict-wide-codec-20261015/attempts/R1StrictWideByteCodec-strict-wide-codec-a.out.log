@@ -1,0 +1,52 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1StrictWideByteCodec.lean:30:54: error: unsolved goals
+lo hi : QM31Limbs
+⊢ ((decodeQM31LE (lowBytes (Fin.append (encodeQM31LE lo) (encodeQM31LE hi)))).bind fun lo_1 =>
+      (decodeQM31LE (highBytes (Fin.append (encodeQM31LE lo) (encodeQM31LE hi)))).bind fun hi => some (lo_1, hi)) =
+    some (lo, hi)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1StrictWideByteCodec.lean:32:22: warning: This simp argument is unused:
+  lowBytes
+
+Hint: Omit it from the simp argument list.
+  simp [decodeWideLE, l̵o̵w̵B̵y̵t̵e̵s̵,̵ ̵highBytes, encodeWideLE,
+  ̵  ̵ ̵ ̵decodeQM31LE_encodeQM31LE]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1StrictWideByteCodec.lean:32:32: warning: This simp argument is unused:
+  highBytes
+
+Hint: Omit it from the simp argument list.
+  simp [decodeWideLE, lowBytes, h̵i̵g̵h̵B̵y̵t̵e̵s̵,̵ ̵encodeWideLE, decodeQM31LE_encodeQM31LE]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1StrictWideByteCodec.lean:33:4: warning: This simp argument is unused:
+  decodeQM31LE_encodeQM31LE
+
+Hint: Omit it from the simp argument list.
+  simp [decodeWideLE, lowBytes, highBytes, encodeWideLE,̵
+  ̵ ̵ ̵ ̵ ̵d̵e̵c̵o̵d̵e̵Q̵M̵3̵1̵L̵E̵_̵e̵n̵c̵o̵d̵e̵Q̵M̵3̵1̵L̵E̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1StrictWideByteCodec.lean:62:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ b ≤ 15
+  16 ≤ a ≤ 31
+  a - b ≤ 15
+where
+ a := ↑↑i
+ b := ↑↑⟨↑i - 16, ⋯⟩
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1StrictWideByteCodec.lean:64:4: error: Type mismatch: After simplification, term
+  congrFun hhi' j
+ has type
+  encodeQM31LE hi j = bytes (j.addNat 16)
+but is expected to have type
+  Fin.append (encodeQM31LE lo) (encodeQM31LE hi) (j.addNat 16) = bytes (j.addNat 16)
+'AspisR1.StrictWideByteCodec.decodeWideLE_encodeWideLE' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.StrictWideByteCodec.encodeWideLE_of_decodeWideLE' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.StrictWideByteCodec.successful_halves' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
