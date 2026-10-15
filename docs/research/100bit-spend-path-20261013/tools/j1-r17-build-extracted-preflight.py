@@ -19,11 +19,14 @@ def main():
     checks = []
     with tempfile.TemporaryDirectory(prefix="j1-r17-runner-preflight-") as temp:
         root = Path(temp); source = root / "Imports.lean"
-        source.write_text("/- outer /- import Wrong -/ -/\nmodule\npublic meta import all Foo.Bar\nprivate import Baz Qux\n")
+        source.write_text("/-! module documentation\n/- nested import Wrong -/\n-/\nmodule\npublic meta import all Foo.Bar\nprivate import Baz Qux\nnamespace FirstDeclaration\nimport Ignored.AfterHeader\n")
         assert api["imports"](source, True) == ["Init", "Foo.Bar", "Baz", "Qux"]
         source.write_text("prelude\nimport Init.Prelude\n")
         assert api["imports"](source, True) == ["Init.Prelude"]
         checks.append("nested comments, public/meta/all imports, implicit Init and prelude")
+        source.write_text("import Lean\nnamespace Widget\ndef js := r#\"\nimport { createElement } from 'react';\n\"#\n")
+        assert api["imports"](source, True) == ["Init", "Lean"]
+        checks.append("embedded JavaScript after the Lean header is not an import")
         source.write_text("#print axioms x\n#print axioms y\n")
         assert api["audits"](source, "'x' depends on axioms: [propext, Classical.choice, Quot.sound]\n'y' does not depend on any axioms\n")["passed"]
         assert not api["audits"](source, "'x' depends on axioms: [sorryAx]\n'y' does not depend on any axioms\n")["passed"]

@@ -70,15 +70,25 @@ def uncomment(text):
 
 def imports(path, implicit_init=False):
     text = uncomment(Path(path).read_text())
-    result = []
+    result, has_prelude = [], False
     for line in text.splitlines():
+        line = line.strip()
+        if not line or line == "module":
+            continue
+        if line == "prelude":
+            has_prelude = True
+            continue
         m = re.match(r"^\s*(?:(?:public|private|meta)\s+)*import\s+(?:all\s+)?(.+)$", line)
         if m:
             for name in m[1].split():
                 require(re.fullmatch(r"[A-Za-z0-9_.]+", name), "Unsupported import syntax: " + line)
                 if name not in result:
                     result.append(name)
-    if implicit_init and not re.search(r"^\s*prelude\s*$", text, re.M) and "Init" not in result:
+        else:
+            # Lean imports belong to the leading header. Later embedded JS and
+            # quoted examples can contain unrelated lines beginning with import.
+            break
+    if implicit_init and not has_prelude and "Init" not in result:
         result.insert(0, "Init")
     return result
 
