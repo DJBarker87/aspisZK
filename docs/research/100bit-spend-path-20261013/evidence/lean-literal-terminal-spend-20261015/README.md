@@ -1,0 +1,3 @@
+# LiteralTerminalSpend focused evidence
+
+The final clean focused compile (attempt m) checks `checked_witness_of_read_noHit`. Given successful literal public, matching and opening reads; no classifier hit; `Good` and `AcceptedPairing`; matching-set size at least 9558; and explicit semantic claim, polynomial, and sumcheck equations, the theorem returns an M31-checked `Wspend` witness. Attempts a–k failed and are retained. Attempt l also passed with diagnostic phase tracing and is retained as superseded; attempt m is the clean final source/object. This conditional composition does not prove accepted-reader coverage, source/Pool refinement, D3 closure, the complete probability argument, or an efficient full-log extractor.
