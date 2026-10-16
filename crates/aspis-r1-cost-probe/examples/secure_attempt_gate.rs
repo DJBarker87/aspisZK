@@ -1,4 +1,5 @@
 //! UNPROVED P3 secure-source host API gate. Preserves its durable nonce ledger.
+use aspis_core::digest::LegacyHashFn;
 use aspis_core::HashFn;
 use aspis_prover::{
     state_only_entropy::{DurableStateOnlyMaskNonceStore, StateOnlyAttemptSecrets},
@@ -50,11 +51,11 @@ fn main() {
     assert_eq!(audit.mask_only_columns_inactive_balanced, 10);
     assert!(audit.d_inactive_balanced && audit.g_inactive_balanced);
     assert!(audit.h1_padding_inactive_balanced && audit.h1_total_balanced);
-    let checkpoint = verifier::tx1(fixture.public(), &public_bytes, &proof, 11, hash, None)
+    let checkpoint = verifier::tx1(fixture.public(), &public_bytes, &proof, 11, LegacyHashFn(hash), None)
         .expect("strict first stage");
-    verifier::tx2(&public_bytes, &proof, &checkpoint, hash, None)
+    verifier::tx2(&public_bytes, &proof, &checkpoint, LegacyHashFn(hash), None)
         .expect("strict second stage");
-    verifier::tx2_authenticated(&public_bytes, &proof, &checkpoint, hash, None)
+    verifier::tx2_authenticated(&public_bytes, &proof, &checkpoint, LegacyHashFn(hash), None)
         .expect("authenticated-checkpoint second stage");
     dense::verify(fixture.public(), &proof, hash).expect("independent dense verifier");
 

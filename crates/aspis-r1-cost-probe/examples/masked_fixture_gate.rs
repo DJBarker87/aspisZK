@@ -1,4 +1,5 @@
 //! UNPROVED R1 COST PROBE. Deterministic full-mask fixture acceptance only.
+use aspis_core::digest::LegacyHashFn;
 use aspis_core::HashFn;
 use aspis_prover::HOST_HASH;
 use aspis_r1_cost_probe::{prover, transport::Variant, verifier};
@@ -57,9 +58,9 @@ fn main() {
             assert!(audit.h1_padding_inactive_balanced);
             assert!(audit.h1_total_balanced);
 
-            let native = verifier::tx1(fixture.public(), &public_bytes, &proof, 11, hash, None)
+            let native = verifier::tx1(fixture.public(), &public_bytes, &proof, 11, LegacyHashFn(hash), None)
                 .and_then(|checkpoint| {
-                    verifier::tx2(&public_bytes, &proof, &checkpoint, hash, None)
+                    verifier::tx2(&public_bytes, &proof, &checkpoint, LegacyHashFn(hash), None)
                 });
             native.expect("masked fixture native acceptance");
             aspis_r1_cost_probe::dense::verify(fixture.public(), &proof, hash)

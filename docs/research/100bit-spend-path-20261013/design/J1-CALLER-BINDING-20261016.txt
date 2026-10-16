@@ -1,0 +1,52 @@
+J1.a fixed decoded-public binding; caller execution remains OPEN
+
+Base ca137f5db50123d6157ce144e43e4f15d8fad94b. Read the lead caller-frontier
+review and searched existing lean/design before adding this bridge. Reuse
+ExtractedDecoderPublicBridge, ExtractedWithdrawalCallerPublic and the fixed
+serializer/raw/codec agreements; no source or protocol-core edits.
+
+The exact caller chain at this pin is programs/r1-cost-probe/src/lib.rs24-28
+first: decode ASF8, match the same returned statement, borrow its public and
+common.lane_transition, then tx1. verifier.rs342-350 parses the proof and calls
+r1_semantic::verify_observed before prepare/query/checkpoint work. The latter,
+r1_semantic.rs63-78, parses Prefix and serializes that Public before calling
+SemanticTranscript::new with the same bytes and Prefix.c1_root. Stage1's
+account wrapper calls first only after its own decoder/validator and candidate
+checks. This is source inspection, not a theorem of caller execution.
+
+New owned ExtractedDecoderPublicBinding fixes toTransition by copying all six
+live-snapshot fields and all three candidate fields, with inverse roundtrips.
+toSerializer copies each decoded variant and sets t to toTransition of the
+same common.lane_transition. It cannot accept a free t. Withdrawal reuses the
+checked decoder-to-ASWP encoder bridge. PrivateTransfer reuses the existing
+semantic serializer refinement and true transfer amount guard; it does not
+need or assume a new transfer payment-validator model.
+
+Target decoder_serializer_parsePublic takes the actual ASF8 decode success hd
+and actual semantic serializer success hs on this fixed carrier, for either
+variant. decoder_serializer_eq_computed equates the semantic-byte parse to
+computedPublic of the returned statement. computedPublic is toWire of the
+fixed source projection followed by toPublic; it is not chosen from bytes and
+there is no desired hbind premise. Identifying this value with an actual
+caller's supplied public remains OPEN until the caller expression is extracted.
+
+Focused Lean 4.32 check GREEN on the first attempt: exactly
+ExtractedDecoderPublicBinding, seven standard-only axiom reports, exit0,
+2.613 seconds, process maximum RSS3838080KiB, sampled cgroup715276288bytes,
+actual cumulative cgroup peak722378752bytes, zero swaps/pressure events.
+Limits6GiB high/8GiB max/swap0; one Lean process, pinned warm closure, no
+predecessor or Rust replay. Seven producing predecessor receipts and their
+source/import/runtime/object keys were rehashed. Exact receipt, source, object,
+snapshot, staging checks and overlay journal are retained in
+evidence/decoder-public-binding-20261016; verify.py checks the archive locally.
+
+Next actual caller obligation is not solved by this fixed map. Digest32 source
+migration9f215fc5b changes first/tx1/verify_observed signatures but retains the
+Observer function pointer and the arithmetic tail. Do not extract a synthetic
+shortened first and label it the actual caller. A possible separately reviewed
+source factoring is an exact statement-to-Public method plus a public-prefix
+preparation helper retaining Prefix::parse then Public.public_bytes in the
+original order. Its extraction would prove only helper consequences until
+actual first/tx1/verify_observed reachability is also justified. No such source
+factoring, extraction or premise is included in this checkpoint. Account field
+projection will use B's named R16 boundary; it does not supply custody.
