@@ -497,6 +497,16 @@ pub fn encode_pool_v1_pair_live_snapshot_v1(
     Ok(())
 }
 
+#[inline]
+pub(crate) fn set_decoded_frontier_node(
+    mut frontier: [Digest; POOL_V1_PAIR_TREE_DEPTH],
+    level: usize,
+    node: Digest,
+) -> [Digest; POOL_V1_PAIR_TREE_DEPTH] {
+    frontier[level] = node;
+    frontier
+}
+
 pub fn decode_pool_v1_pair_live_snapshot_v1(
     bytes: &[u8],
 ) -> Result<PoolV1PairLiveSnapshotV1, PoolV1PairLiveSnapshotErrorV1> {
@@ -525,7 +535,7 @@ pub fn decode_pool_v1_pair_live_snapshot_v1(
         match decode_digest_canonical(bytes[start..start + 32].try_into().unwrap())
             .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)
         {
-            Ok(node) => frontier[level] = node,
+            Ok(node) => frontier = set_decoded_frontier_node(frontier, level, node),
             Err(error) => {
                 decode_status = Err(error);
                 break;

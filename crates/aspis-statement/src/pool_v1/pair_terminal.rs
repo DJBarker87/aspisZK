@@ -192,7 +192,13 @@ pub fn decode_pool_v1_pair_verified_afterstate_v1(
             Err(error) => Err(error),
         };
         match decoded {
-            Ok(node) => next_frontier[level] = node,
+            Ok(node) => {
+                next_frontier = super::pair_tree_profile::set_decoded_frontier_node(
+                    next_frontier,
+                    level,
+                    node,
+                )
+            }
             Err(error) => {
                 decode_status = Err(error);
                 break;
