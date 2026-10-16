@@ -14,6 +14,7 @@ use aspis_statement::pool_v1::{
     VerifierRegistryEntryV2, VerifierRegistryV1, VerifierRegistryV2,
     POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT, POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE,
 };
+use aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public;
 use std::{cell::Cell, sync::OnceLock};
 
 const PROOF: &[u8] = include_bytes!(concat!(
@@ -835,10 +836,10 @@ fn measured_core_call_counts_include_zero_progress_checkpoint() {
     let statement = decode_pool_v1_pair_forest_terminal_statement_v1(PUBLIC).unwrap();
     let public = match &statement {
         PoolV1PairForestTerminalStatementV1::PrivateTransfer { common, public } => {
-            super::super::Public::Transfer(public, &common.lane_transition)
+            Public::Transfer(public, &common.lane_transition)
         }
         PoolV1PairForestTerminalStatementV1::Withdrawal { common, public } => {
-            super::super::Public::Withdrawal(public, &common.lane_transition)
+            Public::Withdrawal(public, &common.lane_transition)
         }
     };
     for k in [10, 11] {
