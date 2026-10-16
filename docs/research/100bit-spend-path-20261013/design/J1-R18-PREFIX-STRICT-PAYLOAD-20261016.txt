@@ -1,0 +1,17 @@
+Actual Prefix payloads and the strict codec
+
+ExtractedRecordStrictLow transports the actual packed high QM31 coordinate equal to ZERO into four explicitly bounded zero limbs. Its actual_decode_low corollary combines this with the checked actual byte decoder. The low-level corollary states the zero-coordinate premise explicitly; the full payload composition below obtains it from actual validation success.
+
+ExtractedPrefixStrictPayload defines StrictLowChunk using a fixed 32-byte function, exact input-list equality, success of the unchanged strict eight-limb decoder with a zero high half, and exact re-encoding. strict_of_canonical derives this from the existing actual-validator CanonicalChunk, without an assumed codec-success premise.
+
+parse_record_strict_payload takes actual final Prefix-E parse_record success and row.val >= 14. The explicit namespace/carrier agreement supplies the old actual parser success, whose checked framing/validator proofs yield canonical chunks. The actual row table proves divisibility: remainder is empty, all chunks concatenate to the entire payload, and each chunk is StrictLowChunk. No ignored tail is claimed validated.
+
+prefix_record_strict_payload supplies that parser-success premise from the actual full Prefix.parse result and membership of the row/frame pair in the returned row 0..26 sequence. Thus it does not choose an unrelated successful record. The existing full Prefix theorem still supplies C1 = first 32 bytes, all 27 record steps, and final input consumption.
+
+The next semantic field representation and coefficient-vector codecs are separate: this result does not yet establish SemanticPrefixCodec.decodeFull, selected completed-message byte equality, or challenge/read provenance. Historical SemanticPrefix agreement correspondence remains provisional during the independent Circle cache investigation. These modules use the checked parser/byte-codec closure below that frontier. No Rust source, live protocol declaration, backend, or generated body was changed.
+
+Verification and cache provenance
+
+Two focused Lean 4.32 targets passed with five standard-only axiom reports. StrictLow-c and strict-payload-b each took 2.203 seconds; sampled cgroup peaks were 497881088 and 495149056 bytes. One process used MemoryHigh 6 GiB / MemoryMax 8 GiB / SwapMax 0, -j1/-M0, with zero swap and no pressure/OOM events. Exact source, runner, runtime shared-library/version, object and input hashes are retained. Three earlier local elaboration failures are retained: bounded-zero numeral construction, explicit U32 zero-value simplification, and the rowOrder namespace reference. No cap was raised.
+
+Eight unchanged row-shape/framing/validator/partition cache modules were copied after checking successful producing receipts and source/object hashes; their current repository source bytes also match. No dependency build occurred. Evidence verifier checks these receipts and every retained artifact checksum.
