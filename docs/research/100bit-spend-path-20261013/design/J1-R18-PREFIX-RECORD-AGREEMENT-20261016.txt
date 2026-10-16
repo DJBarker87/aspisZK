@@ -1,0 +1,44 @@
+J1.R18 actual Prefix/record parser agreement; 2026-10-16
+
+Result. ExtractedPrefixParserAgreement.parse_record_agreement proves
+mapResult statusToRecord (Prefix-E.parse_record row frame) =
+RecordParser-F.parse_record row frame for every U8 row and Slice U8 frame.
+statusToRecord preserves successful slices and maps all11 ordinary Error
+constructors with their original payloads. mapResult preserves runtime fail
+and div. parse_record_success therefore supplies actual old-parser success
+from actual new-parser success; no successful decoder premise is invented.
+
+Construction. ExtractedPrefixRecordAgreement fixes the Error map, proves
+actual row_shape equality, and proves actual validator-body equality using
+the already-checked fixed field maps. Continued iterations consume one
+remaining complete chunk, for arbitrary initial count/remainder. The generic
+ExtractedPrefixLoopMap.loop_map transports loops from explicit body equality
+and a strictly decreasing natural measure. Applying it proves the entire
+validator loop and wrapper agree, including overflow and ordinary failures.
+Parser composition preserves all framing reads, tag/header/length guards,
+payload identity and error order. Private continuation definitions are linked
+by definitional equality to the unchanged generated bodies.
+
+Verification. Three focused Lean4.32.0 targets pass: loop-map-a1.602s,
+record-agreement-d2.004s, parser-agreement-b1.803s. Their cgroup peaks are
+390,270,976 /397,221,888 /394,809,344bytes; process RSS2,638,720 /
+2,648,956 /2,649,964KiB. All8 requested audits contain only propext,
+Classical.choice and Quot.sound. Every run uses -j1/-M0 and hard
+MemoryHigh6G/MemoryMax8G/MemorySwapMax0, with zero process/cgroup swap and
+no pressure/OOM events. Existing pinned backend/generated objects are reused;
+no dependency rebuild. Evidence retains exact source/runtime/runner hashes,
+commands, input manifests, object hashes and all4 failed local attempts.
+Failures exposed irreducible row constants, tuple-let normalization and
+premature unfolding of the Result map; explicit symbolic changes fixed them
+without raising limits. verify.py checks receipts, current sources and audits.
+
+Boundary. This is equality between two actual generated Lean functions under
+explicit carrier maps, not a Rust compiler/refinement theorem. It supplies
+the namespace premise needed to reuse old framing/payload canonicality;
+semantic record/decodeFull composition remains OPEN. The earlier separate
+SemanticPrefixAgreement, SemanticPrefixCompletedAgreement and
+SemanticPrefixCutAgreement exact-source correspondence is provisional after
+the stale CircleGroupOrder cache audit; none is imported here. Their receipts
+must be explicitly repaired before later reuse. Selected completed-message
+byte equality, challenge-table/first-read provenance and recoverC2 remain
+separate requirements for the eventual SelectedSemanticPrefix.read supplier.
