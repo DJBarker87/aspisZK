@@ -1,0 +1,148 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -72,6 +72,38 @@
+     )
+ }
+ 
++fn polynomial_boundary(polynomial:&[QM31;28])->QM31 {
++    polynomial.iter().copied().fold(polynomial[0], QM31::add)
++}
++
++fn polynomial_value(polynomial:&[QM31;28], alpha:QM31)->QM31 {
++    polynomial
++            .iter()
++            .rev()
++            .fold(QM31::ZERO, |a, &c| a.mul(alpha).add(c))
++}
++
++fn verify_round<H:Digest32>(prefix:&Prefix<'_>, transcript:&mut SemanticTranscript<H>, round:usize, running:QM31)->Result<(QM31,QM31,QM31),Error> {
++        let row = 15 + round as u8;
++        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
++        let boundary = polynomial_boundary(&polynomial);
++        if boundary != running {
++            return Err(Error::Boundary { round });
++        }
++        let alpha = transcript.semantic_validated(prefix.validated_record(row)?)?;
++        let value = polynomial_value(&polynomial, alpha);
++        Ok((alpha,boundary,value))
++}
++
++fn selected_mask(claims:&[[QM31;29];3], alpha:&[QM31;10])->QM31 {
++    aspis_core::state_only_hiding::state_only_selected_mask_value(
++        &core::array::from_fn(|i| claims[0][i]),
++        &core::array::from_fn(|i| claims[0][16 + i]),
++        claims[0][27],
++        alpha,
++    )
++}
++
+ #[inline(never)]
+ pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
+     fn mark(obs: crate::verifier::Observer, i: u8) {
+@@ -89,23 +121,75 @@
+     let mut alpha = [QM31::ZERO; 10];
+     #[cfg(feature = "prover")]
+     let mut round_checks = [[QM31::ZERO; 3]; 10];
+-    for round in 0..10 {
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
+-        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+-        let value = polynomial
+-            .iter()
+-            .rev()
+-            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+-        #[cfg(feature = "prover")]
+-        {
+-            round_checks[round] = [running, boundary, value];
+-        }
+-        running = value;
++    {
++        let (a,boundary,value)=verify_round(&prefix,&mut transcript,0,running)?;
++        alpha[0]=a;
++        #[cfg(feature="prover")]
++        {round_checks[0]=[running,boundary,value];}
++        running=value;
++    }
++    {
++        let (a,boundary,value)=verify_round(&prefix,&mut transcript,1,running)?;
++        alpha[1]=a;
++        #[cfg(feature="prover")]
++        {round_checks[1]=[running,boundary,value];}
++        running=value;
++    }
++    {
++        let (a,boundary,value)=verify_round(&prefix,&mut transcript,2,running)?;
++        alpha[2]=a;
++        #[cfg(feature="prover")]
++        {round_checks[2]=[running,boundary,value];}
++        running=value;
++    }
++    {
++        let (a,boundary,value)=verify_round(&prefix,&mut transcript,3,running)?;
++        alpha[3]=a;
++        #[cfg(feature="prover")]
++        {round_checks[3]=[running,boundary,value];}
++        running=value;
++    }
++    {
++        let (a,boundary,value)=verify_round(&prefix,&mut transcript,4,running)?;
++        alpha[4]=a;
++        #[cfg(feature="prover")]
++        {round_checks[4]=[running,boundary,value];}
++        running=value;
++    }
++    {
++        let (a,boundary,value)=verify_round(&prefix,&mut transcript,5,running)?;
++        alpha[5]=a;
++        #[cfg(feature="prover")]
++        {round_checks[5]=[running,boundary,value];}
++        running=value;
++    }
++    {
++        let (a,boundary,value)=verify_round(&prefix,&mut transcript,6,running)?;
++        alpha[6]=a;
++        #[cfg(feature="prover")]
++        {round_checks[6]=[running,boundary,value];}
++        running=value;
++    }
++    {
++        let (a,boundary,value)=verify_round(&prefix,&mut transcript,7,running)?;
++        alpha[7]=a;
++        #[cfg(feature="prover")]
++        {round_checks[7]=[running,boundary,value];}
++        running=value;
++    }
++    {
++        let (a,boundary,value)=verify_round(&prefix,&mut transcript,8,running)?;
++        alpha[8]=a;
++        #[cfg(feature="prover")]
++        {round_checks[8]=[running,boundary,value];}
++        running=value;
++    }
++    {
++        let (a,boundary,value)=verify_round(&prefix,&mut transcript,9,running)?;
++        alpha[9]=a;
++        #[cfg(feature="prover")]
++        {round_checks[9]=[running,boundary,value];}
++        running=value;
+     }
+     mark(obs, 2);
+     let claims = claims(&prefix)?;
+@@ -121,12 +205,7 @@
+         .terminal_qm31(&claims, &alpha, &original_challenges)
+         .map_err(|_| Error::Public)?;
+     mark(obs, 3);
+-    let mask = aspis_core::state_only_hiding::state_only_selected_mask_value(
+-        &core::array::from_fn(|i| claims[0][i]),
+-        &core::array::from_fn(|i| claims[0][16 + i]),
+-        claims[0][27],
+-        &alpha,
+-    );
++    let mask = selected_mask(&claims, &alpha);
+     let extra = prefix.validated_record(25)?.decode_k::<29>(87)?;
+     let masked_terminal = mask.add(challenges.eta.mul(terminal)).add(extra[28]);
+     if running != masked_terminal {
