@@ -1,0 +1,45 @@
+J1.a actual ASF8 outer-decoder success checkpoint
+
+Reviewed integration base b2ad6649de4c1b97c2270a1c8bd4bbfe5537d52c;
+unchanged Rust source 0626294e34632812accf4cb14704f027368ea871.
+ExtractedTerminalDecoderSuccess imports only the checked
+AspisR1TerminalDecoder.Funs cone. Its decode_success theorem assumes exactly
+decode_pool_v1_pair_forest_terminal_statement_v1 bytes = ok (Ok out).
+It derives validate_pool_v1_pair_forest_terminal_statement_v1 out = ok (Ok ())
+for that same returned object, without an assumed validation premise.
+
+The same theorem derives bytes.val.length = 1880, actual byte4/version and
+byte6/digest-version read equations, successful actual transition_kind of the
+byte5 read, and the actual source magic slices/comparison returning false for
+inequality. It does not replace the magic comparison equation by unproved byte
+equality or assert that the transition witness equals a projected out tag.
+statement_bytes proves the finite checked-addition constant
+144 + (32 + 800 + (8 + 680)) + 216 = 1880. This is the ASF8 decoder buffer,
+not the separate semantic-public serialization.
+
+Proof scope: unfold only the actual outer decoder (generated Funs2867-2922;
+Rust pair_forest_terminal.rs386-416), then invert its actual Result binds,
+guards, Try residual branches and final validator call. Both payment variants
+are covered. Err, monadic fail and div cannot satisfy the success hypothesis.
+Inner decoders/validator and field arithmetic are not unfolded. The convenience
+decode_success_validated theorem exports just the exact-out validation result.
+
+Focused Lean4.32 check success-d: exit0,2.214s, peak process RSS2,657,280KiB,
+sampled cgroup618,946,560B, cumulative cgroup peak628,125,696B,zero swaps/events.
+Scope6Ghigh/8Gmax/swap0; no dependency build or predecessor replay. All three
+requested reports contain only propext,Classical.choice,Quot.sound. Three prior
+local proof failures (finite scalar evaluation, inference/namespace and generic
+Try-pattern matching) are retained with exact sources and receipts; explicit
+actual-result cases replaced the failed generic matching approach.
+
+Evidence terminal-decoder-success-20261016 pins final source/object, unchanged
+generated imports, runtime/cache keys, all attempts and the reservation record.
+Its read-only verify.py checks the archive, current source equivalence, import
+receipt keys and raw final axiom log. Prior decoder extraction/runtime evidence
+remains immutable in terminal-decoder-432-20261016.
+
+Still OPEN: deep decoder field/byte correctness, decoder/serializer roundtrip,
+transport to the other extracted terminal/public carrier, actual stage1 caller
+composition, account/custody provenance, Rust extraction preservation and
+runtime simulation. This checkpoint discharges the actual emitted outer
+decoder's successful-validation premise only; it closes none of those gaps.
