@@ -1,0 +1,61 @@
+Next actual account/caller cut; SOURCE ONLY, no extraction/build
+
+Continuation of J1-A-CALLER-THEOREM-QUEUE-20261016.txt items3/5, after335e04a4c.
+Read live0f3e294502312a4b6ce6bf0b43b3bd0b29e63735; no duplicate extracted
+account helper or stage1-success theorem was found. Companion JSON pins exact
+source spans, full signatures, Cargo.lock and SDK sources. Adapter bytes remain
+9bdf6732f97c70919bce1afa2f5d901540cbef97f7fd3e6895799041c198895f.
+
+Smallest next root: programs/r1-cost-probe/src/r1_pool_adapter.rs:152-157,
+fn require_readonly_account(account: &AccountInfo<'_>, owner: &Pubkey)
+  -> ProgramResult.
+Proposed theorem on its actual generated constant: successful return implies
+account.owner=owner and !account.is_signer and !account.is_writable and
+!account.executable. The actual body only reads these fields and compares the
+Pubkeys; it performs no data borrow, hash, allocation, mutation or syscall.
+This supplies one concrete authentication guard, not complete authentication.
+The identical-owner comparison is meaningful only for the actual runtime
+AccountInfo supplied by the caller; no ownership/custody premise is invented.
+
+Extract the unchanged private declaration through its original module path,
+with solana_program::{account_info::AccountInfo, pubkey::Pubkey,
+entrypoint::ProgramResult, program_error::ProgramError} and their pinned actual
+SDK definitions. ProgramResult aliases Result<(),ProgramError>. Preserve the
+full AccountInfo<'a>: key/owner references, Rc<RefCell<&'a mut u64>> lamports,
+Rc<RefCell<&'a mut [u8]>> data, rent_epoch and three flags. Do not replace it by
+a flags-only record. SDK pins: solana-program/account-info2.3.0, pubkey2.4.0,
+program-error2.2.2. Pubkey's private [u8;32] carrier and derived equality must
+remain actual code. Unknown until extraction: nested mutable-reference carrier
+support, Rc/RefCell type lowering, and whether deriving/export selection drags
+in opaque Formatter. No such external may be silently accepted as closure.
+
+Next small caller roots, only after that feasibility gate:
+require_readonly_buffer(account:&AccountInfo<'_>)->ProgramResult (:159-164)
+deliberately imposes no owner constraint. require_verifier_checkpoint(
+account:&AccountInfo<'_>,program_id:&Pubkey,writable:bool)->ProgramResult
+(:166-178) also calls account.try_data_len() and checkpoint_size(Variant::S2).
+Preserve SDK try_data_len -> try_borrow_data -> data.try_borrow, the Ref guard's
+lifetime/drop, and AccountBorrowFailed; a free length parameter is not equivalent.
+require_distinct_accounts<const N:usize>(accounts:&[&AccountInfo<'_>;N])
+->ProgramResult (:180-190) retains its iterator/any and key comparisons.
+
+Eventual actual wrapper, unchanged signature (:628-733):
+fn authenticate_asq8_accounts(verifier_program:&Pubkey,
+accounts:&[AccountInfo<'_>],pool_program:&Pubkey,output_lane:u8,current_slot:u64)
+->Result<AuthenticatedAsq8Accounts,ProgramError>.
+It checks seven accounts, invokes the guards, borrows master/checkpoint/lane and
+registry/entry bytes, calls exact decoders, checks stored-bump PDAs and release
+policy, then allocates/copies the returned snapshot. current_slot is an input;
+Clock::get()?.slot is in its real validate_asq8 caller, not this helper. Preserve
+all borrows/errors and their order. create_program_address uses native hashing/
+curve checks off-chain versus the Solana syscall on-chain; those configurations
+and syscall semantics cannot be equated by choosing an abstract callback.
+
+Stage1 hs still needs the real chain first(public_bytes:&[u8],proof:&[u8],
+k:usize)->Result<Vec<u8>,ProgramError>, tx1(public:Public<'_>,public_bytes:&[u8],
+proof:&[u8],k:usize,hash:HashFn,obs:Observer)->Result<Vec<u8>,verifier::Error>,
+verify_observed(public:Public<'_>,bytes:&[u8],hash:HashFn,obs:Observer)
+->Result<Verified,r1_wire::Error>. Its caller cone includes callbacks, allocations
+and terminal arithmetic. A truncated replacement prefix would not prove hs.
+Stage1 [3,10]/[3,11] and ASQ8 stage2 remain separate. The latter never invokes
+semantic public_bytes; cross-stage checkpoint/same-byte binding remains OPEN.
