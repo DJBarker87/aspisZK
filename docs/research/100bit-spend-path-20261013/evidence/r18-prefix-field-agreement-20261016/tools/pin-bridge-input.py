@@ -1,0 +1,3 @@
+from pathlib import Path
+import hashlib,json,sys,shutil
+w=Path('/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge');sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();m=json.loads((w/'input-manifest.json').read_text());m['new_import_objects']={str(p.relative_to(w/'objects')):sha(p) for p in sorted((w/'objects').rglob('*.olean'))};m['new_sources']={str(p.relative_to(w/'sources')):sha(p) for p in sorted((w/'sources').rglob('*.lean'))};(w/'input-manifest.json').write_text(json.dumps(m,indent=2)+'\n');shutil.copy2(w/'input-manifest.json',w/('input-manifest-'+sys.argv[1]+'.json'))

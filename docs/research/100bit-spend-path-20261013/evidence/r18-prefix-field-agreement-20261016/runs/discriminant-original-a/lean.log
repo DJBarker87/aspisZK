@@ -1,0 +1,15 @@
+def AspisR1PrefixAggregateParser.r1_wire.Error.read_discriminant : r1_wire.Error → Isize :=
+fun x =>
+  match x with
+  | r1_wire.Error.Allocation => 0#isize
+  | r1_wire.Error.RowOrder a a_1 => 1#isize
+  | r1_wire.Error.InvalidRow => 2#isize
+  | r1_wire.Error.Tag a => 3#isize
+  | r1_wire.Error.Length a => 4#isize
+  | r1_wire.Error.NonCanonical a a_1 => 5#isize
+  | r1_wire.Error.Boundary a => 6#isize
+  | r1_wire.Error.Terminal => 7#isize
+  | r1_wire.Error.EqualCirclePoints => 8#isize
+  | r1_wire.Error.TrailingBytes => 9#isize
+  | r1_wire.Error.Public => 10#isize
+'AspisR1.PrefixDiscriminantAudit.constructor_codes' depends on axioms: [propext, Classical.choice, Quot.sound]
