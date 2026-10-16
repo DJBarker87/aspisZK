@@ -1,7 +1,7 @@
 # Lead review: source-migration checkpoint 85ef4199b (2026-10-16)
 
 Fast-forward from ae2410caf. The live session's commits are retained unchanged.
-This is the first checkpoint since J1.R4 to change production source. The
+This checkpoint changes production source. The
 29 changed non-research files are the Digest32 migration (A), the guard split
 (B), and one extracted helper `semantic_public` (C).
 
