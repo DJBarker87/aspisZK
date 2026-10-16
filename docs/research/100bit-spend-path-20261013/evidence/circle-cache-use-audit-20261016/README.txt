@@ -58,3 +58,11 @@ current SHA256 file pins are additionally recorded in the utility receipt.
 This establishes the identified historical broad-import build record, not
 current-header equality, and does not silently reclassify old prefix receipts
 as current-source checks. No dependency/proof replay occurred.
+
+Final Circle-specific historical correspondence is established in historical-closure/.
+The original source/output trace hashes, all34,556 actual dependency artifact
+hashes, and both ordered Mathlib import aggregates match. Use the explicit
+historical-source-mapping.json correction; do not relabel old39ea… as current
+focused-import source70b…. The three old semantic-agreement receipts remain
+unchanged. This resolves the Circle-specific provisional correspondence, not
+a blanket producing-source audit of all174 retained predecessors.
