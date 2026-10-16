@@ -1,0 +1,57 @@
+J1.a actual withdrawal decoder-to-public checkpoint
+
+Proof base92756a3c1098e3c1c3e2586ec303fbae20191292; unchanged Rust source
+0626294e34632812accf4cb14704f027368ea871. This completes the proposed narrow
+transport in J1-DECODER-CALLER-TRANSPORT-20261016.txt, not its listed caller,
+transition or runtime obligations. No production source or field arithmetic
+was changed or re-extracted.
+
+ExtractedDecoderWithdrawalSuccess proves that the actual Decoder validator
+on Withdrawal c p cannot succeed without its own actual ASWP encoder
+succeeding on that same p. decoder_encoder_success obtains this premise from
+actual decode asf8 = ok (Ok (Withdrawal c p)), using the checked outer decoder
+success theorem. Both statements exclude Err/fail/div by success inversion;
+late/tree computations are not modeled or assumed total.
+
+ExtractedDecoderCallerBridge defines a fixed all-nine-field map to the existing
+Caller public. Roundtrips, common/digest/validator/encoder equalities are
+checked against both actual generated computations. encoder_eq preserves
+all fourteen mapped payment errors, outer fail/div and successful unchanged
+216-byte ASWP output. No AtomicStatementError map or QM arithmetic is needed.
+
+ExtractedDecoderPublicBridge.decoder_serializer_parsePublic reuses the existing
+AspisR1WithdrawalCaller.CallerPublic.encoder_serializer_parsePublic theorem.
+The exact discharged hypothesis is its he (actual Caller ASWP encoder success).
+The new theorem still assumes hd (actual ASF8 decoding returns Withdrawal c p)
+and hs (actual semantic serializer succeeds on the same fixed carrier and t).
+Its parser conclusion concerns semantic output bytes, not the original
+1880-byte ASF8 input. This is Withdrawal-only. No supplied-public corollary is
+exported; hw/hbind remain a later interface.
+
+Confirmed joint-import failure was only the global fourteen-code payment-error
+instance name. A separate Decoder Types adapter qualifies that instance and
+retains the same read_discriminant definition; complete inverse recovers the
+original bytes. Original Types/Funs/objects are immutable. Identical original
+and adapted fourteen-tag equality audits passed. The affected generated cone,
+sixteen actual decoder declarations, prior outer-success proof and new
+withdrawal proof all rechecked; the joint import then passed. This justified
+only the changed import cone, not a broad replay.
+
+Final focused Lean4.32 targets: CallerBridge exit0,1.814s,processRSS2,659,572KiB,
+sampled637,333,504B,cumulative651,747,328B; PublicBridge exit0,2.010s,
+processRSS3,847,884KiB,sampled745,406,464B,cumulative753,795,072B. All scopes
+6Ghigh/8Gmax/swap0,zero swaps/events. Forty-one adapted reports are standard-only,
+including eleven transport exports and six final actual-function/theorem
+reports. The actual Copy conversion helper remains axiom-free. No foreign
+axiom allowance, dependency build or unchanged full regression was used.
+
+Evidence decoder-public-bridge-20261016 preserves192 archive members, original
+prefix/tag checks, failed naming diagnostic, adapted checks, exact sources,
+objects/import/runtime keys and all raw receipts. verify.py checks hashes,
+current-source equality, dependency keys, naming inverse and raw audit logs.
+Retained cache source/object pinning is not a new historical compile claim.
+
+Still OPEN: hs supplied by an actual stage1 caller; binding free t to decoded
+c.lane_transition; hd caller reachability and selected buffer/custody provenance;
+independently supplied verifier-public equality; deep decode/encode roundtrip;
+Rust extraction preservation and runtime/source simulation.
