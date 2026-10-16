@@ -1,0 +1,92 @@
+{"synthetic": false,
+ "schemaVersion": "2025-09-10",
+ "outputs":
+ {"o": ["f5e2aad9336e36aa.olean"],
+  "m": false,
+  "i": "5d8bc0df907d265a.ilean",
+  "c": "ef1b352b5af77842.c"},
+ "log":
+ [{"message":
+   ".> LEAN_PATH=/Users/dominic/ZK/AspisFormal/.lake/packages/Cli/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/batteries/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/Qq/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/aesop/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/importGraph/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/plausible/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/mathlib/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/build/lib/lean /Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean /Users/dominic/ZK/AspisFormal/AspisFormal/CircleGroupOrder.lean -o /Users/dominic/ZK/AspisFormal/.lake/build/lib/lean/AspisFormal/CircleGroupOrder.olean -i /Users/dominic/ZK/AspisFormal/.lake/build/lib/lean/AspisFormal/CircleGroupOrder.ilean -c /Users/dominic/ZK/AspisFormal/.lake/build/ir/AspisFormal/CircleGroupOrder.c --setup /Users/dominic/ZK/AspisFormal/.lake/build/ir/AspisFormal/CircleGroupOrder.setup.json --json",
+   "level": "trace"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:1:1: * '-/':\nCopyright too short!\n\n\nNote: This linter can be disabled with `set_option linter.style.header false`",
+   "level": "warning"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:8:0: The module doc-string for a file should be the first command after the imports.\nPlease, add a module doc-string before `set_option maxRecDepth 20000`.\n\nNote: This linter can be disabled with `set_option linter.style.header false`",
+   "level": "warning"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:1:1: * '-/':\nCopyright too short!\n\n\nNote: This linter can be disabled with `set_option linter.style.header false`",
+   "level": "warning"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:8:0: The module doc-string for a file should be the first command after the imports.\nPlease, add a module doc-string before `/-!# The M31 circle group and the order of the deployed generator\n\nThis file backs the one geometric interface hypothesis carried by\n`CircleFibreRoots.lean` (`SameXCoord`): that on the deployed M31 circle group\nthe x-coordinate collision criterion\n`x(g^a) = x(g^b) ⟺ a ≡ ±b (mod 2³¹)`\nis a **fact**, not an assumption.  Its two ingredients are\n\n* the *x-collision criterion* `x(P) = x(Q) ⟺ Q = P ∨ Q = P⁻¹` — pure group-law\n  algebra over `𝔽ₚ`, proved structurally here, and\n* the *order of the generator* `g = (2, 1268011823)` is exactly `2³¹`, which\n  turns `g^a = g^{±b}` into `a ≡ ±b (mod 2³¹)`.\n\nThe circle group is `C = {(x,y) ∈ 𝔽ₚ² : x²+y² = 1}` with the rotation law\n`(x₁,y₁)·(x₂,y₂) = (x₁x₂ − y₁y₂, x₁y₂ + y₁x₂)`, `𝔽ₚ = ZMod (2³¹−1)`.  We build\n`C` as a concrete `CommGroup` (the unit-norm elements of `𝔽ₚ[i]`), prove the\nx-collision criterion from the group law, and pin the generator's order with the\nprime-power criterion `orderOf_eq_prime_pow`: it reduces to the two concrete\n2-power checks `g^{2³⁰} ≠ 1` and `g^{2³¹} = 1`.\n\n## Honesty note on the order computation\n\nThe two 2-power checks are genuine finite computations about the specific field\nelement `1268011823`; there is no structural shortcut (the answer depends on the\nnumber).  They are discharged by the **kernel** `decide` on a **31-fold repeated\nsquaring** (not a `2³¹`-step exponentiation), so the work is 31 field\nmultiplications, not two billion.  Because this is kernel reduction (not the\ncompiled `native_decide`), it adds **no** `Lean.ofReduceBool` axiom: every\ntheorem below, including `orderOf_g` and `sameXCoord_exp`, closes with axioms\nexactly `[propext, Classical.choice, Quot.sound]`. See the audit at the bottom.\n-/\n`.\n\nNote: This linter can be disabled with `set_option linter.style.header false`",
+   "level": "warning"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:79:4: The `show` tactic should only be used to indicate intermediate goal states for readability.\nHowever, this tactic invocation changed the goal. Please use `change` instead for these purposes.\n\nNote: This linter can be disabled with `set_option linter.style.show false`",
+   "level": "warning"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:85:28: The `show` tactic should only be used to indicate intermediate goal states for readability.\nHowever, this tactic invocation changed the goal. Please use `change` instead for these purposes.\n\nNote: This linter can be disabled with `set_option linter.style.show false`",
+   "level": "warning"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:91:4: The `show` tactic should only be used to indicate intermediate goal states for readability.\nHowever, this tactic invocation changed the goal. Please use `change` instead for these purposes.\n\nNote: This linter can be disabled with `set_option linter.style.show false`",
+   "level": "warning"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:100:4: The `show` tactic should only be used to indicate intermediate goal states for readability.\nHowever, this tactic invocation changed the goal. Please use `change` instead for these purposes.\n\nNote: This linter can be disabled with `set_option linter.style.show false`",
+   "level": "warning"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:105:4: The `show` tactic should only be used to indicate intermediate goal states for readability.\nHowever, this tactic invocation changed the goal. Please use `change` instead for these purposes.\n\nNote: This linter can be disabled with `set_option linter.style.show false`",
+   "level": "warning"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:110:4: The `show` tactic should only be used to indicate intermediate goal states for readability.\nHowever, this tactic invocation changed the goal. Please use `change` instead for these purposes.\n\nNote: This linter can be disabled with `set_option linter.style.show false`",
+   "level": "warning"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:115:4: The `show` tactic should only be used to indicate intermediate goal states for readability.\nHowever, this tactic invocation changed the goal. Please use `change` instead for these purposes.\n\nNote: This linter can be disabled with `set_option linter.style.show false`",
+   "level": "warning"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:119:6: The `show` tactic should only be used to indicate intermediate goal states for readability.\nHowever, this tactic invocation changed the goal. Please use `change` instead for these purposes.\n\nNote: This linter can be disabled with `set_option linter.style.show false`",
+   "level": "warning"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:120:6: The `show` tactic should only be used to indicate intermediate goal states for readability.\nHowever, this tactic invocation changed the goal. Please use `change` instead for these purposes.\n\nNote: This linter can be disabled with `set_option linter.style.show false`",
+   "level": "warning"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:123:4: The `show` tactic should only be used to indicate intermediate goal states for readability.\nHowever, this tactic invocation changed the goal. Please use `change` instead for these purposes.\n\nNote: This linter can be disabled with `set_option linter.style.show false`",
+   "level": "warning"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:258:0: 'AspisCircleGroupOrder.sameX_iff' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "level": "info"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:259:0: 'AspisCircleGroupOrder.orderOf_g' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "level": "info"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:260:0: 'AspisCircleGroupOrder.sameXCoord_exp' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "level": "info"},
+  {"message":
+   "AspisFormal/CircleGroupOrder.lean:261:0: 'AspisCircleGroupOrder.card_C_dvd' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "level": "info"}],
+ "inputs":
+ [["AspisFormal.CircleGroupOrder:deps",
+   [["deps",
+     [["AspisFormal/AspisFormal:extraDep",
+       [["@AspisFormal:extraDep", "00000000000006bb"]]],
+      ["imports",
+       [["Mathlib transitive imports (legacy)", "693e25ff4498b2e4"],
+        ["Mathlib:importAllArts", "f90ecd83c52e54ec"]]]]],
+    ["libs",
+     [["import dynlibs", "00000000000006bb"],
+      ["package external libraries", "00000000000006bb"],
+      ["module dynlibs", "00000000000006bb"],
+      ["module plugins", "00000000000006bb"]]]]],
+  ["Lean 4.32.0, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35",
+   "5d4a267a1ba5cafb"],
+  ["/Users/dominic/ZK/AspisFormal/AspisFormal/CircleGroupOrder.lean",
+   "824923ef3e0403cd"],
+  ["options",
+   [["-DmaxSynthPendingDepth=3", "c78e353d34de85d4"],
+    ["-Dweak.linter.mathlibStandardSet=true", "8a155799906f2b42"],
+    ["-DrelaxedAutoImplicit=false", "74a2b5546b55be80"],
+    ["-Dpp.unicode.fun=true", "9b94070140457fab"]]],
+  ["isModule: false", "feefd2a0d3a1847e"],
+  ["Module.name: AspisFormal.CircleGroupOrder", "c13df567325f8b86"],
+  ["Package.id?: (some AspisFormal)", "7c1828f0aaf6921d"],
+  ["Module.leanArgs: #[]", "00000000000006bb"]],
+ "depHash": "d6d8481ac2256d0e"}

@@ -27,3 +27,16 @@ No Lean/build/replay occurred during this audit. audit-circle-use.py uses the
 pinned existing header parser, reads only host sources/receipts, verifies all
 direct receipt-object relations, and emits circle-use-host.json. The separate
 local codec inventory is pinned by source path/hash.
+
+Follow-up inventory: the177 affected source files are144below16KiB,32at16--64KiB,
+and one86,989-byte HenselIntegralLift file; none exceeds256KiB. No explicit
+generated-certificate marker was found, which is not evidence that these
+algebraic proofs are cheap. prefix-frontier.json records size/shape flags for
+every affected module and pins all three actual successful receipt sources.
+Their direct imports and recorded object hashes are verified, while paths
+from those imports to Circle are explicitly source-graph evidence.
+
+A retained Aug24 Lake trace and candidate pre3638d7546 source were found beside
+the exact rejected object. The trace has64-bit Lake source/output hashes,
+not a SHA256 producing-source receipt; these have not yet been recomputed.
+historical-candidate.json keeps the identification provisional.
