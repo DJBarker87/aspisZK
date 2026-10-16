@@ -1,4 +1,5 @@
 //! UNPROVED COST PROBE. Honest fixtures, dense comparison and rejection corpus.
+use aspis_core::digest::LegacyHashFn;
 use aspis_r1_cost_probe::{prover,dense,trace,transport::Variant,verifier::{self,View,HEADER,INITIAL_QUERY_BYTES},r1_wire};
 use aspis_prover::HOST_HASH;
 use serde_json::json;
@@ -43,8 +44,8 @@ fn main(){
             let prior=fs::read(out.parent().unwrap().join("S1/fixtures").join(format!("{name}.proof.bin"))).unwrap();
             assert_eq!(&proof[HEADER..HEADER+verifier::SEMANTIC_BYTES],&prior[HEADER..HEADER+verifier::SEMANTIC_BYTES],"shared semantic bytes changed");
         }
-        trace::take();let checkpoint=verifier::tx1(fixture.public(),&public,&proof,11,HOST_HASH,None);
-        let actual=checkpoint.as_ref().map_err(|e|*e).and_then(|c|verifier::tx2(&public,&proof,c,HOST_HASH,None));let mut actual_trace=trace::take();
+        trace::take();let checkpoint=verifier::tx1(fixture.public(),&public,&proof,11,LegacyHashFn(HOST_HASH),None);
+        let actual=checkpoint.as_ref().map_err(|e|*e).and_then(|c|verifier::tx2(&public,&proof,c,LegacyHashFn(HOST_HASH),None));let mut actual_trace=trace::take();
         let expected=dense::verify(fixture.public(),&proof,HOST_HASH);let mut expected_trace=trace::take();
         actual_trace.sort_by_key(|(t,i,_)|(*t,*i));expected_trace.sort_by_key(|(t,i,_)|(*t,*i));
         if actual!=expected||actual_trace!=expected_trace {
@@ -53,8 +54,8 @@ fn main(){
             panic!("STOP: dense oracle and probe disagree");
         }
         actual.expect("honest acceptance");let checkpoint=checkpoint.unwrap();
-        let (p,a)=verifier::resume(&checkpoint,&proof,&public,v,HOST_HASH).unwrap();
-        assert_eq!(checkpoint,verifier::checkpoint(&p,&a,&proof,&public,HOST_HASH));
+        let (p,a)=verifier::resume(&checkpoint,&proof,&public,v,LegacyHashFn(HOST_HASH)).unwrap();
+        assert_eq!(checkpoint,verifier::checkpoint(&p,&a,&proof,&public,LegacyHashFn(HOST_HASH)));
         let trace_bytes:Vec<_>=actual_trace.iter().flat_map(|(t,i,b)|t.to_le_bytes().into_iter().chain((*i as u32).to_le_bytes()).chain(*b)).collect();
         let mut cases=vec![];let mut offsets=vec![];
         for i in [0usize,8,9,15]{offsets.push((format!("header-{i}"),i));}
@@ -86,19 +87,19 @@ fn main(){
         }
         for (label,offset) in offsets {
             let mut bad=proof.clone();bad[offset]^=1;
-            let result=verifier::tx1(fixture.public(),&public,&bad,11,HOST_HASH,None).and_then(|c|verifier::tx2(&public,&bad,&c,HOST_HASH,None));
+            let result=verifier::tx1(fixture.public(),&public,&bad,11,LegacyHashFn(HOST_HASH),None).and_then(|c|verifier::tx2(&public,&bad,&c,LegacyHashFn(HOST_HASH),None));
             trace::take();assert!(result.is_err(),"accepted mutation {label}");cases.push(json!({"case":label,"offset":offset,"error":format!("{:?}",result.unwrap_err())}));
         }
         for offset in (0..checkpoint.len()).step_by(16) {
-            let mut bad=checkpoint.clone();bad[offset]^=1;let result=verifier::tx2(&public,&proof,&bad,HOST_HASH,None);trace::take();assert!(result.is_err());cases.push(json!({"case":"checkpoint-byte","offset":offset,"error":format!("{:?}",result.unwrap_err())}));
+            let mut bad=checkpoint.clone();bad[offset]^=1;let result=verifier::tx2(&public,&proof,&bad,LegacyHashFn(HOST_HASH),None);trace::take();assert!(result.is_err());cases.push(json!({"case":"checkpoint-byte","offset":offset,"error":format!("{:?}",result.unwrap_err())}));
         }
-        let mut wrong_public=public.clone();wrong_public[0]^=1;assert!(verifier::tx2(&wrong_public,&proof,&checkpoint,HOST_HASH,None).is_err());
+        let mut wrong_public=public.clone();wrong_public[0]^=1;assert!(verifier::tx2(&wrong_public,&proof,&checkpoint,LegacyHashFn(HOST_HASH),None).is_err());
         cases.push(json!({"case":"checkpoint-public-binding","error":"rejected"}));
         assert!(cases.len()>=200);
         #[cfg(feature="private-leaf-salts")]
         {
             let mut old_magic=proof.clone();old_magic[..8].copy_from_slice(b"R1P2COST");
-            assert!(verifier::tx1(fixture.public(),&public,&old_magic,11,HOST_HASH,None).is_err());
+            assert!(verifier::tx1(fixture.public(),&public,&old_magic,11,LegacyHashFn(HOST_HASH),None).is_err());
             cases.push(json!({"case":"P2-magic-rejected","error":"rejected"}));
         }
         write(&out.join(format!("{name}-mutations.json")),json!({"label":"UNPROVED COST PROBE","count":cases.len(),"cases":cases}));

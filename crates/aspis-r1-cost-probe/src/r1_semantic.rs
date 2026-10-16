@@ -1,10 +1,10 @@
 //! UNPROVED COST PROBE. P2 semantic layer in K plus the specified D14 tail.
 use crate::r1_wire::{self as wire, Challenges, Error, Prefix, SemanticTranscript};
 use alloc::boxed::Box;
-use aspis_core::{HashFn, circle::SecureCirclePoint, field::QM31};
+use aspis_core::{Digest32, circle::SecureCirclePoint, field::QM31};
 use aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public;
 
-pub struct Verified {
+pub struct Verified<H: Digest32> {
     pub roots: [[u8; 32]; 2],
     pub challenges: Challenges,
     pub alpha: [QM31; 10],
@@ -13,7 +13,7 @@ pub struct Verified {
     pub before_z1: [QM31; 29],
     pub state_before_z0: [u8; 32],
     pub z: [SecureCirclePoint; 2],
-    pub transcript: SemanticTranscript,
+    pub transcript: SemanticTranscript<H>,
     #[cfg(feature = "prover")]
     pub round_checks: [[QM31; 3]; 10],
     #[cfg(feature = "prover")]
@@ -55,12 +55,12 @@ fn claims(prefix: &Prefix<'_>) -> Result<Box<[[QM31; 29]; 3]>, Error> {
 }
 
 #[inline(never)]
-pub fn verify(public: Public<'_>, bytes: &[u8], hash: HashFn) -> Result<Verified, Error> {
+pub fn verify<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H) -> Result<Verified<H>, Error> {
     verify_observed(public, bytes, hash, None)
 }
 
 #[inline(never)]
-pub fn verify_observed(public: Public<'_>, bytes: &[u8], hash: HashFn, obs: crate::verifier::Observer) -> Result<Verified, Error> {
+pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
     fn mark(obs: crate::verifier::Observer, i: u8) {
         #[cfg(feature="detail-phases")]
         if let Some(f)=obs {f(crate::verifier::Phase::SemanticPart(i));}

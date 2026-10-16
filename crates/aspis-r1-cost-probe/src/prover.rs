@@ -1,6 +1,6 @@
 //! UNPROVED COST PROBE. Own native prover, including D14 content.
 use alloc::{vec,vec::Vec};
-use aspis_core::{HashFn,field::{WideExact as E,M31,QM31 as K,CM31},r0::{self,CodeField,domain::{Point,FibreIndex},merkle,wire::FibreOpening,Message},state_only_hiding::StateOnlyHidingContext};
+use aspis_core::{digest::LegacyHashFn,HashFn,field::{WideExact as E,M31,QM31 as K,CM31},r0::{self,CodeField,domain::{Point,FibreIndex},merkle,wire::FibreOpening,Message},state_only_hiding::StateOnlyHidingContext};
 use aspis_statement::pool_v1::{pair_forest_semantic_terminal::r0::Public,pair_forest_trace::PoolV1PairForestMergedC1CompilationV1};
 use aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_row_masks_v1;
 use aspis_prover::{state_only_entropy::{StateOnlyAttemptSecrets,ReservedStateOnlyAttemptSecrets,DurableStateOnlyMaskNonceStore},state_only_hiding::{apply_pool_v1_pair_forest_mask_material_v1,InMemoryStateOnlyMaskNonceStore,StateOnlyMaskNonceStore}};
@@ -49,7 +49,7 @@ pub fn prove(public:Public<'_>,compiled:&PoolV1PairForestMergedC1CompilationV1,v
     dc[..56].copy_from_slice(&tail_samples(hash,seed));let d=variant.rows(&dc);
     let g=core::array::from_fn(|r|K::from_m31(M31(r as u32+5)));
     let mut backend=Backend{hash,variant,domain:EncodingDomain::new().map_err(|_|Error::Allocation)?,messages:vec![[E::ZERO;1024];29],c1:None,c2:None,c1_salts:None,c2_salts:None};
-    let sem=crate::host_semantic::build(public,compiled,&masks,&d,&g,&mut backend,hash,variant).map_err(|_|Error::Semantic)?;
+    let sem=crate::host_semantic::build(public,compiled,&masks,&d,&g,&mut backend,LegacyHashFn(hash),variant).map_err(|_|Error::Semantic)?;
     prove_from_semantics(public,variant,hash,backend,sem,None)
 }
 
@@ -167,7 +167,7 @@ fn prove_masked_with_attempt(
     #[cfg(not(feature="private-leaf-salts"))]
     let (c1_salts,c2_salts)=(None,None);
     let mut backend=Backend{hash,variant,domain:EncodingDomain::new().map_err(|_|Error::Allocation)?,messages:vec![[E::ZERO;1024];29],c1:None,c2:None,c1_salts,c2_salts};
-    let sem=crate::host_semantic::build_with_material(public,compiled,&noised_c1,&applied.mask_only_c1,&d,&g,&h1_padding,&mut backend,hash,variant).map_err(|_|Error::Semantic)?;
+    let sem=crate::host_semantic::build_with_material(public,compiled,&noised_c1,&applied.mask_only_c1,&d,&g,&h1_padding,&mut backend,LegacyHashFn(hash),variant).map_err(|_|Error::Semantic)?;
     let h1_total_balanced=aspis_statement::state_only_copy_helper_sum(&sem.columns[26])==Some(K::ZERO);
     if !h1_total_balanced { return Err(Error::Semantic); }
     let audit=MaskedFixtureAudit{h1_total_balanced,..audit};
@@ -187,11 +187,11 @@ fn derive_private_salts(reserved:&ReservedStateOnlyAttemptSecrets,context:StateO
     Ok(PrivateSalts::new(salts))
 }
 
-fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics,salts:Option<(&ReservedStateOnlyAttemptSecrets,StateOnlyHidingContext)>)->Result<Vec<u8>,Error> {
+fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>,salts:Option<(&ReservedStateOnlyAttemptSecrets,StateOnlyHidingContext)>)->Result<Vec<u8>,Error> {
     let coefficients:Vec<Message<E>>=backend.messages.iter().map(|m|variant.coefficients(m)).collect();
     let z1=Point{x:E::from_qm31(sem.z[1].x),y:E::from_qm31(sem.z[1].y)};
     let y1=encoded(coefficients.iter().map(|m|r0::encoder::eval_message(m,z1)));
-    let mut t=Transcript::new(hash,sem.transcript.state(),variant);
+    let mut t=Transcript::new(LegacyHashFn(hash),sem.transcript.state(),variant);
     let gamma=t.scalar(27,&y1,true);let gp=crate::weights::powers::<29>(gamma);
     let q:Vec<E>=(0..1024).map(|j|(0..29).fold(E::ZERO,|s,l|s.add(gp[l].mul(coefficients[l][j])))).collect();
     let w=Weights::new(variant,&sem.alpha,&sem.z)?;

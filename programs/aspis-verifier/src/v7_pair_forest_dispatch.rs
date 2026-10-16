@@ -124,12 +124,26 @@ fn frontier_nodes_from_proof_length(length: usize) -> Option<usize> {
         .then_some(nodes)
 }
 
-fn require_readonly_account(account: &AccountInfo<'_>, owner: &Pubkey) -> ProgramResult {
-    if account.owner != owner || account.is_signer || account.is_writable || account.executable {
+fn readonly_meta_ok(
+    owner: &Pubkey,
+    expected: &Pubkey,
+    is_signer: bool,
+    is_writable: bool,
+    executable: bool,
+) -> ProgramResult {
+    if owner != expected || is_signer || is_writable || executable {
         return Err(ProgramError::InvalidAccountData);
     }
     Ok(())
 }
+
+fn require_readonly_account(account: &AccountInfo<'_>, owner: &Pubkey) -> ProgramResult {
+    readonly_meta_ok(account.owner, owner, account.is_signer, account.is_writable, account.executable)
+}
+
+#[cfg(test)]
+#[path = "readonly_meta_tests.rs"]
+mod readonly_meta_tests;
 
 fn require_distinct_accounts<const N: usize>(accounts: &[&AccountInfo<'_>; N]) -> ProgramResult {
     for (index, account) in accounts.iter().enumerate() {

@@ -1,5 +1,11 @@
 use aspis_r1_cost_probe::r1_wire::{self, Error, Prefix, SemanticTranscript};
 
+#[derive(Clone, Copy)]
+struct TestDigest;
+impl aspis_core::Digest32 for TestDigest {
+    fn digest(&self, parts: &[&[u8]]) -> [u8; 32] { test_hash(parts) }
+}
+
 fn test_hash(parts: &[&[u8]]) -> [u8; 32] {
     let mut out = [0u8; 32];
     for (part_index, part) in parts.iter().enumerate() {
@@ -39,7 +45,7 @@ fn prefix_and_public_transcript_reject_bad_framing_and_field_encodings() {
         Prefix::parse(&bad_tag),
         Err(Error::Tag { row: 0 })
     ));
-    let mut transcript = SemanticTranscript::new(test_hash, b"public", &[0; 32]).unwrap();
+    let mut transcript = SemanticTranscript::new(TestDigest, b"public", &[0; 32]).unwrap();
     assert!(matches!(
         transcript.semantic(0, &bad_tag[32..37]),
         Err(Error::Tag { row: 0 })
@@ -61,7 +67,7 @@ fn prefix_and_public_transcript_reject_bad_framing_and_field_encodings() {
     ));
 
     for malformed in [&noncanonical, &high_component] {
-        let mut transcript = SemanticTranscript::new(test_hash, b"public", &[0; 32]).unwrap();
+        let mut transcript = SemanticTranscript::new(TestDigest, b"public", &[0; 32]).unwrap();
         for row in 0..14 {
             transcript
                 .semantic(
@@ -87,7 +93,7 @@ fn prefix_and_public_transcript_reject_bad_framing_and_field_encodings() {
         Prefix::parse(&malformed_circle),
         Err(Error::NonCanonical { row: 25, value: 0 })
     ));
-    let mut transcript = SemanticTranscript::new(test_hash, b"public", &[0; 32]).unwrap();
+    let mut transcript = SemanticTranscript::new(TestDigest, b"public", &[0; 32]).unwrap();
     for row in 0..25 {
         let start = row_offset(row);
         let size = r1_wire::row_shape(row).unwrap().1;

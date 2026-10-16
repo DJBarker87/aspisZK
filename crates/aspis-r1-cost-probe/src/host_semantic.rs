@@ -1,6 +1,6 @@
 //! UNPROVED COST PROBE. Own D14 semantic prover; original prover unchanged.
 use alloc::vec::Vec;
-use aspis_core::{field::{WideExact, M31, QM31, P},HashFn,r0::{domain::Point,encoder::eval_message}};
+use aspis_core::{field::{WideExact, M31, QM31, P},Digest32,r0::{domain::Point,encoder::eval_message}};
 use crate::r1_wire::{self as wire,Challenges,Error,SemanticTranscript};
 use aspis_statement::{multilinear_evaluate_qm31,state_only_copy_helper_sum,StateOnlyTraceFoundation,pool_v1::{pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1,pair_forest_semantic_terminal::r0::Public,pair_forest_trace::PoolV1PairForestMergedC1CompilationV1}};
     #[derive(Clone, Copy)]
@@ -13,9 +13,9 @@ use aspis_statement::{multilinear_evaluate_qm31,state_only_copy_helper_sum,State
         fn c1(&mut self, columns: [Column<'_>; 27]) -> Result<[u8; 32], Error>;
         fn c2(&mut self, columns: [&[QM31; 1024]; 2]) -> Result<[u8; 32], Error>;
     }
-    pub struct BuiltSemantics {
+    pub struct BuiltSemantics<H: Digest32> {
         pub bytes: Vec<u8>,
-        pub transcript: SemanticTranscript,
+        pub transcript: SemanticTranscript<H>,
         pub challenges: Challenges,
         pub alpha: [QM31; 10],
         /// Opening integration starts with this row-25 state, bound roots,
@@ -42,7 +42,7 @@ use aspis_statement::{multilinear_evaluate_qm31,state_only_copy_helper_sum,State
     }
 
     #[allow(clippy::too_many_arguments)]
-    fn build_with_helper_mode(
+    fn build_with_helper_mode<H: Digest32>(
         public: Public<'_>,
         c1: &[Vec<M31>; 26],
         d: &[QM31; 1024],
@@ -50,9 +50,9 @@ use aspis_statement::{multilinear_evaluate_qm31,state_only_copy_helper_sum,State
         h1_padding: &[QM31; 1024],
         helper: impl FnOnce(QM31, QM31) -> Result<Vec<QM31>, Error>,
         commitments: &mut impl Commitments,
-        hash: HashFn,
+        hash: H,
         variant: crate::transport::Variant,
-    ) -> Result<BuiltSemantics, Error> {
+    ) -> Result<BuiltSemantics<H>, Error> {
         // Reject raw noncanonical constructors rather than normalize their
         // commitment representation. D is supplied before any challenge.
         if c1
@@ -81,7 +81,7 @@ use aspis_statement::{multilinear_evaluate_qm31,state_only_copy_helper_sum,State
         let c1_root = commitments.c1(first)?;
         let mut transcript = SemanticTranscript::new(hash, &public.public_bytes().map_err(|_|Error::Public)?, &c1_root)?;
         let mut bytes = c1_root.to_vec();
-        let mut scalar = |row, payload: &[u8], transcript: &mut SemanticTranscript| {
+        let mut scalar = |row, payload: &[u8], transcript: &mut SemanticTranscript<H>| {
             let framed = wire::record(row, payload)?;
             let value = transcript.semantic(row, &framed)?;
             bytes.extend_from_slice(&framed);
@@ -204,7 +204,7 @@ use aspis_statement::{multilinear_evaluate_qm31,state_only_copy_helper_sum,State
 pub fn extra(coefficients:&[QM31;1024],a:QM31,b:QM31)->QM31 {
     (0..2).fold(QM31::ZERO,|sum,s|sum.add(coefficients[s*28..s*28+28].iter().rev().fold(QM31::ZERO,|v,&c|v.mul(if s==0 {a}else{b}).add(c))))
 }
-pub fn build(public:Public<'_>,compiled:&PoolV1PairForestMergedC1CompilationV1,mask_only:&[Vec<M31>;10],d:&[QM31;1024],g:&[QM31;1024],commitments:&mut impl Commitments,hash:HashFn,variant:crate::transport::Variant)->Result<BuiltSemantics,Error> {
+pub fn build<H: Digest32>(public:Public<'_>,compiled:&PoolV1PairForestMergedC1CompilationV1,mask_only:&[Vec<M31>;10],d:&[QM31;1024],g:&[QM31;1024],commitments:&mut impl Commitments,hash:H,variant:crate::transport::Variant)->Result<BuiltSemantics<H>,Error> {
     if compiled.semantic_c1.c1.len()!=16 || &compiled.public_statement!=public.transition(){return Err(Error::Public);}
     let c1=core::array::from_fn(|i| if i<16 {compiled.semantic_c1.c1[i].clone()}else{mask_only[i-16].clone()});
     build_with_helper_mode(public,&c1,d,g,&[QM31::ZERO;1024],|lambda,chi|build_pool_v1_pair_forest_copy_helper_v1(&compiled.trace,public.transition().live_snapshot.next_pair_index,lambda,chi).map_err(|_|Error::Public),commitments,hash,variant)
@@ -213,7 +213,7 @@ pub fn build(public:Public<'_>,compiled:&PoolV1PairForestMergedC1CompilationV1,m
 /// Fixture-only entry for C1/H1 material from the existing state-only mask
 /// APIs. The compiled trace remains the helper source; only the semantic C1
 /// input is replaced with its independently masked clone.
-pub fn build_with_material(
+pub fn build_with_material<H: Digest32>(
     public: Public<'_>,
     compiled: &PoolV1PairForestMergedC1CompilationV1,
     noised_semantic_c1: &StateOnlyTraceFoundation,
@@ -222,9 +222,9 @@ pub fn build_with_material(
     g: &[QM31; 1024],
     h1_padding: &[QM31; 1024],
     commitments: &mut impl Commitments,
-    hash: HashFn,
+    hash: H,
     variant: crate::transport::Variant,
-) -> Result<BuiltSemantics, Error> {
+) -> Result<BuiltSemantics<H>, Error> {
     if noised_semantic_c1.c1.len() != 16
         || compiled.semantic_c1.c1.len() != 16
         || &compiled.public_statement != public.transition()
