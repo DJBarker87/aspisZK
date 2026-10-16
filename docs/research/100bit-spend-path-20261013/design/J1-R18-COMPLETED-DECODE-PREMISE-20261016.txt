@@ -1,0 +1,53 @@
+J1.R18: supply the completed-record decode premise
+Base: 72c35a2b3ebfb10b125e1797fc1562bc0ea26efa.
+
+ExtractedPrefixCompletedDecode.completed_decode is checked against the
+existing FS2.Duplex.Rec M type. It takes actual Prefix.parse success,
+messageBytes : M -> SemanticPrefixCodec.Bytes, rs : List (Rec M), and
+  hbytes : rs.map (fun r => messageBytes r.2.2.1) = completedRecords parsed.
+It returns values : SemanticPrefixCodec.Full and
+  decodeFrom 0 (rs.map (fun r => messageBytes r.2.2.1)) =
+    some (entriesOf values),
+together with decodeFull success and exact encodeFull recovery of that list.
+completedRecords remains precisely the first25 returned source records
+mapped byte-for-byte by rawByte. The theorem does not establish hbytes.
+
+Precise documented specialization (joint Selected imports not newly checked):
+set M := SelectedTranscriptParams.Message and messageBytes := fun m => m.val.
+Then hbytes is exactly
+  rs.map (fun r => r.2.2.1.val) = completedRecords parsed.
+The first returned equality is hdecode for
+  SemanticPrefixCompletedAgreement.completed_read_of_decode
+    recoverC2 T acc 0 rs (SemanticPrefixCodec.entriesOf values) hdecode.
+Its output retains the exact original completed challenges from
+SelectedCompletedSemantic.pairs T acc 0 rs. The same equality also supplies
+completed_semChalsZ_of_decode, without choosing new challenge values.
+
+For the already-read cut, retain these named OPEN hypotheses:
+  ha : a in tr.map Prod.fst;
+  htyped : UnifiedSemanticRecovery.typed SelectedTranscriptParams.params
+    pubBytes (tableBefore t tr a) fuel endpoint = some (c1, rs).
+The corresponding existing application is
+  SemanticPrefixCutAgreement.typed_read_append_of_decode
+    recoverC2 pubBytes t T tr tail a ha fuel endpoint c1 acc 0 rs
+    (SemanticPrefixCodec.entriesOf values) htyped hdecode.
+That theorem uses TypedPrefixExtension.semantic_typed_append_eq; the
+completion table T, fallback acc and recoverC2 remain the supplied values.
+No runtime provenance, recovery correctness, equality between different
+challenge tables, or closure of the selected hread provenance is asserted.
+
+The source-only inventory is pinned to coordinator b330ade02e82770977de48471ee0d0b886c0e796;
+the selected interfaces also match fetched origin 0d8855fa49c54d99d7b08fe0a99a5168929ba99a.
+Primitive/completed/cut agreement closures contain 337/341/377 project
+modules. Of these, 140/144/180 lack a source-matching receipt in the examined
+current144, coherent46, focused A and R17-producing sets. These are inventory
+counts, not mandatory rebuild counts or a combined-object coherence claim.
+The two source differences from this branch are UniformStateFirstHit and
+V6PublishedTheoremInterfaces. Historical374 objects remain unselected;
+concrete Selected/cut wrappers await a coherent cache. No live source changed.
+
+Only the new generic bridge was checked: Lean4.32, first attempt, 2.204s,
+RSS 3,855,260 KiB, cgroup peak 505,040,896 bytes, zero process/cgroup swap,
+no pressure/OOM, -j1/-M0, MemoryHigh6G/MemoryMax8G/SwapMax0. Its axiom report
+contains only propext, Classical.choice, Quot.sound. Evidence and the
+source/import/runtime/output pins are in r18-prefix-completed-decode-20261016.
