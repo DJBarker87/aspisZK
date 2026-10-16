@@ -1,0 +1,696 @@
+{
+  "archive": "public-preparation-extraction.tar.gz",
+  "archive_bytes": 4364465,
+  "archive_entries": 108,
+  "archive_sha256": "4f57bb584f10fc9f2befb8671f1c097b2690be1b1aef4c8bb4dc2c2cb077b746",
+  "cuts": 30,
+  "extraction_receipts": {
+    "aeneas-a": {
+      "cgroup_memory_peak_cumulative": 853839872,
+      "cgroup_swap_current": 0,
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/bin/aeneas",
+        "-sequential",
+        "-no-progress-bar",
+        "-abort-on-error",
+        "-backend",
+        "lean",
+        "-namespace",
+        "AspisR1PublicPreparation",
+        "-dest",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/generated",
+        "-subdir",
+        "AspisR1PublicPreparation",
+        "-split-files",
+        "-emit-json",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/PublicPreparation.llbc"
+      ],
+      "exit_status": 0,
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0"
+      },
+      "memory_events_after": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "memory_events_before": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "outputs": {
+        "PublicPreparation.llbc": "1688f4a3b53fc8b6611a2bac9b0e1c224c64f80a099457bbfa765ff8ec10487d",
+        "generated/AspisR1PublicPreparation/Funs.lean": "d4b77a8657f3356079268735d02e225a37b61246c3f43782781f82a3dd05fde3",
+        "generated/AspisR1PublicPreparation/Types.lean": "88b760f734fc7cc23ad36992894f4b5cb38f3d3b7f82d53dd631ca70c73e9eee",
+        "generated/translation.json": "940075dc55e4897fb8e6e6c926f1797ec01e39717dd8cd39516f3f117b794f8a"
+      },
+      "peak_process_rss_kib": 821180,
+      "phase": "aeneas",
+      "process_swaps": 0,
+      "runner_sha256": "00dc18fdcee5d6186e75495414205c3de72bc9e39c9927de6523a239631d355f",
+      "sampled_cgroup_peak_bytes": 853839872,
+      "scope": "Exact source declaration-cut extraction only; no Lean or source/runtime refinement claim.",
+      "source_pins_sha256": "51c2a4ddda9a33b10553bb5da2514e747fa261290c3812ef3bb66de984f7c2e6",
+      "source_revision": "b92ab28465f9ffd4edcd3e2d5300cc9306ba66af",
+      "timed_out": false,
+      "tool_pins": {
+        "bin/aeneas": "959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3",
+        "charon-target/release/charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+        "charon-target/release/charon-driver": "efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45"
+      },
+      "wall_seconds": 5.011415597051382
+    },
+    "charon-a": {
+      "cgroup_memory_peak_cumulative": 99188736,
+      "cgroup_swap_current": 0,
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+        "cargo",
+        "--preset",
+        "aeneas",
+        "--mir",
+        "built",
+        "--sysroot",
+        "default",
+        "--include",
+        "core::option::Option",
+        "--include",
+        "core::result::Result",
+        "--include",
+        "core::result::_::map_err",
+        "--start-from",
+        "crate::pool_v1::pair_forest_terminal",
+        "--start-from",
+        "crate::r1_semantic::public_transcript",
+        "--start-from",
+        "crate::aspis_core::Digest32",
+        "--start-from",
+        "crate::r1_wire::sample_validated_entry",
+        "--dest-file",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/PublicPreparation.llbc",
+        "--",
+        "--locked",
+        "--offline",
+        "--release",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "r0,private-leaf-salts",
+        "--jobs",
+        "1"
+      ],
+      "exit_status": 0,
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0"
+      },
+      "memory_events_after": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "memory_events_before": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "outputs": {
+        "PublicPreparation.llbc": "1688f4a3b53fc8b6611a2bac9b0e1c224c64f80a099457bbfa765ff8ec10487d"
+      },
+      "peak_process_rss_kib": 206392,
+      "phase": "charon",
+      "process_swaps": 0,
+      "runner_sha256": "00dc18fdcee5d6186e75495414205c3de72bc9e39c9927de6523a239631d355f",
+      "sampled_cgroup_peak_bytes": 90902528,
+      "scope": "Exact source declaration-cut extraction only; no Lean or source/runtime refinement claim.",
+      "source_pins_sha256": "51c2a4ddda9a33b10553bb5da2514e747fa261290c3812ef3bb66de984f7c2e6",
+      "source_revision": "b92ab28465f9ffd4edcd3e2d5300cc9306ba66af",
+      "timed_out": false,
+      "tool_pins": {
+        "bin/aeneas": "959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3",
+        "charon-target/release/charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+        "charon-target/release/charon-driver": "efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45"
+      },
+      "wall_seconds": 0.4049204809125513
+    }
+  },
+  "features": [
+    "r0",
+    "private-leaf-salts"
+  ],
+  "format": 1,
+  "full_repository_source_files": 12,
+  "inventory": "output-audit.json retains all 43 LLBC opaque functions and 66 source-file content pins; no generated external template or opaque function.",
+  "lean_receipts": {
+    "AspisR1PublicPreparation.Funs": {
+      "axioms": {
+        "passed": true,
+        "reports": [],
+        "requested_count": 0,
+        "scope": "Only source #print axioms commands; zero requested audits makes no axiom claim."
+      },
+      "backend_build": false,
+      "cgroup_memory_peak_cumulative": "691560448",
+      "cgroup_swap_current": "0",
+      "command": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runs/shared-a/AspisR1PublicPreparation.Funs/time.log",
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "--no-cache",
+        "env",
+        "python3",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runner.py",
+        "--exec-lean",
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runs/shared-a/import-overlay:/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/objects:/home/dombarker/project-offloads/aspis-r1-j17-port-20261015/backend/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/plausible/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/importGraph/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/aesop/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Qq/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/batteries/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Cli/.lake/build/lib/lean:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean",
+        "-j1",
+        "-M0",
+        "-R",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/sources",
+        "-o",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runs/shared-a/AspisR1PublicPreparation.Funs/artifacts/AspisR1PublicPreparation/Funs.olean",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/sources/AspisR1PublicPreparation/Funs.lean"
+      ],
+      "cwd": "/home/dombarker/project-offloads/aspis-r1-j17-port-20261015/backend",
+      "dependency_build": false,
+      "exit_status": 0,
+      "key": {
+        "cache_protocol": 1,
+        "imports": {
+          "Aeneas": {
+            "closure_key": "18c73114097c590d93db93242d3eda0e3e897af0532ee73abbcff3486c69447c",
+            "objects": {
+              ".olean": {
+                "path": "/home/dombarker/project-offloads/aspis-r1-j17-port-20261015/backend/.lake/build/lib/lean/Aeneas.olean",
+                "sha256": "d3bfce818c2409992274bc1852aa00280cb7a8139465ef0bab674498e4cdc69d"
+              }
+            }
+          },
+          "AspisR1PublicPreparation.Types": {
+            "objects": {
+              ".olean": {
+                "path": "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/objects/AspisR1PublicPreparation/Types.olean",
+                "sha256": "2106648dcad754817bc5d6fecdad30caecba186e52e873a79965657c79924a3d"
+              }
+            },
+            "receipt_key": "0d8c18a59df877cec65e3509f2778a9a9bcf7fa774187a835cd2857bc282300c"
+          },
+          "Init": {
+            "closure_key": "0e904716865c7905579447cf2722f7acfd7dbaced255b34f6ea1fc79f26271eb",
+            "objects": {
+              ".ilean": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.ilean",
+                "sha256": "e5158072a2993522daf63336ec6e3bed92bd60fa0ab009ead4373854b2c0d06e"
+              },
+              ".ir": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.ir",
+                "sha256": "3999556bf5ced08a0ae2b6f5972283fb01cc4a9b1a5e01d39f2720fa915ffb2b"
+              },
+              ".olean": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.olean",
+                "sha256": "d2e85d72099f9d869c9582aad5fb13079968d9d121ac6061e8326b00800b306e"
+              },
+              ".olean.private": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.olean.private",
+                "sha256": "ee2465850125d8857c69cee947e7416dc1569eb22dc9f9bcb98bd9f8224ace5b"
+              },
+              ".olean.server": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.olean.server",
+                "sha256": "69b6bef637350cb34abdfdd40748de5f5098567cf21673d74497b700344954bd"
+              }
+            }
+          }
+        },
+        "options": [
+          "-j1",
+          "-M0"
+        ],
+        "runtime": {
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake": "60330ab6f07dce20f3fa9ebb08e8b984ea9549eac172afeb15d9d2227060e2b3",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared.so": "52c37024db38569f7e8911cfbc6819a2d97d0a8c336e74c3da8590e2cc1e099b",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared_1.so": "2f96493ac9046f64ec7bcb78102a4c1e7cd9a7042487f246af45eda8a96667f5",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared_2.so": "2f96493ac9046f64ec7bcb78102a4c1e7cd9a7042487f246af45eda8a96667f5"
+        },
+        "source_sha256": "d4b77a8657f3356079268735d02e225a37b61246c3f43782781f82a3dd05fde3"
+      },
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0"
+      },
+      "memory_events_after": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "memory_events_before": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "objects": {
+        ".olean": {
+          "path": "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/objects/AspisR1PublicPreparation/Funs.olean",
+          "sha256": "191517f5e749226c62f8ae54eb275cdc16a89ecd5a331ba21b7b0aabcbec3bf2"
+        }
+      },
+      "peak_process_rss_kib": 2699044,
+      "process_swaps": 0,
+      "sampled_cgroup_peak_bytes": 685105152,
+      "source_manifest_entry": {
+        "axiom_requests": 0,
+        "imports": [
+          "Aeneas",
+          "AspisR1PublicPreparation.Types"
+        ],
+        "role": "Exact shared actual constructor/step/preparation cone; no runtime preservation claim",
+        "source": "docs/research/100bit-spend-path-20261013/lean/extracted-public-preparation-20261016/AspisR1PublicPreparation/Funs.lean",
+        "source_revision": "b92ab28465f9ffd4edcd3e2d5300cc9306ba66af exact step extension / C proof18ad8c915",
+        "source_sha256": "d4b77a8657f3356079268735d02e225a37b61246c3f43782781f82a3dd05fde3",
+        "stage_as": "AspisR1PublicPreparation/Funs.lean"
+      },
+      "source_revision": "b92ab28465-step-extension",
+      "stopped_at_ten_minutes_without_target": false,
+      "target": "AspisR1PublicPreparation.Funs",
+      "wall_seconds": 3.431
+    },
+    "AspisR1PublicPreparation.Types": {
+      "axioms": {
+        "passed": true,
+        "reports": [],
+        "requested_count": 0,
+        "scope": "Only source #print axioms commands; zero requested audits makes no axiom claim."
+      },
+      "backend_build": false,
+      "cgroup_memory_peak_cumulative": "642256896",
+      "cgroup_swap_current": "0",
+      "command": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runs/shared-a/AspisR1PublicPreparation.Types/time.log",
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "--no-cache",
+        "env",
+        "python3",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runner.py",
+        "--exec-lean",
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runs/shared-a/import-overlay:/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/objects:/home/dombarker/project-offloads/aspis-r1-j17-port-20261015/backend/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/plausible/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/importGraph/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/aesop/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Qq/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/batteries/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Cli/.lake/build/lib/lean:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean",
+        "-j1",
+        "-M0",
+        "-R",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/sources",
+        "-o",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runs/shared-a/AspisR1PublicPreparation.Types/artifacts/AspisR1PublicPreparation/Types.olean",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/sources/AspisR1PublicPreparation/Types.lean"
+      ],
+      "cwd": "/home/dombarker/project-offloads/aspis-r1-j17-port-20261015/backend",
+      "dependency_build": false,
+      "exit_status": 0,
+      "key": {
+        "cache_protocol": 1,
+        "imports": {
+          "Aeneas": {
+            "closure_key": "18c73114097c590d93db93242d3eda0e3e897af0532ee73abbcff3486c69447c",
+            "objects": {
+              ".olean": {
+                "path": "/home/dombarker/project-offloads/aspis-r1-j17-port-20261015/backend/.lake/build/lib/lean/Aeneas.olean",
+                "sha256": "d3bfce818c2409992274bc1852aa00280cb7a8139465ef0bab674498e4cdc69d"
+              }
+            }
+          },
+          "Init": {
+            "closure_key": "0e904716865c7905579447cf2722f7acfd7dbaced255b34f6ea1fc79f26271eb",
+            "objects": {
+              ".ilean": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.ilean",
+                "sha256": "e5158072a2993522daf63336ec6e3bed92bd60fa0ab009ead4373854b2c0d06e"
+              },
+              ".ir": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.ir",
+                "sha256": "3999556bf5ced08a0ae2b6f5972283fb01cc4a9b1a5e01d39f2720fa915ffb2b"
+              },
+              ".olean": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.olean",
+                "sha256": "d2e85d72099f9d869c9582aad5fb13079968d9d121ac6061e8326b00800b306e"
+              },
+              ".olean.private": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.olean.private",
+                "sha256": "ee2465850125d8857c69cee947e7416dc1569eb22dc9f9bcb98bd9f8224ace5b"
+              },
+              ".olean.server": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.olean.server",
+                "sha256": "69b6bef637350cb34abdfdd40748de5f5098567cf21673d74497b700344954bd"
+              }
+            }
+          }
+        },
+        "options": [
+          "-j1",
+          "-M0"
+        ],
+        "runtime": {
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake": "60330ab6f07dce20f3fa9ebb08e8b984ea9549eac172afeb15d9d2227060e2b3",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared.so": "52c37024db38569f7e8911cfbc6819a2d97d0a8c336e74c3da8590e2cc1e099b",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared_1.so": "2f96493ac9046f64ec7bcb78102a4c1e7cd9a7042487f246af45eda8a96667f5",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared_2.so": "2f96493ac9046f64ec7bcb78102a4c1e7cd9a7042487f246af45eda8a96667f5"
+        },
+        "source_sha256": "88b760f734fc7cc23ad36992894f4b5cb38f3d3b7f82d53dd631ca70c73e9eee"
+      },
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0"
+      },
+      "memory_events_after": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "memory_events_before": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "objects": {
+        ".olean": {
+          "path": "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/objects/AspisR1PublicPreparation/Types.olean",
+          "sha256": "2106648dcad754817bc5d6fecdad30caecba186e52e873a79965657c79924a3d"
+        }
+      },
+      "peak_process_rss_kib": 2651036,
+      "process_swaps": 0,
+      "sampled_cgroup_peak_bytes": 624693248,
+      "source_manifest_entry": {
+        "axiom_requests": 0,
+        "imports": [
+          "Aeneas"
+        ],
+        "role": "Exact shared actual constructor/step/preparation cone; no runtime preservation claim",
+        "source": "docs/research/100bit-spend-path-20261013/lean/extracted-public-preparation-20261016/AspisR1PublicPreparation/Types.lean",
+        "source_revision": "b92ab28465f9ffd4edcd3e2d5300cc9306ba66af exact step extension / C proof18ad8c915",
+        "source_sha256": "88b760f734fc7cc23ad36992894f4b5cb38f3d3b7f82d53dd631ca70c73e9eee",
+        "stage_as": "AspisR1PublicPreparation/Types.lean"
+      },
+      "source_revision": "b92ab28465-step-extension",
+      "stopped_at_ten_minutes_without_target": false,
+      "target": "AspisR1PublicPreparation.Types",
+      "wall_seconds": 2.412
+    },
+    "ExtractedPublicPreparationSuccess": {
+      "axioms": {
+        "passed": true,
+        "reports": [
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1PublicPreparation.PreparationSuccess.semantic_public_transfer"
+          },
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1PublicPreparation.PreparationSuccess.semantic_public_withdrawal"
+          },
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1PublicPreparation.PreparationSuccess.public_transcript_success"
+          }
+        ],
+        "requested_count": 3,
+        "scope": "Only source #print axioms commands; zero requested audits makes no axiom claim."
+      },
+      "backend_build": false,
+      "cgroup_memory_peak_cumulative": "691560448",
+      "cgroup_swap_current": "0",
+      "command": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runs/shared-a/ExtractedPublicPreparationSuccess/time.log",
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "--no-cache",
+        "env",
+        "python3",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runner.py",
+        "--exec-lean",
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runs/shared-a/import-overlay:/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/objects:/home/dombarker/project-offloads/aspis-r1-j17-port-20261015/backend/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/plausible/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/importGraph/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/aesop/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Qq/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/batteries/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Cli/.lake/build/lib/lean:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean",
+        "-j1",
+        "-M0",
+        "-R",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/sources",
+        "-o",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runs/shared-a/ExtractedPublicPreparationSuccess/artifacts/ExtractedPublicPreparationSuccess.olean",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/sources/ExtractedPublicPreparationSuccess.lean"
+      ],
+      "cwd": "/home/dombarker/project-offloads/aspis-r1-j17-port-20261015/backend",
+      "dependency_build": false,
+      "exit_status": 0,
+      "key": {
+        "cache_protocol": 1,
+        "imports": {
+          "AspisR1PublicPreparation.Funs": {
+            "objects": {
+              ".olean": {
+                "path": "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/objects/AspisR1PublicPreparation/Funs.olean",
+                "sha256": "191517f5e749226c62f8ae54eb275cdc16a89ecd5a331ba21b7b0aabcbec3bf2"
+              }
+            },
+            "receipt_key": "949f913464f9809da82ef346699738732ca7561b938ca65468eba0fcbaa0177e"
+          },
+          "Init": {
+            "closure_key": "0e904716865c7905579447cf2722f7acfd7dbaced255b34f6ea1fc79f26271eb",
+            "objects": {
+              ".ilean": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.ilean",
+                "sha256": "e5158072a2993522daf63336ec6e3bed92bd60fa0ab009ead4373854b2c0d06e"
+              },
+              ".ir": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.ir",
+                "sha256": "3999556bf5ced08a0ae2b6f5972283fb01cc4a9b1a5e01d39f2720fa915ffb2b"
+              },
+              ".olean": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.olean",
+                "sha256": "d2e85d72099f9d869c9582aad5fb13079968d9d121ac6061e8326b00800b306e"
+              },
+              ".olean.private": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.olean.private",
+                "sha256": "ee2465850125d8857c69cee947e7416dc1569eb22dc9f9bcb98bd9f8224ace5b"
+              },
+              ".olean.server": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.olean.server",
+                "sha256": "69b6bef637350cb34abdfdd40748de5f5098567cf21673d74497b700344954bd"
+              }
+            }
+          }
+        },
+        "options": [
+          "-j1",
+          "-M0"
+        ],
+        "runtime": {
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake": "60330ab6f07dce20f3fa9ebb08e8b984ea9549eac172afeb15d9d2227060e2b3",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared.so": "52c37024db38569f7e8911cfbc6819a2d97d0a8c336e74c3da8590e2cc1e099b",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared_1.so": "2f96493ac9046f64ec7bcb78102a4c1e7cd9a7042487f246af45eda8a96667f5",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared_2.so": "2f96493ac9046f64ec7bcb78102a4c1e7cd9a7042487f246af45eda8a96667f5"
+        },
+        "source_sha256": "92fe64a4a600c40491b4434330055044fbe21c705a26cee92b644b234bb1427e"
+      },
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0"
+      },
+      "memory_events_after": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "memory_events_before": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "objects": {
+        ".olean": {
+          "path": "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/objects/ExtractedPublicPreparationSuccess.olean",
+          "sha256": "b89fb74196cecea1a1c240a944db85fec27a4d29b0974505b7f9335131fad31a"
+        }
+      },
+      "peak_process_rss_kib": 2638476,
+      "process_swaps": 0,
+      "sampled_cgroup_peak_bytes": 624078848,
+      "source_manifest_entry": {
+        "axiom_requests": 3,
+        "imports": [
+          "AspisR1PublicPreparation.Funs"
+        ],
+        "role": "Exact shared actual constructor/step/preparation cone; no runtime preservation claim",
+        "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedPublicPreparationSuccess.lean",
+        "source_revision": "b92ab28465f9ffd4edcd3e2d5300cc9306ba66af exact step extension / C proof18ad8c915",
+        "source_sha256": "92fe64a4a600c40491b4434330055044fbe21c705a26cee92b644b234bb1427e",
+        "stage_as": "ExtractedPublicPreparationSuccess.lean"
+      },
+      "source_revision": "b92ab28465-step-extension",
+      "stopped_at_ten_minutes_without_target": false,
+      "target": "ExtractedPublicPreparationSuccess",
+      "wall_seconds": 1.61
+    },
+    "PublicPreparationActualAudit": {
+      "axioms": {
+        "passed": true,
+        "reports": [
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1PublicPreparation.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public"
+          },
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes"
+          },
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1PublicPreparation.r1_wire.SemanticTranscript.new"
+          },
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1PublicPreparation.r1_semantic.public_transcript"
+          },
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1PublicPreparation.r1_wire.DOMAIN"
+          },
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated"
+          },
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1PublicPreparation.r1_wire.sample_validated_entry"
+          }
+        ],
+        "requested_count": 7,
+        "scope": "Only source #print axioms commands; zero requested audits makes no axiom claim."
+      },
+      "backend_build": false,
+      "cgroup_memory_peak_cumulative": "691560448",
+      "cgroup_swap_current": "0",
+      "command": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runs/shared-a/PublicPreparationActualAudit/time.log",
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "--no-cache",
+        "env",
+        "python3",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runner.py",
+        "--exec-lean",
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runs/shared-a/import-overlay:/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/objects:/home/dombarker/project-offloads/aspis-r1-j17-port-20261015/backend/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/plausible/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/importGraph/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/aesop/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Qq/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/batteries/.lake/build/lib/lean:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Cli/.lake/build/lib/lean:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean",
+        "-j1",
+        "-M0",
+        "-R",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/sources",
+        "-o",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/runs/shared-a/PublicPreparationActualAudit/artifacts/PublicPreparationActualAudit.olean",
+        "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/sources/PublicPreparationActualAudit.lean"
+      ],
+      "cwd": "/home/dombarker/project-offloads/aspis-r1-j17-port-20261015/backend",
+      "dependency_build": false,
+      "exit_status": 0,
+      "key": {
+        "cache_protocol": 1,
+        "imports": {
+          "AspisR1PublicPreparation.Funs": {
+            "objects": {
+              ".olean": {
+                "path": "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/objects/AspisR1PublicPreparation/Funs.olean",
+                "sha256": "191517f5e749226c62f8ae54eb275cdc16a89ecd5a331ba21b7b0aabcbec3bf2"
+              }
+            },
+            "receipt_key": "949f913464f9809da82ef346699738732ca7561b938ca65468eba0fcbaa0177e"
+          },
+          "Init": {
+            "closure_key": "0e904716865c7905579447cf2722f7acfd7dbaced255b34f6ea1fc79f26271eb",
+            "objects": {
+              ".ilean": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.ilean",
+                "sha256": "e5158072a2993522daf63336ec6e3bed92bd60fa0ab009ead4373854b2c0d06e"
+              },
+              ".ir": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.ir",
+                "sha256": "3999556bf5ced08a0ae2b6f5972283fb01cc4a9b1a5e01d39f2720fa915ffb2b"
+              },
+              ".olean": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.olean",
+                "sha256": "d2e85d72099f9d869c9582aad5fb13079968d9d121ac6061e8326b00800b306e"
+              },
+              ".olean.private": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.olean.private",
+                "sha256": "ee2465850125d8857c69cee947e7416dc1569eb22dc9f9bcb98bd9f8224ace5b"
+              },
+              ".olean.server": {
+                "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Init.olean.server",
+                "sha256": "69b6bef637350cb34abdfdd40748de5f5098567cf21673d74497b700344954bd"
+              }
+            }
+          }
+        },
+        "options": [
+          "-j1",
+          "-M0"
+        ],
+        "runtime": {
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake": "60330ab6f07dce20f3fa9ebb08e8b984ea9549eac172afeb15d9d2227060e2b3",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared.so": "52c37024db38569f7e8911cfbc6819a2d97d0a8c336e74c3da8590e2cc1e099b",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared_1.so": "2f96493ac9046f64ec7bcb78102a4c1e7cd9a7042487f246af45eda8a96667f5",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/libleanshared_2.so": "2f96493ac9046f64ec7bcb78102a4c1e7cd9a7042487f246af45eda8a96667f5"
+        },
+        "source_sha256": "f79e347ba37feab4e9b8582aa2e89d7db42b7a8c9f85088f1af1a0288555a501"
+      },
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0"
+      },
+      "memory_events_after": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "memory_events_before": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "objects": {
+        ".olean": {
+          "path": "/home/dombarker/project-offloads/aspis-r1-public-preparation-step-20261016/proofs/objects/PublicPreparationActualAudit.olean",
+          "sha256": "35b026a0eb79768554d9108c29e4870c81a6c7ead384d03cf767fac148ee0f37"
+        }
+      },
+      "peak_process_rss_kib": 2618768,
+      "process_swaps": 0,
+      "sampled_cgroup_peak_bytes": 617766912,
+      "source_manifest_entry": {
+        "axiom_requests": 7,
+        "imports": [
+          "AspisR1PublicPreparation.Funs"
+        ],
+        "role": "Exact shared actual constructor/step/preparation cone; no runtime preservation claim",
+        "source": "docs/research/100bit-spend-path-20261013/lean/extracted-public-preparation-20261016/PublicPreparationActualAudit.lean",
+        "source_revision": "b92ab28465f9ffd4edcd3e2d5300cc9306ba66af exact step extension / C proof18ad8c915",
+        "source_sha256": "f79e347ba37feab4e9b8582aa2e89d7db42b7a8c9f85088f1af1a0288555a501",
+        "stage_as": "PublicPreparationActualAudit.lean"
+      },
+      "source_revision": "b92ab28465-step-extension",
+      "stopped_at_ten_minutes_without_target": false,
+      "target": "PublicPreparationActualAudit",
+      "wall_seconds": 1.609
+    }
+  },
+  "scope": "Actual four helper roots, reused serializer and generic Digest32 constructor. Seven actual declarations and three re-pinned helper-success theorems audited standard-only. No claim for derived Debug methods, Rust/backend preservation, outer caller reachability, runtime digest semantics or custody.",
+  "source_revision": "b92ab28465f9ffd4edcd3e2d5300cc9306ba66af"
+}

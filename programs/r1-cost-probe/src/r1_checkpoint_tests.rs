@@ -14,6 +14,7 @@ use aspis_statement::pool_v1::{
     VerifierRegistryEntryV2, VerifierRegistryV1, VerifierRegistryV2,
     POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT, POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE,
 };
+use aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public;
 use std::{cell::Cell, sync::OnceLock};
 
 const PROOF: &[u8] = include_bytes!(concat!(
@@ -38,6 +39,18 @@ thread_local! {
 fn counted_sha256(parts: &[&[u8]]) -> [u8; 32] {
     HASH_CALLS.with(|calls| calls.set(calls.get() + 1));
     sha256(parts)
+}
+
+#[derive(Clone, Copy)]
+struct TestDigest;
+impl aspis_core::Digest32 for TestDigest {
+    fn digest(&self, parts: &[&[u8]]) -> [u8; 32] { sha256(parts) }
+}
+
+#[derive(Clone, Copy)]
+struct CountedDigest;
+impl aspis_core::Digest32 for CountedDigest {
+    fn digest(&self, parts: &[&[u8]]) -> [u8; 32] { counted_sha256(parts) }
 }
 
 struct TestAccount {
@@ -134,13 +147,13 @@ fn saved_checkpoint() -> &'static [u8] {
 fn assert_hash_binding_rejection(proof: &[u8], public: &[u8], checkpoint: &[u8], calls: usize) {
     HASH_CALLS.with(|count| count.set(0));
     assert!(matches!(
-        verifier::resume(checkpoint, proof, public, Variant::S2, counted_sha256),
+        verifier::resume(checkpoint, proof, public, Variant::S2, CountedDigest),
         Err(verifier::Error::Checkpoint)
     ));
     HASH_CALLS.with(|count| assert_eq!(count.get(), calls));
     HASH_CALLS.with(|count| count.set(0));
     assert_eq!(
-        verifier::tx2_authenticated(public, proof, checkpoint, counted_sha256, None),
+        verifier::tx2_authenticated(public, proof, checkpoint, CountedDigest, None),
         Err(verifier::Error::Checkpoint)
     );
     HASH_CALLS.with(|count| assert_eq!(count.get(), calls));
@@ -166,11 +179,11 @@ fn stage1_accepts_foreign_readonly_raw_buffers_and_only_writes_checkpoint() {
         assert_eq!(&checkpoint[16..48], &sha256(&[PROOF]));
         assert_eq!(&checkpoint[48..80], &sha256(&[PUBLIC]));
         assert_eq!(
-            verifier::tx2(PUBLIC, PROOF, checkpoint, sha256, None),
+            verifier::tx2(PUBLIC, PROOF, checkpoint, TestDigest, None),
             Ok(())
         );
         assert_eq!(
-            verifier::tx2_authenticated(PUBLIC, PROOF, checkpoint, sha256, None),
+            verifier::tx2_authenticated(PUBLIC, PROOF, checkpoint, TestDigest, None),
             Ok(())
         );
         // A second stage1 must not replace an already initialized checkpoint.
@@ -502,7 +515,7 @@ fn unkeyed_checksum_does_not_establish_checkpoint_provenance() {
     let checksum = sha256(&[b"UNPROVED:R1:checkpoint", &checkpoint[..end]]);
     checkpoint[end..].copy_from_slice(&checksum);
     let (_, accumulator) =
-        verifier::resume(&checkpoint, PROOF, PUBLIC, Variant::S2, sha256).unwrap();
+        verifier::resume(&checkpoint, PROOF, PUBLIC, Variant::S2, TestDigest).unwrap();
     assert_eq!(accumulator.next, 0);
     // Only resume acceptance is asserted. This is not a tx1-produced checkpoint
     // or an assertion of tx2 acceptance; runtime ownership guards are essential.
@@ -823,18 +836,18 @@ fn measured_core_call_counts_include_zero_progress_checkpoint() {
     let statement = decode_pool_v1_pair_forest_terminal_statement_v1(PUBLIC).unwrap();
     let public = match &statement {
         PoolV1PairForestTerminalStatementV1::PrivateTransfer { common, public } => {
-            super::super::Public::Transfer(public, &common.lane_transition)
+            Public::Transfer(public, &common.lane_transition)
         }
         PoolV1PairForestTerminalStatementV1::Withdrawal { common, public } => {
-            super::super::Public::Withdrawal(public, &common.lane_transition)
+            Public::Withdrawal(public, &common.lane_transition)
         }
     };
     for k in [10, 11] {
         HASH_CALLS.with(|count| count.set(0));
-        let checkpoint = verifier::tx1(public, PUBLIC, PROOF, k, counted_sha256, None).unwrap();
+        let checkpoint = verifier::tx1(public, PUBLIC, PROOF, k, CountedDigest, None).unwrap();
         HASH_CALLS.with(|count| assert_eq!(count.get(), 118 + 21 * k));
         HASH_CALLS.with(|count| count.set(0));
-        verifier::tx2_authenticated(PUBLIC, PROOF, &checkpoint, counted_sha256, None).unwrap();
+        verifier::tx2_authenticated(PUBLIC, PROOF, &checkpoint, CountedDigest, None).unwrap();
         HASH_CALLS.with(|count| assert_eq!(count.get(), 3 + 21 * (22 - k)));
     }
     // Unkeyed checksum plus arbitrary account bytes admits next=0 at resume.
@@ -848,7 +861,7 @@ fn measured_core_call_counts_include_zero_progress_checkpoint() {
     checkpoint[end..].copy_from_slice(&checksum);
     HASH_CALLS.with(|count| count.set(0));
     assert_eq!(
-        verifier::tx2_authenticated(PUBLIC, PROOF, &checkpoint, counted_sha256, None),
+        verifier::tx2_authenticated(PUBLIC, PROOF, &checkpoint, CountedDigest, None),
         Ok(())
     );
     HASH_CALLS.with(|count| assert_eq!(count.get(), 465));

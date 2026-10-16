@@ -1,0 +1,103 @@
+Source-boundary checkpoint review, 2026-10-16
+
+Authority: ca137f5db, LEAD-REVIEW-J1-CALLER-FRONTIER-20261016.md.
+Production candidate b92ab28465; 0ff133eff changes only a test Public import.
+Integration retains the lead additions through ae2410caf, without editing them.
+Workers own separate branches; the live worktree/ref is untouched. Lead merges.
+
+Adoption ledger
+1. Source review PASS: admitted stage1/ASQ8 use the sole SolanaDigest backend,
+   delegating to existing hashv(parts).to_bytes(); R16 syscall wording unchanged.
+2. Native codec PASS: all 1,233 full outputs byte-identical (16,431,699 bytes),
+   SHA256 3ef16b12a329dd6d74b472cd75e5554c1ef8d98c618de3117f87b6c50d73e321.
+3. Native counter PASS: saved transfer1023 has identical 583 ordered calls,
+   slice boundaries/bytes/outputs, checkpoint bytes and counts 349/234.
+   All 23 checkpoint tests pass; both readonly copies pass 5 native tests.
+4. Candidate CU delta OPEN. Any increase must be reported before adoption.
+5. Lead's sole J1.R13 SBF rebuild/artifact pin OPEN; no worker rebuild occurred.
+6. Migrated extraction progressed; source linkage/re-pins are
+   incomplete. Limitations: J1-DIGEST32-THEOREM-INVENTORY-20261016.txt.
+The migrated candidate is not yet certified release source. Finite native
+traces establish neither universal source refinement nor real-verifier QV.
+
+J1.R13 baseline, reused measurement (not a new execution)
+Source 0626294e34632812accf4cb14704f027368ea871; ELF SHA256
+835ccf148744c242e6bb912fed19971dc5d8e660a6c7abde2d50aa206241f8c6.
+Transfer1023 receipt: stage1 [3,10] 1,343,603 CU; stage2 ASQ8 1,229,578 CU;
+total 2,573,181 CU, setup excluded. Candidate has no CU measurement. Metadata runtime
+harness must use the same planned candidate artifact; second V7-copy runtime
+fixture/artifact coverage remains OPEN.
+
+Coordinator review and evidence
+Read/hash verifiers passed for native:187, readonly:707, runtime-harness:24,
+decoder-binding:24, preparation:93, preparation-success:24 and step-extension:108, naming:144, transcript-proof:40, fields:64 and loop:24
+archive members. Actual host rehash: 135 source/object/receipt/runtime/native
+binary files, all matched; see evidence/source-boundary-review-20261016.
+Limited token comparison: 74 bodies; signatures/backend/wrappers/call placements
+reviewed separately. This is source review, not runtime equivalence.
+Focused Lean 4.32 jobs use one host slot, 6GiB high/8GiB max/swap0, -j1; no
+package replay, extractor fork, live-module modification, push or stash.
+Exact targets, source/tool pins, exits, time, RSS, swaps and printed axiom
+lists are retained in each evidence directory. Accepted reports use only standard Lean axioms; no foreign axioms discharge a
+source obligation. Unrelated derived Debug definitions are outside the audited cone.
+
+A: codex/r1-digest32-source-20261016
+Head 9ff447e49793fa1cb6454aea6648b979be7adc98.
+1. Migrates admitted R1 interfaces to Digest32; retains R0 compatibility wrappers.
+2. Same production hashv delegation; no extractor change.
+3. All 1,233 codec outputs byte-identical.
+4. Saved-proof: 583 ordered calls/checkpoint identical; not a universal call bound.
+5. All 23 checkpoint tests pass, with original failed harness receipt retained.
+6. Extracts 30 exact cuts/12 files; original 34 emitted definitions preserved.
+7. Constructor proves exact five slices and derives conversion/digest success.
+8. Successful row step derives block and state/hash/index carry for row<=26.
+9. Five standard-only reports: exit0,1.812s,2661556KiB RSS,swap0.
+10. Re-pins 28 unchanged parser cuts; whole 33/source/R16 linkage remains OPEN.
+
+B: codex/r1-readonly-meta-20261016
+Head 565ad899f6b1bbe41d28f6a78650ef9aa1d7fc27.
+1. Splits both guards into identical pure helpers and real projection wrappers.
+2. Uses actual SDK Pubkey/error extraction, including all 26 error variants.
+3. guard_result proves the complete success/error result.
+4. success_iff requires matching owner and three false flags.
+5. Both real AccountInfo native suites pass 5 cases each.
+6. Five Lean targets pass with 8 standard-only reports; individual metrics retained.
+7. Names R16ReadonlyMetadataProjection; hprojection remains a runtime premise.
+8. Four independent runtime mutations plus honest control are implemented.
+9. Harness typecheck: exit0,0.397s,210240KiB RSS,swap0; runtime NOT run.
+10. Second-copy artifact/fixture and custody/caller reachability remain OPEN.
+
+C: codex/r1-caller-binding-20261016
+Head c835b1d91fb66a381bae25dc13a48822e07bd591.
+1. Fixes both-variant serializer projection to decoded c.lane_transition.
+2. decoder_serializer_eq_computed identifies that fixed projection.
+3. Extracts actual semantic_public/public_transcript helpers from reviewed cuts.
+4. Helper success derives its new serializer witness and constructor success.
+5. Naming-only overlay qualifies five instances; original mirrors unchanged.
+6. Original/adapted audits prove all 28 constructor tags agree.
+7. Comprehensive joint import passes; seven targets/12 standard-only reports.
+8. Re-pins 17 unchanged decoder/helper declarations across six current files.
+9. Exact field-loop/wrapper transport passes: exit0,1.812s,2643492KiB RSS,swap0.
+10. Old .hs, outer .hd, supplied-input equality and custody remain OPEN.
+
+Dependencies, conflicts and ordered remaining work
+A and C share one extraction/type universe; C's naming overlay resolves the
+observed import collision. There is no second transcript/QM31 model. B's native
+harness is separate from A's source snapshot and does not invalidate its pins.
+No newly completed local helper proof establishes a whole live-verifier
+conditional hypothesis.
+1. Complete C's frontier/public serializer transport to supply
+   PublicBinding.decoder_serializer_parsePublic.hs from actual helper success.
+2. Extract/refine actual caller reachability for .hd and identify supplied public;
+   close caller/account/custody bindings separately from B's hprojection premise.
+3. Lift A's row step through actual begin/verify callers and opening phase;
+   reuse current QM31 equality; prove all 33 rows/state carry and actual hbytes,
+   SelectedCompletedSemantic.semChalsZ_read.hread, htyped/ha and C2 provenance.
+4. Once J1.a/b land, J5 and J2 may proceed; then source commitment cuts/recovery
+   J1.c and sampler coordinates/fallback/state carry J1.d.
+5. Instantiate VerifierPhaseCost.SourceSimulation.preservesPrefix for every
+   admitted execution prefix, including rejection/panic/allocation/PDA calls;
+   derive actual QV and raw-byte collision mass. Model budgets are not source QV.
+6. Efficient extraction remains OPEN. Lead must supply J1.R13 artifacts/CU
+   comparison and select valid second-copy runtime coverage; both decisions
+   adopting Digest32 and the pure guard split are already settled.

@@ -35,6 +35,9 @@ use std::{
     time::Instant,
 };
 
+#[path = "r18_replay/readonly_runtime.rs"]
+mod readonly_runtime;
+
 const PROGRAM: &str = "7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue";
 const POOL: [u8; 32] = [0x41; 32];
 const REGISTRY: [u8; 32] = [0x44; 32];
@@ -610,6 +613,16 @@ fn run(
         keys[6],
         checkpoint_key.pubkey(),
     ];
+    // Optional candidate-only loader-metadata gate, using independent clones of
+    // this exact successful stage1 state. Default CU replay is unchanged.
+    let readonly_gate_state = if label == "after"
+        && env::var_os("ASPIS_R16_READONLY_RUNTIME").is_some()
+    {
+        ensure!(env::var("ASPIS_R16_READONLY_RUNTIME")? == "1");
+        Some(svm.clone())
+    } else {
+        None
+    };
     let stage2 = send(
         &mut svm,
         payer,
@@ -637,6 +650,11 @@ fn run(
         stage1.verifier.is_some() && stage2.verifier.is_some(),
         "missing verifier CU log"
     );
+    if let Some(state) = readonly_gate_state {
+        readonly_runtime::run(
+            &state, program, &keys, &stage2_keys, request, expected, payer, &out,
+        )?;
+    }
     Ok(Run {
         stage1,
         stage2,
@@ -702,6 +720,8 @@ fn main() -> Result<()> {
         &json!({"scope":"current-route verifier CU; preloaded state; no registration or Pool settlement claim",
         "before_source_revision":before_revision,"after_source_revision":after_revision,"build_receipts":build_pins,
         "harness_source_revision":env::var("ASPIS_SOURCE_REVISION")?,"harness_source_sha256":sha(include_bytes!("r18_replay.rs")),
+        "readonly_metadata_runtime":{"requested":env::var("ASPIS_R16_READONLY_RUNTIME").ok(),
+            "source_sha256":sha(include_bytes!("r18_replay/readonly_runtime.rs")),"candidate_only":true,"signature_verification":false},
         "cargo_lock_sha256":sha(include_bytes!("../../Cargo.lock")),"harness_binary_sha256":sha(&fs::read(env::current_exe()?)?),
         "before_elf_sha256":sha(&before),"after_elf_sha256":sha(&after),"proof_sha256":sha(&proof),"public_sha256":sha(&public),
         "program":PROGRAM,"payer":payer.pubkey().to_string(),"checkpoint":checkpoint_key.pubkey().to_string(),

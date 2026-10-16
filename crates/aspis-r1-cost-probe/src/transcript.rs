@@ -1,23 +1,23 @@
 //! UNPROVED COST PROBE. Explicit opening schedule, including rho after queries.
 use aspis_core::r0::CodeField;
-use aspis_core::{HashFn,field::WideExact as E};
+use aspis_core::{Digest32,field::WideExact as E};
 use crate::transport::Variant;
-pub struct Transcript { pub state:[u8;32], hash:HashFn }
-impl Transcript {
-    pub fn new(hash:HashFn, semantic_state:[u8;32], variant:Variant) -> Self {
+pub struct Transcript<H: Digest32> { pub state:[u8;32], hash:H }
+impl<H: Digest32> Transcript<H> {
+    pub fn new(hash:H, semantic_state:[u8;32], variant:Variant) -> Self {
         #[cfg(not(feature = "private-leaf-salts"))]
         let domain: &[u8] = b"UNPROVED:R1:COST-PROBE:P2";
         #[cfg(feature = "private-leaf-salts")]
         let domain: &[u8] = b"UNPROVED:R1:PRIVATE-SALTED:P3";
-        Self { state:hash(&[domain,&[variant.tag()],&semantic_state]), hash }
+        Self { state:hash.digest(&[domain,&[variant.tag()],&semantic_state]), hash }
     }
     pub fn absorb(&mut self, row:u8, payload:&[u8]) {
-        self.state=(self.hash)(&[&self.state,&[0,0xa0+row],&(payload.len() as u32).to_le_bytes(),payload]);
+        self.state=self.hash.digest(&[&self.state,&[0,0xa0+row],&(payload.len() as u32).to_le_bytes(),payload]);
     }
     pub fn block(&mut self,row:u8,payload:&[u8])->[u8;32] {
         self.absorb(row,payload);
-        let block=(self.hash)(&[&self.state,&[1]]);
-        self.state=(self.hash)(&[&self.state,&[2]]);
+        let block=self.hash.digest(&[&self.state,&[1]]);
+        self.state=self.hash.digest(&[&self.state,&[2]]);
         block
     }
     pub fn scalar(&mut self,row:u8,payload:&[u8],nonzero:bool)->E {
@@ -36,8 +36,8 @@ impl Transcript {
         self.absorb(row,payload);
         let mut blocks=[[0;32];8];let mut advances=blocks; let mut state=self.state;
         for k in 0..8 {
-            blocks[k]=(self.hash)(&[&state,&[1]]);
-            advances[k]=(self.hash)(&[&state,&[2]]);state=advances[k];
+            blocks[k]=self.hash.digest(&[&state,&[1]]);
+            advances[k]=self.hash.digest(&[&state,&[2]]);state=advances[k];
         }
         let (q,state)=aspis_core::r0_transcript::queries_from_pairs(&blocks,&advances).map_err(|_|crate::verifier::Error::Transcript)?;
         self.state=state;

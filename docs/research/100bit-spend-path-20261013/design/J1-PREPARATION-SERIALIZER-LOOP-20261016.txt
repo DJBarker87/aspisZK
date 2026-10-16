@@ -1,0 +1,47 @@
+CHECKED COMPLETE FIELDS LOOP; FRONTIER/PUBLIC TRANSPORT OPEN
+
+Base 414157881c77106966320b5725feec947b4f2add. New standalone module
+ExtractedPreparationSerializerLoop imports the checked fields-body bridge
+and existing PublicSerializerSuccess431, both from their pinned Lean 4.32
+producing objects. No Rust, generated body, backend or predecessor changed.
+No arithmetic was extracted or compiled again.
+
+AspisR1PublicPreparation.SerializerLoop.fields_cont_decreases derives
+strict decrease of slice.length-index from actual new fields_loop.body
+continuation success. Actual IteratorSliceIter.next increments the index;
+bad fields, allocation failure and divergence cannot produce cont. Vec
+internals are not unfolded and allocation success is not assumed.
+
+fields_loop_eq proves the complete old actual loop outcome equals
+mapPairOutcome of the new actual loop, for arbitrary iterator and vector.
+It uses the checked one-step fields_body_eq and well-founded induction on
+the actual remaining length. It reuses the old unroll theorem and proves
+the corresponding new unroll. fields_eq derives the actual fields-wrapper
+equality. Both the mutable output vector and mapped inner status are
+preserved; outer fail/div are also preserved. There is no capacity or
+success hypothesis. This does not equate arbitrary divergent loops.
+
+Focused target ExtractedPreparationSerializerLoop, first attempt loop-a:
+exit 0, 1.812 seconds, peak process RSS 2,643,492 KiB; sampled cgroup peak
+620,601,344 bytes, cumulative cgroup peak 620,871,680 bytes; zero swaps.
+MemoryHigh=6GiB, MemoryMax=8GiB, MemorySwapMax=0; -j1 -M0. All four
+requested declarations report only propext, Classical.choice, Quot.sound.
+The one new import is pinned directly to the body-e producing receipt;
+all other cached dependencies were reused without replay.
+
+Source SHA256:
+5ce92921749ccd546da4ae10944b950ffa81984a599f4bda923de9f36d3a6b83
+Object SHA256:
+81e664ad4d2e16ecb56efcbc29de39c785059a7c1ed0e3b12a6861df8bcc1000
+Evidence: evidence/public-preparation-loop-20261016/manifest.json and
+verify.py, which checks archive members, raw audits, producing source,
+object, runtime and imported closure keys.
+
+OPEN: actual twenty-node frontier and full public serializer transport.
+Accordingly PublicBinding.decoder_serializer_parsePublic.hs is not yet
+discharged by PreparationSuccess.public_transcript_success's same-new-
+serializer witness. Outer first/tx1/verify_observed reachability, actual
+decoder hd and identification of a separately supplied caller public
+input remain open. Existing fixed transition/variant and computedPublic
+results remain conditional. Source/extraction preservation, R16 runtime
+semantics, account custody and full call budgets are separate obligations.

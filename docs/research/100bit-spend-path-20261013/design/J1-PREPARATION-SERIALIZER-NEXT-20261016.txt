@@ -1,0 +1,59 @@
+PROPOSED NEXT TRANSPORT; NO NEW PROOF CLAIM
+
+Checked predecessor ebdb9eb8d7723f49cd08d110db6506fb07098458 provides
+AspisR1PublicPreparation.SerializerLoop.fields_loop_eq and fields_eq.
+Let New and Old abbreviate AspisR1PublicPreparation and
+AspisR1PublicSerializer, respectively, only in this note. The actual
+generated function suffix is
+pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.
+
+First target (proposed): for every out : Vec U8 and
+values : Array (Array U32 8#usize) 20#usize,
+
+  Old.Public.public_bytes.frontier out values =
+    SerializerFields.mapPairOutcome (New.Public.public_bytes.frontier out values).
+
+The displayed Public paths expand to the exact suffix above. New Funs
+lines 984–1310 contain twenty ascending index reads and sequential fields
+calls, not a recursive loop. Preserve index failures, fields errors,
+mutable output, outer fail and div. Use fields_eq plus symbolic bind and
+Try/FromResidual transport. Existing PublicSerializerFrontier431 provides
+thenCheck, index20, rows and frontier_eq_chain if useful; do not duplicate
+its codec or prove its successful-return result again. No capacity premise,
+concrete recurrence normalization, allocation unfolding or new extraction.
+
+Second target (proposed): define fixed toOldPublic and prove
+
+  Old.Public.public_bytes (toOldPublic p) =
+    mapResult SerializerFields.mapStatus (New.Public.public_bytes p).
+
+Here mapResult is the proposed outer Result map, preserving fail/div.
+Equivalently define mapOutcome := mapResult SerializerFields.mapStatus.
+It must preserve outer fail/div and successful Vec bytes, mapping
+only the existing eleven Error constructors through SerializerFields.toError.
+All maps are explicit: six live-snapshot fields, three afterstate fields,
+eight transfer-public fields, nine withdrawal-public fields, and the exact
+variant. SemanticPublic's ten fields, including optional recipient/amount,
+must agree under the same record map. Prove both constructor-level
+private_public/withdrawal_public and Public.semantic equations. New Funs
+873–930 show these three functions; public_bytes starts at 1315. The two
+actual variant branches then reuse fields_eq/frontier_eq and symbolic
+status transport. Inspect the exact expressions before using definitional
+equality; nominal record similarity is not a proof.
+
+Third target (proposed): map the existing Decoder.Statement into the new
+preparation carrier by explicit all-seven-common-field and variant maps.
+Prove its actual semantic_public result, followed by toOldPublic, equals
+the already checked PublicBinding.toSerializer of that SAME statement.
+This fixes t to the copied c.lane_transition without a desired hbind.
+Then PreparationSuccess.public_transcript_success's derived serializer
+witness can supply PublicBinding.decoder_serializer_parsePublic.hs.
+The constructor success remains the same actual helper result.
+
+These are separate focused modules/checkpoints. Existing old serializer,
+raw codec, selected protocol and current QM modules remain untouched;
+retain the current naming overlay and exact producing import receipts.
+No host job is requested by this note. First/tx1/verify_observed reachability,
+actual decoder hd, actual separately supplied-public identification,
+source/runtime preservation and custody remain OPEN. Semantic serializer
+output bytes are not the 1880-byte ASF8 input buffer.

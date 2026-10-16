@@ -1,4 +1,5 @@
 //! UNPROVED R1 COST PROBE. Focused strict/authenticated tx2 equivalence check.
+use aspis_core::digest::LegacyHashFn;
 use aspis_core::HashFn;
 use aspis_prover::HOST_HASH;
 use aspis_r1_cost_probe::{
@@ -26,14 +27,14 @@ fn main() {
     .unwrap();
 
     trace::take();
-    let checkpoint = verifier::tx1(fixture.public(), &public, &proof, 10, hash, None).unwrap();
+    let checkpoint = verifier::tx1(fixture.public(), &public, &proof, 10, LegacyHashFn(hash), None).unwrap();
     let _tx1_trace = trace::take();
 
     trace::take();
-    let strict = verifier::tx2(&public, &proof, &checkpoint, hash, None);
+    let strict = verifier::tx2(&public, &proof, &checkpoint, LegacyHashFn(hash), None);
     let mut strict_trace = trace::take();
     trace::take();
-    let authenticated = verifier::tx2_authenticated(&public, &proof, &checkpoint, hash, None);
+    let authenticated = verifier::tx2_authenticated(&public, &proof, &checkpoint, LegacyHashFn(hash), None);
     let mut authenticated_trace = trace::take();
     assert_eq!(strict, Ok(()));
     assert_eq!(authenticated, Ok(()));
@@ -47,7 +48,7 @@ fn main() {
     changed_proof[HEADER] ^= 1;
     trace::take();
     assert_eq!(
-        verifier::tx2_authenticated(&public, &changed_proof, &checkpoint, hash, None),
+        verifier::tx2_authenticated(&public, &changed_proof, &checkpoint, LegacyHashFn(hash), None),
         Err(Error::Checkpoint),
     );
     trace::take();
@@ -64,7 +65,7 @@ fn main() {
     noncanonical_query[query_start..query_start + 4].copy_from_slice(&u32::MAX.to_le_bytes());
     trace::take();
     assert_eq!(
-        verifier::tx2_authenticated(&public, &noncanonical_query, &checkpoint, hash, None),
+        verifier::tx2_authenticated(&public, &noncanonical_query, &checkpoint, LegacyHashFn(hash), None),
         Err(Error::Checkpoint),
     );
     assert!(
@@ -72,7 +73,7 @@ fn main() {
         "hash mismatch must reject before query arithmetic"
     );
     assert_eq!(
-        verifier::tx2(&public, &noncanonical_query, &checkpoint, hash, None),
+        verifier::tx2(&public, &noncanonical_query, &checkpoint, LegacyHashFn(hash), None),
         Err(Error::Parse),
         "strict tx2 must retain its canonical query scan",
     );
@@ -81,7 +82,7 @@ fn main() {
     let mut changed_public = public.clone();
     changed_public[0] ^= 1;
     assert_eq!(
-        verifier::tx2_authenticated(&changed_public, &proof, &checkpoint, hash, None),
+        verifier::tx2_authenticated(&changed_public, &proof, &checkpoint, LegacyHashFn(hash), None),
         Err(Error::Checkpoint),
     );
 
@@ -89,7 +90,7 @@ fn main() {
         let mut changed_checkpoint = checkpoint.clone();
         changed_checkpoint[offset] ^= 1;
         assert!(
-            verifier::tx2_authenticated(&public, &proof, &changed_checkpoint, hash, None,).is_err()
+            verifier::tx2_authenticated(&public, &proof, &changed_checkpoint, LegacyHashFn(hash), None,).is_err()
         );
     }
 

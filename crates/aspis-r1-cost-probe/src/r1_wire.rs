@@ -4,7 +4,7 @@ use crate::sampler::{circle_sample, qm31_sample, CircleRow};
 use alloc::vec::Vec;
 use aspis_core::circle::SecureCirclePoint;
 use aspis_core::field::{WideExact, QM31};
-use aspis_core::transcript::HashFn;
+use aspis_core::Digest32;
 
 #[cfg(not(feature = "private-leaf-salts"))]
 pub const DOMAIN: &[u8] = b"aspis:r0:20261009:v1";
@@ -169,17 +169,17 @@ impl<'a> ValidatedRecord<'a> {
 /// C1-time binding is exactly SPEC §9: public bytes and the C1 root in one
 /// hash, with no profile/basis/nonce/registry pre-absorbs. Row 0 is empty.
 #[derive(Clone)]
-pub struct SemanticTranscript {
+pub struct SemanticTranscript<H: Digest32> {
     state: [u8; 32],
-    hash: HashFn,
+    hash: H,
     next_row: u8,
 }
 
-impl SemanticTranscript {
-    pub fn new(hash: HashFn, public_bytes: &[u8], c1_root: &[u8; 32]) -> Result<Self, Error> {
+impl<H: Digest32> SemanticTranscript<H> {
+    pub fn new(hash: H, public_bytes: &[u8], c1_root: &[u8; 32]) -> Result<Self, Error> {
         let length = u32::try_from(public_bytes.len()).map_err(|_| Error::Public)?;
         Ok(Self {
-            state: hash(&[DOMAIN, &[0], &length.to_le_bytes(), public_bytes, c1_root]),
+            state: hash.digest(&[DOMAIN, &[0], &length.to_le_bytes(), public_bytes, c1_root]),
             hash,
             next_row: 0,
         })
@@ -200,9 +200,9 @@ impl SemanticTranscript {
         }
         // Exactly one absorb, one squeeze and one advance. Both reads
         // use s_abs; advancing from the challenge block would be wrong.
-        let absorbed = (self.hash)(&[&self.state, &[0, 0xa0 + row], framed]);
-        let block = (self.hash)(&[&absorbed, &[1]]);
-        self.state = (self.hash)(&[&absorbed, &[2]]);
+        let absorbed = self.hash.digest(&[&self.state, &[0, 0xa0 + row], framed]);
+        let block = self.hash.digest(&[&absorbed, &[1]]);
+        self.state = self.hash.digest(&[&absorbed, &[2]]);
         self.next_row += 1;
         Ok(block)
     }
@@ -386,9 +386,9 @@ pub fn statement_points(alpha: &[QM31; 10]) -> [[QM31; 10]; 3] {
 pub use aspis_core::state_only_prefix::r0::Challenges;
 /// Rows 0..14. Roots are the only commitment records; there is no helper
 /// zero-sum/registry absorb between row 2 and theta.
-pub fn begin(
+pub fn begin<H: Digest32>(
     prefix: &Prefix<'_>,
-    transcript: &mut SemanticTranscript,
+    transcript: &mut SemanticTranscript<H>,
 ) -> Result<Challenges, Error> {
     let lambda = transcript.semantic_validated(prefix.validated_record(0)?)?;
     let chi = transcript.semantic_validated(prefix.validated_record(1)?)?;
@@ -412,6 +412,12 @@ pub fn begin(
 #[cfg(test)]
 mod validated_tests {
     use super::*;
+
+    #[derive(Clone, Copy)]
+    struct TestDigest;
+    impl aspis_core::Digest32 for TestDigest {
+        fn digest(&self, parts: &[&[u8]]) -> [u8; 32] { test_hash(parts) }
+    }
 
     fn test_hash(parts: &[&[u8]]) -> [u8; 32] {
         let mut out = [0u8; 32];
@@ -441,8 +447,8 @@ mod validated_tests {
         let bytes = valid_prefix_bytes();
         let prefix = Prefix::parse(&bytes).unwrap();
         let root = prefix.c1_root;
-        let mut checked = SemanticTranscript::new(test_hash, b"public", root).unwrap();
-        let mut validated = SemanticTranscript::new(test_hash, b"public", root).unwrap();
+        let mut checked = SemanticTranscript::new(TestDigest, b"public", root).unwrap();
+        let mut validated = SemanticTranscript::new(TestDigest, b"public", root).unwrap();
 
         for row in 0..27 {
             let raw = prefix.record(row).unwrap();
