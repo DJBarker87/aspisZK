@@ -2,7 +2,7 @@ Reviewed source-boundary checkpoint, 2026-10-16
 
 Integration branch: codex/r1-100bit-checkpoints-20261016.
 Latest lead parent: 30e57581b1c633890eb06621c2c74bff44aa0ef4.
-Reviewed implementation merge: 05c838265fe1c4eff06ec88d2681ea5e11281c35.
+Reviewed implementation merge: bc6e72fcce84c4615b1a9989d320196263c50a04.
 The lead accepted the preceding checkpoint 443c468cb and will fast-forward this one.
 The protected live worktree and its branch ref have not been modified.
 All merges were clean. Our changes do not edit live-owned protocol modules.
@@ -10,31 +10,31 @@ The lead's own subsequent protocol commits are preserved unchanged.
 Production crates/programs exactly match checked source 42e5ca2011c39ee9770afc798282ff861b092428.
 The unfinished ASF8 decoder experiments on the coordinator branch are excluded.
 
-Worker A: codex/r1-j1-r17-aeneas-20261015 @ c5665bbd39e00c9c66ff5a430cd495eabc9f3781
+Worker A: codex/r1-j1-r17-aeneas-20261015 @ 8dc2d7ca7c30858d6822628f92026261f82715f0
 1. Lean4.32 backend port and actual Prefix extraction are included.
 2. Actual Prefix success supplies C1 and all 27 successful record calls.
 3. Actual record-parser result agrees with the retained extracted parser.
 4. Actual byte decoding supplies strict eight-limb canonicality.
 5. Actual zero high QM31 coordinate supplies four zero strict limbs.
 6. Prefix field-bearing records have complete 32-byte chunk coverage.
-7. Every such chunk strictly decodes and re-encodes to its original bytes.
+7. Fixed canonical-limb map now gives semantic decodeLow success and exact bytes.
 8. Actual Prefix success now supplies both retained frame-parser successes.
-9. Latest frame check: eight green targets, 38 standard-only reports; legacy FS2 proof repair checked.
+9. Latest semantic check: eight green targets, 39 standard-only reports; 46 coherent cache inputs.
 10. Completed semantic decode and selected semChalsZ_read.hread remain OPEN.
 
-Worker B: codex/r1-j1-r17-extracted-20261015 @ 2ff2ea148d2eeaa9a5f518d47235355d68fad802
+Worker B: codex/r1-j1-r17-extracted-20261015 @ be46d779069c062b198ed4e57f3c3e4860ab878b
 1. Actual withdrawal carrier maps every one of its nine fields.
 2. All 14 errors have explicit correspondence.
 3. Actual validator results agree, including failure and divergence.
 4. Actual ASWP encoder success supplies the retained helper-validation premise.
-5. The same carrier and actual serializer success imply live parsePublic success.
+5. Terminal success plus actual same-carrier serializer success imply live parsePublic.
 6. A separately supplied public still requires explicit equality to that wire.
-7. Actual terminal success supplies ASWP success: 2.014s, ten standard-only reports.
+7. Final composition: 2.011s, two standard-only reports; eleven affected targets checked.
 8. Historical Circle bytes now have their exact historical source/import mapping.
-9. Terminal/Caller Kind naming adapter has exact inverse and identical two-tag audits.
-10. Joint terminal-to-public import, actual caller reachability and metadata remain OPEN.
+9. Kind and payment Error naming adapters have exact inverses and identical tag audits.
+10. Actual caller reachability, serializer premise, supplied equality and metadata remain OPEN.
 
-Worker C: codex/r1-j1-r17-runtime-20261015 @ 7bd4442a3d0bd8479e0d750c9b094946c58faf49
+Worker C: codex/r1-j1-r17-runtime-20261015 @ e97ac2bb0275bea5f4f73cdcbb064d45d03df9cd
 1. Sampler proof reuses live current-QM31 equality and arithmetic modules.
 2. sample_total covers every 32-byte input and its canonical coordinates.
 3. Sampler focused check has seven standard-only reports.
@@ -42,9 +42,9 @@ Worker C: codex/r1-j1-r17-runtime-20261015 @ 7bd4442a3d0bd8479e0d750c9b094946c58
 5. Option discriminants are definitions matching LLBC None=0 and Some=1.
 6. The unused opaque Slice.eq template is not imported or implemented.
 7. Five actual terminal-function axiom audits passed.
-8. Array comparisons are related to equality using backend slice specifications.
-9. Actual terminal success yields fixed-payment, lane and snapshot equalities.
-10. Success inversion: 2.614s, standard-only; actual adapter authentication remains OPEN.
+8. Actual adapter reconstruction fixes the request public, candidate and copied account fields.
+9. It also proves checked next-index increment, asset equality and actual terminal success.
+10. Adapter checkpoint: five targets, ten standard-only reports; account authentication remains OPEN.
 
 Coordinator validation
 Reviewed theorem statements against generated/source declarations and checked
@@ -58,7 +58,8 @@ fixture evidence; it is not a universal call bound or compiler-preservation proo
 
 Remaining ordered work and live hypotheses
 1. Finish actual ASF8 decoding and compose terminal/caller/public metadata.
-   Decoder candidate translation now succeeds; compile and regression gates remain OPEN.
+   Decoder translation and finite regressions passed separately; actual axiom gate is OPEN.
+   Candidate Rust remains excluded here, including its measured +102CU fixture delta.
    This contributes to LiteralAcceptanceTerminal.Checks.publicParsed; it does
    not discharge the whole accepted-verifier hypothesis conditional_d3.hconditions.
 2. Reuse attested current framing dependencies, then compose completed Prefix
