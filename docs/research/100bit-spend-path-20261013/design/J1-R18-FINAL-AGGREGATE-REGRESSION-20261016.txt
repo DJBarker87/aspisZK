@@ -1,0 +1,46 @@
+Final Prefix aggregate + indexed sampler: execution validation
+
+Candidate3e7056f06bd512ae7b414aea2dbf893642b9a841 includes reviewed Prefix
+b38b1ce770 and sampler670b7e149. Its503-file source/input snapshot differs from
+baseline2ed5bc48393ba51e38ec62167134f55755b11649 only in r1_wire.rs/sampler.rs.
+The Prefix source SHA is4ce97b7bc11b495dc8af3ef79f29dbbd9ebba7c2427a6db1acb8851759b1d305.
+The earlier caller-array Prefix could not extract; its +88CU result remains
+historical evidence. This revised source warranted a fresh counter and CU check.
+
+All8 Prefix/record/serializer/transcript focused tests passed, as did the three
+actual-crate sampler tests. Root independently verified both native bundles.
+The combined saved-proof counter test passed: k10 core328+255, k11 core349+234,
+arbitrary resumed next0 core465. These exclude PDA syscalls and do not prove QV.
+
+One before/after direct admitted-route comparison used [3,10] then ASQ8, the
+frozen transfer1023 proof and ASF8, identical V2 account images and retained keys.
+The verifier checkpoint was system-created and initially exact1768 zero bytes;
+stage2 used only that SBF stage1 output. Both pairs accepted, read-only inputs
+were unchanged, and checkpoint/ASR8 outputs were byte-identical.
+Transaction CU: baseline1341865+1228710=2570575;
+candidate1341696+1228710=2570406. Delta -169 stage1,0 stage2; setup excluded.
+Preloaded account images are not registration/history or Pool-settlement proofs.
+
+Baseline ELF e948bfea12a8d93c1bfd9c332e722285ef6a0cdcbac7095415a9939f1012d3d7
+and its original build receipts were reused from79635e7ab, without rebuilding.
+Fresh candidate ELF99527c1feee71b5e23387b7348456f19c3ffe13254a3f2e886cfd9e005cb83bb.
+Same SolanaCLI3.1.13/platform-tools v1.52, locked features and default custom heap;
+fresh source mtimes prevent the earlier relative Cargo fingerprint reuse.
+Runtime LiteSVM0.16.0/Agave4.2.1 is test-only; R16 remains the syscall premises.
+Existing point_claims stack-offset diagnostics remain in both build logs; this
+passing route establishes no general stack-safety result.
+
+New target                 exit wall(s) peakRSS(KiB) swaps
+saved-proof counter        0    50.877  543084       0
+candidate SBF              0    40.650  673664       0
+one paired CU comparison   0     0.200   29088       0
+Each ran serially in its own8GiB-high/10GiB-max/swap0 scope, with no memory events.
+Evidence/r18-final-aggregate-regression-20261016 retains commands, source/tool
+pins, resource receipts, account/transaction/result bytes and the reuse record.
+verify.py checks68 bundle hashes, both reproducible503-file source archives,
+the two-file difference and the measured facts. Private keys remain on host.
+#print axioms is N/A for these execution checks. No full replay ran.
+
+This closes the requested execution-validation component for the final source.
+Extracted-function correctness, caller/metadata binding, challenge-state carry
+and SourceSimulation.preservesPrefix remain separate proof obligations.
