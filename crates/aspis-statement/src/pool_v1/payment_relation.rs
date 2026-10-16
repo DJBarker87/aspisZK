@@ -323,7 +323,7 @@ fn require_header(
     magic: [u8; 4],
     kind: PoolV1TransitionKind,
 ) -> Result<(), PoolV1PaymentStatementFormatError> {
-    if bytes[..4] != magic {
+    if bytes[..4] != magic[0..4] {
         return Err(PoolV1PaymentStatementFormatError::WrongMagic);
     }
     if bytes[4] != POOL_V1_PAYMENT_STATEMENT_VERSION {
@@ -344,35 +344,29 @@ fn require_header(
 fn decode_common(
     bytes: &[u8; POOL_V1_PAYMENT_STATEMENT_BYTES],
 ) -> Result<CommonPublicV1, PoolV1PaymentStatementFormatError> {
-    let asset = u32::from_le_bytes(
-        bytes[ASSET_ID_OFFSET..AMOUNT_OR_RESERVED_OFFSET]
-            .try_into()
-            .unwrap(),
-    );
+    let asset = u32::from_le_bytes(crate::atomic_statement::unwrap_fixed_slice(
+        bytes[ASSET_ID_OFFSET..AMOUNT_OR_RESERVED_OFFSET].try_into(),
+    ));
     if asset >= P {
         return Err(PoolV1PaymentStatementFormatError::NonCanonicalAssetId);
     }
     let common = CommonPublicV1 {
-        pool: bytes[POOL_OFFSET..DEPLOYMENT_DOMAIN_OFFSET]
-            .try_into()
-            .unwrap(),
-        deployment_domain: bytes[DEPLOYMENT_DOMAIN_OFFSET..ANCHOR_SEQUENCE_OFFSET]
-            .try_into()
-            .unwrap(),
-        anchor_sequence: u64::from_le_bytes(
-            bytes[ANCHOR_SEQUENCE_OFFSET..ANCHOR_ROOT_OFFSET]
-                .try_into()
-                .unwrap(),
+        pool: crate::atomic_statement::unwrap_fixed_slice(
+            bytes[POOL_OFFSET..DEPLOYMENT_DOMAIN_OFFSET].try_into(),
         ),
-        anchor_root: decode_digest_canonical(
-            bytes[ANCHOR_ROOT_OFFSET..NULLIFIER_OFFSET]
-                .try_into()
-                .unwrap(),
-        )
+        deployment_domain: crate::atomic_statement::unwrap_fixed_slice(
+            bytes[DEPLOYMENT_DOMAIN_OFFSET..ANCHOR_SEQUENCE_OFFSET].try_into(),
+        ),
+        anchor_sequence: u64::from_le_bytes(crate::atomic_statement::unwrap_fixed_slice(
+            bytes[ANCHOR_SEQUENCE_OFFSET..ANCHOR_ROOT_OFFSET].try_into(),
+        )),
+        anchor_root: decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+            bytes[ANCHOR_ROOT_OFFSET..NULLIFIER_OFFSET].try_into(),
+        ))
         .map_err(|_| PoolV1PaymentStatementFormatError::NonCanonicalDigest)?,
-        nullifier: decode_digest_canonical(
-            bytes[NULLIFIER_OFFSET..ASSET_ID_OFFSET].try_into().unwrap(),
-        )
+        nullifier: decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+            bytes[NULLIFIER_OFFSET..ASSET_ID_OFFSET].try_into(),
+        ))
         .map_err(|_| PoolV1PaymentStatementFormatError::NonCanonicalDigest)?,
         asset_id: M31(asset),
     };
@@ -392,7 +386,7 @@ pub fn decode_pool_v1_private_transfer_public_v1(
         PoolV1TransitionKind::PrivateTransfer,
     )?;
     if bytes[AMOUNT_OR_RESERVED_OFFSET..FIRST_OUTPUT_OR_DESTINATION_OFFSET]
-        != POOL_V1_CANONICAL_FEE.to_le_bytes()
+        != POOL_V1_CANONICAL_FEE.to_le_bytes()[0..4]
     {
         return Err(PoolV1PaymentStatementFormatError::NonZeroReserved);
     }
@@ -404,15 +398,13 @@ pub fn decode_pool_v1_private_transfer_public_v1(
         anchor_root: common.anchor_root,
         nullifier: common.nullifier,
         asset_id: common.asset_id,
-        recipient_commitment: decode_digest_canonical(
-            bytes[FIRST_OUTPUT_OR_DESTINATION_OFFSET..SECOND_OUTPUT_OFFSET]
-                .try_into()
-                .unwrap(),
-        )
+        recipient_commitment: decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+            bytes[FIRST_OUTPUT_OR_DESTINATION_OFFSET..SECOND_OUTPUT_OFFSET].try_into(),
+        ))
         .map_err(|_| PoolV1PaymentStatementFormatError::NonCanonicalDigest)?,
-        change_commitment: decode_digest_canonical(
-            bytes[SECOND_OUTPUT_OFFSET..].try_into().unwrap(),
-        )
+        change_commitment: decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+            bytes[SECOND_OUTPUT_OFFSET..].try_into(),
+        ))
         .map_err(|_| PoolV1PaymentStatementFormatError::NonCanonicalDigest)?,
     };
     validate_pool_v1_private_transfer_public_v1(&public)?;
@@ -438,17 +430,15 @@ pub fn decode_pool_v1_withdrawal_public_v1(
         anchor_root: common.anchor_root,
         nullifier: common.nullifier,
         asset_id: common.asset_id,
-        amount: u32::from_le_bytes(
-            bytes[AMOUNT_OR_RESERVED_OFFSET..FIRST_OUTPUT_OR_DESTINATION_OFFSET]
-                .try_into()
-                .unwrap(),
+        amount: u32::from_le_bytes(crate::atomic_statement::unwrap_fixed_slice(
+            bytes[AMOUNT_OR_RESERVED_OFFSET..FIRST_OUTPUT_OR_DESTINATION_OFFSET].try_into(),
+        )),
+        destination_token_account: crate::atomic_statement::unwrap_fixed_slice(
+            bytes[FIRST_OUTPUT_OR_DESTINATION_OFFSET..SECOND_OUTPUT_OFFSET].try_into(),
         ),
-        destination_token_account: bytes[FIRST_OUTPUT_OR_DESTINATION_OFFSET..SECOND_OUTPUT_OFFSET]
-            .try_into()
-            .unwrap(),
-        change_commitment: decode_digest_canonical(
-            bytes[SECOND_OUTPUT_OFFSET..].try_into().unwrap(),
-        )
+        change_commitment: decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
+            bytes[SECOND_OUTPUT_OFFSET..].try_into(),
+        ))
         .map_err(|_| PoolV1PaymentStatementFormatError::NonCanonicalDigest)?,
     };
     validate_pool_v1_withdrawal_public_v1(&public)?;

@@ -1,0 +1,37 @@
+ASF8 decoder extraction: retained failed attempts, no closure claim
+
+The actual decoder is decode_pool_v1_pair_forest_terminal_statement_v1.
+Its existing dependency cone includes eight-limb digest decoding and two
+20-node frontier decoders. No pre-existing extracted decoder was found in
+lean/ or design/. The live terminal-QM31 arithmetic is a separate dependency
+and has not been edited or re-extracted.
+
+42e5ca2011c39ee9770afc798282ff861b092428: Charon succeeded (72.177s,
+649696KiB peak RSS). Aeneas exited2 (0.256s,105248KiB), unsupported early
+returns in the snapshot frontier loop, PrePasses.ml:586.
+972d162996051849b1b314349724cf346067089f: three iterator loops became
+indexed loops, preserving bounds and byte/error order. Charon succeeded
+(72.961s,644760KiB); Aeneas exited2 with the same prepass error
+(0.250s,104016KiB). This is not an extraction-success checkpoint.
+46ec150eb74d52c75e76c79d6bb957c9bddd9b8c: each loop explicitly records
+the first error and breaks, then propagates it before constructing the result.
+The afterstate exact-length error is also preserved explicitly. Charon passed
+(71.921s,648196KiB); Aeneas passed the earlier prepass but exited2 at
+InterpJoin.ml:1542, "Could not match the contexts", snapshot loop523-535
+(2.052s,176668KiB). The next task is to inspect this join before another edit.
+
+A baseline differential harness was added at80defc77556e5b2be69711f728c8cbced4017af8,
+before decoder changes. It covers transfer/withdrawal ASF8, snapshot, afterstate
+and late formats: all lengths, single-byte mutations and paired corruptions.
+The optimized baseline build passed in66.613s/548156KiB;20,720 cases completed
+in0.152s/1760KiB. The complete66,622,110-byte Result trace is retained with
+SHA256628a3418096f93d769955ff18e7ac2f4e8fcb25b659b66aac3360204ad94efff.
+No changed-decoder differential comparison, counter regression, or CU replay
+has yet passed. Baseline completion is not evidence of candidate equivalence.
+
+The evidence bundle contains all three LLBC files, exact modified sources,
+four Git-pinned input manifests, complete eight tool/native receipts and logs,
+baseline trace and native artifact pins. Every invocation had6GiB MemoryHigh,
+8GiB MemoryMax and MemorySwapMax=0; all swaps were zero. No Lean ran, so
+#print axioms is not applicable. No cap was raised or failed command retried
+unchanged. The experiments are excluded from the reviewed integration branch.

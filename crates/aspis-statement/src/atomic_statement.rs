@@ -78,13 +78,35 @@ pub fn encode_digest_canonical(digest: &Digest) -> [u8; 32] {
     bytes
 }
 
-pub fn decode_digest_canonical(bytes: &[u8; 32]) -> Result<Digest, AtomicStatementError> {
-    let mut digest = [M31::ZERO; DIGEST_ELEMS];
-    for (index, output) in digest.iter_mut().enumerate() {
-        *output = M31::from_le_bytes(bytes[index * 4..index * 4 + 4].try_into().unwrap())
-            .ok_or(AtomicStatementError::NonCanonicalDigest)?;
+/// Unwrap a fixed-width slice conversion after its enclosing length guard.
+/// Both payloads are Copy, so extraction needs no formatting or drop machinery.
+#[inline]
+pub(crate) fn unwrap_fixed_slice<T: Copy>(value: Result<T, core::array::TryFromSliceError>) -> T {
+    match value {
+        Ok(value) => value,
+        Err(_) => panic!("fixed-size slice conversion failed"),
     }
-    Ok(digest)
+}
+
+pub fn decode_digest_canonical(bytes: &[u8; 32]) -> Result<Digest, AtomicStatementError> {
+    Ok([
+        M31::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+        M31::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]])
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+        M31::from_le_bytes([bytes[8], bytes[9], bytes[10], bytes[11]])
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+        M31::from_le_bytes([bytes[12], bytes[13], bytes[14], bytes[15]])
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+        M31::from_le_bytes([bytes[16], bytes[17], bytes[18], bytes[19]])
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+        M31::from_le_bytes([bytes[20], bytes[21], bytes[22], bytes[23]])
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+        M31::from_le_bytes([bytes[24], bytes[25], bytes[26], bytes[27]])
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+        M31::from_le_bytes([bytes[28], bytes[29], bytes[30], bytes[31]])
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+    ])
 }
 
 pub fn decode_asset_id_canonical(value: u32) -> Result<M31, AtomicStatementError> {
