@@ -1,0 +1,9 @@
+Exact Prefix record-step predecessor
+
+ExtractedPrefixRecordStep.parse_record_at_success is proved against the actual final-E namespace AspisR1PrefixAggregateParser, importing only its Funs module. For arbitrary bytes, row and initial offset, successful return (framed,next) implies an actual successful row_shape result (tag,size), next.val=offset.val+5+size.val, next within the input, framed equal to the exact drop/take slice, and a successful actual parse_record call on framed. These are consequences of success; validation/canonicality are not assumed.
+
+The proof inverts the generated Result binds and range check, then uses checked-addition value laws. It never unfolds the inner field validator and never relabels an earlier extraction namespace. This is the compositional predecessor for a separate full Prefix proof exposing C1 first32 and every returned record in the fixed 27-row sequence.
+
+Focused Lean4.32 step-c passed in2.003seconds,383598592-byte cgroup peak,2635908KiB process RSS, zero swaps and no pressure/OOM events; -j1/-M0,6G high/8G max/swap0. SourceSHA f04d066bc11a67c2b2331c266a9bee5b74f4b4770ee7fd5b65b4d778aa83e0f0. Axiom report is exactly propext,Classical.choice,Quot.sound. Two earlier small elaboration failures are retained: scalar/Nat guard and Slice equality projection, then an unsimplified True-and-True condition. No resource limit changed and no dependency was rebuilt. Minor unused-simp warnings remain in the green source.
+
+Evidence records exact source snapshots, base revision24f82cae4, commands, input/object/runtime-library hashes and all attempts. No production Rust changes accompany this theorem. Full Prefix, Rust execution, challenge provenance and first-read correspondence are not established here.
