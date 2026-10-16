@@ -1,0 +1,40 @@
+Actual reconstruction binds withdrawal metadata, 2026-10-16
+
+Search at live 0d8855fa4 found the existing J1-A-CALLER-THEOREM-QUEUE and
+J1-AB-EXECUTION-LINKS inventories, but no proved stage1 caller-to-serializer link.
+The actual public_bytes invocation is r1_semantic.rs:74 inside verify_observed.
+That function's complete cone includes HashFn/Observer, transcript state,
+unsafe claims allocation, terminal_qm31 and selected-mask operations. A newly
+written truncation of its prefix would not prove actual caller reachability.
+No such surrogate, source refactor, or new extraction is introduced here.
+
+Instead, ExtractedAdapterWithdrawalBindings consumes only the already extracted
+Adapter reconstruction/terminal cone from e97ac2bb0, with the checked naming
+overlay and receipt frontier from 2405d1deb. terminal_metadata_bindings inverts
+the actual validator through its output-lane guard; it does not assume or
+replace the remaining late/tree computation. Its array comparisons use the
+backend's symbolic eq_homo_spec, without enumerating concrete array contents.
+
+reconstruct_withdrawal_bindings assumes only request.public=Withdrawal(p) and
+the actual reconstruct_asq8_statement request a candidate=Ok(Ok(out)). It proves:
+checked_add(a.live_snapshot.next_pair_index,1)=Some(candidate.next_pair_index);
+a.master.identity.asset_id=p.asset_id; three account keys are nonzero;
+a.selected_lane.lane_id<8; p.pool=a.master_account;
+p.deployment_domain=a.live_snapshot.deployment_domain;
+a.live_snapshot.pool=a.master_account;
+p.anchor_sequence=a.checkpoint.checkpoint_sequence;
+p.anchor_root=a.checkpoint.global_root; and the actual nullifier-to-output-lane
+computation returns a.selected_lane.lane_id. Every carrier is fixed before success.
+
+These are structural account-field equalities, not owner/PDA authentication,
+current account state, custody, or transaction execution. Stage1 accepts [3,10]
+or [3,11] and calls the serializer through first/tx1/verify_observed. ASQ8 stage2
+does not call that semantic serializer. Actual serializer success hs and the
+same-byte/checkpoint binding across stages remain OPEN, as does supplied-public
+hbind. No semantic-byte injectivity is used to bind omitted metadata.
+
+Focused Lean4.32 check passed first attempt: both public exports have only
+propext, Classical.choice, Quot.sound; 2.815 seconds, 629637120 bytes sampled
+cgroup peak, no swap, under 6GiB high/8GiB max/swap0. Four predecessor objects
+were reused by exact receipts; no dependency replay. See the separate
+evidence/adapter-withdrawal-bindings-20261016 bundle and verifier.
