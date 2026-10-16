@@ -26,6 +26,13 @@ pins = json.loads(manifest.read_text())
 sha = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
 for path, digest in pins["files"].items():
     assert sha(source / path) == digest, path
+# Cargo fingerprints use relative paths and mtimes. Two archived workspaces
+# sharing a private target cache can otherwise reuse the first workspace's
+# binary when both archives predate that binary. Preserve bytes and explicitly
+# make workspace inputs newer than the cache before invoking Cargo.
+freshness_ns = time.time_ns()
+for path in pins["files"]:
+    os.utime(source / path, ns=(freshness_ns, freshness_ns))
 cg = Path("/sys/fs/cgroup") / next(
     line.split(":", 2)[2]
     for line in Path("/proc/self/cgroup").read_text().splitlines()
@@ -44,7 +51,7 @@ env = dict(os.environ, PATH=sol + ":/home/dombarker/.cargo/bin:/usr/bin:/bin",
 for name in ["RUSTFLAGS", "RUSTC_WRAPPER", "RUSTC_WORKSPACE_WRAPPER", "CARGO_ENCODED_RUSTFLAGS"]:
     env.pop(name, None)
 if a.mode == "sbf":
-    artifact = w / (a.source_label + "-sbf")
+    artifact = w / (a.label + "-artifacts")
     artifact.mkdir(exist_ok=False)
     command = [sol + "/cargo-build-sbf", "--manifest-path", str(source / "programs/r1-cost-probe/Cargo.toml"),
                "--sbf-out-dir", str(artifact), "--features", "pool-adapter,private-leaf-salts",
@@ -55,6 +62,7 @@ else:
                "--jobs", "1", "measured_core_call_counts_include_zero_progress_checkpoint", "--", "--test-threads=1"]
 timed = ["/usr/bin/time", "-v", "-o", str(out / "time.log"), *command]
 record = {"label": a.label, "mode": a.mode, "source_revision": pins["revision"],
+          "workspace_source_freshness_ns": freshness_ns,
           "source_manifest_sha256": sha(manifest), "runner_sha256": sha(Path(__file__)),
           "command": timed, "cwd": str(source), "cgroup": str(cg), "limits": limits,
           "events_before": read("memory.events"), "start_unix": time.time(),
