@@ -1,0 +1,198 @@
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixRecordAgreement.lean:32:54: error: Tactic `rfl` failed: The left-hand side
+  AspisR1PrefixAggregateParser.r1_wire.row_shape row
+is not definitionally equal to the right-hand side
+  AspisR1RecordParser.r1_wire.row_shape row
+
+row : U8
+⊢ AspisR1PrefixAggregateParser.r1_wire.row_shape row = AspisR1RecordParser.r1_wire.row_shape row
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixRecordAgreement.lean:51:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes ?bytes
+in the target expression
+  mapResult (mapControl statusToRecord)
+      (let (o, iter1) := (some (index, bytes), next)
+      match o with
+      | none => ok (done (core.result.Result.Ok ()))
+      | some p =>
+        let (value, bytes) := p
+        do
+        let o1 ← AspisR1PrefixAggregateParser.field.wide_exact.WideExact.from_le_bytes bytes
+        let r ←
+          AspisR1PrefixAggregateParser.core.option.Option.ok_or o1
+              (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row value)
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let q ← AspisR1PrefixAggregateParser.field.wide_exact.WideExact.impl.c1 val
+            let b ←
+              core.cmp.PartialEq.ne.trait_default AspisR1PrefixAggregateParser.field.QM31.Insts.CoreCmpPartialEqQM31 q
+                  AspisR1PrefixAggregateParser.field.QM31.ZERO
+            if b = true then
+                ok (done (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row value)))
+              else ok (cont iter1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+            ok (done r1)) =
+    let (o, iter1) := (some (index, bytes), next)
+    match o with
+    | none => ok (done (core.result.Result.Ok ()))
+    | some p =>
+      let (value, bytes) := p
+      do
+      let o1 ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes
+      let r ← AspisR1RecordParser.core.option.Option.ok_or o1 (AspisR1RecordParser.r1_wire.Error.NonCanonical row value)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let q ← AspisR1RecordParser.field.wide_exact.WideExact.impl.c1 val
+          let b ←
+            core.cmp.PartialEq.ne.trait_default AspisR1RecordParser.field.QM31.Insts.CoreCmpPartialEqQM31 q
+                AspisR1RecordParser.field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.NonCanonical row value)))
+            else ok (cont iter1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame AspisR1RecordParser.r1_wire.Error) residual
+          ok (done r1)
+
+case ok.some
+row : U8
+iter : Iter
+next : core.iter.adapters.enumerate.Enumerate (core.slice.iter.ChunksExact U8)
+index : Usize
+bytes : Slice U8
+hn :
+  core.iter.adapters.enumerate.IteratorEnumerate.next (core.iter.traits.iterator.IteratorChunksExact U8) iter =
+    ok (some (index, bytes), next)
+⊢ mapResult (mapControl statusToRecord)
+      (let (o, iter1) := (some (index, bytes), next)
+      match o with
+      | none => ok (done (core.result.Result.Ok ()))
+      | some p =>
+        let (value, bytes) := p
+        do
+        let o1 ← AspisR1PrefixAggregateParser.field.wide_exact.WideExact.from_le_bytes bytes
+        let r ←
+          AspisR1PrefixAggregateParser.core.option.Option.ok_or o1
+              (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row value)
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let q ← AspisR1PrefixAggregateParser.field.wide_exact.WideExact.impl.c1 val
+            let b ←
+              core.cmp.PartialEq.ne.trait_default AspisR1PrefixAggregateParser.field.QM31.Insts.CoreCmpPartialEqQM31 q
+                  AspisR1PrefixAggregateParser.field.QM31.ZERO
+            if b = true then
+                ok (done (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row value)))
+              else ok (cont iter1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+            ok (done r1)) =
+    let (o, iter1) := (some (index, bytes), next)
+    match o with
+    | none => ok (done (core.result.Result.Ok ()))
+    | some p =>
+      let (value, bytes) := p
+      do
+      let o1 ← AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes bytes
+      let r ← AspisR1RecordParser.core.option.Option.ok_or o1 (AspisR1RecordParser.r1_wire.Error.NonCanonical row value)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let q ← AspisR1RecordParser.field.wide_exact.WideExact.impl.c1 val
+          let b ←
+            core.cmp.PartialEq.ne.trait_default AspisR1RecordParser.field.QM31.Insts.CoreCmpPartialEqQM31 q
+                AspisR1RecordParser.field.QM31.ZERO
+          if b = true then ok (done (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.NonCanonical row value)))
+            else ok (cont iter1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame AspisR1RecordParser.r1_wire.Error) residual
+          ok (done r1)
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixRecordAgreement.lean:88:18: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixRecordAgreement.lean:89:15: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixRecordAgreement.lean:97:10: error: Dependent elimination failed: Failed to solve equation
+  ok (cont next) =
+    match AspisR1PrefixAggregateParser.field.wide_exact.WideExact.from_le_bytes chunk with
+    | ok v =>
+      (fun o1 => do
+          let r ←
+            match o1 with
+              | none =>
+                ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row iter.count))
+              | some v => ok (core.result.Result.Ok v)
+          let cf ←
+            match r with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let q ← AspisR1PrefixAggregateParser.field.wide_exact.WideExact.impl.c1 val
+              let b ←
+                core.cmp.PartialEq.ne.trait_default AspisR1PrefixAggregateParser.field.QM31.Insts.CoreCmpPartialEqQM31 q
+                    AspisR1PrefixAggregateParser.field.QM31.ZERO
+              if b = true then
+                  ok
+                    (done
+                      (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row iter.count)))
+                else ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec
+                      (fun x => Result (core.result.Result Unit AspisR1PrefixAggregateParser.r1_wire.Error)) x
+                  | core.result.Result.Err e => ok (core.result.Result.Err (core.convert.FromSame.from e))
+              ok (done r1))
+        v
+    | fail v => fail v
+    | div => div
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixRecordAgreement.lean:106:22: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixRecordAgreement.lean:107:19: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixRecordAgreement.lean:110:22: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixRecordAgreement.lean:112:14: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixRecordAgreement.lean:93:21: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵d̵,̵ ̵bind_tc_ok,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+              core.result.Result.Insts.CoreOpsTry.branch,
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixRecordAgreement.lean:99:21: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵d̵,̵ ̵bind_tc_ok,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+              core.result.Result.Insts.CoreOpsTry.branch,
+              AspisR1PrefixAggregateParser.field.wide_exact.WideExact.impl.c1] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.ExtractedPrefixRecordAgreement.row_shape_agreement' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.ExtractedPrefixRecordAgreement.body_agreement' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.ExtractedPrefixRecordAgreement.body_cont_decreases' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.ExtractedPrefixRecordAgreement.validator_loop_agreement' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.ExtractedPrefixRecordAgreement.validator_agreement' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
