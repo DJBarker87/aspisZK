@@ -1930,8 +1930,51 @@ def r1_wire.SemanticTranscript.new
       (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error)
       residual
 
+/-- [aspis_r1_public_preparation::r1_wire::{aspis_r1_public_preparation::r1_wire::SemanticTranscript<H>}::sample_block_validated]:
+    Source: 'lib.rs', lines 355:4-369:5 -/
+def r1_wire.SemanticTranscript.sample_block_validated
+  {H : Type} (aspis_coreDigest32Inst : aspis_core.Digest32 H)
+  (self : r1_wire.SemanticTranscript H) (row : Std.U8) (framed : Slice Std.U8)
+  :
+  Result ((core.result.Result (Array Std.U8 32#usize) r1_wire.Error) ×
+    (r1_wire.SemanticTranscript H))
+  := do
+  if row != self.next_row
+  then
+    ok (core.result.Result.Err (r1_wire.Error.RowOrder self.next_row row),
+      self)
+  else
+    let s ← lift (Array.to_slice self.state)
+    let i ← 160#u8 + row
+    let s1 ← lift (Array.to_slice (Array.make 2#usize [ 0#u8, i ]))
+    let s2 ← lift (Array.to_slice (Array.make 3#usize [ s, s1, framed ]))
+    let absorbed ← aspis_coreDigest32Inst.digest self.hash s2
+    let s3 ← lift (Array.to_slice absorbed)
+    let s4 ← lift (Array.to_slice (Array.make 1#usize [ 1#u8 ]))
+    let s5 ← lift (Array.to_slice (Array.make 2#usize [ s3, s4 ]))
+    let block ← aspis_coreDigest32Inst.digest self.hash s5
+    let s6 ← lift (Array.to_slice absorbed)
+    let s7 ← lift (Array.to_slice (Array.make 1#usize [ 2#u8 ]))
+    let s8 ← lift (Array.to_slice (Array.make 2#usize [ s6, s7 ]))
+    let a ← aspis_coreDigest32Inst.digest self.hash s8
+    let i1 ← self.next_row + 1#u8
+    ok (core.result.Result.Ok block, { self with state := a, next_row := i1 })
+
+/-- [aspis_r1_public_preparation::r1_wire::sample_validated_entry]:
+    Source: 'lib.rs', lines 372:4-376:5
+    Visibility: public -/
+def r1_wire.sample_validated_entry
+  {H : Type} (aspis_coreDigest32Inst : aspis_core.Digest32 H)
+  (transcript : r1_wire.SemanticTranscript H) (row : Std.U8)
+  (framed : Slice Std.U8) :
+  Result ((core.result.Result (Array Std.U8 32#usize) r1_wire.Error) ×
+    (r1_wire.SemanticTranscript H))
+  := do
+  r1_wire.SemanticTranscript.sample_block_validated aspis_coreDigest32Inst
+    transcript row framed
+
 /-- [aspis_r1_public_preparation::r1_semantic::public_transcript::{impl core::ops::function::FnOnce<(aspis_r1_public_preparation::aspis_core::state_only_prefix::r0::Error,), aspis_r1_public_preparation::r1_wire::Error> for aspis_r1_public_preparation::r1_semantic::public_transcript::closure<H>}::call_once]:
-    Source: 'lib.rs', lines 370:39-370:56 -/
+    Source: 'lib.rs', lines 391:39-391:56 -/
 def
   r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
   {H : Type} (aspis_coreDigest32Inst : aspis_core.Digest32 H)
@@ -1942,7 +1985,7 @@ def
   ok r1_wire.Error.Public
 
 /-- Trait implementation: [aspis_r1_public_preparation::r1_semantic::public_transcript::{impl core::ops::function::FnOnce<(aspis_r1_public_preparation::aspis_core::state_only_prefix::r0::Error,), aspis_r1_public_preparation::r1_wire::Error> for aspis_r1_public_preparation::r1_semantic::public_transcript::closure<H>}]
-    Source: 'lib.rs', lines 370:39-370:56 -/
+    Source: 'lib.rs', lines 391:39-391:56 -/
 @[reducible]
 def
   r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
@@ -1955,7 +1998,7 @@ def
 }
 
 /-- [aspis_r1_public_preparation::r1_semantic::public_transcript]:
-    Source: 'lib.rs', lines 363:0-373:1
+    Source: 'lib.rs', lines 384:0-394:1
     Visibility: public -/
 def r1_semantic.public_transcript
   {H : Type} (aspis_coreDigest32Inst : aspis_core.Digest32 H)

@@ -25,7 +25,7 @@ def main():
  if a.phase=='charon':
   cmd=[str(TOOLS/'charon-target/release/charon'),'cargo','--preset','aeneas','--mir','built','--sysroot','default',
    '--include','core::option::Option','--include','core::result::Result','--include','core::result::_::map_err',
-   '--start-from','crate::pool_v1::pair_forest_terminal','--start-from','crate::r1_semantic::public_transcript','--start-from','crate::aspis_core::Digest32',
+   '--start-from','crate::pool_v1::pair_forest_terminal','--start-from','crate::r1_semantic::public_transcript','--start-from','crate::aspis_core::Digest32','--start-from','crate::r1_wire::sample_validated_entry',
    '--dest-file',str(llbc),'--','--locked','--offline','--release','--lib','--no-default-features','--features','r0,private-leaf-salts','--jobs','1']
  else:
   prev=json.loads((w/'runs/charon-a/receipt.json').read_text());assert prev['exit_status']==0 and llbc.is_file()

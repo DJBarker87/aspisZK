@@ -98,6 +98,13 @@ pub mod r1_wire {
     include!("fragments/transcript_type.rs");
     impl<H: Digest32> SemanticTranscript<H> {
         include!("fragments/transcript_new.rs");
+        include!("fragments/transcript_step.rs");
+    }
+    // Extraction-only entry wrapper: actual private method body is unchanged.
+    pub fn sample_validated_entry<H: Digest32>(
+        transcript: &mut SemanticTranscript<H>, row: u8, framed: &[u8],
+    ) -> Result<[u8; 32], Error> {
+        transcript.sample_block_validated(row, framed)
     }
 }
 
