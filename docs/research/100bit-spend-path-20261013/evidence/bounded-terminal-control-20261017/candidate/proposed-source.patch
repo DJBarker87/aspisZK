@@ -1,0 +1,75 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -102,6 +102,20 @@
+     QM31::from_cm31(CM31::from_m31(value))
+ }
+ 
++/// Count only the trailing one bits used by the twenty-level append tree.
++/// The bounded form is equivalent to capping u64::trailing_ones at twenty.
++fn bounded_append_carry(mut index: u64) -> usize {
++    let mut carry = 0usize;
++    while carry < 20 {
++        if index & 1 == 0 {
++            return carry;
++        }
++        index >>= 1u32;
++        carry += 1;
++    }
++    carry
++}
++
+ #[inline(always)]
+ fn add_preweighted<const N: usize>(
+     packed: &mut [QM31; POOL_V1_PAIR_FOREST_PACKED_SEMANTIC_LANES_V1],
+@@ -191,7 +205,7 @@
+         return Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition);
+     }
+     let index = source.next_pair_index;
+-    let carry = core::cmp::min(index.trailing_ones() as usize, 20);
++    let carry = bounded_append_carry(index);
+     for level in 0..20 {
+         if level == carry && carry < 20 {
+             continue;
+@@ -679,7 +693,7 @@
+         &after.next_root,
+         false,
+     );
+-    let carry = core::cmp::min(source.next_pair_index.trailing_ones() as usize, 20);
++    let carry = bounded_append_carry(source.next_pair_index);
+     if carry < 20 {
+         add_digest_binding(
+             &mut digests,
+@@ -804,7 +818,7 @@
+         &after.next_root,
+         false,
+     );
+-    let carry = core::cmp::min(source.next_pair_index.trailing_ones() as usize, 20);
++    let carry = bounded_append_carry(source.next_pair_index);
+     if carry < 20 {
+         add_digest_binding_packed(
+             &mut digests,
+@@ -1081,7 +1095,7 @@
+     );
+     local_sums[1][0] = local_sums[1][0].add(next_root[0]);
+     local_sums[1][1] = local_sums[1][1].add(next_root[1]);
+-    let carry = core::cmp::min(next_pair_index.trailing_ones() as usize, 20);
++    let carry = bounded_append_carry(next_pair_index);
+     let carry_index = core::cmp::min(carry, 19);
+     let carry_contribution = optional_carry_packed_selector_tensor(
+         carry,
+@@ -1231,10 +1245,11 @@
+     ),
+     PoolV1PairForestSemanticTerminalErrorV1,
+ > {
+-    if public
+-        .withdrawal_amount
+-        .is_some_and(|amount| amount == 0 || amount >= (1 << 30))
+-    {
++    let invalid_amount = match public.withdrawal_amount {
++        None => false,
++        Some(amount) => amount == 0 || amount >= (1 << 30u32),
++    };
++    if invalid_amount {
+         return Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount);
+     }
+     validate_transition(public)?;

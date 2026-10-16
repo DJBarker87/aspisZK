@@ -1,0 +1,33 @@
+{"lean_version": "Lean (version 4.32.0, x86_64-unknown-linux-gnu, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, Release)", "lean_path": "/tmp/aspis-mask432-digest-joint-overlay-20261016/objects:/tmp/aspis-mask432-path-complete-overlay-20261016/objects:/home/dombarker/project-offloads/aspis-r1-mask-lean432-20261015/objects:/tmp/aspis-mask432-selector-recovery-20261016/objects:/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/objects:/home/dombarker/project-offloads/aspis-line18-import-footprint-20261013/objects:/home/dombarker/project-offloads/aspis-fs-generic-20261006/objects2:/home/dombarker/project-offloads/aspis-r0-20261006/cache:/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib/.lake/build/lib/lean:/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/backends/lean/.lake/packages/Cli/.lake/build/lib/lean:/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/backends/lean/.lake/packages/batteries/.lake/build/lib/lean:/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/backends/lean/.lake/packages/Qq/.lake/build/lib/lean:/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/backends/lean/.lake/packages/aesop/.lake/build/lib/lean:/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/backends/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/backends/lean/.lake/packages/importGraph/.lake/build/lib/lean:/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/backends/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/backends/lean/.lake/packages/plausible/.lake/build/lib/lean:/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/backends/lean/.lake/packages/mathlib/.lake/build/lib/lean:/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/backends/lean/.lake/build/lib/lean:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean", "argv": ["/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean", "-j1", "-M5000", "-DElab.async=false", "-R", "/tmp/aspis-mask432-digest-joint-overlay-20261016/attempts/bounded-control-arithmetic-a-BoundedControlArithmetic/sources", "-o", "/tmp/aspis-mask432-digest-joint-overlay-20261016/objects/BoundedControlArithmetic.olean", "/tmp/aspis-mask432-digest-joint-overlay-20261016/attempts/bounded-control-arithmetic-a-BoundedControlArithmetic/sources/BoundedControlArithmetic.lean"]}
+/tmp/aspis-mask432-digest-joint-overlay-20261016/attempts/bounded-control-arithmetic-a-BoundedControlArithmetic/sources/BoundedControlArithmetic.lean:31:34: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?x >>> ?i).toNat
+in the target expression
+  (index.bv.ushiftRight (↑1#u32 % 64)).toNat = ↑index >>> 1
+
+index : U64
+⊢ (index.bv.ushiftRight (↑1#u32 % 64)).toNat = ↑index >>> 1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    id (Eq.refl true)
+/tmp/aspis-mask432-digest-joint-overlay-20261016/attempts/bounded-control-arithmetic-a-BoundedControlArithmetic/sources/BoundedControlArithmetic.lean:39:4: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+carry : Usize
+h : ↑carry < 20
+⊢ ↑carry + ↑1#usize < UScalar.size UScalarTy.Usize
+'AspisBoundedControl.Arithmetic.low_bit_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisBoundedControl.Arithmetic.low_bit_zero_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisBoundedControl.Arithmetic.shift_one_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisBoundedControl.Arithmetic.increment_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisBoundedControl.Arithmetic.amount_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
