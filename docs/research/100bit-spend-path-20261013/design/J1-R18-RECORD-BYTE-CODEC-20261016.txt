@@ -1,0 +1,17 @@
+Actual byte and strict limb codec agreement (Lean 4.32)
+
+The new ExtractedRecordByteValue proves the exact value of the actual Aeneas U32.from_le_bytes primitive on four symbolic bytes, then equality with RetainedFieldByteCodec.decodeWordLE. Its proof splits four bit ranges and uses symbolic append arithmetic. No field, parser, or decoder-success premise is supplied.
+
+ExtractedRecordStrictCodec fixes the byte carrier from the actual 32-byte array and proves its ordered list is exactly the input. Each retained word decoder equals the corresponding actual U32 decoder. Eight canonical bounds then imply success of the unchanged StrictWideByteCodec decoder, with low/high halves selected by fixed Fin embeddings. actual_decode_strict obtains those bounds, the exact input array, decoder success, and exact WideExact packing from actual final Prefix-E from_le_bytes success. It uses the checked one-sided naming adapter and explicit Prefix-to-record carrier agreement; it does not substitute a theorem from another emitted namespace.
+
+Evidence and rejection history
+
+Seven focused attempts are retained. byte-value-a compiled but is REJECTED: native bv_decide introduced _native.bv_decide.ax_1_8. The replacement proves the same bit identity symbolically. byte-value-b/c and strict-codec-a failed local elaboration; no failed object is accepted. byte-value-d, strict-predecessor-a (the unchanged small StrictWideByteCodec module), and strict-codec-b are green, with 2, 3, and 8 standard-only axiom reports respectively.
+
+Those green checks took 2.604, 2.003, and 2.404 seconds; sampled cgroup peaks were 513835008, 451899392, and 498151424 bytes. Each used one Lean process under MemoryHigh 6 GiB, MemoryMax 8 GiB, swap disabled, with zero process swaps and no pressure/OOM events. -M0 leaves enforcement to the hard cgroup cap, as previously reviewed for shared imported-page accounting. Receipts retain exact commands, source/runner/object hashes, runtime shared-library hashes, Lean version, RSS, and cgroup measurements. No dependency replay or Rust change occurred.
+
+RetainedFieldByteCodec and the two actual record-canonicality predecessors were copied only after matching current source, successful receipt, and object hashes. Their provenance inventories and staging scripts are retained. This target uses the independent checked backend/parser/byte-codec closure, not the provisional historical SemanticPrefix agreements affected by the separate Circle cache investigation.
+
+Remaining scope
+
+Actual c1=ZERO still needs transport to strict high-half zero; chunk validation, semantic coefficient decoding, full25 decodeFull, completed-message byte equality, and selected challenge/read provenance remain separate obligations. The live SelectedSemanticPrefix.read(...)=some out hypothesis is not discharged by this result. The results concern the checked extraction and primitive model, not an independently proved Rust/pointer/runtime refinement. Unused generated Error.fmt remains outside the audited target dependency cone; no whole-module axiom-free claim is made.
