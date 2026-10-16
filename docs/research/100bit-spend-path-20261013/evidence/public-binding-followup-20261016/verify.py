@@ -105,7 +105,7 @@ f=j('runs/first-c/ExtractedFirstCallerReachability/receipt.json');assert f['exit
 for tag in ['first-a','first-b']:
  g=j(tag+'.guard.json');assert g['exit_status']==75 and not g['formal_target_started']
 assert j('first-d.launcher-failure.json')['formal_target_started']==False
-for n in ['stage-host.py','serial-host.py','run-first-diagnostic-host.py','prepare-first-diagnostic.py','audit-extended-host.py','audit-first-binder.py','guard-runner-host.py','run-extended-host.py','stage-joint-host.py','bridge-callers.py']:
+for n in ['stage-host.py','serial-host.py','run-first-diagnostic-host.py','prepare-first-diagnostic.py','audit-extended-host.py','audit-first-binder.py','guard-runner-host.py','run-extended-host.py','bridge-callers.py']:
  assert data['tools/'+n]==(R/'docs/research/100bit-spend-path-20261013/tools/public-binding-followup-kit'/n).read_bytes()
 assert data['pack.py']==(H/'pack.py').read_bytes()
 print(f'PASS{len(members)} members;9 standard-only reports; helper supplies hs; emitted first prefix supplies hd+fixed supplied public; downstream/custody OPEN')

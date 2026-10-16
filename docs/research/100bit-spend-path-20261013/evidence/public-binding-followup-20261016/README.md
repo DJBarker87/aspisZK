@@ -41,6 +41,6 @@ failure are retained. Neither preflight stop started a formal target. The
 corrected runner checks immediately before actual Lean launch, after hashing,
 and monitors external Lean by cgroup. No external process was signaled.
 
-No SBF rebuild or runtime harness was run. A separate coherent refresh follows
-for A's expanded current caller Types/Funs; these receipts retain the original
-pinned preparation universe and are not silently mixed with the new objects.
+No SBF rebuild or runtime harness was run. The coherent current caller-universe refresh is recorded in
+`../public-binding-joint-c16-20261016`; these original-universe receipts are
+retained separately and are not silently mixed with the new objects.
