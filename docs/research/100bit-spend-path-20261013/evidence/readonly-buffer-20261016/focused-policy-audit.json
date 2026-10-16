@@ -1,0 +1,184 @@
+{
+  "cfg_generated": false,
+  "configuration": {
+    "cfg_handling": "All lexical alternatives retained and labelled; no source-to-selected-CFG claim",
+    "core_features": [
+      "optimized-terminal",
+      "private-leaf-salts"
+    ],
+    "dependency_feature_expansion": "Exact Cargo manifests pinned; feature-resolution/build attestation OPEN",
+    "disabled_features": [
+      "test",
+      "prover",
+      "detail-phases",
+      "r0-op-count",
+      "custom-panic",
+      "no-entrypoint"
+    ],
+    "oracle_event": "one SHA256 digest evaluation, including PDA derivation; repeated inputs count",
+    "program_features": [
+      "custom-heap",
+      "pool-adapter",
+      "private-leaf-salts"
+    ],
+    "runtime_release_evidence": "PENDING at release: observed target-cluster Agave version and source references for the two syscalls. This audit neither selects a release version nor attests a live validator.",
+    "runtime_selection": "SUPERSEDED by lead J1.R16 at c441facae60f957472b4b87180babcda4051eca3: the proof has two version-independent syscall premises. Observe the target-cluster Agave version and record its syscall source references at release; no version number is a proof parameter. Local 4.2.1 is test evidence only.",
+    "runtime_semantic_premises": [
+      "sol_sha256 computes FIPS 180-4 SHA-256 of the concatenation of its input slices.",
+      "At its derivation step, sol_create_program_address computes one SHA-256 of concatenated seeds || program_id || ASCII ProgramDerivedAddress, and rejects on-curve results. Admitted stored-bump calls satisfy seed limits; generic invalid-seed checks may return before hashing. No bump search is included."
+    ],
+    "scope": "Focused lexical maintenance for four readonly guard/wrapper declarations only; no complete invocation/effect audit",
+    "status": "Pinned focused source edges only; runtime projection and custody remain OPEN",
+    "target_os": "solana"
+  },
+  "generator_sha256": "1473b15e7a768b231c32569e750acbb84523e28d0994becdb56fa1c84001f6a7",
+  "items": [
+    {
+      "anchor": "fn readonly_meta_ok(",
+      "attributes_in_span": [],
+      "byte_end_exclusive": 7232,
+      "byte_start": 6940,
+      "call_classifications": {
+        "Err": {
+          "class": "constructor",
+          "count": 1,
+          "obligation": "Constructor occurrence only; argument and Rust context preservation remain OPEN."
+        },
+        "Ok": {
+          "class": "constructor",
+          "count": 1,
+          "obligation": "Constructor occurrence only; argument and Rust context preservation remain OPEN."
+        }
+      },
+      "calls": [
+        {
+          "callee": "Err",
+          "line": 160,
+          "offset": 238
+        },
+        {
+          "callee": "Ok",
+          "line": 162,
+          "offset": 286
+        }
+      ],
+      "first_line": 152,
+      "fragment_sha256": "3a71e5bd9dc34764b462183a697d78280283cabde559a2ff200855c48e9b84ee",
+      "id": "readonly_meta_helper",
+      "last_line": 163,
+      "loop_classifications": {},
+      "loops": [],
+      "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs"
+    },
+    {
+      "anchor": "fn require_readonly_account(",
+      "attributes_in_span": [],
+      "byte_end_exclusive": 7428,
+      "byte_start": 7234,
+      "call_classifications": {
+        "readonly_meta_ok": {
+          "class": "expanded",
+          "count": 1,
+          "obligation": "Exact one-call projection edge; actual runtime metadata correspondence is the single conditional R16ReadonlyMetadataProjection premise, not proved here.",
+          "target": "readonly_meta_helper"
+        }
+      },
+      "calls": [
+        {
+          "callee": "readonly_meta_ok",
+          "line": 166,
+          "offset": 110
+        }
+      ],
+      "first_line": 165,
+      "fragment_sha256": "5c0897580b212684af2513ee20a5bb231fec70392d0f60b493d1461ddd78c1b9",
+      "id": "readonly",
+      "last_line": 167,
+      "loop_classifications": {},
+      "loops": [],
+      "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs"
+    },
+    {
+      "anchor": "fn readonly_buffer_meta_ok(",
+      "attributes_in_span": [],
+      "byte_end_exclusive": 7739,
+      "byte_start": 7504,
+      "call_classifications": {
+        "Err": {
+          "class": "constructor",
+          "count": 1,
+          "obligation": "Constructor occurrence only; argument and Rust context preservation remain OPEN."
+        },
+        "Ok": {
+          "class": "constructor",
+          "count": 1,
+          "obligation": "Constructor occurrence only; argument and Rust context preservation remain OPEN."
+        }
+      },
+      "calls": [
+        {
+          "callee": "Err",
+          "line": 179,
+          "offset": 181
+        },
+        {
+          "callee": "Ok",
+          "line": 181,
+          "offset": 229
+        }
+      ],
+      "first_line": 173,
+      "fragment_sha256": "fb1a50c27b8a73553a130024316b58c6f5010a981ed7d478decb7e34a4ba26cc",
+      "id": "readonly_buffer_meta_helper",
+      "last_line": 182,
+      "loop_classifications": {},
+      "loops": [],
+      "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs"
+    },
+    {
+      "anchor": "fn require_readonly_buffer(",
+      "attributes_in_span": [],
+      "byte_end_exclusive": 7903,
+      "byte_start": 7741,
+      "call_classifications": {
+        "readonly_buffer_meta_ok": {
+          "class": "expanded",
+          "count": 1,
+          "obligation": "Exact one-call projection edge; actual runtime metadata correspondence is the single conditional R16ReadonlyMetadataProjection premise, not proved here.",
+          "target": "readonly_buffer_meta_helper"
+        }
+      },
+      "calls": [
+        {
+          "callee": "readonly_buffer_meta_ok",
+          "line": 185,
+          "offset": 100
+        }
+      ],
+      "first_line": 184,
+      "fragment_sha256": "a689595c5dc95f770b6edf68d7382f399421362463dc6532718df003d79806b2",
+      "id": "readonly_buffer",
+      "last_line": 186,
+      "loop_classifications": {},
+      "loops": [],
+      "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs"
+    }
+  ],
+  "opaque_call_obligations": [],
+  "opaque_loop_obligations": [],
+  "policy_sha256": "d86df7c23cd9898b203863fd9f561808ec195f630180244f5c9cb0a3ca0b44a1",
+  "preservation_obligations": [
+    "Rust name/type resolution and lexical-to-CFG preservation remain OPEN.",
+    "Actual AccountInfo field provenance is conditional on one R16ReadonlyMetadataProjection premise for both guards.",
+    "Custody and account authentication remain separate from metadata projection.",
+    "No full invocation, SBF, runtime, or designated-hash effect closure is claimed."
+  ],
+  "revision": "6fb788cbda2ce9dba9831e533260026f56b2796b",
+  "sdk_pins": [],
+  "source_files": {
+    "Cargo.lock": "f93f8f524fdd707c7a3b7feade31d015c891264b6c8fbd8bff885249e19600ea",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs": "0bd2ded7298505e03300d88c7e5a72ee33a94fddc56311ae32d36d350e39262c"
+  },
+  "status": "PINNED_LEXICAL_AUDIT_ONLY_EFFECT_CLOSURE_OPEN",
+  "universal_source_cap_proved": false
+}

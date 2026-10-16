@@ -66,6 +66,33 @@ theorem invalid_account_data_iff (owner expected : solana_pubkey.Pubkey)
   rw [guard_result]
   split <;> simp_all
 
+/-- Exact result of the extracted flags-only production guard. -/
+theorem buffer_guard_result (is_signer is_writable executable : Bool) :
+    readonly_meta.readonly_buffer_meta_ok is_signer is_writable executable =
+      if is_signer = false ∧ is_writable = false ∧ executable = false
+      then ok (core.result.Result.Ok ())
+      else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData) := by
+  cases is_signer <;> cases is_writable <;> cases executable <;>
+    simp [readonly_meta.readonly_buffer_meta_ok]
+
+theorem buffer_success_iff (is_signer is_writable executable : Bool) :
+    readonly_meta.readonly_buffer_meta_ok is_signer is_writable executable =
+      ok (core.result.Result.Ok ()) ↔
+      is_signer = false ∧ is_writable = false ∧ executable = false := by
+  rw [buffer_guard_result]
+  split <;> simp_all
+
+theorem buffer_invalid_account_data_iff (is_signer is_writable executable : Bool) :
+    readonly_meta.readonly_buffer_meta_ok is_signer is_writable executable =
+      ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData) ↔
+      ¬ (is_signer = false ∧ is_writable = false ∧ executable = false) := by
+  rw [buffer_guard_result]
+  split <;> simp_all
+
+#print axioms buffer_guard_result
+#print axioms buffer_success_iff
+#print axioms buffer_invalid_account_data_iff
+
 #print axioms pubkey_eq_value
 #print axioms pubkey_ne_value
 #print axioms guard_result

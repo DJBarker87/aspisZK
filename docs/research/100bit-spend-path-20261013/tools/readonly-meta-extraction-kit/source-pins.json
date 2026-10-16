@@ -1,9 +1,9 @@
 {
-  "source_revision": "20672afeffd5757f8f8eb024a71a1ce86001c7e2",
+  "source_revision": "6fb788cbda2ce9dba9831e533260026f56b2796b",
   "sources": [
     {
       "source": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
-      "source_sha256": "9333cde06c5d2512096fbe29fb05218304086222ee8c9cad8aec77cf1d20e6c7",
+      "source_sha256": "0bd2ded7298505e03300d88c7e5a72ee33a94fddc56311ae32d36d350e39262c",
       "declarations": {
         "readonly_meta_ok": {
           "span": [
@@ -20,10 +20,28 @@
           ],
           "sha256": "f99456efb5d40fdffe4bc06bcb7fd4d20c8b19f682571aa566f1db48ad7621ce",
           "declaration": "fn require_readonly_account(account: &AccountInfo<'_>, owner: &Pubkey) -> ProgramResult {\n    readonly_meta_ok(account.owner, owner, account.is_signer, account.is_writable, account.executable)\n}\n"
+        },
+        "readonly_buffer_meta_ok": {
+          "span": [
+            173,
+            182
+          ],
+          "sha256": "de275d3294982eba07f9dc66c7e4dad204166fd703be3d16ad8e40855fa4bf56",
+          "declaration": "fn readonly_buffer_meta_ok(\n    is_signer: bool,\n    is_writable: bool,\n    executable: bool,\n) -> ProgramResult {\n    if is_signer || is_writable || executable {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    Ok(())\n}\n"
+        },
+        "require_readonly_buffer": {
+          "span": [
+            184,
+            186
+          ],
+          "sha256": "71da182d15b35bbfb7bb71497b311ce3f641f0518bdbf0426cbc2418f9191eb9",
+          "declaration": "fn require_readonly_buffer(account: &AccountInfo<'_>) -> ProgramResult {\n    readonly_buffer_meta_ok(account.is_signer, account.is_writable, account.executable)\n}\n"
         }
       },
       "native_test_source": "programs/r1-cost-probe/src/readonly_meta_tests.rs",
-      "native_test_sha256": "4c517559925cb28180f17477efda10ac51f6fd304fe466ad7358affa0da529c5"
+      "native_test_sha256": "4c517559925cb28180f17477efda10ac51f6fd304fe466ad7358affa0da529c5",
+      "buffer_native_test_source": "programs/r1-cost-probe/src/readonly_buffer_tests.rs",
+      "buffer_native_test_sha256": "ce3a4366c34fae4491bf6dbe8ee9bc425eefdf4ba3ad30c7ba3b135ad5b8158f"
     },
     {
       "source": "programs/aspis-verifier/src/v7_pair_forest_dispatch.rs",
@@ -53,10 +71,10 @@
   "identical_helpers": true,
   "identical_wrappers": true,
   "identical_native_tests": true,
-  "scope": "Actual pure helper only. Wrapper text is pinned but not extracted; R16 metadata projection is conditional, not SDK semantics or custody.",
+  "scope": "Actual pure account and buffer helpers. Wrapper text is pinned but not extracted; one R16 metadata projection is conditional, not SDK semantics or custody.",
   "kit_files": {
     "Cargo.toml": "102130eee69c83f9fa169108fdbbce7fcee0b6fbdad321b825c580022871de2d",
-    "extract.py": "cbde92caedcefb58fa5e01ba37b4f8b8cec7060723592c5dada595406cd2fe1c",
-    "lib.rs": "dab55a23f47c002e2702e50019740f3e7a613def22eeca9d0a2b3baca97b890f"
+    "extract.py": "7493fce6b884665c04c04119e6e69bd6e0cacf717870605fa01d2ad2485cddb2",
+    "lib.rs": "bc04abc7793a9d737cd19567acc8d0f13b294f2c118b3d68cd93a1fe44578e44"
   }
 }

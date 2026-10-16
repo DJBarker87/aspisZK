@@ -1,0 +1,26 @@
+# Actual caller diagnostics and unapproved proposals
+
+Production revision `c16ab4d76619cf2cf80ece9d7e60e47975957af0` is unchanged by this work. No live worktree, SBF, runtime harness or Lean target was touched or run. The accepted Worker C binding results remain in `public-binding-joint-c16-20261016`; this bundle adds **extraction evidence only**, with `#print axioms` explicitly inapplicable because it asserts no new Lean result.
+
+`verify.py` verifies all 945 archive members, 21 exact capped extraction receipts, every retained valid LLBC and output pin. Run `python3 verify.py`. The archive contains all input snapshots, source cuts, commands, logs, wall/RSS/swap/cgroup metrics and producing tools. Every job used MemoryHigh6GiB/MemoryMax8GiB/MemorySwapMax0, peak RSS below4.6GiB, zero process/cgroup swap. The source-cut crate reuses A's 52-cut canonical QM31 carrier and appends 20 exact source items. Named opaque functions are extraction boundaries with nonsemantic typechecking stubs. Their globals are never accepted theorem premises: any future proof must replace them with explicit universal parameters or existing checked definitions.
+
+The accepted existing extended static Aeneas binary is SHA256 `4632746db1bf6c3953f2971078965a2a5a8ad6cf5f75636b46b397bc50c550b5`; source/build provenance was audited in `../public-binding-followup-20261016/extended-tool-audit.json` (also in that archive). No extractor was built or forked. Charon is `daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8` with driver `efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45`.
+
+## Concrete successful proposal
+
+The reviewable full-file patch is `../../tools/verify-prepared-prefix-kit/proposal-prepared-helper-fields/proposal.patch`. It changes only `Prepared::new` plus a new pure claim helper in `verifier.rs`:
+
+1. Return owned `(alpha,row)` values from the existing folds branch. Draw alpha0 at29, optional alpha1 at30, then query and rho in exactly the original order. Closed Variant::{S1,S2,D} has folds1 for S1 and folds2 for S2/D, preserving the row choice.
+2. Move the entire aggregation tail after rho into `prepared_claim(sem,y1,inactive,gamma,kappa)->Result<E,Error>`. Every moved statement is byte-identical after the two explicit identifier substitutions `v.y1→y1`, `v.inactive→inactive`. `prepared-proposal-audit.json` records exact original/moved/helper hashes and call-order evidence. Passing the two fields avoids reborrowing the whole View while its payload loans are active. Added `Ok(claim)` and `?` retain all existing dot errors and their order.
+
+Proposed Prepared function SHA256 `3fddfd4f2b0366f2f1f0c94153a6793df457b44f0ceda6eb13fcc96f4b31c8a1`; helper `6118f1bcf4f08dffdf24963a5c3d2a586490c7112e60c459c285a9f25291fe52`. Charon exit0,0.403s,208560KiB RSS; Aeneas exit0,0.804s,103488KiB RSS; both swap0. Valid LLBC `ef771d7ab1b1f5864da083cbab48696f96e53bc97b1a8cc2d5dc1e090492b6a1`. Generated uncompiled proposal files are under `prepared-proposal-generated`; Types `124067c1c4afe5c6090371c3c49e993a8520b72765663612cdd0b682f3265a9a`, Funs `eed11eefce6f5c729f90c49202e190131315832fe07f3ac1d269857a557d1ea2`.
+
+This is **not adopted production source**, a reachability theorem, or arithmetic refinement. Exactly six emitted external boundaries remain: `WideExact.to_le_bytes`, `WideExact.from_qm31`, `sampler.ordinary_sample`, `sampler.gamma_sample`, `Transcript.queries`, `verifier.prepared_claim`. Their exact statements are in the uncompiled `FunsExternal_Template.lean`; none is accepted as a global axiom. New generated Types must be integrated into the canonical carrier with a fresh coherent import chain; no old .olean may be paired with a changed nominal Type.
+
+## Retained failures and bounded stopping point
+
+The unchanged actual verify+Prepared source cuts produce valid LLBC. Aeneas rejects verify's range loop at `InterpMatchCtxs.ml:2739` (`equal_abs`). Actual Prepared-only fails the join after its mutable alpha loan at `InterpJoin.ml:2209`. The first actual-cut Rust preflight also failed due two missing staging declarations; exact inputs and compiler error are retained, then corrected staging passed.
+
+Review-only verify attempts are all separate inputs: while preserves the loop-body but reaches the same fixedpoint failure; ten scoped exact bodies reach unsupported function-item Arrow; replacing only the add method item with an equivalent closure advances to `InterpReduceCollapse.collapse_ctx_following_sequence` Not_found. A single visible round helper with two pure polynomial boundaries plus ten sequential calls reduces the cost but reaches the same Not_found; moving the unchanged selected-mask expression to a pure boundary still reaches it (exit2,5.212s,754688KiB RSS,swap0). No output is claimed and no further speculative verify edits were made. Rows15–32, row26 reseed and full state/record carry through the current actual verify/opening caller remain open.
+
+Prepared's owned-branch-only proposal advances past its original join then fails in the arithmetic-tail scalar match; the whole-View claim helper advances but fails borrowing a View with live payload loans; the final field-parameter helper above succeeds. These are source-changed diagnostics, never unchanged retries or cap raises. All failures remain archived.

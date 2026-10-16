@@ -1,0 +1,59 @@
+Readonly buffer helper and one shared runtime projection premise
+
+Production source revision6fb788cbda2ce9dba9831e533260026f56b2796b is based on
+Digest32 candidate ebe378259, rebased onto lead99263bea0. require_readonly_buffer
+is now a one-expression AccountInfo flags projection into readonly_buffer_meta_ok.
+The pure guard keeps signer/writable/executable order and InvalidAccountData.
+There are three static buffer call sites: stage1 proof, stage1 public, and
+stage2 authenticate_asq8_accounts proof. Stage1 accepts [3,10] and [3,11]; the
+admitted runtime fixture uses [3,10], and both variants share these guards.
+
+Fresh real-SDK Charon/Aeneas extraction emits the buffer helper. Existing Types,
+Pubkey equality, trait implementation and readonly_meta_ok are unchanged, with
+per-declaration hashes in re-pin-inventory.json. The only new extracted statement
+is readonly_buffer_meta_ok(Bool,Bool,Bool):Result(Result Unit ProgramError).
+The exact result, success iff, and complementary InvalidAccountData iff are
+proved. readonly_guards_success_iff_of_projection derives both account and
+buffer guard conditions from exactly one R16ReadonlyMetadataProjection premise.
+Actual loader projection remains conditional. Custody is separate.
+
+All four focused Lean targets passed. The extracted buffer helper has no axioms;
+its three exact-result/iff proofs use propext only. The combined runtime boundary
+has only propext, Classical.choice, Quot.sound. Native six-test suite passed:
+five existing account cases and one buffer test exhaustively covering all eight
+flag combinations through both the actual helper and real AccountInfo wrapper.
+The runtime harness passed optimized native cargo check only. It was NOT run.
+No SBF artifact was built; the lead owns J1.R13.
+
+ReadonlyMetaGeneratedAudit: exit 0; 1.602s; RSS 2619608KiB; swaps 0; scope swap max0.
+R16ReadonlyMetadataBoundary: exit 0; 1.602s; RSS 2633704KiB; swaps 0; scope swap max0.
+AspisR1ReadonlyMeta.Funs: exit 0; 1.803s; RSS 2632080KiB; swaps 0; scope swap max0.
+ExtractedReadonlyMeta: exit 0; 2.003s; RSS 2637980KiB; swaps 0; scope swap max0.
+harness-buffer-check-a: exit 0; 7.691s; RSS 513864KiB; swaps 0; scope swap max0.
+probe-buffer-tests-a: exit 0; 50.511s; RSS 540736KiB; swaps 0; scope swap max0.
+aeneas-buffer-a: exit 0; 0.257s; RSS 71456KiB; swaps 0; scope swap max0.
+charon-buffer-a: exit 0; 0.218s; RSS 130356KiB; swaps 0; scope swap max0.
+
+The opt-in J1.R13 runtime harness now prepares seven stage1 clones (honest control
+plus signer/writable/executable on proof and public) and eight stage2 clones
+(existing five master-account cases plus proof signer/writable/executable).
+Every clone disables signature verification, including controls; no custody or
+valid-signature claim follows. Stage1 control must match the independently
+successful checkpoint afterstate; all negative clones must retain exact source
+account images and return InstructionError(3, InvalidAccountData) after real
+verifier entry and consumption. Runtime execution remains the lead's gate.
+
+A narrow four-declaration lexical policy overlay validates the exact new helper
+and wrapper edges. policy-maintenance.json preserves the historical policy
+revision, old account-guard hash/calls, pre-B actual hashes, and current hashes.
+The historical full policy was already stale for require_readonly_account before
+B; its prior pins are retained. Full migration reconciliation remains OPEN.
+
+Concurrency deviation: separate failed process preflight did not suppress the
+next Funs launch. External PID1613893 SelectorReconstructIndexModel was observed
+before launch; own scope started2026-10-16T19:04:28.902566Z and succeeded1.803s.
+The external receipt completed by file timestamp19:04:29.535331Z. Exact process
+overlap duration was not instrumented. Own stop attempt found scope finished;
+external process was never signaled. This successful target was not rerun.
+All later three Lean launches used atomic initial checks and50ms monitoring,
+with zero external events. Receipts, hashes and the deviation are in the archive.
