@@ -1,0 +1,654 @@
+{
+  "source_revision": "b2ad6649de4c1b97c2270a1c8bd4bbfe5537d52c",
+  "scope": "Read-only source and retained-LLBC feasibility inventory; no new extraction or build",
+  "source_spans": [
+    {
+      "name": "HashFn",
+      "path": "crates/aspis-core/src/transcript.rs",
+      "lines": [
+        45,
+        45
+      ],
+      "source_sha256": "9bd74c66a28567e4d964896b7e2d7c0ac79840565d44b561747879868bdd9179",
+      "span_sha256": "d513852d8fca58443b9eb85d172677dea3753d9f096b24a240086ad4d9197ee7",
+      "exact_text": "pub type HashFn = fn(&[&[u8]]) -> [u8; 32];\n"
+    },
+    {
+      "name": "wire_Error",
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "lines": [
+        23,
+        36
+      ],
+      "source_sha256": "4ce97b7bc11b495dc8af3ef79f29dbbd9ebba7c2427a6db1acb8851759b1d305",
+      "span_sha256": "852ad8dffbfac851429e401a82859f8beaf3a7109d173d56962c954bb0b0ac41",
+      "exact_text": "#[derive(Clone, Copy, Debug, PartialEq, Eq)]\npub enum Error {\n    Allocation,\n    RowOrder { expected: u8, actual: u8 },\n    InvalidRow,\n    Tag { row: u8 },\n    Length { row: u8 },\n    NonCanonical { row: u8, value: usize },\n    Boundary { round: usize },\n    Terminal,\n    EqualCirclePoints,\n    TrailingBytes,\n    Public,\n}\n"
+    },
+    {
+      "name": "semantic_config",
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "lines": [
+        9,
+        12
+      ],
+      "source_sha256": "4ce97b7bc11b495dc8af3ef79f29dbbd9ebba7c2427a6db1acb8851759b1d305",
+      "span_sha256": "23c7e234beb6895523dc13287b40e0799916b211efd94834c7a46053252d3a8a",
+      "exact_text": "#[cfg(not(feature = \"private-leaf-salts\"))]\npub const DOMAIN: &[u8] = b\"aspis:r0:20261009:v1\";\n#[cfg(feature = \"private-leaf-salts\")]\npub const DOMAIN: &[u8] = b\"UNPROVED:R1:PRIVATE-SALTED:SEMANTIC:P3\";\n"
+    },
+    {
+      "name": "SemanticTranscript",
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "lines": [
+        168,
+        176
+      ],
+      "source_sha256": "4ce97b7bc11b495dc8af3ef79f29dbbd9ebba7c2427a6db1acb8851759b1d305",
+      "span_sha256": "aa329c7abea9912806d54398a7367f0d77edc5344592717528cdf4cbbdc479ce",
+      "exact_text": "/// Fresh R0 state, separate from Transcript's legacy all-zero IV. The\n/// C1-time binding is exactly SPEC \u00a79: public bytes and the C1 root in one\n/// hash, with no profile/basis/nonce/registry pre-absorbs. Row 0 is empty.\n#[derive(Clone)]\npub struct SemanticTranscript {\n    state: [u8; 32],\n    hash: HashFn,\n    next_row: u8,\n}\n"
+    },
+    {
+      "name": "new_and_getters",
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "lines": [
+        179,
+        192
+      ],
+      "source_sha256": "4ce97b7bc11b495dc8af3ef79f29dbbd9ebba7c2427a6db1acb8851759b1d305",
+      "span_sha256": "be4c232d2dd9ab9b91baae02d4b1f1145f6d45545ab38874138041283a4ba7d2",
+      "exact_text": "    pub fn new(hash: HashFn, public_bytes: &[u8], c1_root: &[u8; 32]) -> Result<Self, Error> {\n        let length = u32::try_from(public_bytes.len()).map_err(|_| Error::Public)?;\n        Ok(Self {\n            state: hash(&[DOMAIN, &[0], &length.to_le_bytes(), public_bytes, c1_root]),\n            hash,\n            next_row: 0,\n        })\n    }\n    pub fn state(&self) -> [u8; 32] {\n        self.state\n    }\n    pub fn next_row(&self) -> u8 {\n        self.next_row\n    }\n"
+    },
+    {
+      "name": "first_extraction_root",
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "lines": [
+        194,
+        208
+      ],
+      "source_sha256": "4ce97b7bc11b495dc8af3ef79f29dbbd9ebba7c2427a6db1acb8851759b1d305",
+      "span_sha256": "dba5714992602c6d93b19675f3cace06580b4545938ecf673d5fbf8b46149240",
+      "exact_text": "    fn sample_block_validated(&mut self, row: u8, framed: &[u8]) -> Result<[u8; 32], Error> {\n        if row != self.next_row {\n            return Err(Error::RowOrder {\n                expected: self.next_row,\n                actual: row,\n            });\n        }\n        // Exactly one absorb, one squeeze and one advance. Both reads\n        // use s_abs; advancing from the challenge block would be wrong.\n        let absorbed = (self.hash)(&[&self.state, &[0, 0xa0 + row], framed]);\n        let block = (self.hash)(&[&absorbed, &[1]]);\n        self.state = (self.hash)(&[&absorbed, &[2]]);\n        self.next_row += 1;\n        Ok(block)\n    }\n"
+    },
+    {
+      "name": "semantic_and_circle_validated",
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "lines": [
+        220,
+        247
+      ],
+      "source_sha256": "4ce97b7bc11b495dc8af3ef79f29dbbd9ebba7c2427a6db1acb8851759b1d305",
+      "span_sha256": "f03ced77f2f2dc594933244341e2551f75029c22867b5249df987736892b90a6",
+      "exact_text": "    pub(crate) fn semantic_validated(\n        &mut self,\n        record: ValidatedRecord<'_>,\n    ) -> Result<QM31, Error> {\n        let row = record.row();\n        if row > 24 {\n            return Err(Error::InvalidRow);\n        }\n        Ok(qm31_sample(\n            &self.sample_block_validated(row, record.framed())?,\n        ))\n    }\n\n    pub(crate) fn circle_validated(\n        &mut self,\n        record: ValidatedRecord<'_>,\n    ) -> Result<SecureCirclePoint, Error> {\n        let row = record.row();\n        let circle_row = match row {\n            25 => CircleRow::First,\n            26 => CircleRow::Second,\n            _ => return Err(Error::InvalidRow),\n        };\n        Ok(circle_sample(\n            &self.sample_block_validated(row, record.framed())?,\n            circle_row,\n        ))\n    }\n"
+    },
+    {
+      "name": "Prefix_getters",
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "lines": [
+        338,
+        353
+      ],
+      "source_sha256": "4ce97b7bc11b495dc8af3ef79f29dbbd9ebba7c2427a6db1acb8851759b1d305",
+      "span_sha256": "bf0bc176b9dc4c2f6872dda2d5eef34e214bd8368560d7503b217460424f99db",
+      "exact_text": "    pub fn record(&self, row: u8) -> Result<&'a [u8], Error> {\n        if row >= 27 {\n            return Err(Error::InvalidRow);\n        }\n        Ok(self.records[row as usize])\n    }\n    pub fn payload(&self, row: u8) -> Result<&'a [u8], Error> {\n        let framed = self.record(row)?;\n        Ok(&framed[5..])\n    }\n    pub(crate) fn validated_record(&self, row: u8) -> Result<ValidatedRecord<'a>, Error> {\n        Ok(ValidatedRecord {\n            row,\n            framed: self.record(row)?,\n        })\n    }\n"
+    },
+    {
+      "name": "begin",
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "lines": [
+        389,
+        410
+      ],
+      "source_sha256": "4ce97b7bc11b495dc8af3ef79f29dbbd9ebba7c2427a6db1acb8851759b1d305",
+      "span_sha256": "2398df4b55a57b04280b01b48189bd72be6f70ff095a90351857338493184d98",
+      "exact_text": "pub fn begin(\n    prefix: &Prefix<'_>,\n    transcript: &mut SemanticTranscript,\n) -> Result<Challenges, Error> {\n    let lambda = transcript.semantic_validated(prefix.validated_record(0)?)?;\n    let chi = transcript.semantic_validated(prefix.validated_record(1)?)?;\n    let theta = transcript.semantic_validated(prefix.validated_record(2)?)?;\n    let mut zc = [QM31::ZERO; 10];\n    for (i, value) in zc.iter_mut().enumerate() {\n        *value = transcript.semantic_validated(prefix.validated_record(3 + i as u8)?)?;\n    }\n    let mu = transcript.semantic_validated(prefix.validated_record(13)?)?;\n    let eta = transcript.semantic_validated(prefix.validated_record(14)?)?;\n    Ok(Challenges {\n        lambda,\n        chi,\n        theta,\n        zc,\n        mu,\n        eta,\n    })\n}\n"
+    },
+    {
+      "name": "complete_verify_observed",
+      "path": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+      "lines": [
+        62,
+        172
+      ],
+      "source_sha256": "964f008a0841246fe3638ce2e492d12d18d78302565aa57f8c7df4d079579ce3",
+      "span_sha256": "848ae2464ef6bbb227d200eff13e589c0afb748b04a29a932f5d774dbf03e430",
+      "exact_text": "#[inline(never)]\npub fn verify_observed(public: Public<'_>, bytes: &[u8], hash: HashFn, obs: crate::verifier::Observer) -> Result<Verified, Error> {\n    fn mark(obs: crate::verifier::Observer, i: u8) {\n        #[cfg(feature=\"detail-phases\")]\n        if let Some(f)=obs {f(crate::verifier::Phase::SemanticPart(i));}\n        #[cfg(not(feature=\"detail-phases\"))]\n        let _=(obs,i);\n    }\n    let prefix = Prefix::parse(bytes)?;\n    mark(obs, 0);\n    let mut transcript = SemanticTranscript::new(\n        hash,\n        &public.public_bytes().map_err(|_| Error::Public)?,\n        prefix.c1_root,\n    )?;\n    let challenges = wire::begin(&prefix, &mut transcript)?;\n    mark(obs, 1);\n    let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];\n    let mut alpha = [QM31::ZERO; 10];\n    #[cfg(feature = \"prover\")]\n    let mut round_checks = [[QM31::ZERO; 3]; 10];\n    for round in 0..10 {\n        let row = 15 + round as u8;\n        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;\n        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);\n        if boundary != running {\n            return Err(Error::Boundary { round });\n        }\n        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;\n        let value = polynomial\n            .iter()\n            .rev()\n            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));\n        #[cfg(feature = \"prover\")]\n        {\n            round_checks[round] = [running, boundary, value];\n        }\n        running = value;\n    }\n    mark(obs, 2);\n    let claims = claims(&prefix)?;\n    let original_challenges = aspis_core::state_only_prefix::r0::Challenges {\n        lambda: challenges.lambda,\n        chi: challenges.chi,\n        theta: challenges.theta,\n        zc: challenges.zc,\n        mu: challenges.mu,\n        eta: challenges.eta,\n    };\n    let terminal = public\n        .terminal_qm31(&claims, &alpha, &original_challenges)\n        .map_err(|_| Error::Public)?;\n    mark(obs, 3);\n    let mask = aspis_core::state_only_hiding::state_only_selected_mask_value(\n        &core::array::from_fn(|i| claims[0][i]),\n        &core::array::from_fn(|i| claims[0][16 + i]),\n        claims[0][27],\n        &alpha,\n    );\n    let extra = prefix.validated_record(25)?.decode_k::<29>(87)?;\n    let masked_terminal = mask.add(challenges.eta.mul(terminal)).add(extra[28]);\n    if running != masked_terminal {\n        return Err(Error::Terminal);\n    }\n    mark(obs, 4);\n    let state_before_z0 = transcript.state();\n    let z0 = transcript.circle_validated(prefix.validated_record(25)?)?;\n    let before_z1 = prefix.validated_record(26)?.decode_k::<29>(0)?;\n    let z1 = transcript.circle_validated(prefix.validated_record(26)?)?;\n    mark(obs, 5);\n    #[cfg(feature = \"prover\")]\n    {\n        for (i, x) in [z0.x, z0.y, z1.x, z1.y].into_iter().enumerate() {\n            crate::trace::value(3, i, aspis_core::field::WideExact::from_qm31(x));\n        }\n        for (i, x) in challenges.with_alphas(&alpha).into_iter().enumerate() {\n            crate::trace::value(0, i, x);\n        }\n        for (i, row) in round_checks.iter().enumerate() {\n            for (j, x) in row.iter().enumerate() {\n                crate::trace::value(1, 3 * i + j, aspis_core::field::WideExact::from_qm31(*x));\n            }\n        }\n        crate::trace::value(2, 0, aspis_core::field::WideExact::from_qm31(terminal));\n        crate::trace::value(\n            2,\n            1,\n            aspis_core::field::WideExact::from_qm31(masked_terminal),\n        );\n    }\n    if z0 == z1 {\n        return Err(Error::EqualCirclePoints);\n    }\n    Ok(Verified {\n        roots: [*prefix.c1_root, prefix.payload(2)?.try_into().unwrap()],\n        challenges,\n        alpha,\n        claims,\n        extra,\n        before_z1,\n        state_before_z0,\n        z: [z0, z1],\n        transcript,\n        #[cfg(feature = \"prover\")]\n        round_checks,\n        #[cfg(feature = \"prover\")]\n        terminal,\n        #[cfg(feature = \"prover\")]\n        masked_terminal,\n    })\n}\n"
+    },
+    {
+      "name": "claims_allocation",
+      "path": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+      "lines": [
+        41,
+        55
+      ],
+      "source_sha256": "964f008a0841246fe3638ce2e492d12d18d78302565aa57f8c7df4d079579ce3",
+      "span_sha256": "4420a6800849135cc48ae2fc5a53075514c65ce318d3197e0e5dbd3061b79658",
+      "exact_text": "#[inline(never)]\nfn claims(prefix: &Prefix<'_>) -> Result<Box<[[QM31; 29]; 3]>, Error> {\n    let record = prefix.validated_record(25)?;\n    let mut out =\n        aspis_core::r0::heap::uninit::<[[QM31; 29]; 3]>().map_err(|_| Error::Allocation)?;\n    unsafe {\n        for p in 0..3 {\n            out.as_mut_ptr()\n                .cast::<[QM31; 29]>()\n                .add(p)\n                .write(record.decode_k::<29>(p * 29)?);\n        }\n        Ok(out.assume_init())\n    }\n}\n"
+    },
+    {
+      "name": "Observer_and_mark",
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "lines": [
+        19,
+        24
+      ],
+      "source_sha256": "017f01c9f2250b4aa3995fd1c0ca16edc4065da0467b90f97833c1e28d2c3fef",
+      "span_sha256": "53085e04bd699d90b29d515dd135fd2b2b730b98ea4277b4a9efc267eff2f09f",
+      "exact_text": "#[derive(Debug,Clone,Copy,PartialEq,Eq)]\npub enum Error { Parse,Semantic,Transcript,Relation,Merkle,Query,Checkpoint,Allocation }\n#[derive(Debug,Clone,Copy,PartialEq,Eq)]\npub enum Phase { Parsed,Semantic,SemanticPart(u8),Prepare,CheckpointRead,Merkle(usize),Query(usize),QueryPart(usize,u8),CheckpointWrite,Relation,Final }\npub type Observer=Option<fn(Phase)>;\nfn mark(obs:Observer,p:Phase) { if let Some(f)=obs {f(p);} }\n"
+    },
+    {
+      "name": "Prepared_new",
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "lines": [
+        85,
+        114
+      ],
+      "source_sha256": "017f01c9f2250b4aa3995fd1c0ca16edc4065da0467b90f97833c1e28d2c3fef",
+      "span_sha256": "7dc823a4c9f3c0f82fb7521f04de2c673b3f167d776207d7f1d6f8e8cf1236a5",
+      "exact_text": "impl Prepared {\n    #[inline(never)]\n    pub fn new(sem:&crate::r1_semantic::Verified,v:&View<'_>,hash:HashFn)->Result<Box<Self>,Error> {\n        let mut t=Transcript::new(hash,sem.transcript.state(),v.variant);\n        let gamma=t.scalar(27,v.y1,true);\n        let kappa=t.scalar(28,&v.inactive.to_le_bytes(),false);\n        let mut alpha=[t.scalar(29,v.round0,false),E::ZERO];\n        if v.variant.folds()==2 {\n            let mut bytes=Vec::with_capacity(32+224);bytes.extend_from_slice(v.folded_root.unwrap());bytes.extend_from_slice(v.round1);\n            alpha[1]=t.scalar(30,&bytes,false);\n        }\n        let row=if v.variant.folds()==1 {30}else{31};\n        let queries=t.queries(row,v.final_message)?;\n        let rho=t.scalar_k(row+1,&[]);\n        let g=powers::<29>(gamma);let k=powers::<7>(kappa);\n        let mut parts=[E::ZERO;7];parts[0]=v.inactive;\n        for point in 0..6 {\n            let mut dot=crate::fast_pairing::EbyKDot::new();\n            for l in 0..29 {\n                let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(v.y1,l).c0()};\n                dot.push(g[l],scalar).map_err(|_|Error::Parse)?;\n            }\n            parts[point+1]=dot.finish();\n        }\n        let mut claim=E::ZERO;\n        for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}\n        crate::trace::value(14,7,claim);\n        Ok(Box::new(Self{variant:v.variant,roots:sem.roots,gamma,kappa,alpha,rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state:t.state}))\n    }\n}\n"
+    },
+    {
+      "name": "tx1",
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "lines": [
+        341,
+        350
+      ],
+      "source_sha256": "017f01c9f2250b4aa3995fd1c0ca16edc4065da0467b90f97833c1e28d2c3fef",
+      "span_sha256": "611c41033e498232f8308635eb2ade22e293524d0edc5596e3e28a80446a488d",
+      "exact_text": "#[inline(never)]\npub fn tx1(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:HashFn,obs:Observer)->Result<Vec<u8>,Error> {\n    if k>22 {return Err(Error::Parse);}\n    let v=View::parse(proof)?;mark(obs,Phase::Parsed);\n    let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;mark(obs,Phase::Semantic);\n    let p=Prepared::new(&sem,&v,hash)?;let mut a=Accumulator::new(v.variant)?;let g=powers::<29>(p.gamma);mark(obs,Phase::Prepare);\n    let geometry=QueryGeometry::for_range(&p.queries,0,k)?;\n    while a.next<k {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}\n    let bytes=checkpoint(&p,&a,proof,public_bytes,hash);mark(obs,Phase::CheckpointWrite);Ok(bytes)\n}\n"
+    },
+    {
+      "name": "opening_transcript",
+      "path": "crates/aspis-r1-cost-probe/src/transcript.rs",
+      "lines": [
+        1,
+        47
+      ],
+      "source_sha256": "c91ffe824a55ff62659e8a194d2ea201032383e4e11e5f60625404a30c691ef6",
+      "span_sha256": "c91ffe824a55ff62659e8a194d2ea201032383e4e11e5f60625404a30c691ef6",
+      "exact_text": "//! UNPROVED COST PROBE. Explicit opening schedule, including rho after queries.\nuse aspis_core::r0::CodeField;\nuse aspis_core::{HashFn,field::WideExact as E};\nuse crate::transport::Variant;\npub struct Transcript { pub state:[u8;32], hash:HashFn }\nimpl Transcript {\n    pub fn new(hash:HashFn, semantic_state:[u8;32], variant:Variant) -> Self {\n        #[cfg(not(feature = \"private-leaf-salts\"))]\n        let domain: &[u8] = b\"UNPROVED:R1:COST-PROBE:P2\";\n        #[cfg(feature = \"private-leaf-salts\")]\n        let domain: &[u8] = b\"UNPROVED:R1:PRIVATE-SALTED:P3\";\n        Self { state:hash(&[domain,&[variant.tag()],&semantic_state]), hash }\n    }\n    pub fn absorb(&mut self, row:u8, payload:&[u8]) {\n        self.state=(self.hash)(&[&self.state,&[0,0xa0+row],&(payload.len() as u32).to_le_bytes(),payload]);\n    }\n    pub fn block(&mut self,row:u8,payload:&[u8])->[u8;32] {\n        self.absorb(row,payload);\n        let block=(self.hash)(&[&self.state,&[1]]);\n        self.state=(self.hash)(&[&self.state,&[2]]);\n        block\n    }\n    pub fn scalar(&mut self,row:u8,payload:&[u8],nonzero:bool)->E {\n        let block=self.block(row,payload);\n        let out=if nonzero {crate::sampler::gamma_sample(&block)} else {crate::sampler::ordinary_sample(&block)};\n        crate::trace::value(4,row as usize,out); out\n    }\n    /// Final query-residual batching: at most 22 coefficients, so a nonzero\n    /// residual has at most 21 roots even when sampled from the K subfield.\n    /// Gamma and both folding challenges continue to use E.\n    pub fn scalar_k(&mut self,row:u8,payload:&[u8])->aspis_core::field::QM31 {\n        let out=crate::sampler::qm31_sample(&self.block(row,payload));\n        crate::trace::value(4,row as usize,E::from_qm31(out)); out\n    }\n    pub fn queries(&mut self, row:u8, payload:&[u8])->Result<[u32;22],crate::verifier::Error> {\n        self.absorb(row,payload);\n        let mut blocks=[[0;32];8];let mut advances=blocks; let mut state=self.state;\n        for k in 0..8 {\n            blocks[k]=(self.hash)(&[&state,&[1]]);\n            advances[k]=(self.hash)(&[&state,&[2]]);state=advances[k];\n        }\n        let (q,state)=aspis_core::r0_transcript::queries_from_pairs(&blocks,&advances).map_err(|_|crate::verifier::Error::Transcript)?;\n        self.state=state;\n        for (i,&u) in q.iter().enumerate() { crate::trace::value(5,i,E::from_m31(aspis_core::field::M31(u))); }\n        Ok(q)\n    }\n}\n"
+    },
+    {
+      "name": "queries_from_pairs",
+      "path": "crates/aspis-core/src/r0_transcript.rs",
+      "lines": [
+        302,
+        318
+      ],
+      "source_sha256": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1",
+      "span_sha256": "76e039e646e20118c4a09202855868249527495122e9d37e55b19915b5f995e3",
+      "exact_text": "/// SPEC \u00a72 adapter for callers that materialize all eight squeeze/advance\n/// pairs before scanning. Returns scanOut's selected state, which can precede\n/// the eighth advance. The sampler and its stop test are shared with R-B.\npub fn queries_from_pairs(\n    blocks: &[[u8; 32]; 8],\n    advances: &[[u8; 32]; 8],\n) -> Result<([u32; QUERY_COUNT], [u8; 32]), QuerySampleError> {\n    let mut scan = QueryScan::default();\n    let mut state = advances[7];\n    for k in 0..8 {\n        if scan.scan(&blocks[k]) {\n            state = advances[k];\n            break;\n        }\n    }\n    Ok((scan.finish()?, state))\n}\n"
+    },
+    {
+      "name": "release_callbacks",
+      "path": "programs/r1-cost-probe/src/lib.rs",
+      "lines": [
+        10,
+        28
+      ],
+      "source_sha256": "65ffe02678f80509759f4828c62439f075b3edbcc8dc3a2f5f58dd3256d6e30d",
+      "span_sha256": "2bb52510e34f9da54d90723e290f5c914747a1f99de531a76717ad4ab470134f",
+      "exact_text": "#[inline(never)]\nfn mark(phase:Phase){\n    match phase {\n        Phase::QueryPart(i,j)=>msg!(\"r1:query-part:{}:{}\",i,j),\n        Phase::SemanticPart(i)=>msg!(\"r1:semantic-part:{}\",i),\n        Phase::Parsed=>msg!(\"r1:parsed\"),Phase::Semantic=>msg!(\"r1:semantic\"),Phase::Prepare=>msg!(\"r1:prepare\"),\n        Phase::CheckpointRead=>msg!(\"r1:checkpoint-read\"),Phase::CheckpointWrite=>msg!(\"r1:checkpoint-write\"),\n        Phase::Merkle(i)=>msg!(\"r1:merkle:{}\",i),Phase::Query(i)=>msg!(\"r1:query:{}\",i),\n        Phase::Relation=>msg!(\"r1:relation\"),Phase::Final=>msg!(\"r1:final\"),\n    }\n    sol_log_compute_units();\n}\nfn error(e:verifier::Error)->ProgramError{msg!(\"r1:error:{:?}\",e);ProgramError::InvalidInstructionData}\n#[inline(never)]\nfn first(public_bytes:&[u8],proof:&[u8],k:usize)->Result<Vec<u8>,ProgramError>{\n    let statement=decode_pool_v1_pair_forest_terminal_statement_v1(public_bytes).map_err(|_|ProgramError::InvalidAccountData)?;\n    let public=match &statement{PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public}=>Public::Transfer(public,&common.lane_transition),PoolV1PairForestTerminalStatementV1::Withdrawal{common,public}=>Public::Withdrawal(public,&common.lane_transition)};\n    verifier::tx1(public,public_bytes,proof,k,|p|hashv(p).to_bytes(),Some(mark)).map_err(error)\n}\n"
+    }
+  ],
+  "first_root": {
+    "name": "r1_wire::SemanticTranscript::sample_block_validated",
+    "new_dependency_cone": "real HashFn, SemanticTranscript, Error, u8 checked arithmetic, arrays/slices/reborrows, three dynamic dispatches; no field/parser/SDK/Selected dependencies",
+    "proposed_statement": {
+      "premises": [
+        "actual source/extracted successful execution",
+        "input row equals old next_row and row <= 26",
+        "retain arbitrary real callback invocations and effects"
+      ],
+      "designated_dispatches_in_order": [
+        "hash([old.state,[0,160+row],framed]) -> absorbed",
+        "hash([absorbed,[1]]) -> returned block",
+        "hash([absorbed,[2]]) -> new.state"
+      ],
+      "postconditions": [
+        "new.next_row=old.next_row+1",
+        "new.hash=old.hash"
+      ],
+      "mismatch": "RowOrder before any designated dispatch; unchanged transcript",
+      "qualification": "Three designated dispatches is not three total SHA calls. Panic/unwind/nonreturn and callback-internal behavior remain visible; no actual emitted theorem yet."
+    }
+  },
+  "configuration": {
+    "private-leaf-salts": true,
+    "prover": false,
+    "detail-phases": false,
+    "variant": "admitted S2; D also has two folds but is not the selected route",
+    "optimized-terminal": "retain program dependency-selected exact feature list",
+    "runtime_callbacks": "lib.rs first passes hashv closure and Some(mark); Observer remains explicit, not assumed absent"
+  },
+  "known_blocker": {
+    "aeneas_revision": "b59d5188c082f704a418c7cb4e52ad69328002d1",
+    "path": "src/llbc/RegionsHierarchy.ml",
+    "file_sha256": "45e315ac59bfd21cfe2ee128e9631057a5e233d39d0d0110d35f9a75b5f29a47",
+    "lines": [
+      165,
+      174
+    ],
+    "exact_text": "    | TFnPtr binder ->\n        (* TODO: *)\n        [%cassert_opt_span] span\n          (binder.binder_regions = [])\n          \"We don't support arrow types with locally quantified regions\";\n        (* We can ignore the outer regions *)\n        let { Types.inputs; output; _ } = binder.binder_value in\n        List.iter (explore_ty []) (output :: inputs)\n    | TFnDef { binder_regions; binder_value = { kind = _; generics } } ->\n        (* For now we check that there are no regions anywhere.\n",
+    "retained_fnptr_json_path": "$.translated.fun_decls[0].signature.inputs[0].HashConsedValue[1].FnPtr",
+    "retained_fnptr": {
+      "regions": [
+        {
+          "index": 0,
+          "name": null,
+          "mutability": "Unknown"
+        },
+        {
+          "index": 1,
+          "name": null,
+          "mutability": "Unknown"
+        }
+      ],
+      "skip_binder": {
+        "is_unsafe": false,
+        "abi": "Rust",
+        "is_variadic": false,
+        "inputs": [
+          {
+            "HashConsedValue": [
+              304,
+              {
+                "Ref": [
+                  {
+                    "Var": {
+                      "Bound": [
+                        0,
+                        0
+                      ]
+                    }
+                  },
+                  {
+                    "HashConsedValue": [
+                      303,
+                      {
+                        "Slice": {
+                          "HashConsedValue": [
+                            302,
+                            {
+                              "Ref": [
+                                {
+                                  "Var": {
+                                    "Bound": [
+                                      0,
+                                      1
+                                    ]
+                                  }
+                                },
+                                {
+                                  "HashConsedValue": [
+                                    301,
+                                    {
+                                      "Slice": {
+                                        "HashConsedValue": [
+                                          300,
+                                          {
+                                            "Literal": {
+                                              "UInt": "U8"
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                },
+                                "Shared"
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  "Shared"
+                ]
+              }
+            ]
+          }
+        ],
+        "output": {
+          "HashConsedValue": [
+            306,
+            {
+              "Array": [
+                {
+                  "Deduplicated": 300
+                },
+                {
+                  "kind": {
+                    "Literal": {
+                      "Scalar": {
+                        "Unsigned": [
+                          "Usize",
+                          "32"
+                        ]
+                      }
+                    }
+                  },
+                  "ty": {
+                    "HashConsedValue": [
+                      305,
+                      {
+                        "Literal": {
+                          "UInt": "Usize"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "current_alias_identical": true,
+    "prior_result": "Aeneas exit2, no Lean output; arrow locally quantified regions rejected",
+    "references": [
+      {
+        "path": "docs/research/100bit-spend-path-20261013/evidence/j1e-private-leaf-extraction-20261015/PrivateLeaf.llbc",
+        "sha256": "37369fd24fde220f235ad4a6ad9a2306f894436ae0056969344d4b8b6d770bf6"
+      },
+      {
+        "path": "docs/research/100bit-spend-path-20261013/evidence/j1e-private-leaf-extraction-20261015/PrivateLeaf.ullbc",
+        "sha256": "bf0964a73ae5ba10b4337d781050ac31a99b822153de3a2fa579690b952c1d5e"
+      },
+      {
+        "path": "docs/research/100bit-spend-path-20261013/evidence/j1e-private-leaf-extraction-20261015/translate.log",
+        "sha256": "55d5a9365a36a8c39c23a83864f030ea61f50466d4ae5776ff55df1c6720a9de"
+      },
+      {
+        "path": "docs/research/100bit-spend-path-20261013/evidence/j1e-private-leaf-extraction-20261015/commands.json",
+        "sha256": "223db7b632e82650bb0ee718c02b9574b173fe7dbf8f9d4b5e144d8c87c68797"
+      },
+      {
+        "path": "docs/research/100bit-spend-path-20261013/evidence/j1e-private-leaf-extraction-20261015/source/hash_fn.rs",
+        "sha256": "d513852d8fca58443b9eb85d172677dea3753d9f096b24a240086ad4d9197ee7"
+      },
+      {
+        "path": "docs/research/100bit-spend-path-20261013/evidence/j1e-private-leaf-extraction-20261015/provenance.json",
+        "sha256": "f49fc31fd5379b2e08f618eb8bae31a7f0f7974078e04c17e6b508eb2c19dc0b"
+      }
+    ],
+    "new_root_result": "NOT RUN; expected same region frontier, not a measured result",
+    "matching_linux_tools": {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/native-r18-tools-20261016/tools-final-pins.json",
+      "sha256": "b3b5117fb70cda0dfe44968f0e9b2c760dd3f479dfa4b505b41ec7034d489049"
+    }
+  },
+  "proposed_remedies": [
+    "Lead-reviewed actual-source generic digest trait with concrete release implementation; preserve callbacks/effects and all real callsites; no wrapper retaining blocked HashFn representation",
+    "Lead-reviewed semantic callback lowering supporting bound regions/reborrows and dynamic/unwind behavior; no binder erasure or oracle/extern axiom"
+  ],
+  "existing_interfaces": [
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixParse.lean",
+      "sha256": "03256548bbb68a040f4b2a65aedf7d48a1a8e60d511fa38d2a01107ad5094d88",
+      "declarations": {
+        "parse_success": [
+          42
+        ],
+        "parse_record_of_success": [
+          203
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixStrictPayload.lean",
+      "sha256": "fd1011cc0556e071d261b1309b01cb04c49ad59920fac1be4cf3f6632dae0476",
+      "declarations": {
+        "prefix_record_strict_payload": [
+          52
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixTypedFull.lean",
+      "sha256": "10cfa4e354720480b24c219fd6726d43bdb1dc3d2c92b9e84a9f11fbf6c9c678",
+      "declarations": {
+        "completedRecords": [
+          12
+        ],
+        "parse_decodeFull": [
+          36
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixCompletedDecode.lean",
+      "sha256": "fa934b9addb96db392a652dcdc3d86b3063a191da341b712099c6f4ffbfe1a61",
+      "declarations": {
+        "completed_decode": [
+          14
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/ExtractedQM31SamplerCorrect.lean",
+      "sha256": "0580577c6824481280dc16023c8148cab8274e9419394a8da125196a0ecf9e49",
+      "declarations": {
+        "sample_total": [
+          59
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/UnifiedSemanticRecovery.lean",
+      "sha256": "971f84897f0c546fdd6488e197bc887062fb3904a4e520dc6595ada317a14d88",
+      "declarations": {
+        "typed": [
+          21,
+          26
+        ],
+        "typed_before_row": [
+          26
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/SelectedCompletedSemantic.lean",
+      "sha256": "8a750277b530555c5c4ee932472af92506b2d3afaa29115345785f625b7d6a88",
+      "declarations": {
+        "pairs": [
+          23,
+          29
+        ],
+        "semantic_recs_challenges": [
+          49
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/SemanticPrefixCompletedAgreement.lean",
+      "sha256": "2cbfc4cbb4d83c07b3dac196c71f8c4a59dfaec3a9e3adb82e285d0a3867fa5f",
+      "declarations": {
+        "completed_read_of_decode": [
+          45
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/SemanticPrefixCutAgreement.lean",
+      "sha256": "67e6d275dc1f87b3a2ef24225c5549ce7ef9928ec49469184206cc8318377e7b",
+      "declarations": {
+        "typed_read_append_of_decode": [
+          39
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/TypedPrefixExtension.lean",
+      "sha256": "80ec6b3e680e4b0c48b0d732e2afd89deaeb7b68d909c6600e6ada55c7bcd4a3",
+      "declarations": {
+        "semantic_typed_append_eq": [
+          18
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/UnifiedPhases.lean",
+      "sha256": "377f0b1a3f293634d7add5dcc6d13c9acd2c13e6f1103949d447ab5d43619eb5",
+      "declarations": {
+        "semantic_step": [
+          48
+        ],
+        "semantic_end": [
+          30
+        ],
+        "opening_root": [
+          61
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/UnifiedRecordCompletion.lean",
+      "sha256": "a81f89c897a35c4b61039f7e1ce8c1a0707ab0450607a1433354939dfd6d1d75",
+      "declarations": {
+        "completed_eq_transcript": [
+          18
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/UnifiedQueryRun.lean",
+      "sha256": "ed08e8517bff0607f1c4e3e33a46729636271d88ce4b96dafe74e93bf4289153",
+      "declarations": {
+        "query_state": [
+          48
+        ],
+        "rho_address": [
+          56
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/QuerySamplerBridge.lean",
+      "sha256": "80a3ee6df0709eabb14fe51635a10940bfcc7e5a9ad6d1e14b39fe8818f6b179",
+      "declarations": {
+        "output": [
+          23
+        ],
+        "reads_pairs": [
+          36
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/SelectedTranscriptParams.lean",
+      "sha256": "489f8b49c6a102f85c511ad4f4907dbeca479322b7184a563eda8c4a17c2dce0",
+      "declarations": {
+        "params": [
+          40,
+          52,
+          55
+        ],
+        "publicStatement": [
+          57,
+          67,
+          72,
+          77
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/SelectedChallengeMap.lean",
+      "sha256": "36bcd2bb277dcb2b34564656c71ebb7b14742c584ce931328a2ad1dbe03e5aad",
+      "declarations": {
+        "semantic_row": [
+          22
+        ],
+        "first_circle_view": [
+          49
+        ],
+        "second_circle_view": [
+          54
+        ],
+        "rho_row": [
+          59
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/CircleRecordCodec.lean",
+      "sha256": "b1fba8dced40f86c1b7d1f28eef2c6c25df720f36ffd9a18b464d6a57296f71f",
+      "declarations": {
+        "decode": [
+          22,
+          36,
+          54
+        ],
+        "encode": [
+          19,
+          26,
+          30,
+          42
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/OpeningRecordCodec.lean",
+      "sha256": "7ac150cff7ede99cf4916e81e8ba348bdcf785e6d7771cf46aa9622756fd6387",
+      "declarations": {
+        "decode": [
+          62,
+          81,
+          106,
+          132,
+          192
+        ],
+        "encode": [
+          54,
+          78,
+          84,
+          97,
+          101,
+          139,
+          180
+        ]
+      },
+      "status": "source inventory; no new cache/coherence claim"
+    }
+  ],
+  "open_hypotheses": [
+    "hbytes for actual recovered records, not a chosen arbitrary list",
+    "htyped and ha with consistent first-read history, row-zero/init frame, endpoint, budgets and no badColl",
+    "C2 commitment-word recovery and challenge table provenance",
+    "source caller success -> actual parse and serializer successes on same values",
+    "circle/opening/query source codecs and sampler maps",
+    "callback source/LLBC/extractor/runtime preservation"
+  ],
+  "resources": {
+    "no_job_launched": true,
+    "reviewed_potential_scope": {
+      "MemoryHigh": "6G",
+      "MemoryMax": "8G",
+      "MemorySwapMax": 0,
+      "timeout_seconds": 180,
+      "one_job": true,
+      "cold_dependencies": false
+    },
+    "historical_tiny_charon_sampled_peak_kib": 151312,
+    "estimate": "tiny root should be substantially smaller than full verifier; no new measured bound; full caller cone/RSS OPEN"
+  },
+  "separation": "B owns actual SDK readonly guard; no AccountInfo/Pubkey/ProgramError modifications, no 337/377 replay, no live core edits"
+}
