@@ -1,0 +1,93 @@
+J1.a/J1.b execution-link inventory; no closure claim
+
+Read pinned root 59534c0eb, including its new PublicCodecAgreement adapter;
+production sources equal b40d1cfff. Exact full revisions, declaration signatures,
+line ranges and file hashes are in evidence/j1-ab-source-boundary-inventory-20261016/
+signatures.json. No live-owned file, source or theorem is changed; no build ran.
+Lean names below use AspisR1 unless another namespace is written explicitly.
+
+J1.a: existing conditional contract and fixed suppliers
+PublicSourceBoundary.decoded_of_validated_source_success requires:
+SourceSerializerRefines sourceReturns project; SourceValidationAmountGuard
+validated project; sourceReturns source bytes; validated source. The two
+contracts quantify over actual successes, with fixed source coordinate mapping;
+choosing predicates to fit the desired bytes would not discharge them.
+
+AspisR1PublicSerializer.RawBridge431.source_success_raw requires actual
+generated Public.public_bytes p = ok (.Ok out), and proves
+PublicRawCore.serialize (project p) = some (out.val.map rawByte).
+Its project copies the live index/frontier and candidate root/frontier.
+AspisR1PublicSerializer.WithdrawalCarrier431.validated_source_success additionally
+requires HelperValidated p on the fixed nine-field toValidator mapping. It
+supplies the amount guard and nonzero withdrawal for that same projection;
+the transition remains arbitrary. PublicRawAmountGuardAgreement.
+decoded_of_guarded_core_success consumes exactly serialize-success plus the
+amount guard. Live PublicCodecAgreement.parsePublic_of_decode then supplies
+SemanticPublicWire.parsePublic bytes = some pub, the downstream hpub.
+Generated 4.31 and model 4.32 results still need the coordinated single-kernel
+port; these statements do not supply concrete Rust execution semantics.
+
+Smallest missing caller link: prove accepted stage1 reaches both successful
+ASF8 decoding and the same typed payment/transition at programs/r1-cost-probe/
+src/lib.rs:24-27, then successful helper validation and semantic serialization.
+Actual sites: r1_pool_adapter.rs:902-937; pair_forest_terminal.rs:227-275,
+386-415; r1_semantic.rs:70-77. Stage2 reconstructs/encodes ASF8 at adapter
+813-873,965-976. These paths are inspected, not extracted caller theorems.
+
+Separate missing bindings: ASF8/ASWP and late-record codec refinement; account
+owner/PDA/release authentication (adapter628-732); checkpoint provenance plus
+proof/ASF8 rehash binding (verifier302-339); and Pool custody transport.
+Semantic bytes omit account keys, pool/domain, anchor sequence, destination,
+live sequence/root and candidate index. Equality of semantic bytes cannot bind
+them. Pool pair_forest.rs:1467-1478 plans the destination/amount transfer;
+1557-1558 invokes it and checks exact token deltas. The verifier's seven-account
+list has no destination account; host-only terminal.validate_accounts is not
+an on-chain caller theorem. Existing J1-PUBLIC-CALLER-BOUNDARY explains these
+paths; no current R1 Lean execution bridge was found for them.
+
+J1.b: record success is not Prefix provenance or state carry
+ExtractedRecordFraming.parse_record_success assumes only generated parse_record
+success and supplies exact tag/size/header, returned-slice equality and validator
+success. ExtractedRecordPayloadSoundness.parse_record_full_payload also assumes
+14<=row.val and supplies complete canonical 32-byte chunks. Their high component
+is zero: QM31 restriction, not M31 descent. Root rows 1/2 remain arbitrary bytes.
+The remaining representation link maps these machine bytes/limbs to the exact
+SemanticRecordCodec/CircleRecordCodec payload, without substituting a model
+parse-success premise for the generated success.
+
+Next source invariant: r1_wire.rs:278-297 parses exactly 27 consecutive frames
+after C1 and rejects trailing bytes; record/validated_record:299-312 must retain
+that construction provenance. validated_record merely wraps a stored slice:
+accessor success alone does not imply validation. TypedPrefixParser.prefix_stable
+and SemanticPrefixCodec.decodeFull are list-model facts, not this Rust invariant.
+LiteralSemanticPayloadBridge.read_of_decodeFull_atC2 additionally requires all
+25 messages valid, the fixed C2 word at row 2, and successful decodeFull;
+the literal committed word is a separate recovery obligation.
+
+Raw P1 wire rows 0-24 sample QM31; 25/26 sample circle z0/z1 (r1_wire.rs:220-246).
+Protocol numbering does not shift: UnifiedSampler.samp/row_zero combine C1
+initialization and the fixed empty raw-row0 challenge in row0's .initial c1.
+Rows 1-25 use .payload, with row25 already the first circle challenge; row26
+samples the second circle then reseeds (row_reseed). Rows 27-30 are opening,
+31 queries, 32 rho. TranscriptView.ordinary/ordinary_cons replace the first raw
+payload by .initial while retaining its challenge. SelectedChallengeMap.
+semantic_row requires i<25; first_circle_view/second_circle_view identify 25/26.
+LiteralTranscript.valid/erase refine rows 2/30 to c2/second before erasing them
+to payload; the Unified constructor schedule must not be confused with this.
+These are inspected source/model schedules, not a proved execution link.
+
+UnifiedRecordCompletion.completed_eq_transcript requires hD, label0=160,
+encoded row0=emptyRecord and n<=31. UnifiedPhases.semantic_step/opening_step
+preserve ordinary advances; semantic_end and opening_root distinguish the
+pre-reseed state from row26's returned reseeded state. UnifiedQueryRun.query_state
+and rho_address carry the selected query state into rho. Rust transcript.rs:35-43
+precomputes eight pairs but uses queries_from_pairs' selected state
+(r0_transcript.rs:303-317), not necessarily advances[7]. These are model laws;
+actual sampler values, callback inputs and state updates still need correspondence.
+
+Terminal consumer LiteralAcceptanceTerminal.conditional_d3 requires accepted
+eval H (V pub pf) to provide Checks on the same 33-round transcript, for every H.
+Checks includes publicParsed, matchingRead, openingRead, valid query/rho entries,
+queryDecode, firstMatch, residualBatch, claimParse, polynomialParse and
+semanticChecks. J1.a/b supply only relevant clauses after their execution links;
+they do not establish that entire premise, word recovery or acceptance soundness.

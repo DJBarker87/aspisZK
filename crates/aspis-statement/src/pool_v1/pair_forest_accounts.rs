@@ -164,7 +164,14 @@ pub struct PoolV1PairForestCheckpointPlanV1 {
 
 #[inline]
 fn digest_is_canonical(digest: &Digest) -> bool {
-    digest.iter().all(|limb| limb.0 < P)
+    let mut i = 0;
+    while i < digest.len() {
+        if digest[i].0 >= P {
+            return false;
+        }
+        i += 1;
+    }
+    true
 }
 
 #[inline]

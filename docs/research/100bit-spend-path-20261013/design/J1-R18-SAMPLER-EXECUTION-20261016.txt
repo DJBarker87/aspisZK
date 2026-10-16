@@ -1,0 +1,71 @@
+J1.R18 indexed QM31 sampler; progress and remaining boundary
+
+Production commit 670b7e149f94004baa5b138bdc2db28f3bc646bd changes only sampler.rs.
+qm31_div_pass returns the entire owned quotient array and remainder; qm31_digits
+assembles little-endian words by checked indices and explicitly carries the
+quotient between four passes. The public wrapper preserves c0.a,c0.b,c1.a,c1.b
+order. Ordinary/gamma/circle routines and current QM31 arithmetic are unchanged.
+
+Three optimized tests retain the exact old sampler body and an iterator pass
+reference, compare every quotient word over four passes, cover every single bit,
+word/modulus boundaries, independent u128 base-P expectations, and 4096 deterministic
+full blocks. The exact eight-cut kit passed all 3 tests in 0.220s/136536KiB RSS;
+actual crate `cargo test --release --locked --offline -p aspis-r1-cost-probe --lib
+sampler::qm31_index_tests` passed 3/3 in 46.600s/543888KiB RSS. Both reported zero
+swaps, no memory events, and separate systemd scopes with MemoryHigh 6G,
+MemoryMax 8G, MemorySwapMax 0. Native cache was privately copied, not shared writable.
+
+The new kit pins eight original declarations and the cfg(test)-only test module.
+Its checker proves source-text equality, including old-reference equality modulo
+name/indent; this is not Rust/Lean refinement. No arithmetic method is selected.
+The matching unpatched Linux b59/cb50 tools emitted ten nonopaque functions,
+three carrier types and one global. Exact binaries and source cuts are pinned
+in evidence/qm31-index-sampler-extraction-20261016. Charon/Aeneas passed in
+0.176s/161700KiB and 0.368s/81136KiB, with zero swaps. Emitted code explicitly
+writes the quotient array and carries it through the outer loop. The audit
+checks this inventory, not semantic equivalence.
+
+Original generated Types/Funs compile unchanged under the verified Lean 4.32
+backend, with 11 standard-only axiom reports. Separate existing model rechecks
+passed 13 modules and 67 standard-only reports. The generated and model receipts
+are retained in distinct dated evidence bundles; no 4.31 object was selected.
+ExtractedQM31SamplerPassLoop.loop_correct now proves successful termination for
+every remaining index j <= 8 and bounded remainder, identifies the entire
+quotient prefix with SamplerWordPass.machineProcess, and preserves the untouched
+suffix. ExtractedQM31SamplerDivision.div_pass_correct exposes this result for
+the actual complete qm31_div_pass, including the returned canonical digit.
+These three predecessor modules have nine standard-only axiom reports; their
+failed local proof attempts and exact candidate sources are retained separately.
+
+ExtractedQM31SamplerDigits.digits_total now proves unconditional termination,
+the exact four model digits, and canonicality for the actual emitted qm31_digits.
+Its loop invariant preserves the written digit prefix and carries the entire
+quotient array. The first focused check passed in 2.012s/2663840KiB process RSS
+(456790016 bytes sampled cgroup), zero swaps, with four standard-only reports.
+Exact source, checked predecessor pins, receipts and objects are retained in
+evidence/qm31-index-sampler-digits-432-20261016.
+
+ExtractedQM31SamplerCorrect.sample_total now proves actual emitted qm31_sample
+success for every typed 32-byte block, canonicality of the fixed toCurrent
+carrier projection, and exact c0.a,c0.b,c1.a,c1.b coordinates equal to
+SamplerNatModel.qm31Digits(SourceSamplerByteRank.rank block). It has no execution,
+model-equation, or canonicality premise. byteWord_eq_four and source_words_eq_model
+connect the actual primitive byte reads to the existing rank model.
+sampled_decode_eq_iff reuses the unchanged current-QM31 equality theorem for actual
+sample outputs. No current QM31 arithmetic is re-extracted. These results compose
+the independently checked byte-loop and constructor bridges through their exact
+emitted interfaces. The final focused check passed in 2.212s/3858604KiB process
+RSS (745439232 bytes sampled cgroup), zero swaps, and seven standard-only reports.
+
+The final snapshot retains the failed whole-module SamplerWordRead audit:
+unwrap_success/read_success depend on Formatter and are excluded claims. The
+consumed four/source_word/rank declarations and all final sampler exports have
+separate standard-only audits. A historical CircleGroupOrder object with a
+mismatched import header was rejected; unchanged current CircleGroupOrder and
+its three dependent rank targets were checked before use. Evidence, failed
+candidates, source/import/object pins and import-overlay journals are retained
+in evidence/qm31-index-sampler-correct-432-20261016 and the rank audit bundle.
+
+Rust/compiler translation preservation, source-call reachability, challenge-state
+timing, and ordinary/gamma/circle source correspondence are outside this theorem.
+Old sampler extraction failures remain in their original bundle.

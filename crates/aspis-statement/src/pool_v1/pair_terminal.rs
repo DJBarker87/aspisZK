@@ -126,14 +126,15 @@ fn validate_verified_afterstate(
     {
         return Err(PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex);
     }
-    if afterstate.next_root.iter().any(|limb| limb.0 >= P)
-        || afterstate
-            .next_frontier
-            .iter()
-            .flatten()
-            .any(|limb| limb.0 >= P)
-    {
+    if !super::pair_tree_profile::digest_is_canonical(&afterstate.next_root) {
         return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);
+    }
+    let mut level = 0;
+    while level < afterstate.next_frontier.len() {
+        if !super::pair_tree_profile::digest_is_canonical(&afterstate.next_frontier[level]) {
+            return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);
+        }
+        level += 1;
     }
     Ok(())
 }

@@ -1,0 +1,91 @@
+R18 direct-verifier CU replay proposal; source inspection only
+
+Inspection: coordinator 5e7b6e6a48e48f129c7e20757548a89390ea4057.
+After R17 green, add only tools/r1-cost-probe/src/bin/r18_replay.rs, using
+that package's existing lock/dependencies (LiteSVM 0.16.0, Agave 4.2.1).
+No broad pool_gate rewrite, proof generation, Pool/registry deployment or
+full R13 release replay. Production Prefix draft remains unapplied.
+
+Why this route
+programs/r1-cost-probe/src/pool_route.rs admits [3,10], [3,11], ASQ8.
+r1_pool_adapter.rs:902 stage1 requires three accounts; :948 stage2 seven.
+Existing tools/r1-cost-probe/src/main.rs sends legacy [1,k]/[2], rejected
+by the release guard. pool_gate.rs:2024 still sends two stage1 accounts
+and packages ASPU plus checkpoint tail. Its provisioning cannot be reused.
+Reuse only transaction/measurement patterns, not either obsolete route.
+
+Frozen input
+Use evidence/p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/
+r1-s2-proof.bin (124343 bytes; SHA256
+8569435667420b36a980493477f8fef7ef47e7351122647cf3747054079d4d62)
+and r1-s2-public-asf8.bin (1880 bytes; SHA256
+72f067d263af326b017284579f30e3da7c843c6cbb29f1c6df94c8afbb1f2172).
+These are already used by r1_checkpoint_tests.rs:19-28. Decode/re-encode
+ASF8 identically; never regenerate or mutate proof/public for the replay.
+Stage1Fixture:80-112 supplies the correct new proof image: encoded candidate
+(688 bytes) || raw proof, total 125031, with neither ASPU nor checkpoint tail.
+
+Current account images
+Use canonical encoders, not old serialized registry/account fixtures, whose
+versions predate G8. Adapt PdaFixture:514-720, but not its random mint/empty
+lane: copy live_snapshot, candidate, checkpoint sequence/global root and
+payment from decoded ASF8. Canonical master uses pool=[0x41;32], mint=[0x42;32]
+(pool_gate.rs:1177-1252); assert derived master/checkpoint/lane keys equal
+ASF8. Use saved sequence 42, output lane 3, live next_pair_index 1023; assert
+sequence equals next_pair_index. Copy root/frontier exactly; use exported
+POOL_V1_PAIR_EMPTY_ROOTS for lane encoding. Master asset/deployment domain
+come from payment/snapshot; token program is legacy SPL Token. Preserve
+initialized mask 0xff, has_checkpoint=true, next sequence 43 and zero historical
+lane-sequence arrays, matching the original fixture.
+
+Keep immutable-registry AND immutable-deployment policy flags; registry
+program=[0x44;32], policy=[7;32], authority zero. Encode current RegistryV2
+and EntryV2, derive their canonical bumps plus both loader ProgramData bumps,
+active entry at fixed slot 150, no retirement, and exact private-leaf-salt
+profile/release constants from r1_pool_adapter.rs:70-90. Verifier ID remains
+7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue. Use fixed nonzero fixture
+executable-hash descriptors in BOTH runs, recording loaded ELF SHA separately.
+No registration, immutability or historical-provenance proof follows from
+preloading these images. Both runs use byte-identical account images.
+
+Setup and admitted execution
+Create fresh retained payer/checkpoint keys once (0600 files, no existing keys
+modified); use them in independent fresh SVMs for baseline and after. Fund
+payer locally. System Program create_account creates the verifier-owned 1768-byte
+zero checkpoint, rent-exempt using LiteSVM minimum_balance_for_rent_exemption.
+Assert owner, exact size, nonexecutability and zero bytes. Setup CU is recorded
+separately and excluded. Proof/public use fixed foreign-owner images; neither
+is executable or a signer. Snapshot every supplied account before execution.
+
+LiteSVM 0.16 src/lib.rs:1161-1166 selects upgradeable loader; :1050-1102 creates
+canonical ProgramData with None upgrade authority and the exact ELF bytes,
+plus executable loader-owned Program pointing to it. Assert these facts by
+reading the loaded accounts, including ProgramData's owner and canonical key.
+The adapter:550-570 checks descriptor loader/PDA fields, not the ProgramData
+account; registry executable/account initialization remains outside this replay.
+
+Transaction 1: [3,10], metas [proof RO, public RO, verifier-checkpoint W].
+Transaction 2: encoded 320-byte ASQ8 request, metas [proof, master, Pool-checkpoint,
+lane, registry, entry, verifier-checkpoint], ALL read-only/nonsigner. Every
+listed key is distinct, and payer aliases none. Separate transactions avoid
+writable promotion. Use only transaction 1's SBF-produced checkpoint; abort and
+record failure if either transaction fails, without elevated-CU or native-checkpoint
+fallback. Require all stage1 inputs except its checkpoint unchanged. Require 792-byte ASR8 return from exact verifier ID, matching the saved
+statement's expected result; require all transaction 2 account images unchanged.
+
+Proposed command and evidence
+After implementing the new binary, under the coordinated capped host runner:
+cargo run --release --locked --offline --jobs 1 --manifest-path tools/r1-cost-probe/Cargo.toml --features private-leaf-salts --bin r18_replay -- BEFORE.so AFTER.so PROOF.bin PUBLIC.bin FRESH_OUTPUT
+PROOF/PUBLIC are the exact paths above. Both ELFs must be newly pinned current
+route builds with pool-adapter,private-leaf-salts and default custom-heap,
+identical SDK/compiler/flags; old lifecycle-era ELF is not a baseline.
+Run exactly one transaction pair per ELF, same runtime feature set/slot 150,
+limit 1400000 CU, heap 262144, loaded-account limit 8388608; assert serialized
+transactions fit 1232 bytes. Record tool source/lock/binary hashes, build/runtime
+pins, instruction bytes/metas, every account key/owner/flags/data SHA, proof/public
+and ELF SHA, checkpoint/result bytes, full logs, status, CU and phase markers.
+Compare before/after stage1 CU, stage2 CU and their sum, excluding setup; also
+require identical checkpoint/result outputs and nonwritten input images.
+This is current-route SBF CU evidence with preloaded state, not Pool CPI,
+settlement atomicity, on-chain provisioning or the lead's full R13 release gate.
+No binary, SBF build or replay has been run for this proposal.

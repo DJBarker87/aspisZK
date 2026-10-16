@@ -1,0 +1,39 @@
+J1.R18 actual complete Prefix success; 2026-10-16
+
+Result. ExtractedPrefixParse.parse_success assumes only successful return of
+final-E AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes. It proves
+parsed.c1_root.val = bytes.val.take 32 and a RecordChain through literal rows
+0..26, starting at offset32, using exactly parsed.records.val, with final
+offset equal to input length. Each chain link is the actual parse_record_at
+success for its returned slice. record_step_of_success and
+parse_record_of_success quantify over every row/frame pair in the complete
+zipped returned sequence. No decoder-success, canonicality, or selected
+arbitrary parser premise is introduced.
+
+Proof shape. Generic Result bind/error-branch inversion preserves the large
+continuation without simplifying it. The proof then inverts27 actual helper
+calls individually, assembles the inductive chain, and uses the trailing-byte
+check. C1 uses the actual slice and array conversion success. No concrete
+field arithmetic, recurrence, or validator loop is normalized.
+
+Retained failures. parse-a exposed an initial let before split. parse-b/c
+hit default recursion depth because dsimp/split traversed the complete nested
+continuation. parse-d/e/f/g failed continuation inference under a pair/match;
+generic outer bind inversion with an explicit error-continuation property
+solved it. parse-h reached all27 calls but confused the final Usize comparison
+with its Nat-value form. parse-i corrected that local fact. No memory,
+recursion, or heartbeat cap was raised; all old receipts remain unchanged.
+
+Verification. parse-i exit0,2.203s, RSS2,702,252KiB, cgroup peak459,485,184bytes,
+process swaps0/cgroup swap0/no pressure or OOM events. All3 requested reports
+contain only propext,Classical.choice,Quot.sound. Lean4.32.0, one target,
+-j1/-M0 under MemoryHigh6G/MemoryMax8G/MemorySwapMax0; pinned backend and
+predecessor objects reused with no rebuild. Evidence retains each source,
+runner, input manifest, runtime-library hash, command and result. verify.py
+checks current source equality,9 attempts, resource settings and the audit.
+
+Boundary. This is a generated-Lean successful-return theorem, not a Rust
+compiler/refinement theorem. Explicit old/new parser carrier/function reuse,
+semantic decodeFull and SelectedSemanticPrefix.read success, challenge-table
+values, recoverC2, first-read provenance and runtime lifecycle remain OPEN.
+The older parser namespace is not imported or silently substituted here.

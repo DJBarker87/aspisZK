@@ -1,0 +1,55 @@
+R18 current-route CU harness implementation; runtime check pending
+
+New binary: tools/r1-cost-probe/src/bin/r18_replay.rs. Its scope and fixed
+fixture are in J1-R18-DIRECT-VERIFIER-CU-PROPOSAL-20261016.txt. No existing
+pool_gate or production verifier module is changed. The saved transfer-1023
+proof and full ASF8 SHA/lengths are mandatory; it reconstructs ASF8 from the
+current canonical-bump account carriers and requires exact re-encoding.
+Master/lane/Pool-checkpoint use format2; RegistryV2/EntryV2 use format3.
+All seven stage2 metas are read-only and nonsigner. Stage1 has three metas,
+only the separate verifier checkpoint writable. Every supplied key is distinct
+from payer/program and all other supplied keys. Setup creates that1768-byte
+checkpoint with the actual System Program in each fresh LiteSVM; no native
+checkpoint or failed-stage1 fallback exists. Keys are created only in the new
+output directory, mode0600, retained for both independent local VM runs.
+
+Source checks against pinned LiteSVM0.16
+new() invokes into_basic(), which selects mainnet_feature_set(), builtins,
+sysvars, signature verification and blockhash verification. The harness records
+its sorted active feature IDs/activation slots. warp_to_slot(150) precedes
+add_program; add_program_internal obtains current_slot from cached Clock and
+serializes it in ProgramData. add_program selects the upgradeable loader.
+The harness decodes both loaded Program and ProgramData, checks canonical PDA,
+loader owners, executable flags, slot150, absent upgrade authority, and exact
+ELF suffix. Preloaded registry hash descriptors stay fixed across the two
+runs; no registry registration/history or descriptor-to-ELF certificate is
+claimed. Input state equality excludes the intentionally different executable.
+
+Coordinated optimized build (not a CU run):
+cargo build --release --locked --offline --manifest-path tools/r1-cost-probe/Cargo.toml --features private-leaf-salts --bin r18_replay --jobs 1
+
+Before the one paired replay, root supplies these environment values:
+ASPIS_SOURCE_REVISION: exact harness revision;
+ASPIS_R18_BEFORE_REVISION and ASPIS_R18_AFTER_REVISION: distinct production pins;
+ASPIS_R18_BEFORE_BUILD_RECEIPT and ASPIS_R18_AFTER_BUILD_RECEIPT: JSON paths for
+current-route SBF builds. Full receipt values and original byte hashes are
+retained alongside measured ELF hashes; the harness does not independently
+prove compiler provenance. Both builds require the same SDK/compiler/flags and
+pool-adapter,private-leaf-salts with custom-heap.
+
+Invocation:
+r18_replay BEFORE.so AFTER.so PROOF.bin PUBLIC.bin FRESH_OUTPUT
+
+Exactly one pair per ELF, no simulated duplicate or repeated acceptance gate.
+Setup transaction has its own receipt excluded from CU deltas. Every admitted
+transaction saves bytes, exact metas, logs, CU, phase markers and return data.
+Failure retains its receipt and aborts; no elevated-budget fallback. Success
+requires identical initial images, identical stage1 checkpoint and ASR8 result,
+ASR8 binding to the saved statement, unchanged stage1 non-checkpoint inputs and
+unchanged stage2 inputs. comparison.json reports stage1,stage2,total CU and
+signed after-minus-before deltas. The whole replay remains a verifier-only
+measurement, not Pool CPI/settlement or the lead's R13 provisioning gate.
+
+At this source commit rustfmt parsed the new file; no build or SBF/CU run is
+claimed. The following focused host build will retain its own source pins,
+compiler versions, resource receipt and any correction/failure.

@@ -1,0 +1,143 @@
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixParserAgreement.lean:45:16: error: unsolved goals
+case ok.some
+row : U8
+frame : Slice U8
+tag : U8
+size : Usize
+hs : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+⊢ mapResult statusToRecord
+      (let (tag, size) := (tag, size)
+      do
+      let i1 ← 5#usize + size
+      if (frame.len != i1) = true then
+          ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+        else do
+          let i2 ← frame.index_usize 0#usize
+          if (i2 != tag) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag row))
+            else do
+              let i3 ← frame.index_usize 1#usize
+              let i4 ← frame.index_usize 2#usize
+              let i5 ← frame.index_usize 3#usize
+              let i6 ← frame.index_usize 4#usize
+              let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+              let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+              if (i8 != size) = true then
+                  ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+                else do
+                  let payload ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) frame
+                        { start := 5#usize }
+                  if row ≥ 14#u8 then do
+                      let r1 ← AspisR1PrefixAggregateParser.r1_wire.validate_record_fields row payload
+                      let cf1 ←
+                        match r1 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf1 with
+                        | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                            (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+                    else ok (core.result.Result.Ok payload)) =
+    let (tag, size) := (tag, size)
+    do
+    let i1 ← 5#usize + size
+    if (frame.len != i1) = true then ok (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.Length row))
+      else do
+        let i2 ← frame.index_usize 0#usize
+        if (i2 != tag) = true then ok (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.Tag row))
+          else do
+            let i3 ← frame.index_usize 1#usize
+            let i4 ← frame.index_usize 2#usize
+            let i5 ← frame.index_usize 3#usize
+            let i6 ← frame.index_usize 4#usize
+            let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+            let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+            if (i8 != size) = true then ok (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.Length row))
+              else do
+                let payload ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) frame
+                      { start := 5#usize }
+                if row ≥ 14#u8 then do
+                    let value ← AspisR1PrefixAggregateParser.r1_wire.validate_record_fields row payload
+                    let cf1 ←
+                      match
+                          match value with
+                          | core.result.Result.Ok value => core.result.Result.Ok value
+                          | core.result.Result.Err error =>
+                            core.result.Result.Err
+                              (match error with
+                              | AspisR1PrefixAggregateParser.r1_wire.Error.Allocation =>
+                                AspisR1RecordParser.r1_wire.Error.Allocation
+                              | AspisR1PrefixAggregateParser.r1_wire.Error.RowOrder expected actual =>
+                                AspisR1RecordParser.r1_wire.Error.RowOrder expected actual
+                              | AspisR1PrefixAggregateParser.r1_wire.Error.InvalidRow =>
+                                AspisR1RecordParser.r1_wire.Error.InvalidRow
+                              | AspisR1PrefixAggregateParser.r1_wire.Error.Tag row =>
+                                AspisR1RecordParser.r1_wire.Error.Tag row
+                              | AspisR1PrefixAggregateParser.r1_wire.Error.Length row =>
+                                AspisR1RecordParser.r1_wire.Error.Length row
+                              | AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row index =>
+                                AspisR1RecordParser.r1_wire.Error.NonCanonical row index
+                              | AspisR1PrefixAggregateParser.r1_wire.Error.Boundary index =>
+                                AspisR1RecordParser.r1_wire.Error.Boundary index
+                              | AspisR1PrefixAggregateParser.r1_wire.Error.Terminal =>
+                                AspisR1RecordParser.r1_wire.Error.Terminal
+                              | AspisR1PrefixAggregateParser.r1_wire.Error.EqualCirclePoints =>
+                                AspisR1RecordParser.r1_wire.Error.EqualCirclePoints
+                              | AspisR1PrefixAggregateParser.r1_wire.Error.TrailingBytes =>
+                                AspisR1RecordParser.r1_wire.Error.TrailingBytes
+                              | AspisR1PrefixAggregateParser.r1_wire.Error.Public =>
+                                AspisR1RecordParser.r1_wire.Error.Public) with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf1 with
+                      | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                          (core.convert.FromSame AspisR1RecordParser.r1_wire.Error) residual
+                  else ok (core.result.Result.Ok payload)
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixParserAgreement.lean:51:17: warning: This simp argument is unused:
+  mapResult_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [mapResult_b̵in̵d̵,̵ ̵m̵a̵p̵R̵e̵s̵u̵l̵t_̵i̵t̵e, mapResult_ok,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵statusToRecord, errorToRecord, ← validator_agreement,
+          bind_mapResult, after_validation]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixParserAgreement.lean:51:33: warning: This simp argument is unused:
+  mapResult_ite
+
+Hint: Omit it from the simp argument list.
+  simp only [mapResult_bind, mapResult_i̵t̵e̵,̵ ̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵ok,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵statusToRecord, errorToRecord, ← validator_agreement,
+          bind_mapResult, after_validation]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixParserAgreement.lean:51:48: warning: This simp argument is unused:
+  mapResult_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [mapResult_bind, mapResult_ite, m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵o̵k̵,̵statusToRecord, errorToRecord,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲← validator_agreement, bind_mapResult, after_validation]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixParserAgreement.lean:53:24: warning: This simp argument is unused:
+  after_validation
+
+Hint: Omit it from the simp argument list.
+  simp only [mapResult_bind, mapResult_ite, mapResult_ok, statusToRecord, errorToRecord,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲← validator_agreement, b̵i̵n̵d̵_̵m̵a̵p̵R̵e̵s̵u̵l̵t̵,̵ ̵a̵f̵t̵e̵r̵_̵v̵a̵l̵i̵d̵a̵t̵i̵o̵n̵]̵b̲i̲n̲d̲_̲m̲a̲p̲R̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.ExtractedPrefixParserAgreement.parse_record_agreement' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.ExtractedPrefixParserAgreement.parse_record_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

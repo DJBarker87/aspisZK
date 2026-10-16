@@ -1,0 +1,56 @@
+Terminal validator extraction diagnostic — proposal, not J1.a closure
+
+Pinned source: 3e7056f06bd512ae7b414aea2dbf893642b9a841. The
+503-file input matches git exactly. No production source was changed.
+Target: validate_pool_v1_pair_forest_terminal_statement_v1 in
+crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:227.
+The existing caller inventory and ASWP extraction are reused; this is the
+next actual caller, not a replacement model. No QM31 arithmetic is extracted.
+
+Raw pinned Charon cb50ff16 succeeded; pinned Aeneas b59d5188 failed because
+the first-class Snapshot enum constructor and enum variant receive the same
+Lean name. The same problem affects Afterstate. Proposed adapter
+tools/j1-rename-enum-constructors.py changes only the two function rename
+metadata fields to SnapshotConstructor and AfterstateConstructor. Restoring
+those two fields reproduces the entire original LLBC JSON value. Bodies,
+types, IDs, calls and Rust source are identical. This is an explicitly
+recorded tool-boundary adaptation, not a compiler-correctness proof.
+
+The adapted translation succeeds but is NOT accepted as an executable proof
+input: its templates contain eleven opaque functions, one type and one
+global. They have not been renamed into implementations or admitted as
+axioms. No Lean compile or #print axioms result is claimed for this cone.
+
+OPEN external obligations (full generated signatures and Rust spans are in
+the retained templates and SUMMARY.json): slice/array equality; slice Iter
+any/all; generic Iterator flatten/any/all; Flatten next and its carrier;
+Option equality; Result.map_err; M31 equality/to_le_bytes; field constant P.
+The expected contracts are actual elementwise comparison, short-circuit
+iteration with the returned iterator state, flatten in source order,
+constructor-preserving option/result operations, the source u32 comparison
+and four little-endian bytes, and the source constant 2147483647. These are
+obligations, not axioms. Reuse the existing field/serializer source chain
+where possible. Including slice Iter::all already failed in the earlier
+withdrawal-validation extraction (non-ADT loop expansion); an unchanged
+retry is not a proposed solution. Any index-loop refactor needs separate
+review and the applicable behavior regression, not opaque stubs.
+
+Required next theorem, after a closed executable cone exists: actual
+terminal-validator success on statement s implies the same s has nonzero
+account bindings, lane < 8, successful matching payment encoder, equality
+of pool/deployment/checkpoint sequence/historical anchor fields, the
+derived lane, and successful encoding of its exact lane transition.
+Then prove actual ASF8 decode success reaches that validator on its returned
+statement. These are caller/metadata prerequisites. Neither alone supplies
+LiteralAcceptanceTerminal.conditional_d3.hconditions or source reachability
+of LiteralAcceptanceTerminal.Checks.publicParsed; all remain OPEN here.
+
+Measurements (own scope, MemoryHigh=6 GiB, MemoryMax=8 GiB, swap=0):
+Charon: exit 0, 71.970 s, RSS 661704 KiB, cgroup peak 652640256 B.
+Raw Aeneas: exit 2, 1.601 s, RSS 172480 KiB, cgroup peak 157933568 B.
+Named Aeneas: exit 0, 1.610 s, RSS 172128 KiB, cgroup peak 158113792 B.
+All three report zero swaps and zero memory events. Commands, source pins,
+tool hashes, generated templates and both LLBC files are retained under
+evidence/terminal-validator-extraction-diagnostic-20261016. Its verifier
+checks every archive member, all 503 git source pins and the name-only diff.
+No full replay, downgrade, production change or live-module edit occurred.

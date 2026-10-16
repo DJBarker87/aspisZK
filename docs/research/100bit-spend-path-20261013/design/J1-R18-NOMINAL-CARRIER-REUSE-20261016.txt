@@ -1,0 +1,84 @@
+J1.R18 concrete nominal-carrier reuse; source-only preparation
+
+This supplements J1-R18-SAMPLER-INTEGRATION-PROPOSAL-20261016.txt.
+No production edits, extraction or builds ran. Implementation waits for R17.
+Inspected local Aeneas snapshot220c7ff9cce569dead1e72ef199775b3417493b7;
+its src tree equals historical b59d5188c082f704a418c7cb4e52ad69328002d1.
+Charon snapshot is d333b4ec4317e6941452b324949f6830fec52455, corresponding
+to the previously pinned cb50 source. Binary/source rebuild correspondence
+remains unproved; historical tool hashes remain in sampler attempt-a/tool-pins.json.
+
+Supported mechanisms and limits
+Aeneas src/Main.ml:100-107 exposes -namespace and -subdir. Translate.ml:1719-1764
+selects output namespace/path; 1943-1969 still emits the transparent Types module.
+These switches do not import or identify existing declarations. Reusing the
+arithmetic namespace would cause duplicate declarations unless an additional
+checked transformation were supplied; it is unnecessary for the route below.
+
+Charon charon/src/bin/charon-driver/translate/translate_meta.rs:502-524 accepts
+rename only as one identifier, rejecting dots/colons. Aeneas
+src/extract/ExtractBase.ml:217-225 replaces the final path component. Thus
+#[aeneas::rename] cannot map QM31 to an imported fully qualified type.
+Charon options.rs:145-158 controls include/opaque/exclude bodies, not type equality.
+Aeneas Translate.ml:1885-1931 and2005-2054 creates TypesExternal/FunsExternal
+templates for missing definitions; providing placeholders would not prove reuse.
+
+There is a real compiled-in mapping mechanism: ExtractBuiltinCore.ml:109-153
+mk_type records a target name, constructor and field map; ExtractBuiltin.ml:62-181
+builds its fixed table. No user mapping-file/plugin/import CLI appears in the
+inspected Main.ml options. Extending this OCaml table would change the translator
+and require fresh validation; no such extension is needed or proposed here.
+
+Smallest proposed extraction artifact
+After the authorized index-loop source rewrite, use one exact eight-cut kit:
+field.rs P18-19, M31+derives21-23, CM31+derives253-258, CM31::new270-273,
+QM31+derives430-435; plus actual sampler.rs qm31_div_pass, qm31_digits,
+qm31_sample at their newly pinned spans. The helper names are proposed until
+production exists. Preserve original declarations/derives and constructor body;
+only module/import/impl wrappers may differ, as recorded by the existing kit.
+No M31/CM31/QM31 addition, multiplication, reducer or other arithmetic method
+belongs in this cut. Start from the actual qm31_sample wrapper.
+
+Expected user declarations: field.M31 reducible to Aeneas.Std.U32;
+field.CM31{a,b}; field.QM31{c0,c1}; constant field.P; field.CM31.new;
+sampler.qm31_div_pass, qm31_digits, qm31_sample and their generated loop helpers.
+Keep a new sampler namespace, e.g. AspisR1Qm31SamplerIndex. This emits nominal
+carrier records and constructor code only, not a second QM31 arithmetic theory.
+Record the actual emitted inventory rather than asserting this prediction.
+
+Checks and fixed bridge targets
+The kit must check full-file and every declaration-cut hash against the new
+production revision, and exact equality of retained field cuts against both
+historical sampler/current-arithmetic kits. Audit LLBC and translation.json:
+all reachable user functions have bodies; classify every dependency by its
+pinned backend implementation; fail on new opaque/template functions or types,
+FunsExternal/TypesExternal imports, sorry/axiom placeholders, or arithmetic-method
+emission. Check complete quotient-array write-back, not only the final digit.
+Lean must check generated Types/Funs and bridge in the same R17 environment,
+followed by #print axioms; absence of templates alone proves no refinement.
+
+In a new bridge importing generated sampler Funs and ExtractedCurrentQM31Equality,
+define toCurrent(q) by copying c0.a,c0.b,c1.a,c1.b into
+AspisR1Qm31ArithmeticProbe.field.QM31. Define the inverse and prove both round
+trips and four coordinate equalities. These need no canonicality assumption.
+The existing sampler attempt-a generated field.CM31.new at Funs.lean:62-63 is
+ok{a,b}; prove the corresponding newly emitted constructor equation directly.
+Do not add a missing external CM31.new to the live arithmetic module.
+
+Proposed wrapper target: qm31_digits b=ok d implies existence of q with
+qm31_sample b=ok q and toCurrent q's ordered coordinates equal d[0..3].
+Derive it from the actual emitted wrapper, array-length/index proofs and its
+two constructor calls; an arbitrary packing function is not that wrapper.
+Then prove the two helper targets in the preceding proposal: full division
+pass write-back and d.val.map UScalar.val=SamplerNatModel.qm31Digits(rank b).
+The val bridge must justify Aeneas scalar operations/casts against the existing
+native UInt32/UInt64 word model; those carriers are not definitionally equal.
+
+Four digit bounds imply ExtractedCurrentTowerAdd.CanonicalQM(toCurrent q),
+whose definition is exactly four coordinate .val<P inequalities (lines14-18).
+ExtractedCurrentQM31Exact.decode:18-20 fixes the same coordinate order.
+Only then use ExtractedCurrentQM31Equality.decode_eq_iff:17-20 with canonicality
+for both values to recover current-record equality. Existing current arithmetic
+theorems remain imported unchanged. No new external axiom is needed.
+Wrapper/helper extraction success, their proofs, Rust lowering and actual
+challenge-call timing remain OPEN. Old iterator/write-back failures stay intact.

@@ -1,0 +1,40 @@
+Terminal source regression and one CU delta, 2026-10-16
+
+Final terminal helper source42e5ca2011c39ee9770afc798282ff861b092428 passes
+the saved-proof hash-counter regression and one before/after admitted-route
+comparison. Baseline is the already-checked R18 source3e7056f06; its exact
+retained SBF artifact and original build receipt were reused without rebuilding.
+Only pair_forest_accounts.rs, pair_tree_profile.rs and pair_terminal.rs differ
+in production source. The added native trace example is the sole extra input.
+
+The counter target measured_core_call_counts_include_zero_progress_checkpoint
+passes in release mode. It retains k10/k11 and arbitrary next0 coverage from
+the existing test; these are measured core fixtures, not universal QV or PDA
+counts. Exit0,51.072s,544092KiB process RSS,536502272B cgroup peak,swap0.
+The new SBF build exits0 in39.648s,673404KiB RSS,663400448B cgroup peak,swap0.
+One paired CU replay exits0 in0.200s,28916KiB RSS,48959488B cgroup peak,swap0.
+All use MemoryHigh8GiB/MemoryMax10GiB/MemorySwapMax0 with no pressure events.
+Inputs are hash-checked and mtimes refreshed to avoid stale shared Cargo reuse.
+
+On the saved transfer1023 fixture, [3,10] stage1 and ASQ8 stage2 both accept
+before and after. Initial account images, checkpoint bytes and ASR8 output
+are identical. Stage1 changes1341696→1342259 (+563CU); stage2 changes
+1228710→1229076 (+366CU); total2570406→2571335 (+929CU). Setup is excluded.
+This measures the terminal refactor's incremental cost relative to the final
+Prefix/sampler source, not relative to the earlier pre-R18 baseline.
+
+ELF baseline SHA256:
+99527c1feee71b5e23387b7348456f19c3ffe13254a3f2e886cfd9e005cb83bb
+ELF candidate SHA256:
+2c031d0040a3bf739b58591b2a20dc68f04722550fd49b79d4fd7eb8e5dfee9f
+The build retains the earlier point_claims stack-offset diagnostics. One
+passing admitted-route fixture does not prove general stack safety, account
+history, custody/settlement or a complete release artifact gate.
+
+evidence/terminal-validator-regression-20261016 retains67 hashed members,
+source manifests, exact commands/tool versions, resource receipts, public
+execution artifacts and comparison. verify.py checks all hashes,1007 Git
+source pins, exact changed-file scope, receipts and output equality without
+replaying. Private payer/checkpoint and generated artifact keys remain on the
+host; no private keys are archived. No Lean theorem/axioms claim is made by
+these execution receipts. Actual SourceSimulation.preservesPrefix remains OPEN.

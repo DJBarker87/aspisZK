@@ -1,0 +1,36 @@
+R18 Prefix source implementation; formal extraction pending matching tools
+
+The reviewed draft 7b5873d12aef8209ae59166bf03ba6bb1a09039cdfe93dd7e736eeb539f732ff
+was applied exactly. Production r1_wire.rs SHA256 is
+47c13ed41b82511390903597ed796bd33d7481a11d934d0244620dff11a51f3d.
+The new parse_records_into helper receives the caller-owned 27-slice array,
+visits rows in order, preserves parse_record validation and error propagation,
+checks the suffix, and returns unit. Prefix::parse keeps its existing root
+length guard, borrowed c1_root conversion, local array and final Prefix.
+The public API and wire bytes are unchanged. No Rust refinement is claimed.
+
+New tests freeze the whole former Prefix parser as a differential oracle.
+They compare complete frames/payloads and pointers, all truncations, every row's
+tag/header errors and cross-row precedence, invalid getters, trailing bytes,
+first/last field positions and limbs, and first-error order. The scratch-array
+test starts with nonempty entries, checking every entry is overwritten.
+The old parse_record differential and public serializer differential still run.
+The existing validated-transcript comparison additionally checks all row tokens.
+
+All eight focused native tests passed under optimized rustc1.94.1 on Linux,
+one Cargo job, MemoryHigh6G/MemoryMax8G/MemorySwapMax0. Four receipts record
+46.669s/529317888B (Prefix3), 0.201s/58830848B (parser2),
+56.080s/635375616B (serializer2), 0.201s/57905152B (transcript1).
+Those memory figures are cgroup peaks; time.log separately records RSS/swaps.
+No proof generation, SBF build or CU replay occurred. Native evidence retains
+all500 source input hashes, changed source snapshot, exact commands/runners,
+versions, logs and cgroup limits/events. verify.py checks the bundle.
+
+New tools/prefix-into-extraction-kit/extract.py --check passes28 exact current
+declaration cuts, including18 byte-identical retained parser declarations.
+The former prefix-parser-extraction-kit and failed attempt-a are untouched.
+Both unwraps/derives remain in scope. The new source form is not asserted to
+translate until matching pinned Linux Charon/Aeneas tools are available.
+An older host Aeneas d860 binary was identified and deliberately not used.
+Any new extraction failure, external template or generated proof dependency
+will be recorded explicitly; no source/core axiom is introduced.

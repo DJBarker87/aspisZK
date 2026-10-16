@@ -1,9 +1,9 @@
 //! UNPROVED COST PROBE. P2 D14-content wire; expanded row 25, isolated from the S4 gate.
 
-use crate::sampler::{CircleRow, circle_sample, qm31_sample};
+use crate::sampler::{circle_sample, qm31_sample, CircleRow};
 use alloc::vec::Vec;
 use aspis_core::circle::SecureCirclePoint;
-use aspis_core::field::{QM31, WideExact};
+use aspis_core::field::{WideExact, QM31};
 use aspis_core::transcript::HashFn;
 
 #[cfg(not(feature = "private-leaf-salts"))]
@@ -274,42 +274,82 @@ pub struct Prefix<'a> {
     pub c1_root: &'a [u8; 32],
     records: [&'a [u8]; 27],
 }
+
+fn parse_record_at<'a>(
+    bytes: &'a [u8],
+    row: u8,
+    offset: usize,
+) -> Result<(&'a [u8], usize), Error> {
+    let length = 5 + row_shape(row).unwrap().1;
+    let framed = bytes
+        .get(offset..offset + length)
+        .ok_or(Error::Length { row })?;
+    parse_record(row, framed)?;
+    Ok((framed, offset + length))
+}
+
 impl<'a> Prefix<'a> {
     pub fn parse(bytes: &'a [u8]) -> Result<Self, Error> {
         if bytes.len() < 32 {
             return Err(Error::Length { row: 0 });
         }
-        let c1_root = bytes[..32].try_into().unwrap();
-        let mut records = [&[][..]; 27];
-        let mut offset = 32;
-        for row in 0..27u8 {
-            let length = 5 + row_shape(row).unwrap().1;
-            let framed = bytes
-                .get(offset..offset + length)
-                .ok_or(Error::Length { row })?;
-            parse_record(row, framed)?;
-            records[row as usize] = framed;
-            offset += length;
-        }
+        let c1_root = match bytes[..32].try_into() {
+            Ok(root) => root,
+            Err(_) => return Err(Error::Length { row: 0 }),
+        };
+        let (r0, offset) = parse_record_at(bytes, 0, 32)?;
+        let (r1, offset) = parse_record_at(bytes, 1, offset)?;
+        let (r2, offset) = parse_record_at(bytes, 2, offset)?;
+        let (r3, offset) = parse_record_at(bytes, 3, offset)?;
+        let (r4, offset) = parse_record_at(bytes, 4, offset)?;
+        let (r5, offset) = parse_record_at(bytes, 5, offset)?;
+        let (r6, offset) = parse_record_at(bytes, 6, offset)?;
+        let (r7, offset) = parse_record_at(bytes, 7, offset)?;
+        let (r8, offset) = parse_record_at(bytes, 8, offset)?;
+        let (r9, offset) = parse_record_at(bytes, 9, offset)?;
+        let (r10, offset) = parse_record_at(bytes, 10, offset)?;
+        let (r11, offset) = parse_record_at(bytes, 11, offset)?;
+        let (r12, offset) = parse_record_at(bytes, 12, offset)?;
+        let (r13, offset) = parse_record_at(bytes, 13, offset)?;
+        let (r14, offset) = parse_record_at(bytes, 14, offset)?;
+        let (r15, offset) = parse_record_at(bytes, 15, offset)?;
+        let (r16, offset) = parse_record_at(bytes, 16, offset)?;
+        let (r17, offset) = parse_record_at(bytes, 17, offset)?;
+        let (r18, offset) = parse_record_at(bytes, 18, offset)?;
+        let (r19, offset) = parse_record_at(bytes, 19, offset)?;
+        let (r20, offset) = parse_record_at(bytes, 20, offset)?;
+        let (r21, offset) = parse_record_at(bytes, 21, offset)?;
+        let (r22, offset) = parse_record_at(bytes, 22, offset)?;
+        let (r23, offset) = parse_record_at(bytes, 23, offset)?;
+        let (r24, offset) = parse_record_at(bytes, 24, offset)?;
+        let (r25, offset) = parse_record_at(bytes, 25, offset)?;
+        let (r26, offset) = parse_record_at(bytes, 26, offset)?;
         if offset != bytes.len() {
             return Err(Error::TrailingBytes);
         }
-        Ok(Self { c1_root, records })
+        Ok(Self {
+            c1_root,
+            records: [
+                r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17,
+                r18, r19, r20, r21, r22, r23, r24, r25, r26,
+            ],
+        })
     }
     pub fn record(&self, row: u8) -> Result<&'a [u8], Error> {
-        self.records
-            .get(row as usize)
-            .copied()
-            .ok_or(Error::InvalidRow)
+        if row >= 27 {
+            return Err(Error::InvalidRow);
+        }
+        Ok(self.records[row as usize])
     }
     pub fn payload(&self, row: u8) -> Result<&'a [u8], Error> {
-        self.records
-            .get(row as usize)
-            .map(|framed| &framed[5..])
-            .ok_or(Error::InvalidRow)
+        let framed = self.record(row)?;
+        Ok(&framed[5..])
     }
     pub(crate) fn validated_record(&self, row: u8) -> Result<ValidatedRecord<'a>, Error> {
-        Ok(ValidatedRecord { row, framed: self.record(row)? })
+        Ok(ValidatedRecord {
+            row,
+            framed: self.record(row)?,
+        })
     }
     /// Same row-25 decoder, with direct initialization of heap storage.
     pub fn point_claims_boxed(&self) -> Result<alloc::boxed::Box<PointClaims>, Error> {
@@ -550,6 +590,169 @@ mod record_parser_tests {
                     check_error(row, &two_errors, Error::NonCanonical { row, value });
                 }
             }
+        }
+    }
+}
+
+#[cfg(test)]
+mod prefix_parser_tests {
+    use super::*;
+    use aspis_core::field::P;
+
+    // Freeze the complete pre-refactor parser, including its error ordering.
+    fn parse_reference<'a>(bytes: &'a [u8]) -> Result<Prefix<'a>, Error> {
+        if bytes.len() < 32 {
+            return Err(Error::Length { row: 0 });
+        }
+        let c1_root = bytes[..32].try_into().unwrap();
+        let mut records = [&[][..]; 27];
+        let mut offset = 32;
+        for row in 0..27u8 {
+            let length = 5 + row_shape(row).unwrap().1;
+            let framed = bytes
+                .get(offset..offset + length)
+                .ok_or(Error::Length { row })?;
+            parse_record(row, framed)?;
+            records[row as usize] = framed;
+            offset += length;
+        }
+        if offset != bytes.len() {
+            return Err(Error::TrailingBytes);
+        }
+        Ok(Prefix { c1_root, records })
+    }
+    fn fixture() -> (Vec<u8>, [usize; 28]) {
+        let mut bytes = alloc::vec![255u8; 32];
+        let mut offsets = [0usize; 28];
+        offsets[0] = bytes.len();
+        for row in 0..27u8 {
+            let (tag, size) = row_shape(row).unwrap();
+            bytes.push(tag);
+            bytes.extend_from_slice(&(size as u32).to_le_bytes());
+            let payload_start = bytes.len();
+            bytes.resize(payload_start + size, 0);
+            if row == 2 {
+                bytes[payload_start..].fill(255);
+            } else if row >= 14 {
+                for value in bytes[payload_start..].chunks_exact_mut(32) {
+                    for limb in 0..4 {
+                        value[4 * limb..4 * limb + 4].copy_from_slice(&(P - 1).to_le_bytes());
+                    }
+                }
+            }
+            offsets[row as usize + 1] = bytes.len();
+        }
+        (bytes, offsets)
+    }
+
+    fn check_error(bytes: &[u8], expected: Error) {
+        assert_eq!(parse_reference(bytes).err(), Some(expected));
+        assert_eq!(Prefix::parse(bytes).err(), Some(expected));
+    }
+
+    #[test]
+    fn prefix_aggregate_preserves_slices_and_all_truncations() {
+        let (bytes, offsets) = fixture();
+        let actual = Prefix::parse(&bytes).unwrap();
+        let expected = parse_reference(&bytes).unwrap();
+        assert_eq!(actual.c1_root, expected.c1_root);
+        assert_eq!(actual.c1_root.as_ptr(), bytes.as_ptr());
+        let mut next_offset = 32;
+        // Independently inspect each helper result as well as the final array.
+        for row in 0..27u8 {
+            let start = offsets[row as usize];
+            let end = offsets[row as usize + 1];
+            let frame = actual.record(row).unwrap();
+            assert_eq!(frame, expected.record(row).unwrap());
+            assert_eq!(frame, &bytes[start..end]);
+            assert_eq!(frame.as_ptr(), bytes[start..end].as_ptr());
+            let (single, next) = parse_record_at(&bytes, row, next_offset).unwrap();
+            assert_eq!(single.as_ptr(), frame.as_ptr());
+            assert_eq!(single.len(), frame.len());
+            assert_eq!(next, end);
+            next_offset = next;
+            let payload = actual.payload(row).unwrap();
+            assert_eq!(payload, expected.payload(row).unwrap());
+            assert_eq!(payload.as_ptr(), bytes[start + 5..end].as_ptr());
+            let token = actual.validated_record(row).unwrap();
+            assert_eq!(token.row(), row);
+            assert_eq!(token.framed().as_ptr(), frame.as_ptr());
+            assert_eq!(token.payload(), payload);
+        }
+        assert_eq!(next_offset, bytes.len());
+        for row in 27..=u8::MAX {
+            assert_eq!(actual.record(row), Err(Error::InvalidRow));
+            assert_eq!(actual.payload(row), Err(Error::InvalidRow));
+            assert_eq!(actual.validated_record(row).err(), Some(Error::InvalidRow));
+        }
+        for length in 0..bytes.len() {
+            let row = (0..27).find(|row| length < offsets[row + 1]).unwrap() as u8;
+            check_error(&bytes[..length], Error::Length { row });
+        }
+        for suffix in [alloc::vec![0], alloc::vec![255; 32]] {
+            let mut extra = bytes.clone();
+            extra.extend_from_slice(&suffix);
+            check_error(&extra, Error::TrailingBytes);
+        }
+    }
+
+    #[test]
+    fn prefix_into_preserves_framing_and_cross_row_error_order() {
+        let (bytes, offsets) = fixture();
+        for row in 0..27u8 {
+            let start = offsets[row as usize];
+            let mut bad_tag = bytes.clone();
+            bad_tag[start] ^= 255;
+            bad_tag[start + 1..start + 5].fill(255);
+            check_error(&bad_tag, Error::Tag { row });
+            // An early invalid tag wins over both later truncation and suffix.
+            bad_tag.push(0);
+            check_error(&bad_tag, Error::Tag { row });
+            check_error(&bad_tag[..offsets[row as usize + 1]], Error::Tag { row });
+            let mut bad_length = bytes.clone();
+            bad_length[start + 1..start + 5].fill(255);
+            check_error(&bad_length, Error::Length { row });
+            if row < 26 {
+                bad_length[offsets[row as usize + 1]] ^= 255;
+                check_error(&bad_length, Error::Length { row });
+            }
+        }
+    }
+
+    #[test]
+    fn prefix_into_preserves_first_field_failure() {
+        let (bytes, offsets) = fixture();
+        for row in 14..27u8 {
+            let payload_start = offsets[row as usize] + 5;
+            let values = (offsets[row as usize + 1] - payload_start) / 32;
+            for value in [0, values - 1] {
+                for limb in 0..8 {
+                    for bad in [P, u32::MAX] {
+                        let mut malformed = bytes.clone();
+                        let offset = payload_start + value * 32 + limb * 4;
+                        malformed[offset..offset + 4].copy_from_slice(&bad.to_le_bytes());
+                        check_error(&malformed, Error::NonCanonical { row, value });
+                    }
+                }
+                for limb in 4..8 {
+                    let mut high_nonzero = bytes.clone();
+                    let offset = payload_start + value * 32 + limb * 4;
+                    high_nonzero[offset..offset + 4].copy_from_slice(&1u32.to_le_bytes());
+                    // An earlier field failure wins over a trailing suffix.
+                    high_nonzero.push(255);
+                    check_error(&high_nonzero, Error::NonCanonical { row, value });
+                }
+            }
+            let mut two_errors = bytes.clone();
+            two_errors[payload_start + 16..payload_start + 20].copy_from_slice(&1u32.to_le_bytes());
+            if values > 1 {
+                two_errors[payload_start + 32..payload_start + 36]
+                    .copy_from_slice(&P.to_le_bytes());
+            }
+            if row < 26 {
+                two_errors[offsets[row as usize + 1]] ^= 255;
+            }
+            check_error(&two_errors, Error::NonCanonical { row, value: 0 });
         }
     }
 }

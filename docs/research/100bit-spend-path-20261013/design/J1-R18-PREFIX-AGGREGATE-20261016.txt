@@ -1,0 +1,13 @@
+R18 Prefix immutable aggregation (2026-10-16)
+
+The caller-owned mutable array refactor at36eeac391 failed exact b59/cb50 extraction: Aeneas rejected nested borrows in the loop fixed point. An isolated immutable27-record construction advanced to an independent failure in the existing get().copied() getter. A guarded direct-index getter and payload through record eliminated that projector failure. All experiments and the original failure remain retained; extraction/kernel evidence is packaged separately.
+
+Reviewed production change: parse_record_at computes the existing row length, obtains the same input slice, invokes unchanged parse_record, then returns that slice and the next offset. Prefix::parse invokes it for rows0 through26 in order, checks trailing bytes, and constructs one fully initialized immutable array. The public Prefix fields/API, bytes, slice identities and error precedence stay the same. record rejects every row>=27 before indexing; payload uses that checked result. C1 conversion explicitly matches Result instead of unwrap; after the existing length guard its input slice is exactly32bytes, so the Err branch is unreachable. This removes the generated Debug/Formatter dependency without changing derives or accepting extra input.
+
+Frozen r1_wire.rs SHA256:
+4ce97b7bc11b495dc8af3ef79f29dbbd9ebba7c2427a6db1acb8851759b1d305.
+Parent ca5ac5dff7eded50dd37ae3b682aac70b2a3bafb; source snapshot and all500 inputs are individually pinned. The NEW prefix-aggregate-extraction-kit --check validates28 exact declarations, including18 unchanged parser declarations. Previous kits are unchanged.
+
+Focused optimized native checks:3 Prefix differentials,2 record differentials,2 serializer differentials and1 validated-transcript comparison all passed. Prefix covers every truncation, every row shape, malformed tags/lengths, canonicality failures and first-error order, getter rows0..255, root/frame/payload pointers, plus each helper's next offset. The old whole-parser oracle remains unchanged. Shared scope6G high/8G max/swap0, jobs1; commands/versions/time/RSS/swaps and source pins are in evidence/r18-prefix-aggregate-native-20261016. Scope peak152424448bytes; no memory events or swaps.
+
+Matched exact extraction of this source also exited0 for Charon and Aeneas, with only Types/Funs emitted. Kernel checks and reachable-declaration axiom audit are pending in the next evidence bundle. Extraction alone is not Rust refinement or completed Prefix/challenge/first-read correspondence. The previous+88CU result concerns the earlier source; root coordinates an updated saved-counter and candidate comparison against the retained original baseline.

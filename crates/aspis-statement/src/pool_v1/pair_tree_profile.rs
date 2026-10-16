@@ -102,8 +102,15 @@ pub struct PoolV1PairLeafWitnessV1 {
 }
 
 #[inline]
-fn digest_is_canonical(value: &Digest) -> bool {
-    value.iter().all(|limb| limb.0 < P)
+pub(crate) fn digest_is_canonical(value: &Digest) -> bool {
+    let mut i = 0;
+    while i < value.len() {
+        if value[i].0 >= P {
+            return false;
+        }
+        i += 1;
+    }
+    true
 }
 
 impl PoolV1PairLeafWitnessV1 {
@@ -452,13 +459,15 @@ fn validate_pool_v1_pair_live_snapshot_v1(
     if snapshot.next_pair_index >= POOL_V1_PAIR_CAPACITY {
         return Err(PoolV1PairLiveSnapshotErrorV1::TreeFull);
     }
-    if !digest_is_canonical(&snapshot.current_root)
-        || snapshot
-            .frontier
-            .iter()
-            .any(|node| !digest_is_canonical(node))
-    {
+    if !digest_is_canonical(&snapshot.current_root) {
         return Err(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);
+    }
+    let mut level = 0;
+    while level < snapshot.frontier.len() {
+        if !digest_is_canonical(&snapshot.frontier[level]) {
+            return Err(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);
+        }
+        level += 1;
     }
     Ok(())
 }
@@ -552,10 +561,10 @@ pub fn encode_pool_v1_pair_late_public_statement_v1(
         &statement.live_snapshot,
         &mut output[32..32 + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES],
     )
-    .map_err(PoolV1PairLatePublicStatementErrorV1::Snapshot)?;
+    .map_err(|error| PoolV1PairLatePublicStatementErrorV1::Snapshot(error))?;
     let encoded_afterstate =
         encode_pool_v1_pair_verified_afterstate_v1(&statement.candidate_afterstate)
-            .map_err(PoolV1PairLatePublicStatementErrorV1::Afterstate)?;
+            .map_err(|error| PoolV1PairLatePublicStatementErrorV1::Afterstate(error))?;
     output[32 + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES..].copy_from_slice(&encoded_afterstate);
     Ok(())
 }

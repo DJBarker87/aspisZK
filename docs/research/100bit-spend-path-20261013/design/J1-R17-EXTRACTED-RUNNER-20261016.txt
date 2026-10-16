@@ -1,0 +1,69 @@
+Serial extracted-source port runner; SOURCE-ONLY PREPARATION
+No host queue use, Lean run, extraction, or backend build by this change.
+ExtractedPublicCheckedBridge432 remains UNCOMPILED until the host check passes.
+
+Inputs and first target
+tools/j1-r17-build-extracted.py consumes the unchanged 85-module source manifest.
+First request: --target PublicSerializerFieldsRefinement431. Its closure is
+exactly serializer Types, Funs, then the smallest generic fields proof.
+Next focused requests can be PublicSerializerWhole431 (6 cumulative inputs),
+WithdrawalCarrierBridge431 (13), ExtractedPublicCheckedBridge432 (41), and
+ExtractedRecordPayloadSoundness (12). Successful predecessors are reused by
+verified key. This is 53 distinct public/parser inputs, not a full R1 replay.
+Selected-mask and current-QM31 groups remain unchanged, compile-only inputs
+under their existing ownership; they are not selected by these requests.
+
+Staging
+Run the existing j1-r17-extracted-manifest-20261015.py --check --stage NEW_DIR.
+Copy that source-only directory to HOST_WORK/extracted/sources, and copy the
+runner separately. HOST_WORK is the coordinator's existing
+/home/dombarker/project-offloads/aspis-r1-j17-port-20261015.
+The runner requires every staged path/hash/import to match the manifest and
+rejects extra files, including old compiled objects. The source tree is read-only
+during checks. Project objects start empty; this runner does not import Mac R1
+objects. Pure R1 codec dependencies are checked locally to this new host cache.
+
+External closure snapshot: read/hash only, after backend readiness
+Invoke snapshot HOST_WORK/extracted with these required options:
+  --backend HOST_WORK/backend
+  --runtime /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0
+  --dependency-pins HOST_WORK/dependency-cache-pins.json
+  --backend-manifest COORDINATOR_FINAL_PATCHED_BACKEND_MANIFEST.json
+  --backend-receipts HOST_WORK/successful-targets
+  --output HOST_WORK/extracted/external-inputs-001.json
+The final backend manifest must contain source_sha256 keyed by relative source
+path. The nine package records use the existing name/rev/path/tracked_modified
+format. Snapshot rechecks HEAD and clean tracked trees, exact Mathlib 81a5,
+backend sources, source/import/object/runtime receipt agreement, and all direct
+and transitive external sources/objects. Main olean headers must match this
+4.32 runtime's version/commit seal; .private/.server/.ir/.ilean companions are
+hashed too. It reads no historical object archive and executes no Lean/Lake.
+The resulting snapshot is immutable evidence, not a new reproducible-build
+proof for preexisting package caches.
+
+Queue and command policy
+Only the coordinator may start run after granting the serial host slot.
+Use an existing systemd user scope with MemoryHigh=6G, MemoryMax=8G,
+MemorySwapMax=0 (and TasksMax=128); no outer flock. The runner verifies those
+memory limits exactly. Invoke run HOST_WORK/extracted with --target TARGET,
+--external-snapshot PATH, --attempt UNIQUE_LABEL, and --revision EXACT_REVISION.
+There is no default all-module replay. Each target uses lake --no-cache env lean
+through an exact-path wrapper, -j1 -M0, explicit pinned object roots, and a
+ten-minute timeout. It never fetches or builds backend/package dependencies.
+The -M0 choice delegates memory to the cgroup; no runtime proof cap changes.
+
+Cache and evidence
+Each reuse key contains source, direct imported object/companion hashes,
+recursive import keys, compiler/runtime pins, and options. A new snapshot time
+alone does not invalidate unchanged green results. Source/import/runtime changes
+do. Each target retains source, preflight, command, complete log, timing, cgroup
+peak/events/swap, process RSS/swaps, and parsed #print axioms reports. Missing or
+nonstandard requested audits stop the run. Generated modules with no requested
+audit are identified as such, without an axiom claim. Failed/partial outputs
+remain in their attempt directory and never become reusable cache records.
+
+Local validation
+The companion Python preflight tests import parsing, exact source staging,
+minimal closures, audit failures, recursive key invalidation, and rejection of
+an actual retained 4.31 object. It runs no Lean. Host snapshot/runner execution
+remains untested until the coordinator's backend is ready.
