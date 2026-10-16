@@ -6,7 +6,15 @@ B=Path('/home/dombarker/project-offloads')
 P=B/'aspis-r1-public-binding-followup-20261016';W=B/'aspis-r1-public-binding-joint-c16-20261016'
 W.mkdir(exist_ok=True);(W/'sources').mkdir(exist_ok=True)
 shutil.copy2(P/'runner.py',W/'runner.py')
-shutil.copy2(P/'external-inputs.json',W/'external-inputs.json')
+external=json.loads((P/'external-inputs.json').read_text())
+removed={'AspisR1PublicPreparation.Types','AspisR1PublicPreparation.Funs'}
+while True:
+ additional={n for n,x in external['modules'].items() if set(x['imports']) & removed}
+ if additional <= removed:break
+ removed |= additional
+for n in removed:external['modules'].pop(n,None)
+(W/'excluded-old-universe.json').write_text(json.dumps({'removed_reverse_import_closure':sorted(removed),'base_snapshot_sha256':hashlib.sha256((P/'external-inputs.json').read_bytes()).hexdigest(),'reason':'Old universe objects and every reverse importer are excluded; changed current universe is produced only by staged fresh targets.'},indent=2)+'\n')
+(W/'external-inputs.json').write_text(json.dumps(external,indent=2,sort_keys=True)+'\n')
 spec=importlib.util.spec_from_file_location('runner',W/'runner.py');r=importlib.util.module_from_spec(spec);spec.loader.exec_module(r)
 names=['AspisR1PublicPreparation.Types','AspisR1PublicPreparation.Funs','ExtractedPublicPreparationSuccess','ExtractedPreparationSerializerFields','ExtractedPreparationSerializerLoop','ExtractedPreparationSerializerWhole','ExtractedPublicPreparationBinding','ExtractedFirstCallerReachability']
 mods={}
