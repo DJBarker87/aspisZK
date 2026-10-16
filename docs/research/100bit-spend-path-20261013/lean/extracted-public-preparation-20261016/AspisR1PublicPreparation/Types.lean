@@ -190,7 +190,7 @@ structure r1_wire.SemanticTranscript (H : Type) where
 def r1_wire.SemanticTranscript.new.closure (H : Type) := Unit
 
 /-- [aspis_r1_public_preparation::r1_semantic::public_transcript::closure]
-    Source: 'lib.rs', lines 370:39-370:56 -/
+    Source: 'lib.rs', lines 391:39-391:56 -/
 @[reducible]
 def r1_semantic.public_transcript.closure (H : Type) := Unit
 
