@@ -1,0 +1,67 @@
+[
+  {
+    "module": "R1FixedWidthSlice",
+    "source": "docs/research/100bit-spend-path-20261013/lean/FixedWidthSlice.lean",
+    "source_sha256": "3ec5915c59cd5ed3151a2850664c1615b9c77faf57f1906204f369f4944b7a42",
+    "imports": [
+      "Mathlib.Data.List.OfFn"
+    ],
+    "source_revision": "c5665bbd39e00c9c66ff5a430cd495eabc9f3781"
+  },
+  {
+    "module": "R1FixedWidthReconstruction",
+    "source": "docs/research/100bit-spend-path-20261013/lean/FixedWidthReconstruction.lean",
+    "source_sha256": "1b71a52cad69e57c163d77e4e0707ba84697c6082da30c75ff12ba9e86c1759e",
+    "imports": [
+      "Mathlib.Data.List.OfFn",
+      "Mathlib.Data.List.TakeDrop"
+    ],
+    "source_revision": "c5665bbd39e00c9c66ff5a430cd495eabc9f3781"
+  },
+  {
+    "module": "R1FixedWidthDecodedSlices",
+    "source": "docs/research/100bit-spend-path-20261013/lean/FixedWidthDecodedSlices.lean",
+    "source_sha256": "5e85cf56efaf066c38d1f596ca053d2edf4dec18c5ff9331481418ce06a07212",
+    "imports": [
+      "R1FixedWidthDecoder",
+      "R1FixedWidthSlice",
+      "R1FixedWidthReconstruction"
+    ],
+    "source_revision": "c5665bbd39e00c9c66ff5a430cd495eabc9f3781"
+  },
+  {
+    "module": "R1WideExactLimbCodec",
+    "source": "docs/research/100bit-spend-path-20261013/lean/WideExactLimbCodec.lean",
+    "source_sha256": "7fdbbd8da262ec8c7dbe539bb13b76af6c7ce7f91ae5e52cfdcf3327aa020dd6",
+    "imports": [
+      "R1StrictWideByteCodec",
+      "R1RetainedExactLimbCodec",
+      "R0C.ModuloField"
+    ],
+    "source_revision": "c5665bbd39e00c9c66ff5a430cd495eabc9f3781"
+  },
+  {
+    "module": "R1FoldedLeafCodec",
+    "source": "docs/research/100bit-spend-path-20261013/lean/FoldedLeafCodec.lean",
+    "source_sha256": "0d01c041523d28682af952f91290feddf0702d0797b38e4cab988898a2266633",
+    "imports": [
+      "R1FixedWidthDecoder",
+      "R1FixedWidthDecodedSlices",
+      "R1StrictWideByteCodec",
+      "R1WideExactLimbCodec",
+      "R1ListFieldCodec"
+    ],
+    "source_revision": "c5665bbd39e00c9c66ff5a430cd495eabc9f3781"
+  },
+  {
+    "module": "R1SemanticCoefficientCodec",
+    "source": "docs/research/100bit-spend-path-20261013/lean/SemanticCoefficientCodec.lean",
+    "source_sha256": "98e72955903ac42c2058dc06aaa4bff38b443b07d2b0effc06eb6f66b153acd6",
+    "imports": [
+      "R1FoldedLeafCodec",
+      "R1FixedWidthDecoder",
+      "R1FixedWidthDecodedSlices"
+    ],
+    "source_revision": "c5665bbd39e00c9c66ff5a430cd495eabc9f3781"
+  }
+]
