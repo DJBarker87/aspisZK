@@ -24,6 +24,12 @@ private def cellAt (a : Array QM 33#usize) (j : Nat) : QM :=
   if h : j < 33 then a.val[j]'(by simpa [a.property] using h)
   else field.QM31.ZERO
 
+/-- The loop's Nat-indexed view is the ordinary Array cell at every valid
+33-cell index. This exposes the exact observation used by the output-list map. -/
+theorem cellAt_eq_getElem (a : Array QM 33#usize) (j : Fin 33) :
+    cellAt a j.val = a.val[j.val]'(by simpa [a.property] using j.isLt) := by
+  simp [cellAt, j.isLt]
+
 private theorem index_usize_ok {α : Type} {n : Usize}
     (a : Array α n) (i : Usize) (hi : i.val < n.val) :
     Array.index_usize a i = .ok (a.val[i.val]'(by simpa [a.property] using hi)) := by
@@ -190,6 +196,7 @@ theorem add_value_lanes_loop3_from_zero
   intro j
   simpa using hvalues j
 
+#print axioms cellAt_eq_getElem
 #print axioms add_value_lanes_loop3_success_fuel
 #print axioms add_value_lanes_loop3_from_zero
 end AspisR1.SelectorValueLaneIndexedLoop3
