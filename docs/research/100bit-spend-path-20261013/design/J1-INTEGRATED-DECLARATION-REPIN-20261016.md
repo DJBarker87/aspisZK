@@ -1,4 +1,4 @@
-The integrated inventory is generated from committed source and evidence at `bbb3ceb51a9fca4edc4a762d69805a278a2af525`. It records 268 unchanged entries, 21 re-extracted entries, and one authorized helper/projection replacement, with no unresolved correspondence in the enumerated accepted/current cones. Counts include source cuts, LLBC declarations, and separately emitted loop auxiliaries; they are not counts of distinct Rust functions.
+The integrated inventory is generated from committed source and evidence at `fb2f11993ce1aa4a996ebf55642503ae25ffd28e`. It records 268 unchanged entries, 21 re-extracted entries, and one authorized helper/projection replacement, with no unresolved correspondence in the enumerated accepted/current cones. Counts include source cuts, LLBC declarations, and separately emitted loop auxiliaries; they are not counts of distinct Rust functions. The original worker check receipt targets `bbb3ceb51`; the final integration check is retained separately under `evidence/lead-followup-integration-20261016`.
 
 Regenerate at the final integration ref, then check the exact report:
 
