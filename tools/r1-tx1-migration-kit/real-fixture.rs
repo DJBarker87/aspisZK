@@ -9,13 +9,14 @@ enum Fault { #[default] None, Geometry, Query(usize), Checkpoint }
 #[derive(Clone,Debug,PartialEq,Eq,Default)]
 struct Log { fault:Fault, geometry:Vec<(usize,usize,[u32;22])>, queries:Vec<(usize,Vec<u8>)>, checkpoints:Vec<Vec<u8>>, phases:Vec<Phase>, digests:Vec<(Vec<Vec<u8>>,[u8;32])> }
 std::thread_local! {static LOG:RefCell<Log>=RefCell::new(Log::default());}
+fn k_bytes(value:K)->[u8;16] {let mut bytes=[0;16];value.write_le_bytes(&mut bytes);bytes}
 fn state(p:&Prepared,a:&Accumulator)->Vec<u8> {
  let mut b=alloc::vec![p.variant.tag()];for root in p.roots {b.extend_from_slice(&root);}
  for x in [p.gamma,p.kappa,p.alpha[0],p.alpha[1]] {b.extend_from_slice(&x.to_le_bytes());}
- b.extend_from_slice(&p.rho.to_le_bytes());for x in p.queries {b.extend_from_slice(&x.to_le_bytes());}
- for x in p.semantic_alpha {b.extend_from_slice(&x.to_le_bytes());}for z in p.z {b.extend_from_slice(&z.x.to_le_bytes());b.extend_from_slice(&z.y.to_le_bytes());}
+ b.extend_from_slice(&k_bytes(p.rho));for x in p.queries {b.extend_from_slice(&x.to_le_bytes());}
+ for x in p.semantic_alpha {b.extend_from_slice(&k_bytes(x));}for z in p.z {b.extend_from_slice(&k_bytes(z.x));b.extend_from_slice(&k_bytes(z.y));}
  b.extend_from_slice(&p.claim.to_le_bytes());b.extend_from_slice(&p.state);b.extend_from_slice(&(a.next as u64).to_le_bytes());
- b.extend_from_slice(&a.rhs.to_le_bytes());b.extend_from_slice(&a.power.to_le_bytes());for x in &a.weights {b.extend_from_slice(&x.to_le_bytes());}b
+ b.extend_from_slice(&a.rhs.to_le_bytes());b.extend_from_slice(&k_bytes(a.power));for x in &a.weights {b.extend_from_slice(&k_bytes(*x));}b
 }
 pub(crate) fn before_geometry(q:&[u32;22],start:usize,end:usize)->bool {
  LOG.with(|s| {let mut s=s.borrow_mut();s.geometry.push((start,end,*q));s.fault==Fault::Geometry})
@@ -55,7 +56,7 @@ fn tx1_saved_s2_exact_old_new_faults_and_success() {
   let old=run(true,fault);let new=run(false,fault);assert_eq!(old,new,"fault={fault:?}");
   let expected_error=match fault {Fault::None=>None,Fault::Checkpoint=>Some(Error::Checkpoint),_=>Some(Error::Query)};
   assert_eq!(old.result.as_ref().err().copied(),expected_error);
-  let cut=match fault {Fault::None=>success.log.phases.len(),Fault::Geometry|Fault::Query(0)=>prepare_cut,Fault::Query(21)=>last_query_cut,Fault::Checkpoint=>success.log.phases.len()-1};
+  let cut=match fault {Fault::None=>success.log.phases.len(),Fault::Geometry|Fault::Query(0)=>prepare_cut,Fault::Query(21)=>last_query_cut,Fault::Checkpoint=>success.log.phases.len()-1,Fault::Query(_)=>unreachable!("only query 0 and 21 are configured")};
   assert_eq!(old.log.phases,&success.log.phases[..cut]);
   assert_eq!(old.values,&success.values[..old.values.len()]);assert_eq!(old.log.digests,&success.log.digests[..old.log.digests.len()]);
   assert_eq!(old.log.geometry.len(),1);

@@ -1,0 +1,42 @@
+{
+  "before_kit_revision": "3864508ff",
+  "production_source_revision": "96aad8ef209cb69d7667ab5d8728bd4584a86d16",
+  "scope": "Two test-only compile corrections. No production changes, no tests or native jobs run by B. A preserves failed joint input files/manifest and runs the corrected injection targets; successful clean gates unchanged.",
+  "failed_compile_reported_by_A": {
+    "target": "prepared-failure-overlay joint test-crate compilation",
+    "exit_status": 101,
+    "wall_seconds": 24.284,
+    "peak_rss_kib": 473640,
+    "process_swaps": 0,
+    "tests_executed": false,
+    "receipt_owner": "A",
+    "host_log": "/home/dombarker/project-offloads/aspis-r1-prepared-helper-native-20261016/runs/prepared-failure-overlay/stderr.log"
+  },
+  "old_failed_B_inputs_retained": {
+    "git_revision": "3864508ff",
+    "real_fixture_sha256": "5c93d3ce59db096fc510f3fcdd2956bd9b0dbec8da0f42c5729b11fd879f3349",
+    "source_pins_sha256": "bb7fb2f7465304bd9ea18d6f222b57a24743a070a54b90c08729be81a96cb225",
+    "note": "Git blobs retain exact B inputs; A retains actual composed host source/manifest, compiler outputs and receipts before restaging."
+  },
+  "corrected_B_inputs": {
+    "real_fixture_sha256": "328134027fe5417b99fceb328536a2f292c02875f77f0f2801eabfa00902e7ba",
+    "source_pins_sha256": "72372695ad0a271f621fc73c32716966502a9cd3f25403e7660d165143a6711a"
+  },
+  "changes": [
+    "Replace nonexistent QM31.to_le_bytes with k_bytes using existing QM31.write_le_bytes. Preserve 16 raw little-endian bytes c0.a,c0.b,c1.a,c1.b, all Prepared/Accumulator fields, and byte order; WideExact serialization unchanged.",
+    "Add explicit unreachable Fault::Query(_) arm for exhaustiveness outside the configured first0/last21 fault cases; configured cases and phase-cut expectations unchanged."
+  ],
+  "existing_encoder": {
+    "path": "crates/aspis-core/src/field.rs",
+    "revision": "96aad8ef209cb69d7667ab5d8728bd4584a86d16",
+    "file_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "first_line": 1028,
+    "last_line": 1031,
+    "declaration_sha256": "cd6f75b335b545a35b537fb40d4940a52ea2aeec609482d1e2256a77047fd145",
+    "source": "    pub fn write_le_bytes(self, out: &mut [u8]) {\n        self.c0.write_le_bytes(&mut out[0..8]);\n        self.c1.write_le_bytes(&mut out[8..16]);\n    }\n",
+    "interpretation": "Writes CM31 c0 to bytes0..8 and CM31 c1 to bytes8..16; each CM31 writes a,b limbs as little-endian. No test helper normalization or changed field relation."
+  },
+  "exact_old_new_body_and_verifier_overlay_hashes_unchanged": true,
+  "diff": "--- 3864508ff/real-fixture.rs\n+++ corrected/real-fixture.rs\n@@ -9,13 +9,14 @@\n #[derive(Clone,Debug,PartialEq,Eq,Default)]\n struct Log { fault:Fault, geometry:Vec<(usize,usize,[u32;22])>, queries:Vec<(usize,Vec<u8>)>, checkpoints:Vec<Vec<u8>>, phases:Vec<Phase>, digests:Vec<(Vec<Vec<u8>>,[u8;32])> }\n std::thread_local! {static LOG:RefCell<Log>=RefCell::new(Log::default());}\n+fn k_bytes(value:K)->[u8;16] {let mut bytes=[0;16];value.write_le_bytes(&mut bytes);bytes}\n fn state(p:&Prepared,a:&Accumulator)->Vec<u8> {\n  let mut b=alloc::vec![p.variant.tag()];for root in p.roots {b.extend_from_slice(&root);}\n  for x in [p.gamma,p.kappa,p.alpha[0],p.alpha[1]] {b.extend_from_slice(&x.to_le_bytes());}\n- b.extend_from_slice(&p.rho.to_le_bytes());for x in p.queries {b.extend_from_slice(&x.to_le_bytes());}\n- for x in p.semantic_alpha {b.extend_from_slice(&x.to_le_bytes());}for z in p.z {b.extend_from_slice(&z.x.to_le_bytes());b.extend_from_slice(&z.y.to_le_bytes());}\n+ b.extend_from_slice(&k_bytes(p.rho));for x in p.queries {b.extend_from_slice(&x.to_le_bytes());}\n+ for x in p.semantic_alpha {b.extend_from_slice(&k_bytes(x));}for z in p.z {b.extend_from_slice(&k_bytes(z.x));b.extend_from_slice(&k_bytes(z.y));}\n  b.extend_from_slice(&p.claim.to_le_bytes());b.extend_from_slice(&p.state);b.extend_from_slice(&(a.next as u64).to_le_bytes());\n- b.extend_from_slice(&a.rhs.to_le_bytes());b.extend_from_slice(&a.power.to_le_bytes());for x in &a.weights {b.extend_from_slice(&x.to_le_bytes());}b\n+ b.extend_from_slice(&a.rhs.to_le_bytes());b.extend_from_slice(&k_bytes(a.power));for x in &a.weights {b.extend_from_slice(&k_bytes(*x));}b\n }\n pub(crate) fn before_geometry(q:&[u32;22],start:usize,end:usize)->bool {\n  LOG.with(|s| {let mut s=s.borrow_mut();s.geometry.push((start,end,*q));s.fault==Fault::Geometry})\n@@ -55,7 +56,7 @@\n   let old=run(true,fault);let new=run(false,fault);assert_eq!(old,new,\"fault={fault:?}\");\n   let expected_error=match fault {Fault::None=>None,Fault::Checkpoint=>Some(Error::Checkpoint),_=>Some(Error::Query)};\n   assert_eq!(old.result.as_ref().err().copied(),expected_error);\n-  let cut=match fault {Fault::None=>success.log.phases.len(),Fault::Geometry|Fault::Query(0)=>prepare_cut,Fault::Query(21)=>last_query_cut,Fault::Checkpoint=>success.log.phases.len()-1};\n+  let cut=match fault {Fault::None=>success.log.phases.len(),Fault::Geometry|Fault::Query(0)=>prepare_cut,Fault::Query(21)=>last_query_cut,Fault::Checkpoint=>success.log.phases.len()-1,Fault::Query(_)=>unreachable!(\"only query 0 and 21 are configured\")};\n   assert_eq!(old.log.phases,&success.log.phases[..cut]);\n   assert_eq!(old.values,&success.values[..old.values.len()]);assert_eq!(old.log.digests,&success.log.digests[..old.log.digests.len()]);\n   assert_eq!(old.log.geometry.len(),1);\n",
+  "formal_status": "No formal proof result, Lean invocation or #print axioms claim."
+}
