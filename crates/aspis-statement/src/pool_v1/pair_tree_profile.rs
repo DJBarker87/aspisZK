@@ -103,7 +103,14 @@ pub struct PoolV1PairLeafWitnessV1 {
 
 #[inline]
 fn digest_is_canonical(value: &Digest) -> bool {
-    value.iter().all(|limb| limb.0 < P)
+    let mut i = 0;
+    while i < value.len() {
+        if value[i].0 >= P {
+            return false;
+        }
+        i += 1;
+    }
+    true
 }
 
 impl PoolV1PairLeafWitnessV1 {
@@ -452,13 +459,15 @@ fn validate_pool_v1_pair_live_snapshot_v1(
     if snapshot.next_pair_index >= POOL_V1_PAIR_CAPACITY {
         return Err(PoolV1PairLiveSnapshotErrorV1::TreeFull);
     }
-    if !digest_is_canonical(&snapshot.current_root)
-        || snapshot
-            .frontier
-            .iter()
-            .any(|node| !digest_is_canonical(node))
-    {
+    if !digest_is_canonical(&snapshot.current_root) {
         return Err(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);
+    }
+    let mut level = 0;
+    while level < snapshot.frontier.len() {
+        if !digest_is_canonical(&snapshot.frontier[level]) {
+            return Err(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);
+        }
+        level += 1;
     }
     Ok(())
 }

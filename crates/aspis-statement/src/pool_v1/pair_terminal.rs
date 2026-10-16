@@ -126,14 +126,23 @@ fn validate_verified_afterstate(
     {
         return Err(PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex);
     }
-    if afterstate.next_root.iter().any(|limb| limb.0 >= P)
-        || afterstate
-            .next_frontier
-            .iter()
-            .flatten()
-            .any(|limb| limb.0 >= P)
-    {
-        return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);
+    let mut i = 0;
+    while i < afterstate.next_root.len() {
+        if afterstate.next_root[i].0 >= P {
+            return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);
+        }
+        i += 1;
+    }
+    let mut level = 0;
+    while level < afterstate.next_frontier.len() {
+        let mut limb = 0;
+        while limb < afterstate.next_frontier[level].len() {
+            if afterstate.next_frontier[level][limb].0 >= P {
+                return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);
+            }
+            limb += 1;
+        }
+        level += 1;
     }
     Ok(())
 }
