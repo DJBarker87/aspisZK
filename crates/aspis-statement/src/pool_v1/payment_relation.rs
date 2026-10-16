@@ -323,7 +323,7 @@ fn require_header(
     magic: [u8; 4],
     kind: PoolV1TransitionKind,
 ) -> Result<(), PoolV1PaymentStatementFormatError> {
-    if bytes[..4] != magic[..] {
+    if bytes[..4] != magic[0..4] {
         return Err(PoolV1PaymentStatementFormatError::WrongMagic);
     }
     if bytes[4] != POOL_V1_PAYMENT_STATEMENT_VERSION {
@@ -392,7 +392,7 @@ pub fn decode_pool_v1_private_transfer_public_v1(
         PoolV1TransitionKind::PrivateTransfer,
     )?;
     if bytes[AMOUNT_OR_RESERVED_OFFSET..FIRST_OUTPUT_OR_DESTINATION_OFFSET]
-        != POOL_V1_CANONICAL_FEE.to_le_bytes()[..]
+        != POOL_V1_CANONICAL_FEE.to_le_bytes()[0..4]
     {
         return Err(PoolV1PaymentStatementFormatError::NonZeroReserved);
     }

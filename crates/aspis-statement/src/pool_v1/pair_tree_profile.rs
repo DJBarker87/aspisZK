@@ -503,7 +503,7 @@ pub fn decode_pool_v1_pair_live_snapshot_v1(
     if bytes.len() != POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES {
         return Err(PoolV1PairLiveSnapshotErrorV1::WrongLength);
     }
-    if bytes[..8] != POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC[..] {
+    if bytes[..8] != POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC[0..8] {
         return Err(PoolV1PairLiveSnapshotErrorV1::WrongMagic);
     }
     if bytes[8] != POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION {
@@ -519,7 +519,7 @@ pub fn decode_pool_v1_pair_live_snapshot_v1(
     {
         return Err(PoolV1PairLiveSnapshotErrorV1::NonZeroReserved);
     }
-    if bytes[16..48] != POOL_V1_PAIR_TREE_FORMAT_BINDING[..] {
+    if bytes[16..48] != POOL_V1_PAIR_TREE_FORMAT_BINDING[0..32] {
         return Err(PoolV1PairLiveSnapshotErrorV1::WrongFormatBinding);
     }
     let current_root = decode_digest_canonical(bytes[128..160].try_into().unwrap())
@@ -638,7 +638,7 @@ pub(crate) fn decode_pool_v1_pair_late_public_statement_boxed_v1(
     if bytes.len() != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES {
         return Err(PoolV1PairLatePublicStatementErrorV1::WrongLength);
     }
-    if bytes[..8] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC[..] {
+    if bytes[..8] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC[0..8] {
         return Err(PoolV1PairLatePublicStatementErrorV1::WrongMagic);
     }
     if bytes[8] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION {
