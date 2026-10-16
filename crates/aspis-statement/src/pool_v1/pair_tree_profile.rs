@@ -497,16 +497,6 @@ pub fn encode_pool_v1_pair_live_snapshot_v1(
     Ok(())
 }
 
-#[inline]
-pub(crate) fn set_decoded_frontier_node(
-    mut frontier: [Digest; POOL_V1_PAIR_TREE_DEPTH],
-    level: usize,
-    node: Digest,
-) -> [Digest; POOL_V1_PAIR_TREE_DEPTH] {
-    frontier[level] = node;
-    frontier
-}
-
 pub fn decode_pool_v1_pair_live_snapshot_v1(
     bytes: &[u8],
 ) -> Result<PoolV1PairLiveSnapshotV1, PoolV1PairLiveSnapshotErrorV1> {
@@ -527,23 +517,48 @@ pub fn decode_pool_v1_pair_live_snapshot_v1(
     }
     let current_root = decode_digest_canonical(bytes[128..160].try_into().unwrap())
         .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?;
-    let mut frontier = [[M31::ZERO; 8]; POOL_V1_PAIR_TREE_DEPTH];
-    let mut level = 0;
-    let mut decode_status = Ok(());
-    while level < POOL_V1_PAIR_TREE_DEPTH {
-        let start = 160 + 32 * level;
-        match decode_digest_canonical(bytes[start..start + 32].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)
-        {
-            Ok(node) => frontier = set_decoded_frontier_node(frontier, level, node),
-            Err(error) => {
-                decode_status = Err(error);
-                break;
-            }
-        }
-        level += 1;
-    }
-    decode_status?;
+    let frontier = [
+        decode_digest_canonical(bytes[160..192].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[192..224].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[224..256].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[256..288].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[288..320].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[320..352].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[352..384].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[384..416].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[416..448].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[448..480].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[480..512].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[512..544].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[544..576].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[576..608].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[608..640].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[640..672].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[672..704].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[704..736].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[736..768].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(bytes[768..800].try_into().unwrap())
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+    ];
     let snapshot = PoolV1PairLiveSnapshotV1 {
         pool: bytes[48..80].try_into().unwrap(),
         deployment_domain: bytes[80..112].try_into().unwrap(),

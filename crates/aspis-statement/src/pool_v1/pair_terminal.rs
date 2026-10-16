@@ -181,32 +181,48 @@ pub fn decode_pool_v1_pair_verified_afterstate_v1(
     }
     let next_root = decode_digest_canonical(&exact(&bytes[16..48])?)
         .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?;
-    let mut next_frontier = [[M31::ZERO; 8]; super::POOL_V1_PAIR_TREE_DEPTH];
-    let mut level = 0;
-    let mut decode_status = Ok(());
-    while level < super::POOL_V1_PAIR_TREE_DEPTH {
-        let start = 48 + 32 * level;
-        let decoded = match exact(&bytes[start..start + 32]) {
-            Ok(raw) => decode_digest_canonical(&raw)
-                .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate),
-            Err(error) => Err(error),
-        };
-        match decoded {
-            Ok(node) => {
-                next_frontier = super::pair_tree_profile::set_decoded_frontier_node(
-                    next_frontier,
-                    level,
-                    node,
-                )
-            }
-            Err(error) => {
-                decode_status = Err(error);
-                break;
-            }
-        }
-        level += 1;
-    }
-    decode_status?;
+    let next_frontier = [
+        decode_digest_canonical(&exact(&bytes[48..80])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[80..112])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[112..144])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[144..176])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[176..208])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[208..240])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[240..272])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[272..304])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[304..336])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[336..368])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[368..400])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[400..432])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[432..464])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[464..496])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[496..528])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[528..560])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[560..592])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[592..624])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[624..656])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+        decode_digest_canonical(&exact(&bytes[656..688])?)
+            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
+    ];
     let afterstate = PoolV1PairVerifiedAfterstateV1 {
         next_pair_index: u64::from_le_bytes(exact(&bytes[8..16])?),
         next_root,

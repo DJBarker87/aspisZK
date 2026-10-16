@@ -79,23 +79,24 @@ pub fn encode_digest_canonical(digest: &Digest) -> [u8; 32] {
 }
 
 pub fn decode_digest_canonical(bytes: &[u8; 32]) -> Result<Digest, AtomicStatementError> {
-    let mut digest = [M31::ZERO; DIGEST_ELEMS];
-    let mut index = 0;
-    let mut decode_status = Ok(());
-    while index < DIGEST_ELEMS {
-        match M31::from_le_bytes(bytes[index * 4..index * 4 + 4].try_into().unwrap())
-            .ok_or(AtomicStatementError::NonCanonicalDigest)
-        {
-            Ok(value) => digest[index] = value,
-            Err(error) => {
-                decode_status = Err(error);
-                break;
-            }
-        }
-        index += 1;
-    }
-    decode_status?;
-    Ok(digest)
+    Ok([
+        M31::from_le_bytes(bytes[0..4].try_into().unwrap())
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+        M31::from_le_bytes(bytes[4..8].try_into().unwrap())
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+        M31::from_le_bytes(bytes[8..12].try_into().unwrap())
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+        M31::from_le_bytes(bytes[12..16].try_into().unwrap())
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+        M31::from_le_bytes(bytes[16..20].try_into().unwrap())
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+        M31::from_le_bytes(bytes[20..24].try_into().unwrap())
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+        M31::from_le_bytes(bytes[24..28].try_into().unwrap())
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+        M31::from_le_bytes(bytes[28..32].try_into().unwrap())
+            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
+    ])
 }
 
 pub fn decode_asset_id_canonical(value: u32) -> Result<M31, AtomicStatementError> {
