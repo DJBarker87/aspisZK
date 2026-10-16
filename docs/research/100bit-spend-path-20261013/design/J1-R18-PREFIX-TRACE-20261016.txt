@@ -1,0 +1,31 @@
+J1.R18 actual Prefix trace predecessor; 2026-10-16
+
+Scope. ExtractedPrefixTrace imports the checked ExtractedPrefixRecordStep and
+therefore final-E AspisR1PrefixAggregateParser.Funs. rowOrder is exactly U8
+0..26. RecordChain records each actual parse_record_at success, its returned
+frame, and successive offsets. It does not assert that Prefix.parse produces
+this chain; that full constructor composition remains OPEN in this commit.
+
+Checked laws. continue_ok_iff inverts the actual emitted Result/Try control
+flow without unfolding the parser or field arithmetic. RecordChain.length
+identifies the lengths. step_of_mem supplies the actual helper invocation for
+every member of the entire zipped row/frame sequence. parse_record_of_mem
+uses the previously checked helper theorem to supply actual inner-parser
+success for every such frame. No arbitrary selected parser witness replaces
+the sequence, and no old-extraction namespace is substituted.
+
+Verification. One focused Linux Lean 4.32.0 check, trace-a, exit 0, 1.803 s,
+peak process RSS 2,648,368 KiB, cgroup peak 396,591,104 bytes, process swaps 0,
+cgroup swap 0 and no pressure/OOM events. All four requested axiom reports
+contain only propext, Classical.choice and Quot.sound. The scope used
+MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, -j1/-M0, with pinned existing
+backend and generated objects; no dependency rebuild or full replay.
+Exact source, runner, runtime-library, command, dependency, and object hashes
+are retained in evidence/r18-prefix-trace-20261016. verify.py checks the
+receipt, current source, standard-only reports and artifact manifest.
+
+Remaining. Full Prefix success must connect C1 to the first32 input bytes and
+all27 returned records to this chain and final offset. Explicit carrier and
+actual-function agreement is required before reusing older RecordParser-F
+canonicality theorems. Semantic decodeFull, selected hread, challenge reads,
+first-read provenance and Rust/extraction refinement remain OPEN here.
