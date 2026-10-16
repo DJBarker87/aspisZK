@@ -58,9 +58,10 @@ adopt those statements as the current security target: the target remains
 
 ## Scope still open
 
-The generic and concrete mask bridges already checked provisionally; their
-final dependent rechecks against these source-bound objects are recorded
-separately. Accepted-input canonicality, actual verifier-to-relation
+The generic and concrete mask bridges passed their
+[focused dependent rechecks](../evidence/mask-final-bridges-row-model-20261016/README.md)
+against the newly reconciled objects, with three standard-only axiom reports.
+Accepted-input canonicality, actual verifier-to-relation
 composition, efficient extraction, privacy, source/runtime correspondence
 and final settlement/artifact gates remain open. This evidence does not turn
 conditional protocol statements into an unconditional security theorem.
