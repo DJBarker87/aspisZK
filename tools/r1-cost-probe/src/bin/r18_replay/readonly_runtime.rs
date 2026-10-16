@@ -71,18 +71,16 @@ pub(super) fn run(
             ComputeBudgetInstruction::set_loaded_accounts_data_size_limit(LOADED),
             instruction,
         ];
-        let message = VersionedMessage::V0(v0::Message::try_compile(
+        let message_v0 = v0::Message::try_compile(
             &payer.pubkey(),
             &instructions,
             &[],
             svm.latest_blockhash(),
-        )?);
+        )?;
         // Correct signature-vector length permits runtime entry; these are
         // deliberately dummy signatures, not forged/validated PDA signatures.
-        let signature_count = match &message {
-            VersionedMessage::V0(m) => usize::from(m.header.num_required_signatures),
-            VersionedMessage::Legacy(_) => unreachable!(),
-        };
+        let signature_count = usize::from(message_v0.header.num_required_signatures);
+        let message = VersionedMessage::V0(message_v0);
         let tx = VersionedTransaction {
             signatures: vec![Default::default(); signature_count],
             message,
