@@ -1,0 +1,5 @@
+import ScalarSuffixPacking
+import AspisR1TerminalDigestBindingCandidate.R0PBridge
+
+#print axioms AspisR1.ScalarSuffixPacking.actual_scalar_suffix
+#print axioms AspisR1TerminalDigestBindingCandidate.R0PBridge.add_digest_binding_is_r0p
