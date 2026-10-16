@@ -1,0 +1,55 @@
+J1.R18: actual Prefix records to the retained semantic codec
+Base: 8dc2d7ca7c30858d6822628f92026261f82715f0.
+
+The new ChunkOrder.slice_mem theorem identifies each complete fixed-width
+offset slice in the actual Aeneas toChunksExact list. The proof is induction
+on the slot, with symbolic multiplication; it does not evaluate a concrete
+896-byte list or make any claim about an ignored remainder.
+
+ExtractedPrefixCoefficients.decode_coefficients supplies the existing
+SemanticCoefficientCodec decoder with all 28 slots in ascending byte order.
+Each value is lowValue of the retained canonical four-limb carrier, not a
+freely selected field map. The conclusion also recovers the complete payload
+through encodeCoefficients and each original offset slice through encodeLow.
+The separate decode_low theorem handles the one-chunk mask-sum payload.
+
+The four unchanged predecessors PrefixedStateCodec, SemanticRecordCodec,
+TypedPrefixParser and SemanticPrefixCodec were checked individually against
+the verified current overlay. Their source bytes remain unchanged. This
+continues the coherent 46-predecessor selection and fresh ModuloField/codec
+checks from the preceding strict-low evidence; no provisional historical
+Selected agreement object or broad replay is used.
+
+ExtractedPrefixRowPayload.parse_record_decode derives successful
+RowPayload decoding and exact re-encoding from actual parse_record success
+at a matching Fin25 row. ExtractedPrefixTypedFull.parse_decodeFull composes
+the actual fixed rowOrder trace into decodeFull/decodeFrom success for
+precisely the first 25 returned records, with exact encodeFull recovery:
+  actual Prefix.parse bytes = ok (Ok parsed) ->
+  exists values : SemanticPrefixCodec.Full,
+    decodeFull (completedRecords parsed) = some values /\
+    encodeFull values = completedRecords parsed /\
+    decodeFrom 0 (completedRecords parsed) = some (entriesOf values).
+completedRecords is exactly (parsed.records.val.take 25).map
+(fun frame => frame.val.map rawByte). Row positions come from the successful
+actual trace; no decoder-success hypothesis or arbitrary records are supplied.
+
+Eight focused Lean 4.32 targets passed, with 36 standard-only axiom reports.
+Successful checks total 17.426 seconds; maximum process RSS 3,864,308 KiB,
+cgroup peak 510,156,800 bytes, process/cgroup swap zero and no pressure/OOM
+events. Every check used -j1/-M0, MemoryHigh 6G, MemoryMax 8G, SwapMax 0.
+Four earlier failures are retained: the generic helper's namespace and
+dependent-if/symbolic arithmetic elaboration, and the final composition's
+list-map indexing/minimum normalization. No limit was raised. Source,
+direct-import, runtime/shared-library, command and output pins are in
+evidence/r18-prefix-typed-semantic-20261016; verify.py checks the bundle.
+
+The selected boundary remains explicit. SemanticPrefixCompletedAgreement's
+completed_read_of_decode requires decodeFrom 0 applied to the selected rs
+message bytes. Supplying that premise from actual Prefix parsing still
+requires equality of those bytes with the returned first25 record list.
+Selected challenge values, C2 recovery, first-read provenance and the
+already-read cut required by TypedPrefixExtension.semantic_typed_append_eq
+are separate obligations. Neither that extension theorem nor these codecs
+equate challenge tables. No Rust-refinement, accepted-execution, classifier,
+density, extractor or D3 closure is claimed.

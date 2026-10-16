@@ -1,0 +1,45 @@
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixChunkOrder.lean:15:30: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if xs.length < n then ?m.58 else ?m.59
+in the target expression
+  List.take n (List.drop (n * 0) xs) ∈
+    (if _h : xs.length < n then ([], xs)
+      else
+        match List.toChunksExact n hn (List.drop n xs) with
+        | (chunks, rem) => (List.take n xs :: chunks, rem)).1
+
+case zero
+α : Type
+n : ℕ
+hn : 0 < n
+xs : List α
+hi : (0 + 1) * n ≤ xs.length
+hlen : ¬xs.length < n
+⊢ List.take n (List.drop (n * 0) xs) ∈
+    (if _h : xs.length < n then ([], xs)
+      else
+        match List.toChunksExact n hn (List.drop n xs) with
+        | (chunks, rem) => (List.take n xs :: chunks, rem)).1
+/home/dombarker/project-offloads/aspis-r1-r18-prefix-20261016/lean-bridge/sources/ExtractedPrefixChunkOrder.lean:20:30: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if xs.length < n then ?m.86 else ?m.87
+in the target expression
+  List.take n (List.drop (n * (i + 1)) xs) ∈
+    (if _h : xs.length < n then ([], xs)
+      else
+        match List.toChunksExact n hn (List.drop n xs) with
+        | (chunks, rem) => (List.take n xs :: chunks, rem)).1
+
+case succ
+α : Type
+n : ℕ
+hn : 0 < n
+i : ℕ
+ih : ∀ (xs : List α), (i + 1) * n ≤ xs.length → List.take n (List.drop (n * i) xs) ∈ (List.toChunksExact n hn xs).1
+xs : List α
+hi : i * n + n + n ≤ xs.length
+hlen : ¬xs.length < n
+⊢ List.take n (List.drop (n * (i + 1)) xs) ∈
+    (if _h : xs.length < n then ([], xs)
+      else
+        match List.toChunksExact n hn (List.drop n xs) with
+        | (chunks, rem) => (List.take n xs :: chunks, rem)).1
+'AspisR1.ExtractedPrefixChunkOrder.slice_mem' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
