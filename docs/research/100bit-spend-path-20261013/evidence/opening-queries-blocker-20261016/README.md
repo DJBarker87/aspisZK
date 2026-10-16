@@ -1,0 +1,7 @@
+Exact unchanged final96aad `Transcript::queries` is the only new extraction root, reached through a one-call extraction-kit wrapper. The source body is byte pinned. Pure `queries_from_pairs` and field embedding remain explicit external boundaries. This is rejected diagnostic evidence, not a Lean result.
+
+Charon exit0,.402235s,213644KiBRSS,swap0; LLBC `edef611a020524557983843da08d92de302456efb63a4a6fa23687cca0390d3a`, has_errors=false. Aeneas exit2,.402117s,76912KiBRSS,swap0, accepted static tool4632746d. Both scopes6G/8G/swap0; complete commands/revisions/hashes/reservations and immutable input snapshots are archived. No generated Lean output exists. Axioms:N/A, no theorem result.
+
+The first exact failure is the eight-pair loop (production transcript.rs38–41; cutlib813–816), `interp/InterpBorrows.ml:2731`, `simplify_dummy_values_useless_abs_aux` visiting a shared loan during loop synthesis. The later trace enumerate loop has not been reached; no claim is made that it extracts.
+
+`tools/opening-queries-extraction-kit/proposal-eight-pairs/proposal.patch` is REVIEW ONLY: expand exactly the eight iterations, preserving each readtag1/advancetag2 pair and local state update. The generator audits the unchanged file prefix/suffix, every expanded body and the16call order. The suffix still assigns the decoder-returned state, which may be an earlier advance. No proposed file was applied, compiled, extracted, or used as proof evidence. Further edits remain subject to a new lead decision.
