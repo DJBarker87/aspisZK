@@ -272,7 +272,8 @@ theorem badColl_density (p : Params M Cv L) (Qtot : Nat) (a : Addr L) (T : Table
             have := indicator_or_le (∃ b, T b = some f)
               (∃ b, (b = a ∨ T b ≠ none) ∧ b.toBytes.take 32 = bytes f)
             linarith
-    have hcard : (0 : ℚ) < (Fintype.card State : ℚ) := by positivity
+    have hcard : (0 : ℚ) < (Fintype.card State : ℚ) := by
+      exact_mod_cast (Fintype.card_pos : 0 < Fintype.card State)
     have hout := mean_exists_output_le T
     have hfilt : ((Finset.univ.filter fun b : Addr L => b = a ∨ T b ≠ none).card : ℚ) ≤
         ((dom T).card : ℚ) + 1 := by exact_mod_cast card_filter_insert_le T a
@@ -299,7 +300,9 @@ theorem badColl_density (p : Params M Cv L) (Qtot : Nat) (a : Addr L) (T : Table
       rw [indicator_iff (q := False), indicator_false]
       exact ⟨fun h => hsz h.1, False.elim⟩
     rw [mean_congr hz, mean_const]
-    positivity
+    exact div_nonneg
+      (mul_nonneg (by norm_num : (0 : ℚ) ≤ 2) (Nat.cast_nonneg Qtot))
+      (Nat.cast_nonneg (Fintype.card State))
 
 /-- The collision event of an execution. -/
 def Coll {Pf : Type} (p : Params M Cv L) (Qtot : Nat) (v : View (Addr L) State (Pf × Bool)) : Prop :=
@@ -316,7 +319,10 @@ theorem coll_mass {X Pf : Type} (p : Params M Cv L) (Qtot : Nat)
   unfold Coll κ
   rw [empty_oracle_law (experiment P V x)
     (fun v => indicator (hitsBad (badColl p Qtot) emptyTable v.1))]
-  have hε : (0 : ℚ) ≤ (2 * Qtot : ℚ) / (256 ^ 32 : ℚ) := by positivity
+  have hε : (0 : ℚ) ≤ (2 * Qtot : ℚ) / (256 ^ 32 : ℚ) := by
+    exact div_nonneg
+      (mul_nonneg (by norm_num : (0 : ℚ) ≤ 2) (Nat.cast_nonneg Qtot))
+      (pow_nonneg (by norm_num : (0 : ℚ) ≤ 256) 32)
   have hdens : ∀ (a : Addr L) (T : Table (Addr L) State),
       mean (fun f => indicator (badColl p Qtot a T f)) ≤ (2 * Qtot : ℚ) / (256 ^ 32 : ℚ) := by
     intro a T
