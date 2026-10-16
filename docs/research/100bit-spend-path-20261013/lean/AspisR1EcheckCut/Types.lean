@@ -44,7 +44,6 @@ structure field.wide_exact.WideExact where
 /-- [aspis_r1_mask_extraction_probe::verifier::Error]
     Source: 'src/verifier.rs', lines 4:0-4:95
     Visibility: public -/
-@[discriminant isize]
 inductive verifier.Error where
 | Parse : verifier.Error
 | Semantic : verifier.Error
@@ -54,5 +53,19 @@ inductive verifier.Error where
 | Query : verifier.Error
 | Checkpoint : verifier.Error
 | Allocation : verifier.Error
+
+def verifier.Error.read_discriminant : verifier.Error → Std.Isize
+  | .Parse => 0#isize
+  | .Semantic => 1#isize
+  | .Transcript => 2#isize
+  | .Relation => 3#isize
+  | .Merkle => 4#isize
+  | .Query => 5#isize
+  | .Checkpoint => 6#isize
+  | .Allocation => 7#isize
+
+instance _root_.AspisR1EcheckCut.verifier.Error.instDiscriminant :
+    Aeneas.Std.Discriminant verifier.Error Isize where
+  read_discriminant := verifier.Error.read_discriminant
 
 end AspisR1EcheckCut
