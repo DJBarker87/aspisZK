@@ -1,0 +1,25 @@
+J1.R18 indexed QM31 sampler; progress and remaining boundary
+
+Production commit670b7e149f94004baa5b138bdc2db28f3bc646bd changes only sampler.rs.
+qm31_div_pass returns the entire owned quotient array and remainder; qm31_digits
+assembles little-endian words by checked indices and explicitly carries the
+quotient between four passes. The public wrapper preserves c0.a,c0.b,c1.a,c1.b
+order. Ordinary/gamma/circle routines and current QM31 arithmetic are unchanged.
+
+Three optimized tests retain the exact old sampler body and an iterator pass
+reference, compare every quotient word over four passes, cover every single bit,
+word/modulus boundaries, independent u128 base-P expectations, and4096 deterministic
+full blocks. The exact eight-cut kit passed all3 tests in0.220s/136536KiB RSS;
+actual crate `cargo test --release --locked --offline -p aspis-r1-cost-probe --lib
+sampler::qm31_index_tests` passed3/3 in46.600s/543888KiB RSS. Both reported zero
+swaps, no memory events, and separate systemd scopes with MemoryHigh6G,
+MemoryMax8G, MemorySwapMax0. Native cache was privately copied, not shared writable.
+
+The new kit pins eight original declarations and the cfg(test)-only test module.
+Its checker proves source-text equality, including old-reference equality modulo
+name/indent; this is not Rust/Lean refinement. No arithmetic method is selected.
+Extraction waits for matching b59/cb50 Linux tools; the older d860 host translator
+is not used. No Lean has run on these new sources. Full quotient write-back,
+digit values/canonicality, actual wrapper success and the constructor-only
+toCurrent bridge remain OPEN until proved over the emitted definitions.
+Old sampler extraction failures remain in their original bundle.
