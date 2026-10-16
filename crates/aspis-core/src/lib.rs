@@ -25,6 +25,7 @@ pub mod circle_openings;
 pub mod circle_pcs_shape;
 pub mod circle_prefix;
 pub mod circle_query;
+pub mod digest;
 pub mod field;
 pub mod merkle;
 pub mod params;
@@ -63,6 +64,7 @@ pub mod v7_staged_pair;
 pub mod verify;
 
 pub use params::{FoldPayload, MerkleMode, Profile, PROFILES};
+pub use digest::Digest32;
 pub use transcript::HashFn;
 #[cfg(feature = "insecure-test-framing")]
 pub use verify::verify_with_insecure_m31_circle_as_legacy_for_tests;

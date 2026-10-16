@@ -35,8 +35,8 @@
         out
     }
 
-    pub fn prove_sumcheck(
-        transcript: &mut SemanticTranscript,
+    pub fn prove_sumcheck<H: aspis_core::Digest32>(
+        transcript: &mut SemanticTranscript<H>,
         output: &mut Vec<u8>,
         initial_claim: QM31,
         mut oracle: impl FnMut(&[QM31; 10]) -> Result<QM31, Error>,
