@@ -6,7 +6,14 @@ use std::{collections::HashMap, fs, path::Path, sync::{atomic::{AtomicU8, Orderi
 #[derive(Default, Clone, Copy)]
 struct Counts { tx1: u64, tx2: u64 }
 
+#[derive(Clone, Copy)]
+struct CountedDigest;
+impl aspis_core::Digest32 for CountedDigest {
+    fn digest(&self, parts: &[&[u8]]) -> [u8; 32] { counted_hash(parts) }
+}
+
 static PHASE: AtomicU8 = AtomicU8::new(0);
+static ORDERED: OnceLock<Mutex<Vec<Value>>> = OnceLock::new();
 static INPUTS: OnceLock<Mutex<HashMap<Vec<u8>, Counts>>> = OnceLock::new();
 
 fn counted_hash(parts: &[&[u8]]) -> [u8; 32] {
@@ -16,7 +23,13 @@ fn counted_hash(parts: &[&[u8]]) -> [u8; 32] {
     let mut map = INPUTS.get_or_init(|| Mutex::new(HashMap::new())).lock().unwrap();
     let counts = map.entry(input).or_default();
     match phase { 1 => counts.tx1 += 1, 2 => counts.tx2 += 1, _ => panic!("hash called outside tx1/tx2") }
-    aspis_prover::host_hashv(parts)
+    let output = aspis_prover::host_hashv(parts);
+    ORDERED.get_or_init(|| Mutex::new(Vec::new())).lock().unwrap().push(json!({
+        "phase": phase,
+        "parts_hex": parts.iter().map(|part| hex(part)).collect::<Vec<_>>(),
+        "output_hex": hex(&output),
+    }));
+    output
 }
 
 fn sha(bytes: &[u8]) -> String { format!("{:x}", Sha256::digest(bytes)) }
@@ -42,9 +55,9 @@ fn main() {
     assert_eq!(proof[8], Variant::S2.tag(), "proof is not the two-fold S2 variant");
 
     PHASE.store(1, Ordering::Relaxed);
-    let checkpoint = verifier::tx1(public, &saved_public, &proof, 11, counted_hash, None).expect("tx1 acceptance");
+    let checkpoint = verifier::tx1(public, &saved_public, &proof, 11, CountedDigest, None).expect("tx1 acceptance");
     PHASE.store(2, Ordering::Relaxed);
-    verifier::tx2(&saved_public, &proof, &checkpoint, counted_hash, None).expect("tx2 acceptance");
+    verifier::tx2(&saved_public, &proof, &checkpoint, CountedDigest, None).expect("tx2 acceptance");
     PHASE.store(0, Ordering::Relaxed);
 
     let map = INPUTS.get().unwrap().lock().unwrap();
@@ -65,7 +78,8 @@ fn main() {
             "public_path": public_path, "public_len": saved_public.len(), "public_sha256": sha(&saved_public),
             "public_reconstruction_equal": true, "variant": "S2 two-fold", "fixture_mode": "existing saved proof/public; no proof generation"
         },
-        "acceptance": { "tx1": true, "tx2": true, "checkpoint_len": checkpoint.len() },
+        "acceptance": { "tx1": true, "tx2": true, "checkpoint_len": checkpoint.len(), "checkpoint_hex": hex(&checkpoint) },
+        "ordered_digest_calls": *ORDERED.get().unwrap().lock().unwrap(),
         "hash_input_counts": {
             "tx1_raw_calls": tx1_raw, "tx1_distinct_inputs": distinct_tx1,
             "tx2_raw_calls": tx2_raw, "tx2_distinct_inputs": distinct_tx2,

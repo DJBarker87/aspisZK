@@ -1,7 +1,7 @@
 //! UNPROVED R1 COST PROBE. Two-transaction verifier shape; no production use.
 use aspis_core::r0::CodeField;
 use alloc::{boxed::Box,vec::Vec};
-use aspis_core::{HashFn,field::{WideExact as E,QM31 as K,M31},circle::SecureCirclePoint,r0::{domain,merkle}};
+use aspis_core::{Digest32,field::{WideExact as E,QM31 as K,M31},circle::SecureCirclePoint,r0::{domain,merkle}};
 use aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public;
 use crate::{transport::Variant,weights::{self,Weights,field,powers,QUARTER},transcript::Transcript};
 
@@ -84,7 +84,7 @@ pub struct Prepared {
 }
 impl Prepared {
     #[inline(never)]
-    pub fn new(sem:&crate::r1_semantic::Verified,v:&View<'_>,hash:HashFn)->Result<Box<Self>,Error> {
+    pub fn new<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,hash:H)->Result<Box<Self>,Error> {
         let mut t=Transcript::new(hash,sem.transcript.state(),v.variant);
         let gamma=t.scalar(27,v.y1,true);
         let kappa=t.scalar(28,&v.inactive.to_le_bytes(),false);
@@ -117,13 +117,13 @@ impl Accumulator {
     pub fn new(v:Variant)->Result<Self,Error> {Ok(Self{weights:aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?,rhs:E::ZERO,power:K::ONE,next:0})}
 }
 
-fn merkle_path(hash:HashFn,root:&[u8;32],mut index:usize,mut node:[u8;32],path:&[u8])->bool {
+fn merkle_path<H:Digest32>(hash:H,root:&[u8;32],mut index:usize,mut node:[u8;32],path:&[u8])->bool {
     for d in 0..6 {
         let slot=index%8;
         let children=core::array::from_fn(|s| {
             if s==slot {node}else{let j=s-usize::from(s>slot);path[d*224+j*32..d*224+j*32+32].try_into().unwrap()}
         });
-        node=merkle::parent(hash,&children);index/=8;
+        node=merkle::parent_with_digest(hash,&children);index/=8;
     }
     node==*root&&index==0
 }
@@ -234,29 +234,29 @@ pub fn accumulate(p:&Prepared,a:&mut Accumulator,index:usize,value:E) {
     a.power=a.power.mul(p.rho);a.next+=1;
 }
 #[inline(never)]
-pub fn query(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:HashFn,obs:Observer)->Result<(),Error> {
+pub fn query<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:H,obs:Observer)->Result<(),Error> {
     let geometry=QueryGeometry::for_range(&p.queries,a.next,a.next+1)?;
     query_with_geometry(v,p,a,g,hash,obs,&geometry)
 }
 #[inline(never)]
-fn query_with_geometry(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:HashFn,obs:Observer,geometry:&QueryGeometry)->Result<(),Error> {
+fn query_with_geometry<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry)->Result<(),Error> {
     let i=a.next;let u=p.queries[i] as usize;let q=v.query(i);
     #[cfg(not(feature = "private-leaf-salts"))]
-    let (c1,c2,path_at) = (merkle::leaf(hash,merkle::C1_TAG,&q[..480]),merkle::leaf(hash,merkle::C2_TAG,&q[480..608]),608);
+    let (c1,c2,path_at) = (merkle::leaf_with_digest(hash,merkle::C1_TAG,&q[..480]),merkle::leaf_with_digest(hash,merkle::C2_TAG,&q[480..608]),608);
     #[cfg(feature = "private-leaf-salts")]
     let (c1,c2,path_at) = (
-        aspis_core::state_only_private_merkle::private_leaf_hash(hash,merkle::C1_TAG,&q[..480],q[608..640].try_into().unwrap()),
-        aspis_core::state_only_private_merkle::private_leaf_hash(hash,merkle::C2_TAG,&q[480..608],q[640..672].try_into().unwrap()),
+        aspis_core::state_only_private_merkle::private_leaf_hash_with_digest(hash,merkle::C1_TAG,&q[..480],q[608..640].try_into().unwrap()),
+        aspis_core::state_only_private_merkle::private_leaf_hash_with_digest(hash,merkle::C2_TAG,&q[480..608],q[640..672].try_into().unwrap()),
         672,
     );
     if !merkle_path(hash,&p.roots[0],u,c1,&q[path_at..path_at+1344])||!merkle_path(hash,&p.roots[1],u,c2,&q[path_at+1344..INITIAL_QUERY_BYTES]) {return Err(Error::Merkle);}
     if p.variant.folds()==2 {
         let folded=&q[INITIAL_QUERY_BYTES..INITIAL_QUERY_BYTES+128];
         #[cfg(not(feature = "private-leaf-salts"))]
-        let (leaf,path_offset)=(merkle::leaf(hash,0x72,folded),INITIAL_QUERY_BYTES+128);
+        let (leaf,path_offset)=(merkle::leaf_with_digest(hash,0x72,folded),INITIAL_QUERY_BYTES+128);
         #[cfg(feature = "private-leaf-salts")]
         let (leaf,path_offset)=(
-            aspis_core::state_only_private_merkle::private_leaf_hash(hash,0x72,folded,q[INITIAL_QUERY_BYTES+128..INITIAL_QUERY_BYTES+160].try_into().unwrap()),
+            aspis_core::state_only_private_merkle::private_leaf_hash_with_digest(hash,0x72,folded,q[INITIAL_QUERY_BYTES+128..INITIAL_QUERY_BYTES+160].try_into().unwrap()),
             INITIAL_QUERY_BYTES+160,
         );
         if !merkle_path(hash,v.folded_root.unwrap(),u/4,leaf,&q[path_offset..]) {return Err(Error::Merkle);}
@@ -299,10 +299,10 @@ pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Res
 
 fn put(out:&mut Vec<u8>,x:E) {out.extend_from_slice(&x.to_le_bytes());}
 fn put_k(out:&mut Vec<u8>,x:K) {let mut b=[0;16];x.write_le_bytes(&mut b);out.extend_from_slice(&b);}
-pub fn checkpoint(p:&Prepared,a:&Accumulator,proof:&[u8],public:&[u8],hash:HashFn)->Vec<u8> {
+pub fn checkpoint<H:Digest32>(p:&Prepared,a:&Accumulator,proof:&[u8],public:&[u8],hash:H)->Vec<u8> {
     let mut out=Vec::with_capacity(checkpoint_size(p.variant));
     out.extend_from_slice(b"R1P2CKP2");out.extend_from_slice(&[p.variant.tag(),a.next as u8,1,0,0,0,0,0]);
-    out.extend_from_slice(&hash(&[proof]));out.extend_from_slice(&hash(&[public]));out.extend_from_slice(&p.state);
+    out.extend_from_slice(&hash.digest(&[proof]));out.extend_from_slice(&hash.digest(&[public]));out.extend_from_slice(&p.state);
     for root in &p.roots {out.extend_from_slice(root);}
     for x in [p.gamma,p.kappa,p.alpha[0],p.alpha[1]] {put(&mut out,x);}
     put_k(&mut out,p.rho);
@@ -312,7 +312,7 @@ pub fn checkpoint(p:&Prepared,a:&Accumulator,proof:&[u8],public:&[u8],hash:HashF
     for x in [p.claim,a.rhs] {put(&mut out,x);}
     put_k(&mut out,a.power);
     for &x in &a.weights {put_k(&mut out,x);}
-    let sum=hash(&[b"UNPROVED:R1:checkpoint",&out]);out.extend_from_slice(&sum);
+    let sum=hash.digest(&[b"UNPROVED:R1:checkpoint",&out]);out.extend_from_slice(&sum);
     assert_eq!(out.len(),checkpoint_size(p.variant));out
 }
 struct Reader<'a>{bytes:&'a[u8],at:usize}
@@ -322,10 +322,10 @@ impl<'a> Reader<'a>{
     fn k(&mut self)->Result<K,Error>{K::from_le_bytes(&self.raw::<16>()).ok_or(Error::Checkpoint)}
 }
 #[inline(never)]
-pub fn resume(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:HashFn)->Result<(Box<Prepared>,Accumulator),Error> {
+pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)->Result<(Box<Prepared>,Accumulator),Error> {
     if bytes.len()!=checkpoint_size(v)||&bytes[..8]!=b"R1P2CKP2"||bytes[8]!=v.tag()||bytes[9]>22||bytes[10]!=1||bytes[11..16].iter().any(|&b|b!=0) {return Err(Error::Checkpoint);}
     let end=bytes.len()-32;
-    if bytes[16..48]!=hash(&[proof])||bytes[48..80]!=hash(&[public])||bytes[end..]!=hash(&[b"UNPROVED:R1:checkpoint",&bytes[..end]]) {return Err(Error::Checkpoint);}
+    if bytes[16..48]!=hash.digest(&[proof])||bytes[48..80]!=hash.digest(&[public])||bytes[end..]!=hash.digest(&[b"UNPROVED:R1:checkpoint",&bytes[..end]]) {return Err(Error::Checkpoint);}
     let mut r=Reader{bytes,at:80};let state=r.raw();let roots=[r.raw(),r.raw()];
     let gamma=r.e()?;let kappa=r.e()?;let alpha=[r.e()?,r.e()?];let rho=r.k()?;
     let queries=core::array::from_fn(|_|u32::from_le_bytes(r.raw()));
@@ -339,7 +339,7 @@ pub fn resume(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:HashFn)->Resul
     Ok((Box::new(Prepared{variant:v,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state}),Accumulator{weights,rhs,power,next:bytes[9] as usize}))
 }
 #[inline(never)]
-pub fn tx1(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:HashFn,obs:Observer)->Result<Vec<u8>,Error> {
+pub fn tx1<H:Digest32>(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {
     if k>22 {return Err(Error::Parse);}
     let v=View::parse(proof)?;mark(obs,Phase::Parsed);
     let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;mark(obs,Phase::Semantic);
@@ -357,7 +357,7 @@ pub fn tx1(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:HashFn,
 /// does not establish checkpoint provenance by itself. This strict entrypoint
 /// repeats the full canonical scan of proof fields and query values.
 #[inline(never)]
-pub fn tx2(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:HashFn,obs:Observer)->Result<(),Error> {
+pub fn tx2<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,obs:Observer)->Result<(),Error> {
     let v=View::parse(proof)?;mark(obs,Phase::Parsed);
     let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);
     let geometry=QueryGeometry::for_range(&p.queries,a.next,22)?;
@@ -377,7 +377,7 @@ pub fn tx2(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:HashFn,obs:Obser
 /// redundant per-field canonical scan of the proof; use strict `tx2` when that
 /// scan is required.
 #[inline(never)]
-pub fn tx2_authenticated(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:HashFn,obs:Observer)->Result<(),Error> {
+pub fn tx2_authenticated<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,obs:Observer)->Result<(),Error> {
     let v=View::parse_shape(proof)?;mark(obs,Phase::Parsed);
     let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);
     let geometry=QueryGeometry::for_range(&p.queries,a.next,22)?;

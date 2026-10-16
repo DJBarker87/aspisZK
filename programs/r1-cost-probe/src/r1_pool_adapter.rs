@@ -971,7 +971,7 @@ fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> Pro
         &public_bytes,
         &proof_data[proof_start..proof_end],
         &checkpoint_data,
-        |parts| hashv(parts).to_bytes(),
+        super::SolanaDigest,
         Some(super::mark),
     )
     .map_err(super::error)?;

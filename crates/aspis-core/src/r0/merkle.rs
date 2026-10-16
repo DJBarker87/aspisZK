@@ -7,7 +7,7 @@
 //! grammar (R552 leafInput), with canonical fixed-width bytes and no salt.
 //! The old 26-byte Lean theorem is NOT a refinement proof of this adapter.
 use super::{domain::FibreIndex, Error, FIBRE_COUNT};
-use crate::HashFn;
+use crate::{digest::LegacyHashFn, Digest32, HashFn};
 use alloc::vec::Vec;
 
 pub type Digest = [u8; 32];
@@ -15,10 +15,18 @@ pub type Path = [[Digest; 7]; 6];
 pub const C1_TAG: u8 = 0x71;
 pub const C2_TAG: u8 = 0xf1;
 pub fn leaf(hash: HashFn, tag: u8, values: &[u8]) -> Digest {
-    hash(&[&[0x10, tag], values])
+    leaf_with_digest(LegacyHashFn(hash), tag, values)
 }
 pub fn parent(hash: HashFn, children: &[Digest; 8]) -> Digest {
-    hash(&[
+    parent_with_digest(LegacyHashFn(hash), children)
+}
+#[inline]
+pub fn leaf_with_digest<H: Digest32>(hash: H, tag: u8, values: &[u8]) -> Digest {
+    hash.digest(&[&[0x10, tag], values])
+}
+#[inline]
+pub fn parent_with_digest<H: Digest32>(hash: H, children: &[Digest; 8]) -> Digest {
+    hash.digest(&[
         &[0x18],
         &children[0],
         &children[1],
