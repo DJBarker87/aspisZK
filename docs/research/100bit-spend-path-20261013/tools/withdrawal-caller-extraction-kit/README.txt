@@ -14,9 +14,10 @@ the actual M31 byte serializer and source constants. No stub or callback is
 substituted. The namespace-only layout changes no declaration body.
 
 Local cargo check (single job, no dependencies) exits0; this is only a native
-type preflight. Charon/Aeneas extraction, generated-target external audit,
-Lean4.32 checks, carrier agreement and caller theorem are OPEN. The digest
-encoder's exact iterator chain is retained; any unsupported translation must
-be reported before a source change or an external contract is proposed.
+type preflight. Exact cb50/b59 extraction subsequently succeeds with10 functions,
+5 types and16 globals, no opaque declaration/template. The digest encoder's
+exact immutable iterator chain uses Aeneas backend operations. See the committed
+withdrawal-caller-extraction-20261016 evidence and exact generated mirrors.
+Lean4.32 checks, carrier agreement and caller theorem remain OPEN.
 
 No production source, existing proof or live-owned module was changed.
