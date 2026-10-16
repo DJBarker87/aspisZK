@@ -78,6 +78,16 @@ pub fn encode_digest_canonical(digest: &Digest) -> [u8; 32] {
     bytes
 }
 
+/// Unwrap a fixed-width slice conversion after its enclosing length guard.
+/// Both payloads are Copy, so extraction needs no formatting or drop machinery.
+#[inline]
+pub(crate) fn unwrap_fixed_slice<T: Copy>(value: Result<T, core::array::TryFromSliceError>) -> T {
+    match value {
+        Ok(value) => value,
+        Err(_) => panic!("fixed-size slice conversion failed"),
+    }
+}
+
 pub fn decode_digest_canonical(bytes: &[u8; 32]) -> Result<Digest, AtomicStatementError> {
     Ok([
         M31::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])
