@@ -1,0 +1,51 @@
+J1.R18 Prefix/record field agreement; 2026-10-16
+
+Result. ExtractedPrefixFieldAgreement gives fixed componentwise CM31/QM31/
+WideExact maps from final Prefix-E to record-parser-F. from_limbs_agreement
+and from_le_bytes_agreement equate the actual generated functions after
+mapping successful carriers, preserving Option.none, Result.fail and div.
+from_le_bytes_success is the success specialization. qm_zero_agreement and
+qm_eq_agreement establish the exact ZERO/derived comparison transport.
+The proof uses unchanged byte reads, guards and packing, without field
+arithmetic reduction or an assumed decoder-success premise.
+
+Namespace obstacle. Importing both original generated Types failed before
+proof checking: both discriminant attributes emitted the root instance name
+instDiscriminantErrorIsize. The pinned Aeneas Discriminant generator qualifies
+read_discriminant but emits an anonymous instance through liftCommandElabM.
+The original failed receipt is retained. This is a declaration-name collision,
+not evidence that the carrier functions disagree.
+
+Reviewed adapter. tools/prefix-discriminant-bridge.py verifies the exact
+original Types hash and emits a new one-sided Types mirror. It replaces only
+the Error discriminant attribute with its generated constructor-order match
+(codes0..10) and a fully qualified instance. An inverse transformation restores
+all original source bytes. Original generated Types/Funs and their receipts
+remain unchanged. Separate original/adapter audits prove every constructor
+code by cases/rfl; their printed definitions and complete logs are byte-identical.
+The backend generator is snapshotted and hashed. A future backend instance-name
+patch is recorded as unapplied; no backend consumer or runtime was changed.
+
+Verification. In an isolated object overlay, adapter Types, unchanged Funs,
+discriminant audit, unchanged step/trace/full Prefix proofs, and new field
+agreement all pass Lean4.32.0. The new field target takes1.803s, RSS2,643,404KiB,
+cgroup peak391,430,144bytes. Its five audits use only standard axioms; the
+comparison equality uses none. Original discriminant audit also passes.
+All eight green checks use -j1/-M0, MemoryHigh6G/MemoryMax8G/MemorySwapMax0,
+zero process/cgroup swap and no pressure/OOM events. No dependency rebuild.
+Evidence retains exact commands, sources, runtime libraries, object hashes,
+runner snapshots, source/object manifests and old RecordParser cache receipts.
+verify.py checks these pins, the collision, unchanged dependent sources,
+constructor equivalence, resource settings and audits.
+
+Boundary. The naming adapter is an explicitly verified representation bridge,
+not a change to the extracted Rust semantics. Unused generated Error.fmt still
+has Formatter/native.decide dependencies outside the audited target cone;
+there is no whole-module axiom-free claim. Validator-loop/parse_record carrier
+agreement, actual semantic decodeFull success and selected completed-message
+byte equality remain OPEN. The eventual live hypothesis is
+SelectedSemanticPrefix.read recoverC2 offset
+  (SelectedCompletedSemantic.pairs T acc offset rs) = some out.
+Supplying it still requires actual completed bytes plus challenge/read
+provenance; arbitrary supplied rs/T and recoverC2 do not discharge those facts.
+No Rust compiler/refinement or runtime lifecycle claim is made.
