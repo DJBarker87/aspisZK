@@ -1,3 +1,4 @@
+import Mathlib.Algebra.Order.Field.Rat
 import AspisV8R19.SourceDuplexStep
 
 /-! A one-step counting bound for an independently uniform 32-byte state.
@@ -39,9 +40,10 @@ theorem uniform_bad_bound (reads : List Bytes) :
     uniformBadFraction reads ≤ (reads.length : ℚ) / (256 ^ 32 : ℚ) := by
   unfold uniformBadFraction
   rw [state_card]
-  simp only [Nat.cast_pow, Nat.cast_ofNat]
+  have hbase : (0 : ℚ) ≤ (256 : ℚ) := by decide
+  have hden : (0 : ℚ) ≤ (256 : ℚ) ^ 32 := Rat.pow_nonneg hbase
   exact div_le_div_of_nonneg_right
-    (by exact_mod_cast bad_states_card bytes bytes_length bytes_injective reads) (by positivity)
+    (Nat.cast_le.mpr (bad_states_card bytes bytes_length bytes_injective reads)) hden
 
 #print axioms bytes_injective
 #print axioms bad_states_card

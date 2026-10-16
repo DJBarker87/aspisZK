@@ -69,14 +69,30 @@ theorem output_list_expression_lt_113 :
     (((3 : Real) + 1 / 2) / Real.sqrt outputRate) <
       outputListExpressionCap := by
   rw [div_lt_iff₀ sqrt_outputRate_pos]
-  have hs := sqrt_outputRate_sq
-  have hp := sqrt_outputRate_pos
-  have h255 : Real.sqrt (255 : Real) ^ 2 = 255 :=
-    Real.sq_sqrt (by norm_num)
-  have h255p : 0 < Real.sqrt (255 : Real) :=
-    Real.sqrt_pos.2 (by norm_num)
-  norm_num [outputRate, finalDomainSize, outputListExpressionCap] at hs ⊢
-  nlinarith [h255]
+  norm_num [outputListExpressionCap]
+  have hs : Real.sqrt outputRate ^ 2 = (255 : Real) / 262144 := by
+    rw [sqrt_outputRate_sq, outputRate, finalDomainSize]
+    norm_num
+  have hp : 0 < Real.sqrt outputRate := sqrt_outputRate_pos
+  have hleft : 0 ≤ (113 : Real) * Real.sqrt outputRate := by positivity
+  have hright : 0 ≤ (7 : Real) / 2 := by norm_num
+  by_contra hnot
+  have hle : (113 : Real) * Real.sqrt outputRate ≤ 7 / 2 := le_of_not_gt hnot
+  have hsq : ((113 : Real) * Real.sqrt outputRate) ^ 2 ≤ ((7 : Real) / 2) ^ 2 := by
+    calc
+      ((113 : Real) * Real.sqrt outputRate) ^ 2 =
+          ((113 : Real) * Real.sqrt outputRate) * ((113 : Real) * Real.sqrt outputRate) := by ring
+      _ ≤ ((7 : Real) / 2) * ((113 : Real) * Real.sqrt outputRate) :=
+        mul_le_mul_of_nonneg_right hle hleft
+      _ ≤ ((7 : Real) / 2) * ((7 : Real) / 2) :=
+        mul_le_mul_of_nonneg_left hle hright
+      _ = ((7 : Real) / 2) ^ 2 := by ring
+  have hrat : (113 : Real) ^ 2 * ((255 : Real) / 262144) ≤ ((7 : Real) / 2) ^ 2 := by
+    calc
+      (113 : Real) ^ 2 * ((255 : Real) / 262144) =
+          ((113 : Real) * Real.sqrt outputRate) ^ 2 := by rw [← hs]; ring
+      _ ≤ ((7 : Real) / 2) ^ 2 := hsq
+  norm_num at hrat
 
 theorem conservative_fold_challenge_cap :
     (outputListExpressionCap : Real) *
