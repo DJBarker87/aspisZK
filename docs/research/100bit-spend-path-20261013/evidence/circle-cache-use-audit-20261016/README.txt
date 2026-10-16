@@ -40,3 +40,21 @@ A retained Aug24 Lake trace and candidate pre3638d7546 source were found beside
 the exact rejected object. The trace has64-bit Lake source/output hashes,
 not a SHA256 producing-source receipt; these have not yet been recomputed.
 historical-candidate.json keeps the identification provisional.
+
+New live mask reconciliation atb40ad6372 supplies91 of these177 names:90 have
+identical source SHA256, while V6PublishedTheoremInterfaces has the documented
+live proof repair. Circle itself also has a newly attested current-source
+object05c7d259551e4a362c99a4dc9913848d589a94a0c06f9325dad0099a58045461.
+The exact90/1/86 lists and pinned audit source are in mask-overlap.json. This
+overlap is a reuse candidate inventory; adopting its outputs requires their
+recorded dependency chain, not swapping objects under old prefix receipt keys.
+
+Historical identification follow-up: the capped Lake-only utility returned0
+in0.515s, process826,780KiB, cgroup180,305,920B, swaps0. It recomputed BOTH
+producing trace hashes exactly: source824923ef3e0403cd and outputf5e2aad9336e36aa.
+The source is git3638d7546^ SHA867bb6d90213c9b44caa9106538d2db8d8a55f5619934410bc632e7bd3bdf959;
+the output is the rejected39ea3fa6… object. The trace has64-bit Lake hashes;
+current SHA256 file pins are additionally recorded in the utility receipt.
+This establishes the identified historical broad-import build record, not
+current-header equality, and does not silently reclassify old prefix receipts
+as current-source checks. No dependency/proof replay occurred.
