@@ -16,10 +16,11 @@ private theorem bind_success {α β : Type} (m : Result α) (k : α → Result �
 
 /-- A successful shape parse with the two-folds variant has the exact 224-byte
 round-one source interval. -/
-theorem parse_shape_round1_root (bytes : Slice Std.U8) (shape : verifier.ViewShape)
+theorem parse_shape_round1_root_and_start (bytes : Slice Std.U8) (shape : verifier.ViewShape)
     (hparse : verifier.View.parse_shape bytes = ok (.Ok shape))
     (hfold : transport.Variant.folds shape.variant = ok 2#usize) :
     ∃ base, shape.folded_root_start = some base ∧
+      shape.round1_start.val = base.val + 32 ∧
       shape.round1_end.val - shape.round1_start.val = 224 := by
   unfold verifier.View.parse_shape at hparse
   by_cases hshort : Slice.len bytes < verifier.HEADER
@@ -127,12 +128,42 @@ theorem parse_shape_round1_root (bytes : Slice Std.U8) (shape : verifier.ViewSha
             congrArg (fun x : verifier.ViewShape => x.round1_start) hrecord
           have he : offsets.2.2.1 = shape.round1_end :=
             congrArg (fun x : verifier.ViewShape => x.round1_end) hrecord
+          have hstartOffset : offsets.2.1.val = base.val + 32 := by
+            have htmp := hoffsetTrue
+            unfold verifier.folded_offsets at htmp
+            obtain ⟨i, hi, htmp⟩ := bind_success _ _ _ htmp
+            obtain ⟨j, hj, htmp⟩ := bind_success _ _ _ htmp
+            have ht := Result.ok.inj htmp
+            simp only [Prod.mk.injEq, Option.some.injEq] at ht
+            have hstartI : offsets.2.1 = i := ht.2.1.symm
+            have hequiv := UScalar.add_equiv base 32#usize
+            have hi' : (base + 32#usize : Result Std.Usize) = ok i := by
+              change UScalar.add base 32#usize = ok i
+              exact hi
+            rw [hi'] at hequiv
+            rw [hstartI]
+            exact hequiv.2.1
+          have hstart : shape.round1_start.val = base.val + 32 := by
+            rw [← hs]
+            exact hstartOffset
           rw [hs, he] at hwidth
           have hsroot : shape.folded_root_start = offsets.1 :=
             (congrArg (fun x : verifier.ViewShape => x.folded_root_start) hrecord).symm
-          refine ⟨base, ?_, hwidth⟩
+          refine ⟨base, ?_, hstart, hwidth⟩
           rw [hsroot, hroot]
 
+/-- Compatibility projection retaining the earlier root-presence/round-width
+interface. -/
+theorem parse_shape_round1_root (bytes : Slice Std.U8) (shape : verifier.ViewShape)
+    (hparse : verifier.View.parse_shape bytes = ok (.Ok shape))
+    (hfold : transport.Variant.folds shape.variant = ok 2#usize) :
+    ∃ base, shape.folded_root_start = some base ∧
+      shape.round1_end.val - shape.round1_start.val = 224 := by
+  obtain ⟨base, hroot, _hstart, hwidth⟩ :=
+    parse_shape_round1_root_and_start bytes shape hparse hfold
+  exact ⟨base, hroot, hwidth⟩
+
 #print axioms parse_shape_round1_root
+#print axioms parse_shape_round1_root_and_start
 
 end AspisR1ViewParseProbe.ParseShapeRound1Root
