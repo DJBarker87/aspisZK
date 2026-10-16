@@ -1,0 +1,69 @@
+Independent source review of the R17 backend port
+
+Reviewed coordinator .j1-r17/upstream/backends/lean against .j1-r17/backend,
+including the later Step, StepArraySpec and StepStar fixes. Compared with
+installed Lean 4.32 source at 8c9756b28d64dab099da31a4c09229a9e6a2ef35 and
+Mathlib 81a5d257. Source inspection only: no worker Lean/build, source edit,
+extra axiom, proof admission or new check result. No semantic defect found in
+the inspected changes. This is not a proof of tactic equivalence.
+
+Array.lean:112 attaches the same simp and simp_lists_safe attributes to Lean's
+Array.getElem!_set!_ne (Init/Data/Array/Lemmas.lean:4710). Proposition and
+inhabited requirement match. API discrepancy: old xs/i/j/x were implicit;
+Lean's replacement takes xs i j x explicitly before hij. An external direct
+application using only the old hypothesis would need adaptation; simp matching
+is unaffected by those binder annotations. No affected direct application was
+found in the backend or coordinator extracted-source set.
+
+Vector.lean:114/131 retains both original conjunctive statements as
+getElem_set!_eq_of and getElem_set!_ne_of, with both original simp attributes.
+The proofs correctly apply core getElem_set!_self hi and
+getElem_set!_ne h.2 h.1 (Init/Data/Vector/Lemmas.lean:3198/3203).
+Core now owns the old names: getElem_set! is an if-expression law;
+getElem_set!_ne takes separate bound/inequality hypotheses. The renamed
+conjunctive rules preserve their mathematical content, but this is an explicit
+source-API rename, not byte-identical declarations. No affected direct use found.
+
+BvEnumToBitVec.lean:70-76 preserves the enum guard and realization enablement.
+Lean/Meta/Tactic/BVDecide/Normalize/Enums.lean:353-367 registers the exact
+three suffixes and invokes the same private getEnumToBitVecFor,
+getEnumToBitVecLeFor and getEqIffEnumToBitVecEqFor generators. getConstInfo
+ensures the requested declaration exists; no fallback definition is supplied.
+Idempotence still comes from the underlying realizeConst. This deliberately
+depends on those pinned suffixes and registered actions.
+
+Simp/Simp.lean:119/127-129 makes the Option.some and HashSet type explicit.
+Lean's simpGoal returns Option(Array FVarId x MVarId); its inspected 4.31 and
+4.32 bodies are identical. None still means the goal closed; Some(empty) is
+an open goal without fresh hypotheses. Filtering surviving fvars and appending
+fresh ones are unchanged. No theorem or simplification rule is removed.
+
+ReduceZMod:83-86 changes only the exact instance matcher from Monoid.toPow
+to NPow.toPow(Monoid.toNPow ...). Mathlib Algebra/Group/Defs.lean:650-678
+places natural power in NPow and derives Pow through that instance. The
+matched ZMod commRing chain and reducer/proof construction are unchanged.
+
+BvTac:10/82/121 adapts namespaces. Lean's new TacticContext.new still takes
+the same temporary LRAT path/config; bvDecide still normalizes, bitblasts and
+checks the resulting certificate or reports a counterexample. The port does
+not substitute an oracle, change configuration fields or bypass proof checking.
+
+Step.lean:1027 explicitly returns the try/catch Option result. Lean 4.31
+Do/Switch.lean defaults backward.do.legacy=true; Legacy.lean:1437-1442 returns
+a terminal compound RHS directly when there is no following element. A nested
+do has doNested syntax, handled at :1813-1815. Lean 4.32 defaults legacy=false;
+BuiltinDo/Let.lean:165-178 uses a Unit continuation for let-arrow. The explicit
+pure res preserves the former result and unchanged exception behavior.
+StepArraySpec:110 qualifies the parser kind; local/scoped attributes and
+generated theorem text are unchanged. StepStar:466 annotates the actual
+Array(TaskOrDone(Option Syntax.Tactic)) constructor payload, matching
+Script.tacs at :325 and the existing TaskOrDone.mk(some tac) at :474.
+
+Prefix next step remains a draft patch only, in
+J1-R18-PREFIX-IMPLEMENTATION-DRAFT-20261016.patch. It contains the reviewed
+private caller-array helper and three full-Prefix regression tests, retaining
+the old parser as an oracle. git apply --check succeeds; no patch was applied
+and no Rust/test/extraction run occurred. Production r1_wire.rs remains
+SHA256 ed6e426c460c97248d124727e8be7985c1ea75f89bd0f5baef0570ec44ec4b03.
+Implementation and extraction wait for the coordinator's explicit R17-green
+message. The earlier proposal records test/CU entrypoints and harness boundary.

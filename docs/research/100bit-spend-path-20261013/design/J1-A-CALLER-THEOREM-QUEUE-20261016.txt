@@ -1,0 +1,92 @@
+J1.a caller/metadata queue after R18; fixed targets, no closure claim
+
+Read origin/local100bit 721d8d674d12f6734f581a9f4365abc927025325 and coordinator
+c195afba6599d8e5d4b9dc420c17ac5bb5d736c9. Their crates/programs are identical.
+The newer mask proofs add no caller/account theorem. This extends the existing
+J1-PUBLIC-CALLER-BOUNDARY and J1-AB-EXECUTION-LINKS inventories rather than
+replacing their predicates. Item1 reuses the existing bridge inspected at
+8b5661efb99efefefeaf4db0d3c5da27e19ba03f; later new theorem names are proposed.
+No Lean/source edit or job ran.
+
+1. Import/reuse ExtractedPublicCheckedBridge432; no duplicate composition.
+Within AspisR1PublicSerializer.ExtractedPublicCheckedBridge432, the existing
+validated_source_parsePublic takes p:WithdrawalCarrier431.SerializerPublic,
+t:Whole431.Transition, out:FieldsRefinement431.ByteVec,
+hv:WithdrawalCarrier431.HelperValidated p, and
+hs:pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
+  (.Withdrawal p t)=ok(.Ok out).
+It concludes existence of wire with
+PublicSourceRaw.toWire (projectRaw (.Withdrawal p t))=some wire and
+SemanticPublicWire.parsePublic (out.val.map RawBridge431.rawByte)=
+  some (SemanticPublicWire.toPublic wire).
+projectRaw is fixed as PublicRawCoreAgreement.fromCore after RawBridge431.project.
+Reuse helper_success_amount_guard and extracted_serializer_refines from that
+module for their existing contracts. Its same-kernel Lean 4.32 check is pending;
+historical Lean 4.31 receipts do not validate this composition. Caller identity and
+both generated successes remain obligations for Checks.publicParsed.
+
+2. Smallest new source-reachable caller lemma: aswp_encode_success_validated.
+Let E/V denote the exact emitted payment_relation.rs constants
+encode_pool_v1_withdrawal_public_v1/validate_pool_v1_withdrawal_public_v1,
+not function parameters. Target: E p=ok(.Ok bytes) -> V p=ok(.Ok ()).
+The source is crates/aspis-statement/src/pool_v1/payment_relation.rs:301-318;
+line304 calls the already extracted validator. Extract that narrow caller
+cone and invert its Result binds; retain concrete byte helpers, not axioms.
+Use the existing nine-field WithdrawalCarrier431.toValidator/fromValidator
+round trips to align carriers. Do not create another validation predicate.
+
+Next terminal_validate_success: successful exact terminal validator on
+Withdrawal{common,public=p} implies successful E p, hence HelperValidated on
+the same p, and its explicit metadata equalities: p.pool=common.master_account,
+p.deployment_domain=common.lane_transition.live_snapshot.deployment_domain,
+snapshot.pool=master, p.anchor_sequence=checkpoint_sequence,
+p.anchor_root=historical_global_anchor, and output_lane(nullifier)=common.output_lane.
+Source pair_forest_terminal.rs:227-275 also checks nonzero account keys,
+lane range and successful late-statement encoding; retain these consequences.
+Then asf8_decode_success_validated: exact ASF8 decoder success returns that
+same validated statement (386-415). ASWP decode422-455 supplies an independent
+same-public route. No assumption that these callers already refine validation.
+
+3. Connect actual call values, keeping callbacks visible.
+first_success_calls: programs/r1-cost-probe/src/lib.rs:24-27 success exposes
+ASF8 decoder success and tx1 success on exactly Public::Withdrawal(p,transition)
+or Transfer from that result. tx1:342-345 then verify_observed:63-77 must expose
+the same Public.public_bytes success and bytes passed to SemanticTranscript::new
+with Prefix.c1_root. The separate Prefix bridge must supply construction provenance;
+record-access success alone does not. These are targets about emitted caller
+definitions/execution traces, never an assumed sourceReturns/SourceSimulation.
+HashFn/observer lowering remains an explicit blocker if unsupported.
+
+4. Preserve full ASF8 metadata across transactions.
+Proposed asf8_encode_decode_agree: E_ASF8 s2=ok(.Ok b) and
+D_ASF8 b=ok(.Ok s1) imply s1=s2, including all account/payment/late fields
+of the 1880-byte ASF8 value. Do not substitute semantic-byte injectivity:
+destination, pool/domain, anchor sequence, live sequence/current root and
+candidate next index are omitted there; frontiers and candidate root are present.
+checkpoint/resume (verifier.rs:302-339) must establish, for an actually produced
+checkpoint and successful resume, equal proof/full-ASF8 bytes OR a collision
+among the exact hashed byte inputs. Unkeyed checksum alone gives no provenance.
+Stage1 adapter902-944 must supply distinct readonly buffers, S2/candidate-prefix
+agreement and a zeroed verifier-owned checkpoint. G9/G8 source acceptance does
+not itself provide these Lean execution links.
+
+5. Authenticate reconstruction, then custody; separate theorem targets.
+authenticate_asq8_accounts_success (adapter628-732) exposes the seven-account
+flags/distinctness, owned decoded images, stored-bump PDA and release checks,
+and exact live snapshot fields. reconstruct_asq8_statement_success (813-838)
+preserves request.public/candidate, checks candidate index=live index+1 and
+asset identity, and copies checkpoint/root/account fields via asq8_common.
+Stage2:956-978 encodes precisely that statement before authenticated resume.
+
+Pool custody is not a verifier-seven-account consequence. Proposed
+withdrawal_plan_binds: vault.rs:412-523 success gives plan.destination=request
+destination, plan.amount=u64::from(request.amount), and value-level equalities
+plan.vault_after+plan.amount=plan.vault_before and
+plan.destination_before+plan.amount=plan.destination_after;
+validate_exact_withdrawal_delta_v1:541-571 success gives those exact postbalances.
+Connect both to process_pair_forest_terminal_with_verifier_v1:1467-1478,1498-1525,
+1548-1558, preserving the same request and authenticated result. Account-history,
+CPI/token semantics and rollback remain explicit runtime proof obligations.
+None of these tasks supplies other LiteralAcceptanceTerminal.Checks fields,
+the complete hypotheses of conditional_d3, literal-word recovery, or no-hit.
+No source-execution hypothesis is discharged by this preparation.

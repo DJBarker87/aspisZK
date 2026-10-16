@@ -1,0 +1,49 @@
+J1.R18 combined Prefix/sampler regression: checked execution evidence
+
+Baseline production revision2ed5bc48393ba51e38ec62167134f55755b11649;
+candidate2805606682d730654ebfb1df66f237ae75a9fdbe. Across503 pinned source/input
+files only r1_wire.rs and sampler.rs differ. No format/account/runtime change.
+Worker A's Prefix tests8/8 and worker C's actual-crate sampler tests3/3 passed.
+Root independently verified both evidence bundles before merging the proposals.
+
+Saved-proof hash regression passed with both refactors:
+measured_core_call_counts_include_zero_progress_checkpoint, optimized program
+unit test with pool-adapter,private-leaf-salts. It checks k10:328+255 and
+k11:349+234 core calls; arbitrary next0 resumed checkpoint:465 core calls.
+These are fixture measurements; PDA hashes and universal QV are not measured.
+
+One direct admitted-route CU comparison used freshly built baseline/candidate
+ELFs, the frozen transfer1023 proof/ASF8, identical preloaded V2 account images,
+one [3,10] stage1 then ASQ8 stage2 per ELF, and the same retained task keys.
+The verifier checkpoint was system-created, program-owned, exact1768 zero bytes;
+stage2 consumed only the successful SBF stage1 output. Both pairs accepted.
+Checkpoint/ASR8 bytes and initial inputs matched; read-only inputs stayed unchanged.
+Transaction CU: before1341865+1228710=2570575;
+after1341953+1228710=2570663. Delta+88 stage1,+0 stage2. Setup CU excluded.
+Runtime LiteSVM0.16.0/Agave4.2.1 is test-only; R16 syscall premises unchanged.
+Preloaded registry descriptors do not prove registration/history or Pool settlement.
+
+Solana CLI3.1.13/platform-tools v1.52; same locked features/default custom heap.
+Baseline ELF e948bfea12a8d93c1bfd9c332e722285ef6a0cdcbac7095415a9939f1012d3d7;
+candidate0d064e3d3a88adaf8f96e8834a650fc78c5b5a7225d169cb28a0d640fed8fd18.
+An initial candidate cache reuse returned the baseline ELF and is EXCLUDED.
+The runner now makes verified workspace inputs newer than relative Cargo
+fingerprints; retained fresh logs compile all four local crates from candidate.
+Both builds emit existing point_claims stack-offset diagnostics. Their exit0
+and this route's successful execution establish no general stack-safety result.
+
+All root jobs used separate8GiB-high/10GiB-max/swap0 scopes, one at a time.
+Target                     exit wall(s) peakRSS(KiB) swaps
+combined saved-proof test   0    54.472  543956       0
+baseline SBF               0    45.059  671324       0
+fresh candidate SBF        0    43.258  673536       0
+one CU comparison          0     0.201   28780       0
+Evidence/r18-combined-regression-20261016 retains full commands, revisions,
+source/tool pins, logs, cgroup counters and the excluded cache attempt.
+verify.py checks72 bundle hashes, reproducible source archives and receipt facts.
+Keys remain on the build host; no private key is included in the bundle.
+#print axioms is N/A for these execution checks. No full replay ran.
+
+R18 extraction and Lean refinement remain OPEN. These results discharge the
+requested differential/hash-count/CU validation component only, not any live
+source-execution, state-carry, SourceSimulation.preservesPrefix or QV hypothesis.

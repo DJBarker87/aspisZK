@@ -20,7 +20,12 @@
       "pool-adapter",
       "private-leaf-salts"
     ],
-    "runtime_selection": "OPEN for lead selection, per explicit user instruction. Local SDK/runtime source and replay dependency pins are evidence only; Solana 4.2.1 is not a selected release runtime.",
+    "runtime_release_evidence": "PENDING at release: observed target-cluster Agave version and source references for the two syscalls. This audit neither selects a release version nor attests a live validator.",
+    "runtime_selection": "SUPERSEDED by lead J1.R16 at c441facae60f957472b4b87180babcda4051eca3: the proof has two version-independent syscall premises. Observe the target-cluster Agave version and record its syscall source references at release; no version number is a proof parameter. Local 4.2.1 is test evidence only.",
+    "runtime_semantic_premises": [
+      "sol_sha256 computes FIPS 180-4 SHA-256 of the concatenation of its input slices.",
+      "At its derivation step, sol_create_program_address computes one SHA-256 of concatenated seeds || program_id || ASCII ProgramDerivedAddress, and rejects on-curve results. Admitted stored-bump calls satisfy seed limits; generic invalid-seed checks may return before hashing. No bump search is included."
+    ],
     "scope": "one admitted program invocation, arbitrary inputs/checkpoints and all finite failure prefixes",
     "status": "selected source configuration; no binary/validator attestation",
     "target_os": "solana"
@@ -3373,7 +3378,7 @@
     "The query success edge must preserve exactly one a.next increment; intermediate failure must terminate without a retry edge.",
     "Actual runtime SHA256/create_program_address syscall implementations and no-extra-SHA runtime behavior must be tied to the experiment; package pins do not attest a live validator.",
     "Compiler/SBF execution and allocation/compute failure prefixes must refine the selected source semantics.",
-    "Release runtime selection is OPEN for lead selection by explicit user instruction; the local Solana 4.2.1 replay dependency is not release selection.",
+    "Lead J1.R16 fixes exactly two version-independent runtime semantic premises (configuration.runtime_semantic_premises). Release evidence must record the observed target-cluster Agave version and syscall source references. This supersedes version selection only; all opaque effects and complete-prefix source/runtime preservation remain OPEN.",
     "The payment digest leaf has no lexical call or loop entries, but indexing, comparison, short-circuit evaluation, failure and compiler/runtime effects are unproved. An empty lexical inventory is not zero designated-SHA cost; opaque parent validation boundaries remain OPEN."
   ],
   "revision": "2ed5bc48393ba51e38ec62167134f55755b11649",

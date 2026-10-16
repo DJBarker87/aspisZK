@@ -1,0 +1,64 @@
+Semantic-prefix agreement: three checked Lean 4.32 bridges
+
+Base b40d1cfffadbdf967f84cca23ea4e7f1553d564f descends from the requested
+b8760b76ac8de6c5c903eb98ff3a85f6f9f532e8. Three new modules prove nine laws;
+existing codecs, Selected definitions and TypedPrefixExtension are unchanged.
+
+SemanticPrefixAgreement.read_eq identifies SelectedSemanticPrefix.read with
+SemanticPrefixCodec.decodeFrom on the identical message bytes, followed by
+SemanticPayloadView.toMessage with the identical recoverC2 and zip with the
+original challenges. The equality includes empty, invalid-record and
+out-of-range cases. Position supplies the row; both readers use the same
+SemanticRecordCodec.decode. read_of_decode supplies live read success from
+typed-byte decode success. decoded_length excludes zip truncation.
+
+SemanticPrefixCompletedAgreement.completed_records proves that the existing
+SelectedCompletedSemantic.pairs preserves record bytes. completed_read_eq
+specializes the primitive equality, retaining the exact table/getD fallback
+challenges. completed_read_of_decode supplies the existing
+SelectedCompletedSemantic.semChalsZ_read hread premise from hdecode:
+  decodeFrom row (rs.map (fun r => r.2.2.1.val)) = some entries.
+completed_semChalsZ_of_decode consumes that live theorem without an additional
+read-success premise. Its conclusion retains the completed challenges.
+
+SemanticPrefixCutAgreement.typed_read_append_eq applies the existing
+TypedPrefixExtension.semantic_typed_append_eq at an already-read address
+(a in tr.map Prod.fst). typed_read_append_of_decode combines that equality,
+prior typed-cut success and hdecode. The completion table T, fallback acc and
+recoverC2 stay fixed. No equality between different completion tables is used.
+
+Validation: primitive-linux-d, completed-linux-a and cut-linux-a all exit 0;
+wall times 3.405/3.405/3.806 seconds; process peak RSS
+6,746,300/6,746,212/6,729,708 KiB; cgroup peaks
+804,483,072/787,841,024/772,042,752 bytes. All nine #print axioms reports contain
+only propext, Classical.choice and Quot.sound. Process/cgroup swap is zero;
+no cgroup pressure/OOM event occurred. The coordinator ran one target at a
+time through lake env lean, -j1, MemoryHigh=6GiB, MemoryMax=8GiB,
+MemorySwapMax=0. Runtime version, shared-library hashes, commands, source and
+object pins are retained in the evidence directory. No dependency rebuild or
+full manifest replay occurred. The existing Mathlib URL warning is preserved;
+no dependency update was performed.
+
+The source partition separates three primitive laws (336 existing project
+dependencies), four completed-record laws (339), and two typed-cut laws (374).
+All 374 dependency objects were reused with source/object provenance; only
+the three new successful objects are packaged here. The original macOS
+provenance and two historical predecessor attestations are retained.
+
+Three local failed attempts, the Linux import-only failure, and subsequent
+failed primitive attempts remain unchanged in evidence. Empty local logs did
+not locate the failure. The Linux import-only target isolated a failing
+baseline before bridge proofs. After the three-way source partition, -M6000
+still raised an interpreter memory exception although the 8GiB cgroup had no
+pressure event. Pinned Lean checks process RSS; shared imported-page charging
+is a plausible explanation for the RSS/cgroup discrepancy, not a proved
+attribution. A new import diagnostic and final targets used -M0 with the same
+hard 8GiB cgroup cap. The intermediate primitive-linux-c had a type-inference
+error and sorryAx output; only the corrected primitive-linux-d is accepted.
+
+Remaining boundaries: hdecode, typed-cut success and address membership remain
+hypotheses where stated. Challenge-read provenance, C2 recovery, actual Rust
+refinement, live caller reachability and protocol acceptance are not proved.
+The existing Literal semantic bridges retain their own premises. This work
+discharges representation/read-success obligations, not extraction, D3 or
+soundness closure.
