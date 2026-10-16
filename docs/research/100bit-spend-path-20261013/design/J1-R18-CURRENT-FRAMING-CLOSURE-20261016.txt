@@ -1,0 +1,32 @@
+Current-source framing closure: two green checks, one blocked predecessor
+
+All 17 reused modules were independently checked against producing receipts, source snapshots, output hashes, and direct-import hashes. Their source bytes match committed revision bd94ad7206e1df826aefda4f514c1ce8cf7993ed, including repaired UniformStateFirstHit source 75160419184f20aee9645b1da3ccda18e32e5b28a118fdc45ec1d5d26de129d2. Only those attested objects were copied into the private overlay. No historical bridge object was substituted. The nine planned unchanged source targets also match that revision.
+
+FS2.LemmaA passed in 2.203 seconds with two standard-only audits; FS2.Theorem passed in 1.803 seconds with three. Sampled cgroup peaks were 319827968 and 316563456 bytes. FS2.Duplex then failed in 2.003 seconds, sampled 314597376 bytes. All scopes used 6 GiB high / 8 GiB maximum / swap 0, one process, -j1/-M0; no pressure/OOM events or swap. The failed coll_mass audit contains sorryAx and is rejected; no failed object is selected. Exact source/runtime/command/input/output evidence is retained.
+
+Failure and ownership
+
+Current FS2.Duplex SHA256 is 3a2c1330dfd39d59b10cdf1fc68b218432775b855c98e700d1ba938eeac2d88b, at docs/research/v8-fs-generic-20261006/lean/FS2/Duplex.lean. This is the earlier generic FS2 duplex/collision theorem module, not an R18-owned extracted source. Git blame attributes all three failing proof expressions to df68b2684edc8c452eaf4cf26c25b9a625abd3f8 (2026-10-06, duplex instance part 1). The current file's most recent modification is 0b7a9a9ed97f8cd755ad8fadeb405fa123bbf4a6.
+
+Line 275 uses positivity for the rational cast of the concrete State cardinality and hits the default recursion limit. Lines 302 and 319 fail positivity/nonnegativity. The sequence stopped immediately. No live source edit, increased limit, or dependent check followed.
+
+Unapplied, unverified proof-only proposal
+
+At 275, replace only the proof body with:
+  by exact_mod_cast (Fintype.card_pos : 0 < Fintype.card State)
+
+At 302, replace positivity with:
+  exact div_nonneg
+    (mul_nonneg (by norm_num : (0 : ℚ) ≤ 2) (Nat.cast_nonneg Qtot))
+    (Nat.cast_nonneg (Fintype.card State))
+
+At 319, replace only the proof body with:
+  by exact div_nonneg
+    (mul_nonneg (by norm_num : (0 : ℚ) ≤ 2) (Nat.cast_nonneg Qtot))
+    (pow_nonneg (by norm_num : (0 : ℚ) ≤ 256) 32)
+
+These proposed expressions use generic cardinal positivity and quotient nonnegativity, avoiding concrete finite-state enumeration and power evaluation. Statements, definitions, collision bounds and protocol behavior would remain unchanged, but elaboration has NOT been checked. The proposal is not applied.
+
+Boundary
+
+Exact HeaderBytes and StrictPayload results are already independently green. To name the unchanged RecordFrameCodec directly, its transitive import still requires this predecessor; a copied smaller model would not discharge that live interface. Root review must choose an authorized proof-only compatibility repair or retain this boundary. DuplexDecode, the three frame modules, two codec/model predecessors, and the new FrameAgreement remain unchecked. Semantic decodeFull and selected hread remain OPEN.
