@@ -3,6 +3,9 @@
 from pathlib import Path, PurePosixPath
 import hashlib,json,re,subprocess,tarfile
 here=Path(__file__).resolve().parent;root=here.parents[4]
+PRODUCING='f6521c1249cef35b01b2e343445ec795d9ec82eb'
+def produced(path):
+ return subprocess.check_output(['git','-C',str(root),'show',PRODUCING+':'+str(path)])
 sha=lambda b:hashlib.sha256(b).hexdigest()
 digest=lambda x:sha(json.dumps(x,sort_keys=True).encode())
 m=json.loads((here/'manifest.json').read_text());p=here/m['archive']
@@ -28,8 +31,8 @@ for n,b in sources.items():assert sha(b)==pins['source_files'][n]
 for cut in pins['cuts']:
  b=sources[cut['path']][cut['start_byte']:cut['end_byte_exclusive']]
  assert sha(b)==cut['sha256'] and b==data['input/fragments/'+cut['name']+'.rs']
-for n,h in pins['kit_files'].items():assert sha(data['input/'+n])==h and data['input/'+n]==(kit/n).read_bytes()
-assert data['input/source-pins.json']==(kit/'source-pins.json').read_bytes()
+for n,h in pins['kit_files'].items():assert sha(data['input/'+n])==h and data['input/'+n]==produced((kit/n).relative_to(root))
+assert data['input/source-pins.json']==produced((kit/'source-pins.json').relative_to(root))
 for span in pins['layout_spans']:
  assert data['input/lib.rs'][span['start_byte']:span['end_byte_exclusive']]==data['input/fragments/'+span['name']+'.rs']
 llbc=j('PublicPreparation.llbc');assert not llbc['has_errors']
@@ -61,7 +64,7 @@ for n,r in m['lean_receipts'].items():
  assert r['key']['options']==['-j1','-M0'] and r['key']['runtime']==snapshot['runtime_files']
  assert r['process_swaps']==0 and r['cgroup_swap_current']=='0' and not r['dependency_build'] and not r['backend_build']
  source=data['proofs-original/sources/'+n.replace('.','/')+'.lean']
- assert source==data['proofs-original/runs/original-a/'+n+'/source.lean']==(root/r['source_manifest_entry']['source']).read_bytes()
+ assert source==data['proofs-original/runs/original-a/'+n+'/source.lean']==produced(r['source_manifest_entry']['source'])
  assert sha(source)==r['key']['source_sha256']
  for ext,o in r['objects'].items():assert sha(data['proofs-original/objects/'+n.replace('.','/')+ext])==o['sha256']
  if n.startswith('AspisR1PublicPreparation.'):
@@ -75,4 +78,4 @@ for n,r in m['lean_receipts'].items():
  assert actual==r['axioms']['reports'];reports.extend(actual)
 assert len(reports)==5 and all(set(x['axioms'])<={'propext','Classical.choice','Quot.sound'} for x in reports)
 assert data['pack.py']==(here/'pack.py').read_bytes()
-print(f'PASS {len(members)} members; 29 exact cuts/12 Git files; 3 original Lean targets/5 actual standard-only reports; 43 LLBC opaque entries retained')
+print(f'PASS {len(members)} members; producing {PRODUCING}; 29 exact cuts/12 Git files; 3 original Lean targets/5 actual standard-only reports; 43 LLBC opaque entries retained')
