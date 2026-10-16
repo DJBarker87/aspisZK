@@ -49,6 +49,7 @@ theorem run_success (packed : Array QM 24#usize) (selector : QM)
     (hz : CanonicalArray z) (hsucc : CanonicalArray succ) :
     ∃ r0 r1 : QM, ∃ out : Array QM 24#usize,
       run packed selector z succ = .ok out ∧ CanonicalArray out ∧
+      CanonicalArray (Array.make 2#usize [r0, r1]) ∧
       decoded out = (fun j => decoded packed j +
         groupValue (Array.make 2#usize [r0, r1]) 82 j.val) ∧
       decode r0 = decode selector *
@@ -63,7 +64,7 @@ theorem run_success (packed : Array QM 24#usize) (selector : QM)
   obtain ⟨out, hpack, hcanon, hmodel⟩ :=
     AspisR1.PreweightedWrapperModel.add_preweighted_model packed 82#usize
       (Array.make 2#usize [r0, r1]) (by decide) (by decide) hpacked harray
-  refine ⟨r0, r1, out, ?_, hcanon, hmodel, hv0, hv1⟩
+  refine ⟨r0, r1, out, ?_, hcanon, harray, hmodel, hv0, hv1⟩
   have hz0 := index_ok z 0#usize 0 rfl
   have hz1 := index_ok z 1#usize 1 rfl
   have hz2 := index_ok z 2#usize 2 rfl
