@@ -1,0 +1,9 @@
+Legacy FS2 duplex proof compatibility repair
+
+Exactly three proof bodies in docs/research/v8-fs-generic-20261006/lean/FS2/Duplex.lean now use symbolic facts instead of positivity: cardinal positivity via Fintype.card_pos, quotient nonnegativity via mul_nonneg/div_nonneg, and denominator-power nonnegativity via pow_nonneg. No definitions, theorem statements, imports, event predicates, collision bounds, or protocol behavior changed. The evidence verifier reconstructs the exact three substitutions and checks all other bytes remain unchanged.
+
+These proof expressions originated in df68b2684edc8c452eaf4cf26c25b9a625abd3f8 on October 6. The preceding unchanged-source check failed under Lean 4.32 at cardinal positivity and two nonnegativity steps. That failure, its rejected sorryAx audit, source history, and 17 current-source dependency receipts remain preserved in r18-current-framing-closure-20261016. Root reviewed the concrete replacements before authorization; this commit separates the legacy proof repair from new source-boundary bridges for lead review.
+
+The changed file passed its first focused check in 2.003 seconds, sampled cgroup peak 314675200 bytes, process RSS 1848268 KiB, zero swap and no pressure/OOM events. FS2.Duplex.coll_mass reports only propext, Classical.choice, and Quot.sound. The same Lean 4.32 runtime and 6 GiB high / 8 GiB hard / zero-swap scope were used, one process, -j1/-M0, without a limit increase or dependency replay. Exact source/runtime/input/object/runner hashes are retained.
+
+The repaired source SHA256 is f0a6a4cd416b0b625241263edf2e4911c383e1555b7f6395e12b36628180fcbc. This focused result alone does not complete the dependent RecordFrame codec, semantic decodeFull, or selected hread bridge. Those checks remain separate.
