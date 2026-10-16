@@ -6,9 +6,11 @@ with tarfile.open(arc) as t:
  for n,h in sums.items():
   b=t.extractfile(n).read();assert sha(b)==h,n;blobs[n]=b
  rs=m['formal_receipts'];assert len(rs)==5;reports=0
+ shared=W.parent.parent/'lean/bridge-tx1-e5c186ba3-20261016'
+ common=json.loads((shared/'common-funs-audit.json').read_text());assert common['A_prepared_binding_pins_sha256']==sha((shared/'prepared-binding-pins.json').read_bytes())
  for n,r in rs.items():
   assert r==json.loads(blobs['proof/successful-targets/'+n+'.json']);assert r['exit_status']==0 and r['axioms']['passed'];assert r['process_swaps']==0 and r['cgroup_swap_current']=='0';assert r['limits']=={'memory.high':str(6*2**30),'memory.max':str(8*2**30),'memory.swap.max':'0'}
-  s=r['source_manifest_entry'];assert sha(blobs['proof/sources/'+s['stage_as']])==s['source_sha256']
+  s=r['source_manifest_entry'];assert sha(blobs['proof/sources/'+s['stage_as']])==s['source_sha256'];assert sha((shared/s['stage_as']).read_bytes())==s['source_sha256']
   for suf,pin in r['objects'].items():assert sha(blobs['proof/objects/'+n.replace('.','/')+suf])==pin['sha256']
   for dep,pin in r['key']['imports'].items():
    if dep in rs:assert pin['receipt_key']==digest(rs[dep]['key']) and pin['objects']==rs[dep]['objects'],(n,dep)
