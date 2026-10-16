@@ -59,6 +59,19 @@ pub fn verify<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H) -> Result<
     verify_observed(public, bytes, hash, None)
 }
 
+#[inline(always)]
+pub fn public_transcript<H: Digest32>(
+    public: Public<'_>,
+    hash: H,
+    c1_root: &[u8; 32],
+) -> Result<SemanticTranscript<H>, Error> {
+    SemanticTranscript::new(
+        hash,
+        &public.public_bytes().map_err(|_| Error::Public)?,
+        c1_root,
+    )
+}
+
 #[inline(never)]
 pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
     fn mark(obs: crate::verifier::Observer, i: u8) {
@@ -69,11 +82,7 @@ pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, o
     }
     let prefix = Prefix::parse(bytes)?;
     mark(obs, 0);
-    let mut transcript = SemanticTranscript::new(
-        hash,
-        &public.public_bytes().map_err(|_| Error::Public)?,
-        prefix.c1_root,
-    )?;
+    let mut transcript = public_transcript(public, hash, prefix.c1_root)?;
     let challenges = wire::begin(&prefix, &mut transcript)?;
     mark(obs, 1);
     let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];

@@ -1,6 +1,6 @@
 //! UNPROVED R1 COST PROBE. Local measurement entrypoint only.
 use aspis_r1_cost_probe::verifier::{self,Phase};
-use aspis_statement::pool_v1::{decode_pool_v1_pair_forest_terminal_statement_v1,PoolV1PairForestTerminalStatementV1,pair_forest_semantic_terminal::r0::Public};
+use aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1;
 use solana_program::{account_info::AccountInfo,entrypoint::ProgramResult,pubkey::Pubkey,program_error::ProgramError,hash::hashv,msg,log::sol_log_compute_units};
 /// The sole digest backend instantiated by the admitted R1 program routes.
 #[derive(Clone, Copy)]
@@ -32,7 +32,7 @@ fn error(e:verifier::Error)->ProgramError{msg!("r1:error:{:?}",e);ProgramError::
 #[inline(never)]
 fn first(public_bytes:&[u8],proof:&[u8],k:usize)->Result<Vec<u8>,ProgramError>{
     let statement=decode_pool_v1_pair_forest_terminal_statement_v1(public_bytes).map_err(|_|ProgramError::InvalidAccountData)?;
-    let public=match &statement{PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public}=>Public::Transfer(public,&common.lane_transition),PoolV1PairForestTerminalStatementV1::Withdrawal{common,public}=>Public::Withdrawal(public,&common.lane_transition)};
+    let public=statement.semantic_public();
     verifier::tx1(public,public_bytes,proof,k,SolanaDigest,Some(mark)).map_err(error)
 }
 #[cfg(feature="pool-adapter")]
