@@ -4,7 +4,8 @@ The generic bridge now checks against Lean 4.32: the actual extracted selected-m
 caller returns a canonical value whose field image equals the existing
 `R0P.Mask.maskValue` declaration. This is a checked local theorem with
 **provisional dependency evidence**, not final source admission or the complete
-private-spend theorem. The concrete `WideExact` instance remains a separate target.
+private-spend theorem. The separate concrete `WideExact` instance now also checks,
+with the same provisional dependency qualification.
 
 ## Statement and reuse
 
@@ -19,6 +20,12 @@ its result is canonical, and its decoded field image is `R0P.Mask.maskValue` on
 the mapped inputs. Execution success and the desired output equality are
 conclusions, not premises. Source and semantic field carriers are not identified
 by assertion.
+
+`AspisR1.ExtractedMaskSemanticBridgeConcrete` supplies the actual
+`QM31Exact → WideExact` algebra map and reuses the existing
+`ConcretePackBasis.basis`. It proves all four basis equations and instantiates
+the generic theorem. Its public theorem retains only the canonical source-input
+hypotheses; the field map and basis compatibility are no longer caller premises.
 
 The proof reuses the complete extracted-mask formula, the field-hom transport
 of the two linear forms, and the historical mask definition. It checks the
@@ -49,6 +56,18 @@ exact source hash above. Its current mask dependencies are committed through
 objects and environment. Five failed predecessor attempts remain in the archive;
 their emitted axiom lines do not count as successful checks.
 
+The concrete target `ExtractedMaskSemanticBridgeConcrete` passes in attempt f:
+exit 0, 2.96 s (`time`), 2.996 s (controller), 4,052,352 KiB peak RSS, zero
+process swaps, under the same 4/6/0 GiB scope. Its two reports, `basisCompatible`
+and `current_selected_mask_maps_to_maskValue`, contain only the three standard
+axioms. Source SHA-256 is
+`d8284caa37e249240c812eeb4db381d8891715d0e365fe36d4b0b42d16adb1df`;
+output SHA-256 is
+`7f521e170e90a973ec36df17d92326e70d884c55ebfe3b80c3b000d082c5fbfb`.
+The sole change from the reviewed draft is marking the alias of the existing
+noncomputable basis as `noncomputable`. The failed import-resolution and
+computability attempts a–e are retained separately.
+
 ## Why evidence is provisional
 
 The old `R0P.MaskValue` cache object is pinned, but its historical import census
@@ -71,10 +90,11 @@ Lean comments while reading import lines.
 
 ## Remaining obligations
 
-The concrete homomorphism and basis instance, final dependency evidence,
-accepted-input canonicality and reader correspondence, actual terminal and
+Final dependency evidence, accepted-input canonicality and reader correspondence, actual terminal and
 ten-round verifier simulation, and the broader extraction, Fiat–Shamir, privacy
 and runtime obligations remain open. This result supplies one source-to-model
 arithmetic component; it does not establish 100-bit soundness or zero knowledge.
 
 Evidence: [retained bundle](../evidence/current-mask-semantic-bridge-provisional-20261016/README.md).
+The [concrete bundle](../evidence/current-mask-concrete-bridge-provisional-20261016/README.md)
+also records the Wide/K1 cache overlays and the exact provisional environment.
