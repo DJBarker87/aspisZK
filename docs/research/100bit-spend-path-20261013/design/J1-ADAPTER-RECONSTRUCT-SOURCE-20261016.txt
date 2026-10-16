@@ -1,0 +1,53 @@
+ADAPTER RECONSTRUCTION: EXACT DECLARATION CUT
+
+Source revision: 42e5ca2011c39ee9770afc798282ff861b092428. The extraction kit
+copies AuthenticatedAsq8Accounts and the exact bodies/inline attributes of
+asq8_common, transfer_statement_box, withdrawal_statement_box and
+reconstruct_asq8_statement from programs/r1-cost-probe/src/r1_pool_adapter.rs.
+The complete adapter file and all five cuts are byte-identical at the later
+experimental decoder revision 2b51d4995; no decoder experiment enters this kit.
+The initial unexecuted 2b51 staging is retained as preparation history.
+
+The cut uses pool-adapter/private-leaf-salts and the actual pinned
+solana-program-error 2.2.2 ProgramError reexported by solana-program 2.3.0.
+It does not substitute a reduced error enum or build the full SBF program.
+Offline selected dependency resolution has 34 packages; all 31 registry archive
+hashes match Cargo.lock and 857 archived source files match installed sources.
+Only the new extraction member changes the lock; original entries are retained.
+
+Pinned cb50 Charon and b59 Aeneas run under separate 6G/8G/swap0 scopes.
+Charon: exit0, 116.600s, 549792KiB RSS, zero swaps; Aeneas: exit0, 1.910s,
+228044KiB RSS, zero swaps. LLBC has 139 functions, 77 types and 37 globals,
+no extraction errors, and no QM31/CM31 declarations. Original Types/Funs are
+mirrored byte-for-byte under lean/extracted-adapter-reconstruct-20261016.
+The sole opaque Slice/Array equality template is unreferenced and omitted.
+Only scoped builtin Option tags are supplied, justified by exact LLBC None=0,
+Some=1 and audited definitionally; no external axiom is accepted.
+
+CHECKED STATEMENT AND LIMITS
+
+AspisR1AdapterReconstruct.AdapterReconstructSuccess.reconstruct_success takes
+only actual reconstruct_asq8_statement request accounts candidate = ok(Ok out).
+It proves the actual checked_add equals candidate.next_pair_index, the master
+asset equals the asset in request.public, out is the same public variant/value
+with the exact asq8_common field copy, and the actual terminal validator accepts
+out. Both PrivateTransfer and Withdrawal are covered. asq8_common_exact and
+transfer_box_success/withdrawal_box_success expose the intermediate identities.
+No chosen projection or assumed nested validation success appears as a premise.
+
+Five Lean4.32 modules passed individually using the pinned R17 backend/cache;
+ten requested axiom reports contain only propext, Classical.choice, Quot.sound.
+Final success target: exit0, 1.611s, 2655940KiB process RSS,
+620765184B sampled cgroup peak, zero swaps. Three failed proof attempts are
+retained; they concern Boolean/scalar representation normalization, not a
+changed theorem. The generated source bytes are unchanged throughout.
+
+AuthenticatedAsq8Accounts remains a structural carrier: its name proves no
+account ownership, stored-bump PDA authentication, custody, or constructor
+provenance. The leaf does not inspect request verifier_profile/verifier_release/
+pool_program. Those checks belong to the caller. Raw ASF8 decoding, exact
+source/runtime execution correspondence, and transport into the separately
+extracted terminal/public cone remain OPEN here. No whole J1.a closure is
+claimed. Evidence is adapter-reconstruct-432-20261016; its read-only verifier
+checks all 655 logical archive members, exact source cuts, unchanged generated
+files, object/source receipts, the ten reports, and retained failures.

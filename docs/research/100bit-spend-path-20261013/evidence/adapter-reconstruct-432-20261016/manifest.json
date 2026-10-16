@@ -1,0 +1,283 @@
+{
+  "archive": "source-extraction-proofs.tar.gz",
+  "archive_deduplication": "Identical contents use tar hardlink records; no filesystem cache hardlinks or mutations. Every logical member has a SHA256SUMS entry.",
+  "archive_entries": 655,
+  "archive_sha256": "d8ceb3919247c458e22de6cb3cf58faa3ded40124ea8d6a1c12388cd36a8082c",
+  "extraction": {
+    "aeneas-a": {
+      "cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/aspis-j1a-adapter-aeneas-a-20261016.scope",
+      "cgroup_memory_peak_bytes": 215023616,
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/bin/aeneas",
+        "-sequential",
+        "-no-progress-bar",
+        "-abort-on-error",
+        "-backend",
+        "lean",
+        "-namespace",
+        "AspisR1AdapterReconstruct",
+        "-dest",
+        "/home/dombarker/project-offloads/aspis-r1-j1a-adapter-reconstruct-20261016/extraction-a/generated",
+        "-subdir",
+        "AspisR1AdapterReconstruct",
+        "-split-files",
+        "-emit-json",
+        "/home/dombarker/project-offloads/aspis-r1-j1a-adapter-reconstruct-20261016/extraction-a/AdapterReconstruct.llbc"
+      ],
+      "cwd": "/home/dombarker/project-offloads/aspis-r1-j1a-adapter-reconstruct-20261016/input",
+      "exit_status": 0,
+      "label": "aeneas-a",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0"
+      },
+      "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "peak_rss_kib": 228044,
+      "runner_sha256": "9c65568da115f8b5ca0978de1b08601ddaae8df47438d6b7504473ea97f6a2ba",
+      "scope": "Focused Rust/tool invocation only; no Lean/proof claim.",
+      "source_revision": "42e5ca2011c39ee9770afc798282ff861b092428",
+      "swaps": 0,
+      "timeout_seconds": 180,
+      "wall_seconds": 1.9101101991254836
+    },
+    "charon-a": {
+      "cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/aspis-j1a-adapter-charon-a-20261016.scope",
+      "cgroup_memory_peak_bytes": 642777088,
+      "command": [
+        "env",
+        "-u",
+        "CHARON_TOOLCHAIN_IS_IN_PATH",
+        "CARGO_NET_OFFLINE=true",
+        "CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_OPT_LEVEL=3",
+        "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+        "cargo",
+        "--preset",
+        "aeneas",
+        "--mir",
+        "built",
+        "--sysroot",
+        "default",
+        "--include",
+        "aspis_statement",
+        "--include",
+        "aspis_core::field",
+        "--include",
+        "solana_program_error",
+        "--include",
+        "core::option",
+        "--include",
+        "core::result::Result",
+        "--include",
+        "core::result::_::map_err",
+        "--start-from",
+        "crate::r1_pool_adapter::reconstruct_asq8_statement",
+        "--dest-file",
+        "/home/dombarker/project-offloads/aspis-r1-j1a-adapter-reconstruct-20261016/extraction-a/AdapterReconstruct.llbc",
+        "--",
+        "--locked",
+        "--offline",
+        "--release",
+        "-p",
+        "aspis-r1-adapter-reconstruct",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "pool-adapter,private-leaf-salts"
+      ],
+      "cwd": "/home/dombarker/project-offloads/aspis-r1-j1a-adapter-reconstruct-20261016/input",
+      "exit_status": 0,
+      "label": "charon-a",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0"
+      },
+      "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+      "peak_rss_kib": 549792,
+      "runner_sha256": "9c65568da115f8b5ca0978de1b08601ddaae8df47438d6b7504473ea97f6a2ba",
+      "scope": "Focused Rust/tool invocation only; no Lean/proof claim.",
+      "source_revision": "42e5ca2011c39ee9770afc798282ff861b092428",
+      "swaps": 0,
+      "timeout_seconds": 180,
+      "wall_seconds": 116.59990987391211
+    }
+  },
+  "format": 1,
+  "modules": {
+    "AdapterReconstructGeneratedAudit": {
+      "axioms": {
+        "passed": true,
+        "reports": [
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1AdapterReconstruct.r1_pool_adapter.asq8_common"
+          },
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1AdapterReconstruct.r1_pool_adapter.transfer_statement_box"
+          },
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1AdapterReconstruct.r1_pool_adapter.withdrawal_statement_box"
+          },
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1AdapterReconstruct.r1_pool_adapter.reconstruct_asq8_statement"
+          }
+        ],
+        "requested_count": 4,
+        "scope": "Only source #print axioms commands; zero requested audits makes no axiom claim."
+      },
+      "peak_process_rss_kib": 2622464,
+      "process_swaps": 0,
+      "receipt": "proofs/successful-targets/AdapterReconstructGeneratedAudit.json",
+      "sampled_cgroup_peak_bytes": 602365952,
+      "source": "docs/research/100bit-spend-path-20261013/lean/AdapterReconstructGeneratedAudit.lean",
+      "source_sha256": "767dcc2b71ae642b21f9b6bfeac4a0ad31f70b9320d3517ba7ca55a1c6738cbe",
+      "wall_seconds": 1.41
+    },
+    "AspisR1AdapterReconstruct.Funs": {
+      "axioms": {
+        "passed": true,
+        "reports": [],
+        "requested_count": 0,
+        "scope": "Only source #print axioms commands; zero requested audits makes no axiom claim."
+      },
+      "peak_process_rss_kib": 2707932,
+      "process_swaps": 0,
+      "receipt": "proofs/successful-targets/AspisR1AdapterReconstruct.Funs.json",
+      "sampled_cgroup_peak_bytes": 666882048,
+      "source": "docs/research/100bit-spend-path-20261013/lean/extracted-adapter-reconstruct-20261016/AspisR1AdapterReconstruct/Funs.lean",
+      "source_sha256": "bce4345d53e4bf18e05f475b65521324c0b0fbcb24dcb182ac9df64da922d0f2",
+      "wall_seconds": 3.837
+    },
+    "AspisR1AdapterReconstruct.FunsExternal": {
+      "axioms": {
+        "passed": true,
+        "reports": [
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1AdapterReconstruct.optionDiscriminant_none"
+          },
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1AdapterReconstruct.optionDiscriminant_some"
+          }
+        ],
+        "requested_count": 2,
+        "scope": "Only source #print axioms commands; zero requested audits makes no axiom claim."
+      },
+      "peak_process_rss_kib": 2625416,
+      "process_swaps": 0,
+      "receipt": "proofs/successful-targets/AspisR1AdapterReconstruct.FunsExternal.json",
+      "sampled_cgroup_peak_bytes": 619528192,
+      "source": "docs/research/100bit-spend-path-20261013/lean/extracted-adapter-reconstruct-20261016/AspisR1AdapterReconstruct/FunsExternal.lean",
+      "source_sha256": "ee323b7e543eafe6c006bcecfc181d5d37f027af56d1ceca84456abecb441216",
+      "wall_seconds": 2.01
+    },
+    "AspisR1AdapterReconstruct.Types": {
+      "axioms": {
+        "passed": true,
+        "reports": [],
+        "requested_count": 0,
+        "scope": "Only source #print axioms commands; zero requested audits makes no axiom claim."
+      },
+      "peak_process_rss_kib": 2709132,
+      "process_swaps": 0,
+      "receipt": "proofs/successful-targets/AspisR1AdapterReconstruct.Types.json",
+      "sampled_cgroup_peak_bytes": 685944832,
+      "source": "docs/research/100bit-spend-path-20261013/lean/extracted-adapter-reconstruct-20261016/AspisR1AdapterReconstruct/Types.lean",
+      "source_sha256": "c60d3e7035dc8d3318a8e61ca9c55aa6f7fbe591d2bedb8912eee514a4eb9fdf",
+      "wall_seconds": 2.618
+    },
+    "ExtractedAdapterReconstructSuccess": {
+      "axioms": {
+        "passed": true,
+        "reports": [
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1AdapterReconstruct.AdapterReconstructSuccess.asq8_common_exact"
+          },
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1AdapterReconstruct.AdapterReconstructSuccess.transfer_box_success"
+          },
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1AdapterReconstruct.AdapterReconstructSuccess.withdrawal_box_success"
+          },
+          {
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "declaration": "AspisR1AdapterReconstruct.AdapterReconstructSuccess.reconstruct_success"
+          }
+        ],
+        "requested_count": 4,
+        "scope": "Only source #print axioms commands; zero requested audits makes no axiom claim."
+      },
+      "peak_process_rss_kib": 2655940,
+      "process_swaps": 0,
+      "receipt": "proofs/successful-targets/ExtractedAdapterReconstructSuccess.json",
+      "sampled_cgroup_peak_bytes": 620765184,
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedAdapterReconstructSuccess.lean",
+      "source_sha256": "f706af82d72ee6de921a97fc489f3cb0adc453aeee14032bf4264e38e2e4ffdb",
+      "wall_seconds": 1.611
+    }
+  },
+  "no_full_replay": true,
+  "open": [
+    "Account authentication and actual AuthenticatedAsq8Accounts constructor provenance",
+    "Raw ASF8 decoder/source caller-to-leaf execution link",
+    "Nominal transport to separately extracted terminal/public cone",
+    "Rust/compiler/runtime semantic preservation and syscall/custody assumptions"
+  ],
+  "preparation_2b51": "Unexecuted earlier source staging retained as archive and pins; all metadata/compiler/translator runs use reviewed42e5.",
+  "retained_failed_proof_attempts": [
+    "success-a",
+    "success-b",
+    "success-c"
+  ],
+  "rust_source_revision": "42e5ca2011c39ee9770afc798282ff861b092428",
+  "scope": "Exact five-declaration Rust cut; actual four extracted functions and source-labelled success theorem checked on pinned Lean4.32 backend. No replacement opaque external, no source/runtime refinement assertion.",
+  "standard_only_report_count": 10
+}
