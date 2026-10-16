@@ -1,0 +1,15 @@
+--- a/src/statement/pool_v1/pair_forest_semantic_terminal.rs
++++ b/src/statement/pool_v1/pair_forest_semantic_terminal.rs
+@@ -505,8 +505,10 @@
+     range[32] = openings.xor12_z[10];
+     #[cfg(not(feature = "pool-v1-pair-forest-packed-range-audit"))]
+     {
+-        for residual in &mut range {
+-            *residual = range_selector.mul(*residual);
++        let mut residual_index = 0usize;
++        while residual_index < 33 {
++            range[residual_index] = range_selector.mul(range[residual_index]);
++            residual_index += 1;
+         }
+         add_preweighted(packed, 49, &range);
+     }

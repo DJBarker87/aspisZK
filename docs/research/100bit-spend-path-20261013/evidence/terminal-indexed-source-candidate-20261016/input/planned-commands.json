@@ -1,0 +1,76 @@
+{
+  "description": "Prepared merged local-module extraction. Do not use existing output directories.",
+  "charon": [
+    "charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--sysroot",
+    "default",
+    "--start-from",
+    "crate::extraction_probe::terminal_qm31_probe",
+    "--dest-file",
+    "OUTPUT/Terminal.llbc",
+    "--",
+    "--manifest-path",
+    "Cargo.toml",
+    "--package",
+    "aspis-r1-mask-extraction-probe",
+    "--features",
+    "r0,pool-v1-kernel",
+    "--no-default-features",
+    "--release",
+    "--lib",
+    "--locked",
+    "--offline"
+  ],
+  "aeneas": [
+    "aeneas",
+    "-sequential",
+    "-no-progress-bar",
+    "-abort-on-error",
+    "-backend",
+    "lean",
+    "-namespace",
+    "AspisR1SelectedMaskProbe",
+    "-dest",
+    "OUTPUT/generated",
+    "-subdir",
+    "AspisR1SelectedMaskProbe",
+    "-split-files",
+    "-emit-json",
+    "OUTPUT/Terminal.llbc"
+  ],
+  "build": [
+    "cargo",
+    "build",
+    "--manifest-path",
+    "Cargo.toml",
+    "--package",
+    "aspis-r1-mask-extraction-probe",
+    "--features",
+    "r0,pool-v1-kernel",
+    "--no-default-features",
+    "--release",
+    "--locked",
+    "--offline",
+    "--lib"
+  ],
+  "audit_required": [
+    "prove LLBC wrapper+terminal_qm31+terminal_parts+composition_parts functions are emitted/nonopaque or explicitly trace inlined bodies",
+    "verify all target-reachable QM31/CM31/M31 and PreparedQm31Multiplier functions are Structured/Transparent",
+    "reject missing function declaration inventory",
+    "record failure if nested Continue remains"
+  ],
+  "toolchain": "nightly-2026-06-01; exact Charon/Aeneas binary hashes copied from previously pinned b2 runner/tool manifest",
+  "features": {
+    "enabled": [
+      "r0",
+      "pool-v1-kernel"
+    ],
+    "disabled": "All other merged feature flags, especially r0-op-count and r0-r91-audit."
+  },
+  "configuration_note": "Source bodies are byte-identical. The extraction-only root merges core and statement module namespaces, aliases the local crate as aspis_core, and omits only the feature-gated statement crate root r0 module which collides with core root r0; the selected target path does not traverse that module. This is not a production workspace/build equivalence claim."
+}

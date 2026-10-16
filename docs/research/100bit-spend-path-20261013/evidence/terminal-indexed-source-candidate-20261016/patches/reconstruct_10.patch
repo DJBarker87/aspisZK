@@ -1,0 +1,20 @@
+--- base/pair_forest_semantic_terminal.rs
++++ candidate/pair_forest_semantic_terminal.rs
+@@ -166,10 +166,13 @@
+ 
+ #[inline(always)]
+ fn reconstruct_10(view: &[QM31; 16]) -> QM31 {
+-    view[..9]
+-        .iter()
+-        .rev()
+-        .fold(view[9], |acc, bit| acc.add(acc).add(*bit))
++    let mut acc = view[9];
++    let mut i = 9usize;
++    while i > 0 {
++        i -= 1;
++        acc = acc.add(acc).add(view[i]);
++    }
++    acc
+ }
+ 
+ #[inline(always)]
