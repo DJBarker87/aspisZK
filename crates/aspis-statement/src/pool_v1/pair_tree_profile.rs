@@ -561,10 +561,10 @@ pub fn encode_pool_v1_pair_late_public_statement_v1(
         &statement.live_snapshot,
         &mut output[32..32 + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES],
     )
-    .map_err(PoolV1PairLatePublicStatementErrorV1::Snapshot)?;
+    .map_err(|error| PoolV1PairLatePublicStatementErrorV1::Snapshot(error))?;
     let encoded_afterstate =
         encode_pool_v1_pair_verified_afterstate_v1(&statement.candidate_afterstate)
-            .map_err(PoolV1PairLatePublicStatementErrorV1::Afterstate)?;
+            .map_err(|error| PoolV1PairLatePublicStatementErrorV1::Afterstate(error))?;
     output[32 + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES..].copy_from_slice(&encoded_afterstate);
     Ok(())
 }
