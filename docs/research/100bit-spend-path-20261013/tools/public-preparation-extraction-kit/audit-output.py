@@ -15,18 +15,20 @@ def main():
  for f in t['fun_decls']:
   if not f:continue
   meta=f['item_meta'];last=meta['name'][-1].get('Ident',[''])[0]
-  if last in ['semantic_public','public_transcript']:
+  if last in ['semantic_public','public_transcript','sample_block_validated','sample_validated_entry']:
    assert isinstance(f['body'],dict) and meta['opacity']=='Transparent'
    assert meta['source_text'] in lib.decode()
    roots.append({'id':f['def_id'],'name':meta['name'],'source_text_sha256':sha(meta['source_text'].encode()),'span':meta['span']})
   if f['body']=='Opaque':
    opaque.append({'id':f['def_id'],'name':meta['name'],'is_local':meta['is_local'],'span':meta['span']})
- assert len(roots)==2
+ assert len(roots)==4
  tr=json.loads((a.generated/'translation.json').read_text())
  assert tr['aeneas_version']=='b59d5188c082f704a418c7cb4e52ad69328002d1'
  names=[x['lean_name'] for x in tr['functions']]
  assert any(x.endswith('.semantic_public') for x in names)
  assert any(x.endswith('.public_transcript') for x in names)
+ assert any(x.endswith('.sample_block_validated') for x in names)
+ assert any(x.endswith('.sample_validated_entry') for x in names)
  assert all(not x['is_opaque'] for x in tr['functions'])
  files={str(p.relative_to(a.generated)):sha(p.read_bytes()) for p in a.generated.rglob('*') if p.is_file()}
  assert set(files)=={'AspisR1PublicPreparation/Types.lean','AspisR1PublicPreparation/Funs.lean','translation.json'}

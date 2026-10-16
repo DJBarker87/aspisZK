@@ -4,3 +4,5 @@ import AspisR1PublicPreparation.Funs
 #print axioms AspisR1PublicPreparation.r1_wire.SemanticTranscript.new
 #print axioms AspisR1PublicPreparation.r1_semantic.public_transcript
 #print axioms AspisR1PublicPreparation.r1_wire.DOMAIN
+#print axioms AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated
+#print axioms AspisR1PublicPreparation.r1_wire.sample_validated_entry

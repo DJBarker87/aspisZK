@@ -26,6 +26,7 @@ def main():
   ('domain_salted','crates/aspis-r1-cost-probe/src/r1_wire.rs','#[cfg(feature = "private-leaf-salts")]\npub const DOMAIN'),
   ('transcript_type','crates/aspis-r1-cost-probe/src/r1_wire.rs','pub struct SemanticTranscript<H: Digest32>'),
   ('transcript_new','crates/aspis-r1-cost-probe/src/r1_wire.rs','pub fn new(hash: H, public_bytes:'),
+  ('transcript_step','crates/aspis-r1-cost-probe/src/r1_wire.rs','fn sample_block_validated(&mut self,'),
   ('public_transcript','crates/aspis-r1-cost-probe/src/r1_semantic.rs','pub fn public_transcript<H: Digest32>'),
  ]
  outputs={};cuts=[];sources={}
@@ -69,7 +70,7 @@ version = 4
 name = "aspis-r1-public-preparation"
 version = "0.0.0"
 '''
- pins={'revision':REV,'source_files':sources,'cuts':cuts,'layout_spans':spans,'layout_sha256':sha(layout),'source_cut_parser':{'path':BASE,'sha256':sha(parser_bytes)},'kit_files':{n:sha(b) for n,b in outputs.items()},'features':['r0','private-leaf-salts'],'closure':'Exact serializer declarations plus actual semantic_public, public_transcript and SemanticTranscript::new; Digest32 remains a trait parameter. No observer, verifier tail, account/SDK carrier or QM arithmetic is extracted.','open':['Outer first/tx1/verify_observed success-to-helper execution','Rust/tool/runtime preservation','R16 digest semantics','Accounts/custody']}
+ pins={'revision':REV,'source_files':sources,'cuts':cuts,'layout_spans':spans,'layout_sha256':sha(layout),'source_cut_parser':{'path':BASE,'sha256':sha(parser_bytes)},'kit_files':{n:sha(b) for n,b in outputs.items()},'features':['r0','private-leaf-salts'],'closure':'Exact serializer declarations plus actual semantic_public, public_transcript and SemanticTranscript::new/sample_block_validated; one one-call entry wrapper roots the private method; Digest32 remains a trait parameter. No observer, verifier tail, account/SDK carrier or QM arithmetic is extracted.','open':['Outer first/tx1/verify_observed success-to-helper execution','Rust/tool/runtime preservation','R16 digest semantics','Accounts/custody']}
  outputs['source-pins.json']=(json.dumps(pins,indent=2,sort_keys=True)+'\n').encode()
  for name,b in outputs.items():
   f=a.out/name
