@@ -1,0 +1,20 @@
+R18 exact Prefix extraction and focused Lean 4.32 checks
+
+Actual production: b38b1ce770f91a86315a3de1f750fbe993389569.
+r1_wire.rs SHA: 4ce97b7bc11b495dc8af3ef79f29dbbd9ebba7c2427a6db1acb8851759b1d305.
+The new aggregate kit contains 28 verbatim declaration cuts; its 18 retained field/record declarations are byte-identical to the earlier parser kit. No live protocol/model/QM module changed.
+
+Retained progression in evidence/r18-prefix-aggregate-extraction-20261016:
+A: exact caller-owned mutable array source failed Aeneas at InterpBorrows.ml:2032, the unsupported nested-borrow check reached by the loop join.
+B: isolated immutable 27-local construction reached the unchanged record getter, then failed duplicate loan projection at InterpBorrowsCore.ml:1498.
+C: isolated constructor without unused Prefix getters extracted successfully.
+D: isolated guarded direct-index getters plus immutable construction extracted successfully.
+E: final actual production cut, including explicit C1 Result match, extracted successfully. A/B are preserved failures; C/D are explicitly experiments, never production-refinement evidence. E Charon took 0.301 seconds; Aeneas 6.617 seconds. Peak cgroup memory 1795174400 bytes, swap zero, no pressure/OOM events. Complete LLBC/translation JSON are retained with lossless deterministic gzip and original hashes.
+
+Tools are unpatched native Linux builds from b59d5188c082f704a418c7cb4e52ad69328002d1 Aeneas and cb50ff16b9f1066b8a97dc06da704de2da2fa41c Charon, using B's authoritative tools-final-pins inventory. Cross-platform binary reproducibility is not asserted.
+
+E emits only AspisR1PrefixAggregateParser.Types/Funs. Both compile against the pinned, ported Lean 4.32 backend: 1.803 and 2.404 seconds. A separate 1.803-second audit checks 15 actual field/validator/record/helper/Prefix declarations; every dependency is among propext, Classical.choice and Quot.sound. Unused derived Error.fmt retains Formatter/native.decide and is separately reported. There is no whole-module axiom-free claim.
+
+All checks used one Lean process, -j1 -M0 under mandatory 6G high/8G max/swap0. Maximum kernel-check cgroup peak was 435163136 bytes; process RSS, runtime-library hashes, versions, exact source/object pins, commands and swap counters are retained. All 237 unchanged backend source/object pairs were verified against green receipts, without rebuilding dependencies or committing their objects.
+
+The evidence verifier checks all five attempts, exact final kit, three kernel receipts and the complete axiom inventory. Generated source is retained unchanged in lean/extracted-prefix-aggregate-20261016. Rust execution refinement, the compositional helper theorem, all-27-record/c1-prefix correspondence, challenge provenance and first-read transport remain separate obligations. No full replay was run.

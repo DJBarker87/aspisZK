@@ -1,0 +1,139 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -275,46 +275,64 @@
+     records: [&'a [u8]; 27],
+ }
+ 
+-fn parse_records_into<'a>(bytes: &'a [u8], records: &mut [&'a [u8]; 27]) -> Result<(), Error> {
+-    let mut offset = 32;
+-    let mut row = 0u8;
+-    while row < 27 {
+-        let length = 5 + row_shape(row).unwrap().1;
+-        let framed = bytes
+-            .get(offset..offset + length)
+-            .ok_or(Error::Length { row })?;
+-        parse_record(row, framed)?;
+-        records[row as usize] = framed;
+-        offset += length;
+-        row += 1;
+-    }
+-    if offset != bytes.len() {
+-        return Err(Error::TrailingBytes);
+-    }
+-    Ok(())
+-}
+-
++fn parse_record_at<'a>(bytes: &'a [u8], row: u8, offset: usize) -> Result<(&'a [u8], usize), Error> {
++    let length = 5 + row_shape(row).unwrap().1;
++    let framed = bytes
++        .get(offset..offset + length)
++        .ok_or(Error::Length { row })?;
++    parse_record(row, framed)?;
++    Ok((framed, offset + length))
++}
+ impl<'a> Prefix<'a> {
+     pub fn parse(bytes: &'a [u8]) -> Result<Self, Error> {
+         if bytes.len() < 32 {
+             return Err(Error::Length { row: 0 });
+         }
+-        let c1_root = bytes[..32].try_into().unwrap();
+-        let mut records = [&[][..]; 27];
+-        parse_records_into(bytes, &mut records)?;
+-        Ok(Self { c1_root, records })
++        let c1_root = match bytes[..32].try_into() {
++            Ok(root) => root,
++            Err(_) => return Err(Error::Length { row: 0 }),
++        };
++        let (r0, offset) = parse_record_at(bytes, 0, 32)?;
++        let (r1, offset) = parse_record_at(bytes, 1, offset)?;
++        let (r2, offset) = parse_record_at(bytes, 2, offset)?;
++        let (r3, offset) = parse_record_at(bytes, 3, offset)?;
++        let (r4, offset) = parse_record_at(bytes, 4, offset)?;
++        let (r5, offset) = parse_record_at(bytes, 5, offset)?;
++        let (r6, offset) = parse_record_at(bytes, 6, offset)?;
++        let (r7, offset) = parse_record_at(bytes, 7, offset)?;
++        let (r8, offset) = parse_record_at(bytes, 8, offset)?;
++        let (r9, offset) = parse_record_at(bytes, 9, offset)?;
++        let (r10, offset) = parse_record_at(bytes, 10, offset)?;
++        let (r11, offset) = parse_record_at(bytes, 11, offset)?;
++        let (r12, offset) = parse_record_at(bytes, 12, offset)?;
++        let (r13, offset) = parse_record_at(bytes, 13, offset)?;
++        let (r14, offset) = parse_record_at(bytes, 14, offset)?;
++        let (r15, offset) = parse_record_at(bytes, 15, offset)?;
++        let (r16, offset) = parse_record_at(bytes, 16, offset)?;
++        let (r17, offset) = parse_record_at(bytes, 17, offset)?;
++        let (r18, offset) = parse_record_at(bytes, 18, offset)?;
++        let (r19, offset) = parse_record_at(bytes, 19, offset)?;
++        let (r20, offset) = parse_record_at(bytes, 20, offset)?;
++        let (r21, offset) = parse_record_at(bytes, 21, offset)?;
++        let (r22, offset) = parse_record_at(bytes, 22, offset)?;
++        let (r23, offset) = parse_record_at(bytes, 23, offset)?;
++        let (r24, offset) = parse_record_at(bytes, 24, offset)?;
++        let (r25, offset) = parse_record_at(bytes, 25, offset)?;
++        let (r26, offset) = parse_record_at(bytes, 26, offset)?;
++        if offset != bytes.len() {
++            return Err(Error::TrailingBytes);
++        }
++        Ok(Self { c1_root, records: [r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20, r21, r22, r23, r24, r25, r26] })
+     }
+     pub fn record(&self, row: u8) -> Result<&'a [u8], Error> {
+-        self.records
+-            .get(row as usize)
+-            .copied()
+-            .ok_or(Error::InvalidRow)
++        if row >= 27 {
++            return Err(Error::InvalidRow);
++        }
++        Ok(self.records[row as usize])
+     }
+     pub fn payload(&self, row: u8) -> Result<&'a [u8], Error> {
+-        self.records
+-            .get(row as usize)
+-            .map(|framed| &framed[5..])
+-            .ok_or(Error::InvalidRow)
++        let framed = self.record(row)?;
++        Ok(&framed[5..])
+     }
+     pub(crate) fn validated_record(&self, row: u8) -> Result<ValidatedRecord<'a>, Error> {
+         Ok(ValidatedRecord { row, framed: self.record(row)? })
+@@ -619,15 +637,14 @@
+     }
+ 
+     #[test]
+-    fn prefix_into_preserves_slices_and_all_truncations() {
++    fn prefix_aggregate_preserves_slices_and_all_truncations() {
+         let (bytes, offsets) = fixture();
+         let actual = Prefix::parse(&bytes).unwrap();
+         let expected = parse_reference(&bytes).unwrap();
+         assert_eq!(actual.c1_root, expected.c1_root);
+         assert_eq!(actual.c1_root.as_ptr(), bytes.as_ptr());
+-        // The helper overwrites every entry; no empty-slice seed assumption.
+-        let mut scratch = [&bytes[..1]; 27];
+-        parse_records_into(&bytes, &mut scratch).unwrap();
++        let mut next_offset = 32;
++        // Independently inspect each helper result as well as the final array.
+         for row in 0..27u8 {
+             let start = offsets[row as usize];
+             let end = offsets[row as usize + 1];
+@@ -635,8 +652,11 @@
+             assert_eq!(frame, expected.record(row).unwrap());
+             assert_eq!(frame, &bytes[start..end]);
+             assert_eq!(frame.as_ptr(), bytes[start..end].as_ptr());
+-            assert_eq!(scratch[row as usize].as_ptr(), frame.as_ptr());
+-            assert_eq!(scratch[row as usize].len(), frame.len());
++            let (single, next) = parse_record_at(&bytes, row, next_offset).unwrap();
++            assert_eq!(single.as_ptr(), frame.as_ptr());
++            assert_eq!(single.len(), frame.len());
++            assert_eq!(next, end);
++            next_offset = next;
+             let payload = actual.payload(row).unwrap();
+             assert_eq!(payload, expected.payload(row).unwrap());
+             assert_eq!(payload.as_ptr(), bytes[start + 5..end].as_ptr());
+@@ -645,6 +665,7 @@
+             assert_eq!(token.framed().as_ptr(), frame.as_ptr());
+             assert_eq!(token.payload(), payload);
+         }
++        assert_eq!(next_offset, bytes.len());
+         for row in 27..=u8::MAX {
+             assert_eq!(actual.record(row), Err(Error::InvalidRow));
+             assert_eq!(actual.payload(row), Err(Error::InvalidRow));
