@@ -1,0 +1,35 @@
+Lead continuation decisions for checkpoint 5e841c471, 2026-10-16
+
+The checkpoint is merged into the continuing proof branch at ead3e78e9.
+The branch had advanced beyond 19c68d240, so integration used a normal merge.
+No existing protocol theorem or production source changed in this merge.
+
+1. Implement the Digest32 source migration path in an isolated source branch.
+Use the already emitted complete method/wrapper and the actual production
+hash backend. Preserve each call's exact input bytes, absorb/squeeze/advance
+order, state update point, returned errors, and admitted row bounds. Prove
+this concrete entrypoint/backend correspondence; do not require a theorem
+about every arbitrary effectful HashFn callback. Extend the extraction through
+the actual constructor and all 33 caller rows, including reseed and selected
+query state. A generic dictionary alone does not discharge source effects.
+Do not spend the critical path implementing general callback lowering.
+The resulting source/artifact change must have its own source proof and
+focused release/native equivalence evidence before replacing the pinned
+release artifact. Existing unchanged runtime gates need no rerun meanwhile.
+
+2. Implement the actual-source readonly metadata helper path, preserving the
+real AccountInfo wrapper, owner/key semantics, flag reads, and error order.
+Prove the helper and the real wrapper's field projections/call relation.
+The helper must read metadata supplied by that wrapper, not attacker-supplied
+standalone booleans. Keep caller reachability, account identity, ownership,
+checkpoint immutability, transition binding and custody in the actual caller
+obligations. This decision does not admit them as axioms or claim full SDK
+extraction. General NonNull/Rc/RefCell support is not the critical-path task.
+
+3. Runtime/public continuation uses the checked Withdrawal decoder/public
+bridge: derive hd and serializer hs at the actual caller, identify t with the
+decoded lane_transition, then compose publicParsed. Keep the bridge's stated
+Withdrawal scope; no automatic transfer to a payment/transfer caller.
+
+The proof team continues raw decoder density, causal commitment-word
+reconstruction and terminal semantic source correspondence in parallel.
