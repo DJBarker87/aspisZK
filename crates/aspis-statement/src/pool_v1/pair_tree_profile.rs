@@ -522,55 +522,151 @@ pub fn decode_pool_v1_pair_live_snapshot_v1(
     if bytes[16..48] != POOL_V1_PAIR_TREE_FORMAT_BINDING[0..32] {
         return Err(PoolV1PairLiveSnapshotErrorV1::WrongFormatBinding);
     }
-    let current_root = decode_digest_canonical(bytes[128..160].try_into().unwrap())
-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?;
+    let current_root = decode_digest_canonical(
+        bytes[128..160]
+            .try_into()
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+    )
+    .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?;
     let frontier = [
-        decode_digest_canonical(bytes[160..192].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[192..224].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[224..256].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[256..288].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[288..320].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[320..352].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[352..384].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[384..416].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[416..448].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[448..480].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[480..512].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[512..544].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[544..576].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[576..608].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[608..640].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[640..672].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[672..704].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[704..736].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[736..768].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
-        decode_digest_canonical(bytes[768..800].try_into().unwrap())
-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[160..192]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[192..224]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[224..256]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[256..288]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[288..320]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[320..352]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[352..384]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[384..416]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[416..448]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[448..480]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[480..512]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[512..544]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[544..576]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[576..608]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[608..640]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[640..672]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[672..704]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[704..736]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[736..768]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
+        decode_digest_canonical(
+            bytes[768..800]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        )
+        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
     ];
     let snapshot = PoolV1PairLiveSnapshotV1 {
-        pool: bytes[48..80].try_into().unwrap(),
-        deployment_domain: bytes[80..112].try_into().unwrap(),
-        sequence: u64::from_le_bytes(bytes[112..120].try_into().unwrap()),
-        next_pair_index: u64::from_le_bytes(bytes[120..128].try_into().unwrap()),
+        pool: bytes[48..80]
+            .try_into()
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        deployment_domain: bytes[80..112]
+            .try_into()
+            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        sequence: u64::from_le_bytes(
+            bytes[112..120]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        ),
+        next_pair_index: u64::from_le_bytes(
+            bytes[120..128]
+                .try_into()
+                .map_err(|_| PoolV1PairLiveSnapshotErrorV1::WrongLength)?,
+        ),
         current_root,
         frontier,
     };
@@ -647,22 +743,38 @@ pub(crate) fn decode_pool_v1_pair_late_public_statement_boxed_v1(
     if bytes[9] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT {
         return Err(PoolV1PairLatePublicStatementErrorV1::WrongItemCount);
     }
-    if u16::from_le_bytes(bytes[10..12].try_into().unwrap()) as usize
+    if u16::from_le_bytes(
+        bytes[10..12]
+            .try_into()
+            .map_err(|_| PoolV1PairLatePublicStatementErrorV1::WrongLength)?,
+    ) as usize
         != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_HEADER_BYTES
     {
         return Err(PoolV1PairLatePublicStatementErrorV1::WrongHeaderLength);
     }
-    if u32::from_le_bytes(bytes[12..16].try_into().unwrap()) as usize
+    if u32::from_le_bytes(
+        bytes[12..16]
+            .try_into()
+            .map_err(|_| PoolV1PairLatePublicStatementErrorV1::WrongLength)?,
+    ) as usize
         != POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES
     {
         return Err(PoolV1PairLatePublicStatementErrorV1::WrongSnapshotLength);
     }
-    if u32::from_le_bytes(bytes[16..20].try_into().unwrap()) as usize
+    if u32::from_le_bytes(
+        bytes[16..20]
+            .try_into()
+            .map_err(|_| PoolV1PairLatePublicStatementErrorV1::WrongLength)?,
+    ) as usize
         != POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
     {
         return Err(PoolV1PairLatePublicStatementErrorV1::WrongAfterstateLength);
     }
-    if u32::from_le_bytes(bytes[20..24].try_into().unwrap()) as usize
+    if u32::from_le_bytes(
+        bytes[20..24]
+            .try_into()
+            .map_err(|_| PoolV1PairLatePublicStatementErrorV1::WrongLength)?,
+    ) as usize
         != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES
     {
         return Err(PoolV1PairLatePublicStatementErrorV1::WrongTotalLength);

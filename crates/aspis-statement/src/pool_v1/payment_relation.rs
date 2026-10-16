@@ -347,7 +347,7 @@ fn decode_common(
     let asset = u32::from_le_bytes(
         bytes[ASSET_ID_OFFSET..AMOUNT_OR_RESERVED_OFFSET]
             .try_into()
-            .unwrap(),
+            .map_err(|_| PoolV1PaymentStatementFormatError::WrongLength)?,
     );
     if asset >= P {
         return Err(PoolV1PaymentStatementFormatError::NonCanonicalAssetId);
@@ -355,23 +355,25 @@ fn decode_common(
     let common = CommonPublicV1 {
         pool: bytes[POOL_OFFSET..DEPLOYMENT_DOMAIN_OFFSET]
             .try_into()
-            .unwrap(),
+            .map_err(|_| PoolV1PaymentStatementFormatError::WrongLength)?,
         deployment_domain: bytes[DEPLOYMENT_DOMAIN_OFFSET..ANCHOR_SEQUENCE_OFFSET]
             .try_into()
-            .unwrap(),
+            .map_err(|_| PoolV1PaymentStatementFormatError::WrongLength)?,
         anchor_sequence: u64::from_le_bytes(
             bytes[ANCHOR_SEQUENCE_OFFSET..ANCHOR_ROOT_OFFSET]
                 .try_into()
-                .unwrap(),
+                .map_err(|_| PoolV1PaymentStatementFormatError::WrongLength)?,
         ),
         anchor_root: decode_digest_canonical(
             bytes[ANCHOR_ROOT_OFFSET..NULLIFIER_OFFSET]
                 .try_into()
-                .unwrap(),
+                .map_err(|_| PoolV1PaymentStatementFormatError::WrongLength)?,
         )
         .map_err(|_| PoolV1PaymentStatementFormatError::NonCanonicalDigest)?,
         nullifier: decode_digest_canonical(
-            bytes[NULLIFIER_OFFSET..ASSET_ID_OFFSET].try_into().unwrap(),
+            bytes[NULLIFIER_OFFSET..ASSET_ID_OFFSET]
+                .try_into()
+                .map_err(|_| PoolV1PaymentStatementFormatError::WrongLength)?,
         )
         .map_err(|_| PoolV1PaymentStatementFormatError::NonCanonicalDigest)?,
         asset_id: M31(asset),
@@ -407,11 +409,13 @@ pub fn decode_pool_v1_private_transfer_public_v1(
         recipient_commitment: decode_digest_canonical(
             bytes[FIRST_OUTPUT_OR_DESTINATION_OFFSET..SECOND_OUTPUT_OFFSET]
                 .try_into()
-                .unwrap(),
+                .map_err(|_| PoolV1PaymentStatementFormatError::WrongLength)?,
         )
         .map_err(|_| PoolV1PaymentStatementFormatError::NonCanonicalDigest)?,
         change_commitment: decode_digest_canonical(
-            bytes[SECOND_OUTPUT_OFFSET..].try_into().unwrap(),
+            bytes[SECOND_OUTPUT_OFFSET..]
+                .try_into()
+                .map_err(|_| PoolV1PaymentStatementFormatError::WrongLength)?,
         )
         .map_err(|_| PoolV1PaymentStatementFormatError::NonCanonicalDigest)?,
     };
@@ -441,13 +445,15 @@ pub fn decode_pool_v1_withdrawal_public_v1(
         amount: u32::from_le_bytes(
             bytes[AMOUNT_OR_RESERVED_OFFSET..FIRST_OUTPUT_OR_DESTINATION_OFFSET]
                 .try_into()
-                .unwrap(),
+                .map_err(|_| PoolV1PaymentStatementFormatError::WrongLength)?,
         ),
         destination_token_account: bytes[FIRST_OUTPUT_OR_DESTINATION_OFFSET..SECOND_OUTPUT_OFFSET]
             .try_into()
-            .unwrap(),
+            .map_err(|_| PoolV1PaymentStatementFormatError::WrongLength)?,
         change_commitment: decode_digest_canonical(
-            bytes[SECOND_OUTPUT_OFFSET..].try_into().unwrap(),
+            bytes[SECOND_OUTPUT_OFFSET..]
+                .try_into()
+                .map_err(|_| PoolV1PaymentStatementFormatError::WrongLength)?,
         )
         .map_err(|_| PoolV1PaymentStatementFormatError::NonCanonicalDigest)?,
     };
