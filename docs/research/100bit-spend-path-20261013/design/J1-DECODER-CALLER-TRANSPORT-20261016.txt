@@ -1,0 +1,52 @@
+J1.a decoder-to-existing-public continuation inventory
+
+Base b2ad6649de4c1b97c2270a1c8bd4bbfe5537d52c; decoder source0626294e3;
+actual outer-success checkpoint e8678d625bf283dc5bf046daef81b9523320fe37.
+Search of current lean/design finds no existing Decoder-to-Caller carrier map.
+
+Existing checked declarations to reuse:
+AspisR1TerminalDecoder.DecoderSuccess.decode_success_validated returns the
+actual Decoder validator equation for the exact decoded object.
+AspisR1TerminalValidator.CallerBridge.toCaller/fromCaller, validator_eq,
+encoder_eq and encoder_success are fixed nine-field transports, but their
+domain is the different TerminalValidator nominal type. They do not directly
+accept Decoder's type. ExtractedTerminalCallerBridge.lean16-39,119,200,264.
+AspisR1WithdrawalCaller.CallerPublic.encoder_serializer_parsePublic already
+composes actual Caller ASWP encoder success with actual semantic serializer
+success on Carrier.toSerializer p and the supplied transition t. It concludes
+the live parser equation on its fixed projectRaw p t. Reuse it unchanged
+(ExtractedWithdrawalCallerPublic.lean23-36); do not copy the public proof.
+
+Smallest new statements, still OPEN at this inventory checkpoint:
+1. For Decoder c,p, actual Decoder validator (.Withdrawal c p)=ok(Ok())
+   implies exists pay:Array U8 216, actual Decoder payment encoder p=ok(Ok pay).
+   Compose with decode_success_validated to replace validation by actual
+   decoder bytes=ok(Ok(.Withdrawal c p)). Only invert the validator prefix:
+   generated Decoder Funs1144 onward, source pair_forest_terminal.rs227-276.
+   Existing ExtractedAdapterWithdrawalSuccess.terminal_encoder_success shows
+   the same proof shape in a different nominal cone; it is not a theorem about
+   Decoder and must not be applied by assumption.
+2. Define DecoderPublic-to-CallerPublic by copying all nine fields: pool,
+   deployment_domain,anchor_sequence,anchor_root,nullifier,asset_id,amount,
+   destination_token_account,change_commitment. Prove complete encoder outcome
+   equality through an explicit fourteen-error map preserving fail/div; then
+   specialize to successful unchanged pay bytes. M31 in both extracted Types
+   is reducible U32, so this needs no field/QM arithmetic extraction or proof.
+3. Apply existing CallerPublic.encoder_serializer_parsePublic to that fixed
+   carrier and pay. Its hs premise remains the actual serializer success
+   equation on the same mapped p and t. No arbitrary projection is selected.
+
+Source inspection supports a small equality cone: Decoder versus Terminal
+withdrawal_common,digest_is_canonical,validate_common,withdrawal validator,
+withdrawal encoder,encode_common and all three atomic encode_digest functions
+have equal bodies after whitespace normalization. Decoder Funs465/511/516/
+543/570/606 and129/146/154; Terminal Funs336/430/446/481/533/598 and114/144/157.
+This lexical observation is not a Lean equality or source-preservation proof.
+The new proof must also relate constants and nominal errors/common records.
+
+No whole-terminal or late/tree transport is required. The full public joint
+import remains untested for generated discriminant-name collisions; retain
+originals and diagnose any collision before a scoped naming-only adapter.
+Remaining premises: actual semantic serialization, transition t binding to the
+decoded snapshot/candidate, stage1 invocation/account/custody provenance and
+Rust/runtime preservation. This inventory discharges none of those premises.

@@ -1,0 +1,60 @@
+Candidate Digest32 feasibility, not release-interface adoption
+
+Original Rust pin b2ad6649de4c1b97c2270a1c8bd4bbfe5537d52c remains unchanged.
+tools/digest-interface-candidate-kit cuts r1_wire.rs Error23-36, transcript168-176,
+impl178 and complete sample_block_validated194-208. It adds Digest32:Copy with
+digest(&self,parts:&[&[u8]])->[u8;32], parameterizes only the transcript/impl,
+changes its hash field to H and replaces exactly three direct calls by methods.
+prepare.py --check reverses every substitution to the exact original span.
+No HashFn/Fn/dyn wrapper, concrete backend, SDK, Observer, caller, constructor,
+compiler change or handwritten replacement method is included.
+
+First attempt and root-selection correction
+
+Candidate-a exited0 in both tools but is retained as a rejected empty-method
+result. Charon kept the transparent method body in fun_decls yet excluded it
+from ordered_decls; Aeneas emitted only Digest32. Exact cb50 matcher sources
+are retained by file/span hashes: reorder_decls.rs305-319 recomputes roots;
+options.rs593-604 delegates matching; name_matcher/mod.rs245-282 does not match
+Ident SemanticTranscript against Impl(Ty), and its inherent-Impl case is false.
+The inspected bytes match the retained exact cb50 source archive.
+
+Reviewed candidate-b adds one public same-module function whose only body is
+transcript.sample_block_validated(row,framed). Root selection names that function
+and Digest32. Before translation, both transparent bodies must occur in
+ordered_decls; afterward both must occur in translation.json. No LLBC surgery.
+The original candidate method remains byte-identical between attempts.
+
+Checked candidate and its precise boundary
+
+Candidate-b Charon0.1.223/cb50 succeeds in0.201s/132352KiB process RSS; unpatched
+Aeneas b59 succeeds in0.301s/75152KiB. The emitted surface is Types, Funs and
+translation.json: two transparent functions, Error/transcript types and one
+trait dictionary; no external template or explicit generated axiom/sorry.
+The dictionary field is H -> Slice(Slice U8) -> Result(Array U8 32), with Copy H.
+The whole method returns Result(RustResult block Error x SemanticTranscript H).
+Its three sequential calls use old.state/tag/framed, absorbed/[1], absorbed/[2];
+row mismatch returns RowOrder and unchanged self. Checked additions remain.
+
+On pinned Lean4.32, unchanged emitted Types/Funs and a two-export axioms audit
+pass in1.602/1.602/1.402s, process RSS2645400/2638728/2622940KiB. Both method
+and wrapper report only propext, Classical.choice, Quot.sound. The237 already
+checked backend source/object/receipt pins were verified, not rebuilt.
+All runs used high6G/max8G/swap0, one job,180-second per-target stop. Extraction
+scope peaks444403712B/304619520B; Lean scope peak416624640B; swaps0, pressure0.
+The earlier trait-only output is not counted as method success.
+
+This demonstrates candidate-interface translation and kernel acceptance, not
+production adoption, concrete hash implementation, byte-behavior equivalence,
+ordered hash effects, panic/unwind/nontermination preservation or syscall cost.
+The pure dictionary/Result representation does not supply mutation/effect traces
+on panic/divergence; can_diverge=false metadata is not a Rust callback theorem.
+Built-MIR extraction uses checked overflow; arbitrary release-row equivalence
+is not claimed. No constructor/all33 caller, Observer, hbytes/htyped/ha or
+Rust-to-LLBC preservation premise is discharged. No native differential, SBF or
+CU replay was run. The release-interface proposal remains unadopted.
+
+Evidence: evidence/digest-interface-candidate-20261016. Its verifier checks both
+source snapshots, reversible edits, root-selection diagnosis, nonempty final
+method, exact emitted/checked bytes, receipts, new objects and standard audits.
+Only three new candidate objects are included; no backend objects are copied.
