@@ -569,6 +569,14 @@ fn run(
         .map(|(k, a)| account_json(*k, a))
         .collect();
     write_json(&out.join("initial-accounts.json"), &json!(initial))?;
+    let readonly_stage1_state = if label == "after"
+        && env::var_os("ASPIS_R16_READONLY_RUNTIME").is_some()
+    {
+        ensure!(env::var("ASPIS_R16_READONLY_RUNTIME")? == "1");
+        Some(svm.clone())
+    } else {
+        None
+    };
     let stage1 = send(
         &mut svm,
         payer,
@@ -601,6 +609,12 @@ fn run(
         cp.lamports == initial_accounts[inputs.len()].lamports
             && cp.rent_epoch == initial_accounts[inputs.len()].rent_epoch
     );
+    if let Some(state) = readonly_stage1_state {
+        readonly_runtime::run_stage1(
+            &state, program, &keys, &[keys[0], keys[1], checkpoint_key.pubkey()],
+            &after1, payer, &out,
+        )?;
+    }
     let checkpoint = cp.data.clone();
     write_new(&out.join("checkpoint.bin"), &checkpoint, 0o644)?;
     // Seven read-only accounts, with the verifier checkpoint distinct from ASC8.

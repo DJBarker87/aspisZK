@@ -16,4 +16,15 @@ fn readonly_meta_ok(
     }
     Ok(())
 }
+
+fn readonly_buffer_meta_ok(
+    is_signer: bool,
+    is_writable: bool,
+    executable: bool,
+) -> ProgramResult {
+    if is_signer || is_writable || executable {
+        return Err(ProgramError::InvalidAccountData);
+    }
+    Ok(())
+}
 }
