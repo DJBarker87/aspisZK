@@ -1,0 +1,18 @@
+{
+  "old_revision": "ebe378259fb7d9c8a007eec2c8a8eb4850e549fc",
+  "current_revision": "c16ab4d76619cf2cf80ece9d7e60e47975957af0",
+  "source_path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+  "declaration": "begin",
+  "classification": "re-extracted",
+  "old_source_sha256": "e3371387e35286404897fcc90114171c75a4a0d762d49d8b28a7d469aaf6480c",
+  "current_source_sha256": "851e60205aa89ce6be365bed0c01db5b8423c67ced4053d97c8bd66c25f9cb7a",
+  "source_body_diff": "--- old begin\n+++ c16 begin\n@@ -8,9 +8,16 @@\n     let chi = transcript.semantic_validated(prefix.validated_record(1)?)?;\n     let theta = transcript.semantic_validated(prefix.validated_record(2)?)?;\n     let mut zc = [QM31::ZERO; 10];\n-    for (i, value) in zc.iter_mut().enumerate() {\n-        *value = transcript.semantic_validated(prefix.validated_record(3 + i as u8)?)?;\n-    }\n+    zc[0] = transcript.semantic_validated(prefix.validated_record(3)?)?;\n+    zc[1] = transcript.semantic_validated(prefix.validated_record(4)?)?;\n+    zc[2] = transcript.semantic_validated(prefix.validated_record(5)?)?;\n+    zc[3] = transcript.semantic_validated(prefix.validated_record(6)?)?;\n+    zc[4] = transcript.semantic_validated(prefix.validated_record(7)?)?;\n+    zc[5] = transcript.semantic_validated(prefix.validated_record(8)?)?;\n+    zc[6] = transcript.semantic_validated(prefix.validated_record(9)?)?;\n+    zc[7] = transcript.semantic_validated(prefix.validated_record(10)?)?;\n+    zc[8] = transcript.semantic_validated(prefix.validated_record(11)?)?;\n+    zc[9] = transcript.semantic_validated(prefix.validated_record(12)?)?;\n     let mu = transcript.semantic_validated(prefix.validated_record(13)?)?;\n     let eta = transcript.semantic_validated(prefix.validated_record(14)?)?;\n     Ok(Challenges {\n",
+  "old_source_statement": "/// Rows 0..14. Roots are the only commitment records; there is no helper\n/// zero-sum/registry absorb between row 2 and theta.\npub fn begin<H: Digest32>(\n    prefix: &Prefix<'_>,\n    transcript: &mut SemanticTranscript<H>,\n) -> Result<Challenges, Error>",
+  "current_source_statement": "/// Rows 0..14. Roots are the only commitment records; there is no helper\n/// zero-sum/registry absorb between row 2 and theta.\npub fn begin<H: Digest32>(\n    prefix: &Prefix<'_>,\n    transcript: &mut SemanticTranscript<H>,\n) -> Result<Challenges, Error>",
+  "source_statement_diff": "",
+  "current_generated_statement": "def r1_wire.begin\n  {H : Type} (aspis_coreDigest32Inst : aspis_core.Digest32 H)\n  (prefix1 : r1_wire.Prefix) (transcript : r1_wire.SemanticTranscript H) :\n  Result ((core.result.Result r1_wire.Challenges r1_wire.Error) \u00d7\n    (r1_wire.SemanticTranscript H))",
+  "old_generated_statement": null,
+  "generated_statement_diff_status": "No old Lean begin declaration emitted: original r18 Aeneas failed at unsupported nested-loop early return. Current emitted statement above is checked. No old/new generated-declaration equality asserted. Rust API statement is byte-identical; only ten zc calls were unrolled.",
+  "unchanged_original_emission_audit": "worker-a-checkpoint.tar.gz:c16/lean/original-declaration-audit.json",
+  "current_source_pins": "worker-a-checkpoint.tar.gz:c16/input/source-pins.json"
+}

@@ -1,0 +1,1 @@
+    pub fn folds(self) -> usize { if self == Self::S1 { 1 } else { 2 } }

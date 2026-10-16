@@ -1,0 +1,20 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs (exact function cut)
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs (PROPOSAL ONLY)
+@@ -15,7 +15,8 @@
+     let mut alpha = [QM31::ZERO; 10];
+     #[cfg(feature = "prover")]
+     let mut round_checks = [[QM31::ZERO; 3]; 10];
+-    for round in 0..10 {
++    let mut round = 0usize;
++    while round < 10 {
+         let row = 15 + round as u8;
+         let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+         let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+@@ -32,6 +33,7 @@
+             round_checks[round] = [running, boundary, value];
+         }
+         running = value;
++        round += 1;
+     }
+     mark(obs, 2);
+     let claims = claims(&prefix)?;

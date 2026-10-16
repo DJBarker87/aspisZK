@@ -1,0 +1,12 @@
+{
+  "base_revision": "99263bea08e00911b48ec51a06a7ca0bb8ff66c0",
+  "source_commit": "c16ab4d76619cf2cf80ece9d7e60e47975957af0",
+  "source_path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+  "before_sha256": "12eedce4eac403ff6446cdb6fea88e51cb6443ace9cd4264319b788ec476c245",
+  "after_sha256": "f1c0856377f5586fef1e74fc5d4cba619000325beb6be85edd539cee699646d5",
+  "only_change": "replace ten-row iter_mut/enumerate loop with index assignments zc[0] row3 through zc[9] row12; every other source byte unchanged",
+  "old_fragment": "    for (i, value) in zc.iter_mut().enumerate() {\n        *value = transcript.semantic_validated(prefix.validated_record(3 + i as u8)?)?;\n    }",
+  "new_fragment": "    zc[0] = transcript.semantic_validated(prefix.validated_record(3)?)?;\n    zc[1] = transcript.semantic_validated(prefix.validated_record(4)?)?;\n    zc[2] = transcript.semantic_validated(prefix.validated_record(5)?)?;\n    zc[3] = transcript.semantic_validated(prefix.validated_record(6)?)?;\n    zc[4] = transcript.semantic_validated(prefix.validated_record(7)?)?;\n    zc[5] = transcript.semantic_validated(prefix.validated_record(8)?)?;\n    zc[6] = transcript.semantic_validated(prefix.validated_record(9)?)?;\n    zc[7] = transcript.semantic_validated(prefix.validated_record(10)?)?;\n    zc[8] = transcript.semantic_validated(prefix.validated_record(11)?)?;\n    zc[9] = transcript.semantic_validated(prefix.validated_record(12)?)?;",
+  "result": "PASS",
+  "scope": "byte-level approved-diff check, not runtime or formal equivalence"
+}
