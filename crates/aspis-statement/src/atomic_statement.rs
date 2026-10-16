@@ -81,11 +81,20 @@ pub fn encode_digest_canonical(digest: &Digest) -> [u8; 32] {
 pub fn decode_digest_canonical(bytes: &[u8; 32]) -> Result<Digest, AtomicStatementError> {
     let mut digest = [M31::ZERO; DIGEST_ELEMS];
     let mut index = 0;
+    let mut decode_status = Ok(());
     while index < DIGEST_ELEMS {
-        digest[index] = M31::from_le_bytes(bytes[index * 4..index * 4 + 4].try_into().unwrap())
-            .ok_or(AtomicStatementError::NonCanonicalDigest)?;
+        match M31::from_le_bytes(bytes[index * 4..index * 4 + 4].try_into().unwrap())
+            .ok_or(AtomicStatementError::NonCanonicalDigest)
+        {
+            Ok(value) => digest[index] = value,
+            Err(error) => {
+                decode_status = Err(error);
+                break;
+            }
+        }
         index += 1;
     }
+    decode_status?;
     Ok(digest)
 }
 

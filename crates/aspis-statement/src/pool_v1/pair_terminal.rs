@@ -183,12 +183,24 @@ pub fn decode_pool_v1_pair_verified_afterstate_v1(
         .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?;
     let mut next_frontier = [[M31::ZERO; 8]; super::POOL_V1_PAIR_TREE_DEPTH];
     let mut level = 0;
+    let mut decode_status = Ok(());
     while level < super::POOL_V1_PAIR_TREE_DEPTH {
         let start = 48 + 32 * level;
-        next_frontier[level] = decode_digest_canonical(&exact(&bytes[start..start + 32])?)
-            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?;
+        let decoded = match exact(&bytes[start..start + 32]) {
+            Ok(raw) => decode_digest_canonical(&raw)
+                .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate),
+            Err(error) => Err(error),
+        };
+        match decoded {
+            Ok(node) => next_frontier[level] = node,
+            Err(error) => {
+                decode_status = Err(error);
+                break;
+            }
+        }
         level += 1;
     }
+    decode_status?;
     let afterstate = PoolV1PairVerifiedAfterstateV1 {
         next_pair_index: u64::from_le_bytes(exact(&bytes[8..16])?),
         next_root,
