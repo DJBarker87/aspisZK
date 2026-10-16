@@ -1,0 +1,27 @@
+The inventory is refreshed at `af828dec09343c268990b925f6ace47eff412a94`, with production verifier SHA-256 `a0c440c37620ef22073e16a1f292ddb8a85e9d63463e702f2204a3d3b7cd9b18` (the accepted Decision 1c source). All inputs are committed Git blobs; no supplement, compiler, Lean, native test, runtime harness or SBF job is used.
+
+The original registered cones retain their 268 unchanged, 21 re-extracted and one authorized helper/projection replacement classifications. The accepted Prepared and tx1/Accumulator cones add 52 source/LLBC entries: 21 unchanged by exact prior/current source-context and generated statement/body hashes, and 31 re-extracted with statement diffs. Totals are 289 unchanged, 52 re-extracted and one authorized replacement, with zero unresolved correspondence **within the explicit registered cones**. Counts include source cuts, compiler metadata and emitted auxiliaries; they are not a count of distinct Rust functions or newly proved theorems.
+
+New membership is exact and explicit:
+
+- A: `evidence/prepared-actual-20261016/actual-prepared-evidence.tar.gz`, accepted `VerifyPreparedPrefix.llbc` and `generated/` emission; source kit `tools/prepared-actual-extraction-kit/input/source-pins.json`.
+- C: `evidence/tx1-caller-accepted-20261016/tx1-caller-accepted.tar.gz`, accepted `tx1-actual-accumulator/` only. The archive's `tx1-finish-diagnostic/` emission is excluded.
+
+Archive selection no longer guesses the first translation for these cones. Explicit prefixes select one accepted backend translation; the separately named accepted LLBC is retained. The LLBC-embedded `lib.rs` must equal the registered kit's exact file. All kit-file hashes and historical source slices are checked. The missing layout metadata is reconstructed from 52 inherited cuts plus 21 Prepared or 30 tx1 fragment cuts: 73 and 82 exact occurrences respectively, with no missing cuts. Membership is established before any current-source text lookup. Compiler-generated metadata pointing into core can map back only through exact retained source text and a unique verified production cut. This mapping is recorded explicitly.
+
+The 52 added entries contain 40 emitted-body/type records, four **opaque boundary signatures only**, and eight retained LLBC metadata records with no backend body. The signature-only entries are Prepared's `prepared_claim`, and tx1's `verify_observed`, `prepared_claim` and `tx1_finish`. Their source declarations and types are pinned; their implementations are not claimed emitted or proved by these cones. Kit-only stubs outside actual source cuts are retained as explicit exclusions. In particular, a `View.parse`, query/geometry, heap or arithmetic stub is never accepted as a production body merely because its kit typechecks. The raw external templates are not accepted implementation evidence.
+
+A's exact six-parameter Prepared binding and C's five-parameter tx1 binding (plus its Prepared parameters) are retained in full. The inventory independently replays their simultaneous identifier replacements, binder additions, source token hashes and exact resulting body hashes against the committed bound model text. It records every generated-to-bound signature and complete declaration diff. It checks A's four explicit carrier normalizations, C's common function alpha renames and C's type union normalizations, including the exact prior/current token hashes. A statement unchanged with an identical generated body is classified unchanged; changed raw statements retain their actual diff. First emissions have absent-to-current statement diffs rather than invented previous generated declarations. No additional function boundary is discharged by this inventory.
+
+Every migration-changed production Rust file remains listed. The current registry has 28 entries mapped to `verifier.rs` and 16 to `transcript.rs`; the earlier zero filename hits belong to the earlier historical scan, not this current extraction. The retained 218-archive/48-LLBC scan is preserved. The final index enumerates 228 archives and 70 direct LLBC members, including the rejected exact-query and tx1-tail emissions as diagnostic records. It selects ten accepted/current LLBC occurrences, with all other variants distinguished as historical, unrelated, failed, rejected or superseded. Nested archive recursion is not claimed.
+
+The rejected `opening-queries-blocker-20261016` output and pending verify-finish/eight-pair-unroll proposals are not accepted roots. This report proves no actual query loop, row-26 reseed, full transcript carry, semantic-word custody or account/runtime refinement. B's authorized old AccountInfo wrapper replacement remains a pure-helper plus one still-conditional projection; custody stays separate. External frozen proof-model imports and their retained source-bundle limitations remain explicit. The lead still reviews the final accepted release universe at J1.R13.
+
+Regenerate and verify from any final source-equivalent integration ref:
+
+```sh
+python3 -B docs/research/100bit-spend-path-20261013/tools/j1-integrated-declaration-repin.py --revision FINAL_REF --require-complete
+python3 -B docs/research/100bit-spend-path-20261013/tools/j1-integrated-declaration-repin.py --revision FINAL_REF --check --require-complete
+```
+
+`--require-complete` fails for unresolved registered correspondence. It is not a claim that every successful experimental LLBC is accepted. The producing formal/native receipts remain with A/C; the inventory check receipt is a local read/hash result and has no #print-axioms claim.
