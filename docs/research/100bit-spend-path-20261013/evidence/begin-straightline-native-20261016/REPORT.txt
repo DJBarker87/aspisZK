@@ -1,0 +1,53 @@
+Approved begin straightline refactor: required native gates
+
+Source revision63990fffe36c155ac3a0b435f39b7d326795a1a3 contains B's readonly
+buffer split, A's exact source commitc16ab4d76619cf2cf80ece9d7e60e47975957af0,
+and the isolated failure-order kit. r1_wire.rs differs from lead99263bea0 only
+by replacing the zc loop with ten explicit calls for rows3..12. No other begin
+or production changes were added. All532 staged source/fixture files are pinned
+and correspond to this Git revision;530 initial files plus2 repaired fixture
+include paths are separately retained. All native commands were optimized
+release builds in6Ghigh/8Gmax/swap0 scopes. Each records aggregate reservations:
+32GiB total including the new scope, below the55GiB safe working limit.
+No Lean, SBF, runtime metadata harness or proof-generation command was run.
+
+Required results: the full1233codec trace is byte-identical to the accepted
+baseline, SHA2563ef16b12a329dd6d74b472cd75e5554c1ef8d98c618de3117f87b6c50d73e321.
+Existing saved proof acceptance, every one of583 ordered digest calls, exact
+slices/outputs and checkpoint bytes match; stage1 calls349, stage2 calls234.
+All23 source-named checkpoint tests pass, including the zero-progress count.
+The source-overlay tests pass all20 injected failures (lookup and semantic
+interfaces at each row3..12) and the successful15-row/Challenges control.
+
+codec1233: native exit0; wrapper exit1; wall45.560s; peakRSS540244KiB; process swaps0;6Ghigh/8Gmax/swap0.
+saved-proof-counter: native exit0; wrapper exit1; wall77.250s; peakRSS544364KiB; process swaps0;6Ghigh/8Gmax/swap0.
+checkpoint23-staged-fixtures: native exit0; wrapper exit0; wall3.548s; peakRSS237992KiB; process swaps0;6Ghigh/8Gmax/swap0.
+begin-failure-overlay: native exit0; wrapper exit0; wall0.333s; peakRSS141140KiB; process swaps0;6Ghigh/8Gmax/swap0.
+
+Failure-injection scope: exact entire old/new begin source declarations compile
+against the same fixed instrumented Prefix/SemanticTranscript interfaces, without
+closure adapters or production hooks. The actual unchanged Error declaration
+is included. Tests compare exact returned errors, lookup/semantic/advance order,
+state prefixes and challenge assignments. Production Digest32 is infallible;
+validated rows do not expose these arbitrary late interface failures. This is
+a differential Rust control-flow test, not actual production failure reachability
+or a source-refinement theorem. Kit hashes and approved-diff checks are retained.
+
+Two receipt-wrapper failures are retained separately from their successful
+native children: codec and saved-proof counter each exited0, then artifact-pin
+postprocessing attempted to stat an overlong compiler flag. The intended first
+fix had not applied because of shell quoting, so the same postprocessing failed
+again. Both results were recovered from retained GNUtime/stdout/stderr/report,
+source and executable hashes, without rerunning either native target. Wall time
+has GNUtime0.01second precision; process RSS/swaps are exact logged metrics.
+Cgroup peak/current were unavailable after those scopes exited; mandatory cap
+and swap0 assertions plus process swaps are retained. The fixed runner was
+uploaded as a file and read back before the remaining jobs.
+
+Checkpoint's first compile exited101 because2 include_bytes fixture paths were
+missing from staging. Exact already-saved proof/public files were placed at
+those paths (856943.../72f067... hashes); source and proof contents did not change.
+Only that focused failed target was retried. Its23 exact source names passed.
+All failure logs, commands, fixed/failed runners, reservation receipts, source
+snapshots and baseline/current outputs are in the archive. Axioms are N/A for
+these Rust-only results; no formal or runtime gate is discharged by this report.
