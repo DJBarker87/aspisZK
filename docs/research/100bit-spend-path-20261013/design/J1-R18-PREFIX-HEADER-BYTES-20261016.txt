@@ -1,0 +1,14 @@
+Actual successful record header re-encoding
+
+ExtractedPrefixHeaderBytes.header_word_bytes proves that encoding the actual Aeneas four-byte U32 decoder result reproduces exactly the four input bytes. It uses the checked symbolic primitive agreement and the unchanged retained encode/decode inverse.
+
+parse_record_encoded_frame starts from actual final Prefix-E parse_record success. It obtains the checked old-parser framing facts through the explicit namespace/carrier agreement, then reconstructs the exact input from its five checked indexed bytes and returned drop-5 payload. Its conclusion supplies the actual row-table tag/size, a bounded RawWord with word.val=size.val, payload length=size.val, and:
+
+frame.val.map rawByte = [rawByte tag] ++
+  List.ofFn (encodeWordLE word) ++ payload.val.map rawByte.
+
+No retained parser success or canonical payload premise is assumed. The actual decoded U32 provides the length bound automatically. This complements the previous complete strict-payload result without changing either codec or production source.
+
+One focused Lean 4.32 check passed first attempt: 2.203 seconds, 496336896-byte sampled cgroup peak, 3839428 KiB process RSS, zero swap and no pressure/OOM events. Both exported theorem audits contain only propext, Classical.choice, and Quot.sound. Exact source, input, runner, runtime shared-library/version, command, output-object and resource pins are retained. The check used the existing 6 GiB high / 8 GiB hard / zero-swap scope, one process, -j1/-M0; no dependency build occurred.
+
+The next relation to the existing RecordFrameCodec.parse should use RecordLengthCodec.decodeWordLE_val_eq_iff. Its historical 24-module compiled import closure has no hidden Circle import, but the UniformStateFirstHit source in that closure has since been repaired, and old objects do not have producing-source receipts. Current-source correspondence requires an explicit attested closure selection; this proof does not silently substitute those objects. Semantic field/vector decoding, full 25-record decodeFull, selected completed-message equality, and challenge/read provenance remain OPEN. This is an extracted-function/byte-representation theorem, not an independent Rust runtime refinement.
