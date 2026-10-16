@@ -1,6 +1,6 @@
 J1.R18 indexed QM31 sampler; progress and remaining boundary
 
-Production commit670b7e149f94004baa5b138bdc2db28f3bc646bd changes only sampler.rs.
+Production commit 670b7e149f94004baa5b138bdc2db28f3bc646bd changes only sampler.rs.
 qm31_div_pass returns the entire owned quotient array and remainder; qm31_digits
 assembles little-endian words by checked indices and explicitly carries the
 quotient between four passes. The public wrapper preserves c0.a,c0.b,c1.a,c1.b
@@ -8,18 +8,28 @@ order. Ordinary/gamma/circle routines and current QM31 arithmetic are unchanged.
 
 Three optimized tests retain the exact old sampler body and an iterator pass
 reference, compare every quotient word over four passes, cover every single bit,
-word/modulus boundaries, independent u128 base-P expectations, and4096 deterministic
-full blocks. The exact eight-cut kit passed all3 tests in0.220s/136536KiB RSS;
+word/modulus boundaries, independent u128 base-P expectations, and 4096 deterministic
+full blocks. The exact eight-cut kit passed all 3 tests in 0.220s/136536KiB RSS;
 actual crate `cargo test --release --locked --offline -p aspis-r1-cost-probe --lib
-sampler::qm31_index_tests` passed3/3 in46.600s/543888KiB RSS. Both reported zero
-swaps, no memory events, and separate systemd scopes with MemoryHigh6G,
-MemoryMax8G, MemorySwapMax0. Native cache was privately copied, not shared writable.
+sampler::qm31_index_tests` passed 3/3 in 46.600s/543888KiB RSS. Both reported zero
+swaps, no memory events, and separate systemd scopes with MemoryHigh 6G,
+MemoryMax 8G, MemorySwapMax 0. Native cache was privately copied, not shared writable.
 
 The new kit pins eight original declarations and the cfg(test)-only test module.
 Its checker proves source-text equality, including old-reference equality modulo
 name/indent; this is not Rust/Lean refinement. No arithmetic method is selected.
-Extraction waits for matching b59/cb50 Linux tools; the older d860 host translator
-is not used. No Lean has run on these new sources. Full quotient write-back,
-digit values/canonicality, actual wrapper success and the constructor-only
-toCurrent bridge remain OPEN until proved over the emitted definitions.
+The matching unpatched Linux b59/cb50 tools emitted ten nonopaque functions,
+three carrier types and one global. Exact binaries and source cuts are pinned
+in evidence/qm31-index-sampler-extraction-20261016. Charon/Aeneas passed in
+0.176s/161700KiB and 0.368s/81136KiB, with zero swaps. Emitted code explicitly
+writes the quotient array and carries it through the outer loop. The audit
+checks this inventory, not semantic equivalence.
+
+Original generated Types/Funs compile unchanged under the verified Lean 4.32
+backend, with 11 standard-only axiom reports. Separate existing model rechecks
+passed 13 modules and 67 standard-only reports. The generated and model receipts
+are retained in distinct dated evidence bundles; no 4.31 object was selected.
+Full quotient write-back correctness, digit values/canonicality, actual wrapper
+success and the constructor-only toCurrent bridge remain OPEN until proved
+over these emitted definitions. No current QM31 arithmetic is re-extracted.
 Old sampler extraction failures remain in their original bundle.
