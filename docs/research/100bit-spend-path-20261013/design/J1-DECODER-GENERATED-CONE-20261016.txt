@@ -1,0 +1,45 @@
+Checked decoder extraction boundary
+
+Production pin0626294e34632812accf4cb14704f027368ea871. The final source
+uses atomic_statement::unwrap_fixed_slice<T: Copy> for40 guarded fixed-width
+conversions and explicit four-byte arrays for8 primitive digest reads.
+The helper's actual generated body matches Ok to ok and Err to fail panic.
+No Debug argument or generated Result.unwrap remains. Source inspection
+against72a restores all original ranges/guards/error order after reversing
+these edits; this inspection is not a Rust semantic-preservation theorem.
+
+Exact Charon raw LLBC f6a0625a20411ffb3b2ee38e46481657ea2e7595d7117ffab5338bfa2e6dadd3
+is transformed only by four recorded function-name metadata changes, with
+complete JSON inverse equality. The private geometry printer emits Types
+4137560dca226c388376c5d8fe1f30285cc5664d0a86a67184e54212e5bda548 and Funs
+74e3d045178376a88ae58b57e29c6aad13afaa2b69e463e119ce0cda8e755504.
+Reviewable mirrors under lean/extracted-terminal-decoder-20261016 preserve
+these bytes. No arithmetic source or generated function body is edited.
+
+The sole external template declaration, Slice.Insts.CoreCmpPartialEqArray.eq,
+has no Types/Funs references and is omitted from the implementation. The
+FunsExternal companion supplies only scoped builtin Option tags: LLBC type20
+None=Isize0,Some=Isize1, with two checked definitional tag lemmas. It contains
+no opaque external model. The unused original template remains in evidence.
+
+Focused Lean4.32 Types, Option companion, unchanged Funs and actual-function
+audit all pass on the pinned R17 backend. Sixteen actual reports cover the
+helper and every decoder/primitive entry previously audited. The helper's
+axiom list is empty; the other15 contain only propext, Classical.choice and
+Quot.sound. Both Option tag reports are standard-only. Funs takes5.472s with
+802308096B sampled cgroup peak; the audit takes1.610s/601063424B sampled,
+620462080B cumulative cgroup memory. These observations are distinct. All jobs use
+6GiB high/8GiB max/swap0, with no dependency or full-manifest replay. Exact
+targets, exits, process RSS, cgroup observations, source/import/runtime/object
+keys and raw axiom outputs are archived separately from those summaries.
+
+Independent read/hash inspection matches466 tracked Cargo/crates/programs
+input files to062. Six relevant source snapshots accompany the proof bundle;
+the complete source/tool/native/regression evidence is coordinator-owned.
+Historical layout and Formatter failures remain in diagnostic commit7ba97b3;
+the stopped map_err and rejected Result::ok attempts remain in coordinator
+evidence. No previous failure is promoted or overwritten.
+
+This closes the generated cone's compile/standard-axiom gate. Decoder
+correctness, an ASF8-to-public-statement equivalence, the actual account and
+custody caller link, and Rust/compiler/runtime preservation remain OPEN.
