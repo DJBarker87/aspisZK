@@ -31,7 +31,26 @@ verified R17 Lean4.32/backend closure and a separate 6G-high/8G-max/swap0 scope;
 all successful jobs report zero swaps. Exact process RSS is preserved beside
 sampled cgroup usage in each receipt. No predecessor or package replay occurred.
 
-The actual withdrawal success/metadata inversion theorem is still separate work
-and is not part of this checkpoint. Raw ASF8 decoding, admitted caller execution,
-account owner/PDA authentication, custody binding, and Rust/compiler preservation
-are not discharged by these generated-cone and comparison results.
+The successor ExtractedTerminalWithdrawalSuccess.terminal_withdrawal_success
+is now checked. Its only premise is actual emitted validator success on
+Withdrawal c p. It exposes actual payment encoder success on the identical p;
+three nonzero account keys; output_lane.val < 8; exact public-pool/master,
+public-deployment/live-deployment, live-pool/master, anchor-sequence/checkpoint,
+and anchor-root/historical-root equalities; actual nullifier-derived output
+lane equality; and actual late encoder success from the source's zeroed 1520-byte
+slice. No chosen projection or nested-encoder-success premise is assumed.
+
+The proof inverts each actual bind and rejection branch. Whole-body simp was
+replaced after a bounded step-limit failure; later elaboration and substitution
+failures are retained with their exact sources. The final check passed in 2.614s,
+2656276KiB process RSS, 633532416 bytes sampled cgroup, zero swaps/events, with
+[propext, Classical.choice, Quot.sound]. One unused-simp warning remains; it has
+no effect on the checked statement. Evidence is separately retained in
+terminal-withdrawal-success-432-20261016, depending on the immutable closed-cone
+checkpoint 6315ae8fc8b5336be97fe9fb0c62c0e9067f0f8d.
+
+The result concerns typed Withdrawal values; PrivateTransfer is not covered.
+Raw ASF8 decoding, admitted caller execution, account owner/PDA authentication,
+custody binding, and Rust/compiler preservation remain outside the theorem.
+Transport into the separately extracted ASWP/public carrier requires explicit
+nominal field/function correspondence and is not inferred from similar names.
