@@ -5,9 +5,10 @@ import argparse,hashlib,json,subprocess
 P=Path(__file__).resolve().parent
 ap=argparse.ArgumentParser()
 ap.add_argument('--check',action='store_true')
-ap.add_argument('--revision',default='HEAD',help='exact production source revision to pin')
+ap.add_argument('--revision',help='exact production source revision; --check defaults to recorded pin')
 args=ap.parse_args()
-REV=subprocess.check_output(['git','rev-parse',args.revision],cwd=P,text=True).strip()
+revision=args.revision or (json.loads((P/'source-pins.json').read_text())['source_revision'] if args.check else 'HEAD')
+REV=subprocess.check_output(['git','rev-parse',revision],cwd=P,text=True).strip()
 SOURCES=['programs/r1-cost-probe/src/r1_pool_adapter.rs',
          'programs/aspis-verifier/src/v7_pair_forest_dispatch.rs']
 def sha(data):return hashlib.sha256(data).hexdigest()

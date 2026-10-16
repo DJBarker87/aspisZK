@@ -70,4 +70,26 @@ def readonly_meta.readonly_meta_ok
             solana_program_error.ProgramError.InvalidAccountData)
         else ok (core.result.Result.Ok ())
 
+/-- [aspis_r1_readonly_meta::readonly_meta::readonly_buffer_meta_ok]:
+    Source: 'lib.rs', lines 20:0-29:1 -/
+def readonly_meta.readonly_buffer_meta_ok
+  (is_signer : Bool) (is_writable : Bool) (executable : Bool) :
+  Result (core.result.Result Unit solana_program_error.ProgramError)
+  := do
+  if is_signer
+  then
+    ok (core.result.Result.Err
+      solana_program_error.ProgramError.InvalidAccountData)
+  else
+    if is_writable
+    then
+      ok (core.result.Result.Err
+        solana_program_error.ProgramError.InvalidAccountData)
+    else
+      if executable
+      then
+        ok (core.result.Result.Err
+          solana_program_error.ProgramError.InvalidAccountData)
+      else ok (core.result.Result.Ok ())
+
 end AspisR1ReadonlyMeta
