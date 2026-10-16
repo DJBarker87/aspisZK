@@ -1,0 +1,55 @@
+Indexed sampler extraction/proof order; targets are OPEN until checked
+
+Source:670b7e149f94004baa5b138bdc2db28f3bc646bd. Run extract.py --check first.
+The release cut contains exactly P, M31, CM31, CM31::new, QM31, qm31_div_pass,
+qm31_digits and qm31_sample. The pinned test module is cfg(test)-only.
+Extract starting at crate::sampler::qm31_sample, namespace AspisR1Qm31SamplerIndex.
+Use verified matching Linux b59/cb50 tools and the R17 Lean4.32 backend only.
+
+Before Lean: retain raw LLBC, generated output, translation.json and full tool/
+command/environment/resource receipts. Report actual emitted names and bodies.
+Expected source loops: one descending pass, one increasing byte decoder, one
+increasing four-pass accumulator. Expected constructors: field.CM31.new and
+the QM31 aggregate. Reject unexpected field arithmetic, opaque declarations,
+missing function bodies or external templates. Do not silently replace a helper
+by its mathematical specification. Confirm rank[j] and rank=quotient updates
+survive in the emitted body and returned state; an unused quotient is a blocker.
+
+Proof1: scalar step and complete division loop.
+With j<=8 and r.val<P, the emitted descending loop succeeds. Let input be the
+current array and high-to-low words be reverse(take j input.val), mapped from
+Aeneas U32 to UInt32.ofNat of .val. The returned remainder equals machineProcess
+on these words starting at UInt64.ofNat r.val; the returned array has the
+processed quotient reversed in its first j positions and preserves drop j
+input.val. This general suffix-preserving statement exposes the whole array.
+Derive the public pass case from j=8,r=0, not an assumed no-panic condition.
+Use SamplerMachineBounds for dividend/cast bounds and SamplerWord.machineStep
+value lemmas; prove the Aeneas scalar-operation .val equalities separately.
+
+Proof2: byte-decoding loop.
+After i<=8 iterations, the first i words are the little-endian four-byte
+blocks; the remaining initialized words are unchanged. Show each index/add/mul
+and counter increment succeeds. At i=8, the reversed word view is exactly
+SamplerBytePass.digits b; cite its existing byte-word and rank theorems.
+
+Proof3: four-pass loop.
+For i<=4, preserve the first i accumulated digits and carry the entire updated
+rank into the next pass. The remaining digits match SamplerRepeatedPass.run
+(4-i) on the current high-to-low words. Compose Proof1+Proof2 to obtain actual
+qm31_digits success and its four .val entries equal
+SamplerNatModel.qm31Digits(SourceSamplerByteRank.rank b), using run4_bytes.
+Obtain all four values<P from run_digits_canonical, not caller assumptions.
+
+Proof4: actual wrapper and nominal-carrier bridge.
+Prove the emitted CM31.new result equation; discharge four array indices and
+both constructor calls in the actual qm31_sample. Define toCurrent/fromCurrent
+by four coordinate copies and prove round trips. Transfer digit values and
+canonicality into existing AspisR1Qm31ArithmeticProbe.field.QM31; use
+ExtractedCurrentQM31Exact.decode and ExtractedCurrentQM31Equality.decode_eq_iff
+only with both required canonicality proofs. Import current arithmetic unchanged.
+
+Each theorem must be about the actual emitted declaration, with no assumed
+loop simulation, external axiom, or sampler-success premise in the totality
+result. Charon/Aeneas lowering remains an explicit trust boundary even when
+these generated-function theorems pass. Actual challenge/state timing, circle
+fallback, whole-verifier source effects and collision composition are separate.
