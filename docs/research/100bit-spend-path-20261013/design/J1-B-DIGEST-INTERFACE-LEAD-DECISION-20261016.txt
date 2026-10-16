@@ -1,0 +1,93 @@
+Lead decision addendum: callback representation, not an authorized patch
+Source pin: b2ad6649de4c1b97c2270a1c8bd4bbfe5537d52c; builds: none.
+Companion inventory: J1-B-SEMANTIC-TRANSCRIPT-NEXT-CUT-20261016.json.
+Search found no existing generic digest interface in these R1/core paths.
+The separate semantic_wire/semantic/dense implementations are not replacements
+for the selected r1_wire/r1_semantic/verifier path.
+
+Option A: actual-source interface, first a small feasibility pilot
+Proposed new aspis_core::digest interface:
+  pub trait Digest32: Copy {
+      fn digest(&self, parts: &[&[u8]]) -> [u8; 32];
+  }
+Use a concrete zero-size release type SolanaDigest whose method executes
+solana_program::hash::hashv(parts).to_bytes(). Native SHA, counted SHA, and
+deterministic test backends get explicit types executing their existing bodies.
+Do not implement the selected backend by storing/coercing a HashFn, blanket
+Fn/FnMut adapter, dyn trait, or arbitrary opaque oracle. Callback effects are
+still real method effects; this proposal adds no purity or one-SHA assumption.
+
+Minimal first pilot changes SemanticTranscript to SemanticTranscript<H:Digest32>,
+its hash field to H, constructor 179-185 to accept H, and direct calls 182/203-205
+to hash.digest(...). Remaining algorithm bodies stay identical; begin 389-410 takes
+the generic transcript. Extract the complete sample_block_validated method and
+real trait declaration first. This removes the stored HRTB function-pointer
+type syntactically; support for the trait method's borrowed slice arguments
+must still be demonstrated. A pilot cannot be represented as full caller closure.
+
+Actual-source propagation required before a complete route compiles
+r1_semantic::Verified<H> stores that transcript; verify/verify_observed 58-172
+accept H. opening transcript.rs::Transcript<H>, new/absorb/block/scalar/scalar_k/
+queries preserve the same backend and calls. Prepared::new 87-112 accepts
+Verified<H> and H; Prepared itself need not become generic because it stores
+no callback. verifier::{tx1,tx2,tx2_authenticated,query,query_with_geometry,
+merkle_path,checkpoint,resume} must carry H, replacing only direct dispatch.
+The selected Merkle leaves/parents also require generic implementations of
+core r0::merkle::{leaf,parent} and state_only_private_merkle::private_leaf_hash.
+Do not duplicate their byte grammars. A reviewed compatibility arrangement may
+retain existing HashFn entrypoints over shared generic bodies for old callers;
+those adapters must remain outside the selected extracted cone and are not
+trusted effect lemmas. Migrating every legacy R0 caller instead is larger scope.
+
+Concrete production callers: program lib.rs::first:27, fallback tx2:56, and
+r1_pool_adapter::stage2:970-976 pass SolanaDigest rather than a coerced closure.
+Observer and mark remain unchanged and explicit; this does not solve their
+separate dynamic-call lowering. Host signatures requiring adjustment include
+host_semantic::BuiltSemantics/build_with_helper_mode/build/build_with_material,
+host_sumcheck::prove_sumcheck, prover::prove_from_semantics and its callers.
+Native examples, validated_prefix tests, r1_wire tests, checkpoint tests and
+r1-hash-input-counter must select explicit concrete backends; no frozen baseline
+or historical tool snapshot is rewritten. These are required consumers, not a
+claim that changing only the first transcript is sufficient.
+
+Option B: genuinely support the existing callback
+Leave Rust APIs/bytes unchanged. A concrete compiler proposal must open and
+instantiate both HashFn bound regions, preserve their outlives/reborrow
+constraints through nested shared slices, and correctly translate dynamic calls,
+their returned values, failure/unwind and nonreturning prefixes. Merely deleting
+RegionsHierarchy 165-169's assertion or accepting the type without its borrow
+semantics is not a fix. Test a minimal actual alias/call, retained private-leaf
+body and transcript step before any caller; retain original mirrors and receipts.
+This is semantic compiler work requiring lead review, not R17 printing geometry.
+Even correct value translation does not prove an event trace or runtime syscall
+contract. Neither option independently closes Rust-to-LLBC preservation.
+
+Required checks for a reviewed source refactor
+Use optimized, capped native checks, not proof generation: validated_prefix and
+r1_wire::validated_tests, plus new old/new transcript differentials comparing
+ordered argument-slice bytes, outputs, state/next_row and first-error behavior
+through all 27 semantic/circle rows and S2 opening/query/rho. Exercise wrong rows,
+malformed records and callback panics at each of the three step dispatches;
+panic tests cover observed prefixes, not arbitrary nontermination. Existing
+r1-hash-input-counter checks exact-input multisets, not order: preserve it and
+add a focused ordered recorder. Reuse the saved proof/full ASF8; require identical
+checkpoint/acceptance and checkpoint_tests::measured_core_call_counts_include_zero_progress_checkpoint
+in programs/r1-cost-probe/src/r1_checkpoint_tests.rs:820-855 (fixture counts
+328/255 for k10, 349/234 for k11, 465 for next0), with strict/authenticated-resume
+corruption checks. Current retained evidence: terminal-decoder-copy-helper-20261016/
+regression.tar.gz, runs/after-counter/{receipt.json,build.log}, revision 0626294e3,
+exit0; test bytes match this source pin. Receipt SHA256:
+b6c801c726a9e9cdc9f63c101977ee2e88bcfc12f19df2137fcd20442e2c5c94.
+These are fixture measurements,
+not universal bounds. Neither interface option supplies hbytes/htyped/ha,
+commitment recovery, collision exclusions or complete source-prefix simulation.
+
+One coordinated current-route SBF comparison uses retained identical fixtures:
+  r18_replay BEFORE.so AFTER.so PROOF.bin PUBLIC.bin FRESH_OUTPUT
+Pin source/compiler/runtime/ELF and account-image hashes, compare stage1/stage2
+and total CU plus checkpoint/ASR8 equality; exclude setup CU and retain keys.
+No CU equivalence is predicted. Host scope remains 6G/8G/swap0, one job, existing
+caches. No new tests, extraction, compiler/source edits or release runs are
+authorized or performed by this addendum. Recommended decision: review a tiny
+trait-method feasibility pilot before choosing source migration over compiler
+lowering; stop if it merely relocates the lifetime/callback blocker.
