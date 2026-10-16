@@ -1,0 +1,58 @@
+J1.a actual terminal validator: extraction checkpoint, 2026-10-16
+
+The final source42e5ca201 extracts the real Pool terminal validator and its
+payment/late-append callees. Types/Funs are unchanged generator output.
+This advances caller proof construction; it does not yet discharge a live
+conditional theorem's complete hconditions or authenticated metadata premise.
+
+Source review. Existing canonical-digest tests check eight limbs, root first,
+then20 frontier entries in order. Bounded loops preserve those checks and
+their short-circuit ordering; the afterstate uses the existing tree-profile
+digest helper. Two map_err arguments become capture-free closures wrapping
+the identical error payload. Snapshot priority remains ZeroRequiredBinding,
+SequenceIndexMismatch, TreeFull, NonCanonicalDigest. Afterstate checks index
+before canonicality. Decoder priority is not equated to encoder priority.
+No byte format, protocol-core module or QM31 arithmetic was changed.
+
+Extraction. The original broad iterator diagnostic is retained separately.
+The first loop candidate failed at Aeneas's unsupported outer-loop break.
+Factoring the existing helper removed that construct. Broad core::result
+inclusion then failed at an unsupported multi-variant expansion. Including
+only the actual Result.map_err method succeeds. Final Charon-c exits0 in
+72.097s,642448KiB RSS; Aeneas-c exits0 in1.650s,173184KiB. All jobs use
+MemoryHigh6GiB/MemoryMax8GiB/MemorySwapMax0, with zero swaps/pressure events.
+No unchanged failed job was rerun at a higher cap.
+
+The emitted inventory is47functions,23types,37globals,8trait impls. Its only
+opaque function is Slice.Insts.CoreCmpPartialEqArray.eq, present solely in
+the retained external template. The actual emitted Types/Funs contain no
+reference to it. The template is not admitted; an empty external module and
+focused closed compilation must substantiate that omission. No opaque types
+or globals remain. Lean compilation/axioms results are recorded separately.
+
+Differential evidence. A deterministic native release example covers all168
+root/frontier limb positions with six canonical/boundary values, seven
+indices with32combined metadata flags, and one baseline:1233cases. It records
+actual lane/afterstate/snapshot/late-encoder results plus output buffers,
+including wrong-length cases. Full16,431,699-byte stdout is identical for
+the original, first loop and final helper sources. Final build exits0 in
+65.972s,548896KiB RSS; trace exits0 in0.061s,1760KiB; swap0. All504 source
+hashes were checked, mtimes explicitly refreshed for the shared Cargo cache,
+and the compile log names the correct source workspace. This is finite
+evidence, not universal equivalence. Saved-proof hash-count/CU follow-ups
+are separate; earlier R18 numbers cannot attest this changed source.
+
+Review evidence. evidence/terminal-validator-extraction-20261016/verify.py
+independently checks89 archive members,1512 exact Git source pins across
+three revisions,14 tool/native receipts, source/runtime resource limits,
+the retained failures, generated mirrors and all three complete traces.
+The native tool binaries were rehashed against native-r18-tools-20261016.
+No Lean theorem or axiom audit is claimed by these Rust/tool receipts.
+
+Next fixed theorem. Success of actual validate(Withdrawal common public)
+must expose actual encode_withdrawal(public) success, the same nine-field
+public carrier, every direct metadata guard, computed output-lane equality,
+and actual late-encoder success. Connect it to the checked ASWP caller
+theorem using explicit carrier/function agreement. Distinct PDA/owner,
+account-history, ASF8 decoder, custody and first/resume reachability remain
+OPEN. A successful validator alone does not authenticate accounts.
