@@ -35,7 +35,7 @@ for name, data in files.items():
     receipts.append(name)
 assert len(receipts) == 8
 for prefix in ['', 'indexed/']:
-    assert b'Early returns inside loops' in files[prefix + 'runs/aeneas-a/stdout.log']
+    assert b'Early returns inside of loops are not supported yet' in files[prefix + 'runs/aeneas-a/stdout.log']
 assert b'Could not match the contexts' in files['status/runs/aeneas-a/stdout.log']
 trace = files['before/runs/trace-a/stdout.log']
 assert sha(trace) == '628a3418096f93d769955ff18e7ac2f4e8fcb25b659b66aac3360204ad94efff'
