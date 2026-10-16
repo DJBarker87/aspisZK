@@ -1,0 +1,44 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -72,19 +72,14 @@
+     )
+ }
+ 
+-#[inline(never)]
+-pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
+-    fn mark(obs: crate::verifier::Observer, i: u8) {
+-        #[cfg(feature="detail-phases")]
+-        if let Some(f)=obs {f(crate::verifier::Phase::SemanticPart(i));}
+-        #[cfg(not(feature="detail-phases"))]
+-        let _=(obs,i);
+-    }
+-    let prefix = Prefix::parse(bytes)?;
+-    mark(obs, 0);
+-    let mut transcript = public_transcript(public, hash, prefix.c1_root)?;
+-    let challenges = wire::begin(&prefix, &mut transcript)?;
+-    mark(obs, 1);
++fn mark(obs: crate::verifier::Observer, i: u8) {
++    #[cfg(feature="detail-phases")]
++    if let Some(f)=obs {f(crate::verifier::Phase::SemanticPart(i));}
++    #[cfg(not(feature="detail-phases"))]
++    let _=(obs,i);
++}
++
++fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
+     let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
+     let mut alpha = [QM31::ZERO; 10];
+     #[cfg(feature = "prover")]
+@@ -179,3 +174,13 @@
+         masked_terminal,
+     })
+ }
++
++#[inline(never)]
++pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
++    let prefix = Prefix::parse(bytes)?;
++    mark(obs, 0);
++    let mut transcript = public_transcript(public, hash, prefix.c1_root)?;
++    let challenges = wire::begin(&prefix, &mut transcript)?;
++    mark(obs, 1);
++    verify_finish(public, prefix, transcript, challenges, obs)
++}
