@@ -164,7 +164,7 @@ pub fn decode_pool_v1_pair_verified_afterstate_v1(
     if bytes.len() != POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES {
         return Err(PoolV1PairVerifierTransportErrorV1::WrongLength);
     }
-    if bytes[..4] != POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC {
+    if bytes[..4] != POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC[..] {
         return Err(PoolV1PairVerifierTransportErrorV1::WrongMagic);
     }
     if bytes[4] != POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION {

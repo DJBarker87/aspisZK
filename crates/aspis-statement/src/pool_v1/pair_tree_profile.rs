@@ -503,16 +503,23 @@ pub fn decode_pool_v1_pair_live_snapshot_v1(
     if bytes.len() != POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES {
         return Err(PoolV1PairLiveSnapshotErrorV1::WrongLength);
     }
-    if bytes[..8] != POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC {
+    if bytes[..8] != POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC[..] {
         return Err(PoolV1PairLiveSnapshotErrorV1::WrongMagic);
     }
     if bytes[8] != POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION {
         return Err(PoolV1PairLiveSnapshotErrorV1::WrongVersion);
     }
-    if bytes[9..16].iter().any(|byte| *byte != 0) {
+    if bytes[9] != 0
+        || bytes[10] != 0
+        || bytes[11] != 0
+        || bytes[12] != 0
+        || bytes[13] != 0
+        || bytes[14] != 0
+        || bytes[15] != 0
+    {
         return Err(PoolV1PairLiveSnapshotErrorV1::NonZeroReserved);
     }
-    if bytes[16..48] != POOL_V1_PAIR_TREE_FORMAT_BINDING {
+    if bytes[16..48] != POOL_V1_PAIR_TREE_FORMAT_BINDING[..] {
         return Err(PoolV1PairLiveSnapshotErrorV1::WrongFormatBinding);
     }
     let current_root = decode_digest_canonical(bytes[128..160].try_into().unwrap())
@@ -631,7 +638,7 @@ pub(crate) fn decode_pool_v1_pair_late_public_statement_boxed_v1(
     if bytes.len() != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES {
         return Err(PoolV1PairLatePublicStatementErrorV1::WrongLength);
     }
-    if bytes[..8] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC {
+    if bytes[..8] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC[..] {
         return Err(PoolV1PairLatePublicStatementErrorV1::WrongMagic);
     }
     if bytes[8] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION {
@@ -660,7 +667,15 @@ pub(crate) fn decode_pool_v1_pair_late_public_statement_boxed_v1(
     {
         return Err(PoolV1PairLatePublicStatementErrorV1::WrongTotalLength);
     }
-    if bytes[24..32].iter().any(|byte| *byte != 0) {
+    if bytes[24] != 0
+        || bytes[25] != 0
+        || bytes[26] != 0
+        || bytes[27] != 0
+        || bytes[28] != 0
+        || bytes[29] != 0
+        || bytes[30] != 0
+        || bytes[31] != 0
+    {
         return Err(PoolV1PairLatePublicStatementErrorV1::NonZeroReserved);
     }
     let live_snapshot =

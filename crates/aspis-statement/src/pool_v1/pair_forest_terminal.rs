@@ -389,7 +389,7 @@ pub fn decode_pool_v1_pair_forest_terminal_statement_v1(
     if bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES {
         return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength);
     }
-    if bytes[..4] != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC {
+    if bytes[..4] != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC[..] {
         return Err(PoolV1PairForestTerminalFormatErrorV1::WrongMagic);
     }
     if bytes[4] != POOL_V1_PAIR_FOREST_TERMINAL_VERSION {
