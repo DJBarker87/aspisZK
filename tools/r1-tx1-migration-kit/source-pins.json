@@ -1,0 +1,60 @@
+{
+  "before_revision": "3335eecf2f2a08096abe95c67ac6b304f2df6284",
+  "after_revision": "96aad8ef209cb69d7667ab5d8728bd4584a86d16",
+  "production_verifier_sha256": "a0c440c37620ef22073e16a1f292ddb8a85e9d63463e702f2204a3d3b7cd9b18",
+  "exact_old_tx1_sha256": "040b9e9bebc42512143c0c42cc5962593659b8c58cbd16550fd83a58b258f25f",
+  "exact_new_tx1_sha256": "7697469792e4d4bb7b55d1c1710d55c5a370b7a1499b3a47e899b72119177bd2",
+  "exact_new_tx1_finish_sha256": "07f740d9eaac9d2ac5e85ef1a2e7cad04ed8c7a19f005f757988a55df9b06517",
+  "actual_overlay_files": {
+    "crates/aspis-r1-cost-probe/src/verifier.rs": "8c88034cfb4072c92c23ea3278f364f422ac8ea61c09b56ff91000d08d5a32c8",
+    "crates/aspis-r1-cost-probe/src/tx1_migration_tests.rs": "5c93d3ce59db096fc510f3fcdd2956bd9b0dbec8da0f42c5729b11fd879f3349"
+  },
+  "shared_exact_body_files": {
+    "shared/old.rs": "49cc0a69b9e68c996e4b1931e2b8b4320021f28ba5f7cef4b64b2b6b6d57c826",
+    "shared/new.rs": "ca0913ed253bd398ca9477eec48289eb54199cb8cb065b61eb5f29f345fd8366"
+  },
+  "generator_sha256": "e859bfcea7b168b30e6783b33264801a1fb154fc92b2d181d0404e0b946b0f3c",
+  "real_harness_sha256": "5c93d3ce59db096fc510f3fcdd2956bd9b0dbec8da0f42c5729b11fd879f3349",
+  "shared_harness_sha256": "ca83153ec217f8197342ffb4b54debd2f6c59886bae62e4c12873259107ab4d5",
+  "transformations": [
+    "Old free function tx1 renamed migration_old_tx1 in actual crate overlay only; entire body otherwise retained except the symmetric checkpoint Result wrapper.",
+    "The infallible checkpoint call in old tx1/new tx1_finish is symmetrically wrapped as checkpoint_result(...)? for test-only synthetic Err(Checkpoint); non-test final tx1_finish retains the exact original checkpoint expression.",
+    "cfg(test,prover,private-leaf-salts) geometry entry hook may return Error::Query before setup; query_with_geometry entry hook may return Error::Query before first query0 or last query21.",
+    "Shared-interface old/new modules preserve complete source bodies except identical checkpoint Result-call wrapping; their names remain tx1 in separate modules. All dependencies are explicit common synthetic interfaces, not production execution."
+  ],
+  "shared_interface_limits": {
+    "field": "E = u64, not WideExact; arithmetic and all parse/semantic/prepare/geometry/query/checkpoint implementations are shared synthetic interfaces",
+    "digest": "Deterministic recorded byte recurrence, explicitly not SHA or the production sampler",
+    "purpose": "Exact Rust control-flow, Result propagation, call/state/trace/observer/digest-prefix comparison for S1/S2/D in both observer modes only; no production proof acceptance or field equivalence claim"
+  },
+  "fixture_files": {
+    "docs/research/100bit-spend-path-20261013/evidence/p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/r1-s2-proof.bin": {
+      "sha256": "8569435667420b36a980493477f8fef7ef47e7351122647cf3747054079d4d62",
+      "bytes": 124343
+    },
+    "docs/research/100bit-spend-path-20261013/evidence/p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/r1-s2-public-asf8.bin": {
+      "sha256": "72f067d263af326b017284579f30e3da7c843c6cbb29f1c6df94c8afbb1f2172",
+      "bytes": 1880
+    }
+  },
+  "coverage": {
+    "k": 22,
+    "first_query": 0,
+    "last_query": 21,
+    "actual_saved_fixture": "S2 P3 full tx1, real SHA, fields, semantic verification, query bodies and checkpoint; failures themselves synthetic",
+    "shared_interface_variants": [
+      "S1",
+      "S2",
+      "D"
+    ],
+    "cases_per_variant": [
+      "success",
+      "geometry",
+      "query0",
+      "query21",
+      "checkpoint"
+    ],
+    "observer_features": "real gate enables detail-phases; shared harness explicitly models both default and detailed observer modes"
+  },
+  "scope": "No production edit or proof generation. Generator emits source only. A runs capped optimized native gates; synthetic failures are never claimed production-reachable."
+}
