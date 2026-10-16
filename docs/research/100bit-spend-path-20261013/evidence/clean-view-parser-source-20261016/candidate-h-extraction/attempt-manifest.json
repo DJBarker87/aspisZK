@@ -1,0 +1,13 @@
+{
+  "attempt": "attempt-h-owned-offset-shape",
+  "candidate_source_sha256": "0ff4b1dee86df93934cd4962bfe0e33668bfe08e8335d4044fe446d7e86e1661",
+  "parent_attempt": "attempt-g-fallible-folded-parts",
+  "change": "Replace parse_shape borrowed View output by an owned ViewShape of section offsets/lengths, variant and decoded inactive E. It retains the same length/header/tag checks and parses inactive at the same offset. Transparent folded_offsets returns only usize/Option<usize> and derives root presence/start, round1 bounds, consumed bytes from folds==2. View::parse constructs all borrowed slices directly from the original input, including root conversion as explicit Result::Parse, then runs the same echeck sequence and opaque query helper. No production source edit; source migration remains unproven.",
+  "limits": {
+    "MemoryHigh": "4G",
+    "MemoryMax": "6G",
+    "MemorySwapMax": "0",
+    "TasksMax": "128"
+  },
+  "status": "source-only candidate; awaiting d18 window"
+}
