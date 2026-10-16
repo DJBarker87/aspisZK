@@ -1,0 +1,30 @@
+{
+  "scope": "Read/hash and metadata tooling failures only; neither native build failed or reran. Retrospective ledger; raw stderr was observed in tool outputs, not saved separately.",
+  "items": [
+    {
+      "stage": "Rust dependency metadata",
+      "failure": "Unfiltered offline metadata requested missing Windows-only anstyle-wincon 3.0.10",
+      "correction": "Filter exact x86_64-unknown-linux-gnu target; metadata then passed offline."
+    },
+    {
+      "stage": "Rust dependency source audit",
+      "failure": "Initially expected vendor-style .cargo-checksum.json; cache uses registry crate archives. Initial archive-parent path was also one directory too shallow.",
+      "correction": "Verify locked .crate SHA and every unpacked regular file against archive; all 192 Linux package entries verified."
+    },
+    {
+      "stage": "Charon version query",
+      "failure": "--version is not accepted by this CLI",
+      "correction": "Use charon version and charon toolchain-version."
+    },
+    {
+      "stage": "Symlink audit",
+      "failure": "Initial exact-target assertion did not account for leading ./ normalization by safe tar extraction; local Path.readlink also normalizes that display.",
+      "correction": "Record archive/staged targets and require normalized relative target equality. All regular source bytes still exact."
+    },
+    {
+      "stage": "Final audit Python syntax",
+      "failure": "An apostrophe inside a single-quoted audit explanation caused SyntaxError",
+      "correction": "Corrected explanation quoting; final read/hash audit passed."
+    }
+  ]
+}
