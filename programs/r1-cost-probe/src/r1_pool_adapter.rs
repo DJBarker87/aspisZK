@@ -170,12 +170,24 @@ fn require_readonly_account(account: &AccountInfo<'_>, owner: &Pubkey) -> Progra
 #[path = "readonly_meta_tests.rs"]
 mod readonly_meta_tests;
 
-fn require_readonly_buffer(account: &AccountInfo<'_>) -> ProgramResult {
-    if account.is_signer || account.is_writable || account.executable {
+fn readonly_buffer_meta_ok(
+    is_signer: bool,
+    is_writable: bool,
+    executable: bool,
+) -> ProgramResult {
+    if is_signer || is_writable || executable {
         return Err(ProgramError::InvalidAccountData);
     }
     Ok(())
 }
+
+fn require_readonly_buffer(account: &AccountInfo<'_>) -> ProgramResult {
+    readonly_buffer_meta_ok(account.is_signer, account.is_writable, account.executable)
+}
+
+#[cfg(test)]
+#[path = "readonly_buffer_tests.rs"]
+mod readonly_buffer_tests;
 
 fn require_verifier_checkpoint(
     account: &AccountInfo<'_>,
