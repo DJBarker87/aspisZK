@@ -1,64 +1,104 @@
-Source-boundary migration continuation, 2026-10-16
+Source-boundary checkpoint review, 2026-10-16
 
-Base: ca137f5db50123d6157ce144e43e4f15d8fad94b.
-Integration also retains the unchanged lead protocol additions through8eaf9faa9.
-Authority: LEAD-REVIEW-J1-CALLER-FRONTIER-20261016.md; user confirmed both paths.
-The previous checkpoint 5e841c471 is merged as ead3e78e9.
-Combined production candidate: b92ab28465f9ffd4edcd3e2d5300cc9306ba66af;
-0ff133eff changes only the checkpoint test's Public import/qualification.
+Authority: ca137f5db, LEAD-REVIEW-J1-CALLER-FRONTIER-20261016.md.
+Production candidate b92ab28465; 0ff133eff changes only a test Public import.
+Integration retains the lead additions through2fc0ecee1, without editing them.
+Workers own separate branches; the live worktree/ref is untouched. Lead merges.
 
-Ownership and release boundary
-A owns the concrete Digest32 source migration and its migrated extraction.
-B owns both readonly_meta_ok helpers, field-projection wrappers and tests.
-C owns actual caller/public bindings and the PrivateTransfer bridge.
-Workers use isolated branches; the protected live worktree is not accessed.
-Existing live-session Lean modules and the extractor are not edited. Host Lean jobs
-are serialized and capped; no full replay or worker SBF rebuild is authorized.
+Adoption ledger
+1. Source review PASS: admitted stage1/ASQ8 use the sole SolanaDigest backend,
+   delegating to existing hashv(parts).to_bytes(); R16 syscall wording unchanged.
+2. Native codec PASS: all1,233 full outputs byte-identical,16,431,699bytes,
+   SHA256 3ef16b12a329dd6d74b472cd75e5554c1ef8d98c618de3117f87b6c50d73e321.
+3. Native counter PASS: saved transfer1023 has identical583 ordered calls,
+   original slice boundaries/bytes/outputs, checkpoint bytes and349/234counts.
+   All23 checkpoint tests pass; both readonly copies pass5native tests.
+4. Candidate CU delta OPEN. Any increase must be reported before adoption.
+5. Lead's sole J1.R13 SBF rebuild/artifact pin OPEN; no worker rebuild occurred.
+6. Focused migrated extraction progressed; universal source linkage/re-pins are
+   incomplete. Exact limitations: J1-DIGEST32-THEOREM-INVENTORY-20261016.txt.
+The migrated candidate is not yet certified release source. Finite native
+traces establish neither universal source refinement nor real-verifier QV.
 
-Adoption ledger (pending new evidence)
-1. Source review PASS: admitted R1 routes instantiate SolanaDigest, whose
-   only digest body calls existing hashv(parts).to_bytes(). R16 is unchanged.
-2. Existing 1,233-case complete native differential, identical traces: OPEN.
-3. Saved-proof hash-counter regression, identical counts: OPEN.
-4. CU delta from the lead's candidate artifact: OPEN; report any increase.
-5. Single planned J1.R13 SBF rebuild and artifact pin: lead-owned, OPEN.
-6. Migrated-only extraction, re-pins and changed-theorem inventory: OPEN.
-Both guard splits ride these gates. The pure helper must be proved; the real
-AccountInfo field projection is one named R16 runtime premise, not custody.
-Four runtime rejections must independently cover signer, writable,
-executable and wrong owner for both source copies.
-
-J1.R13 baseline reuse (recorded measurement, not a new execution)
-The last production source is 0626294e34632812accf4cb14704f027368ea871.
-Its retained ELF SHA256 is
+J1.R13 baseline, reused measurement (not a new execution)
+Source0626294e34632812accf4cb14704f027368ea871; ELF SHA256
 835ccf148744c242e6bb912fed19971dc5d8e660a6c7abde2d50aa206241f8c6.
-evidence/terminal-decoder-copy-helper-20261016/regression.tar.gz:SUMMARY.json
-records stage1 [3,10] 1343603 CU and ASQ8 stage2 1229578 CU, total2573181,
-on the same saved transfer1023 fixture with setup excluded. Reuse its exact
-artifact/build receipt; do not substitute an older baseline or rebuild it.
-These numbers are not a measurement of the pending Digest32/metadata changes.
+Existing transfer1023 receipt: stage1[3,10]1343603CU; stage2 ASQ8 1229578;
+total2573181, setup excluded. Candidate has no CU measurement. Metadata runtime
+harness must use the same planned candidate artifact; second V7-copy runtime
+fixture/artifact coverage remains OPEN.
 
-Reviewed intermediate checkpoints
-C b85d4bef3943c1b342bfa71e15121589ca9b1ffe adds
-ExtractedDecoderPublicBinding.decoder_serializer_parsePublic for both ASF8
-variants and decoder_serializer_eq_computed. The transition is a fixed copy
-of decoded common.lane_transition; the public is computed from that carrier,
-not selected from output bytes. Actual hd and hs remain explicit premises.
-One focused Lean4.32 check: exit0, 2.613s, process RSS3838080KiB, actual
-cgroup peak722378752B, swap0, seven standard-only axiom reports. Exact target
-and receipt are in evidence/decoder-public-binding-20261016. Coordinator
-verified24 archive members and32 actual host source/object/runtime/receipt pins.
+Coordinator review and evidence
+Read/hash verifiers passed for native187, readonly707, runtime-harness24,
+decoder-binding24, preparation93, preparation-success24 and step-extension108, naming144 and transcript-proof40
+archive members. Actual host rehash:119 source/object/receipt/runtime/native
+binary files, all matched; see evidence/source-boundary-review-20261016.
+The source-body aid checks74 bodies after documented digest/name normalization;
+signatures, backend, both wrappers and caller helper placements were reviewed
+separately. This is source review, not a compiler-preservation theorem.
+Focused Lean4.32 jobs use one host slot,6GiB high/8GiB max/swap0,-j1; no
+package replay, extractor fork, live-module modification, push or stash.
+Exact targets, source/tool pins, exits, time, RSS, swaps and printed axiom
+lists are retained in each evidence directory. Only standard Lean axioms occur
+in accepted reports; no foreign/external axioms are admitted.
 
-C b92ab28465f9ffd4edcd3e2d5300cc9306ba66af adds two inline production cuts:
-statement.semantic_public preserves first's exact two-variant borrow match;
-public_transcript preserves serialization/map_err/new at the same point after
-Prefix::parse and mark0. This source change awaits combined adoption gates.
-Neither helper alone establishes actual outer caller success/reachability.
+A: codex/r1-digest32-source-20261016
+Head 9ff447e49793fa1cb6454aea6648b979be7adc98.
+1. Migrates admitted R1 interfaces to Digest32; retains R0 compatibility wrappers.
+2. Same production hashv delegation; no extractor change.
+3. All 1,233 codec outputs byte-identical.
+4. Saved-proof583 ordered calls/checkpoint identical; not a universal call bound.
+5. All23 checkpoint tests pass, with original failed harness receipt retained.
+6. Extracts30 exact cuts/12files; original34 emitted definitions preserved.
+7. Constructor proves exact five slices and derives conversion/digest success.
+8. Validated row step derives block and state/hash/index carry for row<=26.
+9. Five standard-only reports: exit0,1.812s,2661556KiB RSS,swap0.
+10. Re-pins28 unchanged parser cuts; whole33/source/R16 linkage remains OPEN.
 
-A's pre-factoring source59f07ee3c passed a limited token-body comparison of73
-functions, including three generic Merkle bodies, after only digest-call/name
-spelling normalization. Combined b92ab2846 passes74, adding the exact helper
-body and reviewed call expansion; the new borrowed match was reviewed
-separately against first. See
-J1-DIGEST32-SOURCE-BODY-REVIEW-20261016.json and its source-review tool.
-This is source-review evidence, not compiler or runtime preservation.
+B: codex/r1-readonly-meta-20261016
+Head 565ad899f6b1bbe41d28f6a78650ef9aa1d7fc27.
+1. Splits both guards into identical pure helpers and real projection wrappers.
+2. Uses actual SDK Pubkey/error extraction, including all26 error variants.
+3. guard_result proves the complete success/error result.
+4. success_iff requires matching owner and three false flags.
+5. Both real AccountInfo native suites pass5cases each.
+6. Five Lean targets pass with8 standard-only reports; individual metrics retained.
+7. Names R16ReadonlyMetadataProjection; hprojection remains a runtime premise.
+8. Four independent runtime mutations plus honest control are implemented.
+9. Harness typecheck: exit0,0.397s,210240KiB RSS,swap0; runtime NOT run.
+10. Second-copy artifact/fixture and custody/caller reachability remain OPEN.
+
+C: codex/r1-caller-binding-20261016
+Head currently91e839c9c5cc7fd08a10e3b111cb8f6fe02835c7 (fields follow-up pending).
+1. Fixes both-variant serializer projection to decoded c.lane_transition.
+2. decoder_serializer_eq_computed identifies that fixed projection.
+3. Extracts actual semantic_public/public_transcript helpers from reviewed cuts.
+4. Helper success derives its new serializer witness and constructor success.
+5. Naming-only overlay qualifies five instances; original mirrors unchanged.
+6. Original/adapted audits prove all28 constructor tags agree.
+7. Comprehensive joint import passes; seven targets/12 standard-only reports.
+8. Re-pins17 unchanged decoder/helper declarations across six current files.
+9. Full serializer function transport remains OPEN; fields-body check pending.
+10. Old .hs, outer .hd, supplied-input equality and custody remain OPEN.
+
+Dependencies, conflicts and ordered remaining work
+A and C share one extraction/type universe; C's naming overlay resolves the
+observed import collision. There is no second transcript/QM31 model. B's native
+harness is separate from A's source snapshot and does not invalidate its pins.
+No newly completed local helper proof establishes a whole live-verifier
+conditional hypothesis.
+1. Complete C's exact loop/frontier/serializer transport to supply
+   PublicBinding.decoder_serializer_parsePublic.hs from actual helper success.
+2. Extract/refine actual caller reachability for .hd and identify supplied public;
+   close caller/account/custody bindings separately from B's hprojection premise.
+3. Lift A's row step through actual begin/verify callers and opening phase;
+   reuse current-QM31 equality; prove all33 rows/state carry and actual hbytes,
+   SelectedCompletedSemantic.semChalsZ_read.hread, htyped/ha and C2 provenance.
+4. Once J1.a/b land, J5 and J2 may proceed; then source commitment cuts/recovery
+   J1.c and sampler coordinates/fallback/state carry J1.d.
+5. Instantiate VerifierPhaseCost.SourceSimulation.preservesPrefix for every
+   admitted execution prefix, including rejection/panic/allocation/PDA calls;
+   derive actual QV and raw-byte collision mass. Model budgets are not source QV.
+6. Efficient extraction remains OPEN. Lead must supply J1.R13 artifacts/CU
+   comparison and select valid second-copy runtime coverage; both decisions
+   adopting Digest32 and the pure guard split are already settled.
