@@ -1,10 +1,12 @@
-J1.R17: Aeneas backend port checked; extracted-chain closure still pending
+J1.R17: Aeneas backend and requested extracted chains checked
 
 Result and pins
 The AeneasMeta and Aeneas roots now compile on Lean 4.32.0: 237 required
 backend modules, including embedded tests. This is the backend port, not an
-R1 full replay or a source-refinement result. The serializer/parser theorem
-chains and their #print axioms audits are checked separately by worker B.
+R1 full replay or a source-refinement result. Worker B also checked 69 distinct requested/dependency modules and 263
+standard-only axiom reports; see J1-R17-EXTRACTED-PORT-RESULTS-20261016.txt
+and evidence commit 3f81b1237a40bfebc2aec390554294a98323605e. This includes
+the unchanged current-QM31 equality dependency chain required by the sampler.
 No downgrade, new axiom, production source change or live protocol edit.
 
 R1 base b40d1cfffadbdf967f84cca23ea4e7f1553d564f; production remains equal
@@ -54,7 +56,7 @@ reconstructible patch, 241 input pins, all successful per-target receipts,
 10 failed compile attempts with sources/logs, runtime pins and commands.
 verify-evidence.py checks patch reconstruction and source/import receipt hashes
 without compiling. This library build makes no blanket axioms assertion; exact
-extracted theorem audits are required for R17 closure.
+extracted theorem audits are recorded in the separate checked result above.
 
 The separate prefix agreement checks used the same hard cap with -M0 after
 an import-only diagnostic isolated Lean's whole-RSS heuristic. That option
