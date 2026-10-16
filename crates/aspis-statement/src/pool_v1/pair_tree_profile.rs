@@ -518,10 +518,12 @@ pub fn decode_pool_v1_pair_live_snapshot_v1(
     let current_root = decode_digest_canonical(bytes[128..160].try_into().unwrap())
         .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?;
     let mut frontier = [[M31::ZERO; 8]; POOL_V1_PAIR_TREE_DEPTH];
-    for (level, node) in frontier.iter_mut().enumerate() {
+    let mut level = 0;
+    while level < POOL_V1_PAIR_TREE_DEPTH {
         let start = 160 + 32 * level;
-        *node = decode_digest_canonical(bytes[start..start + 32].try_into().unwrap())
+        frontier[level] = decode_digest_canonical(bytes[start..start + 32].try_into().unwrap())
             .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?;
+        level += 1;
     }
     let snapshot = PoolV1PairLiveSnapshotV1 {
         pool: bytes[48..80].try_into().unwrap(),
