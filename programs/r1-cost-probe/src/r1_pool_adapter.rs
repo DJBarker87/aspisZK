@@ -149,12 +149,26 @@ struct ValidatedAsqa {
     proof_length: usize,
 }
 
-fn require_readonly_account(account: &AccountInfo<'_>, owner: &Pubkey) -> ProgramResult {
-    if account.owner != owner || account.is_signer || account.is_writable || account.executable {
+fn readonly_meta_ok(
+    owner: &Pubkey,
+    expected: &Pubkey,
+    is_signer: bool,
+    is_writable: bool,
+    executable: bool,
+) -> ProgramResult {
+    if owner != expected || is_signer || is_writable || executable {
         return Err(ProgramError::InvalidAccountData);
     }
     Ok(())
 }
+
+fn require_readonly_account(account: &AccountInfo<'_>, owner: &Pubkey) -> ProgramResult {
+    readonly_meta_ok(account.owner, owner, account.is_signer, account.is_writable, account.executable)
+}
+
+#[cfg(test)]
+#[path = "readonly_meta_tests.rs"]
+mod readonly_meta_tests;
 
 fn require_readonly_buffer(account: &AccountInfo<'_>) -> ProgramResult {
     if account.is_signer || account.is_writable || account.executable {

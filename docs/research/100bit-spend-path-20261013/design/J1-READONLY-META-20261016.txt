@@ -1,0 +1,27 @@
+Readonly metadata helper: adopted source split, gates pending
+
+Base ca137f5db50123d6157ce144e43e4f15d8fad94b, implementing Decision 2 of
+LEAD-REVIEW-J1-CALLER-FRONTIER-20261016.md. Both original guard copies now
+call an identical readonly_meta_ok(&Pubkey,&Pubkey,bool,bool,bool) helper.
+The comparison remains actual Pubkey value equality; owner, signer, writable,
+executable checks retain that order and InvalidAccountData. Each wrapper is
+one expression projecting the real AccountInfo fields. No SDK model is added.
+
+The identical new tests call each actual wrapper with real native AccountInfo
+objects: signer, writable, executable, and wrong owner are corrupted separately.
+The valid control uses equal owner values at distinct addresses. The account key
+equals expected owner even in the wrong-owner test, detecting a key/owner mixup.
+These are native wrapper tests, not loader/runtime evidence. Their checks are
+pending in this initial source checkpoint; the real-runtime metadata gate
+remains OPEN until the lead's single J1.R13 artifact replay.
+
+Next: extract the actual new helper with genuine SDK Pubkey and ProgramError,
+then prove actual success iff owner equality and all three flags false. A named
+R16ReadonlyMetadataProjection Prop will conditionally relate the helper's
+observed arguments to loader metadata. It is not an axiom or custody premise;
+no actual AccountInfo extraction, caller reachability, hs, t or hbind is proved.
+
+Both copies ride the same six adoption gates as Digest32: exact backend/runtime
+identity, 1,233-case full trace equality, saved-proof counts, reported CU result,
+the single J1.R13 SBF build, and focused source re-extraction/re-pinning.
+No separate SBF build or full proof replay is requested.
