@@ -1,0 +1,19 @@
+{
+  "before_revision": "896d40067",
+  "source_revision": "96aad8ef209cb69d7667ab5d8728bd4584a86d16",
+  "exact_target": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -B tools/r1-tx1-migration-kit/prepare.py --check",
+  "exit_status": 0,
+  "start_utc": "2026-10-16T21:47:02.434371+00:00",
+  "end_utc": "2026-10-16T21:47:02.634247+00:00",
+  "wall_seconds": 0.19976208312436938,
+  "peak_rss_bytes": 23855104,
+  "process_swaps": 0,
+  "old_shared_harness_sha256": "ca83153ec217f8197342ffb4b54debd2f6c59886bae62e4c12873259107ab4d5",
+  "new_shared_harness_sha256": "f849aabaadfa33490ce3c17c5c4c9a6d9ba6bf99347f037860190f5736757782",
+  "source_pins_sha256": "0e6214b9b26a9545d0b73fe6ddbaa1681b5d1e4795f44a68a13cea868c2392fd",
+  "diff": "--- 896d40067/shared-harness.rs\n+++ corrected/shared-harness.rs\n@@ -78,7 +78,7 @@\n    for fault in [Fault::None,Fault::Geometry,Fault::Query(0),Fault::Query(21),Fault::Checkpoint]{\n     let old=run(true,variant,fault,detailed);let new=run(false,variant,fault,detailed);assert_eq!(old,new,\"{variant:?} {fault:?} detailed={detailed}\");\n     assert_eq!(old.result.as_ref().err().copied(),match fault{Fault::None=>None,Fault::Checkpoint=>Some(Error::Checkpoint),_=>Some(Error::Query)});\n-    let cut=match fault{Fault::None=>success.log.phases.len(),Fault::Geometry|Fault::Query(0)=>prepare,Fault::Query(21)=>last,Fault::Checkpoint=>success.log.phases.len()-1};\n+    let cut=match fault{Fault::None=>success.log.phases.len(),Fault::Geometry|Fault::Query(0)=>prepare,Fault::Query(21)=>last,Fault::Checkpoint=>success.log.phases.len()-1,Fault::Query(_)=>unreachable!(\"only query 0 and 21 are configured\")};\n     assert_eq!(old.log.phases,&success.log.phases[..cut]);assert_eq!(old.log.marks,old.log.phases);\n     assert_eq!(old.log.values,&success.log.values[..old.log.values.len()]);assert_eq!(old.log.digests,&success.log.digests[..old.log.digests.len()]);\n     println!(\"TX1_SHARED_CASE variant={variant:?} fault={fault:?} detailed={detailed} old_new_equal=true {old:?}\");\n",
+  "reason": "Proactive source-review correction of the same non-exhaustive Fault::Query match in the separate standalone harness before A compiles it. Configured Query0/21 cuts unchanged. No production, real-fixture or verifier-overlay change.",
+  "stdout": "{\"status\": \"PASS\", \"checked\": true, \"staged\": null, \"source_pins_sha256\": \"0e6214b9b26a9545d0b73fe6ddbaa1681b5d1e4795f44a68a13cea868c2392fd\"}\n",
+  "stderr": "",
+  "formal_status": "Read/hash check only. No new Rust compile/native test/Lean/#print axioms result claimed. A owns all jobs."
+}

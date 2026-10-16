@@ -78,7 +78,7 @@ mod r1_semantic {pub use crate::shared::semantic as verify_observed;}
    for fault in [Fault::None,Fault::Geometry,Fault::Query(0),Fault::Query(21),Fault::Checkpoint]{
     let old=run(true,variant,fault,detailed);let new=run(false,variant,fault,detailed);assert_eq!(old,new,"{variant:?} {fault:?} detailed={detailed}");
     assert_eq!(old.result.as_ref().err().copied(),match fault{Fault::None=>None,Fault::Checkpoint=>Some(Error::Checkpoint),_=>Some(Error::Query)});
-    let cut=match fault{Fault::None=>success.log.phases.len(),Fault::Geometry|Fault::Query(0)=>prepare,Fault::Query(21)=>last,Fault::Checkpoint=>success.log.phases.len()-1};
+    let cut=match fault{Fault::None=>success.log.phases.len(),Fault::Geometry|Fault::Query(0)=>prepare,Fault::Query(21)=>last,Fault::Checkpoint=>success.log.phases.len()-1,Fault::Query(_)=>unreachable!("only query 0 and 21 are configured")};
     assert_eq!(old.log.phases,&success.log.phases[..cut]);assert_eq!(old.log.marks,old.log.phases);
     assert_eq!(old.log.values,&success.log.values[..old.log.values.len()]);assert_eq!(old.log.digests,&success.log.digests[..old.log.digests.len()]);
     println!("TX1_SHARED_CASE variant={variant:?} fault={fault:?} detailed={detailed} old_new_equal=true {old:?}");
