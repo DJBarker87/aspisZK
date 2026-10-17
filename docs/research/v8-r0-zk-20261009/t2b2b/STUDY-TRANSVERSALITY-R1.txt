@@ -462,3 +462,47 @@ estimate to ± a factor of ~1.5 and must be measured before adoption.
   T2b-2b keeps hBc and the OT premises as hypotheses (the current J9 shape);
   the only new statement is the abort-aware ZK_FS (ZF1 scope, open anyway),
   whose error term drops badMass P.
+
+§4  Recommendation for D23.5
+---------------------------
+The binding constraint is the R1 compute budget, not the mathematics.  Both
+Route M changes that remove a premise inside the verifier cost tens of
+thousands of CU in transactions that are already within 31.5k (stage2, worst
+settlement) and 57k (stage1, and 43k over the 1.3M target) of the cap.
+
+  option          removes            verifier CU (est.)   bytes    Lean impact                        residual premise
+  P  (prove)      —                   0                   0        new research; J10                  both, no bound (feasibility < 15%)
+  M1 (Z lane)     B-open             +22–64k (both tx)   +2,848   tape type + batch; BCond → lemma   none for (B)
+  M2 (Libra-all)  OT-open            +40–78k (tx2)        0       Libra 56→280 (mask + soundness)    one query-free certificate, ≈ 2^-114
+  M1+M2           both                +62–142k            +2,848   both                               certificate only
+  M3 (reject)     both (from ZK)      0                   0        abort-aware ZK_FS (ZF1)            none in the ZK error; refinement of P
+
+Recommendation: adopt M3 as the D23.5 decision, and keep M1 as an optional
+hardening if headroom appears later.
+  - M3 is the only option that removes the premises from the privacy
+    statement without touching the verifier, the proof bytes or any soundness
+    row, and it leaves every proved theorem (T2a, T2b-1, T2b-2a, ZF-A) and the
+    planned T2b-2b statement (with hBc and OT as hypotheses of P) unchanged.
+    Its price is real but is paid where work is open anyway: the FS
+    composition (ZF1) must be stated for a prover with aborts, the honest
+    prover must run the exact P check (seconds per attempt), and the Rust
+    check must be shown to decide the Lean predicate on the Z9 payload.  As a
+    bonus the same mechanism removes Good₃'s mass from the privacy ledger.
+  - M1 is cheap in Lean, proves (B) in five lines and deletes the whole
+    Dprime apparatus; it is worth doing if ~20–60k CU can be found (it is the
+    standard ZK-FRI mask).  It does nothing for OT-open.
+  - M2 is mathematically attractive (it also removes Good₃'s round-cover
+    condition) but its ~55k CU land entirely in stage2, which has 31.5k left
+    in the worst fixture; and it leaves a numerical certificate (one
+    determinant per release, query-free) rather than a structural proof.
+  - Route P should not be pursued as the main line: the known tools have a
+    hard capacity limit (Kronecker: ≤ 5 functionals against ~400–660 in the
+    premises), and the dimension heuristic that explains the numerics is not
+    a proof.  Z10 (§A) adds evidence that failures are absent on random and
+    structured query sets of an R1-sized model, which supports M3's
+    completeness assumption (Pr[¬P] ≈ 0) but bounds nothing.
+Trade-off stated plainly: M3 gives an unconditional (premise-free) privacy
+statement at zero on-chain cost, in exchange for a prover that may retry, an
+abort-aware Fiat–Shamir theorem, and the obligation that the deployed prover
+really runs the P check; M1+M2 give a premise-free statement for any honest
+prover with no aborts, at roughly 60–140k CU that R1 does not currently have.
