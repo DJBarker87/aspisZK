@@ -74,8 +74,62 @@ impl Basis {
     }
 }
 
+
+/// Rank over QM31 of a dense matrix (rows of Q).
+fn qrank(mut m: Vec<Vec<Q>>) -> usize {
+    let cols = if m.is_empty() { 0 } else { m[0].len() }; let mut rank = 0;
+    for c in 0..cols {
+        let Some(p) = (rank..m.len()).find(|&i| m[i][c] != Q::f(0)) else { continue };
+        m.swap(rank, p); let iv = m[rank][c].inv();
+        for k in 0..cols { m[rank][k] = m[rank][k].mul(iv); }
+        for i in 0..m.len() { if i != rank && m[i][c] != Q::f(0) { let f = m[i][c]; for k in 0..cols { let t = f.mul(m[rank][k]); m[i][k] = m[i][k].sub(t); } } }
+        rank += 1;
+    }
+    rank
+}
+
+/// Route M2 residual (STUDY §3.3): Kronecker/Hankel certificate shape for the three
+/// eq-MLE claims of a Libra lane restricted to the reservoir block N'_128 * P_{<128}
+/// of one channel, identity transport (rows = natural indices; INDICATIVE ONLY —
+/// the release certificate needs the real R1 transport).  With 22 nodes + 2 OOD +
+/// sigma's point t = 1 (25 rank-one functionals), the certificate is
+///   rank_K4 [H_{eta_1}J | H_{eta_2}J | H_{eta_3}J] = 3*26,
+/// H_eta(a, b) = eta(t^(a+b)), a < 100, b in J = {0..25}.
+fn kron(trials: usize, seed: u64, control: bool) {
+    let mut rng = Rng(seed);
+    // monomial coefficients of N'_e(t) = prod_{b in bits e} T_{2^b}(t), e < 128
+    let mut tpoly: Vec<Vec<u64>> = vec![vec![0, 1]]; // T_1 = t
+    for b in 1..7 { let prev = &tpoly[b - 1]; let mut sq = vec![0u64; prev.len() * 2 - 1];
+        for i in 0..prev.len() { for j in 0..prev.len() { sq[i + j] = add(sq[i + j], mul(prev[i], prev[j])); } }
+        for x in sq.iter_mut() { *x = add(*x, *x); } sq[0] = sub(sq[0], 1); tpoly.push(sq); }
+    let mut nmono = vec![vec![0u64; 128]; 128]; nmono[0][0] = 1;
+    for e in 1..128usize { let b = e.trailing_zeros() as usize; let base = nmono[e & !(1 << b)].clone(); let tp = &tpoly[b];
+        let mut out = vec![0u64; 128]; for i in 0..128 { if base[i] != 0 { for j in 0..tp.len() { if i + j < 128 { out[i + j] = add(out[i + j], mul(base[i], tp[j])); } } } } nmono[e] = out; }
+    // C[k][e]: N'-coefficient e of t^k.  Solve sum_e C[k][e] nmono[e] = t^k by back substitution (nmono[e] has degree e, leading coeff != 0).
+    let mut cmat = vec![vec![0u64; 128]; 128];
+    for k in 0..128 { let mut rem = vec![0u64; 128]; rem[k] = 1;
+        for e in (0..128).rev() { if rem[e] != 0 { let f = mul(rem[e], inv(nmono[e][e])); cmat[k][e] = f; for i in 0..=e { rem[i] = sub(rem[i], mul(f, nmono[e][i])); } } } }
+    for tr in 0..trials {
+        let alpha: Vec<Q> = (0..10).map(|_| rng.q()).collect();
+        let p1: Vec<Q> = (0..10).map(|_| rng.q()).collect();
+        let mut p2 = alpha.clone(); p2[6] = Q::f(1).sub(p2[6]); p2[7] = Q::f(1).sub(p2[7]);
+        let mut s: Vec<Vec<Q>> = vec![vec![Q::f(0); 78]; 100];
+        for (kk, pt) in [&alpha, &p1, &p2].iter().enumerate() {
+            // eta_e = eq over the 7 d-bits (row bits 2..8) of the block coordinate e
+            let mut eta: Vec<Q> = (0..128).map(|e: usize| (0..7).fold(Q::f(1), |acc, b| acc.mul(if (e >> b) & 1 == 1 { pt[2 + b] } else { Q::f(1).sub(pt[2 + b]) }))).collect();
+            // control: replace the first functional by an evaluation at a random F point (Hankel rank 1); expected rank 26*2 + 1 = 53
+            if control && kk == 0 { let t0 = rng.f(); eta = (0..128).map(|e| Q::f((0..128).fold(0u64, |acc, i| add(acc, mul(nmono[e][i], pw(t0, i as u64)))))).collect(); }
+            let mom: Vec<Q> = (0..128).map(|k| (0..128).fold(Q::f(0), |acc, e| acc.add(eta[e].mul(Q::f(cmat[k][e]))))).collect();
+            for a in 0..100 { for b in 0..26 { s[a][26 * kk + b] = mom[a + b]; } }
+        }
+        let r = qrank(s);
+        println!("KRON trial={} rank={} of 78 {}", tr, r, if r == 78 { "OK" } else { "DEFICIENT" });
+    }
+}
+
 fn main() {
     let a: Vec<String> = env::args().collect();
+    if a.get(1).map(|x| x == "kron").unwrap_or(false) { kron(a.get(2).map(|s| s.parse().unwrap()).unwrap_or(5), a.get(3).map(|s| s.parse().unwrap()).unwrap_or(1), a.get(4).map(|x| x == "control").unwrap_or(false)); return; }
     let e: usize = a.get(1).map(|s| s.parse().unwrap()).unwrap_or(21);      // exponent; 26 = G-shape factor 1+Y^26
     let pimode: &str = a.get(2).map(|s| s.as_str()).unwrap_or("id");        // id | rand | rev
     let trials: usize = a.get(3).map(|s| s.parse().unwrap()).unwrap_or(200);
