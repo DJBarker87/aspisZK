@@ -1,0 +1,3 @@
+    pub fn coefficients<T:Copy>(self, rows: &[T;1024]) -> [T;1024] {
+        core::array::from_fn(|j|rows[self.row(j)])
+    }
