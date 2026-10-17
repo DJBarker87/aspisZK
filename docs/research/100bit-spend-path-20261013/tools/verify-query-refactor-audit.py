@@ -22,6 +22,7 @@ PAIR = "d4da2a662"
 TRACE = "abd4c40a4"
 ROUND = "8c348ebbe"
 HELPER = "2a5b09f40"
+FOLD = "d0dbb2181"
 WIRE = "crates/aspis-r1-cost-probe/src/"
 sha = lambda b: hashlib.sha256(b).hexdigest()
 
@@ -112,11 +113,28 @@ def main():
     assert helper_source.count(helpers) == 1 and helper_source.count(calls) == 1
     assert helper_source.replace(helpers, b"", 1).replace(calls, moved, 1) == semantic_after
     assert blob(HELPER, WIRE + "transcript.rs") == after
+    fold_source = blob(FOLD, WIRE + "r1_semantic.rs")
+    boundary_statement = b"        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);\n"
+    value_statement = b"""        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+"""
+    fold_helpers = b"fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {\n" + boundary_statement + b"    boundary\n}\n\n" + \
+        b"fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> QM31 {\n" + value_statement + b"    value\n}\n\n"
+    boundary_call = b"        let boundary = semantic_boundary(&polynomial);\n"
+    value_call = b"        let value = semantic_value(&polynomial, &alpha, round);\n"
+    assert helper_source.count(boundary_statement) == helper_source.count(value_statement) == 20
+    assert fold_source.count(fold_helpers) == 1
+    restored = fold_source.replace(fold_helpers, b"", 1)
+    assert restored.count(boundary_call) == restored.count(value_call) == 20
+    assert restored.replace(boundary_call, boundary_statement).replace(value_call, value_statement) == helper_source
+    assert blob(FOLD, WIRE + "transcript.rs") == after
     lead_retained = []
     for path in [WIRE + "r1_wire.rs",
                  "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
                  "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs"]:
-        assert blob(HELPER, path) == blob(LEAD, path)
+        assert blob(FOLD, path) == blob(LEAD, path)
         lead_retained.append({"path": path, "sha256": sha(blob(LEAD, path))})
     assert blob(TRACE, WIRE + "r1_semantic.rs") == blob(PAIR, WIRE + "r1_semantic.rs")
     own = resource.getrusage(resource.RUSAGE_SELF)
@@ -127,7 +145,7 @@ def main():
         "wall_seconds": time.monotonic() - start,
         "peak_rss_bytes": max(own.ru_maxrss, children.ru_maxrss) * rss_unit,
         "swap_events": own.ru_nswap + children.ru_nswap,
-        "source_revision": git("rev-parse", HELPER).decode().strip(),
+        "source_revision": git("rev-parse", FOLD).decode().strip(),
         "lead_revision": LEAD, "exact_1d_and_1e": decisions,
         "decision_1f": {"kind": "compile-time bound 22 <= 32",
             "before_sha256": sha(before), "after_sha256": sha(after),
@@ -145,12 +163,20 @@ def main():
             "exact_reverse_to_predecessor": True, "cfg_alternatives": ["not(prover)", "prover"],
             "returned_existing_values": [["running", "alpha", "transcript"],
                 ["running", "alpha", "transcript", "round_checks"]]},
+        "decision_1f_fold_helpers": {"kind": "unchanged complete let statements in private helpers",
+            "before_sha256": sha(helper_source), "after_sha256": sha(fold_source),
+            "boundary_statement_sha256": sha(boundary_statement),
+            "value_statement_sha256": sha(value_statement), "exact_reverse_to_predecessor": True,
+            "each_helper_call_count_across_both_cfgs": 20,
+            "boundary_arguments": ["&polynomial"],
+            "value_arguments": ["&polynomial", "&alpha", "round"],
+            "arithmetic_changed": False, "introduced_fallible_calls": 0},
         "lead_source_retained": lead_retained,
         "runtime_or_formal_result": False, "print_axioms": "N/A (source audit)",
         "live_worktree_mutation": False, "SBF_build": False}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2) + "\n")
-    print("PASS: exact 1d/1e; fixed22/fixed10; owned round helpers; all reverse audits; lead source retained")
+    print("PASS: exact 1d/1e; fixed22/fixed10; owned round/fold helpers; all reverse audits; lead source retained")
 
 
 if __name__ == "__main__":
