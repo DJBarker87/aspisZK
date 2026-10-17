@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independent read-only source/reverse audit of Decisions 1d, 1e and fixed22 1f.
+"""Read-only source/reverse audit of Decisions 1d, 1e and registered 1f moves.
 
 No build, Lean or runtime gate is run here. All inputs come from explicit Git
 objects; temporary patch applications never touch a checked-out source tree.
@@ -21,6 +21,7 @@ LEAD = "deb68369ba3ad7cc6706dc24b6503fac1cbe942b"
 PAIR = "d4da2a662"
 TRACE = "abd4c40a4"
 ROUND = "8c348ebbe"
+HELPER = "2a5b09f40"
 WIRE = "crates/aspis-r1-cost-probe/src/"
 sha = lambda b: hashlib.sha256(b).hexdigest()
 
@@ -93,11 +94,29 @@ def main():
     assert semantic_after.count(expanded) == 1
     assert semantic_after.replace(expanded, loop) == semantic_before
     assert blob(ROUND, WIRE + "transcript.rs") == after
+    helper_source = blob(HELPER, WIRE + "r1_semantic.rs")
+    old_finish = lexer.fragment(semantic_after, "fn verify_finish<")[0].encode()
+    moved = old_finish.split(b"\n", 1)[1].split(b"    mark(obs, 2);\n", 1)[0]
+    assert moved.startswith(b"    let mut running = ")
+    helper_headers = [
+        b'#[cfg(not(feature = "prover"))]\nfn semantic_rounds<H: Digest32>(prefix: &Prefix<\'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {\n',
+        b'#[cfg(feature = "prover")]\nfn semantic_rounds<H: Digest32>(prefix: &Prefix<\'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>, [[QM31; 3]; 10]), Error> {\n']
+    helper_returns = [b"    Ok((running, alpha, transcript))\n}\n\n",
+                      b"    Ok((running, alpha, transcript, round_checks))\n}\n\n"]
+    helpers = b"".join(head + moved + ret for head, ret in zip(helper_headers, helper_returns))
+    calls = b'''    #[cfg(not(feature = "prover"))]
+    let (running, alpha, mut transcript) = semantic_rounds(&prefix, transcript)?;
+    #[cfg(feature = "prover")]
+    let (running, alpha, mut transcript, round_checks) = semantic_rounds(&prefix, transcript)?;
+'''
+    assert helper_source.count(helpers) == 1 and helper_source.count(calls) == 1
+    assert helper_source.replace(helpers, b"", 1).replace(calls, moved, 1) == semantic_after
+    assert blob(HELPER, WIRE + "transcript.rs") == after
     lead_retained = []
     for path in [WIRE + "r1_wire.rs",
                  "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
                  "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs"]:
-        assert blob(ROUND, path) == blob(LEAD, path)
+        assert blob(HELPER, path) == blob(LEAD, path)
         lead_retained.append({"path": path, "sha256": sha(blob(LEAD, path))})
     assert blob(TRACE, WIRE + "r1_semantic.rs") == blob(PAIR, WIRE + "r1_semantic.rs")
     own = resource.getrusage(resource.RUSAGE_SELF)
@@ -108,7 +127,7 @@ def main():
         "wall_seconds": time.monotonic() - start,
         "peak_rss_bytes": max(own.ru_maxrss, children.ru_maxrss) * rss_unit,
         "swap_events": own.ru_nswap + children.ru_nswap,
-        "source_revision": git("rev-parse", ROUND).decode().strip(),
+        "source_revision": git("rev-parse", HELPER).decode().strip(),
         "lead_revision": LEAD, "exact_1d_and_1e": decisions,
         "decision_1f": {"kind": "compile-time bound 22 <= 32",
             "before_sha256": sha(before), "after_sha256": sha(after),
@@ -120,12 +139,18 @@ def main():
             "original_loop_body_sha256": sha(inner), "reverse_expansion_exact": True,
             "ordered_rounds": list(range(10)), "ordered_rows": list(range(15, 25)),
             "all_10_body_copies_byte_identical": True},
+        "decision_1f_owned_round_helpers": {"kind": "unchanged sequence in private owned-argument helper",
+            "before_sha256": sha(semantic_after), "after_sha256": sha(helper_source),
+            "moved_sequence_sha256": sha(moved), "both_cfg_bodies_byte_identical": True,
+            "exact_reverse_to_predecessor": True, "cfg_alternatives": ["not(prover)", "prover"],
+            "returned_existing_values": [["running", "alpha", "transcript"],
+                ["running", "alpha", "transcript", "round_checks"]]},
         "lead_source_retained": lead_retained,
         "runtime_or_formal_result": False, "print_axioms": "N/A (source audit)",
         "live_worktree_mutation": False, "SBF_build": False}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2) + "\n")
-    print("PASS: exact 1d/1e forward and reverse; fixed22/fixed10 expansion/reverse; lead source retained")
+    print("PASS: exact 1d/1e; fixed22/fixed10; owned round helpers; all reverse audits; lead source retained")
 
 
 if __name__ == "__main__":

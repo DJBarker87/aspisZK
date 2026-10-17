@@ -25,7 +25,7 @@ struct Log {
     fault: Fault, events: Vec<Event>,
     phases: Vec<crate::verifier::Phase>,
     digests: Vec<(Vec<Vec<u8>>, [u8; 32])>,
-    lookups: [usize; 10],
+    lookups: [usize; 11],
 }
 std::thread_local! {static LOG: RefCell<Log> = RefCell::new(Log::default());}
 fn fault() -> Fault { LOG.with(|s| s.borrow().fault) }
@@ -47,8 +47,8 @@ pub(super) fn begin<H: Digest32>(prefix: &Prefix<'_>, transcript: &mut SemanticT
     wire::begin(prefix, transcript)
 }
 pub(super) fn lookup<'a>(prefix: &Prefix<'a>, row: u8) -> Result<ValidatedRecord<'a>, Error> {
-    assert!((15..=24).contains(&row));
-    let n = LOG.with(|s| { let mut s = s.borrow_mut(); let n = s.lookups[(row - 15) as usize]; s.lookups[(row - 15) as usize] += 1; n });
+    assert!((14..=24).contains(&row));
+    let n = LOG.with(|s| { let mut s = s.borrow_mut(); let n = s.lookups[(row - 14) as usize]; s.lookups[(row - 14) as usize] += 1; n });
     event(Event::Lookup(row, n));
     if fault() == Fault::Lookup(row, n) { return Err(Error::InvalidRow); }
     prefix.validated_record(row)
@@ -130,9 +130,9 @@ fn expected_error(f: Fault) -> Option<Error> {
 #[test]
 fn verify_saved_s2_exact_old_new_all_round_failures_and_success() {
     assert_eq!(&PROOF[..8], b"R1P3COST");
-    let mut faults = vec![Fault::None, Fault::Parse, Fault::Public, Fault::Begin];
+    let mut faults = vec![Fault::None, Fault::Parse, Fault::Public, Fault::Begin, Fault::Lookup(14, 0), Fault::Decode(14)];
     for row in 15..=24 { faults.extend([Fault::Lookup(row, 0), Fault::Decode(row), Fault::Boundary(row), Fault::Lookup(row, 1), Fault::Semantic(row)]); }
-    assert_eq!(faults.len(), 54);
+    assert_eq!(faults.len(), 56);
     for observed in [false, true] {
         let success = run(true, Fault::None, observed);
         assert!(success.result.is_ok(), "actual saved S2 semantic verification must succeed");
@@ -150,5 +150,5 @@ fn verify_saved_s2_exact_old_new_all_round_failures_and_success() {
             std::println!("VERIFY_REAL_S2_CASE fault={configured:?} observed={observed} detail_phases={} old_new_equal=true error={:?} digest_calls={} trace_values={} events={} phases={} full_outcome_sha256={digest:02x?}", cfg!(feature="detail-phases"), old.result.as_ref().err(), old.log.digests.len(), old.values.len(), old.log.events.len(), old.log.phases.len());
         }
     }
-    std::println!("VERIFY_REAL_S2_PASS cases=108 faults=53 rows=15..24 observers=Some,None detail_phases={}", cfg!(feature="detail-phases"));
+    std::println!("VERIFY_REAL_S2_PASS cases=112 faults=55 rows=14..24 observers=Some,None detail_phases={}", cfg!(feature="detail-phases"));
 }

@@ -17,13 +17,14 @@ wrappers inject explicit synthetic errors at parse, public-transcript and
 begin entry, and at both record lookups, polynomial decoding and semantic
 sampling for every row 15..24. A separate coefficient perturbation exercises
 the original boundary check and its original error branch at each round.
+The moved row-14 initializer also gets lookup and decode failures.
 These configured failures are not asserted reachable on a valid production
 input. All transformation counts and complete source/overlay hashes are in
 `source-pins.json`.
 
-There are 53 failures and one success control, each with `Some(observer)` and
-`None`: 108 cases per binary. Run two focused native builds, with and without
-`detail-phases`, for 216 cases total. Each compares the complete returned
+There are 55 failures and one success control, each with `Some(observer)` and
+`None`: 112 cases per binary. Run two focused native builds, with and without
+`detail-phases`, for 224 cases total. Each compares the complete returned
 semantic data, transcript state and row, actual SHA digest slice inputs and
 answers, native trace values, interface-call events and observer phases.
 Failure observations must also be prefixes of the successful run. The
@@ -42,7 +43,7 @@ cargo test --release --locked --offline -j1 -p aspis-r1-cost-probe --features pr
 cargo test --release --locked --offline -j1 -p aspis-r1-cost-probe --features prover,private-leaf-salts,optimized-terminal,detail-phases --lib r1_semantic::verify_migration_tests::verify_saved_s2_exact_old_new_all_round_failures_and_success -- --nocapture --test-threads=1
 ```
 
-Require all per-case lines and `VERIFY_REAL_S2_PASS cases=108` in each log.
+Require all per-case lines and `VERIFY_REAL_S2_PASS cases=112` in each log.
 Retain exact command, exit, wall time, peak RSS, swap and source/overlay pins.
 `#print axioms` is N/A for this Rust gate. No SBF, Lean, readonly runtime
 harness or live-worktree mutation is part of this kit.

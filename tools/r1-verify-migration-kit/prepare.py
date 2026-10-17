@@ -38,6 +38,8 @@ def instrument(body):
          b"verify_migration_tests::public_transcript(public, hash, prefix.c1_root)?"),
         (b"wire::begin(&prefix, &mut transcript)?",
          b"verify_migration_tests::begin(&prefix, &mut transcript)?"),
+        (b"prefix.validated_record(14)?.decode_k::<1>(0)?[0]",
+         b"verify_migration_tests::decode::<1>(&prefix, 14, 0)?[0]"),
         (b"prefix.validated_record(row)?.decode_k::<28>(0)?",
          b"verify_migration_tests::decode::<28>(&prefix, row, 0)?"),
         (b"transcript.semantic_validated(prefix.validated_record(row)?)?",
@@ -65,12 +67,14 @@ def main():
     old_instrumented, old_counts = instrument(old)
     new_instrumented, new_counts = instrument(new)
     finish_instrumented, finish_counts = instrument(finish)
-    assert old_counts == [1, 1, 1, 1, 1], old_counts
-    assert new_counts == [1, 1, 1, 0, 0], new_counts
+    _, all_counts = instrument(new_source)
+    assert old_counts == [1, 1, 1, 1, 1, 1], old_counts
+    assert new_counts == [1, 1, 1, 0, 0, 0], new_counts
     assert finish_counts[:3] == [0, 0, 0]
-    assert finish_counts[3:] in [[1, 1], [10, 10]], finish_counts
+    assert all_counts[:3] == [1, 1, 1]
+    assert all_counts[3:] in [[1, 1, 1], [1, 10, 10], [2, 20, 20]], all_counts
     old_instrumented = old_instrumented.replace(b"pub fn verify_observed<", b"fn migration_old_verify_observed<", 1)
-    overlay = new_source.replace(new, new_instrumented, 1).replace(finish, finish_instrumented, 1)
+    overlay, _ = instrument(new_source)
     assert overlay != new_source
     overlay += ("\n" + CFG + "\n").encode() + old_instrumented + ("\n" + CFG +
         '\n#[path="verify_migration_tests.rs"]\nmod verify_migration_tests;\n').encode()
@@ -82,13 +86,14 @@ def main():
         "whole_declaration_sha256": {"old_verify_observed": sha(old),
             "new_verify_observed": sha(new), "new_verify_finish": sha(finish)},
         "symmetric_replacement_counts": {"old": old_counts, "new_prefix": new_counts,
-            "new_finish": finish_counts},
+            "new_finish": finish_counts, "all_new_cfg_declarations": all_counts},
         "overlay_files": {p: sha(raw) for p, raw in files.items()},
         "generator_sha256": sha(Path(__file__).read_bytes()), "harness_sha256": sha(harness),
         "coverage": {"semantic_rows": list(range(15, 25)),
             "each_row_faults": ["lookup0", "decode", "boundary", "lookup1", "semantic"],
             "prefix_faults": ["parse", "public_transcript", "begin"],
-            "cases_per_observer_mode": 54, "observer": ["Some", "None"],
+            "row14_initializer_faults": ["lookup0", "decode"],
+            "cases_per_observer_mode": 56, "observer": ["Some", "None"],
             "feature_builds_required": ["detail-phases", "default"]},
         "scope": "Actual saved S2 P3 semantic verification, real fields, SHA, parser and source arithmetic. Errors are injected only at explicit symmetric test wrappers; boundary injection changes one decoded coefficient before the unchanged source Boundary check. All returned fields, state/next_row, full digest inputs/outputs, native trace values, call events and observer phases are compared. Semantic verify has no Variant argument. No S1/D valid-proof execution or production-reachability claim is made.",
         "production_candidate_modified": False, "SBF_build": False}
