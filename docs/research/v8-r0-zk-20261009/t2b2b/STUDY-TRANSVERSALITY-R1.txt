@@ -136,3 +136,121 @@ claim_2} for G and e ≥ 14; {extra} for D).
            uniformly over ch (or off a small bad set of ch).
   Neither exists today; 35 challenge vectors were checked (Z8c/Z8e), each with
   one query set.
+
+§2  Route P — proving a failure-mass bound
+-----------------------------------------
+§2.1  The one fact that every argument uses (PROVED here; standard).  Let M
+be the lane message space (natural basis, 1,024 coordinates) and ev_x the
+evaluation functional at a domain point x.  Write the message by channels
+m = 4d + s (s = 0..3, d < 256); evaluation at the four children of a fibre is
+equivalent to evaluating all four channels at that fibre's line node t_u
+(fibre_inverse; x_u, y_u ≠ 0).  Then:
+  (E1) [interpolation]  For distinct nodes t_1..t_k and any block
+       B = {c + e : e < k} of channel coordinates with c = 0, or c a power of
+       two ≥ k with T_c(t_i) ≠ 0 (NZ), the k node evaluations are bijective
+       on B (N′_{c+e} = N′_c·N′_e; Vandermonde in the N′_e, e < k).
+  (E2) [high support]  A family Φ of functionals whose natural-coordinate
+       vectors are zero on the channel coordinates d < 22 keeps its rank on
+       {channels vanishing at 22 distinct nodes}: the coordinates d ∈
+       [22, 256) are bijective there (kernel = polynomials of degree < 22
+       with 22 zeros).
+  (E3) [rank-one restriction]  On a block N′_c·P_{<k} (and on the whole
+       channel), ev_t is a rank-one Hankel functional: H_{ev_t}(a, b) =
+       ev_t(N′_c·t^{a+b}) = N′_c(t)·t^a·t^b.  Hence a combination of j
+       evaluations has Hankel rank ≤ j on every A×B with A·B inside the block.
+Every query-dependent premise is an instance of (TRANS) (§1.2): a
+query-free space V must meet span{ev_x : x ∈ X(Q)} only in 0.  (E1)–(E2)
+settle (TRANS) when V vanishes on an interpolation block or is supported on
+high coordinates; (E3) gives a query-free sufficient condition when V is
+small.  None of the three applies to the actual premises, for the reasons
+below.
+
+§2.2  Why the two obvious formulations do not give a bound.
+  (P-SZ, per query set).  For fixed Q, FAIL_OT_l(·, Q) is the vanishing of
+  all maximal minors of [V(ch); E(Q)], polynomials in the α-row (and z) of
+  degree ≤ 10 per row of claims and ≤ e+1 per round row through β powers —
+  rough total degree D_Q ≤ 10·r ≈ 4·10^3 for r ≈ 400.  Schwartz–Zippel then
+  gives Pr_ch[FAIL | Q] ≤ D_Q/|K₄| ≈ 2^-112 PROVIDED the minor is not
+  identically zero for this Q, which needs a witness ch*(Q).  A witness is a
+  challenge at which the lane's round rowspace is explicit; the only explicit
+  points are Boolean or base-field α, and there Λ_j collapses to F (D20.1),
+  rank R_l drops (Z7 (B), Z8c structure B/L), and the minor is zero for
+  trivial reasons.  So no single structured witness works, and an
+  X-dependent witness would have to be exhibited for ~C(2^18, 22) ≈ 2^306
+  query sets.  This is the D23.2 obstruction: the functionals of V that do
+  not depend on α at all — σ (the inactive-row indicator, 810 of 1,024
+  rows, dense in natural coordinates) and the OOD evaluations — cannot be
+  moved by any witness, and σ is not supported on high coordinates, so (E2)
+  is unavailable even at a degenerate α.
+  (P-CNT, per challenge).  For fixed ch, count bad fibres sequentially: the
+  k-th fibre is bad iff its four evaluations are dependent on
+  V + span(previous), i.e. iff the fibre is a common zero of a nonzero
+  subspace of messages; one nonzero message has ≤ 1,023 zeros on the circle,
+  so Pr[bad k-th fibre] ≤ 4·1,023/(2^18 − k) ≈ 2^-6, and 22 fibres give
+  ≈ 2^-1.5.  This is the "Bezout ~2^13 bad fibres" count of DESIGN-T2b-2b
+  §2.4.3: correct, but four to five orders of magnitude in the exponent too
+  weak.  It uses one witness message per step; a stronger count would need
+  the common zero set of a whole (n − r − k)-dimensional message space, i.e.
+  structure of V that is not available.
+  (Heuristic only.)  Dimension count: the bad locus {Q : (TRANS) fails} is
+  cut out on the 22-parameter family of query sets by a rank drop of
+  expected codimension n − r − 88 + 1 (≥ 392 for the largest mask lane on
+  R1-sized data, ≥ 475 for the G-factor shape, ≥ 860 for D), so for
+  "generic" V it is empty.  This explains why every numerical check passes,
+  but it is not a proof: V is highly structured (eq-MLE tensors, Boolean-face
+  σ, the natural-basis tensor structure of rows ≥ 479 noted in Dprime R5),
+  and structure is exactly what can make a high-codimension locus non-empty.
+
+§2.3  Candidate witnesses and where each stops.
+  (W1) Boolean / base-field α.  Kills Λ_j; V loses rank; the minor vanishes.
+       Dead (Z8c structures B, L; D21.3).
+  (W2) α with the round rowspace in "staircase" form (DESIGN-T2b-2b §6 O1(a)).
+       Would need R_l's rowspace, pushed through π, to be supported on
+       natural coordinates ≥ 88 modulo explicit pieces, so that (E2) applies;
+       the round rows read every row with weight eqPrefix(α, r_<j) ≠ 0 and π
+       spreads them over all coordinates; σ and the claims are dense for every
+       α.  No candidate found.
+  (W3) Query-free Hankel / secant condition (Dprime §5 R2 made concrete by
+       (E3)).  Sufficient: every nonzero φ ∈ V has Hankel rank ≥ 89 on some
+       A×B ⊆ M.  Certifiable by ONE nonzero minor (hence a Schwartz–Zippel
+       bound with ONE query-free witness) only through the Kronecker
+       stacking argument: if the m generators φ_1..φ_m of V satisfy
+       rank[H_{φ_1}J | … | H_{φ_m}J] = 89·m for a column set J of size 89,
+       no nonzero combination has Hankel rank ≤ 88.  This needs
+       89·m ≤ (number of rows of H) ≤ ~510 on a 1,024-dimensional message
+       space, i.e. m ≤ 5.  The OT-open spaces have m ≈ 400–660 (mask lanes,
+       G) and Gb adds 104: impossible by a factor of ~100.  TP_D's residual
+       has 12 K₄-functionals on two 256-coordinate B-channels at 22 nodes:
+       12·23 = 276 > 128 rows of a channel Hankel: also impossible.  (W3)
+       works only for spaces of ≤ 4–5 functionals — which is what Route M
+       produces (§3.3).
+  (W4) Dual distance of the punctured code Enc(c(ker R_l)) (O1(b)).  The
+       dual of a subcode contains dual words of support ≤ 88 exactly when
+       (TRANS) fails; a dual-distance bound is a restatement, not a route.
+Conclusion of §2.3: for the premises as they stand (large V), I found no
+formulation that yields a failure-mass bound, and the structural reason is
+general — a dense, challenge-independent functional (σ, OOD) together with a
+challenge-dependent space of dimension ~400–660 cannot be separated from
+evaluations at adversarially placed points by any of the available tools
+(interpolation, high support, Hankel rank).
+
+§2.4  Numeric evidence (Z10, §A).  Z10 measures (TRANS) directly on an
+R1-sized model of one lane (1,024 rows/coefficients, QM31 α-row, the ten
+sumcheck rounds with the actual exponents and weights, three eq-MLE claims,
+the Libra extra functional, two QM31 OOD points, σ on 810 rows, the 2^20-point
+canonic coset with the four-child fibre structure).  Model check: for e = 21
+the round+claim rank is 392 = Z8c's rank R_{m9} 388 + 12 claim limbs − 8
+(claim_0, claim_2 round-determined), exactly.  Results are in §A.
+
+§2.5  Feasibility estimate (Route P).  For a proved bound on OT-open and
+B-open in their current form: low.  I would put it below 15% within a few
+weeks of focused work, because the three known tools provably cannot reach
+spaces of this size (§2.3 W3 is a hard counting limit, not a missing idea),
+and a new tool would have to exploit the specific tensor structure of the
+eq-MLE rows against the doubling-curve structure of the evaluations — a
+research problem of its own (Dprime R5 is the only lead, and it needs the
+transport-identity premise on rows ≥ 479 in Lean as well).  What Route P can
+realistically deliver is (a) a Schwartz–Zippel bound for the small,
+query-free pieces (Ga, G2, GoodWrap, PR6/PR7, C_ll) once exact witnesses are
+certified, and (b) an (E3)/Kronecker certificate for any premise that can be
+reduced to ≤ 4–5 functionals — which the current premises cannot.
