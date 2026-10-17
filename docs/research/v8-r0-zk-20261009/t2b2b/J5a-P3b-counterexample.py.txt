@@ -1,0 +1,62 @@
+# J5a P3b counterexample search (exact rank over GF(p)); run: python3 ce.py
+import random, sys
+from math import comb
+def rank(M,p):
+    M=[r[:] for r in M]; rk=0; cols=len(M[0])
+    for c in range(cols):
+        piv=next((i for i in range(rk,len(M)) if M[i][c]%p),None)
+        if piv is None: continue
+        M[rk],M[piv]=M[piv],M[rk]; inv=pow(M[rk][c],p-2,p)
+        M[rk]=[x*inv%p for x in M[rk]]
+        for i in range(len(M)):
+            if i!=rk and M[i][c]%p:
+                f=M[i][c]; M[i]=[(a-f*b)%p for a,b in zip(M[i],M[rk])]
+        rk+=1
+    return rk
+def gens(m,b,p,w=1):
+    # coefficients (index = degree) of Phi(L)=1+L^m, X*Phi(L), L=wX+b, length m+2
+    phi=[comb(m,d)*pow(w,d,p)*pow(b,m-d,p)%p for d in range(m+1)]+[0]
+    phi[0]=(phi[0]+1)%p
+    xphi=[0]+phi[:-1]
+    return [phi,xphi]
+# m=2 check over GF(5), beta=(0,1)
+if __name__=="__main__":
+    M=gens(2,0,5)+gens(2,1,5); print("m=2 GF5 beta=(0,1) rank",rank(M,5),"of 4")
+    p=101; m=26; n=14
+    random.seed(int(sys.argv[1]) if len(sys.argv)>1 else 1)
+    for trial in range(20):
+        bs=random.sample(range(p),n-1)
+        rest=[t for t in range(p) if t not in bs]
+        for t in rest:
+            M=[]
+            for b in bs+[t]: M+=gens(m,b,p)
+            r=rank(M,p)
+            if r<2*n:
+                print("COUNTEREXAMPLE p=101 m=26 n=14 w=1 beta=",bs+[t],"rank",r,"<",2*n); sys.exit()
+    print("none found")
+
+# --- chk.py: random consistency check of P1, P2, P3a, restricted P3b over GF(101), 300 trials, 0 mismatches
+import random
+from ce import rank, comb
+p=101
+def Lpow(e,b,w,N):
+    v=[comb(e,d)*pow(w,d,p)*pow(b,e-d,p)%p for d in range(e+1)]; return v+[0]*(N+1-len(v))
+bad=0
+for trial in range(300):
+    e=random.randint(0,26); n=random.randint(1,30); w=random.randint(1,p-1)
+    bs=random.sample(range(p),n)
+    r1=rank([Lpow(e,b,w,e) for b in bs],p); bad+= r1!=min(n,e+1)
+    M=[]
+    for b in bs: M+= [Lpow(e,b,w,e+1), [0]+Lpow(e,b,w,e)[:e+1]]
+    bad+= rank(M,p)!=min(2*n,e+2)
+    m=26
+    G=[]
+    for b in bs:
+        v=Lpow(m,b,w,m); v[0]=(v[0]+1)%p; G.append(v)
+    bad+= rank(G,p)!=min(n,m+1)
+    H=[]
+    for b in bs:
+        v=Lpow(m,b,w,m); v[0]=(v[0]+1)%p; H+=[v+[0],[0]+v]
+    top=[r[2:] for r in H]  # degrees 2..27
+    bad+= rank(top,p)!=min(2*n,26)
+print("mismatches",bad)

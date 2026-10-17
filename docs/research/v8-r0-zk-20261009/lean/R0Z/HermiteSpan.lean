@@ -67,6 +67,7 @@ set_option autoImplicit false
 noncomputable section
 namespace R0Z.HermiteSpan
 open Polynomial Finset Module
+open scoped Nat Matrix
 
 variable {K : Type*} [Field K]
 
@@ -195,7 +196,7 @@ lemma coeff_apolar (w : K) (N : ℕ) (s : ℕ → K) (i : ℕ) :
     (apolar w N s).coeff i =
       if i < N + 1 then (N.choose i : K) * s (N - i) * w ^ i else 0 := by
   unfold apolar
-  simp only [finset_sum_coeff, coeff_C_mul_X_pow]
+  simp only [finsetSum_coeff, coeff_C_mul_X_pow]
   rw [Finset.sum_ite_eq]
   simp only [Finset.mem_range]
 
@@ -228,11 +229,8 @@ lemma apolar_pow (w b : K) (N : ℕ) :
     apolar w N (fun k => b ^ k) = (C w * X + C b) ^ N := by
   unfold apolar
   rw [add_pow]
-  refine Finset.sum_congr rfl fun d hd => ?_
-  have hd' : d < N + 1 := Finset.mem_range.1 hd
-  rw [← Nat.choose_symm (by omega : d ≤ N)] at *
+  refine Finset.sum_congr rfl fun d _ => ?_
   simp only [map_mul, map_pow, map_natCast, mul_pow]
-  rw [Nat.choose_symm (by omega : d ≤ N)]
   ring
 
 /-- `L^e` is the transform (frame `e+1`) of the scaled derivative sequence. -/
@@ -249,14 +247,15 @@ lemma apolar_pow_pred (w b : K) (e : ℕ) (he : ((e + 1 : ℕ) : K) ≠ 0) :
   have hd' : d < e + 1 := Finset.mem_range.1 hd
   have h1 : ((e + 1).choose d : K) * ((e + 1 - d : ℕ) : K) =
       (e.choose d : K) * ((e + 1 : ℕ) : K) := by
-    exact_mod_cast (Nat.choose_mul_succ_eq e d).symm
+    rw [← Nat.cast_mul, ← Nat.cast_mul, (Nat.choose_mul_succ_eq e d).symm]
   have h2 : e + 1 - d - 1 = e - d := by omega
   have hrhs : C ((e.choose d : K) * b ^ (e - d) * w ^ d) * X ^ d =
-      (C w * X) ^ d * C b ^ (e - d) * ↑(e.choose d) := by
+      (C w * X) ^ d * C b ^ (e - d) * (e.choose d : K[X]) := by
     simp only [map_mul, map_pow, map_natCast, mul_pow]
     ring
   rw [← hrhs]
   congr 2
+  dsimp only
   rw [h2]
   calc ((e + 1).choose d : K) * (((e + 1 : ℕ) : K)⁻¹ * (((e + 1 - d : ℕ) : K) * b ^ (e - d))) *
         w ^ d
@@ -311,7 +310,7 @@ lemma exists_dual {ι : Type*} [Fintype ι] (N r : ℕ) (s : ι → ℕ → K)
           ∑ i ∈ range (k + 1), (q : K[X]).coeff i * s j i := by
         unfold pair
         refine (Finset.sum_subset (f := fun i => (q : K[X]).coeff i * s j i)
-          (Finset.range_subset.2 (by omega : k + 1 ≤ N + 1)) ?_).symm
+          (fun x hx => by simp only [Finset.mem_range] at hx ⊢; omega) ?_).symm
         intro i _ hi
         have hi' : k + 1 ≤ i := by simpa using hi
         show (q : K[X]).coeff i * s j i = 0
@@ -359,7 +358,7 @@ theorem top_cover {ι : Type*} [Fintype ι] {w : K} (hw : w ≠ 0) {N r : ℕ} (
       a / ((N.choose D : K) * w ^ D) * ((N.choose i : K) * w ^ i) * ∑ j, c j * s j (N - i)
       else 0 := by
     intro i hi
-    rw [hp, finset_sum_coeff]
+    rw [hp, finsetSum_coeff]
     simp only [coeff_smul, smul_eq_mul]
     rw [Finset.sum_congr rfl fun j _ => by rw [hgc j i (by omega), coeff_apolar]]
     split_ifs with h
@@ -396,6 +395,8 @@ theorem le_finrank_of_top_cover {ι : Type*} [Fintype ι] {w : K} (hw : w ≠ 0)
     (hsep : ∀ q : K[X], q.degree < r → (∀ j, pair N q (s j) = 0) → q = 0) :
     r ≤ finrank K (Submodule.span K (Set.range g)) := by
   have hcov := top_cover hw hr hch g s hg hsep
+  haveI : FiniteDimensional K (Submodule.span K (Set.range g)) :=
+    FiniteDimensional.span_of_finite K (Set.finite_range g)
   have hle : degreeLT K (N + 1) ≤ Submodule.span K (Set.range g) ⊔ degreeLT K (N + 1 - r) := by
     intro t ht
     obtain ⟨p, hp, hlt⟩ := coeff_cover (Submodule.span K (Set.range g)) (N + 1 - r) N hcov t
@@ -441,7 +442,7 @@ lemma eq_zero_of_double_roots {n : ℕ} (β : Fin n → K) (hβ : Function.Injec
   have hdvd : ∀ i, (X - C (β i)) ^ 2 ∣ q := fun i => by
     have h := (one_lt_rootMultiplicity_iff_isRoot hq).2 ⟨h0 i, h1 i⟩
     exact (le_rootMultiplicity_iff hq).1 (by omega)
-  have hcop : Pairwise (IsCoprime on fun i => (X - C (β i)) ^ 2) := fun i j hij =>
+  have hcop : Pairwise (Function.onFun IsCoprime fun i => (X - C (β i)) ^ 2) := fun i j hij =>
     (pairwise_coprime_X_sub_C hβ hij).pow
   have hprod := Fintype.prod_dvd_of_coprime hcop hdvd
   have hdeg' := natDegree_le_of_dvd hprod hq
