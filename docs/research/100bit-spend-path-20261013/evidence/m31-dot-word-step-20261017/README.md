@@ -1,0 +1,11 @@
+# Checked scalar-weight dot coordinate update
+
+`PoseidonM31DotSource` retains the exact missing scalar-weight dot declarations from candidate Funs SHA `f1e258056294e84777f56f2a1ea3572329eca52b4bb553bfc6c58027bef1604c`, lines 671--855. It imports existing field/reducer owners unchanged and compiles without declaration replacements. This is the source operation used to interpolate the seven even and seven odd internal-round constants.
+
+`PoseidonM31DotWordStep.source_success` derives a single actual U32-widening, U64 multiply, checked accumulation and array update. If the input coordinate has processed at most three previous canonical products, the updated coordinate is exactly old + word*scalar and is bounded by the next input count times (P-1)^2. The named `four_products_fit` theorem proves 4(P-1)^2 < 2^64. No wrapping arithmetic, unchecked accumulator or field-reduction premise is assumed for this step. Existing cast, checked scalar arithmetic, array read and update proofs are reused.
+
+The four-coordinate helper composition and its equality to the actual chunk-loop source body are frozen for the next focused checks. The complete chunk loop, chunk reduction/outer traversal, seven-weight interpolation, internal-pair/oracle composition and production correspondence remain open. This packet does not claim the whole dot operation succeeds or matches its field sum yet.
+
+The older R26 chunked-dot proof at commit `7377cdf6f` supplies a reusable iterator proof pattern, but proves a different QM31-by-QM31 sixteen-input operation and is not used as a theorem about the current seven-input QM31-by-M31 operation. Current four-coordinate decoder and exact U64 reducer results will be reused for this operation's field interpretation. Production Rust and runtime artifacts are unchanged by this packet; final 100-bit security/privacy remains open.
+
+Validation: 2 focused targets; 3 standard-only axiom reports; zero process swap. Maximum RSS 4,004,168 KiB. Receipts record exact source/object/import hashes, command, base revision, wall time, RSS and cgroup cap. Repeated and internal import pins were checked for coherence. No unchanged full replay was run. Assembly parent: `93d2c9a20dd092fc57bad34e46618f9e924d5c01`.
