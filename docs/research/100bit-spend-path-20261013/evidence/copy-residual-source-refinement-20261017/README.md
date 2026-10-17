@@ -1,0 +1,9 @@
+# Actual Copy residual source refinement
+
+`AspisR1.CopyResidualExact.copy_residual_exact` proves successful execution and output canonicality of the exact extracted Copy residual function. Its decoded output equals `R0P.copyResidual` for the same four two-cell input arrays, helper and chi. Every array read and all17 arithmetic operations are derived, using the existing checked QM31 addition/multiplication/subtraction lemmas. No intermediate read/arithmetic success or independent polynomial row is assumed.
+
+The source carrier/function declaration blocks are copied verbatim from sealed candidate Types60cf…/Funs04fc… into a fresh namespace, retaining the existing arithmetic helper owners. The source manifest records exact blocks and complete source pins. `modelRow` is computed directly from those same source arrays. Generic read lemmas inspect only literal indices0–3; no generated registry, dense field term or recurrence is unfolded. The small proof emitter names every operation/canonicality/value fact and normalizes the existing decode aliases explicitly.
+
+This closes the final rational-residual arithmetic component of Copy execution. Pattern generation, link weights, endpoint accumulation, the136-link fold and active selector source refinement remain separate obligations, as do the whole composition caller, full modified-source extraction/runtime correspondence, privacy and final100-bit accepted-spend security.
+
+Focused NUC source check exited0 in1.548seconds, peak RSS3,765,384KiB; dependent refinement exited0 in10.378seconds, peak RSS3,778,816KiB. Both had zero swap under MemoryHigh4GiB/MemoryMax6GiB/MemorySwapMax0. The one exported behavior theorem reports only propext/Classical.choice/Quot.sound. Exact command, revision, source/object/import pins and resource/axiom evidence are retained. Earlier alias-only failures were repaired before this successful run; no cap increase or unchanged broad replay was used.
