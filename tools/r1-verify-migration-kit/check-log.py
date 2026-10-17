@@ -13,7 +13,7 @@ faults = ["None", "Parse", "Public", "Begin", "Lookup(14, 0)", "Decode(14)"]
 for row in range(15, 25):
     faults += [f"Lookup({row}, 0)", f"Decode({row})", f"Boundary({row})",
                f"Lookup({row}, 1)", f"Semantic({row})"]
-pattern = re.compile(r"^VERIFY_REAL_S2_CASE fault=(.*?) observed=(true|false) "
+pattern = re.compile(r"(?:^|\.\.\. )VERIFY_REAL_S2_CASE fault=(.*?) observed=(true|false) "
     r"detail_phases=(true|false) old_new_equal=true error=(.*?) digest_calls=(\d+) "
     r"trace_values=(\d+) events=(\d+) phases=(\d+) full_outcome_sha256=\[([^\]]+)\]$", re.M)
 matches = pattern.findall(text)

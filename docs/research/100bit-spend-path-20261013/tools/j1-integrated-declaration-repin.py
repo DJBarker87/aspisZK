@@ -642,7 +642,8 @@ def main():
     for spec in builtin:
         if inputs.read(spec["archive"], optional=True) is not None: specs.append(spec)
     for path in args.additional_cone:
-        manifest = inputs.json(path); specs.extend(manifest.get("cones", [manifest]))
+        manifest = inputs.json(path)
+        specs.extend(manifest if isinstance(manifest, list) else manifest.get("cones", [manifest]))
     for cone_spec in specs:
         cone = archive_cone(cone_spec, inputs); additional.append(cone); followup_specs.append(cone_spec)
         layout = []; lib = None
