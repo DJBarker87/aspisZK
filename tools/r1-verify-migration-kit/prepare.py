@@ -72,7 +72,7 @@ def main():
     assert new_counts == [1, 1, 1, 0, 0, 0], new_counts
     assert finish_counts[:3] == [0, 0, 0]
     assert all_counts[:3] == [1, 1, 1]
-    assert all_counts[3:] in [[1, 1, 1], [1, 10, 10], [2, 20, 20]], all_counts
+    assert all_counts[3:] in [[1, 1, 1], [1, 10, 10], [2, 20, 20], [2, 2, 2]], all_counts
     old_instrumented = old_instrumented.replace(b"pub fn verify_observed<", b"fn migration_old_verify_observed<", 1)
     overlay, _ = instrument(new_source)
     assert overlay != new_source

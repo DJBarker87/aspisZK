@@ -482,6 +482,19 @@ def main():
     def correspond(row, historical, source_raw, start, end, signature, fresh=False):
         target = row["source_path"]; now = current.get(target)
         result = dict(row, retained_signature=signature)
+        # An opaque API never supplied an implementation theorem. Re-pin its
+        # exact Rust header and owner context, retaining both body hashes as
+        # unproved provenance; do not require or claim unchanged body bytes.
+        if (row.get("emission_kind") == "opaque-boundary-signature-only"
+                and historical is not None and b"fn " in historical):
+            original_boundary = historical
+            opening = next((t[1] for t in audit.tokens(historical.decode()) if t[0] == "{"), None)
+            if opening is not None:
+                historical = historical[:opening].rstrip()
+                end = start + len(historical) if start is not None else end
+                result.update(source_identity_scope="Opaque Rust signature only; no implementation was emitted or proved",
+                    historical_unproved_declaration_sha256=sha(original_boundary),
+                    opaque_rust_header_sha256=sha(historical))
         if now is None or historical is None or source_raw is None or start is None:
             result.update(classification="unresolved", reason="Missing current source, historical declaration bytes, or enclosing-source provenance")
         else:
@@ -501,6 +514,14 @@ def main():
                     historical_enclosing_context_sha256=old_context["sha256"],
                     current_start_byte=at, current_end_byte_exclusive=at+len(historical), current_file_sha256=sha(now),
                     identity_basis="Exact source body plus enclosing impl/owner-type tokens; retained generated/LLBC signature separately hashed. This is not a Rust name-resolution/refinement proof.")
+                if result.get("source_identity_scope"):
+                    result["identity_basis"] = "Exact unchanged opaque Rust header and enclosing owner context, plus retained LLBC/API signature. No unchanged implementation or source-body theorem is claimed."
+                    try:
+                        actual_declaration = audit.fragment(now, historical.decode())[0].encode()
+                        result["current_unproved_declaration_sha256"] = sha(actual_declaration)
+                        result["unproved_source_body_changed"] = sha(actual_declaration) != result["historical_unproved_declaration_sha256"]
+                    except ValueError:
+                        result["current_unproved_declaration_sha256"] = None
                 if fresh:
                     text = "\n".join(q.get("signature", q["lean_name"]) for q in signature.get("generated", [])) or json.dumps(signature.get("llbc_signature", {}), sort_keys=True)
                     result["statement_diff"] = statement_diff("", text)

@@ -23,6 +23,7 @@ TRACE = "abd4c40a4"
 ROUND = "8c348ebbe"
 HELPER = "2a5b09f40"
 FOLD = "d0dbb2181"
+STEP = "88b9bd4f1"
 WIRE = "crates/aspis-r1-cost-probe/src/"
 sha = lambda b: hashlib.sha256(b).hexdigest()
 
@@ -130,11 +131,27 @@ def main():
     assert restored.count(boundary_call) == restored.count(value_call) == 20
     assert restored.replace(boundary_call, boundary_statement).replace(value_call, value_statement) == helper_source
     assert blob(FOLD, WIRE + "transcript.rs") == after
+    step_source = blob(STEP, WIRE + "r1_semantic.rs")
+    begin = fold_source.index(b"        let row = 15 + round as u8;\n")
+    end = fold_source.index(b"        running = value;\n", begin) + len(b"        running = value;\n")
+    iteration = fold_source[begin:end]
+    assert fold_source.count(iteration) == 20
+    step_headers = [
+        b'#[cfg(not(feature = "prover"))]\nfn semantic_round<H: Digest32>(prefix: &Prefix<\'_>, mut transcript: SemanticTranscript<H>, mut alpha: [QM31; 10], mut running: QM31, round: usize) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {\n',
+        b'#[cfg(feature = "prover")]\nfn semantic_round<H: Digest32>(prefix: &Prefix<\'_>, mut transcript: SemanticTranscript<H>, mut alpha: [QM31; 10], mut running: QM31, round: usize, mut round_checks: [[QM31; 3]; 10]) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>, [[QM31; 3]; 10]), Error> {\n']
+    step_helpers = b"".join(head + iteration + ret for head, ret in zip(step_headers, helper_returns))
+    step_calls = [b"        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n",
+        b"        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;\n"]
+    assert step_source.count(step_helpers) == 1
+    restored = step_source.replace(step_helpers, b"", 1)
+    assert all(restored.count(call) == 10 for call in step_calls)
+    assert restored.replace(step_calls[0], iteration).replace(step_calls[1], iteration) == fold_source
+    assert blob(STEP, WIRE + "transcript.rs") == after
     lead_retained = []
     for path in [WIRE + "r1_wire.rs",
                  "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
                  "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs"]:
-        assert blob(FOLD, path) == blob(LEAD, path)
+        assert blob(STEP, path) == blob(LEAD, path)
         lead_retained.append({"path": path, "sha256": sha(blob(LEAD, path))})
     assert blob(TRACE, WIRE + "r1_semantic.rs") == blob(PAIR, WIRE + "r1_semantic.rs")
     own = resource.getrusage(resource.RUSAGE_SELF)
@@ -145,7 +162,7 @@ def main():
         "wall_seconds": time.monotonic() - start,
         "peak_rss_bytes": max(own.ru_maxrss, children.ru_maxrss) * rss_unit,
         "swap_events": own.ru_nswap + children.ru_nswap,
-        "source_revision": git("rev-parse", FOLD).decode().strip(),
+        "source_revision": git("rev-parse", STEP).decode().strip(),
         "lead_revision": LEAD, "exact_1d_and_1e": decisions,
         "decision_1f": {"kind": "compile-time bound 22 <= 32",
             "before_sha256": sha(before), "after_sha256": sha(after),
@@ -171,12 +188,18 @@ def main():
             "boundary_arguments": ["&polynomial"],
             "value_arguments": ["&polynomial", "&alpha", "round"],
             "arithmetic_changed": False, "introduced_fallible_calls": 0},
+        "decision_1f_single_round_helper": {"kind": "unchanged iteration sequence in private owned-argument helper",
+            "before_sha256": sha(fold_source), "after_sha256": sha(step_source),
+            "iteration_body_sha256": sha(iteration), "both_cfg_bodies_byte_identical": True,
+            "exact_reverse_to_predecessor": True, "ordered_rounds_each_cfg": list(range(10)),
+            "carried_existing_values": ["running", "alpha", "transcript", "prover:round_checks"],
+            "arithmetic_changed": False, "new_failure_variants": False},
         "lead_source_retained": lead_retained,
         "runtime_or_formal_result": False, "print_axioms": "N/A (source audit)",
         "live_worktree_mutation": False, "SBF_build": False}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2) + "\n")
-    print("PASS: exact 1d/1e; fixed22/fixed10; owned round/fold helpers; all reverse audits; lead source retained")
+    print("PASS: exact 1d/1e; fixed22/fixed10; owned round/fold/step helpers; all reverse audits; lead source retained")
 
 
 if __name__ == "__main__":
