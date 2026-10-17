@@ -1,0 +1,142 @@
+{
+  "adoption_gate": "No patch is proposed for direct adoption here. First obtain valid LLBC and successful Aeneas helper emission under actual source-equivalent boundaries, pin body/signature/source mapping, and coordinate A/root before judging standing1f coverage. New native gates belong to A if a source change is adopted.",
+  "classification": "READ_ONLY_SOURCE_SPAN_PROPOSAL_NOT_ADOPTED_NOT_1F_QUALIFIED",
+  "compiler_frontier": [
+    {
+      "archive": "evidence/c2-owned-host-20261017/checkpoint.tar.gz",
+      "case": "exact Backend::c2",
+      "compiler": "symbolic/SymbolicToPureAbs.ml:1313",
+      "interpretation": "whole function end-abstraction failure; not proof that HashFn alone is the cause",
+      "lib_span": "220:4-224:5",
+      "log_member": "actual-caller/runs/aeneas-a/stdout.log"
+    },
+    {
+      "archive": "evidence/c2-owned-host-20261017/checkpoint.tar.gz",
+      "case": "exact Commitment::build",
+      "compiler": "interp/InterpJoin.ml:2209",
+      "lib_span": "308:32-313:43",
+      "log_member": "actual-build/runs/aeneas-a/stdout.log",
+      "source_span": "build_indices_match"
+    },
+    {
+      "archive": "evidence/c2-followup-diagnostics-20261017/followup-diagnostics.tar.gz",
+      "case": "copy helper relocation, still whole Backend root",
+      "compiler": "symbolic/SymbolicToPureAbs.ml:1313",
+      "interpretation": "does not test helper-only root acceptance; zero accepted helper cone",
+      "lib_span": "221:4-225:5",
+      "log_member": "copy-helper/runs/aeneas-a/stdout.log"
+    },
+    {
+      "archive": "evidence/c2-followup-diagnostics-20261017/followup-diagnostics.tar.gz",
+      "case": "owned lane-allocation branches diagnostic",
+      "compiler": "interp/InterpJoin.ml:1680",
+      "interpretation": "reaches later packing-width branch; no whole-function or prefix acceptance inferred",
+      "lib_span": "353:32-353:59",
+      "log_member": "owned-lanes/runs/aeneas-a/stdout.log"
+    },
+    {
+      "archive": "evidence/c2-followup-diagnostics-20261017/followup-diagnostics.tar.gz",
+      "case": "owned lanes plus opaque packing helper diagnostic",
+      "compiler": "interp/InterpAbs.ml:191",
+      "interpretation": "still rejects whole function; not an accepted constructor prefix",
+      "lib_span": "1:0-355:5",
+      "log_member": "owned-prefix/runs/aeneas-a/stdout.log"
+    }
+  ],
+  "next_diagnostics": [
+    {
+      "derived_fact_needed": "Actual successful helper output contains from_qm31(H1[r]) and from_qm31(G[r]) in lanes26/27, with other lanes and error mutation prefix preserved.",
+      "priority": 1,
+      "remaining_caller": "Actual Backend::c2 still must call this emitted helper and retain salt take/constructor map_err/root/c2 store order; helper-only acceptance does not prove caller execution.",
+      "source_span": "backend_copy_loop",
+      "target": "copy_c2_columns helper alone",
+      "transformation": "Move exact loop into private helper taking only &mut Vec<Message<E>> and owned [&[K;1024];2]; replace only self.messages with messages. Make the diagnostic entry call that helper, not Backend::c2. No unroll unless separately needed and qualified."
+    },
+    {
+      "derived_fact_needed": "For actual two-lane iteration and real helper success, returned Word::Secure vectors are the two actual domain.encode returns for projected actual variant.coefficients; saved rows are the input rows. Actual caller must derive lanes=[26,27] from its match/allocation/copy, rather than assume final custody.",
+      "priority": 2,
+      "remaining_caller": "Borrowed-index match, whole-build carrier/end-abstraction, packing/tree and Backend caller refinement remain separate until accepted caller emission. Existing owned-lanes diagnostic is evidence of compiler frontier only.",
+      "source_span": "build_encode_and_retain_prefix",
+      "target": "encode_and_retain_lanes helper alone",
+      "transformation": "Move exact words/saved allocations and loop into private helper taking &EncodingDomain, &[Message<E>], Variant, &[usize], returning owned (words,saved). Caller retains initial guards, actual lanes allocation/copy, then invokes helper, then original packing/tree block. No synthetic encoder result or replacement of variant.coefficients body."
+    }
+  ],
+  "preservation_requirements": [
+    "Keep all message/salt length checks before allocation.",
+    "Keep lanes allocation/copy before words reserve, saved reserve, and lane loop.",
+    "Keep each WrongField check before that lane coefficients/encode, words.push before saved.push, and H1 before G.",
+    "Keep allocation/encode errors, Vec bounds behavior, and destructor/private-salt order; audit helper return/moves explicitly.",
+    "Keep Backend copy mutations before c2_salts.take; preserve take on constructor error, map_err Public, and root/store only on success.",
+    "Do not change packing, private salts, hash calls, tree construction, transcript or checkpoint."
+  ],
+  "proof_scope": "The fresh checked primitive closes only per-element Wide construction. Neither this plan nor conditional Core proves actual Backend/build ownership, full recorded experiment, literalMessage custody, packing/salt-path or checkpoint.",
+  "revision": "5a28a4b4896aba8b07bff11c47d4683dea3c80cf",
+  "spans": [
+    {
+      "end_byte_exclusive": 2071,
+      "end_line_inclusive": 16,
+      "file_sha256": "dbbeeca9b081b5a9613fea3145698ade78b41bc00f53b9fbf45c30b9243cda78",
+      "name": "backend_copy_loop",
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "sha256": "b3fd1035fd43df15a7c99c3fe980f17bb5b46f927d031ce15255337021ace2b5",
+      "source": "        for (i,c) in columns.into_iter().enumerate(){self.messages[26+i]=c.map(E::from_qm31);}",
+      "start_byte": 1977,
+      "start_line": 16
+    },
+    {
+      "end_byte_exclusive": 2399,
+      "end_line_inclusive": 18,
+      "file_sha256": "dbbeeca9b081b5a9613fea3145698ade78b41bc00f53b9fbf45c30b9243cda78",
+      "name": "backend_salt_take_and_store",
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "sha256": "e78077307701e7f718c83f0f7c747c8943aeb9f05b4784ae64d4c19c7fa5dc00",
+      "source": "        let c=if let Some(salts)=self.c2_salts.take(){Commitment::new_salted(self.hash,&self.domain,CommitmentTime::C2,&self.messages,self.variant,salts)}else{Commitment::new(self.hash,&self.domain,CommitmentTime::C2,&self.messages,self.variant)}.map_err(|_|SError::Public)?;\n        let root=c.root();self.c2=Some(c);Ok(root)\n",
+      "start_byte": 2072,
+      "start_line": 17
+    },
+    {
+      "end_byte_exclusive": 5963,
+      "end_line_inclusive": 165,
+      "file_sha256": "551c4f8a0df50e0b53ab7e79d4e71b8c6afe417043c55caa1c377da3388f890c",
+      "name": "build_indices_match",
+      "path": "crates/aspis-r1-cost-probe/src/host_commitment.rs",
+      "sha256": "b837276c3078432c181ead6adafba869e511d126a8c61b1c07c71d3059dfe4bb",
+      "source": "        let indices: &[usize] = match time {\n            CommitmentTime::C1 => &[\n                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,\n                23, 24, 25, 28,\n            ],\n            CommitmentTime::C2 => &[26, 27],\n        };\n",
+      "start_byte": 5680,
+      "start_line": 159
+    },
+    {
+      "end_byte_exclusive": 6054,
+      "end_line_inclusive": 167,
+      "file_sha256": "551c4f8a0df50e0b53ab7e79d4e71b8c6afe417043c55caa1c377da3388f890c",
+      "name": "build_owned_lanes",
+      "path": "crates/aspis-r1-cost-probe/src/host_commitment.rs",
+      "sha256": "d7eda0cf1b5c1713251d85e14e1b8395983db2512424a467857953a8fd1c8f75",
+      "source": "        let mut lanes = filled(indices.len(), 0)?;\n        lanes.copy_from_slice(indices);\n",
+      "start_byte": 5963,
+      "start_line": 166
+    },
+    {
+      "end_byte_exclusive": 7110,
+      "end_line_inclusive": 193,
+      "file_sha256": "551c4f8a0df50e0b53ab7e79d4e71b8c6afe417043c55caa1c377da3388f890c",
+      "name": "build_encode_and_retain_prefix",
+      "path": "crates/aspis-r1-cost-probe/src/host_commitment.rs",
+      "sha256": "71dd73a722e833dae047d10870a94f03573d63a1b85608bb55b8c4e18427ecdd",
+      "source": "        let mut words = Vec::new();\n        words\n            .try_reserve_exact(lanes.len())\n            .map_err(|_| Error::Allocation)?;\n        let mut saved = Vec::new();\n        saved\n            .try_reserve_exact(lanes.len())\n            .map_err(|_| Error::Allocation)?;\n        for &l in &lanes {\n            if messages[l].iter().any(|x| {\n                x.to_limbs()[if l < 26 { 1 } else { 4 }..]\n                    .iter()\n                    .any(|&d| d != 0)\n            }) {\n                return Err(Error::WrongField);\n            }\n            // API inputs and retained matching data are semantic rows; only\n            // Enc consumes coefficients. W_l = Enc(t_l \u2218 \u03c0\u207b\u00b9), D13.\n            let coefficients = variant.coefficients(&messages[l]);\n            words.push(if l < 26 {\n                Word::Base(domain.encode(&coefficients.map(|x| M31(x.to_limbs()[0])))?)\n            } else {\n                Word::Secure(domain.encode(&coefficients.map(|x| x.c0()))?)\n            });\n            saved.push(messages[l]);\n        }\n",
+      "start_byte": 6054,
+      "start_line": 168
+    },
+    {
+      "end_byte_exclusive": 8213,
+      "end_line_inclusive": 221,
+      "file_sha256": "551c4f8a0df50e0b53ab7e79d4e71b8c6afe417043c55caa1c377da3388f890c",
+      "name": "build_pack_and_finish",
+      "path": "crates/aspis-r1-cost-probe/src/host_commitment.rs",
+      "sha256": "99fdc9f25bc4faac68c348e413737e5006f1cac7e1cbb6b509d5284ebc385065",
+      "source": "        let mut leaves = filled(FIBRE_COUNT, [0; 32])?;\n        for (u, digest) in leaves.iter_mut().enumerate() {\n            let mut bytes = [0u8; 480];\n            let mut at = 0;\n            for s in 0..4 {\n                for (j, &l) in lanes.iter().enumerate() {\n                    let b = words[j].value(4 * u + s).to_le_bytes();\n                    let width = if l < 26 { 4 } else { 16 };\n                    bytes[at..at + width].copy_from_slice(&b[..width]);\n                    at += width;\n                }\n            }\n            let tag = if time == CommitmentTime::C1 { merkle::C1_TAG } else { merkle::C2_TAG };\n            *digest = if let Some(salts) = private_salts.as_ref() {\n                aspis_core::state_only_private_merkle::private_leaf_hash(hash, tag, &bytes[..at], salts.get(u))\n            } else {\n                merkle::leaf(hash, tag, &bytes[..at])\n            };\n        }\n        Ok(Self {\n            time,\n            lanes,\n            messages: saved,\n            words,\n            tree: Tree::new(hash, leaves)?,\n            private_salts,\n        })\n    }\n",
+      "start_byte": 7110,
+      "start_line": 194
+    }
+  ]
+}
