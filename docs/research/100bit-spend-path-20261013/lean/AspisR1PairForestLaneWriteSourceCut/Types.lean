@@ -30,10 +30,19 @@ def M31 := Std.U32
 /-- [pair_forest_lane_write_source_cut::PoolV1TransitionKind]
     Source: 'lib.rs', lines 25:0-28:1
     Visibility: public -/
-@[discriminant u8 [1,2]]
 inductive PoolV1TransitionKind where
 | PrivateTransfer : PoolV1TransitionKind
 | Withdrawal : PoolV1TransitionKind
+
+-- Naming-only expansion of the pinned two-code discriminant attribute.
+def PoolV1TransitionKind.read_discriminant (x : PoolV1TransitionKind) : U8 :=
+  match x with
+  | .PrivateTransfer => 1#u8
+  | .Withdrawal => 2#u8
+
+instance _root_.AspisR1PairForestLaneWriteSourceCut.PoolV1TransitionKind.instDiscriminant :
+    Aeneas.Std.Discriminant PoolV1TransitionKind U8 where
+  read_discriminant := PoolV1TransitionKind.read_discriminant
 
 /-- [pair_forest_lane_write_source_cut::IncrementalMerkleTreeV1]
     Source: 'lib.rs', lines 33:0-37:1
