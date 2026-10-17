@@ -4445,3 +4445,54 @@ mask-design change (extra mask randomness on D/G sized to the 22 openings) is
 a protocol change, not a proof task; it is listed, not decided.
 
 Verdict unchanged. Host counter: next 3426.
+
+### Lead acceptance of the (ii′) design as a proposal (2026-10-17); D24; R1 retargeting
+
+The privacy agents issued on 2026-10-17 work for R1. R1 is the deployment
+target, and R0Z is only the name of the track. Payload-generic work (T2a,
+ZF-A, J1, J3, J5a) carries over to R1. Rank facts and J2/J4 do not carry over
+until Z9 restates them for the R1 payload. Five Opus agents are running, on
+branches codex/r0-{z9-r1-payload, k4-silent, hermite-span,
+transversality-study, clause-iiprime}-20261017. Attempt ranges: J1/J3
+3426–3459, J5a 3460–3489, (ii′) 3490–3499.
+
+The (ii′) design (`t2b2b/DESIGN-ii-prime.txt`, worker 596b371d0, fast-forward
+from 524e1debb) is accepted as the working design. No Lean was run and no
+attempts were used.
+
+**D24.1 (ii′) as written is false.** `MaskImageOn` clause (ii′) (Shift.lean:190)
+quantifies over every `w, w'` with `h.public w = x.1`, and `HonestProver` has
+no validity field. The initial-sum functional and `.inactiveSum` vanish on
+range A but separate a satisfying trace from a non-satisfying one with the
+same public value (counterexample in design §1.4). The lead checked
+Shift.lean:180–191 and Z4Maps.lean:62. The fix (§1.5) needs no edit to any
+proved module. Define `HonestValid` (laneOf plus the two helper sums) and
+apply `MaskImageOn` to the restricted prover `h.restrict V`, where V is
+validity on P. The T2a/ZF-A theorems then apply verbatim. Restricting to valid
+witnesses is the standard ZK quantifier (x, w) ∈ R. Builder completeness
+(honest builds satisfy HonestValid) is a new obligation, J0b.
+
+**D24.2 `c1_surjectivity` is insufficient.** It omits `.extraClaim c` for
+c < 16 and the H1 lane. It is replaced by the premises `C1Lift` and `H1Lift`.
+The opened-symbol part (88 limbs per lane) is STRUCTURAL under D13Order with
+≤ 22 queries (Vandermonde on the quarter polynomials). The remaining 24 limbs
+per lane are carried as C1T-open and H1T-open. Both join the D23
+transversality family, so the privacy claim stays conditional on that family.
+H1Lift has never been measured on its own, so the J11 numeric check comes first.
+
+**D24.3 The (B) premise.** The design proposes `BReach := B₀ ≤ bat(ker own ⊓ ker R)`
+(which implies BCond) as the single (B) premise for both clauses. This is
+deferred until Z9 restates B₀ for the R1 opening layer (no chord quotient,
+two fold layers, 64 final values, 88 extra folded-word openings). Z9's first
+report already says the R0 Ψ_lo/etaRel structure does not transfer.
+
+**D24.4 R1 transport.** Under S2's π_R1 (D18, identity digit maps), the
+eligible semantic coefficients are a top block (quarter index 208–255), not a
+prefix. The opened part of C1Lift is therefore not structural on R1 as built.
+Two ways out: Variant D (the D13 transport), or a digit-map search (J11b).
+Both are protocol choices. They go to the user together with D23.5, once the
+transversality study lands.
+
+**D24.5 Job order.** J0/J0b, J4′, J13–J16 and J11 are listed, not issued. They
+wait for Z9 and the D23.5/D24.4 decisions. Verdict unchanged. Host counter:
+next 3426 (ranges above).
