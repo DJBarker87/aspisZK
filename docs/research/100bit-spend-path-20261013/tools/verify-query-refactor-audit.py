@@ -8,7 +8,9 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import resource
 import subprocess
+import sys
 import tempfile
 import time
 
@@ -81,8 +83,14 @@ def main():
         assert blob(TRACE, path) == blob(LEAD, path)
         lead_retained.append({"path": path, "sha256": sha(blob(LEAD, path))})
     assert blob(TRACE, WIRE + "r1_semantic.rs") == blob(PAIR, WIRE + "r1_semantic.rs")
+    own = resource.getrusage(resource.RUSAGE_SELF)
+    children = resource.getrusage(resource.RUSAGE_CHILDREN)
+    rss_unit = 1 if sys.platform == "darwin" else 1024
     report = {"target": str(Path(__file__).relative_to(ROOT)), "exit_status": 0,
+        "command_argv": [sys.executable, *sys.argv],
         "wall_seconds": time.monotonic() - start,
+        "peak_rss_bytes": max(own.ru_maxrss, children.ru_maxrss) * rss_unit,
+        "swap_events": own.ru_nswap + children.ru_nswap,
         "source_revision": git("rev-parse", TRACE).decode().strip(),
         "lead_revision": LEAD, "exact_1d_and_1e": decisions,
         "decision_1f": {"kind": "compile-time bound 22 <= 32",
