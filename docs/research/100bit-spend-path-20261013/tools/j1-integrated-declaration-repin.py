@@ -332,6 +332,39 @@ def bound_statement_audits(inputs, specs, cones):
                     chunks[name] = change["canonical_statement"]
                     checks.append({"declaration": name, "explicit_normalization_replayed": True,
                         "statement_diff": statement_diff(change["raw_statement"], change["canonical_statement"]), "rule": change["rule"]})
+                # The compact round binder records the same canonical overlay
+                # as explicit diffs rather than duplicate full declarations.
+                # Replay only these five named, syntax-only transformations.
+                for name, change in inventory.get("explicit_statement_normalizations", {}).items():
+                    before_body = chunks[name]; body = before_body
+                    if name == "aspis_core.Digest32":
+                        old = "Self → (Slice (Slice Std.U8))"
+                        assert body.count(old) == 1
+                        body = body.replace(old, "Self → Slice (Slice Std.U8)")
+                    elif name == "r1_wire.Error":
+                        assert body.startswith("@[discriminant isize]\n")
+                        body = body.removeprefix("@[discriminant isize]\n")
+                    elif name in {"sampler.qm31_digits_loop0.body", "sampler.qm31_div_pass_loop.body",
+                                  "sampler.qm31_digits_loop1.body"}:
+                        local = "digits1" if name == "sampler.qm31_digits_loop1.body" else "rank1"
+                        pattern = re.compile(r"\b" + local + r"\b")
+                        assert len(pattern.findall(body)) == 2
+                        body = pattern.sub("a", body)
+                    else:
+                        raise ValueError("Unrecognized compact carrier normalization: " + name)
+                    diff = "".join(difflib.unified_diff(before_body.splitlines(True), body.splitlines(True),
+                        fromfile="raw-current", tofile="accepted-canonical"))
+                    assert diff == change["statement_diff"], (path, name, "explicit normalization diff")
+                    common = record["common_carrier_audit"][file]
+                    assert common["prior_source_sha256"] in assets
+                    prior_chunks = lean_chunks(assets[common["prior_source_sha256"]][1])
+                    assert lean_tokens(body) == lean_tokens(prior_chunks[name])
+                    if name == "r1_wire.Error":
+                        assert "r1_wire.Error.read_discriminant" in prior_chunks
+                    chunks[name] = body
+                    checks.append({"declaration": name, "explicit_normalization_replayed": True,
+                        "statement_diff": diff, "rule": change["rule"],
+                        "accepted_prior_source_sha256": common["prior_source_sha256"]})
                 for item in inventory["common_unchanged"]:
                     digest = sha(canonical(lean_tokens(chunks[item["declaration"]])))
                     assert digest == item["old_token_sha256"] == item["current_token_sha256"], (path, file, item["declaration"])
