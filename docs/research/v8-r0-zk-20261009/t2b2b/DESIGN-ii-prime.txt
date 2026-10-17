@@ -529,3 +529,95 @@ value, (★) ∈ range A.
   event "Z_j lies in a proper subfield of K₄" has mass about P²·μ_Q ≈ 2^-62 per
   point, far above the 2^-100 line.  A proof of C1Rest must avoid that event
   (for instance by using both ood points and their y-parts jointly).
+
+§3  R1 applicability
+--------------------
+Source read (read-only) at origin/codex/100bit-spend-path-20261013:
+crates/aspis-r1-cost-probe/src/{prover.rs, transport.rs, verifier.rs,
+weights.rs, transcript.rs}.  R1 = Variant::S2 (folds() = 2, final_len() =
+1024 >> 4 = 64).
+
+§3.1  What R1's C1 and opening layer are
+  • C1 commits 27 messages: lanes 0..25 (16 semantic + 10 mask-only, F-valued)
+    and D (lane 28, K₄) — prover.rs Backend::c1; C2 commits H1 (26) and G (27).
+    So D is a C1 lane in R1 as in R0 Lean (lane 28 initial); nothing in (ii′)
+    depends on which commitment holds a lane: the per-lane own cells are the
+    same kinds.
+  • Per-lane disclosures (verifier.rs prepared_claim): the three point claims,
+    the extra (Libra) claim, the OOD value at z₀ (sem.before_z1, inside the
+    semantic bytes) and at z₁ (y1), and per query the four children of the
+    initial fibre for all 29 lanes (prover.rs: opening.values[s][l]).
+    22 queries (transcript.rs queries → [u32; 22]).  Own limb counts per lane
+    are therefore unchanged: 112 (F-lane) and 376 (K₄-lane).
+  • Batched block (changed): no chord quotient.  q := Σ_l γ^l·coeffs_l (all 29
+    lanes, WideExact γ), the scalar inactive := ⟨q, w.raw(0)⟩ (the inactive
+    indicator in coefficient space — the R0 .inactiveSum form applied to q),
+    round0 (7 values) at the materialised weights, fold α₀, a committed folded
+    word (salted Merkle root, a handle, not a field cell) with round1 (7), fold
+    α₁, final 64 values; per query additionally the four folded-word values at
+    fibre u/4.  So bat_R1 = (inactive, round0, round1, final 64, 22×4 folded
+    openings) and the verifier's linear checks are: the claim pairing (round0
+    boundary vs κ-batched claims, extra, ood and inactive — the S2 analogue),
+    round evaluation at each layer (2), and fold consistency at the 22 queried
+    fibres at each layer (initial children → folded value; folded fibre →
+    final).  B₀_R1 := their common zero set.  Exact relation list and ranks are
+    Z9's job (LOG D20′/D23 already list Z9).
+  • Transport: S2 uses π_R1 (D18; transport.rs row(j): coefficient base-4 digit
+    d goes to row digit TAU[d], TAU = [3,4,2,0,1], identity digit maps); variant
+    D keeps D13's COEFFICIENT_TO_ROW with the same two folds.
+
+§3.2  Effect on each step of §2
+  §1.4–1.5 (validity, ι, inactive):  unchanged.  The R1 terminal is the same
+    semantic terminal (D18.3: semantic layer unaffected); the R1 prover even
+    checks h1_total_balanced (prover.rs), i.e. HonestValid's clause 2.
+  §2.0 lane separability:  unchanged (own cells read one lane).
+  §2.3 R1–R7:  unchanged (round and terminal structure identical).
+  §2.3 R8 and §2.4 BReach:  same shape, new objects: bat_L_mem_B0R1 (the R1
+    relations are identities of L τ for every trace, as in R0, provided the R1
+    Lean model states them for arbitrary words), and BReach_R1 := B₀_R1 ≤
+    bat_R1(ker own ⊓ ker R).  The second-layer folded openings enlarge bat by
+    88 K-values and add 22 fold relations; BReach_R1 is a new premise to be
+    measured (Z9), not inherited.
+  §2.2 opened_prefix:  DOES NOT TRANSFER to S2.  Under π_R1 a coefficient
+    j = 4i + s sits at row cd₃ + 4cd₄ + 16cd₂ + 64s + 256cd₁ (cd_k = base-4 digit
+    k of j).  Eligibility below row 912 (r % 16 ≥ 13) forces cd₄ = 3 and
+    cd₃ ≥ 1, i.e. quarter index i ∈ [208, 256): in classes s = 0 and 1 the
+    eligible semantic coefficients are exactly that top block of 48 (all such
+    rows are < 912), in classes 2 and 3 a subset of it plus a sparse set of
+    i ≡ 3 (mod 4) from the forest/pair region.  No class has a degree prefix.
+    On the top block, N_i = N_192·N_{i−192} (disjoint bits), so the opened
+    system is N_192(X_u)·g(X_u) with g ∈ span{N_16..N_63}; surjectivity at 22
+    arbitrary nodes needs N_192(X_u) ≠ 0 and a non-Vandermonde rank condition.
+    Neither is structural for every query set.  So on S2 the opened part of
+    C1Lift joins C1T-open.  Z5/D18 measured rank 112 per column for π_R1 on the
+    random set and {0,…,21} only.
+    H1Lift needs copy-inactive rows (padding is zero on active rows); under
+    π_R1 their coefficient positions are not characterised in the source I
+    read; H1Lift on R1 is OPEN and unmeasured as a separate statement.
+  Step N glue, Step M glue, composition:  unchanged.
+
+§3.3  Does the route survive?
+  Yes in shape: the reduction (noise lift → residual → mask lift) uses only
+  lane separability, the verifier's linear checks being identities of L, the
+  completeness/validity restriction and the three lift premises, all of which
+  have R1 counterparts.  What changes: (a) B₀ and BReach are re-stated for the
+  two-layer batched block (new measurement); (b) the structural part of C1Lift
+  is lost under S2's identity-digit-map π_R1.
+  Two ways to restore (b), for the lead (a protocol choice, not a proof task):
+   (i) use variant D (D13 transport with two folds) — opened_prefix then
+       applies verbatim; D18 records its cost (the transport component of the
+       verifier's weight evaluation that π_R1 removed);
+   (ii) extend D18's digit-permutation family with non-identity digit maps σ_d
+       (still product form, so D18.1's O(1) dual folds survive) chosen so that
+       quarter indices i < 22 (and i = 22 in class 0) land on rows eligible in
+       all 16 columns and copy-inactive: rows are eligible below 912 when
+       rd₁ = 3 and rd₀ ≥ 1, so σ for the coefficient digits feeding row digits
+       0 and 1 must send the small digit values of cd₃ (0, 1) into {1,2,3}
+       and of cd₄ (0) to 3, with row < 912 kept by the digit feeding rd₄.
+       Whether such a σ also makes those rows copy-inactive (needed for H1 and
+       for D13Order-style balancing) is a finite check over 4!⁵·120 maps against
+       the copy-active registry — a Z5-style probe (J11b), not a proof.  If one
+       exists, a D13Order analogue (prefix rows eligible + inactive, π 1023 =
+       1023) holds for it and opened_prefix transfers with the same proof.
+  With neither, R1's (ii′) is conditional on C1T-open covering the full 112
+  limbs per column, numerically supported only by Z5's two query sets.
