@@ -53,4 +53,162 @@ Sections
 
 §1  Definitions in Lean and the exact (ii′) statement
 -----------------------------------------------------
-(sections below are filled in incrementally)
+§1.1  Objects (each signature checked against the source at base 524e1debb)
+
+  Challenges K            HonestView.lean:32   {sem : Fin 25 → K; circle : Fin 2 →
+                          Point K; opening : Fin 4 → K; queries : Finset (Fin 262144)}
+                          alpha ch i = ch.sem (15+i) (HonestView.lean:38).
+  HonestProver K          ZkStatement.lean:296  {Instance; transport : Fin 1024 ≃
+                          Fin 1024; public : Instance → Public K; build : Instance →
+                          Trace K}.  NO validity field: build w is any trace.
+  Statement K CH          JointView/ZkStatement; x.1 : Public K.
+  PayloadCell, Payload    HonestView.lean:53, 65.  Cells: maskSum, semanticCoeff j i
+                          (j<10,i<28), pointClaim j c (j<3,c<29), extraClaim c,
+                          ood j c (j<2), inactiveSum, openingCoeff i (i<7),
+                          finalCoeff i (i<256), opened q s c.
+  M, N, T                 Partition.lean:15,17,19:
+                          M K F = (Fin 10 × Fin 1024 → F) × ExtTape F × ExtTape F
+                                  (mask-only raw, G raw limbs, D raw limbs);
+                          N K F = ExtTape F × EligibleNoise K F (H1-padding limbs,
+                                  eligible C1 noise); T = M × N.
+                          inlM (Partition.lean:61) = LinearMap.inl.
+  EligibleNoise K F       MaskLayout.lean:54  = EligibleCell → F, with
+                          eligible c r (MaskLayout.lean:38): c < 16 ∧ (r < 912 ∧
+                          13 ≤ r % 16  ∨  912 ≤ r ∧ ¬ forest/pair-aux used).
+  applyEligible t e       MaskLayout.lean:102: for c < 16,
+                          balance 1023 (t c + noise c) — row 1023 of every semantic
+                          column (trace AND noise) is overwritten by minus the sum
+                          over copyInactiveRows.erase 1023.  balance: :81.
+  applyAff                MaskLayout.lean:109: lanes 16..25 maskOnlyColumns
+                          (balance 0), 26: t + h1Padding (zero on copy-active rows,
+                          balance 0; :97), 27: balance 0 (pack4 G), 28: dWord
+                          (balance 0; :91).  Semantic lanes untouched.
+  eligibleLinear          JointTrace.lean:47; tapeLinear B (JointTrace.lean:88)
+                          = eligibleLinear ∘ snd∘snd + traceLinear B ∘ aff.
+  prepare, helper         HonestView.lean:50, 44: lane 26 := helper pub t λ χ r
+                          (λ = ch.sem 0, χ = ch.sem 1).
+  linearPayload π ch      HonestView.lean:208 (the non-round linear observations).
+  L π B ch                PayloadSplit.lean:47: Trace K →ₗ[K] Payload K; maskSum and
+                          rounds through maskLinear (PayloadSplit.lean:17: c1
+                          factors × pointClaim-0 MLE of lanes 0..15, explicitG × lane
+                          27, maskOnly factors × lanes 16..25, extraLinear lane 28;
+                          lane 26 is NOT read); other cells = linearPayload.
+  O pub B ch t            PayloadSplit.lean:67 = roundInclusion (originalRounds …)
+                          (:62): rounds of a ↦ η·terminalValue(honestClaims t a).
+  actual pub B t ch r     PayloadSplit.lean:70 = applyAff B (prepare pub
+                          (applyEligible t r.2.2) ch) (aff r).
+  A π B ch                D12.lean:27 = (L π B ch).restrictScalars F ∘ tapeLinear B
+                          : T K F →ₗ[F] Payload K.
+  c h B x w ch            JointView.lean:36 = payload at tape (0,0); by
+                          PayloadSplit.run_split, c = L(u_w) + O(u_w) with
+                          u_w := actual x.1 B (h.build w) ch 0.
+  g h B x w ch n          D12.lean:33.
+  dir                     Shift.lean:65 (round 9: X − ½, zero elsewhere).
+  originalOf pub B ch v   Shift.lean:131 = ch.sem 14 · terminalValue(… v's point
+                          claims …) (alpha ch).
+  Phi0 B ch               Shift.lean:59 = evalRound9 ch − claimMask B (alpha ch);
+                          claimMask (Shift.lean:44) reads pointClaim 0 of lanes
+                          0..25, 27 (with mask factors) and extraClaim 28.
+  sRem                    Shift.lean:175.
+  cTilde h B x w ch       Shift.lean:180 = c − (originalOf x.1 B ch c ·
+                          (alpha ch 9 − 1/2)⁻¹) • dir.
+  MaskImageOn P h B x     Shift.lean:186 (two clauses; (ii′) is the second).
+  Good ch                 Shift.lean:21 = GoodAlpha (alpha ch) (GoodDensity.lean:16).
+  Good₃                   NOT in Lean.  Proposed in DESIGN-T2b-2b §1.2 (J1):
+                          Good ∧ (∀ i : Fin 25, ch.sem i ∈ K4 B hB) ∧
+                          ∃ s : Finset (Fin 4), 3 ≤ s.card ∧ ∀ i ∈ s,
+                          alpha ch ⟨i,_⟩ ∉ K2 B hB; P_final (§4.1 there) adds
+                          GoodOpen ∧ GoodGeneric.
+  silentMasks             Z4Maps.lean:25; mem_silentMasks_iff PureRounds.lean:73
+                          (eight non-round groups).
+  Chain0, InitialChain0   Chain.lean:144, 137; rounds_initial Chain.lean:87
+                          (needs VDeg 10 (fun _ => 27) f); fOrig Shift.lean:367;
+                          original_bsum_actual Chain.lean:224.
+  C1Cell, c1Projection,   Z4Maps.lean:32, 39, 46, 62.  C1Cell = point j c | ood j c |
+  c1Map, c1_surjectivity  opened q s c, c : Fin 16.  c1_surjectivity :=
+                          ∀ ch, Good ch → ∀ w w', public w = x.1 → public w' = x.1 →
+                          c1Projection (c w − c w') ∈ range (c1Map h.transport B ch).
+  D13Order π              HonestView.lean:24: ∀ k < 89, π.symm k ∈ copyInactiveRows ∧
+                          ∀ c < 16, eligible c (π.symm k); π 1023 = 1023; π.symm
+                          increasing on k ≥ 89.
+  Circle code             R0/PolynomialPair.lean:76,79: p0Linear/p1Linear = even/odd
+                          coefficients in the natural line basis;
+                          AspisFormal/CircleNaturalBasisEval.lean: naturalLinePoly k
+                          = ∏_{b ∈ bits k} T_{2^b} (degree exactly k).
+                          R0/Fold.lean:55–66: fibre, fibreTransform, channels;
+                          :101 fold_encoded.
+
+§1.2  The (ii′) statement, verbatim from MaskImageOn (Shift.lean:186–191)
+
+  def IIPrime (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F)
+      (x : Statement K CommitHandle) : Prop :=
+    ∀ ch, P ch → ∀ w w', h.public w = x.1 → h.public w' = x.1 →
+      cTilde h B x w ch - cTilde h B x w' ch ∈ LinearMap.range (A h.transport B ch)
+
+  so MaskImageOn P h B x ↔ (clause i′) ∧ IIPrime P h B x by definition (Iff.rfl
+  after unfolding; the proposed module states IIPrime with exactly this body).
+  Variables as in Shift.lean:17–18: {K CommitHandle : Type} [Field K] [Fintype K]
+  [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}.
+  LinearMap.range is over F (A is F-linear).
+
+§1.3  Decomposition of the target (STRUCTURAL, from existing lemmas)
+
+  Write u_w := PayloadSplit.actual x.1 B (h.build w) ch 0 (a trace: lanes 0..15 =
+  balance 1023 of h.build w, lane 26 = helper, all other lanes 0).  By
+  run_split (PayloadSplit.lean:177) and the definition of cTilde,
+
+    cTilde w − cTilde w′ = L(u_w − u_w′) + roundInclusion(ΔOR) − k • dir,      (★)
+    ΔOR := originalRounds x.1 B ch u_w − originalRounds x.1 B ch u_w′,
+    k   := (originalOf x.1 B ch (c w) − originalOf x.1 B ch (c w′))·(α₉ − ½)⁻¹.
+
+  δ := u_w − u_w′ is supported on lanes 0..15 and 26.  Its semantic part is the
+  difference of two balanced words (Σ over copyInactiveRows = 0); its H1 part is
+  the helper difference, on all 1024 rows (copy-active rows included).
+
+§1.4  Obstruction: (ii′) is false without a completeness premise
+
+  Two F-linear functionals on Payload K vanish on range A:
+
+  (O1) ι(v) := (roundPoly 0 v).eval 0 + (roundPoly 0 v).eval 1 − v .maskSum.
+       For v = A t = L(tapeLinear t): L's maskSum is Σ_bits maskLinear(bits) and its
+       round-0 polynomial is rounds ch 0 (a ↦ maskLinear a ·), so ι(L τ) = 0 for every
+       trace τ by rounds_initial with maskLinear_vdeg (Shift.lean:330, any trace).
+       On (★): ι(roundInclusion ΔOR) = bsum fOrig(u_w) − bsum fOrig(u_w′)
+       (rounds_initial with vdeg_fOrig), ι(dir) = 0 (dir_mem_initialChain0).  So
+         ι(cTilde w − cTilde w′) = bsumB 10 (fOrig x.1 B ch u_w ∘ ofBool)
+                                  − bsumB 10 (fOrig x.1 B ch u_w′ ∘ ofBool).
+  (O2) v .inactiveSum.  On range A it is Σ_c γ^c · Σ_{r ∈ copyInactiveRows}
+       (tapeLinear t) c r = 0, because every lane that tapeLinear writes is balanced
+       over copyInactiveRows (semantic noise at 1023, H1 padding and mask lanes at 0).
+       On (★) it is γ^26 · (Σ_{r∈I} helper_w r − Σ_{r∈I} helper_w′ r) (semantic lanes
+       of u_w are balanced; lanes 16..25, 27, 28 are 0).
+
+  Counterexample shape: any HonestProver with two instances of equal public value,
+  one satisfying the constraints and one not (e.g. one bad Poseidon row), at any ch
+  with ch.sem 14 ≠ 0 and a zerocheck point zc for which the Boolean sum of the bad
+  row's term is nonzero, violates (O1).  HonestProver admits such instances, so
+  IIPrime P h B x is not provable for general h; it needs a premise.  (This is the
+  "builder completeness" item left open since D11/D12, now pinned to the exact
+  two equalities that (ii′) uses.)
+
+§1.5  The completeness premises (PREMISE; to be discharged by builder completeness)
+
+  def HonestSum (h) (B) (x) (ch) : Prop :=
+    ∀ w w', h.public w = x.1 → h.public w' = x.1 →
+      bsumB 10 (fun b => fOrig x.1 B ch (PayloadSplit.actual x.1 B (h.build w) ch 0) (ofBool b)) =
+      bsumB 10 (fun b => fOrig x.1 B ch (PayloadSplit.actual x.1 B (h.build w') ch 0) (ofBool b))
+
+  def HonestInactive (h) (x) (ch) : Prop :=
+    ∀ w w', h.public w = x.1 → h.public w' = x.1 →
+      ∑ r ∈ copyInactiveRows, prepare x.1 (applyEligible (F := F) (h.build w) 0) ch 26 r =
+      ∑ r ∈ copyInactiveRows, prepare x.1 (applyEligible (F := F) (h.build w') 0) ch 26 r
+
+  Both hold when every honest trace satisfies the R0 row constraints: then each
+  Boolean-row terminal is 0 (terminalValue at a Boolean row is
+  eqValue·Σθ^i·laneAt + μ·h1 + μ²(1−active)·h1, and copy_mu_helper_sum /
+  copy_mu_inactive_helper_sum (R0P/Copy.lean:627, :633) identify the two helper
+  sums, which the honest LogUp construction makes 0; R1's prover checks the
+  second one as h1_total_balanced).  Stating the two equalities rather than
+  "valid" keeps the premise minimal and checkable.  Typing premise (as J2's hw):
+    HonestF h x : ∀ w, h.public w = x.1 → ∀ c : Fin 29, c.val < 16 → ∀ r,
+      h.build w c r ∈ F.
