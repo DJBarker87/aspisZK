@@ -1,0 +1,9 @@
+# Same-input Copy row and residual composition
+
+`AspisR1.CopyEvaluateRowExact.row_prefix_success` composes actual pattern generation with the entire actual 136-link loop from the four source zero arrays. It proves all returned row arrays canonical and identifies the same decoded row with the retained full registry fold on the same openings, lambda, selectors, index and variant. No pattern or link execution/model premises remain.
+
+`AspisR1.CopyEvaluateResidualExact.residual_prefix_success` then derives actual checked residual execution, canonical output and the retained residual expression on that row. It assumes canonical openings, selector arrays, lambda, helper and chi. These are source arithmetic/canonicality premises, not independent success or model-equivalence premises.
+
+The source-prefix check matches rowPrefix's monadic prefix with the sealed indexed evaluate_with_selectors prefix before the active call, using only recorded helper-owner and local variable renamings. The prefix map pins both texts. rowPrefix returns the existing source row carrier; residualPrefix composes the actual source copy_residual. These helpers are checked source fragments, not production Rust changes or a theorem about the full exported evaluator. The enclosing active call, failure ordering, caller/extraction/runtime correspondence and final accepted-spend security/privacy remain separate obligations.
+
+Two focused NUC targets exited zero in 1.79/1.63 seconds, peak RSS at most 4,061,960 KiB, zero swap; both exported reports contain only propext/Classical.choice/Quot.sound. Exact command, cache/source revision, source/object/direct-import pins and resource metrics are retained. The prior powers, complete pattern generator, full link traversal and residual proofs are reused. No unchanged regression or package-wide replay was run.
