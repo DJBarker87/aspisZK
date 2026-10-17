@@ -1,0 +1,11 @@
+# Complete actual136-link Copy traversal
+
+`AspisR1.CopyLinkLoopFuel.loop_success` proves the actual source loop from cursor0 succeeds, returns four canonical arrays, and its decoded output row equals `R0P.copyLinks.foldl` of the retained `modelStep` on the same initial arrays, patterns, selectors, public index and variant. It assumes canonical input arrays and selectors; it assumes no per-record read/weight/endpoint/arithmetic/store/increment success, and supplies no independent model registry.
+
+The symbolic fuel theorem derives each actual registry read, applies the checked fixed-registry bounds, invokes the actual same-record link step, proves the checked increment, and recurses. Model suffix-fold equations use existing List.drop_eq_getElem_cons and the already proved registry length/index/equality facts. No136-step field calculation or generated recurrence is unfolded. The final zero-cursor theorem rewrites to the retained model registry via the same established equality.
+
+`ResultPairSequence.three_pair_bind` is a generic Result-constructor theorem tested before instantiation. It permits direct source-body factoring through the checked link step. Earlier attempts to simplify dependent generated tuple binders hit scalar-literal proof transparency; the generic theorem avoids that reduction entirely. One canonical module owner is retained for each declaration, and the incidental top-level ResultPairSequence alias was quarantined from the active cache.
+
+All four focused targets exited0 on the capped NUC, durations1.10–1.97seconds, peak RSS≤4,064,924KiB, zero process swap. All seven exported behavior axiom reports contain only propext/Classical.choice/Quot.sound. Exact commands, source revision, source/object/import pins, wall/RSS/swap and axioms are retained. No broad replay, package rebuild, cap/heartbeat/recursion increase or unchanged regression was run.
+
+The source loop remains the sealed indexed-candidate loop already retained in copy-link-source-refinement. Copy pattern generation, active selectors and the full evaluator/caller composition remain separate obligations; production extraction/runtime correspondence, privacy and final100-bit accepted-spend security remain open. This theorem closes the actual full registry traversal, not the entire Copy verifier path.
