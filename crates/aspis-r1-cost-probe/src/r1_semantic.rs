@@ -84,7 +84,179 @@ fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transc
     let mut alpha = [QM31::ZERO; 10];
     #[cfg(feature = "prover")]
     let mut round_checks = [[QM31::ZERO; 3]; 10];
-    for round in 0..10 {
+    {
+        let round = 0usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 1usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 2usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 3usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 4usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 5usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 6usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 7usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 8usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 9usize;
         let row = 15 + round as u8;
         let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
         let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
