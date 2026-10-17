@@ -1,0 +1,1053 @@
+import AspisR1.CopyLinkLoopCandidate
+import CopyLinkWeightExact
+
+/-! Only literal integer descriptor bounds are checked here. No finite-field
+arithmetic, recurrence, registry fold or generated certificate is normalized. -/
+set_option autoImplicit false
+namespace AspisR1.CopyRegistryBounds
+open Aeneas Aeneas.Std
+open AspisR1.CopyLinkWeightExact
+abbrev registry := AspisR1CopyLinkLoopCandidate.pool_v1.pair_forest_copy_terminal.constants.COPY_LINKS
+
+def DescriptorValid (link : Raw) : Prop :=
+  link.tag.val < 2147483647 ∧ link.weight_kind.val < 5 ∧ link.weight_level.val < 64 ∧
+  link.producer.row.val < 1024 ∧ link.producer.slot.val < 2 ∧ link.producer.pattern.val < 14 ∧
+  link.consumer.row.val < 1024 ∧ link.consumer.slot.val < 2 ∧ link.consumer.pattern.val < 14
+
+instance (link : Raw) : Decidable (DescriptorValid link) :=
+  inferInstanceAs (Decidable (link.tag.val < 2147483647 ∧ link.weight_kind.val < 5 ∧ link.weight_level.val < 64 ∧
+    link.producer.row.val < 1024 ∧ link.producer.slot.val < 2 ∧ link.producer.pattern.val < 14 ∧
+    link.consumer.row.val < 1024 ∧ link.consumer.slot.val < 2 ∧ link.consumer.pattern.val < 14))
+
+private def chunk_0 : List Raw := [
+    {
+      tag := 1124073472#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 27#u16, slot := 0#u8, pattern := 0#u8 },
+      consumer := { row := 32#u16, slot := 0#u8, pattern := 0#u8 }
+    },
+    {
+      tag := 1124073473#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 43#u16, slot := 0#u8, pattern := 0#u8 },
+      consumer := { row := 48#u16, slot := 0#u8, pattern := 0#u8 }
+    },
+    {
+      tag := 1124073474#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 411#u16, slot := 0#u8, pattern := 0#u8 },
+      consumer := { row := 416#u16, slot := 0#u8, pattern := 0#u8 }
+    },
+    {
+      tag := 1124073475#u32,
+      weight_kind := 1#u8,
+      weight_level := 0#u8,
+      producer := { row := 443#u16, slot := 0#u8, pattern := 0#u8 },
+      consumer := { row := 448#u16, slot := 0#u8, pattern := 0#u8 }
+    },
+    {
+      tag := 1124073476#u32,
+      weight_kind := 1#u8,
+      weight_level := 0#u8,
+      producer := { row := 459#u16, slot := 0#u8, pattern := 0#u8 },
+      consumer := { row := 464#u16, slot := 0#u8, pattern := 0#u8 }
+    },
+    {
+      tag := 1124073477#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 491#u16, slot := 0#u8, pattern := 0#u8 },
+      consumer := { row := 496#u16, slot := 0#u8, pattern := 0#u8 }
+    },
+    {
+      tag := 1124073478#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 507#u16, slot := 0#u8, pattern := 0#u8 },
+      consumer := { row := 512#u16, slot := 0#u8, pattern := 0#u8 }
+    },
+    {
+      tag := 1124073479#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 11#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 28#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073480#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 12#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 412#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073481#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 44#u16, slot := 0#u8, pattern := 2#u8 },
+      consumer := { row := 428#u16, slot := 0#u8, pattern := 3#u8 }
+    },
+    {
+      tag := 1124073482#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 60#u16, slot := 0#u8, pattern := 4#u8 },
+      consumer := { row := 428#u16, slot := 1#u8, pattern := 5#u8 }
+    },
+    {
+      tag := 1124073483#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 44#u16, slot := 1#u8, pattern := 6#u8 },
+      consumer := { row := 1008#u16, slot := 0#u8, pattern := 7#u8 }
+    },
+    {
+      tag := 1124073484#u32,
+      weight_kind := 1#u8,
+      weight_level := 0#u8,
+      producer := { row := 460#u16, slot := 0#u8, pattern := 6#u8 },
+      consumer := { row := 1010#u16, slot := 0#u8, pattern := 7#u8 }
+    },
+    {
+      tag := 1124073485#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 508#u16, slot := 0#u8, pattern := 6#u8 },
+      consumer := { row := 1012#u16, slot := 0#u8, pattern := 7#u8 }
+    },
+    {
+      tag := 1124073486#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 1008#u16, slot := 0#u8, pattern := 7#u8 },
+      consumer := { row := 1014#u16, slot := 0#u8, pattern := 6#u8 }
+    },
+    {
+      tag := 1124073487#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 1010#u16, slot := 0#u8, pattern := 7#u8 },
+      consumer := { row := 1014#u16, slot := 1#u8, pattern := 8#u8 }
+    }
+  ]
+
+private def chunk_1 : List Raw := [
+    {
+      tag := 1124073488#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 1012#u16, slot := 0#u8, pattern := 7#u8 },
+      consumer := { row := 1015#u16, slot := 0#u8, pattern := 8#u8 }
+    },
+    {
+      tag := 1124073489#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 1014#u16, slot := 0#u8, pattern := 9#u8 },
+      consumer := { row := 1015#u16, slot := 1#u8, pattern := 6#u8 }
+    },
+    {
+      tag := 1124073490#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 64#u16, slot := 0#u8, pattern := 10#u8 },
+      consumer := { row := 1017#u16, slot := 0#u8, pattern := 11#u8 }
+    },
+    {
+      tag := 1124073491#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 913#u16, slot := 0#u8, pattern := 6#u8 },
+      consumer := { row := 1017#u16, slot := 1#u8, pattern := 7#u8 }
+    },
+    {
+      tag := 1124073492#u32,
+      weight_kind := 1#u8,
+      weight_level := 0#u8,
+      producer := { row := 523#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 1018#u16, slot := 0#u8, pattern := 11#u8 }
+    },
+    {
+      tag := 1124073493#u32,
+      weight_kind := 1#u8,
+      weight_level := 0#u8,
+      producer := { row := 475#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 540#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073494#u32,
+      weight_kind := 2#u8,
+      weight_level := 0#u8,
+      producer := { row := 523#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 540#u16, slot := 1#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073495#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 1018#u16, slot := 0#u8, pattern := 11#u8 },
+      consumer := { row := 528#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073496#u32,
+      weight_kind := 3#u8,
+      weight_level := 0#u8,
+      producer := { row := 539#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 556#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073497#u32,
+      weight_kind := 4#u8,
+      weight_level := 0#u8,
+      producer := { row := 539#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 544#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073498#u32,
+      weight_kind := 3#u8,
+      weight_level := 1#u8,
+      producer := { row := 555#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 572#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073499#u32,
+      weight_kind := 4#u8,
+      weight_level := 1#u8,
+      producer := { row := 555#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 560#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073500#u32,
+      weight_kind := 3#u8,
+      weight_level := 2#u8,
+      producer := { row := 571#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 588#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073501#u32,
+      weight_kind := 4#u8,
+      weight_level := 2#u8,
+      producer := { row := 571#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 576#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073502#u32,
+      weight_kind := 3#u8,
+      weight_level := 3#u8,
+      producer := { row := 587#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 604#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073503#u32,
+      weight_kind := 4#u8,
+      weight_level := 3#u8,
+      producer := { row := 587#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 592#u16, slot := 0#u8, pattern := 10#u8 }
+    }
+  ]
+
+private def chunk_2 : List Raw := [
+    {
+      tag := 1124073504#u32,
+      weight_kind := 3#u8,
+      weight_level := 4#u8,
+      producer := { row := 603#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 620#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073505#u32,
+      weight_kind := 4#u8,
+      weight_level := 4#u8,
+      producer := { row := 603#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 608#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073506#u32,
+      weight_kind := 3#u8,
+      weight_level := 5#u8,
+      producer := { row := 619#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 636#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073507#u32,
+      weight_kind := 4#u8,
+      weight_level := 5#u8,
+      producer := { row := 619#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 624#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073508#u32,
+      weight_kind := 3#u8,
+      weight_level := 6#u8,
+      producer := { row := 635#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 652#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073509#u32,
+      weight_kind := 4#u8,
+      weight_level := 6#u8,
+      producer := { row := 635#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 640#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073510#u32,
+      weight_kind := 3#u8,
+      weight_level := 7#u8,
+      producer := { row := 651#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 668#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073511#u32,
+      weight_kind := 4#u8,
+      weight_level := 7#u8,
+      producer := { row := 651#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 656#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073512#u32,
+      weight_kind := 3#u8,
+      weight_level := 8#u8,
+      producer := { row := 667#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 684#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073513#u32,
+      weight_kind := 4#u8,
+      weight_level := 8#u8,
+      producer := { row := 667#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 672#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073514#u32,
+      weight_kind := 3#u8,
+      weight_level := 9#u8,
+      producer := { row := 683#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 700#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073515#u32,
+      weight_kind := 4#u8,
+      weight_level := 9#u8,
+      producer := { row := 683#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 688#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073516#u32,
+      weight_kind := 3#u8,
+      weight_level := 10#u8,
+      producer := { row := 699#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 716#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073517#u32,
+      weight_kind := 4#u8,
+      weight_level := 10#u8,
+      producer := { row := 699#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 704#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073518#u32,
+      weight_kind := 3#u8,
+      weight_level := 11#u8,
+      producer := { row := 715#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 732#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073519#u32,
+      weight_kind := 4#u8,
+      weight_level := 11#u8,
+      producer := { row := 715#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 720#u16, slot := 0#u8, pattern := 10#u8 }
+    }
+  ]
+
+private def chunk_3 : List Raw := [
+    {
+      tag := 1124073520#u32,
+      weight_kind := 3#u8,
+      weight_level := 12#u8,
+      producer := { row := 731#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 748#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073521#u32,
+      weight_kind := 4#u8,
+      weight_level := 12#u8,
+      producer := { row := 731#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 736#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073522#u32,
+      weight_kind := 3#u8,
+      weight_level := 13#u8,
+      producer := { row := 747#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 764#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073523#u32,
+      weight_kind := 4#u8,
+      weight_level := 13#u8,
+      producer := { row := 747#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 752#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073524#u32,
+      weight_kind := 3#u8,
+      weight_level := 14#u8,
+      producer := { row := 763#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 780#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073525#u32,
+      weight_kind := 4#u8,
+      weight_level := 14#u8,
+      producer := { row := 763#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 768#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073526#u32,
+      weight_kind := 3#u8,
+      weight_level := 15#u8,
+      producer := { row := 779#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 796#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073527#u32,
+      weight_kind := 4#u8,
+      weight_level := 15#u8,
+      producer := { row := 779#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 784#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073528#u32,
+      weight_kind := 3#u8,
+      weight_level := 16#u8,
+      producer := { row := 795#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 812#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073529#u32,
+      weight_kind := 4#u8,
+      weight_level := 16#u8,
+      producer := { row := 795#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 800#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073530#u32,
+      weight_kind := 3#u8,
+      weight_level := 17#u8,
+      producer := { row := 811#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 828#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073531#u32,
+      weight_kind := 4#u8,
+      weight_level := 17#u8,
+      producer := { row := 811#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 816#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073532#u32,
+      weight_kind := 3#u8,
+      weight_level := 18#u8,
+      producer := { row := 827#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 844#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073533#u32,
+      weight_kind := 4#u8,
+      weight_level := 18#u8,
+      producer := { row := 827#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 832#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073534#u32,
+      weight_kind := 3#u8,
+      weight_level := 19#u8,
+      producer := { row := 843#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 860#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073535#u32,
+      weight_kind := 4#u8,
+      weight_level := 19#u8,
+      producer := { row := 843#u16, slot := 1#u8, pattern := 1#u8 },
+      consumer := { row := 848#u16, slot := 0#u8, pattern := 10#u8 }
+    }
+  ]
+
+private def chunk_4 : List Raw := [
+    {
+      tag := 1124073536#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 59#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 913#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073537#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 914#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 76#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073538#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 914#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 64#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073539#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 75#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 917#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073540#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 918#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 92#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073541#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 918#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 80#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073542#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 91#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 921#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073543#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 922#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 108#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073544#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 922#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 96#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073545#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 107#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 925#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073546#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 926#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 124#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073547#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 926#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 112#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073548#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 123#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 929#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073549#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 930#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 140#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073550#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 930#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 128#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073551#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 139#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 933#u16, slot := 0#u8, pattern := 12#u8 }
+    }
+  ]
+
+private def chunk_5 : List Raw := [
+    {
+      tag := 1124073552#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 934#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 156#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073553#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 934#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 144#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073554#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 155#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 937#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073555#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 938#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 172#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073556#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 938#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 160#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073557#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 171#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 941#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073558#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 942#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 188#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073559#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 942#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 176#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073560#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 187#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 945#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073561#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 946#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 204#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073562#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 946#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 192#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073563#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 203#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 949#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073564#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 950#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 220#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073565#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 950#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 208#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073566#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 219#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 953#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073567#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 954#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 236#u16, slot := 0#u8, pattern := 1#u8 }
+    }
+  ]
+
+private def chunk_6 : List Raw := [
+    {
+      tag := 1124073568#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 954#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 224#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073569#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 235#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 957#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073570#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 958#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 252#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073571#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 958#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 240#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073572#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 251#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 961#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073573#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 962#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 268#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073574#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 962#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 256#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073575#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 267#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 965#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073576#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 966#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 284#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073577#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 966#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 272#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073578#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 283#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 969#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073579#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 970#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 300#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073580#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 970#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 288#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073581#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 299#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 973#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073582#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 974#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 316#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073583#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 974#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 304#u16, slot := 0#u8, pattern := 10#u8 }
+    }
+  ]
+
+private def chunk_7 : List Raw := [
+    {
+      tag := 1124073584#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 315#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 977#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073585#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 978#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 332#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073586#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 978#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 320#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073587#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 331#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 981#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073588#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 982#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 348#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073589#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 982#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 336#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073590#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 347#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 985#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073591#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 986#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 364#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073592#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 986#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 352#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073593#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 363#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 989#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073594#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 990#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 380#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073595#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 990#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 368#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073596#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 379#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 993#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073597#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 994#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 396#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073598#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 994#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 384#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073599#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 395#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 997#u16, slot := 0#u8, pattern := 12#u8 }
+    }
+  ]
+
+private def chunk_8 : List Raw := [
+    {
+      tag := 1124073600#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 998#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 876#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073601#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 998#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 864#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073602#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 875#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 1001#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073603#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 1002#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 892#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073604#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 1002#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 880#u16, slot := 0#u8, pattern := 10#u8 }
+    },
+    {
+      tag := 1124073605#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 891#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 1005#u16, slot := 0#u8, pattern := 12#u8 }
+    },
+    {
+      tag := 1124073606#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 1006#u16, slot := 0#u8, pattern := 1#u8 },
+      consumer := { row := 908#u16, slot := 0#u8, pattern := 1#u8 }
+    },
+    {
+      tag := 1124073607#u32,
+      weight_kind := 0#u8,
+      weight_level := 0#u8,
+      producer := { row := 1006#u16, slot := 1#u8, pattern := 13#u8 },
+      consumer := { row := 896#u16, slot := 0#u8, pattern := 10#u8 }
+    }
+  ]
+
+private theorem chunk_0_valid : List.Forall DescriptorValid chunk_0 := by
+  decide
+
+private theorem chunk_1_valid : List.Forall DescriptorValid chunk_1 := by
+  decide
+
+private theorem chunk_2_valid : List.Forall DescriptorValid chunk_2 := by
+  decide
+
+private theorem chunk_3_valid : List.Forall DescriptorValid chunk_3 := by
+  decide
+
+private theorem chunk_4_valid : List.Forall DescriptorValid chunk_4 := by
+  decide
+
+private theorem chunk_5_valid : List.Forall DescriptorValid chunk_5 := by
+  decide
+
+private theorem chunk_6_valid : List.Forall DescriptorValid chunk_6 := by
+  decide
+
+private theorem chunk_7_valid : List.Forall DescriptorValid chunk_7 := by
+  decide
+
+private theorem chunk_8_valid : List.Forall DescriptorValid chunk_8 := by
+  decide
+
+private theorem forall_append (a b : List Raw)
+    (ha : List.Forall DescriptorValid a) (hb : List.Forall DescriptorValid b) :
+    List.Forall DescriptorValid (a ++ b) := by
+  rw [List.forall_iff_forall_mem] at *
+  intro link hmem
+  rcases List.mem_append.mp hmem with h | h
+  · exact ha link h
+  · exact hb link h
+
+private theorem registry_chunks : registry.val = chunk_0 ++ chunk_1 ++ chunk_2 ++ chunk_3 ++ chunk_4 ++ chunk_5 ++ chunk_6 ++ chunk_7 ++ chunk_8 := by
+  rfl
+
+theorem registry_valid : List.Forall DescriptorValid registry.val := by
+  rw [registry_chunks]
+  exact forall_append _ _ chunk_0_valid (forall_append _ _ chunk_1_valid (forall_append _ _ chunk_2_valid (forall_append _ _ chunk_3_valid (forall_append _ _ chunk_4_valid (forall_append _ _ chunk_5_valid (forall_append _ _ chunk_6_valid (forall_append _ _ chunk_7_valid (chunk_8_valid))))))))
+
+theorem member_bounds (link : Raw) (hmem : link ∈ registry.val) :
+    link.tag.val < AspisR1.TerminalLiftM31Exact.P ∧ link.weight_kind.val < 5 ∧
+    link.weight_level.val < 64 ∧ EndpointBounds link := by
+  have h := (List.forall_iff_forall_mem.mp registry_valid) link hmem
+  rcases h with ⟨htag,hkind,hlevel,hpr,hps,hpp,hcr,hcs,hcp⟩
+  exact ⟨htag,hkind,hlevel,⟨hpr,hps,hpp,hcr,hcs,hcp⟩⟩
+
+#print axioms registry_valid
+#print axioms member_bounds
+end AspisR1.CopyRegistryBounds
