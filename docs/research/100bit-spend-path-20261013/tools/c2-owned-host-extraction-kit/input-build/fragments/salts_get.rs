@@ -1,0 +1,1 @@
+    pub fn get(&self, index: usize) -> &[u8; 32] { &self.0[index] }
