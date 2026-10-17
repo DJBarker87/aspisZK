@@ -4705,3 +4705,44 @@ oracle-programming terms. Its new obligations (the abort-aware ZK_FS and
 the Rust predicate check) are ordinary proof work rather than open
 research. M1 and M2 stay as fallbacks if the abort-aware composition fails.
 Decision D23.5 belongs to the user.
+
+### D29: user decision on D23.5 (2026-10-17): honest-prover rejection (M3) now; Route P later
+
+**D29.1 Decision.** The user chose M3: the honest prover rejects bad challenges.
+Route P, a proved failure-mass bound for the transversality premises, is
+kept as later research, not abandoned. M1 and M2 remain fallbacks if the
+abort-aware composition fails.
+
+**D29.2 The predicate P.** P is the conjunction of every challenge condition
+the privacy proof uses. The lead checked that each conjunct is defined from
+π, B and ch only: `QPrime` (SilentReduction.lean:241), `BCond` (:248), and
+`C1Lift`/`H1Lift` (DESIGN-ii-prime §2.1). Each is therefore a function of
+public data. P includes:
+- `QPrime_R1` and `BCond_R1` (on R1, V_G = B0);
+- the J2 side conditions (sem ∈ K₄, α₉ ≠ ½);
+- `C1Lift`, `H1Lift` and `BReach` for clause (ii′).
+
+QPrime and BCond are checked directly, not derived from Good₃. So J5b, J5c,
+J6, J7′, J7a and J8 leave the critical path. They come back only for Route P.
+
+What remains on the critical path: the R1 privacy model, J2-R1, (ii′) (J0,
+J0b, J4′, the residual and lift steps), the abort-aware ZK_FS (ZF1), the
+efficient simulator (ZF2), and the Rust predicate check with its refinement.
+
+**D29.3 Requirements on the honest prover.**
+- It never publishes a transcript with ¬P.
+- Attempts use fresh masks, salts and attempt secrets.
+- Attempts are capped, with an explicit failure exit.
+
+The failure exit depends only on challenges and publishes nothing. Its
+probability matters for liveness, not privacy. There is no proof that
+Pr[¬P] is small, and Z8–Z10 have observed no failures.
+
+**D29.4 First jobs.**
+- **R1M:** an inventory and plan for the R1 privacy model, deciding which
+  R0Z/R0P definitions are payload-specific and the minimal Lean model of the
+  Z9 payload.
+- **ZF1-abort:** the abort-aware ZK_FS, generic over FSExperiments, building
+  on ZF-A. Attempts 3500–3549.
+
+The Rust predicate check waits for R1M's definitions.
