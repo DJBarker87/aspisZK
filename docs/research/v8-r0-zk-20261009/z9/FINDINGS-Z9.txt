@@ -1,0 +1,37 @@
+Z9 -- the Z8c gate and the D23 decomposition on the R1 payload
+==============================================================
+
+Branch codex/r0-z9-r1-payload-20261017, base 524e1debb. Exact
+M31/QM31/WideExact computation. This is not a Lean proof, and no Lean or
+production source was changed. The payload is fixed in R1-PAYLOAD-MAP.txt.
+The probe is z4/z9.rs (dispatched by `--z9` in z4/probe.rs) and the runner is
+z4/run-z9.py. Receipts are under z9/runs/.
+
+0. Expectations registered before any measurement
+-------------------------------------------------
+E1 Chain target. The semantic layer (rows 0..26, 10 rounds of K4[X]<=27,
+   terminal, masks, balancing) is the same in R1 and R0 (map sections 3-5). The
+   K4-valued chain target is therefore the same space: dim_F Chain0_4 =
+   4 * 269 = 1,076, and the initial-retained image has dimension 1,080. The
+   silent image lies in Chain0_4 (T2b-2a does not depend on the payload), so
+   the silent rank is at most 1,076.
+E2 Silent rank. Expected 1,076 on A and J, 1,038 on B and 1,068 on I. These
+   deficits come from Lambda_7 lying in a proper subfield, which is a fact
+   about the semantic layer. Equality needs the R1 analogue of BCond (E4). The
+   R1 silence has fewer batched conditions than R0 (1,336 limbs against
+   2,112), but the coordinates are different functionals: the folded-word
+   values have no R0 counterpart. Containment in R0's span is therefore not an
+   argument.
+E3 B0. The annihilator of bat(ker own) is spanned by the 48 R1 verifier
+   relations: ia, S2a, S2b, S1, 22 C_u and 22 L_u (map section 6). That is
+   384 limbs, so dim B0 = 1,336 - 384 = 952 when the 22 folded fibres u/4
+   are distinct.
+E4 BCond (R1). bat(ker own ∩ ker R) = bat(ker own) = 952.
+E5 (i'), (ii'). 25/25 on A and J. On B and I, (i') 0/25 and (ii') 25/25, as in Z8/Z8c.
+E6 D23 on R1. R1 has no chord quotient, so the low shadow has no analogue.
+   D-high (D coefficients < 56 zero) gives q1_d = 0 for d < 14, and so
+   final_0..final_2 = 0 exactly (24 limbs), with final_3 free. The R0
+   conjugate relation (Fact 3) needs the whole once-folded message in the
+   view, but R1 discloses only 159 of q1's 256 E-functionals, so I expect no
+   etaRel in R1. Predicted: V_D = 952 - 24 = 928, V_G = 952, and
+   B0 = V_D + V_G.
