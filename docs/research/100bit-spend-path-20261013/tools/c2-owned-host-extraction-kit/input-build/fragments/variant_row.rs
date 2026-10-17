@@ -1,0 +1,6 @@
+    pub fn row(self, j:usize) -> usize {
+        if self == Self::D { return aspis_core::r0::transport::COEFFICIENT_TO_ROW[j] as usize; }
+        let mut out=0;
+        for d in 0..5 { out |= ((j>>(2*d))&3) << (2*TAU[d]); }
+        out
+    }

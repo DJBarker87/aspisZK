@@ -1,0 +1,1 @@
+pub type Message<E> = [E; MESSAGE_LEN];

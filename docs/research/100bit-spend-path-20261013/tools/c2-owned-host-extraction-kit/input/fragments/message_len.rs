@@ -1,0 +1,1 @@
+pub const MESSAGE_LEN: usize = 1024;
