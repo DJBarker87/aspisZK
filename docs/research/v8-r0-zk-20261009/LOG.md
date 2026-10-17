@@ -4580,3 +4580,66 @@ Lesson for generators and proofs: state balance-cancellation lemmas K-valued,
 with decidability instances passed in rather than synthesized. Keep `simp`
 from unfolding `PayloadSplit.L`. Instance-path mismatches made the kernel
 reduce `copyInactiveRows`.
+
+### Lead acceptance of Z9 (2026-10-17); D27: the privacy reduction transfers to R1
+
+Z9 (worker commits 96b37aa83..8c26ef3e9, cherry-picked) is accepted. The R1
+payload was taken from spend-path tip 1822c2ced, variant S2. The
+expectations were committed (7ab695866, 11:19) before the preflight results
+(bb10719b2, 11:27). The full run took 29:58.6 for 40 jobs: structures A, B, I,
+J × vectors 0–4 × the checkpoint's two γ limb sets. All exited 0, with peak
+child RSS 225,940 KiB, cgroup peak 1.126 GB, 0 swaps and caps 3G/4G/swap 0.
+All CHALLENGE lines replay. The lead read the summary: for A, structure
+vector 0, γ set 0, the chain basis gives image rank 1,076 with 0 failures,
+and B0 has annihilator 384 = 384 explained by the 48 relations, with 0
+unexplained.
+
+**D27.1 R1 payload differences.** The R1 payload differs from R0 in five ways:
+- transport D18 instead of D13;
+- no chord quotient: OOD enters as weight kinds 5 and 6;
+- two folds;
+- the batched view is 167 E values (1,336 limbs) against R0's 2,112;
+- 48 verifier relations against R0's 25.
+
+ρ enters no disclosed coordinate. The semantic layer (rows 0–26, masks,
+balancing, terminal, chain target) is the same as R0's. Model checks pass,
+including every verifier equation on a full honest view.
+
+**D27.2 Gate on R1.**
+
+| Structures | Silent rank | (i′) | (ii′) |
+|---|---:|---:|---:|
+| A, J | 1,076 | 25/25 | 25/25 |
+| B | 1,038 | 0/25 | 25/25 |
+| I | 1,068 | 0/25 | 25/25 |
+
+The B and I deficits have the same pivots as Z8/Z8c, so Good₃ stays the
+predicate. This is numerically checked, not proved.
+
+**D27.3 Structure of (B) on R1.** The (Q′)+(B) reduction transfers to R1:
+- The round image of the own-silent kernel, with initial sum zero, is 1,076
+  and contains Chain0₄.
+- B0 = 1,336 − 384 = 952. The annihilator is exactly the 48 relations.
+- BCond holds (952 = 952) in all 40 jobs.
+
+There is no Ψ_lo/lowShadow or etaRel analogue:
+- D-high's deficit is the exact law f0 = f1 = f2 = 0, giving V_D = 928.
+- V_G = B0 = 952.
+
+So on R1, BCond reduces to "G alone covers B0" (`V_G = B0`). The D-high/G
+assembly of D23 is not needed. This is simpler than R0, and it is the form the
+R1 restatement of J3 and the transversality work must target. As on R0, the
+PCS block is not full rank (1,304 of 1,712).
+
+**D27.4 Still open.**
+- B-open (now `V_G = B0` on R1) and OT-open are evidence from 40 jobs, with
+  no failure-mass bound.
+- γ was tested only on the two fixed limb sets.
+- Structures K, L, M and the per-lane OT′ checks were not rerun on R1.
+- Salted leaves and paths are outside the linear model.
+- The source has moved since 1822c2ced through extraction-only refactors
+  (Digest32, unrolls), which do not change mask layout or weights.
+
+Next: restate J1/J3's payload-specific statements for R1 (Good3 layout,
+ownMap/batMap over the R1 view, BCond_R1 := V_G = B0). The J2/J4 analogues
+for R1 wait on that, together with the D23.5/D24.4 decisions.
