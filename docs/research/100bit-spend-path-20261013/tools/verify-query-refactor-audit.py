@@ -6,6 +6,7 @@ objects; temporary patch applications never touch a checked-out source tree.
 """
 import argparse
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import resource
@@ -19,6 +20,7 @@ BASE = "docs/research/100bit-spend-path-20261013"
 LEAD = "deb68369ba3ad7cc6706dc24b6503fac1cbe942b"
 PAIR = "d4da2a662"
 TRACE = "abd4c40a4"
+ROUND = "8c348ebbe"
 WIRE = "crates/aspis-r1-cost-probe/src/"
 sha = lambda b: hashlib.sha256(b).hexdigest()
 
@@ -76,11 +78,26 @@ def main():
     assert b"Result<[u32;22],crate::verifier::Error>" in after
     changed = git("diff", "--name-only", PAIR, TRACE, "--", "crates", "programs").decode().splitlines()
     assert changed == [WIRE + "transcript.rs"], changed
+    semantic_before = blob(TRACE, WIRE + "r1_semantic.rs")
+    semantic_after = blob(ROUND, WIRE + "r1_semantic.rs")
+    lexer_spec = importlib.util.spec_from_file_location("source_lexer", ROOT / BASE /
+        "tools/j1e-source-effect-audit.py")
+    lexer = importlib.util.module_from_spec(lexer_spec)
+    lexer_spec.loader.exec_module(lexer)
+    loop = lexer.fragment(semantic_before, "for round in 0..10 {")[0].encode()
+    inner = loop.split(b"\n", 1)[1].rsplit(b"\n", 1)[0]
+    expanded = b"\n".join(b"    {\n        let round = " + str(i).encode() +
+        b"usize;\n" + inner + b"\n    }" for i in range(10))
+    assert semantic_before.count(loop) == 1
+    assert semantic_before.replace(loop, expanded) == semantic_after
+    assert semantic_after.count(expanded) == 1
+    assert semantic_after.replace(expanded, loop) == semantic_before
+    assert blob(ROUND, WIRE + "transcript.rs") == after
     lead_retained = []
     for path in [WIRE + "r1_wire.rs",
                  "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
                  "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs"]:
-        assert blob(TRACE, path) == blob(LEAD, path)
+        assert blob(ROUND, path) == blob(LEAD, path)
         lead_retained.append({"path": path, "sha256": sha(blob(LEAD, path))})
     assert blob(TRACE, WIRE + "r1_semantic.rs") == blob(PAIR, WIRE + "r1_semantic.rs")
     own = resource.getrusage(resource.RUSAGE_SELF)
@@ -91,19 +108,24 @@ def main():
         "wall_seconds": time.monotonic() - start,
         "peak_rss_bytes": max(own.ru_maxrss, children.ru_maxrss) * rss_unit,
         "swap_events": own.ru_nswap + children.ru_nswap,
-        "source_revision": git("rev-parse", TRACE).decode().strip(),
+        "source_revision": git("rev-parse", ROUND).decode().strip(),
         "lead_revision": LEAD, "exact_1d_and_1e": decisions,
         "decision_1f": {"kind": "compile-time bound 22 <= 32",
             "before_sha256": sha(before), "after_sha256": sha(after),
             "reverse_expansion_exact": True, "ordered_trace_positions": list(range(22)),
             "introduced_fallible_calls": 0,
             "decoder_returned_state_preserved": True},
+        "decision_1f_rounds": {"kind": "compile-time bound 10 <= 32",
+            "before_sha256": sha(semantic_before), "after_sha256": sha(semantic_after),
+            "original_loop_body_sha256": sha(inner), "reverse_expansion_exact": True,
+            "ordered_rounds": list(range(10)), "ordered_rows": list(range(15, 25)),
+            "all_10_body_copies_byte_identical": True},
         "lead_source_retained": lead_retained,
         "runtime_or_formal_result": False, "print_axioms": "N/A (source audit)",
         "live_worktree_mutation": False, "SBF_build": False}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2) + "\n")
-    print("PASS: exact 1d/1e forward and reverse; fixed22 expansion/reverse; lead source retained")
+    print("PASS: exact 1d/1e forward and reverse; fixed22/fixed10 expansion/reverse; lead source retained")
 
 
 if __name__ == "__main__":
