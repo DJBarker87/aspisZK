@@ -35,3 +35,35 @@ E6 D23 on R1. R1 has no chord quotient, so the low shadow has no analogue.
    view, but R1 discloses only 159 of q1's 256 E-functionals, so I expect no
    etaRel in R1. Predicted: V_D = 952 - 24 = 928, V_G = 952, and
    B0 = V_D + V_G.
+
+1. Preflight (structure A, vector 0, gamma limb set 0; runs/preflight-07af16227)
+--------------------------------------------------------------------------------
+Host nuc, scope aspis-z9-preflight-07af16227 (MemoryHigh 3G, MemoryMax 4G,
+MemorySwapMax 0, TasksMax 64). The launch was gated on no other user scope.
+Compile 60.1 s and probe 99.1 s, both exit 0. Peak child RSS 216,832 KiB
+(probe) and 547,232 KiB (compile), cgroup peak 1,123,610,624 B, swaps 0.
+212 source hashes are in evidence.json. The CHALLENGE line replays
+probe-C.log trial 0 byte for byte.
+Model checks passed:
+* D18 equals the inverse of Variant::S2 row.
+* The ACTIVE table equals the source mask.
+* The transported Libra tail passes the Z5 checks.
+* Weight kinds 1-3 equal eq(point, row(j)), kind 4 equals h_weight(j), and kinds 5-6 equal evalrow(j, z).
+* The folded-word closed form equals EncodingDomain::evaluate at all 88 positions.
+* The whole-column R1 pipeline equals the row-wise batched sum on all 167 coordinates.
+* On a full (not silent) view, S2a (with the kappa claim), S2b, S1 (by Weights::pair and by the double dual fold), 22 C_u and 22 L_u all hold.
+Results (exact):
+  silent 1,076 = E2; initial-retained 1,080; R(ker own) 1,080 (initial zero 1,076);
+  per round 108,112,...,112,108; Chain0 basis excess 0; (Q') Chain0 excess 0.
+  The 48 relations annihilate bat on all 16,542 own-kernel carries.
+  B0 = bat(ker own) = 952 = E3. The annihilator has dimension 384, explained 384, unexplained 0.
+  BCond(R1): bat(ker own ∩ ker R) = 952 = bat(ker own). Holds (E4).
+  V_D = 928 = E6. Its annihilator is 408 = the 48 relations + f0, f1, f2 (24 limbs).
+       Unexplained 0. f3 is free on V_D (rank 8).
+  V_G = 952 = B0. Its annihilator is exactly the 48 relations, so R1 has no etaRel.
+  V_D + V_G = 952 = B0 (the assembly lies inside B0).
+  PCS block (D coefficients >= 56, unbalanced, onto [batched | D own]): rank 1,304 of
+  1,336 + 376 = 1,712. bat on ker own_D is 932, with 4 limbs from .inactiveSum (the K4-line).
+Per-lane own ranks: 112 for each mask-only lane, 376 for G and for D. The per-lane round
+images of the own kernels are 60, 108, 148, 184, 216, 248, 308, 332, 356, 380, G 652, D 216,
+identical to Z8c's A column.
