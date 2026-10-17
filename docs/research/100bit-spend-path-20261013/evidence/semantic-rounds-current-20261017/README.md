@@ -1,0 +1,9 @@
+The accepted a555 source has one exact private round body and ten fixed applications. `RoundCalls.rounds_success` proves actual helper success reaches rows 15–24 in order, with the sampler results equal to the returned alpha array. `rounds_carry` proves unchanged hash and next-row advance by ten. The generic step exposes actual record lookup and actual `semantic_validated` success; it takes no child-success premise.
+
+The checked model binds the complete emitted bodies to the current shared a2b/c3dd carrier. Decode, boundary fold and value fold remain three explicit function parameters. The actual sampler is retained; this packet does not replace or reprove the accepted QM31 sampler equality. No external template or opaque-global axiom is imported. The body and common-declaration audits record all naming/parenthesis normalizations.
+
+`SUMMARY.json` records exact commands, source revision, exit, wall time, RSS and swap. Both focused Lean targets have only `propext`, `Classical.choice` and `Quot.sound`. The proof archive retains the rejected obsolete-simplifier attempt and every suppressed launch; no own Lean child launched on suppression. The diagnostic archive retains prior whole-tail, giant phase and cfg-assignment failures. Its results are not accepted proofs.
+
+The unchanged full `verify_finish` now emits successfully; its raw emission is separately retained for the next circle/projection binder. It is not advertised as a checked finish theorem here. Rows 25/26, row-26 circle reseed implementation, all opening/query carry, and literal C2 custody remain separate completion work. The public caller composition and full25 decoder/read bridge remain with C; this packet supplies their missing ten-row run.
+
+Run `python3 check.py` for a deterministic read-only audit. `registered-cones.json` selects only the accepted round emission for the merged re-pin inventory. Native final-source gates are packaged separately.
