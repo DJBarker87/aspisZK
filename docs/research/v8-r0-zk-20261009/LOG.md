@@ -4496,3 +4496,34 @@ transversality study lands.
 **D24.5 Job order.** J0/J0b, J4′, J13–J16 and J11 are listed, not issued. They
 wait for Z9 and the D23.5/D24.4 decisions. Verdict unchanged. Host counter:
 next 3426 (ranges above).
+
+### Lead acceptance of J5a (2026-10-17); D25
+
+J5a `R0Z/HermiteSpan.lean` is accepted. The worker commits are ced2b82d9 and
+f4e3af77d, cherry-picked here. The file imports Mathlib only and is generic
+over the field, so it applies to R1. Host attempt 3462: exit 0, 12.06 s,
+peak RSS 6,604,012 KiB, 0 swaps. The source SHA `e9ff8cf7…` matches the
+committed file. All 26 `#print axioms` lines are exactly
+`[propext, Classical.choice, Quot.sound]`, verified by the lead from the host
+log. The file has no sorry, axiom or native_decide. Attempts 3460 and 3461
+were compile errors (exit 1) and are retained in the evidence.
+
+**D25.1 P3 restated.** The design's P3 claim dim span{Φ_i, X·Φ_i} = min(2n, 28)
+(DESIGN-T2b-2b.txt:401–402) is false for some distinct nodes. Two exact
+counterexamples:
+- m=2, n=2 over GF(5), β=(0,1): rank 3;
+- m=26, n=14 over GF(101): rank 27.
+
+The two lowest coefficients become tied to the nodes once 2n ≥ m+1. The
+proved forms are:
+- P3a, span{Φ_i}: unconditional;
+- P3b, span{Φ_i, X·Φ_i}: covers degrees ≥ 2, i.e. r ≤ min(2n, m), with
+  independence for 2n ≤ m.
+
+Every citation of P3 in the design (lines 410, 430, 454, 462, 535, 806) uses
+P3a or P3b with n ≤ 8, inside the proved range. The D′ design does not cite
+P3. J5b and J5c must cite the restricted forms by name.
+
+**D25.2 Process.** The worker launched 3462 while its own check had counted
+one other Lean process. run2.sh's flock serialised the two, and the run took
+12 s. This is a gate lapse; it is recorded and is not repeated.
