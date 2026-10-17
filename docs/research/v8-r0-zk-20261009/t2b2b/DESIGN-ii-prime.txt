@@ -621,3 +621,136 @@ weights.rs, transcript.rs}.  R1 = Variant::S2 (folds() = 2, final_len() =
        1023) holds for it and opened_prefix transfers with the same proof.
   With neither, R1's (ii′) is conditional on C1T-open covering the full 112
   limbs per column, numerically supported only by Z5's two query sets.
+
+§4  Lean job plan
+-----------------
+Rules as DESIGN-T2b-2b §5 (no sorry/axiom/admit/native_decide, no
+maxRecDepth/maxHeartbeats, no concrete Finset.univ over rows/states, symbolic
+row sums through bsumB_rowOf and equivalences, one module per job, focused
+lake env lean then host replay one module at a time, #print axioms for every
+listed theorem; conditional facts as named Prop hypotheses).  Numbering
+continues the J-plan; J4′ is an amendment of J4.
+
+J0  R0Z/HonestValid.lean  (imports R0Z.Chain, R0Z.Shift, R0P.SemHonest,
+    R0P.LaneMap, R0P.Copy)                                          low–medium
+    def HonestValid (§1.5)
+    def HonestProver.restrict (h) (V : h.Instance → Prop) : HonestProver K
+    def iota : Payload K →ₗ[F] K  (roundPoly 0 at 0 and 1, minus .maskSum)
+    iota_L : iota (L π B ch τ) = 0                   (rounds_initial,
+                                                     maskLinear_vdeg; any τ)
+    iota_A : iota (A π B ch t) = 0
+    inactive_A : (A π B ch t) .inactiveSum = 0       (balance lemmas; needs
+                                                     1023 ∈ copyInactiveRows and
+                                                     zero_inactive — instance
+                                                     facts via CopyActiveRow)
+    iota_cTilde : iota (cTilde h B x w ch) =
+        bsumB 10 (fun b => fOrig x.1 B ch (actual x.1 B (h.build w) ch 0) (ofBool b))
+    bsum_fOrig_zero : HonestValid x.1 B t ch →
+        bsumB 10 (fun b => fOrig x.1 B ch (actual x.1 B t ch 0) (ofBool b)) = 0
+        (R0P.honestRows with pre := sem 0..13; lane_h1_sum, lane_inactive_sum
+         — R0P/LaneMap.lean:939, :946)
+    iota_cTilde_zero, inactive_cTilde_zero  (corollaries)
+    not_iiPrime_witness (the obstruction, as an implication):
+        iota (cTilde w) ≠ iota (cTilde w') → cTilde w − cTilde w' ∉ range A
+    Uses: Chain.rounds_initial, Shift.maskLinear_vdeg, vdeg_fOrig,
+    dir_mem_initialChain0, run_split, originalRounds_eq.  Risk: matching
+    fOrig's terminalValue arguments to virtualPoly's pre-indexing (zc ch =
+    preZc pre); stated as a rewriting lemma first.
+
+J0b R0Z/HonestValidity.lean (builder completeness; research-sized)       hard
+    honestValid_of : ProductionHolds pub λ χ u ∧ CopyLinkBalance pub u ∧
+      (helper inactive form) → HonestValid …   (LaneInterface, pairwise
+    cancellation of balanced links in helper).  Not needed for J16; it is
+    the obligation that justifies restricting to valid instances.
+
+J4′ amendment to R0Z/VerifierRelations.lean (J4)                        medium
+    state S1, S2, S3_u for L π B ch τ for every trace τ:
+      bat_L_mem_B0 : GoodCircle ch → (∀ c, own_c (L τ) = 0) →
+        (L τ) .inactiveSum = 0 → batCells (L τ) ∈ B0 ch
+    and derive bat_ker_own_le from it.  Same lemmas, wider statement.
+
+J13 R0Z/NoiseLift.lean  (imports R0Z.Z4Maps, R0Z.JointTrace)             medium
+    def ownCells c, obs c : (Fin 1024 → K) →ₗ[F] (OwnCell c → K)
+    own_L_single : own_c (L (Pi.single c v)) = obs c v; own_L_other
+    def Vsem c, Ph1, Wsem c, Wh1; def C1Lift c ch, H1Lift ch
+    noise_lift : (∀ c, C1Lift c ch) → H1Lift ch → ∀ δ, (δ supported on lanes
+      0..15, 26, typed and balanced) → ∃ n : N K F, ∀ c, own_c (A (inrN n)) =
+      own_c (L δ) (lanes 0..15, 26) ∧ own_c (A (inrN n)) = 0 (others)
+    c1_surjectivity_of_C1Lift (links the historical Prop)
+    Risk: eligibleLinear's balance at 1023 per column; keep the set abstract.
+
+J14 R0Z/OpenedPrefix.lean  (imports AspisFormal CircleNaturalBasisEval,
+    Wide.FinalEncoder, R0.Fold, R0Z.HonestView)                     medium–hard
+    naturalLinePoly_natDegree (= k), naturalLinePoly_leadingCoeff_ne_zero
+      (2^(k − popcount k) ≠ 0 in char P), naturalLinePoly_eval_one (= 1)
+    span_naturalLinePoly : span{N_i : i < n} = degreeLT K n  (every n)
+    exists_prefix_eval (|Q| ≤ 22, distinct nodes, Z_Q(1) ≠ 0): zero-sum
+      prefix solution in F (and limb-wise in K₄)
+    nodes_ne_one : storedFirstLineX18 u ≠ 1 (from fibre_coordinates_nonzero
+      and the radix-4 lift identity)
+    opened_prefix : D13Order π → ch.queries.card ≤ 22 → (target) →
+      ∃ v ∈ Vsem c (resp. Ph1), opened_c v = target ∧ coefficients ≥ 89 zero
+    Uses: encoded_channels, fibre_inverse, exactFinalLinear_apply,
+    points_injective, Lagrange.interpolate.  Risk: locating X_u = 2x² − 1 in
+    circleLiftEncoder; the K₄ case needs PackField (J1).  This is the only
+    STRUCTURAL piece of C1Lift; C1Lift itself stays a premise.
+
+J15 R0Z/IIPrimeResidual.lean  (imports J0, J2, J3, J4′, J13)            medium
+    Phi0_cTilde : alpha ch 9 ≠ 1/2 → Phi0 B ch (cTilde h B x w ch) = 0
+    residual_own, residual_inactive, residual_iota, residual_terminal,
+    residual_chain, residual_K4, residual_bat   (§2.3 R1–R8)
+    def BReach ch; BCond_of_BReach (with bat_ker_own_le)
+    exists_lift_of_cover (generic F-linear algebra, J3's lemma with
+      prescribed bat); mask_lift (§2.4)
+    Uses: Phi0_L, Phi0_A, evalRound9_originalRounds, claimMask_roundInclusion,
+    originalOf_c, Phi0_dir, rounds_chain, mem_silentMasks_iff, J2's
+    originalRounds_mem_K4 / oracle_mem_K4.  Risk: R7 needs J2's K₄ lemmas for
+    originalRounds of actual … 0 with HonestF (BaseTyped); state J2 for any
+    BaseTyped prepared trace, not only for sRem.
+
+J16 R0Z/IIPrime.lean  (imports J15, J9)                                  low
+    def IIPrimeValid (§1.5)
+    iiPrime_of (§2.5)  — IIPrimeValid (P_final B hB) h B x
+    maskImageOn_final : MaskImageOn (P_final B hB) (h.restrict V) B x
+    hvzk_final / zkfs_final : instantiate hvzk_on_good and
+      zkfs_of_maskImageOn_good_bridge at h.restrict V
+    #print axioms for iiPrime_of, maskImageOn_final, hvzk_final, zkfs_final.
+
+J11 (numeric, probe agent; not Lean)
+    (a) C1Lift per semantic column and H1Lift alone (rank of obs on V_c / P_26
+        vs on W_c / W_26) on adversarial query sets: consecutive fibres,
+        twin-structured sets, sets clustered under the second-level map, plus
+        random; D13 and π_R1.
+    (b) for R1: a search over digit maps σ_d with τ ∈ the three D18 passes,
+        for prefix rows eligible in all 16 columns and copy-inactive (§3.3 ii).
+    (c) Z9 extended with BReach_R1 (B₀_R1 from the two-layer relations).
+
+Order.  J0 and J13, J14 are independent of each other and of Z8c-type
+outcomes and can start now (J14 needs J1 only for the K₄ case).  J4′ is a
+statement change folded into J4.  J15 after J2, J3, J4′, J13.  J16 after J9
+and J15.  Difficulty is concentrated in J14 (circle-code bookkeeping) and in
+the premises (C1Lift, H1Lift, QPrime/OT-open, BReach), which stay premises.
+
+§5  Open points
+---------------
+P1 C1Lift / H1Lift beyond the opened part (24 limbs per lane): OPEN, carried
+   as C1T-open / H1T-open beside OT-open and B-open.  Numerically supported
+   for C1 by Z4c/Z5 (two query sets) and indirectly by every (ii′) pass; H1Lift
+   has never been measured alone (J11a).
+P2 BReach is a strengthening of BCond that (ii′) needs and (i′) does not; it is
+   the measured quantity (Z8c item 4) and the Dprime assembly's conclusion, so
+   D21 can adopt it as the single (B) premise at no evidence cost.
+P3 HonestValid is the right restriction only if honest builds satisfy it for
+   every challenge; clauses 2–3 (helper sums) are expected to hold for all λ, χ
+   by pairwise cancellation, but that is J0b, unproved.  If a challenge-
+   dependent failure exists (an active pole that breaks cancellation), V must
+   move into the challenge predicate and HVZK_on needs a per-ch instance type.
+P4 ch.queries.card ≤ 22 is a sampler property; ZF1's bridge must supply it
+   (R1's transcript returns [u32; 22]; R0 Lean's Challenges.queries is an
+   arbitrary Finset).
+P5 R1: structural opened part lost under S2's π_R1 (§3.2); restored by variant D
+   or by a digit-map search (J11b).  B₀_R1 and BReach_R1 need Z9.
+P6 Instance facts used: 1023 ∈ copyInactiveRows; X_u ≠ 1 via the radix-4 lift;
+   PackField; K4 = image of QM31; D13Order for ROW_TO_COEFFICIENT (all already
+   on the J1/J7a/J10 obligation lists except the first two, which are new and
+   small).
