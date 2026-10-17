@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Current source correspondence; no compiler or source mutation."""
 from pathlib import Path
-import hashlib,json,subprocess,importlib.util
+import hashlib,json,subprocess,importlib.util,argparse
 R=Path(__file__).resolve().parents[5];B=R/'docs/research/100bit-spend-path-20261013';H=Path(__file__).resolve().parent
 sha=lambda b:hashlib.sha256(b).hexdigest()
-rev=subprocess.check_output(['git','-C',str(R),'rev-parse','HEAD'],text=True).strip();old=B/'tools/tx1-caller-extraction-kit/input-accumulator';p=json.loads((old/'source-pins.json').read_text());out=[]
+ap=argparse.ArgumentParser();ap.add_argument('--revision',default='0e82f19aa985abe3e419bf1be7ce4212e8387b18');ap.add_argument('--check',action='store_true');args=ap.parse_args();rev=subprocess.check_output(['git','-C',str(R),'rev-parse',args.revision],text=True).strip();old=B/'tools/tx1-caller-extraction-kit/input-accumulator';p=json.loads((old/'source-pins.json').read_text());out=[]
 for c in p['cuts']:
  raw=subprocess.check_output(['git','-C',str(R),'show',rev+':'+c['path']]);b=(old/'fragments'/f"{c['name']}.rs").read_bytes();assert sha(b)==c['sha256'],c['name'];
  if b not in raw:
@@ -17,4 +17,7 @@ assert [(c['name'],c['path'],c['sha256']) for c in fp['declaration_cuts']]==[(c[
 for path,h in fp['source_files'].items():assert sha(subprocess.check_output(['git','-C',str(R),'show',rev+':'+path]))==h
 wirecuts=fp['declaration_cuts']
 record={'revision':rev,'accepted_tx1_revision':p['revision'],'unchanged_tx1_cuts':out,'wire_cuts':wirecuts,'wire_source_files':fp['source_files'],'wire_lib_sha256':sha(fresh['lib.rs']),'rule':'Exact declaration bytes must occur in current git source; full enclosing source files rehashed. Current prefix extraction is fe80; later authorized transcript-only query trace rewrite does not change these declarations.'}
-(H/'current-source-repin.json').write_text(json.dumps(record,indent=2,sort_keys=True)+'\n');print(json.dumps({'revision':rev,'unchanged_tx1_cuts':len(out),'wire_cuts':len(wirecuts)}))
+raw=(json.dumps(record,indent=2,sort_keys=True)+'\n')
+if args.check:assert(H/'current-source-repin.json').read_text()==raw
+else:(H/'current-source-repin.json').write_text(raw)
+print(json.dumps({'revision':rev,'unchanged_tx1_cuts':len(out),'wire_cuts':len(wirecuts)}))

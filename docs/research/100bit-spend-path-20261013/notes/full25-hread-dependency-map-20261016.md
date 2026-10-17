@@ -28,6 +28,8 @@ For each successive constructor of that ordered source run, derive:
 
    for the record list **constructed from that actual run**. Here completedRecords is exactly `(pre.records.val.take 25).map (fun frame => frame.val.map rawByte)`. This is the missing hbytes conclusion, not a new hypothesis.
 
+The generic source part is now checked: `SourceFull25.calls_of_run` builds its ordered `Call` list from the actual SemanticRun constructors, retaining each exact source slot, three Digest32 calls, q and state carry. `SourceFull25.run_full25_frames` derives equality of those framed slices to `pre.records.val.take 25` from the fixed row schedule, without a byte-equality premise. Evidence: `evidence/source-full25-frames-20261017` (four coherent targets,24 standard-only reports). This is not yet the bounded selected `Rec Message` construction or actual verifier-tail instantiation.
+
 The bounded `SelectedTranscriptParams.Message` constructor also needs the existing fixed message bound3717. It should be obtained from the parsed row's strict framing/typed-codec bounds (semantic records are≤901 bytes), not an arbitrary length assumption. `validated_record` itself merely projects an array slot; it does not independently re-parse framing. Therefore retain the original Prefix parser success throughout.
 
 ## hread composition once the source bytes are proved
