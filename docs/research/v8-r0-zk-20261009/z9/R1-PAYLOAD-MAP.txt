@@ -101,7 +101,7 @@ fold(q, a): h0 + a h1 + a^2 h2 + a^3 h3. The dual fold is (h0 + a h3 + a^2 h2 + 
 The masks enter the batched coordinates only through q, that is, through
 gamma^l times lane l's coefficient vector. There is no quotient.
 
-6. Verifier relations among the batched coordinates on own-silent tapes (INFERRED from verifier.rs)
+6. Verifier relations among the batched coordinates on own-silent tapes (SOURCE verifier.rs; CHECKED Z9: exact annihilator, 384 limbs)
 ----------------------------------------------------------------------------------------------------
   ia     inactive = 0                                    (balanced)
   S2a    round0[0] + round0[4] = claim/4, with claim = kappa^0 inactive + own parts = 0 on ker own
@@ -136,3 +136,14 @@ rho in QM31 only batches L_u inside the verifier. It enters no disclosed coordin
      etaRel (R0 Fact 3) needs the whole once-folded message to be disclosed. In R1 only 159 of
      the 256 E-functionals of q1 are disclosed, so I expect no conjugate relation
      (to be measured).
+
+8. Checked by the Z9 probe (FINDINGS-Z9.txt sections 1 and 2)
+-------------------------------------------------------------
+D18 equals the inverse of S2 row. The probe's ACTIVE table equals
+pool_v1_pair_forest_copy_active_row_masks_v1. Weight kinds 1-6 equal the
+probe's eq/h_weight/evalrow functionals. The folded word is
+EncodingDomain::evaluate. The whole-column R1 pipeline equals the row-wise
+sum on all 167 coordinates. On a full view, S2a (kappa claim), S2b, S1
+(Weights::pair = double dual fold), C_u and L_u all hold. On own-silent
+tapes the 48 relations are exactly the annihilator (dim B0 = 952). The 22
+queried fibres had 22 distinct u/4 on every vector.
