@@ -1,0 +1,1 @@
+    pub fn new(v:Variant)->Result<Self,Error> {Ok(Self{weights:aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?,rhs:E::ZERO,power:K::ONE,next:0})}

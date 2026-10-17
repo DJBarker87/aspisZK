@@ -1,0 +1,38 @@
+{
+  "actual_tx1_sha256": "367d4e60cfba54c5d69bd16477032cf8853056bfd447a1b96add6b270173c437",
+  "classification": "REVIEW-ONLY PROPOSAL; no extraction probe, no production application",
+  "files": {
+    "proposal.patch": "ae3bb243df53c7f8cb75e1c49b5b2bfccea5deb447889dfc89b369a56096d980",
+    "tx1.rs": "9e7a69e0ee63eaa85cc40a0c1d6569a0ab17902068061467fc6c2d04ee071727",
+    "tx1_finish.rs": "9d3eec7ed6918a35bb6639916860037c5f466d7436919eb8a20d389b66a08a5c",
+    "verifier.rs": "a0c440c37620ef22073e16a1f292ddb8a85e9d63463e702f2204a3d3b7cd9b18"
+  },
+  "helper_sha256": "9d3eec7ed6918a35bb6639916860037c5f466d7436919eb8a20d389b66a08a5c",
+  "moved_tail_sha256": "667270fc6fb4d18d0326bd0cc826759e7b980f2593ad8eabc9c93ffd12a1d8e7",
+  "new_boundary": "verifier::tx1_finish",
+  "ownership_and_loans": {
+    "drop_order": "Owned View drops in tx1_finish before outer sem, whereas original View drops after sem. View contains only Variant, WideExact, shared slices and Option<&[u8;32]>; it has no Drop implementation, so this drop-point change has no destructor/allocation/logging effect. Geometry Vec then accumulator Vec then Prepared Box still drop before sem Box in their original relative order; copy fields/arrays/hash/Observer have no custom destructor.",
+    "evaluation_order": "Only caller argument evaluation of existing locals/references is added (no computation or fallible argument). Prepare mark remains before helper. Entire geometry/while/checkpoint/CheckpointWrite/Ok body remains byte-identical.",
+    "external_borrows": "View stores references into unchanged proof bytes. Helper receives the same proof/public borrowed arguments separately; shared aliases remain shared. No mutable external borrow or returned borrow is introduced.",
+    "hash_copy": "Digest32: Copy in crates/aspis-core/src/digest.rs:6. H cannot implement Drop. Moving H into helper preserves the same by-value Copy uses in unchanged query loop/checkpoint. No Clone implementation is called.",
+    "limitation": "Source inspection establishes intended ownership shape; no rewritten source has been compiled/extracted. Actual borrowcheck/native gate still required after user approval.",
+    "owned_arguments": [
+      "View v",
+      "Box<Prepared> p",
+      "Accumulator a",
+      "[E;29] g"
+    ],
+    "retained_outer_local": "sem:Verified<H> stays in tx1, is not borrowed by tx1_finish. Verified and Prepared have no lifetime parameters; Prepared carries no references into sem or View. The preceding shared borrows passed to verify_observed/Prepared::new do not escape those calls."
+  },
+  "proposed_statement": "fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> ",
+  "proposed_tx1_sha256": "9e7a69e0ee63eaa85cc40a0c1d6569a0ab17902068061467fc6c2d04ee071727",
+  "scope": "Allows visible actual tx1 prefix to be interpreted with a universal query/checkpoint continuation at a real source boundary; does not refine the opaque tail or current verify_observed source.",
+  "source_file": "crates/aspis-r1-cost-probe/src/verifier.rs",
+  "source_revision": "3335eecf2f2a08096abe95c67ac6b304f2df6284",
+  "source_support_files": {
+    "crates/aspis-core/src/digest.rs": "e9a3476d8d3f05639253ea663aebaade2318af60e2ea0fd87a280e058208aba0",
+    "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "340f96f95aab835283c03f54c8ea10be1b9650d0536791e6abddaf269d955e7e",
+    "crates/aspis-r1-cost-probe/src/verifier.rs": "17f0edf1140f470170aaad61d73c7b3c6cd7e305c0205672ab747f281f8eefea"
+  },
+  "tail_correspondence": "Exact bytes: geometry setup, unchanged while, checkpoint, observer mark, Ok(bytes). All original owned locals transfer once to helper; helper is Result-returning and no operation, allocation, arithmetic or first-error order is added/reordered."
+}
