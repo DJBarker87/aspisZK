@@ -1,0 +1,11 @@
+# Actual digest roundtrip and root/frontier decoding
+
+`actual_decode_digest_after_successful_encode` proves the actual extracted digest decoder returns the original eight-word digest from the successful source encoder's bytes, under explicit canonical M31 bounds. All eight parser premises from the previous decoder checkpoint are now discharged using source-produced field bytes, exact chunk windows and the existing parser bridge. The result is the original digest, not merely an existential decoder output.
+
+`successful_tail_root_and_frontier_actual_decode` composes that roundtrip with the existing lane-tail encoder's successful decomposition. It covers the root and all twenty frontier entries: each exact 32-byte source encoding is accepted by the actual canonical digest decoder and returns its original digest. Canonicality remains explicit per digest. Existing digest chunk, field-codec, Array/Slice getter and encoder projection proofs are reused.
+
+The matching enclosing account path is `pair_forest_accounts.rs::decode_pool_v1_pair_forest_lane_state_v1`, whose tree slice starts at lane offset 80, and `incremental_merkle.rs::decode_tree_image_unvalidated`. The lane is 768 bytes and the tree image is 688 bytes. This gives lane-relative cursor bytes [88,96), root [96,128), and frontier cell i [128+32i,160+32i), matching the proved encoder projections. This mapping is source inspection, not yet the Lean caller/offset binding theorem. The distinct terminal live-snapshot decoder uses another format and is not substituted for this path.
+
+The next consumer is the actual tree-image decoder, followed by validated-tree reconstruction with authenticated empty roots and the lane header/binding checks. This packet does not claim whole account decode/readback, authenticated account custody/runtime, complete verifier soundness or final 100-bit security/privacy. Production Rust and runtime artifacts are unchanged by this packet.
+
+Validation: 2 focused targets; 2 standard-only axiom reports; zero process swap. Maximum RSS 3,843,712 KiB. Receipts record exact source/object/import hashes, command, base revision, wall time, RSS and cgroup cap. Repeated and internal import pins were checked for coherence. No unchanged full replay was run. Assembly parent: `6a8d5b345b3ddc5008f38b1f04bd6443ebb7a4a1`.
