@@ -136,73 +136,43 @@ fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTra
     let mut round_checks = [[QM31::ZERO; 3]; 10];
     {
         let round = 0usize;
-        #[cfg(not(feature = "prover"))]
         (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
-        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 1usize;
-        #[cfg(not(feature = "prover"))]
         (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
-        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 2usize;
-        #[cfg(not(feature = "prover"))]
         (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
-        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 3usize;
-        #[cfg(not(feature = "prover"))]
         (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
-        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 4usize;
-        #[cfg(not(feature = "prover"))]
         (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
-        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 5usize;
-        #[cfg(not(feature = "prover"))]
         (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
-        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 6usize;
-        #[cfg(not(feature = "prover"))]
         (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
-        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 7usize;
-        #[cfg(not(feature = "prover"))]
         (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
-        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 8usize;
-        #[cfg(not(feature = "prover"))]
         (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
-        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 9usize;
-        #[cfg(not(feature = "prover"))]
         (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
-        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     Ok((running, alpha, transcript))
 }
@@ -215,72 +185,42 @@ fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTra
     let mut round_checks = [[QM31::ZERO; 3]; 10];
     {
         let round = 0usize;
-        #[cfg(not(feature = "prover"))]
-        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
         (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 1usize;
-        #[cfg(not(feature = "prover"))]
-        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
         (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 2usize;
-        #[cfg(not(feature = "prover"))]
-        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
         (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 3usize;
-        #[cfg(not(feature = "prover"))]
-        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
         (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 4usize;
-        #[cfg(not(feature = "prover"))]
-        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
         (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 5usize;
-        #[cfg(not(feature = "prover"))]
-        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
         (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 6usize;
-        #[cfg(not(feature = "prover"))]
-        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
         (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 7usize;
-        #[cfg(not(feature = "prover"))]
-        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
         (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 8usize;
-        #[cfg(not(feature = "prover"))]
-        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
         (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     {
         let round = 9usize;
-        #[cfg(not(feature = "prover"))]
-        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
-        #[cfg(feature = "prover")]
         (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
     }
     Ok((running, alpha, transcript, round_checks))
