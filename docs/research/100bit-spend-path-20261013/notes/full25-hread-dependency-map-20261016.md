@@ -1,6 +1,6 @@
 # Actual source obligations for full25 completed-message bytes and hread
 
-This is a composition/dependency analysis, not a new Lean result. The source is approved Prepared+tx1_finish revision `e5c186ba3`. The current actual `verify_observed` loop remains an extractor blocker. Strict parsing alone does not establish source transcript identity or actual challenge provenance. No new theorem below is assumed.
+This is a composition/dependency analysis. The current checked prefix is exact approved `fe80a544a` (Decision1d), repinned after the new `deb68369b` lead baseline. `FirstHelperBinding.first_helper_parsePublic` now closes actual first→tx1→verify prefix→public_transcript reachability, including hd, supplied=decoded public and hs/parsePublic. The post-begin semantic tail is A's separately extracted source boundary. Strict parsing alone does not establish source transcript identity or actual challenge provenance; no unproved theorem below is assumed.
 
 ## Exact missing caller result requested from A
 
@@ -74,4 +74,4 @@ For the literal path, separately supply the actual `.c2 frame word` constructor 
 
 ## Current status
 
-Checked: actual Prefix typedFull, actual begin15 ordered calls/bytes/rank/carry, current QM31 nominal transport, helper serializer success/binding, and first caller's actual decoder/selector prefix. Current tx1_finish caller model and success inversion have now been checked with only standard Lean axioms; its named verify/query boundaries remain explicit. Missing: actual verify caller reachability to public_transcript and ordered rows15–24; actual recovered-log hbytes; matching Digest32/table/typed-address provenance; literal constructor/C1/C2 context and custody; actual row25/26 and opening/query completion for all33. No full25 hread or complete source acceptance claim follows yet.
+Checked: actual Prefix typedFull, actual begin15 ordered calls/bytes/rank/carry, current QM31 nominal transport, helper serializer success/binding, and first caller's actual decoder/selector prefix. Current tx1_finish caller model and success inversion have now been checked with only standard Lean axioms; its named verify/query boundaries remain explicit. Actual public_transcript reachability is now checked in `evidence/verify-helper-prefix-fe80-20261017` (23 coherent targets,98 standard-only reports). Missing: ordered rows15–24 from the actual post-begin tail; actual recovered-log hbytes; matching Digest32/table/typed-address provenance; literal constructor/C1/C2 context and custody; actual row25/26 and opening/query completion for all33. No full25 hread or complete source acceptance claim follows yet.
