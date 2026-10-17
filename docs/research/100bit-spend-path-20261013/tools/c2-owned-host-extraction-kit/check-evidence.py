@@ -5,6 +5,9 @@ import hashlib,json,re,tarfile
 ROOT=Path(__file__).resolve().parents[5];E=ROOT/'docs/research/100bit-spend-path-20261013/evidence/c2-owned-host-20261017'
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def main():
+ audit=ROOT/'docs/research/100bit-spend-path-20261013/evidence/c2-historical-context-20261017/audit.json'
+ assert sha(audit.read_bytes())=='d599abdfd7ca2ebd44a9b24e111596bf13d94b47f089912b6bd4b5de1ee973e8'
+ assert json.loads(audit.read_text())['classification']=='HISTORICAL_CONTEXT_ONLY'
  members=json.loads((E/'checkpoint-members.json').read_text());archive=E/'checkpoint.tar.gz'
  with tarfile.open(archive) as tf:
   files={m.name:tf.extractfile(m).read() for m in tf.getmembers() if m.isfile()}
@@ -32,5 +35,5 @@ def main():
   p=json.loads(files[prefix+'/input/source-pins.json'])
   for name,h in p['kit_files'].items():assert sha(files[prefix+'/input/'+name])==h,(prefix,name)
   if prefix.startswith('diagnostic'):assert p['classification'].startswith('REJECTED_DIAGNOSTIC')
- print(json.dumps({'status':'PASS','archive_sha256':sha(archive.read_bytes()),'members':len(files),'conditional_formal_results':len(reports),'accepted_actual_caller_or_build_cones':0,'unresolved_actual_source_bridge':True},sort_keys=True))
+ print(json.dumps({'status':'PASS','archive_sha256':sha(archive.read_bytes()),'members':len(files),'conditional_formal_results':len(reports),'result_context':'HISTORICAL_CONTEXT_ONLY','current_accepted_semantic_model_results':0,'accepted_actual_caller_or_build_cones':0,'unresolved_actual_source_bridge':True},sort_keys=True))
 if __name__=='__main__':main()

@@ -1,5 +1,15 @@
 # C2 known-host construction checkpoint
 
+**HISTORICAL_CONTEXT_ONLY — 17 Oct cache audit.** These archived semantic-model
+results are excluded from current accepted results. Both targets import the
+old `FS2.Duplex` (`fd269bd4…`) and `UniformStateFirstHit` (`b0d7a107…`) objects.
+The resolved Circle object is the repaired `05c7d259…`, not rejected `39ea3fa6…`.
+The exact source import paths, selected object hashes and repaired comparisons
+are in `../c2-historical-context-20261017/audit.json`. All original receipts and
+archives remain unchanged. Current actual embedding and six freshly checked
+construction-core lemmas are isolated from these historical model imports in
+`../c2-host-embedding-20261017/`. No whole semantic-model replay was attempted.
+
 The conditional construction component is checked. The actual `Backend::c2`
 and `Commitment::build` source bridges remain **open**: both exact roots have
 valid Charon LLBC and fail Aeneas. No actual C2 custody result is claimed.

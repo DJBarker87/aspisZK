@@ -5,6 +5,9 @@ import hashlib,json,re,tarfile
 ROOT=Path(__file__).resolve().parents[5];E=ROOT/'docs/research/100bit-spend-path-20261013/evidence/c2-recorded-experiment-20261017'
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def main():
+ audit=ROOT/'docs/research/100bit-spend-path-20261013/evidence/c2-historical-context-20261017/audit.json'
+ assert sha(audit.read_bytes())=='d599abdfd7ca2ebd44a9b24e111596bf13d94b47f089912b6bd4b5de1ee973e8'
+ assert json.loads(audit.read_text())['classification']=='HISTORICAL_CONTEXT_ONLY'
  members=json.loads((E/'recorded-members.json').read_text())
  with tarfile.open(E/'recorded-experiment.tar.gz') as tf:files={m.name:tf.extractfile(m).read() for m in tf.getmembers() if m.isfile()}
  assert set(files)==set(members)
@@ -20,5 +23,5 @@ def main():
  log=files['runs/recorded-a/lean.log'].decode();reports=re.findall(r"'([^']+)' depends on axioms: \[([^\]]*)\]",log)
  assert len(reports)==4 and 'sorryAx' not in log and 'error:' not in log
  for _,xs in reports:assert set(x.strip() for x in xs.split(','))=={'propext','Classical.choice','Quot.sound'}
- print(json.dumps({'status':'PASS','reports':4,'actual_Rust_execution_bridge':'OPEN','full_prover_verifier_witness_supplied':False,'archive_sha256':sha((E/'recorded-experiment.tar.gz').read_bytes())},sort_keys=True))
+ print(json.dumps({'status':'PASS','reports':4,'result_context':'HISTORICAL_CONTEXT_ONLY','current_accepted_semantic_model_results':0,'actual_Rust_execution_bridge':'OPEN','full_prover_verifier_witness_supplied':False,'archive_sha256':sha((E/'recorded-experiment.tar.gz').read_bytes())},sort_keys=True))
 if __name__=='__main__':main()
