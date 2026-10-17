@@ -1,0 +1,9 @@
+# Validator entry to the append relation's non-carry condition
+
+`AspisR1TerminalValidateTransitionCandidate.EntryAppendShape.successful_entry_append_shape` derives the maintained `AspisR1.AppendSemantics.NonCarryShape` of the same decoded public value from successful execution of the factored current validator entry. It derives both the bounded carry result and the full twenty-level loop success; neither is an independent premise. The loop/row proofs reuse the previously committed non-carry graph and the retained append model, rather than a duplicate definition of the append condition.
+
+The entry retains ordered source prechecks and the adopted bounded-carry suffix. Capacity and the Option equality implementation remain explicit parameters of this source cut. The sealed 04fc candidate contains the older trailing-ones implementation; migration to current Rust SHA256 4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e remains an explicit source-correspondence boundary. This result does not prove whole production caller reachability, capacity/Option binding or extraction/runtime preservation.
+
+The exact existing AppendPair and AppendSemantics sources are replayed with canonical module owners R1AppendPair and R1AppendSemantics. Their maintained filenames remain AppendPair.lean and AppendSemantics.lean; the summary records that mapping, and no duplicate maintained owner is added. The two dependent wrappers were checked again after switching their import to the canonical R1AppendSemantics owner. The incidental AppendSemantics alias is excluded from this graph.
+
+Six focused targets exited zero with zero process swap. Receipts retain commands, source/cache revision, exact source/object/direct-import pins, elapsed time, peak RSS and standard-only exported axiom reports. No package-wide replay or cap increase was used. The full accepted-spend soundness and privacy theorem remains open.
