@@ -1,0 +1,56 @@
+DESIGN-ii-prime — proof design for clause (ii′) of MaskImageOn
+==============================================================
+
+Job: (ii′) design (no Lean proofs written; zero host compiles).  Branch
+codex/r0-clause-iiprime-20261017, base 524e1debb (origin/v8-reference,
+D23 accepted).  Read against LOG D11–D23, DESIGN-T2b-2b.txt (§0 notation,
+§1 K₄/Good₃, §2.1 reduction, §2.2 verifier relations, §5 J-plan) and
+DESIGN-T2b-2b-Dprime.txt (BCond, B-glue, V_D/V_G).  Lean paths below are
+relative to docs/research/v8-r0-zk-20261009/lean/R0Z/ unless prefixed
+(R0P = docs/research/v8-r0-sem-proof-20261008/lean/R0P/,
+R0 = docs/research/v8-wide-reference-20261005/lean/R0/).
+
+Tags as in DESIGN-T2b-2b §0: STRUCTURAL (all challenges), CONDITIONAL
+(off a named bad set, density given), OPEN (no proof route I vouch for;
+numeric support named), PREMISE (a named Prop hypothesis of the theorem).
+
+Headline findings
+  H1 (§1.4)  (ii′) as stated in Shift.lean:186 is FALSE without a
+     completeness premise.  HonestProver (ZkStatement.lean:296) has no
+     validity field, so h.build w is an arbitrary trace.  Two linear
+     functionals vanish on range A but not on cTilde w − cTilde w′ for
+     arbitrary traces: the initial-sum defect
+     ι(v) := p₀ᵛ(0) + p₀ᵛ(1) − v(.maskSum)  and  v(.inactiveSum).
+     (ii′) needs two honest-trace equalities (HonestSum, HonestInactive;
+     §1.5), both consequences of builder completeness (open since D11).
+  H2 (§2)  Given those, (ii′) reduces to: per-lane noise lifts for the 16
+     semantic lanes (C1Lift_c) and the H1 lane (H1Lift), followed by a mask
+     lift that reuses (i′)'s Q′ premise and a strengthened (B) premise,
+     BReach := B₀ ≤ bat(ker own ⊓ ker R).  BReach is exactly the assembly
+     that Z8c/Z8d/Z8e measured; it implies BCond.  No new mask-lane rank
+     statement is needed.
+  H3 (§2.3)  c1_surjectivity as defined (Z4Maps.lean:62) is insufficient:
+     C1Cell (Z4Maps.lean:32) omits .extraClaim c for c < 16 (it predates
+     D14's fourth weight row), and it omits the H1 lane.  The replacement
+     is per lane, on the own observations, with the noise lane's actual
+     (balanced) word space.
+  H4 (§2.3)  The opened-symbol part of C1Lift is STRUCTURAL under
+     D13Order: through the fibre transform, the 88 opened symbols are the
+     four quarter polynomials evaluated at 22 distinct folded points, and
+     the 89 free low coefficients give a 22-node Vandermonde in each
+     quarter, since span{N_0..N_{n−1}} = K[X]_{<n} for every n.  The
+     remaining 24 limbs per lane (claims, extra, ood) are a transversality
+     condition (C1T-open / H1T-open), in the same family as OT-open.
+  H5 (§3)  R1: the route survives unchanged in shape.  Every count and
+     the verifier-relation list change; see §3.
+
+Sections
+  §1  Definitions in Lean, the exact (ii′) Prop, the obstruction
+  §2  Proof route (steps, tags, composition with (i′))
+  §3  R1 applicability
+  §4  Lean job plan
+  §5  Open points
+
+§1  Definitions in Lean and the exact (ii′) statement
+-----------------------------------------------------
+(sections below are filled in incrementally)
