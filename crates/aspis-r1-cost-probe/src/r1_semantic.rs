@@ -79,7 +79,8 @@ fn mark(obs: crate::verifier::Observer, i: u8) {
     let _=(obs,i);
 }
 
-fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
+#[cfg(not(feature = "prover"))]
+fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {
     let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
     let mut alpha = [QM31::ZERO; 10];
     #[cfg(feature = "prover")]
@@ -274,6 +275,213 @@ fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transc
         }
         running = value;
     }
+    Ok((running, alpha, transcript))
+}
+
+#[cfg(feature = "prover")]
+fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>, [[QM31; 3]; 10]), Error> {
+    let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
+    let mut alpha = [QM31::ZERO; 10];
+    #[cfg(feature = "prover")]
+    let mut round_checks = [[QM31::ZERO; 3]; 10];
+    {
+        let round = 0usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 1usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 2usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 3usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 4usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 5usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 6usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 7usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 8usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    {
+        let round = 9usize;
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = polynomial
+            .iter()
+            .rev()
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    }
+    Ok((running, alpha, transcript, round_checks))
+}
+
+fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
+    #[cfg(not(feature = "prover"))]
+    let (running, alpha, mut transcript) = semantic_rounds(&prefix, transcript)?;
+    #[cfg(feature = "prover")]
+    let (running, alpha, mut transcript, round_checks) = semantic_rounds(&prefix, transcript)?;
     mark(obs, 2);
     let claims = claims(&prefix)?;
     let original_challenges = aspis_core::state_only_prefix::r0::Challenges {
