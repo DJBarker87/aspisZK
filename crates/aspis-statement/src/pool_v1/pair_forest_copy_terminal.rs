@@ -192,6 +192,9 @@ impl Selectors {
 
     #[cfg(any(test, feature = "pool-v1-pair-forest-active-mask-basis-audit"))]
     fn active_mask_basis(&self) -> QM31 {
+        // Candidate specialization of the seven frozen active masks. Their
+        // set-bit counts are all at most eight, so selector_mask_sum_16 takes
+        // its non-complement branch and visits these low indices in order.
         const MASKS: [u16; 7] = [6144, 6145, 4097, 2048, 2049, 26214, 1749];
         let mut high_sums = [QM31::ZERO; MASKS.len()];
         let mut block = 0usize;
@@ -213,8 +216,19 @@ impl Selectors {
         let mut sum = QM31::ZERO;
         let mut coordinate = 0usize;
         while coordinate < MASKS.len() {
-            sum = sum
-                .add(high_sums[coordinate].mul(selector_mask_sum_16(&self.low, MASKS[coordinate])));
+            let low_sum = match coordinate {
+                0 => self.low[11].add(self.low[12]),
+                1 => self.low[0].add(self.low[11]).add(self.low[12]),
+                2 => self.low[0].add(self.low[12]),
+                3 => self.low[11],
+                4 => self.low[0].add(self.low[11]),
+                5 => self.low[1].add(self.low[2]).add(self.low[5]).add(self.low[6])
+                    .add(self.low[9]).add(self.low[10]).add(self.low[13]).add(self.low[14]),
+                6 => self.low[0].add(self.low[2]).add(self.low[4]).add(self.low[6])
+                    .add(self.low[7]).add(self.low[9]).add(self.low[10]),
+                _ => unreachable!("coordinate outside frozen active-mask basis"),
+            };
+            sum = sum.add(high_sums[coordinate].mul(low_sum));
             coordinate += 1;
         }
         sum

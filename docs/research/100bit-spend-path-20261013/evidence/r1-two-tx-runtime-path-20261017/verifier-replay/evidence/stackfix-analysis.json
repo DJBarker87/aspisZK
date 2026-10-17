@@ -1,0 +1,123 @@
+{
+  "purpose": "Diagnose and repair current R1 ASQ8 SBF stack-frame crash; isolated candidate workspace only",
+  "toolchain": {
+    "old_and_current": "Solana cargo-build-sbf 3.1.13; platform-tools v1.52; SBF rustc 1.89.0-dev / LLVM 20.1.7",
+    "current_flags": "--features pool-adapter,private-leaf-salts --skip-tools-install --offline -j 1 -- --locked",
+    "conclusion": "No compiler/profile/toolchain mismatch found. Prior successful build and current failing build use same toolchain and flags; old logs also contain unrelated oversized-frame warnings."
+  },
+  "failing_function": {
+    "rust_symbol": "aspis_r1_cost_probe::r1_semantic::verify_observed",
+    "current_stack_warning": "Stack offset 4104 exceeded 4096 by 8 bytes; estimated frame 4416 bytes",
+    "runtime_error": "Access violation in stack frame 9 at 0x200009fe8 of size 8",
+    "last_phase": "r1:parsed",
+    "evidence": "logs/sbf-candidate-fresh.log; previous unmodified candidate/baseline runtime receipts under fixtures/r18-osmask-both-final"
+  },
+  "source_change": {
+    "file": "candidate/crates/aspis-r1-cost-probe/src/r1_wire.rs",
+    "baseline_sha256": "f1c0856377f5586fef1e74fc5d4cba619000325beb6be85edd539cee699646d5",
+    "candidate_sha256": "3a6f30708d5cd8de323438a5b5de479cc59d1c8234958197c3a033a0204256f3",
+    "delta": "Added #[inline(never)] to generic begin<H: Digest32>, preventing its challenge setup from inlining into verify_observed. Semantic operations unchanged.",
+    "other_source_pins": {
+      "r1_semantic_sha256": "340f96f95aab835283c03f54c8ea10be1b9650d0536791e6abddaf269d955e7e",
+      "copy_helper_sha256": "f38ca2bd28554e8f67b75b7b035f02648ea0b5d82f78d2457e10188e6402a3f0",
+      "semantic_terminal_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e"
+    }
+  },
+  "rebuild": {
+    "receipt": "evidence/build-receipts/candidate-stackfix-final.json",
+    "exit_status": 0,
+    "elapsed_seconds": 4.56,
+    "max_rss_kib": 229464,
+    "swap_bytes": 0,
+    "scope_caps": "MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0",
+    "log": "logs/sbf-candidate-fresh.log",
+    "new_verify_observed_warning": false,
+    "artifact_sha256": "2ba4725ffaf04ceb761346942950d0d681379b2efb084111893078953518d12c",
+    "artifact_bytes": 1282984
+  },
+  "fixture": {
+    "proof_sha256": "65f57a1764292c4c569e69800e0ee5591e8ea11980520f898457002d6bd18f11",
+    "proof_bytes": 124343,
+    "public_sha256": "f6bcd49446f1077d2c5ed4be940e91f0be444efc5ae83024ec0700b8c205c331",
+    "public_bytes": 1880,
+    "output": "fixtures/r18-stackfix-final-osmask"
+  },
+  "replay": {
+    "scope": "aspis-maskbasis-r1-replay-final-20261017.scope",
+    "harness_exit_status": 1,
+    "explanation": "Harness attempted both artifacts; untouched baseline failed, while repaired candidate passed both transactions.",
+    "baseline_stage1": {
+      "error": "InstructionError(3, ProgramFailedToComplete)",
+      "invoked_program_cu": 87815,
+      "last_phase": "parsed"
+    },
+    "candidate_stage1": {
+      "error": null,
+      "invoked_program_cu": 1342725,
+      "phases": [
+        "parsed",
+        "semantic",
+        "prepare",
+        "merkle:0",
+        "query:0",
+        "merkle:1",
+        "query:1",
+        "merkle:2",
+        "query:2",
+        "merkle:3",
+        "query:3",
+        "merkle:4",
+        "query:4",
+        "merkle:5",
+        "query:5",
+        "merkle:6",
+        "query:6",
+        "merkle:7",
+        "query:7",
+        "merkle:8",
+        "query:8",
+        "merkle:9",
+        "query:9",
+        "checkpoint-write",
+        "pool-adapter-stage1-checkpoint-written"
+      ]
+    },
+    "candidate_stage2": {
+      "error": null,
+      "invoked_program_cu": 1226423,
+      "phases": [
+        "pool-adapter-stage2-begin",
+        "parsed",
+        "checkpoint-read",
+        "merkle:10",
+        "query:10",
+        "merkle:11",
+        "query:11",
+        "merkle:12",
+        "query:12",
+        "merkle:13",
+        "query:13",
+        "merkle:14",
+        "query:14",
+        "merkle:15",
+        "query:15",
+        "merkle:16",
+        "query:16",
+        "merkle:17",
+        "query:17",
+        "merkle:18",
+        "query:18",
+        "merkle:19",
+        "query:19",
+        "merkle:20",
+        "query:20",
+        "merkle:21",
+        "query:21",
+        "relation",
+        "final"
+      ]
+    },
+    "time_log": "logs/r18-stackfix-final.time",
+    "keys_retained": true
+  }
+}

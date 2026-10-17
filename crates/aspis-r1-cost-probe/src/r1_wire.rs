@@ -386,6 +386,7 @@ pub fn statement_points(alpha: &[QM31; 10]) -> [[QM31; 10]; 3] {
 pub use aspis_core::state_only_prefix::r0::Challenges;
 /// Rows 0..14. Roots are the only commitment records; there is no helper
 /// zero-sum/registry absorb between row 2 and theta.
+#[inline(never)]
 pub fn begin<H: Digest32>(
     prefix: &Prefix<'_>,
     transcript: &mut SemanticTranscript<H>,
