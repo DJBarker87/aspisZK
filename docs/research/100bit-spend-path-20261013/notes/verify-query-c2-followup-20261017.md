@@ -118,6 +118,19 @@ owned vectors or literalMessage. Packing, variant/encoder transport and exact
 length/content, salt/path, custody, and checkpoint remain separate obligations.
 Hashes and samplers are not substitutes for the full C2 witness.
 
+The remaining compiler frontier is isolated in
+`evidence/c2-helper-root-diagnostics-20261017` (archive
+`9b64fe50df2f41656258a777ce5144a91a2c8858755587f6cc82fbc3b63b93b0`).
+Rooting the actual copy helper alone still fails Aeneas at
+`SymbolicToPureAbs.ml:1313`; rooting only the unchanged encode/retain prefix
+fails at `InterpAbs.ml:191`. Both have valid error-free LLBC but no accepted
+Lean emission or theorem. Their Charons exit0 and their Aeneas runs exit2,
+with swap0 and the same6/8GiB caps. The retained102-member archive and
+deterministic input generators pass the read/hash-only checker. No viable
+production-source refactor was demonstrated or adopted. The six exact source
+spans and preservation conditions are recorded in
+`evidence/c2-host-embedding-20261017/next-source-bridge-plan.json`.
+
 ## Outstanding work
 
 Actual finish→full25 byte identity, generic selected hread in a coherent current
