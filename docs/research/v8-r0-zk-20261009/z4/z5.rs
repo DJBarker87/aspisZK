@@ -7,6 +7,10 @@ pub(super) fn transport() -> &'static [u16; N] {
     SELECTED.get().unwrap_or(&r0::transport::ROW_TO_COEFFICIENT)
 }
 pub(super) fn is_selected() -> bool { SELECTED.get().is_some() }
+/// Z9: select a row-to-coefficient transport (D18 for R1) before first use.
+pub(super) fn set_transport(pi: [u16; N]) {
+    SELECTED.set(pi).expect("a row-to-coefficient transport is already selected");
+}
 const MASTER: u64 = 0x5348f0b9a87835d0;
 const SEARCH_SEED: u64 = 0x5a35d16120261010;
 #[derive(Clone, Debug)]
