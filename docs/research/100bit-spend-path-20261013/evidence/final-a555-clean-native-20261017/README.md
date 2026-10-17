@@ -1,0 +1,5 @@
+Final clean native gates for a555c852664c80000942f0c911e16719a5493625. The immutable snapshot contains 532 Git-exact source files plus the two pinned checkpoint fixtures. All three release-profile gates passed under6/8GiB caps with swap0. SUMMARY.json records exact targets, commands, revisions, exit, wall time and peak RSS.
+
+Codec output is byte-identical for all1233 cases. The583 digest calls are compared in exact order, with349tx1 and234tx2 calls and unchanged checkpoint bytes/acceptance. Only the unordered repeated-input report inventory is sorted for comparison. All23 checkpoint test names match the accepted baseline. Native-stage axioms are not applicable. No SBF/runtime harness or proof generation ran.
+
+The separate lead packet records224 actual semantic failure/order injections on this same source; the102 query cases remain valid through exact unchanged query declaration/dependency re-pin. This packet does not rerun those already passing covered scopes. Run python3 check.py for a read-only archive/hash/source audit.

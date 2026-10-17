@@ -72,41 +72,165 @@ pub fn public_transcript<H: Digest32>(
     )
 }
 
-#[inline(never)]
-pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
-    fn mark(obs: crate::verifier::Observer, i: u8) {
-        #[cfg(feature="detail-phases")]
-        if let Some(f)=obs {f(crate::verifier::Phase::SemanticPart(i));}
-        #[cfg(not(feature="detail-phases"))]
-        let _=(obs,i);
-    }
-    let prefix = Prefix::parse(bytes)?;
-    mark(obs, 0);
-    let mut transcript = public_transcript(public, hash, prefix.c1_root)?;
-    let challenges = wire::begin(&prefix, &mut transcript)?;
-    mark(obs, 1);
-    let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
-    let mut alpha = [QM31::ZERO; 10];
-    #[cfg(feature = "prover")]
-    let mut round_checks = [[QM31::ZERO; 3]; 10];
-    for round in 0..10 {
-        let row = 15 + round as u8;
-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+fn mark(obs: crate::verifier::Observer, i: u8) {
+    #[cfg(feature="detail-phases")]
+    if let Some(f)=obs {f(crate::verifier::Phase::SemanticPart(i));}
+    #[cfg(not(feature="detail-phases"))]
+    let _=(obs,i);
+}
+
+fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {
         let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
-        if boundary != running {
-            return Err(Error::Boundary { round });
-        }
-        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+    boundary
+}
+
+fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> QM31 {
         let value = polynomial
             .iter()
             .rev()
             .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+    value
+}
+
+#[cfg(not(feature = "prover"))]
+fn semantic_round<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>, mut alpha: [QM31; 10], mut running: QM31, round: usize) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = semantic_boundary(&polynomial);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = semantic_value(&polynomial, &alpha, round);
         #[cfg(feature = "prover")]
         {
             round_checks[round] = [running, boundary, value];
         }
         running = value;
+    Ok((running, alpha, transcript))
+}
+
+#[cfg(feature = "prover")]
+fn semantic_round<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>, mut alpha: [QM31; 10], mut running: QM31, round: usize, mut round_checks: [[QM31; 3]; 10]) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>, [[QM31; 3]; 10]), Error> {
+        let row = 15 + round as u8;
+        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+        let boundary = semantic_boundary(&polynomial);
+        if boundary != running {
+            return Err(Error::Boundary { round });
+        }
+        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+        let value = semantic_value(&polynomial, &alpha, round);
+        #[cfg(feature = "prover")]
+        {
+            round_checks[round] = [running, boundary, value];
+        }
+        running = value;
+    Ok((running, alpha, transcript, round_checks))
+}
+
+#[cfg(not(feature = "prover"))]
+fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {
+    let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
+    let mut alpha = [QM31::ZERO; 10];
+    #[cfg(feature = "prover")]
+    let mut round_checks = [[QM31::ZERO; 3]; 10];
+    {
+        let round = 0usize;
+        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
     }
+    {
+        let round = 1usize;
+        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
+    }
+    {
+        let round = 2usize;
+        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
+    }
+    {
+        let round = 3usize;
+        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
+    }
+    {
+        let round = 4usize;
+        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
+    }
+    {
+        let round = 5usize;
+        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
+    }
+    {
+        let round = 6usize;
+        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
+    }
+    {
+        let round = 7usize;
+        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
+    }
+    {
+        let round = 8usize;
+        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
+    }
+    {
+        let round = 9usize;
+        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
+    }
+    Ok((running, alpha, transcript))
+}
+
+#[cfg(feature = "prover")]
+fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>, [[QM31; 3]; 10]), Error> {
+    let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
+    let mut alpha = [QM31::ZERO; 10];
+    #[cfg(feature = "prover")]
+    let mut round_checks = [[QM31::ZERO; 3]; 10];
+    {
+        let round = 0usize;
+        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
+    }
+    {
+        let round = 1usize;
+        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
+    }
+    {
+        let round = 2usize;
+        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
+    }
+    {
+        let round = 3usize;
+        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
+    }
+    {
+        let round = 4usize;
+        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
+    }
+    {
+        let round = 5usize;
+        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
+    }
+    {
+        let round = 6usize;
+        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
+    }
+    {
+        let round = 7usize;
+        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
+    }
+    {
+        let round = 8usize;
+        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
+    }
+    {
+        let round = 9usize;
+        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
+    }
+    Ok((running, alpha, transcript, round_checks))
+}
+
+fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
+    #[cfg(not(feature = "prover"))]
+    let (running, alpha, mut transcript) = semantic_rounds(&prefix, transcript)?;
+    #[cfg(feature = "prover")]
+    let (running, alpha, mut transcript, round_checks) = semantic_rounds(&prefix, transcript)?;
     mark(obs, 2);
     let claims = claims(&prefix)?;
     let original_challenges = aspis_core::state_only_prefix::r0::Challenges {
@@ -178,4 +302,14 @@ pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, o
         #[cfg(feature = "prover")]
         masked_terminal,
     })
+}
+
+#[inline(never)]
+pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
+    let prefix = Prefix::parse(bytes)?;
+    mark(obs, 0);
+    let mut transcript = public_transcript(public, hash, prefix.c1_root)?;
+    let challenges = wire::begin(&prefix, &mut transcript)?;
+    mark(obs, 1);
+    verify_finish(public, prefix, transcript, challenges, obs)
 }

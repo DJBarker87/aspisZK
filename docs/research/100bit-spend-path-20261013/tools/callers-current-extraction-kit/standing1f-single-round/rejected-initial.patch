@@ -1,0 +1,399 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -93,35 +93,53 @@
+ }
+ 
+ #[cfg(not(feature = "prover"))]
+-fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {
+-    let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
+-    let mut alpha = [QM31::ZERO; 10];
+-    #[cfg(feature = "prover")]
+-    let mut round_checks = [[QM31::ZERO; 3]; 10];
+-    {
+-        let round = 0usize;
++fn semantic_round<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>, mut alpha: [QM31; 10], mut running: QM31, round: usize) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {
+         let row = 15 + round as u8;
+         let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+         let boundary = semantic_boundary(&polynomial);
+         if boundary != running {
+             return Err(Error::Boundary { round });
+-        }
+-        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+-        let value = semantic_value(&polynomial, &alpha, round);
+-        #[cfg(feature = "prover")]
+-        {
+-            round_checks[round] = [running, boundary, value];
+-        }
+-        running = value;
+-    }
+-    {
+-        let round = 1usize;
++        Ok((running, alpha, transcript))
++}
++
++#[cfg(feature = "prover")]
++fn semantic_round<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>, mut alpha: [QM31; 10], mut running: QM31, round: usize, mut round_checks: [[QM31; 3]; 10]) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>, [[QM31; 3]; 10]), Error> {
+         let row = 15 + round as u8;
+         let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+         let boundary = semantic_boundary(&polynomial);
+         if boundary != running {
+             return Err(Error::Boundary { round });
+-        }
++        Ok((running, alpha, transcript, round_checks))
++}
++
++#[cfg(not(feature = "prover"))]
++fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {
++    let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
++    let mut alpha = [QM31::ZERO; 10];
++    #[cfg(feature = "prover")]
++    let mut round_checks = [[QM31::ZERO; 3]; 10];
++    {
++        let round = 0usize;
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
++        let value = semantic_value(&polynomial, &alpha, round);
++        #[cfg(feature = "prover")]
++        {
++            round_checks[round] = [running, boundary, value];
++        }
++        running = value;
++    }
++    {
++        let round = 1usize;
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -132,12 +150,11 @@
+     }
+     {
+         let round = 2usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -148,12 +165,11 @@
+     }
+     {
+         let round = 3usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -164,12 +180,11 @@
+     }
+     {
+         let round = 4usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -180,12 +195,11 @@
+     }
+     {
+         let round = 5usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -196,12 +210,11 @@
+     }
+     {
+         let round = 6usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -212,12 +225,11 @@
+     }
+     {
+         let round = 7usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -228,12 +240,11 @@
+     }
+     {
+         let round = 8usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -244,12 +255,11 @@
+     }
+     {
+         let round = 9usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -269,12 +279,11 @@
+     let mut round_checks = [[QM31::ZERO; 3]; 10];
+     {
+         let round = 0usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -285,12 +294,11 @@
+     }
+     {
+         let round = 1usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -301,12 +309,11 @@
+     }
+     {
+         let round = 2usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -317,12 +324,11 @@
+     }
+     {
+         let round = 3usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -333,12 +339,11 @@
+     }
+     {
+         let round = 4usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -349,12 +354,11 @@
+     }
+     {
+         let round = 5usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -365,12 +369,11 @@
+     }
+     {
+         let round = 6usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -381,12 +384,11 @@
+     }
+     {
+         let round = 7usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -397,12 +399,11 @@
+     }
+     {
+         let round = 8usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+@@ -413,12 +414,11 @@
+     }
+     {
+         let round = 9usize;
+-        let row = 15 + round as u8;
+-        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = semantic_boundary(&polynomial);
+-        if boundary != running {
+-            return Err(Error::Boundary { round });
+-        }
++        #[cfg(not(feature = "prover"))]
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++        #[cfg(feature = "prover")]
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+         let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
