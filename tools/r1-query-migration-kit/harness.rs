@@ -44,9 +44,10 @@ fn queries_exact_old_new_all_digest_positions_and_decoder() {
   for fault in faults {
    let a=run(true,state,row,&payload,fault);let b=run(false,state,row,&payload,fault);assert_eq!(a,b,"{} {:?}",label,fault);
    match fault {
-    Fault::Abort(p)=>{assert_eq!(b.abort,Some(p));assert_eq!(b.events.len(),p+1);assert_eq!(b.events.last().unwrap().answer,None);assert!(b.trace.is_empty()&&b.decoder.is_empty());}
-    Fault::Decoder=>{assert_eq!(b.result,Some(Err(crate::verifier::Error::Transcript)));assert_eq!(b.events.len(),17);assert!(b.trace.is_empty());assert_eq!(b.decoder.len(),1);}
+    Fault::Abort(p)=>{assert_eq!(b.abort,Some(p));assert_eq!(b.events.len(),p+1);assert_eq!(b.events.last().unwrap().answer,None);assert!(b.trace.is_empty()&&b.decoder.is_empty());assert_eq!(b.state,b.events[0].answer.unwrap());}
+    Fault::Decoder=>{assert_eq!(b.result,Some(Err(crate::verifier::Error::Transcript)));assert_eq!(b.events.len(),17);assert!(b.trace.is_empty());assert_eq!(b.decoder.len(),1);assert_eq!(b.state,b.events[0].answer.unwrap());}
     Fault::None|Fault::Alter(_)=>{
+     if fault==Fault::None {assert!(matches!(b.result,Some(Ok(_))),"successcontrol mustdecode");}
      assert_eq!(b.events.len(),17);assert_eq!(b.decoder.len(),1);
      if let Some(Ok(q))=b.result {assert_eq!(b.trace.len(),22);for i in 0..22 {assert_eq!(b.trace[i],(5,i,E::from_m31(aspis_core::field::M31(q[i])).to_le_bytes()));}
       let decoded=aspis_core::r0_transcript::queries_from_pairs(&b.decoder[0].blocks,&b.decoder[0].advances).unwrap();assert_eq!(decoded.0,q);assert_eq!(decoded.1,b.state);
@@ -54,6 +55,7 @@ fn queries_exact_old_new_all_digest_positions_and_decoder() {
     }
    }
    if label=="saved-S2"&&fault==Fault::None {
+    assert_eq!(unhex(fixture["expected_absorbed_state"].as_str().unwrap()),b.events[0].answer.unwrap());
     let expected=fixture["expected17calls"].as_array().unwrap();assert_eq!(expected.len(),b.events.len());
     for (e,v)in b.events.iter().zip(expected) {let parts:Vec<Vec<u8>>=v["parts_hex"].as_array().unwrap().iter().map(|p|unhex(p.as_str().unwrap())).collect();assert_eq!(parts,e.parts);assert_eq!(unhex(v["output_hex"].as_str().unwrap()),e.answer.unwrap());}
    }
