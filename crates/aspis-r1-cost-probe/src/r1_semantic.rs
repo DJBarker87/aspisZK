@@ -80,14 +80,16 @@ fn mark(obs: crate::verifier::Observer, i: u8) {
 }
 
 fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {
-    polynomial.iter().copied().fold(polynomial[0], QM31::add)
+        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+    boundary
 }
 
 fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> QM31 {
-    polynomial
+        let value = polynomial
             .iter()
             .rev()
-            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c))
+            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+    value
 }
 
 #[cfg(not(feature = "prover"))]
