@@ -125,7 +125,7 @@ def main():
         "source_revision": FINAL, "checker_revision": subprocess.check_output(["git", "-C", str(ROOT), "rev-parse", "HEAD"], text=True).strip(),
         "print_axioms": "N/A (read/hash-only evidence check)", "members": len(files), "production_files_each_snapshot": 532,
         "accepted_targets": summaries, "final_verify_cases": 224, "query_cases": 102,
-        "query_repin": "Entire transcript.rs and all531 other production files unchanged; only semantic round source differs",
+        "query_repin": "Entire transcript.rs and all530 other production files unchanged; only semantic round source differs",
         "historical_verify_targets": "5a28 snapshots retained; superseded by final a555 checks",
         "archive_sha256": args.sha256, "builds_executed": False, "SBF_build": False, "readonly_runtime_harness": False}
     if args.output:

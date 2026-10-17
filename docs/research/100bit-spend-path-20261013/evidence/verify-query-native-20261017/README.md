@@ -29,7 +29,7 @@ decoder arguments/results and carried states agree. The saved-S2 context and
 17 calls are checked against the retained 583-call ordered counter trace.
 
 The query target is re-pinned to a555 by byte equality of its entire production
-file, transcript.rs, and all 531 other production files; only r1_semantic.rs
+file, transcript.rs, and all 530 other production files; only r1_semantic.rs
 changed after its run. Its unchanged gate was not repeated. The earlier 5a28
 verify runs remain in the archive as superseded history, excluded from acceptance.
 
