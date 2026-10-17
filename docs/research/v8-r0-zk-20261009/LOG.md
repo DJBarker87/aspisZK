@@ -4527,3 +4527,56 @@ P3. J5b and J5c must cite the restricted forms by name.
 **D25.2 Process.** The worker launched 3462 while its own check had counted
 one other Lean process. run2.sh's flock serialised the two, and the run took
 12 s. This is a gate lapse; it is recorded and is not repeated.
+
+### Lead acceptance of J1 and J3 (2026-10-17); D26
+
+The worker commits 3619dde1a and 1c957c01f are cherry-picked here. The lead
+verified both host receipts:
+- `R0Z/K4.lean`: attempt 3427, exit 0, 10.9 s, peak RSS 6,697,960 KiB,
+  0 swaps, SHA `d588952a…` (matches), 28 axiom reports;
+- `R0Z/SilentReduction.lean`: attempt 3437, exit 0, 10.6 s, peak RSS
+  6,812,272 KiB, 0 swaps, SHA `99fc4a68…` (matches), 17 axiom reports.
+
+Every axiom line is exactly `[propext, Classical.choice, Quot.sound]`. There
+is no sorry, axiom, admit or native_decide. Evidence for attempts 3426–3437
+is in `t2b2b/evidence-J1-J3.json`.
+
+**D26.1 What is proved.**
+- K₂/K₄ subfields, with `finrank_K4F = 4` and `finrank_K2F = 2`.
+- `mem_K2_of_quadratic`, for all x, without a card premise.
+- `Lambda F a j`.
+- `Good3` in the D21 form (LOG line 4274).
+- `lambda4_eq_K4`.
+- `exists_silent_of_cover`, `ia_pure_zero` and `ms_pure_eq_initial`.
+- `QPrime` and `BCond`. BCond is in exactly the D23.2 form; the lead checked
+  SilentReduction.lean:248.
+- `chain0K4_le_silent_of (hQ : QPrime) (hBc : BCond) : Chain0K4 ≤
+  (silentMasks π B ch).map (A ∘ inlM)`.
+
+This is the (Q′)+(B) reduction as a theorem. T2b-2b on R0 is now J2 plus the
+two transversality premises. One gap is recorded: `ownMap` keeps all 29
+columns, so its kernel being the per-lane own kernel (extra columns 0–15 and
+26 zero on mask tapes) is not proved. Any later lemma that uses the per-lane
+form must prove that equivalence first.
+
+**D26.2 Carries over to R1:** the subfield/Λ/quadratic facts and
+`exists_silent_of_cover`. Written against the R0 payload, and to be restated
+after Z9: `Good3`, `lambda4_eq_K4`, ownMap/batMap, ChainT0, QPrime, BCond
+and the reduction. These are template statements for the R1 restatement.
+
+**D26.3 Violations (recorded by the worker).**
+- 3428 was launched while the Z9 preflight scope was active, with the gate
+  check and the launch in one command.
+- 3428 then hit Lean's own -M7000 memory exception: a full `simp` unfolded
+  the copy-row tables. The source was changed before any rerun, and no cap
+  was raised.
+
+Lead exception (2026-10-17): Lean may run beside a capped non-Lean probe scope
+(≤ 4G, swap 0) when run2.sh's reservation check passes and no other Lean, R1
+or extraction job is running. The gate check must be a separate command whose
+output is read before launch.
+
+Lesson for generators and proofs: state balance-cancellation lemmas K-valued,
+with decidability instances passed in rather than synthesized. Keep `simp`
+from unfolding `PayloadSplit.L`. Instance-path mismatches made the kernel
+reduce `copyInactiveRows`.
