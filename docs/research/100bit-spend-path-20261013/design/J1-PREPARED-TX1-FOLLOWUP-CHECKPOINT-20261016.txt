@@ -1,0 +1,205 @@
+Prepared and tx1 followup, 2026-10-16
+
+Isolated branch: codex/r1-lead-followup-20261016.
+Accepted checkpointba8cc28e8 was rebased onto3da1531fced390103f4b67e7bdffb7f4672454a8.
+This was a fast-forward because the lead already contained the accepted merge;
+there was no production-source delta fromba8cc28e8 to3da1531fc.
+The live worktree and its modules were not changed.
+
+APPROVED SOURCE
+
+Decision1b: applied proposal-prepared-helper-fields/proposal.patch exactly.
+Prepared::new returns owned(alpha,row) from the folds branch and calls
+prepared_claim after rho. The moved claim tail preserves every statement after
+the two documented field substitutions, including error and value-trace order.
+Source commit3335eecf2; root cherry-pickab634318a.
+
+The complete actual tx1 then produced valid Charon LLBC but Aeneas rejected
+its query while-loop fixed point at InterpMatchCtxs.ml:2739/equal_abs.
+The failure, source, tools and review-only proposal were committed before the
+user approved Decision1c. evidence/tx1-caller-blocker-20261016/verify.py
+checks141 archive members and3 capped receipts; no theorem is claimed for it.
+
+Decision1c: applied proposal-tail/proposal.patch exactly, with no other edits
+to tx1. tx1_finish takes the existing owned View, Box<Prepared>, Accumulator
+and powers array; its geometry/query/checkpoint tail is byte-identical.
+Sourcee5c186ba3, A native source-equivalent96aad8ef209cb69d7667ab5d8728bd4584a86d16;
+root cherry-pick7fa9e5ad4. Only verifier.rs differs in production from3da1531fc.
+Full file SHA256a0c440c37620ef22073e16a1f292ddb8a85e9d63463e702f2204a3d3b7cd9b18.
+Both reverse-patch audits restore the exact predecessor, not a normalized copy.
+See evidence/prepared-followup-integration-20261016/{rebase-and-exact-patch,
+decision1c-exact-patch}.json. There is no inline(always) attribute or other
+fallback change. The lead owns J1.R13 SBF stack warnings, artifact pin and CU.
+No SBF build or runtime metadata harness execution was performed.
+
+FINAL CLEAN NATIVE GATES
+
+All three pass on the final Decision1c source, using optimized Rust, one Cargo
+job,6GiB MemoryHigh/8GiB MemoryMax/MemorySwapMax0 and safe aggregate reservations:
+  codec1233: exit0,0.189s,70428KiB RSS,swaps0. All16,431,699 bytes identical;
+    SHA2563ef16b12a329dd6d74b472cd75e5554c1ef8d98c618de3117f87b6c50d73e321.
+  saved counter: exit0,78.216s,543960KiB RSS,swaps0. Exact583 ordered digest
+    calls349/234, acceptance and checkpoint bytes match. The unordered repeated-
+    input summary has HashMap iteration nondeterminism; only that summary is
+    normalized by input_hex. The583 ordered input-slice/output records are
+    compared in their original order. Distinct/repeat counts remain452/131.
+  checkpoint23: exit0,35.275s,470712KiB RSS,swaps0; all23 exact tests pass.
+An earlier Decision1b-only codec also passed before the new source approval;
+it is historical and is not substituted for this final-source gate.
+
+INJECTION SCOPE AND EVIDENCE
+
+Prepared: exact complete old/new Prepared bodies, real field arithmetic and SHA,
+all174 moved dot.push positions for S1/S2/D, query-boundary errors and success
+controls. The configured failures are synthetic interface failures. The query
+injection occurs after the actual eight digest pairs and before the sampler,
+state assignment and rho. Returned errors, every Prepared field, value traces,
+digest-part boundaries/answers and push prefixes are compared.
+
+tx1: exact old/new whole tx1 bodies and exact new tx1_finish. Geometry, first
+query0, last query21 and checkpoint failures are compared at k22, plus success.
+The actual saved S2 proof uses the real parser, semantics, field arithmetic,
+SHA, query and checkpoint implementations, with test-only failure hooks.
+The S1/S2/D shared-interface suite covers both observer modes with synthetic
+parse/semantic/prepare/query interfaces, E=u64 and a deterministic non-SHA digest.
+It is explicitly a source control-flow differential, not a valid-production-proof
+or arbitrary field-implementation theorem. No valid S1/D fixture is invented.
+The symmetric checkpoint Result adapter is test-only because production
+checkpoint is infallible. Exact errors, state, trace marks/values, digest prefixes
+and observer-phase cuts are checked. The final production source contains no hooks.
+
+All three injection targets pass on the final production source with declared
+test-only overlays, optimized/capped as above, swaps0:
+  Prepared528 cases: exit0,4.914s,261420KiB RSS.
+  actual savedS2 tx1 five cases: exit0,4.751s,261860KiB RSS.
+  shared S1/S2/D tx1 thirty cases: exit0,0.584s,152988KiB RSS.
+The shared suite toggles default/detailed phase modes; both use Some(observer).
+It does not claim observer-absent coverage. The corrected joint manifest has554
+input files; both old-function adapters and all test-module bytes are pinned.
+evidence/prepared-tx1-native-20261016 and
+tools/r1-prepared-migration-kit/check-evidence.py retain and validate all six
+native receipts, exact outputs, baseline comparisons and original failed inputs.
+The coordinator independently verified this archive; no native gate was rerun.
+
+The first joint injection compile failed before any tests ran: test serializers
+used nonexistent QM31.to_le_bytes, and a test Fault match was non-exhaustive.
+The complete original551-file input snapshot, manifest, runner, logs and failed
+receipt were preserved before test-only fixes. Clean source and successful clean
+gates were unchanged; they were not rerun for those harness edits.
+
+FORMAL SCOPE
+
+The current carrier uses one shared Types/Funs pair. Staging panic declarations
+are excluded; the actual unchanged Accumulator constructor is emitted, with its
+allocation boundary explicit. Remaining external operations are explicit parameters,
+not accepted opaque global axioms. Actual generated-body substitutions are audited.
+Types, Funs, PreparedModel, Tx1Model and Tx1Reachability have passed focused Lean
+checks; model/reachability audits report18 standard-only axiom results.
+
+  AspisR1PublicPreparation.Types: exit0,2.579s,2683364KiB RSS,swaps0.
+  AspisR1PublicPreparation.Funs: exit0,3.894s,2733388KiB RSS,swaps0.
+  ExtractedPreparedModel: exit0,1.727s,2655272KiB RSS,swaps0,4axiom reports.
+  ExtractedTx1Model: exit0,1.741s,2647180KiB RSS,swaps0,12axiom reports.
+  ExtractedTx1Reachability: exit0,1.938s,2653800KiB RSS,swaps0,2axiom reports.
+Producing source revisione5c186ba3bcbbf9a0cc5878077aa8848853a65cc.
+Types/Funs are compilation results; their zero requested audits are not presented
+as standalone axiom audits. The18 model/reachability reports audit the semantic
+bodies transitively. evidence/tx1-caller-accepted-20261016/verify.py independently
+passes369 members,5coherent targets,18standard-only reports and30exact sourcecuts.
+
+ExtractedPreparedReachability.prepare_success separately passes exit0,2.296s,
+2667384KiB RSS,swaps0,source96aad8ef209cb69d7667ab5d8728bd4584a86d16,
+one standard-only axioms report. Whole approved Prepared
+success yields the ordered opening calls27..32 on S2/D (five calls27..31 onS1),
+their child successes, payloads and returned-state links through Prepared.state.
+Query sampling and claim arithmetic are still explicit boundary functions.
+The proof consumes C's exact producing current Types/Funs/PreparedModel objects,
+not the intermediate local69f3 carrier snapshot. Its immutable archive and checker
+are evidence/prepared-actual-20261016 and tools/prepared-actual-extraction-kit/
+check-evidence.py. The coordinator independently checked both formal archives.
+
+Actual tx1 success reaches the named semantic-verifier success and Prepared::new
+success. This eliminates the old universal tx1 continuation at this component;
+it does not derive public_transcript inside an opaque verify_observed body.
+The actual semantic-loop source blocker and the full25/hread/context obligations
+remain distinct. A parsed full25 codec witness alone is not a transcript-log
+equality or an address-context/auxiliary-word witness.
+
+Guarded Lean attempts stopped or suppressed themselves when external lead jobs
+arrived. Interrupted checks have no theorem verdict. Successful predecessors are
+reused without unchanged recompiles; the guard retains verified import identities
+between focused targets. Failed syntax checks are retained with changed successors.
+Per-target source revision, command, exit, wall/RSS/swap, scope and #print axioms
+are retained in the worker evidence. No package-wide manifest replay was run.
+
+C2 DESIGN BEFORE PROOF
+
+design/J1-C2-LITERALMESSAGE-SOURCE-DESIGN-20261016.md is a source design note,
+not a new proof. Its inventory checks440 tracked Rust files and42 exact source
+declarations at3da1531fc; read/hash check exit0,18.828s,51937280bytes RSS,swaps0,
+axioms N/A. There is no production identifier C2Word or literalMessage in that
+scoped inventory. The known host owns paddedH1/G copies, variant-permuted
+coefficients and encoded two-lane vectors in Backend.c2; the proof serializes
+only selected openings. The literal-model all-zero metadata is not that word.
+
+The note proposes an owned execution witness for known-host executions and the
+complete recorded prover-plus-verifier experiment/cut compiler for arbitrary
+accepted proofs. It lists packing, salt/path, source/oracle, account custody,
+checkpoint and context obligations separately. Hashes and sampler facts are
+not used as substitutes. No C2 proof work or production change was performed.
+
+UNAPPLIED SOURCE PROPOSALS AND REMAINING OBLIGATIONS
+
+The review-only verify-prefix-proposal-kit/proposal/proposal.patch moves the
+unchanged post-begin semantic tail into verify_finish, with owned Public/Prefix/
+Transcript/Challenges/Observer, and lifts the unchanged noncapturing mark function
+to module scope. It is intended to expose actual public_transcript reachability.
+It does not solve the row15..26 loop or hread. No application, rewritten probe
+or compilation has occurred; a further source decision is pending.
+
+The exact unchanged Transcript::queries method also hit a new extractor blocker.
+Charon exit0,0.402235s,213644KiB RSS,swaps0,validLLBC; Aeneas exit2,0.402117s,
+76912KiB RSS,swaps0,InterpBorrows.ml:2731 shared-loan failure in the eight-pair
+loop. evidence/opening-queries-blocker-20261016 retains both capped receipts,
+exact immutable source/tool/LLBC pins and logs; no Lean result exists,axioms N/A.
+The coordinator verified its archive and both receipts.
+
+The separate review-only opening-queries-extraction-kit/proposal-eight-pairs/
+proposal.patch writes out the eight iterations and16 ordered hash calls exactly.
+It leaves the decoder-returned state assignment and all remaining method bytes
+unchanged. The later trace enumerate loop is still undiagnosed. No application
+or rewritten probe has occurred; any follow-on rewrite needs another proposal.
+
+Still open: actual semantic loop rows15..24; actual circle rows25/26 and row26
+reseed reachability; complete opening query implementation and whole33-row carry;
+source-derived full25 transcript byte identity; actual selected hread, address-
+context htyped/ha, Digest32/table/init correspondence and C1/C2 constructors/custody.
+The exact dependency map is notes/full25-hread-dependency-map-20261016.md.
+These are not discharged by strict parsing, parameterized component success,
+the passing native differential gates, or the readonly metadata premise.
+
+RE-PIN AND COORDINATOR AUDIT
+
+The refreshed integrated declaration inventory targetsaf828dec09343c268990b925f6ace47eff412a94,
+which contains all accepted evidence and the identical final1c production source.
+It records289unchanged,52re-extracted and1authorized replacement, with0unresolved
+within explicitly registered cones. The old268/21/1 entries remain valid; new
+entries add21unchanged and31re-extracted. The new ledger distinguishes40emitted
+bodies/types,4opaque signature-only boundaries and8LLBC-only metadata entries.
+It verifies73A/82C source-cut occurrences, raw-to-bound statement/body diffs and
+carrier normalization audits. The228archive/70LLBC historical index includes
+rejected experiments without promoting them to accepted source interpretations.
+Final source-universe review remains the lead's J1.R13 release gate.
+
+Read/hash inventory check: exit0,24.715s,661422080bytes RSS,swaps0,axioms N/A.
+Exact source/script/report pins are in design/J1-INTEGRATED-DECLARATION-REPIN-
+20261016-prepared-tx1-check.json; scope and reproduction instructions are in
+design/J1-PREPARED-TX1-REPIN-ADDENDUM-20261016.md. No compiler runs in that check.
+
+The coordinator independently replayed native archive hashes and all532 clean
+Git source pins, complete codec bytes/case sequence,583 ordered calls, exact
+acceptance/checkpoint data, report-only input inventory and23 exact test names.
+The native checker now repeats these comparisons directly, rather than trusting
+the archived PASS annotations. Artifact checks do not rerun native/formal jobs.
+All accepted producing receipts retain the required target, exit, wall/RSS/swap,
+source revision and axioms evidence; rejected and interrupted results are separate.

@@ -1,0 +1,83 @@
+{
+  "status": "REVIEW_ONLY_NOT_APPLIED_NOT_PROBED",
+  "source_revision": "96aad8ef209cb69d7667ab5d8728bd4584a86d16",
+  "path": "crates/aspis-r1-cost-probe/src/transcript.rs",
+  "old_file_sha256": "72247cef94273eb475b8e4179ab489f7689c5ee8146e3cd6e8eb87d1b258b202",
+  "proposed_file_sha256": "4adb788bc7810ce61942de1b67a2f4340d339ba441aaa8e4f38d7eb008deebbb",
+  "patch_sha256": "26d5e56a7c4f66b26c0b1957e5a29a1859306e8d080d16b441315ef30e0b89f5",
+  "unchanged_prefix_sha256": "091929317cc916c217707a90d5396cf164e66c347abd47fa1b37195b20efe26d",
+  "unchanged_suffix_sha256": "e5c42dcd67b58bec494fb0e3b4926cafe08d711512221bb7183ea5e54ab315a0",
+  "old_loop_sha256": "8935b26c5b99a7e71509f432375b0715c783b82292ecb7fd89634b574e8a2c5c",
+  "proposed_sequence_sha256": "caaa2410736ebff1249f58bd8ab433a88ba5cc29c91d5f0f45042eb295fbcbf3",
+  "sole_adapter": "Expand k in0..8 into eight exact copies of its body, substitute each[k] by literal[0]..[7], remove four indentation spaces. No other source change.",
+  "ordered_digest_tags": [
+    1,
+    2,
+    1,
+    2,
+    1,
+    2,
+    1,
+    2,
+    1,
+    2,
+    1,
+    2,
+    1,
+    2,
+    1,
+    2
+  ],
+  "iteration_audit": [
+    {
+      "k": 0,
+      "expanded_body_sha256": "5e0d4b82a98e204608093cae7f5636a16853c1ff6b62beb8c92f05ede2233b0a",
+      "block_state": "previous advances[k-1], or initial absorbed self.state for k0",
+      "advance_state": "same pre-read state as paired block; local state then assigned advances[k]"
+    },
+    {
+      "k": 1,
+      "expanded_body_sha256": "aecc91ccae5296e86c804db089f72e54a3bed304e1b9f21dbdacb88e866660a4",
+      "block_state": "previous advances[k-1], or initial absorbed self.state for k0",
+      "advance_state": "same pre-read state as paired block; local state then assigned advances[k]"
+    },
+    {
+      "k": 2,
+      "expanded_body_sha256": "f35dbe0f760a79490f4139ad9dc2a8ac915e79cf06587c3465fb2886938e9621",
+      "block_state": "previous advances[k-1], or initial absorbed self.state for k0",
+      "advance_state": "same pre-read state as paired block; local state then assigned advances[k]"
+    },
+    {
+      "k": 3,
+      "expanded_body_sha256": "434a0c41f3e738402c0b344a2755b95c33dab3fbbf8f58856646705605f54fb4",
+      "block_state": "previous advances[k-1], or initial absorbed self.state for k0",
+      "advance_state": "same pre-read state as paired block; local state then assigned advances[k]"
+    },
+    {
+      "k": 4,
+      "expanded_body_sha256": "02963e3f2caadc8b882cc2c3b5b3cae967e80d1708cc8c79463c4736e86d92d7",
+      "block_state": "previous advances[k-1], or initial absorbed self.state for k0",
+      "advance_state": "same pre-read state as paired block; local state then assigned advances[k]"
+    },
+    {
+      "k": 5,
+      "expanded_body_sha256": "578fcaa6586dd474b384a45ea576d1bbc273b0b786d98f5119e66c96eed9c4e1",
+      "block_state": "previous advances[k-1], or initial absorbed self.state for k0",
+      "advance_state": "same pre-read state as paired block; local state then assigned advances[k]"
+    },
+    {
+      "k": 6,
+      "expanded_body_sha256": "1f45526d07339050ce6ae3dc0cbdf706e12b164e916ae67f845213a8a113ff6f",
+      "block_state": "previous advances[k-1], or initial absorbed self.state for k0",
+      "advance_state": "same pre-read state as paired block; local state then assigned advances[k]"
+    },
+    {
+      "k": 7,
+      "expanded_body_sha256": "b79debec58902e5252c1c27a6dc46afff8c1148726cd6d038edf9732eafe29a3",
+      "block_state": "previous advances[k-1], or initial absorbed self.state for k0",
+      "advance_state": "same pre-read state as paired block; local state then assigned advances[k]"
+    }
+  ],
+  "semantics_argument": "Fixed finite loop expansion retains exactly8iterations in increasingindex order. Eachiteration performs readtag1,advancetag2 using the same incoming localstate, then state=advances[k]. Induction on k preserves both arrays and localstate. The unchanged suffix still calls queries_from_pairs and assigns its RETURNED state to self.state; it does not assign the final localadvance directly. No allocation/API/domain/error/trace changes. This is a proposed source equivalence argument, not a checked extraction/proof result.",
+  "remaining_risk": "The unchanged q.iter().enumerate trace loop has not yet been reached by Aeneas; a second extractor blocker is possible. No automatic follow-on rewrite is authorized."
+}

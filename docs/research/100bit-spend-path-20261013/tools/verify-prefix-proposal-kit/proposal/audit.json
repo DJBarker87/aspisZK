@@ -1,0 +1,34 @@
+{
+  "classification": "REVIEW-ONLY SOURCE PROPOSAL; no application, compile or extraction probe",
+  "files": {
+    "mark.rs": "0786f0cc20c9f4b033a83d98f2f8b43a6876e15a3fe8ae83c18f0b068f68ae12",
+    "proposal.patch": "581de99774d0919068f71be96d94f763c439b2e448a5ef75c3ef5483f055bdf8",
+    "r1_semantic.rs": "49da4a3e17dccbc9e07e079a37a1aa04d203c1db01ef8790ec3363b769077e4e",
+    "source-before.rs": "340f96f95aab835283c03f54c8ea10be1b9650d0536791e6abddaf269d955e7e",
+    "verify_finish.rs": "6b3b9a66fea6a26c02ff318a710128da24337efbcf20703e33b69b6bfd14f0da",
+    "verify_observed.rs": "2c36dab53a17a9064523cf1551ac40b2213519bdf28ef2f05b05e50829c40ba7"
+  },
+  "finish_sha256": "6b3b9a66fea6a26c02ff318a710128da24337efbcf20703e33b69b6bfd14f0da",
+  "limitations": "Intended to expose actual parse\u2192public_transcript\u2192begin success inversion with one real explicit tail boundary; does not prove actual rows15\u201326/all33/log bytes/hread, arithmetic tail, SDK/custody. Extractor/borrowchecker success not yet claimed. Lead/user source decision required before application or rewritten extraction probe.",
+  "mark_after_sha256": "0786f0cc20c9f4b033a83d98f2f8b43a6876e15a3fe8ae83c18f0b068f68ae12",
+  "mark_before_sha256": "67c51a386391c20d465fe514d49fa9d28a1aa4d7fb4ffa8fcd9b5262ab3ccd32",
+  "mark_equivalence": "Original nested noncapturing mark body lifted to same private module name with indentation only; all cfg(feature=detail-phases) / non-detail code and every call retained, no capture/environment parameter.",
+  "moved_tail_sha256": "f7d798515c8a600fcf9c37e8eed1bf47c1e2a35c51fd500c6062e99bdf56d105",
+  "old_source_sha256": "340f96f95aab835283c03f54c8ea10be1b9650d0536791e6abddaf269d955e7e",
+  "old_verify_sha256": "182c7adfc361e74ea7b4b42ab9940b434317d93972b359ff3f742d6aefd47092",
+  "owned_signature": "fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> ",
+  "ownership": "Own Public, Prefix, SemanticTranscript, Challenges, Observer. Prefix/shared external bytes and C1 root borrows do not escape public_transcript/begin in the returned owned types; their borrowed arguments may end before the helper call. All five values have no custom Drop; H:Digest32:Copy. Caller hash/bytes remain borrowed/copy-only locals. No clone, allocation or extra fallible step introduced.",
+  "prefix_order": [
+    "Prefix::parse(bytes)?",
+    "mark(obs,0)",
+    "public_transcript(public,hash,prefix.c1_root)?",
+    "wire::begin(&prefix,&mut transcript)?",
+    "mark(obs,1)",
+    "verify_finish owned transfer"
+  ],
+  "proposed_source_sha256": "49da4a3e17dccbc9e07e079a37a1aa04d203c1db01ef8790ec3363b769077e4e",
+  "proposed_verify_sha256": "2c36dab53a17a9064523cf1551ac40b2213519bdf28ef2f05b05e50829c40ba7",
+  "revision": "e5c186ba3bcbbf9a0cc5878077aa8848853a65cc",
+  "source": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+  "tail_equivalence": "All text after mark(obs,1) and before outer function closing brace copied byte-for-byte into verify_finish. No loop/iterator/arithmetic/reseed/error/trace operation rewritten."
+}

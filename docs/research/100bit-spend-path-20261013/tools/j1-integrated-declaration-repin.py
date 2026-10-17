@@ -211,7 +211,7 @@ class Cone:
         for q in matches:
             name = q["lean_name"]; short = name.split(".", 1)[-1]
             generated = self.generated.get(short, self.generated.get(name))
-            output.append({"lean_name": name, "lean_file": q.get("lean_file"),
+            output.append({"lean_name": name, "lean_file": q.get("lean_file"), "is_opaque": q.get("is_opaque", False),
                            **({k: generated[k] for k in ["body_sha256", "signature", "signature_sha256"]} if generated else {})})
         item = self.item(kind, ident)
         llbc_sig = {key: item[key] for key in ["generics", "signature", "kind", "type", "impl_trait"] if key in item}
@@ -224,10 +224,187 @@ def archive_cone(spec, inputs):
         # Keep only source metadata/generated text, not compiled objects/caches.
         files = {m.name: tar.extractfile(m).read() for m in tar.getmembers()
                  if m.isfile() and (m.name == spec["llbc_member"] or m.name.endswith(("translation.json", ".lean")))}
+    if spec.get("accepted_prefix"):
+        prefix = spec["accepted_prefix"]
+        files = {name: body for name, body in files.items() if name.startswith(prefix) or name == spec["llbc_member"]}
+        assert spec["llbc_member"] in files
+        assert sum(name.endswith("translation.json") for name in files) == 1, "Accepted prefix must select exactly one backend translation"
     kit = inputs.json(BASE + "/tools/" + spec["kit"]) if spec.get("kit") else None
     return Cone(spec["cone"], files, spec["llbc_member"], kit, inputs,
-                {"path": path, "sha256": sha(raw), "llbc_member": spec["llbc_member"], "llbc_sha256": sha(files[spec["llbc_member"]])})
+                {"path": path, "sha256": sha(raw), "llbc_member": spec["llbc_member"], "llbc_sha256": sha(files[spec["llbc_member"]]), "accepted_prefix": spec.get("accepted_prefix")})
 
+
+
+def verified_fragment_layout(cone, spec, inputs):
+    """Verify exact historical cuts and their occurrence in the LLBC's kit lib.
+
+    Membership comes from source pins, not a current-source text lookup. Stubs
+    outside these cuts are never accepted as production declaration bodies.
+    """
+    kit = cone.kit
+    directory = BASE + "/tools/" + spec["kit"].rsplit("/", 1)[0] + "/"
+    artifacts = {name: inputs.read(directory + name) for name in kit["kit_files"]}
+    for name, raw in artifacts.items(): assert sha(raw) == kit["kit_files"][name], (cone.name, name)
+    lib = artifacts["lib.rs"]
+    retained = [f["contents"].encode() for f in cone.data["files"]
+        if f["name"].get("Local") == "lib.rs" and f.get("contents") is not None]
+    assert retained == [lib], "Accepted LLBC must contain exact registered kit lib.rs"
+    base = json.loads(artifacts["base52/source-pins.json"])
+    assert sha(artifacts["base52/lib.rs"]) == kit["base52_lib_sha256"] == base["kit_files"]["lib.rs"]
+    assert kit["base52_cuts"] == base["cuts"]
+    layout = []; missing = []
+    for category, cuts, revision in [("base52", kit["base52_cuts"], base["revision"]),
+                                     ("fragment", kit["cuts"], kit["revision"])]:
+        for cut in cuts:
+            source = inputs.git(revision, cut["path"])
+            body = source[cut["start_byte"]:cut["end_byte_exclusive"]]
+            assert sha(body) == cut["sha256"], (cone.name, category, cut["name"], "historical source pin")
+            if category == "fragment": assert artifacts["fragments/" + cut["name"] + ".rs"] == body
+            matches = [m.start() for m in re.finditer(re.escape(body), lib)]
+            if not matches:
+                missing.append({"category": category, "name": cut["name"], "path": cut["path"],
+                    "sha256": cut["sha256"], "reason": "Inherited cut not present in final kit; not used for source membership"})
+            for at in matches:
+                layout.append({"category": category, "name": cut["name"], "path": cut["path"],
+                    "start_byte": at, "end_byte_exclusive": at + len(body),
+                    "source_revision": revision, "source_sha256": sha(source),
+                    "source_start_byte": cut["start_byte"], "source_end_byte_exclusive": cut["end_byte_exclusive"],
+                    "fragment_sha256": sha(body)})
+    return lib, layout, {"cone": cone.name, "kit_lib_sha256": sha(lib), "layout": layout,
+        "inherited_or_fragment_cuts_not_present": missing,
+        "verified_kit_file_count": len(artifacts),
+        "basis": "All kit files and historical source cut hashes verified; exact cut occurrences reconstruct layout before current-source lookup"}
+
+
+def lean_chunks(raw):
+    text = uncomment(raw.decode())
+    matches = list(re.finditer(r"^\s*(?:@\[[^\]]*\]\s*)*(?:def|structure|inductive|abbrev|instance)\s+(\S+)", text, re.M))
+    return {m[1]: re.sub(r"\s*@\[[^\]]*\]\s*$", "", text[m.start():matches[i+1].start() if i+1 < len(matches) else text.rfind("\nend ")]).strip() + "\n"
+        for i, m in enumerate(matches)}
+
+
+def bound_statement_audits(inputs, specs, cones):
+    result = []; assets = {}
+    for cone in cones:
+        for name, raw in cone.files.items():
+            if name.endswith(".lean"): assets[sha(raw)] = (name, raw)
+    for spec in specs:
+        for path in spec.get("bound_models", []):
+            raw = inputs.read(path); assets[sha(raw)] = (path, raw)
+        for audit in spec.get("binding_audits", []):
+            parent = audit.rsplit("/", 1)[0]
+            for name in ["AspisR1PublicPreparation/Types.lean", "AspisR1PublicPreparation/Funs.lean"]:
+                raw = inputs.read(parent + "/" + name, optional=True)
+                if raw is not None: assets[sha(raw)] = (parent + "/" + name, raw)
+    for spec in specs:
+        for path in spec.get("binding_audits", []):
+            raw = inputs.read(path); record = json.loads(raw); checks = []
+            model_items = record.get("model_body_audits", record.get("exact_body_audits", []))
+            if model_items:
+                funs_hash = record.get("raw_funs_sha256") or record["carrier_inventory"]["Funs.lean"]["raw_current_sha256"]
+                assert funs_hash in assets, (path, "raw accepted Funs missing")
+                raw_funs = assets[funs_hash][1]; chunks = lean_chunks(raw_funs)
+                mapping = record["identifier_map"]
+                pattern = re.compile("|".join(re.escape(n) + r"(?![A-Za-z0-9_.])" for n in sorted(mapping, key=len, reverse=True)))
+                for item in model_items:
+                    name = item.get("source_declaration", item.get("declaration")); original = chunks[name]
+                    assert sha(canonical(lean_tokens(original))) == item["source_token_sha256"], (path, name, "body token pin")
+                    body = pattern.sub(lambda m: mapping[m[0]], original); target = mapping[name]
+                    binder = item.get("binder_addition", " (B : PreparedModel.Boundaries)" if "sole_binder_addition" in item else "")
+                    if binder:
+                        head = "def " + target + "\n"; assert head in body
+                        body = body.replace(head, "def " + target.split(" ")[0] + binder + "\n", 1)
+                    assert sha(body.encode()) == item.get("adapted_sha256", item.get("model_sha256")), (path, name, "exact parameter-bound body")
+                    assert any(body.encode() in value[1] for value in assets.values()), (path, name, "bound source absent")
+                    before_statement = original.split(":=", 1)[0].strip(); after_statement = body.split(":=", 1)[0].strip()
+                    checks.append({"declaration": name, "exact_substitution_and_binder_replayed": True,
+                        "source_token_sha256": item["source_token_sha256"], "bound_body_sha256": sha(body.encode()),
+                        "generated_statement": before_statement, "parameter_bound_statement": after_statement,
+                        "statement_diff": statement_diff(before_statement, after_statement),
+                        "complete_declaration_diff": statement_diff(original.rstrip(), body.rstrip())})
+                if "model_sha256" in record: assert record["model_sha256"] in assets
+                for name, digest in record.get("output_hashes", {}).items(): assert digest in assets, (path, name, "output pin")
+            for file, inventory in record.get("carrier_inventory", {}).items():
+                digest = inventory["raw_current_sha256"]; assert digest in assets
+                chunks = lean_chunks(assets[digest][1]); normal = inventory.get("explicit_statement_parenthesization_normalizations", {})
+                for name, change in normal.items():
+                    assert chunks[name] == change["raw_statement"]
+                    chunks[name] = change["canonical_statement"]
+                    checks.append({"declaration": name, "explicit_normalization_replayed": True,
+                        "statement_diff": statement_diff(change["raw_statement"], change["canonical_statement"]), "rule": change["rule"]})
+                for item in inventory["common_unchanged"]:
+                    digest = sha(canonical(lean_tokens(chunks[item["declaration"]])))
+                    assert digest == item["old_token_sha256"] == item["current_token_sha256"], (path, file, item["declaration"])
+                checks.append({"file": file, "common_canonical_token_hashes_checked": len(inventory["common_unchanged"])})
+            if "common_type_audit" in record:
+                assert record["raw_types_sha256"] in assets and record["base_types_sha256"] in assets and record["shared_types_sha256"] in assets
+                raw_types = lean_chunks(assets[record["raw_types_sha256"]][1]); base_types = lean_chunks(assets[record["base_types_sha256"]][1]); shared_types = lean_chunks(assets[record["shared_types_sha256"]][1])
+                for entry in record["common_type_audit"]:
+                    name = entry["declaration"]; before = raw_types[name]; body = before
+                    assert sha(before.encode()) == entry["raw_sha256"]
+                    for rule in entry["normalizations"]:
+                        if rule == "remove redundant argument parentheses": body = body.replace("Self → (Slice (Slice Std.U8))", "Self → Slice (Slice Std.U8)")
+                        elif rule == "reuse existing canonical named discriminant reader/instance; remove raw deriving attribute only":
+                            assert name + ".read_discriminant" in base_types
+                            body = body.removeprefix("@[discriminant isize]\n")
+                        else: raise ValueError("Unknown normalization: " + rule)
+                    digest = sha(canonical(lean_tokens(body)))
+                    assert digest == entry["canonical_token_sha256"] == sha(canonical(lean_tokens(base_types[name]))) == sha(canonical(lean_tokens(shared_types[name])))
+                    checks.append({"declaration": name, "common_type_normalizations_replayed": entry["normalizations"], "statement_diff": statement_diff(before, body)})
+                for name in record["new_types"]: assert lean_tokens(raw_types[name]) == lean_tokens(shared_types[name])
+                assert record["shared_funs_sha256"] in assets
+            if "common_funs" in record:
+                assert sha(inputs.read(BASE + "/lean/bridge-prepared-3335-20261016/binding-pins.json")) == record["A_prepared_binding_pins_sha256"]
+                raw_funs = lean_chunks(next(c for c in cones if c.name == spec["cone"]).files[next(n for n in next(c for c in cones if c.name == spec["cone"]).files if n.endswith("/Funs.lean"))])
+                for entry in record["common_funs"]:
+                    name = entry["declaration"]; before = raw_funs[name]; body = before
+                    for rule in entry["normalizations"]:
+                        match = re.fullmatch(r"Alpha rename local (rank1|digits1)→a \(bind result and its sole return use\)", rule)
+                        assert match, (path, rule)
+                        pattern = re.compile(r"\b" + match[1] + r"\b"); assert len(pattern.findall(body)) == 2
+                        body = pattern.sub("a", body)
+                    assert sha(canonical(lean_tokens(body))) == entry["canonical_token_sha256"], (path, name)
+                    checks.append({"declaration": name, "common_function_normalizations_replayed": entry["normalizations"], "statement_diff": statement_diff(before, body)})
+                for entry in record["same_prepared_model_source_bodies"]:
+                    assert entry["same_as_A_prepared_binder"] and sha(canonical(lean_tokens(raw_funs[entry["declaration"]]))) == entry["source_token_sha256"]
+            result.append({"cone": spec["cone"], "path": path, "sha256": sha(raw), "record": record, "read_hash_replay": checks,
+                "scope": "Exact identifier substitutions, explicit binder additions and listed carrier normalizations replayed from accepted raw emission. Function parameters remain conditional boundaries; external-template stubs/diagnostics are not actual source-body theorems."})
+        for path in spec.get("bound_models", []):
+            raw = inputs.read(path)
+            assert not re.search(rb"^\s*(axiom|opaque)\b", raw, re.M), path
+            result.append({"cone": spec["cone"], "model_path": path, "sha256": sha(raw),
+                "declarations": {n: {k: v[k] for k in ["body_sha256", "signature", "signature_sha256"]}
+                    for n, v in lean_declarations(raw).items()},
+                "scope": "Checked-model source hashes; producing proof receipts retained separately, no Lean replay here."})
+    return result
+
+
+def reconcile_followup_statements(rows, cones, followup_names):
+    prior = {}; declarations = {}
+    for cone in cones:
+        for name, item in cone.generated.items(): declarations.setdefault(name, []).append(item)
+    for row in [r for r in rows if r["cone"] not in followup_names] + [r for r in rows if r["cone"] in followup_names]:
+        outputs = row.get("retained_signature", {}).get("generated", [])
+        comparisons = []
+        for emitted in outputs:
+            name = emitted["lean_name"]; old = prior.get(name)
+            if row["cone"] in followup_names and old is not None:
+                comparisons.append({"lean_name": name, "previous_body_sha256": old.get("body_sha256"),
+                    "current_body_sha256": emitted.get("body_sha256"),
+                    "previous_signature_sha256": old.get("signature_sha256"), "current_signature_sha256": emitted.get("signature_sha256"),
+                    "statement_diff": statement_diff(old.get("signature", ""), emitted.get("signature", "")),
+                    "statement_status": "identical" if old.get("signature_sha256") == emitted.get("signature_sha256") else "changed",
+                    "body_status": "identical" if old.get("body_sha256") == emitted.get("body_sha256") else "changed"})
+            prior[name] = emitted
+        if row["cone"] in followup_names and comparisons:
+            row["prior_current_emission_comparison"] = comparisons
+            row.pop("previous_statement_status", None)
+            row["statement_diff"] = "\n".join(c["statement_diff"] for c in comparisons)
+            if len(comparisons) == len(outputs) and all(c["statement_status"] == c["body_status"] == "identical" for c in comparisons):
+                row["classification"] = "unchanged"
+                row["identity_basis"] += " Current and prior retained generated signatures/body token hashes are also identical."
+            else:
+                row["generated_diff_status"] = "Re-extracted; explicit raw signature diffs shown. Unchanged statement with changed body is recorded separately; canonical naming/alpha/parenthesis normalizations are in the binding audit."
 
 def statement_diff(before, after):
     return "".join(difflib.unified_diff((before + "\n").splitlines(True) if before else [],
@@ -256,7 +433,11 @@ def history_index(inputs, selected, changed):
                 replacement = "readonly-account-extraction-20261016" in path
                 status = "selected-current-or-accepted" if label else (
                     "authorized-superseded-wrapper" if replacement else "historical-not-selected")
-                if not label and not replacement and parsed.get("has_errors"):
+                if not label and "opening-queries-blocker-20261016" in path:
+                    status = "rejected-diagnostic-query-emission-not-current"
+                elif not label and "tx1-finish-diagnostic/" in member.name:
+                    status = "rejected-diagnostic-tx1-tail-emission-not-current"
+                elif not label and not replacement and parsed.get("has_errors"):
                     status = "failed-LLBC-not-current"
                 elif not label and not replacement and not aliases and not direct:
                     status = "historical-unrelated-source-files"
@@ -445,40 +626,85 @@ def main():
     else:
         unresolved.append({"cone": "current-callers", "reason": "Current accepted caller cone absent at ref/supplements"})
 
-    additional = []; additional_exclusions = collections.Counter()
+    additional = []; additional_exclusions = collections.Counter(); followup_layouts = []; followup_specs = []
+    builtin = [
+        {"cone": "accepted-prepared-actual", "archive": BASE + "/evidence/prepared-actual-20261016/actual-prepared-evidence.tar.gz",
+         "llbc_member": "VerifyPreparedPrefix.llbc", "accepted_prefix": "generated/", "kit": "prepared-actual-extraction-kit/input/source-pins.json",
+         "binding_audits": [BASE + "/lean/bridge-prepared-3335-20261016/binding-pins.json"],
+         "bound_models": [BASE + "/lean/bridge-prepared-3335-20261016/ExtractedPreparedModel.lean"]},
+        {"cone": "accepted-tx1-actual-accumulator", "archive": BASE + "/evidence/tx1-caller-accepted-20261016/tx1-caller-accepted.tar.gz",
+         "llbc_member": "tx1-actual-accumulator/VerifyPreparedPrefix.llbc", "accepted_prefix": "tx1-actual-accumulator/", "kit": "tx1-caller-extraction-kit/input-accumulator/source-pins.json",
+         "binding_audits": [BASE + "/lean/bridge-tx1-e5c186ba3-20261016/" + p for p in ["tx1-binding-pins.json", "prepared-binding-pins.json", "common-funs-audit.json", "union-pins.json"]],
+         "bound_models": [BASE + "/lean/bridge-tx1-e5c186ba3-20261016/ExtractedTx1Model.lean", BASE + "/lean/bridge-tx1-e5c186ba3-20261016/ExtractedPreparedModel.lean"]}]
+    # The first prefix selects generated text while retaining the separately
+    # named accepted LLBC. Both are explicit, never first-translation guessing.
+    specs = []
+    for spec in builtin:
+        if inputs.read(spec["archive"], optional=True) is not None: specs.append(spec)
     for path in args.additional_cone:
-        manifest = inputs.json(path)
-        specs = manifest.get("cones", [manifest])
-        for cone_spec in specs:
-            cone = archive_cone(cone_spec, inputs); additional.append(cone)
-            for kind in KINDS:
-                for item in cone.data[kind]:
-                    if not item: continue
-                    source, original, body, start, end = cone.source(item)
-                    targets = [p for p in current if source == p or source.endswith("/" + p)]
-                    if source == "lib.rs":
-                        containing = [q for q in cone.kit.get("layout_spans", [])
-                            if q.get("start_byte", q.get("byte_start", -1)) <= (start if start is not None else -2)
-                            < q.get("end_byte_exclusive", q.get("byte_end_exclusive", -1))]
-                        if len(containing) == 1:
-                            cut = next(q for q in cone.kit["cuts"] if q["name"] == containing[0]["name"])
-                            targets = [cut["path"]] if cut["path"] in current else []
-                        elif cone_spec.get("synthetic_lib_rs"):
-                            synthetic.append({"cone": cone.name, "kind": kind, "id": item["def_id"],
-                                "name": item["item_meta"]["name"], "reason": "Explicitly declared synthetic lib.rs boundary", "signature": cone.signatures(kind, item["def_id"])})
-                            continue
-                        else:
-                            unresolved.append({"cone": cone.name, "kind": kind, "id": item["def_id"],
-                                "name": item["item_meta"]["name"], "reason": "Current lib.rs declaration has no unique historical production layout mapping"})
-                            continue
-                    if not targets:
-                        additional_exclusions[cone.name + ":" + source] += 1
+        manifest = inputs.json(path); specs.extend(manifest.get("cones", [manifest]))
+    for cone_spec in specs:
+        cone = archive_cone(cone_spec, inputs); additional.append(cone); followup_specs.append(cone_spec)
+        layout = []; lib = None
+        if cone.kit.get("base52_cuts"):
+            lib, layout, layout_audit = verified_fragment_layout(cone, cone_spec, inputs)
+            followup_layouts.append(layout_audit)
+        for kind in KINDS:
+            for item in cone.data[kind]:
+                if not item: continue
+                source, original, body, start, end = cone.source(item)
+                targets = [p for p in current if source == p or source.endswith("/" + p)]
+                mapped = None; provenance = "direct LLBC production source path"
+                if layout:
+                    # Rust compiler-generated metadata may point into core but
+                    # retain the originating production declaration source_text.
+                    candidates = []
+                    if source == "lib.rs" and start is not None:
+                        candidates = [q for q in layout if q["start_byte"] <= start and end <= q["end_byte_exclusive"]]
+                    elif body is not None and str(item["item_meta"]["name"][0]).find("aspis_r1_") >= 0:
+                        for hit in re.finditer(re.escape(body), lib):
+                            candidates += [dict(q, recovered_start=hit.start()) for q in layout
+                                if q["start_byte"] <= hit.start() and hit.end() <= q["end_byte_exclusive"]]
+                        if candidates:
+                            starts = {q["recovered_start"] for q in candidates}
+                            if len(starts) == 1:
+                                start = next(iter(starts)); end = start + len(body); original = lib
+                                provenance = "Compiler-origin metadata mapped by exact retained source_text to one verified production cut"
+                    identities = {(q["path"], q["source_revision"], q["source_start_byte"], q["name"]) for q in candidates}
+                    if len(identities) == 1:
+                        mapped = candidates[0]; targets = [mapped["path"]] if mapped["path"] in current else []
+                    elif source == "lib.rs" or candidates:
+                        signature = cone.signatures(kind, item["def_id"])
+                        entry = {"cone": cone.name, "kind": kind, "id": item["def_id"], "name": item["item_meta"]["name"],
+                            "source_path": source, "source_text_sha256": sha(body) if body is not None else None,
+                            "reason": "Kit-only/opaque stub outside verified production cuts" if not candidates else "Ambiguous production cut mapping",
+                            "signature": signature, "not_accepted_as_production_body": True}
+                        if candidates: unresolved.append(entry)
+                        else: synthetic.append(entry)
                         continue
-                    for target in targets:
-                        correspond({"cone": cone.name, "kind": kind, "id": item["def_id"],
-                            "name": item["item_meta"]["name"], "source_path": target},
-                            body, original, start, end, cone.signatures(kind, item["def_id"]), fresh=True)
-
+                elif source == "lib.rs":
+                    containing = [q for q in cone.kit.get("layout_spans", [])
+                        if q.get("start_byte", q.get("byte_start", -1)) <= (start if start is not None else -2)
+                        < q.get("end_byte_exclusive", q.get("byte_end_exclusive", -1))]
+                    if len(containing) == 1:
+                        cut = next(q for q in cone.kit["cuts"] if q["name"] == containing[0]["name"])
+                        targets = [cut["path"]] if cut["path"] in current else []
+                    else:
+                        unresolved.append({"cone": cone.name, "kind": kind, "id": item["def_id"],
+                            "name": item["item_meta"]["name"], "reason": "lib.rs declaration has no unique historical production layout mapping"}); continue
+                if not targets:
+                    additional_exclusions[cone.name + ":" + source + (":" + mapped["path"] if mapped else "")] += 1
+                    continue
+                signature = cone.signatures(kind, item["def_id"])
+                opaque = any(q.get("is_opaque") for q in signature["generated"]) or item.get("body") == "Opaque"
+                for target in targets:
+                    correspond({"cone": cone.name, "kind": kind, "id": item["def_id"],
+                        "name": item["item_meta"]["name"], "source_path": target,
+                        "source_mapping": mapped, "source_mapping_basis": provenance,
+                        "emission_kind": "opaque-boundary-signature-only" if opaque else "emitted-body-or-type" if signature["generated"] else "retained-LLBC-metadata-only",
+                        "actual_body_emitted": bool(signature["generated"]) and not opaque,
+                        "boundary_implementation_unproved": opaque},
+                        body, original, start, end, signature, fresh=True)
     # C's original79 naming-only audit: check every token hash against raw current
     # generated declarations, including attributes and atomic string contents.
     c_path = BASE + "/lean/bridge-public-callers-c16-20261016/adapter-pins.json"
@@ -584,11 +810,17 @@ def main():
         if row["cone"] == "current-callers" and any(q["lean_name"].endswith(".r1_wire.begin") for q in row.get("retained_signature", {}).get("generated", [])):
             row["actual_begin_re_extraction_diff"] = begin_diff
 
+    reconcile_followup_statements(rows, [*cones.values(), *([current_a] if current_a else []), *additional], {q.name for q in additional})
+
     # Preserve the broader historical scan as metadata, not as accepted status.
     baseline_scan = inputs.json(BASE + "/evidence/begin-straightline-native-20261016/re-pin-coverage-review.json")
     coverage = collections.Counter(q["source_path"] for q in rows)
     result = {"source_revision": ref, "migration_before": before,
-        "scope": "Enumerated retained accepted/current cones from A's explicit LLBC membership registry, current A52, B helper/SDK inventory, C79 naming audit, and accepted Prefix cuts. Historical failed/obsolete/alias metadata is not promoted to current status. No source/runtime refinement theorem is claimed.",
+        "scope": "Enumerated retained accepted/current cones from A's explicit LLBC membership registry, current A52, B helper/SDK inventory, C79 naming audit, accepted Prefix cuts, actual Prepared and accepted tx1/Accumulator emissions. Only explicit accepted prefixes selected. Historical/diagnostic/opaque-stub bodies are not promoted to source theorems. No source/runtime refinement theorem is claimed.",
+        "original_registered_cone_counts": dict(collections.Counter(q["classification"] for q in rows if q["cone"] not in {v.name for v in additional})),
+        "followup_registered_cone_counts": dict(collections.Counter(q["classification"] for q in rows if q["cone"] in {v.name for v in additional})),
+        "followup_emission_kinds": dict(collections.Counter(q.get("emission_kind") for q in rows if q["cone"] in {v.name for v in additional})),
+        "followup_source_inventory_status": "Current accepted cuts now include verifier.rs. Earlier zero filename hits belong only to the retained earlier scan. Actual verify_observed/tx1_finish implementations remain explicit boundaries; diagnostic query/tail outputs are excluded.",
         "inventory_gate": "OPEN: unresolved correspondence" if unresolved else "PASS for enumerated accepted/current universe; lead owns final universe/merge review",
         "classification_counts": dict(collections.Counter(q["classification"] for q in rows)),
         "declarations": rows, "unresolved": unresolved, "synthetic_kit_declarations": synthetic,
@@ -609,6 +841,9 @@ def main():
             "layout_pin_member": "c16/input/source-pins.json",
             "declaration_counts": {k: sum(x is not None for x in current_a.data[k]) for k in KINDS} if current_a else {}},
         "additional_nonmigration_source_exclusions": dict(additional_exclusions),
+        "followup_verified_fragment_layouts": followup_layouts,
+        "followup_explicit_accepted_specs": followup_specs,
+        "followup_binding_and_model_audits": bound_statement_audits(inputs, followup_specs, additional),
         "inputs": inputs.pins, "script_sha256": sha(Path(__file__).read_bytes()),
         "no_builds_Lean_runtime_or_SBF": True}
     encoded = (json.dumps(result, indent=2, sort_keys=True) + "\n").encode()
