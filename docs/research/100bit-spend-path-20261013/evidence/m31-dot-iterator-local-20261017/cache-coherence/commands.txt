@@ -1,0 +1,20 @@
+Remote exact-owner command (read-only):
+ssh -o BatchMode=yes dombarker@100.108.41.90 'for f in /tmp/aspis-mask432-gather-array-v3-20261017/objects/Aeneas/Std/RangeIter.olean /tmp/aspis-mask432-gather-slice-20261017/objects/Aeneas/Std/RangeIter.olean /home/dombarker/project-offloads/aspis-r1-j17-port-20261015/backend/.lake/build/lib/lean/Aeneas/Std/RangeIter.olean; do if test -e "$f"; then printf "%s -> %s\\n" "$f" "$(readlink -f "$f")"; sha256sum "$f"; fi; done'
+
+Remote full `.olean` manifest command (read-only):
+ssh -o BatchMode=yes dombarker@100.108.41.90 'python3 - <<'"'"'PY'"'"'
+import os,hashlib
+r="/tmp/aspis-mask432-gather-array-v3-20261017/objects/Aeneas"
+for dp,ds,fs in os.walk(r,followlinks=True):
+ for f in fs:
+  if f.endswith(".olean"):
+   p=os.path.join(dp,f)
+   try: print(hashlib.sha256(open(p,"rb").read()).hexdigest(),os.path.relpath(p,r))
+   except OSError: pass
+PY'
+
+Local Aeneas object comparison:
+Python recursively hashes `.olean` and `.ir` files under:
+  /tmp/lean432-gather-array-objects/Aeneas
+  /tmp/lean432-nuc-aeneas-cache/Aeneas
+and reports counts/common/identical/different/only on each side.
