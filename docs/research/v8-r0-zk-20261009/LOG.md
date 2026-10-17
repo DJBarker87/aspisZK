@@ -4643,3 +4643,65 @@ PCS block is not full rank (1,304 of 1,712).
 Next: restate J1/J3's payload-specific statements for R1 (Good3 layout,
 ownMap/batMap over the R1 view, BCond_R1 := V_G = B0). The J2/J4 analogues
 for R1 wait on that, together with the D23.5/D24.4 decisions.
+
+### Transversality study received (2026-10-17); D28: D23.5 options for R1, decision pending with the user
+
+`t2b2b/STUDY-TRANSVERSALITY-R1.txt` (worker b84c2ae82..1301fb31f,
+cherry-picked) and probe Z10 (`t2b2b/z10/`) are received. Z10 ran 34 jobs,
+all exit 0, in 18:47, with per-job peak RSS ≤ 17.5 MB and 0 swaps. Its launch
+waited for the Z9 and c-source25 scopes to finish. Z10 is an R1-sized
+single-lane model, not the R1 payload. It found 0 failures in 13,000 query
+sets. The forced-dependency control failed 20/20 as intended. A
+failure-free result of that size bounds the failure rate only below
+≈2.3·10⁻⁴.
+
+**D28.1 Route P (prove the premises) is not a main line.** Per-query-set
+Schwartz–Zippel needs a witness challenge for each of ≈2^306 query sets, and
+the explicit candidates collapse the round rank. Fibre counting gives
+≈2^-1.5. The query-free Hankel route certifies only ≈5 functionals against
+the ≈400–1,900 needed. The study estimates under 15% chance of a proved bound
+within weeks.
+
+**D28.2 The options (CU figures are estimates, ±1.5×; none measured):**
+- **M1:** a uniform E-valued Z lane in the FRI batch. It removes B-open with
+  a short argument valid for every challenge and query set. Cost: +3,040
+  proof bytes and ≈ +24–69k CU. Z's seven pairing values must be bound
+  before γ; the study found and fixed this soundness trap in its own draft.
+- **M2:** Libra on D extended to all ten rounds, plus an evaluation
+  reservoir. It removes OT-open and Good₃'s round-cover condition. Cost:
+  0 bytes and ≈ +40–78k CU, all in tx2, which has 31.5k headroom in the
+  worst settlement. One query-free determinant remains, with mass ≈2^-114.
+- **M3:** honest-prover rejection.
+  - After the challenges are drawn, the prover evaluates
+    P := Good₃ ∧ OT ∧ BCond_R1 ∧ C1T/H1T, using exact linear algebra on
+    public data. If P fails, it discards the attempt and restarts with fresh
+    masks, salts and attempt secrets.
+  - P depends only on the challenges, which in the ROM are uniform and
+    independent of the witness. So the accept decision leaks nothing, and
+    the simulator rejection-samples the same P.
+  - Costs: verifier CU 0, proof bytes 0, soundness rows unchanged, and
+    badMass(P) leaves the privacy error entirely, including Good₃'s mass.
+  - What it requires:
+    - an abort-aware ZK_FS statement, in ZF1's scope, taking the
+      eprint 2023/245 FS-with-aborts caution into account;
+    - a prover-side rank check per attempt (seconds on a desktop);
+    - a refinement obligation: the Rust check decides exactly the Lean
+      predicate P on the exact R1 payload;
+    - the honest prover never publishes a ¬P transcript, with a cap on
+      attempts and an explicit failure exit.
+
+**D28.3 D24.4 may not need a protocol change.** This is the study's
+observation and has not been checked. The top block 208–255 contains the
+aligned sub-block 224–245. There N_{224+e} = N_224·N_e for e < 22, so the
+22-node system is a diagonal scaling times a Vandermonde, invertible for
+every query set, given NZ for k = 5, 6, 7. Classes 2 and 3 need an
+eligibility-registry check. Variant D would bring back the transport cost
+that D18 removed, so it is not affordable. Lead check pending.
+
+**D28.4 Lead view.** M3 is the right default. The verifier is unchanged, so
+soundness, CU (stage1 is already over 1.3M) and every R1 proof are
+untouched. The privacy statement becomes unconditional apart from
+oracle-programming terms. Its new obligations (the abort-aware ZK_FS and
+the Rust predicate check) are ordinary proof work rather than open
+research. M1 and M2 stay as fallbacks if the abort-aware composition fails.
+Decision D23.5 belongs to the user.
