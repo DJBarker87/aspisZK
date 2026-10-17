@@ -1,0 +1,7 @@
+# Actual semantic output to composition coefficients
+
+`coefficients_of_packed_equations` converts all24 retained Wide packed equations of one semantic output array to its exact QM31 coefficient model. It uses the existing injective field embedding and symbolic family transport for the same source public value, openings and point; no independent model values are introduced. `actual_semantic_coefficients` feeds it the proved actual semantic_packed source output. `prepared_folds_actual_semantic` then reuses the existing checked semantic24/Poseidon4 arithmetic folds to obtain the29-coefficient lane sum.
+
+The prior free24-cell semantic array-to-model premise is discharged. Poseidon4 canonicality/model equations and copy-seed canonicality/model remain explicit caller inputs. The source public bounds and selector success in this module's actual-source theorem are derivable through the separately checked preparation prelude; its reusable coefficient helper directly accepts that prelude's packed equations. Complete composition_parts reachability, Poseidon/copy source correspondence, runtime refinement, privacy and complete100-bit accepted-spend security are not claimed.
+
+The focused NUC target exited0 in5.102seconds, peak RSS4,111,012KiB, zero swap, under4/6GiB cgroup caps with swap disabled. All three printed declarations use only propext/Classical.choice/Quot.sound. The exact source/object/import hashes, command, revision and resource evidence are in the receipt. No dense field reduction, generated-certificate aggregation or unchanged full replay was used.
