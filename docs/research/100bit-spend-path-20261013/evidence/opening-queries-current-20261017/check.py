@@ -8,7 +8,10 @@ for n,h in expected.items():assert sha((E/n).read_bytes())==h,n
 with tempfile.TemporaryDirectory(prefix='queries-check-')as tmp:
  out=Path(tmp)
  with tarfile.open(E/'queries-current-emission.tar.gz')as t:
-  pins=json.load(t.extractfile('input/source-pins.json'));lib=t.extractfile('input/lib.rs').read()
+  rawpins=t.extractfile('input/source-pins.json').read();pins=json.loads(rawpins);kit=BASE/'tools/callers-current-extraction-kit/queries';normalized=json.loads((kit/'source-pins.json').read_text());assert (kit/'producing-source-pins.json').read_bytes()==rawpins
+  assert sha((kit/'base52/source-pins.json').read_bytes())==pins['base52_source_pins_sha256']=='389b09c9f9411403cff9a97062c8f8b120e7e75dd7605c7bb6757e9033725361'
+  for name,digest in normalized['kit_files'].items():assert sha((kit/name).read_bytes())==digest,name
+  lib=t.extractfile('input/lib.rs').read()
   for n,h in pins['kit_files'].items():assert sha(t.extractfile('input/'+n).read())==h,n
   for c in pins['cuts']+pins['base52_cuts']:
    src=subprocess.check_output(['git','-C',str(ROOT),'show',pins['revision']+':'+c['path']]);span=src[c['start_byte']:c['end_byte_exclusive']];assert sha(span)==c['sha256'],c['name'];assert span in lib,c['name']
