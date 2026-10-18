@@ -5768,3 +5768,71 @@ transfers to `maskImageOn_R1` by antitonicity once `check_sound` is composed.
 
 CertR1 peaks 0.27 GB under -M7000; wider importers must split. A Freivalds
 check was rejected (§7.3).
+
+### Lead acceptance of the builder model (2026-10-19); D50: Rspend strengthened by the change sentinel for privacy
+
+The worker commits 23f5bd8cd..6d5a2889b (14) are cherry-picked. The design is
+`t2b2b/DESIGN-BUILDER-MODEL.txt` §1–§7. The lead verified the six host
+receipts:
+
+| Module | Attempt |
+|---|---|
+| BuilderModel | 4201 |
+| BuilderModelAux | 4204 |
+| BuilderModelHash | 4208 |
+| BuilderModelDigest | 4210 |
+| BuilderModelSentinel | 4211 |
+| BuilderModelBridge | 4212 |
+
+All exited 0, ran in-window (slots 1 and 2), have matching SHAs and standard
+axioms, and contain no overrides. The failed attempts were elaboration
+errors, each followed by a changed source. Two whnf/simp timeouts were fixed
+with local irreducibility; no limits were raised.
+
+**D50.1 Proved.** `buildModel` is a staged Lean model of the Rust builder,
+and all seven NonCopyHolds families hold for it (`nonCopy_model`):
+- Poseidon holds by construction;
+- schedule and path need no premise;
+- value, occupancy, asset and digest hold under named witness premises.
+
+**D50.2 Finding: no builder can satisfy `BuilderRefines S Rspend`.**
+`refines_forces_sentinel` (lead-read): for any builder, BuilderRefines on a
+private transfer forces `pub.change 7 ≠ 0`. Copy link 1124073492 places the
+change digest on occupancy row 1018, whose sentinel equation requires it.
+Rspend has no such clause, while the Rust builder already rejects a zero
+sentinel with a salt retry (`two_outputs`).
+
+**Lead decision.** The privacy relation is Rspend⁺ := Rspend ∧ (transfer →
+change[7] ≠ 0). The soundness theorem continues to extract Rspend. This is
+consistent, because the honest prover proves a subset of the relation that
+soundness extracts.
+
+On privacy, the salt retry conditions the change commitment (a public
+statement value, a hash output in the ROM) on one limb being nonzero. That
+affects the commitment's own hiding, which is outside this ZK theorem, by
+at most the conditioning on a ≈2^-31 event, not the view given the
+statement. This is recorded as an item for the note-commitment hiding
+argument and is not checked here.
+
+A soundness-side opportunity (not required): since accepted proofs force the
+sentinel, the extracted relation could carry it too.
+
+**D50.3 Modelling choices the Rust refinement must justify.**
+- Block rows are defined by the canonical Poseidon transition. This moves the
+  open raw-limb boundary to the builder side.
+- Empty-root siblings come from the frozen table.
+- Path aux levels are written from the node inputs.
+- The model is total, with Rust's checks as premises.
+
+**D50.4 Open, with the worker's estimates.**
+- CopyLinkBalance of the model, 136 links: 3–5 days.
+- BaseTyped of the model: about 1 day.
+- Rspend⁺ → the model premises, after build integration: 2–3 days. This needs
+  model digests equal to the spend path's noteCommitment, nodeCompress and
+  pathPrefix.
+- Aeneas refinement via extraction-friendly copies of each writer, checked
+  by differential tests:
+  - value, occupancy, path, merge: 2–3 days;
+  - sponge and node: 2 days;
+  - Poseidon: 1–2 weeks. This is the hardest item, and it has failed
+    extraction before.
