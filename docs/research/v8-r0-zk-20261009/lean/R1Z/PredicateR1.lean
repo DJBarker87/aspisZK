@@ -4,9 +4,14 @@ import R1Z.VerifierRelationsR1
 rejection predicate `P_R1` of the R1 prover, as a conjunction of named Props.
 
 * `QPrime_R1`: (Q′) on the R1 instance.
-* `V_G`, `BCondG_R1 := B0R1 ≤ V_G` (the measured "V_G = B0", Z9 §1), and the
-  two consequences `bcond_of_G` (BCond, for clause (i′)) and `breach_of_G`
-  (BReach, for clause (ii′)), from `bat_ker_own_le_B0R1`.
+* `V_G`, `BCondG_R1 := B0R1' ≤ V_G`, and the two consequences `bcond_of_G`
+  (BCond, for clause (i′)) and `breach_of_G` (BReach, for clause (ii′)), from
+  `bat_ker_own_le_B0R1'`.  `B0R1' := B0R1 ⊓ (unopened folded cells zero)`:
+  the unprimed `B0R1 ≤ V_G` is false for every challenge, because `relR1`
+  never constrains the folded cells outside `FoldedOpen` while `V_G` is zero
+  there (Z9b, LOG design correction).  The number of independent relations
+  varies with the query set (queries sharing a parent u/4 give coinciding
+  line relations); nothing here counts relations.
 * `C1Lift`, `H1Lift` (the (ii′) noise lifts, design §3.3), stated
   Bat-generically and specialised to `R1Bat` in `P_R1`.
 * `HalfOK`, `SemK4`, `QueryCard`.
@@ -52,10 +57,50 @@ def V_G (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) :
       LinearMap.ker (R0Z.SilentReduction.ownMap (Bat := R1Bat) π B ch)).map
     (R0Z.SilentReduction.batMap (Bat := R1Bat) π B ch)
 
-/-- The (B) conjunct of `P_R1`: every relation-consistent batched vector is
-reached by a G-only silent tape. -/
+/-- Batched vectors whose folded cells vanish outside `FoldedOpen`. -/
+def unopenedZero (ch : Challenges K) : Submodule F (R1Bat → K) where
+  carrier := {b | ∀ p, ¬ FoldedOpen ch p → b (.folded p) = 0}
+  add_mem' := by
+    intro a b ha hb p hp
+    rw [Pi.add_apply, ha p hp, hb p hp, add_zero]
+  zero_mem' := fun _ _ => rfl
+  smul_mem' := by
+    intro c b hb p hp
+    rw [Pi.smul_apply, hb p hp, smul_zero]
+
+/-- `B0`, corrected: relation-consistent batched vectors with zero unopened
+folded cells. -/
+def B0R1' (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) : Submodule F (R1Bat → K) :=
+  B0R1 (F := F) π ch ⊓ unopenedZero ch
+
+/-- Every mask tape has zero batched cells at the unopened folded positions. -/
+theorem batMap_unopened (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K)
+    (m : M K F) (p : Fin 262144) (hp : ¬ FoldedOpen ch p) :
+    R0Z.SilentReduction.batMap (Bat := R1Bat) π B ch m (.folded p) = 0 := by
+  have e : R0Z.SilentReduction.batMap (Bat := R1Bat) π B ch m (.folded p) =
+      BatchedLayer.read (Bat := R1Bat) π ch (pureTrace B m) (.folded p) := by
+    rw [R0Z.SilentReduction.batMap, LinearMap.comp_apply, R0Z.PureRounds.A_pure]
+    rfl
+  rw [e]
+  exact folded_unqueried_zero π ch (pureTrace B m) p hp
+
+/-- The batched image of own-silent mask tapes lies in `B0R1'`. -/
+theorem bat_ker_own_le_B0R1' (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) :
+    (LinearMap.ker (R0Z.SilentReduction.ownMap (Bat := R1Bat) π B ch)).map
+        (R0Z.SilentReduction.batMap (Bat := R1Bat) π B ch) ≤ B0R1' π ch := by
+  intro v hv
+  refine Submodule.mem_inf.2 ⟨bat_ker_own_le_B0R1 (F := F) π B ch hv, ?_⟩
+  obtain ⟨m, _, rfl⟩ := Submodule.mem_map.1 hv
+  exact fun p hp => batMap_unopened π B ch m p hp
+
+/-- Shape sanity: `B0R1'` lives on the opened coordinates. -/
+theorem B0R1'_le_unopenedZero (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) :
+    B0R1' (F := F) π ch ≤ unopenedZero ch := inf_le_right
+
+/-- The (B) conjunct of `P_R1`: every relation-consistent batched vector with
+zero unopened folded cells is reached by a G-only silent tape. -/
 def BCondG_R1 (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : Prop :=
-  B0R1 (F := F) π ch ≤ V_G π B ch
+  B0R1' π ch ≤ V_G π B ch
 
 /-- (B) as used by clause (i′) (SilentReduction.BCond on R1). -/
 def BCond_R1 (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : Prop :=
@@ -63,7 +108,7 @@ def BCond_R1 (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) 
 
 /-- (B) as used by clause (ii′). -/
 def BReach_R1 (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : Prop :=
-  B0R1 (F := F) π ch ≤
+  B0R1' π ch ≤
     (LinearMap.ker (R0Z.SilentReduction.ownMap (Bat := R1Bat) π B ch) ⊓
       LinearMap.ker (R0Z.Z4Maps.roundMaskMap (Bat := R1Bat) π B ch)).map
       (R0Z.SilentReduction.batMap (Bat := R1Bat) π B ch)
@@ -78,6 +123,15 @@ theorem V_G_le (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K
   rcases Submodule.mem_inf.1 hm with ⟨hGR, ho⟩
   exact Submodule.mem_inf.2 ⟨ho, (Submodule.mem_inf.1 hGR).2⟩
 
+/-- Shape sanity: `V_G` also lives on the opened coordinates, so
+`BCondG_R1` compares two subspaces of the same coordinate space (the
+unprimed `B0R1 ≤ V_G` could never hold). -/
+theorem V_G_le_unopenedZero (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) :
+    V_G π B ch ≤ unopenedZero ch := by
+  intro v hv
+  obtain ⟨m, _, rfl⟩ := Submodule.mem_map.1 hv
+  exact fun p hp => batMap_unopened π B ch m p hp
+
 theorem breach_of_G (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K)
     (hG : BCondG_R1 π B ch) : BReach_R1 π B ch :=
   hG.trans (V_G_le π B ch)
@@ -85,7 +139,7 @@ theorem breach_of_G (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challen
 theorem bcond_of_G (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K)
     (hG : BCondG_R1 π B ch) : BCond_R1 π B ch :=
   le_antisymm (Submodule.map_mono inf_le_left)
-    ((bat_ker_own_le_B0R1 (F := F) π B ch).trans (hG.trans (V_G_le π B ch)))
+    ((bat_ker_own_le_B0R1' π B ch).trans (hG.trans (V_G_le π B ch)))
 
 /-! ## The (ii′) noise lifts (design §3.3) -/
 
@@ -199,6 +253,10 @@ theorem chain0K4_le_silent_R1 {π : Fin 1024 ≃ Fin 1024} {B : PackBasis F}
         ((A (Bat := R1Bat) π B ch).comp inlM) :=
   R0Z.SilentReduction.chain0K4_le_silent_of π B hB ch h.qprime h.bcond
 
+#print axioms batMap_unopened
+#print axioms bat_ker_own_le_B0R1'
+#print axioms B0R1'_le_unopenedZero
+#print axioms V_G_le_unopenedZero
 #print axioms V_G_le
 #print axioms breach_of_G
 #print axioms bcond_of_G
