@@ -22,3 +22,109 @@ PROPOSED = design text only.
 §8  Numbers for N = 8, Q = 2^64
 §9  Open items and gaps found
 
+----------------------------------------------------------------------
+§1  The R1 oracle reads of one attempt  (SOURCE unless marked)
+----------------------------------------------------------------------
+
+One random oracle H : Bytes → {0,1}^256 (SHA-256 in the ROM; one function
+for the transcript, the Merkle trees, salt and mask derivation, as in the
+source: every call is `hash`/`Digest32::digest` of the same backend).
+
+1.1 Transcript reads (115 per attempt).
+  init    s_init = H(DOMAIN ‖ 0 ‖ len_le32 ‖ public_bytes ‖ c1_root)
+          (r1_wire.rs SemanticTranscript::new; DOMAIN =
+          "UNPROVED:R1:PRIVATE-SALTED:SEMANTIC:P3" under private-leaf-salts).
+          This is the "row 0 absorbs the public bytes and the C1 root" of
+          the payload map; row 0's own record is empty.
+  rows 0..26 (sample_block_validated): for row i
+          abs_i = H(state ‖ [0, 0xa0+i] ‖ framed_i),
+          sq_i  = H(abs_i ‖ [1])   (the challenge block),
+          adv_i = H(abs_i ‖ [2])   (the next state).            27 × 3 = 81
+          Row 2's record is the C2 root; rows 14..26 carry H, the round
+          polynomials, the claims/extra (25) and before_z1 (26).
+  reseed  t_0 = H(domain2 ‖ [variant tag] ‖ adv_26)   (transcript.rs
+          Transcript::new, called in verifier.rs:105 with the semantic
+          state; this is the "26 reseeds" of the schedule).          1
+  rows 27..30 (Transcript::block): abs = H(state ‖ [0, 0xa0+row] ‖
+          len_le32 ‖ payload), sq = H(abs ‖ [1]), adv = H(abs ‖ [2]);
+          payloads y1 (γ), inactive (κ), round0 (α0), folded root ‖ round1
+          (α1).                                                  4 × 3 = 12
+  row 31  abs_31 = H(state ‖ [0, 0xa0+31] ‖ len ‖ final_message), then
+          eight pairs b_k = H(st_k ‖ [1]), a_k = H(st_k ‖ [2]), st_0 = abs_31,
+          st_{k+1} = a_k (transcript.rs queries). The queries are
+          QueryScan over the b_k only; the continuing state is a_{k*} for
+          the first k* at which the scan completes, else a_7
+          (r0_transcript.rs queries_from_pairs).                1 + 16 = 17
+  row 32  ρ: abs_32 = H(a_{k*} ‖ [0, 0xa0+32] ‖ len ‖ ∅), sq, adv.      3
+  Total m_T = 1 + 81 + 1 + 12 + 17 + 3 = 115 (the R0 count was 110).
+  Decoders: semantic rows qm31_sample, circle rows circle_sample (one
+  block, fixed fallback), γ gamma_sample, κ/α0/α1 ordinary_sample, queries
+  QueryScan, ρ qm31_sample (sampler.rs). Every challenge is a function of
+  the squeeze answers sq_i / b_k only; no squeeze answer is a field of any
+  later address. ρ enters no disclosed coordinate (payload map §6), so the
+  Lean `Challenges K` (sem 25, circle 2, opening 4 = γ, κ, α0, α1, queries)
+  is the image of `draw` with ρ dropped.
+
+1.2 Commitment reads (private-leaf-salts build only; see §6 A-salt).
+  salt    salt_{T,u} = H(LEAF_SALT_DOMAIN ‖ bind_k ‖ nonce_k ‖ T ‖ u_le32 ‖
+          leaf_salt_seed_k)  for each tree T ∈ {C1, C2} and fibre u < 2^18
+          (state_only_entropy.rs derive_pool_v1_leaf_salt, called per leaf
+          by prover.rs derive_private_salts).
+  leaf    H(0x10 ‖ T ‖ value_u ‖ salt_{T,u})   (state_only_private_merkle.rs).
+  node    8-ary Merkle nodes over the leaf digests (host_commitment.rs; the
+          opened path is 1344 bytes = 6 levels × 7 siblings × 32).
+  The folded tree (row 30's root) is built the same way over 2^16 leaves.
+  The C1 root is the top node of the C1 tree; it is the trailing field of
+  `init`. The C2 root is row 2's record.
+
+1.3 Mask and secret derivation reads.
+  bind_k  = H(dom ‖ precommit_binding ‖ context_k)  (pool_v1_private_attempt_
+          binding; context_k contains the public per-attempt nonce_k and
+          statement digest H(public_bytes)).
+  seeds   source_mask_seed_k = H(POOL_V1_SOURCE_SEED_DOMAIN ‖ precommit ‖
+          context_k ‖ field_mask_entropy_k), and per lane family
+          H(…_SEED_DOMAIN ‖ bind_k ‖ source_mask_seed_k).
+  expand  H(PROFILE21_SOURCE_EXPAND_DOMAIN ‖ seed ‖ counter_le) blocks; each
+          M31 limb takes 31-bit words `w & 0x7fffffff`, rejecting 2^31−1, at
+          most 16 tries, else MaskSampleExhausted.
+
+1.4 Classes (PROPOSED classification; the HYP of §7 is that it is exact).
+  Pub_k  : an address whose bytes are a function of public data, of the
+           public nonce_k and of H at other Pub addresses (statement digest,
+           bind_k, the context hash). Answered from the shared table in
+           every game; repeats across attempts are legitimate; never charged.
+  Priv_k : every other read of attempt k. Each has a DESIGNATED FIELD — a
+           32-byte sub-string at a fixed offset, recoverable from the address
+           alone — that is either an attempt secret of k or the answer of
+           an earlier Priv_k read:
+             salt     → leaf_salt_seed_k (trailing 32 bytes)
+             seeds    → field_mask_entropy_k / source_mask_seed_k answer
+             expand   → the seed answer (offset of the domain length)
+             leaf     → salt_{T,u} answer (trailing)
+             node     → its last child's answer
+             init     → c1_root = C1 top-node answer (trailing)
+             abs_i    → previous adv answer (offset 0); abs_0 → s_init answer
+             sq_i, adv_i, b_k, a_k → abs_i / st_k answer (offset 0)
+             reseed   → adv_26 answer (trailing)
+             abs_32   → a_{k*} answer (offset 0); k* is a function of the
+                        squeeze answers only.
+           Reads that share a designated field are structurally distinct:
+           sq/adv by the suffix byte 1/2; salts by (T, u); expander blocks by
+           counter; abs_32 against b_{k*+1}/a_{k*+1} by length (38 vs 33
+           bytes). This is the same device as the spend-path soundness
+           targets `fixed 0`, `trailing`, `child j`, `fixed 38`
+           (RawByteCollisionTargets.lean, `pred`, file SHA at 3b0acd4f5:
+           1246810ec0 is the last commit touching it), used here for privacy.
+  Published: a Priv read is PUBLISHED if the verifier recomputes it from
+           the proof bytes (all 115 transcript reads, the reads on the 22
+           opened paths of the three trees, and the opened leaves); otherwise
+           UNPUBLISHED (unopened leaves, sibling-subtree nodes, salt
+           derivations, seeds, expander blocks). Which leaves are opened
+           depends on the query challenge, i.e. on squeeze answers only.
+
+1.5 Count per attempt (PROPOSED, from the source; not instrumented).
+  salts 2·2^18 + 2^16, leaves 2·2^18 + 2^16, 8-ary nodes < 2·2^18/7 + 2^16,
+  expander blocks ≤ 29·1024·4·16/8 < 2^18 (worst case, every word
+  rejected 15 times; normally ≈ 1.5·10^4), transcript 115, seeds/binding/
+  context < 2^6. Total m < 1.53·10^6 < 2^21. All bounds below use m = 2^21.
+
