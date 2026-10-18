@@ -5717,3 +5717,54 @@ commitment reads in the causal read list, followed by CmLayout, Agree and
 
 The P_R1 check is unaffected: it reads challenges and public constants only,
 not roots.
+
+### Lead acceptance of the P_R1 certificate checker (2026-10-19); D49
+
+The worker commits f38410320..80723cd38 (15) are cherry-picked. Design:
+`zf1/DESIGN-P-CERT.txt` §0–§7. The lead verified both host receipts:
+- `R1Z/CertSound`: attempt 4121, 20 standard axiom lines;
+- `R1Z/CertR1`: attempt 4122, 7 standard axiom lines.
+
+Both ran in-window, exited 0, have matching SHAs and no overrides. Attempt
+4120 failed on missing imports.
+
+**D49.1 Proved.** Generic certificate soundness:
+- preimage certificates give the inclusions;
+- the echelon certificate gives ker Rel ≤ span{n_f}, and hence the BCondG
+  shape (no inverse of U needed);
+- a right inverse gives the lift shape.
+
+Each is decidable. At the exact P_R1 types: `qprime_of_cert`,
+`bcondG_of_cert`, `c1lift_of_cert`, `h1lift_of_cert`, `halfOK_of_cert`,
+`queryCard_of_cert` and `p_r1_of_cert`. These are relative to the
+row-formula premises rf_own, rf_round, rf_bat, rf_src, rf_chain, rf_rel,
+rf_obs and rf_dec, which subsume the D34.3 items.
+
+**D49.2 Measured.** The Rust prototype `z4/z9c.rs` was run on the nuc in a
+capped scope:
+- A/J, actual or random queries: emit 11.9–12.6 s, check 2.56–2.65 s,
+  14.2–14.4 MB certificate, 194–250 MB peak;
+- coset: 9.2 s emit, 1.6 s check, 9.8 MB.
+
+Emit plus check is about 15 s, which is cheaper than the 22.6 s eliminating
+check. This replaces D38.2's "roughly doubled" estimate, so the prover-latency
+cost of D29 is about 15 s per attempt with the current code. Ranks match
+z9b, and 8/8 corrupted certificates were rejected at their intended steps.
+
+On structure B the checker fails closed at the first C1 lift (rank
+100 < 112), which is acceptable because a false negative only costs an
+attempt. Whether C1Lift itself fails on B is not computed.
+
+**D49.3 Enforced predicate.** P_chk := (emit succeeds ∧ check passes). It
+transfers to `maskImageOn_R1` by antitonicity once `check_sound` is composed.
+
+**D49.4 Open.**
+- C2: the rf_* premises, including the Z4c round-coordinate map.
+- C3: Aeneas extraction of the checker only. The constraints are u32/u64
+  with proved bounds, flat Vec, plain while loops, monomorphic code, and one
+  loop nest per function.
+- `check_sound` composition.
+- Prover integration, and timing on a second machine.
+
+CertR1 peaks 0.27 GB under -M7000; wider importers must split. A Freivalds
+check was rejected (§7.3).
