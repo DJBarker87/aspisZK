@@ -519,3 +519,161 @@ GENERIC in the sense of this job: it holds for R1 with no new mathematics.
     the (ii′) jobs J0/J0b/J4′/J13–J16 (never proved), and opened_prefix
     (J14), which on R1 changes statement (§4, J14-R1).
 
+§3  Exact Lean statements (PROPOSED)
+------------------------------------
+Typed against: Shift.lean:186 (MaskImageOn P h B x, P : Challenges K → Prop),
+SilentReduction.lean:241/248 (QPrime π B hB ch, BCond π B ch), K4.lean:28,106
+(PackField, K4), Z4Maps.lean:20-25 (roundMaskMap, silentMasks), Partition
+(M, N, T, inlM, inrN, ExtTape), JointTrace (eligibleLinear, tapeLinear),
+PayloadSplit.L, R0P.CoreExt (BaseTyped, PublicBase), AspisR1.RoundPairing
+(dualFold includes the quarter; round_eval/round_boundary as quoted in §2.4).
+Every name below that is not in those files is defined in this section or
+in §2; after the §2.2 refactor, R0Z names take an extra implicit Bat, written
+(Bat := R1Bat) once in the R1 abbreviations.  Variables throughout:
+  {K CommitHandle : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+  (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (hB : PackField B) (ch : Challenges K)
+Checked by reading only; the first compile of each module is the check.
+
+§3.1  QPrime_R1
+    abbrev ownMapR1 := SilentReduction.ownMap (Bat := R1Bat) π B ch
+    abbrev roundMaskMapR1 := Z4Maps.roundMaskMap (Bat := R1Bat) π B ch
+    def QPrime_R1 : Prop := SilentReduction.QPrime (Bat := R1Bat) π B hB ch
+  i.e. ChainT0K4 B hB ch ≤ (LinearMap.ker ownMapR1).map roundMaskMapR1.
+  ChainT0K4 is payload-free (a submodule of RoundPayload K), so the R1 and R0
+  targets are literally the same space (Z9 E1: 1,076 + 4 = 1,080).  The R1
+  difference is only in ker ownMapR1: the R1 own cells read coefficients
+  through π = D18.  MEASURED 1,076 on A and J (Z9 §2).
+
+§3.2  BCond_R1 in the V_G = B0 form
+    def batRead : Payload K R1Bat →ₗ[F] (R1Bat → K) :=
+      LinearMap.pi fun b => (LinearMap.proj (PayloadCell.bat b) : Payload K R1Bat →ₗ[F] K)
+    def batMapR1 : M K F →ₗ[F] (R1Bat → K) :=
+      batRead.comp ((D12.A (Bat := R1Bat) π B ch).comp Partition.inlM)
+    def Gonly : Submodule F (M K F) :=
+      LinearMap.ker (LinearMap.fst F (Fin 10 × Fin 1024 → F) (ExtTape F × ExtTape F)) ⊓
+      LinearMap.ker ((LinearMap.snd F (ExtTape F) (ExtTape F)).comp
+        (LinearMap.snd F (Fin 10 × Fin 1024 → F) (ExtTape F × ExtTape F)))
+    def V_G : Submodule F (R1Bat → K) :=
+      (Gonly ⊓ LinearMap.ker roundMaskMapR1 ⊓ LinearMap.ker ownMapR1).map batMapR1
+    def BCondG_R1 : Prop := B0R1 π ch ≤ V_G π B ch
+  (m.1 = mask-only raw, m.2.1 = G limbs, m.2.2 = D limbs, Partition.lean:15;
+  Gonly is DESIGN-T2b-2b-Dprime §2.1's Gonly.)  Z9 §1: V_G = 952 = B0,
+  annihilator exactly the 48 relations, on every job.
+  The generic forms, for the record:
+    def BCond_R1 : Prop := SilentReduction.BCond (Bat := R1Bat) π B ch
+      -- (ker own ⊓ ker R).map bat = (ker own).map bat, with bat = batMapR1
+      -- after §2.2's Bat-valued batMap
+    def BReach_R1 : Prop := B0R1 π ch ≤ (LinearMap.ker ownMapR1 ⊓ LinearMap.ker roundMaskMapR1).map batMapR1
+  Lemmas (J4-R1 / J15-R1):
+    V_G_le : V_G π B ch ≤ (LinearMap.ker ownMapR1 ⊓ LinearMap.ker roundMaskMapR1).map batMapR1
+      (Submodule.map_mono, inf_le; trivial)
+    bat_ker_own_le_B0R1 : (LinearMap.ker ownMapR1).map batMapR1 ≤ B0R1 π ch      (J4-R1)
+    breach_of_G : BCondG_R1 π B ch → BReach_R1 π B ch                            (V_G_le)
+    bcond_of_G  : BCondG_R1 π B ch → BCond_R1 π B ch
+      (le_antisymm (map_mono inf_le_left) (bat_ker_own_le_B0R1.trans (hG.trans V_G_le)))
+  Why the G-only form is the right conjunct: it implies both (B) premises, and
+  it is the smallest public rank check (one K₄ lane, 376-limb own map, 952
+  target) for the Rust predicate.  Taking BReach_R1 instead is equally valid
+  and weaker; the lead may prefer it if a future challenge draw has V_G < B0
+  but BReach holding (Z9 never saw this).  P_R1 below uses BCondG_R1.
+
+§3.3  The (ii′) lifts on R1 (DESIGN-ii-prime §2.1, retyped)
+    inductive OwnCell | claim (j : Fin 3) | extra | ood (j : Fin 2) | opened (q : Fin 262144) (s : Fin 4)
+    def ownRead (c : Fin 29) : Payload K R1Bat →ₗ[F] (OwnCell → K) := LinearMap.pi fun
+      | .claim j    => LinearMap.proj (PayloadCell.pointClaim j c)
+      | .extra      => LinearMap.proj (PayloadCell.extraClaim c)
+      | .ood j      => LinearMap.proj (PayloadCell.ood j c)
+      | .opened q s => LinearMap.proj (PayloadCell.opened q s c)
+    def obs (c : Fin 29) : (Fin 1024 → K) →ₗ[F] (OwnCell → K) :=
+      (ownRead c).comp (((PayloadSplit.L (Bat := R1Bat) π B ch).restrictScalars F).comp
+        (LinearMap.single F (fun _ : Fin 29 => Fin 1024 → K) c))
+    def baseF : Submodule F K := LinearMap.range (Algebra.linearMap F K)
+    def inactiveSumF : (Fin 1024 → K) →ₗ[F] K :=
+      ∑ r ∈ copyInactiveRows, (LinearMap.proj r : (Fin 1024 → K) →ₗ[F] K)
+    def Wsem : Submodule F (Fin 1024 → K) :=
+      (⨅ r : Fin 1024, baseF.comap (LinearMap.proj r)) ⊓ LinearMap.ker inactiveSumF
+    def Wh1 : Submodule F (Fin 1024 → K) :=
+      (⨅ r : Fin 1024, (K4F B hB).comap (LinearMap.proj r)) ⊓ LinearMap.ker inactiveSumF
+    def Vsem (c : Fin 29) : Submodule F (Fin 1024 → K) :=
+      LinearMap.range ((LinearMap.proj c : Trace K →ₗ[F] (Fin 1024 → K)).comp
+        (JointTrace.eligibleLinear (K := K) (F := F)))
+    def Ph1 : Submodule F (Fin 1024 → K) :=
+      LinearMap.range ((LinearMap.proj 26 : Trace K →ₗ[F] (Fin 1024 → K)).comp
+        ((JointTrace.tapeLinear B).comp (Partition.inrN.comp
+          (LinearMap.inl F (ExtTape F) (EligibleNoise K F)))))
+    def C1Lift (c : Fin 16) : Prop :=
+      Wsem.map (obs π B ch (Fin.castLE (by omega) c)) ≤
+        (Vsem (Fin.castLE (by omega) c)).map (obs π B ch (Fin.castLE (by omega) c))
+    def H1Lift : Prop := (Wh1 B hB).map (obs π B ch 26) ≤ (Ph1 B).map (obs π B ch 26)
+  Typing notes: Trace K = Fin 29 → Fin 1024 → K is an F-module through the
+  Subfield algebra instance (as Z4Maps/SilentReduction already use);
+  LinearMap.single needs DecidableEq (Fin 29); eligibleLinear's balance row is
+  1023 and the H1 padding's is 0 (MaskLayout:97,102), both inside
+  copyInactiveRows (instance facts, DESIGN-ii-prime P6), which is why
+  Wsem/Wh1 ⊆ the lane word spaces is plausible; the lifts themselves stay in P.
+  On R1 the opened part is not structural (DESIGN-ii-prime §3.2; D24.4), so
+  C1Lift is a P conjunct in full; J14-R1 (§4) proves the aligned-block part
+  only as Route-P material.
+
+§3.4  P_R1, the rejection predicate (conjunction of named Props)
+    def HalfOK : Prop := alpha ch 9 ≠ 1/2                       -- J2 / Phi0_sRem
+    def SemK4 : Prop := ∀ i : Fin 25, ch.sem i ∈ K4 B hB          -- J2, R7
+    def QueryCard : Prop := ch.queries.card ≤ 22                 -- (ii′) sampler fact
+    def P_R1 (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (hB : PackField B)
+        (ch : Challenges K) : Prop :=
+      HalfOK ch ∧ SemK4 B hB ch ∧ QPrime_R1 π B hB ch ∧ BCondG_R1 π B ch ∧
+      (∀ c : Fin 16, C1Lift π B ch c) ∧ H1Lift π B hB ch ∧ QueryCard ch
+  Every conjunct is a function of (π, B, ch) only — π and B are fixed public
+  constants of the protocol — so P_R1 is a public predicate of the
+  challenges (D29.2).  QueryCard holds for every R1 draw (transcript returns
+  22 distinct fibres) and costs the prover nothing; it is in P so that the
+  theorem does not depend on the sampler.  Good, Good3, GoodCircle and
+  GoodAlpha's α ∉ {0, 1} are NOT conjuncts: nothing in the M3 route uses
+  them (Good3 was only the route to QPrime; GoodCircle only for R0's chord
+  quotient, which R1 lacks).  For the Rust check: HalfOK and SemK4 are field
+  tests (SemK4 is true by construction, qm31_sample), QueryCard a length
+  test, and the other four are exact rank comparisons over F = M31:
+    QPrime_R1  : rank_F R(ker own) restricted to ChainT0K4 … (Z9's "(Q′) excess 0")
+    BCondG_R1  : rank_F V_G = 1,336 − rank_F(relations) (Z9's "V_G = B0")
+    C1Lift c   : rank_F obs(Vsem c) = rank_F obs(Wsem)  (16 tests)
+    H1Lift     : rank_F obs(Ph1) = rank_F obs(Wh1)
+  (as inclusions of images; equal ranks plus inclusion of the generators).
+
+§3.5  Validity restriction (DESIGN-ii-prime §1.5, unchanged)
+    def HonestProver.restrict (h : HonestProver K) (V : h.Instance → Prop) : HonestProver K :=
+      ⟨{w // V w}, h.transport, fun w => h.public w.1, fun w => h.build w.1⟩
+    def ValidOn (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F)
+        (x : Statement K CommitHandle) : h.Instance → Prop :=
+      fun w => ∀ ch, P ch → HonestValid x.1 B (h.build w) ch
+  HonestValid is J0's (DESIGN-ii-prime §1.5: laneOf zero, Σ_r u 26 r = 0,
+  Σ_{r ∈ I} u 26 r = 0 at u = PayloadSplit.actual pub B t ch 0).  It reads
+  only the semantic layer, so it is Bat-free and identical on R1; the R1
+  prover's audit already checks the total helper sum (prover.rs:171).
+
+§3.6  The target theorem
+    theorem maskImageOn_R1 (h : HonestProver K) (B : PackBasis F) (hB : PackField B)
+        (x : Statement K CommitHandle)
+        (hpub : PublicBase F x.1)
+        (hF : ∀ w, h.public w = x.1 → BaseTyped F (h.build w)) :
+        Shift.MaskImageOn (Bat := R1Bat) (P_R1 h.transport B hB)
+          (h.restrict (ValidOn (P_R1 h.transport B hB) h B x)) B x
+  Remarks.
+  (a) No transport hypothesis: the statement holds for every π, because
+      every π-dependent fact sits inside P_R1.  The R1 instance fixes
+      h.transport = AspisR1.rowEquiv (D18Transport), which enters only the
+      refinement "the Rust check decides P_R1 (rowEquiv) B hB".
+  (b) Clause (i′): for ch with P_R1, J2's sRem_mem_chain0K4 (HalfOK, SemK4,
+      hpub, hF) and chain0K4_le_silent_of (QPrime_R1, bcond_of_G) give
+      sRem ∈ (silentMasks).map (A ∘ inlM) ≤ range (A ∘ inlM).  The restricted
+      prover's sRem is the original prover's at w.1 (definitional; one lemma).
+  (c) Clause (ii′): J16-R1's iiPrime_of_R1 from C1Lift, H1Lift, QPrime_R1,
+      breach_of_G, QueryCard, validity of w.1 and w'.1, hF.
+  (d) Composition: hvzk_on_of (P_R1 …) (§1.5) gives HVZK_on P_R1 for the
+      restricted prover; ZF1-abort consumes HVZK_on P_R1 (no badMass term:
+      P_R1 is enforced by rejection).  The nondegeneracy of P_R1 for liveness
+      (Pr[¬P_R1] small) is not needed and not claimed.
+  (e) Corollary for builders: J0b (honest builds are valid for every ch) turns
+      h.restrict V back into h on honest instances; without J0b the theorem
+      is about valid instances, which is the standard (x, w) ∈ R quantifier.
+
