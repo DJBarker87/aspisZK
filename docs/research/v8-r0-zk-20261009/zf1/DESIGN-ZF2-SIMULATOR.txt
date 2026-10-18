@@ -428,3 +428,32 @@ an addition. Acceptance criteria:
     R1IdealModelS … (simE …) and `he : 0 ≤ εexh` dropped (HvzkS needs no
     sign hypotheses);
   * the type of simE takes no h.Instance and no InLanguage proof.
+
+§7  What stays open
+--------------------
+  * The Lean view has no commitment roots, Merkle paths or opened salts
+    (G-root, D41.5). Once they are added, the simulator must also produce
+    them. In the ROM, roots and the hashes of unopened siblings over fresh
+    salts are simulated by fresh oracle answers. This belongs to the ZF1
+    ideal model (R1IdealModelS / G-prog), not to the coset argument. The
+    coset argument covers exactly the field-valued payload.
+  * R1IdealModelS is a named hypothesis, as R1IdealModelV was. Its fields
+    (lazy programming and PairFresh) concern how fs.ideal programs the
+    oracle around the simulator's output. Discharging it for simE is the
+    same job as for simV (G-def, G-prog), so ZF2 adds no new obligation of
+    that kind. The agreement field is now stated for a concrete,
+    instance-free simulator, which is the form a real ideal game can
+    implement.
+  * Efficiency is a meta-level statement. Lean proves that simE's type is
+    witness-free and that its laws are right. That simE runs in polynomial
+    time is read off the definition (§4.1, §5.3); no complexity theory is
+    formalised.
+  * G-sim (new refinement item): a Rust implementation of SimR1 steps 1–5
+    over the R1 payload layout, with a timing on the host and a check that
+    its output passes the R1 verifier on fresh tapes. That check is a
+    necessary condition, since every honest view is accepting and the laws
+    are equal. Also needed: the correspondence between the Lean L/O split
+    and the Rust zerocheck (G-ref).
+  * Every other condition of privacy_R1 carries over unchanged (D42.5, items
+    1–4 and 6). Item 5 (ZF2) is closed by privacy_R1_eff once L1–L4 are
+    green.
