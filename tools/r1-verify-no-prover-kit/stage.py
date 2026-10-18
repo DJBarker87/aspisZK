@@ -5,7 +5,7 @@ from pathlib import Path
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1];sha=lambda b:hashlib.sha256(b).hexdigest()
 def main():
  p=argparse.ArgumentParser();p.add_argument('--after',required=True);p.add_argument('--out',type=Path,required=True);a=p.parse_args();dest=a.out.resolve();assert not dest.exists(),dest
- s=importlib.util.spec_from_file_location('prepare',HERE/'prepare.py');prep=importlib.util.module_from_spec(s);s.loader.exec_module(prep);overlay,pins=prep.build(a.after);assert len(overlay)==10;assert json.loads((HERE/'source-pins.json').read_text())==pins
+ s=importlib.util.spec_from_file_location('prepare',HERE/'prepare.py');prep=importlib.util.module_from_spec(s);s.loader.exec_module(prep);declared=json.loads((HERE/'source-pins.json').read_text());overlay,pins=prep.build(a.after,declared.get('source_scope','all'));assert len(overlay)==(3 if pins.get('source_scope')=='counter' else 10);assert declared==pins
  arpath='docs/research/100bit-spend-path-20261013/evidence/final-a555-clean-native-20261017/final-a555-clean-native.tar.gz';raw=prep.git('6dd9028e9',arpath);t=tarfile.open(fileobj=io.BytesIO(raw));files={};originals={};matched=[]
  for n in t.getmembers():
   if not n.name.startswith('source-clean/') or not n.isfile():continue
@@ -29,5 +29,5 @@ def main():
  files['inputs.json']=(json.dumps(inputs,sort_keys=True,indent=2)+'\n').encode()
  for name,b in files.items():path=dest/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(b)
  assert len(list((dest/'source').rglob('*')))>=len(matched)
- print(json.dumps({'status':'PASS_STRICT_STAGE_NO_BUILD','source_revision':pins['after_revision'],'Git_exact_source_files':532,'declared_overlays':10,'input_manifest_sha256':sha(files['inputs.json']),'input_files':len(inputs['files']),'source_audit_sha256':sha(files['source-audit.json']),'out':str(dest)},sort_keys=True))
+ print(json.dumps({'status':'PASS_STRICT_STAGE_NO_BUILD','source_revision':pins['after_revision'],'Git_exact_source_files':532,'declared_overlays':len(deltas),'input_manifest_sha256':sha(files['inputs.json']),'input_files':len(inputs['files']),'source_audit_sha256':sha(files['source-audit.json']),'out':str(dest)},sort_keys=True))
 if __name__=='__main__':main()

@@ -78,3 +78,20 @@ matching executed artifact hash and actual producer rustc cfg. A bare `Fresh`
 line or CLI feature flag does not establish resolved features. The counter check
 also requires exact saved ordered-call and checkpoint comparison. No SBF build,
 readonly runtime harness, proof generation or Lean job belongs to this kit.
+
+Accepted results are now in `evidence/native-no-prover-20261018` under the research
+path. The three injection gates retain their frozen ten-file snapshot and pins
+in `source-pins-injections-accepted.json`; unused counter tool overlays did not
+participate in those three tests. The accepted counter uses a SEPARATE clean
+532-file baseline with ONLY3 counter tool overlays, recorded by
+`source-pins-counter-accepted.json`. Running the counter against the injection
+snapshot is invalid (test wrappers are cfg(test)-only); that rejected compilation
+is retained. Never use the injection snapshot for the normal-library counter.
+
+The current reproducible `source-pins.json` is counter-only: prepare with
+`--scope counter`. Its3 overlay byte hashes and command are identical to accepted
+counter pins. Canonical lock text is stored inside `counter-lock-refresh.json`;
+only unused prover packages/edges were pruned, with retained versions/sources /
+checksums unchanged. `source-pin-maintenance.json` records the packaging-only
+loader change; no native rerun followed it. The final packet is JSON/logs/SHA
+manifests only and includes all native failures and the checker-prefix correction.
