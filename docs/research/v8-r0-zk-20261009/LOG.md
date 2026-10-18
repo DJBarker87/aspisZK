@@ -5631,3 +5631,37 @@ Ways to discharge it:
   ε_pole. The lead's preference is the Lean model.
 
 Instantiating W := Wspend and Rel := Rspend waits for the build integration.
+
+### Lead acceptance of Sem1Uniform for R1 (2026-10-19); D47
+
+The worker commits 36760a048, 9a9921af2 and eb4690a1b are cherry-picked.
+Host attempts 4164, 4165 and 4166 ran in-window (slot 1). The lead verified
+each (SHA matches, exit 0, standard axioms, no overrides). Attempts
+4160–4163 were elaboration failures, each with a changed source. Evidence:
+`zf1/sem1-uniform-evidence.json`.
+
+**D47.1 Proved.**
+- `sem1Uniform_abR1`: `Sem1Uniform ((abR1 W N hN).draw adv x) (p⁴ − 1)`
+  for every adversary and statement, with no additive term.
+- The exact form is `sem1_mass_le_exact` ≤ m·(⌊2^256/p⁴⌋+1)/2^256. The bias
+  is multiplicative and ≈ 2^-132. Q = p⁴ − 1 is the best natural number.
+- In abR1 the row-1 answer is its own uniform coin coordinate, so address
+  repeats do not arise here. They stay charged to ε_coll in the real-to-middle
+  coupling.
+- `pole_N8_M31_pred`: 8·4096/(p⁴−1) ≤ 2^-108.
+- `privacy_R1_games_sampler` is `privacy_R1_games` with `hdraw` discharged.
+  Landed statements are unchanged.
+
+**D47.2 Remaining premises (R-wire).**
+- `SemRows01 W`: χ = sem 1 is `s1` of the row-1 answer, and sem 0 does not
+  read it. This matches r1_wire.rs `begin`.
+- `QM31SamplerLaw s1`: rank is a bijection onto Fin 2^256, emb is injective
+  below p⁴, and s1 b = emb(rank b mod p⁴). It is restated from the spend
+  path's proved sampler facts, which are pinned at 36353e178:
+  - ExtractedQM31SamplerCorrect.sample_total;
+  - qm31Digits_value;
+  - SourceSamplerByteRank.rank;
+  - sampled_decode_eq_iff.
+
+The carrier transports (Array U8 32 ↔ Fin 32 → UInt8, and QM31 ↔ K) are the
+open link. They join the build-integration job.
