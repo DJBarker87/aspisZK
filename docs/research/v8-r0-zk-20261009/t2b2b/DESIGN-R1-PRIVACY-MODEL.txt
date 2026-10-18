@@ -677,3 +677,147 @@ Checked by reading only; the first compile of each module is the check.
       h.restrict V back into h on honest instances; without J0b the theorem
       is about valid instances, which is the standard (x, w) ∈ R quantifier.
 
+§4  Job plan
+------------
+Rules for every job: as DESIGN-T2b-2b §5 (no sorry/axiom/admit/native_decide,
+no maxRecDepth/maxHeartbeats, no concrete Finset.univ over rows, Fin 262144,
+Fin 65536 or Fin 1048576; row sums symbolic; one module per job; host replay
+one module at a time with run2.sh under the standard caps; `#print axioms`
+for every listed theorem; conditional facts as named Props).  D26.3's lesson
+applies to every refactored module: keep `simp` from unfolding
+PayloadSplit.L / linearPayload's maskSum branch and the copy registries
+(`attribute [local irreducible]` as the current modules do).
+
+R1-0  Refactor: Bat-parametrised payload  (all of R0Z downstream of HonestView)
+      low–medium, large
+    HonestView: class BatchedLayer, PayloadCell Bat, Payload K Bat,
+      linearPayload/payloadAffine/run with `.bat b`, run_bat, run_eq_payloadAffine.
+    R0Z/R0Batched.lean (new): R0Bat, its BatchedLayer instance (HonestView:217-219).
+    Re-source with the merged branch: PayloadSplit (run_split_bat replaces two
+      private lemmas), D12 (no edit beyond variables), Shift (+ hvzk_on_of),
+      Chain, PureRounds (mem_silentMasks_iff: 7 groups), Z4Maps, K4 (variables
+      only), SilentReduction (batProj → batRead, Bat-valued batMap, payload_ext,
+      mem_silentMasks_of), JointView, ZkStatement (current part), Hvzk,
+      FsStatement, FsGood, JointTrace/Partition/TerminalEligible/HelperInvariant
+      (variables only where they mention Payload; most do not).
+    Acceptance: every previously listed `#print axioms` line reappears with
+      the same theorem name and [propext, Classical.choice, Quot.sound]; no
+      statement changes except the Bat parameter.  Risk: memory on modules
+      whose `cases coord` proofs used simp over the full match (D26.3);
+      kernel reduction of the derived DecidableEq on PayloadCell Bat in
+      `if` tests — keep Classical.propDecidable local, as now.
+    Lead decision needed first: refactor (recommended, §2.2) versus copy.
+
+R1-1  Mirror of R1 opening-layer libraries  (no new proofs)        low
+    Bring into this track, unchanged, with source SHA recorded: spend-path
+      lean/RoundPairing.lean (and its R1NaturalProjection import),
+      FoldCoefficientBridge.lean, D18Transport.lean, Line18Geometry.lean,
+      LineFold.lean, SecondFoldRestoration.lean; base-branch
+      v8-r1-20261011/lean/R1/RepeatedLift.lean.  Preferred: a lead merge of
+      those files from the spend path rather than a copy (rule 1 forbids this
+      worker from touching that branch).  Recompile each once on the privacy
+      workspace.  Risk: namespace clash AspisR1.childIndex vs AspisFormal
+      childIndex (both 4i + s; a bridging `rfl` lemma).
+
+R1-2  R1Z/Batched.lean  (imports R1-0, R1-1)                        low–medium
+    R1Bat, gamma/kappa/alpha0/alpha1 abbreviations, batchR1, ell, weightsR1,
+    q1, w1, w2, FoldedOpen, roundPolynomialLinear, instance BatchedLayer K R1Bat.
+    Lemmas: dot_weightsR1 (Σ κ^k ℓ_k), ell_batchR1 (each ℓ_k of the batch is the
+    γ-batched own value: claims, extra, ood, inactive), batRead_L (the four
+    cell formulas), folded_unqueried_zero.
+    Risk: the π-reindexing of eqWeight/indicator (an Equiv.sum_comp, as in
+    J3's balance lemmas — never enumerate Fin 1024).
+
+J4-R1  R1Z/VerifierRelationsR1.lean  (imports R1-2, R0.Fold, R1-1)   medium–hard
+    Split in two modules so the hard part needs no payload:
+    (a) R1Z/BatchedAlgebra.lean (payload-free; can start before R1-0):
+        s2b_identity : round1 boundary = quarter · round0(α₀)  (RP.round_boundary,
+          RP.round_eval, coefficientFoldLayer_eq_primalFold)
+        s1_identity  : round1(α₁) = Σ_e final_e · w2_e           (RP.round_eval)
+        s2a_identity : round0 boundary = quarter · Σ_k κ^k ℓ_k(q)  (round_boundary,
+          dot_weightsR1)
+        circ_identity : exactFinalLinear (foldMessage α₀ q) u =
+          coefficientFoldValue α₀ (channels (exactInitialEncoder q) · u)
+          (R0.Fold.fold_encoded, encoded_channels; R0's S3_u verbatim)
+        line_identity : lineFoldValue α₁ inv (fun s => exactFinalLinear m (childIndex v s))
+          = secondLinear (coefficientFoldLayer 64 α₁ m) v
+          (the line-domain fold/encoder commutation: Line18Geometry
+          storedLine18_radix4_geometry, SecondFoldRestoration channel
+          identities, LineFold.recovered_horner, R1.RepeatedLift
+          exactFinalLinear_child_split / secondLinear)
+    (b) R1Z/VerifierRelationsR1.lean: R1Rel, relR1, B0R1;
+        bat_L_mem_B0R1 : (∀ c, ownRead c (L τ) = 0) → L τ .inactiveSum = 0 →
+          batRead (L τ) ∈ B0R1 π ch            -- every trace τ (J4′ form)
+        bat_ker_own_le_B0R1 (corollary for mask tapes, with ia_pure_zero).
+    No GoodCircle premise (no quotient).  The only nondegeneracies are the
+    nonzero fibre/line coordinates, structural (fibre_coordinates_nonzero,
+    SecondFoldRestoration.x0/x1/x2_ne_zero).
+    Risk: line_identity (§5).  Pre-check: Z9's annihilator was computed from
+    the Rust relations; before Lean, a 1-job numeric check that relR1 exactly
+    as written in §2.4 (with RP's quarter conventions) annihilates bat(ker own)
+    removes normalisation stops (three earlier worker stops were
+    transcription errors).
+
+J2-R1  R0Z/K4Values.lean, Bat-generic  (imports R1-0's Chain, K4)   medium
+    As DESIGN-T2b-2b §5 J2, stated for an arbitrary Bat (sRem has zero
+    non-round cells, so K4Payload reduces to the round cells):
+    interpolate_coeff_mem, oracle_mem_K4, roundPoly_coeff_mem_K4,
+    originalRounds_mem_K4 (for ANY BaseTyped prepared trace, as J15 needs),
+    sRem_mem_K4 (hsem : SemK4) (hpub : PublicBase F x.1) (hF) (hhalf : HalfOK),
+    sRem_mem_chain0K4.  One proof serves R0 and R1.
+
+R1-3  R1Z/PredicateR1.lean  (imports J3 refactored, J4-R1, J2-R1)   low
+    QPrime_R1, batRead, batMapR1, Gonly, V_G, BCondG_R1, BCond_R1, BReach_R1,
+    HalfOK, SemK4, QueryCard, P_R1 (needs J13-R1's C1Lift/H1Lift — or define
+    them here and let J13-R1 import this module; recommended: define here);
+    V_G_le, breach_of_G, bcond_of_G;
+    clause_i_R1 : P_R1 π B hB ch → … → sRem … ∈ LinearMap.range ((A π B ch).comp inlM).
+
+J0    R0Z/HonestValid.lean  (Bat-generic; DESIGN-ii-prime §4 J0)     low–medium
+    unchanged list (HonestValid, HonestProver.restrict, iota, iota_L, iota_A,
+    inactive_A, iota_cTilde, bsum_fOrig_zero, iota_cTilde_zero,
+    inactive_cTilde_zero, not_iiPrime_witness) with Payload K Bat.  The
+    inactive_A balance argument is per lane, unchanged on R1.
+
+J0b   R0Z/HonestValidity.lean  (builder completeness)                 hard
+    unchanged from DESIGN-ii-prime; R1-specific input: the R1 prover's
+    h1_total_balanced audit (prover.rs:171) is clause 2 checked at run time.
+    Not on the theorem's path (§3.6 e).
+
+J13-R1  R0Z/NoiseLift.lean  (Bat-generic)                              medium
+    OwnCell, ownRead, obs, own_L_single, own_L_other, noise_lift, as
+    DESIGN-ii-prime J13 (C1Lift/H1Lift imported from R1-3 or defined
+    Bat-generically here and specialised there).
+
+J14-R1  opened_prefix on R1 — DEFERRED (Route P only)
+    Under M3 the whole C1Lift/H1Lift is a P conjunct, so no structural
+    opened part is needed.  If Route P resumes: opened_aligned for the
+    quarter block 224..245 (STUDY-TRANSVERSALITY-R1 §3.4; N_{224+e} =
+    N_224·N_e), plus the class 2/3 registry check (J11b).
+
+J15-R1  R0Z/IIPrimeResidual.lean, Bat-generic with an R1 wrapper        medium
+    As DESIGN-ii-prime J15, with R8 := bat_L_mem_B0R1 (no GoodCircle),
+    BReach := BReach_R1 (from breach_of_G), exists_lift_of_cover, mask_lift.
+
+J16-R1  R1Z/MaskImageR1.lean  (imports J15-R1, R1-3)                  low
+    IIPrimeValid (Bat := R1Bat), iiPrime_of_R1, maskImageOn_R1 (§3.6),
+    hvzk_R1 := hvzk_on_of (P_R1 …) applied to the restricted prover;
+    hand-off statement for ZF1-abort.  `#print axioms` for all four.
+
+Outside Lean (named here because R1-3 fixes their target)
+  Z9b (numeric, Rust, capped scope): H1Lift and C1Lift alone on R1 (never
+    measured, D24.2), and the relR1-as-written annihilator check above.
+  R1-P (Rust): the prover-side P_R1 check per attempt (exact M31 rank
+    tests of §3.4), retry with fresh attempt secrets, attempt cap and
+    explicit failure exit; refinement statement "check = P_R1 rowEquiv B hB".
+
+Order and parallelism
+  Lane A (critical path):  R1-0 → J2-R1 → R1-3 → J15-R1 → J16-R1
+  Lane B (parallel from now): R1-1 → J4-R1(a) payload-free; then J4-R1(b)
+          after R1-0 and R1-2
+  Lane C (after R1-0, parallel to Lane A): R1-2; J0; J13-R1
+  Lane D (parallel from now): Z9b; R1-P design; J0b (research)
+  J4-R1(b) gates R1-3; J0, J13-R1, J4-R1(b) gate J15-R1.  Lanes B, C, D run
+  concurrently with A, subject to the one-Lean-job-at-a-time host rule (the
+  parallelism is in writing, not in compiling).
+
