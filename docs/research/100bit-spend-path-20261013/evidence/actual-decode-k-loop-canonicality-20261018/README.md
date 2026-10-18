@@ -1,0 +1,19 @@
+# Actual generated decode_k: successful results are canonical
+
+The main checked theorem is `AspisR1DecodeKFullSuccessCanonicality.decode_k_success_canonical`. For any generated V10 record, requested count and offset, success of the actual generated `ValidatedRecord.decode_k` with output array `out` implies `CanonicalArray out`: every constituent M31 limb in every returned QM31 value is strictly below P.
+
+The theorem inverts the actual wrapper's guards and checked operations. It starts with the actual zero-filled array, follows the actual range loop and updates, and handles the actual pending-result return. The array canonicality and pending-error invariants are proved by range-fuel induction over the generated function's equation; intermediate arrays or parser success are not supplied as assumptions. The helper/parser canonicality proofs are reused from the previous [V10 extraction packet](../actual-decode-k-canonicality-20261018/README.md).
+
+Eight new checked owners supply the reusable array invariant, actual body canonicality, exact iterator/update frames, the body value frame, full-loop canonicality, pending-result shape, and outer-function result. `accepted-targets.json` maps each source to its exact accepted object and receipt. The original receipts, commands, controllers, preflight inventories, resource logs and printed axiom reports are retained under each owner. Exact `OccupancyRangeTraversal` source and object pins are reused; its source was required to match the already-published module byte for byte.
+
+## Source scope
+
+This theorem concerns the pinned indexed-loop candidate, not an unrecorded change to production Rust. Candidate Rust SHA256 is `47562d76a47ba602aacbbdd61c9b97c4429ba9700aa96e8ea49d3c4ccab9b444`. The original generated V10 Funs SHA256 is `a0bf0fcb29f13a10328b0bbdda0954bc96e531e8b0f780a0aebf6cd4ee5cb6a5`; the source-preserving bridge-import version consumed by the proof has SHA256 `9cfa90cf12f476cd1d55c247b216ce5c8734566056fc7a6e9385ad887b26247f`. These source cuts and the extraction/tool pins are in the preceding packet. The manifest's historical b302c0d49 label is checkout context, not a claim that the modified candidate was unmodified production at that revision.
+
+Canonical successful output is now proved. Exact per-index decoded-byte/readback semantics, total absence of panics on accepted caller ranges, full caller/token correspondence and release adoption/equivalence remain separate obligations. The existing high-half-zero token validation and authenticated two-transaction checkpoint are not replaced by this theorem. No deployed artifact, full verifier soundness, or 100-bit security claim follows from this packet alone.
+
+## Resource evidence
+
+The accepted targets use pinned Lean 4.32.0 (commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35) on the NUC, serialized focused jobs, explicit cgroup MemoryHigh=3GiB / MemoryMax=3584MiB / MemorySwapMax=0 and Lean -M3200. Each fresh overnight admission accounts for outermost populated finite caps, reserves uncapped-scope usage, and preserves OS/control headroom. All eight accepted targets exit zero and all printed reports contain only propext, Classical.choice and Quot.sound or subsets. Exact wall time, process RSS, sampled cgroup charge and swaps are recorded; process RSS is around 2.5GiB and must not be confused with the smaller cgroup charge for shared mappings. No full dependency or frozen-manifest replay was run.
+
+`memory-limit-review` preserves the earlier -M900 failure and isolated import probes. The small cgroup charge had understated required Lean addressable memory. An unchanged import-only probe reproduced that failure; the changed -M3200 probe passed. The proof was then factored into a reusable canonical-array invariant before the changed body target passed. This records both the failed limit assumption and the corrected focused workflow rather than discarding the failure.
