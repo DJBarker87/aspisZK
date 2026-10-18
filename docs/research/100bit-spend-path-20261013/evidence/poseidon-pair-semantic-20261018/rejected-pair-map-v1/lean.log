@@ -1,0 +1,75 @@
+/tmp/PoseidonPairMap.lean:31:74: error: unsolved goals
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+state low : State K
+⊢ poseidonFullRound
+      (poseidonFullRound (mapState f state)
+        (mapState f fun lane =>
+          low 1 * poseidonExternalInitial 2 lane + low 9 * poseidonExternalFinal 0 lane +
+            low 10 * poseidonExternalFinal 2 lane))
+      (mapState f fun lane =>
+        low 1 * poseidonExternalInitial 3 lane + low 9 * poseidonExternalFinal 1 lane +
+          low 10 * poseidonExternalFinal 3 lane) =
+    poseidonFullRound
+      (poseidonFullRound (mapState f state) fun lane =>
+        f (low 1) * poseidonExternalInitial 2 lane + f (low 9) * poseidonExternalFinal 0 lane +
+          f (low 10) * poseidonExternalFinal 2 lane)
+      fun lane =>
+      f (low 1) * poseidonExternalInitial 3 lane + f (low 9) * poseidonExternalFinal 1 lane +
+        f (low 10) * poseidonExternalFinal 3 lane
+/tmp/PoseidonPairMap.lean:34:22: warning: This simp argument is unused:
+  map_add
+
+Hint: Omit it from the simp argument list.
+  simp only [mapState, ̲map_a̵d̵d̵,̵ma̵p̵_̵m̵ul, ̲map_poseidonExternalInitial, ̲map_poseidonExternalFinal]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/PoseidonPairMap.lean:34:30: warning: This simp argument is unused:
+  map_mul
+
+Hint: Omit it from the simp argument list.
+  simp only [mapState, ̲map_a̵d̵d̵a̲d̲d̲, ̲map_m̵u̵l̵,̵m̵a̵p_̵p̵oseidonExternalInitial, ̲map_poseidonExternalFinal]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/PoseidonPairMap.lean:34:38: warning: This simp argument is unused:
+  map_poseidonExternalInitial
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵S̵t̵a̵t̵e̵,̵m̵a̵p̵_̵a̵d̵d̵,̵m̵a̵p̵_̵m̵u̵l̵,̵m̵a̵p̵_̵p̵o̵s̵e̵i̵d̵o̵n̵E̵x̵t̵e̵r̵n̵a̵l̵I̵n̵i̵t̵i̵a̵l̵,̵m̵a̵p̵_̵p̵o̵s̵e̵i̵d̵o̵n̵E̵x̵t̵e̵r̵n̵a̵l̵F̵i̵n̵a̵l̵]̵[̲m̲a̲p̲S̲t̲a̲t̲e̲,̲ ̲m̲a̲p̲_̲a̲d̲d̲,̲ ̲m̲a̲p̲_̲m̲u̲l̲,̲ ̲m̲a̲p̲_̲p̲o̲s̲e̲i̲d̲o̲n̲E̲x̲t̲e̲r̲n̲a̲l̲F̲i̲n̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/PoseidonPairMap.lean:34:66: warning: This simp argument is unused:
+  map_poseidonExternalFinal
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵S̵t̵a̵t̵e̵,̵m̵a̵p̵_̵a̵d̵d̵,̵m̵a̵p̵_̵m̵u̵l̵,̵m̵a̵p̵_̵p̵o̵s̵e̵i̵d̵o̵n̵E̵x̵t̵e̵r̵n̵a̵l̵I̵n̵i̵t̵i̵a̵l̵,̵m̵a̵p̵_̵p̵o̵s̵e̵i̵d̵o̵n̵E̵x̵t̵e̵r̵n̵a̵l̵F̵i̵n̵a̵l̵]̵[̲m̲a̲p̲S̲t̲a̲t̲e̲,̲ ̲m̲a̲p̲_̲a̲d̲d̲,̲ ̲m̲a̲p̲_̲m̲u̲l̲,̲ ̲m̲a̲p̲_̲p̲o̲s̲e̲i̲d̲o̲n̲E̲x̲t̲e̲r̲n̲a̲l̲I̲n̲i̲t̲i̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PoseidonPairMap.map_poseidonLeadingPair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonPairMap.map_poseidonInterpolatedFullPair' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.PoseidonPairMap.map_poseidonInterpolatedInternalPair' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+       14.94 real         1.76 user         2.76 sys
+          2803269632  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              126875  page reclaims
+               98014  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               21165  voluntary context switches
+               89626  involuntary context switches
+         21403912935  instructions retired
+          9519857159  cycles elapsed
+           448188456  peak memory footprint
