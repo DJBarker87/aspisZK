@@ -1,0 +1,8 @@
+from pathlib import Path
+import json,hashlib,difflib
+W=Path('/home/dombarker/project-offloads/aspis-r1-worker-c-selected-current-20261017');n='AspisFormal.V6PublishedTheoremInterfaces';p=W/'sources'/(n.replace('.','/')+'.lean');old=p.read_text();start=old.index('  have hs := sqrt_outputRate_sq',old.index('theorem output_list_expression_lt_113'));end=old.index('\ntheorem conservative_fold_challenge_cap',start);new=old[:start]+'''  have hbound : (7 : Real) / 226 < Real.sqrt outputRate := by
+    apply (Real.lt_sqrt (by norm_num : (0 : Real) ≤ 7 / 226)).2
+    norm_num [outputRate, finalDomainSize]
+  norm_num only [outputListExpressionCap]
+  linarith only [hbound]
+''' + old[end:];p.write_text(new);sha=lambda b:hashlib.sha256(b).hexdigest();m=W/'sources/SOURCE-MANIFEST.json';d=json.loads(m.read_text());d['modules'][n]['source_sha256']=sha(new.encode());d['modules'][n]['role']='Exact theorem statement; symbolic Real.lt_sqrt rational bound replaces fragile simplifier normalization';m.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n');a=W/'proof-normalization-repairs.json';rs=json.loads(a.read_text());rs.append({'module':n,'theorem':'output_list_expression_lt_113','old_source_sha256':sha(old.encode()),'new_source_sha256':sha(new.encode()),'rule':'Prove explicit7/226<sqrt(outputRate) with Real.lt_sqrt and a small exact rational comparison; finish by linear arithmetic. The theorem statement is unchanged. No concrete recurrence, foreign axiom or native evaluation.','source_diff':''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='failed-normalization',tofile='symbolic-sqrt-bound'))});a.write_text(json.dumps(rs,indent=2)+'\n');(W/'RETRY-selected-sigma-R1SelectedChallengeMapCore-2').touch()

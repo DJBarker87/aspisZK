@@ -1,0 +1,10 @@
+{
+  "companion_source_sha256": "53d388067faab4409d45bc37829dd283512b18db24600b3c5a0ed0bce3201cba",
+  "core_sha256": "4bba25873cd75403444d8c6bca427351c8df0608e877ebf6c4533799793f2838",
+  "fully_qualified_declaration": "AspisR1.UnifiedSemanticRecovery.typed",
+  "inverse_recovers_original": true,
+  "original_declaration_sha256": "a78ccf5aaad5ab9a0111358fdb0b1aa5a13fe3a69d327c100d094a905395e529",
+  "original_source_sha256": "971f84897f0c546fdd6488e197bc887062fb3904a4e520dc6595ada317a14d88",
+  "scope": "Exact proof-only parser declaration move. Companion full security module is source-only, no formal result claim.",
+  "source_diff": "--- original\n+++ split\n@@ -1,3 +1,4 @@\n+import R1UnifiedSemanticRecoveryCore\n import R1UnifiedSemanticRecords\n import R1UnifiedPrefixedReads\n import R1InitialWalkTrace\n@@ -18,10 +19,6 @@\n \n variable {M Cv W : Type} {L : Nat}\n \n-def typed (p : Params M Cv L) (pubBytes : Bytes) (T : Table (Addr L) State)\n-    (fuel : Nat) (endpoint : State) : Option (State \u00d7 List (Rec M)) :=\n-  (InitialWalk.walk p pubBytes T fuel endpoint).bind fun (c1, raw) =>\n-    (RawRoundDecode.decode p 0 raw).map fun rs => (c1, rs)\n \n theorem typed_before_row (p : Params M Cv L) (hD : 5 \u2264 p.D)\n     (extract : UnifiedSampler.Public L \u2192 Table (Addr L) State \u2192 Option W)\n"
+}

@@ -276,9 +276,10 @@ def verified_fragment_layout(cone, spec, inputs):
         "basis": "All kit files and historical source cut hashes verified; exact cut occurrences reconstruct layout before current-source lookup"}
 
 
-def lean_chunks(raw):
+def lean_chunks(raw, include_impl_def=False):
     text = uncomment(raw.decode())
-    matches = list(re.finditer(r"^\s*(?:@\[[^\]]*\]\s*)*(?:def|structure|inductive|abbrev|instance)\s+(\S+)", text, re.M))
+    kinds = "def|structure|inductive|abbrev|instance" + ("|impl_def" if include_impl_def else "")
+    matches = list(re.finditer(r"^\s*(?:@\[[^\]]*\]\s*)*(?:" + kinds + r")\s+(\S+)", text, re.M))
     return {m[1]: re.sub(r"\s*@\[[^\]]*\]\s*$", "", text[m.start():matches[i+1].start() if i+1 < len(matches) else text.rfind("\nend ")]).strip() + "\n"
         for i, m in enumerate(matches)}
 
@@ -299,11 +300,14 @@ def bound_statement_audits(inputs, specs, cones):
     for spec in specs:
         for path in spec.get("binding_audits", []):
             raw = inputs.read(path); record = json.loads(raw); checks = []
+            parser = record.get("chunk_parser")
+            assert parser in {None, "include_impl_def"}, (path, parser)
+            chunks_for_record = lambda data: lean_chunks(data, include_impl_def=parser == "include_impl_def")
             model_items = record.get("model_body_audits", record.get("exact_body_audits", []))
             if model_items:
                 funs_hash = record.get("raw_funs_sha256") or record["carrier_inventory"]["Funs.lean"]["raw_current_sha256"]
                 assert funs_hash in assets, (path, "raw accepted Funs missing")
-                raw_funs = assets[funs_hash][1]; chunks = lean_chunks(raw_funs)
+                raw_funs = assets[funs_hash][1]; chunks = chunks_for_record(raw_funs)
                 mapping = record["identifier_map"]
                 pattern = re.compile("|".join(re.escape(n) + r"(?![A-Za-z0-9_.])" for n in sorted(mapping, key=len, reverse=True)))
                 for item in model_items:
@@ -324,9 +328,47 @@ def bound_statement_audits(inputs, specs, cones):
                         "complete_declaration_diff": statement_diff(original.rstrip(), body.rstrip())})
                 if "model_sha256" in record: assert record["model_sha256"] in assets
                 for name, digest in record.get("output_hashes", {}).items(): assert digest in assets, (path, name, "output pin")
+            if "canonical_common_types" in record:
+                # The complete finish binder uses the current shared carrier
+                # files explicitly selected by its cone manifest.
+                canonical_types = [p for p in spec.get("bound_models", []) if p.endswith("/Types.lean")]
+                canonical_funs = [p for p in spec.get("bound_models", []) if p.endswith("/Funs.lean")]
+                assert len(canonical_types) == len(canonical_funs) == 1
+                raw_types = chunks_for_record(assets[record["raw_types_sha256"]][1])
+                shared_types = chunks_for_record(inputs.read(canonical_types[0]))
+                shared_funs = chunks_for_record(inputs.read(canonical_funs[0]))
+                raw_funs = chunks_for_record(assets[record["raw_funs_sha256"]][1])
+                for item in record["canonical_common_types"]:
+                    name = item["declaration"]; before_body = raw_types[name]; body = before_body
+                    assert sha(before_body.encode()) == item["raw_sha256"]
+                    for rule in item["normalizations"]:
+                        if rule == "remove redundant argument parentheses":
+                            assert name == "aspis_core.Digest32"
+                            body = body.replace("Self → (Slice (Slice Std.U8))", "Self → Slice (Slice Std.U8)")
+                        elif rule == "reuse existing canonical named discriminant reader/instance; remove raw deriving attribute only":
+                            assert body.startswith("@[discriminant isize]\n") and name + ".read_discriminant" in shared_types
+                            body = body.removeprefix("@[discriminant isize]\n")
+                        else:
+                            raise ValueError("Unknown complete finish carrier normalization: " + rule)
+                    assert sha(canonical(lean_tokens(body))) == item["canonical_token_sha256"]
+                    assert lean_tokens(body) == lean_tokens(shared_types[name])
+                    checks.append({"declaration": name, "canonical_finish_carrier_replayed": True,
+                        "statement_diff": statement_diff(before_body, body), "rules": item["normalizations"]})
+                for item in record["canonical_function_token_identity"]:
+                    name = item["declaration"]
+                    assert sha(canonical(lean_tokens(raw_funs[name]))) == item["raw_and_canonical_token_sha256"]
+                    assert lean_tokens(raw_funs[name]) == lean_tokens(shared_funs[name])
+                    checks.append({"declaration": name, "canonical_function_identity_replayed": True})
+                prior_rounds = chunks_for_record(assets[record["accepted_rounds_raw_funs_sha256"]][1])
+                assert record["fixed_actual_round_model_source_sha256"] in assets
+                for item in record["fixed_round_body_token_identity"]:
+                    name = item["declaration"]
+                    assert sha(canonical(lean_tokens(raw_funs[name]))) == item["finish_and_accepted_rounds_token_sha256"]
+                    assert lean_tokens(raw_funs[name]) == lean_tokens(prior_rounds[name])
+                    checks.append({"declaration": name, "fixed_actual_round_body_identity_replayed": True})
             for file, inventory in record.get("carrier_inventory", {}).items():
                 digest = inventory["raw_current_sha256"]; assert digest in assets
-                chunks = lean_chunks(assets[digest][1]); normal = inventory.get("explicit_statement_parenthesization_normalizations", {})
+                chunks = chunks_for_record(assets[digest][1]); normal = inventory.get("explicit_statement_parenthesization_normalizations", {})
                 for name, change in normal.items():
                     assert chunks[name] == change["raw_statement"]
                     chunks[name] = change["canonical_statement"]
@@ -357,7 +399,7 @@ def bound_statement_audits(inputs, specs, cones):
                     assert diff == change["statement_diff"], (path, name, "explicit normalization diff")
                     common = record["common_carrier_audit"][file]
                     assert common["prior_source_sha256"] in assets
-                    prior_chunks = lean_chunks(assets[common["prior_source_sha256"]][1])
+                    prior_chunks = chunks_for_record(assets[common["prior_source_sha256"]][1])
                     assert lean_tokens(body) == lean_tokens(prior_chunks[name])
                     if name == "r1_wire.Error":
                         assert "r1_wire.Error.read_discriminant" in prior_chunks
@@ -371,7 +413,7 @@ def bound_statement_audits(inputs, specs, cones):
                 checks.append({"file": file, "common_canonical_token_hashes_checked": len(inventory["common_unchanged"])})
             if "common_type_audit" in record:
                 assert record["raw_types_sha256"] in assets and record["base_types_sha256"] in assets and record["shared_types_sha256"] in assets
-                raw_types = lean_chunks(assets[record["raw_types_sha256"]][1]); base_types = lean_chunks(assets[record["base_types_sha256"]][1]); shared_types = lean_chunks(assets[record["shared_types_sha256"]][1])
+                raw_types = chunks_for_record(assets[record["raw_types_sha256"]][1]); base_types = chunks_for_record(assets[record["base_types_sha256"]][1]); shared_types = chunks_for_record(assets[record["shared_types_sha256"]][1])
                 for entry in record["common_type_audit"]:
                     name = entry["declaration"]; before = raw_types[name]; body = before
                     assert sha(before.encode()) == entry["raw_sha256"]
@@ -388,7 +430,7 @@ def bound_statement_audits(inputs, specs, cones):
                 assert record["shared_funs_sha256"] in assets
             if "common_funs" in record:
                 assert sha(inputs.read(BASE + "/lean/bridge-prepared-3335-20261016/binding-pins.json")) == record["A_prepared_binding_pins_sha256"]
-                raw_funs = lean_chunks(next(c for c in cones if c.name == spec["cone"]).files[next(n for n in next(c for c in cones if c.name == spec["cone"]).files if n.endswith("/Funs.lean"))])
+                raw_funs = chunks_for_record(next(c for c in cones if c.name == spec["cone"]).files[next(n for n in next(c for c in cones if c.name == spec["cone"]).files if n.endswith("/Funs.lean"))])
                 for entry in record["common_funs"]:
                     name = entry["declaration"]; before = raw_funs[name]; body = before
                     for rule in entry["normalizations"]:
@@ -514,7 +556,16 @@ def main():
 
     def correspond(row, historical, source_raw, start, end, signature, fresh=False):
         target = row["source_path"]; now = current.get(target)
-        result = dict(row, retained_signature=signature)
+        # Retained accepted membership can predate the selected migration
+        # baseline. Such files still need source correspondence; absence from
+        # git diff does not mean absence from the current tree.
+        if now is None:
+            try:
+                now = inputs.git(ref, target); current[target] = now
+            except subprocess.CalledProcessError:
+                pass
+        result = dict(row, retained_signature=signature,
+            source_file_changed_since_migration_before=target in changed)
         # An opaque API never supplied an implementation theorem. Re-pin its
         # exact Rust header and owner context, retaining both body hashes as
         # unproved provenance; do not require or claim unchanged body bytes.
@@ -875,7 +926,7 @@ def main():
         "original_registered_cone_counts": dict(collections.Counter(q["classification"] for q in rows if q["cone"] not in {v.name for v in additional})),
         "followup_registered_cone_counts": dict(collections.Counter(q["classification"] for q in rows if q["cone"] in {v.name for v in additional})),
         "followup_emission_kinds": dict(collections.Counter(q.get("emission_kind") for q in rows if q["cone"] in {v.name for v in additional})),
-        "followup_source_inventory_status": "Current accepted cuts now include verifier.rs. Earlier zero filename hits belong only to the retained earlier scan. Actual verify_observed/tx1_finish implementations remain explicit boundaries; diagnostic query/tail outputs are excluded.",
+        "followup_source_inventory_status": "Current accepted cuts include verifier.rs, the actual query body and complete verify_finish. Per-binding audits list each remaining arithmetic/allocation/sampler/conversion API explicitly. Rejected diagnostic emissions remain historical, never source-body theorems.",
         "inventory_gate": "OPEN: unresolved correspondence" if unresolved else "PASS for enumerated accepted/current universe; lead owns final universe/merge review",
         "classification_counts": dict(collections.Counter(q["classification"] for q in rows)),
         "declarations": rows, "unresolved": unresolved, "synthetic_kit_declarations": synthetic,
@@ -888,7 +939,12 @@ def main():
         "frozen_import_scope": baseline_scan["frozen_import_audit"],
         "source_context_limit": "Lexical source/context identity plus retained generated/LLBC signature hashes is not current compiler name resolution. Type/body substitutions or changed containers remain explicit unresolved or re-extracted entries; no current-text membership filter silently removes them.",
         "deleted_production_source_files": sorted(set(changed)-set(current)),
-        "file_coverage": [{"source_path": p, "source_sha256": sha(raw), "inventory_entries": coverage[p], "meaning": "No declaration in enumerated retained accepted/current cones" if not coverage[p] else ""} for p, raw in current.items()],
+        "file_coverage": [{"source_path": p, "source_sha256": sha(raw),
+            "changed_since_migration_before": p in changed,
+            "inventory_entries": coverage[p],
+            "meaning": ("Retained accepted source outside the selected migration diff; correspondence still checked" if p not in changed else
+                        "No declaration in enumerated retained accepted/current cones" if not coverage[p] else "")}
+            for p, raw in current.items()],
         "accepted_cones": [q.archive_pin for q in [*cones.values(), bcone, *additional]],
         "current_A_callers_cone": {"archive": a_archive_path, "archive_sha256": sha(a_archive) if a_archive is not None else None,
             "llbc_member": "c16/PublicPreparation.llbc",

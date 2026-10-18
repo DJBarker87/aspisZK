@@ -1,0 +1,263 @@
+diff --git a/crates/aspis-r1-cost-probe/src/r1_semantic.rs b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+index c65170c76..06aa9392e 100644
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -72,41 +72,165 @@ pub fn public_transcript<H: Digest32>(
+     )
+ }
+ 
+-#[inline(never)]
+-pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
+-    fn mark(obs: crate::verifier::Observer, i: u8) {
+-        #[cfg(feature="detail-phases")]
+-        if let Some(f)=obs {f(crate::verifier::Phase::SemanticPart(i));}
+-        #[cfg(not(feature="detail-phases"))]
+-        let _=(obs,i);
+-    }
+-    let prefix = Prefix::parse(bytes)?;
+-    mark(obs, 0);
+-    let mut transcript = public_transcript(public, hash, prefix.c1_root)?;
+-    let challenges = wire::begin(&prefix, &mut transcript)?;
+-    mark(obs, 1);
+-    let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
+-    let mut alpha = [QM31::ZERO; 10];
+-    #[cfg(feature = "prover")]
+-    let mut round_checks = [[QM31::ZERO; 3]; 10];
+-    for round in 0..10 {
++fn mark(obs: crate::verifier::Observer, i: u8) {
++    #[cfg(feature="detail-phases")]
++    if let Some(f)=obs {f(crate::verifier::Phase::SemanticPart(i));}
++    #[cfg(not(feature="detail-phases"))]
++    let _=(obs,i);
++}
++
++fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {
++        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
++    boundary
++}
++
++fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> QM31 {
++        let value = polynomial
++            .iter()
++            .rev()
++            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
++    value
++}
++
++#[cfg(not(feature = "prover"))]
++fn semantic_round<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>, mut alpha: [QM31; 10], mut running: QM31, round: usize) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {
+         let row = 15 + round as u8;
+         let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+-        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
++        let boundary = semantic_boundary(&polynomial);
+         if boundary != running {
+             return Err(Error::Boundary { round });
+         }
+         alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
+-        let value = polynomial
+-            .iter()
+-            .rev()
+-            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
++        let value = semantic_value(&polynomial, &alpha, round);
++        #[cfg(feature = "prover")]
++        {
++            round_checks[round] = [running, boundary, value];
++        }
++        running = value;
++    Ok((running, alpha, transcript))
++}
++
++#[cfg(feature = "prover")]
++fn semantic_round<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>, mut alpha: [QM31; 10], mut running: QM31, round: usize, mut round_checks: [[QM31; 3]; 10]) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>, [[QM31; 3]; 10]), Error> {
++        let row = 15 + round as u8;
++        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
++        let boundary = semantic_boundary(&polynomial);
++        if boundary != running {
++            return Err(Error::Boundary { round });
++        }
++        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;
++        let value = semantic_value(&polynomial, &alpha, round);
+         #[cfg(feature = "prover")]
+         {
+             round_checks[round] = [running, boundary, value];
+         }
+         running = value;
++    Ok((running, alpha, transcript, round_checks))
++}
++
++#[cfg(not(feature = "prover"))]
++fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {
++    let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
++    let mut alpha = [QM31::ZERO; 10];
++    #[cfg(feature = "prover")]
++    let mut round_checks = [[QM31::ZERO; 3]; 10];
++    {
++        let round = 0usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 1usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 2usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
+     }
++    {
++        let round = 3usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 4usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 5usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 6usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 7usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 8usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    {
++        let round = 9usize;
++        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;
++    }
++    Ok((running, alpha, transcript))
++}
++
++#[cfg(feature = "prover")]
++fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>, [[QM31; 3]; 10]), Error> {
++    let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
++    let mut alpha = [QM31::ZERO; 10];
++    #[cfg(feature = "prover")]
++    let mut round_checks = [[QM31::ZERO; 3]; 10];
++    {
++        let round = 0usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 1usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 2usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 3usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 4usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 5usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 6usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 7usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 8usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    {
++        let round = 9usize;
++        (running, alpha, transcript, round_checks) = semantic_round(prefix, transcript, alpha, running, round, round_checks)?;
++    }
++    Ok((running, alpha, transcript, round_checks))
++}
++
++fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
++    #[cfg(not(feature = "prover"))]
++    let (running, alpha, mut transcript) = semantic_rounds(&prefix, transcript)?;
++    #[cfg(feature = "prover")]
++    let (running, alpha, mut transcript, round_checks) = semantic_rounds(&prefix, transcript)?;
+     mark(obs, 2);
+     let claims = claims(&prefix)?;
+     let original_challenges = aspis_core::state_only_prefix::r0::Challenges {
+@@ -179,3 +303,13 @@ pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, o
+         masked_terminal,
+     })
+ }
++
++#[inline(never)]
++pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
++    let prefix = Prefix::parse(bytes)?;
++    mark(obs, 0);
++    let mut transcript = public_transcript(public, hash, prefix.c1_root)?;
++    let challenges = wire::begin(&prefix, &mut transcript)?;
++    mark(obs, 1);
++    verify_finish(public, prefix, transcript, challenges, obs)
++}
+diff --git a/crates/aspis-r1-cost-probe/src/transcript.rs b/crates/aspis-r1-cost-probe/src/transcript.rs
+index 1348126ba..52186fb68 100644
+--- a/crates/aspis-r1-cost-probe/src/transcript.rs
++++ b/crates/aspis-r1-cost-probe/src/transcript.rs
+@@ -35,13 +35,46 @@ impl<H: Digest32> Transcript<H> {
+     pub fn queries(&mut self, row:u8, payload:&[u8])->Result<[u32;22],crate::verifier::Error> {
+         self.absorb(row,payload);
+         let mut blocks=[[0;32];8];let mut advances=blocks; let mut state=self.state;
+-        for k in 0..8 {
+-            blocks[k]=self.hash.digest(&[&state,&[1]]);
+-            advances[k]=self.hash.digest(&[&state,&[2]]);state=advances[k];
+-        }
++        blocks[0]=self.hash.digest(&[&state,&[1]]);
++        advances[0]=self.hash.digest(&[&state,&[2]]);state=advances[0];
++        blocks[1]=self.hash.digest(&[&state,&[1]]);
++        advances[1]=self.hash.digest(&[&state,&[2]]);state=advances[1];
++        blocks[2]=self.hash.digest(&[&state,&[1]]);
++        advances[2]=self.hash.digest(&[&state,&[2]]);state=advances[2];
++        blocks[3]=self.hash.digest(&[&state,&[1]]);
++        advances[3]=self.hash.digest(&[&state,&[2]]);state=advances[3];
++        blocks[4]=self.hash.digest(&[&state,&[1]]);
++        advances[4]=self.hash.digest(&[&state,&[2]]);state=advances[4];
++        blocks[5]=self.hash.digest(&[&state,&[1]]);
++        advances[5]=self.hash.digest(&[&state,&[2]]);state=advances[5];
++        blocks[6]=self.hash.digest(&[&state,&[1]]);
++        advances[6]=self.hash.digest(&[&state,&[2]]);state=advances[6];
++        blocks[7]=self.hash.digest(&[&state,&[1]]);
++        advances[7]=self.hash.digest(&[&state,&[2]]);state=advances[7];
+         let (q,state)=aspis_core::r0_transcript::queries_from_pairs(&blocks,&advances).map_err(|_|crate::verifier::Error::Transcript)?;
+         self.state=state;
+-        for (i,&u) in q.iter().enumerate() { crate::trace::value(5,i,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[0]; crate::trace::value(5,0,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[1]; crate::trace::value(5,1,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[2]; crate::trace::value(5,2,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[3]; crate::trace::value(5,3,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[4]; crate::trace::value(5,4,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[5]; crate::trace::value(5,5,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[6]; crate::trace::value(5,6,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[7]; crate::trace::value(5,7,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[8]; crate::trace::value(5,8,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[9]; crate::trace::value(5,9,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[10]; crate::trace::value(5,10,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[11]; crate::trace::value(5,11,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[12]; crate::trace::value(5,12,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[13]; crate::trace::value(5,13,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[14]; crate::trace::value(5,14,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[15]; crate::trace::value(5,15,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[16]; crate::trace::value(5,16,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[17]; crate::trace::value(5,17,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[18]; crate::trace::value(5,18,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[19]; crate::trace::value(5,19,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[20]; crate::trace::value(5,20,E::from_m31(aspis_core::field::M31(u))); }
++        { let u=q[21]; crate::trace::value(5,21,E::from_m31(aspis_core::field::M31(u))); }
+         Ok(q)
+     }
+ }
