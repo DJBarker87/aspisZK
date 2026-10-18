@@ -178,3 +178,53 @@ The failure exit has no term: ⊥ is published with the same probability
 and the same content in both middle games, and Hit already covers the
 adversary's reads of all N discarded attempts' addresses after a failure.
 The cap N enters only through ε_hit and ε_coll (§5).
+
+----------------------------------------------------------------------
+§5  Which events the oracle-programming terms charge  (PROPOSED)
+----------------------------------------------------------------------
+
+Notation: m = prover oracle reads per attempt (R0: 110 = 31·3 + 1 + 16,
+D20′.4; R1: its own count), q = the adversary's oracle reads, N = cap,
+a_{k,j} = the j-th prover address of attempt k, i* = accepted index.
+
+Hit (real side; "oracle points queried by discarded attempts").
+  The adversary's program, run on the published view (or on ⊥), reads
+  some a_{k,j} with k ≠ i* (all k when no attempt passed) that is not
+  also an address of the accepted attempt.
+  Why it is charged: in the real game H(a_{k,j}) is the entry that
+  produced a REJECTED challenge (its law is the law conditioned on ¬P
+  for the attempt as a whole), and it is a fixed table entry; in the
+  middle game the adversary's off-transcript reads are answered by the
+  bridge's fresh table. Outside Hit those discarded entries are never
+  observed, and the two games agree.
+  Expected bound (payload fact, hypothesis hHit): every discarded
+  attempt's FIRST address contains fresh attempt material (salted
+  commitment roots / attempt secrets) of min-entropy ≥ H_att given the
+  published data, and every later address of attempt k is a function of
+  the oracle's answer at an earlier address of attempt k; so an
+  adversary reading a_{k,j} must first read a_{k,0} or guess an internal
+  state. ε_hit ≤ q·N·(2^{-H_att} + m·2^{-H_state}) (2^{-H_state}: guessing
+  a duplex state of the 2^{|State|} space directly).
+
+Coll (real side; prover-address repetition, within or across attempts).
+  Two of the ≤ N·m prover reads, in different positions, have the same
+  address (the existing ε_real event of D20′.4, now over N attempts), or
+  a prover read of attempt k equals an adversary-independent fixed point
+  used by `extend`. Charged because a repetition makes ch_k depend on an
+  earlier attempt's (rejected) answer, breaking the i.i.d. per-attempt
+  draws of the middle game — this is exactly the event under which
+  "the accepted challenge is ch | P" could fail.
+  Expected bound (hypothesis hColl): ε_coll ≤ (N·m choose 2)·2^{-H_state}
+  + N·(N−1)/2 · 2^{-H_att}.
+
+Prog (ideal side; programming failure).
+  The simulator programs H at the accepted attempt's m addresses; Prog is
+  the event that two of them coincide (inconsistent programming). The
+  adversary is post-proof (D20′.4), so the usual "adversary queried a
+  point before it was programmed" event cannot occur. Discarded ideal
+  draws are never programmed and leave no oracle trace, so there is no
+  ideal-side Hit term. ε_prog ≤ (m choose 2)·2^{-H_state} (hypothesis).
+
+No other event is charged. In particular: no badMass P, no failure-exit
+term, no term for the accept decision itself (it is a function of the
+challenges, whose law is the same in both worlds).
