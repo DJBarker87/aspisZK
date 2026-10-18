@@ -1,0 +1,143 @@
+{
+  "accepted_archive": {
+    "git_path": "docs/research/100bit-spend-path-20261013/evidence/verify-query-native-20261017/native-evidence.tar.gz",
+    "git_revision": "6dd9028e9e0d85e1f8fd78405e78c4af6dded3af",
+    "sha256": "5c192d1d15fea5207c1f8bb386708b68654ae121dca00eef85792731c2821427"
+  },
+  "after_revision": "1a39ad6081ba1fdaa77f3ce82c94e0619486344a",
+  "changes": {
+    "crates/aspis-r1-cost-probe/Cargo.toml": {
+      "after_sha256": "f4580e9678a67654e26fe8d78fdca0fc7cb16bb59f44eef5f5f8049944d88386",
+      "before_sha256": "5fafcd2572896d4ba35cb01304aa6ccde1d0b634804fedf22c3f74133cedf093",
+      "unified_diff": "--- accepted-test-overlay/crates/aspis-r1-cost-probe/Cargo.toml\n+++ no-prover-test-overlay/crates/aspis-r1-cost-probe/Cargo.toml\n@@ -51,3 +51,7 @@\n [[example]]\n name = \"secure_attempt_gate\"\n required-features = [\"prover\", \"private-leaf-salts\"]\n+\n+# Test-only SHA for the saved no-prover injection gate.\n+[dev-dependencies]\n+sha2 = { workspace = true }\n"
+    },
+    "crates/aspis-r1-cost-probe/src/lib.rs": {
+      "after_sha256": "05f11105306c947cfed6887ebfdfa94b8990ee0ebd3eb1a648f3a4df690e40d3",
+      "before_sha256": "f68b59010023a1adc9aea104068bbfbd715a9e8d7daf1cc033e3e84406ba1402",
+      "unified_diff": "--- accepted-test-overlay/crates/aspis-r1-cost-probe/src/lib.rs\n+++ no-prover-test-overlay/crates/aspis-r1-cost-probe/src/lib.rs\n@@ -8,7 +8,7 @@\n pub mod fast_dots;\n pub mod fast_pairing;\n \n-#[cfg(feature = \"prover\")]\n+#[cfg(any(test, feature = \"prover\"))]\n extern crate std;\n pub mod r1_wire;\n pub mod r1_semantic;\n"
+    },
+    "crates/aspis-r1-cost-probe/src/r1_semantic.rs": {
+      "after_sha256": "e0070ad02bfb47ee7c2cbab8114072906c8a6986b1b0a9c3ed9973ae31a713cd",
+      "before_sha256": "aea9433433e4f807612f1531da4499eac324476057657ee932c6f9a02cdec08c",
+      "unified_diff": "--- accepted-test-overlay/crates/aspis-r1-cost-probe/src/r1_semantic.rs\n+++ no-prover-test-overlay/crates/aspis-r1-cost-probe/src/r1_semantic.rs\n@@ -314,7 +314,7 @@\n     verify_finish(public, prefix, transcript, challenges, obs)\n }\n \n-#[cfg(all(test, feature=\"prover\", feature=\"private-leaf-salts\"))]\n+#[cfg(all(test, feature=\"private-leaf-salts\"))]\n fn migration_old_verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {\n     fn mark(obs: crate::verifier::Observer, i: u8) {\n         #[cfg(feature=\"detail-phases\")]\n@@ -421,6 +421,6 @@\n         masked_terminal,\n     })\n }\n-#[cfg(all(test, feature=\"prover\", feature=\"private-leaf-salts\"))]\n+#[cfg(all(test, feature=\"private-leaf-salts\"))]\n #[path=\"verify_migration_tests.rs\"]\n mod verify_migration_tests;\n"
+    },
+    "crates/aspis-r1-cost-probe/src/verify_migration_tests.rs": {
+      "after_sha256": "ebdfeba84a18cd6715635159e78fb8c311457586ff07c8f917f632ef5e05d8fc",
+      "before_sha256": "4c5d4ac9bb7e25a83fe731d6f3528c5436c74cc62a22e60d461209d4f32f25df",
+      "unified_diff": "--- accepted-test-overlay/crates/aspis-r1-cost-probe/src/verify_migration_tests.rs\n+++ no-prover-test-overlay/crates/aspis-r1-cost-probe/src/verify_migration_tests.rs\n@@ -99,22 +99,42 @@\n     b.extend_from_slice(&out.state_before_z0);\n     for z in out.z { k_bytes(z.x, &mut b); k_bytes(z.y, &mut b); }\n     b.extend_from_slice(&out.transcript.state()); b.push(out.transcript.next_row());\n-    for row in out.round_checks { for x in row { k_bytes(x, &mut b); } }\n-    k_bytes(out.terminal, &mut b); k_bytes(out.masked_terminal, &mut b);\n+    #[cfg(feature = \"prover\")]\n+    {\n+        for row in out.round_checks { for x in row { k_bytes(x, &mut b); } }\n+        k_bytes(out.terminal, &mut b); k_bytes(out.masked_terminal, &mut b);\n+    }\n     b\n }\n #[derive(Clone, Debug, PartialEq, Eq)]\n struct Outcome { result: Result<Vec<u8>, Error>, log: Log, values: Vec<(u16, usize, [u8; 32])> }\n+use aspis_statement::pool_v1::PoolV1PairForestTerminalStatementV1;\n+pub fn statement_public(statement: &PoolV1PairForestTerminalStatementV1) -> Public<'_> {\n+    match statement {\n+        PoolV1PairForestTerminalStatementV1::PrivateTransfer { common, public } => {\n+            Public::Transfer(public, &common.lane_transition)\n+        }\n+        PoolV1PairForestTerminalStatementV1::Withdrawal { common, public } => {\n+            Public::Withdrawal(public, &common.lane_transition)\n+        }\n+    }\n+}\n+fn take_values() -> Vec<(u16, usize, [u8; 32])> {\n+    #[cfg(feature = \"prover\")]\n+    { crate::trace::take() }\n+    #[cfg(not(feature = \"prover\"))]\n+    { Vec::new() }\n+}\n fn run(old: bool, configured: Fault, observed: bool) -> Outcome {\n     let statement = aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1(PUBLIC).unwrap();\n-    let public = aspis_prover::r0_fixture::statement_public(&statement);\n+    let public = statement_public(&statement);\n     let view = crate::verifier::View::parse(PROOF).unwrap();\n     LOG.with(|s| *s.borrow_mut() = Log { fault: configured, ..Log::default() });\n-    let _ = crate::trace::take();\n+    let _ = take_values();\n     let obs = if observed { Some(observer as fn(crate::verifier::Phase)) } else { None };\n     let result = if old { migration_old_verify_observed(public, view.semantic, RecordedSha, obs) }\n         else { verify_observed(public, view.semantic, RecordedSha, obs) }.map(snapshot);\n-    Outcome { result, log: LOG.with(|s| s.borrow().clone()), values: crate::trace::take() }\n+    Outcome { result, log: LOG.with(|s| s.borrow().clone()), values: take_values() }\n }\n fn expected_error(f: Fault) -> Option<Error> {\n     match f {\n@@ -129,6 +149,7 @@\n }\n #[test]\n fn verify_saved_s2_exact_old_new_all_round_failures_and_success() {\n+    assert!(!cfg!(feature = \"prover\"), \"no-prover gate must not enable prover\");\n     assert_eq!(&PROOF[..8], b\"R1P3COST\");\n     let mut faults = vec![Fault::None, Fault::Parse, Fault::Public, Fault::Begin, Fault::Lookup(14, 0), Fault::Decode(14)];\n     for row in 15..=24 { faults.extend([Fault::Lookup(row, 0), Fault::Decode(row), Fault::Boundary(row), Fault::Lookup(row, 1), Fault::Semantic(row)]); }\n@@ -140,6 +161,7 @@\n             let old = run(true, *configured, observed);\n             let new = run(false, *configured, observed);\n             assert_eq!(old, new, \"fault={configured:?} observed={observed}\");\n+            assert!(old.values.is_empty() && new.values.is_empty(), \"production no-prover trace values are disabled\");\n             assert_eq!(old.result.as_ref().err().copied(), expected_error(*configured));\n             assert_eq!(old.log.digests, success.log.digests[..old.log.digests.len()]);\n             assert_eq!(old.values, success.values[..old.values.len()]);\n"
+    }
+  },
+  "classification": "TEST_ONLY_NO_PROVER_VERIFY_OVERLAY_NOT_RUN",
+  "coverage": {
+    "all_deployed_shape_returned_fields_equal": true,
+    "all_errors_events_digests_phases_equal": true,
+    "cases_per_feature_build": 112,
+    "faults": 55,
+    "feature_builds": {
+      "default": "private-leaf-salts,optimized-terminal",
+      "detail": "private-leaf-salts,optimized-terminal,detail-phases"
+    },
+    "native_trace_values": "Actual production no-prover value recording remains disabled; both snapshots asserted empty.",
+    "observer_modes": [
+      "None",
+      "Some"
+    ],
+    "prover": false,
+    "success_controls": 1
+  },
+  "fixture_files": {
+    "docs/research/100bit-spend-path-20261013/evidence/p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/r1-s2-proof.bin": "8569435667420b36a980493477f8fef7ef47e7351122647cf3747054079d4d62",
+    "docs/research/100bit-spend-path-20261013/evidence/p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/r1-s2-public-asf8.bin": "72f067d263af326b017284579f30e3da7c843c6cbb29f1c6df94c8afbb1f2172"
+  },
+  "gates": [
+    {
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo",
+        "test",
+        "--verbose",
+        "--release",
+        "--locked",
+        "--offline",
+        "-j1",
+        "-p",
+        "aspis-r1-cost-probe",
+        "--features",
+        "private-leaf-salts,optimized-terminal",
+        "--lib",
+        "r1_semantic::verify_migration_tests::verify_saved_s2_exact_old_new_all_round_failures_and_success",
+        "--",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "label": "verify-no-prover-default",
+      "production_reachability": "Actual saved S2; symmetric injected wrapper failures remain test-only.",
+      "required_absent_extern": "aspis_prover",
+      "required_case_lines": 112,
+      "required_rustc_cost_probe_features": [
+        "default",
+        "optimized-terminal",
+        "private-leaf-salts"
+      ],
+      "required_test_result": "1 passed; 0 failed",
+      "scope_limits": {
+        "MemoryHigh": "6G",
+        "MemoryMax": "8G",
+        "MemorySwapMax": 0
+      }
+    },
+    {
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo",
+        "test",
+        "--verbose",
+        "--release",
+        "--locked",
+        "--offline",
+        "-j1",
+        "-p",
+        "aspis-r1-cost-probe",
+        "--features",
+        "private-leaf-salts,optimized-terminal,detail-phases",
+        "--lib",
+        "r1_semantic::verify_migration_tests::verify_saved_s2_exact_old_new_all_round_failures_and_success",
+        "--",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "label": "verify-no-prover-detail",
+      "production_reachability": "Actual saved S2; symmetric injected wrapper failures remain test-only.",
+      "required_absent_extern": "aspis_prover",
+      "required_case_lines": 112,
+      "required_rustc_cost_probe_features": [
+        "default",
+        "detail-phases",
+        "optimized-terminal",
+        "private-leaf-salts"
+      ],
+      "required_test_result": "1 passed; 0 failed",
+      "scope_limits": {
+        "MemoryHigh": "6G",
+        "MemoryMax": "8G",
+        "MemorySwapMax": 0
+      }
+    }
+  ],
+  "generator_sha256": "e89c81eff35c2053e00fd1d85d2c464ecce679aef957a688342f8ec1ea58e75d",
+  "helper_copy": {
+    "declaration_sha256": "3c113e769c15070d04034876416e2ce454649e123f83e9aa945a15046d57eb1a",
+    "source_path": "crates/aspis-prover/src/r0_fixture.rs",
+    "source_revision": "1a39ad6081ba1fdaa77f3ce82c94e0619486344a",
+    "source_sha256": "eb04b2fb826c245b0b98dadcc60a3f6977845f568d97a275e50293039a0c43ba",
+    "transformation": "byte-exact helper declaration/body, actual statement type imported; only harness call target is local. No aspis_prover dependency."
+  },
+  "new_builds": 0,
+  "old_new_verify_instrumentation": "Exact previously accepted wrapper bodies; only module/old-body test guards remove prover. Existing production cfg(not(prover)) branches now compile.",
+  "overlay_files": {
+    "crates/aspis-r1-cost-probe/Cargo.toml": "f4580e9678a67654e26fe8d78fdca0fc7cb16bb59f44eef5f5f8049944d88386",
+    "crates/aspis-r1-cost-probe/src/lib.rs": "05f11105306c947cfed6887ebfdfa94b8990ee0ebd3eb1a648f3a4df690e40d3",
+    "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "e0070ad02bfb47ee7c2cbab8114072906c8a6986b1b0a9c3ed9973ae31a713cd",
+    "crates/aspis-r1-cost-probe/src/verify_migration_tests.rs": "ebdfeba84a18cd6715635159e78fb8c311457586ff07c8f917f632ef5e05d8fc"
+  },
+  "production_candidate_modified": false,
+  "production_files_match_accepted_6dd": true
+}
