@@ -14,3 +14,93 @@ compiled), PROPOSED, MEASURED, ESTIMATED.
 §5  The theorem that replaces simV                  [pending]
 §6  Lean plan                                       [pending]
 §7  What stays open                                 [pending]
+
+§1  The current simulator and why it is not one
+------------------------------------------------
+(SOURCE.)  `privacy_R1` (R1Z/PrivacyR1.lean, host 3763) proves
+`ZK_FSV h (VR1 h) B outputs fs x ε` with
+  ε = M·q/Umin + (M²/Umin + εexh) + Mi²/Umin + N·4096/Q.
+The ideal side is `idealTestV h V …`, i.e. `fs.ideal (simV h B outputs x hx V)`.
+`simV` (R0Z/HvzkV.lean:120) is
+
+  if hch : ∃ w, V ch w ∧ h.public w = x.1
+  then view h B outputs x (Classical.choose hch) ch
+  else simulator h B outputs x hx ch            -- JointView.simulator,
+                                                -- itself view … (Classical.choose hx)
+
+So at every challenge the simulator runs the honest view of a witness picked
+by choice from the instances valid at that challenge. The statement it proves
+is a statistical one: the two view families have equal laws. It says nothing
+about computing the ideal view from the public statement. `Classical.choose`
+is not an algorithm, and in this setting no algorithm could implement it: an
+instance with `h.public w = x.1` is a spend witness (note, path, keys), and
+finding one from x would break soundness. The spend-path note
+PRIVACY-RANK-PATH.md ("Efficient simulation, beyond witness independence")
+records the same gap and names the stronger target used below: place the
+normalised honest offset in a publicly computable coset of the mask image,
+then sample masks.
+
+The proof uses the witness in two places, and only the first must go:
+  (i)  the definition of the simulator (simV / JointView.simulator);
+  (ii) the proofs of the law equalities, which may quantify over and use
+       any valid w.  A simulator is efficient if its definition is
+       witness-free and polynomial-time; its correctness proof may use w.
+
+§2  The honest law and the public coset data
+---------------------------------------------
+§2.1 The law (SOURCE; every step is a landed theorem).
+  Fix ch with P_R1 h.transport B hB ch and w with h.public w = x.1,
+  BaseTyped F (h.build w), HonestValid x.1 B (h.build w) ch, PublicBase F x.1.
+  Write T = M × N (Partition.lean), A_ch = D12.A h.transport B ch : T →ₗ[F] Payload,
+  Ψ_ch = Shift.shift x.1 B ch (a bijection, inverse unshift).
+  * payload_eq_shift (Shift.lean:445), any ch:
+      D12.payload h B x w ch t = Ψ_ch (cTilde w + A_ch t + sRem w t.2).
+  * clause (i′), clause_i_R1_all (R1Z/ClauseIR1, host 3695):
+      sRem w n ∈ range (A_ch ∘ inlM) for every n.
+  * payload_law_on (Shift.lean:489) with AbsorptionLaw.mixture:
+      EqualLaws (D12.payload h B x w ch) (t ↦ Ψ_ch (cTilde w + A_ch t)).
+  * JointView.payload w ch = D12.payload w ch ∘ Partition.equiv.symm, and
+    JointView.view = (metadata outputs x ch, JointView.payload …).
+  So on P_R1 ∧ HonestValid the honest view at ch has the law of
+      t ↦ (metadata outputs x ch, Ψ_ch (cTilde w + A_ch t)),   t uniform on T.
+
+§2.2 Which parts are public.
+  * metadata outputs x ch = ⟨x, ch, (x.2, ·), outputs x ch⟩: public.
+  * Ψ_ch: reads x.1, B and ch only (originalOf, Shift.lean:132).
+  * A_ch: reads h.transport, B and ch.  `transport` is a field of the
+    HonestProver structure, not of the instance (ZkStatement.lean:304); on R1
+    it is the fixed D18 permutation. Public.
+  * The uniform tape t: sampled by the simulator.
+  The only witness-dependent object is the class [cTilde w] in
+  Payload / range A_ch (an F-quotient). Clause (ii′) (iiPrime_R1, host 3750)
+  says that this class is the same for all valid w, but that is a statement
+  of existence. It does not say how to compute the class.
+
+§2.3 The silent functionals that pin the class (SOURCE).
+  These are linear functionals φ with φ ∘ A_ch = 0. For each, the value on
+  cTilde w is listed:
+    ι = p₀(0)+p₀(1) − maskSum       iota_A;  ι(cTilde w) = Σ_b fOrig(u_w)(b)
+                                     (iota_cTilde), = 0 for valid w
+                                     (iota_cTilde_zero)
+    .inactiveSum                     inactive_A;  = λ₀^26·Σ_{inactive} u_w[26]
+                                     (inactive_cTilde), = 0 for valid w
+    Φ₀ = evalRound9 − claimMask      Phi0_A;  Φ₀(cTilde w) = 0 for EVERY w
+                                     when α₉ ≠ ½ (Phi0_cTilde)
+    ChainEqs (9 chain equalities)    A_mem_chainEqs; cTilde w ∈ ChainEqs for
+                                     EVERY w (cTilde_mem_chainEqs)
+  Here u_w = PayloadSplit.actual x.1 B (h.build w) ch 0, and λ₀ = ch.opening 0.
+  The rest of the annihilator is the relR1 / B0R1′ relations on the batched
+  cells and the K₄-typing of the round cells. These hold for any K₄-valued
+  payload trace (bat_L_mem_B0R1, L_round_mem, originalRounds_mem).
+  The own cells (point claims, extra claims, OOD values, openings) are not
+  pinned. Under C1Lift and H1Lift the noise image reaches them
+  (noise_lift_R1).
+  Only ι and .inactiveSum separate valid from invalid traces (§1.4 of
+  DESIGN-ii-prime, not_iiPrime_witness / not_iiPrime_inactive). The other
+  silent values are the same, and public, for every base-typed trace.
+
+  A linear-solve simulator would need a basis of this annihilator together
+  with its public right-hand sides: a rank computation of the Z9b kind per
+  challenge. §3 avoids that. The (ii′) residual argument already shows that
+  the list above is complete under P_R1. So a single explicit point in the
+  coset is enough, and no elimination happens at simulation time.
