@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+"""The only edits made to the Aeneas output before compiling it as R0Z/WritersExtracted:
+ 1. `import Aeneas` -> `import Aeneas.Std` + `import Aeneas.Tactic.RustAttributes`
+    (the shared run2 object tree has the pinned b59d5188 Aeneas.Std and the attribute module,
+    but not the Aeneas root, Aeneas.Data.{Array,Vector} or most of Aeneas.Tactic: those do not
+    build unpatched under Lean 4.32; see DESIGN-BUILDER-MODEL §9 blockers);
+ 2. delete the two generated `set_option maxHeartbeats/maxRecDepth` lines (project rule 3).
+Nothing else changes; the script asserts both edits apply exactly once.
+Usage: substitute.py.txt <Writers.lean> <out.lean>"""
+import sys
+src = open(sys.argv[1]).read()
+assert src.count("import Aeneas\n") == 1
+out = src.replace("import Aeneas\n", "import Aeneas.Std\nimport Aeneas.Tactic.RustAttributes\n", 1)
+for blk in ("/- You can set the `maxHeartbeats` value with the `-max-heartbeats` CLI option -/\nset_option maxHeartbeats 1000000\n\n",
+            "/- You can set the `maxRecDepth` value with the `-max-recdepth` CLI option -/\nset_option maxRecDepth 2048\n\n"):
+    assert out.count(blk) == 1
+    out = out.replace(blk, "")
+assert "maxHeartbeats" not in out and "maxRecDepth" not in out
+open(sys.argv[2], "w").write(out)

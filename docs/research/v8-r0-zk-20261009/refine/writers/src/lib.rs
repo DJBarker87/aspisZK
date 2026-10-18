@@ -166,8 +166,7 @@ pub fn merge_check(stable: &[u32; TRACE_CELLS], late: &[u32; TRACE_CELLS]) -> bo
     let mut i: usize = 0;
     while i < TRACE_CELLS {
         let row = i % 1024;
-        let in_late = row >= 544 && row < 864;
-        if in_late {
+        if row >= 544 && row < 864 {
             if stable[i] != 0 {
                 ok = false;
             }
