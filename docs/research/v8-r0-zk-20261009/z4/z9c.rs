@@ -174,7 +174,12 @@ struct Src3 {
 }
 fn build_pub(s: &str, v: usize, qspec: &str, gi: usize) -> Pub {
     let pi = d18_transport();
-    z5::set_transport(pi);
+    // The transport is a process-wide OnceLock; the checker's rebuild reuses it.
+    if z5::is_selected() {
+        assert_eq!(*z5::transport(), pi, "D18 transport");
+    } else {
+        z5::set_transport(pi);
+    }
     let t = trial(v);
     let a = alpha_for(s, v, &t.a);
     let qs = query_set(qspec, &t.qs);
