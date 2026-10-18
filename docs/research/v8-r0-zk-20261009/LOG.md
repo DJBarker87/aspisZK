@@ -5518,3 +5518,67 @@ Remaining for R1 privacy (D42.5, updated):
    G-prog and G-ref (in progress).
 4. G-root, G-retry, G-sim.
 5. Classical ROM only.
+
+### Lead acceptance of the R1 games (2026-10-18); D45: the ideal model is proved; real-side hypotheses narrowed
+
+The R1 games work (worker 4d6ee9980..72f11706a, 12 commits, cherry-picked)
+is accepted. The design is `zf1/DESIGN-R1-GAMES.txt` §0–§8. The lead verified
+each host receipt (SHA matches, exit 0, standard axioms, no overrides):
+
+| Module | Attempt | SHA | Axiom lines |
+|---|---|---|---|
+| R1Z/LensR1 | 3951 | `90bc5726…` | 10 |
+| R1Z/TranscriptR1 | 3954 | `e8b6f22d…` | 18 |
+| R1Z/GamesR1 | 3957 | `630393aa…` | 21 |
+| R1Z/PrivacyGamesR1 | 3958 | `ec1a2ede…` | 2 |
+
+**D45.1 The games are defined.** `fsR1` is the real and ideal pair, and
+`abR1` is the abort bridge.
+- The real game is the honest retrying prover: up to N attempts with
+  independent secrets, accepting on P_R1 ∧ VR1 ∧ ¬exhausted. A rejected
+  attempt publishes nothing; if every attempt fails, a fixed failure view is
+  published.
+- The ideal game is the same loop on P alone, with simE (or simV), answering
+  from the table programmed at the published addresses.
+
+**D45.2 G-root is closed at the model level.** It was checked against
+verifier.rs and r1_semantic.rs. Every root, opened salt and path digest is in
+the input or is the answer to a verifier read (115 transcript reads, plus one
+leaf read and 6 node reads per query and tree). So proof = f(view, verifier
+log), and `extend` puts that log at the front of observerOracle.
+
+**D45.3 What is proved.**
+- `R1IdealModelS` (simE) and `R1IdealModelV`, every field. The coupling is
+  the identity, so Mi = 0 and ε_prog = 0. The programming collisions are
+  charged inside the real side's M²/Umin.
+- `R1RealModelV`:
+  - the read count M = N·(115 + Mc), with `card_TRead = 115` proved;
+  - transcript HitFresh;
+  - PairFresh for transcript×transcript pairs and transcript×commitment
+    pairs (the latter via `CmLayout.cross`).
+- `privacy_R1_games` is privacy_R1_eff on the concrete games, with error
+  N(115+Mc)·q/2^255 + (N(115+Mc))²/2^255 + εexh + N·4096/Q. The N = 8
+  numeral is not compiled. It is expected to stay pole-dominated, ≈ 2^-108.
+
+**D45.4 What remains a hypothesis.** These are fields of `R1RealData`, per
+adversary and witness:
+- `cp`: the lazy-programming coupling (G-prog);
+- `Agree`: real and middle games agree outside the events (G-ref);
+- `CmLayout`: hit, pair and cross for the salt, leaf, node, expander and
+  seed reads;
+- exhaustion mass ≤ εexh (G-exh);
+- Mc: the commitment-read count, counted from Rust only.
+
+These are also unchanged: Sem1Uniform, BuilderSoundOn (baseTyped, lanes,
+CopyLinkBalance), PublicBase, and classical ROM only.
+
+**D45.5 Rust ↔ Lean refinement list (design §6.4).**
+- R-wire: framing, decoders, QueryScan, Merkle-path reads.
+- R-ser: proof bytes = serialize(view, log).
+- R-commit: prover.rs commitment phase and salted trees.
+- R-causal: row i depends only on earlier challenges.
+- R-retry: the retry loop in the Rust prover.
+- R-pub: the Rust P_R1 check (D38.5 certificates).
+
+**D45.6 Process.** The worker gated on Lean processes only, as instructed.
+Spend-path cargo and charon jobs ran concurrently at times without incident.
