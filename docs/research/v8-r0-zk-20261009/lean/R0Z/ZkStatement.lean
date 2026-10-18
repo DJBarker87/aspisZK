@@ -288,6 +288,13 @@ open R0P R0P.SemSource R0Z.MaskLayout R0Z.HonestView Polynomial
 open AspisWide.InitialEncoder AspisWide.Agreement AspisPool.AlgorithmicCircleDecoderV7
 attribute [local instance] Classical.propDecidable
 
+/- Finiteness of the payload cells, used only inside the proofs of the law
+theorems (AffineLaw and AbsorptionLaw take `[Fintype V]` for the payload space).
+R1-0: derived here for every `Bat` with `[Fintype Bat]`; `R0Bat` is finite, so the
+law theorems instantiate at the R0 instance. -/
+deriving instance Fintype for PayloadCell
+deriving instance Fintype for R0Z.R0Batched.R0Bat
+
 abbrev Statement (K CommitHandle : Type) := Public K × CommitHandle
 abbrev Challenges (K : Type) [Field K] := HonestView.Challenges K
 abbrev Payload (K Bat : Type) := HonestView.Payload K Bat
