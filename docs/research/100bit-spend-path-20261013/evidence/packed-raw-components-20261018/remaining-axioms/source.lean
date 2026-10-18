@@ -1,0 +1,6 @@
+import PoseidonExternalPackedRawOpsV7
+
+#print axioms AspisR1.PoseidonExternalPackedRawOps.component1Ops_success
+#print axioms AspisR1.PoseidonExternalPackedRawOps.component2Ops_success
+#print axioms AspisR1.PoseidonExternalPackedRawOps.component3Ops_success
+#print axioms AspisR1.PoseidonExternalPackedRawOps.packedComponentsOps_success
