@@ -1,0 +1,7 @@
+# Exact field model of scalar-weight coordinate sums
+
+Four checked structural lemmas connect coordinatewise Nat sums to the exact QM31 field model. For any input count N, decoding the coordinate sum equals the existing ordered field dot product of the decoded QM31 weights with the U32 scalar values. This uses maintained word-vector decoding and field linearity; it does not unfold a concrete seven-term recurrence. Actual source chunk execution and the full caller still require their own checks.
+
+The exact source was checked on both hosts. NUC: Lean4.32.0, exit0,2.00s, peakRSS3,984,756KiB, swap0 under MemoryHigh4GiB/MemoryMax4608MiB/MemorySwapMax0. Mac focused predecessor: exit0,122.37s, peakRSS2,444,722,176bytes, swap0. Each run has four standard-only axiom reports; these are four unique theorems, not eight. Full commands/import paths/source and object hashes are retained in the receipts and logs. The NUC receipt records its pinned workspace revision; the exact new module source is separately hash-pinned and byte-identical to the maintained source.
+
+`local/project-import-transfer-metadata.json` records the bounded cached dependency batch; no dependencies were rebuilt. Source fixes replaced bare function composition with an explicit lambda normal form. Failed v1/v2 diagnostics are not accepted proofs. Production Rust is not changed by this proof packet. End-to-end security, remaining source/runtime correspondence and privacy obligations are still open.

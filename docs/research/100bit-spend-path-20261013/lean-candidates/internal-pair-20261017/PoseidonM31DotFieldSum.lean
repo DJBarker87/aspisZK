@@ -34,7 +34,7 @@ theorem decodeWords_ofFn_coordinate_sum
       (List.ofFn (fun i : Fin N => decodeWords (coordinate i))).sum := by
   have h := decodeWords_list_coordinate_sum
     (List.ofFn (fun i : Fin N => coordinate i))
-  simpa only [List.map_ofFn] using h
+  simpa only [List.map_ofFn, Function.comp_def] using h
 
 /-- A weighted QM31 word vector decodes to the exact-field scalar multiple
 of its decoded QM31 value. -/
