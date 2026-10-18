@@ -1,0 +1,57 @@
+/tmp/CompPolyFactorTwoChildBound.lean:35:2: error: Type mismatch
+  LE.le.trans
+    (bind_abort_le left
+      (fun o =>
+        AspisV8R19.OracleProgramOps.bind right fun rightResult =>
+          match rightResult with
+          | none => Program.done none
+          | some r => Program.done (some (o ++ r)))
+      BR hBR hnext)
+    (add_le_add hl (le_refl BR))
+has type
+  outMean
+      (AspisV8R19.OracleProgramOps.bind left fun o =>
+        match o with
+        | none => Program.done none
+        | some x =>
+          AspisV8R19.OracleProgramOps.bind right fun rightResult =>
+            match rightResult with
+            | none => Program.done none
+            | some r => Program.done (some (x ++ r)))
+      abortIndicator ≤
+    BL + BR
+but is expected to have type
+  outMean
+      (AspisV8R19.OracleProgramOps.bind left fun leftResult =>
+        match leftResult with
+        | none => Program.done none
+        | some l =>
+          AspisV8R19.OracleProgramOps.bind right fun rightResult =>
+            match rightResult with
+            | none => Program.done none
+            | some r => Program.done (some (l ++ r)))
+      abortIndicator ≤
+    BL + BR
+'AspisR1.CompPolyFactorTwoChildBound.append_abort_mean' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CompPolyFactorTwoChildBound.two_children_abort_le' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        3.70 real         0.67 user         0.68 sys
+          2062598144  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              139908  page reclaims
+               27548  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                3904  voluntary context switches
+               21779  involuntary context switches
+         12436903395  instructions retired
+          5065808162  cycles elapsed
+           335657792  peak memory footprint

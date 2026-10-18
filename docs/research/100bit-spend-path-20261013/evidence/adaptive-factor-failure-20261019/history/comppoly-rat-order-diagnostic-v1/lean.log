@@ -1,0 +1,90 @@
+@[implicit_reducible] def Rat.instPreorder : Preorder ℚ :=
+inferInstance
+@[implicit_reducible] def Rat.instLE : LE ℚ :=
+{ le := fun a b => b.blt a = false }
+@[implicit_reducible] def Rat.linearOrder : LinearOrder ℚ :=
+{ toLE := Rat.instLE, toLT := Rat.instLT, le_refl := ⋯, le_trans := ⋯, lt_iff_le_not_ge := Rat.lt_iff_le_not_ge,
+  le_antisymm := ⋯, toMin := Rat.instMin, toMax := Rat.instMax, compare := fun a b => compareOfLessAndEq a b,
+  le_total := ⋯, toDecidableLE := inferInstance, toDecidableEq := inferInstance, toDecidableLT := inferInstance,
+  min_def := Rat.linearOrder._proof_1, max_def := Rat.linearOrder._proof_2,
+  compare_eq_compareOfLessAndEq := Rat.linearOrder._proof_3 }
+theorem Rat.instAddLeftMono : AddLeftMono ℚ :=
+{ elim := fun x x_1 x_2 h => Rat.add_le_add_left.mpr h }
+theorem add_le_add_right.{u_1} : ∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [AddLeftMono α] {b c : α},
+  b ≤ c → ∀ (a : α), a + b ≤ a + c :=
+fun {α} [Add α] [LE α] [AddLeftMono α] {b c} bc a => CovariantClass.elim a bc
+theorem AspisR1.CompPolyFactorMeanTools.bind_abort_le : ∀ {I A O R : Type} [inst : Fintype A] [Nonempty A]
+  (p : AspisV8R19.MemoizedProgramLaw.Program I A (Option O))
+  (next : O → AspisV8R19.MemoizedProgramLaw.Program I A (Option R)) (B : ℚ),
+  0 ≤ B →
+    (∀ (o : O), AspisR1.CompPolyFactorMeanTools.outMean (next o) AspisR1.CompPolyFactorMeanTools.abortIndicator ≤ B) →
+      AspisR1.CompPolyFactorMeanTools.outMean
+          (AspisV8R19.OracleProgramOps.bind p fun o =>
+            match o with
+            | none => AspisV8R19.MemoizedProgramLaw.Program.done none
+            | some x => next x)
+          AspisR1.CompPolyFactorMeanTools.abortIndicator ≤
+        AspisR1.CompPolyFactorMeanTools.outMean p AspisR1.CompPolyFactorMeanTools.abortIndicator + B :=
+fun {I A O R} [Fintype A] [Nonempty A] p next B hB hnext =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a => _a ≤ AspisR1.CompPolyFactorMeanTools.outMean p AspisR1.CompPolyFactorMeanTools.abortIndicator + B)
+        (AspisR1.CompPolyFactorMeanTools.outMean_bind p
+          (fun o =>
+            match o with
+            | none => AspisV8R19.MemoizedProgramLaw.Program.done none
+            | some x => next x)
+          AspisR1.CompPolyFactorMeanTools.abortIndicator)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (AspisR1.CompPolyFactorMeanTools.outMean p fun o =>
+                AspisR1.CompPolyFactorMeanTools.outMean
+                  (match o with
+                  | none => AspisV8R19.MemoizedProgramLaw.Program.done none
+                  | some x => next x)
+                  AspisR1.CompPolyFactorMeanTools.abortIndicator) ≤
+              _a)
+          (Eq.symm
+            (AspisR1.CompPolyFactorMeanTools.outMean_add_const p AspisR1.CompPolyFactorMeanTools.abortIndicator B))))
+      (AspisR1.CompPolyFactorMeanTools.outMean_mono p fun o =>
+        Option.casesOn (motive := fun t =>
+          o = t →
+            AspisR1.CompPolyFactorMeanTools.outMean
+                (match o with
+                | none => AspisV8R19.MemoizedProgramLaw.Program.done none
+                | some x => next x)
+                AspisR1.CompPolyFactorMeanTools.abortIndicator ≤
+              AspisR1.CompPolyFactorMeanTools.abortIndicator o + B)
+          o (fun h => Eq.symm h ▸ id (le_add_of_nonneg_right hB))
+          (fun o_1 h =>
+            Eq.symm h ▸
+              Eq.mpr
+                (id
+                  (congrArg
+                    (LE.le
+                      (AspisR1.CompPolyFactorMeanTools.outMean (next o_1)
+                        AspisR1.CompPolyFactorMeanTools.abortIndicator))
+                    (Eq.trans (congrFun' (congrArg HAdd.hAdd (ite_cond_eq_true 0 1 (eq_self true))) B) (zero_add B))))
+                (hnext o_1))
+          (Eq.refl o)))
+        8.62 real         0.67 user         1.00 sys
+          2060779520  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               90843  page reclaims
+               77597  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               14607  voluntary context switches
+               57778  involuntary context switches
+         15235549438  instructions retired
+          6290169057  cycles elapsed
+           343243512  peak memory footprint
