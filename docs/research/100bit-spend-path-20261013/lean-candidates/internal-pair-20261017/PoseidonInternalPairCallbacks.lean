@@ -27,6 +27,7 @@ theorem weight_source (local1 : State) (row : Usize) (hr : row.val < 16) :
   simp only [state_only_poseidon.interpolated_internal_pair.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut,
     hread,bind_tc_ok,weightValue]
   rw [hfin]
+  rfl
 
 theorem even_source (row : Usize) (hlo : 2 ≤ row.val) (hhi : row.val ≤ 8) :
     state_only_poseidon.interpolated_internal_pair.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut
@@ -36,16 +37,26 @@ theorem even_source (row : Usize) (hlo : 2 ≤ row.val) (hhi : row.val ≤ 8) :
     apply UScalar.mul_spec
     scalar_tac
   obtain ⟨index,hmul,hindex⟩ := WP.spec_imp_exists hmulSpec
-  have hidx : index.val < 14 := by rw [hindex,hsubval]; omega
+  have htwo : (2#usize).val = 2 := by decide
+  have hraw : index.val = 2 * (row.val - 2) := by
+    calc
+      index.val = 2 * sub.val := hindex
+      _ = 2 * (row.val - 2) := by rw [hsubval, htwo]
+  have hidx : index.val < 14 := by rw [hraw]; omega
   have hread := internal_source_read index hidx
+  have hrawBound : 2 * (row.val - 2) < 14 := by rw [← hraw]; exact hidx
   have hfin : (⟨index.val,hidx⟩ : Fin 14) = constantIndex row 0 := by
     apply Fin.ext
     unfold constantIndex
-    rw [Nat.mod_eq_of_lt (by omega)]
-    omega
-  simp only [state_only_poseidon.interpolated_internal_pair.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut,
-    hsub,hmul,hread,bind_tc_ok,constantValue]
-  rw [hfin]
+    simp only [Nat.add_zero]
+    rw [Nat.mod_eq_of_lt hrawBound]
+    exact hraw
+  change (do
+      let i ← UScalar.sub row 2#usize
+      let i1 ← UScalar.mul 2#usize i
+      let i2 ← Array.index_usize poseidon2.INTERNAL i1
+      ok (i2, ())) = .ok (internalConstant (constantIndex row 0), ())
+  rw [hsub, bind_tc_ok, hmul, bind_tc_ok, hread, bind_tc_ok, hfin]
 
 theorem odd_source (row : Usize) (hlo : 2 ≤ row.val) (hhi : row.val ≤ 8) :
     state_only_poseidon.interpolated_internal_pair.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut
@@ -59,16 +70,28 @@ theorem odd_source (row : Usize) (hlo : 2 ≤ row.val) (hhi : row.val ≤ 8) :
     apply UScalar.add_spec
     scalar_tac
   obtain ⟨index,hadd,hindex⟩ := WP.spec_imp_exists haddSpec
-  have hidx : index.val < 14 := by rw [hindex,htwice,hsubval]; omega
+  have htwo : (2#usize).val = 2 := by decide
+  have hone : (1#usize).val = 1 := by decide
+  have hraw : index.val = 2 * (row.val - 2) + 1 := by
+    calc
+      index.val = twice.val + 1 := hindex
+      _ = 2 * sub.val + 1 := by rw [htwice]
+      _ = 2 * (row.val - 2) + 1 := by rw [hsubval, htwo]
+  have hidx : index.val < 14 := by rw [hraw]; omega
   have hread := internal_source_read index hidx
+  have hrawBound : 2 * (row.val - 2) + 1 < 14 := by rw [← hraw]; exact hidx
   have hfin : (⟨index.val,hidx⟩ : Fin 14) = constantIndex row 1 := by
     apply Fin.ext
-    unfold constantIndex
-    rw [Nat.mod_eq_of_lt (by omega)]
-    omega
-  simp only [state_only_poseidon.interpolated_internal_pair.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut,
-    hsub,hmul,hadd,hread,bind_tc_ok,constantValue]
-  rw [hfin]
+    change index.val = (2 * (row.val - 2) + 1) % 14
+    rw [Nat.mod_eq_of_lt hrawBound]
+    exact hraw
+  change (do
+      let i ← UScalar.sub row 2#usize
+      let i1 ← UScalar.mul 2#usize i
+      let i2 ← UScalar.add i1 1#usize
+      let i3 ← Array.index_usize poseidon2.INTERNAL i2
+      ok (i3, ())) = .ok (internalConstant (constantIndex row 1), ())
+  rw [hsub, bind_tc_ok, hmul, bind_tc_ok, hadd, bind_tc_ok, hread, bind_tc_ok, hfin]
 
 #print axioms weight_source
 #print axioms even_source

@@ -61,25 +61,35 @@ theorem odd_source :
   exact AspisR1.PoseidonInternalPairCallbacks.odd_source r hb.1 hb.2
 
 theorem weights_model (local1 : State) (i : Fin 7) :
-    cell (weights local1) i = cell local1 ⟨i.val+2,by have := i.isLt; omega⟩ := by
+    cell (weights local1) i = cell local1 ⟨i.val+2,by
+      have hi := i.isLt
+      have h16 : (16#usize).val = 16 := by decide
+      omega⟩ := by
   change ((state_only_poseidon.interpolated_internal_pair.ROWS.val.map (weightValue local1))[i.val]'_) = _
-  rw [List.getElem_map,rows_model,List.getElem_ofFn]
+  simp only [List.getElem_map, rows_model, List.getElem_ofFn]
   unfold weightValue
   apply congrArg (cell local1)
   apply Fin.ext
-  rw [row_value,Nat.mod_eq_of_lt (by have := i.isLt; omega)]
+  change (row i).val % 16 = i.val + 2
+  rw [row_value]
+  exact Nat.mod_eq_of_lt (by have hi := i.isLt; omega)
 
 theorem constants_model (parity : Nat) (hp : parity ≤ 1) (i : Fin 7) :
     cell (constants parity) i = AspisR1.PoseidonRemainingConstantsExact.internalConstant
       ⟨2*i.val+parity,by have := i.isLt; omega⟩ := by
   change ((state_only_poseidon.interpolated_internal_pair.ROWS.val.map (fun r => constantValue r parity))[i.val]'_) = _
-  rw [List.getElem_map,rows_model,List.getElem_ofFn]
-  unfold constantValue constantIndex
+  simp only [List.getElem_map, rows_model, List.getElem_ofFn]
+  change constantValue (row i) parity =
+    AspisR1.PoseidonRemainingConstantsExact.internalConstant
+      ⟨2*i.val+parity,by have := i.isLt; omega⟩
+  unfold constantValue
   apply congrArg AspisR1.PoseidonRemainingConstantsExact.internalConstant
   apply Fin.ext
+  change (2 * ((row i).val - 2) + parity) % 14 = 2 * i.val + parity
   rw [row_value]
   have hsub : i.val+2-2=i.val := by omega
-  rw [hsub,Nat.mod_eq_of_lt (by have := i.isLt; omega)]
+  rw [hsub]
+  exact Nat.mod_eq_of_lt (by have hi := i.isLt; omega)
 
 theorem weights_canonical (local1 : State) (hc : CanonicalState local1) :
     AspisR1.PoseidonM31DotReads.CanonicalWeights (Array.to_slice (weights local1)) := by

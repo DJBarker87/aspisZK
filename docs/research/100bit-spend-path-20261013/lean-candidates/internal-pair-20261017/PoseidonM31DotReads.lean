@@ -21,8 +21,8 @@ theorem source_read {T : Type} (s : Slice T) (i : Usize) (hi : i.val < s.val.len
     Slice.index_usize s i = .ok (sliceCell s i.val hi) := by
   unfold Slice.index_usize
   change (match s.val[i.val]? with
-    | none => .fail Error.arrayOutOfBounds
-    | some x => .ok x) = .ok (s.val[i.val]'hi)
+    | none => (Result.fail Error.arrayOutOfBounds : Result T)
+    | some x => Result.ok x) = Result.ok (s.val[i.val]'hi)
   rw [List.getElem?_eq_getElem hi]
 
 def term (weights : Slice QM) (values : Slice U32) (i : Nat) (j : Fin 4) : Nat :=

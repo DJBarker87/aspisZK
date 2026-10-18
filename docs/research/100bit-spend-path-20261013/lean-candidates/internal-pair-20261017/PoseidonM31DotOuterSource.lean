@@ -27,7 +27,6 @@ theorem finish_source_eq (raw : Raw4) :
     finish raw = state_only_poseidon.extension_from_raw_limbs raw := by
   simp only [finish,state_only_poseidon.extension_from_raw_limbs,
     field.M31.reduce_u62,field.M31.reduce_u64,bind_assoc_eq,bind_tc_ok]
-  rfl
 
 theorem source_loop_eq (iter : Iter) (weights : Slice field.QM31)
     (values : Slice U32) (sums : Raw4) :
