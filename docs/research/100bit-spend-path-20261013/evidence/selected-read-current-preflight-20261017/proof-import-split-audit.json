@@ -1,0 +1,47 @@
+[
+  {
+    "module": "R1UnifiedSampler",
+    "moved_qualified_declarations": [
+      "AspisR1.UnifiedSampler.Public"
+    ],
+    "exact_original_declaration_sha256": "a26d90a42076e2bff8298cc6a5306c86ac60e4a1d18d4c24b1161e990dc47380",
+    "original_source_sha256": "ac0ed518595233c81a4b2c3f368bb20c513cb29b888f19dc586801a9ac0b98ad",
+    "split_source_sha256": "268f0b36163163c0a0b50fa351543c84e7095e5bcc654f7b08c1c16927b5b991",
+    "new_core": "R1UnifiedSamplerPublic",
+    "new_core_sha256": "e76709fca0e68b78e9b94e10b7d123987233ad3f0f3cdb3ec1b17ecc434e4cbf",
+    "inverse_recovers_original": true,
+    "source_diff": "--- old\n+++ split\n@@ -1,3 +1,4 @@\n+import R1UnifiedSamplerPublic\n import R1DuplexSamplers\n import R1QuerySamplerBridge\n import R1RowZeroCodec\n@@ -20,10 +21,6 @@\n \n variable {M Cv : Type} {L : Nat}\n \n-structure Public (L : Nat) where\n-  pubBytes : Bytes\n-  initFits : 75 + pubBytes.length \u2264 L\n-  tag : Byte\n \n abbrev Prefix (M Cv : Type) (L : Nat) :=\n   FS.Prefix (Public L) (Message M) (Challenge Cv)\n"
+  },
+  {
+    "module": "R1SelectedChallengeMap",
+    "moved_qualified_declarations": [
+      "AspisR1.SelectedChallengeMap.sigma",
+      "AspisR1.SelectedChallengeMap.rhoOf",
+      "AspisR1.SelectedChallengeMap.semantic_row"
+    ],
+    "exact_original_declaration_sha256": "0ffde4d0ef2964afbb8b9cb46c455cc89eda0fa5975bc072ce9a525f19d82722",
+    "original_source_sha256": "36bcd2bb277dcb2b34564656c71ebb7b14742c584ce931328a2ad1dbe03e5aad",
+    "split_source_sha256": "05575d178036c99146705777e23ee8604bd0d1d32d5a8ed83cb51c8115e4f678",
+    "new_core": "R1SelectedChallengeMapCore",
+    "new_core_sha256": "c024a53fa6401b1f7b7a54e84079e98e7807590164e2f409f2fcd189e60fc552",
+    "inverse_recovers_original": true,
+    "source_diff": "--- old\n+++ split\n@@ -1,3 +1,4 @@\n+import R1SelectedChallengeMapCore\n import R1SelectedSamplerRanks\n \n /-! Selected challenge maps for the 33-row mathematical transcript. Rows 25\n@@ -11,20 +12,6 @@\n open AspisV8R19.SourceDuplexStep AspisWideTower AspisCircleGroupOrder\n open R0P.SemSource\n \n-def sigma (i : Nat) (s : State) : WideExact :=\n-  if i = 27 then R0C.ModuloField.gamma s\n-  else if i = 28 \u2228 i = 29 \u2228 i = 30 then R0C.ModuloField.ordinary s\n-  else if i = 31 then 0\n-  else semChal s\n-\n-def rhoOf (x : WideExact) : AspisV8R15.ExactTowerBase.QM31Exact := x.re\n-\n-theorem semantic_row (i : Nat) (hi : i < 25) (s : State) :\n-    sigma i s = semChal s := by\n-  have h27 : i \u2260 27 := by omega\n-  have hopen : \u00ac (i = 28 \u2228 i = 29 \u2228 i = 30) := by omega\n-  have h31 : i \u2260 31 := by omega\n-  simp only [sigma, if_neg h27, if_neg hopen, if_neg h31]\n \n theorem gamma_row (s : State) :\n     sigma 27 s = OpeningSamplerBound.gammaSample SelectedSamplerRanks.stateRank\n"
+  },
+  {
+    "module": "R1SelectedTranscriptParams",
+    "original_source_sha256": "489f8b49c6a102f85c511ad4f4907dbeca479322b7184a563eda8c4a17c2dce0",
+    "split_source_sha256": "ef42377ea3ce0b8806135713763f1d7154450e976f6abefaaf598d8f15c3ff54",
+    "all_declaration_bodies_unchanged": true,
+    "inverse_recovers_original": true,
+    "removed_open": "AspisR1.TranscriptView (unused; Byte/Bytes supplied by existing DuplexFrames/SourceDuplexStep)",
+    "source_diff": "--- old\n+++ split\n@@ -1,5 +1,5 @@\n-import R1SelectedChallengeMap\n-import R1UnifiedSampler\n+import R1SelectedChallengeMapCore\n+import R1UnifiedSamplerPublic\n import R1SemanticPublicCodecComplete\n \n /-! A bounded raw-message parameterization for the selected 33-row model.\n@@ -12,7 +12,6 @@\n \n open AspisV8R19.DuplexFrames\n open AspisV8R19.SourceDuplexStep\n-open AspisR1.TranscriptView\n \n def L : Nat := 131072\n def D : Nat := 3717\n"
+  },
+  {
+    "module": "R1SelectedCompletedSemantic",
+    "original_source_sha256": "8a750277b530555c5c4ee932472af92506b2d3afaa29115345785f625b7d6a88",
+    "split_source_sha256": "ca035bfd57334c58a4a156ac38a782edfe283d5489bf6b4cee369571cb3c43ef",
+    "all_declaration_bodies_unchanged": true,
+    "inverse_recovers_original": true,
+    "source_diff": "--- old\n+++ split\n@@ -1,7 +1,7 @@\n import R1SelectedSemanticPrefixFacts\n import R1RawRoundCompletion\n import R1RawRoundAppend\n-import R1SelectedChallengeMap\n+import R1SelectedChallengeMapCore\n \n /-! Challenge-pair views of completed selected records. These list identities\n connect the semantic prefix parser and the abstract completed-round sampler;\n"
+  }
+]
