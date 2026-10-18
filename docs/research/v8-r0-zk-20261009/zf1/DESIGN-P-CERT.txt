@@ -417,3 +417,45 @@ format was made prefix-based, matching KerEntry.s in Lean).
   here for six configurations, §4) and the teeth set of §4 is kept as a
   regression test for the extracted crate.
 
+§7  Open items and a rejected-for-now option
+--------------------------------------------
+§7.1 The protocol predicate.  The prover enforces
+    P_chk ch := match emit ch with | some c => check ch c | none => false,
+  a deterministic public function of ch (emit uses no secret and no
+  randomness), so the simulator can run it too (ZF1 §3, R-same).
+  check_sound gives P_chk ch -> P_R1 (decode ch), hence MaskImageOn
+  antitonicity transfers maskImageOn_R1 to P_chk (D38.5, DESIGN-R1-P §4.1).
+  The producer is part of P_chk's definition but needs no proof: only the
+  implication is used, and emit failing is an allowed false negative.
+§7.2 Open (OBLIGATION unless stated).
+  1. rf_* premises (C2), §2.3: RF-own, RF-round (with the Z4c coordinate map
+     and its implied linear coefficient), RF-bat (incl. D34.3 ell vs weight
+     kinds 5/6), RF-src, RF-chain (normalize_d generators span ChainT0K4),
+     RF-rel (incl. D34.3 lineInverse vs QueryGeometry, storedFirstLineX18 vs
+     line_node; unopenedZero = read support), RF-obs, RF-dec.
+  2. (C3) the extracted checker, §6.
+  3. The decoders: SemK4 enters as rf_sem; on R1 it is the qm31_sample shape.
+  4. Structure B: whether C1Lift fails there or only the full-width
+     right-inverse format does is not determined (§4.1).  Not needed for
+     soundness; relevant only if B-like challenges were frequent, which
+     Z8-Z10 do not suggest.
+  5. Prover integration (DESIGN-R1-P §3.1): replace the hook's
+     p_r1::check by emit + check; the certificate never leaves the prover
+     and is dropped with the attempt (it is a function of public data, so
+     no erasure rule applies, but it is not published).
+  6. Cost on a client: measured 15.2 s per attempt on the nuc (emit 12.6 +
+     check 2.6); a laptop of the same class should be similar; not measured
+     elsewhere.  The DESIGN-R1-P §2.3 speedups apply to emit unchanged.
+§7.3 Randomised checking (considered, NOT adopted).  Freivalds-style tests
+  (check Y·(R r) = T r for a random r, and the kernel and echelon products
+  against random vectors) would cut check from ~2.7G to ~30M
+  multiply-adds (well under 0.1 s).  But the implication becomes
+    Pr_r[check ch c r = true and not P_R1 ch] <= (number of tests)/|E|,
+  with r drawn after c.  Over M31 that is 2^-31 per test, far above the
+  2^-108 privacy budget (D45.3); over WideExact (|E| ~ 2^248) it is
+  negligible, but P_chk then depends on prover-local randomness, the
+  simulator must sample it identically, and ZF1-abort's predicate would
+  need a randomised form, which the Lean development does not have.  Since
+  the deterministic check costs 2.6 s, below the producer's 12.6 s, the
+  deterministic route is kept.  Recorded here so that the option is not
+  re-derived.
