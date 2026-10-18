@@ -49,3 +49,42 @@ same meaning, as the ZF1 couplings job did ("conceptual reference, not
 imported, not mirrored").  The spend-path byte model was used as the
 SOURCE for the layout of §2 (row tags, framing, the eight query pairs, the
 38-byte ρ absorb), not as Lean.
+
+----------------------------------------------------------------------
+§1  What the R1 proof publishes (G-root check)  (SOURCE)
+----------------------------------------------------------------------
+
+R1 is variant S2 (two folds, 33 rows).  verifier.rs View::parse_shape and
+r1_semantic.rs: the proof bytes are
+  header (magic "R1P3COST", variant tag) ‖ semantic prefix (the C1 root
+  `prefix.c1_root`, the 27 framed semantic records, row 2's record = the C2
+  root) ‖ y1 (29·32) ‖ inactive (32) ‖ round0 (7·32) ‖ folded root (32) ‖
+  round1 (7·32) ‖ final message ‖ 22 × query blocks.
+A query block (P3 build, INITIAL_QUERY_BYTES + SECOND_QUERY_BYTES) holds the
+opened C1 values (480 bytes), C2 values (128), the two opened leaf salts
+(2·32), two C1/C2 Merkle paths (2·6·7·32), the folded values (128), the
+folded salt (32) and the folded path (6·7·32).
+
+The verifier's hash reads on these bytes are exactly
+  (a) the 115 transcript reads of §2 (it recomputes every one, including all
+      eight query pairs: transcript.rs `queries` always computes 8 blocks);
+  (b) per query and tree: the leaf read H(0x10 ‖ T ‖ value ‖ salt) and six
+      8-ary node reads whose inputs are the path siblings and the running
+      digest (verifier.rs merkle_path, state_only_private_merkle).
+So the D41.5 G-root proposal matches the proof: every root, opened salt and
+path digest is either inside the INPUT of a verifier read (c1_root trails the
+`init` address; the C2 root is inside row 2's framed record; the folded root
+inside row 30's payload; opened salts trail the leaf inputs; siblings are
+node inputs) or is the ANSWER of one (roots and path digests).  Hence
+  proof bytes = serialize(View, VerLog)  and  VerLog = verifier(proof, H),
+with VerLog := (a) ++ (b) as an ordered (input, answer) list.  The Lean
+`abR1.extend` publishes ROMView ⟨V, VerLog ++ adversary log⟩: G-root is
+closed in the game definitions, with the serialisation identity as REF item
+R-ser (§6.4).
+
+Two further verifier reads (checked, not in VerLog): the two-transaction
+checkpoint stores H(proof) and H(public) (verifier.rs checkpoint).  Both
+inputs are functions of published data, so they are ordinary adversary
+queries (each costs one of the q reads) and need no programming.  The
+on-chain checkpoint itself is a deterministic function of (proof, public,
+H) and adds nothing to the view.
