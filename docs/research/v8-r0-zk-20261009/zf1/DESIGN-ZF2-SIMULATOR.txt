@@ -212,3 +212,77 @@ The proof uses the witness in two places, and only the first must go:
   extra about the challenge is needed. The conditions Claim Z uses are the
   conjuncts of P_R1 (HalfOK, SemK4, QPrime_R1, BCondG_R1, C1Lift, H1Lift)
   plus PublicBase. No obstruction appeared.
+
+§4  The simulator algorithm and its cost
+-----------------------------------------
+§4.1 Algorithm SimR1 (PROPOSED; the Lean definition is in §5).
+  Input: the public statement x = (pub, handle), outputs, the fixed π = D18
+  and basis B, a challenge vector ch, and a uniform tape t on
+  JointView.Tape K F (affine mask tape plus eligible noise).
+    1. s := Partition.equiv.symm t ∈ T = M × N. This is a coordinate
+       permutation: the same tape bits, relabelled.
+    2. τ := JointTrace.tapeLinear B s. This is the pure-tape trace: the
+       mask-only lanes 16..25, H1 padding in lane 26, G in 27, D in 28, and
+       eligible C1 noise in lanes 0..15 balanced at row 1023. No witness
+       enters.
+    3. a := PayloadSplit.L π B ch τ, the linear payload of τ: the
+       mask-polynomial round coefficients, the mask sum, claims, extra
+       claims, OOD values, openings and batched/folded cells.
+    4. r := refPayload pub B ch (§3.2): the ten zerocheck round polynomials
+       of the zero payload trace, i.e. the constraint polynomial with every
+       trace opening zero and only the public data present, minus k₀·dir,
+       with S₀ added at the mask-sum cell.
+    5. Output (metadata outputs x ch, Ψ_ch(r + a)). Ψ_ch adds
+       originalOf(·)·(α₉−½)⁻¹·dir, and originalOf is one terminalValue
+       evaluation at the point claims.
+  In the FS ideal game the challenges come from the same capped retry loop
+  as the prover's: draw ch, evaluate the public P_R1, retry up to N = 8,
+  and take the failure exit otherwise. ZF1 already models this
+  (middleIdealAbortV, which calls the simulator only at an accepted
+  attempt). SimR1 has no other input. It never reads an instance, never
+  calls Classical.choose, and solves no linear system.
+
+§4.2 Why the output has the honest law (DERIVED; the §5 theorem).
+  r + A_ch s and cTilde w + A_ch s have equal laws for uniform s, because
+  their offset lies in range A_ch (Claim Z, then
+  AffineLaw.equal_laws_of_mask_image). Apply Ψ_ch (equalLaws_comp), then
+  clause (i′) (payload_law_on), then the tape relabelling
+  (AbsorptionLaw.equal_laws_of_equiv), then the constant metadata
+  (AffineLaw.equal_laws_const_pair). This is the proof of hvzk_on_of, with
+  cTilde w′ of the chosen witness replaced by refPayload.
+
+§4.3 Cost (ESTIMATED by operation count; the P_R1 figure is MEASURED).
+  Linear algebra at simulation time: none. The coset point is explicit, so
+  no elimination, rank or preimage computation runs. The only eliminations
+  in the whole simulator are inside the public predicate P_R1. It is the
+  same check the honest prover runs (D38): QPrime_R1 over 12 lanes carrying
+  1,084 limbs, and BCondG_R1 carrying 1,336 limbs plus the relR1 rank.
+  MEASURED in D38.2 on the nuc: 22.6 s and 130 MB per attempt on the actual
+  query sets, 16 s on coset sets. The expected number of attempts is
+  1/Pr[P_R1], which is about 1 on all evidence so far.
+  The remaining steps are polynomial and much smaller than one honest proof:
+    * step 3, rounds: the mask polynomial is linear in τ. With the standard
+      sumcheck table folding of state_only_zerocheck.rs, the cost is about
+      29 lanes × 28 nodes × 2·1024 table entries ≈ 1.7·10⁶ K-operations.
+      The naive Lean formula would take 28·1023 = 28,644 point evaluations ×
+      3·29·1024-term dot products ≈ 2.5·10⁹, so an implementation must
+      fold, as the prover does.
+    * step 3, claims, extra claims and OOD: (3+1+2) points × 29 lanes ×
+      1024 rows ≈ 1.8·10⁵.
+    * step 3, openings at ≤ 22 queries × 4 positions × 29 lanes by direct
+      evaluation of the 1024-coefficient lane polynomials ≈ 2.6·10⁶. The
+      batched/folded cells are κ/γ-linear combinations of these. In the Lean
+      model only FoldedOpen cells are non-zero (folded_unqueried_zero).
+      The real view's final 64-coefficient message needs the full γ-batched
+      fold, an O(n log n) FFT-sized job (n ≤ 2^18 folded cells), which the
+      honest prover already performs.
+    * step 4: one zerocheck of the public constraint polynomial (trace
+      openings zero) over 1024 rows. That is the prover's own zerocheck
+      with fewer terms, so it costs no more than the honest prover's
+      zerocheck.
+    * step 5: one terminalValue evaluation.
+  So per accepted attempt the simulator costs at most one honest R1 proof's
+  payload computation without witness generation, plus the 22.6 s P_R1
+  check. A prototype timing was not run: with no linear algebra to
+  prototype, z9b's elimination code does not apply. A timing of steps 3–5
+  belongs to the Rust refinement item G-sim (§7).
