@@ -133,3 +133,48 @@ up to N. So
 So the simulator can sample ch | P efficiently whenever the honest prover
 can produce a proof efficiently; there is no obstruction of the kind the
 task statement asks me to stop on.
+
+----------------------------------------------------------------------
+§4  The theorem and its error terms  (statement PROPOSED here; Lean §8)
+----------------------------------------------------------------------
+
+Let fs be the abort-aware experiments (§2 real, §3 ideal) packaged as an
+ordinary `FSExperiments` (their RealRand/IdealRand contain all N
+attempts' coins and the oracle table). Let ab be an abort bridge (§2,
+Lean `AbortBridge`). Define
+
+  AbortReductionWith P h B outputs fs ab x ε_real ε_ideal :=
+    0 ≤ ε_real ∧ 0 ≤ ε_ideal ∧ ∀ hx adv w, h.public w = x.1 →
+      |mean realTest − mean middleRealAbort P … ab adv x w| ≤ ε_real ∧
+      |mean middleIdealAbort P … ab adv x hx − mean idealTest| ≤ ε_ideal
+
+Theorem A (zkfs_of_hvzk_on_abort).
+  HVZK_on P h B outputs x → AbortReductionWith P … ab x ε_real ε_ideal →
+  ZK_FS h B outputs fs x (ε_real + ε_ideal).
+No badMass term: the middle step contributes exactly 0 (§2 key fact).
+Corollary (zkfs_of_maskImageOn_abort): the same from MaskImageOn Good
+when P implies Good (via hvzk_on_good and monotonicity of HVZK_on in P).
+In particular with P = Good₃ ∧ QPrime ∧ BCond ∧ … (D29.2), the T2a/T2b
+chain supplies HVZK_on P from MaskImageOn on the conjunction, and Good₃'s
+mass leaves the ledger.
+
+Theorem B (zkfs_of_hvzk_on_abort_terms) splits ε_real, ε_ideal into the
+named oracle-programming terms of §5 through identical-until-bad
+couplings: given
+  - a real coupling: finite S_R with measure-preserving maps to RealRand
+    and to (Fin N → Coins) × (Fin N → Tape), events Hit, Coll on S_R,
+    and agreement of realTest and middleRealAbort outside Hit ∪ Coll;
+  - an ideal coupling: finite S_I with measure-preserving maps to
+    IdealRand and to the middle coins, an event Prog, and agreement
+    outside Prog;
+  - bounds mass(Hit) ≤ ε_hit, mass(Coll) ≤ ε_coll, mass(Prog) ≤ ε_prog
+    for every adversary/witness,
+it concludes ZK_FS h B outputs fs x (ε_hit + ε_coll + ε_prog).
+The couplings and the three bounds are payload facts (they are ZF1a/b's
+per-attempt version of D20′.4's G3/G6–G11 and the address-freshness
+facts of §7); they enter as Prop hypotheses, never axioms.
+
+The failure exit has no term: ⊥ is published with the same probability
+and the same content in both middle games, and Hit already covers the
+adversary's reads of all N discarded attempts' addresses after a failure.
+The cap N enters only through ε_hit and ε_coll (§5).
