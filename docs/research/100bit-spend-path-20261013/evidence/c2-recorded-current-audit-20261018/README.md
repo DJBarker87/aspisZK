@@ -84,3 +84,67 @@ custody and checkpoints remain separate and open.
 
 `check-recorded-current-audit.py` verifies this read-only packet and49 corrected
 declaration command/context hashes; its PASS does not mean the model or proposed cores compile.
+
+## Definition-use supplement (source review, no executable split)
+
+`definition-use-frontier.json` and `audit-recorded-definition-use.py` now pin the
+next source-only checkpoint. The earlier paragraph describing spend and Merkle
+as untraced is superseded by this supplement; the original broad graph and its
+capture-time producer status are retained unchanged.
+
+The exact spend semantics trace to **19 commands across6 source interfaces**:
+valid pair/selected-slot semantics, the real input witness relation, frozen empty
+roots and append path, append binding, and the complete spend witness/relation.
+The leaf providers retain actual `R0P` public/digest/commitment semantics,
+`PublicOptionShape.canonical`, `ExactTowerBase.M31Exact`, and
+`SemanticPublicWire.parsePublic`. No generic relation replaces them.
+
+The Merkle/typed-recovery slice selects **62 commands across16 interfaces**.
+It retains both node and leaf parser **re-encoding equality** guards, actual
+recorded-log parsers, lookup/walk, first-read cuts, geometry, fixed-width mixed
+leaf decoders, folded decoding, and original total recovery defaults. The
+anonymous Merkle-table instance is pinned as its source command at line20;
+`@instance:20` is an audit selector, not a claimed elaborated Lean declaration
+name. An earlier handwritten subtotal of63 was incorrect: the table selection
+contains5 commands, so the computed total is62.
+
+These named-definition selections do **not** close an executable small refresh.
+The exact `LiteralTranscript.samp` calls `UnifiedSampler.samp`, which in turn
+needs the real transcript datatypes, state/validity/absorb/lift logic, three
+duplex samplers and query-chain sampler. This adds **6 source interfaces** beyond
+the original12; the existing current `Public` and sigma cores alone are
+insufficient. Recording, finite first-read/replay support, actual witness choice
+and the final compiler/root add another8 interfaces. With the6 spend and11 newly
+exposed Merkle interfaces, the unbundled accounting is:
+
+`12 + 6 + 11 + 6 + 8 = 43 distinct source interfaces`.
+
+This is a **43-module bound only under one selected interface per module**. It
+is not an absolute minimum number of Lean files: compatible exact declarations
+could potentially be bundled. No such executable patch has been generated,
+inverse-audited or elaborated, so a few-target proposal is not demonstrated.
+Generated deriving instances, inferred implicit/typeclass arguments, private
+`replay_apply` identity, and the effects of changing proof-only imports/opens
+remain the exact binding frontier. The report preserves the original namespace,
+section and command-context syntax rather than claiming elaboration equivalence.
+All four final theorem commands remain exact; no statement or proof body was
+weakened. The unused `frame_read`/private `firstCell_mem` and `buildWords_eq_full`
+proofs are explicitly outside the selected final-four cone and are not refreshed.
+
+The supplement embeds18 current source-provider texts and producer metadata in
+`definition-use-base-sources.json.gz`, exported read-only from C's completed215
+workspace. It pins the full390-project-source index hash and the215 source
+manifest. It does not adopt objects or revalidate an import overlay. C has since
+frozen its coherent6110-module source-read snapshot in commit `17f8f2b38`; that
+snapshot is available for a future authorized binding, and contains no adopted
+`RawCut*` objects. Neither the295 broad candidates nor the43-interface selection
+was executed. Unsupported `R572SequentialWordMass` remains a problem for the
+original uncut graph; the proposed selection is not claimed to elaborate without
+it until exact binding and compilation establish that fact.
+
+Run the existing checker and the supplement's `--check` for read/hash validation.
+Both are source audits, with **zero Lean jobs, new formal results, production
+changes or historical-object adoptions**. The actual Rust Backend/build owned
+witness, a complete recorded experiment witness, packing/salt paths, custody and
+checkpoint obligations remain open. This checkpoint stops at the precise
+source/binding frontier; no further large graph exploration is warranted here.
