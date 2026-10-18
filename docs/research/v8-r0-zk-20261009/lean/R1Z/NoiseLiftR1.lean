@@ -223,6 +223,28 @@ theorem noise_lift (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (hB : PackFiel
   · intro l hl
     rw [ownRead_A, own_L_eq_obs, noise_lane_other B _ l hl, map_zero]
 
+/-! ### Named accessors for the conjuncts of `P_R1` (LOG D36.3) -/
+
+section Accessors
+variable {π : Fin 1024 ≃ Fin 1024} {B : PackBasis F} {hB : PackField B} {ch : Challenges K}
+
+theorem _root_.R1Z.PredicateR1.P_R1.halfOK (hP : P_R1 π B hB ch) : HalfOK ch := hP.1
+
+theorem _root_.R1Z.PredicateR1.P_R1.semK4 (hP : P_R1 π B hB ch) : SemK4 B hB ch := hP.2.1
+
+theorem _root_.R1Z.PredicateR1.P_R1.bcondG (hP : P_R1 π B hB ch) : BCondG_R1 π B ch := hP.2.2.2.1
+
+theorem _root_.R1Z.PredicateR1.P_R1.c1lift (hP : P_R1 π B hB ch) :
+    ∀ c : Fin 16, C1Lift (Bat := R1Bat) π B ch c := hP.2.2.2.2.1
+
+theorem _root_.R1Z.PredicateR1.P_R1.h1lift (hP : P_R1 π B hB ch) :
+    H1Lift (Bat := R1Bat) π B hB ch := hP.2.2.2.2.2.1
+
+theorem _root_.R1Z.PredicateR1.P_R1.queryCard (hP : P_R1 π B hB ch) : QueryCard ch :=
+  hP.2.2.2.2.2.2
+
+end Accessors
+
 /-- Step N for the R1 instance: both lifts are conjuncts of `P_R1`. -/
 theorem noise_lift_R1 (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (hB : PackField B)
     (ch : Challenges K) (hP : P_R1 π B hB ch)
@@ -234,7 +256,7 @@ theorem noise_lift_R1 (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (hB : PackF
           ownRead (Bat := R1Bat) (F := F) l (R0Z.PayloadSplit.L π B ch δ)) ∧
       (∀ l : Fin 29, ¬ (l.val < 16 ∨ l.val = 26) →
         ownRead (Bat := R1Bat) (F := F) l (A π B ch (inrN n)) = 0) :=
-  noise_lift (Bat := R1Bat) π B hB ch hP.2.2.2.2.1 hP.2.2.2.2.2.1 δ hδ hδ26
+  noise_lift (Bat := R1Bat) π B hB ch hP.c1lift hP.h1lift δ hδ hδ26
 
 #print axioms L_pointClaim_congr
 #print axioms L_extraClaim_congr
@@ -249,5 +271,11 @@ theorem noise_lift_R1 (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (hB : PackF
 #print axioms assemble
 #print axioms eligibleLinear_assemble
 #print axioms noise_lift
+#print axioms R1Z.PredicateR1.P_R1.halfOK
+#print axioms R1Z.PredicateR1.P_R1.semK4
+#print axioms R1Z.PredicateR1.P_R1.bcondG
+#print axioms R1Z.PredicateR1.P_R1.c1lift
+#print axioms R1Z.PredicateR1.P_R1.h1lift
+#print axioms R1Z.PredicateR1.P_R1.queryCard
 #print axioms noise_lift_R1
 end R1Z.NoiseLiftR1
