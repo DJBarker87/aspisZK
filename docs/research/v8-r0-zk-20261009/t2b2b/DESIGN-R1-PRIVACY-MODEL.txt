@@ -821,3 +821,76 @@ Order and parallelism
   concurrently with A, subject to the one-Lean-job-at-a-time host rule (the
   parallelism is in writing, not in compiling).
 
+§5  Effort estimates and the riskiest item
+------------------------------------------
+Estimates are in focused worker-days (one agent, including host replays
+under the one-job rule) and host attempts.  They are judgements from the
+size of comparable accepted jobs (J1/J3: ~1 day, ~12 attempts each; T2b-2a:
+813 lines), not measurements.
+
+  Job      Size (lines, est.)  Days      Attempts   Confidence
+  R1-0     ~600 edited in ~20  1.5–3     25–45      medium (mechanical, but
+           modules + 60 new                         many modules; memory
+                                                    risk per D26.3)
+  R1-1     0 new (mirror)      0.5       6–10       high, if the lead merges
+  R1-2     ~300                1–1.5     5–10       high
+  J4-R1(a) ~400–700            3–7       10–25      low–medium (line_identity)
+  J4-R1(b) ~200                1         3–6        high once (a) is done
+  J2-R1    ~350                1.5–2.5   8–15       medium
+  R1-3     ~150                0.5–1     2–5        high
+  J0       ~300                1.5–2     6–12       medium (fOrig ↔ virtualPoly
+                                                    argument matching)
+  J0b      unknown             1–3 weeks unknown    low (research)
+  J13-R1   ~350                2–3       8–15       medium
+  J15-R1   ~500                2–4       10–20      medium
+  J16-R1   ~120                0.5–1     2–4        high
+  Total on the critical path to maskImageOn_R1 (excluding J0b, Z9b, R1-P):
+  about 15–25 worker-days and 90–170 attempts, with Lanes B/C overlapping
+  Lane A so that elapsed time is closer to 10–15 days.
+
+Riskiest single item: line_identity in J4-R1(a), the commutation of the
+second (line-domain) fold with the encoder,
+    lineFoldValue α₁ inv (exactFinalLinear m at the four stored children of v)
+      = secondLinear (coefficientFoldLayer 64 α₁ m) v,   v : Fin 65536.
+Why: it is the only new algebraic fact about the PCS that the R1 privacy
+proof needs and R0 never proved.  On the soundness side it is obligation (B)
+of R1_SOUNDNESS.md ("domain commutation and the depth-two node
+identification"), recorded open; the material that exists (LineFold.lean:
+field recovery only, by its own header; SecondFoldRestoration: channel
+identities conditional on agreement, compiled per its README;
+Line18Geometry; RepeatedLift's quartet lemmas) has not been assembled into
+this equation, and the Rust line fold (verifier.rs:154-169) uses its own
+node and inverse conventions (x = line_node(4v), y = line_node(4v+3),
+z = 2x² − 1) that must match storedFirstLineX18 / storedLine16X exactly.
+Every L_u relation, hence B0R1, hence BCondG_R1 ⇒ BCond and BReach, rests
+on it.
+Mitigations, in order:
+  1. Do it once for both tracks: it is the same lemma the R1 soundness
+     ledger needs for rows α₁/q22; the lead can issue it as a shared job.
+  2. Clause (i′) does not need it.  Define, for (i′) only,
+       B0own := (LinearMap.ker ownMapR1).map batMapR1
+     and put BCondG′ := B0own ≤ V_G in P.  bat_ker_own_le is then trivial
+     and clause (i′) needs no relation at all; Z9 measured B0own = 952 = V_G.
+  3. Clause (ii′) can avoid it the same way: put in P the check
+       BReachTrace := batRead (L(ker own over all traces)) ≤
+                       (ker ownMapR1 ⊓ ker roundMaskMapR1).map batMapR1,
+     a public rank test over the ~38,900-dimensional F-space of 29-lane
+     coefficient words (26·1,024 + 3·4,096) — heavier for the Rust check
+     (minutes rather than seconds, unmeasured) but needing no J4-R1.
+  With 2 and 3, J4-R1 leaves the critical path entirely, at the price of a
+  larger prover-side check and a P that is less transparent to a reader.
+  I recommend keeping J4-R1 as planned and holding 2/3 as the fallback if
+  line_identity is not done within the J4-R1(a) budget.
+
+Second risk (process, not mathematics): R1-0 re-sources every proved R0Z
+module.  If the lead does not accept re-sourcing, the copy alternative of
+§2.2 applies, roughly doubling R1-0 and every later Bat-generic job.
+
+Honest unknowns
+  * The Lean ↔ Rust index/normalisation correspondences (weights.rs digit
+    tensors vs ell; folded-word order; quarter conventions) are checked only
+    numerically by Z9; each is a refinement item, not a Lean lemma here.
+  * H1Lift and C1Lift on R1 have never been measured on their own (Z9b).
+  * Pr[¬P_R1] is unbounded; it affects liveness only (D29.3).
+  * ρ and the 33-row FS schedule are ZF1-abort's; nothing here constrains
+    the abort-aware composition beyond handing it HVZK_on P_R1.
