@@ -1,0 +1,904 @@
+R1-0 statement diff — Bat-parametrised payload (DESIGN-R1-PRIVACY-MODEL §2.2, LOG D30.2)
+=========================================================================================
+
+Branch codex/r0-r1z-refactor-20261018, base 384b7d195.  OLD = the file at 384b7d195
+(FsAbort: origin/v8-reference, sha256 9b1ffc92..., accepted at host 3502).  NEW = this
+branch.  Every `theorem`/`lemma`/`def`/`abbrev`/`structure`/`inductive`/`class`/`instance`
+header is extracted from both versions (header = text up to the first top-level `:=` or
+`where`; constructor and field lines included) and compared after whitespace
+normalisation.  Generator: a header-extraction script run on both trees; the
+full output is §3.
+
+§1  Summary
+-----------
+* Section variables gain `{Bat : Type} [BatchedLayer K Bat]` in HonestView (from
+  linearPayload on), ZkStatement, JointView, PayloadSplit, D12, Shift, Z4Maps, Chain,
+  PureRounds, SilentReduction, Hvzk, FsStatement, FsGood and FsAbort.  These binders are
+  invisible in the source headers below; Lean includes them in every declaration whose
+  statement or (for defs) body mentions Bat.
+* After mechanically removing the Bat edits from each NEW header — `(Bat := Bat)`,
+  `Payload K` → `Payload K Bat`, `PayloadCell` → `PayloadCell Bat`, the extra Bat
+  argument of View/ROMView/ProverOutput/FSExperiments/ROMBridge/AbortBridge, and
+  `[Fintype Bat]` — every changed header equals its OLD header except these
+  three, which are the intended non-mechanical edits:
+    1. inductive HonestView.PayloadCell: takes `(Bat : Type)`; `.openingCoeff`,
+       `.finalCoeff` are replaced by `.bat (cell : Bat)`; derives only DecidableEq
+       (Fintype is derived later, in ZkStatement, given `[Fintype Bat]`).
+    2. def ZkStatement.messages: `(p : Payload K)` becomes
+       `(p : Payload K R0Z.R0Batched.R0Bat)`; its body reads `.bat (.openingCoeff k)` and
+       `.bat (.finalCoeff k)`.  This is the R0 instance, as the 32-row schedule is R0's.
+    3. def SilentReduction.batMap: codomain `Payload K` becomes `Bat → K`
+       (`batRead` replaces `batProj`), as recommended in §2.4/§4.  BCond's text is
+       unchanged.
+  Three headers in Shift (claimMask_dir, evalRound9_dir, Phi0_dir) change only by
+  writing `dir` as `(dir (Bat := Bat))`.
+* `[Fintype Bat]` is an added instance binder on 11 theorems whose proofs use the
+  law lemmas (AffineLaw/AbsorptionLaw need `[Fintype V]` for V = Payload K Bat):
+  D12.payload_law, D12.hvzk_perfect_of_maskImage, Shift.payload_law_on,
+  Shift.hvzk_on_good, Shift.hvzk_on_of, Hvzk.hvzk_conditional_of_maskImage,
+  Hvzk.hvzk_perfect_of_maskImage, Hvzk.hvzk_zero_of_maskImage,
+  FsGood.zkfs_of_maskImageOn_good_bridge, FsGood.zkfs_of_maskImageOn_good,
+  FsAbort.zkfs_of_maskImageOn_abort.  R0Bat derives Fintype (ZkStatement), so all
+  of them instantiate at Bat := R0Bat.
+* Added: HonestView.BatchedLayer (class), HonestView.run_bat (private);
+  PayloadSplit.run_split_bat (private); SilentReduction.batRead;
+  Shift.hvzk_on_of; new module R0Z/R0Batched (R0Bat, r0Read, the
+  instBatchedLayer instance, R0Payload, read_openingCoeff, read_finalCoeff).
+  ZkStatement adds `deriving instance Fintype for PayloadCell` and for R0Bat (commands,
+  not declarations).
+  Removed: HonestView.run_openingCoeff, run_finalCoeff (private);
+  PayloadSplit.run_split_openingCoeff, run_split_finalCoeff (private);
+  SilentReduction.batProj.  None of the removed ones had a `#print axioms` line.
+* The R0 content of the two removed cells is kept in R0Batched: r0Read is
+  HonestView's former `linearPayload` branches verbatim, and
+  read_openingCoeff/read_finalCoeff restate the former `run` branches
+  (roundPolynomial … .coeff i, foldMessage (ch.opening 3) … i).
+
+§2  hvzk_on_of
+--------------
+  theorem hvzk_on_of [Fintype Bat] (P : Challenges K → Prop) (h : HonestProver K)
+      (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux)
+      (x : Statement K CommitHandle) :
+      MaskImageOn (Bat := Bat) P h B x → HVZK_on (Bat := Bat) P h B outputs x
+  The proof is hvzk_on_good's with Good replaced by P.  Axioms (3596):
+  [propext, Classical.choice, Quot.sound].
+
+§3  Full header diff (generator output)
+---------------------------------------
+
+=== R0Z/HonestView.lean  (55 declarations before, 55 after; changed 14, added 2, removed 2)
+
+  inductive R0Z.HonestView.PayloadCell
+    OLD: inductive PayloadCell | maskSum | semanticCoeff (round : Fin 10) (coefficient : Fin 28) | pointClaim (point : Fin 3) (column : Fin 29) | extraClaim (column : Fin 29) | ood (point : Fin 2) (column : Fin 29) | inactiveSum | openingCoeff (coefficient : Fin 7) | finalCoeff (coefficient : Fin 256) | opened (query : Fin 262144) (child : Fin 4) (column : Fin 29) deriving DecidableEq, Fintype
+    NEW: inductive PayloadCell (Bat : Type) | maskSum | semanticCoeff (round : Fin 10) (coefficient : Fin 28) | pointClaim (point : Fin 3) (column : Fin 29) | extraClaim (column : Fin 29) | ood (point : Fin 2) (column : Fin 29) | inactiveSum | opened (query : Fin 262144) (child : Fin 4) (column : Fin 29) | bat (cell : Bat) deriving DecidableEq
+
+  abbrev R0Z.HonestView.Payload
+    OLD: abbrev Payload (K : Type)
+    NEW: abbrev Payload (K Bat : Type)
+
+  def R0Z.HonestView.linearPayload
+    OLD: def linearPayload (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) : Trace K →ₗ[K] Payload K
+    NEW: def linearPayload (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) : Trace K →ₗ[K] Payload K Bat
+
+  def R0Z.HonestView.payloadAffine
+    OLD: def payloadAffine (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) : AffTape K F →ᵃ[F] Payload K
+    NEW: def payloadAffine (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) : AffTape K F →ᵃ[F] Payload K Bat
+
+  theorem R0Z.HonestView.unqueried_zero
+    OLD: theorem unqueried_zero (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (q : Fin 262144) (s : Fin 4) (c : Fin 29) (hq : q ∉ ch.queries) : payloadAffine π pub B t ch r (.opened q s c) = 0
+    NEW: theorem unqueried_zero (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (q : Fin 262144) (s : Fin 4) (c : Fin 29) (hq : q ∉ ch.queries) : payloadAffine (Bat := Bat) π pub B t ch r (.opened q s c) = 0
+
+  def R0Z.HonestView.run
+    OLD: def run (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) : Payload K
+    NEW: def run (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) : Payload K Bat
+
+  theorem R0Z.HonestView.run_maskSum
+    OLD: private theorem run_maskSum (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) : run π pub B t ch r (.maskSum) = payloadAffine π pub B t ch r (.maskSum)
+    NEW: private theorem run_maskSum (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) : run (Bat := Bat) π pub B t ch r (.maskSum) = payloadAffine (Bat := Bat) π pub B t ch r (.maskSum)
+
+  theorem R0Z.HonestView.run_semanticCoeff
+    OLD: private theorem run_semanticCoeff (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (j : Fin 10) (i : Fin 28) : run π pub B t ch r (.semanticCoeff j i) = payloadAffine π pub B t ch r (.semanticCoeff j i)
+    NEW: private theorem run_semanticCoeff (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (j : Fin 10) (i : Fin 28) : run (Bat := Bat) π pub B t ch r (.semanticCoeff j i) = payloadAffine (Bat := Bat) π pub B t ch r (.semanticCoeff j i)
+
+  theorem R0Z.HonestView.run_pointClaim
+    OLD: private theorem run_pointClaim (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (j : Fin 3) (c : Fin 29) : run π pub B t ch r (.pointClaim j c) = payloadAffine π pub B t ch r (.pointClaim j c)
+    NEW: private theorem run_pointClaim (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (j : Fin 3) (c : Fin 29) : run (Bat := Bat) π pub B t ch r (.pointClaim j c) = payloadAffine (Bat := Bat) π pub B t ch r (.pointClaim j c)
+
+  theorem R0Z.HonestView.run_extraClaim
+    OLD: private theorem run_extraClaim (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (c : Fin 29) : run π pub B t ch r (.extraClaim c) = payloadAffine π pub B t ch r (.extraClaim c)
+    NEW: private theorem run_extraClaim (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (c : Fin 29) : run (Bat := Bat) π pub B t ch r (.extraClaim c) = payloadAffine (Bat := Bat) π pub B t ch r (.extraClaim c)
+
+  theorem R0Z.HonestView.run_ood
+    OLD: private theorem run_ood (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (j : Fin 2) (c : Fin 29) : run π pub B t ch r (.ood j c) = payloadAffine π pub B t ch r (.ood j c)
+    NEW: private theorem run_ood (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (j : Fin 2) (c : Fin 29) : run (Bat := Bat) π pub B t ch r (.ood j c) = payloadAffine (Bat := Bat) π pub B t ch r (.ood j c)
+
+  theorem R0Z.HonestView.run_inactiveSum
+    OLD: private theorem run_inactiveSum (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) : run π pub B t ch r (.inactiveSum) = payloadAffine π pub B t ch r (.inactiveSum)
+    NEW: private theorem run_inactiveSum (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) : run (Bat := Bat) π pub B t ch r (.inactiveSum) = payloadAffine (Bat := Bat) π pub B t ch r (.inactiveSum)
+
+  theorem R0Z.HonestView.run_opened
+    OLD: private theorem run_opened (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (q : Fin 262144) (s : Fin 4) (c : Fin 29) : run π pub B t ch r (.opened q s c) = payloadAffine π pub B t ch r (.opened q s c)
+    NEW: private theorem run_opened (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (q : Fin 262144) (s : Fin 4) (c : Fin 29) : run (Bat := Bat) π pub B t ch r (.opened q s c) = payloadAffine (Bat := Bat) π pub B t ch r (.opened q s c)
+
+  theorem R0Z.HonestView.run_eq_payloadAffine
+    OLD: theorem run_eq_payloadAffine (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) : run π pub B t ch r = payloadAffine π pub B t ch r
+    NEW: theorem run_eq_payloadAffine (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) : run (Bat := Bat) π pub B t ch r = payloadAffine π pub B t ch r
+
+  ADDED class R0Z.HonestView.BatchedLayer
+    NEW: class BatchedLayer (K : Type) [Field K] (Bat : Type) where read : (Fin 1024 ≃ Fin 1024) → Challenges K → Trace K →ₗ[K] (Bat → K)
+
+  ADDED theorem R0Z.HonestView.run_bat
+    NEW: private theorem run_bat (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (b : Bat) : run (Bat := Bat) π pub B t ch r (.bat b) = payloadAffine (Bat := Bat) π pub B t ch r (.bat b)
+
+  REMOVED theorem R0Z.HonestView.run_openingCoeff
+
+  REMOVED theorem R0Z.HonestView.run_finalCoeff
+
+=== R0Z/R0Batched.lean  (NEW MODULE; changed 0, added 6, removed 0)
+
+  ADDED inductive R0Z.R0Batched.R0Bat
+    NEW: inductive R0Bat | openingCoeff (coefficient : Fin 7) | finalCoeff (coefficient : Fin 256) deriving DecidableEq
+
+  ADDED def R0Z.R0Batched.r0Read
+    NEW: def r0Read (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) : Trace K →ₗ[K] (R0Bat → K)
+
+  ADDED instance R0Z.R0Batched.instBatchedLayer
+    NEW: instance instBatchedLayer : BatchedLayer K R0Bat
+
+  ADDED abbrev R0Z.R0Batched.R0Payload
+    NEW: abbrev R0Payload (K : Type)
+
+  ADDED theorem R0Z.R0Batched.read_openingCoeff
+    NEW: theorem read_openingCoeff (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) (t : Trace K) (i : Fin 7) : BatchedLayer.read π ch t (R0Bat.openingCoeff i) = (roundPolynomial (batchLinear π ch t) (openingWeights π ch)).coeff i.val
+
+  ADDED theorem R0Z.R0Batched.read_finalCoeff
+    NEW: theorem read_finalCoeff (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) (t : Trace K) (i : Fin 256) : BatchedLayer.read π ch t (R0Bat.finalCoeff i) = foldMessage (ch.opening 3) (batchLinear π ch t) i
+
+=== R0Z/ZkStatement.lean  (61 declarations before, 61 after; changed 13, added 0, removed 0)
+
+  abbrev R0Z.ZkStatement.Payload
+    OLD: abbrev Payload (K : Type)
+    NEW: abbrev Payload (K Bat : Type)
+
+  abbrev R0Z.ZkStatement.View
+    OLD: abbrev View (K CommitHandle Aux : Type) [Field K]
+    NEW: abbrev View (K CommitHandle Aux Bat : Type) [Field K]
+
+  def R0Z.ZkStatement.payload
+    OLD: def payload (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K) : AffTape K F → Payload K
+    NEW: def payload (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K) : AffTape K F → Payload K Bat
+
+  def R0Z.ZkStatement.view
+    OLD: def view (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K) (r : AffTape K F) : View K CommitHandle Aux
+    NEW: def view (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K) (r : AffTape K F) : View K CommitHandle Aux Bat
+
+  def R0Z.ZkStatement.A
+    OLD: def A (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K) : AffTape K F →ₗ[F] Payload K
+    NEW: def A (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K) : AffTape K F →ₗ[F] Payload K Bat
+
+  def R0Z.ZkStatement.b
+    OLD: def b (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K) : Payload K
+    NEW: def b (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K) : Payload K Bat
+
+  theorem R0Z.ZkStatement.payload_affine
+    OLD: theorem payload_affine (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K) (r : AffTape K F) : payload h B x w ch r = b h B x w ch + A h B x w ch r
+    NEW: theorem payload_affine (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K) (r : AffTape K F) : payload (Bat := Bat) h B x w ch r = b h B x w ch + A h B x w ch r
+
+  theorem R0Z.ZkStatement.view_affine
+    OLD: theorem view_affine (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K) (r : AffTape K F) : view h B outputs x w ch r = (metadata outputs x ch, b h B x w ch + A h B x w ch r)
+    NEW: theorem view_affine (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K) (r : AffTape K F) : view (Bat := Bat) h B outputs x w ch r = (metadata outputs x ch, b h B x w ch + A h B x w ch r)
+
+  def R0Z.ZkStatement.simulator
+    OLD: def simulator (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (hx : InLanguage (F := F) h x) (ch : Challenges K) : AffTape K F → View K CommitHandle Aux
+    NEW: def simulator (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (hx : InLanguage (F := F) h x) (ch : Challenges K) : AffTape K F → View K CommitHandle Aux Bat
+
+  def R0Z.ZkStatement.honestLawRun
+    OLD: def honestLawRun (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (tape : EligibleNoise K F × AffTape K F) : View K CommitHandle Aux
+    NEW: def honestLawRun (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (tape : EligibleNoise K F × AffTape K F) : View K CommitHandle Aux Bat
+
+  structure R0Z.ZkStatement.ProverOutput
+    OLD: structure ProverOutput (K CommitHandle Aux : Type) [Field K] where W : Fin 29 → InitialWord K C2 : Fin 2 → InitialWord K disclosed : View K CommitHandle Aux
+    NEW: structure ProverOutput (K CommitHandle Aux Bat : Type) [Field K] where W : Fin 29 → InitialWord K C2 : Fin 2 → InitialWord K disclosed : View K CommitHandle Aux Bat
+
+  def R0Z.ZkStatement.proverOutput
+    OLD: def proverOutput (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K) (r : AffTape K F) : ProverOutput K CommitHandle Aux
+    NEW: def proverOutput (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (w : HonestInstance h F) (ch : Challenges K) (r : AffTape K F) : ProverOutput K CommitHandle Aux Bat
+
+  def R0Z.ZkStatement.messages
+    OLD: def messages (x : Statement K CommitHandle) (p : Payload K) (i : Fin 32) : Msg K CommitHandle
+    NEW: def messages (x : Statement K CommitHandle) (p : Payload K R0Z.R0Batched.R0Bat) (i : Fin 32) : Msg K CommitHandle
+
+=== R0Z/JointView.lean  (14 declarations before, 14 after; changed 5, added 0, removed 0)
+
+  def R0Z.JointView.payload
+    OLD: def payload (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : HonestInstance h) (ch : Challenges K) (t : Tape K F) : Payload K
+    NEW: def payload (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : HonestInstance h) (ch : Challenges K) (t : Tape K F) : Payload K Bat
+
+  def R0Z.JointView.view
+    OLD: def view (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (w : HonestInstance h) (ch : Challenges K) (t : Tape K F) : View K CommitHandle Aux
+    NEW: def view (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (w : HonestInstance h) (ch : Challenges K) (t : Tape K F) : View K CommitHandle Aux Bat
+
+  def R0Z.JointView.c
+    OLD: def c (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : HonestInstance h) (ch : Challenges K) : Payload K
+    NEW: def c (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : HonestInstance h) (ch : Challenges K) : Payload K Bat
+
+  def R0Z.JointView.simulator
+    OLD: def simulator (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (hx : InLanguage h x) (ch : Challenges K) : Tape K F → View K CommitHandle Aux
+    NEW: def simulator (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (hx : InLanguage h x) (ch : Challenges K) : Tape K F → View K CommitHandle Aux Bat
+
+  theorem R0Z.JointView.view_eq_z3
+    OLD: theorem view_eq_z3 (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (w : HonestInstance h) (ch : Challenges K) (r : AffTape K F) (e : EligibleNoise K F) : view h B outputs x w ch (r,e) = ZkStatement.view h B outputs x (w,e) ch r
+    NEW: theorem view_eq_z3 (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (w : HonestInstance h) (ch : Challenges K) (r : AffTape K F) (e : EligibleNoise K F) : view (Bat := Bat) h B outputs x w ch (r,e) = ZkStatement.view h B outputs x (w,e) ch r
+
+=== R0Z/PayloadSplit.lean  (30 declarations before, 29 after; changed 17, added 1, removed 2)
+
+  def R0Z.PayloadSplit.L
+    OLD: def L (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : Trace K →ₗ[K] Payload K
+    NEW: def L (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : Trace K →ₗ[K] Payload K Bat
+
+  def R0Z.PayloadSplit.roundInclusion
+    OLD: def roundInclusion : RoundPayload K →ₗ[K] Payload K
+    NEW: def roundInclusion : RoundPayload K →ₗ[K] Payload K Bat
+
+  def R0Z.PayloadSplit.O
+    OLD: def O (pub : Public K) (B : PackBasis F) (ch : Challenges K) (t : Trace K) : Payload K
+    NEW: def O (pub : Public K) (B : PackBasis F) (ch : Challenges K) (t : Trace K) : Payload K Bat
+
+  def R0Z.PayloadSplit.payload
+    OLD: def payload (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : T K F) : Payload K
+    NEW: def payload (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : T K F) : Payload K Bat
+
+  theorem R0Z.PayloadSplit.L_round
+    OLD: theorem L_round (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (t : Trace K) (j : Fin 10) (i : Fin 28) : L π B ch t (.semanticCoeff j i) = (rounds ch j (fun a => maskLinear π B a t)).coeff i.val
+    NEW: theorem L_round (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (t : Trace K) (j : Fin 10) (i : Fin 28) : L (Bat := Bat) π B ch t (.semanticCoeff j i) = (rounds ch j (fun a => maskLinear π B a t)).coeff i.val
+
+  theorem R0Z.PayloadSplit.O_round
+    OLD: theorem O_round (pub : Public K) (B : PackBasis F) (ch : Challenges K) (t : Trace K) (j : Fin 10) (i : Fin 28) : O pub B ch t (.semanticCoeff j i) = originalRounds pub B ch t j i
+    NEW: theorem O_round (pub : Public K) (B : PackBasis F) (ch : Challenges K) (t : Trace K) (j : Fin 10) (i : Fin 28) : O (Bat := Bat) pub B ch t (.semanticCoeff j i) = originalRounds pub B ch t j i
+
+  theorem R0Z.PayloadSplit.run_split_maskSum
+    OLD: private theorem run_split_maskSum (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) : run π pub B t ch r (.maskSum) = L π B ch (applyAff B (prepare pub t ch) r) (.maskSum) + O pub B ch (applyAff B (prepare pub t ch) r) (.maskSum)
+    NEW: private theorem run_split_maskSum (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) : run (Bat := Bat) π pub B t ch r (.maskSum) = L (Bat := Bat) π B ch (applyAff B (prepare pub t ch) r) (.maskSum) + O (Bat := Bat) pub B ch (applyAff B (prepare pub t ch) r) (.maskSum)
+
+  theorem R0Z.PayloadSplit.run_split_semanticCoeff
+    OLD: private theorem run_split_semanticCoeff (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (j : Fin 10) (i : Fin 28) : run π pub B t ch r (.semanticCoeff j i) = L π B ch (applyAff B (prepare pub t ch) r) (.semanticCoeff j i) + O pub B ch (applyAff B (prepare pub t ch) r) (.semanticCoeff j i)
+    NEW: private theorem run_split_semanticCoeff (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (j : Fin 10) (i : Fin 28) : run (Bat := Bat) π pub B t ch r (.semanticCoeff j i) = L (Bat := Bat) π B ch (applyAff B (prepare pub t ch) r) (.semanticCoeff j i) + O (Bat := Bat) pub B ch (applyAff B (prepare pub t ch) r) (.semanticCoeff j i)
+
+  theorem R0Z.PayloadSplit.run_split_pointClaim
+    OLD: private theorem run_split_pointClaim (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (j : Fin 3) (c : Fin 29) : run π pub B t ch r (.pointClaim j c) = L π B ch (applyAff B (prepare pub t ch) r) (.pointClaim j c) + O pub B ch (applyAff B (prepare pub t ch) r) (.pointClaim j c)
+    NEW: private theorem run_split_pointClaim (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (j : Fin 3) (c : Fin 29) : run (Bat := Bat) π pub B t ch r (.pointClaim j c) = L (Bat := Bat) π B ch (applyAff B (prepare pub t ch) r) (.pointClaim j c) + O (Bat := Bat) pub B ch (applyAff B (prepare pub t ch) r) (.pointClaim j c)
+
+  theorem R0Z.PayloadSplit.run_split_extraClaim
+    OLD: private theorem run_split_extraClaim (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (c : Fin 29) : run π pub B t ch r (.extraClaim c) = L π B ch (applyAff B (prepare pub t ch) r) (.extraClaim c) + O pub B ch (applyAff B (prepare pub t ch) r) (.extraClaim c)
+    NEW: private theorem run_split_extraClaim (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (c : Fin 29) : run (Bat := Bat) π pub B t ch r (.extraClaim c) = L (Bat := Bat) π B ch (applyAff B (prepare pub t ch) r) (.extraClaim c) + O (Bat := Bat) pub B ch (applyAff B (prepare pub t ch) r) (.extraClaim c)
+
+  theorem R0Z.PayloadSplit.run_split_ood
+    OLD: private theorem run_split_ood (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (j : Fin 2) (c : Fin 29) : run π pub B t ch r (.ood j c) = L π B ch (applyAff B (prepare pub t ch) r) (.ood j c) + O pub B ch (applyAff B (prepare pub t ch) r) (.ood j c)
+    NEW: private theorem run_split_ood (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (j : Fin 2) (c : Fin 29) : run (Bat := Bat) π pub B t ch r (.ood j c) = L (Bat := Bat) π B ch (applyAff B (prepare pub t ch) r) (.ood j c) + O (Bat := Bat) pub B ch (applyAff B (prepare pub t ch) r) (.ood j c)
+
+  theorem R0Z.PayloadSplit.run_split_inactiveSum
+    OLD: private theorem run_split_inactiveSum (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) : run π pub B t ch r (.inactiveSum) = L π B ch (applyAff B (prepare pub t ch) r) (.inactiveSum) + O pub B ch (applyAff B (prepare pub t ch) r) (.inactiveSum)
+    NEW: private theorem run_split_inactiveSum (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) : run (Bat := Bat) π pub B t ch r (.inactiveSum) = L (Bat := Bat) π B ch (applyAff B (prepare pub t ch) r) (.inactiveSum) + O (Bat := Bat) pub B ch (applyAff B (prepare pub t ch) r) (.inactiveSum)
+
+  theorem R0Z.PayloadSplit.run_split_opened
+    OLD: private theorem run_split_opened (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (q : Fin 262144) (s : Fin 4) (c : Fin 29) : run π pub B t ch r (.opened q s c) = L π B ch (applyAff B (prepare pub t ch) r) (.opened q s c) + O pub B ch (applyAff B (prepare pub t ch) r) (.opened q s c)
+    NEW: private theorem run_split_opened (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (q : Fin 262144) (s : Fin 4) (c : Fin 29) : run (Bat := Bat) π pub B t ch r (.opened q s c) = L (Bat := Bat) π B ch (applyAff B (prepare pub t ch) r) (.opened q s c) + O (Bat := Bat) pub B ch (applyAff B (prepare pub t ch) r) (.opened q s c)
+
+  theorem R0Z.PayloadSplit.run_split
+    OLD: theorem run_split (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) : run π pub B t ch r = L π B ch (applyAff B (prepare pub t ch) r) + O pub B ch (applyAff B (prepare pub t ch) r)
+    NEW: theorem run_split (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) : run (Bat := Bat) π pub B t ch r = L π B ch (applyAff B (prepare pub t ch) r) + O pub B ch (applyAff B (prepare pub t ch) r)
+
+  theorem R0Z.PayloadSplit.O_add_pure
+    OLD: theorem O_add_pure (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (m : M K F) : O pub B ch (t + pureTrace B m) = O pub B ch t
+    NEW: theorem O_add_pure (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (m : M K F) : O (Bat := Bat) pub B ch (t + pureTrace B m) = O pub B ch t
+
+  def R0Z.PayloadSplit.pureLinear
+    OLD: def pureLinear (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : M K F →ₗ[F] Payload K
+    NEW: def pureLinear (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : M K F →ₗ[F] Payload K Bat
+
+  theorem R0Z.PayloadSplit.M_pure
+    OLD: theorem M_pure (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (m : M K F) (n : N K F) : payload π pub B t ch (m,n) = payload π pub B t ch (0,n) + pureLinear π B ch m
+    NEW: theorem M_pure (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (m : M K F) (n : N K F) : payload (Bat := Bat) π pub B t ch (m,n) = payload π pub B t ch (0,n) + pureLinear π B ch m
+
+  ADDED theorem R0Z.PayloadSplit.run_split_bat
+    NEW: private theorem run_split_bat (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (b : Bat) : run (Bat := Bat) π pub B t ch r (.bat b) = L (Bat := Bat) π B ch (applyAff B (prepare pub t ch) r) (.bat b) + O (Bat := Bat) pub B ch (applyAff B (prepare pub t ch) r) (.bat b)
+
+  REMOVED theorem R0Z.PayloadSplit.run_split_openingCoeff
+
+  REMOVED theorem R0Z.PayloadSplit.run_split_finalCoeff
+
+=== R0Z/D12.lean  (17 declarations before, 17 after; changed 10, added 0, removed 0)
+
+  def R0Z.D12.payload
+    OLD: def payload (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (t : T K F) : Payload K
+    NEW: def payload (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (t : T K F) : Payload K Bat
+
+  def R0Z.D12.A
+    OLD: def A (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : T K F →ₗ[F] Payload K
+    NEW: def A (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : T K F →ₗ[F] Payload K Bat
+
+  abbrev R0Z.D12.roundInclusion
+    OLD: abbrev roundInclusion : PayloadSplit.RoundPayload K →ₗ[F] Payload K
+    NEW: abbrev roundInclusion : PayloadSplit.RoundPayload K →ₗ[F] Payload K Bat
+
+  theorem R0Z.D12.M_pure
+    OLD: theorem M_pure (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (m : M K F) (n : N K F) : payload h B x w ch (m,n) = payload h B x w ch (0,n) + (A h.transport B ch).comp inlM m
+    NEW: theorem M_pure (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (m : M K F) (n : N K F) : payload (Bat := Bat) h B x w ch (m,n) = payload h B x w ch (0,n) + (A h.transport B ch).comp inlM m
+
+  theorem R0Z.D12.decomposition
+    OLD: theorem decomposition (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (t : T K F) : payload h B x w ch t = c h B x w ch + A h.transport B ch t + roundInclusion (F := F) (g h B x w ch t.2)
+    NEW: theorem decomposition (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (t : T K F) : payload (Bat := Bat) h B x w ch t = c h B x w ch + A h.transport B ch t + roundInclusion (F := F) (g h B x w ch t.2)
+
+  def R0Z.D12.nonRound
+    OLD: def nonRound : Payload K →ₗ[F] Payload K
+    NEW: def nonRound : Payload K Bat →ₗ[F] Payload K Bat
+
+  theorem R0Z.D12.nonRound_roundInclusion
+    OLD: theorem nonRound_roundInclusion (p : PayloadSplit.RoundPayload K) : nonRound (F := F) (roundInclusion (F := F) p) = 0
+    NEW: theorem nonRound_roundInclusion (p : PayloadSplit.RoundPayload K) : nonRound (F := F) (roundInclusion (F := F) (Bat := Bat) p) = 0
+
+  theorem R0Z.D12.other_components_affine
+    OLD: theorem other_components_affine (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (t : T K F) : nonRound (F := F) (payload h B x w ch t) = nonRound (F := F) (c h B x w ch) + nonRound (F := F) (A h.transport B ch t)
+    NEW: theorem other_components_affine (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (t : T K F) : nonRound (F := F) (payload (Bat := Bat) h B x w ch t) = nonRound (F := F) (c h B x w ch) + nonRound (F := F) (A h.transport B ch t)
+
+  theorem R0Z.D12.payload_law
+    OLD: theorem payload_law (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (hm : MaskImage h B x) (w : h.Instance) (ch : Challenges K) (hw : h.public w = x.1) : EqualLaws (payload h B x w ch) (fun t => c h B x w ch + A h.transport B ch t)
+    NEW: theorem payload_law [Fintype Bat] (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (hm : MaskImage (Bat := Bat) h B x) (w : h.Instance) (ch : Challenges K) (hw : h.public w = x.1) : EqualLaws (payload (Bat := Bat) h B x w ch) (fun t => c h B x w ch + A h.transport B ch t)
+
+  theorem R0Z.D12.hvzk_perfect_of_maskImage
+    OLD: theorem hvzk_perfect_of_maskImage (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) : MaskImage h B x → JointView.HVZK_perfect h B outputs x
+    NEW: theorem hvzk_perfect_of_maskImage [Fintype Bat] (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) : MaskImage (Bat := Bat) h B x → JointView.HVZK_perfect (Bat := Bat) h B outputs x
+
+=== R0Z/Shift.lean  (65 declarations before, 66 after; changed 49, added 1, removed 0)
+
+  def R0Z.Shift.proj
+    OLD: def proj (coord : PayloadCell) : Payload K →ₗ[K] K
+    NEW: def proj (coord : PayloadCell Bat) : Payload K Bat →ₗ[K] K
+
+  theorem R0Z.Shift.proj_apply
+    OLD: @[simp] theorem proj_apply (coord : PayloadCell) (v : Payload K) : proj coord v = v coord
+    NEW: @[simp] theorem proj_apply (coord : PayloadCell Bat) (v : Payload K Bat) : proj coord v = v coord
+
+  def R0Z.Shift.round9Poly
+    OLD: def round9Poly : Payload K →ₗ[K] K[X]
+    NEW: def round9Poly : Payload K Bat →ₗ[K] K[X]
+
+  theorem R0Z.Shift.round9Poly_apply
+    OLD: theorem round9Poly_apply (v : Payload K) : round9Poly v = ∑ i : Fin 28, monomial i.val (v (.semanticCoeff 9 i))
+    NEW: theorem round9Poly_apply (v : Payload K Bat) : round9Poly v = ∑ i : Fin 28, monomial i.val (v (.semanticCoeff 9 i))
+
+  def R0Z.Shift.evalRound9
+    OLD: def evalRound9 (ch : Challenges K) : Payload K →ₗ[K] K
+    NEW: def evalRound9 (ch : Challenges K) : Payload K Bat →ₗ[K] K
+
+  theorem R0Z.Shift.evalRound9_apply
+    OLD: theorem evalRound9_apply (ch : Challenges K) (v : Payload K) : evalRound9 ch v = (round9Poly v).eval (alpha ch 9)
+    NEW: theorem evalRound9_apply (ch : Challenges K) (v : Payload K Bat) : evalRound9 ch v = (round9Poly v).eval (alpha ch 9)
+
+  def R0Z.Shift.claimMask
+    OLD: def claimMask (B : PackBasis F) (a : Fin 10 → K) : Payload K →ₗ[K] K
+    NEW: def claimMask (B : PackBasis F) (a : Fin 10 → K) : Payload K Bat →ₗ[K] K
+
+  theorem R0Z.Shift.claimMask_apply
+    OLD: theorem claimMask_apply (B : PackBasis F) (a : Fin 10 → K) (v : Payload K) : claimMask B a v = R0P.Mask.maskClaimsR0 B (fun c => v (.pointClaim 0 c)) (fun c => v (.extraClaim c)) a
+    NEW: theorem claimMask_apply (B : PackBasis F) (a : Fin 10 → K) (v : Payload K Bat) : claimMask B a v = R0P.Mask.maskClaimsR0 B (fun c => v (.pointClaim 0 c)) (fun c => v (.extraClaim c)) a
+
+  def R0Z.Shift.Phi0
+    OLD: def Phi0 (B : PackBasis F) (ch : Challenges K) : Payload K →ₗ[K] K
+    NEW: def Phi0 (B : PackBasis F) (ch : Challenges K) : Payload K Bat →ₗ[K] K
+
+  def R0Z.Shift.dir
+    OLD: def dir : Payload K
+    NEW: def dir : Payload K Bat
+
+  theorem R0Z.Shift.roundInclusion_semanticCoeff
+    OLD: theorem roundInclusion_semanticCoeff (p : PayloadSplit.RoundPayload K) (j : Fin 10) (i : Fin 28) : PayloadSplit.roundInclusion p (.semanticCoeff j i) = p j i
+    NEW: theorem roundInclusion_semanticCoeff (p : PayloadSplit.RoundPayload K) (j : Fin 10) (i : Fin 28) : PayloadSplit.roundInclusion (Bat := Bat) p (.semanticCoeff j i) = p j i
+
+  theorem R0Z.Shift.roundInclusion_pointClaim
+    OLD: theorem roundInclusion_pointClaim (p : PayloadSplit.RoundPayload K) (j : Fin 3) (c : Fin 29) : PayloadSplit.roundInclusion p (.pointClaim j c) = 0
+    NEW: theorem roundInclusion_pointClaim (p : PayloadSplit.RoundPayload K) (j : Fin 3) (c : Fin 29) : PayloadSplit.roundInclusion (Bat := Bat) p (.pointClaim j c) = 0
+
+  theorem R0Z.Shift.roundInclusion_extraClaim
+    OLD: theorem roundInclusion_extraClaim (p : PayloadSplit.RoundPayload K) (c : Fin 29) : PayloadSplit.roundInclusion p (.extraClaim c) = 0
+    NEW: theorem roundInclusion_extraClaim (p : PayloadSplit.RoundPayload K) (c : Fin 29) : PayloadSplit.roundInclusion (Bat := Bat) p (.extraClaim c) = 0
+
+  theorem R0Z.Shift.dir_pointClaim
+    OLD: theorem dir_pointClaim (j : Fin 3) (c : Fin 29) : dir (K := K) (.pointClaim j c) = 0
+    NEW: theorem dir_pointClaim (j : Fin 3) (c : Fin 29) : dir (K := K) (Bat := Bat) (.pointClaim j c) = 0
+
+  theorem R0Z.Shift.dir_extraClaim
+    OLD: theorem dir_extraClaim (c : Fin 29) : dir (K := K) (.extraClaim c) = 0
+    NEW: theorem dir_extraClaim (c : Fin 29) : dir (K := K) (Bat := Bat) (.extraClaim c) = 0
+
+  theorem R0Z.Shift.claimMask_roundInclusion
+    OLD: theorem claimMask_roundInclusion (B : PackBasis F) (a : Fin 10 → K) (p : PayloadSplit.RoundPayload K) : claimMask B a (PayloadSplit.roundInclusion p) = 0
+    NEW: theorem claimMask_roundInclusion (B : PackBasis F) (a : Fin 10 → K) (p : PayloadSplit.RoundPayload K) : claimMask B a (PayloadSplit.roundInclusion (Bat := Bat) p) = 0
+
+  theorem R0Z.Shift.claimMask_dir
+    OLD: theorem claimMask_dir (B : PackBasis F) (a : Fin 10 → K) : claimMask B a dir = 0
+    NEW: theorem claimMask_dir (B : PackBasis F) (a : Fin 10 → K) : claimMask B a (dir (Bat := Bat)) = 0
+
+  theorem R0Z.Shift.round9Poly_roundInclusion
+    OLD: theorem round9Poly_roundInclusion (p : PayloadSplit.RoundPayload K) : round9Poly (PayloadSplit.roundInclusion p) = ∑ i : Fin 28, monomial i.val (p 9 i)
+    NEW: theorem round9Poly_roundInclusion (p : PayloadSplit.RoundPayload K) : round9Poly (PayloadSplit.roundInclusion (Bat := Bat) p) = ∑ i : Fin 28, monomial i.val (p 9 i)
+
+  theorem R0Z.Shift.evalRound9_roundInclusion
+    OLD: theorem evalRound9_roundInclusion (ch : Challenges K) (p : PayloadSplit.RoundPayload K) : evalRound9 ch (PayloadSplit.roundInclusion p) = (∑ i : Fin 28, monomial i.val (p 9 i)).eval (alpha ch 9)
+    NEW: theorem evalRound9_roundInclusion (ch : Challenges K) (p : PayloadSplit.RoundPayload K) : evalRound9 ch (PayloadSplit.roundInclusion (Bat := Bat) p) = (∑ i : Fin 28, monomial i.val (p 9 i)).eval (alpha ch 9)
+
+  theorem R0Z.Shift.Phi0_roundInclusion
+    OLD: theorem Phi0_roundInclusion (B : PackBasis F) (ch : Challenges K) (p : PayloadSplit.RoundPayload K) : Phi0 B ch (PayloadSplit.roundInclusion p) = evalRound9 ch (PayloadSplit.roundInclusion p)
+    NEW: theorem Phi0_roundInclusion (B : PackBasis F) (ch : Challenges K) (p : PayloadSplit.RoundPayload K) : Phi0 B ch (PayloadSplit.roundInclusion (Bat := Bat) p) = evalRound9 ch (PayloadSplit.roundInclusion (Bat := Bat) p)
+
+  theorem R0Z.Shift.round9Poly_dir
+    OLD: theorem round9Poly_dir : round9Poly (dir (K := K)) = X - C (1/2 : K)
+    NEW: theorem round9Poly_dir : round9Poly (dir (K := K) (Bat := Bat)) = X - C (1/2 : K)
+
+  theorem R0Z.Shift.evalRound9_dir
+    OLD: theorem evalRound9_dir (ch : Challenges K) : evalRound9 ch dir = alpha ch 9 - 1/2
+    NEW: theorem evalRound9_dir (ch : Challenges K) : evalRound9 ch (dir (Bat := Bat)) = alpha ch 9 - 1/2
+
+  theorem R0Z.Shift.Phi0_dir
+    OLD: theorem Phi0_dir (B : PackBasis F) (ch : Challenges K) : Phi0 B ch dir = alpha ch 9 - 1/2
+    NEW: theorem Phi0_dir (B : PackBasis F) (ch : Challenges K) : Phi0 B ch (dir (Bat := Bat)) = alpha ch 9 - 1/2
+
+  theorem R0Z.Shift.nonRound_dir
+    OLD: theorem nonRound_dir : nonRound (F := F) (dir (K := K)) = 0
+    NEW: theorem nonRound_dir : nonRound (F := F) (dir (K := K) (Bat := Bat)) = 0
+
+  def R0Z.Shift.originalOf
+    OLD: def originalOf (pub : Public K) (B : PackBasis F) (ch : Challenges K) (v : Payload K) : K
+    NEW: def originalOf (pub : Public K) (B : PackBasis F) (ch : Challenges K) (v : Payload K Bat) : K
+
+  def R0Z.Shift.shift
+    OLD: def shift (pub : Public K) (B : PackBasis F) (ch : Challenges K) (v : Payload K) : Payload K
+    NEW: def shift (pub : Public K) (B : PackBasis F) (ch : Challenges K) (v : Payload K Bat) : Payload K Bat
+
+  def R0Z.Shift.unshift
+    OLD: def unshift (pub : Public K) (B : PackBasis F) (ch : Challenges K) (v : Payload K) : Payload K
+    NEW: def unshift (pub : Public K) (B : PackBasis F) (ch : Challenges K) (v : Payload K Bat) : Payload K Bat
+
+  theorem R0Z.Shift.originalOf_add_smul_dir
+    OLD: theorem originalOf_add_smul_dir (pub : Public K) (B : PackBasis F) (ch : Challenges K) (v : Payload K) (k : K) : originalOf pub B ch (v + k • dir) = originalOf pub B ch v
+    NEW: theorem originalOf_add_smul_dir (pub : Public K) (B : PackBasis F) (ch : Challenges K) (v : Payload K Bat) (k : K) : originalOf pub B ch (v + k • dir) = originalOf pub B ch v
+
+  theorem R0Z.Shift.originalOf_sub_smul_dir
+    OLD: theorem originalOf_sub_smul_dir (pub : Public K) (B : PackBasis F) (ch : Challenges K) (v : Payload K) (k : K) : originalOf pub B ch (v - k • dir) = originalOf pub B ch v
+    NEW: theorem originalOf_sub_smul_dir (pub : Public K) (B : PackBasis F) (ch : Challenges K) (v : Payload K Bat) (k : K) : originalOf pub B ch (v - k • dir) = originalOf pub B ch v
+
+  theorem R0Z.Shift.unshift_shift
+    OLD: theorem unshift_shift (pub : Public K) (B : PackBasis F) (ch : Challenges K) (v : Payload K) : unshift pub B ch (shift pub B ch v) = v
+    NEW: theorem unshift_shift (pub : Public K) (B : PackBasis F) (ch : Challenges K) (v : Payload K Bat) : unshift pub B ch (shift pub B ch v) = v
+
+  theorem R0Z.Shift.shift_unshift
+    OLD: theorem shift_unshift (pub : Public K) (B : PackBasis F) (ch : Challenges K) (v : Payload K) : shift pub B ch (unshift pub B ch v) = v
+    NEW: theorem shift_unshift (pub : Public K) (B : PackBasis F) (ch : Challenges K) (v : Payload K Bat) : shift pub B ch (unshift pub B ch v) = v
+
+  def R0Z.Shift.shiftEquiv
+    OLD: def shiftEquiv (pub : Public K) (B : PackBasis F) (ch : Challenges K) : Payload K ≃ Payload K
+    NEW: def shiftEquiv (pub : Public K) (B : PackBasis F) (ch : Challenges K) : Payload K Bat ≃ Payload K Bat
+
+  def R0Z.Shift.sRem
+    OLD: def sRem (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (n : N K F) : Payload K
+    NEW: def sRem (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (n : N K F) : Payload K Bat
+
+  def R0Z.Shift.cTilde
+    OLD: def cTilde (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) : Payload K
+    NEW: def cTilde (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) : Payload K Bat
+
+  theorem R0Z.Shift.evalRound9_roundInclusion_rounds
+    OLD: theorem evalRound9_roundInclusion_rounds (ch : Challenges K) (f : PayloadSplit.PointFunction K) (hf : VDeg 10 (fun _ => 27) f) : evalRound9 ch (PayloadSplit.roundInclusion (fun j i => (PayloadSplit.rounds ch j f).coeff i.val)) = f (alpha ch)
+    NEW: theorem evalRound9_roundInclusion_rounds (ch : Challenges K) (f : PayloadSplit.PointFunction K) (hf : VDeg 10 (fun _ => 27) f) : evalRound9 ch (PayloadSplit.roundInclusion (Bat := Bat) (fun j i => (PayloadSplit.rounds ch j f).coeff i.val)) = f (alpha ch)
+
+  theorem R0Z.Shift.L_pointClaim
+    OLD: theorem L_pointClaim (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (u : Trace K) (j : Fin 3) (c : Fin 29) : PayloadSplit.L π B ch u (.pointClaim j c) = honestClaims u (alpha ch) j c
+    NEW: theorem L_pointClaim (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (u : Trace K) (j : Fin 3) (c : Fin 29) : PayloadSplit.L (Bat := Bat) π B ch u (.pointClaim j c) = honestClaims u (alpha ch) j c
+
+  theorem R0Z.Shift.L_extraClaim
+    OLD: theorem L_extraClaim (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (u : Trace K) (c : Fin 29) : PayloadSplit.L π B ch u (.extraClaim c) = R0P.Mask.honestExtra π u (alpha ch) c
+    NEW: theorem L_extraClaim (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (u : Trace K) (c : Fin 29) : PayloadSplit.L (Bat := Bat) π B ch u (.extraClaim c) = R0P.Mask.honestExtra π u (alpha ch) c
+
+  theorem R0Z.Shift.Phi0_L
+    OLD: theorem Phi0_L (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (u : Trace K) : Phi0 B ch (PayloadSplit.L π B ch u) = 0
+    NEW: theorem Phi0_L (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (u : Trace K) : Phi0 B ch (PayloadSplit.L (Bat := Bat) π B ch u) = 0
+
+  theorem R0Z.Shift.Phi0_A
+    OLD: theorem Phi0_A (h : HonestProver K) (B : PackBasis F) (ch : Challenges K) (t : T K F) : Phi0 B ch (A h.transport B ch t) = 0
+    NEW: theorem Phi0_A (h : HonestProver K) (B : PackBasis F) (ch : Challenges K) (t : T K F) : Phi0 B ch (A (Bat := Bat) h.transport B ch t) = 0
+
+  theorem R0Z.Shift.evalRound9_originalRounds
+    OLD: theorem evalRound9_originalRounds (pub : Public K) (B : PackBasis F) (ch : Challenges K) (t : Trace K) : evalRound9 ch (PayloadSplit.roundInclusion (PayloadSplit.originalRounds pub B ch t)) = fOrig pub B ch t (alpha ch)
+    NEW: theorem evalRound9_originalRounds (pub : Public K) (B : PackBasis F) (ch : Challenges K) (t : Trace K) : evalRound9 ch (PayloadSplit.roundInclusion (Bat := Bat) (PayloadSplit.originalRounds pub B ch t)) = fOrig pub B ch t (alpha ch)
+
+  theorem R0Z.Shift.payload_pointClaim
+    OLD: theorem payload_pointClaim (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (r : T K F) (j : Fin 3) (c : Fin 29) : payload h B x w ch r (.pointClaim j c) = honestClaims (PayloadSplit.actual x.1 B (h.build w) ch r) (alpha ch) j c
+    NEW: theorem payload_pointClaim (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (r : T K F) (j : Fin 3) (c : Fin 29) : payload (Bat := Bat) h B x w ch r (.pointClaim j c) = honestClaims (PayloadSplit.actual x.1 B (h.build w) ch r) (alpha ch) j c
+
+  theorem R0Z.Shift.originalOf_payload
+    OLD: theorem originalOf_payload (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (r : T K F) : originalOf x.1 B ch (payload h B x w ch r) = fOrig x.1 B ch (PayloadSplit.actual x.1 B (h.build w) ch r) (alpha ch)
+    NEW: theorem originalOf_payload (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (r : T K F) : originalOf x.1 B ch (payload (Bat := Bat) h B x w ch r) = fOrig x.1 B ch (PayloadSplit.actual x.1 B (h.build w) ch r) (alpha ch)
+
+  theorem R0Z.Shift.originalOf_c
+    OLD: theorem originalOf_c (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) : originalOf x.1 B ch (c h B x w ch) = fOrig x.1 B ch (PayloadSplit.actual x.1 B (h.build w) ch 0) (alpha ch)
+    NEW: theorem originalOf_c (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) : originalOf x.1 B ch (c (Bat := Bat) h B x w ch) = fOrig x.1 B ch (PayloadSplit.actual x.1 B (h.build w) ch 0) (alpha ch)
+
+  theorem R0Z.Shift.Phi0_roundInclusion_g
+    OLD: theorem Phi0_roundInclusion_g (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (n : N K F) : Phi0 B ch (roundInclusion (F := F) (g h B x w ch n)) = originalOf x.1 B ch (payload h B x w ch (0,n)) - originalOf x.1 B ch (c h B x w ch)
+    NEW: theorem Phi0_roundInclusion_g (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (n : N K F) : Phi0 B ch (roundInclusion (F := F) (Bat := Bat) (g h B x w ch n)) = originalOf x.1 B ch (payload (Bat := Bat) h B x w ch (0,n)) - originalOf x.1 B ch (c (Bat := Bat) h B x w ch)
+
+  theorem R0Z.Shift.Phi0_sRem
+    OLD: theorem Phi0_sRem (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (n : N K F) (hgood : alpha ch 9 ≠ 1/2) : Phi0 B ch (sRem h B x w ch n) = 0
+    NEW: theorem Phi0_sRem (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (n : N K F) (hgood : alpha ch 9 ≠ 1/2) : Phi0 B ch (sRem (Bat := Bat) h B x w ch n) = 0
+
+  theorem R0Z.Shift.originalOf_payload_pure
+    OLD: theorem originalOf_payload_pure (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (m : M K F) (n : N K F) : originalOf x.1 B ch (payload h B x w ch (m,n)) = originalOf x.1 B ch (payload h B x w ch (0,n))
+    NEW: theorem originalOf_payload_pure (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (m : M K F) (n : N K F) : originalOf x.1 B ch (payload (Bat := Bat) h B x w ch (m,n)) = originalOf x.1 B ch (payload (Bat := Bat) h B x w ch (0,n))
+
+  theorem R0Z.Shift.payload_eq_shift
+    OLD: theorem payload_eq_shift (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (t : T K F) : payload h B x w ch t = shift x.1 B ch (cTilde h B x w ch + A h.transport B ch t + sRem h B x w ch t.2)
+    NEW: theorem payload_eq_shift (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (t : T K F) : payload (Bat := Bat) h B x w ch t = shift x.1 B ch (cTilde h B x w ch + A h.transport B ch t + sRem h B x w ch t.2)
+
+  theorem R0Z.Shift.payload_law_on
+    OLD: theorem payload_law_on (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (hi : ∀ n, sRem h B x w ch n ∈ LinearMap.range ((A h.transport B ch).comp inlM)) : EqualLaws (payload h B x w ch) (fun t => shift x.1 B ch (cTilde h B x w ch + A h.transport B ch t))
+    NEW: theorem payload_law_on [Fintype Bat] (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (hi : ∀ n, sRem (Bat := Bat) h B x w ch n ∈ LinearMap.range ((A h.transport B ch).comp inlM)) : EqualLaws (payload (Bat := Bat) h B x w ch) (fun t => shift x.1 B ch (cTilde h B x w ch + A h.transport B ch t))
+
+  theorem R0Z.Shift.hvzk_on_good
+    OLD: theorem hvzk_on_good (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) : MaskImageOn Good h B x → HVZK_on Good h B outputs x
+    NEW: theorem hvzk_on_good [Fintype Bat] (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) : MaskImageOn (Bat := Bat) Good h B x → HVZK_on (Bat := Bat) Good h B outputs x
+
+  ADDED theorem R0Z.Shift.hvzk_on_of
+    NEW: theorem hvzk_on_of [Fintype Bat] (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) : MaskImageOn (Bat := Bat) P h B x → HVZK_on (Bat := Bat) P h B outputs x
+
+=== R0Z/Z4Maps.lean  (9 declarations before, 9 after; changed 3, added 0, removed 0)
+
+  def R0Z.Z4Maps.roundProjection
+    OLD: def roundProjection : Payload K →ₗ[F] PayloadSplit.RoundPayload K
+    NEW: def roundProjection : Payload K Bat →ₗ[F] PayloadSplit.RoundPayload K
+
+  def R0Z.Z4Maps.silentRoundMaskMap
+    OLD: def silentRoundMaskMap (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : silentMasks π B ch →ₗ[F] PayloadSplit.RoundPayload K
+    NEW: def silentRoundMaskMap (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : silentMasks (Bat := Bat) π B ch →ₗ[F] PayloadSplit.RoundPayload K
+
+  def R0Z.Z4Maps.c1Projection
+    OLD: def c1Projection : Payload K →ₗ[F] (C1Cell → K)
+    NEW: def c1Projection : Payload K Bat →ₗ[F] (C1Cell → K)
+
+=== R0Z/Chain.lean  (28 declarations before, 28 after; changed 19, added 0, removed 0)
+
+  def R0Z.Chain.roundPoly
+    OLD: def roundPoly (j : Fin 10) : Payload K →ₗ[K] K[X]
+    NEW: def roundPoly (j : Fin 10) : Payload K Bat →ₗ[K] K[X]
+
+  theorem R0Z.Chain.roundPoly_apply
+    OLD: theorem roundPoly_apply (j : Fin 10) (v : Payload K) : roundPoly j v = ∑ i : Fin 28, monomial i.val (v (.semanticCoeff j i))
+    NEW: theorem roundPoly_apply (j : Fin 10) (v : Payload K Bat) : roundPoly j v = ∑ i : Fin 28, monomial i.val (v (.semanticCoeff j i))
+
+  theorem R0Z.Chain.roundPoly_nine
+    OLD: theorem roundPoly_nine : roundPoly (K := K) 9 = round9Poly
+    NEW: theorem roundPoly_nine : roundPoly (K := K) (Bat := Bat) 9 = round9Poly
+
+  def R0Z.Chain.evalRound
+    OLD: def evalRound (j : Fin 10) (z : K) : Payload K →ₗ[K] K
+    NEW: def evalRound (j : Fin 10) (z : K) : Payload K Bat →ₗ[K] K
+
+  theorem R0Z.Chain.evalRound_apply
+    OLD: theorem evalRound_apply (j : Fin 10) (z : K) (v : Payload K) : evalRound j z v = (roundPoly j v).eval z
+    NEW: theorem evalRound_apply (j : Fin 10) (z : K) (v : Payload K Bat) : evalRound j z v = (roundPoly j v).eval z
+
+  def R0Z.Chain.nonRoundK
+    OLD: def nonRoundK : Payload K →ₗ[K] Payload K
+    NEW: def nonRoundK : Payload K Bat →ₗ[K] Payload K Bat
+
+  theorem R0Z.Chain.nonRoundK_apply
+    OLD: theorem nonRoundK_apply (v : Payload K) : nonRoundK v = nonRound (F := F) v
+    NEW: theorem nonRoundK_apply (v : Payload K Bat) : nonRoundK v = nonRound (F := F) v
+
+  def R0Z.Chain.InitialChain0
+    OLD: def InitialChain0 (ch : Challenges K) : Submodule K (Payload K)
+    NEW: def InitialChain0 (ch : Challenges K) : Submodule K (Payload K Bat)
+
+  def R0Z.Chain.Chain0
+    OLD: def Chain0 (ch : Challenges K) : Submodule K (Payload K)
+    NEW: def Chain0 (ch : Challenges K) : Submodule K (Payload K Bat)
+
+  theorem R0Z.Chain.mem_initialChain0_iff
+    OLD: theorem mem_initialChain0_iff (ch : Challenges K) (v : Payload K) : v ∈ InitialChain0 ch ↔ nonRound (F := F) v = 0 ∧ (roundPoly 0 v).eval 0 + (roundPoly 0 v).eval 1 = 0 ∧ ∀ j : Fin 9, (roundPoly j.succ v).eval 0 + (roundPoly j.succ v).eval 1 = (roundPoly j.castSucc v).eval (alpha ch j.castSucc)
+    NEW: theorem mem_initialChain0_iff (ch : Challenges K) (v : Payload K Bat) : v ∈ InitialChain0 ch ↔ nonRound (F := F) v = 0 ∧ (roundPoly 0 v).eval 0 + (roundPoly 0 v).eval 1 = 0 ∧ ∀ j : Fin 9, (roundPoly j.succ v).eval 0 + (roundPoly j.succ v).eval 1 = (roundPoly j.castSucc v).eval (alpha ch j.castSucc)
+
+  theorem R0Z.Chain.mem_chain0_iff
+    OLD: theorem mem_chain0_iff (ch : Challenges K) (v : Payload K) : v ∈ Chain0 ch ↔ nonRound (F := F) v = 0 ∧ (roundPoly 0 v).eval 0 + (roundPoly 0 v).eval 1 = 0 ∧ (∀ j : Fin 9, (roundPoly j.succ v).eval 0 + (roundPoly j.succ v).eval 1 = (roundPoly j.castSucc v).eval (alpha ch j.castSucc)) ∧ (roundPoly 9 v).eval (alpha ch 9) = 0
+    NEW: theorem mem_chain0_iff (ch : Challenges K) (v : Payload K Bat) : v ∈ Chain0 ch ↔ nonRound (F := F) v = 0 ∧ (roundPoly 0 v).eval 0 + (roundPoly 0 v).eval 1 = 0 ∧ (∀ j : Fin 9, (roundPoly j.succ v).eval 0 + (roundPoly j.succ v).eval 1 = (roundPoly j.castSucc v).eval (alpha ch j.castSucc)) ∧ (roundPoly 9 v).eval (alpha ch 9) = 0
+
+  theorem R0Z.Chain.roundPoly_roundInclusion
+    OLD: theorem roundPoly_roundInclusion (j : Fin 10) (p : PayloadSplit.RoundPayload K) : roundPoly j (PayloadSplit.roundInclusion p) = ∑ i : Fin 28, monomial i.val (p j i)
+    NEW: theorem roundPoly_roundInclusion (j : Fin 10) (p : PayloadSplit.RoundPayload K) : roundPoly j (PayloadSplit.roundInclusion (Bat := Bat) p) = ∑ i : Fin 28, monomial i.val (p j i)
+
+  theorem R0Z.Chain.roundPoly_rounds
+    OLD: theorem roundPoly_rounds (ch : Challenges K) (j : Fin 10) (f : PayloadSplit.PointFunction K) : roundPoly j (PayloadSplit.roundInclusion (fun k i => (PayloadSplit.rounds ch k f).coeff i.val)) = PayloadSplit.rounds ch j f
+    NEW: theorem roundPoly_rounds (ch : Challenges K) (j : Fin 10) (f : PayloadSplit.PointFunction K) : roundPoly j (PayloadSplit.roundInclusion (Bat := Bat) (fun k i => (PayloadSplit.rounds ch k f).coeff i.val)) = PayloadSplit.rounds ch j f
+
+  theorem R0Z.Chain.roundPoly_originalRounds
+    OLD: theorem roundPoly_originalRounds (pub : Public K) (B : PackBasis F) (ch : Challenges K) (t : Trace K) (j : Fin 10) : roundPoly j (PayloadSplit.roundInclusion (PayloadSplit.originalRounds pub B ch t)) = PayloadSplit.rounds ch j (fOrig pub B ch t)
+    NEW: theorem roundPoly_originalRounds (pub : Public K) (B : PackBasis F) (ch : Challenges K) (t : Trace K) (j : Fin 10) : roundPoly j (PayloadSplit.roundInclusion (Bat := Bat) (PayloadSplit.originalRounds pub B ch t)) = PayloadSplit.rounds ch j (fOrig pub B ch t)
+
+  theorem R0Z.Chain.roundPoly_dir
+    OLD: theorem roundPoly_dir (j : Fin 10) : roundPoly j (dir : Payload K) = if j = 9 then X - C (1/2 : K) else 0
+    NEW: theorem roundPoly_dir (j : Fin 10) : roundPoly j (dir : Payload K Bat) = if j = 9 then X - C (1/2 : K) else 0
+
+  theorem R0Z.Chain.dir_mem_initialChain0
+    OLD: theorem dir_mem_initialChain0 (ch : Challenges K) : (dir : Payload K) ∈ InitialChain0 ch
+    NEW: theorem dir_mem_initialChain0 (ch : Challenges K) : (dir : Payload K Bat) ∈ InitialChain0 ch
+
+  theorem R0Z.Chain.roundPoly_g
+    OLD: theorem roundPoly_g (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (n : N K F) (j : Fin 10) : roundPoly j (roundInclusion (F := F) (g h B x w ch n)) = PayloadSplit.rounds ch j (fOrig x.1 B ch (PayloadSplit.actual x.1 B (h.build w) ch (0,n))) - PayloadSplit.rounds ch j (fOrig x.1 B ch (PayloadSplit.actual x.1 B (h.build w) ch 0))
+    NEW: theorem roundPoly_g (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (n : N K F) (j : Fin 10) : roundPoly j (roundInclusion (F := F) (Bat := Bat) (g h B x w ch n)) = PayloadSplit.rounds ch j (fOrig x.1 B ch (PayloadSplit.actual x.1 B (h.build w) ch (0,n))) - PayloadSplit.rounds ch j (fOrig x.1 B ch (PayloadSplit.actual x.1 B (h.build w) ch 0))
+
+  theorem R0Z.Chain.g_mem_initialChain0
+    OLD: theorem g_mem_initialChain0 (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (n : N K F) : roundInclusion (F := F) (g h B x w ch n) ∈ InitialChain0 ch
+    NEW: theorem g_mem_initialChain0 (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (n : N K F) : roundInclusion (F := F) (Bat := Bat) (g h B x w ch n) ∈ InitialChain0 ch
+
+  theorem R0Z.Chain.sRem_mem_chain0
+    OLD: theorem sRem_mem_chain0 (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (n : N K F) (hgood : alpha ch 9 ≠ 1/2) : sRem h B x w ch n ∈ Chain0 ch
+    NEW: theorem sRem_mem_chain0 (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle) (w : h.Instance) (ch : Challenges K) (n : N K F) (hgood : alpha ch 9 ≠ 1/2) : sRem (Bat := Bat) h B x w ch n ∈ Chain0 ch
+
+=== R0Z/PureRounds.lean  (57 declarations before, 57 after; changed 11, added 0, removed 0)
+
+  theorem R0Z.PureRounds.A_pure
+    OLD: theorem A_pure (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) : (A π B ch).comp inlM m = PayloadSplit.L π B ch (pureTrace B m)
+    NEW: theorem A_pure (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) : (A (Bat := Bat) π B ch).comp inlM m = PayloadSplit.L (Bat := Bat) π B ch (pureTrace B m)
+
+  theorem R0Z.PureRounds.roundPoly_L
+    OLD: theorem roundPoly_L (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (t : Trace K) (j : Fin 10) : Chain.roundPoly j (PayloadSplit.L π B ch t) = PayloadSplit.rounds ch j (fun a => PayloadSplit.maskLinear π B a t)
+    NEW: theorem roundPoly_L (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (t : Trace K) (j : Fin 10) : Chain.roundPoly j (PayloadSplit.L (Bat := Bat) π B ch t) = PayloadSplit.rounds ch j (fun a => PayloadSplit.maskLinear π B a t)
+
+  theorem R0Z.PureRounds.L_maskSum
+    OLD: theorem L_maskSum (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (t : Trace K) : PayloadSplit.L π B ch t .maskSum = ∑ bits : Fin 10 → Bool, PayloadSplit.maskLinear π B (ofBool bits) t
+    NEW: theorem L_maskSum (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (t : Trace K) : PayloadSplit.L (Bat := Bat) π B ch t .maskSum = ∑ bits : Fin 10 → Bool, PayloadSplit.maskLinear π B (ofBool bits) t
+
+  theorem R0Z.PureRounds.silent_mem_chain0
+    OLD: theorem silent_mem_chain0 (h : HonestProver K) (B : PackBasis F) (ch : Challenges K) (m : M K F) (hs : nonRound (F := F) ((A h.transport B ch).comp inlM m) = 0) : (A h.transport B ch).comp inlM m ∈ Chain0 ch
+    NEW: theorem silent_mem_chain0 (h : HonestProver K) (B : PackBasis F) (ch : Challenges K) (m : M K F) (hs : nonRound (F := F) ((A (Bat := Bat) h.transport B ch).comp inlM m) = 0) : (A (Bat := Bat) h.transport B ch).comp inlM m ∈ Chain0 ch
+
+  theorem R0Z.PureRounds.mem_silentMasks_iff
+    OLD: theorem mem_silentMasks_iff (h : HonestProver K) (B : PackBasis F) (ch : Challenges K) (m : M K F) : m ∈ silentMasks h.transport B ch ↔ let v
+    NEW: theorem mem_silentMasks_iff (h : HonestProver K) (B : PackBasis F) (ch : Challenges K) (m : M K F) : m ∈ silentMasks (Bat := Bat) h.transport B ch ↔ let v
+
+  theorem R0Z.PureRounds.L_pure_maskOnly
+    OLD: theorem L_pure_maskOnly (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) (c : Fin 10) (j : Fin 10) (hm : ∀ i : Fin 10, i ≠ c → ∀ r, m.1 (i,r) = 0) (hg : m.2.1 = 0) (hd : m.2.2 = 0) : Chain.roundPoly j (PayloadSplit.L π B ch (pureTrace B m)) = ∑ r, maskOnlyColumns (Sum.elim 0 (pureAff m)) c r • (R0P.Mask.towerBasis B ⟨(16+c.val)%4, Nat.mod_lt _ (by omega)⟩ * eqPrefix (alpha ch) r j) • ((if rowBits r j then X else 1-X) * (C (w 0 j)*X + C (β (w 0) (alpha ch) j r)) ^ (R0P.Mask.maskOnlyFactorExponent c).val)
+    NEW: theorem L_pure_maskOnly (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) (c : Fin 10) (j : Fin 10) (hm : ∀ i : Fin 10, i ≠ c → ∀ r, m.1 (i,r) = 0) (hg : m.2.1 = 0) (hd : m.2.2 = 0) : Chain.roundPoly j (PayloadSplit.L (Bat := Bat) π B ch (pureTrace B m)) = ∑ r, maskOnlyColumns (Sum.elim 0 (pureAff m)) c r • (R0P.Mask.towerBasis B ⟨(16+c.val)%4, Nat.mod_lt _ (by omega)⟩ * eqPrefix (alpha ch) r j) • ((if rowBits r j then X else 1-X) * (C (w 0 j)*X + C (β (w 0) (alpha ch) j r)) ^ (R0P.Mask.maskOnlyFactorExponent c).val)
+
+  theorem R0Z.PureRounds.L_pure_G
+    OLD: theorem L_pure_G (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) (j : Fin 10) (hm : m.1 = 0) (hd : m.2.2 = 0) : Chain.roundPoly j (PayloadSplit.L π B ch (pureTrace B m)) = ∑ r, balance 0 (extensionRaw B (Sum.elim 0 (pureAff m)) 0) r • eqPrefix (alpha ch) r j • ((if rowBits r j then X else 1-X) * (1 + (C (w 16 j)*X + C (β (w 16) (alpha ch) j r)) ^ 26))
+    NEW: theorem L_pure_G (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) (j : Fin 10) (hm : m.1 = 0) (hd : m.2.2 = 0) : Chain.roundPoly j (PayloadSplit.L (Bat := Bat) π B ch (pureTrace B m)) = ∑ r, balance 0 (extensionRaw B (Sum.elim 0 (pureAff m)) 0) r • eqPrefix (alpha ch) r j • ((if rowBits r j then X else 1-X) * (1 + (C (w 16 j)*X + C (β (w 16) (alpha ch) j r)) ^ 26))
+
+  theorem R0Z.PureRounds.L_pure_libra_maskSum
+    OLD: theorem L_pure_libra_maskSum (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) (d : Fin 56) (hm : m.1 = 0) (hg : m.2.1 = 0) (hu : (fun k => dWord B (Sum.elim 0 (pureAff m)) (π.symm k)) = Pi.single (⟨d.val, by omega⟩ : Fin 1024) 1) : PayloadSplit.L π B ch (pureTrace B m) .maskSum = (512 : K) * (if d.val%28 = 0 then 2 else 1)
+    NEW: theorem L_pure_libra_maskSum (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) (d : Fin 56) (hm : m.1 = 0) (hg : m.2.1 = 0) (hu : (fun k => dWord B (Sum.elim 0 (pureAff m)) (π.symm k)) = Pi.single (⟨d.val, by omega⟩ : Fin 1024) 1) : PayloadSplit.L (Bat := Bat) π B ch (pureTrace B m) .maskSum = (512 : K) * (if d.val%28 = 0 then 2 else 1)
+
+  theorem R0Z.PureRounds.roundPoly_coeff_L
+    OLD: theorem roundPoly_coeff_L (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (t : Trace K) (j : Fin 10) (i : Fin 28) : (Chain.roundPoly j (PayloadSplit.L π B ch t)).coeff i.val = PayloadSplit.L π B ch t (.semanticCoeff j i)
+    NEW: theorem roundPoly_coeff_L (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (t : Trace K) (j : Fin 10) (i : Fin 28) : (Chain.roundPoly j (PayloadSplit.L (Bat := Bat) π B ch t)).coeff i.val = PayloadSplit.L (Bat := Bat) π B ch t (.semanticCoeff j i)
+
+  theorem R0Z.PureRounds.L_pure_maskOnly_coeff
+    OLD: theorem L_pure_maskOnly_coeff (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) (c : Fin 10) (j : Fin 10) (i : Fin 28) (hm : ∀ i : Fin 10, i ≠ c → ∀ r, m.1 (i,r) = 0) (hg : m.2.1 = 0) (hd : m.2.2 = 0) : PayloadSplit.L π B ch (pureTrace B m) (.semanticCoeff j i) = (∑ r, maskOnlyColumns (Sum.elim 0 (pureAff m)) c r • (R0P.Mask.towerBasis B ⟨(16+c.val)%4, Nat.mod_lt _ (by omega)⟩ * eqPrefix (alpha ch) r j) • ((if rowBits r j then X else 1-X) * (C (w 0 j)*X + C (β (w 0) (alpha ch) j r)) ^ (R0P.Mask.maskOnlyFactorExponent c).val)).coeff i.val
+    NEW: theorem L_pure_maskOnly_coeff (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) (c : Fin 10) (j : Fin 10) (i : Fin 28) (hm : ∀ i : Fin 10, i ≠ c → ∀ r, m.1 (i,r) = 0) (hg : m.2.1 = 0) (hd : m.2.2 = 0) : PayloadSplit.L (Bat := Bat) π B ch (pureTrace B m) (.semanticCoeff j i) = (∑ r, maskOnlyColumns (Sum.elim 0 (pureAff m)) c r • (R0P.Mask.towerBasis B ⟨(16+c.val)%4, Nat.mod_lt _ (by omega)⟩ * eqPrefix (alpha ch) r j) • ((if rowBits r j then X else 1-X) * (C (w 0 j)*X + C (β (w 0) (alpha ch) j r)) ^ (R0P.Mask.maskOnlyFactorExponent c).val)).coeff i.val
+
+  theorem R0Z.PureRounds.L_pure_G_coeff
+    OLD: theorem L_pure_G_coeff (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) (j : Fin 10) (i : Fin 28) (hm : m.1 = 0) (hd : m.2.2 = 0) : PayloadSplit.L π B ch (pureTrace B m) (.semanticCoeff j i) = (∑ r, balance 0 (extensionRaw B (Sum.elim 0 (pureAff m)) 0) r • eqPrefix (alpha ch) r j • ((if rowBits r j then X else 1-X) * (1 + (C (w 16 j)*X + C (β (w 16) (alpha ch) j r)) ^ 26))).coeff i.val
+    NEW: theorem L_pure_G_coeff (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) (j : Fin 10) (i : Fin 28) (hm : m.1 = 0) (hd : m.2.2 = 0) : PayloadSplit.L (Bat := Bat) π B ch (pureTrace B m) (.semanticCoeff j i) = (∑ r, balance 0 (extensionRaw B (Sum.elim 0 (pureAff m)) 0) r • eqPrefix (alpha ch) r j • ((if rowBits r j then X else 1-X) * (1 + (C (w 16 j)*X + C (β (w 16) (alpha ch) j r)) ^ 26))).coeff i.val
+
+=== R0Z/SilentReduction.lean  (28 declarations before, 28 after; changed 15, added 1, removed 1)
+
+  def R0Z.SilentReduction.ownProj
+    OLD: def ownProj : Payload K →ₗ[F] Payload K
+    NEW: def ownProj : Payload K Bat →ₗ[F] Payload K Bat
+
+  def R0Z.SilentReduction.ownMap
+    OLD: def ownMap (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : M K F →ₗ[F] Payload K
+    NEW: def ownMap (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : M K F →ₗ[F] Payload K Bat
+
+  def R0Z.SilentReduction.batMap
+    OLD: def batMap (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : M K F →ₗ[F] Payload K
+    NEW: def batMap (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : M K F →ₗ[F] (Bat → K)
+
+  theorem R0Z.SilentReduction.L_inactiveSum
+    OLD: theorem L_inactiveSum (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (t : Trace K) : PayloadSplit.L π B ch t .inactiveSum = linearPayload π ch t .inactiveSum
+    NEW: theorem L_inactiveSum (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (t : Trace K) : PayloadSplit.L (Bat := Bat) π B ch t .inactiveSum = linearPayload (Bat := Bat) π ch t .inactiveSum
+
+  theorem R0Z.SilentReduction.linearPayload_inactiveSum
+    OLD: theorem linearPayload_inactiveSum (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) (t : Trace K) : linearPayload π ch t .inactiveSum = ∑ c : Fin 29, ch.opening 0 ^ c.val * dotLinear (AspisR0.Opening.indicator copyInactiveRows) (t c)
+    NEW: theorem linearPayload_inactiveSum (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) (t : Trace K) : linearPayload (Bat := Bat) π ch t .inactiveSum = ∑ c : Fin 29, ch.opening 0 ^ c.val * dotLinear (AspisR0.Opening.indicator copyInactiveRows) (t c)
+
+  theorem R0Z.SilentReduction.ia_pure_zero
+    OLD: theorem ia_pure_zero (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) : (A π B ch).comp inlM m .inactiveSum = 0
+    NEW: theorem ia_pure_zero (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) : (A (Bat := Bat) π B ch).comp inlM m .inactiveSum = 0
+
+  theorem R0Z.SilentReduction.ms_pure_eq_initial
+    OLD: theorem ms_pure_eq_initial (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) : (A π B ch).comp inlM m .maskSum = (roundPoly 0 ((A π B ch).comp inlM m)).eval 0 + (roundPoly 0 ((A π B ch).comp inlM m)).eval 1
+    NEW: theorem ms_pure_eq_initial (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) : (A (Bat := Bat) π B ch).comp inlM m .maskSum = (roundPoly 0 ((A (Bat := Bat) π B ch).comp inlM m)).eval 0 + (roundPoly 0 ((A (Bat := Bat) π B ch).comp inlM m)).eval 1
+
+  theorem R0Z.SilentReduction.mem_chainT0_iff
+    OLD: theorem mem_chainT0_iff (ch : Challenges K) (t : PayloadSplit.RoundPayload K) : t ∈ ChainT0 ch ↔ (∀ j : Fin 9, (roundPoly j.succ (PayloadSplit.roundInclusion t)).eval 0 + (roundPoly j.succ (PayloadSplit.roundInclusion t)).eval 1 = (roundPoly j.castSucc (PayloadSplit.roundInclusion t)).eval (alpha ch j.castSucc)) ∧ (roundPoly 9 (PayloadSplit.roundInclusion t)).eval (alpha ch 9) = 0
+    NEW: theorem mem_chainT0_iff (ch : Challenges K) (t : PayloadSplit.RoundPayload K) : t ∈ ChainT0 (Bat := Bat) ch ↔ (∀ j : Fin 9, (roundPoly j.succ (PayloadSplit.roundInclusion (Bat := Bat) t)).eval 0 + (roundPoly j.succ (PayloadSplit.roundInclusion (Bat := Bat) t)).eval 1 = (roundPoly j.castSucc (PayloadSplit.roundInclusion (Bat := Bat) t)).eval (alpha ch j.castSucc)) ∧ (roundPoly 9 (PayloadSplit.roundInclusion (Bat := Bat) t)).eval (alpha ch 9) = 0
+
+  def R0Z.SilentReduction.K4Payload
+    OLD: def K4Payload (B : PackBasis F) (hB : PackField B) : Submodule F (Payload K)
+    NEW: def K4Payload (B : PackBasis F) (hB : PackField B) : Submodule F (Payload K Bat)
+
+  def R0Z.SilentReduction.Chain0K4
+    OLD: def Chain0K4 (B : PackBasis F) (hB : PackField B) (ch : Challenges K) : Submodule F (Payload K)
+    NEW: def Chain0K4 (B : PackBasis F) (hB : PackField B) (ch : Challenges K) : Submodule F (Payload K Bat)
+
+  theorem R0Z.SilentReduction.mem_chain0K4_iff
+    OLD: theorem mem_chain0K4_iff (B : PackBasis F) (hB : PackField B) (ch : Challenges K) (v : Payload K) : v ∈ Chain0K4 B hB ch ↔ v ∈ Chain0 ch ∧ ∀ cell, v cell ∈ K4 B hB
+    NEW: theorem mem_chain0K4_iff (B : PackBasis F) (hB : PackField B) (ch : Challenges K) (v : Payload K Bat) : v ∈ Chain0K4 B hB ch ↔ v ∈ Chain0 ch ∧ ∀ cell, v cell ∈ K4 B hB
+
+  theorem R0Z.SilentReduction.payload_ext
+    OLD: theorem payload_ext {v w : Payload K} (h1 : nonRound (F := F) v = nonRound (F := F) w) (h2 : roundProjection (F := F) v = roundProjection (F := F) w) : v = w
+    NEW: theorem payload_ext {v w : Payload K Bat} (h1 : nonRound (F := F) v = nonRound (F := F) w) (h2 : roundProjection (F := F) v = roundProjection (F := F) w) : v = w
+
+  theorem R0Z.SilentReduction.roundPoly_eq_of_roundProjection
+    OLD: theorem roundPoly_eq_of_roundProjection {v w : Payload K} (h : roundProjection (F := F) v = roundProjection (F := F) w) (j : Fin 10) : roundPoly j v = roundPoly j w
+    NEW: theorem roundPoly_eq_of_roundProjection {v w : Payload K Bat} (h : roundProjection (F := F) v = roundProjection (F := F) w) (j : Fin 10) : roundPoly j v = roundPoly j w
+
+  theorem R0Z.SilentReduction.mem_silentMasks_of
+    OLD: theorem mem_silentMasks_of (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) (hown : ownMap π B ch m = 0) (hbat : batMap π B ch m = 0) (hinit : (roundPoly 0 ((A π B ch).comp inlM m)).eval 0 + (roundPoly 0 ((A π B ch).comp inlM m)).eval 1 = 0) : m ∈ silentMasks π B ch
+    NEW: theorem mem_silentMasks_of (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) (hown : ownMap (Bat := Bat) π B ch m = 0) (hbat : batMap (Bat := Bat) π B ch m = 0) (hinit : (roundPoly 0 ((A (Bat := Bat) π B ch).comp inlM m)).eval 0 + (roundPoly 0 ((A (Bat := Bat) π B ch).comp inlM m)).eval 1 = 0) : m ∈ silentMasks (Bat := Bat) π B ch
+
+  theorem R0Z.SilentReduction.chain0K4_le_silent_of
+    OLD: theorem chain0K4_le_silent_of (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (hB : PackField B) (ch : Challenges K) (hQ : QPrime π B hB ch) (hBc : BCond π B ch) : Chain0K4 B hB ch ≤ (silentMasks π B ch).map ((A π B ch).comp inlM)
+    NEW: theorem chain0K4_le_silent_of (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (hB : PackField B) (ch : Challenges K) (hQ : QPrime (Bat := Bat) π B hB ch) (hBc : BCond (Bat := Bat) π B ch) : Chain0K4 (Bat := Bat) B hB ch ≤ (silentMasks (Bat := Bat) π B ch).map ((A (Bat := Bat) π B ch).comp inlM)
+
+  ADDED def R0Z.SilentReduction.batRead
+    NEW: def batRead : Payload K Bat →ₗ[F] (Bat → K)
+
+  REMOVED def R0Z.SilentReduction.batProj
+
+=== R0Z/Hvzk.lean  (4 declarations before, 4 after; changed 4, added 0, removed 0)
+
+  theorem R0Z.Hvzk.hvzk_conditional_of_maskImage
+    OLD: theorem hvzk_conditional_of_maskImage (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (hm : MaskImage h B x) : HVZK_conditional h B outputs x
+    NEW: theorem hvzk_conditional_of_maskImage [Fintype Bat] (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (hm : MaskImage (Bat := Bat) h B x) : HVZK_conditional (Bat := Bat) h B outputs x
+
+  theorem R0Z.Hvzk.conditional_marginalisation
+    OLD: theorem conditional_marginalisation (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (hc : HVZK_conditional h B outputs x) : HVZK_perfect h B outputs x
+    NEW: theorem conditional_marginalisation (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (hc : HVZK_conditional (Bat := Bat) h B outputs x) : HVZK_perfect (Bat := Bat) h B outputs x
+
+  theorem R0Z.Hvzk.hvzk_perfect_of_maskImage
+    OLD: theorem hvzk_perfect_of_maskImage (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) : MaskImage h B x → HVZK_perfect h B outputs x
+    NEW: theorem hvzk_perfect_of_maskImage [Fintype Bat] (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) : MaskImage (Bat := Bat) h B x → HVZK_perfect (Bat := Bat) h B outputs x
+
+  theorem R0Z.Hvzk.hvzk_zero_of_maskImage
+    OLD: theorem hvzk_zero_of_maskImage (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (hm : MaskImage h B x) : HVZK h B outputs x 0
+    NEW: theorem hvzk_zero_of_maskImage [Fintype Bat] (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (hm : MaskImage (Bat := Bat) h B x) : HVZK (Bat := Bat) h B outputs x 0
+
+=== R0Z/FsStatement.lean  (16 declarations before, 16 after; changed 13, added 0, removed 0)
+
+  structure R0Z.FsStatement.ROMView
+    OLD: structure ROMView (K CommitHandle Aux : Type) [Field K] where disclosed : View K CommitHandle Aux observerOracle : List (Bytes × OracleAnswer)
+    NEW: structure ROMView (K CommitHandle Aux Bat : Type) [Field K] where disclosed : View K CommitHandle Aux Bat observerOracle : List (Bytes × OracleAnswer)
+
+  structure R0Z.FsStatement.FSExperiments
+    OLD: structure FSExperiments (K CommitHandle Aux : Type) [Field K] (F : Subfield K) where Adversary : Type RealRand : Type IdealRand : Type real : (h : HonestProver K) → PackBasis F → (Statement K CommitHandle → Challenges K → Aux) → Adversary → Statement K CommitHandle → h.Instance → RealRand → ROMView K CommitHandle Aux ideal : (Challenges K → Tape K F → View K CommitHandle Aux) → Adversary → Statement K CommitHandle → IdealRand → ROMView K CommitHandle Aux observe : Adversary → ROMView K CommitHandle Aux → Bool
+    NEW: structure FSExperiments (K CommitHandle Aux Bat : Type) [Field K] (F : Subfield K) where Adversary : Type RealRand : Type IdealRand : Type real : (h : HonestProver K) → PackBasis F → (Statement K CommitHandle → Challenges K → Aux) → Adversary → Statement K CommitHandle → h.Instance → RealRand → ROMView K CommitHandle Aux Bat ideal : (Challenges K → Tape K F → View K CommitHandle Aux Bat) → Adversary → Statement K CommitHandle → IdealRand → ROMView K CommitHandle Aux Bat observe : Adversary → ROMView K CommitHandle Aux Bat → Bool
+
+  def R0Z.FsStatement.realTest
+    OLD: def realTest (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) (adv : fs.Adversary) (x : Statement K CommitHandle) (w : h.Instance) : fs.RealRand → ℚ
+    NEW: def realTest (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) (adv : fs.Adversary) (x : Statement K CommitHandle) (w : h.Instance) : fs.RealRand → ℚ
+
+  def R0Z.FsStatement.idealTest
+    OLD: def idealTest (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) (adv : fs.Adversary) (x : Statement K CommitHandle) (hx : InLanguage h x) : fs.IdealRand → ℚ
+    NEW: def idealTest (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) (adv : fs.Adversary) (x : Statement K CommitHandle) (hx : InLanguage h x) : fs.IdealRand → ℚ
+
+  def R0Z.FsStatement.ZK_FS
+    OLD: def ZK_FS (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (epsilon_fs : ℚ) : Prop
+    NEW: def ZK_FS (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (epsilon_fs : ℚ) : Prop
+
+  structure R0Z.FsStatement.ROMBridge
+    OLD: structure ROMBridge (K CommitHandle Aux Adv : Type) [Field K] where Coins : Type finiteCoins : Fintype Coins nonemptyCoins : Nonempty Coins draw : Adv → Statement K CommitHandle → Coins → Challenges K extend : Adv → Statement K CommitHandle → Coins → View K CommitHandle Aux → ROMView K CommitHandle Aux
+    NEW: structure ROMBridge (K CommitHandle Aux Bat Adv : Type) [Field K] where Coins : Type finiteCoins : Fintype Coins nonemptyCoins : Nonempty Coins draw : Adv → Statement K CommitHandle → Coins → Challenges K extend : Adv → Statement K CommitHandle → Coins → View K CommitHandle Aux Bat → ROMView K CommitHandle Aux Bat
+
+  def R0Z.FsStatement.middleReal
+    OLD: def middleReal (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary) (x : Statement K CommitHandle) (w : h.Instance) : bridge.Coins × Tape K F → ℚ
+    NEW: def middleReal (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary) (x : Statement K CommitHandle) (w : h.Instance) : bridge.Coins × Tape K F → ℚ
+
+  def R0Z.FsStatement.middleIdeal
+    OLD: def middleIdeal (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary) (x : Statement K CommitHandle) (hx : InLanguage h x) : bridge.Coins × Tape K F → ℚ
+    NEW: def middleIdeal (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary) (x : Statement K CommitHandle) (hx : InLanguage h x) : bridge.Coins × Tape K F → ℚ
+
+  def R0Z.FsStatement.ROMReduction
+    OLD: def ROMReduction (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (epsilon_fs : ℚ) : Prop
+    NEW: def ROMReduction (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (epsilon_fs : ℚ) : Prop
+
+  def R0Z.FsStatement.ROMReductionWith
+    OLD: def ROMReductionWith (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (x : Statement K CommitHandle) (ε_real ε_ideal : ℚ) : Prop
+    NEW: def ROMReductionWith (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (x : Statement K CommitHandle) (ε_real ε_ideal : ℚ) : Prop
+
+  theorem R0Z.FsStatement.romReduction_iff
+    OLD: theorem romReduction_iff (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (ε : ℚ) : ROMReduction h B outputs fs x ε ↔ ∃ bridge ε_real ε_ideal, ROMReductionWith h B outputs fs bridge x ε_real ε_ideal ∧ ε_real + ε_ideal ≤ ε
+    NEW: theorem romReduction_iff (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (ε : ℚ) : ROMReduction h B outputs fs x ε ↔ ∃ bridge ε_real ε_ideal, ROMReductionWith h B outputs fs bridge x ε_real ε_ideal ∧ ε_real + ε_ideal ≤ ε
+
+  theorem R0Z.FsStatement.middle_means_eq
+    OLD: theorem middle_means_eq (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary) (x : Statement K CommitHandle) (hx : InLanguage h x) (w : h.Instance) (hw : h.public w = x.1) (hh : HVZK_perfect h B outputs x) : mean (middleReal h B outputs fs bridge adv x w) = mean (middleIdeal h B outputs fs bridge adv x hx)
+    NEW: theorem middle_means_eq (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary) (x : Statement K CommitHandle) (hx : InLanguage h x) (w : h.Instance) (hw : h.public w = x.1) (hh : HVZK_perfect (Bat := Bat) h B outputs x) : mean (middleReal h B outputs fs bridge adv x w) = mean (middleIdeal h B outputs fs bridge adv x hx)
+
+  theorem R0Z.FsStatement.zkfs_of_hvzk_perfect
+    OLD: theorem zkfs_of_hvzk_perfect (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (epsilon_fs : ℚ) : HVZK_perfect h B outputs x → ROMReduction h B outputs fs x epsilon_fs → ZK_FS h B outputs fs x epsilon_fs
+    NEW: theorem zkfs_of_hvzk_perfect (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (epsilon_fs : ℚ) : HVZK_perfect (Bat := Bat) h B outputs x → ROMReduction h B outputs fs x epsilon_fs → ZK_FS h B outputs fs x epsilon_fs
+
+=== R0Z/FsGood.lean  (13 declarations before, 13 after; changed 6, added 0, removed 0)
+
+  def R0Z.FsGood.badMass
+    OLD: def badMass {Adv : Type} (P : Challenges K → Prop) (bridge : ROMBridge K CommitHandle Aux Adv) (adv : Adv) (x : Statement K CommitHandle) : ℚ
+    NEW: def badMass {Adv : Type} (P : Challenges K → Prop) (bridge : ROMBridge K CommitHandle Aux Bat Adv) (adv : Adv) (x : Statement K CommitHandle) : ℚ
+
+  theorem R0Z.FsGood.middle_means_close
+    OLD: theorem middle_means_close (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary) (x : Statement K CommitHandle) (hx : InLanguage h x) (w : h.Instance) (hw : h.public w = x.1) (P : Challenges K → Prop) (hh : HVZK_on P h B outputs x) : |mean (middleReal h B outputs fs bridge adv x w) - mean (middleIdeal h B outputs fs bridge adv x hx)| ≤ badMass P bridge adv x
+    NEW: theorem middle_means_close (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary) (x : Statement K CommitHandle) (hx : InLanguage h x) (w : h.Instance) (hw : h.public w = x.1) (P : Challenges K → Prop) (hh : HVZK_on (Bat := Bat) P h B outputs x) : |mean (middleReal h B outputs fs bridge adv x w) - mean (middleIdeal h B outputs fs bridge adv x hx)| ≤ badMass P bridge adv x
+
+  theorem R0Z.FsGood.zkfs_of_hvzk_on_bridge
+    OLD: theorem zkfs_of_hvzk_on_bridge (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (P : Challenges K → Prop) (hh : HVZK_on P h B outputs x) (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (ε_real ε_ideal ε_bad : ℚ) (hr : ROMReductionWith h B outputs fs bridge x ε_real ε_ideal) (hmass : ∀ adv, badMass P bridge adv x ≤ ε_bad) : ZK_FS h B outputs fs x (ε_real + ε_ideal + ε_bad)
+    NEW: theorem zkfs_of_hvzk_on_bridge (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (P : Challenges K → Prop) (hh : HVZK_on (Bat := Bat) P h B outputs x) (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (ε_real ε_ideal ε_bad : ℚ) (hr : ROMReductionWith h B outputs fs bridge x ε_real ε_ideal) (hmass : ∀ adv, badMass P bridge adv x ≤ ε_bad) : ZK_FS h B outputs fs x (ε_real + ε_ideal + ε_bad)
+
+  theorem R0Z.FsGood.zkfs_of_maskImageOn_good_bridge
+    OLD: theorem zkfs_of_maskImageOn_good_bridge (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (ε_real ε_ideal ε_bad : ℚ) : MaskImageOn Good h B x → ROMReductionWith h B outputs fs bridge x ε_real ε_ideal → (∀ adv, badMass Good bridge adv x ≤ ε_bad) → ZK_FS h B outputs fs x (ε_real + ε_ideal + ε_bad)
+    NEW: theorem zkfs_of_maskImageOn_good_bridge [Fintype Bat] (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (ε_real ε_ideal ε_bad : ℚ) : MaskImageOn (Bat := Bat) Good h B x → ROMReductionWith h B outputs fs bridge x ε_real ε_ideal → (∀ adv, badMass Good bridge adv x ≤ ε_bad) → ZK_FS h B outputs fs x (ε_real + ε_ideal + ε_bad)
+
+  theorem R0Z.FsGood.zkfs_of_hvzk_on
+    OLD: theorem zkfs_of_hvzk_on (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (P : Challenges K → Prop) (epsilon_fs epsilon_bad : ℚ) (hh : HVZK_on P h B outputs x) (hr : ROMReduction h B outputs fs x epsilon_fs) (hmass : ∀ (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary), badMass P bridge adv x ≤ epsilon_bad) : ZK_FS h B outputs fs x (epsilon_fs + epsilon_bad)
+    NEW: theorem zkfs_of_hvzk_on (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (P : Challenges K → Prop) (epsilon_fs epsilon_bad : ℚ) (hh : HVZK_on (Bat := Bat) P h B outputs x) (hr : ROMReduction h B outputs fs x epsilon_fs) (hmass : ∀ (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary), badMass P bridge adv x ≤ epsilon_bad) : ZK_FS h B outputs fs x (epsilon_fs + epsilon_bad)
+
+  theorem R0Z.FsGood.zkfs_of_maskImageOn_good
+    OLD: theorem zkfs_of_maskImageOn_good (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (epsilon_fs epsilon_bad : ℚ) : MaskImageOn Good h B x → ROMReduction h B outputs fs x epsilon_fs → (∀ (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary), badMass Good bridge adv x ≤ epsilon_bad) → ZK_FS h B outputs fs x (epsilon_fs + epsilon_bad)
+    NEW: theorem zkfs_of_maskImageOn_good [Fintype Bat] (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (epsilon_fs epsilon_bad : ℚ) : MaskImageOn (Bat := Bat) Good h B x → ROMReduction h B outputs fs x epsilon_fs → (∀ (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary), badMass Good bridge adv x ≤ epsilon_bad) → ZK_FS h B outputs fs x (epsilon_fs + epsilon_bad)
+
+=== R0Z/FsAbort.lean  (28 declarations before, 28 after; changed 12, added 0, removed 0)
+
+  structure R0Z.FsAbort.AbortBridge
+    OLD: structure AbortBridge (K CommitHandle Aux Adv : Type) [Field K] where Coins : Type finiteCoins : Fintype Coins nonemptyCoins : Nonempty Coins N : Nat draw : Adv → Statement K CommitHandle → Coins → Challenges K extend : Adv → Statement K CommitHandle → (Fin N → Coins) → Fin N → View K CommitHandle Aux → ROMView K CommitHandle Aux fail : Adv → Statement K CommitHandle → (Fin N → Coins) → ROMView K CommitHandle Aux
+    NEW: structure AbortBridge (K CommitHandle Aux Bat Adv : Type) [Field K] where Coins : Type finiteCoins : Fintype Coins nonemptyCoins : Nonempty Coins N : Nat draw : Adv → Statement K CommitHandle → Coins → Challenges K extend : Adv → Statement K CommitHandle → (Fin N → Coins) → Fin N → View K CommitHandle Aux Bat → ROMView K CommitHandle Aux Bat fail : Adv → Statement K CommitHandle → (Fin N → Coins) → ROMView K CommitHandle Aux Bat
+
+  def R0Z.FsAbort.middleRealAbort
+    OLD: def middleRealAbort (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) (ab : AbortBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary) (x : Statement K CommitHandle) (w : h.Instance) : (Fin ab.N → ab.Coins) × (Fin ab.N → Tape K F) → ℚ
+    NEW: def middleRealAbort (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary) (x : Statement K CommitHandle) (w : h.Instance) : (Fin ab.N → ab.Coins) × (Fin ab.N → Tape K F) → ℚ
+
+  def R0Z.FsAbort.middleIdealAbort
+    OLD: def middleIdealAbort (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) (ab : AbortBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary) (x : Statement K CommitHandle) (hx : InLanguage h x) : (Fin ab.N → ab.Coins) × (Fin ab.N → Tape K F) → ℚ
+    NEW: def middleIdealAbort (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary) (x : Statement K CommitHandle) (hx : InLanguage h x) : (Fin ab.N → ab.Coins) × (Fin ab.N → Tape K F) → ℚ
+
+  theorem R0Z.FsAbort.middleAbort_means_eq
+    OLD: theorem middleAbort_means_eq (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) (ab : AbortBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary) (x : Statement K CommitHandle) (hx : InLanguage h x) (w : h.Instance) (hw : h.public w = x.1) (hh : HVZK_on P h B outputs x) : mean (middleRealAbort P h B outputs fs ab adv x w) = mean (middleIdealAbort P h B outputs fs ab adv x hx)
+    NEW: theorem middleAbort_means_eq (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary) (x : Statement K CommitHandle) (hx : InLanguage h x) (w : h.Instance) (hw : h.public w = x.1) (hh : HVZK_on (Bat := Bat) P h B outputs x) : mean (middleRealAbort P h B outputs fs ab adv x w) = mean (middleIdealAbort P h B outputs fs ab adv x hx)
+
+  def R0Z.FsAbort.AbortReductionWith
+    OLD: def AbortReductionWith (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (ab : AbortBridge K CommitHandle Aux fs.Adversary) (x : Statement K CommitHandle) (ε_real ε_ideal : ℚ) : Prop
+    NEW: def AbortReductionWith (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (x : Statement K CommitHandle) (ε_real ε_ideal : ℚ) : Prop
+
+  theorem R0Z.FsAbort.zkfs_of_hvzk_on_abort
+    OLD: theorem zkfs_of_hvzk_on_abort (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (hh : HVZK_on P h B outputs x) (ab : AbortBridge K CommitHandle Aux fs.Adversary) (ε_real ε_ideal : ℚ) (hr : AbortReductionWith P h B outputs fs ab x ε_real ε_ideal) : ZK_FS h B outputs fs x (ε_real + ε_ideal)
+    NEW: theorem zkfs_of_hvzk_on_abort (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (hh : HVZK_on (Bat := Bat) P h B outputs x) (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (ε_real ε_ideal : ℚ) (hr : AbortReductionWith P h B outputs fs ab x ε_real ε_ideal) : ZK_FS h B outputs fs x (ε_real + ε_ideal)
+
+  theorem R0Z.FsAbort.hvzk_on_mono
+    OLD: theorem hvzk_on_mono (P Q : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (hPQ : ∀ ch, P ch → Q ch) (hq : HVZK_on Q h B outputs x) : HVZK_on P h B outputs x
+    NEW: theorem hvzk_on_mono (P Q : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) (hPQ : ∀ ch, P ch → Q ch) (hq : HVZK_on (Bat := Bat) Q h B outputs x) : HVZK_on (Bat := Bat) P h B outputs x
+
+  theorem R0Z.FsAbort.zkfs_of_maskImageOn_abort
+    OLD: theorem zkfs_of_maskImageOn_abort (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (hPG : ∀ ch, P ch → Good ch) (ab : AbortBridge K CommitHandle Aux fs.Adversary) (ε_real ε_ideal : ℚ) : MaskImageOn Good h B x → AbortReductionWith P h B outputs fs ab x ε_real ε_ideal → ZK_FS h B outputs fs x (ε_real + ε_ideal)
+    NEW: theorem zkfs_of_maskImageOn_abort [Fintype Bat] (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (hPG : ∀ ch, P ch → Good ch) (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (ε_real ε_ideal : ℚ) : MaskImageOn (Bat := Bat) Good h B x → AbortReductionWith P h B outputs fs ab x ε_real ε_ideal → ZK_FS h B outputs fs x (ε_real + ε_ideal)
+
+  def R0Z.FsAbort.RealAbortCoupling
+    OLD: def RealAbortCoupling (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand] (ab : AbortBridge K CommitHandle Aux fs.Adversary) (x : Statement K CommitHandle) (ε_hit ε_coll : ℚ) : Prop
+    NEW: def RealAbortCoupling (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand] (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (x : Statement K CommitHandle) (ε_hit ε_coll : ℚ) : Prop
+
+  def R0Z.FsAbort.IdealAbortCoupling
+    OLD: def IdealAbortCoupling (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.IdealRand] (ab : AbortBridge K CommitHandle Aux fs.Adversary) (x : Statement K CommitHandle) (ε_prog : ℚ) : Prop
+    NEW: def IdealAbortCoupling (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.IdealRand] (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (x : Statement K CommitHandle) (ε_prog : ℚ) : Prop
+
+  theorem R0Z.FsAbort.abortReduction_of_couplings
+    OLD: theorem abortReduction_of_couplings (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (ab : AbortBridge K CommitHandle Aux fs.Adversary) (x : Statement K CommitHandle) (ε_hit ε_coll ε_prog : ℚ) (h0 : 0 ≤ ε_hit) (h1 : 0 ≤ ε_coll) (h2 : 0 ≤ ε_prog) (hreal : RealAbortCoupling P h B outputs fs ab x ε_hit ε_coll) (hideal : IdealAbortCoupling P h B outputs fs ab x ε_prog) : AbortReductionWith P h B outputs fs ab x (ε_hit + ε_coll) ε_prog
+    NEW: theorem abortReduction_of_couplings (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (x : Statement K CommitHandle) (ε_hit ε_coll ε_prog : ℚ) (h0 : 0 ≤ ε_hit) (h1 : 0 ≤ ε_coll) (h2 : 0 ≤ ε_prog) (hreal : RealAbortCoupling P h B outputs fs ab x ε_hit ε_coll) (hideal : IdealAbortCoupling P h B outputs fs ab x ε_prog) : AbortReductionWith P h B outputs fs ab x (ε_hit + ε_coll) ε_prog
+
+  theorem R0Z.FsAbort.zkfs_of_hvzk_on_abort_terms
+    OLD: theorem zkfs_of_hvzk_on_abort_terms (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (hh : HVZK_on P h B outputs x) (ab : AbortBridge K CommitHandle Aux fs.Adversary) (ε_hit ε_coll ε_prog : ℚ) (h0 : 0 ≤ ε_hit) (h1 : 0 ≤ ε_coll) (h2 : 0 ≤ ε_prog) (hreal : RealAbortCoupling P h B outputs fs ab x ε_hit ε_coll) (hideal : IdealAbortCoupling P h B outputs fs ab x ε_prog) : ZK_FS h B outputs fs x (ε_hit + ε_coll + ε_prog)
+    NEW: theorem zkfs_of_hvzk_on_abort_terms (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux) (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand] (x : Statement K CommitHandle) (hh : HVZK_on (Bat := Bat) P h B outputs x) (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (ε_hit ε_coll ε_prog : ℚ) (h0 : 0 ≤ ε_hit) (h1 : 0 ≤ ε_coll) (h2 : 0 ≤ ε_prog) (hreal : RealAbortCoupling P h B outputs fs ab x ε_hit ε_coll) (hideal : IdealAbortCoupling P h B outputs fs ab x ε_prog) : ZK_FS h B outputs fs x (ε_hit + ε_coll + ε_prog)

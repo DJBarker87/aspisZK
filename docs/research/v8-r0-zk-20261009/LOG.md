@@ -3481,3 +3481,2104 @@ the closed forms; T2b-2b: spanning), and (ii′) `cTilde w − cTilde w' ∈ ran
 T2b-2a is released as specified in "User direction (2026-10-12)", base this
 commit, attempts from 3395. Research under the current verdict (PLAN,
 2026-10-11): v7 stands.
+
+### Lead decision T2b-2a′ (2026-10-13) — item 3 corrected: silence includes the mask sum; the stop is accepted
+
+The T2b-2a worker stopped under the fixed-statement rule: item 3
+(`mem_silentMasks_iff`) is false as written. `nonRound` (D12.lean:80) zeroes
+only the `.semanticCoeff` coordinates and retains `.maskSum`; the right-hand
+side I listed omitted that coordinate. The worker's counterexample stands:
+`π = Equiv.refl`, all field challenges zero, both circle points `(1,0)`,
+`queries = ∅`, tape supported on mask-only lane 0 with word `δ₅₁₃ − δ₅₁₅`
+(both rows inactive, so `balance 0` leaves it unchanged); every listed
+condition holds, yet the mask sum is `(w₀+w₉) − (w₀+w₈+w₉) = −w₈ = −179 ≠ 0`
+and the round-0 polynomial is `−179·X`. The stop is correct.
+
+**T2b-2a′.1 (item 3, corrected statement).** Writing `v := (A h.transport B ch).comp inlM m`:
+
+```
+mem_silentMasks_iff (m : M K F) :
+  m ∈ silentMasks h.transport B ch ↔
+    v .maskSum = 0 ∧
+    (∀ j c, v (.pointClaim j c) = 0) ∧ (∀ c, v (.extraClaim c) = 0) ∧
+    (∀ j c, v (.ood j c) = 0) ∧ v .inactiveSum = 0 ∧
+    (∀ i, v (.openingCoeff i) = 0) ∧ (∀ i, v (.finalCoeff i) = 0) ∧
+    (∀ q s c, v (.opened q s c) = 0)
+```
+
+Each coordinate unfolds through `L` (PayloadSplit.lean:47–52): `.maskSum` is
+`∑ bits : Fin 10 → Bool, maskLinear π B (ofBool bits) (pureTrace B m)` and the
+others are the `linearPayload` cases (`claimsLinear`, `extraLinear`,
+`oodLinear ∘ coeffsLinear`, the inactive-sum dot, `openingCoeff`/`finalCoeff`
+through `batchLinear`, and `opened` gated by `q ∈ ch.queries`). The lemma is
+stated at the coordinate level as above; the per-lane reading in the original
+item 3 is its unfolding, not a separate statement. No new definitions.
+
+**T2b-2a′.2 (items 1 and 2 unchanged).** Item 1's route already uses the
+`.maskSum` coordinate: silence gives `v .maskSum = 0`, which `rounds_initial`
+identifies with `p₀(0) + p₀(1)`. This is consistent with the corrected item 3
+(the mask sum is exactly the initial-sum coordinate) and nothing in items 1–2
+moves. Research under the current verdict (PLAN, 2026-10-11): v7 stands.
+
+### Lead decision D20 (2026-10-13) — spanning fails on `Good` over the base field; predicate refinement; probe Z7; ZF1-0 inventory
+
+While T2b-2a runs, the T2b-2b statement was prepared from the closed forms of
+"User direction (2026-10-12)" item 2. A dimension count shows that the
+intended statement, `Chain0 ch ⊆ roundProjection (A (silentMasks))` for every
+`Good ch`, is **false**, so the predicate must be refined before T2b-2b is
+written. Nothing proved so far is affected: T2a's chain
+`MaskImageOn P → HVZK_on P → ZK_FS (ε_fs + badMass P)` holds for every `P`,
+and T2b-1/T2b-2a hold on `Good` as stated. What changes is the predicate on
+which `MaskImageOn` will be proved and the ledger term attached to it.
+
+**D20.1 (the obstruction).** Let `F` be the mask base field (the `PackBasis`
+subfield; M31 in the source) and take `ch` with every `alpha ch i ∈ F \ {0,1}`
+and `alpha ch 9 ≠ 1/2`, so `Good ch` holds. At round 7, the tower-limb-`u`
+component (`towerBasis` index 2) of the silent image has `F`-dimension at most
+24, while `Chain0`'s round-7 component is all of `K[X]_{≤27}` (its only
+coupling is the one chain condition), whose `u`-component has dimension 28:
+
+- mask-only lane `c` has an `F`-valued word and factor
+  `τ_c · (maskLinear 0 a)^{e_c}` with `τ_c = towerBasis ((16+c) mod 4)`; the
+  `u`-lanes are `c = 2` (`e = 5`) and `c = 6` (`e = 15`). The round-7 row
+  polynomial is `eqPrefix(α, r_<7) · (r_7 ? X : 1−X) · (w_7 X + β_7(r))^{e_c}`
+  with `β_7(r) = Σ_{i<7} w_i α_i + Σ_{i>7} w_i r_i`; with `α ∈ F^10` every
+  coefficient is in `F`, there are four tails (bits 8, 9) and two values of
+  `r_7`, so the lane's image is `τ_c · (F-span of ≤ 8 polynomials in
+  F[X]_{≤ e_c+1})`: `u`-component ≤ 7 + 8 = 15 dimensions;
+- `G`'s word is `K`-valued; its round-7 polynomials
+  `(r_7 ? X : 1−X)(1 + (w'_7 X + β'_7(r))^26)` lie in `F[X]` for `α ∈ F^10`
+  (four tails, two bits), so its image is `K ⊗_F (≤ 8-dimensional F-space)`:
+  `u`-component ≤ 8;
+- the Libra lane `D` contributes a constant at rounds `j < 8` (Z4c table):
+  `u`-component ≤ 1; the H1 padding is not a mask lane (it lives in `N`).
+
+Total ≤ 24 < 28. The same count at `α ∈ {0,1}^10` is what Z4c observed
+(constructed ranks 1,022 and 1,038, supports at `(7,d,k)` with `k ∈ {2,3}`);
+the point here is that `Good` does not exclude the base-field case, which has
+mass `(|F|/|K|)^10` under a uniform α-row. The mechanism is that the
+mask-only lanes acquire `K`-multiples only through the low-bit scalars
+`Λ_j := span_F { eqPrefix(α, ℓ) : ℓ ∈ {0,1}^j } ⊇ span_F {1, α_0, …, α_{j−1}}`;
+`G` and `D` carry `K`-valued words and need no such scalars. With
+`w_i = 3 + 22 i` an arithmetic progression, the distinct tail sums at round
+`j` number 512, 256, 128, 42, 26, 15, 8, 4, 2, 1 for `j = 0..9` (subset sums
+of an arithmetic progression collide: e.g. `w_6 + w_9 = w_7 + w_8`). By the
+leading-degree (divided-difference) argument, `G` alone spans all 28 degrees at
+rounds 0–3, degrees 1–27 at round 4 (degree 0 from `D`'s constant), degrees
+12–27 at round 5, 19–27 at round 6 and 23–27 at round 7; `D` spans rounds 8
+and 9 entirely (`h8`, `h9` monomials). The mask-only lanes, under `Λ_j = K`,
+span degrees 0–22 at every round by the same argument (lane `e` contributes
+leading degrees `e−3 … e+1`; the ten exponents cover 0–22 without gaps). So
+`Λ_5 = Λ_6 = Λ_7 = K` is sufficient, and the base-field case shows some such
+condition is necessary.
+
+**D20.2 (predicate, provisional).** The candidate refinement is
+`Good₂ ch := Good ch ∧ span_F {1, alpha ch 0, …, alpha ch 4} = K`
+(then `Λ_5 ⊆ Λ_6 ⊆ Λ_7` are all `K`). Its failure mass under a uniform α-row
+is at most `(#3-dimensional F-subspaces containing 1) · (|F|^3/|K|)^5 =
+(|F|^2+|F|+1)·|F|^15/|K|^5`. In the proved protocol the α-row is drawn in
+`K = SemE = WideExact` (SemD3Glue.lean:528), where this is negligible; for a
+QM31 instantiation it is ≈ 2^-93, and the sharper bound using the products
+`α_i α_k ∈ Λ_5` would be needed to stay below 2^-100. The exact predicate is
+fixed after Z7 reports; the T2b-2b statement is written then.
+
+**Z7 (numeric probe; Claude agent; Rust; no Lean; no host Lean job).** Extend
+`z4/probe.rs`'s Z4c machinery (`Ech`, `lane_eliminate`, `pure_c`, `full_c`,
+`gate_c`, Z4c's D13 transport and challenge replay, `summarize`) into
+`z4/z7.rs` + `run-z7.py`, keeping the base routines byte-for-byte. For each
+α-structure below, report per round `j` the `F`-rank of the round-`j`
+projection of (a) the constructed silent image and (b) the unconstrained pure
+image, the total silent rank, and Z4c-style excess supports `(j,d,k)` against
+`Chain0`-targets, on 5 challenge vectors per structure (all other challenges
+as Z4c; `alpha 9 ≠ 1/2` and `α_i ∉ {0,1}` enforced):
+ (A) α uniform in K (control; expect 112 per round, 1,076 total);
+ (B) all `α_i ∈ F \ {0,1}` (expect the D20.1 deficiency at rounds 6–7, and
+     the measured round-5 behaviour);
+ (C) `α_0..α_4 ∈ W`, `W` a random 3-dimensional `F`-subspace containing 1,
+     `α_5..α_9` uniform in K; (D) `α_0..α_5 ∈ W`; (E) `α_0..α_6 ∈ W`;
+ (F) `α_0, α_1 ∈ span_F{1, α_0}` (2-dimensional), rest uniform;
+ (G) `α_0..α_4` uniform, `α_5..α_9 ∈ F` (late coordinates only; expect no loss);
+ (H) as (A) but with mask-only words restricted to rows with low bits
+     `r_<j = 0` for the round-`j` matrix (diagnostic for the `Λ_j` mechanism).
+Also print the distinct-tail-sum counts per round and, for (A), the
+leading-degree pivot sets per lane at rounds 5–7. Optimised build under a
+cgroup with explicit caps (`run-z7.py` in the style of `run.py`), source
+manifest, receipts; findings as `z4/FINDINGS-Z7.txt` + `summary-Z7.json` +
+`evidence-Z7.json` (the lead converts the findings to `.md`). No production
+or Lean source changes. Stop rule: if (A) does not reproduce 1,076 on every
+vector, stop and report.
+
+**ZF1-0 (inventory and proposal; Claude agent; no proofs; no host).** Produce
+`zf1/INVENTORY-ZF1.txt`: exact names, files and lines of every object ZF1
+composes — `FsStatement` (`ROMView`, `FSExperiments`, `ZK_FS`, `ROMBridge`,
+`ROMReduction`, `middleReal/Ideal`, `zkfs_of_hvzk_perfect`), `FsGood`
+(`badMass`, `zkfs_of_hvzk_on`, `zkfs_of_maskImageOn_good`), `ZkStatement`
+(`ModelSamplers`, `SamplerLaw`, `honestRows`, `honestView`,
+`combinedSamplers`, `R0Obligations`, the 32-row schedule at line 449),
+`FS2.Duplex` (`Params`, `samp`, `stateOf`, `absorbA/squeezeA/advanceA` and
+their injectivity/disjointness lemmas, `Chal`), `FS2.Statement`
+(`Sampler`, `toProgram`), `AspisV8R19.MemoizedProgramLaw` (`Program`, `eval`,
+`lazyMean`, `Table`, `put`, `complete`), `AspisV8R19.AdaptiveFirstReadLaw`
+(`FreshFrom`, `lazyMean_eq_independentMean`,
+`complete_oracle_eq_independentMean`, `empty_oracle_eq_independentMean`,
+`squeezeProgram_fresh_iff`, `independentMean_bind`), the decoders
+(`R0C.V3.DQ.σQ`, `R0C.ModuloField.ordinary/gamma`, `ordinary_mass`,
+`ordinary_mass_257`, `ordinary_event`), `R0P.SemDuplex.combinedOwn_law` and
+`samp_mean`, and the field of the α-row (`SemE := WideExact`). Then a
+proposal, as text with Lean signatures but no proofs: (1) the concrete
+`FSExperiments` instance — adversary as a view-dependent oracle program with
+its own coins, real experiment = the honest 31-round duplex program evaluated
+on a uniform oracle function followed by the adversary's program, observer
+log = its reads, ideal = the same with the simulator's instance; (2) the
+`ROMBridge` — coins = the per-round absorb/squeeze/advance states, a fresh
+table for the adversary's other reads and its coins; `draw` = the challenges
+`σ_i` of the squeeze states in the 32-row schedule; `extend` = answering the
+adversary's reads at prover addresses (recomputable from the view's messages)
+from the recorded states, otherwise from the fresh table; (3) `ε_real`,
+`ε_ideal` = the `FreshFrom`-failure mass (an adversary read hitting a prover
+address before the prover does, or a prover address repeating), with the
+bound shape in terms of the query count and `|State|` and the lemmas that
+give it; (4) the `badMass Good` identification — per α-round mass of
+`{0, 1}` (and `1/2` at round 23) under the semantic decoder through
+`ordinary_mass`/`combinedOwn_law`, naming which `Params.σ` the semantic rounds
+14–23 use in `R0Obligations` and what is data there. List every gap or
+mismatch found. The lead fixes the ZF1 statements from this report.
+
+### Lead decision D20′ (2026-10-13) — ZF1-0 accepted; α lives in the QM31 subfield; the probes' batching field does not match the proved protocol; composition theorem to be restated
+
+ZF1-0 (`7aead2702` on `codex/zf1-inventory-20261013`, cherry-picked as
+`0120ebd64`; `zf1/INVENTORY-ZF1.txt`) is accepted as an inventory. Its two
+substantive findings were checked against the sources and both hold.
+
+**D20′.1 (the α-row field; corrects D20.2).** The semantic challenges are
+decoded by `semChal s = algebraMap QM31Exact WideExact (qm31Sample s)`
+(SemD2.lean:206), fixed for rows 0–24 by `hσsem` in `combined_fiat_shamirZ`
+(MaskFiatShamir.lean:124–125). So in the proved protocol `K = SemE =
+WideExact` but every semantic challenge, including the α-row (rows 15–24,
+`alpha ch i = ch.sem (15+i)`), lies in the QM31 subfield `K₄ ⊂ K`
+(`[K : K₄] = 2`, `[K₄ : F] = 4` for `F` the M31 pack field). D20.2's
+`span_F {1, α_0, …, α_4} = K` is therefore never satisfied and is withdrawn.
+The corrected picture: the mask words are `F`-valued (mask-only lanes) or
+`K₄`-valued (`pack4 B`: G, H1, D), the tower factors `τ_c ∈ K₄`, and with
+`α ∈ K₄^10` every round polynomial of the mask image has coefficients in
+`K₄`; `sRem` is `K₄`-valued too (all semantic challenges and trace values
+are). The spanning target is therefore
+`Chain0₄ ch := { v ∈ Chain0 ch : ∀ cell, v cell ∈ K₄ }`, an `F`-subspace of
+dimension `4·269 = 1076` — Z4c's number — and the refined predicate is
+`Good₂ ch := Good ch ∧ (∀ i, alpha ch i ∈ K₄) ∧ span_F {1, α_0, …, α_4} = K₄`
+(with the `Λ_5 = K₄` variant including the products `α_0 α_i` if the density
+must be sharper). Densities are over `K₄`, not `K`: the simple span condition
+fails with mass ≤ `(|F|²+|F|+1)·|F|^15/|K₄|^5 ≈ 2^-93`; the product-refined
+condition fails with mass `O(|F|^-4) ≈ 2^-124` (a 3-dimensional `F`-subspace
+of `K₄` containing 1 is never a subalgebra, so each product condition costs a
+factor `≈ 2/|F|`); the exact form is fixed in D21 after Z7. The α-law bound
+is `semChal_event` (SemD2.lean:225): `|bad|·(1+δ_Q)/P^4` with
+`δ_Q = P^4/256^32`; `badAlpha_density` (`21/|K|`) is the uniform-decoder
+idealisation and is not the protocol's bound. D20's row numbering
+("rounds 14–23") was the historical 31-row protocol's; the current 32-row
+`combinedProtocolZ` has η at row 14 and α at rows 15–24.
+
+**D20′.2 (batching field — a modelling gap in Z4b/Z4c/Z5 and Z7).** The
+opening challenges are `ch.opening j`, rows 27–30, decoded by
+`R0C.V3.DQ.σQ` (`gamma`/`ordinary`, ModuloField.lean:75–81) into
+`WideExact`, and `linearPayload` weights the PCS coordinates with them:
+`batchLinear π ch = ∑_c ch.opening 0 ^ c • …` (HonestView.lean:191),
+`.openingCoeff` through `relationLinear (openingWeights π ch)` with
+`ch.opening 1, 2`, `.finalCoeff` through `foldLinear (ch.opening 3)`, and
+`.inactiveSum` with `ch.opening 0 ^ c`. These functionals are `K`-valued on
+`K₄`-valued words: over `F` each is 8 conditions (2 over `K₄`). The Rust
+probes set `gamma = 7 ∈ QM31` (probe.rs:2387, 2448, 2558, 2716) and cancel
+the batched word with the D-lift `T_D = −γ^{c−28} t`, which is `K₄`-valued
+and cannot cancel a `WideExact`-weighted combination; with `γ ∈ K ∖ K₄` a
+zero batched word needs two `K₄`-valued lanes per row (G and D), which would
+consume G's round contributions. So the Z4c/Z5 silent-rank gate (1,076) and
+the (i′)/(ii′) passes certify a QM31-batching variant, not the proved
+protocol's payload. This does not touch T2a, T2b-1 or T2b-2a (stated for any
+`K`), but no spanning statement for the proved protocol is credible until the
+gate is redone. **Z8 (numeric; after Z7 reports):** re-run the silent-rank
+gate with `WideExact` batching challenges (aspis-core's `WideExact`
+arithmetic; `K`-valued functionals eliminated over `F` as 8 coordinates),
+with silence defined by the actual coordinates — `.openingCoeff` (7),
+`.finalCoeff` (256), `.inactiveSum`, and per lane `.pointClaim`,
+`.extraClaim`, `.ood`, `.opened` — not by the zero-batched-word proxy; report
+the silent rank against 1,076 = `dim_F Chain0₄` and the (i′)/(ii′) passes on
+5 vectors. **T2b-2b is HELD until Z7 and Z8 report**; D21 writes its
+statement from both.
+
+**D20′.3 (composition theorem; ZF1-0 gap G2).** `zkfs_of_hvzk_on` and
+`zkfs_of_maskImageOn_good` (FsGood.lean:97–98, 120–121) require
+`badMass P bridge adv x ≤ ε_bad` for **every** bridge; a constant-draw bridge
+at a bad challenge has `badMass = 1`, so the hypothesis forces `ε_bad ≥ 1`
+and the theorems are vacuous for the intended use. They are true but
+superseded. **Job ZF-A (Lean; after T2b-2a lands; one job at a time):** in
+`R0Z/FsStatement.lean` add
+
+```
+def ROMReductionWith (bridge : ROMBridge K CommitHandle Aux fs.Adversary)
+    (x) (ε_real ε_ideal : ℚ) : Prop :=
+  0 ≤ ε_real ∧ 0 ≤ ε_ideal ∧
+  ∀ (hx : InLanguage h x) (adv : fs.Adversary) (w : h.Instance), h.public w = x.1 →
+    |mean (realTest h B outputs fs adv x w) - mean (middleReal h B outputs fs bridge adv x w)| ≤ ε_real ∧
+    |mean (middleIdeal h B outputs fs bridge adv x hx) - mean (idealTest h B outputs fs adv x hx)| ≤ ε_ideal
+theorem romReduction_iff : ROMReduction h B outputs fs x ε ↔
+  ∃ bridge ε_real ε_ideal, ROMReductionWith … bridge x ε_real ε_ideal ∧ ε_real + ε_ideal ≤ ε
+```
+
+and in `R0Z/FsGood.lean`
+
+```
+theorem zkfs_of_hvzk_on_bridge (P) (hh : HVZK_on P h B outputs x) (bridge) (ε_real ε_ideal ε_bad : ℚ)
+    (hr : ROMReductionWith h B outputs fs bridge x ε_real ε_ideal)
+    (hmass : ∀ adv, badMass P bridge adv x ≤ ε_bad) :
+    ZK_FS h B outputs fs x (ε_real + ε_ideal + ε_bad)
+theorem zkfs_of_maskImageOn_good_bridge : MaskImageOn Good h B x →
+    ROMReductionWith … bridge x ε_real ε_ideal → (∀ adv, badMass Good bridge adv x ≤ ε_bad) →
+    ZK_FS h B outputs fs x (ε_real + ε_ideal + ε_bad)
+```
+
+(the existing proofs transfer; `middle_means_close` is unchanged). The old
+theorems stay with a docstring "superseded by the `_bridge` forms (D20′.3)".
+
+**D20′.4 (ZF1 plan, from the inventory; statements fixed in D22).** The
+target protocol is the 32-row `combinedProtocolZ` with the four σ
+hypotheses of `combined_fiat_shamirZ` and `p.rounds = 32`
+(`R0Obligations` is the historical Z1 object). The FS experiments are built
+from `JointView.view`/`HonestView.run` and `ZkStatement.messages` (not from
+Z1's `honestRows`); the adversary is a deterministic post-proof oracle program
+`View → Program (Addr L) State Bool` (randomised adversaries follow by
+averaging over their coins outside `ZK_FS`, which quantifies over all
+adversaries — resolves G5). The bridge coins are the per-row absorb/squeeze/
+advance states, the row-31 chain states and a fresh table for the adversary's
+other reads; `draw` applies the row decoders to the squeeze coins; `extend`
+recomputes the prover's addresses from the view's messages and answers from
+the recorded states, else the fresh table. `ε_real = ε_ideal` is the mass of
+a repeated prover address (110 reads: 31·3 + 1 + 16), bounded through
+`lazyMean_eq_independentMean` on a collision-free variant plus an
+identical-until-bad step (G10); `complete_oracle_eq_independentMean` is not
+the right lemma because the adversary's re-reads break `FreshFrom` by design.
+`badMass Good ≤ 21·(1+δ_Q)/P^4` by `semChal_event` and independence of the
+bridge coins. Gaps to be closed inside ZF1: G3 (causality of `messages … i`
+in the challenge rows `< i`), G6 (a ZK duplex `Params` over
+`ZkStatement.Msg` with its own `enc`; statement binding and source bytes are
+D7, outside), G7 (`toChallenges` projection), G8 (byte/`Fin 256`
+conversions), G9 (`absorbA` injectivity), G10, G11 (`R0Z.mean` vs
+`OracleResampling.mean`). Order after T2b-2a: ZF-A → (Z7, Z8 → D21 →
+T2b-2b) → ZF1a (definitions, bridge, G3/G6/G7) → ZF1b (ε via freshness) →
+ZF1c (badMass). Research under the current verdict (PLAN, 2026-10-11): v7
+stands.
+
+### Lead acceptance of Z7 (2026-10-13); decision D20″ — corrections to D20.1, the predicate fixed as `Good₂`, Z8 issued
+
+Z7 (`8dfaa3a4c` on `codex/z7-alpha-structures-20261013`, cherry-picked;
+`z4/z7.rs` as a module of `probe.rs` with a `--z7` dispatch, `run-z7.py`,
+`FINDINGS-Z7.txt` (lead copy `FINDINGS-Z7.md`), `summary-Z7.json`,
+`evidence-Z7.json`, `probe-Z7.log`, `z7-runs/`) is accepted. Reviewed: only
+`z4/` changed; Z4c's rank and target routines are called unchanged; all 40
+jobs replay Z4c's challenge lines byte-for-byte; structure (A) reproduces
+silent rank 1,076 and the Z4c (i′)/derivative/(ii′) passes on 5/5 vectors;
+host receipts (nuc, `MemoryHigh=3G`/`MemoryMax=4G`/swap 0): full scope
+618.9 s, peak child RSS 75,200 KiB, swaps 0; 206 source hashes match.
+
+**Results (identical on all 5 vectors per structure).** Silent per-round
+`F`-ranks (max 108 at rounds 0 and 9 — the initial-sum and terminal conditions
+each cut one `K`-dimension — and 112 elsewhere): (A), (C), (D), (E), (F), (G)
+all attain the maximum at every round, total 1,076, excess 0. (B), all
+`α_i ∈ F∖{0,1}`: round 7 drops to 93 (unconstrained 103), total 1,038; limbs
+`(1, i, u, iu)` at round 7 are 24, 26, 21, 22 silent and 27, 28, 23, 25
+unconstrained; Chain0 targets have excess 38, all at round 7; Z4c's (i′) and
+derivative targets fail 5/5 with pivots `(7,14,2), (7,15,2), (7,16,2),
+(7,16,3), (7,17,2)`; (ii′) passes. Rounds 5 and 6 do **not** lose rank under
+(B). (H) (mask-only rows with low bits zero) loses only at round 7 in the
+unconstrained projection (108); its silent drops at rounds 6–7 are an
+artefact of too few rows for the 113 raw observations.
+
+**D20″.1 (corrections to D20.1).** The `u`-limb count (≤ 24) is confirmed
+(measured 23 unconstrained). Three details of D20.1 were wrong and are
+replaced by the measured values: the distinct tail sums at rounds 0–2 are
+130, 93, 64 (not 512, 256, 128; the counts 42, 26, 15, 8, 4, 2, 1 for rounds
+3–9 stand); `G`'s unconstrained pivot coverage is degrees 0–27 at round 5,
+12–27 at round 6 and 20–27 at round 7 (the leading-degree argument gives only
+a lower bound on pivots; the actual span of `{q_B, X·q_B}` is `2·#tails`
+dimensional); and consequently round 5 is spanned by `G` alone and round 6 by
+`G` plus `F`-scalar lanes, so **only round 7 needs the `K₄`-scalar mechanism**.
+The subspace structures (C)–(F) pass because `Λ_j` contains the products
+`α_i α_k`, which leave any 3-dimensional subspace (none is a subalgebra); the
+failing cases are those where all low-bit scalars stay inside a proper
+subfield, of which (B) is the extreme.
+
+**D20″.2 (predicate fixed).** With `K₄` the `F`-span of the pack basis
+(the QM31 subfield for the tower basis), the predicate for `MaskImageOn` and
+for the ledger is
+
+```
+Good₂ ch := Good ch ∧ (∀ i, alpha ch i ∈ K₄) ∧
+            Submodule.span F {1, alpha ch 0, alpha ch 1, alpha ch 2, alpha ch 3, alpha ch 4, alpha ch 5} = K₄
+```
+
+It implies `Λ_6 = Λ_7 = K₄` (`Λ_7 ⊇ Λ_6 ⊇ span_F{1, α_0, …, α_5}` by summing
+`eqPrefix` over the trailing bit), which is what the spanning proof needs at
+rounds 6–7 (round 6 may not need it, per Z7; using it there is the safe
+choice). Failure mass under independent `semChal`-distributed coordinates:
+a proper `F`-subspace of `K₄` containing `1` and all six values has dimension
+≤ 3; there are `|F|²+|F|+1` three-dimensional ones, and each coordinate lands
+in a given one with mass ≤ `(1+δ_Q)/|F|`, so
+`badMass(span) ≤ (|F|²+|F|+1)·((1+δ_Q)/|F|)^6 ≈ |F|^-4 ≈ 2^-124`, below the
+2^-100 line; the `{0,1,½}` part is `21·(1+δ_Q)/P^4` (`semChal_event`); the
+`∈ K₄` part has mass 0 under the decoder. The exact Lean form of `K₄` and of
+the span condition is fixed in D21 with the T2b-2b statement, **after Z8**.
+
+**Z8 (numeric; Claude agent, continuing Z7's branch and workspace).** The
+gate must be redone for the proved protocol's payload (D20′.2): batching
+challenges `ch.opening 0..3` uniform in `WideExact` (aspis-core's type; no
+QM31 proxy), and silence defined by the actual `linearPayload` coordinates —
+`.inactiveSum` (1 `WideExact` value), `.openingCoeff` (7), `.finalCoeff`
+(256), computed with the R0 opening-layer functions (`batchLinear`: chord
+quotient at `ch.circle 0/1` of each column's π-permuted natural-basis
+coefficients, weighted by `γ^c`; the relation polynomial with
+`openingWeights`; the fold by `ch.opening 3`), each `WideExact` value
+eliminated over `F` as 8 coordinates — plus the per-lane `.pointClaim`,
+`.extraClaim`, `.ood`, `.opened` as in Z4c. No zero-batched-word proxy and no
+D-lift. Report, on 5 Z4c vectors: silent rank against 1,076 (= `dim_F
+Chain0₄`), per-round ranks, (i′)/(ii′) passes with the targets' PCS
+coordinates recomputed under `WideExact` batching, for structures (A) and (B),
+plus (I) all `α_i` in the quadratic subfield `K₂ = F(i)` and (J) `α_0`
+uniform in `K₄`, `α_1..α_6 ∈ F`, `α_7..α_9` uniform (both test `Λ_7` inside a
+proper subfield or a 2-dimensional span). Stop rule: if the opening-layer
+functionals cannot be evaluated column-wise from the existing Rust, stop and
+report what is missing; if (A) under `WideExact` batching gives a silent rank
+below 1,076, report the per-round and per-limb deficit and the excess
+support — that is a finding, not an error. Same caps, receipts, manifest and
+evidence format as Z7; `FINDINGS-Z8.txt`. T2b-2b stays held until Z8 lands.
+Research under the current verdict (PLAN, 2026-10-11): v7 stands.
+
+### Lead acceptance of Z8 (2026-10-13); decision D20‴ — the batching gap closes numerically; the hold on T2b-2b lifts into a proof-design job
+
+Z8 (`c052a8f09` on `codex/z8-wide-batching-20261013`, cherry-picked; `z4/z8.rs`
+as a `probe.rs` module with a `--z8` dispatch, `run-z8.py`, `FINDINGS-Z8.txt`
+(lead copy `FINDINGS-Z8.md`), `summary-Z8.json`, `evidence-Z8.json`,
+`probe-Z8.log`, `z8-runs/`) is accepted. Reviewed: only `z4/` changed; no
+zero-batched-word proxy and no D-lift; silence is every non-semantic
+`linearPayload` coordinate — per lane the Z4c set, and across lanes the 264
+`WideExact` values `.inactiveSum` (1), `.openingCoeff` (7), `.finalCoeff`
+(256), eliminated over M31 as 2,112 limbs; the opening layer is the R0 Rust
+(`prover::quotient` column-wise, Lean's `totalWeights` from
+`chord::quotient_weights`, `prover::round_polynomial`, `fold::fold_message`)
+with a per-job check that the whole-column pipeline equals the sum of per-row
+vectors on all 264 coordinates; `ch.opening 0..3` uniform in `WideExact`;
+Z4c's 20 challenge lines and 25 terminal values replayed. Host receipts
+(nuc, 3G/4G/swap 0): full scope 1,301.6 s, peak child RSS 145,732 KiB,
+swaps 0; 207 source hashes match. One Rust/Lean mismatch was found and
+handled inside the probe: `OpeningData::weights` omits Lean's `κ⁴ • libraWeight`
+term; the probe adds it to match Lean. This is D14's fourth weight row, which
+the Rust reference prover does not implement because R-H is held (D16); no
+consequence under the current verdict, recorded for R-H.
+
+**Results (identical on all 5 vectors per structure).**
+
+| Structure | Silent | Initial retained | (i′) | (ii′) | Round-7 silent |
+|---|---:|---:|---:|---:|---:|
+| (A) α uniform | 1,076 | 1,080 | 25/25 | 25/25 | 112 |
+| (B) all α ∈ F | 1,038 | 1,042 | 0/25 | 25/25 | 93 |
+| (I) all α ∈ K₂ = F(i) | 1,068 | 1,072 | 0/25 | 25/25 | 108 |
+| (J) α₀ ∈ K₄ generic, α₁..α₆ ∈ F | 1,076 | 1,080 | 25/25 | 25/25 | 112 |
+
+Every other round is at its maximum (108 at rounds 0 and 9, 112 elsewhere)
+in all four structures. (B)'s supports and pivots are Z7's exactly; (I)'s
+Chain0 excess is 8 with pivots `(7, 24–27, {u, iu})`. In (ii′) the 2,112
+batched limbs of the witness difference were matched exactly for every pair.
+
+**D20‴.1 (what the numbers settle).** Under the proved protocol's
+`WideExact` batching and its actual silence coordinates, the silent image is
+the full `Chain0₄` (1,076) on generic challenges, and both clauses of
+`MaskImageOn` hold numerically on Z4c's honest targets. The modelling gap of
+D20′.2 is closed as a question of fact; what the Z4b/Z4c/Z5 gates certified
+with the QM31 proxy, Z8 certifies for the real payload on the same vectors.
+Rank is lost only when `Λ₇ = span_F{eqPrefix(α, ℓ)}` lies inside a proper
+subfield of `K₄` (`F` in (B), `K₂` in (I)); (J) shows that a two-dimensional
+`Λ₇ = span_F{1, α₀}` with `α₀ ∉ K₂` already suffices — the lane directions
+`τ_c · Λ₇` then rotate across all four limbs.
+
+**D20‴.2 (predicate).** `Good₂` as fixed in D20″.2 stands for the proof route
+(it gives `Λ₆ = Λ₇ = K₄`, so lane spans are `K₄`-spans and the round argument
+is `K₄`-linear), with one addition forced by `sRem`'s `K₄`-valuedness: all
+semantic challenges, not only α, must lie in `K₄` (`λ, χ, θ, zc, μ, η` enter
+the terminal), so
+
+```
+Good₂ ch := Good ch ∧ (∀ i : Fin 25, ch.sem i ∈ K₄) ∧
+            Submodule.span F {1, alpha ch 0, …, alpha ch 5} = K₄
+```
+
+(mass 0 for the second clause under the decoder; ≈ 2^-124 for the third).
+Recorded alternative, numerically sufficient by (J) and with a trivial density
+proof (`((1+δ_Q)/|F|²)^7 ≈ 2^-434`): `Good₂′ := Good ∧ (∀ i, ch.sem i ∈ K₄) ∧
+∃ i < 7, alpha ch i ∉ K₂`; it needs the direction-rotation argument instead
+of `K₄`-linearity and is kept as the fallback if the design below prefers it.
+
+**D20‴.3 (T2b-2b becomes a design job before a statement).** The hold is
+lifted, but `Chain0₄ ⊆ A(silentMasks)` is a global rank statement about the
+real silence kernel, and no Lean statement is fixed until its proof is
+designed. **T2b-2b-D (design; Claude agent on Fable; no Lean, no host):**
+write the complete mathematical argument for `Chain0₄ ch ⊆ (A h.transport B
+ch ∘ inlM)(silentMasks …)` on `Good₂` with every nondegeneracy condition on
+`ch.circle`/`ch.opening` made explicit, as a sequence of lemmas whose
+statements transcribe to Lean, each tagged *structural* (provable for all
+challenges, e.g. Vandermonde independence of evaluations at distinct points,
+the `K₄`-linear leading-degree argument of D20.1/D20″) or *conditional*
+(holds off an explicit bad set of challenges, with the set and its density
+named). Decomposition to validate or replace: **(P) PCS cancellation** — the
+264 batched coordinates and `D`'s own 112 observations are cancelled by `D`'s
+round-free coefficients 56–1023 (968 `K₄`-coordinates) together with `G`'s
+inactive-row sum (`D` alone reaches only the `K₄`-line `γ^28·K₄` of
+`.inactiveSum`); **(Q) round spanning** — the round images of the mask-only
+lanes' own-silence kernels (claims = MLE at the three α-points and the fourth
+row, OOD = natural-basis evaluation at the circle points under π, opened =
+codeword symbols at the 88 queried positions under π), of `G`'s own-silence
+kernel with zero inactive-row sum, and of `D`'s Libra coefficients 0–55 span
+`Chain0₄`; the design must state exactly which rank facts (Q) needs where the
+row basis (claims, rounds) meets the coefficient basis (OOD, opened) through
+the transport, and which of them are structural. Deliverable
+`t2b2b/DESIGN-T2b-2b.txt`; the lead writes D21 (the Lean statement and the
+T2b-2b job) from it. **Z8b (numeric; probe agent, same branch family):** on
+Z8's (A) vectors check the decomposition — (1) the `F`-rank of the batched 264
+coordinates plus `D`'s own 112 observations restricted to `D`'s coefficients
+56–1023 (2,560 if full; 2,556 if `.inactiveSum` is short by the `K₄`-line),
+and the same with `G`'s inactive-row sum added; (2) the `F`-rank of the round
+image of {mask-only lanes ∩ own-silence} + {`G` ∩ own-silence ∩ zero
+inactive-row sum} + {`D` coefficients 0–55} (expect 1,076); (3) the silent
+rank of the subspace assembled from (1) and (2) (expect 1,076 — equality with
+Z8's silent rank means the decomposition loses nothing). Any shortfall is a
+finding that redirects the design. Research under the current verdict (PLAN,
+2026-10-11): v7 stands.
+
+### Lead acceptance of Z8b (2026-10-13); decision D20⁗ — the decomposition loses nothing globally, but its PCS block is not full rank; the design is redirected
+
+Z8b (`166ed47cd` on `codex/z8b-decomposition-20261013`, cherry-picked;
+`z4/z8b.rs` as a `probe.rs` module behind `--z8b`, `run-z8b.py`,
+`FINDINGS-Z8b.txt` (lead copy `FINDINGS-Z8b.md`), `summary-Z8b.json`,
+`evidence-Z8b.json`, `probe-Z8b.log`, `z8b-runs/`) is accepted. Only `z4/`
+changed; Z8's WideExact batching and real silence coordinates; 5 (A) vectors,
+identical numbers on each; host receipts (nuc, 3G/4G/swap 0): full scope
+516.8 s, peak child RSS 217,884 KiB, swaps 0; 208 source hashes match.
+
+**Correction of counts.** A `K₄`-valued lane (G, D) has 94 own observations
+(3 point claims, 1 extra claim, 2 OOD, 88 opened, each `K₄`-valued) = 376
+limbs, not 448; the "112" of an M31 lane is a limb count. Block (1) of
+D20‴.3 therefore has 2,112 + 376 = 2,488 limb-functionals.
+
+**Results.**
+- Per-lane own-silence ranks on Z8's fibre set: mask-only lanes 16–25: 112
+  each; G: 376 (380 with its inactive-row sum); D: 376; D restricted to
+  coefficients 0–55: 224; to 56–1023: 372.
+- **(1) PCS block on D's coefficients 56–1023:** rank 2,184 of 2,488; with
+  G's inactive-row sum 2,188. Breakdown: batched 2,000 of 2,112 (2,004 with
+  G); D-own 372 of 376; `.inactiveSum` 4 of 8 limbs (8 with G — the
+  `K₄`-line effect predicted in D20‴.3); opening+final 1,996 of 2,104 (27
+  `K₄`-functionals short). **The block is 300 limbs short of full rank**; the
+  `.inactiveSum` line accounts for 4 of them.
+- **(2) Round image of the (Q) generators** (mask-lane own-kernels, G's
+  own-kernel with zero inactive-row sum, D's coefficients 0–55): 112 per
+  round, 1,084 retained, 1,080 with initial zero (the terminal is not forced
+  to zero because D's 0–55 are free there); Chain0 and (i′) targets already
+  inside; the generators' silent part alone is only 988.
+- **(3) Assembled** ((Q) generators + D's 56–1023): span 3,376 with 2,296
+  silence pivots; initial-retained 1,080; **silent 1,076 = Z8's**; per round
+  108, 112, …, 112, 108; Chain0 excess 0; (i′) 25/25; derivative 25/25.
+
+**D20⁗.1 (what this means).** The modular picture "D's round-free
+coefficients cancel the PCS coordinates; the lanes span the rounds" is false
+as a lemma: D's high coefficients plus G's inactive sum cancel 2,188 of the
+2,488 batched/own limbs, and the remaining 300 are cancelled by the surplus
+of the other lanes' own-silence kernels (each mask-only lane has a
+912-limb kernel of which only a bounded part carries round image). The
+global statement stands — the assembled subspace is exactly the silent image
+on these vectors — so the proof must be organised around a global
+kernel-rank fact (the observation functionals restricted to the round-kernel
+`ker R` have full rank, or an equivalent) or around a decomposition that uses
+the lanes' surplus explicitly. The T2b-2b-D agent has been given these
+numbers and asked to restructure accordingly, keeping the
+STRUCTURAL/CONDITIONAL tagging and naming the numeric check that would
+confirm each restructured lemma. D21 waits for the revised design. Research
+under the current verdict (PLAN, 2026-10-11): v7 stands.
+
+### Lead decision T2b-2a″ (2026-10-13) — item 2's Libra table restated in the local degree; the third stop is accepted
+
+The T2b-2a worker stopped on item 2's Libra formula: the table in "User
+direction (2026-10-12)" item 2 is written with `d : Fin 56` as both the
+coefficient index and the exponent, but `libraWeight` (SemView.lean:65) is
+`if j < 28 then alpha 8 ^ j else if j < 56 then alpha 9 ^ (j − 28) else 0`,
+so for cells 28–55 the exponent is the local degree `d − 28`. The worker's
+counterexample stands: `π = Equiv.refl`, D's limb 0 at row 28 equal to 1
+(row 28 is copy-active, mask `6144` bit 12, so `balance 0` leaves the word
+`δ₂₈` unchanged), `d = 28`, round 9: the actual polynomial is `1`
+(`α₉^(28−28)`), the table said `X^28`; the actual mask total is `1024`, the
+table said `512`. The stop is correct; Z4c's table used "degree `d` in `hm`"
+in the local sense and I transcribed it as the coefficient index.
+
+**T2b-2a″.1 (item 2, Libra, corrected).** For `d : Fin 56` let
+`m := if d.val < 28 then 8 else 9` and `e := d.val % 28` (the local degree).
+`pureRound_libra (d : Fin 56)`: for a tape supported on D's coefficient `d`
+with balanced word value 1 there —
+
+```
+mask total        512 · (if e = 0 then 2 else 1)
+round j < m       C (2^(8−j) · (if e = 0 then 2 else 1))        (a constant)
+round j = m       C (2^(9−j)) * X^e
+round j > m       C (2^(9−j) · (alpha ch m)^e)                   (a constant)
+```
+
+Everything else in item 2 (the mask-only and G closed forms, the connection
+to `L π B ch (pureTrace B m)` after `balance 0`) and items 1 and 3 (as
+corrected by T2b-2a′) are unchanged. Check: `d = 28` gives `e = 0`, `m = 9`,
+mask total `1024`, round-9 polynomial `1`, matching the counterexample.
+Research under the current verdict (PLAN, 2026-10-11): v7 stands.
+
+### Cross-reference (2026-10-13): the R1 programme in the Rust PLAN; privacy merge
+
+The Rust PLAN section "Lead review of the `codex/100bit-spend-path-20261013`
+checkpoint (2026-10-13)" amends the P2 verdict (the ordinary two-transaction
+case now measures 1.34M/1.37M CU with the Pool adapter; the rollover case
+fails; headroom is 25–57K) and re-states the fit gate as G_R1. For this
+track it adds: **Z9** — the Z8 gate on the R1 payload (two folds, 64 final
+values, D18 π, γ ∈ WideExact, ρ ∈ QM31) with real coordinates and no proxy,
+on the checkpoint's two γ limb sets and structures (A)/(B)/(I)/(J); the
+T2b-2b design to be stated for a payload family covering R0 and R1; ZF1 for
+the 33-row schedule; **ZF2** — an efficient simulator obligation (the
+checkpoint's PRIVACY-RANK-PATH is right that `Classical.choose` is not an
+algorithm; the public mask-map route is to be fixed as a lead decision after
+T2b-2b). The checkpoint found the γ-in-QM31 gap of D20′.2 independently and
+compensates with both K₄-valued pads, as D20′.2 requires; its probe reaches
+silent rank 1,076 on the actual R1 payload. Nothing in T2a, T2b-1, T2b-2a or
+the D20 series changes. Standing verdict: v7 stands; R1 is a live candidate
+under G_R1.
+### T2b-2a completed — pure-mask round forms and the easy inclusion (2026-10-13)
+
+Implemented on `codex/t2b2a-purerounds-20261013`, rebased before the first
+commit onto `5ff677bf36be5af137b29f9bf09c819bfb29073c`. The accepted stops and
+corrections T2b-2a′ (retain the mask sum) and T2b-2a″ (Libra local degree)
+are recorded above and in `t2b2a/evidence.json.previous_stops`. The only new
+source is `R0Z/PureRounds.lean`. It imports `Shift` and `Chain`, plus
+`Z4Maps` solely to use its existing `silentMasks` submodule. No existing
+Lean module changed.
+
+**Easy inclusion and silence.** `silent_mem_chain0` has exactly the specified
+non-round-silence premise, with no `Good` premise. `A_pure` identifies the
+payload with `L (pureTrace m)`; `L_maskSum` and `rounds_initial` give its zero
+initial boundary, `rounds_chain` gives the nine internal boundaries, and
+`Phi0_A` with the silent point/extra claims gives the zero terminal value.
+`mem_silentMasks_iff` is T2b-2a′'s coordinate-level equivalence, including
+`.maskSum` and all eight listed groups of retained coordinates. Its proof
+only projects or reconstructs the existing non-round map.
+
+**Closed forms.** The only new definitions are `w`, `β` and `eqPrefix`.
+`w` is parameterized by the source family: `w_zero` gives `3+22j` and
+`w_sixteen` gives `275+150j`. `selector_round_match` and
+`selector_round_mismatch` prove that each row's equality selector leaves
+exactly its matching Boolean tail. `linear_round_match` splits the weighted
+linear form into `w_j X + β_j(r)`. `power_rounds` applies
+`rounds_eval_of_vdeg`, collapses the tail sum symbolically, and identifies
+the polynomial on the 28 distinct nodes using `nodes_injOn`.
+`pureRound_maskOnly` and `pureRound_G` specialize this formula, including
+G's added constant 1. The mask-only functional and polynomial degree is
+at most `e_c+1`, and `maskOnly_degree` proves `e_c+1 ≤ 22`; G's bound is 27.
+
+`pureRound_libra` uses coordinate 8 or 9 and local degree `d.val % 28`.
+A generic tuple equivalence isolates one Boolean coordinate; symbolic cube
+cardinality supplies the powers of two. `pureLibra_maskSum` proves the
+`512*(if e=0 then 2 else 1)` total. No Boolean cube, row universe, field or
+literal registry is enumerated.
+
+**Connection to the honest view.** The word lemmas identify `pureTrace`'s
+mask-only, G and D lanes with `maskOnlyColumns`, balanced packed G, and
+`dWord`, respectively. Raw-support lemmas prove the required trace support
+from the tape components, including zero G/D or mask-only components as
+appropriate; support is not an unproved premise of the final bridges.
+`L_pure_maskOnly_coeff`, `L_pure_G_coeff` and `L_pure_libra_coeff` identify
+the actual `.semanticCoeff j i` coordinates with the closed forms. For
+Libra the unit-coefficient condition is imposed on the transported word
+**after** `balance 0`; `L_pure_libra_maskSum` connects its total as well.
+H1 padding is never treated as a pure mask lane.
+
+**Replay.** Before attempt 3395, all 105 unchanged R0Z/R0P modules matched
+the staged host hashes, including `TerminalEligible` and `Chain`. All 13
+attempts (3395–3407) ran one module at a time in the pinned host workspace,
+with `sh run2.sh N R0Z/PureRounds 7000 7` run directly, never under an outer
+flock. Caps: MemoryHigh 5G, MemoryMax 7G, MemorySwapMax 0, TasksMax 128,
+timeout 900 s, Lean `-j1 -M7000 -DElab.async=false`. The reported populated
+reservation was 24 GiB plus this job's 7 GiB, below the 55 GiB safe limit.
+No cap changed. Lean v4.32.0 and the pinned cache were reused.
+
+Nine attempts failed during elaboration; four stages passed. Repairs were
+local projection/unfolding control, dependent-index normalization, or proof
+syntax; no statement or premise was weakened. Final attempt 3407: exit 0,
+9.40 s wall, peak RSS 7,080,048 KiB, swaps 0. Across all attempts the maximum
+wall time was 16.97 s and maximum RSS was 7,080,048 KiB; every attempt had
+zero swaps. [t2b2a/evidence.json](t2b2a/evidence.json) records source hashes,
+commands, metrics, diagnostics, repairs and host receipt hashes. No unchanged
+full regression was repeated.
+
+All four required `#print axioms` results are exactly
+`[propext, Classical.choice, Quot.sound]`: `silent_mem_chain0`,
+`pureRound_maskOnly`, `pureRound_G`, `pureRound_libra`. The corrected silence
+equivalence and all four final honest-view bridges were also audited with
+exactly those axioms. No prohibited proof escape or resource option occurs;
+the sole `decide` is `(28 : Fin 29) ≠ 27`; the sole explicit `Finset.univ`
+is over `Fin 10` in the weighted linear-form degree lemma. No binaries,
+co-author trailer or push.
+
+This closes T2b-2a only. Nothing proves, assumes or weakens `MaskImageOn
+Good`; no spanning or deployment claim follows. The deployment verdict is
+unchanged: v7 stands.
+
+### Lead acceptance of T2b-2a (2026-10-13); ZF-A released
+
+T2b-2a (`700dd4b4a` on `codex/t2b2a-purerounds-20261013`, one commit on
+`5ff677bf3`, cherry-picked as `1cdcbd22b`) is accepted. Reviewed against the
+statements fixed in "User direction (2026-10-12)" items 1–3 with T2b-2a′
+(mask-sum coordinate) and T2b-2a″ (Libra local degree):
+
+- **Statements.** `silent_mem_chain0` with exactly the non-round-silence
+  premise and no `Good`; `mem_silentMasks_iff` at coordinate level with
+  `.maskSum` and the eight retained groups; `pureRound_maskOnly`
+  (`τ_c = towerBasis ((16+c) mod 4)`, exponent `maskOnlyFactorExponent c`,
+  `w 0 j = 3+22j`, `β`, `eqPrefix` in the source's MSB-first `rowBits`
+  order, selector `selAt a r`); `pureRound_G` (`1 + maskLinear 16 ^ 26`,
+  `w 16 j = 275+150j`); `pureRound_libra` with `k = 8/9` and `e = d % 28`
+  for the point function `a ↦ a k ^ e`, plus `pureLibra_maskSum`
+  (`512·(2 if e = 0 else 1)`); and the honest-view bridges
+  `L_pure_maskOnly_coeff`, `L_pure_G_coeff`, `L_pure_libra_coeff`,
+  `L_pure_libra_maskSum`, stated for the words after `balance 0`
+  (`maskOnlyColumns`, balanced packed G, `dWord`), with the Libra unit
+  condition imposed on the transported word after balancing. Only `w`, `β`,
+  `eqPrefix` are new definitions. `Z4Maps` is imported only for `silentMasks`.
+- **Proof substance (lead inspection).** `power_rounds` is the generic closed
+  form: `rounds_eval_of_vdeg`, the symbolic tail collapse
+  (`selector_round_match/mismatch`, `tail_sum_selector`), the split
+  `w_j X + β_j(r)` (`linear_round_match`), and identification on the 28 nodes
+  (`polynomial_ext28`, `nodes_injOn`); degrees `e_c + 1 ≤ 22`
+  (`maskOnly_degree`) and 27 for G. The Libra form isolates one Boolean
+  coordinate by a tuple equivalence with symbolic cube cardinalities. Support
+  lemmas derive the trace support from the tape components rather than
+  assuming it. H1 padding is never a pure mask lane.
+- **Hard rules.** No `sorry`/`axiom`/`native_decide`/`admit`/`maxRecDepth`/
+  `maxHeartbeats`; one `decide` on `(28 : Fin 29) ≠ 27`; the only explicit
+  `Finset.univ` is over `Fin 10`; all row and cube sums symbolic. Only
+  `R0Z/PureRounds.lean`, the LOG section and `t2b2a/evidence.json` changed.
+- **Replay evidence (verified on the host).** Attempts 3395–3407, one module
+  at a time, `run2.sh` run directly, caps 5G/7G/swap 0/900 s, no cap raised;
+  105 unchanged modules hash-checked before 3395. Final attempt 3407: exit 0,
+  9.40 s, peak RSS 7,080,048 KiB, swaps 0; `evidence/sha-3407.txt` and the
+  staged copy match the committed source (`227c7f58…b704c4`); `out-3407.log`
+  carries nine `#print axioms` lines, each exactly
+  `[propext, Classical.choice, Quot.sound]`. Host counter: next 3408.
+
+**State of D17.3 (i′).** Proved: `sRem ∈ Chain0` (T2b-1, `alpha ch 9 ≠ 1/2`)
+and `A(silentMasks) ⊆ Chain0` (T2b-2a). Open: `Chain0₄ ⊆ A(silentMasks)` on
+`Good₂` (T2b-2b; design in progress per D20⁗) and clause (ii′). The numeric
+record (Z4c, Z5, Z7, Z8, Z8b) supports both on generic challenges for the
+proved protocol's payload.
+
+**ZF-A is released** as specified in D20′.3 (`ROMReductionWith`,
+`romReduction_iff`, `zkfs_of_hvzk_on_bridge`, `zkfs_of_maskImageOn_good_bridge`),
+base the commit carrying this section, attempts from 3408. Research under the
+current verdict (PLAN, 2026-10-13): v7 stands; R1 is a live candidate under
+G_R1.
+
+### ZF-A completed — bridge exposed in FS composition (2026-10-13)
+
+Branch `codex/zfa-bridge-composition-20261013`, base
+`4edacd5bda84f7808a87a29a466f7ff8eb6e6e26` (carrying T2b-2a acceptance).
+The four statements fixed in D20′.3 compile as given, with no added or
+weakened premise. `FsStatement.lean` adds `ROMReductionWith` immediately
+after `ROMReduction`, retaining the two nonnegative comparison bounds for
+the specified bridge, and `romReduction_iff`, which recovers the original
+existential packaging and sum bound. `FsGood.lean` adds
+`zkfs_of_hvzk_on_bridge` and `zkfs_of_maskImageOn_good_bridge`: the bad-mass
+hypothesis now concerns the same bridge supplied to `ROMReductionWith`, and
+the conclusion has error `ε_real + ε_ideal + ε_bad`.
+
+The existing triangle-inequality proof transfers with the bridge supplied
+as an argument. `middle_means_close` is byte-identical to the base, as are
+the existing theorem declarations and proofs. Both old FsGood theorems
+remain with the docstring “superseded by the `_bridge` forms (D20′.3)”. No
+concrete bridge, ROM comparison certificate, challenge law, or numerical
+bad-mass bound is supplied by this composition result.
+
+Host: `dombarker@100.108.41.90`, pinned workspace
+`/home/dombarker/project-offloads/aspis-fs-generic-20261006`. All 106 base
+R0Z/R0P modules matched the staged host sources before the first attempt.
+The existing Lean v4.32.0 / Mathlib cache was reused. Each module ran once,
+in this order, using `sh run2.sh N Module 7000 7` directly; the launcher took
+its own lock. Caps were MemoryHigh 5G, MemoryMax 7G, MemorySwapMax 0,
+TasksMax 128, timeout 900 s, Lean `-j1 -M7000 -DElab.async=false`. Both
+launches admitted 24 GiB populated plus this job's 7 GiB below 55 GiB.
+
+| Attempt | Final target | Exit | Wall time | Peak RSS (KiB) | Swaps |
+|---|---|---|---|---|---|
+| 3408 | `R0Z/FsStatement` | 0 | 3.17 s | 6,847,708 | 0 |
+| 3409 | `R0Z/FsGood` | 0 | 3.46 s | 6,859,556 | 0 |
+
+All four required `#print axioms` results are exactly
+`[propext, Classical.choice, Quot.sound]`: `ROMReductionWith`,
+`romReduction_iff`, `zkfs_of_hvzk_on_bridge`,
+`zkfs_of_maskImageOn_good_bridge`. All eleven printed declarations across
+the two modules have that same result. No failed Lean attempt, cap increase,
+dependency rebuild or unchanged full regression. Next host attempt: 3410.
+[zfa/evidence.json](zfa/evidence.json), in the T2b-1 format, records source
+SHA-256 and Git blob identities, dependency identity, commands, metrics,
+axioms, and host receipt paths and hashes.
+
+Only the two prescribed Lean files, this LOG section and that evidence JSON
+changed. Neither target contains `sorry`, an `axiom` declaration,
+`native_decide`, `admit`, `maxRecDepth`, `maxHeartbeats` or `decide`. No new
+enumeration or broad unfolding; no binaries, co-author trailer or push.
+This closes ZF-A only. The research verdict is unchanged: v7 stands; R1
+remains a live candidate under G_R1.
+
+### Lead acceptance of ZF-A (2026-10-15)
+
+ZF-A (`0782fa3a7`, fast-forwarded onto `v8-reference` with L1 and L2) is
+accepted: `ROMReductionWith`, `romReduction_iff`, `zkfs_of_hvzk_on_bridge`,
+`zkfs_of_maskImageOn_good_bridge` as fixed in D20′.3; the old theorems keep
+their "superseded" docstrings. Host attempts 3408 (`R0Z/FsStatement`, exit 0,
+SHA `e79a9ae2…`) and 3409 (`R0Z/FsGood`, exit 0, SHA `9d3ec489…`) verified
+against the host receipts; all axiom lines exactly `[propext,
+Classical.choice, Quot.sound]`; no cap raised. The vacuity found by ZF1-0
+(gap G2) is closed: the bad-mass hypothesis now quantifies over adversaries
+for one exhibited bridge. Open on this track: T2b-2b (design agent stopped by
+a provider session limit before writing; relaunched 2026-10-15), (ii′), ZF1,
+ZF2. Host counter: next 3426.
+
+### Lead acceptance of the T2b-2b design as a proposal (2026-10-15); Z8c issued; D21 waits for Z8c
+
+The T2b-2b-D design (`5bedc6303`, cherry-picked; `t2b2b/DESIGN-T2b-2b.txt`,
+Opus agent) is accepted as the working proposal, not as fixed statements.
+What it establishes and what it changes:
+
+- **Reduction.** The spanning half splits into (Q′) round cover — every
+  K₄-valued chain vector with terminal 0 is the round image of an own-silent
+  tape — and (B) the batched opening coordinates on own-silent round-kernel
+  tapes reach what they reach on all own-silent tapes. This replaces the
+  refuted (P)/(Q) split (D20⁗). On own-silent tapes the observations satisfy
+  exactly 24 K-relations (192 limbs) from existing R0 lemmas (`round_eval`,
+  `round_boundary`, `fold_encoded` on the 22 fibres), matching Z8's 1,920.
+- **Why Z8b's (P) block fell short.** On D's coefficients 56–1023 with zero
+  OOD values the chord quotient is divisible by x^28, so its fold vanishes on
+  fibres 0–13; G's 56 low rows supply them.
+- **Model gap (correction F4).** In Lean every mask lane is balanced at row 0
+  (`balance 0`), so each lane's word space is a hyperplane and the inactive sum
+  vanishes identically. Z8/Z8b used unbalanced unit sources, a superset of the
+  Lean mask space by up to 10 limbs. **1,076 is therefore an upper bound for
+  the Lean model, not yet a measurement.** Z8c decides it.
+- **Predicate.** The route needs Λ₄ = K₄, which Good₂ does not give. Proposed
+  `Good₃ := Good ∧ (∀ i, ch.sem i ∈ K₄) ∧ (at least three of α₀..α₃ ∉ K₂)`,
+  plus explicit nondegeneracy conditions on the circle points and fold
+  challenge. K₄ as a subfield needs a premise PackBasis lacks (i² ∈ F,
+  u² ∈ F + F·i; true for QM31). Total conditional mass excluding the open
+  item ≈ 2^-104.3 (privacy ledger term; about 4 bits of margin), with the
+  minor bounds valid only once nonvanishing witnesses exist.
+- **Main risk (OT-open).** Transversality of the 88 opened symbols to each
+  lane's round kernel has no proof route for all query sets. If none is found
+  it enters the theorem as an explicit, numerically checked premise, labelled
+  as such in the ledger.
+- Clause (ii′) is not covered. The R1 payload changes every count.
+
+Next: **Z8c** (probe, §3.3 of the design; Opus agent) on the balanced Lean
+model; J1–J3 and J5a can be written independently of Z8c; D21 after Z8c; an
+OT-open research item before J6. Verdict unchanged.
+
+### Lead acceptance of Z8c (2026-10-15); D21: design corrections, Z8d issued, Lean statement still waits
+
+Z8c (`6c93dfb64`, Opus agent; `z4/FINDINGS-Z8c.md`, `summary-Z8c.json`,
+`evidence-Z8c.json`) is accepted. Receipts: 36 per-process records, exit 0,
+swap 0, peak RSS 314 MB per job, cgroup peak 1.59 GB under MemoryMax 4G;
+209 source hashes match; all 35 CHALLENGE lines and A's 25 terminal triples
+match probe-C.log. Every number is identical across the 5 vectors of each
+structure.
+
+**D21.1 Model gap closed.** On the balanced Lean sources (`balance 0`, no
+`.inactiveSum` proxy) the silent rank is 1,076 for A, J, K and M. Z8 and Z8c
+agree on every per-round and per-limb rank; the only difference is the 8
+`.inactiveSum` limbs, now identically 0. 1,076 is a measured rank of the Lean
+model on these vectors, not only an upper bound (F4 resolved).
+
+**D21.2 Verifier relations exact.** The annihilator of bat(ker own) has
+dimension 200 and is spanned by `.inactiveSum` plus the 24 relations (S1, S2,
+22 × S3_u), which are independent. F2 is confirmed; the (B) target is fixed as
+"bat(ker own) = the common zero set of these 25 relations".
+
+**D21.3 Predicate.** L (α₀..α₅ ∈ F) fails at the statement level: silent 994,
+(ii′) 0/25, full conditioned image 1,073. Good₂′ at i = 6 alone is rejected.
+K passes with Good₃ false, so Good₃ is sufficient, not necessary. Good₃ stays
+the proof predicate: a sufficient predicate with a mass bound is all the
+ledger needs, and weakening it buys at most a fraction of a bit.
+
+**D21.4 OT_l correction.** On ker R_l the lane's own observations have rank 108
+only for e ∈ {1, 3, 5} and 104 for every e ≥ 7, not "108 for e ≤ 13". Rel_l in
+OT_l includes claim₂ for e ∈ {7, 9, 11} as well, using rounds beyond 6. The
+round-6-only statement F5 holds exactly as the design predicted. OT′ holds as
+designed (mask lanes 108, G 372, D 372).
+
+**D21.5 The x^28 law is not confirmed and (B)'s split is not the f0..f13
+split.** D-high misses 104 limbs (13 K-dims), not the 14 low-fibre
+coordinates; all of f0..f13 fail as relations. This accounts exactly for
+Z8b's 8-limb residual. The designer's §2.5.1 may be right in the monomial
+basis and simply mis-applied to coefficients in the encoder's basis
+(`basis::values`, NaturalBasis); that is the agent's hypothesis and is not
+checked. G-low is 220, not 224, because G's extra claim is a functional on
+exactly the rows π⁻¹(0..55); it is 224 without it. The assembly holds:
+bat(D-high_bal ∩ ker own_D) + bat(G ∩ ker R_G ∩ ker own_G) = 1,912 on every
+structure. PR6 and PR7 hold.
+
+**D21.6 Consequence for the Lean statement.** (Q′) and the (B) target are
+fixed by D21.2. The proof of (B) cannot use the x^28 coordinate split, and the
+Lean statement of the D-high/G decomposition is not written until the basis
+question is answered. Z8d is issued:
+
+1. Identify the coefficient basis of the D word in Lean (`R0Z/MaskLayout.lean`
+   `dWord` and the PCS encoder it feeds) and in the probe (`encoder::eval_pair`,
+   `basis::values`), and the change of basis to monomials.
+2. Rerun the D-high block with the condition "monomial-basis polynomial
+   divisible by x^28" (and with "NaturalBasis coefficients < 56 zero", as a
+   control equal to Z8c's 1,808). Report the rank, the left kernel modulo the
+   25 relations, and whether f0..f13 hold.
+3. Rerun G-low in the same basis, with and without G's extra claim.
+4. Structure A, vectors 0–4; one job per vector; MemoryMax 4G; same receipts.
+
+If (2) gives 1,800 with f0..f13 holding, §2.5 stands in the monomial basis and
+D21's Lean statement is written in that basis. Otherwise the designer revises
+§2.5 from Z8c §5's remainder support [h2..h6, f22..f255].
+
+J1–J3 and J5a of the T2b-2b plan do not depend on §2.5 and can be released.
+Verdict unchanged. Host counter: next 3426.
+
+### Lead acceptance of Z8d (2026-10-15); D22: §2.5 of the T2b-2b design withdrawn, (B) redesign issued
+
+Z8d (`de86b2306`, Opus agent; `z4/FINDINGS-Z8d.md`) is accepted. The control
+reproduces Z8c's 1,808 exactly. Structure A, vectors 0–4, identical outputs.
+Receipts: all exit 0, swap 0, peak RSS 340 MB per job, cgroup peak 1.69 GB
+under MemoryMax 4G; 210 source hashes and 5 CHALLENGE lines match.
+
+**D22.1 Basis.** Lean and Rust both index the D message (and every PCS
+message) in the natural Chebyshev-product basis N_j = ∏_{b ∈ bits j} T_{2^b}:
+`dWord` (MaskLayout.lean:91) → `coeffsLinear` (HonestView.lean:80, π only) →
+`naturalCoefficientPolynomial` (V5FriInitialCircleEncoderIdentity.lean:124;
+CircleNaturalBasis.lean:43); `foldMessage` reads natural coordinates directly
+(Fold.lean:71). Rust: encoder.rs:10, basis.rs:37, fold.rs:61.
+
+**D22.2 §2.5 of the design is withdrawn.** It treats c as monomial
+coefficients. Its quotient step is a correct polynomial fact, but the
+conclusion that f0..f13 vanish needs natural coefficients of the quotient
+below 56 to be zero, which X^28-divisibility does not give (checked: natural
+low coefficients 56/56 nonzero, low folds 14/14 nonzero). In the monomial
+condition D-high reaches 1,792, not 1,800 (1,700 inside ker R_D, where it is
+not round-free: R_D rank 216). No basis gives the design's split.
+
+**D22.3 What stands.** (Q′), the (B) target (D21.2: bat(ker own) is the common
+zero set of the 25 relations) and the assembly: every D-high variant plus G's
+batched image reaches 1,912 = bat(ker own). G-low is 224 in monomial
+coordinates with or without the extra claim. The remainder support
+[h2..h6, f22..f255] is the complement of the 25 relations' pivots and carries
+no structure; D21.6's instruction to revise from it is withdrawn.
+
+**D22.4 Host discipline.** The full run launched while another job's scope (a
+`timeout 900` Lean replay of aspis-r1-concrete-decoder) was active; the launch
+listed scopes but did not gate on them. No harm (4 GiB reservation, the other
+scope exited within moments), but the rule is unchanged: a launch gates on no
+other aspis scope being active, or on an explicit reservation sum check.
+
+**D22.5 Next.** A design revision of (B) (T2b-2b-D′, Opus agent) in the natural
+basis. Requirements: every claimed rank reproduces Z8c/Z8d on structure A;
+the decomposition must be one Lean can state (row sets or natural-coordinate
+conditions on named words, not dense change-of-basis conditions unless a
+closed form is given); if no proof route is found, (B) enters the theorem as
+an explicit numerically checked premise, labelled in the ledger alongside
+OT-open, and the design says so. D21's Lean statement waits for it. J1–J3 and
+J5a remain releasable. Verdict unchanged. Host counter: next 3426.
+
+### Lead acceptance of T2b-2b-D′ (2026-10-15); D23: (B) enters as premise B-open; privacy claim stays conditional
+
+T2b-2b-D′ (`93e0830da`, Opus agent; `t2b2b/DESIGN-T2b-2b-Dprime.txt`, probe
+Z8e in `z4/z8e.rs`, `z4/z8e-runs/`) is accepted as the working design.
+Z8e receipts: structure A, vectors 0–4, all exit 0, swap 0, peak RSS 324 MB
+per job, cgroup peak 1.42 GB under MemoryMax 4G, launches gated on no other
+aspis scope (D22.4 satisfied), 211 source hashes match.
+
+**D23.1 D-high explained.** In the natural basis, V_D = B₀ ∩ {f0..f13 ∈
+lowShadow} ∩ ker etaRel 28 (1,912 − 96 − 8 = 1,808). "⊆" is argued in the
+design (Facts 1–2: multiplication by the chord line moves natural indices up
+by one or down only by clearing trailing ones; the conjugate round_eval
+relation); "=" is measured (annihilator 304 limbs = 25 relations + 96 Ψ_lo +
+8 etaRel, unexplained 0). V_G = B₀ ∩ ker etaRel 27 exactly (1,904). This
+replaces the withdrawn x^28 law.
+
+**D23.2 (B) is not proved for all query sets.** It reduces to DHighChar⊇ and
+GCover; the query-dependent parts (TP_D and Gb) have the same obstacle as
+OT-open (fixed or row-side functionals must stay independent of the opened
+evaluations at 22 arbitrary fibres; the dense inactive-row sum rules out the
+obvious uniform witness). The T2b-2b theorem takes `hBc : BCond` as a named
+hypothesis; narrower forms (assembly, DHighChar⊇ ∧ GCover, Ga ∧ Gb) are J7′
+lemmas so the theorem does not change when a piece is later proved.
+
+**D23.3 Ledger status.** B-open and OT-open are carried together as the
+"transversality premises" family, each checked numerically on the stated
+vectors and **with no failure-mass bound**. A premise checked on 35 challenge
+vectors is evidence, not a bound on the probability over the verifier's query
+draw. Therefore the R0 privacy result, once J1–J9 land, is: statistical HVZK
+and ZK_FS with the stated ledger terms **conditional on the transversality
+premises**. No release text may state unconditional statistical
+zero-knowledge until those premises carry a proved mass bound or are removed
+by a mask-design change. The new conditional rows (C_ll invertible, GoodWrap,
+G2, Ga, γ ∉ K₄, σ) enter the ledger only if BCond is later discharged by this
+route. Good₃ is unchanged.
+
+**D23.4 Job order.** J1, J2, J3, J5a unchanged and releasable; J4 next; J7 is
+replaced by J7′ (`R0Z/BatchedBlock.lean`, structural, writable before J5b–J6);
+J7a (`R0Z/NaturalShift.lean`, symbolic, needed only to narrow the premise);
+J5b, J5c, J6 unchanged; J9 takes hBc and the Q′ premises; J10 is the research
+item for TP_D, Gb and the transversality bound. The two Lean premises the
+route assumes (T_{2^k}(node) ≠ 0 at the line nodes; transport identity on rows
+≥ 479) are recorded as J7a/J10 obligations.
+
+**D23.5 Open for the user.** Removing the transversality premises by a
+mask-design change (extra mask randomness on D/G sized to the 22 openings) is
+a protocol change, not a proof task; it is listed, not decided.
+
+Verdict unchanged. Host counter: next 3426.
+
+### Lead acceptance of the (ii′) design as a proposal (2026-10-17); D24; R1 retargeting
+
+The privacy agents issued on 2026-10-17 work for R1. R1 is the deployment
+target, and R0Z is only the name of the track. Payload-generic work (T2a,
+ZF-A, J1, J3, J5a) carries over to R1. Rank facts and J2/J4 do not carry over
+until Z9 restates them for the R1 payload. Five Opus agents are running, on
+branches codex/r0-{z9-r1-payload, k4-silent, hermite-span,
+transversality-study, clause-iiprime}-20261017. Attempt ranges: J1/J3
+3426–3459, J5a 3460–3489, (ii′) 3490–3499.
+
+The (ii′) design (`t2b2b/DESIGN-ii-prime.txt`, worker 596b371d0, fast-forward
+from 524e1debb) is accepted as the working design. No Lean was run and no
+attempts were used.
+
+**D24.1 (ii′) as written is false.** `MaskImageOn` clause (ii′) (Shift.lean:190)
+quantifies over every `w, w'` with `h.public w = x.1`, and `HonestProver` has
+no validity field. The initial-sum functional and `.inactiveSum` vanish on
+range A but separate a satisfying trace from a non-satisfying one with the
+same public value (counterexample in design §1.4). The lead checked
+Shift.lean:180–191 and Z4Maps.lean:62. The fix (§1.5) needs no edit to any
+proved module. Define `HonestValid` (laneOf plus the two helper sums) and
+apply `MaskImageOn` to the restricted prover `h.restrict V`, where V is
+validity on P. The T2a/ZF-A theorems then apply verbatim. Restricting to valid
+witnesses is the standard ZK quantifier (x, w) ∈ R. Builder completeness
+(honest builds satisfy HonestValid) is a new obligation, J0b.
+
+**D24.2 `c1_surjectivity` is insufficient.** It omits `.extraClaim c` for
+c < 16 and the H1 lane. It is replaced by the premises `C1Lift` and `H1Lift`.
+The opened-symbol part (88 limbs per lane) is STRUCTURAL under D13Order with
+≤ 22 queries (Vandermonde on the quarter polynomials). The remaining 24 limbs
+per lane are carried as C1T-open and H1T-open. Both join the D23
+transversality family, so the privacy claim stays conditional on that family.
+H1Lift has never been measured on its own, so the J11 numeric check comes first.
+
+**D24.3 The (B) premise.** The design proposes `BReach := B₀ ≤ bat(ker own ⊓ ker R)`
+(which implies BCond) as the single (B) premise for both clauses. This is
+deferred until Z9 restates B₀ for the R1 opening layer (no chord quotient,
+two fold layers, 64 final values, 88 extra folded-word openings). Z9's first
+report already says the R0 Ψ_lo/etaRel structure does not transfer.
+
+**D24.4 R1 transport.** Under S2's π_R1 (D18, identity digit maps), the
+eligible semantic coefficients are a top block (quarter index 208–255), not a
+prefix. The opened part of C1Lift is therefore not structural on R1 as built.
+Two ways out: Variant D (the D13 transport), or a digit-map search (J11b).
+Both are protocol choices. They go to the user together with D23.5, once the
+transversality study lands.
+
+**D24.5 Job order.** J0/J0b, J4′, J13–J16 and J11 are listed, not issued. They
+wait for Z9 and the D23.5/D24.4 decisions. Verdict unchanged. Host counter:
+next 3426 (ranges above).
+
+### Lead acceptance of J5a (2026-10-17); D25
+
+J5a `R0Z/HermiteSpan.lean` is accepted. The worker commits are ced2b82d9 and
+f4e3af77d, cherry-picked here. The file imports Mathlib only and is generic
+over the field, so it applies to R1. Host attempt 3462: exit 0, 12.06 s,
+peak RSS 6,604,012 KiB, 0 swaps. The source SHA `e9ff8cf7…` matches the
+committed file. All 26 `#print axioms` lines are exactly
+`[propext, Classical.choice, Quot.sound]`, verified by the lead from the host
+log. The file has no sorry, axiom or native_decide. Attempts 3460 and 3461
+were compile errors (exit 1) and are retained in the evidence.
+
+**D25.1 P3 restated.** The design's P3 claim dim span{Φ_i, X·Φ_i} = min(2n, 28)
+(DESIGN-T2b-2b.txt:401–402) is false for some distinct nodes. Two exact
+counterexamples:
+- m=2, n=2 over GF(5), β=(0,1): rank 3;
+- m=26, n=14 over GF(101): rank 27.
+
+The two lowest coefficients become tied to the nodes once 2n ≥ m+1. The
+proved forms are:
+- P3a, span{Φ_i}: unconditional;
+- P3b, span{Φ_i, X·Φ_i}: covers degrees ≥ 2, i.e. r ≤ min(2n, m), with
+  independence for 2n ≤ m.
+
+Every citation of P3 in the design (lines 410, 430, 454, 462, 535, 806) uses
+P3a or P3b with n ≤ 8, inside the proved range. The D′ design does not cite
+P3. J5b and J5c must cite the restricted forms by name.
+
+**D25.2 Process.** The worker launched 3462 while its own check had counted
+one other Lean process. run2.sh's flock serialised the two, and the run took
+12 s. This is a gate lapse; it is recorded and is not repeated.
+
+### Lead acceptance of J1 and J3 (2026-10-17); D26
+
+The worker commits 3619dde1a and 1c957c01f are cherry-picked here. The lead
+verified both host receipts:
+- `R0Z/K4.lean`: attempt 3427, exit 0, 10.9 s, peak RSS 6,697,960 KiB,
+  0 swaps, SHA `d588952a…` (matches), 28 axiom reports;
+- `R0Z/SilentReduction.lean`: attempt 3437, exit 0, 10.6 s, peak RSS
+  6,812,272 KiB, 0 swaps, SHA `99fc4a68…` (matches), 17 axiom reports.
+
+Every axiom line is exactly `[propext, Classical.choice, Quot.sound]`. There
+is no sorry, axiom, admit or native_decide. Evidence for attempts 3426–3437
+is in `t2b2b/evidence-J1-J3.json`.
+
+**D26.1 What is proved.**
+- K₂/K₄ subfields, with `finrank_K4F = 4` and `finrank_K2F = 2`.
+- `mem_K2_of_quadratic`, for all x, without a card premise.
+- `Lambda F a j`.
+- `Good3` in the D21 form (LOG line 4274).
+- `lambda4_eq_K4`.
+- `exists_silent_of_cover`, `ia_pure_zero` and `ms_pure_eq_initial`.
+- `QPrime` and `BCond`. BCond is in exactly the D23.2 form; the lead checked
+  SilentReduction.lean:248.
+- `chain0K4_le_silent_of (hQ : QPrime) (hBc : BCond) : Chain0K4 ≤
+  (silentMasks π B ch).map (A ∘ inlM)`.
+
+This is the (Q′)+(B) reduction as a theorem. T2b-2b on R0 is now J2 plus the
+two transversality premises. One gap is recorded: `ownMap` keeps all 29
+columns, so its kernel being the per-lane own kernel (extra columns 0–15 and
+26 zero on mask tapes) is not proved. Any later lemma that uses the per-lane
+form must prove that equivalence first.
+
+**D26.2 Carries over to R1:** the subfield/Λ/quadratic facts and
+`exists_silent_of_cover`. Written against the R0 payload, and to be restated
+after Z9: `Good3`, `lambda4_eq_K4`, ownMap/batMap, ChainT0, QPrime, BCond
+and the reduction. These are template statements for the R1 restatement.
+
+**D26.3 Violations (recorded by the worker).**
+- 3428 was launched while the Z9 preflight scope was active, with the gate
+  check and the launch in one command.
+- 3428 then hit Lean's own -M7000 memory exception: a full `simp` unfolded
+  the copy-row tables. The source was changed before any rerun, and no cap
+  was raised.
+
+Lead exception (2026-10-17): Lean may run beside a capped non-Lean probe scope
+(≤ 4G, swap 0) when run2.sh's reservation check passes and no other Lean, R1
+or extraction job is running. The gate check must be a separate command whose
+output is read before launch.
+
+Lesson for generators and proofs: state balance-cancellation lemmas K-valued,
+with decidability instances passed in rather than synthesized. Keep `simp`
+from unfolding `PayloadSplit.L`. Instance-path mismatches made the kernel
+reduce `copyInactiveRows`.
+
+### Lead acceptance of Z9 (2026-10-17); D27: the privacy reduction transfers to R1
+
+Z9 (worker commits 96b37aa83..8c26ef3e9, cherry-picked) is accepted. The R1
+payload was taken from spend-path tip 1822c2ced, variant S2. The
+expectations were committed (7ab695866, 11:19) before the preflight results
+(bb10719b2, 11:27). The full run took 29:58.6 for 40 jobs: structures A, B, I,
+J × vectors 0–4 × the checkpoint's two γ limb sets. All exited 0, with peak
+child RSS 225,940 KiB, cgroup peak 1.126 GB, 0 swaps and caps 3G/4G/swap 0.
+All CHALLENGE lines replay. The lead read the summary: for A, structure
+vector 0, γ set 0, the chain basis gives image rank 1,076 with 0 failures,
+and B0 has annihilator 384 = 384 explained by the 48 relations, with 0
+unexplained.
+
+**D27.1 R1 payload differences.** The R1 payload differs from R0 in five ways:
+- transport D18 instead of D13;
+- no chord quotient: OOD enters as weight kinds 5 and 6;
+- two folds;
+- the batched view is 167 E values (1,336 limbs) against R0's 2,112;
+- 48 verifier relations against R0's 25.
+
+ρ enters no disclosed coordinate. The semantic layer (rows 0–26, masks,
+balancing, terminal, chain target) is the same as R0's. Model checks pass,
+including every verifier equation on a full honest view.
+
+**D27.2 Gate on R1.**
+
+| Structures | Silent rank | (i′) | (ii′) |
+|---|---:|---:|---:|
+| A, J | 1,076 | 25/25 | 25/25 |
+| B | 1,038 | 0/25 | 25/25 |
+| I | 1,068 | 0/25 | 25/25 |
+
+The B and I deficits have the same pivots as Z8/Z8c, so Good₃ stays the
+predicate. This is numerically checked, not proved.
+
+**D27.3 Structure of (B) on R1.** The (Q′)+(B) reduction transfers to R1:
+- The round image of the own-silent kernel, with initial sum zero, is 1,076
+  and contains Chain0₄.
+- B0 = 1,336 − 384 = 952. The annihilator is exactly the 48 relations.
+- BCond holds (952 = 952) in all 40 jobs.
+
+There is no Ψ_lo/lowShadow or etaRel analogue:
+- D-high's deficit is the exact law f0 = f1 = f2 = 0, giving V_D = 928.
+- V_G = B0 = 952.
+
+So on R1, BCond reduces to "G alone covers B0" (`V_G = B0`). The D-high/G
+assembly of D23 is not needed. This is simpler than R0, and it is the form the
+R1 restatement of J3 and the transversality work must target. As on R0, the
+PCS block is not full rank (1,304 of 1,712).
+
+**D27.4 Still open.**
+- B-open (now `V_G = B0` on R1) and OT-open are evidence from 40 jobs, with
+  no failure-mass bound.
+- γ was tested only on the two fixed limb sets.
+- Structures K, L, M and the per-lane OT′ checks were not rerun on R1.
+- Salted leaves and paths are outside the linear model.
+- The source has moved since 1822c2ced through extraction-only refactors
+  (Digest32, unrolls), which do not change mask layout or weights.
+
+Next: restate J1/J3's payload-specific statements for R1 (Good3 layout,
+ownMap/batMap over the R1 view, BCond_R1 := V_G = B0). The J2/J4 analogues
+for R1 wait on that, together with the D23.5/D24.4 decisions.
+
+### Transversality study received (2026-10-17); D28: D23.5 options for R1, decision pending with the user
+
+`t2b2b/STUDY-TRANSVERSALITY-R1.txt` (worker b84c2ae82..1301fb31f,
+cherry-picked) and probe Z10 (`t2b2b/z10/`) are received. Z10 ran 34 jobs,
+all exit 0, in 18:47, with per-job peak RSS ≤ 17.5 MB and 0 swaps. Its launch
+waited for the Z9 and c-source25 scopes to finish. Z10 is an R1-sized
+single-lane model, not the R1 payload. It found 0 failures in 13,000 query
+sets. The forced-dependency control failed 20/20 as intended. A
+failure-free result of that size bounds the failure rate only below
+≈2.3·10⁻⁴.
+
+**D28.1 Route P (prove the premises) is not a main line.** Per-query-set
+Schwartz–Zippel needs a witness challenge for each of ≈2^306 query sets, and
+the explicit candidates collapse the round rank. Fibre counting gives
+≈2^-1.5. The query-free Hankel route certifies only ≈5 functionals against
+the ≈400–1,900 needed. The study estimates under 15% chance of a proved bound
+within weeks.
+
+**D28.2 The options (CU figures are estimates, ±1.5×; none measured):**
+- **M1:** a uniform E-valued Z lane in the FRI batch. It removes B-open with
+  a short argument valid for every challenge and query set. Cost: +3,040
+  proof bytes and ≈ +24–69k CU. Z's seven pairing values must be bound
+  before γ; the study found and fixed this soundness trap in its own draft.
+- **M2:** Libra on D extended to all ten rounds, plus an evaluation
+  reservoir. It removes OT-open and Good₃'s round-cover condition. Cost:
+  0 bytes and ≈ +40–78k CU, all in tx2, which has 31.5k headroom in the
+  worst settlement. One query-free determinant remains, with mass ≈2^-114.
+- **M3:** honest-prover rejection.
+  - After the challenges are drawn, the prover evaluates
+    P := Good₃ ∧ OT ∧ BCond_R1 ∧ C1T/H1T, using exact linear algebra on
+    public data. If P fails, it discards the attempt and restarts with fresh
+    masks, salts and attempt secrets.
+  - P depends only on the challenges, which in the ROM are uniform and
+    independent of the witness. So the accept decision leaks nothing, and
+    the simulator rejection-samples the same P.
+  - Costs: verifier CU 0, proof bytes 0, soundness rows unchanged, and
+    badMass(P) leaves the privacy error entirely, including Good₃'s mass.
+  - What it requires:
+    - an abort-aware ZK_FS statement, in ZF1's scope, taking the
+      eprint 2023/245 FS-with-aborts caution into account;
+    - a prover-side rank check per attempt (seconds on a desktop);
+    - a refinement obligation: the Rust check decides exactly the Lean
+      predicate P on the exact R1 payload;
+    - the honest prover never publishes a ¬P transcript, with a cap on
+      attempts and an explicit failure exit.
+
+**D28.3 D24.4 may not need a protocol change.** This is the study's
+observation and has not been checked. The top block 208–255 contains the
+aligned sub-block 224–245. There N_{224+e} = N_224·N_e for e < 22, so the
+22-node system is a diagonal scaling times a Vandermonde, invertible for
+every query set, given NZ for k = 5, 6, 7. Classes 2 and 3 need an
+eligibility-registry check. Variant D would bring back the transport cost
+that D18 removed, so it is not affordable. Lead check pending.
+
+**D28.4 Lead view.** M3 is the right default. The verifier is unchanged, so
+soundness, CU (stage1 is already over 1.3M) and every R1 proof are
+untouched. The privacy statement becomes unconditional apart from
+oracle-programming terms. Its new obligations (the abort-aware ZK_FS and
+the Rust predicate check) are ordinary proof work rather than open
+research. M1 and M2 stay as fallbacks if the abort-aware composition fails.
+Decision D23.5 belongs to the user.
+
+### D29: user decision on D23.5 (2026-10-17): honest-prover rejection (M3) now; Route P later
+
+**D29.1 Decision.** The user chose M3: the honest prover rejects bad challenges.
+Route P, a proved failure-mass bound for the transversality premises, is
+kept as later research, not abandoned. M1 and M2 remain fallbacks if the
+abort-aware composition fails.
+
+**D29.2 The predicate P.** P is the conjunction of every challenge condition
+the privacy proof uses. The lead checked that each conjunct is defined from
+π, B and ch only: `QPrime` (SilentReduction.lean:241), `BCond` (:248), and
+`C1Lift`/`H1Lift` (DESIGN-ii-prime §2.1). Each is therefore a function of
+public data. P includes:
+- `QPrime_R1` and `BCond_R1` (on R1, V_G = B0);
+- the J2 side conditions (sem ∈ K₄, α₉ ≠ ½);
+- `C1Lift`, `H1Lift` and `BReach` for clause (ii′).
+
+QPrime and BCond are checked directly, not derived from Good₃. So J5b, J5c,
+J6, J7′, J7a and J8 leave the critical path. They come back only for Route P.
+
+What remains on the critical path: the R1 privacy model, J2-R1, (ii′) (J0,
+J0b, J4′, the residual and lift steps), the abort-aware ZK_FS (ZF1), the
+efficient simulator (ZF2), and the Rust predicate check with its refinement.
+
+**D29.3 Requirements on the honest prover.**
+- It never publishes a transcript with ¬P.
+- Attempts use fresh masks, salts and attempt secrets.
+- Attempts are capped, with an explicit failure exit.
+
+The failure exit depends only on challenges and publishes nothing. Its
+probability matters for liveness, not privacy. There is no proof that
+Pr[¬P] is small, and Z8–Z10 have observed no failures.
+
+**D29.4 First jobs.**
+- **R1M:** an inventory and plan for the R1 privacy model, deciding which
+  R0Z/R0P definitions are payload-specific and the minimal Lean model of the
+  Z9 payload.
+- **ZF1-abort:** the abort-aware ZK_FS, generic over FSExperiments, building
+  on ZF-A. Attempts 3500–3549.
+
+The Rust predicate check waits for R1M's definitions.
+
+### Lead acceptance of the R1 privacy-model design (2026-10-18); D30
+
+`t2b2b/DESIGN-R1-PRIVACY-MODEL.txt` (worker 0b36b12bf..eb6c3e476,
+cherry-picked) is accepted as the plan for proving privacy on R1.
+
+**D30.1 Findings accepted.** R1 differs from the proved R0Z model only in
+the batched opening block. The per-lane, semantic and mask layers are the
+same. No proved theorem uses `D13Order`: the lead grepped R0Z and R0P, and
+it appears only as a definition in HonestView.lean. So D18 is an instance
+choice. On R1, GoodCircle, Good3 and GoodAlpha are not needed.
+
+**D30.2 Decision: refactor, not copy.** `PayloadCell` takes the batched
+cells as a parameter (`Bat`), with a `BatchedLayer` class. R0 and R1 are
+instances. About 20 proved R0Z modules are re-sourced and recompiled once
+each. Acceptance for R1-0: every previously listed `#print axioms` line
+reappears with the same theorem name and the standard axioms, and no
+statement changes except the `Bat` parameter. The lead diffs the statements.
+`hvzk_on_of` (HVZK for any P) is added.
+
+**D30.3 Target.** `P_R1 := HalfOK ∧ SemK4 ∧ QPrime_R1 ∧ BCondG_R1 ∧ (∀ c,
+C1Lift c) ∧ H1Lift ∧ QueryCard`. BCondG_R1 is `B0R1 ≤ V_G`, which with
+J4-R1 gives both BCond and BReach. The target theorem is
+`maskImageOn_R1 : MaskImageOn (Bat := R1Bat) (P_R1 …) (h.restrict (ValidOn …)) B x`,
+for every π. J14-R1 (the structural opened part) is deferred to Route P,
+because C1Lift is a conjunct of P.
+
+**D30.4 R1-1 (opening-layer mirror).** The worker brings the spend-path
+files listed in §4 into its own branch by `git show`, unchanged, with source
+SHAs recorded. The spend-path branch itself is not touched.
+
+**D30.5 Riskiest item.** J4-R1's `line_identity`: the second fold on the
+line domain commuting with the encoder. It is also open on the R1 soundness
+side. The fallbacks are `B0own ≤ V_G` for clause (i′) and a trace-space rank
+check in P for clause (ii′).
+
+**D30.6 Issued, ordered by lanes.**
+
+| Lane | Job | Attempts |
+|---|---|---|
+| A | R1-0 | 3550–3619 |
+| B | R1-1, then J4-R1(a) (payload-free) | 3620–3679 |
+| D | Z9b numeric: relR1 as written annihilates bat(ker own); C1Lift and H1Lift on their own | Rust, capped |
+
+ZF1-abort continues on 3500–3549. Estimate: 15–25 worker-days and 90–170
+attempts, about 10–15 days elapsed. J0b is unestimated.
+
+### ZF1-abort completed — abort-aware ZK_FS without badMass (2026-10-18)
+
+Branch `codex/r0-zf1-abort-20261017`, base `a4246222a` (D29). Design in
+[zf1/DESIGN-ZF1-ABORT.txt](zf1/DESIGN-ZF1-ABORT.txt); Lean in
+`lean/R0Z/FsAbort.lean` (imports `R0Z.FsGood` only; no PayloadCell
+constructor is used). Proved: in the retrying middle games (per-attempt
+coins and tapes, least accepted attempt, cap N, failure output) only
+P-challenges reach the view and the simulator, so `HVZK_on P` makes the
+middle means equal (`middleAbort_means_eq`); hence
+`zkfs_of_hvzk_on_abort : HVZK_on P → AbortReductionWith P … ab x ε_real
+ε_ideal → ZK_FS … (ε_real + ε_ideal)` with no badMass term, and
+`zkfs_of_hvzk_on_abort_terms` splitting the reduction into the named
+identical-until-bad events Hit (adversary reads a discarded attempt's
+address), Coll (prover-address repetition within or across attempts) and
+Prog (inconsistent programming of the accepted attempt), error
+ε_hit + ε_coll + ε_prog. The couplings and the three bounds are payload
+hypotheses (ZF1a/b), not proved. The failure exit costs nothing. The
+eprint 2023/245 difficulty (secret-dependent aborts) does not arise because
+P depends on ch only; the PDF was not readable from this session (HTTP 403),
+only the abstract. Requirement R-fresh (fresh attempt material in each
+attempt's first absorbed block) must be checked on the R1 layout.
+Host attempts 3500 (exit 1), 3501 (exit 1, diagnostic), 3502 (exit 0,
+4.35 s, peak RSS 6,770,592 KiB, 0 swaps); all 20 axiom lines standard;
+evidence [zf1/abort-evidence.json](zf1/abort-evidence.json). Next host
+attempt in this range: 3503.
+
+### Lead acceptance of ZF1-abort (2026-10-18); D31
+
+ZF1-abort (worker 2542546f2..746e7204d, 11 commits, cherry-picked) is
+accepted.
+- `R0Z/FsAbort.lean` imports only `R0Z.FsGood` and uses no PayloadCell
+  constructor, so it applies to R1 unchanged.
+- Host attempt 3502: exit 0, 4.35 s, peak RSS 6,770,592 KiB, 0 swaps. The
+  source SHA `9b1ffc92…` matches. All 20 axiom lines are exactly the standard
+  three (lead-verified from the host log). The file has no sorry, axiom or
+  admit.
+- It compiled against the ZF-A objects 3408/3409, whose sources are
+  byte-identical to the base. Attempts 3500 and 3501 failed to compile and
+  are retained.
+
+**D31.1 What is proved.**
+- `zkfs_of_hvzk_on_abort : HVZK_on P → AbortReductionWith … → ZK_FS …
+  (ε_real + ε_ideal)`, which has no badMass P term.
+- `zkfs_of_hvzk_on_abort_terms`, which gives ZK_FS with error
+  ε_hit + ε_coll + ε_prog from a real coupling (Hit and Coll) and an ideal
+  coupling (Prog).
+- The generic retry core: `firstGood`, `retry_means_eq`,
+  `until_bad`/`eventMass_or_le`.
+
+The simulator runs the same capped loop on the same public P, so ch | P is
+sampled at the honest prover's own cost. The eprint 2023/245 failure mode
+(aborting on secret-dependent responses) does not arise: P is a function of
+ch and public data, which the type of `HVZK_on` enforces. Aborted
+transcripts are never published, and Hit charges their oracle entries. The
+worker read only the paper's abstract, so a full-text check stays on the
+review list.
+
+**D31.2 Open.**
+- The two couplings for the concrete retrying sponge games. These are ZF1a/b,
+  per-attempt.
+- Numerical bounds on ε_hit, ε_coll and ε_prog.
+- ZF2, the efficient simulator.
+
+Each attempt's first absorbed block must contain fresh attempt material,
+otherwise Coll has mass 1. On R1, row 0 absorbs the C1 root (LOG/TARGET
+note), which is over freshly salted leaves. So this holds if salts are
+fresh per attempt. That becomes an honest-prover requirement, together
+with D29.3.
+
+**D31.3** R1-0 may now proceed with host overwrites (D30 sequencing). The
+lead recompiles FsAbort once after R1-0's ordered pass.
+
+### Lead acceptance of R1-0 (2026-10-18); D32: payload parametrised over the batched block
+
+R1-0 (worker aa8a9a746..01e1f84d5, 19 commits, cherry-picked) is accepted.
+
+**What changed.**
+- `PayloadCell Bat` with `class BatchedLayer K Bat`.
+- A new module `R0Z/R0Batched` holds the R0 instance. Its read is the old
+  `linearPayload` branches word for word.
+- 14 modules take `{Bat} [BatchedLayer K Bat]`.
+- `hvzk_on_of` (HVZK for any P) is added in Shift.
+
+**Final ordered pass.** Attempts 3585–3605 compiled 21 modules into
+objects2, all exit 0, with 0 swaps and peak RSS 6.73–6.93 GB. The lead
+spot-checked HonestView 3585, Shift 3596, SilentReduction 3601 and
+FsAbort 3605: the host SHA matches the committed source in each. Across
+3585–3605 every reported axiom line is `[propext, Classical.choice,
+Quot.sound]` (156) or `[propext, Quot.sound]` (5). The 165 previous lines
+all reappear with the same theorem names, and there are 4 new ones. The
+overlay attempts were 3550–3584. The snapshot `$T/backup-pre-R1-0` has 62
+files, with its manifest committed.
+
+**D32.1 Rulings on the departures.**
+- `[Fintype Bat]` on the 11 law-using theorems is accepted. R0Bat is finite,
+  and R1Bat (round0 7, round1 7, folded openings, final 64) is finite too.
+- Leaving out `[DecidableEq Bat]` is accepted, following the memory rule
+  in D26.3.
+- The three non-mechanical edits are accepted: `PayloadCell`;
+  `messages : Payload K R0Bat` (the R0 32-row schedule; R1's 33-row
+  schedule is separate work for ZF1); and `batMap : … → (Bat → K)` with
+  BCond's text unchanged.
+- FsAbort was re-sourced with the Bat parameter. It compiled at 3605 with
+  all 20 axiom lines unchanged, which replaces the lead's planned
+  recompile.
+
+**D32.2 Next.** R1-2, the R1 instance `R1Bat` and its `BatchedLayer`, is
+unblocked. The host overlay directory `$T/r1-0` may be deleted.
+
+### Lead acceptance of R1-1 and J4-R1(a) (2026-10-18); D33: line_identity proved
+
+The worker commits fa68ccb85, 1f4bb35e2, 2cee2f9e8 and cf23977a1 are
+cherry-picked. Attempts used: 3620–3631. Evidence is in
+`t2b2b/evidence-R1-1-J4R1a.json`. The mirror manifest is
+`t2b2b/R1-1-MIRROR.json` (spend-path tip e38279522).
+
+**D33.1 J4-R1(a) `R1Z/BatchedAlgebra.lean` is accepted.** Host 3628: exit 0.
+The SHA `f4e7aa79…` matches. All 13 axiom lines are standard (lead-verified).
+The file imports only R1Mirror.FoldCoefficientBridge and BaseRepeatedLift.
+It proves `s2b_identity`, `s1_identity`, `s2a_identity` (for any seven
+functionals combined with κ powers), `circ_identity` with
+`circ_zero_of_fibre_zero`, and **`line_identity`**. The last one, the
+design's flagged risk, is the second fold of the four stored children
+equalling `secondLinear (coefficientFoldLayer 64 α₁ m) v` for every m and
+α₁. `line_layer_identity` is the whole-layer version.
+
+The public inverse table is `lineInverse = ((2x)⁻¹, −(2y)⁻¹, (2z)⁻¹)`. This
+is the same normalisation Z9b found independently: relR1 annihilates
+bat(ker own) only with this table. The two findings agree.
+
+Open refinement items:
+- `storedFirstLineX18` versus the Rust `line_node`;
+- `lineInverse` versus `QueryGeometry`.
+
+**D33.2 R1-1 mirror.** Of 12 files mirrored unchanged except import lines
+(R1Mirror.*), 9 are green. Line18Geometry fails under this workspace's
+-M7000 cap (attempt 3625: kernel out of memory on 5 theorems, 7.17 GB) and
+contains `set_option maxRecDepth 20000`. ConcreteProjection and
+SecondFoldRestoration import it. These three are NOT accepted here, and
+nothing accepted depends on them. They are not to be rerun unchanged or
+under a raised cap.
+
+**D33.3 Interference.** Attempt 3623 launched beside the R1 worker-C serial
+runner, whose guard killed its own attempt (selected-sigma …Core-5, exit
+−9). After that the worker gated on a fully idle host. This is the third
+recorded launch-gating lapse (D25.2, D26.3). The rule stands: gate and
+launch are separate commands, and any Lean process on the host means wait.
+
+**D33.4 Next.** R1-2 (`R1Z/Batched.lean`, the R1 instance) then J4-R1(b)
+(relR1, B0R1, `bat_L_mem_B0R1`). Both are now unblocked: R1-0 is D32 and
+the algebra is D33.1.
+
+### Lead acceptance of R1-2 and J4-R1(b) (2026-10-18); D34: J4-R1 closed
+
+The worker commits 9398aa8a1 and 56ad2ce12 are cherry-picked. The lead
+verified both host receipts:
+- `R1Z/Batched.lean`: attempt 3681, exit 0, SHA `fd43a244…` matches,
+  17 standard axiom lines;
+- `R1Z/VerifierRelationsR1.lean`: attempt 3683, exit 0, SHA `3fc38a95…`
+  matches, 13 standard axiom lines.
+
+Neither file has sorry, axiom or a maxRecDepth/maxHeartbeats override.
+Attempts 3680 and 3682 were elaboration failures. Evidence:
+`t2b2b/evidence-R1-2-J4R1b.json`.
+
+**D34.1 Proved.**
+- R1Bat, with `instance BatchedLayer K R1Bat` and the seven `ell`
+  functionals, each equal to the γ-batch of its own cell.
+- relR1 with the D33 `lineInverse`, and B0R1.
+- `bat_L_mem_B0R1` for every trace whose own cells and inactive sum vanish
+  (J4′ form; the own-cell conditions are explicit hypotheses).
+- **`bat_ker_own_le_B0R1`**, with no challenge premise: there is no
+  GoodCircle on R1.
+
+So "BCondG_R1 ⇒ BCond ∧ BReach" depends only on R1-3. The proof lesson
+from 3680 is recorded: make `dotLinear` and `roundPolynomialLinear`
+irreducible after their apply lemmas, and never prove `ell` cells by `rfl`.
+
+**D34.2 Memory headroom.** Peak RSS of 6.78–6.93 GB is within 70–250 MB
+of Lean's -M7000. Later R1Z modules must import narrowly (only what they
+use). The cap is not raised. A module that hits it is split.
+
+**D34.3 Open refinement items.**
+- `storedFirstLineX18` versus the Rust `line_node`;
+- `lineInverse` versus `QueryGeometry`;
+- `ell` versus the Rust weight kinds 5/6 (numerically checked by Z9 only).
+
+**D34.4 Next.**
+- Lane A: R1-3 PredicateR1, then J2-R1 (relations worker, attempts
+  3684–3739).
+- Lane C: J0 and J13-R1 (a new worker, attempts 3740–3799).
+
+### Lead acceptance of Z9b (2026-10-18); D35: B0R1 corrected, C1Lift/H1Lift measured
+
+Z9b (worker 4ecdc28f0..12dc399ac, cherry-picked) is accepted. The
+expectations were committed before any run. 253 jobs (506 evaluations, both γ
+limb sets) were run on the real R1 payload:
+- the Z4c actual query sets;
+- {0..21}, spaced and paired sets;
+- 200 uniform sets;
+- 20 consecutive and 20 coset sets.
+
+The full run took 1:02:09, with cgroup peak 733 MB and 0 swaps. One
+thread-spawn failure (TasksMax 64, not memory) was rerun alone at
+concurrency 1 without raising caps, and passed. Everything here is numerically
+checked, not proved.
+
+**D35.1 lineInverse (F1).** Only `((2x)⁻¹, −(2y)⁻¹, (2z)⁻¹)` makes relR1
+hold. The literal (1/x, 1/y, 1/z) mismatches 88/88, and the unsigned form
+mismatches 44/88. This agrees with the table D33's `line_identity` was proved
+with. With it, ia + relR1 annihilates bat(ker own) exactly in all 506
+evaluations, with 0 unexplained.
+
+**D35.2 BCondG_R1 as typed is false (F2), and is corrected.** B0R1 =
+ker relR1 over all of R1Bat leaves the 262,144 − 4P unopened folded cells
+free, while V_G is zero there. Correction: B0R1′ := B0R1 ⊓ {unopened folded
+cells = 0}, and BCondG_R1 := B0R1′ ≤ V_G. `bat_ker_own_le_B0R1′` follows
+from D34's `bat_ker_own_le_B0R1` and R1-2's `folded_unqueried_zero`. The
+landed VerifierRelationsR1 statements remain true and are not edited. The
+R1-3 worker was told before finishing PredicateR1. On the opened
+coordinates BCondG_R1 held in all 506 evaluations (V_G = bat(ker own) =
+dim B0R1′), and so did the fallback B0own ≤ V_G.
+
+**D35.3 Duplicate parents (F4).** Queries sharing u/4 give identical line
+relations. The relation rank is 8(4 + 22 + P), where P is the number of
+distinct parents. dim B0R1′ is 952 generically and 616 or 568 on coset sets.
+No statement may assume 47 independent relations.
+
+**D35.4 C1Lift and H1Lift.** Measured on their own for the first time, both
+held in every evaluation, including the adversarial consecutive and coset
+sets:
+- C1Lift on all 16 lanes: opened part 88/88, remaining 24/24;
+- H1Lift: opened part 352/352, remaining 24/24.
+
+So under D18 the opened part (D24.4 "not structural") was full on every set
+tried. Under D29 these are conjuncts of P_R1, so no protocol change is
+needed. A structural proof stays with Route P.
+
+### Lead acceptance of R1-3, J2/J2-R1, J2b, J0, J13-R1 (2026-10-18); D36: clause (i′) on R1 has all its pieces
+
+The worker commits are cherry-picked in dependency order:
+- relations branch: 7e0b24607, f132a6b60, d26660a69, f628787e1;
+- clause-(ii′) branch: 39b463f97, 7142d6be6.
+
+The lead verified each host receipt (SHA matches the committed source,
+exit 0, every axiom line standard, no sorry/axiom/admit/native_decide or
+depth/heartbeat overrides):
+
+| Module | Attempt | SHA | Axiom lines | Peak RSS |
+|---|---|---|---|---|
+| R1Z/PredicateR1 (D35.2-amended) | 3687 | `005130bb…` | 11 | — |
+| R0Z/K4Values | 3686 | `1dd15cc5…` | 11 | 6.77 GB |
+| R0Z/TerminalClosed | 3694 | `f41dc20a…` | 13 | — |
+| R0Z/HonestValid | 3741 | `c73cb545…` | 37 | 6.79 GB |
+| R1Z/NoiseLiftR1 | 3743 | `11f98af1…` | 14 | 6.78 GB |
+
+PredicateR1 superseded 3684. NoiseLiftR1 was built against the amended
+PredicateR1, and the SHAs match. The failed attempts (3685, 3740, 3742 and
+others) were elaboration errors only.
+
+**D36.1 Clause (i′) on R1 has every ingredient.**
+- `chain0K4_le_silent_R1`: under P_R1, Chain0K4 lies in the silent image.
+- `sRem_mem_chain0K4` (K4Values), for R0 and R1 together.
+- `terminalClosed`: TerminalClosed is discharged from SemK4 ∧ PublicBase by
+  per-family closure lemmas (Poseidon packed, schedule, occupancy, path,
+  value, digest, asset, copy).
+
+So sRem ∈ Chain0K4 holds unconditionally for base-typed honest instances
+with α₉ ≠ ½. Only the one-line assembly `clause_i_R1` remains. BCondG_R1
+uses B0R1′ (D35.2). The R1-3 version at 3684 is superseded and not used.
+
+**D36.2 J0 (generic over Bat).** Proved: HonestValid, ValidOn, IIPrimeValid,
+`HonestProver.restrict`, and `maskImageOn_restrict_of`. Also proved: the
+corollaries showing that hvzk_on_of and the FsAbort theorems apply verbatim
+to the restricted prover, the ι and inactive-sum lemmas for (R2)/(R3), and
+the §1.4 obstruction as implications. One new fact: `inactive_1023`.
+
+**D36.3 J13-R1.** `noise_lift_R1` gives the noise lift from P_R1's C1Lift and
+H1Lift conjuncts. It projects by position (`hP.2.2.2.2.1`), so a reorder of
+P_R1 must update it. It is proposed that P_R1 get named accessors.
+
+**D36.4 J0b.** The route is proposed (ProductionHolds via LaneInterface, and
+CopyLinkBalance pairwise cancellation). There is one decision first: u is
+built from `applyEligible t 0`, which rebalances row 1023. J0b therefore needs
+either a builder invariant (each semantic column of `h.build w` already sums
+to zero over copyInactiveRows) or a lemma that row 1023 enters no production
+lane or copy link. The lead's preference is the row-1023 lemma, because it is
+a property of the fixed layout, not of the builder. To be settled by a short
+source check before J0b is issued.
+
+**D36.5 Remaining for MaskImageOn on R1:**
+- `clause_i_R1` (assembly);
+- J15-R1 (residual and mask lift for (ii′));
+- J16-R1 (theorem and composition);
+- J0b.
+
+Outside Lean: the ZF1a/b couplings and their event bounds, ZF2, the Rust
+P_R1 check with its refinement, and the D34.3 refinement items.
+
+### Lead acceptance of clause (i′) on R1 (2026-10-18); D37
+
+`R1Z/ClauseIR1.lean` (worker 8ba1c8b4f, cherry-picked) is accepted. Host
+3695: exit 0, SHA `8eb17206…` matches, 2 standard axiom lines
+(lead-verified).
+
+`clause_i_R1_all`: under `P_R1 h.transport B hB ch`, with `PublicBase F x.1`
+and `∀ w, h.public w = x.1 → BaseTyped F (h.build w)`, every
+`sRem h B x w ch n` lies in `range (A ∘ inlM)`. This is the first conjunct of
+`MaskImageOn P_R1` on R1. It has no transversality premise; P_R1 is the
+prover-checked predicate (D29).
+
+The remaining premises are typing facts about the statement and the honest
+builder. `BaseTyped` for honest builds is a builder obligation of the same
+kind as J0b. It joins J0b's scope: builder completeness, meaning honest
+builds are base-typed and HonestValid.
+
+Clause (ii′) (J15-R1, J16-R1) and J0b remain. The relations worker's lane is
+complete.
+
+### Lead acceptance of the R1-P design (2026-10-18); D38: the prover-side check
+
+`z9/DESIGN-R1-P.txt` (worker 8a14c033c..19cb4c86b, cherry-picked) is
+accepted as the plan. The prototype is `z4/z9b.rs --r1p`. Receipts:
+`z9/runs/r1p-244d380ab/`. Expectations were committed before measuring.
+
+**D38.1 The check uses public data only.** Every P_R1 conjunct is an exact
+M31-limb rank or inclusion test built from fixed constants and the attempt's
+challenges (α, z₀, z₁, γ, κ, α0, α1, queries). No witness, mask, salt or
+seed enters.
+
+BCondG_R1 reduces to one dimension test, because `V_G ≤ B0R1′` is already a
+theorem (V_G_le, bat_ker_own_le_B0R1′). C1Lift and H1Lift rest on two
+instance facts, `Vsem ≤ Wsem` and `Ph1 ≤ Wh1`, which are to be proved. They
+are added to the open list.
+
+**D38.2 Cost.** On the nuc (Core Ultra 7 155H, a laptop-class chip):
+- 22.6 s and 130 MB per attempt on the actual query sets;
+- 16 s on coset or {0..21} sets.
+
+QPrime (12.5 s) and BCondG (9.3 s) dominate. P_R1 was true on every
+configuration run. A laptop estimate is 20–30 s, unmeasured. Certificate
+generation roughly doubles this. Code speedups of 5–20× are proposed but
+unmeasured. Prover-latency impact: +20–50 s per proof at current code. This
+is the cost of D29 and is reported to the user.
+
+**D38.3 Prover integration (a plan for the spend-path branch, not applied).**
+- The check goes in `prove_from_semantics` after the queries are drawn
+  (prover.rs:229), before any proof byte exists, returning
+  `Error::Rejected`.
+- A capped loop around `prove_masked_attempt`, with N = 8 (accepted) and
+  `AttemptsExhausted` publishing nothing.
+- Fresh OS attempt secrets each time, with the nonce burned durably before
+  use, and `private-leaf-salts` required.
+- The fresh C1 root over fresh salts gives the fresh row-0 address that
+  D31.2 requires.
+- Rejected challenges and the failing conjunct are never logged persistently
+  or remotely.
+
+**D38.4 Lead decision: the proof account.** The nonce is bound to the
+proof-account address, so each attempt uses a fresh proof-account keypair.
+A rejected attempt's account is never created on chain, so this costs
+nothing on chain. It is recorded as a prover requirement.
+
+**D38.5 Refinement route: certificate checking (accepted).** Only soundness
+of the check is needed: `check c = true → P_R1 rowEquiv B hB (decode c)`. A
+false negative only costs an attempt, so degenerate cases fail closed. The
+protocol's predicate is "the check passes", so by antitonicity of
+MaskImageOn in P one lemma transfers `maskImageOn_R1`.
+
+The Rust check emits preimage certificates, plus an echelon form with its
+inverse for rank(relR1). A small checker uses only matrix-vector products.
+The proof parts:
+- the checker's semantics (generic linear algebra);
+- the row formulas (the D34.3 refinement items, proved symbolically);
+- an Aeneas extraction of the checker only.
+
+The eliminating code itself is not extracted.
+
+### Lead acceptance of J15-R1: clause (ii′) on R1 (2026-10-18); D39
+
+The worker commits 298c1135c, 08f4b610f and 2acc2d919 are cherry-picked. The
+lead verified each host receipt (SHA matches, exit 0, all axiom lines
+standard, no sorry/axiom/admit/native_decide or overrides):
+
+| Module | Attempt | SHA | Axiom lines | Notes |
+|---|---|---|---|---|
+| R0Z/IIPrimeResidual | 3747 | `f712e1d1…` | 22 | |
+| R1Z/NoiseLiftR1 | 3748 | `cba81e30…` | 20 | supersedes 3743; adds named P_R1 accessors |
+| R1Z/IIPrimeR1 | 3750 | `a9d99c89…` | 8 | |
+
+Attempts 3744–3746 and 3749 were elaboration failures.
+
+**D39.1 Clause (ii′) on R1 is proved.** `iiPrime_R1 : IIPrimeValid (P_R1
+h.transport B hB) h B x`, given `PublicBase F x.1` and base-typed witnesses.
+For two HonestValid witnesses with the same public statement, cTilde w −
+cTilde w′ = A(inlM m + inrN n) for a mask tape m from the mask lift and a
+noise tape n from the noise lift. Every challenge condition used comes from
+P_R1, through its named accessors. The residual's batched cells lie in B0R1′
+by `bat_L_mem_B0R1` and `folded_unqueried_zero`. Its round cells are
+K₄-valued, using `terminalClosed`.
+
+**D39.2 Row 1023 (D36.4) is settled by a layout lemma.**
+`laneOf_actual_zero`: laneOf of the payload trace equals laneOf of `prepare
+pub t ch`. It rests on `lanes_eligible` (TerminalEligible.lean:519) and on
+every copy endpoint being Protected with row ≠ 1023
+(HelperInvariant.lean:16–17). J0b therefore needs no builder invariant for
+clause 1. It reduces to ProductionHolds on the prepared instance, plus the
+helper sums of the same prepared trace.
+
+**D39.3 Status of MaskImageOn on R1.** Both clauses are proved: (i′) by D37
+`clause_i_R1_all`, and (ii′) by D39.1. What remains is J16-R1, the
+assembly: `maskImageOn_restrict_of` with both clauses, then
+`hvzk_on_restrict` and the FsAbort corollaries. Every step is an existing
+lemma.
+
+After J16-R1, the privacy theorem for R1 holds under:
+- P_R1, enforced by the prover;
+- PublicBase and BaseTyped;
+- J0b (honest builds are HonestValid and BaseTyped);
+- the ZF1 couplings and their event bounds;
+- ZF2;
+- the Rust check's certificate refinement (D38.5);
+- the D34.3 row-formula items.
+
+Memory: IIPrimeR1 peaks at ≈165 MB under -M7000.
+
+### Lead acceptance of J16-R1 and J0b (2026-10-18); D40: the LogUp pole enters the privacy error
+
+The worker commits 00ae72d55 and 53dd5023b are cherry-picked. The lead
+verified both host receipts:
+- R1Z/MaskImageR1: attempt 3751, SHA `45f65eda…`, 5 standard axiom lines;
+- R0Z/HonestValidity: attempt 3752, SHA `a0214f63…`, 16 standard axiom lines.
+
+Both exited 0, and neither file has sorry, axiom or overrides.
+
+**D40.1 J16-R1.**
+- `maskImageOn_R1 : MaskImageOn (P_R1 …) (validR1 h B hB x) B x`
+- `hvzk_R1`
+- `zkfs_R1_abort` and `zkfs_R1_abort_terms` (ZK_FS for the retrying
+  restricted prover, error ε_hit + ε_coll + ε_prog, with the couplings as
+  hypotheses).
+
+Premises: PackField, PublicBase, and base-typed honest instances.
+`validR1 = h.restrict (ValidOn P_R1 …)`.
+
+**D40.2 J0b: proved conditionally, with an obstruction.**
+`honestValid_of : HonestBuilderSound … → NoPole t λ χ → HonestValid`.
+`HonestBuilderSound` has four named fields:
+- baseTyped;
+- lanes (ProductionHolds without Copy);
+- helperSum;
+- helperInactive.
+
+The obstruction is `not_honestValid_of_pole`. At an active row where χ equals
+a producer or consumer tuple value of the witness's own trace, the copy
+residual is nonzero whatever the helper value, so HonestValid fails. NoPole
+depends on the witness. It therefore cannot be a conjunct of the public
+predicate P_R1, and the restricted prover `validR1` need not contain every
+honest instance at every P_R1 challenge. As stated, the theorem would cover
+fewer instances than the deployed prover runs on.
+
+**D40.3 Lead decision: route (a), a statistical pole term.**
+- Validity becomes per challenge (the instance set depends on ch), and the
+  pole event is charged to the privacy error, not to P_R1.
+- The honest prover behaves as the source does on an ActivePole (the
+  attempt fails). It is treated as a retry whose trigger is
+  witness-dependent. The effect of conditioning on that trigger is bounded
+  by its probability, so it is charged as ε_pole and not hidden in P.
+- Per attempt, for any fixed witness:
+
+  Pr[¬NoPole] ≤ 4·|active rows| / |K_χ|,
+
+  where χ = sem 1 is uniform in K₄ given λ, |K₄| = p⁴ ≈ 2^124, and there are
+  at most 1,024 active rows. So the per-attempt bound is ≈ 2^-112.
+- Over the cap N = 8: ε_pole ≤ 8·4,096/p⁴ ≈ 2^-109.
+- This is the eprint 2023/245 situation handled correctly: a
+  witness-dependent abort whose total probability is charged in full.
+
+Lean work (J0c):
+- HVZK_on with a per-challenge instance set;
+- the FsAbort composition with an extra ε_pole term for a witness-dependent
+  bad event (identical-until-bad);
+- the pole mass bound from χ's uniformity (SemK4 sampler law);
+- `maskImageOn_R1` restated on the per-challenge valid set.
+
+**D40.4 Remaining builder facts.** These are carried as fields, not yet
+proved:
+- `helperInactive`: should follow from a registry fact, every copy endpoint
+  on an active row, decidable over copyLinks as Protected was.
+- `helperSum`: CopyLinkBalance plus a multiplicity or pairing registry fact.
+- `lanes`: R0P builder completeness.
+
+### Lead acceptance of the ZF1a/b coupling design and bounds for R1 (2026-10-18); D41
+
+The ZF1 couplings work (worker 4f97292af..1e42b3685, 10 commits,
+cherry-picked) is accepted. The design is `zf1/DESIGN-ZF1-COUPLINGS-R1.txt`
+§1–§9. The lead verified the host receipts:
+
+| Module | Attempt | SHA | Axiom lines |
+|---|---|---|---|
+| R0Z/FsAbortBounds | 3800 | `f5820c2f…` | 22 |
+| R0Z/FsAbortR1 | 3802 | `617c7f3d…` | 11 |
+| R0Z/FsAbortTape | 3806 | `80578d69…` | 3 |
+
+All three exited 0. The axioms are standard, with `[propext]` alone on one
+line. There are no overrides. Attempts 3801 and 3803–3805 failed (a numeral
+limit and elaboration).
+
+**D41.1 Proved.**
+- Generic first-read and collision masses: `hit_le`, `pair_le`,
+  `mass_cond_le`, `hitEv_mass_fresh` ≤ M·q/Umin, and
+  `collEv_mass_fresh` ≤ M²/Umin.
+- `realAbortCoupling_of_R1` and `idealAbortCoupling_of_R1`, which turn the
+  R1 model into FsAbort's coupling hypotheses.
+- `zkfs_R1_abort_N8`: ZK_FS ≤ 2^-166, for N = 8, q = 2^64, at most 2^21
+  reads per attempt, and Umin = 2^255.
+- `mean_decodeOrSpare`, the tape half of the real coupling.
+
+**D41.2 Named hypotheses (fields of R1RealModel and R1IdealModel).**
+- The lazy-programming law.
+- The sampler's equal-fibre property.
+- Game agreement outside the bad events (the Rust-to-Lean prover
+  refinement).
+- `HitFresh` and `PairFresh`, the designated-field table of §1.4.
+- The read count: at most 2^21 per attempt, counted from source, not
+  measured.
+- The exhaustion mass.
+
+**D41.3 Freshness.** These are assumed of the prover, and recorded as
+requirements together with D29.3, D31.2 and D38.3:
+- fresh OS secrets for every attempt;
+- salted leaves;
+- discarded attempts publish nothing;
+- the attempt cap;
+- the Rust check equals P_R1.
+
+Given those, the chain "fresh salts → fresh C1 root → fresh row-0 address"
+is proved, and each private read's hit or collision mass is ≤ 2^-255.
+
+**D41.4 Numbers.** ε_hit 2^-167, ε_coll 2^-207 + 2^-476, ε_prog 2^-207.
+Together with D40's ε_pole ≈ 2^-109, the pole term dominates the R1 privacy
+error, at about 2^-109. QROM is not covered; classical ROM only.
+
+**D41.5 Gaps recorded.**
+- **G-root:** the Lean View has no commitment roots. Proposal: publish the
+  roots, paths and opened salts as the verifier hash log at the front of
+  `observerOracle`.
+- **G-def:** R1's fs.real, fs.ideal and abort bridge are not defined in
+  Lean. The spend-path LiteralByteProtocol is the model to mirror.
+- **G-prog:** the lazy-programming law, together with G11.
+- **G-ref:** the prover refinement, including the D34.3 items.
+- **G-count:** an instrumented hash-call count.
+- **G-exh:** the exhaustion count, in Lean.
+- **G-retry:** the probe and the prover still lack the retry loop
+  (D38.3).
+
+Naming: the name `zkfs_R1_abort` now exists in both R0Z.FsAbortR1 and
+R1Z.MaskImageR1. The final J0c statement must name one composite theorem
+and cite both.
+
+### Lead acceptance of J0c and `privacy_R1` (2026-10-18); D42: the R1 privacy theorem, conditional on named hypotheses
+
+The worker commits a3c80b748, 4f903c387 and 376423b24 are cherry-picked. The
+lead verified every host receipt (SHA matches, exit 0, axioms standard or a
+subset, no sorry/axiom/admit/native_decide/overrides):
+
+| Module | Attempt | SHA | Axiom lines | Peak RSS (KiB) |
+|---|---|---|---|---|
+| R0Z/HvzkV | 3754 | `9b8096b0…` | 21 | |
+| R1Z/PoleMassR1 | 3760 | `b7ab6669…` | 11 | 7,202,756 |
+| R1Z/ModelsVR1 | 3761 | `cfcf9954…` | 4 | |
+| R1Z/MaskImageVR1 | 3762 | `179d2d98…` | 5 | |
+| R1Z/PrivacyR1 | 3763 | `9be4fb32…` | 1 | |
+| R0Z/HelperInactive | 3765 | `4424b826…` | 5 | |
+
+Attempts 3755 and 3757 hit Lean's -M7000 memory exception. The work was
+split into modules, and the failing sources were not rerun. PoleMassR1 peaks
+about 137 MB under MemoryMax and must not grow; its Finset elaboration should
+be reworked before the final replay.
+
+**D42.1 `privacy_R1`.** It proves `ZK_FSV h (VR1 h) B outputs fs x ε` with
+
+ε = M·q/Umin + (M²/Umin + εexh) + Mi²/Umin + N·4096/Q.
+
+ZK_FSV quantifies over every witness w with h.public w = x.1. The real side
+is the honest retrying prover. The simulator `simV` uses the per-challenge
+pole-free set VR1. Hypotheses:
+- PackField and PublicBase;
+- `BuilderSoundOn`, the builder fields baseTyped, lanes, helperSum and
+  helperInactive;
+- `Sem1Uniform` for every adversary's draw;
+- `R1RealModelV` and `R1IdealModelV`.
+
+For N = 8, q = 2^64, M = 8·2^21, Umin = 2^255 and Q = p⁴, the value is
+≈ 2^-109, dominated by the pole term. The Lean numeral for that
+instantiation was dropped while working around the memory limit (D41's
+r1_error_N8 covers the first three terms).
+
+**D42.2 The V-form models (reviewed).** `ModelsVR1` keeps every D41 field
+except agreement. Agreement now names the P ∧ no-pole games
+(`middleRealAbortV`, `middleIdealAbortV`/`idealTestV`). This is required:
+the honest prover accepts on P ∧ V, and the simulator retries on P alone.
+The coupling bounds are re-proved as in D41. `hybrid_ideal_le` charges the
+difference to `poleBad` (some attempt has P ∧ ¬V), whose mass is at most
+N·4096/Q by `pole_mass_le` and the union bound. Accepted.
+
+**D42.3 Sem1Uniform.** This is a new named premise, in upper-bound form: a
+λ-indexed family of at most m values is hit by χ = sem 1 with mass at most
+m/Q. No existing lemma fixes the FS draw's law (FsGood header; MaskD2's
+`uniform_point_mass` is abstract). It joins the ZF1 refinement list, together
+with the R1 sampler's correspondence (the spend-path sampler proofs are the
+source).
+
+**D42.4 Builder.** `helperInactive` is proved for every trace
+(`active_registry`, [propext, Quot.sound]). Still open:
+- `helperSum`: CopyRegistry's (row, slot) Nodup facts are the expected
+  multiplicity input;
+- `lanes`: R0P builder completeness.
+
+**D42.5 R1 privacy status.** The privacy theorem for R1 now exists as one
+Lean statement. It is conditional on:
+1. P_R1, enforced by the prover through the D38 check (proving that check
+   correct is the certificate route of D38.5);
+2. the builder fields helperSum and lanes;
+3. Sem1Uniform and the R1 real and ideal models: lazy programming, game
+   agreement (prover refinement), the freshness tables HitFresh/PairFresh,
+   and read counts;
+4. the gaps G-root, G-def and G-retry (D41.5);
+5. ZF2: `simV` and the choice-based simulator are not efficient;
+6. classical ROM only.
+
+No transversality premise remains (D29).
+
+### Lead acceptance of J0d (2026-10-18); D43: helperSum proved; builder obligations reduced to three
+
+The worker commits c2ff53224, 3388ce7c5, ba3fb2797 and 82e9e06e9 are
+cherry-picked. The lead verified each host receipt (SHA matches, exit 0,
+axioms standard or a subset, no overrides):
+
+| Module | Attempt | SHA | Axiom lines | Peak RSS (KiB) |
+|---|---|---|---|---|
+| R0Z/HelperSum | 3871 | `8fc3d19f…` | 9 | |
+| R0Z/BuilderSound | 3872 | `b6031988…` | 4 | |
+| R1Z/PoleMassR1 | 3882 | `72fa96fc…` | 11 | 6,633,196 (was 7,202,756) |
+| R1Z/PoleN8 | 3883 | `7eebeadd…` | 3 | 1,695,200 |
+
+Evidence: `t2b2b/evidence-J0d.json`.
+
+**D43.1 helperSum.** `helperSum_of_balance` proves that CopyLinkBalance on a
+trace implies ∑ helper = 0 for all λ, χ. It uses CopyRegistry's
+producer/consumer slot Nodup facts and keeps `helper`'s own 0⁻¹ = 0
+convention. `HonestBuilderCore`, with fields baseTyped, lanes and balance,
+gives `HonestBuilderSound` and `BuilderSoundOn` via
+`builderSoundOn_of_core`. The builder obligations behind `privacy_R1` are
+now exactly three:
+- base typing;
+- ProductionHolds without Copy;
+- CopyLinkBalance of the honest build.
+
+All three are R0P builder completeness.
+
+**D43.2 PoleMassR1 reworked.** Only two proof bodies changed
+(`poleSet_card_le`, `poleSet_card_le_4096`). The lead diffed every
+declaration header: there are no statement changes. The module now adds
+≈54 MB over its imports. Its dependent PrivacyR1 (source unchanged) must be
+rebuilt in the final replay.
+
+**D43.3 pole_N8.** `pole_N8_M31` proves 8·4096/p⁴ ≤ 2^-108 symbolically
+(`m31_pow4: 2^123 ≤ (2^31−1)^4`). The combined numeric bound
+(2^-166 + 2^-108) is not yet stated as one Lean term.
+
+**D43.4 Process.** Attempt 3870 started just after another session's
+charon/cargo job had launched, between the gate check and the launch. The
+worker then moved the gate into the same SSH command as run2.sh, aborting on
+a non-empty gate. That is accepted only as an aborting precondition. The gate
+output must still be recorded per attempt.
+
+### Lead acceptance of ZF2 (2026-10-18); D44: an explicit, witness-free simulator for R1
+
+ZF2 (worker aca7598b5..749f9a778, 9 commits, cherry-picked) is accepted.
+The design is `zf1/DESIGN-ZF2-SIMULATOR.txt`. The lead verified each host
+receipt (SHA matches, exit 0, standard axioms, no sorry/axiom/admit/
+native_decide/overrides, no `Classical.choose` in any of the sources):
+
+| Module | Attempt | SHA | Axiom lines |
+|---|---|---|---|
+| R0Z/HvzkS | 3910 | `877fa7c7…` | 9 |
+| R0Z/RefPayload | 3911 | `d7e378fd…` | 17 |
+| R1Z/RefCosetR1 | 3912 | `deaffbc8…` | 2 |
+| R1Z/SimulatorR1 | 3913 | `b2820559…` | 4 |
+
+**D44.1 The simulator.** `simE π B outputs x ch t = (metadata outputs x
+ch, shift x.1 B ch (refPayload x.1 B ch + A π B ch (equiv.symm t)))`. It
+takes no instance and no InLanguage proof, and the lead read the definition.
+`refPayload` is the zero payload trace's cTilde formula with S₀ added at
+`.maskSum`, so it is computed from public data only.
+
+The dummy-witness alternative was checked and rejected: such a view lies in
+a different coset, at statistical distance 1, and the verifier's initial
+sumcheck test already separates it.
+
+Claim Z (`cTilde_sub_ref_mem_range_R1`): for every valid, base-typed w,
+cTilde w − refPayload ∈ range A_ch.
+
+**D44.2 `privacy_R1_eff`.** It proves ZK_FSS against simE with the same error
+as `privacy_R1`. The hypotheses are unchanged except that the ideal model is
+`R1IdealModelS … (simE …)`. This closes D42.5 item 5 (ZF2) at the level of
+Lean statements.
+
+Efficiency is a meta-level reading of the definition and is not formalised.
+The axiom line's Classical.choice comes from propDecidable in `if`, not from
+choice of a witness. Simulation cost equals the public P_R1 check (22.6 s
+measured, D38) plus one payload computation (estimated, not timed).
+
+**D44.3 New item G-sim.** A Rust simE with a host timing, a check that its
+output passes the R1 verifier, and the L/O-split correspondence (with
+G-ref).
+
+Remaining for R1 privacy (D42.5, updated):
+1. P_R1 enforcement: the D38 check and its certificate refinement.
+2. Builder completeness: baseTyped, lanes, CopyLinkBalance (D43.1).
+3. Sem1Uniform and the R1 real model plus R1IdealModelS, i.e. G-def,
+   G-prog and G-ref (in progress).
+4. G-root, G-retry, G-sim.
+5. Classical ROM only.
+
+### Lead acceptance of the R1 games (2026-10-18); D45: the ideal model is proved; real-side hypotheses narrowed
+
+The R1 games work (worker 4d6ee9980..72f11706a, 12 commits, cherry-picked)
+is accepted. The design is `zf1/DESIGN-R1-GAMES.txt` §0–§8. The lead verified
+each host receipt (SHA matches, exit 0, standard axioms, no overrides):
+
+| Module | Attempt | SHA | Axiom lines |
+|---|---|---|---|
+| R1Z/LensR1 | 3951 | `90bc5726…` | 10 |
+| R1Z/TranscriptR1 | 3954 | `e8b6f22d…` | 18 |
+| R1Z/GamesR1 | 3957 | `630393aa…` | 21 |
+| R1Z/PrivacyGamesR1 | 3958 | `ec1a2ede…` | 2 |
+
+**D45.1 The games are defined.** `fsR1` is the real and ideal pair, and
+`abR1` is the abort bridge.
+- The real game is the honest retrying prover: up to N attempts with
+  independent secrets, accepting on P_R1 ∧ VR1 ∧ ¬exhausted. A rejected
+  attempt publishes nothing; if every attempt fails, a fixed failure view is
+  published.
+- The ideal game is the same loop on P alone, with simE (or simV), answering
+  from the table programmed at the published addresses.
+
+**D45.2 G-root is closed at the model level.** It was checked against
+verifier.rs and r1_semantic.rs. Every root, opened salt and path digest is in
+the input or is the answer to a verifier read (115 transcript reads, plus one
+leaf read and 6 node reads per query and tree). So proof = f(view, verifier
+log), and `extend` puts that log at the front of observerOracle.
+
+**D45.3 What is proved.**
+- `R1IdealModelS` (simE) and `R1IdealModelV`, every field. The coupling is
+  the identity, so Mi = 0 and ε_prog = 0. The programming collisions are
+  charged inside the real side's M²/Umin.
+- `R1RealModelV`:
+  - the read count M = N·(115 + Mc), with `card_TRead = 115` proved;
+  - transcript HitFresh;
+  - PairFresh for transcript×transcript pairs and transcript×commitment
+    pairs (the latter via `CmLayout.cross`).
+- `privacy_R1_games` is privacy_R1_eff on the concrete games, with error
+  N(115+Mc)·q/2^255 + (N(115+Mc))²/2^255 + εexh + N·4096/Q. The N = 8
+  numeral is not compiled. It is expected to stay pole-dominated, ≈ 2^-108.
+
+**D45.4 What remains a hypothesis.** These are fields of `R1RealData`, per
+adversary and witness:
+- `cp`: the lazy-programming coupling (G-prog);
+- `Agree`: real and middle games agree outside the events (G-ref);
+- `CmLayout`: hit, pair and cross for the salt, leaf, node, expander and
+  seed reads;
+- exhaustion mass ≤ εexh (G-exh);
+- Mc: the commitment-read count, counted from Rust only.
+
+These are also unchanged: Sem1Uniform, BuilderSoundOn (baseTyped, lanes,
+CopyLinkBalance), PublicBase, and classical ROM only.
+
+**D45.5 Rust ↔ Lean refinement list (design §6.4).**
+- R-wire: framing, decoders, QueryScan, Merkle-path reads.
+- R-ser: proof bytes = serialize(view, log).
+- R-commit: prover.rs commitment phase and salted trees.
+- R-causal: row i depends only on earlier challenges.
+- R-retry: the retry loop in the Rust prover.
+- R-pub: the Rust P_R1 check (D38.5 certificates).
+
+**D45.6 Process.** The worker gated on Lean processes only, as instructed.
+Spend-path cargo and charon jobs ran concurrently at times without incident.

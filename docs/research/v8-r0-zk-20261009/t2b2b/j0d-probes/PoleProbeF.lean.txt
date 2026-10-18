@@ -1,0 +1,71 @@
+import R0Z.HonestValidity
+import R0Z.HvzkV
+
+/-! J0c (LOG D40.3): the LogUp pole mass of one attempt.  `¬ NoPole t λ χ`
+puts `χ` in `poleSet t λ`, at most 4·|active rows| ≤ 4096 values; under the
+named sampler premise `Sem1Uniform draw Q` (χ = sem 1 uniform on Q values
+given λ = sem 0; for R1, K₄ = QM31 and Q = p⁴) one attempt's pole mass is at
+most 4096 / Q.  No Lean lemma fixes the law of the FS challenge draw
+(FsGood.lean header: the alpha-row law "is not chosen here"; R0P MaskD2.lean
+`uniform_point_mass` is for an abstract uniform type), so the premise is a
+named hypothesis. -/
+set_option autoImplicit false
+noncomputable section
+
+namespace R1Z.PoleProbeF
+open R0P R0Z.JointView R0Z.FsStatement R0Z.Shift R0Z.FsGood R0Z.FsAbort R0Z.HvzkV
+attribute [local irreducible] copyLinks copyPatterns copyActiveRowMasks copyInactiveRows
+
+variable {K CommitHandle Aux : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+
+/-! ### The pole mass -/
+
+/-- The copy-active rows (kept opaque: never evaluated). -/
+@[irreducible] def activeRows : Finset (Fin 1024) :=
+  Finset.univ.filter (fun b : Fin 1024 => CopyActiveRow b)
+
+theorem mem_activeRows (b : Fin 1024) (hb : CopyActiveRow b) : b ∈ activeRows := by
+  unfold activeRows
+  exact Finset.mem_filter.2 ⟨Finset.mem_univ _, hb⟩
+
+theorem activeRows_card_le : activeRows.card ≤ 1024 := by
+  unfold activeRows
+  exact (Finset.card_filter_le _ _).trans (by rw [Finset.card_univ, Fintype.card_fin])
+
+/-- The four LogUp values of one active row and slot (producer or consumer). -/
+def poleValue (t : Trace K) (lam : K) (p : Fin 1024 × Fin 2 × Bool) : K :=
+  cond p.2.2 (copyRowValues t lam p.1 CopyLink.producer p.2.1)
+    (copyRowValues t lam p.1 CopyLink.consumer p.2.1)
+
+/-- All producer and consumer LogUp values of the active rows. -/
+@[irreducible] def poleSet (t : Trace K) (lam : K) : Finset K :=
+  (activeRows ×ˢ (Finset.univ : Finset (Fin 2 × Bool))).image (poleValue t lam)
+
+theorem poleValue_mem (t : Trace K) (lam : K) (p : Fin 1024 × Fin 2 × Bool)
+    (hp : CopyActiveRow p.1) : poleValue t lam p ∈ poleSet t lam := by
+  unfold poleSet
+  exact Finset.mem_image_of_mem (poleValue t lam)
+    (Finset.mem_product.2 ⟨mem_activeRows p.1 hp, Finset.mem_univ _⟩)
+
+theorem mem_poleSet_of_not_noPole (t : Trace K) (lam chi : K)
+    (hn : ¬ R0Z.HonestValidity.NoPole t lam chi) : chi ∈ poleSet t lam := by
+  by_contra hc
+  apply hn
+  intro b hb s
+  constructor
+  · intro he
+    apply hc
+    have hm := poleValue_mem t lam (b, s, true) hb
+    have hv : poleValue t lam (b, s, true) = chi := he.symm
+    rw [hv] at hm
+    exact hm
+  · intro he
+    apply hc
+    have hm := poleValue_mem t lam (b, s, false) hb
+    have hv : poleValue t lam (b, s, false) = chi := he.symm
+    rw [hv] at hm
+    exact hm
+
+
+end R1Z.PoleProbeF

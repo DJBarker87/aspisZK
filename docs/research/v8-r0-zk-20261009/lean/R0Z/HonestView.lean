@@ -50,19 +50,24 @@ def helper (pub : Public K) (t : Trace K) (lam chi : K) (r : Fin 1024) : K :=
 def prepare (pub : Public K) (t : Trace K) (ch : Challenges K) : Trace K :=
   fun c r => if c.val = 26 then helper pub t (ch.sem 0) (ch.sem 1) r else t c r
 
-inductive PayloadCell
+/-- The batched opening block of a PCS: its cell type and its K-linear read
+of the prepared trace (job R1-0, DESIGN-R1-PRIVACY-MODEL §2.2). R0's instance
+is `R0Z.R0Batched`; every other payload cell is the same for R0 and R1. -/
+class BatchedLayer (K : Type) [Field K] (Bat : Type) where
+  read : (Fin 1024 ≃ Fin 1024) → Challenges K → Trace K →ₗ[K] (Bat → K)
+
+inductive PayloadCell (Bat : Type)
   | maskSum
   | semanticCoeff (round : Fin 10) (coefficient : Fin 28)
   | pointClaim (point : Fin 3) (column : Fin 29)
   | extraClaim (column : Fin 29)
   | ood (point : Fin 2) (column : Fin 29)
   | inactiveSum
-  | openingCoeff (coefficient : Fin 7)
-  | finalCoeff (coefficient : Fin 256)
   | opened (query : Fin 262144) (child : Fin 4) (column : Fin 29)
-  deriving DecidableEq, Fintype
+  | bat (cell : Bat)
+  deriving DecidableEq
 
-abbrev Payload (K : Type) := PayloadCell → K
+abbrev Payload (K Bat : Type) := PayloadCell Bat → K
 
 /-- Linear evaluation of a coordinate vector against fixed weights. -/
 def dotLinear {n : Nat} (weights : Fin n → K) : (Fin n → K) →ₗ[K] K :=
@@ -205,7 +210,9 @@ def relationLinear (w : InitialMessage K) : InitialMessage K →ₗ[K] K[X] :=
 def foldLinear (a : K) : InitialMessage K →ₗ[K] (Fin 256 → K) :=
   LinearMap.pi fun d => ∑ s : Fin 4, a^s.val • LinearMap.proj (childIndex d s)
 
-def linearPayload (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) : Trace K →ₗ[K] Payload K :=
+variable {Bat : Type} [BatchedLayer K Bat]
+
+def linearPayload (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) : Trace K →ₗ[K] Payload K Bat :=
   LinearMap.pi fun coord => match coord with
   | .maskSum | .semanticCoeff _ _ => 0
   | .pointClaim j c => claimsLinear (alpha ch) j c
@@ -213,14 +220,12 @@ def linearPayload (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) : Trace K →
   | .ood j c => (oodLinear (ch.circle j)).comp ((coeffsLinear π).comp (LinearMap.proj c))
   | .inactiveSum => ∑ c : Fin 29, ch.opening 0 ^ c.val •
       (dotLinear (indicator copyInactiveRows)).comp (LinearMap.proj c)
-  | .openingCoeff i => (Polynomial.lcoeff K i.val).comp
-      ((relationLinear (openingWeights π ch)).comp (batchLinear π ch))
-  | .finalCoeff i => (LinearMap.proj i).comp ((foldLinear (ch.opening 3)).comp (batchLinear π ch))
   | .opened q s c => if q ∈ ch.queries then
       (LinearMap.proj (childIndex q s)).comp (exactInitialLinear.comp ((coeffsLinear π).comp (LinearMap.proj c))) else 0
+  | .bat b => (LinearMap.proj b).comp (BatchedLayer.read π ch)
 
 def payloadAffine (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
-    (ch : Challenges K) : AffTape K F →ᵃ[F] Payload K :=
+    (ch : Challenges K) : AffTape K F →ᵃ[F] Payload K Bat :=
   let t := prepare pub t ch
   AffineMap.pi fun coord => match coord with
   | .maskSum => ∑ bits : Fin 10 → Bool, mask π B t (fun i => if bits i then 1 else 0)
@@ -303,7 +308,7 @@ theorem roundPoly_apply (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackB
 /-- The public zero extension reveals no symbol at an unqueried position. -/
 theorem unqueried_zero (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (q : Fin 262144) (s : Fin 4) (c : Fin 29)
-    (hq : q ∉ ch.queries) : payloadAffine π pub B t ch r (.opened q s c) = 0 := by
+    (hq : q ∉ ch.queries) : payloadAffine (Bat := Bat) π pub B t ch r (.opened q s c) = 0 := by
   simp only [payloadAffine, AffineMap.pi_apply, AffineMap.comp_apply,
     LinearMap.coe_toAffineMap, LinearMap.restrictScalars_apply, LinearMap.comp_apply,
     LinearMap.proj_apply, linearPayload, LinearMap.pi_apply, if_neg hq, LinearMap.zero_apply]
@@ -312,7 +317,7 @@ theorem unqueried_zero (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBa
 then evaluate the semantic/oracle/opening expressions. The affine packaging is
 proved equal to this function below, not required as an interface premise. -/
 def run (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
-    (ch : Challenges K) (r : AffTape K F) : Payload K :=
+    (ch : Challenges K) (r : AffTape K F) : Payload K Bat :=
   let t := applyAff B (prepare pub t ch) r
   fun coord => match coord with
   | .maskSum => ∑ bits : Fin 10 → Bool,
@@ -331,9 +336,8 @@ def run (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Tra
   | .ood j c => evalMessage (coeffsOf π t c) (ch.circle j)
   | .inactiveSum => ∑ c : Fin 29, ch.opening 0 ^ c.val *
       AspisR0.LinearDual.dot (indicator copyInactiveRows) (t c)
-  | .openingCoeff i => (roundPolynomial (batchLinear π ch t) (openingWeights π ch)).coeff i.val
-  | .finalCoeff i => foldMessage (ch.opening 3) (batchLinear π ch t) i
   | .opened q s c => if q ∈ ch.queries then exactInitialEncoder (coeffsOf π t c) (childIndex q s) else 0
+  | .bat b => BatchedLayer.read π ch t b
 
 attribute [local irreducible] prepare helper applyAff traceAffine batchLinear
   quotientLinear openingWeights honestClaims MaskedProtocol.terminalZ MaskedProtocol.maskValue
@@ -341,21 +345,21 @@ attribute [local irreducible] prepare helper applyAff traceAffine batchLinear
 
 private theorem run_maskSum (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) :
-    run π pub B t ch r (.maskSum) = payloadAffine π pub B t ch r (.maskSum) := by
+    run (Bat := Bat) π pub B t ch r (.maskSum) = payloadAffine (Bat := Bat) π pub B t ch r (.maskSum) := by
   simp only [payloadAffine, AffineMap.pi_apply]
   rw [affine_sum_apply]
   simp only [run, mask_apply]
 
 private theorem run_semanticCoeff (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (j : Fin 10) (i : Fin 28) :
-    run π pub B t ch r (.semanticCoeff j i) = payloadAffine π pub B t ch r (.semanticCoeff j i) := by
+    run (Bat := Bat) π pub B t ch r (.semanticCoeff j i) = payloadAffine (Bat := Bat) π pub B t ch r (.semanticCoeff j i) := by
   change _ = (roundPoly π pub B (prepare pub t ch) ch j r).coeff i.val
   exact (congrArg (fun p : K[X] => p.coeff i.val)
     (roundPoly_apply π pub B (prepare pub t ch) ch j r)).symm
 
 private theorem run_pointClaim (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (j : Fin 3) (c : Fin 29) :
-    run π pub B t ch r (.pointClaim j c) = payloadAffine π pub B t ch r (.pointClaim j c) := by
+    run (Bat := Bat) π pub B t ch r (.pointClaim j c) = payloadAffine (Bat := Bat) π pub B t ch r (.pointClaim j c) := by
   simp only [payloadAffine, AffineMap.pi_apply, AffineMap.comp_apply,
     LinearMap.coe_toAffineMap, LinearMap.restrictScalars_apply, LinearMap.comp_apply,
     LinearMap.proj_apply, linearPayload, LinearMap.pi_apply]
@@ -365,21 +369,21 @@ private theorem run_pointClaim (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B 
 
 private theorem run_extraClaim (π : Fin 1024 ≃ Fin 1024) (pub : Public K)
     (B : PackBasis F) (t : Trace K) (ch : Challenges K) (r : AffTape K F) (c : Fin 29) :
-    run π pub B t ch r (.extraClaim c) = payloadAffine π pub B t ch r (.extraClaim c) := by
+    run (Bat := Bat) π pub B t ch r (.extraClaim c) = payloadAffine (Bat := Bat) π pub B t ch r (.extraClaim c) := by
   change _ = extraLinear π (alpha ch) c (traceAffine B (prepare pub t ch) r)
   rw [traceAffine_apply, extraLinear_apply]
   rfl
 
 private theorem run_ood (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (j : Fin 2) (c : Fin 29) :
-    run π pub B t ch r (.ood j c) = payloadAffine π pub B t ch r (.ood j c) := by
+    run (Bat := Bat) π pub B t ch r (.ood j c) = payloadAffine (Bat := Bat) π pub B t ch r (.ood j c) := by
   change _ = oodLinear (ch.circle j) (coeffsLinear π ((traceAffine B (prepare pub t ch) r) c))
   rw [traceAffine_apply, oodLinear_apply]
   rfl
 
 private theorem run_inactiveSum (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) :
-    run π pub B t ch r (.inactiveSum) = payloadAffine π pub B t ch r (.inactiveSum) := by
+    run (Bat := Bat) π pub B t ch r (.inactiveSum) = payloadAffine (Bat := Bat) π pub B t ch r (.inactiveSum) := by
   simp only [payloadAffine, AffineMap.pi_apply, AffineMap.comp_apply,
     LinearMap.coe_toAffineMap, LinearMap.restrictScalars_apply, LinearMap.comp_apply,
     LinearMap.proj_apply, linearPayload, LinearMap.pi_apply]
@@ -390,28 +394,16 @@ private theorem run_inactiveSum (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B
   simp only [run, LinearMap.sum_apply, LinearMap.smul_apply, LinearMap.comp_apply,
     LinearMap.proj_apply, smul_eq_mul, dotLinear, AspisR0.LinearDual.dot]
 
-private theorem run_openingCoeff (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
-    (ch : Challenges K) (r : AffTape K F) (i : Fin 7) :
-    run π pub B t ch r (.openingCoeff i) = payloadAffine π pub B t ch r (.openingCoeff i) := by
-  simp only [payloadAffine, AffineMap.pi_apply, AffineMap.comp_apply,
-    LinearMap.coe_toAffineMap, LinearMap.restrictScalars_apply, LinearMap.comp_apply,
-    LinearMap.proj_apply, linearPayload, LinearMap.pi_apply, Polynomial.lcoeff_apply]
-  change _ = (relationLinear (openingWeights π ch)
-    (batchLinear π ch (traceAffine B (prepare pub t ch) r))).coeff i.val
-  rw [traceAffine_apply, relationLinear_apply]
-  rfl
-
-private theorem run_finalCoeff (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
-    (ch : Challenges K) (r : AffTape K F) (i : Fin 256) :
-    run π pub B t ch r (.finalCoeff i) = payloadAffine π pub B t ch r (.finalCoeff i) := by
-  change _ = foldLinear (ch.opening 3)
-    (batchLinear π ch (traceAffine B (prepare pub t ch) r)) i
-  rw [traceAffine_apply, foldLinear_apply]
+private theorem run_bat (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
+    (ch : Challenges K) (r : AffTape K F) (b : Bat) :
+    run (Bat := Bat) π pub B t ch r (.bat b) = payloadAffine (Bat := Bat) π pub B t ch r (.bat b) := by
+  change _ = BatchedLayer.read π ch (traceAffine B (prepare pub t ch) r) b
+  rw [traceAffine_apply]
   rfl
 
 private theorem run_opened (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
     (ch : Challenges K) (r : AffTape K F) (q : Fin 262144) (s : Fin 4) (c : Fin 29) :
-    run π pub B t ch r (.opened q s c) = payloadAffine π pub B t ch r (.opened q s c) := by
+    run (Bat := Bat) π pub B t ch r (.opened q s c) = payloadAffine (Bat := Bat) π pub B t ch r (.opened q s c) := by
   change _ = (if q ∈ ch.queries then
     (LinearMap.proj (childIndex q s)).comp (exactInitialLinear.comp ((coeffsLinear π).comp (LinearMap.proj c)))
     else 0) (traceAffine B (prepare pub t ch) r)
@@ -422,9 +414,10 @@ private theorem run_opened (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : Pa
   rfl
 
 /-- Componentwise equality to the actual ported expressions. The eight small
-component lemmas keep the kernel from expanding one aggregate proof. -/
+component lemmas (seven fixed cells and the batched read) keep the kernel from expanding one aggregate proof. -/
 theorem run_eq_payloadAffine (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F) (t : Trace K)
-    (ch : Challenges K) (r : AffTape K F) : run π pub B t ch r = payloadAffine π pub B t ch r := by
+    (ch : Challenges K) (r : AffTape K F) :
+    run (Bat := Bat) π pub B t ch r = payloadAffine π pub B t ch r := by
   funext coord
   cases coord with
   | maskSum => exact run_maskSum π pub B t ch r
@@ -433,9 +426,8 @@ theorem run_eq_payloadAffine (π : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : 
   | extraClaim c => exact run_extraClaim π pub B t ch r c
   | ood j c => exact run_ood π pub B t ch r j c
   | inactiveSum => exact run_inactiveSum π pub B t ch r
-  | openingCoeff i => exact run_openingCoeff π pub B t ch r i
-  | finalCoeff i => exact run_finalCoeff π pub B t ch r i
   | opened q s c => exact run_opened π pub B t ch r q s c
+  | bat b => exact run_bat π pub B t ch r b
 
 #print axioms helper
 #print axioms original_apply

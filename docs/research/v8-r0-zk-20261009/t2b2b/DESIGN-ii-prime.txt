@@ -1,0 +1,759 @@
+DESIGN-ii-prime — proof design for clause (ii′) of MaskImageOn
+==============================================================
+
+Job: (ii′) design (no Lean proofs written; zero host compiles).  Branch
+codex/r0-clause-iiprime-20261017, base 524e1debb (origin/v8-reference,
+D23 accepted).  Read against LOG D11–D23, DESIGN-T2b-2b.txt (§0 notation,
+§1 K₄/Good₃, §2.1 reduction, §2.2 verifier relations, §5 J-plan) and
+DESIGN-T2b-2b-Dprime.txt (BCond, B-glue, V_D/V_G).  Lean paths below are
+relative to docs/research/v8-r0-zk-20261009/lean/R0Z/ unless prefixed
+(R0P = docs/research/v8-r0-sem-proof-20261008/lean/R0P/,
+R0 = docs/research/v8-wide-reference-20261005/lean/R0/).
+
+Tags as in DESIGN-T2b-2b §0: STRUCTURAL (all challenges), CONDITIONAL
+(off a named bad set, density given), OPEN (no proof route I vouch for;
+numeric support named), PREMISE (a named Prop hypothesis of the theorem).
+
+Headline findings
+  H1 (§1.4–1.5)  (ii′) as stated in Shift.lean:186 is FALSE without a
+     validity hypothesis (restated per lead decision as IIPrimeValid).  HonestProver (ZkStatement.lean:296) has no
+     validity field, so h.build w is an arbitrary trace.  Two linear
+     functionals vanish on range A but not on cTilde w − cTilde w′ for
+     arbitrary traces: the initial-sum defect
+     ι(v) := p₀ᵛ(0) + p₀ᵛ(1) − v(.maskSum)  and  v(.inactiveSum).
+     §1.5 restates (ii′) with HonestValid on both witnesses (a trace
+     predicate built from R0P's laneOf and the two helper sums), proves that
+     both functionals then vanish on each side, and composes with T2a through
+     a restricted HonestProver without editing proved modules.
+  H2 (§2)  Given those, (ii′) reduces to: per-lane noise lifts for the 16
+     semantic lanes (C1Lift_c) and the H1 lane (H1Lift), followed by a mask
+     lift that reuses (i′)'s Q′ premise and a strengthened (B) premise,
+     BReach := B₀ ≤ bat(ker own ⊓ ker R).  BReach is exactly the assembly
+     that Z8c/Z8d/Z8e measured; it implies BCond.  No new mask-lane rank
+     statement is needed.
+  H3 (§2.3)  c1_surjectivity as defined (Z4Maps.lean:62) is insufficient:
+     C1Cell (Z4Maps.lean:32) omits .extraClaim c for c < 16 (it predates
+     D14's fourth weight row), and it omits the H1 lane.  The replacement
+     is per lane, on the own observations, with the noise lane's actual
+     (balanced) word space.
+  H4 (§2.3)  The opened-symbol part of C1Lift is STRUCTURAL under
+     D13Order: through the fibre transform, the 88 opened symbols are the
+     four quarter polynomials evaluated at 22 distinct folded points, and
+     the 89 free low coefficients give a 22-node Vandermonde in each
+     quarter, since span{N_0..N_{n−1}} = K[X]_{<n} for every n.  The
+     remaining 24 limbs per lane (claims, extra, ood) are a transversality
+     condition (C1T-open / H1T-open), in the same family as OT-open.
+  H5 (§3)  R1: the route survives in shape; B₀ and BReach must be restated
+     for the two-layer batched block (Z9).  Under S2's identity-digit-map π_R1
+     the eligible semantic coefficients are a top block (quarter index
+     208..255), not a prefix, so the opened part of C1Lift is no longer
+     structural; variant D (D13) or a digit-map search (J11b) restores it.
+
+Sections
+  §1  Definitions in Lean, the exact (ii′) Prop, the obstruction
+  §2  Proof route (steps, tags, composition with (i′))
+  §3  R1 applicability
+  §4  Lean job plan
+  §5  Open points
+
+§1  Definitions in Lean and the exact (ii′) statement
+-----------------------------------------------------
+§1.1  Objects (each signature checked against the source at base 524e1debb)
+
+  Challenges K            HonestView.lean:32   {sem : Fin 25 → K; circle : Fin 2 →
+                          Point K; opening : Fin 4 → K; queries : Finset (Fin 262144)}
+                          alpha ch i = ch.sem (15+i) (HonestView.lean:38).
+  HonestProver K          ZkStatement.lean:296  {Instance; transport : Fin 1024 ≃
+                          Fin 1024; public : Instance → Public K; build : Instance →
+                          Trace K}.  NO validity field: build w is any trace.
+  Statement K CH          JointView/ZkStatement; x.1 : Public K.
+  PayloadCell, Payload    HonestView.lean:53, 65.  Cells: maskSum, semanticCoeff j i
+                          (j<10,i<28), pointClaim j c (j<3,c<29), extraClaim c,
+                          ood j c (j<2), inactiveSum, openingCoeff i (i<7),
+                          finalCoeff i (i<256), opened q s c.
+  M, N, T                 Partition.lean:15,17,19:
+                          M K F = (Fin 10 × Fin 1024 → F) × ExtTape F × ExtTape F
+                                  (mask-only raw, G raw limbs, D raw limbs);
+                          N K F = ExtTape F × EligibleNoise K F (H1-padding limbs,
+                                  eligible C1 noise); T = M × N.
+                          inlM (Partition.lean:61) = LinearMap.inl.
+  EligibleNoise K F       MaskLayout.lean:54  = EligibleCell → F, with
+                          eligible c r (MaskLayout.lean:38): c < 16 ∧ (r < 912 ∧
+                          13 ≤ r % 16  ∨  912 ≤ r ∧ ¬ forest/pair-aux used).
+  applyEligible t e       MaskLayout.lean:102: for c < 16,
+                          balance 1023 (t c + noise c) — row 1023 of every semantic
+                          column (trace AND noise) is overwritten by minus the sum
+                          over copyInactiveRows.erase 1023.  balance: :81.
+  applyAff                MaskLayout.lean:109: lanes 16..25 maskOnlyColumns
+                          (balance 0), 26: t + h1Padding (zero on copy-active rows,
+                          balance 0; :97), 27: balance 0 (pack4 G), 28: dWord
+                          (balance 0; :91).  Semantic lanes untouched.
+  eligibleLinear          JointTrace.lean:47; tapeLinear B (JointTrace.lean:88)
+                          = eligibleLinear ∘ snd∘snd + traceLinear B ∘ aff.
+  prepare, helper         HonestView.lean:50, 44: lane 26 := helper pub t λ χ r
+                          (λ = ch.sem 0, χ = ch.sem 1).
+  linearPayload π ch      HonestView.lean:208 (the non-round linear observations).
+  L π B ch                PayloadSplit.lean:47: Trace K →ₗ[K] Payload K; maskSum and
+                          rounds through maskLinear (PayloadSplit.lean:17: c1
+                          factors × pointClaim-0 MLE of lanes 0..15, explicitG × lane
+                          27, maskOnly factors × lanes 16..25, extraLinear lane 28;
+                          lane 26 is NOT read); other cells = linearPayload.
+  O pub B ch t            PayloadSplit.lean:67 = roundInclusion (originalRounds …)
+                          (:62): rounds of a ↦ η·terminalValue(honestClaims t a).
+  actual pub B t ch r     PayloadSplit.lean:70 = applyAff B (prepare pub
+                          (applyEligible t r.2.2) ch) (aff r).
+  A π B ch                D12.lean:27 = (L π B ch).restrictScalars F ∘ tapeLinear B
+                          : T K F →ₗ[F] Payload K.
+  c h B x w ch            JointView.lean:36 = payload at tape (0,0); by
+                          PayloadSplit.run_split, c = L(u_w) + O(u_w) with
+                          u_w := actual x.1 B (h.build w) ch 0.
+  g h B x w ch n          D12.lean:33.
+  dir                     Shift.lean:65 (round 9: X − ½, zero elsewhere).
+  originalOf pub B ch v   Shift.lean:131 = ch.sem 14 · terminalValue(… v's point
+                          claims …) (alpha ch).
+  Phi0 B ch               Shift.lean:59 = evalRound9 ch − claimMask B (alpha ch);
+                          claimMask (Shift.lean:44) reads pointClaim 0 of lanes
+                          0..25, 27 (with mask factors) and extraClaim 28.
+  sRem                    Shift.lean:175.
+  cTilde h B x w ch       Shift.lean:180 = c − (originalOf x.1 B ch c ·
+                          (alpha ch 9 − 1/2)⁻¹) • dir.
+  MaskImageOn P h B x     Shift.lean:186 (two clauses; (ii′) is the second).
+  Good ch                 Shift.lean:21 = GoodAlpha (alpha ch) (GoodDensity.lean:16).
+  Good₃                   NOT in Lean.  Proposed in DESIGN-T2b-2b §1.2 (J1):
+                          Good ∧ (∀ i : Fin 25, ch.sem i ∈ K4 B hB) ∧
+                          ∃ s : Finset (Fin 4), 3 ≤ s.card ∧ ∀ i ∈ s,
+                          alpha ch ⟨i,_⟩ ∉ K2 B hB; P_final (§4.1 there) adds
+                          GoodOpen ∧ GoodGeneric.
+  silentMasks             Z4Maps.lean:25; mem_silentMasks_iff PureRounds.lean:73
+                          (eight non-round groups).
+  Chain0, InitialChain0   Chain.lean:144, 137; rounds_initial Chain.lean:87
+                          (needs VDeg 10 (fun _ => 27) f); fOrig Shift.lean:367;
+                          original_bsum_actual Chain.lean:224.
+  C1Cell, c1Projection,   Z4Maps.lean:32, 39, 46, 62.  C1Cell = point j c | ood j c |
+  c1Map, c1_surjectivity  opened q s c, c : Fin 16.  c1_surjectivity :=
+                          ∀ ch, Good ch → ∀ w w', public w = x.1 → public w' = x.1 →
+                          c1Projection (c w − c w') ∈ range (c1Map h.transport B ch).
+  D13Order π              HonestView.lean:24: ∀ k < 89, π.symm k ∈ copyInactiveRows ∧
+                          ∀ c < 16, eligible c (π.symm k); π 1023 = 1023; π.symm
+                          increasing on k ≥ 89.
+  Circle code             R0/PolynomialPair.lean:76,79: p0Linear/p1Linear = even/odd
+                          coefficients in the natural line basis;
+                          AspisFormal/CircleNaturalBasisEval.lean: naturalLinePoly k
+                          = ∏_{b ∈ bits k} T_{2^b} (degree exactly k).
+                          R0/Fold.lean:55–66: fibre, fibreTransform, channels;
+                          :101 fold_encoded.
+
+§1.2  The (ii′) statement, verbatim from MaskImageOn (Shift.lean:186–191)
+
+  def IIPrime (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F)
+      (x : Statement K CommitHandle) : Prop :=
+    ∀ ch, P ch → ∀ w w', h.public w = x.1 → h.public w' = x.1 →
+      cTilde h B x w ch - cTilde h B x w' ch ∈ LinearMap.range (A h.transport B ch)
+
+  so MaskImageOn P h B x ↔ (clause i′) ∧ IIPrime P h B x by definition (Iff.rfl
+  after unfolding; the proposed module states IIPrime with exactly this body).
+  Variables as in Shift.lean:17–18: {K CommitHandle : Type} [Field K] [Fintype K]
+  [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}.
+  LinearMap.range is over F (A is F-linear).
+
+§1.3  Decomposition of the target (STRUCTURAL, from existing lemmas)
+
+  Write u_w := PayloadSplit.actual x.1 B (h.build w) ch 0 (a trace: lanes 0..15 =
+  balance 1023 of h.build w, lane 26 = helper, all other lanes 0).  By
+  run_split (PayloadSplit.lean:177) and the definition of cTilde,
+
+    cTilde w − cTilde w′ = L(u_w − u_w′) + roundInclusion(ΔOR) − k • dir,      (★)
+    ΔOR := originalRounds x.1 B ch u_w − originalRounds x.1 B ch u_w′,
+    k   := (originalOf x.1 B ch (c w) − originalOf x.1 B ch (c w′))·(α₉ − ½)⁻¹.
+
+  δ := u_w − u_w′ is supported on lanes 0..15 and 26.  Its semantic part is the
+  difference of two balanced words (Σ over copyInactiveRows = 0); its H1 part is
+  the helper difference, on all 1024 rows (copy-active rows included).
+
+§1.4  Obstruction: (ii′) is false without a completeness premise
+
+  Two F-linear functionals on Payload K vanish on range A:
+
+  (O1) ι(v) := (roundPoly 0 v).eval 0 + (roundPoly 0 v).eval 1 − v .maskSum.
+       For v = A t = L(tapeLinear t): L's maskSum is Σ_bits maskLinear(bits) and its
+       round-0 polynomial is rounds ch 0 (a ↦ maskLinear a ·), so ι(L τ) = 0 for every
+       trace τ by rounds_initial with maskLinear_vdeg (Shift.lean:330, any trace).
+       On (★): ι(roundInclusion ΔOR) = bsum fOrig(u_w) − bsum fOrig(u_w′)
+       (rounds_initial with vdeg_fOrig), ι(dir) = 0 (dir_mem_initialChain0).  So
+         ι(cTilde w − cTilde w′) = bsumB 10 (fOrig x.1 B ch u_w ∘ ofBool)
+                                  − bsumB 10 (fOrig x.1 B ch u_w′ ∘ ofBool).
+  (O2) v .inactiveSum.  On range A it is Σ_c γ^c · Σ_{r ∈ copyInactiveRows}
+       (tapeLinear t) c r = 0, because every lane that tapeLinear writes is balanced
+       over copyInactiveRows (semantic noise at 1023, H1 padding and mask lanes at 0).
+       On (★) it is γ^26 · (Σ_{r∈I} helper_w r − Σ_{r∈I} helper_w′ r) (semantic lanes
+       of u_w are balanced; lanes 16..25, 27, 28 are 0).
+
+  Counterexample shape: any HonestProver with two instances of equal public value,
+  one satisfying the constraints and one not (e.g. one bad Poseidon row), at any ch
+  with ch.sem 14 ≠ 0 and a zerocheck point zc for which the Boolean sum of the bad
+  row's term is nonzero, violates (O1).  HonestProver admits such instances, so
+  IIPrime P h B x is not provable for general h; it needs a premise.  (This is the
+  "builder completeness" item left open since D11/D12, now pinned to the exact
+  two equalities that (ii′) uses.)
+
+§1.5  Restated (ii′): both witnesses valid (lead decision, 2026-10-17)
+
+  What the existing Lean uses.  R0Z's HonestProver (ZkStatement.lean:296) has
+  no validity field; InLanguage (JointView.lean:42, ZkStatement.lean:373) is
+  only ∃ w, h.public w = x.1, and HVZK_on (Shift.lean:480), hvzk_on_good,
+  FsStatement and FsGood quantify over w with h.public w = x.1 and nothing
+  else.  (The historical Z1 HonestProver, ZkStatement.lean:70, has
+  valid : Statement → witness → Prop, but it is not the object of the T2a
+  chain.)  The satisfaction notions that exist are on traces, in R0P:
+    ProductionHolds pub λ χ t       R0P/SemAssembly.lean:29
+    LaneInterface pub λ χ t laneOf  R0P/SemAssembly.lean:35
+                                    ((∀ i b, laneOf i b = 0) ↔ ProductionHolds)
+    CopyLinkBalance pub t           R0P/PositivityChain.lean:17
+    laneOf t pub λ χ B              R0P/LaneMap.lean:511
+    HonestRows / honestRows         R0P/SemD3.lean:41 / R0P/SemHonest.lean:200
+                                    (an identity, proved for EVERY trace: at a
+                                    Boolean row the terminal is
+                                    eqwB·lanesComp θ (laneOf …) b + μ·t 26 (rowOf b)
+                                    + μ²·(1 − active)·t 26 (rowOf b))
+  None of these is attached to h.  I therefore propose one trace predicate
+  that matches exactly what the terminal reads, at the trace the payload is
+  built from (u = actual … 0: semantic lanes balanced at row 1023, lane 26 the
+  helper, other lanes zero):
+
+  def HonestValid (pub : Public K) (B : PackBasis F) (t : Trace K)
+      (ch : Challenges K) : Prop :=
+    let u := PayloadSplit.actual pub B t ch 0
+    (∀ i b, laneOf u pub (ch.sem 0) (ch.sem 1) B i b = 0) ∧
+    (∑ r, u 26 r = 0) ∧ (∑ r ∈ copyInactiveRows, u 26 r = 0)
+
+  (typed against: laneOf (t) (pub) (lam chi : K) {F} (B) : Fin 29 → (Fin 10 →
+  Bool) → K; actual (pub) (B) (t) (ch) (r : T K F); copyInactiveRows :
+  Finset (Fin 1024), R0P/Copy.lean:244.)  Clause 1 is ProductionHolds at
+  (λ, χ) = (ch.sem 0, ch.sem 1) through LaneInterface; clauses 2–3 are the two
+  helper sums that copy_mu_helper_sum / copy_mu_inactive_helper_sum
+  (R0P/Copy.lean, after :617) isolate in the terminal.  Clause 2 should follow
+  from CopyLinkBalance by pairwise cancellation of each link's producer and
+  consumer terms (equal compressed tuples give equal (χ − value)⁻¹, including
+  at a pole where both inverses are 0); clause 3 from the inactive-row form of
+  the helper.  Those two derivations are builder-completeness lemmas (J0,
+  §4), not assumed here.  Row 1023's rebalancing does not interfere: every
+  effective C1 read excludes row 1023 (T2b-1, LOG).
+
+  The restated clause (the form J12 proves):
+
+  def IIPrimeValid (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F)
+      (x : Statement K CommitHandle) : Prop :=
+    ∀ ch, P ch → ∀ w w', h.public w = x.1 → h.public w' = x.1 →
+      HonestValid x.1 B (h.build w) ch → HonestValid x.1 B (h.build w') ch →
+      cTilde h B x w ch - cTilde h B x w' ch ∈ LinearMap.range (A h.transport B ch)
+
+  The initial-sum functional now vanishes on both (STRUCTURAL; new lemma
+  iota_cTilde_zero):  HonestValid x.1 B (h.build w) ch → ι (cTilde h B x w ch) = 0.
+  Proof.  ι(cTilde w) = ι(L u) + ι(roundInclusion (originalRounds … u)) − k·ι(dir).
+  ι(L u) = 0 (rounds_initial + maskLinear_vdeg, as in O1); ι(dir) = 0
+  (dir_mem_initialChain0); roundInclusion has maskSum 0, so the middle term is
+  bsumB 10 (fOrig x.1 B ch u ∘ ofBool) (rounds_initial + vdeg_fOrig).  By
+  honestRows with pre := (ch.sem 0, …, ch.sem 13) (fOrig's terminalValue
+  arguments are exactly virtualPoly's: λ, χ, θ = sem 2, μ = sem 13,
+  zc = preZc pre = sem 3..12), each Boolean term is
+  η·(eqwB·lanesComp θ (laneOf u …) b + μ u 26 (rowOf b) + μ²(1 − active) u 26 (rowOf b)).
+  Clause 1 kills the first summand; summing over b (bsumB ↔ Σ over Fin 1024
+  through rowOf, as copy_mu_helper_sum / copy_mu_inactive_helper_sum do) the
+  others give η(μ·Σ_r u 26 r + μ²·Σ_{r∈I} u 26 r) = 0 by clauses 2–3.  ∎
+  Likewise (cTilde w) .inactiveSum = γ^26·Σ_{r∈I} u 26 r = 0 by clause 3 (the
+  semantic lanes are balanced, the others zero).  So HonestSum and
+  HonestInactive below are consequences of HonestValid for both witnesses
+  (each side is 0), and neither O1 nor O2 can separate valid witnesses.
+
+  The counterexample to the unrestricted statement stays as recorded in §1.4:
+  IIPrime P h B x (Shift.lean:186's clause) fails for any h admitting two
+  instances of equal public value with ι-values that differ, e.g. one
+  HonestValid and one with a single nonzero laneOf entry at Boolean row b₀ and
+  ch with η ≠ 0, θ, zc such that the bsum of η·eqwB(zc,·)·lanesComp is nonzero
+  (a nonzero multilinear function of zc, so such zc exist).  ι vanishes on
+  range A, so the difference is not in range A.
+
+  Composition with T2a (no edit to proved modules).  hvzk_on_good is generic in
+  h.  Define the restricted prover
+    def HonestProver.restrict (h : HonestProver K) (V : h.Instance → Prop) :
+        HonestProver K :=
+      ⟨{w // V w}, h.transport, fun w => h.public w.1, fun w => h.build w.1⟩
+  with V w := ∀ ch, P ch → HonestValid x.1 B (h.build w) ch.  Then
+  MaskImageOn P (h.restrict V) B x unfolds to clause (i′) on valid instances and
+  IIPrimeValid (restricted to V), and hvzk_on_good / zkfs_of_maskImageOn_good_
+  bridge apply verbatim to h.restrict V: the simulator's Classical.choose picks
+  a valid instance, and InLanguage (h.restrict V) x is "some valid witness has
+  public value x".  That is the honest-verifier ZK statement intended.  (If V
+  should depend on ch, HVZK_on would need a per-ch instance type; nothing
+  here needs that if clauses 2–3 hold for all challenges, which the
+  pole-free cancellation argument suggests.)
+
+  Derived (no longer premises of the theorem):
+  HonestSum h B x ch : ∀ w w', public w = x.1 → public w' = x.1 →
+      bsumB 10 (fOrig x.1 B ch (actual x.1 B (h.build w) ch 0) ∘ ofBool) =
+      bsumB 10 (fOrig x.1 B ch (actual x.1 B (h.build w') ch 0) ∘ ofBool)
+  HonestInactive h B x ch : the same for ∑ r ∈ copyInactiveRows, (actual … 0) 26 r.
+  Typing premise (as J2's hw), still needed for K₄-valuedness and W_c:
+    HonestF h x : ∀ w, h.public w = x.1 → BaseTyped F (h.build w)
+  (BaseTyped, R0P/CoreExt.lean:27: lanes < 26 are F-valued — the existing
+  predicate used by d3_core).
+
+§2  Proof route
+---------------
+Notation of DESIGN-T2b-2b §0 (own, bat, R, ms, ia, B₀, Chain_T0₄, K₄, Good₃,
+GoodCircle).  Here own is extended to ALL 29 lanes: own_c := the cells
+pointClaim j c, extraClaim c, ood j c, opened q s c (q ∈ ch.queries).  I :=
+copyInactiveRows.  Target: for ch with P_final ch, and w, w′ with equal public
+value, (★) ∈ range A.
+
+§2.0  Lane separability (STRUCTURAL).  For every lane c, the own_c cells of
+  L τ read only τ c (linearPayload, HonestView.lean:211–220: claimsLinear,
+  extraLinear, oodLinear, opened all compose with LinearMap.proj c).  Define the
+  lane observation  obs_c : (Fin 1024 → K) →ₗ[F] (OwnCell c → K),
+  obs_c v := own_c (L (Pi.single c v)).  tapeLinear B (0, n) writes only lanes
+  0..15 (eligible noise) and 26 (H1 padding), lane by lane and from disjoint tape
+  coordinates (eligibleLinear: per (c, r) cell; padding: per row limbs).
+
+§2.1  Step N — noise lift (lanes 0..15 and 26)
+
+  Word spaces (F-submodules of Fin 1024 → K):
+    V_c  := range (fun e => eligibleLinear e c)          (c < 16)
+    P_26 := range (fun p => tapeLinear B (0,(p,0)) 26)   (H1 padding words)
+    W_c  := {v | (∀ r, v r ∈ F) ∧ ∑ r ∈ I, v r = 0}      (c < 16)
+    W_26 := {v | (∀ r, v r ∈ K₄) ∧ ∑ r ∈ I, v r = 0}
+  δ_c ∈ W_c for c < 16 (HonestF; balance at 1023 with 1023 ∈ I — an instance
+  fact, provable from CopyActiveRow without enumerating I); δ_26 ∈ W_26 (helper
+  values are K₄-valued under ch.sem ∈ K₄ — J2's helper lemma; zero inactive
+  difference is 0 by clause 3 of HonestValid for w and w′).
+
+  def C1Lift (c : Fin 16) ch : Prop := (W_c).map obs_c ≤ (V_c).map obs_c
+  def H1Lift ch : Prop          := (W_26).map obs_26 ≤ (P_26).map obs_26
+
+  Lemma noise_lift (STRUCTURAL glue): (∀ c, C1Lift c ch) → H1Lift ch → ∃ n : N K F,
+    ∀ c ∈ {0..15, 26}, own_c (A (inrN n)) = own_c (L δ), and own_c (A (inrN n)) = 0
+    for the other lanes.  (Choose per lane, assemble by disjointness §2.0.)
+
+  This replaces c1_surjectivity (Z4Maps.lean:62).  Differences, all forced:
+  (i) extraClaim c for c < 16 is a disclosed cell (linearPayload :212, all 29
+  lanes) but is not a C1Cell; (ii) the H1 lane needs the same statement and is
+  absent; (iii) the right-hand side must be the noise lane's own word space, not
+  c1Map's range over all of T (that range includes mask tapes, which do not
+  touch lanes 0..15, so it is the same space, but stating it per lane keeps the
+  lemma free of the mask machinery); (iv) the left-hand side is the typed,
+  balanced word space, so the premise is statement-independent and is exactly
+  what Z4c/Z5 measured ("C1 rank 112 per column", on the random fibre set and
+  on {0,…,21}).  c1_surjectivity follows from C1Lift (projection), not
+  conversely.
+
+§2.2  The structure of C1Lift / H1Lift: opened part STRUCTURAL, rest OPEN
+
+  Per lane the target has, over F: opened 88 limbs (F-lane; 352 for the
+  K₄-valued H1 lane), claims 3 values, extra 1, ood 2 (K₄ values: 4 limbs each,
+  24 limbs; 24 for H1 as well) — 112 and 376 limbs, matching Z4c and
+  DESIGN-T2b-2b §2.2.2.
+
+  Lemma opened_prefix (STRUCTURAL; hypotheses D13Order π, ch.queries.card ≤ 22).
+  For every target τ : ch.queries → Fin 4 → F (resp. K₄) there is a word v with
+  coefficientsLinear π v supported on indices < 89, ∑ v = 0, and opened(v) = τ.
+  Every such v lies in V_c (resp. P_26).
+  Proof.
+   (a) Realisability: rows π.symm k (k < 89) are in I and eligible in every
+       semantic column (D13Order); π 1023 = 1023, so 1023 is not a prefix row.
+       A zero-sum vector supported on prefix rows is eligibleLinear of the noise
+       with those values (the 1023 balance receives −Σ = 0).  For H1 the padding
+       balance row is 0; whether or not row 0 is a prefix row, every zero-sum
+       prefix-supported K₄ vector is realised (if row 0 is a prefix row its value
+       is the forced −Σ of the others).
+   (b) Channels: by encoded_channels (R0/Fold.lean, after :86) and fibre_inverse
+       (needs fibre_coordinates_nonzero, R0/Fold.lean:18), the four opened
+       symbols at fibre u are an invertible F-linear image of
+       (exactFinalEncoder (coefficientLane 256 s (coeffs v)) u)_{s<4}, and
+       exactFinalEncoder m u = (naturalCoefficientPolynomial m).eval X_u with
+       u ↦ X_u injective (Wide/FinalEncoder.lean: exactFinalLinear_apply,
+       points_injective).  So the target is equivalent to prescribing
+       P_s(X_u) for s < 4, u ∈ Q, where P_s := Σ_i v_{4i+s} N_i.
+   (c) Degree prefix: naturalLinePoly i = ∏_{b∈bits i} T_{2^b} has degree exactly
+       i and leading coefficient 2^{i − popcount i} ≠ 0 (char K = P > 2), so
+       span{N_0..N_{n−1}} = K[X]_{<n} for every n (not only powers of two).
+       Prefix coefficients < 89 give, in class s, the indices i < n_s with
+       n_0 = 23, n_1 = n_2 = n_3 = 22.  With |Q| ≤ 22 distinct nodes,
+       evaluation K[X]_{<22} → K^Q is bijective (Lagrange); class 0 has one
+       extra direction, the N-coefficient vector κ of Z_Q(X) := ∏_{u∈Q}(X − X_u).
+   (d) Zero sum: Σ_i [f]_i (sum of N-coefficients) = f(1) because
+       T_{2^b}(1) = 1.  Solve classes 1, 2, 3 and class 0 (on i < 22) by
+       Lagrange, then add t·κ to class 0 with t := −(Σ of the other
+       coefficients)/Z_Q(1).  Z_Q(1) = ∏(1 − X_u) ≠ 0 because X_u = 1 forces
+       y_u = 0 at the circle fibre (excluded by fibre_coordinates_nonzero; the
+       identity X_u = 2·exactCircleX u² − 1 is the radix-4 lift and must be
+       cited from circleLiftEncoder — a one-line check, not a new fact).  All
+       quantities are in F for F-valued targets (nodes X_u ∈ F), and the K₄
+       case is limb-wise.  ∎
+  Consequently C1Lift c ⇔ C1Rest c, where, with V_c⁰ := V_c ∩ ker(opened_c)
+  and the 24-limb map rest_c := (claims_c, extra_c, ood_c):
+    C1Rest c ch : rest_c(W_c) ≤ rest_c(V_c⁰) + rest_c(prefix-correction) —
+  stated simply as the original C1Lift (the reduction is a lemma, not a new
+  definition; the premise stays C1Lift so that the theorem does not change if
+  the rest is later proved).  Same for H1.
+
+  What remains in C1Rest (OPEN; numerically supported).  The 24 limbs are the
+  claims at the three α-points (row basis, eqWeight ∘ π.symm), the Libra extra
+  claim (coefficients 0..55 only — all prefix coefficients, so on V_c⁰ it sees
+  only the prefix correction), and the ood values at z₀, z₁.  For a fixed query
+  set they are polynomial conditions in (α, z) with continuous variables, so a
+  Schwartz–Zippel bound applies once ONE witness (α*, z*) is known per query
+  set.  Partial structure: on V_c⁰ the reduced ood functional of a coefficient
+  E_k (k = 4i+s ≥ 89 eligible) is Z_Q(Z_j)·D_{i}(Z_j) with D_i ∈ F[X] the
+  Lagrange remainder quotient (deg i − 22), so if each class has four eligible
+  indices of consecutive degree ≥ 89 and Z_j generates K₄ over F with
+  Z_Q(Z_j) ≠ 0, the ood limbs are covered (CONDITIONAL: bad set Z_j ∈ proper
+  subfield or Z_j ∈ {X_u}, density ≤ (2P² + 2·22)·μ_Q per point).  The claims
+  in the row basis have no comparable closed form under D13Order (π.symm is
+  only order-constrained on k ≥ 89), and the joint independence of claims with
+  ood is not argued.  I therefore carry
+     C1T-open: ∀ c < 16, C1Lift c ch      and      H1T-open: H1Lift ch
+  as premises in the transversality family of D23 (with OT-open, B-open).
+  Numeric support: Z4c (rank 112 per column with the fourth row, 20 vectors,
+  random set and {0,…,21}), Z5 (D13 control), Z8 (ii′) 25/25 and Z8c (ii′)
+  25/25 on A, J, K, M — the full clause, which implies C1Lift/H1Lift on those
+  honest pairs.  No probe has measured H1Lift alone or C1Lift on adversarial
+  (twin/consecutive/structured) query sets beyond {0,…,21}; J11 (§4) asks for
+  it.  The difficulty is the same as OT-open's: a statement for every query
+  set.
+
+§2.3  Step R — the residual after the noise lift (all STRUCTURAL given premises)
+
+  x := (★) − A (inrN n).  Then
+  (R1) own_c x = 0 for all 29 lanes (Step N; lanes 16..25, 27, 28: both terms 0).
+  (R2) x .inactiveSum = 0 (O2 of §1.4: range A part 0; (★) part 0 by
+       clause 3 of HonestValid for w and w′).
+  (R3) ι x = 0 (O1: range A part 0; (★) part 0 by iota_cTilde_zero for w, w′).
+  (R4) Phi0 B ch x = 0 when alpha ch 9 ≠ 1/2: new lemma
+         Phi0_cTilde : alpha ch 9 ≠ 1/2 → Phi0 B ch (cTilde h B x w ch) = 0
+       (Phi0_L on L u_w (Shift.lean:341), evalRound9_originalRounds and
+       claimMask_roundInclusion on O u_w, originalOf_c (Shift.lean:398),
+       Phi0_dir); and Phi0_A (Shift.lean:358) for A (inrN n).
+  (R5) evalRound9 x = claimMask x + Phi0 x = 0 + 0 (claimMask reads only
+       pointClaim 0 c and extraClaim 28, all zero by R1).
+  (R6) chain equalities of the round part: rounds_chain (Chain.lean:98) for L τ
+       (maskLinear_vdeg) and for ΔOR (vdeg_fOrig); dir by dir_mem_initialChain0.
+  (R7) round part K₄-valued: L-rounds of lanes 0..15/27/16..25/28 with K₄
+       factors at K₄ points (J2 machinery: interpolate_coeff_mem, oracle values),
+       ΔOR by J2's originalRounds_mem_K4 (with HonestF, ch.sem ∈ K₄), k ∈ K₄
+       (originalOf values ∈ K₄, (α₉ − ½)⁻¹ ∈ K₄), dir ∈ F.  The H1 padding has
+       no round contribution (maskLinear does not read lane 26).
+  (R8) bat x ∈ B0 ch under GoodCircle: the relations S1, S2, S3_u
+       (DESIGN-T2b-2b §2.2.4) are linear identities of L τ for EVERY trace τ
+       (round_eval for all q, w; the S2 pairing with σ = inactiveSum and own
+       cells; fold_encoded with encoded_channels), roundInclusion has zero bat
+       cells, and own x = 0, ia x = 0.  J4 must therefore state them for
+       arbitrary traces (bat_L_mem_B0), with bat_ker_own_le as the corollary for
+       mask tapes.  This is a statement change to J4, not a new difficulty.
+  Hence round x ∈ Chain_T0₄ ch and its initial sum equals x .maskSum.
+
+§2.4  Step M — the mask lift (reuses (i′)'s premises)
+
+  def BReach ch : Prop := B0 ch ≤ (ker ownMap ⊓ ker R).map batMap
+  (ownMap, batMap, R as in J3, on M).  BReach → BCond (with bat_ker_own_le:
+  bat(ker own ⊓ ker R) ≤ bat(ker own) ≤ B₀ ≤ bat(ker own ⊓ ker R)).  BReach is
+  what was measured: Z8c item (4) rank_F bat(ker own ∩ ker R) = 1,912 = dim B₀
+  on A, B, I, J, K, L, M (35 vectors), and it is the conclusion of the
+  Dprime assembly hAsm : B0 ≤ V_D ⊔ V_G (B-glue, Dprime §2.1, gives exactly
+  this inequality before concluding BCond).  RECOMMENDATION: D21 takes hBR :
+  BReach as the (B) premise of both clauses; (i′) uses it through BCond.
+
+  Lemma mask_lift (STRUCTURAL, generic F-linear algebra):
+    QPrime ch → BReach ch → GoodCircle ch →
+    ∀ x, own x = 0 → x .inactiveSum = 0 → ι x = 0 → roundProjection x ∈
+      Chain_T0K4 ch → batMap-cells x ∈ B0 ch → x ∈ range ((A π B ch).comp inlM).
+  Proof.  Q′ gives x₀ ∈ ker own with R x₀ = round x; bat x₀ ∈ B₀
+  (bat_ker_own_le).  BReach gives y ∈ ker own ⊓ ker R with bat y = bat x₀ − bat x.
+  m := x₀ − y: own m = 0, R m = round x, bat m = bat x, ia m = 0 (ia_pure_zero),
+  ms m = p₀(0)+p₀(1) = ms x (ms_pure_eq_initial, R3).  The eight groups of
+  mem_silentMasks_iff plus the round cells exhaust PayloadCell, so
+  A (inlM m) = x.  ∎
+  (generic form: exists_lift_of_cover, the obvious extension of J3's
+  exists_silent_of_cover with prescribed own = 0 and prescribed bat.)
+
+§2.5  The theorem and its composition with (i′)
+
+  theorem iiPrime_of
+      (hB : PackField B) (hπ : D13Order h.transport)
+      (hF : HonestF h x)
+      (hT : ∀ ch, P_final B hB ch →
+              QPrime h.transport B ch ∧ BReach h.transport B ch ∧
+              (∀ c, C1Lift h.transport B ch c) ∧ H1Lift h.transport B ch ∧
+              ch.queries.card ≤ 22) :
+      IIPrimeValid (P_final B hB) h B x
+  (validity of w, w′ enters through iota_cTilde_zero and the inactive-sum
+  identity of §1.5, which replace the HonestSum/HonestInactive premises.)
+  Proof: §2.1 noise_lift, §2.3 (R1–R8), §2.4 mask_lift, and
+  (★) = A (inrN n) + A (inlM m) = A (m, n).  P_final supplies Good (α₉ ≠ ½),
+  ch.sem ∈ K₄, GoodCircle (⊆ GoodOpen).
+
+  Composition.  J9's clause_i_prime_on takes QPrime and BCond (or OT′ and the
+  Q′ premises); with BReach → BCond both clauses share one premise bundle
+     Transversal ch := QPrime ∧ BReach ∧ (∀ c, C1Lift c) ∧ H1Lift
+  and the validity restriction of §1.5 (plus HonestF):
+     theorem maskImageOn_final (hT : ∀ ch, P_final ch → Transversal ch ∧
+         ch.queries.card ≤ 22) … :
+         MaskImageOn (P_final B hB) (h.restrict V) B x
+       := ⟨clause_i_prime_on …, iiPrime_of …⟩      (V as in §1.5).
+  Then T2a's chain gives HVZK_on (P_final) and ZK_FS with ε_bad = badMass
+  P_final, CONDITIONAL on Transversal (no mass bound; D23.3), for the
+  prover restricted to valid instances (builder completeness, J0, supplies
+  that honest instances are valid; it is not probabilistic).  The card ≤ 22 premise
+  is a property of the query sampler (aspis-core r0_transcript queries_from_pairs
+  returns [u32; 22]; in R0 Lean, ZF1's bridge must supply it).
+
+  Step tags summary
+    §2.0 lane separability ................................ STRUCTURAL
+    §1.4 necessity of HonestSum / HonestInactive ............ STRUCTURAL (obstruction)
+    HonestValid on w, w′ (restated clause) ................... HYPOTHESIS of the clause
+    iota_cTilde_zero, inactive identity .................... STRUCTURAL (honestRows)
+    HonestValid for honest builds, HonestF ................. J0 obligation (completeness/typing)
+    noise_lift glue ......................................... STRUCTURAL
+    opened_prefix (opened part of C1Lift/H1Lift) ............ STRUCTURAL (D13Order, |Q| ≤ 22,
+                                                              fibre coords nonzero)
+    C1Lift / H1Lift remainder (24 limbs per lane) ........... OPEN → PREMISE C1T-open,
+                                                              H1T-open (ood part
+                                                              CONDITIONAL as above)
+    R1–R6 ................................................... STRUCTURAL (R4 needs α₉ ≠ ½)
+    R7 (K₄) ................................................. STRUCTURAL given PackField,
+                                                              ch.sem ∈ K₄, HonestF
+    R8 (bat x ∈ B₀) ......................................... STRUCTURAL given GoodCircle
+    QPrime .................................................. as in (i′): RC structural +
+                                                              OT-open premise
+    BReach .................................................. PREMISE B-open (strengthened;
+                                                              measured)
+    mask_lift, composition .................................. STRUCTURAL
+  No new probabilistic bad set enters the ledger beyond (i′)'s: GoodCircle and
+  α₉ ≠ ½ are already rows of DESIGN-T2b-2b §4.2.  The CONDITIONAL ood
+  sub-route of §2.2 is recorded as structure only, not as a ledger row: its bad
+  event "Z_j lies in a proper subfield of K₄" has mass about P²·μ_Q ≈ 2^-62 per
+  point, far above the 2^-100 line.  A proof of C1Rest must avoid that event
+  (for instance by using both ood points and their y-parts jointly).
+
+§3  R1 applicability
+--------------------
+Source read (read-only) at origin/codex/100bit-spend-path-20261013:
+crates/aspis-r1-cost-probe/src/{prover.rs, transport.rs, verifier.rs,
+weights.rs, transcript.rs}.  R1 = Variant::S2 (folds() = 2, final_len() =
+1024 >> 4 = 64).
+
+§3.1  What R1's C1 and opening layer are
+  • C1 commits 27 messages: lanes 0..25 (16 semantic + 10 mask-only, F-valued)
+    and D (lane 28, K₄) — prover.rs Backend::c1; C2 commits H1 (26) and G (27).
+    So D is a C1 lane in R1 as in R0 Lean (lane 28 initial); nothing in (ii′)
+    depends on which commitment holds a lane: the per-lane own cells are the
+    same kinds.
+  • Per-lane disclosures (verifier.rs prepared_claim): the three point claims,
+    the extra (Libra) claim, the OOD value at z₀ (sem.before_z1, inside the
+    semantic bytes) and at z₁ (y1), and per query the four children of the
+    initial fibre for all 29 lanes (prover.rs: opening.values[s][l]).
+    22 queries (transcript.rs queries → [u32; 22]).  Own limb counts per lane
+    are therefore unchanged: 112 (F-lane) and 376 (K₄-lane).
+  • Batched block (changed): no chord quotient.  q := Σ_l γ^l·coeffs_l (all 29
+    lanes, WideExact γ), the scalar inactive := ⟨q, w.raw(0)⟩ (the inactive
+    indicator in coefficient space — the R0 .inactiveSum form applied to q),
+    round0 (7 values) at the materialised weights, fold α₀, a committed folded
+    word (salted Merkle root, a handle, not a field cell) with round1 (7), fold
+    α₁, final 64 values; per query additionally the four folded-word values at
+    fibre u/4.  So bat_R1 = (inactive, round0, round1, final 64, 22×4 folded
+    openings) and the verifier's linear checks are: the claim pairing (round0
+    boundary vs κ-batched claims, extra, ood and inactive — the S2 analogue),
+    round evaluation at each layer (2), and fold consistency at the 22 queried
+    fibres at each layer (initial children → folded value; folded fibre →
+    final).  B₀_R1 := their common zero set.  Exact relation list and ranks are
+    Z9's job (LOG D20′/D23 already list Z9).
+  • Transport: S2 uses π_R1 (D18; transport.rs row(j): coefficient base-4 digit
+    d goes to row digit TAU[d], TAU = [3,4,2,0,1], identity digit maps); variant
+    D keeps D13's COEFFICIENT_TO_ROW with the same two folds.
+
+§3.2  Effect on each step of §2
+  §1.4–1.5 (validity, ι, inactive):  unchanged.  The R1 terminal is the same
+    semantic terminal (D18.3: semantic layer unaffected); the R1 prover even
+    checks h1_total_balanced (prover.rs), i.e. HonestValid's clause 2.
+  §2.0 lane separability:  unchanged (own cells read one lane).
+  §2.3 R1–R7:  unchanged (round and terminal structure identical).
+  §2.3 R8 and §2.4 BReach:  same shape, new objects: bat_L_mem_B0R1 (the R1
+    relations are identities of L τ for every trace, as in R0, provided the R1
+    Lean model states them for arbitrary words), and BReach_R1 := B₀_R1 ≤
+    bat_R1(ker own ⊓ ker R).  The second-layer folded openings enlarge bat by
+    88 K-values and add 22 fold relations; BReach_R1 is a new premise to be
+    measured (Z9), not inherited.
+  §2.2 opened_prefix:  DOES NOT TRANSFER to S2.  Under π_R1 a coefficient
+    j = 4i + s sits at row cd₃ + 4cd₄ + 16cd₂ + 64s + 256cd₁ (cd_k = base-4 digit
+    k of j).  Eligibility below row 912 (r % 16 ≥ 13) forces cd₄ = 3 and
+    cd₃ ≥ 1, i.e. quarter index i ∈ [208, 256): in classes s = 0 and 1 the
+    eligible semantic coefficients are exactly that top block of 48 (all such
+    rows are < 912), in classes 2 and 3 a subset of it plus a sparse set of
+    i ≡ 3 (mod 4) from the forest/pair region.  No class has a degree prefix.
+    On the top block, N_i = N_192·N_{i−192} (disjoint bits), so the opened
+    system is N_192(X_u)·g(X_u) with g ∈ span{N_16..N_63}; surjectivity at 22
+    arbitrary nodes needs N_192(X_u) ≠ 0 and a non-Vandermonde rank condition.
+    Neither is structural for every query set.  So on S2 the opened part of
+    C1Lift joins C1T-open.  Z5/D18 measured rank 112 per column for π_R1 on the
+    random set and {0,…,21} only.
+    H1Lift needs copy-inactive rows (padding is zero on active rows); under
+    π_R1 their coefficient positions are not characterised in the source I
+    read; H1Lift on R1 is OPEN and unmeasured as a separate statement.
+  Step N glue, Step M glue, composition:  unchanged.
+
+§3.3  Does the route survive?
+  Yes in shape: the reduction (noise lift → residual → mask lift) uses only
+  lane separability, the verifier's linear checks being identities of L, the
+  completeness/validity restriction and the three lift premises, all of which
+  have R1 counterparts.  What changes: (a) B₀ and BReach are re-stated for the
+  two-layer batched block (new measurement); (b) the structural part of C1Lift
+  is lost under S2's identity-digit-map π_R1.
+  Two ways to restore (b), for the lead (a protocol choice, not a proof task):
+   (i) use variant D (D13 transport with two folds) — opened_prefix then
+       applies verbatim; D18 records its cost (the transport component of the
+       verifier's weight evaluation that π_R1 removed);
+   (ii) extend D18's digit-permutation family with non-identity digit maps σ_d
+       (still product form, so D18.1's O(1) dual folds survive) chosen so that
+       quarter indices i < 22 (and i = 22 in class 0) land on rows eligible in
+       all 16 columns and copy-inactive: rows are eligible below 912 when
+       rd₁ = 3 and rd₀ ≥ 1, so σ for the coefficient digits feeding row digits
+       0 and 1 must send the small digit values of cd₃ (0, 1) into {1,2,3}
+       and of cd₄ (0) to 3, with row < 912 kept by the digit feeding rd₄.
+       Whether such a σ also makes those rows copy-inactive (needed for H1 and
+       for D13Order-style balancing) is a finite check over 4!⁵·120 maps against
+       the copy-active registry — a Z5-style probe (J11b), not a proof.  If one
+       exists, a D13Order analogue (prefix rows eligible + inactive, π 1023 =
+       1023) holds for it and opened_prefix transfers with the same proof.
+  With neither, R1's (ii′) is conditional on C1T-open covering the full 112
+  limbs per column, numerically supported only by Z5's two query sets.
+
+§4  Lean job plan
+-----------------
+Rules as DESIGN-T2b-2b §5 (no sorry/axiom/admit/native_decide, no
+maxRecDepth/maxHeartbeats, no concrete Finset.univ over rows/states, symbolic
+row sums through bsumB_rowOf and equivalences, one module per job, focused
+lake env lean then host replay one module at a time, #print axioms for every
+listed theorem; conditional facts as named Prop hypotheses).  Numbering
+continues the J-plan; J4′ is an amendment of J4.
+
+J0  R0Z/HonestValid.lean  (imports R0Z.Chain, R0Z.Shift, R0P.SemHonest,
+    R0P.LaneMap, R0P.Copy)                                          low–medium
+    def HonestValid (§1.5)
+    def HonestProver.restrict (h) (V : h.Instance → Prop) : HonestProver K
+    def iota : Payload K →ₗ[F] K  (roundPoly 0 at 0 and 1, minus .maskSum)
+    iota_L : iota (L π B ch τ) = 0                   (rounds_initial,
+                                                     maskLinear_vdeg; any τ)
+    iota_A : iota (A π B ch t) = 0
+    inactive_A : (A π B ch t) .inactiveSum = 0       (balance lemmas; needs
+                                                     1023 ∈ copyInactiveRows and
+                                                     zero_inactive — instance
+                                                     facts via CopyActiveRow)
+    iota_cTilde : iota (cTilde h B x w ch) =
+        bsumB 10 (fun b => fOrig x.1 B ch (actual x.1 B (h.build w) ch 0) (ofBool b))
+    bsum_fOrig_zero : HonestValid x.1 B t ch →
+        bsumB 10 (fun b => fOrig x.1 B ch (actual x.1 B t ch 0) (ofBool b)) = 0
+        (R0P.honestRows with pre := sem 0..13; lane_h1_sum, lane_inactive_sum
+         — R0P/LaneMap.lean:939, :946)
+    iota_cTilde_zero, inactive_cTilde_zero  (corollaries)
+    not_iiPrime_witness (the obstruction, as an implication):
+        iota (cTilde w) ≠ iota (cTilde w') → cTilde w − cTilde w' ∉ range A
+    Uses: Chain.rounds_initial, Shift.maskLinear_vdeg, vdeg_fOrig,
+    dir_mem_initialChain0, run_split, originalRounds_eq.  Risk: matching
+    fOrig's terminalValue arguments to virtualPoly's pre-indexing (zc ch =
+    preZc pre); stated as a rewriting lemma first.
+
+J0b R0Z/HonestValidity.lean (builder completeness; research-sized)       hard
+    honestValid_of : ProductionHolds pub λ χ u ∧ CopyLinkBalance pub u ∧
+      (helper inactive form) → HonestValid …   (LaneInterface, pairwise
+    cancellation of balanced links in helper).  Not needed for J16; it is
+    the obligation that justifies restricting to valid instances.
+
+J4′ amendment to R0Z/VerifierRelations.lean (J4)                        medium
+    state S1, S2, S3_u for L π B ch τ for every trace τ:
+      bat_L_mem_B0 : GoodCircle ch → (∀ c, own_c (L τ) = 0) →
+        (L τ) .inactiveSum = 0 → batCells (L τ) ∈ B0 ch
+    and derive bat_ker_own_le from it.  Same lemmas, wider statement.
+
+J13 R0Z/NoiseLift.lean  (imports R0Z.Z4Maps, R0Z.JointTrace)             medium
+    def ownCells c, obs c : (Fin 1024 → K) →ₗ[F] (OwnCell c → K)
+    own_L_single : own_c (L (Pi.single c v)) = obs c v; own_L_other
+    def Vsem c, Ph1, Wsem c, Wh1; def C1Lift c ch, H1Lift ch
+    noise_lift : (∀ c, C1Lift c ch) → H1Lift ch → ∀ δ, (δ supported on lanes
+      0..15, 26, typed and balanced) → ∃ n : N K F, ∀ c, own_c (A (inrN n)) =
+      own_c (L δ) (lanes 0..15, 26) ∧ own_c (A (inrN n)) = 0 (others)
+    c1_surjectivity_of_C1Lift (links the historical Prop)
+    Risk: eligibleLinear's balance at 1023 per column; keep the set abstract.
+
+J14 R0Z/OpenedPrefix.lean  (imports AspisFormal CircleNaturalBasisEval,
+    Wide.FinalEncoder, R0.Fold, R0Z.HonestView)                     medium–hard
+    naturalLinePoly_natDegree (= k), naturalLinePoly_leadingCoeff_ne_zero
+      (2^(k − popcount k) ≠ 0 in char P), naturalLinePoly_eval_one (= 1)
+    span_naturalLinePoly : span{N_i : i < n} = degreeLT K n  (every n)
+    exists_prefix_eval (|Q| ≤ 22, distinct nodes, Z_Q(1) ≠ 0): zero-sum
+      prefix solution in F (and limb-wise in K₄)
+    nodes_ne_one : storedFirstLineX18 u ≠ 1 (from fibre_coordinates_nonzero
+      and the radix-4 lift identity)
+    opened_prefix : D13Order π → ch.queries.card ≤ 22 → (target) →
+      ∃ v ∈ Vsem c (resp. Ph1), opened_c v = target ∧ coefficients ≥ 89 zero
+    Uses: encoded_channels, fibre_inverse, exactFinalLinear_apply,
+    points_injective, Lagrange.interpolate.  Risk: locating X_u = 2x² − 1 in
+    circleLiftEncoder; the K₄ case needs PackField (J1).  This is the only
+    STRUCTURAL piece of C1Lift; C1Lift itself stays a premise.
+
+J15 R0Z/IIPrimeResidual.lean  (imports J0, J2, J3, J4′, J13)            medium
+    Phi0_cTilde : alpha ch 9 ≠ 1/2 → Phi0 B ch (cTilde h B x w ch) = 0
+    residual_own, residual_inactive, residual_iota, residual_terminal,
+    residual_chain, residual_K4, residual_bat   (§2.3 R1–R8)
+    def BReach ch; BCond_of_BReach (with bat_ker_own_le)
+    exists_lift_of_cover (generic F-linear algebra, J3's lemma with
+      prescribed bat); mask_lift (§2.4)
+    Uses: Phi0_L, Phi0_A, evalRound9_originalRounds, claimMask_roundInclusion,
+    originalOf_c, Phi0_dir, rounds_chain, mem_silentMasks_iff, J2's
+    originalRounds_mem_K4 / oracle_mem_K4.  Risk: R7 needs J2's K₄ lemmas for
+    originalRounds of actual … 0 with HonestF (BaseTyped); state J2 for any
+    BaseTyped prepared trace, not only for sRem.
+
+J16 R0Z/IIPrime.lean  (imports J15, J9)                                  low
+    def IIPrimeValid (§1.5)
+    iiPrime_of (§2.5)  — IIPrimeValid (P_final B hB) h B x
+    maskImageOn_final : MaskImageOn (P_final B hB) (h.restrict V) B x
+    hvzk_final / zkfs_final : instantiate hvzk_on_good and
+      zkfs_of_maskImageOn_good_bridge at h.restrict V
+    #print axioms for iiPrime_of, maskImageOn_final, hvzk_final, zkfs_final.
+
+J11 (numeric, probe agent; not Lean)
+    (a) C1Lift per semantic column and H1Lift alone (rank of obs on V_c / P_26
+        vs on W_c / W_26) on adversarial query sets: consecutive fibres,
+        twin-structured sets, sets clustered under the second-level map, plus
+        random; D13 and π_R1.
+    (b) for R1: a search over digit maps σ_d with τ ∈ the three D18 passes,
+        for prefix rows eligible in all 16 columns and copy-inactive (§3.3 ii).
+    (c) Z9 extended with BReach_R1 (B₀_R1 from the two-layer relations).
+
+Order.  J0 and J13, J14 are independent of each other and of Z8c-type
+outcomes and can start now (J14 needs J1 only for the K₄ case).  J4′ is a
+statement change folded into J4.  J15 after J2, J3, J4′, J13.  J16 after J9
+and J15.  Difficulty is concentrated in J14 (circle-code bookkeeping) and in
+the premises (C1Lift, H1Lift, QPrime/OT-open, BReach), which stay premises.
+
+§5  Open points
+---------------
+P1 C1Lift / H1Lift beyond the opened part (24 limbs per lane): OPEN, carried
+   as C1T-open / H1T-open beside OT-open and B-open.  Numerically supported
+   for C1 by Z4c/Z5 (two query sets) and indirectly by every (ii′) pass; H1Lift
+   has never been measured alone (J11a).
+P2 BReach is a strengthening of BCond that (ii′) needs and (i′) does not; it is
+   the measured quantity (Z8c item 4) and the Dprime assembly's conclusion, so
+   D21 can adopt it as the single (B) premise at no evidence cost.
+P3 HonestValid is the right restriction only if honest builds satisfy it for
+   every challenge; clauses 2–3 (helper sums) are expected to hold for all λ, χ
+   by pairwise cancellation, but that is J0b, unproved.  If a challenge-
+   dependent failure exists (an active pole that breaks cancellation), V must
+   move into the challenge predicate and HVZK_on needs a per-ch instance type.
+P4 ch.queries.card ≤ 22 is a sampler property; ZF1's bridge must supply it
+   (R1's transcript returns [u32; 22]; R0 Lean's Challenges.queries is an
+   arbitrary Finset).
+P5 R1: structural opened part lost under S2's π_R1 (§3.2); restored by variant D
+   or by a digit-map search (J11b).  B₀_R1 and BReach_R1 need Z9.
+P6 Instance facts used: 1023 ∈ copyInactiveRows; X_u ≠ 1 via the radix-4 lift;
+   PackField; K4 = image of QM31; D13Order for ROW_TO_COEFFICIENT (all already
+   on the J1/J7a/J10 obligation lists except the first two, which are new and
+   small).

@@ -1,0 +1,232 @@
+{
+ "job": "R1-1 mirror of the R1 opening-layer libraries (DESIGN-R1-PRIVACY-MODEL §4, LOG D30.4)",
+ "branch": "codex/r0-r1z-relations-20261018",
+ "base": "384b7d195",
+ "edit_policy": "Content unchanged. The only edits are import lines that name a mirrored module: the spend-path files import each other by root module names (R1NaturalProjection, ...), and on the build host those root names are already taken by other jobs' sources and .olean files under $T/sources and $T/objects2. The mirror lives under $T/sources/R1Mirror/ (module prefix R1Mirror.) so that it neither overwrites nor silently reuses another job's objects; each such import line is rewritten to the R1Mirror. name and listed in diff. No declaration, namespace, proof or option line is changed.",
+ "transitive_closure_note": "Listed design files: RoundPairing (+ R1NaturalProjection), FoldCoefficientBridge, D18Transport, Line18Geometry, LineFold, SecondFoldRestoration, base RepeatedLift. Added by import closure: FirstFold (FoldCoefficientBridge), ParentSupport and ConcreteProjection (SecondFoldRestoration), spend-path RepeatedLift (ParentSupport; a different file from the base-branch R1/RepeatedLift, namespace AspisR1 rather than AspisR1.RepeatedLift). External imports (AspisFormal, Wide, Mathlib) resolve to the host workspace; local AspisFormal/V5ComponentCConcreteFoldLinearity, V5FriReleasedLineGeometry, V7ExactOneFoldDomains and Wide/FinalEncoder sources have the same SHA-256 as the host sources.",
+ "flags": [
+  "Line18Geometry.lean carries `set_option maxRecDepth 20000` and `set_option maxHeartbeats 200000` (the latter is the default value). Mirrored unchanged; it is a pre-existing spend-path file, not a theorem added here. Lead to decide whether the privacy track accepts it.",
+  "Line18Geometry, ConcreteProjection, SecondFoldRestoration are mirrored but not compiled in this workspace. R1Z/BatchedAlgebra does not import them: the slot/doubling facts come from base RepeatedLift (storedFirstLineX18_slot1/slot3/slot2_T2) and the three nonvanishing facts are re-proved in BatchedAlgebra from storedFirstLineX18_injective (same argument as SecondFoldRestoration.x0/x1/x2_ne_zero)."
+ ],
+ "childIndex_clash": "AspisR1.childIndex (NaturalProjection) and AspisV5ComponentCConcreteFoldLinearity.childIndex are both ⟨4*i+s, _⟩. Bridged in R1Z/BatchedAlgebra.lean by `childIndex_bridge` (proved by rfl); no mirrored file is edited.",
+ "files": [
+  {
+   "mirror_path": "docs/research/v8-r0-zk-20261009/lean/R1Mirror/NaturalProjection.lean",
+   "mirror_module": "R1Mirror.NaturalProjection",
+   "source_branch": "origin/codex/100bit-spend-path-20261013",
+   "source_branch_tip": "e38279522cfb22eb27da9091cbb0d8dc0df28790",
+   "source_path": "docs/research/100bit-spend-path-20261013/lean/NaturalProjection.lean",
+   "source_module_name": "R1NaturalProjection",
+   "source_last_commit": "a29d480477dd7ad3e2d2343f71baa2b4ef91a3df",
+   "source_sha256": "add9c506d5cbf5c55447c9df156a52eb2298fe5ecf53faff2ea6a9654152726a",
+   "mirror_sha256": "add9c506d5cbf5c55447c9df156a52eb2298fe5ecf53faff2ea6a9654152726a",
+   "unchanged": true,
+   "diff": [],
+   "host_attempt": 3620,
+   "host_status": "green"
+  },
+  {
+   "mirror_path": "docs/research/v8-r0-zk-20261009/lean/R1Mirror/RoundPairing.lean",
+   "mirror_module": "R1Mirror.RoundPairing",
+   "source_branch": "origin/codex/100bit-spend-path-20261013",
+   "source_branch_tip": "e38279522cfb22eb27da9091cbb0d8dc0df28790",
+   "source_path": "docs/research/100bit-spend-path-20261013/lean/RoundPairing.lean",
+   "source_module_name": "R1RoundPairing",
+   "source_last_commit": "a29d480477dd7ad3e2d2343f71baa2b4ef91a3df",
+   "source_sha256": "1c03d1bb7d9360207bbc20f1b293a8e2de4c550c237fe3eb9d56713bf7e16797",
+   "mirror_sha256": "afd1571293a95a542f04069b5f8cc0344323195a6aba572aabcbd4588644ba11",
+   "unchanged": false,
+   "diff": [
+    [
+     "-import R1NaturalProjection",
+     "+import R1Mirror.NaturalProjection"
+    ]
+   ],
+   "host_attempt": 3621,
+   "host_status": "green"
+  },
+  {
+   "mirror_path": "docs/research/v8-r0-zk-20261009/lean/R1Mirror/FirstFold.lean",
+   "mirror_module": "R1Mirror.FirstFold",
+   "source_branch": "origin/codex/100bit-spend-path-20261013",
+   "source_branch_tip": "e38279522cfb22eb27da9091cbb0d8dc0df28790",
+   "source_path": "docs/research/100bit-spend-path-20261013/lean/FirstFold.lean",
+   "source_module_name": "R1FirstFold",
+   "source_last_commit": "3638d7546f6e03a1afb0eaabdb1cff38d1631e84",
+   "source_sha256": "674a9e12da22944712ab23b127ec52834b179af3cf7c97f7759e49d2e0574585",
+   "mirror_sha256": "674a9e12da22944712ab23b127ec52834b179af3cf7c97f7759e49d2e0574585",
+   "unchanged": true,
+   "diff": [],
+   "host_attempt": 3622,
+   "host_status": "green"
+  },
+  {
+   "mirror_path": "docs/research/v8-r0-zk-20261009/lean/R1Mirror/FoldCoefficientBridge.lean",
+   "mirror_module": "R1Mirror.FoldCoefficientBridge",
+   "source_branch": "origin/codex/100bit-spend-path-20261013",
+   "source_branch_tip": "e38279522cfb22eb27da9091cbb0d8dc0df28790",
+   "source_path": "docs/research/100bit-spend-path-20261013/lean/FoldCoefficientBridge.lean",
+   "source_module_name": "R1FoldCoefficientBridge",
+   "source_last_commit": "3638d7546f6e03a1afb0eaabdb1cff38d1631e84",
+   "source_sha256": "048c725e67b6ad08da5f0bcd419f652f13fe5d9d2db0866d9d87f5b97bd96060",
+   "mirror_sha256": "8e91bdd7572e9eb4f68492047d8c19d0d06afd8168aafde0681fdce544ffc71b",
+   "unchanged": false,
+   "diff": [
+    [
+     "-import R1RoundPairing",
+     "+import R1Mirror.RoundPairing"
+    ],
+    [
+     "-import R1FirstFold",
+     "+import R1Mirror.FirstFold"
+    ]
+   ],
+   "host_attempt": 3623,
+   "host_status": "green"
+  },
+  {
+   "mirror_path": "docs/research/v8-r0-zk-20261009/lean/R1Mirror/D18Transport.lean",
+   "mirror_module": "R1Mirror.D18Transport",
+   "source_branch": "origin/codex/100bit-spend-path-20261013",
+   "source_branch_tip": "e38279522cfb22eb27da9091cbb0d8dc0df28790",
+   "source_path": "docs/research/100bit-spend-path-20261013/lean/D18Transport.lean",
+   "source_module_name": "R1D18Transport",
+   "source_last_commit": "a7ff42dc8068119ba1aea4e7bda471a01177b5be",
+   "source_sha256": "ffa944f42b5188e89d6a538a5fe345e4347a148dcc080feb01673c82b6099033",
+   "mirror_sha256": "ffa944f42b5188e89d6a538a5fe345e4347a148dcc080feb01673c82b6099033",
+   "unchanged": true,
+   "diff": [],
+   "host_attempt": 3624,
+   "host_status": "green"
+  },
+  {
+   "mirror_path": "docs/research/v8-r0-zk-20261009/lean/R1Mirror/Line18Geometry.lean",
+   "mirror_module": "R1Mirror.Line18Geometry",
+   "source_branch": "origin/codex/100bit-spend-path-20261013",
+   "source_branch_tip": "e38279522cfb22eb27da9091cbb0d8dc0df28790",
+   "source_path": "docs/research/100bit-spend-path-20261013/lean/Line18Geometry.lean",
+   "source_module_name": "R1Line18Geometry",
+   "source_last_commit": "3638d7546f6e03a1afb0eaabdb1cff38d1631e84",
+   "source_sha256": "aea9a5746cc57820484e64b515704e18c0f882cf1e37cc8fb2201c5ac45c5bbd",
+   "mirror_sha256": "aea9a5746cc57820484e64b515704e18c0f882cf1e37cc8fb2201c5ac45c5bbd",
+   "unchanged": true,
+   "diff": [],
+   "host_attempt": 3625,
+   "host_status": "FAILED: (kernel) excessive memory consumption at 5 declarations under the standard -M7000 / MemoryMax 7G caps (peak 7.17 GB; workspace import baseline ~6.6 GB). Not rerun, not edited."
+  },
+  {
+   "mirror_path": "docs/research/v8-r0-zk-20261009/lean/R1Mirror/LineFold.lean",
+   "mirror_module": "R1Mirror.LineFold",
+   "source_branch": "origin/codex/100bit-spend-path-20261013",
+   "source_branch_tip": "e38279522cfb22eb27da9091cbb0d8dc0df28790",
+   "source_path": "docs/research/100bit-spend-path-20261013/lean/LineFold.lean",
+   "source_module_name": "R1LineFold",
+   "source_last_commit": "628054cd494c66dc91e4e01612c70bd164ecf276",
+   "source_sha256": "a74b9e3e7987ba420e138e889efc2757ef10d45d12781c8b8c2b98c12e752981",
+   "mirror_sha256": "a74b9e3e7987ba420e138e889efc2757ef10d45d12781c8b8c2b98c12e752981",
+   "unchanged": true,
+   "diff": [],
+   "host_attempt": 3629,
+   "host_status": "green"
+  },
+  {
+   "mirror_path": "docs/research/v8-r0-zk-20261009/lean/R1Mirror/RepeatedLift.lean",
+   "mirror_module": "R1Mirror.RepeatedLift",
+   "source_branch": "origin/codex/100bit-spend-path-20261013",
+   "source_branch_tip": "e38279522cfb22eb27da9091cbb0d8dc0df28790",
+   "source_path": "docs/research/100bit-spend-path-20261013/lean/RepeatedLift.lean",
+   "source_module_name": "R1RepeatedLift",
+   "source_last_commit": "07b270d2846eb5cdd6a7adc661c132f5452debab",
+   "source_sha256": "bb5fa533f56b5b9c7adc84970cad149dfb0e4eccab4820f8fa4cbea74a996605",
+   "mirror_sha256": "bb5fa533f56b5b9c7adc84970cad149dfb0e4eccab4820f8fa4cbea74a996605",
+   "unchanged": true,
+   "diff": [],
+   "host_attempt": 3630,
+   "host_status": "green"
+  },
+  {
+   "mirror_path": "docs/research/v8-r0-zk-20261009/lean/R1Mirror/ParentSupport.lean",
+   "mirror_module": "R1Mirror.ParentSupport",
+   "source_branch": "origin/codex/100bit-spend-path-20261013",
+   "source_branch_tip": "e38279522cfb22eb27da9091cbb0d8dc0df28790",
+   "source_path": "docs/research/100bit-spend-path-20261013/lean/ParentSupport.lean",
+   "source_module_name": "R1ParentSupport",
+   "source_last_commit": "a29d480477dd7ad3e2d2343f71baa2b4ef91a3df",
+   "source_sha256": "f5993b2950e70058e25368f9fec84d031a2afefbaec0f1efee2c7e6239a2e733",
+   "mirror_sha256": "2a50386c6b56b0a0674c57873529fbe18a9cfe94da159d4ad89ce5671647c4b6",
+   "unchanged": false,
+   "diff": [
+    [
+     "-import R1NaturalProjection",
+     "+import R1Mirror.NaturalProjection"
+    ],
+    [
+     "-import R1RepeatedLift",
+     "+import R1Mirror.RepeatedLift"
+    ]
+   ],
+   "host_attempt": 3631,
+   "host_status": "green"
+  },
+  {
+   "mirror_path": "docs/research/v8-r0-zk-20261009/lean/R1Mirror/ConcreteProjection.lean",
+   "mirror_module": "R1Mirror.ConcreteProjection",
+   "source_branch": "origin/codex/100bit-spend-path-20261013",
+   "source_branch_tip": "e38279522cfb22eb27da9091cbb0d8dc0df28790",
+   "source_path": "docs/research/100bit-spend-path-20261013/lean/ConcreteProjection.lean",
+   "source_module_name": "R1ConcreteProjection",
+   "source_last_commit": "3638d7546f6e03a1afb0eaabdb1cff38d1631e84",
+   "source_sha256": "55370bf7838a477c1d80d96893f337900e8f7c2e0c53e0a1ff14ee9fbbccb906",
+   "mirror_sha256": "ed04fd3f32162bb583736b4f8f2d0ab2bbfc200ffc13dcf2aec856bca2a6cbbf",
+   "unchanged": false,
+   "diff": [
+    [
+     "-import R1Line18Geometry",
+     "+import R1Mirror.Line18Geometry"
+    ],
+    [
+     "-import R1ParentSupport",
+     "+import R1Mirror.ParentSupport"
+    ]
+   ],
+   "host_attempt": null,
+   "host_status": "NOT COMPILED: imports R1Mirror.Line18Geometry, which has no olean here"
+  },
+  {
+   "mirror_path": "docs/research/v8-r0-zk-20261009/lean/R1Mirror/SecondFoldRestoration.lean",
+   "mirror_module": "R1Mirror.SecondFoldRestoration",
+   "source_branch": "origin/codex/100bit-spend-path-20261013",
+   "source_branch_tip": "e38279522cfb22eb27da9091cbb0d8dc0df28790",
+   "source_path": "docs/research/100bit-spend-path-20261013/lean/SecondFoldRestoration.lean",
+   "source_module_name": "R1SecondFoldRestoration",
+   "source_last_commit": "3638d7546f6e03a1afb0eaabdb1cff38d1631e84",
+   "source_sha256": "fdf4d5a8b349f11e46185c96ceab4623fe0fd5b74ec875ca12378146c3709127",
+   "mirror_sha256": "610d983846ca920fb35150e01d9ccba51c0e50f850b2afae94947631bd673567",
+   "unchanged": false,
+   "diff": [
+    [
+     "-import R1ConcreteProjection",
+     "+import R1Mirror.ConcreteProjection"
+    ]
+   ],
+   "host_attempt": null,
+   "host_status": "NOT COMPILED: imports R1Mirror.ConcreteProjection (Line18Geometry chain)"
+  },
+  {
+   "mirror_path": "docs/research/v8-r0-zk-20261009/lean/R1Mirror/BaseRepeatedLift.lean",
+   "mirror_module": "R1Mirror.BaseRepeatedLift",
+   "source_branch": "origin/v8-reference",
+   "source_branch_tip": "384b7d1954bd8afb5d2e3bff9aa35c889b212d37",
+   "source_path": "docs/research/v8-r1-20261011/lean/R1/RepeatedLift.lean",
+   "source_module_name": "R1.RepeatedLift",
+   "source_last_commit": "364f53b602584a4b763ea0b5ce7ecb392dd2f368",
+   "source_sha256": "4be70e8fc62870917ec8ed534d1022beb03ec3e3af0f8540e14a1ee99d5efd70",
+   "mirror_sha256": "4be70e8fc62870917ec8ed534d1022beb03ec3e3af0f8540e14a1ee99d5efd70",
+   "unchanged": true,
+   "diff": [],
+   "host_attempt": 3626,
+   "host_status": "green"
+  }
+ ],
+ "compiles": "per-file host_attempt/host_status; full per-attempt records in t2b2b/evidence-R1-1-J4R1a.json"
+}

@@ -1,0 +1,358 @@
+ZF1-abort — abort-aware ZK_FS for honest-prover rejection (D29)
+==============================================================
+
+Base a4246222a (D29). Branch codex/r0-zf1-abort-20261017.
+Status legend: PROPOSED = design text; PROVED = Lean, host-compiled,
+axioms audited (evidence in zf1/abort-evidence.json).
+
+§1  Objects already in the tree (read from the sources, not the spec)
+§2  The abort-aware experiment (retrying prover, cap N, failure exit)
+§3  The simulator (rejection sampling of ch | P, oracle programming)
+§4  The theorem and its error terms (no badMass P)
+§5  Which events the oracle-programming terms charge
+§6  Why the eprint 2023/245 problem does not arise here
+§7  Requirements on the instantiation (R0 and R1)
+§8  Lean module R0Z/FsAbort.lean: statements and status
+
+----------------------------------------------------------------------
+§1  Objects already in the tree
+----------------------------------------------------------------------
+
+R0Z/StatisticalDistance.lean: `mean f = (∑ r, f r)/card R` (uniform finite
+tapes), `law`, `EqualLaws f g := ∀ v, law f v = law g v`.
+R0Z/LawTransport.lean: `mean_eq_of_equalLaws` (equal laws ⇒ equal means of
+any test), `mean_product` (mean over C × R = mean over C of mean over R).
+R0Z/JointView.lean: `Tape K F := AffTape K F × EligibleNoise K F`;
+`view h B outputs x w ch t`; `simulator h B outputs x hx ch :=
+view h B outputs x (Classical.choose hx) ch`.
+R0Z/Shift.lean:480: `HVZK_on P h B outputs x : ∀ hx w ch, P ch →
+h.public w = x.1 → EqualLaws (view … w ch) (simulator … hx ch)`, with
+`P : Challenges K → Prop` bound before w (so P cannot depend on the
+witness — the type enforces D29's "public predicate").
+R0Z/FsStatement.lean: `ROMView` (disclosed view + observer oracle log);
+`FSExperiments` (abstract `real`, `ideal`, `observe`); `ZK_FS h B outputs fs
+x ε := ∀ hx adv w, h.public w = x.1 → |mean realTest − mean idealTest| ≤ ε`;
+`ROMBridge` (Coins, `draw : Adv → x → Coins → Challenges`, `extend : Adv →
+x → Coins → View → ROMView`); `middleReal/middleIdeal` over
+`bridge.Coins × Tape`; `ROMReductionWith bridge x ε_real ε_ideal`.
+R0Z/FsGood.lean: `badMass P bridge adv x := mean (coin ↦ if P (draw coin)
+then 0 else 1)`; `middle_means_close` (|middleReal − middleIdeal| ≤
+badMass P); `zkfs_of_hvzk_on_bridge` (error ε_real + ε_ideal + ε_bad).
+
+Where badMass comes from: in the one-shot middle experiments the published
+view is taken at EVERY drawn challenge, including ¬P ones, on which
+HVZK_on says nothing. Under D29 the honest prover never publishes a ¬P
+view, so in the retrying middle experiments every published view is at a
+P-challenge, and the ¬P coins only steer the attempt index.
+
+Important consequence of the abstract interface: `FSExperiments.real/ideal`
+are data. The retrying real game and the rejection-sampling ideal game are
+just another `fs`; `ZK_FS` itself needs no change. What changes is the
+middle pair (the bridge) and therefore the reduction certificate.
+
+----------------------------------------------------------------------
+§2  The abort-aware experiment  (PROPOSED; Lean shape in §8)
+----------------------------------------------------------------------
+
+Fix the statement x, the public predicate P : Challenges K → Prop (may use
+x, π = h.transport, B; never w), and a cap N ≥ 1.
+
+Real game RealAbort(adv, x, w) on the random oracle H:
+  for k = 0, 1, …, N−1:
+    sample fresh attempt coins: tape t_k (masks, eligible noise) and fresh
+      attempt secrets / commitment salts s_k (fresh, never reused);
+    run the 32-row FS prover against H with (w, t_k, s_k); it obtains
+      ch_k from H at the attempt's addresses a_k,0 … a_k,m (m = 110 reads
+      per attempt in the R0 count of D20′.4; R1 has its own count);
+    if P(ch_k): publish the attempt-k proof (view(w, ch_k, t_k) plus the
+      public commitment data), STOP;
+    else: erase everything of attempt k (nothing is published).
+  if no attempt passed: publish the failure symbol ⊥ (no data).
+Then the post-proof adversary adv : View → Program (Addr) State Bool runs
+with oracle access to the SAME H and outputs a bit (D20′.4: deterministic,
+post-proof; randomised adversaries by averaging outside ZK_FS).
+
+What the adversary sees: the accepted attempt's view, or ⊥; its own oracle
+log. It does not see the discarded attempts, their count is a function of
+the challenges only (so publishing it, or leaking it by timing, is allowed
+by the theorem — §8 lets `extend` see the accepted index).
+
+Middle games (the abort bridge). Per-attempt bridge coins c_k (the
+squeeze/advance states of attempt k, as in D20′.4) and tapes t_k, all
+independent and uniform:
+    (c, t) ∈ (Fin N → Coins) × (Fin N → Tape K F),
+    ch_k := draw(adv, x, c_k),
+    i*(c) := the least k with P(ch_k), or none        -- coins only
+    MiddleRealAbort(c, t)  := observe(adv, extend(adv, x, c, i*, view(w,  ch_{i*}, t_{i*})))
+    MiddleIdealAbort(c, t) := observe(adv, extend(adv, x, c, i*, sim(hx, ch_{i*}, t_{i*})))
+    and, when i*(c) = none, both := observe(adv, fail(adv, x, c)).
+`extend` and `fail` may read ALL attempt coins (the oracle table at every
+attempt's addresses and the fresh table for the adversary's other reads);
+the witness and the tapes reach the output only through the single
+accepted view. The discarded tapes t_k, k ≠ i*, are never read.
+
+Key fact (proved, §8 `middleAbort_means_eq`): MiddleRealAbort and
+MiddleIdealAbort have EQUAL means for every adversary, under HVZK_on P
+alone. Reason: condition on c. If i*(c) = none, both sides are the same
+coin function. If i*(c) = k, then P(ch_k) holds, the output is a test of
+view(w, ch_k, ·) resp. sim(hx, ch_k, ·) evaluated at t_k, the other tapes
+are marginalised out, and HVZK_on P gives equal laws at ch_k. No ¬P
+challenge is ever passed to view or sim, so there is no badMass term.
+
+----------------------------------------------------------------------
+§3  The simulator  (PROPOSED)
+----------------------------------------------------------------------
+
+IdealAbort(adv, x) — input: x and hx only.
+  for k = 0, …, N−1:
+    sample ch_k with the honest per-attempt challenge law (the law of
+      `draw` on uniform per-attempt coins: semChal/circle/σQ/q22 decoders
+      on uniform squeeze states, D20′.4);
+    if P(ch_k): sample a tape t, set V := sim(hx, ch_k, t) (= JointView
+      `simulator`, the view at the chosen instance; ZF2 replaces it with
+      the efficient witness-free sampler), program H at the accepted
+      attempt's addresses so that the duplex reproduces ch_k (the
+      squeeze states are the sampled coins), publish V, STOP.
+    else: discard ch_k. NOTHING is programmed for a discarded draw.
+  if none passed: publish ⊥.
+  The adversary then runs against the programmed H (fresh lazily sampled
+  answers off the programmed points).
+
+Sampling ch | P. The simulator does exactly what the prover does on the
+public side: draw challenges, evaluate the same public predicate, retry
+up to N. So
+  - the law of (accepted index, accepted challenge) is identical in the
+    two worlds: i.i.d. draws with the same law, the same stopping rule;
+  - the failure exit has the same probability (1 − p)^N, p := Pr[P],
+    in both worlds, and publishes the same symbol; it costs nothing in
+    the privacy error (liveness only, as D29.3 says);
+  - the expected cost is the prover's: ≤ N evaluations of P, expected
+    1/p; P is exact linear algebra on public data (D28.2, M3). No
+    efficient sampler for the conditional law ch | P is needed beyond
+    the rejection loop, and the conditional law is never approximated.
+So the simulator can sample ch | P efficiently whenever the honest prover
+can produce a proof efficiently; there is no obstruction of the kind the
+task statement asks me to stop on.
+
+----------------------------------------------------------------------
+§4  The theorem and its error terms  (statement PROPOSED here; Lean §8)
+----------------------------------------------------------------------
+
+Let fs be the abort-aware experiments (§2 real, §3 ideal) packaged as an
+ordinary `FSExperiments` (their RealRand/IdealRand contain all N
+attempts' coins and the oracle table). Let ab be an abort bridge (§2,
+Lean `AbortBridge`). Define
+
+  AbortReductionWith P h B outputs fs ab x ε_real ε_ideal :=
+    0 ≤ ε_real ∧ 0 ≤ ε_ideal ∧ ∀ hx adv w, h.public w = x.1 →
+      |mean realTest − mean middleRealAbort P … ab adv x w| ≤ ε_real ∧
+      |mean middleIdealAbort P … ab adv x hx − mean idealTest| ≤ ε_ideal
+
+Theorem A (zkfs_of_hvzk_on_abort).
+  HVZK_on P h B outputs x → AbortReductionWith P … ab x ε_real ε_ideal →
+  ZK_FS h B outputs fs x (ε_real + ε_ideal).
+No badMass term: the middle step contributes exactly 0 (§2 key fact).
+Corollary (zkfs_of_maskImageOn_abort): the same from MaskImageOn Good
+when P implies Good (via hvzk_on_good and monotonicity of HVZK_on in P).
+In particular with P = Good₃ ∧ QPrime ∧ BCond ∧ … (D29.2), the T2a/T2b
+chain supplies HVZK_on P from MaskImageOn on the conjunction, and Good₃'s
+mass leaves the ledger.
+
+Theorem B (zkfs_of_hvzk_on_abort_terms) splits ε_real, ε_ideal into the
+named oracle-programming terms of §5 through identical-until-bad
+couplings: given
+  - a real coupling: finite S_R with measure-preserving maps to RealRand
+    and to (Fin N → Coins) × (Fin N → Tape), events Hit, Coll on S_R,
+    and agreement of realTest and middleRealAbort outside Hit ∪ Coll;
+  - an ideal coupling: finite S_I with measure-preserving maps to
+    IdealRand and to the middle coins, an event Prog, and agreement
+    outside Prog;
+  - bounds mass(Hit) ≤ ε_hit, mass(Coll) ≤ ε_coll, mass(Prog) ≤ ε_prog
+    for every adversary/witness,
+it concludes ZK_FS h B outputs fs x (ε_hit + ε_coll + ε_prog).
+The couplings and the three bounds are payload facts (they are ZF1a/b's
+per-attempt version of D20′.4's G3/G6–G11 and the address-freshness
+facts of §7); they enter as Prop hypotheses, never axioms.
+
+The failure exit has no term: ⊥ is published with the same probability
+and the same content in both middle games, and Hit already covers the
+adversary's reads of all N discarded attempts' addresses after a failure.
+The cap N enters only through ε_hit and ε_coll (§5).
+
+----------------------------------------------------------------------
+§5  Which events the oracle-programming terms charge  (PROPOSED)
+----------------------------------------------------------------------
+
+Notation: m = prover oracle reads per attempt (R0: 110 = 31·3 + 1 + 16,
+D20′.4; R1: its own count), q = the adversary's oracle reads, N = cap,
+a_{k,j} = the j-th prover address of attempt k, i* = accepted index.
+
+Hit (real side; "oracle points queried by discarded attempts").
+  The adversary's program, run on the published view (or on ⊥), reads
+  some a_{k,j} with k ≠ i* (all k when no attempt passed) that is not
+  also an address of the accepted attempt.
+  Why it is charged: in the real game H(a_{k,j}) is the entry that
+  produced a REJECTED challenge (its law is the law conditioned on ¬P
+  for the attempt as a whole), and it is a fixed table entry; in the
+  middle game the adversary's off-transcript reads are answered by the
+  bridge's fresh table. Outside Hit those discarded entries are never
+  observed, and the two games agree.
+  Expected bound (payload fact, hypothesis hHit): every discarded
+  attempt's FIRST address contains fresh attempt material (salted
+  commitment roots / attempt secrets) of min-entropy ≥ H_att given the
+  published data, and every later address of attempt k is a function of
+  the oracle's answer at an earlier address of attempt k; so an
+  adversary reading a_{k,j} must first read a_{k,0} or guess an internal
+  state. ε_hit ≤ q·N·(2^{-H_att} + m·2^{-H_state}) (2^{-H_state}: guessing
+  a duplex state of the 2^{|State|} space directly).
+
+Coll (real side; prover-address repetition, within or across attempts).
+  Two of the ≤ N·m prover reads, in different positions, have the same
+  address (the existing ε_real event of D20′.4, now over N attempts), or
+  a prover read of attempt k equals an adversary-independent fixed point
+  used by `extend`. Charged because a repetition makes ch_k depend on an
+  earlier attempt's (rejected) answer, breaking the i.i.d. per-attempt
+  draws of the middle game — this is exactly the event under which
+  "the accepted challenge is ch | P" could fail.
+  Expected bound (hypothesis hColl): ε_coll ≤ (N·m choose 2)·2^{-H_state}
+  + N·(N−1)/2 · 2^{-H_att}.
+
+Prog (ideal side; programming failure).
+  The simulator programs H at the accepted attempt's m addresses; Prog is
+  the event that two of them coincide (inconsistent programming). The
+  adversary is post-proof (D20′.4), so the usual "adversary queried a
+  point before it was programmed" event cannot occur. Discarded ideal
+  draws are never programmed and leave no oracle trace, so there is no
+  ideal-side Hit term. ε_prog ≤ (m choose 2)·2^{-H_state} (hypothesis).
+
+No other event is charged. In particular: no badMass P, no failure-exit
+term, no term for the accept decision itself (it is a function of the
+challenges, whose law is the same in both worlds).
+
+----------------------------------------------------------------------
+§6  Why the eprint 2023/245 problem does not arise  (PROPOSED)
+----------------------------------------------------------------------
+
+Source: Devevey, Fallahpour, Passelègue, Stehlé, Xagawa, "A Detailed
+Analysis of Fiat-Shamir with Aborts" (eprint 2023/245). I could read the
+abstract (eprint page); the PDF returned HTTP 403 from this session, so
+the paper's detailed error list was NOT re-read. The abstract states:
+combining random oracles with repeated loop iterations complicates the
+analysis of correctness, run time and security; all existing analyses
+had errors; the corrected bounded-iteration analysis needs a STRONGER
+zero-knowledge property of the underlying Σ-protocol than usual; the
+unbounded-iteration case has further subtleties.
+
+Where the difficulty comes from in FS-with-aborts (Lyubashevsky/
+Dilithium): the abort decision is made on the RESPONSE z = y + c·s,
+which depends on the secret. Then (a) the accept event is correlated with
+the secret, so "simulate an accepted transcript" is a statement about a
+law reweighted by a secret-dependent acceptance probability; (b) the
+rejected iterations' commitments were sent to H by the real signer, so a
+simulator that programs H must also produce those commitments with the
+right joint law, which needs a ZK property covering aborted transcripts;
+(c) the iteration count's law is secret-dependent unless proved
+otherwise, and with unbounded loops even run time interacts with the ROM.
+
+How each point fares under D29:
+(a) P is a function of ch (and public x, π, B) only. Given the attempt's
+    challenge, acceptance is decided; HVZK_on P is a statement about the
+    view law AT a fixed P-challenge, with no reweighting. The theorem's
+    proof conditions on the coins, never on a secret-dependent event.
+    The Lean type of HVZK_on binds P before w, so this cannot be broken
+    silently.
+(b) No aborted transcript is published and none needs to be simulated:
+    the only trace of a discarded attempt is its oracle entries, charged
+    in full by Hit (§5) under a min-entropy hypothesis on fresh attempt
+    material. The "stronger ZK" of the paper is replaced here by
+    something weaker and payload-checkable: unpredictability of each
+    discarded attempt's first address. The simulator's discarded draws
+    are not programmed at all.
+(c) The cap N is explicit and the failure exit publishes ⊥; the
+    iteration count is a function of the challenges and has the same law
+    in both worlds (the simulator runs the same loop on the same public
+    predicate). Unbounded iteration is not used.
+(d) Model: the existing ZK_FS is a classical ROM statement with a
+    post-proof adversary. The paper's analyses are in the QROM. A QROM
+    version of Hit would need a one-way-to-hiding style argument and is
+    out of scope; nothing in this design claims QROM security.
+
+Residual risk, stated plainly: the conclusion relies on (i) P being
+exactly a function of public data and challenges (refinement
+obligation: the Rust check decides exactly the Lean P, D28.2); (ii)
+fresh per-attempt material entering every attempt's FIRST absorbed block
+(§7 R-fresh). If (ii) fails — e.g. row 0's address depends only on the
+statement — then several challenge rows are IDENTICAL across attempts,
+the accepted challenge is not distributed as ch | P, and Coll has mass 1.
+That would not change D29 (it is a prover-implementation requirement),
+but it must be checked against the exact R1 transcript layout (R1M).
+
+----------------------------------------------------------------------
+§7  Requirements on the instantiation (R0 and R1)  (PROPOSED)
+----------------------------------------------------------------------
+
+R-pub    P : Challenges K → Prop depends on ch and public data only;
+         the Rust check decides exactly the Lean P (refinement, D28.2).
+R-fresh  every attempt samples fresh masks, eligible noise, salts and
+         attempt secrets, never reused (durable nonce reservation), and
+         the attempt's first absorbed block contains them (salted
+         commitment roots); this gives H_att in §5.
+R-erase  nothing from a discarded attempt is published, logged to the
+         chain, or reused; the only published artefacts are the accepted
+         view or ⊥ (and, optionally, the attempt index).
+R-cap    N fixed in advance; on exhaustion output ⊥ and publish nothing.
+R-same   the ideal game's per-attempt challenge law equals `draw` on
+         uniform per-attempt coins (the D20′.4 decoders), so the
+         simulator's loop and the prover's loop have the same law.
+Generic: nothing in §2–§5 uses the R0 payload. The Lean core (§8) is
+stated for arbitrary coin, tape and view types, then specialised to the
+R0Z JointView/FsStatement types; R1 reuses the core with its own view
+once R1M fixes the R1 model.
+
+----------------------------------------------------------------------
+§8  Lean module R0Z/FsAbort.lean  (imports R0Z.FsGood only)
+----------------------------------------------------------------------
+
+Dependencies: only the interfaces `mean`, `EqualLaws`, `LawTransport`,
+`FSExperiments`, `ROMView`, `realTest`, `idealTest`, `bit`, `view`,
+`simulator`, `InLanguage`, `HVZK_on`, and (for one corollary)
+`MaskImageOn Good`/`hvzk_on_good`. No PayloadCell constructor is used, so
+the R1-0 refactor (D30) should reach this module at most through an added
+implicit parameter. The headline theorem is stated from `HVZK_on P`
+directly; `hvzk_on_mono` is monotonicity in P, not R1-0's `hvzk_on_of`.
+
+Generic core (arbitrary types C, T, V):
+  mean_equiv, mean_const, mean_eval (marginalising the other attempts'
+    tapes), mean_add'
+  firstGood Pd c : Option (Fin N) — least accepted attempt
+    firstGood_spec (accepted ⇒ Pd), firstGood_least (it is the least),
+    firstGood_none (none ⇒ every attempt rejected)
+  retryTest N Pd pub ext fail — the retry loop's observer bit
+  retry_means_eq: (∀ c, Pd c → EqualLaws (pub₁ c) (pub₂ c)) →
+    mean (retryTest … pub₁ …) = mean (retryTest … pub₂ …)
+  eventMass, eventMass_or_le, until_bad (identical-until-bad on [0,1])
+  Coupling R M — finite common space with uniform maps to R and M
+R0Z specialisation:
+  AbortBridge K CommitHandle Aux Adv — Coins, N, draw, extend (sees all
+    attempt coins and the accepted index), fail
+  middleRealAbort / middleIdealAbort P h B outputs fs ab adv x (w | hx)
+  middleAbort_means_eq — EQUAL means under HVZK_on P
+  AbortReductionWith P … ab x ε_real ε_ideal
+  Theorem A  zkfs_of_hvzk_on_abort :
+    HVZK_on P → AbortReductionWith … → ZK_FS h B outputs fs x (ε_real + ε_ideal)
+  hvzk_on_mono, zkfs_of_maskImageOn_abort (P ⇒ Good)
+  RealAbortCoupling P … ab x ε_hit ε_coll   (events Hit, Coll; §5)
+  IdealAbortCoupling P … ab x ε_prog        (event Prog; §5)
+  abortReduction_of_couplings
+  Theorem B  zkfs_of_hvzk_on_abort_terms :
+    HVZK_on P → RealAbortCoupling … → IdealAbortCoupling … →
+    ZK_FS h B outputs fs x (ε_hit + ε_coll + ε_prog)
+
+What is NOT proved here (payload facts, ZF1a/b): the existence of the two
+couplings for the concrete retrying sponge games (per-attempt G3/G6–G11),
+and the numerical bounds of §5 on Hit, Coll, Prog. They are exactly the
+hypotheses of Theorem B. The efficient simulator is ZF2.
+Status: PROVED. Host attempt 3502 (source sha256 9b1ffc92…), exit 0, every
+#print axioms line [propext, Classical.choice, Quot.sound]; attempts
+3500/3501 failed on instance synthesis of Fintype (Fin n → Tape K F),
+fixed by the named instance `tapeFintype`. See zf1/abort-evidence.json.

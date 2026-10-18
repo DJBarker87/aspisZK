@@ -1,0 +1,311 @@
+R1 games — fs.real, fs.ideal and the abort bridge for the 33-row transcript
+===========================================================================
+
+Base 583de3111 (D42), rebased onto 7872bce2c (D44, ZF2) before the GamesR1 compile. Branch codex/r0-r1-games-20261018.
+Closes, in part, gaps G-def, G-root and G-retry of D41.5. Read with this:
+DESIGN-ZF1-COUPLINGS-R1.txt (§1 read classes, §3 couplings), LOG D31, D38,
+D41, D42; R0Z/FsStatement, R0Z/FsAbort, R0Z/HvzkV, R1Z/ModelsVR1.
+Status legend: SOURCE = read in the cited file; PROVED = Lean, host-compiled,
+axioms audited; HYP = a named Prop hypothesis of a Lean theorem; REF = a
+Rust <-> Lean refinement obligation (outside Lean); PROPOSED = design text.
+
+§0  Sources read and the mirroring decision
+§1  What the R1 proof publishes (G-root check)
+§2  The transcript layout: 115 reads, fields, coordinates
+§3  The abort bridge ab_R1 and the middle games
+§4  fs.real: the retrying honest prover
+§5  fs.ideal: the simulator game
+§6  Field map: R1RealModelV / R1IdealModelV
+§7  Lean modules, attempts and evidence
+§8  Open items
+
+
+----------------------------------------------------------------------
+§0  Sources read and the mirroring decision
+----------------------------------------------------------------------
+
+Spend-path branch origin/codex/100bit-spend-path-20261013, tip 1a39ad608,
+read with `git show` only (sha256 of the bytes read):
+  crates/aspis-r1-cost-probe/src/transcript.rs     927150f4…
+  crates/aspis-r1-cost-probe/src/r1_wire.rs        3a6f3070…
+  crates/aspis-r1-cost-probe/src/verifier.rs       a0c440c3…
+  crates/aspis-r1-cost-probe/src/r1_semantic.rs    1e62a951…
+  crates/aspis-core/src/r0_transcript.rs           2a315219…
+  lean/RawByteCollisionTargets.lean                c0c23ab0…
+  lean/LiteralByteProtocol.lean                    b8a5958a…
+(full digests in zf1/r1-games-evidence.json "sources_read").
+
+Mirroring decision: NO file is mirrored.  The generic spend-path pieces this
+job needs are the 32-byte field readers `fixed 0` / `trailing`
+(RawByteCollisionTargets `fixed`, `trailing`, `fixed_frame`,
+`trailing_frame`).  Their file imports AllAddressCollisionTrace and
+R1CombinedMerkleTargets, whose closure pulls AspisV8R19.* and FS2.* (the
+FS2.Duplex `State`, `Addr L`, `Table` machinery); LiteralByteProtocol and the
+AllAddressFiatShamir* files import FS2.Verifier / R0C.V3.Gen.  None of that
+closure is minimal, and under -M7000 (Mathlib alone is 6.6 GB) it is a
+memory risk.  The two readers are therefore RESTATED in R1Z/LensR1
+(`fixed0`, `trailing`, `fixed0_ans_append`, `trailing_append_ans`) with the
+same meaning, as the ZF1 couplings job did ("conceptual reference, not
+imported, not mirrored").  The spend-path byte model was used as the
+SOURCE for the layout of §2 (row tags, framing, the eight query pairs, the
+38-byte ρ absorb), not as Lean.
+
+----------------------------------------------------------------------
+§1  What the R1 proof publishes (G-root check)  (SOURCE)
+----------------------------------------------------------------------
+
+R1 is variant S2 (two folds, 33 rows).  verifier.rs View::parse_shape and
+r1_semantic.rs: the proof bytes are
+  header (magic "R1P3COST", variant tag) ‖ semantic prefix (the C1 root
+  `prefix.c1_root`, the 27 framed semantic records, row 2's record = the C2
+  root) ‖ y1 (29·32) ‖ inactive (32) ‖ round0 (7·32) ‖ folded root (32) ‖
+  round1 (7·32) ‖ final message ‖ 22 × query blocks.
+A query block (P3 build, INITIAL_QUERY_BYTES + SECOND_QUERY_BYTES) holds the
+opened C1 values (480 bytes), C2 values (128), the two opened leaf salts
+(2·32), two C1/C2 Merkle paths (2·6·7·32), the folded values (128), the
+folded salt (32) and the folded path (6·7·32).
+
+The verifier's hash reads on these bytes are exactly
+  (a) the 115 transcript reads of §2 (it recomputes every one, including all
+      eight query pairs: transcript.rs `queries` always computes 8 blocks);
+  (b) per query and tree: the leaf read H(0x10 ‖ T ‖ value ‖ salt) and six
+      8-ary node reads whose inputs are the path siblings and the running
+      digest (verifier.rs merkle_path, state_only_private_merkle).
+So the D41.5 G-root proposal matches the proof: every root, opened salt and
+path digest is either inside the INPUT of a verifier read (c1_root trails the
+`init` address; the C2 root is inside row 2's framed record; the folded root
+inside row 30's payload; opened salts trail the leaf inputs; siblings are
+node inputs) or is the ANSWER of one (roots and path digests).  Hence
+  proof bytes = serialize(View, VerLog)  and  VerLog = verifier(proof, H),
+with VerLog := (a) ++ (b) as an ordered (input, answer) list.  The Lean
+`abR1.extend` publishes ROMView ⟨V, VerLog ++ adversary log⟩: G-root is
+closed in the game definitions, with the serialisation identity as REF item
+R-ser (§6.4).
+
+Two further verifier reads (checked, not in VerLog): the two-transaction
+checkpoint stores H(proof) and H(public) (verifier.rs checkpoint).  Both
+inputs are functions of published data, so they are ordinary adversary
+queries (each costs one of the q reads) and need no programming.  The
+on-chain checkpoint itself is a deterministic function of (proof, public,
+H) and adds nothing to the view.
+
+----------------------------------------------------------------------
+§2  The transcript layout: 115 reads, fields, coordinates  (PROVED, R1Z/TranscriptR1)
+----------------------------------------------------------------------
+
+2.1 Reads (`TRead`, 14 constructors; `card_TRead : card TRead = 115`):
+  init; absS i, sqS i, advS i (rows 0..26); reseed; absO i, sqO i, advO i
+  (rows 27..30); absQ (row 31 absorb), qb k, qa k (k < 8); absR, sqR, advR
+  (row 32, ρ).  `schedule` lists them in the verifier's order
+  (`mem_schedule`).  Squeeze reads (`IsSq`: sqS, sqO, qb, sqR) are the 40
+  challenge blocks; the other 75 answers are chain coordinates.
+
+2.2 Addresses (`addrWith`, from the source byte layout):
+  init   = DOMAIN ‖ 0 ‖ le32|pub| ‖ pub ‖ c1_root            field: C1 root, trailing
+  absS i = st ‖ 0 ‖ 0xa0+i ‖ framed_i                         field: st, offset 0
+  absO i = st ‖ 0 ‖ 0xa0+27+i ‖ le32|payload| ‖ payload
+  absQ   = st ‖ 0 ‖ 0xa0+31 ‖ le32|final| ‖ final
+  absR   = a_{k*} ‖ 0 ‖ 0xc0 ‖ le32 0      (38 bytes)
+  sq*/qb = st ‖ 1,  adv*/qa = st ‖ 2       (33 bytes)
+  reseed = DOMAIN2 ‖ vtag ‖ adv_26                           field: trailing
+  `fc` gives each read's designated field (Coord = root | sel | ans j):
+  absS 0 ← init, absS (i+1) ← advS i, sq/adv ← their absorb, reseed ←
+  advS 26, absO 0 ← reseed, …, qb/qa 0 ← absQ, qb/qa (k+1) ← qa k, absR ←
+  sel (the answer of qa k*), sqR/advR ← absR.  `chain_fc`: no field is a
+  squeeze answer (the D41 §1.1 "no squeeze answer is a field of any later
+  address", now a theorem).  `extract_addrWith`: the field reader recovers
+  the field from the address.
+
+2.3 Records.  `Rec` = (all 115 answers, C1 root, k*, Rest), Rest = framed
+  records, payloads, final message, public bytes, variant tag.  `setC c`
+  moves one coordinate; `Dep` says which coordinates an address reads (its
+  field; absR reads every qa answer through k*; reads with a qa field read
+  `sel`).  `addr_setC_of_not_dep`: an address is unchanged by every
+  coordinate it does not read.
+
+2.4 The pair table (`table`): two distinct reads of one attempt either have
+  a field the other does not read, or their addresses differ for EVERY
+  record: same field ⇒ squeeze/advance siblings (last byte 1 vs 2,
+  `sib_addr_ne`); absR against qb/qa (k+1) ⇒ length 38 vs 33.  The proof is
+  symbolic (`back_fc`, `rep_cases`); nothing is enumerated.
+
+2.5 Lifting (`TranscriptFrame`): per-attempt records on any finite space
+  with a lawful lens per (attempt, chain coordinate) whose move is `setC`
+  on that attempt and the identity on the others.  Then
+  `pairFresh_transcript`: PairFresh (either orientation, Umin = 2^255,
+  |answers| = 2^256 by `card_ans`) for EVERY pair of distinct transcript
+  positions of all N attempts; `hitFresh_transcript`: HitFresh for a
+  position whose charging event and adversary read are lens-invariant.
+  `card_positions`: N · 115 positions.  A lens gives the HitFresh/PairFresh
+  coordinate split S ≃ R × U (R1Z/LensR1 `hitFresh_of_lens`,
+  `pairFresh_of_lens`), so the designated-field table of D41 §1.4 is no
+  longer a hypothesis for the transcript reads.
+
+----------------------------------------------------------------------
+§3  The abort bridge ab_R1 and the middle games  (Lean: R1Z/GamesR1 `abR1`)
+----------------------------------------------------------------------
+
+Coins (per attempt) R1Coins = (TRead → Ans) × (Fin 3 → Ans) × Cm × Tab:
+the 115 transcript answers, the roots (C1, C2, folded), the commitment
+answers Cm (salts, leaf and node digests; abstract finite type) and a table
+Tab with `look : Tab → Bytes → Ans` (the shared oracle; attempt 0's table is
+used).  N attempts, `hN : 0 < N`.
+  draw c      = dec(squeeze answers of c)          (`drawW`; ρ dropped by dec)
+  extend c k V = ⟨V, VerLog_k ++ runLog(adv.prog V VerLog_k, prog_k, qmax)⟩
+               VerLog_k = tLog (the 115 reads with addresses from V's
+               records and c k's chain answers) ++ comLog(c k) (opening reads)
+               prog_k a = the VerLog_k answer at a if a is published, else
+               look (tab of attempt 0) a
+  fail c      = ⟨failView, runLog(adv.prog failView [], look tab_0, qmax)⟩
+Discarded attempts are read only through draw; their tapes never.
+
+Adversary (`R1Adv`): a query program `prog : View → VerLog → OProg`
+(adaptive, at most qmax reads, `runLog`) and a decision `decide : ROMView →
+Bool` (observe := decide).  Any post-proof adversary whose output is a
+function of what it saw is of this form.
+
+The middle games are FsAbort/HvzkV/HvzkS's `middleRealAbortV`,
+`middleIdealAbortS` on this bridge; no new middle game is defined.
+
+----------------------------------------------------------------------
+§4  fs.real: the retrying honest prover  (Lean: `realAttempt`, `realGame`)
+----------------------------------------------------------------------
+
+RealRand = Tab × (Fin N → Secrets); H := look tab.  Attempt k
+(`realAttempt`, with secrets k):
+  1. commit phase (`R1Prover.commit`, REF): from H, the attempt's fresh
+     secrets and the instance — the mask tape t (rejection decode of the
+     expander answers), the three roots, the opening reads as a function of
+     the challenges, the exhaustion flag;
+  2. transcript: the reads of `schedule` in order, each address built from
+     the answers so far and the records of view(w, ch_so_far, t), each
+     answer H(address);
+  3. ch := dec(squeeze answers), V := view(w, ch, t), log := the verifier's
+     recomputation (115 reads from V's records, answers H) ++ opening reads.
+Game (`realGame`): accept the first k with P ch ∧ Vp ch w ∧ ¬exh (P = P_R1,
+Vp = VR1, the no-pole set: D38/D40); publish ⟨V_k, log_k ++ adversary log
+against H⟩; if none, publish ⟨failView, adversary log⟩.  Discarded attempts
+publish nothing (A-erase holds by construction); the cap is N (A-cap);
+attempts use independent secrets (A-sec as the product RealRand).
+This closes G-retry at the model level; the Rust prover still lacks the loop
+(D38.3) — the refinement item R-retry.
+
+----------------------------------------------------------------------
+§5  fs.ideal: the simulator game  (Lean: `fsR1.ideal`)
+----------------------------------------------------------------------
+
+IdealRand = (Fin N → R1Coins) × (Fin N → Tape).  Given a simulator sim
+(primary: ZF2's `simE h.transport B outputs x`, D44; secondary: `simV`):
+the same capped loop on draw and P alone; on acceptance at k publish
+extend(c, k, sim(draw c_k, t_k)) — VerLog computed from the simulated view
+and fresh coins, and the adversary answered by the table programmed at the
+published addresses; failure publishes fail(c).  It reads no witness.
+`ideal_agree_S` proves it equals `middleIdealAbortS` pointwise, for every
+simulator; the collision cost of programming is carried by the REAL side's
+CollEv (two transcript or opening positions with one address), where it was
+already counted (D41 ε_coll).  Consequently Mi = 0 and ε_prog = 0.
+
+----------------------------------------------------------------------
+§6  Field map: R1IdealModelS / R1IdealModelV / R1RealModelV
+----------------------------------------------------------------------
+
+6.1 R1IdealModelS P fsR1 abR1 x M Umin sim (primary, D44) — ALL PROVED,
+    for every simulator, M, Umin (`idealModelS_R1`, PrivacyGamesR1):
+      coupling   identity coupling (`idCoupling`), meanR/meanM by rfl
+      agreement  `ideal_agree_S` (holds at every s, not only off CollEv)
+      PairFresh  vacuous: priv := False
+6.2 R1IdealModelV (secondary) — ALL PROVED (`idealModel_R1`), same way.
+
+6.3 R1RealModelV P_R1 (VR1 h) … fsR1 abR1 x (N·(115+Mc)) qmax 2^255 εexh —
+    by `realModel_R1` from `R1RealData` per (adv, w):
+      positions  PROVED shape: Fin (N·(115+Mc)) ≃ Fin N × (TRead ⊕ Fin Mc)
+                 (`card_pos`, `card_TRead` = 115).  The read-count field is
+                 thereby split: transcript part 115 PROVED; commitment part
+                 Mc remains source-counted (D41 §1.5: Mc ≤ 2^21 − 115,
+                 H-count / G-count).
+      charged    transcript positions: "attempt k was run and discarded"
+                 (`discR`, a function of the squeeze answers and P ∧ V) —
+                 DEFINED; commitment positions: `CmLayout.charged` (HYP).
+      priv       transcript True; commitment `CmLayout.priv` (HYP data).
+      addr       transcript `taddr` (the §2 addresses on the middle coins) —
+                 DEFINED; commitment `CmLayout.caddr` (HYP data).
+      qry        the adversary's i-th read in the middle game (`qryR`) —
+                 DEFINED.
+      HitFresh   transcript positions PROVED (`R1RealData.hit`: discR and the
+                 adversary's log are invariant under every chain lens of a
+                 discarded attempt — `accR_midLens`, `advLogR_midLens`;
+                 field = lens value); commitment positions HYP (`CmLayout.hit`).
+      PairFresh  transcript × transcript PROVED (`pairFresh_transcript`);
+                 transcript × commitment PROVED from `CmLayout.cross`
+                 (commitment addresses do not read chain coordinates);
+                 commitment × commitment HYP (`CmLayout.pair`).
+      coupling   HYP (G-prog): `R1RealData.cp` with lenses `Lc` such that
+                 toM is a coordinate projection (`hLc`); the lazy-programming
+                 law is meanR.
+      agreement  HYP (G-ref): `R1RealData.Agree`, stated with the concrete
+                 events above, between `realTest` of `realGame` and
+                 `middleRealAbortV` of `abR1`.
+      exh mass   HYP (G-exh): `mass d.exh ≤ εexh`.
+
+6.4 What remains a Rust ↔ Lean refinement obligation (REF):
+      R-wire   `R1Wire.frame/payload/final/pubBytes/vtag` are r1_wire.rs /
+               verifier.rs serialisations; `dec` = sampler.rs decoders;
+               `kstarOf` = QueryScan; `comLog` = the verifier's merkle_path
+               reads.
+      R-ser    proof bytes = serialize(View, VerLog) (§1).
+      R-commit `R1Prover.commit` = prover.rs / host_commitment.rs /
+               state_only_entropy.rs (mask derivation, salted trees).
+      R-causal the records of row i depend on the challenges of rows < i only
+               (needed inside Agree: the prover's adaptive addresses equal the
+               verifier's recomputation from the final view).
+      R-retry  the Rust loop of D38.3 equals `realGame` (fresh secrets, cap,
+               P_R1 ∧ no-pole ∧ ¬exhausted, nothing published on rejection).
+      R-pub    the Rust P_R1 check decides P_R1 (D38.5 certificate route).
+
+6.5 privacy_R1_games (PrivacyGamesR1): privacy_R1_eff on fsR1/abR1 against
+    simE, error
+      N(115+Mc)·qmax/2^255 + (N(115+Mc))²/2^255 + εexh + 0 + N·4096/Q,
+    under PublicBase, BuilderSoundOn, Sem1Uniform (drawW W) Q and the
+    R1RealData hypotheses of 6.3.  For N = 8, Mc + 115 ≤ 2^21, qmax = 2^64
+    this is the D41/D42 number (≈ 2^-109, pole-dominated) with ε_prog
+    dropped; no new numeral was compiled.
+
+----------------------------------------------------------------------
+§7  Lean modules, attempts and evidence  (zf1/r1-games-evidence.json)
+----------------------------------------------------------------------
+
+All on the build host via run2.sh … 7000 7; exit 0, 0 swaps, every axiom
+line within [propext, Classical.choice, Quot.sound]; no sorry, axiom,
+admit, native_decide or option overrides.
+  R1Z/LensR1          3951  sha 90bc5726…  imports R0Z.FsAbortBounds   11 lines
+  R1Z/TranscriptR1    3954  sha e8b6f22d…  imports R1Z.LensR1          20 lines
+  R1Z/GamesR1         3957  sha 630393aa…  imports R0Z.HvzkS, R1Z.ModelsVR1,
+                                           R1Z.TranscriptR1            22 lines
+  R1Z/PrivacyGamesR1  3958  sha ec1a2ede…  imports R1Z.SimulatorR1, R1Z.GamesR1
+                                                                        2 lines
+Failed and retained: 3950 (List.ofFn unfolded by simp), 3952 (field name
+`rec` clashed with the recursor), 3953 (green, superseded by 3954 after the
+ChainC restriction), 3955–3956 (instance/metavariable elaboration).
+Peak RSS 6.47–6.70 GB under -M7000.  GamesR1 and PrivacyGamesR1 were
+compiled against the 7872bce2c objects (host sources of HvzkS, HvzkV,
+ModelsVR1, SimulatorR1, RefPayload, RefCosetR1, PoleMassR1 checked
+byte-identical to the rebased base).
+
+----------------------------------------------------------------------
+§8  Open items
+----------------------------------------------------------------------
+
+G-root   closed in the model (§1, `abR1.extend`); R-ser remains.
+G-def    closed: fsR1.real, fsR1.ideal and abR1 are Lean definitions.
+G-retry  closed in the model (`realGame`); R-retry (the Rust loop) open.
+G-prog   open: R1RealData.cp (lazy programming, with toM a projection).
+G-ref    open: R1RealData.Agree, plus R-wire, R-commit, R-causal, R-pub.
+H-layout transcript part PROVED; commitment part (CmLayout.hit/pair/cross)
+         open — salts, leaves, 8-ary nodes, expander and seed reads.
+H-count  transcript 115 PROVED; Mc source-counted (G-count).
+G-exh    open (mass of exh).
+Sem1Uniform for drawW, BuilderSoundOn fields, PublicBase: unchanged (D42/D44).
+QROM     not covered.
+Observation: the ideal programming term is 0 for these games because the
+simulator game IS the middle game; the programming collisions are inside
+the real side's CollEv, which already pays M²/Umin.
