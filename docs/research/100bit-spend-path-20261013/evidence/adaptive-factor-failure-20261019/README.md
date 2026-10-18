@@ -16,7 +16,7 @@ Six checked modules connect the executable factorization program to a global pro
 
 ## Remaining obligations
 
-The previously checked fixed-heap executable factorizer returns complete root certificates on success. Transferring all successful-output and exact consumption bounds to the sequentialized program still needs a leaf/trace invariant; the new abort theorem alone is not that certificate theorem. The sequential cursor must be bounded by the proved split-call budget and linked to a finite random-bit/field sampler, including its cost/failure law. No production randomness implementation is equated here.
+Follow-on packet [sequential-root-sampler-contract-20261019](../sequential-root-sampler-contract-20261019/README.md) closes successful-output correctness and the actual query-trace/cursor bound for this same sequential program, and proves its exact finite uniform field-tape law. The concrete random-bit-to-field sampler and total arithmetic/bit costs remain open. No production randomness implementation is equated here.
 
 The Option RR traversal, actual WideExact GRS conversions, normalized vector children, filtering/message inversion, joint-list/caller count and whole-extractor operation/bit costs still need composition. The earlier numeric 395,412,192-site/149-trial/2^-120 statement remains conditional until those caller counts and all other failure terms are proved. Full source/sampler/terminal soundness and privacy coupling remain open.
 
