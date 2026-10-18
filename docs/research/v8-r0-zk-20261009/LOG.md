@@ -4746,3 +4746,29 @@ Pr[¬P] is small, and Z8–Z10 have observed no failures.
   on ZF-A. Attempts 3500–3549.
 
 The Rust predicate check waits for R1M's definitions.
+
+### ZF1-abort completed — abort-aware ZK_FS without badMass (2026-10-18)
+
+Branch `codex/r0-zf1-abort-20261017`, base `a4246222a` (D29). Design in
+[zf1/DESIGN-ZF1-ABORT.txt](zf1/DESIGN-ZF1-ABORT.txt); Lean in
+`lean/R0Z/FsAbort.lean` (imports `R0Z.FsGood` only; no PayloadCell
+constructor is used). Proved: in the retrying middle games (per-attempt
+coins and tapes, least accepted attempt, cap N, failure output) only
+P-challenges reach the view and the simulator, so `HVZK_on P` makes the
+middle means equal (`middleAbort_means_eq`); hence
+`zkfs_of_hvzk_on_abort : HVZK_on P → AbortReductionWith P … ab x ε_real
+ε_ideal → ZK_FS … (ε_real + ε_ideal)` with no badMass term, and
+`zkfs_of_hvzk_on_abort_terms` splitting the reduction into the named
+identical-until-bad events Hit (adversary reads a discarded attempt's
+address), Coll (prover-address repetition within or across attempts) and
+Prog (inconsistent programming of the accepted attempt), error
+ε_hit + ε_coll + ε_prog. The couplings and the three bounds are payload
+hypotheses (ZF1a/b), not proved. The failure exit costs nothing. The
+eprint 2023/245 difficulty (secret-dependent aborts) does not arise because
+P depends on ch only; the PDF was not readable from this session (HTTP 403),
+only the abstract. Requirement R-fresh (fresh attempt material in each
+attempt's first absorbed block) must be checked on the R1 layout.
+Host attempts 3500 (exit 1), 3501 (exit 1, diagnostic), 3502 (exit 0,
+4.35 s, peak RSS 6,770,592 KiB, 0 swaps); all 20 axiom lines standard;
+evidence [zf1/abort-evidence.json](zf1/abort-evidence.json). Next host
+attempt in this range: 3503.

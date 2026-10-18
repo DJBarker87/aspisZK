@@ -137,7 +137,7 @@ theorem eventMass_or_le {S : Type} [Fintype S] (E E' : S → Prop) :
   rw [← mean_add']
   apply mean_le_mean
   intro s
-  by_cases h1 : E s <;> by_cases h2 : E' s <;> simp [h1, h2] <;> norm_num
+  by_cases h1 : E s <;> by_cases h2 : E' s <;> simp [h1, h2]
 
 theorem until_bad {S : Type} [Fintype S] (f g : S → ℚ)
     (hf : ∀ s, 0 ≤ f s ∧ f s ≤ 1) (hg : ∀ s, 0 ≤ g s ∧ g s ≤ 1)
@@ -185,6 +185,10 @@ structure AbortBridge (K CommitHandle Aux Adv : Type) [Field K] where
   fail : Adv → Statement K CommitHandle → (Fin N → Coins) → ROMView K CommitHandle Aux
 
 attribute [instance] AbortBridge.finiteCoins AbortBridge.nonemptyCoins
+
+/-- Host attempt 3501: `Fintype (Tape K F)` is found but not under `Fin n → ·`;
+naming it lets the Pi instance close. It is definitionally the inferred one. -/
+instance tapeFintype : Fintype (Tape K F) := inferInstance
 
 def middleRealAbort (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
