@@ -286,3 +286,25 @@ statement — then several challenge rows are IDENTICAL across attempts,
 the accepted challenge is not distributed as ch | P, and Coll has mass 1.
 That would not change D29 (it is a prover-implementation requirement),
 but it must be checked against the exact R1 transcript layout (R1M).
+
+----------------------------------------------------------------------
+§7  Requirements on the instantiation (R0 and R1)  (PROPOSED)
+----------------------------------------------------------------------
+
+R-pub    P : Challenges K → Prop depends on ch and public data only;
+         the Rust check decides exactly the Lean P (refinement, D28.2).
+R-fresh  every attempt samples fresh masks, eligible noise, salts and
+         attempt secrets, never reused (durable nonce reservation), and
+         the attempt's first absorbed block contains them (salted
+         commitment roots); this gives H_att in §5.
+R-erase  nothing from a discarded attempt is published, logged to the
+         chain, or reused; the only published artefacts are the accepted
+         view or ⊥ (and, optionally, the attempt index).
+R-cap    N fixed in advance; on exhaustion output ⊥ and publish nothing.
+R-same   the ideal game's per-attempt challenge law equals `draw` on
+         uniform per-attempt coins (the D20′.4 decoders), so the
+         simulator's loop and the prover's loop have the same law.
+Generic: nothing in §2–§5 uses the R0 payload. The Lean core (§8) is
+stated for arbitrary coin, tape and view types, then specialised to the
+R0Z JointView/FsStatement types; R1 reuses the core with its own view
+once R1M fixes the R1 model.
