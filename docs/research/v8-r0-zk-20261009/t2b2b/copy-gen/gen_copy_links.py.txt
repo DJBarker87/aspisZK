@@ -1,0 +1,245 @@
+#!/usr/bin/env python3
+"""Generator for the builder model's CopyLinkBalance proof (DESIGN-BUILDER-MODEL §4 a).
+
+Reads R0P/CopyConstants.lean (the 136-link registry and the 14 patterns), checks every
+link against the kind table below (rows, patterns, weights must match the symbolic kind
+lemmas exactly), and emits:
+  R0Z/BuilderModelCopyPat.lean        one pattern-pair lemma per (producer, consumer) pattern pair
+  R0Z/BuilderModelCopyLinksMisc.lean  24 one-off links
+  R0Z/BuilderModelCopyLinksApp.lean   40 append links
+  R0Z/BuilderModelCopyLinksPath.lean  72 path links
+  R0Z/BuilderModelCopyBalance.lean    the List.forall_mem assembly
+Every emitted proof is a named lemma application; `decide` appears only for Fin/Nat bounds
+on literals below 64 and `rfl` only for weight-kind literals and inactive pattern lanes
+(both sides reduce to the literal 0 of a 16-entry constant table).
+Usage: python3 gen_copy_links.py.txt <R0P dir> <R0Z out dir> [--check]
+"""
+import re, sys, os
+
+r0p, outdir = sys.argv[1], sys.argv[2]
+check = '--check' in sys.argv
+src = open(os.path.join(r0p, 'CopyConstants.lean')).read()
+
+# ---- patterns ----
+def vec(s):
+    return [int(x) for x in s.split(',')]
+pats = {}
+for m in re.finditer(r'def copyPattern(\d+) : CopyPattern :=\s*⟨!\[([^\]]*)\], !\[([^\]]*)\], !\[([^\]]*)\]⟩', src):
+    pats[int(m.group(1))] = (vec(m.group(2)), vec(m.group(3)), vec(m.group(4)))
+for k, col in ((6, 0), (7, 10), (8, 1), (9, 2)):   # sparse functional patterns, see their docstrings
+    assert re.search(r'def copyPattern%d : CopyPattern :=\s*⟨fun j => if j = 0 then 1 else 0,\s*fun j => if j = 0 then %d else 0,\s*fun _ => 0⟩' % (k, col), src), k
+    pats[k] = ([1] + [0] * 15, [col] + [0] * 15, [0] * 16)
+assert sorted(pats) == list(range(14)), sorted(pats)
+
+# ---- links ----
+LRE = r'⟨(\d+), (\d), (\d+), ⟨(\d+), (\d), (\d+)⟩, ⟨(\d+), (\d), (\d+)⟩⟩'
+def links_of(name):
+    body = re.search(r'def %s : List CopyLink := \[(.*?)\n\]' % name, src, re.S).group(1)
+    return [tuple(int(x) for x in m) for m in re.findall(LRE, body)]
+before = links_of('copyLinksBeforePositivity')
+after = links_of('copyLinksAfterPositivity')
+pos = []
+for i in range(4):
+    m = re.search(r'def copyPositivityLink%d : CopyLink :=\s*' % i + LRE, src)
+    pos.append(tuple(int(x) for x in m.groups()))
+assert re.search(r'copyLinks : List CopyLink :=\s*copyLinksBeforePositivity \+\+ copyPositivityLinks \+\+ copyLinksAfterPositivity', src)
+assert len(before) == 14 and len(pos) == 4 and len(after) == 118
+
+def lit(L):
+    t, wk, wl, r1, s1, p1, r2, s2, p2 = L
+    return '(⟨%d, %d, %d, ⟨%d, %d, %d⟩, ⟨%d, %d, %d⟩⟩ : CopyLink)' % L
+
+# ---- pattern pairs ----
+def lanes(pa, pb):
+    ka, ca, oa = pats[pa]; kb, cb, ob = pats[pb]
+    out = []
+    for j in range(16):
+        assert (ka[j] == 1) == (kb[j] == 1), (pa, pb, j)
+        if ka[j] == 1:
+            out.append((j, ca[j], oa[j], cb[j], ob[j]))
+    return out
+
+def hyp_type(c1, o1, c2, o2):
+    lhs = 'f %d' % c1 + ('' if o1 == 0 else ' + ((%d : Nat) : K)' % o1)
+    rhs = 'g %d' % c2 + ('' if o2 == 0 else ' + ((%d : Nat) : K)' % o2)
+    return lhs + ' = ' + rhs
+
+def pat_lemma(pa, pb):
+    L = lanes(pa, pb)
+    hs = ' '.join('(h%d : %s)' % (j, hyp_type(c1, o1, c2, o2)) for (j, c1, o1, c2, o2) in L)
+    act = {j: (c1, o1, c2, o2) for (j, c1, o1, c2, o2) in L}
+    s = 'theorem pat_%d_%d (f g : Fin 16 → K) %s :\n' % (pa, pb, hs)
+    s += '    copyPatternTuple (copyPatterns %d) f = copyPatternTuple (copyPatterns %d) g := by\n' % (pa, pb)
+    s += '  funext j\n  fin_cases j\n'
+    for j in range(16):
+        if j in act:
+            c1, o1, c2, o2 = act[j]
+            s += '  · show f %d + ((%d : Nat) : K) = g %d + ((%d : Nat) : K)\n' % (c1, o1, c2, o2)
+            if o1 == 0 and o2 == 0:
+                s += '    rw [h%d]\n' % j
+            else:
+                s += '    rw [h%d, Nat.cast_zero, add_zero]\n' % j
+        else:
+            s += '  · rfl\n'
+    return s
+
+# ---- kind table: returns (producer pattern, consumer pattern, weight prelude, lane proof fn) ----
+def path_rows(l):
+    prev = 3 if l == 0 else (3 + l if l <= 21 else 32 + l)
+    node = 4 + l if l <= 20 else 33 + l
+    base = 912 + 16 * (l // 4) + 1 + 4 * (l % 4)
+    return prev, node, base
+
+HV1 = 'have hv := w1_variant _ _ _ rfl hw\n    '
+HV2 = 'have hv := w2_variant _ _ _ rfl hw\n    '
+
+def classify(L):
+    t, wk, wl, r1, s1, p1, r2, s2, p2 = L
+    # path links
+    for l in range(24):
+        prev, node, base = path_rows(l)
+        if (r1, p1, r2, p2, wk) == (16 * prev + 11, 1, base, 12, 0):
+            return ('path', '', lambda j, c1, o1, c2, o2, l=l: 'pathCur_cell pub w ⟨%d, by decide⟩ ⟨%d, by decide⟩' % (l, j))
+        if (r1, p1, r2, p2, wk) == (base + 1, 1, 16 * node + 12, 1, 0):
+            return ('path', '', lambda j, c1, o1, c2, o2, l=l: 'pathLeft_cell pub w ⟨%d, by decide⟩ ⟨%d, by decide⟩' % (l, j))
+        if (r1, p1, r2, p2, wk) == (base + 1, 13, 16 * node, 10, 0):
+            return ('path', '', lambda j, c1, o1, c2, o2, l=l:
+                    ('pathRight7_cell pub w ⟨%d, by decide⟩' % l) if j == 7 else
+                    ('pathRight_cell pub w ⟨%d, by decide⟩ ⟨%d, by decide⟩ (by decide)' % (l, j)))
+    # append links
+    if wk == 3 and (r1, p1, r2, p2) == (16 * (33 + wl) + 11, 1, 16 * (34 + wl) + 12, 1) and wl < 20:
+        return ('app', 'have hb := appBit_false pub %d (w3_bit _ _ _ rfl hw)\n    ' % wl,
+                lambda j, c1, o1, c2, o2, J=wl: 'appLeft_cell pub w %d (by decide) hb ⟨%d, by decide⟩' % (J, j))
+    if wk == 4 and (r1, p1, r2, p2) == (16 * (33 + wl) + 11, 1, 16 * (34 + wl), 10) and wl < 20:
+        return ('app', 'have hb := appBit_true pub %d (w4_bit _ _ _ rfl hw)\n    ' % wl,
+                lambda j, c1, o1, c2, o2, J=wl:
+                ('appRight7_cell pub w %d (by decide) hb' % J) if j == 7 else
+                ('appRight_cell pub w %d (by decide) hb ⟨%d, by decide⟩ (by decide)' % (J, j)))
+    # one-off links
+    chains = {(27, 32): ('1', '2', 'pre_2 pub w', 0), (43, 48): ('2', '3', 'pre_3 pub w', 0),
+              (411, 416): ('25', '26', 'pre_26 pub w', 0), (443, 448): ('27', '28', 'pre_28 pub w hv', 1),
+              (459, 464): ('28', '29', 'pre_29 pub w hv', 1), (491, 496): ('30', '31', 'pre_31 pub w', 0),
+              (507, 512): ('31', '32', 'pre_32 pub w', 0)}
+    if p1 == 0 and p2 == 0 and (r1, r2) in chains:
+        h, h2, pre, k = chains[(r1, r2)]
+        assert wk == k
+        return ('misc', HV1 if k == 1 else '',
+                lambda j, c1, o1, c2, o2: 'chain_cell pub w %s %s (%s) ⟨%d, by decide⟩' % (h, h2, pre, j))
+    da = {(11, 28): ('0', '1', 'ab_1 pub w', 0), (475, 540): ('29', '33', 'ab_33pt pub w hv', 1),
+          (523, 540): ('32', '33', 'ab_33wd pub w hv', 2)}
+    if p1 == 1 and p2 == 1 and (r1, r2) in da:
+        h, h2, ab, k = da[(r1, r2)]
+        assert wk == k
+        return ('misc', {0: '', 1: HV1, 2: HV2}[k],
+                lambda j, c1, o1, c2, o2: 'da_cell pub w %s %s (%s) ⟨%d, by decide⟩' % (h, h2, ab, j))
+    if (r1, p1, r2, p2, wk) == (12, 1, 412, 1, 0):
+        return ('misc', '', lambda j, c1, o1, c2, o2:
+                'aa_cell pub w 0 25 ⟨%d, by decide⟩ ⟨%d, by decide⟩ (e480 pub w ⟨%d, by decide⟩)' % (c1, c2, j))
+    if (r1, p1, r2, p2, wk) == (44, 2, 428, 3, 0):
+        return ('misc', '', lambda j, c1, o1, c2, o2:
+                'aa_cell pub w 2 26 ⟨%d, by decide⟩ ⟨%d, by decide⟩ (e481 pub w ⟨%d, by decide⟩)' % (c1, c2, c2))
+    if (r1, p1, r2, p2, wk) == (60, 4, 428, 5, 0):
+        return ('misc', '', lambda j, c1, o1, c2, o2:
+                'aa_cell pub w 3 26 ⟨%d, by decide⟩ ⟨%d, by decide⟩ (e482 pub w ⟨%d, by decide⟩)' % (c1, c2, c1))
+    single = {(44, 6, 1008, 7, 0): 'v483 pub w', (460, 6, 1010, 7, 1): 'v484 pub w hv',
+              (508, 6, 1012, 7, 0): 'v485 pub w', (1008, 7, 1014, 6, 0): 'p486 pub w',
+              (1010, 7, 1014, 8, 0): 'p487 pub w', (1012, 7, 1015, 8, 0): 'p488 pub w',
+              (1014, 9, 1015, 6, 0): 'p489 pub w', (913, 6, 1017, 7, 0): 'o491 pub w'}
+    key = (r1, p1, r2, p2, wk)
+    if key in single:
+        return ('misc', HV1 if wk == 1 else '', lambda j, c1, o1, c2, o2, n=single[key]: n)
+    if key == (64, 10, 1017, 11, 0):
+        return ('misc', '', lambda j, c1, o1, c2, o2:
+                'o490_7 pub w hR' if j == 7 else 'o490 pub w hR ⟨%d, by decide⟩ (by decide)' % j)
+    if key == (523, 1, 1018, 11, 1):
+        return ('misc', HV1, lambda j, c1, o1, c2, o2: 'o492 pub w hv ⟨%d, by decide⟩' % j)
+    if key == (1018, 11, 528, 10, 0):
+        return ('misc', '', lambda j, c1, o1, c2, o2:
+                'o495_7 pub w' if j == 7 else 'o495 pub w ⟨%d, by decide⟩ (by decide)' % j)
+    raise SystemExit('unclassified link %r' % (L,))
+
+ALL = before + pos + after
+kinds = {}
+pairs = set()
+for L in ALL:
+    kind, pre, lane = classify(L)
+    kinds[L] = (kind, pre, lane)
+    pairs.add((L[5], L[8]))
+count = {}
+for L in ALL:
+    count[kinds[L][0]] = count.get(kinds[L][0], 0) + 1
+print('links', len(ALL), count, 'pattern pairs', sorted(pairs))
+assert count == {'misc': 24, 'app': 40, 'path': 72}
+if check:
+    sys.exit(0)
+
+HEAD = '''set_option autoImplicit false
+noncomputable section
+
+namespace R0Z.BuilderModel
+open R0P
+
+variable {K : Type} [Field K]
+'''
+
+def link_thm(L):
+    kind, pre, lane = kinds[L]
+    t, wk, wl, r1, s1, p1, r2, s2, p2 = L
+    A = 'buildModel pub w'
+    s = 'theorem link_%d (pub : Public K) (w : ModelWitness K) [CharP K 0x7fffffff]\n' % t
+    s += '    (hR : PairRight pub w) :\n'
+    s += '    copyLinkWeight (K := K) %s pub.nextPairIndex pub.variant ≠ 0 →\n' % lit(L)
+    s += '      copyProducerTuple (%s) %s = copyConsumerTuple (%s) %s := by\n' % (A, lit(L), A, lit(L))
+    s += '  intro hw\n  exact\n    '
+    s += pre
+    args = ' '.join('(%s)' % lane(j, c1, o1, c2, o2) for (j, c1, o1, c2, o2) in lanes(p1, p2))
+    s += 'link_of _ _ (pat_%d_%d (rv (%s) %d) (rv (%s) %d) %s)\n\n' % (p1, p2, A, r1, A, r2, args)
+    return s
+
+def write(name, imports, doc, body):
+    with open(os.path.join(outdir, name + '.lean'), 'w') as f:
+        f.write(''.join('import %s\n' % i for i in imports))
+        f.write('\n/-! %s\nGenerated by t2b2b/copy-gen/gen_copy_links.py.txt; do not edit. -/\n' % doc)
+        f.write(HEAD)
+        f.write(body)
+        f.write('end R0Z.BuilderModel\n')
+
+pat_body = '\n'.join(pat_lemma(a, b) for (a, b) in sorted(pairs))
+pat_body += '\n' + ''.join('#print axioms pat_%d_%d\n' % ab for ab in sorted(pairs))
+write('BuilderModelCopyPat', ['R0Z.BuilderModelCopyMisc'],
+      'Pattern-pair lemmas: equality of two endpoint pattern tuples from lane equations.', pat_body)
+
+for kind, name in (('misc', 'Misc'), ('app', 'App'), ('path', 'Path')):
+    sel = [L for L in ALL if kinds[L][0] == kind]
+    body = 'attribute [local irreducible] buildModel\n\n' + ''.join(link_thm(L) for L in sel)
+    body += ''.join('#print axioms link_%d\n' % L[0] for L in sel)
+    write('BuilderModelCopyLinks' + name, ['R0Z.BuilderModelCopyPat'],
+          'Copy links of kind %s, one theorem per link.' % kind, body)
+
+def nest(ls):
+    s = 'fun _ h => by simp at h'
+    for L in reversed(ls):
+        s = 'List.forall_mem_cons.2 ⟨link_%d pub w hR, %s⟩' % (L[0], s)
+    return s
+
+P = ('(fun link : CopyLink => copyLinkWeight (K := K) link pub.nextPairIndex pub.variant ≠ 0 →\n'
+     '      copyProducerTuple (buildModel pub w) link = copyConsumerTuple (buildModel pub w) link)')
+bal = ''
+for nm, ls in (('copyLinksBeforePositivity', before), ('copyPositivityLinks', pos), ('copyLinksAfterPositivity', after)):
+    bal += 'theorem ok_%s (pub : Public K) (w : ModelWitness K) [CharP K 0x7fffffff]\n' % nm
+    bal += '    (hR : PairRight pub w) : ∀ link ∈ %s, %s link :=\n  %s\n\n' % (nm, P, nest(ls))
+bal += '''/-- CopyLinkBalance of the builder model: all 136 links, under PairRight and
+characteristic 2^31−1 (the tweak offset 1051521018 = p − 0x41531005). -/
+theorem balance_model (pub : Public K) (w : ModelWitness K) [CharP K 0x7fffffff]
+    (hR : PairRight pub w) : CopyLinkBalance pub (buildModel pub w) :=
+  List.forall_mem_append.2 ⟨List.forall_mem_append.2 ⟨ok_copyLinksBeforePositivity pub w hR,
+    ok_copyPositivityLinks pub w hR⟩, ok_copyLinksAfterPositivity pub w hR⟩
+
+#print axioms ok_copyLinksBeforePositivity
+#print axioms ok_copyPositivityLinks
+#print axioms ok_copyLinksAfterPositivity
+#print axioms balance_model
+'''
+write('BuilderModelCopyBalance', ['R0Z.BuilderModelCopyLinksMisc', 'R0Z.BuilderModelCopyLinksApp',
+      'R0Z.BuilderModelCopyLinksPath'], 'CopyLinkBalance of buildModel, assembled over copyLinks.', bal)
+print('written')
