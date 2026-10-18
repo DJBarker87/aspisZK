@@ -13,3 +13,39 @@ axioms audited (evidence in zf1/abort-evidence.json).
 §6  Why the eprint 2023/245 problem does not arise here
 §7  Requirements on the instantiation (R0 and R1)
 §8  Lean module R0Z/FsAbort.lean: statements and status
+
+----------------------------------------------------------------------
+§1  Objects already in the tree
+----------------------------------------------------------------------
+
+R0Z/StatisticalDistance.lean: `mean f = (∑ r, f r)/card R` (uniform finite
+tapes), `law`, `EqualLaws f g := ∀ v, law f v = law g v`.
+R0Z/LawTransport.lean: `mean_eq_of_equalLaws` (equal laws ⇒ equal means of
+any test), `mean_product` (mean over C × R = mean over C of mean over R).
+R0Z/JointView.lean: `Tape K F := AffTape K F × EligibleNoise K F`;
+`view h B outputs x w ch t`; `simulator h B outputs x hx ch :=
+view h B outputs x (Classical.choose hx) ch`.
+R0Z/Shift.lean:480: `HVZK_on P h B outputs x : ∀ hx w ch, P ch →
+h.public w = x.1 → EqualLaws (view … w ch) (simulator … hx ch)`, with
+`P : Challenges K → Prop` bound before w (so P cannot depend on the
+witness — the type enforces D29's "public predicate").
+R0Z/FsStatement.lean: `ROMView` (disclosed view + observer oracle log);
+`FSExperiments` (abstract `real`, `ideal`, `observe`); `ZK_FS h B outputs fs
+x ε := ∀ hx adv w, h.public w = x.1 → |mean realTest − mean idealTest| ≤ ε`;
+`ROMBridge` (Coins, `draw : Adv → x → Coins → Challenges`, `extend : Adv →
+x → Coins → View → ROMView`); `middleReal/middleIdeal` over
+`bridge.Coins × Tape`; `ROMReductionWith bridge x ε_real ε_ideal`.
+R0Z/FsGood.lean: `badMass P bridge adv x := mean (coin ↦ if P (draw coin)
+then 0 else 1)`; `middle_means_close` (|middleReal − middleIdeal| ≤
+badMass P); `zkfs_of_hvzk_on_bridge` (error ε_real + ε_ideal + ε_bad).
+
+Where badMass comes from: in the one-shot middle experiments the published
+view is taken at EVERY drawn challenge, including ¬P ones, on which
+HVZK_on says nothing. Under D29 the honest prover never publishes a ¬P
+view, so in the retrying middle experiments every published view is at a
+P-challenge, and the ¬P coins only steer the attempt index.
+
+Important consequence of the abstract interface: `FSExperiments.real/ideal`
+are data. The retrying real game and the rejection-sampling ideal game are
+just another `fs`; `ZK_FS` itself needs no change. What changes is the
+middle pair (the bridge) and therefore the reduction certificate.
