@@ -36,10 +36,16 @@ theorem source_success (weights : Slice field.QM31) (values : Slice U32)
   let iter0 := initial (Slice.len weights)
   have hstart0 : iter0.iter.start.val = 0 := rfl
   have hend0 : iter0.iter.end.val = 7 := by change (Slice.len weights).val = 7; rw [hwlen']; rfl
-  have hplus0 : UScalar.add iter0.iter.start 4#usize = .ok 4#usize := by decide
+  have hiter0 : iter0.iter.start = 0#usize := UScalar.eq_of_val_eq hstart0
+  have hsize4 : 8 < 2 ^ System.Platform.numBits := by
+    cases System.Platform.numBits_eq <;> simp_all
+  have hsize4small : 4 < 2 ^ System.Platform.numBits := by omega
+  have hplus0 : UScalar.add iter0.iter.start 4#usize = .ok 4#usize := by
+    rw [hiter0]
+    simp [UScalar.add, UScalar.tryMk, UScalar.tryMkOpt, UScalar.check_bounds, hsize4, hsize4small]
   have hmin0 : core.cmp.min core.cmp.OrdUsize 4#usize (Slice.len weights) = .ok 4#usize := by
     rw [hwlen']
-    decide
+    simp [core.cmp.min, core.cmp.OrdUsize, core.cmp.impls.OrdUsize.min]
   obtain ⟨iter1,sums1,hrun0,hstart1,hend1,hstep1,hbound1,hmodel1⟩ :=
     AspisR1.PoseidonM31DotOuterStep.source_advance iter0 weights values zero 4#usize 4#usize 4 1
       (by rfl) (by rw [hstart0,hend0]; decide) hplus0 hmin0
@@ -48,10 +54,12 @@ theorem source_success (weights : Slice field.QM31) (values : Slice U32)
   have hstart1' : iter1.iter.start.val = 4 := by rw [hstart1,hstart0,hend0]; decide
   have hend1' : iter1.iter.end.val = 7 := by rw [hend1]; exact hend0
   have hstart1eq : iter1.iter.start = 4#usize := UScalar.eq_of_val_eq hstart1'
-  have hplus1 : UScalar.add iter1.iter.start 4#usize = .ok 8#usize := by rw [hstart1eq]; decide
+  have hplus1 : UScalar.add iter1.iter.start 4#usize = .ok 8#usize := by
+    rw [hstart1eq]
+    simp [UScalar.add, UScalar.tryMk, UScalar.tryMkOpt, UScalar.check_bounds, hsize4, hsize4small]
   have hmin1 : core.cmp.min core.cmp.OrdUsize 8#usize (Slice.len weights) = .ok 7#usize := by
     rw [hwlen']
-    decide
+    simp [core.cmp.min, core.cmp.OrdUsize, core.cmp.impls.OrdUsize.min]
   obtain ⟨iter2,sums2,hrun1,hstart2,hend2,hstep2,hbound2,hmodel2⟩ :=
     AspisR1.PoseidonM31DotOuterStep.source_advance iter1 weights values sums1 8#usize 7#usize 3 2
       hstep1 (by rw [hstart1',hend1']; decide) hplus1 hmin1

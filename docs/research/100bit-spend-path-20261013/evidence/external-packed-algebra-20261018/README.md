@@ -1,0 +1,9 @@
+# External packed source-coordinate algebra
+
+Two focused Lean 4.32 modules passed with nine standard-only axiom reports. `PoseidonExternalPackedAlgebra` handles the exact source-order natural subtraction formulas with the `5B`, `B`, and `2B` offsets. Under each row limb < B and B = 0 in M31, decoding those formulas gives literal tower packing of the four row values. It derives the 8B output bound, the canonical-input 7P local-row bound, and the packed Mat4 interpretation by reusing maintained `raw_rows_decode_eq_poseidonMat4`. Coefficients and tower-weight formulas correspond to the repository's earlier `V5CuArithmeticEquivalences` algebra; existing exact tower basis definitions are imported. Actual U64 execution remains the separate source consumer.
+
+`PoseidonExternalPackedModel` keeps Mat4 opaque and proves that packing an existing R0P external-layer group equals its packed local row plus the ordered sum of all four packed locals. It includes the existing R0P.pack4 adapter. No injectivity or basis independence is required or claimed by these linearity lemmas.
+
+The accepted runs took 23.88 seconds / 3,237,281,792 bytes peak RSS and 3.10 seconds / 2,820,063,232 bytes peak RSS, both process swap count zero. Receipts record exact source revision, compiler, source/import object hashes, command, LEAN_PATH, observed aggregate RSS and system swap observations. The runner limits Lean to -j1/-M4400, aborts its own job above 8 GiB aggregate Lean RSS or after 300 seconds, and performs no dependency build.
+
+Rejected v1 is retained: Nat.sub_sub produced a right-associated negative sum while the bound lemma was left-associated. V2 changes that one bound statement to match the actual symbolic term. It does not raise resource caps or normalize a concrete recurrence. The complete actual packed routine, full source/runtime correspondence and end-to-end soundness/privacy are still open.

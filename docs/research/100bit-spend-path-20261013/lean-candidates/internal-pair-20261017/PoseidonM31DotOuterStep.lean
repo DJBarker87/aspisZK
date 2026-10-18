@@ -42,6 +42,16 @@ theorem source_advance (iter : Iter) (weights : Slice field.QM31) (values : Slic
     AspisR1.PoseidonM31DotReduceLoop.source_success sums raw n hn hs
   refine ⟨next,sums1,?_,hstart,hend,hstep1,hbound,?_⟩
   · rw [AspisR1.PoseidonM31DotOuterSource.source_loop_eq,hnext]
+    change (do
+      let plus ← UScalar.add iter.iter.start 4#usize
+      let last ← core.cmp.min core.cmp.OrdUsize plus (Slice.len weights)
+      let raw ← field.qm31_m31_dot_loop1_loop0
+        { start := iter.iter.start, «end» := last } weights values
+        PoseidonInternalAccumulateState.zero
+      let sums1 ← field.qm31_m31_dot_loop1_loop1
+        { start := 0#usize, «end» := 4#usize } sums raw
+      field.qm31_m31_dot_loop1 next weights values sums1) =
+      field.qm31_m31_dot_loop1 next weights values sums1
     simp only [hplus,hmin,hchunk,hreduce,bind_tc_ok]
   · have hdecode : rawDecode raw = decodeWords (remaining weights values iter.iter.start.val fuel) :=
       congrArg decodeWords (funext hraw)
