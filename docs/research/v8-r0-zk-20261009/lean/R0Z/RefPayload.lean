@@ -64,7 +64,8 @@ theorem roundPoly_msCell (j : Fin 10) (s : K) : Chain.roundPoly j (msCell (Bat :
   simp only [msCell_semanticCoeff, monomial_zero_right, Finset.sum_const_zero]
 
 theorem iota_msCell (s : K) : HonestValid.iota (msCell (Bat := Bat) s) = -s := by
-  rw [HonestValid.iota_apply, roundPoly_msCell, msCell_maskSum, eval_zero, add_zero, zero_sub]
+  simp only [HonestValid.iota_apply, roundPoly_msCell, msCell_maskSum, eval_zero, zero_add,
+    zero_sub]
 
 theorem iota_refPayload (pub : Public K) (B : PackBasis F) (ch : Challenges K) :
     HonestValid.iota (refPayload (Bat := Bat) pub B ch) = 0 := by
