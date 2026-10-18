@@ -4901,3 +4901,46 @@ files, with its manifest committed.
 
 **D32.2 Next.** R1-2, the R1 instance `R1Bat` and its `BatchedLayer`, is
 unblocked. The host overlay directory `$T/r1-0` may be deleted.
+
+### Lead acceptance of R1-1 and J4-R1(a) (2026-10-18); D33: line_identity proved
+
+The worker commits fa68ccb85, 1f4bb35e2, 2cee2f9e8 and cf23977a1 are
+cherry-picked. Attempts used: 3620–3631. Evidence is in
+`t2b2b/evidence-R1-1-J4R1a.json`. The mirror manifest is
+`t2b2b/R1-1-MIRROR.json` (spend-path tip e38279522).
+
+**D33.1 J4-R1(a) `R1Z/BatchedAlgebra.lean` is accepted.** Host 3628: exit 0.
+The SHA `f4e7aa79…` matches. All 13 axiom lines are standard (lead-verified).
+The file imports only R1Mirror.FoldCoefficientBridge and BaseRepeatedLift.
+It proves `s2b_identity`, `s1_identity`, `s2a_identity` (for any seven
+functionals combined with κ powers), `circ_identity` with
+`circ_zero_of_fibre_zero`, and **`line_identity`**. The last one, the
+design's flagged risk, is the second fold of the four stored children
+equalling `secondLinear (coefficientFoldLayer 64 α₁ m) v` for every m and
+α₁. `line_layer_identity` is the whole-layer version.
+
+The public inverse table is `lineInverse = ((2x)⁻¹, −(2y)⁻¹, (2z)⁻¹)`. This
+is the same normalisation Z9b found independently: relR1 annihilates
+bat(ker own) only with this table. The two findings agree.
+
+Open refinement items:
+- `storedFirstLineX18` versus the Rust `line_node`;
+- `lineInverse` versus `QueryGeometry`.
+
+**D33.2 R1-1 mirror.** Of 12 files mirrored unchanged except import lines
+(R1Mirror.*), 9 are green. Line18Geometry fails under this workspace's
+-M7000 cap (attempt 3625: kernel out of memory on 5 theorems, 7.17 GB) and
+contains `set_option maxRecDepth 20000`. ConcreteProjection and
+SecondFoldRestoration import it. These three are NOT accepted here, and
+nothing accepted depends on them. They are not to be rerun unchanged or
+under a raised cap.
+
+**D33.3 Interference.** Attempt 3623 launched beside the R1 worker-C serial
+runner, whose guard killed its own attempt (selected-sigma …Core-5, exit
+−9). After that the worker gated on a fully idle host. This is the third
+recorded launch-gating lapse (D25.2, D26.3). The rule stands: gate and
+launch are separate commands, and any Lean process on the host means wait.
+
+**D33.4 Next.** R1-2 (`R1Z/Batched.lean`, the R1 instance) then J4-R1(b)
+(relR1, B0R1, `bat_L_mem_B0R1`). Both are now unblocked: R1-0 is D32 and
+the algebra is D33.1.
