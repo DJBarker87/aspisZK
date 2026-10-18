@@ -17,3 +17,115 @@ Sections
   §6  Aeneas extraction plan (checker only)
   §7  Open items and a rejected-for-now option (randomised checking)
 
+§0  Shape of the result and notation
+------------------------------------
+Producer and checker (D38.5).  The producer is any code (the eliminating
+z9b/z9c code); it is never proved.  The checker is a pure function
+  check : Challenges -> Cert -> Bool
+that recomputes the source vectors from the challenges (the §1.1 row formulas
+of DESIGN-R1-P) and verifies the certificate by matrix-vector products and
+equality tests over F = M31.  It performs no elimination and no division
+except the scalar inverses that HalfOK needs (and even that is a supplied
+inverse, checked by one multiplication).
+Target statement (D38.5, D45 R-pub):
+  check_sound : check ch c = true -> P_R1 AspisR1.rowEquiv B hB (decode ch)
+with only soundness required; every degenerate case fails closed.
+Coordinates.  Every Lean space in P_R1 is a K-space (K = WideExact) or a
+K4-space viewed over F.  The checker works in F-coordinates:
+  own   per lane l, F^112 (mask-only lanes m0..m9) or F^376 (G, D);
+        stacked over the 12 lanes, F^1872 (block-diagonal: a source of lane l
+        has zero own coordinates outside block l);
+  round F^1084 (the Z4c round coordinates; 271 QM31 values);
+  bat   F^1328 (8 limbs × (7 round0 + 7 round1 + nf opened folded cells +
+        64 final), nf = 4P, P = number of distinct parents; 1328 at P = 22).
+        The probe's extra "inactive" cell (8 limbs) is NOT an R1Bat cell and is
+        dropped; R1Bat has no such constructor (Batched.lean:33);
+  obs   F^112 (a C1 lane), F^376 (the H1 lane).
+For each space a coordinate embedding iota_X : F^n ->_F (Lean space) is
+fixed; the row-formula premises (§2.3) say that every source vector the
+checker computes is the coordinate vector of the Lean map applied to the
+corresponding unit tape, through iota_X.
+Sources.  As in DESIGN-R1-P §1.1 / Lean `balance 0`: for lane l and row r>=1,
+  s = e_r (r copy-active) or e_r - e_0 (r copy-inactive), times the tower
+  basis element x_k (k < 4) for the K4 lanes G, D;
+counts 1,023 per mask-only lane and 4,092 per K4 lane, 18,414 in all.
+For the lifts the sources are those of DESIGN-R1-P §1.5 (Vsem c balanced at
+1023, Ph1 balanced at 0).
+
+§1  Certificate format, conjunct by conjunct
+--------------------------------------------
+All entries are canonical M31 limbs (u32 < 2^31 - 1); indices are u32.  The
+checker rejects any non-canonical limb or out-of-range index (fail closed).
+
+§1.1 HalfOK  (alpha_9 != 1/2 in QM31)                         SPECIFIED
+  Cert: hinv in QM31.  Check: (alpha_9 - 1/2) * hinv == 1.
+  Lean: x * y = 1 -> x != 0 -> alpha_9 != 1/2.  4 limbs.
+
+§1.2 SemK4  (every ch.sem i in K4)                             SPECIFIED
+  Cert: none.  Check: the decoder output for each of the 25 semantic rows has
+  limbs 4..7 equal to zero in the WideExact representation (on R1 the rows are
+  qm31_sample, so this is the decoder's shape and holds by construction).
+  PREMISE (decoder): a WideExact value with zero upper half lies in K4 B hB.
+
+§1.3 QueryCard  (ch.queries.card <= 22)                        SPECIFIED
+  Cert: none.  Check: the decoded query list has length <= 22.
+  Lean: List.toFinset_card_le.  Distinctness is not needed (card <= length).
+  PREMISE (decoder): ch.queries = list.toFinset.
+
+§1.4 QPrime_R1  (ChainT0K4 <= (ker ownMap).map roundMaskMap)   SPECIFIED
+  Two-level preimage certificate.
+  (a) Kernel vectors.  A list of m entries (l, j, P_l-coefficients):
+      lane l, a source index j of lane l, and c in F^{|P_l|} over a pivot list
+      P_l (source indices of lane l, |P_l| <= 112 or 376, stored once per
+      lane).  The kernel vector is k = s_j - sum_p c_p s_p.
+      Check: own_l(s_j) - sum_p c_p own_l(s_p) == 0 in F^112 / F^376.
+      Then rho = round(s_j) - sum_p c_p round(s_p) in F^1084 (computed).
+  (b) Combination matrix Y in F^{1084 x m}.
+      Check: for every i < 1084, sum_j Y[i][j] rho_j == b_i, where b_i is the
+      i-th normalised ChainT0K4 generator computed by the checker from alpha:
+      b_i = normalize_d(e_i) (DESIGN-R1-P §1.3; unit vector plus a correction
+      on the 4 limbs of the terminal coordinate 244, needs alpha_9 != 1/2).
+  The producer keeps only kernel vectors that became pivots of the round
+  image R, so m <= rank R = 1,080; Y is read off the tagged echelon of R.
+  Size: |P| lists + m(|P|+2) + 1084 m entries.
+
+§1.5 BCondG_R1  (B0R1' <= V_G)                                 SPECIFIED
+  (a) Kernel description of B0R1'.  Rel in F^{q x 1328} is the matrix of
+      relR1's limb functionals (8 per K-relation: s2a, s2b, s1, circ u for the
+      queries, line v for the distinct parents) on the read support; it is
+      computed by the checker (it is public and sparse).  Cert: U in
+      F^{r x q}, a pivot list piv in [1328]^r and a free list fr in
+      [1328]^{1328-r}.  Check: E := U * Rel (sparse product) satisfies
+      E[k][piv k'] = [k = k'] and piv, fr partition [1328] (each column is
+      in exactly one list).  No inverse of U is needed: only
+        Rel v = 0  =>  E v = U (Rel v) = 0  =>  v = sum_f v_{fr f} n_f
+      is used, with n_f = e_{fr f} - sum_k E[k][fr f] e_{piv k}.  (The
+      design D38.5 named "echelon form plus inverse"; the inverse would
+      certify ker E <= ker Rel, the direction BCondG does not need.  It is
+      dropped; §2.4 records why this is sound.)
+  (b) V_G preimages, as §1.4 for the single lane G with zero map
+      [own_G ; round] (F^{376+1084}) and target map bat (F^1328):
+      pivot list P_G (|P_G| <= 1460), m_G kernel entries
+      (j, c in F^{|P_G|}) with own_G and round of k zero (checked), beta_j :=
+      bat(k_j) computed, and Y_G in F^{(1328-r) x m_G} with
+      sum_j Y_G[f][j] beta_j == n_f for every free column f.
+  Size at P = 22: r = 376, |fr| = 952, m_G = 952, |P_G| = 1460:
+  U 141k, kernel coefficients 1.39M, Y_G 0.91M entries.
+
+§1.6 C1Lift_c (c < 16) and H1Lift                              SPECIFIED
+  On every measured configuration rank obs(W) is the full coordinate width
+  (112 resp. 376, DESIGN-R1-P §2.1), so the lift is certified by a right
+  inverse.  Cert per lift: a list S of w source indices of Vsem c (resp. Ph1),
+  w = 112 (resp. 376), and Uc in F^{w x w}.
+  Check: O_S * Uc == I_w, where O_S has the obs-columns of the listed sources.
+  Then every t in F^w equals O_S (Uc t), so iota_obs(F^w) <= (Vsem c).map obs.
+  If a configuration ever had rank obs(W) < w the producer emits nothing and
+  the attempt fails closed (false negative, allowed).
+  Size: 16 * (112 + 112^2) + 376 + 376^2 = 343k entries.
+
+§1.7 Total size (estimate, P = 22)
+  QPrime ~1.17M (Y) + <= 0.41M (kernel) ; BCondG ~2.44M ; lifts 0.34M ;
+  about 4.4M limbs = 17.6 MB as raw u32.  DESIGN-R1-P §4.2 estimated
+  50-200 MB for one-level preimages; the two-level form (kernel vectors over
+  a pivot list, then a combination of their images) is what makes it small.
+
