@@ -224,6 +224,65 @@ Expected:
   differential      the producer's own P_R1 verdicts (ranks 1,080, 952/952,
                     112, 376) equal z9b main_r1p's on the same configuration.
 
+§4  Measurements (MEASURED; z9/runs/z9c-f77c7c3d2/)
+--------------------------------------------------
+Host nuc (Intel Core Ultra 7 155H).  Scope aspis-z9c-full-f77c7c3d2:
+MemoryHigh 3G, MemoryMax 4G, MemorySwapMax 0, TasksMax 64; gate OK (no other
+cargo/rustc/release-binary scope; reservation 4 GiB).  Release build
+(opt-level 3, overflow checks on), source revision f77c7c3d2 (z9c.rs sha256
+e2f0b6c8…).  One process per configuration, sequential.  All exit 0, swaps 0,
+cgroup swap peak 0, cgroup memory peak 263.6 MB, scope wall 1:18.7.
+  configuration           P_chk  emit    check  size        peak RSS   ranks
+  A v0 actual γ0 (+teeth) true   12.56s  2.65s  14,227,132B 250,408KiB R 1080, rel 376, V_G 952, G piv 1028
+  A v0 actual γ1          true   12.59s  2.62s  14,227,132B 194,840KiB same
+  J v1 actual γ0          true   11.94s  2.56s  14,359,484B 194,112KiB same
+  A v3 random γ1          true   12.51s  2.64s  14,227,132B 193,684KiB same
+  A v2 coset (P = 8) γ0   true    9.15s  1.58s   9,755,748B 170,052KiB rel 264, V_G 616
+  B v0 actual γ0          false  0.13s   --     --          101,888KiB lift c=0 rank 100 < 112
+  (emit = producer only; check = the checker including its own rebuild of the
+  public data, 0.21-0.24 s; process wall without teeth 11.0-15.4 s.)
+Per part (A v0 γ0): emit lifts 0.12 s, QPrime 6.99 s, BCondG 5.32 s; check
+sources 0.09 s, lifts 0.03 s, QPrime 0.63 s, BCondG 1.67 s.
+Certificate composition (A v0): QPrime Y 1,084 × 1,080 (1.17M), QPrime
+kernel 133,946 limbs (pivot lists + prefix coefficients; 1,080 entries over
+12 lanes), BCondG U 376 × 376, 952 free columns, G entries 952 over 1,028
+G pivots, Y_G 952 × 952, lifts 344,248; total 3,556,783 limbs.
+Teeth (A v0 γ0): 8/8 corruptions rejected, each at its own step:
+  hinv -> HalfOK; QPrime kernel coefficient -> qprime kernel; QPrime Y ->
+  qprime combination; U -> bcond echelon; Y_G -> bcond combination; G kernel
+  coefficient -> bcond G kernel; H1 inverse -> lift inverse; pivot/free swap
+  -> bcond echelon.
+Differential: rank R 1,080, dim V_G = dim B0R1' (952, 616 at P = 8), rank
+obs 112 for all 16 C1 lanes and 376 for H1 equal the z9b main_r1p values in
+DESIGN-R1-P §2.1 on the same configurations.
+Superseded attempts (same scope rules; logs kept): preflight 4067f381a
+(gate failed once on another session's SBF cargo build, then the checker's
+rebuild panicked at z5::set_transport, a process-wide OnceLock); preflight
+f65b15aa4 (the checker rejected the honest certificate: kernel entries carry
+the pivot count at emission time, a prefix of the lane's final list; the
+format was made prefix-based, matching KerEntry.s in Lean).
+§4.1 Against the expectations of §3
+  emit      12.6 s, below the 20-45 s range.  Two reasons: the G lane's
+            [own; round] rank is 1,028, not the 1,460 assumed in §2.2, and
+            the producer stops each echelon as soon as the targets reduce
+            (QPrime at rank 1,080, V_G at 952).  The producer is faster than
+            the z9b R1-P check itself (22.6 s), so emit + check (15.2 s)
+            replaces the 22.6 s check rather than doubling it (D38.2 had
+            estimated 40-50 s).
+  check     2.6 s (1.6 s at P = 8): inside 2-8 s.  The G kernel work is
+            952 × 1,029 × 2,788 = 2.7G multiply-adds, not the 3.9G of §2.2.
+  size      14.2 MB: just below 15-25 MB; 9.8 MB at P = 8 as expected.
+  RSS       170-250 MB: inside 200-500 MB at the low end.
+  verdicts  as expected on A/J.  B: fails closed as expected, but at the
+            first C1 lift (rank obs(Vsem 0) = 100 < 112), before QPrime; the
+            producer stops at the first failing conjunct.  Whether C1Lift
+            itself fails on B is not determined: the right-inverse format of
+            §1.6 needs rank obs(W) = width, and rank obs(Wsem) on B was not
+            computed.  Either way the attempt is rejected (allowed false
+            negative or true negative).
+  teeth     8/8 as expected.
+
+
 §5  Lean: generic soundness (modules R1Z/CertSound, R1Z/CertR1)
 ---------------------------------------------------------------
 §5.1 R1Z/CertSound (PROVED; host attempt 4121, exit 0, 20 axiom lines, all
@@ -291,62 +350,3 @@ Expected:
   No part of (i)-(iii) needs a concrete-row evaluation in Lean: the rf_*
   are identities "column t of the matrix the checker builds = iota^-1 of the
   map on source t", proved for symbolic t from the closed forms.
-
-§4  Measurements (MEASURED; z9/runs/z9c-f77c7c3d2/)
---------------------------------------------------
-Host nuc (Intel Core Ultra 7 155H).  Scope aspis-z9c-full-f77c7c3d2:
-MemoryHigh 3G, MemoryMax 4G, MemorySwapMax 0, TasksMax 64; gate OK (no other
-cargo/rustc/release-binary scope; reservation 4 GiB).  Release build
-(opt-level 3, overflow checks on), source revision f77c7c3d2 (z9c.rs sha256
-e2f0b6c8…).  One process per configuration, sequential.  All exit 0, swaps 0,
-cgroup swap peak 0, cgroup memory peak 263.6 MB, scope wall 1:18.7.
-  configuration           P_chk  emit    check  size        peak RSS   ranks
-  A v0 actual γ0 (+teeth) true   12.56s  2.65s  14,227,132B 250,408KiB R 1080, rel 376, V_G 952, G piv 1028
-  A v0 actual γ1          true   12.59s  2.62s  14,227,132B 194,840KiB same
-  J v1 actual γ0          true   11.94s  2.56s  14,359,484B 194,112KiB same
-  A v3 random γ1          true   12.51s  2.64s  14,227,132B 193,684KiB same
-  A v2 coset (P = 8) γ0   true    9.15s  1.58s   9,755,748B 170,052KiB rel 264, V_G 616
-  B v0 actual γ0          false  0.13s   --     --          101,888KiB lift c=0 rank 100 < 112
-  (emit = producer only; check = the checker including its own rebuild of the
-  public data, 0.21-0.24 s; process wall without teeth 11.0-15.4 s.)
-Per part (A v0 γ0): emit lifts 0.12 s, QPrime 6.99 s, BCondG 5.32 s; check
-sources 0.09 s, lifts 0.03 s, QPrime 0.63 s, BCondG 1.67 s.
-Certificate composition (A v0): QPrime Y 1,084 × 1,080 (1.17M), QPrime
-kernel 133,946 limbs (pivot lists + prefix coefficients; 1,080 entries over
-12 lanes), BCondG U 376 × 376, 952 free columns, G entries 952 over 1,028
-G pivots, Y_G 952 × 952, lifts 344,248; total 3,556,783 limbs.
-Teeth (A v0 γ0): 8/8 corruptions rejected, each at its own step:
-  hinv -> HalfOK; QPrime kernel coefficient -> qprime kernel; QPrime Y ->
-  qprime combination; U -> bcond echelon; Y_G -> bcond combination; G kernel
-  coefficient -> bcond G kernel; H1 inverse -> lift inverse; pivot/free swap
-  -> bcond echelon.
-Differential: rank R 1,080, dim V_G = dim B0R1' (952, 616 at P = 8), rank
-obs 112 for all 16 C1 lanes and 376 for H1 equal the z9b main_r1p values in
-DESIGN-R1-P §2.1 on the same configurations.
-Superseded attempts (same scope rules; logs kept): preflight 4067f381a
-(gate failed once on another session's SBF cargo build, then the checker's
-rebuild panicked at z5::set_transport, a process-wide OnceLock); preflight
-f65b15aa4 (the checker rejected the honest certificate: kernel entries carry
-the pivot count at emission time, a prefix of the lane's final list; the
-format was made prefix-based, matching KerEntry.s in Lean).
-§4.1 Against the expectations of §3
-  emit      12.6 s, below the 20-45 s range.  Two reasons: the G lane's
-            [own; round] rank is 1,028, not the 1,460 assumed in §2.2, and
-            the producer stops each echelon as soon as the targets reduce
-            (QPrime at rank 1,080, V_G at 952).  The producer is faster than
-            the z9b R1-P check itself (22.6 s), so emit + check (15.2 s)
-            replaces the 22.6 s check rather than doubling it (D38.2 had
-            estimated 40-50 s).
-  check     2.6 s (1.6 s at P = 8): inside 2-8 s.  The G kernel work is
-            952 × 1,029 × 2,788 = 2.7G multiply-adds, not the 3.9G of §2.2.
-  size      14.2 MB: just below 15-25 MB; 9.8 MB at P = 8 as expected.
-  RSS       170-250 MB: inside 200-500 MB at the low end.
-  verdicts  as expected on A/J.  B: fails closed as expected, but at the
-            first C1 lift (rank obs(Vsem 0) = 100 < 112), before QPrime; the
-            producer stops at the first failing conjunct.  Whether C1Lift
-            itself fails on B is not determined: the right-inverse format of
-            §1.6 needs rank obs(W) = width, and rank obs(Wsem) on B was not
-            computed.  Either way the attempt is rejected (allowed false
-            negative or true negative).
-  teeth     8/8 as expected.
-
