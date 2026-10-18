@@ -171,18 +171,19 @@ attribute [instance] Coupling.finS Coupling.nonemptyS
 
 variable {K CommitHandle Aux : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+  {Bat : Type} [HonestView.BatchedLayer K Bat]
 
 /-- Per-attempt bridge coins, a cap `N`, and the extension/failure outputs.
 `extend` receives all attempts' coins and the accepted index. -/
-structure AbortBridge (K CommitHandle Aux Adv : Type) [Field K] where
+structure AbortBridge (K CommitHandle Aux Bat Adv : Type) [Field K] where
   Coins : Type
   finiteCoins : Fintype Coins
   nonemptyCoins : Nonempty Coins
   N : Nat
   draw : Adv → Statement K CommitHandle → Coins → Challenges K
   extend : Adv → Statement K CommitHandle → (Fin N → Coins) → Fin N →
-    View K CommitHandle Aux → ROMView K CommitHandle Aux
-  fail : Adv → Statement K CommitHandle → (Fin N → Coins) → ROMView K CommitHandle Aux
+    View K CommitHandle Aux Bat → ROMView K CommitHandle Aux Bat
+  fail : Adv → Statement K CommitHandle → (Fin N → Coins) → ROMView K CommitHandle Aux Bat
 
 attribute [instance] AbortBridge.finiteCoins AbortBridge.nonemptyCoins
 
@@ -192,8 +193,8 @@ instance tapeFintype : Fintype (Tape K F) := inferInstance
 
 def middleRealAbort (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
-    (ab : AbortBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
+    (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary)
     (x : Statement K CommitHandle) (w : h.Instance) :
     (Fin ab.N → ab.Coins) × (Fin ab.N → Tape K F) → ℚ :=
   retryTest ab.N (fun coin => P (ab.draw adv x coin))
@@ -203,8 +204,8 @@ def middleRealAbort (P : Challenges K → Prop) (h : HonestProver K) (B : PackBa
 
 def middleIdealAbort (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
-    (ab : AbortBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
+    (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary)
     (x : Statement K CommitHandle) (hx : InLanguage h x) :
     (Fin ab.N → ab.Coins) × (Fin ab.N → Tape K F) → ℚ :=
   retryTest ab.N (fun coin => P (ab.draw adv x coin))
@@ -215,10 +216,10 @@ def middleIdealAbort (P : Challenges K → Prop) (h : HonestProver K) (B : PackB
 /-- The middle experiments agree exactly under `HVZK_on P`. -/
 theorem middleAbort_means_eq (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
-    (ab : AbortBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
+    (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary)
     (x : Statement K CommitHandle) (hx : InLanguage h x) (w : h.Instance)
-    (hw : h.public w = x.1) (hh : HVZK_on P h B outputs x) :
+    (hw : h.public w = x.1) (hh : HVZK_on (Bat := Bat) P h B outputs x) :
     mean (middleRealAbort P h B outputs fs ab adv x w) =
       mean (middleIdealAbort P h B outputs fs ab adv x hx) := by
   haveI : Nonempty (Tape K F) := ⟨(0, 0)⟩
@@ -227,10 +228,10 @@ theorem middleAbort_means_eq (P : Challenges K → Prop) (h : HonestProver K) (B
 /-- The abort-aware reduction certificate for a specified abort bridge. -/
 def AbortReductionWith (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
     [Fintype fs.RealRand] [Nonempty fs.RealRand]
     [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
-    (ab : AbortBridge K CommitHandle Aux fs.Adversary)
+    (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary)
     (x : Statement K CommitHandle) (ε_real ε_ideal : ℚ) : Prop :=
   0 ≤ ε_real ∧ 0 ≤ ε_ideal ∧
   ∀ (hx : InLanguage h x) (adv : fs.Adversary) (w : h.Instance), h.public w = x.1 →
@@ -242,11 +243,11 @@ def AbortReductionWith (P : Challenges K → Prop) (h : HonestProver K) (B : Pac
 /-- Theorem A: HVZK on `P` plus the abort-aware reduction; no bad-mass term. -/
 theorem zkfs_of_hvzk_on_abort (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
     [Fintype fs.RealRand] [Nonempty fs.RealRand]
     [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
-    (x : Statement K CommitHandle) (hh : HVZK_on P h B outputs x)
-    (ab : AbortBridge K CommitHandle Aux fs.Adversary) (ε_real ε_ideal : ℚ)
+    (x : Statement K CommitHandle) (hh : HVZK_on (Bat := Bat) P h B outputs x)
+    (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (ε_real ε_ideal : ℚ)
     (hr : AbortReductionWith P h B outputs fs ab x ε_real ε_ideal) :
     ZK_FS h B outputs fs x (ε_real + ε_ideal) := by
   intro hx adv w hw
@@ -259,18 +260,18 @@ theorem zkfs_of_hvzk_on_abort (P : Challenges K → Prop) (h : HonestProver K) (
 theorem hvzk_on_mono (P Q : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
     (x : Statement K CommitHandle) (hPQ : ∀ ch, P ch → Q ch)
-    (hq : HVZK_on Q h B outputs x) : HVZK_on P h B outputs x :=
+    (hq : HVZK_on (Bat := Bat) Q h B outputs x) : HVZK_on (Bat := Bat) P h B outputs x :=
   fun hx w ch hp hw => hq hx w ch (hPQ ch hp) hw
 
 /-- Mask image on `Good`, rejection on any `P` implying `Good`. -/
-theorem zkfs_of_maskImageOn_abort (P : Challenges K → Prop) (h : HonestProver K)
+theorem zkfs_of_maskImageOn_abort [Fintype Bat] (P : Challenges K → Prop) (h : HonestProver K)
     (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
     [Fintype fs.RealRand] [Nonempty fs.RealRand]
     [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
     (x : Statement K CommitHandle) (hPG : ∀ ch, P ch → Good ch)
-    (ab : AbortBridge K CommitHandle Aux fs.Adversary) (ε_real ε_ideal : ℚ) :
-    MaskImageOn Good h B x → AbortReductionWith P h B outputs fs ab x ε_real ε_ideal →
+    (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (ε_real ε_ideal : ℚ) :
+    MaskImageOn (Bat := Bat) Good h B x → AbortReductionWith P h B outputs fs ab x ε_real ε_ideal →
     ZK_FS h B outputs fs x (ε_real + ε_ideal) :=
   fun hm hr => zkfs_of_hvzk_on_abort P h B outputs fs x
     (hvzk_on_mono P Good h B outputs x hPG (hvzk_on_good h B outputs x hm)) ab ε_real ε_ideal hr
@@ -281,8 +282,8 @@ theorem zkfs_of_maskImageOn_abort (P : Challenges K → Prop) (h : HonestProver 
 collision `Coll`, the real retrying game and the middle game agree. -/
 def RealAbortCoupling (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.RealRand]
-    (ab : AbortBridge K CommitHandle Aux fs.Adversary)
+    (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.RealRand]
+    (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary)
     (x : Statement K CommitHandle) (ε_hit ε_coll : ℚ) : Prop :=
   ∀ (adv : fs.Adversary) (w : h.Instance), h.public w = x.1 →
     ∃ (cp : Coupling fs.RealRand ((Fin ab.N → ab.Coins) × (Fin ab.N → Tape K F)))
@@ -296,8 +297,8 @@ def RealAbortCoupling (P : Challenges K → Prop) (h : HonestProver K) (B : Pack
 the rejection-sampling ideal game agree. -/
 def IdealAbortCoupling (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F) [Fintype fs.IdealRand]
-    (ab : AbortBridge K CommitHandle Aux fs.Adversary)
+    (fs : FSExperiments K CommitHandle Aux Bat F) [Fintype fs.IdealRand]
+    (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary)
     (x : Statement K CommitHandle) (ε_prog : ℚ) : Prop :=
   ∀ (hx : InLanguage h x) (adv : fs.Adversary),
     ∃ (cp : Coupling fs.IdealRand ((Fin ab.N → ab.Coins) × (Fin ab.N → Tape K F)))
@@ -309,10 +310,10 @@ def IdealAbortCoupling (P : Challenges K → Prop) (h : HonestProver K) (B : Pac
 
 theorem abortReduction_of_couplings (P : Challenges K → Prop) (h : HonestProver K)
     (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
     [Fintype fs.RealRand] [Nonempty fs.RealRand]
     [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
-    (ab : AbortBridge K CommitHandle Aux fs.Adversary)
+    (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary)
     (x : Statement K CommitHandle) (ε_hit ε_coll ε_prog : ℚ)
     (h0 : 0 ≤ ε_hit) (h1 : 0 ≤ ε_coll) (h2 : 0 ≤ ε_prog)
     (hreal : RealAbortCoupling P h B outputs fs ab x ε_hit ε_coll)
@@ -352,11 +353,11 @@ theorem abortReduction_of_couplings (P : Challenges K → Prop) (h : HonestProve
 named oracle-programming terms. No `badMass P` and no failure-exit term. -/
 theorem zkfs_of_hvzk_on_abort_terms (P : Challenges K → Prop) (h : HonestProver K)
     (B : PackBasis F) (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
     [Fintype fs.RealRand] [Nonempty fs.RealRand]
     [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
-    (x : Statement K CommitHandle) (hh : HVZK_on P h B outputs x)
-    (ab : AbortBridge K CommitHandle Aux fs.Adversary) (ε_hit ε_coll ε_prog : ℚ)
+    (x : Statement K CommitHandle) (hh : HVZK_on (Bat := Bat) P h B outputs x)
+    (ab : AbortBridge K CommitHandle Aux Bat fs.Adversary) (ε_hit ε_coll ε_prog : ℚ)
     (h0 : 0 ≤ ε_hit) (h1 : 0 ≤ ε_coll) (h2 : 0 ≤ ε_prog)
     (hreal : RealAbortCoupling P h B outputs fs ab x ε_hit ε_coll)
     (hideal : IdealAbortCoupling P h B outputs fs ab x ε_prog) :
