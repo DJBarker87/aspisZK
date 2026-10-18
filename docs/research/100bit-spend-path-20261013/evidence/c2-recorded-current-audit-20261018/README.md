@@ -1,5 +1,16 @@
 # Current recorded-experiment reverse-closure audit — review only
 
+**Hash correction:** all original49 definition-body hash labels are superseded.
+The generated-declaration parser used in the first proposal ignored following
+handwritten theorem commands;8 of49 hashes included trailing proof text.
+`superseded-proposal.json.gz` preserves the original proposal bytes/hash, and
+`proposal.json.hash_audit_correction` records each old/new comparison. The new
+model command parser separately records exact declaration tokens, qualified
+namespace, active namespace/section syntax and ordered context-command history.
+All49 are re-audited; inferred binders/instances and elaboration equivalence
+remain unchecked. Graph/count/no-run conclusions are unchanged, and no theorem
+or release result was accepted on the preliminary proposal hashes.
+
 The unchanged `C2RecordedExperimentConstruction` is one final target containing
 four theorem declarations and four axioms prints. Against C's coherent current
 selected-read work, it needs295 additional candidate modules,109 current-base
@@ -33,8 +44,8 @@ Two import families cause most of the expansion:
   descent proofs although the four recorded results use construction/replay
   definitions and equality lemmas.
 
-`proposal.json` gives a concrete **review-only** core proposal:49 exact
-qualified declaration signatures and body hashes across12 source modules.
+`proposal.json` gives a concrete **review-only** core proposal:49 corrected
+qualified declaration command/signature/context hashes across12 source modules.
 No proposed Lean file has been generated. The intended split moves declarations
 with identical names, parameter/instance contexts, attributes, statements and
 bodies into an imported core; the old module retains its proof layer. Full
@@ -71,5 +82,5 @@ exit, wall/RSS/swap/revision/axioms evidence. The actual Rust Backend/build
 owned-witness frontier, actual complete experiment witness, packing, salt paths,
 custody and checkpoints remain separate and open.
 
-`check-recorded-current-audit.py` verifies this read-only packet and49 selected
-declaration hashes; its PASS does not mean the model or proposed cores compile.
+`check-recorded-current-audit.py` verifies this read-only packet and49 corrected
+declaration command/context hashes; its PASS does not mean the model or proposed cores compile.
