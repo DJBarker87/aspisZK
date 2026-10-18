@@ -286,3 +286,114 @@ The proof uses the witness in two places, and only the first must go:
   check. A prototype timing was not run: with no linear algebra to
   prototype, z9b's elimination code does not apply. A timing of steps 3–5
   belongs to the Rust refinement item G-sim (§7).
+
+§5  The theorem that replaces simV
+-----------------------------------
+These statements were checked by hand against the base definitions:
+JointView.Tape/View, D12.A, Shift.shift/dir/fOrig, PayloadSplit.
+roundInclusion/originalRounds, R0P.Sumcheck.bsumB/ofBool, PayloadCell
+(HonestView.lean:59), FsAbort.AbortBridge (fields N, draw, extend, fail),
+FsStatement.FSExperiments (`ideal` takes any
+`Challenges K → Tape K F → View`), HvzkV, ModelsVR1, PrivacyR1.
+
+§5.1 Generic in Bat (R0Z/RefPayload.lean).
+  def msCell (s : K) : Payload K Bat := fun cell => match cell with
+    | .maskSum => s
+    | _ => 0
+  def k0 (pub : Public K) (B : PackBasis F) (ch : Challenges K) : K :=
+    fOrig pub B ch 0 (alpha ch) * (alpha ch 9 - 1/2)⁻¹
+  def S0 (pub : Public K) (B : PackBasis F) (ch : Challenges K) : K :=
+    bsumB 10 (fun b => fOrig pub B ch 0 (ofBool b))
+  def refPayload (pub : Public K) (B : PackBasis F) (ch : Challenges K) : Payload K Bat :=
+    PayloadSplit.roundInclusion (PayloadSplit.originalRounds pub B ch 0)
+      - k0 pub B ch • dir + msCell (S0 pub B ch)
+  theorem iota_refPayload : HonestValid.iota (refPayload (Bat := Bat) pub B ch) = 0
+  theorem inactive_refPayload : refPayload (Bat := Bat) pub B ch .inactiveSum = 0
+  theorem Phi0_refPayload (hhalf : alpha ch 9 ≠ 1/2) : Phi0 B ch (refPayload (Bat := Bat) pub B ch) = 0
+  theorem refPayload_mem_chainEqs : refPayload (Bat := Bat) pub B ch ∈ IIPrimeResidual.ChainEqs ch
+  theorem refPayload_cell (cell) (hc : ∀ j i, cell ≠ .semanticCoeff j i) (hm : cell ≠ .maskSum) :
+      refPayload (Bat := Bat) pub B ch cell = 0
+  /-- The explicit simulator: no instance, no choice. -/
+  def simE (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
+      (outputs : Statement K CommitHandle → Challenges K → Aux)
+      (x : Statement K CommitHandle) (ch : Challenges K) (t : Tape K F) :
+      View K CommitHandle Aux Bat :=
+    (ZkStatement.metadata outputs x ch,
+      shift x.1 B ch (refPayload x.1 B ch + D12.A π B ch (Partition.equiv.symm t)))
+  theorem equalLaws_simE_of [Fintype Bat] (h) (B) (outputs) (x) (w) (ch)
+      (hi : ∀ n, sRem (Bat := Bat) h B x w ch n ∈ range ((A h.transport B ch).comp inlM))
+      (hz : cTilde (Bat := Bat) h B x w ch - refPayload x.1 B ch ∈ range (A h.transport B ch)) :
+      EqualLaws (view (Bat := Bat) h B outputs x w ch) (simE h.transport B outputs x ch)
+  This is the body of hvzk_on_of with w′ removed. Its hypotheses are clause
+  (i′) for w and Claim Z.
+
+§5.2 Generic composition (R0Z/HvzkS.lean; HvzkV with the simulator as a
+parameter).
+  variable (sim : Challenges K → Tape K F → View K CommitHandle Aux Bat)
+  def HVZK_onS (P) (h) (V : Challenges K → h.Instance → Prop) (B) (outputs) (x) sim : Prop :=
+    ∀ (w : h.Instance) (ch), P ch → V ch w → h.public w = x.1 →
+      EqualLaws (view (Bat := Bat) h B outputs x w ch) (sim ch)
+  def hybridAbortS P h V fs ab adv x sim w   -- retryTest on P ∧ V(·,w), calling sim
+  def middleIdealAbortS P fs ab adv x sim    -- retryTest on P, calling sim
+  def idealTestS fs adv x sim : fs.IdealRand → ℚ := fun r => bit (fs.observe adv (fs.ideal sim adv x r))
+  def ZK_FSS h B outputs fs x sim ε : Prop :=
+    ∀ (adv : fs.Adversary) (w : h.Instance), h.public w = x.1 →
+      |mean (realTest h B outputs fs adv x w) - mean (idealTestS fs adv x sim)| ≤ ε
+  def IdealAbortCouplingS P fs ab x sim ε_prog   -- IdealAbortCouplingV with simV ↦ sim, no hx
+  theorem zkfs_of_hvzk_onS_terms (hh : HVZK_onS P h V B outputs x sim)
+      (hreal : RealAbortCouplingV P h V B outputs fs ab x ε_hit ε_coll)   -- unchanged
+      (hideal : IdealAbortCouplingS P fs ab x sim ε_prog)
+      (hq : ∀ adv w, h.public w = x.1 → eventMass (attemptBad P h V ab adv x w) ≤ q) … :
+      ZK_FSS h B outputs fs x sim (ε_hit + ε_coll + ε_prog + ab.N * q)
+  The proofs are HvzkV's real_hybrid_eq, hybrid_ideal_le and
+  abortReductionV_of_couplings verbatim. None of them unfolds simV; only
+  hvzk_on_of_V does, and HvzkS does not need it. RealAbortCouplingV and the
+  real-side model R1RealModelV do not mention the simulator, so they are
+  reused unchanged.
+
+§5.3 On R1 (R1Z/RefCosetR1.lean, R1Z/SimulatorR1.lean).
+  theorem cTilde_sub_ref_mem_range_R1 (h) (B) (hB : PackField B) (x) (hpub : PublicBase F x.1)
+      (ch) (hP : P_R1 h.transport B hB ch) (w) (hF : BaseTyped F (h.build w))
+      (hv : HonestValid x.1 B (h.build w) ch) :
+      cTilde (Bat := R1Bat) h B x w ch - refPayload x.1 B ch ∈ range (A h.transport B ch)
+                                                                  -- Claim Z
+  theorem hvzk_R1S (h) (B) (hB) (outputs) (x) (hpub) (hs : HonestValidity.BuilderSoundOn h B x) :
+      HVZK_onS (P_R1 h.transport B hB) h (VR1 h) B outputs x (simE h.transport B outputs x)
+    -- validity from NoPole: honestValid_of (as maskImageOnV_R1); clause (i′) from
+    -- clause_i_R1_all; Claim Z; equalLaws_simE_of.
+  def R1IdealModelS (P) (fs) (ab) (x) (M Umin : ℕ) (sim) : Prop  -- R1IdealModelV with
+    -- agreement naming middleIdealAbortS … sim / idealTestS … sim; no hx
+  theorem idealAbortCouplingS_of_R1 : R1IdealModelS … → IdealAbortCouplingS … (M·M/Umin)
+
+  THE REPLACEMENT THEOREM:
+  theorem privacy_R1_eff (h : HonestProver K) (B : PackBasis F) (hB : PackField B)
+      (outputs : Statement K CommitHandle → Challenges K → Aux)
+      (fs : FSExperiments K CommitHandle Aux R1Bat F)
+      [Fintype fs.RealRand] [Nonempty fs.RealRand] [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
+      (x : Statement K CommitHandle) (hpub : PublicBase F x.1)
+      (hs : HonestValidity.BuilderSoundOn h B x)
+      (ab : AbortBridge K CommitHandle Aux R1Bat fs.Adversary)
+      (M Mi q Umin Q : ℕ) (εexh : ℚ) (hU : 0 < Umin) (he : 0 ≤ εexh)
+      (hr : R1RealModelV (P_R1 h.transport B hB) h (VR1 h) B outputs fs ab x M q Umin εexh)
+      (hi : R1IdealModelS (P_R1 h.transport B hB) fs ab x Mi Umin (simE h.transport B outputs x))
+      (hdraw : ∀ adv : fs.Adversary, Sem1Uniform (ab.draw adv x) Q) :
+      ZK_FSS h B outputs fs x (simE h.transport B outputs x)
+        ((M : ℚ) * q / Umin + ((M : ℚ) * M / Umin + εexh) + (Mi : ℚ) * Mi / Umin +
+          ab.N * ((4096 : ℚ) / Q))
+  Same error terms as privacy_R1, and the same hypotheses except hi, which
+  names the explicit simulator. The pole term is unchanged: the honest
+  prover still accepts on P_R1 ∧ NoPole, and the simulator still retries on
+  P_R1 alone (poleBad, pole_mass_le). The simulator argument is the term
+  `simE h.transport B outputs x`. Its type mentions no h.Instance and no
+  InLanguage proof, so witness-freeness is visible in the type. Polynomial
+  time is a meta-level property of its definition (§4.1), checked by
+  inspection: the unfolding reaches Lagrange.interpolate over 28 nodes,
+  bsumB over 2^10 points, finite sums, and field inverses. It reaches no
+  Classical.choose and no quantifier over instances. #print axioms will
+  still list Classical.choice, because the R0Z modules use the local
+  propDecidable instance for `if`. That is a decidability artefact, not a
+  choice of witness, so the axiom line cannot certify efficiency.
+
+  Relation to privacy_R1: the new theorem does not depend on the old one.
+  As a corollary, simE and simV have equal laws at every P_R1 ∧ VR1-
+  inhabited challenge, both being equal to the honest view.
