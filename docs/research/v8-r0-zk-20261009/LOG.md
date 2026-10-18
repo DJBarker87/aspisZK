@@ -5582,3 +5582,52 @@ CopyLinkBalance), PublicBase, and classical ROM only.
 
 **D45.6 Process.** The worker gated on Lean processes only, as instructed.
 Spend-path cargo and charon jobs ran concurrently at times without incident.
+
+### Lead acceptance of builder completeness (2026-10-19); D46: the builder is a refinement premise
+
+Worker a46873ead..cf81ffd86, cherry-picked. `R0Z/BuilderComplete.lean`, host
+4063 (in-window `run2-par.sh`): exit 0, 3.68 s, 6,616,004 KiB, 0 swaps.
+SHA verified by the lead; standard axioms. Evidence:
+`t2b2b/evidence-builder-complete.json`. Design:
+`t2b2b/DESIGN-BUILDER-COMPLETE.txt`.
+
+**D46.1 Inventory.** No concrete honest builder exists in Lean, here or on the
+spend path.
+- `HonestProver.build` is a field left deliberately uninstantiated
+  (ZkStatement.lean:302–308).
+- R0P and the spend path only extract from a trace: ProductionHolds,
+  `lanes_zero_iff_holds`, CopyLinkBalance, `input_note_extracted`, and
+  Rspend/extract.
+- The builder exists only in Rust: the `compile_pool_v1_pair_forest_*`
+  functions, then `host_semantic::build_with_material`.
+
+**D46.2 Proved.**
+- `lanes_iff_nonCopy`: for a base-typed trace and |K| > 4096, `lanes` is
+  equivalent to `NonCopyHolds`, the seven families that read neither λ, χ nor
+  column 26. The proof uses a pole-free χ obtained by counting.
+- `baseTyped_ofColumns`: any `ofColumns` builder is base-typed by
+  construction.
+- `honestProverOf S Rel transport`.
+- `builderSoundOn_of_refines`: BuilderRefines + |K| + PublicBase ⇒
+  BuilderSoundOn.
+- `inputNoteExtracted_of_refines`: a sanity check that the premise is the
+  trace-side image of the payment relation that soundness extracts.
+
+**D46.3 The premise.** `BuilderRefines S Rel` has two fields:
+- `nonCopy`: NonCopyHolds of the honest build;
+- `balance`: CopyLinkBalance of the honest build.
+
+This is the builder's correctness against the Rust prover. It is a refinement
+obligation of the same kind as the soundness side's source correspondence,
+and nothing more follows from Rspend while the builder is abstract.
+
+Ways to discharge it:
+- a Lean model of the legacy builder (relocate_and_extend, the bank merge)
+  with an Aeneas refinement of the Rust; or
+- a per-build certificate the prover checks before publishing. Rust already
+  checks the 18,089 transfer residuals at runtime (`finish`,
+  pool_v1_pair_forest_honest.rs:80). A check-and-retry is witness-dependent,
+  however, so as a privacy argument it would need a failure-mass bound like
+  ε_pole. The lead's preference is the Lean model.
+
+Instantiating W := Wspend and Rel := Rspend waits for the build integration.
