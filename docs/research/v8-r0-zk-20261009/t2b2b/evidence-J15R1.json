@@ -95,6 +95,44 @@
     "'R1Z.PredicateR1.P_R1.queryCard' depends on axioms: [propext, Classical.choice, Quot.sound]",
     "'R1Z.NoiseLiftR1.noise_lift_R1' depends on axioms: [propext, Classical.choice, Quot.sound]"
    ]
+  },
+  {
+   "attempt": 3749,
+   "module": "R1Z/IIPrimeR1",
+   "exit": 1,
+   "wall": "0:03.14",
+   "peak_rss_kib": 6727484,
+   "swaps": 0,
+   "note": "PayloadSplit not opened (unqualified name); no proof error reached"
+  },
+  {
+   "attempt": 3750,
+   "module": "R1Z/IIPrimeR1",
+   "source_sha256": "a9d99c890d0c12b6f9bfb5e4ee776fa88c271a04d4b4f1071ac2e0231b789a09",
+   "exit": 0,
+   "wall": "0:07.80",
+   "peak_rss_kib": 6834700,
+   "swaps": 0,
+   "axioms": [
+    "'R1Z.IIPrimeR1.batRead_apply' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.IIPrimeR1.mem_baseF' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.IIPrimeR1.mem_Wsem_iff' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.IIPrimeR1.mem_Wh1_iff' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.IIPrimeR1.delta_sem_mem' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.IIPrimeR1.delta_h1_mem' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.IIPrimeR1.cTilde_sub_mem_range_R1' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.IIPrimeR1.iiPrime_R1' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ]
   }
- ]
+ ],
+ "row1023_check": {
+  "question": "does row 1023 enter any production lane or copy link?",
+  "answer": "read syntactically, but no lane or link value depends on it",
+  "evidence": [
+   "R0P/Core.lean:25,41-43: rowOpenings reads z at b, succRow b, xor12Row b, so rows 1023, 1022 and 1011 read row 1023",
+   "R0Z/TerminalEligible.lean:519-526 lanes_eligible: laneAt at every row is unchanged by applyEligible t e for every e (no honesty premise); its per-family lemmas protect reads by selectors",
+   "R0Z/HelperInvariant.lean:16-17 Protected: every copy endpoint has row != 1023 (decided over the registry), :288 helper_eligible",
+   "R0Z/IIPrimeResidual.lean laneOf_actual_zero (green 3747): laneOf (actual pub B t ch 0) = laneOf (prepare pub t ch) for all lambda, chi"
+  ]
+ }
 }
