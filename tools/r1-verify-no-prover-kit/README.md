@@ -59,7 +59,7 @@ matching distinguishes reparented own children from foreign same-user jobs; it
 never exempts a broad user prefix. Pure fixtures test that classification.
 
 The native child requires a dedicated scope with MemoryHigh6G/MemoryMax8G /
-MemorySwapMax0. Admission sums populated finite-scope MemoryMax reservations
+MemorySwapMax0. Admission sums all populated finite-cgroup MemoryMax reservations (including services)
 (including A/foreign scopes), adds B's8GiB once, and requires <=55GiB immediately
 before launch and continuously during the job. Only an unsafe aggregate or own
 timeout may stop B's own process group; foreign arrival alone never does. The
