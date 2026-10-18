@@ -308,3 +308,48 @@ Generic: nothing in §2–§5 uses the R0 payload. The Lean core (§8) is
 stated for arbitrary coin, tape and view types, then specialised to the
 R0Z JointView/FsStatement types; R1 reuses the core with its own view
 once R1M fixes the R1 model.
+
+----------------------------------------------------------------------
+§8  Lean module R0Z/FsAbort.lean  (imports R0Z.FsGood only)
+----------------------------------------------------------------------
+
+Dependencies: only the interfaces `mean`, `EqualLaws`, `LawTransport`,
+`FSExperiments`, `ROMView`, `realTest`, `idealTest`, `bit`, `view`,
+`simulator`, `InLanguage`, `HVZK_on`, and (for one corollary)
+`MaskImageOn Good`/`hvzk_on_good`. No PayloadCell constructor is used, so
+the R1-0 refactor (D30) should reach this module at most through an added
+implicit parameter. The headline theorem is stated from `HVZK_on P`
+directly; `hvzk_on_mono` is monotonicity in P, not R1-0's `hvzk_on_of`.
+
+Generic core (arbitrary types C, T, V):
+  mean_equiv, mean_const, mean_eval (marginalising the other attempts'
+    tapes), mean_add'
+  firstGood Pd c : Option (Fin N) — least accepted attempt
+    firstGood_spec (accepted ⇒ Pd), firstGood_least (it is the least),
+    firstGood_none (none ⇒ every attempt rejected)
+  retryTest N Pd pub ext fail — the retry loop's observer bit
+  retry_means_eq: (∀ c, Pd c → EqualLaws (pub₁ c) (pub₂ c)) →
+    mean (retryTest … pub₁ …) = mean (retryTest … pub₂ …)
+  eventMass, eventMass_or_le, until_bad (identical-until-bad on [0,1])
+  Coupling R M — finite common space with uniform maps to R and M
+R0Z specialisation:
+  AbortBridge K CommitHandle Aux Adv — Coins, N, draw, extend (sees all
+    attempt coins and the accepted index), fail
+  middleRealAbort / middleIdealAbort P h B outputs fs ab adv x (w | hx)
+  middleAbort_means_eq — EQUAL means under HVZK_on P
+  AbortReductionWith P … ab x ε_real ε_ideal
+  Theorem A  zkfs_of_hvzk_on_abort :
+    HVZK_on P → AbortReductionWith … → ZK_FS h B outputs fs x (ε_real + ε_ideal)
+  hvzk_on_mono, zkfs_of_maskImageOn_abort (P ⇒ Good)
+  RealAbortCoupling P … ab x ε_hit ε_coll   (events Hit, Coll; §5)
+  IdealAbortCoupling P … ab x ε_prog        (event Prog; §5)
+  abortReduction_of_couplings
+  Theorem B  zkfs_of_hvzk_on_abort_terms :
+    HVZK_on P → RealAbortCoupling … → IdealAbortCoupling … →
+    ZK_FS h B outputs fs x (ε_hit + ε_coll + ε_prog)
+
+What is NOT proved here (payload facts, ZF1a/b): the existence of the two
+couplings for the concrete retrying sponge games (per-attempt G3/G6–G11),
+and the numerical bounds of §5 on Hit, Coll, Prog. They are exactly the
+hypotheses of Theorem B. The efficient simulator is ZF2.
+Status of the compile: see zf1/abort-evidence.json.
