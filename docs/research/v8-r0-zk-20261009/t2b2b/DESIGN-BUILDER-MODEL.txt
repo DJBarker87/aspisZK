@@ -7,7 +7,19 @@ FH = pool_v1/pair_forest_hiding.rs, P2 = crates/aspis-statement/src/poseidon2.rs
 HS = crates/aspis-r1-cost-probe/src/host_semantic.rs,
 HO = crates/aspis-prover/src/pool_v1_pair_forest_honest.rs).
 
-§0  Summary                                   (filled last)
+§0  Summary
+
+  A staged Lean model of the Rust pair-forest builder now exists
+  (buildModel : Public K → ModelWitness K → Trace K, Wspend-shaped witness).
+  NonCopyHolds of the model is proved for all seven families from named
+  witness premises that mirror the Rust builder's own checks.  What remains
+  for BuilderRefines on the model is CopyLinkBalance (136 links, generator
+  plan in §4) and base typing; what remains for the Rust builder is the
+  refinement of §6, where Poseidon is the hard part.  Proving the families
+  exposed a relation gap: no builder at all satisfies BuilderRefines for
+  Rspend, because the copy registry and the occupancy family force a
+  non-zero change sentinel on transfers (§5, proved).
+
 §1  Stage map of the Rust builder
 
 The honest transfer prover runs, in order (HO:115-138 transfer, HO:142- withdrawal):
@@ -241,9 +253,8 @@ is the row-local fact the writing stage guarantees.
   change[7] ≠ 0), i.e. the relation of instances the honest prover actually
   proves, and account for the salt retry on the wallet side (it is a
   witness-sampling retry before proving, not a proof-time abort, so it does
-  not enter the HVZK argument; whether the public statement leaks the
-  retry is a separate, I think trivial, check: the condition is on a
-  public value).  The model carries it as AuxPremises.changeSentinel.
+  not enter the HVZK argument; whether the retry affects the distribution
+  of public values is not examined here).  The model carries it as AuxPremises.changeSentinel.
 
 §6  Aeneas refinement plan (Rust builder ↔ buildModel)
 
@@ -292,4 +303,21 @@ is the row-local fact the writing stage guarantees.
   the check never fails on accepted witnesses, which the model plus (m1)
   would prove.
 
-§7  Status: proved / modelled / open           (pending)
+§7  Status
+
+  Proved (host, standard axioms; evidence t2b2b/evidence-builder-model.json,
+  green attempts 4201, 4204, 4208, 4210, 4211, 4212):
+    - the model buildModel and its cell/bit lemmas (R0Z/BuilderModel);
+    - all seven NonCopyHolds families of buildModel under AuxPremises and
+      DigestPremises (nonCopy_model), Poseidon and schedule and path with
+      no witness premise;
+    - the change-sentinel obstruction for any builder (§5).
+  Modelled, not proved: CopyLinkBalance of buildModel (§4 a); BaseTyped of
+  buildModel (§4 b).
+  Not started: Rspend/Wspend → premises (§4 c, waits for the build
+  integration); every Rust ↔ model refinement (§6).
+  Failed attempts 4200, 4202, 4203, 4205-4207, 4209: elaboration errors,
+  each followed by a changed source; no cap was raised, no attempt rerun
+  unchanged.  Peak RSS ≤ 3.4 GB except the bridge (6.7 GB, it imports
+  BuilderComplete).
+
