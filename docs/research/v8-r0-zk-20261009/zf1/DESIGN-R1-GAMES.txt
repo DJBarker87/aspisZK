@@ -140,3 +140,67 @@ H) and adds nothing to the view.
   coordinate split S ≃ R × U (R1Z/LensR1 `hitFresh_of_lens`,
   `pairFresh_of_lens`), so the designated-field table of D41 §1.4 is no
   longer a hypothesis for the transcript reads.
+
+----------------------------------------------------------------------
+§3  The abort bridge ab_R1 and the middle games  (Lean: R1Z/GamesR1 `abR1`)
+----------------------------------------------------------------------
+
+Coins (per attempt) R1Coins = (TRead → Ans) × (Fin 3 → Ans) × Cm × Tab:
+the 115 transcript answers, the roots (C1, C2, folded), the commitment
+answers Cm (salts, leaf and node digests; abstract finite type) and a table
+Tab with `look : Tab → Bytes → Ans` (the shared oracle; attempt 0's table is
+used).  N attempts, `hN : 0 < N`.
+  draw c      = dec(squeeze answers of c)          (`drawW`; ρ dropped by dec)
+  extend c k V = ⟨V, VerLog_k ++ runLog(adv.prog V VerLog_k, prog_k, qmax)⟩
+               VerLog_k = tLog (the 115 reads with addresses from V's
+               records and c k's chain answers) ++ comLog(c k) (opening reads)
+               prog_k a = the VerLog_k answer at a if a is published, else
+               look (tab of attempt 0) a
+  fail c      = ⟨failView, runLog(adv.prog failView [], look tab_0, qmax)⟩
+Discarded attempts are read only through draw; their tapes never.
+
+Adversary (`R1Adv`): a query program `prog : View → VerLog → OProg`
+(adaptive, at most qmax reads, `runLog`) and a decision `decide : ROMView →
+Bool` (observe := decide).  Any post-proof adversary whose output is a
+function of what it saw is of this form.
+
+The middle games are FsAbort/HvzkV/HvzkS's `middleRealAbortV`,
+`middleIdealAbortS` on this bridge; no new middle game is defined.
+
+----------------------------------------------------------------------
+§4  fs.real: the retrying honest prover  (Lean: `realAttempt`, `realGame`)
+----------------------------------------------------------------------
+
+RealRand = Tab × (Fin N → Secrets); H := look tab.  Attempt k
+(`realAttempt`, with secrets k):
+  1. commit phase (`R1Prover.commit`, REF): from H, the attempt's fresh
+     secrets and the instance — the mask tape t (rejection decode of the
+     expander answers), the three roots, the opening reads as a function of
+     the challenges, the exhaustion flag;
+  2. transcript: the reads of `schedule` in order, each address built from
+     the answers so far and the records of view(w, ch_so_far, t), each
+     answer H(address);
+  3. ch := dec(squeeze answers), V := view(w, ch, t), log := the verifier's
+     recomputation (115 reads from V's records, answers H) ++ opening reads.
+Game (`realGame`): accept the first k with P ch ∧ Vp ch w ∧ ¬exh (P = P_R1,
+Vp = VR1, the no-pole set: D38/D40); publish ⟨V_k, log_k ++ adversary log
+against H⟩; if none, publish ⟨failView, adversary log⟩.  Discarded attempts
+publish nothing (A-erase holds by construction); the cap is N (A-cap);
+attempts use independent secrets (A-sec as the product RealRand).
+This closes G-retry at the model level; the Rust prover still lacks the loop
+(D38.3) — the refinement item R-retry.
+
+----------------------------------------------------------------------
+§5  fs.ideal: the simulator game  (Lean: `fsR1.ideal`)
+----------------------------------------------------------------------
+
+IdealRand = (Fin N → R1Coins) × (Fin N → Tape).  Given a simulator sim
+(primary: ZF2's `simE h.transport B outputs x`, D44; secondary: `simV`):
+the same capped loop on draw and P alone; on acceptance at k publish
+extend(c, k, sim(draw c_k, t_k)) — VerLog computed from the simulated view
+and fresh coins, and the adversary answered by the table programmed at the
+published addresses; failure publishes fail(c).  It reads no witness.
+`ideal_agree_S` proves it equals `middleIdealAbortS` pointwise, for every
+simulator; the collision cost of programming is carried by the REAL side's
+CollEv (two transcript or opening positions with one address), where it was
+already counted (D41 ε_coll).  Consequently Mi = 0 and ε_prog = 0.
