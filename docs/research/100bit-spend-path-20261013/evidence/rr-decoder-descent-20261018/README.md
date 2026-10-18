@@ -1,0 +1,22 @@
+# RR descent, tree bounds and coefficient-vector refinement
+
+This packet advances the efficient decoder/extractor obligation. It does not establish the complete extractor, the Rust verifier's soundness, or 100-bit security of the deployed spend.
+
+## Checked results
+
+- `RRRootDescent` proves that affine substitution followed by exact removal of an inner-X power preserves polynomial roots in both directions. It also proves a root's constant coefficient is a root of the inner-X=0 specialization, and derives the actual `divX` tail descent.
+- `RRChildNormalization` constructs the proof-level coefficientwise normalization and proves its factorization from vanishing lower slices. Its root-preservation theorem has no free factorization premise. Readback is exactly input coefficient `v+k`, the refinement equation for an executable list-drop operation. This polynomial specification is proof-only.
+- `RRActualFixedParentConvolutionV7` fixes one parent independently of the selected normalization index and proves the slice formula for every index, including indices above the parent's inner-X input bound. A first nonzero child slice exists no later than the root multiplicity, with degree no greater than that multiplicity.
+- `RRSiblingMultiplicityMassV2`, `RRActualSiblingMassV2` and `RRActualRootLayerBoundV3` bound selected child degrees and multiplicity mass by the parent degree. `RRActualLayerBudgetV3` separately bounds occurrences, including degree-zero leaves: total occurrences through depth D are at most initial count plus D times initial mass. Instantiation with the implemented transition remains open.
+- `RRFiniteCoeffScannerV9` supplies list-based scanning functions, a comparison bound for a vector, and a full-row scanner equivalent to its `List.any` specification. Its executable definitions have no axioms, and the recorded small ZMod evaluations execute. The full scanner's first-index correctness and composition with the slice bound are subsequent obligations.
+- `RRDenseCoeffVectorV6` proves coefficient-list readback and the finite Hasse/Taylor coefficient formula. `RRVectorRowBridgeV14` proves direct row construction agrees with the actual fixed-parent coefficient slice as a polynomial, including the coefficient tail. The proof map uses Mathlib polynomials; the direct row calculation does not. A minimal-signature executable row interface is being separated from the broad Field proof interface; this packet does not claim all polynomial algorithms execute.
+
+The fixed-parent and sibling-mass results reuse the existing Taylor, multiplicity and diagonal substitution results. They do not assume that the full bivariate Y-degree decreases: the bound is on the first nonzero inner-X coefficient slice. They do not restrict normalization index v to the parent's input bound M.
+
+## Evidence and scope
+
+`accepted-targets.json` records the exact source and object hashes for all 18 accepted owners and their receipts. Direct custom import object hashes were matched recursively before publication; already-published sources were required to be byte-identical. The original compiler logs and receipts retain the actual checkout revisions, paths and source snapshots used for each focused compile. Publication is not a new whole-checkout build claim.
+
+All accepted compiles exited zero. Printed axiom reports contain only propext, Classical.choice and Quot.sound (or subsets); executable scanner definitions report no axioms. Previously compiled helper files without their own printed reports are covered by downstream reports. Native Lean is pinned to 4.32.0, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35. Jobs were serialized, with explicit Lean limits, timeout and aggregate-RSS monitoring. Maximum recorded process RSS in this packet is 1,794,162,688 bytes; every process swap count is zero. Existing host swap is recorded separately and is not claimed zero. No full manifest replay or production source change was performed.
+
+Remaining extractor obligations include the executed first-slice selection and normalization refinement, complete root-factor recursion with fresh randomness at adaptive nodes, field representation/sampling correspondence, interpolation construction, full RR candidate completeness and filtering, implemented caller/site counts, and the complete polynomial operation-cost/failure bound. The separate 149-trial split inequality is conditional on the site count and does not cover other failure events.
