@@ -13,7 +13,7 @@ Sections
   §2  The checker and its soundness statement
   §3  Expectations (registered before measuring)
   §4  Measurements
-  §5  Lean: generic soundness (module R1Z/CertSound)
+  §5  Lean: generic soundness (modules R1Z/CertSound, R1Z/CertR1)
   §6  Aeneas extraction plan (checker only)
   §7  Open items and a rejected-for-now option (randomised checking)
 
@@ -77,9 +77,11 @@ checker rejects any non-canonical limb or out-of-range index (fail closed).
   (a) Kernel vectors.  A list of m entries (l, j, P_l-coefficients):
       lane l, a source index j of lane l, and c in F^{|P_l|} over a pivot list
       P_l (source indices of lane l, |P_l| <= 112 or 376, stored once per
-      lane).  The kernel vector is k = s_j - sum_p c_p s_p.
-      Check: own_l(s_j) - sum_p c_p own_l(s_p) == 0 in F^112 / F^376.
-      Then rho = round(s_j) - sum_p c_p round(s_p) in F^1084 (computed).
+      lane).  c covers a prefix of P_l (the pivots that existed when the
+      entry was produced; Lean KerEntry.s = len c).  The kernel vector is
+      k = s_j + sum_p c_p s_{P_l[p]}.
+      Check: own_l(s_j) + sum_p c_p own_l(s_{P_l[p]}) == 0 in F^112 / F^376.
+      Then rho = round(s_j) + sum_p c_p round(s_{P_l[p]}) in F^1084.
   (b) Combination matrix Y in F^{1084 x m}.
       Check: for every i < 1084, sum_j Y[i][j] rho_j == b_i, where b_i is the
       i-th normalised ChainT0K4 generator computed by the checker from alpha:
@@ -350,3 +352,68 @@ format was made prefix-based, matching KerEntry.s in Lean).
   No part of (i)-(iii) needs a concrete-row evaluation in Lean: the rf_*
   are identities "column t of the matrix the checker builds = iota^-1 of the
   map on source t", proved for symbolic t from the closed forms.
+§6  Aeneas extraction plan (checker only)                       PROPOSED
+-------------------------------------------------------------------------
+§6.1 What is extracted.  A new crate (proposal: crates/aspis-r1-cert-check,
+  no_std + alloc, no dependency on the producer) holding exactly
+  (X1) the certificate decoder: a flat little-endian u32 stream with explicit
+       lengths -> the certificate struct; rejects non-canonical limbs and
+       out-of-range indices (step 1 of §2.1);
+  (X2) the linear-algebra checks: dot (lazy u64 accumulation), kernel test
+       and image (kcoord), combination test (PreOK, PreOK₂), E = U·Rel with
+       the echelon and partition tests (EchOK), O·U = I (RinvOK), the QM31
+       product for HalfOK, the length test;
+  (X3) the column builders (the §1.1 row formulas of DESIGN-R1-P): own/obs
+       (claims eq weights, h_weight, ood and opened evaluations), round_row
+       and tail_row, the batched unit functionals at pi(r) with gamma^lane,
+       relR1's limb functionals, normalize_d.  These are the Rust halves of
+       the rf_* premises.
+  Not extracted: the producer (TagEch, invert, early stop), the probe's
+  replay of challenges, timing, printing, threads.
+§6.2 Rust subset the checker must stay within.
+  - Integers only: u32 limbs, u64 accumulators, usize indices.  No floats,
+    no i128/u128 (keep the Lean models in the U32/U64 scalars), no
+    wrapping_* / overflowing_* (Aeneas models arithmetic as checked; every
+    bound is proved instead: a term (p & M) + (p >> 31) < 2^32, and a dot of
+    length < 2^32 never overflows u64).
+  - Flat Vec<u32> / &[u32] with explicit (rows, cols) and index arithmetic
+    r * cols + c; no Vec<Vec<_>> (nested borrows enlarge the generated
+    state), no slicing by ranges in hot loops if the pinned Aeneas cannot
+    model it (use start/len index arguments instead).
+  - Loops as `while i < n { ...; i += 1 }` with one accumulator or one
+    mutable output buffer each; no iterator adapters (zip, map, chunks,
+    windows, any, all, fold), no closures, no early `return` from inside
+    nested loops (use a bool flag and a break at one level, which the
+    loop-break preflight of the patched Aeneas handles).
+  - No traits beyond what the pinned Aeneas models (no generic CodeField:
+    monomorphic M31/QM31/WideExact functions), no dyn, no Box<dyn>, no
+    HashMap/BTreeMap, no threads, no OnceLock/static mut, no panics on the
+    accepted path (every failure is `return false`).
+  - Functions small and separately extracted (one loop nest per function),
+    so each generated Lean declaration is elaborated alone; AGENTS.md
+    rule 2-4: the Lean proofs are about symbolic loops (invariants over
+    `Fin n` sums), never `decide`/`rfl` on concrete sizes 1,084 or 4,092.
+§6.3 The refinement lemmas (C3).  For each extracted function f_rust:
+  f_rust inputs = ok out  ->  out = (Lean definition) inputs, e.g.
+    dot_spec      dot a b = ok (sum_i a[i] * b[i] mod p)   (lengths equal)
+    kernel_spec   check_kernel ... = ok true <-> forall i, kcoord A e i = 0
+    combo_spec    check_combo ... = ok true <-> forall i t, sum Y·k = T i t
+    ech_spec, rinv_spec, half_spec, card_spec  likewise
+  and for the column builders col_spec: builder t = ok v -> v = col A t with
+  A the matrix that the rf_* premise names (this is where the Lean-side
+  symbolic row formulas of (C2) meet the Rust).  The top-level
+  check_spec: check ch c = ok true -> the hypotheses of p_r1_of_cert's five
+  *_of_cert inputs hold for decode c, which with (C2) gives check_sound.
+§6.4 Size and hazard estimate.  (X1)+(X2) about 300 lines of Rust; (X3)
+  about 500-800 lines (DESIGN-R1-P §4.2).  The loop-heavy builders are the
+  memory-hazardous Aeneas case; extract them one function per run under the
+  usual capped scope, starting with dot and kcoord, and stop on the first
+  replay that approaches its cap (AGENTS resource rule 4).  The dense
+  multiply in O·U = I and Y·rho is a triple loop over symbolic bounds; its
+  invariant proof is generic in the dimensions, so no concrete size is ever
+  unfolded.
+§6.5 Differential evidence (engineering only).  Until (C3) is proved, the
+  prototype's check is compared with z9b main_r1p on the Z9b vectors (done
+  here for six configurations, §4) and the teeth set of §4 is kept as a
+  regression test for the extracted crate.
+
