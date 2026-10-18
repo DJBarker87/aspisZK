@@ -20,3 +20,106 @@ Sections
   §2  Cost per attempt (expectations, then measurements)
   §3  Where the check plugs into the R1 prover; fresh salts; cap; failure exit
   §4  The refinement statement and the route to it
+
+§1  The conjuncts: exact algorithms, fields, dimensions, inputs
+---------------------------------------------------------------
+
+§1.0 Public inputs (all of them; none is secret)
+  Fixed protocol constants:
+    π = D18 (S2 Variant::row; LOG D30.5 D18Transport); the pack basis B
+    (QM31 tower basis 1, i, u, iu); the copy-active row table (64 u16 masks,
+    pool_v1_pair_forest_copy_active_row_masks_v1, CHECKED equal to the probe's
+    ACTIVE); the eligibility table (16 semantic columns); the mask exponents
+    EXP = 1,3,5,7,9,11,15,17,19,21; the domain constants (fibre points,
+    stored line-18 and line-16 nodes, generator (2, 1268011823)).
+  Transcript challenges of this attempt (all public):
+    α_0..α_9 (rows 15–24), z_0, z_1 (rows 25, 26), γ (27), κ (28), α0 (29),
+    α1 (30), the 22 query fibres u (31).  λ, χ, θ, zc, μ, η enter only SemK4
+    (and are QM31 by construction).  ρ (32) enters nothing.
+  Not used: the witness, the trace, the masks, any mask/salt seed, the Merkle
+  roots' preimages, the proof bytes.  Every matrix below is built from the
+  constants and challenges only (the probe functions raw_c(α, z, Q),
+  round_row(α, r, c), tail_row(α, r), Weights(α, z), unit_functionals(w, κ,
+  α0, α1, Q) take nothing else).  The challenges are, of course, functions of
+  the attempt's commitments; P_R1 is a function of ch, as D29.2/D31.1 require.
+  F = M31 throughout; every K4 = QM31 value is 4 limbs, every K = WideExact
+  value 8 limbs; all ranks are exact F-ranks (Gaussian elimination mod
+  2^31 − 1).
+
+§1.1 Shared precomputation (SPECIFIED; z9.rs functions in brackets)
+  O    own-observation rows: for each row r < 1024 the 112 F-limbs (resp. 94
+       QM31 values = 376 limbs for a K4 lane) of a unit at row r:
+       3 claims eq(point_k(α), r) [12], extra h_weight(α; π(r)) [4],
+       ood evalrow(π(r), z_j) [8], opened evalrow(π(r), stored_point(u,s))
+       for 22 × 4 symbols [88].  Lane-independent. [raw_c]
+  Rr   round rows: for mask-only lanes m0..m9 and G, round_row(α, r, c); for
+       D, tail_row(α, r) (coefficients π(r) < 56); 271 QM31 = 1,084 limbs in
+       the Z4c round coordinates (initial sum + 10 × 27 free coefficients; the
+       linear coefficient is implied by the boundary).  [round_row, tail_row]
+  β    batched row functionals: for each coefficient k the 167 E values
+       (inactive, round0 7, round1 7, folded 4P, final 64) of the unit e_k,
+       through Weights::materialize(κ) and R1's round/fold, and the folded
+       closed form ∏_{b ∈ bits d} levels[b][i >> b]; row r uses k = π(r),
+       lane ℓ scales by γ^ℓ.  [unit_functionals]
+  Sources are balanced as in Lean `balance 0`: e_r for active r, e_r − e_0 for
+  inactive r ≠ 0 (row 0 is copy-inactive), per tower limb for K4 lanes.
+
+§1.2 HalfOK, SemK4, QueryCard (SPECIFIED; field tests)
+  HalfOK: α_9 ≠ 1/2 in QM31 (one comparison).
+  SemK4: every ch.sem i ∈ K4.  On R1 the semantic challenges are QM31 by
+    construction (qm31_sample); the check is "the c1 half of each decoded value
+    is zero" if the challenges are carried as E, else vacuous.
+  QueryCard: the transcript returns 22 distinct fibres (queries_from_pairs);
+    check len = 22 and distinctness.
+
+§1.3 QPrime_R1  := ChainT0K4 ≤ (ker ownMap).map roundMaskMap   (SPECIFIED)
+  For each mask lane ℓ ∈ {m0..m9 (F, 1,023 sources), G, D (K4, 4,092 sources)}
+  eliminate the balanced sources on their own-observation limbs (112 or 376
+  columns) carrying the round limbs (1,084); every source that reduces to zero
+  own part contributes its carried round vector to R := Ech over F^1084
+  (= the round image of ker own; lanes are independent because own cells are
+  per lane).  Then:
+    QPrime_R1  ⇔  every vector of a basis of ChainT0K4 reduces to 0 modulo R.
+  ChainT0K4 basis in the Z4c coordinates: the 1,084 unit vectors, each
+  corrected on the terminal coordinate so that the terminal round evaluated
+  at α_9 is 0 (normalize_d; needs α_9 ≠ 1/2), rank 1,080.  Dimensions:
+  matrices 1,023 × (112 + 1,084) ten times and 4,092 × (376 + 1,084) twice;
+  R has rank 1,080 when the check passes (Z9: 1,080 on A, J; B 1,042 and I
+  1,072 fail).  Cost is the dominant elimination (§2).
+
+§1.4 BCondG_R1  := B0R1′ ≤ V_G   (SPECIFIED)
+  V_G: eliminate G's 4,092 balanced sources on [own (376) | round (1,084)]
+  carrying the batched limbs (8·(15 + 4P + 64)); the carries of the kernel span
+  V_G.  dim V_G := rank of that Ech.
+  B0R1′: the relR1 functionals with D35.1's lineInverse ((2x)^-1, −(2y)^-1,
+  (2z)^-1): s2a, s2b, s1, circ u (22), line v (P distinct parents), as 8 limb
+  functionals each on the read support (round0, round1, the 4P opened folded
+  cells, final); dim B0R1′ = 8(78 + 4P) − rank(relR1) = 8(53 + 3P)
+  generically (952 at P = 22).
+  Check: dim V_G = dim B0R1′.  This suffices because V_G ≤ B0R1′ is a theorem
+  (V_G_le, bat_ker_own_le_B0R1′, PredicateR1.lean), so equal dimension gives
+  equality.  (The inclusion may be re-checked numerically at negligible cost by
+  evaluating relR1 on the V_G basis; the prototype does.)
+
+§1.5 C1Lift_c (c < 16) and H1Lift   (SPECIFIED)
+  obs is lane-independent on the probe side (the own functionals do not depend
+  on which lane holds the word), so W ranks are computed once:
+    rank_F obs(Wsem): 1,023 balanced F sources (e_r − e_1023 for inactive r),
+      112 columns;  rank_F obs(Wh1): 4,092 balanced K4 sources (vs row 0),
+      376 columns.
+    rank_F obs(Vsem c): the eligible rows of column c (r ≠ 1023), balanced at
+      1023, 112 columns (221–900 sources per column);
+    rank_F obs(Ph1): inactive rows r ≠ 0 × 4 limbs (3,236 sources), 376 columns.
+  Check: C1Lift_c ⇔ rank obs(Vsem c) = rank obs(Wsem); H1Lift ⇔ rank obs(Ph1)
+  = rank obs(Wh1).  Sufficient because Vsem c ≤ Wsem and Ph1 ≤ Wh1
+  (OBLIGATION, instance facts: eligible noise is base-valued and balanced at
+  1023 ∈ copyInactiveRows — `inactive_1023`, D36.2; the H1 padding is K4-
+  valued on inactive rows balanced at 0).  Z9b measured 112 = 112 and
+  376 = 376 everywhere.
+
+§1.6 Order and early exit
+  All conjuncts need the queries (row 31), so the check runs once, after the
+  final message and queries are known and before any proof byte is released.
+  Cheap conjuncts first (HalfOK, QueryCard, SemK4), then the lifts (~1 s),
+  then V_G (one lane), then QPrime (twelve lanes).  Any false conjunct aborts
+  the attempt immediately (§3).
