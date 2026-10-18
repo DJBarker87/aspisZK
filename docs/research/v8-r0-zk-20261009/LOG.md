@@ -5665,3 +5665,55 @@ each (SHA matches, exit 0, standard axioms, no overrides). Attempts
 
 The carrier transports (Array U8 32 ↔ Fin 32 → UInt8, and QM31 ↔ K) are the
 open link. They join the build-integration job.
+
+### Lead acceptance of G-prog/G-exh/G-count (2026-10-19); D48: commit interface corrected to phase-indexed roots
+
+The worker commits 85307cedc and 30886c9d8 are cherry-picked. Host attempts
+4002 (`R1Z/LazyTable`) and 4004 (`R1Z/CommitReadsR1`) ran in-window. The lead
+verified both: SHA matches, exit 0, standard axioms. Evidence:
+`zf1/r1-real-evidence.json`.
+
+**D48.1 Proved.**
+- Generic lazy programming: `mean_prog`, `prog_first`/`prog_off`, and
+  `run_eq` (the middle game equals the programmed table on pairwise-distinct
+  causal reads).
+- Exhaustion: the M31 rejection loop rejects exactly 2 of 2^32 words, and
+  εexh ≤ N/2^476 under `RCommitCount`.
+- Read count: Mc = 1,685,214 + E₁ + E₂, and 115 + Mc ≤ 2^21.
+
+Correction: the folded tree has 2^18 leaves, not 2^16 as the couplings
+design said.
+
+New R-commit premise `RCommitCount`: stream 1 has at most 45,056 limbs, which
+assumes at most 26·1024 relation-free mask cells (to be confirmed from
+aspis-statement); stream 2 has 4,096 limbs.
+
+**D48.2 Modelling error found in the landed GamesR1.**
+`R1Prover.commit` returns all three roots before the transcript. In Rust:
+- the C2 root depends on rows 0–1, because its leaves include
+  h1 = helper(λ, χ) (host_semantic.rs);
+- the folded root depends on rows ≤ 29, since it is built over
+  fold(q, α0) after α0 (prover.rs).
+
+An R-commit premise equating `commit` with the Rust phase would therefore be
+false, and `privacy_R1_games'` would be vacuous for the real prover. This
+does not affect the landed theorems' truth: they hold for any `R1Prover`. It
+affects only whether the Rust prover is an instance.
+
+**D48.3 Lead decision: phase-indexed commitments.** Do not edit the landed
+GamesR1. New modules define `R1ProverP`, with commit of type
+`Challenges K → Fin 3 → OracleAnswer`:
+- the C1 root is constant;
+- the C2 root depends only on rows 0–1;
+- the folded root depends only on rows ≤ 29.
+
+These causality conditions are fields. Commitment reads and the exhaustion
+flag are indexed the same way. `realAttempt.step` evaluates the roots at the
+partial challenges, and R-causal covers them. The new games `fsR1P`/`abR1P`
+reuse the ideal models and transcript freshness, which are unaffected because
+the roots there are coins. Then `cp` follows from LazyTable with the
+commitment reads in the causal read list, followed by CmLayout, Agree and
+`privacy_R1_games'` on fsR1P.
+
+The P_R1 check is unaffected: it reads challenges and public constants only,
+not roots.
