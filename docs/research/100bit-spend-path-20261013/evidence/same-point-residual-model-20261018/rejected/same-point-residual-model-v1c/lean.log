@@ -1,0 +1,79 @@
+/tmp/PoseidonSamePointResidualModel.lean:26:31: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/PoseidonSamePointResidualModel.lean:80:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Decode (PoseidonClosure2ArrayExact.cell4 leading group)
+in the target expression
+  R0P.g2SumHigh (PoseidonSamePointArray.pointSelector point) 0 57 PoseidonSamePointArray.model._proof_3 *
+      (R0P.g2Low (PoseidonSamePointArray.pointSelector point) 0 *
+            (PoseidonGroupSliceModel.packedGroup o.succ_z group -
+              PoseidonSamePointArray.Decode (PoseidonClosure2ArrayExact.cell4 leading group)) +
+          PoseidonExplicitLowWeightFold.fullLow (R0P.g2Low (PoseidonSamePointArray.pointSelector point)) *
+            (PoseidonGroupSliceModel.packedGroup o.succ_z group -
+              PoseidonSamePointArray.Decode (PoseidonClosure2ArrayExact.cell4 full group)) +
+        PoseidonExplicitLowWeightFold.internalLow (R0P.g2Low (PoseidonSamePointArray.pointSelector point)) *
+          (PoseidonGroupSliceModel.packedGroup o.succ_z group -
+            PoseidonGroupSliceModel.packedGroup internalArray group)) =
+    R0P.poseidonPackingFormula iBasis uBasis fun j =>
+      R0P.poseidonScalarResidual (decodedOpenings o) (R0P.g2SumHigh (pointSelector point) 0 57 ⋯)
+        (R0P.g2Low (pointSelector point)) (lane group j)
+
+o : Openings
+point : Std.Array field.QM31 10#usize
+internalArray : State
+leading full : Packed
+hleading :
+  ∀ (g : Fin 4),
+    Decode (PoseidonClosure2ArrayExact.cell4 leading g) =
+      R0P.poseidonPackingFormula iBasis uBasis fun j =>
+        R0P.poseidonLeadingPair (decodedOpenings o).z (decodedOpenings o).xor12 (lane g j)
+hfull :
+  ∀ (g : Fin 4),
+    Decode (PoseidonClosure2ArrayExact.cell4 full g) =
+      R0P.poseidonPackingFormula iBasis uBasis fun j =>
+        R0P.poseidonInterpolatedFullPair (decodedOpenings o).z (R0P.g2Low (pointSelector point)) (lane g j)
+hinternal :
+  ∀ (j : Fin 16),
+    decodedState internalArray j =
+      R0P.poseidonInterpolatedInternalPair (decodedOpenings o).z (R0P.g2Low (pointSelector point)) j
+group : Fin 4
+hint :
+  decodedState internalArray =
+    R0P.poseidonInterpolatedInternalPair (decodedOpenings o).z (R0P.g2Low (pointSelector point))
+⊢ R0P.g2SumHigh (PoseidonSamePointArray.pointSelector point) 0 57 PoseidonSamePointArray.model._proof_3 *
+      (R0P.g2Low (PoseidonSamePointArray.pointSelector point) 0 *
+            (PoseidonGroupSliceModel.packedGroup o.succ_z group -
+              PoseidonSamePointArray.Decode (PoseidonClosure2ArrayExact.cell4 leading group)) +
+          PoseidonExplicitLowWeightFold.fullLow (R0P.g2Low (PoseidonSamePointArray.pointSelector point)) *
+            (PoseidonGroupSliceModel.packedGroup o.succ_z group -
+              PoseidonSamePointArray.Decode (PoseidonClosure2ArrayExact.cell4 full group)) +
+        PoseidonExplicitLowWeightFold.internalLow (R0P.g2Low (PoseidonSamePointArray.pointSelector point)) *
+          (PoseidonGroupSliceModel.packedGroup o.succ_z group -
+            PoseidonGroupSliceModel.packedGroup internalArray group)) =
+    R0P.poseidonPackingFormula iBasis uBasis fun j =>
+      R0P.poseidonScalarResidual (decodedOpenings o) (R0P.g2SumHigh (pointSelector point) 0 57 ⋯)
+        (R0P.g2Low (pointSelector point)) (lane group j)
+'AspisR1.PoseidonSamePointResidualModel.packedGroup_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoseidonSamePointResidualModel.scalar_group_pack' depends on axioms: [propext, Quot.sound]
+'AspisR1.PoseidonSamePointResidualModel.same_point_model_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+       21.25 real         2.35 user         3.72 sys
+          3331571712  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              115493  page reclaims
+              154253  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               25802  voluntary context switches
+              141979  involuntary context switches
+         29827280045  instructions retired
+         12823109115  cycles elapsed
+           525170424  peak memory footprint

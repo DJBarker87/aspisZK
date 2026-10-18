@@ -1,0 +1,9 @@
+# Same-point output model equals the retained Poseidon residual
+
+The three checked lemmas connect contiguous actual array packing to the literal tower formula and prove `PoseidonSamePointArray.model` is exactly the original R0P scalar residual packed in groups of four. They reuse the existing selector/preparation/output model and `PoseidonResidualPacking.weighted_pack` theorem. Leading/full packed-array model equations and the internal array model remain explicit premises; this does not claim those incoming actual source calls or the whole projected evaluator are proved.
+
+New source SHA 1e298a799280e3a157ec35a47a96193a971c6b1b5c0c3735da6580d418805589 passed in 7.70s, peak RSS3,372,335,104 bytes, process swap0, three standard-only axiom reports. The previously checked `AspisR1.PoseidonResidualPacking` source was unchanged and rebuilt only to recover its missing local import artifact; its two reports are not counted as new. The verified same-module object was placed into the first resolved AspisR1 namespace cache, with exact bytes/hash recorded.
+
+Rejected diagnostics are retained: aliases needed explicit normalization; direct elaboration of the general theorem attempted broad definitional reduction and hit recursion/heartbeat limits. The replacement rewrites backwards by the named symbolic theorem, closing without any raised recursion/heartbeat setting or evaluating a nonlinear round/table. The immediately preceding attempt failed only because a trailing rfl was redundant; it is not counted as an accepted file.
+
+The branch source correspondence, complete evaluator, cryptographic extraction/list/Fiat-Shamir instantiation and end-to-end 100-bit security/privacy remain open. No packing injectivity on unrestricted extension coordinates is asserted. No production Rust/runtime changed.
