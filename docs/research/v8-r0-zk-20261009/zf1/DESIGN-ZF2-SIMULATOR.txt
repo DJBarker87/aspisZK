@@ -82,13 +82,13 @@ The proof uses the witness in two places, and only the first must go:
     ι = p₀(0)+p₀(1) − maskSum       iota_A;  ι(cTilde w) = Σ_b fOrig(u_w)(b)
                                      (iota_cTilde), = 0 for valid w
                                      (iota_cTilde_zero)
-    .inactiveSum                     inactive_A;  = λ₀^26·Σ_{inactive} u_w[26]
+    .inactiveSum                     inactive_A;  = γ₀^26·Σ_{inactive} u_w[26]
                                      (inactive_cTilde), = 0 for valid w
     Φ₀ = evalRound9 − claimMask      Phi0_A;  Φ₀(cTilde w) = 0 for EVERY w
                                      when α₉ ≠ ½ (Phi0_cTilde)
     ChainEqs (9 chain equalities)    A_mem_chainEqs; cTilde w ∈ ChainEqs for
                                      EVERY w (cTilde_mem_chainEqs)
-  Here u_w = PayloadSplit.actual x.1 B (h.build w) ch 0, and λ₀ = ch.opening 0.
+  Here u_w = PayloadSplit.actual x.1 B (h.build w) ch 0, and γ₀ = ch.opening 0.
   The rest of the annihilator is the relR1 / B0R1′ relations on the batched
   cells and the K₄-typing of the round cells. These hold for any K₄-valued
   payload trace (bat_L_mem_B0R1, L_round_mem, originalRounds_mem).
@@ -104,3 +104,111 @@ The proof uses the witness in two places, and only the first must go:
   challenge. §3 avoids that. The (ii′) residual argument already shows that
   the list above is complete under P_R1. So a single explicit point in the
   coset is enough, and no elimination happens at simulation time.
+
+§3  Candidate public points
+----------------------------
+§3.1 The dummy witness through the honest builder fails (DERIVED from SOURCE).
+  Take a public dummy trace d, for example the public columns with every
+  private cell zero, and run the honest pipeline: u_d = actual x.1 B d ch 0
+  (prepare computes the H1 helper lane from d, λ and χ). In general d is
+  not HonestValid:
+    * production lanes: laneOf u_d … ≠ 0 at rows where a constraint with
+      public constants (Poseidon round constants, selectors, the copy
+      residual) is not met by zero private cells;
+    * the helper sums: Σ_r u_d[26] r ≠ 0 and Σ_{inactive} u_d[26] r ≠ 0 in
+      general.  The LogUp helper of a non-witness is unbalanced, and at a
+      pole (χ equal to one of d's tuple values) it has no valid value at
+      all (not_honestValid_of_pole, D40.2).
+  Then ι(cTilde_d) = Σ_b fOrig(u_d)(b) =: S_d ≠ 0 in general, and
+  .inactiveSum(cTilde_d) = γ₀^26·Σ_{inactive} u_d[26] ≠ 0 in general.
+  By not_iiPrime_witness / not_iiPrime_inactive (HonestValid.lean:410, 421),
+  cTilde_d − cTilde_w ∉ range A_ch whenever either value is nonzero. The two
+  laws Ψ_ch(cTilde_· + A_ch t) then sit on disjoint cosets, so the
+  statistical distance is 1. The verifier itself tells them apart: its
+  initial sumcheck test p₀(0)+p₀(1) = H (the published mask sum) fails on
+  the dummy view with probability 1. So "run the honest prover on a dummy
+  witness" is not a simulator. This is the check the task asked for.
+
+§3.2 The patched zero payload trace (DERIVED; the Lean proof is the §6 plan).
+  The proof of clause (ii′) never uses that u′ comes from an instance. It
+  uses only these properties of the pair (u, u′):
+    (a) the semantic lanes of u − u′ lie in Wsem (base-valued and
+        inactive-balanced), lane 26 lies in Wh1 (K₄-valued and
+        inactive-balanced), and every other lane of u − u′ is zero;
+    (b) u, u′ are K₄-valued, so the round cells and kOf lie in K₄
+        (TerminalClosed);
+    (c) ι and .inactiveSum agree on the two cTilde's.
+  Take u′ := 0 as the payload trace itself, NOT as a witness passed through
+  prepare. Lane 26 is then 0 too, so there is no helper, no pole and no
+  balance condition to meet. Property (a) for (u_w, 0) is exactly what
+  delta_sem_mem / delta_h1_mem prove for u_w alone (actual_sem_mem,
+  actual_inactive_sum, actual_mem and HonestValid clause 3). Property (b)
+  is trivial for 0. Property (c) fails only by the constant
+  S₀ := Σ_b fOrig(0)(b), because .inactiveSum of the zero-trace payload is
+  0. One public correction in the .maskSum cell repairs it. Define, for
+  pub = x.1:
+
+    k₀(pub,B,ch)  := fOrig pub B ch 0 (alpha ch) · (alpha ch 9 − ½)⁻¹
+    S₀(pub,B,ch)  := bsumB 10 (fun b => fOrig pub B ch 0 (ofBool b))
+    msCell s      := the payload with s at .maskSum and 0 elsewhere
+    refPayload pub B ch :=
+        PayloadSplit.roundInclusion (PayloadSplit.originalRounds pub B ch 0)
+      − k₀ • Shift.dir
+      + msCell S₀
+
+  This is cTilde's formula (cTilde_eq) at u = 0, using L 0 = 0, plus the
+  mask-sum patch.  Its silent values (DERIVED, one line each):
+    ι(refPayload)       = S₀ + 0 − S₀ = 0        (iota_originalRounds, iota_dir,
+                                                  ι(msCell s) = −s)
+    .inactiveSum        = 0                       (all three summands are zero there)
+    Φ₀(refPayload)      = fOrig(0)(α) − k₀(α₉−½) + 0 = 0   when α₉ ≠ ½
+    refPayload ∈ ChainEqs ch                      (originalRounds_mem_chainEqs,
+                                                  dir_mem_chainEqs; msCell has no
+                                                  round cell)
+    round cells ∈ K₄                              (originalRounds_mem at t = 0,
+                                                  k₀ ∈ K₄ by TerminalClosed on
+                                                  honestClaims 0 = 0, dirCoeff_mem)
+
+  Claim Z (DERIVED). Assume P_R1 h.transport B hB ch, PublicBase F x.1,
+  h.public w = x.1, BaseTyped F (h.build w) and
+  HonestValid x.1 B (h.build w) ch. Then
+      cTilde h B x w ch − refPayload x.1 B ch ∈ range (A h.transport B ch).
+  Proof: replay cTilde_sub_mem_range_R1 (R1Z/IIPrimeR1.lean:73) with w′
+  replaced by the reference. Step by step:
+    N  δ := u_w − 0.  hδ (delta_sem_mem's argument for u_w alone) and hδ26
+       (actual_mem; hv.2.2) hold, and noise_lift_R1 gives n.
+    τ  := u_w − tapeLinear B (inrN n). It is K₄-valued (the htape argument
+       of the original proof, which uses w only).
+    Y  := cTilde w − refPayload − A(inrN n)
+        = L τ + (roundInclusion(origRounds u_w) − roundInclusion(origRounds 0)
+                 − (kOf w − k₀) • dir) − msCell S₀.
+       This uses cTilde_eq and map_zero for L.
+    own cells: for every cell that is neither a round cell nor .maskSum,
+       Y cell = L τ cell (roundOnly_cell, extended by the msCell summand,
+       which is zero off .maskSum). The own cells of L τ are 0 by hn1/hn2,
+       own_L_eq_obs and actual_other_zero.
+    .inactiveSum: 0 − 0 − 0 (inactive_cTilde_zero, the line above,
+       inactive_A).
+    ι: 0 − 0 − 0 (iota_cTilde_zero, the line above, iota_A).
+    batched: batRead Y = batRead (L τ) ∈ B0R1′ (bat_L_mem_B0R1,
+       folded_unqueried_zero).
+    chain and terminal: Y ∈ ChainEqs, and Φ₀ Y = 0 with claimMask Y = 0, so
+       roundPoly 9 Y vanishes at α₉ (as hY9). Round cells are in K₄.
+       Hence roundProjection Y ∈ ChainT0K4.
+    M: mask_lift_of (QPrime_R1, bat_ker_own_le_B0R1′, BReach_R1) gives
+       Y = A(inlM m). So cTilde w − refPayload = A(inlM m + inrN n).  ∎
+  The .maskSum cell of Y enters mask_lift_of only through hinit (ι Y = 0).
+  That is the reason a patch in that cell is harmless. iiPrime_R1 follows
+  from Claim Z by subtraction, so Claim Z is the stronger statement.
+
+§3.3 What exactly defines the coset (answer).
+  Under P_R1, the class of cTilde w in Payload / range A_ch, for every valid
+  base-typed w, is the class of refPayload x.1 B ch. That payload is an
+  explicit function of (pub = x.1, B, ch), and through A_ch of
+  π = h.transport. It does not depend on x.2 (the commit handle), on
+  `outputs`, or on any instance. A canonical public point exists: the
+  zero payload trace, with the single field element S₀ added to the mask-sum
+  cell and the D14 direction removed. Under the D29 rejection rule nothing
+  extra about the challenge is needed. The conditions Claim Z uses are the
+  conjuncts of P_R1 (HalfOK, SemK4, QPrime_R1, BCondG_R1, C1Lift, H1Lift)
+  plus PublicBase. No obstruction appeared.
