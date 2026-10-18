@@ -6,14 +6,34 @@ Status words: PROVED (Lean, host receipt cited), SOURCE (read in the cited
 Lean file at the base), DERIVED (argued here from SOURCE lemmas, not yet
 compiled), PROPOSED, MEASURED, ESTIMATED.
 
-§0  Summary                                         [pending]
-§1  The current simulator and why it is not one     [pending]
-§2  The honest law and the public coset data        [pending]
-§3  Candidate public points; the dummy witness fails; the patched zero trace [pending]
-§4  The simulator algorithm and its cost            [pending]
-§5  The theorem that replaces simV                  [pending]
-§6  Lean plan                                       [pending]
-§7  What stays open                                 [pending]
+§0  Summary
+------------
+  * Result: an explicit simulator exists, and no obstruction arose.
+    simE π B outputs x ch t = (metadata outputs x ch,
+    Ψ_ch(refPayload x.1 B ch + A_ch(equiv⁻¹ t))). Its inputs are the public
+    statement, the challenge and a uniform tape; it reads no witness and
+    solves no linear system (§4).
+  * The public coset point is refPayload: the zero payload trace (all 29
+    lanes zero, so there is no helper and no pole), its zerocheck rounds of
+    the public constraint polynomial, minus k₀·dir, plus
+    S₀ = Σ_b fOrig(0)(b) in the mask-sum cell (§3.2). Running the honest
+    prover on a dummy witness does NOT work: that view lies in a different
+    coset (ι ≠ 0 and the inactive sum ≠ 0), at statistical distance 1 (§3.1).
+  * PROVED (host 3910–3913, all exit 0 on the first attempt, axioms
+    standard; zf1/zf2-evidence.json):
+      R0Z/HvzkS        zkfs_of_hvzk_onS_terms (the abort composition for any
+                       simulator)
+      R0Z/RefPayload   refPayload's silent values, simE, equalLaws_simE_of
+      R1Z/RefCosetR1   cTilde_sub_ref_mem_range_R1 (Claim Z: on P_R1,
+                       cTilde w − refPayload ∈ range A_ch for every valid,
+                       base-typed w)
+      R1Z/SimulatorR1  hvzk_R1S, privacy_R1_eff: ZK_FS against simE with the
+                       error of privacy_R1,
+                       M·q/Umin + (M²/Umin + εexh) + Mi²/Umin + N·4096/Q.
+  * Cost: the simulator is dominated by the public P_R1 check it shares
+    with the prover. That check takes 22.6 s on the nuc (MEASURED, D38).
+    The rest costs at most one honest payload computation without witness
+    generation (ESTIMATED, §4.3).
 
 §1  The current simulator and why it is not one
 ------------------------------------------------
@@ -129,7 +149,7 @@ The proof uses the witness in two places, and only the first must go:
   the dummy view with probability 1. So "run the honest prover on a dummy
   witness" is not a simulator. This is the check the task asked for.
 
-§3.2 The patched zero payload trace (DERIVED; the Lean proof is the §6 plan).
+§3.2 The patched zero payload trace (PROVED: R1Z/RefCosetR1, host 3912).
   The proof of clause (ii′) never uses that u′ comes from an instance. It
   uses only these properties of the pair (u, u′):
     (a) the semantic lanes of u − u′ lie in Wsem (base-valued and
@@ -169,7 +189,7 @@ The proof uses the witness in two places, and only the first must go:
                                                   k₀ ∈ K₄ by TerminalClosed on
                                                   honestClaims 0 = 0, dirCoeff_mem)
 
-  Claim Z (DERIVED). Assume P_R1 h.transport B hB ch, PublicBase F x.1,
+  Claim Z (PROVED, cTilde_sub_ref_mem_range_R1). Assume P_R1 h.transport B hB ch, PublicBase F x.1,
   h.public w = x.1, BaseTyped F (h.build w) and
   HonestValid x.1 B (h.build w) ch. Then
       cTilde h B x w ch − refPayload x.1 B ch ∈ range (A h.transport B ch).
@@ -295,6 +315,9 @@ roundInclusion/originalRounds, R0P.Sumcheck.bsumB/ofBool, PayloadCell
 (HonestView.lean:59), FsAbort.AbortBridge (fields N, draw, extend, fail),
 FsStatement.FSExperiments (`ideal` takes any
 `Challenges K → Tape K F → View`), HvzkV, ModelsVR1, PrivacyR1.
+
+All of §5 compiled as written, except for the small departures listed in
+§6 (PROVED, host 3910–3913).
 
 §5.1 Generic in Bat (R0Z/RefPayload.lean).
   def msCell (s : K) : Payload K Bat := fun cell => match cell with
@@ -457,3 +480,16 @@ an addition. Acceptance criteria:
   * Every other condition of privacy_R1 carries over unchanged (D42.5, items
     1–4 and 6). Item 5 (ZF2) is closed by privacy_R1_eff once L1–L4 are
     green.
+
+§6.1 Results (PROVED; zf1/zf2-evidence.json).
+  attempt module           sha256 (prefix)  exit wall   peak RSS KiB swaps axiom lines
+  3910    R0Z/HvzkS        877fa7c7…        0    3.33 s 6,637,800    0     9
+  3911    R0Z/RefPayload   d7e378fd…        0    9.86 s 6,638,560    0     17 (msCell [propext, Quot.sound])
+  3912    R1Z/RefCosetR1   deaffbc8…        0    7.59 s 6,705,280    0     2
+  3913    R1Z/SimulatorR1  b2820559…        0    3.34 s 6,634,228    0     4
+  Every axiom line is [propext, Classical.choice, Quot.sound] or a subset.
+  The sources contain no sorry, axiom, admit, native_decide or option
+  overrides. Each host SHA equals the committed source. Departures from
+  §5: privacy_R1_eff drops `he : 0 ≤ εexh` (not needed);
+  zkfs_of_hvzk_onS_terms takes no sign hypotheses; RefCosetR1 adds
+  `msCell_ne`. Next free attempt in the range: 3914.
