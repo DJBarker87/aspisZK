@@ -129,3 +129,70 @@ checker rejects any non-canonical limb or out-of-range index (fail closed).
   50-200 MB for one-level preimages; the two-level form (kernel vectors over
   a pivot list, then a combination of their images) is what makes it small.
 
+§2  The checker and its soundness statement
+-------------------------------------------
+§2.1 Algorithm (SPECIFIED; prototype z4/z9c.rs `check`)
+  Inputs: challenges (alpha_0..9, z_0, z_1, gamma, kappa, alpha0, alpha1,
+  queries) and the certificate.  Steps, each returning false on failure:
+   1. canonical-limb and index-range scan of the certificate;
+   2. HalfOK, QueryCard, SemK4 (§1.1-§1.3);
+   3. source columns from the row formulas: own/obs (raw_c), round
+      (round_row, tail_row), bat (unit_functionals at pi(r), gamma^lane);
+      only the columns named by the certificate are needed, plus the full
+      G lane for BCondG;
+   4. lifts: O_S * Uc == I (§1.6);
+   5. QPrime: kernel checks, rho_j, then Y * rho == b (§1.4);
+   6. BCondG: E := U * Rel, echelon and partition checks, n_f, G kernel checks,
+      beta_j, then Y_G * beta == n (§1.5).
+  Every arithmetic step is a dot product of two F-vectors (accumulated
+  lazily in u64, reduced once per output) or an equality test.
+§2.2 Cost model (multiply-adds, P = 22, before measurement)
+  lifts 16*112^3 + 376^3 = 75M; QPrime kernel <= 1,080*377*1,460 = 0.6G
+  (0.15G if all from mask-only lanes), Y*rho 1,084*1,080*1,084 = 1.27G;
+  BCondG U*Rel ~40M (Rel sparse), G kernel 952*1,461*(1,460+1,328) = 3.9G,
+  Y_G*beta 952*952*1,328 = 1.2G.  Total about 6.5G multiply-adds.  This is
+  the deterministic floor for these shapes: verifying a dense product of an
+  n x n by n x n matrix by recomputation costs n^3, and the targets (b, n_f)
+  are dense combinations of the computed images.  §7 records the randomised
+  alternative and why it is not adopted.
+§2.3 Soundness statement and its parts
+  check_sound (OBLIGATION, assembled from the parts below):
+    check ch c = true -> P_R1 AspisR1.rowEquiv B hB (decode ch).
+  (C1) Checker semantics -- generic linear algebra, PROVED in §5:
+     pre_sound     zero-map + target-map preimage certificate =>
+                   iota(T i) in (G ⊓ ker z).map g for every target row i;
+     span_sound    the same for a submodule spanned by the targets;
+     ech_sound     U * Rel = E, E echelon on piv, piv/fr partition =>
+                   ker Rel <= span {n_f};
+     rinv_sound    O_S * U = 1 => range iota <= (span S).map obs;
+     half_sound, card_sound   the field and length facts.
+  (C2) Row-formula premises -- named Props in §5, the D34.3 items and their
+     siblings; each is a closed-form identity to be proved symbolically for
+     all rows (AGENTS rule 2), never by evaluating 1,024 rows:
+     RF-own    ownMap (src t) = iota_own (O col t) (block-diagonal per lane);
+     RF-round  roundMaskMap (src t) = iota_round (R col t) (T2b-2a pureRound
+               closed forms; the Z4c coordinate map, linear coefficient
+               implied by the boundary -- DESIGN-R1-P §4.2 OBLIGATION);
+     RF-bat    batMap (src t) = iota_bat (Bt col t) (R1-2 batRead_L cells,
+               ell vs Rust weight kinds 5/6, D34.3);
+     RF-src    each source is a mask tape (Gonly for the G sources; base for
+               Vsem, K4 for Ph1) and src t in Vsem c / Ph1 for the lift lists;
+     RF-chain  ChainT0K4 <= span {iota_round b_i} (normalize_d generators);
+     RF-rel    B0R1' <= (ker Rel).map iota_bat (relR1 limb functionals, D35.1
+               lineInverse vs QueryGeometry, storedFirstLineX18 vs line_node,
+               unopenedZero = coordinates outside the read support);
+     RF-obs    (Wsem).map obs <= range iota_obs, (Wh1).map obs <= range
+               iota_obs (obs of a base/K4 lane word has its F-coordinates);
+     RF-dec    the decoders: alpha 9 = decoded alpha_9, queries = list.toFinset,
+               sem rows in K4 when their upper limbs vanish.
+  (C3) Rust <-> Lean for the checker only (§6).
+§2.4 Why no inverse is needed for BCondG
+  BCondG_R1 is B0R1' <= V_G.  With RF-rel, B0R1' <= iota_bat(ker Rel); ech_sound
+  gives ker Rel <= span{n_f}; pre_sound gives iota_bat(n_f) in V_G.  The
+  direction ker E <= ker Rel (which U^-1 would certify) would bound B0R1' from
+  below and is not used; the theorem V_G <= B0R1' is not used either (it is
+  already proved and makes the inclusion an equality, which P_R1 does not ask).
+  So the dimension test of DESIGN-R1-P §1.4 becomes an inclusion with
+  explicit preimages, and false negatives remain possible only by the
+  producer failing to find them.
+
