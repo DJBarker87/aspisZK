@@ -1,0 +1,9 @@
+# Actual candidate G3 composition
+
+Four focused Lean 4.32 targets passed. PoseidonInterpolatedFullPairExact derives actual interpolated full-pair success, output canonicality and the retained model by composing the checked preparation and both full rounds. Generic Result bind lemmas preserve concrete scalar instance proofs without unfolding arrays.
+
+PoseidonCandidateProjectedActualG3 derives the actual leading, interpolated-full, internal and projected candidate computations and their literal WideExact packing formula from canonical point/opening arrays and boxed-selector success. The packed-family companion identifies all four output cells with the retained family formula. The final companion derives boxed-selector success from the canonical point and connects the candidate evaluator QName, removing that success premise. Canonical point and z/succ/xor opening arrays remain premises. No intermediate branch-success or branch-model hypotheses remain. No packing injectivity at extension points is asserted.
+
+Each target passed one focused check, with exact source/base revision, command, object/import pins, wall time, RSS, process swap and printed axioms retained. All reports contain only propext, Classical.choice and Quot.sound. Host swap is separately recorded in receipts; process swap count zero is not a claim of zero host swap. The integration table resolves new-target import source pins omitted by the original temporary-path lookup using the matching object and frozen source hashes. No unchanged full manifest replay was run.
+
+This proves a candidate source cut. Whole generated extraction, current production Rust equivalence, accepted-verifier caller reachability, remaining backend relations, commitment/oracle instantiation and end-to-end soundness/privacy remain open. Production Rust and deployed artifacts are unchanged.
