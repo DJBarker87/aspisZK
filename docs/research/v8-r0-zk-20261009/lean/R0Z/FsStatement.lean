@@ -16,35 +16,36 @@ abbrev OracleAnswer := Fin 32 → UInt8
 
 /-- Full public model view plus the observer's own query/answer transcript.
 The honest prover's private oracle-input log is not a public field. -/
-structure ROMView (K CommitHandle Aux : Type) [Field K] where
-  disclosed : View K CommitHandle Aux
+structure ROMView (K CommitHandle Aux Bat : Type) [Field K] where
+  disclosed : View K CommitHandle Aux Bat
   observerOracle : List (Bytes × OracleAnswer)
 
-structure FSExperiments (K CommitHandle Aux : Type) [Field K] (F : Subfield K) where
+structure FSExperiments (K CommitHandle Aux Bat : Type) [Field K] (F : Subfield K) where
   Adversary : Type
   RealRand : Type
   IdealRand : Type
   real : (h : HonestProver K) → PackBasis F →
     (Statement K CommitHandle → Challenges K → Aux) → Adversary →
-    Statement K CommitHandle → h.Instance → RealRand → ROMView K CommitHandle Aux
-  ideal : (Challenges K → Tape K F → View K CommitHandle Aux) → Adversary →
-    Statement K CommitHandle → IdealRand → ROMView K CommitHandle Aux
-  observe : Adversary → ROMView K CommitHandle Aux → Bool
+    Statement K CommitHandle → h.Instance → RealRand → ROMView K CommitHandle Aux Bat
+  ideal : (Challenges K → Tape K F → View K CommitHandle Aux Bat) → Adversary →
+    Statement K CommitHandle → IdealRand → ROMView K CommitHandle Aux Bat
+  observe : Adversary → ROMView K CommitHandle Aux Bat → Bool
 
 variable {K CommitHandle Aux : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+  {Bat : Type} [HonestView.BatchedLayer K Bat]
 
 def bit (b : Bool) : ℚ := if b then 1 else 0
 
 def realTest (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F) (adv : fs.Adversary)
+    (fs : FSExperiments K CommitHandle Aux Bat F) (adv : fs.Adversary)
     (x : Statement K CommitHandle) (w : h.Instance) : fs.RealRand → ℚ :=
   fun r => bit (fs.observe adv (fs.real h B outputs adv x w r))
 
 def idealTest (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F) (adv : fs.Adversary)
+    (fs : FSExperiments K CommitHandle Aux Bat F) (adv : fs.Adversary)
     (x : Statement K CommitHandle) (hx : InLanguage h x) : fs.IdealRand → ℚ :=
   fun r => bit (fs.observe adv (fs.ideal (simulator h B outputs x hx) adv x r))
 
@@ -52,7 +53,7 @@ def idealTest (h : HonestProver K) (B : PackBasis F)
 neither HVZK nor a ROM reduction is a premise of this definition. -/
 def ZK_FS (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
     [Fintype fs.RealRand] [Nonempty fs.RealRand]
     [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
     (x : Statement K CommitHandle) (epsilon_fs : ℚ) : Prop :=
@@ -62,28 +63,28 @@ def ZK_FS (h : HonestProver K) (B : PackBasis F)
 /-- Data for a common randomized extension of the two interactive views.
 Its coins include the instance-independent challenge draw and any observer
 randomness. Their product with Tape expresses independence from prover coins. -/
-structure ROMBridge (K CommitHandle Aux Adv : Type) [Field K] where
+structure ROMBridge (K CommitHandle Aux Bat Adv : Type) [Field K] where
   Coins : Type
   finiteCoins : Fintype Coins
   nonemptyCoins : Nonempty Coins
   draw : Adv → Statement K CommitHandle → Coins → Challenges K
   extend : Adv → Statement K CommitHandle → Coins →
-    View K CommitHandle Aux → ROMView K CommitHandle Aux
+    View K CommitHandle Aux Bat → ROMView K CommitHandle Aux Bat
 
 attribute [instance] ROMBridge.finiteCoins ROMBridge.nonemptyCoins
 
 def middleReal (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
-    (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
+    (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary)
     (x : Statement K CommitHandle) (w : h.Instance) : bridge.Coins × Tape K F → ℚ :=
   fun t => bit (fs.observe adv (bridge.extend adv x t.1
     (view h B outputs x w (bridge.draw adv x t.1) t.2)))
 
 def middleIdeal (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
-    (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
+    (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary)
     (x : Statement K CommitHandle) (hx : InLanguage h x) : bridge.Coins × Tape K F → ℚ :=
   fun t => bit (fs.observe adv (bridge.extend adv x t.1
     (simulator h B outputs x hx (bridge.draw adv x t.1) t.2)))
@@ -93,11 +94,11 @@ real-game comparison bounds. All commitment, programming, seed, abort, and
 source errors must be justified in these bounds; no such proof is supplied. -/
 def ROMReduction (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
     [Fintype fs.RealRand] [Nonempty fs.RealRand]
     [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
     (x : Statement K CommitHandle) (epsilon_fs : ℚ) : Prop :=
-  ∃ bridge : ROMBridge K CommitHandle Aux fs.Adversary,
+  ∃ bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary,
     ∃ epsilon_real epsilon_ideal : ℚ,
       0 ≤ epsilon_real ∧ 0 ≤ epsilon_ideal ∧ epsilon_real + epsilon_ideal ≤ epsilon_fs ∧
       ∀ (hx : InLanguage h x) (adv : fs.Adversary) (w : h.Instance), h.public w = x.1 →
@@ -109,10 +110,10 @@ def ROMReduction (h : HonestProver K) (B : PackBasis F)
 /-- D20′.3: the two real-game comparison bounds for a specified bridge. -/
 def ROMReductionWith (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
     [Fintype fs.RealRand] [Nonempty fs.RealRand]
     [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
-    (bridge : ROMBridge K CommitHandle Aux fs.Adversary)
+    (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary)
     (x : Statement K CommitHandle) (ε_real ε_ideal : ℚ) : Prop :=
   0 ≤ ε_real ∧ 0 ≤ ε_ideal ∧
   ∀ (hx : InLanguage h x) (adv : fs.Adversary) (w : h.Instance), h.public w = x.1 →
@@ -124,7 +125,7 @@ def ROMReductionWith (h : HonestProver K) (B : PackBasis F)
 /-- The original reduction existentially packages a bridge and its two bounds. -/
 theorem romReduction_iff (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
     [Fintype fs.RealRand] [Nonempty fs.RealRand]
     [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
     (x : Statement K CommitHandle) (ε : ℚ) :
@@ -139,10 +140,10 @@ theorem romReduction_iff (h : HonestProver K) (B : PackBasis F)
 
 theorem middle_means_eq (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
-    (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
+    (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary)
     (x : Statement K CommitHandle) (hx : InLanguage h x) (w : h.Instance)
-    (hw : h.public w = x.1) (hh : HVZK_perfect h B outputs x) :
+    (hw : h.public w = x.1) (hh : HVZK_perfect (Bat := Bat) h B outputs x) :
     mean (middleReal h B outputs fs bridge adv x w) =
       mean (middleIdeal h B outputs fs bridge adv x hx) := by
   rw [LawTransport.mean_product, LawTransport.mean_product]
@@ -156,11 +157,11 @@ theorem middle_means_eq (h : HonestProver K) (B : PackBasis F)
 ROMReduction certificate for the chosen games and their symbolic ledger. -/
 theorem zkfs_of_hvzk_perfect (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
     [Fintype fs.RealRand] [Nonempty fs.RealRand]
     [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
     (x : Statement K CommitHandle) (epsilon_fs : ℚ) :
-    HVZK_perfect h B outputs x → ROMReduction h B outputs fs x epsilon_fs →
+    HVZK_perfect (Bat := Bat) h B outputs x → ROMReduction h B outputs fs x epsilon_fs →
       ZK_FS h B outputs fs x epsilon_fs := by
   intro hh hr hx adv w hw
   obtain ⟨bridge, er, ei, _, _, hsum, hb⟩ := hr
