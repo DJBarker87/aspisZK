@@ -4984,3 +4984,49 @@ use). The cap is not raised. A module that hits it is split.
 - Lane A: R1-3 PredicateR1, then J2-R1 (relations worker, attempts
   3684–3739).
 - Lane C: J0 and J13-R1 (a new worker, attempts 3740–3799).
+
+### Lead acceptance of Z9b (2026-10-18); D35: B0R1 corrected, C1Lift/H1Lift measured
+
+Z9b (worker 4ecdc28f0..12dc399ac, cherry-picked) is accepted. The
+expectations were committed before any run. 253 jobs (506 evaluations, both γ
+limb sets) were run on the real R1 payload:
+- the Z4c actual query sets;
+- {0..21}, spaced and paired sets;
+- 200 uniform sets;
+- 20 consecutive and 20 coset sets.
+
+The full run took 1:02:09, with cgroup peak 733 MB and 0 swaps. One
+thread-spawn failure (TasksMax 64, not memory) was rerun alone at
+concurrency 1 without raising caps, and passed. Everything here is numerically
+checked, not proved.
+
+**D35.1 lineInverse (F1).** Only `((2x)⁻¹, −(2y)⁻¹, (2z)⁻¹)` makes relR1
+hold. The literal (1/x, 1/y, 1/z) mismatches 88/88, and the unsigned form
+mismatches 44/88. This agrees with the table D33's `line_identity` was proved
+with. With it, ia + relR1 annihilates bat(ker own) exactly in all 506
+evaluations, with 0 unexplained.
+
+**D35.2 BCondG_R1 as typed is false (F2), and is corrected.** B0R1 =
+ker relR1 over all of R1Bat leaves the 262,144 − 4P unopened folded cells
+free, while V_G is zero there. Correction: B0R1′ := B0R1 ⊓ {unopened folded
+cells = 0}, and BCondG_R1 := B0R1′ ≤ V_G. `bat_ker_own_le_B0R1′` follows
+from D34's `bat_ker_own_le_B0R1` and R1-2's `folded_unqueried_zero`. The
+landed VerifierRelationsR1 statements remain true and are not edited. The
+R1-3 worker was told before finishing PredicateR1. On the opened
+coordinates BCondG_R1 held in all 506 evaluations (V_G = bat(ker own) =
+dim B0R1′), and so did the fallback B0own ≤ V_G.
+
+**D35.3 Duplicate parents (F4).** Queries sharing u/4 give identical line
+relations. The relation rank is 8(4 + 22 + P), where P is the number of
+distinct parents. dim B0R1′ is 952 generically and 616 or 568 on coset sets.
+No statement may assume 47 independent relations.
+
+**D35.4 C1Lift and H1Lift.** Measured on their own for the first time, both
+held in every evaluation, including the adversarial consecutive and coset
+sets:
+- C1Lift on all 16 lanes: opened part 88/88, remaining 24/24;
+- H1Lift: opened part 352/352, remaining 24/24.
+
+So under D18 the opened part (D24.4 "not structural") was full on every set
+tried. Under D29 these are conjuncts of P_R1, so no protocol change is
+needed. A structural proof stays with Route P.
