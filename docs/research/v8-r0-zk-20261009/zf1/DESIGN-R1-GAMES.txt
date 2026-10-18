@@ -269,3 +269,43 @@ already counted (D41 ε_coll).  Consequently Mi = 0 and ε_prog = 0.
     R1RealData hypotheses of 6.3.  For N = 8, Mc + 115 ≤ 2^21, qmax = 2^64
     this is the D41/D42 number (≈ 2^-109, pole-dominated) with ε_prog
     dropped; no new numeral was compiled.
+
+----------------------------------------------------------------------
+§7  Lean modules, attempts and evidence  (zf1/r1-games-evidence.json)
+----------------------------------------------------------------------
+
+All on the build host via run2.sh … 7000 7; exit 0, 0 swaps, every axiom
+line within [propext, Classical.choice, Quot.sound]; no sorry, axiom,
+admit, native_decide or option overrides.
+  R1Z/LensR1          3951  sha 90bc5726…  imports R0Z.FsAbortBounds   11 lines
+  R1Z/TranscriptR1    3954  sha e8b6f22d…  imports R1Z.LensR1          20 lines
+  R1Z/GamesR1         3957  sha 630393aa…  imports R0Z.HvzkS, R1Z.ModelsVR1,
+                                           R1Z.TranscriptR1            22 lines
+  R1Z/PrivacyGamesR1  3958  sha ec1a2ede…  imports R1Z.SimulatorR1, R1Z.GamesR1
+                                                                        2 lines
+Failed and retained: 3950 (List.ofFn unfolded by simp), 3952 (field name
+`rec` clashed with the recursor), 3953 (green, superseded by 3954 after the
+ChainC restriction), 3955–3956 (instance/metavariable elaboration).
+Peak RSS 6.47–6.70 GB under -M7000.  GamesR1 and PrivacyGamesR1 were
+compiled against the 7872bce2c objects (host sources of HvzkS, HvzkV,
+ModelsVR1, SimulatorR1, RefPayload, RefCosetR1, PoleMassR1 checked
+byte-identical to the rebased base).
+
+----------------------------------------------------------------------
+§8  Open items
+----------------------------------------------------------------------
+
+G-root   closed in the model (§1, `abR1.extend`); R-ser remains.
+G-def    closed: fsR1.real, fsR1.ideal and abR1 are Lean definitions.
+G-retry  closed in the model (`realGame`); R-retry (the Rust loop) open.
+G-prog   open: R1RealData.cp (lazy programming, with toM a projection).
+G-ref    open: R1RealData.Agree, plus R-wire, R-commit, R-causal, R-pub.
+H-layout transcript part PROVED; commitment part (CmLayout.hit/pair/cross)
+         open — salts, leaves, 8-ary nodes, expander and seed reads.
+H-count  transcript 115 PROVED; Mc source-counted (G-count).
+G-exh    open (mass of exh).
+Sem1Uniform for drawW, BuilderSoundOn fields, PublicBase: unchanged (D42/D44).
+QROM     not covered.
+Observation: the ideal programming term is 0 for these games because the
+simulator game IS the middle game; the programming collisions are inside
+the real side's CollEv, which already pays M²/Umin.
