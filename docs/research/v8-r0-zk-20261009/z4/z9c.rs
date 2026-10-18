@@ -604,14 +604,17 @@ fn check(p: &Pub, c: &Cert, tm: &mut CheckTimes) -> (bool, &'static str) {
         let own_t = transpose(&ps.iter().map(|s| s.own.as_slice()).collect::<Vec<_>>(), ow);
         let rnd_t = transpose(&ps.iter().map(|s| s.round.as_slice()).collect::<Vec<_>>(), RW);
         for (j, cc) in &l.ents {
-            if cc.len() != l.piv.len() {
+            // c covers a prefix of the lane's pivot list (the pivots that existed when
+            // the entry was produced): KerEntry.s = c.len() <= |P|.
+            let n = cc.len();
+            if n > l.piv.len() {
                 return (false, "qprime shape");
             }
             let s = src3(&ln, li, *j as usize);
-            if (0..ow).any(|t| addm(s.own[t], dot(&own_t[t], cc)) != 0) {
+            if (0..ow).any(|t| addm(s.own[t], dot(&own_t[t][..n], cc)) != 0) {
                 return (false, "qprime kernel");
             }
-            rhos.push((0..RW).map(|t| addm(s.round[t], dot(&rnd_t[t], cc))).collect());
+            rhos.push((0..RW).map(|t| addm(s.round[t], dot(&rnd_t[t][..n], cc))).collect());
         }
     }
     let targets = chain_targets(&p.a);
@@ -666,16 +669,17 @@ fn check(p: &Pub, c: &Cert, tm: &mut CheckTimes) -> (bool, &'static str) {
     let b_t = transpose(&ps.iter().map(|s| s.bat.as_slice()).collect::<Vec<_>>(), bwr);
     let mut betas: Vec<Vec<u32>> = vec![];
     for (j, cc) in &c.bc_g.ents {
-        if cc.len() != c.bc_g.piv.len() {
+        let n = cc.len();
+        if n > c.bc_g.piv.len() {
             return (false, "bcond G shape");
         }
         let s = src3(&ln, 10, *j as usize);
         let mut zj = s.own.clone();
         zj.extend(&s.round);
-        if (0..zw).any(|t| addm(zj[t], dot(&z_t[t], cc)) != 0) {
+        if (0..zw).any(|t| addm(zj[t], dot(&z_t[t][..n], cc)) != 0) {
             return (false, "bcond G kernel");
         }
-        betas.push((0..bwr).map(|t| addm(s.bat[t], dot(&b_t[t], cc))).collect());
+        betas.push((0..bwr).map(|t| addm(s.bat[t], dot(&b_t[t][..n], cc))).collect());
     }
     if c.bc_y.len() != c.bc_fr.len() || c.bc_y.iter().any(|y| y.len() != betas.len()) {
         return (false, "bcond Y shape");
