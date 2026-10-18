@@ -30,3 +30,5 @@ The seven accepted sources are copied with their actual compiled owner names int
 These are positive proof components, not the full privacy coupling or source correspondence theorem. The actual HonestView semantic coefficient prefix law is proved; all-row payload stability, concrete R1Wire instantiation, realAttempt agreement, commitment/salt and retry/source invariants still need composition. No production code, deployed artifact, wallet key or protocol parameter changed.
 
 The original audit preflight omitted the FixedRest direct-import pin. A separate read-only binding validation records the audit source import, v12 object SHA and LEAN_PATH precedence; its path/hash is linked from accepted-targets.json. The original preflight is preserved unchanged.
+
+The row-bytes v1/v2 drafts arrived in the worker packet during assembly. They failed focused elaboration and are retained only under history/unaccepted-row-bytes, outside the accepted manifest and canonical Lean sources. They are not accepted proof results.
