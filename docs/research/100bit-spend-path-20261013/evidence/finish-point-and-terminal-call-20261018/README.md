@@ -1,0 +1,11 @@
+# Exact finish point and terminal call
+
+Two new focused Lean targets passed. ActualFinishAlphaSelectedCanonical derives canonical selected-carrier coordinates from successful FinishModel.finish, using the existing round-call reachability theorem. The selectedAlpha array is a coordinate-for-coordinate copy of the exact returned alpha; no independent point or input canonicality premise is supplied. ActualFinishTerminalCallReachability derives the successful B.terminal call with that same alpha and the actual claims value. No terminal child-success hypothesis is supplied.
+
+These are the retained finish source model, with explicit RoundModel/FinishModel boundaries. The archived source-token correspondence is separate from a whole production Rust proof. B.terminal is not instantiated here with the new candidate composition. Actual claims decoder/heap semantics, entrypoint/source refinement, commitment/Fiat-Shamir reduction and end-to-end soundness/privacy remain open. These results do not certify 100-bit security.
+
+Accepted NUC checks: alpha exit0/controller5.075s/peakRSS3,815,180KiB; terminal call exit0/controller3.041s/RSS2,614,992KiB. Process swaps0, no watchdog abort. All three printed reports contain only propext, Classical.choice and Quot.sound. Individual High4GiB/Max4608MiB/SwapMax0 and fresh58GiB reservation gates were unchanged. Exact commands, source/base revision/hashes, imports, resource watches and output hashes are retained per accepted target. No full manifest replay was run.
+
+The needed full generated Types and Funs are already accepted conservative source extensions of C16. The byte-prefix check retains every existing declaration and adds emitted types/getters needed by the full finish body. Compatibility sources and a runnable check are retained. No configured cache was overwritten. A first alpha import attempt lacked a cached prefix dependency; two terminal attempts exposed a missing getter in the smaller Funs owner. Those rejected attempts are retained separately. Their compiler-error sorryAx reports are not accepted proof results; no failed output is used. The complete generated extension fixed the missing source dependency.
+
+Next consumer: the candidate begin/finish composition bridge, whose claim-parser canonicality premise and production boundary instantiation remain explicit.
