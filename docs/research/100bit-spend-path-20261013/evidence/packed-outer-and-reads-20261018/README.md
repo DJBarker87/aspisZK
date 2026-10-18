@@ -1,0 +1,7 @@
+# Packed outer rows and checked raw reads
+
+The outer-row target proves the actual four-row source construction succeeds, with the expected natural formulas and every cell below 7P. The raw-read target proves the checked fixed-array reads and composes them with the already checked four packing arithmetic components, yielding source-tail success and exact packed natural values under explicit word/range bounds. It reuses the existing fixed-array read and arithmetic results.
+
+Focused NUC checks passed: outer rows exit0, controller wall2.021s, peakRSS3,996,580KiB; raw reads exit0, controller wall3.039s, peakRSS3,996,608KiB. Both had process swaps0, per-job MemoryMax4608MiB and MemorySwapMax0, and no watchdog abort. Reservation gates and live samples, exact source revisions/hashes, commands and import/object pins are retained in each receipt. Nine theorem axiom reports are standard-only (three outer-row, six raw-read). Five raw-read reports were printed by a later failing caller attempt importing the exact accepted raw-read object, avoiding an unchanged rerun. Its failure and exact source are retained; neither that caller nor its additional sourceRawWord report is claimed as an accepted result. accepted-five-reports.json identifies exactly the imported theorems counted here.
+
+The enclosing raw caller, field-level caller, complete packed external layer and final evaluator composition remain open. No complete manifest replay, whole-verifier correspondence, end-to-end soundness or privacy is claimed. No production Rust or runtime artifact changed.
