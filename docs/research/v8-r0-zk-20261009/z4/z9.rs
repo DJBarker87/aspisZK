@@ -28,6 +28,8 @@ const OPEN_SEED9: u64 = 0x5a39_0be0_2026_1017;
 // Order kept from z8c so that A, B, I, J (and K, L, M) keep their alpha seeds.
 const STRUCTURES: [&str; 7] = ["A", "B", "I", "J", "K", "L", "M"];
 const RW: usize = 1084; // round coordinates (Z4c layout)
+#[path = "z9b.rs"]
+pub(super) mod z9b;
 const THREADS: usize = 4;
 
 // ---------------------------------------------------------------- R1 ports
