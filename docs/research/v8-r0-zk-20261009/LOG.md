@@ -5469,3 +5469,52 @@ charon/cargo job had launched, between the gate check and the launch. The
 worker then moved the gate into the same SSH command as run2.sh, aborting on
 a non-empty gate. That is accepted only as an aborting precondition. The gate
 output must still be recorded per attempt.
+
+### Lead acceptance of ZF2 (2026-10-18); D44: an explicit, witness-free simulator for R1
+
+ZF2 (worker aca7598b5..749f9a778, 9 commits, cherry-picked) is accepted.
+The design is `zf1/DESIGN-ZF2-SIMULATOR.txt`. The lead verified each host
+receipt (SHA matches, exit 0, standard axioms, no sorry/axiom/admit/
+native_decide/overrides, no `Classical.choose` in any of the sources):
+
+| Module | Attempt | SHA | Axiom lines |
+|---|---|---|---|
+| R0Z/HvzkS | 3910 | `877fa7c7…` | 9 |
+| R0Z/RefPayload | 3911 | `d7e378fd…` | 17 |
+| R1Z/RefCosetR1 | 3912 | `deaffbc8…` | 2 |
+| R1Z/SimulatorR1 | 3913 | `b2820559…` | 4 |
+
+**D44.1 The simulator.** `simE π B outputs x ch t = (metadata outputs x
+ch, shift x.1 B ch (refPayload x.1 B ch + A π B ch (equiv.symm t)))`. It
+takes no instance and no InLanguage proof, and the lead read the definition.
+`refPayload` is the zero payload trace's cTilde formula with S₀ added at
+`.maskSum`, so it is computed from public data only.
+
+The dummy-witness alternative was checked and rejected: such a view lies in
+a different coset, at statistical distance 1, and the verifier's initial
+sumcheck test already separates it.
+
+Claim Z (`cTilde_sub_ref_mem_range_R1`): for every valid, base-typed w,
+cTilde w − refPayload ∈ range A_ch.
+
+**D44.2 `privacy_R1_eff`.** It proves ZK_FSS against simE with the same error
+as `privacy_R1`. The hypotheses are unchanged except that the ideal model is
+`R1IdealModelS … (simE …)`. This closes D42.5 item 5 (ZF2) at the level of
+Lean statements.
+
+Efficiency is a meta-level reading of the definition and is not formalised.
+The axiom line's Classical.choice comes from propDecidable in `if`, not from
+choice of a witness. Simulation cost equals the public P_R1 check (22.6 s
+measured, D38) plus one payload computation (estimated, not timed).
+
+**D44.3 New item G-sim.** A Rust simE with a host timing, a check that its
+output passes the R1 verifier, and the L/O-split correspondence (with
+G-ref).
+
+Remaining for R1 privacy (D42.5, updated):
+1. P_R1 enforcement: the D38 check and its certificate refinement.
+2. Builder completeness: baseTyped, lanes, CopyLinkBalance (D43.1).
+3. Sem1Uniform and the R1 real model plus R1IdealModelS, i.e. G-def,
+   G-prog and G-ref (in progress).
+4. G-root, G-retry, G-sim.
+5. Classical ROM only.
