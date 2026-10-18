@@ -4864,3 +4864,40 @@ with D29.3.
 
 **D31.3** R1-0 may now proceed with host overwrites (D30 sequencing). The
 lead recompiles FsAbort once after R1-0's ordered pass.
+
+### Lead acceptance of R1-0 (2026-10-18); D32: payload parametrised over the batched block
+
+R1-0 (worker aa8a9a746..01e1f84d5, 19 commits, cherry-picked) is accepted.
+
+**What changed.**
+- `PayloadCell Bat` with `class BatchedLayer K Bat`.
+- A new module `R0Z/R0Batched` holds the R0 instance. Its read is the old
+  `linearPayload` branches word for word.
+- 14 modules take `{Bat} [BatchedLayer K Bat]`.
+- `hvzk_on_of` (HVZK for any P) is added in Shift.
+
+**Final ordered pass.** Attempts 3585–3605 compiled 21 modules into
+objects2, all exit 0, with 0 swaps and peak RSS 6.73–6.93 GB. The lead
+spot-checked HonestView 3585, Shift 3596, SilentReduction 3601 and
+FsAbort 3605: the host SHA matches the committed source in each. Across
+3585–3605 every reported axiom line is `[propext, Classical.choice,
+Quot.sound]` (156) or `[propext, Quot.sound]` (5). The 165 previous lines
+all reappear with the same theorem names, and there are 4 new ones. The
+overlay attempts were 3550–3584. The snapshot `$T/backup-pre-R1-0` has 62
+files, with its manifest committed.
+
+**D32.1 Rulings on the departures.**
+- `[Fintype Bat]` on the 11 law-using theorems is accepted. R0Bat is finite,
+  and R1Bat (round0 7, round1 7, folded openings, final 64) is finite too.
+- Leaving out `[DecidableEq Bat]` is accepted, following the memory rule
+  in D26.3.
+- The three non-mechanical edits are accepted: `PayloadCell`;
+  `messages : Payload K R0Bat` (the R0 32-row schedule; R1's 33-row
+  schedule is separate work for ZF1); and `batMap : … → (Bat → K)` with
+  BCond's text unchanged.
+- FsAbort was re-sourced with the Bat parameter. It compiled at 3605 with
+  all 20 axiom lines unchanged, which replaces the lead's planned
+  recompile.
+
+**D32.2 Next.** R1-2, the R1 instance `R1Bat` and its `BatchedLayer`, is
+unblocked. The host overlay directory `$T/r1-0` may be deleted.
