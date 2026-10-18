@@ -1,0 +1,7 @@
+# Candidate outputs to existing packed Poseidon family
+
+Five focused Lean modules connect the boxed candidate output to the scalar residual, transport its packing through the concrete QM31-to-WideExact homomorphism, and identify the four resulting cells with the existing R0P.poseidonPackedFamily residual vector. The proofs reuse the existing selector/internal caller, scalar residual model and field transport lemmas. Actual selector, internal and projected candidate source bindings and output canonicality are retained. No packing injectivity at extension-field evaluation points is asserted.
+
+These are conditional compositions: leading/full packed call success and output canonicality remain explicit premises; the scalar/family endpoints also require their exact decoded branch models. The final caller composition intended to discharge these premises is not included. Correspondence of the copied projected source with the full current verifier, the remaining protocol proof and end-to-end 100-bit security/privacy remain open.
+
+All five focused targets passed. Their wall times were 19.42s, 98.01s, 10.98s, 6.21s and 11.04s; peak process RSS stayed below 3.5 GB and process swap counts were zero. All six printed axiom reports contain only propext, Classical.choice and Quot.sound. Exact source/module owners, source revisions, commands, toolchain/import/object pins and resource records are in the per-target receipts and manifest. These checks do not constitute a full manifest replay. No production Rust or runtime artifact changed.
