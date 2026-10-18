@@ -1,0 +1,7 @@
+# Actual leading-pair packed caller
+
+source_success derives actual leading_pair_packed success, canonical packed output and the literal packed R0P.poseidonLeadingPair formula from canonical z and xor12_z opening arrays. It derives absorption, lazy initial external layer, both initial-constant row reads, the first lazy full round and the final packed full round. No intermediate source-success or decoded-model equality is assumed. Named Fin index equalities identify the two initial rows without unfolding the constant tables.
+
+The focused NUC check passed: exit0, controller wall2.023s, peakRSS4,003,512KiB, process swaps0, no watchdog abort; the printed axiom report contains only propext, Classical.choice and Quot.sound. Per-job MemoryHigh4GiB/MemoryMax4608MiB/MemorySwapMax0 were unchanged. Exact source revision/hash, command/import/object pins and resource evidence are retained. A task-local incoming bare-module prefix supplies previously checked lazy-round dependencies, retaining the configured NUC GroupSliceModel. Its different Mac/NUC object builds use exactly the same source/compiler/direct imports and preserve their distinct path metadata/provenance. No configured dependency root was overwritten and no full replay was run.
+
+The interpolated full-pair and final evaluator/caller composition remain open, along with verifier point provenance, complete production source/runtime equivalence and end-to-end soundness/privacy. No production Rust or runtime artifact changed.
