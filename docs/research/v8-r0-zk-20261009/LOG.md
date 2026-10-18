@@ -4746,3 +4746,49 @@ Pr[¬P] is small, and Z8–Z10 have observed no failures.
   on ZF-A. Attempts 3500–3549.
 
 The Rust predicate check waits for R1M's definitions.
+
+### Lead acceptance of the R1 privacy-model design (2026-10-18); D30
+
+`t2b2b/DESIGN-R1-PRIVACY-MODEL.txt` (worker 0b36b12bf..eb6c3e476,
+cherry-picked) is accepted as the plan for proving privacy on R1.
+
+**D30.1 Findings accepted.** R1 differs from the proved R0Z model only in
+the batched opening block. The per-lane, semantic and mask layers are the
+same. No proved theorem uses `D13Order`: the lead grepped R0Z and R0P, and
+it appears only as a definition in HonestView.lean. So D18 is an instance
+choice. On R1, GoodCircle, Good3 and GoodAlpha are not needed.
+
+**D30.2 Decision: refactor, not copy.** `PayloadCell` takes the batched
+cells as a parameter (`Bat`), with a `BatchedLayer` class. R0 and R1 are
+instances. About 20 proved R0Z modules are re-sourced and recompiled once
+each. Acceptance for R1-0: every previously listed `#print axioms` line
+reappears with the same theorem name and the standard axioms, and no
+statement changes except the `Bat` parameter. The lead diffs the statements.
+`hvzk_on_of` (HVZK for any P) is added.
+
+**D30.3 Target.** `P_R1 := HalfOK ∧ SemK4 ∧ QPrime_R1 ∧ BCondG_R1 ∧ (∀ c,
+C1Lift c) ∧ H1Lift ∧ QueryCard`. BCondG_R1 is `B0R1 ≤ V_G`, which with
+J4-R1 gives both BCond and BReach. The target theorem is
+`maskImageOn_R1 : MaskImageOn (Bat := R1Bat) (P_R1 …) (h.restrict (ValidOn …)) B x`,
+for every π. J14-R1 (the structural opened part) is deferred to Route P,
+because C1Lift is a conjunct of P.
+
+**D30.4 R1-1 (opening-layer mirror).** The worker brings the spend-path
+files listed in §4 into its own branch by `git show`, unchanged, with source
+SHAs recorded. The spend-path branch itself is not touched.
+
+**D30.5 Riskiest item.** J4-R1's `line_identity`: the second fold on the
+line domain commuting with the encoder. It is also open on the R1 soundness
+side. The fallbacks are `B0own ≤ V_G` for clause (i′) and a trace-space rank
+check in P for clause (ii′).
+
+**D30.6 Issued, ordered by lanes.**
+
+| Lane | Job | Attempts |
+|---|---|---|
+| A | R1-0 | 3550–3619 |
+| B | R1-1, then J4-R1(a) (payload-free) | 3620–3679 |
+| D | Z9b numeric: relR1 as written annihilates bat(ker own); C1Lift and H1Lift on their own | Rust, capped |
+
+ZF1-abort continues on 3500–3549. Estimate: 15–25 worker-days and 90–170
+attempts, about 10–15 days elapsed. J0b is unestimated.
