@@ -128,3 +128,69 @@ source: every call is `hash`/`Digest32::digest` of the same backend).
   rejected 15 times; normally ≈ 1.5·10^4), transcript 115, seeds/binding/
   context < 2^6. Total m < 1.53·10^6 < 2^21. All bounds below use m = 2^21.
 
+----------------------------------------------------------------------
+§2  FSExperiments and AbortBridge for R1  (PROPOSED)
+----------------------------------------------------------------------
+
+Types (FsStatement.lean, FsAbort.lean, read from the sources):
+  FSExperiments K CommitHandle Aux Bat F has Adversary, RealRand,
+  IdealRand, real, ideal, observe; ROMView = (disclosed : View, observer-
+  Oracle : List (Bytes × OracleAnswer)), OracleAnswer = Fin 32 → UInt8.
+  AbortBridge has Coins, N, draw : Adv → x → Coins → Challenges K,
+  extend : Adv → x → (Fin N → Coins) → Fin N → View → ROMView, fail.
+  Meta.handles = fun i => (x.2, i): the Lean View carries NO commitment
+  root; roots are nominal handles from the statement.
+
+2.1 Where the hash layer goes (gap G-root, new). The R1 proof contains the
+  C1/C2/folded roots, 22 × 3 Merkle paths and 22 × 3 opened salts, none of
+  which is a View coordinate. Proposal: they are published as the VERIFIER
+  LOG — the list of (input, answer) pairs the R1 verifier reads when it
+  checks the proof (the 115 transcript reads and every read on the opened
+  paths). An opened path IS such a list (sibling digests are answers, the
+  opened leaf input is value ‖ salt), so (View, VerLog) determines the
+  proof bytes and conversely. Instantiation: CommitHandle := the public
+  account namespace (no root), and fs.real puts VerLog as the prefix of
+  ROMView.observerOracle, followed by the adversary's own reads. No Lean
+  type changes. The adversary sees every root and sibling as an answer.
+
+2.2 Real game RealAbort_R1 (fs.real). RealRand := (Addr_L → OracleAnswer) ×
+  (Fin N → Secrets), Secrets := two nonzero 32-byte seeds
+  (field_mask_entropy, leaf_salt_seed) and the public nonce; Addr_L the
+  bounded-length byte strings (as FS2.Duplex.Addr; finite, so RealRand is
+  a Fintype). Attempt k: derive masks and salts from Secrets_k (§1.3),
+  build C1, run rows 0..32 against H, decide P on the decoded challenges
+  (Rust `P_R1` check = Lean P_R1, refinement R-pub); publish the first
+  accepted attempt as (View, VerLog) or ⊥; then run the adversary
+  adv : View × VerLog → Program Bytes OracleAnswer Bool against H.
+
+2.3 Abort bridge ab_R1.
+  N      the attempt cap.
+  Coins  per attempt: SQ (the squeeze answers: 27 + 4 + 8 + 1 = 40 blocks),
+         CH (the answers of every other Priv read of §1.4 except expander
+         blocks: abs/adv/st answers, s_init, t_0, salts, leaf and node
+         digests), SE (the two secret seeds), TB (a table Addr_L → Answer).
+         Uniform product.
+  draw   decoders of §1.1 applied to SQ (ρ dropped). It reads nothing else,
+         so the per-attempt challenges are i.i.d. with the honest law
+         (R-same of DESIGN-ZF1-ABORT §7 holds by construction).
+  tape   Tape K F of attempt k (FsAbort's (Fin N → Tape) factor). The
+         Rust masks are the rejection decode of the expander answers; the
+         coupling space carries those answers B_k and a spare tape, and
+         maps them to Tape by decode-or-spare (§3.3).
+  extend c k V: the ROMView with disclosed V and observerOracle = VerLog_k
+         ++ adversary log, where VerLog_k is computed from V's messages
+         (the framed records) and c_k (state chain answers, opened salts,
+         sibling and path digests, roots); the adversary's reads are
+         answered: at an address of a published Priv read of attempt k by
+         its coin; at any other address by TB of attempt 0 (the shared
+         table; Pub reads of every attempt use it too).
+  fail c: ROMView of ⊥ (empty View sentinel) with the adversary run on TB_0.
+  The discarded attempts' coins are read only through draw (to steer the
+  accepted index); their tapes never.
+
+2.4 Ideal game IdealAbort_R1 (fs.ideal). Same loop on fresh SQ draws and
+  the same P; on acceptance, V := simulator(ch, t) for a fresh tape, coins
+  CH/SE fresh, VerLog computed as in extend, and H := TB_0 programmed at
+  the accepted attempt's published Priv addresses with those coins; the
+  adversary runs against the programmed H. Discarded draws program
+  nothing. (Witness-free except for `simulator`, which is ZF2's object.)
