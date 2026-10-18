@@ -1,0 +1,225 @@
+{
+  "status": "PREPARED_ONLY_NO_COMPILERS_OR_BUILDS_LAUNCHED",
+  "source_revision": "234a1431ba0ec533261864b6d34c86997c70239d",
+  "source_revision_requirement": "Root-issued immutable recut commit based on1a39ad6081ba1fdaa77f3ce82c94e0619486344a; production and maintained driver identical to accepted6dd",
+  "host": "dombarker@100.108.41.90",
+  "workspace": "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018",
+  "fresh_target_directories": {
+    "sbf": "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/sbf-target",
+    "native": "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/native-target"
+  },
+  "forbidden_target": "sharedcargo-target-v152",
+  "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+  ],
+  "caps": {
+    "memory_high": 6442450944,
+    "memory_max": 8589934592,
+    "memory_swap_max": 0,
+    "jobs": 1,
+    "aggregate_max_exclusive_upper_bound": 59055800320
+  },
+  "exclusive_host": false,
+  "launch_authorization": "Separate read-only host gate command must be inspected and root must explicitly grant launch; every phase reacquires same lock, rechecks exclusivity, monitors external arrivals and stops OWN child only.",
+  "lock": "/tmp/aspis-r0-lean.lock",
+  "gate_checks": [
+    "no Lean/Aeneas/Charon/cargo/rustc/SBF/linker or Aspis native/replay jobs, excluding gate ancestry",
+    "exclusive nonblocking shared flock test",
+    "populated scope MemoryMax aggregate +8GiB below55GiB; available RAM and swap recorded",
+    "fresh private source hash manifest equals root source commit; targetdirs initially absent/empty, no shared cache link",
+    "pinned tool and baseline/fixture SHA checks; free disk, paths, source snapshot, release features recorded"
+  ],
+  "phases": [
+    {
+      "name": "sbf-build",
+      "time_expected": "Cold isolated SBF dependency compilation/linking; no proof generation; mandatory review at10min without artifact",
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/sbf-target",
+        "CARGO_HOME": "/home/dombarker/.cargo",
+        "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin"
+      },
+      "argv": [
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/source/programs/r1-cost-probe/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/artifacts",
+        "--features",
+        "pool-adapter,private-leaf-salts",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "1",
+        "--",
+        "--locked"
+      ]
+    },
+    {
+      "name": "stack-audit",
+      "argv": [
+        "python3",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/runner/strict_stack.py",
+        "--log",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/runs/sbf-build-c/stdout.log",
+        "--linked",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/sbf-target/sbpf-solana-solana/release/aspis_r1_cost_probe_program.so",
+        "--measured",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/artifacts/aspis_r1_cost_probe_program.so",
+        "--output",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/stack-audit.json"
+      ],
+      "acceptance": [
+        "EVERY stack-offset/frame diagnostic inventoried; ANY frame/offset over4096 fails, including dead or stripped symbols",
+        "unparsed stack diagnostics fail pending manual review",
+        "linked/stripped ELF SHA/size pinned; supplemental old callgraph/text audit does not override strict failure"
+      ]
+    },
+    {
+      "name": "native-driver-build",
+      "time_expected": "Cold isolated optimized native dependency compilation/linking; no proof generation;10min progress review",
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/native-target",
+        "CARGO_BUILD_JOBS": "1",
+        "RUSTUP_TOOLCHAIN": "stable"
+      },
+      "argv": [
+        "/home/dombarker/.cargo/bin/cargo",
+        "build",
+        "--release",
+        "--locked",
+        "--offline",
+        "-j",
+        "1",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/source/tools/r1-cost-probe/Cargo.toml",
+        "--features",
+        "private-leaf-salts",
+        "--bin",
+        "r18_replay"
+      ]
+    },
+    {
+      "name": "supplemental-stack-audit",
+      "argv": [
+        "python3",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/source/scripts/r1_p2_stack_audit.py",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/runs/sbf-build-c/stdout.log",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/sbf-target/sbpf-solana-solana/release/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/artifacts/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/stack-supplemental"
+      ]
+    }
+  ],
+  "replay_common_env": {
+    "ASPIS_SOURCE_REVISION": "FINAL_RECUT_REVISION",
+    "ASPIS_R18_BEFORE_REVISION": "8089cab8f099de12bd543ab379eac348f0fd7b3a",
+    "ASPIS_R18_AFTER_REVISION": "FINAL_RECUT_REVISION",
+    "ASPIS_R18_BEFORE_BUILD_RECEIPT": "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/baseline/candidate-stackfix-final.json",
+    "ASPIS_R18_AFTER_BUILD_RECEIPT": "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/runs/sbf-build-c/receipt.json",
+    "ASPIS_R16_READONLY_RUNTIME": "UNSET"
+  },
+  "replays": [
+    {
+      "flow": "canonical-transfer",
+      "argv": [
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/native-target/release/r18_replay",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/baseline/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/artifacts/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/fixtures/canonical-transfer/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/fixtures/canonical-transfer/r1-s2-public-asf8.bin",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/results/canonical-transfer"
+      ],
+      "source_fixture_prefix": "docs/research/100bit-spend-path-20261013/evidence/r1-two-tx-runtime-path-20261017/verifier-replay/fixtures/baseline-transfer-os-current-v3-01"
+    },
+    {
+      "flow": "transfer",
+      "argv": [
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/native-target/release/r18_replay",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/baseline/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/artifacts/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/fixtures/transfer/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/fixtures/transfer/r1-s2-public-asf8.bin",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/results/transfer"
+      ],
+      "source_fixture_prefix": "docs/research/100bit-spend-path-20261013/evidence/r1-two-tx-runtime-path-20261017/pool-settlement/transfer/task"
+    },
+    {
+      "flow": "withdrawal",
+      "argv": [
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/native-target/release/r18_replay",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/baseline/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/artifacts/aspis_r1_cost_probe_program.so",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/fixtures/withdrawal/r1-s2-proof.bin",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/fixtures/withdrawal/r1-s2-public-asf8.bin",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/results/withdrawal"
+      ],
+      "source_fixture_prefix": "docs/research/100bit-spend-path-20261013/evidence/r1-two-tx-runtime-path-20261017/pool-settlement/withdrawal/task"
+    }
+  ],
+  "baseline_canonical_invoked_verifier_CU": {
+    "stage1": 1342725,
+    "stage2": 1226423
+  },
+  "baseline_canonical_transaction_CU": {
+    "stage1": 1343231,
+    "stage2": 1226929
+  },
+  "runtime_scope": "Existing r18_replay verifier-only, preloaded saved account context; no Pool settlement/proof generation/deployment, no metadata mutation suite requested",
+  "runtime_acceptance": [
+    "same baseline/current fixture per flow",
+    "both stage1/stage2 accept; simulation equals execution checks retained by driver",
+    "same initial account images, checkpoint bytes and ASR8 bytes",
+    "record stage1/stage2 transaction+invoked-verifier CU and exact delta, full logs/errors",
+    "report any CU or stack failure honestly; do not change source/attributes under this task"
+  ],
+  "key_retention": "Driver creates payer.key and checkpoint.key in fresh0600 outputs; retain securely on host, never publish/delete, no cleanup authorized",
+  "git_outputs": [
+    "JSON",
+    "logs",
+    "SHA256 manifests"
+  ],
+  "never_git": [
+    "ELF/.so",
+    "private keys",
+    "nonce-burn files"
+  ],
+  "gate_commands": {
+    "separate_gate": [
+      "python3",
+      "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/runner/host_gate.py",
+      "--root",
+      "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018",
+      "--revision",
+      "FINAL_RECUT_REVISION",
+      "--output",
+      "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/gate-UTC.json"
+    ],
+    "then": "Read gate JSON in a separate tool result and obtain root launch grant before executing any phase.",
+    "phase_launch_template": [
+      "systemd-run",
+      "--user",
+      "--scope",
+      "--quiet",
+      "-p",
+      "MemoryHigh=6G",
+      "-p",
+      "MemoryMax=8G",
+      "-p",
+      "MemorySwapMax=0",
+      "python3",
+      "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/runner/run_phase.py",
+      "--root",
+      "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018",
+      "--revision",
+      "FINAL_RECUT_REVISION",
+      "--phase",
+      "PHASE",
+      "--gate",
+      "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/gate-UTC.json",
+      "--gate-ack-sha256",
+      "ROOT_REVIEWED_GATE_SHA256"
+    ]
+  },
+  "parallel_override": "User: just do it in parallel; task-specific A lock and continuous aggregate caps remain mandatory"
+}
