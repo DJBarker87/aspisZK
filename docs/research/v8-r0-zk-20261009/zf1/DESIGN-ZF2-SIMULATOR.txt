@@ -397,3 +397,34 @@ parameter).
   Relation to privacy_R1: the new theorem does not depend on the old one.
   As a corollary, simE and simV have equal laws at every P_R1 ∧ VR1-
   inhabited challenge, both being equal to the honest view.
+
+§6  Lean plan
+--------------
+Four modules, compiled one at a time on the host in this order (attempts
+3910–3949, run2.sh, -M7000, MemoryMax 7 G). Each imports narrowly (D34.2).
+  L1 R0Z/HvzkS.lean        imports R0Z.HvzkV. The generic composition, §5.2;
+                           a copy of HvzkV's game proofs with sim as a
+                           parameter. Risk: low.
+  L2 R0Z/RefPayload.lean   imports R0Z.IIPrimeResidual. msCell, k0, S0,
+                           refPayload, the silent-value lemmas, simE and
+                           equalLaws_simE_of (§5.1). Risk: the rfl/`show`
+                           cell evaluations (same pattern as roundOnly_cell)
+                           and the equiv transport (simp with
+                           symm_apply_apply).
+  L3 R1Z/RefCosetR1.lean   imports R1Z.IIPrimeR1 and R0Z.RefPayload. Claim Z
+                           (§3.2), a line-by-line adaptation of
+                           cTilde_sub_mem_range_R1. Risk: medium (a long
+                           proof); memory as for IIPrimeR1.
+  L4 R1Z/SimulatorR1.lean  imports L3, MaskImageVR1, PoleMassR1, ModelsVR1,
+                           L1. hvzk_R1S, R1IdealModelS,
+                           idealAbortCouplingS_of_R1, privacy_R1_eff.
+                           Risk: low; the import set is PrivacyR1's plus L3.
+No existing module is edited. privacy_R1 stays as proved. The new theorem is
+an addition. Acceptance criteria:
+  * every #print axioms line is ⊆ [propext, Classical.choice, Quot.sound];
+  * the sources contain no sorry, axiom, admit, native_decide, or depth or
+    heartbeat options;
+  * privacy_R1_eff's hypotheses are privacy_R1's, with hi retyped to
+    R1IdealModelS … (simE …) and `he : 0 ≤ εexh` dropped (HvzkS needs no
+    sign hypotheses);
+  * the type of simE takes no h.Instance and no InLanguage proof.
