@@ -5091,3 +5091,23 @@ source check before J0b is issued.
 
 Outside Lean: the ZF1a/b couplings and their event bounds, ZF2, the Rust
 P_R1 check with its refinement, and the D34.3 refinement items.
+
+### Lead acceptance of clause (i′) on R1 (2026-10-18); D37
+
+`R1Z/ClauseIR1.lean` (worker 8ba1c8b4f, cherry-picked) is accepted. Host
+3695: exit 0, SHA `8eb17206…` matches, 2 standard axiom lines
+(lead-verified).
+
+`clause_i_R1_all`: under `P_R1 h.transport B hB ch`, with `PublicBase F x.1`
+and `∀ w, h.public w = x.1 → BaseTyped F (h.build w)`, every
+`sRem h B x w ch n` lies in `range (A ∘ inlM)`. This is the first conjunct of
+`MaskImageOn P_R1` on R1. It has no transversality premise; P_R1 is the
+prover-checked predicate (D29).
+
+The remaining premises are typing facts about the statement and the honest
+builder. `BaseTyped` for honest builds is a builder obligation of the same
+kind as J0b. It joins J0b's scope: builder completeness, meaning honest
+builds are base-typed and HonestValid.
+
+Clause (ii′) (J15-R1, J16-R1) and J0b remain. The relations worker's lane is
+complete.
