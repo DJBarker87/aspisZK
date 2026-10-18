@@ -1,0 +1,63 @@
+DESIGN-R1-PRIVACY-MODEL — inventory and plan for the R1 privacy model (R1M)
+==========================================================================
+
+Job R1M (LOG D29.4).  Design and inventory only: no Lean compiled, no host
+attempt used.  Branch codex/r0-r1-privacy-model-20261017, base a4246222a.
+Read against LOG D24–D29, z9/R1-PAYLOAD-MAP.txt, z9/FINDINGS-Z9.txt,
+t2b2b/DESIGN-T2b-2b.txt §5, DESIGN-T2b-2b-Dprime.txt, DESIGN-ii-prime.txt,
+STUDY-TRANSVERSALITY-R1.txt §3.3, and every file in lean/R0Z/.  R1 Rust
+source read only through
+  git show origin/codex/100bit-spend-path-20261013:<path>
+(tip b61ddd6e2 at the time of reading; Z9 used 1822c2ced).  Rust paths are
+relative to crates/aspis-r1-cost-probe/src/ unless stated.
+
+Tags.  GENERIC = holds verbatim for R1.  PARAMETRIC = holds once a parameter
+is changed (named).  R0-SPECIFIC = must be rewritten (replacement named).
+PROPOSED = a statement written here and type-checked by reading the actual
+definitions, not by Lean.  MEASURED = Z9 numbers.
+
+Sections
+  §0  Summary
+  §1  Inventory of R0Z (and the R0P/R0 payload dependencies)
+  §2  The minimal Lean model of the R1 privacy view
+  §3  Exact Lean statements: P_R1, QPrime_R1, BCond_R1, the target theorem
+  §4  Job plan
+  §5  Effort estimates and the riskiest item
+
+§0  Summary
+-----------
+S1  R1 differs from the proved R0Z model in exactly one place: the batched
+    opening block.  Every per-lane disclosed cell has the same constructor
+    and the same formula in R1 (pointClaim, extraClaim, ood, opened,
+    inactiveSum; maskSum and semanticCoeff are the unchanged semantic layer).
+    The R0 cells .openingCoeff (Fin 7) and .finalCoeff (Fin 256), built from
+    the chord quotient, are replaced by four R1 groups: round0 (Fin 7),
+    round1 (Fin 7), folded (query-gated, Fin 262144, 4 per distinct u/4) and
+    final (Fin 64).  Source: verifier.rs View::parse_shape (:39-58),
+    prover.rs prove_from_semantics (:190-236), R1-PAYLOAD-MAP §5.
+S2  The transport π enters every proved theorem only as an argument
+    `π : Fin 1024 ≃ Fin 1024`; D13Order (HonestView.lean:24) is defined but no
+    proved theorem uses it.  D18 is therefore an instance choice, not a
+    re-proof.
+S3  Recommended model: one mechanical refactor of HonestView.PayloadCell into
+    `PayloadCell (Bat : Type)` with a single batched constructor `.bat b`, and
+    a class `BatchedLayer K Bat` supplying the batched read.  R0 is the
+    instance Bat := R0Bat, R1 the instance Bat := R1Bat.  Every proved theorem
+    of the T2a/ZF-A chain, T2b-1, T2b-2a and J3 keeps its statement (with
+    Payload K replaced by Payload K Bat) and its proof modulo merging two
+    `cases` branches into one.  Only HonestView's batched part and J3's
+    batProj/payload_ext/mem_silentMasks_of branches are touched by hand.
+S4  On R1 the honest-prover predicate is
+       P_R1 := α₉ ≠ ½ ∧ sem ∈ K₄ ∧ QPrime ∧ BCondG_R1 ∧ (∀ c, C1Lift c) ∧
+               H1Lift ∧ |queries| ≤ 22
+    with BCondG_R1 := B0R1 ≤ V_G (the measured "V_G = B0", Z9 §1).  BCondG_R1
+    implies both BCond (for (i′)) and BReach (for (ii′)) given J4-R1's
+    bat_ker_own_le, so R1 needs ONE (B) conjunct for both clauses.  GoodCircle
+    is not needed on R1: with no chord quotient, all 47 batched relations are
+    identities for every challenge (the only nondegeneracy facts, nonzero
+    fibre and line coordinates, are structural).
+S5  Riskiest item: J4-R1's line-fold relations L_u, which need the
+    line-domain encoder/fold commutation (2^18 → 2^16, 256 → 64
+    coefficients).  On R1's soundness side this is obligation (B), open in
+    R1_SOUNDNESS.md; partial material exists (§5).
+
