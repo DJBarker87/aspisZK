@@ -5170,3 +5170,51 @@ The proof parts:
 - an Aeneas extraction of the checker only.
 
 The eliminating code itself is not extracted.
+
+### Lead acceptance of J15-R1: clause (ii′) on R1 (2026-10-18); D39
+
+The worker commits 298c1135c, 08f4b610f and 2acc2d919 are cherry-picked. The
+lead verified each host receipt (SHA matches, exit 0, all axiom lines
+standard, no sorry/axiom/admit/native_decide or overrides):
+
+| Module | Attempt | SHA | Axiom lines | Notes |
+|---|---|---|---|---|
+| R0Z/IIPrimeResidual | 3747 | `f712e1d1…` | 22 | |
+| R1Z/NoiseLiftR1 | 3748 | `cba81e30…` | 20 | supersedes 3743; adds named P_R1 accessors |
+| R1Z/IIPrimeR1 | 3750 | `a9d99c89…` | 8 | |
+
+Attempts 3744–3746 and 3749 were elaboration failures.
+
+**D39.1 Clause (ii′) on R1 is proved.** `iiPrime_R1 : IIPrimeValid (P_R1
+h.transport B hB) h B x`, given `PublicBase F x.1` and base-typed witnesses.
+For two HonestValid witnesses with the same public statement, cTilde w −
+cTilde w′ = A(inlM m + inrN n) for a mask tape m from the mask lift and a
+noise tape n from the noise lift. Every challenge condition used comes from
+P_R1, through its named accessors. The residual's batched cells lie in B0R1′
+by `bat_L_mem_B0R1` and `folded_unqueried_zero`. Its round cells are
+K₄-valued, using `terminalClosed`.
+
+**D39.2 Row 1023 (D36.4) is settled by a layout lemma.**
+`laneOf_actual_zero`: laneOf of the payload trace equals laneOf of `prepare
+pub t ch`. It rests on `lanes_eligible` (TerminalEligible.lean:519) and on
+every copy endpoint being Protected with row ≠ 1023
+(HelperInvariant.lean:16–17). J0b therefore needs no builder invariant for
+clause 1. It reduces to ProductionHolds on the prepared instance, plus the
+helper sums of the same prepared trace.
+
+**D39.3 Status of MaskImageOn on R1.** Both clauses are proved: (i′) by D37
+`clause_i_R1_all`, and (ii′) by D39.1. What remains is J16-R1, the
+assembly: `maskImageOn_restrict_of` with both clauses, then
+`hvzk_on_restrict` and the FsAbort corollaries. Every step is an existing
+lemma.
+
+After J16-R1, the privacy theorem for R1 holds under:
+- P_R1, enforced by the prover;
+- PublicBase and BaseTyped;
+- J0b (honest builds are HonestValid and BaseTyped);
+- the ZF1 couplings and their event bounds;
+- ZF2;
+- the Rust check's certificate refinement (D38.5);
+- the D34.3 row-formula items.
+
+Memory: IIPrimeR1 peaks at ≈165 MB under -M7000.
