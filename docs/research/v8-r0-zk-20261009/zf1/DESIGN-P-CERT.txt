@@ -196,3 +196,31 @@ checker rejects any non-canonical limb or out-of-range index (fail closed).
   explicit preimages, and false negatives remain possible only by the
   producer failing to find them.
 
+§3  Expectations (registered before measuring)
+----------------------------------------------
+Prototype: `probe --r1cert` (z4/z9c.rs), release build (opt-level 3,
+overflow checks on), one configuration per process, host nuc in a scope
+MemoryHigh 3G / MemoryMax 4G / MemorySwapMax 0 / TasksMax 64.  Configurations:
+A v0 actual γ0 and γ1, J v1 actual γ0, A v3 random γ1, A v2 coset (P = 8),
+and the negative structure B v0 actual γ0 (Z9: rank R 1,042 < 1,080).
+Expected:
+  emit (producer, tagged eliminations, early stop at full rank)
+                    20-45 s  (z9b R1-P total 22.6 s; tags add up to 2x,
+                              early stop removes part of the QPrime lanes)
+  check             2-8 s    (§2.2: ~6.5G multiply-adds at 1-3G/s on one
+                              core with lazy u64 accumulation)
+  certificate size  15-25 MB raw u32 (§1.7: ~4.4M limbs at P = 22);
+                    ~10 MB at P = 8
+  peak RSS          200-500 MB (the G lane's 4,092 x 2,788 source matrix is
+                    46 MB; Y and kernel arrays ~20 MB; tagged echelons
+                    ~30-60 MB)
+  verdicts          P_R1 true and check true on every A/J configuration;
+                    B: the producer fails (QPrime) and emits no certificate,
+                    so check is never called -> fail closed.
+  teeth             one-limb corruptions of hinv, a QPrime kernel
+                    coefficient, a Y entry, U, a Y_G entry, a G kernel
+                    coefficient, a lift inverse, and a swapped pivot index
+                    are each rejected (8/8).
+  differential      the producer's own P_R1 verdicts (ranks 1,080, 952/952,
+                    112, 376) equal z9b main_r1p's on the same configuration.
+
