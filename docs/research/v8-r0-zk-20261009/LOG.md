@@ -5111,3 +5111,62 @@ builds are base-typed and HonestValid.
 
 Clause (ii′) (J15-R1, J16-R1) and J0b remain. The relations worker's lane is
 complete.
+
+### Lead acceptance of the R1-P design (2026-10-18); D38: the prover-side check
+
+`z9/DESIGN-R1-P.txt` (worker 8a14c033c..19cb4c86b, cherry-picked) is
+accepted as the plan. The prototype is `z4/z9b.rs --r1p`. Receipts:
+`z9/runs/r1p-244d380ab/`. Expectations were committed before measuring.
+
+**D38.1 The check uses public data only.** Every P_R1 conjunct is an exact
+M31-limb rank or inclusion test built from fixed constants and the attempt's
+challenges (α, z₀, z₁, γ, κ, α0, α1, queries). No witness, mask, salt or
+seed enters.
+
+BCondG_R1 reduces to one dimension test, because `V_G ≤ B0R1′` is already a
+theorem (V_G_le, bat_ker_own_le_B0R1′). C1Lift and H1Lift rest on two
+instance facts, `Vsem ≤ Wsem` and `Ph1 ≤ Wh1`, which are to be proved. They
+are added to the open list.
+
+**D38.2 Cost.** On the nuc (Core Ultra 7 155H, a laptop-class chip):
+- 22.6 s and 130 MB per attempt on the actual query sets;
+- 16 s on coset or {0..21} sets.
+
+QPrime (12.5 s) and BCondG (9.3 s) dominate. P_R1 was true on every
+configuration run. A laptop estimate is 20–30 s, unmeasured. Certificate
+generation roughly doubles this. Code speedups of 5–20× are proposed but
+unmeasured. Prover-latency impact: +20–50 s per proof at current code. This
+is the cost of D29 and is reported to the user.
+
+**D38.3 Prover integration (a plan for the spend-path branch, not applied).**
+- The check goes in `prove_from_semantics` after the queries are drawn
+  (prover.rs:229), before any proof byte exists, returning
+  `Error::Rejected`.
+- A capped loop around `prove_masked_attempt`, with N = 8 (accepted) and
+  `AttemptsExhausted` publishing nothing.
+- Fresh OS attempt secrets each time, with the nonce burned durably before
+  use, and `private-leaf-salts` required.
+- The fresh C1 root over fresh salts gives the fresh row-0 address that
+  D31.2 requires.
+- Rejected challenges and the failing conjunct are never logged persistently
+  or remotely.
+
+**D38.4 Lead decision: the proof account.** The nonce is bound to the
+proof-account address, so each attempt uses a fresh proof-account keypair.
+A rejected attempt's account is never created on chain, so this costs
+nothing on chain. It is recorded as a prover requirement.
+
+**D38.5 Refinement route: certificate checking (accepted).** Only soundness
+of the check is needed: `check c = true → P_R1 rowEquiv B hB (decode c)`. A
+false negative only costs an attempt, so degenerate cases fail closed. The
+protocol's predicate is "the check passes", so by antitonicity of
+MaskImageOn in P one lemma transfers `maskImageOn_R1`.
+
+The Rust check emits preimage certificates, plus an echelon form with its
+inverse for rank(relR1). A small checker uses only matrix-vector products.
+The proof parts:
+- the checker's semantics (generic linear algebra);
+- the row formulas (the D34.3 refinement items, proved symbolically);
+- an Aeneas extraction of the checker only.
+
+The eliminating code itself is not extracted.
