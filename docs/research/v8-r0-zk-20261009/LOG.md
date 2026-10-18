@@ -5425,3 +5425,47 @@ Lean statement. It is conditional on:
 6. classical ROM only.
 
 No transversality premise remains (D29).
+
+### Lead acceptance of J0d (2026-10-18); D43: helperSum proved; builder obligations reduced to three
+
+The worker commits c2ff53224, 3388ce7c5, ba3fb2797 and 82e9e06e9 are
+cherry-picked. The lead verified each host receipt (SHA matches, exit 0,
+axioms standard or a subset, no overrides):
+
+| Module | Attempt | SHA | Axiom lines | Peak RSS (KiB) |
+|---|---|---|---|---|
+| R0Z/HelperSum | 3871 | `8fc3d19f…` | 9 | |
+| R0Z/BuilderSound | 3872 | `b6031988…` | 4 | |
+| R1Z/PoleMassR1 | 3882 | `72fa96fc…` | 11 | 6,633,196 (was 7,202,756) |
+| R1Z/PoleN8 | 3883 | `7eebeadd…` | 3 | 1,695,200 |
+
+Evidence: `t2b2b/evidence-J0d.json`.
+
+**D43.1 helperSum.** `helperSum_of_balance` proves that CopyLinkBalance on a
+trace implies ∑ helper = 0 for all λ, χ. It uses CopyRegistry's
+producer/consumer slot Nodup facts and keeps `helper`'s own 0⁻¹ = 0
+convention. `HonestBuilderCore`, with fields baseTyped, lanes and balance,
+gives `HonestBuilderSound` and `BuilderSoundOn` via
+`builderSoundOn_of_core`. The builder obligations behind `privacy_R1` are
+now exactly three:
+- base typing;
+- ProductionHolds without Copy;
+- CopyLinkBalance of the honest build.
+
+All three are R0P builder completeness.
+
+**D43.2 PoleMassR1 reworked.** Only two proof bodies changed
+(`poleSet_card_le`, `poleSet_card_le_4096`). The lead diffed every
+declaration header: there are no statement changes. The module now adds
+≈54 MB over its imports. Its dependent PrivacyR1 (source unchanged) must be
+rebuilt in the final replay.
+
+**D43.3 pole_N8.** `pole_N8_M31` proves 8·4096/p⁴ ≤ 2^-108 symbolically
+(`m31_pow4: 2^123 ≤ (2^31−1)^4`). The combined numeric bound
+(2^-166 + 2^-108) is not yet stated as one Lean term.
+
+**D43.4 Process.** Attempt 3870 started just after another session's
+charon/cargo job had launched, between the gate check and the launch. The
+worker then moved the gate into the same SSH command as run2.sh, aborting on
+a non-empty gate. That is accepted only as an aborting precondition. The gate
+output must still be recorded per attempt.
