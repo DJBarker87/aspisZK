@@ -1,0 +1,296 @@
+{
+  "status": "FAIL: admitted actual tx1 stack frame remains oversized and all current saved stage-1 replays fail",
+  "lead": "785973441",
+  "first_source_revision": "01e761365486cca6f2f3398a581eced83d7130af",
+  "final_source_revision": "910cb693a77fe973ae385af868891fe3d09a3676",
+  "production_changes_by_worker_a": false,
+  "build_count": {
+    "first_source": 1,
+    "final_source": 1
+  },
+  "first_source": {
+    "changes": "only inline(never) tx1_finish",
+    "linked_elf_sha256": "59d23332cbb00dbfd7ab2b73c63ac93ad4da4904eca6529e9c1ce98a7dbc8b33",
+    "stripped_elf_sha256": "2c9ec2362948c6ee2fd161e0588e403a877ff356e790077a5b689f989a7f3fb3",
+    "tx1_stack_frame_bytes": 4288,
+    "numeric_stack_offset": 4264,
+    "tx1_overwrite_diagnostics": 7,
+    "superseded_before_native_runtime": true
+  },
+  "final_source": {
+    "changes": "inline(never) tx1_finish, both cfg semantic_rounds, verify_finish; bodies/signatures unchanged",
+    "linked_elf_sha256": "f4db279a2b2fba8e5f169b8b3ccfe173a418939d832c9a692c7170d05cea5827",
+    "stripped_elf_sha256": "44fd2f4bb8883993d7ee940c3b078afb0d6bb2377c89bb21f7a57b6551b5b0c0",
+    "tx1_stack_frame_bytes": 4288,
+    "numeric_stack_offset": 4264,
+    "tx1_overwrite_diagnostics": 7,
+    "diagnostics": 65,
+    "unparsed_diagnostics": 0,
+    "audit_scope": "Reachable admitted stage1 [3,10] and stage2 ASQ8; C supplies complete symbol/reachability audit with 34 oversized symbols absent from linked ELF. Actual tx1 survives and exceeds 4096."
+  },
+  "fresh_driver": {
+    "sha256": "031ac27bc9fd87631c0ddc10745c737ea129c29c0c1d09708813b7a9a2f57abf",
+    "base_source_revision": "910cb693a77fe973ae385af868891fe3d09a3676",
+    "test_only_source_overlay_sha256": "4d6f1afd9b2af035ec14638b948509d23ccc335bab0957704d8645a820d6b945",
+    "overlay_scope": "Exactly 3 fixture identity comparisons parameterized by required manifest-pinned env: proof SHA, public SHA, next_pair_index. All runtime/decode/reencode/context/PDA acceptance checks unchanged.",
+    "features": [
+      "private-leaf-salts"
+    ],
+    "dependency_prover_enabled": true
+  },
+  "deployed_sbf_features": [
+    {
+      "path": "/home/dombarker/project-offloads/aspis-r1-decision1g-20261018/sbf-target/sbpf-solana-solana/release/.fingerprint/aspis-r1-cost-probe-9c28791a1181a61a/lib-aspis_r1_cost_probe.json",
+      "features": "[\"default\", \"optimized-terminal\", \"private-leaf-salts\"]",
+      "declared_features": "[\"default\", \"detail-phases\", \"optimized-terminal\", \"private-leaf-salts\", \"prover\", \"r0-op-count\"]",
+      "target": 9694633355711199200,
+      "enabled_features": [
+        "default",
+        "optimized-terminal",
+        "private-leaf-salts"
+      ],
+      "declared_features_are_not_enabled_features": true,
+      "retained_fingerprint": "feature-pins/aspis-r1-cost-probe-9c28791a1181a61a-lib-aspis_r1_cost_probe.json",
+      "fingerprint_sha256": "a9ca0f99de6286d1b619cd8bb90620cad9cacdd99747c662441085a7232a85b5"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/aspis-r1-decision1g-20261018/sbf-target/sbpf-solana-solana/release/.fingerprint/aspis-r1-cost-probe-program-98fb27f11315ad1c/lib-aspis_r1_cost_probe_program.json",
+      "features": "[\"custom-heap\", \"default\", \"pool-adapter\", \"private-leaf-salts\"]",
+      "declared_features": "[\"custom-heap\", \"custom-panic\", \"default\", \"no-entrypoint\", \"pool-adapter\", \"private-leaf-salts\"]",
+      "target": 8193371445437791373,
+      "enabled_features": [
+        "custom-heap",
+        "default",
+        "pool-adapter",
+        "private-leaf-salts"
+      ],
+      "declared_features_are_not_enabled_features": true,
+      "retained_fingerprint": "feature-pins/aspis-r1-cost-probe-program-98fb27f11315ad1c-lib-aspis_r1_cost_probe_program.json",
+      "fingerprint_sha256": "cf4fdad5b0e365c3b1e5db47c402ff97d9598e8b68969b5fd64b48f67fafee4f"
+    }
+  ],
+  "feature_distinction": "Actual enabled SBF dependency features exclude prover. Native R18 driver has prover dependency. B non-prover native gates are separate evidence.",
+  "runs": [
+    {
+      "run": "sbf-build-1g",
+      "receipt": "runs/sbf-build-1g/receipt.json",
+      "command": "runs/sbf-build-1g/command.json",
+      "exit_status": 0,
+      "wall_seconds": 39.65601700893603,
+      "peak_process_rss_kib": "671156",
+      "process_swaps": "0",
+      "source_revision": "01e761365486cca6f2f3398a581eced83d7130af",
+      "print_axioms": "not applicable: SBF/native/stack/CU phase, no formal theorem"
+    },
+    {
+      "run": "sbf-build-1g-fallback",
+      "receipt": "runs/sbf-build-1g-fallback/receipt.json",
+      "command": "runs/sbf-build-1g-fallback/command.json",
+      "exit_status": 0,
+      "wall_seconds": 39.38720851810649,
+      "peak_process_rss_kib": "671096",
+      "process_swaps": "0",
+      "source_revision": "910cb693a77fe973ae385af868891fe3d09a3676",
+      "print_axioms": "not applicable: SBF/native/stack/CU phase, no formal theorem"
+    },
+    {
+      "run": "native-driver-build-1g-fallback",
+      "receipt": "runs/native-driver-build-1g-fallback/receipt.json",
+      "command": "runs/native-driver-build-1g-fallback/command.json",
+      "exit_status": 0,
+      "wall_seconds": 84.65065117692575,
+      "peak_process_rss_kib": "546392",
+      "process_swaps": "0",
+      "source_revision": "910cb693a77fe973ae385af868891fe3d09a3676",
+      "print_axioms": "not applicable: SBF/native/stack/CU phase, no formal theorem"
+    },
+    {
+      "run": "adapted-replay-canonical-transfer-1g-fallback",
+      "receipt": "runs/adapted-replay-canonical-transfer-1g-fallback/receipt.json",
+      "command": "runs/adapted-replay-canonical-transfer-1g-fallback/command.json",
+      "exit_status": 1,
+      "wall_seconds": 0.2875267791096121,
+      "peak_process_rss_kib": "29568",
+      "process_swaps": "0",
+      "source_revision": "910cb693a77fe973ae385af868891fe3d09a3676",
+      "print_axioms": "not applicable: SBF/native/stack/CU phase, no formal theorem"
+    },
+    {
+      "run": "adapted-replay-transfer-1g-fallback",
+      "receipt": "runs/adapted-replay-transfer-1g-fallback/receipt.json",
+      "command": "runs/adapted-replay-transfer-1g-fallback/command.json",
+      "exit_status": 1,
+      "wall_seconds": 0.28560779290273786,
+      "peak_process_rss_kib": "29732",
+      "process_swaps": "0",
+      "source_revision": "910cb693a77fe973ae385af868891fe3d09a3676",
+      "print_axioms": "not applicable: SBF/native/stack/CU phase, no formal theorem"
+    },
+    {
+      "run": "adapted-replay-withdrawal-1g-fallback",
+      "receipt": "runs/adapted-replay-withdrawal-1g-fallback/receipt.json",
+      "command": "runs/adapted-replay-withdrawal-1g-fallback/command.json",
+      "exit_status": 1,
+      "wall_seconds": 0.2872237008996308,
+      "peak_process_rss_kib": "29560",
+      "process_swaps": "0",
+      "source_revision": "910cb693a77fe973ae385af868891fe3d09a3676",
+      "print_axioms": "not applicable: SBF/native/stack/CU phase, no formal theorem"
+    }
+  ],
+  "replay_results": [
+    {
+      "flow": "canonical-transfer",
+      "before": {
+        "stage1": {
+          "error": null,
+          "transaction_cu": 1343231,
+          "invoked_cu": 1342725,
+          "last_log": "Program 7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue success",
+          "phase_markers": "recorded raw"
+        },
+        "stage2": {
+          "error": null,
+          "transaction_cu": 1226929,
+          "invoked_cu": 1226423,
+          "last_log": "Program 7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue success",
+          "phase_markers": "recorded raw"
+        }
+      },
+      "after": {
+        "stage1": {
+          "error": "InstructionError(3, ProgramFailedToComplete)",
+          "transaction_cu": 1400000,
+          "invoked_cu": 27830,
+          "last_log": "Program 7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue failed: Access violation in stack frame 7 at address 0x200007f68 of size 8",
+          "phase_markers": []
+        },
+        "stage2": null
+      },
+      "keys": [
+        {
+          "path": "/home/dombarker/project-offloads/aspis-r1-decision1g-20261018/results/canonical-transfer/checkpoint.key",
+          "mode": "0o600"
+        },
+        {
+          "path": "/home/dombarker/project-offloads/aspis-r1-decision1g-20261018/results/canonical-transfer/payer.key",
+          "mode": "0o600"
+        }
+      ]
+    },
+    {
+      "flow": "transfer",
+      "before": {
+        "stage1": {
+          "error": null,
+          "transaction_cu": 1343265,
+          "invoked_cu": 1342759,
+          "last_log": "Program 7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue success",
+          "phase_markers": "recorded raw"
+        },
+        "stage2": {
+          "error": null,
+          "transaction_cu": 1226993,
+          "invoked_cu": 1226487,
+          "last_log": "Program 7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue success",
+          "phase_markers": "recorded raw"
+        }
+      },
+      "after": {
+        "stage1": {
+          "error": "InstructionError(3, ProgramFailedToComplete)",
+          "transaction_cu": 1400000,
+          "invoked_cu": 27830,
+          "last_log": "Program 7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue failed: Access violation in stack frame 7 at address 0x200007f68 of size 8",
+          "phase_markers": []
+        },
+        "stage2": null
+      },
+      "keys": [
+        {
+          "path": "/home/dombarker/project-offloads/aspis-r1-decision1g-20261018/results/transfer/checkpoint.key",
+          "mode": "0o600"
+        },
+        {
+          "path": "/home/dombarker/project-offloads/aspis-r1-decision1g-20261018/results/transfer/payer.key",
+          "mode": "0o600"
+        }
+      ]
+    },
+    {
+      "flow": "withdrawal",
+      "before": {
+        "stage1": {
+          "error": null,
+          "transaction_cu": 1341791,
+          "invoked_cu": 1341285,
+          "last_log": "Program 7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue success",
+          "phase_markers": "recorded raw"
+        },
+        "stage2": {
+          "error": null,
+          "transaction_cu": 1226719,
+          "invoked_cu": 1226213,
+          "last_log": "Program 7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue success",
+          "phase_markers": "recorded raw"
+        }
+      },
+      "after": {
+        "stage1": {
+          "error": "InstructionError(3, ProgramFailedToComplete)",
+          "transaction_cu": 1400000,
+          "invoked_cu": 27718,
+          "last_log": "Program 7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue failed: Access violation in stack frame 7 at address 0x200007f68 of size 8",
+          "phase_markers": []
+        },
+        "stage2": null
+      },
+      "keys": [
+        {
+          "path": "/home/dombarker/project-offloads/aspis-r1-decision1g-20261018/results/withdrawal/checkpoint.key",
+          "mode": "0o600"
+        },
+        {
+          "path": "/home/dombarker/project-offloads/aspis-r1-decision1g-20261018/results/withdrawal/payer.key",
+          "mode": "0o600"
+        }
+      ]
+    }
+  ],
+  "runtime_conclusion": {
+    "all_current_stage1_error": "InstructionError(3, ProgramFailedToComplete)",
+    "all_current_stack_fault": "Access violation in stack frame 7 at address 0x200007f68 of size 8",
+    "current_phase_markers": [],
+    "current_stage2": "UNREACHED",
+    "valid_successful_CU_delta": false,
+    "checkpoint_or_ASR8_equality_established": false,
+    "failed_transaction_cu_1400000_is_not_successful_verifier_cost": true,
+    "baseline_canonical_published_invoked_CU_exact": [
+      1342725,
+      1226423
+    ]
+  },
+  "resources": {
+    "MemoryHigh": 6442450944,
+    "MemoryMax": 8589934592,
+    "MemorySwapMax": 0,
+    "aggregate_limit_bytes": 59055800320,
+    "parallel_authorized": true,
+    "foreign_jobs_recorded_in_receipts": true,
+    "private_target_dirs": true,
+    "shared_v152_target_used": false
+  },
+  "retention": {
+    "new_keys": 6,
+    "key_mode": "0600",
+    "keys_retained_host_only": true,
+    "prior_keys_retained": true,
+    "ELFs_retained_host_only": true,
+    "git_content": "JSON/logs/SHA manifest only"
+  },
+  "no_further_source_remedy_or_SBF_build": "No additional source fix or artifact build after final910; decision required for any further remedy.",
+  "input_archives_host_only": {
+    "first_sha256": "85fbab30a31700c850a4d8db1530fb4532b0483edb4495c27caf950670df6196",
+    "final_sha256": "f3d1b5b22c5bffd3d7bbcd16d2d1fe3a13b1adcdad1ba9362ee73ab6561117e6"
+  }
+}

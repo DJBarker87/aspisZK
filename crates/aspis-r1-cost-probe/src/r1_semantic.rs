@@ -129,6 +129,7 @@ fn semantic_round<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTran
 }
 
 #[cfg(not(feature = "prover"))]
+#[inline(never)]
 fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {
     let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
     let mut alpha = [QM31::ZERO; 10];
@@ -178,6 +179,7 @@ fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTra
 }
 
 #[cfg(feature = "prover")]
+#[inline(never)]
 fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>, [[QM31; 3]; 10]), Error> {
     let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
     let mut alpha = [QM31::ZERO; 10];
@@ -226,6 +228,7 @@ fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTra
     Ok((running, alpha, transcript, round_checks))
 }
 
+#[inline(never)]
 fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {
     #[cfg(not(feature = "prover"))]
     let (running, alpha, mut transcript) = semantic_rounds(&prefix, transcript)?;

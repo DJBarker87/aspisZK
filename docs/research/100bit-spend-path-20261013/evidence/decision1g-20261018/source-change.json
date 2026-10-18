@@ -1,0 +1,53 @@
+{
+  "status": "DECISION_1G_FAILED_GATES_RECORDED_NEW_DECISION_REQUIRED",
+  "decision": "1g",
+  "lead_review_revision": "785973441c28a31988363e829c4b49ab8a5a36e2",
+  "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+  "before_sha256": "a0c440c37620ef22073e16a1f292ddb8a85e9d63463e702f2204a3d3b7cd9b18",
+  "after_sha256": "f201d2f7279da45dda69f14aec980d2af227f6589a0a54f9884b55ca31c7cdc6",
+  "diff": "diff --git a/crates/aspis-r1-cost-probe/src/verifier.rs b/crates/aspis-r1-cost-probe/src/verifier.rs\nindex 54a30376f..0efb845c9 100644\n--- a/crates/aspis-r1-cost-probe/src/verifier.rs\n+++ b/crates/aspis-r1-cost-probe/src/verifier.rs\n@@ -344,6 +344,7 @@ pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)\n     if r.at!=end {return Err(Error::Checkpoint);}\n     Ok((Box::new(Prepared{variant:v,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state}),Accumulator{weights,rhs,power,next:bytes[9] as usize}))\n }\n+#[inline(never)]\n fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {\n     let geometry=QueryGeometry::for_range(&p.queries,0,k)?;\n     while a.next<k {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}\n",
+  "attribute_removal_restores_base_byte_exact": true,
+  "all_production_changes": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+      "base_sha256": "1e62a9512db72e2ddd83edd124c707e3c5158b35b3cf0ba60e3dcb0803525896",
+      "final_sha256": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "remove_authorized_attributes_restores_base": true
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "base_sha256": "a0c440c37620ef22073e16a1f292ddb8a85e9d63463e702f2204a3d3b7cd9b18",
+      "final_sha256": "f201d2f7279da45dda69f14aec980d2af227f6589a0a54f9884b55ca31c7cdc6",
+      "remove_authorized_attributes_restores_base": true
+    }
+  ],
+  "conditional_semantic_attributes_applied": true,
+  "conditional_authorization": "Only if tx1 alone still exceeds4096 after this change, inline(never) may be added to semantic_rounds and/or verify_finish. Any other remedy needs a new decision.",
+  "native_gates": "Reruncodec1233/ordered583/checkpoint23 without prover on new snapshot",
+  "SBF_gates": "One current source artifact, pool-adapter,private-leaf-salts; capMemoryHigh6G MemoryMax8G MemorySwapMax0, private target; reachable frames<=4096 for admittedstage1[3,10]/stage2ASQ8; alloversizedunreachable listed/reasoned; savedtransfer/withdrawal stage1/stage2pass andCUdelta",
+  "evidence_policy": "New build outputs onlyJSON/logs/SHA manifests, noELF/binaries/keys. Required production source is the single authorized attribute.",
+  "formal_results": "None; noLean replay requested or run.",
+  "parallel_policy": "Existing explicit user instruction just do it in parallel persists; all finite populated cgroup reservations monitored below55GiB, independentA/B phase locks.",
+  "live_worktree_touched": false,
+  "first_producing_revision": "01e761365486cca6f2f3398a581eced83d7130af",
+  "frozen_producing_revision": "910cb693a77fe973ae385af868891fe3d09a3676",
+  "first_SBF_result": {
+    "source_revision": "01e761365486cca6f2f3398a581eced83d7130af",
+    "exit": 0,
+    "wall_seconds": 39.65601700893603,
+    "peak_RSS_KiB": 671156,
+    "swaps": 0,
+    "tx1_frame_bytes": 4288,
+    "tx1_stack_offset": 4264,
+    "limit": 4096,
+    "decision_1g_conditional_triggered": true,
+    "scope": "First attribute-only predecessor; preserved raw receipt/log and artifact hashes in worker evidence; final gate uses changed source."
+  },
+  "final_diff": "diff --git a/crates/aspis-r1-cost-probe/src/r1_semantic.rs b/crates/aspis-r1-cost-probe/src/r1_semantic.rs\nindex 06aa9392e..6a0d717bc 100644\n--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs\n+++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs\n@@ -129,6 +129,7 @@ fn semantic_round<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTran\n }\n \n #[cfg(not(feature = \"prover\"))]\n+#[inline(never)]\n fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {\n     let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];\n     let mut alpha = [QM31::ZERO; 10];\n@@ -178,6 +179,7 @@ fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTra\n }\n \n #[cfg(feature = \"prover\")]\n+#[inline(never)]\n fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>, [[QM31; 3]; 10]), Error> {\n     let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];\n     let mut alpha = [QM31::ZERO; 10];\n@@ -226,6 +228,7 @@ fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTra\n     Ok((running, alpha, transcript, round_checks))\n }\n \n+#[inline(never)]\n fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {\n     #[cfg(not(feature = \"prover\"))]\n     let (running, alpha, mut transcript) = semantic_rounds(&prefix, transcript)?;\ndiff --git a/crates/aspis-r1-cost-probe/src/verifier.rs b/crates/aspis-r1-cost-probe/src/verifier.rs\nindex 54a30376f..0efb845c9 100644\n--- a/crates/aspis-r1-cost-probe/src/verifier.rs\n+++ b/crates/aspis-r1-cost-probe/src/verifier.rs\n@@ -344,6 +344,7 @@ pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)\n     if r.at!=end {return Err(Error::Checkpoint);}\n     Ok((Box::new(Prepared{variant:v,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state}),Accumulator{weights,rhs,power,next:bytes[9] as usize}))\n }\n+#[inline(never)]\n fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {\n     let geometry=QueryGeometry::for_range(&p.queries,0,k)?;\n     while a.next<k {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}\n",
+  "diff_scope": "Four attribute lines only: tx1_finish, both cfg copies of semantic_rounds, verify_finish; all bodies and signatures byte-identical.",
+  "SBF_run_cadence": "One SBF build of first allowed source triggered the explicitly authorized fallback. Final changed-source checkpoint is built once; no unchanged SBF regression.",
+  "final_gate_report": "checkpoint-report.json",
+  "final_native_gates": "PASS codec1233/ordered583/checkpoint23,actualnot(prover) compiler evidence",
+  "final_stack_runtime": "FAIL reachabletx1frame4288>4096;allcurrentstage1runtimefail;stage2unreached",
+  "further_proposal_applied": false
+}
