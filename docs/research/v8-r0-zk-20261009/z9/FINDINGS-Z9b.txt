@@ -87,3 +87,26 @@ X5 C1Lift. rank obs(W_c) = 112 for every c. rank obs(V_c) = 112 with opened 88
 X6 H1Lift. rank obs(P_26) = rank obs(W_26) = 376, with opened 352 and rest 24, everywhere.
 X7 BCondG_R1 (reading R1) and B0own <= V_G hold on every job, with
    V_G = bat(ker own) = dim B0R1.
+
+2. Preflight (runs/z9b-preflight-4ecdc28f0)
+-------------------------------------------
+Host nuc. The gate allowed the launch: one Lean scope from another agent
+was active (c-selected-sigma, MemoryMax 8 GiB), no non-Lean probe was
+running, and the reservation sum including ours was 12 GiB of the 48 GiB
+limit. Scope MemoryHigh 3G, MemoryMax 4G, MemorySwapMax 0, TasksMax 64.
+Compile 61.1 s. The A/0/actual job took 50.5 s and A/0/consecutive0 took
+22.0 s, all exit 0. Peak child RSS was 135,828 KiB, the cgroup peak
+889,979,904 B, and swap 0.
+* Geometry: 0 mismatches. weightsR1 equals the Rust materialize.
+* lineInverse: Rust line_fold mismatches on the 88 unit evaluations per job are
+  R0 literal 88, R1 (1/(2x), -1/(2y), 1/(2z)) 0, R2 44.
+  Deviation from X2: R2 differs on 44 of 88 unit evaluations, not on all of
+  them. The sign of the y entry only affects the slots 2 and 3 inputs.
+* relR1 with R1, plus ia, annihilates bat(ker own) exactly (unexplained 0). The literal
+  reading R0 and R2 fail. Ranks follow X3 exactly:
+  - actual set, P = 22: annihilator 384, bat(ker own) 952;
+  - {0..21}, P = 6: annihilator 256, bat(ker own) 568 = 8(53 + 18).
+* C1Lift: all 16 lanes have 112/112, with opened 88 and rest 24, on both sets.
+  H1Lift: 376/376, with opened 352 and rest 24.
+* BCondG_R1 (R1 on the read support) and B0own <= V_G hold for both gammas
+  (V_G = 952 and 568 respectively).
