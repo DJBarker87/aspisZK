@@ -13,16 +13,17 @@ attribute [local instance] Classical.propDecidable
 attribute [local irreducible] copyInactiveRows copyActiveRowMasks
 variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+  {Bat : Type} [BatchedLayer K Bat]
 
 theorem A_pure (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
     (ch : Challenges K) (m : M K F) :
-    (A π B ch).comp inlM m = PayloadSplit.L π B ch (pureTrace B m) := by
-  change PayloadSplit.L π B ch (JointTrace.tapeLinear B (m,0)) = _
+    (A (Bat := Bat) π B ch).comp inlM m = PayloadSplit.L (Bat := Bat) π B ch (pureTrace B m) := by
+  change PayloadSplit.L (Bat := Bat) π B ch (JointTrace.tapeLinear B (m,0)) = _
   rw [JointTrace.tapeLinear_pure]
 
 theorem roundPoly_L (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
     (ch : Challenges K) (t : Trace K) (j : Fin 10) :
-    Chain.roundPoly j (PayloadSplit.L π B ch t) =
+    Chain.roundPoly j (PayloadSplit.L (Bat := Bat) π B ch t) =
       PayloadSplit.rounds ch j (fun a => PayloadSplit.maskLinear π B a t) := by
   rw [Chain.roundPoly_apply]
   simp only [PayloadSplit.L_round]
@@ -32,7 +33,7 @@ attribute [local irreducible] PayloadSplit.maskLinear
 
 theorem L_maskSum (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
     (ch : Challenges K) (t : Trace K) :
-    PayloadSplit.L π B ch t .maskSum =
+    PayloadSplit.L (Bat := Bat) π B ch t .maskSum =
       ∑ bits : Fin 10 → Bool, PayloadSplit.maskLinear π B (ofBool bits) t := by
   simp only [PayloadSplit.L, LinearMap.pi_apply, LinearMap.sum_apply]
   rfl
@@ -41,19 +42,19 @@ attribute [local irreducible] A PayloadSplit.L pureTrace
 
 theorem silent_mem_chain0 (h : HonestProver K) (B : PackBasis F)
     (ch : Challenges K) (m : M K F)
-    (hs : nonRound (F := F) ((A h.transport B ch).comp inlM m) = 0) :
-    (A h.transport B ch).comp inlM m ∈ Chain0 ch := by
-  have hsum : (A h.transport B ch).comp inlM m .maskSum = 0 := by
+    (hs : nonRound (F := F) ((A (Bat := Bat) h.transport B ch).comp inlM m) = 0) :
+    (A (Bat := Bat) h.transport B ch).comp inlM m ∈ Chain0 ch := by
+  have hsum : (A (Bat := Bat) h.transport B ch).comp inlM m .maskSum = 0 := by
     simpa only [nonRound, LinearMap.pi_apply, LinearMap.proj_apply, Pi.zero_apply]
       using congrFun hs .maskSum
   have hp (c : Fin 29) :
-      (A h.transport B ch).comp inlM m (.pointClaim 0 c) = 0 := by
+      (A (Bat := Bat) h.transport B ch).comp inlM m (.pointClaim 0 c) = 0 := by
     simpa only [nonRound, LinearMap.pi_apply, LinearMap.proj_apply, Pi.zero_apply]
       using congrFun hs (.pointClaim 0 c)
-  have hx : (A h.transport B ch).comp inlM m (.extraClaim 28) = 0 := by
+  have hx : (A (Bat := Bat) h.transport B ch).comp inlM m (.extraClaim 28) = 0 := by
     simpa only [nonRound, LinearMap.pi_apply, LinearMap.proj_apply, Pi.zero_apply]
       using congrFun hs (.extraClaim 28)
-  have hm : claimMask B (alpha ch) ((A h.transport B ch).comp inlM m) = 0 := by
+  have hm : claimMask B (alpha ch) ((A (Bat := Bat) h.transport B ch).comp inlM m) = 0 := by
     simp only [claimMask, LinearMap.add_apply, LinearMap.sum_apply,
       LinearMap.smul_apply, proj_apply, hp, hx, smul_zero, Finset.sum_const_zero, add_zero]
   rw [mem_chain0_iff (F := F)]
@@ -63,32 +64,31 @@ theorem silent_mem_chain0 (h : HonestProver K) (B : PackBasis F)
   · intro j
     rw [A_pure, roundPoly_L, roundPoly_L]
     exact rounds_chain ch _ (maskLinear_vdeg _ B _) j
-  · have he := Phi0_A h B ch (inlM m)
-    change evalRound9 ch ((A h.transport B ch).comp inlM m) -
-      claimMask B (alpha ch) ((A h.transport B ch).comp inlM m) = 0 at he
+  · have he := Phi0_A (Bat := Bat) h B ch (inlM m)
+    change evalRound9 ch ((A (Bat := Bat) h.transport B ch).comp inlM m) -
+      claimMask B (alpha ch) ((A (Bat := Bat) h.transport B ch).comp inlM m) = 0 at he
     rw [hm, sub_zero] at he
     exact he
 
 /-- T2b-2a′: maskSum is retained, along with every direct observation. -/
 theorem mem_silentMasks_iff (h : HonestProver K) (B : PackBasis F)
     (ch : Challenges K) (m : M K F) :
-    m ∈ silentMasks h.transport B ch ↔
-      let v := (A h.transport B ch).comp inlM m
+    m ∈ silentMasks (Bat := Bat) h.transport B ch ↔
+      let v := (A (Bat := Bat) h.transport B ch).comp inlM m
       v .maskSum = 0 ∧
       (∀ j c, v (.pointClaim j c) = 0) ∧ (∀ c, v (.extraClaim c) = 0) ∧
       (∀ j c, v (.ood j c) = 0) ∧ v .inactiveSum = 0 ∧
-      (∀ i, v (.openingCoeff i) = 0) ∧ (∀ i, v (.finalCoeff i) = 0) ∧
+      (∀ b, v (.bat b) = 0) ∧
       (∀ q s c, v (.opened q s c) = 0) := by
-  change nonRound (F := F) ((A h.transport B ch).comp inlM m) = 0 ↔ _
-  generalize (A h.transport B ch).comp inlM m = v
+  change nonRound (F := F) ((A (Bat := Bat) h.transport B ch).comp inlM m) = 0 ↔ _
+  generalize (A (Bat := Bat) h.transport B ch).comp inlM m = v
   simp only [nonRound, LinearMap.pi_apply, LinearMap.proj_apply, funext_iff, Pi.zero_apply]
   constructor
   · intro hz
     exact ⟨hz .maskSum, fun j c => hz (.pointClaim j c),
       fun c => hz (.extraClaim c), fun j c => hz (.ood j c),
-      hz .inactiveSum, fun i => hz (.openingCoeff i),
-      fun i => hz (.finalCoeff i), fun q s c => hz (.opened q s c)⟩
-  · rintro ⟨hs, hp, hx, ho, hi, hc, hf, hq⟩
+      hz .inactiveSum, fun b => hz (.bat b), fun q s c => hz (.opened q s c)⟩
+  · rintro ⟨hs, hp, hx, ho, hi, hb, hq⟩
     intro coord
     cases coord with
     | maskSum => exact hs
@@ -97,9 +97,8 @@ theorem mem_silentMasks_iff (h : HonestProver K) (B : PackBasis F)
     | extraClaim c => exact hx c
     | ood j c => exact ho j c
     | inactiveSum => exact hi
-    | openingCoeff i => exact hc i
-    | finalCoeff i => exact hf i
     | opened q s c => exact hq q s c
+    | bat b => exact hb b
 
 /-- The two source families: w 0 i = 3+22i and w 16 i = 275+150i. -/
 def w (family : Nat) (i : Fin 10) : K :=
@@ -690,7 +689,7 @@ theorem L_pure_maskOnly (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
     (ch : Challenges K) (m : M K F) (c : Fin 10) (j : Fin 10)
     (hm : ∀ i : Fin 10, i ≠ c → ∀ r, m.1 (i,r) = 0)
     (hg : m.2.1 = 0) (hd : m.2.2 = 0) :
-    Chain.roundPoly j (PayloadSplit.L π B ch (pureTrace B m)) =
+    Chain.roundPoly j (PayloadSplit.L (Bat := Bat) π B ch (pureTrace B m)) =
       ∑ r, maskOnlyColumns (Sum.elim 0 (pureAff m)) c r •
         (R0P.Mask.towerBasis B ⟨(16+c.val)%4, Nat.mod_lt _ (by omega)⟩ *
           eqPrefix (alpha ch) r j) • ((if rowBits r j then X else 1-X) *
@@ -705,7 +704,7 @@ theorem L_pure_maskOnly (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
 theorem L_pure_G (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
     (ch : Challenges K) (m : M K F) (j : Fin 10)
     (hm : m.1 = 0) (hd : m.2.2 = 0) :
-    Chain.roundPoly j (PayloadSplit.L π B ch (pureTrace B m)) =
+    Chain.roundPoly j (PayloadSplit.L (Bat := Bat) π B ch (pureTrace B m)) =
       ∑ r, balance 0 (extensionRaw B (Sum.elim 0 (pureAff m)) 0) r •
         eqPrefix (alpha ch) r j • ((if rowBits r j then X else 1-X) *
           (1 + (C (w 16 j)*X + C (β (w 16) (alpha ch) j r)) ^ 26)) := by
@@ -722,7 +721,7 @@ theorem L_pure_libra (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
       Pi.single (⟨d.val, by omega⟩ : Fin 1024) 1) :
     let k : Fin 10 := if d.val < 28 then 8 else 9
     let e := d.val%28
-    Chain.roundPoly j (PayloadSplit.L π B ch (pureTrace B m)) =
+    Chain.roundPoly j (PayloadSplit.L (Bat := Bat) π B ch (pureTrace B m)) =
       if j.val < k.val then C ((2 : K)^(8-j.val) * (if e = 0 then 2 else 1))
       else if j = k then C ((2 : K)^(9-j.val)) * X^e
       else C ((2 : K)^(9-j.val) * alpha ch k ^ e) := by
@@ -744,7 +743,7 @@ theorem L_pure_libra_maskSum (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
     (hm : m.1 = 0) (hg : m.2.1 = 0)
     (hu : (fun k => dWord B (Sum.elim 0 (pureAff m)) (π.symm k)) =
       Pi.single (⟨d.val, by omega⟩ : Fin 1024) 1) :
-    PayloadSplit.L π B ch (pureTrace B m) .maskSum =
+    PayloadSplit.L (Bat := Bat) π B ch (pureTrace B m) .maskSum =
       (512 : K) * (if d.val%28 = 0 then 2 else 1) := by
   have hs := pureTrace_D_support B m hm hg
   have hu' : coeffsOf π (pureTrace B m) 28 = Pi.single ⟨d.val, by omega⟩ 1 := by
@@ -758,8 +757,8 @@ theorem L_pure_libra_maskSum (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
 /-- Reconstructing the round polynomial preserves each disclosed coefficient. -/
 theorem roundPoly_coeff_L (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
     (ch : Challenges K) (t : Trace K) (j : Fin 10) (i : Fin 28) :
-    (Chain.roundPoly j (PayloadSplit.L π B ch t)).coeff i.val =
-      PayloadSplit.L π B ch t (.semanticCoeff j i) := by
+    (Chain.roundPoly j (PayloadSplit.L (Bat := Bat) π B ch t)).coeff i.val =
+      PayloadSplit.L (Bat := Bat) π B ch t (.semanticCoeff j i) := by
   rw [roundPoly_L, PayloadSplit.L_round]
 
 
@@ -767,7 +766,7 @@ theorem L_pure_maskOnly_coeff (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
     (ch : Challenges K) (m : M K F) (c : Fin 10) (j : Fin 10) (i : Fin 28)
     (hm : ∀ i : Fin 10, i ≠ c → ∀ r, m.1 (i,r) = 0)
     (hg : m.2.1 = 0) (hd : m.2.2 = 0) :
-    PayloadSplit.L π B ch (pureTrace B m) (.semanticCoeff j i) =
+    PayloadSplit.L (Bat := Bat) π B ch (pureTrace B m) (.semanticCoeff j i) =
       (∑ r, maskOnlyColumns (Sum.elim 0 (pureAff m)) c r •
         (R0P.Mask.towerBasis B ⟨(16+c.val)%4, Nat.mod_lt _ (by omega)⟩ *
           eqPrefix (alpha ch) r j) • ((if rowBits r j then X else 1-X) *
@@ -779,7 +778,7 @@ theorem L_pure_maskOnly_coeff (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
 theorem L_pure_G_coeff (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
     (ch : Challenges K) (m : M K F) (j : Fin 10) (i : Fin 28)
     (hm : m.1 = 0) (hd : m.2.2 = 0) :
-    PayloadSplit.L π B ch (pureTrace B m) (.semanticCoeff j i) =
+    PayloadSplit.L (Bat := Bat) π B ch (pureTrace B m) (.semanticCoeff j i) =
       (∑ r, balance 0 (extensionRaw B (Sum.elim 0 (pureAff m)) 0) r •
         eqPrefix (alpha ch) r j • ((if rowBits r j then X else 1-X) *
           (1 + (C (w 16 j)*X + C (β (w 16) (alpha ch) j r)) ^ 26))).coeff i.val := by
@@ -793,7 +792,7 @@ theorem L_pure_libra_coeff (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
       Pi.single (⟨d.val, by omega⟩ : Fin 1024) 1) :
     let k : Fin 10 := if d.val < 28 then 8 else 9
     let e := d.val%28
-    PayloadSplit.L π B ch (pureTrace B m) (.semanticCoeff j i) =
+    PayloadSplit.L (Bat := Bat) π B ch (pureTrace B m) (.semanticCoeff j i) =
       (if j.val < k.val then C ((2 : K)^(8-j.val) * (if e = 0 then 2 else 1))
       else if j = k then C ((2 : K)^(9-j.val)) * X^e
       else C ((2 : K)^(9-j.val) * alpha ch k ^ e)).coeff i.val := by
