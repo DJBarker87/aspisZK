@@ -222,6 +222,74 @@ is the row-local fact the writing stage guarantees.
   Schedule turned out cheap in the model because the block roles are
   explicit; its real content is the Rust sponge layout, again §6.
 
-§5  Finding: the change-sentinel gap in Rspend (pending)
-§6  Aeneas refinement plan                     (pending)
+§5  Finding: the change-sentinel gap in Rspend (PROVED, hosts 4211, 4212)
+
+  change_sentinel_of_balance (BuilderModelSentinel): for any trace A with
+  Holds occupancyFamily, Holds digestFamily and CopyLinkBalance, and
+  pub.variant = privateTransfer, pub.change 7 ≠ 0.  Mechanism: copy link
+  1124073492 (transfer-only) equates row 523 cols 0..7 (change digest) with
+  row 1018 cols 2..9; occupancy row 1018 needs A9·A1 − A0 = 0 with A0 = 1.
+  refines_forces_sentinel (BuilderModelBridge): BuilderRefines S Rel ⇒ every
+  transfer instance of Rel has pub.change 7 ≠ 0, for EVERY builder S.
+
+  Rspend (SpendRelation.lean:41) has no such clause, so `BuilderRefines S
+  Rspend` is unsatisfiable as soon as Rspend has a transfer instance whose
+  change commitment ends in a zero limb (a ≈2^-31 event per salt).  The Rust
+  builder aborts in exactly this case (two_outputs PP:206-226, "a zero
+  sentinel is a retry condition for note-salt generation").  Required
+  change (lead decision): instantiate Rel := Rspend ∧ (variant = transfer →
+  change[7] ≠ 0), i.e. the relation of instances the honest prover actually
+  proves, and account for the salt retry on the wallet side (it is a
+  witness-sampling retry before proving, not a proof-time abort, so it does
+  not enter the HVZK argument; whether the public statement leaks the
+  retry is a separate, I think trivial, check: the condition is on a
+  public value).  The model carries it as AuxPremises.changeSentinel.
+
+§6  Aeneas refinement plan (Rust builder ↔ buildModel)
+
+  Target statement, per stage, for every witness accepted by the Rust
+  checks: the Rust column arrays (lifted M31 → K) equal layout (cellsOf pub w)
+  on columns 0..15.  Per-family refinement is feasible because every family
+  reads only specific (row, column) cells and the stages write disjoint row
+  ranges (blocks 0..56, path 912..1007, value/occupancy 1008..1023); a
+  stage-level refinement lemma suffices for each family:
+    value/occupancy  write_value_aux PT:401-437, write_occupancy PT:439-468,
+                     and the relocation copy FT:225-227 (rows +48).
+    path             write_forest_path_aux FT:142-159 + trace_digest/
+                     node_left/node_right FT:121-140 (choice m3).
+    blocks           write_permutation PT:268-302, write_sponge PT:304-354,
+                     write_node PT:356-366, write_forest_node FT:161-195, and
+                     permute_optimized_with_trace P2:362-410 (choice m1).
+    merge            merge_pool_v1_pair_forest_trace_banks_v1 FT:281-314
+                     (shape checks + copy of rows 544..863).
+    asset/digest     note_input PT:227-245 and the equality checks.
+  Known extractor blockers (spend-path R1 history, pinned Charon cb50ff16 /
+  Aeneas b59d5188):
+    - closures: permute_optimized_with_trace and hash_fields_with_trace take
+      FnMut callbacks that capture `&mut columns`; the HashFn function-pointer
+      bound regions were already rejected (J1-CALLER-FRONTIER-CHECKPOINT,
+      LEAD-REVIEW-J1-CALLER-FRONTIER), and Aeneas failed on nested borrows
+      in the Poseidon external rounds (J1-TERMINAL-TRANSLATION-CANDIDATE).
+    - loops with nested &mut borrows into [Vec<M31>; 16] (InterpBorrows.ml
+      nested-borrow check, J1-R18-PREFIX-EXTRACTION) and outer-loop break
+      (J1-A-TERMINAL-VALIDATOR-EXTRACTION).
+    - std iterators (iter().any, chunks().enumerate(), copy_from_slice,
+      fill) and core::option/result inclusion (FIELD-PARSER-EXTRACTION
+      attempt b, "Inconsistent state").
+  Feasible route: an extraction-shaped twin of each writer (fixed-size
+  arrays, while-loops with explicit indices, no closures: the permutation
+  returns its 11 odd-round states as an array), proved equal to the
+  production writer by an exhaustive-shape differential test in Rust plus
+  one Lean lemma per twin from the Aeneas output.  The Poseidon twin is the
+  hardest item: its rounds must be shown equal to poseidonTransition on
+  canonical M31 values, which is the raw-limb refinement CoreExt.lean
+  already records as open.  Estimates: value/occupancy/path/merge twins
+  2–3 days; sponge/node writers 2 days given a Poseidon twin; Poseidon twin
+  and its round lemma 1–2 weeks (it has failed extraction before).
+  Alternative for the Poseidon stage only: keep it as a per-build checked
+  fact (the runtime residual check already includes the Poseidon residuals,
+  HO:80), recorded as a named premise; that is witness-independent only if
+  the check never fails on accepted witnesses, which the model plus (m1)
+  would prove.
+
 §7  Status: proved / modelled / open           (pending)
