@@ -128,7 +128,44 @@ is the row-local fact the writing stage guarantees.
   (balance)  73 touch path aux, 40 append, 13 block-             the same witness value (sponge chaining,
              to-block, 10 value/occupancy aux                    digest reuse, path, value/occupancy aux)
 
-§3  The Lean model buildModel                  (pending)
+§3  The Lean model buildModel (R0Z/BuilderModel.lean, host 4201)
+
+  ModelWitness K: Wspend's fields (SpendRelation.lean:15) with PairLeaf
+    unfolded: inputValue/outputValue/changeValue : Fin (2^30), sk, salt,
+    path : Fin 24 → Bool × Digest K, pairFirst/pairOccupied/pairSecond/
+    pairInverse, recipient/change owner and salt.
+  Stage B  BlockIn {pre, absorb}; blockIter (rows 0..11 by
+    poseidonTransition), blockDigest (row 11 lanes 0..7), blockCell (row 12 =
+    absorb, rows 13..15 = 0); spongeInit, nodeIn (pre = [0^8, right, right[7]
+    + 0x41531005], absorb = left), ordered.
+  Stage W  ownerB, noteB0/1/2 (chunks owner | value, asset, salt[0..6) |
+    salt[6..8)), nulB0/1, treeNode/treeCur (24 levels: blocks 4..24, 54..56),
+    appBit/appSib/appNode/appCur (blocks 34..53; sibling = emptyRootsNat table
+    for a 0 bit, snapshot frontier for a 1 bit), recipB (three zero blocks for
+    a withdrawal), outPairB, blocksOf : Fin 57 → BlockIn, pathAuxOf,
+    valuesOf, inOccOf, outOccOf (two_outputs / single_output), cellsOf.
+  Stage A/M  auxCell (path rows 912..1007, value rows 1008..1016/1020/1022,
+    occupancy 1017/1018), layout : Cells → Trace (columns 16..28 = 0).
+  buildModel pub w := layout (cellsOf pub w).
+
+  Modelling choices that the refinement (§6) must justify:
+  (m1) block rows are DEFINED by the canonical transition; the Rust rows are
+       the optimised raw-limb rounds (P2:362-410).  This is the existing
+       raw-limb boundary of CoreExt.lean, moved from the verifier side to the
+       builder side.
+  (m2) the empty-root siblings are the frozen table (EmptyRoots.lean); Rust
+       recomputes them (pair_empty_roots PT:217-225).
+  (m3) the path aux levels 0..20 are written from the same (current,
+       sibling, bit) as the node; Rust reads them back from the legacy
+       blocks (FT:216-224).  Equal by write_node's layout (node_left =
+       absorption, node_right = pre[8..16) minus the tweak, which is exact
+       in M31).
+  (m4) Rust aborts on any failed check; the model is total and the checks
+       become the premises AuxPremises / DigestPremises.
+  (m5) cells are K-valued; BaseTyped (values in the base subfield F) of
+       buildModel is NOT yet proved (Poseidon constants and field operations
+       stay in F; a closure lemma), so `BuilderSpec` is not yet instantiated.
+
 §4  Proof plan and effort per family           (pending)
 §5  Finding: the change-sentinel gap in Rspend (pending)
 §6  Aeneas refinement plan                     (pending)
