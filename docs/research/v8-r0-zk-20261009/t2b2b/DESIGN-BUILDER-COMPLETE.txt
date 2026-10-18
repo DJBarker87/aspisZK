@@ -1,0 +1,49 @@
+DESIGN-BUILDER-COMPLETE — the honest builder behind HonestBuilderCore (LOG D40.4, D42.4, D43.1)
+Branch codex/r0-builder-complete-20261019, base e171d7418.
+
+§0  Answer (task item 1): is there a concrete honest builder in Lean?
+
+NO.  The Lean model contains no function from a typed witness to a Trace
+with proved properties.  Evidence:
+
+- R0Z/ZkStatement.lean:302-308.  `HonestProver K` has fields Instance,
+  transport, public, build : Instance → Trace K; its doc comment says "The
+  transfer-instance builder is deliberately uninstantiated."  ZkStatement.lean:
+  319-320 `build h w := applyEligible (h.build w.1) w.2` only adds eligible
+  noise to the abstract build.
+- R0P (v8-r0-sem-proof-20261008/lean/R0P, 21,192 lines) is entirely in the
+  soundness direction, trace → witness:
+  * SemAssembly.lean:29 `ProductionHolds` and :35 `LaneInterface` are
+    predicates on a given trace; LaneMap.lean:511 `laneOf` and :817
+    `lanes_zero_iff_holds` (proved) relate the lane map to the families on
+    any base-typed trace.
+  * PositivityChain.lean:17 `CopyLinkBalance` is a predicate on a trace.
+  * Extraction.lean:330 `input_note_extracted` and SemSource.lean:34
+    `paymentWitness` read a witness out of a trace (traceSk/traceSalt/
+    tracePath).  SemClosed.lean:23 `semantic_sound_closed` is acceptance →
+    ProductionHolds ∧ CopyLinkBalance.
+  * The only Trace constructors in R0P are SemView.lean:35 `rowsOf` (rows
+    from committed messages, an encoding equivalence), :55 `padC2Trace`,
+    and the counterexample trace in Poseidon.lean:233.  None takes a witness.
+- R0Z constructs traces only from traces: MaskLayout.lean:102/109/119
+  (applyEligible/applyAff/applyMask), :232 traceBase, HonestView.lean:50
+  `prepare` (writes the helper into column 26), PayloadSplit.lean:72.
+- Spend path (read-only, origin/codex/100bit-spend-path-20261013):
+  SpendRelation.lean:15 `Witness`, :41 `Rspend`, :61 `check` (decidable,
+  check_eq_true_iff); TraceWitnessExtract.lean:17 `extract : Public →
+  Trace → Option Wspend`, :43 `complete_of_production`;
+  PublicTraceWitness.lean:8 `extract_complete_of_typed_public`.  These are
+  also trace → witness.  No Lean file on that branch builds a Trace from a
+  Witness (searched for Trace-valued definitions and Rspend users).
+- The builder exists only in Rust: aspis-statement
+  pool_v1/pair_forest_trace.rs:321/354
+  `compile_pool_v1_pair_forest_{private_transfer,withdrawal}_merged_c1_v1`
+  (legacy pair trace builder, relocate_and_extend, bank merge into
+  `semantic_c1`), checked by aspis-prover pool_v1_pair_forest_honest.rs:108/
+  137 (all constraint residuals zero), then consumed by
+  aspis-r1-cost-probe prover.rs:131 `prove_masked_with_attempt` →
+  host_semantic.rs:207 `build`/`build_with_material`, which also builds the
+  H1 column and checks `state_only_copy_helper_sum == 0` (prover.rs, after
+  build_with_material).
+
+Consequence: task item 2 does not apply; item 3 is carried out below.
