@@ -166,7 +166,62 @@ is the row-local fact the writing stage guarantees.
        buildModel is NOT yet proved (Poseidon constants and field operations
        stay in F; a closure lemma), so `BuilderSpec` is not yet instantiated.
 
-§4  Proof plan and effort per family           (pending)
+§4  Proof plan and effort per family
+
+  PROVED on host (every axiom line ⊆ [propext, Classical.choice, Quot.sound]):
+    value      value_layout / value_model (BuilderModelAux, 4204): chunk10 +
+               nat_bits reconstruction, premise: conservation.
+    occupancy  occupancy_layout / occupancy_model (4204): OccValid of both
+               leaves, premises pairValid, spendable, changeSentinel.
+    asset      asset_model (4204): by construction; premise: withdrawal
+               amount = outputValue.
+    path       path_layout / path_model (4204): pathAuxOf_valid, no premise.
+    poseidon   poseidon_layout (BuilderModelHash, 4208): every layout, by
+               construction (choice m1).
+    schedule   schedule_model (4208): blocksOf_node, blocksOf_hiZero,
+               blocksOf_absorb_zero; no premise.
+    digest     digest_model (BuilderModelDigest, 4210): DigestPremises
+               (anchor, nullifier, recipient, change, nextRoot, carry) and
+               CharP K (2^31−1) for the tweaked empty-root limb.
+    all seven  nonCopy_model (BuilderModelBridge, 4212):
+               NonCopyHolds pub (buildModel pub w) from AuxPremises and
+               DigestPremises.
+  Method note: every block lemma is symbolic.  Heavy definitions (blockOut,
+  blockIter, treeCur, appCur) are made locally irreducible before any
+  unification that could compare block contents; one early attempt (4205/
+  4206) timed out exactly there (whnf of a note block against a node block),
+  and was replaced by explicit range lemmas (blocksOf_tree_lo, _recip, _app,
+  _tree_hi), never by raising limits.
+
+  OPEN, with estimates (one worker, host-compiled, same discipline):
+  (a) CopyLinkBalance (buildModel pub w): 136 links.  Plan: classify by
+      endpoint kind (73 path-aux, 40 append, 13 block-to-block sponge/digest
+      reuse, 10 value/occupancy), prove one symbolic cell lemma per kind
+      (e.g. "row 16h+11 of block h equals row 0 of block h+1 for sponge
+      chains", "path base row level l cols 1..8 = row 11 of block
+      membership(l)−1"), then a generated per-link file that applies the
+      kind lemma with the link's literal rows (AGENTS.md generator rule: no
+      rfl/decide over the registry).  Weight kinds 3/4 (append left/right
+      by bit, 40 links) need the appBit case split.  Some links need witness
+      premises: ⟨64,0,10⟩→⟨1017,0,11⟩ (pair second commitment = right child
+      of block 4) needs path 0 = (selected_second, other commitment) and the
+      input leaf = selected commitment.  Estimate 3–5 days; this is the
+      largest remaining Lean item.
+  (b) BaseTyped (m5): closure of the model cells in F.  ~1 day.
+  (c) Wspend/Rspend bridge: map Wspend → ModelWitness and prove
+      Rspend ∧ sentinel → AuxPremises ∧ DigestPremises.  Needs the model
+      digests to equal the spend path's noteCommitment / nodeCompress /
+      pathPrefix, i.e. blockOut = poseidonPermutation of the absorbed input
+      (R0P has the composition behind poseidon_scalar_holds_output; it is
+      private there and must be re-exported or re-proved) plus the sponge
+      chaining.  Blocked on the build integration (SpendRelation not on the
+      R0Z path).  2–3 days after integration.
+  (d) Instantiating BuilderSpec / BuilderRefines with buildModel: immediate
+      once (a), (b), (c) hold.
+  Hardest: (a) by volume, and the Rust side of Poseidon (§6), by tooling.
+  Schedule turned out cheap in the model because the block roles are
+  explicit; its real content is the Rust sponge layout, again §6.
+
 §5  Finding: the change-sentinel gap in Rspend (pending)
 §6  Aeneas refinement plan                     (pending)
 §7  Status: proved / modelled / open           (pending)
