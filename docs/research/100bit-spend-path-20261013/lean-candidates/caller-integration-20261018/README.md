@@ -1,0 +1,7 @@
+# Pending caller integration proofs
+
+These immutable candidates are committed to preserve the proof work while the focused NUC import workspace is completed. They are NOT accepted proof results and are not part of the frozen release manifest. Compile each smallest target before its dependent bridge; replace a candidate only with a separately retained snapshot and focused evidence.
+
+The adapter supplies the actual candidate Poseidon callable. G3Exact discharges the existing caller Poseidon contract and composes the complete 29-coefficient continue-branch theorem. ActualBeginFinishCandidateComposition derives the candidate point/challenges from successful retained begin/finish calls and uses the existing actual 84-claim gather. Claim-decoder canonicality remains explicit; the opaque finish terminal boundary is not asserted equal to the candidate. FinishAlpha and TerminalCallReachability connect the finish source model to its exact returned/passed alpha and terminal arguments.
+
+Whole production Rust correspondence, claims/heap source semantics, finish-boundary instantiation, commitment/Fiat-Shamir security and end-to-end soundness/privacy remain open. No production source or runtime artifact changes are included here. The imported type extension preserves the existing C16 declaration prefix; formal checks are pending in a coherent temporary object workspace. Source hashes identify these candidates; they do not certify elaboration or security.
