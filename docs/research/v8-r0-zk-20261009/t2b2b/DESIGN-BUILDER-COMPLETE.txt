@@ -96,3 +96,71 @@ Consequence: task item 2 does not apply; item 3 is carried out below.
     CopyLinkBalance, all supplied by hR).  The refinement premise is
     therefore the trace-side image of the payment relation used by the
     soundness extractor, not an unrelated condition.
+
+§2  The refinement premise (what is NOT proved)
+
+    structure BuilderRefines (S : BuilderSpec F W) (Rel : Public K → W → Prop) : Prop
+      nonCopy : ∀ pub w, Rel pub w → NonCopyHolds pub (S.build pub w)
+      balance : ∀ pub w, Rel pub w → CopyLinkBalance pub (S.build pub w)
+
+    Intended instantiation: W := Wspend, Rel pub w := Rspend (projectPublic
+    pub) w (SpendRelation.lean:41 on the spend-path branch; PublicBase
+    projection as in PublicTraceWitness.lean:8), S := the Rust builder
+    compile_pool_v1_pair_forest_*_merged_c1_v1 → semantic_c1 (c1) and
+    host_semantic::build_with_material (rest: H1/C2 columns; their values
+    are irrelevant to all three fields, since `prepare` overwrites column 26
+    and no field reads columns 27-28).  The instantiation is not made on
+    this branch: SpendRelation and its imports (R1InputWitnessCheck,
+    PublicOptionShape, AspisV8R15.ExactTowerBase, R1SpendAppendBinding) are
+    not on the R0Z build path; W and Rel are parameters, so the theorems
+    apply verbatim once the modules share a build.
+
+    Rust status of the two premises: the honest compiler runs a host
+    residual check (aspis-prover pool_v1_pair_forest_honest.rs:80 `finish`:
+    exactly 18,089 transfer residuals, all zero; aspis-statement
+    pair_forest_constraint_residuals.rs:79) that includes Poseidon,
+    schedule, copy-alias, path, value, occupancy, append and public
+    residuals.  That is a RUNTIME check on each build, not a proof for all
+    witnesses, and its correspondence to the Lean families (NonCopyHolds)
+    and to CopyLinkBalance over R0P copyLinks is not proved.  The refinement
+    obligation is therefore: for every w with Rspend, the Rust builder's
+    columns satisfy the Lean families and link balance.  It can be
+    discharged either (a) by a Lean model of the builder (the column-wise
+    definitions of the legacy pair-trace builder, relocate_and_extend and
+    bank merge), proving NonCopyHolds/CopyLinkBalance per family, or (b) by
+    an Aeneas/extraction refinement of the Rust functions to such a model.
+
+    Why nothing more follows from Rspend alone: with S abstract, Rspend
+    constrains w, not S.build pub w.  Any S whose build is a trace with a
+    nonzero non-copy residual (e.g. Poseidon.lean:233's committed trace)
+    satisfies the types and violates nonCopy, for every w.  So neither
+    nonCopy nor balance is derivable from Rspend without a concrete
+    builder; (a) is the honest-completeness proof that would replace the
+    premise.
+
+§3  Field-by-field status of HonestBuilderCore (R0Z/BuilderSound.lean:24)
+
+    baseTyped : THEOREM for every builder of the ofColumns shape
+                (baseTyped_ofColumns).  Residual Rust fact: the semantic
+                C1 columns are M31 values embedded in K (a type fact of
+                `semantic_c1: [Vec<M31>]`, part of the same refinement map).
+    lanes     : THEOREM-reduced to NonCopyHolds (lanes_iff_nonCopy, needs
+                |K| > 4096, BaseTyped, PublicBase).  NonCopyHolds of the
+                honest build is the REFINEMENT PREMISE BuilderRefines.nonCopy.
+    balance   : REFINEMENT PREMISE BuilderRefines.balance (CopyLinkBalance
+                of the honest build), unchanged in content from D43.1.
+
+    Net effect on privacy_R1: the premise `BuilderSoundOn h B x` is replaced,
+    for h := honestProverOf S Rspend transport, by `BuilderRefines S Rspend`
+    (two Prop fields, both trace-side images of the payment relation) plus
+    the field-size fact and PublicBase, which privacy_R1 already assumes.
+
+§4  Open
+    - BuilderRefines for the Rust builder (route (a) or (b) of §2).
+    - Instantiating W := Wspend, Rel := Rspend once SpendRelation and R0Z
+      share a build; and checking that the Rust prover's Instance is
+      exactly {(pub, w) | Rspend} (the prover aborts on non-zero residuals,
+      so its domain may be smaller than Rspend iff the premise fails).
+    - The extension columns: `rest` is free in this model; if a later
+      statement reads columns 27-28 of h.build, their builder definition
+      must be added to BuilderSpec.
