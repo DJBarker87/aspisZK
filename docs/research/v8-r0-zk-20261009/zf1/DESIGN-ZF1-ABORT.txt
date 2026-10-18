@@ -228,3 +228,61 @@ Prog (ideal side; programming failure).
 No other event is charged. In particular: no badMass P, no failure-exit
 term, no term for the accept decision itself (it is a function of the
 challenges, whose law is the same in both worlds).
+
+----------------------------------------------------------------------
+§6  Why the eprint 2023/245 problem does not arise  (PROPOSED)
+----------------------------------------------------------------------
+
+Source: Devevey, Fallahpour, Passelègue, Stehlé, Xagawa, "A Detailed
+Analysis of Fiat-Shamir with Aborts" (eprint 2023/245). I could read the
+abstract (eprint page); the PDF returned HTTP 403 from this session, so
+the paper's detailed error list was NOT re-read. The abstract states:
+combining random oracles with repeated loop iterations complicates the
+analysis of correctness, run time and security; all existing analyses
+had errors; the corrected bounded-iteration analysis needs a STRONGER
+zero-knowledge property of the underlying Σ-protocol than usual; the
+unbounded-iteration case has further subtleties.
+
+Where the difficulty comes from in FS-with-aborts (Lyubashevsky/
+Dilithium): the abort decision is made on the RESPONSE z = y + c·s,
+which depends on the secret. Then (a) the accept event is correlated with
+the secret, so "simulate an accepted transcript" is a statement about a
+law reweighted by a secret-dependent acceptance probability; (b) the
+rejected iterations' commitments were sent to H by the real signer, so a
+simulator that programs H must also produce those commitments with the
+right joint law, which needs a ZK property covering aborted transcripts;
+(c) the iteration count's law is secret-dependent unless proved
+otherwise, and with unbounded loops even run time interacts with the ROM.
+
+How each point fares under D29:
+(a) P is a function of ch (and public x, π, B) only. Given the attempt's
+    challenge, acceptance is decided; HVZK_on P is a statement about the
+    view law AT a fixed P-challenge, with no reweighting. The theorem's
+    proof conditions on the coins, never on a secret-dependent event.
+    The Lean type of HVZK_on binds P before w, so this cannot be broken
+    silently.
+(b) No aborted transcript is published and none needs to be simulated:
+    the only trace of a discarded attempt is its oracle entries, charged
+    in full by Hit (§5) under a min-entropy hypothesis on fresh attempt
+    material. The "stronger ZK" of the paper is replaced here by
+    something weaker and payload-checkable: unpredictability of each
+    discarded attempt's first address. The simulator's discarded draws
+    are not programmed at all.
+(c) The cap N is explicit and the failure exit publishes ⊥; the
+    iteration count is a function of the challenges and has the same law
+    in both worlds (the simulator runs the same loop on the same public
+    predicate). Unbounded iteration is not used.
+(d) Model: the existing ZK_FS is a classical ROM statement with a
+    post-proof adversary. The paper's analyses are in the QROM. A QROM
+    version of Hit would need a one-way-to-hiding style argument and is
+    out of scope; nothing in this design claims QROM security.
+
+Residual risk, stated plainly: the conclusion relies on (i) P being
+exactly a function of public data and challenges (refinement
+obligation: the Rust check decides exactly the Lean P, D28.2); (ii)
+fresh per-attempt material entering every attempt's FIRST absorbed block
+(§7 R-fresh). If (ii) fails — e.g. row 0's address depends only on the
+statement — then several challenge rows are IDENTICAL across attempts,
+the accepted challenge is not distributed as ch | P, and Coll has mass 1.
+That would not change D29 (it is a prover-implementation requirement),
+but it must be checked against the exact R1 transcript layout (R1M).
