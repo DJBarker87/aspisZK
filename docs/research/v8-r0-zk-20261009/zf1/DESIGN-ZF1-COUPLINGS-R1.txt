@@ -278,3 +278,29 @@ Types (FsStatement.lean, FsAbort.lean, read from the sources):
   failed (same seeds in two attempts), the init reads of the two attempts
   would agree whenever their C1 trees do, PairFresh would be false and
   Coll would have mass ≈ 1 — the D31 observation, now located exactly.
+----------------------------------------------------------------------
+§4  The ideal coupling: Prog  (event PROVED-bounded; facts HYP)
+----------------------------------------------------------------------
+
+4.1 Coupling space S_I := the abort-middle coins and tapes themselves,
+  (Fin N → Coins) × (Fin N → Tape), toM = id; toR maps them to the ideal
+  game's randomness (per-attempt SQ draws, the accepted attempt's tape and
+  CH/SE coins, TB_0). meanR: the ideal game samples exactly these
+  coordinates (HYP `cp` in R1IdealModel; it is a reindexing, no
+  programming law is needed because the simulator programs by
+  construction).
+4.2 Positions: the published Priv reads of each attempt (M_I ≤ N·m; the
+  Lean statement takes all N·m, which over-counts).
+4.3 Prog := ∃ p < p', (priv p ∨ priv p') ∧ addr p s = addr p' s, i.e. two
+  programmed points of the accepted attempt coincide (or coincide with a
+  Pub address the simulator also answers from TB_0). Outside Prog the
+  programmed table answers every published read by its coordinate, as
+  `extend` does, and every other read by TB_0, as `extend` does; the
+  adversary is post-proof, so no read precedes the programming. Agreement
+  outside Prog is HYP (it needs the ideal game written out in Lean).
+4.4 No ideal-side Hit term: discarded ideal draws program nothing and leave
+  no trace; unpublished reads do not exist in the ideal game and are
+  answered by TB_0 in the middle game too.
+4.5 The simulator's view is `simulator h B outputs x hx ch` (JointView),
+  the view at the chosen instance; ZF2 replaces it with a witness-free
+  sampler. Nothing here depends on that choice.
