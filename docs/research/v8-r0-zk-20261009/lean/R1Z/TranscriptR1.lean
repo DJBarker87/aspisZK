@@ -413,15 +413,23 @@ theorem fc_not_sq (j j' : TRead) (h : fc j = .ans j') : ¬ IsSq j' := by
     simp [fc] at h
   · simp [Sib] at e
 
+/-- A chain coordinate: the C1 root, `sel`, or the answer of a non-squeeze
+read.  Every designated field is one (`chain_fc`); moving a chain coordinate
+leaves the challenges and the prover's messages unchanged. -/
+def ChainC (c : Coord) : Prop := ∀ j, c = .ans j → ¬ IsSq j
+
+theorem chain_fc (j : TRead) : ChainC (fc j) := fun j' h => fc_not_sq j j' h
+
 /-! ### Lifting to a space of attempts -/
 
 /-- Per-attempt records on a finite space `S`, with a lawful lens for every
-coordinate of every attempt: moving coordinate `c` of attempt `k` moves that
-coordinate of `k`'s record and leaves every other attempt's record alone. -/
+chain coordinate of every attempt: moving chain coordinate `c` of attempt `k`
+moves that coordinate of `k`'s record and leaves every other attempt's record
+alone. -/
 structure TranscriptFrame (S : Type) (N : ℕ) where
   att : Fin N → S → Rec
   lens : Fin N → Coord → Lens S Ans
-  rec_same : ∀ k c s u, att k ((lens k c).set s u) = setC c (att k s) u
+  rec_same : ∀ k c s u, ChainC c → att k ((lens k c).set s u) = setC c (att k s) u
   rec_other : ∀ k k' c s u, k' ≠ k → att k' ((lens k c).set s u) = att k' s
 
 variable {S : Type} [Fintype S] {N : ℕ}
@@ -432,7 +440,7 @@ def taddr (Fr : TranscriptFrame S N) (k : Fin N) (j : TRead) (s : S) : Bytes :=
 theorem taddr_extract (Fr : TranscriptFrame S N) (k : Fin N) (j : TRead) (s : S) (u : Ans) :
     extract j (taddr Fr k j ((Fr.lens k (fc j)).set s u)) = u := by
   unfold taddr
-  rw [Fr.rec_same]
+  rw [Fr.rec_same _ _ _ _ (chain_fc j)]
   exact extract_addr_setC _ _ _
 
 /-- `PairFresh` for every pair of distinct transcript positions, over all
@@ -450,7 +458,7 @@ theorem pairFresh_transcript (Fr : TranscriptFrame S N) (p p' : Fin N × TRead) 
         umin_le_card_ans ?_ (taddr_extract Fr k j'))
       intro s u
       unfold taddr
-      rw [Fr.rec_same]
+      rw [Fr.rec_same _ _ _ _ (chain_fc j')]
       exact addr_setC_of_not_dep j _ _ _ hd
     · exact Or.inl (pairFresh_of_ne _ _ _ (fun s => hd (Fr.att k s)))
   · refine Or.inl (pairFresh_of_lens (Fr.lens k' (fc j')) _ _ (extract j') _
@@ -476,6 +484,7 @@ theorem card_positions : Fintype.card (Fin N × TRead) = N * 115 := by
 #print axioms card_TRead
 #print axioms mem_schedule
 #print axioms fc_not_sq
+#print axioms chain_fc
 #print axioms extract_addrWith
 #print axioms fieldVal_setC
 #print axioms extract_addr_setC
