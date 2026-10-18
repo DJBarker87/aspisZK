@@ -1,0 +1,492 @@
+ZF1a/b on R1 — the abort couplings for the 33-row sponge transcript
+===================================================================
+
+Base 5c1e49aa7 (D37). Branch codex/r0-zf1-couplings-20261018.
+Spend-path source read with `git show` only, at origin tip 3b0acd4f5
+(crates/aspis-r1-cost-probe/src/{r1_wire,transcript,r1_semantic,verifier,
+prover,host_commitment,sampler}.rs; aspis-core r0_transcript.rs,
+state_only_private_merkle.rs; aspis-prover state_only_entropy.rs, which is
+byte-identical on this branch).
+Status legend: SOURCE = read in the cited file; PROVED = Lean, host-compiled,
+axioms audited; HYP = a named Prop hypothesis of a Lean theorem; ASSUME = a
+requirement on the honest prover or the hash model, outside Lean;
+PROPOSED = design text only.
+
+§1  The R1 oracle reads of one attempt (positions, fields, classes)
+§2  FSExperiments and AbortBridge for R1 (coins, draw, extend, fail)
+§3  The real coupling: events Hit and Coll
+§4  The ideal coupling: event Prog
+§5  Bounds, in terms of N, Q, m, δ
+§6  Freshness: what is assumed, what is proved
+§7  Lean: R0Z/FsAbortBounds.lean and R0Z/FsAbortR1.lean
+§8  Numbers for N = 8, Q = 2^64
+§9  Open items and gaps found
+
+----------------------------------------------------------------------
+§1  The R1 oracle reads of one attempt  (SOURCE unless marked)
+----------------------------------------------------------------------
+
+One random oracle H : Bytes → {0,1}^256 (SHA-256 in the ROM; one function
+for the transcript, the Merkle trees, salt and mask derivation, as in the
+source: every call is `hash`/`Digest32::digest` of the same backend).
+
+1.1 Transcript reads (115 per attempt).
+  init    s_init = H(DOMAIN ‖ 0 ‖ len_le32 ‖ public_bytes ‖ c1_root)
+          (r1_wire.rs SemanticTranscript::new; DOMAIN =
+          "UNPROVED:R1:PRIVATE-SALTED:SEMANTIC:P3" under private-leaf-salts).
+          This is the "row 0 absorbs the public bytes and the C1 root" of
+          the payload map; row 0's own record is empty.
+  rows 0..26 (sample_block_validated): for row i
+          abs_i = H(state ‖ [0, 0xa0+i] ‖ framed_i),
+          sq_i  = H(abs_i ‖ [1])   (the challenge block),
+          adv_i = H(abs_i ‖ [2])   (the next state).            27 × 3 = 81
+          Row 2's record is the C2 root; rows 14..26 carry H, the round
+          polynomials, the claims/extra (25) and before_z1 (26).
+  reseed  t_0 = H(domain2 ‖ [variant tag] ‖ adv_26)   (transcript.rs
+          Transcript::new, called in verifier.rs:105 with the semantic
+          state; this is the "26 reseeds" of the schedule).          1
+  rows 27..30 (Transcript::block): abs = H(state ‖ [0, 0xa0+row] ‖
+          len_le32 ‖ payload), sq = H(abs ‖ [1]), adv = H(abs ‖ [2]);
+          payloads y1 (γ), inactive (κ), round0 (α0), folded root ‖ round1
+          (α1).                                                  4 × 3 = 12
+  row 31  abs_31 = H(state ‖ [0, 0xa0+31] ‖ len ‖ final_message), then
+          eight pairs b_k = H(st_k ‖ [1]), a_k = H(st_k ‖ [2]), st_0 = abs_31,
+          st_{k+1} = a_k (transcript.rs queries). The queries are
+          QueryScan over the b_k only; the continuing state is a_{k*} for
+          the first k* at which the scan completes, else a_7
+          (r0_transcript.rs queries_from_pairs).                1 + 16 = 17
+  row 32  ρ: abs_32 = H(a_{k*} ‖ [0, 0xa0+32] ‖ len ‖ ∅), sq, adv.      3
+  Total m_T = 1 + 81 + 1 + 12 + 17 + 3 = 115 (the R0 count was 110).
+  Decoders: semantic rows qm31_sample, circle rows circle_sample (one
+  block, fixed fallback), γ gamma_sample, κ/α0/α1 ordinary_sample, queries
+  QueryScan, ρ qm31_sample (sampler.rs). Every challenge is a function of
+  the squeeze answers sq_i / b_k only; no squeeze answer is a field of any
+  later address. ρ enters no disclosed coordinate (payload map §6), so the
+  Lean `Challenges K` (sem 25, circle 2, opening 4 = γ, κ, α0, α1, queries)
+  is the image of `draw` with ρ dropped.
+
+1.2 Commitment reads (private-leaf-salts build only; see §6 A-salt).
+  salt    salt_{T,u} = H(LEAF_SALT_DOMAIN ‖ bind_k ‖ nonce_k ‖ T ‖ u_le32 ‖
+          leaf_salt_seed_k)  for each tree T ∈ {C1, C2} and fibre u < 2^18
+          (state_only_entropy.rs derive_pool_v1_leaf_salt, called per leaf
+          by prover.rs derive_private_salts).
+  leaf    H(0x10 ‖ T ‖ value_u ‖ salt_{T,u})   (state_only_private_merkle.rs).
+  node    8-ary Merkle nodes over the leaf digests (host_commitment.rs; the
+          opened path is 1344 bytes = 6 levels × 7 siblings × 32).
+  The folded tree (row 30's root) is built the same way over 2^16 leaves.
+  The C1 root is the top node of the C1 tree; it is the trailing field of
+  `init`. The C2 root is row 2's record.
+
+1.3 Mask and secret derivation reads.
+  bind_k  = H(dom ‖ precommit_binding ‖ context_k)  (pool_v1_private_attempt_
+          binding; context_k contains the public per-attempt nonce_k and
+          statement digest H(public_bytes)).
+  seeds   source_mask_seed_k = H(POOL_V1_SOURCE_SEED_DOMAIN ‖ precommit ‖
+          context_k ‖ field_mask_entropy_k), and per lane family
+          H(…_SEED_DOMAIN ‖ bind_k ‖ source_mask_seed_k).
+  expand  H(PROFILE21_SOURCE_EXPAND_DOMAIN ‖ seed ‖ counter_le) blocks; each
+          M31 limb takes 31-bit words `w & 0x7fffffff`, rejecting 2^31−1, at
+          most 16 tries, else MaskSampleExhausted.
+
+1.4 Classes (PROPOSED classification; the HYP of §7 is that it is exact).
+  Pub_k  : an address whose bytes are a function of public data, of the
+           public nonce_k and of H at other Pub addresses (statement digest,
+           bind_k, the context hash). Answered from the shared table in
+           every game; repeats across attempts are legitimate; never charged.
+  Priv_k : every other read of attempt k. Each has a DESIGNATED FIELD — a
+           32-byte sub-string at a fixed offset, recoverable from the address
+           alone — that is either an attempt secret of k or the answer of
+           an earlier Priv_k read:
+             salt     → leaf_salt_seed_k (trailing 32 bytes)
+             seeds    → field_mask_entropy_k / source_mask_seed_k answer
+             expand   → the seed answer (offset of the domain length)
+             leaf     → salt_{T,u} answer (trailing)
+             node     → its last child's answer
+             init     → c1_root = C1 top-node answer (trailing)
+             abs_i    → previous adv answer (offset 0); abs_0 → s_init answer
+             sq_i, adv_i, b_k, a_k → abs_i / st_k answer (offset 0)
+             reseed   → adv_26 answer (trailing)
+             abs_32   → a_{k*} answer (offset 0); k* is a function of the
+                        squeeze answers only.
+           Reads that share a designated field are structurally distinct:
+           sq/adv by the suffix byte 1/2; salts by (T, u); expander blocks by
+           counter; abs_32 against b_{k*+1}/a_{k*+1} by length (38 vs 33
+           bytes). This is the same device as the spend-path soundness
+           targets `fixed 0`, `trailing`, `child j`, `fixed 38`
+           (RawByteCollisionTargets.lean, `pred`, file SHA at 3b0acd4f5:
+           1246810ec0 is the last commit touching it), used here for privacy.
+  Published: a Priv read is PUBLISHED if the verifier recomputes it from
+           the proof bytes (all 115 transcript reads, the reads on the 22
+           opened paths of the three trees, and the opened leaves); otherwise
+           UNPUBLISHED (unopened leaves, sibling-subtree nodes, salt
+           derivations, seeds, expander blocks). Which leaves are opened
+           depends on the query challenge, i.e. on squeeze answers only.
+
+1.5 Count per attempt (PROPOSED, from the source; not instrumented).
+  salts 2·2^18 + 2^16, leaves 2·2^18 + 2^16, 8-ary nodes < 2·2^18/7 + 2^16,
+  expander blocks ≤ 29·1024·4·16/8 < 2^18 (worst case, every word
+  rejected 15 times; normally ≈ 1.5·10^4), transcript 115, seeds/binding/
+  context < 2^6. Total m < 1.53·10^6 < 2^21. All bounds below use m = 2^21.
+
+----------------------------------------------------------------------
+§2  FSExperiments and AbortBridge for R1  (PROPOSED)
+----------------------------------------------------------------------
+
+Types (FsStatement.lean, FsAbort.lean, read from the sources):
+  FSExperiments K CommitHandle Aux Bat F has Adversary, RealRand,
+  IdealRand, real, ideal, observe; ROMView = (disclosed : View, observer-
+  Oracle : List (Bytes × OracleAnswer)), OracleAnswer = Fin 32 → UInt8.
+  AbortBridge has Coins, N, draw : Adv → x → Coins → Challenges K,
+  extend : Adv → x → (Fin N → Coins) → Fin N → View → ROMView, fail.
+  Meta.handles = fun i => (x.2, i): the Lean View carries NO commitment
+  root; roots are nominal handles from the statement.
+
+2.1 Where the hash layer goes (gap G-root, new). The R1 proof contains the
+  C1/C2/folded roots, 22 × 3 Merkle paths and 22 × 3 opened salts, none of
+  which is a View coordinate. Proposal: they are published as the VERIFIER
+  LOG — the list of (input, answer) pairs the R1 verifier reads when it
+  checks the proof (the 115 transcript reads and every read on the opened
+  paths). An opened path IS such a list (sibling digests are answers, the
+  opened leaf input is value ‖ salt), so (View, VerLog) determines the
+  proof bytes and conversely. Instantiation: CommitHandle := the public
+  account namespace (no root), and fs.real puts VerLog as the prefix of
+  ROMView.observerOracle, followed by the adversary's own reads. No Lean
+  type changes. The adversary sees every root and sibling as an answer.
+
+2.2 Real game RealAbort_R1 (fs.real). RealRand := (Addr_L → OracleAnswer) ×
+  (Fin N → Secrets), Secrets := two nonzero 32-byte seeds
+  (field_mask_entropy, leaf_salt_seed) and the public nonce; Addr_L the
+  bounded-length byte strings (as FS2.Duplex.Addr; finite, so RealRand is
+  a Fintype). Attempt k: derive masks and salts from Secrets_k (§1.3),
+  build C1, run rows 0..32 against H, decide P on the decoded challenges
+  (Rust `P_R1` check = Lean P_R1, refinement R-pub); publish the first
+  accepted attempt as (View, VerLog) or ⊥; then run the adversary
+  adv : View × VerLog → Program Bytes OracleAnswer Bool against H.
+
+2.3 Abort bridge ab_R1.
+  N      the attempt cap.
+  Coins  per attempt: SQ (the squeeze answers: 27 + 4 + 8 + 1 = 40 blocks),
+         CH (the answers of every other Priv read of §1.4 except expander
+         blocks: abs/adv/st answers, s_init, t_0, salts, leaf and node
+         digests), SE (the two secret seeds), TB (a table Addr_L → Answer).
+         Uniform product.
+  draw   decoders of §1.1 applied to SQ (ρ dropped). It reads nothing else,
+         so the per-attempt challenges are i.i.d. with the honest law
+         (R-same of DESIGN-ZF1-ABORT §7 holds by construction).
+  tape   Tape K F of attempt k (FsAbort's (Fin N → Tape) factor). The
+         Rust masks are the rejection decode of the expander answers; the
+         coupling space carries those answers B_k and a spare tape, and
+         maps them to Tape by decode-or-spare (§3.3).
+  extend c k V: the ROMView with disclosed V and observerOracle = VerLog_k
+         ++ adversary log, where VerLog_k is computed from V's messages
+         (the framed records) and c_k (state chain answers, opened salts,
+         sibling and path digests, roots); the adversary's reads are
+         answered: at an address of a published Priv read of attempt k by
+         its coin; at any other address by TB of attempt 0 (the shared
+         table; Pub reads of every attempt use it too).
+  fail c: ROMView of ⊥ (empty View sentinel) with the adversary run on TB_0.
+  The discarded attempts' coins are read only through draw (to steer the
+  accepted index); their tapes never.
+
+2.4 Ideal game IdealAbort_R1 (fs.ideal). Same loop on fresh SQ draws and
+  the same P; on acceptance, V := simulator(ch, t) for a fresh tape, coins
+  CH/SE fresh, VerLog computed as in extend, and H := TB_0 programmed at
+  the accepted attempt's published Priv addresses with those coins; the
+  adversary runs against the programmed H. Discarded draws program
+  nothing. (Witness-free except for `simulator`, which is ZF2's object.)
+----------------------------------------------------------------------
+§3  The real coupling: Hit and Coll  (events PROVED-bounded; facts HYP)
+----------------------------------------------------------------------
+
+3.1 Coupling space. S_R := Π_k (SQ_k × CH_k × SE_k × TB_k × B_k × T'_k), all
+  coordinates uniform and independent; B_k the expander answers, T'_k a
+  spare tape. Maps:
+    toM s := ((k ↦ (SQ_k, CH_k, SE_k, TB_k)), (k ↦ decode-or-spare(B_k, T'_k)))
+    toR s := (H, secrets) with H := TB_0 overwritten, first write wins, at
+             the addresses of the run attempts' Priv reads (in run order)
+             by their answer coordinates (SQ/CH/B), secrets := SE.
+  meanM holds coordinatewise once decode-or-spare is uniform (rejection
+  with fallback: each limb value has the same number of word preimages;
+  the fallback spare is uniform). meanR is the lazy-programming law: every
+  table H has exactly |Answer|^m preimages along the adaptive recursion
+  (a fresh address forces its coordinate, a repeated one leaves it free,
+  and the table is free exactly on the programmed addresses). Both are
+  HYP (`cp` in R1RealModel). The first is PROVED generically
+  (FsAbortTape.mean_decodeOrSpare: equal fibres ⇒ decode-or-spare is
+  measure-preserving) given the sampler's equal-fibre property (HYP); the
+  lazy-programming law is not proved here; it is the
+  per-attempt analogue of R19 `lazyMean_eq_independentMean`
+  (AdaptiveFirstReadLaw), which lives in another workspace (G10).
+
+3.2 Positions. M := N·m positions (k, j); addr (k, j) s := the address of
+  read j of attempt k computed in the middle game from toM s (attempts
+  after the accepted one are computed as if run; they are never charged).
+  priv (k, j) := read j is in Priv (static per j). charged (k, j) s :=
+  [attempt k discarded at s] ∨ [attempt k accepted at s ∧ read j is
+  UNPUBLISHED at s]. qry i s := the i-th distinct read of the adversary in
+  the middle game, i < q (padded with a fixed public address).
+
+3.3 Events (Lean: FsAbortBounds.HitEv, CollEv; FsAbortR1.R1RealModel).
+  Hit  := ∃ (k, j) i, charged (k, j) s ∧ qry i s = addr (k, j) s.
+  Coll := (∃ p < p', (priv p ∨ priv p') ∧ addr p s = addr p' s) ∨ Exh s,
+          Exh := some mask limb of a run attempt used 16 rejected words.
+  Pub–Pub coincidences are not charged: they are the same public address,
+  answered from TB_0 in every game.
+
+3.4 Agreement outside Hit ∪ Coll (HYP hAgree = protocol refinement).
+  Outside Coll every run read gets its own coordinate (no first-write
+  conflict), so attempt k's challenges are draw(SQ_k), its masks are
+  decode(B_k) = the Lean tape (no Exh), and the accepted attempt's proof
+  is (view(w, ch, t), VerLog) — this last step is the refinement of the
+  Rust prover to the Lean payload (D28.2/D34.3 items; not in Lean).
+  Outside Hit the adversary never reads a charged address; at every other
+  address both games answer alike: published Priv reads of the accepted
+  attempt by their coordinate (extend records them), Pub and unrelated
+  addresses by TB_0, reads of attempts after the accepted one by TB_0 (not
+  programmed in toR either).
+
+3.5 Why the charged reads have designated fields independent of the view
+  (HYP HitFresh, per (k, j, i); design §1.4 gives the field).
+  Fix (k, j) and let u be the coordinate that is read j's designated field
+  (a secret seed of attempt k, or the answer of an earlier Priv read of k).
+  Split S_R ≃ R × U. Then:
+  (a) `charged (k, j)` does not depend on u: "discarded/accepted" is a
+      function of the SQ coordinates (draw) and P; "published" is a
+      function of the query challenge (SQ). No designated field is an SQ
+      coordinate (§1.1: squeeze answers feed decoders only).
+  (b) on `charged (k, j)`, the adversary's reads do not depend on u: the
+      adversary sees the accepted view (Lean tape and challenges), VerLog
+      of the accepted attempt (published coordinates only) and TB_0. If k
+      is discarded, nothing of attempt k is published; if k is accepted
+      and j unpublished, u is a secret seed, an unopened salt answer, an
+      unpublished node answer or a seed answer, none of which is in VerLog
+      (opened salts, path digests and sibling digests are answers of OTHER
+      reads). This is where R-erase is used.
+  (c) addr (k, j) = a forces u = π(a) (fixed-offset/trailing field).
+  FsAbortBounds.hit_le then gives mass ≤ mass(charged)/|U| ≤ 1/2^255.
+  The C1 root needs no entropy argument: in the middle game it is a coin
+  (the top-node answer), and the real game equals the middle game until
+  Coll. This is the formal content of "fresh salts → fresh C1 root → fresh
+  row-0 address": salts fresh (SE), C1 root fresh (CH, by (c) for the leaf
+  and node reads against Coll), init address fresh (field = root).
+
+3.6 Pair freshness (HYP PairFresh, per private-involving pair p < p').
+  Either the two reads are structurally distinct (§1.4: suffix byte,
+  (T, u), counter, length), or one of them, say p', has a designated field
+  u on which addr p does not depend (addr p depends on its own field, on
+  messages — functions of SQ, the witness and the tape — and on nothing
+  else of attempt k; the 8 children of distinct Merkle nodes are distinct
+  reads; attempts use disjoint secrets). Pub reads depend on no Priv
+  coordinate. Then FsAbortBounds.pair_le gives ≤ 1/2^255. If R-fresh
+  failed (same seeds in two attempts), the init reads of the two attempts
+  would agree whenever their C1 trees do, PairFresh would be false and
+  Coll would have mass ≈ 1 — the D31 observation, now located exactly.
+----------------------------------------------------------------------
+§4  The ideal coupling: Prog  (event PROVED-bounded; facts HYP)
+----------------------------------------------------------------------
+
+4.1 Coupling space S_I := the abort-middle coins and tapes themselves,
+  (Fin N → Coins) × (Fin N → Tape), toM = id; toR maps them to the ideal
+  game's randomness (per-attempt SQ draws, the accepted attempt's tape and
+  CH/SE coins, TB_0). meanR: the ideal game samples exactly these
+  coordinates (HYP `cp` in R1IdealModel; it is a reindexing, no
+  programming law is needed because the simulator programs by
+  construction).
+4.2 Positions: the published Priv reads of each attempt (M_I ≤ N·m; the
+  Lean statement takes all N·m, which over-counts).
+4.3 Prog := ∃ p < p', (priv p ∨ priv p') ∧ addr p s = addr p' s, i.e. two
+  programmed points of the accepted attempt coincide (or coincide with a
+  Pub address the simulator also answers from TB_0). Outside Prog the
+  programmed table answers every published read by its coordinate, as
+  `extend` does, and every other read by TB_0, as `extend` does; the
+  adversary is post-proof, so no read precedes the programming. Agreement
+  outside Prog is HYP (it needs the ideal game written out in Lean).
+4.4 No ideal-side Hit term: discarded ideal draws program nothing and leave
+  no trace; unpublished reads do not exist in the ideal game and are
+  answered by TB_0 in the middle game too.
+4.5 The simulator's view is `simulator h B outputs x hx ch` (JointView),
+  the view at the chosen instance; ZF2 replaces it with a witness-free
+  sampler. Nothing here depends on that choice.
+----------------------------------------------------------------------
+§5  Bounds  (PROVED from the HYP of §3/§4; Lean names in §7)
+----------------------------------------------------------------------
+
+Notation: N attempt cap, m ≤ 2^21 reads per attempt (§1.5), M = N·m
+positions, q adversary reads (distinct first reads; VerLog reads are
+published data, not queries), Umin = 2^255 ≤ every designated-field
+coordinate size (answers: 2^256 values; seeds: 2^256 − 1 nonzero values).
+
+5.1 ε_hit ≤ M·q/Umin = N·m·q / 2^255.
+    Proof: hitEv_mass_le (union over M·q (position, read) pairs) and
+    hitFresh_mass (each pair ≤ mass(charged)/|U| ≤ 1/Umin).
+    This is the "(adversary queries) × (addresses touched by discarded
+    attempts and unpublished reads) / |field space|" form. It contains a
+    term that exists already at N = 1: the accepted attempt's unpublished
+    reads (unopened leaves, salt derivations, seeds, expander). The R0
+    ZF1 count (D20′.4: 110 transcript reads) did not have it, because
+    there the commitments were nominal handles.
+    Sharper, not formalised: Σ_k Pr[k run] ≤ min(N, 1/p) replaces N, since
+    mass(charged (k, j)) ≤ Pr[attempt k run].
+5.2 ε_coll ≤ M²/Umin + ε_exh.
+    Proof: collEv_mass_le (ordered pairs p < p', counted over all M² index
+    pairs) and pairFresh_mass; mass_or_le for the exhaustion disjunct.
+    ε_exh ≤ N · L · (2/2^32)^16 = N · L · 2^-496 with L < 29·1024·4 < 2^17
+    limbs per attempt (a limb fails only if 16 words all map to 2^31 − 1;
+    `w & 0x7fffffff = 0x7fffffff` for 2 of 2^32 words). HYP H-exh.
+5.3 ε_prog ≤ M_I²/Umin, M_I ≤ N·m (Lean takes M_I = N·m).
+5.4 Total (Theorem B of FsAbort, via zkfs_R1_abort):
+    ε_FS ≤ N·m·q/2^255 + 2·(N·m)²/2^255 + N·2^17·2^-496.
+    The failure exit and the accept decision cost nothing (FsAbort). No
+    term depends on Pr[P] or on the challenge decoders' bias (the
+    ordinary_sample/gamma_sample bias of about 2^-8 over E matters for
+    soundness only: both worlds use the same decoders on uniform blocks).
+
+----------------------------------------------------------------------
+§6  Freshness: assumed vs proved
+----------------------------------------------------------------------
+
+ASSUME (honest prover / hash model; outside Lean):
+  A-RO     SHA-256 is a classical random oracle on bounded-length inputs;
+           the adversary is post-proof (FsStatement/ZK_FS). QROM: no claim.
+  A-sec    every attempt draws field_mask_entropy and leaf_salt_seed fresh
+           from the OS RNG, uniform on nonzero 32-byte strings, independent
+           of everything else (StateOnlyAttemptSecrets::generate does this
+           per call; the retry driver must call it once per attempt — the
+           probe has no retry driver yet).
+  A-salt   the private-leaf-salts (P3) build. Without it the leaf reads
+           have no uniform designated field and HitFresh fails as stated.
+  A-erase  nothing of a discarded attempt is published or logged (roots,
+           records, salts, seeds, opened data); the accepted attempt
+           publishes exactly (View, VerLog): unopened salts and seeds never
+           (PrivateSalts::drop and the seed Zeroizing wrappers zeroize).
+  A-cap    N fixed in advance; failure (cap reached, or
+           MaskSampleExhausted treated as a failed attempt) publishes ⊥.
+  A-pub    the Rust P_R1 check decides exactly the Lean P_R1 (D28.2).
+  The public nonce needs no secrecy and no entropy here (its reads are
+  Pub); its uniqueness (durable ledger) is an operational guard only.
+HYP (named Lean hypotheses; source correspondence, checked by reading only):
+  H-layout  HitFresh/PairFresh: the designated-field table of §1.4 is exact
+            for the R1 byte layouts and the reads sharing a field are
+            structurally distinct.
+  H-count   m ≤ 2^21 (r1AttemptReadBound_le proves the arithmetic of the
+            §1.5 formula; that the formula counts the Rust calls is not
+            instrumented).
+  H-prog    the coupling `cp` of R1RealModel (lazy-programming law and
+            uniform decode-or-spare) and of R1IdealModel (reindexing).
+  H-ref     agreement outside the events (the Rust prover produces the
+            Lean view and VerLog; the ideal game as specified in §2.4).
+  H-exh     mass(Exh) ≤ ε_exh.
+PROVED (Lean, host 3800 and 3802):
+  every event-mass bound of §5 from these hypotheses, both FsAbort
+  couplings, ZK_FS with the §5.4 error, and the N = 8 number. The chain
+  "fresh salts → fresh C1 root → fresh row-0 address" is proved in the
+  following exact sense: once A-sec makes the seeds coordinates of the
+  coupling space and H-layout names each read's field, the hit and pair
+  masses of the salt, leaf, node, init and row-0 reads are each ≤ 2^-255
+  (instances of hit_le / pair_le); no per-link entropy argument is needed
+  because in the middle game every answer is its own uniform coordinate
+  and the real game agrees with it until Coll.
+----------------------------------------------------------------------
+§7  Lean  (all PROVED, host-compiled, axioms audited; zf1/couplings-R1-evidence.json)
+----------------------------------------------------------------------
+
+R0Z/FsAbortBounds.lean (imports R0Z.LawTransport only) — host 3800, exit 0,
+SHA f5820c2f…, 22 axiom lines [propext, Classical.choice, Quot.sound]:
+  mass E := mean (if E s then 1 else 0)            (= FsAbort.eventMass, rfl)
+  mass_nonneg, mass_le_one, mass_mono, mass_congr, mass_or_le,
+  mass_exists_le, mass_exists_le_card (union bound), mass_equiv, mass_prod,
+  mass_point (1/|U|)
+  mass_cond_le: S ≃ R × X, D depends on R only, ∀ r ∈ D, mass_X E ≤ δ
+                ⇒ mass (D ∧ E) ≤ mass D · δ           (identical-until-bad
+                conditioning step)
+  hit_le:       qa constant in u on D, ga = a ⇒ u = π r a
+                ⇒ mass (D ∧ qa = ga) ≤ mass D / |U|     (first read vs field)
+  pair_le:      fa constant in u, ga's field u ⇒ mass (fa = ga) ≤ 1/|U|
+  HitFresh, PairFresh (the named per-read / per-pair hypotheses),
+  hitFresh_mass, pairFresh_mass (≤ 1/Umin)
+  HitEv M q charged qry addr, CollEv M priv addr,
+  hitEv_mass_le / hitEv_mass_fresh:  mass HitEv ≤ M·q/Umin
+  collEv_mass_le / collEv_mass_fresh: mass CollEv ≤ M·M/Umin
+R0Z/FsAbortR1.lean (imports R0Z.FsAbort, R0Z.FsAbortBounds) — host 3802,
+exit 0, SHA 617c7f3d…, 11 axiom lines standard (r1TranscriptReads_eq:
+[propext]); 3801 failed (a 2^496 numeral above norm_num's threshold):
+  eventMass_eq_mass (rfl), r1TranscriptReads_eq (= 115),
+  r1AttemptReadBound_le (§1.5 formula ≤ 2^21; arithmetic only)
+  R1RealModel P h B outputs fs ab x M q Umin εexh   (named hypotheses, §3)
+  realAbortCoupling_of_R1 : R1RealModel … → RealAbortCoupling P … ab x
+                            (M·q/Umin) (M·M/Umin + εexh)
+  R1IdealModel P h B outputs fs ab x M Umin         (named hypotheses, §4)
+  idealAbortCoupling_of_R1 : R1IdealModel … → IdealAbortCoupling … (M·M/Umin)
+  zkfs_R1_abort : HVZK_on P → R1RealModel … → R1IdealModel … →
+                  ZK_FS h B outputs fs x (M·q/Umin + (M·M/Umin + εexh) + Mi·Mi/Umin)
+  zkfs_mono, r1_error_N8, zkfs_R1_abort_N8 (below)
+R0Z/FsAbortTape.lean (imports R0Z.FsAbortBounds) — host 3806, exit 0, SHA
+80578d69…, 3 axiom lines standard; 3803–3805 failed (sum_boole rewriting and
+an instance-unification timeout in the exhaustion-count lemmas, which were
+dropped):
+  sum_fibres, mean_decodeOrSpare (rejection decoder with equal fibres plus
+  a uniform spare is measure-preserving), mass_fst.
+Peak RSS 6.60–6.75 GB under -M7000 (the Mathlib import alone is 6.6 GB);
+no cap raised; nothing mirrored from the spend-path workspace.
+
+What the Lean does NOT contain: a definition of fs.real/fs.ideal/ab for
+R1 (no byte-level R1 transcript model exists in this workspace), the
+coupling maps, the agreement proofs, or the HitFresh/PairFresh instances.
+Those are exactly the fields of R1RealModel / R1IdealModel.
+
+----------------------------------------------------------------------
+§8  Numbers for N = 8, Q = 2^64
+----------------------------------------------------------------------
+
+m ≤ 2^21 per attempt ⇒ M = M_I = 8·2^21 = 2^24; Umin = 2^255.
+  ε_hit  ≤ 2^24 · 2^64 / 2^255           = 2^-167
+  ε_coll ≤ 2^48 / 2^255 + ε_exh            = 2^-207 + 2^-476
+           (ε_exh ≤ 8 · 2^17 · 2^-496 = 2^-476)
+  ε_prog ≤ 2^48 / 2^255                   = 2^-207
+  ε_FS   ≤ 2^-167 · (1 + 2^-39 + 2^-309)  < 2^-166.99.
+Lean: r1_error_N8 proves the sum ≤ 2^-166 with the exhaustion slot taken
+as 2^-250 (a looser bound, to stay below the numeral threshold), and
+zkfs_R1_abort_N8 : HVZK_on P → R1RealModel … (8·2^21) (2^64) (2^255)
+(1/2^250) → R1IdealModel … (8·2^21) (2^255) → ZK_FS … (1/2^166).
+Sensitivity: ε_FS is linear in N·m·q; a factor 16 error in the read count
+moves it to 2^-163. At N = 1 it is 2^-170 (the accepted attempt's
+unpublished reads alone). The privacy ledger term of the abort composition
+is therefore ≈ 2^-167, far below the soundness target; it does not
+contain Pr[P] or the transversality premises.
+
+----------------------------------------------------------------------
+§9  Open items and gaps found
+----------------------------------------------------------------------
+
+G-root   (new) The Lean View has no commitment root (Meta.handles are
+         nominal statement handles). Proposal §2.1: publish roots, paths
+         and opened salts as the verifier log in observerOracle; needs
+         ZF1a's fs.real to be written that way. No Lean type change.
+G-def    fs.real, fs.ideal and ab for R1 are not defined in Lean; a byte-
+         level R1 transcript model would be needed (the spend-path
+         LiteralByteProtocol / AdaptiveStatementFiatShamir model the
+         33-row protocol for soundness and are the natural source to
+         mirror; not done here).
+G-prog   the lazy-programming law (meanR of the real coupling); route:
+         mirror R19 MemoizedProgramLaw/AdaptiveFirstReadLaw
+         (exact_oracle_law, lazyMean_eq_independentMean), which also
+         needs G11 (the two `mean`s).
+G-ref    agreement outside the events = refinement of the Rust R1 prover
+         to the Lean view (with D34.3's line_node / QueryGeometry / ell
+         items) and of the P_R1 check (D28.2).
+G-count  m ≤ 2^21 is counted from the source, not instrumented; an
+         optimized, capped Rust count of hash calls per attempt would
+         close it.
+G-exh    the per-limb exhaustion mass (2/2^32)^16 and the union over
+         limbs are not in Lean (attempted in 3803–3805, dropped).
+G-retry  the probe has no retry driver: prove_masked_attempt is one
+         attempt. The honest prover must loop ≤ N times, call
+         StateOnlyAttemptSecrets::generate per attempt (A-sec), treat
+         MaskSampleExhausted and ¬P as a failed attempt, publish nothing
+         from failed attempts (A-erase) and ⊥ at the cap (A-cap).
+A-salt   R1 privacy requires the private-leaf-salts (P3) build; the
+         unsalted P2 path has no uniform designated field on its leaves.
+QROM     not covered (as in DESIGN-ZF1-ABORT §6(d)).
+No item of this job stopped on an ill-typed or false statement: the
+FsAbort hypotheses typed as read (RealAbortCoupling, IdealAbortCoupling,
+Coupling, AbortBridge) and were instantiated without change.

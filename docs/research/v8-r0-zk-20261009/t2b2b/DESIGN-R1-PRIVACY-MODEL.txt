@@ -1,0 +1,896 @@
+DESIGN-R1-PRIVACY-MODEL — inventory and plan for the R1 privacy model (R1M)
+==========================================================================
+
+Job R1M (LOG D29.4).  Design and inventory only: no Lean compiled, no host
+attempt used.  Branch codex/r0-r1-privacy-model-20261017, base a4246222a.
+Read against LOG D24–D29, z9/R1-PAYLOAD-MAP.txt, z9/FINDINGS-Z9.txt,
+t2b2b/DESIGN-T2b-2b.txt §5, DESIGN-T2b-2b-Dprime.txt, DESIGN-ii-prime.txt,
+STUDY-TRANSVERSALITY-R1.txt §3.3, and every file in lean/R0Z/.  R1 Rust
+source read only through
+  git show origin/codex/100bit-spend-path-20261013:<path>
+(tip b61ddd6e2 at the time of reading; Z9 used 1822c2ced).  Rust paths are
+relative to crates/aspis-r1-cost-probe/src/ unless stated.
+
+Tags.  GENERIC = holds verbatim for R1.  PARAMETRIC = holds once a parameter
+is changed (named).  R0-SPECIFIC = must be rewritten (replacement named).
+PROPOSED = a statement written here and type-checked by reading the actual
+definitions, not by Lean.  MEASURED = Z9 numbers.
+
+Sections
+  §0  Summary
+  §1  Inventory of R0Z (and the R0P/R0 payload dependencies)
+  §2  The minimal Lean model of the R1 privacy view
+  §3  Exact Lean statements: P_R1, QPrime_R1, BCond_R1, the target theorem
+  §4  Job plan
+  §5  Effort estimates and the riskiest item
+
+§0  Summary
+-----------
+S1  R1 differs from the proved R0Z model in exactly one place: the batched
+    opening block.  Every per-lane disclosed cell has the same constructor
+    and the same formula in R1 (pointClaim, extraClaim, ood, opened,
+    inactiveSum; maskSum and semanticCoeff are the unchanged semantic layer).
+    The R0 cells .openingCoeff (Fin 7) and .finalCoeff (Fin 256), built from
+    the chord quotient, are replaced by four R1 groups: round0 (Fin 7),
+    round1 (Fin 7), folded (query-gated, Fin 262144, 4 per distinct u/4) and
+    final (Fin 64).  Source: verifier.rs View::parse_shape (:39-58),
+    prover.rs prove_from_semantics (:190-236), R1-PAYLOAD-MAP §5.
+S2  The transport π enters every proved theorem only as an argument
+    `π : Fin 1024 ≃ Fin 1024`; D13Order (HonestView.lean:24) is defined but no
+    proved theorem uses it.  D18 is therefore an instance choice, not a
+    re-proof.
+S3  Recommended model: one mechanical refactor of HonestView.PayloadCell into
+    `PayloadCell (Bat : Type)` with a single batched constructor `.bat b`, and
+    a class `BatchedLayer K Bat` supplying the batched read.  R0 is the
+    instance Bat := R0Bat, R1 the instance Bat := R1Bat.  Every proved theorem
+    of the T2a/ZF-A chain, T2b-1, T2b-2a and J3 keeps its statement (with
+    Payload K replaced by Payload K Bat) and its proof modulo merging two
+    `cases` branches into one.  Only HonestView's batched part and J3's
+    batProj/payload_ext/mem_silentMasks_of branches are touched by hand.
+S4  On R1 the honest-prover predicate is
+       P_R1 := α₉ ≠ ½ ∧ sem ∈ K₄ ∧ QPrime ∧ BCondG_R1 ∧ (∀ c, C1Lift c) ∧
+               H1Lift ∧ |queries| ≤ 22
+    with BCondG_R1 := B0R1 ≤ V_G (the measured "V_G = B0", Z9 §1).  BCondG_R1
+    implies both BCond (for (i′)) and BReach (for (ii′)) given J4-R1's
+    bat_ker_own_le, so R1 needs ONE (B) conjunct for both clauses.  GoodCircle
+    is not needed on R1: with no chord quotient, all 47 batched relations are
+    identities for every challenge (the only nondegeneracy facts, nonzero
+    fibre and line coordinates, are structural).
+S5  Riskiest item: J4-R1's line-fold relations L_u, which need the
+    line-domain encoder/fold commutation (2^18 → 2^16, 256 → 64
+    coefficients).  On R1's soundness side this is obligation (B), open in
+    R1_SOUNDNESS.md; partial material exists (§5).
+
+§1  Inventory
+-------------
+Every declaration of lean/R0Z/*.lean (base a4246222a) is listed, grouped by
+module.  "Refactor" means: same statement with Payload K := Payload K Bat,
+same proof except that the two R0 batched `cases` branches (.openingCoeff,
+.finalCoeff) merge into one `.bat b` branch (§2.2).  A refactored item is
+GENERIC in the sense of this job: it holds for R1 with no new mathematics.
+
+§1.1  Pure probability and linear algebra (GENERIC, no payload)
+  StatisticalDistance: mean law support law_zero dist EqualLaws dist_nonneg
+    dist_zero_of_equalLaws dist_on dist_triangle.
+  AffineLaw: coset fibreEquivKer cosetEquivRange card_tape law_eq_fibre_card
+    uniform_coset equal_cosets_law coset_eq_of_range_eq_displacement
+    equal_laws_of_mask_image equal_laws_const_pair law_product marginalisation.
+  AbsorptionLaw: law_equiv equal_laws_of_equiv law_product_right pureMap
+    split fixed_n mixture uniform_coset.
+  LawTransport: mean_eq_sum_law mean_eq_of_equalLaws mean_product.
+  KernelImage: surjective.
+  HermiteSpan (J5a, Mathlib only): all 72 declarations.  Off the critical
+    path under M3 (D29.2); kept for Route P.
+  GoodDensity: GoodAlpha pinned pinnedEquiv card_pinned not_goodAlpha_subset
+    card_biUnion_pinned badAlpha_card badAlpha_density.  GENERIC, but under
+    M3 no density enters the privacy error; used only if Route P returns.
+  D11Obstruction: separated_mixed_difference sparseRow sparseCopySlice
+    sparse_copy_mixed_difference sparse_copy_not_separated.  GENERIC
+    (historical; semantic copy rows only).
+
+§1.2  Semantic layer and mask layout (GENERIC)
+  Basis: R1-PAYLOAD-MAP §3–§4 (same 29 lanes, same mask lanes, balancing,
+  25 semantic rows, terminal), D27.1, and prover.rs:131-178 (the R1 prover
+  calls reserve_and_build_pool_v1_pair_forest_mask_material_v1 and audits
+  exactly the balances MaskLayout models: 16 C1 columns, 10 mask-only
+  columns, D, G, H1 padding, H1 total).
+  MaskedProtocol: SemMsgZ Msg Chal maskValue_mldeg terminalZ sumcheckChecksZ
+    GENERIC.  RoundKind, schedule: R0-SPECIFIC (32 rows, `.opening (j : Fin 5)`);
+    replaced by the R1 33-row schedule (§2.6), used only by ZkStatement.messages
+    and the FS bridge, never by MaskImageOn.
+  MaskLayout: forestPathUsed pairAuxUsed eligible EligibleCell AffCoordinate
+    MaskCoordinate EligibleNoise AffTape MaskTape semanticNoise maskOnlyRaw
+    extensionRaw balance maskOnlyColumns dWord h1Padding applyEligible
+    applyAff applyMask applyMask_eq_port applyAff_affine readAff extensionAff
+    balanceAff traceLinear traceBase applyAff_eq_base_add traceAffine
+    traceAffine_apply — GENERIC.  The eligibility registry is row-indexed and
+    copyInactiveRows equals the R1 ACTIVE table (Z9 model check); the
+    transport does not enter.  Refinement: the R1 source pin differs from
+    MaskLayout's d2b74132 pin; map §3 records state_only_hiding.rs /
+    state_only_entropy.rs byte-identical between 524e1debb and the spend-path
+    tip.  That is a source fact to re-confirm at the R1 refinement job, not a
+    proof item.
+  ViewAffine: copyResidual_affine copyEvaluate_affine laneAt_affine
+    originalAt originalAt_affine originalAt_decomp terminalValue_eq_originalAt
+    — GENERIC.
+  HelperInvariant: Protected checkLink check check_spec check_append
+    check_take_drop, before_*/positive_*/after_* slices, before_all
+    positive_all after_all protected_registry protected_cell protected_tuple
+    row_values_eligible helper_eligible — GENERIC (copy registry unchanged).
+  TerminalEligible: all 39 declarations (cell_eligible … terminal_row_eligible)
+    — GENERIC (semantic rows, registry, H1 padding sums; no opening cell).
+  K4: all 64 declarations (PackField … Good3 lambda4_eq_K4) — GENERIC.
+    Good3 mentions only Shift.Good and ch.sem; it is off the critical path
+    under M3.
+  Partition: ExtTape M N T aff equiv inlM inrN pureAff pureTrace
+    extension_pure_zero balance_zero_generic padding_pure_zero pureTrace_fixed
+    — GENERIC.
+  JointTrace: balanceLinear balanceLinear_apply balance_add_generic noiseRead
+    noiseRead_apply eligibleLinear eligibleLinear_apply applyEligible_add
+    prepared_add tapeLinear actual_affine tapeLinear_pure — GENERIC (reads
+    Challenges only through prepare, i.e. ch.sem 0, ch.sem 1).
+
+§1.3  The payload (HonestView) — the only R0-SPECIFIC core
+  GENERIC (statement unchanged; π stays an argument):
+    Challenges, alpha, zc, helper, prepare, dotLinear, claimsLinear(_apply),
+    coeffsLinear(_apply), extraLinear(_apply), extraCell(_apply), oodLinear
+    (_apply), cell(_apply), semantic_claim_fixed, semanticOpenings, original
+    (_apply), mask(_apply), oracle(_apply), roundPoint, roundPoly(_apply),
+    affine_sum_apply, decode_encoded, unqueried_zero.
+    Challenges is reused verbatim with the R1 reading
+      sem : Fin 25 → K (rows 0–24), circle : Fin 2 → Point K (z₀, z₁),
+      opening 0 = γ, opening 1 = κ, opening 2 = α₀, opening 3 = α₁,
+      queries : Finset (Fin 262144) (row 31);
+    ρ (row 32, QM31) is read by no disclosed coordinate (map §6,
+    verifier.rs:85-119: ρ only batches L_u) and is not a Challenges field;
+    it is a bridge coin of the FS layer (§2.6).
+    The per-lane cells match R1 exactly:
+      .pointClaim j c  = sem.claims[j][l]     (verifier.rs prepared_claim, :88-92)
+      .extraClaim c    = sem.extra[l]         (honestExtra = dot libraWeight,
+                                               weights.rs kind 4: j < 56,
+                                               extra[j/28]^(j%28))
+      .ood 0 c, .ood 1 c = before_z1[l], y1[l] (prover.rs:193-195,
+                                               eval_message at z₀, z₁)
+      .opened q s c    = Enc(coeffs_l)(4q+s)  (prover.rs query loop; four_dots
+                                               reads all 29 lanes, verifier.rs:136)
+      .inactiveSum     = Σ_l γ^l Σ_{r ∈ I} t_l r (prover.rs:198: Σ_j q_j raw(0,j),
+                                               raw(0,j) = [row(j) inactive])
+  PARAMETRIC (parameter: the cell type Bat and its read, §2.2):
+    PayloadCell, Payload, linearPayload, payloadAffine, run, run_maskSum,
+    run_semanticCoeff, run_pointClaim, run_extraClaim, run_ood,
+    run_inactiveSum, run_opened, run_eq_payloadAffine.
+  R0-SPECIFIC (replaced in R1Z/Batched.lean, §2.3):
+    quotientLinear — R1 has no chord quotient (map D2); replaced by nothing:
+      batchLinearR1 batches raw coefficients.
+    batchLinear — replaced by batchR1 := Σ_c γ^c • coeffsLinear π ∘ proj c.
+    openingWeights (totalWeights with κ, τ) — replaced by weightsR1 (κ^0..κ^6
+      over kinds inactive, 3 points, Libra, z₀, z₁; weights.rs raw/materialize
+      :120-133, :227-232).
+    relationLinear(_apply) — fixed length 1024; replaced by the length-generic
+      round polynomial (AspisR1.RoundPairing.roundPolynomial, spend-path
+      lean/RoundPairing.lean:47) at n = 256 and n = 64.
+    foldLinear(_apply) — replaced by coefficientFoldLayer 256 α₀ and
+      coefficientFoldLayer 64 α₁ (AspisFormal V5ComponentCConcreteFoldLinearity
+      :238) plus exactFinalLinear for the folded word (Wide/FinalEncoder:23).
+    run_openingCoeff, run_finalCoeff — replaced by run_bat for R1Bat.
+    D13Order — R0 transport predicate; R1 uses D18Transport (§2.5).
+  QuotientImage (D10): all 12 declarations R0-SPECIFIC (chord quotient on the
+    encoder image).  No R1 analogue is needed: nothing in R1 is a quotient.
+
+§1.4  Statement layers
+  ZkStatement.Z1 (historical 31-round interface): all declarations are R0
+    history; not used by the T2a chain.  No R1 counterpart is written.
+  ZkStatement (current): Statement, Challenges, Payload, HonestProver,
+    HonestInstance, public, build, Meta, View, metadata, InLanguage —
+    GENERIC (Payload refactored).  payload, view, A, b, payload_affine,
+    view_affine, MaskImage, simulator, honestLawRun, HVZK_conditional,
+    HVZK_perfect, HVZK, Completeness, Obligations, ProverOutput, proverOutput
+    — refactor (GENERIC).  IdealSemMsg, Msg, Chal, coefficientPolynomial,
+    messages, honestMessages, finalMessage, challengeAt — R0-SPECIFIC
+    (32-row schedule, .opening (.values/.scalar/.unit/.poly/.final) message
+    tags of R0C.SemStatement); replaced by R1 messages/challengeAt over the
+    33-row schedule of map §4 (rows 27–32: γ | y1, κ | inactive, α₀ | round0,
+    α₁ | folded root ‖ round1, queries | final 64, ρ | nothing).  These feed
+    only the FS refinement, not MaskImageOn.
+  JointView: HonestProver HonestInstance Statement Challenges View Payload
+    Tape payload view c InLanguage simulator HVZK_perfect view_eq_z3 —
+    refactor (GENERIC).
+  Hvzk: hvzk_conditional_of_maskImage conditional_marginalisation
+    hvzk_perfect_of_maskImage hvzk_zero_of_maskImage — refactor (GENERIC;
+    historical D4′ route).
+  FsStatement: Bytes OracleAnswer ROMView FSExperiments bit realTest
+    idealTest ZK_FS ROMBridge middleReal middleIdeal ROMReduction
+    ROMReductionWith romReduction_iff middle_means_eq zkfs_of_hvzk_perfect —
+    refactor (GENERIC).  ZF1-abort replaces ZK_FS's game, not this layer.
+  FsGood: mean_sub abs_mean_le mean_le_mean mean_nonneg mean_le_one bit_nonneg
+    bit_le_one badMass middle_means_close zkfs_of_hvzk_on_bridge zkfs_of_hvzk_on
+    — refactor (GENERIC, P-generic).  zkfs_of_maskImageOn_good_bridge,
+    zkfs_of_maskImageOn_good — PARAMETRIC (stated for P = Good; the P-generic
+    form needs hvzk_on_of, below).
+
+§1.5  Privacy reduction (T2a, T2b-1, T2b-2a, J3)
+  D12: HonestProver HonestInstance Statement payload c A roundInclusion g
+    g_zero M_pure decomposition nonRound nonRound_roundInclusion
+    other_components_affine MaskImage payload_law hvzk_perfect_of_maskImage —
+    refactor (GENERIC).  nonRound's match keeps `.semanticCoeff _ _ => 0 |
+    coord => proj coord`, so it needs no edit at all.
+  Shift: Good proj proj_apply round9Poly(_apply) evalRound9(_apply) claimMask
+    (_apply) Phi0 dir roundInclusion_semanticCoeff/_pointClaim/_extraClaim
+    dir_pointClaim dir_extraClaim sum_monomial_coeff claimMask_roundInclusion
+    claimMask_dir round9Poly_roundInclusion evalRound9_roundInclusion
+    Phi0_roundInclusion round9Poly_dir evalRound9_dir Phi0_dir nonRound_dir
+    originalOf shift unshift originalOf_add_smul_dir originalOf_sub_smul_dir
+    unshift_shift shift_unshift shiftEquiv sRem cTilde MaskImageOn nodes_injOn
+    rounds_natDegree_lt vdeg_update roundPoint_update roundPoint_nine
+    rounds_eval_of_vdeg eval_rounds_nine evalRound9_roundInclusion_rounds
+    L_pointClaim L_extraClaim maskLinear_vdeg Phi0_L Phi0_A fOrig vdeg_fOrig
+    originalRounds_eq evalRound9_originalRounds payload_pointClaim
+    originalOf_payload originalOf_c Phi0_roundInclusion_g Phi0_sRem
+    originalOf_payload_pure payload_eq_shift equalLaws_comp HVZK_on
+    payload_law_on — refactor (GENERIC).  hvzk_on_good — PARAMETRIC: its proof
+    never uses `Good` except to feed hm, so the R1 job adds
+      hvzk_on_of (P) : MaskImageOn P h B x → HVZK_on P h B outputs x
+    (the same proof with Good replaced by P; ~25 lines, low).
+  Chain: boolConsEquiv bsumB_eq_sum sum_cons_cast roundPoint_zero
+    roundPoint_cons rounds_initial rounds_chain roundPoly(_apply) roundPoly_nine
+    evalRound(_apply) nonRoundK nonRoundK_apply InitialChain0 Chain0
+    mem_initialChain0_iff mem_chain0_iff roundPoly_roundInclusion
+    roundPoly_rounds roundPoly_originalRounds roundPoly_dir two_ne_zero
+    dir_mem_initialChain0 original_bsum_actual roundPoly_g g_mem_initialChain0
+    sRem_mem_chain0 — refactor (GENERIC).  T2b-1 holds on R1 as proved.
+  PureRounds: A_pure roundPoly_L L_maskSum silent_mem_chain0 w β eqPrefix
+    w_zero w_sixteen maskOnly_degree bitFactor_bool selector_round_match
+    selector_round_mismatch linear_round_match tail_sum_selector
+    polynomial_ext28 weighted_vdeg word_vdeg power_word_vdeg row_power_degree
+    power_rounds pureRound_maskOnly pureRound_G maskOnly_word_vdeg
+    pureRound_maskOnly_degree sum_bool_const sum_bool_coordinate sum_bool_power
+    coordinate_power_vdeg coordinate_power_round pureRound_libra
+    pureLibra_maskSum pureTrace_applyAff pureTrace_maskOnly_word
+    pureTrace_G_word pureTrace_D_word claims_zero_of_word_zero
+    extra_zero_of_word_zero maskLinear_maskOnly maskLinear_G maskLinear_D
+    extra_coefficient_unit pureTrace_*_zero pureTrace_*_support L_pure_maskOnly
+    L_pure_G L_pure_libra L_pure_libra_maskSum roundPoly_coeff_L
+    L_pure_*_coeff — refactor (GENERIC; π-generic, D13Order unused).
+    mem_silentMasks_iff — refactor with one hand edit: its eight groups become
+    seven (`∀ b, v (.bat b) = 0` replaces the openingCoeff and finalCoeff
+    groups).  T2b-2a holds on R1 as proved.
+  Z4Maps: roundProjection roundMaskMap silentMasks silentRoundMaskMap —
+    refactor (GENERIC).  C1Cell, c1Projection, c1Map, roundMask_surjectivity,
+    c1_surjectivity — GENERIC as statements but superseded by C1Lift/H1Lift
+    (D24.2); not used on R1.
+  SilentReduction (J3): exists_silent_of_cover, balance_sum_generic,
+    balance_apply_sum_generic, balanceAff_sum_apply, traceLinear_inactive_sum,
+    pureTrace_inactive_dot, L_inactiveSum, linearPayload_inactiveSum,
+    ia_pure_zero, ms_pure_eq_initial, ChainT0, mem_chainT0_iff, K4Round,
+    mem_K4Round_iff, ChainT0K4, K4Payload, Chain0K4, mem_chain0K4_iff, QPrime,
+    roundPoly_eq_of_roundProjection, chain0K4_le_silent_of — refactor (GENERIC).
+    ownProj — GENERIC (match lists the per-lane cells, `_ => 0`).
+    batProj, batMap, BCond, payload_ext, mem_silentMasks_of — PARAMETRIC: the
+    two batched branches merge into `.bat b`; recommended (§2.4) to make
+    batMap Bat-valued, batMap := batRead ∘ A ∘ inlM.  BCond keeps its form.
+    D26.1's recorded gap (ownMap keeps all 29 columns) is unchanged on R1.
+
+§1.6  R0P / R0 / AspisFormal dependencies of the payload
+  GENERIC on R1: R0P.Core (Trace, Public), R0P.CoreExt (PackBasis, pack4,
+    BaseTyped, PublicBase), R0P.SemSource / SemView (honestClaims,
+    openingPoints, eqWeight, libraWeight, coeffsOf), R0P.Mask (maskFactors,
+    maskValue, maskClaimsR0, honestExtra, towerBasis), R0P.SemDecision
+    (terminalValue), R0P.SemDegree (VDeg), R0P.SemHonest / LaneMap (laneOf,
+    honestRows; needed by J0), R0P.Copy / CopyConstants (copyInactiveRows,
+    CopyActiveRow, copyRowsAt), R0P.CircleSampler (Point K usage);
+    Wide.InitialEncoder (exactInitialEncoder, exactInitialLinear),
+    Wide.FinalEncoder (exactFinalLinear: reused for R1's folded word),
+    R0.Chord.evalMessage / R0.PolynomialPair (p0Linear, p1Linear: the OOD),
+    R0.Fold (fibre, channels, encoded_channels, fold_encoded,
+    fibre_coordinates_nonzero, fibre_inverse: reused for C_u),
+    R0.RoundNormalization (foldMessage_eq_sum, round_eval, round_boundary at
+    n = 1024 only), R0.OpeningDefinitions.indicator,
+    AspisFormal V5ComponentCConcreteFoldLinearity (childIndex,
+    coefficientFoldLayer, lineFoldLayer, gatherFibre).
+  R0-SPECIFIC, not imported by the R1 model: R0.Chord interpolant/L,
+    R0.ChordImage, R0.ChordGeometry (only the Point type is kept),
+    R0.OpeningDefinitions.totalWeights, R0.FunctionalWeights (e1, e2).
+  New for R1 (exist on other branches, to be mirrored, §4): AspisR1.RoundPairing
+    (length-generic roundPolynomial, primalFold, dualFold, round_eval,
+    round_boundary; spend-path lean/RoundPairing.lean), AspisR1 D18Transport
+    (rowNat, row, rowEquiv, row_involutive; spend-path lean/D18Transport.lean),
+    R1.RepeatedLift (SecondCoefficients = Fin 64, SecondWord = Fin 65536,
+    secondLinear; base branch docs/research/v8-r1-20261011/lean/R1),
+    AspisR1 SecondFoldRestoration / Line18Geometry / LineFold (line-domain
+    channel identities; spend-path, compiled per its evidence README).
+
+§2  The minimal Lean model of the R1 privacy view
+-------------------------------------------------
+§2.1  What does not change.  Tape and A map.
+  Tape: T K F = M K F × N K F (Partition.lean:15-19), M = mask-only raw ×
+  G limbs × D limbs, N = H1-padding limbs × eligible C1 noise.  Unchanged:
+  R1's mask material is the same field tape (map §3, prover.rs:141-178).
+  A π B ch := ((PayloadSplit.L π B ch).restrictScalars F).comp
+  (JointTrace.tapeLinear B) (D12.lean:27).  Unchanged in text; L reads the
+  R1 batched block through the class instance of §2.2.  c, g, roundInclusion,
+  dir, sRem, cTilde, Phi0, originalOf, Chain0, InitialChain0, silentMasks,
+  ownMap, roundMaskMap: unchanged in text.
+
+§2.2  The refactor (one job, mechanical; PROPOSED)
+  In HonestView.lean, before PayloadCell:
+
+    /-- The batched opening block of a PCS: its cell type and its K-linear
+    read of the prepared trace. -/
+    class BatchedLayer (K : Type) [Field K] (Bat : Type) where
+      read : (Fin 1024 ≃ Fin 1024) → Challenges K → Trace K →ₗ[K] (Bat → K)
+
+    inductive PayloadCell (Bat : Type)
+      | maskSum
+      | semanticCoeff (round : Fin 10) (coefficient : Fin 28)
+      | pointClaim (point : Fin 3) (column : Fin 29)
+      | extraClaim (column : Fin 29)
+      | ood (point : Fin 2) (column : Fin 29)
+      | inactiveSum
+      | opened (query : Fin 262144) (child : Fin 4) (column : Fin 29)
+      | bat (cell : Bat)
+      deriving DecidableEq
+
+    abbrev Payload (K Bat : Type) := PayloadCell Bat → K
+
+  linearPayload gains the branch
+      | .bat b => (LinearMap.proj b).comp (BatchedLayer.read π ch)
+  and loses .openingCoeff/.finalCoeff; payloadAffine and run likewise
+  (`| .bat b => BatchedLayer.read π ch t b` in run).  run_bat replaces
+  run_openingCoeff/run_finalCoeff and is `rfl`-level.
+
+  Variable lines in all downstream modules gain
+      {Bat : Type} [DecidableEq Bat] [BatchedLayer K Bat].
+  `deriving Fintype` is dropped from PayloadCell (the R0 type derived it; no
+  proved theorem in R0Z needs Fintype (PayloadCell) — a grep target for the
+  refactor job: Finset.univ over PayloadCell must not appear, and does not
+  today).  If some proof does need it, add [Fintype Bat] and derive.
+
+  Inference caveat (found while typing §3).  Bat does not occur in the
+  arguments of QPrime, BCond, MaskImageOn, HVZK_on, silentMasks: it occurs
+  only inside A's codomain.  Those definitions therefore need Bat named
+  explicitly at use sites: `QPrime (Bat := R1Bat) π B hB ch`.  R1Z.Model
+  provides abbreviations (QPrime_R1 etc., §3) so that no R1 statement writes
+  `(Bat := _)` more than once.  Alternative rejected: making Bat a field of
+  HonestProver changes the prover type that ZF-A and FsGood quantify over.
+
+  The R0 instance (R0Z/R0Batched.lean, small):
+    inductive R0Bat | openingCoeff (i : Fin 7) | finalCoeff (i : Fin 256)
+      deriving DecidableEq
+    instance : BatchedLayer K R0Bat where
+      read π ch := LinearMap.pi fun
+        | .openingCoeff i => (Polynomial.lcoeff K i.val).comp
+            ((relationLinear (openingWeights π ch)).comp (batchLinear π ch))
+        | .finalCoeff i => (LinearMap.proj i).comp
+            ((foldLinear (ch.opening 3)).comp (batchLinear π ch))
+  This is exactly HonestView.lean:217-219, so the R0 track keeps every
+  theorem (re-proved by the refactored modules).  The equivalence
+  PayloadCell R0Bat ≃ old PayloadCell is not needed by anything.
+
+  Alternative (copy): R1Z/* copies of HonestView … SilentReduction with the
+  R1 cells hard-coded, ~3,900 lines, no edit to R0Z.  Rejected: it doubles
+  every future lemma (J2, J4, (ii′)) and the copies drift.  The refactor
+  changes no statement's mathematics; the lead must accept that the R0Z
+  modules are re-sourced (new SHAs, recompiled once each, ~20 modules).
+
+§2.3  The R1 batched layer (R1Z/Batched.lean; PROPOSED)
+  Notation inside the module:
+    γ := ch.opening 0, κ := ch.opening 1, α₀ := ch.opening 2, α₁ := ch.opening 3
+  (prover.rs:194-226, transcript rows 27-30; map §4).
+
+    inductive R1Bat
+      | round0 (i : Fin 7) | round1 (i : Fin 7)
+      | folded (p : Fin 262144) | final (e : Fin 64)
+      deriving DecidableEq
+
+  Batched coefficient vector (no quotient; map D2, prover.rs:196):
+    def batchR1 (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) :
+        Trace K →ₗ[K] InitialMessage K :=
+      ∑ c : Fin 29, ch.opening 0 ^ c.val • (coeffsLinear π).comp (LinearMap.proj c)
+  (same shape as HonestView.batchLinear minus quotientLinear.)
+
+  The seven coefficient functionals (weights.rs raw :120-133), stated through
+  existing linear maps rather than the Rust digit tensor:
+    def ell (π) (ch) : Fin 7 → (InitialMessage K →ₗ[K] K)
+      | 0 => dotLinear (fun j => indicator copyInactiveRows (π.symm j))
+      | 1 => dotLinear (fun j => eqWeight (openingPoints (alpha ch) 0) (π.symm j))
+      | 2 => dotLinear (fun j => eqWeight (openingPoints (alpha ch) 1) (π.symm j))
+      | 3 => dotLinear (fun j => eqWeight (openingPoints (alpha ch) 2) (π.symm j))
+      | 4 => dotLinear (libraWeight (alpha ch))
+      | 5 => oodLinear (ch.circle 0)
+      | 6 => oodLinear (ch.circle 1)
+    def weightsR1 (π) (ch) : InitialMessage K :=
+      fun j => ∑ k : Fin 7, ch.opening 1 ^ k.val * ell π ch k (Pi.single j 1)
+  Lemma (low): dot q (weightsR1 π ch) = ∑ k, κ^k * ell π ch k q, and
+  ell π ch k (batchR1 π ch t) = ∑ c, γ^c * (own value k of lane c of t)
+  (claims through claimsLinear and the π-reindexing equivalence, extra
+  through extraLinear, ood through oodLinear, inactive through the
+  .inactiveSum cell).  The equality of `ell` with the Rust raw kinds
+  (digit-tensor eq, h_weight, evalrow) is the refinement obligation Z9
+  checked numerically ("Weight kinds 1-6 equal eq/h_weight/evalrow").
+
+  The two layers (RP := AspisR1.RoundPairing, §1.6):
+    def q1 (π) (ch) : Trace K →ₗ[K] FinalMessage K :=
+      (coefficientFoldLayer 256 (ch.opening 2)).comp (batchR1 π ch)
+    def w1 (π) (ch) : Fin 256 → K := RP.dualFold (n := 256) (ch.opening 2) (weightsR1 π ch)
+    def w2 (π) (ch) : Fin 64 → K  := RP.dualFold (n := 64) (ch.opening 3) (w1 π ch)
+    def FoldedOpen (ch) (p : Fin 262144) : Prop := ∃ u ∈ ch.queries, u.val / 4 = p.val / 4
+
+    instance : BatchedLayer K R1Bat where
+      read π ch := LinearMap.pi fun
+        | .round0 i => (Polynomial.lcoeff K i.val).comp
+            ((RP.roundPolynomialLinear (n := 256) (weightsR1 π ch)).comp (batchR1 π ch))
+        | .round1 i => (Polynomial.lcoeff K i.val).comp
+            ((RP.roundPolynomialLinear (n := 64) (w1 π ch)).comp (q1 π ch))
+        | .folded p => if FoldedOpen ch p then
+            (LinearMap.proj p).comp (exactFinalLinear.comp (q1 π ch)) else 0
+        | .final e => (LinearMap.proj e).comp
+            ((coefficientFoldLayer 64 (ch.opening 3)).comp (q1 π ch))
+
+  RP.roundPolynomialLinear w := the K-linear map q ↦ RP.roundPolynomial q w
+  (new, two lines; RoundPairing defines the function, as R0's relationLinear
+  does for R0).  Type facts to confirm at first compile: Fin (4*256) and
+  Fin 1024 unify by literal reduction (R0's foldMessage already relies on
+  this, Fold.lean:71), and RP.dualFold's quarter normalisation equals the
+  Rust dual fold `(h0 + a(h3 + a(h2 + a h1)))/4` (prover.rs:26-30); if
+  RoundPairing omits the quarter, w1/w2 carry it explicitly.
+
+  Folded-word indexing: exactFinalLinear q1 p = (naturalCoefficientPolynomial
+  q1).eval (storedFirstLineX18 p) (Wide/FinalEncoder.lean:66); Rust opens
+  folded_word[4(u/4)+s], s < 4, with Merkle index u/4 (prover.rs:207-212,
+  verifier.rs:258-276).  Z9 checked "the folded word is
+  EncodingDomain::evaluate"; Lean equality with the Rust domain order is the
+  refinement obligation, as for R0's final word.
+
+  Cell count.  With the 22 u/4 distinct, the nonzero gated cells are
+  7 + 7 + 88 + 64 = 166 E values; with .inactiveSum (outside Bat) the
+  batched view is Z9's 167 E = 1,336 limbs.
+
+§2.4  The 47 batched relations (+ ia = Z9's 48)
+    inductive R1Rel | s2a | s2b | s1 | circ (u : Fin 262144) | line (u : Fin 262144)
+
+    def relR1 (π) (ch) : (R1Bat → K) →ₗ[K] (R1Rel → K) := LinearMap.pi fun
+      | .s2a => proj (.round0 0) + proj (.round0 4)
+      | .s2b => proj (.round1 0) + proj (.round1 4)
+                - quarter • ∑ i : Fin 7, (ch.opening 2)^i.val • proj (.round0 i)
+      | .s1  => ∑ i : Fin 7, (ch.opening 3)^i.val • proj (.round1 i)
+                - ∑ e : Fin 64, w2 π ch e • proj (.final e)
+      | .circ u => if u ∈ ch.queries then proj (.folded u) else 0
+      | .line u => if u ∈ ch.queries then
+            (LinearMap.proj (parentIndex16 u)).comp
+              (lineFoldLayer 65536 (ch.opening 3) lineInverse ∘ₗ foldedWordOf
+               - secondLinear ∘ₗ finalOf)
+          else 0
+  where foldedWordOf b := fun p => b (.folded p), finalOf b := fun e => b (.final e),
+  parentIndex16 u := ⟨u.val / 4, _⟩ : Fin 65536, lineInverse the public M31
+  inverse table (x, y, z = 2x² − 1 of the stored line-18 fibre; verifier.rs
+  :154-169, QueryGeometry :171-206), secondLinear from R1.RepeatedLift:81.
+    def B0R1 (π) (ch) : Submodule F (R1Bat → K) := (LinearMap.ker (relR1 π ch)).restrictScalars F
+  Sources: S2a/S2b verifier.rs finish_relation :284-292 (lhs = c[0] + c[4],
+  rhs = claim/4); S1 :294-297 (Weights::pair = Σ final·W2); C_u :273-276
+  (folded == values[u%4]); L_u :277-279 with accumulate :229-241 (ρ-batched
+  in Rust; each L_u holds for the honest prover, so the model states them
+  separately — ρ never enters).  s2a is the own-silent form (claim = 0 when
+  every own cell and .inactiveSum vanish), s1 and s2b hold for every
+  vector, circ is the own-silent form of C_u (opened symbols zero ⇒ folded
+  value zero).  For (ii′) J4-R1 states them for L τ for every trace τ.
+
+  Normalisation constants (quarter powers, the PERM convention of RP
+  versus R0's (4 − t) % 4) are fixed by the proofs of RP.round_eval and
+  RP.round_boundary; J4-R1 writes relR1 in exactly the form it proves and
+  Z9's annihilator (384 limbs, unexplained 0) is the numeric check.
+
+  dim_F B0R1 = 952 (MEASURED, 22 distinct u/4) is not a Lean obligation: P_R1
+  checks BCondG_R1 directly, which needs no dimension count.
+
+§2.5  Transport
+    def D18Transport (π : Fin 1024 ≃ Fin 1024) : Prop := π = AspisR1.rowEquiv
+  (spend-path lean/D18Transport.lean:157-166; rowNat_involutive :143 gives
+  π.symm = π, and coeffsLinear π m j = m (π.symm j) = m (row j) matches
+  Variant::coefficients, transport.rs: coefficients(rows)[j] = rows[row(j)]).
+  No privacy lemma uses D18Transport; it fixes the instance h.transport and
+  enters the Rust refinement only.
+
+§2.6  FS layer (for ZF1-abort, not for MaskImageOn)
+  The R1 schedule has 33 rows (map §4): semantic 0–24, circle 25–26, γ 27,
+  κ 28, α₀ 29, α₁ 30, queries 31, ρ 32.  R1Z.Messages (new, small) restates
+  ZkStatement.messages/challengeAt with the R1 message rows (y1 at 27,
+  inactive at 28, round0 at 29, folded root ‖ round1 at 30, final at 31,
+  nothing at 32; opened symbols and folded fibres are the final response).
+  ρ is a coin of ROMBridge (FsStatement.lean:63), drawn after the final
+  message and independent of the view.
+
+§2.7  Which proved theorems survive unchanged under §2.2
+  T2a/ZF-A chain: payload_eq_shift, payload_law_on, HVZK_on, hvzk_on_good,
+    decomposition, M_pure, hvzk_perfect_of_maskImage, zkfs_of_hvzk_on_bridge,
+    zkfs_of_maskImageOn_good_bridge, middle_means_close, badMass — survive
+    (refactor; same statements); plus new hvzk_on_of (P-generic, §1.5).
+  T2b-1: sRem_mem_chain0, g_mem_initialChain0, dir_mem_initialChain0,
+    Phi0_sRem, rounds_initial, rounds_chain — survive.
+  T2b-2a: silent_mem_chain0, pureRound_*, L_pure_*, mem_silentMasks_iff
+    (one hand edit) — survive.
+  J1: everything (K4.lean has no payload cell).
+  J3: exists_silent_of_cover, ia_pure_zero, ms_pure_eq_initial, ChainT0(K4),
+    Chain0K4, QPrime, BCond, chain0K4_le_silent_of — survive; batProj,
+    batMap, payload_ext, mem_silentMasks_of take the merged branch.
+  J5a: everything (Mathlib only).
+  Must be re-proved / newly proved: run_bat and the R1 linearity facts of
+    §2.3 (R1Z/Batched), J2 (never proved; state it Bat-generically — it reads
+    only round cells), J4-R1 (new relations; R0's J4 was never written),
+    the (ii′) jobs J0/J0b/J4′/J13–J16 (never proved), and opened_prefix
+    (J14), which on R1 changes statement (§4, J14-R1).
+
+§3  Exact Lean statements (PROPOSED)
+------------------------------------
+Typed against: Shift.lean:186 (MaskImageOn P h B x, P : Challenges K → Prop),
+SilentReduction.lean:241/248 (QPrime π B hB ch, BCond π B ch), K4.lean:28,106
+(PackField, K4), Z4Maps.lean:20-25 (roundMaskMap, silentMasks), Partition
+(M, N, T, inlM, inrN, ExtTape), JointTrace (eligibleLinear, tapeLinear),
+PayloadSplit.L, R0P.CoreExt (BaseTyped, PublicBase), AspisR1.RoundPairing
+(dualFold includes the quarter; round_eval/round_boundary as quoted in §2.4).
+Every name below that is not in those files is defined in this section or
+in §2; after the §2.2 refactor, R0Z names take an extra implicit Bat, written
+(Bat := R1Bat) once in the R1 abbreviations.  Variables throughout:
+  {K CommitHandle : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+  (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (hB : PackField B) (ch : Challenges K)
+Checked by reading only; the first compile of each module is the check.
+
+§3.1  QPrime_R1
+    abbrev ownMapR1 := SilentReduction.ownMap (Bat := R1Bat) π B ch
+    abbrev roundMaskMapR1 := Z4Maps.roundMaskMap (Bat := R1Bat) π B ch
+    def QPrime_R1 : Prop := SilentReduction.QPrime (Bat := R1Bat) π B hB ch
+  i.e. ChainT0K4 B hB ch ≤ (LinearMap.ker ownMapR1).map roundMaskMapR1.
+  ChainT0K4 is payload-free (a submodule of RoundPayload K), so the R1 and R0
+  targets are literally the same space (Z9 E1: 1,076 + 4 = 1,080).  The R1
+  difference is only in ker ownMapR1: the R1 own cells read coefficients
+  through π = D18.  MEASURED 1,076 on A and J (Z9 §2).
+
+§3.2  BCond_R1 in the V_G = B0 form
+    def batRead : Payload K R1Bat →ₗ[F] (R1Bat → K) :=
+      LinearMap.pi fun b => (LinearMap.proj (PayloadCell.bat b) : Payload K R1Bat →ₗ[F] K)
+    def batMapR1 : M K F →ₗ[F] (R1Bat → K) :=
+      batRead.comp ((D12.A (Bat := R1Bat) π B ch).comp Partition.inlM)
+    def Gonly : Submodule F (M K F) :=
+      LinearMap.ker (LinearMap.fst F (Fin 10 × Fin 1024 → F) (ExtTape F × ExtTape F)) ⊓
+      LinearMap.ker ((LinearMap.snd F (ExtTape F) (ExtTape F)).comp
+        (LinearMap.snd F (Fin 10 × Fin 1024 → F) (ExtTape F × ExtTape F)))
+    def V_G : Submodule F (R1Bat → K) :=
+      (Gonly ⊓ LinearMap.ker roundMaskMapR1 ⊓ LinearMap.ker ownMapR1).map batMapR1
+    def BCondG_R1 : Prop := B0R1 π ch ≤ V_G π B ch
+  (m.1 = mask-only raw, m.2.1 = G limbs, m.2.2 = D limbs, Partition.lean:15;
+  Gonly is DESIGN-T2b-2b-Dprime §2.1's Gonly.)  Z9 §1: V_G = 952 = B0,
+  annihilator exactly the 48 relations, on every job.
+  The generic forms, for the record:
+    def BCond_R1 : Prop := SilentReduction.BCond (Bat := R1Bat) π B ch
+      -- (ker own ⊓ ker R).map bat = (ker own).map bat, with bat = batMapR1
+      -- after §2.2's Bat-valued batMap
+    def BReach_R1 : Prop := B0R1 π ch ≤ (LinearMap.ker ownMapR1 ⊓ LinearMap.ker roundMaskMapR1).map batMapR1
+  Lemmas (J4-R1 / J15-R1):
+    V_G_le : V_G π B ch ≤ (LinearMap.ker ownMapR1 ⊓ LinearMap.ker roundMaskMapR1).map batMapR1
+      (Submodule.map_mono, inf_le; trivial)
+    bat_ker_own_le_B0R1 : (LinearMap.ker ownMapR1).map batMapR1 ≤ B0R1 π ch      (J4-R1)
+    breach_of_G : BCondG_R1 π B ch → BReach_R1 π B ch                            (V_G_le)
+    bcond_of_G  : BCondG_R1 π B ch → BCond_R1 π B ch
+      (le_antisymm (map_mono inf_le_left) (bat_ker_own_le_B0R1.trans (hG.trans V_G_le)))
+  Why the G-only form is the right conjunct: it implies both (B) premises, and
+  it is the smallest public rank check (one K₄ lane, 376-limb own map, 952
+  target) for the Rust predicate.  Taking BReach_R1 instead is equally valid
+  and weaker; the lead may prefer it if a future challenge draw has V_G < B0
+  but BReach holding (Z9 never saw this).  P_R1 below uses BCondG_R1.
+
+§3.3  The (ii′) lifts on R1 (DESIGN-ii-prime §2.1, retyped)
+    inductive OwnCell | claim (j : Fin 3) | extra | ood (j : Fin 2) | opened (q : Fin 262144) (s : Fin 4)
+    def ownRead (c : Fin 29) : Payload K R1Bat →ₗ[F] (OwnCell → K) := LinearMap.pi fun
+      | .claim j    => LinearMap.proj (PayloadCell.pointClaim j c)
+      | .extra      => LinearMap.proj (PayloadCell.extraClaim c)
+      | .ood j      => LinearMap.proj (PayloadCell.ood j c)
+      | .opened q s => LinearMap.proj (PayloadCell.opened q s c)
+    def obs (c : Fin 29) : (Fin 1024 → K) →ₗ[F] (OwnCell → K) :=
+      (ownRead c).comp (((PayloadSplit.L (Bat := R1Bat) π B ch).restrictScalars F).comp
+        (LinearMap.single F (fun _ : Fin 29 => Fin 1024 → K) c))
+    def baseF : Submodule F K := LinearMap.range (Algebra.linearMap F K)
+    def inactiveSumF : (Fin 1024 → K) →ₗ[F] K :=
+      ∑ r ∈ copyInactiveRows, (LinearMap.proj r : (Fin 1024 → K) →ₗ[F] K)
+    def Wsem : Submodule F (Fin 1024 → K) :=
+      (⨅ r : Fin 1024, baseF.comap (LinearMap.proj r)) ⊓ LinearMap.ker inactiveSumF
+    def Wh1 : Submodule F (Fin 1024 → K) :=
+      (⨅ r : Fin 1024, (K4F B hB).comap (LinearMap.proj r)) ⊓ LinearMap.ker inactiveSumF
+    def Vsem (c : Fin 29) : Submodule F (Fin 1024 → K) :=
+      LinearMap.range ((LinearMap.proj c : Trace K →ₗ[F] (Fin 1024 → K)).comp
+        (JointTrace.eligibleLinear (K := K) (F := F)))
+    def Ph1 : Submodule F (Fin 1024 → K) :=
+      LinearMap.range ((LinearMap.proj 26 : Trace K →ₗ[F] (Fin 1024 → K)).comp
+        ((JointTrace.tapeLinear B).comp (Partition.inrN.comp
+          (LinearMap.inl F (ExtTape F) (EligibleNoise K F)))))
+    def C1Lift (c : Fin 16) : Prop :=
+      Wsem.map (obs π B ch (Fin.castLE (by omega) c)) ≤
+        (Vsem (Fin.castLE (by omega) c)).map (obs π B ch (Fin.castLE (by omega) c))
+    def H1Lift : Prop := (Wh1 B hB).map (obs π B ch 26) ≤ (Ph1 B).map (obs π B ch 26)
+  Typing notes: Trace K = Fin 29 → Fin 1024 → K is an F-module through the
+  Subfield algebra instance (as Z4Maps/SilentReduction already use);
+  LinearMap.single needs DecidableEq (Fin 29); eligibleLinear's balance row is
+  1023 and the H1 padding's is 0 (MaskLayout:97,102), both inside
+  copyInactiveRows (instance facts, DESIGN-ii-prime P6), which is why
+  Wsem/Wh1 ⊆ the lane word spaces is plausible; the lifts themselves stay in P.
+  On R1 the opened part is not structural (DESIGN-ii-prime §3.2; D24.4), so
+  C1Lift is a P conjunct in full; J14-R1 (§4) proves the aligned-block part
+  only as Route-P material.
+
+§3.4  P_R1, the rejection predicate (conjunction of named Props)
+    def HalfOK : Prop := alpha ch 9 ≠ 1/2                       -- J2 / Phi0_sRem
+    def SemK4 : Prop := ∀ i : Fin 25, ch.sem i ∈ K4 B hB          -- J2, R7
+    def QueryCard : Prop := ch.queries.card ≤ 22                 -- (ii′) sampler fact
+    def P_R1 (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (hB : PackField B)
+        (ch : Challenges K) : Prop :=
+      HalfOK ch ∧ SemK4 B hB ch ∧ QPrime_R1 π B hB ch ∧ BCondG_R1 π B ch ∧
+      (∀ c : Fin 16, C1Lift π B ch c) ∧ H1Lift π B hB ch ∧ QueryCard ch
+  Every conjunct is a function of (π, B, ch) only — π and B are fixed public
+  constants of the protocol — so P_R1 is a public predicate of the
+  challenges (D29.2).  QueryCard holds for every R1 draw (transcript returns
+  22 distinct fibres) and costs the prover nothing; it is in P so that the
+  theorem does not depend on the sampler.  Good, Good3, GoodCircle and
+  GoodAlpha's α ∉ {0, 1} are NOT conjuncts: nothing in the M3 route uses
+  them (Good3 was only the route to QPrime; GoodCircle only for R0's chord
+  quotient, which R1 lacks).  For the Rust check: HalfOK and SemK4 are field
+  tests (SemK4 is true by construction, qm31_sample), QueryCard a length
+  test, and the other four are exact rank comparisons over F = M31:
+    QPrime_R1  : rank_F R(ker own) restricted to ChainT0K4 … (Z9's "(Q′) excess 0")
+    BCondG_R1  : rank_F V_G = 1,336 − rank_F(relations) (Z9's "V_G = B0")
+    C1Lift c   : rank_F obs(Vsem c) = rank_F obs(Wsem)  (16 tests)
+    H1Lift     : rank_F obs(Ph1) = rank_F obs(Wh1)
+  (as inclusions of images; equal ranks plus inclusion of the generators).
+
+§3.5  Validity restriction (DESIGN-ii-prime §1.5, unchanged)
+    def HonestProver.restrict (h : HonestProver K) (V : h.Instance → Prop) : HonestProver K :=
+      ⟨{w // V w}, h.transport, fun w => h.public w.1, fun w => h.build w.1⟩
+    def ValidOn (P : Challenges K → Prop) (h : HonestProver K) (B : PackBasis F)
+        (x : Statement K CommitHandle) : h.Instance → Prop :=
+      fun w => ∀ ch, P ch → HonestValid x.1 B (h.build w) ch
+  HonestValid is J0's (DESIGN-ii-prime §1.5: laneOf zero, Σ_r u 26 r = 0,
+  Σ_{r ∈ I} u 26 r = 0 at u = PayloadSplit.actual pub B t ch 0).  It reads
+  only the semantic layer, so it is Bat-free and identical on R1; the R1
+  prover's audit already checks the total helper sum (prover.rs:171).
+
+§3.6  The target theorem
+    theorem maskImageOn_R1 (h : HonestProver K) (B : PackBasis F) (hB : PackField B)
+        (x : Statement K CommitHandle)
+        (hpub : PublicBase F x.1)
+        (hF : ∀ w, h.public w = x.1 → BaseTyped F (h.build w)) :
+        Shift.MaskImageOn (Bat := R1Bat) (P_R1 h.transport B hB)
+          (h.restrict (ValidOn (P_R1 h.transport B hB) h B x)) B x
+  Remarks.
+  (a) No transport hypothesis: the statement holds for every π, because
+      every π-dependent fact sits inside P_R1.  The R1 instance fixes
+      h.transport = AspisR1.rowEquiv (D18Transport), which enters only the
+      refinement "the Rust check decides P_R1 (rowEquiv) B hB".
+  (b) Clause (i′): for ch with P_R1, J2's sRem_mem_chain0K4 (HalfOK, SemK4,
+      hpub, hF) and chain0K4_le_silent_of (QPrime_R1, bcond_of_G) give
+      sRem ∈ (silentMasks).map (A ∘ inlM) ≤ range (A ∘ inlM).  The restricted
+      prover's sRem is the original prover's at w.1 (definitional; one lemma).
+  (c) Clause (ii′): J16-R1's iiPrime_of_R1 from C1Lift, H1Lift, QPrime_R1,
+      breach_of_G, QueryCard, validity of w.1 and w'.1, hF.
+  (d) Composition: hvzk_on_of (P_R1 …) (§1.5) gives HVZK_on P_R1 for the
+      restricted prover; ZF1-abort consumes HVZK_on P_R1 (no badMass term:
+      P_R1 is enforced by rejection).  The nondegeneracy of P_R1 for liveness
+      (Pr[¬P_R1] small) is not needed and not claimed.
+  (e) Corollary for builders: J0b (honest builds are valid for every ch) turns
+      h.restrict V back into h on honest instances; without J0b the theorem
+      is about valid instances, which is the standard (x, w) ∈ R quantifier.
+
+§4  Job plan
+------------
+Rules for every job: as DESIGN-T2b-2b §5 (no sorry/axiom/admit/native_decide,
+no maxRecDepth/maxHeartbeats, no concrete Finset.univ over rows, Fin 262144,
+Fin 65536 or Fin 1048576; row sums symbolic; one module per job; host replay
+one module at a time with run2.sh under the standard caps; `#print axioms`
+for every listed theorem; conditional facts as named Props).  D26.3's lesson
+applies to every refactored module: keep `simp` from unfolding
+PayloadSplit.L / linearPayload's maskSum branch and the copy registries
+(`attribute [local irreducible]` as the current modules do).
+
+R1-0  Refactor: Bat-parametrised payload  (all of R0Z downstream of HonestView)
+      low–medium, large
+    HonestView: class BatchedLayer, PayloadCell Bat, Payload K Bat,
+      linearPayload/payloadAffine/run with `.bat b`, run_bat, run_eq_payloadAffine.
+    R0Z/R0Batched.lean (new): R0Bat, its BatchedLayer instance (HonestView:217-219).
+    Re-source with the merged branch: PayloadSplit (run_split_bat replaces two
+      private lemmas), D12 (no edit beyond variables), Shift (+ hvzk_on_of),
+      Chain, PureRounds (mem_silentMasks_iff: 7 groups), Z4Maps, K4 (variables
+      only), SilentReduction (batProj → batRead, Bat-valued batMap, payload_ext,
+      mem_silentMasks_of), JointView, ZkStatement (current part), Hvzk,
+      FsStatement, FsGood, JointTrace/Partition/TerminalEligible/HelperInvariant
+      (variables only where they mention Payload; most do not).
+    Acceptance: every previously listed `#print axioms` line reappears with
+      the same theorem name and [propext, Classical.choice, Quot.sound]; no
+      statement changes except the Bat parameter.  Risk: memory on modules
+      whose `cases coord` proofs used simp over the full match (D26.3);
+      kernel reduction of the derived DecidableEq on PayloadCell Bat in
+      `if` tests — keep Classical.propDecidable local, as now.
+    Lead decision needed first: refactor (recommended, §2.2) versus copy.
+
+R1-1  Mirror of R1 opening-layer libraries  (no new proofs)        low
+    Bring into this track, unchanged, with source SHA recorded: spend-path
+      lean/RoundPairing.lean (and its R1NaturalProjection import),
+      FoldCoefficientBridge.lean, D18Transport.lean, Line18Geometry.lean,
+      LineFold.lean, SecondFoldRestoration.lean; base-branch
+      v8-r1-20261011/lean/R1/RepeatedLift.lean.  Preferred: a lead merge of
+      those files from the spend path rather than a copy (rule 1 forbids this
+      worker from touching that branch).  Recompile each once on the privacy
+      workspace.  Risk: namespace clash AspisR1.childIndex vs AspisFormal
+      childIndex (both 4i + s; a bridging `rfl` lemma).
+
+R1-2  R1Z/Batched.lean  (imports R1-0, R1-1)                        low–medium
+    R1Bat, gamma/kappa/alpha0/alpha1 abbreviations, batchR1, ell, weightsR1,
+    q1, w1, w2, FoldedOpen, roundPolynomialLinear, instance BatchedLayer K R1Bat.
+    Lemmas: dot_weightsR1 (Σ κ^k ℓ_k), ell_batchR1 (each ℓ_k of the batch is the
+    γ-batched own value: claims, extra, ood, inactive), batRead_L (the four
+    cell formulas), folded_unqueried_zero.
+    Risk: the π-reindexing of eqWeight/indicator (an Equiv.sum_comp, as in
+    J3's balance lemmas — never enumerate Fin 1024).
+
+J4-R1  R1Z/VerifierRelationsR1.lean  (imports R1-2, R0.Fold, R1-1)   medium–hard
+    Split in two modules so the hard part needs no payload:
+    (a) R1Z/BatchedAlgebra.lean (payload-free; can start before R1-0):
+        s2b_identity : round1 boundary = quarter · round0(α₀)  (RP.round_boundary,
+          RP.round_eval, coefficientFoldLayer_eq_primalFold)
+        s1_identity  : round1(α₁) = Σ_e final_e · w2_e           (RP.round_eval)
+        s2a_identity : round0 boundary = quarter · Σ_k κ^k ℓ_k(q)  (round_boundary,
+          dot_weightsR1)
+        circ_identity : exactFinalLinear (foldMessage α₀ q) u =
+          coefficientFoldValue α₀ (channels (exactInitialEncoder q) · u)
+          (R0.Fold.fold_encoded, encoded_channels; R0's S3_u verbatim)
+        line_identity : lineFoldValue α₁ inv (fun s => exactFinalLinear m (childIndex v s))
+          = secondLinear (coefficientFoldLayer 64 α₁ m) v
+          (the line-domain fold/encoder commutation: Line18Geometry
+          storedLine18_radix4_geometry, SecondFoldRestoration channel
+          identities, LineFold.recovered_horner, R1.RepeatedLift
+          exactFinalLinear_child_split / secondLinear)
+    (b) R1Z/VerifierRelationsR1.lean: R1Rel, relR1, B0R1;
+        bat_L_mem_B0R1 : (∀ c, ownRead c (L τ) = 0) → L τ .inactiveSum = 0 →
+          batRead (L τ) ∈ B0R1 π ch            -- every trace τ (J4′ form)
+        bat_ker_own_le_B0R1 (corollary for mask tapes, with ia_pure_zero).
+    No GoodCircle premise (no quotient).  The only nondegeneracies are the
+    nonzero fibre/line coordinates, structural (fibre_coordinates_nonzero,
+    SecondFoldRestoration.x0/x1/x2_ne_zero).
+    Risk: line_identity (§5).  Pre-check: Z9's annihilator was computed from
+    the Rust relations; before Lean, a 1-job numeric check that relR1 exactly
+    as written in §2.4 (with RP's quarter conventions) annihilates bat(ker own)
+    removes normalisation stops (three earlier worker stops were
+    transcription errors).
+
+J2-R1  R0Z/K4Values.lean, Bat-generic  (imports R1-0's Chain, K4)   medium
+    As DESIGN-T2b-2b §5 J2, stated for an arbitrary Bat (sRem has zero
+    non-round cells, so K4Payload reduces to the round cells):
+    interpolate_coeff_mem, oracle_mem_K4, roundPoly_coeff_mem_K4,
+    originalRounds_mem_K4 (for ANY BaseTyped prepared trace, as J15 needs),
+    sRem_mem_K4 (hsem : SemK4) (hpub : PublicBase F x.1) (hF) (hhalf : HalfOK),
+    sRem_mem_chain0K4.  One proof serves R0 and R1.
+
+R1-3  R1Z/PredicateR1.lean  (imports J3 refactored, J4-R1, J2-R1)   low
+    QPrime_R1, batRead, batMapR1, Gonly, V_G, BCondG_R1, BCond_R1, BReach_R1,
+    HalfOK, SemK4, QueryCard, P_R1 (needs J13-R1's C1Lift/H1Lift — or define
+    them here and let J13-R1 import this module; recommended: define here);
+    V_G_le, breach_of_G, bcond_of_G;
+    clause_i_R1 : P_R1 π B hB ch → … → sRem … ∈ LinearMap.range ((A π B ch).comp inlM).
+
+J0    R0Z/HonestValid.lean  (Bat-generic; DESIGN-ii-prime §4 J0)     low–medium
+    unchanged list (HonestValid, HonestProver.restrict, iota, iota_L, iota_A,
+    inactive_A, iota_cTilde, bsum_fOrig_zero, iota_cTilde_zero,
+    inactive_cTilde_zero, not_iiPrime_witness) with Payload K Bat.  The
+    inactive_A balance argument is per lane, unchanged on R1.
+
+J0b   R0Z/HonestValidity.lean  (builder completeness)                 hard
+    unchanged from DESIGN-ii-prime; R1-specific input: the R1 prover's
+    h1_total_balanced audit (prover.rs:171) is clause 2 checked at run time.
+    Not on the theorem's path (§3.6 e).
+
+J13-R1  R0Z/NoiseLift.lean  (Bat-generic)                              medium
+    OwnCell, ownRead, obs, own_L_single, own_L_other, noise_lift, as
+    DESIGN-ii-prime J13 (C1Lift/H1Lift imported from R1-3 or defined
+    Bat-generically here and specialised there).
+
+J14-R1  opened_prefix on R1 — DEFERRED (Route P only)
+    Under M3 the whole C1Lift/H1Lift is a P conjunct, so no structural
+    opened part is needed.  If Route P resumes: opened_aligned for the
+    quarter block 224..245 (STUDY-TRANSVERSALITY-R1 §3.4; N_{224+e} =
+    N_224·N_e), plus the class 2/3 registry check (J11b).
+
+J15-R1  R0Z/IIPrimeResidual.lean, Bat-generic with an R1 wrapper        medium
+    As DESIGN-ii-prime J15, with R8 := bat_L_mem_B0R1 (no GoodCircle),
+    BReach := BReach_R1 (from breach_of_G), exists_lift_of_cover, mask_lift.
+
+J16-R1  R1Z/MaskImageR1.lean  (imports J15-R1, R1-3)                  low
+    IIPrimeValid (Bat := R1Bat), iiPrime_of_R1, maskImageOn_R1 (§3.6),
+    hvzk_R1 := hvzk_on_of (P_R1 …) applied to the restricted prover;
+    hand-off statement for ZF1-abort.  `#print axioms` for all four.
+
+Outside Lean (named here because R1-3 fixes their target)
+  Z9b (numeric, Rust, capped scope): H1Lift and C1Lift alone on R1 (never
+    measured, D24.2), and the relR1-as-written annihilator check above.
+  R1-P (Rust): the prover-side P_R1 check per attempt (exact M31 rank
+    tests of §3.4), retry with fresh attempt secrets, attempt cap and
+    explicit failure exit; refinement statement "check = P_R1 rowEquiv B hB".
+
+Order and parallelism
+  Lane A (critical path):  R1-0 → J2-R1 → R1-3 → J15-R1 → J16-R1
+  Lane B (parallel from now): R1-1 → J4-R1(a) payload-free; then J4-R1(b)
+          after R1-0 and R1-2
+  Lane C (after R1-0, parallel to Lane A): R1-2; J0; J13-R1
+  Lane D (parallel from now): Z9b; R1-P design; J0b (research)
+  J4-R1(b) gates R1-3; J0, J13-R1, J4-R1(b) gate J15-R1.  Lanes B, C, D run
+  concurrently with A, subject to the one-Lean-job-at-a-time host rule (the
+  parallelism is in writing, not in compiling).
+
+§5  Effort estimates and the riskiest item
+------------------------------------------
+Estimates are in focused worker-days (one agent, including host replays
+under the one-job rule) and host attempts.  They are judgements from the
+size of comparable accepted jobs (J1/J3: ~1 day, ~12 attempts each; T2b-2a:
+813 lines), not measurements.
+
+  Job      Size (lines, est.)  Days      Attempts   Confidence
+  R1-0     ~600 edited in ~20  1.5–3     25–45      medium (mechanical, but
+           modules + 60 new                         many modules; memory
+                                                    risk per D26.3)
+  R1-1     0 new (mirror)      0.5       6–10       high, if the lead merges
+  R1-2     ~300                1–1.5     5–10       high
+  J4-R1(a) ~400–700            3–7       10–25      low–medium (line_identity)
+  J4-R1(b) ~200                1         3–6        high once (a) is done
+  J2-R1    ~350                1.5–2.5   8–15       medium
+  R1-3     ~150                0.5–1     2–5        high
+  J0       ~300                1.5–2     6–12       medium (fOrig ↔ virtualPoly
+                                                    argument matching)
+  J0b      unknown             1–3 weeks unknown    low (research)
+  J13-R1   ~350                2–3       8–15       medium
+  J15-R1   ~500                2–4       10–20      medium
+  J16-R1   ~120                0.5–1     2–4        high
+  Total on the critical path to maskImageOn_R1 (excluding J0b, Z9b, R1-P):
+  about 15–25 worker-days and 90–170 attempts, with Lanes B/C overlapping
+  Lane A so that elapsed time is closer to 10–15 days.
+
+Riskiest single item: line_identity in J4-R1(a), the commutation of the
+second (line-domain) fold with the encoder,
+    lineFoldValue α₁ inv (exactFinalLinear m at the four stored children of v)
+      = secondLinear (coefficientFoldLayer 64 α₁ m) v,   v : Fin 65536.
+Why: it is the only new algebraic fact about the PCS that the R1 privacy
+proof needs and R0 never proved.  On the soundness side it is obligation (B)
+of R1_SOUNDNESS.md ("domain commutation and the depth-two node
+identification"), recorded open; the material that exists (LineFold.lean:
+field recovery only, by its own header; SecondFoldRestoration: channel
+identities conditional on agreement, compiled per its README;
+Line18Geometry; RepeatedLift's quartet lemmas) has not been assembled into
+this equation, and the Rust line fold (verifier.rs:154-169) uses its own
+node and inverse conventions (x = line_node(4v), y = line_node(4v+3),
+z = 2x² − 1) that must match storedFirstLineX18 / storedLine16X exactly.
+Every L_u relation, hence B0R1, hence BCondG_R1 ⇒ BCond and BReach, rests
+on it.
+Mitigations, in order:
+  1. Do it once for both tracks: it is the same lemma the R1 soundness
+     ledger needs for rows α₁/q22; the lead can issue it as a shared job.
+  2. Clause (i′) does not need it.  Define, for (i′) only,
+       B0own := (LinearMap.ker ownMapR1).map batMapR1
+     and put BCondG′ := B0own ≤ V_G in P.  bat_ker_own_le is then trivial
+     and clause (i′) needs no relation at all; Z9 measured B0own = 952 = V_G.
+  3. Clause (ii′) can avoid it the same way: put in P the check
+       BReachTrace := batRead (L(ker own over all traces)) ≤
+                       (ker ownMapR1 ⊓ ker roundMaskMapR1).map batMapR1,
+     a public rank test over the ~38,900-dimensional F-space of 29-lane
+     coefficient words (26·1,024 + 3·4,096) — heavier for the Rust check
+     (minutes rather than seconds, unmeasured) but needing no J4-R1.
+  With 2 and 3, J4-R1 leaves the critical path entirely, at the price of a
+  larger prover-side check and a P that is less transparent to a reader.
+  I recommend keeping J4-R1 as planned and holding 2/3 as the fallback if
+  line_identity is not done within the J4-R1(a) budget.
+
+Second risk (process, not mathematics): R1-0 re-sources every proved R0Z
+module.  If the lead does not accept re-sourcing, the copy alternative of
+§2.2 applies, roughly doubling R1-0 and every later Bat-generic job.
+
+Honest unknowns
+  * The Lean ↔ Rust index/normalisation correspondences (weights.rs digit
+    tensors vs ell; folded-word order; quarter conventions) are checked only
+    numerically by Z9; each is a refinement item, not a Lean lemma here.
+  * H1Lift and C1Lift on R1 have never been measured on their own (Z9b).
+  * Pr[¬P_R1] is unbounded; it affects liveness only (D29.3).
+  * ρ and the 33-row FS schedule are ZF1-abort's; nothing here constrains
+    the abort-aware composition beyond handing it HVZK_on P_R1.

@@ -1,0 +1,228 @@
+Z7 -- alpha-structure probe (LOG D20)
+=====================================
+
+Base 70d116093 (origin/v8-reference). Branch codex/z7-alpha-structures-20261013.
+Exact M31/QM31 computation on Z4c's machinery; not a Lean proof; no Lean or
+production source changed. Lead converts this text to .md.
+
+STOP RULE: not triggered. Structure (A) gave constructed silent rank 1,076 on
+all 5 vectors (and Z4c's (i'), derivative and (ii') targets pass 5/5 each).
+
+1. Setup
+--------
+* Vectors: Z4c trials 0..4 (master seed 0x5348f0b9a87835d0), replayed exactly
+  (z6.rs `trial`, extended to return z and the random query set). All 40 jobs'
+  CHALLENGE lines are byte-identical to probe-C.log; for (A) all 25 pre-
+  normalization terminal triples equal Z4c's Z4B_REPLAY lines.
+* Alpha per structure. Coordinates a structure leaves "uniform in K" keep
+  Z4c's sampled values; structured coordinates come from a separate stream
+  (seed 0x5a37d20a20261013 + per-(structure,vector) offset), so the Z4c
+  stream (z, queries, lambda, chi, theta, zc, mu, eta, noise tapes) is untouched.
+    A  Z4c alpha unchanged (uniform in K).
+    B  all alpha_i uniform in F \ {0,1}, alpha_9 != 1/2.
+    C/D/E  W = span_F{1,x,y}, x,y uniform in K (rejected if F-dependent);
+       alpha_0..alpha_{k-1} uniform F-combinations in W minus {0,1},
+       k = 5 / 6 / 7; rest Z4c.
+    F  alpha_1 = a + b*alpha_0, a,b uniform in F (rejected if in {0,1}); rest Z4c.
+    G  alpha_0..4 Z4c; alpha_5..9 uniform in F \ {0,1}, alpha_9 != 1/2.
+    H  Z4c alpha; for the round-j matrix, mask-only lanes (c = 0..9) use only
+       rows whose prefix coordinates r_0..r_{j-1} are all 0. In round_row's
+       convention coordinate i is bit (9-i) of the row index, so the kept rows
+       are r < 2^(10-j) (1024, 512, ..., 2 rows). G and D are unrestricted.
+  Every alpha was checked: alpha_i not in {0,1}, alpha_9 != 1/2.
+* F = M31 inside K = QM31, tower basis (1, i, u, iu) = limbs k = 0..3.
+* Libra design, width 29, D13 transport, gamma = 7 (Z4c's generic gate).
+* "Silent image" = initial_zero(pure_c(..., libra=true)), Z4c's constructed
+  zero-batched-word subspace; 1,076 is its boundary/terminal upper bound.
+  "Initial retained" = pure_c before initial_zero.
+* "Unconstrained pure image" = F-span of round_row(r, c) for mask-only lanes
+  c = 0..9 over all 1,024 rows, plus K-span of G's rows (c = 10) and K-span of
+  D's own tail rows (tail_row). No raw-observation silence; initial retained.
+* Round-j projection: the full 28-coefficient round-j polynomial (degree 1
+  reconstructed through the boundary chain exactly as last_coeff does), F-rank
+  out of 112; per-limb F-rank out of 28. With initial = 0 the round-0 sum
+  p_0(0)+p_0(1) = 0 and the terminal p_9(alpha_9) = 0 each cut one K-dimension,
+  so the silent maxima are 108 at rounds 0 and 9 and 112 at rounds 1..8.
+* Targets. (i) chain0_basis: the 1,080 stored-coordinate units with initial 0,
+  each shifted by Z4c's normalize_d to terminal value 0; they span the
+  1,076-dimensional {initial = 0, terminal = 0} chain space. (ii) Z4c's honest
+  targets via compute_targets + normalized (real builder, 5 pairs):
+  libra_i_prime and libra_derivative_diagnostic against the silent image,
+  libra_ii_prime against full_c's conditioned image. Supports and pivots are
+  from Z4c's unchanged summarize, labels (round, degree, limb).
+  For (H) no targets were computed: its ten round-j matrices are not one
+  image; ranks only.
+
+2. Totals (identical on all 5 vectors in every structure)
+---------------------------------------------------------
+ struct | silent | initial retained | unconstrained | full conditioned (ii')
+ -------+--------+------------------+---------------+-----------------------
+   A    | 1,076  | 1,080            | 1,084         | 1,080
+   B    | 1,038  | 1,042            | 1,066         | 1,080
+   C    | 1,076  | 1,080            | 1,084         | 1,080
+   D    | 1,076  | 1,080            | 1,084         | 1,080
+   E    | 1,076  | 1,080            | 1,084         | 1,080
+   F    | 1,076  | 1,080            | 1,084         | 1,080
+   G    | 1,076  | 1,080            | 1,084         | 1,080
+   H    | per round-j matrix (silent / initial retained):
+        | j=0..2: 1,076/1,080; j=3: 1,014/1,018; j=4..9: 864/868
+
+3. Per-round F-ranks of the round-j projection (all 5 vectors identical)
+------------------------------------------------------------------------
+ round j          0    1    2    3    4    5    6    7    8    9
+ (a) silent
+   A            108  112  112  112  112  112  112  112  112  108
+   B            108  112  112  112  112  112  112   93  112  108
+   C,D,E,F,G    108  112  112  112  112  112  112  112  112  108
+   H (round-j
+    matrix)     108  112  112  112  112  112   60   32  112  108
+ (b) unconstrained
+   A            112  112  112  112  112  112  112  112  112  112
+   B            112  112  112  112  112  112  112  103  112  112
+   C,D,E,F,G    112  112  112  112  112  112  112  112  112  112
+   H (round-j
+    matrix)     112  112  112  112  112  112  112  108  112  112
+
+ Per-limb ranks (out of 28). Every structure and round not listed is 28 per
+ limb (27 per limb at silent rounds 0 and 9).
+   B round 7, silent:          limbs (1, i, u, iu) = 24, 26, 21, 22
+   B round 7, unconstrained:                         27, 28, 23, 25
+   H rounds 6, 7, silent: each limb individually 28 (the loss is joint only).
+   H round 7, unconstrained: each limb 28.
+ Initial-retained silent per round equals the silent row except round 0 = 112.
+
+4. Excess supports (all 5 vectors identical)
+--------------------------------------------
+ A, C, D, E, F, G: chain0_basis excess 0, i' 5/5, derivative 5/5, ii' 5/5;
+   supports and pivots [] throughout.
+ B: chain0_basis excess rank 38 (= 1,076 - 1,038), 354 of 1,080 units outside.
+    i' and derivative: 5/5 fail, excess rank 5 each. ii': 5/5 pass, excess 0.
+    Reduced support, identical for chain0_basis, i' and derivative (42 coords):
+      (7,14,2) (7,15,2)
+      (7,d,k) d=16..19, k in {2,3}
+      (7,d,k) d=20..23, k in {0,2,3}
+      (7,d,k) d=24..27, k=0..3
+      (9,27,k) k=0..3
+    chain0_basis excess pivots (38): all round 7 -- every support coordinate
+      above except the four (9,27,k).
+    i' / derivative excess pivots: (7,14,2) (7,15,2) (7,16,2) (7,16,3) (7,17,2).
+ H: not computed (ranks only).
+
+5. Distinct tail sums, w_i = 3 + 22 i (sums of w_i r_i over i > j)
+------------------------------------------------------------------
+ j        0    1    2    3    4    5    6    7    8    9
+ count  130   93   64   42   26   15    8    4    2    1
+ These are exact integer subset-sum counts. They differ from D20.1's stated
+ 512, 256, 128 at j = 0, 1, 2 and agree from j = 3 on.
+
+6. F-dimensions of the low-bit scalars (all vectors identical per structure)
+---------------------------------------------------------------------------
+ Lambda_j = span_F{eqPrefix(alpha, l) : l in {0,1}^j}; S_j = span_F{1, alpha_0..alpha_{j-1}}.
+ j            0  1  2  3  4  5  6  7  8  9
+ A,G,H Lam    1  2  4  4  4  4  4  4  4  4    S  1 2 3 4 4 4 4 4 4 4
+ B     Lam    1  1  1  1  1  1  1  1  1  1    S  1 1 1 1 1 1 1 1 1 1
+ C     Lam    1  2  4  4  4  4  4  4  4  4    S  1 2 3 3 3 3 4 4 4 4
+ D     Lam    1  2  4  4  4  4  4  4  4  4    S  1 2 3 3 3 3 3 4 4 4
+ E     Lam    1  2  4  4  4  4  4  4  4  4    S  1 2 3 3 3 3 3 3 4 4
+ F     Lam    1  2  3  4  4  4  4  4  4  4    S  1 2 2 3 4 4 4 4 4 4
+ In C, D, E, S_5..S_7 stay 3-dimensional but Lambda_2 already equals K: the
+ product terms (1-alpha_0)(1-alpha_1), alpha_0 alpha_1, ... leave W.
+
+7. Structure (A): leading-degree pivot sets per lane, rounds 5-7
+----------------------------------------------------------------
+ Degrees d at which the lane's round-j F-subspace has a leading coefficient;
+ every listed degree has F-dimension 4 unless marked "d:n". Identical on all
+ 5 vectors. Unconstrained = the lane's own free word (F for mask lanes, K for
+ G and D). Silent own = that lane's own lane_eliminate kernel image including
+ its D compensation (Z4c's compensated_rows), initial retained.
+
+ lane (exp)     | unconstrained r5 | r6     | r7     | silent own r5 | r6           | r7
+ mask0 (e=1)    | 0-2   | 0-2   | 0-2   | 0-2   | 0-2          | 0-2
+ mask1 (e=3)    | 0-4   | 0-4   | 0-4   | 0-4   | 0-4          | 0-4
+ mask2 (e=5)    | 0-6   | 0-6   | 0-6   | 0-6   | 0-6          | 0-6
+ mask3 (e=7)    | 0-8   | 0-8   | 1-8   | 0-8   | 0-8          | 0:1, 2-8
+ mask4 (e=9)    | 0-10  | 0-10  | 3-10  | 0-10  | 0-10         | 0:1, 4-10
+ mask5 (e=11)   | 0-12  | 0-12  | 5-12  | 0-12  | 0-12         | 0:1, 6-12
+ mask6 (e=15)   | 0-16  | 1-16  | 9-16  | 0-16  | 0:1, 3-16    | 0:1, 10-16
+ mask7 (e=17)   | 0-18  | 3-18  | 11-18 | 0-18  | 0:1, 5-18    | 0:1, 12-18
+ mask8 (e=19)   | 0-20  | 5-20  | 13-20 | 0-20  | 0:1, 7-20    | 0:1, 14-20
+ mask9 (e=21)   | 0-22  | 7-22  | 15-22 | 0-22  | 0:1, 9-22    | 0:1, 16-22
+ G (e=26, K)    | 0-27  | 12-27 | 20-27 | 0-27  | 0, 14-27     | 0, 21-27
+ D (tail, K)    | 0     | 0     | 0     | n/a (D has no independent silent word)
+
+8. Interpretation (factual)
+---------------------------
+* Only (B), all alpha in F, loses rank in the constructed silent image, and
+  only at round 7: 93 of 112 (limbs 24, 26, 21, 22; u-limb 21 <= 24 as D20.1
+  bounds). Rounds 5 and 6 are full (112) under (B). The unconstrained image
+  under (B) also loses only at round 7 (103; u-limb 23). The deficit 1,076 -
+  1,038 = 38 equals the chain0 excess rank, and every chain0 excess pivot is
+  at round 7. The (B) totals and the (i') pivot (7,14,2) coincide with Z4c's
+  alpha = all-one control (1,038; pivot (7,14,2)).
+* (C), (D), (E) (alpha_0 up to alpha_6 in a 3-dimensional F-subspace W
+  containing 1), (F) (alpha_1 in span_F{1, alpha_0}) and (G) (alpha_5..9 in F)
+  lose nothing: silent 1,076, unconstrained 1,084, all targets contained.
+  In each, Lambda_j = K from j = 2 (C, D, E) or j = 3 (F) on, although
+  span_F{1, alpha_0..alpha_4} has dimension 3 in C, D, E.
+* (H): restricting the mask-only words to rows with r_<j = 0 leaves the
+  round-j projection of the unconstrained image full except at round 7 (108).
+  The silent round-j projection drops at rounds 6 (60) and 7 (32). Rounds 8
+  and 9 stay full (D). Under this restriction the per-lane row count
+  (16 at j = 6, 8 at j = 7) is below the 113 raw observations, so the silent
+  (H) matrices at j >= 4 contain no mask-only contribution; the silent (H)
+  numbers therefore mix the Lambda_j restriction with loss of silent
+  combinations.
+* With uniform alpha (A), the pivot sets reproduce D20.1's lane ranges for
+  the mask-only lanes at round 5 (lane e covers 0..e+1). G's unconstrained
+  pivots are 0-27 at round 5, 12-27 at round 6 and 20-27 at round 7
+  (D20.1 states 12-27 at round 5, 19-27 at round 6, 23-27 at round 7).
+
+9. Code
+-------
+z7.rs is a module of probe.rs, dispatched by `--z7`, following the z5.rs and
+z6.rs precedent (they are modules, not separate [[bin]] targets; the probe's
+routines are private, so a separate binary could not call them without
+editing probe.rs). probe.rs changes only by the `mod z7` declaration and the
+`--z7` dispatch line. Called unchanged: Ech, lane_eliminate, compensated_rows,
+pure_c, full_c, copied_ech, initial_zero, summarize, pass_count, raw_c,
+tail_row, round_row, compute_targets, normalized, normalize_d, final_value,
+balance_trace, real::instances. Copied: z6.rs `trial` (adds z and queries to
+the return), pure_c's body as pure_h (one added row filter on the mask-only
+lanes), last_coeff's chain loop as round_polys (returns all rounds).
+
+10. Runs and receipts
+---------------------
+Host dombarker@100.108.41.90, staging /home/dombarker/project-offloads/aspis-z7-20261013/
+(repo/ = rsync of Cargo.toml, crates/aspis-{core,statement,prover} and z4/).
+No other aspis scope was active at launch; this run reserved MemoryMax 4 GiB.
+Release profile opt-level=3, overflow-checks; rustc 1.94.1 (e408947bf 2026-03-25).
+
+  cd /home/dombarker/project-offloads/aspis-z7-20261013/repo
+  /usr/bin/time -v systemd-run --user --scope --unit=aspis-z7-preflight \
+    -p MemoryHigh=3G -p MemoryMax=4G -p MemorySwapMax=0 \
+    python3 docs/research/v8-r0-zk-20261009/z4/run-z7.py \
+    --out /home/dombarker/project-offloads/aspis-z7-20261013/preflight-evidence --preflight
+  /usr/bin/time -v systemd-run --user --scope --unit=aspis-z7-full \
+    -p MemoryHigh=3G -p MemoryMax=4G -p MemorySwapMax=0 \
+    python3 docs/research/v8-r0-zk-20261009/z4/run-z7.py \
+    --out /home/dombarker/project-offloads/aspis-z7-20261013/full-evidence --vectors 5 --jobs 8
+
+ scope / target        exit  wall s    peak child RSS KiB  cgroup peak B   swap
+ preflight / compile   0     49.475    545,888             896,102,400     0
+ preflight / A-0 (ranks+pivots only)
+                       0     29.494    65,204              896,102,400     0
+ full / compile        0     0.030     29,032              25,653,248      0
+ full / A-0..A-4       0     94.8-100.8  74,344-75,200     365,113,344     0
+ full / B..G jobs      0     <= 162.198  <= 51,152         365,113,344     0
+ full / H-0..H-4       0     77.0-101.8  <= 38,776         365,113,344     0
+ full scope total      0     618.857 (driver), 10:18.97 (time -v), max RSS 75,200 KiB, swaps 0
+
+41 per-process receipts (compile + 40 jobs) are in evidence-Z7.json; all exit
+0, swap 0. Up to 8 jobs ran concurrently in the one scope (cgroup peak is
+cumulative across them). The 5-vector plan was kept (well under 60 min).
+206 source SHA-256s recorded; all match this worktree. A local `cargo check`
+(type-check only) preceded staging; no local arithmetic run.
+
+Artifacts: z7.rs, run-z7.py, summary-Z7.json, evidence-Z7.json, probe-Z7.log
+(all 40 job logs concatenated), z7-runs/ (driver log, compile logs, time -v
+outputs, preflight log). No Lean run; #print axioms not applicable.

@@ -1,0 +1,408 @@
+DESIGN-R1-P -- the honest-prover check of P_R1 in Rust
+=====================================================
+
+Job R1-P (lead note after D37). Branch codex/r0-z9-r1-payload-20261017,
+base 5c1e49aa7. Inputs:
+- LOG D29, D31, D35-D37;
+- lean/R1Z/PredicateR1.lean (P_R1 and its conjuncts);
+- zf1/DESIGN-ZF1-ABORT.txt §7;
+- the Z9/Z9b probe (z4/z9.rs, z4/z9b.rs);
+- the spend-path R1 prover, read only via git show at
+  origin/codex/100bit-spend-path-20261013 32f8a8c7a.
+Status words:
+- SPECIFIED: an algorithm stated here;
+- MEASURED: on the host with the prototype;
+- PROPOSED: integration not yet built;
+- OBLIGATION: a refinement fact still to prove.
+
+Sections
+  §1  The conjuncts: exact algorithms, fields, dimensions, inputs
+  §2  Cost per attempt (expectations, then measurements)
+  §3  Where the check plugs into the R1 prover; fresh salts; cap; failure exit
+  §4  The refinement statement and the route to it
+
+§1  The conjuncts: exact algorithms, fields, dimensions, inputs
+---------------------------------------------------------------
+
+§1.0 Public inputs (all of them; none is secret)
+  Fixed protocol constants:
+    π = D18 (S2 Variant::row; LOG D30.5 D18Transport); the pack basis B
+    (QM31 tower basis 1, i, u, iu); the copy-active row table (64 u16 masks,
+    pool_v1_pair_forest_copy_active_row_masks_v1, CHECKED equal to the probe's
+    ACTIVE); the eligibility table (16 semantic columns); the mask exponents
+    EXP = 1,3,5,7,9,11,15,17,19,21; the domain constants (fibre points,
+    stored line-18 and line-16 nodes, generator (2, 1268011823)).
+  Transcript challenges of this attempt (all public):
+    α_0..α_9 (rows 15–24), z_0, z_1 (rows 25, 26), γ (27), κ (28), α0 (29),
+    α1 (30), the 22 query fibres u (31).  λ, χ, θ, zc, μ, η enter only SemK4
+    (and are QM31 by construction).  ρ (32) enters nothing.
+  Not used: the witness, the trace, the masks, any mask/salt seed, the Merkle
+  roots' preimages, the proof bytes.  Every matrix below is built from the
+  constants and challenges only (the probe functions raw_c(α, z, Q),
+  round_row(α, r, c), tail_row(α, r), Weights(α, z), unit_functionals(w, κ,
+  α0, α1, Q) take nothing else).  The challenges are, of course, functions of
+  the attempt's commitments; P_R1 is a function of ch, as D29.2/D31.1 require.
+  F = M31 throughout; every K4 = QM31 value is 4 limbs, every K = WideExact
+  value 8 limbs; all ranks are exact F-ranks (Gaussian elimination mod
+  2^31 − 1).
+
+§1.1 Shared precomputation (SPECIFIED; z9.rs functions in brackets)
+  O    own-observation rows: for each row r < 1024 the 112 F-limbs (resp. 94
+       QM31 values = 376 limbs for a K4 lane) of a unit at row r:
+       3 claims eq(point_k(α), r) [12], extra h_weight(α; π(r)) [4],
+       ood evalrow(π(r), z_j) [8], opened evalrow(π(r), stored_point(u,s))
+       for 22 × 4 symbols [88].  Lane-independent. [raw_c]
+  Rr   round rows: for mask-only lanes m0..m9 and G, round_row(α, r, c); for
+       D, tail_row(α, r) (coefficients π(r) < 56); 271 QM31 = 1,084 limbs in
+       the Z4c round coordinates (initial sum + 10 × 27 free coefficients; the
+       linear coefficient is implied by the boundary).  [round_row, tail_row]
+  β    batched row functionals: for each coefficient k the 167 E values
+       (inactive, round0 7, round1 7, folded 4P, final 64) of the unit e_k,
+       through Weights::materialize(κ) and R1's round/fold, and the folded
+       closed form ∏_{b ∈ bits d} levels[b][i >> b]; row r uses k = π(r),
+       lane ℓ scales by γ^ℓ.  [unit_functionals]
+  Sources are balanced as in Lean `balance 0`: e_r for active r, e_r − e_0 for
+  inactive r ≠ 0 (row 0 is copy-inactive), per tower limb for K4 lanes.
+
+§1.2 HalfOK, SemK4, QueryCard (SPECIFIED; field tests)
+  HalfOK: α_9 ≠ 1/2 in QM31 (one comparison).
+  SemK4: every ch.sem i ∈ K4.  On R1 the semantic challenges are QM31 by
+    construction (qm31_sample); the check is "the c1 half of each decoded value
+    is zero" if the challenges are carried as E, else vacuous.
+  QueryCard: the transcript returns 22 distinct fibres (queries_from_pairs);
+    check len = 22 and distinctness.
+
+§1.3 QPrime_R1  := ChainT0K4 ≤ (ker ownMap).map roundMaskMap   (SPECIFIED)
+  For each mask lane ℓ ∈ {m0..m9 (F, 1,023 sources), G, D (K4, 4,092 sources)}
+  eliminate the balanced sources on their own-observation limbs (112 or 376
+  columns) carrying the round limbs (1,084); every source that reduces to zero
+  own part contributes its carried round vector to R := Ech over F^1084
+  (= the round image of ker own; lanes are independent because own cells are
+  per lane).  Then:
+    QPrime_R1  ⇔  every vector of a basis of ChainT0K4 reduces to 0 modulo R.
+  ChainT0K4 basis in the Z4c coordinates: the 1,084 unit vectors, each
+  corrected on the terminal coordinate so that the terminal round evaluated
+  at α_9 is 0 (normalize_d; needs α_9 ≠ 1/2), rank 1,080.  Dimensions:
+  matrices 1,023 × (112 + 1,084) ten times and 4,092 × (376 + 1,084) twice;
+  R has rank 1,080 when the check passes (Z9: 1,080 on A, J; B 1,042 and I
+  1,072 fail).  Cost is the dominant elimination (§2).
+
+§1.4 BCondG_R1  := B0R1′ ≤ V_G   (SPECIFIED)
+  V_G: eliminate G's 4,092 balanced sources on [own (376) | round (1,084)]
+  carrying the batched limbs (8·(15 + 4P + 64)); the carries of the kernel span
+  V_G.  dim V_G := rank of that Ech.
+  B0R1′: the relR1 functionals with D35.1's lineInverse ((2x)^-1, −(2y)^-1,
+  (2z)^-1): s2a, s2b, s1, circ u (22), line v (P distinct parents), as 8 limb
+  functionals each on the read support (round0, round1, the 4P opened folded
+  cells, final); dim B0R1′ = 8(78 + 4P) − rank(relR1) = 8(53 + 3P)
+  generically (952 at P = 22).
+  Check: dim V_G = dim B0R1′.  This suffices because V_G ≤ B0R1′ is a theorem
+  (V_G_le, bat_ker_own_le_B0R1′, PredicateR1.lean), so equal dimension gives
+  equality.  (The inclusion may be re-checked numerically at negligible cost by
+  evaluating relR1 on the V_G basis; the prototype does.)
+
+§1.5 C1Lift_c (c < 16) and H1Lift   (SPECIFIED)
+  obs is lane-independent on the probe side (the own functionals do not depend
+  on which lane holds the word), so W ranks are computed once:
+    rank_F obs(Wsem): 1,023 balanced F sources (e_r − e_1023 for inactive r),
+      112 columns;  rank_F obs(Wh1): 4,092 balanced K4 sources (vs row 0),
+      376 columns.
+    rank_F obs(Vsem c): the eligible rows of column c (r ≠ 1023), balanced at
+      1023, 112 columns (221–900 sources per column);
+    rank_F obs(Ph1): inactive rows r ≠ 0 × 4 limbs (3,236 sources), 376 columns.
+  Check: C1Lift_c ⇔ rank obs(Vsem c) = rank obs(Wsem); H1Lift ⇔ rank obs(Ph1)
+  = rank obs(Wh1).  Sufficient because Vsem c ≤ Wsem and Ph1 ≤ Wh1
+  (OBLIGATION, instance facts: eligible noise is base-valued and balanced at
+  1023 ∈ copyInactiveRows — `inactive_1023`, D36.2; the H1 padding is K4-
+  valued on inactive rows balanced at 0).  Z9b measured 112 = 112 and
+  376 = 376 everywhere.
+
+§1.6 Order and early exit
+  All conjuncts need the queries (row 31), so the check runs once, after the
+  final message and queries are known and before any proof byte is released.
+  Cheap conjuncts first (HalfOK, QueryCard, SemK4), then the lifts (~1 s),
+  then V_G (one lane), then QPrime (twelve lanes).  Any false conjunct aborts
+  the attempt immediately (§3).
+
+§2  Cost per attempt
+--------------------
+
+§2.0 Expectations (registered before the measurement)
+  Prototype: `probe --r1p` (z4/z9b.rs main_r1p), release build, one challenge
+  per process, timed per conjunct.  Scale reference: in Z9b one gamma pass
+  (bat(ker own) over 12 lanes carrying 1,336 limbs, plus V_G) took about 25 s;
+  in Z9, pass 1 carrying 2,420 limbs took about 63 s.
+  Expected on the nuc:
+    field conjuncts  < 1 ms
+    precompute       2–5 s   (unit functionals, 4 threads; round rows,
+                              12 threads)
+    lifts            about 1 s
+    BCondG_R1        10–15 s (one K4 lane, carry 1,336 limbs, plus the
+                              relR1 rank)
+    QPrime_R1        20–35 s (12 lanes, carry 1,084)
+    total            35–55 s wall; peak RSS 150–300 MB.
+  Pinned to one core (taskset -c 0), the threaded precompute becomes serial:
+  +5–10 s.  A laptop-class client (one modern core comparable to the nuc's)
+  should land within a factor 1–2 of the single-core figure, so 45–110 s per
+  attempt with the unoptimised probe code.  The prototype uses dense Vec<M31>
+  rows and scalar M31 arithmetic; §2.3 lists the obvious 5–20× improvements
+  (the Q′ and V_G eliminations are sparse in the source dimension, the own
+  columns are shared across lanes, SIMD/limb-packed rows).
+
+§2.1 Measurement (MEASURED; runs/r1p-244d380ab)
+  Host nuc, Intel Core Ultra 7 155H (a laptop-class mobile CPU, max 4.8 GHz).
+  Scope aspis-r1p-244d380ab: MemoryHigh 3G, MemoryMax 4G, MemorySwapMax 0,
+  TasksMax 64.  Gate OK (no other scope; reservation 4 GiB).  Release build
+  (opt-level 3, overflow checks on), compile 61.4 s.  One process per
+  configuration, run sequentially.  All exit 0, swaps 0, cgroup swap peak 0;
+  scope wall time 3:27.0.
+    configuration                   P_R1  wall    user    peak RSS     V_G / B0R1′
+    A v0 actual  γ0                 true  22.59s  23.13s  130,344 KiB  952/952
+    A v0 actual  γ1                 true  22.35s  22.90s  129,888 KiB  952/952
+    J v1 actual  γ0                 true  21.47s  22.04s  129,956 KiB  952/952
+    A v3 random  γ1                 true  22.18s  22.74s  129,968 KiB  952/952
+    A v2 coset (P = 8)  γ0          true  16.45s  16.99s  118,956 KiB  616/616
+    A v0 {0..21} (P = 6) γ0         true  16.11s  16.62s  118,520 KiB  568/568
+    A v0 actual γ0, taskset 1 core  true  24.42s  24.36s  131,408 KiB  952/952
+  Per conjunct (A v0 actual γ0):
+    field 0.001 s, precompute 0.27 s, lifts 0.54 s, BCondG_R1 9.30 s,
+    QPrime_R1 12.47 s, total 22.58 s.
+  QPrime_R1's rank_R(ker own) is 1,080 in every configuration.  All 16 C1Lift
+  checks are true, with rank obs(Wsem) = 112.  H1Lift is 376 = 376.
+
+§2.2 Reading of the numbers
+  The expectation (35–55 s, 150–300 MB) was pessimistic. Measured: 22.6 s and
+  130 MB. The precompute is 0.27 s, not 2–5 s. Nearly all the time is the two
+  eliminations, and they are single-threaded, so one core costs only +1.8 s.
+  The nuc's CPU is itself laptop-class. A client laptop of the same
+  generation, on one performance core, should therefore take about 20–30 s
+  per attempt and about 130 MB with this unoptimised prototype. Older or
+  low-power machines might take 2–3× that. This is not measured on a second
+  machine.
+  Every attempt that passes P_R1 is published, so the expected number of
+  attempts is 1 / Pr[P_R1], which is about 1 on all evidence so far (no
+  failure in Z8–Z10, Z9b or here). The expected added proving time is
+  therefore about one check.
+
+§2.3 Obvious improvements (PROPOSED, not measured)
+  (a) Each mask lane's own kernel is computed twice, for V_G's G lane and
+      for QPrime's G lane. Share it.
+  (b) The 112 own columns are the same for every mask-only lane. Eliminate
+      the own block once per lane type, then reduce the carries.
+  (c) The source vectors are sparse: a unit at one row. Dense Vec<M31>
+      elimination wastes most of its work. Limb-packed or SIMD rows, and
+      eliminating in the 1,084-dimensional round space first, should give
+      5–20×.
+  (d) The ten mask-only lanes are independent until the final merge, so
+      they can run in parallel threads.
+
+§3  Where the check plugs into the R1 prover; fresh salts; cap; failure exit
+---------------------------------------------------------------------------
+Read only, at origin/codex/100bit-spend-path-20261013 3b0acd4f5. Paths are
+under crates/aspis-r1-cost-probe/src unless stated.
+
+§3.0 What exists (SOURCE)
+  - There is no attempt loop. The P3 entry point prove_masked_attempt
+    (prover.rs:117) runs one attempt and returns Ok(proof) or an Error.
+  - StateOnlyAttemptSecrets (aspis-prover state_only_entropy.rs:85) holds:
+      a public mask_nonce;
+      two private OS seeds, field_mask_entropy and leaf_salt_seed
+      (generate :172, generate_for_mask_nonce :202), zeroized on drop.
+  - reserve_and_build_pool_v1_pair_forest_mask_material_v1 (:392):
+      durably burns the nonce first (DurableStateOnlyMaskNonceStore,
+      create_new + fsync, :871-952, fail-closed);
+      then builds the masks;
+      returns ReservedStateOnlyAttemptSecrets, the only type that can derive
+      leaf salts.
+  - Leaf salts are derive_pool_v1_leaf_salt (:568):
+      H(LEAF_SALT_DOMAIN, attempt_binding, mask_nonce, tree_tag, index,
+        leaf_salt_seed).
+    They are derived for the C1, C2 and folded (0x72) trees in
+    prove_masked_with_attempt (prover.rs:166) and prove_from_semantics.
+  - D is derived from the same reserved secrets (derive_pool_v1_pair_forest_
+    zero_factor_d). The source seed is H(·, field_mask_entropy) (:425).
+  - The transcript starts as H(DOMAIN, public bytes, c1_root)
+    (r1_wire.rs:179-186, SemanticTranscript::new). Row 0 (λ) is the first
+    block drawn from that state.
+  - The source documents one constraint on the nonce (state_only_entropy.rs
+    :196-201): "a deployed proof binds this nonce to the proof-account
+    address; clients generate the account keypair first and pass its
+    public key here."
+
+§3.1 The insertion point (PROPOSED)
+  In prove_from_semantics (prover.rs:190), directly after
+    let queries=t.queries(row,&fbytes)?;let _rho=t.scalar_k(row+1,&[]);
+  (prover.rs:229), and before the output buffer is assembled
+  (prover.rs:230 onward), insert:
+    if !p_r1::check(&p_r1::Challenges{ sem_alpha: sem.alpha, z: sem.z, gamma,
+        kappa, fold: [alpha0, alpha1], queries }) {
+      return Err(Error::Rejected);
+    }
+  Error gains one variant, Rejected (verifier.rs:20).
+  - Every input is already in scope there:
+      sem.alpha and sem.z come from BuiltSemantics;
+      gamma, kappa, alpha0 and alpha1 are locals;
+      queries comes from row 31.
+    The transport (Variant::S2 row) and the layout tables are constants.
+  - The check reads no message, mask, trace column or seed. It is the §1
+    algorithm, the z9b.rs main_r1p body with the probe's challenge replay
+    removed.
+  - No proof byte exists yet at that point: `out` is created only after
+    the queries.
+  - On rejection, the function returns. The commitments (backend.c1/c2,
+    folded tree) are dropped together with the Reserved secrets, and
+    PrivateSalts zeroizes on drop (host_commitment.rs PrivateSalts Drop).
+
+§3.2 The attempt loop and fresh per-attempt material (PROPOSED; D29.3,
+     D31.2, ZF1 §7 R-fresh, R-erase and R-cap)
+    pub fn prove_r1_private(public, compiled, hash, nonce_store,
+                            new_attempt: impl FnMut() -> Result<(StateOnlyAttemptSecrets, ProofAccount), _>,
+                            cap: usize) -> Result<(Vec<u8>, ProofAccount), ProveError>
+      for i in 0..cap:
+        let (secrets, account) = new_attempt()?;   // fresh OS entropy every time
+        match prove_masked_attempt(public, compiled, Variant::S2, hash, secrets, nonce_store):
+          Ok(proof)              => return Ok((proof, account))
+          Err(Error::Rejected)   => continue        // nothing kept, nothing published
+          Err(e)                 => return Err(e.into())   // not a challenge rejection
+      Err(ProveError::AttemptsExhausted)            // the failure exit: publish nothing
+  Freshness argument (D31.2):
+  - Each attempt calls StateOnlyAttemptSecrets::generate (or
+    generate_for_mask_nonce with a fresh proof-account public key). That
+    gives fresh field_mask_entropy and leaf_salt_seed: 256 OS bits each,
+    never derived from each other or from earlier attempts.
+  - The nonce is burned durably before any derivation. If the same secrets
+    object were replayed, the burned nonce would make the replay fail at
+    reserve(); this is the source's fail-closed behaviour.
+  - So every C1/C2/folded leaf salt is fresh, and the masks and D are fresh.
+  - c1_root is a hash over freshly salted leaves. The first absorbed block
+    (the transcript's initial state, then row 0) therefore contains fresh
+    attempt material, except with hash-collision probability or a
+    2^-256 seed repeat.
+  - This needs the private-leaf-salts feature. Without it (the P2 cost path)
+    the leaves are unsalted, and only the masks are fresh.
+  Proof account (decision for the integrator):
+  - The nonce is bound to the proof-account address (§3.0), so each attempt
+    needs a fresh account keypair. Alternatively, a nonce scheme must keep
+    the account fixed while still burning a fresh nonce per attempt.
+  - A rejected attempt's account is never created on chain, so nothing is
+    published. Its burn file stays only in the local ledger; R-erase allows
+    this because the ledger is never published.
+  Cap N: fixed in advance and public (it is part of the simulator's loop,
+  ZF1 §2).
+  - Proposal: N = 8. No failure has been observed: every one of about 600
+    real-payload evaluations in Z8–Z9b and R1-P passed, and so did Z10's
+    13,000 reduced-model query sets. N therefore matters only for liveness.
+  - The theorem holds for any fixed N (zkfs_of_hvzk_on_abort; no badMass
+    term).
+  Failure exit: AttemptsExhausted.
+  - It is returned to the wallet with no proof, no account, no
+    transaction, and no partial bytes logged.
+  - Its probability is a liveness question, not a privacy one (D29.3).
+  - The attempt index is not published. Every accepted proof looks the same
+    whatever its index, since the simulator runs the same loop.
+  Logging rule: neither the rejected challenges nor the reason for a
+  rejection (which conjunct failed) may be written anywhere persistent or
+  remote. Debug logging of a rejection must be compiled out of release
+  builds.
+
+§4  The refinement statement and the route to it
+-----------------------------------------------
+
+§4.1 What has to be proved (only one direction)
+  Let check : RustChallenges → Bool be the Rust function of §1, and decode
+  the R1 transcript decoders (gamma_sample/ordinary_sample into WideExact,
+  qm31_sample, circle_sample, queries_from_pairs; R0P SemD2 and the R1
+  decoders D20′.4). The statement is
+    check_sound : ∀ c, check c = true → P_R1 AspisR1.rowEquiv B hB (decode c)
+  Only soundness is needed. The protocol's predicate is taken to be
+  P_chk := fun ch => check ch = true itself:
+  - the prover rejects exactly when check is false;
+  - the simulator rejection-samples ch | P_chk, which is public and
+    executable (ZF1 §3, R-same);
+  - MaskImageOn is antitone in P, so a smaller P is easier, and from
+    check_sound,
+      MaskImageOn P_R1 h B x → MaskImageOn P_chk h B x;
+  - ZF1-abort's theorem holds for any public P, so it applies to P_chk.
+  Completeness (P_R1 → check = true) is not needed. A false negative from the
+  check costs only an extra attempt, i.e. liveness. This removes half the
+  refinement work, and every degenerate case in the Rust code may fail
+  closed.
+
+§4.2 Route C: certificate checking (recommended)
+  The check is split into a producer, which may be any code, and a small
+  checker. Only the checker needs proving.
+  Each inclusion of images "S.map f ≤ T.map g" in P_R1 is certified by
+  preimages:
+  - QPrime_R1: for each of the 1,084 normalised ChainT0K4 basis vectors b_i,
+    the coefficients of a combination of each lane's balanced sources whose
+    own part is 0 and whose round part is b_i. The producer gets these by
+    carrying source tags (identity columns) through the §1.3 elimination.
+  - BCondG_R1: a reduced echelon form E = U · relR1 with U and U^-1 (so the
+    rank of relR1 is certified), the kernel basis of B0R1′ read off E, and for
+    each kernel basis vector a G-source combination with zero own and round
+    parts that produces it.
+  - C1Lift_c and H1Lift: for each W source (1,023 F sources, or 4,092 K4
+    limb sources) a combination of V sources (respectively P_26 sources)
+    with the same obs value.
+  The checker:
+  - rebuilds the source vectors from the challenges (§1.1 formulas);
+  - verifies every certificate by matrix-vector products over F and
+    equality tests, with no elimination;
+  - computes HalfOK, SemK4 and QueryCard directly.
+  Proof obligations, in Lean, once:
+  (C1) Checker semantics. Accepted certificates imply the inclusions.
+       Linear algebra over ZMod P: a preimage witness gives membership in
+       the map image, and U·U^-1 = 1 with E = U·relR1 gives ker relR1 =
+       ker E. Small, payload-free, and reusable for R0.
+  (C2) Matrix refinement. Each source vector is the Lean linear map applied
+       to the corresponding unit tape:
+       - own rows = ownMap ∘ single (claimsLinear, extraLinear, oodLinear,
+         opened through naturalCoefficientPolynomial and the D18 π);
+       - round rows = roundMaskMap ∘ single (the pureRound closed forms of
+         T2b-2a, already proved);
+       - batched rows = batRead ∘ A ∘ inlM ∘ single (R1-2's batRead_L cell
+         formulas);
+       - relR1 limb functionals = D34's relR1 with D35.1's lineInverse;
+       - the ChainT0K4 basis = normalize_d in the Z4c round coordinates,
+         together with the map from those coordinates to RoundPayload (the
+         linear coefficient is implied by the boundary). This one is an
+         OBLIGATION.
+       These are the D34.3 refinement items. Each is a closed-form identity
+       per row, proved symbolically for all rows (AGENTS rule 2), never by
+       evaluating 1,024 concrete rows.
+  (C3) Rust ↔ Lean for the checker only. Extract the checker (about 500–800
+       lines: the §1.1 row formulas plus matrix-vector products) with Aeneas,
+       or write it in Lean and generate the Rust from it. Prove that the
+       extracted functions equal the Lean definitions of (C1)/(C2).
+       Differential tests against the z9b probe on the Z9b vectors are
+       engineering evidence only.
+  Cost of Route C at proving time:
+  - The producer carries tags through the eliminations, about 2× the §2
+    figure.
+  - The checker is a few matrix-vector passes, under 1–2 s.
+  - Certificate memory: QPrime about 12 × 1,084 × (≤ 4,092) F entries
+    ≈ 50–200 MB; this can be streamed per lane and need not be kept.
+  So expect 40–50 s per attempt with the prototype code, before the §2.3
+  improvements.
+
+§4.3 Route E: extraction of the eliminating check (not recommended)
+  Aeneas-extract the Rust Gaussian elimination and prove that the echelon
+  routine computes rank and span membership over ZMod P, with mutation, loop
+  invariants and pivot bookkeeping, plus the same (C2) matrix refinement. The
+  generic elimination proof is the large part, and the Aeneas replays of
+  loop-heavy code are the memory-hazardous kind AGENTS.md warns about. It
+  gives completeness for free, but completeness is not needed (§4.1).
+
+§4.4 Recommendation and order
+  1. Write the producer/checker split in Rust behind the §3.1 hook. Start
+     with differential tests against main_r1p on the Z9b vectors.
+  2. Prove (C1) in Lean: generic, small, payload-free.
+  3. Prove (C2) row by row, reusing R1-2/J4-R1 and T2b-2a closed forms.
+  4. Do (C3) by extraction of the checker only.
+  5. Restate the target with P_chk and derive it from maskImageOn_R1 by
+     antitonicity (one lemma, once maskImageOn_R1 is proved).
+  Open in this design:
+  - the proof-account and nonce decision (§3.2);
+  - the cap N = 8, a proposal;
+  - the improvements of §2.3, not measured;
+  - laptop timing, estimated only from the nuc's laptop-class CPU.

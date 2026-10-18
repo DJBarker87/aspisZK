@@ -1,0 +1,149 @@
+Z9 -- R1 payload map (read-only from the spend-path source)
+===========================================================
+
+Source: origin/codex/100bit-spend-path-20261013 at 1822c2ced (later than
+deb68369b), read with `git show`, never checked out. Variant S2 is R1
+(transport.rs: S1 = one fold, S2 = two folds with D18, D = two folds with D13).
+Paths below are relative to crates/aspis-r1-cost-probe/src unless stated.
+Status words: SOURCE = read directly in the cited file; CHECKED = asserted
+numerically by the Z9 probe (see FINDINGS-Z9.txt); INFERRED = a consequence I
+derived and have not yet checked.
+
+1. Lanes and fields (SOURCE)
+----------------------------
+29 lanes, the same as R0:
+  0..15   semantic C1 columns, M31 (with eligible C1 noise)
+  16..25  mask-only C1 columns, M31 (10 lanes, exponents EXP = 1,3,5,7,9,11,15,17,19,21)
+  26      H1 (copy helper plus H1 padding), QM31 = K4
+  27      G, QM31 = K4
+  28      D (Libra), QM31 = K4
+The commitments are C1 = lanes 0..25 and 28, and C2 = lanes 26 and 27
+(host_commitment.rs build; prover.rs Backend). The K4-valued lanes are
+26, 27 and 28. Every message is a K4 or F row word, and the encoder reads
+`variant.coefficients(rows)`: coefficient j sits at row S2.row(j).
+
+2. Transport pi = D18 (SOURCE transport.rs; CHECKED against the checkpoint's d18_transport)
+------------------------------------------------------------------------------------------
+TAU = [3,4,2,0,1]. Coefficient base-4 digit d becomes row base-4 digit TAU[d]
+(the identity within each digit):
+  row(j) = sum_d ((j >> 2d) & 3) << 2*TAU[d]
+  coefficient(r) = dig3(r) + 4 dig4(r) + 16 dig2(r) + 64 dig0(r) + 256 dig1(r).
+R0 probes Z8/Z8b/Z8c/Z8d/Z8e used D13 (aspis_core::r0::transport
+ROW_TO_COEFFICIENT). Layout consequences, computed from the probe's ACTIVE
+table (810 inactive rows; row 0 inactive):
+  * coefficient 0 sits at row 0, so row 0 is a D-tail row (under D13, row 0 is coefficient 89);
+  * of D's 56 tail rows (coefficients 0..55), only 10 are copy-inactive and 46 are active
+    (under D13 all 56 were inactive).
+
+3. Masks and balancing (SOURCE: aspis-prover state_only_entropy.rs
+   derive_pool_v1_zero_factor_d; r1 prover.rs prove_masked_with_attempt audit)
+---------------------------------------------------------------------------
+D is uniform in QM31 at every row, with the first inactive row (row 0) set to
+minus the sum of the other inactive rows. G, H1 padding and the 10 mask-only
+columns are audited to have inactive sum zero. The 16 semantic C1 columns are
+balanced with eligible noise. Each mask lane's word space is therefore the
+inactive-sum-zero hyperplane, which is the Lean `balance 0` space; which row
+carries the balance does not change the span. aspis-prover
+state_only_hiding.rs/state_only_entropy.rs and aspis-core
+state_only_hiding.rs/state_only_prefix.rs are byte-identical between
+v8-reference (524e1debb) and the spend-path tip. aspis-core r0/*, field.rs
+and wide_exact.rs differ only by inlining and refactors (diff reviewed). The
+aspis-statement semantic-terminal diff is a refactor (bounded_append_carry,
+an unrolled serializer, tests).
+
+4. FS schedule, 33 rows (SOURCE r1_wire.rs row_shape/begin, r1_semantic.rs, verifier.rs Prepared::new, transcript.rs)
+----------------------------------------------------------------------------------------------------------------------
+  0 lambda, 1 chi, 2 theta (absorbs the C2 root), 3..12 zc[0..9], 13 mu,
+  14 eta (absorbs the mask sum H, one E value with c1 = 0)          QM31 (qm31_sample)
+  15..24 semantic sumcheck alpha_0..alpha_9; each row absorbs one
+         round polynomial of 28 QM31 coefficients (degree <= 27)    QM31
+  25 circle point z0; absorbs claims (3 x 29) + extra (29)           QM31 circle point
+  26 circle point z1; absorbs before_z1 = 29 lane evaluations at z0  QM31 circle point
+  27 gamma (gamma_sample: nonzero, uniform in E = WideExact); absorbs y1 = 29 evaluations at z1
+  28 kappa (ordinary_sample, E); absorbs the inactive sum (1 E)
+  29 alpha0 (E); absorbs round0 (7 E)
+  30 alpha1 (E); absorbs the folded root (32 bytes) and round1 (7 E)
+  31 queries: 22 fibre indices u < 2^18; absorbs the final message (64 E)
+  32 rho (qm31_sample, QM31); absorbs nothing.
+R0 (combinedProtocolZ, 32 rows) differs from row 27 on: gamma, kappa, tau and
+the fold alpha (rows 27..30), then queries at row 31. R0 has tau and no alpha1
+and no rho.
+
+5. Disclosed view (SOURCE verifier.rs View::parse_shape, prover.rs prove_from_semantics)
+--------------------------------------------------------------------------------------
+Per lane l (own observations; the same coordinate types as R0, and in R1
+also K4-valued for K4 lanes):
+  claims[p][l], p = 0,1,2: MLE of the row word at the three statement points
+          (row-indexed; independent of pi)
+  extra[l] = sum_{s<2} sum_{k<28} coeff_l[28s+k] * alpha_{8+s}^k  (coefficient-indexed)
+  before_z1[l] = eval_message(coeff_l, z0);  y1[l] = eval_message(coeff_l, z1)
+  opened: 22 queried fibres x 4 codeword symbols (Enc of coefficients, the R0 encoder)
+  -> 3 + 1 + 2 + 88 = 94 values per lane (112 limbs for an F lane, 376 for a K4 lane).
+Semantic rows 15..24 (round polynomials), the eta row (H) and the claims are
+the semantic layer and are unchanged from R0.
+Batched (gamma-weighted across lanes; q = sum_l gamma^l coeff_l, q in E^1024):
+  inactive  = sum_j q_j * [row(j) inactive]                      1 E   (0 on balanced masks)
+  round0    = round(q, w)                                         7 E   (all 7 sent; R0 sends 6)
+  folded word values: q1 = fold(q, alpha0) in E^256; folded_word = evaluate(q1)
+            over the 2^18 line nodes 2x_u^2-1; opened at positions 4*(u/4)+s, s<4,
+            per query                                             88 E  (if the 22 u/4 are distinct)
+  round1    = round(q1, w1),  w1 = dual fold(w, alpha0)           7 E
+  final     = fold(q1, alpha1)                                    64 E
+  -> 167 E values = 1,336 M31 limbs (R0: 264 E = 2,112 limbs).
+The Merkle roots and paths are hashes, and with private-leaf-salts the
+salts are not linear coordinates. They are outside this linear model, as in Z8.
+Here w = sum_{kind<7} kappa^kind raw(kind, j) (weights.rs materialize):
+  kind 0 inactive indicator; kinds 1..3 eq(point_k, row(j)) as a digit tensor;
+  kind 4 Libra weight on coefficient j < 56; kinds 5 and 6 natural-basis evaluation of
+  coefficient j at z0 and z1.
+round(q, w): c[s+PERM[t]] += q[4d+s] w[4d+t] / 4, PERM = [0,3,2,1].
+fold(q, a): h0 + a h1 + a^2 h2 + a^3 h3. The dual fold is (h0 + a h3 + a^2 h2 + a^3 h1)/4.
+The masks enter the batched coordinates only through q, that is, through
+gamma^l times lane l's coefficient vector. There is no quotient.
+
+6. Verifier relations among the batched coordinates on own-silent tapes (SOURCE verifier.rs; CHECKED Z9: exact annihilator, 384 limbs)
+----------------------------------------------------------------------------------------------------
+  ia     inactive = 0                                    (balanced)
+  S2a    round0[0] + round0[4] = claim/4, with claim = kappa^0 inactive + own parts = 0 on ker own
+  S2b    round1[0] + round1[4] = round0(alpha0)/4
+  S1     round1(alpha1) = sum_e final_e * w2_e,  w2 = dual fold(w1, alpha1)  (Weights::pair)
+  C_u    folded_word[u] = circle_fold(alpha0, gamma-batched opened symbols at u) = 0 on ker own  (22)
+  L_u    line_fold(alpha1, folded_word[4(u/4)..+4]) = sum_e final_e basis_e(u)  (22; rho-batched
+         in the verifier, but each one holds for the honest prover)
+  -> 48 E relations = 384 limbs. If they are independent and exhaust the
+     annihilator, dim_F B0 = 1,336 - 384 = 952 (the R0 analogue is 1,912 =
+     2,112 - 200).
+rho in QM31 only batches L_u inside the verifier. It enters no disclosed coordinate.
+
+7. Differences from the R0 probe model (Z8/Z8c/Z8e)
+---------------------------------------------------
+ D1  pi: D18 (R1) against D13 (R0 probes).
+ D2  There is no chord quotient. R0 batches Q(c_l) = (c_l - interpolant)/chord line and uses
+     tau, e1 and e2. R1 batches raw coefficients and puts the OOD into weight kinds 5 and 6.
+ D3  Two folds: round1, the folded root, 88 folded-word values and alpha1 are new.
+     The final message has 64 values, not 256.
+ D4  round0 sends all 7 coefficients (R0 sends 6 and implies c4).
+ D5  The challenge rows are gamma, kappa, alpha0, alpha1 and rho (QM31). R0 has tau.
+ D6  The batched space is 1,336 limbs (R0: 2,112). The relation count is 48 E (R0: 25).
+ D7  The weight layout is kappa^0..6 over (inactive, 3 points, Libra, z0, z1).
+     In R0 it is indicator + kappa^1..3 eq + kappa^4 libraWeight, then the quotient
+     weights + tau e1 + tau^2 e2.
+ D8  The D-tail rows are mostly copy-active under D18 (46 of 56). Row 0 is coefficient 0.
+ D9  Expected R1 forms of the D23 objects:
+     Psi_lo, the R0 low shadow of D-high through the chord quotient, has no R1 analogue,
+     because there is no quotient. With no quotient, D-high (coefficients < 56 zero)
+     gives q1_d = 0 for d < 14, hence final_0..final_2 = 0 exactly (24 limbs), and final_3 is free.
+     etaRel (R0 Fact 3) needs the whole once-folded message to be disclosed. In R1 only 159 of
+     the 256 E-functionals of q1 are disclosed, so I expect no conjugate relation
+     (to be measured).
+
+8. Checked by the Z9 probe (FINDINGS-Z9.txt sections 1 and 2)
+-------------------------------------------------------------
+D18 equals the inverse of S2 row. The probe's ACTIVE table equals
+pool_v1_pair_forest_copy_active_row_masks_v1. Weight kinds 1-6 equal the
+probe's eq/h_weight/evalrow functionals. The folded word is
+EncodingDomain::evaluate. The whole-column R1 pipeline equals the row-wise
+sum on all 167 coordinates. On a full view, S2a (kappa claim), S2b, S1
+(Weights::pair = double dual fold), C_u and L_u all hold. On own-silent
+tapes the 48 relations are exactly the annihilator (dim B0 = 952). The 22
+queried fibres had 22 distinct u/4 on every vector.

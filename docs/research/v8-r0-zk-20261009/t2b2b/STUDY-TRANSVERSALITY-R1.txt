@@ -1,0 +1,654 @@
+STUDY-TRANSVERSALITY-R1 — the transversality premises (B-open, OT-open) in R1 terms:
+prove them, or remove them by a mask change (input to decision D23.5)
+==================================================================================
+
+Research study; no Lean written, no protocol or source file changed.
+Branch codex/r0-transversality-study-20261017, base 524e1debb.
+Inputs: LOG D20–D23; t2b2b/DESIGN-T2b-2b.txt (§2.2–2.4, §6 O1);
+t2b2b/DESIGN-T2b-2b-Dprime.txt (§2.4–2.6, §5 R1/R2/R5, §6 J10); R1 source read
+via `git show origin/codex/100bit-spend-path-20261013:<path>`:
+crates/aspis-r1-cost-probe/src/{verifier.rs, r1_semantic.rs, lib.rs},
+docs/research/100bit-spend-path-20261013/{PRIVACY-RANK-PATH.md,
+security-ledger.json, SPLIT10-COSTS-20261015.md, STATUS-20261015.md,
+evidence/r1-two-tx-runtime-path-20261017/README.md}.
+
+Tags used throughout: PROVED (here, on paper, short); STRUCTURAL (provable for
+every challenge from stated algebra, not yet in Lean); MEASURED (numeric, on the
+stated instances only); PROPOSED (design, not implemented); ESTIMATE (cost
+figure derived from measured costs, method stated).
+
+Sections
+  §1  The two premises as events over the R1 challenge draw
+  §2  Route P — proving a failure-mass bound
+  §3  Route M — mask redesign options with costs
+  §3.4 D24.4 (π_R1 and C1Lift's opened part)
+  §4  Recommendation for D23.5 (and D24.4)
+  §A  Probe Z10 (reduced-size failure-rate experiment): method and receipts
+
+§1  The two premises as events over the R1 challenge draw
+--------------------------------------------------------
+§1.1  R1 objects (from verifier.rs; R1 = Variant with folds() = 2, final_len 64).
+
+  Lanes.  29 committed lanes l = 0..28 in two leaves per child: C1 leaf =
+  26 M31 symbols (semantic lanes 0..15, mask-only lanes 16..25 = m0..m9) plus
+  one QM31 symbol (lane 28 = D, offset 104); C2 leaf = two QM31 symbols
+  (lanes 26 = H1 padding, 27 = G).  Each lane is a 1,024-row word whose
+  natural coefficients are the rows permuted by the transport (D18 in R1).
+  Code.  Message dimension 1,024, codeword on 2^20 circle points grouped in
+  2^18 = 262,144 fibres of 4 children (domain::FibreIndex < 1<<18);
+  Merkle trees of arity 8, depth 6 over fibres.  Fold 1 (circle fold, α_0)
+  gives a 256-coefficient message on 2^18 line points, committed
+  (folded_root) in 2^16 leaves of 4 values; fold 2 (line fold, α_1) gives the
+  64-value final message.
+  Challenge rows (Transcript): rows 0..26 semantic prefix (including the
+  α-row 15..24 of the Libra/sumcheck part, circle points z_0, z_1), row 27 γ,
+  28 κ, 29 α_0, 30 α_1, 31 the 22 queries, 32 ρ (final-weight batching):
+  33 FS rows.  γ, κ, α_0, α_1 ∈ E = WideExact (K in the design notation);
+  semantic challenges and ρ ∈ QM31 = K₄.  The 22 queries are distinct fibres
+  u_0..u_21 < 2^18 (resume() rejects repeats); their second-layer leaves are
+  u_i/4 (two queries may share a second-layer leaf).
+
+  What the verifier sees, per lane l (the "own" observations own_l):
+    claims[0..2][l]   three MLE claims at the opening points (row basis)
+    extra[l]          the Libra functional (coefficient basis, k < 56 in R0)
+    before_z1[l], y1[l]   the two OOD values (coefficient basis)
+    opened_l(u_i, s)  the codeword symbol at child s of each queried fibre:
+                      22 × 4 = 88 symbols (F-valued for lanes 0..25, K₄ for
+                      26..28)
+  and batched across lanes (bat, through γ):
+    inactive          γ-batched inactive-row sum (0 on balanced mask tapes)
+    round0, round1    7 + 7 E-coefficients of the two FRI round polynomials
+    folded values     4 E-values at each second-layer leaf u_i/4; one of them
+                      is the fold-1 value at u_i (checked: folded == values[u%4])
+                      and that one is a function of own_l (the opened symbols
+                      and the OOD interpolant), so on own-silent tapes it is 0
+    final message     64 E-values
+  plus the Merkle roots (hash commitments; their hiding is a separate,
+  salted-leaf ROM statement and plays no role in the rank premises).
+
+  Counts on the R1 payload (cf. R0's 1,872 own / 1,912 bat limbs):
+    own per F-lane  12 (claims) + 4 (extra) + 8 (OOD) + 88 (opened) = 112 limbs
+                    (matches the R1 gate's "eligible C1 raw ranks: 112");
+    own per K₄-lane 4·(3 + 1 + 2 + 88) = 376 limbs;
+    bat             8·(14 + 64 + 3·q₂) limbs before the verifier relations,
+                    q₂ = number of distinct second-layer leaves (22 unless two
+                    queries share u/4).  The verifier relations on own-silent
+                    tapes are, by the R0 pattern (design §2.2.4) extended to two
+                    layers: round_boundary and round_eval for each of the two
+                    rounds (4 E-relations), fold-2 consistency at each queried
+                    second-layer point (q₂), fold-1 = folded[u%4] (already used
+                    to remove one value per query), and the final ρ-batched
+                    check (subsumed by the q₂ point checks).  This count is a
+                    prediction for Z9; it has not been measured on R1.
+
+§1.1a  R1 facts fixed by Z9 (LOG D27; z9/FINDINGS-Z9.txt, z9/R1-PAYLOAD-MAP.txt;
+added after the lead's note of 2026-10-17; they supersede the predicted counts
+above where they differ).  R1 has NO chord quotient: the batched word is
+Σ_l γ^l·c_l and the OOD values enter as pairing weight kinds 5 and 6 (kinds:
+0 inactive, 1–3 eq-MLE claims, 4 Libra h_weight, 5–6 evalrow at z_0, z_1).
+The batched view is 167 E values (1,336 limbs); the verifier relations on
+own-silent tapes are 48 (ia, S2a, S2b, S1, 22 C_u, 22 L_u; 384 limbs), so
+B₀ = 952.  BCond holds in all 40 Z9 jobs, and on R1 it reduces to
+     BCond_R1 :  V_G = B₀,   V_G := bat(G ∩ ker R_G ∩ ker own_G)
+("G alone covers B₀"): no Ψ_lo/lowShadow, no etaRel; D-high's deficit is
+exactly f_0 = f_1 = f_2 = 0 (V_D = 928).  Per-lane own ranks 112 (F-lanes) and
+376 (G, D) and the per-lane round images (60 … 380, G 652, D 216) are
+identical to Z8c's.  Everything below targets BCond_R1, not R0's
+D-high/G assembly.
+
+§1.2  The premises as events.  Fix all challenges except the queries and
+write Q = {u_0, ..., u_21} for the query set and X(Q) for its 88 children.
+Notation as DESIGN-T2b-2b §0: for lane l, W_l its balanced word space,
+R_l : W_l → rounds its round map (depends on the α-row only), own⁺_l = (own_l,
+σ_l); Rel_l the round-determined relations ({claim_0} for e ≤ 13; {claim_0,
+claim_2} for G and e ≥ 14; {extra} for D).
+
+  OT_l(ch, Q):  own⁺_l(ker R_l) = own⁺_l(W_l) ∩ ker Rel_l.
+     Equivalent dual form (used below): let
+       V_l(ch) := rowspace(R_l) + span(claims, extra, OOD, σ_l)   (query-free)
+     a space of F-functionals on W_l of F-dimension r_l ≈ 520–760 (R0 counts;
+     R1 identical, since the sumcheck and row layout are the same and only the
+     transport differs).  Then OT_l fails iff some nonzero functional in
+     span{ev_x : x ∈ X(Q)} lies in V_l(ch) beyond the identities Rel_l, i.e.
+       FAIL_OT_l(ch, Q) :⇔ span_F{ev_x|_{W_l} : x ∈ X(Q)} ∩ V_l(ch) ≠ 0
+                         (modulo Rel_l).
+     OT-open is ⋀_{l ∈ {m0..m9, G}} OT_l, together with C-Dhigh's query part
+     for D (TP_D).
+
+  BCond(ch, Q):  bat(ker own ∩ ker R) = bat(ker own).  On R1 (§1.1a) this is
+     V_G = B₀: G's own-silent round kernel must reach all 952 limbs of B₀.  bat
+     carries the second-layer opened values (evaluations of the folded batched
+     word at the 66 other children of the leaves u_i/4) and the C_u/L_u
+     relations tie them to the first layer, so V_G = B₀ is again a (TRANS)
+     statement: G's 352 opened limbs (and its claims, Libra, OOD and σ) must be
+     transversal, inside ker R_G, to the 952 batched functionals — the R1 form
+     of Gb with V of size rank R_G (660) + own (376) + 952.  For comparison, the
+     R0 reduction (Dprime §2.6) went through query-free conditions (GoodWrap,
+     NZ, K-deg, Ga, G2) plus two query-dependent ones of the same dual form:
+       TP_D:  the 12 K₄-functionals Φ_D (claims_0..2(Lq), ind(Lq), the 8 free
+              h-dims) stay independent modulo the 22-node evaluation block;
+              FAIL_TP_D(ch, Q) :⇔ span{ev at X(Q)} ∩ (Φ_D + ...) ≠ 0 on the
+              D-high block;
+       Gb:    E_G (2 OOD + 88 opened) has full rank on
+              G ∩ ker R ∩ ker Rw ∩ ker(T∘bat) — i.e. OT_G with 104 more
+              query-free functionals added to V_G.
+
+  On R1 TP_D is not needed (V_D plays no role once V_G = B₀); Gb_R1 is the
+  whole of B-open.
+  The premise family is therefore one shape repeated 12–13 times:
+     (TRANS)  For a query-free functional space V(ch) of dimension r on a
+              message space M of dimension n (n = 1,024 per K₄/F-coordinate),
+              the 88 evaluation functionals at X(Q) are independent modulo V.
+  with (r, n) ≈ (544, 1,024) for a mask lane of exponent 21, ≈ (780, 1,024)
+  per K₄-limb-block for G, and r ≈ 12 K₄-functionals on a structured
+  coefficient block for TP_D.
+
+§1.3  What has to be shown.  A ledger term ε_T with
+     Pr_{ch}[ ⋁_l FAIL_OT_l ∨ FAIL_TP_D ∨ FAIL_Gb ] ≤ ε_T,
+  the probability over the full FS draw (rows 0..32; the queries of row 31 are
+  drawn after every challenge that V depends on, so V(ch) is fixed when Q is
+  drawn — the order is favourable).  Target: ε_T small enough to sit beside the
+  ~2^-104.3 privacy terms, i.e. ε_T ≤ 2^-106 or so.  Two shapes of argument
+  are possible:
+   (P-SZ)  for EVERY query set Q, the failure locus is contained in the zero
+           set of a nonzero polynomial in the continuous challenges (α-row,
+           z, γ, κ, α_f) of degree D_Q; then ε_T ≤ max_Q D_Q·(1+δ)/|K₄| per
+           premise.  Needs a witness challenge for every Q (2^18 choose 22
+           ≈ 2^306 sets), or a structural argument covering all Q at once.
+   (P-CNT) for fixed ch, a bound on the fraction of query sets that fail,
+           uniformly over ch (or off a small bad set of ch).
+  Neither exists today; 35 challenge vectors were checked (Z8c/Z8e), each with
+  one query set.
+
+§2  Route P — proving a failure-mass bound
+-----------------------------------------
+§2.1  The one fact that every argument uses (PROVED here; standard).  Let M
+be the lane message space (natural basis, 1,024 coordinates) and ev_x the
+evaluation functional at a domain point x.  Write the message by channels
+m = 4d + s (s = 0..3, d < 256); evaluation at the four children of a fibre is
+equivalent to evaluating all four channels at that fibre's line node t_u
+(fibre_inverse; x_u, y_u ≠ 0).  Then:
+  (E1) [interpolation]  For distinct nodes t_1..t_k and any block
+       B = {c + e : e < k} of channel coordinates with c = 0, or c a power of
+       two ≥ k with T_c(t_i) ≠ 0 (NZ), the k node evaluations are bijective
+       on B (N′_{c+e} = N′_c·N′_e; Vandermonde in the N′_e, e < k).
+  (E2) [high support]  A family Φ of functionals whose natural-coordinate
+       vectors are zero on the channel coordinates d < 22 keeps its rank on
+       {channels vanishing at 22 distinct nodes}: the coordinates d ∈
+       [22, 256) are bijective there (kernel = polynomials of degree < 22
+       with 22 zeros).
+  (E3) [rank-one restriction]  On a block N′_c·P_{<k} (and on the whole
+       channel), ev_t is a rank-one Hankel functional: H_{ev_t}(a, b) =
+       ev_t(N′_c·t^{a+b}) = N′_c(t)·t^a·t^b.  Hence a combination of j
+       evaluations has Hankel rank ≤ j on every A×B with A·B inside the block.
+Every query-dependent premise is an instance of (TRANS) (§1.2): a
+query-free space V must meet span{ev_x : x ∈ X(Q)} only in 0.  (E1)–(E2)
+settle (TRANS) when V vanishes on an interpolation block or is supported on
+high coordinates; (E3) gives a query-free sufficient condition when V is
+small.  None of the three applies to the actual premises, for the reasons
+below.
+
+§2.2  Why the two obvious formulations do not give a bound.
+  (P-SZ, per query set).  For fixed Q, FAIL_OT_l(·, Q) is the vanishing of
+  all maximal minors of [V(ch); E(Q)], polynomials in the α-row (and z) of
+  degree ≤ 10 per row of claims and ≤ e+1 per round row through β powers —
+  rough total degree D_Q ≤ 10·r ≈ 4·10^3 for r ≈ 400.  Schwartz–Zippel then
+  gives Pr_ch[FAIL | Q] ≤ D_Q/|K₄| ≈ 2^-112 PROVIDED the minor is not
+  identically zero for this Q, which needs a witness ch*(Q).  A witness is a
+  challenge at which the lane's round rowspace is explicit; the only explicit
+  points are Boolean or base-field α, and there Λ_j collapses to F (D20.1),
+  rank R_l drops (Z7 (B), Z8c structure B/L), and the minor is zero for
+  trivial reasons.  So no single structured witness works, and an
+  X-dependent witness would have to be exhibited for ~C(2^18, 22) ≈ 2^306
+  query sets.  This is the D23.2 obstruction: the functionals of V that do
+  not depend on α at all — σ (the inactive-row indicator, 810 of 1,024
+  rows, dense in natural coordinates) and the OOD evaluations — cannot be
+  moved by any witness, and σ is not supported on high coordinates, so (E2)
+  is unavailable even at a degenerate α.
+  (P-CNT, per challenge).  For fixed ch, count bad fibres sequentially: the
+  k-th fibre is bad iff its four evaluations are dependent on
+  V + span(previous), i.e. iff the fibre is a common zero of a nonzero
+  subspace of messages; one nonzero message has ≤ 1,023 zeros on the circle,
+  so Pr[bad k-th fibre] ≤ 4·1,023/(2^18 − k) ≈ 2^-6, and 22 fibres give
+  ≈ 2^-1.5.  This is the "Bezout ~2^13 bad fibres" count of DESIGN-T2b-2b
+  §2.4.3: correct, but four to five orders of magnitude in the exponent too
+  weak.  It uses one witness message per step; a stronger count would need
+  the common zero set of a whole (n − r − k)-dimensional message space, i.e.
+  structure of V that is not available.
+  (Heuristic only.)  Dimension count: the bad locus {Q : (TRANS) fails} is
+  cut out on the 22-parameter family of query sets by a rank drop of
+  expected codimension n − r − 88 + 1 (≥ 392 for the largest mask lane on
+  R1-sized data, ≥ 475 for the G-factor shape, ≥ 860 for D), so for
+  "generic" V it is empty.  This explains why every numerical check passes,
+  but it is not a proof: V is highly structured (eq-MLE tensors, Boolean-face
+  σ, the natural-basis tensor structure of rows ≥ 479 noted in Dprime R5),
+  and structure is exactly what can make a high-codimension locus non-empty.
+
+§2.3  Candidate witnesses and where each stops.
+  (W1) Boolean / base-field α.  Kills Λ_j; V loses rank; the minor vanishes.
+       Dead (Z8c structures B, L; D21.3).
+  (W2) α with the round rowspace in "staircase" form (DESIGN-T2b-2b §6 O1(a)).
+       Would need R_l's rowspace, pushed through π, to be supported on
+       natural coordinates ≥ 88 modulo explicit pieces, so that (E2) applies;
+       the round rows read every row with weight eqPrefix(α, r_<j) ≠ 0 and π
+       spreads them over all coordinates; σ and the claims are dense for every
+       α.  No candidate found.
+  (W3) Query-free Hankel / secant condition (Dprime §5 R2 made concrete by
+       (E3)).  Sufficient: every nonzero φ ∈ V has Hankel rank ≥ 89 on some
+       A×B ⊆ M.  Certifiable by ONE nonzero minor (hence a Schwartz–Zippel
+       bound with ONE query-free witness) only through the Kronecker
+       stacking argument: if the m generators φ_1..φ_m of V satisfy
+       rank[H_{φ_1}J | … | H_{φ_m}J] = 89·m for a column set J of size 89,
+       no nonzero combination has Hankel rank ≤ 88.  This needs
+       89·m ≤ (number of rows of H) ≤ ~510 on a 1,024-dimensional message
+       space, i.e. m ≤ 5.  The OT-open spaces have m ≈ 400–660 (mask lanes,
+       G) and Gb adds 104: impossible by a factor of ~100.  TP_D's residual
+       has 12 K₄-functionals on two 256-coordinate B-channels at 22 nodes:
+       12·23 = 276 > 128 rows of a channel Hankel: also impossible.  (W3)
+       works only for spaces of ≤ 4–5 functionals — which is what Route M
+       produces (§3.2).  On R1 the B-open form V_G = B₀ (§1.1a) is worse, not
+       better, for (W3): G must absorb 952 batched limbs plus its own 376
+       inside ker R_G (rank 660).
+  (W4) Dual distance of the punctured code Enc(c(ker R_l)) (O1(b)).  The
+       dual of a subcode contains dual words of support ≤ 88 exactly when
+       (TRANS) fails; a dual-distance bound is a restatement, not a route.
+Conclusion of §2.3: for the premises as they stand (large V), I found no
+formulation that yields a failure-mass bound, and the structural reason is
+general — a dense, challenge-independent functional (σ, OOD) together with a
+challenge-dependent space of dimension ~400–660 cannot be separated from
+evaluations at adversarially placed points by any of the available tools
+(interpolation, high support, Hankel rank).
+
+§2.4  Numeric evidence (Z10, §A).  Z10 measures (TRANS) directly on an
+R1-sized model of one lane (1,024 rows/coefficients, QM31 α-row, the ten
+sumcheck rounds with the actual exponents and weights, three eq-MLE claims,
+the Libra extra functional, two QM31 OOD points, σ on 810 rows, the 2^20-point
+canonic coset with the four-child fibre structure).  Model check: for e = 21
+the round+claim rank is 392 = Z8c's rank R_{m9} 388 + 12 claim limbs − 8
+(claim_0, claim_2 round-determined), exactly.  Results are in §A.
+
+§2.5  Feasibility estimate (Route P).  For a proved bound on OT-open and
+B-open in their current form: low.  I would put it below 15% within a few
+weeks of focused work, because the three known tools provably cannot reach
+spaces of this size (§2.3 W3 is a hard counting limit, not a missing idea),
+and a new tool would have to exploit the specific tensor structure of the
+eq-MLE rows against the doubling-curve structure of the evaluations — a
+research problem of its own (Dprime R5 is the only lead, and it needs the
+transport-identity premise on rows ≥ 479 in Lean as well).  What Route P can
+realistically deliver is (a) a Schwartz–Zippel bound for the small,
+query-free pieces (Ga, G2, GoodWrap, PR6/PR7, C_ll) once exact witnesses are
+certified, and (b) an (E3)/Kronecker certificate for any premise that can be
+reduced to ≤ 4–5 functionals — which the current premises cannot.
+
+§3  Route M — mask redesign (D23.5)
+----------------------------------
+§3.0  What has to change, in one sentence.  Each premise asks a mask block
+to absorb the 88 queried evaluations while staying silent on a large
+query-free space V that it shares with the rounds, the claims and σ.  The
+premises become structural exactly when the absorbing block is a block that V
+does not read (E1), or when the absorbed observations are functions of one
+uniformly random vector that V does not touch at all.  Inside a sumcheck lane
+no such block exists: every row enters every round through eqPrefix(α, ·) ≠ 0
+and every claim through eq(pt, ·) ≠ 0 (DESIGN-T2b-2b §2.4.3).  So Route M
+must either add randomness that the sumcheck and the claims do not see, or
+stop relying on the sumcheck lanes for the absorption.  Three concrete
+changes follow; M1 and M2 together remove both premises from the theorem, M3
+removes them without touching the verifier.
+
+Cost method used throughout (ESTIMATE).  The only measured marginal unit is
+the cost of one query pair moved between transactions: 49,524–49,562 CU
+(SPLIT10-COSTS-20261015.md, five fixtures).  Its composition (P2-CU-
+RECONCILIATION.md, older pairing stage): Merkle ≈ 9.1k CU/query (≈ 19 digest
+calls over 160–512-byte inputs), parse ≈ 1.2k CU/query (strict scan of
+736 query bytes), the rest (≈ 39k) is four_dots + the two folds + the
+64-weight ρ accumulation.  In four_dots one F-lane symbol costs 8 limb
+products per child and one QM31 symbol 32 limb products (EbyKDot), so an
+extra QM31 lane adds ≈ 32/(26·8 + 3·32) ≈ 10% of the dots work.  I assign
+dots ≈ 8–15k CU/query (the folds and accumulation do not depend on the lane
+count).  Unit E×K products are taken as 120–250 CU (lazy-reduced EbyKDot
+push) and K×K as 60–100 CU.  Budgets: stage1 (tx1) ≈ 1.343M CU (target
+1.3M, cap 1.4M; 57k under the cap); worst stage2 settlement (withdrawal,
+255 pairs) 1,368,461 CU, 31,539 under the cap.  Every CU figure below is an
+estimate to ± a factor of ~1.5 and must be measured before adoption.
+
+§3.1  M1 — a γ-batched FRI mask lane Z (removes B-open).  PROPOSED.
+  (Revised for the R1 opening of §1.1a: no chord quotient, OOD as weight
+  kinds 5–6.  An earlier draft sent one combined value μ_Z = ⟨Z, w⟩ after κ;
+  that is UNSOUND — a value chosen after γ and κ can cancel the error of
+  false claims of the other lanes — and is withdrawn.)
+  Change (prover).  Sample Z uniformly in E^1024 (natural coefficients) and
+  commit its codeword in the C2 leaf next to lanes 26/27 (one E symbol, or two
+  QM31 symbols, per child), i.e. before γ.  Z is a 30th PCS lane that is not a
+  sumcheck lane: it has no round contribution, no balancing and no semantic
+  use.  Its seven pairing values v_{Z,k} := ⟨Z, W_k⟩ (k = 0 inactive, 1–3 the
+  eq-MLE points, 4 Libra, 5–6 OOD) are sent with the other lanes' values in
+  the prefix (before γ), exactly as for lanes 0..28.  Batched word:
+       q_tot := Σ_{l ≤ 28} γ^l·c_l + γ^29·Z,
+  and every parts[k] of prepared_claim gains the term γ^29·v_{Z,k}.
+  Change (verifier).  Leaf parse/hash +32 bytes per child; four_dots adds
+  γ^29·Z(child); prepared_claim's six dot products run over 30 lanes; the
+  transcript absorbs 7 more E values (or 6 if Z is excluded from kind 0).
+  Nothing else: FRI degree bound (1,024), folds, final length 64, 22 queries,
+  the 48 relations, unchanged.
+  Why B-open disappears (PROVED here; uses only γ ≠ 0 and that every batched
+  observation of R1 — round0, round1, the folded-word values, final — is a
+  function of q_tot).  Let x be an own-silent tape (all lanes including Z:
+  opened = 0, v_{·,k} = 0).  Then q_tot(x) vanishes at X(Q) (each term is
+  γ^l·opened_l = 0) and ⟨q_tot(x), W_k⟩ = Σ_l γ^l·v_{l,k}(x) = 0 for every
+  kind k.  Let y be the tape with every sumcheck lane 0 and Z-part
+  γ^-29·q_tot(x).  Then y has no round contribution, own_l(y) = 0 for l ≤ 28,
+  opened_Z(y) = γ^-29·q_tot(x)|X = 0, v_{Z,k}(y) = γ^-29⟨q_tot(x), W_k⟩ = 0,
+  inactiveSum and maskSum of y are 0, and q_tot(y) = q_tot(x), so
+  bat(y) = bat(x).  Hence bat(ker own ∩ ker R) = bat(ker own) for every
+  challenge and every query set; on R1 this replaces V_G = B₀ outright (Z
+  alone covers B₀, structurally).  Distributionally: given public data,
+  q_tot is uniform on {q : q|X(Q) = recomputed values, ⟨q, W_k⟩ = parts[k]},
+  so the whole FRI part is simulated from public data — the standard
+  "random full-degree polynomial in the FRI batch" argument.  E-valued (not
+  QM31) is required: γ^29·K₄^1024 is not an E-subspace; two QM31 lanes at
+  γ^29, γ^30 are equivalent off γ ∈ K₄ (row privacy_gamma_in_subfield_event_only,
+  2^-124).
+  What it also removes.  BCond_R1 / Gb_R1, the Dprime apparatus (DHighChar,
+  GCover, TP_D, G1–G3, Ga/Gb, GoodWrap, lowShadow, etaRel, C_ll) and J7′/J7a,
+  and the dual-pad batched correction of PRIVACY-RANK-PATH.md: Z :=
+  −γ^-29·Σ_c γ^c·r_c has zero opened values and zero v_{Z,k} for residuals r_c
+  with zero raw observations.  It does NOT remove OT-open (Z has no rounds).
+  Proof bytes.  +32 B × 4 children × 22 queries = +2,816 B, plus 7 × 32 B of
+  pairing values: +3,040 B (+2.5% of the 122,231-byte proof; staged, outside
+  the counted transactions).
+  Verifier CU (ESTIMATE).  Per query: leaf hash +128 B (+64–130 CU), parse of
+  4 more E values (+150–250 CU), four_dots +64 limb products per child
+  (≈ +10–20% of the dots work: +0.8–2.5k CU) → +1.0–2.9k CU/query, i.e.
+  +10–29k on tx1 (10 queries) and +12–35k on tx2 (12 queries).
+  prepared_claim: 6 more E×E products and the transcript absorbing 224 B:
+  +2–5k on tx1.  Total ≈ +24–69k CU, midpoint ≈ +45k (≈ +22k tx1, +23k tx2).
+  Soundness rows.  Z is one more lane committed before γ with its pairing
+  values fixed before γ and κ, so it is covered by the existing batching
+  rows with the lane count raised from 29 to 30 (gamma_joint_list_and_
+  functionals, 2^-199.7: no visible change).  Degree bounds,
+  query22_existing_envelope (2^-105.14), α_0/α_1, κ, ρ rows unchanged.
+  Lean.  Restate (mechanically): the mask tape type (MaskLayout/PayloadSplit:
+  MaskTape gains Z), the R1 view map (ownMap/batMap over the R1 view, which
+  the post-Z9 restatement of J1/J3 is doing anyway: Z adds 88 opened cells,
+  7 pairing cells and one batch term), D12's A and mem_silentMasks_iff (new
+  clauses), silent_mem_chain0 (Z contributes no round cell: a zero term).
+  New: bcond_of_zlane (the lemma above).  BCond_R1/hBc leaves the T2b-2b
+  theorem.  T2a, T2b-1, ZF-A content unchanged.
+
+§3.2  M2 — Libra-complete D with an evaluation reservoir (removes OT-open).
+  PROPOSED.
+  Change (prover).  D (lane 28) becomes a full Libra mask: its natural
+  coefficients 28·j + e (j = 0..9, e ≤ 27), i.e. coefficients 0..279, carry
+  univariate masks g_j of degree 27 for EVERY round, instead of rounds 8, 9
+  only (coefficients 0..55 today; weights.rs raw kind 4, libra index < 56).
+  Coefficients ≥ 280 stay uniform (the reservoir).  Mask-only lanes and G are
+  kept exactly as they are (their claims feed the state-only masked terminal,
+  r1_semantic.rs:124–131), but the privacy proof no longer uses them to cover
+  rounds.
+  Change (verifier).  The Libra weight family (kind 4, coefficient-indexed,
+  no transport: D18.3) extends from 56 to 280 coefficients: twofold_libra_weights runs over index < 280 (18 final
+  positions instead of 4), with power tables for all ten α_j.  The sumcheck
+  degree bound (27 per round) and the masked-terminal formula (extra[28] is
+  added as today) do not change.
+  Why OT-open disappears.  (Q′) needs, for every chain vector t with terminal
+  0, an own-silent tape whose rounds are t.  (a) Libra cover (STRUCTURAL; the
+  pureRound_libra/D_absorb pattern of DESIGN-T2b-2b §2.3.5 for all rounds):
+  cell (j, e) contributes 2^{9−j}·X^e at round j, α_j^e at later rounds and
+  constants below; triangularity gives every chain-consistent round vector
+  from D-low alone.  (b) Correction into ker own_D from the reservoir
+  R := channel coordinates d ∈ [128, 256) (natural indices 512..1023, disjoint
+  from the Libra block): R is round-free and extra-free; the 88 opened values
+  and 2 OOD values are bijective on R by (E1) (N′_{128+e} = N′_128·N′_e, NZ
+  for nodes, N′_128(t(z_i)) ≠ 0 and t(z_i) ∉ nodes for OOD); σ_D restricted to
+  R is the evaluation at t = 1 whenever R's rows are all copy-inactive
+  (T_{2^b}(1) = 1), otherwise a fixed functional.  What is left is that the
+  three eq-MLE claims of D stay independent of these ≤ 25 rank-one
+  evaluations on R — a (TRANS) instance with only m = 3 functionals, which
+  the (E3)/Kronecker certificate handles: if rank_K₄[H_{η1}J | H_{η2}J |
+  H_{η3}J] = 78 (Hankel rows a < 100, J = 26 columns, one channel), no
+  combination of the claims lies in the span of 25 evaluations, for every
+  query set.  This is ONE query-free determinant: Schwartz–Zippel in the
+  α-row with degree ≤ 75·10 = 750 gives failure mass ≤ 750/|K₄| ≈ 2^-114.4
+  (|K₄| = (2^31−1)^4) once one exact witness is computed with the real R1
+  transport.  R1 specifics: under π_R1 every claim weight is in product form
+  over the five coefficient digits (D18.1: eq(α, π_R1⁻¹ j) = ∏_d eq₂(α-pair
+  τ(d), digit_d(j))), so on the reservoir (fixed top digit) each claim is a
+  product tensor of the same shape as Z10's identity-transport model, with
+  the α coordinates permuted by τ; the inactive indicator is 0/1 and
+  digit-structured, so σ restricted to R is either an evaluation at t = 1
+  (all of R inactive) or a fourth functional, in which case the certificate
+  is the square 100 × 100 minor (m = 4, J = 25) — still within capacity.
+  Without a chord quotient the evaluation side is the plain codeword of D at
+  X(Q) and the OOD side is weight kinds 5–6; (E1) applies unchanged.  Z10 computes the certificate shape with the identity transport
+  (§A): full rank on every trial; its control (one claim replaced by a point
+  evaluation) drops to 53 as predicted.  So mask-only lanes and G can be set
+  to 0 in the silent tape, and OT_l for l ∈ {m0..m9, G} is not a premise.
+  What it also removes.  The round-cover part of Good₃ (Λ₄ = K₄ and the
+  three-of-α₀..α₃-outside-K₂ condition, ≈ 2^-121.4), PR6/PR7, OT-row, OT-ood
+  for mask lanes, RC/RC⁺ and the per-lane F5 bookkeeping.  Good (α ∉ {0, 1},
+  α₉ ≠ ½) and the circle-point conditions remain.  The ledger gains the
+  single certificate term (≈ 2^-114.4) and loses Good₃'s Λ term.
+  Variant M2* (fully structural, NOT recommended).  Exclude D from the three
+  point claims so that only evaluations act on R.  Because the opening uses
+  one common weight vector w for all γ-batched lanes (image_pairing pairs
+  every quotient with all seven claim kinds), this needs a lane-specific
+  weight, i.e. a second inner-product reduction: far more expensive than the
+  certificate it replaces.
+  Proof bytes.  0 (D is already a full 1,024-coefficient lane).
+  Verifier CU (ESTIMATE).  twofold_libra_weights grows from 56 to 280 E×K
+  products and 56 to 280 K powers: +224·(120–250) + 224·(60–100) ≈ +40–78k CU,
+  all in tx2 (finish_relation).  Midpoint ≈ +55k.  The worst stage2 margin is
+  31,539 CU, so M2 does not fit without a matching saving or rebalancing.
+  Soundness rows.  The sumcheck degree is unchanged (27 per round), so
+  semantic_conservative_max (2^-105.27) is unchanged.  D is committed before
+  every semantic challenge, so a Libra mask on all rounds is the standard
+  Libra soundness situation (prover-chosen g fixed before the challenges);
+  the terminal check's use of extra[28] is unchanged in form.  The κ pairing
+  row counts 7 functional kinds, unchanged.
+  Lean.  Restate: libraWeight's support (56 → 280) wherever it is defined and
+  used (R0Z/MaskLayout dWord/extraLinear, HonestView.extraLinear,
+  PureRounds.pureRound_libra and L_pure_libra_coeff, T2b-2a's Libra table of
+  T2b-2a″ item 2), the R0 soundness lemmas that use the Libra terminal on
+  k < 56, and Good₃ → Good in the final predicate.  New: libra_cover (all
+  rounds), reservoir_eval_bijective ((E1) + NZ), and the certificate lemma
+  (claims ∩ span(evaluations) = 0 from a nonzero determinant; the
+  determinant's non-vanishing enters as a named witness premise with its
+  Schwartz–Zippel mass, or is replaced by a symbolic argument if one is
+  found).  OT-open leaves the theorem; the J4–J6 per-lane OT work is not
+  needed.
+
+§3.3  M3 — enforce the premises by honest-prover rejection (removes both
+  premises from the privacy statement; verifier unchanged).  PROPOSED.
+  Change (prover only).  After deriving the challenges of an attempt, the
+  honest prover evaluates P(ch) := Good₃ ∧ OT ∧ BCond_R1 — and, for clause (ii′),
+  C1T-open/H1T-open and the opened part of C1Lift — (exact linear algebra
+  on public data: the challenges, the query set, the transport) and, if it
+  fails, discards the attempt and starts a fresh one with new masks, salts
+  and attempt secrets (the StateOnlyAttemptSecrets / durable nonce
+  reservation path already exists, PRIVACY-RANK-PATH.md "Optional honest-
+  prover rank rejection").  Nothing about an aborted attempt is published.
+  Why this is enough.  P depends only on ch; in the ROM, ch of a fresh
+  attempt is uniform and independent of the commitments, so acceptance is
+  independent of the witness and of the masks.  Accepted transcripts have
+  ch ~ Uniform | P and view | ch witness-independent by the already-planned
+  HVZK_on P; the simulator rejection-samples ch | P from public data and
+  programs the oracle.  The privacy error then contains no badMass(P) term
+  at all — not for the transversality premises and not for Good₃ either —
+  only the abort-aware oracle-programming terms (expected attempts ×
+  hit probability of an aborted attempt's hidden oracle points).
+  Costs.  Verifier CU 0, proof bytes 0, soundness rows unchanged (the
+  verifier does not know about P).  Prover: one P check per attempt, of
+  Z8c/Z8e size (≈ 12 lane rank tests of ~500×1,024 F and 4·(~800×1,024) K₄
+  dimensions plus the 1,912-dimensional batched check; the Z8c jobs ran in
+  ≈ 314 MB, the R1 rank gate in ≈ 16.5 s including compilation): seconds per
+  attempt on a desktop; expected attempts 1/(1 − Pr[¬P]), numerically 1.
+  Completeness/liveness only depends on Pr[¬P] being small, which needs no
+  proof for privacy (a cap on attempts with an explicit failure exit is
+  enough; Z8c/Z8e/Z10 have never seen a failure).
+  What it does NOT give.  It does not make the premises true for transcripts
+  produced by any other prover (irrelevant for ZK, which is about the honest
+  prover), and it moves work into ZF1: the FS composition must be stated for
+  a prover with aborts (FSExperiments with a retry loop, fresh coins per
+  attempt, the simulator's conditional sampler), cf. the eprint 2023/245
+  warning recorded in PRIVACY-RANK-PATH.md.  It adds a refinement obligation:
+  the Rust check must decide exactly the Lean predicate P on the exact R1
+  payload (the Z9 model), and the honest prover's correctness now includes
+  "never publishes a transcript with ¬P".
+  Lean.  Proved theorems unchanged: T2a's chain is already stated "on P";
+  T2b-2b keeps hBc and the OT premises as hypotheses (the current J9 shape);
+  the only new statement is the abort-aware ZK_FS (ZF1 scope, open anyway),
+  whose error term drops badMass P.
+
+§3.4  D24.4 (π_R1 and the opened part of C1Lift) in the same comparison.
+  D24.4 says that under π_R1 the eligible semantic coefficients of each
+  column form the top block of quarter indices i ∈ [208, 256) (classes
+  s = 0, 1 exactly that block of 48; classes 2, 3 a subset of it plus sparse
+  i ≡ 3 mod 4), so the R0 Vandermonde argument (opened_prefix) does not
+  transfer, and names Variant D (D13 transport) or a digit-map search (J11b).
+  Observation (STRUCTURAL by (E1); not in the (ii′) design, to be checked by
+  the lead against the registry): the top block contains the dyadically
+  aligned sub-block i ∈ [224, 246).  Since 224 = 2^5 + 2^6 + 2^7 and every
+  e < 32 has bits only in 0..4, N_{224+e} = N_224·N_e for e < 22, so on that
+  sub-block the 22-node system is diag(N_224(X_u))·Vandermonde(N_0..N_21) —
+  invertible for EVERY set of 22 distinct nodes once N_224(X_u) =
+  T_32·T_64·T_128(X_u) ≠ 0, which is the (NZ) circle-order fact already
+  recorded as a J7a/J10 obligation (X_u is the x-coordinate of a point of
+  order 2^20, and T_{2^k}(x(P)) = x(2^k P) = 0 only for 2^k P of order 4).
+  The (ii′) design's "N_192·g, g ∈ span{N_16..N_63}, non-Vandermonde"
+  analysis uses the whole block; a 22-element aligned sub-block suffices for
+  surjectivity onto the 88 opened values.  Hence:
+   - classes s = 0, 1: the opened part of C1Lift is STRUCTURAL on R1 as built
+     (no Variant D, no digit-map change), given NZ for k = 5, 6, 7;
+   - classes s = 2, 3: structural iff their eligible subset contains some
+     aligned block c + [0, 22) with c ≡ 0 (mod 32), c + 21 < 256, inside the
+     eligible rows — a finite check of the registry (minutes, no search over
+     4!⁵·120 maps); if not, the class needs a different aligned block
+     (c ≡ 0 mod 2^m for a block of size 2^m ≥ 22 fits only m = 5) or the
+     remaining-limbs premise C1T-open absorbs it.
+  Cost comparison if the observation fails for classes 2, 3:
+   - Variant D (D13 transport with two folds): restores opened_prefix
+     verbatim, but reintroduces the transport component of the verifier's
+     weight evaluation that D18 removed by construction (recorded as the
+     "3.5M transport component of R-E4's V2" in D18.1; even a 10× better
+     implementation is far beyond either transaction's margin). Not viable on
+     R1's budget.
+   - J11b digit-map search: product-form digit permutations keep D18.1's O(1)
+     dual folds, so verifier cost ≈ 0 if a map exists; cost is a probe and a
+     re-run of the Z9/Z5 gates.
+   - M3 (§3.3) also covers it: C1T-open and the opened part of C1Lift are
+     rank conditions on public data, so they join P and are enforced by
+     rejection at zero verifier cost.
+  None of M1/M2 helps here (they act on the mask lanes, not on the semantic
+  lanes' eligible noise).
+
+§4  Recommendation for D23.5 (and D24.4)
+---------------------------------------
+The binding constraint is the R1 compute budget, not the mathematics.  Both
+Route M changes that remove a premise inside the verifier cost tens of
+thousands of CU in transactions that are already within 31.5k (stage2, worst
+settlement) and 57k (stage1, which is 43k over the 1.3M target) of the cap.
+
+  option            removes             verifier CU (est.)    bytes     Lean impact                          residual
+  P  (prove)        —                    0                     0         research (J10)                       both premises, no bound; feasibility < 15%
+  M1 (Z lane)       B-open (V_G = B₀)   +24–69k (both tx)    +3,040    tape type + R1 view; BCond → lemma   none for (B)
+  M2 (Libra-all)    OT-open             +40–78k (tx2)          0        Libra 56→280 (masks + soundness)     one query-free determinant, ≈ 2^-114
+  M1+M2             both                 +64–147k              +3,040    both                                 the determinant only
+  M3 (reject)       both, and Good₃'s    0                     0         abort-aware ZK_FS (ZF1)              none in the ZK error; Rust check = Lean P
+                    mass, and C1T-open
+  D24.4, aligned    opened part of       0                     0         opened_prefix → opened_aligned       NZ for k = 5,6,7; registry check
+  sub-block (§3.4)  C1Lift, classes 0,1                                  (same proof, block 224..245)         for classes 2, 3
+  D24.4, Variant D  opened part of C1Lift  transport cost D18 removed (≫ margin)                             not viable
+  D24.4, J11b       opened part of C1Lift  ≈ 0 if a map exists   0      new transport Equiv                   probe + Z5/Z9 reruns
+
+Recommendation.
+  1. D23.5: adopt M3 (honest-prover rejection on the public predicate P),
+     and keep M1 as an optional hardening if ~25–70k CU of headroom appears.
+     - M3 is the only option that removes the transversality family from the
+       privacy statement without touching the verifier, the proof bytes or
+       any soundness row.  Every proved theorem (T2a, T2b-1, T2b-2a, ZF-A, J1,
+       J3, J5a) and the planned T2b-2b statement (premises as hypotheses of
+       P) stay as they are.  The price is paid where work is open anyway: ZF1
+       must be stated for a prover with aborts; the honest prover runs the
+       exact P check (seconds per attempt); and the Rust check must be shown
+       to decide the Lean P on the R1 payload of Z9.  The same mechanism also
+       drops Good₃'s mass and C1T-open/H1T-open from the privacy error.
+     - M1 is cheap in Lean and proves B-open away in a few lines (on R1 it
+       replaces "G alone covers B₀" by "Z alone covers B₀, structurally"); it is
+       the standard ZK-FRI mask.  It does nothing for OT-open, and its
+       +24–69k CU does not fit stage2's worst margin today.
+     - M2 removes OT-open and Good₃'s round-cover condition but costs
+       ≈ +55k CU in stage2 (31.5k left) and still leaves one numerical
+       certificate.
+     - Route P should not be the main line: the available tools have a hard
+       capacity limit (Kronecker ≤ 5 functionals against ~400–1,900 in the
+       premises; the R1 form V_G = B₀ is the largest), and the dimension
+       heuristic that explains the numerics is not a proof.  Z10 (§A) finds no
+       failure on random or structured query sets of an R1-sized model, which
+       supports M3's completeness assumption (Pr[¬P] ≈ 0) but bounds nothing.
+  2. D24.4: before choosing Variant D or J11b, check the aligned sub-block of
+     §3.4.  If classes 2 and 3 also contain an aligned 22-block of eligible
+     coefficients, the opened part of C1Lift is structural on R1 as built at
+     zero cost; if not, J11b (≈ 0 CU) or M3 cover it.  Variant D is not
+     affordable on R1.
+Trade-off stated plainly.  M3 gives a privacy statement free of the
+transversality premises at zero on-chain cost, in exchange for a prover that
+may retry, an abort-aware Fiat–Shamir theorem, and the obligation that the
+deployed prover really runs the P check.  M1+M2 give a premise-free statement
+(up to one certified determinant) for any honest prover with no aborts, at
+roughly 65–145k CU and +3 KB that R1 does not currently have.  Proving the
+premises as they stand is unlikely to succeed.
+
+§A  Probe Z10: method and receipts (MEASURED; model, not the R1 payload)
+-----------------------------------------------------------------------
+Source: t2b2b/z10/main.rs (+ Cargo.toml, run-z10.sh, collect-z10.py);
+sha256 main.rs 23e3fdea…ffda, Cargo.toml c84575a0…ffda, run-z10.sh
+367f85e8…835a1d (runs/source-sha256.txt).  Exact M31/QM31 arithmetic, no
+dependencies.  Host nuc, one scope aspis-z10-transversality (MemoryHigh 3G,
+MemoryMax 4G, MemorySwapMax 0, TasksMax 64), optimized build; launched after
+the gate showed no other user scope (it waited for aspis-z9-full-07af16227
+and c-source25 to finish).  34 jobs, all exit 0; scope wall 18:47.0, scope
+max RSS 153,232 KiB, per-job max RSS ≤ 17,520 KiB, swaps 0
+(runs/evidence-Z10.json, runs/*.time, runs/exits.txt, runs/scope-time.txt).
+
+Model (one lane, R1-sized).  1,024 rows = natural coefficients through a
+transport π (id, or a uniformly random permutation "rand"); QM31 α-row;
+V = ten sumcheck rounds (factor (w_j X + β)^e, w_j = 3 + 22j; e = 26 means
+the G-factor 1 + Y^26 with w_j = 275 + 150j, on an F-valued word) + eq-MLE
+claims at α, a random point and xor12(α) + Libra (k < 56, α_8/α_9 powers) +
+OOD at two random QM31 circle points + σ on 810 rows; e = 0 is the D-shape
+(rounds = coefficient functionals k < 56).  E = the 88 evaluations at the
+four children of 22 distinct fibres of the 2^20-point canonic coset (natural
+basis y^{m&1}·∏ T_{2^b}(x)).  FAIL ⇔ rank(V + E) < rank V + 88.  Model
+check: e = 21 gives rounds+claims rank 392 = Z8c rank R_{m9} 388 + 12 − 8.
+Query structures: uniform (1,000 sets per job), coset (22 fibres in an
+arithmetic progression of stride 2^14 in the coset exponent, 150 sets),
+consecutive (150 sets).
+
+Results.
+  shape        rank V   margin n−r−88   jobs (π × structure)   query sets   failures
+  e = 21        405        531           6                      2,600         0
+  e = 7         209        727           6                      2,600         0
+  e = 1          85        851           6                      2,600         0
+  G-factor 26   461        475           6                      2,600         0
+  D-shape        77        859           6                      2,600         0
+  total                                   30                     13,000        0  (min independent = 88 everywhere)
+Sensitivity controls (e = 21, π = id, generic padding added to V):
+  margin 0  (rank V 936): 100 sets, 0 failures (a generic square system);
+  margin −1 (rank V 937): 20 sets, 20 failures, min independent 87 — the
+  detector fires exactly when a dependency is forced.
+Kronecker certificate shape for M2 (§3.2; identity transport, three claims
+on one channel of the reservoir block N′_128·P_{<128}, Hankel rows a < 100,
+J = 26): 200 random α-rows, rank 78 of 78 in all 200; control (one claim
+replaced by a point evaluation, Hankel rank 1): 20/20 at 26·2 + 1 = 53, as
+predicted.
+Reading.  No failure of the (TRANS) shape on 13,000 query sets, including
+coset-structured and consecutive fibres, for every lane shape and both
+transports.  This is consistent with the dimension heuristic of §2.2 and
+with Z8c/Z8e/Z9.  It is evidence that Pr[¬P] is negligible (what M3's
+completeness needs), not a bound (what Route P needs): 13,000 clean trials
+only say that the failure rate is below about 2.3·10^-4 at 95% confidence.
+Limits: one lane at a time; F-valued words for the G-factor shape (G is
+K₄-valued in R1); a random second claim point instead of successor(α); a
+random transport instead of π_R1; not the R1 payload.  The certificate run
+gives the shape only; the release witness needs π_R1, the real claim points
+and σ's restriction (§3.2).

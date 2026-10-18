@@ -1,0 +1,160 @@
+Z9 -- the Z8c gate and the D23 decomposition on the R1 payload
+==============================================================
+
+Branch codex/r0-z9-r1-payload-20261017, base 524e1debb. Exact
+M31/QM31/WideExact computation. This is not a Lean proof, and no Lean or
+production source was changed. The payload is fixed in R1-PAYLOAD-MAP.txt.
+The probe is z4/z9.rs (dispatched by `--z9` in z4/probe.rs) and the runner is
+z4/run-z9.py. Receipts are under z9/runs/.
+
+0. Expectations registered before any measurement
+-------------------------------------------------
+E1 Chain target. The semantic layer (rows 0..26, 10 rounds of K4[X]<=27,
+   terminal, masks, balancing) is the same in R1 and R0 (map sections 3-5). The
+   K4-valued chain target is therefore the same space: dim_F Chain0_4 =
+   4 * 269 = 1,076, and the initial-retained image has dimension 1,080. The
+   silent image lies in Chain0_4 (T2b-2a does not depend on the payload), so
+   the silent rank is at most 1,076.
+E2 Silent rank. Expected 1,076 on A and J, 1,038 on B and 1,068 on I. These
+   deficits come from Lambda_7 lying in a proper subfield, which is a fact
+   about the semantic layer. Equality needs the R1 analogue of BCond (E4). The
+   R1 silence has fewer batched conditions than R0 (1,336 limbs against
+   2,112), but the coordinates are different functionals: the folded-word
+   values have no R0 counterpart. Containment in R0's span is therefore not an
+   argument.
+E3 B0. The annihilator of bat(ker own) is spanned by the 48 R1 verifier
+   relations: ia, S2a, S2b, S1, 22 C_u and 22 L_u (map section 6). That is
+   384 limbs, so dim B0 = 1,336 - 384 = 952 when the 22 folded fibres u/4
+   are distinct.
+E4 BCond (R1). bat(ker own ∩ ker R) = bat(ker own) = 952.
+E5 (i'), (ii'). 25/25 on A and J. On B and I, (i') 0/25 and (ii') 25/25, as in Z8/Z8c.
+E6 D23 on R1. R1 has no chord quotient, so the low shadow has no analogue.
+   D-high (D coefficients < 56 zero) gives q1_d = 0 for d < 14, and so
+   final_0..final_2 = 0 exactly (24 limbs), with final_3 free. The R0
+   conjugate relation (Fact 3) needs the whole once-folded message in the
+   view, but R1 discloses only 159 of q1's 256 E-functionals, so I expect no
+   etaRel in R1. Predicted: V_D = 952 - 24 = 928, V_G = 952, and
+   B0 = V_D + V_G.
+
+1. Preflight (structure A, vector 0, gamma limb set 0; runs/preflight-07af16227)
+--------------------------------------------------------------------------------
+Host nuc, scope aspis-z9-preflight-07af16227 (MemoryHigh 3G, MemoryMax 4G,
+MemorySwapMax 0, TasksMax 64). The launch was gated on no other user scope.
+Compile 60.1 s and probe 99.1 s, both exit 0. Peak child RSS 216,832 KiB
+(probe) and 547,232 KiB (compile), cgroup peak 1,123,610,624 B, swaps 0.
+212 source hashes are in evidence.json. The CHALLENGE line replays
+probe-C.log trial 0 byte for byte.
+Model checks passed:
+* D18 equals the inverse of Variant::S2 row.
+* The ACTIVE table equals the source mask.
+* The transported Libra tail passes the Z5 checks.
+* Weight kinds 1-3 equal eq(point, row(j)), kind 4 equals h_weight(j), and kinds 5-6 equal evalrow(j, z).
+* The folded-word closed form equals EncodingDomain::evaluate at all 88 positions.
+* The whole-column R1 pipeline equals the row-wise batched sum on all 167 coordinates.
+* On a full (not silent) view, S2a (with the kappa claim), S2b, S1 (by Weights::pair and by the double dual fold), 22 C_u and 22 L_u all hold.
+Results (exact):
+  silent 1,076 = E2; initial-retained 1,080; R(ker own) 1,080 (initial zero 1,076);
+  per round 108,112,...,112,108; Chain0 basis excess 0; (Q') Chain0 excess 0.
+  The 48 relations annihilate bat on all 16,542 own-kernel carries.
+  B0 = bat(ker own) = 952 = E3. The annihilator has dimension 384, explained 384, unexplained 0.
+  BCond(R1): bat(ker own ∩ ker R) = 952 = bat(ker own). Holds (E4).
+  V_D = 928 = E6. Its annihilator is 408 = the 48 relations + f0, f1, f2 (24 limbs).
+       Unexplained 0. f3 is free on V_D (rank 8).
+  V_G = 952 = B0. Its annihilator is exactly the 48 relations, so R1 has no etaRel.
+  V_D + V_G = 952 = B0 (the assembly lies inside B0).
+  PCS block (D coefficients >= 56, unbalanced, onto [batched | D own]): rank 1,304 of
+  1,336 + 376 = 1,712. bat on ker own_D is 932, with 4 limbs from .inactiveSum (the K4-line).
+Per-lane own ranks: 112 for each mask-only lane, 376 for G and for D. The per-lane round
+images of the own kernels are 60, 108, 148, 184, 216, 248, 308, 332, 356, 380, G 652, D 216,
+identical to Z8c's A column.
+
+2. Full run (structures A, B, I, J x vectors 0-4 x gamma limb sets 0, 1; runs/full-07af16227)
+-------------------------------------------------------------------------------------------
+Source revision 07af16227. Host nuc, scope aspis-z9-full-07af16227
+(MemoryHigh 3G, MemoryMax 4G, MemorySwapMax 0, TasksMax 64), 5 concurrent
+jobs. The launch was gated on no other user scope: one attempt was refused
+by the gate while c-prefix-serializer-repair was active, and the run started
+once the host was free. Scope wall time is 29:58.6. There are 41 receipts
+(compile + 40 probes), all exit 0. Probe wall times range from 188.1 s to
+249.0 s. Peak child RSS is 225,940 KiB, the cgroup memory peak is
+1,126,293,504 B, and cgroup swap peak and swaps are both 0. All 40 CHALLENGE
+lines replay probe-C.log. After removing labels and timings, every job's
+output is identical across the 5 vectors and across the two gamma limb sets
+within its structure.
+
+ struct Good3 | silent | init.ret | R(ker own) | B0  | B0 on ker R | BCond | V_D | V_G | V_D+V_G | PCS block   | (i')  | (ii') | chain0 exc
+ A      yes   | 1,076  | 1,080    | 1,080      | 952 | 952         | holds | 928 | 952 | 952     | 1,304/1,712 | 25/25 | 25/25 | 0
+ B      no    | 1,038  | 1,042    | 1,042      | 952 | 952         | holds | 928 | 952 | 952     | 1,304/1,712 |  0/25 | 25/25 | 38
+ I      no    | 1,068  | 1,072    | 1,072      | 952 | 952         | holds | 928 | 952 | 952     | 1,304/1,712 |  0/25 | 25/25 | 8
+ J      no    | 1,076  | 1,080    | 1,080      | 952 | 952         | holds | 928 | 952 | 952     | 1,304/1,712 | 25/25 | 25/25 | 0
+ (i') and (ii') are counted over 5 vectors x 5 witness pairs, for each gamma limb set separately.
+
+Per-round silent ranks are 108, then 112 eight times, then 108 for A and J.
+Round 7 is 93 for B and 108 for I. The B excess support starts at (7,14,2)
+and the I excess pivots are (7,24..27,{2,3}). The (i') excess pivots for B
+are (7,14,2) (7,15,2) (7,16,2) (7,16,3) (7,17,2), and for I they are
+(7,24,2) (7,24,3) (7,25,2) (7,25,3) (7,26,2). These are exactly Z8/Z8c. In
+(ii') every batched coordinate of the witness difference is matched
+(0 unmatched in all 40 jobs).
+Annihilator accounting, the same in every job:
+  bat(ker own) = B0:  annihilator 384 = ia + S2a + S2b + S1 + 22 C_u + 22 L_u, unexplained 0
+  V_D:                annihilator 408 = the 48 relations + f0, f1, f2 (24 limbs), unexplained 0
+  V_G:                annihilator 384 = the 48 relations, unexplained 0 (f0..f3 do not hold)
+
+3. Answers
+----------
+Q1 (gate, true R1 PCS). MEASURED. The silent rank of the K4 chain target is
+   1,076 = dim_F Chain0_4 on A and J, and the silent image is all of
+   Chain0_4 (excess 0). (i') and (ii') pass 25/25 for each gamma. On B and I
+   the numbers are the R0 deficits exactly. Every expectation E1-E5 held, and
+   no number deviates.
+Q2 (Q') + (B) reduction and the R1 BCond. MEASURED.
+   (Q'): R(ker own) with initial zero is 1,076, and Chain0_4 is inside it on A and J.
+   The annihilator of bat(ker own) is exactly the 48 R1 verifier relations
+   (384 limbs), so B0 = 1,336 - 384 = 952.
+   BCond(R1): bat(ker own ∩ ker R) = bat(ker own) = 952 on every job
+   (including B and I, where the deficit is entirely in Q').
+   The reduction therefore transfers with the R1 relation set
+   {ia, S2a, S2b, S1, C_u, L_u} in place of {ia, S1, S2, S3_u}.
+   As in R0, this is evidence on 40 jobs (5 challenge vectors x 2 gammas x 4
+   structures). It is not a mass bound over the query draw: B-open and
+   OT-open stay premises for R1.
+Q3 (D23 on R1). MEASURED.
+   * The low shadow (Psi_lo) has no R1 analogue. Its R1 replacement is the exact
+     law f0 = f1 = f2 = 0 on D-high: with no chord quotient, D's natural
+     coefficients < 56 feed only q1_0..13 and so only final_0..2. final_3 is
+     free on V_D (rank 8).
+   * etaRel has no R1 analogue. V_G = B0 = 952, and its annihilator is
+     exactly the 48 relations. The R0 conjugate relation needs the whole
+     once-folded message in the view; R1 discloses q1 only through round1,
+     88 folded values and 64 final values.
+   * V_D = B0 ∩ {f0 = f1 = f2 = 0} = 952 - 24 = 928 (measured equality).
+     V_G = B0. B0 = V_D + V_G, which is trivial for R1 because V_G alone is B0.
+   * PCS block (the Z8b analogue): rank 1,304 of 1,712 (batched 1,336 + D own 376),
+     and bat on ker own_D unbalanced is 932, of which 4 limbs are .inactiveSum
+     (the K4-line). It is not full rank, as in R0.
+   Consequence for the design. On R1 the GCover part of (B) is not needed in
+   its R0 form, because G's own-silent round kernel alone reaches B0. For R1,
+   BCond is equivalent to the single statement V_G = B0 (G-only); the D-high
+   absorber is not needed. This is measured, not proved.
+
+4. What changed from R0 (no paper-over)
+---------------------------------------
+* pi is D18. 46 of D's 56 tail rows are copy-active, against 0 under D13, and
+  row 0 is coefficient 0. None of the gate numbers changed.
+* There is no quotient. The batched space is 167 E (1,336 limbs) and the
+  relations are 48 E. B0 is 952, not 1,912. These are different numbers, not
+  a deficit.
+* The R0 objects Psi_lo, lowShadow, Wz, C_ll, the wrap set X and etaRel 27/28
+  do not exist on R1. Their measured replacements are f0..f2 (D-high only)
+  and nothing.
+* rho (row 32, QM31) enters no disclosed coordinate. It only rho-batches L_u
+  inside the verifier.
+
+5. Open
+-------
+* No proof. B-open and OT-open for R1 are premises with no mass bound, as D23.3 says for R0.
+* Only the 5 Z4c vectors and the two fixed checkpoint gamma limb sets were run.
+  kappa, alpha0 and alpha1 were uniform in WideExact (seed OPEN_SEED9), and gamma was not drawn uniformly.
+* Structures K, L and M, and per-lane OT_l/OT', were not rerun on R1.
+* The salted leaves and Merkle paths are outside the linear model, as in Z8.

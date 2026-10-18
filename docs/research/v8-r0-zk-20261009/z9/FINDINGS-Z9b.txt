@@ -1,0 +1,201 @@
+Z9b -- relR1 as written, C1Lift/H1Lift on their own, BCondG_R1 (R1 payload)
+==========================================================================
+
+Branch codex/r0-z9-r1-payload-20261017, rebased onto 384b7d195. Issued in
+LOG D30.6 lane D. The probe is z4/z9b.rs (a child module of z4/z9.rs, with
+`--z9b` in z4/probe.rs) and the runner is z4/run-z9b.py. Exact
+M31/QM31/WideExact computation. Not a Lean proof, and no Lean is run.
+Receipts are under z9/runs/.
+
+0. What is implemented (from the design and the Lean sources it names)
+---------------------------------------------------------------------
+relR1 (DESIGN-R1-PRIVACY-MODEL §2.4), written in the Z9 batched layout:
+  s2a   = round0 0 + round0 4
+  s2b   = round1 0 + round1 4 - quarter * sum_i alpha0^i round0 i
+  s1    = sum_i alpha1^i round1 i - sum_e w2 e * final e,
+          with w2 = RP.dualFold alpha1 (RP.dualFold alpha0 weightsR1)
+          (RoundPairing.lean:42: quarter * sum_t w(4d+t) alpha^((4-t)%4)),
+          weightsR1 = sum_k kappa^k ell_k(e_j) built from the R0 Lean-mirror
+          functions (opening::inactive, row_eq_weight(points_from_alphas),
+          h_weight, encoder::eval_message) at pi.symm j = row(j)
+  circ u = folded u                                             (22)
+  line u = lineFoldValue alpha1 (lineInverse (u/4)) (folded 4(u/4)+s)_s
+           - secondLinear(final)(u/4), with secondLinear(m)(v) =
+           sum_e m_e naturalLinePoly_e(storedLine16X v)
+           (V5ComponentCConcreteFoldLinearity.lean:110-120 pairFoldValue and
+           lineFoldValue, R1/RepeatedLift.lean:81, V5FriReleasedLineGeometry:64)
+           (one relation per distinct parent u/4)
+  plus ia = inactive.
+The design does not pin the lineInverse table. It says only "the public M31
+inverse table (x, y, z = 2x^2 - 1 of the stored line-18 fibre)". I check
+three readings, with x = storedFirstLineX18(4v), y = storedFirstLineX18(4v+3)
+and z = 2x^2 - 1:
+  R0 literal  (1/x, 1/y, 1/z)
+  R1          (1/(2x), -1/(2y), 1/(2z))
+  R2          (1/(2x), 1/(2y), 1/(2z))
+The probe also checks the Lean stored domains (storedFirstLineX18,
+storedLine16X, naturalLinePoly) against the Rust domains of the Z9 port, and
+weightsR1 against the Rust materialize.
+
+C1Lift_c (§3.3 and DESIGN-ii-prime §2.1). V_c is the eligible words of
+column c, balanced at 1023. W_c is the F-words with inactive sum 0. obs_c is
+the 112 own limbs: claims 12, extra 4, ood 8, opened 88. C1Lift_c holds
+exactly when rank obs(V_c) = rank obs(W_c). The probe reports it, and
+separately the opened rank on V_c (against W_c) and the rest rank (24
+limbs) on V_c ∩ ker opened. H1Lift is the same with P_26 = H1 padding words
+(inactive rows, balanced at 0, K4) and W_26 = K4 words with inactive sum 0,
+using 376 limbs (opened 352). These are independent of gamma, kappa, alpha0
+and alpha1.
+
+BCondG_R1 means B0R1 <= V_G. The probe tests it as: the reading's relations
+annihilate bat(ker own), and rank V_G = dim B0R1 on the read support. The
+fallback B0own <= V_G is tested as rank(V_G + bat(ker own)) = rank V_G.
+
+Runs (each job evaluates both gamma limb sets in one process):
+  actual:    structures A and J x vectors 0-4, the Z4c query set (10 jobs)
+  named:     A vector 0 x {0..21, spaced 8192 i, paired} (3 jobs)
+  random:    200 sets of 22 uniform distinct fibres, alternating A and J, vector k mod 5
+  z10-worst: 20 consecutive and 20 coset sets in Z10's canonic-coset index
+             (point GEN^(1024+2048 i), i0 uniform, step 1 or 2^14, deduplicated by
+             fibre), mapped to R1 fibres; alternating A and J
+  Total 253 jobs.
+
+1. Expectations (registered before any run)
+-------------------------------------------
+X1 Geometry. All mismatch counts are 0 (storedFirstLineX18 = Rust levels[0];
+   naturalLinePoly evaluation = Rust unit_eval; storedLine16X basis = Rust
+   accumulate). weightsR1 equals the Rust materialize.
+X2 lineInverse. The Rust line_fold equals lineFoldValue only under R1. R0
+   (literal) and R2 differ on every unit vector, which I derived by expanding
+   both forms. So relR1 "as written" annihilates bat(ker own) only once
+   lineInverse is fixed to R1. That is a precision finding about the design:
+   the table entries are inverses of 2x, -2y and 2z, not of x, y and z.
+X3 Annihilator, with reading R1. With P distinct parents (P = 22 for random
+   sets), ia + s2a + s2b + s1 + 22 circ + P line have F-rank 8(4 + 22 + P),
+   equal to the annihilator of bat(ker own), with unexplained 0. The
+   dimensions are dim bat(ker own) = dim B0R1 (read support) = 8(53 + 3P),
+   which is 952 at P = 22. Consecutive fibre sets have P < 22.
+X4 Formal note on B0R1. B0R1 := ker relR1 over all of R1Bat → K. relR1 does
+   not constrain the 262,144 - 4P unopened folded cells, while V_G is zero
+   on them. So BCondG_R1, typed literally, is false for every challenge. It
+   needs B0R1 ∩ {unopened folded cells = 0}, or circ-type relations for the
+   unopened cells. The numeric check is on the read support.
+X5 C1Lift. rank obs(W_c) = 112 for every c. rank obs(V_c) = 112 with opened 88
+   and rest 24, on actual and random sets. On consecutive and coset sets I
+   expect a pass too (Z5 measured 112 per column under D18 on {0..21}), but
+   this is the open part (D24.4) and I do not claim it in advance.
+X6 H1Lift. rank obs(P_26) = rank obs(W_26) = 376, with opened 352 and rest 24, everywhere.
+X7 BCondG_R1 (reading R1) and B0own <= V_G hold on every job, with
+   V_G = bat(ker own) = dim B0R1.
+
+2. Preflight (runs/z9b-preflight-4ecdc28f0)
+-------------------------------------------
+Host nuc. The gate allowed the launch: one Lean scope from another agent
+was active (c-selected-sigma, MemoryMax 8 GiB), no non-Lean probe was
+running, and the reservation sum including ours was 12 GiB of the 48 GiB
+limit. Scope MemoryHigh 3G, MemoryMax 4G, MemorySwapMax 0, TasksMax 64.
+Compile 61.1 s. The A/0/actual job took 50.5 s and A/0/consecutive0 took
+22.0 s, all exit 0. Peak child RSS was 135,828 KiB, the cgroup peak
+889,979,904 B, and swap 0.
+* Geometry: 0 mismatches. weightsR1 equals the Rust materialize.
+* lineInverse: Rust line_fold mismatches on the 88 unit evaluations per job are
+  R0 literal 88, R1 (1/(2x), -1/(2y), 1/(2z)) 0, R2 44.
+  Deviation from X2: R2 differs on 44 of 88 unit evaluations, not on all of
+  them. The sign of the y entry only affects the slots 2 and 3 inputs.
+* relR1 with R1, plus ia, annihilates bat(ker own) exactly (unexplained 0). The literal
+  reading R0 and R2 fail. Ranks follow X3 exactly:
+  - actual set, P = 22: annihilator 384, bat(ker own) 952;
+  - {0..21}, P = 6: annihilator 256, bat(ker own) 568 = 8(53 + 18).
+* C1Lift: all 16 lanes have 112/112, with opened 88 and rest 24, on both sets.
+  H1Lift: 376/376, with opened 352 and rest 24.
+* BCondG_R1 (R1 on the read support) and B0own <= V_G hold for both gammas
+  (V_G = 952 and 568 respectively).
+
+3. Full run (runs/z9b-full-4ecdc28f0, plus runs/z9b-rerun-f657deb79)
+--------------------------------------------------------------------
+Host nuc, scope aspis-z9b-full-4ecdc28f0 (MemoryHigh 3G, MemoryMax 4G,
+MemorySwapMax 0, TasksMax 64), 5 concurrent jobs. Gate OK: no other scope
+was active at launch, and the reservation sum was 4 GiB. Scope wall time
+1:02:09. There are 254 receipts: compile plus 253 jobs, with probe walls of
+1.6-100.4 s. Peak child RSS was 154,792 KiB, the cgroup peak 733,310,976 B,
+and swaps and swap peak 0. 212 source hashes were recorded.
+One job failed: A/3/actual, exit 101, "failed to spawn thread: Resource
+temporarily unavailable". This was the TasksMax 64 limit, hit when five
+concurrent jobs each opened 12 scoped threads. It was not memory. I did not
+raise the cap. I reran that one job at concurrency 1 (runner --only,
+revision f657deb79, which changes only the runner): scope
+aspis-z9b-rerun-f657deb79, gate OK, wall 1:57.8, probe 53.2 s, exit 0,
+cgroup peak 883,511,296 B, swap 0. Its results are used in place of the
+failed job.
+
+Results over all 253 jobs (506 job x gamma evaluations):
+ query sets        jobs  distinct parents P   dim bat(ker own) = V_G = B0R1
+ actual (Z4c)        10  22                   952
+ random             200  22                   952
+ z10 consecutive     20  22                   952
+ z10 coset           20   8                   616
+ {0..21}              1   6                   568
+ spaced 8192 i        1  22                   952
+ paired               1   6                   568
+* X1 holds in every job: the geometry mismatch counts are 0 and weightsR1 equals the Rust materialize.
+* X2: Rust line_fold mismatches per reading are [88, 0, 44] in every job.
+  Only lineInverse = (1/(2x), -1/(2y), 1/(2z)) reproduces the R1 verifier.
+* X3 holds in every evaluation. With R1, ia + relR1 annihilates bat(ker own)
+  exactly (unexplained 0), and the relation rank is 8(4 + 22 + P). The
+  literal reading and R2 fail.
+* X5 and X6 hold in every job. C1Lift_c holds for all 16 lanes, each with
+  rank_obs_V = rank_obs_W = 112, opened 88/88 and rest 24/24 on ker opened.
+  H1Lift holds with 376/376, opened 352/352 and rest 24/24. This includes
+  the Z10 consecutive and coset sets and {0..21}.
+* X7 holds in every evaluation:
+  - BCondG_R1 on the read support holds with R1 (false with R0 and R2,
+    which do not annihilate);
+  - B0own <= V_G holds;
+  - V_G lies inside bat(ker own), and V_G = bat(ker own) = dim B0R1;
+  - ia pivots are 0.
+
+4. Findings about the design (precise, for the R1-2/J4-R1 statements)
+--------------------------------------------------------------------
+F1 lineInverse (§2.4) is underspecified, and the literal reading is wrong.
+   For lineFoldValue alpha1 inv (V5ComponentCConcreteFoldLinearity
+   pairFoldValue form) to equal the Rust/R1 verifier line_fold, the table
+   must be
+     lineInverse v = (1/(2x), -1/(2y), 1/(2z)),
+   with x = storedFirstLineX18(4v), y = storedFirstLineX18(4v+3) and
+   z = 2x^2 - 1. Checked by expanding both forms, then exactly on every unit
+   vector at every queried parent, and as the only reading under which relR1
+   annihilates bat(ker own). The minus sign on the y entry is the same
+   convention as circleFoldLinear (inv2y, -inv2y, inv2x).
+F2 B0R1 is typed over all of R1Bat → K, but relR1 does not constrain the
+   262,144 - 4P unopened folded cells, while V_G (an image of batRead) is
+   zero on them. So `BCondG_R1 := B0R1 ≤ V_G` is false for every challenge as
+   written. One fix is
+     B0R1 := ker relR1 ⊓ {b | ∀ p, ¬ FoldedOpen ch p → b (.folded p) = 0}.
+   The other is a relation `.unopened p` that forces those cells to 0. With
+   the first fix, BCondG_R1 holds in all 506 evaluations.
+F3 Everything else in §2.4 is confirmed as written in the numeric
+   pre-check, so it is not a normalisation stop:
+   - s2a, s2b, s1 with RoundPairing's quarter conventions (the quarter
+     inside dualFold, so w1 and w2 need no explicit quarter);
+   - circ;
+   - secondLinear through storedLine16X;
+   - the folded cells through storedFirstLineX18;
+   - weightsR1 through the R0 Lean-mirror functions at pi.symm = row.
+F4 Duplicate parents. When two queries share u/4, `line u` gives the same
+   relation twice, so relR1 has rank 8(3 + 22 + P), not 8·47. Example: the
+   coset sets have P = 8. dim B0R1 = 8(53 + 3P). The P_R1 check is a rank
+   comparison, so this needs no change, but any count in the Lean statement
+   must not assume 47 independent relations.
+F5 C1Lift and H1Lift were measured on their own for the first time. On this
+   evidence (253 query-set jobs, A and J, both gammas, since the lifts do not
+   depend on gamma), the opened part is full even under D18. That was the
+   part D24.4 flagged as non-structural, and the result is evidence, not a
+   proof.
+
+5. Open
+-------
+Nothing is proved. The lifts and BCondG_R1 remain P_R1 conjuncts, checked
+numerically. The coset and consecutive sets come from Z10's canonic-coset
+index mapped to R1 fibres, which is my mapping (z10_fibre in z9b.rs), not a
+Z10 artifact. kappa, alpha0 and alpha1 are uniform from OPEN_SEED9, and gamma
+uses only the two fixed limb sets.

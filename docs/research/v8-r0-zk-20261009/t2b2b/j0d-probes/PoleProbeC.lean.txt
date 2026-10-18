@@ -1,0 +1,37 @@
+import R0Z.HonestValidity
+import R0Z.HvzkV
+
+/-! J0c (LOG D40.3): the LogUp pole mass of one attempt.  `¬ NoPole t λ χ`
+puts `χ` in `poleSet t λ`, at most 4·|active rows| ≤ 4096 values; under the
+named sampler premise `Sem1Uniform draw Q` (χ = sem 1 uniform on Q values
+given λ = sem 0; for R1, K₄ = QM31 and Q = p⁴) one attempt's pole mass is at
+most 4096 / Q.  No Lean lemma fixes the law of the FS challenge draw
+(FsGood.lean header: the alpha-row law "is not chosen here"; R0P MaskD2.lean
+`uniform_point_mass` is for an abstract uniform type), so the premise is a
+named hypothesis. -/
+set_option autoImplicit false
+noncomputable section
+
+namespace R1Z.PoleProbeC
+open R0P R0Z.JointView R0Z.FsStatement R0Z.Shift R0Z.FsGood R0Z.FsAbort R0Z.HvzkV
+attribute [local irreducible] copyLinks copyPatterns copyActiveRowMasks copyInactiveRows
+
+variable {K CommitHandle Aux : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+
+/-! ### The pole mass -/
+
+/-- The copy-active rows (kept opaque: never evaluated). -/
+@[irreducible] def activeRows : Finset (Fin 1024) :=
+  Finset.univ.filter (fun b : Fin 1024 => CopyActiveRow b)
+
+theorem mem_activeRows (b : Fin 1024) (hb : CopyActiveRow b) : b ∈ activeRows := by
+  unfold activeRows
+  exact Finset.mem_filter.2 ⟨Finset.mem_univ _, hb⟩
+
+theorem activeRows_card_le : activeRows.card ≤ 1024 := by
+  unfold activeRows
+  exact (Finset.card_filter_le _ _).trans (by rw [Finset.card_univ, Fintype.card_fin])
+
+
+end R1Z.PoleProbeC

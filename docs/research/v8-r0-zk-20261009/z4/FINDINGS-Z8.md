@@ -1,0 +1,190 @@
+# Z8 — WideExact-batching silent-rank gate (lead copy of the agent's FINDINGS-Z8.txt; D20″, accepted 2026-10-13)
+
+```text
+Z8 -- silent-rank gate with WideExact batching (LOG D20′.2, D20″ "Z8")
+====================================================================
+
+Base dd9e0c70a (origin/v8-reference). Branch codex/z8-wide-batching-20261013.
+Exact M31/QM31/WideExact computation; not a Lean proof; no Lean or production
+source changed. Lead converts this text to .md.
+
+STOP: none. The opening-layer functionals were evaluated column-wise from the
+existing Rust (prover::quotient succeeded on all 1,024 coefficient units on
+every job). (A) under WideExact batching gives silent rank 1,076 on 5/5
+vectors; no deficit to report for (A).
+
+1. What is computed
+-------------------
+* Payload (R0Z/HonestView.lean:191–220, `linearPayload`). Silence = all
+  non-semantic coordinates zero:
+    per lane: .pointClaim j c (j = 0..2), .extraClaim c, .ood j c (j = 0,1),
+      .opened q s c on the 22 queried fibres -- exactly Z4c's raw_c rows
+      without Z4c's per-lane inactive entry (112 M31 per F-lane, 94 QM31 per
+      K4-lane);
+    batched, gamma = ch.opening 0 in WideExact:
+      .inactiveSum (1), .openingCoeff i (7), .finalCoeff d (256)
+      = 264 WideExact values = 2,112 M31 coordinates (8 canonical limbs each,
+      WideExact::to_limbs order).
+  No zero-batched-word proxy, no D-lift.
+* Batched functionals per source (lane c, row r, value x):
+    gamma^c * x * beta(r), beta(r) = ( [r inactive],
+      round_polynomial(Q e_{pi(r)}, totalWeights) [7],
+      fold_message(ch.opening 3, Q e_{pi(r)}) [256] ),
+  Q = aspis_core::r0::prover::quotient(basis, (z0, z1), e_k, (eval(e_k,z0),
+  eval(e_k,z1))) for each natural coefficient unit e_k (the per-lane chord
+  quotient with that lane's own OOD values), pi = D13 ROW_TO_COEFFICIENT.
+  totalWeights = chord::quotient_weights(line, weights) + tau*e1 + tau^2*e2
+  (FunctionalWeights::e1/e2), weights = indicator + kappa eq0 + kappa^2 eq1 +
+  kappa^3 eq2 + kappa^4 libraWeight (Lean `weights`; the Rust
+  OpeningData::weights has no kappa^4 libraWeight term, so it was added here),
+  kappa = ch.opening 1, tau = ch.opening 2.
+* Checks run in every job: (i) all 1,024 unit quotients succeed; (ii) Rust
+  row_eq_weight(points_from_alphas(alpha)) equals Z4c's eq(points(alpha)) at
+  every row for all three points; (iii) for random words on lanes 16 (F), 27
+  and 28 (K4), the whole-column Rust pipeline (quotient per lane, gamma-batched,
+  round_polynomial, fold_message, inactive sum) equals the sum of the per-row
+  batched vectors on all 264 coordinates.
+* Sources. Silent image: mask-only lanes 16..25 (F words, all 1,024 rows),
+  G = lane 27 and D = lane 28 (K4 words, all rows; D's round contribution is
+  Z4c's tail_row). Full conditioned image (ii'): additionally semantic lanes
+  0..15 (F, eligible rows, balanced against row 1023 on inactive rows) and H1
+  = lane 26 (K4, inactive rows, balanced against row 0), as in Z4c.
+  Elimination: each lane on its own per-lane coordinates first (carrying
+  [batched 2,112 | round 1,084]); kernel carries go into one Ech over 3,196
+  M31 coordinates with batched coordinates first. The silent image = rows with
+  pivot in the round part, minus initial-sum pivots.
+* Challenges. Z4c vectors 0..4 replayed exactly (all 20 CHALLENGE lines
+  byte-identical to probe-C.log; (A)'s 25 terminal triples equal Z4c's).
+  Circle points are Z4c's QM31 points embedded in WideExact (as the R0
+  transcript's z0/z1 are). ch.opening 0..3 uniform in WideExact (8 uniform
+  M31 limbs each; gamma resampled at 0), seed 0x5a380be020261013 per vector,
+  shared by all structures of a vector. Structures:
+    A  Z4c alpha (uniform QM31);  B  all alpha_i in F \ {0,1};
+    I  all alpha_i in K2 = F(i) \ {0,1};
+    J  alpha_0 Z4c (uniform QM31), alpha_1..6 in F \ {0,1}, alpha_7..9 Z4c;
+  all with alpha_9 != 1/2 (checked).
+* Targets: chain0_basis (1,080 normalized units spanning the 1,076-dim
+  {initial 0, terminal 0} space); Z4c's honest i' and derivative targets
+  (round-only) against the silent image; ii' = the witness difference's full
+  payload (per-lane coordinates of lanes 0..15 and 26, and its WideExact
+  batched coordinates over those lanes) together with its normalized round
+  target, tested against the full conditioned span.
+
+2. Totals (identical on all 5 vectors in every structure)
+---------------------------------------------------------
+ struct | silent | initial retained | span (3,196 coords) | batched pivots | full conditioned | i' pass | ii' pass
+ -------+--------+------------------+---------------------+----------------+------------------+---------+---------
+   A    | 1,076  | 1,080            | 3,000               | 1,920          | 1,080            | 25/25   | 25/25
+   B    | 1,038  | 1,042            | 2,962               | 1,920          | 1,080            |  0/25   | 25/25
+   I    | 1,068  | 1,072            | 2,992               | 1,920          | 1,080            |  0/25   | 25/25
+   J    | 1,076  | 1,080            | 3,000               | 1,920          | 1,080            | 25/25   | 25/25
+ The derivative diagnostic has the same pass counts and supports as i'.
+ In (ii') every pair's batched coordinates were matched (0 unmatched of
+ 2,112, all 100 pairs).
+ The batched coordinates contribute 1,920 independent M31 conditions on the
+ mask/G/D sources in every job (of 2,112).
+
+3. Per-round F-ranks of the silent image (max 108 at rounds 0 and 9, 112 else)
+-------------------------------------------------------------------------------
+ round j     0    1    2    3    4    5    6    7    8    9
+   A       108  112  112  112  112  112  112  112  112  108
+   B       108  112  112  112  112  112  112   93  112  108
+   I       108  112  112  112  112  112  112  108  112  108
+   J       108  112  112  112  112  112  112  112  112  108
+ Per-limb (limbs 1, i, u, iu; out of 28; 27 at rounds 0 and 9 in all):
+   B round 7: 24, 26, 21, 22.   I round 7: 28, 28, 28, 28 (loss is joint only).
+   All other rounds: 28 each.
+ Initial-retained per round equals the silent row except round 0 = 112.
+
+4. Excess supports (all 5 vectors identical)
+--------------------------------------------
+ A, J: chain0_basis, i', derivative, ii' excess 0; supports [].
+ B: chain0_basis excess 38 (354 of 1,080 units outside); i' and derivative
+    5/5 fail, excess 5, pivots (7,14,2) (7,15,2) (7,16,2) (7,16,3) (7,17,2).
+    Reduced support (all three, 42 coordinates):
+      (7,14,2) (7,15,2); (7,16..19,{2,3}); (7,20..23,{0,2,3});
+      (7,24..27,{0,1,2,3}); (9,27,{0,1,2,3}).
+    chain0 excess pivots: the 38 round-7 coordinates of that list.
+ I: chain0_basis excess 8 (36 of 1,080 units outside); i' and derivative
+    5/5 fail, excess 5, pivots (7,24,2) (7,24,3) (7,25,2) (7,25,3) (7,26,2).
+    Reduced support (all three, 10 coordinates):
+      (7,24..27,{2,3}); (9,27,{2,3}).
+    chain0 excess pivots: (7,24..27,{2,3}).
+ ii': all structures 25/25, excess 0.
+
+5. Lambda_j = span_F{eqPrefix(alpha, l) : l in {0,1}^j} dimensions
+-----------------------------------------------------------------
+ j     0  1  2  3  4  5  6  7  8  9
+ A     1  2  4  4  4  4  4  4  4  4
+ B     1  1  1  1  1  1  1  1  1  1
+ I     1  2  2  2  2  2  2  2  2  2
+ J     1  2  2  2  2  2  2  2  4  4
+ (In J, Lambda_1..7 = span_F{1, alpha_0} is 2-dimensional.)
+
+6. Comparison with Z7 (QM31 gamma = 7, D-lift construction)
+-----------------------------------------------------------
+ (A) and (B) give the same silent ranks, per-round and per-limb ranks,
+ supports and pivots as Z7's (A) and (B) on the same 5 vectors.
+
+7. Interpretation (factual)
+---------------------------
+* With the proved protocol's payload (WideExact gamma/kappa/tau/fold
+  challenges, actual linearPayload coordinates, D as an ordinary lane), the
+  constructed silent image reaches the 1,076 upper bound for (A) and (J), and
+  Z4c's i' and ii' targets are contained, on all 5 vectors.
+* Rank is lost only at round 7, and only where Lambda_7 lies in a proper
+  subfield: (B) Lambda_7 = F (93/112), (I) Lambda_7 = K2 (108/112; the
+  missing directions are in limbs u, iu at degrees 24-27). (J), with
+  Lambda_1..7 of dimension 2 but not a subfield (span_F{1, alpha_0} with
+  alpha_0 uniform in QM31), loses nothing.
+* (ii') passes in every structure; the full conditioned image is 1,080 in all.
+
+8. Code
+-------
+z8.rs is a module of probe.rs dispatched by `--z8` (probe.rs changes: the
+`mod z8` declaration and one dispatch line). Called unchanged from probe.rs:
+Ech (insert, residual), summarize, pass_count, raw_c, tail_row, round_row,
+eq, points, h_weight, compute_targets, normalized, normalize_d, final_value,
+balance_trace, real::instances, eligible, inactive. From aspis-core (no
+change): r0::prover::{quotient, round_polynomial}, r0::chord::{quotient_weights,
+Secant, FunctionalWeights::{e1, e2}}, r0::fold::fold_message,
+r0::opening::{points_from_alphas, row_eq_weight, eq_weight, indicator, powers},
+r0::encoder::eval_message, r0::transport, field::WideExact. Copied: z7's
+trial replay, alpha helpers, round_polys and Proj. New: lane_stage (a
+lane_eliminate variant carrying 3,196 M31 coordinates; lane_eliminate's
+carry length is fixed at 271 QM31), the beta table, and the ii' payload target.
+
+9. Runs and receipts
+--------------------
+Host dombarker@100.108.41.90, staging /home/dombarker/project-offloads/aspis-z8-20261013/
+(repo/ = rsync of Cargo.toml, crates/aspis-{core,statement,prover}, z4/).
+No other aspis scope active at launch; reserved MemoryMax 4 GiB.
+Release profile opt-level=3, overflow-checks; rustc 1.94.1 (e408947bf 2026-03-25).
+
+  cd /home/dombarker/project-offloads/aspis-z8-20261013/repo
+  /usr/bin/time -v -o ../preflight-time.txt systemd-run --user --scope --unit=aspis-z8-preflight \
+    -p MemoryHigh=3G -p MemoryMax=4G -p MemorySwapMax=0 \
+    python3 docs/research/v8-r0-zk-20261009/z4/run-z8.py \
+    --out /home/dombarker/project-offloads/aspis-z8-20261013/preflight-evidence --preflight
+  /usr/bin/time -v -o ../full-time.txt systemd-run --user --scope --unit=aspis-z8-full \
+    -p MemoryHigh=3G -p MemoryMax=4G -p MemorySwapMax=0 \
+    python3 docs/research/v8-r0-zk-20261009/z4/run-z8.py \
+    --out /home/dombarker/project-offloads/aspis-z8-20261013/full-evidence --vectors 5 --jobs 8
+
+ scope / target           exit  wall s          peak child RSS KiB   cgroup peak B    swap
+ preflight / compile      0     50.943          545,628              888,578,048      0
+ preflight / A-0 (silent rank, ranks, chain0; no targets)
+                          0     165.020         94,880               888,578,048      0
+ full / compile           0     0.069           29,204               25,874,432       0
+ full / 20 jobs           0     353.7 - 572.6   143,736 - 145,732    1,145,790,464    0
+ full scope total         0     1,301.580 (driver), 21:41.68 (time -v), max RSS 145,732 KiB, swaps 0
+
+21 per-process receipts in the full scope, all exit 0 and swap 0 (evidence-Z8.json).
+Up to 8 jobs ran concurrently in one scope. 207 source SHA-256s recorded; all
+match this worktree. Local work: `cargo check` only. No Lean run; #print
+axioms not applicable.
+
+Artifacts: z8.rs, run-z8.py, summary-Z8.json, evidence-Z8.json, probe-Z8.log
+(20 job logs concatenated), z8-runs/ (driver log, compile logs, time -v
+outputs, preflight log).
+```

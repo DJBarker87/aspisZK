@@ -2884,8 +2884,31 @@ fn z4c_main() {
 mod z5;
 #[path = "z6.rs"]
 mod z6;
+#[path = "z7.rs"]
+mod z7;
+#[path = "z8.rs"]
+mod z8;
+#[path = "z8b.rs"]
+mod z8b;
+#[path = "z8c.rs"]
+mod z8c;
+#[path = "z8d.rs"]
+mod z8d;
+#[path = "z8e.rs"]
+mod z8e;
+#[path = "z9.rs"]
+mod z9;
 fn main() {
-    if std::env::args().any(|x| x == "--z6") { z6::main(); }
+    if std::env::args().any(|x| x == "--r1p") { z9::z9b::main_r1p(); }
+    else if std::env::args().any(|x| x == "--z9b") { z9::z9b::main(); }
+    else if std::env::args().any(|x| x == "--z9") { z9::main(); }
+    else if std::env::args().any(|x| x == "--z8e") { z8e::main(); }
+    else if std::env::args().any(|x| x == "--z8d") { z8d::main(); }
+    else if std::env::args().any(|x| x == "--z8c") { z8c::main(); }
+    else if std::env::args().any(|x| x == "--z8b") { z8b::main(); }
+    else if std::env::args().any(|x| x == "--z8") { z8::main(); }
+    else if std::env::args().any(|x| x == "--z7") { z7::main(); }
+    else if std::env::args().any(|x| x == "--z6") { z6::main(); }
     else if std::env::args().any(|x| x == "--z5-search") { z5::search(); }
     else if std::env::args().any(|x| x == "--z5-gate") { z5::gate(); }
     else { z4c_main(); }

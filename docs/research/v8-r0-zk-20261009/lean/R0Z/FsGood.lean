@@ -13,6 +13,7 @@ open R0P R0Z.JointView R0Z.FsStatement R0Z.Shift
 attribute [local instance] Classical.propDecidable
 variable {K CommitHandle Aux : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+  {Bat : Type} [HonestView.BatchedLayer K Bat]
 
 /-! ### Elementary facts about finite uniform means -/
 
@@ -50,17 +51,17 @@ theorem bit_le_one (b : Bool) : bit b ≤ 1 := by
 /-! ### The ledger term -/
 
 /-- The mass of bridge coins whose drawn challenge fails `P`. -/
-def badMass {Adv : Type} (P : Challenges K → Prop) (bridge : ROMBridge K CommitHandle Aux Adv)
+def badMass {Adv : Type} (P : Challenges K → Prop) (bridge : ROMBridge K CommitHandle Aux Bat Adv)
     (adv : Adv) (x : Statement K CommitHandle) : ℚ :=
   mean (fun coin => if P (bridge.draw adv x coin) then 0 else 1)
 
 /-- `middle_means_eq` on the good coins; a difference of at most one elsewhere. -/
 theorem middle_means_close (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
-    (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
+    (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary)
     (x : Statement K CommitHandle) (hx : InLanguage h x) (w : h.Instance)
-    (hw : h.public w = x.1) (P : Challenges K → Prop) (hh : HVZK_on P h B outputs x) :
+    (hw : h.public w = x.1) (P : Challenges K → Prop) (hh : HVZK_on (Bat := Bat) P h B outputs x) :
     |mean (middleReal h B outputs fs bridge adv x w) -
       mean (middleIdeal h B outputs fs bridge adv x hx)| ≤ badMass P bridge adv x := by
   rw [LawTransport.mean_product, LawTransport.mean_product, mean_sub]
@@ -86,15 +87,52 @@ theorem middle_means_close (h : HonestProver K) (B : PackBasis F)
     rw [abs_sub_le_iff]
     constructor <;> linarith
 
-/-- D17.2 item 9: statistical HVZK on `P` composed with a ROM reduction. -/
+/-- D20′.3: statistical HVZK on `P` composed using the specified bridge's bad mass. -/
+theorem zkfs_of_hvzk_on_bridge (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
+    [Fintype fs.RealRand] [Nonempty fs.RealRand]
+    [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
+    (x : Statement K CommitHandle) (P : Challenges K → Prop) (hh : HVZK_on (Bat := Bat) P h B outputs x)
+    (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (ε_real ε_ideal ε_bad : ℚ)
+    (hr : ROMReductionWith h B outputs fs bridge x ε_real ε_ideal)
+    (hmass : ∀ adv, badMass P bridge adv x ≤ ε_bad) :
+    ZK_FS h B outputs fs x (ε_real + ε_ideal + ε_bad) := by
+  intro hx adv w hw
+  obtain ⟨_, _, hb⟩ := hr
+  obtain ⟨hreal, hideal⟩ := hb hx adv w hw
+  have hmid := middle_means_close h B outputs fs bridge adv x hx w hw P hh
+  have hbad := hmass adv
+  have t1 := abs_sub_le (mean (realTest h B outputs fs adv x w))
+    (mean (middleReal h B outputs fs bridge adv x w)) (mean (idealTest h B outputs fs adv x hx))
+  have t2 := abs_sub_le (mean (middleReal h B outputs fs bridge adv x w))
+    (mean (middleIdeal h B outputs fs bridge adv x hx)) (mean (idealTest h B outputs fs adv x hx))
+  linarith
+
+/-- D20′.3: mask image on `Good` composed with the specified bridge's reduction and bad mass. -/
+theorem zkfs_of_maskImageOn_good_bridge [Fintype Bat] (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
+    [Fintype fs.RealRand] [Nonempty fs.RealRand]
+    [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
+    (x : Statement K CommitHandle)
+    (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (ε_real ε_ideal ε_bad : ℚ) :
+    MaskImageOn (Bat := Bat) Good h B x → ROMReductionWith h B outputs fs bridge x ε_real ε_ideal →
+    (∀ adv, badMass Good bridge adv x ≤ ε_bad) →
+    ZK_FS h B outputs fs x (ε_real + ε_ideal + ε_bad) :=
+  fun hm hr hmass => zkfs_of_hvzk_on_bridge h B outputs fs x Good
+    (hvzk_on_good h B outputs x hm) bridge ε_real ε_ideal ε_bad hr hmass
+
+/-- D17.2 item 9: statistical HVZK on `P` composed with a ROM reduction;
+superseded by the `_bridge` forms (D20′.3). -/
 theorem zkfs_of_hvzk_on (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
     [Fintype fs.RealRand] [Nonempty fs.RealRand]
     [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
     (x : Statement K CommitHandle) (P : Challenges K → Prop) (epsilon_fs epsilon_bad : ℚ)
-    (hh : HVZK_on P h B outputs x) (hr : ROMReduction h B outputs fs x epsilon_fs)
-    (hmass : ∀ (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary),
+    (hh : HVZK_on (Bat := Bat) P h B outputs x) (hr : ROMReduction h B outputs fs x epsilon_fs)
+    (hmass : ∀ (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary),
       badMass P bridge adv x ≤ epsilon_bad) :
     ZK_FS h B outputs fs x (epsilon_fs + epsilon_bad) := by
   intro hx adv w hw
@@ -109,15 +147,15 @@ theorem zkfs_of_hvzk_on (h : HonestProver K) (B : PackBasis F)
   linarith
 
 /-- The Lean form of "statistical HVZK with the 21/|K_α| term": perfect on `Good`
-plus one named ledger term. -/
-theorem zkfs_of_maskImageOn_good (h : HonestProver K) (B : PackBasis F)
+plus one named ledger term; superseded by the `_bridge` forms (D20′.3). -/
+theorem zkfs_of_maskImageOn_good [Fintype Bat] (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (fs : FSExperiments K CommitHandle Aux F)
+    (fs : FSExperiments K CommitHandle Aux Bat F)
     [Fintype fs.RealRand] [Nonempty fs.RealRand]
     [Fintype fs.IdealRand] [Nonempty fs.IdealRand]
     (x : Statement K CommitHandle) (epsilon_fs epsilon_bad : ℚ) :
-    MaskImageOn Good h B x → ROMReduction h B outputs fs x epsilon_fs →
-    (∀ (bridge : ROMBridge K CommitHandle Aux fs.Adversary) (adv : fs.Adversary),
+    MaskImageOn (Bat := Bat) Good h B x → ROMReduction h B outputs fs x epsilon_fs →
+    (∀ (bridge : ROMBridge K CommitHandle Aux Bat fs.Adversary) (adv : fs.Adversary),
       badMass Good bridge adv x ≤ epsilon_bad) →
     ZK_FS h B outputs fs x (epsilon_fs + epsilon_bad) :=
   fun hm hr hmass => zkfs_of_hvzk_on h B outputs fs x Good epsilon_fs epsilon_bad
@@ -125,6 +163,8 @@ theorem zkfs_of_maskImageOn_good (h : HonestProver K) (B : PackBasis F)
 
 #print badMass
 #print axioms middle_means_close
+#print axioms zkfs_of_hvzk_on_bridge
+#print axioms zkfs_of_maskImageOn_good_bridge
 #print axioms zkfs_of_hvzk_on
 #print axioms zkfs_of_maskImageOn_good
 end R0Z.FsGood

@@ -1,0 +1,114 @@
+{
+ "job": "J5a R0Z/HermiteSpan.lean (Mathlib only)",
+ "branch": "codex/r0-hermite-span-20261017",
+ "base": "524e1debb",
+ "host": "dombarker@100.108.41.90, /home/dombarker/project-offloads/aspis-fs-generic-20261006, run2.sh <A> R0Z/HermiteSpan 7000 7 (MemoryHigh 5G, MemoryMax 7G, MemorySwapMax 0)",
+ "toolchain": "leanprover/lean4:v4.32.0; Mathlib 81a5d257c8e410db227a6665ed08f64fea08e997",
+ "attempts": [
+  {
+   "attempt": 3460,
+   "module": "R0Z/HermiteSpan",
+   "sha256": "9d6485b424748636db9f3303f32aa2dfd2c8c452913f66774a3b5468d84f3091",
+   "exit": 1,
+   "wall": "0:10.14",
+   "peak_rss_kb": 6517476,
+   "swaps": 0,
+   "note": "missing open scoped Nat/Matrix, cast and instance errors"
+  },
+  {
+   "attempt": 3461,
+   "module": "R0Z/HermiteSpan",
+   "sha256": "c3198f85c46b3a0d64b7ba7ab5be75e1044ec6f653f60d7449d2484b3a395648",
+   "exit": 1,
+   "wall": "0:12.26",
+   "peak_rss_kb": 6562476,
+   "swaps": 0,
+   "note": "one error: Finset.range_subset changed meaning"
+  },
+  {
+   "attempt": 3462,
+   "module": "R0Z/HermiteSpan",
+   "sha256": "e9ff8cf7a01df254ebe1403df7fd835e9f436516a6949556fa85a345bb1332f7",
+   "exit": 0,
+   "wall": "0:12.06",
+   "peak_rss_kb": 6604012,
+   "swaps": 0,
+   "note": "green; committed source"
+  }
+ ],
+ "print_axioms_3462": [
+  "'R0Z.HermiteSpan.coeff_cover' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.coeff_cover_of_leadingCoeff_span' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.leading_coeff_cover' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.leading_coeff_cover_root' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.top_cover' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.le_finrank_of_top_cover' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.finrank_eq_min_of_sep' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.powers_top_cover' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.divided_difference_degree' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.powers_finrank' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.hermite_span_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.hermite_top_cover' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.hermite_span_dim' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.hermite_linearIndependent' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.gfactor_top_cover' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.gfactor_span_dim' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.gfactor_hermite_top_cover' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.gfactor_hermite_linearIndependent' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.divided_difference_degree_R0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.powers_finrank_R0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.hermite_span_dim_R0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.hermite_top_cover_R0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.gfactor_span_dim_R0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.gfactor_top_cover_R0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.gfactor_hermite_top_cover_R0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+  "'R0Z.HermiteSpan.gfactor_hermite_linearIndependent_R0' depends on axioms: [propext, Classical.choice, Quot.sound]"
+ ],
+ "forbidden_scan": "no sorry/admit/axiom/native_decide/maxHeartbeats/maxRecDepth in source",
+ "stop_P3b_unrestricted": {
+  "claim": "DESIGN-T2b-2b §2.3.2 P3: dim span{Phi(L_i), X Phi(L_i)} = min(2n, 28) for Phi = 1+Y^26",
+  "status": "false in the stated generality (distinct beta, w != 0, factorials nonzero)",
+  "counterexamples": [
+   {
+    "m": 2,
+    "n": 2,
+    "field": "GF(5)",
+    "w": 1,
+    "beta": [
+     0,
+     1
+    ],
+    "rank": 3,
+    "claimed": 4,
+    "by_hand": "det = -t^2 (t^2+4) for beta=(0,t)"
+   },
+   {
+    "m": 26,
+    "n": 14,
+    "field": "GF(101)",
+    "w": 1,
+    "beta": [
+     92,
+     3,
+     67,
+     28,
+     97,
+     56,
+     63,
+     70,
+     29,
+     44,
+     86,
+     58,
+     37,
+     23
+    ],
+    "rank": 27,
+    "claimed": 28
+   }
+  ],
+  "script": "t2b2b/J5a-P3b-counterexample.py.txt",
+  "proved_replacement": "cover of degrees D in [m+2-min(2n,m), m+1] (degrees >= 2) and independence for 2n <= m (gfactor_hermite_top_cover / _linearIndependent, R0: n <= 13)"
+ },
+ "numerical_sanity": "chk.py: 300 random GF(101) trials of P1, P2, P3a, restricted P3b ranks, 0 mismatches (numerical only)"
+}

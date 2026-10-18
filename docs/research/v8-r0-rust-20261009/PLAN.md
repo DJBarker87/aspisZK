@@ -993,3 +993,203 @@ theorem from closure, both with research value and no deployment path. The
 old v8 verifier shape remains the only measured one-transaction design, and
 its security is work-normalised and unproved. The Lean privacy work in flight
 (T2b-1 after Z6) continues only if the user wants it as research.
+
+## Lead review of the `codex/100bit-spend-path-20261013` checkpoint (2026-10-13); decision: the P2 verdict is amended, the fit gate is re-stated, and R1 becomes a live candidate under gate G_R1
+
+**What was reviewed.** Worktree `.worktrees/100bit-spend-path`, branch
+`codex/100bit-spend-path-20261013` at `628054cd4` (base `774295764`, one
+checkpoint commit plus live uncommitted edits in `crates/aspis-r1-cost-probe`,
+`tools/r1-cost-probe` and `programs/r1-cost-probe`; two Codex sessions
+active). Read in full: `CHECKPOINT.md`, `SECURITY-PATH.md`,
+`SECOND-FOLD-LIFT.md`, `TWO-ROUND-BINDING.md`, `PRIVACY-RANK-PATH.md`,
+`RESULTS-FIT.md`, `security-ledger.json` + `security_ledger.py`, the six Lean
+files and their axiom receipts, `evidence/pool-v0`, `evidence/pool-v2`,
+`evidence/authenticated-tx2-gate-20261013`; and the verifier diff of
+`crates/aspis-r1-cost-probe` against the P2 head `d2197e355` (26 files,
++2,628/−335; the removed lines are the second transaction's strict per-record
+parse checks, replaced by a checkpoint-bound authenticated digest).
+
+**Accepted as computation.** The staged S2 verifier (D18 transport, two
+folds, final 64 `WideExact` values, γ/κ/α₀/α₁ in `WideExact`, ρ in QM31)
+measures, at the 1.4M cap, on the P2 fixtures:
+
+| | P2 S2 (tx1 / tx2) | d18 verifier (whole tx) | with Pool adapter v2 |
+|---|---:|---:|---:|
+| Transfer CU | 2,441,407 / 2,411,848 | 1,331,566 / 1,282,345 | 1,342,707 / 1,374,664 |
+| Withdrawal CU | 2,435,353 / 2,414,242 | 1,330,319 / 1,282,305 | 1,341,346 / 1,390,957 |
+
+Five capped runs per transaction, dense-trace agreement, 832/1,164 mutation
+rejections, zero reachable stack diagnostics, caps 4G/6G/swap 0, hashes
+recorded. Pool lifecycle (sealing, authority, altered proof, wrong release,
+stale lane, nullifier replay, injected CPI rollback) exercised on LiteSVM.
+The 255-pair history rollover **exceeds the cap** (verifier exhausts
+1,286,887 of 1,286,943 remaining CU; Pool 1,399,494 of 1,399,550).
+
+**Correction of the P2 record.** My P2 review put the design's arithmetic
+floor at ≈ 2.6M for the pair and concluded "two is excluded by the floor".
+The pair now measures 2.61M: the floor estimate was right and the exclusion
+was wrong, because it judged against our ≤ 1.2M-each rule with 0.2M headroom
+rather than against the cap. Against the cap the ordinary case fits with
+57K/25K headroom (transfer) and 59K/9K (withdrawal); against our rule it
+fails; the rollover case fails outright. **The P2 verdict "R1 does not fit two
+transactions" is withdrawn; "v7 stands" remains until gate G_R1 below closes.**
+Nothing else in the P2 review changes: Z5 passed, the soundness bound is not
+work-normalised, and the field choices (opening in `WideExact`, ρ in QM31)
+are the ones the soundness caps require.
+
+**What is not yet established, in the checkpoint's own words and mine.**
+1. The ≈ 1.1M per transaction saved between P2 and the first named stage
+   ("pairing") is not reconciled per phase anywhere; the stages are named,
+   hashed and equivalence-tested, but no table in P2's format exists.
+2. The authenticated-parser change removes strict parse checks from tx2
+   (record lengths, tags, canonicality `echeck` of `WideExact` values, row
+   order, trailing bytes, checkpoint header) in favour of a digest bound to
+   the tx1 checkpoint. Mutations are rejected, but the covering argument —
+   tx1's strict parse plus the digest implies every property tx2 relies on,
+   including canonicality of values it then multiplies — is not written.
+3. All CU figures use deterministic partial fixture masks; no run with full
+   random masks is recorded for the SBF verifier.
+4. Soundness is a proof design with small compiled lemmas (root bounds,
+   field identities, arithmetic feasibility); the second-fold extraction,
+   joint-list binding, both round comparisons, source correspondence and FS
+   instantiation are open. The ledger's largest row is the existing q22
+   envelope (≈ 2^-105.1) — the right shape, not yet a theorem for R1.
+5. Privacy: the checkpoint found the same γ-in-QM31 modelling gap as the
+   privacy LOG's D20′ and compensates with both K₄-valued pads G and D, as
+   D20′.2 requires; its probe reaches silent rank 1,076 on the actual R1
+   payload. The open theorems are the LOG's: spanning (T2b-2b), (ii′), an
+   efficient simulator, the ROM reduction, aborts. The Rust verifier
+   includes the Libra fourth row (D14), so R-H's content is present in R1.
+6. The Pool adapter runs on a verifier release identity shared with the old
+   path; a distinct R1 profile/release is required before any deployment.
+7. Entropy: fixture entropy is insecure by design; secure entropy, salted
+   leaves and durable nonce reservation are not integrated.
+
+### Gate G_R1 (re-stated fit gate; replaces the 2026-10-10 fit rule)
+
+R1 proceeds towards deployment only when all of the following hold, each
+with receipts in P2's format (caps, hashes, five capped runs, mutation
+corpus, dense-trace equivalence):
+
+- **G_R1.1 Cost.** Whole-transaction CU, including the Pool adapter, for
+  transfer and withdrawal at **≤ 1,300,000** per transaction (≥ 100K headroom
+  at the 1.4M cap; the lead will accept ≥ 50K only with a written runtime-drift
+  analysis covering compute pricing, syscall costs and adapter variance),
+  measured with **full random masks**, and the **rollover case fits the same
+  bound** or the history design is changed so that rollover is not part of a
+  user's spend (a user decision; the plan's default is "must fit").
+- **G_R1.2 Reconciliation.** A per-phase table (parse, semantic, prepare,
+  checkpoint read/write, Merkle, query folds, relation rounds, final) for the
+  selected ELF against P2's table, attributing every saving to a named stage
+  and an equivalence test; any phase that disappeared must say where its
+  work went.
+- **G_R1.3 Authentication argument.** A written covering argument for the
+  authenticated tx2 parser (what tx1 checks, what the digest binds, what tx2
+  assumes), audited by the lead, plus a mutation corpus targeting exactly the
+  removed checks (non-canonical limbs, row order, trailing bytes, header).
+- **G_R1.4 Soundness ledger closed.** `R1_SOUNDNESS.md` (lead; see below)
+  with every row either a compiled theorem at the R0 standard
+  (`[propext, Classical.choice, Quot.sound]`, host receipts) or an explicitly
+  retained assumption the user has accepted.
+- **G_R1.5 Privacy closed** to the standard of the privacy LOG: `MaskImageOn
+  Good₂` for the R1 payload, `ZK_FS` with the ledger term, an efficient
+  simulator statement, and the ROM reduction (ZF1 series).
+- **G_R1.6 Release and entropy.** Distinct R1 release identity; secure
+  entropy, salted leaves and nonce reservation integrated; the fixture path
+  removed from any deployable build.
+
+### R1_SOUNDNESS ledger (lead deliverable, next)
+
+Rows, each a stated obligation with its cap, field, and the theorem or
+assumption that discharges it — written by the lead before any Lean job:
+
+| Row | Content | Cap / bound | Status |
+|---|---|---|---|
+| S | semantic phase (29 lanes, R0 terminal, masks, 25 K₄ challenges) | R0P `combined_fiat_shamirZ` | reuse; needs the 33-row schedule instance |
+| γ | joint-list matched response + six per-lane functionals (28·6·100 = 16,800) | 336,869,026,605,739 + 16,800 in E | design (SECURITY-PATH) |
+| κ | weighted pairing over the joint list | 600 in E | design; `FunctionalBatch.lean` has the root bound |
+| α₀ | first fold matched response + round comparison | 9,396,508,281,246 + 600 in E | existing cap + design (TWO-ROUND-BINDING) |
+| α₁ | second fold by repeated lift + round comparison | 9,396,508,281,246 + 600 in E | design (SECOND-FOLD-LIFT); `RepeatedLift.lean` has the abstract descent |
+| q22 | 22 queries, 2^18 domain, agreement 9,557 | (1+δ₀)·C(9557,22)/C(262144,22) ≈ 2^-105.1 | existing envelope; re-instance for two folds |
+| ρ | final residual batching in QM31 | 21·⌈2^256/|K|⌉/2^256 ≈ 2^-119.6 | `SubfieldBatch.lean` root bound; needs commitment/FS glue |
+| FS | 33-row duplex schedule, Qtot multiplier, oracle collision term | Qtot·max row + collision | re-instance of the R0P FS theorem |
+| Src | Rust ↔ Lean correspondence of the new opening layer (D18 π, two folds, final 64, ρ row) | — | open |
+
+### Lean soundness programme (after the ledger; one host job at a time)
+
+L1 encoder lemmas for the repeated lift: quartet identities for the stored
+line nodes, `T4` as the depth-two node, radix-4 instantiation of L and P,
+complete-quartet cardinality, descent (`RepeatedLift.lean` abstracts the last).
+L2 second-fold matched response as a wrapper around
+`exactFinal_bad_response_challenges_card_le` on the lifted words.
+L3 the two round-polynomial comparisons (α₀, α₁) over the fixed joint list.
+L4 direct joint-list binding (γ, κ rows) via `batch_union_bound`.
+L5 ρ row with commitment binding and the FS glue.
+L6 FS schedule instance for 33 rows reusing FS2's duplex and the R0P
+composition; Qtot and collision term retained.
+L7 source correspondence for the new opening layer.
+Each job gets a lead-fixed statement; difficulty is weeks per item; the lead
+expects statements to need amendment on contact with the sources, as in T2b.
+
+### Privacy programme (merged with the privacy LOG track)
+
+The semantic/mask layer is R0's, so T2a, T2b-1 and T2b-2a transfer; the
+payload's opening coordinates differ (two folds, 64 final values, D18 π,
+γ ∈ `WideExact`, ρ ∈ QM31). Steps: Z9 — the Z8 gate on the **R1 payload**
+with the real coordinates and no proxy (the checkpoint's two-pad construction
+is one sufficient family; the kernel itself is the object), on both γ limb
+sets and the (A)/(B)/(I)/(J) structures; the T2b-2b design (running) to be
+stated for a payload family covering R0 and R1; ZF1 for the 33-row schedule;
+ZF2 — an efficient simulator (the checkpoint is right that `Classical.choose`
+is not an algorithm): the public mask-map route of PRIVACY-RANK-PATH, stated
+as a lead decision after T2b-2b.
+
+### Order and governance
+
+1. Now (Rust, the checkpoint's sessions): G_R1.2 reconciliation table;
+   G_R1.3 covering argument + targeted mutation corpus; full-random-mask CU
+   run; the 255-pair rollover either fixed or escalated to the user as a
+   design question. No security claim in any artifact.
+2. Now (lead): `R1_SOUNDNESS.md` scaffold with the rows above and the exact
+   existing theorems each row reuses.
+3. Then Lean L1–L7 in order, one host job at a time, interleaved with the
+   privacy jobs already queued (T2b-2a, ZF-A, T2b-2b, ZF1).
+4. Integration rule: the checkpoint's evidence is copied read-only into
+   `results/` as P2's was; its decisions are recorded here (cost,
+   engineering, soundness) and in the privacy LOG (privacy); every report is
+   reviewed against receipts before acceptance; the sum of simultaneous
+   build-host caps stays under the host limit (the checkpoint's NUC checkout
+   `aspis-100bit-path-20261013` is separate from the Lean workspace; its Lean
+   runs must respect the one-Lean-job rule).
+5. Standing verdict: **v7 stands; R1 is a live candidate under G_R1**; no
+   deployment step, release or key handling until G_R1 closes.
+
+## Lead note (2026-10-15): spend-path status against G_R1
+
+The `codex/100bit-spend-path-20261013` branch (now `a17829a77`, 49 commits
+after the reviewed checkpoint, ≈ 477 focused Lean files, no `sorry`/`axiom`
+found by scan; not yet reviewed in detail) reports, with full-random-mask
+proofs and the strict wide parser adopted:
+
+| Case | Verification tx | Settlement tx |
+|---|---:|---:|
+| Transfer, 13 pairs | 1,392,386 | 1,303,475 |
+| Transfer, 255 pairs (rollover) | 1,392,164 | 1,369,686 |
+| Withdrawal, 255 pairs (rollover) | 1,390,833 | 1,385,823 |
+| Transfer, 1,023 pairs (rollover) | 1,392,237 | 1,366,505 |
+| Withdrawal, 1,023 pairs (rollover) | 1,390,915 | 1,382,595 |
+
+Against G_R1: **rollover now fits the 1.4M cap** (G_R1.1's "must fit" met at
+the cap); **G_R1.1's ≤ 1.3M bound is not met** — the verification transaction
+has ≈ 8K CU headroom after the strict parser, the settlement transaction
+≈ 14K–97K. G_R1.2 (`RECONCILIATION-P2.md`, `P2-CU-RECONCILIATION.*`) and
+G_R1.3 (`AUTHENTICATED-TX2.md`, `AUTHENTICATED-PARSER-AUDIT.md`) deliverables
+exist and await lead review. **Soundness statement shape:** the branch's
+conditional FS bound is `Q·max_row + 3Q²/2^256` with max_row ≈ 2^-105.1,
+which is below 2^-100 only for Q ≤ 35 oracle queries. This is the same
+per-query form as R0's proved bound (`Qtot·2^-105`); it is a statement about
+the definition of "100-bit", not an attack: a per-query 2^-105 bound is the
+standard FS reading, an absolute 2^-100 bound for arbitrary Q is not
+available from this route. **This is a user decision** (accept per-query
+security, or require more queries — which moves cost — or a tighter bound).
+Verdict unchanged: v7 stands; R1 is a live candidate under G_R1.
