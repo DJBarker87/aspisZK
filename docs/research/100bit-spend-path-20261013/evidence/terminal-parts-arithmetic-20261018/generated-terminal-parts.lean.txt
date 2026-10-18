@@ -1,0 +1,35 @@
+def pool_v1.pair_forest_semantic_terminal.terminal_parts
+  (public1 : pool_v1.pair_forest_semantic_terminal.SemanticPublic)
+  (claims : Array field.QM31 84#usize) (point : Array field.QM31 10#usize)
+  (lambda : field.QM31) (chi : field.QM31) (theta : field.QM31)
+  (zerocheck_point : Array field.QM31 10#usize) (mu : field.QM31) :
+  Result (core.result.Result (field.QM31 × (Array field.QM31 16#usize) ×
+    (Array field.QM31 10#usize) × field.QM31)
+    pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+  := do
+  let r ←
+    pool_v1.pair_forest_semantic_terminal.composition_parts public1 claims
+      point lambda chi theta
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+  | core.ops.control_flow.ControlFlow.Continue val =>
+    let (composition, c1, mask_only, g, h1_z, copy_active) := val
+    let q ←
+      pool_v1.pair_forest_semantic_terminal.equality_value zerocheck_point
+        point
+    let q1 ← field.QM31.mul q composition
+    let q2 ← field.QM31.mul mu h1_z
+    let q3 ← field.QM31.add q1 q2
+    let q4 ← field.QM31.mul mu mu
+    let q5 ← field.QM31.sub field.QM31.ONE copy_active
+    let q6 ← field.QM31.mul q5 h1_z
+    let q7 ← field.QM31.mul q4 q6
+    let original ← field.QM31.add q3 q7
+    ok (core.result.Result.Ok (original, c1, mask_only, g))
+  | core.ops.control_flow.ControlFlow.Break residual =>
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+      (field.QM31 × (Array field.QM31 16#usize) × (Array field.QM31 10#usize)
+      × field.QM31) (core.convert.FromSame
+      pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+      residual
+
