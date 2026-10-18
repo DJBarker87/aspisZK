@@ -224,3 +224,71 @@ Expected:
   differential      the producer's own P_R1 verdicts (ranks 1,080, 952/952,
                     112, 376) equal z9b main_r1p's on the same configuration.
 
+§5  Lean: generic soundness (modules R1Z/CertSound, R1Z/CertR1)
+---------------------------------------------------------------
+§5.1 R1Z/CertSound (PROVED; host attempt 4121, exit 0, 20 axiom lines, all
+     within [propext, Classical.choice, Quot.sound]; evidence
+     zf1/cert-evidence.json).  Imports Mathlib only.  Field F arbitrary;
+     vectors Fin n -> F, matrices Fin a -> Fin b -> F (row index first).
+  KerEntry N F      (s, j, piv : Fin s -> Fin N, c : Fin s -> F), the Rust
+                    (j, c over P_l) entry; kvec src e = src j + sum c_p src(piv p)
+  kcoord A e i      = A i j + sum_p A i (piv p) * c p  (exactly the checker's
+                    addm(own_j[t], dot(own_t[t], c)))
+  map_kvec          f (kvec src e) = iota (kcoord A e) given
+                    hA : forall t, f (src t) = iota (col A t)
+  PreOK Zc Gc ents Y T      (forall e i, kcoord Zc (ents e) i = 0) and
+                    (forall i t, sum_e Y i e * kcoord Gc (ents e) t = T i t)
+  pre_sound         PreOK -> iota_g (T i) in (G ⊓ ker z).map g
+  pre_sound₂        PreOK₂ (two zero maps) -> iota_g (T i) in
+                    (G ⊓ ker z₂ ⊓ ker z₁).map g   (the parenthesisation of V_G)
+  span_sound        S <= span (iota_g ∘ T) and PreOK -> S <= (G ⊓ ker z).map g
+  kcoord_offblock   the lane-local kernel test implies the full one for a
+                    block-diagonal coordinate matrix
+  Emat U Rel        E = U·Rel;  nvec E piv fr f  the free-column generator
+  EchOK E piv fr    E (piv b) column = unit b; fr injective; piv, fr
+                    disjoint and covering (piv injective follows: piv_inj)
+  sum_split         the column sum splits over piv and fr
+  ech_sound         EchOK (U·Rel) -> Rel v = 0 -> v = sum_f v(fr f) • n_f
+  bcond_sound       B0 <= iota_b(ker Rel) (hrel), EchOK, every iota_b n_f in V
+                    -> B0 <= V
+  RinvOK O U        O·U = 1;  rinv_sound  range iota <= V.map obs
+  lift_sound        W.map obs <= range iota (RF-obs) -> W.map obs <= V.map obs
+  half_sound        (x - h) * y = 1 -> x != h
+  card_sound        l.length <= 22 -> l.toFinset.card <= 22
+  decPreOK, decPreOK₂, decEchOK, decRinvOK   Decidable instances;
+  preCheck_sound .. rinvCheck_sound   decide (..) = true -> the Prop
+  (the Boolean checker is `decide` of these Props; §6 relates it to Rust).
+  Host: wall 2.4 s, peak RSS 1.88 GB, swaps 0.  Attempt 4120 (missing
+  imports: the Pi module instance, Finset.sum_mul, ring) failed and is
+  recorded; 4121 is the changed source.
+§5.2 R1Z/CertR1 (PROVED; attempt 4122, exit 0, 7 axiom lines, standard).
+     Imports R1Z.PredicateR1 and R1Z.CertSound; instantiates the generic
+     theorems at the exact P_R1 types (F a Subfield K, scalars ↥F):
+  halfOK_of_cert    (alpha ch 9 - 1/2) * y = 1 -> HalfOK ch
+  queryCard_of_cert rf_dec : ch.queries = l.toFinset, l.length <= 22
+                    -> QueryCard ch
+  qprime_of_cert    rf_own, rf_round (coordinates of ownMap / roundMaskMap on
+                    the stacked sources), rf_chain (ChainT0K4 <= span of the
+                    iota_r b_i), PreOK -> QPrime_R1
+  bcondG_of_cert    rf_src (G sources in Gonly), rf_own, rf_round, rf_bat,
+                    rf_rel (B0R1' <= iota_b(ker Rel)), EchOK (U·Rel),
+                    PreOK₂ with targets n_f -> BCondG_R1
+  c1lift_of_cert    rf_src (in Vsem c), rf_obs (Wsem.map obs <= range iota),
+                    rf_col, RinvOK -> C1Lift c
+  h1lift_of_cert    the same for Ph1 / Wh1 / lane 26 -> H1Lift
+  p_r1_of_cert      the seven conjuncts -> P_R1 (SemK4 enters as rf_sem)
+  Host: wall 4.6 s; peak RSS 6.73 GB (the PredicateR1 import closure; 0.27
+  GB below -M7000; a module that imports it more widely must be split, as
+  D34.2 already requires).
+§5.3 What is left for check_sound (OBLIGATION)
+  check_sound = p_r1_of_cert applied to the five *_of_cert theorems, with
+  (i)  the rf_* premises proved symbolically (C2, §2.3 list);
+  (ii) the Rust checker shown to compute the Props' `decide` (C3, §6):
+       its dot products equal kcoord / the sums in PreOK, PreOK₂, EchOK,
+       RinvOK, for the coordinate matrices that the rf_* premises name;
+  (iii) the coordinate embeddings iota_* fixed once (Z4c round coordinates,
+       the WideExact limb basis wunit, the QM31 tower basis, OwnCell limbs).
+  No part of (i)-(iii) needs a concrete-row evaluation in Lean: the rf_*
+  are identities "column t of the matrix the checker builds = iota^-1 of the
+  map on source t", proved for symbolic t from the closed forms.
+
