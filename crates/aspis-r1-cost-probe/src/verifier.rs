@@ -344,6 +344,7 @@ pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)
     if r.at!=end {return Err(Error::Checkpoint);}
     Ok((Box::new(Prepared{variant:v,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state}),Accumulator{weights,rhs,power,next:bytes[9] as usize}))
 }
+#[inline(never)]
 fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {
     let geometry=QueryGeometry::for_range(&p.queries,0,k)?;
     while a.next<k {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}
