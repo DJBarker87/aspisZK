@@ -11,18 +11,19 @@ open R0P R0Z.MaskLayout R0Z.ZkStatement
 attribute [local instance] Classical.propDecidable
 variable {K CommitHandle Aux : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+  {Bat : Type} [HonestView.BatchedLayer K Bat]
 
-theorem hvzk_conditional_of_maskImage (h : HonestProver K) (B : PackBasis F)
+theorem hvzk_conditional_of_maskImage [Fintype Bat] (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (x : Statement K CommitHandle) (hm : MaskImage h B x) :
-    HVZK_conditional h B outputs x := by
+    (x : Statement K CommitHandle) (hm : MaskImage (Bat := Bat) h B x) :
+    HVZK_conditional (Bat := Bat) h B outputs x := by
   intro hx w ch hw
   have hw₀ : ZkStatement.public h (Classical.choose hx) = x.1 := Classical.choose_spec hx
   obtain ⟨hr, hd⟩ := hm w (Classical.choose hx) ch hw hw₀
   have ha := AffineLaw.equal_laws_of_mask_image
     (A h B x w ch) (A h B x (Classical.choose hx) ch)
     (b h B x w ch) (b h B x (Classical.choose hx) ch) hr hd
-  have hp : EqualLaws (payload h B x w ch) (payload h B x (Classical.choose hx) ch) := by
+  have hp : EqualLaws (payload (Bat := Bat) h B x w ch) (payload h B x (Classical.choose hx) ch) := by
     intro v
     simpa only [← payload_affine] using ha v
   exact AffineLaw.equal_laws_const_pair _ _ (metadata outputs x ch) hp
@@ -32,8 +33,8 @@ keeps its chosen eligible noise e₀ fixed; every honest e has the same conditio
 law by D4′, so averaging over independent uniform e preserves equality. -/
 theorem conditional_marginalisation (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (x : Statement K CommitHandle) (hc : HVZK_conditional h B outputs x) :
-    HVZK_perfect h B outputs x := by
+    (x : Statement K CommitHandle) (hc : HVZK_conditional (Bat := Bat) h B outputs x) :
+    HVZK_perfect (Bat := Bat) h B outputs x := by
   intro hx w ch hw
   apply AffineLaw.marginalisation
   intro e
@@ -41,16 +42,18 @@ theorem conditional_marginalisation (h : HonestProver K) (B : PackBasis F)
 
 /-- Perfect interactive HVZK follows from MaskImage. Completeness is a separate
 builder obligation. The statement outside the language is vacuous. -/
-theorem hvzk_perfect_of_maskImage (h : HonestProver K) (B : PackBasis F)
+theorem hvzk_perfect_of_maskImage [Fintype Bat] (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (x : Statement K CommitHandle) : MaskImage h B x → HVZK_perfect h B outputs x := by
+    (x : Statement K CommitHandle) :
+    MaskImage (Bat := Bat) h B x → HVZK_perfect (Bat := Bat) h B outputs x := by
   intro hm
   exact conditional_marginalisation h B outputs x (hvzk_conditional_of_maskImage h B outputs x hm)
 
 /-- The retained distance formulation has the fixed D8 value epsilon = 0. -/
-theorem hvzk_zero_of_maskImage (h : HonestProver K) (B : PackBasis F)
+theorem hvzk_zero_of_maskImage [Fintype Bat] (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
-    (x : Statement K CommitHandle) (hm : MaskImage h B x) : HVZK h B outputs x 0 := by
+    (x : Statement K CommitHandle) (hm : MaskImage (Bat := Bat) h B x) :
+    HVZK (Bat := Bat) h B outputs x 0 := by
   intro hx w ch hw
   exact (dist_zero_of_equalLaws _ _ (hvzk_perfect_of_maskImage h B outputs x hm hx w ch hw)).le
 
