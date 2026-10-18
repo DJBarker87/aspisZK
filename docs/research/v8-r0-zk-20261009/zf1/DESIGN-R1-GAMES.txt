@@ -204,3 +204,68 @@ published addresses; failure publishes fail(c).  It reads no witness.
 simulator; the collision cost of programming is carried by the REAL side's
 CollEv (two transcript or opening positions with one address), where it was
 already counted (D41 ε_coll).  Consequently Mi = 0 and ε_prog = 0.
+
+----------------------------------------------------------------------
+§6  Field map: R1IdealModelS / R1IdealModelV / R1RealModelV
+----------------------------------------------------------------------
+
+6.1 R1IdealModelS P fsR1 abR1 x M Umin sim (primary, D44) — ALL PROVED,
+    for every simulator, M, Umin (`idealModelS_R1`, PrivacyGamesR1):
+      coupling   identity coupling (`idCoupling`), meanR/meanM by rfl
+      agreement  `ideal_agree_S` (holds at every s, not only off CollEv)
+      PairFresh  vacuous: priv := False
+6.2 R1IdealModelV (secondary) — ALL PROVED (`idealModel_R1`), same way.
+
+6.3 R1RealModelV P_R1 (VR1 h) … fsR1 abR1 x (N·(115+Mc)) qmax 2^255 εexh —
+    by `realModel_R1` from `R1RealData` per (adv, w):
+      positions  PROVED shape: Fin (N·(115+Mc)) ≃ Fin N × (TRead ⊕ Fin Mc)
+                 (`card_pos`, `card_TRead` = 115).  The read-count field is
+                 thereby split: transcript part 115 PROVED; commitment part
+                 Mc remains source-counted (D41 §1.5: Mc ≤ 2^21 − 115,
+                 H-count / G-count).
+      charged    transcript positions: "attempt k was run and discarded"
+                 (`discR`, a function of the squeeze answers and P ∧ V) —
+                 DEFINED; commitment positions: `CmLayout.charged` (HYP).
+      priv       transcript True; commitment `CmLayout.priv` (HYP data).
+      addr       transcript `taddr` (the §2 addresses on the middle coins) —
+                 DEFINED; commitment `CmLayout.caddr` (HYP data).
+      qry        the adversary's i-th read in the middle game (`qryR`) —
+                 DEFINED.
+      HitFresh   transcript positions PROVED (`R1RealData.hit`: discR and the
+                 adversary's log are invariant under every chain lens of a
+                 discarded attempt — `accR_midLens`, `advLogR_midLens`;
+                 field = lens value); commitment positions HYP (`CmLayout.hit`).
+      PairFresh  transcript × transcript PROVED (`pairFresh_transcript`);
+                 transcript × commitment PROVED from `CmLayout.cross`
+                 (commitment addresses do not read chain coordinates);
+                 commitment × commitment HYP (`CmLayout.pair`).
+      coupling   HYP (G-prog): `R1RealData.cp` with lenses `Lc` such that
+                 toM is a coordinate projection (`hLc`); the lazy-programming
+                 law is meanR.
+      agreement  HYP (G-ref): `R1RealData.Agree`, stated with the concrete
+                 events above, between `realTest` of `realGame` and
+                 `middleRealAbortV` of `abR1`.
+      exh mass   HYP (G-exh): `mass d.exh ≤ εexh`.
+
+6.4 What remains a Rust ↔ Lean refinement obligation (REF):
+      R-wire   `R1Wire.frame/payload/final/pubBytes/vtag` are r1_wire.rs /
+               verifier.rs serialisations; `dec` = sampler.rs decoders;
+               `kstarOf` = QueryScan; `comLog` = the verifier's merkle_path
+               reads.
+      R-ser    proof bytes = serialize(View, VerLog) (§1).
+      R-commit `R1Prover.commit` = prover.rs / host_commitment.rs /
+               state_only_entropy.rs (mask derivation, salted trees).
+      R-causal the records of row i depend on the challenges of rows < i only
+               (needed inside Agree: the prover's adaptive addresses equal the
+               verifier's recomputation from the final view).
+      R-retry  the Rust loop of D38.3 equals `realGame` (fresh secrets, cap,
+               P_R1 ∧ no-pole ∧ ¬exhausted, nothing published on rejection).
+      R-pub    the Rust P_R1 check decides P_R1 (D38.5 certificate route).
+
+6.5 privacy_R1_games (PrivacyGamesR1): privacy_R1_eff on fsR1/abR1 against
+    simE, error
+      N(115+Mc)·qmax/2^255 + (N(115+Mc))²/2^255 + εexh + 0 + N·4096/Q,
+    under PublicBase, BuilderSoundOn, Sem1Uniform (drawW W) Q and the
+    R1RealData hypotheses of 6.3.  For N = 8, Mc + 115 ≤ 2^21, qmax = 2^64
+    this is the D41/D42 number (≈ 2^-109, pole-dominated) with ε_prog
+    dropped; no new numeral was compiled.
