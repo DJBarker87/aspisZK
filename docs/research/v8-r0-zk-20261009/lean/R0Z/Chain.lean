@@ -11,6 +11,7 @@ open R0P R0P.SemSource R0P.SemDegree R0P.Sumcheck R0Z.MaskLayout
 attribute [local instance] Classical.propDecidable
 variable {K CommitHandle : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+  {Bat : Type} [BatchedLayer K Bat]
 
 /-- Leading Boolean coordinate and tail; no cube is enumerated. -/
 def boolConsEquiv (n : Nat) : (Bool × (Fin n → Bool)) ≃ (Fin (n+1) → Bool) where
@@ -108,43 +109,43 @@ theorem rounds_chain (ch : Challenges K) (f : PayloadSplit.PointFunction K)
 /-! ### The four K-linear constraints -/
 
 /-- Polynomial read from round j's 28 coefficient cells. -/
-def roundPoly (j : Fin 10) : Payload K →ₗ[K] K[X] :=
+def roundPoly (j : Fin 10) : Payload K Bat →ₗ[K] K[X] :=
   ∑ i : Fin 28, (monomial i.val).comp (proj (.semanticCoeff j i))
 
-theorem roundPoly_apply (j : Fin 10) (v : Payload K) :
+theorem roundPoly_apply (j : Fin 10) (v : Payload K Bat) :
     roundPoly j v = ∑ i : Fin 28, monomial i.val (v (.semanticCoeff j i)) := by
   simp only [roundPoly, LinearMap.sum_apply, LinearMap.comp_apply, proj_apply]
 
-theorem roundPoly_nine : roundPoly (K := K) 9 = round9Poly := rfl
+theorem roundPoly_nine : roundPoly (K := K) (Bat := Bat) 9 = round9Poly := rfl
 
-def evalRound (j : Fin 10) (z : K) : Payload K →ₗ[K] K := (Polynomial.leval z).comp (roundPoly j)
+def evalRound (j : Fin 10) (z : K) : Payload K Bat →ₗ[K] K := (Polynomial.leval z).comp (roundPoly j)
 
-theorem evalRound_apply (j : Fin 10) (z : K) (v : Payload K) :
+theorem evalRound_apply (j : Fin 10) (z : K) (v : Payload K Bat) :
     evalRound j z v = (roundPoly j v).eval z := rfl
 
 /-- The existing nonround projection over K, before restriction to F. -/
-def nonRoundK : Payload K →ₗ[K] Payload K :=
+def nonRoundK : Payload K Bat →ₗ[K] Payload K Bat :=
   LinearMap.pi fun coord => match coord with
   | .semanticCoeff _ _ => 0
-  | coord => (LinearMap.proj coord : Payload K →ₗ[K] K)
+  | coord => (LinearMap.proj coord : Payload K Bat →ₗ[K] K)
 
-theorem nonRoundK_apply (v : Payload K) : nonRoundK v = nonRound (F := F) v := by
+theorem nonRoundK_apply (v : Payload K Bat) : nonRoundK v = nonRound (F := F) v := by
   funext coord
   cases coord <;> rfl
 
 /-- Round-only, initial-zero and boundary-chain constraints, before the
 terminal value is imposed. This auxiliary space contains `dir`. -/
-def InitialChain0 (ch : Challenges K) : Submodule K (Payload K) :=
+def InitialChain0 (ch : Challenges K) : Submodule K (Payload K Bat) :=
   (LinearMap.ker nonRoundK ⊓ LinearMap.ker (evalRound 0 0 + evalRound 0 1)) ⊓
     ⨅ j : Fin 9, LinearMap.ker
       (evalRound j.succ 0 + evalRound j.succ 1 - evalRound j.castSucc (alpha ch j.castSucc))
 
 /-- The chain space is a K-submodule: all four conditions are kernels of
 K-linear maps. Its explicit membership statement is `mem_chain0_iff`. -/
-def Chain0 (ch : Challenges K) : Submodule K (Payload K) :=
+def Chain0 (ch : Challenges K) : Submodule K (Payload K Bat) :=
   InitialChain0 ch ⊓ LinearMap.ker (evalRound 9 (alpha ch 9))
 
-theorem mem_initialChain0_iff (ch : Challenges K) (v : Payload K) :
+theorem mem_initialChain0_iff (ch : Challenges K) (v : Payload K Bat) :
     v ∈ InitialChain0 ch ↔ nonRound (F := F) v = 0 ∧
       (roundPoly 0 v).eval 0 + (roundPoly 0 v).eval 1 = 0 ∧
       ∀ j : Fin 9, (roundPoly j.succ v).eval 0 + (roundPoly j.succ v).eval 1 =
@@ -153,7 +154,7 @@ theorem mem_initialChain0_iff (ch : Challenges K) (v : Payload K) :
     LinearMap.add_apply, LinearMap.sub_apply, evalRound_apply, nonRoundK_apply (F := F), sub_eq_zero]
   tauto
 
-theorem mem_chain0_iff (ch : Challenges K) (v : Payload K) :
+theorem mem_chain0_iff (ch : Challenges K) (v : Payload K Bat) :
     v ∈ Chain0 ch ↔ nonRound (F := F) v = 0 ∧
       (roundPoly 0 v).eval 0 + (roundPoly 0 v).eval 1 = 0 ∧
       (∀ j : Fin 9, (roundPoly j.succ v).eval 0 + (roundPoly j.succ v).eval 1 =
@@ -164,24 +165,24 @@ theorem mem_chain0_iff (ch : Challenges K) (v : Payload K) :
   tauto
 
 theorem roundPoly_roundInclusion (j : Fin 10) (p : PayloadSplit.RoundPayload K) :
-    roundPoly j (PayloadSplit.roundInclusion p) = ∑ i : Fin 28, monomial i.val (p j i) := by
+    roundPoly j (PayloadSplit.roundInclusion (Bat := Bat) p) = ∑ i : Fin 28, monomial i.val (p j i) := by
   rw [roundPoly_apply]
   rfl
 
 theorem roundPoly_rounds (ch : Challenges K) (j : Fin 10) (f : PayloadSplit.PointFunction K) :
-    roundPoly j (PayloadSplit.roundInclusion (fun k i => (PayloadSplit.rounds ch k f).coeff i.val)) =
+    roundPoly j (PayloadSplit.roundInclusion (Bat := Bat) (fun k i => (PayloadSplit.rounds ch k f).coeff i.val)) =
       PayloadSplit.rounds ch j f := by
   rw [roundPoly_roundInclusion]
   exact sum_monomial_coeff _ (rounds_natDegree_lt ch j f)
 
 theorem roundPoly_originalRounds (pub : Public K) (B : PackBasis F) (ch : Challenges K)
     (t : Trace K) (j : Fin 10) :
-    roundPoly j (PayloadSplit.roundInclusion (PayloadSplit.originalRounds pub B ch t)) =
+    roundPoly j (PayloadSplit.roundInclusion (Bat := Bat) (PayloadSplit.originalRounds pub B ch t)) =
       PayloadSplit.rounds ch j (fOrig pub B ch t) := by
   rw [originalRounds_eq, roundPoly_rounds]
 
 theorem roundPoly_dir (j : Fin 10) :
-    roundPoly j (dir : Payload K) = if j = 9 then X - C (1/2 : K) else 0 := by
+    roundPoly j (dir : Payload K Bat) = if j = 9 then X - C (1/2 : K) else 0 := by
   unfold dir
   rw [roundPoly_roundInclusion]
   by_cases hj : j = 9
@@ -197,7 +198,7 @@ theorem two_ne_zero : (2 : K) ≠ 0 := by
   have hv := congrArg Fin.val he
   norm_num at hv
 
-theorem dir_mem_initialChain0 (ch : Challenges K) : (dir : Payload K) ∈ InitialChain0 ch := by
+theorem dir_mem_initialChain0 (ch : Challenges K) : (dir : Payload K Bat) ∈ InitialChain0 ch := by
   rw [mem_initialChain0_iff (F := (⊥ : Subfield K))]
   refine ⟨nonRound_dir, ?_, ?_⟩
   · simp only [roundPoly_dir, show (0 : Fin 10) ≠ 9 from by decide, if_false,
@@ -238,10 +239,10 @@ theorem original_bsum_actual (pub : Public K) (B : PackBasis F) (t : Trace K)
 
 theorem roundPoly_g (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle)
     (w : h.Instance) (ch : Challenges K) (n : N K F) (j : Fin 10) :
-    roundPoly j (roundInclusion (F := F) (g h B x w ch n)) =
+    roundPoly j (roundInclusion (F := F) (Bat := Bat) (g h B x w ch n)) =
       PayloadSplit.rounds ch j (fOrig x.1 B ch (PayloadSplit.actual x.1 B (h.build w) ch (0,n))) -
       PayloadSplit.rounds ch j (fOrig x.1 B ch (PayloadSplit.actual x.1 B (h.build w) ch 0)) := by
-  have hg : roundInclusion (F := F) (g h B x w ch n) =
+  have hg : roundInclusion (F := F) (Bat := Bat) (g h B x w ch n) =
       PayloadSplit.roundInclusion (PayloadSplit.originalRounds x.1 B ch
         (PayloadSplit.actual x.1 B (h.build w) ch (0,n))) -
       PayloadSplit.roundInclusion (PayloadSplit.originalRounds x.1 B ch
@@ -250,7 +251,7 @@ theorem roundPoly_g (h : HonestProver K) (B : PackBasis F) (x : Statement K Comm
 
 theorem g_mem_initialChain0 (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle)
     (w : h.Instance) (ch : Challenges K) (n : N K F) :
-    roundInclusion (F := F) (g h B x w ch n) ∈ InitialChain0 ch := by
+    roundInclusion (F := F) (Bat := Bat) (g h B x w ch n) ∈ InitialChain0 ch := by
   rw [mem_initialChain0_iff (F := F)]
   refine ⟨nonRound_roundInclusion _, ?_, ?_⟩
   · rw [roundPoly_g]
@@ -274,18 +275,18 @@ theorem g_mem_initialChain0 (h : HonestProver K) (B : PackBasis F) (x : Statemen
 No mask-image premise, witness-validity premise or stronger Good assumption. -/
 theorem sRem_mem_chain0 (h : HonestProver K) (B : PackBasis F) (x : Statement K CommitHandle)
     (w : h.Instance) (ch : Challenges K) (n : N K F) (hgood : alpha ch 9 ≠ 1/2) :
-    sRem h B x w ch n ∈ Chain0 ch := by
+    sRem (Bat := Bat) h B x w ch n ∈ Chain0 ch := by
   refine ⟨?_, ?_⟩
   · exact (InitialChain0 ch).sub_mem (g_mem_initialChain0 h B x w ch n)
       ((InitialChain0 ch).smul_mem _ (dir_mem_initialChain0 ch))
-  · change evalRound9 ch (sRem h B x w ch n) = 0
-    have hm : claimMask B (alpha ch) (sRem h B x w ch n) = 0 := by
+  · change evalRound9 ch (sRem (Bat := Bat) h B x w ch n) = 0
+    have hm : claimMask B (alpha ch) (sRem (Bat := Bat) h B x w ch n) = 0 := by
       unfold sRem
-      have hr : claimMask B (alpha ch) (roundInclusion (F := F) (g h B x w ch n)) = 0 := by
-        change claimMask B (alpha ch) (PayloadSplit.roundInclusion (g h B x w ch n)) = 0
+      have hr : claimMask B (alpha ch) (roundInclusion (F := F) (Bat := Bat) (g h B x w ch n)) = 0 := by
+        change claimMask B (alpha ch) (PayloadSplit.roundInclusion (Bat := Bat) (g h B x w ch n)) = 0
         exact claimMask_roundInclusion B (alpha ch) _
       rw [map_sub, map_smul, hr, claimMask_dir, smul_zero, sub_zero]
-    have hp := Phi0_sRem h B x w ch n hgood
+    have hp := Phi0_sRem (Bat := Bat) h B x w ch n hgood
     simpa only [Phi0, LinearMap.sub_apply, hm, sub_zero] using hp
 
 #print axioms sRem_mem_chain0
