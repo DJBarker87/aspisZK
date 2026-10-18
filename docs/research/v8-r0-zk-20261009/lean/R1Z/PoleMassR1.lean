@@ -70,14 +70,17 @@ theorem mem_poleSet_of_not_noPole (t : Trace K) (lam chi : K)
 theorem poleSet_card_le (t : Trace K) (lam : K) :
     (poleSet t lam).card ≤ 4 * activeRows.card := by
   unfold poleSet
-  refine Finset.card_image_le.trans ?_
-  rw [Finset.card_product, Finset.card_univ, Fintype.card_prod, Fintype.card_fin, Fintype.card_bool]
-  omega
+  -- Memory (J0d probes 3879/3880): the former `rw [...]; omega` closing of this
+  -- lemma alone cost ≈440 MB over the import baseline; every step here closes
+  -- syntactically, so nothing is asked to reduce `activeRows.card`.
+  have hu : (Finset.univ : Finset (Fin 2 × Bool)).card = 4 := by
+    rw [Finset.card_univ, Fintype.card_prod, Fintype.card_fin, Fintype.card_bool]
+  calc _ ≤ (activeRows ×ˢ (Finset.univ : Finset (Fin 2 × Bool))).card := Finset.card_image_le
+    _ = activeRows.card * 4 := by rw [Finset.card_product, hu]
+    _ = 4 * activeRows.card := Nat.mul_comm _ _
 
-theorem poleSet_card_le_4096 (t : Trace K) (lam : K) : (poleSet t lam).card ≤ 4096 := by
-  have h1 := poleSet_card_le t lam
-  have h2 := activeRows_card_le
-  omega
+theorem poleSet_card_le_4096 (t : Trace K) (lam : K) : (poleSet t lam).card ≤ 4096 :=
+  (poleSet_card_le t lam).trans (Nat.mul_le_mul_left 4 activeRows_card_le)
 
 /-- Sampler premise (HYP): `χ = sem 1` is uniform on a set of `Q` values given
 `λ = sem 0` (for R1: K₄ = QM31, `Q = p⁴`), in the upper-bound form used here:
