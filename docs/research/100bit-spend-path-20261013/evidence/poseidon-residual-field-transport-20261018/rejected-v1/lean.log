@@ -1,0 +1,61 @@
+/tmp/PoseidonResidualFieldTransport.lean:23:82: error: unsolved goals
+K L : Type
+inst✝¹ : Field K
+inst✝ : Field L
+f : K →+* L
+o : Openings K
+block : K
+low : Fin 16 → K
+lane : Fin 16
+hfull :
+  f (List.foldl (fun sum row => sum + low row) 0 [1, 9, 10]) =
+    List.foldl (fun sum row => sum + f (low row)) 0 [1, 9, 10]
+hinternal :
+  f (List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun i => low ⟨↑i + 2, ⋯⟩)) =
+    List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun i => f (low ⟨↑i + 2, ⋯⟩))
+hleading : f (poseidonLeadingPair o.z o.xor12 lane) = poseidonLeadingPair (mapState f o.z) (mapState f o.xor12) lane
+hfullPair :
+  f (poseidonInterpolatedFullPair o.z low lane) = poseidonInterpolatedFullPair (mapState f o.z) (mapState f low) lane
+hinternalPair :
+  f (poseidonInterpolatedInternalPair o.z low lane) =
+    poseidonInterpolatedInternalPair (mapState f o.z) (mapState f low) lane
+⊢ f block *
+      (0 + f (low 0) * (f (o.succ lane) - poseidonLeadingPair (mapState f o.z) (mapState f o.xor12) lane) +
+          List.foldl (fun sum row => sum + f (low row)) 0 [1, 9, 10] *
+            (f (o.succ lane) - poseidonInterpolatedFullPair (mapState f o.z) (mapState f low) lane) +
+        List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun i => f (low ⟨↑i + 2, ⋯⟩)) *
+          (f (o.succ lane) - poseidonInterpolatedInternalPair (mapState f o.z) (mapState f low) lane)) =
+    f block *
+      (0 + f (low 0) * (f (o.succ lane) - poseidonLeadingPair (fun i => f (o.z i)) (fun i => f (o.xor12 i)) lane) +
+          List.foldl (fun sum row => sum + f (low row)) 0 [1, 9, 10] *
+            (f (o.succ lane) - poseidonInterpolatedFullPair (fun i => f (o.z i)) (mapState f low) lane) +
+        List.foldl (fun x1 x2 => x1 + x2) 0 (List.ofFn fun i => f (low ⟨↑i + 2, ⋯⟩)) *
+          (f (o.succ lane) - poseidonInterpolatedInternalPair (fun i => f (o.z i)) (mapState f low) lane))
+'AspisR1.PoseidonResidualFieldTransport.map_packingFormula' depends on axioms: [propext, Quot.sound]
+'AspisR1.PoseidonResidualFieldTransport.map_scalarResidual' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.PoseidonResidualFieldTransport.map_packed_scalarResidual' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.PoseidonResidualFieldTransport.map_family' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       22.18 real         2.43 user         4.08 sys
+          2751856640  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               93711  page reclaims
+              133235  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               20241  voluntary context switches
+              114281  involuntary context switches
+         25138249100  instructions retired
+         11676601892  cycles elapsed
+           451350712  peak memory footprint
