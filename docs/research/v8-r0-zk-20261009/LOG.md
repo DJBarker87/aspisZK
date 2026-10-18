@@ -5030,3 +5030,64 @@ sets:
 So under D18 the opened part (D24.4 "not structural") was full on every set
 tried. Under D29 these are conjuncts of P_R1, so no protocol change is
 needed. A structural proof stays with Route P.
+
+### Lead acceptance of R1-3, J2/J2-R1, J2b, J0, J13-R1 (2026-10-18); D36: clause (i′) on R1 has all its pieces
+
+The worker commits are cherry-picked in dependency order:
+- relations branch: 7e0b24607, f132a6b60, d26660a69, f628787e1;
+- clause-(ii′) branch: 39b463f97, 7142d6be6.
+
+The lead verified each host receipt (SHA matches the committed source,
+exit 0, every axiom line standard, no sorry/axiom/admit/native_decide or
+depth/heartbeat overrides):
+
+| Module | Attempt | SHA | Axiom lines | Peak RSS |
+|---|---|---|---|---|
+| R1Z/PredicateR1 (D35.2-amended) | 3687 | `005130bb…` | 11 | — |
+| R0Z/K4Values | 3686 | `1dd15cc5…` | 11 | 6.77 GB |
+| R0Z/TerminalClosed | 3694 | `f41dc20a…` | 13 | — |
+| R0Z/HonestValid | 3741 | `c73cb545…` | 37 | 6.79 GB |
+| R1Z/NoiseLiftR1 | 3743 | `11f98af1…` | 14 | 6.78 GB |
+
+PredicateR1 superseded 3684. NoiseLiftR1 was built against the amended
+PredicateR1, and the SHAs match. The failed attempts (3685, 3740, 3742 and
+others) were elaboration errors only.
+
+**D36.1 Clause (i′) on R1 has every ingredient.**
+- `chain0K4_le_silent_R1`: under P_R1, Chain0K4 lies in the silent image.
+- `sRem_mem_chain0K4` (K4Values), for R0 and R1 together.
+- `terminalClosed`: TerminalClosed is discharged from SemK4 ∧ PublicBase by
+  per-family closure lemmas (Poseidon packed, schedule, occupancy, path,
+  value, digest, asset, copy).
+
+So sRem ∈ Chain0K4 holds unconditionally for base-typed honest instances
+with α₉ ≠ ½. Only the one-line assembly `clause_i_R1` remains. BCondG_R1
+uses B0R1′ (D35.2). The R1-3 version at 3684 is superseded and not used.
+
+**D36.2 J0 (generic over Bat).** Proved: HonestValid, ValidOn, IIPrimeValid,
+`HonestProver.restrict`, and `maskImageOn_restrict_of`. Also proved: the
+corollaries showing that hvzk_on_of and the FsAbort theorems apply verbatim
+to the restricted prover, the ι and inactive-sum lemmas for (R2)/(R3), and
+the §1.4 obstruction as implications. One new fact: `inactive_1023`.
+
+**D36.3 J13-R1.** `noise_lift_R1` gives the noise lift from P_R1's C1Lift and
+H1Lift conjuncts. It projects by position (`hP.2.2.2.2.1`), so a reorder of
+P_R1 must update it. It is proposed that P_R1 get named accessors.
+
+**D36.4 J0b.** The route is proposed (ProductionHolds via LaneInterface, and
+CopyLinkBalance pairwise cancellation). There is one decision first: u is
+built from `applyEligible t 0`, which rebalances row 1023. J0b therefore needs
+either a builder invariant (each semantic column of `h.build w` already sums
+to zero over copyInactiveRows) or a lemma that row 1023 enters no production
+lane or copy link. The lead's preference is the row-1023 lemma, because it is
+a property of the fixed layout, not of the builder. To be settled by a short
+source check before J0b is issued.
+
+**D36.5 Remaining for MaskImageOn on R1:**
+- `clause_i_R1` (assembly);
+- J15-R1 (residual and mask lift for (ii′));
+- J16-R1 (theorem and composition);
+- J0b.
+
+Outside Lean: the ZF1a/b couplings and their event bounds, ZF2, the Rust
+P_R1 check with its refinement, and the D34.3 refinement items.
