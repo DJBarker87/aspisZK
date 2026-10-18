@@ -148,3 +148,50 @@ Sections
   rows and scalar M31 arithmetic; §2.3 lists the obvious 5–20× improvements
   (the Q′ and V_G eliminations are sparse in the source dimension, the own
   columns are shared across lanes, SIMD/limb-packed rows).
+
+§2.1 Measurement (MEASURED; runs/r1p-244d380ab)
+  Host nuc, Intel Core Ultra 7 155H (a laptop-class mobile CPU, max 4.8 GHz).
+  Scope aspis-r1p-244d380ab: MemoryHigh 3G, MemoryMax 4G, MemorySwapMax 0,
+  TasksMax 64.  Gate OK (no other scope; reservation 4 GiB).  Release build
+  (opt-level 3, overflow checks on), compile 61.4 s.  One process per
+  configuration, run sequentially.  All exit 0, swaps 0, cgroup swap peak 0;
+  scope wall time 3:27.0.
+    configuration                   P_R1  wall    user    peak RSS     V_G / B0R1′
+    A v0 actual  γ0                 true  22.59s  23.13s  130,344 KiB  952/952
+    A v0 actual  γ1                 true  22.35s  22.90s  129,888 KiB  952/952
+    J v1 actual  γ0                 true  21.47s  22.04s  129,956 KiB  952/952
+    A v3 random  γ1                 true  22.18s  22.74s  129,968 KiB  952/952
+    A v2 coset (P = 8)  γ0          true  16.45s  16.99s  118,956 KiB  616/616
+    A v0 {0..21} (P = 6) γ0         true  16.11s  16.62s  118,520 KiB  568/568
+    A v0 actual γ0, taskset 1 core  true  24.42s  24.36s  131,408 KiB  952/952
+  Per conjunct (A v0 actual γ0):
+    field 0.001 s, precompute 0.27 s, lifts 0.54 s, BCondG_R1 9.30 s,
+    QPrime_R1 12.47 s, total 22.58 s.
+  QPrime_R1's rank_R(ker own) is 1,080 in every configuration.  All 16 C1Lift
+  checks are true, with rank obs(Wsem) = 112.  H1Lift is 376 = 376.
+
+§2.2 Reading of the numbers
+  The expectation (35–55 s, 150–300 MB) was pessimistic. Measured: 22.6 s and
+  130 MB. The precompute is 0.27 s, not 2–5 s. Nearly all the time is the two
+  eliminations, and they are single-threaded, so one core costs only +1.8 s.
+  The nuc's CPU is itself laptop-class. A client laptop of the same
+  generation, on one performance core, should therefore take about 20–30 s
+  per attempt and about 130 MB with this unoptimised prototype. Older or
+  low-power machines might take 2–3× that. This is not measured on a second
+  machine.
+  Every attempt that passes P_R1 is published, so the expected number of
+  attempts is 1 / Pr[P_R1], which is about 1 on all evidence so far (no
+  failure in Z8–Z10, Z9b or here). The expected added proving time is
+  therefore about one check.
+
+§2.3 Obvious improvements (PROPOSED, not measured)
+  (a) Each mask lane's own kernel is computed twice, for V_G's G lane and
+      for QPrime's G lane. Share it.
+  (b) The 112 own columns are the same for every mask-only lane. Eliminate
+      the own block once per lane type, then reduce the carries.
+  (c) The source vectors are sparse: a unit at one row. Dense Vec<M31>
+      elimination wastes most of its work. Limb-packed or SIMD rows, and
+      eliminating in the 1,084-dimensional round space first, should give
+      5–20×.
+  (d) The ten mask-only lanes are independent until the final merge, so
+      they can run in parallel threads.
