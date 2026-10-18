@@ -1,0 +1,5 @@
+# Canonical challenges from the successful begin caller
+
+begin_challenges_selected_canonical derives canonical selected-carrier values for lambda, chi, theta, mu, eta and all ten zc coordinates from one successful retained begin call. It reuses begin_success to recover the actual SemanticRun, then the checked per-call canonicality theorem, with explicit nominal-carrier coordinate copying. No supplied challenge canonicality or additional successful child-call premise is needed. This establishes canonicality; it does not establish challenge uniformity or production entrypoint correspondence.
+
+One focused NUC check passed, exit0, Lean wall1.62s/controller2.025s, peakRSS3,859,384KiB, process swaps0, no watchdog abort. The printed report contains only propext, Classical.choice and Quot.sound. Exact command, source/base revision, imports, output hash, cgroup limits and fresh reservation/watch records are retained. Individual MemoryHigh4GiB/MemoryMax4608MiB/MemorySwapMax0 remained unchanged. No unchanged full replay was run.
