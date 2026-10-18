@@ -98,3 +98,38 @@ coin function. If i*(c) = k, then P(ch_k) holds, the output is a test of
 view(w, ch_k, ·) resp. sim(hx, ch_k, ·) evaluated at t_k, the other tapes
 are marginalised out, and HVZK_on P gives equal laws at ch_k. No ¬P
 challenge is ever passed to view or sim, so there is no badMass term.
+
+----------------------------------------------------------------------
+§3  The simulator  (PROPOSED)
+----------------------------------------------------------------------
+
+IdealAbort(adv, x) — input: x and hx only.
+  for k = 0, …, N−1:
+    sample ch_k with the honest per-attempt challenge law (the law of
+      `draw` on uniform per-attempt coins: semChal/circle/σQ/q22 decoders
+      on uniform squeeze states, D20′.4);
+    if P(ch_k): sample a tape t, set V := sim(hx, ch_k, t) (= JointView
+      `simulator`, the view at the chosen instance; ZF2 replaces it with
+      the efficient witness-free sampler), program H at the accepted
+      attempt's addresses so that the duplex reproduces ch_k (the
+      squeeze states are the sampled coins), publish V, STOP.
+    else: discard ch_k. NOTHING is programmed for a discarded draw.
+  if none passed: publish ⊥.
+  The adversary then runs against the programmed H (fresh lazily sampled
+  answers off the programmed points).
+
+Sampling ch | P. The simulator does exactly what the prover does on the
+public side: draw challenges, evaluate the same public predicate, retry
+up to N. So
+  - the law of (accepted index, accepted challenge) is identical in the
+    two worlds: i.i.d. draws with the same law, the same stopping rule;
+  - the failure exit has the same probability (1 − p)^N, p := Pr[P],
+    in both worlds, and publishes the same symbol; it costs nothing in
+    the privacy error (liveness only, as D29.3 says);
+  - the expected cost is the prover's: ≤ N evaluations of P, expected
+    1/p; P is exact linear algebra on public data (D28.2, M3). No
+    efficient sampler for the conditional law ch | P is needed beyond
+    the rejection loop, and the conditional law is never approximated.
+So the simulator can sample ch | P efficiently whenever the honest prover
+can produce a proof efficiently; there is no obstruction of the kind the
+task statement asks me to stop on.
