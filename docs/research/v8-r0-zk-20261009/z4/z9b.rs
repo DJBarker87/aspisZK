@@ -396,3 +396,106 @@ pub(crate) fn main() {
     }
     println!("Z9B_DONE {label} wall_seconds={:.3}", start.elapsed().as_secs_f64());
 }
+
+// ---------------------------------------------------------------- R1-P prototype
+/// The P_R1 honest-prover check (DESIGN-R1-P §1), timed per conjunct, on one
+/// challenge (structure, vector, query set, gamma limb set). Public inputs only.
+pub(crate) fn main_r1p() {
+    let args: Vec<_> = std::env::args().collect();
+    let get = |k: &str| args.windows(2).find(|x| x[0] == k).map(|x| x[1].clone());
+    let s = get("--structure").unwrap_or("A".into());
+    let v: usize = get("--vector").unwrap_or("0".into()).parse().unwrap();
+    let qspec = get("--qset").unwrap_or("actual".into());
+    let gi: usize = get("--gamma").unwrap_or("0".into()).parse().unwrap();
+    let t0 = Instant::now();
+    let lap = |t: &mut Instant| -> f64 { let e = t.elapsed().as_secs_f64(); *t = Instant::now(); e };
+    let mut tt = Instant::now();
+    let pi = d18_transport();
+    z5::set_transport(pi);
+    let t = trial(v);
+    let a = alpha_for(&s, v, &t.a);
+    let qs = query_set(&qspec, &t.qs);
+    let op = opening_challenges(v, gi);
+    let label = format!("structure={s} vector={v} qset={qspec} gamma={gi}");
+    // §1.2 field and sampler conjuncts.
+    let half_ok = a[9] != QM31::from_m31(M31(2).inv());
+    let sem_k4 = true; // QM31 by construction (qm31_sample); the probe carries QM31 values.
+    let mut dq = qs.clone();
+    dq.dedup();
+    let query_card = qs.len() == 22 && dq.len() == 22;
+    let t_field = lap(&mut tt);
+    // §1.1 shared precomputation.
+    let lay = Lay::new(&qs);
+    let bw = lay.bw;
+    let (br, gr) = raw_c(&a, &t.z, &qs);
+    let zk = [[t.z[0].x, t.z[0].y], [t.z[1].x, t.z[1].y]];
+    let wts = r1::Weights::new(&a, &zk);
+    let w = wts.materialize(op.kappa, inactive_fn);
+    let geo = Geo::new();
+    let phi = unit_functionals(&geo, &w, &op, &lay);
+    let beta: Vec<Vec<W>> = (0..N).map(|r| phi[usize::from(pi[r])].clone()).collect();
+    let gpow = (0..29).map(|l| op.gamma.pow(l as u64)).collect();
+    let tail: Vec<_> = (0..N).map(|r| tail_row(&a, r)).collect();
+    let cx = Ctx { a, br, gr, tail, beta, gpow, lay: Lay::new(&qs) };
+    let ln = Lanes::new(&cx);
+    let t_pre = lap(&mut tt);
+    // §1.5 lifts.
+    let obs_rank = |src: &[Vec<M31>], width: usize| rank_of(width, src.iter().cloned());
+    let bal_f = |r: usize| -> Vec<M31> { if inactive(r) { sub_vec(&cx.br[r][1..], &cx.br[1023][1..], |x, y| x.sub(y)) } else { cx.br[r][1..].to_vec() } };
+    let w_f = obs_rank(&(0..N).filter(|&r| r != 1023).map(|r| bal_f(r)).collect::<Vec<_>>(), 112);
+    let c1: Vec<bool> = (0..16)
+        .map(|c| obs_rank(&(0..N).filter(|&r| r != 1023 && eligible(c, r)).map(|r| bal_f(r)).collect::<Vec<_>>(), 112) == w_f)
+        .collect();
+    let bal_k = |r: usize, k: usize| -> Vec<M31> {
+        if inactive(r) { flatten(&scale(&sub_vec(&cx.gr[r][1..], &cx.gr[0][1..], |p, q| p.sub(q)), tower(k))) } else { flatten(&scale(&cx.gr[r][1..], tower(k))) }
+    };
+    let w_k = obs_rank(&(1..N).flat_map(|r| (0..4).map(move |k| (r, k))).map(|(r, k)| bal_k(r, k)).collect::<Vec<_>>(), 376);
+    let p_k = obs_rank(&(1..N).filter(|&r| inactive(r)).flat_map(|r| (0..4).map(move |k| (r, k))).map(|(r, k)| bal_k(r, k)).collect::<Vec<_>>(), 376);
+    let h1 = p_k == w_k;
+    let t_lifts = lap(&mut tt);
+    // §1.4 BCondG_R1.
+    let mut vg = Ech::new(bw);
+    lane_elim(ln.count(10), |i| { let (o, b, rd) = ln.bal(10, i); let mut vv = o; vv.extend(flatten(&rd)); (vv, wflat(&b)) }, |c| { vg.insert(c); });
+    let wd = weights_design(&a, &t.z, op.kappa);
+    let dr = design_relations(&wd, &op, &qs, &cx.lay);
+    let mut relset = Ech::new(bw);
+    let mut rels: Vec<&Rel> = vec![&dr.s2a, &dr.s2b, &dr.s1];
+    rels.extend(dr.circ.iter());
+    rels.extend(dr.line[1].iter());
+    for r in &rels {
+        for f in r.limb_functionals(bw) {
+            relset.insert(f);
+        }
+    }
+    // read support excludes the inactive-sum cell (8 limbs, identically 0 on V_G).
+    let dim_b0 = (bw - 8) - relset.rank;
+    let vg_rows = ech_rows(&vg);
+    let vg_in_b0 = rels.iter().all(|r| vg_rows.iter().all(|y| r.eval(&wvals(y)) == W::ZERO));
+    let bcondg = vg.rank == dim_b0 && vg_in_b0;
+    let t_bcond = lap(&mut tt);
+    // §1.3 QPrime_R1.
+    let mut rimg = Ech::new(RW);
+    for li in 0..LANES {
+        lane_elim(ln.count(li), |i| { let (o, _, r) = ln.bal(li, i); (o, flatten(&r)) }, |c| { rimg.insert(c); });
+    }
+    let chain: Vec<Vec<M31>> = (0..RW)
+        .map(|i| {
+            let mut u = vec![M31::ZERO; RW];
+            u[i] = M31::ONE;
+            let q = unflat(&u);
+            let ph = final_value(&q, &a);
+            flatten(&normalize_d(&q, ph, &a).expect("alpha9 = 1/2 is excluded by HalfOK"))
+        })
+        .collect();
+    let qprime = chain.iter().all(|c| rimg.residual(c.clone()).iter().all(|x| *x == M31::ZERO));
+    let t_qprime = lap(&mut tt);
+    let p = half_ok && sem_k4 && query_card && qprime && bcondg && c1.iter().all(|x| *x) && h1;
+    println!(
+        "R1P_RESULT {label} P_R1={p} HalfOK={half_ok} SemK4={sem_k4} QueryCard={query_card} QPrime_R1={qprime} rank_R_ker_own={} BCondG_R1={bcondg} dim_V_G={} dim_B0R1p={dim_b0} V_G_in_B0R1p={vg_in_b0} C1Lift={c1:?} rank_obs_Wsem={w_f} H1Lift={h1} rank_obs_Ph1={p_k} rank_obs_Wh1={w_k} distinct_parents={}",
+        rimg.rank, vg.rank, lay.nf / 4
+    );
+    println!(
+        "R1P_TIME {label} field={t_field:.3} precompute={t_pre:.3} lifts={t_lifts:.3} bcondg={t_bcond:.3} qprime={t_qprime:.3} total={:.3}",
+        t0.elapsed().as_secs_f64()
+    );
+}

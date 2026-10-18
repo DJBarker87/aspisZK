@@ -123,3 +123,28 @@ Sections
   Cheap conjuncts first (HalfOK, QueryCard, SemK4), then the lifts (~1 s),
   then V_G (one lane), then QPrime (twelve lanes).  Any false conjunct aborts
   the attempt immediately (§3).
+
+§2  Cost per attempt
+--------------------
+
+§2.0 Expectations (registered before the measurement)
+  Prototype: `probe --r1p` (z4/z9b.rs main_r1p), release build, one challenge
+  per process, timed per conjunct.  Scale reference: in Z9b one gamma pass
+  (bat(ker own) over 12 lanes carrying 1,336 limbs, plus V_G) took about 25 s;
+  in Z9, pass 1 carrying 2,420 limbs took about 63 s.
+  Expected on the nuc:
+    field conjuncts  < 1 ms
+    precompute       2–5 s   (unit functionals, 4 threads; round rows,
+                              12 threads)
+    lifts            about 1 s
+    BCondG_R1        10–15 s (one K4 lane, carry 1,336 limbs, plus the
+                              relR1 rank)
+    QPrime_R1        20–35 s (12 lanes, carry 1,084)
+    total            35–55 s wall; peak RSS 150–300 MB.
+  Pinned to one core (taskset -c 0), the threaded precompute becomes serial:
+  +5–10 s.  A laptop-class client (one modern core comparable to the nuc's)
+  should land within a factor 1–2 of the single-core figure, so 45–110 s per
+  attempt with the unoptimised probe code.  The prototype uses dense Vec<M31>
+  rows and scalar M31 arithmetic; §2.3 lists the obvious 5–20× improvements
+  (the Q′ and V_G eliminations are sparse in the source dimension, the own
+  columns are shared across lanes, SIMD/limb-packed rows).
