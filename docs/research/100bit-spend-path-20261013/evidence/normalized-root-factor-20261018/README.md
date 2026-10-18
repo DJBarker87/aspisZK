@@ -1,0 +1,9 @@
+# Normalized complete-root factor and certificate availability
+
+`FiniteFieldNormalizedRootFactor` fixes the certificate-availability issue identified in the random splitting work. Euclidean gcd can have a nonunit leading coefficient; the algorithm normalizes the gcd before testing or certifying it.
+
+For monic positive-degree p and an explicit q equal to the finite field cardinality, the defined factor is `normalize(gcd(p, polynomialModPower X p q - X))`. The focused proof establishes that it divides p, is monic, has exactly the field roots of p, divides X^q-X, splits over the field, and has no repeated roots (separability). It therefore has a certificate equal to a product of distinct linear factors. The module proves that any such certificate contains every root and only roots, with size at most degree p.
+
+This supplements the earlier raw-gcd conditional certificates; it does not assert they always exist without normalization. Binary modular exponentiation is reused from the checked generic lemma. No enumeration of the field cardinality appears in the factor definition: q is explicit. The existence proof uses mathematical polynomial roots; it is not an efficient executable root enumeration algorithm. Constructing the roots by recursive splitting, attaching operation costs, handling constant/zero inputs and integrating the entire extractor remain open.
+
+The final changed target compiled once against the focused predecessor cache: exit0, 3.18 seconds, peak RSS2,098,102,272 bytes, process swaps0. All five axiom reports contain only standard axioms. Exact source/object/import hashes and the integration source revision are in `accepted/receipt.json`. The source is byte-identical to the accepted frozen snapshot. Prior diagnostics and the green predecessor V2 are retained in the archive; no package-wide replay was run. Existing host swap is separately recorded and is not claimed zero.
