@@ -5352,3 +5352,76 @@ error, at about 2^-109. QROM is not covered; classical ROM only.
 Naming: the name `zkfs_R1_abort` now exists in both R0Z.FsAbortR1 and
 R1Z.MaskImageR1. The final J0c statement must name one composite theorem
 and cite both.
+
+### Lead acceptance of J0c and `privacy_R1` (2026-10-18); D42: the R1 privacy theorem, conditional on named hypotheses
+
+The worker commits a3c80b748, 4f903c387 and 376423b24 are cherry-picked. The
+lead verified every host receipt (SHA matches, exit 0, axioms standard or a
+subset, no sorry/axiom/admit/native_decide/overrides):
+
+| Module | Attempt | SHA | Axiom lines | Peak RSS (KiB) |
+|---|---|---|---|---|
+| R0Z/HvzkV | 3754 | `9b8096b0…` | 21 | |
+| R1Z/PoleMassR1 | 3760 | `b7ab6669…` | 11 | 7,202,756 |
+| R1Z/ModelsVR1 | 3761 | `cfcf9954…` | 4 | |
+| R1Z/MaskImageVR1 | 3762 | `179d2d98…` | 5 | |
+| R1Z/PrivacyR1 | 3763 | `9be4fb32…` | 1 | |
+| R0Z/HelperInactive | 3765 | `4424b826…` | 5 | |
+
+Attempts 3755 and 3757 hit Lean's -M7000 memory exception. The work was
+split into modules, and the failing sources were not rerun. PoleMassR1 peaks
+about 137 MB under MemoryMax and must not grow; its Finset elaboration should
+be reworked before the final replay.
+
+**D42.1 `privacy_R1`.** It proves `ZK_FSV h (VR1 h) B outputs fs x ε` with
+
+ε = M·q/Umin + (M²/Umin + εexh) + Mi²/Umin + N·4096/Q.
+
+ZK_FSV quantifies over every witness w with h.public w = x.1. The real side
+is the honest retrying prover. The simulator `simV` uses the per-challenge
+pole-free set VR1. Hypotheses:
+- PackField and PublicBase;
+- `BuilderSoundOn`, the builder fields baseTyped, lanes, helperSum and
+  helperInactive;
+- `Sem1Uniform` for every adversary's draw;
+- `R1RealModelV` and `R1IdealModelV`.
+
+For N = 8, q = 2^64, M = 8·2^21, Umin = 2^255 and Q = p⁴, the value is
+≈ 2^-109, dominated by the pole term. The Lean numeral for that
+instantiation was dropped while working around the memory limit (D41's
+r1_error_N8 covers the first three terms).
+
+**D42.2 The V-form models (reviewed).** `ModelsVR1` keeps every D41 field
+except agreement. Agreement now names the P ∧ no-pole games
+(`middleRealAbortV`, `middleIdealAbortV`/`idealTestV`). This is required:
+the honest prover accepts on P ∧ V, and the simulator retries on P alone.
+The coupling bounds are re-proved as in D41. `hybrid_ideal_le` charges the
+difference to `poleBad` (some attempt has P ∧ ¬V), whose mass is at most
+N·4096/Q by `pole_mass_le` and the union bound. Accepted.
+
+**D42.3 Sem1Uniform.** This is a new named premise, in upper-bound form: a
+λ-indexed family of at most m values is hit by χ = sem 1 with mass at most
+m/Q. No existing lemma fixes the FS draw's law (FsGood header; MaskD2's
+`uniform_point_mass` is abstract). It joins the ZF1 refinement list, together
+with the R1 sampler's correspondence (the spend-path sampler proofs are the
+source).
+
+**D42.4 Builder.** `helperInactive` is proved for every trace
+(`active_registry`, [propext, Quot.sound]). Still open:
+- `helperSum`: CopyRegistry's (row, slot) Nodup facts are the expected
+  multiplicity input;
+- `lanes`: R0P builder completeness.
+
+**D42.5 R1 privacy status.** The privacy theorem for R1 now exists as one
+Lean statement. It is conditional on:
+1. P_R1, enforced by the prover through the D38 check (proving that check
+   correct is the certificate route of D38.5);
+2. the builder fields helperSum and lanes;
+3. Sem1Uniform and the R1 real and ideal models: lazy programming, game
+   agreement (prover refinement), the freshness tables HitFresh/PairFresh,
+   and read counts;
+4. the gaps G-root, G-def and G-retry (D41.5);
+5. ZF2: `simV` and the choice-based simulator are not efficient;
+6. classical ROM only.
+
+No transversality premise remains (D29).
