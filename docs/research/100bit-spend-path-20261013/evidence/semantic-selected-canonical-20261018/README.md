@@ -1,0 +1,9 @@
+# Successful semantic sampling implies selected-carrier canonicality
+
+SemanticCallSelectedCanonical follows a successful public-preparation semantic_validated call through its emitted sampler invocation. It reuses the checked sampler success/canonicality theorem and proves the four coordinate copies between nominal sampler, public-preparation and selected-verifier carriers. Canonicality is derived from the successful call, not supplied as an input premise.
+
+SemanticRoundAlphaSelectedCanonical then proves canonicality of every sampled value in SemanticRun. ExtractedSemanticRoundsReachability identifies that list with the alpha array returned by the retained ten-round verifier-loop model. Consequently each selected-carrier alpha coordinate is canonical. The existing RoundModel and reachability sources were checked without changes to obtain missing artifact evidence; the RoundModel source is also retained under its bare import owner. Decode, boundary evaluation and round-value evaluation remain explicit model boundaries. This does not establish whole production Rust verifier correspondence, actual downstream point-copy equality, caller reachability, soundness or privacy.
+
+Four focused NUC checks passed with 11 printed reports; the two coordinate/inequality transport reports use no axioms, and the remaining reports use only propext, Classical.choice and Quot.sound. Wall time, RSS, process swaps, exact source/base revision, commands, import pins and cgroup/reservation/watch records are retained per target. MemoryHigh4GiB, MemoryMax4608MiB and MemorySwapMax0 remained unchanged under the recorded task-local 58GiB reservation gate; process swaps were zero. No full replay was performed.
+
+The exact recursive cached sampler closure was reused. Its import setup is evidence of artifact reuse, not a new proof of unchanged sampler internals. End-to-end production source/runtime and Fiat-Shamir/commitment connections remain open.
