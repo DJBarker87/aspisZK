@@ -5,7 +5,7 @@ limb sets are evaluated inside each process. `--summarize DIR` re-parses only.
 """
 import argparse, concurrent.futures, hashlib, json, os, pathlib, re, shutil, subprocess, time
 p=argparse.ArgumentParser();p.add_argument('--out');p.add_argument('--preflight',action='store_true');p.add_argument('--jobs',type=int,default=5)
-p.add_argument('--revision',default='unknown');p.add_argument('--summarize');p.add_argument('--random',type=int,default=200);p.add_argument('--worst',type=int,default=20);args=p.parse_args()
+p.add_argument('--revision',default='unknown');p.add_argument('--summarize');p.add_argument('--random',type=int,default=200);p.add_argument('--worst',type=int,default=20);p.add_argument('--only');args=p.parse_args()
 here=pathlib.Path(__file__).resolve().parent;root=here.parents[3]
 def kv(text):
     out={}
@@ -77,7 +77,7 @@ binary=str(here/'target/release/probe')
 def job(s,v,q):return run([binary,'--z9b','--structure',s,'--vector',str(v),'--qset',q],name(s,v,q))
 status=run([cargo,'build','--release','--locked','--offline','--manifest-path',str(here/'Cargo.toml'),'-j2'],'compile')
 if status!=0:evidence(status);raise SystemExit(status)
-js=[('A',0,'actual'),('A',0,'consecutive0')] if args.preflight else jobs()
+js=[('A',0,'actual'),('A',0,'consecutive0')] if args.preflight else ([(l.split(',')[0],int(l.split(',')[1]),l.split(',')[2]) for l in pathlib.Path(args.only).read_text().split()] if args.only else jobs())
 with concurrent.futures.ThreadPoolExecutor(1 if args.preflight else args.jobs) as ex:codes=list(ex.map(lambda x:job(*x),js))
 status=0 if all(c==0 for c in codes) else 1
 rows=parse(out);agg=table(rows);(out/'summary.json').write_text(json.dumps({'aggregate':agg,'jobs':rows},indent=1)+'\n');print(json.dumps(agg,indent=1))
