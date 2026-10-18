@@ -4747,7 +4747,6 @@ Pr[¬P] is small, and Z8–Z10 have observed no failures.
 
 The Rust predicate check waits for R1M's definitions.
 
-<<<<<<< HEAD
 ### Lead acceptance of the R1 privacy-model design (2026-10-18); D30
 
 `t2b2b/DESIGN-R1-PRIVACY-MODEL.txt` (worker 0b36b12bf..eb6c3e476,
@@ -4793,7 +4792,7 @@ check in P for clause (ii′).
 
 ZF1-abort continues on 3500–3549. Estimate: 15–25 worker-days and 90–170
 attempts, about 10–15 days elapsed. J0b is unestimated.
-=======
+
 ### ZF1-abort completed — abort-aware ZK_FS without badMass (2026-10-18)
 
 Branch `codex/r0-zf1-abort-20261017`, base `a4246222a` (D29). Design in
@@ -4819,7 +4818,6 @@ Host attempts 3500 (exit 1), 3501 (exit 1, diagnostic), 3502 (exit 0,
 4.35 s, peak RSS 6,770,592 KiB, 0 swaps); all 20 axiom lines standard;
 evidence [zf1/abort-evidence.json](zf1/abort-evidence.json). Next host
 attempt in this range: 3503.
->>>>>>> 746e7204d (research(r0): ZF1-abort — FsAbort compiles (host 3502); abort-aware ZK_FS without badMass, named Hit/Coll/Prog terms; evidence and LOG)
 
 ### Lead acceptance of ZF1-abort (2026-10-18); D31
 
