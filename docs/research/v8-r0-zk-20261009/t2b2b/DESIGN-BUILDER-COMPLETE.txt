@@ -47,3 +47,52 @@ with proved properties.  Evidence:
   build_with_material).
 
 Consequence: task item 2 does not apply; item 3 is carried out below.
+
+§1  What is now proved (R0Z/BuilderComplete.lean, host attempt 4063, exit 0,
+    every axiom line ⊆ [propext, Classical.choice, Quot.sound];
+    evidence t2b2b/evidence-builder-complete.json)
+
+1.1 `lanes` is a production relation, not a lane-map fact.
+    lanes_iff_nonCopy (hcard : 4096 < Fintype.card K) B pub t
+        (hA : BaseTyped F t) (hpub : PublicBase F pub) :
+      (∀ λ χ i b, i < 28 → laneOf t pub λ χ B i b = 0) ↔ NonCopyHolds pub t
+    where NonCopyHolds = Holds of value, occupancy, asset, schedule, path,
+    digest and poseidonScalar (the seven λ/χ-free conjuncts of R0P
+    ProductionHolds, SemAssembly.lean:29).  Proof: pick a pole-free χ
+    (exists_noPole: `poleVal` from 2·2048 row-slot values into K is not
+    surjective when |K| > 4096, Fintype.card_le_of_surjective), form the
+    prepared instance `prepare pub t (chOf 0 χ)`, on which the Copy lane
+    vanishes (copyHolds_prepare) and lanes 0..27 equal those of t
+    (laneOf_prepare_lt); then the proved R0P equivalence
+    lanes_zero_iff_holds (LaneMap.lean:817) on the prepared instance, and
+    transport of every Holds back to t (holds_prepare, rowOpenings_prepare).
+    laneOf_lt_indep: lanes 0..27 read neither λ nor χ.
+    hcard is a field-size fact (|K| = p⁴ ≈ 2^124 for QM31), not a builder fact.
+
+1.2 `baseTyped` holds by construction.
+    ofColumns (c1 : Fin 26 → Fin 1024 → F) (rest : Fin 3 → Fin 1024 → K)
+    is the builder's output shape: the 26 semantic columns are base-field
+    arrays (the Rust `semantic_c1` M31 arrays), columns 26-28 are extension
+    values.  baseTyped_ofColumns : BaseTyped F (ofColumns c1 rest).
+
+1.3 The prover.  BuilderSpec F W (data: c1, rest as functions of
+    (pub, w)), BuilderSpec.build, and
+      honestProverOf S Rel transport : HonestProver K
+    with Instance := {p : Public K × W // Rel p.1 p.2}, public := p.1,
+    build := S.build p.1 p.2.  This is the HonestProver instance whose
+    `build` is the builder.
+
+1.4 The bridge.
+    builderCore_of_refines / builderCoreOn_of_refines /
+    builderSoundOn_of_refines (hcard) S Rel (hR : BuilderRefines S Rel)
+      transport B x (hpub : PublicBase F x.1) :
+      BuilderSoundOn (honestProverOf S Rel transport) B x
+    so `privacy_R1` / `privacy_R1_eff` take their BuilderSoundOn premise
+    from hR, hcard and PublicBase alone.
+
+1.5 Sanity against soundness.  inputNoteExtracted_of_refines: under hR,
+    every relation instance's build satisfies R0P InputNoteExtracted
+    (Extraction.lean:330 needs schedule, path, digest, asset, poseidon and
+    CopyLinkBalance, all supplied by hR).  The refinement premise is
+    therefore the trace-side image of the payment relation used by the
+    soundness extractor, not an unrelated condition.
