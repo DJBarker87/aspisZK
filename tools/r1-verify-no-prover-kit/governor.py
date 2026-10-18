@@ -28,7 +28,6 @@ def reservation_snapshot(own_cgroup=None):
  finite=[]
  for path in Path('/sys/fs/cgroup').rglob('memory.max'):
   directory=path.parent
-  if not directory.name.endswith('.scope'):continue
   try:
    value=path.read_text().strip();events=(directory/'cgroup.events').read_text();relative='0::/'+str(directory.relative_to('/sys/fs/cgroup'))
    if value=='max' or 'populated 1' not in events or relative==own_cgroup:continue
@@ -36,14 +35,14 @@ def reservation_snapshot(own_cgroup=None):
   except OSError:continue
  # A finite ancestor reservation covers its child scopes; do not double count.
  top=[item for item in finite if not any(item['path'].startswith(other['path']+'/') for other in finite if other!=item)]
- total=sum(item['MemoryMax_bytes'] for item in top);return {'other_populated_scope_reservations':sorted(top,key=lambda p:p['path']),'other_MemoryMax_bytes':total,'proposed_own_MemoryMax_bytes':8*2**30,'sum_with_own_bytes':total+8*2**30,'safe_working_limit_bytes':55*2**30,'admitted':total+8*2**30<=55*2**30,'rule':'Finite populated scope reservations; nested finite ancestor covers children; exact dedicated own scope excluded.'}
+ total=sum(item['MemoryMax_bytes'] for item in top);return {'other_populated_finite_cgroup_reservations':sorted(top,key=lambda p:p['path']),'other_MemoryMax_bytes':total,'proposed_own_MemoryMax_bytes':8*2**30,'sum_with_own_bytes':total+8*2**30,'safe_working_limit_bytes':55*2**30,'admitted':total+8*2**30<=55*2**30,'rule':'All finite populated cgroup reservations, including services; nested finite ancestor covers children; exact dedicated own scope excluded.'}
 def cgroup_metrics(cg):
  return {n:(cg/n).read_text().strip() for n in ['memory.current','memory.peak','memory.swap.current','memory.events']}
 def stop_own_group(pid):
  try:os.killpg(pid,signal.SIGKILL)
  except ProcessLookupError:pass
 def main():
- a=argparse.ArgumentParser();a.add_argument('--root',type=Path,required=True);a.add_argument('--label',required=True);a.add_argument('--execute-granted',action='store_true');args=a.parse_args();root=args.root.resolve();kit=root/'tools/r1-verify-no-prover-kit';pins=json.loads((kit/'source-pins.json').read_text());gate=next(g for g in pins['gates'] if g['label']==args.label);command=[x.replace('{root}',str(root)) for x in gate['command']];journal=root/'governor';journal.mkdir(exist_ok=True);dest=journal/(args.label+('-execute' if args.execute_granted else '-preflight')+'.json');assert not dest.exists(),'retain old governor receipt; choose another root/label before retry';entry={'label':args.label,'utc_start':datetime.now(timezone.utc).isoformat(),'source_revision':pins['after_revision'],'source_pins_sha256':sha(kit/'source-pins.json'),'governor_sha256':sha(__file__),'shared_lock':LOCK,'command':command,'execute_granted':args.execute_granted,'foreign_process_samples':[],'policy_override':{'source':'User instruction: just do it in parallel; root coordination clarification 2026-10-18','foreign_activity':'record only; never blocks or stops a B job by itself','own_jobs':'B phase lock serializes B native gates; A may run concurrently','admission':'Own6G high/8G max/swap0; aggregate populated finite-scope MemoryMax plus proposed B8G must be <=55GiB before and continuously during own job.'}}
+ a=argparse.ArgumentParser();a.add_argument('--root',type=Path,required=True);a.add_argument('--label',required=True);a.add_argument('--execute-granted',action='store_true');args=a.parse_args();root=args.root.resolve();kit=root/'tools/r1-verify-no-prover-kit';pins=json.loads((kit/'source-pins.json').read_text());gate=next(g for g in pins['gates'] if g['label']==args.label);command=[x.replace('{root}',str(root)) for x in gate['command']];journal=root/'governor';journal.mkdir(exist_ok=True);dest=journal/(args.label+('-execute' if args.execute_granted else '-preflight')+'.json');assert not dest.exists(),'retain old governor receipt; choose another root/label before retry';entry={'label':args.label,'utc_start':datetime.now(timezone.utc).isoformat(),'source_revision':pins['after_revision'],'source_pins_sha256':sha(kit/'source-pins.json'),'governor_sha256':sha(__file__),'shared_lock':LOCK,'command':command,'execute_granted':args.execute_granted,'foreign_process_samples':[],'policy_override':{'source':'User instruction: just do it in parallel; root coordination clarification 2026-10-18','foreign_activity':'record only; never blocks or stops a B job by itself','own_jobs':'B phase lock serializes B native gates; A may run concurrently','admission':'Own6G high/8G max/swap0; aggregate populated finite-cgroup MemoryMax plus proposed B8G must be <=55GiB before and continuously during own job.'}}
  def save():dest.write_text(json.dumps(entry,sort_keys=True,indent=2)+'\n')
  with open(LOCK,'a+') as lock:
   try:fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
