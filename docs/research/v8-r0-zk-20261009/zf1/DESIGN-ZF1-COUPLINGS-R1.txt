@@ -211,7 +211,10 @@ Types (FsStatement.lean, FsAbort.lean, read from the sources):
   table H has exactly |Answer|^m preimages along the adaptive recursion
   (a fresh address forces its coordinate, a repeated one leaves it free,
   and the table is free exactly on the programmed addresses). Both are
-  HYP (`cp` in R1RealModel), not proved here; the second is the
+  HYP (`cp` in R1RealModel). The first is PROVED generically
+  (FsAbortTape.mean_decodeOrSpare: equal fibres ⇒ decode-or-spare is
+  measure-preserving) given the sampler's equal-fibre property (HYP); the
+  lazy-programming law is not proved here; it is the
   per-attempt analogue of R19 `lazyMean_eq_independentMean`
   (AdaptiveFirstReadLaw), which lives in another workspace (G10).
 
@@ -383,3 +386,107 @@ PROVED (Lean, host 3800 and 3802):
   (instances of hit_le / pair_le); no per-link entropy argument is needed
   because in the middle game every answer is its own uniform coordinate
   and the real game agrees with it until Coll.
+----------------------------------------------------------------------
+§7  Lean  (all PROVED, host-compiled, axioms audited; zf1/couplings-R1-evidence.json)
+----------------------------------------------------------------------
+
+R0Z/FsAbortBounds.lean (imports R0Z.LawTransport only) — host 3800, exit 0,
+SHA f5820c2f…, 22 axiom lines [propext, Classical.choice, Quot.sound]:
+  mass E := mean (if E s then 1 else 0)            (= FsAbort.eventMass, rfl)
+  mass_nonneg, mass_le_one, mass_mono, mass_congr, mass_or_le,
+  mass_exists_le, mass_exists_le_card (union bound), mass_equiv, mass_prod,
+  mass_point (1/|U|)
+  mass_cond_le: S ≃ R × X, D depends on R only, ∀ r ∈ D, mass_X E ≤ δ
+                ⇒ mass (D ∧ E) ≤ mass D · δ           (identical-until-bad
+                conditioning step)
+  hit_le:       qa constant in u on D, ga = a ⇒ u = π r a
+                ⇒ mass (D ∧ qa = ga) ≤ mass D / |U|     (first read vs field)
+  pair_le:      fa constant in u, ga's field u ⇒ mass (fa = ga) ≤ 1/|U|
+  HitFresh, PairFresh (the named per-read / per-pair hypotheses),
+  hitFresh_mass, pairFresh_mass (≤ 1/Umin)
+  HitEv M q charged qry addr, CollEv M priv addr,
+  hitEv_mass_le / hitEv_mass_fresh:  mass HitEv ≤ M·q/Umin
+  collEv_mass_le / collEv_mass_fresh: mass CollEv ≤ M·M/Umin
+R0Z/FsAbortR1.lean (imports R0Z.FsAbort, R0Z.FsAbortBounds) — host 3802,
+exit 0, SHA 617c7f3d…, 11 axiom lines standard (r1TranscriptReads_eq:
+[propext]); 3801 failed (a 2^496 numeral above norm_num's threshold):
+  eventMass_eq_mass (rfl), r1TranscriptReads_eq (= 115),
+  r1AttemptReadBound_le (§1.5 formula ≤ 2^21; arithmetic only)
+  R1RealModel P h B outputs fs ab x M q Umin εexh   (named hypotheses, §3)
+  realAbortCoupling_of_R1 : R1RealModel … → RealAbortCoupling P … ab x
+                            (M·q/Umin) (M·M/Umin + εexh)
+  R1IdealModel P h B outputs fs ab x M Umin         (named hypotheses, §4)
+  idealAbortCoupling_of_R1 : R1IdealModel … → IdealAbortCoupling … (M·M/Umin)
+  zkfs_R1_abort : HVZK_on P → R1RealModel … → R1IdealModel … →
+                  ZK_FS h B outputs fs x (M·q/Umin + (M·M/Umin + εexh) + Mi·Mi/Umin)
+  zkfs_mono, r1_error_N8, zkfs_R1_abort_N8 (below)
+R0Z/FsAbortTape.lean (imports R0Z.FsAbortBounds) — host 3806, exit 0, SHA
+80578d69…, 3 axiom lines standard; 3803–3805 failed (sum_boole rewriting and
+an instance-unification timeout in the exhaustion-count lemmas, which were
+dropped):
+  sum_fibres, mean_decodeOrSpare (rejection decoder with equal fibres plus
+  a uniform spare is measure-preserving), mass_fst.
+Peak RSS 6.60–6.75 GB under -M7000 (the Mathlib import alone is 6.6 GB);
+no cap raised; nothing mirrored from the spend-path workspace.
+
+What the Lean does NOT contain: a definition of fs.real/fs.ideal/ab for
+R1 (no byte-level R1 transcript model exists in this workspace), the
+coupling maps, the agreement proofs, or the HitFresh/PairFresh instances.
+Those are exactly the fields of R1RealModel / R1IdealModel.
+
+----------------------------------------------------------------------
+§8  Numbers for N = 8, Q = 2^64
+----------------------------------------------------------------------
+
+m ≤ 2^21 per attempt ⇒ M = M_I = 8·2^21 = 2^24; Umin = 2^255.
+  ε_hit  ≤ 2^24 · 2^64 / 2^255           = 2^-167
+  ε_coll ≤ 2^48 / 2^255 + ε_exh            = 2^-207 + 2^-476
+           (ε_exh ≤ 8 · 2^17 · 2^-496 = 2^-476)
+  ε_prog ≤ 2^48 / 2^255                   = 2^-207
+  ε_FS   ≤ 2^-167 · (1 + 2^-39 + 2^-309)  < 2^-166.99.
+Lean: r1_error_N8 proves the sum ≤ 2^-166 with the exhaustion slot taken
+as 2^-250 (a looser bound, to stay below the numeral threshold), and
+zkfs_R1_abort_N8 : HVZK_on P → R1RealModel … (8·2^21) (2^64) (2^255)
+(1/2^250) → R1IdealModel … (8·2^21) (2^255) → ZK_FS … (1/2^166).
+Sensitivity: ε_FS is linear in N·m·q; a factor 16 error in the read count
+moves it to 2^-163. At N = 1 it is 2^-170 (the accepted attempt's
+unpublished reads alone). The privacy ledger term of the abort composition
+is therefore ≈ 2^-167, far below the soundness target; it does not
+contain Pr[P] or the transversality premises.
+
+----------------------------------------------------------------------
+§9  Open items and gaps found
+----------------------------------------------------------------------
+
+G-root   (new) The Lean View has no commitment root (Meta.handles are
+         nominal statement handles). Proposal §2.1: publish roots, paths
+         and opened salts as the verifier log in observerOracle; needs
+         ZF1a's fs.real to be written that way. No Lean type change.
+G-def    fs.real, fs.ideal and ab for R1 are not defined in Lean; a byte-
+         level R1 transcript model would be needed (the spend-path
+         LiteralByteProtocol / AdaptiveStatementFiatShamir model the
+         33-row protocol for soundness and are the natural source to
+         mirror; not done here).
+G-prog   the lazy-programming law (meanR of the real coupling); route:
+         mirror R19 MemoizedProgramLaw/AdaptiveFirstReadLaw
+         (exact_oracle_law, lazyMean_eq_independentMean), which also
+         needs G11 (the two `mean`s).
+G-ref    agreement outside the events = refinement of the Rust R1 prover
+         to the Lean view (with D34.3's line_node / QueryGeometry / ell
+         items) and of the P_R1 check (D28.2).
+G-count  m ≤ 2^21 is counted from the source, not instrumented; an
+         optimized, capped Rust count of hash calls per attempt would
+         close it.
+G-exh    the per-limb exhaustion mass (2/2^32)^16 and the union over
+         limbs are not in Lean (attempted in 3803–3805, dropped).
+G-retry  the probe has no retry driver: prove_masked_attempt is one
+         attempt. The honest prover must loop ≤ N times, call
+         StateOnlyAttemptSecrets::generate per attempt (A-sec), treat
+         MaskSampleExhausted and ¬P as a failed attempt, publish nothing
+         from failed attempts (A-erase) and ⊥ at the cap (A-cap).
+A-salt   R1 privacy requires the private-leaf-salts (P3) build; the
+         unsalted P2 path has no uniform designated field on its leaves.
+QROM     not covered (as in DESIGN-ZF1-ABORT §6(d)).
+No item of this job stopped on an ill-typed or false statement: the
+FsAbort hypotheses typed as read (RealAbortCoupling, IdealAbortCoupling,
+Coupling, AbortBridge) and were instantiated without change.
