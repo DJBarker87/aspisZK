@@ -234,8 +234,8 @@ under crates/aspis-r1-cost-probe/src unless stated.
     let queries=t.queries(row,&fbytes)?;let _rho=t.scalar_k(row+1,&[]);
   (prover.rs:229), and before the output buffer is assembled
   (prover.rs:230 onward), insert:
-    if !p_r1::check(&p_r1::Challenges{ alpha: sem.alpha, z: sem.z, gamma,
-        kappa, alpha: [alpha0, alpha1], queries }) {
+    if !p_r1::check(&p_r1::Challenges{ sem_alpha: sem.alpha, z: sem.z, gamma,
+        kappa, fold: [alpha0, alpha1], queries }) {
       return Err(Error::Rejected);
     }
   Error gains one variant, Rejected (verifier.rs:20).
@@ -289,8 +289,9 @@ under crates/aspis-r1-cost-probe/src unless stated.
     this because the ledger is never published.
   Cap N: fixed in advance and public (it is part of the simulator's loop,
   ZF1 §2).
-  - Proposal: N = 8. In Z8–Z10, Z9b and R1-P, 0 of about 13,900 challenge
-    draws failed, so N matters only for liveness.
+  - Proposal: N = 8. No failure has been observed: every one of about 600
+    real-payload evaluations in Z8–Z9b and R1-P passed, and so did Z10's
+    13,000 reduced-model query sets. N therefore matters only for liveness.
   - The theorem holds for any fixed N (zkfs_of_hvzk_on_abort; no badMass
     term).
   Failure exit: AttemptsExhausted.
@@ -303,3 +304,105 @@ under crates/aspis-r1-cost-probe/src unless stated.
   rejection (which conjunct failed) may be written anywhere persistent or
   remote. Debug logging of a rejection must be compiled out of release
   builds.
+
+§4  The refinement statement and the route to it
+-----------------------------------------------
+
+§4.1 What has to be proved (only one direction)
+  Let check : RustChallenges → Bool be the Rust function of §1, and decode
+  the R1 transcript decoders (gamma_sample/ordinary_sample into WideExact,
+  qm31_sample, circle_sample, queries_from_pairs; R0P SemD2 and the R1
+  decoders D20′.4). The statement is
+    check_sound : ∀ c, check c = true → P_R1 AspisR1.rowEquiv B hB (decode c)
+  Only soundness is needed. The protocol's predicate is taken to be
+  P_chk := fun ch => check ch = true itself:
+  - the prover rejects exactly when check is false;
+  - the simulator rejection-samples ch | P_chk, which is public and
+    executable (ZF1 §3, R-same);
+  - MaskImageOn is antitone in P, so a smaller P is easier, and from
+    check_sound,
+      MaskImageOn P_R1 h B x → MaskImageOn P_chk h B x;
+  - ZF1-abort's theorem holds for any public P, so it applies to P_chk.
+  Completeness (P_R1 → check = true) is not needed. A false negative from the
+  check costs only an extra attempt, i.e. liveness. This removes half the
+  refinement work, and every degenerate case in the Rust code may fail
+  closed.
+
+§4.2 Route C: certificate checking (recommended)
+  The check is split into a producer, which may be any code, and a small
+  checker. Only the checker needs proving.
+  Each inclusion of images "S.map f ≤ T.map g" in P_R1 is certified by
+  preimages:
+  - QPrime_R1: for each of the 1,084 normalised ChainT0K4 basis vectors b_i,
+    the coefficients of a combination of each lane's balanced sources whose
+    own part is 0 and whose round part is b_i. The producer gets these by
+    carrying source tags (identity columns) through the §1.3 elimination.
+  - BCondG_R1: a reduced echelon form E = U · relR1 with U and U^-1 (so the
+    rank of relR1 is certified), the kernel basis of B0R1′ read off E, and for
+    each kernel basis vector a G-source combination with zero own and round
+    parts that produces it.
+  - C1Lift_c and H1Lift: for each W source (1,023 F sources, or 4,092 K4
+    limb sources) a combination of V sources (respectively P_26 sources)
+    with the same obs value.
+  The checker:
+  - rebuilds the source vectors from the challenges (§1.1 formulas);
+  - verifies every certificate by matrix-vector products over F and
+    equality tests, with no elimination;
+  - computes HalfOK, SemK4 and QueryCard directly.
+  Proof obligations, in Lean, once:
+  (C1) Checker semantics. Accepted certificates imply the inclusions.
+       Linear algebra over ZMod P: a preimage witness gives membership in
+       the map image, and U·U^-1 = 1 with E = U·relR1 gives ker relR1 =
+       ker E. Small, payload-free, and reusable for R0.
+  (C2) Matrix refinement. Each source vector is the Lean linear map applied
+       to the corresponding unit tape:
+       - own rows = ownMap ∘ single (claimsLinear, extraLinear, oodLinear,
+         opened through naturalCoefficientPolynomial and the D18 π);
+       - round rows = roundMaskMap ∘ single (the pureRound closed forms of
+         T2b-2a, already proved);
+       - batched rows = batRead ∘ A ∘ inlM ∘ single (R1-2's batRead_L cell
+         formulas);
+       - relR1 limb functionals = D34's relR1 with D35.1's lineInverse;
+       - the ChainT0K4 basis = normalize_d in the Z4c round coordinates,
+         together with the map from those coordinates to RoundPayload (the
+         linear coefficient is implied by the boundary). This one is an
+         OBLIGATION.
+       These are the D34.3 refinement items. Each is a closed-form identity
+       per row, proved symbolically for all rows (AGENTS rule 2), never by
+       evaluating 1,024 concrete rows.
+  (C3) Rust ↔ Lean for the checker only. Extract the checker (about 500–800
+       lines: the §1.1 row formulas plus matrix-vector products) with Aeneas,
+       or write it in Lean and generate the Rust from it. Prove that the
+       extracted functions equal the Lean definitions of (C1)/(C2).
+       Differential tests against the z9b probe on the Z9b vectors are
+       engineering evidence only.
+  Cost of Route C at proving time:
+  - The producer carries tags through the eliminations, about 2× the §2
+    figure.
+  - The checker is a few matrix-vector passes, under 1–2 s.
+  - Certificate memory: QPrime about 12 × 1,084 × (≤ 4,092) F entries
+    ≈ 50–200 MB; this can be streamed per lane and need not be kept.
+  So expect 40–50 s per attempt with the prototype code, before the §2.3
+  improvements.
+
+§4.3 Route E: extraction of the eliminating check (not recommended)
+  Aeneas-extract the Rust Gaussian elimination and prove that the echelon
+  routine computes rank and span membership over ZMod P, with mutation, loop
+  invariants and pivot bookkeeping, plus the same (C2) matrix refinement. The
+  generic elimination proof is the large part, and the Aeneas replays of
+  loop-heavy code are the memory-hazardous kind AGENTS.md warns about. It
+  gives completeness for free, but completeness is not needed (§4.1).
+
+§4.4 Recommendation and order
+  1. Write the producer/checker split in Rust behind the §3.1 hook. Start
+     with differential tests against main_r1p on the Z9b vectors.
+  2. Prove (C1) in Lean: generic, small, payload-free.
+  3. Prove (C2) row by row, reusing R1-2/J4-R1 and T2b-2a closed forms.
+  4. Do (C3) by extraction of the checker only.
+  5. Restate the target with P_chk and derive it from maskImageOn_R1 by
+     antitonicity (one lemma, once maskImageOn_R1 is proved).
+  Open in this design:
+  - the proof-account and nonce decision (§3.2);
+  - the cap N = 8, a proposal;
+  - the improvements of §2.3, not measured;
+  - laptop timing, estimated only from the nuc's laptop-class CPU.
