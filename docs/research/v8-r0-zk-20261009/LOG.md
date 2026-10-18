@@ -4944,3 +4944,43 @@ launch are separate commands, and any Lean process on the host means wait.
 **D33.4 Next.** R1-2 (`R1Z/Batched.lean`, the R1 instance) then J4-R1(b)
 (relR1, B0R1, `bat_L_mem_B0R1`). Both are now unblocked: R1-0 is D32 and
 the algebra is D33.1.
+
+### Lead acceptance of R1-2 and J4-R1(b) (2026-10-18); D34: J4-R1 closed
+
+The worker commits 9398aa8a1 and 56ad2ce12 are cherry-picked. The lead
+verified both host receipts:
+- `R1Z/Batched.lean`: attempt 3681, exit 0, SHA `fd43a244…` matches,
+  17 standard axiom lines;
+- `R1Z/VerifierRelationsR1.lean`: attempt 3683, exit 0, SHA `3fc38a95…`
+  matches, 13 standard axiom lines.
+
+Neither file has sorry, axiom or a maxRecDepth/maxHeartbeats override.
+Attempts 3680 and 3682 were elaboration failures. Evidence:
+`t2b2b/evidence-R1-2-J4R1b.json`.
+
+**D34.1 Proved.**
+- R1Bat, with `instance BatchedLayer K R1Bat` and the seven `ell`
+  functionals, each equal to the γ-batch of its own cell.
+- relR1 with the D33 `lineInverse`, and B0R1.
+- `bat_L_mem_B0R1` for every trace whose own cells and inactive sum vanish
+  (J4′ form; the own-cell conditions are explicit hypotheses).
+- **`bat_ker_own_le_B0R1`**, with no challenge premise: there is no
+  GoodCircle on R1.
+
+So "BCondG_R1 ⇒ BCond ∧ BReach" depends only on R1-3. The proof lesson
+from 3680 is recorded: make `dotLinear` and `roundPolynomialLinear`
+irreducible after their apply lemmas, and never prove `ell` cells by `rfl`.
+
+**D34.2 Memory headroom.** Peak RSS of 6.78–6.93 GB is within 70–250 MB
+of Lean's -M7000. Later R1Z modules must import narrowly (only what they
+use). The cap is not raised. A module that hits it is split.
+
+**D34.3 Open refinement items.**
+- `storedFirstLineX18` versus the Rust `line_node`;
+- `lineInverse` versus `QueryGeometry`;
+- `ell` versus the Rust weight kinds 5/6 (numerically checked by Z9 only).
+
+**D34.4 Next.**
+- Lane A: R1-3 PredicateR1, then J2-R1 (relations worker, attempts
+  3684–3739).
+- Lane C: J0 and J13-R1 (a new worker, attempts 3740–3799).
