@@ -10,7 +10,8 @@ the batched condition (B).
   and `chain0K4_le_silent_of` are the R0 instantiation.  `BCond` is exactly
   the premise "B-open" of D23.2: `(ker own ⊓ ker R).map bat = (ker own).map bat`.
 * `ownMap` keeps the direct observations `.pointClaim`, `.extraClaim`, `.ood`,
-  `.opened` on all 29 columns; `batMap` keeps `.openingCoeff` and `.finalCoeff`.
+  `.opened` on all 29 columns; `batMap` reads the batched cells `.bat b`
+  (for R0, `.openingCoeff` and `.finalCoeff`), valued in `Bat → K` (R1-0).
 
 Nothing here asserts (Q′) or (B); both enter `chain0K4_le_silent_of` as
 named hypotheses. -/
@@ -45,34 +46,33 @@ theorem exists_silent_of_cover {R V W₁ W₂ W₃ : Type*} [Ring R]
 
 variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+  {Bat : Type} [BatchedLayer K Bat]
 
 /-! ### Observation maps on the mask tape -/
 
 /-- Keep the per-lane direct observations; zero every other cell. -/
-def ownProj : Payload K →ₗ[F] Payload K :=
+def ownProj : Payload K Bat →ₗ[F] Payload K Bat :=
   LinearMap.pi fun coord => match coord with
-  | .pointClaim j c => (LinearMap.proj (.pointClaim j c) : Payload K →ₗ[F] K)
-  | .extraClaim c => (LinearMap.proj (.extraClaim c) : Payload K →ₗ[F] K)
-  | .ood j c => (LinearMap.proj (.ood j c) : Payload K →ₗ[F] K)
-  | .opened q s c => (LinearMap.proj (.opened q s c) : Payload K →ₗ[F] K)
+  | .pointClaim j c => (LinearMap.proj (.pointClaim j c) : Payload K Bat →ₗ[F] K)
+  | .extraClaim c => (LinearMap.proj (.extraClaim c) : Payload K Bat →ₗ[F] K)
+  | .ood j c => (LinearMap.proj (.ood j c) : Payload K Bat →ₗ[F] K)
+  | .opened q s c => (LinearMap.proj (.opened q s c) : Payload K Bat →ₗ[F] K)
   | _ => 0
 
-/-- Keep the batched opening coordinates; zero every other cell. -/
-def batProj : Payload K →ₗ[F] Payload K :=
-  LinearMap.pi fun coord => match coord with
-  | .openingCoeff i => (LinearMap.proj (.openingCoeff i) : Payload K →ₗ[F] K)
-  | .finalCoeff i => (LinearMap.proj (.finalCoeff i) : Payload K →ₗ[F] K)
-  | _ => 0
+/-- Read the batched opening cells (R1-0: replaces R0's `batProj`). -/
+def batRead : Payload K Bat →ₗ[F] (Bat → K) :=
+  LinearMap.pi fun b => (LinearMap.proj (PayloadCell.bat b) : Payload K Bat →ₗ[F] K)
 
 /-- `own m`: claims, extra claims, OOD values and opened symbols of `A(inlM m)`. -/
 def ownMap (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) :
-    M K F →ₗ[F] Payload K :=
-  (ownProj (F := F)).comp ((A π B ch).comp inlM)
+    M K F →ₗ[F] Payload K Bat :=
+  (ownProj (F := F)).comp ((A (Bat := Bat) π B ch).comp inlM)
 
-/-- `bat m`: `.openingCoeff` and `.finalCoeff` of `A(inlM m)`. -/
+/-- `bat m`: the batched cells of `A(inlM m)` (for R0, `.openingCoeff` and
+`.finalCoeff`). -/
 def batMap (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) :
-    M K F →ₗ[F] Payload K :=
-  (batProj (F := F)).comp ((A π B ch).comp inlM)
+    M K F →ₗ[F] (Bat → K) :=
+  (batRead (F := F)).comp ((A (Bat := Bat) π B ch).comp inlM)
 
 /-! ### The inactive sum vanishes on mask tapes (balance) -/
 
@@ -153,7 +153,7 @@ theorem pureTrace_inactive_dot (B : PackBasis F) (m : M K F) (c : Fin 29) :
 Boolean cube). -/
 theorem L_inactiveSum (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K)
     (t : Trace K) :
-    PayloadSplit.L π B ch t .inactiveSum = linearPayload π ch t .inactiveSum := rfl
+    PayloadSplit.L (Bat := Bat) π B ch t .inactiveSum = linearPayload (Bat := Bat) π ch t .inactiveSum := rfl
 
 section LRead
 /- As in Shift.LRead: keep the large readers opaque while `simp` reduces the
@@ -163,7 +163,7 @@ attribute [local irreducible] copyLinks copyPatterns copyActiveRowMasks
 
 theorem linearPayload_inactiveSum (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K)
     (t : Trace K) :
-    linearPayload π ch t .inactiveSum = ∑ c : Fin 29, ch.opening 0 ^ c.val *
+    linearPayload (Bat := Bat) π ch t .inactiveSum = ∑ c : Fin 29, ch.opening 0 ^ c.val *
       dotLinear (AspisR0.Opening.indicator copyInactiveRows) (t c) := by
   simp only [linearPayload, LinearMap.pi_apply, LinearMap.sum_apply, LinearMap.smul_apply,
     LinearMap.comp_apply, LinearMap.proj_apply, smul_eq_mul]
@@ -172,16 +172,16 @@ end LRead
 
 /-- Design §2.2.1: `.inactiveSum` is identically zero on mask tapes. -/
 theorem ia_pure_zero (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K)
-    (m : M K F) : (A π B ch).comp inlM m .inactiveSum = 0 := by
+    (m : M K F) : (A (Bat := Bat) π B ch).comp inlM m .inactiveSum = 0 := by
   rw [A_pure, L_inactiveSum, linearPayload_inactiveSum]
   exact Finset.sum_eq_zero (fun c _ => by rw [pureTrace_inactive_dot, mul_zero])
 
 /-- `.maskSum` on a mask tape is the initial sum `p₀(0) + p₀(1)` of its rounds. -/
 theorem ms_pure_eq_initial (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K)
     (m : M K F) :
-    (A π B ch).comp inlM m .maskSum =
-      (roundPoly 0 ((A π B ch).comp inlM m)).eval 0 +
-        (roundPoly 0 ((A π B ch).comp inlM m)).eval 1 := by
+    (A (Bat := Bat) π B ch).comp inlM m .maskSum =
+      (roundPoly 0 ((A (Bat := Bat) π B ch).comp inlM m)).eval 0 +
+        (roundPoly 0 ((A (Bat := Bat) π B ch).comp inlM m)).eval 1 := by
   rw [A_pure, roundPoly_L, rounds_initial ch _ (maskLinear_vdeg _ B _), bsumB_eq_sum,
     L_maskSum]
   try rfl
@@ -193,14 +193,14 @@ the initial sum is free (design §2.1, `Chain_T0`). -/
 def ChainT0 (ch : Challenges K) : Submodule K (PayloadSplit.RoundPayload K) :=
   ((⨅ j : Fin 9, LinearMap.ker
       (evalRound j.succ 0 + evalRound j.succ 1 - evalRound j.castSucc (alpha ch j.castSucc))) ⊓
-    LinearMap.ker (evalRound 9 (alpha ch 9))).comap PayloadSplit.roundInclusion
+    LinearMap.ker (evalRound 9 (alpha ch 9))).comap (PayloadSplit.roundInclusion (Bat := Bat))
 
 theorem mem_chainT0_iff (ch : Challenges K) (t : PayloadSplit.RoundPayload K) :
-    t ∈ ChainT0 ch ↔
-      (∀ j : Fin 9, (roundPoly j.succ (PayloadSplit.roundInclusion t)).eval 0 +
-          (roundPoly j.succ (PayloadSplit.roundInclusion t)).eval 1 =
-        (roundPoly j.castSucc (PayloadSplit.roundInclusion t)).eval (alpha ch j.castSucc)) ∧
-      (roundPoly 9 (PayloadSplit.roundInclusion t)).eval (alpha ch 9) = 0 := by
+    t ∈ ChainT0 (Bat := Bat) ch ↔
+      (∀ j : Fin 9, (roundPoly j.succ (PayloadSplit.roundInclusion (Bat := Bat) t)).eval 0 +
+          (roundPoly j.succ (PayloadSplit.roundInclusion (Bat := Bat) t)).eval 1 =
+        (roundPoly j.castSucc (PayloadSplit.roundInclusion (Bat := Bat) t)).eval (alpha ch j.castSucc)) ∧
+      (roundPoly 9 (PayloadSplit.roundInclusion (Bat := Bat) t)).eval (alpha ch 9) = 0 := by
   simp only [ChainT0, Submodule.mem_comap, Submodule.mem_inf, Submodule.mem_iInf,
     LinearMap.mem_ker, LinearMap.add_apply, LinearMap.sub_apply, evalRound_apply, sub_eq_zero]
 
@@ -218,19 +218,19 @@ theorem mem_K4Round_iff (B : PackBasis F) (hB : PackField B) (t : PayloadSplit.R
 /-- `Chain_T0₄`: K₄-valued `Chain_T0` (F-dimension 1,080 on Z8c's vectors). -/
 def ChainT0K4 (B : PackBasis F) (hB : PackField B) (ch : Challenges K) :
     Submodule F (PayloadSplit.RoundPayload K) :=
-  (ChainT0 ch).restrictScalars F ⊓ K4Round B hB
+  (ChainT0 (Bat := Bat) ch).restrictScalars F ⊓ K4Round B hB
 
 /-- Payload vectors with every cell in `K₄`. -/
-def K4Payload (B : PackBasis F) (hB : PackField B) : Submodule F (Payload K) :=
-  ⨅ cell : PayloadCell, (K4F B hB).comap (LinearMap.proj cell : Payload K →ₗ[F] K)
+def K4Payload (B : PackBasis F) (hB : PackField B) : Submodule F (Payload K Bat) :=
+  ⨅ cell : PayloadCell Bat, (K4F B hB).comap (LinearMap.proj cell : Payload K Bat →ₗ[F] K)
 
 /-- Design §1.3: `Chain0₄ = Chain0 ∩ K₄`-valued cells. -/
 def Chain0K4 (B : PackBasis F) (hB : PackField B) (ch : Challenges K) :
-    Submodule F (Payload K) :=
+    Submodule F (Payload K Bat) :=
   (Chain0 ch).restrictScalars F ⊓ K4Payload B hB
 
 theorem mem_chain0K4_iff (B : PackBasis F) (hB : PackField B) (ch : Challenges K)
-    (v : Payload K) : v ∈ Chain0K4 B hB ch ↔ v ∈ Chain0 ch ∧ ∀ cell, v cell ∈ K4 B hB := by
+    (v : Payload K Bat) : v ∈ Chain0K4 B hB ch ↔ v ∈ Chain0 ch ∧ ∀ cell, v cell ∈ K4 B hB := by
   simp only [Chain0K4, K4Payload, Submodule.mem_inf, Submodule.restrictScalars_mem,
     Submodule.mem_iInf, Submodule.mem_comap, LinearMap.proj_apply, mem_K4F]
 
@@ -240,19 +240,21 @@ theorem mem_chain0K4_iff (B : PackBasis F) (hB : PackField B) (ch : Challenges K
 own-silent mask tape. -/
 def QPrime (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (hB : PackField B)
     (ch : Challenges K) : Prop :=
-  ChainT0K4 B hB ch ≤ (LinearMap.ker (ownMap π B ch)).map (roundMaskMap π B ch)
+  ChainT0K4 (Bat := Bat) B hB ch ≤
+    (LinearMap.ker (ownMap (Bat := Bat) π B ch)).map (roundMaskMap (Bat := Bat) π B ch)
 
 /-- (B), DESIGN-T2b-2b-Dprime §2.1 / LOG D23.2 ("B-open"): the batched
 coordinates reach on own-silent round-kernel tapes what they reach on all
 own-silent tapes. -/
 def BCond (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) : Prop :=
-  (LinearMap.ker (ownMap π B ch) ⊓ LinearMap.ker (roundMaskMap π B ch)).map (batMap π B ch) =
-    (LinearMap.ker (ownMap π B ch)).map (batMap π B ch)
+  (LinearMap.ker (ownMap (Bat := Bat) π B ch) ⊓ LinearMap.ker (roundMaskMap (Bat := Bat) π B ch)).map
+      (batMap (Bat := Bat) π B ch) =
+    (LinearMap.ker (ownMap (Bat := Bat) π B ch)).map (batMap (Bat := Bat) π B ch)
 
 /-! ### The reduction -/
 
 /-- Two payloads with the same non-round cells and the same round cells agree. -/
-theorem payload_ext {v w : Payload K} (h1 : nonRound (F := F) v = nonRound (F := F) w)
+theorem payload_ext {v w : Payload K Bat} (h1 : nonRound (F := F) v = nonRound (F := F) w)
     (h2 : roundProjection (F := F) v = roundProjection (F := F) w) : v = w := by
   funext cell
   cases cell with
@@ -262,11 +264,10 @@ theorem payload_ext {v w : Payload K} (h1 : nonRound (F := F) v = nonRound (F :=
   | extraClaim c => exact congrFun h1 (.extraClaim c)
   | ood j c => exact congrFun h1 (.ood j c)
   | inactiveSum => exact congrFun h1 .inactiveSum
-  | openingCoeff i => exact congrFun h1 (.openingCoeff i)
-  | finalCoeff i => exact congrFun h1 (.finalCoeff i)
   | opened q s c => exact congrFun h1 (.opened q s c)
+  | bat b => exact congrFun h1 (.bat b)
 
-theorem roundPoly_eq_of_roundProjection {v w : Payload K}
+theorem roundPoly_eq_of_roundProjection {v w : Payload K Bat}
     (h : roundProjection (F := F) v = roundProjection (F := F) w) (j : Fin 10) :
     roundPoly j v = roundPoly j w := by
   rw [Chain.roundPoly_apply, Chain.roundPoly_apply]
@@ -277,39 +278,37 @@ theorem roundPoly_eq_of_roundProjection {v w : Payload K}
 /-- A mask tape with zero own, zero batched cells and zero initial round sum
 is silent. -/
 theorem mem_silentMasks_of (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K)
-    (m : M K F) (hown : ownMap π B ch m = 0) (hbat : batMap π B ch m = 0)
-    (hinit : (roundPoly 0 ((A π B ch).comp inlM m)).eval 0 +
-        (roundPoly 0 ((A π B ch).comp inlM m)).eval 1 = 0) :
-    m ∈ silentMasks π B ch := by
-  show nonRound (F := F) ((A π B ch).comp inlM m) = 0
+    (m : M K F) (hown : ownMap (Bat := Bat) π B ch m = 0) (hbat : batMap (Bat := Bat) π B ch m = 0)
+    (hinit : (roundPoly 0 ((A (Bat := Bat) π B ch).comp inlM m)).eval 0 +
+        (roundPoly 0 ((A (Bat := Bat) π B ch).comp inlM m)).eval 1 = 0) :
+    m ∈ silentMasks (Bat := Bat) π B ch := by
+  show nonRound (F := F) ((A (Bat := Bat) π B ch).comp inlM m) = 0
   funext cell
   cases cell with
   | semanticCoeff j i => rfl
   | maskSum =>
-    change (A π B ch).comp inlM m .maskSum = 0
+    change (A (Bat := Bat) π B ch).comp inlM m .maskSum = 0
     rw [ms_pure_eq_initial]
     exact hinit
   | pointClaim j c =>
-    simpa only [ownMap, ownProj, batMap, batProj, nonRound, LinearMap.comp_apply, LinearMap.pi_apply, LinearMap.proj_apply, Pi.zero_apply] using congrFun hown (.pointClaim j c)
+    simpa only [ownMap, ownProj, batMap, batRead, nonRound, LinearMap.comp_apply, LinearMap.pi_apply, LinearMap.proj_apply, Pi.zero_apply] using congrFun hown (.pointClaim j c)
   | extraClaim c =>
-    simpa only [ownMap, ownProj, batMap, batProj, nonRound, LinearMap.comp_apply, LinearMap.pi_apply, LinearMap.proj_apply, Pi.zero_apply] using congrFun hown (.extraClaim c)
+    simpa only [ownMap, ownProj, batMap, batRead, nonRound, LinearMap.comp_apply, LinearMap.pi_apply, LinearMap.proj_apply, Pi.zero_apply] using congrFun hown (.extraClaim c)
   | ood j c =>
-    simpa only [ownMap, ownProj, batMap, batProj, nonRound, LinearMap.comp_apply, LinearMap.pi_apply, LinearMap.proj_apply, Pi.zero_apply] using congrFun hown (.ood j c)
+    simpa only [ownMap, ownProj, batMap, batRead, nonRound, LinearMap.comp_apply, LinearMap.pi_apply, LinearMap.proj_apply, Pi.zero_apply] using congrFun hown (.ood j c)
   | inactiveSum =>
     simpa only [nonRound, LinearMap.comp_apply, LinearMap.pi_apply, LinearMap.proj_apply,
       Pi.zero_apply] using ia_pure_zero π B ch m
-  | openingCoeff i =>
-    simpa only [ownMap, ownProj, batMap, batProj, nonRound, LinearMap.comp_apply, LinearMap.pi_apply, LinearMap.proj_apply, Pi.zero_apply] using congrFun hbat (.openingCoeff i)
-  | finalCoeff i =>
-    simpa only [ownMap, ownProj, batMap, batProj, nonRound, LinearMap.comp_apply, LinearMap.pi_apply, LinearMap.proj_apply, Pi.zero_apply] using congrFun hbat (.finalCoeff i)
   | opened q s c =>
-    simpa only [ownMap, ownProj, batMap, batProj, nonRound, LinearMap.comp_apply, LinearMap.pi_apply, LinearMap.proj_apply, Pi.zero_apply] using congrFun hown (.opened q s c)
+    simpa only [ownMap, ownProj, batMap, batRead, nonRound, LinearMap.comp_apply, LinearMap.pi_apply, LinearMap.proj_apply, Pi.zero_apply] using congrFun hown (.opened q s c)
+  | bat b =>
+    simpa only [ownMap, ownProj, batMap, batRead, nonRound, LinearMap.comp_apply, LinearMap.pi_apply, LinearMap.proj_apply, Pi.zero_apply] using congrFun hbat b
 
 /-- Design §2.1 / D23: (Q′) and (B) give `Chain0₄ ⊆ A(inlM(silentMasks))`. -/
 theorem chain0K4_le_silent_of (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
     (hB : PackField B) (ch : Challenges K)
-    (hQ : QPrime π B hB ch) (hBc : BCond π B ch) :
-    Chain0K4 B hB ch ≤ (silentMasks π B ch).map ((A π B ch).comp inlM) := by
+    (hQ : QPrime (Bat := Bat) π B hB ch) (hBc : BCond (Bat := Bat) π B ch) :
+    Chain0K4 (Bat := Bat) B hB ch ≤ (silentMasks (Bat := Bat) π B ch).map ((A (Bat := Bat) π B ch).comp inlM) := by
   intro v hv
   obtain ⟨hvC, hvK⟩ := (mem_chain0K4_iff B hB ch v).1 hv
   obtain ⟨hnr, hinit, hchain, hterm⟩ := (mem_chain0_iff (F := F) ch v).1 hvC
@@ -319,16 +318,17 @@ theorem chain0K4_le_silent_of (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F)
     · rw [hnr]
       exact nonRound_roundInclusion (F := F) t
     · rfl
-  have ht : t ∈ ChainT0K4 B hB ch := by
+  have ht : t ∈ ChainT0K4 (Bat := Bat) B hB ch := by
     refine Submodule.mem_inf.2 ⟨?_, (mem_K4Round_iff B hB t).2 (fun j i => hvK _)⟩
     rw [Submodule.restrictScalars_mem, mem_chainT0_iff, hvt]
     exact ⟨hchain, hterm⟩
   obtain ⟨m, hm, hRm⟩ := Submodule.mem_map.1
-    (exists_silent_of_cover (roundMaskMap π B ch) (ownMap π B ch) (batMap π B ch) _ hQ hBc ht)
+    (exists_silent_of_cover (roundMaskMap (Bat := Bat) π B ch) (ownMap (Bat := Bat) π B ch)
+      (batMap (Bat := Bat) π B ch) _ hQ hBc ht)
   obtain ⟨hown, hbat⟩ := Submodule.mem_inf.1 hm
-  have hproj : roundProjection (F := F) ((A π B ch).comp inlM m) = roundProjection (F := F) v :=
+  have hproj : roundProjection (F := F) ((A (Bat := Bat) π B ch).comp inlM m) = roundProjection (F := F) v :=
     hRm
-  have hsil : m ∈ silentMasks π B ch := by
+  have hsil : m ∈ silentMasks (Bat := Bat) π B ch := by
     refine mem_silentMasks_of π B ch m (LinearMap.mem_ker.1 hown) (LinearMap.mem_ker.1 hbat) ?_
     rw [roundPoly_eq_of_roundProjection hproj 0]
     exact hinit
