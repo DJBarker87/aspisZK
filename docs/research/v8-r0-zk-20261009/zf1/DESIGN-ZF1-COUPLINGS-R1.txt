@@ -194,3 +194,87 @@ Types (FsStatement.lean, FsAbort.lean, read from the sources):
   the accepted attempt's published Priv addresses with those coins; the
   adversary runs against the programmed H. Discarded draws program
   nothing. (Witness-free except for `simulator`, which is ZF2's object.)
+----------------------------------------------------------------------
+§3  The real coupling: Hit and Coll  (events PROVED-bounded; facts HYP)
+----------------------------------------------------------------------
+
+3.1 Coupling space. S_R := Π_k (SQ_k × CH_k × SE_k × TB_k × B_k × T'_k), all
+  coordinates uniform and independent; B_k the expander answers, T'_k a
+  spare tape. Maps:
+    toM s := ((k ↦ (SQ_k, CH_k, SE_k, TB_k)), (k ↦ decode-or-spare(B_k, T'_k)))
+    toR s := (H, secrets) with H := TB_0 overwritten, first write wins, at
+             the addresses of the run attempts' Priv reads (in run order)
+             by their answer coordinates (SQ/CH/B), secrets := SE.
+  meanM holds coordinatewise once decode-or-spare is uniform (rejection
+  with fallback: each limb value has the same number of word preimages;
+  the fallback spare is uniform). meanR is the lazy-programming law: every
+  table H has exactly |Answer|^m preimages along the adaptive recursion
+  (a fresh address forces its coordinate, a repeated one leaves it free,
+  and the table is free exactly on the programmed addresses). Both are
+  HYP (`cp` in R1RealModel), not proved here; the second is the
+  per-attempt analogue of R19 `lazyMean_eq_independentMean`
+  (AdaptiveFirstReadLaw), which lives in another workspace (G10).
+
+3.2 Positions. M := N·m positions (k, j); addr (k, j) s := the address of
+  read j of attempt k computed in the middle game from toM s (attempts
+  after the accepted one are computed as if run; they are never charged).
+  priv (k, j) := read j is in Priv (static per j). charged (k, j) s :=
+  [attempt k discarded at s] ∨ [attempt k accepted at s ∧ read j is
+  UNPUBLISHED at s]. qry i s := the i-th distinct read of the adversary in
+  the middle game, i < q (padded with a fixed public address).
+
+3.3 Events (Lean: FsAbortBounds.HitEv, CollEv; FsAbortR1.R1RealModel).
+  Hit  := ∃ (k, j) i, charged (k, j) s ∧ qry i s = addr (k, j) s.
+  Coll := (∃ p < p', (priv p ∨ priv p') ∧ addr p s = addr p' s) ∨ Exh s,
+          Exh := some mask limb of a run attempt used 16 rejected words.
+  Pub–Pub coincidences are not charged: they are the same public address,
+  answered from TB_0 in every game.
+
+3.4 Agreement outside Hit ∪ Coll (HYP hAgree = protocol refinement).
+  Outside Coll every run read gets its own coordinate (no first-write
+  conflict), so attempt k's challenges are draw(SQ_k), its masks are
+  decode(B_k) = the Lean tape (no Exh), and the accepted attempt's proof
+  is (view(w, ch, t), VerLog) — this last step is the refinement of the
+  Rust prover to the Lean payload (D28.2/D34.3 items; not in Lean).
+  Outside Hit the adversary never reads a charged address; at every other
+  address both games answer alike: published Priv reads of the accepted
+  attempt by their coordinate (extend records them), Pub and unrelated
+  addresses by TB_0, reads of attempts after the accepted one by TB_0 (not
+  programmed in toR either).
+
+3.5 Why the charged reads have designated fields independent of the view
+  (HYP HitFresh, per (k, j, i); design §1.4 gives the field).
+  Fix (k, j) and let u be the coordinate that is read j's designated field
+  (a secret seed of attempt k, or the answer of an earlier Priv read of k).
+  Split S_R ≃ R × U. Then:
+  (a) `charged (k, j)` does not depend on u: "discarded/accepted" is a
+      function of the SQ coordinates (draw) and P; "published" is a
+      function of the query challenge (SQ). No designated field is an SQ
+      coordinate (§1.1: squeeze answers feed decoders only).
+  (b) on `charged (k, j)`, the adversary's reads do not depend on u: the
+      adversary sees the accepted view (Lean tape and challenges), VerLog
+      of the accepted attempt (published coordinates only) and TB_0. If k
+      is discarded, nothing of attempt k is published; if k is accepted
+      and j unpublished, u is a secret seed, an unopened salt answer, an
+      unpublished node answer or a seed answer, none of which is in VerLog
+      (opened salts, path digests and sibling digests are answers of OTHER
+      reads). This is where R-erase is used.
+  (c) addr (k, j) = a forces u = π(a) (fixed-offset/trailing field).
+  FsAbortBounds.hit_le then gives mass ≤ mass(charged)/|U| ≤ 1/2^255.
+  The C1 root needs no entropy argument: in the middle game it is a coin
+  (the top-node answer), and the real game equals the middle game until
+  Coll. This is the formal content of "fresh salts → fresh C1 root → fresh
+  row-0 address": salts fresh (SE), C1 root fresh (CH, by (c) for the leaf
+  and node reads against Coll), init address fresh (field = root).
+
+3.6 Pair freshness (HYP PairFresh, per private-involving pair p < p').
+  Either the two reads are structurally distinct (§1.4: suffix byte,
+  (T, u), counter, length), or one of them, say p', has a designated field
+  u on which addr p does not depend (addr p depends on its own field, on
+  messages — functions of SQ, the witness and the tape — and on nothing
+  else of attempt k; the 8 children of distinct Merkle nodes are distinct
+  reads; attempts use disjoint secrets). Pub reads depend on no Priv
+  coordinate. Then FsAbortBounds.pair_le gives ≤ 1/2^255. If R-fresh
+  failed (same seeds in two attempts), the init reads of the two attempts
+  would agree whenever their C1 trees do, PairFresh would be false and
+  Coll would have mass ≈ 1 — the D31 observation, now located exactly.
