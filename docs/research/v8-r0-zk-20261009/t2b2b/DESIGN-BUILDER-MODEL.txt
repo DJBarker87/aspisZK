@@ -95,7 +95,39 @@ Stage H (host_semantic, HS:207-260).  Adds mask-only C1 columns 16..25 and the
   CopyLinkBalance reads them (BuilderComplete §2), so the model fixes them to 0
   (BuilderSpec.rest is free).
 
-§2  Families: writing stage and local invariant (pending)
+§2  Families: writing stage and local invariant
+
+Lean characterisations are the R0P *_holds_iff theorems; the "local invariant"
+is the row-local fact the writing stage guarantees.
+
+  family     cells read (holds_iff)                      stage   local invariant
+  ---------  ------------------------------------------  ------  ---------------------------------------
+  value      rows 1008/1010/1012 + succ + xor12,         A       bits are (raw>>k)&1 ∈ {0,1}; raw < 2^30
+             cols 0..10; rows 1014, 1015                         reconstructs from three 10-bit chunks;
+             (Value.lean value_holds_rows_iff)                   v0 = v1 + (v0−v1); v0−v1 = v2 needs
+                                                                 conservation (witness check)
+  occupancy  rows 1017, 1018 (Occupancy.lean)            A       PairLeaf.Valid of the input leaf and of
+                                                                 the output leaf; selected·(1−occupied)=0;
+                                                                 output occupied = 1 (transfer) / 0
+  asset      rows 44, 460, 508 col 1; 1010 col 10        B, A    note chunk 1 lane 1 = public asset id
+             (Asset.lean)                                        (note_input PT:227); withdrawal amount
+                                                                 = v1 (witness/public check)
+  path       blocks 57..62 local rows 1,5,9,13 and +1    A       (left,right) = ordered(current, sibling,
+             (Path.lean)                                         bit), bit ∈ {0,1}
+  schedule   row 0 of first sponge blocks and node       B, W    sponge init [0^8, domain, len, 0^6];
+             blocks; row 12 absorption supports                  node pre lanes 0..7 = 0; absorption
+             (Schedule.lean)                                     lanes 8..15 = 0, short chunks zero-padded
+  digest     row 11 of blocks 26, 29, 32, 33+carry,      B, W    output digest = first 8 lanes of row 11;
+             53, 56; append blocks row 0 / row 12                public values equal the computed digests
+             (Digest.lean)                                       (builder equality checks); empty roots
+                                                                 and frontier placed by ordered()
+  poseidon   rows 0..12 of all 57 blocks                 B       row k+1 = canonical two-round transition
+             (Poseidon.lean poseidon_scalar_holds_iff)           of row k with row 12 (raw-limb ↔
+                                                                 canonical is the refinement, §6)
+  copy       136 links (CopyConstants.lean copyLinks):   all     each link equates two cells written from
+  (balance)  73 touch path aux, 40 append, 13 block-             the same witness value (sponge chaining,
+             to-block, 10 value/occupancy aux                    digest reuse, path, value/occupancy aux)
+
 §3  The Lean model buildModel                  (pending)
 §4  Proof plan and effort per family           (pending)
 §5  Finding: the change-sentinel gap in Rspend (pending)
