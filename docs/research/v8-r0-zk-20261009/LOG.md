@@ -4747,6 +4747,7 @@ Pr[¬P] is small, and Z8–Z10 have observed no failures.
 
 The Rust predicate check waits for R1M's definitions.
 
+<<<<<<< HEAD
 ### Lead acceptance of the R1 privacy-model design (2026-10-18); D30
 
 `t2b2b/DESIGN-R1-PRIVACY-MODEL.txt` (worker 0b36b12bf..eb6c3e476,
@@ -4792,3 +4793,76 @@ check in P for clause (ii′).
 
 ZF1-abort continues on 3500–3549. Estimate: 15–25 worker-days and 90–170
 attempts, about 10–15 days elapsed. J0b is unestimated.
+=======
+### ZF1-abort completed — abort-aware ZK_FS without badMass (2026-10-18)
+
+Branch `codex/r0-zf1-abort-20261017`, base `a4246222a` (D29). Design in
+[zf1/DESIGN-ZF1-ABORT.txt](zf1/DESIGN-ZF1-ABORT.txt); Lean in
+`lean/R0Z/FsAbort.lean` (imports `R0Z.FsGood` only; no PayloadCell
+constructor is used). Proved: in the retrying middle games (per-attempt
+coins and tapes, least accepted attempt, cap N, failure output) only
+P-challenges reach the view and the simulator, so `HVZK_on P` makes the
+middle means equal (`middleAbort_means_eq`); hence
+`zkfs_of_hvzk_on_abort : HVZK_on P → AbortReductionWith P … ab x ε_real
+ε_ideal → ZK_FS … (ε_real + ε_ideal)` with no badMass term, and
+`zkfs_of_hvzk_on_abort_terms` splitting the reduction into the named
+identical-until-bad events Hit (adversary reads a discarded attempt's
+address), Coll (prover-address repetition within or across attempts) and
+Prog (inconsistent programming of the accepted attempt), error
+ε_hit + ε_coll + ε_prog. The couplings and the three bounds are payload
+hypotheses (ZF1a/b), not proved. The failure exit costs nothing. The
+eprint 2023/245 difficulty (secret-dependent aborts) does not arise because
+P depends on ch only; the PDF was not readable from this session (HTTP 403),
+only the abstract. Requirement R-fresh (fresh attempt material in each
+attempt's first absorbed block) must be checked on the R1 layout.
+Host attempts 3500 (exit 1), 3501 (exit 1, diagnostic), 3502 (exit 0,
+4.35 s, peak RSS 6,770,592 KiB, 0 swaps); all 20 axiom lines standard;
+evidence [zf1/abort-evidence.json](zf1/abort-evidence.json). Next host
+attempt in this range: 3503.
+>>>>>>> 746e7204d (research(r0): ZF1-abort — FsAbort compiles (host 3502); abort-aware ZK_FS without badMass, named Hit/Coll/Prog terms; evidence and LOG)
+
+### Lead acceptance of ZF1-abort (2026-10-18); D31
+
+ZF1-abort (worker 2542546f2..746e7204d, 11 commits, cherry-picked) is
+accepted.
+- `R0Z/FsAbort.lean` imports only `R0Z.FsGood` and uses no PayloadCell
+  constructor, so it applies to R1 unchanged.
+- Host attempt 3502: exit 0, 4.35 s, peak RSS 6,770,592 KiB, 0 swaps. The
+  source SHA `9b1ffc92…` matches. All 20 axiom lines are exactly the standard
+  three (lead-verified from the host log). The file has no sorry, axiom or
+  admit.
+- It compiled against the ZF-A objects 3408/3409, whose sources are
+  byte-identical to the base. Attempts 3500 and 3501 failed to compile and
+  are retained.
+
+**D31.1 What is proved.**
+- `zkfs_of_hvzk_on_abort : HVZK_on P → AbortReductionWith … → ZK_FS …
+  (ε_real + ε_ideal)`, which has no badMass P term.
+- `zkfs_of_hvzk_on_abort_terms`, which gives ZK_FS with error
+  ε_hit + ε_coll + ε_prog from a real coupling (Hit and Coll) and an ideal
+  coupling (Prog).
+- The generic retry core: `firstGood`, `retry_means_eq`,
+  `until_bad`/`eventMass_or_le`.
+
+The simulator runs the same capped loop on the same public P, so ch | P is
+sampled at the honest prover's own cost. The eprint 2023/245 failure mode
+(aborting on secret-dependent responses) does not arise: P is a function of
+ch and public data, which the type of `HVZK_on` enforces. Aborted
+transcripts are never published, and Hit charges their oracle entries. The
+worker read only the paper's abstract, so a full-text check stays on the
+review list.
+
+**D31.2 Open.**
+- The two couplings for the concrete retrying sponge games. These are ZF1a/b,
+  per-attempt.
+- Numerical bounds on ε_hit, ε_coll and ε_prog.
+- ZF2, the efficient simulator.
+
+Each attempt's first absorbed block must contain fresh attempt material,
+otherwise Coll has mass 1. On R1, row 0 absorbs the C1 root (LOG/TARGET
+note), which is over freshly salted leaves. So this holds if salts are
+fresh per attempt. That becomes an honest-prover requirement, together
+with D29.3.
+
+**D31.3** R1-0 may now proceed with host overwrites (D30 sequencing). The
+lead recompiles FsAbort once after R1-0's ordered pass.
