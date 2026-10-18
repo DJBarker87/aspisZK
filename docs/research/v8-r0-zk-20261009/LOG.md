@@ -5284,3 +5284,71 @@ proved:
   on an active row, decidable over copyLinks as Protected was.
 - `helperSum`: CopyLinkBalance plus a multiplicity or pairing registry fact.
 - `lanes`: R0P builder completeness.
+
+### Lead acceptance of the ZF1a/b coupling design and bounds for R1 (2026-10-18); D41
+
+The ZF1 couplings work (worker 4f97292af..1e42b3685, 10 commits,
+cherry-picked) is accepted. The design is `zf1/DESIGN-ZF1-COUPLINGS-R1.txt`
+§1–§9. The lead verified the host receipts:
+
+| Module | Attempt | SHA | Axiom lines |
+|---|---|---|---|
+| R0Z/FsAbortBounds | 3800 | `f5820c2f…` | 22 |
+| R0Z/FsAbortR1 | 3802 | `617c7f3d…` | 11 |
+| R0Z/FsAbortTape | 3806 | `80578d69…` | 3 |
+
+All three exited 0. The axioms are standard, with `[propext]` alone on one
+line. There are no overrides. Attempts 3801 and 3803–3805 failed (a numeral
+limit and elaboration).
+
+**D41.1 Proved.**
+- Generic first-read and collision masses: `hit_le`, `pair_le`,
+  `mass_cond_le`, `hitEv_mass_fresh` ≤ M·q/Umin, and
+  `collEv_mass_fresh` ≤ M²/Umin.
+- `realAbortCoupling_of_R1` and `idealAbortCoupling_of_R1`, which turn the
+  R1 model into FsAbort's coupling hypotheses.
+- `zkfs_R1_abort_N8`: ZK_FS ≤ 2^-166, for N = 8, q = 2^64, at most 2^21
+  reads per attempt, and Umin = 2^255.
+- `mean_decodeOrSpare`, the tape half of the real coupling.
+
+**D41.2 Named hypotheses (fields of R1RealModel and R1IdealModel).**
+- The lazy-programming law.
+- The sampler's equal-fibre property.
+- Game agreement outside the bad events (the Rust-to-Lean prover
+  refinement).
+- `HitFresh` and `PairFresh`, the designated-field table of §1.4.
+- The read count: at most 2^21 per attempt, counted from source, not
+  measured.
+- The exhaustion mass.
+
+**D41.3 Freshness.** These are assumed of the prover, and recorded as
+requirements together with D29.3, D31.2 and D38.3:
+- fresh OS secrets for every attempt;
+- salted leaves;
+- discarded attempts publish nothing;
+- the attempt cap;
+- the Rust check equals P_R1.
+
+Given those, the chain "fresh salts → fresh C1 root → fresh row-0 address"
+is proved, and each private read's hit or collision mass is ≤ 2^-255.
+
+**D41.4 Numbers.** ε_hit 2^-167, ε_coll 2^-207 + 2^-476, ε_prog 2^-207.
+Together with D40's ε_pole ≈ 2^-109, the pole term dominates the R1 privacy
+error, at about 2^-109. QROM is not covered; classical ROM only.
+
+**D41.5 Gaps recorded.**
+- **G-root:** the Lean View has no commitment roots. Proposal: publish the
+  roots, paths and opened salts as the verifier hash log at the front of
+  `observerOracle`.
+- **G-def:** R1's fs.real, fs.ideal and abort bridge are not defined in
+  Lean. The spend-path LiteralByteProtocol is the model to mirror.
+- **G-prog:** the lazy-programming law, together with G11.
+- **G-ref:** the prover refinement, including the D34.3 items.
+- **G-count:** an instrumented hash-call count.
+- **G-exh:** the exhaustion count, in Lean.
+- **G-retry:** the probe and the prover still lack the retry loop
+  (D38.3).
+
+Naming: the name `zkfs_R1_abort` now exists in both R0Z.FsAbortR1 and
+R1Z.MaskImageR1. The final J0c statement must name one composite theorem
+and cite both.
