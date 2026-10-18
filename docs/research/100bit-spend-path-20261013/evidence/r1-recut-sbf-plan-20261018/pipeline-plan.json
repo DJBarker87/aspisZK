@@ -59,17 +59,20 @@
       "name": "stack-audit",
       "argv": [
         "python3",
-        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/source/scripts/r1_p2_stack_audit.py",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/runner/strict_stack.py",
+        "--log",
         "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/runs/sbf-build/stdout.log",
+        "--linked",
         "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/sbf-target/sbpf-solana-solana/release/aspis_r1_cost_probe_program.so",
+        "--measured",
         "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/artifacts/aspis_r1_cost_probe_program.so",
-        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/stack-audit"
+        "--output",
+        "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/stack-audit.json"
       ],
       "acceptance": [
-        "all diagnostics individually inventoried",
-        "no over4096 frame diagnostic reachable in complete linked call graph, including conservative callx targets",
-        "diagnostic functions absent from linked artifact per baseline audit policy",
-        "linked/stripped executable .text identical; audit cannot mutate inputs; preserve ELF SHA/size only in Git"
+        "EVERY stack-offset/frame diagnostic inventoried; ANY frame/offset over4096 fails, including dead or stripped symbols",
+        "unparsed stack diagnostics fail pending manual review",
+        "linked/stripped ELF SHA/size pinned; supplemental old callgraph/text audit does not override strict failure"
       ]
     },
     {
@@ -169,5 +172,42 @@
     "ELF/.so",
     "private keys",
     "nonce-burn files"
-  ]
+  ],
+  "gate_commands": {
+    "separate_gate": [
+      "python3",
+      "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/runner/host_gate.py",
+      "--root",
+      "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018",
+      "--revision",
+      "FINAL_RECUT_REVISION",
+      "--output",
+      "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/gate-UTC.json"
+    ],
+    "then": "Read gate JSON in a separate tool result and obtain root launch grant before executing any phase.",
+    "phase_launch_template": [
+      "systemd-run",
+      "--user",
+      "--scope",
+      "--quiet",
+      "-p",
+      "MemoryHigh=6G",
+      "-p",
+      "MemoryMax=8G",
+      "-p",
+      "MemorySwapMax=0",
+      "python3",
+      "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/runner/run_phase.py",
+      "--root",
+      "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018",
+      "--revision",
+      "FINAL_RECUT_REVISION",
+      "--phase",
+      "PHASE",
+      "--gate",
+      "/home/dombarker/project-offloads/aspis-r1-recut-sbf-20261018/gate-UTC.json",
+      "--gate-ack-sha256",
+      "ROOT_REVIEWED_GATE_SHA256"
+    ]
+  }
 }
