@@ -1,7 +1,7 @@
 R1 games — fs.real, fs.ideal and the abort bridge for the 33-row transcript
 ===========================================================================
 
-Base 583de3111 (D42). Branch codex/r0-r1-games-20261018.
+Base 583de3111 (D42), rebased onto 7872bce2c (D44, ZF2) before the GamesR1 compile. Branch codex/r0-r1-games-20261018.
 Closes, in part, gaps G-def, G-root and G-retry of D41.5. Read with this:
 DESIGN-ZF1-COUPLINGS-R1.txt (§1 read classes, §3 couplings), LOG D31, D38,
 D41, D42; R0Z/FsStatement, R0Z/FsAbort, R0Z/HvzkV, R1Z/ModelsVR1.
@@ -19,4 +19,33 @@ Rust <-> Lean refinement obligation (outside Lean); PROPOSED = design text.
 §7  Lean modules, attempts and evidence
 §8  Open items
 
-(sections are filled one at a time)
+
+----------------------------------------------------------------------
+§0  Sources read and the mirroring decision
+----------------------------------------------------------------------
+
+Spend-path branch origin/codex/100bit-spend-path-20261013, tip 1a39ad608,
+read with `git show` only (sha256 of the bytes read):
+  crates/aspis-r1-cost-probe/src/transcript.rs     927150f4…
+  crates/aspis-r1-cost-probe/src/r1_wire.rs        3a6f3070…
+  crates/aspis-r1-cost-probe/src/verifier.rs       a0c440c3…
+  crates/aspis-r1-cost-probe/src/r1_semantic.rs    1e62a951…
+  crates/aspis-core/src/r0_transcript.rs           2a315219…
+  lean/RawByteCollisionTargets.lean                c0c23ab0…
+  lean/LiteralByteProtocol.lean                    b8a5958a…
+(full digests in zf1/r1-games-evidence.json "sources_read").
+
+Mirroring decision: NO file is mirrored.  The generic spend-path pieces this
+job needs are the 32-byte field readers `fixed 0` / `trailing`
+(RawByteCollisionTargets `fixed`, `trailing`, `fixed_frame`,
+`trailing_frame`).  Their file imports AllAddressCollisionTrace and
+R1CombinedMerkleTargets, whose closure pulls AspisV8R19.* and FS2.* (the
+FS2.Duplex `State`, `Addr L`, `Table` machinery); LiteralByteProtocol and the
+AllAddressFiatShamir* files import FS2.Verifier / R0C.V3.Gen.  None of that
+closure is minimal, and under -M7000 (Mathlib alone is 6.6 GB) it is a
+memory risk.  The two readers are therefore RESTATED in R1Z/LensR1
+(`fixed0`, `trailing`, `fixed0_ans_append`, `trailing_append_ans`) with the
+same meaning, as the ZF1 couplings job did ("conceptual reference, not
+imported, not mirrored").  The spend-path byte model was used as the
+SOURCE for the layout of §2 (row tags, framing, the eight query pairs, the
+38-byte ρ absorb), not as Lean.
