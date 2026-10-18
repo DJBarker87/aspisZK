@@ -61,3 +61,241 @@ S5  Riskiest item: J4-R1's line-fold relations L_u, which need the
     coefficients).  On R1's soundness side this is obligation (B), open in
     R1_SOUNDNESS.md; partial material exists (§5).
 
+§1  Inventory
+-------------
+Every declaration of lean/R0Z/*.lean (base a4246222a) is listed, grouped by
+module.  "Refactor" means: same statement with Payload K := Payload K Bat,
+same proof except that the two R0 batched `cases` branches (.openingCoeff,
+.finalCoeff) merge into one `.bat b` branch (§2.2).  A refactored item is
+GENERIC in the sense of this job: it holds for R1 with no new mathematics.
+
+§1.1  Pure probability and linear algebra (GENERIC, no payload)
+  StatisticalDistance: mean law support law_zero dist EqualLaws dist_nonneg
+    dist_zero_of_equalLaws dist_on dist_triangle.
+  AffineLaw: coset fibreEquivKer cosetEquivRange card_tape law_eq_fibre_card
+    uniform_coset equal_cosets_law coset_eq_of_range_eq_displacement
+    equal_laws_of_mask_image equal_laws_const_pair law_product marginalisation.
+  AbsorptionLaw: law_equiv equal_laws_of_equiv law_product_right pureMap
+    split fixed_n mixture uniform_coset.
+  LawTransport: mean_eq_sum_law mean_eq_of_equalLaws mean_product.
+  KernelImage: surjective.
+  HermiteSpan (J5a, Mathlib only): all 72 declarations.  Off the critical
+    path under M3 (D29.2); kept for Route P.
+  GoodDensity: GoodAlpha pinned pinnedEquiv card_pinned not_goodAlpha_subset
+    card_biUnion_pinned badAlpha_card badAlpha_density.  GENERIC, but under
+    M3 no density enters the privacy error; used only if Route P returns.
+  D11Obstruction: separated_mixed_difference sparseRow sparseCopySlice
+    sparse_copy_mixed_difference sparse_copy_not_separated.  GENERIC
+    (historical; semantic copy rows only).
+
+§1.2  Semantic layer and mask layout (GENERIC)
+  Basis: R1-PAYLOAD-MAP §3–§4 (same 29 lanes, same mask lanes, balancing,
+  25 semantic rows, terminal), D27.1, and prover.rs:131-178 (the R1 prover
+  calls reserve_and_build_pool_v1_pair_forest_mask_material_v1 and audits
+  exactly the balances MaskLayout models: 16 C1 columns, 10 mask-only
+  columns, D, G, H1 padding, H1 total).
+  MaskedProtocol: SemMsgZ Msg Chal maskValue_mldeg terminalZ sumcheckChecksZ
+    GENERIC.  RoundKind, schedule: R0-SPECIFIC (32 rows, `.opening (j : Fin 5)`);
+    replaced by the R1 33-row schedule (§2.6), used only by ZkStatement.messages
+    and the FS bridge, never by MaskImageOn.
+  MaskLayout: forestPathUsed pairAuxUsed eligible EligibleCell AffCoordinate
+    MaskCoordinate EligibleNoise AffTape MaskTape semanticNoise maskOnlyRaw
+    extensionRaw balance maskOnlyColumns dWord h1Padding applyEligible
+    applyAff applyMask applyMask_eq_port applyAff_affine readAff extensionAff
+    balanceAff traceLinear traceBase applyAff_eq_base_add traceAffine
+    traceAffine_apply — GENERIC.  The eligibility registry is row-indexed and
+    copyInactiveRows equals the R1 ACTIVE table (Z9 model check); the
+    transport does not enter.  Refinement: the R1 source pin differs from
+    MaskLayout's d2b74132 pin; map §3 records state_only_hiding.rs /
+    state_only_entropy.rs byte-identical between 524e1debb and the spend-path
+    tip.  That is a source fact to re-confirm at the R1 refinement job, not a
+    proof item.
+  ViewAffine: copyResidual_affine copyEvaluate_affine laneAt_affine
+    originalAt originalAt_affine originalAt_decomp terminalValue_eq_originalAt
+    — GENERIC.
+  HelperInvariant: Protected checkLink check check_spec check_append
+    check_take_drop, before_*/positive_*/after_* slices, before_all
+    positive_all after_all protected_registry protected_cell protected_tuple
+    row_values_eligible helper_eligible — GENERIC (copy registry unchanged).
+  TerminalEligible: all 39 declarations (cell_eligible … terminal_row_eligible)
+    — GENERIC (semantic rows, registry, H1 padding sums; no opening cell).
+  K4: all 64 declarations (PackField … Good3 lambda4_eq_K4) — GENERIC.
+    Good3 mentions only Shift.Good and ch.sem; it is off the critical path
+    under M3.
+  Partition: ExtTape M N T aff equiv inlM inrN pureAff pureTrace
+    extension_pure_zero balance_zero_generic padding_pure_zero pureTrace_fixed
+    — GENERIC.
+  JointTrace: balanceLinear balanceLinear_apply balance_add_generic noiseRead
+    noiseRead_apply eligibleLinear eligibleLinear_apply applyEligible_add
+    prepared_add tapeLinear actual_affine tapeLinear_pure — GENERIC (reads
+    Challenges only through prepare, i.e. ch.sem 0, ch.sem 1).
+
+§1.3  The payload (HonestView) — the only R0-SPECIFIC core
+  GENERIC (statement unchanged; π stays an argument):
+    Challenges, alpha, zc, helper, prepare, dotLinear, claimsLinear(_apply),
+    coeffsLinear(_apply), extraLinear(_apply), extraCell(_apply), oodLinear
+    (_apply), cell(_apply), semantic_claim_fixed, semanticOpenings, original
+    (_apply), mask(_apply), oracle(_apply), roundPoint, roundPoly(_apply),
+    affine_sum_apply, decode_encoded, unqueried_zero.
+    Challenges is reused verbatim with the R1 reading
+      sem : Fin 25 → K (rows 0–24), circle : Fin 2 → Point K (z₀, z₁),
+      opening 0 = γ, opening 1 = κ, opening 2 = α₀, opening 3 = α₁,
+      queries : Finset (Fin 262144) (row 31);
+    ρ (row 32, QM31) is read by no disclosed coordinate (map §6,
+    verifier.rs:85-119: ρ only batches L_u) and is not a Challenges field;
+    it is a bridge coin of the FS layer (§2.6).
+    The per-lane cells match R1 exactly:
+      .pointClaim j c  = sem.claims[j][l]     (verifier.rs prepared_claim, :88-92)
+      .extraClaim c    = sem.extra[l]         (honestExtra = dot libraWeight,
+                                               weights.rs kind 4: j < 56,
+                                               extra[j/28]^(j%28))
+      .ood 0 c, .ood 1 c = before_z1[l], y1[l] (prover.rs:193-195,
+                                               eval_message at z₀, z₁)
+      .opened q s c    = Enc(coeffs_l)(4q+s)  (prover.rs query loop; four_dots
+                                               reads all 29 lanes, verifier.rs:136)
+      .inactiveSum     = Σ_l γ^l Σ_{r ∈ I} t_l r (prover.rs:198: Σ_j q_j raw(0,j),
+                                               raw(0,j) = [row(j) inactive])
+  PARAMETRIC (parameter: the cell type Bat and its read, §2.2):
+    PayloadCell, Payload, linearPayload, payloadAffine, run, run_maskSum,
+    run_semanticCoeff, run_pointClaim, run_extraClaim, run_ood,
+    run_inactiveSum, run_opened, run_eq_payloadAffine.
+  R0-SPECIFIC (replaced in R1Z/Batched.lean, §2.3):
+    quotientLinear — R1 has no chord quotient (map D2); replaced by nothing:
+      batchLinearR1 batches raw coefficients.
+    batchLinear — replaced by batchR1 := Σ_c γ^c • coeffsLinear π ∘ proj c.
+    openingWeights (totalWeights with κ, τ) — replaced by weightsR1 (κ^0..κ^6
+      over kinds inactive, 3 points, Libra, z₀, z₁; weights.rs raw/materialize
+      :120-133, :227-232).
+    relationLinear(_apply) — fixed length 1024; replaced by the length-generic
+      round polynomial (AspisR1.RoundPairing.roundPolynomial, spend-path
+      lean/RoundPairing.lean:47) at n = 256 and n = 64.
+    foldLinear(_apply) — replaced by coefficientFoldLayer 256 α₀ and
+      coefficientFoldLayer 64 α₁ (AspisFormal V5ComponentCConcreteFoldLinearity
+      :238) plus exactFinalLinear for the folded word (Wide/FinalEncoder:23).
+    run_openingCoeff, run_finalCoeff — replaced by run_bat for R1Bat.
+    D13Order — R0 transport predicate; R1 uses D18Transport (§2.5).
+  QuotientImage (D10): all 12 declarations R0-SPECIFIC (chord quotient on the
+    encoder image).  No R1 analogue is needed: nothing in R1 is a quotient.
+
+§1.4  Statement layers
+  ZkStatement.Z1 (historical 31-round interface): all declarations are R0
+    history; not used by the T2a chain.  No R1 counterpart is written.
+  ZkStatement (current): Statement, Challenges, Payload, HonestProver,
+    HonestInstance, public, build, Meta, View, metadata, InLanguage —
+    GENERIC (Payload refactored).  payload, view, A, b, payload_affine,
+    view_affine, MaskImage, simulator, honestLawRun, HVZK_conditional,
+    HVZK_perfect, HVZK, Completeness, Obligations, ProverOutput, proverOutput
+    — refactor (GENERIC).  IdealSemMsg, Msg, Chal, coefficientPolynomial,
+    messages, honestMessages, finalMessage, challengeAt — R0-SPECIFIC
+    (32-row schedule, .opening (.values/.scalar/.unit/.poly/.final) message
+    tags of R0C.SemStatement); replaced by R1 messages/challengeAt over the
+    33-row schedule of map §4 (rows 27–32: γ | y1, κ | inactive, α₀ | round0,
+    α₁ | folded root ‖ round1, queries | final 64, ρ | nothing).  These feed
+    only the FS refinement, not MaskImageOn.
+  JointView: HonestProver HonestInstance Statement Challenges View Payload
+    Tape payload view c InLanguage simulator HVZK_perfect view_eq_z3 —
+    refactor (GENERIC).
+  Hvzk: hvzk_conditional_of_maskImage conditional_marginalisation
+    hvzk_perfect_of_maskImage hvzk_zero_of_maskImage — refactor (GENERIC;
+    historical D4′ route).
+  FsStatement: Bytes OracleAnswer ROMView FSExperiments bit realTest
+    idealTest ZK_FS ROMBridge middleReal middleIdeal ROMReduction
+    ROMReductionWith romReduction_iff middle_means_eq zkfs_of_hvzk_perfect —
+    refactor (GENERIC).  ZF1-abort replaces ZK_FS's game, not this layer.
+  FsGood: mean_sub abs_mean_le mean_le_mean mean_nonneg mean_le_one bit_nonneg
+    bit_le_one badMass middle_means_close zkfs_of_hvzk_on_bridge zkfs_of_hvzk_on
+    — refactor (GENERIC, P-generic).  zkfs_of_maskImageOn_good_bridge,
+    zkfs_of_maskImageOn_good — PARAMETRIC (stated for P = Good; the P-generic
+    form needs hvzk_on_of, below).
+
+§1.5  Privacy reduction (T2a, T2b-1, T2b-2a, J3)
+  D12: HonestProver HonestInstance Statement payload c A roundInclusion g
+    g_zero M_pure decomposition nonRound nonRound_roundInclusion
+    other_components_affine MaskImage payload_law hvzk_perfect_of_maskImage —
+    refactor (GENERIC).  nonRound's match keeps `.semanticCoeff _ _ => 0 |
+    coord => proj coord`, so it needs no edit at all.
+  Shift: Good proj proj_apply round9Poly(_apply) evalRound9(_apply) claimMask
+    (_apply) Phi0 dir roundInclusion_semanticCoeff/_pointClaim/_extraClaim
+    dir_pointClaim dir_extraClaim sum_monomial_coeff claimMask_roundInclusion
+    claimMask_dir round9Poly_roundInclusion evalRound9_roundInclusion
+    Phi0_roundInclusion round9Poly_dir evalRound9_dir Phi0_dir nonRound_dir
+    originalOf shift unshift originalOf_add_smul_dir originalOf_sub_smul_dir
+    unshift_shift shift_unshift shiftEquiv sRem cTilde MaskImageOn nodes_injOn
+    rounds_natDegree_lt vdeg_update roundPoint_update roundPoint_nine
+    rounds_eval_of_vdeg eval_rounds_nine evalRound9_roundInclusion_rounds
+    L_pointClaim L_extraClaim maskLinear_vdeg Phi0_L Phi0_A fOrig vdeg_fOrig
+    originalRounds_eq evalRound9_originalRounds payload_pointClaim
+    originalOf_payload originalOf_c Phi0_roundInclusion_g Phi0_sRem
+    originalOf_payload_pure payload_eq_shift equalLaws_comp HVZK_on
+    payload_law_on — refactor (GENERIC).  hvzk_on_good — PARAMETRIC: its proof
+    never uses `Good` except to feed hm, so the R1 job adds
+      hvzk_on_of (P) : MaskImageOn P h B x → HVZK_on P h B outputs x
+    (the same proof with Good replaced by P; ~25 lines, low).
+  Chain: boolConsEquiv bsumB_eq_sum sum_cons_cast roundPoint_zero
+    roundPoint_cons rounds_initial rounds_chain roundPoly(_apply) roundPoly_nine
+    evalRound(_apply) nonRoundK nonRoundK_apply InitialChain0 Chain0
+    mem_initialChain0_iff mem_chain0_iff roundPoly_roundInclusion
+    roundPoly_rounds roundPoly_originalRounds roundPoly_dir two_ne_zero
+    dir_mem_initialChain0 original_bsum_actual roundPoly_g g_mem_initialChain0
+    sRem_mem_chain0 — refactor (GENERIC).  T2b-1 holds on R1 as proved.
+  PureRounds: A_pure roundPoly_L L_maskSum silent_mem_chain0 w β eqPrefix
+    w_zero w_sixteen maskOnly_degree bitFactor_bool selector_round_match
+    selector_round_mismatch linear_round_match tail_sum_selector
+    polynomial_ext28 weighted_vdeg word_vdeg power_word_vdeg row_power_degree
+    power_rounds pureRound_maskOnly pureRound_G maskOnly_word_vdeg
+    pureRound_maskOnly_degree sum_bool_const sum_bool_coordinate sum_bool_power
+    coordinate_power_vdeg coordinate_power_round pureRound_libra
+    pureLibra_maskSum pureTrace_applyAff pureTrace_maskOnly_word
+    pureTrace_G_word pureTrace_D_word claims_zero_of_word_zero
+    extra_zero_of_word_zero maskLinear_maskOnly maskLinear_G maskLinear_D
+    extra_coefficient_unit pureTrace_*_zero pureTrace_*_support L_pure_maskOnly
+    L_pure_G L_pure_libra L_pure_libra_maskSum roundPoly_coeff_L
+    L_pure_*_coeff — refactor (GENERIC; π-generic, D13Order unused).
+    mem_silentMasks_iff — refactor with one hand edit: its eight groups become
+    seven (`∀ b, v (.bat b) = 0` replaces the openingCoeff and finalCoeff
+    groups).  T2b-2a holds on R1 as proved.
+  Z4Maps: roundProjection roundMaskMap silentMasks silentRoundMaskMap —
+    refactor (GENERIC).  C1Cell, c1Projection, c1Map, roundMask_surjectivity,
+    c1_surjectivity — GENERIC as statements but superseded by C1Lift/H1Lift
+    (D24.2); not used on R1.
+  SilentReduction (J3): exists_silent_of_cover, balance_sum_generic,
+    balance_apply_sum_generic, balanceAff_sum_apply, traceLinear_inactive_sum,
+    pureTrace_inactive_dot, L_inactiveSum, linearPayload_inactiveSum,
+    ia_pure_zero, ms_pure_eq_initial, ChainT0, mem_chainT0_iff, K4Round,
+    mem_K4Round_iff, ChainT0K4, K4Payload, Chain0K4, mem_chain0K4_iff, QPrime,
+    roundPoly_eq_of_roundProjection, chain0K4_le_silent_of — refactor (GENERIC).
+    ownProj — GENERIC (match lists the per-lane cells, `_ => 0`).
+    batProj, batMap, BCond, payload_ext, mem_silentMasks_of — PARAMETRIC: the
+    two batched branches merge into `.bat b`; recommended (§2.4) to make
+    batMap Bat-valued, batMap := batRead ∘ A ∘ inlM.  BCond keeps its form.
+    D26.1's recorded gap (ownMap keeps all 29 columns) is unchanged on R1.
+
+§1.6  R0P / R0 / AspisFormal dependencies of the payload
+  GENERIC on R1: R0P.Core (Trace, Public), R0P.CoreExt (PackBasis, pack4,
+    BaseTyped, PublicBase), R0P.SemSource / SemView (honestClaims,
+    openingPoints, eqWeight, libraWeight, coeffsOf), R0P.Mask (maskFactors,
+    maskValue, maskClaimsR0, honestExtra, towerBasis), R0P.SemDecision
+    (terminalValue), R0P.SemDegree (VDeg), R0P.SemHonest / LaneMap (laneOf,
+    honestRows; needed by J0), R0P.Copy / CopyConstants (copyInactiveRows,
+    CopyActiveRow, copyRowsAt), R0P.CircleSampler (Point K usage);
+    Wide.InitialEncoder (exactInitialEncoder, exactInitialLinear),
+    Wide.FinalEncoder (exactFinalLinear: reused for R1's folded word),
+    R0.Chord.evalMessage / R0.PolynomialPair (p0Linear, p1Linear: the OOD),
+    R0.Fold (fibre, channels, encoded_channels, fold_encoded,
+    fibre_coordinates_nonzero, fibre_inverse: reused for C_u),
+    R0.RoundNormalization (foldMessage_eq_sum, round_eval, round_boundary at
+    n = 1024 only), R0.OpeningDefinitions.indicator,
+    AspisFormal V5ComponentCConcreteFoldLinearity (childIndex,
+    coefficientFoldLayer, lineFoldLayer, gatherFibre).
+  R0-SPECIFIC, not imported by the R1 model: R0.Chord interpolant/L,
+    R0.ChordImage, R0.ChordGeometry (only the Point type is kept),
+    R0.OpeningDefinitions.totalWeights, R0.FunctionalWeights (e1, e2).
+  New for R1 (exist on other branches, to be mirrored, §4): AspisR1.RoundPairing
+    (length-generic roundPolynomial, primalFold, dualFold, round_eval,
+    round_boundary; spend-path lean/RoundPairing.lean), AspisR1 D18Transport
+    (rowNat, row, rowEquiv, row_involutive; spend-path lean/D18Transport.lean),
+    R1.RepeatedLift (SecondCoefficients = Fin 64, SecondWord = Fin 65536,
+    secondLinear; base branch docs/research/v8-r1-20261011/lean/R1),
+    AspisR1 SecondFoldRestoration / Line18Geometry / LineFold (line-domain
+    channel identities; spend-path, compiled per its evidence README).
+
