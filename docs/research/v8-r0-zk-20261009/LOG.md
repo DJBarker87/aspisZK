@@ -5218,3 +5218,69 @@ After J16-R1, the privacy theorem for R1 holds under:
 - the D34.3 row-formula items.
 
 Memory: IIPrimeR1 peaks at ≈165 MB under -M7000.
+
+### Lead acceptance of J16-R1 and J0b (2026-10-18); D40: the LogUp pole enters the privacy error
+
+The worker commits 00ae72d55 and 53dd5023b are cherry-picked. The lead
+verified both host receipts:
+- R1Z/MaskImageR1: attempt 3751, SHA `45f65eda…`, 5 standard axiom lines;
+- R0Z/HonestValidity: attempt 3752, SHA `a0214f63…`, 16 standard axiom lines.
+
+Both exited 0, and neither file has sorry, axiom or overrides.
+
+**D40.1 J16-R1.**
+- `maskImageOn_R1 : MaskImageOn (P_R1 …) (validR1 h B hB x) B x`
+- `hvzk_R1`
+- `zkfs_R1_abort` and `zkfs_R1_abort_terms` (ZK_FS for the retrying
+  restricted prover, error ε_hit + ε_coll + ε_prog, with the couplings as
+  hypotheses).
+
+Premises: PackField, PublicBase, and base-typed honest instances.
+`validR1 = h.restrict (ValidOn P_R1 …)`.
+
+**D40.2 J0b: proved conditionally, with an obstruction.**
+`honestValid_of : HonestBuilderSound … → NoPole t λ χ → HonestValid`.
+`HonestBuilderSound` has four named fields:
+- baseTyped;
+- lanes (ProductionHolds without Copy);
+- helperSum;
+- helperInactive.
+
+The obstruction is `not_honestValid_of_pole`. At an active row where χ equals
+a producer or consumer tuple value of the witness's own trace, the copy
+residual is nonzero whatever the helper value, so HonestValid fails. NoPole
+depends on the witness. It therefore cannot be a conjunct of the public
+predicate P_R1, and the restricted prover `validR1` need not contain every
+honest instance at every P_R1 challenge. As stated, the theorem would cover
+fewer instances than the deployed prover runs on.
+
+**D40.3 Lead decision: route (a), a statistical pole term.**
+- Validity becomes per challenge (the instance set depends on ch), and the
+  pole event is charged to the privacy error, not to P_R1.
+- The honest prover behaves as the source does on an ActivePole (the
+  attempt fails). It is treated as a retry whose trigger is
+  witness-dependent. The effect of conditioning on that trigger is bounded
+  by its probability, so it is charged as ε_pole and not hidden in P.
+- Per attempt, for any fixed witness:
+
+  Pr[¬NoPole] ≤ 4·|active rows| / |K_χ|,
+
+  where χ = sem 1 is uniform in K₄ given λ, |K₄| = p⁴ ≈ 2^124, and there are
+  at most 1,024 active rows. So the per-attempt bound is ≈ 2^-112.
+- Over the cap N = 8: ε_pole ≤ 8·4,096/p⁴ ≈ 2^-109.
+- This is the eprint 2023/245 situation handled correctly: a
+  witness-dependent abort whose total probability is charged in full.
+
+Lean work (J0c):
+- HVZK_on with a per-challenge instance set;
+- the FsAbort composition with an extra ε_pole term for a witness-dependent
+  bad event (identical-until-bad);
+- the pole mass bound from χ's uniformity (SemK4 sampler law);
+- `maskImageOn_R1` restated on the per-challenge valid set.
+
+**D40.4 Remaining builder facts.** These are carried as fields, not yet
+proved:
+- `helperInactive`: should follow from a registry fact, every copy endpoint
+  on an active row, decidable over copyLinks as Protected was.
+- `helperSum`: CopyLinkBalance plus a multiplicity or pairing registry fact.
+- `lanes`: R0P builder completeness.
