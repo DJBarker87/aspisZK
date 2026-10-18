@@ -88,3 +88,55 @@ inputs are functions of published data, so they are ordinary adversary
 queries (each costs one of the q reads) and need no programming.  The
 on-chain checkpoint itself is a deterministic function of (proof, public,
 H) and adds nothing to the view.
+
+----------------------------------------------------------------------
+§2  The transcript layout: 115 reads, fields, coordinates  (PROVED, R1Z/TranscriptR1)
+----------------------------------------------------------------------
+
+2.1 Reads (`TRead`, 14 constructors; `card_TRead : card TRead = 115`):
+  init; absS i, sqS i, advS i (rows 0..26); reseed; absO i, sqO i, advO i
+  (rows 27..30); absQ (row 31 absorb), qb k, qa k (k < 8); absR, sqR, advR
+  (row 32, ρ).  `schedule` lists them in the verifier's order
+  (`mem_schedule`).  Squeeze reads (`IsSq`: sqS, sqO, qb, sqR) are the 40
+  challenge blocks; the other 75 answers are chain coordinates.
+
+2.2 Addresses (`addrWith`, from the source byte layout):
+  init   = DOMAIN ‖ 0 ‖ le32|pub| ‖ pub ‖ c1_root            field: C1 root, trailing
+  absS i = st ‖ 0 ‖ 0xa0+i ‖ framed_i                         field: st, offset 0
+  absO i = st ‖ 0 ‖ 0xa0+27+i ‖ le32|payload| ‖ payload
+  absQ   = st ‖ 0 ‖ 0xa0+31 ‖ le32|final| ‖ final
+  absR   = a_{k*} ‖ 0 ‖ 0xc0 ‖ le32 0      (38 bytes)
+  sq*/qb = st ‖ 1,  adv*/qa = st ‖ 2       (33 bytes)
+  reseed = DOMAIN2 ‖ vtag ‖ adv_26                           field: trailing
+  `fc` gives each read's designated field (Coord = root | sel | ans j):
+  absS 0 ← init, absS (i+1) ← advS i, sq/adv ← their absorb, reseed ←
+  advS 26, absO 0 ← reseed, …, qb/qa 0 ← absQ, qb/qa (k+1) ← qa k, absR ←
+  sel (the answer of qa k*), sqR/advR ← absR.  `chain_fc`: no field is a
+  squeeze answer (the D41 §1.1 "no squeeze answer is a field of any later
+  address", now a theorem).  `extract_addrWith`: the field reader recovers
+  the field from the address.
+
+2.3 Records.  `Rec` = (all 115 answers, C1 root, k*, Rest), Rest = framed
+  records, payloads, final message, public bytes, variant tag.  `setC c`
+  moves one coordinate; `Dep` says which coordinates an address reads (its
+  field; absR reads every qa answer through k*; reads with a qa field read
+  `sel`).  `addr_setC_of_not_dep`: an address is unchanged by every
+  coordinate it does not read.
+
+2.4 The pair table (`table`): two distinct reads of one attempt either have
+  a field the other does not read, or their addresses differ for EVERY
+  record: same field ⇒ squeeze/advance siblings (last byte 1 vs 2,
+  `sib_addr_ne`); absR against qb/qa (k+1) ⇒ length 38 vs 33.  The proof is
+  symbolic (`back_fc`, `rep_cases`); nothing is enumerated.
+
+2.5 Lifting (`TranscriptFrame`): per-attempt records on any finite space
+  with a lawful lens per (attempt, chain coordinate) whose move is `setC`
+  on that attempt and the identity on the others.  Then
+  `pairFresh_transcript`: PairFresh (either orientation, Umin = 2^255,
+  |answers| = 2^256 by `card_ans`) for EVERY pair of distinct transcript
+  positions of all N attempts; `hitFresh_transcript`: HitFresh for a
+  position whose charging event and adversary read are lens-invariant.
+  `card_positions`: N · 115 positions.  A lens gives the HitFresh/PairFresh
+  coordinate split S ≃ R × U (R1Z/LensR1 `hitFresh_of_lens`,
+  `pairFresh_of_lens`), so the designated-field table of D41 §1.4 is no
+  longer a hypothesis for the transcript reads.
