@@ -1,0 +1,1 @@
+pub const POOL_V1_TREE_DEPTH: usize = 20;

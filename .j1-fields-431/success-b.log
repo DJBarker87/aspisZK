@@ -1,0 +1,70 @@
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerSuccess431.lean:42:6: error: `simp` made no progress
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerSuccess431.lean:44:6: error: `simp` made no progress
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerSuccess431.lean:78:0: warning: unused termination hints, function is not recursive
+case pos
+it : Iter
+out out' : ByteVec
+hi : it.i < (↑it.slice).length
+x : FieldsRefinement431.Field := (↑it.slice)[it.i]
+next : Iter := { slice := it.slice, i := it.i + 1 }
+hrem : remaining it = x :: remaining next
+hnext : core.slice.iter.IteratorSliceIter.next it = ok (some x, next)
+h :
+  (match
+      let (o, iter1) := (some x, next)
+      match o with
+      | none => ok (done (core.result.Result.Ok (), out))
+      | some value =>
+        if value ≥ aspis_core.field.P then
+          ok (done (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, out))
+        else do
+          let a ← lift (core.num.U32.to_le_bytes value)
+          let s ← lift a.to_slice
+          let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s
+          ok (cont (iter1, out1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ← core.slice.iter.IteratorSliceIter.next x.1
+            match o with
+              | none => ok (done (core.result.Result.Ok (), x.2))
+              | some value =>
+                if value ≥ aspis_core.field.P then
+                  ok (done (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, x.2))
+                else do
+                  let a ← lift (core.num.U32.to_le_bytes value)
+                  let s ← lift a.to_slice
+                  let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 x.2 s
+                  ok (cont (iter1, out1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (), out')
+⊢ canonical (remaining it) ∧ ↑out' = ↑out ++ encodeWords (remaining it)
+'AspisR1PublicSerializer.Success431.extend_success' depends on axioms: [propext, Quot.sound]
+'AspisR1PublicSerializer.Success431.fields_loop_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicSerializer.Success431.fields_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       38.98 real         3.41 user         7.07 sys
+          2094678016  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              125663  page reclaims
+              157302  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               20810  voluntary context switches
+              193808  involuntary context switches
+          5228668628  instructions retired
+          2695377155  cycles elapsed
+           133141848  peak memory footprint

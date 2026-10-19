@@ -1,0 +1,73 @@
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerSuccess431.lean:40:4: error: 'change' tactic failed, pattern
+  (match
+      if x ≥ aspis_core.field.P then
+        ok (done (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, out))
+      else do
+        let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (core.num.U32.to_le_bytes x).to_slice
+        ok (cont (next, out1)) with
+    | ok r =>
+      match r with
+      | cont s => fields_loop s.1 s.2
+      | done r => ok r
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (), out')
+is not definitionally equal to target
+  (match
+      let (o, iter1) := (some x, next)
+      match o with
+      | none => ok (done (core.result.Result.Ok (), out))
+      | some value =>
+        if value ≥ aspis_core.field.P then
+          ok (done (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, out))
+        else do
+          let a ← lift (core.num.U32.to_le_bytes value)
+          let s ← lift a.to_slice
+          let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s
+          ok (cont (iter1, out1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ← core.slice.iter.IteratorSliceIter.next x.1
+            match o with
+              | none => ok (done (core.result.Result.Ok (), x.2))
+              | some value =>
+                if value ≥ aspis_core.field.P then
+                  ok (done (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, x.2))
+                else do
+                  let a ← lift (core.num.U32.to_le_bytes value)
+                  let s ← lift a.to_slice
+                  let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 x.2 s
+                  ok (cont (iter1, out1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (), out')
+/Users/dominic/ZK/.worktrees/r1-j1-r12-registry-20261015/docs/research/100bit-spend-path-20261013/lean/PublicSerializerSuccess431.lean:89:0: warning: unused termination hints, function is not recursive
+'AspisR1PublicSerializer.Success431.extend_success' depends on axioms: [propext, Quot.sound]
+'AspisR1PublicSerializer.Success431.fields_loop_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicSerializer.Success431.fields_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       43.35 real         4.40 user         8.79 sys
+          2114519040  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              147295  page reclaims
+              115920  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               18554  voluntary context switches
+              178742  involuntary context switches
+          5259279764  instructions retired
+          4912273093  cycles elapsed
+           135239072  peak memory footprint
