@@ -1,0 +1,51 @@
+/tmp/FastDotFoldedBatches.lean:62:35: warning: Possibly looping simp theorem: `Nat.add_mod`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/tmp/FastDotFoldedBatches.lean:62:4: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/tmp/FastDotFoldedBatches.lean:79:6: error: Application type mismatch: The argument
+  (seven_batches_u64 batches hlen hb).right
+has type
+  foldedSum batches < 2 ^ 64
+but is expected to have type
+  foldedSum batches < 2 ^ UScalarTy.numBits ?m.66
+in the application
+  UScalar.ofNatCore (foldedSum batches) ⋯
+/tmp/FastDotFoldedBatches.lean:74:61: error: unsolved goals
+batches : List (List ℕ)
+hlen : batches.length ≤ 7
+hb : ∀ xs ∈ batches, xs.length ≤ 4 ∧ ∀ x ∈ xs, x ≤ cap
+z : AspisR1Qm31ArithmeticProbe.field.M31
+hz : AspisR1Qm31ArithmeticProbe.field.M31.reduce_u64 (UScalar.ofNatCore (foldedSum batches) ⋯) = Result.ok z
+hmod : ↑z = ↑(UScalar.ofNatCore (foldedSum batches) ⋯) % AspisV8R17.RawReducer.P
+hcanonical : ↑z < AspisV8R17.RawReducer.P
+⊢ ∃ z,
+    AspisR1Qm31ArithmeticProbe.field.M31.reduce_u64 (UScalar.ofNatCore (foldedSum batches) ⋯) = Result.ok z ∧
+      ↑z = fullSum batches % modulus ∧ ↑z < modulus
+'AspisR1.FastDotFoldedBatches.batch_sum_u64' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FastDotFoldedBatches.seven_batches_u64' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FastDotFoldedBatches.foldedSum_mod' depends on axioms: [propext, sorryAx]
+'AspisR1.FastDotFoldedBatches.actual_reducer_after_seven' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        2.05 real         1.18 user         0.81 sys
+          2237693952  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              182844  page reclaims
+                 293  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  55  voluntary context switches
+                1443  involuntary context switches
+         20736978353  instructions retired
+          7226887453  cycles elapsed
+           374165456  peak memory footprint
