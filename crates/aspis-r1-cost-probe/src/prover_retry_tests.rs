@@ -90,6 +90,30 @@ fn real_check_publishes_a_verifying_proof() {
     let _=std::fs::remove_dir_all(&ledger_dir);
 }
 
+/// LOG D72.2: on the real checker input of fresh attempts, the extracted
+/// round, G-round and G-batched column writers (now wired into the check)
+/// equal the columns `convert` takes from z9c's `Lanes`, entry for entry.
+#[test]
+fn real_check_column_writers_equal_lanes_columns() {
+    let fixture=r0_fixture::prepare(false);
+    let ledger_dir=fresh_ledger("cols");
+    let mut ledger=DurableStateOnlyMaskNonceStore::open(&ledger_dir).unwrap();
+    test_hooks::clear();
+    let _=take_check_times();
+    let _=test_hooks::take_challenges();
+    let out=prove_masked_retrying(fixture.public(),&fixture.compiled,Variant::S2,HOST_HASH,&mut ledger).expect("P_R1 accepted within 8 attempts");
+    verify_all(&fixture,&out.proof);
+    let chs=test_hooks::take_challenges();
+    assert_eq!(chs.len(),out.attempts,"one recorded checker input per attempt");
+    for (i,ch) in chs.iter().enumerate() {
+        let a=aspis_z4b_probe::p_r1_columns_audit(ch).expect("audit converts");
+        std::println!("R1P_COLS_AUDIT attempt={i} round_entries={} round_mismatches={} ground_entries={} ground_mismatches={} gbat_entries={} gbat_mismatches={}",a[0][0],a[0][1],a[1][0],a[1][1],a[2][0],a[2][1]);
+        assert!(a.iter().all(|x| x[0]>0 && x[1]==0),"column writers differ from the Lanes columns");
+    }
+    drop(ledger);
+    let _=std::fs::remove_dir_all(&ledger_dir);
+}
+
 /// P_R1 is defined for R1 (= S2) only; the loop refuses other variants.
 #[test]
 fn retry_loop_refuses_non_r1_variants() {

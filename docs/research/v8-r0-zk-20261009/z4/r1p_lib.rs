@@ -3,4 +3,4 @@
 //! (`probe.rs`) is unchanged in behaviour.
 #[path = "probe.rs"]
 mod probe;
-pub use probe::r1p::{p_r1_check, R1CheckTimes, R1PublicChallenges};
+pub use probe::r1p::{p_r1_check, p_r1_columns_audit, R1CheckTimes, R1PublicChallenges};

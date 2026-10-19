@@ -8,9 +8,9 @@
 //! column family that has an extracted C3 builder substituted by that
 //! builder's output: ChainT0K4 targets (`fill_tq`, D59), lift observation
 //! matrices (`fill_lo`, D62), own columns of the QPrime and G families
-//! (`fill_own`, D64) and the relR1 limb functionals (`fill_rel`, D66).  The
-//! round/bat columns (hRound, hGRound, hGBat) are still z9c's builders; that
-//! is the open part of `check_sound″` (D62.3, D64.2).
+//! (`fill_own`, D64), the relR1 limb functionals (`fill_rel`, D66), and the
+//! pure-round and G batched columns of the QPrime and G families
+//! (`fill_round`, `fill_gbat`, D72.2: hRent, hGent, hGBent).
 //!
 //! The public data are rebuilt from the attempt's actual challenges
 //! (alpha, z0, z1, gamma, kappa, alpha0, alpha1, queries) exactly as z9c's
@@ -22,6 +22,7 @@
 use super::*;
 
 /// The challenges P_R1 reads (D38.1): public data only.
+#[derive(Clone)]
 pub struct R1PublicChallenges {
     pub alpha: [QM31; 10],
     /// (x, y) of z0 and z1.
@@ -150,7 +151,27 @@ fn extracted_builders(p: &Pub, cert: &Cert, ln: &Lanes, pb: &mut ck::Pub) -> Opt
         xs.push(x16(v).0);
     }
     pb.rel = aspis_r1_cert_build::fill_rel(&al, &zz, &tr, &inact, &ti, &opl, &fpos, &rk, &ru, &li, &xs, p.lay.nf, 8 * rk.len());
+    pb.round = aspis_r1_cert_build::fill_round(&al, &tr, &inact, &kq, &rq, &lq, kq.len());
+    pb.ground = aspis_r1_cert_build::fill_round(&al, &tr, &inact, &kg, &rg, &lg, kg.len());
+    let x18s: Vec<u32> = p.lay.fpos.iter().map(|&f| x18(f).0).collect();
+    pb.gbat = aspis_r1_cert_build::fill_gbat(&al, &zz, &tr, &inact, &ti, &opl, &x18s, &rg, &lg, rg.len(), p.lay.nf);
     Some(())
+}
+
+/// Audit only (LOG D72.2), never called by the prover: on one attempt's
+/// challenges, the extracted round/G-round/G-batched writers against the
+/// columns `convert` takes from z9c's `Lanes` (the pre-D72.2 checker input).
+/// Returns [entries, mismatches] for pb.round, pb.ground and pb.gbat.
+pub fn p_r1_columns_audit(ch: &R1PublicChallenges) -> Option<[[usize; 2]; 3]> {
+    let p = public_data(ch)?;
+    let (cert, _) = emit(&p);
+    let cert = cert?;
+    let ln = Lanes::new(&p.cx);
+    let (pz, _) = convert(&p, &cert, &ln)?;
+    let (mut pb, _) = convert(&p, &cert, &ln)?;
+    extracted_builders(&p, &cert, &ln, &mut pb)?;
+    let cmp = |a: &[u32], b: &[u32]| [a.len(), a.iter().zip(b).filter(|(x, y)| x != y).count() + a.len().abs_diff(b.len())];
+    Some([cmp(&pb.round, &pz.round), cmp(&pb.ground, &pz.ground), cmp(&pb.gbat, &pz.gbat)])
 }
 
 std::thread_local! {

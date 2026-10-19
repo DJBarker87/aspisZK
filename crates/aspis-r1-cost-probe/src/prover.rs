@@ -327,6 +327,8 @@ pub fn take_check_times() -> Vec<R1CheckTimes> {
 fn public_check(variant:Variant,challenges:&R1PublicChallenges,c1_root:[u8;32])->Result<(),Error> {
     if variant!=Variant::S2 { return Err(Error::Semantic); }
     #[cfg(test)]
+    test_hooks::observe_challenges(challenges);
+    #[cfg(test)]
     if let Some(accepted)=test_hooks::forced_verdict(c1_root) {
         return if accepted {Ok(())} else {Err(Error::Rejected)};
     }
@@ -451,6 +453,15 @@ pub(crate) mod test_hooks {
         let record=Attempt{mask_nonce,g_digest:hash(&[b"test:g",&bytes]),salt_digest:hash(&[b"test:salt0",salt0]),..Attempt::default()};
         ATTEMPTS.with(|a| a.borrow_mut().push(record));
     }
+    #[cfg(feature="r1p-check")]
+    std::thread_local! {
+        static CHALLENGES: core::cell::RefCell<Vec<super::R1PublicChallenges>> = const { core::cell::RefCell::new(Vec::new()) };
+    }
+    /// Test builds only (LOG D72.2 column audit): the challenges of each P_R1 check on this thread.
+    #[cfg(feature="r1p-check")]
+    pub(crate) fn observe_challenges(ch:&super::R1PublicChallenges) { CHALLENGES.with(|c| c.borrow_mut().push(ch.clone())); }
+    #[cfg(feature="r1p-check")]
+    pub fn take_challenges()->Vec<super::R1PublicChallenges> { CHALLENGES.with(|c| core::mem::take(&mut *c.borrow_mut())) }
     pub(crate) fn forced_verdict(c1_root:[u8;32])->Option<bool> {
         let verdict=VERDICTS.with(|v| v.borrow_mut().as_mut().map(|q| q.pop_front().unwrap_or(true)))?;
         ATTEMPTS.with(|a| if let Some(last)=a.borrow_mut().last_mut() {last.c1_root=Some(c1_root);last.forced_verdict=Some(verdict);});

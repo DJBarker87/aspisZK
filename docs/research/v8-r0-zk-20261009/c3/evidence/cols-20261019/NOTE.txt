@@ -1,0 +1,23 @@
+D72.2 column writers (branch codex/r1p-column-writers-20261019, base 74e78062c). Host: build host,
+workspace /home/dombarker/project-offloads/codex-r1p-column-writers-20261019, every job in a systemd
+scope MemoryHigh 6G / MemoryMax 8G / MemorySwapMax 0 / TasksMax 64, release with overflow checks.
+
+Extraction (tag cw2, extraction-cw2.txt): Charon cb50ff16 (daad69be...) and Aeneas b59d5188 (959659a6...),
+start points fill_tq/fill_lo/fill_own/fill_rel/fill_round/fill_gbat.  split-cols.py.txt asserts that the
+substituted output begins byte for byte with CertBuildExtracted (d7e06b9f...) followed by the body of
+CertRelExtracted (7ce94171...); both are unchanged.  The remainder is R1Z/CertColExtracted (81a2334a...).
+A first extraction (cw1) put `let x = if ..` selections in loop bodies; Aeneas emits do-notation join
+points for them (attempt 5751), so cw2 moves every selection into its own function (tail position).
+Semantics unchanged; all evidence below is for cw2 (lib.rs 207d5626...).
+
+Differential (colsdiff-d3-*): z9d builder_diff on the five D66 configurations (A/0 g0, A/0 g1, A/2 coset,
+A/3 random, J/1; B/0 exits early as before): fill_round equals z9c's QPrime round columns (3,199,968 or
+3,173,952 entries) and G round columns (2,146,320 / 1,782,096), fill_gbat equals the G batched columns
+(2,629,440 / 1,446,720), 0 mismatches each; checker verdicts unchanged.  Teeth: clearing the inactive
+flags changes 1.0-1.15M round entries, moving one stored point x18 changes 13,056-15,744 gbat entries.
+
+R-retry checker input (test2-results.txt): with the writers wired into z9e (pb.round, pb.ground, pb.gbat
+now from fill_round/fill_gbat), lib tests 22/22 pass, including the new
+real_check_column_writers_equal_lanes_columns: on the real attempt's challenges the extracted columns equal
+convert's Lanes columns entry for entry (0 mismatches on all three).  Gate (gate1.json): 8/8 OS attempts
+accepted and verified (strict tx1+tx2, dense); 37.8 s mean per attempt (check 33.5 s; builders 11.9 s).

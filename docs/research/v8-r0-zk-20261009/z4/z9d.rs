@@ -390,6 +390,31 @@ fn builder_diff(p: &Pub, cert: &Cert, label: &str) {
     let want = flat(&p.rels, p.lay.bw - BAT0).expect("relations");
     let dr = rel.iter().zip(&want).filter(|(x, y)| x != y).count();
     println!("R1C3_BUILD {label} builder=relations agree={} entries={} want_entries={} mismatches={dr} relations={} build_seconds={t_rel:.3}", rel == want, rel.len(), want.len(), rk.len());
+    // Builder 5 (D72.2 hRent/hGent): the pure-round columns of the QPrime and G families.
+    let tb = Instant::now();
+    let round = aspis_r1_cert_build::fill_round(&al, &tr, &inact, &kq, &rq, &lq, kq.len());
+    let ground = aspis_r1_cert_build::fill_round(&al, &tr, &inact, &kg, &rg, &lg, kg.len());
+    let t_round = tb.elapsed().as_secs_f64();
+    let d5 = round.iter().zip(&pbw.round).filter(|(x, y)| x != y).count();
+    let d5g = ground.iter().zip(&pbw.ground).filter(|(x, y)| x != y).count();
+    println!("R1C3_BUILD {label} builder=round_columns agree={} entries={} want_entries={} mismatches={d5} sources={} build_seconds={t_round:.3}", round == pbw.round, round.len(), pbw.round.len(), kq.len());
+    println!("R1C3_BUILD {label} builder=g_round_columns agree={} entries={} want_entries={} mismatches={d5g} sources={}", ground == pbw.ground, ground.len(), pbw.ground.len(), kg.len());
+    // Builder 6 (D72.2 hGBent): the G batched columns; input: the stored first-line points of the folded positions.
+    let x18s: Vec<u32> = p.lay.fpos.iter().map(|&f| x18(f).0).collect();
+    let tb = Instant::now();
+    let gbat = aspis_r1_cert_build::fill_gbat(&al, &zz, &tr, &inact, &ti, &opl, &x18s, &rg, &lg, rg.len(), p.lay.nf);
+    let t_gbat = tb.elapsed().as_secs_f64();
+    let d6 = gbat.iter().zip(&pbw.gbat).filter(|(x, y)| x != y).count();
+    println!("R1C3_BUILD {label} builder=g_batched_columns agree={} entries={} want_entries={} mismatches={d6} sources={} build_seconds={t_gbat:.3}", gbat == pbw.gbat, gbat.len(), pbw.gbat.len(), rg.len());
+    // Teeth: the comparison detects a dropped balance (inactive flags cleared) and a moved stored point.
+    let flat0 = vec![0u32; N];
+    let t5 = aspis_r1_cert_build::fill_round(&al, &tr, &flat0, &kq, &rq, &lq, kq.len());
+    let m5 = t5.iter().zip(&pbw.round).filter(|(x, y)| x != y).count();
+    let mut x18b = x18s.clone();
+    x18b[0] = (x18b[0] + 1) % 0x7fff_ffff;
+    let t6 = aspis_r1_cert_build::fill_gbat(&al, &zz, &tr, &inact, &ti, &opl, &x18b, &rg, &lg, rg.len(), p.lay.nf);
+    let m6 = t6.iter().zip(&pbw.gbat).filter(|(x, y)| x != y).count();
+    println!("R1C3_BUILD_TEETH {label} round_inactive_cleared_mismatches={m5} gbat_x18_moved_mismatches={m6}");
 }
 
 pub(super) fn run(p: &Pub, cert: &Cert, label: &str, teeth: bool) {
