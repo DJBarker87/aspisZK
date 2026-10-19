@@ -5874,3 +5874,62 @@ are identical and it exited 1. A local edit script failed before launch.
 This breaks the never-rerun-unchanged rule. It is recorded in the evidence,
 and the worker's launcher now refuses a source hash it has already sent.
 That guard is adopted for all workers.
+
+### Lead acceptance of the phase-indexed real games (2026-10-19); D52: privacy_R1_games′
+
+The worker commits 142b9fa15..99b6f9149 (17) are cherry-picked; GamesR1 is
+untouched. The design is `zf1/DESIGN-R1-REAL.txt` §1–§7. The lead verified
+all 15 green host receipts (4007 … 4049): SHAs match, all exited 0
+in-window, standard axioms, no overrides. Notes on the failed attempts:
+- 4005 is void: another worker's leftover launcher in the shared scratchpad
+  ran, compiled nothing, and the worker switched to a private launcher.
+- 4033 hit the default heartbeat limit and was fixed by restructuring, not by
+  an override.
+
+**D52.1 Proved.**
+- `R1ProverP` with phase-indexed roots (D48.3). Each attempt is one causal
+  read program run on partial answer vectors.
+- cp: the frozen-set lazy-programming law (`LazyFrozen`), with
+  H(public_bytes) as the frozen address, and `cpP`.
+- CmLayout: the byte grammar `gram` for every commitment read, and hit,
+  pair and cross freshness for all N·|Pos1| positions. `hidden` shows the
+  opening log does not move on unopened reads.
+- Agree: `agreeP`.
+- exh: εexh = N·16(L₁+L₂)/2^496 + N·|Pos1|/2^255.
+- `privacy_R1_games′` on fsR1P/abR1P against simE. The error is
+  M·q/2^255 + M²/2^255 + εexh + N·4096/(p⁴−1), with M = N·|Pos1|.
+
+Every field of R1RealData is discharged.
+
+**D52.2 Hypotheses of privacy_R1_games′.**
+- PackField, PublicBase, BuilderSoundOn (theorem for the model, D51),
+  SemRows01 and QM31SamplerLaw.
+- R-rom: `RomModel W`, `RAddrIn`.
+- R-causal: `RCausal`.
+- R-commit:
+  - `RCommitBytes` (the node, leaf, salt, seed, binding and expander
+    grammars);
+  - `hfib`;
+  - `RExh`;
+  - E bounds, and 16L ≤ 8E.
+- R-wire: `eCm`, `ROpen`, `RComLog`.
+
+Every one of these is a statement about the Rust prover's behaviour, which
+is what the refinement work discharges.
+
+**D52.3 Modelling choices (reviewed).**
+- The mask nonce is secret. It is never in the proof bytes or read by the
+  verifier, per r1_wire.rs, which overrides the "public" context comment.
+- The binding read is memoized: the Rust recomputes it at the same address.
+- The real game runs all N attempts and charges every read. That is
+  conservative.
+- The cell bound ≤ 26·1024 (RCommitCount) still needs confirming from
+  aspis-statement.
+
+**D52.4 Open.**
+- R-ser, R-retry, R-pub.
+- Completeness of the read list, i.e. no other hash call in the commitment
+  phase.
+- The Rust-side discharge of every premise in D52.2.
+- An LE byte-formula lemma for `wordsE`.
+- The N = 8 numeral.
