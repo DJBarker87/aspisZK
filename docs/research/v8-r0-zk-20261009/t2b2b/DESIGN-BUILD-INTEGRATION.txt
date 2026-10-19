@@ -278,3 +278,38 @@ same caps, same slot locks, same run2.py, refuses a (sha, env) pair already sent
     [propext, Quot.sound]) turns the interface law into Sem1UniformR1.QM31SamplerLaw.
     What is open: SamplerLawSpend and SamplerLawBridge are on different bases and are not yet
     in one closure (needs §4 (f)); SemRows01 is not addressed (§4 (c)).
+
+------------------------------------------------------------------------------------------
+§9  Unified base (f) — execution log (LOG D63, attempts 5000-5299)
+------------------------------------------------------------------------------------------
+
+Repo base: this branch after merging origin/v8-reference 66bca8914 and
+origin/codex/100bit-spend-path-20261013 f05b0e63e (ef32703b5; tools at f82a8aa22).
+Finding while writing the manifest: the repo already holds the spend path's narrowed base
+sources (AspisFormal/AspisFormal/CircleGroupOrder 70b2727f, v8-fs-generic FS/LemmaA and
+FS/Theorem, v8-r0-close R0C/ModuloField and ModuloCounting, v8-wide-reference WideTower all
+match the spend pins); the privacy host's T/sources copies are older.  So "one repo revision"
+and "spend copy where the sides differ" coincide: J/sources is generated from the repo only
+(build-integration/joint-manifest.py.txt; root priority spend lean > base research trees >
+privacy trees; R1Mirror excluded).
+
+J = /home/dombarker/project-offloads/aspis-joint-20261019 (sources, objects, evidence).
+LEAN_PATH (H/env/J.json): J/objects : AspisFormal consolidation packages (Cli, batteries, Qq,
+aesop, proofwidgets, importGraph, LeanSearchClient, plausible, mathlib) : the Aeneas 4.32
+port backend lib (its .lake/packages are symlinks to the same AspisFormal packages) : Lean
+core.  No AspisFormal build dir, no objects2, no overlays.  Library check: all 99 library
+modules of manifest 1 found; no user module shadowed by a library dir.
+
+Manifest 1 (build-integration/manifest-privacy-1.json): roots R1Z.PrivacyGamesSamplerR1,
+R1Z.PrivacyR1P, R0Z.BuilderWitnessMerged, R1Z.CertCheckSound3; 402 modules (8 spend, 237
+base, 157 privacy); --check clean.  Four names have two repo sources and take the spend copy:
+AspisFormal.V6PublishedTheoremInterfaces, R0P.LogUpChain, R0P.LogUpAssembly, R0P.SemRounds.
+Two modules import all of Mathlib: R0Z.GoodDensity, R0Z.StatisticalDistance.
+Spend roots (dry run, not built yet): 920 modules in all; problems: R1FunctionalBatchClean,
+R1SubfieldBatchStage2 and AspisR1Qm31ArithmeticProbe.Funs have no repo source; SpendRelation,
+SpendAppendBinding and TraceAppend are each imported under two module names (X and R1X) —
+one file, two modules, a duplicate-declaration hazard in one closure.  Three spend-vs-spend
+name collisions (R1SelectedTranscriptParams, R1UnifiedSampler, R1SelectedChallengeMap: a
+file named R1X.lean and a file X.lean aliased to R1X).  These go to the soundness lead.
+
+Budget: manifest 1 alone needs 402 attempts; the range 5000-5299 has 300.

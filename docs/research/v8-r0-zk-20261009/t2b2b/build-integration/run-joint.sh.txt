@@ -8,14 +8,14 @@
 #   A  privacy base: H/objects-A : objects2 : environment-base LEAN_PATH
 #   C  spend sampler overlay: H/objects-C : correct-c import-overlay : correct-c search path
 #   J  unified base (LOG D63): J/objects : AspisFormal consolidation packages : Aeneas 4.32 port
-#      backend : Lean core, sources J/sources (J = aspis-joint-20261019); attempts 5000-5299
+#      backend : Lean core, sources J/sources (J = aspis-joint-20261019); attempts 5000-5799 (extended by the lead)
 # Refuses a (source sha, env-id) pair that was already sent.
 set -u
 T=/home/dombarker/project-offloads/aspis-fs-generic-20261006
 H=/home/dombarker/project-offloads/r1-privacy-build-integration-20261019
 A=$1; M=$2; E=$3; ML=${4:-7000}; MX=${5:-7}; NSLOTS=4
 if [ "$E" = J ]; then
-  case "$A" in 5[0-2][0-9][0-9]) ;; *) echo "attempt $A outside 5000-5299"; exit 64;; esac
+  case "$A" in 5[0-7][0-9][0-9]) ;; *) echo "attempt $A outside 5000-5799"; exit 64;; esac
   J=/home/dombarker/project-offloads/aspis-joint-20261019; SRCROOT="$J/sources"; OBJ="$J/objects"
 else
   case "$A" in 45[2-9][0-9]) ;; *) echo "attempt $A outside 4520-4599"; exit 64;; esac

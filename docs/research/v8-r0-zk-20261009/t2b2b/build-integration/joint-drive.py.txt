@@ -22,9 +22,9 @@ if os.path.exists(rec_path):
         r = json.loads(l)
         if r.get('exit') == 0: green[r['module']] = r['source_sha256']
 def next_attempt():
-    used = [int(f[4:-4]) for f in os.listdir(f'{T}/evidence') if re.match(r'^out-5[0-2]\d\d\.log$', f)]
+    used = [int(f[4:-4]) for f in os.listdir(f'{T}/evidence') if re.match(r'^out-5[0-7]\d\d\.log$', f)]
     n = max(used) + 1 if used else 5000
-    return n if n <= 5299 else None
+    return n if n <= 5799 else None
 def gate():
     now = datetime.datetime.now(ZoneInfo('Europe/London')); hm = now.hour * 100 + now.minute
     inwin = hm >= 2230 or hm < 600
@@ -45,7 +45,7 @@ for m in [e['module'] for e in man['order']]:
     while not g['in_window'] and g['other_jobs']:
         waits.append(g); time.sleep(90); g = gate()
     A = next_attempt()
-    if A is None: print('attempt range 5000-5299 exhausted at', m); sys.exit(4)
+    if A is None: print('attempt range 5000-5799 exhausted at', m); sys.exit(4)
     src = f'{J}/sources/{m.replace(".", "/")}.lean'
     p = subprocess.run(['sh', f'{H}/tools/run-joint.sh', str(A), m.replace('.', '/'), 'J', '7000', '7'],
                        capture_output=True, text=True)
