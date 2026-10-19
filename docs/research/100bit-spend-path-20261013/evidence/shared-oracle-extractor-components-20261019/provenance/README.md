@@ -1,0 +1,1 @@
+Historical source snapshot for the selected R1AllAddressFiatShamir module owner. Its receipt records the selected cached object separately; this is not a claim that the current canonical differently named owner was rebuilt. Unified source/alias closure is still required.

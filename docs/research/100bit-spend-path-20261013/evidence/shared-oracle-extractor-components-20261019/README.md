@@ -1,0 +1,11 @@
+# Shared-oracle and fresh-private-coin composition
+
+RawRecordedOracleExtractionMass works under lazyMean, the actual memoized/shared random-oracle interpreter. For an arbitrary recorded experiment, it averages the parser-inclusive recorded-run extractor over its independent finite private byte coins. Under the named CleanAcceptedModel premise, accepted extraction failure is at most the chosen classifier-hit observable's shared-oracle probability plus 2^-126. CleanAcceptedModel explicitly requires accepted clean executions to establish terminal Checks and the exact corresponding no-hit statement. Those source/refinement obligations are not discharged here.
+
+RawAdaptiveClassifierHitDensity reuses RawUnifiedDecoder.decoded_bound and LiteralDecoderEnrichment.density to prove the direct LiteralClassifier event's background-law bound, without a doomed or failed specification-extractor premise. Public and word choices depend only on the decoder input/table. The existing causal first-read theorem then gives actual shared-ROM decoded-hit probability at most Q*B, B=15/2^109, where Q bounds all distinct first reads. The factor Q is retained. The missing deterministic connection from an accepted transcript's classifier hit to this causal decoded-hit observable is separate work, as are its source-format/decoder-completion and collision obligations.
+
+These two results do not assert that independent fresh-round sampling equals the memoized oracle experiment. In particular they do not replace Q*B by 33*B, discard collision terms, or claim a complete 100-bit bound for the production experiment.
+
+The focused Lean 4.32 checks exited 0 in 5.96 and 2.4 seconds, peaked at 3,079,045,120 and 3,111,714,816 bytes RSS, and reported zero process swaps. All five axiom reports contain only propext, Classical.choice and Quot.sound. Exact source revisions, commands, source/object/import hashes, raw logs and compiled objects are retained. Superseded failures are diagnostics only.
+
+These cached focused checks are working component evidence. Release evidence requires one clean ordered build on the unified research base. This is not a whole-extractor polynomial-time proof, production acceptance refinement, or complete 100-bit private-spend theorem.

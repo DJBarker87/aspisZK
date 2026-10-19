@@ -1,0 +1,82 @@
+/tmp/RawRecordedOracleExtractionMass.lean:37:8: warning: Variable name `checks` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/tmp/RawRecordedOracleExtractionMass.lean:75:6: error: Type mismatch: After simplification, term
+  LE.le.trans hle (le_add_of_nonneg_right hpos)
+ has type
+  failureMass run ≤ 1 + 1 / 2 ^ 126
+but is expected to have type
+  failureMass (eval H exp) ≤ (if hit (eval H exp) then 1 else 0) + 1 / 2 ^ 126
+/tmp/RawRecordedOracleExtractionMass.lean:95:8: error: Type mismatch: After simplification, term
+  LE.le.trans hle hb
+ has type
+  failureMass run ≤ 1 / 2 ^ 126
+but is expected to have type
+  failureMass (eval H exp) ≤ (if hit (eval H exp) then 1 else 0) + 1 / 2 ^ 126
+/tmp/RawRecordedOracleExtractionMass.lean:96:41: error: unsolved goals
+decoder : LiteralByteProtocol.Decoder
+exp : Experiment
+hit : RawCutProverCompiler.RunView → Prop
+hmodel : CleanAcceptedModel decoder exp hit
+H : Bytes → State
+run : View Bytes State ((LiteralTranscript.Public × (ℕ → LiteralTranscript.Message)) × Bool) := eval H exp
+hh : ¬hit run
+ha : ¬run.2.2 = true
+⊢ (mean fun coins => indicator (false = true ∧ RawRecordedPublicSpendExtractor.extract run coins = none)) = 0
+/tmp/RawRecordedOracleExtractionMass.lean:98:25: warning: This simp argument is unused:
+  false_and
+
+Hint: Omit it from the simp argument list.
+  simp only [ha, f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵ ̵indicator_false, mean_const]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/RawRecordedOracleExtractionMass.lean:98:36: warning: This simp argument is unused:
+  indicator_false
+
+Hint: Omit it from the simp argument list.
+  simp only [ha, false_and, i̵n̵d̵i̵c̵a̵t̵o̵r̵_̵f̵a̵l̵s̵e̵,̵ ̵mean_const]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/RawRecordedOracleExtractionMass.lean:98:53: warning: This simp argument is unused:
+  mean_const
+
+Hint: Omit it from the simp argument list.
+  simp only [ha, false_and, indicator_false,̵ ̵m̵e̵a̵n̵_̵c̵o̵n̵s̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/RawRecordedOracleExtractionMass.lean:118:4: error: Application type mismatch: The argument
+  add_le_add_right hhit ?m.54
+has type
+  (?m.54 + lazyMean exp emptyTable fun run => indicator (hit run)) ≤ ?m.54 + bound
+but is expected to have type
+  (lazyMean exp emptyTable fun run => indicator (hit run)) + 1 / 2 ^ 126 ≤ bound + 1 / 2 ^ 126
+in the application
+  LE.le.trans (shared_oracle_failure_le_hit_add_abort decoder exp hit hmodel) (add_le_add_right hhit ?m.54)
+'AspisR1.RawRecordedOracleExtractionMass.shared_oracle_failure_le_hit_add_abort' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.RawRecordedOracleExtractionMass.shared_oracle_failure_le_supplied_hit_bound' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        8.16 real         2.97 user         1.32 sys
+          3109961728  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              190307  page reclaims
+               55626  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                1862  voluntary context switches
+               47354  involuntary context switches
+         49282787902  instructions retired
+         16005392606  cycles elapsed
+           486756552  peak memory footprint
