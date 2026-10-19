@@ -70,3 +70,19 @@ The bounded optimized-MIR attempt also failed its reborrow shape gate:
 Option.as_deref_mut remains in the successful raw emission. No speculative
 primitive implementation has been imported. Evidence is in
 RHO-MIR-REBORROW-DIAGNOSTIC.json; do not repeat this extraction configuration.
+
+## Option source boundary checkpoint (after 34b0e558e)
+
+See RHO-OPTION-LOANS.md/json. Exact generic std as_mut/map and identity
+DerefMut body extraction now have checked leaf/writeback theorems in
+CuSavingsRhoOptionLoans. These are not a binding of original as_deref_mut.
+Do not count them as candidate completion. Generic leaf composition fails
+when source nested loan types are instantiated; direct branch normalization
+also fails handback translation. Do not keep trying producer flags/variants
+without a new structural reason. No template/compatible API may stand in for
+that source binding. Original production Rust remains frozen.
+
+Proceed with actual caller invariants independently: derive power update and
+next framing from the common accumulate suffix, then source Prepared/resume
+canonicality/dataflow. The original nested-borrow lowering and final contexts
+still must be solved before full candidate completion.
