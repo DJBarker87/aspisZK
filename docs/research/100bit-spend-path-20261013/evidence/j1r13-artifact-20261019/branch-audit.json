@@ -1,0 +1,252 @@
+{
+  "audit_script_sha256": "53307e87310dda7a4a701058772adae18bcc3e25b945995ba42482de71a15668",
+  "audit_script_source": "import hashlib,json,pathlib,re,subprocess,sys,time,resource\nstart=time.monotonic();root=pathlib.Path.cwd()\nbase='f59a21fc15dcad23fcad412afe42b83ee319ed50'\ngit=lambda *a:subprocess.check_output(['git',*a])\nhead=git('rev-parse','HEAD').decode().strip()\nassert git('branch','--show-current').decode().strip()=='codex/r1-checkpoint-recut-20261018'\nassert git('status','--porcelain')==b''\nassert subprocess.run(['git','merge-base','--is-ancestor',base,head]).returncode==0\nprefix='docs/research/100bit-spend-path-20261013/evidence/'\nallowed=('j1r13-artifact-20261019/','readonly-runtime-1h-20261019/','decision1h-rollover-measurements-20261019/','lean-module-hygiene-inventory-20261019/','prepared-arithmetic-proposals-20261019/')\ncommits=git('rev-list','--reverse',base+'..'+head).decode().splitlines();trees=[]\nfor c in commits:\n changed=git('diff-tree','--no-commit-id','--name-only','-r','-z',c).decode().rstrip('\\0').split('\\0')\n for n in changed:\n  assert any(n.startswith(prefix+x) for x in allowed),n\n  assert n.endswith(('.json','.log')) or pathlib.PurePosixPath(n).name=='SHA256SUMS',n\n msg=git('show','-s','--format=%B',c).decode()\n assert not re.search(r'(?im)^co-authored-by:.*(openai|chatgpt|codex|claude|copilot|assistant)',msg)\n files=[]\n for row in git('ls-tree','-r','-l','-z',c).split(b'\\0'):\n  if not row:continue\n  info,path=row.split(b'\\t',1);mode,typ,obj,size=info.split()\n  if typ==b'blob':\n   assert int(size)<=90000000,(c,path,size)\n   files.append({'path':path.decode(),'bytes':int(size),'blob':obj.decode()})\n trees.append({'commit':c,'file_count':len(files),'largest_file':max(files,key=lambda x:x['bytes']),'changed_paths':changed})\nassert git('diff','--name-only',base,head,'--','crates','programs','tools','Cargo.toml','Cargo.lock','*.lean')==b''\nreach=git('rev-list','--objects',head).decode().splitlines();old='de8869cff836ba49cda1b66c473b885f11d410e2'\nassert all(x.split(' ',1)[0]!=old for x in reach)\nverifier_sha=hashlib.sha256(git('show',head+':crates/aspis-r1-cost-probe/src/verifier.rs')).hexdigest()\nassert verifier_sha=='2babda97eabb9e84204204f016dc37562ec7b762e7c66abbce0f6a5c17b1d6d9'\nusage=resource.getrusage(resource.RUSAGE_SELF)\nj={'status':'PASS_ARTIFACT_ONLY_J1R13_SCOPE_AND_HISTORY','audited_head':head,'base_revision':base,\n 'branch':'codex/r1-checkpoint-recut-20261018','clean_worktree':True,'source_or_Lean_changes':0,\n 'verifier_sha256':verifier_sha,'every_new_commit_tree':trees,'maximum_file_bytes':90000000,\n 'largest_file_in_range':max((x['largest_file'] for x in trees),key=lambda x:x['bytes']),\n 'rejected_blob_reachable':False,'no_ELF_or_keys_or_binary_archives_added':True,\n 'command':['python3','/tmp/r1-j1r13-branch-audit.py',sys.argv[1]],'revision':head,'features':'N/A read-only Git/hash audit',\n 'exit_status':0,'wall_seconds':time.monotonic()-start,'peak_rss_bytes':usage.ru_maxrss,'swaps':usage.ru_nswap,\n 'platform':'macOS ru_maxrss bytes','print_axioms':'N/A no Lean result','compiler_or_runtime_jobs':0,\n 'audit_script_sha256':hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest(),'audit_script_source':pathlib.Path(__file__).read_text()}\npathlib.Path(sys.argv[1]).write_text(json.dumps(j,indent=2,sort_keys=True)+'\\n')\nprint(json.dumps({k:j[k] for k in ['status','audited_head','source_or_Lean_changes','largest_file_in_range']}))\n",
+  "audited_head": "4ae85eaaafb2ce982e7f480b665828ac500c95bb",
+  "base_revision": "f59a21fc15dcad23fcad412afe42b83ee319ed50",
+  "branch": "codex/r1-checkpoint-recut-20261018",
+  "clean_worktree": true,
+  "command": [
+    "python3",
+    "/tmp/r1-j1r13-branch-audit.py",
+    "/tmp/r1-j1r13-branch-audit.json"
+  ],
+  "compiler_or_runtime_jobs": 0,
+  "every_new_commit_tree": [
+    {
+      "changed_paths": [
+        "docs/research/100bit-spend-path-20261013/evidence/j1r13-artifact-20261019/SHA256.json",
+        "docs/research/100bit-spend-path-20261013/evidence/j1r13-artifact-20261019/artifact-pin.json"
+      ],
+      "commit": "b1b64a17c53573542215c7af514033180a462721",
+      "file_count": 79184,
+      "largest_file": {
+        "blob": "028e98cb2451b17cd9836d7995e2ae773db5e347",
+        "bytes": 80000000,
+        "path": "docs/research/100bit-spend-path-20261013/evidence/selected-read-current-20261018/selected-read-current-accepted.tar.gz.part-01"
+      }
+    },
+    {
+      "changed_paths": [
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/KEY-RETENTION.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/MANIFEST.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/SUMMARY.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/VALIDATION.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/driver-source-pins.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/input-state-after.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/inputs.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/loader-source-provenance.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/producer/actual-sbf-features.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/producer/driver-build-command.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/producer/native-driver-build-receipt.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/producer/sbf-build-receipt.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/proposal-only.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/governor/readonly-metadata-runtime-1h-execute.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/governor/readonly-metadata-runtime-1h-preflight.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/inputs.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/launch.log",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/preflight.log",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/results/after/initial-accounts.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/results/after/loaded-program.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/results/after/readonly-buffer-stage1-runtime/control.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/results/after/readonly-buffer-stage1-runtime/proof-signer.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/results/after/readonly-buffer-stage1-runtime/proof-writable.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/results/after/setup-checkpoint.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/results/after/stage1.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/results/before/initial-accounts.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/results/before/loaded-program.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/results/before/setup-checkpoint.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/results/before/stage1.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/results/before/stage2.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/results/input-manifest.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/results/runtime-features.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/runs/readonly-metadata-runtime-1h/environment.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/runs/readonly-metadata-runtime-1h/input-manifest.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/runs/readonly-metadata-runtime-1h/receipt.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/runs/readonly-metadata-runtime-1h/stderr.log",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/runs/readonly-metadata-runtime-1h/stdout.log",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/runs/readonly-metadata-runtime-1h/time.log",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/source-pins.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/tool-inputs.json",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/validation-stderr.log",
+        "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/validation-stdout.log"
+      ],
+      "commit": "33f621c08abcf2c2a383ec16782a1e71a99b709a",
+      "file_count": 79226,
+      "largest_file": {
+        "blob": "028e98cb2451b17cd9836d7995e2ae773db5e347",
+        "bytes": 80000000,
+        "path": "docs/research/100bit-spend-path-20261013/evidence/selected-read-current-20261018/selected-read-current-accepted.tar.gz.part-01"
+      }
+    },
+    {
+      "changed_paths": [
+        "docs/research/100bit-spend-path-20261013/evidence/lean-module-hygiene-inventory-20261019/SHA256.json",
+        "docs/research/100bit-spend-path-20261013/evidence/lean-module-hygiene-inventory-20261019/SUMMARY.json",
+        "docs/research/100bit-spend-path-20261013/evidence/lean-module-hygiene-inventory-20261019/diagnostics.json",
+        "docs/research/100bit-spend-path-20261013/evidence/lean-module-hygiene-inventory-20261019/git-history-paths.json",
+        "docs/research/100bit-spend-path-20261013/evidence/lean-module-hygiene-inventory-20261019/host-inventory.json",
+        "docs/research/100bit-spend-path-20261013/evidence/lean-module-hygiene-inventory-20261019/module-importers.json",
+        "docs/research/100bit-spend-path-20261013/evidence/lean-module-hygiene-inventory-20261019/read-only-check.json",
+        "docs/research/100bit-spend-path-20261013/evidence/lean-module-hygiene-inventory-20261019/receipt.json",
+        "docs/research/100bit-spend-path-20261013/evidence/lean-module-hygiene-inventory-20261019/ref-tip-inventory.json",
+        "docs/research/100bit-spend-path-20261013/evidence/lean-module-hygiene-inventory-20261019/repository-inventory.json"
+      ],
+      "commit": "9ce45e645d6f6522a0c3b683e4023a565b51a0c5",
+      "file_count": 79236,
+      "largest_file": {
+        "blob": "028e98cb2451b17cd9836d7995e2ae773db5e347",
+        "bytes": 80000000,
+        "path": "docs/research/100bit-spend-path-20261013/evidence/selected-read-current-20261018/selected-read-current-accepted.tar.gz.part-01"
+      }
+    },
+    {
+      "changed_paths": [
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/FINAL-RESULT.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/SHA256SUMS",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/analysis-source.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/costed-proposals.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/driver-source.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/existing-driver-provenance.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/fixture-identity.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/gate-rollover-1.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/input-files.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/key-retention.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/launch-results.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/launch-transfer-1023.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/launch-transfer-13.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/launch-transfer-255.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/launch-withdrawal-1023.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/launch-withdrawal-13.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/launch-withdrawal-255.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/phase-costs.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/pipeline-plan.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/results/transfer-1023-evidence.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/results/transfer-13-evidence.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/results/transfer-255-evidence.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/results/withdrawal-1023-evidence.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/results/withdrawal-13-evidence.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/results/withdrawal-255-evidence.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runner-source.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/transfer-1023-measure1/command.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/transfer-1023-measure1/preflight.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/transfer-1023-measure1/receipt.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/transfer-1023-measure1/stdout.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/transfer-1023-measure1/time.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/transfer-13-measure1/command.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/transfer-13-measure1/preflight.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/transfer-13-measure1/receipt.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/transfer-13-measure1/stdout.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/transfer-13-measure1/time.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/transfer-255-measure1/command.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/transfer-255-measure1/preflight.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/transfer-255-measure1/receipt.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/transfer-255-measure1/stdout.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/transfer-255-measure1/time.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/withdrawal-1023-measure1/command.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/withdrawal-1023-measure1/preflight.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/withdrawal-1023-measure1/receipt.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/withdrawal-1023-measure1/stdout.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/withdrawal-1023-measure1/time.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/withdrawal-13-measure1/command.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/withdrawal-13-measure1/preflight.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/withdrawal-13-measure1/receipt.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/withdrawal-13-measure1/stdout.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/withdrawal-13-measure1/time.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/withdrawal-255-measure1/command.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/withdrawal-255-measure1/preflight.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/withdrawal-255-measure1/receipt.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/withdrawal-255-measure1/stdout.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/runs/withdrawal-255-measure1/time.log",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/source-files.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/split-measurement-limit.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/tool-pins.json"
+      ],
+      "commit": "0e7db5c6718ea7a574c58cc03fa1c96ef5517d08",
+      "file_count": 79295,
+      "largest_file": {
+        "blob": "028e98cb2451b17cd9836d7995e2ae773db5e347",
+        "bytes": 80000000,
+        "path": "docs/research/100bit-spend-path-20261013/evidence/selected-read-current-20261018/selected-read-current-accepted.tar.gz.part-01"
+      }
+    },
+    {
+      "changed_paths": [
+        "docs/research/100bit-spend-path-20261013/evidence/prepared-arithmetic-proposals-20261019/MANIFEST.json",
+        "docs/research/100bit-spend-path-20261013/evidence/prepared-arithmetic-proposals-20261019/proposal-note.json",
+        "docs/research/100bit-spend-path-20261013/evidence/prepared-arithmetic-proposals-20261019/read-audit.json",
+        "docs/research/100bit-spend-path-20261013/evidence/prepared-arithmetic-proposals-20261019/source-inputs.json",
+        "docs/research/100bit-spend-path-20261013/evidence/prepared-arithmetic-proposals-20261019/source-pins.json"
+      ],
+      "commit": "8b928e735b38d8fa6f296c4c4824b37c82de9c24",
+      "file_count": 79300,
+      "largest_file": {
+        "blob": "028e98cb2451b17cd9836d7995e2ae773db5e347",
+        "bytes": 80000000,
+        "path": "docs/research/100bit-spend-path-20261013/evidence/selected-read-current-20261018/selected-read-current-accepted.tar.gz.part-01"
+      }
+    },
+    {
+      "changed_paths": [
+        "docs/research/100bit-spend-path-20261013/evidence/j1r13-artifact-20261019/SHA256.json",
+        "docs/research/100bit-spend-path-20261013/evidence/j1r13-artifact-20261019/artifact-pin.json",
+        "docs/research/100bit-spend-path-20261013/evidence/j1r13-artifact-20261019/checkpoint-report.json",
+        "docs/research/100bit-spend-path-20261013/evidence/j1r13-artifact-20261019/costed-source-options.json",
+        "docs/research/100bit-spend-path-20261013/evidence/j1r13-artifact-20261019/report-assembly-receipt.json"
+      ],
+      "commit": "47c68063a0438e9e37534e67f427757c1ffc9024",
+      "file_count": 79303,
+      "largest_file": {
+        "blob": "028e98cb2451b17cd9836d7995e2ae773db5e347",
+        "bytes": 80000000,
+        "path": "docs/research/100bit-spend-path-20261013/evidence/selected-read-current-20261018/selected-read-current-accepted.tar.gz.part-01"
+      }
+    },
+    {
+      "changed_paths": [
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/FINAL-RESULT.json",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/SHA256SUMS",
+        "docs/research/100bit-spend-path-20261013/evidence/decision1h-rollover-measurements-20261019/token-pool-CU-scope-clarification.json"
+      ],
+      "commit": "587062798c6f40a68da90eb0dc86629cf401fcee",
+      "file_count": 79304,
+      "largest_file": {
+        "blob": "028e98cb2451b17cd9836d7995e2ae773db5e347",
+        "bytes": 80000000,
+        "path": "docs/research/100bit-spend-path-20261013/evidence/selected-read-current-20261018/selected-read-current-accepted.tar.gz.part-01"
+      }
+    },
+    {
+      "changed_paths": [
+        "docs/research/100bit-spend-path-20261013/evidence/j1r13-artifact-20261019/SHA256.json",
+        "docs/research/100bit-spend-path-20261013/evidence/j1r13-artifact-20261019/checkpoint-report.json",
+        "docs/research/100bit-spend-path-20261013/evidence/j1r13-artifact-20261019/report-assembly-receipt.json"
+      ],
+      "commit": "4ae85eaaafb2ce982e7f480b665828ac500c95bb",
+      "file_count": 79304,
+      "largest_file": {
+        "blob": "028e98cb2451b17cd9836d7995e2ae773db5e347",
+        "bytes": 80000000,
+        "path": "docs/research/100bit-spend-path-20261013/evidence/selected-read-current-20261018/selected-read-current-accepted.tar.gz.part-01"
+      }
+    }
+  ],
+  "exit_status": 0,
+  "features": "N/A read-only Git/hash audit",
+  "largest_file_in_range": {
+    "blob": "028e98cb2451b17cd9836d7995e2ae773db5e347",
+    "bytes": 80000000,
+    "path": "docs/research/100bit-spend-path-20261013/evidence/selected-read-current-20261018/selected-read-current-accepted.tar.gz.part-01"
+  },
+  "maximum_file_bytes": 90000000,
+  "no_ELF_or_keys_or_binary_archives_added": true,
+  "peak_rss_bytes": 149110784,
+  "platform": "macOS ru_maxrss bytes",
+  "print_axioms": "N/A no Lean result",
+  "rejected_blob_reachable": false,
+  "revision": "4ae85eaaafb2ce982e7f480b665828ac500c95bb",
+  "source_or_Lean_changes": 0,
+  "status": "PASS_ARTIFACT_ONLY_J1R13_SCOPE_AND_HISTORY",
+  "swaps": 0,
+  "verifier_sha256": "2babda97eabb9e84204204f016dc37562ec7b762e7c66abbce0f6a5c17b1d6d9",
+  "wall_seconds": 4.250733875203878
+}
