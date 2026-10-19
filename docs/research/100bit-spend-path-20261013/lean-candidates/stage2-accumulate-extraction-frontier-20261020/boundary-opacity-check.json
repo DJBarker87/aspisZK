@@ -1,0 +1,190 @@
+[
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['verifier', 0]}, {'Ident': ['accumulate_with_node', 0]}]",
+    "body_kind": [
+      "Structured"
+    ],
+    "source_text": "fn accumulate_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E,mut pending:Option<&mut BatchedWeights>) {\n    let mut basis=[M31::ZERO;256];basis[0]=M31::ONE;let mut n=1;\n    while n<a.weights.len() {for j in 0..n {basis[n+j]=basis[j].mul(node);} node=node.mul(node).double().sub(M31::ONE);n*=2;}\n    for j in 0..a.weights.len() {\n        if let Some(weights)=pending.as_deref_mut() {\n            weights.push(j,a.power,basis[j]);\n            #[cfg(feature=\"prover\")] {a.weights[j]=weights.value(j);}\n        } else {a.weights[j]=a.weights[j].add(a.power.mul_m31(basis[j]));}\n        crate::trace::value(12,a.next*a.weights.len()+j,E::from_qm31(a.weights[j]));\n        crate::trace::value(13,a.next*a.weights.len()+j,E::from_m31(basis[j]));\n    }\n    if let Some(weights)=pending {weights.terms+=1;}\n    a.rhs=a.rhs.add(value.mul_qm31(a.power));crate::trace::value(11,a.next,a.rhs);\n    a.power=a.power.mul(p.rho);a.next+=1;\n}"
+  },
+  {
+    "name": "[{'Ident': ['alloc', 0]}, {'Ident': ['vec', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [{'index': 0, 'name': 'T'}, {'index': 1, 'name': 'A'}], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 5435}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['len', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['iter', 0]}, {'Ident': ['traits', 0]}, {'Ident': ['collect', 0]}, {'Impl': {'Trait': 0}}, {'Ident': ['into_iter', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['iter', 0]}, {'Ident': ['range', 0]}, {'Impl': {'Trait': 1}}, {'Ident': ['next', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['aspis_core', 0]}, {'Ident': ['field', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 461}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['mul', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": "pub fn mul(self,_:Self)->Self{unreachable!()}"
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['option', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [{'index': 0, 'name': 'T'}], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 1214}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['as_deref_mut', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['aspis_core', 0]}, {'Ident': ['field', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 461}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['double', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": "pub fn double(self)->Self{unreachable!()}"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['aspis_core', 0]}, {'Ident': ['field', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 461}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['sub', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": "pub fn sub(self,_:Self)->Self{unreachable!()}"
+  },
+  {
+    "name": "[{'Ident': ['alloc', 0]}, {'Ident': ['vec', 0]}, {'Impl': {'Trait': 4}}, {'Ident': ['index', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['aspis_core', 0]}, {'Ident': ['field', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 465}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['mul_qm31', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": "pub fn mul_qm31(self,_:QM31)->Self {unreachable!()}"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['aspis_core', 0]}, {'Ident': ['field', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 465}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['add', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": "pub fn add(self,_:Self)->Self {unreachable!()}"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['verifier', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 498}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['push', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": "fn push(&mut self,_:usize,_:K,_:M31){unreachable!()}"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['aspis_core', 0]}, {'Ident': ['field', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 586}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['mul_m31', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": "pub fn mul_m31(self,_:M31)->Self {unreachable!()}"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['trace', 0]}, {'Ident': ['value', 0]}]",
+    "body_kind": [
+      "Structured"
+    ],
+    "source_text": "pub fn value(tag: u16, index: usize, x: E) {\n    #[cfg(feature=\"prover\")]\n    VALUES.with(|v| v.borrow_mut().push((tag,index,x.to_le_bytes())));\n    #[cfg(not(feature=\"prover\"))]\n    let _ = (tag,index,x);\n}"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['aspis_core', 0]}, {'Ident': ['field', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 586}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['add', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": "pub fn add(self,_:Self)->Self {unreachable!()}"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['aspis_core', 0]}, {'Ident': ['field', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 586}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['mul', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": "pub fn mul(self,_:Self)->Self {unreachable!()}"
+  },
+  {
+    "name": "[{'Ident': ['alloc', 0]}, {'Ident': ['vec', 0]}, {'Impl': {'Trait': 6}}, {'Ident': ['index_mut', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['aspis_core', 0]}, {'Ident': ['field', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 465}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['from_qm31', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": "pub fn from_qm31(_:QM31)->Self {unreachable!()}"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['aspis_core', 0]}, {'Ident': ['field', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 465}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['from_m31', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": "pub fn from_m31(_:M31)->Self {unreachable!()}"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['aspis_core', 0]}, {'Ident': ['field', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 461}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['ZERO', 0]}]",
+    "body_kind": [
+      "Structured"
+    ],
+    "source_text": "pub const ZERO:Self=Self(0);"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['aspis_core', 0]}, {'Ident': ['field', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 461}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['ONE', 0]}]",
+    "body_kind": [
+      "Structured"
+    ],
+    "source_text": "pub const ONE:Self=Self(1);"
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['iter', 0]}, {'Ident': ['range', 0]}, {'Impl': {'Trait': 2}}, {'Ident': ['steps_between', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['iter', 0]}, {'Ident': ['range', 0]}, {'Impl': {'Trait': 2}}, {'Ident': ['forward_checked', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['iter', 0]}, {'Ident': ['range', 0]}, {'Impl': {'Trait': 2}}, {'Ident': ['backward_checked', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['ops', 0]}, {'Ident': ['deref', 0]}, {'Impl': {'Trait': 3}}, {'Ident': ['deref_mut', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['slice', 0]}, {'Ident': ['index', 0]}, {'Impl': {'Trait': 5}}, {'Ident': ['get', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['slice', 0]}, {'Ident': ['index', 0]}, {'Impl': {'Trait': 5}}, {'Ident': ['get_mut', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['slice', 0]}, {'Ident': ['index', 0]}, {'Impl': {'Trait': 5}}, {'Ident': ['get_unchecked', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['slice', 0]}, {'Ident': ['index', 0]}, {'Impl': {'Trait': 5}}, {'Ident': ['get_unchecked_mut', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['slice', 0]}, {'Ident': ['index', 0]}, {'Impl': {'Trait': 5}}, {'Ident': ['index', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['slice', 0]}, {'Ident': ['index', 0]}, {'Impl': {'Trait': 5}}, {'Ident': ['index_mut', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['clone', 0]}, {'Ident': ['impls', 0]}, {'Impl': {'Trait': 8}}, {'Ident': ['clone', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['cmp', 0]}, {'Ident': ['impls', 0]}, {'Impl': {'Trait': 9}}, {'Ident': ['partial_cmp', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['ops', 0]}, {'Ident': ['deref', 0]}, {'Impl': {'Trait': 10}}, {'Ident': ['deref', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['cmp', 0]}, {'Ident': ['impls', 0]}, {'Impl': {'Trait': 15}}, {'Ident': ['eq', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  },
+  {
+    "name": "[{'Ident': ['core', 0]}, {'Ident': ['num', 0]}, {'Ident': ['niche_types', 0]}, {'Impl': {'Trait': 16}}, {'Ident': ['clone', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": null
+  }
+]
