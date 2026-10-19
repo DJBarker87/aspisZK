@@ -3228,6 +3228,58 @@
      ],
      "launched_utc": "2026-10-19T06:38:07Z",
      "kind": "compile"
+    },
+    {
+     "attempt": 4615,
+     "module": "R1Z/CertCheckSound5",
+     "source_sha256": "21f66f6dad383f5b5dfd7593cba091711fbeccd2204d1ffd5c23f8f232d25ac8",
+     "ledger_sha256_matches": true,
+     "exit": 134,
+     "wall": "0:04.47",
+     "peak_rss_kib": 7186044,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 0,
+     "axioms": [],
+     "launched_utc": "2026-10-19T06:41:16Z",
+     "kind": "compile",
+     "note": "lean memory_exception at -M7000 at interpreter (7,186,044 KiB): the composing module imports CertCheckSound4 (7.19 GB) plus the CertRel modules; Mathlib tactics (norm_num, ring) run in the interpreter there. Changed to core tactics only (decide, omega) for 4616; no cap raised."
+    },
+    {
+     "attempt": 4616,
+     "module": "R1Z/CertCheckSound5",
+     "source_sha256": "14cff9c091a517523d7b13ac9d449581ce9c3e4dfa4d8fa8751bdc451184bb69",
+     "ledger_sha256_matches": true,
+     "exit": 134,
+     "wall": "0:04.68",
+     "peak_rss_kib": 7179812,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 0,
+     "axioms": [],
+     "launched_utc": "2026-10-19T06:42:10Z",
+     "kind": "compile",
+     "note": "second memory_exception at -M7000 at interpreter (7,179,812 KiB) with core tactics only: the import closure of CertCheckSound4 plus the CertRel modules alone is over the limit. Not retried; the pb/ct-level wrapper source is kept as c3/evidence/lean/CertCheckSound5-4616.lean.txt (sha matches the ledger) and the composition is stated at the CertData level (CertCheckSoundRel, 4617)."
+    },
+    {
+     "attempt": 4617,
+     "module": "R1Z/CertCheckSoundRel",
+     "source_sha256": "7901dba1e97f917fed43770b32ede39de25b55ad9579065ec1a6c7cb2f433b0c",
+     "ledger_sha256_matches": true,
+     "exit": 0,
+     "wall": "0:03.16",
+     "peak_rss_kib": 6810512,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 0,
+     "axioms": [
+      "'R1Z.CertCheckSound.p_r1_of_data_rel' depends on axioms: [propext, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T06:43:31Z",
+     "kind": "compile"
     }
    ],
    "green_modules": {
@@ -3293,6 +3345,13 @@
      "all_axioms_standard": true,
      "peak_rss_kib": 6808872,
      "kind": "compile"
+    },
+    "R1Z/CertCheckSoundRel": {
+     "attempt": 4617,
+     "sha_matches_committed": true,
+     "all_axioms_standard": true,
+     "peak_rss_kib": 6810512,
+     "kind": "compile"
     }
    },
    "extraction": {
@@ -3307,7 +3366,24 @@
    "differential": {
     "run": "c3/evidence/diff-r7",
     "result": "fill_rel equals z9c's relR1 limb functionals p.rels (BAT0 dropped) on the 5 configurations: 499,328 entries (47 relations, q = 376, bw = 1,328) on A-0 g0/g1, J-1, A-3 random, and 232,320 (33 relations) on A-2 coset, 0 mismatches, 0.73 s; fill_tq, fill_lo, fill_own and the checker verdicts (honest, 8/8 teeth, 6/6 extra) unchanged; B-0 emits no certificate (fail closed) as in diff-r6"
-   }
+   },
+   "consistent_chain": [
+    "CertRelExtracted 4513",
+    "CertRelIdent 4601",
+    "CertRelW 4602",
+    "CertRelK 4606",
+    "CertRelWeights 4607",
+    "CertRelCoef 4609",
+    "CertRelFill 4610",
+    "CertRelWId 4613",
+    "CertRelData 4614",
+    "CertCheckSoundRel 4617"
+   ],
+   "notes": [
+    "Builder 1-3 modules unchanged (CertBuildExtracted prefix-identical; CertRelExtracted holds builder 4), so no dependency replay.",
+    "Aeneas side (CertRelW..CertRelFill, 3.8 GB) never imports the relR1 layer; pure side (CertRelIdent, CertRelWId, CertRelData, CertCheckSoundRel, 6.8 GB) never imports Aeneas; the bridge is CertRelK.RelEntry (ZMod p data only).",
+    "Proved: fill_rel_entries (Aeneas) and rel_data / p_r1_of_data_rel (CertData level). Not compiled: the pb/ct-level check_sound'''' (memory wall, 4615/4616)."
+   ]
   }
  ]
 }
