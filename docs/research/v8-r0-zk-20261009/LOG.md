@@ -6405,3 +6405,46 @@ Memory: CertCheckSound4 peaks at 7.19 GB. Further composition must happen
 at the CertData level, with no Aeneas import in the composing module.
 
 All of this is subject to D63: release evidence requires the unified build.
+
+### Unified-base build of the privacy closure (2026-10-19); D65: the R1 privacy theorems check in one coherent build
+
+Side branch `codex/r1-privacy-build-integration-20261019` (dbfe84f12, pushed)
+holds manifest 1: the closure of the privacy roots, 402 modules (8 spend, 237
+base, 157 privacy). It was built from one repo revision (v8-reference
+66bca8914 plus spend f05b0e63e) in the new host workspace
+`aspis-joint-20261019`: one sources tree, one objects folder, AspisFormal
+Mathlib and the Aeneas 4.32 port. The build ran in dependency order, one
+module at a time, as attempts 5000–5402 (03:38–04:02 London), with 0 swaps
+and peak 7.18 GB.
+
+Where repo sources differed, the spend copy was used:
+- the six narrowed base files;
+- `V6PublishedTheoremInterfaces`, `R0P.LogUpChain`, `R0P.LogUpAssembly` and
+  `R0P.SemRounds`.
+
+**Lead verification.** All 403 host logs were parsed, including wrapped axiom
+lists. The only axiom sets are subsets of {propext, Classical.choice,
+Quot.sound}: 2,437 + 340 + 90 + 6 reports. The single `sorryAx` is in the
+failed attempt 5068, which the error produced. The only non-zero exit is
+5068: `AspisV8R19.R443BoundedRejectionMass` used `field_simp` without
+importing it, and the old base supplied it through all of Mathlib. The fix
+adds `import Mathlib.Tactic.FieldSimp`, an import-only change to the base
+tree `v8-full-view-zk-20260912`. The lead accepts it; it must also reach
+v8-reference's copy. It recompiled green at 5069.
+
+The root theorems check with standard axioms only, in one coherent theory:
+- `builder_witness_merged` (5283);
+- `check_sound″` (5387);
+- `privacy_R1_games` (5398);
+- `privacy_R1_games_sampler` (5401);
+- `privacy_R1_games′` (5402).
+
+Object hashes are in `t2b2b/build-integration/joint-objects-manifest1.sha256`.
+This settles D63 for the privacy closure. The soundness roots remain.
+
+**Open (D63.2).**
+- The soundness roots wait on soundness-side hygiene: three missing sources,
+  the X/R1X double imports of SpendRelation/SpendAppendBinding/TraceAppend,
+  and three name collisions.
+- (c) end to end: the spend sampler stack in this workspace.
+- (b), (d) (Rspend⁺ map, SemRows01) and (e).
