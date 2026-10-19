@@ -48,3 +48,29 @@ Unverified by the worker, carried as open: host receipts for
 sources behind the proved source rows were not diffed against current
 production Rust; the root checkout's uncommitted `current-merkle-source-
 execution` evidence is not counted.
+
+## Addendum (2026-10-19, late): integer-overflow semantics as a gap-map row
+
+Aeneas translates Rust integer operations with checked semantics: an overflow
+is a failure of the translated function. Rust release builds wrap unless
+`overflow-checks = true`. The two extracted prover-side crates
+(`aspis-r1-cert-check`, `aspis-r1-cert-build`) have overflow checks on in
+release (root `Cargo.toml`, D73), so the compiled checker is the modelled
+function. The SBF programs (`programs/r1-cost-probe`, `programs/aspis-pool`)
+have no overflow setting and are built wrapping.
+
+For (T) the needed direction is "deployed accepts ⇒ model accepts". If the
+deployed verifier wraps at any operation where the model fails, that
+direction is not established. New row **R22 (OPEN)**, owner lead/Codex:
+one of (a) a Lean proof that no operation in the stage-1 and stage-2
+extraction cones can overflow for any input (per-operation range lemmas;
+the builder work already has "u64 reductions mod p never overflow",
+LOG:6076); (b) an SBF build with `overflow-checks = true` for the verifier
+program, re-measured against the stage-1 CU margin (16k); or (c) an audit
+that every arithmetic site on the admitted routes uses explicit
+`wrapping_*`/`checked_*` operations (23 in `fast_pairing.rs`, 10 in the
+adapter today), with the model matching by construction. R22 is on the
+critical path before step 9 (C3). Size: M for (a), S for (b) and (c).
+
+Prover side: measure how much of the 35.8 s P_R1 check is the overflow
+checks before deciding between a no-overflow proof and keeping them on.
