@@ -1,0 +1,39 @@
+/home/dombarker/project-offloads/r17-circle-coordinate-power-v2-20261020/sources/R17CircleCoordinatePowerBridge.lean:30:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  R17TableBasePowerBridge.zPow (circleCoords x) m
+in the target expression
+  R17TableBasePowerBridge.zMul (circleCoords (x ^ m)) (circleCoords (x ^ m)) = circleCoords (x ^ (k + 1))
+
+case pos
+x : C
+k : ℕ
+ih : ∀ m < k + 1, R17TableBasePowerBridge.zPow (circleCoords x) m = circleCoords (x ^ m)
+m : ℕ := (k + 1) / 2
+hm : m < k + 1
+him : R17TableBasePowerBridge.zPow (circleCoords x) m = circleCoords (x ^ m)
+hdecomp : (k + 1) % 2 + 2 * ((k + 1) / 2) = k + 1
+hparity : ((k + 1) % 2 == 0) = true
+hmod : (k + 1) % 2 = 0
+hn : k + 1 = m + m
+⊢ R17TableBasePowerBridge.zMul (circleCoords (x ^ m)) (circleCoords (x ^ m)) = circleCoords (x ^ (k + 1))
+/home/dombarker/project-offloads/r17-circle-coordinate-power-v2-20261020/sources/R17CircleCoordinatePowerBridge.lean:46:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  R17TableBasePowerBridge.zPow (circleCoords x) m
+in the target expression
+  R17TableBasePowerBridge.zMul (R17TableBasePowerBridge.zMul (circleCoords (x ^ m)) (circleCoords (x ^ m)))
+      (circleCoords x) =
+    circleCoords (x ^ (k + 1))
+
+case neg
+x : C
+k : ℕ
+ih : ∀ m < k + 1, R17TableBasePowerBridge.zPow (circleCoords x) m = circleCoords (x ^ m)
+m : ℕ := (k + 1) / 2
+hm : m < k + 1
+him : R17TableBasePowerBridge.zPow (circleCoords x) m = circleCoords (x ^ m)
+hdecomp : (k + 1) % 2 + 2 * ((k + 1) / 2) = k + 1
+hparity : ¬((k + 1) % 2 == 0) = true
+hmod : (k + 1) % 2 = 1
+hn : k + 1 = m + m + 1
+⊢ R17TableBasePowerBridge.zMul (R17TableBasePowerBridge.zMul (circleCoords (x ^ m)) (circleCoords (x ^ m)))
+      (circleCoords x) =
+    circleCoords (x ^ (k + 1))
+'R17CircleCoordinatePowerBridge.zPow_circleCoords' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
