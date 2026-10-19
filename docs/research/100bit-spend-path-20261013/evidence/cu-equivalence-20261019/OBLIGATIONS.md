@@ -21,13 +21,18 @@ and its consuming initialized-prefix invariant are checked under explicit
 safe-domain primitive models (five additional focused targets). A guarded
 experimental LLBC rewrite clears the two mutable-copy diagnostics and passes
 positive byte-identity/four negative-copy tests, but is NOT admitted as a
-compiler pass. The complete array-library emission still fails at generic
-Try::from_output and the Try/Residual dictionary boundary. The loop's
+compiler pass. The complete array-library emission still fails at the
+Try/Residual dictionary boundary. The earlier generic Try::from_output
+input mismatch is cleared using the exact declared parent equalities;
+full normalized library borrow-checking and32 paired/negative controls pass.
+The exact infallible methods and a productive graph consuming them are checked
+(three additional Lean targets), but generic dictionary/source binding is open.
+The loop's
 fixed-point mismatch was subsequently diagnosed as a missing identical,
 region-free associated-type match case; the opt-in repair passes strict
 symbolic borrow-checking and 14 paired controls. This is frontend evidence,
 not a compiled whole-library theorem. See ARRAY-LIBRARY-SOURCE.md and
-ASSOCIATED-TYPE-MATCHER.md.
+ASSOCIATED-TYPE-MATCHER.md and TRY-RESIDUAL-CONSTRAINTS.md.
 No whole-candidate or security-transfer obligation is closed by this checkpoint.
 
 | Retained change | Required proof and source bridge | Status |

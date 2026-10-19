@@ -138,3 +138,13 @@ the full library emission now fails only at the Try/Residual typing/dictionary
 boundary. See ASSOCIATED-TYPE-MATCHER.md for scope, hashes, exact receipts and
 the distinction between borrow-checking and Lean/source admission. No new
 Lean target or whole-library completion is claimed for this frontend repair.
+
+The Try::from_output mismatch is subsequently cleared by exact instantiation
+of the explicit source Residual parent equalities after method-signature
+substitution. The complete normalized library crate now passes strict symbolic
+borrow-checking, and all32 paired controls/negative witness mutations pass.
+The full Lean emission still fails at dictionary representation. Three new
+focused targets check the exact concrete infallible methods and a productive
+Try/Residual graph that consumes them; generic graph/source binding is open.
+See TRY-RESIDUAL-CONSTRAINTS.md for exact boundaries, source pins, receipts,
+the initial build reservation exception and its corrected artifact recheck.

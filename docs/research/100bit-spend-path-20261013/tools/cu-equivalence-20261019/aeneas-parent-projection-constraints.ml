@@ -1,0 +1,53 @@
+(** Normalize only a region-free parent projection for which the source trait
+    declaration supplies an exactly matching instantiated equality. No trait
+    clause is removed and unequal types are never accepted by a type check. *)
+let normalize_parent_projection_constraints (ctx : eval_ctx) (ty : ty) : ty =
+  if Sys.getenv_opt "AENEAS_PARENT_PROJECTION_CONSTRAINTS" <> Some "1" then ty
+  else
+    let visitor =
+      object
+        inherit [_] map_ty as super
+
+        method! visit_ty env ty =
+          let ty = super#visit_ty env ty in
+          match ty with
+          | TTraitType (tref, type_id, extra) when ty_no_regions ty -> (
+              match tref.kind with
+              | ParentClause (base, _)
+                when extra.regions = [] && extra.types = []
+                     && extra.const_generics = [] && extra.trait_refs = []
+                     && base.trait_decl_ref.binder_regions = [] -> (
+                  let base_decl = base.trait_decl_ref.binder_value in
+                  match TraitDeclId.Map.find_opt base_decl.id ctx.crate.trait_decls with
+                  | Some decl
+                    when decl.generics.regions = []
+                         && List.length decl.generics.types = List.length base_decl.generics.types
+                         && List.length decl.generics.const_generics = List.length base_decl.generics.const_generics
+                         && List.length decl.generics.trait_clauses = List.length base_decl.generics.trait_refs ->
+                      let subst =
+                        Substitute.make_subst_from_generics __FILE__ __LINE__ None
+                          decl.generics base_decl.generics base.kind
+                      in
+                      let replacement =
+                        List.find_map
+                          (fun constraint_ ->
+                            if constraint_.binder_regions <> [] then None
+                            else
+                              let equality =
+                                Substitute.st_substitute_visitor#visit_trait_type_constraint
+                                  subst constraint_.binder_value
+                              in
+                              if equality.type_id = type_id
+                                 && phys_eq equality.trait_ref tref
+                                 && ty_no_regions equality.ty
+                              then Some equality.ty else None)
+                          decl.generics.trait_type_constraints
+                      in
+                      Option.value replacement ~default:ty
+                  | _ -> ty)
+              | _ -> ty)
+          | _ -> ty
+      end
+    in
+    visitor#visit_ty () ty
+
