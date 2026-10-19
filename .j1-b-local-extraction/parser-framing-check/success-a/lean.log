@@ -1,0 +1,273 @@
+/Users/dominic/ZK/.worktrees/r1-j1-r12-pool-20261015/docs/research/100bit-spend-path-20261013/lean/ExtractedRecordFraming.lean:93:6: error: `simp` made no progress
+/Users/dominic/ZK/.worktrees/r1-j1-r12-pool-20261015/docs/research/100bit-spend-path-20261013/lean/ExtractedRecordFraming.lean:102:85: error: unsolved goals
+row : U8
+record payload : Slice U8
+tag : U8
+size : Usize
+ht : ExtractedRowShape.table row = some (tag, size)
+h✝⁵ :
+  (let (tag, size) := (tag, size)
+    do
+    let i1 ← 5#usize + size
+    if (record.len != i1) = true then ok (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.Length row))
+      else do
+        let i2 ← record.index_usize 0#usize
+        if (i2 != tag) = true then ok (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.Tag row))
+          else do
+            let i3 ← record.index_usize 1#usize
+            let i4 ← record.index_usize 2#usize
+            let i5 ← record.index_usize 3#usize
+            let i6 ← record.index_usize 4#usize
+            let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+            let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+            if (i8 != size) = true then ok (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.Length row))
+              else do
+                let payload ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) record
+                      { start := 5#usize }
+                if row ≥ 14#u8 then do
+                    let r1 ← AspisR1RecordParser.r1_wire.validate_record_fields row payload
+                    let cf1 ←
+                      match r1 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf1 with
+                      | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                          (core.convert.FromSame AspisR1RecordParser.r1_wire.Error) residual
+                  else ok (core.result.Result.Ok payload)) =
+    ok (core.result.Result.Ok payload)
+framedSize : UScalar UScalarTy.Usize
+hadd : 5#usize + size = ok framedSize
+hlen : record.len = framedSize
+h✝⁴ :
+  (do
+      let i2 ← record.index_usize 0#usize
+      if ↑i2 = ↑tag then do
+          let i3 ← record.index_usize 1#usize
+          let i4 ← record.index_usize 2#usize
+          let i5 ← record.index_usize 3#usize
+          let i6 ← record.index_usize 4#usize
+          let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+          let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+          if ↑i8 = ↑size then do
+              let payload ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := 5#usize } record
+              if 14 ≤ ↑row then do
+                  let r1 ← AspisR1RecordParser.r1_wire.validate_record_fields row payload
+                  let cf1 ←
+                    match r1 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                        (core.convert.FromSame AspisR1RecordParser.r1_wire.Error) residual
+                else ok (core.result.Result.Ok payload)
+            else ok (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.Length row))
+        else ok (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.Tag row))) =
+    ok (core.result.Result.Ok payload)
+hlength : (↑record).length = 5 + ↑size
+h0 : record.index_usize 0#usize = ok tag
+h✝³ :
+  (do
+      let i3 ← record.index_usize 1#usize
+      let i4 ← record.index_usize 2#usize
+      let i5 ← record.index_usize 3#usize
+      let i6 ← record.index_usize 4#usize
+      let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+      let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+      if ↑i8 = ↑size then do
+          let payload ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := 5#usize } record
+          if 14 ≤ ↑row then do
+              let r1 ← AspisR1RecordParser.r1_wire.validate_record_fields row payload
+              let cf1 ←
+                match r1 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                    (core.convert.FromSame AspisR1RecordParser.r1_wire.Error) residual
+            else ok (core.result.Result.Ok payload)
+        else ok (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.Length row))) =
+    ok (core.result.Result.Ok payload)
+b1 : U8
+h1 : record.index_usize 1#usize = ok b1
+h✝² :
+  (do
+      let i4 ← record.index_usize 2#usize
+      let i5 ← record.index_usize 3#usize
+      let i6 ← record.index_usize 4#usize
+      let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [b1, i4, i5, i6] ⋯))
+      let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+      if ↑i8 = ↑size then do
+          let payload ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := 5#usize } record
+          if 14 ≤ ↑row then do
+              let r1 ← AspisR1RecordParser.r1_wire.validate_record_fields row payload
+              let cf1 ←
+                match r1 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                    (core.convert.FromSame AspisR1RecordParser.r1_wire.Error) residual
+            else ok (core.result.Result.Ok payload)
+        else ok (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.Length row))) =
+    ok (core.result.Result.Ok payload)
+b2 : U8
+h2 : record.index_usize 2#usize = ok b2
+h✝¹ :
+  (do
+      let i5 ← record.index_usize 3#usize
+      let i6 ← record.index_usize 4#usize
+      let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [b1, b2, i5, i6] ⋯))
+      let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+      if ↑i8 = ↑size then do
+          let payload ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := 5#usize } record
+          if 14 ≤ ↑row then do
+              let r1 ← AspisR1RecordParser.r1_wire.validate_record_fields row payload
+              let cf1 ←
+                match r1 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                    (core.convert.FromSame AspisR1RecordParser.r1_wire.Error) residual
+            else ok (core.result.Result.Ok payload)
+        else ok (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.Length row))) =
+    ok (core.result.Result.Ok payload)
+b3 : U8
+h3 : record.index_usize 3#usize = ok b3
+h✝ :
+  (do
+      let i6 ← record.index_usize 4#usize
+      let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [b1, b2, b3, i6] ⋯))
+      let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+      if ↑i8 = ↑size then do
+          let payload ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := 5#usize } record
+          if 14 ≤ ↑row then do
+              let r1 ← AspisR1RecordParser.r1_wire.validate_record_fields row payload
+              let cf1 ←
+                match r1 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                    (core.convert.FromSame AspisR1RecordParser.r1_wire.Error) residual
+            else ok (core.result.Result.Ok payload)
+        else ok (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.Length row))) =
+    ok (core.result.Result.Ok payload)
+b4 : U8
+h4 : record.index_usize 4#usize = ok b4
+hn : ¬UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [b1, b2, b3, b4] ⋯)) = size
+h :
+  (if ↑(core.num.U32.from_le_bytes (Array.make 4#usize [b1, b2, b3, b4] ⋯)) = ↑size then do
+      let payload ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := 5#usize } record
+      if 14 ≤ ↑row then do
+          let r1 ← AspisR1RecordParser.r1_wire.validate_record_fields row payload
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                (core.convert.FromSame AspisR1RecordParser.r1_wire.Error) residual
+        else ok (core.result.Result.Ok payload)
+    else ok (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.Length row))) =
+    ok (core.result.Result.Ok payload)
+⊢ False
+/Users/dominic/ZK/.worktrees/r1-j1-r12-pool-20261015/docs/research/100bit-spend-path-20261013/lean/ExtractedRecordFraming.lean:115:8: error: `simp` made no progress
+/Users/dominic/ZK/.worktrees/r1-j1-r12-pool-20261015/docs/research/100bit-spend-path-20261013/lean/ExtractedRecordFraming.lean:127:8: error: `simp` made no progress
+/Users/dominic/ZK/.worktrees/r1-j1-r12-pool-20261015/docs/research/100bit-spend-path-20261013/lean/ExtractedRecordFraming.lean:133:76: error(lean.unknownIdentifier): Unknown identifier `hdrop`
+/Users/dominic/ZK/.worktrees/r1-j1-r12-pool-20261015/docs/research/100bit-spend-path-20261013/lean/ExtractedRecordFraming.lean:133:87: error: Application type mismatch: The argument
+  hvalid
+has type
+  14 ≤ ↑row →
+    AspisR1RecordParser.r1_wire.validate_record_fields row (record.drop 5#usize) = ok (core.result.Result.Ok ())
+but is expected to have type
+  14 ≤ ↑row → AspisR1RecordParser.r1_wire.validate_record_fields row payload = ok (core.result.Result.Ok ())
+in the application
+  ⟨?m.460, hvalid⟩
+/Users/dominic/ZK/.worktrees/r1-j1-r12-pool-20261015/docs/research/100bit-spend-path-20261013/lean/ExtractedRecordFraming.lean:140:10: error(lean.unknownIdentifier): Unknown identifier `hdrop`
+/Users/dominic/ZK/.worktrees/r1-j1-r12-pool-20261015/docs/research/100bit-spend-path-20261013/lean/ExtractedRecordFraming.lean:76:6: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp [ht, AspisR1RecordParser.core.option.Option.ok_or,
+        core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r12-pool-20261015/docs/research/100bit-spend-path-20261013/lean/ExtractedRecordFraming.lean:95:15: warning: This simp argument is unused:
+  bne_self_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵ ̵Bool.false_eq_true, ↓reduceIte] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r12-pool-20261015/docs/research/100bit-spend-path-20261013/lean/ExtractedRecordFraming.lean:95:34: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [bne_self_eq_false, B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵ ̵↓reduceIte] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r12-pool-20261015/docs/research/100bit-spend-path-20261013/lean/ExtractedRecordFraming.lean:104:12: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵n̵]̵ ̵at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r12-pool-20261015/docs/research/100bit-spend-path-20261013/lean/ExtractedRecordFraming.lean:105:22: warning: This simp argument is unused:
+  bne_self_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [hdecl, b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵ ̵Bool.false_eq_true, ↓reduceIte] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-j1-r12-pool-20261015/docs/research/100bit-spend-path-20261013/lean/ExtractedRecordFraming.lean:105:41: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [hdecl, bne_self_eq_false, B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵ ̵↓reduceIte] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.ExtractedRecordFraming.parser_row_shape_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ExtractedRecordFraming.parser_row_shape_table' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ExtractedRecordFraming.parse_record_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+       19.92 real         4.03 user         4.53 sys
+          2165243904  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              178004  page reclaims
+               75637  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               12100  voluntary context switches
+               87181  involuntary context switches
+          3283772673  instructions retired
+          1515407665  cycles elapsed
+           135304584  peak memory footprint

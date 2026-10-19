@@ -1,0 +1,1 @@
+pub const DIGEST_ELEMS: usize = 8;

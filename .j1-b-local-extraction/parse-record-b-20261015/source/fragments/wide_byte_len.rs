@@ -1,0 +1,1 @@
+    pub const BYTE_LEN: usize = 32;

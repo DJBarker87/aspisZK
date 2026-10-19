@@ -1,0 +1,81 @@
+/-- Successful execution proves framing and returned bytes without any
+assumption about the opaque field validator's behavior. -/
+theorem parse_record_success (row : U8) (record payload : Slice U8)
+    (h : AspisR1RecordParser.r1_wire.parse_record row record =
+      ok (core.result.Result.Ok payload)) :
+    SuccessfulFraming row record payload := by
+  unfold AspisR1RecordParser.r1_wire.parse_record at h
+  rw [parser_row_shape_table] at h
+  simp only [bind_tc_ok] at h
+  cases ht : ExtractedRowShape.table row with
+  | none =>
+    simp [ht, AspisR1RecordParser.core.option.Option.ok_or,
+      core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+      core.convert.FromSame] at h
+  | some pair =>
+    rcases pair with ⟨tag, size⟩
+    simp only [ht, AspisR1RecordParser.core.option.Option.ok_or,
+      core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok] at h
+    obtain ⟨framedSize, hadd, h⟩ := (bind_ok_iff _ _ _).mp h
+    have hlen : Slice.len record = framedSize := by
+      by_contra hn
+      simp [hn] at h
+    simp [hlen] at h
+    have hlength : record.val.length = 5 + size.val := by
+      have hv := congrArg UScalar.val hlen
+      have ha := add_ok_val _ _ _ hadd
+      simpa using hv.trans ha
+    obtain ⟨actualTag, h0, h⟩ := (bind_ok_iff _ _ _).mp h
+    have htag : actualTag = tag := by
+      by_contra hn
+      simp [hn] at h
+    subst actualTag
+    simp only [bne_self_eq_false, Bool.false_eq_true, ↓reduceIte] at h
+    obtain ⟨b1, h1, h⟩ := (bind_ok_iff _ _ _).mp h
+    obtain ⟨b2, h2, h⟩ := (bind_ok_iff _ _ _).mp h
+    obtain ⟨b3, h3, h⟩ := (bind_ok_iff _ _ _).mp h
+    obtain ⟨b4, h4, h⟩ := (bind_ok_iff _ _ _).mp h
+    simp only [lift, bind_tc_ok] at h
+    have hdecl : UScalar.cast .Usize
+        (core.num.U32.from_le_bytes (Array.make 4#usize [b1, b2, b3, b4])) = size := by
+      by_contra hn
+      simp [hn] at h
+    simp only [hdecl, bne_self_eq_false, Bool.false_eq_true, ↓reduceIte] at h
+    obtain ⟨actualPayload, hs, h⟩ := (bind_ok_iff _ _ _).mp h
+    have h5 : 5 ≤ record.val.length := by omega
+    have hdrop : actualPayload = record.drop 5#usize := by
+      symm
+      simpa [core.slice.index.SliceIndexRangeFromUsizeSlice.index, h5] using hs
+    have hout : actualPayload = payload ∧
+        (14 ≤ row.val → AspisR1RecordParser.r1_wire.validate_record_fields row actualPayload =
+          ok (core.result.Result.Ok ())) := by
+      by_cases hr : 14#u8 ≤ row
+      · simp only [if_pos hr] at h
+        obtain ⟨validated, hv, h⟩ := (bind_ok_iff _ _ _).mp h
+        cases validated with
+        | Ok u =>
+          cases u
+          simp only [core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok,
+            Result.ok.injEq, core.result.Result.Ok.injEq] at h
+          exact ⟨h, fun _ => hv⟩
+        | Err e =>
+          simp [core.result.Result.Insts.CoreOpsTry.branch,
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+            core.convert.FromSame] at h
+      · simp only [if_neg hr, Result.ok.injEq, core.result.Result.Ok.injEq] at h
+        refine ⟨h, ?_⟩
+        intro hrval
+        exact False.elim (hr (by simpa using hrval))
+    rcases hout with ⟨heq, hvalid⟩
+    subst actualPayload
+    refine ⟨tag, size, b1, b2, b3, b4, ht, hlength, ?_, ?_, ?_, ?_, ?_, ?_, hdrop, ?_, hvalid⟩
+    · simpa using (index_ok_iff _ _ _).mp h0
+    · simpa using (index_ok_iff _ _ _).mp h1
+    · simpa using (index_ok_iff _ _ _).mp h2
+    · simpa using (index_ok_iff _ _ _).mp h3
+    · simpa using (index_ok_iff _ _ _).mp h4
+    · simpa only [headerValue, U32.cast_Usize_val_eq] using congrArg UScalar.val hdecl
+    · rw [hdrop]
+      simp [Slice.drop, hlength]
+
