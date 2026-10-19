@@ -1,0 +1,31 @@
+{
+  "before_sha256": "16974404f6798ad8b9c67baf6033020a89d86fb7faa179b38e82bd9d242a76e9",
+  "classification": "UNAPPLIED_UNCOMPILED_DRIVER_ONLY_REPAIR_PROPOSAL_REQUIRES_DECISION",
+  "explicit_limits": [
+    "No patch applied; no new driver build or runtime attempt.",
+    "set_account_no_checks inserts synthetic metadata bypassing LiteSVM recognized-loader validation. Not a legal reachable on-chain account/custody claim.",
+    "Account owner/data/key/lamports remain unchanged; only executable flag differs. No new invoked program is installed.",
+    "Do not call rebuild_caches: it reloads all executable accounts and re-triggers the same foreign-owner rejection. Existing verifier cache remains cloned unchanged.",
+    "Runtime entry after this bypass remains UNMEASURED; any pre-entry rejection would still fail the existing gate.",
+    "Existing vectors remain7TOTAL stage1/8TOTAL stage2; proposal does not add missing negative cases from lead wording."
+  ],
+  "patch": "--- a/tools/r1-cost-probe/src/bin/r18_replay/readonly_runtime.rs\n+++ b/tools/r1-cost-probe/src/bin/r18_replay/readonly_runtime.rs\n@@ -91,7 +91,9 @@\n             \"writable\" | \"proof-writable\" | \"public-writable\" => metas[target_index].is_writable = true,\n             \"executable\" | \"proof-executable\" | \"public-executable\" => {\n                 expected_before[protected_index].executable = true;\n-                checked(svm.set_account(target, expected_before[protected_index].clone()))?;\n+                // Test-only injected metadata; bypass program-loader insertion checks.\n+                // Invoked verifier cache is unchanged. This is not reachable-state evidence.\n+                svm.set_account_no_checks(target, expected_before[protected_index].clone().into());\n             }\n             \"control\" => {}\n             _ => unreachable!(),\n",
+  "planned_build_command": [
+    "cargo",
+    "build",
+    "--release",
+    "--locked",
+    "--offline",
+    "-j1",
+    "--manifest-path",
+    "tools/r1-cost-probe/Cargo.toml",
+    "--features",
+    "private-leaf-salts,litesvm/persistence-internal",
+    "--bin",
+    "r18_replay"
+  ],
+  "proposed_after_sha256": "008b059cec20c315bd9d61348b01610581796536f257e5be21c946a2d1d74ac3",
+  "proposed_native_build_feature_addition": "litesvm/persistence-internal alongside private-leaf-salts; existing litesvm0.16 public feature, no dependency version/toolchain/SBF change",
+  "source_path": "tools/r1-cost-probe/src/bin/r18_replay/readonly_runtime.rs",
+  "source_revision": "32559d2696b89cdbd75304c1f7624f94dfe125ae"
+}
