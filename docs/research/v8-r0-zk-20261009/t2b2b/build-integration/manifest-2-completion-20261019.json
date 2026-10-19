@@ -1,0 +1,143 @@
+{
+ "record": "manifest-2 completion on the narrowed-import base (env J), branch codex/r1p-build-fix-20261019",
+ "manifest": "manifest-4.json",
+ "manifest_sha256": "63dd4febd301f02134bab1de7549bdcd23b1bdbf513163d34f11b5a87e3eda7c",
+ "manifest_scope": "manifest 2 of the unified build (manifest-3.json, 455 modules; R1Z.CertBuildExtracted at the D62 copy d7e06b9f per D69.3) plus the R1J.SemRowsSpend closure: AspisR1PublicPreparation.{Types,Funs} (c16 copy of record, D68.3), ExtractedDigest32{Transcript,Callers,Begin,SamplerTransport}, R1J.SemRowsSpend; 462 modules",
+ "status": "462 of 462 current",
+ "currency_rule": "a module is current when its latest green record in J/evidence/attempts.jsonl has the manifest source sha256 and (for records that carry one) a deps fingerprint equal to the fingerprint of the objects now present; the 350 manifest-1-era records without a fingerprint are current by the driver's attempt-order rule (no import rebuilt after them).",
+ "order_rule_false_positives": {
+  "modules": [
+   "R1Z.CertBuildIdent2",
+   "R1Z.CertCheckSound2",
+   "R1Z.CertLiftIdent",
+   "R1Z.CertLiftIdent2",
+   "R1Z.CertLiftIdent3",
+   "R1Z.CertLiftIdent4",
+   "R1Z.CertCheckSound3"
+  ],
+  "explanation": "after the D69 CertBuildExtracted replacement (5623-5632) the rebuilt CertBuildIdent/CertLiftEntry/CertNatural objects are byte-identical to the ones these modules were compiled against at 5602/5616-5621, so their deps fingerprints are unchanged; run-joint.sh refused CertBuildIdent2 as an unchanged rerun (exit 67, no attempt number consumed). They were not rebuilt (coordinator: do not rebuild Cert*/Rf*)."
+ },
+ "refused_records_in_shared_attempts_jsonl": [
+  {
+   "label": 5544,
+   "module": "R1Z.CertR1Rf",
+   "exit": 67,
+   "note": "same sha+deps already sent by 5606 (concurrent checker-wrapper worker); no out log; number 5544 later used for SemRowsSpend"
+  },
+  {
+   "label": 5548,
+   "module": "R1Z.CertBuildIdent2",
+   "exit": 67,
+   "note": "same sha+deps as 5602; no out log"
+  }
+ ],
+ "roots": [
+  {
+   "theorem": "R1Z.PrivacyR1P.privacy_R1_games'",
+   "attempt": 5547,
+   "axioms": "[propext, Classical.choice, Quot.sound]",
+   "peak_rss_kib": 3608652
+  },
+  {
+   "theorem": "R1Z.CertCheckSound.check_sound''",
+   "attempt": 5616,
+   "axioms": "[propext, Classical.choice, Quot.sound]",
+   "note": "other worker; current by fingerprint"
+  },
+  {
+   "theorem": "R1Z.CertCheckSound.check_sound'''",
+   "attempt": 5621,
+   "axioms": "[propext, Classical.choice, Quot.sound]",
+   "note": "other worker; current by fingerprint"
+  },
+  {
+   "theorem": "R1Z.PrivacyGamesR1.privacy_R1_games",
+   "attempt": 5514,
+   "axioms": "[propext, Classical.choice, Quot.sound]"
+  },
+  {
+   "theorem": "R1Z.PrivacyGamesSamplerR1.privacy_R1_games_sampler",
+   "attempt": 5515,
+   "axioms": "[propext, Classical.choice, Quot.sound]"
+  },
+  {
+   "theorem": "R1J.PrivacySamplerSpend.privacy_R1_games_spendSampler",
+   "attempt": 5517,
+   "axioms": "[propext, Classical.choice, Quot.sound]"
+  },
+  {
+   "theorem": "R1J.SpendWitnessMap.{toModel_toRust,witnessOk_toRust,pubCorr_toRustPub}",
+   "attempt": 5520,
+   "axioms": "[propext, Classical.choice, Quot.sound]"
+  },
+  {
+   "theorem": "R0Z.WriterRefine.builder_witness_merged",
+   "attempt": 5283,
+   "axioms": "[propext, Classical.choice, Quot.sound]"
+  },
+  {
+   "theorem": "R1J.SemRowsSpend.{semRows01_spend,semRows01_spend_s1,row_refines,begin_refines_decSpend,begin_agrees_dec}",
+   "attempt": 5544,
+   "axioms": "[propext, Classical.choice, Quot.sound]"
+  },
+  {
+   "theorem": "R1Z.EventsR1P.{card_NZ_of,card_NZ}",
+   "attempt": 5532,
+   "axioms": "[propext, Classical.choice, Quot.sound]"
+  }
+ ],
+ "axioms_audit": {
+  "reports_parsed_over_latest_green_logs": 3150,
+  "nonstandard": [
+   {
+    "module": "AspisV8R19.SamplerWordRead",
+    "attempt": 5414,
+    "theorems": [
+     "unwrap_success",
+     "read_success"
+    ],
+    "axiom": "core.fmt.Formatter",
+    "note": "pre-existing (manifest-2 era); an Aeneas library opaque type, reached through AspisR72Sampler.Funs; no root theorem above lists it"
+   }
+  ],
+  "swaps_total": 0,
+  "max_peak_rss_kib": [
+   4125204,
+   "R1J.SemRowsSpend",
+   5544
+  ]
+ },
+ "shared_tree_changes": [
+  {
+   "path": "J/sources/R1Z/EventsR1P2.lean",
+   "old_sha256": "fd5bf7a1dfa08ac599542e814757ddcd52ae700d9ae3b79d8820a4d134f66b4a",
+   "new_sha256": "5746651a999f4f7cec78c99d314627f50e26a1e1c4039825a54f79a735fd5893",
+   "olean_rewritten": true,
+   "snapshot": "/home/dombarker/project-offloads/codex-r1p-build-fix-20261019/snapshot/ (source + olean b076b47a...)",
+   "dependents_rebuilt": [
+    "R1Z.EventsR1P3 5540",
+    "R1Z.EventsR1P4 5541",
+    "R1Z.AgreeR1P 5542",
+    "R1Z.AgreeR1P2 5543",
+    "R1Z.FinalR1P 5546",
+    "R1Z.PrivacyR1P 5547"
+   ]
+  },
+  {
+   "path": "J/sources/R1J/SemRowsSpend.lean",
+   "note": "new at 5539 (04729a99), replaced by the namespace fix 226800bf (5544); 5539 copy snapshotted"
+  },
+  {
+   "path": "J/sources/AspisR1PublicPreparation/{Types,Funs}.lean, J/sources/ExtractedDigest32{Transcript,Callers,Begin,SamplerTransport}.lean",
+   "note": "new files, bytes equal to the repo copies"
+  }
+ ],
+ "failures": [
+  {
+   "attempt": 5539,
+   "module": "R1J.SemRowsSpend",
+   "cause": "the generated names r1_wire.*, aspis_core.* live in namespace AspisR1PublicPreparation, which the module did not open; fixed by adding it to the open line (5544 green)"
+  }
+ ],
+ "attempts_file": "joint-attempts-5532-5547.jsonl"
+}

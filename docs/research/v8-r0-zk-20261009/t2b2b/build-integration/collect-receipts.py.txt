@@ -1,0 +1,34 @@
+# collect-receipts.py <lo> <hi>  — one JSON line per used attempt in [lo, hi] from the host evidence
+# ($T/evidence/{sha,out,time}-<A>) joined with the joint record (J/evidence/attempts.jsonl):
+# module, source sha256, deps fingerprint, exit, wall, peak RSS, swaps, every #print axioms line
+# (wrapped lists joined; primed names such as privacy_R1_games' kept whole), errors, and whether any non-standard axiom appears.
+import sys, os, re, json
+T = '/home/dombarker/project-offloads/aspis-fs-generic-20261006'
+J = '/home/dombarker/project-offloads/aspis-joint-20261019'
+lo, hi = int(sys.argv[1]), int(sys.argv[2])
+rec = {}
+for l in open(f'{J}/evidence/attempts.jsonl'):
+    r = json.loads(l); rec[r['attempt']] = r
+STD = {'propext', 'Classical.choice', 'Quot.sound'}
+for A in range(lo, hi + 1):
+    o = f'{T}/evidence/out-{A}.log'
+    if not os.path.exists(o): continue
+    out = open(o).read(); tl = open(f'{T}/evidence/time-{A}.log').read() if os.path.exists(f'{T}/evidence/time-{A}.log') else ''
+    sha = open(f'{T}/evidence/sha-{A}.txt').read().split()[0] if os.path.exists(f'{T}/evidence/sha-{A}.txt') else None
+    def tv(p):
+        m = re.search(p, tl); return m.group(1).strip() if m else None
+    ax = [' '.join(x.split()) for x in re.findall(r"^('[^\n]+?' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms))", out, re.M)]
+    used = set()
+    for a in ax:
+        m = re.search(r'\[(.*)\]', a)
+        if m: used |= {x.strip() for x in m.group(1).split(',')}
+    r = rec.get(A, {})
+    ex = re.search(r'exit=(\d+)', out)
+    print(json.dumps({'attempt': A, 'module': r.get('module'), 'source_sha256': sha,
+        'deps_fingerprint': r.get('deps_fingerprint'), 'exit': int(ex.group(1)) if ex else None,
+        'wall': tv(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): (.+)'),
+        'peak_rss_kib': int(tv(r'Maximum resident set size \(kbytes\): (\d+)') or 0),
+        'swaps': int(tv(r'Swaps: (\d+)') or 0), 'axioms': ax,
+        'nonstandard_axioms': sorted(used - STD),
+        'errors': [l for l in out.splitlines() if 'error' in l][:12],
+        'launcher': out.strip().splitlines()[-1] if out.strip() else None}, ensure_ascii=False))
