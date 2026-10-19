@@ -1,0 +1,13 @@
+CLASSIFIER — proposal, not a proved instance
+
+Scope and definition
+Base e6744568e; spend sources inspected only via git show at a17829a776d533d7cd0beeb1f8676dcc793a909c. No build performed. The requested raw UnifiedProtocol instance remains OPEN: its public object contains bytes, its messages contain commitment roots, and no table-independent prefix adapter selects their literal words. Existentially ranging over words inside a bad event invalidates the fixed-word cardinality bounds.
+
+Propose an enriched literal-word view A, preserving commitment chronology, with deterministic partial parsers semView(P,m), openingView(P,m), queryView(P,m), rhoView(P,m). These are NEW obligations, not existing helpers. Each returns only data fixed before that row's challenge; C1 precedes lambda, C2 precedes theta, V precedes alpha1, f precedes q22, and q precedes rho. Early C2 padding uses R0's candidate projection. A cannot consult the arbitrary D2 table or future messages.
+
+For public relation R(pub,t) := InputNoteExtracted (parsePublic pub) t, propose:
+  hitFrom prev [] := False
+  hitFrom prev ((m,c)::rs) := bad prev m c ∨ hitFrom (prev++[(m,c)]) rs
+  rbA.doomed P _ := (¬∃t, R P.statement t) ∧ ¬hitFrom [] P.rounds
+  rbA.ε := eps
+The parsers reject wrong tags, lengths, degrees, or inconsistent prefixes. bad=False on parse failure, wrong challenge constructor, or rows >=33; terminal acceptance rejects those cases. Prefix parsing must be stable under extension. chooseWitness ignores its table and satisfies chooseWitness_eq_none_iff; D1 then follows at the empty prefix. This is membership soundness only; an efficient extractor does not inherit D1.
