@@ -1,0 +1,7 @@
+# Parsed actual finish closes the WideExact chain at its masked endpoint
+
+`parsed_finish_wide_chain` maps the reached exact-QM31 finish equation through the existing algebra map into WideExact and rewrites the endpoint of that same parsed semantic-view sumcheck chain. It retains the same payload encoding, actual annotated round run/challenge order, terminal/fromFn calls and claim read witnesses. The desired endpoint equation is derived from the successful begin/finish inputs, not assumed independently.
+
+Canonical mask16/mask10, claim27 and terminal value remain explicit premises for the final chain. The endpoint's mask is the algebra-map image of the already proved populated-coefficient QM31 mask. Equating it with R0P.Mask.maskValue remains a separate open bridge; claims/fromFn/public-terminal implementations, source-to-literal challenge coupling, top-level acceptance and commitment/opening binding are also open. This theorem alone does not establish 100-bit soundness.
+
+The focused native Lean4.32 check exited0 with a standard-only axiom report and zero process/cgroup swap. Exact GNU time peak process RSS, controller wall, source/object/import pins, cgroup reservation admission and command are included. It reused the checked predecessor object and its frozen cached closure; no dependencies or unchanged package regression were rebuilt. The predecessor manifest hash is pinned in this manifest.
