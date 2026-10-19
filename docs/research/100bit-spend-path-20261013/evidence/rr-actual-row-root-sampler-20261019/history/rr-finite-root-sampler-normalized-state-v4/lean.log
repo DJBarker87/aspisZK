@@ -1,0 +1,110 @@
+/tmp/RRFiniteRootSamplerNormalizedStateBridge-v9.lean:157:6: error: unsolved goals
+case neg
+K : Type
+inst✝⁴ : Field K
+inst✝³ : BEq K
+inst✝² : LawfulBEq K
+inst✝¹ : DecidableEq K
+inst✝ : Fintype K
+gs : List (List K)
+a : K
+M L ell : ℕ
+p0 : K[X]
+hp0 : p0 ≠ 0
+hinput : RRVectorRowPolynomialBridge.inputPolynomial gs 0 = p0
+hL : rootMultiplicity a p0 ≤ L
+hLspan : L ≤ M + ell
+hdegree : ∀ i ≤ M, (RRVectorRowPolynomialBridge.inputPolynomial gs i).natDegree ≤ ell
+q t : ℕ
+hq : q = Fintype.card K
+roots : List K
+f : K[X]
+Q : K[X][X] := (RRVectorNormalizedRows.actualParent gs M).comp (RRRootDescent.affine a)
+hcomp :
+  (RRRootDescent.parentFromSlices (RRVectorRowPolynomialBridge.inputPolynomial gs) M).comp (RRRootDescent.affine a) =
+    RRActualBivariateTaylorBridge.fixedParentSlice (RRVectorRowPolynomialBridge.inputPolynomial gs) a M
+v' : ℕ
+hscan :
+  RRFiniteCoeffScannerV9.firstNonzeroFullRows (RRVectorActualScanner.rowsUpTo gs a M L) =
+    some (v'.succ, RRVectorRowPolynomialBridge.row gs a M v'.succ)
+H : ↥(Finset.range ((normalizedRuntimeRootPolynomial gs a M v'.succ).natDegree - 1)) → Fin t → K × K
+hsuccess : (runFromFiniteTapeGeneral (normalizedRuntimeRootPolynomial gs a M v'.succ) q t H).1 = some roots
+hroot : Polynomial.eval f (RRVectorNormalizedRows.actualChild gs a M v'.succ) = 0
+child : K[X][X] := RRVectorNormalizedRows.actualChild gs a M v'.succ
+row : List K := RRVectorRowPolynomialBridge.row gs a M v'.succ
+samplerPoly : CPolynomial K := normalizedRuntimeRootPolynomial gs a M v'.succ
+hv0✝ : v'.succ ≤ rootMultiplicity a p0
+hscan0 :
+  RRFiniteCoeffScannerV9.firstNonzeroFullRows (RRVectorActualScanner.rowsUpTo gs a M L) =
+    some (v'.succ, RRVectorRowPolynomialBridge.row gs a M v'.succ)
+left✝¹ :
+  RRActualBivariateTaylorBridge.fixedParentCoeffSlice (RRVectorRowPolynomialBridge.inputPolynomial gs) a M v'.succ ≠ 0
+hlower0 :
+  ∀ k < v'.succ,
+    RRActualBivariateTaylorBridge.fixedParentCoeffSlice (RRVectorRowPolynomialBridge.inputPolynomial gs) a M k = 0
+hw : v'.succ ≤ rootMultiplicity a p0
+hscanTransition :
+  RRFiniteCoeffScannerV9.firstNonzeroFullRows (RRVectorActualScanner.rowsUpTo gs a M L) =
+    some (v'.succ, RRVectorRowPolynomialBridge.row gs a M v'.succ)
+hspecNonzero :
+  map (evalRingHom 0)
+      (RRRootDescent.stripInnerPower
+        ((RRRootDescent.parentFromSlices (RRVectorRowPolynomialBridge.inputPolynomial gs) M).comp
+          (RRRootDescent.affine a))
+        v'.succ) ≠
+    0
+hspecDegree :
+  (map (evalRingHom 0)
+        (RRRootDescent.stripInnerPower
+          ((RRRootDescent.parentFromSlices (RRVectorRowPolynomialBridge.inputPolynomial gs) M).comp
+            (RRRootDescent.affine a))
+          v'.succ)).natDegree ≤
+    rootMultiplicity a p0
+hrootPres :
+  ∀ (f : K[X]),
+    Polynomial.eval f
+          (RRRootDescent.stripInnerPower
+            ((RRRootDescent.parentFromSlices (RRVectorRowPolynomialBridge.inputPolynomial gs) M).comp
+              (RRRootDescent.affine a))
+            v'.succ) =
+        0 ↔
+      Polynomial.eval (C a + X * f)
+          (RRRootDescent.parentFromSlices (RRVectorRowPolynomialBridge.inputPolynomial gs) M) =
+        0
+hv : v'.succ ≤ M + ell
+hlowerslice : ∀ k < v'.succ, RRActualBivariateTaylorBridge.xCoeffSlice Q k = 0
+hlower :
+  ∀ (j k : ℕ),
+    k < v'.succ → (((RRVectorNormalizedRows.actualParent gs M).comp (RRRootDescent.affine a)).coeff j).coeff k = 0
+hrowpoly :
+  RRDenseCoeffVector.toPolynomial row =
+    RRActualBivariateTaylorBridge.fixedParentCoeffSlice (RRVectorRowPolynomialBridge.inputPolynomial gs) a M v'.succ
+hpoly :
+  samplerPoly.toPoly =
+    RRActualBivariateTaylorBridge.fixedParentCoeffSlice (RRVectorRowPolynomialBridge.inputPolynomial gs) a M v'.succ
+hspec :
+  map (evalRingHom 0) (RRRootDescent.stripInnerPower Q v'.succ) = RRActualBivariateTaylorBridge.xCoeffSlice Q v'.succ
+hpolySpec : samplerPoly.toPoly = map (evalRingHom 0) child
+hpnonzero : samplerPoly.toPoly ≠ 0
+hcorrect : AllOutcomes (CompPolyGeneralRootsProgram.generalRootsProgram samplerPoly q t) (RootResult samplerPoly)
+hrun :
+  RootResult samplerPoly
+    (AspisV8R19.MemoizedProgramLaw.eval (extend (Finset.range (samplerPoly.natDegree - 1)) H fun x => (0, 0))
+        (CompPolyGeneralRootsProgram.generalRootsProgram samplerPoly q t)).2
+left✝ : (runFromFiniteTapeGeneral samplerPoly q t H).2 ≤ samplerPoly.toPoly.natDegree - 1
+hroots :
+  ∀ (roots : List K),
+    (runFromFiniteTapeGeneral samplerPoly q t H).1 = some roots →
+      (∀ (x : K), samplerPoly.toPoly.IsRoot x ↔ x ∈ roots) ∧ roots.Nodup ∧ roots.length ≤ samplerPoly.toPoly.natDegree
+hmembership : ∀ (x : K), samplerPoly.toPoly.IsRoot x ↔ x ∈ roots
+hconstant : Polynomial.eval (Polynomial.eval 0 f) (map (evalRingHom 0) child) = 0
+hrootSampler : samplerPoly.toPoly.IsRoot (Polynomial.eval 0 f)
+hv0 : ¬v'.succ = 0
+⊢ v' < M + ell
+'AspisR1.RRFiniteRootSamplerNormalizedStateBridge.ofArray_toPolynomial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.RRFiniteRootSamplerNormalizedStateBridge.scanned_finite_sampler_covers_normalized_child_constants' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
