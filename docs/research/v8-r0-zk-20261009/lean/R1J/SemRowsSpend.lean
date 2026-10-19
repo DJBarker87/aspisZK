@@ -23,7 +23,7 @@ changed.
 set_option autoImplicit false
 noncomputable section
 namespace R1J.SemRowsSpend
-open Aeneas Aeneas.Std Result
+open Aeneas Aeneas.Std Result AspisR1PublicPreparation
 open R0Z.FsStatement R1Z.GamesR1 R1Z.Sem1UniformR1 R1J.SamplerLawSpend
 
 variable {K CommitHandle Aux : Type} [Field K] [Fintype K] [DecidableEq K]
