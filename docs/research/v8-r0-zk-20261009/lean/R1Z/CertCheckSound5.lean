@@ -1,0 +1,154 @@
+import R1Z.CertCheckSound4
+import R1Z.CertRelFill
+import R1Z.CertRelData
+
+/-! D64: **`check_sound''''`** — `check_sound'''` with the relation identification `hRel`
+discharged by the extracted relation builder `fill_rel` (`hbr`): the Aeneas bridge
+`fill_rel_entries` (CertRelFill) gives the CertRelK `RelEntry` of `pb.rel`, and the pure
+CertData-level `rel_data` (CertRelData) turns it into `hRel` for the rows
+`relRows rk ru`.  New premises: the WideExact model (`hW : w·w = B.u`, `hwb` the limb
+basis), the inverse transport `ti`, the openings `op`, the folded positions `fpos`
+(`hfp`, `hinj`), the relation descriptors (`hru`, `hrq`), the line inverses `li` and the
+stored log-16 nodes `x16` of the line relations (`hl0..2`, `hx16`), and the sizes
+(`hnfU`, `hqU`).  This module only composes, with core tactics only (attempts 4615/4616 hit
+the -M7000 check while loading the Sound4 imports in workspace A, whose base imports all of
+Mathlib; compiled in the unified env J, whose base imports bounded Mathlib sets).  `coefK` is
+an abbrev, so `hent` matches `rel_data`'s premise by unfolding (no `dsimp`); `nf` is
+substituted by `nfU.val` so the builder's width argument matches. -/
+
+set_option autoImplicit false
+
+noncomputable section
+
+namespace R1Z.CertCheckSound
+
+open scoped BigOperators
+open Aeneas Aeneas.Std Result R1CertCheck R1Z.CertCheck R1Z.CertBuild R1Z.CertOwn
+open R0P R0Z.MaskLayout R0Z.HonestView R0Z.Partition R0Z.K4
+open R1Z.Batched R1Z.VerifierRelationsR1 R1Z.PredicateR1 R1Z.CertSound R1Z.CertR1
+open R1Z.RfDec R1Z.RfSrc R1Z.RfChain R1Z.RfOwnLimb R1Z.RfBat R1Z.CertData R1Z.RfOwn R1Z.RfObs R1Z.CertRel
+
+attribute [local instance] Classical.propDecidable
+
+variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+
+variable (pb : Pub) (ct : Cert)
+
+/-- **`check_sound''''`**. -/
+theorem check_sound'''' (hc : check pb ct = ok true) (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (hB : PackField B)
+    (w : K) (raw : RawChallenges K F) (φ : R1Z.CertData.ZP →+* ↥F) (srow slimb : Slice U32)
+    -- decoder facts
+    (hup : ∀ (i : Fin 25) (k : Fin 4), raw.sem i (Fin.natAdd 4 k) = 0)
+    (hnq : raw.queries.length = (toData pb ct).nq)
+    (hz : ∀ j, (raw.circle j).1.1 ∈ K4 B hB ∧ (raw.circle j).1.2 ∈ K4 B hB)
+    (hrw : (toData pb ct).rw = 1084)
+    -- QPrime builder identifications
+    (hRound : ∀ (i : Fin 1084) (t : Fin (toData pb ct).N),
+      flat B hB (z4c (R0Z.Z4Maps.roundMaskMap (Bat := R1Bat) π B (decode B w raw) (srcOf (sl pb.lane) srow slimb t))) i =
+        φ (colM (toData pb ct).round (toData pb ct).rw i t))
+    -- chain-target builder (replaces hChain and hhalf): the tower premise, the alpha limbs, the builder run
+    (hT : Tower B) (al : Slice U32)
+    (hal : ∀ (j : Fin 10) (k : Fin 4), ((φ (gs al (4 * j.val + k.val)) : F) : K) =
+      ((raw.sem ⟨15 + j.val, by omega⟩ (Fin.castAdd 4 k) : F) : K))
+    (ha9 : ∀ k : Fin 4, ((φ (gs (sl pb.a9) k.val) : F) : K) = ((raw.sem 24 (Fin.castAdd 4 k) : F) : K))
+    (hbuild : R1CertBuild.fill_tq al (sl ct.hinv) = ok pb.tq)
+    -- BCondG builder identifications
+    (wb : Module.Basis (Fin 8) F K) {nf : ℕ} (fp : Fin nf → Fin 262144)
+    (hcov : ∀ p, FoldedOpen (decode B w raw) p → ∃ f, fp f = p)
+    (hbw : (toData pb ct).bw = (78 + nf) * 8)
+    (sel : Fin (toData pb ct).NG → Fin 1024 × Fin 4)
+    (hGRound : ∀ (i : Fin 1084) (t : Fin (toData pb ct).NG),
+      flat B hB (z4c (R0Z.Z4Maps.roundMaskMap (Bat := R1Bat) π B (decode B w raw)
+        (gSrc (sel t).1 (sel t).2))) i = φ (colM (toData pb ct).ground (toData pb ct).rw i t))
+    (hGBat : ∀ (i : Fin ((78 + nf) * 8)) (t : Fin (toData pb ct).NG),
+      flatB wb fp (R0Z.SilentReduction.batMap (Bat := R1Bat) π B (decode B w raw)
+        (gSrc (sel t).1 (sel t).2)) i = φ (colM (toData pb ct).gbat (toData pb ct).bw i t))
+    -- lift builder identifications
+    (hnl : 17 ≤ (toData pb ct).nl)
+    (sel1 : Fin 16 → Fin (24 + 4 * raw.queries.length) → Fin 1024)
+    (hsel1 : ∀ c t, eligible (Fin.castLE (by omega) c) (sel1 c t) ∧ sel1 c t ≠ 1023)
+    (hlw1 : ∀ c : Fin 16, (toData pb ct).lw c = 24 + 4 * raw.queries.length)
+    (selH : Fin (24 + 16 * raw.queries.length) → Fin 1024 × Fin 4)
+    (hselH : ∀ t, (selH t).1 ≠ 0 ∧ (selH t).1 ∈ copyInactiveRows)
+    (hlwH : (toData pb ct).lw 16 = 24 + 16 * raw.queries.length)
+    -- lift-column builder (replaces hC1 and hH1): inputs under named premises (D59.2 ruling)
+    (zz tr sx sy inact sel1a selha : Slice U32) (nqU : Usize) (hnqU : nqU.val = raw.queries.length)
+    (hzx : ∀ j : Fin 2, Alimb B φ zz (2 * j.val) = (raw.circle j).1.1)
+    (hzy : ∀ j : Fin 2, Alimb B φ zz (2 * j.val + 1) = (raw.circle j).1.2)
+    (htr : ∀ r : Fin 1024, gN tr r.val = (π r).val)
+    (hin : ∀ r : Fin 1024, gs inact r.val = if r ∈ copyInactiveRows then 1 else 0)
+    (hsx : ∀ (m : ℕ) (hm : m < 4 * raw.queries.length), embR φ (gs sx m) =
+      storedX (AspisV5ComponentCConcreteFoldLinearity.childIndex (raw.queries.get ⟨m / 4, by omega⟩) ⟨m % 4, by omega⟩))
+    (hsy : ∀ (m : ℕ) (hm : m < 4 * raw.queries.length), embR φ (gs sy m) =
+      storedY (AspisV5ComponentCConcreteFoldLinearity.childIndex (raw.queries.get ⟨m / 4, by omega⟩) ⟨m % 4, by omega⟩))
+    (hselC : ∀ (c : Fin 16) (t : Fin (24 + 4 * raw.queries.length)),
+      (sel1 c t).val = gNL sel1a (c.val * (24 + 4 * raw.queries.length) + t.val))
+    (hselHv : ∀ t : Fin (24 + 16 * raw.queries.length),
+      ((selH t).1).val = gNL selha t.val / 4 ∧ ((selH t).2).val = gNL selha t.val % 4)
+    (hloC : ∀ c : Fin 16, (toData pb ct).loff c.val = c.val * ((24 + 4 * raw.queries.length) * (24 + 4 * raw.queries.length)))
+    (hloH : (toData pb ct).loff 16 = 16 * ((24 + 4 * raw.queries.length) * (24 + 4 * raw.queries.length)))
+    (hblo : R1CertBuild.fill_lo al zz tr sx sy inact sel1a selha nqU = ok pb.lo)
+    -- own-column builder (replaces hOwn and hGOwn)
+    (nU osU : Usize) (hnU : nU.val = (toData pb ct).N) (hosU : osU.val = pb.os.val)
+    (hos : 24 + 16 * raw.queries.length ≤ pb.os.val)
+    (hbo : R1CertBuild.fill_own al zz tr sx sy inact (sl pb.lane) srow slimb nU osU nqU = ok pb.own)
+    (hrow : ∀ t, t < (toData pb ct).N → 1 ≤ gNL srow t ∧ gNL srow t < 1024)
+    (hlimbB : ∀ t, t < (toData pb ct).N → gNL slimb t < 4)
+    (hlane : ∀ t, t < (toData pb ct).N → gi (sl pb.lane) t < 12)
+    (hwl : ∀ j, j < 12 → gi (sl pb.wl) j = if j < 10 then wB raw.queries.length else wE raw.queries.length)
+    (gk gsrow gslimb : Slice U32) (gnU gwU : Usize) (hgnU : gnU.val = (toData pb ct).NG) (hgwU : gwU.val = pb.gw.val)
+    (hgw : 24 + 16 * raw.queries.length ≤ pb.gw.val)
+    (hbg : R1CertBuild.fill_own al zz tr sx sy inact gk gsrow gslimb gnU gwU nqU = ok pb.gown)
+    (hgk : ∀ t, t < (toData pb ct).NG → gNL gk t = 10)
+    (hselG : ∀ t : Fin (toData pb ct).NG, ((sel t).1).val = gNL gsrow t.val ∧ ((sel t).2).val = gNL gslimb t.val)
+    (hgrow : ∀ t, t < (toData pb ct).NG → 1 ≤ gNL gsrow t)
+    (hglane : ∀ t, t < (toData pb ct).NG → gi (sl pb.glane) t = 0)
+    (hgwl : gi (sl pb.gwl) 0 = wE raw.queries.length)
+    -- relation builder (replaces hRel): the WideExact model, the builder run, inputs under named premises
+    (hW : w * w = B.u) (hwb : ∀ k : Fin 8, wb k = wbP B.i B.u w k.val)
+    (ti op fpos rk ru li x16 : Slice U32) (nfU qU : Usize) (hnfU : nfU.val = nf) (hqU : qU.val = (toData pb ct).q)
+    (hbr : R1CertBuild.fill_rel al zz tr inact ti op fpos rk ru li x16 nfU qU = ok pb.rel)
+    (hti : ∀ j : Fin 1024, gN ti j.val = (π.symm j).val)
+    (hop : ∀ o : Fin 4, Wl B φ w op o.val = raw.opening o)
+    (hfp : ∀ f : Fin nf, (fp f).val = gN fpos f.val) (hinj : Function.Injective fp)
+    (hru : ∀ ρ, gN ru ρ < 262144)
+    (hrq : ∀ ρ, 8 * ρ < (toData pb ct).q → 3 ≤ gN rk ρ →
+      (⟨gN ru ρ % 262144, Nat.mod_lt _ (by decide)⟩ : Fin 262144) ∈ raw.queries)
+    (hl0 : ∀ ρ, 8 * ρ < (toData pb ct).q → 4 ≤ gN rk ρ → embR φ (gs li (3 * ρ)) =
+      algebraMap (ZMod AspisCircleGroupOrder.P) K
+        (R1Z.BatchedAlgebra.lineInverse ⟨gN ru ρ / 4, by have := hru ρ; omega⟩ 0))
+    (hl1 : ∀ ρ, 8 * ρ < (toData pb ct).q → 4 ≤ gN rk ρ → embR φ (gs li (3 * ρ + 1)) =
+      algebraMap (ZMod AspisCircleGroupOrder.P) K
+        (R1Z.BatchedAlgebra.lineInverse ⟨gN ru ρ / 4, by have := hru ρ; omega⟩ 1))
+    (hl2 : ∀ ρ, 8 * ρ < (toData pb ct).q → 4 ≤ gN rk ρ → embR φ (gs li (3 * ρ + 2)) =
+      algebraMap (ZMod AspisCircleGroupOrder.P) K
+        (R1Z.BatchedAlgebra.lineInverse ⟨gN ru ρ / 4, by have := hru ρ; omega⟩ 2))
+    (hx16 : ∀ ρ, 8 * ρ < (toData pb ct).q → 4 ≤ gN rk ρ → embR φ (gs x16 ρ) =
+      algebraMap (ZMod AspisCircleGroupOrder.P) K
+        (AspisV5FriReleasedLineGeometry.storedLine16X ⟨gN ru ρ / 4, by have := hru ρ; omega⟩)) :
+    P_R1 π B hB (decode B w raw) := by
+  refine check_sound''' pb ct hc π B hB w raw φ srow slimb hup hnq hz hrw hRound hT al hal ha9 hbuild wb fp hcov hbw (R1Z.CertRel.relRows (gN rk) (gN ru)) sel ?_ hGRound hGBat hnl sel1 hsel1 hlw1 selH hselH hlwH zz tr sx sy
+    inact sel1a selha nqU hnqU hzx hzy htr hin hsx hsy hselC hselHv hloC hloH hblo nU osU hnU hosU hos hbo hrow
+    hlimbB hlane hwl gk gsrow gslimb gnU gwU hgnU hgwU hgw hbg hgk hselG hgrow hglane hgwl
+  have hent := fill_rel_entries B φ w al zz tr inact ti op fpos rk ru li x16 nfU hT hW hbr
+  subst hnfU
+  rw [hqU, show 8 * (78 + nfU.val) = (toData pb ct).bw by rw [hbw]; omega] at hent
+  exact rel_data π (decode B w raw) φ B.i B.u w wb hwb fp hinj (gN fpos) (fun f => (hfp f).symm)
+    (Alimb B φ al) (Alimb B φ zz) (gN tr) (gN ti) (flK φ inact) (Wl B φ w op 1) (Wl B φ w op 2)
+    (Wl B φ w op 3) (embR φ 536870912) (embR φ 1073741824)
+    (fun j hj => alimb_eq B φ w raw hup al hal ⟨j, hj⟩) hzx hzy htr (fun r => by
+      show embR φ (gs inact r.val) = _
+      by_cases hm : r ∈ copyInactiveRows
+      · rw [if_pos hm, embR_flag φ inact r (hin r), if_pos hm]
+      · rw [if_neg hm, embR_flag φ inact r (hin r), if_neg hm]) hti
+    (hop 1) (hop 2) (hop 3) (e_quarter _) (e_half _) (gN rk) (gN ru)
+    (fun ρ => embR φ (gs li (3 * ρ))) (fun ρ => embR φ (gs li (3 * ρ + 1))) (fun ρ => embR φ (gs li (3 * ρ + 2)))
+    (fun ρ => embR φ (gs x16 ρ)) hbw hru (fun ρ h1 h2 => List.mem_toFinset.2 (hrq ρ h1 h2)) hl0 hl1 hl2 hx16
+    (toData pb ct).rel hent
+
+#print axioms check_sound''''
+
+end R1Z.CertCheckSound
+
+end
