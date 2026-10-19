@@ -965,8 +965,11 @@ fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> Pro
         return Err(ProgramError::InvalidAccountData);
     }
     checkpoint_data.copy_from_slice(&checkpoint);
+    #[cfg(feature="cu-profiling")]
+    {
     msg!("r1:pool-adapter-stage1-checkpoint-written");
     solana_program::log::sol_log_compute_units();
+    }
     Ok(())
 }
 
@@ -977,8 +980,11 @@ fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> Pro
         return Err(ProgramError::InvalidInstructionData);
     }
     program::set_return_data(&[]);
+    #[cfg(feature="cu-profiling")]
+    {
     msg!("r1:pool-adapter-stage2-begin");
     solana_program::log::sol_log_compute_units();
+    }
     let validated = validate_asq8(program_id, accounts, data)?;
     let proof_data = accounts[0].try_borrow_data()?;
     let checkpoint_data = accounts[6].try_borrow_data()?;
@@ -998,7 +1004,7 @@ fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> Pro
         &proof_data[proof_start..proof_end],
         &checkpoint_data,
         super::SolanaDigest,
-        Some(super::mark),
+        super::observer(),
     )
     .map_err(super::error)?;
     emit_result(&validated.statement)

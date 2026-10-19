@@ -16,6 +16,7 @@ impl aspis_core::Digest32 for SolanaDigest {
 static ALLOCATOR:solana_program::entrypoint::BumpAllocator=solana_program::entrypoint::BumpAllocator{start:solana_program::entrypoint::HEAP_START_ADDRESS as usize,len:256*1024};
 #[cfg(not(feature="no-entrypoint"))]
 solana_program::entrypoint!(process_r1_cost_probe_instruction);
+#[cfg(feature="cu-profiling")]
 #[inline(never)]
 fn mark(phase:Phase){
     match phase {
@@ -28,12 +29,17 @@ fn mark(phase:Phase){
     }
     sol_log_compute_units();
 }
+#[inline(always)]
+fn observer()->verifier::Observer {
+    #[cfg(feature="cu-profiling")] {Some(mark)}
+    #[cfg(not(feature="cu-profiling"))] {None}
+}
 fn error(e:verifier::Error)->ProgramError{msg!("r1:error:{:?}",e);ProgramError::InvalidInstructionData}
 #[inline(never)]
 fn first(public_bytes:&[u8],proof:&[u8],k:usize)->Result<Vec<u8>,ProgramError>{
     let statement=decode_pool_v1_pair_forest_terminal_statement_v1(public_bytes).map_err(|_|ProgramError::InvalidAccountData)?;
     let public=statement.semantic_public();
-    verifier::tx1(public,public_bytes,proof,k,SolanaDigest,Some(mark)).map_err(error)
+    verifier::tx1(public,public_bytes,proof,k,SolanaDigest,observer()).map_err(error)
 }
 #[cfg(feature="pool-adapter")]
 mod r1_pool_adapter;
@@ -62,7 +68,7 @@ pub fn process_r1_cost_probe_instruction(program_id:&Pubkey,accounts:&[AccountIn
         if checkpoint.len()!=bytes.len(){return Err(ProgramError::InvalidAccountData);}
         checkpoint.copy_from_slice(&bytes);
     } else {
-        verifier::tx2(&public,&proof,&checkpoint,SolanaDigest,Some(mark)).map_err(error)?;
+        verifier::tx2(&public,&proof,&checkpoint,SolanaDigest,observer()).map_err(error)?;
         checkpoint[10]=2;let end=checkpoint.len()-32;let sum=hashv(&[b"UNPROVED:R1:checkpoint",&checkpoint[..end]]).to_bytes();checkpoint[end..].copy_from_slice(&sum);
     }
     msg!("r1:account-write");sol_log_compute_units();
