@@ -1,4 +1,5 @@
 import R0Z.FsAbortBounds
+import Mathlib.Data.FinEnum
 
 /-! R1 games (zf1/DESIGN-R1-GAMES §2): lawful lenses as coordinate splits.
 `HitFresh` / `PairFresh` (FsAbortBounds) ask for an equivalence `S ≃ R × U`
