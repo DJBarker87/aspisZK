@@ -1,0 +1,81 @@
+/tmp/RRProgramAbortBound.lean:21:8: error: unsolved goals
+case nil
+I A K S : Type
+inst✝¹ : Fintype A
+inst✝ : Nonempty A
+run : S → Program I A (Option (List (List K)))
+mass : S → ℕ
+δ : ℚ
+hδ : 0 ≤ δ
+hrun : ∀ (s : S), outMean (run s) abortIndicator ≤ ↑(mass s) * δ
+⊢ (AspisV8R19.AdaptiveFirstReadLaw.independentMean (Program.done (some [])) fun v =>
+      if v.2.isSome = true then 0 else 1) ≤
+    0
+/tmp/RRProgramAbortBound.lean:52:11: error: don't know how to synthesize implicit argument `X`
+  @abortIndicator ?m.60 (some ?m.61)
+context:
+I A K S : Type
+inst✝¹ : Fintype A
+inst✝ : Nonempty A
+zeroTest : S → Bool
+children : S → Program I A (Option (List (K × S)))
+mass : S → ℕ
+δ : ℚ
+hδ : 0 ≤ δ
+hlocal : ∀ (s : S), outMean (children s) abortIndicator ≤ ↑(mass s) * δ
+hmass : ∀ (s : S), AllOutcomes (children s) fun out => ∀ (cs : List (K × S)), out = some cs → childMass mass cs ≤ mass s
+s : S
+⊢ Type
+/tmp/RRProgramAbortBound.lean:52:27: error: don't know how to synthesize implicit argument `α`
+  @some ?m.60 ?m.61
+context:
+I A K S : Type
+inst✝¹ : Fintype A
+inst✝ : Nonempty A
+zeroTest : S → Bool
+children : S → Program I A (Option (List (K × S)))
+mass : S → ℕ
+δ : ℚ
+hδ : 0 ≤ δ
+hlocal : ∀ (s : S), outMean (children s) abortIndicator ≤ ↑(mass s) * δ
+hmass : ∀ (s : S), AllOutcomes (children s) fun out => ∀ (cs : List (K × S)), out = some cs → childMass mass cs ≤ mass s
+s : S
+⊢ Type
+/tmp/RRProgramAbortBound.lean:52:32: error: don't know how to synthesize placeholder for argument `val`
+context:
+I A K S : Type
+inst✝¹ : Fintype A
+inst✝ : Nonempty A
+zeroTest : S → Bool
+children : S → Program I A (Option (List (K × S)))
+mass : S → ℕ
+δ : ℚ
+hδ : 0 ≤ δ
+hlocal : ∀ (s : S), outMean (children s) abortIndicator ≤ ↑(mass s) * δ
+hmass : ∀ (s : S), AllOutcomes (children s) fun out => ∀ (cs : List (K × S)), out = some cs → childMass mass cs ≤ mass s
+s : S
+⊢ ?m.60
+'AspisR1.RRProgramAbortBound.childMass' depends on axioms: [propext]
+'AspisR1.RRProgramAbortBound.walkChildren_abort_le' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RRProgramAbortBound.collectProgram_abort_le' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        1.99 real         0.77 user         0.57 sys
+          2076147712  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              161340  page reclaims
+                8294  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                 891  voluntary context switches
+                7866  involuntary context switches
+         12851236642  instructions retired
+          5116903253  cycles elapsed
+           340032416  peak memory footprint
