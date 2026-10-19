@@ -1,0 +1,11 @@
+# Scalar root sampler for arbitrary nonzero RR specializations
+
+The core root sampler requires monic positive-degree input. Actual normalized RR scalar specializations are only known to be nonzero; assuming monicity or positive degree would leave a real caller gap.
+
+`CompPolyGeneralRootsProgram.generalRootsProgram` is executable. It explicitly rejects the zero polynomial, returns a successful empty list for any nonzero constant, and otherwise applies the existing sequential root finder after CompPoly's executable `monicNormalize`.
+
+The new correctness theorem assumes only nonzero input and q=card K. Every successful list contains exactly the original polynomial's roots, has no duplicates, and has length at most its degree; the cursor is at most degree-1 on every branch. The abort theorem preserves the prior (degree-1)*2^-t bound in odd characteristic. It reuses CompPoly's normalization refinement and Mathlib's degree/divisibility/monicity facts, so neither new noncomputable field enumeration nor a new normalized-factor theorem is required. A direct whole-wrapper finite-tape/actual-trace corollary and the RR caller integration are next; this packet does not claim those corollaries have been checked yet.
+
+The zero-input rejection is explicit, not a claimed complete empty root list for zero. The RR integration must prove that its reached scalar specialization is nonzero, using the existing normalized-row scanner. Runtime list-row to CPolynomial conversion must be executable; converting a Mathlib polynomial using ringEquiv.symm is at most a proof-only intermediate bridge. Whole-traversal freshness/failure accounting, arithmetic/bit costs and final protocol/source/sampler/privacy/security composition remain open.
+
+Evidence records exact target, command, source/object/import hashes, source revision, exit status, wall time, RSS, process swaps and standard-only axiom reports. The accepted focused check passed in 2.64s, at 2,118,139,904 bytes process RSS, with zero process swaps, under -M2048 and the aggregate 4GiB local guard. Existing compiled caches were reused; no full regression or production change occurred. The first attempt's self-referential simp rewrite was replaced with a single directed rewrite; its diagnostic source and receipt are preserved in history rather than raising recursion limits.
