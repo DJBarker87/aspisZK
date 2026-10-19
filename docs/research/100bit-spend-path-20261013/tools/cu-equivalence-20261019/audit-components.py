@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Verify exact current sources against focused receipts; never imply full closure."""
 from pathlib import Path
-import argparse, hashlib, json, resource, subprocess, sys, time
+import argparse, hashlib, json, re, resource, subprocess, sys, time
 
 started=time.monotonic()
 repo=Path(__file__).resolve().parents[5]
@@ -34,6 +34,15 @@ for module,item in audit['successful_targets'].items():
     assert receipt['exit_status']==0,module
     assert 'sorryAx' not in receipt['print_axioms_output'],module
     assert 'error:' not in receipt['print_axioms_output'],module
+    axioms={name.strip() for block in re.findall(r'depends on axioms:\s*\[([^\]]*)\]',
+        receipt['print_axioms_output']) for name in block.split(',')}
+    extra=axioms-{'propext','Classical.choice','Quot.sound'}
+    # Unwrap's Debug instance refers to the backend's opaque Formatter TYPE.
+    # Record this conservative carrier boundary; never whitelist a proposition
+    # asserting an optimization or a verifier equivalence.
+    expected={'core.fmt.Formatter'} if module in {'AspisR1CuPrefix/Funs','CuSavingsPrefix'} else set()
+    assert extra==expected,(module,extra,expected)
+    item['nonstandard_axioms']=sorted(extra)
     assert receipt['process_swaps']==0,module
     if receipt.get('resource_scope')=='focused_local':
         assert receipt['cgroup_swap_bytes'] is None,module
@@ -69,6 +78,11 @@ audit['rho_init_row_check']=json.loads(subprocess.check_output([
 for name in ['Types.lean','Funs.lean']:
     assert (area/'lean/AspisR1CuRhoInitRow'/name).read_bytes()==(
         Path(__file__).parent/'rho-init-row-generated'/name).read_bytes(),name
+audit['cu_prefix_check']=json.loads(subprocess.check_output([
+    sys.executable,str(Path(__file__).with_name('extract-cu-prefix.py')),'--check'],text=True))
+for name in ['Types.lean','Funs.lean']:
+    assert (area/'lean/AspisR1CuPrefix'/name).read_bytes()==(
+        Path(__file__).parent/'cu-prefix-generated'/name).read_bytes(),name
 usage=resource.getrusage(resource.RUSAGE_SELF)
 audit['audit_command']=[sys.executable,str(Path(__file__).relative_to(repo)),*sys.argv[1:]]
 audit['audit_source_revision']=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()

@@ -25,7 +25,7 @@ remain obligations, not hidden hypotheses asserting the conclusion.
 | 5 canonical private dots | WideExact invariant, redundant-check elimination, outer count implies inner bound, reduction/output | open |
 | 6 public decode reuse | checked same-byte decoder/selector correspondence, first_decoded and adapter execution | open |
 | 7 geometry reuse | node/denominator agreement, caller range validity, execution | open |
-| 10 fixed prefix | admitted q length, identical decoder accesses and failure behavior | open |
+| 10 fixed prefix | admitted q length, identical decoder accesses and failure behavior | exact prefix statement success/short-input failure and all decoder range identities checked; View.query and four-dot source composition open |
 | 12 rho residues | every-prefix modular invariant, four-term overflow bound, canonical finish, array/caller execution, heap admission | integer invariant, complete push/value execution and frame/overflow proofs checked; finish now consumes the extracted standard next body; initialization, outer callers and serialization composition open |
 | 14 Libra factorization | all four weights equal for arbitrary canonical challenges including zero; field/source execution | division-free cut/tensor algebra and handwritten list-loop correspondence checked; concrete field/machine/source bridges open |
 | composition | refreshed emitted caller bodies, byte/error/effect preservation across tx1/tx2 and adapter | open |
@@ -178,3 +178,12 @@ round-trip and composition with source finish from a list initialization model.
 Receipts: `rho-init-row-types-a`, `rho-init-row-funs-a`, `rho-init-row-proof-c`.
 The full unchanged new method encounters an Aeneas borrow-analysis failure;
 its zip/allocation source obligations remain open. See RHO-INITIALIZATION.md.
+
+The fixed-prefix statement is now separately extracted and checked, including
+its actual subslice/conversion/unwrap and short-input panic. All three decoder
+range families remain byte-identical under the bound. COMPONENT-AUDIT covers
+58 successful targets and now checks exact nonstandard axiom sets as well as
+rejecting sorryAx. The prefix success/failure source theorems carry the
+backend's opaque Formatter TYPE through Debug/unwrap; the byte/range/index
+lemmas use standard Lean axioms only. See PREFIX.md for the exact boundary
+and still-open View.query/four-dot source composition.
