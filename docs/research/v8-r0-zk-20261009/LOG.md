@@ -6238,3 +6238,42 @@ the named premise `Nat.Prime 2147483647`. It is proved elsewhere in the repo
   21–23, the public side, the WitnessOk/PubCorr range facts, and the
   primality import.
 - The copy↔production link (D54.3).
+
+### Lead acceptance of the merged builder, M31 primality and the glue test (2026-10-19); D61
+
+The worker commits 6cf89c077..106f12df5 are cherry-picked. The lead verified
+host attempts 4421 (`M31Prime`) and 4426 (`BuilderWitnessMerged`): SHAs
+match, exit 0 in-window, standard axioms. Attempts 4420 and 4422–4425 were
+local fixes. Design: §13.
+
+**D61.1 Proved.**
+- `m31_prime`, by a Lucas certificate with witness 7 over the factorisation
+  of p−1. It uses reduce_mod_char modular powers with no value above p², one
+  literal-comparison `decide` per check, and norm_num only on the seven small
+  primes.
+- `builder_witness_merged`: with the late bank on rows 544–863 and the stable
+  bank elsewhere, merge_check returns true, merge returns ok, and every cell
+  equals `buildModel pub (toModel W)`. The only premises are PubCorr and
+  WitnessOk.
+
+**D61.2 Glue differential test.** Production rejected none of the
+inputs. The copy's merged trace equals the production forest compile cell for
+cell in columns 0–15, on:
+- both saved fixtures;
+- 512 randomized honest witnesses.
+
+Columns 16–28 are the model's zero stage-H columns and are not compared.
+Each of seven single-field mutations makes 1 to 9,788 cells differ, which
+shows the comparison has teeth. The Lean glue and its Rust mirror are
+generated from one table (`refine/glue/gen-glue.py.txt`). Its `--check`
+requires verbatim Lean text in the proved files, and it rejected two
+deliberate edits. The structural functions are mirrored one-to-one and are
+covered by the full-trace comparison.
+
+**D61.3 Builder status.** The honest builder, as composed extracted Rust
+copies, is proved to produce the model's trace, the model satisfies the
+builder premise of `privacy_R1` (D51), and the composition is differentially
+equal to production. Remaining:
+- the Lean-side Wspend⁺ → RustWitness/RustPublic map (§12.6), after build
+  integration. The Rust side of the map is `records` in glue.rs.
+- the copy↔production decision (D54.3).
