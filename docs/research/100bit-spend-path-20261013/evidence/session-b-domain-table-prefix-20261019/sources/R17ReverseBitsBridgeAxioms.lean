@@ -1,0 +1,3 @@
+import R17MinimalReverseBitsBridge
+#print axioms R17MinimalReverseBitsBridge.copied_reverseBits_eq_source
+#print axioms R17MinimalReverseBitsBridge.reverseBits18_split_source
