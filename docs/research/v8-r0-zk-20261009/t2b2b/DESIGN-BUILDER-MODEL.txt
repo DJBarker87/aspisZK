@@ -370,3 +370,384 @@ is the row-local fact the writing stage guarantees.
   model refinement (§6).  Process note: attempt 4218 re-sent the 4217 source
   unchanged after a local edit script failed; the launcher now refuses an
   already-sent source hash.
+
+§9  Rust ↔ model refinement, first writers (base c79d33eb8)
+
+  Scope: value aux, occupancy aux, forest path aux, bank merge (plus the
+  node_right tweak read-back).  Poseidon, sponge and node writers are not
+  touched.
+
+  9.1 Extraction-friendly copies: refine/writers/src/lib.rs (no_std,
+      monomorphic, u32 cells, plain while loops, ≤ one loop nest per
+      function, flat arrays, no closures/iterators).  Cells are written at
+      their final forest rows (the production writes legacy rows 960..975
+      and relocates +48).
+  9.2 Native differential test: refine/diffharness (production exported
+      read-only from origin/codex/100bit-spend-path-20261013 @ 0c46bf447 via
+      git archive, scratch-only pub shims for three private writers,
+      shim.patch.txt).  Green on the host (refine/evidence/diff-d.txt):
+      value 200,000 cases, occupancy 100,000, path 52,000, node_right
+      1,000,000, merge 2,000 (with injected shape violations), the saved
+      transfer and withdrawal fixtures, and 256 randomized full honest
+      compiles comparing rows 912..1023 and the merge against the copies,
+      with path data recomputed independently by pool_v1_tree_parent.
+      Scope 3G/4G, swap 0.  Attempts a/b failed (cargo PATH; two harness
+      type errors); c green; merge_check was then rewritten without a Bool
+      temporary (see 9.3) and d re-ran green on the new source.
+  9.3 Extraction: pinned Charon cb50ff16 (sha daad69be…) `--preset aeneas
+      --mir built`, Aeneas b59d5188 (sha 959659a6…) `-loops-to-rec`, each in
+      a 6G/8G swap-0 scope; refine/evidence/extract-b.txt,
+      refine/extract/Writers.lean (byte-for-byte output).  Release
+      semantics: arithmetic extracts as wrapping ops.  Attempt a's
+      `let in_late = a && b; if in_late` extracted to a Prop-valued
+      temporary that does not elaborate against the available Aeneas
+      library (Decidable in_late); rewriting the source as a direct `if`
+      fixed it.
+  9.4 Lean (run2-par in-window, all green attempts exit 0, standard axioms;
+      refine/evidence/lean-attempts-4232-4262.json):
+      R0Z/WritersExtracted   the extracted code (4233)
+      WriterRefineOcc/OccRow occ_loop, occ_row, occ_row_model (4235, 4238)
+      WriterRefinePath       path_loop, path_base_row_val, path_level (4241)
+      WriterRefineMerge      merge_copy_loop_spec, merge_check_loop_spec,
+                             merge_model (4246) — induction over 16,384
+                             cells, no evaluation
+      WriterRefineValue/…    value_inner, value_outer, value_block,
+                             m31_sub_spec, value_row_r (4248, 4253, 4257)
+      WriterRefineAuxBlock   aux_block_model: write_aux_block = model block 63
+                             (rows 1008..1023), every cell lifted (4258)
+      WriterRefinePathBlock/ path_block_loop, path_block_model: write_path_block
+      PathModel              = model rows 912..1007, every cell (4260, 4262)
+      The statements take the Rust inputs' lifts to the model records as
+      premises (ValueLifts, OccLifts, PathLifts) and CharP K (2^31−1)
+      (the m31_sub conservation cell).
+  9.5 Blockers and deviations (for the lead):
+      (B1) Aeneas library gap in the run2 tree: objects2 has the pinned
+           b59d5188 Aeneas.Std, Aeneas.Tactic.RustAttributes, ScalarTac and
+           the Step core, but not the Aeneas root module, Aeneas.Data.
+           {Array,Vector} or ~24 Aeneas.Tactic modules (they do not build
+           unpatched under Lean 4.32; the spend path's j17 port patches
+           them, but its Aeneas.Std differs from objects2's).  Deviation
+           D-1: the generated file is compiled with `import Aeneas` replaced
+           by `import Aeneas.Std` + `import Aeneas.Tactic.RustAttributes`
+           (refine/extract/substitute.py.txt; asserts exactly these edits).
+      (B2) The generated file sets `maxHeartbeats 1000000` and
+           `maxRecDepth 2048`.  Deviation D-2: both lines are deleted
+           (project rule 3); the extracted code compiles without them.
+      (B3) Not proved in Lean: node_right_lane7 (m31_sub with an input
+           above 2^30; m31_sub_spec assumes both inputs < 2^30), and the
+           relocation read-back of levels 0..20 (choice m3) — the copy
+           takes current/left/right as inputs; the diff test checks them
+           against independently recomputed hashes, Lean does not.
+      (B4) The input lifts are premises.  Discharging them for the real
+           build needs (i) the Wspend → Rust-witness map and (ii) for the
+           path lifts, the Poseidon/node refinement (current/left/right are
+           hash outputs).  The merge is proved against an abstract model
+           table M; instantiating M with layout (cellsOf pub w) needs the
+           block writers.
+      (B5) The copy ↔ production link is the native differential test,
+           not a proof (the production writers use Vec, closures and
+           M31 methods that the pinned extractor does not handle).
+
+§10  Sponge and node writers, Poseidon abstract; B3 (base 4c8948186)
+
+  10.1 Copies: refine/blockwriters/src/lib.rs.  Every writer takes the
+       eleven odd-round outputs of its permutation (`rounds`) as an input;
+       the permutation is not in the copy.  write_block (write_permutation's
+       layout), node_pre / node_absorb / write_node (write_node and
+       write_forest_node), sponge_init / sponge_absorb / sponge_chunk /
+       place_block / write_sponge (write_sponge; running state after
+       permutation p = rounds[p][10]), read_back (the relocation read-back),
+       m31_add / m31_sub.
+  10.2 Native differential test (refine/evidence/diff-f.txt, 3G/4G, swap 0),
+       with `rounds` produced by the production permutation
+       permute_optimized_with_trace (the abstract parameter, instantiated):
+       M31 add/sub 1,000,000 pairs incl. edges; write_permutation 20,000;
+       write_node/write_forest_node 20,000 (digest and read_back checked);
+       write_sponge 20,000 (len 1..24, digest checked); and all 57 blocks of
+       64 compiled traces (3,648 blocks) have write_block's layout.  The
+       earlier tests (diff-d) re-ran green in the same run.  Attempt e:
+       two harness move-out-of-Drop errors; f green.
+  10.3 Extraction (refine/evidence/extract-c.txt): same pinned tools and
+       scopes; refine/extract/blocks/Writers.lean byte-for-byte; compiled as
+       R0Z/BlockWritersExtracted with D-1/D-2 only (host 4263).
+  10.4 Lean (refine/evidence/lean-attempts-4263-4277.json; all green exit 0,
+       standard axioms, in-window):
+       BlockRefine     ends_loop, rounds_inner/outer, block_spec,
+                       block_model: write_block = blockCell B for every cell,
+                       given EndsLift (pre/absorb lift to B) and
+                       RoundsOk rounds B := ∀ r < 11, lift rounds[r] =
+                       blockIter B (r+1)  — THE Poseidon plug-in point (4266)
+       NodeRefine      m31_add_spec, m31_sub_spec_wide (inputs < p),
+                       node_right_lane7_spec/_lift (B3 a: the large tweak,
+                       lift = x − 0x41531005 in char p), node_pre_spec,
+                       node_absorb_spec, node_ends_lift, node_model:
+                       write_node = blockCell (nodeIn L R) (4268)
+       ReadBackRefine  read_back_node (B3 b): reading a copy-written node
+                       block returns (prev[0..8], left, right) exactly (4271)
+       SpongeRefine    sponge_init/absorb/chunk/place_block specs (4272)
+       SpongeModel     sponge_model: write_sponge = blockCell (B q) for every
+                       permutation q < ceil(len/8) and cell, given the
+                       initial pre-state, the chunk absorptions, the model's
+                       chaining B(q+1).pre = blockOut (B q) and RoundsOk;
+                       later blocks zero (4275)
+       NoteSpongeModel note_sponge_model: on the note input the blocks are
+                       the model's noteB0/noteB1/noteB2 (4277)
+  10.5 Status of B3: (a) closed (node_right_lane7_lift); (b) closed at the
+       copy level (read_back_node).  The production relocation itself is
+       linked to the copy by the differential test.
+  10.6 Open for the block region: owner/nullifier sponge and tree/append
+       node instantiations are the same pattern as note_sponge_model /
+       node_model (not yet written); RoundsOk for the Rust permutation is the
+       Poseidon job; the input lifts (Wspend → Rust witness) as before.
+
+§11  Poseidon: discharging RoundsOk for permute_optimized_with_trace (base 1b56fef13)
+
+  11.0 Done first (host 4400): R0Z/BuilderBlocksModel.builder_blocks_model —
+       for every block h < 57, the copy writer that produces it (write_node
+       for 4..24 and 33..56, write_block of zeros for a withdrawal's 27..29,
+       write_sponge_block otherwise) returns ok b and every lifted cell of b
+       equals buildModel pub w at row 16h+l, under BuilderLifts: RoundsOk for
+       every block, node-children lifts, sponge pre-state/absorption lifts.
+       Discharge lemmas: spre_chain (Rust chaining spre(h+1) = rounds h[10]
+       plus the model's pre_* equalities), spre_init (sponge_init →
+       spongeInit), owner/nullifier absorption and pre-state lemmas,
+       tree/append/output-pair children, digest_from_rounds (a Rust digest
+       read from rounds[10] lifts to blockDigest).  So RoundsOk is the only
+       Poseidon obligation left for the block region.
+
+  11.1 The Rust permutation (crates/aspis-statement/src/poseidon2.rs,
+       read-only): width 16 over M31, 22 rounds.
+       - leading: external_linear_lazy(state) once, before round 0
+         (poseidon2.rs:368);
+       - rounds 0..3 ExternalInitial: state[i] = pow5(state[i] +
+         EXTERNAL_INITIAL[r][i]) for all 16 lanes, then external_linear_lazy;
+       - rounds 4..17 Internal: state[0] = pow5(state[0] + INTERNAL[r-4]),
+         then internal_linear_lazy;
+       - rounds 18..21 ExternalFinal: as initial with EXTERNAL_FINAL.
+       S-box pow5(x) = (x^2)^2 · x.  External layer: apply_mat4 per group of
+       4 (lazy form 2a+3b+c+d, a+2b+3c+d, a+b+2c+3d, 3a+b+c+2d), then
+       lane i += Σ_g group g lane (i mod 4).  Internal layer: part = Σ_{i≥1}
+       s_i, s_0' = part − s_0, s_i' = part + s_0 + 2^{shift_{i−1}} s_i,
+       shifts [0,1,2,3,4,5,6,7,8,10,12,13,14,15,16].  Lazy variants
+       accumulate in u64 and reduce once (reduce_u62).  The trace callback
+       fires after every round with (round, input, output); the builder
+       stores the outputs of odd rounds 1,3,…,21 as rows 1..11.
+  11.2 The Lean model (R0P/Poseidon.lean): poseidonPow5, poseidonMat4,
+       poseidonExternalLinear, poseidonInternalLinear (ordered foldl of lanes
+       1..15), poseidonFullRound, poseidonInternalRound, poseidonApplyRound
+       (round r selects table/kind), poseidonLeadingPair (absorb lanes 0..7,
+       external layer, rounds 0 and 1), poseidonTransition row (row 0 =
+       leading pair, row k = rounds 2k, 2k+1).  blockIter B (r+1) =
+       poseidonTransition r (blockIter B r) B.absorb, so RoundsOk says:
+       rounds[0] = leadingPair(pre, absorb) and rounds[k] = rounds 2k, 2k+1
+       of rounds[k−1].  The R0P tables are K-literals; the Rust tables are
+       u32 literals.
+  11.3 Spend-path history (read-only, origin/codex/100bit-spend-path-20261013):
+       the verifier-side state_only_poseidon (QM31 limbs) was extracted in
+       pieces.  Failures and their fixes:
+       - unsupported outer `continue` in an optimized field loop → local
+         extraction crate with built MIR (J1-TERMINAL-TRANSLATION-CANDIDATE);
+       - Aeneas borrow tracking failed on the nested external matrix loop
+         (`chunks_exact_mut` + in-place apply_mat4) → factor each four-input
+         matrix row into a helper with explicit writes;
+       - a generated name collision (M31 type vs tuple constructor) → an
+         LLBC rename adapter;
+       - proofs then went loop by loop with symbolic fuel invariants
+         (poseidon-round-loops, internal-round-exact, external-local-loop,
+         poseidon-exact-array-and-pow5); the 4x16 constant table needed a
+         finite read check.  The complete external wrapper and the round
+         composition were still open there.
+       Lessons kept here: no in-place slice mutation, no iterator adapters
+       or closures, matrix rows as explicit arithmetic, u64 accumulation with
+       one `%`, constants passed as arguments.
+  11.4 Route.
+       (a) Copy (refine/poseidon/src/lib.rs): m31_add, m31_mul ((a·b) mod p
+           in u64), pow5, mat4 (explicit 4-output formula), external_linear
+           (group loop + column sums + final loop), internal_linear,
+           full_round(state, c: [u32;16]), internal_round(state, c0),
+           leading_pair(pre, absorb, c0, c1), round_pair(state, c_even,
+           c_odd, kind), perm_rounds(pre, absorb, tables) -> [[u32;16];11].
+           One round per function; the constant tables are ARGUMENTS of the
+           round functions; only perm_rounds reads them.
+       (b) Differential test: perm_rounds vs the odd outputs of production
+           permute_optimized_with_trace, and each round function vs the
+           production round (via evaluate_trace_round with the same state).
+       (c) Lean: field lemmas (add/mul/pow5 lift), mat4_lift, external_lift,
+           internal_lift, then the single-round lemmas
+             full_round_lift: lift (full_round s c) = poseidonFullRound
+               (lift s) (lift c);
+             internal_round_lift: … = poseidonInternalRound (lift s) (lift c0);
+           by symbolic loop induction (no cell is evaluated).  Then
+           round_pair_lift by composition, and RoundsOk by induction over the
+           11 rows.  Constant tables: one named lemma per table row stating
+           lift (rust row) = R0P row (generated, each lane a numeral-cast
+           equality), applied by name inside perm_rounds' proof, never
+           unfolded inside a round.
+  11.5 Status (base 1b56fef13; Lean attempts 4400-4407).
+       Copy (refine/poseidon/src/lib.rs) as in (a), with one change: the
+       round tables are module constants read only by apply_round, and the
+       round functions take the constant row / constant / shift row as
+       arguments.  Numerically checked (refine/evidence/diff-g.txt, host,
+       optimized, 3G/4G scope): perm_rounds equals the eleven odd-round
+       outputs of production permute_optimized_with_trace on 100,000 random
+       (pre, absorb) pairs and on all 1,824 blocks of 32 compiled traces;
+       the final state equals production permute on 50,000 states; m31_add /
+       m31_mul agree with production on 1,000,000 pairs.
+       Extraction (tag d, Charon cb50ff16 --preset aeneas --mir built,
+       Aeneas b59d5188 -loops-to-rec): no adapter or rename needed; the
+       generated file differs from R0Z/PoseidonExtracted only by D-1/D-2
+       (host 4401 green).
+       Proved (axioms propext, Classical.choice, Quot.sound only):
+       - R0Z/PoseidonRefine (4404): add_lift, mul_lift, pow5_lift,
+         mat4_lift, the three external-layer loops, external_lift and
+         full_round_lift: for every u32 state s and constant row c,
+         full_round s c = ok t and liftU t[i] = poseidonFullRound (liftA s)
+         (liftA c) i.  No canonicity hypothesis: every reduction is
+         (u64 expression) % p with no u64 wrap, and K has characteristic p.
+       - R0Z/PoseidonInternal (4406): part_lift (the u64 part sum equals
+         R0P's ordered foldl over List.ofFn, via a generic ofFn/range'
+         lemma), internal_linear_lift (lane 0 needs s[0] < p) and
+         internal_round_lift: internal_round s c0 shifts = ok t and liftU
+         t[i] = poseidonInternalRound (liftA s) (liftU c0) i, given the named
+         facts ShiftsBound shifts and ShiftsOk shifts (lane 0 canonicity is
+         supplied by pow5_canon).
+       - R0Z/PoseidonTables (4407): INTERNAL_SHIFTS satisfies ShiftsOk and
+         ShiftsBound.
+       Closed after D56 (base 89080c136; attempts 4408-4410, all green
+       first time, standard axioms):
+       (1) R0Z/PoseidonConstLift (4408), generated by
+           refine/extract/gen-const-lift.py.txt: the generator reads
+           EXTERNAL_INITIAL, EXTERNAL_FINAL and INTERNAL from production
+           poseidon2.rs, the copy, the extracted Lean and R0P
+           PoseidonConstants.lean, aborts on any disagreement or a value
+           outside [2, p), and has --check (teeth recorded in
+           refine/evidence/gen-const-lift-check.txt).  Each of the 142 lanes
+           is `lane_lift n (by unfold TABLE; exact UScalar.ofNatCore_val_eq _)
+           rfl`, i.e. Nat.cast_ofNat after reading the u32 literal; then row
+           lemmas (match over Fin 16) and dispatch lemmas ei_rows, ef_rows,
+           ic_all.
+       (2) R0Z/PoseidonRounds (4409): apply_round_lift (three branches,
+           R0P side by ar_init/ar_int/ar_fin), absorb_loop,
+           leading_pair_lift.
+       (3) perm_rounds_lift: EndsLift pre absorb B gives perm_rounds pre
+           absorb = ok rounds with RoundsOk rounds B (invariant: rows < k lift
+           to blockIter B (r+1), state to blockIter B k; one step is
+           iter_succ + trans_succ + two apply_round_lift).
+           R0Z/BuilderBlocksCopy (4410): builder_blocks_model_copy — with
+           RustWriterCopy (each block's own pre/absorb fed to the copy's
+           perm_rounds, then write_block), all 57 blocks equal buildModel
+           under BuilderInputLifts = BuilderLifts without RoundsOk.
+       Still numerical, not proved: copy ↔ production for the permutation
+       (diff-g: perm_rounds = production odd-round rows on 100k states and
+       all 1,824 compiled blocks), as for the other writers (D54.3).
+
+§12  Sponge chaining and the witness-level copy builder (base dd4e78aa4; attempts 4411-4419)
+
+  12.1 Sponge chaining (R0Z/BuilderBlocksChain, 4412).  spongePre R h is the
+       Rust pre-state: sponge_init(domain, len) for the first block of each
+       sponge (owner 0x41530001/8 at 0; note 0x41530003/18 at 1, 27, 30;
+       nullifier 0x41530002/16 at 25) and, for a chained block, row 10 of the
+       copy's perm_rounds on the previous block's pre-state and absorption.
+       builder_blocks_model_chain: under BuilderChunkLifts (node children and
+       sponge chunks only; no pre-state, no RoundsOk) all 57 blocks of
+       RustWriterChain equal buildModel.
+  12.2 Canonicity (R0Z/PoseidonCanon, 4413).  Every row of the copy's
+       perm_rounds is < p (each lane is cast(x % p)); needed because a
+       computed digest can be a node's right child (node_pre adds the tweak
+       to lane 7 with one conditional subtraction).
+  12.3 Records and the named map (R0Z/BuilderWitness, 4415).
+       RustWitness: inputValue, outputValue, changeValue, sk, salt, bits[24],
+       sibs[24], pairFirst, pairOccupied, pairSecond, pairInverse,
+       recipientOwner/Salt, changeOwner/Salt (u32 words / [u32;8]).
+       RustPublic: variant, asset, nextPairIndex, frontier[20], empty[20].
+       toModel W : ModelWitness K, field by field: values x ↦ x mod 2^30 (the
+       identity under WitnessOk), digests ↦ liftU per lane, path l ↦
+       (bits[l] ≠ 0, liftU sibs[l]), pair fields ↦ liftU.  PubCorr P pub:
+       variant, liftU asset = assetId, nextPairIndex, frontier and empty
+       roots lift (and are canonical).  WitnessOk W: values < 2^30, bits
+       0/1, siblings canonical.  chunksOf W P: every sponge block's chunk and
+       length (sk; owner digest computed by the copy's block 0; note chunks
+       [value, asset, salt0..5] / [salt6, salt7]; nullifier sk, salt);
+       chunks_sabs proves the chunk premise.
+  12.4 Node children (R0Z/BuilderWitnessTree, 4417).  treeCurR (input leaf
+       = digest of block 3, then ordered(cur, sibs[l], bits[l]) through
+       nodeDigestR), outPairR (recipient/change digests of blocks 29/32, or
+       (change, 0)), appCurR (sibling frontier[l] or empty[l] by bit l of
+       nextPairIndex).  rustChunks W P = chunks + children;
+       rust_chunk_lifts: BuilderChunkLifts pub (toModel W) (rustChunks W P);
+       builder_witness_blocks: all 57 blocks from (W, P) equal buildModel.
+  12.5 Aux rows and the trace (R0Z/BuilderWitnessTrace, 4419).  The path
+       arrays (bits, current, left, right), the value triple and the two
+       occupancy records are computed; PathLifts, ValueLifts and both
+       OccLifts are theorems (rust_path_lifts, rust_value_lifts, rust_in_occ,
+       rust_out_occ).  The output inverse is the glue invR x = x^(p-2) mod p;
+       invR_lift: its lift is (liftU x)⁻¹, given the named premise
+       Nat.Prime 2147483647 (Fermat via ZMod.castHom; the prime fact is
+       proved by norm_num in AspisV8R15.ExactTowerBase, not in this object
+       tree).  copyCell W P c r assembles the 29 x 1024 trace (57 chained
+       blocks, path block rows 912..1007, aux block rows 1008..1023, columns
+       16..28 zero).  builder_witness_model: every component returns ok and
+       liftU (copyCell W P c r) = buildModel pub (toModel W) c r for all c, r.
+  12.6 What remains for build integration (the Wspend⁺ → ModelWitness map).
+       The theorem is stated from RustWitness / RustPublic.  Still to be
+       supplied from the production structs (pair_trace.rs
+       build_transfer_inner / build_withdrawal_inner, pair_forest_trace.rs):
+       - the record fields: values (outputValue = recipient.value for a
+         transfer, public.amount for a withdrawal), sk = nullifier_key, salt,
+         recipient/change owners and salts, the pair leaf's four fields;
+       - bits[24] and sibs[24]: level 0 = selected_second and the other pair
+         commitment; levels 1..20 = membership directions/siblings; levels
+         21..23 = super-root directions/siblings (pair_forest_trace.rs:229-240);
+       - RustPublic: asset id, next_pair_index, snapshot frontier, and
+         empty = pair_empty_roots() with its lift to emptyRootsNat (PubCorr.empty);
+       - WitnessOk / PubCorr range facts (values < VALUE_LIMIT = 2^30, bits
+         0/1, canonical digests), which the production types/checks give;
+       - Nat.Prime 2147483647 imported or re-proved in this tree.
+       Not proved here: that the Lean glue (block order, chunk words,
+       ordered(), invR, assembly) matches production control flow — it is
+       by inspection of pair_trace.rs and not differentially tested; the
+       stable/late bank merge (merge_model covers the merge function only);
+       the copy ↔ production link for each writer stays numerical (D54.3).
+
+§13  Glue differential test, bank merge, M31 primality (base 2adce1714; attempts 4420-4426)
+
+  13.1 Glue differential test (refine/diffharness/tests/glue.rs; evidence
+       refine/evidence/diff-h.txt).  A Rust mirror of copyCellMerged over the
+       extracted copies (blockwriters, poseidon, writers).  Mirror guarantee:
+       - the table-driven glue (sponge schedule of spongePre, chunk words and
+         lengths of chunksOf, the node-children dispatch of childrenOf, the
+         row ranges of copyCell) is rendered from ONE table in
+         refine/glue/gen-glue.py.txt: the Lean rendering must occur verbatim
+         in the proved Lean files and the Rust rendering is glue_gen.rs
+         (included by glue.rs); --check fails on either drift (tamper teeth in
+         refine/evidence/gen-glue-check.raw: a Lean chunk swap and a Rust
+         chain-index change are both rejected);
+       - the structural glue (orderedR, bitB, treeCurR, outPairR, appBitR,
+         appSibR, appCurR, RustWriterChain, invR, path arrays, inRec/outRec,
+         banks, merge) is one hand-written Rust function per Lean definition,
+         same name in snake case, and is covered by the comparison itself.
+       Numerically checked (host, optimized, 3G/4G scope, 1.9 s, 152 MB):
+       the merged 29 x 1024 copy trace equals the production forest compile
+       (columns 0..15 cell for cell; columns 16..28 zero, the model's choice for
+       the stage-H columns) on the saved transfer and withdrawal fixtures and
+       on 512 randomized honest witnesses (alternating transfer/withdrawal,
+       random append index 0..63, random pair-leaf shapes); merge_check true
+       on each.  Teeth: 7 single-field record mutations (membership bit,
+       super-root bit, append parity, asset, change salt, pair inverse,
+       variant) each change 1..9,788 cells against production.
+       The Rust side of the Wspend⁺ → record map is `records` in glue.rs
+       (the field-by-field source of every RustWitness / RustPublic field).
+  13.2 Bank merge (R0Z/BuilderWitnessMerged, 4426).  The append blocks go to a
+       late bank (rows 544..863 only), every other row to the stable bank,
+       both 16 x 1024 column-major; the extracted merge_check / merge_copy
+       combine them.  builder_witness_merged: the check returns ok true, the
+       merge returns ok, and every cell of copyCellMerged lifts to
+       buildModel pub (toModel W) — under PubCorr and WitnessOk only.
+  13.3 Nat.Prime 2147483647 (R0Z/M31Prime, 4421).  Lucas certificate: witness
+       7, p - 1 = 2·3²·7·11·31·151·331; each 7^((p-1)/q) in ZMod p reduced by
+       reduce_mod_char (Mathlib's certified pow-mod, intermediate values
+       < p²), each residue ≠ 1 closed by one decide on two reduced literals;
+       the small primes by norm_num.  Wall 1.0 s, 2.2 GB.  The named prime
+       premise is gone from builder_witness_merged.
+  Remaining: the Wspend⁺ → RustWitness/RustPublic map on the Lean side
+  (§12.6), and the per-writer copy ↔ production links (numerical, D54.3).

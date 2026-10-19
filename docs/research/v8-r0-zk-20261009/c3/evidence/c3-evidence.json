@@ -1,0 +1,1243 @@
+{
+ "job": "D49.4 C3 + D53.2 (extraction of the P_R1 checker, check_sound)",
+ "branch": "codex/r0-checker-extract-20261019",
+ "base": "b14fd4208",
+ "host": "dombarker@100.108.41.90",
+ "workspace": "/home/dombarker/project-offloads/aspis-fs-generic-20261006",
+ "launcher": "run2-par.sh <A> <Module> 7000 7 (in-window slot; RUN2_GLOBAL=1 for re-sourced CertCheckExtracted)",
+ "caps": {
+  "lean_M": "7000 MB",
+  "MemoryHigh": "5G",
+  "MemoryMax": "7G",
+  "MemorySwapMax": 0
+ },
+ "notes": [
+  "Dependency replay 4363-4373: CertCheckBase .. CertCheckSoundAll recompiled in import order against the 4345 CertCheckExtracted object (sources unchanged, global lock); the consistent chain is 4345 then 4363-4373. The earlier Base/Dot objects (4342/4343) were built against 4341.",
+  "CertCheckSoundAll (4362) imports both the Aeneas side and the PredicateR1 closure: peak RSS 7.15 GB under -M7000 / MemoryMax 7G; any wider importer must split."
+ ],
+ "green_modules": {
+  "R1Z/CertCheckExtracted": {
+   "attempt": 4345,
+   "sha_matches_committed": true,
+   "all_axioms_standard": true
+  },
+  "R1Z/CertCheckBase": {
+   "attempt": 4363,
+   "sha_matches_committed": true,
+   "all_axioms_standard": true,
+   "exit": 0,
+   "replaces": 4342
+  },
+  "R1Z/CertCheckDot": {
+   "attempt": 4364,
+   "sha_matches_committed": true,
+   "all_axioms_standard": true,
+   "exit": 0,
+   "replaces": 4343
+  },
+  "R1Z/CertCheckKer": {
+   "attempt": 4365,
+   "sha_matches_committed": true,
+   "all_axioms_standard": true,
+   "exit": 0,
+   "replaces": 4346
+  },
+  "R1Z/CertCheckMat": {
+   "attempt": 4366,
+   "sha_matches_committed": true,
+   "all_axioms_standard": true,
+   "exit": 0,
+   "replaces": 4348
+  },
+  "R1Z/CertCheckHalf": {
+   "attempt": 4367,
+   "sha_matches_committed": true,
+   "all_axioms_standard": true,
+   "exit": 0,
+   "replaces": 4349
+  },
+  "R1Z/CertCheckTop": {
+   "attempt": 4368,
+   "sha_matches_committed": true,
+   "all_axioms_standard": true,
+   "exit": 0,
+   "replaces": 4351
+  },
+  "R1Z/CertData": {
+   "attempt": 4369,
+   "sha_matches_committed": true,
+   "all_axioms_standard": true,
+   "exit": 0,
+   "replaces": 4354
+  },
+  "R1Z/CertData2": {
+   "attempt": 4370,
+   "sha_matches_committed": true,
+   "all_axioms_standard": true,
+   "exit": 0,
+   "replaces": 4357
+  },
+  "R1Z/CertCheckData": {
+   "attempt": 4371,
+   "sha_matches_committed": true,
+   "all_axioms_standard": true,
+   "exit": 0,
+   "replaces": 4358
+  },
+  "R1Z/CertCheckSound": {
+   "attempt": 4372,
+   "sha_matches_committed": true,
+   "all_axioms_standard": true,
+   "exit": 0,
+   "replaces": 4360
+  },
+  "R1Z/CertCheckSoundAll": {
+   "attempt": 4373,
+   "sha_matches_committed": true,
+   "all_axioms_standard": true,
+   "exit": 0,
+   "replaces": 4362
+  }
+ },
+ "attempts": [
+  {
+   "attempt": 4340,
+   "module": "R1Z/CertCheckExtracted",
+   "source_sha256": "2fe11b47dd8539c626c263e770a1f91c9b5bbe345c69604035fc0d89de4e8cda",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:03.06",
+   "peak_rss_kib": 2655420,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 0,
+   "axioms": [],
+   "launched_utc": "2026-10-19T01:02:16Z"
+  },
+  {
+   "attempt": 4341,
+   "module": "R1Z/CertCheckExtracted",
+   "source_sha256": "a6db1e6e9e203002719577aa876f6f3ed48e29ed226b10d664a5ce3d9f83a566",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:03.09",
+   "peak_rss_kib": 2656312,
+   "swaps": 0,
+   "window": "0",
+   "slot": "global",
+   "errors": 0,
+   "axioms": [],
+   "launched_utc": "2026-10-19T01:03:32Z"
+  },
+  {
+   "attempt": 4342,
+   "module": "R1Z/CertCheckBase",
+   "source_sha256": "08a7f95d6177228e5b3514b5a01a1006129a45dbc84aaef809d34d3d6091de68",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.61",
+   "peak_rss_kib": 2618648,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheck.bind_eq_ok' depends on axioms: [propext]",
+    "'R1Z.CertCheck.add_ok' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.mul_ok' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.sub_ok' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.rem_ok' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.div_ok' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.index_ok' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.cast64' depends on axioms: [propext]",
+    "'R1Z.CertCheck.castUs' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.castUs64' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.cast32' depends on axioms: [propext]",
+    "'R1Z.CertCheck.modP_lt' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.flag_loop' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.flag_loop0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.acc_loop' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.acc_loop0' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:07:05Z"
+  },
+  {
+   "attempt": 4343,
+   "module": "R1Z/CertCheckDot",
+   "source_sha256": "2b1792b005be380f99df469e13bb71752608c798e5d48ab77a8a4dbeeec76fae",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.35",
+   "peak_rss_kib": 2604868,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheck.dot_loop_step' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.dot_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.kdot_loop_step' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.kdot_spec' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:07:49Z"
+  },
+  {
+   "attempt": 4344,
+   "module": "R1Z/CertCheckKer",
+   "source_sha256": "79a383821211bdbf68b808d36fc11df16f2e75ad5b07cd7d2ae5f8192d15438f",
+   "ledger_sha256_matches": true,
+   "exit": 1,
+   "wall": "0:01.32",
+   "peak_rss_kib": 2600232,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 3,
+   "axioms": [
+    "'R1Z.CertCheck.kimg_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.piv_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.ents_loop_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:09:47Z"
+  },
+  {
+   "attempt": 4345,
+   "module": "R1Z/CertCheckExtracted",
+   "source_sha256": "602a092ef596aa9c2175785fa5faa157fb1db0610f6d43edfa7dfc23633171ba",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:02.78",
+   "peak_rss_kib": 2644852,
+   "swaps": 0,
+   "window": "0",
+   "slot": "global",
+   "errors": 0,
+   "axioms": [],
+   "launched_utc": "2026-10-19T01:12:37Z"
+  },
+  {
+   "attempt": 4346,
+   "module": "R1Z/CertCheckKer",
+   "source_sha256": "5bc087b6013014584b611370ead611feb38b8f60f1a9aafa51866b2b70eff087",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.45",
+   "peak_rss_kib": 2616552,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheck.kimg_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.piv_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.ents_spec' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:13:45Z"
+  },
+  {
+   "attempt": 4347,
+   "module": "R1Z/CertCheckMat",
+   "source_sha256": "b82f5019adbb2cb82761897afc10511bbe811f51edc1040ce58a4349d9a9c3ce",
+   "ledger_sha256_matches": true,
+   "exit": 1,
+   "wall": "0:01.90",
+   "peak_rss_kib": 2617172,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 2,
+   "axioms": [
+    "'R1Z.CertCheck.prod_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.id_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.ech_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.perm_left_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.perm_right_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.nvec_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.lifts_spec' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:16:16Z"
+  },
+  {
+   "attempt": 4348,
+   "module": "R1Z/CertCheckMat",
+   "source_sha256": "637a8431ab5d966c1ea8d04e43e94d6bd7bc21a461ba61aad913d0dfcf14f9d4",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.99",
+   "peak_rss_kib": 2628644,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheck.prod_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.id_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.ech_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.perm_left_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.perm_right_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.nvec_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.lifts_spec' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:16:34Z"
+  },
+  {
+   "attempt": 4349,
+   "module": "R1Z/CertCheckHalf",
+   "source_sha256": "3402dadde97bd3449ffc355243fe0f8ad43898cf269f61f6b84bcad9748c3671",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.71",
+   "peak_rss_kib": 2633944,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheck.mm_z' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.half_spec' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:18:56Z"
+  },
+  {
+   "attempt": 4350,
+   "module": "R1Z/CertCheckTop",
+   "source_sha256": "619d7ce32b6b000a159ff2bd37ecf3099f663e8d123d2852875cb48c66e3f18d",
+   "ledger_sha256_matches": true,
+   "exit": 1,
+   "wall": "0:01.27",
+   "peak_rss_kib": 2600096,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 5,
+   "axioms": [
+    "'R1Z.CertCheck.zeroS_gs' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.qprime_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.bcond_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.check_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:19:42Z"
+  },
+  {
+   "attempt": 4351,
+   "module": "R1Z/CertCheckTop",
+   "source_sha256": "4befcc069f5bda43cb1130675fbf1751546861a9d2e63a7ff93ff327fea347ea",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.43",
+   "peak_rss_kib": 2617944,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheck.zeroS_gs' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.qprime_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.bcond_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.check_spec' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:20:00Z"
+  },
+  {
+   "attempt": 4352,
+   "module": "R1Z/CertData",
+   "source_sha256": "9abeb61b4209714e3698d687b16abe7432300b9bc6f7680f8f0df019770c51ea",
+   "ledger_sha256_matches": true,
+   "exit": 1,
+   "wall": "0:01.04",
+   "peak_rss_kib": 1926024,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 4,
+   "axioms": [
+    "'R1Z.CertData.kcoord_colM' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.kcoord_blockM' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.data_qprime' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:22:28Z"
+  },
+  {
+   "attempt": 4353,
+   "module": "R1Z/CertData",
+   "source_sha256": "903d4a4e712f1380d542e0b540d383e5450a10dca7126c130262dd4084b4589b",
+   "ledger_sha256_matches": true,
+   "exit": 1,
+   "wall": "0:01.22",
+   "peak_rss_kib": 1935880,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 3,
+   "axioms": [
+    "'R1Z.CertData.kcoord_map' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.kco_blockM' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.data_qprime' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:23:10Z"
+  },
+  {
+   "attempt": 4354,
+   "module": "R1Z/CertData",
+   "source_sha256": "2b68bef03862278faddaa8eb3f5cb8e2848881d140db8287e277a84b4474f99d",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.35",
+   "peak_rss_kib": 1947756,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertData.kcoord_map' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.kco_blockM' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.data_qprime' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:23:25Z"
+  },
+  {
+   "attempt": 4355,
+   "module": "R1Z/CertData2",
+   "source_sha256": "33e05cb33c287793a3140fe6cb5ec3681c44a78f49aa2a75e6b54d6272fb30f2",
+   "ledger_sha256_matches": true,
+   "exit": 1,
+   "wall": "0:01.46",
+   "peak_rss_kib": 1932144,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 3,
+   "axioms": [
+    "'R1Z.CertData.data_ech' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.nvec_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.data_vg' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.data_lift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:24:19Z"
+  },
+  {
+   "attempt": 4356,
+   "module": "R1Z/CertData2",
+   "source_sha256": "2c77264bfce9323de0eb7641f6303a2cba210174078543be1f8407854237fa53",
+   "ledger_sha256_matches": true,
+   "exit": 1,
+   "wall": "0:01.55",
+   "peak_rss_kib": 1937092,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 1,
+   "axioms": [
+    "'R1Z.CertData.data_ech' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.nvec_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.data_vg' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.data_lift' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:24:48Z"
+  },
+  {
+   "attempt": 4357,
+   "module": "R1Z/CertData2",
+   "source_sha256": "f325dd29f64f36dd450369de34ef9fe65a02091789230970d7930cde1d05d1cd",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.64",
+   "peak_rss_kib": 1950412,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertData.data_ech' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.nvec_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.data_vg' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.data_lift' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:26:30Z"
+  },
+  {
+   "attempt": 4358,
+   "module": "R1Z/CertCheckData",
+   "source_sha256": "49b40ebe3f988c9c78602b9fe901823027287121cf06bf348fca8fc9a68d0747",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.27",
+   "peak_rss_kib": 2610284,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheck.entOK_F' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.check_data' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:27:18Z"
+  },
+  {
+   "attempt": 4359,
+   "module": "R1Z/CertCheckSound",
+   "source_sha256": "c4eb60e9154935b3009e936485e9e4817d3b02fc74cfd3a1174b2c1882121b37",
+   "ledger_sha256_matches": true,
+   "exit": 1,
+   "wall": "0:03.34",
+   "peak_rss_kib": 6733552,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 1,
+   "axioms": [
+    "'R1Z.CertCheckSound.preOK_of_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheckSound.preOK\u2082_of_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheckSound.rinvOK_of_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheckSound.p_r1_of_data' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:28:52Z"
+  },
+  {
+   "attempt": 4360,
+   "module": "R1Z/CertCheckSound",
+   "source_sha256": "5fbff231a3cadbdd69209a09926a5ff2f662d32601785682e36119cb30a4c2e0",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:03.38",
+   "peak_rss_kib": 6776220,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheckSound.preOK_of_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheckSound.preOK\u2082_of_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheckSound.rinvOK_of_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheckSound.p_r1_of_data' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:29:09Z"
+  },
+  {
+   "attempt": 4361,
+   "module": "R1Z/CertCheckSoundAll",
+   "source_sha256": "8cba7aa57967f73741f828e995105b1e1c4a5792ca53d48df9d47147b4ab7c7e",
+   "ledger_sha256_matches": true,
+   "exit": 1,
+   "wall": "0:03.09",
+   "peak_rss_kib": 7113404,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 2,
+   "axioms": [
+    "'R1Z.CertCheckSound.check_sound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:29:44Z"
+  },
+  {
+   "attempt": 4362,
+   "module": "R1Z/CertCheckSoundAll",
+   "source_sha256": "65a41e82cb9da0aaaa8522b527a5ff51785570d512e96b2f63704093c9e396ae",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:03.38",
+   "peak_rss_kib": 7147784,
+   "swaps": 0,
+   "window": "1",
+   "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheckSound.check_sound' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:30:02Z"
+  },
+  {
+   "attempt": 4363,
+   "module": "R1Z/CertCheckBase",
+   "source_sha256": "08a7f95d6177228e5b3514b5a01a1006129a45dbc84aaef809d34d3d6091de68",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.55",
+   "peak_rss_kib": 2618576,
+   "swaps": 0,
+   "window": "0",
+   "slot": "global",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheck.bind_eq_ok' depends on axioms: [propext]",
+    "'R1Z.CertCheck.add_ok' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.mul_ok' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.sub_ok' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.rem_ok' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.div_ok' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.index_ok' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.cast64' depends on axioms: [propext]",
+    "'R1Z.CertCheck.castUs' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.castUs64' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.cast32' depends on axioms: [propext]",
+    "'R1Z.CertCheck.modP_lt' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.flag_loop' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.flag_loop0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.acc_loop' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.acc_loop0' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:34:07Z",
+   "kind": "dependency replay",
+   "reason": "unchanged source recompiled in order against the 4345 R1Z/CertCheckExtracted object (lead request)"
+  },
+  {
+   "attempt": 4364,
+   "module": "R1Z/CertCheckDot",
+   "source_sha256": "2b1792b005be380f99df469e13bb71752608c798e5d48ab77a8a4dbeeec76fae",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.42",
+   "peak_rss_kib": 2604748,
+   "swaps": 0,
+   "window": "0",
+   "slot": "global",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheck.dot_loop_step' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.dot_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.kdot_loop_step' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.kdot_spec' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:34:10Z",
+   "kind": "dependency replay",
+   "reason": "unchanged source recompiled in order against the 4345 R1Z/CertCheckExtracted object (lead request)"
+  },
+  {
+   "attempt": 4365,
+   "module": "R1Z/CertCheckKer",
+   "source_sha256": "5bc087b6013014584b611370ead611feb38b8f60f1a9aafa51866b2b70eff087",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.48",
+   "peak_rss_kib": 2616520,
+   "swaps": 0,
+   "window": "0",
+   "slot": "global",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheck.kimg_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.piv_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.ents_spec' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:34:12Z",
+   "kind": "dependency replay",
+   "reason": "unchanged source recompiled in order against the 4345 R1Z/CertCheckExtracted object (lead request)"
+  },
+  {
+   "attempt": 4366,
+   "module": "R1Z/CertCheckMat",
+   "source_sha256": "637a8431ab5d966c1ea8d04e43e94d6bd7bc21a461ba61aad913d0dfcf14f9d4",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.92",
+   "peak_rss_kib": 2628416,
+   "swaps": 0,
+   "window": "0",
+   "slot": "global",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheck.prod_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.id_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.ech_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.perm_left_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.perm_right_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.nvec_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.lifts_spec' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:34:15Z",
+   "kind": "dependency replay",
+   "reason": "unchanged source recompiled in order against the 4345 R1Z/CertCheckExtracted object (lead request)"
+  },
+  {
+   "attempt": 4367,
+   "module": "R1Z/CertCheckHalf",
+   "source_sha256": "3402dadde97bd3449ffc355243fe0f8ad43898cf269f61f6b84bcad9748c3671",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.70",
+   "peak_rss_kib": 2634048,
+   "swaps": 0,
+   "window": "0",
+   "slot": "global",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheck.mm_z' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.half_spec' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:34:19Z",
+   "kind": "dependency replay",
+   "reason": "unchanged source recompiled in order against the 4345 R1Z/CertCheckExtracted object (lead request)"
+  },
+  {
+   "attempt": 4368,
+   "module": "R1Z/CertCheckTop",
+   "source_sha256": "4befcc069f5bda43cb1130675fbf1751546861a9d2e63a7ff93ff327fea347ea",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.38",
+   "peak_rss_kib": 2618000,
+   "swaps": 0,
+   "window": "0",
+   "slot": "global",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheck.zeroS_gs' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.qprime_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.bcond_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.check_spec' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:34:22Z",
+   "kind": "dependency replay",
+   "reason": "unchanged source recompiled in order against the 4345 R1Z/CertCheckExtracted object (lead request)"
+  },
+  {
+   "attempt": 4369,
+   "module": "R1Z/CertData",
+   "source_sha256": "2b68bef03862278faddaa8eb3f5cb8e2848881d140db8287e277a84b4474f99d",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.31",
+   "peak_rss_kib": 1947892,
+   "swaps": 0,
+   "window": "0",
+   "slot": "global",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertData.kcoord_map' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.kco_blockM' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.data_qprime' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:34:24Z",
+   "kind": "dependency replay",
+   "reason": "unchanged source recompiled in order against the 4345 R1Z/CertCheckExtracted object (lead request)"
+  },
+  {
+   "attempt": 4370,
+   "module": "R1Z/CertData2",
+   "source_sha256": "f325dd29f64f36dd450369de34ef9fe65a02091789230970d7930cde1d05d1cd",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.70",
+   "peak_rss_kib": 1949408,
+   "swaps": 0,
+   "window": "0",
+   "slot": "global",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertData.data_ech' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.nvec_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.data_vg' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertData.data_lift' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:34:27Z",
+   "kind": "dependency replay",
+   "reason": "unchanged source recompiled in order against the 4345 R1Z/CertCheckExtracted object (lead request)"
+  },
+  {
+   "attempt": 4371,
+   "module": "R1Z/CertCheckData",
+   "source_sha256": "49b40ebe3f988c9c78602b9fe901823027287121cf06bf348fca8fc9a68d0747",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:01.29",
+   "peak_rss_kib": 2610436,
+   "swaps": 0,
+   "window": "0",
+   "slot": "global",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheck.entOK_F' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheck.check_data' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:34:30Z",
+   "kind": "dependency replay",
+   "reason": "unchanged source recompiled in order against the 4345 R1Z/CertCheckExtracted object (lead request)"
+  },
+  {
+   "attempt": 4372,
+   "module": "R1Z/CertCheckSound",
+   "source_sha256": "5fbff231a3cadbdd69209a09926a5ff2f662d32601785682e36119cb30a4c2e0",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:03.16",
+   "peak_rss_kib": 6775760,
+   "swaps": 0,
+   "window": "0",
+   "slot": "global",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheckSound.preOK_of_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheckSound.preOK\u2082_of_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheckSound.rinvOK_of_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.CertCheckSound.p_r1_of_data' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:34:33Z",
+   "kind": "dependency replay",
+   "reason": "unchanged source recompiled in order against the 4345 R1Z/CertCheckExtracted object (lead request)"
+  },
+  {
+   "attempt": 4373,
+   "module": "R1Z/CertCheckSoundAll",
+   "source_sha256": "65a41e82cb9da0aaaa8522b527a5ff51785570d512e96b2f63704093c9e396ae",
+   "ledger_sha256_matches": true,
+   "exit": 0,
+   "wall": "0:03.30",
+   "peak_rss_kib": 7148280,
+   "swaps": 0,
+   "window": "0",
+   "slot": "global",
+   "errors": 0,
+   "axioms": [
+    "'R1Z.CertCheckSound.check_sound' depends on axioms: [propext, Classical.choice, Quot.sound]"
+   ],
+   "launched_utc": "2026-10-19T01:34:38Z",
+   "kind": "dependency replay",
+   "reason": "unchanged source recompiled in order against the 4345 R1Z/CertCheckExtracted object (lead request)"
+  }
+ ],
+ "extraction": {
+  "charon": "cb50ff16 (sha256 daad69be\u2026af8)",
+  "aeneas": "b59d5188 (sha256 959659a6\u20269e3)",
+  "script": "c3/extract/run-extract.sh",
+  "final_tag": "c",
+  "scope": "MemoryHigh 6G / MemoryMax 8G / MemorySwapMax 0, each tool its own scope",
+  "charon_time": "c3/extract/charon-c-time.log",
+  "aeneas_time": "c3/extract/aeneas-c-time.log",
+  "generated_sha256": "9adf667a92d48a9f2dcb7a2f368c6c8fef25d6ce5c6095f070c14423e99e2048",
+  "substitutions": "c3/extract/substitute.py.txt (import Aeneas -> Aeneas.Std + Tactic.RustAttributes; drop maxHeartbeats/maxRecDepth)",
+  "history": "a: first extraction (flag-if bodies produced do-join points, abandoned); b: half constant inlined; c: branch-free bodies (final)"
+ },
+ "differential": {
+  "run": "c3/evidence/diff-r3 (source revision r3 = committed c3/check + z4/z9d.rs)",
+  "scope": "MemoryHigh 6G / MemoryMax 8G / MemorySwapMax 0, TasksMax 64, release + overflow-checks",
+  "result": "A v0 g0, A v0 g1, J v1 g0, A v3 random g1, A v2 coset g0: z9c=true, c3=true; B v0 g0: emit fails closed (no certificate) before either checker; 8/8 z9c corruptions both false; 6/6 supplied-field corruptions c3 false",
+  "c3_check_seconds": "8.7-8.9 (4.3 at P=8), convert 4.6 s; z9c check 2.6 s",
+  "peak_rss_kib": 520668,
+  "superseded": [
+   "diff-r1 (flag-if checker)",
+   "diff-r2 (pre branch-free)"
+  ]
+ },
+ "builders": [
+  {
+   "job": "D57.3 builder 1: ChainT0K4 targets (hChain, hhalf)",
+   "attempts": [
+    {
+     "attempt": 4374,
+     "module": "R1Z/CertBuildExtracted",
+     "source_sha256": "a68583c303c22cb3e94fb67598c74491092165eea502bb8cffc5b592f03ea1aa",
+     "ledger_sha256_matches": true,
+     "exit": 0,
+     "wall": "0:01.90",
+     "peak_rss_kib": 2615968,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 0,
+     "axioms": [],
+     "launched_utc": "2026-10-19T01:40:20Z"
+    },
+    {
+     "attempt": 4375,
+     "module": "R1Z/CertBuildBase",
+     "source_sha256": "2a11f8e799e1932559df67001e3eb47c2529602ea71d09c0cf5029bd3175cc76",
+     "ledger_sha256_matches": true,
+     "exit": 1,
+     "wall": "0:02.06",
+     "peak_rss_kib": 2628056,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 8,
+     "axioms": [
+      "'R1Z.CertBuild.fadd_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.fsub_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.fmul_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.qadd_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.qsub_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.qmul_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.vget_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:41:53Z"
+    },
+    {
+     "attempt": 4376,
+     "module": "R1Z/CertBuildBase",
+     "source_sha256": "fd6c0af641c092ee69ae95d186d18eca66231b022b67525f05ea74c06f2eb79a",
+     "ledger_sha256_matches": true,
+     "exit": 0,
+     "wall": "0:02.16",
+     "peak_rss_kib": 2638924,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 0,
+     "axioms": [
+      "'R1Z.CertBuild.fadd_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.fsub_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.fmul_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.qadd_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.qsub_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.qmul_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.vget_spec' depends on axioms: [propext, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:42:21Z"
+    },
+    {
+     "attempt": 4377,
+     "module": "R1Z/CertBuildTower",
+     "source_sha256": "3c15b017d3b141198a747d64992389030baeb78f028f3fa7c039140ce27a75ca",
+     "ledger_sha256_matches": true,
+     "exit": 0,
+     "wall": "0:02.91",
+     "peak_rss_kib": 3811952,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 0,
+     "axioms": [
+      "'R1Z.CertBuild.psi4_mul' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.psi_qmul' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.psi_qadd' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.psi_qsub' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.psi_vget' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.psi_zero' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.acc_loopG' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.horner_loopG' depends on axioms: [propext, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:44:44Z"
+    },
+    {
+     "attempt": 4378,
+     "module": "R1Z/CertBuildChain",
+     "source_sha256": "4e0c6a021ad25067849f0586f769ede5ad879afe7e8410f01e7cee8d00466c0c",
+     "ledger_sha256_matches": true,
+     "exit": 0,
+     "wall": "0:02.43",
+     "peak_rss_kib": 3798772,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 0,
+     "axioms": [
+      "'R1Z.CertBuild.rsum_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.rhorner_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.round_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.final_value_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.corr_spec' depends on axioms: [propext, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:46:04Z"
+    },
+    {
+     "attempt": 4379,
+     "module": "R1Z/CertBuildFill",
+     "source_sha256": "4b00b80465af5e84e671757ce57c03418d5a8591b50a81ed9d0cfd454e2d716f",
+     "ledger_sha256_matches": true,
+     "exit": 1,
+     "wall": "0:02.19",
+     "peak_rss_kib": 3786524,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 3,
+     "axioms": [
+      "'R1Z.CertBuild.fill_row_loop_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.fill_tq_loop_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.fill_tq_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:47:07Z"
+    },
+    {
+     "attempt": 4380,
+     "module": "R1Z/CertBuildFill",
+     "source_sha256": "50e71b12c892230d38106e4d9c7cea5664d0e5503db26910fb616967f694f68a",
+     "ledger_sha256_matches": true,
+     "exit": 1,
+     "wall": "0:02.27",
+     "peak_rss_kib": 3789892,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 1,
+     "axioms": [
+      "'R1Z.CertBuild.fill_row_loop_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.fill_tq_loop_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.fill_tq_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:47:35Z"
+    },
+    {
+     "attempt": 4381,
+     "module": "R1Z/CertBuildFill",
+     "source_sha256": "ac5e2957c0a02c4a6708f8efd3777ceb14665af389323662d1f8c6b3c70ab6b4",
+     "ledger_sha256_matches": true,
+     "exit": 0,
+     "wall": "0:02.32",
+     "peak_rss_kib": 3807524,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 0,
+     "axioms": [
+      "'R1Z.CertBuild.fill_row_loop_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.fill_tq_loop_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.fill_tq_spec' depends on axioms: [propext, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:49:18Z"
+    },
+    {
+     "attempt": 4382,
+     "module": "R1Z/CertBuildIdent",
+     "source_sha256": "f0feb3034575c2ade98ef9d6541e9324d5fbd52c73f6a5698acfaaeed0ca93c5",
+     "ledger_sha256_matches": true,
+     "exit": 1,
+     "wall": "0:03.73",
+     "peak_rss_kib": 7115288,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 7,
+     "axioms": [],
+     "launched_utc": "2026-10-19T01:51:49Z"
+    },
+    {
+     "attempt": 4383,
+     "module": "R1Z/CertBuildIdent",
+     "source_sha256": "31ef1f2b6675a84ff0ad2f67c597c4410f1b29ec108d0bdfed88c50a7bda13d8",
+     "ledger_sha256_matches": true,
+     "exit": 1,
+     "wall": "0:04.09",
+     "peak_rss_kib": 7127292,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 10,
+     "axioms": [
+      "'R1Z.CertBuild.limbs_pack4' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.unflat_unit' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.roundK_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.finalVal_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:52:33Z"
+    },
+    {
+     "attempt": 4384,
+     "module": "R1Z/CertBuildIdent",
+     "source_sha256": "d40cd049fb3f7adbb209d0330c722a53aefd7e7c2a7963d050f4d6da8bb90466",
+     "ledger_sha256_matches": true,
+     "exit": 1,
+     "wall": "0:03.67",
+     "peak_rss_kib": 7117300,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 1,
+     "axioms": [
+      "'R1Z.CertBuild.limbs_pack4' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.unflat_unit' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.roundK_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.finalVal_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:52:56Z"
+    },
+    {
+     "attempt": 4385,
+     "module": "R1Z/CertBuildIdent",
+     "source_sha256": "b06fc1ab1830c5dc9848f0cc15e5389dce17ad421e07618654398e79296394fd",
+     "ledger_sha256_matches": true,
+     "exit": 0,
+     "wall": "0:04.34",
+     "peak_rss_kib": 7128692,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-2.lock",
+     "errors": 0,
+     "axioms": [
+      "'R1Z.CertBuild.limbs_pack4' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.unflat_unit' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.roundK_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.finalVal_eq' depends on axioms: [propext, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:53:12Z"
+    },
+    {
+     "attempt": 4386,
+     "module": "R1Z/CertBuildIdent2",
+     "source_sha256": "2853e5c08e2093e5b657db38ac221736931f084db648d552b91716bdfc70d9b1",
+     "ledger_sha256_matches": true,
+     "exit": 1,
+     "wall": "0:03.77",
+     "peak_rss_kib": 7120732,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 2,
+     "axioms": [
+      "'R1Z.CertBuild.embR_half' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.chain_ident' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:54:00Z"
+    },
+    {
+     "attempt": 4387,
+     "module": "R1Z/CertBuildIdent2",
+     "source_sha256": "d8a9358a04f068e7fb3e101fd9d27fb3440ced4063a624b3c71644f82e5591d9",
+     "ledger_sha256_matches": true,
+     "exit": 1,
+     "wall": "0:03.66",
+     "peak_rss_kib": 7121092,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 1,
+     "axioms": [
+      "'R1Z.CertBuild.embR_half' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.chain_ident' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:54:23Z"
+    },
+    {
+     "attempt": 4388,
+     "module": "R1Z/CertBuildIdent2",
+     "source_sha256": "da6015258eb14208cbad2807291ddb1a301a1652bd713ff1ce046282563de60c",
+     "ledger_sha256_matches": true,
+     "exit": 0,
+     "wall": "0:04.07",
+     "peak_rss_kib": 7156424,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 0,
+     "axioms": [
+      "'R1Z.CertBuild.embR_half' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertBuild.chain_ident' depends on axioms: [propext, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:54:44Z"
+    },
+    {
+     "attempt": 4389,
+     "module": "R1Z/CertCheckSound2",
+     "source_sha256": "480763258fda6767126eb95357f9d3ff5667a55b6d9b3d1ba4f8ac499d71ccaa",
+     "ledger_sha256_matches": true,
+     "exit": 1,
+     "wall": "0:03.59",
+     "peak_rss_kib": 7126120,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 3,
+     "axioms": [
+      "'R1Z.CertCheckSound.alimb_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertCheckSound.half_from' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertCheckSound.check_sound'' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:55:52Z"
+    },
+    {
+     "attempt": 4390,
+     "module": "R1Z/CertCheckSound2",
+     "source_sha256": "d5bbb921b76b8874bd053024dccd7e564b9fc54dec5d783fbcd8c24320669017",
+     "ledger_sha256_matches": true,
+     "exit": 1,
+     "wall": "0:03.65",
+     "peak_rss_kib": 7130012,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 2,
+     "axioms": [
+      "'R1Z.CertCheckSound.alimb_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertCheckSound.half_from' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+      "'R1Z.CertCheckSound.check_sound'' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:56:16Z"
+    },
+    {
+     "attempt": 4391,
+     "module": "R1Z/CertCheckSound2",
+     "source_sha256": "fe709fadedf9e73ebf76fce5bc3660f246f7e048930075a57a01b8ef7a4af488",
+     "ledger_sha256_matches": true,
+     "exit": 0,
+     "wall": "0:03.88",
+     "peak_rss_kib": 7162056,
+     "swaps": 0,
+     "window": "1",
+     "slot": "/tmp/aspis-r0-lean-slot-1.lock",
+     "errors": 0,
+     "axioms": [
+      "'R1Z.CertCheckSound.alimb_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertCheckSound.half_from' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'R1Z.CertCheckSound.check_sound'' depends on axioms: [propext, Classical.choice, Quot.sound]"
+     ],
+     "launched_utc": "2026-10-19T01:56:33Z"
+    }
+   ],
+   "green_modules": {
+    "R1Z/CertBuildExtracted": {
+     "attempt": 4374,
+     "sha_matches_committed": true,
+     "all_axioms_standard": true,
+     "peak_rss_kib": 2615968
+    },
+    "R1Z/CertBuildBase": {
+     "attempt": 4376,
+     "sha_matches_committed": true,
+     "all_axioms_standard": true,
+     "peak_rss_kib": 2638924
+    },
+    "R1Z/CertBuildTower": {
+     "attempt": 4377,
+     "sha_matches_committed": true,
+     "all_axioms_standard": true,
+     "peak_rss_kib": 3811952
+    },
+    "R1Z/CertBuildChain": {
+     "attempt": 4378,
+     "sha_matches_committed": true,
+     "all_axioms_standard": true,
+     "peak_rss_kib": 3798772
+    },
+    "R1Z/CertBuildFill": {
+     "attempt": 4381,
+     "sha_matches_committed": true,
+     "all_axioms_standard": true,
+     "peak_rss_kib": 3807524
+    },
+    "R1Z/CertBuildIdent": {
+     "attempt": 4385,
+     "sha_matches_committed": true,
+     "all_axioms_standard": true,
+     "peak_rss_kib": 7128692
+    },
+    "R1Z/CertBuildIdent2": {
+     "attempt": 4388,
+     "sha_matches_committed": true,
+     "all_axioms_standard": true,
+     "peak_rss_kib": 7156424
+    },
+    "R1Z/CertCheckSound2": {
+     "attempt": 4391,
+     "sha_matches_committed": true,
+     "all_axioms_standard": true,
+     "peak_rss_kib": 7162056
+    }
+   },
+   "extraction": {
+    "crate": "c3/build",
+    "script": "c3/extract/run-extract-build.sh (tag a)",
+    "generated": "c3/extract/Build.lean",
+    "generated_sha256": "18a0ea35770b98d68b487c62d9d24745192b1c14483086d59563dc0249b4fb02",
+    "charon_time": "c3/extract/charon-build-a-time.log",
+    "aeneas_time": "c3/extract/aeneas-build-a-time.log",
+    "note": "tag a reused the host charon-a/aeneas-a directories of the superseded first checker extraction; that extraction is not referenced by the accepted chain (tag c)"
+   },
+   "differential": {
+    "run": "c3/evidence/diff-r4",
+    "result": "fill_tq output equals z9c chain_targets (flattened) entry for entry (1,175,056 entries, 0 mismatches) on A v0 g0, A v0 g1, J v1 g0, A v3 random g1, A v2 coset g0; checker verdicts unchanged (5 agree, 8/8, 6/6)",
+    "build_seconds": 0.009
+   }
+  }
+ ]
+}

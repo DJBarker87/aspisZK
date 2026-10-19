@@ -1,0 +1,85 @@
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertData2.lean:43:56: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑x * d.bw + ?b
+in the target expression
+  (fun a x => φ (d.u (↑a * d.q + ↑x))) a x * (fun x c => φ (d.rel (↑x * d.bw + ↑c))) x c =
+    φ (d.u (↑a * d.q + ↑x)) * φ (d.rel (↑c + ↑x * d.bw))
+
+F : Type u_1
+inst✝ : Field F
+φ : ZP →+* F
+d : CData
+B : ℕ
+hB : d.bw = B
+a : Fin d.r
+c : Fin B
+hUR :
+  ∀ a < d.r,
+    ∀ j < d.bw, ∑ x ∈ Finset.range d.q, d.u (0 + a * d.q + x) * d.rel (0 + j + x * d.bw) = d.e (0 + a * d.bw + j)
+this : ∑ x ∈ Finset.range d.q, d.u (↑a * d.q + x) * d.rel (↑c + x * d.bw) = d.e (↑a * d.bw + ↑c)
+x : Fin d.q
+x✝ : x ∈ Finset.univ
+⊢ (fun a x => φ (d.u (↑a * d.q + ↑x))) a x * (fun x c => φ (d.rel (↑x * d.bw + ↑c))) x c =
+    φ (d.u (↑a * d.q + ↑x)) * φ (d.rel (↑c + ↑x * d.bw))
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertData2.lean:138:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nvec (Emat (fun a x => φ (rowM d.u d.q ↑a ↑x)) fun x c => φ (rowM d.rel d.bw ↑x ↑c)) (pivF d hd hB) (frF d hd hB) f t
+in the target expression
+  ∑ x, φ (d.yg (↑f * d.mg + ↑x)) * φ (d.beta (↑x * d.bw + ↑t)) =
+    nvec (Emat (fun a x => φ (d.u (↑a * d.q + ↑x))) fun x c => φ (d.rel (↑x * d.bw + ↑c))) (pivF d hd hB) (frF d hd hB)
+      f t
+
+case refine_3
+F : Type u_1
+inst✝ : Field F
+φ : ZP →+* F
+d : CData
+hd : DataOK d
+st : ℕ → ℕ
+A R B : ℕ
+hR : d.rw = R
+hB : d.bw = B
+hE :
+  ∀ e < d.mg,
+    EntOKF d.gej d.ges d.gepo d.geco d.gpidx d.gcoef d.glane d.gwl d.NG d.gown d.gw d.ground d.rw d.rw d.gbat d.bw d.bw
+      d.beta e
+hN : ∀ f < d.k, ∀ t < d.bw, d.nm (f * d.bw + t) = nvalF d.e d.bw d.tag d.r (d.lst (d.r + f)) t
+hP :
+  ∀ f < d.k,
+    ∀ t < d.bw, ∑ p ∈ Finset.range d.mg, d.yg (0 + f * d.mg + p) * d.beta (0 + t + p * d.bw) = d.nm (0 + f * d.bw + t)
+f : Fin d.k
+t : Fin B
+hc :
+  ∀ (e : Fin d.mg),
+    kcoord (fun i t => φ (colM d.gbat d.bw ↑i ↑t)) (entF φ d.gej d.ges d.gepo d.geco d.gpidx d.gcoef d.NG ↑e ⋯ ⋯) t =
+      φ (d.beta (↑e * d.bw + ↑t))
+⊢ ∑ x, φ (d.yg (↑f * d.mg + ↑x)) * φ (d.beta (↑x * d.bw + ↑t)) =
+    nvec (Emat (fun a x => φ (d.u (↑a * d.q + ↑x))) fun x c => φ (d.rel (↑x * d.bw + ↑c))) (pivF d hd hB) (frF d hd hB)
+      f t
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertData2.lean:152:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑i = ↑j then 1 else 0
+in the target expression
+  ∑ x, (fun i x => φ (d.lo (d.loff l + ↑i * W + ↑x))) i x * (fun x j => φ (d.lu (d.loff l + ↑x * W + ↑j))) x j =
+    φ (if i = j then 1 else 0)
+
+F : Type u_1
+inst✝ : Field F
+φ : ZP →+* F
+d : CData
+l : ℕ
+hl : l < d.nl
+W : ℕ
+hW : d.lw l = W
+hL : ∀ l < d.nl, LiftOKF d.lo d.lu d.lid d.lw d.loff l
+hp :
+  ∀ i < W,
+    ∀ j < W,
+      ∑ p ∈ Finset.range W, d.lo (d.loff l + i * W + p) * d.lu (d.loff l + j + p * W) = d.lid (d.loff l + i * W + j)
+hid : ∀ i < W, ∀ j < W, d.lid (d.loff l + i * W + j) = if i = j then 1 else 0
+i j : Fin W
+⊢ ∑ x, (fun i x => φ (d.lo (d.loff l + ↑i * W + ↑x))) i x * (fun x j => φ (d.lu (d.loff l + ↑x * W + ↑j))) x j =
+    φ (if i = j then 1 else 0)
+'R1Z.CertData.data_ech' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.CertData.nvec_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.CertData.data_vg' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.CertData.data_lift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock

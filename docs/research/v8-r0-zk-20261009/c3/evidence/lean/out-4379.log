@@ -1,0 +1,137 @@
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertBuildFill.lean:21:12: error(lean.unknownIdentifier): Unknown identifier `Vec.push`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertBuildFill.lean:22:9: error(lean.unknownIdentifier): Unknown identifier `Vec.push`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertBuildFill.lean:66:58: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑i1
+in the target expression
+  (if t = i then 1 else 0) + (if i1 = 244#usize then 1 else 0) * ↑↑(↑c)[↑t % ↑4#usize]! = ent (↑i) c ↑t
+
+i : Usize
+c : A4
+m : ℕ
+out : alloc.vec.Vec U32
+t : Usize
+r : alloc.vec.Vec U32
+hm : ↑t + (m + 1) = 1084
+h✝⁸ :
+  (do
+      let i1 ← t / 4#usize
+      let on ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i1 = 244#usize)))
+      let i2 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (t = i)))
+      let i3 ← t % 4#usize
+      let i4 ← Array.index_usize c i3
+      let i5 ← R1CertBuild.fmul on i4
+      let i6 ← R1CertBuild.fadd i2 i5
+      let out1 ← out.push i6
+      let t1 ← t + 1#usize
+      R1CertBuild.fill_row_loop i c out1 t1) =
+    ok r
+i1 : UScalar UScalarTy.Usize
+hi1 : t / 4#usize = ok i1
+h✝⁷ :
+  (do
+      let on ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i1 = 244#usize)))
+      let i2 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (t = i)))
+      let i3 ← t % 4#usize
+      let i4 ← Array.index_usize c i3
+      let i5 ← R1CertBuild.fmul on i4
+      let i6 ← R1CertBuild.fadd i2 i5
+      let out1 ← out.push i6
+      let t1 ← t + 1#usize
+      R1CertBuild.fill_row_loop i c out1 t1) =
+    ok r
+on : UScalar UScalarTy.U32
+hon : lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i1 = 244#usize))) = ok on
+h✝⁶ :
+  (do
+      let i2 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (t = i)))
+      let i3 ← t % 4#usize
+      let i4 ← Array.index_usize c i3
+      let i5 ← R1CertBuild.fmul on i4
+      let i6 ← R1CertBuild.fadd i2 i5
+      let out1 ← out.push i6
+      let t1 ← t + 1#usize
+      R1CertBuild.fill_row_loop i c out1 t1) =
+    ok r
+i2 : UScalar UScalarTy.U32
+hi2 : lift (UScalar.cast_fromBool UScalarTy.U32 (decide (t = i))) = ok i2
+h✝⁵ :
+  (do
+      let i3 ← t % 4#usize
+      let i4 ← Array.index_usize c i3
+      let i5 ← R1CertBuild.fmul on i4
+      let i6 ← R1CertBuild.fadd i2 i5
+      let out1 ← out.push i6
+      let t1 ← t + 1#usize
+      R1CertBuild.fill_row_loop i c out1 t1) =
+    ok r
+i3 : UScalar UScalarTy.Usize
+hi3 : t % 4#usize = ok i3
+h✝⁴ :
+  (do
+      let i4 ← Array.index_usize c i3
+      let i5 ← R1CertBuild.fmul on i4
+      let i6 ← R1CertBuild.fadd i2 i5
+      let out1 ← out.push i6
+      let t1 ← t + 1#usize
+      R1CertBuild.fill_row_loop i c out1 t1) =
+    ok r
+i4 : U32
+hi4 : Array.index_usize c i3 = ok i4
+h✝³ :
+  (do
+      let i5 ← R1CertBuild.fmul on i4
+      let i6 ← R1CertBuild.fadd i2 i5
+      let out1 ← out.push i6
+      let t1 ← t + 1#usize
+      R1CertBuild.fill_row_loop i c out1 t1) =
+    ok r
+i5 : U32
+hi5 : R1CertBuild.fmul on i4 = ok i5
+h✝² :
+  (do
+      let i6 ← R1CertBuild.fadd i2 i5
+      let out1 ← out.push i6
+      let t1 ← t + 1#usize
+      R1CertBuild.fill_row_loop i c out1 t1) =
+    ok r
+i6 : U32
+hi6 : R1CertBuild.fadd i2 i5 = ok i6
+h✝¹ :
+  (do
+      let out1 ← out.push i6
+      let t1 ← t + 1#usize
+      R1CertBuild.fill_row_loop i c out1 t1) =
+    ok r
+out1 : alloc.vec.Vec U32
+hout1 : out.push i6 = ok out1
+h✝ :
+  (do
+      let t1 ← t + 1#usize
+      R1CertBuild.fill_row_loop i c out1 t1) =
+    ok r
+t1 : UScalar UScalarTy.Usize
+ht1 : t + 1#usize = ok t1
+h : R1CertBuild.fill_row_loop i c out1 t1 = ok r
+ht1v : ↑t1 = ↑t + 1
+eo : ↑out1 = ↑out ++ [i6]
+L : (↑r).length = (↑out1).length + m
+P1 : ∀ x < (↑out1).length, (↑r)[x]! = (↑out1)[x]!
+P2 : ∀ (s : ℕ), ↑t1 ≤ s → s < 1084 → ↑↑(↑r)[(↑out1).length + (s - ↑t1)]! = ent (↑i) c s
+hlen : (↑out1).length = (↑out).length + 1
+⊢ (if t = i then 1 else 0) + (if i1 = 244#usize then 1 else 0) * ↑↑(↑c)[↑t % ↑4#usize]! = ent (↑i) c ↑t
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    c
+  has type
+    A4
+  but is expected to have type
+    { l // l.length = ↑4#usize }
+  in the application
+    ↑c
+'R1Z.CertBuild.fill_row_loop_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.CertBuild.fill_tq_loop_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.CertBuild.fill_tq_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock
