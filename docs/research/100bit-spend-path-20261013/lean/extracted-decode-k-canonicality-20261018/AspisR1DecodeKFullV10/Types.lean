@@ -42,7 +42,6 @@ structure aspis_core.field.QM31 where
 /-- [aspis_r1_cost_probe::r1_wire::Error]
     Source: 'crates/aspis-r1-cost-probe/src/r1_wire.rs', lines 24:0-36:1
     Visibility: public -/
-@[discriminant isize]
 inductive r1_wire.Error where
 | Allocation : r1_wire.Error
 | RowOrder : Std.U8 → Std.U8 → r1_wire.Error
@@ -55,6 +54,27 @@ inductive r1_wire.Error where
 | EqualCirclePoints : r1_wire.Error
 | TrailingBytes : r1_wire.Error
 | Public : r1_wire.Error
+
+-- Naming-only expansion of the emitted discriminant declaration. This
+-- keeps the same constructor order and reader while allowing joint imports
+-- with other generated Error owners.
+def r1_wire.Error.read_discriminant (x : r1_wire.Error) : Isize :=
+  match x with
+  | .Allocation => 0#isize
+  | .RowOrder _ _ => 1#isize
+  | .InvalidRow => 2#isize
+  | .Tag _ => 3#isize
+  | .Length _ => 4#isize
+  | .NonCanonical _ _ => 5#isize
+  | .Boundary _ => 6#isize
+  | .Terminal => 7#isize
+  | .EqualCirclePoints => 8#isize
+  | .TrailingBytes => 9#isize
+  | .Public => 10#isize
+
+instance _root_.AspisR1DecodeKFullV10.r1_wire.Error.instDiscriminant :
+    Aeneas.Std.Discriminant r1_wire.Error Isize where
+  read_discriminant := r1_wire.Error.read_discriminant
 
 /-- [aspis_r1_cost_probe::r1_wire::ValidatedRecord]
     Source: 'crates/aspis-r1-cost-probe/src/r1_wire.rs', lines 117:0-120:1 -/
