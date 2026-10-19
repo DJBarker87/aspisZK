@@ -1,0 +1,13 @@
+# Paused work checkpoint — 2026-10-19
+
+User requested a pause and commit for branch cleanup. All three subagents were interrupted and no local Lean/compiler runner was live at the preservation check. No new proof or build is authorized by this handoff. Resume only after the user asks.
+
+Keep branch codex/100bit-spend-path-20261013 and its worktree /Users/dominic/ZK/.worktrees/100bit-spend-path. New proof progress and unfinished candidates are preserved in this branch; no worker branch merge is needed for the files listed here. Cached external dependencies/objects remain in /tmp and on the build host; their hashes and runner paths are recorded, but deleting those caches may require retrieval or rebuilding later.
+
+Checked since the previous published head: ordinary computable transcript byte framing, finite recorded-log word recovery and compatibility, and the strict adaptive classifier-plus-actual-bank bound below 2^-100. See evidence/recorded-log-executable-primitives-20261019 and evidence/adaptive-fresh-actual-bank-composition-20261019. The full 100-bit private-spend theorem remains OPEN.
+
+Unfinished sources in this directory are saved as candidates, not canonical Lean modules. RawCommitmentFrameReplay v2 failed at two small proof steps: rewrite under let-bound state expressions, and a final equality involving the private alias for SelectedTranscriptParams.params. It has no compiled object. State induction through row 30 and equality of the three commitment frames are not yet proved. RawCutWordsFromRunExecutable is uncompiled and retains FrameCompatible; replace that premise with the completed replay theorem before claiming a complete executable caller. GSNonfailureFinalRootsGeneric v3 splits out an abstract-results helper and keeps decoder calls opaque; it is uncompiled. The v13 concrete projection failure is preserved and must not be repeated unchanged at a larger cap. LiteralAcceptedExtractorEventCover-v1.lean in the sibling executable-recovery-caller candidate directory is also uncompiled.
+
+Next actions on resume: finish raw state/frame equivalence, compile the generic nonfailure helper, instantiate the fromWords decoder bridge, compile the actual recorded-run caller, then prove deterministic accepted-execution coverage and source semantic/terminal premises. Existing whole-factor cost composition remains open beyond the checked Raw long-division bound.
+
+Other pre-existing uncommitted material in this worktree, including pool-v0 evidence, is outside this checkpoint. Do not treat this checkpoint as authorization to discard it or remove this worktree. No wallet/account/key cleanup was performed.
