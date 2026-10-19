@@ -6640,3 +6640,39 @@ non-standard axiom, `core.fmt.Formatter` (an Aeneas opaque type), in
 predates this job and no root theorem depends on it. Ruling: those two
 lemmas are not release-root material; any future root that imports them
 fails the axiom audit until the Formatter use is removed from the extraction.
+
+### Lead acceptance of the round and G-batch identities (2026-10-19); D72: `check_sound_gbat`
+
+Worker commits 3e68b5215, 2c86d92c9, c4d68034a, e4b80904f (branch
+codex/r1p-checker-rounds-20261019) are cherry-picked. The lead verified
+attempts 5655 (`check_sound_round`, da6644a2…) and 5661 (`check_sound_gbat`,
+89b82ff9…) on the host: SHAs match the repo, exit 0, 0 swaps, about 4.12 GB,
+standard axioms. c4d68034a was committed before compiling (host unreachable)
+and says so; e4b80904f records its compile.
+
+**D72.1 Result.** `R1Z.CertCheckSound.check_sound_gbat` is `check_sound''''`
+(D69) with hRound, hGRound, hGBat and hz discharged.
+- `CertRoundK`/`CertRoundIdent`: a Mathlib-only model of the Rust
+  `round_row`/`tail_row` loops (`srcRoundR`) and the symbolic identity
+  `z4c_srcTape` for every lane, row r ≠ 0 and limb, from the R0Z.PureRounds
+  closed forms.
+- `CertGBatK`/`CertGBatIdent`: `gbatP` models z9.rs `unit_functionals` for
+  the G lane; `gbat_cell` identifies every support cell of the batched image,
+  with weights tied to `weightsR1`/`w1` through `wtP_ident`/`w1P_ident`.
+- hz holds with no new premise: the OOD points are `Alimb zz` values, hence
+  in K₄.
+
+**D72.2 New named premises (replacing the identities).** `hRent`, `hGent`:
+each column entry of `pb.round`/`pb.ground` packs to the `srcRoundR` value.
+`hGBent`: each `pb.gbat` cell's eight limbs combine in `wb` to `gbatP`.
+`X18`/`hX18`: the stored first-line points at the opened folded positions (an
+input table, D59.2 ruling). `hfo`: every listed folded position is opened.
+These are statements about what the prover wrote, of the same kind as hRel
+before D66; they are discharged by extracted copies of the round and gbat
+column writers with Aeneas entry lemmas (the `fill_rel` pattern). That job is
+next on the checker track.
+
+**D72.3 Still open on the checker.** Decoder facts `hup` (sampler/transcript),
+`hnq`, `hrw` (pb construction); the builder-input premises inherited from
+`check_sound''''`. The six new modules need manifest entries before the
+final replay.
