@@ -640,3 +640,71 @@ is the row-local fact the writing stage guarantees.
        Still numerical, not proved: copy ↔ production for the permutation
        (diff-g: perm_rounds = production odd-round rows on 100k states and
        all 1,824 compiled blocks), as for the other writers (D54.3).
+
+§12  Sponge chaining and the witness-level copy builder (base dd4e78aa4; attempts 4411-4419)
+
+  12.1 Sponge chaining (R0Z/BuilderBlocksChain, 4412).  spongePre R h is the
+       Rust pre-state: sponge_init(domain, len) for the first block of each
+       sponge (owner 0x41530001/8 at 0; note 0x41530003/18 at 1, 27, 30;
+       nullifier 0x41530002/16 at 25) and, for a chained block, row 10 of the
+       copy's perm_rounds on the previous block's pre-state and absorption.
+       builder_blocks_model_chain: under BuilderChunkLifts (node children and
+       sponge chunks only; no pre-state, no RoundsOk) all 57 blocks of
+       RustWriterChain equal buildModel.
+  12.2 Canonicity (R0Z/PoseidonCanon, 4413).  Every row of the copy's
+       perm_rounds is < p (each lane is cast(x % p)); needed because a
+       computed digest can be a node's right child (node_pre adds the tweak
+       to lane 7 with one conditional subtraction).
+  12.3 Records and the named map (R0Z/BuilderWitness, 4415).
+       RustWitness: inputValue, outputValue, changeValue, sk, salt, bits[24],
+       sibs[24], pairFirst, pairOccupied, pairSecond, pairInverse,
+       recipientOwner/Salt, changeOwner/Salt (u32 words / [u32;8]).
+       RustPublic: variant, asset, nextPairIndex, frontier[20], empty[20].
+       toModel W : ModelWitness K, field by field: values x ↦ x mod 2^30 (the
+       identity under WitnessOk), digests ↦ liftU per lane, path l ↦
+       (bits[l] ≠ 0, liftU sibs[l]), pair fields ↦ liftU.  PubCorr P pub:
+       variant, liftU asset = assetId, nextPairIndex, frontier and empty
+       roots lift (and are canonical).  WitnessOk W: values < 2^30, bits
+       0/1, siblings canonical.  chunksOf W P: every sponge block's chunk and
+       length (sk; owner digest computed by the copy's block 0; note chunks
+       [value, asset, salt0..5] / [salt6, salt7]; nullifier sk, salt);
+       chunks_sabs proves the chunk premise.
+  12.4 Node children (R0Z/BuilderWitnessTree, 4417).  treeCurR (input leaf
+       = digest of block 3, then ordered(cur, sibs[l], bits[l]) through
+       nodeDigestR), outPairR (recipient/change digests of blocks 29/32, or
+       (change, 0)), appCurR (sibling frontier[l] or empty[l] by bit l of
+       nextPairIndex).  rustChunks W P = chunks + children;
+       rust_chunk_lifts: BuilderChunkLifts pub (toModel W) (rustChunks W P);
+       builder_witness_blocks: all 57 blocks from (W, P) equal buildModel.
+  12.5 Aux rows and the trace (R0Z/BuilderWitnessTrace, 4419).  The path
+       arrays (bits, current, left, right), the value triple and the two
+       occupancy records are computed; PathLifts, ValueLifts and both
+       OccLifts are theorems (rust_path_lifts, rust_value_lifts, rust_in_occ,
+       rust_out_occ).  The output inverse is the glue invR x = x^(p-2) mod p;
+       invR_lift: its lift is (liftU x)⁻¹, given the named premise
+       Nat.Prime 2147483647 (Fermat via ZMod.castHom; the prime fact is
+       proved by norm_num in AspisV8R15.ExactTowerBase, not in this object
+       tree).  copyCell W P c r assembles the 29 x 1024 trace (57 chained
+       blocks, path block rows 912..1007, aux block rows 1008..1023, columns
+       16..28 zero).  builder_witness_model: every component returns ok and
+       liftU (copyCell W P c r) = buildModel pub (toModel W) c r for all c, r.
+  12.6 What remains for build integration (the Wspend⁺ → ModelWitness map).
+       The theorem is stated from RustWitness / RustPublic.  Still to be
+       supplied from the production structs (pair_trace.rs
+       build_transfer_inner / build_withdrawal_inner, pair_forest_trace.rs):
+       - the record fields: values (outputValue = recipient.value for a
+         transfer, public.amount for a withdrawal), sk = nullifier_key, salt,
+         recipient/change owners and salts, the pair leaf's four fields;
+       - bits[24] and sibs[24]: level 0 = selected_second and the other pair
+         commitment; levels 1..20 = membership directions/siblings; levels
+         21..23 = super-root directions/siblings (pair_forest_trace.rs:229-240);
+       - RustPublic: asset id, next_pair_index, snapshot frontier, and
+         empty = pair_empty_roots() with its lift to emptyRootsNat (PubCorr.empty);
+       - WitnessOk / PubCorr range facts (values < VALUE_LIMIT = 2^30, bits
+         0/1, canonical digests), which the production types/checks give;
+       - Nat.Prime 2147483647 imported or re-proved in this tree.
+       Not proved here: that the Lean glue (block order, chunk words,
+       ordered(), invR, assembly) matches production control flow — it is
+       by inspection of pair_trace.rs and not differentially tested; the
+       stable/late bank merge (merge_model covers the merge function only);
+       the copy ↔ production link for each writer stays numerical (D54.3).
