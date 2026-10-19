@@ -1,0 +1,430 @@
+DESIGN: build integration of the R1 privacy Lean with the 100-bit soundness Lean
+==============================================================================
+
+Branch codex/r1-privacy-build-integration-20261019 (= origin/codex/100bit-spend-path-20261013
+359c0e421 + origin/v8-reference a0362116e, local merge ba830b237).  Status: proposal, written
+incrementally.  Tools: t2b2b/build-integration/*.py.txt (copied to the host as
+/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/*.py).
+
+§1  What exists today (measured on the host, 2026-10-19)
+§2  The finding that shapes everything: two bases under one set of module names
+§3  Target single build
+§4  Items (a)-(e) and the added item (f)
+§5  Order of work
+§6  Memory risks
+§7  Estimate
+§8  First joint builds done in this job (a, c)
+
+------------------------------------------------------------------------------------------
+§1  What exists today
+------------------------------------------------------------------------------------------
+
+Privacy.  Workspace T = aspis-fs-generic-20261006.  Sources under T/sources (R0, R0C, R0P,
+R0FS, FS, FS2, R0Z, R1Z, R1Mirror, R1, and root-named R1* files of other jobs); objects in
+T/objects2, compiled one module at a time by run2.sh/run2-par.sh (raw `lean -o`, no lake
+traces).  LEAN_PATH = objects2 : AspisFormal consolidation packages (Mathlib 81a5d257,
+batteries 023ce7d6, ...) : AspisFormal build : Lean 4.32.0 core.  objects2 symlinks
+Wide -> aspis-wide-replay objects, AspisV8R19 -> aspis-r126-release lib, and
+Aeneas/AeneasMeta -> the UNPORTED aeneas-full b59d5188 build (only Aeneas.Std and its
+closure have oleans there; the `Aeneas` root does not build unpatched, D54.2).
+
+Soundness (spend path).  There is no single workspace.  Each accepted target is compiled in
+its own pinned overlay: a symlink tree (import-overlay) whose journal records, per module,
+the resolved olean, its sha256 and the source sha256 (e.g. evidence/qm31-index-sampler-
+correct-432-20261016: 5,592 olean links for ExtractedQM31SamplerCorrect).  The overlays draw
+on a family of host object directories (aspis-r1-concrete-decoder-20261013/objects for the
+opening layer, aspis-r1-j17-port-20261015/{backend,bridge,extracted}/objects, the r18 sampler
+dirs, /tmp/aspis-mask432-* overlays, the G3 union).  Mathlib and the other lake packages are
+the SAME files as the privacy side (AspisFormal consolidation packages; manifests identical).
+Aeneas is the 4.32 PORT (aspis-r1-j17-port-20261015/backend, 237 modules incl. `Aeneas`).
+
+------------------------------------------------------------------------------------------
+§2  The finding: two bases under one set of module names
+------------------------------------------------------------------------------------------
+
+Lean loads one olean per module name (first hit on LEAN_PATH) and does not re-check an
+imported olean against the oleans its dependents were compiled with.  A joint module whose
+import closure takes module X from one side while a dependent of X was compiled against the
+other side's X is incoherent, even if it elaborates.  The check used here
+(build-integration/closure.py + coherence.py): resolve the closure under the joint path and
+under each side's compile-time path, and require identical olean bytes for every module that
+is not rebuilt in the joint directory.
+
+Measured:
+* R1Z.Sem1UniformR1 (privacy, 304 user modules) against ExtractedQM31SamplerCorrect (spend,
+  pinned journal correct-c): 28 shared user module names, 23 with different oleans.  Six differ
+  in SOURCE: AspisFormal.CircleGroupOrder (privacy pinned-v7 `import Mathlib`; spend 70b2727f
+  narrowed imports), FS.LemmaA and FS.Theorem (spend adds Mathlib.Tactic.Linarith /
+  Mathlib.Logic.Equiv.Fin.Basic), R0C.ModuloCounting and R0C.ModuloField (spend adds explicit
+  imports incl. AspisFormal.CircleGroupOrder), WideTower (spend imports AspisV8R15.ExactTower*
+  instead of AspisFormal.V5ComponentCQM31TowerExact).  The other 17 (FS.Statement, R0C.Counting,
+  thirteen AspisV8R19.*, ...) have identical sources and differ only because they were rebuilt
+  on the narrowed base.
+* R1Z.BatchedAlgebra with the mirror replaced by the spend-path originals (R1FoldCoefficientBridge
+  etc. from aspis-r1-concrete-decoder-20261013/objects), plus its three dependents: closure 260
+  user modules, 108 conflicts (Wide.*, R0P.*, R0C.*, R0FS.*, FS2.*: the opening-layer objects
+  were compiled on that workspace's rebuilt copies).  Rebuilding the privacy side on the spend
+  base would need 100 modules recompiled (44 Wide, 19 R0Z, 12 R0P, 10 FS2, ...).
+* The spend side is itself a forest of per-target coherent overlays, not one base:
+  AspisFormal.CircleGroupOrder is 070c1d46.. in the sampler overlay and 05c7d259.. in the G3
+  union; privacy has 39ea3fa6...
+
+So "replace R1Mirror by direct imports" cannot mean "load the spend path's existing oleans
+next to the privacy oleans": the bases differ under the same names.  The single build must
+compile every module once, from one source per module name, on one base.
+
+------------------------------------------------------------------------------------------
+§3  Target single build
+------------------------------------------------------------------------------------------
+
+Workspace.  A new host workspace J = /home/dombarker/project-offloads/aspis-joint-<date> with
+one sources tree, one objects dir, and one LEAN_PATH:
+    J/objects : AspisFormal consolidation packages (Mathlib 81a5d257 ...) :
+    aspis-r1-j17-port-20261015/backend/.lake/build/lib/lean (the ported Aeneas, read-only) :
+    Lean 4.32.0 core.
+Nothing else: no objects2, no per-target overlays, no /tmp dirs.  A lakefile.toml is kept for
+documentation and for `lake env`, but compilation is the existing per-module runner
+(`lean -j1 -M7000 -o`, systemd scope MemoryHigh 5G / MemoryMax 7G / MemorySwapMax 0, slot
+locks), driven in topological order by a manifest; a cold `lake build` is not used (AGENTS.md
+resource rule 1).
+
+Sources.  J/sources is generated from ONE repo revision by a manifest script (to be written,
+build-integration/joint-manifest.py): spend-path docs/research/100bit-spend-path-20261013/lean
+(module name from each file's import usage, e.g. NaturalProjection.lean -> R1NaturalProjection,
+as the spend runners already map them), the pinned base libraries (AspisV8R19, AspisV8R15,
+AspisFormal subset, Wide, WideTower, R0C, R0P, FS, FS2, R0, R0FS), the v8-r1 R1/* files, and
+privacy R0Z/* and R1Z/*.  One source per module name.  Where the two sides carry different
+sources for one name (the six of §2, and any found later), the spend version is selected:
+the differences found are import narrowing, the spend path is frozen, and narrowing lowers
+the import baseline.  Privacy files that relied on the wider imports get explicit imports
+(privacy-side edits only, each listed in the manifest).  The manifest has a --check mode
+(AGENTS.md preflight): every module name has exactly one source; every import resolves inside
+the manifest or to Mathlib/Aeneas/Lean; no R1Mirror.* module is present.
+
+Roots and namespaces.  Module roots: the spend release roots (as listed by the spend path's
+accepted targets), R1Z.PrivacyR1P / R1Z.PrivacyGamesSamplerR1 / R0Z.BuilderWitnessMerged on
+the privacy side, and one joint root R1J.Integration that imports both and states the
+combined facts ((c), (d), (e)).  Namespaces are already disjoint (AspisR1.*, AspisV8R19.*,
+R0Z.*, R1Z.*); the one known clash, AspisR1.childIndex vs AspisV5ComponentCConcreteFoldLinearity
+.childIndex, is two different constants bridged by rfl (BatchedAlgebra.childIndex_bridge).
+Duplicate declarations, if any, show up as import errors at R1J.Integration.
+
+------------------------------------------------------------------------------------------
+§4  The integration items
+------------------------------------------------------------------------------------------
+
+(f) [added; precondition for all others]  One base.  The 23+108 conflicts of §2 are resolved
+    only by compiling the base libraries once in J (spend sources where they differ) and
+    every privacy module on top.  Until J exists, a joint module is coherent only if its
+    closure avoids every conflicting name, which in practice means: either a statement-only
+    interface module with a Mathlib-only closure (used for (c) below), or a joint overlay
+    whose rebuilt set is computed by build-integration/rebuildset.py and compiled in order.
+
+(a) R1Mirror.  The only importer is R1Z/BatchedAlgebra (imports R1Mirror.FoldCoefficientBridge
+    and R1Mirror.BaseRepeatedLift).  Its imports become `import R1FoldCoefficientBridge` and
+    `import R1.RepeatedLift` (done on this branch; BatchedAlgebra source sha 3e36c4d3..).
+    The closure needs the spend-path files NaturalProjection, RoundPairing, FirstFold and
+    FoldCoefficientBridge (sources unchanged since the mirror, checked against
+    origin/codex/100bit-spend-path-20261013), and the v8-r1 base R1/RepeatedLift (namespace
+    AspisR1.RepeatedLift; a different file from the spend path's R1RepeatedLift, namespace
+    AspisR1).  R1Mirror/* leaves the build.  Line18Geometry, ConcreteProjection and
+    SecondFoldRestoration are not needed by privacy (D30.4 flag): BatchedAlgebra re-proves
+    the three nonvanishing facts.  Line18Geometry's `maxRecDepth 20000` stays a spend-path
+    file property, outside privacy modules.
+    Dependents to rebuild with it: R1Z.Batched, R1Z.RfLine, R1Z.VerifierRelationsR1 and
+    everything above Batched (the R1 privacy chain).  On the privacy base this is a plain
+    recompile; in J it is part of the full privacy rebuild.
+
+(b) Aeneas.  J uses only the spend path's ported Aeneas (backend, 4.32 port of b59d5188 with
+    nine patched files: Data/Array, Data/Vector, ReduceZMod, BvTac, Step, StepArraySpec,
+    StepStar, BvEnumToBitVec, Simp).  The privacy extracted files keep the D54.2 substitution
+    (`import Aeneas.Std` + `import Aeneas.Tactic.RustAttributes`; both modules exist in the
+    port) or return to `import Aeneas`, which the port builds.  The six privacy modules that
+    import Aeneas: R0Z/{WritersExtracted, BlockWritersExtracted, PoseidonExtracted,
+    WriterRefineOcc (ScalarTac)}, R1Z/{CertCheckExtracted, CertBuildExtracted}; their proofs
+    that use step/scalar_tac/bv_tac may need local repair because the patched tactics differ.
+    Measured: Aeneas.Std olean 09db735b (unported, privacy) vs 5bb081b6 (port); Primitives,
+    Scalar, Array, RustAttributes all differ.  Two Aeneas trees cannot be on one LEAN_PATH.
+
+(c) SemRows01 / QM31SamplerLaw.  QM31SamplerLaw is a property of s1 alone and follows from
+    the spend sampler: s1 := ι ∘ decode ∘ toCurrent ∘ (the sampler output of
+    ExtractedQM31SamplerCorrect.sample_total) ∘ toArr, with toArr : (Fin 32 → UInt8) ≃
+    Array U8 32#usize and ι : QM31Exact → K injective (the QM31 ↔ K transport; a ring
+    embedding in use).  rank := SourceSamplerByteRank.rank ∘ toArr as an Equiv onto
+    Fin 2^256; emb n := ι (decode (toCurrent (digits of n))) with injectivity below p⁴ from
+    the digit canonicality and decode injectivity (decode_eq_iff content); sample from
+    sample_total + qm31Digits depending only on x mod p⁴.  Statement surface: a
+    statement-only interface module R1Z.SamplerLawIface (Mathlib-only closure, so its olean
+    is valid on both bases) holding the four fields; Sem1UniformR1.QM31SamplerLaw is built
+    from it field by field.  SemRows01 is NOT a consequence of the sampler theorems: it says
+    the wire's decoder W.dec reads χ = sem 1 from row 1 by s1 and λ = sem 0 not from row 1.
+    It needs the concrete R1Wire (W.dec from the spend path's semantic decoder) and belongs
+    with (d).
+(d) Rspend/Wspend.  Rspend (SpendRelation.lean:41) and Wspend map to RustWitness/RustPublic/
+    ModelWitness (DESIGN-BUILDER-MODEL §12.6), following glue.rs `records`; Rspend⁺ :=
+    Rspend ∧ (transfer → change[7] ≠ 0) (D50).  The map is a joint-root definition in
+    R1J.Integration with PubCorr and WitnessOk as theorems from Rspend⁺'s range facts.  It
+    needs SpendRelation (spend) and BuilderWitnessMerged (privacy, Aeneas) in one closure:
+    after (f) and (b).
+(e) line_identity.  R1Z/BatchedAlgebra.line_identity / line_layer_identity give, for every
+    message m and α₁, line fold of the four stored children = second encoder of the
+    α₁-folded message.  On the soundness side this is the honest-data form of match1
+    (MatchingSupport: curveValue (channels V) α₁ (parentIndex i) = secondEncoder f
+    (parentIndex i)).  The exact consumer premise (cited in the merge note as
+    R1QueryResidualBridge) is to be named by the soundness lead; the bridge lemma lives in
+    R1J.Integration once BatchedAlgebra and R1QueryResidualBridge share the base (after f).
+    The R1Mirror replacement (a) is what makes the constants identical: both sides then
+    talk about the same AspisR1.* declarations.
+
+------------------------------------------------------------------------------------------
+§5  Order of work
+------------------------------------------------------------------------------------------
+
+ 1. Done here: (a) on the privacy base, the (c) producer on the spend base, the (c) consumer
+    bridge on the privacy base (§8).  Coherence tooling.
+ 2. joint-manifest.py with --check: enumerate the spend release roots (from the soundness
+    lead) and the privacy roots; resolve one source per module name; report every name with
+    two sources (expected: the six of §2 plus whatever the full closures add) and every
+    module that imports all of Mathlib.  No compile.
+ 3. Base libraries in J (AspisFormal subset, AspisV8R15/R17/R19, Wide, WideTower, R0C, FS),
+    spend versions, in topological order; then the spend opening layer and sampler stack.
+    Each target compiled once; spend receipts can be compared object-for-object where the
+    spend path used the same base (where it did not, the J object is the new one of record).
+ 4. Privacy non-Aeneas modules (R0, R0P, R0FS, FS2, R1, R0Z, R1Z minus the six Aeneas ones),
+    in topological order, fixing missing imports in privacy files only.
+ 5. (b): the six Aeneas-importing privacy modules on the port; local proof repair.
+ 6. R1J.Integration: SamplerLawSpend + SamplerLawBridge in one closure (closes the
+    QM31SamplerLaw premise of privacy_R1_games_sampler for s1 := s1Spend ι), the (e) bridge,
+    then (d) with SemRows01 from the concrete wire.
+ 7. One axioms audit at R1J.Integration, then one full manifest replay of J (AGENTS.md cadence).
+
+------------------------------------------------------------------------------------------
+§6  Memory risks
+------------------------------------------------------------------------------------------
+
+* Privacy modules peak 6.65-6.95 GB under -M7000 / MemoryMax 7G (this job: Batched 6.95 GB,
+  VerifierRelationsR1 6.80, RfLine 6.75, BatchedAlgebra 6.71, FirstFold 6.69 on the privacy
+  base).  The peak is almost all import baseline: 29 modules in the privacy closure
+  `import Mathlib` whole (24 AspisFormal ones, incl. the pinned-v7 CircleGroupOrder that most
+  of the tree imports, and R0P.MessageDescent, R0Z.GoodDensity, R0Z.HermiteSpan,
+  R0Z.KernelImage, R0Z.StatisticalDistance).  The same spend-path-sampler-base compile of
+  SamplerLawSpend peaked at 3.85 GB.  In J the narrowed spend base lowers the baseline only
+  where no closure module still imports all of Mathlib; step 2 lists them, and narrowing the
+  five privacy ones is a privacy-side edit.  Until then any privacy module that adds real
+  elaboration work over the baseline is at risk of the 7 GB cap (BatchedAlgebra 3627 failed
+  at 7.17 GB in D33).  Caps are not raised; a module that crosses is split or its imports
+  narrowed (AGENTS.md resource rule 5).
+* Four slots × 7 GiB = 28 GiB, inside the run2 reservation check (55 GiB populated cap).
+* No `lake build` of the cold tree (resource rule 1): per-module compile only.
+* Aeneas-importing privacy modules (step 5) and the Poseidon/certificate modules have the
+  largest proof terms; they are compiled one at a time with the slot count reduced if two
+  such modules would overlap.
+* Pre-existing hazard found by the closure tool in the privacy workspace: six mtime
+  inversions (e.g. R0P.CoreExt is 53,306 s newer than its dependent R0P.Copy).  objects2 has
+  dependents compiled before a later recompile of their dependency; J's single topological
+  build removes this class of hazard.
+
+------------------------------------------------------------------------------------------
+§7  Estimate
+------------------------------------------------------------------------------------------
+
+Privacy closure of all R0Z/R1Z modules: 432 user modules (R0Z 95, R1Z 75, AspisFormal 63,
+Wide 51, R0P 48, AspisV8R19 25+, R0C 23, R0 21, FS2 11, ...).  Of these about 255 are
+privacy-only (R0Z, R1Z, R0P, R0, R0FS, FS2, R1); the rest are base modules J builds once
+for both sides.  Observed privacy compile times are 3-60 s each, so the privacy share of J is
+about 2-4 h of host time serial, under 1.5 h on four slots, plus repair iterations (one
+attempt each for import fixes; the Aeneas six may need several).  The spend share depends on
+the closure of the release roots (the lean/ tree has 1,544 files, not all of them roots'
+dependencies); at the observed 2-60 s per module it is 5-20 h serial.  Attempt numbers: the
+privacy share needs ~300 attempts, beyond the 4520-4599 range.  Calendar: steps 2-5 are two
+to three night windows; step 6 one more session after the soundness lead names the roots and
+the (e) consumer premise.
+
+------------------------------------------------------------------------------------------
+§8  First joint builds (host attempts 4520-4529, 2026-10-19 in-window, slot 1)
+------------------------------------------------------------------------------------------
+
+Evidence: build-integration/attempts-4520.json (per attempt: module, env, source sha256,
+exit, wall, peak RSS, swaps, #print axioms lines) and build-integration/coherence-20261019.json
+(closures, conflict lists, rebuild set).  Launchers: privacy-only modules by $T/run2-par.sh;
+modules that need a joint LEAN_PATH by build-integration/run-joint.sh.txt (host copy
+H/tools/run-joint.sh, H = /home/dombarker/project-offloads/r1-privacy-build-integration-
+20261019): run2-par.sh with the objects dir and LEAN_PATH taken from a named environment,
+same caps, same slot locks, same run2.py, refuses a (sha, env) pair already sent.
+
+(a) Environment A = privacy base with H/objects-A first.  Compiled, in order: R1FirstFold
+    (4523) and R1FoldCoefficientBridge (4524) from the spend-path sources byte for byte
+    (674a9e12.., 048c725e..; R1NaturalProjection and R1RoundPairing were already in objects2
+    from identical sources), R1Z.BatchedAlgebra with direct imports (4525, 3e36c4d3..),
+    R1Z.Batched (4526), R1Z.RfLine (4527), R1Z.VerifierRelationsR1 (4528), the last three
+    from unchanged sources against the new BatchedAlgebra.  All exit 0, standard axioms only,
+    peaks 6.65-6.95 GB.  Coherence: closure 266 modules, 6 rebuilt, 0 conflicts, no R1Mirror
+    module in the closure.  `line_identity` and `line_layer_identity` are now stated over the
+    spend-path's own AspisR1.* constants, not the mirror's.  What this is not: the spend
+    path's existing R1FirstFold/R1FoldCoefficientBridge objects (built on the
+    concrete-decoder base) are not loaded; on that base the same four targets would need 100
+    privacy modules rebuilt (§2).
+(c) R1Z.SamplerLawIface (4521; 4520 failed on `ℕ` without Mathlib notation, source changed):
+    Mathlib.Logic.Equiv.Defs only, 0.99 GB.  R1J.SamplerLawSpend (4522) in environment C =
+    the pinned correct-c overlay of ExtractedQM31SamplerCorrect (5,592 oleans re-verified by
+    sha256) with H/objects-C first (holding only the iface object): exit 0, 2.8 s, 3.85 GB,
+    standard axioms for arrEquiv, rankE_val, s1Spend_ok, lowDigits_mod, digitsQ_inj,
+    digitsQ_mod, decode_sample, emb_inj, sample, qm31SamplerLaw_spend.  Proved:
+      qm31SamplerLaw_spend (ι : QM31Exact → K) (hι : Injective ι) :
+        SamplerLawIface.QM31SamplerLaw (s1Spend ι)
+    where s1Spend ι a is the extracted qm31_sample on arrEquiv a, read by decode ∘ toCurrent,
+    then ι; rank is SourceSamplerByteRank.rank ∘ arrEquiv as an Equiv onto Fin 2^256.  The
+    only premise is ι injective.  R1Z.SamplerLawBridge.toSem1 (4529, privacy base, 6.75 GB,
+    [propext, Quot.sound]) turns the interface law into Sem1UniformR1.QM31SamplerLaw.
+    What is open: SamplerLawSpend and SamplerLawBridge are on different bases and are not yet
+    in one closure (needs §4 (f)); SemRows01 is not addressed (§4 (c)).
+
+------------------------------------------------------------------------------------------
+§9  Unified base (f) — execution log (LOG D63, attempts 5000-5299)
+------------------------------------------------------------------------------------------
+
+Repo base: this branch after merging origin/v8-reference 66bca8914 and
+origin/codex/100bit-spend-path-20261013 f05b0e63e (ef32703b5; tools at f82a8aa22).
+Finding while writing the manifest: the repo already holds the spend path's narrowed base
+sources (AspisFormal/AspisFormal/CircleGroupOrder 70b2727f, v8-fs-generic FS/LemmaA and
+FS/Theorem, v8-r0-close R0C/ModuloField and ModuloCounting, v8-wide-reference WideTower all
+match the spend pins); the privacy host's T/sources copies are older.  So "one repo revision"
+and "spend copy where the sides differ" coincide: J/sources is generated from the repo only
+(build-integration/joint-manifest.py.txt; root priority spend lean > base research trees >
+privacy trees; R1Mirror excluded).
+
+J = /home/dombarker/project-offloads/aspis-joint-20261019 (sources, objects, evidence).
+LEAN_PATH (H/env/J.json): J/objects : AspisFormal consolidation packages (Cli, batteries, Qq,
+aesop, proofwidgets, importGraph, LeanSearchClient, plausible, mathlib) : the Aeneas 4.32
+port backend lib (its .lake/packages are symlinks to the same AspisFormal packages) : Lean
+core.  No AspisFormal build dir, no objects2, no overlays.  Library check: all 99 library
+modules of manifest 1 found; no user module shadowed by a library dir.
+
+Manifest 1 (build-integration/manifest-privacy-1.json): roots R1Z.PrivacyGamesSamplerR1,
+R1Z.PrivacyR1P, R0Z.BuilderWitnessMerged, R1Z.CertCheckSound3; 402 modules (8 spend, 237
+base, 157 privacy); --check clean.  Four names have two repo sources and take the spend copy:
+AspisFormal.V6PublishedTheoremInterfaces, R0P.LogUpChain, R0P.LogUpAssembly, R0P.SemRounds.
+Two modules import all of Mathlib: R0Z.GoodDensity, R0Z.StatisticalDistance.
+Spend roots (dry run, not built yet): 920 modules in all; problems: R1FunctionalBatchClean,
+R1SubfieldBatchStage2 and AspisR1Qm31ArithmeticProbe.Funs have no repo source; SpendRelation,
+SpendAppendBinding and TraceAppend are each imported under two module names (X and R1X) —
+one file, two modules, a duplicate-declaration hazard in one closure.  Three spend-vs-spend
+name collisions (R1SelectedTranscriptParams, R1UnifiedSampler, R1SelectedChallengeMap: a
+file named R1X.lean and a file X.lean aliased to R1X).  These go to the soundness lead.
+
+Budget: manifest 1 alone needs 402 attempts; the range 5000-5299 has 300.
+
+Manifest 1 result (2026-10-19 03:38-04:02 London, all in-window, one job at a time, slot 1):
+403 attempts, 5000-5402; all 402 modules green; 0 swaps; peak 7,177,656 KiB
+(R1Z.CertLiftIdent4; the Cert* modules sit at 7.17 GB as on the old base, the rest 1.8-6.8 GB,
+AspisFormal/AspisV8R19/FS base modules 1.8-2.7 GB).  One stop: 5068
+AspisV8R19.R443BoundedRejectionMass, `field_simp` unknown tactic (the narrowed base no longer
+brings all of Mathlib); repaired by an import-only change (`import Mathlib.Tactic.FieldSimp`,
+base tree v8-full-view-zk-20260912), recompiled green at 5069 with the new sha.  No other
+source edits.  Axioms over all 403 logs (multi-line parse): propext, Classical.choice,
+Quot.sound only, except the error-induced sorryAx in failed attempt 5068.  Root theorems on
+the unified base: builder_witness_merged (5283), check_sound'' (5387), privacy_R1_games (5398),
+privacy_R1_games_sampler (5401), privacy_R1_games' (5402): [propext, Classical.choice,
+Quot.sound].  Evidence: joint-attempts-5000-5402.jsonl (per attempt: gate (London time,
+window flag, other lean/aeneas/cargo processes), source sha, exit, wall, peak RSS, swaps,
+axioms, errors; note the jsonl axiom field misses names containing an apostrophe, the raw
+$T/evidence/out-<A>.log is authoritative), joint-sha-5000-5402.txt, joint-objects-manifest1.sha256.
+Window: launcher and driver changed from 06:00 to 10:00 London (user extension, 2026-10-19);
+the build itself finished at 04:02, inside both.
+
+------------------------------------------------------------------------------------------
+§10  Manifest 2 ((c) end to end) and (d) — after LOG D65
+------------------------------------------------------------------------------------------
+
+10.1 Composition module (written, not yet compiled): R1J/PrivacySamplerSpend.lean.
+  samplerLaw_of_spend W D ι hι (hD : D.s1 = s1Spend ι) : QM31SamplerLaw D.s1
+    := toSem1 (qm31SamplerLaw_spend ι hι), transported along hD;
+  privacy_R1_games_spendSampler: privacy_R1_games_sampler with L replaced by
+    (ι : QM31Exact → K) (hι : Injective ι) (hD : D.s1 = s1Spend ι).
+  Repo revision for manifest 2: this branch at 63bd33c95 (manifest-1 sources unchanged; the newer
+  v8-reference Cert* work, f9bb4992a, is NOT merged, so the 402 green objects stay valid).
+
+10.2 Manifest 2 = manifest-1 roots + R1J.PrivacySamplerSpend: 452 modules (43 spend, 248 base,
+  161 privacy), 4 known spend-over-base selections, no X/R1X duplicate (no
+  one-file-two-modules), no cycle.  --check FAILS on one problem:
+    unresolved AspisR1Qm31ArithmeticProbe.Funs (and, behind it, .Types)
+  imported by ExtractedCurrentM31AddSub and ExtractedCurrentReducerOps, i.e. by the current-QM31
+  carrier that ExtractedQM31SamplerCorrect needs (Carrier → Equality → Tower → ...).  It is one
+  of the three missing sources the lead holds as a soundness-side decision, so manifest 2 is NOT
+  built.  Facts for that decision: the only repo copies are under evidence/,
+    100bit-spend-path-20261013/evidence/current-qm31-arithmetic-20261015/
+      extraction/attempt-a/generated/AspisR1Qm31ArithmeticProbe/{Funs,Types}.lean and
+      proof-sources/AspisR1Qm31ArithmeticProbe.{Funs,Types}.lean
+  (Funs 114552b8.., Types c5a08408.., identical in both places), and these are byte-identical to
+  the host source the spend path compiled (aspis-r1-j17-port-20261015/extracted/sources) and to
+  the source_lean_sha256 pinned in the accepted ExtractedQM31SamplerCorrect journal (correct-c).
+  Proposed resolution (needs the decision): promote those two files to a non-evidence lean root
+  (e.g. 100bit-spend-path-20261013/lean/extracted-qm31-arithmetic-20261015/AspisR1Qm31ArithmeticProbe/,
+  the layout already used for extracted-qm31-index-sampler-20261016), unchanged bytes.  The
+  manifest then resolves it with no other change; expected new compiles ≈ 50.
+
+10.3 (d) SemRows01 from the spend path's r1_wire extraction — search result.
+  SemRows01 W is not stated for any wire, and cannot be from spend modules alone: privacy's
+  R1Wire is abstract (GamesR1.R1Wire, dec a field), and no concrete R1Wire is defined anywhere.
+  The spend path proves the three facts a concrete W_spend needs (all already-proved modules):
+  * BeginCalls.begin_success (ExtractedDigest32Begin): an accepting r1_wire `begin` runs the
+    fifteen semantic rows 0..14 in order, and its outputs are exactly those calls' results:
+    challengeList out = λ :: χ :: θ :: zc ++ [μ, η], so λ = row-0 result, χ = row-1 result;
+  * CallerStep.semantic_step_success (ExtractedDigest32Callers): each row's result q satisfies
+    sampler.qm31_sample block = ok q, block = D.digest hash (readParts absorbed 1#u8), absorbed =
+    D.digest hash (absorbParts state tag record.framed) — the row's squeeze answer, with the
+    record entering through the absorb (the address), not through the answer;
+  * SamplerTransport.sample_toOld_success (ExtractedDigest32SamplerTransport): the r1_wire
+    extraction's sampler.qm31_sample equals the index extraction's under toOld — so the row-1
+    map is s1Spend's sampler.
+  Proposed joint statements (R1J, new joint module, not a spend module):
+    def decSpend (ι) : (Fin 27 → OracleAnswer) → ... → Challenges K  -- sem i := s1Spend ι (a i)
+                                                                   -- for the 15 begin rows, ...
+    theorem semRows01_spend (W) (hW : W.dec = decSpend ι ...) : SemRows01 W  -- s1 := s1Spend ι
+      (sem1 by construction; sem0 because λ reads a 0 only)
+    theorem begin_refines_decSpend : begin D pre self = ok (.Ok out, after) →
+      toK (out.chi) = decSpend ι (rowAnswers ...) .sem 1 ∧ toK out.lambda = ... .sem 0
+      -- from the three facts above; rowAnswers i := the row-i squeeze block as OracleAnswer
+      -- (arrEquiv.symm), the ROM view privacy already uses.
+  The modelling decision (privacy treats each row's 32-byte squeeze block as the oracle answer;
+  the spend run computes it as D.digest of readParts) is exactly R-wire; it belongs to (d).
+
+10.4 (d) Rspend⁺ → RustWitness / RustPublic / ModelWitness, statement level (§12.6).
+  Types (read from the sources): SpendRelation.Witness K (Fin 2^30 values, R0P.Digest K = Fin 8 →
+  K keys/salts, path : Fin 24 → Bool × Digest K, pair : PairLeaf K {firstCommitment,
+  secondOccupied, secondCommitment, secondOccupancyInverse}, owners/salts); Wspend = Witness
+  M31Exact; R0P.Public K; privacy RustWitness (U32 words, Array U32 8 digests, bits/sibs 24),
+  RustPublic {variant, asset, nextPairIndex, frontier[20], empty[20]}, ModelWitness K
+  (= Witness with the pair leaf unfolded), toModel, PubCorr, WitnessOk.
+  Definitions (joint module R1J.SpendWitnessMap):
+    w32 (x : M31Exact) : U32 := ⟨x.val⟩            -- canonical word, x.val < p < 2^32
+    d32 (d : Digest M31Exact) : Array U32 8#usize := arr8 (fun i => w32 (d i))
+    toRust (w : Wspend) : RustWitness :=
+      { inputValue/outputValue/changeValue := word of the Fin 2^30 value,
+        sk := d32 w.sk, salt := d32 w.salt,
+        bits := fun l => if (w.path l).1 then 1 else 0, sibs := fun l => d32 (w.path l).2,
+        pairFirst := d32 w.pair.firstCommitment, pairOccupied := w32 w.pair.secondOccupied,
+        pairSecond := d32 w.pair.secondCommitment, pairInverse := w32 w.pair.secondOccupancyInverse,
+        recipient/change owners and salts := d32 ... }
+      -- levels 0 / 1..20 / 21..23 are already the meaning of path l in Witness (pair level,
+      -- membership, super-root), matching glue.rs `records`; to be checked field by field
+      -- against `records`, not re-derived.
+    toRustPub (pub : R0P.Public M31Exact) : RustPublic :=
+      { variant, asset := w32 pub.assetId, nextPairIndex, frontier := d32 ∘ snapshotFrontier,
+        empty := the pair_empty_roots table as words (emptyRootsNat) }
+    ι := ZMod.castHom (dvd_refl p) K : M31Exact →+* K   (K with CharP K p, as builder_witness_merged)
+  Theorems:
+    T1 toModel_toRust (w) : toModel (K := K) (toRust w) = (w.map ι)            [pure, no premise]
+    T2 witnessOk_toRust (w) : WitnessOk (toRust w)            [Fin bounds, bits by construction,
+                                                                 ZMod.val_lt for Canon8]
+    T3 pubCorr_toRustPub (pub) : PubCorr (toRustPub pub) (pub.map ι)
+         -- needs: emptyRootK lifts the table (definitional), Canon8 of frontier (ZMod.val_lt)
+    T4 builder_witness_spend (pub w) (h : Rspend⁺ pub w) : every cell of
+         copyCellMerged (toRust w) (toRustPub pub) lifts to buildModel (pub.map ι) (w.map ι)
+         -- builder_witness_merged ∘ T1-T3; h is used by the privacy builder premise, not here
+  Rspend⁺ := Rspend pub w ∧ (pub.variant = .privateTransfer → pub.change 7 ≠ 0)  (D50).
+  Closure: SpendRelation (spend) + BuilderWitnessMerged (privacy, Aeneas port) — both in the
+  unified base once the spend roots' decisions (X/R1X: SpendRelation is imported as both
+  SpendRelation and R1SpendRelation) are taken; T1-T3 need only R0Z.BuilderWitness and
+  AspisFormal Pool, so they can be compiled before the spend decision if the map is stated on
+  Witness-shaped records (ModelWitness) rather than SpendRelation.Witness itself.

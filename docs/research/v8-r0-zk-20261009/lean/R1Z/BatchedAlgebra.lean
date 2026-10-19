@@ -1,5 +1,5 @@
-import R1Mirror.FoldCoefficientBridge
-import R1Mirror.BaseRepeatedLift
+import R1FoldCoefficientBridge
+import R1.RepeatedLift
 
 /-! J4-R1(a): payload-free algebra of the R1 batched opening block
 (DESIGN-R1-PRIVACY-MODEL §4, LOG D30).
