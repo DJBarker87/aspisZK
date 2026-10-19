@@ -149,12 +149,11 @@ fn convert(p: &Pub, c: &Cert, ln: &Lanes) -> Option<(ck::Pub, ck::Cert)> {
     }
     let u = flat(&c.bc_u, q)?;
     let e = matmul(&u, &rel, r, bwr, q);
+    // lst = pivots ++ free columns; tag = its inverse (tag[lst[x]] = x).
+    let lst: Vec<u32> = c.bc_piv.iter().chain(c.bc_fr.iter()).copied().collect();
     let mut tag = vec![u32::MAX; bwr];
-    for (a, &pc) in c.bc_piv.iter().enumerate() {
-        *tag.get_mut(pc as usize)? = 2 * a as u32;
-    }
-    for (f, &fc) in c.bc_fr.iter().enumerate() {
-        *tag.get_mut(fc as usize)? = 2 * f as u32 + 1;
+    for (x, &col) in lst.iter().enumerate() {
+        *tag.get_mut(col as usize)? = x as u32;
     }
     if c.bc_g.lane != 10 {
         return None;
@@ -188,8 +187,8 @@ fn convert(p: &Pub, c: &Cert, ln: &Lanes) -> Option<(ck::Pub, ck::Cert)> {
         for t in 0..bwr {
             nm[f * bwr + t] = if t == fc as usize {
                 1
-            } else if tag[t] != u32::MAX && tag[t] % 2 == 0 {
-                negm(e[(tag[t] / 2) as usize * bwr + fc as usize])
+            } else if (tag[t] as usize) < r {
+                negm(e[tag[t] as usize * bwr + fc as usize])
             } else {
                 0
             };
@@ -227,7 +226,6 @@ fn convert(p: &Pub, c: &Cert, ln: &Lanes) -> Option<(ck::Pub, ck::Cert)> {
         a9: ql(p.a[9]).to_vec(),
         rw: RW as u32,
         bw: bwr as u32,
-        nsrc: nsrc as u32,
         lane: fq.srcs.iter().map(|z| z.0).collect(),
         wl: (0..LANES).map(|li| own_width(li) as u32).collect(),
         os: OS as u32,
@@ -236,7 +234,6 @@ fn convert(p: &Pub, c: &Cert, ln: &Lanes) -> Option<(ck::Pub, ck::Cert)> {
         tq,
         q: q as u32,
         rel,
-        ngs: ngs as u32,
         gw: OS as u32,
         glane: vec![0; ngs],
         gwl: vec![own_width(10) as u32],
@@ -263,8 +260,7 @@ fn convert(p: &Pub, c: &Cert, ln: &Lanes) -> Option<(ck::Pub, ck::Cert)> {
         k: k as u32,
         u,
         e,
-        piv: c.bc_piv.clone(),
-        fr: c.bc_fr.clone(),
+        lst,
         tag,
         mg: mg as u32,
         gej: fg.ej,
@@ -335,13 +331,13 @@ pub(super) fn run(p: &Pub, cert: &Cert, label: &str, teeth: bool) {
     let cl = |c: &ck::Cert| ck::Cert {
         hinv: c.hinv.clone(), m: c.m, ej: c.ej.clone(), es: c.es.clone(), epo: c.epo.clone(), eco: c.eco.clone(),
         pidx: c.pidx.clone(), coef: c.coef.clone(), rho: c.rho.clone(), y: c.y.clone(), r: c.r, k: c.k, u: c.u.clone(),
-        e: c.e.clone(), piv: c.piv.clone(), fr: c.fr.clone(), tag: c.tag.clone(), mg: c.mg, gej: c.gej.clone(),
+        e: c.e.clone(), lst: c.lst.clone(), tag: c.tag.clone(), mg: c.mg, gej: c.gej.clone(),
         ges: c.ges.clone(), gepo: c.gepo.clone(), geco: c.geco.clone(), gpidx: c.gpidx.clone(), gcoef: c.gcoef.clone(),
         beta: c.beta.clone(), yg: c.yg.clone(), nm: c.nm.clone(), lu: c.lu.clone(), lid: c.lid.clone(),
     };
     let mut x = cl(&cc); bump(&mut x.rho, 1000); extra.push(("rho entry", x));
     let mut x = cl(&cc); bump(&mut x.e, 777); extra.push(("E entry", x));
-    let mut x = cl(&cc); let t0 = x.tag[0]; x.tag[0] = t0 ^ 2; extra.push(("tag entry", x));
+    let mut x = cl(&cc); x.tag.swap(0, 1); extra.push(("tag entries swapped", x));
     let mut x = cl(&cc); bump(&mut x.beta, 4321); extra.push(("beta entry", x));
     let mut x = cl(&cc); bump(&mut x.nm, 99); extra.push(("n_f matrix entry", x));
     let mut x = cl(&cc); bump(&mut x.lid, 5); extra.push(("lift identity entry", x));

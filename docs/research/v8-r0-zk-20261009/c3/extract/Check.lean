@@ -15,12 +15,12 @@ set_option maxRecDepth 2048
 namespace R1CertCheck
 
 /-- [aspis_r1_cert_check::P]
-    Source: 'src/lib.rs', lines 22:0-22:31
+    Source: 'src/lib.rs', lines 24:0-24:31
     Visibility: public -/
 @[global_simps, irreducible] def P : Std.U64 := 2147483647#u64
 
 /-- [aspis_r1_cert_check::dot]: loop 0:
-    Source: 'src/lib.rs', lines 28:4-33:5
+    Source: 'src/lib.rs', lines 30:4-35:5
     Visibility: public -/
 @[rust_loop]
 def dot_loop
@@ -48,7 +48,7 @@ def dot_loop
 partial_fixpoint
 
 /-- [aspis_r1_cert_check::dot]:
-    Source: 'src/lib.rs', lines 25:0-35:1
+    Source: 'src/lib.rs', lines 27:0-37:1
     Visibility: public -/
 def dot
   (a : Slice Std.U32) (ao : Std.Usize) (ast : Std.Usize) (b : Slice Std.U32)
@@ -59,7 +59,7 @@ def dot
   acc % P
 
 /-- [aspis_r1_cert_check::kdot]: loop 0:
-    Source: 'src/lib.rs', lines 41:4-47:5
+    Source: 'src/lib.rs', lines 43:4-49:5
     Visibility: public -/
 @[rust_loop]
 def kdot_loop
@@ -89,7 +89,7 @@ def kdot_loop
 partial_fixpoint
 
 /-- [aspis_r1_cert_check::kdot]:
-    Source: 'src/lib.rs', lines 38:0-49:1
+    Source: 'src/lib.rs', lines 40:0-51:1
     Visibility: public -/
 def kdot
   (m : Slice Std.U32) (st : Std.Usize) (i : Std.Usize) (idx : Slice Std.U32)
@@ -100,7 +100,7 @@ def kdot
   acc % P
 
 /-- [aspis_r1_cert_check::kimg_ok]: loop 0:
-    Source: 'src/lib.rs', lines 70:4-76:5
+    Source: 'src/lib.rs', lines 72:4-76:5
     Visibility: public -/
 @[rust_loop]
 def kimg_ok_loop
@@ -123,16 +123,13 @@ def kimg_ok_loop
     let i8 ← to1 + i7
     let i9 ← Slice.index_usize tgt i8
     let i10 ← lift (UScalar.cast .U64 i9)
-    let ok2 ← if v != i10
-                then ok false
-                else ok ok1
     let i11 ← i + 1#usize
-    kimg_ok_loop m st nrows j idx io c co s tgt to1 ts ok2 i11
+    kimg_ok_loop m st nrows j idx io c co s tgt to1 ts (ok1 && (v = i10)) i11
   else ok ok1
 partial_fixpoint
 
 /-- [aspis_r1_cert_check::kimg_ok]:
-    Source: 'src/lib.rs', lines 54:0-78:1
+    Source: 'src/lib.rs', lines 56:0-78:1
     Visibility: public -/
 @[reducible]
 def kimg_ok
@@ -144,12 +141,12 @@ def kimg_ok
   kimg_ok_loop m st nrows j idx io c co s tgt to1 ts true 0#usize
 
 /-- [aspis_r1_cert_check::piv_ok]: loop 0:
-    Source: 'src/lib.rs', lines 84:4-92:5
+    Source: 'src/lib.rs', lines 84:4-88:5
     Visibility: public -/
 @[rust_loop]
 def piv_ok_loop
   (idx : Slice Std.U32) (io : Std.Usize) (s : Std.Usize) (lane : Slice Std.U32)
-  (lj : Std.U32) (nsrc : Std.Usize) (ok1 : Bool) (p : Std.Usize) :
+  (lj : Std.U32) (ok1 : Bool) (p : Std.Usize) :
   Result Bool
   := do
   if p < s
@@ -157,43 +154,34 @@ def piv_ok_loop
     let i ← io + p
     let i1 ← Slice.index_usize idx i
     let t ← lift (UScalar.cast .Usize i1)
-    let ok2 ←
-      if t >= nsrc
-      then ok false
-      else
-        do
-        let i2 ← Slice.index_usize lane t
-        if i2 != lj
-        then ok false
-        else ok ok1
+    let i2 ← Slice.index_usize lane t
     let p1 ← p + 1#usize
-    piv_ok_loop idx io s lane lj nsrc ok2 p1
+    piv_ok_loop idx io s lane lj (ok1 && (i2 = lj)) p1
   else ok ok1
 partial_fixpoint
 
 /-- [aspis_r1_cert_check::piv_ok]:
-    Source: 'src/lib.rs', lines 81:0-94:1
+    Source: 'src/lib.rs', lines 81:0-90:1
     Visibility: public -/
 @[reducible]
 def piv_ok
   (idx : Slice Std.U32) (io : Std.Usize) (s : Std.Usize) (lane : Slice Std.U32)
-  (lj : Std.U32) (nsrc : Std.Usize) :
+  (lj : Std.U32) :
   Result Bool
   := do
-  piv_ok_loop idx io s lane lj nsrc true 0#usize
+  piv_ok_loop idx io s lane lj true 0#usize
 
 /-- [aspis_r1_cert_check::ents_ok]: loop 0:
-    Source: 'src/lib.rs', lines 123:4-147:5
+    Source: 'src/lib.rs', lines 119:4-132:5
     Visibility: public -/
 @[rust_loop]
 def ents_ok_loop
   (ej : Slice Std.U32) (es : Slice Std.U32) (epo : Slice Std.U32)
   (eco : Slice Std.U32) (idx : Slice Std.U32) (coef : Slice Std.U32)
   (m : Std.Usize) (lane : Slice Std.U32) (wl : Slice Std.U32)
-  (nsrc : Std.Usize) (z1 : Slice Std.U32) (s1 : Std.Usize) (z2 : Slice Std.U32)
-  (s2 : Std.Usize) (n2 : Std.Usize) (g : Slice Std.U32) (sg : Std.Usize)
-  (ng : Std.Usize) (out : Slice Std.U32) (zero : Slice Std.U32) (ok1 : Bool)
-  (e : Std.Usize) :
+  (z1 : Slice Std.U32) (s1 : Std.Usize) (z2 : Slice Std.U32) (s2 : Std.Usize)
+  (n2 : Std.Usize) (g : Slice Std.U32) (sg : Std.Usize) (ng : Std.Usize)
+  (out : Slice Std.U32) (zero : Slice Std.U32) (ok1 : Bool) (e : Std.Usize) :
   Result Bool
   := do
   if e < m
@@ -206,56 +194,39 @@ def ents_ok_loop
     let io ← lift (UScalar.cast .Usize i2)
     let i3 ← Slice.index_usize eco e
     let co ← lift (UScalar.cast .Usize i3)
-    let ok2 ←
-      if j >= nsrc
-      then ok false
-      else
-        do
-        let lj ← Slice.index_usize lane j
-        let i4 ← lift (UScalar.cast .Usize lj)
-        let i5 ← Slice.index_usize wl i4
-        let w1 ← lift (UScalar.cast .Usize i5)
-        let b ← piv_ok idx io s lane lj nsrc
-        let ok3 ← if b
-                    then ok ok1
-                    else ok false
-        let b1 ← kimg_ok z1 s1 w1 j idx io coef co s zero 0#usize 0#usize
-        let ok4 ← if b1
-                    then ok ok3
-                    else ok false
-        let b2 ← kimg_ok z2 s2 n2 j idx io coef co s zero 0#usize 0#usize
-        let ok5 ← if b2
-                    then ok ok4
-                    else ok false
-        let i6 ← e * ng
-        let b3 ← kimg_ok g sg ng j idx io coef co s out i6 1#usize
-        if b3
-        then ok ok5
-        else ok false
+    let lj ← Slice.index_usize lane j
+    let i4 ← lift (UScalar.cast .Usize lj)
+    let i5 ← Slice.index_usize wl i4
+    let w1 ← lift (UScalar.cast .Usize i5)
+    let b0 ← piv_ok idx io s lane lj
+    let b1 ← kimg_ok z1 s1 w1 j idx io coef co s zero 0#usize 0#usize
+    let b2 ← kimg_ok z2 s2 n2 j idx io coef co s zero 0#usize 0#usize
+    let i6 ← e * ng
+    let b3 ← kimg_ok g sg ng j idx io coef co s out i6 1#usize
     let e1 ← e + 1#usize
-    ents_ok_loop ej es epo eco idx coef m lane wl nsrc z1 s1 z2 s2 n2 g sg ng
-      out zero ok2 e1
+    ents_ok_loop ej es epo eco idx coef m lane wl z1 s1 z2 s2 n2 g sg ng out
+      zero ((((ok1 && b0) && b1) && b2) && b3) e1
   else ok ok1
 partial_fixpoint
 
 /-- [aspis_r1_cert_check::ents_ok]:
-    Source: 'src/lib.rs', lines 99:0-149:1
+    Source: 'src/lib.rs', lines 96:0-134:1
     Visibility: public -/
 @[reducible]
 def ents_ok
   (ej : Slice Std.U32) (es : Slice Std.U32) (epo : Slice Std.U32)
   (eco : Slice Std.U32) (idx : Slice Std.U32) (coef : Slice Std.U32)
   (m : Std.Usize) (lane : Slice Std.U32) (wl : Slice Std.U32)
-  (nsrc : Std.Usize) (z1 : Slice Std.U32) (s1 : Std.Usize) (z2 : Slice Std.U32)
-  (s2 : Std.Usize) (n2 : Std.Usize) (g : Slice Std.U32) (sg : Std.Usize)
-  (ng : Std.Usize) (out : Slice Std.U32) (zero : Slice Std.U32) :
+  (z1 : Slice Std.U32) (s1 : Std.Usize) (z2 : Slice Std.U32) (s2 : Std.Usize)
+  (n2 : Std.Usize) (g : Slice Std.U32) (sg : Std.Usize) (ng : Std.Usize)
+  (out : Slice Std.U32) (zero : Slice Std.U32) :
   Result Bool
   := do
-  ents_ok_loop ej es epo eco idx coef m lane wl nsrc z1 s1 z2 s2 n2 g sg ng out
-    zero true 0#usize
+  ents_ok_loop ej es epo eco idx coef m lane wl z1 s1 z2 s2 n2 g sg ng out zero
+    true 0#usize
 
 /-- [aspis_r1_cert_check::prod_row_ok]: loop 0:
-    Source: 'src/lib.rs', lines 156:4-161:5
+    Source: 'src/lib.rs', lines 141:4-144:5
     Visibility: public -/
 @[rust_loop]
 def prod_row_ok_loop
@@ -275,16 +246,13 @@ def prod_row_ok_loop
     let i7 ← i6 + j
     let i8 ← Slice.index_usize c i7
     let i9 ← lift (UScalar.cast .U64 i8)
-    let ok2 ← if i4 != i9
-                then ok false
-                else ok ok1
     let j1 ← j + 1#usize
-    prod_row_ok_loop a ao b bo c co i nj len ok2 j1
+    prod_row_ok_loop a ao b bo c co i nj len (ok1 && (i4 = i9)) j1
   else ok ok1
 partial_fixpoint
 
 /-- [aspis_r1_cert_check::prod_row_ok]:
-    Source: 'src/lib.rs', lines 153:0-163:1
+    Source: 'src/lib.rs', lines 138:0-146:1
     Visibility: public -/
 @[reducible]
 def prod_row_ok
@@ -296,7 +264,7 @@ def prod_row_ok
   prod_row_ok_loop a ao b bo c co i nj len true 0#usize
 
 /-- [aspis_r1_cert_check::prod_ok]: loop 0:
-    Source: 'src/lib.rs', lines 169:4-174:5
+    Source: 'src/lib.rs', lines 152:4-155:5
     Visibility: public -/
 @[rust_loop]
 def prod_ok_loop
@@ -308,16 +276,13 @@ def prod_ok_loop
   if i < ni
   then
     let b1 ← prod_row_ok a ao b bo c co i nj len
-    let ok2 ← if b1
-                then ok ok1
-                else ok false
     let i1 ← i + 1#usize
-    prod_ok_loop a ao b bo c co ni nj len ok2 i1
+    prod_ok_loop a ao b bo c co ni nj len (ok1 && b1) i1
   else ok ok1
 partial_fixpoint
 
 /-- [aspis_r1_cert_check::prod_ok]:
-    Source: 'src/lib.rs', lines 166:0-176:1
+    Source: 'src/lib.rs', lines 149:0-157:1
     Visibility: public -/
 @[reducible]
 def prod_ok
@@ -329,7 +294,7 @@ def prod_ok
   prod_ok_loop a ao b bo c co ni nj len true 0#usize
 
 /-- [aspis_r1_cert_check::id_row_ok]: loop 0:
-    Source: 'src/lib.rs', lines 182:4-192:5
+    Source: 'src/lib.rs', lines 163:4-166:5
     Visibility: public -/
 @[rust_loop]
 def id_row_ok_loop
@@ -342,22 +307,16 @@ def id_row_ok_loop
     let i1 ← i * w
     let i2 ← co + i1
     let i3 ← i2 + j
-    let x ← Slice.index_usize c i3
-    let ok2 ←
-      if i = j
-      then if x != 1#u32
-           then ok false
-           else ok ok1
-      else if x != 0#u32
-           then ok false
-           else ok ok1
+    let i4 ← Slice.index_usize c i3
+    let i5 ← lift (UScalar.cast .U64 i4)
+    let i6 ← lift (UScalar.cast_fromBool .U64 (i = j))
     let j1 ← j + 1#usize
-    id_row_ok_loop c co i w ok2 j1
+    id_row_ok_loop c co i w (ok1 && (i5 = i6)) j1
   else ok ok1
 partial_fixpoint
 
 /-- [aspis_r1_cert_check::id_row_ok]:
-    Source: 'src/lib.rs', lines 179:0-194:1
+    Source: 'src/lib.rs', lines 160:0-168:1
     Visibility: public -/
 @[reducible]
 def id_row_ok
@@ -367,7 +326,7 @@ def id_row_ok
   id_row_ok_loop c co i w true 0#usize
 
 /-- [aspis_r1_cert_check::id_ok]: loop 0:
-    Source: 'src/lib.rs', lines 200:4-205:5
+    Source: 'src/lib.rs', lines 174:4-177:5
     Visibility: public -/
 @[rust_loop]
 def id_ok_loop
@@ -378,16 +337,13 @@ def id_ok_loop
   if i < w
   then
     let b ← id_row_ok c co i w
-    let ok2 ← if b
-                then ok ok1
-                else ok false
     let i1 ← i + 1#usize
-    id_ok_loop c co w ok2 i1
+    id_ok_loop c co w (ok1 && b) i1
   else ok ok1
 partial_fixpoint
 
 /-- [aspis_r1_cert_check::id_ok]:
-    Source: 'src/lib.rs', lines 197:0-207:1
+    Source: 'src/lib.rs', lines 171:0-179:1
     Visibility: public -/
 @[reducible]
 def id_ok
@@ -395,259 +351,208 @@ def id_ok
   id_ok_loop c co w true 0#usize
 
 /-- [aspis_r1_cert_check::ech_row_ok]: loop 0:
-    Source: 'src/lib.rs', lines 213:4-223:5
+    Source: 'src/lib.rs', lines 185:4-188:5
     Visibility: public -/
 @[rust_loop]
 def ech_row_ok_loop
-  (e : Slice Std.U32) (n : Std.Usize) (piv : Slice Std.U32) (a : Std.Usize)
+  (e : Slice Std.U32) (n : Std.Usize) (lst : Slice Std.U32) (a : Std.Usize)
   (r : Std.Usize) (ok1 : Bool) (b : Std.Usize) :
   Result Bool
   := do
   if b < r
   then
     let i ← a * n
-    let i1 ← Slice.index_usize piv b
+    let i1 ← Slice.index_usize lst b
     let i2 ← lift (UScalar.cast .Usize i1)
     let i3 ← i + i2
-    let x ← Slice.index_usize e i3
-    let ok2 ←
-      if a = b
-      then if x != 1#u32
-           then ok false
-           else ok ok1
-      else if x != 0#u32
-           then ok false
-           else ok ok1
+    let i4 ← Slice.index_usize e i3
+    let i5 ← lift (UScalar.cast .U64 i4)
+    let i6 ← lift (UScalar.cast_fromBool .U64 (a = b))
     let b1 ← b + 1#usize
-    ech_row_ok_loop e n piv a r ok2 b1
+    ech_row_ok_loop e n lst a r (ok1 && (i5 = i6)) b1
   else ok ok1
 partial_fixpoint
 
 /-- [aspis_r1_cert_check::ech_row_ok]:
-    Source: 'src/lib.rs', lines 210:0-225:1
+    Source: 'src/lib.rs', lines 182:0-190:1
     Visibility: public -/
 @[reducible]
 def ech_row_ok
-  (e : Slice Std.U32) (n : Std.Usize) (piv : Slice Std.U32) (a : Std.Usize)
+  (e : Slice Std.U32) (n : Std.Usize) (lst : Slice Std.U32) (a : Std.Usize)
   (r : Std.Usize) :
   Result Bool
   := do
-  ech_row_ok_loop e n piv a r true 0#usize
+  ech_row_ok_loop e n lst a r true 0#usize
 
 /-- [aspis_r1_cert_check::ech_ok]: loop 0:
-    Source: 'src/lib.rs', lines 231:4-236:5
+    Source: 'src/lib.rs', lines 196:4-199:5
     Visibility: public -/
 @[rust_loop]
 def ech_ok_loop
-  (e : Slice Std.U32) (n : Std.Usize) (piv : Slice Std.U32) (r : Std.Usize)
+  (e : Slice Std.U32) (n : Std.Usize) (lst : Slice Std.U32) (r : Std.Usize)
   (ok1 : Bool) (a : Std.Usize) :
   Result Bool
   := do
   if a < r
   then
-    let b ← ech_row_ok e n piv a r
-    let ok2 ← if b
-                then ok ok1
-                else ok false
+    let b ← ech_row_ok e n lst a r
     let a1 ← a + 1#usize
-    ech_ok_loop e n piv r ok2 a1
+    ech_ok_loop e n lst r (ok1 && b) a1
   else ok ok1
 partial_fixpoint
 
 /-- [aspis_r1_cert_check::ech_ok]:
-    Source: 'src/lib.rs', lines 228:0-238:1
+    Source: 'src/lib.rs', lines 193:0-201:1
     Visibility: public -/
 @[reducible]
 def ech_ok
-  (e : Slice Std.U32) (n : Std.Usize) (piv : Slice Std.U32) (r : Std.Usize) :
+  (e : Slice Std.U32) (n : Std.Usize) (lst : Slice Std.U32) (r : Std.Usize) :
   Result Bool
   := do
-  ech_ok_loop e n piv r true 0#usize
+  ech_ok_loop e n lst r true 0#usize
 
-/-- [aspis_r1_cert_check::tag_list_ok]: loop 0:
-    Source: 'src/lib.rs', lines 244:4-252:5
+/-- [aspis_r1_cert_check::perm_left_ok]: loop 0:
+    Source: 'src/lib.rs', lines 207:4-210:5
     Visibility: public -/
 @[rust_loop]
-def tag_list_ok_loop
-  (l : Slice Std.U32) (len : Std.Usize) (tag : Slice Std.U32) (n : Std.Usize)
-  (par : Std.U32) (ok1 : Bool) (x : Std.Usize) :
+def perm_left_ok_loop
+  (lst : Slice Std.U32) (tag : Slice Std.U32) (n : Std.Usize) (ok1 : Bool)
+  (x : Std.Usize) :
   Result Bool
   := do
-  if x < len
+  if x < n
   then
-    let i ← Slice.index_usize l x
-    let c ← lift (UScalar.cast .Usize i)
-    let ok2 ←
-      if c >= n
-      then ok false
-      else
-        do
-        let i1 ← Slice.index_usize tag c
-        let i2 ← lift (UScalar.cast .U64 i1)
-        let i3 ← lift (UScalar.cast .U64 x)
-        let i4 ← 2#u64 * i3
-        let i5 ← lift (UScalar.cast .U64 par)
-        let i6 ← i4 + i5
-        if i2 != i6
-        then ok false
-        else ok ok1
+    let i ← Slice.index_usize lst x
+    let i1 ← lift (UScalar.cast .Usize i)
+    let i2 ← Slice.index_usize tag i1
+    let i3 ← lift (UScalar.cast .U64 i2)
+    let i4 ← lift (UScalar.cast .U64 x)
     let x1 ← x + 1#usize
-    tag_list_ok_loop l len tag n par ok2 x1
+    perm_left_ok_loop lst tag n (ok1 && (i3 = i4)) x1
   else ok ok1
 partial_fixpoint
 
-/-- [aspis_r1_cert_check::tag_list_ok]:
-    Source: 'src/lib.rs', lines 241:0-254:1
+/-- [aspis_r1_cert_check::perm_left_ok]:
+    Source: 'src/lib.rs', lines 204:0-212:1
     Visibility: public -/
 @[reducible]
-def tag_list_ok
-  (l : Slice Std.U32) (len : Std.Usize) (tag : Slice Std.U32) (n : Std.Usize)
-  (par : Std.U32) :
+def perm_left_ok
+  (lst : Slice Std.U32) (tag : Slice Std.U32) (n : Std.Usize) :
   Result Bool
   := do
-  tag_list_ok_loop l len tag n par true 0#usize
+  perm_left_ok_loop lst tag n true 0#usize
 
-/-- [aspis_r1_cert_check::tag_cover_ok]: loop 0:
-    Source: 'src/lib.rs', lines 260:4-275:5
+/-- [aspis_r1_cert_check::perm_right_ok]: loop 0:
+    Source: 'src/lib.rs', lines 218:4-221:5
     Visibility: public -/
 @[rust_loop]
-def tag_cover_ok_loop
-  (tag : Slice Std.U32) (n : Std.Usize) (piv : Slice Std.U32) (r : Std.Usize)
-  (fr : Slice Std.U32) (k : Std.Usize) (ok1 : Bool) (c : Std.Usize) :
+def perm_right_ok_loop
+  (lst : Slice Std.U32) (tag : Slice Std.U32) (n : Std.Usize) (ok1 : Bool)
+  (c : Std.Usize) :
   Result Bool
   := do
   if c < n
   then
     let i ← Slice.index_usize tag c
-    let t ← lift (UScalar.cast .Usize i)
-    let h ← t / 2#usize
-    let i1 ← t % 2#usize
-    let ok2 ←
-      if i1 = 0#usize
-      then
-        if h >= r
-        then ok false
-        else
-          do
-          let i2 ← Slice.index_usize piv h
-          let i3 ← lift (UScalar.cast .Usize i2)
-          if i3 != c
-          then ok false
-          else ok ok1
-      else
-        if h >= k
-        then ok false
-        else
-          do
-          let i2 ← Slice.index_usize fr h
-          let i3 ← lift (UScalar.cast .Usize i2)
-          if i3 != c
-          then ok false
-          else ok ok1
+    let i1 ← lift (UScalar.cast .Usize i)
+    let i2 ← Slice.index_usize lst i1
+    let i3 ← lift (UScalar.cast .U64 i2)
+    let i4 ← lift (UScalar.cast .U64 c)
     let c1 ← c + 1#usize
-    tag_cover_ok_loop tag n piv r fr k ok2 c1
+    perm_right_ok_loop lst tag n (ok1 && (i3 = i4)) c1
   else ok ok1
 partial_fixpoint
 
-/-- [aspis_r1_cert_check::tag_cover_ok]:
-    Source: 'src/lib.rs', lines 257:0-277:1
+/-- [aspis_r1_cert_check::perm_right_ok]:
+    Source: 'src/lib.rs', lines 215:0-223:1
     Visibility: public -/
 @[reducible]
-def tag_cover_ok
-  (tag : Slice Std.U32) (n : Std.Usize) (piv : Slice Std.U32) (r : Std.Usize)
-  (fr : Slice Std.U32) (k : Std.Usize) :
+def perm_right_ok
+  (lst : Slice Std.U32) (tag : Slice Std.U32) (n : Std.Usize) :
   Result Bool
   := do
-  tag_cover_ok_loop tag n piv r fr k true 0#usize
+  perm_right_ok_loop lst tag n true 0#usize
 
 /-- [aspis_r1_cert_check::nvec_row_ok]: loop 0:
-    Source: 'src/lib.rs', lines 284:4-298:5
+    Source: 'src/lib.rs', lines 230:4-238:5
     Visibility: public -/
 @[rust_loop]
 def nvec_row_ok_loop
   (nm : Slice Std.U32) (e : Slice Std.U32) (n : Std.Usize)
-  (tag : Slice Std.U32) (f : Std.Usize) (ok1 : Bool) (t : Std.Usize)
-  (ff : Std.Usize) :
+  (tag : Slice Std.U32) (r : Std.Usize) (f : Std.Usize) (ff : Std.Usize)
+  (ok1 : Bool) (t : Std.Usize) :
   Result Bool
   := do
   if t < n
   then
-    let i ← f * n
-    let i1 ← i + t
-    let i2 ← Slice.index_usize nm i1
-    let x ← lift (UScalar.cast .U64 i2)
-    let i3 ← Slice.index_usize tag t
-    let g ← lift (UScalar.cast .Usize i3)
-    let want ←
-      if t = ff
-      then ok 1#u64
-      else
-        do
-        let i4 ← g % 2#usize
-        if i4 = 0#usize
-        then
-          let i5 ← g / 2#usize
-          let i6 ← i5 * n
-          let i7 ← i6 + ff
-          let i8 ← Slice.index_usize e i7
-          let i9 ← lift (UScalar.cast .U64 i8)
-          let i10 ← i9 % P
-          let i11 ← P - i10
-          i11 % P
-        else ok 0#u64
-    let ok2 ← if x != want
-                then ok false
-                else ok ok1
+    let i ← Slice.index_usize tag t
+    let g ← lift (UScalar.cast .Usize i)
+    let isf ← lift (UScalar.cast_fromBool .U64 (t = ff))
+    let ip ← lift (UScalar.cast_fromBool .U64 (g < r))
+    let i1 ← g % r
+    let i2 ← i1 * n
+    let i3 ← i2 + ff
+    let i4 ← Slice.index_usize e i3
+    let i5 ← lift (UScalar.cast .U64 i4)
+    let ev ← i5 % P
+    let i6 ← isf + P
+    let i7 ← ip * ev
+    let i8 ← i6 - i7
+    let want ← i8 % P
+    let i9 ← f * n
+    let i10 ← i9 + t
+    let i11 ← Slice.index_usize nm i10
+    let i12 ← lift (UScalar.cast .U64 i11)
     let t1 ← t + 1#usize
-    nvec_row_ok_loop nm e n tag f ok2 t1 ff
+    nvec_row_ok_loop nm e n tag r f ff (ok1 && (i12 = want)) t1
   else ok ok1
 partial_fixpoint
 
 /-- [aspis_r1_cert_check::nvec_row_ok]:
-    Source: 'src/lib.rs', lines 280:0-300:1
+    Source: 'src/lib.rs', lines 227:0-240:1
     Visibility: public -/
+@[reducible]
 def nvec_row_ok
-  (nm : Slice Std.U32) (e : Slice Std.U32) (n : Std.Usize) (fr : Slice Std.U32)
-  (tag : Slice Std.U32) (f : Std.Usize) :
+  (nm : Slice Std.U32) (e : Slice Std.U32) (n : Std.Usize)
+  (tag : Slice Std.U32) (r : Std.Usize) (f : Std.Usize) (ff : Std.Usize) :
   Result Bool
   := do
-  let i ← Slice.index_usize fr f
-  let ff ← lift (UScalar.cast .Usize i)
-  nvec_row_ok_loop nm e n tag f true 0#usize ff
+  nvec_row_ok_loop nm e n tag r f ff true 0#usize
 
 /-- [aspis_r1_cert_check::nvec_ok]: loop 0:
-    Source: 'src/lib.rs', lines 306:4-311:5
+    Source: 'src/lib.rs', lines 246:4-250:5
     Visibility: public -/
 @[rust_loop]
 def nvec_ok_loop
-  (nm : Slice Std.U32) (e : Slice Std.U32) (n : Std.Usize) (fr : Slice Std.U32)
-  (tag : Slice Std.U32) (k : Std.Usize) (ok1 : Bool) (f : Std.Usize) :
+  (nm : Slice Std.U32) (e : Slice Std.U32) (n : Std.Usize)
+  (lst : Slice Std.U32) (tag : Slice Std.U32) (r : Std.Usize) (k : Std.Usize)
+  (ok1 : Bool) (f : Std.Usize) :
   Result Bool
   := do
   if f < k
   then
-    let b ← nvec_row_ok nm e n fr tag f
-    let ok2 ← if b
-                then ok ok1
-                else ok false
+    let i ← r + f
+    let i1 ← Slice.index_usize lst i
+    let ff ← lift (UScalar.cast .Usize i1)
+    let b ← nvec_row_ok nm e n tag r f ff
     let f1 ← f + 1#usize
-    nvec_ok_loop nm e n fr tag k ok2 f1
+    nvec_ok_loop nm e n lst tag r k (ok1 && b) f1
   else ok ok1
 partial_fixpoint
 
 /-- [aspis_r1_cert_check::nvec_ok]:
-    Source: 'src/lib.rs', lines 303:0-313:1
+    Source: 'src/lib.rs', lines 243:0-252:1
     Visibility: public -/
 @[reducible]
 def nvec_ok
-  (nm : Slice Std.U32) (e : Slice Std.U32) (n : Std.Usize) (fr : Slice Std.U32)
-  (tag : Slice Std.U32) (k : Std.Usize) :
+  (nm : Slice Std.U32) (e : Slice Std.U32) (n : Std.Usize)
+  (lst : Slice Std.U32) (tag : Slice Std.U32) (r : Std.Usize) (k : Std.Usize) :
   Result Bool
   := do
-  nvec_ok_loop nm e n fr tag k true 0#usize
+  nvec_ok_loop nm e n lst tag r k true 0#usize
 
 /-- [aspis_r1_cert_check::lifts_ok]: loop 0:
-    Source: 'src/lib.rs', lines 319:4-329:5
+    Source: 'src/lib.rs', lines 258:4-265:5
     Visibility: public -/
 @[rust_loop]
 def lifts_ok_loop
@@ -662,21 +567,15 @@ def lifts_ok_loop
     let w ← lift (UScalar.cast .Usize i)
     let i1 ← Slice.index_usize loff l
     let off ← lift (UScalar.cast .Usize i1)
-    let b ← prod_ok o off u off id off w w w
-    let ok2 ← if b
-                then ok ok1
-                else ok false
+    let b0 ← prod_ok o off u off id off w w w
     let b1 ← id_ok id off w
-    let ok3 ← if b1
-                then ok ok2
-                else ok false
     let l1 ← l + 1#usize
-    lifts_ok_loop o u id lw loff nl ok3 l1
+    lifts_ok_loop o u id lw loff nl ((ok1 && b0) && b1) l1
   else ok ok1
 partial_fixpoint
 
 /-- [aspis_r1_cert_check::lifts_ok]:
-    Source: 'src/lib.rs', lines 316:0-331:1
+    Source: 'src/lib.rs', lines 255:0-267:1
     Visibility: public -/
 @[reducible]
 def lifts_ok
@@ -687,7 +586,7 @@ def lifts_ok
   lifts_ok_loop o u id lw loff nl true 0#usize
 
 /-- [aspis_r1_cert_check::mm]:
-    Source: 'src/lib.rs', lines 334:0-336:1
+    Source: 'src/lib.rs', lines 270:0-272:1
     Visibility: public -/
 def mm (x : Std.U32) (y : Std.U32) : Result Std.U64 := do
   let i ← lift (UScalar.cast .U64 x)
@@ -696,7 +595,7 @@ def mm (x : Std.U32) (y : Std.U32) : Result Std.U64 := do
   i2 % P
 
 /-- [aspis_r1_cert_check::half_ok]:
-    Source: 'src/lib.rs', lines 339:0-360:1
+    Source: 'src/lib.rs', lines 275:0-296:1
     Visibility: public -/
 def half_ok (a : Slice Std.U32) (h : Slice Std.U32) : Result Bool := do
   let i ← Slice.index_usize a 0#usize
@@ -756,24 +655,16 @@ def half_ok (a : Slice Std.U32) (h : Slice Std.U32) : Result Bool := do
   let i40 ← mm x3 y0
   let i41 ← i39 + i40
   let r3 ← i41 % P
-  if r0 = 1#u64
-  then
-    if r1 = 0#u64
-    then if r2 = 0#u64
-         then ok (r3 = 0#u64)
-         else ok false
-    else ok false
-  else ok false
+  ok ((((r0 = 1#u64) && (r1 = 0#u64)) && (r2 = 0#u64)) && (r3 = 0#u64))
 
 /-- [aspis_r1_cert_check::Pub]
-    Source: 'src/lib.rs', lines 363:0-396:1
+    Source: 'src/lib.rs', lines 299:0-330:1
     Visibility: public -/
 structure Pub where
   nq : Std.U32
   a9 : alloc.vec.Vec Std.U32
   rw : Std.U32
   bw : Std.U32
-  nsrc : Std.U32
   lane : alloc.vec.Vec Std.U32
   wl : alloc.vec.Vec Std.U32
   os : Std.U32
@@ -782,7 +673,6 @@ structure Pub where
   tq : alloc.vec.Vec Std.U32
   q : Std.U32
   rel : alloc.vec.Vec Std.U32
-  ngs : Std.U32
   gw : Std.U32
   glane : alloc.vec.Vec Std.U32
   gwl : alloc.vec.Vec Std.U32
@@ -795,7 +685,7 @@ structure Pub where
   lo : alloc.vec.Vec Std.U32
 
 /-- [aspis_r1_cert_check::Cert]
-    Source: 'src/lib.rs', lines 399:0-433:1
+    Source: 'src/lib.rs', lines 333:0-367:1
     Visibility: public -/
 structure Cert where
   hinv : alloc.vec.Vec Std.U32
@@ -812,8 +702,7 @@ structure Cert where
   k : Std.U32
   u : alloc.vec.Vec Std.U32
   e : alloc.vec.Vec Std.U32
-  piv : alloc.vec.Vec Std.U32
-  fr : alloc.vec.Vec Std.U32
+  lst : alloc.vec.Vec Std.U32
   tag : alloc.vec.Vec Std.U32
   mg : Std.U32
   gej : alloc.vec.Vec Std.U32
@@ -829,7 +718,7 @@ structure Cert where
   lid : alloc.vec.Vec Std.U32
 
 /-- [aspis_r1_cert_check::check_qprime]:
-    Source: 'src/lib.rs', lines 436:0-446:1
+    Source: 'src/lib.rs', lines 370:0-380:1
     Visibility: public -/
 def check_qprime (pb : Pub) (c : Cert) : Result Bool := do
   let rw ← lift (UScalar.cast .Usize pb.rw)
@@ -842,25 +731,22 @@ def check_qprime (pb : Pub) (c : Cert) : Result Bool := do
   let s5 := alloc.vec.Vec.deref c.coef
   let s6 := alloc.vec.Vec.deref pb.lane
   let s7 := alloc.vec.Vec.deref pb.wl
-  let i ← lift (UScalar.cast .Usize pb.nsrc)
   let s8 := alloc.vec.Vec.deref pb.own
-  let i1 ← lift (UScalar.cast .Usize pb.os)
+  let i ← lift (UScalar.cast .Usize pb.os)
   let s9 := alloc.vec.Vec.deref pb.round
   let s10 := alloc.vec.Vec.deref pb.round
   let s11 := alloc.vec.Vec.deref c.rho
   let s12 ← lift (Array.to_slice (Array.make 1#usize [ 0#u32 ]))
   let a ←
-    ents_ok s s1 s2 s3 s4 s5 m s6 s7 i s8 i1 s9 rw 0#usize s10 rw rw s11 s12
+    ents_ok s s1 s2 s3 s4 s5 m s6 s7 s8 i s9 rw 0#usize s10 rw rw s11 s12
   let s13 := alloc.vec.Vec.deref c.y
   let s14 := alloc.vec.Vec.deref c.rho
   let s15 := alloc.vec.Vec.deref pb.tq
   let b ← prod_ok s13 0#usize s14 0#usize s15 0#usize rw rw m
-  if a
-  then ok b
-  else ok false
+  ok (a && b)
 
 /-- [aspis_r1_cert_check::check_bcond]:
-    Source: 'src/lib.rs', lines 450:0-470:1
+    Source: 'src/lib.rs', lines 384:0-404:1
     Visibility: public -/
 def check_bcond (pb : Pub) (c : Cert) : Result Bool := do
   let n ← lift (UScalar.cast .Usize pb.bw)
@@ -869,72 +755,52 @@ def check_bcond (pb : Pub) (c : Cert) : Result Bool := do
   let q ← lift (UScalar.cast .Usize pb.q)
   let mg ← lift (UScalar.cast .Usize c.mg)
   let rw ← lift (UScalar.cast .Usize pb.rw)
+  let i := alloc.vec.Vec.len c.lst
+  let i1 := alloc.vec.Vec.len c.tag
+  let i2 ← r + k
   let s := alloc.vec.Vec.deref c.u
   let s1 := alloc.vec.Vec.deref pb.rel
   let s2 := alloc.vec.Vec.deref c.e
   let e1 ← prod_ok s 0#usize s1 0#usize s2 0#usize r n q
-  let s3 := alloc.vec.Vec.deref c.piv
+  let s3 := alloc.vec.Vec.deref c.lst
   let s4 := alloc.vec.Vec.deref c.tag
-  let e2 ← tag_list_ok s3 r s4 n 0#u32
-  let s5 := alloc.vec.Vec.deref c.fr
+  let e2 ← perm_left_ok s3 s4 n
+  let s5 := alloc.vec.Vec.deref c.lst
   let s6 := alloc.vec.Vec.deref c.tag
-  let e3 ← tag_list_ok s5 k s6 n 1#u32
-  let s7 := alloc.vec.Vec.deref c.tag
-  let s8 := alloc.vec.Vec.deref c.piv
-  let s9 := alloc.vec.Vec.deref c.fr
-  let e4 ← tag_cover_ok s7 n s8 r s9 k
-  let s10 := alloc.vec.Vec.deref c.e
-  let s11 := alloc.vec.Vec.deref c.piv
-  let e5 ← ech_ok s10 n s11 r
-  let s12 := alloc.vec.Vec.deref c.gej
-  let s13 := alloc.vec.Vec.deref c.ges
-  let s14 := alloc.vec.Vec.deref c.gepo
-  let s15 := alloc.vec.Vec.deref c.geco
-  let s16 := alloc.vec.Vec.deref c.gpidx
-  let s17 := alloc.vec.Vec.deref c.gcoef
-  let s18 := alloc.vec.Vec.deref pb.glane
-  let s19 := alloc.vec.Vec.deref pb.gwl
-  let i ← lift (UScalar.cast .Usize pb.ngs)
-  let s20 := alloc.vec.Vec.deref pb.gown
-  let i1 ← lift (UScalar.cast .Usize pb.gw)
-  let s21 := alloc.vec.Vec.deref pb.ground
-  let s22 := alloc.vec.Vec.deref pb.gbat
-  let s23 := alloc.vec.Vec.deref c.beta
-  let s24 ← lift (Array.to_slice (Array.make 1#usize [ 0#u32 ]))
+  let e3 ← perm_right_ok s5 s6 n
+  let s7 := alloc.vec.Vec.deref c.e
+  let s8 := alloc.vec.Vec.deref c.lst
+  let e4 ← ech_ok s7 n s8 r
+  let s9 := alloc.vec.Vec.deref c.gej
+  let s10 := alloc.vec.Vec.deref c.ges
+  let s11 := alloc.vec.Vec.deref c.gepo
+  let s12 := alloc.vec.Vec.deref c.geco
+  let s13 := alloc.vec.Vec.deref c.gpidx
+  let s14 := alloc.vec.Vec.deref c.gcoef
+  let s15 := alloc.vec.Vec.deref pb.glane
+  let s16 := alloc.vec.Vec.deref pb.gwl
+  let s17 := alloc.vec.Vec.deref pb.gown
+  let i3 ← lift (UScalar.cast .Usize pb.gw)
+  let s18 := alloc.vec.Vec.deref pb.ground
+  let s19 := alloc.vec.Vec.deref pb.gbat
+  let s20 := alloc.vec.Vec.deref c.beta
+  let s21 ← lift (Array.to_slice (Array.make 1#usize [ 0#u32 ]))
   let g1 ←
-    ents_ok s12 s13 s14 s15 s16 s17 mg s18 s19 i s20 i1 s21 rw rw s22 n n s23
-      s24
-  let s25 := alloc.vec.Vec.deref c.nm
-  let s26 := alloc.vec.Vec.deref c.e
-  let s27 := alloc.vec.Vec.deref c.fr
-  let s28 := alloc.vec.Vec.deref c.tag
-  let g2 ← nvec_ok s25 s26 n s27 s28 k
-  let s29 := alloc.vec.Vec.deref c.yg
-  let s30 := alloc.vec.Vec.deref c.beta
-  let s31 := alloc.vec.Vec.deref c.nm
-  let g3 ← prod_ok s29 0#usize s30 0#usize s31 0#usize k n mg
-  if e1
-  then
-    if e2
-    then
-      if e3
-      then
-        if e4
-        then
-          if e5
-          then if g1
-               then if g2
-                    then ok g3
-                    else ok false
-               else ok false
-          else ok false
-        else ok false
-      else ok false
-    else ok false
-  else ok false
+    ents_ok s9 s10 s11 s12 s13 s14 mg s15 s16 s17 i3 s18 rw rw s19 n n s20 s21
+  let s22 := alloc.vec.Vec.deref c.nm
+  let s23 := alloc.vec.Vec.deref c.e
+  let s24 := alloc.vec.Vec.deref c.lst
+  let s25 := alloc.vec.Vec.deref c.tag
+  let g2 ← nvec_ok s22 s23 n s24 s25 r k
+  let s26 := alloc.vec.Vec.deref c.yg
+  let s27 := alloc.vec.Vec.deref c.beta
+  let s28 := alloc.vec.Vec.deref c.nm
+  let g3 ← prod_ok s26 0#usize s27 0#usize s28 0#usize k n mg
+  ok ((((((((((i = n) && (i1 = n)) && (i2 = n)) && e1) && e2) && e3) && e4) &&
+    g1) && g2) && g3)
 
 /-- [aspis_r1_cert_check::check]:
-    Source: 'src/lib.rs', lines 473:0-480:1
+    Source: 'src/lib.rs', lines 407:0-414:1
     Visibility: public -/
 def check (pb : Pub) (c : Cert) : Result Bool := do
   let s := alloc.vec.Vec.deref pb.a9
@@ -949,15 +815,6 @@ def check (pb : Pub) (c : Cert) : Result Bool := do
   let li ← lifts_ok s2 s3 s4 s5 s6 i
   let qp ← check_qprime pb c
   let bc ← check_bcond pb c
-  if h
-  then
-    if pb.nq <= 22#u32
-    then if li
-         then if qp
-              then ok bc
-              else ok false
-         else ok false
-    else ok false
-  else ok false
+  ok ((((h && (pb.nq <= 22#u32)) && li) && qp) && bc)
 
 end R1CertCheck
