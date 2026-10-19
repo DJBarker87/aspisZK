@@ -1,4 +1,5 @@
 import ExtractedRecordStrictLow
+import StrictLowChunkCodec
 import ExtractedPrefixParserAgreement
 import ExtractedRecordPayloadSoundness
 import ExtractedPrefixParse
@@ -10,13 +11,6 @@ namespace AspisR1.ExtractedPrefixStrictPayload
 open Aeneas Aeneas.Std Result
 open ExtractedRecordByteValue ExtractedRecordStrictCodec ExtractedRecordStrictLow
 open RetainedFieldByteCodec StrictWideByteCodec
-
-/-- A fixed byte carrier, strict decode, zero high half, and exact re-encoding. -/
-def StrictLowChunk (raw : List U8) : Prop :=
-  ∃ bytes : WideBytes, List.ofFn bytes = raw.map rawByte ∧
-    ∃ lo : QM31Limbs,
-      decodeWideLE bytes = some (lo, fun _ => zeroLimb) ∧
-      List.ofFn (encodeWideLE (lo, fun _ => zeroLimb)) = raw.map rawByte
 
 theorem strict_of_canonical (raw : List U8)
     (h : ExtractedRecordValidator.CanonicalChunk raw) : StrictLowChunk raw := by

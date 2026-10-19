@@ -1,4 +1,5 @@
 import ExtractedRecordStrictCodec
+import StrictLowChunkCodec
 
 /-! Zero high-coordinate transport for the unchanged strict limb codec.
 This remains below WideExact algebra and the semantic-prefix import chain. -/
@@ -6,8 +7,6 @@ namespace AspisR1.ExtractedRecordStrictLow
 open Aeneas Aeneas.Std
 open ExtractedRecordByteCanonicality ExtractedRecordLimbCanonicality
 open ExtractedRecordStrictCodec
-
-def zeroLimb : RetainedFieldByteCodec.M31Value := ⟨0, by decide⟩
 
 theorem canonical_high_zero (arr : Array U8 32#usize)
     (canonical : ∀ i : Fin 8, (wordLE arr i).val < 2147483647)
