@@ -708,3 +708,46 @@ is the row-local fact the writing stage guarantees.
        by inspection of pair_trace.rs and not differentially tested; the
        stable/late bank merge (merge_model covers the merge function only);
        the copy ↔ production link for each writer stays numerical (D54.3).
+
+§13  Glue differential test, bank merge, M31 primality (base 2adce1714; attempts 4420-4426)
+
+  13.1 Glue differential test (refine/diffharness/tests/glue.rs; evidence
+       refine/evidence/diff-h.txt).  A Rust mirror of copyCellMerged over the
+       extracted copies (blockwriters, poseidon, writers).  Mirror guarantee:
+       - the table-driven glue (sponge schedule of spongePre, chunk words and
+         lengths of chunksOf, the node-children dispatch of childrenOf, the
+         row ranges of copyCell) is rendered from ONE table in
+         refine/glue/gen-glue.py.txt: the Lean rendering must occur verbatim
+         in the proved Lean files and the Rust rendering is glue_gen.rs
+         (included by glue.rs); --check fails on either drift (tamper teeth in
+         refine/evidence/gen-glue-check.raw: a Lean chunk swap and a Rust
+         chain-index change are both rejected);
+       - the structural glue (orderedR, bitB, treeCurR, outPairR, appBitR,
+         appSibR, appCurR, RustWriterChain, invR, path arrays, inRec/outRec,
+         banks, merge) is one hand-written Rust function per Lean definition,
+         same name in snake case, and is covered by the comparison itself.
+       Numerically checked (host, optimized, 3G/4G scope, 1.9 s, 152 MB):
+       the merged 29 x 1024 copy trace equals the production forest compile
+       (columns 0..15 cell for cell; columns 16..28 zero, the model's choice for
+       the stage-H columns) on the saved transfer and withdrawal fixtures and
+       on 512 randomized honest witnesses (alternating transfer/withdrawal,
+       random append index 0..63, random pair-leaf shapes); merge_check true
+       on each.  Teeth: 7 single-field record mutations (membership bit,
+       super-root bit, append parity, asset, change salt, pair inverse,
+       variant) each change 1..9,788 cells against production.
+       The Rust side of the Wspend⁺ → record map is `records` in glue.rs
+       (the field-by-field source of every RustWitness / RustPublic field).
+  13.2 Bank merge (R0Z/BuilderWitnessMerged, 4426).  The append blocks go to a
+       late bank (rows 544..863 only), every other row to the stable bank,
+       both 16 x 1024 column-major; the extracted merge_check / merge_copy
+       combine them.  builder_witness_merged: the check returns ok true, the
+       merge returns ok, and every cell of copyCellMerged lifts to
+       buildModel pub (toModel W) — under PubCorr and WitnessOk only.
+  13.3 Nat.Prime 2147483647 (R0Z/M31Prime, 4421).  Lucas certificate: witness
+       7, p - 1 = 2·3²·7·11·31·151·331; each 7^((p-1)/q) in ZMod p reduced by
+       reduce_mod_char (Mathlib's certified pow-mod, intermediate values
+       < p²), each residue ≠ 1 closed by one decide on two reduced literals;
+       the small primes by norm_num.  Wall 1.0 s, 2.2 GB.  The named prime
+       premise is gone from builder_witness_merged.
+  Remaining: the Wspend⁺ → RustWitness/RustPublic map on the Lean side
+  (§12.6), and the per-writer copy ↔ production links (numerical, D54.3).
