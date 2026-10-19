@@ -11,7 +11,7 @@ The generated code and the bridge proofs are checked together by Lean.
 For a less technical explanation, start with
 [`docs/formal-verification.md`](../docs/formal-verification.md). For the short
 route through the Rust source, use the
-[`accepted V5 source map`](../docs/v5-accepted-source-map.md).
+[`accepted V5 source map`](../docs/v5/v5-accepted-source-map.md).
 
 ## Final accepted-path theorem
 

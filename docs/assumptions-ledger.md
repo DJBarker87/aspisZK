@@ -59,7 +59,7 @@ uses a symbolic Poseidon2 primitive-security term. The constants and execution
 are verified; the cryptographic advantage is supplied by the assumption.
 
 The dated evidence and bibliography route are recorded in the
-[24 August novelty and cryptanalysis scan](novelty-rescan-2026-08-24.md).
+[24 August novelty and cryptanalysis scan](novelty/novelty-rescan-2026-08-24.md).
 
 ## Work-normalized and raw security
 

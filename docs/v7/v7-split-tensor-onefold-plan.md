@@ -1604,7 +1604,7 @@ results/v7/lane_kats.json
 **Deliverables**
 
 ```text
-docs/v7-code-switch-theorem-audit.md
+docs/v7/v7-code-switch-theorem-audit.md
 V7SplitTensor/PublishedCodeSwitchInterfaces.lean
 ```
 

@@ -85,13 +85,13 @@ mainnet-beta signature. That gate is closed by the recorded transaction
 [`3G1vogg…42sRPFcv`](https://explorer.solana.com/tx/3G1voggszvDMGi5PbGM1kuEMYKvh2TNMbH6hHHwndUdRQJNT7ehRFpQpksxLnx5tp2xkS5jGi359rVXk42sRPFcv?cluster=mainnet-beta)
 at finalized slot `433219840` on 2026-07-16, three days after that scan closed,
 with evidence in
-[`release/aspis-spend-q18-g37-mainnet-v1/`](../release/aspis-spend-q18-g37-mainnet-v1/)
-and [`docs/mainnet-demo.md`](mainnet-demo.md). The later V5/tag-67 line
+[`release/aspis-spend-q18-g37-mainnet-v1/`](../../release/aspis-spend-q18-g37-mainnet-v1/)
+and [`docs/mainnet-demo.md`](../mainnet-demo.md). The later V5/tag-67 line
 finalized separately at slot `435019536`.
 
 This audit records that the artifacts exist and are internally consistent. It
 does not itself re-verify chain finality; that check is
-[`release/aspis-v5-tag67-mainnet-v1/verify.sh`](../release/aspis-v5-tag67-mainnet-v1/)
+[`release/aspis-v5-tag67-mainnet-v1/verify.sh`](../../release/aspis-v5-tag67-mainnet-v1/)
 and `tools/check_release_facts.py`.
 
 ## 4. Delta since 13 July
@@ -123,7 +123,7 @@ This scan found it through the authenticated code-search API on the query
 
 This is not a novelty finding and does not bear on Section 3. It is recorded
 here because it was surfaced by the same pre-publication search and it touches
-[`docs/assumptions-ledger.md`](assumptions-ledger.md).
+[`docs/assumptions-ledger.md`](../assumptions-ledger.md).
 
 A sustained algebraic-cryptanalysis campaign against Poseidon and Poseidon2 ran
 through 2026: [ePrint 2026/150](https://eprint.iacr.org/2026/150),
@@ -135,7 +135,7 @@ Foundation has abandoned Poseidon for L1 in favour of SHA or BLAKE.
 
 Aspis uses Poseidon2 over Mersenne31 at width 16, `alpha = 5`, 8 full and 14
 partial rounds, with constants copied from `p3-mersenne-31 0.6.1`
-([`crates/aspis-statement/src/poseidon2.rs`](../crates/aspis-statement/src/poseidon2.rs)).
+([`crates/aspis-statement/src/poseidon2.rs`](../../crates/aspis-statement/src/poseidon2.rs)).
 On the published evidence that parameter set is not broken. ePrint 2026/306 §6
 states that "the 128-bit security of Poseidon2(b) with respect to preimage and
 collision attacks does not appear to be compromised," and that the attack

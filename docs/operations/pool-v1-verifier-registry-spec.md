@@ -156,7 +156,7 @@ public entrypoint.
 P3f adds an opt-in verifier-side ASVQ handler only for the already-frozen
 same-path Tag-73 `AtomicPaymentStatementV4` relation. It does not claim the
 Pool historical-anchor relation or future P4 1-to-2 semantics. The exact
-392-byte profile is frozen in `docs/pool-v1-v7-tag73-readonly-profile.md`; it
+392-byte profile is frozen in `docs/operations/pool-v1-v7-tag73-readonly-profile.md`; it
 checks an exact-size sealed proof account, recomputes every derivable digest
 and emits ASVS only after full verification. Loader code/upgrade authenticity,
 successful real SVM return-data behavior/CU, future profile semantics and atomic

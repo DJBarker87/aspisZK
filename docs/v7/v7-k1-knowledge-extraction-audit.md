@@ -433,7 +433,7 @@ truncated-collision event. Derive the raw bound as a function of total SHA-256
 queries, with the two trees and domain tags included.
 
 The exact deployed grammar and required combined two-tree theorem are frozen
-in `docs/v7-k1.2-merkle-query-graph-spec.md`.
+in `docs/v7/v7-k1.2-merkle-query-graph-spec.md`.
 
 ### K1.3 — executable circle-code decoders
 

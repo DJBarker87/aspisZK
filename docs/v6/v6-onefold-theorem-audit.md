@@ -38,7 +38,7 @@ scratch space, and masking material. The earlier 112-MiB estimate applied to
 
 ### Checked in Lean
 
-[`V6OneFoldParameterAudit.lean`](../AspisFormal/AspisFormal/V6OneFoldParameterAudit.lean)
+[`V6OneFoldParameterAudit.lean`](../../AspisFormal/AspisFormal/V6OneFoldParameterAudit.lean)
 proves the following exact facts:
 
 - The dimensions are `1024 -> 256` coefficients and
@@ -66,7 +66,7 @@ proves the following exact facts:
   response boundaries. If each genuine BCS round maps to a distinct boundary,
   the round count is at most 23 and therefore at most 30.
 
-[`V6OneFoldCandidateExtraction.lean`](../AspisFormal/AspisFormal/V6OneFoldCandidateExtraction.lean)
+[`V6OneFoldCandidateExtraction.lean`](../../AspisFormal/AspisFormal/V6OneFoldCandidateExtraction.lean)
 now defines the ideal 16-query verifier and proves the deterministic
 accepted-proof step. Outside three explicit failures—a query miss, failure of
 the published one-fold reduction, and an oversized initial list—acceptance
@@ -74,7 +74,7 @@ produces one member of a single at-most-100 initial list whose natural fold is
 exactly the disclosed 256 coefficients. The list-overflow event is impossible
 once the intended initial encoder's 1,024-position overlap bound is supplied.
 
-[`V6EncoderDistance.lean`](../AspisFormal/AspisFormal/V6EncoderDistance.lean)
+[`V6EncoderDistance.lean`](../../AspisFormal/AspisFormal/V6EncoderDistance.lean)
 proves the new B10 domain geometry rather than carrying that overlap bound as
 an unexplained assumption. The `2^20` half-odd circle points are pairwise
 distinct and avoid the west pole. From the ordinary circle-polynomial
@@ -83,13 +83,13 @@ at-most-1,024 initial overlap. From an ordinary natural-line evaluation
 identity, it derives the at-most-255 final overlap. What remains for the V6
 encoder is the concrete evaluation identity, not a separate distance claim.
 
-[`V6Width29CorrelatedAgreement.lean`](../AspisFormal/AspisFormal/V6Width29CorrelatedAgreement.lean)
+[`V6Width29CorrelatedAgreement.lean`](../../AspisFormal/AspisFormal/V6Width29CorrelatedAgreement.lean)
 proves the finite root-counting argument for the selected 26+3 batch. A fixed
 nonzero 29-lane discrepancy is hidden by at most 28 nonzero challenges. The
 result permits the response strategy to choose a different nearby codeword
 for every challenge, so it does not introduce a decoder-list multiplier.
 
-[`V6PublishedTheoremInterfaces.lean`](../AspisFormal/AspisFormal/V6PublishedTheoremInterfaces.lean)
+[`V6PublishedTheoremInterfaces.lean`](../../AspisFormal/AspisFormal/V6PublishedTheoremInterfaces.lean)
 pins the literature boundary to two exact predicates rather than a general
 claim that “FRI applies.” For the 29-column initial batch, the list expression
 is exactly 112 and the degree-28 challenge cap is 336,869,026,605,739. With
@@ -102,7 +102,7 @@ by the local extraction model.
 The companion Python screen used coefficient 28 for the initial batching
 term. That is exactly the degree required by the selected 29-column profile.
 
-[`V6SecurityLedger.lean`](../AspisFormal/AspisFormal/V6SecurityLedger.lean)
+[`V6SecurityLedger.lean`](../../AspisFormal/AspisFormal/V6SecurityLedger.lean)
 checks a conservative rounded budget. It removes the three FRI fold terms that
 no longer exist, uses `2^-109` for the initial batch, `2^-111` for the sole
 fold, and `2^-109` for the compact-conditioned q16 miss, and provisionally
@@ -111,7 +111,7 @@ the named BCS conditions, the three-stream work-normalized core is at most
 `0.4 * 2^-100`. The other `0.6 * 2^-100` is not silently spent: it remains
 available for implementation, primitive, hiding, and any ledger corrections.
 
-[`V6RelationFold.lean`](../AspisFormal/AspisFormal/V6RelationFold.lean) records
+[`V6RelationFold.lean`](../../AspisFormal/AspisFormal/V6RelationFold.lean) records
 that the generic relation-fold theorem already proved for V5 applies unchanged
 to V6. For every arity-four layer, the checked degree-six message has the
 incoming dot product as its boundary and the folded values/dual-folded weights
@@ -125,7 +125,7 @@ logical foundations. There is no `sorry` in this module.
 
 ### Implemented host/SBF-neutral slice
 
-[`v6_onefold.rs`](../crates/aspis-core/src/v6_onefold.rs) now fixes the exact
+[`v6_onefold.rs`](../../crates/aspis-core/src/v6_onefold.rs) now fixes the exact
 26+3 grammar independently of any deployed instruction. It:
 
 - parses the variable-length two-frontier body and rejects trailing bytes;
@@ -164,7 +164,7 @@ canonical packed decoding, 26+3 batching, and both typed binary Merkle trees,
 circle-coordinate derivation and batch inversion, 22,285 CU for the sixteen
 folds and equality checks, and 907 CU for the result sink. The result is
 recorded in
-[`v6_onefold_packed_final256_cu.json`](../results/spend/v6_onefold_packed_final256_cu.json).
+[`v6_onefold_packed_final256_cu.json`](../../results/spend/v6_onefold_packed_final256_cu.json).
 
 This is a positive implementation result because the original version, which
 rescanned the packed body and decoded the terminal vector independently for

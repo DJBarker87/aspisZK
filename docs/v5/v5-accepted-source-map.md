@@ -50,7 +50,7 @@ wrapper discarded writes by rebuilding from an empty iterator; Lean records
 that counterexample, and the Rust and deployed program were unaffected. It does
 not prove Charon, Aeneas, Lean, `rustc`, LLVM, the Solana build tools, SHA-256,
 Poseidon2, or the Solana runtime. Those remaining assumptions are listed in
-[`assumptions-ledger.md`](assumptions-ledger.md).
+[`assumptions-ledger.md`](../assumptions-ledger.md).
 
 ## Primary files
 

@@ -30,12 +30,12 @@ mainnet evidence.
 From this directory:
 
 ```sh
-mkdir -p ../../output/pdf
+mkdir -p pdf
 latexmk -pdf -interaction=nonstopmode -halt-on-error \
-  -outdir=../../output/pdf aspis-formalization.tex
+  -outdir=pdf aspis-formalization.tex
 ```
 
-The final PDF is `output/pdf/aspis-formalization.pdf`.
+The final PDF is `paper/aspis-formalization/pdf/aspis-formalization.pdf`.
 
 ## Submission source
 

@@ -155,17 +155,17 @@ root source file.
 From `paper/aspis-formalization`:
 
 ```sh
-mkdir -p ../../output/pdf
+mkdir -p pdf
 latexmk -pdf -interaction=nonstopmode -halt-on-error \
-  -outdir=../../output/pdf aspis-formalization.tex
+  -outdir=pdf aspis-formalization.tex
 ```
 
-The final PDF is `output/pdf/aspis-formalization.pdf`. Check its metadata,
+The final PDF is `paper/aspis-formalization/pdf/aspis-formalization.pdf`. Check its metadata,
 fonts, and page rendering before submission:
 
 ```sh
-pdfinfo output/pdf/aspis-formalization.pdf
-pdffonts output/pdf/aspis-formalization.pdf
+pdfinfo paper/aspis-formalization/pdf/aspis-formalization.pdf
+pdffonts paper/aspis-formalization/pdf/aspis-formalization.pdf
 ```
 
 The arXiv upload should contain the root TeX source, `sections/`,

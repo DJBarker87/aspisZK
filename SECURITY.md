@@ -110,4 +110,4 @@ reconstructs the closed proof and program accounts offline.
 For Solana review, begin with
 `programs/aspis-verifier/src/{dispatch,v5_full_transaction}.rs` and the
 [V5 release preflight](release/preflight/v5-production-freeze.md). For the
-formal path, begin with the [15-stop source map](docs/v5-accepted-source-map.md).
+formal path, begin with the [15-stop source map](docs/v5/v5-accepted-source-map.md).

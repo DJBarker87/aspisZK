@@ -1,14 +1,29 @@
 # Documentation
 
-Aspis V5 is the current release. It records a private-spend construction,
-Lean proofs, selected production verifier paths translated with Charon and
-Aeneas, a byte-reproducible Solana program, and a finalized mainnet-beta state
-transition. The Rust-to-model connection is complete through the initial
-relation value, decoded relation tail, and both final accumulators. The final
-clean replay passed on 24 August 2026, so one successful selected translated verifier call
-deterministically yields the maintained accepted-path security-event
-conclusion; the main and compact accumulator equalities are derived inside
-that theorem.
+V7 is the current release candidate; no V7 transaction has been signed or
+submitted. V5 is the finalized mainnet result. It records a private-spend
+construction, Lean proofs, selected production verifier paths translated with
+Charon and Aeneas, a byte-reproducible Solana program, and a finalized
+mainnet-beta state transition. The V5 Rust-to-model connection is complete
+through the initial relation value, decoded relation tail, and both final
+accumulators. The final clean replay passed on 24 August 2026, so one
+successful selected translated verifier call deterministically yields the
+maintained accepted-path security-event conclusion; the main and compact
+accumulator equalities are derived inside that theorem.
+
+## Layout
+
+| Folder | Contents |
+| --- | --- |
+| this folder | Overview pages: how it works, formal verification, assumptions, code map, design history, V5 mainnet result |
+| [`v5/`](v5/) | V5 accepted source map |
+| [`v6/`](v6/) | V6 one-fold theorem audit |
+| [`v7/`](v7/) | V7 plans, theorem audits, gate checklist and download provenance |
+| [`v8/`](v8/) | V8 gates and the direct-compression rejection |
+| [`operations/`](operations/) | Pool operator runbook, verifier-registry specification, read-only profile, privacy cleanup |
+| [`novelty/`](novelty/) | Novelty and cryptanalysis scans |
+| [`research/`](research/) | Dated research and audit notes |
+| [`reviews/`](reviews/) | Publication and security-extension reviews |
 
 ## Start here
 
@@ -25,7 +40,7 @@ that theorem.
    proof layers, program identity, and mainnet bundle
 6. [Security assumptions](assumptions-ledger.md) — cryptographic,
    translation, compiler, and runtime boundaries
-7. [Accepted V5 source map](v5-accepted-source-map.md) — the 15 review stops
+7. [Accepted V5 source map](v5/v5-accepted-source-map.md) — the 15 review stops
    from instruction dispatch through proof checks and the state update
 8. [Code map](code-map.md) — broader concept-to-file navigation
 9. [Formalization report](../paper/aspis-formalization/) — mathematical,
@@ -37,7 +52,7 @@ that theorem.
 
 ## V6 research
 
-The [V6 one-fold theorem audit](v6-onefold-theorem-audit.md) records the first
+The [V6 one-fold theorem audit](v6/v6-onefold-theorem-audit.md) records the first
 checked results and the unresolved security work for the proposed 30 KiB
 B10/q16 profile. It is research work, not a released protocol claim.
 

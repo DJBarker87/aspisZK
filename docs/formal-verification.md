@@ -52,7 +52,7 @@ Every item below is derived from the same successful translated execution:
 | Compact accumulator | Constructor, four fold cases, final scatter/assembly, and four-term dot product |
 | Composition | One accepted snapshot yields the maintained accepted-path security-event conclusion |
 
-The [accepted V5 source map](v5-accepted-source-map.md) reduces this path to
+The [accepted V5 source map](v5/v5-accepted-source-map.md) reduces this path to
 15 review stops. The detailed generated-source inventory is in
 [`aeneas-verif/README.md`](../aeneas-verif/README.md).
 

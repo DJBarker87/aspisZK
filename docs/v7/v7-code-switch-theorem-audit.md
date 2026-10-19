@@ -10,7 +10,7 @@ wire gate; compact Tag-72 successor SELECTED**
 > 36,040 bytes (35,016 bytes even with a security-costly punctured source
 > domain).  It is therefore not the production V7 profile.  The selected
 > profile and exact 30,672-byte census are frozen in
-> `docs/v7-compact-tag72-pivot.md`.
+> `docs/v7/v7-compact-tag72-pivot.md`.
 
 This audit is deliberately narrower than a security proof.  It checks whether
 the published statements actually have the hypotheses needed by the proposed

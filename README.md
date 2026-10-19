@@ -296,17 +296,28 @@ published nor retained.
 | `crates/aspis-prover/` | Prover, grinding, fixtures, and security calculators |
 | `programs/aspis-verifier/` | Solana STARK verifier program |
 | `programs/aspis-pool/` | V7 pool, lane, history, nullifier, and withdrawal logic |
+| `crates/aspis-pool-wallet-v1/` | Wallet and client code for the V7 pool |
+| `programs/aspis-registry/` | Governed verifier-registry program |
+| `kani-verif/` | Kani proof bundles for V5 FRI helpers |
 | `xtask/` | Build, deployment, recovery, and evidence tools |
+| `scripts/` | V7 runtime, devnet, and compute-unit drivers |
+| `tools/` | Release-fact, parameter-binding, and replay checkers |
+| `config/` | V7 devnet harness configurations |
+| `manifests/` | Soundness parameters and the V7 split-tensor profile |
+| `audit/` | Focused probes and Stwo reference-vector generators |
 | `release/` | Frozen release inputs and finalized public bundles |
 | `results/` | Runtime measurements, binary hashes, and replay records |
-| `docs/` | Design explanations, source maps, assumptions, and research audits |
-| `paper/aspis-formalization/` | Formalization report |
+| `archive/` | Manifests of archived source states |
+| `docs/` | Design explanations, source maps, assumptions, and research audits ([index](docs/README.md)) |
+| `paper/aspis-formalization/` | Formalization report (PDF in `pdf/`) |
 | `paper/aspis-spend/` | Construction and deployment paper |
+
+Each top-level folder has a README describing its contents.
 
 For a short introduction, see [How Aspis works](docs/how-it-works.md). The
 [assumptions ledger](docs/assumptions-ledger.md), [security
 policy](SECURITY.md), and [V5 accepted source
-map](docs/v5-accepted-source-map.md) provide the review boundaries.
+map](docs/v5/v5-accepted-source-map.md) provide the review boundaries.
 
 ## Earlier result
 

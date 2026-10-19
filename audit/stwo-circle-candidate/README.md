@@ -11,7 +11,7 @@ From the Aspis repository root:
 ```sh
 git clone https://github.com/starkware-libs/stwo.git /tmp/stwo-circle-candidate
 git -C /tmp/stwo-circle-candidate checkout 5d10e6b4baa559766e7bbae133b918121211a9c5
-cp reference/stwo-circle-candidate/aspis_circle_candidate_digests.rs \
+cp audit/stwo-circle-candidate/aspis_circle_candidate_digests.rs \
   /tmp/stwo-circle-candidate/crates/stwo/examples/aspis_circle_candidate_digests.rs
 cargo +nightly-2026-01-15 run --quiet --release --manifest-path \
   /tmp/stwo-circle-candidate/Cargo.toml -p stwo --features prover \

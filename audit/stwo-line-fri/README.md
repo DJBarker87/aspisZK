@@ -10,7 +10,7 @@ From a clean checkout:
 ```sh
 git clone https://github.com/starkware-libs/stwo.git /tmp/stwo-line-fri-reference
 git -C /tmp/stwo-line-fri-reference checkout 5d10e6b4baa559766e7bbae133b918121211a9c5
-cp reference/stwo-line-fri/aspis_line_vectors.rs \
+cp audit/stwo-line-fri/aspis_line_vectors.rs \
   /tmp/stwo-line-fri-reference/crates/stwo/examples/aspis_line_vectors.rs
 cargo +nightly-2026-01-15 run --quiet --release --manifest-path \
   /tmp/stwo-line-fri-reference/Cargo.toml -p stwo \

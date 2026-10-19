@@ -33,10 +33,10 @@ and original executor receipts were retained securely outside the repository.
 
 `git filter-repo` replaced the literal and updated dependent SHA-256 checksums
 and manifest byte lengths. Historical source identifiers remain in the evidence
-as originally published. The [revision map](../release/history-redaction-map.json)
+as originally published. The [revision map](../../release/history-redaction-map.json)
 records their cleaned equivalents. The release-facts checker and V5 source
 rebuild script resolve these identifiers through
-[`tools/resolve_release_revision.py`](../tools/resolve_release_revision.py).
+[`tools/resolve_release_revision.py`](../../tools/resolve_release_revision.py).
 For an older command using a published source ID:
 
 ```bash
