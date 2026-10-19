@@ -1,0 +1,1 @@
+pub struct Accumulator { pub weights:Vec<K>,pub rhs:E,pub power:K,pub next:usize }

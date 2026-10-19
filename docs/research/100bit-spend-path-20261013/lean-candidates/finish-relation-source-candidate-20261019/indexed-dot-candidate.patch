@@ -1,0 +1,12 @@
+--- shallow-candidate/lib.rs
++++ indexed-shallow-candidate/lib.rs
+@@ -869,7 +869,8 @@
+ }
+ fn finish_query_dot(final_message:&[u8],weights:&[K])->Result<E,Error> {
+     let mut dot=crate::fast_pairing::EbyKDot::new();
+-    for (j,w) in weights.iter().enumerate() {dot.push(field(final_message,j),*w).map_err(|_|Error::Parse)?;}
++    let mut j=0;
++    while j<weights.len() {dot.push(field(final_message,j),weights[j]).map_err(|_|Error::Parse)?;j+=1;}
+     Ok(dot.finish())
+ }
+ #[inline(never)]
