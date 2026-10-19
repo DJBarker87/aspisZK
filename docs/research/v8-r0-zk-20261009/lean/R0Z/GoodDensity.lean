@@ -5,6 +5,28 @@ import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Data.Fintype.Pi
 import Mathlib.Tactic.Positivity
 import Mathlib.Tactic.Ring
+import Mathlib.Data.Fintype.Card
+import Mathlib.Data.Finset.Image
+import Mathlib.Tactic.NormNum
+import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
+import Mathlib.LinearAlgebra.Matrix.ToLin
+import Mathlib.LinearAlgebra.Dimension.Constructions
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.FieldTheory.Finite.Basic
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Logic.Equiv.Fin.Basic
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.FinCases
+import Mathlib.Tactic.IntervalCases
+import Mathlib.Algebra.BigOperators.Field
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Algebra.BigOperators.Module
+import Mathlib.Algebra.BigOperators.Pi
+import Mathlib.Algebra.Order.Field.Basic
+import Mathlib.Data.Rat.Cast.Order
+-- Same bounded Mathlib import set as R0Z/StatisticalDistance (unified base).
 
 /-! D15's good-alpha predicate (placed here by D17′) and the D17.2 item 8
 density count. No protocol module is imported. The bad set is covered by 21
