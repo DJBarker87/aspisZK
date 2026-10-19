@@ -301,6 +301,39 @@ fn builder_diff(p: &Pub, cert: &Cert, label: &str) {
     let want = flat(&chain_targets(&p.a), RW).expect("chain targets");
     let diff = tq.iter().zip(&want).filter(|(x, y)| x != y).count();
     println!("R1C3_BUILD {label} builder=chain_targets agree={} entries={} mismatches={diff} build_seconds={t_build:.3}", tq == want, tq.len());
+    // Builder 2: the lift observation matrices.
+    let nq = p.qs.len();
+    let zz: Vec<u32> = p.z.iter().flat_map(|pt| ql(pt.x).into_iter().chain(ql(pt.y))).collect();
+    let tr: Vec<u32> = z5::transport().iter().map(|&x| x as u32).collect();
+    let (mut sx, mut sy) = (vec![], vec![]);
+    for &u in &p.qs {
+        for slot in 0..4 {
+            let pt = stored_point::<M31>(child_index(FibreIndex::new(u).unwrap(), SlotIndex::new(slot).unwrap()));
+            sx.push(pt.x.0);
+            sy.push(pt.y.0);
+        }
+    }
+    let inact: Vec<u32> = (0..N).map(|r| inactive(r) as u32).collect();
+    let mut sel1 = vec![];
+    for l in 0..16 {
+        sel1.extend(cert.lifts[l].sel.iter().copied());
+    }
+    let selh: Vec<u32> = cert.lifts[16].sel.clone();
+    let tb = Instant::now();
+    let lo = aspis_r1_cert_build::fill_lo(&al, &zz, &tr, &sx, &sy, &inact, &sel1, &selh, nq);
+    let t_lo = tb.elapsed().as_secs_f64();
+    let mut want = vec![];
+    for (ci, l) in cert.lifts.iter().enumerate() {
+        let w = lift_width(ci);
+        let cols: Vec<Vec<u32>> = l.sel.iter().map(|&mm| lift_src(&p.cx, ci, mm)).collect();
+        for i in 0..w {
+            for x in 0..w {
+                want.push(cols[x][i]);
+            }
+        }
+    }
+    let diff = lo.iter().zip(&want).filter(|(x, y)| x != y).count();
+    println!("R1C3_BUILD {label} builder=lift_columns agree={} entries={} want_entries={} mismatches={diff} build_seconds={t_lo:.3}", lo == want, lo.len(), want.len());
 }
 
 pub(super) fn run(p: &Pub, cert: &Cert, label: &str, teeth: bool) {

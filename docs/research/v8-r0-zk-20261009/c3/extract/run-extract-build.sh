@@ -12,7 +12,7 @@ cd $S/extract/build-$A && PATH=/home/dombarker/.cargo/bin:$PATH cargo generate-l
 systemd-run --user --scope --quiet -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
   --setenv=PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin --setenv=RUSTUP_TOOLCHAIN=nightly-2026-06-01 \
   /usr/bin/time -v -o $S/extract/charon-$A/time.log timeout 1200 $T/charon-target/release/charon cargo \
-  --preset aeneas --mir built --start-from crate::fill_tq \
+  --preset aeneas --mir built --start-from crate::fill_tq --start-from crate::fill_lo \
   --dest-file $S/extract/charon-$A/build.llbc -- --lib --release --offline > $S/extract/charon-$A/charon.log 2>&1
 echo "charon exit=$?"
 cd $S/extract && systemd-run --user --scope --quiet -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
