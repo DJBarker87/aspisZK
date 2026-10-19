@@ -562,3 +562,27 @@ fn compiled_c1(spec: Option<(u32, u32, bool)>, rng: &mut Rng) -> [Vec<M31>; 16] 
             context(public.pool, public.deployment_domain, anchor, asset), snapshot).unwrap().semantic_c1.c1.clone()
     }
 }
+
+/// The Poseidon copy reproduces rows 1..11 of every block of real traces.
+#[test]
+fn compiled_blocks_rounds_match_copy() {
+    let mut rng = Rng(0x5eed_5eed_5eed_5eed);
+    let mut n = 0;
+    for i in 0..32u64 {
+        let input_value = 2 + rng.below((1 << 30) - 2) as u32;
+        let part = 1 + rng.below(input_value as u64 - 1) as u32;
+        let c1 = compiled_c1(Some((input_value, part, i % 2 == 0)), &mut rng);
+        for block in 0..57 {
+            let pre: [u32; 16] = core::array::from_fn(|c| c1[c][block * 16].0);
+            let abs: [u32; 16] = core::array::from_fn(|c| c1[c][block * 16 + 12].0);
+            let rounds = aspis_r0_poseidon_copy::perm_rounds(&pre, &abs);
+            for r in 0..11 {
+                for c in 0..16 {
+                    assert_eq!(c1[c][block * 16 + r + 1].0, rounds[r][c], "block {block} row {}", r + 1);
+                }
+            }
+            n += 1;
+        }
+    }
+    println!("compiled_blocks_rounds_match_copy: {n} blocks");
+}
