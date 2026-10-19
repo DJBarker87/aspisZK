@@ -1,0 +1,51 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGuard.lean:20:4: error: 'change' tactic failed, pattern
+  buffer.length ≤ UScalar.max UScalarTy.Usize
+is not definitionally equal to target
+  (↑buffer).length ≤ Usize.max
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGuard.lean:25:17: error: Application type mismatch: The argument
+  he
+has type
+  UScalar.add index 1#usize = ok next
+but is expected to have type
+  ok next = ok next
+in the application
+  And.intro he
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGuard.lean:30:6: warning: Try `simp at hs` instead of `simpa using hs`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGuard.lean:35:6: warning: Try `simp at hs` instead of `simpa using hs`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGuard.lean:51:88: error: unsolved goals
+T : Type
+self : Guard T
+item : T
+h : ↑self.initialized < self.array_mut.length
+next : Usize
+hn : UScalar.add self.initialized 1#usize = ok next
+hnv : ↑next = ↑self.initialized + 1
+⊢ (let (mu, get_unchecked_mut_back) := ((↑self.array_mut)[↑self.initialized], self.array_mut.set self.initialized)
+    let (t, write_back) := (item, fun value => some value)
+    ok
+      ({ array_mut := get_unchecked_mut_back (write_back t), initialized := next }, fun self1 =>
+        { array_mut := self1.array_mut, initialized := self.initialized })) =
+    ok
+      ({ array_mut := self.array_mut.set self.initialized (some item), initialized := next }, fun replacement =>
+        { array_mut := replacement.array_mut, initialized := self.initialized })
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGuard.lean:56:4: warning: This simp argument is unused:
+  core.slice.index.SliceIndexUsizeSlice
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1CuArraySource.core.array.Guard.push_unchecked,
+      AspisR1CuArraySource.core.slice.Slice.get_unchecked_mut,
+  ̵  ̵ ̵ ̵core.slice.index.S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵UsizeS̵l̵i̵c̵e̵,̵c̵o̵r̵e̵.s̵l̵ic̵e̵.̵i̵ndex.̵U̵s̵i̵z̵e̵.̵i̵n̵d̵e̵x̵_mut,
+      index_success self.array_mut self.initialized h, ̲bind_tc_ok,
+      AspisR1CuArraySource.core.mem.maybe_uninit.MaybeUninit.write,
+      AspisR1CuArraySource.core.num.Usize.unchecked_add, ̲hn]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsArrayGuard.increment_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsArrayGuard.index_success' depends on axioms: [propext]
+'AspisR1.CuSavingsArrayGuard.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsArrayGuard.frame' depends on axioms: [propext, Quot.sound]
+'AspisR1.CuSavingsArrayGuard.written' depends on axioms: [propext]

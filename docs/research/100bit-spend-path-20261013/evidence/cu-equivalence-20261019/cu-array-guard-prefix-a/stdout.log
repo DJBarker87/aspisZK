@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGuardPrefix.lean:49:12: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => (values ++ [item])[_a] = item
+Error: Application type mismatch: The argument
+  hj
+has type
+  ↑self.initialized < (values ++ [item]).length
+but is expected to have type
+  _a < (values ++ [item]).length
+in the application
+  (values ++ [item])[_a]
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+T : Type
+self : Guard T
+values : List T
+item : T
+hroom : values.length < self.array_mut.length
+hcount : ↑self.initialized = values.length
+hbound : values.length ≤ self.array_mut.length
+hcells : ∀ (j : ℕ) (hj : j < values.length), (↑self.array_mut)[j]? = some (some values[j])
+hindex : ↑self.initialized < self.array_mut.length
+next : Usize
+hn : ↑next = ↑self.initialized + 1
+hexec :
+  AspisR1CuArraySource.core.array.Guard.push_unchecked self item =
+    ok
+      ({ array_mut := self.array_mut.set self.initialized (some item), initialized := next }, fun replacement =>
+        { array_mut := replacement.array_mut, initialized := self.initialized })
+after : Guard T := { array_mut := self.array_mut.set self.initialized (some item), initialized := next }
+hlen : after.array_mut.length = self.array_mut.length
+hj : ↑self.initialized < (values ++ [item]).length
+hleft : ¬↑self.initialized < values.length
+⊢ (values ++ [item])[↑self.initialized] = item
+'AspisR1.CuSavingsArrayGuardPrefix.InitializedAs' depends on axioms: [propext]
+'AspisR1.CuSavingsArrayGuardPrefix.push_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

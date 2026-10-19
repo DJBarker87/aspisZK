@@ -118,6 +118,10 @@ for attempt,item in library_manifest['runs'].items():
     if 'aeneas' in attempt:assert receipt['exit_status']!=0,attempt
 audit['array_library_diagnostic_manifest_sha256']=sha(library/'MANIFEST.json')
 audit['array_library_source_admitted']=False
+audit['array_guard_emission_check']=json.loads(subprocess.check_output([
+    sys.executable,str(Path(__file__).with_name('emit-array-guard.py')),'--check'],text=True))
+audit['deref_frontend_diagnostic_check']=json.loads(subprocess.check_output([
+    sys.executable,str(Path(__file__).with_name('check-deref-evidence.py'))],text=True))
 usage=resource.getrusage(resource.RUSAGE_SELF)
 audit['audit_command']=[sys.executable,str(Path(__file__).relative_to(repo)),*sys.argv[1:]]
 audit['audit_source_revision']=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()

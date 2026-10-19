@@ -16,6 +16,15 @@ executions with sufficient resources; it does not equate failure under an
 insufficient compute/heap cap. Resource bounds and source caller admission
 remain obligations, not hidden hypotheses asserting the conclusion.
 
+Latest library checkpoint: the selected emitted Guard.push_unchecked execution
+and its consuming initialized-prefix invariant are checked under explicit
+safe-domain primitive models (five additional focused targets). A guarded
+experimental LLBC rewrite clears the two mutable-copy diagnostics and passes
+positive byte-identity/four negative-copy tests, but is NOT admitted as a
+compiler pass. The complete array-library emission still fails at generic
+Try::from_output and loop fixed-point analysis. See ARRAY-LIBRARY-SOURCE.md.
+No whole-candidate or security-transfer obligation is closed by this checkpoint.
+
 | Retained change | Required proof and source bridge | Status |
 |---|---|---|
 | 1 gamma table reuse | power table correctness, unchanged caller dataflow, preparation/tx1 extraction | open |

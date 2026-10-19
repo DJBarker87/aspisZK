@@ -508,6 +508,36 @@
       "nonstandard_axioms": [
         "core.fmt.Formatter"
       ]
+    },
+    "AspisR1CuArraySource/Types": {
+      "attempt": "cu-array-guard-types-a",
+      "source_sha256": "65250bce890f6f49b747d36c03afb660f3a1a2cd13a75c1dab5aaf1e3507715d",
+      "receipt_sha256": "3ad73a0dd29580cb8381cd2fcfda35a08e21f3791b124e0b0ff05e4b534fa597",
+      "nonstandard_axioms": []
+    },
+    "AspisR1CuArraySource/Primitives": {
+      "attempt": "cu-array-guard-primitives-a",
+      "source_sha256": "3f7e00175cc4f21da14a76b4b454fdbdc0d36ea79766f6be65724a73a1ef5be8",
+      "receipt_sha256": "d7769831be0f1db172e7502831bc9f384096958bcdac3594d4b850731f35e720",
+      "nonstandard_axioms": []
+    },
+    "AspisR1CuArraySource/Push": {
+      "attempt": "cu-array-guard-push-a",
+      "source_sha256": "f891cbba447453fafcd3e60259906e6e52ba110904f194e4c52c65997103eea5",
+      "receipt_sha256": "053bdaad89595c971d45b1e4cb961390b30ed484e74de1fb031df867064bb93b",
+      "nonstandard_axioms": []
+    },
+    "CuSavingsArrayGuard": {
+      "attempt": "cu-array-guard-proof-c",
+      "source_sha256": "9e4e87aab27b6191c8790314fd0b5fef5d7a4925a1f026d91413044f73ec0b2f",
+      "receipt_sha256": "b1a4cfb2fff4a8414c678169474e12f3cee1b91ad3f749bac1fa67e5cc437275",
+      "nonstandard_axioms": []
+    },
+    "CuSavingsArrayGuardPrefix": {
+      "attempt": "cu-array-guard-prefix-b",
+      "source_sha256": "b17e72ff36ad2993f70d188ee8641b83b505fb8364b2a01b4f4e3b2ac8f06096",
+      "receipt_sha256": "21be285f8c7805a819b9e02c24d503efbdb59545ecba724ad579319fe9be0bde",
+      "nonstandard_axioms": []
     }
   },
   "raw_llbc_retained_on_host": true,
@@ -520,11 +550,26 @@
   "scope": "No whole-verifier, soundness transfer, privacy transfer, compiled binary refinement or universal CU claim yet.",
   "audit_command": [
     "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
-    "docs/research/100bit-spend-path-20261013/tools/cu-equivalence-20261019/audit-components.py"
+    "docs/research/100bit-spend-path-20261013/tools/cu-equivalence-20261019/audit-components.py",
+    "--add",
+    "AspisR1CuArraySource/Types",
+    "cu-array-guard-types-a",
+    "--add",
+    "AspisR1CuArraySource/Primitives",
+    "cu-array-guard-primitives-a",
+    "--add",
+    "AspisR1CuArraySource/Push",
+    "cu-array-guard-push-a",
+    "--add",
+    "CuSavingsArrayGuard",
+    "cu-array-guard-proof-c",
+    "--add",
+    "CuSavingsArrayGuardPrefix",
+    "cu-array-guard-prefix-b"
   ],
-  "audit_source_revision": "8b38671e61234ab2a7e7cdec80e310d2b97b6f9c",
-  "audit_wall_seconds": 1.1925425832159817,
-  "audit_peak_rss_bytes": 22315008,
+  "audit_source_revision": "93f48b1c866a6993bcdad409af5e97b01e844120",
+  "audit_wall_seconds": 2.6649702079594135,
+  "audit_peak_rss_bytes": 22888448,
   "audit_process_swaps": 0,
   "audit_exit_status": 0,
   "audit_print_axioms": "N/A: receipt/source audit only; per-target axioms outputs checked above",
@@ -586,5 +631,27 @@
     "output_sha256": "b7f2e3541088ca6902a8a3005e6a545bdcf70cc8a70fcd5f11cc0c5d42a1be60"
   },
   "array_library_diagnostic_manifest_sha256": "e7e9f670fe29a5978bc9422e10e20b081355f0866f7aaa7fcadf6e1459e5cf2d",
-  "array_library_source_admitted": false
+  "array_library_source_admitted": false,
+  "array_guard_emission_check": {
+    "check": true,
+    "selected_declarations": 2
+  },
+  "deref_frontend_diagnostic_check": {
+    "status": "CHECKED_FRONTEND_REGRESSION_LIBRARY_ADMISSION_OPEN",
+    "run_receipt_sha256": {
+      "deref-repro-charon-a": "bc88a66726b5e2e6baf68b510cf25a96f07397be01c993ef92eb3b8c738d1b66",
+      "deref-repro-aeneas-a": "25cb24f907da9a69052441b8244454727dbfa39f3ababb45c96ab9552c44aa07",
+      "deref-repro-charon-optimized-a": "dd400abd0b48502ba7cb5f287afab97577316265621c52841cbfed6c4d71f5ff",
+      "deref-repro-aeneas-optimized-a": "58717b51cd5a7fbb29c9c4557c3a846b35870a4b2de39168be284f2cf761137e",
+      "deref-normalize-a": "5f7147315c36dfaf4d2d099591d8e979731727583f8ebf64ae8d33d73f73d8e1",
+      "deref-normalized-aeneas-a": "4c09a43b80c5ee6a203518fc6685e78d2f32c413017efc3c00b25ce02bbd90fe",
+      "array-deref-normalize-a": "abb791b1468b631385587492b7ccdd6a2ec3a4fb9b95e9f7529717f0cbc3e22f",
+      "array-deref-normalized-aeneas-a": "5c57a83d0281bd57d60189bf4d84f2ddf2be5686ad73f2d2aa77e785d1b5c695",
+      "deref-guard-regression-a": "0fb855a0a9bbd65f8e3e36cdf1acf7990b9d1f8029bc24bc45241438616755ae"
+    },
+    "regression_summary_sha256": "22a1df6c0022c33fce963f74d2e48dab2046744b882c214a967ab535bf9ca962",
+    "library_normalization_sha256": "c994cf265d48604d5698ae80cef8a6830064372f5a8dca5a79d871e1b70e35dc",
+    "normalizer_sha256": "e48455913b5e126788d466cb43d79ec36d3851716325f44ce9f9e0b2a7c126a8",
+    "array_library_source_admitted": false
+  }
 }

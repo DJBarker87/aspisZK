@@ -1,0 +1,129 @@
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/CuDerefReproOptimized.llbc
+[[92mInfo[39m ] 
+#[lang_item("slice_len_fn")]
+pub fn core::slice::{[T]}::len<'_0, T>(_1: &'_0 [T]) -> usize
+= <opaque>
+
+pub struct aspis_cu_deref_repro::Guard<mut 'a> {
+  array_mut: &'a mut [u8],
+  initialized: usize,
+}
+
+pub fn aspis_cu_deref_repro::projected_len<'_0, '_1>(guard: &'_0 mut aspis_cu_deref_repro::Guard<'_1>) -> usize
+{
+    let _0: usize; // return
+    let guard: &'3 mut aspis_cu_deref_repro::Guard<'4>; // arg #1
+    let _2: &'6 [u8]; // anonymous local
+    let _3: &'8 mut [u8]; // anonymous local
+
+    storage_live(_0)
+    storage_live(_3)
+    storage_live(_2)
+    _3 = copy ((*guard)).array_mut
+    _2 = &(*_3) with_metadata(copy _3.metadata)
+    _0 = core::slice::{[T]}::len<'12, u8>(move _2)
+    ↳⚡ storage_dead(_3)
+        storage_dead(guard)
+        unwind_continue
+    storage_dead(_2)
+    storage_dead(_3)
+    storage_dead(guard)
+    return
+}
+
+pub fn aspis_cu_deref_repro::explicit_len<'_0, '_1>(guard: &'_0 mut aspis_cu_deref_repro::Guard<'_1>) -> usize
+{
+    let _0: usize; // return
+    let guard: &'3 mut aspis_cu_deref_repro::Guard<'4>; // arg #1
+    let values: &'6 [u8]; // local
+    let _3: &'7 [u8]; // anonymous local
+    let _4: &'8 [u8]; // anonymous local
+    let _5: &'10 mut [u8]; // anonymous local
+
+    storage_live(_0)
+    storage_live(_5)
+    storage_live(values)
+    storage_live(_3)
+    _5 = copy ((*guard)).array_mut
+    _3 = &(*_5) with_metadata(copy _5.metadata)
+    values = &(*_3) with_metadata(copy _3.metadata)
+    storage_dead(_3)
+    storage_live(_4)
+    _4 = &(*values) with_metadata(copy values.metadata)
+    _0 = core::slice::{[T]}::len<'14, u8>(move _4)
+    ↳⚡ storage_dead(_5)
+        storage_dead(guard)
+        unwind_continue
+    storage_dead(_4)
+    storage_dead(values)
+    storage_dead(_5)
+    storage_dead(guard)
+    return
+}
+
+pub fn aspis_cu_deref_repro::direct_len<'_0>(values: &'_0 mut [u8]) -> usize
+{
+    let _0: usize; // return
+    let values: &'1 mut [u8]; // arg #1
+    let _2: &'3 [u8]; // anonymous local
+
+    storage_live(_0)
+    storage_live(_2)
+    _2 = &(*values) with_metadata(copy values.metadata)
+    _0 = core::slice::{[T]}::len<'5, u8>(move _2)
+    ↳⚡ storage_dead(values)
+        unwind_continue
+    storage_dead(_2)
+    storage_dead(values)
+    return
+}
+
+pub struct aspis_cu_deref_repro::Shared<'a> {
+  array: &'a [u8],
+}
+
+pub fn aspis_cu_deref_repro::shared_len<'_0, '_1>(guard: &'_0 aspis_cu_deref_repro::Shared<'_1>) -> usize
+{
+    let _0: usize; // return
+    let guard: &'3 aspis_cu_deref_repro::Shared<'4>; // arg #1
+    let _2: &'6 [u8]; // anonymous local
+    let _3: &'7 [u8]; // anonymous local
+
+    storage_live(_0)
+    storage_live(_3)
+    storage_live(_2)
+    _3 = copy ((*guard)).array
+    _2 = &(*_3) with_metadata(copy _3.metadata)
+    _0 = core::slice::{[T]}::len<'11, u8>(move _2)
+    ↳⚡ storage_dead(_3)
+        storage_dead(guard)
+        unwind_continue
+    storage_dead(_2)
+    storage_dead(_3)
+    storage_dead(guard)
+    return
+}
+
+
+
+[[91mError[39m] Can't copy a mutable borrow
+Source: 'lib.rs', lines 7:4-7:19
+[[93mWarn[39m ] Could not translate the body of function 'aspis_cu_deref_repro::projected_len because of previous error
+Name pattern: 'aspis_cu_deref_repro::projected_len'
+Definition span: 'lib.rs', lines 6:0-8:1
+Source: 'lib.rs', lines 7:4-7:19
+Compiler source: interp/Interp.ml, line 609
+
+[[91mError[39m] Can't copy a mutable borrow
+Source: 'lib.rs', lines 11:24-11:41
+[[93mWarn[39m ] Could not translate the body of function 'aspis_cu_deref_repro::explicit_len because of previous error
+Name pattern: 'aspis_cu_deref_repro::explicit_len'
+Definition span: 'lib.rs', lines 10:0-13:1
+Source: 'lib.rs', lines 11:24-11:41
+Compiler source: interp/Interp.ml, line 609
+
+[[92mInfo[39m ] Creating missing directory: /home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/generated-deref-repro-optimized-a/AspisR1CuDeref
+[[92mInfo[39m ] Generated the partial file (because of 2 errors, including 1 unique errors): /home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/generated-deref-repro-optimized-a/AspisR1CuDeref/Types.lean
+[[92mInfo[39m ] Generated the partial file (because of 2 errors, including 1 unique errors): /home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/generated-deref-repro-optimized-a/AspisR1CuDeref/Funs.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/generated-deref-repro-optimized-a/translation.json
+[[92mInfo[39m ] Total execution time: 0.148526 seconds
