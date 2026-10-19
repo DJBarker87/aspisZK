@@ -1,0 +1,43 @@
+/// Build the four two-fold Libra dual weights without per-cell exponentiation.
+#[inline(never)]
+fn twofold_libra_weights(low:&[E;16],extra:[K;2])->[E;4] {
+    let powers:[[K;28];2]=core::array::from_fn(|side| {
+        let mut power=K::ONE;
+        core::array::from_fn(|_| {let value=power;power=power.mul(extra[side]);value})
+    });
+    core::array::from_fn(|j| {
+        let mut weight=E::ZERO;
+        for s in 0..16 {
+            let index=16*j+s;
+            if index<56 {
+                weight=weight.add(low[s].mul_qm31(powers[index/28][index%28]));
+            }
+        }
+        weight
+    })
+}
+
+/// Exact factorization of the existing 56-entry Libra row into two 28-entry
+/// geometric runs. The 16-entry low tensor is a product of two four-entry
+/// tensors; the only cut blocks have lengths 12 and 4 (28 = 16 + 12).
+#[inline(never)]
+fn factored_s2_libra_weights(ap0:&[E;4],ap1:&[E;4],extra:[K;2])->[E;4] {
+    let mut weights=[E::ZERO;4];
+    for side in 0..2 {
+        let q=kpowers::<4>(extra[side]);
+        let q4=q[2].square();let q8=q4.square();let q12=q8.mul(q4);let q16=q8.square();
+        let low=Weights::scalar_factor(&q,ap0);
+        let high_powers=[K::ONE,q4,q8,q12];
+        let terms:[E;4]=core::array::from_fn(|r|ap1[PERM[r]].mul_qm31(high_powers[r]).mul_m31(QUARTER));
+        let first2=terms[0].add(terms[1]);let first3=first2.add(terms[2]);let all=first3.add(terms[3]);
+        if side==0 {
+            weights[0]=low.mul(all);
+            weights[1]=low.mul(first3).mul_qm31(q16);
+        } else {
+            weights[1]=weights[1].add(low.mul(ap1[PERM[3]].mul_m31(QUARTER)));
+            weights[2]=low.mul(all).mul_qm31(q4);
+            weights[3]=low.mul(first2).mul_qm31(q16.mul(q4));
+        }
+    }
+    weights
+}

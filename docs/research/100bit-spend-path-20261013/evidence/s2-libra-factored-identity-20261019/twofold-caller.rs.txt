@@ -1,0 +1,9 @@
+            }
+        } else {
+            // Two-fold 0/1 row: compute the sixteen challenge products once.
+            // Coefficients with the same inactive mask share one subset sum.
+            let low:[E;16]=core::array::from_fn(|s|ap0[PERM[s%4]].mul(ap1[PERM[s/4]]).mul_m31(QUARTER.mul(QUARTER)));
+            parts[0]=grouped_inactive_pair(self,f,&low);
+            let libra=if self.variant==Variant::S2 {factored_s2_libra_weights(&ap0,&ap1,self.extra)}else{twofold_libra_weights(&low,self.extra)};
+            for j in 0..4 {parts[4]=parts[4].add(field(f,j).mul(libra[j]));}
+        }

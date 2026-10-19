@@ -11,3 +11,5 @@ All three focused Lean 4.32 checks exited 0; times 6.18, 3.97 and 4.5 seconds; m
 These cached checks are working component evidence. Concrete accepted-source/decoder/operation refinement and a clean unified ordered build remain open. This is not the complete 100-bit private-spend theorem.
 
 The new degree bridge proves each retained 28-coefficient polynomial has degree at most 27. The checked-run Sumcheck adapter carries those witnesses through the actual ten-event schedule, preserving initial boundary and final challenge-evaluation projections. Those endpoints are decoded running claims; identifying them with maskSum and terminalZ remains open. Both new focused checks pass with standard axioms only. Full metrics are in the receipts.
+
+The imported generic list-polynomial degree helper is also retained canonically with its focused receipt (exit 0; 1.44 seconds; peak RSS 1,659,011,072 bytes; zero process swaps; standard axioms).
