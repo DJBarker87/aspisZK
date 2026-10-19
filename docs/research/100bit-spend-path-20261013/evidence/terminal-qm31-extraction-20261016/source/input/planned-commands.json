@@ -1,0 +1,64 @@
+{
+  "planned_only": true,
+  "preflight": [
+    "sha256sum -c SHA256SUMS",
+    "python3 verify_kit.py",
+    "charon cargo --help",
+    "aeneas -version",
+    "rustup run nightly-2026-06-01 rustc --version --verbose"
+  ],
+  "prepare_lock": [
+    "cargo generate-lockfile --offline"
+  ],
+  "charon": [
+    "charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--sysroot",
+    "default",
+    "--start-from",
+    "crate::extraction_probe::terminal_qm31_probe",
+    "--dest-file",
+    "OUTPUT/Terminal.llbc",
+    "--",
+    "--manifest-path",
+    "Cargo.toml",
+    "--package",
+    "aspis-statement",
+    "--features",
+    "r0,pool-v1-kernel",
+    "--no-default-features",
+    "--release",
+    "--lib",
+    "--locked",
+    "--offline"
+  ],
+  "aeneas": [
+    "aeneas",
+    "-sequential",
+    "-no-progress-bar",
+    "-abort-on-error",
+    "-backend",
+    "lean",
+    "-namespace",
+    "AspisR1TerminalProbe",
+    "-dest",
+    "OUTPUT/generated",
+    "-subdir",
+    "AspisR1TerminalProbe",
+    "-split-files",
+    "-emit-json",
+    "OUTPUT/Terminal.llbc"
+  ],
+  "target_audit_required": [
+    "require wrapper function in LLBC",
+    "require `r0::Public::terminal_qm31` body or inline body evidence",
+    "require `terminal_parts` and `composition_parts` body or inline body evidence",
+    "enumerate every opaque/external call in reachable semantic graph",
+    "reject empty function/declaration inventories"
+  ],
+  "expected_scope": "No cargo/Charon/Aeneas command has been run. Root chooses resource cap/host before any execution."
+}

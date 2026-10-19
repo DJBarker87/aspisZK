@@ -1,0 +1,7 @@
+# Executable trace extractor focused evidence
+
+This separate three-target batch contains R1TraceValueDecode, R1ComputableTraceWitness, and R1TraceWitnessExtract. The final target decodes the three bounded value cells, constructs the witness data from one supplied trace, checks it, and proves returned witnesses valid. Its completeness theorem is conditional on the stated production facts and base typing. This is not a full-log extractor, does not recover the candidate trace, and makes no Rust parser refinement claim.
+
+The bundle preserves seven exact attempts: one green value decoder, three failed and one green computable-witness attempts, and one failed plus one green extractor attempt. The failed extractor attempt was a local conditional-simp proof error; the final target is attempt b. Final targets contribute seven #print axioms reports; every report contains only propext, Classical.choice, and Quot.sound. All target builds used the pinned NUC snapshot wrapper with MemoryHigh=4G, MemoryMax=6G, MemorySwapMax=0, TasksMax=128. Exact receipts and logs carry per-attempt metrics.
+
+The deterministic object archive contains 15 target/import objects. All attempt sources, final sources, staged import sources, runner snapshots, environment snapshot, and object hashes are indexed in source-manifest.json. R0P.Core was loaded from the pinned workspace's external cache; its historical source counterpart is included for provenance only, without asserting it byte-matches that cached object. There are no loose .olean files.

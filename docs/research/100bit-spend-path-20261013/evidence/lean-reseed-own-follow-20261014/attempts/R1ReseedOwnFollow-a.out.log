@@ -1,0 +1,47 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReseedOwnFollow.lean:68:4: error: unsolved goals
+case right
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+H : Addr L → State
+tr : List (Addr L × State)
+T : Table (Addr L) State
+c : Addr L
+reseed : State → Addr L
+miss : List (Addr L)
+C : Type
+g : State → List State → C
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hnd : (miss ++ [c, squeezeA p (H c), advanceA p (H c), reseed (H (advanceA p (H c)))]).Nodup
+hfresh : ∀ b ∈ miss ++ [c, squeezeA p (H c), advanceA p (H c), reseed (H (advanceA p (H c)))], T b = none ∧ Read tr b
+hsq : Before tr c (squeezeA p (H c))
+had : Before tr c (advanceA p (H c))
+har : Before tr c (reseed (H (advanceA p (H c))))
+hadr : Before tr (advanceA p (H c)) (reseed (H (advanceA p (H c))))
+sq : Addr L := squeezeA p (H c)
+ad : Addr L := advanceA p (H c)
+r : Addr L := reseed (H (advanceA p (H c)))
+own : BS (Addr L) State State := ReseedSamplerLaw.own p c reseed
+pend : List (Addr L × Option State) := List.map (fun b => (b, none)) miss
+hwait : waiting pend = miss
+hevs : evs H own = [(true, c), (false, sq), (true, ad), (true, r)]
+hevsAddr : List.map Prod.snd (evs H own) = [c, sq, ad, r]
+hnd' : (waiting pend ++ List.map Prod.snd (evs H own)).Nodup
+hfresh' : ∀ b ∈ waiting pend ++ List.map Prod.snd (evs H own), T b = none ∧ Read tr b
+⊢ Before tr ad r
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReseedOwnFollow.lean:68:12: warning: This simp argument is unused:
+  OrderOK
+
+Hint: Omit it from the simp argument list.
+  simp [O̵r̵d̵e̵r̵O̵K̵,̵ ̵hadr]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1ReseedOwnFollow.lean:68:21: warning: This simp argument is unused:
+  hadr
+
+Hint: Omit it from the simp argument list.
+  simp [OrderOK,̵ ̵h̵a̵d̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.ReseedOwnFollow.follow' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

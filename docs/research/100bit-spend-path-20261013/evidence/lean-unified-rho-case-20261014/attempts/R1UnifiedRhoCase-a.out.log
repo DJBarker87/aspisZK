@@ -1,0 +1,44 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedRhoCase.lean:59:2: error: Type mismatch: After simplification, term
+  hresult
+ has type
+  ∃ own pend g,
+    JointUnifiedDecoder.decode p pub 27 4
+          (UnifiedQueryRun.rhoAddress p hD H pub (eval H prover).2.1 (eval H prover).2.2)
+          (tableBefore emptyTable
+            (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1
+            (UnifiedQueryRun.rhoAddress p hD H pub (eval H prover).2.1 (eval H prover).2.2)) =
+        some (own, pend, g) ∧
+      bfollow g
+          (traceFrom
+            (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1
+            (UnifiedQueryRun.rhoAddress p hD H pub (eval H prover).2.1 (eval H prover).2.2))
+          own pend
+          (tableBefore emptyTable
+            (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1
+            (UnifiedQueryRun.rhoAddress p hD H pub (eval H prover).2.1 (eval H prover).2.2)) =
+        some
+          (UnifiedRun.transcript p hD H pub (eval H prover).2.1 (eval H prover).2.2 32,
+            UnifiedRun.message (eval H prover).2.1 (eval H prover).2.2 32,
+            UnifiedRun.challenge p hD H pub (eval H prover).2.1 (eval H prover).2.2 32)
+but is expected to have type
+  ∃ own pend g,
+    JointUnifiedDecoder.decode p pub 27 4 c
+          (tableBefore emptyTable
+            (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1 c) =
+        some (own, pend, g) ∧
+      bfollow g
+          (traceFrom
+            (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1 c)
+          own pend
+          (tableBefore emptyTable
+            (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1 c) =
+        some
+          ({ r := 33, msg := fun π => UnifiedRun.message π.1 π.2, samp := UnifiedSampler.samp p hD,
+                  decode := fun x x_1 => none, extract := extract }.transcript
+              H pub (eval H prover).2 32,
+            UnifiedRun.message (eval H prover).2.1 (eval H prover).2.2 32,
+            { r := 33, msg := fun π => UnifiedRun.message π.1 π.2, samp := UnifiedSampler.samp p hD,
+                  decode := fun x x_1 => none, extract := extract }.chal
+              H pub (eval H prover).2 32)
+'AspisR1.UnifiedRhoCase.decodes_and_follows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

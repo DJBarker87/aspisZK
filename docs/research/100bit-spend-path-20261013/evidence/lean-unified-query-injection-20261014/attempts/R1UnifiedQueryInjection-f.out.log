@@ -1,0 +1,61 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedQueryInjection.lean:112:4: error: Type mismatch: After simplification, term
+  hactual
+ has type
+  @Eq (JointTranscriptView.Output M Cv L)
+    (UnifiedQueryDecoder.output p pub T
+      { c1 := c1, records := UnifiedRecords.records p hD H pub c1 payload 31, message := payload 31 }
+      (H c ::
+        QuerySampler.state p H (H c) (0 + 1) ::
+          QuerySampler.state p H (H c) (0 + 1 + 1) ::
+            QuerySampler.state p H (H c) (0 + 1 + 1 + 1) ::
+              QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1) ::
+                QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1 + 1) ::
+                  QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1 + 1 + 1) ::
+                    QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1 + 1 + 1 + 1) ::
+                      QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1) ::
+                        List.map (fun k => QuerySampler.state p H (H c) (k + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1))
+                          (List.range 0))
+      (List.map H (PrefixAnswers.missing p T (UnifiedRecords.records p hD H pub c1 payload 31)) ++
+        H (squeezeA p (H c)) ::
+          H (squeezeA p (QuerySampler.state p H (H c) (0 + 1))) ::
+            H (squeezeA p (QuerySampler.state p H (H c) (0 + 1 + 1))) ::
+              H (squeezeA p (QuerySampler.state p H (H c) (0 + 1 + 1 + 1))) ::
+                H (squeezeA p (QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1))) ::
+                  H (squeezeA p (QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1 + 1))) ::
+                    H (squeezeA p (QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1 + 1 + 1))) ::
+                      H (squeezeA p (QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1 + 1 + 1 + 1))) ::
+                        List.map
+                          (fun k => H (squeezeA p (QuerySampler.state p H (H c) (k + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1))))
+                          (List.range 0)))
+    (UnifiedRun.transcript p hD H pub c1 payload 31, UnifiedRun.message c1 payload 31,
+      UnifiedRun.challenge p hD H pub c1 payload 31)
+but is expected to have type
+  @Eq (JointTranscriptView.Output M Cv L)
+    (UnifiedQueryDecoder.output p pub T ctx
+      ([H c] ++
+        QuerySampler.state p H (H c) (0 + 1) ::
+          QuerySampler.state p H (H c) (0 + 1 + 1) ::
+            QuerySampler.state p H (H c) (0 + 1 + 1 + 1) ::
+              QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1) ::
+                QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1 + 1) ::
+                  QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1 + 1 + 1) ::
+                    QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1 + 1 + 1 + 1) ::
+                      QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1) ::
+                        List.map (fun k => QuerySampler.state p H (H c) (k + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1))
+                          (List.range 0))
+      (List.map H (PrefixAnswers.missing p T rs) ++
+        H (squeezeA p (H c)) ::
+          H (squeezeA p (QuerySampler.state p H (H c) (0 + 1))) ::
+            H (squeezeA p (QuerySampler.state p H (H c) (0 + 1 + 1))) ::
+              H (squeezeA p (QuerySampler.state p H (H c) (0 + 1 + 1 + 1))) ::
+                H (squeezeA p (QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1))) ::
+                  H (squeezeA p (QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1 + 1))) ::
+                    H (squeezeA p (QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1 + 1 + 1))) ::
+                      H (squeezeA p (QuerySampler.state p H (H c) (0 + 1 + 1 + 1 + 1 + 1 + 1 + 1))) ::
+                        List.map
+                          (fun k => H (squeezeA p (QuerySampler.state p H (H c) (k + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1))))
+                          (List.range 0)))
+    (UnifiedRun.transcript p hD H pub c1 payload 31, UnifiedRun.message c1 payload 31,
+      UnifiedRun.challenge p hD H pub c1 payload 31)
+'AspisR1.UnifiedQueryInjection.decodes_and_follows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

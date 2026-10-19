@@ -1,0 +1,30 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthReconstruction.lean:90:31: error: Type mismatch
+  Eq.symm (List.ofFn_mul f)
+has type
+  (List.ofFn fun i => List.ofFn fun j => f ⟨↑i * (k + 1) + ↑j, ⋯⟩).flatten = List.ofFn f
+but is expected to have type
+  (List.ofFn fun i => List.ofFn fun j => f ⟨(k + 1) * ↑i + ↑j, ⋯⟩).flatten = List.ofFn f
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthReconstruction.lean:93:14: error: unsolved goals
+case hl
+B : Type
+bytes : List B
+n k : ℕ
+hlen : bytes.length = (n + 1) * (k + 1)
+N : ℕ := (n + 1) * (k + 1)
+f : Fin N → B := fun j => bytes.get ⟨↑j, ⋯⟩
+hN : bytes.length = N
+hblock :
+  ∀ (i : Fin (n + 1)), List.take (k + 1) (List.drop ((k + 1) * ↑i) bytes) = List.ofFn fun j => f ⟨(k + 1) * ↑i + ↑j, ⋯⟩
+hblocks :
+  (List.ofFn fun i => List.take (k + 1) (List.drop ((k + 1) * ↑i) bytes)) =
+    List.ofFn fun i => List.ofFn fun j => f ⟨(k + 1) * ↑i + ↑j, ⋯⟩
+⊢ (n + 1) * k + n + 1 = (n + 1) * k + (n + 1)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthReconstruction.lean:96:25: warning: This simp argument is unused:
+  hN
+
+Hint: Omit it from the simp argument list.
+  simp [f,̵ ̵h̵N̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FixedWidthReconstruction.slices_flatten' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

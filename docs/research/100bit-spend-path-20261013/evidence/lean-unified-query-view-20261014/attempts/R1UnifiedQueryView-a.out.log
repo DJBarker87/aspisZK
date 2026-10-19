@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedQueryView.lean:57:26: error: unsolved goals
+case mk.refl
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+H : Addr L → State
+pub : UnifiedSampler.Public L
+c1 : State
+payload : ℕ → M
+hl : p.lbl 0 = 160
+he : p.enc (payload 0) = PublicInitFrame.emptyRecord
+T : Table (Addr L) State
+hT : ∀ (b : Addr L) (v : State), T b = some v → v = H b
+ctx : UnifiedSemanticContext.Context M :=
+  { c1 := c1, records := UnifiedRecords.records p hD H pub c1 payload 31, message := payload 31 }
+s : ℕ → State := QuerySampler.state p H (H (UnifiedQueryRun.queryAddress p hD H pub c1 payload))
+hrecords :
+  PrefixAnswers.fromAnswers p T 0 ctx.records (List.map H (PrefixAnswers.missing p T ctx.records)) =
+    completeRounds p emptyTable H 0 ctx.records
+rounds : List (Message M × Challenge Cv)
+hcompleted : ordinary c1 (completeRounds p emptyTable H 0 (UnifiedRecords.records p hD H pub c1 payload 31)) = rounds
+hprefix : ordinary c1 (completeRounds p emptyTable H 0 ctx.records) = rounds
+hrun : UnifiedRun.transcript p hD H pub c1 payload 31 = { statement := pub, rounds := rounds }
+⊢ ordinary ctx.c1 (completeRounds p emptyTable H 0 ctx.records) = rounds
+'AspisR1.UnifiedQueryView.actual_output' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.UnifiedQueryView.firstCell_eq' depends on axioms: [propext, Quot.sound]
+exit=1

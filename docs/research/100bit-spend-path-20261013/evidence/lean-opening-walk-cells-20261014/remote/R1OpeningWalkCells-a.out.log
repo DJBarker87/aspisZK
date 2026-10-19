@@ -1,0 +1,120 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningWalkCells.lean:47:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  absorbed j
+in the target expression
+  T (absorbA p (s j) (label j) (data j) ⋯) = some (H (absorbA p (s j) (label j) (data j) ⋯))
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+pubBytes : Bytes
+tag : Byte
+T : Table (Addr L) State
+semanticFuel : ℕ
+H : Addr L → State
+tr : List (Addr L × State)
+Qtot : ℕ
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hQ : firstReads emptyTable tr ≤ Qtot
+hold : ¬hitsBad (badColl p Qtot) emptyTable tr
+hT : ∀ (b : Addr L) (v : State), T b = some v → v = H b ∧ Read tr b
+fuel n : ℕ
+hle : n ≤ fuel
+s absorbed : ℕ → State
+label : ℕ → Byte
+data : ℕ → Bytes
+hD : ∀ (j : ℕ), List.length (data j) ≤ p.D
+habs : ∀ j < n, absorbed j = H (absorbA p (s j) (label j) (data j) ⋯)
+hstep : ∀ j < n, s (j + 1) = H (advanceA p (absorbed j))
+ha : ∀ j < n, T (absorbA p (s j) (label j) (data j) ⋯) = some (absorbed j)
+had : ∀ j < n, T (advanceA p (absorbed j)) = some (s (j + 1))
+c1 : State
+pre : List InitialWalk.RawRec
+hbase : ReseedPrefix.decode p pubBytes tag T semanticFuel (s 0) = some (c1, pre)
+j : ℕ
+hj : j < n
+⊢ T (absorbA p (s j) (label j) (data j) ⋯) = some (H (absorbA p (s j) (label j) (data j) ⋯))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningWalkCells.lean:51:6: error: Type mismatch: After simplification, term
+  had j hj
+ has type
+  T (advanceA p (absorbed j)) = some (H (advanceA p (absorbed j)))
+but is expected to have type
+  T (advanceA p (s j)) = some (H (advanceA p (s j)))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningWalkCells.lean:52:10: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningWalkCells.lean:57:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  absorbed j
+in the target expression
+  T (absorbA p (s j) (label j) (data j) ⋯) = some (H (absorbA p (s j) (label j) (data j) ⋯))
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+pubBytes : Bytes
+tag : Byte
+T : Table (Addr L) State
+semanticFuel : ℕ
+H : Addr L → State
+tr : List (Addr L × State)
+Qtot : ℕ
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hQ : firstReads emptyTable tr ≤ Qtot
+hold : ¬hitsBad (badColl p Qtot) emptyTable tr
+hT : ∀ (b : Addr L) (v : State), T b = some v → v = H b ∧ Read tr b
+fuel n : ℕ
+hle : n ≤ fuel
+s absorbed : ℕ → State
+label : ℕ → Byte
+data : ℕ → Bytes
+hD : ∀ (j : ℕ), List.length (data j) ≤ p.D
+habs : ∀ j < n, absorbed j = H (absorbA p (s j) (label j) (data j) ⋯)
+hstep : ∀ j < n, s (j + 1) = H (advanceA p (absorbed j))
+ha : ∀ j < n, T (absorbA p (s j) (label j) (data j) ⋯) = some (absorbed j)
+had : ∀ j < n, T (advanceA p (absorbed j)) = some (s (j + 1))
+c1 : State
+pre : List InitialWalk.RawRec
+hbase : ReseedPrefix.decode p pubBytes tag T semanticFuel (s 0) = some (c1, pre)
+j : ℕ
+hj : j < n
+⊢ T (absorbA p (s j) (label j) (data j) ⋯) = some (H (absorbA p (s j) (label j) (data j) ⋯))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1OpeningWalkCells.lean:61:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  absorbed j
+in the target expression
+  ReseedBoundary.findCell T (H (absorbA p (s j) (label j) (data j) ⋯)) = some (absorbA p (s j) (label j) (data j) ⋯)
+
+case habs
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+pubBytes : Bytes
+tag : Byte
+T : Table (Addr L) State
+semanticFuel : ℕ
+H : Addr L → State
+tr : List (Addr L × State)
+Qtot : ℕ
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hQ : firstReads emptyTable tr ≤ Qtot
+hold : ¬hitsBad (badColl p Qtot) emptyTable tr
+hT : ∀ (b : Addr L) (v : State), T b = some v → v = H b ∧ Read tr b
+fuel n : ℕ
+hle : n ≤ fuel
+s absorbed : ℕ → State
+label : ℕ → Byte
+data : ℕ → Bytes
+hD : ∀ (j : ℕ), List.length (data j) ≤ p.D
+habs : ∀ j < n, absorbed j = H (absorbA p (s j) (label j) (data j) ⋯)
+hstep : ∀ j < n, s (j + 1) = H (advanceA p (absorbed j))
+ha : ∀ j < n, T (absorbA p (s j) (label j) (data j) ⋯) = some (absorbed j)
+had : ∀ j < n, T (advanceA p (absorbed j)) = some (s (j + 1))
+c1 : State
+pre : List InitialWalk.RawRec
+hbase : ReseedPrefix.decode p pubBytes tag T semanticFuel (s 0) = some (c1, pre)
+j : ℕ
+hj : j < n
+habsCell : T (absorbA p (s j) (label j) (data j) ⋯) = some (H (absorbA p (s j) (label j) (data j) ⋯))
+hfind :
+  ReseedBoundary.findCell T (H (absorbA p (s j) (label j) (data j) ⋯)) = some (absorbA p (s j) (label j) (data j) ⋯)
+⊢ ∃ a, ReseedBoundary.findCell T (absorbed j) = some a ∧ parseAbsorb a = some (s j, label j, data j)
+'AspisR1.OpeningWalkCells.walk_of_cells' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

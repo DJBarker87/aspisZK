@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthDecoder.lean:24:2: error: Unnecessary `generalizing` argument: Variable `xs` is generalized automatically
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthDecoder.lean:25:9: error: unsolved goals
+case zero
+B A : Type
+d : List B → Option A
+f : A → List B
+k : ℕ
+hlen : ∀ (a : A), (f a).length = k
+hround : ∀ (a : A), d (f a) = some a
+xs : Fin 0 → A
+⊢ Fin.elim0 = xs
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthDecoder.lean:36:6: error: Type mismatch: After simplification, term
+  ih fun i => xs i.succ
+ has type
+  decode d k n (encode f fun i => xs i.succ) = some fun i => xs i.succ
+but is expected to have type
+  ((decode d k n (encode f fun i => xs i.succ)).bind fun tail => some (Fin.cons (xs 0) tail)) = some xs
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthDecoder.lean:43:2: error: Unnecessary `generalizing` argument: Variable `xs` is generalized automatically
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthDecoder.lean:58:16: error: Function expected at
+  ih (List.drop k bytes) tail htail
+but this term has type
+  encode f tail = List.drop k bytes
+
+Note: Expected a function because this term is being applied to the argument
+  hback
+'AspisR1.FixedWidthDecoder.decode_encode' depends on axioms: [propext, sorryAx]
+'AspisR1.FixedWidthDecoder.encode_of_decode' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

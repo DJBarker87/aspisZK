@@ -1,0 +1,60 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InitialWalk.lean:75:10: error: unsolved goals
+case pos
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+pubBytes : Bytes
+T : Table (Addr L) State
+s absorbed : ℕ → State
+label : ℕ → Byte
+data : ℕ → Bytes
+c1 : State
+hroot : rootAt pubBytes T (s 0) = some c1
+fuel : ℕ
+a : Addr L
+ih :
+  ∀ (fuel : ℕ),
+    0 < 0 →
+      0 ≤ fuel →
+        (∀ j < 0, theUnique (advPre p T (s (j + 1))) = some (absorbed j)) →
+          (∀ j < 0,
+              ∃ a, ReseedBoundary.findCell T (absorbed j) = some a ∧ parseAbsorb a = some (s j, label j, data j)) →
+            (∀ (j : ℕ), 0 < j → j < 0 → rootAt pubBytes T (s j) = none) →
+              walk p pubBytes T fuel (s 0) = some (c1, records s absorbed label data 0)
+hn : 0 < 0 + 1
+hadv : ∀ j < 0 + 1, theUnique (advPre p T (s (j + 1))) = some (absorbed j)
+habs : ∀ j < 0 + 1, ∃ a, ReseedBoundary.findCell T (absorbed j) = some a ∧ parseAbsorb a = some (s j, label j, data j)
+hstop : ∀ (j : ℕ), 0 < j → j < 0 + 1 → rootAt pubBytes T (s j) = none
+hle : 0 + 1 ≤ fuel + 1
+hlast : 0 < 0 + 1
+ha : ReseedBoundary.findCell T (absorbed 0) = some a
+hparse : parseAbsorb a = some (s 0, label 0, data 0)
+⊢ (match
+      match ReseedBoundary.findCell T (s 0) with
+      | none => none
+      | some a => PublicInitParse.parse pubBytes a with
+    | some c1 => some (c1, [{ prev := s 0, absorbed := absorbed 0, label := label 0, data := data 0, next := s 1 }])
+    | none =>
+      Option.map
+        (fun result =>
+          (result.1,
+            result.2 ++ [{ prev := s 0, absorbed := absorbed 0, label := label 0, data := data 0, next := s 1 }]))
+        (walk p pubBytes T fuel (s 0))) =
+    some (c1, [{ prev := s 0, absorbed := absorbed 0, label := label 0, data := data 0, next := s 1 }])
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InitialWalk.lean:82:46: error: Application type mismatch: The argument
+  hroot
+has type
+  rootAt pubBytes T (s 0) = some c1
+but is expected to have type
+  ∀ (j : ℕ), 0 < j → j < n → rootAt pubBytes T (s j) = none
+in the application
+  ih fuel ?m.197 ?m.198 (fun j hj => hadv j ?m.201) (fun j hj => habs j ?m.205) hroot
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InitialWalk.lean:76:26: warning: This simp argument is unused:
+  hroot
+
+Hint: Omit it from the simp argument list.
+  simp [rootAt, h̵r̵o̵o̵t̵,̵ ̵records]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.InitialWalk.walk_of_lookups' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

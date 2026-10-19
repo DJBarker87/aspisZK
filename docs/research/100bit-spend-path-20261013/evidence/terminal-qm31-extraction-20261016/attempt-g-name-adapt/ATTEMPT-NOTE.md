@@ -1,0 +1,7 @@
+# LLBC name-adaptation retry
+
+Attempt G reruns only Aeneas on the unchanged Attempt F LLBC after a single metadata alpha-renaming. The adapter changes `translated.fun_decls[236].item_meta.attr_info.rename` from `null` to `M31_constructor`; it leaves the original LLBC intact. A restore-and-deep-compare check confirms the copied JSON differs at that one path only. The function/type IDs, all references, signatures, bodies, source spans, `item_names`, and declaration order are unchanged. The adapted LLBC SHA-256 is `58708e0d42a6d9c4e31dd102d2ec4d7de8abc07ccb8be9d9ecd3ffaf57875644`.
+
+Aeneas completed successfully in 8.78 seconds with 317,524 KiB peak process RSS and no swap, in the 4 GiB high / 6 GiB max / zero-swap / 128-task scope. It generated 221 function records and 59 type records. The local `terminal_qm31`, `terminal_parts`, `composition_parts`, `PreparedQm31Multiplier.new`, and `.mul` declarations are present as non-opaque definitions. `field.M31` remains the `Std.U32` alias, and the synthetic constructor has the distinct generated name `field.M31_constructor`. Twenty external/library function declarations are marked opaque in the translation report; see `generated-audit.json` and `translation.json`.
+
+This is a name-adapted LLBC translation artifact. It is not a Lean compile or a result for the unadapted LLBC or unchanged production Rust source. Attempt F and all prior attempts remain preserved separately.

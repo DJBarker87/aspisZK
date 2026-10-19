@@ -1,0 +1,48 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryBackgroundChain.lean:60:44: error: unexpected token ':='; expected ')'
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryBackgroundChain.lean:57:21: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  chainBS p n (H (advanceA p s)) (xs ++ [H (advanceA p s)])
+has type `BS (Addr L) State (List State)` which is not a one-constructor inductive type.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryBackgroundChain.lean:59:38: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  chainBS p n (H (advanceA p s)) (xs ++ [H (advanceA p s)])
+has type `BS (Addr L) State (List State)` which is not a one-constructor inductive type.
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryBackgroundChain.lean:54:14: error: unsolved goals
+case e
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+H : Addr L → State
+n : ℕ
+ih :
+  ∀ (s : State) (xs : List State),
+    runOut H (chainBS p n s xs) =
+      (xs ++ List.map (fun k => QuerySampler.state p H s (k + 1)) (List.range n),
+        List.map (fun k => squeezeA p (QuerySampler.state p H s k)) (List.range n))
+s : State
+xs : List State
+⊢ sorry
+
+case succ
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+H : Addr L → State
+n : ℕ
+ih :
+  ∀ (s : State) (xs : List State),
+    runOut H (chainBS p n s xs) =
+      (xs ++ List.map (fun k => QuerySampler.state p H s (k + 1)) (List.range n),
+        List.map (fun k => squeezeA p (QuerySampler.state p H s k)) (List.range n))
+s : State
+xs : List State
+e : sorry
+⊢ runOut H (chainBS p (n + 1) s xs) =
+    (xs ++ List.map (fun k => QuerySampler.state p H s (k + 1)) (List.range (n + 1)),
+      List.map (fun k => squeezeA p (QuerySampler.state p H s k)) (List.range (n + 1)))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1QueryBackgroundChain.lean:104:40: error(lean.invalidField): Invalid field `map`: The environment does not contain `R0C.V3.BS.map`, so it is not possible to project the field `map` from an expression
+  chainBS p n (H (advanceA p s)) (xs ++ [H (advanceA p s)])
+of type `BS (Addr L) State (List State)`
+'AspisR1.QueryBackgroundChain.evs_chainBS_mem' depends on axioms: [propext, Quot.sound]
+'AspisR1.QueryBackgroundChain.runOut_chainBS' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.QueryBackgroundChain.order_chain' depends on axioms: [propext, Quot.sound]
+'AspisR1.QueryBackgroundChain.chain_nodup' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
