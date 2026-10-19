@@ -258,6 +258,18 @@ pub(crate) fn authenticate_verifier_selection_v1(
     })
 }
 
+/// One `create_program_address` with a stored bump; an on-curve result or a
+/// different address is a mismatch. This authenticates an existing account
+/// only under the premise that its owner program creates accounts at its PDAs
+/// exclusively at canonical bumps; it does not establish canonicality.
+pub(crate) fn stored_bump_address_matches(
+    seeds_with_bump: &[&[u8]],
+    program_id: &Pubkey,
+    key: &Pubkey,
+) -> bool {
+    Pubkey::create_program_address(seeds_with_bump, program_id).is_ok_and(|address| &address == key)
+}
+
 fn authenticate_verifier_selection_v2(
     pool: &Pubkey,
     policy: &VerifierPolicyV1,
@@ -274,23 +286,46 @@ fn authenticate_verifier_selection_v2(
     };
     let registry_program = Pubkey::new_from_array(policy.registry_program);
     let loader = bpf_loader_upgradeable::id();
-    let expected_registry_programdata =
-        Pubkey::find_program_address(&[registry_program.as_ref()], &loader).0;
 
     require_readonly_registry_account(
         registry_account,
         &registry_program,
         PoolV1ProgramError::InvalidVerifierRegistry,
     )?;
-    if registry_account.key != &pool_v1_verifier_registry_v2_address(&registry_program, pool).0 {
-        return Err(PoolV1ProgramError::InvalidVerifierRegistryAddress.into());
-    }
+    // Stored canonical bumps (G_R1.8 pattern). The registry program writes the
+    // canonical registry/programdata bumps at initialization and re-checks
+    // them in its decoder; only it can create accounts at its PDAs. One
+    // `create_program_address` per address replaces each bump search. A
+    // mismatch falls back to the canonical search only to keep the previous
+    // error precedence (address error before image error) on rejection paths.
     let registry = {
         let data = registry_account.try_borrow_data()?;
-        decode_verifier_registry_v2(&data)
-            .map_err(|_| PoolV1ProgramError::InvalidVerifierRegistry)?
+        decode_verifier_registry_v2(&data).ok()
     };
-    if registry.pool != pool.to_bytes()
+    let registry_address_matches = registry.as_ref().is_some_and(|registry| {
+        stored_bump_address_matches(
+            &[
+                POOL_V1_VERIFIER_REGISTRY_V2_SEED,
+                pool.as_ref(),
+                &[registry.bump],
+            ],
+            &registry_program,
+            registry_account.key,
+        )
+    });
+    if !registry_address_matches
+        && registry_account.key != &pool_v1_verifier_registry_v2_address(&registry_program, pool).0
+    {
+        return Err(PoolV1ProgramError::InvalidVerifierRegistryAddress.into());
+    }
+    let registry = registry.ok_or(PoolV1ProgramError::InvalidVerifierRegistry)?;
+    let expected_registry_programdata = Pubkey::create_program_address(
+        &[registry_program.as_ref(), &[registry.programdata_bump]],
+        &loader,
+    )
+    .map_err(|_| PoolV1ProgramError::InvalidVerifierRegistry)?;
+    if !registry_address_matches
+        || registry.pool != pool.to_bytes()
         || registry.authority != policy.registry_authority
         || registry.policy_binding != policy.policy_binding
         || !registry.is_immutable()
@@ -309,24 +344,45 @@ fn authenticate_verifier_selection_v2(
         &registry_program,
         PoolV1ProgramError::InvalidVerifierEntry,
     )?;
-    let expected_entry = pool_v1_verifier_entry_v2_address(
-        &registry_program,
-        pool,
-        &selection.profile_binding,
-        &selection.release_binding,
-    )
-    .0;
-    if entry_account.key != &expected_entry {
-        return Err(PoolV1ProgramError::InvalidVerifierEntryAddress.into());
-    }
     let entry = {
         let data = entry_account.try_borrow_data()?;
-        decode_verifier_registry_entry_v2(&data)
-            .map_err(|_| PoolV1ProgramError::InvalidVerifierEntry)?
+        decode_verifier_registry_entry_v2(&data).ok()
     };
+    let entry_address_matches = entry.as_ref().is_some_and(|entry| {
+        stored_bump_address_matches(
+            &[
+                POOL_V1_VERIFIER_ENTRY_V2_SEED,
+                pool.as_ref(),
+                &selection.profile_binding,
+                &selection.release_binding,
+                &[entry.bump],
+            ],
+            &registry_program,
+            entry_account.key,
+        )
+    });
+    if !entry_address_matches
+        && entry_account.key
+            != &pool_v1_verifier_entry_v2_address(
+                &registry_program,
+                pool,
+                &selection.profile_binding,
+                &selection.release_binding,
+            )
+            .0
+    {
+        return Err(PoolV1ProgramError::InvalidVerifierEntryAddress.into());
+    }
+    let entry = entry.ok_or(PoolV1ProgramError::InvalidVerifierEntry)?;
+    if !entry_address_matches {
+        return Err(PoolV1ProgramError::InvalidVerifierEntry.into());
+    }
     let selected_program = Pubkey::new_from_array(selection.verifier_program);
-    let expected_verifier_programdata =
-        Pubkey::find_program_address(&[selected_program.as_ref()], &loader).0;
+    let expected_verifier_programdata = Pubkey::create_program_address(
+        &[selected_program.as_ref(), &[entry.programdata_bump]],
+        &loader,
+    )
+    .map_err(|_| PoolV1ProgramError::VerifierSelectionMismatch)?;
     if entry.pool != pool.to_bytes()
         || entry.policy_binding != policy.policy_binding
         || entry.verifier_program != selection.verifier_program
@@ -434,14 +490,13 @@ mod tests {
     }
 
     fn registry_v2(registry_program: Pubkey, pool: Pubkey) -> VerifierRegistryV2 {
-        let programdata = Pubkey::find_program_address(
+        let (programdata, programdata_bump) = Pubkey::find_program_address(
             &[registry_program.as_ref()],
             &bpf_loader_upgradeable::id(),
-        )
-        .0;
+        );
         VerifierRegistryV2 {
-            bump: 0,
-            programdata_bump: 0,
+            bump: pool_v1_verifier_registry_v2_address(&registry_program, &pool).1,
+            programdata_bump,
             flags: POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE,
             pool: pool.to_bytes(),
             authority: [0u8; 32],
@@ -455,14 +510,20 @@ mod tests {
         }
     }
 
-    fn entry_v2(pool: Pubkey) -> VerifierRegistryEntryV2 {
+    fn entry_v2(registry_program: Pubkey, pool: Pubkey) -> VerifierRegistryEntryV2 {
         let selection = selection();
         let verifier = Pubkey::new_from_array(selection.verifier_program);
-        let programdata =
-            Pubkey::find_program_address(&[verifier.as_ref()], &bpf_loader_upgradeable::id()).0;
+        let (programdata, programdata_bump) =
+            Pubkey::find_program_address(&[verifier.as_ref()], &bpf_loader_upgradeable::id());
         VerifierRegistryEntryV2 {
-            bump: 0,
-            programdata_bump: 0,
+            bump: pool_v1_verifier_entry_v2_address(
+                &registry_program,
+                &pool,
+                &selection.profile_binding,
+                &selection.release_binding,
+            )
+            .1,
+            programdata_bump,
             status: VerifierEntryStatusV1::Active,
             statement_version: selection.statement_version,
             pool: pool.to_bytes(),
@@ -513,7 +574,8 @@ mod tests {
         .0;
         let mut registry_data =
             encode_verifier_registry_v2(&registry_v2(registry_program, pool)).unwrap();
-        let mut entry_data = encode_verifier_registry_entry_v2(&entry_v2(pool)).unwrap();
+        let mut entry_data =
+            encode_verifier_registry_entry_v2(&entry_v2(registry_program, pool)).unwrap();
         let registry_before = registry_data;
         let entry_before = entry_data;
         let mut registry_lamports = 1;
@@ -547,7 +609,7 @@ mod tests {
 
         for mutation in 0..5 {
             let mut registry_value = registry_v2(registry_program, pool);
-            let mut entry_value = entry_v2(pool);
+            let mut entry_value = entry_v2(registry_program, pool);
             match mutation {
                 0 => registry_value.loader_program = solana_sdk_ids::bpf_loader::id().to_bytes(),
                 1 => registry_value.registry_program = Pubkey::new_unique().to_bytes(),
@@ -561,7 +623,9 @@ mod tests {
                 .unwrap_or_else(|_| {
                     // A nonzero expected authority is rejected by the canonical
                     // codec before the Pool ever considers the account.
-                    let mut bytes = encode_verifier_registry_entry_v2(&entry_v2(pool)).unwrap();
+                    let mut bytes =
+                        encode_verifier_registry_entry_v2(&entry_v2(registry_program, pool))
+                            .unwrap();
                     bytes[232] = 1;
                     bytes
                 });
@@ -591,6 +655,148 @@ mod tests {
                 "mutation {mutation}"
             );
         }
+    }
+
+    #[test]
+    fn v2_stored_bumps_every_noncanonical_bump_and_wrong_address_fail_closed() {
+        let registry_program = Pubkey::new_unique();
+        let pool = Pubkey::new_unique();
+        let policy = immutable_deployment_policy(registry_program);
+        let selection = selection();
+        let registry_key = pool_v1_verifier_registry_v2_address(&registry_program, &pool).0;
+        let entry_key = pool_v1_verifier_entry_v2_address(
+            &registry_program,
+            &pool,
+            &selection.profile_binding,
+            &selection.release_binding,
+        )
+        .0;
+        let run = |registry_value: &VerifierRegistryV2,
+                   entry_value: &VerifierRegistryEntryV2,
+                   registry_key: &Pubkey,
+                   entry_key: &Pubkey| {
+            let mut registry_data = encode_verifier_registry_v2(registry_value).unwrap();
+            let mut entry_data = encode_verifier_registry_entry_v2(entry_value).unwrap();
+            let (mut registry_lamports, mut entry_lamports) = (1, 1);
+            let registry_account = account(
+                registry_key,
+                &registry_program,
+                &mut registry_lamports,
+                &mut registry_data,
+            );
+            let entry_account = account(
+                entry_key,
+                &registry_program,
+                &mut entry_lamports,
+                &mut entry_data,
+            );
+            authenticate_verifier_selection_v1(
+                &pool,
+                &policy,
+                &[registry_account, entry_account],
+                selection,
+                100,
+            )
+            .map(|_| ())
+        };
+        let registry_value = registry_v2(registry_program, pool);
+        let entry_value = entry_v2(registry_program, pool);
+        assert_eq!(
+            run(&registry_value, &entry_value, &registry_key, &entry_key),
+            Ok(())
+        );
+
+        for bump in 0..=u8::MAX {
+            if bump != registry_value.bump {
+                let mutated = VerifierRegistryV2 {
+                    bump,
+                    ..registry_value
+                };
+                assert_eq!(
+                    run(&mutated, &entry_value, &registry_key, &entry_key),
+                    Err(PoolV1ProgramError::InvalidVerifierRegistry.into()),
+                    "registry bump {bump}"
+                );
+            }
+            if bump != registry_value.programdata_bump {
+                let mutated = VerifierRegistryV2 {
+                    programdata_bump: bump,
+                    ..registry_value
+                };
+                assert_eq!(
+                    run(&mutated, &entry_value, &registry_key, &entry_key),
+                    Err(PoolV1ProgramError::InvalidVerifierRegistry.into()),
+                    "registry programdata bump {bump}"
+                );
+            }
+            if bump != entry_value.bump {
+                let mutated = VerifierRegistryEntryV2 {
+                    bump,
+                    ..entry_value
+                };
+                assert_eq!(
+                    run(&registry_value, &mutated, &registry_key, &entry_key),
+                    Err(PoolV1ProgramError::InvalidVerifierEntry.into()),
+                    "entry bump {bump}"
+                );
+            }
+            if bump != entry_value.programdata_bump {
+                let mutated = VerifierRegistryEntryV2 {
+                    programdata_bump: bump,
+                    ..entry_value
+                };
+                assert_eq!(
+                    run(&registry_value, &mutated, &registry_key, &entry_key),
+                    Err(PoolV1ProgramError::VerifierSelectionMismatch.into()),
+                    "entry programdata bump {bump}"
+                );
+            }
+        }
+
+        // Wrong accounts keep the address errors, including a valid image
+        // presented at another key and the registry image at the entry key.
+        assert_eq!(
+            run(
+                &registry_value,
+                &entry_value,
+                &Pubkey::new_unique(),
+                &entry_key
+            ),
+            Err(PoolV1ProgramError::InvalidVerifierRegistryAddress.into())
+        );
+        assert_eq!(
+            run(
+                &registry_value,
+                &entry_value,
+                &registry_key,
+                &Pubkey::new_unique()
+            ),
+            Err(PoolV1ProgramError::InvalidVerifierEntryAddress.into())
+        );
+        assert_eq!(
+            run(&registry_value, &entry_value, &entry_key, &entry_key),
+            Err(PoolV1ProgramError::InvalidVerifierRegistryAddress.into())
+        );
+        // A forged image that stores the bump of a different off-curve PDA
+        // of the same seeds is rejected at the canonical key.
+        let other_bump = (0..registry_value.bump)
+            .rev()
+            .find(|bump| {
+                Pubkey::create_program_address(
+                    &[POOL_V1_VERIFIER_REGISTRY_V2_SEED, pool.as_ref(), &[*bump]],
+                    &registry_program,
+                )
+                .is_ok()
+            })
+            .unwrap();
+        let forged = VerifierRegistryV2 {
+            bump: other_bump,
+            ..registry_value
+        };
+        assert_eq!(
+            run(&forged, &entry_value, &registry_key, &entry_key),
+            Err(PoolV1ProgramError::InvalidVerifierRegistry.into())
+        );
     }
 
     #[test]

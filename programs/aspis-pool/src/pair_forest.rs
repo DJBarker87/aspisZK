@@ -331,15 +331,63 @@ fn decode_master_account(
     }
     let master = decode_pool_v1_pair_forest_master_v1(&account.try_borrow_data()?)
         .map_err(|_| PoolV1ProgramError::InvalidAccountType)?;
-    let mint = Pubkey::new_from_array(master.identity.asset_mint);
-    let (expected, bump) = pool_v1_pair_forest_master_address(program_id, &mint);
-    if account.key != &expected
-        || master.bump != bump
+    // Stored canonical bump (G_R1.8): initialization persists the canonical
+    // `find_program_address` bump and the Pool signs only with canonical bumps,
+    // so one derivation authenticates this Pool-owned image without a search.
+    if !master_address_matches(program_id, &master, account.key)
         || master.identity.pool != account.key.to_bytes()
     {
         return Err(PoolV1ProgramError::InvalidPoolStateAddress.into());
     }
     Ok(master)
+}
+
+/// `key == create_program_address(master seeds || stored bump)`.
+fn master_address_matches(
+    program_id: &Pubkey,
+    master: &PoolV1PairForestMasterV1,
+    key: &Pubkey,
+) -> bool {
+    crate::registry::stored_bump_address_matches(
+        &[
+            POOL_V1_PAIR_FOREST_MASTER_SEED,
+            &master.identity.asset_mint,
+            &[master.bump],
+        ],
+        program_id,
+        key,
+    )
+}
+
+/// `key == create_program_address(lane seeds || stored bump)`.
+fn lane_address_matches(
+    program_id: &Pubkey,
+    master: &Pubkey,
+    lane_id: u8,
+    bump: u8,
+    key: &Pubkey,
+) -> Result<bool, ProgramError> {
+    if usize::from(lane_id) >= POOL_V1_PAIR_FOREST_LANE_COUNT {
+        return Err(ProgramError::InvalidSeeds);
+    }
+    Ok(crate::registry::stored_bump_address_matches(
+        &[
+            POOL_V1_PAIR_FOREST_LANE_SEED,
+            master.as_ref(),
+            &[lane_id],
+            &[bump],
+        ],
+        program_id,
+        key,
+    ))
+}
+
+/// The stored lane bump byte of an exact-size image, if any. Used before the
+/// full decode so that the address check keeps its place ahead of the image
+/// checks.
+fn stored_lane_bump(account: &AccountInfo<'_>) -> Result<Option<u8>, ProgramError> {
+    let data = account.try_borrow_data()?;
+    Ok((data.len() == POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES).then(|| data[72]))
 }
 
 fn decode_lane_account(
@@ -350,7 +398,20 @@ fn decode_lane_account(
     writable: bool,
 ) -> Result<PoolV1PairForestLaneStateV1, ProgramError> {
     require_program_account(account, program_id, writable)?;
-    let (expected, bump) = pool_v1_pair_forest_lane_address(program_id, master, expected_lane)?;
+    // Stored canonical bump (G_R1.8). On a mismatch the canonical search runs
+    // only to reproduce the previous rejection codes: a non-canonical key is
+    // an address error, a canonical key with a wrong stored bump is a state
+    // error after decoding.
+    let stored = stored_lane_bump(account)?;
+    let fast = match stored {
+        Some(bump) => lane_address_matches(program_id, master, expected_lane, bump, account.key)?,
+        None => false,
+    };
+    let (expected, bump) = if fast {
+        (*account.key, stored.unwrap_or_default())
+    } else {
+        pool_v1_pair_forest_lane_address(program_id, master, expected_lane)?
+    };
     if account.is_signer || account.key != &expected {
         return Err(PoolV1ProgramError::InvalidPoolStateAddress.into());
     }
@@ -383,7 +444,17 @@ fn decode_lane_account_from_program_invariant_v1(
     writable: bool,
 ) -> Result<PoolV1PairForestLaneStateV1, ProgramError> {
     require_program_account(account, program_id, writable)?;
-    let (expected, bump) = pool_v1_pair_forest_lane_address(program_id, master, expected_lane)?;
+    // Stored canonical bump (G_R1.8); see `decode_lane_account`.
+    let stored = stored_lane_bump(account)?;
+    let fast = match stored {
+        Some(bump) => lane_address_matches(program_id, master, expected_lane, bump, account.key)?,
+        None => false,
+    };
+    let (expected, bump) = if fast {
+        (*account.key, stored.unwrap_or_default())
+    } else {
+        pool_v1_pair_forest_lane_address(program_id, master, expected_lane)?
+    };
     if account.is_signer || account.key != &expected {
         return Err(PoolV1ProgramError::InvalidPoolStateAddress.into());
     }
@@ -1148,8 +1219,13 @@ fn validate_pair_forest_request_accounts_v1(
         || checkpoint.deployment_domain != deployment
         || checkpoint.checkpoint_sequence != anchor_sequence
         || checkpoint.global_root != anchor_root
-        || lane_account.key
-            != &pool_v1_pair_forest_lane_address(program_id, master_account.key, output_lane)?.0
+        || !lane_address_matches(
+            program_id,
+            master_account.key,
+            output_lane,
+            lane.bump,
+            lane_account.key,
+        )?
         || lane.master != pool
         || lane.lane_id != output_lane
         || master.initialized_lane_mask & (1u8 << output_lane) == 0
@@ -3392,6 +3468,174 @@ mod tests {
             &checkpoint.info()
         )
         .is_err());
+    }
+
+    #[test]
+    fn stored_bump_authentication_rejects_every_wrong_bump_key_and_owner() {
+        let program_id = Pubkey::new_unique();
+        let (mut master, mut lanes, _checkpoint, master_key) = fixtures(program_id);
+        let address_error: ProgramError = PoolV1ProgramError::InvalidPoolStateAddress.into();
+        let state_error: ProgramError = PoolV1ProgramError::StateHistoryMismatch.into();
+        let canonical_master_bump = master.data[7];
+        for bump in 0..=u8::MAX {
+            master.data[7] = bump;
+            let result = decode_master_account(&program_id, &master.info(), true);
+            if bump == canonical_master_bump {
+                assert!(result.is_ok());
+            } else {
+                assert_eq!(
+                    result.err(),
+                    Some(address_error.clone()),
+                    "master bump {bump}"
+                );
+            }
+        }
+        master.data[7] = canonical_master_bump;
+        let master_image = master.data.clone();
+        master.key = Pubkey::new_unique();
+        assert_eq!(
+            decode_master_account(&program_id, &master.info(), true).err(),
+            Some(address_error.clone())
+        );
+        master.key = master_key;
+        master.owner = Pubkey::new_unique();
+        assert_eq!(
+            decode_master_account(&program_id, &master.info(), true).err(),
+            Some(ProgramError::IncorrectProgramId)
+        );
+        master.owner = program_id;
+        assert_eq!(master.data, master_image);
+
+        let lane_keys: Vec<Pubkey> = lanes.iter().map(|lane| lane.key).collect();
+        for (lane_id, lane) in lanes.iter_mut().enumerate() {
+            let lane_id = lane_id as u8;
+            let canonical = lane.data[72];
+            for bump in 0..=u8::MAX {
+                lane.data[72] = bump;
+                let strict =
+                    decode_lane_account(&program_id, &master_key, lane_id, &lane.info(), false);
+                #[cfg(any(
+                    feature = "pair-forest-source-invariant-audit",
+                    feature = "pair-forest-deposit-invariant-audit"
+                ))]
+                let invariant = decode_lane_account_from_program_invariant_v1(
+                    &program_id,
+                    &master_key,
+                    lane_id,
+                    &lane.info(),
+                    false,
+                );
+                if bump == canonical {
+                    assert!(strict.is_ok());
+                    #[cfg(any(
+                        feature = "pair-forest-source-invariant-audit",
+                        feature = "pair-forest-deposit-invariant-audit"
+                    ))]
+                    assert!(invariant.is_ok());
+                } else {
+                    // Canonical key, wrong stored bump: the previous state
+                    // error is kept after the fallback search.
+                    assert_eq!(
+                        strict.err(),
+                        Some(state_error.clone()),
+                        "lane {lane_id} bump {bump}"
+                    );
+                    #[cfg(any(
+                        feature = "pair-forest-source-invariant-audit",
+                        feature = "pair-forest-deposit-invariant-audit"
+                    ))]
+                    assert_eq!(
+                        invariant.err(),
+                        Some(state_error.clone()),
+                        "lane {lane_id} bump {bump}"
+                    );
+                }
+            }
+            lane.data[72] = canonical;
+            // Another lane's key, an arbitrary key and the master key are
+            // address errors; so is the right image under the wrong lane id.
+            let own_key = lane.key;
+            for wrong in [
+                lane_keys[(usize::from(lane_id) + 1) % 8],
+                Pubkey::new_unique(),
+                master_key,
+            ] {
+                lane.key = wrong;
+                assert_eq!(
+                    decode_lane_account(&program_id, &master_key, lane_id, &lane.info(), false)
+                        .err(),
+                    Some(address_error.clone())
+                );
+            }
+            lane.key = own_key;
+            assert_eq!(
+                decode_lane_account(
+                    &program_id,
+                    &master_key,
+                    (lane_id + 1) % 8,
+                    &lane.info(),
+                    false
+                )
+                .err(),
+                Some(address_error.clone())
+            );
+            assert_eq!(
+                decode_lane_account(&program_id, &master_key, 8, &lane.info(), false).err(),
+                Some(ProgramError::InvalidSeeds)
+            );
+            lane.owner = Pubkey::new_unique();
+            assert_eq!(
+                decode_lane_account(&program_id, &master_key, lane_id, &lane.info(), false).err(),
+                Some(ProgramError::IncorrectProgramId)
+            );
+            lane.owner = program_id;
+            lane.signer = true;
+            assert_eq!(
+                decode_lane_account(&program_id, &master_key, lane_id, &lane.info(), false).err(),
+                Some(address_error.clone())
+            );
+            lane.signer = false;
+        }
+    }
+
+    /// Premise boundary, recorded as a test so that it cannot drift silently:
+    /// a stored bump authenticates an existing account only because the Pool
+    /// signs exclusively with canonical bumps. Natively, a Pool-owned image at
+    /// a non-canonical off-curve PDA of the same seeds, storing that bump, is
+    /// accepted. On chain no such account can exist: allocating or assigning
+    /// it requires the Pool's `invoke_signed` with that bump.
+    #[test]
+    fn noncanonical_pda_with_matching_stored_bump_is_premise_bound() {
+        let program_id = Pubkey::new_unique();
+        let (_master, mut lanes, _checkpoint, master_key) = fixtures(program_id);
+        let lane = &mut lanes[0];
+        let canonical = lane.data[72];
+        let (other_key, other_bump) = (0..canonical)
+            .rev()
+            .find_map(|bump| {
+                Pubkey::create_program_address(
+                    &[
+                        POOL_V1_PAIR_FOREST_LANE_SEED,
+                        master_key.as_ref(),
+                        &[0],
+                        &[bump],
+                    ],
+                    &program_id,
+                )
+                .ok()
+                .map(|key| (key, bump))
+            })
+            .unwrap();
+        lane.key = other_key;
+        lane.data[72] = other_bump;
+        assert!(decode_lane_account(&program_id, &master_key, 0, &lane.info(), false).is_ok());
+        // The canonical search would have rejected it.
+        assert_ne!(
+            other_key,
+            pool_v1_pair_forest_lane_address(&program_id, &master_key, 0)
+                .unwrap()
+                .0
+        );
     }
 
     #[test]
