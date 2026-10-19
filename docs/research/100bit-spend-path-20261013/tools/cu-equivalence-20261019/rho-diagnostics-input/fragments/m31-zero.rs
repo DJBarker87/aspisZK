@@ -1,0 +1,1 @@
+    pub const ZERO: M31 = M31(0);

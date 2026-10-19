@@ -1,0 +1,353 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:28:30: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 6001
+  0 ≤ d ≤ 5632
+  d - f ≥ 0
+  c ≥ 0
+  0 ≤ b ≤ 256
+  b - c ≥ 1
+  0 ≤ a ≤ 22
+where
+ a := ↑↑next
+ b := ↑↑length
+ c := ↑↑index
+ d := ↑↑next * ↑↑length
+ e := ↑2 ^ UScalarTy.Usize.numBits
+ f := ↑2 ^ UScalarTy.numBits ?m.504
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:38:2: error: 'change' tactic failed, pattern
+  (match (↑basis)[↑index]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ?m.36
+is not definitionally equal to target
+  (match basis[index]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok (↑basis)[↑index]
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:65:8: error: Type mismatch: After simplification, term
+  hi'
+ has type
+  @LT.lt ℕ instLTNat (↑index) 256
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑index ↑256#usize
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:69:4: error: Type mismatch: After simplification, term
+  hi'
+ has type
+  @LT.lt ℕ instLTNat (↑index) 256
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑index ↑256#usize
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:78:15: error: unsolved goals
+case fail
+power : field.QM31
+next : Usize
+basis : Basis
+iter after : Range
+index : Usize
+rows : Slice field.QM31
+hn : ↑next ≤ 22
+hl : (↑rows).length ≤ 256
+hi : ↑index < (↑rows).length
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, after)
+hb : ↑index < (↑basis).length
+b : U32 := (↑basis)[↑index]
+error : Error
+hm : AspisR1RhoCoefficients.QM31.mul_m31 power b = fail error
+⊢ (let (o, iter1) := (some index, after)
+    match o with
+    | none => ok (done rows)
+    | some j => do
+      let q ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31) rows j
+      let m ← Array.index_usize basis j
+      let q1 ← AspisR1RhoCoefficients.QM31.mul_m31 power m
+      let q2 ← q.add q1
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31)
+            rows j
+      let i1 ← next * (index_mut_back q2).len
+      let i2 ← i1 + j
+      let q3 ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31)
+            (index_mut_back q2) j
+      let we ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_qm31 q3
+      AspisR1RhoCoefficients.trace.value 12#u16 i2 we
+      let i4 ← next * (index_mut_back q2).len
+      let i5 ← i4 + j
+      let we1 ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_m31 m
+      AspisR1RhoCoefficients.trace.value 13#u16 i5 we1
+      ok (cont (iter1, index_mut_back q2))) =
+    fail error
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:79:8: error: unsolved goals
+case div
+power : field.QM31
+next : Usize
+basis : Basis
+iter after : Range
+index : Usize
+rows : Slice field.QM31
+hn : ↑next ≤ 22
+hl : (↑rows).length ≤ 256
+hi : ↑index < (↑rows).length
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, after)
+hb : ↑index < (↑basis).length
+b : U32 := (↑basis)[↑index]
+hm : AspisR1RhoCoefficients.QM31.mul_m31 power b = div
+⊢ (let (o, iter1) := (some index, after)
+    match o with
+    | none => ok (done rows)
+    | some j => do
+      let q ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31) rows j
+      let m ← Array.index_usize basis j
+      let q1 ← AspisR1RhoCoefficients.QM31.mul_m31 power m
+      let q2 ← q.add q1
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31)
+            rows j
+      let i1 ← next * (index_mut_back q2).len
+      let i2 ← i1 + j
+      let q3 ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31)
+            (index_mut_back q2) j
+      let we ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_qm31 q3
+      AspisR1RhoCoefficients.trace.value 12#u16 i2 we
+      let i4 ← next * (index_mut_back q2).len
+      let i5 ← i4 + j
+      let we1 ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_m31 m
+      AspisR1RhoCoefficients.trace.value 13#u16 i5 we1
+      ok (cont (iter1, index_mut_back q2))) =
+    div
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:83:17: error: unsolved goals
+case ok.fail
+power : field.QM31
+next : Usize
+basis : Basis
+iter after : Range
+index : Usize
+rows : Slice field.QM31
+hn : ↑next ≤ 22
+hl : (↑rows).length ≤ 256
+hi : ↑index < (↑rows).length
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, after)
+hb : ↑index < (↑basis).length
+b : U32 := (↑basis)[↑index]
+product : AspisR1RhoCoefficients.aspis_core.field.QM31
+hm : AspisR1RhoCoefficients.QM31.mul_m31 power b = ok product
+error : Error
+ha : AspisR1RhoCoefficients.aspis_core.field.QM31.add (↑rows)[↑index] product = fail error
+⊢ (let (o, iter1) := (some index, after)
+    match o with
+    | none => ok (done rows)
+    | some j => do
+      let q ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31) rows j
+      let m ← Array.index_usize basis j
+      let q1 ← AspisR1RhoCoefficients.QM31.mul_m31 power m
+      let q2 ← q.add q1
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31)
+            rows j
+      let i1 ← next * (index_mut_back q2).len
+      let i2 ← i1 + j
+      let q3 ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31)
+            (index_mut_back q2) j
+      let we ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_qm31 q3
+      AspisR1RhoCoefficients.trace.value 12#u16 i2 we
+      let i4 ← next * (index_mut_back q2).len
+      let i5 ← i4 + j
+      let we1 ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_m31 m
+      AspisR1RhoCoefficients.trace.value 13#u16 i5 we1
+      ok (cont (iter1, index_mut_back q2))) =
+    fail error
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:84:10: error: unsolved goals
+case ok.div
+power : field.QM31
+next : Usize
+basis : Basis
+iter after : Range
+index : Usize
+rows : Slice field.QM31
+hn : ↑next ≤ 22
+hl : (↑rows).length ≤ 256
+hi : ↑index < (↑rows).length
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, after)
+hb : ↑index < (↑basis).length
+b : U32 := (↑basis)[↑index]
+product : AspisR1RhoCoefficients.aspis_core.field.QM31
+hm : AspisR1RhoCoefficients.QM31.mul_m31 power b = ok product
+ha : AspisR1RhoCoefficients.aspis_core.field.QM31.add (↑rows)[↑index] product = div
+⊢ (let (o, iter1) := (some index, after)
+    match o with
+    | none => ok (done rows)
+    | some j => do
+      let q ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31) rows j
+      let m ← Array.index_usize basis j
+      let q1 ← AspisR1RhoCoefficients.QM31.mul_m31 power m
+      let q2 ← q.add q1
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31)
+            rows j
+      let i1 ← next * (index_mut_back q2).len
+      let i2 ← i1 + j
+      let q3 ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31)
+            (index_mut_back q2) j
+      let we ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_qm31 q3
+      AspisR1RhoCoefficients.trace.value 12#u16 i2 we
+      let i4 ← next * (index_mut_back q2).len
+      let i5 ← i4 + j
+      let we1 ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_m31 m
+      AspisR1RhoCoefficients.trace.value 13#u16 i5 we1
+      ok (cont (iter1, index_mut_back q2))) =
+    div
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:90:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  alloc.vec.Vec.len (rows.set index value)
+in the target expression
+  (let (o, iter1) := (some index, after)
+    match o with
+    | none => ok (done rows)
+    | some j => do
+      let q ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31) rows j
+      let m ← Array.index_usize basis j
+      let q1 ← AspisR1RhoCoefficients.QM31.mul_m31 power m
+      let q2 ← q.add q1
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31)
+            rows j
+      let i1 ← next * (index_mut_back q2).len
+      let i2 ← i1 + j
+      let q3 ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31)
+            (index_mut_back q2) j
+      let we ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_qm31 q3
+      AspisR1RhoCoefficients.trace.value 12#u16 i2 we
+      let i4 ← next * (index_mut_back q2).len
+      let i5 ← i4 + j
+      let we1 ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_m31 m
+      AspisR1RhoCoefficients.trace.value 13#u16 i5 we1
+      ok (cont (iter1, index_mut_back q2))) =
+    ok (cont (after, rows.set index value))
+
+case ok.ok
+power : field.QM31
+next : Usize
+basis : Basis
+iter after : Range
+index : Usize
+rows : Slice field.QM31
+hn : ↑next ≤ 22
+hl : (↑rows).length ≤ 256
+hi : ↑index < (↑rows).length
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, after)
+hb : ↑index < (↑basis).length
+b : U32 := (↑basis)[↑index]
+product : AspisR1RhoCoefficients.aspis_core.field.QM31
+hm : AspisR1RhoCoefficients.QM31.mul_m31 power b = ok product
+value : AspisR1RhoCoefficients.aspis_core.field.QM31
+ha : AspisR1RhoCoefficients.aspis_core.field.QM31.add (↑rows)[↑index] product = ok value
+hlen : alloc.vec.Vec.len (rows.set index value) = alloc.vec.Vec.len rows
+⊢ (let (o, iter1) := (some index, after)
+    match o with
+    | none => ok (done rows)
+    | some j => do
+      let q ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31) rows j
+      let m ← Array.index_usize basis j
+      let q1 ← AspisR1RhoCoefficients.QM31.mul_m31 power m
+      let q2 ← q.add q1
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31)
+            rows j
+      let i1 ← next * (index_mut_back q2).len
+      let i2 ← i1 + j
+      let q3 ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31)
+            (index_mut_back q2) j
+      let we ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_qm31 q3
+      AspisR1RhoCoefficients.trace.value 12#u16 i2 we
+      let i4 ← next * (index_mut_back q2).len
+      let i5 ← i4 + j
+      let we1 ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_m31 m
+      AspisR1RhoCoefficients.trace.value 13#u16 i5 we1
+      ok (cont (iter1, index_mut_back q2))) =
+    ok (cont (after, rows.set index value))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    rows
+  has type
+    Slice field.QM31
+  but is expected to have type
+    alloc.vec.Vec AspisR1RhoCoefficients.aspis_core.field.QM31
+  in the application
+    done rows
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:72:24: warning: This simp argument is unused:
+  vec_read rows index hi
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵v̵e̵c̵_̵r̵e̵a̵d̵ ̵r̵o̵w̵s̵ ̵i̵n̵d̵e̵x̵ ̵h̵i̵,̵a̵r̵r̵a̵y̵_̵r̵e̵a̵d̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲a̲r̲r̲a̲y̲_̲r̲e̲a̲d̲ basis index hb]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:72:47: warning: This simp argument is unused:
+  array_read basis index hb
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵v̵e̵c̵_̵r̵e̵a̵d̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲v̲e̲c̲_̲r̲e̲a̲d̲ rows index h̵i̵,̵a̵r̵r̵a̵y̵_̵r̵e̵a̵d̵ ̵b̵a̵s̵i̵s̵ ̵i̵n̵d̵e̵x̵ ̵h̵b̵]̵h̲i̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:78:29: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵m̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:79:22: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵m̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:81:15: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵m̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:83:31: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵a̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:84:24: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵a̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:86:17: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵a̵,̵bind_tc_ok, ̲vec_read_mut rows index hi]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:86:31: warning: This simp argument is unused:
+  vec_read_mut rows index hi
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵a̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵v̵e̵c̵_̵r̵e̵a̵d̵_̵m̵u̵t̵ ̵r̵o̵w̵s̵ ̵i̵n̵d̵e̵x̵ ̵h̵i̵]̵[̲h̲a̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsRhoReferenceLoop.trace_index_steps' depends on axioms: [propext, sorryAx]
+'AspisR1.CuSavingsRhoReferenceLoop.arithmetic_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoReferenceLoop.source_body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

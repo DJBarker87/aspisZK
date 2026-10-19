@@ -1,0 +1,130 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:44:13: warning: This simp argument is unused:
+  Prod.casesOn
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵P̵r̵o̵d̵.̵c̵a̵s̵e̵s̵O̵n̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:48:66: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:48:66: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:63:4: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:75:17: error: unsolved goals
+case succ.fail
+power : field.QM31
+next : Usize
+basis : Basis
+hn : ↑next ≤ 22
+fuel : ℕ
+ih :
+  ∀ (iter : Range) (rows : Rows),
+    (↑rows).length ≤ 256 →
+      (↑rows).length = ↑iter.end →
+        ↑iter.start + fuel = ↑iter.end →
+          sourceLoop iter rows power next basis =
+            CuSavingsRangeTraversal.traverse (atBasis power basis) (indices (↑iter.start) fuel) rows
+iter : Range
+rows : Rows
+hl : (↑rows).length ≤ 256
+hsize : (↑rows).length = ↑iter.end
+hspan : ↑iter.start + (fuel + 1) = ↑iter.end
+iter1 : OccupancyRangeTraversal.Range
+hiter : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hstart : ↑iter1.start = ↑iter.start + 1
+hend : iter1.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+hi : ↑iter.start < (↑rows).length
+hb : ↑iter.start < (↑basis).length
+hbody :
+  Source power next basis iter rows = do
+    let out ← referenceAt rows iter.start power (↑basis)[↑iter.start]
+    ok (cont (iter1, out))
+error : Error
+hs : referenceAt rows iter.start power (↑basis)[↑iter.start] = fail error
+⊢ fail error = do
+    let next ← fail error
+    CuSavingsRangeTraversal.traverse (atBasis power basis) (List.map word (List.range' (↑iter.start + 1) fuel)) next
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:76:10: error: unsolved goals
+case succ.div
+power : field.QM31
+next : Usize
+basis : Basis
+hn : ↑next ≤ 22
+fuel : ℕ
+ih :
+  ∀ (iter : Range) (rows : Rows),
+    (↑rows).length ≤ 256 →
+      (↑rows).length = ↑iter.end →
+        ↑iter.start + fuel = ↑iter.end →
+          sourceLoop iter rows power next basis =
+            CuSavingsRangeTraversal.traverse (atBasis power basis) (indices (↑iter.start) fuel) rows
+iter : Range
+rows : Rows
+hl : (↑rows).length ≤ 256
+hsize : (↑rows).length = ↑iter.end
+hspan : ↑iter.start + (fuel + 1) = ↑iter.end
+iter1 : OccupancyRangeTraversal.Range
+hiter : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hstart : ↑iter1.start = ↑iter.start + 1
+hend : iter1.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+hi : ↑iter.start < (↑rows).length
+hb : ↑iter.start < (↑basis).length
+hbody :
+  Source power next basis iter rows = do
+    let out ← referenceAt rows iter.start power (↑basis)[↑iter.start]
+    ok (cont (iter1, out))
+hs : referenceAt rows iter.start power (↑basis)[↑iter.start] = div
+⊢ div = do
+    let next ← div
+    CuSavingsRangeTraversal.traverse (atBasis power basis) (List.map word (List.range' (↑iter.start + 1) fuel)) next
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:82:6: error: Type mismatch: After simplification, term
+  ih iter1 out (Eq.mpr (id (congrArg (fun _a => _a ≤ 256) hlength)) hl) hsize' hspan'
+ has type
+  @Eq (Result (alloc.vec.Vec AspisR1RhoCoefficients.aspis_core.field.QM31)) (sourceLoop iter1 out power next basis)
+    (CuSavingsRangeTraversal.traverse (atBasis power basis) (List.map word (List.range' (↑iter.start + 1) fuel)) out)
+but is expected to have type
+  @Eq (Result (alloc.vec.Vec AspisR1RhoCoefficients.aspis_core.field.QM31)) (sourceLoop iter1 out power next basis) do
+    let next ← ok out
+    CuSavingsRangeTraversal.traverse (atBasis power basis) (List.map word (List.range' (↑iter.start + 1) fuel)) next
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:75:31: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:76:24: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:78:17: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:94:16: error: Type mismatch: After simplification, term
+  ih out
+ has type
+  @Eq (Result Rows) (CuSavingsRangeTraversal.traverse (atBasis power basis) tail out)
+    (referenceUpdates power (List.map (fun i => (i, basisWord basis i)) tail) out)
+but is expected to have type
+  @Eq (Result Rows)
+    (do
+      let next ← ok out
+      CuSavingsRangeTraversal.traverse (atBasis power basis) tail next)
+    (referenceUpdates power (List.map (fun i => (i, basisWord basis i)) tail) out)
+'AspisR1.CuSavingsRhoReferenceTraversal.reference_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoReferenceTraversal.source_traverse' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsRhoReferenceTraversal.source_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

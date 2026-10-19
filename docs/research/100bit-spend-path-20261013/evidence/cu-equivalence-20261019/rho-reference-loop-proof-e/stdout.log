@@ -1,0 +1,112 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:82:15: error: unsolved goals
+case ok.ok
+power : field.QM31
+next : Usize
+basis : Basis
+iter after : Range
+index : Usize
+rows : alloc.vec.Vec AspisR1RhoCoefficients.aspis_core.field.QM31
+hn : ↑next ≤ 22
+hl : (↑rows).length ≤ 256
+hi : ↑index < (↑rows).length
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, after)
+hb : ↑index < (↑basis).length
+b : U32 := (↑basis)[↑index]
+product : AspisR1RhoCoefficients.aspis_core.field.QM31
+hm : AspisR1RhoCoefficients.QM31.mul_m31 power b = ok product
+value : AspisR1RhoCoefficients.aspis_core.field.QM31
+ha : (↑rows)[↑index].add product = ok value
+hlen : alloc.vec.Vec.len (Slice.set rows index value) = rows.len
+productIndex ix : UScalar UScalarTy.Usize
+hprod : next * rows.len = ok productIndex
+hadd : productIndex + index = ok ix
+wide : field.WideExact
+hw : field.WideExact.from_qm31 value = ok wide
+wide1 : field.WideExact
+hw1 : from_m31 b = ok wide1
+hread : (↑(Slice.set rows index value))[↑index] = value
+⊢ ok (cont (after, Slice.set rows index value)) = ok (cont (after, Slice.set rows index value))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:75:29: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵m̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:76:22: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵m̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:78:15: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵m̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:80:31: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵a̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:81:24: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵a̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:83:17: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵a̵,̵bind_tc_ok, ̲vec_read_mut rows index hi]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:110:8: warning: This simp argument is unused:
+  AspisR1RhoCoefficients.aspis_core.field.WideExact.from_qm31
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵p̵r̵o̵d̵,̵h̵a̵d̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵v̵e̵c̵_̵r̵e̵a̵d̵[̲h̲p̲r̲o̲d̲,̲ ̲h̲a̲d̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲v̲e̲c̲_̲r̲e̲a̲d̲ (Slice.set rows index value) index (by simpa only [Slice.set_length] using h̵i̵)̵,̵h̵r̵e̵a̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵R̵h̵o̵C̵o̵e̵f̵f̵i̵c̵i̵e̵n̵t̵s̵.̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵W̵i̵d̵e̵E̵x̵a̵c̵t̵.̵f̵r̵o̵m̵_̵q̵m̵3̵1̵,̵h̵w̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵R̵h̵o̵C̵o̵e̵f̵f̵i̵c̵i̵e̵n̵t̵s̵.̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵W̵i̵d̵e̵E̵x̵a̵c̵t̵.̵f̵r̵o̵m̵_̵m̵3̵1̵,̵h̵w̵1̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵R̵h̵o̵C̵o̵e̵f̵f̵i̵c̵i̵e̵n̵t̵s̵.̵t̵r̵a̵c̵e̵.̵v̵a̵l̵u̵e̵,̵t̵r̵a̵c̵e̵.̵v̵a̵l̵u̵e̵]̵h̲i̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲r̲e̲a̲d̲,̲ ̲h̲w̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲R̲h̲o̲C̲o̲e̲f̲f̲i̲c̲i̲e̲n̲t̲s̲.̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲W̲i̲d̲e̲E̲x̲a̲c̲t̲.̲f̲r̲o̲m̲_̲m̲3̲1̲,̲ ̲h̲w̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲R̲1̲R̲h̲o̲C̲o̲e̲f̲f̲i̲c̲i̲e̲n̲t̲s̲.̲t̲r̲a̲c̲e̲.̲v̲a̲l̲u̲e̲,̲ ̲t̲r̲a̲c̲e̲.̲v̲a̲l̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:111:8: warning: This simp argument is unused:
+  AspisR1RhoCoefficients.aspis_core.field.WideExact.from_m31
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵p̵r̵o̵d̵,̵h̵a̵d̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵v̵e̵c̵_̵r̵e̵a̵d̵[̲h̲p̲r̲o̲d̲,̲ ̲h̲a̲d̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲v̲e̲c̲_̲r̲e̲a̲d̲ (Slice.set rows index value) index (by simpa only [Slice.set_length] using h̵i̵)̵,̵h̵r̵e̵a̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵R̵h̵o̵C̵o̵e̵f̵f̵i̵c̵i̵e̵n̵t̵s̵.̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵W̵i̵d̵e̵E̵x̵a̵c̵t̵.̵f̵r̵o̵m̵_̵q̵m̵3̵1̵,̵h̵w̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵R̵h̵o̵C̵o̵e̵f̵f̵i̵c̵i̵e̵n̵t̵s̵.̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵W̵i̵d̵e̵E̵x̵a̵c̵t̵.̵f̵r̵o̵m̵_̵m̵3̵1̵,̵h̵w̵1̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵R̵h̵o̵C̵o̵e̵f̵f̵i̵c̵i̵e̵n̵t̵s̵.̵t̵r̵a̵c̵e̵.̵v̵a̵l̵u̵e̵,̵t̵r̵a̵c̵e̵.̵v̵a̵l̵u̵e̵]̵h̲i̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲r̲e̲a̲d̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲R̲h̲o̲C̲o̲e̲f̲f̲i̲c̲i̲e̲n̲t̲s̲.̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲W̲i̲d̲e̲E̲x̲a̲c̲t̲.̲f̲r̲o̲m̲_̲q̲m̲3̲1̲,̲ ̲h̲w̲,̲ ̲h̲w̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲R̲1̲R̲h̲o̲C̲o̲e̲f̲f̲i̲c̲i̲e̲n̲t̲s̲.̲t̲r̲a̲c̲e̲.̲v̲a̲l̲u̲e̲,̲ ̲t̲r̲a̲c̲e̲.̲v̲a̲l̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:112:8: warning: This simp argument is unused:
+  AspisR1RhoCoefficients.trace.value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵p̵r̵o̵d̵,̵h̵a̵d̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵v̵e̵c̵_̵r̵e̵a̵d̵[̲h̲p̲r̲o̲d̲,̲ ̲h̲a̲d̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲v̲e̲c̲_̲r̲e̲a̲d̲ (Slice.set rows index value) index (by simpa only [Slice.set_length] using h̵i̵)̵,̵h̵r̵e̵a̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵R̵h̵o̵C̵o̵e̵f̵f̵i̵c̵i̵e̵n̵t̵s̵.̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵W̵i̵d̵e̵E̵x̵a̵c̵t̵.̵f̵r̵o̵m̵_̵q̵m̵3̵1̵,̵h̵w̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵R̵h̵o̵C̵o̵e̵f̵f̵i̵c̵i̵e̵n̵t̵s̵.̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵W̵i̵d̵e̵E̵x̵a̵c̵t̵.̵f̵r̵o̵m̵_̵m̵3̵1̵,̵h̵w̵1̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵R̵h̵o̵C̵o̵e̵f̵f̵i̵c̵i̵e̵n̵t̵s̵.̵t̵r̵a̵c̵e̵.̵v̵a̵l̵u̵e̵,̵t̵r̵a̵c̵e̵.̵v̵a̵l̵u̵e̵]̵h̲i̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲r̲e̲a̲d̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲R̲h̲o̲C̲o̲e̲f̲f̲i̲c̲i̲e̲n̲t̲s̲.̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲W̲i̲d̲e̲E̲x̲a̲c̲t̲.̲f̲r̲o̲m̲_̲q̲m̲3̲1̲,̲ ̲h̲w̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲R̲1̲R̲h̲o̲C̲o̲e̲f̲f̲i̲c̲i̲e̲n̲t̲s̲.̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲W̲i̲d̲e̲E̲x̲a̲c̲t̲.̲f̲r̲o̲m̲_̲m̲3̲1̲,̲ ̲h̲w̲1̲,̲ ̲t̲r̲a̲c̲e̲.̲v̲a̲l̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsRhoReferenceLoop.trace_index_steps' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoReferenceLoop.arithmetic_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoReferenceLoop.source_body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

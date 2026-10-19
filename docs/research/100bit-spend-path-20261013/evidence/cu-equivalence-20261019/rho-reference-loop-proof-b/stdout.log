@@ -1,0 +1,108 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:87:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  alloc.vec.Vec.len (Slice.set rows index value)
+in the target expression
+  (let (_, index_mut_back) := ((↑rows)[↑index], Slice.set rows index)
+    do
+    let i1 ← next * (index_mut_back value).len
+    let i2 ← i1 + index
+    let q3 ←
+      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31)
+          (index_mut_back value) index
+    let we ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_qm31 q3
+    AspisR1RhoCoefficients.trace.value 12#u16 i2 we
+    let i4 ← next * (index_mut_back value).len
+    let i5 ← i4 + index
+    let we1 ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_m31 (↑basis)[↑index]
+    AspisR1RhoCoefficients.trace.value 13#u16 i5 we1
+    ok (cont (after, index_mut_back value))) =
+    ok (cont (after, Slice.set rows index value))
+
+case ok.ok
+power : field.QM31
+next : Usize
+basis : Basis
+iter after : Range
+index : Usize
+rows : alloc.vec.Vec AspisR1RhoCoefficients.aspis_core.field.QM31
+hn : ↑next ≤ 22
+hl : (↑rows).length ≤ 256
+hi : ↑index < (↑rows).length
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, after)
+hb : ↑index < (↑basis).length
+b : U32 := (↑basis)[↑index]
+product : AspisR1RhoCoefficients.aspis_core.field.QM31
+hm : AspisR1RhoCoefficients.QM31.mul_m31 power b = ok product
+value : AspisR1RhoCoefficients.aspis_core.field.QM31
+ha : (↑rows)[↑index].add product = ok value
+hlen : alloc.vec.Vec.len (Slice.set rows index value) = rows.len
+⊢ (let (_, index_mut_back) := ((↑rows)[↑index], Slice.set rows index)
+    do
+    let i1 ← next * (index_mut_back value).len
+    let i2 ← i1 + index
+    let q3 ←
+      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice AspisR1RhoCoefficients.aspis_core.field.QM31)
+          (index_mut_back value) index
+    let we ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_qm31 q3
+    AspisR1RhoCoefficients.trace.value 12#u16 i2 we
+    let i4 ← next * (index_mut_back value).len
+    let i5 ← i4 + index
+    let we1 ← AspisR1RhoCoefficients.aspis_core.field.WideExact.from_m31 (↑basis)[↑index]
+    AspisR1RhoCoefficients.trace.value 13#u16 i5 we1
+    ok (cont (after, index_mut_back value))) =
+    ok (cont (after, Slice.set rows index value))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    basis
+  has type
+    Basis
+  but is expected to have type
+    { l // l.length = ↑256#usize }
+  in the application
+    ↑basis
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:75:29: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵m̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:76:22: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵m̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:78:15: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵m̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:80:31: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵a̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:81:24: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵a̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceLoop.lean:83:17: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵a̵,̵bind_tc_ok, ̲vec_read_mut rows index hi]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsRhoReferenceLoop.trace_index_steps' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoReferenceLoop.arithmetic_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoReferenceLoop.source_body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,30 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoDiagnostics.lean:19:16: error: Tactic `assumption` failed
+
+x out : U32
+hrun : UScalar.rem x field.P = ok out
+⊢ (do
+      let i ← x % field.P
+      ok i) =
+    ok out
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoDiagnostics.lean:39:2: error: Type mismatch: After simplification, term
+  ho
+ has type
+  field.WideExact.from_qm31 { c0 := { a := word, b := field.M31.ZERO }, c1 := field.CM31.ZERO } = ok out
+but is expected to have type
+  (do
+      let q ←
+        do
+          let c ←
+            do
+              let m ←
+                do
+                  let i ← x % field.P
+                  ok i
+              ok { a := m, b := field.M31.ZERO }
+          ok { c0 := c, c1 := field.CM31.ZERO }
+      field.WideExact.from_qm31 q) =
+    ok out
+'AspisR1.CuSavingsRhoDiagnostics.from_qm31_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoDiagnostics.from_m31_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoDiagnostics.qm31_trace_erased' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoDiagnostics.m31_trace_erased' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

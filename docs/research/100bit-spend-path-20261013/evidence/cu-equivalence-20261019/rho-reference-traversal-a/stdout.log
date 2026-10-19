@@ -1,0 +1,250 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:44:13: warning: This simp argument is unused:
+  Prod.casesOn
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵P̵r̵o̵d̵.̵c̵a̵s̵e̵s̵O̵n̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:48:66: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:48:66: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:62:74: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 : Type) → (Usize → x_0 → Result x_0) → List Usize → x_0 → Result x_0
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:72:66: error: Ambiguous term
+  traverse
+Possible interpretations:
+  CuSavingsRangeTraversal.traverse : (Usize → ?m.157 → Result ?m.157) → List Usize → ?m.157 → Result ?m.157
+  
+  Traversable.traverse : (?m.161 → ?m.159 ?m.162) → ?m.157 ?m.161 → ?m.159 (?m.157 ?m.162)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:75:17: error: unsolved goals
+case succ.fail
+power : field.QM31
+next : Usize
+basis : Basis
+hn : ↑next ≤ 22
+fuel : ℕ
+ih :
+  ∀ (iter : Range) (rows : Rows),
+    (↑rows).length ≤ 256 →
+      (↑rows).length = ↑iter.end →
+        ↑iter.start + fuel = ↑iter.end →
+          sourceLoop iter rows power next basis =
+            CuSavingsRangeTraversal.traverse (atBasis power basis) (indices (↑iter.start) fuel) rows
+iter : Range
+rows : Rows
+hl : (↑rows).length ≤ 256
+hsize : (↑rows).length = ↑iter.end
+hspan : ↑iter.start + (fuel + 1) = ↑iter.end
+iter1 : OccupancyRangeTraversal.Range
+hiter : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hstart : ↑iter1.start = ↑iter.start + 1
+hend : iter1.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+hi : ↑iter.start < (↑rows).length
+hb : ↑iter.start < (↑basis).length
+hbody :
+  Source power next basis iter rows = do
+    let out ← referenceAt rows iter.start power (↑basis)[↑iter.start]
+    ok (cont (iter1, out))
+error : Error
+hs : referenceAt rows iter.start power (↑basis)[↑iter.start] = fail error
+⊢ fail error =
+    CuSavingsRangeTraversal.traverse (atBasis power basis)
+      (iter.start :: List.map word (List.range' (↑iter.start + 1) fuel)) rows
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:76:10: error: unsolved goals
+case succ.div
+power : field.QM31
+next : Usize
+basis : Basis
+hn : ↑next ≤ 22
+fuel : ℕ
+ih :
+  ∀ (iter : Range) (rows : Rows),
+    (↑rows).length ≤ 256 →
+      (↑rows).length = ↑iter.end →
+        ↑iter.start + fuel = ↑iter.end →
+          sourceLoop iter rows power next basis =
+            CuSavingsRangeTraversal.traverse (atBasis power basis) (indices (↑iter.start) fuel) rows
+iter : Range
+rows : Rows
+hl : (↑rows).length ≤ 256
+hsize : (↑rows).length = ↑iter.end
+hspan : ↑iter.start + (fuel + 1) = ↑iter.end
+iter1 : OccupancyRangeTraversal.Range
+hiter : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hstart : ↑iter1.start = ↑iter.start + 1
+hend : iter1.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+hi : ↑iter.start < (↑rows).length
+hb : ↑iter.start < (↑basis).length
+hbody :
+  Source power next basis iter rows = do
+    let out ← referenceAt rows iter.start power (↑basis)[↑iter.start]
+    ok (cont (iter1, out))
+hs : referenceAt rows iter.start power (↑basis)[↑iter.start] = div
+⊢ div =
+    CuSavingsRangeTraversal.traverse (atBasis power basis)
+      (iter.start :: List.map word (List.range' (↑iter.start + 1) fuel)) rows
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:82:6: error: Type mismatch: After simplification, term
+  ih iter1 out (Eq.mpr (id (congrArg (fun _a => _a ≤ 256) hlength)) hl) hsize' hspan'
+ has type
+  sourceLoop iter1 out power next basis =
+    CuSavingsRangeTraversal.traverse (atBasis power basis) (List.map word (List.range' (↑iter.start + 1) fuel)) out
+but is expected to have type
+  sourceLoop iter1 out power next basis =
+    CuSavingsRangeTraversal.traverse (atBasis power basis)
+      (iter.start :: List.map word (List.range' (↑iter.start + 1) fuel)) rows
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:72:75: warning: This simp argument is unused:
+  atBasis
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵i̵n̵d̵i̵c̵e̵s̵,̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵'̵_̵s̵u̵c̵c̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵w̵o̵r̵d̵_̵s̵c̵a̵l̵a̵r̵,̵t̵r̵a̵v̵e̵r̵s̵e̵,̵a̵t̵B̵a̵s̵i̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵a̵s̵i̵s̵W̵o̵r̵d̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵ ̵h̵b̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲i̲n̲d̲i̲c̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲r̲a̲n̲g̲e̲'̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲w̲o̲r̲d̲_̲s̲c̲a̲l̲a̲r̲,̲ ̲t̲r̲a̲v̲e̲r̲s̲e̲,̲ ̲b̲a̲s̲i̲s̲W̲o̲r̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲ ̲h̲b̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:73:6: warning: This simp argument is unused:
+  basisWord
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵n̵d̵i̵c̵e̵s̵,̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵'̵_̵s̵u̵c̵c̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵w̵o̵r̵d̵_̵s̵c̵a̵l̵a̵r̵,̵t̵r̵a̵v̵e̵r̵s̵e̵,̵a̵t̵B̵a̵s̵i̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵a̵s̵i̵s̵W̵o̵r̵d̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵ ̵h̵b̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]̵[̲i̲n̲d̲i̲c̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲r̲a̲n̲g̲e̲'̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲w̲o̲r̲d̲_̲s̲c̲a̲l̲a̲r̲,̲ ̲t̲r̲a̲v̲e̲r̲s̲e̲,̲ ̲a̲t̲B̲a̲s̲i̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲ ̲h̲b̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:73:16: warning: This simp argument is unused:
+  List.getElem?_eq_getElem hb
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵n̵d̵i̵c̵e̵s̵,̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵'̵_̵s̵u̵c̵c̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵w̵o̵r̵d̵_̵s̵c̵a̵l̵a̵r̵,̵t̵r̵a̵v̵e̵r̵s̵e̵,̵a̵t̵B̵a̵s̵i̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵a̵s̵i̵s̵W̵o̵r̵d̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵ ̵h̵b̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]̵[̲i̲n̲d̲i̲c̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲r̲a̲n̲g̲e̲'̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲w̲o̲r̲d̲_̲s̲c̲a̲l̲a̲r̲,̲ ̲t̲r̲a̲v̲e̲r̲s̲e̲,̲ ̲a̲t̲B̲a̲s̲i̲s̲,̲ ̲b̲a̲s̲i̲s̲W̲o̲r̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:73:44: warning: This simp argument is unused:
+  Option.getD_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵n̵d̵i̵c̵e̵s̵,̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵'̵_̵s̵u̵c̵c̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵w̵o̵r̵d̵_̵s̵c̵a̵l̵a̵r̵,̵t̵r̵a̵v̵e̵r̵s̵e̵,̵a̵t̵B̵a̵s̵i̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵a̵s̵i̵s̵W̵o̵r̵d̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵ ̵h̵b̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]̵[̲i̲n̲d̲i̲c̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲r̲a̲n̲g̲e̲'̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲w̲o̲r̲d̲_̲s̲c̲a̲l̲a̲r̲,̲ ̲t̲r̲a̲v̲e̲r̲s̲e̲,̲ ̲a̲t̲B̲a̲s̲i̲s̲,̲ ̲b̲a̲s̲i̲s̲W̲o̲r̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲ ̲h̲b̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:75:31: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:76:24: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:78:17: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:90:15: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 : Type) → (Usize → x_0 → Result x_0) → List Usize → x_0 → Result x_0
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:92:20: error: Tactic `rfl` failed: The left-hand side
+  CuSavingsRangeTraversal.traverse (atBasis power basis) (i :: tail) rows
+is not definitionally equal to the right-hand side
+  do
+    let next ← fail error
+    referenceUpdates power (List.map (fun i => (i, basisWord basis i)) tail) next
+
+case cons.fail
+power : field.QM31
+basis : Basis
+i : Usize
+tail : List Usize
+ih :
+  ∀ (rows : Rows),
+    CuSavingsRangeTraversal.traverse (atBasis power basis) tail rows =
+      referenceUpdates power (List.map (fun i => (i, basisWord basis i)) tail) rows
+rows : Rows
+error : Error
+h : referenceAt rows i power (basisWord basis i) = fail error
+⊢ CuSavingsRangeTraversal.traverse (atBasis power basis) (i :: tail) rows = do
+    let next ← fail error
+    referenceUpdates power (List.map (fun i => (i, basisWord basis i)) tail) next
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:93:13: error: Tactic `rfl` failed: The left-hand side
+  CuSavingsRangeTraversal.traverse (atBasis power basis) (i :: tail) rows
+is not definitionally equal to the right-hand side
+  do
+    let next ← div
+    referenceUpdates power (List.map (fun i => (i, basisWord basis i)) tail) next
+
+case cons.div
+power : field.QM31
+basis : Basis
+i : Usize
+tail : List Usize
+ih :
+  ∀ (rows : Rows),
+    CuSavingsRangeTraversal.traverse (atBasis power basis) tail rows =
+      referenceUpdates power (List.map (fun i => (i, basisWord basis i)) tail) rows
+rows : Rows
+h : referenceAt rows i power (basisWord basis i) = div
+⊢ CuSavingsRangeTraversal.traverse (atBasis power basis) (i :: tail) rows = do
+    let next ← div
+    referenceUpdates power (List.map (fun i => (i, basisWord basis i)) tail) next
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:94:16: error: Type mismatch: After simplification, term
+  ih out
+ has type
+  CuSavingsRangeTraversal.traverse (atBasis power basis) tail out =
+    referenceUpdates power (List.map (fun i => (i, basisWord basis i)) tail) out
+but is expected to have type
+  CuSavingsRangeTraversal.traverse (atBasis power basis) (i :: tail) rows =
+    referenceUpdates power (List.map (fun i => (i, basisWord basis i)) tail) out
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:90:55: warning: This simp argument is unused:
+  atBasis
+
+Hint: Omit it from the simp argument list.
+  simp only [traverse, ̲List.map_cons, ̲referenceUpdates,̵a̵t̵B̵a̵s̵i̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReferenceTraversal.lean:104:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  sourceLoop { start := 0#usize, «end» := alloc.vec.Vec.len rows } rows power next basis
+in the target expression
+  (have i := alloc.vec.Vec.len rows;
+    AspisR1RhoCoefficients.rho_old.coefficients_loop { start := 0#usize, «end» := i } rows power next basis) =
+    referenceUpdates power (CuSavingsRhoInputs.items basis (alloc.vec.Vec.len rows) hl) rows
+
+rows : Rows
+power : field.QM31
+next : Usize
+basis : Basis
+hn : ↑next ≤ 22
+hl : ↑(alloc.vec.Vec.len rows) ≤ 256
+hlen : ↑(alloc.vec.Vec.len rows) = (↑rows).length
+⊢ (have i := alloc.vec.Vec.len rows;
+    AspisR1RhoCoefficients.rho_old.coefficients_loop { start := 0#usize, «end» := i } rows power next basis) =
+    referenceUpdates power (CuSavingsRhoInputs.items basis (alloc.vec.Vec.len rows) hl) rows
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    rows
+  has type
+    Rows
+  but is expected to have type
+    Slice field.QM31
+  in the application
+    referenceUpdates power (CuSavingsRhoInputs.items basis (alloc.vec.Vec.len rows) hl) rows
+'AspisR1.CuSavingsRhoReferenceTraversal.reference_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoReferenceTraversal.source_traverse' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsRhoReferenceTraversal.source_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

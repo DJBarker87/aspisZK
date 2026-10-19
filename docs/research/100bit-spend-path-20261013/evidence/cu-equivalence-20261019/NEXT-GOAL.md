@@ -33,3 +33,20 @@ commit are required. Production Rust and the root checkout remain untouched.
 
 The goal is not complete merely because the push/value/finish components pass.
 No generic compiler expansion is authorized by this goal.
+
+Latest checked source progress: see RHO-INITIALIZER.md and
+RHO-REFERENCE-TRAVERSAL.md. Complete initializer outcome is checked through
+actual heap::filled (resource binding remains separate). The complete emitted
+old coefficient loop now equals the finite reference updates, including
+failures/divergence and executed diagnostics. source_batch consumes that
+function and the actual emitted basis result against the checked optimized
+arithmetic batch. The optimized source Option reborrow interface, actual
+caller invariants and sufficient-resource reservation/effects composition
+remain open. Do not count this as another fully closed optimization.
+
+The existing strict decoder canonicality proofs under
+lean/extracted-decode-k-canonicality-20261018/ include
+AspisR1DecodeKFullParserCanonicalityCMQ.qm31_from_le_bytes_success_canonical.
+Inspect and reuse these before attempting new decoder proof/extraction work
+for Reader.k/resume canonicality. Avoid another Option frontend experiment;
+its exact failures are archived in RHO-COEFFICIENT-SOURCE-DIAGNOSTICS.json.
