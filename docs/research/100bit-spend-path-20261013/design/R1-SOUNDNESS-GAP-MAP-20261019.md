@@ -128,10 +128,10 @@ they start with `docs/`. Receipts are host `receipt.json` files under
 | R13 | Actual Merkle verification: leaf bytes, salts, domains, indices, path geometry, padding, accepted reads equal to the ideal path program | OPEN | Parent hash call and 257-byte preimage checked as a candidate only: `lean-candidates/current-merkle-path-20261019/RawMerkleParentCall.lean:52`, `RawMerkleParentBytes.lean:39` (9d12464cc). Not in the canonical root. The full path is uncommitted live work (§6) | Codex | R5 | M |
 | R14 | Stage 2 execution: `verifier::tx2_authenticated`, `resume`, the remaining 12 queries and `finish_relation` (pairing, both fold equations, final value checks) | OPEN | No Aeneas extraction or Lean statement mentions `tx2_authenticated`, `resume` or `finish_relation` anywhere under `lean/`, `lean-candidates/` or `evidence/` (searched at this base). Source: `crates/aspis-r1-cost-probe/src/verifier.rs:332,379,450` | unassigned | S1-S9, R13, R15 | L: new extraction of the stage-2 cone, then its fields of `Checks` |
 | R15 | Checkpoint authentication: tx1's checkpoint write and tx2's `resume` carry every value tx2 trusts; derived canonicality of skipped wide values | REFINEMENT-OWED | AUTHENTICATED-TX2.md (G_R1.3 covering argument and Rust tests; checksum unkeyed, so provenance rests on P2); 23 checkpoint tests (LEAD-REVIEW-J1-VERIFY-QUERY-C2-20261018) | Codex / lead-worker | P2, R14 | M |
-| R16 | `hchecks`: deployed acceptance ⇒ every field of `LiteralAcceptanceTerminal.Checks` (public parse, matching/opening readers, pairing, query decode, `firstMatch`, ρ `residualBatch`, semantic) on the same transcript | OPEN | The hypothesis `hchecks` of M9 (`lean/RawChecksAdaptiveFailureNoModel.lean:40-51`). Fields are partially covered by R2 (semantic), R5 (parser) and the indexed query helper (`d189b9ac6`, evidence `batched-weights-generated-query-bidirectional-20261019`). No composition exists | Codex | R2-R15, R17, S1-S9 | L: the core remaining proof |
+| R16 | `hchecks`: deployed acceptance ⇒ every field of `LiteralAcceptanceTerminal.Checks` (public parse, matching/opening readers, pairing, query decode, `firstMatch`, ρ `residualBatch`, semantic) on the same transcript | OPEN | The hypothesis `hchecks` of M9 (`lean/RawChecksAdaptiveFailureNoModel.lean:42`). Fields are partially covered by R2 (semantic), R5 (parser) and the indexed query helper (`d189b9ac6`, evidence `batched-weights-generated-query-bidirectional-20261019`). No composition exists | Codex | R2-R15, R17, S1-S9 | L: the core remaining proof |
 | R17 | Runtime fold and domain commutation: source `circle_fold`/`line_fold`/`QueryGeometry` equal the model `LineFold`/`storedFirstLineX18` geometry and D18 transport | OPEN | No Lean mentions `circle_fold`/`line_fold` source bodies; the R1_SOUNDNESS α₁ row leaves "runtime fold/domain commutation (Src)" open. Candidate 7 changed `QueryGeometry` | Codex | S7 | M |
-| R18 | `htag` (initial transcript tag = 2) and commitment-message formats for the deployed transcript | OPEN | Explicit hypothesis `htag` of M9 (`lean/RawChecksAdaptiveFailureNoModel.lean:38`); formats partly derived (2892f6cfd, `lean/RawChecksInjectionFormat.lean`) | Codex | R1 | S |
-| R19 | `hQ`, verifier half (QV): distinct first reads by stage 1 + stage 2 bounded for every admitted input, rejected inputs included (Decision 4) | REFINEMENT-OWED | Constants only: `lean/VerifierCallBudget.lean:55-60` (`stage1Budget 10 = 328` ... by `rfl`). `SourceSimulation.preservesPrefix` instantiation is OPEN (design/J1-R16-R19-RUNTIME-RELEASE-20261015.txt). The 583-call ordered trace is measured on fixtures | Codex | R14, R10 | M |
+| R18 | `htag` (initial transcript tag = 2) and commitment-message formats for the deployed transcript | OPEN | Explicit hypothesis `htag` of M9 (`lean/RawChecksAdaptiveFailureNoModel.lean:40`); formats partly derived (2892f6cfd, `lean/RawChecksInjectionFormat.lean`) | Codex | R1 | S |
+| R19 | `hQ`, verifier half (QV): distinct first reads by stage 1 + stage 2 bounded for every admitted input, rejected inputs included (Decision 4) | REFINEMENT-OWED | Constants only: `lean/VerifierCallBudget.lean:55-60` (`stage1Budget 10 = 328` ... by `rfl`). `SourceSimulation.preservesPrefix` (`lean/VerifierPhaseCost.lean:235`) has no instance; its instantiation is OPEN (design/J1-R16-R19-RUNTIME-RELEASE-20261015.txt). The 583-call ordered trace is measured on fixtures | Codex | R14, R10 | M |
 | R20 | Pool CPI handoff: the Pool passes the re-encoded ASQ8 request (B1 suffix stripped) and the authenticated accounts to nested stage 2 | REFINEMENT-OWED | LEAD-REVIEW-POOL-B1-20261019 ("verifier source and ELF untouched"); Pool suites 118/87/123/123 and mutation tests (evidence/pool-b1-20261019/) | lead-worker (codex/r1-pool-b1) | P5 | M: needs a Pool extraction; none exists for the B1 path |
 | R21 | `verifier.rs` drift since admission: `cfg(feature = "prover")` error variants (ad57ac42f..) | REFINEMENT-OWED | Admission hash `e65f4148...` against current `db70ae3d...`. `.text`/`.rodata` identical, 39 bytes of panic-line data shifted (LEAD-REVIEW-CU-BOUND-2-20261019) | Privacy | none | S: confirm the not(prover) extraction is unchanged |
 
@@ -166,19 +166,21 @@ they start with `docs/`. Receipts are host `receipt.json` files under
 | C3 | Final quantitative theorem: instantiate (T-src) premises into M9, add the δE ≤ 2^-120 allowance and state P1-P7 explicitly | OPEN | OPEN-PROOF-OBLIGATIONS item 11. No such theorem exists | Codex / lead | M9, M10, R16, R19, R9, P1-P7 | S once its inputs exist |
 | X1 | Freshness-B1 and MarkerSeedCR-224 (nullifier marker uniqueness; blocking only) | PREMISE | design/POOL-B1-FRESHNESS-PREMISE.md §2-3; named, "not proved" (LEAD-REVIEW-POOL-B1-20261019 Remaining). **Outside (T)** under Decision 4 (settlement release gate) | lead-worker | P3 | n/a for (T) |
 
-**Counts (all rows above, X1 included):**
+**Counts (all 52 rows above, X1 included):**
 
 | status | count | rows |
 |---|---|---|
-| PROVED | 13 | M1-M9 (two of them conditional), R1, R2, R5, R7, R11 |
+| PROVED | 14 | M1-M9 (M6 and M9 conditional on their stated hypotheses), R1, R2, R5, R7, R11 (R1, R2, R11 carry the explicit R3/R10 premises) |
 | PROVED-STALE | 1 | R6 |
 | REPIN-OWED | 10 | S1-S10 |
 | REFINEMENT-OWED | 4 | R15, R19, R20, R21 |
-| OPEN | 14 | M10, R3, R4, R8, R9, R10, R12, R13, R14, R16, R17, R18, C1, C2, C3 |
-| PREMISE | 8 | P1-P7, X1 |
+| OPEN | 15 | M10, R3, R4, R8, R9, R10, R12, R13, R14, R16, R17, R18, C1, C2, C3 |
+| PREMISE | 8 | P1-P7, X1 (X1 outside (T)) |
 
-Correction to the OPEN line: that list has 15 entries (C1-C3 are three rows),
-so the OPEN count is **15**. Total: 51 rows.
+R2 and R11 are PROVED on source that predates candidates 1, 7 and 12, but
+none of those three changed the functions R2 and R11 extract (`begin`,
+the semantic rounds, the C2 frame). This was checked only against the
+candidate inventories' changed-function lists.
 
 ## 3. Closest composed theorem
 
