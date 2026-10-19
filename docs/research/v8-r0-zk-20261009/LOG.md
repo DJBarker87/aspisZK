@@ -6208,3 +6208,33 @@ discharged with the transport and sampler refinement.
 Housekeeping: the builder extraction reused two host output directories from
 the superseded first checker extraction. That is recorded; the accepted
 chain does not reference them.
+
+### Lead acceptance of the witness-level Rust-copy builder (2026-10-19); D60
+
+The worker commits 8e3e1e172..f027039ef are cherry-picked. The lead verified
+host attempts 4412, 4413, 4415, 4417 and 4419 (SHAs match, exit 0 in-window,
+standard axioms). Attempts 4411, 4414, 4416 and 4418 were local fixes.
+Design: §12.
+
+**D60.1 Proved.**
+- `builder_blocks_model_chain`: sponge pre-states are computed, from
+  sponge_init and row 10 of the previous block's perm_rounds.
+- `PoseidonCanon`: perm_rounds outputs are canonical.
+- `builder_witness_model`: for u32 witness and public records (`RustWitness`,
+  `RustPublic`) with the named map `toModel` and premise sets `PubCorr` and
+  `WitnessOk`, every extracted component returns ok, and every cell of the
+  composed 29×1024 trace lifts to `buildModel pub (toModel W)`.
+
+PathLifts, ValueLifts and both OccLifts are now theorems. `invR` rests on
+the named premise `Nat.Prime 2147483647`. It is proved elsewhere in the repo
+(AspisV8R15.ExactTowerBase) and joins the build-integration list.
+
+**D60.2 Open.**
+- The Lean glue (block order, chunk words, child order, invR, assembly)
+  matches pair_trace.rs by inspection only. It needs a differential test.
+- The stable/late bank merge is not in the composition yet.
+- The Wspend⁺ → RustWitness/ModelWitness map (§12.6): values (transfer vs
+  withdrawal), keys and salts, path bits and siblings at levels 0, 1–20 and
+  21–23, the public side, the WitnessOk/PubCorr range facts, and the
+  primality import.
+- The copy↔production link (D54.3).
