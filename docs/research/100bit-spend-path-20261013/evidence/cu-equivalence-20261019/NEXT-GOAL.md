@@ -98,3 +98,29 @@ count increment. The next source caller work is complete Accumulator.new
 success invariants and actual Prepared/resume dataflow; these must establish
 the suffix entry premises. Full source-loop/transaction composition and the
 Option/resource gaps remain open.
+
+## Complete actual Accumulator.new
+
+CuSavingsRhoAccumulatorNew.source_outcome/source_success now consume the
+whole unchanged constructor plus actual final_len/folds and exact heap source.
+Success derives next=0, canonical power=ONE, rhs=ZERO and length 256/64≤256.
+No heap-success or matching-length assumption. Weight canonicality still needs
+the actual reserve frame; do not infer it merely from successful resize.
+See RHO-ACCUMULATOR-NEW.md/json and check-rho-accumulator-new.py.
+
+Joining heap and tail source modules required a naming-only expansion of the
+Tail Variant discriminator registration. The 0/1/2 reader is identical before
+and after, with separate focused certificates. Tail Types/FunsExternal/Funs/
+proof receipts updated to b/b/b/c respectively. No theorem statements or
+proof bodies changed in CuSavingsRhoPowerTail.
+
+Resume exact weight-loop emission failed twice: borrowed Reader at
+InterpAbs.ml:168; corrected original local ownership (weights, Reader) at
+InterpBorrowsCore.ml:984. Both are source-only failures; no template accepted.
+Do not blindly retry. Original-runtime mutable iterator/loan interpretation
+could be considered only with exact source factoring/assignment binding and
+a full error-preserving loop theorem, as done for initializer Zip; it is not
+yet proved here. Complete actual Prepared.rho success dataflow is independently
+actionable using the already emitted prepared bodies and checked scalar_k.
+All original final goal conditions, including source reserve/resource and
+actual final transaction contexts, remain open.

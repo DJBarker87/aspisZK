@@ -51,11 +51,20 @@ structure aspis_core.field.WideExact where
 /-- [aspis_r1_rho_power_tail::transport::Variant]
     Source: 'lib.rs', lines 774:0-774:30
     Visibility: public -/
-@[discriminant isize]
 inductive transport.Variant where
 | S1 : transport.Variant
 | S2 : transport.Variant
 | D : transport.Variant
+
+-- Same ordinal reader; only the instance registration name is qualified.
+def transport.Variant.read_discriminant (x : transport.Variant) : Isize :=
+  match x with
+  | .S1 => 0#isize
+  | .S2 => 1#isize
+  | .D => 2#isize
+instance _root_.AspisR1RhoPowerTail.transport.Variant.instDiscriminant :
+    Aeneas.Std.Discriminant transport.Variant Isize where
+  read_discriminant := transport.Variant.read_discriminant
 
 /-- [aspis_r1_rho_power_tail::verifier::Prepared]
     Source: 'lib.rs', lines 848:0-851:1

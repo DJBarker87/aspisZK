@@ -6,7 +6,11 @@ not a whole-candidate equivalence claim.
 The original parent and candidate use the byte-identical suffix
 `a.power=a.power.mul(p.rho);a.next+=1;`. The extraction kit factors exactly
 these bytes with the original complete Prepared and Accumulator declarations.
-The raw emitted Types and Funs are promoted unchanged. The single external
+The emitted carrier declarations and Funs are unchanged. The enum registration
+was expanded with the identical ordinal reader and a qualified instance name
+after the original heap helper exposed its global short-name collision.
+Original/corrected constructor reader facts are separately checked in
+`CuSavingsRhoVariantRegistration`; their numbering is unchanged. The single external
 operation binds to the existing extracted QM31 multiplication with invertible
 coordinate transport; its Rust body is identical in the original arithmetic
 extraction, exact candidate, and exact parent. No template axiom is imported.

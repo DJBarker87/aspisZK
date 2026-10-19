@@ -4,7 +4,7 @@ from pathlib import Path
 import hashlib,json,re,resource,subprocess,sys,time
 start=time.monotonic();here=Path(__file__).resolve().parent;repo=here.parents[4];area=here.parents[1];ev=area/'evidence/cu-equivalence-20261019';sha=lambda b:hashlib.sha256(b).hexdigest()
 for script in ['extract-rho-power-tail.py','emit-rho-power-tail.py']:subprocess.run([sys.executable,str(here/script),'--check'],check=True,capture_output=True)
-targets={'ExtractedCurrentQM31Mul':'rho-power-mul-repin-a','AspisR1RhoPowerTail/Types':'rho-power-tail-types-a','AspisR1RhoPowerTail/FunsExternal':'rho-power-tail-externals-a','AspisR1RhoPowerTail/Funs':'rho-power-tail-funs-a','CuSavingsRhoPowerTail':'rho-power-tail-proof-b'}
+targets={'ExtractedCurrentQM31Mul':'rho-power-mul-repin-a','AspisR1RhoPowerTail/Types':'rho-power-tail-types-b','AspisR1RhoPowerTail/FunsExternal':'rho-power-tail-externals-b','AspisR1RhoPowerTail/Funs':'rho-power-tail-funs-b','CuSavingsRhoPowerTail':'rho-power-tail-proof-c'}
 results={};objects={};receipts={}
 for module,attempt in targets.items():
  p=ev/attempt/'receipt.json';r=json.loads(p.read_text());assert r['exit_status']==0
@@ -27,7 +27,7 @@ for attempt in ['rho-power-tail-charon-b','rho-power-tail-aeneas-b']:
 assert subprocess.check_output(['git','-C',str(repo),'diff','39c2971dd16c95858a4cfd2c9ae35da052eacfa9','--','crates','programs'])==b''
 usage=resource.getrusage(resource.RUSAGE_SELF)
 report=dict(status='SOURCE_POWER_COUNTER_SUFFIX_CHECKED_CALLER_COMPOSITION_OPEN',candidate_complete=False,source_revision=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip(),successes=results,source_extraction=source_runs,
- covered=['Exact byte-identical power/counter suffix from parent and candidate, complete original Prepared/Accumulator carriers, whole emitted tail unchanged.',
+ covered=['Exact byte-identical power/counter suffix from parent and candidate; carrier declarations and emitted tail unchanged. Enum ordinal reader preserved with a qualified instance name to permit original heap-helper imports.',
  'External mul binds to the byte-identical existing source QM31 multiplication through invertible coordinate transport, without a template axiom.',
  'Canonical power and rho plus entry next<22 imply actual suffix success, canonical resulting power, exact modular product, next+1≤22 and unchanged weights/rhs.',
  'Unconditional source outcome retains mul/add errors and divergence. No child-call success premise.',
