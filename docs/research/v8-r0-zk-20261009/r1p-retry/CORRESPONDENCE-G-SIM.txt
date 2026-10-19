@@ -210,4 +210,36 @@ View::proof_bytes(S2)` is asserted. Two further verifier reads (the
 checkpoint's H(proof), H(public)) are ordinary unprogrammed reads, as in
 DESIGN-R1-GAMES §1.
 
-(§1, §7 and §8 follow)
+§8  Mismatches and open items
+----------------------------------------------------------------------
+(a) MISMATCH, pole (Vp). Lean realGame moves to the next attempt on
+    P ∧ ¬NoPole; the Rust helper builder maps LogUpError::ActivePole to
+    CopyImbalance → Error::Semantic, so the loop aborts and publishes
+    nothing. Rust = Lean except on the pole event (≤ 4096/p⁴ per attempt,
+    D40.3). Fixing it needs the pole distinguished in aspis-statement's
+    copy-helper builder (a writer-side file, outside this branch). OPEN.
+(b) MISMATCH, exhaustion (¬exh). Lean retries on exh; Rust aborts on any
+    mask/expander/sampler failure. Same shape as (a); mass ≤ εexh. OPEN.
+(c) P is P_chk, not P_R1: see §1. check_sound″ still carries hRound,
+    hGRound, hGBat, decoder facts and named inputs (D62.3, D64.2, D66).
+    The z9e public data (raw_c, weights, unit functionals, relations) are
+    z9's ports of the cost probe at 1822c2ced; their equality with the
+    current cost-probe arithmetic (the CU-savings work rewrote verifier
+    arithmetic, not the prover's challenge semantics) is not re-tested
+    here. OPEN (R-pub, G-ref).
+(d) The simulator's draw failure: the Rust treats z0 = z1 or a QueryScan
+    failure as a failed attempt (the verifier would reject such a view);
+    Lean's dec is total. Probability negligible. Recorded.
+(e) Tape law: Rust uses the prover's expander on coin-derived entropy
+    (deterministic_spend_fixture constructor, coins from the seed), Lean a
+    uniform t. Same R-commit item as the honest prover.
+(f) .inactiveSum, .bat, transport and mask factors: Rust reuses the
+    prover's formulas; their equality with the Lean maps is G-ref (§5).
+(g) The simulator's coins are a hash expansion of one seed (classical ROM
+    stand-in for independent uniform answers), as for any implementation.
+(h) Efficiency is read off the Rust as it is off the Lean definition: no
+    witness input, no linear solve outside P_R1; the sumcheck rounds use
+    the prover's direct summation (28·1023 point evaluations), not a folded
+    table, so the semantic step is the dominant non-P_R1 cost (§7).
+
+(§0 and §7 follow the host runs)
