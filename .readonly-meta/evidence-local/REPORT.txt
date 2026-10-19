@@ -1,0 +1,50 @@
+Readonly metadata helper: checked source split and conditional runtime boundary
+
+Source20672afeffd5757f8f8eb024a71a1ce86001c7e2 implements Decision2 of
+LEAD-REVIEW-J1-CALLER-FRONTIER-20261016.md (base ca137f5db). Both production
+copies call byte-identical readonly_meta_ok(&Pubkey,&Pubkey,bool,bool,bool).
+Owner comparison, signer, writable, executable checks retain their order and
+InvalidAccountData. Both one-expression wrappers project real AccountInfo
+fields. The extraction checker also verifies identical native test files.
+
+Native AccountInfo wrapper tests pass5/5 in each crate: signer, writable,
+executable and wrong owner are rejected independently; the valid control uses
+equal owner values at distinct addresses. Account key equals expected owner
+even in the wrong-owner case, detecting key/owner confusion. These are native
+wrapper tests, not loader-runtime tests. Optimized offline single-job runs:
+probe50.254s/543540KiB RSS; verifier9.906s/389996KiB RSS. A failed verifier
+staging attempt is retained: an existing include_bytes fixture was absent.
+The exact tracked fixture was added and only that target rerun.
+
+The unchanged helper was extracted with genuine solana-pubkey2.4.0 and
+solana-program-error2.2.2, preserving the SDK-derived array equality and all26
+ProgramError variants, including backend String. The selected lock preserves
+root-lock checksums;62 package archives and1839 files were checked, plus SDK
+reexport source pins. Charon cb50ff16 and Aeneas b59d5188 succeeded
+(22.692s/393104KiB and0.270s/70576KiB). LLBC foreign standard-library
+comparison, Result, String and drop entries are inventoried explicitly. There
+are no Error markers or generated external templates; no SDK surrogate was
+introduced. The AccountInfo wrapper itself was not extracted.
+
+Lean4.32 checked exact generated Types, Funs, the two-function audit,
+ExtractedReadonlyMeta and R16ReadonlyMetadataBoundary, each first attempt.
+The helper proof derives actual Pubkey eq/ne semantics from backend slice
+comparison and proves the exact guard result, success iff owner equality and
+all flags false, and the complementary InvalidAccountData iff. The boundary
+uses one named R16ReadonlyMetadataProjection Prop as hprojection; it is not an
+axiom. It conditionally transfers that iff from observed helper arguments to
+runtime-reported metadata. Eight audits have only propext, Classical.choice,
+Quot.sound. Five target times are1.811,1.610,1.609,1.811,1.810s; largest process
+RSS2640484KiB, largest sampled cgroup619061248B. Every job used6G high/8G max/
+swap0; all process and scope swaps were zero. Pinned sources, import objects,
+runtimes, exact commands, logs and receipts are retained.
+
+OPEN: actual loader-to-wrapper projection, caller reachability, custody/PDA
+or other account authentication, serializer success hs, transition t and hbind.
+No stage2-to-stage1 byte binding follows from this result. Both copies ride the
+same six adoption gates as Digest32: backend/runtime identity,1233-case full
+trace equality, saved-proof counts, reported CU result, the lead's single
+J1.R13 SBF build, and focused extraction/re-pinning. This package closes the
+focused helper/source gate and native wrapper tests only. Loader adversarial
+runtime execution remains OPEN pending J1.R13; no separate SBF build or full
+proof replay was performed.

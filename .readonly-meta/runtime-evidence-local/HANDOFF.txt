@@ -1,0 +1,65 @@
+J1.R13 pending runtime gate: readonly metadata
+
+Status: harness prepared; no candidate SBF build or runtime execution claimed.
+Native-only typecheck on combined Digest32/helper source b2dd7fb72 passed:
+cargo check --release --offline --locked -j1 --manifest-path
+tools/r1-cost-probe/Cargo.toml --features private-leaf-salts --bin r18_replay.
+Exit0,0.397s,210240KiB RSS,154927104B cgroup peak,zero process/scope swaps;
+6G high/8G max/swap0. The first attempt's nonexhaustive VersionedMessage match
+is retained; the correction reads the signature count from the concrete V0
+message before wrapping. No executable was produced or run. Private warm-cache
+binary and dep-info provenance are retained; source mtimes were refreshed after
+copy, and all518 combined source pins rechecked. This is not a runtime pass.
+Use the lead's single J1.R13 candidate artifact and producing build receipt.
+The existing before/after CU replay remains unchanged when the environment
+switch is absent. Setting ASPIS_R16_READONLY_RUNTIME=1 adds only a candidate
+gate after its successful stage1, using independent clones of that exact state.
+
+Runnable invocation after the candidate is available:
+
+  ASPIS_R16_READONLY_RUNTIME=1 \
+  ASPIS_SOURCE_REVISION=<harness-commit> \
+  ASPIS_R18_BEFORE_REVISION=<baseline-commit> \
+  ASPIS_R18_AFTER_REVISION=<candidate-commit> \
+  ASPIS_R18_BEFORE_BUILD_RECEIPT=<baseline-build.json> \
+  ASPIS_R18_AFTER_BUILD_RECEIPT=<candidate-build.json> \
+  <optimized-r18_replay> BEFORE.so J1_R13_CANDIDATE.so PROOF.bin PUBLIC.bin FRESH_OUT
+
+Keep the existing pinned R18 fixture: proof length124343/SHA256
+8569435667420b36a980493477f8fef7ef47e7351122647cf3747054079d4d62;
+ASF8 length1880/SHA256
+72f067d263af326b017284579f30e3da7c843c6cbb29f1c6df94c8afbb1f2172.
+The harness creates retained payer/checkpoint keys and refuses existing output.
+No additional SBF artifact is built. Runtime feature, ELF, instruction,
+transaction, account, build-receipt and harness-source hashes are retained.
+
+All five gate clones explicitly disable transaction signature verification,
+including the honest control. A trusted master PDA cannot provide an ordinary
+transaction signature. Correct-length dummy signature vectors let the real
+loader supply signer metadata; this is not valid-signature or custody evidence.
+The honest clone must return the same admitted ASR8. Four separate clones then
+change exactly one master input: owner, signer, writable or executable. The
+master guard runs after proof/checkpoint metadata guards and before master
+decode/PDA checks in authenticate_asq8_accounts. Each negative must show actual
+verifier invocation and CU consumption, then exact InstructionError(3,
+InvalidAccountData). Signature, sanitize or pre-entry rejection fails the gate.
+Full account snapshots must match before/after for all proof/public/trusted
+accounts and the verifier checkpoint; payer fees are outside that set.
+
+Results appear in FRESH_OUT/after/readonly-metadata-runtime. The gate checks
+persisted state after transaction execution; rollback does not prove that no
+transient write was attempted. Source guard order supports the early rejection.
+
+Second-copy runtime gate remains OPEN. The selected R1 ELF executes only
+programs/r1-cost-probe/src/r1_pool_adapter.rs. The other identical helper is in
+programs/aspis-verifier/src/v7_pair_forest_dispatch.rs, reached through
+dispatch::process_spend_production_instruction's ASQ8 branch and
+process_v7_pair_forest_asq8_instruction. It requires a distinct aspis-verifier
+artifact with v7-pair-forest-asq8 (or its fixed-canonical audit route), a V7
+Tag73 profile/release request and valid matching uploaded proof, and four
+accounts [proof,master,checkpoint,lane], or six with registry/entry under
+v7-pair-forest-lane-invariant-audit. The current base feature documents that
+cryptographic route as fail-closed; a successful control must be established
+before claiming runtime coverage. Reusing the R1 request/ELF is not this gate.
+The identical-source checker and native5/5 wrapper suites cover both copies;
+they do not discharge either loader-runtime or second-artifact obligation.
