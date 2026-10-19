@@ -17,17 +17,24 @@ Source (read-only, `git show origin/codex/100bit-spend-path-20261013:…`):
   a position `≤ 16(L − 1)`; `mass_exhausted`: on uniform words the mass is
   `≤ 16 L · (2/2^32)^16`; `mass_exh_attempts`: over N attempts with two
   streams, `≤ N · 16 (L₁ + L₂) / 2^496`.
-* aspis-core/src/r0/merkle.rs (complete 8-ary tree, exactly 8^6 = 2^18
-  fibres; node input `0x18 ‖ 8 children`), state_only_private_merkle.rs (leaf
-  `0x10 ‖ tag ‖ value ‖ salt`), state_only_entropy.rs
-  `derive_pool_v1_leaf_salt` (one read per salt), prover.rs (C1, C2 and the
-  folded tree, each over `FIBRE_COUNT = 2^18` leaves with its own salts; the
+* Tree shape (binary-multiproof format, PREREG-PROOF-SIZE-2-20261019;
+  r1p-readbudget/READ-BUDGET-BINARY.md): crates/aspis-r1-cost-probe/src/
+  multiproof.rs `BinaryTree::new` (complete binary tree over 2^18 leaves,
+  `2^(17−d)` parents at depth `d`, node input `0x12 ‖ left ‖ right`),
+  host_commitment.rs (C1, C2) and prover.rs `prove_candidate_from_semantics`
+  (folded tree); state_only_private_merkle.rs (leaf `0x10 ‖ tag ‖ value ‖
+  salt`), state_only_entropy.rs `derive_pool_v1_leaf_salt` (one read per
+  salt); each tree over `FIBRE_COUNT = 2^18` leaves with its own salts (the
   folded tree has 2^18 leaves, the values beyond 2^16 being zero).
   `CRead` is the per-attempt private commitment-read index set; its
-  cardinality (`card_CRead`) is `Mc = 1 685 214 + E₁ + E₂` with `E_s` the
+  cardinality (`card_CRead`) is `Mc = 2 359 296 + E₁ + E₂` with `E_s` the
   expander-block budget of stream `s`; `blocks_le` bounds the blocks a
-  successful stream touches by `2 L_s`; `mc_le` gives `115 + Mc ≤ 2^21`
-  under the source counts (named premise `RCommitCount`). -/
+  successful stream touches by `2 L_s`; `mc_le` gives `115 + Mc ≤ 2^22`
+  under the source counts (named premise `RCommitCount`), and `mc_gt_2_21`
+  shows the earlier budget `2^21` fails at the worst-case counts.
+* The shipped eight-way tree (aspis-core/src/r0/merkle.rs, 8^6 = 2^18
+  fibres, node input `0x18 ‖ 8 children`) is kept for comparison as
+  `CRead8` / `McR1_8` / `mc_le8` (`Mc = 1 685 214 + E₁ + E₂`, `≤ 2^21`). -/
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.CommitReadsR1
@@ -281,33 +288,70 @@ C1 mask cell (at most 26·1024), 10·1024 mask-only C1 limbs, 1024 QM31 of
 `g` and at most 1024 QM31 of `h1_padding`; stream 2 draws 1024 QM31 of `D`. -/
 def RCommitCount (L₁ L₂ : ℕ) : Prop := L₁ ≤ 26 * 1024 + 10 * 1024 + 4 * 1024 + 4 * 1024 ∧ L₂ = 4 * 1024
 
-/-- Per-attempt private commitment reads: salts and leaves of the three
-trees (C1, C2, folded; 2^18 each), 8-ary nodes at levels 1..6 (8^(5−d)
-nodes at level d+1, the root last), the three secret seed reads (mask
-seed, source-mask seed, D seed), and the expander blocks of the two
-streams (budgets `E₁`, `E₂`). -/
+/-- Per-attempt private commitment reads (binary format): salts and leaves
+of the three trees (C1, C2, folded; 2^18 each), binary parents at depths
+0..17 (`2^(17−d)` parents at depth `d`, the root last), the three secret
+seed reads (mask seed, source-mask seed, D seed), and the expander blocks of
+the two streams (budgets `E₁`, `E₂`). -/
 abbrev CRead (E₁ E₂ : ℕ) :=
+  (Fin 3 × Fin (2 ^ 18)) ⊕ (Fin 3 × Fin (2 ^ 18)) ⊕ (Fin 3 × (Σ d : Fin 18, Fin (2 ^ (17 - d.val)))) ⊕
+    Fin 3 ⊕ (Fin E₁ ⊕ Fin E₂)
+
+/-- A complete binary tree over 2^18 leaves has `2^18 − 1` parents. -/
+theorem card_nodes : Fintype.card (Σ d : Fin 18, Fin (2 ^ (17 - d.val))) = 262143 := by
+  rw [Fintype.card_sigma]
+  simp only [Fintype.card_fin]
+  first
+    | (rw [Fin.sum_univ_eq_sum_range (fun i => 2 ^ (17 - i)) 18]; norm_num [Finset.sum_range_succ])
+    | norm_num [Fin.sum_univ_succ]
+
+def McR1 (E₁ E₂ : ℕ) : ℕ := 2359296 + E₁ + E₂
+
+theorem card_CRead (E₁ E₂ : ℕ) : Fintype.card (CRead E₁ E₂) = McR1 E₁ E₂ := by
+  simp only [CRead, Fintype.card_sum, Fintype.card_prod, Fintype.card_fin, card_nodes, McR1]
+  norm_num <;> omega
+
+/-- With the worst-case block budgets `E_s = 2 L_s` (`blocks_le`) and the
+source limb counts, `115 + Mc ≤ 2^22` (the D41 read budget, binary format). -/
+theorem mc_le (L₁ L₂ : ℕ) (hc : RCommitCount L₁ L₂) : 115 + McR1 (2 * L₁) (2 * L₂) ≤ 2 ^ 22 := by
+  obtain ⟨h1, h2⟩ := hc
+  unfold McR1
+  norm_num <;> omega
+
+/-- The earlier budget `2^21` is false for the binary format: at the
+worst-case limb counts `115 + Mc = 2 457 715 > 2^21`. -/
+theorem mc_gt_2_21 : 2 ^ 21 < 115 + McR1 (2 * (26 * 1024 + 10 * 1024 + 4 * 1024 + 4 * 1024)) (2 * (4 * 1024)) ∧
+    RCommitCount (26 * 1024 + 10 * 1024 + 4 * 1024 + 4 * 1024) (4 * 1024) := by
+  refine ⟨?_, by unfold RCommitCount; exact ⟨le_rfl, rfl⟩⟩
+  unfold McR1
+  norm_num
+
+/-! ### The shipped eight-way count (comparison) -/
+
+/-- Eight-way: 8-ary nodes at levels 1..6 (8^(5−d) nodes at level d+1, the root last). -/
+abbrev CRead8 (E₁ E₂ : ℕ) :=
   (Fin 3 × Fin (2 ^ 18)) ⊕ (Fin 3 × Fin (2 ^ 18)) ⊕ (Fin 3 × (Σ d : Fin 6, Fin (8 ^ (5 - d.val)))) ⊕
     Fin 3 ⊕ (Fin E₁ ⊕ Fin E₂)
 
-theorem card_nodes : Fintype.card (Σ d : Fin 6, Fin (8 ^ (5 - d.val))) = 37449 := by
+theorem card_nodes8 : Fintype.card (Σ d : Fin 6, Fin (8 ^ (5 - d.val))) = 37449 := by
   rw [Fintype.card_sigma]
   simp only [Fintype.card_fin, Fin.sum_univ_six]
   norm_num
 
-def McR1 (E₁ E₂ : ℕ) : ℕ := 1685214 + E₁ + E₂
+def McR1_8 (E₁ E₂ : ℕ) : ℕ := 1685214 + E₁ + E₂
 
-theorem card_CRead (E₁ E₂ : ℕ) : Fintype.card (CRead E₁ E₂) = McR1 E₁ E₂ := by
-  simp only [CRead, Fintype.card_sum, Fintype.card_prod, Fintype.card_fin, card_nodes, McR1]
-  norm_num
-  omega
+theorem card_CRead8 (E₁ E₂ : ℕ) : Fintype.card (CRead8 E₁ E₂) = McR1_8 E₁ E₂ := by
+  simp only [CRead8, Fintype.card_sum, Fintype.card_prod, Fintype.card_fin, card_nodes8, McR1_8]
+  norm_num <;> omega
 
-/-- With the worst-case block budgets `E_s = 2 L_s` (`blocks_le`) and the
-source limb counts, `115 + Mc ≤ 2^21` (the D41 read budget). -/
-theorem mc_le (L₁ L₂ : ℕ) (hc : RCommitCount L₁ L₂) : 115 + McR1 (2 * L₁) (2 * L₂) ≤ 2 ^ 21 := by
+theorem mc_le8 (L₁ L₂ : ℕ) (hc : RCommitCount L₁ L₂) : 115 + McR1_8 (2 * L₁) (2 * L₂) ≤ 2 ^ 21 := by
   obtain ⟨h1, h2⟩ := hc
-  unfold McR1
-  norm_num
+  unfold McR1_8
+  norm_num <;> omega
+
+/-- The binary format adds `3 · (2^18 − 1) − 3 · 37449 = 674 082` node reads. -/
+theorem McR1_sub (E₁ E₂ : ℕ) : McR1 E₁ E₂ = McR1_8 E₁ E₂ + 674082 := by
+  unfold McR1 McR1_8
   omega
 
 /-- The R1 exhaustion bound with the source counts: `εexh ≤ N / 2^476`. -/
@@ -344,5 +388,10 @@ theorem mass_exh_R1 (N L₁ L₂ : ℕ) (hc : RCommitCount L₁ L₂) :
 #print axioms card_nodes
 #print axioms card_CRead
 #print axioms mc_le
+#print axioms mc_gt_2_21
+#print axioms card_nodes8
+#print axioms card_CRead8
+#print axioms mc_le8
+#print axioms McR1_sub
 #print axioms mass_exh_R1
 end R1Z.CommitReadsR1
