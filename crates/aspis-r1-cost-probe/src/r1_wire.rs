@@ -136,6 +136,7 @@ impl<'a> ValidatedRecord<'a> {
     /// validation token proves the 16-byte high half is zero and the
     /// low QM31 encoding canonical, while this method still checks the
     /// requested range and record class.
+    #[inline(always)]
     fn decode_k_value(
         &self,
         byte_offset: usize,
