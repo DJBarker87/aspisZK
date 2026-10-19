@@ -1,0 +1,9 @@
+import AspisR1PublicSerializer.Funs
+#print axioms AspisR1PublicSerializer.pool_v1.pair_forest_semantic_terminal.private_public
+#print axioms AspisR1PublicSerializer.pool_v1.pair_forest_semantic_terminal.withdrawal_public
+#print axioms AspisR1PublicSerializer.pool_v1.pair_forest_semantic_terminal.r0.Public.semantic
+#print axioms AspisR1PublicSerializer.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields_loop.body
+#print axioms AspisR1PublicSerializer.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields_loop
+#print axioms AspisR1PublicSerializer.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields
+#print axioms AspisR1PublicSerializer.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier
+#print axioms AspisR1PublicSerializer.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
