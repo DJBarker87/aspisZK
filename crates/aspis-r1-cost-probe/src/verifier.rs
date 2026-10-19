@@ -82,8 +82,8 @@ pub struct Prepared {
     pub variant:Variant,pub roots:[[u8;32];2],pub gamma:E,pub kappa:E,pub alpha:[E;2],pub rho:K,
     pub queries:[u32;22],pub semantic_alpha:[K;10],pub z:[SecureCirclePoint;2],pub claim:E,pub state:[u8;32],
 }
-fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,gamma:E,kappa:E)->Result<E,Error> {
-        let g=powers::<29>(gamma);let k=powers::<7>(kappa);
+fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {
+        let k=powers::<7>(kappa);
         let mut parts=[E::ZERO;7];parts[0]=inactive;
         for point in 0..6 {
             let mut dot=crate::fast_pairing::EbyKDot::new();
@@ -101,7 +101,7 @@ fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inac
 
 impl Prepared {
     #[inline(never)]
-    pub fn new<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,hash:H)->Result<Box<Self>,Error> {
+    pub fn new<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,hash:H,g:&mut [E;29])->Result<Box<Self>,Error> {
         let mut t=Transcript::new(hash,sem.transcript.state(),v.variant);
         let gamma=t.scalar(27,v.y1,true);
         let kappa=t.scalar(28,&v.inactive.to_le_bytes(),false);
@@ -114,7 +114,9 @@ impl Prepared {
         };
         let queries=t.queries(row,v.final_message)?;
         let rho=t.scalar_k(row+1,&[]);
-        let claim=prepared_claim(sem,v.y1,v.inactive,gamma,kappa)?;
+        // Reuse this caller-owned scratch array in tx1; it is never serialized.
+        *g=powers::<29>(gamma);
+        let claim=prepared_claim(sem,v.y1,v.inactive,g,kappa)?;
         Ok(Box::new(Self{variant:v.variant,roots:sem.roots,gamma,kappa,alpha,rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state:t.state}))
     }
 }
@@ -352,9 +354,9 @@ fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],
 }
 
 #[inline(never)]
-fn tx1_prepare<H:Digest32>(public:Public<'_>,v:&View<'_>,hash:H,obs:Observer)->Result<(Box<[[K;29];3]>,Box<Prepared>),Error> {
+fn tx1_prepare<H:Digest32>(public:Public<'_>,v:&View<'_>,hash:H,obs:Observer,g:&mut [E;29])->Result<(Box<[[K;29];3]>,Box<Prepared>),Error> {
     let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;mark(obs,Phase::Semantic);
-    let p=Prepared::new(&sem,v,hash)?;
+    let p=Prepared::new(&sem,v,hash,g)?;
     Ok((sem.claims,p))
 }
 
@@ -362,7 +364,8 @@ fn tx1_prepare<H:Digest32>(public:Public<'_>,v:&View<'_>,hash:H,obs:Observer)->R
 pub fn tx1<H:Digest32>(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {
     if k>22 {return Err(Error::Parse);}
     let v=View::parse(proof)?;mark(obs,Phase::Parsed);
-    let (_semantic_claims,p)=tx1_prepare(public,&v,hash,obs)?;let mut a=Accumulator::new(v.variant)?;let g=powers::<29>(p.gamma);mark(obs,Phase::Prepare);
+    let mut g=[E::ZERO;29];
+    let (_semantic_claims,p)=tx1_prepare(public,&v,hash,obs,&mut g)?;let a=Accumulator::new(v.variant)?;mark(obs,Phase::Prepare);
     tx1_finish(v,p,a,g,public_bytes,proof,k,hash,obs)
 }
 /// Complete strict verification of an R1 proof and its checkpoint.
