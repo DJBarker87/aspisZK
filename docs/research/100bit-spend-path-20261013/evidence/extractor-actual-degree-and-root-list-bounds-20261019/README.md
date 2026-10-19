@@ -1,0 +1,9 @@
+# Actual modular-degree and root-recovery output-list bounds
+
+`ActualModularProductDegreeBound` proves degree/array-size invariants of the actual CompPoly modular-product and binary modular-power functions. The actual modular product output is bounded by the trimmed modulus size; each repeated-squaring accumulator/output remains bounded by the normalized modulus size. It uses the pinned context contracts and canonical-remainder theorems, not an alternative optimized reducer.
+
+`RRFixedTapeRecoveryOutputLength.recover_output_length_le` proves the length of the actual returned root-candidate list is at most ell. The proof charges each terminal singleton against positive scalar degree and sums child output lengths against the existing conserved multiplicity potential. It does not rely on an arbitrary Candidates contract, assume no duplicates, or use an exponential branching bound. `GSConcreteRecoveryOutputLength` then proves that successful initial and final calls of the actual GS root decoder each return at most 112 candidates.
+
+These are actual implementation-linked size/cardinality bounds. They do not yet count all coefficient operations. The selected naive long-division path constructs shifts using repeated multiplication `Raw.pow`; any eventual cost theorem must charge those actual loops. The earlier actual binary outer-power counter remains applicable, but it alone is not the whole extractor cost.
+
+Three focused Lean 4.32 targets passed with bounded local jobs, zero swap and standard-only axiom reports. Exact source/import/object pins, source revisions, command, wall time and RSS records are retained. No production source changed and no full replay was run. Full randomized transcript-to-witness composition, accepted-source/commitment coupling, protocol/ROM/source/runtime security, privacy and transaction release remain open.

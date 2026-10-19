@@ -1,0 +1,11 @@
+# Actual joint candidate construction followed by checked witness scanning
+
+`GSRuntimeInitialJointKeepCore` computes partial selected-coordinate support with a supplied runtime encoder and uses the ordinary `FiniteListCandidateMerge` list loop. Its specification bridge reuses the existing incremental candidate proof. No `Finset.toList` or global candidate selection is used by the runtime list constructor.
+
+The concrete wrapper uses the already-proved literal initial runtime encoder and `List.finRange 29`. It proves that the actual list length is at most 100 for any input decoder lists. If those lists contain every per-lane close message, it proves that the computed list's `toFinset` equals exactly `ConcreteBinding.candidates W`.
+
+`LiteralComputedCandidateExtract.extract` actually runs this joint constructor followed by the checked spend-witness scanner. Every returned witness satisfies `Rspend`, and the actual scan count is at most 100. Under the existing literal parsed semantic constraints/no-hit hypotheses, typed-word equality and per-lane decoder completeness, the theorem forces this exact executable function to return a valid witness. It discharges the formerly explicit candidate-list correspondence premise. The remaining per-lane completeness premise must be supplied from the actual GS interpolation/root calls; byte-coin bank composition, completed-log recovery, accepted-source checks and the probabilistic/ROM composition remain separate.
+
+All three focused native Lean 4.32 checks passed under bounded cgroups with zero swap and only standard axiom reports. Exact source/import/object hashes, revisions, command, GNU maximum RSS and wall/resource records are retained. A first computed-extractor attempt rewrote the received word in both sides of the list equality, causing unwanted reduction; the final proof transports only the target candidate set and leaves the actual constructor opaque. No large recurrence or concrete domain normalization was evaluated. No full manifest replay.
+
+This advances the executable extraction chain; it is not the full 100-bit spend proof, whole-extractor bit-cost proof, accepted-source/runtime theorem, privacy proof or transaction release gate.
