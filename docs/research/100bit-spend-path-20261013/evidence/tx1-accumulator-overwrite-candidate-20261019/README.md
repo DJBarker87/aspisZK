@@ -1,0 +1,11 @@
+# Isolated Tx1 Accumulator overwrite candidate (2026-10-19)
+
+This focused Lean packet models the single callsite substitution in `Accumulator::new`: `heap::filled(v.final_len(), K::ZERO)` is replaced by the extracted `heap::filled_overwrite` helper. The candidate is not installed in `verifier.rs`; production source and SBF/CU measurements are unchanged.
+
+The checked theorem `Tx1AccumulatorOverwriteCandidateV1.overwrite_constructor_success` states that every successful candidate constructor result has `weights.length ≤ 256`, and every in-range `Slice.index_usize` read returns the Tx1 model's `QM31.ZERO`. The bound reuses the accepted `Tx1FinalLenBoundV6.final_len_cases` theorem through the `Tx1FinalLenBoundV8` module.
+
+The helper function body is the Aeneas extraction of the isolated `filled_overwrite` candidate. Its private Tx1 namespace adapter changes the namespace/owner imports only: the Error type aliases the already-loaded Tx1 model; `TryReserveError` and `Vec.try_reserve_exact` remain the explicit generated external axioms. The source-shaped body/loop/content proof chain is copied under the adapted namespace. This avoids importing a second generated Error discriminant instance.
+
+The result is source-candidate evidence, not a production adoption claim. Original Rust `Accumulator::new` still calls `heap::filled`; adopting the candidate requires source review and CU/runtime gate. The added helper performs `n` indexed writes, so its cost must be reviewed before adoption.
+
+Lean target: `Tx1AccumulatorOverwriteCandidateV1`, Lean 4.32.0, focused runner `/tmp/run-local-lean-exclusive-20261019.py` with `/tmp/heap-filled-overwrite-helper-v2-lean/run-focused.py`, `-j1 -M3200 -DElab.async=false`. Final candidate attempt `tx1-accumulator-overwrite-candidate-v6` exited 0; 5.34 seconds real, 2,255,279,984 bytes maximum RSS, swap count 0. It additionally proves by `rfl` that `Tx1Model.newAccumulator` with only its `filled` boundary replaced by this helper is exactly `newAccumulatorOverwrite`; see `source_callsite_eq_candidate`. Its `#print axioms` output is in the final Lean log: `propext`, `Classical.choice`, `Quot.sound`, `alloc.collections.TryReserveError`, and `alloc.vec.Vec.try_reserve_exact`.
