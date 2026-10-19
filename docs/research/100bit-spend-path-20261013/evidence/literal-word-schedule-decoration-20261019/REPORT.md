@@ -1,0 +1,7 @@
+# Erasure-preserving literal message schedule decoration
+
+Reuses the existing `CanonicalCutEnrichedTranscript.Words` carrier and literal erasure/sampler interface. A positive payload becomes a C2-word-bearing message at row2, a final-word-bearing message at row30, and an ordinary payload elsewhere. The initial constructor retains its root and receives the chosen C1 word. The checked lemmas establish payload-constructor validity for rows1..32, exact erased-message/prefix equality, exact sampler-program equality, and compatibility with prefix extension.
+
+Focused Lean4.32 check passed in16.32 s, peak RSS2785869824 bytes, zero process swaps; five axiom audits contain standard axioms only. Earlier missing/incomplete cache namespace failures and local proof-shape failures are retained as diagnostics. A complete113-module compiled AspisFormal namespace was reused after checking its27 common objects matched the prior pinned subset exactly; no cold dependency build or full manifest replay ran.
+
+This is a generic constructor/erasure bridge. It does not yet prove all constructors valid for an actual source run, install source-derived recovered words in that run, prove commitment-cut causality/binding, or identify acceptance with the terminal Checks predicate. In particular, arbitrary choices of Words are not claimed to satisfy soundness's commitment binding. The intended instantiation is the existing wordsFromRawCuts machinery with its checked recovery/stability obligations discharged from actual source calls.
