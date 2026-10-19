@@ -38,5 +38,5 @@ pub mod compact;
 compile_error!("the adopted R1 proof format is defined over private leaf salts; enable `private-leaf-salts` (a default feature)");
 #[cfg(all(feature="audit-eight-way",feature="prover"))]
 compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
-#[cfg(all(feature="audit-eight-way",target_os="solana"))]
-compile_error!("`audit-eight-way` is audit-only: it is never built for an SBF program (PREREG-PROOF-SIZE-2 item 4)");
+#[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
