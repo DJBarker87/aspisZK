@@ -1,0 +1,7 @@
+# Concrete equality and actual binary modular-power cost
+
+The byte-sampler/GS decoder bank now has an executable entrypoint with equality dictionaries fixed to a retained eight-coordinate M31 comparison. The bound `failure_small_with_retained_equality` is strictly below 2^-126 for the same fixed-input 29+5 decoder bank, with no caller-supplied field equality dictionary.
+
+`ActualCompPolyPowCost.powModWithCost_value_eq` refines the actual pinned `CPolynomial.Raw.powModWith` implementation, while `powModWithCost_le_log_bound` bounds its counted modular multiplications by `2 * (Nat.log2 exponent + 1)`. The actual finite-field root path calls this routine through `xPowSubXModWith`/`Roots.FiniteField.xPowModWith`. This establishes logarithmic dependence on the field-size exponent. It does not yet charge each polynomial multiplication/reduction or the entire extractor's bit cost. CompPoly's distinct generic `Lawful.npow` implementation is linear in its exponent and is not the selected root path.
+
+All four focused Lean 4.32 checks passed. Exact commands, source/import/object hashes, source revisions, wall times, RSS, swap and printed axioms are retained. Only standard axioms occur. No production source changed and no full replay was run. The complete executable transcript-to-witness extractor, protocol/ROM/source/runtime composition, privacy and transaction release gates remain open; these component results do not establish 100-bit spend soundness.
