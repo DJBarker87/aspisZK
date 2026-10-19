@@ -5582,3 +5582,398 @@ CopyLinkBalance), PublicBase, and classical ROM only.
 
 **D45.6 Process.** The worker gated on Lean processes only, as instructed.
 Spend-path cargo and charon jobs ran concurrently at times without incident.
+
+### Lead acceptance of builder completeness (2026-10-19); D46: the builder is a refinement premise
+
+Worker a46873ead..cf81ffd86, cherry-picked. `R0Z/BuilderComplete.lean`, host
+4063 (in-window `run2-par.sh`): exit 0, 3.68 s, 6,616,004 KiB, 0 swaps.
+SHA verified by the lead; standard axioms. Evidence:
+`t2b2b/evidence-builder-complete.json`. Design:
+`t2b2b/DESIGN-BUILDER-COMPLETE.txt`.
+
+**D46.1 Inventory.** No concrete honest builder exists in Lean, here or on the
+spend path.
+- `HonestProver.build` is a field left deliberately uninstantiated
+  (ZkStatement.lean:302–308).
+- R0P and the spend path only extract from a trace: ProductionHolds,
+  `lanes_zero_iff_holds`, CopyLinkBalance, `input_note_extracted`, and
+  Rspend/extract.
+- The builder exists only in Rust: the `compile_pool_v1_pair_forest_*`
+  functions, then `host_semantic::build_with_material`.
+
+**D46.2 Proved.**
+- `lanes_iff_nonCopy`: for a base-typed trace and |K| > 4096, `lanes` is
+  equivalent to `NonCopyHolds`, the seven families that read neither λ, χ nor
+  column 26. The proof uses a pole-free χ obtained by counting.
+- `baseTyped_ofColumns`: any `ofColumns` builder is base-typed by
+  construction.
+- `honestProverOf S Rel transport`.
+- `builderSoundOn_of_refines`: BuilderRefines + |K| + PublicBase ⇒
+  BuilderSoundOn.
+- `inputNoteExtracted_of_refines`: a sanity check that the premise is the
+  trace-side image of the payment relation that soundness extracts.
+
+**D46.3 The premise.** `BuilderRefines S Rel` has two fields:
+- `nonCopy`: NonCopyHolds of the honest build;
+- `balance`: CopyLinkBalance of the honest build.
+
+This is the builder's correctness against the Rust prover. It is a refinement
+obligation of the same kind as the soundness side's source correspondence,
+and nothing more follows from Rspend while the builder is abstract.
+
+Ways to discharge it:
+- a Lean model of the legacy builder (relocate_and_extend, the bank merge)
+  with an Aeneas refinement of the Rust; or
+- a per-build certificate the prover checks before publishing. Rust already
+  checks the 18,089 transfer residuals at runtime (`finish`,
+  pool_v1_pair_forest_honest.rs:80). A check-and-retry is witness-dependent,
+  however, so as a privacy argument it would need a failure-mass bound like
+  ε_pole. The lead's preference is the Lean model.
+
+Instantiating W := Wspend and Rel := Rspend waits for the build integration.
+
+### Lead acceptance of Sem1Uniform for R1 (2026-10-19); D47
+
+The worker commits 36760a048, 9a9921af2 and eb4690a1b are cherry-picked.
+Host attempts 4164, 4165 and 4166 ran in-window (slot 1). The lead verified
+each (SHA matches, exit 0, standard axioms, no overrides). Attempts
+4160–4163 were elaboration failures, each with a changed source. Evidence:
+`zf1/sem1-uniform-evidence.json`.
+
+**D47.1 Proved.**
+- `sem1Uniform_abR1`: `Sem1Uniform ((abR1 W N hN).draw adv x) (p⁴ − 1)`
+  for every adversary and statement, with no additive term.
+- The exact form is `sem1_mass_le_exact` ≤ m·(⌊2^256/p⁴⌋+1)/2^256. The bias
+  is multiplicative and ≈ 2^-132. Q = p⁴ − 1 is the best natural number.
+- In abR1 the row-1 answer is its own uniform coin coordinate, so address
+  repeats do not arise here. They stay charged to ε_coll in the real-to-middle
+  coupling.
+- `pole_N8_M31_pred`: 8·4096/(p⁴−1) ≤ 2^-108.
+- `privacy_R1_games_sampler` is `privacy_R1_games` with `hdraw` discharged.
+  Landed statements are unchanged.
+
+**D47.2 Remaining premises (R-wire).**
+- `SemRows01 W`: χ = sem 1 is `s1` of the row-1 answer, and sem 0 does not
+  read it. This matches r1_wire.rs `begin`.
+- `QM31SamplerLaw s1`: rank is a bijection onto Fin 2^256, emb is injective
+  below p⁴, and s1 b = emb(rank b mod p⁴). It is restated from the spend
+  path's proved sampler facts, which are pinned at 36353e178:
+  - ExtractedQM31SamplerCorrect.sample_total;
+  - qm31Digits_value;
+  - SourceSamplerByteRank.rank;
+  - sampled_decode_eq_iff.
+
+The carrier transports (Array U8 32 ↔ Fin 32 → UInt8, and QM31 ↔ K) are the
+open link. They join the build-integration job.
+
+### Lead acceptance of G-prog/G-exh/G-count (2026-10-19); D48: commit interface corrected to phase-indexed roots
+
+The worker commits 85307cedc and 30886c9d8 are cherry-picked. Host attempts
+4002 (`R1Z/LazyTable`) and 4004 (`R1Z/CommitReadsR1`) ran in-window. The lead
+verified both: SHA matches, exit 0, standard axioms. Evidence:
+`zf1/r1-real-evidence.json`.
+
+**D48.1 Proved.**
+- Generic lazy programming: `mean_prog`, `prog_first`/`prog_off`, and
+  `run_eq` (the middle game equals the programmed table on pairwise-distinct
+  causal reads).
+- Exhaustion: the M31 rejection loop rejects exactly 2 of 2^32 words, and
+  εexh ≤ N/2^476 under `RCommitCount`.
+- Read count: Mc = 1,685,214 + E₁ + E₂, and 115 + Mc ≤ 2^21.
+
+Correction: the folded tree has 2^18 leaves, not 2^16 as the couplings
+design said.
+
+New R-commit premise `RCommitCount`: stream 1 has at most 45,056 limbs, which
+assumes at most 26·1024 relation-free mask cells (to be confirmed from
+aspis-statement); stream 2 has 4,096 limbs.
+
+**D48.2 Modelling error found in the landed GamesR1.**
+`R1Prover.commit` returns all three roots before the transcript. In Rust:
+- the C2 root depends on rows 0–1, because its leaves include
+  h1 = helper(λ, χ) (host_semantic.rs);
+- the folded root depends on rows ≤ 29, since it is built over
+  fold(q, α0) after α0 (prover.rs).
+
+An R-commit premise equating `commit` with the Rust phase would therefore be
+false, and `privacy_R1_games'` would be vacuous for the real prover. This
+does not affect the landed theorems' truth: they hold for any `R1Prover`. It
+affects only whether the Rust prover is an instance.
+
+**D48.3 Lead decision: phase-indexed commitments.** Do not edit the landed
+GamesR1. New modules define `R1ProverP`, with commit of type
+`Challenges K → Fin 3 → OracleAnswer`:
+- the C1 root is constant;
+- the C2 root depends only on rows 0–1;
+- the folded root depends only on rows ≤ 29.
+
+These causality conditions are fields. Commitment reads and the exhaustion
+flag are indexed the same way. `realAttempt.step` evaluates the roots at the
+partial challenges, and R-causal covers them. The new games `fsR1P`/`abR1P`
+reuse the ideal models and transcript freshness, which are unaffected because
+the roots there are coins. Then `cp` follows from LazyTable with the
+commitment reads in the causal read list, followed by CmLayout, Agree and
+`privacy_R1_games'` on fsR1P.
+
+The P_R1 check is unaffected: it reads challenges and public constants only,
+not roots.
+
+### Lead acceptance of the P_R1 certificate checker (2026-10-19); D49
+
+The worker commits f38410320..80723cd38 (15) are cherry-picked. Design:
+`zf1/DESIGN-P-CERT.txt` §0–§7. The lead verified both host receipts:
+- `R1Z/CertSound`: attempt 4121, 20 standard axiom lines;
+- `R1Z/CertR1`: attempt 4122, 7 standard axiom lines.
+
+Both ran in-window, exited 0, have matching SHAs and no overrides. Attempt
+4120 failed on missing imports.
+
+**D49.1 Proved.** Generic certificate soundness:
+- preimage certificates give the inclusions;
+- the echelon certificate gives ker Rel ≤ span{n_f}, and hence the BCondG
+  shape (no inverse of U needed);
+- a right inverse gives the lift shape.
+
+Each is decidable. At the exact P_R1 types: `qprime_of_cert`,
+`bcondG_of_cert`, `c1lift_of_cert`, `h1lift_of_cert`, `halfOK_of_cert`,
+`queryCard_of_cert` and `p_r1_of_cert`. These are relative to the
+row-formula premises rf_own, rf_round, rf_bat, rf_src, rf_chain, rf_rel,
+rf_obs and rf_dec, which subsume the D34.3 items.
+
+**D49.2 Measured.** The Rust prototype `z4/z9c.rs` was run on the nuc in a
+capped scope:
+- A/J, actual or random queries: emit 11.9–12.6 s, check 2.56–2.65 s,
+  14.2–14.4 MB certificate, 194–250 MB peak;
+- coset: 9.2 s emit, 1.6 s check, 9.8 MB.
+
+Emit plus check is about 15 s, which is cheaper than the 22.6 s eliminating
+check. This replaces D38.2's "roughly doubled" estimate, so the prover-latency
+cost of D29 is about 15 s per attempt with the current code. Ranks match
+z9b, and 8/8 corrupted certificates were rejected at their intended steps.
+
+On structure B the checker fails closed at the first C1 lift (rank
+100 < 112), which is acceptable because a false negative only costs an
+attempt. Whether C1Lift itself fails on B is not computed.
+
+**D49.3 Enforced predicate.** P_chk := (emit succeeds ∧ check passes). It
+transfers to `maskImageOn_R1` by antitonicity once `check_sound` is composed.
+
+**D49.4 Open.**
+- C2: the rf_* premises, including the Z4c round-coordinate map.
+- C3: Aeneas extraction of the checker only. The constraints are u32/u64
+  with proved bounds, flat Vec, plain while loops, monomorphic code, and one
+  loop nest per function.
+- `check_sound` composition.
+- Prover integration, and timing on a second machine.
+
+CertR1 peaks 0.27 GB under -M7000; wider importers must split. A Freivalds
+check was rejected (§7.3).
+
+### Lead acceptance of the builder model (2026-10-19); D50: Rspend strengthened by the change sentinel for privacy
+
+The worker commits 23f5bd8cd..6d5a2889b (14) are cherry-picked. The design is
+`t2b2b/DESIGN-BUILDER-MODEL.txt` §1–§7. The lead verified the six host
+receipts:
+
+| Module | Attempt |
+|---|---|
+| BuilderModel | 4201 |
+| BuilderModelAux | 4204 |
+| BuilderModelHash | 4208 |
+| BuilderModelDigest | 4210 |
+| BuilderModelSentinel | 4211 |
+| BuilderModelBridge | 4212 |
+
+All exited 0, ran in-window (slots 1 and 2), have matching SHAs and standard
+axioms, and contain no overrides. The failed attempts were elaboration
+errors, each followed by a changed source. Two whnf/simp timeouts were fixed
+with local irreducibility; no limits were raised.
+
+**D50.1 Proved.** `buildModel` is a staged Lean model of the Rust builder,
+and all seven NonCopyHolds families hold for it (`nonCopy_model`):
+- Poseidon holds by construction;
+- schedule and path need no premise;
+- value, occupancy, asset and digest hold under named witness premises.
+
+**D50.2 Finding: no builder can satisfy `BuilderRefines S Rspend`.**
+`refines_forces_sentinel` (lead-read): for any builder, BuilderRefines on a
+private transfer forces `pub.change 7 ≠ 0`. Copy link 1124073492 places the
+change digest on occupancy row 1018, whose sentinel equation requires it.
+Rspend has no such clause, while the Rust builder already rejects a zero
+sentinel with a salt retry (`two_outputs`).
+
+**Lead decision.** The privacy relation is Rspend⁺ := Rspend ∧ (transfer →
+change[7] ≠ 0). The soundness theorem continues to extract Rspend. This is
+consistent, because the honest prover proves a subset of the relation that
+soundness extracts.
+
+On privacy, the salt retry conditions the change commitment (a public
+statement value, a hash output in the ROM) on one limb being nonzero. That
+affects the commitment's own hiding, which is outside this ZK theorem, by
+at most the conditioning on a ≈2^-31 event, not the view given the
+statement. This is recorded as an item for the note-commitment hiding
+argument and is not checked here.
+
+A soundness-side opportunity (not required): since accepted proofs force the
+sentinel, the extracted relation could carry it too.
+
+**D50.3 Modelling choices the Rust refinement must justify.**
+- Block rows are defined by the canonical Poseidon transition. This moves the
+  open raw-limb boundary to the builder side.
+- Empty-root siblings come from the frozen table.
+- Path aux levels are written from the node inputs.
+- The model is total, with Rust's checks as premises.
+
+**D50.4 Open, with the worker's estimates.**
+- CopyLinkBalance of the model, 136 links: 3–5 days.
+- BaseTyped of the model: about 1 day.
+- Rspend⁺ → the model premises, after build integration: 2–3 days. This needs
+  model digests equal to the spend path's noteCommitment, nodeCompress and
+  pathPrefix.
+- Aeneas refinement via extraction-friendly copies of each writer, checked
+  by differential tests:
+  - value, occupancy, path, merge: 2–3 days;
+  - sponge and node: 2 days;
+  - Poseidon: 1–2 weeks. This is the hardest item, and it has failed
+    extraction before.
+
+### Lead acceptance of builderRefines_model (2026-10-19); D51
+
+The worker commits 69706d6bf..ffdc53471 (12) are cherry-picked. The lead
+verified the nine green host receipts (attempts 4216, 4219, 4222–4225,
+4228, 4229 and 4231): SHAs match, all exited 0 in-window, standard axioms,
+no overrides. Evidence: `t2b2b/evidence-builder-model-2.json`. Design: §8 of
+`t2b2b/DESIGN-BUILDER-MODEL.txt`.
+
+**D51.1 Proved.**
+- `buildModel_mem`, i.e. BaseTyped of the model.
+- `balance_model`: CopyLinkBalance over all 136 links. It is generated by
+  `copy-gen/gen_copy_links.py.txt`, which reads CopyConstants.lean, aborts on
+  any kind mismatch, has a `--check` mode, and emits only named lemma
+  applications. `decide` appears only on numeral bounds and row equations,
+  and `rfl` only on weight literals.
+- `builderRefines_model : BuilderRefines (buildModelSpec F) (ModelRel F)`.
+- `builderSoundOn_model`, for characteristic 2^31−1.
+
+So the builder premise of `privacy_R1` is a theorem about the model. What
+remains is that the Rust builder refines the model, and the map from Rspend⁺
+to ModelRel.
+
+**D51.2 ModelRel** is what a later job derives from Rspend⁺ after build
+integration. Its fields:
+- pubBase and witBase;
+- aux: conservation, pair-leaf validity, spendability, the D50 sentinel and
+  the withdrawal amount;
+- digest: anchor, nullifier, recipient, change, next root and carry, each
+  equal to the model's digests;
+- pairRight: the input pair's second commitment is the pair node's right
+  child. This is the only new witness premise the links needed.
+
+**D51.3 Violation.** Attempt 4218 re-sent 4217's source unchanged: the SHAs
+are identical and it exited 1. A local edit script failed before launch.
+This breaks the never-rerun-unchanged rule. It is recorded in the evidence,
+and the worker's launcher now refuses a source hash it has already sent.
+That guard is adopted for all workers.
+
+### Lead acceptance of the phase-indexed real games (2026-10-19); D52: privacy_R1_games′
+
+The worker commits 142b9fa15..99b6f9149 (17) are cherry-picked; GamesR1 is
+untouched. The design is `zf1/DESIGN-R1-REAL.txt` §1–§7. The lead verified
+all 15 green host receipts (4007 … 4049): SHAs match, all exited 0
+in-window, standard axioms, no overrides. Notes on the failed attempts:
+- 4005 is void: another worker's leftover launcher in the shared scratchpad
+  ran, compiled nothing, and the worker switched to a private launcher.
+- 4033 hit the default heartbeat limit and was fixed by restructuring, not by
+  an override.
+
+**D52.1 Proved.**
+- `R1ProverP` with phase-indexed roots (D48.3). Each attempt is one causal
+  read program run on partial answer vectors.
+- cp: the frozen-set lazy-programming law (`LazyFrozen`), with
+  H(public_bytes) as the frozen address, and `cpP`.
+- CmLayout: the byte grammar `gram` for every commitment read, and hit,
+  pair and cross freshness for all N·|Pos1| positions. `hidden` shows the
+  opening log does not move on unopened reads.
+- Agree: `agreeP`.
+- exh: εexh = N·16(L₁+L₂)/2^496 + N·|Pos1|/2^255.
+- `privacy_R1_games′` on fsR1P/abR1P against simE. The error is
+  M·q/2^255 + M²/2^255 + εexh + N·4096/(p⁴−1), with M = N·|Pos1|.
+
+Every field of R1RealData is discharged.
+
+**D52.2 Hypotheses of privacy_R1_games′.**
+- PackField, PublicBase, BuilderSoundOn (theorem for the model, D51),
+  SemRows01 and QM31SamplerLaw.
+- R-rom: `RomModel W`, `RAddrIn`.
+- R-causal: `RCausal`.
+- R-commit:
+  - `RCommitBytes` (the node, leaf, salt, seed, binding and expander
+    grammars);
+  - `hfib`;
+  - `RExh`;
+  - E bounds, and 16L ≤ 8E.
+- R-wire: `eCm`, `ROpen`, `RComLog`.
+
+Every one of these is a statement about the Rust prover's behaviour, which
+is what the refinement work discharges.
+
+**D52.3 Modelling choices (reviewed).**
+- The mask nonce is secret. It is never in the proof bytes or read by the
+  verifier, per r1_wire.rs, which overrides the "public" context comment.
+- The binding read is memoized: the Rust recomputes it at the same address.
+- The real game runs all N attempts and charges every read. That is
+  conservative.
+- The cell bound ≤ 26·1024 (RCommitCount) still needs confirming from
+  aspis-statement.
+
+**D52.4 Open.**
+- R-ser, R-retry, R-pub.
+- Completeness of the read list, i.e. no other hash call in the commitment
+  phase.
+- The Rust-side discharge of every premise in D52.2.
+- An LE byte-formula lemma for `wordsE`.
+- The N = 8 numeral.
+
+### Lead acceptance of the rf_* premises (2026-10-19); D53: P_R1 from the checker's tests
+
+The worker commits e899fcdd6..c61320358 are cherry-picked. The lead verified
+the 12 green host receipts (4281, 4282, 4287, 4289, 4290, 4294, 4296, 4297,
+4299, 4300, 4302 and 4303): SHAs match, all exited 0 in-window, standard
+axioms, no overrides. Evidence: `zf1/rf-evidence.json`, 24 attempts. The
+failures were memory and recursion blowups and naming errors; none was rerun
+unchanged and no cap was raised. 4296 had finished green before the
+session-limit cut, and was recorded without a relaunch.
+
+**D53.1 Proved.** On the Lean side, all eight rf_* premises are discharged:
+- RF-dec: the decode8 limb order;
+- RF-src: Rust-built sources lie in Gonly, Vsem and Ph1;
+- RF-chain: ChainT0K4 lies in the span of the Rust chain_targets under SemK4;
+- RF-round;
+- RF-own: ownMap equals the Rust raw_c columns, with the 12-lane limb
+  layout;
+- RF-obs/RF-col;
+- RF-bat/RF-rel: the wflat order, and B0R1′ ≤ ιb(ker Rel).
+
+D34.3 items 1 and 2 are proved on the Lean side: `storedFirstLineX18` =
+the Rust line_node formula; lineInverse = the QueryGeometry multipliers; and
+line_fold_with_inverses = lineFoldLinear.
+
+`p_r1_of_checks` derives P_R1 from the checker's tests (PreOK, PreOK₂,
+EchOK, RinvOK, half-inverse, limb/length). Its remaining hypotheses are not
+row formulas:
+- the circle points lie in K₄;
+- wb is an F-basis of K;
+- the opened folded-cell list covers the open cells;
+- one-index side conditions on the selected lift sources.
+
+**D53.2 Moved to C3 (Rust side).**
+- The round, batched and relation matrices, and some own columns, are
+  defined as the Lean maps' coordinates. C3 must show the Rust builders
+  round_row/tail_row, unit_functionals and design_relations/
+  limb_functionals compute them. The other columns already have Lean closed
+  forms matching the Rust.
+- D34.3 item 3 (`ell` versus Rust weight kinds 5/6).
+- π versus the Rust transport table, `natural` versus naturalLineValue, the
+  stored points, and batch inversion.
+- check_sound, i.e. extracting the checker and composing it with
+  p_r1_of_checks.

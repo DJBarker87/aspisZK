@@ -2899,7 +2899,8 @@ mod z8e;
 #[path = "z9.rs"]
 mod z9;
 fn main() {
-    if std::env::args().any(|x| x == "--r1p") { z9::z9b::main_r1p(); }
+    if std::env::args().any(|x| x == "--r1cert") { z9::z9b::z9c::main(); }
+    else if std::env::args().any(|x| x == "--r1p") { z9::z9b::main_r1p(); }
     else if std::env::args().any(|x| x == "--z9b") { z9::z9b::main(); }
     else if std::env::args().any(|x| x == "--z9") { z9::main(); }
     else if std::env::args().any(|x| x == "--z8e") { z8e::main(); }
