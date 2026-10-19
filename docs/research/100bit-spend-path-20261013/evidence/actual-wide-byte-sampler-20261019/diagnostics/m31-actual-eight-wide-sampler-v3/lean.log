@@ -1,0 +1,103 @@
+/tmp/M31ActualEightWideSampler.lean:35:5: warning: Variable name `h` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/tmp/M31ActualEightWideSampler.lean:50:4: error: `simp` made no progress
+/tmp/M31ActualEightWideSampler.lean:86:9: error: unsolved goals
+case none
+xs : EightRetryInputs
+w : WideExactOutput
+h : decodeEight xs = none
+⊢ AllEightAccepted xs → ¬(outputToWideExact fun i => canonicalOutput (xs i)) = w
+/tmp/M31ActualEightWideSampler.lean:92:18: error: Application type mismatch: The argument
+  hout
+has type
+  Option.map (⇑outputToWideExact) (some ys) = some w
+but is expected to have type
+  outputToWideExact ys = w
+in the application
+  ⟨hdec.right, hout⟩
+/tmp/M31ActualEightWideSampler.lean:95:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ys
+in the target expression
+  outputToWideExact zs = w
+
+case some.mpr
+xs : EightRetryInputs
+w : WideExactOutput
+ys : EightValues
+h : decodeEight xs = some ys
+hdec : AllEightReturned xs ∧ ys = fun i => canonicalOutput (xs i)
+zs : EightValues
+hall : AllEightAccepted xs
+hzs : zs = fun i => canonicalOutput (xs i)
+hout : outputToWideExact zs = w
+hys : ys = zs
+⊢ Option.map (⇑outputToWideExact) (some ys) = some w
+/tmp/M31ActualEightWideSampler.lean:86:18: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/M31ActualEightWideSampler.lean:113:21: error: Unexpected term `x.property`; expected single reference to variable
+/tmp/M31ActualEightWideSampler.lean:130:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun i => canonicalOutput (↑x i)
+in the target expression
+  output decode31 (↑x i) = some (outputToWideExact.symm w i)
+
+case some
+w : WideExactOutput
+x : actualWideOutputFiber w
+ys : EightValues
+hdec : decodeEight ↑x = some ys
+hprops : AllEightReturned ↑x ∧ ys = fun i => canonicalOutput (↑x i)
+hall : AllEightAccepted ↑x
+hys : ys = fun i => canonicalOutput (↑x i)
+hout : outputToWideExact ys = w
+hraw : (fun i => canonicalOutput (↑x i)) = outputToWideExact.symm w
+i : Fin 8
+⊢ output decode31 (↑x i) = some (outputToWideExact.symm w i)
+/tmp/M31ActualEightWideSampler.lean:141:6: error: Type mismatch
+  Eq.trans (Eq.symm (x.property i)) hcan
+has type
+  some (outputToWideExact.symm w i) = some (canonicalOutput (↑x i))
+but is expected to have type
+  some (canonicalOutput (↑x i)) = some (outputToWideExact.symm w i)
+/tmp/M31ActualEightWideSampler.lean:164:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'M31RetryOutputFiber.canonicalOutput_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.decodeEight_some_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.actualEightWideSampler_none_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.actualWideOutputFiberEquiv' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.actualWideOutputFiber_card' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.actualWideConditionalMass_uniform' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'M31RetryOutputFiber.actualWideSampler_abort_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.actualWideAbortInputEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.actualWideAbortInput_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.actualWideAbortMass_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+       12.03 real         1.23 user         1.53 sys
+          2812215296  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              117495  page reclaims
+              108473  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               16997  voluntary context switches
+               84013  involuntary context switches
+         27562999867  instructions retired
+         10402014330  cycles elapsed
+           451695016  peak memory footprint

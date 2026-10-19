@@ -1,0 +1,125 @@
+/tmp/M31ActualEightWideSampler.lean:18:5: warning: Variable name `h` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/tmp/M31ActualEightWideSampler.lean:33:2: error: unsolved goals
+case pos
+xs : EightRetryInputs
+ys : EightValues
+h : AllEightAccepted xs
+⊢ AllEightAccepted xs → ((fun i => canonicalOutput (xs i)) = ys ↔ ys = fun i => canonicalOutput (xs i))
+/tmp/M31ActualEightWideSampler.lean:33:10: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/M31ActualEightWideSampler.lean:62:9: error: unsolved goals
+case none
+xs : EightRetryInputs
+w : WideExactOutput
+h : decodeEight xs = none
+⊢ AllEightAccepted xs → ¬(outputToWideExact fun i => canonicalOutput (xs i)) = w
+/tmp/M31ActualEightWideSampler.lean:63:12: error: unsolved goals
+case some
+xs : EightRetryInputs
+w : WideExactOutput
+ys : EightValues
+h : decodeEight xs = some ys
+⊢ outputToWideExact ys = w ↔ AllEightAccepted xs ∧ (outputToWideExact fun i => canonicalOutput (xs i)) = w
+/tmp/M31ActualEightWideSampler.lean:62:18: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/M31ActualEightWideSampler.lean:63:21: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [h̵,̵ ̵decodeEight_some_iff]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/M31ActualEightWideSampler.lean:63:24: warning: This simp argument is unused:
+  decodeEight_some_iff
+
+Hint: Omit it from the simp argument list.
+  simp [h,̵ ̵d̵e̵c̵o̵d̵e̵E̵i̵g̵h̵t̵_̵s̵o̵m̵e̵_̵i̵f̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/M31ActualEightWideSampler.lean:71:22: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+w : WideExactOutput
+x : actualWideOutputFiber w
+hsome : ∃ ys, AllEightAccepted ↑x ∧ (ys = fun i => canonicalOutput (↑x i)) ∧ outputToWideExact ys = w
+⊢ wideExactOutputFiber w
+/tmp/M31ActualEightWideSampler.lean:88:13: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  some (outputToWideExact.symm w i) = firstSome (List.ofFn fun i_1 => decode31 (↑x i i_1))
+at case `Eq.refl`
+/tmp/M31ActualEightWideSampler.lean:91:48: error: Application type mismatch: The argument
+  x.property i
+has type
+  output decode31 (↑x i) = some (outputToWideExact.symm w i)
+but is expected to have type
+  ∃ r, output decode31 (↑x i) = some r
+in the application
+  canonicalOutput_success (↑x i) (x.property i)
+/tmp/M31ActualEightWideSampler.lean:96:6: error: Type mismatch
+  Eq.symm hval
+has type
+  canonicalOutput (↑x i) = outputToWideExact.symm w i
+but is expected to have type
+  outputToWideExact.symm w i = canonicalOutput (↑x i)
+/tmp/M31ActualEightWideSampler.lean:115:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/tmp/M31ActualEightWideSampler.lean:118:39: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Membership EightRetryInputs Type
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/tmp/M31ActualEightWideSampler.lean:128:4: warning: declaration uses `sorry`
+/tmp/M31ActualEightWideSampler.lean:128:4: warning: declaration uses `sorry`
+/tmp/M31ActualEightWideSampler.lean:141:8: error: `M31RetryOutputFiber.actualWideAbortMass_eq_eightAbortMass` has already been declared
+/tmp/M31ActualEightWideSampler.lean:148:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(Nat.card EightAbortInput) / ↑(Nat.card EightRetryInputs)
+in the target expression
+  actualWideAbortMass = 1 - (1 - 1 / 2 ^ 496) ^ 8
+
+⊢ actualWideAbortMass = 1 - (1 - 1 / 2 ^ 496) ^ 8
+'M31RetryOutputFiber.canonicalOutput_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.decodeEight_some_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.actualEightWideSampler_none_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.actualWideOutputFiberEquiv' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.actualWideOutputFiber_card' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.actualWideConditionalMass_uniform' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'M31RetryOutputFiber.actualWideSampler_abort_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.actualWideAbortInputEquiv' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.actualWideAbortInput_card' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.actualWideAbortMass_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       12.25 real         1.23 user         1.60 sys
+          2784952320  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              112196  page reclaims
+              113514  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               14812  voluntary context switches
+               88470  involuntary context switches
+         27138674287  instructions retired
+         10654590114  cycles elapsed
+           449663352  peak memory footprint
