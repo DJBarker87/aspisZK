@@ -805,5 +805,11 @@ pub(crate) fn main() {
         }
         println!("R1CERT_TEETH_SUMMARY {label} rejected={rejected}/{n}");
     }
+    if args.iter().any(|x| x == "--c3diff") {
+        z9d::run(&p2, &cert, &label, teeth);
+    }
     println!("R1CERT_DONE {label} wall_seconds={:.3}", t0.elapsed().as_secs_f64());
 }
+
+#[path = "z9d.rs"]
+mod z9d;
