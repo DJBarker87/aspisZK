@@ -6277,3 +6277,44 @@ equal to production. Remaining:
 - the Lean-side Wspend⁺ → RustWitness/RustPublic map (§12.6), after build
   integration. The Rust side of the map is `records` in glue.rs.
 - the copy↔production decision (D54.3).
+
+### Lead acceptance of the lift-column builder (2026-10-19); D62
+
+The worker commits a88b52d9e..830d9e275 are cherry-picked. The consistent
+chain after re-extraction is:
+
+4392 → 4393 → 4394 → 4395 → 4398 → 4399 → 4460 → 4461 → 4463 → 4464 →
+4466 → 4470 → 4473 → 4474 → 4478 → 4479 → 4480
+
+The lead verified all 17 (SHAs match, exit 0 in-window, standard axioms, no
+sorry/admit/native_decide/overrides). Eleven failed attempts all had changed
+sources.
+
+**D62.1 Proved.** `fill_lo` (C1 and H1 lifts) has an extracted Rust copy.
+Its differential test matches z9c's lift matrices on all 342,080 entries in
+each of five configurations. On the Lean side:
+- the helper values in K (eq, the successor/xor-12 points, h_weight, the
+  natural basis, evalrow);
+- `natR_eq`: Rust `natural` = naturalLineValue. This is a real lemma, and it
+  closes that D53.2 item.
+- `c1_entry_ident`/`h1_entry_ident`: every entry is the flatC1/flatH1
+  coordinate of `obs`.
+- `check_sound″`: hC1 and hH1 are removed.
+
+D59's `check_sound′` had a duplicated binder; it was harmless and is removed
+in 4479.
+
+**D62.2 New premises under the D59.2 ruling.**
+- htr (input table = π), hzx/hzy (OOD points), hsx/hsy (stored points), hin
+  (Rust inactive flags = copyInactiveRows). hin is accepted as a named input
+  premise, of the same kind as π.
+- hselC/hselHv, hloC/hloH (layout), and hblo (`pb.lo` filled by `fill_lo`).
+
+CertCheckSound3 peaks at 7.17 GB.
+
+**D62.3 Remaining in check_sound″.**
+- hOwn and hGOwn: the own-matrix builder and the blockM layout.
+- hRel: design_relations/limb_functionals.
+- hRound, hGRound and hGBat: pure-round closed forms, and `ell` against
+  weight kinds 5/6.
+- The decoder facts and the inherited premises.
