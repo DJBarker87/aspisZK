@@ -244,11 +244,23 @@ impl BatchedWeights {
         let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];
         for j in 0..4 {self.raw[index][j]+=u64::from(limbs[j])*u64::from(basis.0);}
         if self.terms&3==3 {
-            for limb in &mut self.raw[index] {*limb=(*limb&0x7fff_ffff)+(*limb>>31);}
+            let lane=self.raw[index];
+            self.raw[index]=[
+                (lane[0]&0x7fff_ffff)+(lane[0]>>31),
+                (lane[1]&0x7fff_ffff)+(lane[1]>>31),
+                (lane[2]&0x7fff_ffff)+(lane[2]>>31),
+                (lane[3]&0x7fff_ffff)+(lane[3]>>31),
+            ];
         }
     }
     fn value(&self,index:usize)->K {
-        let [a,b,c,d]=self.raw[index].map(M31::reduce_u64);
+        let lane=self.raw[index];
+        let [a,b,c,d]=[
+            M31::reduce_u64(lane[0]),
+            M31::reduce_u64(lane[1]),
+            M31::reduce_u64(lane[2]),
+            M31::reduce_u64(lane[3]),
+        ];
         K{c0:aspis_core::field::CM31{a,b},c1:aspis_core::field::CM31{a:c,b:d}}
     }
     fn finish(&self,weights:&mut[K]) {for (i,w) in weights.iter_mut().enumerate(){*w=self.value(i);}}

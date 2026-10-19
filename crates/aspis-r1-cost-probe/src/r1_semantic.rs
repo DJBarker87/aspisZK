@@ -79,16 +79,30 @@ fn mark(obs: crate::verifier::Observer, i: u8) {
     let _=(obs,i);
 }
 
+// Extraction-friendly candidate for current production semantic_boundary.
+// It preserves the production seed and ascending left-fold order.
 fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {
-        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);
+    let mut boundary = polynomial[0];
+    let mut index = 0usize;
+    while index < 28 {
+        boundary = QM31::add(boundary, polynomial[index]);
+        index += 1;
+    }
     boundary
 }
 
+// Extraction-friendly candidate for current production semantic_value.
+// It preserves the production reverse Horner order and exact add/mul order.
 fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> QM31 {
-        let value = polynomial
-            .iter()
-            .rev()
-            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));
+    let mut index = 28usize;
+    let mut value: QM31 = QM31::ZERO;
+    while index > 0 {
+        index -= 1;
+        value = QM31::add(
+            QM31::mul(value, alpha[round]),
+            polynomial[index],
+        );
+    }
     value
 }
 

@@ -136,6 +136,26 @@ impl<'a> ValidatedRecord<'a> {
     /// validation token proves the 16-byte high half is zero and the
     /// low QM31 encoding canonical, while this method still checks the
     /// requested range and record class.
+    fn decode_k_value(
+        &self,
+        byte_offset: usize,
+        value: usize,
+        offset_values: usize,
+    ) -> Result<QM31, Error> {
+        let start = byte_offset + value * 32;
+        let bytes = self.payload();
+        let part = [
+            bytes[start], bytes[start + 1], bytes[start + 2], bytes[start + 3],
+            bytes[start + 4], bytes[start + 5], bytes[start + 6], bytes[start + 7],
+            bytes[start + 8], bytes[start + 9], bytes[start + 10], bytes[start + 11],
+            bytes[start + 12], bytes[start + 13], bytes[start + 14], bytes[start + 15],
+        ];
+        QM31::from_le_bytes(&part).ok_or(Error::NonCanonical {
+            row: self.row,
+            value: offset_values + value,
+        })
+    }
+
     pub(crate) fn decode_k<const N: usize>(
         &self,
         offset_values: usize,
@@ -150,16 +170,12 @@ impl<'a> ValidatedRecord<'a> {
         let end = byte_offset
             .checked_add(byte_len)
             .ok_or(Error::Length { row: self.row })?;
-        let bytes = self
-            .payload()
+        self.payload()
             .get(byte_offset..end)
             .ok_or(Error::Length { row: self.row })?;
         let mut out = [QM31::ZERO; N];
-        for (value, part) in bytes.chunks_exact(32).enumerate() {
-            out[value] = QM31::from_le_bytes(&part[..16]).ok_or(Error::NonCanonical {
-                row: self.row,
-                value: offset_values + value,
-            })?;
+        for value in 0..N {
+            out[value] = self.decode_k_value(byte_offset, value, offset_values)?;
         }
         Ok(out)
     }
