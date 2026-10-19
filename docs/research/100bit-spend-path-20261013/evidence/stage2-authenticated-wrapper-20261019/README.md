@@ -1,0 +1,7 @@
+# Adopted authenticated stage-2 wrapper
+
+PROVED, at explicit-boundary scope: success of the generated `tx2_authenticated` wrapper implies a successful `parse_shape`, a successful `Parsed` observer step, and success of `tx2_common` with exactly the same public bytes, proof, checkpoint, hash instance and observer. The theorem retains failure/divergence behavior and uses only standard axioms.
+
+Charon and Aeneas succeeded on byte-pinned adoption-branch source `c8ea8dd49c81ab970b9dbee8d8b47718f9beb005`. The whole stage-2 caller is not proved: its separate extraction stopped when rebuilding the whole Accumulator after `pending.finish(&mut a.weights)`. `resume`, the query loop and `finish_relation` remain OPEN.
+
+The elaboration adapter removes generated resource options and replaces precisely the two opaque calls with arbitrary structure fields; it imports no opaque axiom/template. See check-adapter.py. This is a universal theorem over those functions, not a concrete implementation of them. The native runs used -M4400, 1 GiB high / 2 GiB max / swap0 scopes; all three targets exited0, and the theorem axiom report is [propext, Classical.choice, Quot.sound]. No binaries are published. Full exact pins, timings and process/cgroup RSS are in each receipt/preflight. The extraction receipt's legacy human-readable reservation text says 8 GiB; its actual checked cgroup limits correctly record 2 GiB and are authoritative.
