@@ -22,7 +22,12 @@ safe-domain primitive models (five additional focused targets). A guarded
 experimental LLBC rewrite clears the two mutable-copy diagnostics and passes
 positive byte-identity/four negative-copy tests, but is NOT admitted as a
 compiler pass. The complete array-library emission still fails at generic
-Try::from_output and loop fixed-point analysis. See ARRAY-LIBRARY-SOURCE.md.
+Try::from_output and the Try/Residual dictionary boundary. The loop's
+fixed-point mismatch was subsequently diagnosed as a missing identical,
+region-free associated-type match case; the opt-in repair passes strict
+symbolic borrow-checking and 14 paired controls. This is frontend evidence,
+not a compiled whole-library theorem. See ARRAY-LIBRARY-SOURCE.md and
+ASSOCIATED-TYPE-MATCHER.md.
 No whole-candidate or security-transfer obligation is closed by this checkpoint.
 
 | Retained change | Required proof and source bridge | Status |

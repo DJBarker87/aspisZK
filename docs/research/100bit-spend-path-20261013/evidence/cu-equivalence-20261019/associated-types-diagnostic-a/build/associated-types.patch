@@ -1,0 +1,16 @@
+--- a/src/interp/InterpMatchCtxs.ml
++++ b/src/interp/InterpMatchCtxs.ml
+@@ -320,6 +320,13 @@
+         "Arrays with different lengths";
+       TArray (match_rec ty0 ty1, len0)
+   | TSlice ty0, TSlice ty1 -> TSlice (match_rec ty0 ty1)
++  | TTraitType _, TTraitType _
++    when Sys.getenv_opt "AENEAS_IDENTICAL_ASSOCIATED_TYPES" = Some "1"
++         && phys_eq ty0 ty1 && ty_no_regions ty0 ->
++      (* Identical region-free projections require no alpha-renaming map.
++         Distinct projections and every projection containing a region keep
++         the existing matching path. No iteration or borrow check is skipped. *)
++      ty0
+   | TVar vid0, TVar vid1 ->
+       [%cassert_recover] recover span (vid0 = vid1)
+         "Not the same type variables";

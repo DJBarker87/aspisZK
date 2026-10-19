@@ -128,3 +128,13 @@ Next: justify or replace the experimental frontend rewrite, resolve the actual
 library loop and Try/Residual dictionary translation, and admit the concrete
 unsafe primitive interpretation. The full library, shared arithmetic helpers,
 enclosing verifier and final soundness/privacy transfers remain OPEN.
+
+The loop's fixed-point diagnostic has subsequently been isolated and repaired
+in a separate opt-in frontend. `match_types` had no case for two identical
+region-free associated-type projections. The narrow added equality case lets
+the exact normalized library loop pass strict symbolic borrow-checking with
+the unchanged two-iteration limit. All 14 paired compatibility controls pass;
+the full library emission now fails only at the Try/Residual typing/dictionary
+boundary. See ASSOCIATED-TYPE-MATCHER.md for scope, hashes, exact receipts and
+the distinction between borrow-checking and Lean/source admission. No new
+Lean target or whole-library completion is claimed for this frontend repair.
