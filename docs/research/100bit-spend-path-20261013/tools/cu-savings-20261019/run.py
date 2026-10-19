@@ -2,6 +2,7 @@
 """One immutable, capped NUC run. Invoke via systemd-run; no keys are touched."""
 import argparse, hashlib, json, os, re, signal, subprocess, time
 from pathlib import Path
+os.umask(0o077)  # Retain generated task keys and receipts privately by default.
 ap=argparse.ArgumentParser();ap.add_argument('plan');a=ap.parse_args();plan=json.loads(Path(a.plan).read_text())
 cg=Path('/sys/fs/cgroup')/Path('/proc/self/cgroup').read_text().split('0::',1)[1].strip().lstrip('/')
 limits={n:(cg/n).read_text().strip() for n in ['memory.high','memory.max','memory.swap.max']}
