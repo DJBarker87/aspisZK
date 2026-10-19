@@ -129,3 +129,9 @@ binding is therefore not yet marked complete. Successful additional targets:
 `borrow-option-types-a`, `borrow-option-operations-a`, `iterator-types-a`,
 `iterator-source-option-a`, `iterator-next-a`, `iterator-source-shape-e`,
 `iterator-source-bridge-a`. All print standard axioms only with zero job swap.
+
+The finish-context source interpretation and consuming theorem drafts are now
+registered separately as NOT_COMPILED pending targets. See
+`FINISH-CONTEXT-PENDING.md`. Initial SSH staging failed before any Lean job
+launched, and retries after the user's request still found the host unreachable.
+No theorem success or source-binding completion is inferred from these drafts.

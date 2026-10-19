@@ -7,15 +7,24 @@ started=time.monotonic()
 repo=Path(__file__).resolve().parents[5]
 area=repo/'docs/research/100bit-spend-path-20261013'
 evidence=area/'evidence/cu-equivalence-20261019'
-ap=argparse.ArgumentParser();ap.add_argument('--add',nargs=2,action='append',default=[]);a=ap.parse_args()
+ap=argparse.ArgumentParser();ap.add_argument('--add',nargs=2,action='append',default=[])
+ap.add_argument('--pending',action='append',default=[]);a=ap.parse_args()
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 audit_path=evidence/'COMPONENT-AUDIT.json'
 audit=json.loads(audit_path.read_text())
+pending=audit.setdefault('pending_targets',{})
+for module in a.pending:
+    source=area/'lean'/(module+'.lean')
+    pending[module]=dict(source_sha256=sha(source),status='NOT_COMPILED')
 for module,attempt in a.add:
     receipt_path=evidence/attempt/'receipt.json'
     receipt=json.loads(receipt_path.read_text())
     audit['successful_targets'][module]=dict(attempt=attempt,
         source_sha256=receipt['source_sha256'],receipt_sha256=sha(receipt_path))
+    pending.pop(module,None)
+for module,item in pending.items():
+    assert sha(area/'lean'/(module+'.lean'))==item['source_sha256'],module
+    assert module not in audit['successful_targets'],module
 for module,item in audit['successful_targets'].items():
     source=area/'lean'/(module+'.lean')
     receipt_path=evidence/item['attempt']/'receipt.json'
@@ -32,6 +41,9 @@ for name in ['Types.lean','Funs.lean']:
 finish_check=subprocess.check_output([sys.executable,str(Path(__file__).with_name('emit-finish.py')),
     '--check'],text=True)
 audit['finish_emission_layout_check']=json.loads(finish_check)
+finish_source_check=subprocess.check_output([sys.executable,
+    str(Path(__file__).with_name('emit-finish-source.py')),'--check'],text=True)
+audit['finish_source_emission_layout_check']=json.loads(finish_source_check)
 audit['iterator_source_checks']={}
 for script in ['extract-iterator.py','extract-borrow-option.py','emit-iterator.py']:
     output=subprocess.check_output([sys.executable,str(Path(__file__).with_name(script)),
