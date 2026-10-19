@@ -31,3 +31,32 @@ Still required: full mutable zip/initialization execution, fallible allocation
 admission, the outer row/query loops and counter, canonical reference field
 update and checkpoint/serialization composition, then the complete soundness
 and privacy transfers. No whole-verifier equivalence follows from this file.
+
+Frontend diagnosis (experimental; not a release tool change)
+---------------------------------------------------------
+
+Including the concrete zip constructors and the cached full-MIR sysroot did
+not remove the original lookup_aproj_loans_opt failure (init-b).
+Inspection found a double recursive visitor call for non-loan projections:
+the branch recursively visited children, then the unconditional final call
+visited them again. aeneas-single-visit.patch removes the branch calls and
+retains the final traversal and BOTH uniqueness sanity checks. It is tested
+in a separate source/cache copy; pinned tool sources and binaries are intact.
+
+The isolated optimized frontend build succeeds in 30.96 seconds, 523112 KiB
+peak process RSS and zero process swap, under an actual container cgroup with
+6 GiB MemoryHigh, 8 GiB MemoryMax and MemorySwapMax=0. Its source/binary hashes,
+build command, image and resource receipt are in aeneas-single-visit-build.
+No tool binary is committed.
+
+The patched frontend gets past the duplicate-visit assertion on the original
+unchanged LLBC, but now reports an explicitly unsupported nested loop
+abstraction at SymbolicToPureExpressions.ml:1259 (init-c). Forcing recursive
+loop extraction produces the same explicit unsupported case (init-d). Both
+fail in 0.402 seconds, below 83 MiB peak RSS and without process/cgroup swap.
+No check was disabled or unsupported translation case silently accepted.
+The experimental frontend has not produced a new accepted source theorem and
+is not adopted for release proofs. The 55 successful components still use the
+original pinned frontend. Closing initialization needs supported translation
+of that nested mutable-zip abstraction or a justified source interpretation;
+the already checked assignment proof alone does not supply it.
