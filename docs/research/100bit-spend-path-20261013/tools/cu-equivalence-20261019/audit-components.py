@@ -128,6 +128,8 @@ audit['trait_constraint_frontend_diagnostic_check']=json.loads(subprocess.check_
     sys.executable,str(Path(__file__).with_name('check-trait-constraint-evidence.py'))],text=True))
 audit['never_short_circuit_emission_check']=json.loads(subprocess.check_output([
     sys.executable,str(Path(__file__).with_name('emit-never-short-circuit.py')),'--check'],text=True))
+audit['try_graph_metadata_evidence_check']=json.loads(subprocess.check_output([
+    sys.executable,str(Path(__file__).with_name('check-try-graph-evidence.py'))],text=True))
 usage=resource.getrusage(resource.RUSAGE_SELF)
 audit['audit_command']=[sys.executable,str(Path(__file__).relative_to(repo)),*sys.argv[1:]]
 audit['audit_source_revision']=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()

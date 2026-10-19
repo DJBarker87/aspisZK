@@ -1,0 +1,97 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphLoop.lean:34:13: warning: This simp argument is unused:
+  Prod.casesOn
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵P̵r̵o̵d̵.̵c̵a̵s̵e̵s̵O̵n̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphLoop.lean:37:25: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphLoop.lean:38:22: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphLoop.lean:39:41: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphLoop.lean:39:59: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphLoop.lean:39:59: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphLoop.lean:67:6: error: Tactic `apply` failed: could not unify the conclusion of `ih state1 (buffer.set i (some item)) next`
+  sourceLoop inst back state1 (buffer.set i (some item)) next = do
+    let final ← fill inst n state1 (buffer.set i (some item)) next
+    ok (core.ops.control_flow.ControlFlow.Continue (), back final)
+with the goal
+  sourceLoop inst back state1 (buffer.set i (some item)) next = do
+    let final ←
+      let (item, state1) := (item, state1)
+        do
+        let next ← i + 1#usize
+        fill inst n state1 (buffer.set i (some item)) next
+    ok (core.ops.control_flow.ControlFlow.Continue (), back final)
+
+Note: The full type of `ih state1 (buffer.set i (some item)) next` is
+  ↑next + n = (buffer.set i (some item)).length →
+    sourceLoop inst back state1 (buffer.set i (some item)) next = do
+      let final ← fill inst n state1 (buffer.set i (some item)) next
+      ok (core.ops.control_flow.ControlFlow.Continue (), back final)
+
+case succ.ok
+T F : Type
+inst : core.ops.function.FnMut F Usize T
+back : Slice (Option T) → Slice (Option T)
+n : ℕ
+ih :
+  ∀ (state : F) (buffer : Slice (Option T)) (i : Usize),
+    ↑i + n = buffer.length →
+      sourceLoop inst back state buffer i = do
+        let final ← fill inst n state buffer i
+        ok (core.ops.control_flow.ControlFlow.Continue (), back final)
+state : F
+buffer : Slice (Option T)
+i : Usize
+hspan : ↑i + (n + 1) = buffer.length
+hi : ↑i < buffer.length
+next : Usize
+hv : ↑next = ↑i + 1
+hbody :
+  core.array.try_from_fn_erased_loop.body (CuSavingsTryGraphRuntime.neverTry T) inst back state buffer i = do
+    let (item, state1) ← inst.call_mut state i
+    ok (cont (back, state1, buffer.set i (some item), next))
+hadd : UScalar.add i 1#usize = ok next
+hv1 : ↑next = ↑i + 1
+item : T
+state1 : F
+hcall : inst.call_mut state i = ok (item, state1)
+⊢ sourceLoop inst back state1 (buffer.set i (some item)) next = do
+    let final ←
+      let (item, state1) := (item, state1)
+        do
+        let next ← i + 1#usize
+        fill inst n state1 (buffer.set i (some item)) next
+    ok (core.ops.control_flow.ControlFlow.Continue (), back final)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphLoop.lean:59:20: warning: This simp argument is unused:
+  hadd
+
+Hint: Omit it from the simp argument list.
+  simp only [fill,̵h̵a̵d̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsArrayGraphLoop.fill' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsArrayGraphLoop.loop_unroll' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsArrayGraphLoop.source_eq_fill' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

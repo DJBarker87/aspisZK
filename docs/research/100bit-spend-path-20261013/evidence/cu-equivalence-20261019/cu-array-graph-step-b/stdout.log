@@ -1,0 +1,89 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphStep.lean:51:4: error: Tactic `rfl` failed: The left-hand side
+  let (t, generator1) := (item, state1)
+  do
+  let cf ←
+    { Output := T, Residual := CuSavingsTryGraph.Never, Self_Clause1_TryType := T,
+            value := CuSavingsTryGraph.neverTry T }.branch
+        t
+  let cf1 ←
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue item => ok (core.ops.control_flow.ControlFlow.Continue item)
+      | core.ops.control_flow.ControlFlow.Break error =>
+        ok (core.ops.control_flow.ControlFlow.Break (core.ops.control_flow.ControlFlow.Break error))
+  match cf1 with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let (guard, push_unchecked_back) ← { array_mut := buffer, initialized := i }.push_unchecked val
+      ok
+          (cont
+            (fun s => back (push_unchecked_back { array_mut := s, initialized := guard.initialized }).array_mut,
+              generator1, guard.array_mut, guard.initialized))
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let cf2 ←
+        core.ops.control_flow.ControlFlow.Insts.CoreOpsTry_traitFromResidualControlFlowBInfallible.from_residual Unit
+            residual
+      ok (done (cf2, back buffer))
+is not definitionally equal to the right-hand side
+  let (item, state1) := (item, state1)
+  ok (cont (back, state1, buffer.set i (some item), next))
+
+case ok
+T F : Type
+inst : core.ops.function.FnMut F Usize T
+back : Slice (Option T) → Slice (Option T)
+state : F
+buffer : Slice (Option T)
+i : Usize
+hi : ↑i < buffer.length
+next : Usize
+hn : UScalar.add i 1#usize = ok next
+hv : ↑next = ↑i + 1
+hc : i < buffer.len
+item : T
+state1 : F
+hcall : inst.call_mut state i = ok (item, state1)
+⊢ (let (t, generator1) := (item, state1)
+    do
+    let cf ←
+      { Output := T, Residual := CuSavingsTryGraph.Never, Self_Clause1_TryType := T,
+              value := CuSavingsTryGraph.neverTry T }.branch
+          t
+    let cf1 ←
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue item => ok (core.ops.control_flow.ControlFlow.Continue item)
+        | core.ops.control_flow.ControlFlow.Break error =>
+          ok (core.ops.control_flow.ControlFlow.Break (core.ops.control_flow.ControlFlow.Break error))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let (guard, push_unchecked_back) ← { array_mut := buffer, initialized := i }.push_unchecked val
+        ok
+            (cont
+              (fun s => back (push_unchecked_back { array_mut := s, initialized := guard.initialized }).array_mut,
+                generator1, guard.array_mut, guard.initialized))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let cf2 ←
+          core.ops.control_flow.ControlFlow.Insts.CoreOpsTry_traitFromResidualControlFlowBInfallible.from_residual Unit
+              residual
+        ok (done (cf2, back buffer))) =
+    let (item, state1) := (item, state1)
+    ok (cont (back, state1, buffer.set i (some item), next))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphStep.lean:48:26: warning: This simp argument is unused:
+  CuSavingsTryGraphRuntime.never_branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵C̵u̵S̵a̵v̵i̵n̵g̵s̵T̵r̵y̵G̵r̵a̵p̵h̵R̵u̵n̵t̵i̵m̵e̵.̵n̵e̵v̵e̵r̵_̵b̵r̵a̵n̵c̵h̵,̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ core.ops.control_flow.ControlFlow.Insts.CoreOpsTry_traitTry.branch,
+        guard_step buffer i next item hi hn]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphStep.lean:50:6: warning: This simp argument is unused:
+  guard_step buffer i next item hi hn
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵C̵u̵S̵a̵v̵i̵n̵g̵s̵T̵r̵y̵G̵r̵a̵p̵h̵R̵u̵n̵t̵i̵m̵e̵.̵n̵e̵v̵e̵r̵_̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵s̵.̵c̵o̵n̵t̵r̵o̵l̵_̵f̵l̵o̵w̵.̵C̵o̵n̵t̵r̵o̵l̵F̵l̵o̵w̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵_̵t̵r̵a̵i̵t̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵g̵u̵a̵r̵d̵_̵s̵t̵e̵p̵ ̵b̵u̵f̵f̵e̵r̵ ̵i̵ ̵n̵e̵x̵t̵ ̵i̵t̵e̵m̵ ̵h̵i̵ ̵h̵n̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲C̲u̲S̲a̲v̲i̲n̲g̲s̲T̲r̲y̲G̲r̲a̲p̲h̲R̲u̲n̲t̲i̲m̲e̲.̲n̲e̲v̲e̲r̲_̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲o̲p̲s̲.̲c̲o̲n̲t̲r̲o̲l̲_̲f̲l̲o̲w̲.̲C̲o̲n̲t̲r̲o̲l̲F̲l̲o̲w̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲_̲t̲r̲a̲i̲t̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsArrayGraphStep.guard_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsArrayGraphStep.body_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsArrayGraphStep.body_done' depends on axioms: [propext, Classical.choice, Quot.sound]

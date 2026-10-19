@@ -1,0 +1,12 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayFillCells.lean:66:10: error: 'change' tactic failed, pattern
+  store (buffer.set i (some value)) ↑next ↑rest = store buffer (↑i) (value :: ↑rest)
+is not definitionally equal to target
+  (let (values, _) := (rest, state2)
+    ok (store (buffer.set i (some value)) ↑next ↑values)) =
+    do
+    let (values, _) ←
+      let (rest, state2) := (rest, state2)
+        ok (⟨value :: ↑rest, ⋯⟩, state2)
+    ok (store buffer ↑i ↑values)
+'AspisR1.CuSavingsArrayFillCells.store_length' depends on axioms: [propext]
+'AspisR1.CuSavingsArrayFillCells.fill_eq_cells' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

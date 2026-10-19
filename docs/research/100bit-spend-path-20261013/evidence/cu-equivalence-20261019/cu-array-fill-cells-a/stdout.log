@@ -1,0 +1,12 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayFillCells.lean:54:8: error: 'change' tactic failed, pattern
+  match UScalar.add i 1#usize with
+  | ok next => ?m.222 next
+  | fail e => ?m.226 e
+  | div => ?m.228
+is not definitionally equal to target
+  match i + 1#usize with
+  | ok z => ↑i + ↑1#usize < 2 ^ UScalarTy.Usize.numBits ∧ ↑z = ↑i + ↑1#usize ∧ z.bv = i.bv + 1#usize.bv
+  | fail e => ¬UScalar.inBounds UScalarTy.Usize (↑i + ↑1#usize)
+  | x => ⊥
+'AspisR1.CuSavingsArrayFillCells.store_length' depends on axioms: [propext]
+'AspisR1.CuSavingsArrayFillCells.fill_eq_cells' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

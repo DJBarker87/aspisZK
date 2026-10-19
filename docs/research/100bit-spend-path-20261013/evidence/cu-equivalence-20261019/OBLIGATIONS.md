@@ -16,24 +16,20 @@ executions with sufficient resources; it does not equate failure under an
 insufficient compute/heap cap. Resource bounds and source caller admission
 remain obligations, not hidden hypotheses asserting the conclusion.
 
-Latest library checkpoint: the selected emitted Guard.push_unchecked execution
-and its consuming initialized-prefix invariant are checked under explicit
-safe-domain primitive models (five additional focused targets). A guarded
-experimental LLBC rewrite clears the two mutable-copy diagnostics and passes
-positive byte-identity/four negative-copy tests, but is NOT admitted as a
-compiler pass. The complete array-library emission still fails at the
-Try/Residual dictionary boundary. The earlier generic Try::from_output
-input mismatch is cleared using the exact declared parent equalities;
-full normalized library borrow-checking and32 paired/negative controls pass.
-The exact infallible methods and a productive graph consuming them are checked
-(three additional Lean targets), but generic dictionary/source binding is open.
-The loop's
-fixed-point mismatch was subsequently diagnosed as a missing identical,
-region-free associated-type match case; the opt-in repair passes strict
-symbolic borrow-checking and 14 paired controls. This is frontend evidence,
-not a compiled whole-library theorem. See ARRAY-LIBRARY-SOURCE.md and
-ASSOCIATED-TYPE-MATCHER.md and TRY-RESIDUAL-CONSTRAINTS.md.
-No whole-candidate or security-transfer obligation is closed by this checkpoint.
+Latest library checkpoint: the complete normalized array library now emits
+and the exact selected library declarations compile under explicit primitive
+models. The entire initialization loop equals the finite callback fill,
+including handback, failure and divergence, and the fill equals the existing
+ordered callback builder's cells. Symbolic storage/initialization correspondence
+also checks. CuSavingsArrayFromFn.source_eq_build now consumes the entire
+from_fn wrapper and try_from_fn execution, proving equality to the callback
+builder for arbitrary callback success/failure/divergence. This is under the
+explicit primitive/library interpretation, not completed source admission.
+The opt-in dictionary metadata passes 66 paired controls; experimental LLBC
+normalization and primitive/frontend source admission remain open. See
+TRY-GRAPH-EMISSION.md. No whole-candidate or final security-transfer obligation
+is closed merely by these results. No further general frontend expansion is
+planned; progress must be assessed by complete optimization-to-caller proofs.
 
 | Retained change | Required proof and source bridge | Status |
 |---|---|---|
@@ -238,3 +234,23 @@ open: ARRAY-LIBRARY-SOURCE.md identifies the exact generic Try normalization
 and mutable-reference-copy frontend limits. Those failed emissions are not
 proofs and introduce no admitted equivalence premise. Actual enclosing
 verifier context bindings and final soundness/privacy transfers remain open.
+
+
+The complete array-library wrapper bridge is now checked in
+CuSavingsArraySourceBuilder and CuSavingsArrayFromFn. These consume the
+full emitted loop, symbolic initialized storage, checked counter operations
+and the exact wrapper call_mut methods to equate emitted from_fn with the
+ordered callback builder used by the earlier dot comparison. No callback
+success or whole-verifier equivalence premise is assumed. Successful focused
+receipts: cu-array-fill-cells-c, cu-array-storage-b,
+cu-array-source-builder-k and cu-array-from-fn-a; standard Lean axioms only,
+zero process/cgroup swap. The experimental LLBC rewrite, primitive/frontend
+admission, actual caller bindings and final security transfers remain open.
+
+Next work should first align the original soundness/privacy trusted source
+boundary with the optimized proof boundary, then close complete candidate
+caller proofs. Shared unchanged library/tool assumptions already present in
+the reference must not accidentally become a new generic compiler-verification
+project. Equally, a genuinely new unproved interpretation cannot be silently
+treated as an original premise. This scope review does not itself discharge
+any row above.

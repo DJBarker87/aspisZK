@@ -1,0 +1,43 @@
+--- a/src/extract/ExtractBuiltinLean.ml
++++ b/src/extract/ExtractBuiltinLean.ml
+@@ -1305,11 +1305,12 @@
+       "core.ops.try_trait.FromResidual"
+       ~methods:[ ("from_residual", "from_residual") ];
+     (* file: "Aeneas/Std/Core/Ops.lean", line: 103 *)
+-    mk_trait_decl "core::ops::try_trait::Residual" "core.ops.try_trait.Residual"
++    mk_trait_decl "core::ops::try_trait::Residual" (if Sys.getenv_opt "AENEAS_R1_TRY_GRAPH" = Some "1" then "AspisR1.CuSavingsTryGraphRuntime.Residual" else "core.ops.try_trait.Residual")
+       ~parent_clauses:[ "TryInst" ];
+     (* file: "Aeneas/Std/Core/Ops.lean", line: 97 *)
+-    mk_trait_decl "core::ops::try_trait::Try" "core.ops.try_trait.Try"
+-      ~parent_clauses:[ "FromResidualInst" ]
++    mk_trait_decl "core::ops::try_trait::Try" (if Sys.getenv_opt "AENEAS_R1_TRY_GRAPH" = Some "1" then "AspisR1.CuSavingsTryGraphRuntime.DynamicTry" else "core.ops.try_trait.Try")
++      ~parent_clauses:(if Sys.getenv_opt "AENEAS_R1_TRY_GRAPH" = Some "1" then [ "FromResidualInst"; "ResidualInst" ] else [ "FromResidualInst" ])
++      ~types:(if Sys.getenv_opt "AENEAS_R1_TRY_GRAPH" = Some "1" then [("Output", "Output"); ("Residual", "Residual"); ("Self_Clause1_TryType", "Self_Clause1_TryType")] else [])
+       ~methods:[ ("from_output", "from_output"); ("branch", "branch") ];
+     (* file: "Aeneas/Std/Slice.lean", line: 340 *)
+     mk_trait_decl "core::slice::index::SliceIndex" "core.slice.index.SliceIndex"
+@@ -1605,3 +1606,24 @@
+     mk_trait_impl "core::slice::index::private_slice_index::Sealed<usize>"
+       "core.slice.index.private_slice_index.SealedUsize";
+   ]
++
++(* Task-scoped, opt-in Lean model metadata. The concrete models are checked
++   definitions consuming exact extracted methods, never axiom templates. *)
++let lean_builtin_types =
++  if Sys.getenv_opt "AENEAS_R1_TRY_GRAPH" = Some "1" then
++    mk_type "core::ops::try_trait::NeverShortCircuitResidual"
++      "AspisR1CuArraySource.core.ops.try_trait.NeverShortCircuitResidual"
++      ~kind:(KEnum []) :: lean_builtin_types
++  else lean_builtin_types
++
++let lean_builtin_trait_impls =
++  if Sys.getenv_opt "AENEAS_R1_TRY_GRAPH" = Some "1" then
++    [
++      mk_trait_impl
++        "core::ops::try_trait::Try<core::ops::try_trait::NeverShortCircuit<@T>>"
++        "AspisR1.CuSavingsTryGraphRuntime.neverTry";
++      mk_trait_impl
++        "core::ops::try_trait::Residual<core::ops::try_trait::NeverShortCircuitResidual, @T, core::ops::try_trait::NeverShortCircuit<@T>>"
++        "AspisR1.CuSavingsTryGraphRuntime.neverResidual";
++    ] @ lean_builtin_trait_impls
++  else lean_builtin_trait_impls

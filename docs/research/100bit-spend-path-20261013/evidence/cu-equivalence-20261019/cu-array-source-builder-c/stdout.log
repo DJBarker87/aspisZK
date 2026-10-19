@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArraySourceBuilder.lean:45:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    array.from_slice (store array.to_slice 0 values)
+  has type
+    Std.Array (Option T) N
+  but is expected to have type
+    { l // l.length = ↑N }
+  in the application
+    ↑(array.from_slice (store array.to_slice 0 values))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArraySourceBuilder.lean:57:2: error: 'change' tactic failed, pattern
+  (do
+      let (cf, s) ← sourceErased inst array.to_slice state
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let a ← AspisR1CuArrayGraph.core.mem.maybe_uninit.MaybeUninit.array_assume_init (array.from_slice s)
+          (CuSavingsTryGraphRuntime.neverResidual (Std.Array T N)).TryInst.from_output a
+        | core.ops.control_flow.ControlFlow.Break r =>
+          (CuSavingsTryGraphRuntime.neverResidual (Std.Array T N)).TryInst.FromResidualInst.from_residual r) =
+    build N inst state
+is not definitionally equal to target
+  (let (s, to_slice_mut_back) := ((Array.repeat N none).to_slice, (Array.repeat N none).from_slice)
+    do
+    let (cf, s1) ←
+      AspisR1CuArrayGraph.core.array.try_from_fn_erased
+          { Output := T, Residual := CuSavingsTryGraph.Never, Self_Clause1_TryType := T,
+            value := CuSavingsTryGraph.neverTry T }
+          inst s state
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let a ← AspisR1CuArrayGraph.core.mem.maybe_uninit.MaybeUninit.array_assume_init (to_slice_mut_back s1)
+        (CuSavingsTryGraphRuntime.neverResidual (Std.Array T N)).TryInst.from_output a
+      | core.ops.control_flow.ControlFlow.Break r =>
+        (CuSavingsTryGraphRuntime.neverResidual (Std.Array T N)).TryInst.FromResidualInst.from_residual r) =
+    build N inst state
+'AspisR1.CuSavingsArraySourceBuilder.erased_eq_cells' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsArraySourceBuilder.assume_init_store' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.CuSavingsArraySourceBuilder.try_eq_build' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

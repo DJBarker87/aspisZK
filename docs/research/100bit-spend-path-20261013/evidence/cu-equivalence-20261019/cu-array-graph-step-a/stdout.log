@@ -1,0 +1,293 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphStep.lean:22:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (mu, get_unchecked_mut_back) ←
+      AspisR1CuArraySource.core.slice.Slice.get_unchecked_mut
+          (core.slice.index.SliceIndexUsizeSlice (core.mem.maybe_uninit.MaybeUninit T)) buffer i
+    let (t, write_back) ← AspisR1CuArraySource.core.mem.maybe_uninit.MaybeUninit.write mu item
+    let i_1 ← AspisR1CuArraySource.core.num.Usize.unchecked_add i 1#usize
+    ok
+        ({ array_mut := get_unchecked_mut_back (write_back t), initialized := i_1 }, fun self1 =>
+          { array_mut := self1.array_mut, initialized := i })
+is not definitionally equal to the right-hand side
+  ok
+    ({ array_mut := buffer.set i (some item), initialized := next }, fun self1 =>
+      { array_mut := self1.array_mut, initialized := i })
+
+T : Type
+buffer : Slice (Option T)
+i next : Usize
+item : T
+hi : ↑i < buffer.length
+hn : UScalar.add i 1#usize = ok next
+⊢ (do
+      let (mu, get_unchecked_mut_back) ←
+        AspisR1CuArraySource.core.slice.Slice.get_unchecked_mut
+            (core.slice.index.SliceIndexUsizeSlice (core.mem.maybe_uninit.MaybeUninit T)) buffer i
+      let (t, write_back) ← AspisR1CuArraySource.core.mem.maybe_uninit.MaybeUninit.write mu item
+      let i_1 ← AspisR1CuArraySource.core.num.Usize.unchecked_add i 1#usize
+      ok
+          ({ array_mut := get_unchecked_mut_back (write_back t), initialized := i_1 }, fun self1 =>
+            { array_mut := self1.array_mut, initialized := i })) =
+    ok
+      ({ array_mut := buffer.set i (some item), initialized := next }, fun self1 =>
+        { array_mut := self1.array_mut, initialized := i })
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphStep.lean:19:39: warning: This simp argument is unused:
+  core.slice.index.Usize.index_mut
+
+Hint: Omit it from the simp argument list.
+  simp only [core.array.Guard.push_unchecked,
+  ̵  ̵ ̵ ̵core.slice.Slice.get_unchecked_mut,c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵U̵s̵i̵z̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵
+      CuSavingsArrayGuard.index_success buffer i hi, ̲bind_tc_ok,
+      core.mem.maybe_uninit.MaybeUninit.write, ̲core.num.Usize.unchecked_add, ̲hn]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphStep.lean:20:4: warning: This simp argument is unused:
+  CuSavingsArrayGuard.index_success buffer i hi
+
+Hint: Omit it from the simp argument list.
+  simp only [core.array.Guard.push_unchecked, c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵g̵e̵t̵_̵u̵n̵c̵h̵e̵c̵k̵e̵d̵_̵m̵u̵t̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵U̵s̵i̵z̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵u̵S̵a̵v̵i̵n̵g̵s̵A̵r̵r̵a̵y̵G̵u̵a̵r̵d̵.̵i̵n̵d̵e̵x̵_̵s̵u̵c̵c̵e̵s̵s̵ ̵b̵u̵f̵f̵e̵r̵ ̵i̵ ̵h̵i̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵m̵e̵m̵.̵m̵a̵y̵b̵e̵_̵u̵n̵i̵n̵i̵t̵.̵M̵a̵y̵b̵e̵U̵n̵i̵n̵i̵t̵.̵w̵r̵i̵t̵e̵,̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵s̵i̵z̵e̵.̵u̵n̵c̵h̵e̵c̵k̵e̵d̵_̵a̵d̵d̵,̵h̵n̵]̵c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲g̲e̲t̲_̲u̲n̲c̲h̲e̲c̲k̲e̲d̲_̲m̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲U̲s̲i̲z̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲m̲e̲m̲.̲m̲a̲y̲b̲e̲_̲u̲n̲i̲n̲i̲t̲.̲M̲a̲y̲b̲e̲U̲n̲i̲n̲i̲t̲.̲w̲r̲i̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲s̲i̲z̲e̲.̲u̲n̲c̲h̲e̲c̲k̲e̲d̲_̲a̲d̲d̲,̲ ̲h̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphStep.lean:20:50: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.array.Guard.push_unchecked, c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵g̵e̵t̵_̵u̵n̵c̵h̵e̵c̵k̵e̵d̵_̵m̵u̵t̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵U̵s̵i̵z̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲g̲e̲t̲_̲u̲n̲c̲h̲e̲c̲k̲e̲d̲_̲m̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲U̲s̲i̲z̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲ CuSavingsArrayGuard.index_success buffer i h̵i̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵m̵e̵m̵.̵m̵a̵y̵b̵e̵_̵u̵n̵i̵n̵i̵t̵.̵M̵a̵y̵b̵e̵U̵n̵i̵n̵i̵t̵.̵w̵r̵i̵t̵e̵,̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵s̵i̵z̵e̵.̵u̵n̵c̵h̵e̵c̵k̵e̵d̵_̵a̵d̵d̵,̵h̵n̵]̵h̲i̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲m̲e̲m̲.̲m̲a̲y̲b̲e̲_̲u̲n̲i̲n̲i̲t̲.̲M̲a̲y̲b̲e̲U̲n̲i̲n̲i̲t̲.̲w̲r̲i̲t̲e̲,̲ ̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲s̲i̲z̲e̲.̲u̲n̲c̲h̲e̲c̲k̲e̲d̲_̲a̲d̲d̲,̲ ̲h̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphStep.lean:21:73: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [core.array.Guard.push_unchecked, c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵g̵e̵t̵_̵u̵n̵c̵h̵e̵c̵k̵e̵d̵_̵m̵u̵t̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵U̵s̵i̵z̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲g̲e̲t̲_̲u̲n̲c̲h̲e̲c̲k̲e̲d̲_̲m̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲U̲s̲i̲z̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲ CuSavingsArrayGuard.index_success buffer i h̵i̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵m̵e̵m̵.̵m̵a̵y̵b̵e̵_̵u̵n̵i̵n̵i̵t̵.̵M̵a̵y̵b̵e̵U̵n̵i̵n̵i̵t̵.̵w̵r̵i̵t̵e̵,̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵s̵i̵z̵e̵.̵u̵n̵c̵h̵e̵c̵k̵e̵d̵_̵a̵d̵d̵,̵h̵n̵]̵h̲i̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲m̲e̲m̲.̲m̲a̲y̲b̲e̲_̲u̲n̲i̲n̲i̲t̲.̲M̲a̲y̲b̲e̲U̲n̲i̲n̲i̲t̲.̲w̲r̲i̲t̲e̲,̲ ̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲s̲i̲z̲e̲.̲u̲n̲c̲h̲e̲c̲k̲e̲d̲_̲a̲d̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphStep.lean:40:14: error: Tactic `rfl` failed: The left-hand side
+  if i < buffer.len then do
+    let (t, generator1) ← fail e
+    let cf ← (CuSavingsTryGraphRuntime.neverTry T).branch t
+    let cf1 ← core.ops.control_flow.ControlFlow.Insts.CoreOpsTry_traitTry.branch cf
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let (guard, push_unchecked_back) ← { array_mut := buffer, initialized := i }.push_unchecked val
+        ok
+            (cont
+              (fun s => back (push_unchecked_back { array_mut := s, initialized := guard.initialized }).array_mut,
+                generator1, guard.array_mut, guard.initialized))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let cf2 ←
+          core.ops.control_flow.ControlFlow.Insts.CoreOpsTry_traitFromResidualControlFlowBInfallible.from_residual Unit
+              residual
+        ok (done (cf2, back buffer))
+  else do
+    let g ← core.mem.forget { array_mut := buffer, initialized := i }
+    ok (done (core.ops.control_flow.ControlFlow.Continue (), back g.array_mut))
+is not definitionally equal to the right-hand side
+  do
+    let (item, state1) ← fail e
+    ok (cont (back, state1, buffer.set i (some item), next))
+
+case fail
+T F : Type
+inst : core.ops.function.FnMut F Usize T
+back : Slice (Option T) → Slice (Option T)
+state : F
+buffer : Slice (Option T)
+i : Usize
+hi : ↑i < buffer.length
+next : Usize
+hn : UScalar.add i 1#usize = ok next
+hv : ↑next = ↑i + 1
+hc : i < buffer.len
+e : Error
+hcall : inst.call_mut state i = fail e
+⊢ (if i < buffer.len then do
+      let (t, generator1) ← fail e
+      let cf ← (CuSavingsTryGraphRuntime.neverTry T).branch t
+      let cf1 ← core.ops.control_flow.ControlFlow.Insts.CoreOpsTry_traitTry.branch cf
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (guard, push_unchecked_back) ← { array_mut := buffer, initialized := i }.push_unchecked val
+          ok
+              (cont
+                (fun s => back (push_unchecked_back { array_mut := s, initialized := guard.initialized }).array_mut,
+                  generator1, guard.array_mut, guard.initialized))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let cf2 ←
+            core.ops.control_flow.ControlFlow.Insts.CoreOpsTry_traitFromResidualControlFlowBInfallible.from_residual
+                Unit residual
+          ok (done (cf2, back buffer))
+    else do
+      let g ← core.mem.forget { array_mut := buffer, initialized := i }
+      ok (done (core.ops.control_flow.ControlFlow.Continue (), back g.array_mut))) =
+    do
+    let (item, state1) ← fail e
+    ok (cont (back, state1, buffer.set i (some item), next))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphStep.lean:41:11: error: Tactic `rfl` failed: The left-hand side
+  if i < buffer.len then do
+    let (t, generator1) ← div
+    let cf ← (CuSavingsTryGraphRuntime.neverTry T).branch t
+    let cf1 ← core.ops.control_flow.ControlFlow.Insts.CoreOpsTry_traitTry.branch cf
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let (guard, push_unchecked_back) ← { array_mut := buffer, initialized := i }.push_unchecked val
+        ok
+            (cont
+              (fun s => back (push_unchecked_back { array_mut := s, initialized := guard.initialized }).array_mut,
+                generator1, guard.array_mut, guard.initialized))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let cf2 ←
+          core.ops.control_flow.ControlFlow.Insts.CoreOpsTry_traitFromResidualControlFlowBInfallible.from_residual Unit
+              residual
+        ok (done (cf2, back buffer))
+  else do
+    let g ← core.mem.forget { array_mut := buffer, initialized := i }
+    ok (done (core.ops.control_flow.ControlFlow.Continue (), back g.array_mut))
+is not definitionally equal to the right-hand side
+  do
+    let (item, state1) ← div
+    ok (cont (back, state1, buffer.set i (some item), next))
+
+case div
+T F : Type
+inst : core.ops.function.FnMut F Usize T
+back : Slice (Option T) → Slice (Option T)
+state : F
+buffer : Slice (Option T)
+i : Usize
+hi : ↑i < buffer.length
+next : Usize
+hn : UScalar.add i 1#usize = ok next
+hv : ↑next = ↑i + 1
+hc : i < buffer.len
+hcall : inst.call_mut state i = div
+⊢ (if i < buffer.len then do
+      let (t, generator1) ← div
+      let cf ← (CuSavingsTryGraphRuntime.neverTry T).branch t
+      let cf1 ← core.ops.control_flow.ControlFlow.Insts.CoreOpsTry_traitTry.branch cf
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (guard, push_unchecked_back) ← { array_mut := buffer, initialized := i }.push_unchecked val
+          ok
+              (cont
+                (fun s => back (push_unchecked_back { array_mut := s, initialized := guard.initialized }).array_mut,
+                  generator1, guard.array_mut, guard.initialized))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let cf2 ←
+            core.ops.control_flow.ControlFlow.Insts.CoreOpsTry_traitFromResidualControlFlowBInfallible.from_residual
+                Unit residual
+          ok (done (cf2, back buffer))
+    else do
+      let g ← core.mem.forget { array_mut := buffer, initialized := i }
+      ok (done (core.ops.control_flow.ControlFlow.Continue (), back g.array_mut))) =
+    do
+    let (item, state1) ← div
+    ok (cont (back, state1, buffer.set i (some item), next))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphStep.lean:47:4: error: Tactic `rfl` failed: The left-hand side
+  if i < buffer.len then
+    let (t, generator1) := (item, state1)
+    do
+    let (guard, push_unchecked_back) ← { array_mut := buffer, initialized := i }.push_unchecked t
+    ok
+        (cont
+          (fun s => back (push_unchecked_back { array_mut := s, initialized := guard.initialized }).array_mut,
+            generator1, guard.array_mut, guard.initialized))
+  else do
+    let g ← core.mem.forget { array_mut := buffer, initialized := i }
+    ok (done (core.ops.control_flow.ControlFlow.Continue (), back g.array_mut))
+is not definitionally equal to the right-hand side
+  let (item, state1) := (item, state1)
+  ok (cont (back, state1, buffer.set i (some item), next))
+
+case ok
+T F : Type
+inst : core.ops.function.FnMut F Usize T
+back : Slice (Option T) → Slice (Option T)
+state : F
+buffer : Slice (Option T)
+i : Usize
+hi : ↑i < buffer.length
+next : Usize
+hn : UScalar.add i 1#usize = ok next
+hv : ↑next = ↑i + 1
+hc : i < buffer.len
+item : T
+state1 : F
+hcall : inst.call_mut state i = ok (item, state1)
+⊢ (if i < buffer.len then
+      let (t, generator1) := (item, state1)
+      do
+      let (guard, push_unchecked_back) ← { array_mut := buffer, initialized := i }.push_unchecked t
+      ok
+          (cont
+            (fun s => back (push_unchecked_back { array_mut := s, initialized := guard.initialized }).array_mut,
+              generator1, guard.array_mut, guard.initialized))
+    else do
+      let g ← core.mem.forget { array_mut := buffer, initialized := i }
+      ok (done (core.ops.control_flow.ControlFlow.Continue (), back g.array_mut))) =
+    let (item, state1) := (item, state1)
+    ok (cont (back, state1, buffer.set i (some item), next))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphStep.lean:38:53: warning: This simp argument is unused:
+  if_pos hc
+
+Hint: Omit it from the simp argument list.
+  simp only [core.array.try_from_fn_erased_loop.body,̵i̵f̵_̵p̵o̵s̵ ̵h̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphStep.lean:46:6: warning: This simp argument is unused:
+  guard_step buffer i next item hi hn
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵C̵u̵S̵a̵v̵i̵n̵g̵s̵T̵r̵y̵G̵r̵a̵p̵h̵R̵u̵n̵t̵i̵m̵e̵.̵n̵e̵v̵e̵r̵_̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵s̵.̵c̵o̵n̵t̵r̵o̵l̵_̵f̵l̵o̵w̵.̵C̵o̵n̵t̵r̵o̵l̵F̵l̵o̵w̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵_̵t̵r̵a̵i̵t̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵g̵u̵a̵r̵d̵_̵s̵t̵e̵p̵ ̵b̵u̵f̵f̵e̵r̵ ̵i̵ ̵n̵e̵x̵t̵ ̵i̵t̵e̵m̵ ̵h̵i̵ ̵h̵n̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲C̲u̲S̲a̲v̲i̲n̲g̲s̲T̲r̲y̲G̲r̲a̲p̲h̲R̲u̲n̲t̲i̲m̲e̲.̲n̲e̲v̲e̲r̲_̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲o̲p̲s̲.̲c̲o̲n̲t̲r̲o̲l̲_̲f̲l̲o̲w̲.̲C̲o̲n̲t̲r̲o̲l̲F̲l̲o̲w̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲_̲t̲r̲a̲i̲t̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphStep.lean:53:77: error: unsolved goals
+T F : Type
+inst : core.ops.function.FnMut F Usize T
+back : Slice (Option T) → Slice (Option T)
+state : F
+buffer : Slice (Option T)
+i : Usize
+hi : buffer.length ≤ ↑i
+hc : ¬i < buffer.len
+⊢ (if i < buffer.len then do
+      let (t, generator1) ← inst.call_mut state i
+      let cf ← (CuSavingsTryGraphRuntime.neverTry T).branch t
+      let cf1 ← core.ops.control_flow.ControlFlow.Insts.CoreOpsTry_traitTry.branch cf
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (guard, push_unchecked_back) ← { array_mut := buffer, initialized := i }.push_unchecked val
+          ok
+              (cont
+                (fun s => back (push_unchecked_back { array_mut := s, initialized := guard.initialized }).array_mut,
+                  generator1, guard.array_mut, guard.initialized))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let cf2 ←
+            core.ops.control_flow.ControlFlow.Insts.CoreOpsTry_traitFromResidualControlFlowBInfallible.from_residual
+                Unit residual
+          ok (done (cf2, back buffer))
+    else ok (done (core.ops.control_flow.ControlFlow.Continue (), back buffer))) =
+    ok (done (core.ops.control_flow.ControlFlow.Continue (), back buffer))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayGraphStep.lean:58:53: warning: This simp argument is unused:
+  if_neg hc
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵a̵r̵r̵a̵y̵.̵t̵r̵y̵_̵f̵r̵o̵m̵_̵f̵n̵_̵e̵r̵a̵s̵e̵d̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵i̵f̵_̵n̵e̵g̵ ̵h̵c̵,̵c̵o̵r̵e̵.̵m̵e̵m̵.̵f̵o̵r̵g̵e̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲c̲o̲r̲e̲.̲a̲r̲r̲a̲y̲.̲t̲r̲y̲_̲f̲r̲o̲m̲_̲f̲n̲_̲e̲r̲a̲s̲e̲d̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲c̲o̲r̲e̲.̲m̲e̲m̲.̲f̲o̲r̲g̲e̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsArrayGraphStep.guard_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsArrayGraphStep.body_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsArrayGraphStep.body_done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

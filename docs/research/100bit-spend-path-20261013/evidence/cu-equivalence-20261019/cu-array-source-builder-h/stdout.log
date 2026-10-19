@@ -1,0 +1,48 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArraySourceBuilder.lean:78:6: error: Tactic `rfl` failed: The left-hand side
+  let (s, to_slice_mut_back) := ((Array.repeat N none).to_slice, (Array.repeat N none).from_slice)
+  do
+  let (cf, s1) ← AspisR1CuArrayGraph.core.array.try_from_fn_erased (CuSavingsTryGraphRuntime.neverTry T) inst s state
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue a => do
+      let a ← AspisR1CuArrayGraph.core.mem.maybe_uninit.MaybeUninit.array_assume_init (to_slice_mut_back s1)
+      (CuSavingsTryGraphRuntime.neverResidual (Std.Array T N)).TryInst.from_output a
+    | core.ops.control_flow.ControlFlow.Break r =>
+      (CuSavingsTryGraphRuntime.neverResidual (Std.Array T N)).TryInst.FromResidualInst.from_residual r
+is not definitionally equal to the right-hand side
+  do
+    let (cf, s) ←
+      AspisR1CuArrayGraph.core.array.try_from_fn_erased (CuSavingsTryGraphRuntime.neverTry T) inst array.to_slice state
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let a ← AspisR1CuArrayGraph.core.mem.maybe_uninit.MaybeUninit.array_assume_init (array.from_slice s)
+        (CuSavingsTryGraphRuntime.neverResidual (Std.Array T N)).TryInst.from_output a
+      | core.ops.control_flow.ControlFlow.Break r =>
+        (CuSavingsTryGraphRuntime.neverResidual (Std.Array T N)).TryInst.FromResidualInst.from_residual r
+
+T F : Type
+N : Usize
+inst : core.ops.function.FnMut F Usize T
+state : F
+array : Std.Array (Option T) N := Array.repeat N none
+hl : array.to_slice.length = ↑N
+⊢ (let (s, to_slice_mut_back) := ((Array.repeat N none).to_slice, (Array.repeat N none).from_slice)
+    do
+    let (cf, s1) ← AspisR1CuArrayGraph.core.array.try_from_fn_erased (CuSavingsTryGraphRuntime.neverTry T) inst s state
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let a ← AspisR1CuArrayGraph.core.mem.maybe_uninit.MaybeUninit.array_assume_init (to_slice_mut_back s1)
+        (CuSavingsTryGraphRuntime.neverResidual (Std.Array T N)).TryInst.from_output a
+      | core.ops.control_flow.ControlFlow.Break r =>
+        (CuSavingsTryGraphRuntime.neverResidual (Std.Array T N)).TryInst.FromResidualInst.from_residual r) =
+    do
+    let (cf, s) ←
+      AspisR1CuArrayGraph.core.array.try_from_fn_erased (CuSavingsTryGraphRuntime.neverTry T) inst array.to_slice state
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let a ← AspisR1CuArrayGraph.core.mem.maybe_uninit.MaybeUninit.array_assume_init (array.from_slice s)
+        (CuSavingsTryGraphRuntime.neverResidual (Std.Array T N)).TryInst.from_output a
+      | core.ops.control_flow.ControlFlow.Break r =>
+        (CuSavingsTryGraphRuntime.neverResidual (Std.Array T N)).TryInst.FromResidualInst.from_residual r
+'AspisR1.CuSavingsArraySourceBuilder.erased_eq_cells' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsArraySourceBuilder.assume_init_store' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsArraySourceBuilder.try_eq_build' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
