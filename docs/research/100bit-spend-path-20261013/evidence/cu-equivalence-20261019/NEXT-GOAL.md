@@ -160,3 +160,21 @@ inline(always) declaration. Optimized MIR still calls the generic helper and
 reaches Option.as_deref_mut. See RHO-KNOWN-SOME-DIAGNOSTIC.md and
 rho-known-some-shape.json; no Aeneas/Lean admission. Do not repeat inline flag
 variants. This does not change the preparation proof at 832d394a1.
+
+## Source admission impasse and scope decision (2026-10-20)
+
+See RHO-SOURCE-BINDING-BLOCKER.md/json and audit-rho-source-blocker.py for the
+full requirement audit. Candidate12 is not complete. A source-derived local
+triple-return adapter still needs the missing nested-borrow/lifetime lowering
+correspondence; generic leaf proofs do not supply it. No compatible model is
+accepted as actual source.
+
+A final distinct dependency-slice preflight used the actual concrete
+BatchedWeights type and full monomorphization with exact local std bodies.
+Charon succeeded; original producer failed Option type analysis at
+TypesAnalysis.ml:229. No Vec/arithmetic/allocation source graph was selected,
+no Lean result admitted. Do not continue flag variants or peripheral lemmas.
+A scope decision is pending for producer/runtime support of the exact Option
+reborrow and original resume iterator/Reader patterns. Preserve the full goal;
+mark blocked after the current blocker audit, never complete. A later user
+choice to repair supplies the expanded scope; revalidate state when resumed.
