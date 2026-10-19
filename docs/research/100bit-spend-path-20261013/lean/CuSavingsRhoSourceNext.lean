@@ -53,7 +53,7 @@ theorem from_model_success (input : Enum T) (replacement : Usize × T)
     have ht := congrArg (fun pair => pair.2.1) hp
     have hb := congrArg (fun pair => pair.2.2) hp
     refine ⟨sourceBack,?_,?_⟩
-    · simpa only [ho,ht] using hs
+    · exact congrArg Result.ok (Prod.ext ho (Prod.ext ht rfl))
     · intro out
       exact congrFun hb out
 

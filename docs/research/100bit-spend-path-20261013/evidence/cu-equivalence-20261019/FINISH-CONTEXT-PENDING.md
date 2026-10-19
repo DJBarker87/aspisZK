@@ -1,3 +1,20 @@
+Resolved on 2026-10-19 after NUC connectivity returned. The five targets below
+are now checked and appear in COMPONENT-AUDIT.json's successful_targets:
+`rho-source-runtime-b`, `rho-source-next-e`, `rho-source-finish-emission-b`,
+`rho-source-finish-loop-b`, and `rho-source-finish-b`. All exit zero, print only
+propext/Classical.choice/Quot.sound, use zero process/cgroup swap, and peak
+below 2.6 GiB RSS. The complete source finish method returns canonicalSlice
+and equals the previously checked finish model under the matching-length
+caller invariant. This consumes the actual inner-iterator write projection;
+it does not assert equality of the discarded backward counters.
+
+The first attempted source-next proof failed locally in a tuple equality;
+the replacement proves that equality directly by product extensionality.
+One intervening attempt was refused by the shared Lean lock before Lean ran;
+no failed proof or absent receipt is counted as successful evidence.
+Initialization/allocation, outer callers, source composition, and final
+soundness/privacy transfer remain open. The historical pending note follows.
+
 The five source/finish-context modules registered in COMPONENT-AUDIT.json's
 pending_targets are drafted, not compiled. They must not be counted among the
 44 checked components or as a soundness/privacy transfer result.

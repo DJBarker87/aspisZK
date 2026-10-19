@@ -1,7 +1,8 @@
 The selected standard-library mutable-enumeration method now has a focused
 source extraction and a checked comparison with the runtime used by the rho
-finish proof. This is a component result. Composition through finish and the
-actual verifier callers is still required.
+finish proof. The comparison has now been consumed through the entire emitted
+finish method. Composition with initialization and actual verifier callers is
+still required.
 
 Pinned source and extraction boundary
 ------------------------------------
@@ -49,8 +50,12 @@ Whole backward Enumerate states are deliberately not equated. The source
 handback captures the input count; the existing runtime keeps the supplied
 later count. The proof compares their inner iterators after the writes used
 by finish. Finish returns a slice and discards this backward counter. A
-consuming finish-context theorem must establish that projection before this
-comparison can discharge the remaining source-binding obligation.
+consuming finish-context theorem now establishes that projection:
+`CuSavingsRhoSourceFinish.source_eq_model` proves equality of the entire finish
+result at the matching-length invariant. The runtime/finish bodies remain
+pinned to the byte-preserving extraction checks. This closes the selected
+iterator/finish-context comparison within the stated frontend boundary, not
+the enclosing verifier source proof.
 
 Successful focused targets: `borrow-option-types-a`,
 `borrow-option-operations-a`, `iterator-types-a`, `iterator-source-option-a`,

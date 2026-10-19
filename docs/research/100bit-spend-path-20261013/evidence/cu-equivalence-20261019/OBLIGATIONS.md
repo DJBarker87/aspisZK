@@ -26,8 +26,8 @@ remain obligations, not hidden hypotheses asserting the conclusion.
 | 6 public decode reuse | checked same-byte decoder/selector correspondence, first_decoded and adapter execution | open |
 | 7 geometry reuse | node/denominator agreement, caller range validity, execution | open |
 | 10 fixed prefix | admitted q length, identical decoder accesses and failure behavior | open |
-| 12 rho residues | every-prefix modular invariant, four-term overflow bound, canonical finish, array/caller execution, heap admission | integer invariant, complete push/value execution and frame/overflow proofs checked; finish execution checked under concrete mutable runtime; runtime source binding, initialization, outer callers and serialization composition open |
-| 14 Libra factorization | all four weights equal for arbitrary canonical challenges including zero; field/source execution | division-free cut/tensor algebra checked; literal-loop and field/source bridges open |
+| 12 rho residues | every-prefix modular invariant, four-term overflow bound, canonical finish, array/caller execution, heap admission | integer invariant, complete push/value execution and frame/overflow proofs checked; finish now consumes the extracted standard next body; initialization, outer callers and serialization composition open |
+| 14 Libra factorization | all four weights equal for arbitrary canonical challenges including zero; field/source execution | division-free cut/tensor algebra and handwritten list-loop correspondence checked; concrete field/machine/source bridges open |
 | composition | refreshed emitted caller bodies, byte/error/effect preservation across tx1/tx2 and adapter | open |
 | soundness transfer | apply existing soundness results under their original premises to the actual optimized source model | open |
 | privacy transfer | preserve modeled observation/game distributions under original premises; do not claim timing privacy | open |
@@ -152,3 +152,22 @@ zero process swap. Local jobs use Lean's 7000 MiB limit and a descendant RSS
 monitor stopping at 7 GiB, with direct cached-import preflight. They are small
 focused jobs under the ordinary-development-machine policy, not large builds.
 See `S2-TABLES.md` for source/model scope and remaining machine bindings.
+
+After connectivity returned, all five pending finish-context targets passed.
+The actual emitted standard next body is consumed through the unchanged finish
+loop; `CuSavingsRhoSourceFinish.source_success` returns canonicalSlice under
+only the matching-length invariant and `.source_eq_model` equates the result
+with the earlier checked model. No equality of discarded backward counters is
+assumed. Receipts: `rho-source-runtime-b`, `rho-source-next-e`,
+`rho-source-finish-emission-b`, `rho-source-finish-loop-b`, `rho-source-finish-b`.
+All print standard axioms only with zero process/cgroup swap and peak below
+2.6 GiB RSS. See FINISH-CONTEXT-PENDING.md for the resolved historical block.
+
+`CuSavingsPowerLoop` proves emission-before-multiply, every table read, and the
+final updated state. `CuSavingsLibraLoop` checks all literal 16-slot blocks and
+the 28-term cuts. `CuSavingsLibraProgram` consumes both to equate handwritten
+list-loop models of all four weights for arbitrary semiring challenges,
+including zero. These are not Aeneas machine-source equivalence claims.
+Receipts: `power-loop-a`, `libra-loop-a`, `libra-program-b`; all use standard
+axioms only and zero process swap. COMPONENT-AUDIT now covers 52 successful
+targets and has no uncompiled targets; open obligations in the table remain.
