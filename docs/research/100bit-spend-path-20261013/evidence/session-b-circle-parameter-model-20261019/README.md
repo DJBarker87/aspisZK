@@ -1,0 +1,1 @@
+Proved actual circle sampler QM31 parameter equals the retained source sampler. Point output and complete R4 law remain OPEN. See manifest for exact target, pins and preserved provenance limitation. No binaries.
