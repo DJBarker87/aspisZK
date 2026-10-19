@@ -1,0 +1,11 @@
+# Tx1 actual filled helper and accumulator length bound
+
+This packet composes the extracted, actual `aspis_core::r0::heap::filled` source with Tx1Model `newAccumulator` and proves that a successful result has `weights.length ≤ 256` for all three variants. It does not prove allocator success or erase the two allocator axioms in the Aeneas extraction.
+
+The actual helper source is `heap.rs` at revision `df7356e62a56b9ed30d797d2ddfb169f648122b5` (SHA-256 `67153a3fb69c839160855a9b8fdb886fbd1eac90f4dc686260f23a85e346e4f9`, lines 5–10); the actual Error enum selection comes from `crates/aspis-core/src/r0/mod.rs` (file SHA-256 `709f1d0d9be9d3ee74e2b63e13065f5a91c878ba77ed2d2e97a414fbbc646aca`, selected span SHA-256 `c9af6c17bd10d3642ac831afc4ae162905250e71ce95b3fdcfab72ca4c96af0c`). The Aeneas-generated Error constructor is aliased to the exact accepted Tx1 Error carrier to avoid duplicate discriminant instances.
+
+The generated helper and its length theorem retain axioms `alloc.collections.TryReserveError` and `alloc.vec.Vec.try_reserve_exact`, reflecting the allocator boundary. The final length theorem has those same axioms plus standard Lean axioms. No production source was edited.
+
+Focused Lean used Lean 4.32.0, the `run-tx1-actual-filled-adapter-v3.py` workspace, `-M3200`, and the exclusive local Lean lock. For the helper extraction, the original admission check did not include all finite cgroups. This packet preserves that caveat and does not characterize the launch as having passed the full aggregate gate. The Charon/Aeneas stage receipts document separate `MemoryHigh=6G`, `MemoryMax=8G`, `MemorySwapMax=0` scopes, observed RSS, and zero swap. No later retrospective check is treated as pre-launch admission evidence. See `extraction-kit/`, `extraction-generated/`, `extraction-runs/`, and `evidence/` for the exact extraction source, adapted generated Lean, LLBC, and per-stage receipts. Generated `Types.lean`, `TypesExternal.lean`, `FunsExternal.lean`, and `Funs.lean` are all included; build `target/` directories are excluded.
+
+The exact result chain is: generic resize length → actual generated helper success length → actual Tx1 newAccumulator success length → exact final_len by variant → successful accumulator weights length ≤256.
