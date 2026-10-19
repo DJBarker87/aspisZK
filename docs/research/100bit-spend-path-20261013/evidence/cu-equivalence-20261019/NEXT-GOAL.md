@@ -151,3 +151,12 @@ for the initializer Zip, require exact source factoring/assignment binding,
 original iterator handbacks and a full error/divergence-preserving proof; do
 not label a hand-written desired loop as actual emitted source. Resource
 frame/sufficient allocation and final transaction contexts remain mandatory.
+
+## Known-Some context preflight rejected before Lean
+
+One structurally distinct MIR test rooted the coefficient call at the actual
+callers' Some(pending), with the exact helper body and only an extraction-local
+inline(always) declaration. Optimized MIR still calls the generic helper and
+reaches Option.as_deref_mut. See RHO-KNOWN-SOME-DIAGNOSTIC.md and
+rho-known-some-shape.json; no Aeneas/Lean admission. Do not repeat inline flag
+variants. This does not change the preparation proof at 832d394a1.
