@@ -1,0 +1,25 @@
+{
+  "base_kit_sha256": "d3cf5571135c55298314916f1589ca9fbc62046792cd1f0aea421c15583fe892",
+  "production_revision": "39c2971dd16c95858a4cfd2c9ae35da052eacfa9",
+  "candidate": "16a39d2a8a5124e25c787f2b9fcaf8449fb84611",
+  "features": [],
+  "roots": [
+    "crate::verifier::_::new"
+  ],
+  "opaque_paths": [
+    "crate::r0::heap::filled",
+    "crate::verifier::initialize_weights"
+  ],
+  "kit_files": {
+    "lib.rs": "af825c88ac6a6864c12b240675e6b6135cc9d3e84745645add97a681e43a79cd",
+    "fragments/original-new.rs": "75b200064448a717ab8af8f5f779018dbaec2b3184fc4241d48e3d003dea92e2",
+    "fragments/factored-new.rs": "70f986b59c7f01910fd0d78686187d90a814ca536ba133d4fa51c212f0b9a335",
+    "fragments/assignment-loop.rs": "bf13ff9f32821d212a32bc0dfd069ff9d1a3a775619464763cf7baae1e7d31ef",
+    "fragments/initialize-helper.rs": "427e17fc37d8a6838c9bed7582e73a941e82b79e1e7cc3a7864ce41b0efc6d45",
+    "fragments/core-error.rs": "c9af6c17bd10d3642ac831afc4ae162905250e71ce95b3fdcfab72ca4c96af0c",
+    "Cargo.toml": "a7513ebfa7574fba396e835cd165a277771b2ae3d8553bb71f9f503df07f8cee",
+    "Cargo.lock": "27c657c2b03433a59f610f7ee90d1664c153d1c2c0df734ee9de21df802a7604"
+  },
+  "source_refinement": "Lift only the exact zip assignment block to a helper with its two free borrows. Inverse inlining reproduces the complete original new body. The helper is interpreted by the proved original-runtime Zip/loan traversal and extracted assignment, not by an unproved whole-new equivalence premise.",
+  "scope": "Complete surrounding new wrapper emission after this local loop factoring; heap remains an explicit source boundary. Original whole-new emission failures remain not admitted. Source-to-component refinement and allocation contract are still completion requirements."
+}

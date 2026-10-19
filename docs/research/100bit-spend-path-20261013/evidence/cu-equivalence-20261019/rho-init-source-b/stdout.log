@@ -1,0 +1,42 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoInitSource.lean:23:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsRhoInitSource.sourceFor_eq`:
+  [InitAllocation]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [InitAllocation] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoInitSource.lean:47:63: error: unsolved goals
+inst✝ : InitAllocation
+weights : Slice field.QM31
+⊢ (do
+      let r ←
+        r0.heap.filled (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU64) weights.len (Array.repeat 4#usize 0#u64)
+      let r1 ←
+        core.result.Result.map_err verifier.BatchedWeights.new.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let val1 ← verifier.initialize_weights val weights
+          ok (core.result.Result.Ok { raw := val1, terms := 0#usize })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.BatchedWeights
+            (core.convert.FromSame verifier.Error) residual) =
+    do
+    let r ←
+      r0.heap.filled (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU64) weights.len (Array.repeat 4#usize 0#u64)
+    let r1 ←
+      core.result.Result.map_err verifier.BatchedWeights.new.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let val1 ← verifier.initialize_weights val weights
+        ok (core.result.Result.Ok { raw := val1, terms := 0#usize })
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.BatchedWeights
+          (core.convert.FromSame verifier.Error) residual
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoInitSource.lean:76:11: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+'AspisR1.CuSavingsRhoInitSource.sourceFor_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoInitSource.source_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoInitSource.source_outcome' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

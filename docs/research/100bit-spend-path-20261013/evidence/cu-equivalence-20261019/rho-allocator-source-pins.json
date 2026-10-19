@@ -1,0 +1,11 @@
+{
+  "crate": "solana-program-entrypoint",
+  "version": "2.3.0",
+  "source_sha256": "027efed4018bc8f1a340e576bbb0135cb70ba31fc465a23f4732ff8d5196d919",
+  "alloc_sha256": "e6f2969a2e60f6c8e4c79419670ce9c835d5eb9ea4ed8dd492dccd87ef7f0b75",
+  "alloc_source": "    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {\n        let pos_ptr = self.start as *mut usize;\n        let mut pos = *pos_ptr;\n        if pos == 0 {\n            // First time, set starting position\n            pos = self.start + self.len;\n        }\n        pos = pos.saturating_sub(layout.size());\n        pos &= !(layout.align().wrapping_sub(1));\n        if pos < self.start + size_of::<*mut u8>() {\n            return null_mut();\n        }\n        *pos_ptr = pos;\n        pos as *mut u8\n    }",
+  "package_archive_sha256": "32ce041b1a0ed275290a5008ee1a4a6c48f5054c8a3d78d313c08958a06aedbd",
+  "archive_source_match": true,
+  "lock_checksum": "32ce041b1a0ed275290a5008ee1a4a6c48f5054c8a3d78d313c08958a06aedbd",
+  "lock_sha256": "f93f8f524fdd707c7a3b7feade31d015c891264b6c8fbd8bff885249e19600ea"
+}
