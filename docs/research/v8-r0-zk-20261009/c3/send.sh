@@ -8,9 +8,10 @@ D=$(cd "$(dirname "$0")" && pwd); L=$D/../lean/$M.lean; LED=$D/evidence/lean-sen
 [ "$A" -ge 4340 ] && [ "$A" -le 4399 ] || { echo "attempt out of range"; exit 2; }
 SHA=$(shasum -a 256 "$L" | cut -d' ' -f1)
 touch "$LED"
-if grep -q "$SHA" "$LED"; then echo "REFUSE: sha $SHA already sent: $(grep $SHA $LED)"; exit 3; fi
+# DEPREPLAY=1: the source is unchanged but a dependency object was rebuilt (lead-authorised dependency replay).
+if [ "${DEPREPLAY:-0}" != 1 ] && grep -q "$SHA" "$LED"; then echo "REFUSE: sha $SHA already sent: $(grep $SHA $LED)"; exit 3; fi
 if grep -q "^$A " "$LED"; then echo "REFUSE: attempt $A already used"; exit 3; fi
 while ssh $H "ps -eo cmd | grep -E '(^| |/)(lean|aeneas|charon|cargo|rustc)( |$)|lake ' | grep -v grep | grep -q ."; do echo "gate: busy $(date +%T)"; sleep 90; done
 ssh $H "mkdir -p $T/sources/$(dirname $M)" && scp -q "$L" $H:$T/sources/$M.lean || exit 4
-echo "$A $M $SHA $(date -u +%FT%TZ)" >> "$LED"
+echo "$A $M $SHA $(date -u +%FT%TZ)$([ "${DEPREPLAY:-0}" = 1 ] && echo " dependency-replay")" >> "$LED"
 ssh $H "RUN2_GLOBAL=${RUN2_GLOBAL:-0} sh $T/run2-par.sh $A $M 7000 7"
