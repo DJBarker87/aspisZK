@@ -358,6 +358,38 @@ fn builder_diff(p: &Pub, cert: &Cert, label: &str) {
     let dg = gown.iter().zip(&pbw.gown).filter(|(x, y)| x != y).count();
     println!("R1C3_BUILD {label} builder=own_columns agree={} entries={} want_entries={} mismatches={dq} sources={} build_seconds={t_own:.3}", own == pbw.own, own.len(), pbw.own.len(), kq.len());
     println!("R1C3_BUILD {label} builder=g_own_columns agree={} entries={} want_entries={} mismatches={dg} sources={}", gown == pbw.gown, gown.len(), pbw.gown.len(), kg.len());
+    // Builder 4 (D64 hRel): the relR1 limb functionals.  Inputs: the openings, the inverse
+    // transport, the folded positions, the relation descriptors (kind, query), the line
+    // inverses (reading 1) and the stored log-16 nodes of the line relations.
+    let wl = |x: W| -> Vec<u32> { wlimbs(x).iter().map(|m| m.0).collect() };
+    let opl: Vec<u32> = [p.op.gamma, p.op.kappa, p.op.alpha0, p.op.alpha1].iter().flat_map(|&x| wl(x)).collect();
+    let mut ti = vec![0u32; N];
+    for (r, &j) in tr.iter().enumerate() {
+        ti[j as usize] = r as u32;
+    }
+    let fpos: Vec<u32> = p.lay.fpos.iter().map(|&x| x as u32).collect();
+    let mut parents: Vec<usize> = p.qs.iter().map(|u| u / 4).collect();
+    parents.sort();
+    parents.dedup();
+    let (mut rk, mut ru, mut li, mut xs) = (vec![0u32, 1, 2], vec![0u32; 3], vec![0u32; 9], vec![0u32; 3]);
+    for &u in &p.qs {
+        rk.push(3);
+        ru.push(u as u32);
+        li.extend([0, 0, 0]);
+        xs.push(0);
+    }
+    for &v in &parents {
+        rk.push(4);
+        ru.push(*p.qs.iter().find(|&&u| u / 4 == v).unwrap() as u32);
+        li.extend(line_inverse(v, 1).iter().map(|&x| wl(x)[0]));
+        xs.push(x16(v).0);
+    }
+    let tb = Instant::now();
+    let rel = aspis_r1_cert_build::fill_rel(&al, &zz, &tr, &inact, &ti, &opl, &fpos, &rk, &ru, &li, &xs, p.lay.nf, 8 * rk.len());
+    let t_rel = tb.elapsed().as_secs_f64();
+    let want = flat(&p.rels, p.lay.bw - BAT0).expect("relations");
+    let dr = rel.iter().zip(&want).filter(|(x, y)| x != y).count();
+    println!("R1C3_BUILD {label} builder=relations agree={} entries={} want_entries={} mismatches={dr} relations={} build_seconds={t_rel:.3}", rel == want, rel.len(), want.len(), rk.len());
 }
 
 pub(super) fn run(p: &Pub, cert: &Cert, label: &str, teeth: bool) {
