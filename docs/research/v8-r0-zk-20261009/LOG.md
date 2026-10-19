@@ -6523,3 +6523,39 @@ All agents are paused. No host job is running.
      promoted bytes-unchanged like the Qm31 probe modules.
 
 All work lands on `research`.
+
+### Lead acceptance of the checker wrapper (2026-10-19); D69: `check_sound''''` compiles in env J
+
+Worker commit 12d1588e2 (branch codex/r1p-checker-wrapper-20261019) is
+cherry-picked as 8944115e4. The lead verified attempts 5649 and 5700 on the
+host: source SHA matches the repo (`R1Z/CertCheckSound5.lean` dacff139…),
+exit 0, standard axioms only, 0 swaps; peak RSS 4,128,696 KiB and
+3,607,944 KiB.
+
+**D69.1 Why workspace A cannot hold the wrapper.** It is measured, not
+assumed (`c3/wrapper-refactor/NOTE.md`). Every module stating both `P_R1`
+and the extracted `check`/`fill_*` imports all of Mathlib through base
+`import Mathlib` files (first AspisFormal.CircleGroupOrder). The floor is
+2.498 GB of olean, about 7.1 GB RSS, against the -M7000 limit; the
+CertCheckSound2–4 chain adds 0.039 GB. No R1Z split helps. Env J's narrowed
+base brings the Sound3 closure to 1.45 GB. The planned Sound2–4 refactor is
+withdrawn; the chain is compiled in J unchanged.
+
+**D69.2 J rebuilds.** 5600–5621 rebuilt the 22 manifest-3 modules made stale
+by the D67 narrowing (sources unchanged). J's `R1Z.CertBuildExtracted` was
+the pre-D62 extraction (27f2dc76…, no `fill_own`); with lead approval it was
+replaced by the repo/D62 copy (d7e06b9f…, additions only), old source and
+objects snapshotted on the host, and dependents rebuilt (5623–5646). The
+wrapper needed two proof-only fixes (5647, 5648 failed; 5649 green): no-op
+`dsimp only [coefK]` removed, `subst hnfU` added. The theorem's statement is
+the D64 wrapper's.
+
+**D69.3 Follow-ups.** manifest-3 still records the old CertBuildExtracted SHA
+and must be updated to d7e06b9f…, or joint-drive.py will try to rebuild
+CertBuildIdent2/CertLiftIdent. Attempt range: the wrapper worker used J
+5600–5649 and 5700 (5650–5699 belong to the round-identity worker).
+
+**D69.4 Status.** The P_R1 checker's soundness now composes to the pb/ct
+level in one build. Its premises are named, not proved: hRound/hGRound/hGBat
+(in progress), the decoder facts (hup, hnq, hz, hrw) and the builder input
+identifications (chain, BCondG, lift, own, relation) listed in the theorem.
