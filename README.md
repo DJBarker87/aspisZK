@@ -245,6 +245,24 @@ These offline checks verify the published proof and statement, compiled
 program, lifecycle receipts, compute values, cleanup accounting, and committed
 hashes.
 
+## Research branch: R1
+
+The [`research`](https://github.com/DJBarker87/aspisZK/tree/research) branch
+holds R1, a successor design under development. R1 targets 100-bit soundness
+per proof attempt with no proof-of-work credit. A spend uses two
+transactions: the first runs stage 1 of the verifier and stores a checkpoint,
+and the second completes verification inside the pool settlement. R1 has not
+been deployed or submitted to any cluster, and V7 remains the release
+candidate.
+
+Status on 19 October 2026:
+
+| Area | Status | Record |
+| --- | --- | --- |
+| Compute | Measured on six saved fixtures: stage 1 at most 1,199,687 CU, settlement at most 1,170,523 CU. A pre-registered worst-case argument with executable checks bounds stage 1 by 1,283,656 CU and settlement by 1,212,803 CU. The argument is not a formal proof. | [Second bound review](https://github.com/DJBarker87/aspisZK/blob/research/docs/research/100bit-spend-path-20261013/design/LEAD-REVIEW-CU-BOUND-2-20261019.md) |
+| Soundness | Lean proofs are in progress against the R1 soundness ledger. The verifier's recent arithmetic optimisations are not yet re-proved. | [R1 soundness ledger](https://github.com/DJBarker87/aspisZK/blob/research/docs/research/v8-r1-20261011/R1_SOUNDNESS.md) |
+| Privacy | The Lean theorem `privacy_R1` states that the transcript of the retrying honest prover can be simulated from the public statement, in the classical random-oracle model, with an error term that evaluates to about 2^-109. It is conditional on named premises, including the refinement of the Rust prover to the Lean model. | [Privacy log](https://github.com/DJBarker87/aspisZK/blob/research/docs/research/v8-r0-zk-20261009/LOG.md) |
+
 ## Scope and limitations
 
 V7 is an active release candidate. Its local execution evidence is complete
