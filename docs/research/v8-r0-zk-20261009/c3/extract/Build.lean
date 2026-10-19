@@ -901,4 +901,115 @@ def fill_lo
   let i3 ← 24#usize + i2
   h1_lift out al zz tr sx sy inact selh i3
 
+/-- [aspis_r1_cert_build::own_c1]:
+    Source: 'src/lib.rs', lines 331:0-333:1
+    Visibility: public -/
+def own_c1
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (sx : Slice Std.U32) (sy : Slice Std.U32) (inact : Slice Std.U32)
+  (r : Std.Usize) (i : Std.Usize) :
+  Result Std.U32
+  := do
+  let i1 ← c1_val al zz tr sx sy r i
+  let i2 ← Slice.index_usize inact r
+  let i3 ← c1_val al zz tr sx sy 0#usize i
+  let i4 ← fmul i2 i3
+  fsub i1 i4
+
+/-- [aspis_r1_cert_build::own_val]:
+    Source: 'src/lib.rs', lines 335:0-347:1
+    Visibility: public -/
+def own_val
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (sx : Slice Std.U32) (sy : Slice Std.U32) (inact : Slice Std.U32)
+  (kind : Std.Usize) (r : Std.Usize) (k : Std.Usize) (i : Std.Usize)
+  (wb : Std.Usize) (we : Std.Usize) :
+  Result Std.U32
+  := do
+  if kind < 10#usize
+  then if i < wb
+       then own_c1 al zz tr sx sy inact r i
+       else ok 0#u32
+  else if i < we
+       then h1_entry al zz tr sx sy inact r k i
+       else ok 0#u32
+
+/-- [aspis_r1_cert_build::own_col]: loop 0:
+    Source: 'src/lib.rs', lines 351:4-354:5
+    Visibility: public -/
+@[rust_loop]
+def own_col_loop
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (sx : Slice Std.U32) (sy : Slice Std.U32) (inact : Slice Std.U32)
+  (kind : Std.Usize) (r : Std.Usize) (k : Std.Usize) (os : Std.Usize)
+  (wb : Std.Usize) (we : Std.Usize) (out : alloc.vec.Vec Std.U32)
+  (i : Std.Usize) :
+  Result (alloc.vec.Vec Std.U32)
+  := do
+  if i < os
+  then
+    let i1 ← own_val al zz tr sx sy inact kind r k i wb we
+    let out1 ← alloc.vec.Vec.push out i1
+    let i2 ← i + 1#usize
+    own_col_loop al zz tr sx sy inact kind r k os wb we out1 i2
+  else ok out
+partial_fixpoint
+
+/-- [aspis_r1_cert_build::own_col]:
+    Source: 'src/lib.rs', lines 348:0-356:1
+    Visibility: public -/
+@[reducible]
+def own_col
+  (out : alloc.vec.Vec Std.U32) (al : Slice Std.U32) (zz : Slice Std.U32)
+  (tr : Slice Std.U32) (sx : Slice Std.U32) (sy : Slice Std.U32)
+  (inact : Slice Std.U32) (kind : Std.Usize) (r : Std.Usize) (k : Std.Usize)
+  (os : Std.Usize) (wb : Std.Usize) (we : Std.Usize) :
+  Result (alloc.vec.Vec Std.U32)
+  := do
+  own_col_loop al zz tr sx sy inact kind r k os wb we out 0#usize
+
+/-- [aspis_r1_cert_build::fill_own]: loop 0:
+    Source: 'src/lib.rs', lines 361:4-364:5
+    Visibility: public -/
+@[rust_loop]
+def fill_own_loop
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (sx : Slice Std.U32) (sy : Slice Std.U32) (inact : Slice Std.U32)
+  (kind : Slice Std.U32) (srow : Slice Std.U32) (slimb : Slice Std.U32)
+  (n : Std.Usize) (os : Std.Usize) (nq : Std.Usize)
+  (out : alloc.vec.Vec Std.U32) (t : Std.Usize) :
+  Result (alloc.vec.Vec Std.U32)
+  := do
+  if t < n
+  then
+    let i ← Slice.index_usize kind t
+    let i1 ← lift (UScalar.cast .Usize i)
+    let i2 ← Slice.index_usize srow t
+    let i3 ← lift (UScalar.cast .Usize i2)
+    let i4 ← Slice.index_usize slimb t
+    let i5 ← lift (UScalar.cast .Usize i4)
+    let i6 ← 4#usize * nq
+    let i7 ← 24#usize + i6
+    let i8 ← 16#usize * nq
+    let i9 ← 24#usize + i8
+    let out1 ← own_col out al zz tr sx sy inact i1 i3 i5 os i7 i9
+    let t1 ← t + 1#usize
+    fill_own_loop al zz tr sx sy inact kind srow slimb n os nq out1 t1
+  else ok out
+partial_fixpoint
+
+/-- [aspis_r1_cert_build::fill_own]:
+    Source: 'src/lib.rs', lines 358:0-366:1
+    Visibility: public -/
+@[reducible]
+def fill_own
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (sx : Slice Std.U32) (sy : Slice Std.U32) (inact : Slice Std.U32)
+  (kind : Slice Std.U32) (srow : Slice Std.U32) (slimb : Slice Std.U32)
+  (n : Std.Usize) (os : Std.Usize) (nq : Std.Usize) :
+  Result (alloc.vec.Vec Std.U32)
+  := do
+  fill_own_loop al zz tr sx sy inact kind srow slimb n os nq (alloc.vec.Vec.new
+    Std.U32) 0#usize
+
 end R1CertBuild

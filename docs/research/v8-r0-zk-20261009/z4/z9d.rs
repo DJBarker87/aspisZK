@@ -36,9 +36,10 @@ struct Fam {
     pidx: Vec<u32>,
     coef: Vec<u32>,
     ccs: Vec<Vec<u32>>,
+    sid: Vec<(u32, u32)>, // (lane, source index) of each referenced source
 }
 fn family(ln: &Lanes, lks: &[&LaneKer], lane_ix: &dyn Fn(u32) -> u32) -> Option<Fam> {
-    let mut f = Fam { srcs: vec![], ej: vec![], es: vec![], epo: vec![], eco: vec![], pidx: vec![], coef: vec![], ccs: vec![] };
+    let mut f = Fam { srcs: vec![], ej: vec![], es: vec![], epo: vec![], eco: vec![], pidx: vec![], coef: vec![], ccs: vec![], sid: vec![] };
     for l in lks {
         let li = l.lane as usize;
         if li >= LANES {
@@ -51,6 +52,7 @@ fn family(ln: &Lanes, lks: &[&LaneKer], lane_ix: &dyn Fn(u32) -> u32) -> Option<
             }
             f.pidx.push(f.srcs.len() as u32);
             f.srcs.push((lane_ix(l.lane), src3(ln, li, j as usize)));
+            f.sid.push((l.lane, j));
         }
         for (j, cc) in &l.ents {
             if *j as usize >= ln.count(li) {
@@ -58,6 +60,7 @@ fn family(ln: &Lanes, lks: &[&LaneKer], lane_ix: &dyn Fn(u32) -> u32) -> Option<
             }
             f.ej.push(f.srcs.len() as u32);
             f.srcs.push((lane_ix(l.lane), src3(ln, li, *j as usize)));
+            f.sid.push((l.lane, *j));
             f.es.push(cc.len() as u32);
             f.epo.push(po);
             f.eco.push(f.coef.len() as u32);
@@ -334,6 +337,27 @@ fn builder_diff(p: &Pub, cert: &Cert, label: &str) {
     }
     let diff = lo.iter().zip(&want).filter(|(x, y)| x != y).count();
     println!("R1C3_BUILD {label} builder=lift_columns agree={} entries={} want_entries={} mismatches={diff} build_seconds={t_lo:.3}", lo == want, lo.len(), want.len());
+    // Builder 3: the own columns of the referenced sources (QPrime family and G family).
+    let ln = Lanes::new(&p.cx);
+    let (pbw, _) = convert(p, cert, &ln).expect("honest certificate converts");
+    let desc = |f: &Fam| -> (Vec<u32>, Vec<u32>, Vec<u32>) {
+        let pr = |li: u32| if li < 10 { 1 } else { 4 };
+        (f.sid.iter().map(|&(li, _)| li).collect(), f.sid.iter().map(|&(li, j)| j / pr(li) + 1).collect(), f.sid.iter().map(|&(li, j)| j % pr(li)).collect())
+    };
+    let lks: Vec<&LaneKer> = cert.qp.iter().collect();
+    let fq = family(&ln, &lks, &|l| l).expect("family");
+    let (kq, rq, lq) = desc(&fq);
+    let tb = Instant::now();
+    let own = aspis_r1_cert_build::fill_own(&al, &zz, &tr, &sx, &sy, &inact, &kq, &rq, &lq, kq.len(), 376, nq);
+    let fg = family(&ln, &[&cert.bc_g], &|_| 0).expect("family");
+    let (_, rg, lg) = desc(&fg);
+    let kg = vec![10u32; rg.len()];
+    let gown = aspis_r1_cert_build::fill_own(&al, &zz, &tr, &sx, &sy, &inact, &kg, &rg, &lg, kg.len(), 376, nq);
+    let t_own = tb.elapsed().as_secs_f64();
+    let dq = own.iter().zip(&pbw.own).filter(|(x, y)| x != y).count();
+    let dg = gown.iter().zip(&pbw.gown).filter(|(x, y)| x != y).count();
+    println!("R1C3_BUILD {label} builder=own_columns agree={} entries={} want_entries={} mismatches={dq} sources={} build_seconds={t_own:.3}", own == pbw.own, own.len(), pbw.own.len(), kq.len());
+    println!("R1C3_BUILD {label} builder=g_own_columns agree={} entries={} want_entries={} mismatches={dg} sources={}", gown == pbw.gown, gown.len(), pbw.gown.len(), kg.len());
 }
 
 pub(super) fn run(p: &Pub, cert: &Cert, label: &str, teeth: bool) {

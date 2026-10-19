@@ -319,3 +319,48 @@ pub fn fill_lo(al: &[u32], zz: &[u32], tr: &[u32], sx: &[u32], sy: &[u32], inact
     let out = c1_lifts(out, al, zz, tr, sx, sy, inact, sel1, 24 + 4 * nq);
     h1_lift(out, al, zz, tr, sx, sy, inact, selh, 24 + 16 * nq)
 }
+
+// ------------------------------------------------------------------------------
+// Builder 3 (D62): the own columns of the referenced sources (pb.own, pb.gown),
+// z9.rs `Lanes::raw/bal` on the same raw_c rows as the lifts, balanced at row 0.
+// Source t has kind kind[t] (0..9 mask-only lane, 10 = G, 11 = D), row srow[t]
+// (>= 1) and tower limb slimb[t]; its column is padded to os limbs.
+// ------------------------------------------------------------------------------
+
+/// Mask-only own entry: raw C1 coordinate i of row r, balanced at row 0.
+pub fn own_c1(al: &[u32], zz: &[u32], tr: &[u32], sx: &[u32], sy: &[u32], inact: &[u32], r: usize, i: usize) -> u32 {
+    fsub(c1_val(al, zz, tr, sx, sy, r, i), fmul(inact[r], c1_val(al, zz, tr, sx, sy, 0, i)))
+}
+/// Own entry i of a source (0 beyond the lane's block width).
+pub fn own_val(al: &[u32], zz: &[u32], tr: &[u32], sx: &[u32], sy: &[u32], inact: &[u32], kind: usize, r: usize, k: usize, i: usize, wb: usize, we: usize) -> u32 {
+    if kind < 10 {
+        if i < wb {
+            own_c1(al, zz, tr, sx, sy, inact, r, i)
+        } else {
+            0
+        }
+    } else if i < we {
+        h1_entry(al, zz, tr, sx, sy, inact, r, k, i)
+    } else {
+        0
+    }
+}
+pub fn own_col(out: Vec<u32>, al: &[u32], zz: &[u32], tr: &[u32], sx: &[u32], sy: &[u32], inact: &[u32], kind: usize, r: usize, k: usize, os: usize, wb: usize, we: usize) -> Vec<u32> {
+    let mut out = out;
+    let mut i: usize = 0;
+    while i < os {
+        out.push(own_val(al, zz, tr, sx, sy, inact, kind, r, k, i, wb, we));
+        i += 1;
+    }
+    out
+}
+/// The own matrix of n referenced sources (column t at t*os).
+pub fn fill_own(al: &[u32], zz: &[u32], tr: &[u32], sx: &[u32], sy: &[u32], inact: &[u32], kind: &[u32], srow: &[u32], slimb: &[u32], n: usize, os: usize, nq: usize) -> Vec<u32> {
+    let mut out: Vec<u32> = Vec::new();
+    let mut t: usize = 0;
+    while t < n {
+        out = own_col(out, al, zz, tr, sx, sy, inact, kind[t] as usize, srow[t] as usize, slimb[t] as usize, os, 24 + 4 * nq, 24 + 16 * nq);
+        t += 1;
+    }
+    out
+}
