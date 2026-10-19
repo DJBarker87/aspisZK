@@ -1,0 +1,31 @@
+110:                 } else {
+111:                     return Err(TransactionError::InstructionError(
+112:                         index,
+113:                         InstructionError::InvalidInstructionData,
+114:                     ));
+115:                 }
+116:             } else {
+117:                 MIN_HEAP_FRAME_BYTES
+118:             }
+119:             .min(MAX_HEAP_FRAME_BYTES);
+120:
+121:         // Calculate compute unit limit
+122:         let compute_unit_limit = self
+123:             .requested_compute_unit_limit
+124:             .map_or_else(
+125:                 || self.calculate_default_compute_unit_limit(feature_set),
+126:                 |(_index, requested_compute_unit_limit)| requested_compute_unit_limit,
+127:             )
+128:             .min(MAX_COMPUTE_UNIT_LIMIT);
+129:
+130:         let compute_unit_price = self
+131:             .requested_compute_unit_price
+132:             .map_or(0, |(_index, requested_compute_unit_price)| {
+133:                 requested_compute_unit_price
+134:             });
+135:
+136:         let loaded_accounts_bytes =
+137:             if let Some((_index, requested_loaded_accounts_data_size_limit)) =
+138:                 self.requested_loaded_accounts_data_size_limit
+139:             {
+140:                 NonZeroU32::new(requested_loaded_accounts_data_size_limit)

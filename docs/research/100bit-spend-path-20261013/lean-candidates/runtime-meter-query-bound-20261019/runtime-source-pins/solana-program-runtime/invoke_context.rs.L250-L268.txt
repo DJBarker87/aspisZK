@@ -1,0 +1,19 @@
+250:         environment_config: EnvironmentConfig<'a>,
+251:         log_collector: Option<Rc<RefCell<LogCollector>>>,
+252:         compute_budget: SVMTransactionExecutionBudget,
+253:         execution_cost: SVMTransactionExecutionCost,
+254:     ) -> Self {
+255:         Self {
+256:             transaction_context,
+257:             program_cache_for_tx_batch,
+258:             environment_config,
+259:             log_collector,
+260:             compute_budget,
+261:             execution_cost,
+262:             compute_meter: ComputeMeter(Cell::new(compute_budget.compute_unit_limit)),
+263:             total_nested_exec_time: Duration::ZERO,
+264:             timings: ExecuteDetailsTimings::default(),
+265:             memory_contexts: MemoryContexts::new(),
+266:             register_traces: Vec::new(),
+267:             #[cfg(feature = "sbpf-debugger")]
+268:             debug_port: None,

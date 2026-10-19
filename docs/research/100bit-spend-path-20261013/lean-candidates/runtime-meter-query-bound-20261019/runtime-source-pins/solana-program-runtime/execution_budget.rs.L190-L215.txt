@@ -1,0 +1,26 @@
+190:     pub bls12_381_g1_validate_cost: u64,
+191:     /// Number of compute units consumed to validate a bls12_381 g2 point.
+192:     pub bls12_381_g2_validate_cost: u64,
+193:     /// Base number of compute units consumed to perform a bls12_381 pairing.
+194:     pub bls12_381_one_pair_cost: u64,
+195:     /// Incremental number of compute units consumed per pair in a bls12_381 pairing.
+196:     pub bls12_381_additional_pair_cost: u64,
+197: }
+198:
+199: impl Default for SVMTransactionExecutionCost {
+200:     fn default() -> Self {
+201:         SVMTransactionExecutionCost {
+202:             log_64_units: 100,
+203:             create_program_address_units: 1500,
+204:             invoke_units: DEFAULT_INVOCATION_COST,
+205:             sha256_base_cost: 85,
+206:             sha256_byte_cost: 1,
+207:             log_pubkey_units: 100,
+208:             cpi_bytes_per_unit: 250, // ~50MB at 200,000 units
+209:             sysvar_base_cost: 100,
+210:             secp256k1_recover_cost: 25_000,
+211:             syscall_base_cost: 100,
+212:             curve25519_edwards_validate_point_cost: 159,
+213:             curve25519_edwards_add_cost: 473,
+214:             curve25519_edwards_subtract_cost: 475,
+215:             curve25519_edwards_multiply_cost: 2_177,

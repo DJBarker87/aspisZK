@@ -1,0 +1,106 @@
+835:             }
+836:             translate_vm_slice(untranslated_seed, memory_mapping, check_aligned)
+837:         })
+838:         .collect::<Result<Vec<_>, Error>>()?;
+839:     let program_id = translate_type::<Pubkey>(memory_mapping, program_id_addr, check_aligned)?;
+840:     Ok((seeds, program_id))
+841: }
+842:
+843: declare_builtin_function!(
+844:     /// Create a program address
+845:     SyscallCreateProgramAddress,
+846:     fn rust(
+847:         invoke_context: &mut InvokeContext<'_, '_>,
+848:         seeds_addr: u64,
+849:         seeds_len: u64,
+850:         program_id_addr: u64,
+851:         address_addr: u64,
+852:         _arg5: u64,
+853:     ) -> Result<u64, Error> {
+854:         let cost = invoke_context
+855:             .get_execution_cost()
+856:             .create_program_address_units;
+857:         invoke_context.compute_meter.consume_checked(cost)?;
+858:
+859:         let check_aligned = invoke_context.get_check_aligned();
+860:         let memory_mapping = invoke_context.memory_contexts.memory_mapping_mut()?;
+861:         let (seeds, program_id) = translate_and_check_program_address_inputs(
+862:             seeds_addr,
+863:             seeds_len,
+864:             program_id_addr,
+865:             memory_mapping,
+866:             check_aligned,
+867:         )?;
+868:
+869:         let Ok(new_address) = Pubkey::create_program_address(&seeds, program_id) else {
+870:             return Ok(1);
+871:         };
+872:         translate_mut!(
+873:             memory_mapping,
+874:             check_aligned,
+875:             let address: (&mut [MaybeUninit<u8>]) = map(address_addr, std::mem::size_of::<Pubkey>() as u64)?;
+876:         );
+877:         address.write_copy_of_slice(new_address.as_ref());
+878:         Ok(0)
+879:     }
+880: );
+881:
+882: declare_builtin_function!(
+883:     /// Create a program address
+884:     SyscallTryFindProgramAddress,
+885:     fn rust(
+886:         invoke_context: &mut InvokeContext<'_, '_>,
+887:         seeds_addr: u64,
+888:         seeds_len: u64,
+889:         program_id_addr: u64,
+890:         address_addr: u64,
+891:         bump_seed_addr: u64,
+892:     ) -> Result<u64, Error> {
+893:         let cost = invoke_context
+894:             .get_execution_cost()
+895:             .create_program_address_units;
+896:         invoke_context.compute_meter.consume_checked(cost)?;
+897:
+898:         let check_aligned = invoke_context.get_check_aligned();
+899:         let memory_mapping = invoke_context.memory_contexts.memory_mapping_mut()?;
+900:         let (seeds, program_id) = translate_and_check_program_address_inputs(
+901:             seeds_addr,
+902:             seeds_len,
+903:             program_id_addr,
+904:             memory_mapping,
+905:             check_aligned,
+906:         )?;
+907:
+908:         let mut bump_seed = [u8::MAX];
+909:         for _ in 0..u8::MAX {
+910:             {
+911:                 let mut seeds_with_bump = seeds.to_vec();
+912:                 seeds_with_bump.push(&bump_seed);
+913:
+914:                 if let Ok(new_address) =
+915:                     Pubkey::create_program_address(&seeds_with_bump, program_id)
+916:                 {
+917:                     translate_mut!(
+918:                         memory_mapping,
+919:                         check_aligned,
+920:                         let bump_seed_ref: (&mut MaybeUninit<u8>) = map(bump_seed_addr)?;
+921:                         let address: (&mut [MaybeUninit<u8>]) = map(address_addr, std::mem::size_of::<Pubkey>() as u64)?;
+922:                     );
+923:                     bump_seed_ref.write(bump_seed[0]);
+924:                     address.write_copy_of_slice(new_address.as_ref());
+925:                     return Ok(0);
+926:                 }
+927:             }
+928:             bump_seed[0] = bump_seed[0].saturating_sub(1);
+929:             invoke_context.compute_meter.consume_checked(cost)?;
+930:         }
+931:         Ok(1)
+932:     }
+933: );
+934:
+935: declare_builtin_function!(
+936:     /// secp256k1_recover
+937:     SyscallSecp256k1Recover,
+938:     fn rust(
+939:         invoke_context: &mut InvokeContext<'_, '_>,
+940:         hash_addr: u64,

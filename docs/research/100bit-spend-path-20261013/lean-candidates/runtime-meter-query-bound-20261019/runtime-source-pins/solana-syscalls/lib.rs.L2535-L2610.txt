@@ -1,0 +1,76 @@
+2535:
+2536:         Ok(SUCCESS)
+2537:     }
+2538: );
+2539:
+2540: declare_builtin_function!(
+2541:     // Generic Hashing Syscall
+2542:     SyscallHash<H: HasherImpl>,
+2543:     fn rust(
+2544:         invoke_context: &mut InvokeContext<'_, '_>,
+2545:         vals_addr: u64,
+2546:         vals_len: u64,
+2547:         result_addr: u64,
+2548:         _arg4: u64,
+2549:         _arg5: u64,
+2550:     ) -> Result<u64, Error> {
+2551:         let compute_budget = invoke_context.get_compute_budget();
+2552:         let compute_cost = invoke_context.get_execution_cost();
+2553:         let hash_base_cost = H::get_base_cost(compute_cost);
+2554:         let hash_byte_cost = H::get_byte_cost(compute_cost);
+2555:         let hash_max_slices = H::get_max_slices(compute_budget);
+2556:         if hash_max_slices < vals_len {
+2557:             ic_msg!(
+2558:                 invoke_context,
+2559:                 "{} Hashing {} sequences in one syscall is over the limit {}",
+2560:                 H::NAME,
+2561:                 vals_len,
+2562:                 hash_max_slices,
+2563:             );
+2564:             return Err(SyscallError::TooManySlices.into());
+2565:         }
+2566:
+2567:         invoke_context.compute_meter.consume_checked(hash_base_cost)?;
+2568:         let check_aligned = invoke_context.get_check_aligned();
+2569:         let mem_op_base_cost = compute_cost.mem_op_base_cost;
+2570:         let memory_mapping = invoke_context.memory_contexts.memory_mapping_mut()?;
+2571:         translate_mut!(
+2572:             memory_mapping,
+2573:             check_aligned,
+2574:             let hash_result: (&mut [MaybeUninit<u8>]) = map(result_addr, std::mem::size_of::<H::Output>() as u64)?;
+2575:         );
+2576:         let mut hasher = H::create_hasher();
+2577:         if vals_len > 0 {
+2578:             let vals = translate_slice::<VmSlice<u8>>(
+2579:                 memory_mapping,
+2580:                 vals_addr,
+2581:                 vals_len,
+2582:                 check_aligned,
+2583:             )?;
+2584:
+2585:             for val in vals.iter() {
+2586:                 let bytes = translate_vm_slice(val, memory_mapping, check_aligned)?;
+2587:                 let cost = mem_op_base_cost.max(
+2588:                     hash_byte_cost.saturating_mul(
+2589:                         val.len()
+2590:                             .checked_div(2)
+2591:                             .expect("div by non-zero literal"),
+2592:                     ),
+2593:                 );
+2594:                 invoke_context.compute_meter.consume_checked(cost)?;
+2595:                 hasher.hash(bytes);
+2596:             }
+2597:         }
+2598:         hash_result.write_copy_of_slice(hasher.result().as_ref());
+2599:         Ok(0)
+2600:     }
+2601: );
+2602:
+2603: declare_builtin_function!(
+2604:     // Get Epoch Stake Syscall
+2605:     SyscallGetEpochStake,
+2606:     fn rust(
+2607:         invoke_context: &mut InvokeContext<'_, '_>,
+2608:         var_addr: u64,
+2609:         _arg2: u64,
+2610:         _arg3: u64,

@@ -1,0 +1,56 @@
+385:     /// # Ok::<(), anyhow::Error>(())
+386:     /// ```
+387:     // If target_os = "solana" or target_arch = "bpf", then the function
+388:     // will use syscalls which bring no dependencies; otherwise, this should
+389:     // be opt-in so users don't need the curve25519 dependency.
+390:     #[cfg(any(target_os = "solana", target_arch = "bpf", feature = "curve25519"))]
+391:     #[inline(always)]
+392:     pub fn create_program_address(
+393:         seeds: &[&[u8]],
+394:         program_id: &Address,
+395:     ) -> Result<Address, AddressError> {
+396:         use crate::{MAX_SEEDS, MAX_SEED_LEN};
+397:
+398:         if seeds.len() > MAX_SEEDS {
+399:             return Err(AddressError::MaxSeedLengthExceeded);
+400:         }
+401:         if seeds.iter().any(|seed| seed.len() > MAX_SEED_LEN) {
+402:             return Err(AddressError::MaxSeedLengthExceeded);
+403:         }
+404:
+405:         // Perform the calculation inline, calling this from within a program is
+406:         // not supported
+407:         #[cfg(not(any(target_os = "solana", target_arch = "bpf")))]
+408:         {
+409:             use crate::PDA_MARKER;
+410:
+411:             let mut hasher = solana_sha256_hasher::Hasher::default();
+412:             for seed in seeds.iter() {
+413:                 hasher.hash(seed);
+414:             }
+415:             hasher.hashv(&[program_id.as_ref(), PDA_MARKER]);
+416:             let hash = hasher.result();
+417:
+418:             if bytes_are_curve_point(hash.as_ref()) {
+419:                 return Err(AddressError::InvalidSeeds);
+420:             }
+421:
+422:             Ok(Address::from(hash.to_bytes()))
+423:         }
+424:         // Call via a system call to perform the calculation
+425:         #[cfg(any(target_os = "solana", target_arch = "bpf"))]
+426:         {
+427:             let mut bytes = core::mem::MaybeUninit::<Address>::uninit();
+428:             let result = unsafe {
+429:                 crate::syscalls::sol_create_program_address(
+430:                     seeds as *const _ as *const u8,
+431:                     seeds.len() as u64,
+432:                     program_id as *const _ as *const u8,
+433:                     &mut bytes as *mut _ as *mut u8,
+434:                 )
+435:             };
+436:             match result {
+437:                 // SAFETY: The syscall has initialized the bytes.
+438:                 SUCCESS => Ok(unsafe { bytes.assume_init() }),
+439:                 _ => Err(result.into()),
+440:             }

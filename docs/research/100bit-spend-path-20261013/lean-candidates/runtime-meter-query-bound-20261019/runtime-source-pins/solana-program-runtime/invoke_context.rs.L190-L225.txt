@@ -1,0 +1,36 @@
+190:     /// Get cached sysvars
+191:     pub fn sysvar_cache(&self) -> &SysvarCache {
+192:         self.sysvar_cache
+193:     }
+194: }
+195:
+196: pub struct ComputeMeter(Cell<u64>);
+197:
+198: impl ComputeMeter {
+199:     /// Consume compute units
+200:     pub fn consume_checked(&self, amount: u64) -> Result<(), Box<dyn std::error::Error>> {
+201:         let compute_meter = self.0.get();
+202:         let exceeded = compute_meter < amount;
+203:         self.0.set(compute_meter.saturating_sub(amount));
+204:         if exceeded {
+205:             return Err(Box::new(InstructionError::ComputationalBudgetExceeded));
+206:         }
+207:         Ok(())
+208:     }
+209:
+210:     /// Set compute units
+211:     ///
+212:     /// Only use for tests and benchmarks
+213:     #[cfg(feature = "dev-context-only-utils")]
+214:     pub fn mock_set_remaining(&self, remaining: u64) {
+215:         self.0.set(remaining);
+216:     }
+217: }
+218:
+219: /// Main pipeline from runtime to program execution.
+220: pub struct InvokeContext<'a, 'ix_data> {
+221:     /// Information about the currently executing transaction.
+222:     pub transaction_context: &'a mut TransactionContext<'ix_data>,
+223:     /// The local program cache for the transaction batch.
+224:     pub program_cache_for_tx_batch: &'a mut ProgramCacheForTxBatch,
+225:     /// Runtime configurations used to provision the invocation environment.

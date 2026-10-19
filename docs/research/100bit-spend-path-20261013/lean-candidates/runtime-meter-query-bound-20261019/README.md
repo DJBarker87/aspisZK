@@ -1,0 +1,11 @@
+# Runtime-meter query-bound candidate
+
+PROVED: a symbolic metering trace in which every digest start is paid at least 85 units and the transaction begins with at most 1,400,000 units has at most 16,470 matched digest calls. Two such transactions have at most 32,940. The induction covers prefixes that later reject, panic or exhaust compute. It does not assume the desired call-count bound as a hypothesis: its hypotheses are affordable debits, per-event minimum cost and an injection of counted calls into paid starts.
+
+CANDIDATE: applying that theorem to the adopted verifier. This is a possible conservative fallback for R19, not a replacement claim for the assigned ELF/source call-count work. Formal runtime trace refinement and complete coverage of the verifier/Pool hash routes remain OPEN. Local software hashing, any cheaper route, resetting the meter, counting more transactions, or a different runtime cost configuration must be ruled out or accounted for before use.
+
+The included source pins identify the adoption measurement driver's Cargo.lock, five runtime dependency packages and relevant source fragments. Cached .crate archives were SHA-256 verified against Cargo.lock and the inspected registry files compared byte-for-byte with those archive members. The verifier and Pool ELF hashes were rechecked read-only; no binaries are included. This pins the measurement runtime, not a deployed cluster release or its configuration.
+
+In that pinned runtime, SHA-256 charges its 85-unit base cost before producing a digest; PDA hashing charges 1,500 units per attempted derivation. The meter uses affordable debits and the compute-budget instruction clamps requests at 1,400,000. These inspected source facts motivate the model; they have not been formally connected to its transitions.
+
+One focused NUC Lean target passed at -M4400, with explicit 1 GiB high / 2 GiB max / swap-zero limits. The command, imports, compiler/source/object hashes, timing, peak RSS, swap and five standard axiom reports are included. No resource-option overrides or new axioms were introduced. This packet neither closes R19 nor proves the full 100-bit claim. Adversary oracle calls remain separate from verifier calls; no grinding credit is used.

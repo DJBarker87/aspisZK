@@ -1,0 +1,34 @@
+185: struct Sha256Hasher(Hasher);
+186: struct Blake3Hasher(blake3::Hasher);
+187: struct Keccak256Hasher(keccak::Hasher);
+188: struct Sha512Hasher(sha512::Hasher);
+189:
+190: impl HasherImpl for Sha256Hasher {
+191:     const NAME: &'static str = "Sha256";
+192:     type Output = Hash;
+193:
+194:     fn create_hasher() -> Self {
+195:         Sha256Hasher(Hasher::default())
+196:     }
+197:
+198:     fn hash(&mut self, val: &[u8]) {
+199:         self.0.hash(val);
+200:     }
+201:
+202:     fn result(self) -> Self::Output {
+203:         self.0.result()
+204:     }
+205:
+206:     fn get_base_cost(compute_cost: &SVMTransactionExecutionCost) -> u64 {
+207:         compute_cost.sha256_base_cost
+208:     }
+209:     fn get_byte_cost(compute_cost: &SVMTransactionExecutionCost) -> u64 {
+210:         compute_cost.sha256_byte_cost
+211:     }
+212:     fn get_max_slices(compute_budget: &SVMTransactionExecutionBudget) -> u64 {
+213:         compute_budget.sha256_max_slices
+214:     }
+215: }
+216:
+217: impl HasherImpl for Blake3Hasher {
+218:     const NAME: &'static str = "Blake3";
