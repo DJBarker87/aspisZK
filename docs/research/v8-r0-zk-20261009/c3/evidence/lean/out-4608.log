@@ -1,0 +1,889 @@
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertRelCoef.lean:40:47: error: unsolved goals
+K : Type
+inst✝ : Field K
+F : Subfield K
+B : PackBasis F
+φ : ZP →+* ↥F
+w : K
+t lit : Usize
+n : ℕ
+hl : ↑lit = n
+i : U32
+z : A8
+hi : lift (UScalar.cast_fromBool UScalarTy.U32 (decide (t = lit))) = ok i
+h : R1CertBuild.wbase i = ok z
+⊢ Decidable (↑t = n)
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertRelCoef.lean:93:91: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => (embR φ) (if decide (_a = ↑v) = true then 1 else 0) = if ↑p / 4 = gN ru ↑rho / 4 then 1 else 0
+Error: Application type mismatch: The argument
+  ?m.647
+has type
+  Decidable (↑i2 = ↑v)
+but is expected to have type
+  Decidable (_a = ↑v)
+in the application
+  @decide (_a = ↑v) ?m.647
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+K : Type
+inst✝ : Field K
+F : Subfield K
+B : PackBasis F
+φ : ZP →+* ↥F
+w : K
+hT : Tower B
+hW : w * w = B.u
+op ru li : Slice U32
+rho p : Usize
+z : A8
+h✝¹⁷ :
+  (do
+      let i ← ru.index_usize rho
+      let i1 ← lift (UScalar.cast UScalarTy.Usize i)
+      let v ← i1 / 4#usize
+      let i2 ← p / 4#usize
+      let i3 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i2 = v)))
+      let a ← R1CertBuild.wbase i3
+      let a1 ← R1CertBuild.wget op 3#usize
+      let i4 ← 3#usize * rho
+      let i5 ← li.index_usize i4
+      let a2 ← R1CertBuild.wbase i5
+      let i6 ← i4 + 1#usize
+      let i7 ← li.index_usize i6
+      let a3 ← R1CertBuild.wbase i7
+      let i8 ← i4 + 2#usize
+      let i9 ← li.index_usize i8
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+i : U32
+hi : ru.index_usize rho = ok i
+h✝¹⁶ :
+  (do
+      let i1 ← lift (UScalar.cast UScalarTy.Usize i)
+      let v ← i1 / 4#usize
+      let i2 ← p / 4#usize
+      let i3 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i2 = v)))
+      let a ← R1CertBuild.wbase i3
+      let a1 ← R1CertBuild.wget op 3#usize
+      let i4 ← 3#usize * rho
+      let i5 ← li.index_usize i4
+      let a2 ← R1CertBuild.wbase i5
+      let i6 ← i4 + 1#usize
+      let i7 ← li.index_usize i6
+      let a3 ← R1CertBuild.wbase i7
+      let i8 ← i4 + 2#usize
+      let i9 ← li.index_usize i8
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+i1 : UScalar UScalarTy.Usize
+hi1 : lift (UScalar.cast UScalarTy.Usize i) = ok i1
+h✝¹⁵ :
+  (do
+      let v ← i1 / 4#usize
+      let i2 ← p / 4#usize
+      let i3 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i2 = v)))
+      let a ← R1CertBuild.wbase i3
+      let a1 ← R1CertBuild.wget op 3#usize
+      let i4 ← 3#usize * rho
+      let i5 ← li.index_usize i4
+      let a2 ← R1CertBuild.wbase i5
+      let i6 ← i4 + 1#usize
+      let i7 ← li.index_usize i6
+      let a3 ← R1CertBuild.wbase i7
+      let i8 ← i4 + 2#usize
+      let i9 ← li.index_usize i8
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+v : UScalar UScalarTy.Usize
+hv : i1 / 4#usize = ok v
+h✝¹⁴ :
+  (do
+      let i2 ← p / 4#usize
+      let i3 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i2 = v)))
+      let a ← R1CertBuild.wbase i3
+      let a1 ← R1CertBuild.wget op 3#usize
+      let i4 ← 3#usize * rho
+      let i5 ← li.index_usize i4
+      let a2 ← R1CertBuild.wbase i5
+      let i6 ← i4 + 1#usize
+      let i7 ← li.index_usize i6
+      let a3 ← R1CertBuild.wbase i7
+      let i8 ← i4 + 2#usize
+      let i9 ← li.index_usize i8
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+i2 : UScalar UScalarTy.Usize
+hi2 : p / 4#usize = ok i2
+h✝¹³ :
+  (do
+      let i3 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i2 = v)))
+      let a ← R1CertBuild.wbase i3
+      let a1 ← R1CertBuild.wget op 3#usize
+      let i4 ← 3#usize * rho
+      let i5 ← li.index_usize i4
+      let a2 ← R1CertBuild.wbase i5
+      let i6 ← i4 + 1#usize
+      let i7 ← li.index_usize i6
+      let a3 ← R1CertBuild.wbase i7
+      let i8 ← i4 + 2#usize
+      let i9 ← li.index_usize i8
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+i3 : UScalar UScalarTy.U32
+hi3 : lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i2 = v))) = ok i3
+h✝¹² :
+  (do
+      let a ← R1CertBuild.wbase i3
+      let a1 ← R1CertBuild.wget op 3#usize
+      let i4 ← 3#usize * rho
+      let i5 ← li.index_usize i4
+      let a2 ← R1CertBuild.wbase i5
+      let i6 ← i4 + 1#usize
+      let i7 ← li.index_usize i6
+      let a3 ← R1CertBuild.wbase i7
+      let i8 ← i4 + 2#usize
+      let i9 ← li.index_usize i8
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+a : Std.Array U32 8#usize
+ha : R1CertBuild.wbase i3 = ok a
+h✝¹¹ :
+  (do
+      let a1 ← R1CertBuild.wget op 3#usize
+      let i4 ← 3#usize * rho
+      let i5 ← li.index_usize i4
+      let a2 ← R1CertBuild.wbase i5
+      let i6 ← i4 + 1#usize
+      let i7 ← li.index_usize i6
+      let a3 ← R1CertBuild.wbase i7
+      let i8 ← i4 + 2#usize
+      let i9 ← li.index_usize i8
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+a1 : Std.Array U32 8#usize
+ha1 : R1CertBuild.wget op 3#usize = ok a1
+h✝¹⁰ :
+  (do
+      let i4 ← 3#usize * rho
+      let i5 ← li.index_usize i4
+      let a2 ← R1CertBuild.wbase i5
+      let i6 ← i4 + 1#usize
+      let i7 ← li.index_usize i6
+      let a3 ← R1CertBuild.wbase i7
+      let i8 ← i4 + 2#usize
+      let i9 ← li.index_usize i8
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+i4 : UScalar UScalarTy.Usize
+hi4 : 3#usize * rho = ok i4
+h✝⁹ :
+  (do
+      let i5 ← li.index_usize i4
+      let a2 ← R1CertBuild.wbase i5
+      let i6 ← i4 + 1#usize
+      let i7 ← li.index_usize i6
+      let a3 ← R1CertBuild.wbase i7
+      let i8 ← i4 + 2#usize
+      let i9 ← li.index_usize i8
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+i5 : U32
+hi5 : li.index_usize i4 = ok i5
+h✝⁸ :
+  (do
+      let a2 ← R1CertBuild.wbase i5
+      let i6 ← i4 + 1#usize
+      let i7 ← li.index_usize i6
+      let a3 ← R1CertBuild.wbase i7
+      let i8 ← i4 + 2#usize
+      let i9 ← li.index_usize i8
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+a2 : Std.Array U32 8#usize
+ha2 : R1CertBuild.wbase i5 = ok a2
+h✝⁷ :
+  (do
+      let i6 ← i4 + 1#usize
+      let i7 ← li.index_usize i6
+      let a3 ← R1CertBuild.wbase i7
+      let i8 ← i4 + 2#usize
+      let i9 ← li.index_usize i8
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+i6 : UScalar UScalarTy.Usize
+hi6 : i4 + 1#usize = ok i6
+h✝⁶ :
+  (do
+      let i7 ← li.index_usize i6
+      let a3 ← R1CertBuild.wbase i7
+      let i8 ← i4 + 2#usize
+      let i9 ← li.index_usize i8
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+i7 : U32
+hi7 : li.index_usize i6 = ok i7
+h✝⁵ :
+  (do
+      let a3 ← R1CertBuild.wbase i7
+      let i8 ← i4 + 2#usize
+      let i9 ← li.index_usize i8
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+a3 : Std.Array U32 8#usize
+ha3 : R1CertBuild.wbase i7 = ok a3
+h✝⁴ :
+  (do
+      let i8 ← i4 + 2#usize
+      let i9 ← li.index_usize i8
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+i8 : UScalar UScalarTy.Usize
+hi8 : i4 + 2#usize = ok i8
+h✝³ :
+  (do
+      let i9 ← li.index_usize i8
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+i9 : U32
+hi9 : li.index_usize i8 = ok i9
+h✝² :
+  (do
+      let a4 ← R1CertBuild.wbase i9
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+a4 : Std.Array U32 8#usize
+ha4 : R1CertBuild.wbase i9 = ok a4
+h✝¹ :
+  (do
+      let i10 ← p % 4#usize
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+i10 : UScalar UScalarTy.Usize
+hi10 : p % 4#usize = ok i10
+h✝ :
+  (do
+      let a5 ← R1CertBuild.lfv a1 a2 a3 a4 i10
+      R1CertBuild.wmul a a5) =
+    ok z
+a5 : Std.Array U32 8#usize
+ha5 : R1CertBuild.lfv a1 a2 a3 a4 i10 = ok a5
+h : R1CertBuild.wmul a a5 = ok z
+e1 : ↑i1 = gN ru ↑rho
+ev : ↑v = gN ru ↑rho / 4
+e2 : ↑i2 = ↑p / 4
+e4 : ↑i4 = 3 * ↑rho
+e10 : ↑i10 = ↑p % 4
+⊢ (embR φ) (if decide (↑i2 = ↑v) = true then 1 else 0) = if ↑p / 4 = gN ru ↑rho / 4 then 1 else 0
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertRelCoef.lean:120:2: error: unsolved goals
+K : Type
+inst✝ : Field K
+F : Subfield K
+B : PackBasis F
+φ : ZP →+* ↥F
+w : K
+hT : Tower B
+hW : w * w = B.u
+al zz tr inact ti op fpos rk ru li x16 : Slice U32
+nf rho i : Usize
+z : A8
+h✝³ :
+  (do
+      let kind ← rk.index_usize rho
+      if kind = 0#u32 then do
+          let i1 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 0#usize)))
+          let i2 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 4#usize)))
+          let i3 ← i1 + i2
+          R1CertBuild.wbase i3
+        else
+          if kind = 1#u32 then
+            if i < 7#usize then do
+              let a ← R1CertBuild.wzero
+              let a1 ← R1CertBuild.wbase 536870912#u32
+              let a2 ← R1CertBuild.wget op 2#usize
+              let a3 ← R1CertBuild.wpow a2 i
+              let a4 ← R1CertBuild.wmul a1 a3
+              R1CertBuild.wsub a a4
+            else do
+              let i1 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 7#usize) || decide (i = 11#usize)))
+              R1CertBuild.wbase i1
+          else
+            if kind = 2#u32 then
+              if i < 7#usize then R1CertBuild.wzero
+              else
+                if i < 14#usize then do
+                  let a ← R1CertBuild.wget op 3#usize
+                  let i1 ← i - 7#usize
+                  R1CertBuild.wpow a i1
+                else do
+                  let i1 ← 14#usize + nf
+                  if i < i1 then R1CertBuild.wzero
+                    else do
+                      let a ← R1CertBuild.wzero
+                      let i2 ← i - i1
+                      let a1 ← R1CertBuild.df2 al zz tr inact ti op i2
+                      R1CertBuild.wsub a a1
+            else
+              if kind = 3#u32 then
+                if i < 14#usize then R1CertBuild.wzero
+                else do
+                  let i1 ← 14#usize + nf
+                  if i < i1 then do
+                      let i2 ← i - 14#usize
+                      let i3 ← fpos.index_usize i2
+                      let i4 ← ru.index_usize rho
+                      let i5 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i3 = i4)))
+                      R1CertBuild.wbase i5
+                    else R1CertBuild.wzero
+              else
+                if i < 14#usize then R1CertBuild.wzero
+                else do
+                  let i1 ← 14#usize + nf
+                  if i < i1 then do
+                      let i2 ← i - 14#usize
+                      let i3 ← fpos.index_usize i2
+                      let i4 ← lift (UScalar.cast UScalarTy.Usize i3)
+                      R1CertBuild.line_fold op ru li rho i4
+                    else do
+                      let a ← R1CertBuild.wzero
+                      let i2 ← i - i1
+                      let i3 ← x16.index_usize rho
+                      let a1 ← R1CertBuild.qbase i3
+                      let a2 ← R1CertBuild.nat_q i2 a1
+                      let a3 ← R1CertBuild.wq a2
+                      R1CertBuild.wsub a a3) =
+    ok z
+kind : U32
+hk : rk.index_usize rho = ok kind
+h✝² :
+  (do
+      let i1 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 0#usize)))
+      let i2 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 4#usize)))
+      let i3 ← i1 + i2
+      R1CertBuild.wbase i3) =
+    ok z
+ek : ↑kind = gN rk ↑rho
+k0 : ↑kind = 0
+i1 : UScalar UScalarTy.U32
+hi1 : lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 0#usize))) = ok i1
+h✝¹ :
+  (do
+      let i2 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 4#usize)))
+      let i3 ← i1 + i2
+      R1CertBuild.wbase i3) =
+    ok z
+i2 : UScalar UScalarTy.U32
+hi2 : lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 4#usize))) = ok i2
+h✝ :
+  (do
+      let i3 ← i1 + i2
+      R1CertBuild.wbase i3) =
+    ok z
+i3 : UScalar UScalarTy.U32
+hi3 : i1 + i2 = ok i3
+h : R1CertBuild.wbase i3 = ok z
+⊢ Decidable (↑i = 4)
+
+K : Type
+inst✝ : Field K
+F : Subfield K
+B : PackBasis F
+φ : ZP →+* ↥F
+w : K
+hT : Tower B
+hW : w * w = B.u
+al zz tr inact ti op fpos rk ru li x16 : Slice U32
+nf rho i : Usize
+z : A8
+h✝³ :
+  (do
+      let kind ← rk.index_usize rho
+      if kind = 0#u32 then do
+          let i1 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 0#usize)))
+          let i2 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 4#usize)))
+          let i3 ← i1 + i2
+          R1CertBuild.wbase i3
+        else
+          if kind = 1#u32 then
+            if i < 7#usize then do
+              let a ← R1CertBuild.wzero
+              let a1 ← R1CertBuild.wbase 536870912#u32
+              let a2 ← R1CertBuild.wget op 2#usize
+              let a3 ← R1CertBuild.wpow a2 i
+              let a4 ← R1CertBuild.wmul a1 a3
+              R1CertBuild.wsub a a4
+            else do
+              let i1 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 7#usize) || decide (i = 11#usize)))
+              R1CertBuild.wbase i1
+          else
+            if kind = 2#u32 then
+              if i < 7#usize then R1CertBuild.wzero
+              else
+                if i < 14#usize then do
+                  let a ← R1CertBuild.wget op 3#usize
+                  let i1 ← i - 7#usize
+                  R1CertBuild.wpow a i1
+                else do
+                  let i1 ← 14#usize + nf
+                  if i < i1 then R1CertBuild.wzero
+                    else do
+                      let a ← R1CertBuild.wzero
+                      let i2 ← i - i1
+                      let a1 ← R1CertBuild.df2 al zz tr inact ti op i2
+                      R1CertBuild.wsub a a1
+            else
+              if kind = 3#u32 then
+                if i < 14#usize then R1CertBuild.wzero
+                else do
+                  let i1 ← 14#usize + nf
+                  if i < i1 then do
+                      let i2 ← i - 14#usize
+                      let i3 ← fpos.index_usize i2
+                      let i4 ← ru.index_usize rho
+                      let i5 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i3 = i4)))
+                      R1CertBuild.wbase i5
+                    else R1CertBuild.wzero
+              else
+                if i < 14#usize then R1CertBuild.wzero
+                else do
+                  let i1 ← 14#usize + nf
+                  if i < i1 then do
+                      let i2 ← i - 14#usize
+                      let i3 ← fpos.index_usize i2
+                      let i4 ← lift (UScalar.cast UScalarTy.Usize i3)
+                      R1CertBuild.line_fold op ru li rho i4
+                    else do
+                      let a ← R1CertBuild.wzero
+                      let i2 ← i - i1
+                      let i3 ← x16.index_usize rho
+                      let a1 ← R1CertBuild.qbase i3
+                      let a2 ← R1CertBuild.nat_q i2 a1
+                      let a3 ← R1CertBuild.wq a2
+                      R1CertBuild.wsub a a3) =
+    ok z
+kind : U32
+hk : rk.index_usize rho = ok kind
+h✝² :
+  (do
+      let i1 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 0#usize)))
+      let i2 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 4#usize)))
+      let i3 ← i1 + i2
+      R1CertBuild.wbase i3) =
+    ok z
+ek : ↑kind = gN rk ↑rho
+k0 : ↑kind = 0
+i1 : UScalar UScalarTy.U32
+hi1 : lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 0#usize))) = ok i1
+h✝¹ :
+  (do
+      let i2 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 4#usize)))
+      let i3 ← i1 + i2
+      R1CertBuild.wbase i3) =
+    ok z
+i2 : UScalar UScalarTy.U32
+hi2 : lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 4#usize))) = ok i2
+h✝ :
+  (do
+      let i3 ← i1 + i2
+      R1CertBuild.wbase i3) =
+    ok z
+i3 : UScalar UScalarTy.U32
+hi3 : i1 + i2 = ok i3
+h : R1CertBuild.wbase i3 = ok z
+⊢ Decidable (↑i = 0)
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertRelCoef.lean:143:4: error: unsolved goals
+K : Type
+inst✝ : Field K
+F : Subfield K
+B : PackBasis F
+φ : ZP →+* ↥F
+w : K
+hT : Tower B
+hW : w * w = B.u
+al zz tr inact ti op fpos rk ru li x16 : Slice U32
+nf rho i : Usize
+z : A8
+h✝¹ :
+  (do
+      let kind ← rk.index_usize rho
+      if kind = 0#u32 then do
+          let i1 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 0#usize)))
+          let i2 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 4#usize)))
+          let i3 ← i1 + i2
+          R1CertBuild.wbase i3
+        else
+          if kind = 1#u32 then
+            if i < 7#usize then do
+              let a ← R1CertBuild.wzero
+              let a1 ← R1CertBuild.wbase 536870912#u32
+              let a2 ← R1CertBuild.wget op 2#usize
+              let a3 ← R1CertBuild.wpow a2 i
+              let a4 ← R1CertBuild.wmul a1 a3
+              R1CertBuild.wsub a a4
+            else do
+              let i1 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 7#usize) || decide (i = 11#usize)))
+              R1CertBuild.wbase i1
+          else
+            if kind = 2#u32 then
+              if i < 7#usize then R1CertBuild.wzero
+              else
+                if i < 14#usize then do
+                  let a ← R1CertBuild.wget op 3#usize
+                  let i1 ← i - 7#usize
+                  R1CertBuild.wpow a i1
+                else do
+                  let i1 ← 14#usize + nf
+                  if i < i1 then R1CertBuild.wzero
+                    else do
+                      let a ← R1CertBuild.wzero
+                      let i2 ← i - i1
+                      let a1 ← R1CertBuild.df2 al zz tr inact ti op i2
+                      R1CertBuild.wsub a a1
+            else
+              if kind = 3#u32 then
+                if i < 14#usize then R1CertBuild.wzero
+                else do
+                  let i1 ← 14#usize + nf
+                  if i < i1 then do
+                      let i2 ← i - 14#usize
+                      let i3 ← fpos.index_usize i2
+                      let i4 ← ru.index_usize rho
+                      let i5 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i3 = i4)))
+                      R1CertBuild.wbase i5
+                    else R1CertBuild.wzero
+              else
+                if i < 14#usize then R1CertBuild.wzero
+                else do
+                  let i1 ← 14#usize + nf
+                  if i < i1 then do
+                      let i2 ← i - 14#usize
+                      let i3 ← fpos.index_usize i2
+                      let i4 ← lift (UScalar.cast UScalarTy.Usize i3)
+                      R1CertBuild.line_fold op ru li rho i4
+                    else do
+                      let a ← R1CertBuild.wzero
+                      let i2 ← i - i1
+                      let i3 ← x16.index_usize rho
+                      let a1 ← R1CertBuild.qbase i3
+                      let a2 ← R1CertBuild.nat_q i2 a1
+                      let a3 ← R1CertBuild.wq a2
+                      R1CertBuild.wsub a a3) =
+    ok z
+kind : U32
+hk : rk.index_usize rho = ok kind
+h✝ :
+  (do
+      let i1 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 7#usize) || decide (i = 11#usize)))
+      R1CertBuild.wbase i1) =
+    ok z
+ek : ↑kind = gN rk ↑rho
+k0 : ¬↑kind = 0
+k1 : ↑kind = 1
+h7 : ¬↑i < 7
+i1 : UScalar UScalarTy.U32
+hi1 : lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 7#usize) || decide (i = 11#usize))) = ok i1
+h : R1CertBuild.wbase i1 = ok z
+⊢ Decidable (↑i = 11)
+
+K : Type
+inst✝ : Field K
+F : Subfield K
+B : PackBasis F
+φ : ZP →+* ↥F
+w : K
+hT : Tower B
+hW : w * w = B.u
+al zz tr inact ti op fpos rk ru li x16 : Slice U32
+nf rho i : Usize
+z : A8
+h✝¹ :
+  (do
+      let kind ← rk.index_usize rho
+      if kind = 0#u32 then do
+          let i1 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 0#usize)))
+          let i2 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 4#usize)))
+          let i3 ← i1 + i2
+          R1CertBuild.wbase i3
+        else
+          if kind = 1#u32 then
+            if i < 7#usize then do
+              let a ← R1CertBuild.wzero
+              let a1 ← R1CertBuild.wbase 536870912#u32
+              let a2 ← R1CertBuild.wget op 2#usize
+              let a3 ← R1CertBuild.wpow a2 i
+              let a4 ← R1CertBuild.wmul a1 a3
+              R1CertBuild.wsub a a4
+            else do
+              let i1 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 7#usize) || decide (i = 11#usize)))
+              R1CertBuild.wbase i1
+          else
+            if kind = 2#u32 then
+              if i < 7#usize then R1CertBuild.wzero
+              else
+                if i < 14#usize then do
+                  let a ← R1CertBuild.wget op 3#usize
+                  let i1 ← i - 7#usize
+                  R1CertBuild.wpow a i1
+                else do
+                  let i1 ← 14#usize + nf
+                  if i < i1 then R1CertBuild.wzero
+                    else do
+                      let a ← R1CertBuild.wzero
+                      let i2 ← i - i1
+                      let a1 ← R1CertBuild.df2 al zz tr inact ti op i2
+                      R1CertBuild.wsub a a1
+            else
+              if kind = 3#u32 then
+                if i < 14#usize then R1CertBuild.wzero
+                else do
+                  let i1 ← 14#usize + nf
+                  if i < i1 then do
+                      let i2 ← i - 14#usize
+                      let i3 ← fpos.index_usize i2
+                      let i4 ← ru.index_usize rho
+                      let i5 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i3 = i4)))
+                      R1CertBuild.wbase i5
+                    else R1CertBuild.wzero
+              else
+                if i < 14#usize then R1CertBuild.wzero
+                else do
+                  let i1 ← 14#usize + nf
+                  if i < i1 then do
+                      let i2 ← i - 14#usize
+                      let i3 ← fpos.index_usize i2
+                      let i4 ← lift (UScalar.cast UScalarTy.Usize i3)
+                      R1CertBuild.line_fold op ru li rho i4
+                    else do
+                      let a ← R1CertBuild.wzero
+                      let i2 ← i - i1
+                      let i3 ← x16.index_usize rho
+                      let a1 ← R1CertBuild.qbase i3
+                      let a2 ← R1CertBuild.nat_q i2 a1
+                      let a3 ← R1CertBuild.wq a2
+                      R1CertBuild.wsub a a3) =
+    ok z
+kind : U32
+hk : rk.index_usize rho = ok kind
+h✝ :
+  (do
+      let i1 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 7#usize) || decide (i = 11#usize)))
+      R1CertBuild.wbase i1) =
+    ok z
+ek : ↑kind = gN rk ↑rho
+k0 : ¬↑kind = 0
+k1 : ↑kind = 1
+h7 : ¬↑i < 7
+i1 : UScalar UScalarTy.U32
+hi1 : lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 7#usize) || decide (i = 11#usize))) = ok i1
+h : R1CertBuild.wbase i1 = ok z
+⊢ Decidable (↑i = 7)
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertRelCoef.lean:198:93: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => (embR φ) (if decide (_a = ↑i4) = true then 1 else 0) = if gN fpos (↑i - 14) = gN ru ↑rho then 1 else 0
+Error: Application type mismatch: The argument
+  ?m.1577
+has type
+  Decidable (↑i3 = ↑i4)
+but is expected to have type
+  Decidable (_a = ↑i4)
+in the application
+  @decide (_a = ↑i4) ?m.1577
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case pos
+K : Type
+inst✝ : Field K
+F : Subfield K
+B : PackBasis F
+φ : ZP →+* ↥F
+w : K
+hT : Tower B
+hW : w * w = B.u
+al zz tr inact ti op fpos rk ru li x16 : Slice U32
+nf rho i : Usize
+z : A8
+h✝⁵ :
+  (do
+      let kind ← rk.index_usize rho
+      if kind = 0#u32 then do
+          let i1 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 0#usize)))
+          let i2 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 4#usize)))
+          let i3 ← i1 + i2
+          R1CertBuild.wbase i3
+        else
+          if kind = 1#u32 then
+            if i < 7#usize then do
+              let a ← R1CertBuild.wzero
+              let a1 ← R1CertBuild.wbase 536870912#u32
+              let a2 ← R1CertBuild.wget op 2#usize
+              let a3 ← R1CertBuild.wpow a2 i
+              let a4 ← R1CertBuild.wmul a1 a3
+              R1CertBuild.wsub a a4
+            else do
+              let i1 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i = 7#usize) || decide (i = 11#usize)))
+              R1CertBuild.wbase i1
+          else
+            if kind = 2#u32 then
+              if i < 7#usize then R1CertBuild.wzero
+              else
+                if i < 14#usize then do
+                  let a ← R1CertBuild.wget op 3#usize
+                  let i1 ← i - 7#usize
+                  R1CertBuild.wpow a i1
+                else do
+                  let i1 ← 14#usize + nf
+                  if i < i1 then R1CertBuild.wzero
+                    else do
+                      let a ← R1CertBuild.wzero
+                      let i2 ← i - i1
+                      let a1 ← R1CertBuild.df2 al zz tr inact ti op i2
+                      R1CertBuild.wsub a a1
+            else
+              if kind = 3#u32 then
+                if i < 14#usize then R1CertBuild.wzero
+                else do
+                  let i1 ← 14#usize + nf
+                  if i < i1 then do
+                      let i2 ← i - 14#usize
+                      let i3 ← fpos.index_usize i2
+                      let i4 ← ru.index_usize rho
+                      let i5 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i3 = i4)))
+                      R1CertBuild.wbase i5
+                    else R1CertBuild.wzero
+              else
+                if i < 14#usize then R1CertBuild.wzero
+                else do
+                  let i1 ← 14#usize + nf
+                  if i < i1 then do
+                      let i2 ← i - 14#usize
+                      let i3 ← fpos.index_usize i2
+                      let i4 ← lift (UScalar.cast UScalarTy.Usize i3)
+                      R1CertBuild.line_fold op ru li rho i4
+                    else do
+                      let a ← R1CertBuild.wzero
+                      let i2 ← i - i1
+                      let i3 ← x16.index_usize rho
+                      let a1 ← R1CertBuild.qbase i3
+                      let a2 ← R1CertBuild.nat_q i2 a1
+                      let a3 ← R1CertBuild.wq a2
+                      R1CertBuild.wsub a a3) =
+    ok z
+kind : U32
+hk : rk.index_usize rho = ok kind
+h✝⁴ :
+  (do
+      let i1 ← 14#usize + nf
+      if i < i1 then do
+          let i2 ← i - 14#usize
+          let i3 ← fpos.index_usize i2
+          let i4 ← ru.index_usize rho
+          let i5 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i3 = i4)))
+          R1CertBuild.wbase i5
+        else R1CertBuild.wzero) =
+    ok z
+ek : ↑kind = gN rk ↑rho
+k0 : ¬↑kind = 0
+k1 : ¬↑kind = 1
+k2 : ¬↑kind = 2
+k3 : ↑kind = 3
+h14 : ¬↑i < 14
+i1 : UScalar UScalarTy.Usize
+hi1 : 14#usize + nf = ok i1
+h✝³ :
+  (do
+      let i2 ← i - 14#usize
+      let i3 ← fpos.index_usize i2
+      let i4 ← ru.index_usize rho
+      let i5 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i3 = i4)))
+      R1CertBuild.wbase i5) =
+    ok z
+e1 : ↑i1 = 14 + ↑nf
+hn : ↑i < 14 + ↑nf
+i2 : UScalar UScalarTy.Usize
+hi2 : i - 14#usize = ok i2
+h✝² :
+  (do
+      let i3 ← fpos.index_usize i2
+      let i4 ← ru.index_usize rho
+      let i5 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i3 = i4)))
+      R1CertBuild.wbase i5) =
+    ok z
+i3 : U32
+hi3 : fpos.index_usize i2 = ok i3
+h✝¹ :
+  (do
+      let i4 ← ru.index_usize rho
+      let i5 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i3 = i4)))
+      R1CertBuild.wbase i5) =
+    ok z
+i4 : U32
+hi4 : ru.index_usize rho = ok i4
+h✝ :
+  (do
+      let i5 ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i3 = i4)))
+      R1CertBuild.wbase i5) =
+    ok z
+i5 : UScalar UScalarTy.U32
+hi5 : lift (UScalar.cast_fromBool UScalarTy.U32 (decide (i3 = i4))) = ok i5
+h : R1CertBuild.wbase i5 = ok z
+e3 : ↑i3 = gN fpos (↑i - 14)
+e4 : ↑i4 = gN ru ↑rho
+⊢ (embR φ) (if decide (↑i3 = ↑i4) = true then 1 else 0) = if gN fpos (↑i - 14) = gN ru ↑rho then 1 else 0
+'R1Z.CertBuild.psi_pfold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.CertBuild.psi_lfv' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.CertBuild.psi_line_fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.CertBuild.coef_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock
