@@ -1,0 +1,102 @@
+J1.e / R8 SHA-256 CALL ACCOUNTING -- PROPOSED, SOURCE CORRESPONDENCE OPEN
+
+1. Scope and evidence
+
+Requested base 7dc4addc8467275ccba1c77073ae9fdb49ceb204; authorized inspection
+HEAD e4a5808dd061cf373b27d130f7d66eb8f0214db9; lead review f5a04e0bb.
+Source hashes, exact PDA preimage shapes, SDK/archive checks and lockfile pins:
+evidence/j1e-call-count-inspection-20261015/source-inspection.json.
+No builds, replay or commits. The accompanying VerifierCallBudget.lean is
+UNCOMPILED; source caps are proposed definitions, not proved universal bounds.
+
+One designated call means one SHA-256 digest evaluation of concatenated raw
+Bytes, including repeated inputs and internal PDA trials. Streaming updates
+and compression blocks are not additional calls. No domain exclusion or global
+input-length cap is assumed. Count every finite prefix, including rejection,
+panic, allocation failure and compute exhaustion, without acceptance or genuine
+checkpoint hypotheses.
+
+The inspected dispatcher rejects legacy1/2 but permits lifecycle4/5/6.
+Coordinator reports a tested stronger guard admitting only exact [3,10],
+[3,11] and ASQ8-prefixed data, rejecting everything else before account borrow.
+That guard is outside this inspection pin; its integration/refinement remains
+explicit. Until connected, retain the admitted-route premise.
+
+2. Core source arithmetic
+
+Abbreviations: V=crates/aspis-r1-cost-probe/src/verifier.rs; W=r1_wire.rs,
+S=r1_semantic.rs, T=transcript.rs in the same directory;
+A=programs/r1-cost-probe/src/r1_pool_adapter.rs.
+
+Semantic initialization plus 27 absorb/squeeze/advance triples:
+1+27*3=82 (W:174-212,345-358; S:83-97,125-130).
+Opening reseed, four scalar triples, query absorb/eight pairs, rho triple:
+1+12+17+3=33 (V:87-99; T:14-43). All eight pairs are precomputed even if
+sampling rejects. Semantic initialization hashes section-9 public bytes;
+checkpoint/resume hashes the complete ASF8 public buffer instead.
+
+Each S2 query has three salted leaves and three six-parent paths:
+3+3*6=21 (V:120-128,242-263); failures short-circuit. Leaf/parent formats are
+in crates/aspis-core/src/{state_only_private_merkle.rs:22-35,r0/merkle.rs:17-31}.
+Checkpoint write and resume each hash complete proof, public and checkpoint
+checksum, at most three calls (V:302-339).
+
+Stage1: 82+33+21*k+3 =328/349 for k=10/11; no PDA search.
+Stage2: 3+21*(22-next)<=465. Arbitrary resume checks only next<=22;
+do not assume next=k. Successful accumulation increments next once, while
+failure stops without retry (V:224-234,342-349,380-385).
+Measured 583 calls/452 distinct, and linked honest-split core arithmetic583,
+exclude PDA work and cannot bound arbitrary stage2 invocations.
+
+3. PDA and runtime arithmetic
+
+A:618-665 authenticates master/checkpoint/lane with three searches.
+Immutable-deployment adds registry-v2, registry ProgramData, entry-v2 and
+verifier ProgramData (A:481-531); its early return excludes v1's two searches
+(A:538-566). Thus at most seven searches, five on v1.
+
+Root SDK solana-pubkey2.4.0 src/lib.rs:823-841 loops 0..u8::MAX, bumps255..1:
+255 trials. Native create_program_address:911-939 finalizes one digest/trial.
+SBF delegates to a syscall; native SDK arithmetic alone does not bound it.
+The pinned local replay runtime solana-syscalls4.2.1 src/lib.rs:884-932 also
+loops 0..255; solana-address2.6.1 src/syscalls.rs:392-447 finalizes one digest
+per trial. SyscallHash:2540-2600 finalizes once after streaming slices.
+These source pins do not attest a live validator version.
+
+Candidate stage2=465+7*255=2250; candidate uniform=max(349,2250)=2250.
+Every failed completed trial counts; translation/compute failure can stop early.
+The inspected admitted call graph has no CPI. Clock/logging/allocation/
+return-data/borrowing handlers show no SHA request; their execution-level
+no-additional-SHA lemma remains OPEN. Any enclosing transaction/runtime work
+in the experiment must be charged explicitly.
+
+4. Lifecycle writes and release unreachability
+
+Lifecycle4 initializes a zero account's header (A:277-300); lifecycle5 writes
+arbitrary bytes to an authorized unsealed body (302-337). Proof's writable
+prefix includes candidate/proof but excludes the 1768-byte checkpoint tail;
+Public includes all ASF8 bytes (120-128). Lifecycle6 checks canonical shape,
+requires S2/zero checkpoint tail for Proof, then clears authority (339-360).
+Zero authority prevents subsequent lifecycle5 writes (208-239).
+
+No SHA/PDA/CPI appears in these lifecycle call graphs, but they DO write
+proof/public buffers. The release repair is unreachable lifecycle routes under
+the stronger guard, with rejection before account access and an empty SHA
+trace. Whole-history immutability remains a separate obligation.
+
+5. Explicit open interface
+
+VerifierCallBudget.lean supplies raw Bytes/Digest/Trace, explicit PrefixStop
+cases, a caller-supplied SourcePrefix relation, PrefixClosed and AllPrefixCount.
+SourceCountObligation requires closure and the 2250 bound for every admitted
+configuration/input, oracle and finite prefix. The relation must originate
+independently from actual execution and record every designated digest read;
+defining it by the budget would not discharge source correspondence.
+
+Only small budget arithmetic and generic FS.firstReads<=trace.length bookkeeping
+are proved in the draft. The latter gives FS2.distinctFirstReads<=total calls,
+without a finite address type. Source/runtime correspondence, admissibility,
+helper invariants, all failure prefixes, and complete PDA syscall accounting
+remain OPEN. Once established, charge QA+2250*verifier_invocations; repeated
+invocations remain separate. No call-count or whole-source theorem is claimed
+from this inventory or its measurements.
