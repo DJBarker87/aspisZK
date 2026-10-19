@@ -1,0 +1,9 @@
+# Executable recorded-run caller and derived opening-word agreement
+
+The ordinary computable wordsFromRun constructor composes state-only replay at commitment rows 0, 2 and 30 with finite recorded-log Merkle recovery and typed leaf decoding. Its equality to the retained RawCutWordsFromView.buildWords is now proved from valid constructor scheduling through row 30. The old FrameCompatible premise is removed. initialWordsFromRun uses the ordinary explicit QM31-to-WideExact algebraMap rather than the specification-level noncomputable alias. extractFromRun calls the maintained actual byte-GS extractor on those reconstructed words.
+
+RawRecordedOpeningWordAgreement reuses opening_read_enriched_success and RawCutTranscriptRun.transcript_eq. From a successful original opening read, it derives a successful read of the recovered-word-enriched transcript and proves that its 29 received words are exactly initialWordsFromRun. The C1/C2 word equality required by extractor completeness is a theorem, not a separately supplied recovered-word assumption. The challenge sequence, opening functionals and semantic challenge projections are preserved.
+
+The two focused Lean 4.32 checks exited 0 in 13.12 and 14.2 seconds, with peak RSS 3,124,019,200 and 3,120,660,480 bytes. Both report zero process swaps and standard axioms only. Exact source/object/import hashes, captured commands, revisions, complete axiom output and compiled objects are retained. No full frozen-manifest replay occurred.
+
+These are working component checks under the research-branch unified-build policy. The extractor receives the decoded public statement as input. Actual source acceptance must still establish parsing, valid rows, accepted Merkle openings and all semantic/check equations. This packet is not a source-correctness proof, a whole polynomial-time cost proof, or a complete 100-bit private-spend theorem.
