@@ -64,6 +64,11 @@ for directory,source in [('AspisR1CuIterator','iterator-generated'),
                          ('AspisR1CuBorrowOption','borrow-option-generated')]:
     assert (area/'lean'/directory/'Types.lean').read_bytes()==(
         Path(__file__).parent/source/'Types.lean').read_bytes(),directory
+audit['rho_init_row_check']=json.loads(subprocess.check_output([
+    sys.executable,str(Path(__file__).with_name('extract-rho-init-row.py')),'--check'],text=True))
+for name in ['Types.lean','Funs.lean']:
+    assert (area/'lean/AspisR1CuRhoInitRow'/name).read_bytes()==(
+        Path(__file__).parent/'rho-init-row-generated'/name).read_bytes(),name
 usage=resource.getrusage(resource.RUSAGE_SELF)
 audit['audit_command']=[sys.executable,str(Path(__file__).relative_to(repo)),*sys.argv[1:]]
 audit['audit_source_revision']=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()

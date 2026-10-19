@@ -171,3 +171,10 @@ including zero. These are not Aeneas machine-source equivalence claims.
 Receipts: `power-loop-a`, `libra-loop-a`, `libra-program-b`; all use standard
 axioms only and zero process swap. COMPONENT-AUDIT now covers 52 successful
 targets and has no uncompiled targets; open obligations in the table remain.
+
+The exact four-word initialization assignment is now separately extracted and
+checked, including every widening cast, counter-zero residue bounds, canonical
+round-trip and composition with source finish from a list initialization model.
+Receipts: `rho-init-row-types-a`, `rho-init-row-funs-a`, `rho-init-row-proof-c`.
+The full unchanged new method encounters an Aeneas borrow-analysis failure;
+its zip/allocation source obligations remain open. See RHO-INITIALIZATION.md.

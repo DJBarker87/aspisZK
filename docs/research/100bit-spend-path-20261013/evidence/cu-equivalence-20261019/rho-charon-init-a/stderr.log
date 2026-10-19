@@ -1,0 +1,28 @@
+   Compiling aspis-r1-cu-rho v0.0.0 (/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/rho-input)
+warning: struct `BatchedWeights` is never constructed
+  --> lib.rs:54:8
+   |
+54 | struct BatchedWeights { raw:Vec<[u64;4]>, terms:usize }
+   |        ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated items `new`, `push`, `value`, and `finish` are never used
+  --> lib.rs:56:8
+   |
+55 | impl BatchedWeights {
+   | ------------------- associated items in this implementation
+56 |     fn new(weights:&[K])->Result<Self,Error> {
+   |        ^^^
+...
+64 |     fn push(&mut self,index:usize,power:K,basis:M31) {
+   |        ^^^^
+...
+71 |     fn value(&self,index:usize)->K {
+   |        ^^^^^
+...
+75 |     fn finish(&self,weights:&mut[K]) {for (i,w) in weights.iter_mut().enumerate(){*w=self.value(i);}}
+   |        ^^^^^^
+
+warning: `aspis-r1-cu-rho` (lib) generated 2 warnings
+    Finished `release` profile [optimized] target(s) in 0.15s
