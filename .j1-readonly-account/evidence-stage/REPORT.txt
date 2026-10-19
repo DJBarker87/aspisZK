@@ -1,0 +1,71 @@
+J1.a actual readonly-account guard: extraction blocked, no theorem
+
+Source: b2ad6649de4c1b97c2270a1c8bd4bbfe5537d52c,
+programs/r1-cost-probe/src/r1_pool_adapter.rs:152–157, file SHA256
+9bdf6732f97c70919bce1afa2f5d901540cbef97f7fd3e6895799041c198895f.
+This continues J1-ACCOUNT-CALLER-NEXT-CUT-20261016; no production edit.
+
+The exact private declaration, including its header and body, is retained:
+fn require_readonly_account(account: &AccountInfo<'_>, owner: &Pubkey)
+    -> ProgramResult
+It returns InvalidAccountData if owner differs or signer/writable/executable
+is true. The kit changes only the enclosing namespace and import paths.
+It imports genuine SDK nominal types, not replacement structs. Pinned
+solana-program 2.3.0 reexports establish AccountInfo/Pubkey/ProgramError;
+solana-program-entrypoint 2.3.0 reexports the same ProgramResult alias.
+
+Selected direct dependencies: solana-account-info 2.3.0 (bincode),
+solana-pubkey 2.4.0 (borsh, bytemuck, curve25519, serde, sha2, std),
+solana-program-error 2.2.2 (borsh, serde). Linux metadata selects 65 registry
+packages; the lock also includes 26 other-target entries. All 91 versions
+and checksums equal the original Cargo.lock. The audit compared 1,873 source
+files with checksum-verified crate archives. The bundle retains all 65
+archives plus the two reexport-provider archives, selected/seed locks,
+metadata, SDK sources, and every Rust source file named by the LLBC.
+
+Charon cb50ff16b9f1066b8a97dc06da704de2da2fa41c (0.1.223), using
+nightly-2026-06-01, succeeded: exit 0, 42.793 s, 396,040 KiB process peak RSS,
+394,596,352 B cgroup peak, zero swaps. The actual helper is transparent.
+AccountInfo retains key, lamports, data, owner, rent_epoch, is_signer,
+is_writable, executable; lamports/data retain Rc<RefCell<&mut ...>>.
+The LLBC contains 13 nonempty type declarations in 14 slots, 11 functions.
+
+Aeneas b59d5188c082f704a418c7cb4e52ad69328002d1 failed: exit 2,
+0.146 s, 60,896 KiB peak RSS, 44,048,384 B cgroup peak, zero swaps.
+The exact first rejection is TPattern(TRawPtr(TVar(Free 0), RShared),
+NotNull), from core::ptr::non_null::NonNull, Rust source line 74,
+Aeneas src/llbc/TypesAnalysis.ml:486. AccountInfo → Rc.ptr → NonNull
+reaches this type before helper translation. No Lean files were generated.
+Both jobs had enforced MemoryHigh=6 GiB, MemoryMax=8 GiB, SwapMax=0;
+aggregate reserved upper bound was 16 GiB, below the 48 GiB limit.
+
+Complete unresolved inventory (raw names/signatures remain in the LLBC):
+Opaque type: alloc::string::String.
+Opaque functions: reference PartialEq::{ne,eq}; PartialEq::ne default;
+array PartialEq::{eq,ne}; u8 PartialEq::{eq,ne}; String::drop_glue.
+Foreign but structurally present types: Result, Global, PhantomData.
+Foreign traits: PartialEq and Destruct. Foreign implementations: reference,
+array and u8 PartialEq, and String Destruct. These are the 18 opaque/foreign
+declarations in llbc-inventory.json; none is silently treated as proved.
+One Error node remains: Rc.alloc's "removed allocator parameter".
+Charon's has_errors=false does not eliminate that marker. ProgramError's
+drop glue and Pubkey equality have actual structured bodies. Compatibility
+or axiom closure for the foreign entries was not reached or certified.
+
+The intended success ⇒ owner equality and three false flags theorem remains
+OPEN. No Lean check, axiom audit, SDK authentication theorem, hs discharge,
+or cross-stage checkpoint binding is claimed. The failed initial dependency
+audit (absent .cargo-checksum.json) is retained separately; the replacement
+uses checksum-verified .crate archives without changing dependencies.
+
+Next options require lead review. One route is genuine supported semantics
+for NonNull/Rc/RefCell and the remaining foreign/allocator cases, with the
+actual SDK carrier and effects. Another is an actual-source metadata-helper
+refactor retaining the AccountInfo wrapper and error order. A theorem about
+that new pure helper would still require real wrapper field-projection and
+caller-reachability obligations; it would not establish full-SDK extraction.
+No flags-only surrogate, translator patch, or extraction retry was made.
+
+Evidence: evidence/readonly-account-extraction-20261016/verify.py verifies
+the source cut, crate/lock pins, rejected LLBC inventory, raw failures and
+resource receipts. It performs no proof replay.

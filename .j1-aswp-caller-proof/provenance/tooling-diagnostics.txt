@@ -1,0 +1,16 @@
+Retained non-proof diagnostics:
+1. Initial import-aggregate scanner deduplicated header imports. This reproduced
+all-artifacts hash f90ecd83c52e54ec but yielded legacy854ab7db8a674167. The corrected
+ordered scanner retains duplicates (55 affected modules) and yields exactly
+legacy693e25ff4498b2e4. Both source scripts and outputs are retained.
+2. First host SHA read/hash command named mathlib-trace-closure-ordered.json before
+it had been copied to that host path. It exited1/FileNotFoundError before reading
+artifacts. Copying the exact locally retained JSON (SHA30f6abce6f361249b974d67b3074414c8b4048073547f5be1a089f972b320f18)
+resolved setup; no source, object, trace, or axiom policy changed.
+Final read/hash utility ran under6/8/0 and verified34,556 Lake hashes, with progress
+at every1,000 files. It made no theorem declarations and compiled no dependencies.
+Current Linux and macOS Lean both report version4.32.0, commit
+8c9756b28d64dab099da31a4c09229a9e6a2ef35 (the historical trace version/commit).
+Historical binary SHA is not claimed; current utility runtime binaries are pinned
+in the receipts. Historical hashes are Lake64-bit hashes, supplemented here by
+fresh source/object SHA256, not retroactively SHA256-producing receipts.
