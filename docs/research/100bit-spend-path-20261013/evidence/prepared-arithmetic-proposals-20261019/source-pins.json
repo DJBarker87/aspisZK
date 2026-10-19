@@ -1,0 +1,195 @@
+{
+  "files": [
+    {
+      "Git_source_revision": "32559d2696b89cdbd75304c1f7624f94dfe125ae",
+      "declarations": [
+        {
+          "anchor": "fn prepared_claim<",
+          "declaration_sha256": "2512f52c00387651e41d91f5d14e942a15c2205d5430ab94c129632cc5ec2c8e",
+          "declaration_text": "fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,gamma:E,kappa:E)->Result<E,Error> {\n        let g=powers::<29>(gamma);let k=powers::<7>(kappa);\n        let mut parts=[E::ZERO;7];parts[0]=inactive;\n        for point in 0..6 {\n            let mut dot=crate::fast_pairing::EbyKDot::new();\n            for l in 0..29 {\n                let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()};\n                dot.push(g[l],scalar).map_err(|_|Error::Parse)?;\n            }\n            parts[point+1]=dot.finish();\n        }\n        let mut claim=E::ZERO;\n        for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}\n        crate::trace::value(14,7,claim);\n        Ok(claim)\n}",
+          "first_line": 85,
+          "qualified_context_label": "prepared_claim"
+        },
+        {
+          "anchor": "pub fn new<H:Digest32>",
+          "declaration_sha256": "f6405e2e99efe5a097346820c171a9482d59c59191e9c2a72dca7efe55431a96",
+          "declaration_text": "    pub fn new<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,hash:H)->Result<Box<Self>,Error> {\n        let mut t=Transcript::new(hash,sem.transcript.state(),v.variant);\n        let gamma=t.scalar(27,v.y1,true);\n        let kappa=t.scalar(28,&v.inactive.to_le_bytes(),false);\n        let alpha0=t.scalar(29,v.round0,false);\n        let (alpha,row)=if v.variant.folds()==2 {\n            let mut bytes=Vec::with_capacity(32+224);bytes.extend_from_slice(v.folded_root.unwrap());bytes.extend_from_slice(v.round1);\n            ([alpha0,t.scalar(30,&bytes,false)],31)\n        } else {\n            ([alpha0,E::ZERO],30)\n        };\n        let queries=t.queries(row,v.final_message)?;\n        let rho=t.scalar_k(row+1,&[]);\n        let claim=prepared_claim(sem,v.y1,v.inactive,gamma,kappa)?;\n        Ok(Box::new(Self{variant:v.variant,roots:sem.roots,gamma,kappa,alpha,rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state:t.state}))\n    }",
+          "first_line": 104,
+          "qualified_context_label": "Prepared.new"
+        },
+        {
+          "anchor": "pub fn checkpoint<",
+          "declaration_sha256": "8d9c8d0e228be12a88e12e00b3f29b6225fcb404bf84862dea2ce4e0c7c2e2ca",
+          "declaration_text": "pub fn checkpoint<H:Digest32>(p:&Prepared,a:&Accumulator,proof:&[u8],public:&[u8],hash:H)->Vec<u8> {\n    let mut out=Vec::with_capacity(checkpoint_size(p.variant));\n    out.extend_from_slice(b\"R1P2CKP2\");out.extend_from_slice(&[p.variant.tag(),a.next as u8,1,0,0,0,0,0]);\n    out.extend_from_slice(&hash.digest(&[proof]));out.extend_from_slice(&hash.digest(&[public]));out.extend_from_slice(&p.state);\n    for root in &p.roots {out.extend_from_slice(root);}\n    for x in [p.gamma,p.kappa,p.alpha[0],p.alpha[1]] {put(&mut out,x);}\n    put_k(&mut out,p.rho);\n    for q in p.queries {out.extend_from_slice(&q.to_le_bytes());}\n    for x in p.semantic_alpha {let mut b=[0;16];x.write_le_bytes(&mut b);out.extend_from_slice(&b);}\n    for z in p.z {for x in [z.x,z.y] {let mut b=[0;16];x.write_le_bytes(&mut b);out.extend_from_slice(&b);}}\n    for x in [p.claim,a.rhs] {put(&mut out,x);}\n    put_k(&mut out,a.power);\n    for &x in &a.weights {put_k(&mut out,x);}\n    let sum=hash.digest(&[b\"UNPROVED:R1:checkpoint\",&out]);out.extend_from_slice(&sum);\n    assert_eq!(out.len(),checkpoint_size(p.variant));out\n}",
+          "first_line": 308,
+          "qualified_context_label": "checkpoint"
+        },
+        {
+          "anchor": "pub fn resume<",
+          "declaration_sha256": "53b819619ef7b9c87872ff5ca77ff5f2514a6d85bb7f96bd9bb1f4f2138fbaed",
+          "declaration_text": "pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)->Result<(Box<Prepared>,Accumulator),Error> {\n    if bytes.len()!=checkpoint_size(v)||&bytes[..8]!=b\"R1P2CKP2\"||bytes[8]!=v.tag()||bytes[9]>22||bytes[10]!=1||bytes[11..16].iter().any(|&b|b!=0) {return Err(Error::Checkpoint);}\n    let end=bytes.len()-32;\n    if bytes[16..48]!=hash.digest(&[proof])||bytes[48..80]!=hash.digest(&[public])||bytes[end..]!=hash.digest(&[b\"UNPROVED:R1:checkpoint\",&bytes[..end]]) {return Err(Error::Checkpoint);}\n    let mut r=Reader{bytes,at:80};let state=r.raw();let roots=[r.raw(),r.raw()];\n    let gamma=r.e()?;let kappa=r.e()?;let alpha=[r.e()?,r.e()?];let rho=r.k()?;\n    let queries=core::array::from_fn(|_|u32::from_le_bytes(r.raw()));\n    for (i,q) in queries.iter().enumerate(){if *q>=1<<18||queries[..i].contains(q){return Err(Error::Checkpoint);}}\n    let mut semantic_alpha=[K::ZERO;10];for x in &mut semantic_alpha {*x=r.k()?;}\n    let z=[SecureCirclePoint{x:r.k()?,y:r.k()?},SecureCirclePoint{x:r.k()?,y:r.k()?}];\n    let claim=r.e()?;let rhs=r.e()?;let power=r.k()?;\n    let mut weights=aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;\n    for x in &mut weights {*x=r.k()?;}\n    if r.at!=end {return Err(Error::Checkpoint);}\n    Ok((Box::new(Prepared{variant:v,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state}),Accumulator{weights,rhs,power,next:bytes[9] as usize}))\n}",
+          "first_line": 331,
+          "qualified_context_label": "resume"
+        },
+        {
+          "anchor": "fn tx1_finish<",
+          "declaration_sha256": "07f740d9eaac9d2ac5e85ef1a2e7cad04ed8c7a19f005f757988a55df9b06517",
+          "declaration_text": "fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {\n    let geometry=QueryGeometry::for_range(&p.queries,0,k)?;\n    while a.next<k {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}\n    let bytes=checkpoint(&p,&a,proof,public_bytes,hash);mark(obs,Phase::CheckpointWrite);Ok(bytes)\n}",
+          "first_line": 348,
+          "qualified_context_label": "tx1_finish"
+        },
+        {
+          "anchor": "fn tx1_prepare<",
+          "declaration_sha256": "c35f8bdd3c243e91af73fdcab9d26153af88d7853c4e2044856e40ad27e2c2f2",
+          "declaration_text": "fn tx1_prepare<H:Digest32>(public:Public<'_>,v:&View<'_>,hash:H,obs:Observer)->Result<(Box<[[K;29];3]>,Box<Prepared>),Error> {\n    let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;mark(obs,Phase::Semantic);\n    let p=Prepared::new(&sem,v,hash)?;\n    Ok((sem.claims,p))\n}",
+          "first_line": 355,
+          "qualified_context_label": "tx1_prepare"
+        },
+        {
+          "anchor": "pub fn tx1<",
+          "declaration_sha256": "7db5faa48b313b1f358caff65f967e9e7a91334d17910f6134e53c83a44b3411",
+          "declaration_text": "pub fn tx1<H:Digest32>(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {\n    if k>22 {return Err(Error::Parse);}\n    let v=View::parse(proof)?;mark(obs,Phase::Parsed);\n    let (_semantic_claims,p)=tx1_prepare(public,&v,hash,obs)?;let mut a=Accumulator::new(v.variant)?;let g=powers::<29>(p.gamma);mark(obs,Phase::Prepare);\n    tx1_finish(v,p,a,g,public_bytes,proof,k,hash,obs)\n}",
+          "first_line": 362,
+          "qualified_context_label": "tx1"
+        },
+        {
+          "anchor": "pub fn tx2_authenticated<",
+          "declaration_sha256": "54495074dff48e193c94fc438c87f4c59fdd366c909197c098de0310f9a869fd",
+          "declaration_text": "pub fn tx2_authenticated<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,obs:Observer)->Result<(),Error> {\n    let v=View::parse_shape(proof)?;mark(obs,Phase::Parsed);\n    let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);\n    let geometry=QueryGeometry::for_range(&p.queries,a.next,22)?;\n    while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}\n    finish_relation(&v,&p,&a,obs)\n}",
+          "first_line": 397,
+          "qualified_context_label": "tx2_authenticated"
+        },
+        {
+          "anchor": "pub fn finish_relation(",
+          "declaration_sha256": "1d2dfc4050518cc753bdd54a4916fa54e9f38fd56ddffb4c5566fabdd162658b",
+          "declaration_text": "pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Result<(),Error> {\n    let mut claim=p.claim;\n    for round in 0..p.variant.folds() {\n        let poly=if round==0 {v.round0}else{v.round1};\n        let lhs=field(poly,0).add(field(poly,4));let rhs=claim.mul_m31(QUARTER);\n        crate::trace::value(15,3*round,lhs);crate::trace::value(15,3*round+1,rhs);\n        if lhs!=rhs {return Err(Error::Relation);}\n        claim=polynomial(poly,p.alpha[round]);crate::trace::value(15,3*round+2,claim);\n    }\n    let weights=Weights::new(p.variant,&p.semantic_alpha,&p.z)?;\n    let pair=weights.pair(&p.alpha[..p.variant.folds()],v.final_message,p.kappa)?;\n    crate::trace::value(16,0,pair);crate::trace::value(16,1,claim);\n    if pair!=claim {return Err(Error::Relation);}\n    mark(obs,Phase::Relation);\n    let mut dot=crate::fast_pairing::EbyKDot::new();\n    for (j,w) in a.weights.iter().enumerate() {dot.push(field(v.final_message,j),*w).map_err(|_|Error::Parse)?;}\n    let actual=dot.finish();\n    crate::trace::value(17,0,actual);crate::trace::value(17,1,a.rhs);\n    if a.next!=22||actual!=a.rhs {return Err(Error::Query);}\n    mark(obs,Phase::Final);Ok(())\n}",
+          "first_line": 284,
+          "qualified_context_label": "finish_relation"
+        }
+      ],
+      "file_sha256": "2babda97eabb9e84204204f016dc37562ec7b762e7c66abbce0f6a5c17b1d6d9",
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs"
+    },
+    {
+      "Git_source_revision": "32559d2696b89cdbd75304c1f7624f94dfe125ae",
+      "declarations": [
+        {
+          "anchor": "pub fn powers<",
+          "declaration_sha256": "3919d83b539f8819c40251a84625b582ac88338fed2fa14b18951a69c0e1d018",
+          "declaration_text": "pub fn powers<const N:usize>(x:E)->[E;N] { let mut p=E::ONE;core::array::from_fn(|_| {let a=p;p=p.mul(x);a}) }",
+          "first_line": 7,
+          "qualified_context_label": "powers"
+        }
+      ],
+      "file_sha256": "68c9087712ff6bfb08c7ed41a1281798466e6671800761c80f83126963262f63",
+      "path": "crates/aspis-r1-cost-probe/src/weights.rs"
+    },
+    {
+      "Git_source_revision": "32559d2696b89cdbd75304c1f7624f94dfe125ae",
+      "declarations": [
+        {
+          "anchor": "fn semantic_boundary(",
+          "declaration_sha256": "24087d364f2f543d7763d940977bf117826767df82207a7fab92f4f59891d5bb",
+          "declaration_text": "fn semantic_boundary(polynomial: &[QM31; 28]) -> QM31 {\n        let boundary = polynomial.iter().copied().fold(polynomial[0], QM31::add);\n    boundary\n}",
+          "first_line": 82,
+          "qualified_context_label": "semantic_boundary"
+        },
+        {
+          "anchor": "fn semantic_value(",
+          "declaration_sha256": "f40e51f1986bab8bd8509dda5f77c97aa455e04e70f8b4503ac8e0f8a5341863",
+          "declaration_text": "fn semantic_value(polynomial: &[QM31; 28], alpha: &[QM31; 10], round: usize) -> QM31 {\n        let value = polynomial\n            .iter()\n            .rev()\n            .fold(QM31::ZERO, |a, &c| a.mul(alpha[round]).add(c));\n    value\n}",
+          "first_line": 87,
+          "qualified_context_label": "semantic_value"
+        },
+        {
+          "anchor": "fn semantic_round<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>, mut alpha: [QM31; 10], mut running: QM31, round: usize) ->",
+          "declaration_sha256": "40c5ed66b51b544aeba0cdffddd9991192f9cfc90af5c87355e9f7c1c5211eec",
+          "declaration_text": "fn semantic_round<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>, mut alpha: [QM31; 10], mut running: QM31, round: usize) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {\n        let row = 15 + round as u8;\n        let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;\n        let boundary = semantic_boundary(&polynomial);\n        if boundary != running {\n            return Err(Error::Boundary { round });\n        }\n        alpha[round] = transcript.semantic_validated(prefix.validated_record(row)?)?;\n        let value = semantic_value(&polynomial, &alpha, round);\n        #[cfg(feature = \"prover\")]\n        {\n            round_checks[round] = [running, boundary, value];\n        }\n        running = value;\n    Ok((running, alpha, transcript))\n}",
+          "first_line": 96,
+          "qualified_context_label": "semantic_round.not_prover"
+        },
+        {
+          "anchor": "fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error>",
+          "declaration_sha256": "1817517b5df39da29ffd3868bd4c3eeb07cb140051da0420bc31e763b5ca7f02",
+          "declaration_text": "fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {\n    let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];\n    let mut alpha = [QM31::ZERO; 10];\n    #[cfg(feature = \"prover\")]\n    let mut round_checks = [[QM31::ZERO; 3]; 10];\n    {\n        let round = 0usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 1usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 2usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 3usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 4usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 5usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 6usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 7usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 8usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 9usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    Ok((running, alpha, transcript))\n}",
+          "first_line": 133,
+          "qualified_context_label": "semantic_rounds.not_prover"
+        },
+        {
+          "anchor": "fn verify_finish<",
+          "declaration_sha256": "e35ca50a3b472d40538941b6c5eb2a28e31ab0143966925a99a1a851572495c7",
+          "declaration_text": "fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {\n    #[cfg(not(feature = \"prover\"))]\n    let (running, alpha, mut transcript) = semantic_rounds(&prefix, transcript)?;\n    #[cfg(feature = \"prover\")]\n    let (running, alpha, mut transcript, round_checks) = semantic_rounds(&prefix, transcript)?;\n    mark(obs, 2);\n    let claims = claims(&prefix)?;\n    let original_challenges = aspis_core::state_only_prefix::r0::Challenges {\n        lambda: challenges.lambda,\n        chi: challenges.chi,\n        theta: challenges.theta,\n        zc: challenges.zc,\n        mu: challenges.mu,\n        eta: challenges.eta,\n    };\n    let terminal = public\n        .terminal_qm31(&claims, &alpha, &original_challenges)\n        .map_err(|_| Error::Public)?;\n    mark(obs, 3);\n    let mask = aspis_core::state_only_hiding::state_only_selected_mask_value(\n        &core::array::from_fn(|i| claims[0][i]),\n        &core::array::from_fn(|i| claims[0][16 + i]),\n        claims[0][27],\n        &alpha,\n    );\n    let extra = prefix.validated_record(25)?.decode_k::<29>(87)?;\n    let masked_terminal = mask.add(challenges.eta.mul(terminal)).add(extra[28]);\n    if running != masked_terminal {\n        return Err(Error::Terminal);\n    }\n    mark(obs, 4);\n    let state_before_z0 = transcript.state();\n    let z0 = transcript.circle_validated(prefix.validated_record(25)?)?;\n    let before_z1 = prefix.validated_record(26)?.decode_k::<29>(0)?;\n    let z1 = transcript.circle_validated(prefix.validated_record(26)?)?;\n    mark(obs, 5);\n    #[cfg(feature = \"prover\")]\n    {\n        for (i, x) in [z0.x, z0.y, z1.x, z1.y].into_iter().enumerate() {\n            crate::trace::value(3, i, aspis_core::field::WideExact::from_qm31(x));\n        }\n        for (i, x) in challenges.with_alphas(&alpha).into_iter().enumerate() {\n            crate::trace::value(0, i, x);\n        }\n        for (i, row) in round_checks.iter().enumerate() {\n            for (j, x) in row.iter().enumerate() {\n                crate::trace::value(1, 3 * i + j, aspis_core::field::WideExact::from_qm31(*x));\n            }\n        }\n        crate::trace::value(2, 0, aspis_core::field::WideExact::from_qm31(terminal));\n        crate::trace::value(\n            2,\n            1,\n            aspis_core::field::WideExact::from_qm31(masked_terminal),\n        );\n    }\n    if z0 == z1 {\n        return Err(Error::EqualCirclePoints);\n    }\n    Ok(Verified {\n        roots: [*prefix.c1_root, prefix.payload(2)?.try_into().unwrap()],\n        challenges,\n        alpha,\n        claims,\n        extra,\n        before_z1,\n        state_before_z0,\n        z: [z0, z1],\n        transcript,\n        #[cfg(feature = \"prover\")]\n        round_checks,\n        #[cfg(feature = \"prover\")]\n        terminal,\n        #[cfg(feature = \"prover\")]\n        masked_terminal,\n    })\n}",
+          "first_line": 232,
+          "qualified_context_label": "verify_finish"
+        },
+        {
+          "anchor": "pub fn verify_observed<",
+          "declaration_sha256": "27205d3c1b0d1ae48ed5912d7cd971268c0721d1e6f16073d877ddd356aefa14",
+          "declaration_text": "pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {\n    let prefix = Prefix::parse(bytes)?;\n    mark(obs, 0);\n    let mut transcript = public_transcript(public, hash, prefix.c1_root)?;\n    let challenges = wire::begin(&prefix, &mut transcript)?;\n    mark(obs, 1);\n    verify_finish(public, prefix, transcript, challenges, obs)\n}",
+          "first_line": 311,
+          "qualified_context_label": "verify_observed"
+        }
+      ],
+      "file_sha256": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "path": "crates/aspis-r1-cost-probe/src/r1_semantic.rs"
+    },
+    {
+      "Git_source_revision": "32559d2696b89cdbd75304c1f7624f94dfe125ae",
+      "declarations": [
+        {
+          "anchor": "pub fn begin<",
+          "declaration_sha256": "f7f4232f384de89b49721bf105ab36c696aea0652af20fe95ae65d7cd3ec8215",
+          "declaration_text": "pub fn begin<H: Digest32>(\n    prefix: &Prefix<'_>,\n    transcript: &mut SemanticTranscript<H>,\n) -> Result<Challenges, Error> {\n    let lambda = transcript.semantic_validated(prefix.validated_record(0)?)?;\n    let chi = transcript.semantic_validated(prefix.validated_record(1)?)?;\n    let theta = transcript.semantic_validated(prefix.validated_record(2)?)?;\n    let mut zc = [QM31::ZERO; 10];\n    zc[0] = transcript.semantic_validated(prefix.validated_record(3)?)?;\n    zc[1] = transcript.semantic_validated(prefix.validated_record(4)?)?;\n    zc[2] = transcript.semantic_validated(prefix.validated_record(5)?)?;\n    zc[3] = transcript.semantic_validated(prefix.validated_record(6)?)?;\n    zc[4] = transcript.semantic_validated(prefix.validated_record(7)?)?;\n    zc[5] = transcript.semantic_validated(prefix.validated_record(8)?)?;\n    zc[6] = transcript.semantic_validated(prefix.validated_record(9)?)?;\n    zc[7] = transcript.semantic_validated(prefix.validated_record(10)?)?;\n    zc[8] = transcript.semantic_validated(prefix.validated_record(11)?)?;\n    zc[9] = transcript.semantic_validated(prefix.validated_record(12)?)?;\n    let mu = transcript.semantic_validated(prefix.validated_record(13)?)?;\n    let eta = transcript.semantic_validated(prefix.validated_record(14)?)?;\n    Ok(Challenges {\n        lambda,\n        chi,\n        theta,\n        zc,\n        mu,\n        eta,\n    })\n}",
+          "first_line": 390,
+          "qualified_context_label": "begin"
+        }
+      ],
+      "file_sha256": "3a6f30708d5cd8de323438a5b5de479cc59d1c8234958197c3a033a0204256f3",
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs"
+    },
+    {
+      "Git_source_revision": "32559d2696b89cdbd75304c1f7624f94dfe125ae",
+      "declarations": [
+        {
+          "anchor": "fn require_verifier_checkpoint(",
+          "declaration_sha256": "ab13ba4bbf7637fe2b1f76b049a00e904b77e3b93689ffbc1539d8fa018e1228",
+          "declaration_text": "fn require_verifier_checkpoint(\n    account: &AccountInfo<'_>,\n    program_id: &Pubkey,\n    writable: bool,\n) -> ProgramResult {\n    if account.owner != program_id || account.is_signer || account.executable\n        || account.is_writable != writable\n        || account.try_data_len()? != verifier::checkpoint_size(Variant::S2)\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    Ok(())\n}",
+          "first_line": 192,
+          "qualified_context_label": "require_verifier_checkpoint"
+        },
+        {
+          "anchor": "fn stage1(",
+          "declaration_sha256": "2d17a40061a265b9b67b4bf7d932176d3fe7a8e62e238ffe0753ecf4cc9d2e57",
+          "declaration_text": "fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {\n    if !(data == &[3, 10] || data == &[3, 11]) || accounts.len() != 3 {\n        return Err(ProgramError::InvalidInstructionData);\n    }\n    let proof_account = &accounts[0];\n    let public_account = &accounts[1];\n    let checkpoint_account = &accounts[2];\n    require_distinct_accounts(&[proof_account, public_account, checkpoint_account])?;\n    require_readonly_buffer(proof_account)?;\n    require_readonly_buffer(public_account)?;\n    require_verifier_checkpoint(checkpoint_account, program_id, true)?;\n    let mut checkpoint_data = checkpoint_account.try_borrow_mut_data()?;\n    if checkpoint_data.iter().any(|byte| *byte != 0) {\n        return Err(ProgramError::AccountAlreadyInitialized);\n    }\n    let public_data = public_account.try_borrow_data()?;\n    let statement = decode_public_statement_box(&public_data)?;\n    validate_pool_v1_pair_forest_terminal_statement_v1(&statement)\n        .map_err(|_| ProgramError::InvalidAccountData)?;\n    let candidate = encode_pool_v1_pair_verified_afterstate_v1(\n        &statement.common().lane_transition.candidate_afterstate,\n    )\n    .map_err(|_| ProgramError::InvalidAccountData)?;\n\n    let proof_data = proof_account.try_borrow_data()?;\n    let proof_length = verifier::View::proof_bytes(Variant::S2);\n    let proof_start = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;\n    let proof_end = proof_start.checked_add(proof_length)\n        .ok_or(ProgramError::InvalidAccountData)?;\n    if proof_data.len() != proof_end\n        || proof_data[..proof_start] != candidate\n        || proof_data[proof_start + 8] != Variant::S2.tag()\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    let checkpoint = super::first(&public_data, &proof_data[proof_start..proof_end], data[1] as usize)?;\n    if checkpoint.len() != checkpoint_data.len() {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    checkpoint_data.copy_from_slice(&checkpoint);\n    msg!(\"r1:pool-adapter-stage1-checkpoint-written\");\n    solana_program::log::sol_log_compute_units();\n    Ok(())\n}",
+          "first_line": 928,
+          "qualified_context_label": "stage1"
+        },
+        {
+          "anchor": "fn stage2(",
+          "declaration_sha256": "4a504f1898ebbd2dbc969f08cbc89afd21e26ee432975fff573a709290181139",
+          "declaration_text": "fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {\n    if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..])\n    {\n        return Err(ProgramError::InvalidInstructionData);\n    }\n    program::set_return_data(&[]);\n    msg!(\"r1:pool-adapter-stage2-begin\");\n    solana_program::log::sol_log_compute_units();\n    let validated = validate_asq8(program_id, accounts, data)?;\n    let proof_data = accounts[0].try_borrow_data()?;\n    let checkpoint_data = accounts[6].try_borrow_data()?;\n    let proof_start = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;\n    let proof_end = proof_start.checked_add(validated.proof_length)\n        .ok_or(ProgramError::InvalidAccountData)?;\n    if proof_data.len() != proof_end {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    let public_bytes = encode_pool_v1_pair_forest_terminal_statement_v1(&validated.statement)\n        .map_err(|_| ProgramError::InvalidInstructionData)?;\n    if public_bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES {\n        return Err(ProgramError::InvalidInstructionData);\n    }\n    verifier::tx2_authenticated(\n        &public_bytes,\n        &proof_data[proof_start..proof_end],\n        &checkpoint_data,\n        super::SolanaDigest,\n        Some(super::mark),\n    )\n    .map_err(super::error)?;\n    emit_result(&validated.statement)\n}",
+          "first_line": 974,
+          "qualified_context_label": "stage2"
+        }
+      ],
+      "file_sha256": "0bd2ded7298505e03300d88c7e5a72ee33a94fddc56311ae32d36d350e39262c",
+      "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs"
+    },
+    {
+      "Git_source_revision": "32559d2696b89cdbd75304c1f7624f94dfe125ae",
+      "declarations": [
+        {
+          "anchor": "pub fn terminal_qm31(",
+          "declaration_sha256": "906bfb39b8f0b84710c9c46572b6db60912a32bb28c443f43901309424b596fc",
+          "declaration_text": "        pub fn terminal_qm31(\n            self,\n            claims: &[[QM31; 29]; 3],\n            alpha: &[QM31; 10],\n            c: &Challenges,\n        ) -> Result<QM31, Error> {\n            let selected = core::array::from_fn(|i| claims[i / 28][i % 28]);\n            terminal_parts(\n                self.semantic(),\n                &selected,\n                alpha,\n                c.lambda,\n                c.chi,\n                c.theta,\n                &c.zc,\n                c.mu,\n            )\n            .map(|parts| parts.0)\n            .map_err(|_| Error::Public)\n        }",
+          "first_line": 2080,
+          "qualified_context_label": "Public.terminal_qm31"
+        }
+      ],
+      "file_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs"
+    }
+  ],
+  "hash_scope": "Exacttextdeclaration+bodies andwholefiles, read-only sourcepins, not a proof or compilerresult.",
+  "source_revision": "32559d2696b89cdbd75304c1f7624f94dfe125ae"
+}
