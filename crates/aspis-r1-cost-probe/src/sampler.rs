@@ -3,6 +3,18 @@ use aspis_core::circle::{secure_ood_circle_point_from_parameter, SecureCirclePoi
 use aspis_core::field::{WideExact, CM31, M31, P, QM31};
 pub use aspis_core::r0_transcript::CircleRow;
 
+/// Exact quotient/remainder for x < P*2^32. Write x=a*2^31+b:
+/// x=a*P+(a+b), and a+b<3P, so at most two corrections suffice.
+/// This preserves all quotient words, including the high-rank remainder.
+#[inline(always)]
+fn divide_base_p_word(x:u64)->(u32,u32) {
+    let mut quotient=x>>31;
+    let mut remainder=(x&u64::from(P))+quotient;
+    if remainder>=u64::from(P) {remainder-=u64::from(P);quotient+=1;}
+    if remainder>=u64::from(P) {remainder-=u64::from(P);quotient+=1;}
+    (quotient as u32,remainder as u32)
+}
+
 /// Divide a little-endian word array by P, retaining every quotient word.
 /// Dividends are below P * 2^32, so every division fits in u64.
 fn qm31_div_pass(mut rank: [u32; 8]) -> ([u32; 8], u32) {
@@ -11,8 +23,8 @@ fn qm31_div_pass(mut rank: [u32; 8]) -> ([u32; 8], u32) {
     while j > 0 {
         j -= 1;
         let dividend = (remainder << 32) | u64::from(rank[j]);
-        rank[j] = (dividend / u64::from(P)) as u32;
-        remainder = dividend % u64::from(P);
+        let (word,rest)=divide_base_p_word(dividend);
+        rank[j]=word;remainder=u64::from(rest);
     }
     (rank, remainder as u32)
 }
@@ -60,8 +72,8 @@ fn low_base_p_digits(block: &[u8; 32]) -> ([u32; 8], u32) {
         let mut remainder = 0u64;
         for limb in quotient.iter_mut().rev() {
             let dividend = (remainder << 32) | u64::from(*limb);
-            *limb = (dividend / u64::from(P)) as u32;
-            remainder = dividend % u64::from(P);
+            let (word,rest)=divide_base_p_word(dividend);
+            *limb=word;remainder=u64::from(rest);
         }
         remainder as u32
     });
@@ -154,8 +166,8 @@ mod qm31_index_tests {
         let mut remainder = 0u64;
         for limb in rank.iter_mut().rev() {
             let dividend = (remainder << 32) | u64::from(*limb);
-            *limb = (dividend / u64::from(P)) as u32;
-            remainder = dividend % u64::from(P);
+            let (word,rest)=divide_base_p_word(dividend);
+            *limb=word;remainder=u64::from(rest);
         }
         (rank, remainder as u32)
     }
@@ -225,6 +237,28 @@ mod qm31_index_tests {
                 chunk.copy_from_slice(&z.to_le_bytes());
             }
             check(&block);
+        }
+    }
+}
+
+#[cfg(test)]
+mod base_p_word_tests {
+    use super::*;
+    #[test]
+    fn word_division_matches_quotient_and_remainder_at_boundaries() {
+        for rem in [0,1,P/2,P-2,P-1] {
+            for word in [0,1,P-1,P,u32::MAX-1,u32::MAX] {
+                let x=(u64::from(rem)<<32)|u64::from(word);
+                let (q,r)=divide_base_p_word(x);
+                assert_eq!(u64::from(q),x/u64::from(P));
+                assert_eq!(u64::from(r),x%u64::from(P));
+            }
+        }
+        let mut state=0x1a2b3c4d5e6f7081u64;
+        for _ in 0..100000 {
+            state=state.wrapping_mul(6364136223846793005).wrapping_add(1);
+            let x=state%(u64::from(P)<<32);let(q,r)=divide_base_p_word(x);
+            assert_eq!((u64::from(q),u64::from(r)),(x/u64::from(P),x%u64::from(P)));
         }
     }
 }
