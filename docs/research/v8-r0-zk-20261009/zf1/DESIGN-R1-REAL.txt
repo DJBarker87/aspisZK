@@ -1,0 +1,54 @@
+R1 real model — phase-indexed prover R1ProverP, games fsR1P/abR1P, and the
+R1RealData fields cp / CmLayout / exh / Agree  (LOG D48.3)
+===========================================================================
+
+Base c15195f76 (D48). Branch codex/r0-real-model-20261019. GamesR1 is not
+edited; everything below is in new modules.
+Status legend as DESIGN-R1-GAMES: PROVED / HYP (named Lean premise) / REF
+(Rust <-> Lean refinement, outside Lean) / PROPOSED.
+
+§1  The phase-indexed prover and the real game  (PROVED defs, R1Z/GamesR1P)
+  An attempt is one read program over Pos1 = TRead ⊕ CPos, CPos = 3 roots ⊕
+  2 expander streams (E₁, E₂ blocks) ⊕ RIdx (2 bindings, 3 seeds, 3×2^18
+  salts, 3×2^18 leaves, 3×37448 non-root 8-ary nodes).  Every address is
+  computed from the answers read so far in the prover's order Pr.ord, so the
+  C2 root (after rows 0–1), the folded root (after row 29), the challenges
+  chOf W tr and the tape are all evaluated on partial vectors (runC).  The
+  statement digest H(public_bytes) is read first.  realGameP accepts the
+  first attempt with P ∧ V ∧ ¬exhausted and publishes (view, verifier log:
+  115 transcript reads + opening reads, answers H(address)), then the
+  adversary log.  fsR1P.ideal = fsR1.ideal; abR1P = abR1.
+§2  Frozen lazy programming  (PROVED, R1Z/LazyFrozen)
+  progF skips writes into a fixed frozen set (the digest address);
+  mean_progF is exact when addresses depend on earlier answers and on the
+  table only through the frozen set; runC_spec; run_eqF.
+§3  Commitment layout  (PROVED from the grammar, R1Z/LayoutR1P, P2, P3)
+  gram: the Rust byte grammar of every commitment read (constants copied
+  from state_only_entropy.rs / state_only_hiding.rs / prover.rs / merkle.rs;
+  ctxEnc = StateOnlyHidingContext::encode).  src/fld: designated fields
+  (nonce, entropy, leaf-salt seed, or an earlier RIdx answer); depS:
+  dependency sets; gram_rest_update/gram_sec_update; fresh_or_sep (field
+  freshness or byte separation: seeds 0/1 differ at byte 18, salts by
+  (tag, le32 u), blocks by le64 counter); openedQ and hidden.
+§4  Coupling  (PROVED, R1Z/CouplingR1P, P2)
+  S = Fin N → (SecP × (Pos1 → Ans) × Tape × Tab).  toMP: coins (tr, roots,
+  eCm.symm rest, tab), tape = decode-or-spare of the expander answers
+  (meanM from equal fibres).  toRP: base table (attempt 0's) reprogrammed by
+  progF at all reads of all attempts, and the secrets (meanR from
+  mean_progF and RCausal).  cpP : Coupling.
+§5  Events and agreement  (PROVED, R1Z/EventsR1P*, AgreeR1P*, FinalR1P)
+  Positions Fin N × Pos1 (M = N·|Pos1|), all private; charged = not
+  published by the accepted attempt.  HitFresh (hit_tr, hit_cm), PairFresh
+  (pair_all).  agreeP: off HitEv, CollEv and exhQ the real and middle games
+  publish the same ROM view.  exhQ = mask exhaustion ∨ a prover address
+  equals the digest address; mass ≤ N·16(L₁+L₂)/2^496 + M/2^255.
+§6  privacy_R1_games'  (PROVED, R1Z/PrivacyR1P)
+  Hypotheses: PackField, PublicBase, BuilderSoundOn, SemRows01,
+  QM31SamplerLaw; R-rom: RomModel W, RAddrIn (∀ w); R-causal: RCausal (∀ w);
+  R-commit: RCommitBytes, hfib (equal fibres of the mask decode), RExh
+  (little-endian word streams wordsE), E₁,E₂ ≤ 2^64, 16L ≤ 8E;
+  R-wire: eCm, ROpen, RComLog.
+  REF outside Lean (unchanged): R-ser, R-retry, R-pub, the read list itself
+  (no other hash call in the commitment phase), nonce never published.
+§7  Evidence: zf1/r1-real-evidence.json (attempts 4000–4049, run2-par.sh
+  in-window; 4005 void, another session's launcher; 4024 probe).

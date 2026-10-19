@@ -1,0 +1,372 @@
+DESIGN-BUILDER-MODEL — a Lean model of the honest pair-forest builder (LOG D46.3 option 1)
+Branch codex/r0-builder-model-20261019, base 129e82ee0 (origin/v8-reference).
+Rust sources are read-only, from origin/codex/100bit-spend-path-20261013
+(abbreviations below: FT = crates/aspis-statement/src/pool_v1/pair_forest_trace.rs,
+PT = pool_v1/pair_trace.rs, PP = pool_v1/pair_tree_profile.rs,
+FH = pool_v1/pair_forest_hiding.rs, P2 = crates/aspis-statement/src/poseidon2.rs,
+HS = crates/aspis-r1-cost-probe/src/host_semantic.rs,
+HO = crates/aspis-prover/src/pool_v1_pair_forest_honest.rs).
+
+§0  Summary
+
+  A staged Lean model of the Rust pair-forest builder now exists
+  (buildModel : Public K → ModelWitness K → Trace K, Wspend-shaped witness).
+  NonCopyHolds of the model is proved for all seven families from named
+  witness premises that mirror the Rust builder's own checks.  What remains
+  for BuilderRefines on the model is CopyLinkBalance (136 links, generator
+  plan in §4) and base typing; what remains for the Rust builder is the
+  refinement of §6, where Poseidon is the hard part.  Proving the families
+  exposed a relation gap: no builder at all satisfies BuilderRefines for
+  Rspend, because the copy registry and the occupancy family force a
+  non-zero change sentinel on transfers (§5, proved).
+
+§1  Stage map of the Rust builder
+
+The honest transfer prover runs, in order (HO:115-138 transfer, HO:142- withdrawal):
+  compile_pool_v1_pair_forest_{private_transfer,withdrawal}_merged_c1_v1
+    (FT:316-347 / FT:349-379), then
+  evaluate_..._constraint_residuals_v1 + finish (HO:80-100: exactly 18,089
+    transfer residuals, all zero, else abort), then
+  host_semantic::build / build_with_material (HS:207-260: C1 = 16 semantic
+    columns + 10 mask-only columns; H1, G, D are extension columns).
+
+Stage W (witness, validation).  PoolV1PairForest*WitnessV1 (FT:51-71):
+  input pair-note witness (nullifier_key, salt, value, pair_leaf,
+  selected_second, membership{index, 20 siblings}), 3 super-root siblings and
+  3 private directions; recipient/change output notes (owner_key, value, salt).
+  Validation that aborts the build: validate_common PT:470-508 (runtime
+  binding, unspent nullifier, canonical digests, 0 < value < VALUE_LIMIT,
+  index < 2^20, require_selected_spendable PP:182-191), conservation
+  PT:621-628 / PT:724-729, the anchor/nullifier/recipient/change equality
+  checks PT:632-662, two_outputs PP:206-226 (aborts on a zero change sentinel,
+  §5), build_late_append PT:560-598 (snapshot binding, next root), and the
+  super-root anchor check FT:241-243.
+
+Stage B (Poseidon blocks, 57 blocks × 16 rows, columns 0..15).
+  Legacy stable bank, PT:510-558 build_common_stable and PT:600-701:
+    block 0       owner-key sponge        write_sponge PT:304-354, domain 0x41530001, len 8
+    blocks 1-3    input note sponge       note_input PT:227-245, domain 0x41530003, len 18
+    block 4       input pair node         write_node PT:356-366 (ordered PT:368-375)
+    blocks 5-24   20 membership nodes     PT:539-555
+    blocks 25-26  nullifier sponge        domain 0x41530002, len 16, PT:556
+    blocks 27-29  recipient note sponge   (withdrawal: three zero permutations PT:741-743)
+    blocks 30-32  change note sponge
+    block 33      output pair node        PT:666 (withdrawal: right = 0, PT:752)
+  Legacy late bank, PT:560-598 build_late_append:
+    blocks 34-53  append path, bit = (next_pair_index >> l) & 1, sibling =
+                  empty root (bit 0) or snapshot frontier (bit 1)
+  Forest extension, FT:228-240 relocate_and_extend + write_forest_node FT:161-195:
+    blocks 54-56  three super-root nodes over the block-24 lane root.
+  Per block (write_permutation PT:268-302, write_sponge PT:304-354): local row 0
+  = pre-absorption state (sponge: running state minus the absorbed chunk;
+  node: [0^8, right[0..7), right[7] + 0x41531005]); local row 12 lanes 0..7 =
+  absorbed chunk / left child, lanes 8..15 = 0; local rows 1..11 = the
+  outputs of odd rounds 1,3,...,21 (P2:362-410 permute_optimized_with_trace
+  callback; POSEIDON2_ROUNDS = 22, P2:59); local rows 13..15 = 0.  The
+  returned digest is the first 8 lanes of the final state, i.e. local row 11.
+
+Stage A (auxiliary rows, written into the legacy layout then relocated).
+  Path aux (PT:381-399, legacy rows 864..959) is DISCARDED by relocation
+  (FT:211-213 zeroes rows 864..1023) and REWRITTEN in forest layout,
+  FT:142-159 write_forest_path_aux at base row
+  FH pool_v1_pair_forest_path_base_row_v1 = 912 + 16·(l/4) + [1,5,9,13][l%4]:
+    base row: col 0 = bit, cols 1..8 = current digest;
+    base+1:   cols 0..7 = left child, cols 8..15 = right child.
+  Levels 0..20 (FT:216-224) read current/left/right back OUT of the legacy
+  hash blocks (trace_digest FT:121 = row 11 of the previous block;
+  node_left FT:126 = row 12 of the node block; node_right FT:131 = row 0
+  lanes 8..15 with the tweak subtracted from lane 7).  Levels 21..23
+  (FT:229-240) use the super-root directions and siblings directly.
+  Value aux (PT:401-437, legacy rows 960..967) and occupancy aux (PT:439-468,
+  legacy rows 969, 970) are MOVED by FT:225-227 (rows 960..975 → 1008..1023,
+  i.e. +48; +48 = 0b110000 commutes with xor 12, so the base/succ/xor12
+  geometry is preserved):
+    value j ∈ {0,1,2} at base 1008+2j: bits 0..9 → (base, cols 0..9),
+      bits 10..19 → (base+1, cols 0..9), bits 20..29 → (base xor 12, cols 0..9),
+      raw value → (base, col 10).  Conservation rows 1014: (v0, v1, v0−v1),
+      1015: (v0−v1, v2).  (Withdrawal: v1 := public amount.)
+    occupancy row 1017: input pair leaf (occupied, inverse, second
+      commitment[0..8), selected_second in col 10);
+    occupancy row 1018: output pair leaf (two_outputs / single_output).
+
+Stage M (bank merge, FT:281-314).  The stable bank must be zero on rows
+  544..863 and the late bank zero outside them; the merge copies late rows
+  544..863 (blocks 34-53) into the stable bank.  In the model this is the
+  placement of the append blocks; its content is a disjointness fact.
+
+Stage C (copy links).  build_pool_v1_pair_forest_copy_registry_v1 FT:435-489
+  (136 links; R0P CopyConstants.lean copyLinks is its transcription).  The
+  builder does not write link cells separately: every link equates two cells
+  that the stages above wrote from the same witness value (sponge chaining,
+  digest reuse, path current/left/right, value and occupancy aux).  The
+  runtime verification is verify_pool_v1_pair_forest_copy_registry_v1
+  FT:558-569 (LogUp over λ, χ) and the residual check HO:80.
+
+Stage H (host_semantic, HS:207-260).  Adds mask-only C1 columns 16..25 and the
+  extension columns 26..28 (H1 helper, G, D).  None of NonCopyHolds or
+  CopyLinkBalance reads them (BuilderComplete §2), so the model fixes them to 0
+  (BuilderSpec.rest is free).
+
+§2  Families: writing stage and local invariant
+
+Lean characterisations are the R0P *_holds_iff theorems; the "local invariant"
+is the row-local fact the writing stage guarantees.
+
+  family     cells read (holds_iff)                      stage   local invariant
+  ---------  ------------------------------------------  ------  ---------------------------------------
+  value      rows 1008/1010/1012 + succ + xor12,         A       bits are (raw>>k)&1 ∈ {0,1}; raw < 2^30
+             cols 0..10; rows 1014, 1015                         reconstructs from three 10-bit chunks;
+             (Value.lean value_holds_rows_iff)                   v0 = v1 + (v0−v1); v0−v1 = v2 needs
+                                                                 conservation (witness check)
+  occupancy  rows 1017, 1018 (Occupancy.lean)            A       PairLeaf.Valid of the input leaf and of
+                                                                 the output leaf; selected·(1−occupied)=0;
+                                                                 output occupied = 1 (transfer) / 0
+  asset      rows 44, 460, 508 col 1; 1010 col 10        B, A    note chunk 1 lane 1 = public asset id
+             (Asset.lean)                                        (note_input PT:227); withdrawal amount
+                                                                 = v1 (witness/public check)
+  path       blocks 57..62 local rows 1,5,9,13 and +1    A       (left,right) = ordered(current, sibling,
+             (Path.lean)                                         bit), bit ∈ {0,1}
+  schedule   row 0 of first sponge blocks and node       B, W    sponge init [0^8, domain, len, 0^6];
+             blocks; row 12 absorption supports                  node pre lanes 0..7 = 0; absorption
+             (Schedule.lean)                                     lanes 8..15 = 0, short chunks zero-padded
+  digest     row 11 of blocks 26, 29, 32, 33+carry,      B, W    output digest = first 8 lanes of row 11;
+             53, 56; append blocks row 0 / row 12                public values equal the computed digests
+             (Digest.lean)                                       (builder equality checks); empty roots
+                                                                 and frontier placed by ordered()
+  poseidon   rows 0..12 of all 57 blocks                 B       row k+1 = canonical two-round transition
+             (Poseidon.lean poseidon_scalar_holds_iff)           of row k with row 12 (raw-limb ↔
+                                                                 canonical is the refinement, §6)
+  copy       136 links (CopyConstants.lean copyLinks):   all     each link equates two cells written from
+  (balance)  73 touch path aux, 40 append, 13 block-             the same witness value (sponge chaining,
+             to-block, 10 value/occupancy aux                    digest reuse, path, value/occupancy aux)
+
+§3  The Lean model buildModel (R0Z/BuilderModel.lean, host 4201)
+
+  ModelWitness K: Wspend's fields (SpendRelation.lean:15) with PairLeaf
+    unfolded: inputValue/outputValue/changeValue : Fin (2^30), sk, salt,
+    path : Fin 24 → Bool × Digest K, pairFirst/pairOccupied/pairSecond/
+    pairInverse, recipient/change owner and salt.
+  Stage B  BlockIn {pre, absorb}; blockIter (rows 0..11 by
+    poseidonTransition), blockDigest (row 11 lanes 0..7), blockCell (row 12 =
+    absorb, rows 13..15 = 0); spongeInit, nodeIn (pre = [0^8, right, right[7]
+    + 0x41531005], absorb = left), ordered.
+  Stage W  ownerB, noteB0/1/2 (chunks owner | value, asset, salt[0..6) |
+    salt[6..8)), nulB0/1, treeNode/treeCur (24 levels: blocks 4..24, 54..56),
+    appBit/appSib/appNode/appCur (blocks 34..53; sibling = emptyRootsNat table
+    for a 0 bit, snapshot frontier for a 1 bit), recipB (three zero blocks for
+    a withdrawal), outPairB, blocksOf : Fin 57 → BlockIn, pathAuxOf,
+    valuesOf, inOccOf, outOccOf (two_outputs / single_output), cellsOf.
+  Stage A/M  auxCell (path rows 912..1007, value rows 1008..1016/1020/1022,
+    occupancy 1017/1018), layout : Cells → Trace (columns 16..28 = 0).
+  buildModel pub w := layout (cellsOf pub w).
+
+  Modelling choices that the refinement (§6) must justify:
+  (m1) block rows are DEFINED by the canonical transition; the Rust rows are
+       the optimised raw-limb rounds (P2:362-410).  This is the existing
+       raw-limb boundary of CoreExt.lean, moved from the verifier side to the
+       builder side.
+  (m2) the empty-root siblings are the frozen table (EmptyRoots.lean); Rust
+       recomputes them (pair_empty_roots PT:217-225).
+  (m3) the path aux levels 0..20 are written from the same (current,
+       sibling, bit) as the node; Rust reads them back from the legacy
+       blocks (FT:216-224).  Equal by write_node's layout (node_left =
+       absorption, node_right = pre[8..16) minus the tweak, which is exact
+       in M31).
+  (m4) Rust aborts on any failed check; the model is total and the checks
+       become the premises AuxPremises / DigestPremises.
+  (m5) cells are K-valued; BaseTyped (values in the base subfield F) of
+       buildModel is NOT yet proved (Poseidon constants and field operations
+       stay in F; a closure lemma), so `BuilderSpec` is not yet instantiated.
+
+§4  Proof plan and effort per family
+
+  PROVED on host (every axiom line ⊆ [propext, Classical.choice, Quot.sound]):
+    value      value_layout / value_model (BuilderModelAux, 4204): chunk10 +
+               nat_bits reconstruction, premise: conservation.
+    occupancy  occupancy_layout / occupancy_model (4204): OccValid of both
+               leaves, premises pairValid, spendable, changeSentinel.
+    asset      asset_model (4204): by construction; premise: withdrawal
+               amount = outputValue.
+    path       path_layout / path_model (4204): pathAuxOf_valid, no premise.
+    poseidon   poseidon_layout (BuilderModelHash, 4208): every layout, by
+               construction (choice m1).
+    schedule   schedule_model (4208): blocksOf_node, blocksOf_hiZero,
+               blocksOf_absorb_zero; no premise.
+    digest     digest_model (BuilderModelDigest, 4210): DigestPremises
+               (anchor, nullifier, recipient, change, nextRoot, carry) and
+               CharP K (2^31−1) for the tweaked empty-root limb.
+    all seven  nonCopy_model (BuilderModelBridge, 4212):
+               NonCopyHolds pub (buildModel pub w) from AuxPremises and
+               DigestPremises.
+  Method note: every block lemma is symbolic.  Heavy definitions (blockOut,
+  blockIter, treeCur, appCur) are made locally irreducible before any
+  unification that could compare block contents; one early attempt (4205/
+  4206) timed out exactly there (whnf of a note block against a node block),
+  and was replaced by explicit range lemmas (blocksOf_tree_lo, _recip, _app,
+  _tree_hi), never by raising limits.
+
+  OPEN, with estimates (one worker, host-compiled, same discipline):
+  (a) CopyLinkBalance (buildModel pub w): 136 links.  Plan: classify by
+      endpoint kind (73 path-aux, 40 append, 13 block-to-block sponge/digest
+      reuse, 10 value/occupancy), prove one symbolic cell lemma per kind
+      (e.g. "row 16h+11 of block h equals row 0 of block h+1 for sponge
+      chains", "path base row level l cols 1..8 = row 11 of block
+      membership(l)−1"), then a generated per-link file that applies the
+      kind lemma with the link's literal rows (AGENTS.md generator rule: no
+      rfl/decide over the registry).  Weight kinds 3/4 (append left/right
+      by bit, 40 links) need the appBit case split.  Some links need witness
+      premises: ⟨64,0,10⟩→⟨1017,0,11⟩ (pair second commitment = right child
+      of block 4) needs path 0 = (selected_second, other commitment) and the
+      input leaf = selected commitment.  Estimate 3–5 days; this is the
+      largest remaining Lean item.
+  (b) BaseTyped (m5): closure of the model cells in F.  ~1 day.
+  (c) Wspend/Rspend bridge: map Wspend → ModelWitness and prove
+      Rspend ∧ sentinel → AuxPremises ∧ DigestPremises.  Needs the model
+      digests to equal the spend path's noteCommitment / nodeCompress /
+      pathPrefix, i.e. blockOut = poseidonPermutation of the absorbed input
+      (R0P has the composition behind poseidon_scalar_holds_output; it is
+      private there and must be re-exported or re-proved) plus the sponge
+      chaining.  Blocked on the build integration (SpendRelation not on the
+      R0Z path).  2–3 days after integration.
+  (d) Instantiating BuilderSpec / BuilderRefines with buildModel: immediate
+      once (a), (b), (c) hold.
+  Hardest: (a) by volume, and the Rust side of Poseidon (§6), by tooling.
+  Schedule turned out cheap in the model because the block roles are
+  explicit; its real content is the Rust sponge layout, again §6.
+
+§5  Finding: the change-sentinel gap in Rspend (PROVED, hosts 4211, 4212)
+
+  change_sentinel_of_balance (BuilderModelSentinel): for any trace A with
+  Holds occupancyFamily, Holds digestFamily and CopyLinkBalance, and
+  pub.variant = privateTransfer, pub.change 7 ≠ 0.  Mechanism: copy link
+  1124073492 (transfer-only) equates row 523 cols 0..7 (change digest) with
+  row 1018 cols 2..9; occupancy row 1018 needs A9·A1 − A0 = 0 with A0 = 1.
+  refines_forces_sentinel (BuilderModelBridge): BuilderRefines S Rel ⇒ every
+  transfer instance of Rel has pub.change 7 ≠ 0, for EVERY builder S.
+
+  Rspend (SpendRelation.lean:41) has no such clause, so `BuilderRefines S
+  Rspend` is unsatisfiable as soon as Rspend has a transfer instance whose
+  change commitment ends in a zero limb (a ≈2^-31 event per salt).  The Rust
+  builder aborts in exactly this case (two_outputs PP:206-226, "a zero
+  sentinel is a retry condition for note-salt generation").  Required
+  change (lead decision): instantiate Rel := Rspend ∧ (variant = transfer →
+  change[7] ≠ 0), i.e. the relation of instances the honest prover actually
+  proves, and account for the salt retry on the wallet side (it is a
+  witness-sampling retry before proving, not a proof-time abort, so it does
+  not enter the HVZK argument; whether the retry affects the distribution
+  of public values is not examined here).  The model carries it as AuxPremises.changeSentinel.
+
+§6  Aeneas refinement plan (Rust builder ↔ buildModel)
+
+  Target statement, per stage, for every witness accepted by the Rust
+  checks: the Rust column arrays (lifted M31 → K) equal layout (cellsOf pub w)
+  on columns 0..15.  Per-family refinement is feasible because every family
+  reads only specific (row, column) cells and the stages write disjoint row
+  ranges (blocks 0..56, path 912..1007, value/occupancy 1008..1023); a
+  stage-level refinement lemma suffices for each family:
+    value/occupancy  write_value_aux PT:401-437, write_occupancy PT:439-468,
+                     and the relocation copy FT:225-227 (rows +48).
+    path             write_forest_path_aux FT:142-159 + trace_digest/
+                     node_left/node_right FT:121-140 (choice m3).
+    blocks           write_permutation PT:268-302, write_sponge PT:304-354,
+                     write_node PT:356-366, write_forest_node FT:161-195, and
+                     permute_optimized_with_trace P2:362-410 (choice m1).
+    merge            merge_pool_v1_pair_forest_trace_banks_v1 FT:281-314
+                     (shape checks + copy of rows 544..863).
+    asset/digest     note_input PT:227-245 and the equality checks.
+  Known extractor blockers (spend-path R1 history, pinned Charon cb50ff16 /
+  Aeneas b59d5188):
+    - closures: permute_optimized_with_trace and hash_fields_with_trace take
+      FnMut callbacks that capture `&mut columns`; the HashFn function-pointer
+      bound regions were already rejected (J1-CALLER-FRONTIER-CHECKPOINT,
+      LEAD-REVIEW-J1-CALLER-FRONTIER), and Aeneas failed on nested borrows
+      in the Poseidon external rounds (J1-TERMINAL-TRANSLATION-CANDIDATE).
+    - loops with nested &mut borrows into [Vec<M31>; 16] (InterpBorrows.ml
+      nested-borrow check, J1-R18-PREFIX-EXTRACTION) and outer-loop break
+      (J1-A-TERMINAL-VALIDATOR-EXTRACTION).
+    - std iterators (iter().any, chunks().enumerate(), copy_from_slice,
+      fill) and core::option/result inclusion (FIELD-PARSER-EXTRACTION
+      attempt b, "Inconsistent state").
+  Feasible route: an extraction-shaped twin of each writer (fixed-size
+  arrays, while-loops with explicit indices, no closures: the permutation
+  returns its 11 odd-round states as an array), proved equal to the
+  production writer by an exhaustive-shape differential test in Rust plus
+  one Lean lemma per twin from the Aeneas output.  The Poseidon twin is the
+  hardest item: its rounds must be shown equal to poseidonTransition on
+  canonical M31 values, which is the raw-limb refinement CoreExt.lean
+  already records as open.  Estimates: value/occupancy/path/merge twins
+  2–3 days; sponge/node writers 2 days given a Poseidon twin; Poseidon twin
+  and its round lemma 1–2 weeks (it has failed extraction before).
+  Alternative for the Poseidon stage only: keep it as a per-build checked
+  fact (the runtime residual check already includes the Poseidon residuals,
+  HO:80), recorded as a named premise; that is witness-independent only if
+  the check never fails on accepted witnesses, which the model plus (m1)
+  would prove.
+
+§7  Status
+
+  Proved (host, standard axioms; evidence t2b2b/evidence-builder-model.json,
+  green attempts 4201, 4204, 4208, 4210, 4211, 4212):
+    - the model buildModel and its cell/bit lemmas (R0Z/BuilderModel);
+    - all seven NonCopyHolds families of buildModel under AuxPremises and
+      DigestPremises (nonCopy_model), Poseidon and schedule and path with
+      no witness premise;
+    - the change-sentinel obstruction for any builder (§5).
+  Modelled, not proved: CopyLinkBalance of buildModel (§4 a); BaseTyped of
+  buildModel (§4 b).
+  Not started: Rspend/Wspend → premises (§4 c, waits for the build
+  integration); every Rust ↔ model refinement (§6).
+  Failed attempts 4200, 4202, 4203, 4205-4207, 4209: elaboration errors,
+  each followed by a changed source; no cap was raised, no attempt rerun
+  unchanged.  Peak RSS ≤ 3.4 GB except the bridge (6.7 GB, it imports
+  BuilderComplete).
+
+
+§8  BuilderRefines for the model (base af418c3d8; D50 Rel⁺)
+
+  Proved (host, standard axioms; evidence t2b2b/evidence-builder-model-2.json,
+  green 4216, 4219, 4222, 4223, 4224, 4225, 4228, 4229, 4231):
+    BuilderModelBase       buildModel_mem: every cell in F under PublicBase F
+                           pub and WitnessBase F w.  Poseidon closure is
+                           symbolic (numeral constants, ring operations).
+    BuilderModelCopyKinds  one lemma per path kind (current, left, right,
+                           right lane 7) parametrised by the level l : Fin 24,
+                           one per append kind (bit 0, bit 1, bit 1 lane 7)
+                           parametrised by j < 20; weight → bit/variant lemmas.
+    BuilderModelCopyMisc   the 24 one-off links as named cell lemmas.
+    BuilderModelCopyPat,   generated by t2b2b/copy-gen/gen_copy_links.py.txt
+    ...LinksMisc/App/Path, (reads R0P CopyConstants.lean, classifies every
+    ...CopyBalance         link against the kind table and aborts on any
+                           unclassified link; --check mode).  Each link is
+                           `link_of` + a pattern-pair lemma applied to named
+                           cell lemmas; buildModel is locally irreducible in
+                           every generated file.  `decide` appears only on
+                           numeral bounds/row equations, `rfl` only on weight
+                           literals and inactive pattern lanes.
+                           balance_model: CopyLinkBalance pub (buildModel pub w)
+                           for all 136 links.
+    BuilderModelRefines    buildModelSpec F (base columns = model columns 0..25,
+                           extension columns 0), buildModelSpec_build,
+                           builderRefines_model [CharP K (2^31−1)] :
+                             BuilderRefines (buildModelSpec F) (ModelRel F),
+                           builderSoundOn_model (via builderSoundOn_of_refines).
+
+  ModelRel F pub w (the Rel⁺ to be derived from Rspend⁺ after integration):
+    pubBase    PublicBase F pub
+    witBase    WitnessBase F w (sk, salt, path siblings, pair occupancy fields,
+               output owners/salts in F)
+    aux        conservation; OccValid of the input pair leaf; spendability;
+               change sentinel (transfer → changeDigest[7] ≠ 0 — the D50
+               clause); withdrawal amount = outputValue
+    digest     anchor = treeCur 24, nullifier, recipient, change, nextRoot =
+               appCur 20, carry frontier = appCur carry (model digests)
+    pairRight  pairSecond = right child of the pair node (path-0 sibling and
+               bit are the other commitment and the selected side) — the only
+               new witness premise the copy links needed.
+  The change sentinel is used by the occupancy family, not by any link.
+
+  Open: Rspend⁺ → ModelRel (needs model digests = spend-path noteCommitment /
+  nodeCompress / pathPrefix and the Wspend → ModelWitness map); the Rust ↔
+  model refinement (§6).  Process note: attempt 4218 re-sent the 4217 source
+  unchanged after a local edit script failed; the launcher now refuses an
+  already-sent source hash.

@@ -1,0 +1,461 @@
+DESIGN-P-CERT -- certificate checking for the R1 prover-side check P_R1
+======================================================================
+
+Job D38.5 (LOG D38.5, D44, D45 R-pub). Branch codex/r0-cert-checker-20261019,
+base e171d7418. Inputs: z9/DESIGN-R1-P.txt (the P_R1 algorithms, §1; the
+route, §4.2), the prototype z4/z9b.rs main_r1p, lean/R1Z/PredicateR1.lean.
+Status words as in DESIGN-R1-P: SPECIFIED, MEASURED, PROPOSED, OBLIGATION,
+plus PROVED (Lean, host receipt) and PREMISE (a named hypothesis in Lean).
+
+Sections
+  §0  Shape of the result and notation
+  §1  Certificate format, conjunct by conjunct
+  §2  The checker and its soundness statement
+  §3  Expectations (registered before measuring)
+  §4  Measurements
+  §5  Lean: generic soundness (modules R1Z/CertSound, R1Z/CertR1)
+  §6  Aeneas extraction plan (checker only)
+  §7  Open items and a rejected-for-now option (randomised checking)
+
+§0  Shape of the result and notation
+------------------------------------
+Producer and checker (D38.5).  The producer is any code (the eliminating
+z9b/z9c code); it is never proved.  The checker is a pure function
+  check : Challenges -> Cert -> Bool
+that recomputes the source vectors from the challenges (the §1.1 row formulas
+of DESIGN-R1-P) and verifies the certificate by matrix-vector products and
+equality tests over F = M31.  It performs no elimination and no division
+except the scalar inverses that HalfOK needs (and even that is a supplied
+inverse, checked by one multiplication).
+Target statement (D38.5, D45 R-pub):
+  check_sound : check ch c = true -> P_R1 AspisR1.rowEquiv B hB (decode ch)
+with only soundness required; every degenerate case fails closed.
+Coordinates.  Every Lean space in P_R1 is a K-space (K = WideExact) or a
+K4-space viewed over F.  The checker works in F-coordinates:
+  own   per lane l, F^112 (mask-only lanes m0..m9) or F^376 (G, D);
+        stacked over the 12 lanes, F^1872 (block-diagonal: a source of lane l
+        has zero own coordinates outside block l);
+  round F^1084 (the Z4c round coordinates; 271 QM31 values);
+  bat   F^1328 (8 limbs × (7 round0 + 7 round1 + nf opened folded cells +
+        64 final), nf = 4P, P = number of distinct parents; 1328 at P = 22).
+        The probe's extra "inactive" cell (8 limbs) is NOT an R1Bat cell and is
+        dropped; R1Bat has no such constructor (Batched.lean:33);
+  obs   F^112 (a C1 lane), F^376 (the H1 lane).
+For each space a coordinate embedding iota_X : F^n ->_F (Lean space) is
+fixed; the row-formula premises (§2.3) say that every source vector the
+checker computes is the coordinate vector of the Lean map applied to the
+corresponding unit tape, through iota_X.
+Sources.  As in DESIGN-R1-P §1.1 / Lean `balance 0`: for lane l and row r>=1,
+  s = e_r (r copy-active) or e_r - e_0 (r copy-inactive), times the tower
+  basis element x_k (k < 4) for the K4 lanes G, D;
+counts 1,023 per mask-only lane and 4,092 per K4 lane, 18,414 in all.
+For the lifts the sources are those of DESIGN-R1-P §1.5 (Vsem c balanced at
+1023, Ph1 balanced at 0).
+
+§1  Certificate format, conjunct by conjunct
+--------------------------------------------
+All entries are canonical M31 limbs (u32 < 2^31 - 1); indices are u32.  The
+checker rejects any non-canonical limb or out-of-range index (fail closed).
+
+§1.1 HalfOK  (alpha_9 != 1/2 in QM31)                         SPECIFIED
+  Cert: hinv in QM31.  Check: (alpha_9 - 1/2) * hinv == 1.
+  Lean: x * y = 1 -> x != 0 -> alpha_9 != 1/2.  4 limbs.
+
+§1.2 SemK4  (every ch.sem i in K4)                             SPECIFIED
+  Cert: none.  Check: the decoder output for each of the 25 semantic rows has
+  limbs 4..7 equal to zero in the WideExact representation (on R1 the rows are
+  qm31_sample, so this is the decoder's shape and holds by construction).
+  PREMISE (decoder): a WideExact value with zero upper half lies in K4 B hB.
+
+§1.3 QueryCard  (ch.queries.card <= 22)                        SPECIFIED
+  Cert: none.  Check: the decoded query list has length <= 22.
+  Lean: List.toFinset_card_le.  Distinctness is not needed (card <= length).
+  PREMISE (decoder): ch.queries = list.toFinset.
+
+§1.4 QPrime_R1  (ChainT0K4 <= (ker ownMap).map roundMaskMap)   SPECIFIED
+  Two-level preimage certificate.
+  (a) Kernel vectors.  A list of m entries (l, j, P_l-coefficients):
+      lane l, a source index j of lane l, and c in F^{|P_l|} over a pivot list
+      P_l (source indices of lane l, |P_l| <= 112 or 376, stored once per
+      lane).  c covers a prefix of P_l (the pivots that existed when the
+      entry was produced; Lean KerEntry.s = len c).  The kernel vector is
+      k = s_j + sum_p c_p s_{P_l[p]}.
+      Check: own_l(s_j) + sum_p c_p own_l(s_{P_l[p]}) == 0 in F^112 / F^376.
+      Then rho = round(s_j) + sum_p c_p round(s_{P_l[p]}) in F^1084.
+  (b) Combination matrix Y in F^{1084 x m}.
+      Check: for every i < 1084, sum_j Y[i][j] rho_j == b_i, where b_i is the
+      i-th normalised ChainT0K4 generator computed by the checker from alpha:
+      b_i = normalize_d(e_i) (DESIGN-R1-P §1.3; unit vector plus a correction
+      on the 4 limbs of the terminal coordinate 244, needs alpha_9 != 1/2).
+  The producer keeps only kernel vectors that became pivots of the round
+  image R, so m <= rank R = 1,080; Y is read off the tagged echelon of R.
+  Size: |P| lists + m(|P|+2) + 1084 m entries.
+
+§1.5 BCondG_R1  (B0R1' <= V_G)                                 SPECIFIED
+  (a) Kernel description of B0R1'.  Rel in F^{q x 1328} is the matrix of
+      relR1's limb functionals (8 per K-relation: s2a, s2b, s1, circ u for the
+      queries, line v for the distinct parents) on the read support; it is
+      computed by the checker (it is public and sparse).  Cert: U in
+      F^{r x q}, a pivot list piv in [1328]^r and a free list fr in
+      [1328]^{1328-r}.  Check: E := U * Rel (sparse product) satisfies
+      E[k][piv k'] = [k = k'] and piv, fr partition [1328] (each column is
+      in exactly one list).  No inverse of U is needed: only
+        Rel v = 0  =>  E v = U (Rel v) = 0  =>  v = sum_f v_{fr f} n_f
+      is used, with n_f = e_{fr f} - sum_k E[k][fr f] e_{piv k}.  (The
+      design D38.5 named "echelon form plus inverse"; the inverse would
+      certify ker E <= ker Rel, the direction BCondG does not need.  It is
+      dropped; §2.4 records why this is sound.)
+  (b) V_G preimages, as §1.4 for the single lane G with zero map
+      [own_G ; round] (F^{376+1084}) and target map bat (F^1328):
+      pivot list P_G (|P_G| <= 1460), m_G kernel entries
+      (j, c in F^{|P_G|}) with own_G and round of k zero (checked), beta_j :=
+      bat(k_j) computed, and Y_G in F^{(1328-r) x m_G} with
+      sum_j Y_G[f][j] beta_j == n_f for every free column f.
+  Size at P = 22: r = 376, |fr| = 952, m_G = 952, |P_G| = 1460:
+  U 141k, kernel coefficients 1.39M, Y_G 0.91M entries.
+
+§1.6 C1Lift_c (c < 16) and H1Lift                              SPECIFIED
+  On every measured configuration rank obs(W) is the full coordinate width
+  (112 resp. 376, DESIGN-R1-P §2.1), so the lift is certified by a right
+  inverse.  Cert per lift: a list S of w source indices of Vsem c (resp. Ph1),
+  w = 112 (resp. 376), and Uc in F^{w x w}.
+  Check: O_S * Uc == I_w, where O_S has the obs-columns of the listed sources.
+  Then every t in F^w equals O_S (Uc t), so iota_obs(F^w) <= (Vsem c).map obs.
+  If a configuration ever had rank obs(W) < w the producer emits nothing and
+  the attempt fails closed (false negative, allowed).
+  Size: 16 * (112 + 112^2) + 376 + 376^2 = 343k entries.
+
+§1.7 Total size (estimate, P = 22)
+  QPrime ~1.17M (Y) + <= 0.41M (kernel) ; BCondG ~2.44M ; lifts 0.34M ;
+  about 4.4M limbs = 17.6 MB as raw u32.  DESIGN-R1-P §4.2 estimated
+  50-200 MB for one-level preimages; the two-level form (kernel vectors over
+  a pivot list, then a combination of their images) is what makes it small.
+
+§2  The checker and its soundness statement
+-------------------------------------------
+§2.1 Algorithm (SPECIFIED; prototype z4/z9c.rs `check`)
+  Inputs: challenges (alpha_0..9, z_0, z_1, gamma, kappa, alpha0, alpha1,
+  queries) and the certificate.  Steps, each returning false on failure:
+   1. canonical-limb and index-range scan of the certificate;
+   2. HalfOK, QueryCard, SemK4 (§1.1-§1.3);
+   3. source columns from the row formulas: own/obs (raw_c), round
+      (round_row, tail_row), bat (unit_functionals at pi(r), gamma^lane);
+      only the columns named by the certificate are needed, plus the full
+      G lane for BCondG;
+   4. lifts: O_S * Uc == I (§1.6);
+   5. QPrime: kernel checks, rho_j, then Y * rho == b (§1.4);
+   6. BCondG: E := U * Rel, echelon and partition checks, n_f, G kernel checks,
+      beta_j, then Y_G * beta == n (§1.5).
+  Every arithmetic step is a dot product of two F-vectors (accumulated
+  lazily in u64, reduced once per output) or an equality test.
+§2.2 Cost model (multiply-adds, P = 22, before measurement)
+  lifts 16*112^3 + 376^3 = 75M; QPrime kernel <= 1,080*377*1,460 = 0.6G
+  (0.15G if all from mask-only lanes), Y*rho 1,084*1,080*1,084 = 1.27G;
+  BCondG U*Rel ~40M (Rel sparse), G kernel 952*1,461*(1,460+1,328) = 3.9G,
+  Y_G*beta 952*952*1,328 = 1.2G.  Total about 6.5G multiply-adds.  This is
+  the deterministic floor for these shapes: verifying a dense product of an
+  n x n by n x n matrix by recomputation costs n^3, and the targets (b, n_f)
+  are dense combinations of the computed images.  §7 records the randomised
+  alternative and why it is not adopted.
+§2.3 Soundness statement and its parts
+  check_sound (OBLIGATION, assembled from the parts below):
+    check ch c = true -> P_R1 AspisR1.rowEquiv B hB (decode ch).
+  (C1) Checker semantics -- generic linear algebra, PROVED in §5:
+     pre_sound     zero-map + target-map preimage certificate =>
+                   iota(T i) in (G ⊓ ker z).map g for every target row i;
+     span_sound    the same for a submodule spanned by the targets;
+     ech_sound     U * Rel = E, E echelon on piv, piv/fr partition =>
+                   ker Rel <= span {n_f};
+     rinv_sound    O_S * U = 1 => range iota <= (span S).map obs;
+     half_sound, card_sound   the field and length facts.
+  (C2) Row-formula premises -- named Props in §5, the D34.3 items and their
+     siblings; each is a closed-form identity to be proved symbolically for
+     all rows (AGENTS rule 2), never by evaluating 1,024 rows:
+     RF-own    ownMap (src t) = iota_own (O col t) (block-diagonal per lane);
+     RF-round  roundMaskMap (src t) = iota_round (R col t) (T2b-2a pureRound
+               closed forms; the Z4c coordinate map, linear coefficient
+               implied by the boundary -- DESIGN-R1-P §4.2 OBLIGATION);
+     RF-bat    batMap (src t) = iota_bat (Bt col t) (R1-2 batRead_L cells,
+               ell vs Rust weight kinds 5/6, D34.3);
+     RF-src    each source is a mask tape (Gonly for the G sources; base for
+               Vsem, K4 for Ph1) and src t in Vsem c / Ph1 for the lift lists;
+     RF-chain  ChainT0K4 <= span {iota_round b_i} (normalize_d generators);
+     RF-rel    B0R1' <= (ker Rel).map iota_bat (relR1 limb functionals, D35.1
+               lineInverse vs QueryGeometry, storedFirstLineX18 vs line_node,
+               unopenedZero = coordinates outside the read support);
+     RF-obs    (Wsem).map obs <= range iota_obs, (Wh1).map obs <= range
+               iota_obs (obs of a base/K4 lane word has its F-coordinates);
+     RF-dec    the decoders: alpha 9 = decoded alpha_9, queries = list.toFinset,
+               sem rows in K4 when their upper limbs vanish.
+  (C3) Rust <-> Lean for the checker only (§6).
+§2.4 Why no inverse is needed for BCondG
+  BCondG_R1 is B0R1' <= V_G.  With RF-rel, B0R1' <= iota_bat(ker Rel); ech_sound
+  gives ker Rel <= span{n_f}; pre_sound gives iota_bat(n_f) in V_G.  The
+  direction ker E <= ker Rel (which U^-1 would certify) would bound B0R1' from
+  below and is not used; the theorem V_G <= B0R1' is not used either (it is
+  already proved and makes the inclusion an equality, which P_R1 does not ask).
+  So the dimension test of DESIGN-R1-P §1.4 becomes an inclusion with
+  explicit preimages, and false negatives remain possible only by the
+  producer failing to find them.
+
+§3  Expectations (registered before measuring)
+----------------------------------------------
+Prototype: `probe --r1cert` (z4/z9c.rs), release build (opt-level 3,
+overflow checks on), one configuration per process, host nuc in a scope
+MemoryHigh 3G / MemoryMax 4G / MemorySwapMax 0 / TasksMax 64.  Configurations:
+A v0 actual γ0 and γ1, J v1 actual γ0, A v3 random γ1, A v2 coset (P = 8),
+and the negative structure B v0 actual γ0 (Z9: rank R 1,042 < 1,080).
+Expected:
+  emit (producer, tagged eliminations, early stop at full rank)
+                    20-45 s  (z9b R1-P total 22.6 s; tags add up to 2x,
+                              early stop removes part of the QPrime lanes)
+  check             2-8 s    (§2.2: ~6.5G multiply-adds at 1-3G/s on one
+                              core with lazy u64 accumulation)
+  certificate size  15-25 MB raw u32 (§1.7: ~4.4M limbs at P = 22);
+                    ~10 MB at P = 8
+  peak RSS          200-500 MB (the G lane's 4,092 x 2,788 source matrix is
+                    46 MB; Y and kernel arrays ~20 MB; tagged echelons
+                    ~30-60 MB)
+  verdicts          P_R1 true and check true on every A/J configuration;
+                    B: the producer fails (QPrime) and emits no certificate,
+                    so check is never called -> fail closed.
+  teeth             one-limb corruptions of hinv, a QPrime kernel
+                    coefficient, a Y entry, U, a Y_G entry, a G kernel
+                    coefficient, a lift inverse, and a swapped pivot index
+                    are each rejected (8/8).
+  differential      the producer's own P_R1 verdicts (ranks 1,080, 952/952,
+                    112, 376) equal z9b main_r1p's on the same configuration.
+
+§4  Measurements (MEASURED; z9/runs/z9c-f77c7c3d2/)
+--------------------------------------------------
+Host nuc (Intel Core Ultra 7 155H).  Scope aspis-z9c-full-f77c7c3d2:
+MemoryHigh 3G, MemoryMax 4G, MemorySwapMax 0, TasksMax 64; gate OK (no other
+cargo/rustc/release-binary scope; reservation 4 GiB).  Release build
+(opt-level 3, overflow checks on), source revision f77c7c3d2 (z9c.rs sha256
+e2f0b6c8…).  One process per configuration, sequential.  All exit 0, swaps 0,
+cgroup swap peak 0, cgroup memory peak 263.6 MB, scope wall 1:18.7.
+  configuration           P_chk  emit    check  size        peak RSS   ranks
+  A v0 actual γ0 (+teeth) true   12.56s  2.65s  14,227,132B 250,408KiB R 1080, rel 376, V_G 952, G piv 1028
+  A v0 actual γ1          true   12.59s  2.62s  14,227,132B 194,840KiB same
+  J v1 actual γ0          true   11.94s  2.56s  14,359,484B 194,112KiB same
+  A v3 random γ1          true   12.51s  2.64s  14,227,132B 193,684KiB same
+  A v2 coset (P = 8) γ0   true    9.15s  1.58s   9,755,748B 170,052KiB rel 264, V_G 616
+  B v0 actual γ0          false  0.13s   --     --          101,888KiB lift c=0 rank 100 < 112
+  (emit = producer only; check = the checker including its own rebuild of the
+  public data, 0.21-0.24 s; process wall without teeth 11.0-15.4 s.)
+Per part (A v0 γ0): emit lifts 0.12 s, QPrime 6.99 s, BCondG 5.32 s; check
+sources 0.09 s, lifts 0.03 s, QPrime 0.63 s, BCondG 1.67 s.
+Certificate composition (A v0): QPrime Y 1,084 × 1,080 (1.17M), QPrime
+kernel 133,946 limbs (pivot lists + prefix coefficients; 1,080 entries over
+12 lanes), BCondG U 376 × 376, 952 free columns, G entries 952 over 1,028
+G pivots, Y_G 952 × 952, lifts 344,248; total 3,556,783 limbs.
+Teeth (A v0 γ0): 8/8 corruptions rejected, each at its own step:
+  hinv -> HalfOK; QPrime kernel coefficient -> qprime kernel; QPrime Y ->
+  qprime combination; U -> bcond echelon; Y_G -> bcond combination; G kernel
+  coefficient -> bcond G kernel; H1 inverse -> lift inverse; pivot/free swap
+  -> bcond echelon.
+Differential: rank R 1,080, dim V_G = dim B0R1' (952, 616 at P = 8), rank
+obs 112 for all 16 C1 lanes and 376 for H1 equal the z9b main_r1p values in
+DESIGN-R1-P §2.1 on the same configurations.
+Superseded attempts (same scope rules; logs kept): preflight 4067f381a
+(gate failed once on another session's SBF cargo build, then the checker's
+rebuild panicked at z5::set_transport, a process-wide OnceLock); preflight
+f65b15aa4 (the checker rejected the honest certificate: kernel entries carry
+the pivot count at emission time, a prefix of the lane's final list; the
+format was made prefix-based, matching KerEntry.s in Lean).
+§4.1 Against the expectations of §3
+  emit      12.6 s, below the 20-45 s range.  Two reasons: the G lane's
+            [own; round] rank is 1,028, not the 1,460 assumed in §2.2, and
+            the producer stops each echelon as soon as the targets reduce
+            (QPrime at rank 1,080, V_G at 952).  The producer is faster than
+            the z9b R1-P check itself (22.6 s), so emit + check (15.2 s)
+            replaces the 22.6 s check rather than doubling it (D38.2 had
+            estimated 40-50 s).
+  check     2.6 s (1.6 s at P = 8): inside 2-8 s.  The G kernel work is
+            952 × 1,029 × 2,788 = 2.7G multiply-adds, not the 3.9G of §2.2.
+  size      14.2 MB: just below 15-25 MB; 9.8 MB at P = 8 as expected.
+  RSS       170-250 MB: inside 200-500 MB at the low end.
+  verdicts  as expected on A/J.  B: fails closed as expected, but at the
+            first C1 lift (rank obs(Vsem 0) = 100 < 112), before QPrime; the
+            producer stops at the first failing conjunct.  Whether C1Lift
+            itself fails on B is not determined: the right-inverse format of
+            §1.6 needs rank obs(W) = width, and rank obs(Wsem) on B was not
+            computed.  Either way the attempt is rejected (allowed false
+            negative or true negative).
+  teeth     8/8 as expected.
+
+
+§5  Lean: generic soundness (modules R1Z/CertSound, R1Z/CertR1)
+---------------------------------------------------------------
+§5.1 R1Z/CertSound (PROVED; host attempt 4121, exit 0, 20 axiom lines, all
+     within [propext, Classical.choice, Quot.sound]; evidence
+     zf1/cert-evidence.json).  Imports Mathlib only.  Field F arbitrary;
+     vectors Fin n -> F, matrices Fin a -> Fin b -> F (row index first).
+  KerEntry N F      (s, j, piv : Fin s -> Fin N, c : Fin s -> F), the Rust
+                    (j, c over P_l) entry; kvec src e = src j + sum c_p src(piv p)
+  kcoord A e i      = A i j + sum_p A i (piv p) * c p  (exactly the checker's
+                    addm(own_j[t], dot(own_t[t], c)))
+  map_kvec          f (kvec src e) = iota (kcoord A e) given
+                    hA : forall t, f (src t) = iota (col A t)
+  PreOK Zc Gc ents Y T      (forall e i, kcoord Zc (ents e) i = 0) and
+                    (forall i t, sum_e Y i e * kcoord Gc (ents e) t = T i t)
+  pre_sound         PreOK -> iota_g (T i) in (G ⊓ ker z).map g
+  pre_sound₂        PreOK₂ (two zero maps) -> iota_g (T i) in
+                    (G ⊓ ker z₂ ⊓ ker z₁).map g   (the parenthesisation of V_G)
+  span_sound        S <= span (iota_g ∘ T) and PreOK -> S <= (G ⊓ ker z).map g
+  kcoord_offblock   the lane-local kernel test implies the full one for a
+                    block-diagonal coordinate matrix
+  Emat U Rel        E = U·Rel;  nvec E piv fr f  the free-column generator
+  EchOK E piv fr    E (piv b) column = unit b; fr injective; piv, fr
+                    disjoint and covering (piv injective follows: piv_inj)
+  sum_split         the column sum splits over piv and fr
+  ech_sound         EchOK (U·Rel) -> Rel v = 0 -> v = sum_f v(fr f) • n_f
+  bcond_sound       B0 <= iota_b(ker Rel) (hrel), EchOK, every iota_b n_f in V
+                    -> B0 <= V
+  RinvOK O U        O·U = 1;  rinv_sound  range iota <= V.map obs
+  lift_sound        W.map obs <= range iota (RF-obs) -> W.map obs <= V.map obs
+  half_sound        (x - h) * y = 1 -> x != h
+  card_sound        l.length <= 22 -> l.toFinset.card <= 22
+  decPreOK, decPreOK₂, decEchOK, decRinvOK   Decidable instances;
+  preCheck_sound .. rinvCheck_sound   decide (..) = true -> the Prop
+  (the Boolean checker is `decide` of these Props; §6 relates it to Rust).
+  Host: wall 2.4 s, peak RSS 1.88 GB, swaps 0.  Attempt 4120 (missing
+  imports: the Pi module instance, Finset.sum_mul, ring) failed and is
+  recorded; 4121 is the changed source.
+§5.2 R1Z/CertR1 (PROVED; attempt 4122, exit 0, 7 axiom lines, standard).
+     Imports R1Z.PredicateR1 and R1Z.CertSound; instantiates the generic
+     theorems at the exact P_R1 types (F a Subfield K, scalars ↥F):
+  halfOK_of_cert    (alpha ch 9 - 1/2) * y = 1 -> HalfOK ch
+  queryCard_of_cert rf_dec : ch.queries = l.toFinset, l.length <= 22
+                    -> QueryCard ch
+  qprime_of_cert    rf_own, rf_round (coordinates of ownMap / roundMaskMap on
+                    the stacked sources), rf_chain (ChainT0K4 <= span of the
+                    iota_r b_i), PreOK -> QPrime_R1
+  bcondG_of_cert    rf_src (G sources in Gonly), rf_own, rf_round, rf_bat,
+                    rf_rel (B0R1' <= iota_b(ker Rel)), EchOK (U·Rel),
+                    PreOK₂ with targets n_f -> BCondG_R1
+  c1lift_of_cert    rf_src (in Vsem c), rf_obs (Wsem.map obs <= range iota),
+                    rf_col, RinvOK -> C1Lift c
+  h1lift_of_cert    the same for Ph1 / Wh1 / lane 26 -> H1Lift
+  p_r1_of_cert      the seven conjuncts -> P_R1 (SemK4 enters as rf_sem)
+  Host: wall 4.6 s; peak RSS 6.73 GB (the PredicateR1 import closure; 0.27
+  GB below -M7000; a module that imports it more widely must be split, as
+  D34.2 already requires).
+§5.3 What is left for check_sound (OBLIGATION)
+  check_sound = p_r1_of_cert applied to the five *_of_cert theorems, with
+  (i)  the rf_* premises proved symbolically (C2, §2.3 list);
+  (ii) the Rust checker shown to compute the Props' `decide` (C3, §6):
+       its dot products equal kcoord / the sums in PreOK, PreOK₂, EchOK,
+       RinvOK, for the coordinate matrices that the rf_* premises name;
+  (iii) the coordinate embeddings iota_* fixed once (Z4c round coordinates,
+       the WideExact limb basis wunit, the QM31 tower basis, OwnCell limbs).
+  No part of (i)-(iii) needs a concrete-row evaluation in Lean: the rf_*
+  are identities "column t of the matrix the checker builds = iota^-1 of the
+  map on source t", proved for symbolic t from the closed forms.
+§6  Aeneas extraction plan (checker only)                       PROPOSED
+-------------------------------------------------------------------------
+§6.1 What is extracted.  A new crate (proposal: crates/aspis-r1-cert-check,
+  no_std + alloc, no dependency on the producer) holding exactly
+  (X1) the certificate decoder: a flat little-endian u32 stream with explicit
+       lengths -> the certificate struct; rejects non-canonical limbs and
+       out-of-range indices (step 1 of §2.1);
+  (X2) the linear-algebra checks: dot (lazy u64 accumulation), kernel test
+       and image (kcoord), combination test (PreOK, PreOK₂), E = U·Rel with
+       the echelon and partition tests (EchOK), O·U = I (RinvOK), the QM31
+       product for HalfOK, the length test;
+  (X3) the column builders (the §1.1 row formulas of DESIGN-R1-P): own/obs
+       (claims eq weights, h_weight, ood and opened evaluations), round_row
+       and tail_row, the batched unit functionals at pi(r) with gamma^lane,
+       relR1's limb functionals, normalize_d.  These are the Rust halves of
+       the rf_* premises.
+  Not extracted: the producer (TagEch, invert, early stop), the probe's
+  replay of challenges, timing, printing, threads.
+§6.2 Rust subset the checker must stay within.
+  - Integers only: u32 limbs, u64 accumulators, usize indices.  No floats,
+    no i128/u128 (keep the Lean models in the U32/U64 scalars), no
+    wrapping_* / overflowing_* (Aeneas models arithmetic as checked; every
+    bound is proved instead: a term (p & M) + (p >> 31) < 2^32, and a dot of
+    length < 2^32 never overflows u64).
+  - Flat Vec<u32> / &[u32] with explicit (rows, cols) and index arithmetic
+    r * cols + c; no Vec<Vec<_>> (nested borrows enlarge the generated
+    state), no slicing by ranges in hot loops if the pinned Aeneas cannot
+    model it (use start/len index arguments instead).
+  - Loops as `while i < n { ...; i += 1 }` with one accumulator or one
+    mutable output buffer each; no iterator adapters (zip, map, chunks,
+    windows, any, all, fold), no closures, no early `return` from inside
+    nested loops (use a bool flag and a break at one level, which the
+    loop-break preflight of the patched Aeneas handles).
+  - No traits beyond what the pinned Aeneas models (no generic CodeField:
+    monomorphic M31/QM31/WideExact functions), no dyn, no Box<dyn>, no
+    HashMap/BTreeMap, no threads, no OnceLock/static mut, no panics on the
+    accepted path (every failure is `return false`).
+  - Functions small and separately extracted (one loop nest per function),
+    so each generated Lean declaration is elaborated alone; AGENTS.md
+    rule 2-4: the Lean proofs are about symbolic loops (invariants over
+    `Fin n` sums), never `decide`/`rfl` on concrete sizes 1,084 or 4,092.
+§6.3 The refinement lemmas (C3).  For each extracted function f_rust:
+  f_rust inputs = ok out  ->  out = (Lean definition) inputs, e.g.
+    dot_spec      dot a b = ok (sum_i a[i] * b[i] mod p)   (lengths equal)
+    kernel_spec   check_kernel ... = ok true <-> forall i, kcoord A e i = 0
+    combo_spec    check_combo ... = ok true <-> forall i t, sum Y·k = T i t
+    ech_spec, rinv_spec, half_spec, card_spec  likewise
+  and for the column builders col_spec: builder t = ok v -> v = col A t with
+  A the matrix that the rf_* premise names (this is where the Lean-side
+  symbolic row formulas of (C2) meet the Rust).  The top-level
+  check_spec: check ch c = ok true -> the hypotheses of p_r1_of_cert's five
+  *_of_cert inputs hold for decode c, which with (C2) gives check_sound.
+§6.4 Size and hazard estimate.  (X1)+(X2) about 300 lines of Rust; (X3)
+  about 500-800 lines (DESIGN-R1-P §4.2).  The loop-heavy builders are the
+  memory-hazardous Aeneas case; extract them one function per run under the
+  usual capped scope, starting with dot and kcoord, and stop on the first
+  replay that approaches its cap (AGENTS resource rule 4).  The dense
+  multiply in O·U = I and Y·rho is a triple loop over symbolic bounds; its
+  invariant proof is generic in the dimensions, so no concrete size is ever
+  unfolded.
+§6.5 Differential evidence (engineering only).  Until (C3) is proved, the
+  prototype's check is compared with z9b main_r1p on the Z9b vectors (done
+  here for six configurations, §4) and the teeth set of §4 is kept as a
+  regression test for the extracted crate.
+
+§7  Open items and a rejected-for-now option
+--------------------------------------------
+§7.1 The protocol predicate.  The prover enforces
+    P_chk ch := match emit ch with | some c => check ch c | none => false,
+  a deterministic public function of ch (emit uses no secret and no
+  randomness), so the simulator can run it too (ZF1 §3, R-same).
+  check_sound gives P_chk ch -> P_R1 (decode ch), hence MaskImageOn
+  antitonicity transfers maskImageOn_R1 to P_chk (D38.5, DESIGN-R1-P §4.1).
+  The producer is part of P_chk's definition but needs no proof: only the
+  implication is used, and emit failing is an allowed false negative.
+§7.2 Open (OBLIGATION unless stated).
+  1. rf_* premises (C2), §2.3: RF-own, RF-round (with the Z4c coordinate map
+     and its implied linear coefficient), RF-bat (incl. D34.3 ell vs weight
+     kinds 5/6), RF-src, RF-chain (normalize_d generators span ChainT0K4),
+     RF-rel (incl. D34.3 lineInverse vs QueryGeometry, storedFirstLineX18 vs
+     line_node; unopenedZero = read support), RF-obs, RF-dec.
+  2. (C3) the extracted checker, §6.
+  3. The decoders: SemK4 enters as rf_sem; on R1 it is the qm31_sample shape.
+  4. Structure B: whether C1Lift fails there or only the full-width
+     right-inverse format does is not determined (§4.1).  Not needed for
+     soundness; relevant only if B-like challenges were frequent, which
+     Z8-Z10 do not suggest.
+  5. Prover integration (DESIGN-R1-P §3.1): replace the hook's
+     p_r1::check by emit + check; the certificate never leaves the prover
+     and is dropped with the attempt (it is a function of public data, so
+     no erasure rule applies, but it is not published).
+  6. Cost on a client: measured 15.2 s per attempt on the nuc (emit 12.6 +
+     check 2.6); a laptop of the same class should be similar; not measured
+     elsewhere.  The DESIGN-R1-P §2.3 speedups apply to emit unchanged.
+§7.3 Randomised checking (considered, NOT adopted).  Freivalds-style tests
+  (check Y·(R r) = T r for a random r, and the kernel and echelon products
+  against random vectors) would cut check from ~2.7G to ~30M
+  multiply-adds (well under 0.1 s).  But the implication becomes
+    Pr_r[check ch c r = true and not P_R1 ch] <= (number of tests)/|E|,
+  with r drawn after c.  Over M31 that is 2^-31 per test, far above the
+  2^-108 privacy budget (D45.3); over WideExact (|E| ~ 2^248) it is
+  negligible, but P_chk then depends on prover-local randomness, the
+  simulator must sample it identically, and ZF1-abort's predicate would
+  need a randomised form, which the Lean development does not have.  Since
+  the deterministic check costs 2.6 s, below the producer's 12.6 s, the
+  deterministic route is kept.  Recorded here so that the option is not
+  re-derived.

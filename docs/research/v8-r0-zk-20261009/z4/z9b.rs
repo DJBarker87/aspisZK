@@ -499,3 +499,7 @@ pub(crate) fn main_r1p() {
         t0.elapsed().as_secs_f64()
     );
 }
+
+// ---------------------------------------------------------------- D38.5 certificates
+#[path = "z9c.rs"]
+pub(crate) mod z9c;

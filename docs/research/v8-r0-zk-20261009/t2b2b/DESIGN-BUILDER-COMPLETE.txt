@@ -1,0 +1,166 @@
+DESIGN-BUILDER-COMPLETE — the honest builder behind HonestBuilderCore (LOG D40.4, D42.4, D43.1)
+Branch codex/r0-builder-complete-20261019, base e171d7418.
+
+§0  Answer (task item 1): is there a concrete honest builder in Lean?
+
+NO.  The Lean model contains no function from a typed witness to a Trace
+with proved properties.  Evidence:
+
+- R0Z/ZkStatement.lean:302-308.  `HonestProver K` has fields Instance,
+  transport, public, build : Instance → Trace K; its doc comment says "The
+  transfer-instance builder is deliberately uninstantiated."  ZkStatement.lean:
+  319-320 `build h w := applyEligible (h.build w.1) w.2` only adds eligible
+  noise to the abstract build.
+- R0P (v8-r0-sem-proof-20261008/lean/R0P, 21,192 lines) is entirely in the
+  soundness direction, trace → witness:
+  * SemAssembly.lean:29 `ProductionHolds` and :35 `LaneInterface` are
+    predicates on a given trace; LaneMap.lean:511 `laneOf` and :817
+    `lanes_zero_iff_holds` (proved) relate the lane map to the families on
+    any base-typed trace.
+  * PositivityChain.lean:17 `CopyLinkBalance` is a predicate on a trace.
+  * Extraction.lean:330 `input_note_extracted` and SemSource.lean:34
+    `paymentWitness` read a witness out of a trace (traceSk/traceSalt/
+    tracePath).  SemClosed.lean:23 `semantic_sound_closed` is acceptance →
+    ProductionHolds ∧ CopyLinkBalance.
+  * The only Trace constructors in R0P are SemView.lean:35 `rowsOf` (rows
+    from committed messages, an encoding equivalence), :55 `padC2Trace`,
+    and the counterexample trace in Poseidon.lean:233.  None takes a witness.
+- R0Z constructs traces only from traces: MaskLayout.lean:102/109/119
+  (applyEligible/applyAff/applyMask), :232 traceBase, HonestView.lean:50
+  `prepare` (writes the helper into column 26), PayloadSplit.lean:72.
+- Spend path (read-only, origin/codex/100bit-spend-path-20261013):
+  SpendRelation.lean:15 `Witness`, :41 `Rspend`, :61 `check` (decidable,
+  check_eq_true_iff); TraceWitnessExtract.lean:17 `extract : Public →
+  Trace → Option Wspend`, :43 `complete_of_production`;
+  PublicTraceWitness.lean:8 `extract_complete_of_typed_public`.  These are
+  also trace → witness.  No Lean file on that branch builds a Trace from a
+  Witness (searched for Trace-valued definitions and Rspend users).
+- The builder exists only in Rust: aspis-statement
+  pool_v1/pair_forest_trace.rs:321/354
+  `compile_pool_v1_pair_forest_{private_transfer,withdrawal}_merged_c1_v1`
+  (legacy pair trace builder, relocate_and_extend, bank merge into
+  `semantic_c1`), checked by aspis-prover pool_v1_pair_forest_honest.rs:108/
+  137 (all constraint residuals zero), then consumed by
+  aspis-r1-cost-probe prover.rs:131 `prove_masked_with_attempt` →
+  host_semantic.rs:207 `build`/`build_with_material`, which also builds the
+  H1 column and checks `state_only_copy_helper_sum == 0` (prover.rs, after
+  build_with_material).
+
+Consequence: task item 2 does not apply; item 3 is carried out below.
+
+§1  What is now proved (R0Z/BuilderComplete.lean, host attempt 4063, exit 0,
+    every axiom line ⊆ [propext, Classical.choice, Quot.sound];
+    evidence t2b2b/evidence-builder-complete.json)
+
+1.1 `lanes` is a production relation, not a lane-map fact.
+    lanes_iff_nonCopy (hcard : 4096 < Fintype.card K) B pub t
+        (hA : BaseTyped F t) (hpub : PublicBase F pub) :
+      (∀ λ χ i b, i < 28 → laneOf t pub λ χ B i b = 0) ↔ NonCopyHolds pub t
+    where NonCopyHolds = Holds of value, occupancy, asset, schedule, path,
+    digest and poseidonScalar (the seven λ/χ-free conjuncts of R0P
+    ProductionHolds, SemAssembly.lean:29).  Proof: pick a pole-free χ
+    (exists_noPole: `poleVal` from 2·2048 row-slot values into K is not
+    surjective when |K| > 4096, Fintype.card_le_of_surjective), form the
+    prepared instance `prepare pub t (chOf 0 χ)`, on which the Copy lane
+    vanishes (copyHolds_prepare) and lanes 0..27 equal those of t
+    (laneOf_prepare_lt); then the proved R0P equivalence
+    lanes_zero_iff_holds (LaneMap.lean:817) on the prepared instance, and
+    transport of every Holds back to t (holds_prepare, rowOpenings_prepare).
+    laneOf_lt_indep: lanes 0..27 read neither λ nor χ.
+    hcard is a field-size fact (|K| = p⁴ ≈ 2^124 for QM31), not a builder fact.
+
+1.2 `baseTyped` holds by construction.
+    ofColumns (c1 : Fin 26 → Fin 1024 → F) (rest : Fin 3 → Fin 1024 → K)
+    is the builder's output shape: the 26 semantic columns are base-field
+    arrays (the Rust `semantic_c1` M31 arrays), columns 26-28 are extension
+    values.  baseTyped_ofColumns : BaseTyped F (ofColumns c1 rest).
+
+1.3 The prover.  BuilderSpec F W (data: c1, rest as functions of
+    (pub, w)), BuilderSpec.build, and
+      honestProverOf S Rel transport : HonestProver K
+    with Instance := {p : Public K × W // Rel p.1 p.2}, public := p.1,
+    build := S.build p.1 p.2.  This is the HonestProver instance whose
+    `build` is the builder.
+
+1.4 The bridge.
+    builderCore_of_refines / builderCoreOn_of_refines /
+    builderSoundOn_of_refines (hcard) S Rel (hR : BuilderRefines S Rel)
+      transport B x (hpub : PublicBase F x.1) :
+      BuilderSoundOn (honestProverOf S Rel transport) B x
+    so `privacy_R1` / `privacy_R1_eff` take their BuilderSoundOn premise
+    from hR, hcard and PublicBase alone.
+
+1.5 Sanity against soundness.  inputNoteExtracted_of_refines: under hR,
+    every relation instance's build satisfies R0P InputNoteExtracted
+    (Extraction.lean:330 needs schedule, path, digest, asset, poseidon and
+    CopyLinkBalance, all supplied by hR).  The refinement premise is
+    therefore the trace-side image of the payment relation used by the
+    soundness extractor, not an unrelated condition.
+
+§2  The refinement premise (what is NOT proved)
+
+    structure BuilderRefines (S : BuilderSpec F W) (Rel : Public K → W → Prop) : Prop
+      nonCopy : ∀ pub w, Rel pub w → NonCopyHolds pub (S.build pub w)
+      balance : ∀ pub w, Rel pub w → CopyLinkBalance pub (S.build pub w)
+
+    Intended instantiation: W := Wspend, Rel pub w := Rspend (projectPublic
+    pub) w (SpendRelation.lean:41 on the spend-path branch; PublicBase
+    projection as in PublicTraceWitness.lean:8), S := the Rust builder
+    compile_pool_v1_pair_forest_*_merged_c1_v1 → semantic_c1 (c1) and
+    host_semantic::build_with_material (rest: H1/C2 columns; their values
+    are irrelevant to all three fields, since `prepare` overwrites column 26
+    and no field reads columns 27-28).  The instantiation is not made on
+    this branch: SpendRelation and its imports (R1InputWitnessCheck,
+    PublicOptionShape, AspisV8R15.ExactTowerBase, R1SpendAppendBinding) are
+    not on the R0Z build path; W and Rel are parameters, so the theorems
+    apply verbatim once the modules share a build.
+
+    Rust status of the two premises: the honest compiler runs a host
+    residual check (aspis-prover pool_v1_pair_forest_honest.rs:80 `finish`:
+    exactly 18,089 transfer residuals, all zero; aspis-statement
+    pair_forest_constraint_residuals.rs:79) that includes Poseidon,
+    schedule, copy-alias, path, value, occupancy, append and public
+    residuals.  That is a RUNTIME check on each build, not a proof for all
+    witnesses, and its correspondence to the Lean families (NonCopyHolds)
+    and to CopyLinkBalance over R0P copyLinks is not proved.  The refinement
+    obligation is therefore: for every w with Rspend, the Rust builder's
+    columns satisfy the Lean families and link balance.  It can be
+    discharged either (a) by a Lean model of the builder (the column-wise
+    definitions of the legacy pair-trace builder, relocate_and_extend and
+    bank merge), proving NonCopyHolds/CopyLinkBalance per family, or (b) by
+    an Aeneas/extraction refinement of the Rust functions to such a model.
+
+    Why nothing more follows from Rspend alone: with S abstract, Rspend
+    constrains w, not S.build pub w.  Any S whose build is a trace with a
+    nonzero non-copy residual (e.g. Poseidon.lean:233's committed trace)
+    satisfies the types and violates nonCopy, for every w.  So neither
+    nonCopy nor balance is derivable from Rspend without a concrete
+    builder; (a) is the honest-completeness proof that would replace the
+    premise.
+
+§3  Field-by-field status of HonestBuilderCore (R0Z/BuilderSound.lean:24)
+
+    baseTyped : THEOREM for every builder of the ofColumns shape
+                (baseTyped_ofColumns).  Residual Rust fact: the semantic
+                C1 columns are M31 values embedded in K (a type fact of
+                `semantic_c1: [Vec<M31>]`, part of the same refinement map).
+    lanes     : THEOREM-reduced to NonCopyHolds (lanes_iff_nonCopy, needs
+                |K| > 4096, BaseTyped, PublicBase).  NonCopyHolds of the
+                honest build is the REFINEMENT PREMISE BuilderRefines.nonCopy.
+    balance   : REFINEMENT PREMISE BuilderRefines.balance (CopyLinkBalance
+                of the honest build), unchanged in content from D43.1.
+
+    Net effect on privacy_R1: the premise `BuilderSoundOn h B x` is replaced,
+    for h := honestProverOf S Rspend transport, by `BuilderRefines S Rspend`
+    (two Prop fields, both trace-side images of the payment relation) plus
+    the field-size fact and PublicBase, which privacy_R1 already assumes.
+
+§4  Open
+    - BuilderRefines for the Rust builder (route (a) or (b) of §2).
+    - Instantiating W := Wspend, Rel := Rspend once SpendRelation and R0Z
+      share a build; and checking that the Rust prover's Instance is
+      exactly {(pub, w) | Rspend} (the prover aborts on non-zero residuals,
+      so its domain may be smaller than Rspend iff the premise fails).
+    - The extension columns: `rest` is free in this model; if a later
+      statement reads columns 27-28 of h.build, their builder definition
+      must be added to BuilderSpec.
