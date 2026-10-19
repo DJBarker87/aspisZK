@@ -50,3 +50,23 @@ AspisR1DecodeKFullParserCanonicalityCMQ.qm31_from_le_bytes_success_canonical.
 Inspect and reuse these before attempting new decoder proof/extraction work
 for Reader.k/resume canonicality. Avoid another Option frontend experiment;
 its exact failures are archived in RHO-COEFFICIENT-SOURCE-DIAGNOSTICS.json.
+
+Canonical source routines are now checked: RHO-CANONICAL-INPUTS.md/json.
+CuSavingsRhoReader.k_success derives Canonical plus bytes/at frame from the
+actual emitted Reader.k; k_outcome covers all Results. CuSavingsRhoScalarK
+source_outcome/source_success derive actual sampled rho canonicality while
+retaining the arbitrary common block operation. Reuse these; do not redo
+strict parsing or sampler digits. The exact original sampler Types/Funs and
+ExtractedQM31SamplerDigits were re-pinned in the CU object root with matching
+source receipts, then the scalar_k dependents rechecked. Use stage-focused.py
+--source for non-flat source roots instead of introducing duplicate files.
+
+The original Reader unwrap carries inherited core.fmt.Formatter : Type;
+the exact original object is pinned and unwrap_debug_unused proves its Debug
+argument irrelevant. This is not a new equivalence axiom. Canonical audit
+whitelists it only for the actual Reader source and Reader theorem module.
+
+The bounded optimized-MIR attempt also failed its reborrow shape gate:
+Option.as_deref_mut remains in the successful raw emission. No speculative
+primitive implementation has been imported. Evidence is in
+RHO-MIR-REBORROW-DIAGNOSTIC.json; do not repeat this extraction configuration.

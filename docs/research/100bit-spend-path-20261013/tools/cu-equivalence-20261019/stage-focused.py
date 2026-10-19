@@ -5,13 +5,14 @@ import argparse, hashlib, json, resource, shlex, subprocess, sys, time
 
 ap=argparse.ArgumentParser(); ap.add_argument('module'); ap.add_argument('attempt')
 ap.add_argument('--axiom',action='append',default=[])
+ap.add_argument('--source',help='Repository-relative source path for a module in a non-flat Lean root')
 ap.add_argument('--uncapped-nuc',action='store_true',help='User-authorized removal of NUC resource and host-concurrency caps')
 ap.add_argument('--cache-receipt',help='Remote successful receipt whose pinned import search roots may be reused')
 ap.add_argument('--cache-source',help='Repository-relative source corresponding to the cached target')
 a=ap.parse_args()
 repo=Path(__file__).resolve().parents[5]
 area=repo/'docs/research/100bit-spend-path-20261013'
-source=area/'lean'/(a.module+'.lean')
+source=repo/a.source if a.source else area/'lean'/(a.module+'.lean')
 remote='/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019'
 host='dombarker@100.108.41.90'
 out=area/'evidence/cu-equivalence-20261019'/a.attempt

@@ -1,0 +1,244 @@
+   Compiling aspis-r1-cu-gamma v0.0.0 (/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/rho-coefficients-mir-input)
+error: visibility `pub(crate)` is not followed by an item
+   --> lib.rs:481:2
+    |
+481 |  pub(crate) #[inline(never)]
+    |  ^^^^^^^^^^ the visibility
+    |
+    = help: you likely meant to define an item, e.g., `pub(crate) fn foo() {}`
+
+error: non-item in item list
+   --> lib.rs:481:13
+    |
+480 |  impl<'a> ValidatedRecord<'a> {
+    |                               - item list starts here
+481 |  pub(crate) #[inline(never)]
+    |             ^ non-item starts here
+...
+489 |  }
+    |  - item list ends here
+
+warning: unused import: `P`
+   --> lib.rs:310:50
+    |
+310 |             use crate::aspis_core::{field::{M31, P}, state_only_prefix::r0::Error};
+    |                                                  ^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `field`, `powers`, and `transcript::Transcript`
+   --> lib.rs:858:167
+    |
+858 | ...e::SecureCirclePoint},transport::Variant,transcript::Transcript,weights::{powers,field}};
+    |                                             ^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^ ^^^^^
+
+warning: unused imports: `circle::SecureCirclePoint` and `transport::Variant`
+   --> lib.rs:891:69
+    |
+891 | use crate::{aspis_core::{Digest32,field::{WideExact as E,QM31 as K},circle::SecureCirclePoint},
+    |                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+892 |  verifier::{Prepared,View,Error},transcript::Transcript,transport::Variant,weights::{powers,field}};
+    |                                                         ^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `circle::SecureCirclePoint` and `transport::Variant`
+   --> lib.rs:948:69
+    |
+948 | use crate::{aspis_core::{Digest32,field::{WideExact as E,QM31 as K},circle::SecureCirclePoint},
+    |                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+949 |  verifier::{Prepared,View,Error},transcript::Transcript,transport::Variant,weights::{powers,field}};
+    |                                                         ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `BatchedWeights`
+    --> lib.rs:1029:81
+     |
+1029 | pub mod rho_old {use crate::{aspis_core,aspis_core::field::{M31,WideExact as E},BatchedWeights};
+     |                                                                                 ^^^^^^^^^^^^^^
+
+error[E0599]: no method named `row` found for struct `r1_wire::ValidatedRecord<'a>` in the current scope
+   --> lib.rs:584:26
+    |
+476 | pub(crate) struct ValidatedRecord<'a> {
+    | ------------------------------------- method `row` not found for this struct
+...
+584 |         let row = record.row();
+    |                          ^^^ field, not a method
+    |
+help: remove the arguments
+    |
+584 -         let row = record.row();
+584 +         let row = record.row;
+    |
+help: there is a method `borrow` with a similar name
+    |
+584 |         let row = record.borrow();
+    |                          +++
+
+error[E0599]: no method named `framed` found for struct `r1_wire::ValidatedRecord<'a>` in the current scope
+   --> lib.rs:591:54
+    |
+476 | pub(crate) struct ValidatedRecord<'a> {
+    | ------------------------------------- method `framed` not found for this struct
+...
+591 |             &self.sample_block_validated(row, record.framed())?,
+    |                                                      ^^^^^^-- help: remove the arguments
+    |                                                      |
+    |                                                      field, not a method
+
+error[E0599]: no method named `row` found for struct `r1_wire::ValidatedRecord<'a>` in the current scope
+   --> lib.rs:622:26
+    |
+476 | pub(crate) struct ValidatedRecord<'a> {
+    | ------------------------------------- method `row` not found for this struct
+...
+622 |         let row = record.row();
+    |                          ^^^ field, not a method
+    |
+help: remove the arguments
+    |
+622 -         let row = record.row();
+622 +         let row = record.row;
+    |
+help: there is a method `borrow` with a similar name
+    |
+622 |         let row = record.borrow();
+    |                          +++
+
+error[E0599]: no method named `framed` found for struct `r1_wire::ValidatedRecord<'a>` in the current scope
+   --> lib.rs:627:54
+    |
+476 | pub(crate) struct ValidatedRecord<'a> {
+    | ------------------------------------- method `framed` not found for this struct
+...
+627 |             &self.sample_block_validated(row, record.framed())?,
+    |                                                      ^^^^^^-- help: remove the arguments
+    |                                                      |
+    |                                                      field, not a method
+
+error[E0599]: no method named `decode_k` found for struct `r1_wire::ValidatedRecord<'a>` in the current scope
+   --> lib.rs:675:52
+    |
+476 | pub(crate) struct ValidatedRecord<'a> {
+    | ------------------------------------- method `decode_k` not found for this struct
+...
+675 |     let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];
+    |                                                    ^^^^^^^^ method not found in `r1_wire::ValidatedRecord<'_>`
+
+error[E0599]: no method named `decode_k` found for struct `r1_wire::ValidatedRecord<'a>` in the current scope
+   --> lib.rs:681:56
+    |
+476 | pub(crate) struct ValidatedRecord<'a> {
+    | ------------------------------------- method `decode_k` not found for this struct
+...
+681 |         let polynomial = prefix.validated_record(row)?.decode_k::<28>(0)?;
+    |                                                        ^^^^^^^^ method not found in `r1_wire::ValidatedRecord<'_>`
+
+error[E0599]: no method named `decode_k` found for struct `r1_wire::ValidatedRecord<'a>` in the current scope
+   --> lib.rs:717:46
+    |
+476 | pub(crate) struct ValidatedRecord<'a> {
+    | ------------------------------------- method `decode_k` not found for this struct
+...
+717 |     let extra = prefix.validated_record(25)?.decode_k::<29>(87)?;
+    |                                              ^^^^^^^^ method not found in `r1_wire::ValidatedRecord<'_>`
+
+error[E0599]: no method named `decode_k` found for struct `r1_wire::ValidatedRecord<'a>` in the current scope
+   --> lib.rs:725:50
+    |
+476 | pub(crate) struct ValidatedRecord<'a> {
+    | ------------------------------------- method `decode_k` not found for this struct
+...
+725 |     let before_z1 = prefix.validated_record(26)?.decode_k::<29>(0)?;
+    |                                                  ^^^^^^^^ method not found in `r1_wire::ValidatedRecord<'_>`
+
+warning: unused attribute
+   --> lib.rs:881:1
+    |
+881 | #[inline(never)]
+    | ^^^^^^^^^^^^^^^^ help: remove this attribute
+    |
+note: attribute also specified here
+   --> lib.rs:880:1
+    |
+880 | #[inline(never)]
+    | ^^^^^^^^^^^^^^^^
+    = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+    = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> lib.rs:882:58
+    |
+882 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                                                          ----^
+    |                                                          |
+    |                                                          help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `v`
+   --> lib.rs:882:31
+    |
+882 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                               ^ help: if this is intentional, prefix it with an underscore: `_v`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `p`
+   --> lib.rs:882:42
+    |
+882 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                                          ^ help: if this is intentional, prefix it with an underscore: `_p`
+
+warning: unused variable: `a`
+   --> lib.rs:882:58
+    |
+882 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                                                          ^^^^^ help: if this is intentional, prefix it with an underscore: `_a`
+
+warning: unused variable: `g`
+   --> lib.rs:882:76
+    |
+882 | ...ox<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unre...
+    |                                   ^ help: if this is intentional, prefix it with an underscore: `_g`
+
+warning: unused variable: `public_bytes`
+   --> lib.rs:882:85
+    |
+882 | ...ccumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                        ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_public_bytes`
+
+warning: unused variable: `proof`
+   --> lib.rs:882:104
+    |
+882 | ...:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                               ^^^^^ help: if this is intentional, prefix it with an underscore: `_proof`
+
+warning: unused variable: `k`
+   --> lib.rs:882:116
+    |
+882 | ...public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                                   ^ help: if this is intentional, prefix it with an underscore: `_k`
+
+warning: unused variable: `hash`
+   --> lib.rs:882:124
+    |
+882 | ...s:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                                ^^^^ help: if this is intentional, prefix it with an underscore: `_hash`
+
+warning: unused variable: `obs`
+   --> lib.rs:882:131
+    |
+882 | ...],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                                 ^^^ help: if this is intentional, prefix it with an underscore: `_obs`
+
+warning: variable does not need to be mutable
+   --> lib.rs:941:67
+    |
+941 |     let (_semantic_claims,p)=tx1_prepare(public,&v,hash,obs)?;let mut a=Accumulator::new(v.variant)?;let g=powers::<29>(p.gamma);ma...
+    |                                                                   ----^
+    |                                                                   |
+    |                                                                   help: remove this `mut`
+
+For more information about this error, try `rustc --explain E0599`.
+ERROR Code failed to compile
+warning: `aspis-r1-cu-gamma` (lib) generated 17 warnings
+error: could not compile `aspis-r1-cu-gamma` (lib) due to 10 previous errors; 17 warnings emitted

@@ -1,0 +1,89 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReader.lean:27:4: error: Type mismatch: After simplification, term
+  hc.left
+ has type
+  @LT.lt ℕ instLTNat ↑q.c0.a ↑CuSavingsRhoParserCanonicality.P
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑(CuSavingsRhoValue.wordAt (CuSavingsRhoPush.powerLimbs q) ⟨0, ⋯⟩) ↑field.P
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReader.lean:28:4: error: Type mismatch: After simplification, term
+  hc.right.left
+ has type
+  @LT.lt ℕ instLTNat ↑q.c0.b ↑CuSavingsRhoParserCanonicality.P
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑(CuSavingsRhoValue.wordAt (CuSavingsRhoPush.powerLimbs q) ⟨1, ⋯⟩) ↑field.P
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReader.lean:29:4: error: Type mismatch: After simplification, term
+  hc.right.right.left
+ has type
+  @LT.lt ℕ instLTNat ↑q.c1.a ↑CuSavingsRhoParserCanonicality.P
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑(CuSavingsRhoValue.wordAt (CuSavingsRhoPush.powerLimbs q) ⟨2, ⋯⟩) ↑field.P
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReader.lean:30:4: error: Type mismatch: After simplification, term
+  hc.right.right.right
+ has type
+  @LT.lt ℕ instLTNat ↑q.c1.b ↑CuSavingsRhoParserCanonicality.P
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑(CuSavingsRhoValue.wordAt (CuSavingsRhoPush.powerLimbs q) ⟨3, ⋯⟩) ↑field.P
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReader.lean:43:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (bytes, out).2
+in the target expression
+  out.bytes = self.bytes ∧ ↑out.at = ↑self.at + ↑length
+
+length : Usize
+self out : verifier.Reader
+bytes : Std.Array U8 length
+h✝³ :
+  (do
+      let i ← self.at + length
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) self.bytes
+            { start := self.at, «end» := i }
+      let r ← core.array.TryFromArrayCopySlice.try_from length core.marker.CopyU8 s
+      let b ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      ok (b, { bytes := self.bytes, «at» := i })) =
+    ok (bytes, out)
+index : UScalar UScalarTy.Usize
+hadd : self.at + length = ok index
+h✝² :
+  (do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) self.bytes
+            { start := self.at, «end» := index }
+      let r ← core.array.TryFromArrayCopySlice.try_from length core.marker.CopyU8 s
+      let b ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      ok (b, { bytes := self.bytes, «at» := index })) =
+    ok (bytes, out)
+hv :
+  match ok index with
+  | ok z => ↑self.at + ↑length < 2 ^ UScalarTy.Usize.numBits ∧ ↑z = ↑self.at + ↑length ∧ z.bv = self.at.bv + length.bv
+  | fail e => ¬UScalar.inBounds UScalarTy.Usize (↑self.at + ↑length)
+  | x => ⊥
+w✝² : Slice U8
+left✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) self.bytes
+      { start := self.at, «end» := index } =
+    ok w✝²
+h✝¹ :
+  (do
+      let r ← core.array.TryFromArrayCopySlice.try_from length core.marker.CopyU8 w✝²
+      let b ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      ok (b, { bytes := self.bytes, «at» := index })) =
+    ok (bytes, out)
+w✝¹ : core.result.Result (Std.Array U8 length) core.array.TryFromSliceError
+left✝¹ : core.array.TryFromArrayCopySlice.try_from length core.marker.CopyU8 w✝² = ok w✝¹
+h✝ :
+  (do
+      let b ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError w✝¹
+      ok (b, { bytes := self.bytes, «at» := index })) =
+    ok (bytes, out)
+w✝ : Std.Array U8 length
+left✝ : core.result.Result.unwrap core.fmt.DebugTryFromSliceError w✝¹ = ok w✝
+h : ok (w✝, { bytes := self.bytes, «at» := index }) = ok (bytes, out)
+heq : (w✝, { bytes := self.bytes, «at» := index }).2 = (bytes, out).2
+⊢ out.bytes = self.bytes ∧ ↑out.at = ↑self.at + ↑length
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReader.lean:62:32: error(lean.unknownIdentifier): Unknown identifier `value`
+'AspisR1.CuSavingsRhoReader.parser_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoReader.raw_success' depends on axioms: [propext, sorryAx, Quot.sound, core.fmt.Formatter]
+'AspisR1.CuSavingsRhoReader.k_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]

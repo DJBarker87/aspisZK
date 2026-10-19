@@ -1,0 +1,1 @@
+pub struct Transcript<H: Digest32> { pub state:[u8;32], hash:H }
