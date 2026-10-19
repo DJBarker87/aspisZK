@@ -6318,3 +6318,60 @@ CertCheckSound3 peaks at 7.17 GB.
 - hRound, hGRound and hGBat: pure-round closed forms, and `ell` against
   weight kinds 5/6.
 - The decoder facts and the inherited premises.
+
+### Build-integration design and a coherence finding (2026-10-19); D63
+
+The worker on side branch `codex/r1-privacy-build-integration-20261019`
+(commit ee17c8c86, based on the 100-bit branch with v8-reference merged)
+produced `t2b2b/DESIGN-BUILD-INTEGRATION.txt` and compiled host attempts
+4520–4529. The branch is pushed by the lead.
+
+**D63.1 Coherence finding (lead-verified).** Neither host workspace is a
+single coherent build.
+- Lean loads one object per module name and does not check it against what
+  dependents were compiled with.
+- The privacy and spend closures share module names with different objects:
+  the sampler closures share 28 names, 23 with different objects and 6 with
+  different sources.
+- The spend side itself has more than one object for `CircleGroupOrder`.
+- In privacy objects2, `R0P/CoreExt` was re-sourced and recompiled on
+  2026-10-08 09:24, while its dependent `R0P/Copy` dates from 2026-10-07
+  18:36 and was never rebuilt.
+
+Consequence: every focused compile accepted so far, on both tracks, is
+evidence that each module checks against the objects present. None is yet
+evidence of one consistent theory. No accepted statement is withdrawn. But
+**nothing is release evidence until one clean ordered build, from one source
+per module name, on one base, with one axioms audit.** That is also the
+outstanding "single Lean 4.32 kernel" item on the soundness side.
+
+**D63.2 Lead decisions.**
+- Adopt the design's target: a new workspace with one sources tree, one
+  objects folder, Mathlib from AspisFormal, and the spend path's ported Aeneas.
+  The build compiles in dependency order from a manifest with `--check`. Where
+  the two sides' sources differ, take the spend copy and repair privacy
+  imports.
+- New item (f), the unified base, comes before (b), (d) and (e). The
+  provisional soundness release roots are:
+  - LiteralFreshAttemptBound, RawAdaptiveMembershipBound,
+    AdaptiveMembershipSoundness;
+  - SpendRelation, SpendAppendBinding;
+  - the terminal/caller correspondence modules the live session lands.
+
+  These are to be confirmed with the soundness side at final assembly.
+- SemRows01 moves to (d), as a wire-decoder fact.
+- On (e): the worker reads `line_identity` as the honest-data form of
+  `match1`, not as an assumption of R1QueryResidualBridge. This is to be
+  settled when the soundness side states which premise it would discharge.
+- Attempt range for the integration build: 5000–5299, using the private
+  joint launcher (same caps, slots and run2.py; only the objects folder and
+  search path change). The build spans several night windows.
+
+**D63.3 Done (on the side branch).**
+- BatchedAlgebra and its dependents compile against the spend path's own
+  `R1FoldCoefficientBridge`/`R1FirstFold` (byte-identical), with 0 coherence
+  conflicts over 266 modules. So `line_identity` is stated over spend
+  constants.
+- `qm31SamplerLaw_spend` is proved on the spend base from the extracted
+  `qm31_sample`, with the carrier transports, and `SamplerLawBridge.toSem1`
+  is proved. They sit on different bases until (f).
