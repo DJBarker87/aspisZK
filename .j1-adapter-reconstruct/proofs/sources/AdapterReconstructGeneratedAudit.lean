@@ -1,0 +1,6 @@
+import AspisR1AdapterReconstruct.Funs
+
+#print axioms AspisR1AdapterReconstruct.r1_pool_adapter.asq8_common
+#print axioms AspisR1AdapterReconstruct.r1_pool_adapter.transfer_statement_box
+#print axioms AspisR1AdapterReconstruct.r1_pool_adapter.withdrawal_statement_box
+#print axioms AspisR1AdapterReconstruct.r1_pool_adapter.reconstruct_asq8_statement

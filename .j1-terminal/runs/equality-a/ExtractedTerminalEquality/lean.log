@@ -1,0 +1,74 @@
+/home/dombarker/project-offloads/aspis-r1-j1a-terminal-proof-20261016/sources/ExtractedTerminalEquality.lean:14:56: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (a = b)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-r1-j1a-terminal-proof-20261016/sources/ExtractedTerminalEquality.lean:21:61: error: Application type mismatch: The argument
+  h
+has type
+  a.to_slice = b.to_slice
+but is expected to have type
+  a = b
+in the application
+  congrArg Subtype.val h
+/home/dombarker/project-offloads/aspis-r1-j1a-terminal-proof-20261016/sources/ExtractedTerminalEquality.lean:24:17: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (a = b)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-r1-j1a-terminal-proof-20261016/sources/ExtractedTerminalEquality.lean:24:35: error: unsolved goals
+case false
+α : Type
+inst✝ : DecidableEq α
+n : Usize
+cmp : core.cmp.PartialEq α α
+a b : Std.Array α n
+hne : ∀ (x y : α), cmp.ne x y ⦃ b => b = true ↔ ¬x = y ⦄
+he : ¬a.to_slice = b.to_slice
+hv : core.array.equality.PartialEqArray.eq cmp a b = ok false
+hp : ¬a = b
+⊢ sorry () = false
+
+case true
+α : Type
+inst✝ : DecidableEq α
+n : Usize
+cmp : core.cmp.PartialEq α α
+a b : Std.Array α n
+hne : ∀ (x y : α), cmp.ne x y ⦃ b => b = true ↔ ¬x = y ⦄
+hs : a = b
+hv : core.array.equality.PartialEqArray.eq cmp b b = ok true
+⊢ sorry () = true
+/home/dombarker/project-offloads/aspis-r1-j1a-terminal-proof-20261016/sources/ExtractedTerminalEquality.lean:31:56: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (a ≠ b)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-r1-j1a-terminal-proof-20261016/sources/ExtractedTerminalEquality.lean:33:16: error(lean.unknownIdentifier): Unknown constant `Bool.not_decide`
+/home/dombarker/project-offloads/aspis-r1-j1a-terminal-proof-20261016/sources/ExtractedTerminalEquality.lean:31:75: error: unsolved goals
+α : Type
+inst✝ : DecidableEq α
+n : Usize
+cmp : core.cmp.PartialEq α α
+hne : ∀ (x y : α), cmp.ne x y ⦃ b => b = true ↔ x ≠ y ⦄
+a b : Std.Array α n
+⊢ ok (decide ¬sorry = true) = ok sorry
+/home/dombarker/project-offloads/aspis-r1-j1a-terminal-proof-20261016/sources/ExtractedTerminalEquality.lean:42:2: error: Tactic `apply` failed: could not unify the conclusion of `@core.cmp.PartialEq.ne.trait_default.spec`
+  core.cmp.PartialEq.ne.trait_default ?PartialEqInst ?self ?other ⦃ b => b = true ↔ ?self ≠ ?other ⦄
+with the goal
+  aspis_core.field.M31.Insts.CoreCmpPartialEqM31.ne x y ⦃ b => b = true ↔ x ≠ y ⦄
+
+Note: The full type of `@core.cmp.PartialEq.ne.trait_default.spec` is
+  ∀ {T : Type} (PartialEqInst : core.cmp.PartialEq T T) (self other : T),
+    PartialEqInst.eq self other ⦃ b => b = true ↔ self = other ⦄ →
+      core.cmp.PartialEq.ne.trait_default PartialEqInst self other ⦃ b => b = true ↔ self ≠ other ⦄
+
+x y : aspis_core.field.M31
+⊢ aspis_core.field.M31.Insts.CoreCmpPartialEqM31.ne x y ⦃ b => b = true ↔ x ≠ y ⦄
+'AspisR1TerminalValidator.TerminalEquality.array_eq_value' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1TerminalValidator.TerminalEquality.array_ne_value' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1TerminalValidator.TerminalEquality.u8_ne_spec' depends on axioms: [propext]
+'AspisR1TerminalValidator.TerminalEquality.m31_ne_spec' depends on axioms: [sorryAx]

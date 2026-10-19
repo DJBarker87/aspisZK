@@ -1,0 +1,103 @@
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPass.lean:27:30: error: Type mismatch
+  rfl
+has type
+  ?m.133 = ?m.133
+but is expected to have type
+  U64.size = 2 ^ 64
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPass.lean:16:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPass.lean:43:48: error: Type mismatch: After simplification, term
+  hj0
+ has type
+  0 < ↑j
+but is expected to have type
+  1 ≤ ↑j
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPass.lean:70:2: error: unsolved goals
+case refine_1
+rank : Std.Array U32 8#usize
+r : U64
+j : Usize
+hr : ↑r < P
+hj0 : 0 < ↑j
+hj8 : ↑j ≤ 8
+j1 : UScalar UScalarTy.Usize
+hj : j - 1#usize = ok j1
+hvj✝ : ↑j1 = ↑j - ↑1#usize
+right✝ : ↑1#usize ≤ ↑j
+hvj : ↑j1 = ↑j - 1
+hlength : (↑rank).length = 8
+hj1 : ↑j1 < rank.length
+d : U32
+hd : rank.index_usize j1 = ok d
+hvd : d = (↑rank)[↑j1]
+s : U64
+hs : r <<< 32#i32 = ok s
+hvs : ↑s = ↑r <<< 32
+dividend : U64 := s ||| core.convert.num.FromU64U32.from d
+divisor : U64 := core.convert.num.FromU64U32.from field.P
+hvdBound : ↑d < B
+hvword : ↑dividend = ↑r * B + ↑d
+hvdivisor : ↑divisor = P
+hnz : ↑divisor ≠ 0
+q64 : UScalar UScalarTy.U64
+hq : dividend / divisor = ok q64
+hvq : ↑q64 = ↑dividend / ↑divisor
+r1 : UScalar UScalarTy.U64
+hm : dividend % divisor = ok r1
+hvm : ↑r1 = ↑dividend % ↑divisor
+q : U32 := UScalar.cast UScalarTy.U32 q64
+hqval : ↑q = (↑r * B + ↑d) / P
+hmval : ↑r1 = (↑r * B + ↑d) % P
+out : Std.Array U32 8#usize
+hu : rank.update j1 q = ok out
+hvo : out = rank.set j1 q
+hg : j > 0#usize
+⊢ (do
+      let i4 ← (s ||| core.convert.num.FromU64U32.from d) / core.convert.num.FromU64U32.from field.P
+      let a ← rank.update j1 (UScalar.cast UScalarTy.U32 i4)
+      let remainder1 ← (s ||| core.convert.num.FromU64U32.from d) % core.convert.num.FromU64U32.from field.P
+      ok (cont (a, remainder1, j1))) =
+    ok (cont (rank.set j1 q, r1, j1))
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPass.lean:31:8: error: (kernel) unknown constant 'AspisR1.ExtractedQM31SamplerPass.shift_success'
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPass.lean:71:24: warning: This simp argument is unused:
+  hq
+
+Hint: Omit it from the simp argument list.
+  simp only [sampler.qm31_div_pass_loop.body, hg, if_pos, hj, hs, hd,
+  ̵  ̵ ̵ ̵ ̵ ̵lift, bind_tc_ok, hq̵,̵ ̵h̵u, hm,
+  ̲  ̲ ̲ ̲hvo]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPass.lean:71:28: warning: This simp argument is unused:
+  hu
+
+Hint: Omit it from the simp argument list.
+  simp only [sampler.qm31_div_pass_loop.body, hg, if_pos, hj, hs, hd,
+  ̵  ̵ ̵ ̵ ̵ ̵lift, bind_tc_ok, hq, hu̵m̲,
+  ̲ h̵m̵,̵  ̲ ̲hvo]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPass.lean:71:32: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [sampler.qm31_div_pass_loop.body, hg, if_pos, hj, hs, hd,
+  ̵  ̵ ̵ ̵ ̵ ̵lift, bind_tc_ok, hq, hu,
+  ̲ h̵m̵,̵  ̲ ̲hvo]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPass.lean:71:36: warning: This simp argument is unused:
+  hvo
+
+Hint: Omit it from the simp argument list.
+  simp only [sampler.qm31_div_pass_loop.body, hg, if_pos, hj, hs, hd,
+  ̵  ̵ ̵ ̵ ̵ ̵lift, bind_tc_ok, hq, hu,
+  ̲  ̲ ̲ ̲hm,̵ ̵h̵v̵o̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.ExtractedQM31SamplerPass.source_P_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ExtractedQM31SamplerPass.shift_success' does not depend on any axioms
+'AspisR1.ExtractedQM31SamplerPass.body_success' depends on axioms: [propext, Classical.choice, Quot.sound, body_success]

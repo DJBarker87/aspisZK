@@ -1,0 +1,5 @@
+import ExtractedDecoderWithdrawalSuccess
+import ExtractedWithdrawalCallerPublic
+
+#check AspisR1TerminalDecoder.WithdrawalSuccess.decoder_encoder_success
+#check AspisR1WithdrawalCaller.CallerPublic.encoder_serializer_parsePublic

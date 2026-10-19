@@ -1,0 +1,20 @@
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerDivision.lean:38:2: error: unsolved goals
+case refine_1
+rank quotient : Std.Array U32 8#usize
+rem : U64
+hexec : sampler.qm31_div_pass_loop rank 0#u64 8#usize = ok (quotient, rem)
+hbound : ↑rem < P
+htake : List.take 8 (words rank) = words rank
+hdrop : List.drop 8 (words rank) = []
+hzero : decode64 0#u64 = 0
+hrem : ↑rem = (machineProcess 0 (words rank).reverse).1.toNat
+hwords : words quotient = (machineProcess 0 (words rank).reverse).2.reverse
+digit : U32 := UScalar.cast UScalarTy.U32 rem
+hvdigit : ↑digit = ↑rem
+⊢ (let (rank1, remainder) := (quotient, rem)
+    ok (rank1, UScalar.cast UScalarTy.U32 remainder)) =
+    ok (quotient, UScalar.cast UScalarTy.U32 rem)
+'AspisR1.ExtractedQM31SamplerDivision.div_pass_correct' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

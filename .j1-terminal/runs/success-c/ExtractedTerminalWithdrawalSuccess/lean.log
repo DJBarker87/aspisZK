@@ -1,0 +1,87 @@
+/home/dombarker/project-offloads/aspis-r1-j1a-terminal-proof-20261016/sources/ExtractedTerminalWithdrawalSuccess.lean:112:56: error: Application type mismatch: The argument
+  h
+has type
+  (do
+      let r ← encode_pool_v1_withdrawal_public_v1 p
+      let r1 ←
+        core.result.Result.map_err
+            validate_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+            r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (pool, deployment, anchor_sequence, anchor, nullifier, _) ←
+            statement_public_common (PoolV1PairForestTerminalStatementV1.Withdrawal c p)
+          let b3 ← core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 pool c.master_account
+          if b3 = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+            else do
+              let b4 ←
+                core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 deployment
+                    c.lane_transition.live_snapshot.deployment_domain
+              if b4 = true then
+                  ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+                else do
+                  let b5 ←
+                    core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 c.lane_transition.live_snapshot.pool
+                        c.master_account
+                  if b5 = true then
+                      ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+                    else
+                      if (anchor_sequence != c.checkpoint_sequence) = true then
+                        ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+                      else do
+                        let b6 ←
+                          core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                              c.historical_global_anchor
+                        if b6 = true then
+                            ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+                          else do
+                            let r2 ← pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 nullifier
+                            let r3 ←
+                              core.result.Result.map_err
+                                  validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+                                  r2 ()
+                            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                            match cf1 with
+                              | core.ops.control_flow.ControlFlow.Continue val =>
+                                if (val != c.output_lane) = true then
+                                  ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+                                else do
+                                  let (s, _) ← lift (Array.repeat 1520#usize 0#u8).to_slice_mut
+                                  let (r4, _) ←
+                                    pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+                                        c.lane_transition s
+                                  let r5 ←
+                                    core.result.Result.map_err
+                                        validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1
+                                        r4 ()
+                                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                  match cf2 with
+                                    | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame PoolV1PairForestTerminalFormatErrorV1) residual) =
+    ok (core.result.Result.Ok ())
+but is expected to have type
+  (do
+      let r ← ?m.299
+      let r1 ← core.result.Result.map_err ?m.300 r ?m.301
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue v => ?m.302 v
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame ?m.297) residual) =
+    ok (core.result.Result.Ok ())
+in the application
+  mapped_try_success ?m.299 ?m.300 ?m.301 ?m.302 h
+'AspisR1TerminalValidator.TerminalWithdrawalSuccess.terminal_withdrawal_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

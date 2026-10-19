@@ -1,0 +1,83 @@
+{
+  "format": 2,
+  "modules": {
+    "AspisR1TerminalValidator.Types": {
+      "source": "closed generated Types.lean",
+      "source_sha256": "5ac27c38f74aa4cbeb7ad1c224ae0cf9fa324458f591f8ee57604371b8f01d7e",
+      "source_revision": "42e5ca2011c39ee9770afc798282ff861b092428",
+      "imports": [
+        "Aeneas"
+      ],
+      "stage_as": "AspisR1TerminalValidator/Types.lean",
+      "role": "Exact terminal emitted code or empty external/audit companion",
+      "axiom_requests": 0
+    },
+    "AspisR1TerminalValidator.FunsExternal": {
+      "source": "docs/research/100bit-spend-path-20261013/lean/extracted-terminal-validator-20261016/AspisR1TerminalValidator/FunsExternal.lean",
+      "source_sha256": "72754f84e6ee1d4fe39c065b88de9bd014fe3ef389e18899fb2eb0ced727c46a",
+      "source_revision": "42e5ca2011c39ee9770afc798282ff861b092428",
+      "imports": [
+        "Aeneas",
+        "AspisR1TerminalValidator.Types"
+      ],
+      "stage_as": "AspisR1TerminalValidator/FunsExternal.lean",
+      "role": "Scoped builtin Option tags; no opaque external implementation",
+      "axiom_requests": 2
+    },
+    "AspisR1TerminalValidator.Funs": {
+      "source": "closed generated Funs.lean",
+      "source_sha256": "36b3603e86f5fc332c7a02f470c5a5af34febf0e5142e666c6300ce82b215bab",
+      "source_revision": "42e5ca2011c39ee9770afc798282ff861b092428",
+      "imports": [
+        "Aeneas",
+        "AspisR1TerminalValidator.Types",
+        "AspisR1TerminalValidator.FunsExternal"
+      ],
+      "stage_as": "AspisR1TerminalValidator/Funs.lean",
+      "role": "Exact terminal emitted code or empty external/audit companion",
+      "axiom_requests": 0
+    },
+    "TerminalGeneratedAudit": {
+      "source": "closed generated TerminalGeneratedAudit.lean",
+      "source_sha256": "b955fb7d62b1ee530313cb5dac2f36a0ef5548a015b44f2ede1cda65802cc7e2",
+      "source_revision": "42e5ca2011c39ee9770afc798282ff861b092428",
+      "imports": [
+        "AspisR1TerminalValidator.Funs"
+      ],
+      "stage_as": "TerminalGeneratedAudit.lean",
+      "role": "Exact terminal emitted code or empty external/audit companion",
+      "axiom_requests": 5
+    },
+    "ExtractedTerminalEquality": {
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedTerminalEquality.lean",
+      "source_sha256": "79c04a3b49f946e63516be9a847f27a162ccec3b0408ff336d6e927096d4d660",
+      "source_revision": "42e5ca2011c39ee9770afc798282ff861b092428 plus owned proofs",
+      "imports": [
+        "AspisR1TerminalValidator.Funs"
+      ],
+      "stage_as": "ExtractedTerminalEquality.lean",
+      "role": "Actual terminal guard/same-public success proof",
+      "axiom_requests": 4
+    },
+    "ExtractedTerminalWithdrawalSuccess": {
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedTerminalWithdrawalSuccess.lean",
+      "source_sha256": "42fb60337846572a69398b54ece91f75ba73cf82a15a25b870873182f4c9551c",
+      "source_revision": "42e5ca2011c39ee9770afc798282ff861b092428 plus owned proofs",
+      "imports": [
+        "ExtractedTerminalEquality"
+      ],
+      "stage_as": "ExtractedTerminalWithdrawalSuccess.lean",
+      "role": "Actual terminal guard/same-public success proof",
+      "axiom_requests": 1
+    }
+  },
+  "topological_order": [
+    "AspisR1TerminalValidator.Types",
+    "AspisR1TerminalValidator.FunsExternal",
+    "AspisR1TerminalValidator.Funs",
+    "TerminalGeneratedAudit",
+    "ExtractedTerminalEquality",
+    "ExtractedTerminalWithdrawalSuccess"
+  ],
+  "groups": {}
+}

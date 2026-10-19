@@ -1,0 +1,172 @@
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPassLoop.lean:37:11: error: unsolved goals
+case fail
+rank : Std.Array U32 8#usize
+r : U64
+j : Usize
+e : Error
+hb : sampler.qm31_div_pass_loop.body rank r j = fail e
+⊢ (match sampler.qm31_div_pass_loop.body rank r j with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => sampler.qm31_div_pass_loop.body x.1 x.2.1 x.2.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    fail e
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPassLoop.lean:38:8: error: unsolved goals
+case div
+rank : Std.Array U32 8#usize
+r : U64
+j : Usize
+hb : sampler.qm31_div_pass_loop.body rank r j = div
+⊢ (match sampler.qm31_div_pass_loop.body rank r j with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => sampler.qm31_div_pass_loop.body x.1 x.2.1 x.2.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    div
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPassLoop.lean:41:15: error: unsolved goals
+case ok.done
+rank : Std.Array U32 8#usize
+r : U64
+j : Usize
+out : Std.Array U32 8#usize × U64
+hb : sampler.qm31_div_pass_loop.body rank r j = ok (done out)
+⊢ (match sampler.qm31_div_pass_loop.body rank r j with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => sampler.qm31_div_pass_loop.body x.1 x.2.1 x.2.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok out
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPassLoop.lean:42:43: error: Tactic `rfl` failed: The left-hand side
+  match sampler.qm31_div_pass_loop.body rank r j with
+  | ok r =>
+    match r with
+    | cont x => loop (fun x => sampler.qm31_div_pass_loop.body x.1 x.2.1 x.2.2) x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  sampler.qm31_div_pass_loop next.1 next.2.1 next.2.2
+
+case ok.cont
+rank : Std.Array U32 8#usize
+r : U64
+j : Usize
+next : Std.Array U32 8#usize × U64 × Usize
+hb : sampler.qm31_div_pass_loop.body rank r j = ok (cont next)
+⊢ (match sampler.qm31_div_pass_loop.body rank r j with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => sampler.qm31_div_pass_loop.body x.1 x.2.1 x.2.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    sampler.qm31_div_pass_loop next.1 next.2.1 next.2.2
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPassLoop.lean:57:4: error: unsolved goals
+case pos.refine_1
+rank : Std.Array U32 8#usize
+r : U64
+j : Usize
+hr : ↑r < P
+hj : ↑j ≤ 8
+hz : ↑j = 0
+hg : ¬j > 0#usize
+⊢ (do
+      let flow ←
+        if False then do
+            let j1 ← j - 1#usize
+            let i ← r <<< 32#i32
+            let i1 ← rank.index_usize j1
+            let i2 ← lift (core.convert.num.FromU64U32.from i1)
+            let dividend ← lift (i ||| i2)
+            let i3 ← lift (core.convert.num.FromU64U32.from field.P)
+            let i4 ← dividend / i3
+            let i5 ← lift (UScalar.cast UScalarTy.U32 i4)
+            let a ← rank.update j1 i5
+            let i6 ← lift (core.convert.num.FromU64U32.from field.P)
+            let remainder1 ← dividend % i6
+            ok (cont (a, remainder1, j1))
+          else ok (done (rank, r))
+      match flow with
+        | cont (rank1, r1, j1) => sampler.qm31_div_pass_loop rank1 r1 j1
+        | done out => ok out) =
+    ok (rank, r)
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPassLoop.lean:67:95: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  0 ≤ c ≤ 7
+  c - f ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+  a - e ≥ 1
+where
+ a := ↑P
+ b := ↑↑r
+ c := ↑(↑j - 1)
+ d := ↑(↑r * B + ↑(↑rank)[↑j - 1]) / ↑P
+ e := ↑(↑r * B + ↑(↑rank)[↑j - 1]) % ↑P
+ f := ↑↑8#usize
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPassLoop.lean:73:6: error: Type mismatch: After simplification, term
+  hvq
+ has type
+  @Eq ℕ (↑q) ((↑r * B + ↑(↑rank)[↑j - 1]) / P)
+but is expected to have type
+  @Eq ℕ (↑q) ((↑r * 2 ^ 32 + ↑d) / P)
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPassLoop.lean:79:6: error: Type mismatch: After simplification, term
+  hvr
+ has type
+  @Eq ℕ (↑r1) ((↑r * B + ↑(↑rank)[↑j - 1]) % P)
+but is expected to have type
+  @Eq ℕ (↑r1) ((↑r * 2 ^ 32 + ↑d) % P)
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPassLoop.lean:80:48: error: unsolved goals
+rank : Std.Array U32 8#usize
+r : U64
+j : Usize
+hr : ↑r < P
+hj : ↑j ≤ 8
+hz : ¬↑j = 0
+hj0 : 0 < ↑j
+j1 : Usize
+q : U32
+r1 : U64
+hbody : sampler.qm31_div_pass_loop.body rank r j = ok (cont (rank.set j1 q, r1, j1))
+hvj : ↑j1 = ↑j - 1
+hvq : ↑q = (↑r * B + ↑(↑rank)[↑j - 1]) / P
+hvr : ↑r1 = (↑r * B + ↑(↑rank)[↑j - 1]) % P
+hr1 : ↑r1 < P
+n : ℕ := ↑j - 1
+hn : ↑j = n + 1
+hj1 : ↑j1 = n
+hnrank : n < (↑rank).length
+hnwords : n < (words rank).length
+d : U32 := (↑rank)[n]
+hqmodel : decode32 q = (machineStep (decode64 r) (decode32 d)).1
+hrmodel : decode64 r1 = UInt64.ofNat (machineStep (decode64 r) (decode32 d)).2.toNat
+⊢ decode32 (↑rank)[n] = decode32 d
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPassLoop.lean:58:54: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [sampler.qm31_div_pass_loop.body, hg, i̵f̵_̵n̵e̵g̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-r18-sampler-20261016/pass/sources/ExtractedQM31SamplerPassLoop.lean:58:62: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [sampler.qm31_div_pass_loop.body, hg, if_neg,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.ExtractedQM31SamplerPassLoop.decode32_val' depends on axioms: [propext]
+'AspisR1.ExtractedQM31SamplerPassLoop.decode64_val' depends on axioms: [propext]
+'AspisR1.ExtractedQM31SamplerPassLoop.words_set' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ExtractedQM31SamplerPassLoop.loop_unroll' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ExtractedQM31SamplerPassLoop.loop_correct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
