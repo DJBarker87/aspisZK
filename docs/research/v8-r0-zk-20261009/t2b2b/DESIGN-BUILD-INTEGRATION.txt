@@ -331,3 +331,100 @@ axioms, errors; note the jsonl axiom field misses names containing an apostrophe
 $T/evidence/out-<A>.log is authoritative), joint-sha-5000-5402.txt, joint-objects-manifest1.sha256.
 Window: launcher and driver changed from 06:00 to 10:00 London (user extension, 2026-10-19);
 the build itself finished at 04:02, inside both.
+
+------------------------------------------------------------------------------------------
+§10  Manifest 2 ((c) end to end) and (d) — after LOG D65
+------------------------------------------------------------------------------------------
+
+10.1 Composition module (written, not yet compiled): R1J/PrivacySamplerSpend.lean.
+  samplerLaw_of_spend W D ι hι (hD : D.s1 = s1Spend ι) : QM31SamplerLaw D.s1
+    := toSem1 (qm31SamplerLaw_spend ι hι), transported along hD;
+  privacy_R1_games_spendSampler: privacy_R1_games_sampler with L replaced by
+    (ι : QM31Exact → K) (hι : Injective ι) (hD : D.s1 = s1Spend ι).
+  Repo revision for manifest 2: this branch at 63bd33c95 (manifest-1 sources unchanged; the newer
+  v8-reference Cert* work, f9bb4992a, is NOT merged, so the 402 green objects stay valid).
+
+10.2 Manifest 2 = manifest-1 roots + R1J.PrivacySamplerSpend: 452 modules (43 spend, 248 base,
+  161 privacy), 4 known spend-over-base selections, no X/R1X duplicate (no
+  one-file-two-modules), no cycle.  --check FAILS on one problem:
+    unresolved AspisR1Qm31ArithmeticProbe.Funs (and, behind it, .Types)
+  imported by ExtractedCurrentM31AddSub and ExtractedCurrentReducerOps, i.e. by the current-QM31
+  carrier that ExtractedQM31SamplerCorrect needs (Carrier → Equality → Tower → ...).  It is one
+  of the three missing sources the lead holds as a soundness-side decision, so manifest 2 is NOT
+  built.  Facts for that decision: the only repo copies are under evidence/,
+    100bit-spend-path-20261013/evidence/current-qm31-arithmetic-20261015/
+      extraction/attempt-a/generated/AspisR1Qm31ArithmeticProbe/{Funs,Types}.lean and
+      proof-sources/AspisR1Qm31ArithmeticProbe.{Funs,Types}.lean
+  (Funs 114552b8.., Types c5a08408.., identical in both places), and these are byte-identical to
+  the host source the spend path compiled (aspis-r1-j17-port-20261015/extracted/sources) and to
+  the source_lean_sha256 pinned in the accepted ExtractedQM31SamplerCorrect journal (correct-c).
+  Proposed resolution (needs the decision): promote those two files to a non-evidence lean root
+  (e.g. 100bit-spend-path-20261013/lean/extracted-qm31-arithmetic-20261015/AspisR1Qm31ArithmeticProbe/,
+  the layout already used for extracted-qm31-index-sampler-20261016), unchanged bytes.  The
+  manifest then resolves it with no other change; expected new compiles ≈ 50.
+
+10.3 (d) SemRows01 from the spend path's r1_wire extraction — search result.
+  SemRows01 W is not stated for any wire, and cannot be from spend modules alone: privacy's
+  R1Wire is abstract (GamesR1.R1Wire, dec a field), and no concrete R1Wire is defined anywhere.
+  The spend path proves the three facts a concrete W_spend needs (all already-proved modules):
+  * BeginCalls.begin_success (ExtractedDigest32Begin): an accepting r1_wire `begin` runs the
+    fifteen semantic rows 0..14 in order, and its outputs are exactly those calls' results:
+    challengeList out = λ :: χ :: θ :: zc ++ [μ, η], so λ = row-0 result, χ = row-1 result;
+  * CallerStep.semantic_step_success (ExtractedDigest32Callers): each row's result q satisfies
+    sampler.qm31_sample block = ok q, block = D.digest hash (readParts absorbed 1#u8), absorbed =
+    D.digest hash (absorbParts state tag record.framed) — the row's squeeze answer, with the
+    record entering through the absorb (the address), not through the answer;
+  * SamplerTransport.sample_toOld_success (ExtractedDigest32SamplerTransport): the r1_wire
+    extraction's sampler.qm31_sample equals the index extraction's under toOld — so the row-1
+    map is s1Spend's sampler.
+  Proposed joint statements (R1J, new joint module, not a spend module):
+    def decSpend (ι) : (Fin 27 → OracleAnswer) → ... → Challenges K  -- sem i := s1Spend ι (a i)
+                                                                   -- for the 15 begin rows, ...
+    theorem semRows01_spend (W) (hW : W.dec = decSpend ι ...) : SemRows01 W  -- s1 := s1Spend ι
+      (sem1 by construction; sem0 because λ reads a 0 only)
+    theorem begin_refines_decSpend : begin D pre self = ok (.Ok out, after) →
+      toK (out.chi) = decSpend ι (rowAnswers ...) .sem 1 ∧ toK out.lambda = ... .sem 0
+      -- from the three facts above; rowAnswers i := the row-i squeeze block as OracleAnswer
+      -- (arrEquiv.symm), the ROM view privacy already uses.
+  The modelling decision (privacy treats each row's 32-byte squeeze block as the oracle answer;
+  the spend run computes it as D.digest of readParts) is exactly R-wire; it belongs to (d).
+
+10.4 (d) Rspend⁺ → RustWitness / RustPublic / ModelWitness, statement level (§12.6).
+  Types (read from the sources): SpendRelation.Witness K (Fin 2^30 values, R0P.Digest K = Fin 8 →
+  K keys/salts, path : Fin 24 → Bool × Digest K, pair : PairLeaf K {firstCommitment,
+  secondOccupied, secondCommitment, secondOccupancyInverse}, owners/salts); Wspend = Witness
+  M31Exact; R0P.Public K; privacy RustWitness (U32 words, Array U32 8 digests, bits/sibs 24),
+  RustPublic {variant, asset, nextPairIndex, frontier[20], empty[20]}, ModelWitness K
+  (= Witness with the pair leaf unfolded), toModel, PubCorr, WitnessOk.
+  Definitions (joint module R1J.SpendWitnessMap):
+    w32 (x : M31Exact) : U32 := ⟨x.val⟩            -- canonical word, x.val < p < 2^32
+    d32 (d : Digest M31Exact) : Array U32 8#usize := arr8 (fun i => w32 (d i))
+    toRust (w : Wspend) : RustWitness :=
+      { inputValue/outputValue/changeValue := word of the Fin 2^30 value,
+        sk := d32 w.sk, salt := d32 w.salt,
+        bits := fun l => if (w.path l).1 then 1 else 0, sibs := fun l => d32 (w.path l).2,
+        pairFirst := d32 w.pair.firstCommitment, pairOccupied := w32 w.pair.secondOccupied,
+        pairSecond := d32 w.pair.secondCommitment, pairInverse := w32 w.pair.secondOccupancyInverse,
+        recipient/change owners and salts := d32 ... }
+      -- levels 0 / 1..20 / 21..23 are already the meaning of path l in Witness (pair level,
+      -- membership, super-root), matching glue.rs `records`; to be checked field by field
+      -- against `records`, not re-derived.
+    toRustPub (pub : R0P.Public M31Exact) : RustPublic :=
+      { variant, asset := w32 pub.assetId, nextPairIndex, frontier := d32 ∘ snapshotFrontier,
+        empty := the pair_empty_roots table as words (emptyRootsNat) }
+    ι := ZMod.castHom (dvd_refl p) K : M31Exact →+* K   (K with CharP K p, as builder_witness_merged)
+  Theorems:
+    T1 toModel_toRust (w) : toModel (K := K) (toRust w) = (w.map ι)            [pure, no premise]
+    T2 witnessOk_toRust (w) : WitnessOk (toRust w)            [Fin bounds, bits by construction,
+                                                                 ZMod.val_lt for Canon8]
+    T3 pubCorr_toRustPub (pub) : PubCorr (toRustPub pub) (pub.map ι)
+         -- needs: emptyRootK lifts the table (definitional), Canon8 of frontier (ZMod.val_lt)
+    T4 builder_witness_spend (pub w) (h : Rspend⁺ pub w) : every cell of
+         copyCellMerged (toRust w) (toRustPub pub) lifts to buildModel (pub.map ι) (w.map ι)
+         -- builder_witness_merged ∘ T1-T3; h is used by the privacy builder premise, not here
+  Rspend⁺ := Rspend pub w ∧ (pub.variant = .privateTransfer → pub.change 7 ≠ 0)  (D50).
+  Closure: SpendRelation (spend) + BuilderWitnessMerged (privacy, Aeneas port) — both in the
+  unified base once the spend roots' decisions (X/R1X: SpendRelation is imported as both
+  SpendRelation and R1SpendRelation) are taken; T1-T3 need only R0Z.BuilderWitness and
+  AspisFormal Pool, so they can be compiled before the spend decision if the map is stated on
+  Witness-shaped records (ModelWitness) rather than SpendRelation.Witness itself.
