@@ -1,0 +1,164 @@
+/tmp/ActualMainMaskSemanticBridge.lean:22:36: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/ActualMainMaskSemanticBridge.lean:25:20: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/ActualMainMaskSemanticBridge.lean:77:41: error: Tactic `rfl` failed: The left-hand side
+  AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedC1Cell✝ (mainArrayToProbeN c1) j
+is not definitionally equal to the right-hand side
+  fieldValue (cell c1 j)
+
+case e_c1
+c1 : Std.Array MainQM 16#usize
+maskOnly : Std.Array MainQM 10#usize
+g : MainQM
+point : Std.Array MainQM 10#usize
+hc1 : CanonicalArray c1
+hmask : CanonicalArray maskOnly
+hg : Canonical (mainToProbe g)
+hpoint : CanonicalArray point
+hc1' :
+  ∀ (j : Fin 16),
+    AspisR1.ExtractedMaskCoefficientStep.CanonicalQM
+      (AspisR1.ExtractedMaskCoefficientStep.c1Cell (mainArrayToProbeN c1) j)
+hmask' :
+  ∀ (j : Fin 10),
+    AspisR1.ExtractedMaskCoefficientStep.CanonicalQM
+      (AspisR1.ExtractedMaskCoefficientStep.maskCell (mainArrayToProbeN maskOnly) j)
+hpoint' :
+  ∀ (i : ℕ) (hi : i < 10),
+    AspisR1.ExtractedMaskLinearLoop.CanonicalQM
+      (AspisR1.ExtractedMaskLinearLoop.pointAtNat (mainArrayToProbeN point) i hi)
+out : AspisR1.ExtractedMaskSemanticBridgeConcrete.QM✝
+hrun :
+  AspisR1SelectedMaskProbe.state_only_hiding.state_only_selected_mask_value (mainArrayToProbeN c1)
+      (mainArrayToProbeN maskOnly) (mainToProbe g) (mainArrayToProbeN point) =
+    ok out
+hcanonical : AspisR1.ExtractedMaskSemanticBridgeConcrete.CanonicalQM✝ out
+hvalue :
+  AspisR1.ExtractedMaskSemanticBridgeConcrete.qm31ToWide (AspisR1.ExtractedMaskSemanticBridgeConcrete.decode✝ out) =
+    R0P.Mask.maskValue AspisR1.ExtractedMaskSemanticBridgeConcrete.packBasis
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedC1Cell✝ (mainArrayToProbeN c1))
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedMaskCell✝ (mainArrayToProbeN maskOnly))
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.qm31ToWide
+        (AspisR1.ExtractedMaskSemanticBridgeConcrete.decode✝ (mainToProbe g)))
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedPoint✝ (mainArrayToProbeN point))
+hmain :
+  fieldValue (probeToMain out) =
+    AspisR1.ExtractedMaskSemanticBridgeConcrete.qm31ToWide (AspisR1.ExtractedMaskQM31Exact.decode out)
+j : Fin 16
+⊢ AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedC1Cell✝ (mainArrayToProbeN c1) j = fieldValue (cell c1 j)
+/tmp/ActualMainMaskSemanticBridge.lean:77:41: error: Tactic `rfl` failed: The left-hand side
+  AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedMaskCell✝ (mainArrayToProbeN maskOnly) j
+is not definitionally equal to the right-hand side
+  fieldValue (cell maskOnly j)
+
+case refine_3.e_maskOnly
+c1 : Std.Array MainQM 16#usize
+maskOnly : Std.Array MainQM 10#usize
+g : MainQM
+point : Std.Array MainQM 10#usize
+hc1 : CanonicalArray c1
+hmask : CanonicalArray maskOnly
+hg : Canonical (mainToProbe g)
+hpoint : CanonicalArray point
+hc1' :
+  ∀ (j : Fin 16),
+    AspisR1.ExtractedMaskCoefficientStep.CanonicalQM
+      (AspisR1.ExtractedMaskCoefficientStep.c1Cell (mainArrayToProbeN c1) j)
+hmask' :
+  ∀ (j : Fin 10),
+    AspisR1.ExtractedMaskCoefficientStep.CanonicalQM
+      (AspisR1.ExtractedMaskCoefficientStep.maskCell (mainArrayToProbeN maskOnly) j)
+hpoint' :
+  ∀ (i : ℕ) (hi : i < 10),
+    AspisR1.ExtractedMaskLinearLoop.CanonicalQM
+      (AspisR1.ExtractedMaskLinearLoop.pointAtNat (mainArrayToProbeN point) i hi)
+out : AspisR1.ExtractedMaskSemanticBridgeConcrete.QM✝
+hrun :
+  AspisR1SelectedMaskProbe.state_only_hiding.state_only_selected_mask_value (mainArrayToProbeN c1)
+      (mainArrayToProbeN maskOnly) (mainToProbe g) (mainArrayToProbeN point) =
+    ok out
+hcanonical : AspisR1.ExtractedMaskSemanticBridgeConcrete.CanonicalQM✝ out
+hvalue :
+  AspisR1.ExtractedMaskSemanticBridgeConcrete.qm31ToWide (AspisR1.ExtractedMaskSemanticBridgeConcrete.decode✝ out) =
+    R0P.Mask.maskValue AspisR1.ExtractedMaskSemanticBridgeConcrete.packBasis
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedC1Cell✝ (mainArrayToProbeN c1))
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedMaskCell✝ (mainArrayToProbeN maskOnly))
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.qm31ToWide
+        (AspisR1.ExtractedMaskSemanticBridgeConcrete.decode✝ (mainToProbe g)))
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedPoint✝ (mainArrayToProbeN point))
+hmain :
+  fieldValue (probeToMain out) =
+    AspisR1.ExtractedMaskSemanticBridgeConcrete.qm31ToWide (AspisR1.ExtractedMaskQM31Exact.decode out)
+j : Fin 10
+⊢ AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedMaskCell✝ (mainArrayToProbeN maskOnly) j =
+    fieldValue (cell maskOnly j)
+/tmp/ActualMainMaskSemanticBridge.lean:77:41: error: Tactic `rfl` failed: The left-hand side
+  AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedPoint✝ (mainArrayToProbeN point) j
+is not definitionally equal to the right-hand side
+  fieldValue (cell point j)
+
+case refine_3.e_α
+c1 : Std.Array MainQM 16#usize
+maskOnly : Std.Array MainQM 10#usize
+g : MainQM
+point : Std.Array MainQM 10#usize
+hc1 : CanonicalArray c1
+hmask : CanonicalArray maskOnly
+hg : Canonical (mainToProbe g)
+hpoint : CanonicalArray point
+hc1' :
+  ∀ (j : Fin 16),
+    AspisR1.ExtractedMaskCoefficientStep.CanonicalQM
+      (AspisR1.ExtractedMaskCoefficientStep.c1Cell (mainArrayToProbeN c1) j)
+hmask' :
+  ∀ (j : Fin 10),
+    AspisR1.ExtractedMaskCoefficientStep.CanonicalQM
+      (AspisR1.ExtractedMaskCoefficientStep.maskCell (mainArrayToProbeN maskOnly) j)
+hpoint' :
+  ∀ (i : ℕ) (hi : i < 10),
+    AspisR1.ExtractedMaskLinearLoop.CanonicalQM
+      (AspisR1.ExtractedMaskLinearLoop.pointAtNat (mainArrayToProbeN point) i hi)
+out : AspisR1.ExtractedMaskSemanticBridgeConcrete.QM✝
+hrun :
+  AspisR1SelectedMaskProbe.state_only_hiding.state_only_selected_mask_value (mainArrayToProbeN c1)
+      (mainArrayToProbeN maskOnly) (mainToProbe g) (mainArrayToProbeN point) =
+    ok out
+hcanonical : AspisR1.ExtractedMaskSemanticBridgeConcrete.CanonicalQM✝ out
+hvalue :
+  AspisR1.ExtractedMaskSemanticBridgeConcrete.qm31ToWide (AspisR1.ExtractedMaskSemanticBridgeConcrete.decode✝ out) =
+    R0P.Mask.maskValue AspisR1.ExtractedMaskSemanticBridgeConcrete.packBasis
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedC1Cell✝ (mainArrayToProbeN c1))
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedMaskCell✝ (mainArrayToProbeN maskOnly))
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.qm31ToWide
+        (AspisR1.ExtractedMaskSemanticBridgeConcrete.decode✝ (mainToProbe g)))
+      (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedPoint✝ (mainArrayToProbeN point))
+hmain :
+  fieldValue (probeToMain out) =
+    AspisR1.ExtractedMaskSemanticBridgeConcrete.qm31ToWide (AspisR1.ExtractedMaskQM31Exact.decode out)
+j : Fin 10
+⊢ AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedPoint✝ (mainArrayToProbeN point) j = fieldValue (cell point j)
+'AspisR1PublicPreparation.ActualMainMaskSemanticBridge.extractedMainMask_refines' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+      167.95 real         3.56 user        16.64 sys
+          3198828544  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              276177  page reclaims
+              753988  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               36500  voluntary context switches
+              779487  involuntary context switches
+         89527253415  instructions retired
+         54322204829  cycles elapsed
+           921960016  peak memory footprint

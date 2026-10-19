@@ -1,0 +1,282 @@
+{
+  "status": "GREEN_ISOLATED_CURRENT_SOURCE_CARGO_TYPECHECK_CANDIDATE",
+  "base_revision": "2f816c0f1e146f002afba58170e378b739945966",
+  "scope": "Replace all from_fn calls in the terminal-reachable path across Public.terminal_qm31, composition_parts, semantic_packed, and evaluate_state_only_poseidon_oracle_projected plus their called Poseidon helpers. Helper remains private to aspis-statement.",
+  "source_files": [
+    {
+      "path": "crates/aspis-statement/src/lib.rs",
+      "base_sha256": "4026f1172b275a891851784b7de46268460d24a156f540328a63d88ea8078442",
+      "candidate_sha256": "10114a48ad444d02f5e504d00abf6bf88e4a95bea48ea96ab592fe3a945030e8"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+      "base_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+      "candidate_sha256": "6e817b4bbbc350dd5ef71517e6e0eb57b5607a5241e9889041c7ec0a2c0182ea"
+    },
+    {
+      "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+      "base_sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+      "candidate_sha256": "028f5849a19391116d1115508e261210724f343f0e8cb8c9bbd2c2682f81c61b"
+    }
+  ],
+  "patch_sha256": "b3868593bb6cdf307711205f75ff7bb7a1ba07e02c4741a0647e2349dfe51662",
+  "replacement_count": 19,
+  "actual_typecheck": {
+    "command": "cargo check --release --offline --manifest-path /tmp/terminal-qm31-candidate-v4-sparse-workspace/Cargo.toml -p aspis-statement --features r0,pool-v1-kernel --lib",
+    "features": "r0,pool-v1-kernel; pool-v1-kernel alone does not enable r0",
+    "exit_status": 0,
+    "wall_seconds": 16.503,
+    "peak_aggregate_child_rss_bytes": 396247040,
+    "rss_watchdog_cap_bytes": 7516192768,
+    "watchdog_timeout_seconds": 120,
+    "cargo_jobs": 1,
+    "profile": "release (optimized check only, no link)",
+    "network": "offline",
+    "compiler": "rustc 1.93.0 (254b59607 2026-01-19)",
+    "cargo": "cargo 1.93.0 (083ac5135 2025-12-15)",
+    "workspace": "Sparse workspace with actual aspis-statement, aspis-core and the three path writer crates; root manifest narrowed to these five packages. Exact input archive included.",
+    "log": "cargo-check.log",
+    "status_file": "cargo-check.status",
+    "source_archive": "two-crate-typecheck-source.tar.gz",
+    "source_archive_sha256": "05cf0b8a5424ba5c1bb830242268f9a887e22a68349534a74c830548f102f4dc",
+    "scope_limit": "Actual crate-root visibility, actual QM31/u64 types and terminal-path call types checked. Not full workspace regression, Aeneas extraction, generated Lean replay, or proof of callback arithmetic equivalence."
+  },
+  "source_mapping": {
+    "pair_forest_semantic_terminal.rs": [
+      {
+        "source_function": "add_preweighted",
+        "original_line": 128,
+        "reachable_via": "semantic_packed -> terminal_parts",
+        "type": "QM31[4] slot gather"
+      },
+      {
+        "source_function": "semantic_initial_and_absorption",
+        "original_line": 277,
+        "reachable_via": "semantic_packed -> terminal_parts",
+        "type": "QM31[16] lane scaling"
+      },
+      {
+        "source_function": "absorption_lanes_literal",
+        "original_line": 338,
+        "reachable_via": "semantic_packed -> terminal_parts",
+        "type": "QM31[16] lane scaling"
+      },
+      {
+        "source_function": "composition_parts",
+        "original_lines": [
+          1257,
+          1258,
+          1259,
+          1261
+        ],
+        "reachable_via": "terminal_parts",
+        "type": "QM31[16], QM31[16], QM31[16], QM31[10] selected gathers"
+      },
+      {
+        "source_function": "Public::terminal_qm31",
+        "original_line": 2086,
+        "type": "QM31[84] flattened claims selector"
+      }
+    ],
+    "state_only_poseidon.rs": [
+      {
+        "source_function": "external_linear_lazy",
+        "original_lines": [
+          157,
+          175,
+          176,
+          186
+        ],
+        "types": "u64[4] row outputs; u64[4][4] column/limb sums; u64[4] reductions"
+      },
+      {
+        "source_function": "external_local_packed_raw",
+        "original_lines": [
+          219,
+          220
+        ],
+        "types": "u64[4][4] local matrix"
+      },
+      {
+        "source_function": "internal_linear_lazy",
+        "original_lines": [
+          319,
+          320,
+          325
+        ],
+        "types": "u64[4] lane sums/reductions"
+      },
+      {
+        "source_function": "evaluate_state_only_poseidon_oracle",
+        "original_line": 565,
+        "type": "QM31[4] output; changed as shared module helper"
+      },
+      {
+        "source_function": "evaluate_state_only_poseidon_oracle_projected",
+        "original_line": 600,
+        "type": "QM31[4] terminal output"
+      }
+    ]
+  },
+  "retained_from_fn_sites": [
+    {
+      "file": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+      "reason": "cfg(test), audit-only features, or test module; no default selected terminal reachability"
+    },
+    {
+      "file": "crates/aspis-statement/src/state_only_poseidon.rs",
+      "reason": "host-only opening evaluator and cfg(test) helper/test code; not called by terminal_qm31"
+    }
+  ],
+  "helper": {
+    "name": "aspis_statement::array_from_fn_copy",
+    "visibility": "pub(crate) at aspis-statement crate root",
+    "semantics": "Initialize [init; N], then call FnMut(i) once in ascending i=0..N and assign each output.",
+    "body_sha256": "aad4a04611bdce9b1161805a5811614935527d82d7dc8ddb22a6b5f27f5abe56",
+    "matches_existing_extracted_helper_body": true,
+    "lean_model_modules": [
+      {
+        "module": "ArrayFromFnCopySlice",
+        "source_sha256": "2bceca4086c49313185e907f1d6fd40b125b616be046c09808f5e91cc19aa6fa",
+        "olean_sha256": "1e18e90ef59ebcae47e67643c90d0d2498349f3acf80786886360b05e9a41da2"
+      },
+      {
+        "module": "ArrayFromFnCopyStable",
+        "source_sha256": "968fe03b148d700090a9682bcc87fe158643e2a4c128f2289cb9e8c5103e7fda",
+        "olean_sha256": "b2b915c959b1ab009d093bbb574c0f4471988bba3380e6e8bd306a7b218f676e"
+      }
+    ]
+  },
+  "remaining_exact_obligations": [
+    "Run capped current-source Aeneas extraction after source packet review; establish generated definitions correspond to the Rust candidate, not only the historical v10 source.",
+    "Prove the newly extracted generic helper loop implements the same array constructor semantics expected by the Lean model for QM31 and u64 arrays; existing copy helper proofs are close support but source/generated callback adaptation needs revalidation.",
+    "Re-establish exact per-call callback arithmetic/order for external_linear_lazy rows and column sums, external_local_packed_raw local rows, internal_linear_lazy accumulators, the projected four-lane result, and terminal gather callbacks. Existing RawPoseidonExternalAllRows / matched-copy families are candidate support, not yet reconnected to this changed extraction.",
+    "Other reachable external templates remain: core.array.Array.map, iterator/range folds, Result.map and map_err, and integer U16 count/trailing-zero operations. This patch removes reachable from_fn sites only; it does not close the terminal external-template axiom."
+  ],
+  "diagnostic_attempts": [
+    {
+      "name": "v4a_wrong-QM31-array-init",
+      "exit_status": 101,
+      "source": "diagnostic-attempt-v4a",
+      "note": "Initial typecheck exposed passing [QM31; N] as the helper init instead of QM31; corrected in final source. Log/source snapshot retained."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "cargo.version",
+      "sha256": "49f46ff5ffe434e6c1c66388a9230ac33bbe3dbd9175314e9ffc9aa7c418d329"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "7ac7bd3f2fbff97bf106f701c0ffdbae9ae04c1b3c42b6a842de6fda416b370b"
+    },
+    {
+      "path": "source.patch",
+      "sha256": "b3868593bb6cdf307711205f75ff7bb7a1ba07e02c4741a0647e2349dfe51662"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "d253e67019f607e195464d4adfaa8b589c7b9ac80e7d52f9231b83dae7964fe9"
+    },
+    {
+      "path": "two-crate-typecheck-source.tar.gz",
+      "sha256": "05cf0b8a5424ba5c1bb830242268f9a887e22a68349534a74c830548f102f4dc"
+    },
+    {
+      "path": "rustc.version",
+      "sha256": "28b365392950403f9fea8df93860dc8dd11fef9c2b55723de9f71f88144d9f56"
+    },
+    {
+      "path": "cargo-check.log",
+      "sha256": "ac4cd1b10a0d56deeb7fe78d9042921966ccd87e845d4eb65792072c64fbce08"
+    },
+    {
+      "path": "cargo-check.status",
+      "sha256": "fb7aadc9a931dd12ab07714413d29e1dac6bf0bb62d476f1b3d0d13561449647"
+    },
+    {
+      "path": "glue_gen.rs",
+      "sha256": "1fa3ed853c7805111e192993e4f13928d0c9638385fe6bc943c6ff34208a0059"
+    },
+    {
+      "path": "diagnostic-attempt-v4a/cargo-check.log",
+      "sha256": "fe0056cf4a9e6464191503a2757fb9e7a841f2897d3126ffed9c11bf96eaeb71"
+    },
+    {
+      "path": "diagnostic-attempt-v4a/cargo-check.status",
+      "sha256": "5287d4cb67f9e02ac1a56c0cf1e4eb8da67b900908a846ad6aad33673b9d3886"
+    },
+    {
+      "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+      "sha256": "028f5849a19391116d1115508e261210724f343f0e8cb8c9bbd2c2682f81c61b"
+    },
+    {
+      "path": "crates/aspis-statement/src/lib.rs",
+      "sha256": "10114a48ad444d02f5e504d00abf6bf88e4a95bea48ea96ab592fe3a945030e8"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+      "sha256": "6e817b4bbbc350dd5ef71517e6e0eb57b5607a5241e9889041c7ec0a2c0182ea"
+    },
+    {
+      "path": "diagnostic-attempt-v4a/crates/aspis-statement/src/state_only_poseidon.rs",
+      "sha256": "7b3f5f5dafdf240f709288d78b8df19350f897856b9457f4dc9bf7d2ee23fb58"
+    },
+    {
+      "path": "diagnostic-attempt-v4a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+      "sha256": "b7da082e49159a90941446721fd6d167b3341362bab6f8585324a665d2605898"
+    },
+    {
+      "path": "README.md",
+      "sha256": "670a9f0abc33229f56d8861b3bde9b4514d2e47ff52b04c797d329634737d613"
+    }
+  ],
+  "existing_support": [
+    {
+      "module": "ArrayFromFnCopyStable",
+      "source_sha256": "968fe03b148d700090a9682bcc87fe158643e2a4c128f2289cb9e8c5103e7fda",
+      "olean_sha256": "b2b915c959b1ab009d093bbb574c0f4471988bba3380e6e8bd306a7b218f676e",
+      "theorem": "AspisR1.ArrayFromFnCopyStable.copy_stable",
+      "receipt": "docs/research/100bit-spend-path-20261013/evidence/terminal-standard-operation-models-20261019/TerminalArrayFromFnModelV4/receipt.json",
+      "use": "Generic stability of the indexed Copy helper model; does not itself prove the changed Aeneas translation."
+    },
+    {
+      "module": "TerminalClaimsFromFnCopyEquivalenceV1",
+      "source_sha256": "985940e3aafc19bec90269fe26b95909be542bcec584300eeda3c276d79c3e36",
+      "olean_sha256": "915a638d062c992c53a66e237ffa4d311195dae1fc0496ea6ad61860f1d18c3b",
+      "receipt": "/tmp/root-merkle-cost-20261018/evidence/terminal-claims-fromfn-copy-equivalence-v1-20261019/receipt.json",
+      "use": "84-claim selector callback shape. Needs reconnect to new current-source extraction."
+    },
+    {
+      "module": "CompositionPartsGatherStable",
+      "source_sha256": "2fd435655b86ac4206e14952c97ee9ea2374a6baaee789f298f89e67b92cf95f",
+      "olean_sha256": "34653b82b742822f396bb989634451e7fa63b6f9e14ee63fa48bdd455a272878",
+      "receipt": "docs/research/100bit-spend-path-20261013/evidence/composition-source-prelude-tail-20261017/CompositionPartsGatherStable/receipt.json",
+      "use": "Four composition_parts gathering callback facts with explicit CanonicalQM premise; needs reconnect to new current-source extraction."
+    },
+    {
+      "module": "PoseidonExternalColumnSumsV4",
+      "source_sha256": "77dda36d63fe2ac08390d2d491ced4eb44fc96626fbb1dd3ee1d0caa4e584e1b",
+      "olean_sha256": "1a3fbb0e26b1a91f85afc6c4ea3ebf016e46b8b3e8d3b1147332260ba69f55dd",
+      "theorem": "AspisR1.PoseidonExternalColumnSums.source_success",
+      "receipt": "docs/research/100bit-spend-path-20261013/evidence/external-columns-field-model-20261018/PoseidonExternalColumnSumsV4/receipt.json",
+      "use": "Prior source proof for four-column external sums; changed helper extraction still needs a current translation connection."
+    },
+    {
+      "module": "PoseidonInternalLinearExact",
+      "source_sha256": "298e98ff6b32da568c168908f7d6a6dd2508290e6ea915a18fc5dbbf7f74df7b",
+      "olean_sha256": "6dcebfcbb9cfdafa62ff288ef4a13db792e23698ebda64dd430d3e2df6b0e373",
+      "theorem": "AspisR1.PoseidonInternalLinearExact.source_success",
+      "receipt": "docs/research/100bit-spend-path-20261013/evidence/internal-round-exact-20261017/focused/PoseidonInternalLinearExact/receipt.json",
+      "use": "Prior proof of internal lazy accumulator loop; changed helper extraction still needs a current translation connection."
+    },
+    {
+      "module": "PoseidonCandidateProjectedEvaluatorSourceV12",
+      "source_sha256": "af936692d5d773364ddf3fe3e78809e1b93d897977bec1375c68b27253c64e3a",
+      "olean_sha256": "dbc864e593f127e29407a8c7526ce1c99c2471bc30662175762a6c4744fdb98f",
+      "theorem": "AspisR1SelectedMaskProbe.evaluator_qname_eq_factored",
+      "receipt": "docs/research/100bit-spend-path-20261013/evidence/packed-group-and-evaluator-cut-20261018/candidate-evaluator-v12/receipt.json",
+      "use": "Prior projected evaluator source bridge; generated body must be rebound to v4 candidate."
+    }
+  ]
+}

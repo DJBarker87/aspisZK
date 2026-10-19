@@ -1,0 +1,277 @@
+{
+  "schema": "terminal-qm31-v4-current-source-aeneas-evidence.v1",
+  "status": "GREEN_CAPPED_AENEAS_TRANSLATION; external Lean templates remain proof obligations",
+  "base_revision": "2f816c0f1e146f002afba58170e378b739945966",
+  "candidate_source_manifest_sha256": "f3c33a9a8124de17bf06939df35d012691973031438f8778415dfe5edff59bf5",
+  "cargo_typecheck_manifest_sha256": "c045ca5916ccbe06f26b6d2c9201be2acebdeb9d8410bcfd2ae3709962060e94",
+  "runner_sha256": "71bbf38ea5bb2401a4fc77d4255846dce76530d547712670f181d310d3d50a24",
+  "isolated_workspace": "/home/dombarker/project-offloads/aspis-r1-terminal-current-source-candidate-20261019-v8",
+  "host": "dombarker@100.108.41.90",
+  "stages": [
+    {
+      "stage": "cargo-typecheck",
+      "manifest": "../terminal-qm31-fromfn-copy-candidate-v4-20261019/v4-cargo-typecheck-manifest.json",
+      "status": "GREEN",
+      "command": "cargo check --release --offline --manifest-path /tmp/terminal-qm31-candidate-v4-sparse-workspace/Cargo.toml -p aspis-statement --features r0,pool-v1-kernel --lib",
+      "exit_status": 0,
+      "wall_seconds": 16.503,
+      "peak_aggregate_child_rss_bytes": 396247040,
+      "swap": "0",
+      "scope_cap_bytes": 7516192768,
+      "note": "Actual distinct aspis-statement/aspis-core source crates; typecheck only, no full workspace regression."
+    },
+    {
+      "stage": "charon",
+      "command_file": "nuc-run/receipts/charon.command.txt",
+      "status": "GREEN",
+      "exit_status": 0,
+      "wall_seconds": 73.26,
+      "maximum_resident_set_kib": 1117920,
+      "process_swaps": 0,
+      "scope": {
+        "MemoryHigh": "6G",
+        "MemoryMax": "8G",
+        "MemorySwapMax": "0",
+        "timeout_seconds": 180
+      }
+    },
+    {
+      "stage": "aeneas",
+      "command_file": "nuc-run/receipts/aeneas.command.txt",
+      "status": "GREEN",
+      "exit_status": 0,
+      "wall_seconds": 8.96,
+      "maximum_resident_set_kib": 320496,
+      "process_swaps": 0,
+      "scope": {
+        "MemoryHigh": "6G",
+        "MemoryMax": "8G",
+        "MemorySwapMax": "0",
+        "timeout_seconds": 180
+      }
+    }
+  ],
+  "source_overlay": {
+    "schema": "terminal-qm31-v4-aeneas-overlay.v1",
+    "status": "FROZEN_SOURCE_OVERLAY_PENDING_CAPPED_AENEAS",
+    "base_revision": "2f816c0f1e146f002afba58170e378b739945966",
+    "base_merged_manifest_sha256": "4567f7f57810ee56b0b91a09fc078c7f52f19d68aa621ebff501e539c0f57cf0",
+    "candidate_evidence_manifest_sha256": "c045ca5916ccbe06f26b6d2c9201be2acebdeb9d8410bcfd2ae3709962060e94",
+    "source_files": [
+      {
+        "path": "src/lib.rs",
+        "base_sha256": "e7d86af0376ef322809e598d8eef45eddfac46398aa9ef4103f8e1b158cf2504",
+        "candidate_sha256": "0dc97e8f57376f3626de8086809a6e9b74648fd4d633fbbccae78d34597f13ee",
+        "bytes": 16249
+      },
+      {
+        "path": "src/statement/pool_v1/pair_forest_semantic_terminal.rs",
+        "base_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+        "candidate_sha256": "6e817b4bbbc350dd5ef71517e6e0eb57b5607a5241e9889041c7ec0a2c0182ea",
+        "bytes": 82775
+      },
+      {
+        "path": "src/statement/state_only_poseidon.rs",
+        "base_sha256": "a0c7aeb2269670f4c338109fdb6c092b8ce6ca61bcf74b5b9796e016fa3dbcc8",
+        "candidate_sha256": "1aff210cbc98fa80c0829038994b6d79e5c9639f61e02d65671ea161fe905d37",
+        "bytes": 46995
+      }
+    ],
+    "adaptations": [
+      "Replaced the two Aeneas input files with exact v4 Cargo candidate source snapshots: pair_forest_semantic_terminal.rs and state_only_poseidon.rs.",
+      "Inserted the exact private aspis-statement array_from_fn_copy helper into the synthetic merged crate root.",
+      "Retained the v10 external_linear_lazy_row by-value extraction adapter, with its raw-limb callback re-expressed using the v4 helper.",
+      "Preflight compared the v10 merged source manifest against current HEAD: only state_only_poseidon.rs differs, and that is the retained row helper; all other crate sources match.",
+      "After Charon, retain the existing one-path metadata alpha rename M31_constructor: only translated.fun_decls[227].item_meta.attr_info.rename changes."
+    ],
+    "array_from_fn_count_by_candidate_file": {
+      "src/lib.rs": 0,
+      "src/statement/pool_v1/pair_forest_semantic_terminal.rs": 24,
+      "src/statement/state_only_poseidon.rs": 34
+    }
+  },
+  "metadata_adapter": {
+    "kind": "same v10 one-field metadata alpha rename; dynamically located by unique source/name/span",
+    "raw_llbc": "/home/dombarker/project-offloads/aspis-r1-terminal-current-source-candidate-20261019-v8/output/Terminal-v4.llbc",
+    "raw_llbc_sha256": "ad10830147c6424f27542cfedc3bdd7923aff30986dc493a37f0472cc1a3db03",
+    "adapted_llbc": "/home/dombarker/project-offloads/aspis-r1-terminal-current-source-candidate-20261019-v8/output/Terminal-v4-M31-constructor-renamed.llbc",
+    "adapted_llbc_sha256": "a83e26825041f53b4cd6eee5cc776e094f9b05a2ce5183e412925997942276ef",
+    "renamed_fun_index": 225,
+    "renamed_fun_def_id": 225,
+    "type_index": 14,
+    "type_def_id": 14,
+    "original_name": "aspis_r1_mask_extraction_probe::field::M31",
+    "new_name": "M31_constructor",
+    "only_changed_path": "translated.fun_decls[225].item_meta.attr_info.rename",
+    "deep_reverse_transform_equal": true
+  },
+  "external_templates": {
+    "Funs_axioms": 17,
+    "Types_axioms": 1,
+    "from_fn_external_axiom_remaining": false,
+    "details": "nuc-run/receipts/funs-external-axioms.txt and types-external-axioms.txt",
+    "count_method": "Exact generated source blocks: rust_fun annotation block containing an axiom token; see nuc-run/receipts/external-template-declaration-inventory.json. Historical grep count retained as flawed diagnostic."
+  },
+  "contents": [
+    {
+      "path": "README.md",
+      "sha256": "744180e7e8e5be2b29b05ae411e083657587665ab390d1d8d8ea04aa331cac5e",
+      "bytes": 2613
+    },
+    {
+      "path": "candidate-source-manifest.json",
+      "sha256": "f3c33a9a8124de17bf06939df35d012691973031438f8778415dfe5edff59bf5",
+      "bytes": 2165
+    },
+    {
+      "path": "nuc-run/output/Terminal-v4-M31-constructor-renamed.llbc",
+      "sha256": "a83e26825041f53b4cd6eee5cc776e094f9b05a2ce5183e412925997942276ef",
+      "bytes": 11383902
+    },
+    {
+      "path": "nuc-run/output/Terminal-v4.llbc",
+      "sha256": "ad10830147c6424f27542cfedc3bdd7923aff30986dc493a37f0472cc1a3db03",
+      "bytes": 11383830
+    },
+    {
+      "path": "nuc-run/output/generated-current-v4/AspisR1SelectedMaskProbe/Funs.lean",
+      "sha256": "460df41bb3b22a3e54f041b72a3e0ba0baf0330418178ce9f89cc45673fb95c1",
+      "bytes": 305453
+    },
+    {
+      "path": "nuc-run/output/generated-current-v4/AspisR1SelectedMaskProbe/FunsExternal_Template.lean",
+      "sha256": "025ae4dac376eb4335f32867c71340477aa0d5f6ea84bdd5cca5b7351d278c94",
+      "bytes": 11193
+    },
+    {
+      "path": "nuc-run/output/generated-current-v4/AspisR1SelectedMaskProbe/Types.lean",
+      "sha256": "15d7c4fb2c02c8909e0ba1d4bce05667f981709cebdaf955ac51229d5284a2e6",
+      "bytes": 20762
+    },
+    {
+      "path": "nuc-run/output/generated-current-v4/AspisR1SelectedMaskProbe/TypesExternal_Template.lean",
+      "sha256": "08162f81807413773b658333bc146d32040d0a4de9c716d8cec6e27f4b2330d5",
+      "bytes": 872
+    },
+    {
+      "path": "nuc-run/output/generated-current-v4/translation.json",
+      "sha256": "b3b8242aa932e6df1173f66ec29820f9d727163d1f4759f1bbe8cd94c5e933d4",
+      "bytes": 248068
+    },
+    {
+      "path": "nuc-run/receipts/Terminal-v4-metadata-adapter.json",
+      "sha256": "7fd32c4a256a231beea9d629d5994909696a82aab6debcc57ab902db9dbab4c3",
+      "bytes": 888
+    },
+    {
+      "path": "nuc-run/receipts/Terminal-v4.llbc.sha256",
+      "sha256": "1e9c0800c01b3132aaa50530edcafb26ceee4f13768089dfa862dbfee6ff44f8",
+      "bytes": 178
+    },
+    {
+      "path": "nuc-run/receipts/aeneas-admission.json",
+      "sha256": "7c2dc5d8473f66cebdc1d33b870e1b9fc8fa04a2ca82694f5f5df1f7405c7293",
+      "bytes": 4385
+    },
+    {
+      "path": "nuc-run/receipts/aeneas.command.txt",
+      "sha256": "d273051cc88b28825fce716c1900a13e3532c5d3aa866572a6b48220650fa17c",
+      "bytes": 540
+    },
+    {
+      "path": "nuc-run/receipts/aeneas.exit",
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061",
+      "bytes": 7
+    },
+    {
+      "path": "nuc-run/receipts/aeneas.time.txt",
+      "sha256": "d3378958358d4ca8365c170c6771fc5c316a9b392fc01e645e3d465066c4475b",
+      "bytes": 124
+    },
+    {
+      "path": "nuc-run/receipts/charon-admission.json",
+      "sha256": "f54ec3f02c0a7c6e0a49bb5eb10bdab0a134b4f6673acb8655d2fa77708b0850",
+      "bytes": 4277
+    },
+    {
+      "path": "nuc-run/receipts/charon.command.txt",
+      "sha256": "61334e62dad877851032976b323e9990c87de0452078136f7766ff48c8621cad",
+      "bytes": 595
+    },
+    {
+      "path": "nuc-run/receipts/charon.exit",
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061",
+      "bytes": 7
+    },
+    {
+      "path": "nuc-run/receipts/charon.time.txt",
+      "sha256": "dd1a15860ad52adf86f452551ce89dc2926eb3a048afbe555f3e2e5625783d1c",
+      "bytes": 125
+    },
+    {
+      "path": "nuc-run/receipts/external-template-counts.txt",
+      "sha256": "f9683f11fb89d37d5485b6629b123d85aea82c1d59ed61570ecd6f4f84d8af99",
+      "bytes": 35
+    },
+    {
+      "path": "nuc-run/receipts/funs-external-axioms.txt",
+      "sha256": "269318752d4725b87ec7de0fc2c9b23dd386302d87371601c194d841d5b0c1cd",
+      "bytes": 901
+    },
+    {
+      "path": "nuc-run/receipts/generated-v4.sha256",
+      "sha256": "80e00a48f94bd469a9b6d0d486a4a26bf5ca751e61e8aa1230e912a21b489926",
+      "bytes": 1103
+    },
+    {
+      "path": "nuc-run/receipts/input-pins.sha256",
+      "sha256": "e615fef94e774e611dd9454c1b2d3b0872bfe89893a6b32149d8f0547d711523",
+      "bytes": 530
+    },
+    {
+      "path": "nuc-run/receipts/input-validation.json",
+      "sha256": "2595ca1088cc35f997dc5a1b73002b67facd752f1a93d7679422b6429cc61f03",
+      "bytes": 523
+    },
+    {
+      "path": "nuc-run/receipts/types-external-axioms.txt",
+      "sha256": "87af65bb7bd03206fe56028f33454279b3b291c23ca4d72429719e2188ec7de2",
+      "bytes": 65
+    },
+    {
+      "path": "nuc-run/receipts/v4-input-source-snapshot.sha256",
+      "sha256": "050032434a02859398cee55a4b1355d9f58c701a5ea4ba30d0cb484d3e3a8a23",
+      "bytes": 195
+    },
+    {
+      "path": "nuc-run/receipts/v4-input-source-snapshot.tar.gz",
+      "sha256": "870b9c103b432e8280876d3d2b04bcef62901f48965f21589aeb764ec69d0e85",
+      "bytes": 738978
+    },
+    {
+      "path": "run-v4-current-source-aeneas-nuc.sh",
+      "sha256": "71bbf38ea5bb2401a4fc77d4255846dce76530d547712670f181d310d3d50a24",
+      "bytes": 8020
+    },
+    {
+      "path": "v4-aeneas-overlay.tar.gz",
+      "sha256": "133412a1380bf4646fd91a31f691f680030c589289fb473a53dc28e3c2de6ddd",
+      "bytes": 30298
+    },
+    {
+      "path": "v4-aeneas-results.tar.gz",
+      "sha256": "220367e8f163ea224e6391ede6f8ab2882028394999fc6a9de7ee08ffc79934d",
+      "bytes": 2383655
+    },
+    {
+      "path": "v4-cargo-typecheck-manifest.json",
+      "sha256": "c045ca5916ccbe06f26b6d2c9201be2acebdeb9d8410bcfd2ae3709962060e94",
+      "bytes": 13429
+    },
+    {
+      "path": "nuc-run/receipts/external-template-declaration-inventory.json",
+      "sha256": "d4c11cda168df8402ec4481f268840f5786722436c60379f54207df2cb81e1ef",
+      "bytes": 2817
+    }
+  ]
+}

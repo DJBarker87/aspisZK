@@ -1,0 +1,52 @@
+AspisR1.ExtractedMaskSemanticBridgeConcrete.current_selected_mask_maps_to_maskValue
+  (c1 : AspisR1.ExtractedMaskSemanticBridgeConcrete.C1✝)
+  (maskOnly : AspisR1.ExtractedMaskSemanticBridgeConcrete.MaskOnly✝)
+  (g : AspisR1.ExtractedMaskSemanticBridgeConcrete.QM✝)
+  (point : Aeneas.Std.Array AspisR1.ExtractedMaskSemanticBridgeConcrete.QM✝ 10#usize)
+  (hc1 :
+    ∀ (j : Fin 16),
+      AspisR1.ExtractedMaskSemanticBridgeConcrete.CanonicalQM✝ (AspisR1.ExtractedMaskCoefficientStep.c1Cell c1 j))
+  (hmask :
+    ∀ (j : Fin 10),
+      AspisR1.ExtractedMaskSemanticBridgeConcrete.CanonicalQM✝
+        (AspisR1.ExtractedMaskCoefficientStep.maskCell maskOnly j))
+  (hpoint :
+    ∀ (i : ℕ) (hi : i < 10),
+      AspisR1.ExtractedMaskSemanticBridgeConcrete.CanonicalQM✝ (AspisR1.ExtractedMaskLinearLoop.pointAtNat point i hi))
+  (hg : AspisR1.ExtractedMaskSemanticBridgeConcrete.CanonicalQM✝ g) :
+  ∃ out,
+    AspisR1SelectedMaskProbe.state_only_hiding.state_only_selected_mask_value c1 maskOnly g point =
+        Aeneas.Std.Result.ok out ∧
+      AspisR1.ExtractedMaskSemanticBridgeConcrete.CanonicalQM✝ out ∧
+        AspisR1.ExtractedMaskSemanticBridgeConcrete.qm31ToWide
+            (AspisR1.ExtractedMaskSemanticBridgeConcrete.decode✝ out) =
+          R0P.Mask.maskValue AspisR1.ExtractedMaskSemanticBridgeConcrete.packBasis
+            (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedC1Cell✝ c1)
+            (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedMaskCell✝ maskOnly)
+            (AspisR1.ExtractedMaskSemanticBridgeConcrete.qm31ToWide
+              (AspisR1.ExtractedMaskSemanticBridgeConcrete.decode✝ g))
+            (AspisR1.ExtractedMaskSemanticBridgeConcrete.mappedPoint✝ point)
+AspisR1PublicPreparation.ActualFinishConcreteArithmeticBoundary.extractedMainMask
+  (c1 : Aeneas.Std.Array AspisR1PublicPreparation.RawSemanticFieldOwnerAdapter.MainQM 16#usize)
+  (maskOnly : Aeneas.Std.Array AspisR1PublicPreparation.RawSemanticFieldOwnerAdapter.MainQM 10#usize)
+  (g : AspisR1PublicPreparation.RawSemanticFieldOwnerAdapter.MainQM)
+  (point : Aeneas.Std.Array AspisR1PublicPreparation.RawSemanticFieldOwnerAdapter.MainQM 10#usize) :
+  Aeneas.Std.Result AspisR1PublicPreparation.RawSemanticFieldOwnerAdapter.MainQM
+      105.21 real         4.27 user        19.05 sys
+          3030515712  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              248050  page reclaims
+              727102  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               33866  voluntary context switches
+              744478  involuntary context switches
+         84346908574  instructions retired
+         50235371897  cycles elapsed
+           929693144  peak memory footprint

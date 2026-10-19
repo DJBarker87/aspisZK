@@ -1,0 +1,7 @@
+# Same parsed payload view binds each reached polynomial
+
+The source record-slot readback and annotated schedule identify each reached frame at row 15+round. Given one fixed Full payload view and its encodeFull equality with completedRecords of that same prefix, every reached typed row is decoded from the very actual record used by the annotated round. The polynomial consumer then reuses actual_polynomial_row_agrees to identify the actual decoded polynomial with the typed coefficients.
+
+The same Full values argument and encodeFull equality are retained for every entry. Independent existential payloads for different rounds are not substituted for this same-view relation. The existing successful strict parser supplies one such view through parse_typedFull. The consumer still takes the precise polynomial constructor identity hpoly; the existing coeffAt_payload theorem supplies that fact in the view-specific caller, whose combined import was too large for this focused local lane and remains a separate integration step.
+
+Four unchanged reverse dependency modules were rechecked against current StrictLowChunkCodec owners and the already checked named RecordParser repair, reusing the accepted cache instead of rebuilding dependencies. Two new source consumers checked afterward. Exact revisions, commands, source/object/import pins, times/RSS/swaps and standard-only printed axioms are retained. This is focused working evidence; actual acceptance-to-Checks composition and clean ordered release remain open.

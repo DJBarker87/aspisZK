@@ -1,0 +1,13 @@
+# Terminal QM31 from_fn replacement: v4 Aeneas evidence
+
+This packet records an isolated candidate source change and its current-source translation check. It does not modify the canonical Rust crates.
+
+The v4 candidate replaces the 19 `array::from_fn` calls in the terminal-reachable source slice with the private, statement-crate `array_from_fn_copy` helper. The previously validated loan-safe `external_linear_lazy_row` refactor is retained. A sparse workspace typechecked the actual separate `aspis-statement` and `aspis-core` crates with `r0,pool-v1-kernel`, and the capped Aeneas pipeline translated the candidate source after a single metadata-only alpha rename of the M31 constructor.
+
+The Aeneas work was performed in an isolated warmed workspace on the NUC host. Charon exited 0 in 73.26 seconds with maximum RSS 1,117,920 KiB and zero swaps. Aeneas exited 0 in 8.96 seconds with maximum RSS 320,496 KiB and zero swaps. The runner applied `MemoryHigh=6G`, `MemoryMax=8G`, `MemorySwapMax=0`, with a 180-second phase timeout and a fresh aggregate admission gate. Exact commands, admission reports, source snapshots, LLBC, generated Lean, and hashes are included below.
+
+The metadata adapter changed only `translated.fun_decls[225].item_meta.attr_info.rename`, from `aspis_r1_mask_extraction_probe::field::M31` to `M31_constructor`; the recorded deep reverse-transform equality check passed. Raw LLBC SHA-256 is `ad10830147c6424f27542cfedc3bdd7923aff30986dc493a37f0472cc1a3db03`; adapted LLBC SHA-256 is `a83e26825041f53b4cd6eee5cc776e094f9b05a2ce5183e412925997942276ef`.
+
+This is an extraction result, not yet a complete Rust-to-Lean proof. The generated translation has 17 remaining `FunsExternal_Template` axioms and one `TypesExternal_Template` axiom. The count comes from the source-enumeration receipt; the older `external-template-counts.txt` used `grep '^axiom '` and undercounted multiline declarations, so that file is retained as a flawed diagnostic. In particular, `Result.map`, `Result.map_err`, and `Array.map` remain named external boundaries even though prior Lean candidate models exist. The packet contains those complete generated templates and a full external list; subsequent work must connect models to the exact generated declarations and prove reachable callback/source-success contracts. No claim is made that translation success discharges those obligations.
+
+The paired v4 Cargo source/typecheck packet is in `../terminal-qm31-fromfn-copy-candidate-v4-20261019/`. Its actual optimized Cargo check is a typecheck only (no linking), not a full workspace regression or formal proof.
