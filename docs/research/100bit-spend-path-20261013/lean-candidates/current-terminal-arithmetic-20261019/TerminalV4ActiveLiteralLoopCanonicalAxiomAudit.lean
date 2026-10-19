@@ -1,0 +1,2 @@
+import AspisR1.TerminalV4ActiveLiteralLoopCanonical
+#print axioms AspisR1.TerminalV4ActiveLiteralLoopCanonical.active_loop_good

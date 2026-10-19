@@ -1,0 +1,3 @@
+import AspisR1.TerminalV4ActiveLiteralCanonical
+#print axioms AspisR1.TerminalV4ActiveLiteralCanonical.loop_4096_success_canonical
+#print axioms AspisR1.TerminalV4ActiveLiteralCanonical.sum_6144_success_canonical
