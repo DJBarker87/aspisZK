@@ -1,0 +1,7 @@
+# Agreement forces the actual interpolation polynomial to vanish
+
+From an actual CompPoly ValidInterpolationWitness, a candidate CPolynomial below the message-degree limit, distinct point abscissae, and weightedDegreeBound < multiplicity * matchingPointCount, the checked bridge proves (CBivariate.toPoly Q).eval p.toPoly = 0. It directly reuses CompPoly's multiplicity/root-count theorem and the verified composeY-to-ordinary-polynomial conversion. No new interpolation oracle, coefficient-kernel extraction premise or univariate root-count argument is assumed.
+
+The output is precisely the polynomial root condition consumed by the checked raw-state and message-recovery modules. Their executable initial/final encoders already return CPolynomial, so no noncomputable Polynomial-to-CPolynomial reconstruction is required on that route. The still-open data adapter must identify the actual normalized point/value array, prove its matchingPointCount corresponds to the protocol agreement count, and instantiate the message degree and strict numeric threshold.
+
+Focused Lean 4.32 exit 0, wall 4.50 seconds, peak process RSS 2,154,151,936 bytes, process swap 0; the printed axiom report contains only standard axioms. Exact sources/imports/object, command and base revision are retained. The core is separate from the dense backend import closure so it stays within the focused memory cap. No full replay was run. Full extractor composition/cost, sampler/caller law, protocol/source/runtime/ROM soundness, privacy and two-transaction release gates remain open.
