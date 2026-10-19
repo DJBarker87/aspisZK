@@ -5933,3 +5933,47 @@ is what the refinement work discharges.
 - The Rust-side discharge of every premise in D52.2.
 - An LE byte-formula lemma for `wordsE`.
 - The N = 8 numeral.
+
+### Lead acceptance of the rf_* premises (2026-10-19); D53: P_R1 from the checker's tests
+
+The worker commits e899fcdd6..c61320358 are cherry-picked. The lead verified
+the 12 green host receipts (4281, 4282, 4287, 4289, 4290, 4294, 4296, 4297,
+4299, 4300, 4302 and 4303): SHAs match, all exited 0 in-window, standard
+axioms, no overrides. Evidence: `zf1/rf-evidence.json`, 24 attempts. The
+failures were memory and recursion blowups and naming errors; none was rerun
+unchanged and no cap was raised. 4296 had finished green before the
+session-limit cut, and was recorded without a relaunch.
+
+**D53.1 Proved.** On the Lean side, all eight rf_* premises are discharged:
+- RF-dec: the decode8 limb order;
+- RF-src: Rust-built sources lie in Gonly, Vsem and Ph1;
+- RF-chain: ChainT0K4 lies in the span of the Rust chain_targets under SemK4;
+- RF-round;
+- RF-own: ownMap equals the Rust raw_c columns, with the 12-lane limb
+  layout;
+- RF-obs/RF-col;
+- RF-bat/RF-rel: the wflat order, and B0R1′ ≤ ιb(ker Rel).
+
+D34.3 items 1 and 2 are proved on the Lean side: `storedFirstLineX18` =
+the Rust line_node formula; lineInverse = the QueryGeometry multipliers; and
+line_fold_with_inverses = lineFoldLinear.
+
+`p_r1_of_checks` derives P_R1 from the checker's tests (PreOK, PreOK₂,
+EchOK, RinvOK, half-inverse, limb/length). Its remaining hypotheses are not
+row formulas:
+- the circle points lie in K₄;
+- wb is an F-basis of K;
+- the opened folded-cell list covers the open cells;
+- one-index side conditions on the selected lift sources.
+
+**D53.2 Moved to C3 (Rust side).**
+- The round, batched and relation matrices, and some own columns, are
+  defined as the Lean maps' coordinates. C3 must show the Rust builders
+  round_row/tail_row, unit_functionals and design_relations/
+  limb_functionals compute them. The other columns already have Lean closed
+  forms matching the Rust.
+- D34.3 item 3 (`ell` versus Rust weight kinds 5/6).
+- π versus the Rust transport table, `natural` versus naturalLineValue, the
+  stored points, and batch inversion.
+- check_sound, i.e. extracting the checker and composing it with
+  p_r1_of_checks.
