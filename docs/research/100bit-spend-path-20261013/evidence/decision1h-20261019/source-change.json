@@ -1,0 +1,22 @@
+{
+  "after_sha256": "2babda97eabb9e84204204f016dc37562ec7b762e7c66abbce0f6a5c17b1d6d9",
+  "all_other_source_paths_unchanged": true,
+  "approved_patch": "--- a/crates/aspis-r1-cost-probe/src/verifier.rs\n+++ b/crates/aspis-r1-cost-probe/src/verifier.rs\n@@ -352,11 +352,17 @@\n }\n \n #[inline(never)]\n+fn tx1_prepare<H:Digest32>(public:Public<'_>,v:&View<'_>,hash:H,obs:Observer)->Result<(Box<[[K;29];3]>,Box<Prepared>),Error> {\n+    let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;mark(obs,Phase::Semantic);\n+    let p=Prepared::new(&sem,v,hash)?;\n+    Ok((sem.claims,p))\n+}\n+\n+#[inline(never)]\n pub fn tx1<H:Digest32>(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {\n     if k>22 {return Err(Error::Parse);}\n     let v=View::parse(proof)?;mark(obs,Phase::Parsed);\n-    let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;mark(obs,Phase::Semantic);\n-    let p=Prepared::new(&sem,&v,hash)?;let mut a=Accumulator::new(v.variant)?;let g=powers::<29>(p.gamma);mark(obs,Phase::Prepare);\n+    let (_semantic_claims,p)=tx1_prepare(public,&v,hash,obs)?;let mut a=Accumulator::new(v.variant)?;let g=powers::<29>(p.gamma);mark(obs,Phase::Prepare);\n     tx1_finish(v,p,a,g,public_bytes,proof,k,hash,obs)\n }\n /// Complete strict verification of an R1 proof and its checkpoint.\n",
+  "approved_patch_sha256": "a712eb0a67fdf727dfa19db0d65416b4a777395ce6d5cbb1dfafe546ac9e51b9",
+  "before_sha256": "f201d2f7279da45dda69f14aec980d2af227f6589a0a54f9884b55ca31c7cdc6",
+  "checkpoint_report": "checkpoint-report.json",
+  "claims_guard_binding": "Named _semantic_claims, retained in tx1 scope; claims box returned as first tuple element by tx1_prepare.",
+  "decision": "1h",
+  "frozen_producing_revision": "32559d2696b89cdbd75304c1f7624f94dfe125ae",
+  "gates": "not(prover)codec1233,ordered583,checkpoint23,tx1failure/order/observer;onefinalSBF+strictadmittedstack;savedtransfer/withdrawalstage1/stage2+CU;re-extracttx1/preparecontrolflowsuccessandclaimsownership",
+  "lead_revision": "30a6c06c41e0a0e4e74a4db9c4fb62dec89232dc",
+  "live_worktree_touched": false,
+  "new_allocation_or_clone_in_patch": false,
+  "old_tx1_proof_body_classification": "Re-extracted and re-pinned; tx1_success statement unchanged and proof body replaced by current helper/caller composition. Statement/body inventory in formal packet.",
+  "output_policy": "Required Rust patch plus evidenceJSON/logs/SHA only; noELF/privatekeys in Git.",
+  "public_signatures_unchanged": true,
+  "resources": "Dedicated Linux host,privatecachedtargets,caps6Ghigh/8Gmax/swap0,parallelaggregate55GiB;oneLeanjobonhostatatime.",
+  "source_path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+  "status": "EXACT_APPROVED_PATCH_APPLIED_ALL_FOUR_GATES_PASS",
+  "stop_condition": "If tx1 or tx1_prepare still exceeds4096, stop and report disassembly. No further attributes or splits without new lead decision."
+}
