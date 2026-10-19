@@ -5977,3 +5977,48 @@ row formulas:
   stored points, and batch inversion.
 - check_sound, i.e. extracting the checker and composing it with
   p_r1_of_checks.
+
+### Lead acceptance of the first builder refinement (2026-10-19); D54
+
+The worker commits 8288078b9..6a655b053 (13) are cherry-picked. The lead
+verified the 11 green host receipts (4233, 4235, 4238, 4241, 4246, 4248,
+4253, 4257, 4258, 4260 and 4262): SHAs match, all exited 0 in-window,
+standard axioms, no overrides. Attempt 4237 (exit 1) was checked after the
+session-limit cut, and nothing was resent unchanged. Design:
+`t2b2b/DESIGN-BUILDER-MODEL.txt` §9.
+
+**D54.1 Proved, for the value, occupancy, path-aux and merge writers.**
+- Extraction-friendly Rust copies are in `refine/writers`.
+- Native differential tests against production (read-only from the spend
+  branch at 0c46bf447): 200k value, 100k occupancy, 52k path and 1M
+  node_right cases; 2k merge shape violations; the 2 saved fixtures; and 256
+  randomized full honest compiles.
+- Extraction with pinned Charon cb50ff16 and Aeneas b59d5188.
+- In Lean:
+  - `aux_block_model`: write_aux_block equals model block 63;
+  - `path_block_model`: rows 912..1007;
+  - `merge_model`.
+
+Loops are handled by induction; nothing is evaluated.
+
+**D54.2 Lead rulings.**
+- **B1 accepted.** `import Aeneas` is replaced by `import Aeneas.Std` and
+  `import Aeneas.Tactic.RustAttributes` in the generated file, and the edit
+  is asserted by `refine/extract/substitute.py.txt`. The full `Aeneas` root
+  does not build unpatched under 4.32 in this tree. Build integration must
+  reconcile this Aeneas.Std with the spend path's ported one: two versions
+  cannot coexist in one tree.
+- **B2 accepted.** The generated `maxHeartbeats`/`maxRecDepth` lines are
+  deleted, which is stricter than generated, and the code compiles without
+  them.
+
+**D54.3 Open.**
+- `node_right_lane7` and the path read-back are checked by differential test
+  only.
+- ValueLifts, OccLifts and PathLifts are premises. They need the
+  Wspend-to-Rust-witness map and the Poseidon/node refinement.
+- The merge is proved against an abstract table.
+- The copy-to-production link is a differential test, not a proof. The
+  production writers use Vec, closures and M31 methods the pinned extractor
+  does not handle. The options are a production-source migration (as with
+  Decision 1 on the verifier) or accepting tested equivalence.
