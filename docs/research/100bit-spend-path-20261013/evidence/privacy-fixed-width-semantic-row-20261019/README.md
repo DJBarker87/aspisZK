@@ -1,0 +1,11 @@
+# Actual typed-builder sumcheck row: fixed-width bytes and source header
+
+This packet extends the previously checked actual `R0Z.HonestView.run` coefficient-prefix result. For each semantic sumcheck row j in 0..9, the 28 typed-builder coefficients are encoded as 28 ordered 32-byte cells. The executable source row layout uses tag 2 and payload length 896; its literal five-byte header is `[2,128,3,0,0]`.
+
+`R1HonestViewSemanticRowBytes` proves that equality of all semantic challenges before index 15+j gives equality of the payload and framed row, after any fixed deterministic 32-byte per-value encoding. It also proves payload length exactly 896. This reuses the actual typed-builder theorem rather than assuming row equality. The length proof uses a small symbolic list-sum lemma, not normalization of a large generated numeral.
+
+Remaining boundary: the formal encoder `K -> Fin 32 -> UInt8` is still a function parameter. It has not been identified with an extracted Rust WideExact codec, and this is not a Rust caller refinement or a concrete full R1Wire instance. In particular, all scheduled frame families and the actual realAttempt challenge-prefix/final-transcript agreement still require composition. The continuation constructs the actual JointView semantic frame branch and then targets these caller premises. The whole-spend privacy theorem remains conditional.
+
+The one current accepted module is frozen v13. Earlier green v4 used arbitrary-length cells/header; it is retained in history with the intervening diagnostics, and is not a second current module owner. Failed diagnostics are not release theorems. No production source or protocol security parameter changed.
+
+The focused NUC check passed with standard axioms and zero swaps, reusing exact native predecessor caches under MemoryHigh=7G, MemoryMax=8G and MemorySwapMax=0 in the authorized night window. The manifest separately records actual process RSS (~6.85GB) and sampled cgroup charge (~0.68GB); those measurements must not be confused. Exact commands, source/object/import hashes, resource admission snapshot, wall time, logs and axiom reports are preserved. The original preflight lacks a repository revision field; frozen source bytes over base 0cb81842f are identified explicitly instead of inventing a producer revision. No unchanged full replay was run.

@@ -1,0 +1,27 @@
+/tmp/R1HonestViewSemanticRowBytes-v10.lean:90:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.ofFn fun i => (semanticCoeffCellBytes32 π pub B t r j ch encode i).length
+in the target expression
+  (List.map List.length (List.ofFn fun i => semanticCoeffCellBytes32 π pub B t r j ch encode i)).sum = 896
+
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+Bat : Type
+inst✝ : BatchedLayer K Bat
+π : Fin 1024 ≃ Fin 1024
+pub : Public K
+B : PackBasis F
+t : Trace K
+r : AffTape K F
+j : Fin 10
+ch : Challenges K
+encode : K → Fin 32 → UInt8
+hsum : ∀ (n : ℕ), (List.ofFn fun x => 32).sum = n * 32
+hmap : (List.ofFn fun i => (semanticCoeffCellBytes32 π pub B t r j ch encode i).length) = List.ofFn fun x => 32
+⊢ (List.map List.length (List.ofFn fun i => semanticCoeffCellBytes32 π pub B t r j ch encode i)).sum = 896
+'R0Z.HonestView.semanticCoeffPayloadBytes32_prefix_stable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0Z.HonestView.semanticCoeffPayloadBytes32_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R0Z.HonestView.frameSemanticCoeffRow32_prefix_stable' depends on axioms: [propext, Classical.choice, Quot.sound]
