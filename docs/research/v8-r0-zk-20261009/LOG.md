@@ -6676,3 +6676,64 @@ next on the checker track.
 `hnq`, `hrw` (pb construction); the builder-input premises inherited from
 `check_sound''''`. The six new modules need manifest entries before the
 final replay.
+
+### Lead acceptance of R-retry and G-sim (2026-10-19); D73: the retrying prover and the explicit simulator exist in Rust
+
+Worker commits a4aca2a1e..bcba80117 (branch codex/r1p-retry-sim-20261019, six
+commits) are cherry-picked as ad57ac42f..eae26c314. Rust only; no Lean
+compiled. Host runs at d951c0681, after rebasing onto the optimised verifier
+(CU savings, 7133365cc); evidence `r1p-retry/evidence.json`,
+`gate2-d951c0681.json`, `simgate1-d951c0681.json`.
+
+**D73.1 R-retry (D38.3).** The P_R1 check runs in `prove_from_semantics`
+after the queries and ρ are drawn, before any output buffer exists; the
+verdict is emit-success plus the D57 extracted checker on the extracted
+builders' columns (`fill_tq`, `fill_lo`, `fill_own`, `fill_rel`).
+`prove_masked_retrying` caps at N = 8, fresh OS secrets per attempt, nonce
+burned durably first, `AttemptsExhausted` publishes nothing; `r1p-check`
+implies `private-leaf-salts` (compile_error guard); only a verdict bit and
+durations leave the check, and panic messages inside it are suppressed.
+Tests: forced 7 rejections then accept (8 distinct nonces, G-mask, salt and
+C1 roots; proof verifies), exhaustion, real-check path. Measured: 32/32 OS
+attempts accepted and verified; 41.2 s per attempt (proving 5.5 s, check
+35.8 s: emit 14.5, builders 9.95, checker 11.1 with overflow checks on).
+
+**D73.2 G-sim (D44.3).** `sim::sim_e` takes the public statement and a seed
+only, runs the ideal game's P-only loop (cap 8), and programs the oracle at
+the transcript reads, opened leaves and path nodes. The simulated proof
+passes strict tx1+tx2 and dense under the programmed oracle and is rejected
+under the real hash; dropping S₀ or the round-9 shift is rejected. 4 seeds:
+33.6–35.5 s (P_R1 32–34 s; ≈1.5 s without the check), 442–450 addresses
+programmed, all read. The verifier is generic over the hash; no verifier
+injection was added. `CORRESPONDENCE-G-SIM.txt` maps each step to GamesR1,
+RefPayload, Shift, PayloadSplit, Partition, JointTrace: a reading, not a
+proof. G-sim is closed as specified in D44.3.
+
+**D73.3 Edits outside the stated scope (reviewed, accepted).** `verifier::Error`
+gains `Rejected`, `AttemptsExhausted`, `Entropy` under `cfg(feature="prover")`
+only, so the SBF build's enum is unchanged. Root `exclude = ["docs"]`: checked
+with `cargo metadata` that the three D70 copy crates remain members (explicit
+members win). Release overflow checks for the extracted checker/builder
+crates (host only). z4 probe files changed by visibility only, so their
+SHA-256 no longer match the D57 differential receipts; the D57 receipts
+stand for the earlier bytes.
+
+**D73.4 Mismatches with the Lean games (lead rulings).**
+1. ActivePole: Rust surfaces it as `Error::Semantic` and aborts; Lean
+   `realGame` charges it (D40.3) and continues to the next attempt. Ruling:
+   the Rust loop must treat a pole as a rejected attempt (consume one of the
+   N = 8, publish nothing). The fix touches the aspis-statement copy-helper
+   builder; it is a follow-up job.
+2. Exhaustion: the worker reports the same shape; the follow-up must state
+   Lean's exhaustion behaviour from the source and make Rust match it.
+3. P_chk ⇒ P_R1 still rests on the open premises of the checker (D72.3);
+   z9e's public-data builders are ports from cost-probe 1822c2ced and must be
+   re-checked against the current prover.
+4. Tape law (the simulator uses the prover's expander; Lean assumes a uniform
+   tape) and formula equality for inactive-sum and batched cells remain
+   R-commit and G-ref.
+
+**D73.5 Cost note.** The honest prover now takes about 41 s per attempt,
+almost all in the P_R1 check (D38 measured 22.6 s for an earlier, unchecked
+port). A prover-speed job (overflow-check cost, builder conversion) is
+optional and does not affect soundness or privacy.
