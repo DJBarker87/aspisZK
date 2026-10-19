@@ -1,0 +1,43 @@
+structure Aeneas.Std.core.slice.iter.IterMut (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.IterMut.slice : Slice T
+  Aeneas.Std.core.slice.iter.IterMut.i : ℕ :=
+    0
+constructor:
+  Aeneas.Std.core.slice.iter.IterMut.mk {T : Type} (slice : Slice T) (i : ℕ) : core.slice.iter.IterMut T
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    ok (some x, it, back)
+  else ok (none, it, fun it x => it)
+structure Aeneas.Std.core.iter.adapters.enumerate.Enumerate.{u} (I : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.iter.adapters.enumerate.Enumerate.iter : I
+  Aeneas.Std.core.iter.adapters.enumerate.Enumerate.count : Usize
+constructor:
+  Aeneas.Std.core.iter.adapters.enumerate.Enumerate.mk.{u} {I : Type u} (iter : I) (count : Usize) :
+    core.iter.adapters.enumerate.Enumerate I
+theorem Aeneas.Std.loop.spec_decr_nat.{u, v} : ∀ {α : Type u} {β : Type v} (measure : α → ℕ) (inv : α → Prop)
+  (post : β → Prop) (body : α → Result (ControlFlow α β)) (x : α),
+  (∀ (x : α),
+      inv x →
+        body x ⦃ r =>
+          match r with
+          | done y => post y
+          | cont x' => inv x' ∧ measure x' < measure x ⦄) →
+    inv x → loop body x ⦃ post ⦄ :=
+fun {α} {β} measure inv post body x hBody hInv =>
+  have this := loop.spec measure inv post body x hBody hInv;
+  this

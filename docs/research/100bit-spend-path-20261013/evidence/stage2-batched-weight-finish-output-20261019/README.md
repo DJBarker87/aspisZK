@@ -1,0 +1,9 @@
+# Stage-2 batched-weight finish: returned values and canonical components
+
+PROVED for the extracted finish compatibility adapter: if `BatchedWeights.finish self weights` succeeds, then every in-range index of the actual returned slice contains a value with the canonical components established by the retained V20 `value` theorem. The proof derives successful per-index value calls from success of the loop; that is no longer an assumption.
+
+The proof reuses the existing V20 arithmetic result. It combines a symbolic loop-success induction, a symbolic prefix-write invariant, callback writeback, exact value-namespace equality and indexed slice readback. It does not unroll 64 entries. Earlier pointwise-value premises remain in reusable intermediate lemmas; the final `FinishSuccessOutputReadback.finish_success_output_components` discharges them from successful finish.
+
+OPEN: correspondence of the explicit `IterMut`/`Enumerate` compatibility adapter with the Rust standard-library borrow/writeback behavior. The adapter retains the `Some` replacement callback; it does not discard mutable writes. A successful theorem about the adapter is not by itself a theorem about the complete adopted tx2 caller. Whole R14 caller refinement, concrete decoding/arithmetic joins and final composition remain separate.
+
+The manifest uses focused-extractor-proof-packet-v1. Receipts pin the exact sources, imported objects, compiler, commands, wall times, process RSS, scope memory and zero swap. New owners have no resource-option overrides or new axioms; printed theorem axioms are standard. Historical base import sources are stored under references with their original bytes and are not claimed as new compliant compiles. Duplicate worker receipt copies were removed. Missing existing timing logs and two direct dependency sources were fetched without rerunning Lean. No compiled objects or other binaries are included.
