@@ -68,13 +68,31 @@ Two expanding proof-search attempts were stopped and replaced, without cap
 increases or unchanged reruns. See PROOF-SEARCH-REVIEW.md. Refused launches
 remain explicitly classified as not launched, not failed theorem results.
 
-NEXT REQUIRED: lift the slot-prefix theorem through the actual four-slot
-array construction using its own index bound and stable capture invariant.
-The existing unbounded naturality theorem cannot simply assume the slot
-bound. Prove a bounded/invariant version from the builder's literal counter,
-then discharge its callback and state-preservation premises from the actual
-emitted callback/continuation theorem. Consume View.query's already checked
-bound for the complete full-width caller. Standard-library admission of this
-array builder and concrete shared-helper source interpretation also remain
-required. The final whole-verifier/error/checkpoint/hash/effect composition
-and soundness/privacy transfers remain OPEN. Production Rust is unchanged.
+The constructor/capture obligation is now checked. CuSavingsArrayBuilderBounded
+proves its literal counter calls the callback only below the declared length,
+while preserving a supplied state invariant through actual successful handback.
+CuSavingsDotsSlotPost proves the actual emitted slot callback preserves its
+capture whenever it succeeds; it never assumes success. These discharge the
+bounded constructor premises from the source callback rather than postulating
+them.
+
+CuSavingsDotsPrefixKernel.source_eq now compares the COMPLETE emitted old/new
+four_dots functions on every arbitrary slice of length at least 608, arbitrary
+gamma arrays, and every shared Arithmetic instance. Its query_composition
+consumes the actual emitted View.query success bound, preserving failed or
+divergent query executions. This expression composes the two actual emitted
+operations; it is not yet an extraction of their entire enclosing verifier
+caller. Receipts: cu-array-builder-bounded-a, cu-dots-slot-post-a,
+cu-dots-prefix-kernel-a. All exit zero, wall 1.6-1.9 seconds, peak RSS below
+2.6 GiB, process/cgroup swap zero. The bounded builder uses standard axioms;
+source slot/kernel contracts additionally carry only the existing Formatter
+TYPE through Debug/unwrap. No new equivalence proposition is admitted.
+
+REMAINING: Rust standard-library admission of the concrete array builder,
+concrete interpretation of the unchanged shared arithmetic helpers, and
+embedding this comparison in the actual enclosing verifier/adapter source
+contexts. ARRAY-LIBRARY-SOURCE.md records the exact current frontend failures
+and bounded diagnostic evidence. No failed library emission or its partial
+axiom template is imported into a checked proof. The final whole-verifier
+error/checkpoint/hash/effect composition and soundness/privacy transfers remain
+OPEN. Production Rust and the measured sub-1.2M build remain unchanged.

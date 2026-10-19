@@ -62,9 +62,14 @@ universal shared arithmetic and a concrete state-threading array builder.
 The complete old/new kernel comparison also checks for arbitrary same-608-byte
 inputs. See DOTS-SOURCE.md for those source-linked results and axioms.
 
-Remaining for candidate 10: lift complete slot prefix-insensitivity through
-the four-slot constructor using its actual index bound and stable capture
-invariant, then consume the actual View.query bound. Standard-library source
-admission of the array builder and concrete shared-helper interpretation are
-still required. The full-width four_dots/caller and final soundness/privacy
-composition are not marked complete.
+The four-slot counter/capture invariants and complete full-width kernel
+comparison now also check. CuSavingsDotsPrefixKernel.source_eq compares the
+actual emitted old/new complete functions for every slice of length at least
+608. query_composition derives that bound from actual View.query execution,
+including failed/divergent queries. See DOTS-SOURCE.md for the exact scope.
+
+Remaining for candidate 10: Rust-library admission of the concrete array
+builder, concrete shared-helper interpretation, and source binding of the
+entire enclosing verifier caller. The library frontier is recorded in
+ARRAY-LIBRARY-SOURCE.md. Final soundness/privacy composition is unfinished;
+no source-admission claim is inferred from a failed frontend run.

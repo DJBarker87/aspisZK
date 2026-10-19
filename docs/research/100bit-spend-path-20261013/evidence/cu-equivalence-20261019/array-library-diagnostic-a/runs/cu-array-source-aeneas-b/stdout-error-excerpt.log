@@ -1,0 +1,108 @@
+atement:
+  storage_dead(_11)
+
+
+[[36mTrace[39m] drop_value: place: _11
+- Initial context:
+# Ended regions: { 0, 1 }
+# 1 frame(s)
+
+# Frame 0:
+- locals: 14
+- dummy bindings: 1
+- abstractions: 0
+{
+  ...
+  _3 : core::ops::control_flow::ControlFlow<TraitClause0::Residual, ()> -> core::ops::control_flow::ControlFlow::Continue (s@7 : ()) ;
+  ...
+  _10 : [TraitClause0::Output; N] -> s@14 : [TraitClause0::Output; N] ;
+  ...
+}
+
+[[36mTrace[39m] Aeneas__InterpStatements.drop_value.(fun), line 46:
+place: _11
+- Final context:
+# Ended regions: { 0, 1 }
+# 1 frame(s)
+
+# Frame 0:
+- locals: 14
+- dummy bindings: 1
+- abstractions: 0
+{
+  ...
+  _3 : core::ops::control_flow::ControlFlow<TraitClause0::Residual, ()> -> core::ops::control_flow::ControlFlow::Continue (s@7 : ()) ;
+  ...
+  _10 : [TraitClause0::Output; N] -> s@14 : [TraitClause0::Output; N] ;
+  ...
+}
+
+
+[[36mTrace[39m] Aeneas__InterpStatements.eval_statement.(fun), line 790:
+
+**About to evaluate statement** ('/rustc/library/core/src/array/mod.rs', lines 159:18-159:66): [
+  _0 = TraitClause1::ImpliedClause0::from_output(move _10)
+  ↳⚡ unwind_continue
+]
+
+**Context**:
+# Ended regions: { 0, 1 }
+# 1 frame(s)
+
+# Frame 0:
+- locals: 14
+- dummy bindings: 1
+- abstractions: 0
+{
+  ...
+  _3 : core::ops::control_flow::ControlFlow<TraitClause0::Residual, ()> -> core::ops::control_flow::ControlFlow::Continue (s@7 : ()) ;
+  ...
+  _10 : [TraitClause0::Output; N] -> s@14 : [TraitClause0::Output; N] ;
+  ...
+}
+
+
+
+[[36mTrace[39m] Aeneas__InterpStatements.eval_statement_raw.(fun), line 852:
+statement:
+  _0 = TraitClause1::ImpliedClause0::from_output(move _10)
+  ↳⚡ unwind_continue
+
+
+[[36mTrace[39m] Aeneas__InterpStatements.eval_function_call_symbolic.(fun), line 1403:
+function call:
+- call: _0 = TraitClause1::ImpliedClause0::from_output(move _10)
+- fn_ptr : TraitClause1::ImpliedClause0::from_output
+
+[[36mTrace[39m] Aeneas__InterpStatements.eval_function_call_symbolic.(fun), line 1407:
+- call: _0 = TraitClause1::ImpliedClause0::from_output(move _10)
+- call.generics:
+
+- def.signature:
+fn<Self>(Self::Output) -> Self
+
+[[36mTrace[39m] Aeneas__InterpStatements.eval_function_call_symbolic_from_inst_sig.(fun), line 1529:
+- fid: TraitClause1::ImpliedClause0::from_output
+- inst_sg:
+(TraitClause1::ImpliedClause0::Output) -> Clause1_TryType
+- regions_hierarchy:
+
+- abs_regions_hierarchy:
+
+- call.generics:
+
+- args:
+move _10
+- dest:
+_0
+
+[[36mTrace[39m] Aeneas__InterpStatements.eval_function_call_symbolic_from_inst_sig.(fun), line 1570:
+Argument 0 doesn't have the proper type:
+- arg: s@14 : [TraitClause0::Output; N]
+- arg.ty: [TraitClause0::Output; N]
+- target type: TraitClause1::ImpliedClause0::Output
+
+[[91mError[39m] The input arguments don't have the proper type
+Source: '/rustc/library/core/src/ops/try_trait.rs', lines 192:4-192:49
+Compiler source: interp/InterpStatements.ml, line 1575
+

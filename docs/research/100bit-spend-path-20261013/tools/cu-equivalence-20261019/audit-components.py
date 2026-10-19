@@ -44,7 +44,8 @@ for module,item in audit['successful_targets'].items():
         'AspisR1CuPrefix/Funs','CuSavingsPrefix','CuSavingsQueryPrefix',
         'AspisR1CuDots/Funs','CuSavingsDotsSlot','CuSavingsDotsSameBytes',
         'CuSavingsDotsBaseStep','CuSavingsDotsBaseProgress','CuSavingsDotsBase',
-        'CuSavingsDotsBatches','CuSavingsDotsTail','CuSavingsDotsSlotPrefix'} else set()
+        'CuSavingsDotsBatches','CuSavingsDotsTail','CuSavingsDotsSlotPrefix',
+        'CuSavingsDotsSlotPost','CuSavingsDotsPrefixKernel'} else set()
     assert extra==expected,(module,extra,expected)
     item['nonstandard_axioms']=sorted(extra)
     assert receipt['process_swaps']==0,module
@@ -103,6 +104,20 @@ audit['cu_dots_source_check']=json.loads(subprocess.check_output([
     sys.executable,str(Path(__file__).with_name('extract-cu-dots.py')),'--check'],text=True))
 audit['cu_dots_emission_check']=json.loads(subprocess.check_output([
     sys.executable,str(Path(__file__).with_name('emit-cu-dots.py')),'--check'],text=True))
+library=evidence/'array-library-diagnostic-a'
+library_manifest=json.loads((library/'MANIFEST.json').read_text())
+assert library_manifest['status']=='LIBRARY_SOURCE_ADMISSION_OPEN'
+for name,pin in library_manifest['sources'].items():
+    assert sha(library/name)==pin['sha256'],name
+for attempt,item in library_manifest['runs'].items():
+    receipt_path=library/'runs'/attempt/'receipt.json'
+    assert sha(receipt_path)==item['files']['receipt.json']['sha256'],attempt
+    receipt=json.loads(receipt_path.read_text())
+    assert receipt['exit_status']==item['exit_status'],attempt
+    assert receipt['process_swaps']==0 and receipt['cgroup_swap_current']=='0',attempt
+    if 'aeneas' in attempt:assert receipt['exit_status']!=0,attempt
+audit['array_library_diagnostic_manifest_sha256']=sha(library/'MANIFEST.json')
+audit['array_library_source_admitted']=False
 usage=resource.getrusage(resource.RUSAGE_SELF)
 audit['audit_command']=[sys.executable,str(Path(__file__).relative_to(repo)),*sys.argv[1:]]
 audit['audit_source_revision']=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()

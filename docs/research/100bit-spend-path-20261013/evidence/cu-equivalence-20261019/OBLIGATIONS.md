@@ -25,7 +25,7 @@ remain obligations, not hidden hypotheses asserting the conclusion.
 | 5 canonical private dots | WideExact invariant, redundant-check elimination, outer count implies inner bound, reduction/output | open |
 | 6 public decode reuse | checked same-byte decoder/selector correspondence, first_decoded and adapter execution | open |
 | 7 geometry reuse | node/denominator agreement, caller range validity, execution | open |
-| 10 fixed prefix | admitted q length, identical decoder accesses and failure behavior | exact query bound and complete source slot/base/batch/tail comparisons checked; complete old/new kernel compared on 608-byte inputs; full-width four-slot constructor/caller and std-library admission open |
+| 10 fixed prefix | admitted q length, identical decoder accesses and failure behavior | complete interpreted source kernel equality and actual-query composition checked, including four-slot bound/capture invariants; std-library/shared-helper and enclosing-verifier source bindings open |
 | 12 rho residues | every-prefix modular invariant, four-term overflow bound, canonical finish, array/caller execution, heap admission | integer invariant, complete push/value execution and frame/overflow proofs checked; finish now consumes the extracted standard next body; initialization, outer callers and serialization composition open |
 | 14 Libra factorization | all four weights equal for arbitrary canonical challenges including zero; field/source execution | division-free cut/tensor algebra and handwritten list-loop correspondence checked; concrete field/machine/source bridges open |
 | composition | refreshed emitted caller bodies, byte/error/effect preservation across tx1/tx2 and adapter | open |
@@ -209,3 +209,13 @@ Its standard-library source admission and concrete shared-helper interpretation
 remain explicit; no optimization is newly marked fully closed. All new
 successful receipts/axiom sets are registered in COMPONENT-AUDIT. Stopped
 search attempts and symbolic replacements are in PROOF-SEARCH-REVIEW.md.
+
+The four-slot bound and source capture preservation now check, and the
+complete emitted fixed-prefix kernel comparison holds for every slice of
+length at least 608 under the explicit library/helper interpretation. Actual
+View.query execution discharges the bound in query_composition, including
+failed/divergent queries. See DOTS-SOURCE.md. Rust-library admission remains
+open: ARRAY-LIBRARY-SOURCE.md identifies the exact generic Try normalization
+and mutable-reference-copy frontend limits. Those failed emissions are not
+proofs and introduce no admitted equivalence premise. Actual enclosing
+verifier context bindings and final soundness/privacy transfers remain open.
