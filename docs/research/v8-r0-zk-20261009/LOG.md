@@ -6783,3 +6783,44 @@ application, salts or builders; these join R-wire/R-commit with a required
 probability or impossibility argument. CORRESPONDENCE-G-SIM.txt §8 (a)/(b)
 are closed by this entry. SBF rebuild not run (host default-feature objects
 identical).
+
+### Lead acceptance of the column writers (2026-10-19); D75: `check_sound_cols`
+
+Worker commits ef845ca95 and d69ee5dbd (branch
+codex/r1p-column-writers-20261019) are cherry-picked. The lead verified
+attempts 5754 (`fill_round_entries`, 3.83 GB), 5755 (`fill_gbat_entries`,
+3.80 GB) and 5756 (`check_sound_cols`, 4.06 GB): SHAs match the repo, exit 0,
+0 swaps, standard axioms. 5751 and 5753 failed and were fixed by source
+changes.
+
+**D75.1 Result.** `R1Z.CertCheckSound.check_sound_cols`
+(R1Z/CertCheckSoundCols.lean) is `check_sound_gbat` (D72) with `hRent`,
+`hGent`, `hGBent`, `X18`, `hX18` removed and the extracted writer runs added:
+`fill_round … = ok pb.round`, `fill_round … = ok pb.ground` (own-column
+descriptors reused), `fill_gbat … = ok pb.gbat`, plus the input slice `x18`
+with named premise `hx18` (`x18[f] = storedFirstLineX18 (fp f)`, D59.2 input
+table) and `hfo`. The entry lemmas rest on the closed form `pcR_closed`
+(coefficient d of (b + wX)^e) and the builder-4 specs; loops by invariants
+or structural induction, no concrete-size evaluation.
+
+**D75.2 Extraction.** Builders 5 and 6 appended to `c3/build/src/lib.rs`,
+re-extracted with the pinned Charon/Aeneas under caps; `CertBuildExtracted`
+(d7e06b9f…) and `CertRelExtracted` (7ce94171…) checked byte-identical
+(`split-cols.py.txt`). Each `let x = if …` selection was moved into its own
+function to avoid do-notation join points (behaviour unchanged; all evidence
+is for the final source). `CertColExtracted.lean` 81a2334a… committed as in
+D66; `build.llbc` by SHA only.
+
+**D75.3 Rust evidence.** On the five D66 configurations the new writers equal
+z9c's round, G-round and G-batch columns with 0 mismatches (up to 3.2M,
+2.1M, 2.6M entries); teeth: clearing inactive flags changes ≈1.0–1.15M round
+entries, moving one x18 point changes 13–16k gbat entries. Wired into the
+prover's P_R1 check (z9e); a test records a real attempt's challenges and
+finds 0 column mismatches; 22/22 lib tests; gate 8/8 accepted and verified
+(37.8 s per attempt, check 33.5 s).
+
+**D75.4 Remaining on the checker.** Decoder facts `hup`, `hnq`, `hrw`; the
+named input premises (π/`ti`, OOD and stored points, `inact`, `x18`, `x16`,
+`li`, `hW`/`hwb`, `Tower`); the builder-input premises inherited from
+`check_sound''''`; manifest entries for CertColExtracted, CertRoundFill,
+CertGBatFill, CertCheckSoundCols (and D72's six) before the final replay.
