@@ -1,0 +1,11 @@
+# Actual finish chain uses the existing R0P selected mask
+
+ActualMainMaskSemanticBridge transports the extracted selected-mask result across the exact coordinate rewrapping to the existing R0P.Mask.maskValue definition over WideExact. ActualMainMaskR0PValue compares the unique result of that very same deterministic extracted call with its separately checked populated-coefficient QM31 meaning; this identifies the mapped QM31 mask with the R0P mask without reevaluating powers or populated coefficients.
+
+RawActualParsedFinishR0PChain then substitutes that identity into the checked parsed-finish WideExact chain. It derives alpha canonicality from the same successful finish. The result retains one encoded Full payload, the actual ten-round annotated run, the same alpha challenges and terminal/fromFn/read witnesses, and a sumcheck chain ending at R0P mask + eta*terminal + extra. The desired mask equation and final arithmetic equation are not independent premises.
+
+Remaining explicit conditions: mask16/mask10, claim27 and terminal canonicality; source implementation/refinement of claims, fromFn and public terminal boundaries; same-value correspondence of those outputs to the semantic view; source/literal transcript coupling; actual top-level acceptance-to-Checks, commitment/opening binding and final unified source/artifact release. The complete 100-bit soundness proof remains open.
+
+All three focused native Lean4.32 checks exited0, with only propext/Classical.choice/Quot.sound in printed axiom reports and zero process/cgroup swap. Exact target, source revision/bytes, object, imports, command, wall time, process RSS, reservation admission and watchdog are retained. Each used -j1, MemoryHigh4G, MemoryMax6G, MemorySwapMax0 and120s timeout. Large transitive pin inventories are gzip-compressed with expanded hashes recorded.
+
+This closes the R0P mask transport previously listed open in the exact-field and mapped-endpoint component reports. Earlier combined local variants failed memory; they remain in the earlier evidence packet. The accepted variant exposes only the mapped function spine and simplifies coordinate/array reads, rather than using broad mask congruence. Its capped native check reused the frozen cached closure plus12 additional compiled modules; no dependencies, unchanged regression or full manifest were rebuilt.
