@@ -1,0 +1,276 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReference.lean:25:13: error: unsolved goals
+case mk.mk.e_c1
+c1✝¹ c0✝ c1✝ : field.CM31
+a✝ b✝ : field.M31
+h :
+  ∀ (j : Fin 4),
+    ↑(wordAt (powerLimbs { c0 := { a := c0✝.a, b := c0✝.b }, c1 := c1✝¹ }) j) =
+      ↑(wordAt (powerLimbs { c0 := c0✝, c1 := c1✝ }) j)
+ha : a✝ = c0✝.a
+hb : b✝ = c0✝.b
+hc : c1✝¹.a = c1✝.a
+hd : c1✝¹.b = c1✝.b
+⊢ c1✝¹ = c1✝
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReference.lean:101:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑out.c1.b
+in the target expression
+  ↑(wordAt (powerLimbs (fromCurrent out)) ((fun i => i) ⟨0, ⋯⟩)) =
+    (↑(wordAt (powerLimbs weight) ((fun i => i) ⟨0, ⋯⟩)) +
+        ↑(wordAt (powerLimbs power) ((fun i => i) ⟨0, ⋯⟩)) * ↑basis) %
+      P
+
+case refine_3.«0»
+weight power : field.QM31
+basis : U32
+hw : Canonical weight
+product : Current
+hm : AspisR1RhoReference.field.QM31.mul_m31 (toCurrent power) basis = ok product
+hc : ExtractedCurrentTowerAdd.CanonicalQM product
+hv :
+  ExtractedCurrentTowerAdd.wordsQM product =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+      ↑(toCurrent power).c1.b * ↑basis % P)
+out : AspisR1Qm31ArithmeticProbe.field.QM31
+ha : AspisR1Qm31ArithmeticProbe.field.QM31.add (toCurrent weight) product = ok out
+hoc : ExtractedCurrentTowerAdd.CanonicalQM out
+hov :
+  ExtractedCurrentTowerAdd.wordsQM out =
+    (((↑(toCurrent weight).c0.a + ↑product.c0.a) % ExtractedCurrentTowerAdd.P,
+        (↑(toCurrent weight).c0.b + ↑product.c0.b) % ExtractedCurrentTowerAdd.P),
+      (↑(toCurrent weight).c1.a + ↑product.c1.a) % ExtractedCurrentTowerAdd.P,
+      (↑(toCurrent weight).c1.b + ↑product.c1.b) % ExtractedCurrentTowerAdd.P)
+hpa :
+  (ExtractedCurrentTowerAdd.wordsQM product).1.1 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).1.1
+hpb :
+  (ExtractedCurrentTowerAdd.wordsQM product).1.2 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).1.2
+hpc :
+  (ExtractedCurrentTowerAdd.wordsQM product).2.1 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).2.1
+hpd :
+  (ExtractedCurrentTowerAdd.wordsQM product).2.2 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).2.2
+ho :
+  ↑out.c1.b =
+    (((↑(toCurrent weight).c0.a + ↑product.c0.a) % ExtractedCurrentTowerAdd.P,
+            (↑(toCurrent weight).c0.b + ↑product.c0.b) % ExtractedCurrentTowerAdd.P),
+          (↑(toCurrent weight).c1.a + ↑product.c1.a) % ExtractedCurrentTowerAdd.P,
+          (↑(toCurrent weight).c1.b + ↑product.c1.b) % ExtractedCurrentTowerAdd.P).2.2
+⊢ ↑(wordAt (powerLimbs (fromCurrent out)) ((fun i => i) ⟨0, ⋯⟩)) =
+    (↑(wordAt (powerLimbs weight) ((fun i => i) ⟨0, ⋯⟩)) +
+        ↑(wordAt (powerLimbs power) ((fun i => i) ⟨0, ⋯⟩)) * ↑basis) %
+      P
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Nat.le_refl 4
+  has type
+    4 ≤ 4
+  but is expected to have type
+    3 < 4
+  in the application
+    Nat.le_of_lt (Nat.le_refl 4)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReference.lean:101:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑out.c1.b
+in the target expression
+  ↑(wordAt (powerLimbs (fromCurrent out)) ((fun i => i) ⟨1, ⋯⟩)) =
+    (↑(wordAt (powerLimbs weight) ((fun i => i) ⟨1, ⋯⟩)) +
+        ↑(wordAt (powerLimbs power) ((fun i => i) ⟨1, ⋯⟩)) * ↑basis) %
+      P
+
+case refine_3.«1»
+weight power : field.QM31
+basis : U32
+hw : Canonical weight
+product : Current
+hm : AspisR1RhoReference.field.QM31.mul_m31 (toCurrent power) basis = ok product
+hc : ExtractedCurrentTowerAdd.CanonicalQM product
+hv :
+  ExtractedCurrentTowerAdd.wordsQM product =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+      ↑(toCurrent power).c1.b * ↑basis % P)
+out : AspisR1Qm31ArithmeticProbe.field.QM31
+ha : AspisR1Qm31ArithmeticProbe.field.QM31.add (toCurrent weight) product = ok out
+hoc : ExtractedCurrentTowerAdd.CanonicalQM out
+hov :
+  ExtractedCurrentTowerAdd.wordsQM out =
+    (((↑(toCurrent weight).c0.a + ↑product.c0.a) % ExtractedCurrentTowerAdd.P,
+        (↑(toCurrent weight).c0.b + ↑product.c0.b) % ExtractedCurrentTowerAdd.P),
+      (↑(toCurrent weight).c1.a + ↑product.c1.a) % ExtractedCurrentTowerAdd.P,
+      (↑(toCurrent weight).c1.b + ↑product.c1.b) % ExtractedCurrentTowerAdd.P)
+hpa :
+  (ExtractedCurrentTowerAdd.wordsQM product).1.1 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).1.1
+hpb :
+  (ExtractedCurrentTowerAdd.wordsQM product).1.2 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).1.2
+hpc :
+  (ExtractedCurrentTowerAdd.wordsQM product).2.1 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).2.1
+hpd :
+  (ExtractedCurrentTowerAdd.wordsQM product).2.2 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).2.2
+ho :
+  ↑out.c1.b =
+    (((↑(toCurrent weight).c0.a + ↑product.c0.a) % ExtractedCurrentTowerAdd.P,
+            (↑(toCurrent weight).c0.b + ↑product.c0.b) % ExtractedCurrentTowerAdd.P),
+          (↑(toCurrent weight).c1.a + ↑product.c1.a) % ExtractedCurrentTowerAdd.P,
+          (↑(toCurrent weight).c1.b + ↑product.c1.b) % ExtractedCurrentTowerAdd.P).2.2
+⊢ ↑(wordAt (powerLimbs (fromCurrent out)) ((fun i => i) ⟨1, ⋯⟩)) =
+    (↑(wordAt (powerLimbs weight) ((fun i => i) ⟨1, ⋯⟩)) +
+        ↑(wordAt (powerLimbs power) ((fun i => i) ⟨1, ⋯⟩)) * ↑basis) %
+      P
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Nat.le_refl 4
+  has type
+    4 ≤ 4
+  but is expected to have type
+    3 < 4
+  in the application
+    Nat.le_of_lt (Nat.le_refl 4)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReference.lean:101:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑out.c1.b
+in the target expression
+  ↑(wordAt (powerLimbs (fromCurrent out)) ((fun i => i) ⟨2, ⋯⟩)) =
+    (↑(wordAt (powerLimbs weight) ((fun i => i) ⟨2, ⋯⟩)) +
+        ↑(wordAt (powerLimbs power) ((fun i => i) ⟨2, ⋯⟩)) * ↑basis) %
+      P
+
+case refine_3.«2»
+weight power : field.QM31
+basis : U32
+hw : Canonical weight
+product : Current
+hm : AspisR1RhoReference.field.QM31.mul_m31 (toCurrent power) basis = ok product
+hc : ExtractedCurrentTowerAdd.CanonicalQM product
+hv :
+  ExtractedCurrentTowerAdd.wordsQM product =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+      ↑(toCurrent power).c1.b * ↑basis % P)
+out : AspisR1Qm31ArithmeticProbe.field.QM31
+ha : AspisR1Qm31ArithmeticProbe.field.QM31.add (toCurrent weight) product = ok out
+hoc : ExtractedCurrentTowerAdd.CanonicalQM out
+hov :
+  ExtractedCurrentTowerAdd.wordsQM out =
+    (((↑(toCurrent weight).c0.a + ↑product.c0.a) % ExtractedCurrentTowerAdd.P,
+        (↑(toCurrent weight).c0.b + ↑product.c0.b) % ExtractedCurrentTowerAdd.P),
+      (↑(toCurrent weight).c1.a + ↑product.c1.a) % ExtractedCurrentTowerAdd.P,
+      (↑(toCurrent weight).c1.b + ↑product.c1.b) % ExtractedCurrentTowerAdd.P)
+hpa :
+  (ExtractedCurrentTowerAdd.wordsQM product).1.1 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).1.1
+hpb :
+  (ExtractedCurrentTowerAdd.wordsQM product).1.2 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).1.2
+hpc :
+  (ExtractedCurrentTowerAdd.wordsQM product).2.1 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).2.1
+hpd :
+  (ExtractedCurrentTowerAdd.wordsQM product).2.2 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).2.2
+ho :
+  ↑out.c1.b =
+    (((↑(toCurrent weight).c0.a + ↑product.c0.a) % ExtractedCurrentTowerAdd.P,
+            (↑(toCurrent weight).c0.b + ↑product.c0.b) % ExtractedCurrentTowerAdd.P),
+          (↑(toCurrent weight).c1.a + ↑product.c1.a) % ExtractedCurrentTowerAdd.P,
+          (↑(toCurrent weight).c1.b + ↑product.c1.b) % ExtractedCurrentTowerAdd.P).2.2
+⊢ ↑(wordAt (powerLimbs (fromCurrent out)) ((fun i => i) ⟨2, ⋯⟩)) =
+    (↑(wordAt (powerLimbs weight) ((fun i => i) ⟨2, ⋯⟩)) +
+        ↑(wordAt (powerLimbs power) ((fun i => i) ⟨2, ⋯⟩)) * ↑basis) %
+      P
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Nat.le_refl 4
+  has type
+    4 ≤ 4
+  but is expected to have type
+    3 < 4
+  in the application
+    Nat.le_of_lt (Nat.le_refl 4)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoReference.lean:101:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑out.c1.b
+in the target expression
+  ↑(wordAt (powerLimbs (fromCurrent out)) ((fun i => i) ⟨3, ⋯⟩)) =
+    (↑(wordAt (powerLimbs weight) ((fun i => i) ⟨3, ⋯⟩)) +
+        ↑(wordAt (powerLimbs power) ((fun i => i) ⟨3, ⋯⟩)) * ↑basis) %
+      P
+
+case refine_3.«3»
+weight power : field.QM31
+basis : U32
+hw : Canonical weight
+product : Current
+hm : AspisR1RhoReference.field.QM31.mul_m31 (toCurrent power) basis = ok product
+hc : ExtractedCurrentTowerAdd.CanonicalQM product
+hv :
+  ExtractedCurrentTowerAdd.wordsQM product =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+      ↑(toCurrent power).c1.b * ↑basis % P)
+out : AspisR1Qm31ArithmeticProbe.field.QM31
+ha : AspisR1Qm31ArithmeticProbe.field.QM31.add (toCurrent weight) product = ok out
+hoc : ExtractedCurrentTowerAdd.CanonicalQM out
+hov :
+  ExtractedCurrentTowerAdd.wordsQM out =
+    (((↑(toCurrent weight).c0.a + ↑product.c0.a) % ExtractedCurrentTowerAdd.P,
+        (↑(toCurrent weight).c0.b + ↑product.c0.b) % ExtractedCurrentTowerAdd.P),
+      (↑(toCurrent weight).c1.a + ↑product.c1.a) % ExtractedCurrentTowerAdd.P,
+      (↑(toCurrent weight).c1.b + ↑product.c1.b) % ExtractedCurrentTowerAdd.P)
+hpa :
+  (ExtractedCurrentTowerAdd.wordsQM product).1.1 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).1.1
+hpb :
+  (ExtractedCurrentTowerAdd.wordsQM product).1.2 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).1.2
+hpc :
+  (ExtractedCurrentTowerAdd.wordsQM product).2.1 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).2.1
+hpd :
+  (ExtractedCurrentTowerAdd.wordsQM product).2.2 =
+    ((↑(toCurrent power).c0.a * ↑basis % P, ↑(toCurrent power).c0.b * ↑basis % P), ↑(toCurrent power).c1.a * ↑basis % P,
+          ↑(toCurrent power).c1.b * ↑basis % P).2.2
+ho :
+  ↑out.c1.b =
+    (((↑(toCurrent weight).c0.a + ↑product.c0.a) % ExtractedCurrentTowerAdd.P,
+            (↑(toCurrent weight).c0.b + ↑product.c0.b) % ExtractedCurrentTowerAdd.P),
+          (↑(toCurrent weight).c1.a + ↑product.c1.a) % ExtractedCurrentTowerAdd.P,
+          (↑(toCurrent weight).c1.b + ↑product.c1.b) % ExtractedCurrentTowerAdd.P).2.2
+⊢ ↑(wordAt (powerLimbs (fromCurrent out)) ((fun i => i) ⟨3, ⋯⟩)) =
+    (↑(wordAt (powerLimbs weight) ((fun i => i) ⟨3, ⋯⟩)) +
+        ↑(wordAt (powerLimbs power) ((fun i => i) ⟨3, ⋯⟩)) * ↑basis) %
+      P
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Nat.le_refl 4
+  has type
+    4 ≤ 4
+  but is expected to have type
+    3 < 4
+  in the application
+    ⟨3, ⋯⟩
+'AspisR1.CuSavingsRhoReference.mul_values' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoReference.reference_values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoReference.push_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

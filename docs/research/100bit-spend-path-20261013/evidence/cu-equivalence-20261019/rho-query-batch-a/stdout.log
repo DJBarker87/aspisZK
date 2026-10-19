@@ -1,0 +1,32 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQueryBatch.lean:45:2: error: unsolved goals
+case refine_1
+items : List (Usize × U32)
+self : verifier.BatchedWeights
+power : field.QM31
+hgood : Good self []
+hp : Canonical power
+hi : ∀ pair ∈ items, ↑pair.1 < (↑self.raw).length
+hb : ∀ pair ∈ items, ↑pair.2 < AspisV8R17.RawReducer.P
+hnodup : (List.map (fun pair => ↑pair.1) items).Nodup
+hcover : ∀ (i : Usize), ↑i < (↑self.raw).length → ↑i ∈ List.map (fun pair => ↑pair.1) items
+hcount : ↑self.terms < 22
+next : verifier.BatchedWeights
+hrun : updates power items self = ok next
+href : referenceUpdates power items (canonicalSlice self) = ok (canonicalSlice next)
+hterms : next.terms = self.terms
+hlen : (↑next.raw).length = (↑self.raw).length
+hg : Good next ((List.map (fun pair => ↑pair.1) items).reverse ++ [])
+hfit : ↑next.terms + ↑1#usize < 2 ^ UScalarTy.Usize.numBits
+terms : UScalar UScalarTy.Usize
+hval : ↑terms = ↑next.terms + ↑1#usize
+hadd : UScalar.add next.terms 1#usize = ok terms
+out : verifier.BatchedWeights := { raw := next.raw, terms := terms }
+⊢ ok { raw := next.raw, terms := terms } = ok out
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQueryBatch.lean:47:4: error: Type mismatch: After simplification, term
+  hval
+ has type
+  @Eq ℕ (↑terms) (↑self.terms + ↑1#usize)
+but is expected to have type
+  @Eq ℕ (↑terms) (↑self.terms + 1)
+'AspisR1.CuSavingsRhoQueryBatch.batch_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoQueryBatch.batch_finish' depends on axioms: [propext, Classical.choice, Quot.sound]

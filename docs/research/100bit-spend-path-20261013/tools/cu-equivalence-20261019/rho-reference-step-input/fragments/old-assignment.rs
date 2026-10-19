@@ -1,0 +1,1 @@
+a.weights[j]=a.weights[j].add(a.power.mul_m31(basis[j]));
