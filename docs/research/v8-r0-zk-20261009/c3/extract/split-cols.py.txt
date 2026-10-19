@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+"""D72.2 column writers: split the Aeneas output of c3/build (tag cw1, which only APPENDS
+builders 5 and 6 to lib.rs) into the unchanged R1Z/CertBuildExtracted, the unchanged
+R1Z/CertRelExtracted and the new R1Z/CertColExtracted.
+The output after the two substitute.py.txt edits must start with the committed
+CertBuildExtracted.lean minus its closing `end R1CertBuild`, followed by the body of the
+committed CertRelExtracted.lean (after its `namespace R1CertBuild` line) minus its closing
+line (asserted byte for byte), so no compiled builder module changes.  The remainder (the
+builder-5/6 definitions, verbatim) becomes R1Z/CertColExtracted, which imports
+R1Z.CertRelExtracted and reopens the same namespace with the same opens and options.
+Usage: split-cols.py.txt <substituted Build.lean> <CertBuildExtracted.lean> <CertRelExtracted.lean> <out CertColExtracted.lean>"""
+import sys
+new = open(sys.argv[1]).read()
+old = open(sys.argv[2]).read()
+rel = open(sys.argv[3]).read()
+tail = "end R1CertBuild\n"
+ns = "namespace R1CertBuild\n"
+assert old.endswith(tail) and new.endswith(tail) and rel.endswith(tail)
+assert rel.count(ns) == 1
+prefix = old[: -len(tail)] + rel[rel.index(ns) + len(ns): -len(tail)]
+assert new.startswith(prefix), "builder 1-4 definitions changed"
+rest = new[len(prefix):]
+relhead = rel[: rel.index(ns)]
+hdr = relhead.replace("import R1Z.CertBuildExtracted\n", "import R1Z.CertRelExtracted\n", 1)
+assert hdr != relhead
+out = hdr + ns + rest
+open(sys.argv[4], "w").write(out)
+print("prefix_bytes", len(prefix), "new_bytes", len(rest))

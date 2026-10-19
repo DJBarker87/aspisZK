@@ -545,3 +545,382 @@ pub fn fill_rel(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], o
     }
     out
 }
+
+// ------------------------------------------------------------------------------
+// Builder 5 (D72.2 hRent, hGent): the pure-round columns pb.round / pb.ground,
+// z9.rs `Lanes::bal` round parts (z9c.rs `src3(..).round`): lane c < 10 is
+// probe.rs `round_row(a, r, c)`, lane 10 is tower(k) times `round_row(a, r, 10)`,
+// lane 11 is tower(k) times probe.rs `tail_row(a, r)` (transported coefficient
+// tr[r]); balanced at row 0 when inact[r] = 1.  Every selection is the tail
+// expression of its own function (no `let x = if ..`).  Entry p of `round_row` is
+// computed directly (Lean CertRoundK `rrowR`): j = (p - 1) / 27, k = (p - 1) % 27,
+// and coefficient d of (b + w X)^e is C(e, d) b^(e - d) w^d.  Source t has lane
+// kind[t], row srow[t] and tower limb slimb[t]; its column is 271 QM31 values
+// (1084 limbs), column t at 1084 t.
+// ------------------------------------------------------------------------------
+
+pub const EXP: [usize; 10] = [1, 3, 5, 7, 9, 11, 15, 17, 19, 21];
+
+/// `round_row` family.
+pub fn famr(c: usize) -> usize {
+    if c == 10 {
+        16
+    } else {
+        0
+    }
+}
+/// `round_row` exponent (0 for the tail lane).
+pub fn exr(c: usize) -> usize {
+    if c == 10 {
+        26
+    } else if c < 10 {
+        EXP[c]
+    } else {
+        0
+    }
+}
+/// `round_row` rotation.
+pub fn rotr(c: usize) -> [u32; 4] {
+    if c == 10 {
+        qone()
+    } else {
+        tbq(c % 4)
+    }
+}
+/// `round_row` weight w[i].
+pub fn wr(fam: usize, i: usize) -> u32 {
+    (3 + 22 * i + fam * (17 + 8 * i)) as u32
+}
+/// Bit i of row r (r >> (9 - i) & 1).
+pub fn bitr(r: usize, i: usize) -> usize {
+    (r / P2[i]) % 2
+}
+/// x^e in M31.
+pub fn fpow(x: u32, e: usize) -> u32 {
+    let mut acc: u32 = 1;
+    let mut t: usize = 0;
+    while t < e {
+        acc = fmul(acc, x);
+        t += 1;
+    }
+    acc
+}
+/// C(e, d) mod P for d <= e (exact: C(e, i) (e - i) / (i + 1) = C(e, i + 1)).
+pub fn binom(e: usize, d: usize) -> u32 {
+    let mut acc: u64 = 1;
+    let mut i: usize = 0;
+    while i < d {
+        acc = acc * ((e - i) as u64) / ((i + 1) as u64);
+        i += 1;
+    }
+    (acc % P) as u32
+}
+/// Coefficient d of (b + w X)^e (zero for d > e).
+pub fn pcoef(b: [u32; 4], w: u32, e: usize, d: usize) -> [u32; 4] {
+    if d <= e {
+        qmul(qpow(b, e - d), qbase(fmul(binom(e, d), fpow(w, d))))
+    } else {
+        [0, 0, 0, 0]
+    }
+}
+/// `round_row`'s p[d] (with the G constant) times pref times rot.
+pub fn pgv(c: usize, b: [u32; 4], w: u32, pref: [u32; 4], d: usize) -> [u32; 4] {
+    let g = qadd(pcoef(b, w, exr(c), d), qbase(((c == 10) & (d == 0)) as u32));
+    qmul(qmul(g, pref), rotr(c))
+}
+/// Term i of `round_row`'s boolean: w[i] if bit i of r is set.
+pub fn bwt(fam: usize, r: usize, i: usize) -> u32 {
+    if bitr(r, i) == 1 {
+        wr(fam, i)
+    } else {
+        0
+    }
+}
+/// `round_row`'s boolean: sum of w[i] over the set bits of r.
+pub fn boolw(fam: usize, r: usize) -> [u32; 4] {
+    let mut acc: [u32; 4] = [0, 0, 0, 0];
+    let mut i: usize = 0;
+    while i < 10 {
+        acc = qadd(acc, qbase(bwt(fam, r, i)));
+        i += 1;
+    }
+    acc
+}
+/// Entry 0 of `round_row(a, r, c)`.
+pub fn rr0(c: usize, r: usize) -> [u32; 4] {
+    qadd(qmul(rotr(c), qpow(boolw(famr(c), r), exr(c))), qbase((c == 10) as u32))
+}
+/// Term i of b of round j.
+pub fn bterm(al: &[u32], fam: usize, j: usize, r: usize, i: usize) -> [u32; 4] {
+    if i < j {
+        qmul(aget(al, i), qbase(wr(fam, i)))
+    } else if (j < i) & (bitr(r, i) == 1) {
+        qbase(wr(fam, i))
+    } else {
+        [0, 0, 0, 0]
+    }
+}
+/// b of round j: sum_{i < j} a_i w_i + sum_{i > j, bit i} w_i.
+pub fn bsum(al: &[u32], fam: usize, j: usize, r: usize) -> [u32; 4] {
+    let mut acc: [u32; 4] = [0, 0, 0, 0];
+    let mut i: usize = 0;
+    while i < 10 {
+        acc = qadd(acc, bterm(al, fam, j, r, i));
+        i += 1;
+    }
+    acc
+}
+/// Factor i of pref: bit i ? a_i : 1 - a_i.
+pub fn pfac(al: &[u32], r: usize, i: usize) -> [u32; 4] {
+    if bitr(r, i) == 1 {
+        aget(al, i)
+    } else {
+        qsub(qone(), aget(al, i))
+    }
+}
+/// pref before round j: prod_{i < j} (bit i ? a_i : 1 - a_i).
+pub fn prefr(al: &[u32], j: usize, r: usize) -> [u32; 4] {
+    let mut acc = qone();
+    let mut i: usize = 0;
+    while i < j {
+        acc = qmul(pfac(al, r, i), acc);
+        i += 1;
+    }
+    acc
+}
+/// The round coefficient stored at Z4c entry k (0, then k + 1).
+pub fn coeffr(k: usize) -> usize {
+    if k == 0 {
+        0
+    } else {
+        k + 1
+    }
+}
+/// pgv at d - 1 (zero at d = 0).
+pub fn pgv1(c: usize, b: [u32; 4], w: u32, pref: [u32; 4], d: usize) -> [u32; 4] {
+    if d == 0 {
+        [0, 0, 0, 0]
+    } else {
+        pgv(c, b, w, pref, d - 1)
+    }
+}
+/// `full` of round j at coefficient d: bit 1 is v(d-1), bit 0 is v(d) - v(d-1).
+pub fn fullv(bit: usize, v0: [u32; 4], v1: [u32; 4]) -> [u32; 4] {
+    if bit == 1 {
+        v1
+    } else {
+        qsub(v0, v1)
+    }
+}
+/// Entry p >= 1 of `round_row(a, r, c)`.
+pub fn rr_ent(al: &[u32], c: usize, r: usize, p: usize) -> [u32; 4] {
+    let j = (p - 1) / 27;
+    let k = (p - 1) % 27;
+    let fam = famr(c);
+    let b = bsum(al, fam, j, r);
+    let pref = prefr(al, j, r);
+    let w = wr(fam, j);
+    let d = coeffr(k);
+    fullv(bitr(r, j), pgv(c, b, w, pref, d), pgv1(c, b, w, pref, d))
+}
+/// Entry p of `round_row(a, r, c)`.
+pub fn rr(al: &[u32], c: usize, r: usize, p: usize) -> [u32; 4] {
+    if p == 0 {
+        rr0(c, r)
+    } else {
+        rr_ent(al, c, r, p)
+    }
+}
+/// `tail_row`'s Libra variable m of coefficient co.
+pub fn mr(co: usize) -> usize {
+    if co < 28 {
+        8
+    } else {
+        9
+    }
+}
+/// `tail_row`'s endpoint sum at d = co % 28.
+pub fn esr(d: usize) -> u32 {
+    if d == 0 {
+        2
+    } else {
+        1
+    }
+}
+/// `tail_row`'s cell index at j = m.
+pub fn kkr(d: usize) -> usize {
+    if d == 0 {
+        0
+    } else {
+        d - 1
+    }
+}
+/// `tail_row` cell at j = m.
+pub fn tmid(d: usize, j: usize, k: usize) -> [u32; 4] {
+    if (d != 1) & (k == kkr(d)) {
+        qbase(P2[j] as u32)
+    } else {
+        [0, 0, 0, 0]
+    }
+}
+/// `tail_row` entry 1 + 27 j + k at coefficient co < 56 (j < 10).
+pub fn tcell(al: &[u32], co: usize, j: usize, k: usize) -> [u32; 4] {
+    if j < mr(co) {
+        if k == 0 {
+            qbase(fmul(esr(co % 28), P2[j + 1] as u32))
+        } else {
+            [0, 0, 0, 0]
+        }
+    } else if j == mr(co) {
+        tmid(co % 28, j, k)
+    } else if k == 0 {
+        qmul(qpow(aget(al, mr(co)), co % 28), qbase(P2[j] as u32))
+    } else {
+        [0, 0, 0, 0]
+    }
+}
+/// Entry p of `tail_row` at transported coefficient co.
+pub fn trow(al: &[u32], co: usize, p: usize) -> [u32; 4] {
+    if 56 <= co {
+        [0, 0, 0, 0]
+    } else if p == 0 {
+        qbase(fmul(esr(co % 28), 512))
+    } else if 10 <= (p - 1) / 27 {
+        [0, 0, 0, 0]
+    } else {
+        tcell(al, co, (p - 1) / 27, (p - 1) % 27)
+    }
+}
+/// Entry p of the balanced round source (lane c, row r, tower limb k).
+pub fn src_ent(al: &[u32], tr: &[u32], inact: &[u32], c: usize, r: usize, k: usize, p: usize) -> [u32; 4] {
+    let f = qbase(inact[r]);
+    if c < 10 {
+        qsub(rr(al, c, r, p), qmul(f, rr(al, c, 0, p)))
+    } else if c == 10 {
+        qmul(tbq(k), qsub(rr(al, 10, r, p), qmul(f, rr(al, 10, 0, p))))
+    } else {
+        qmul(tbq(k), qsub(trow(al, tr[r] as usize, p), qmul(f, trow(al, tr[0] as usize, p))))
+    }
+}
+/// One round column: the 271 entries' four limbs.
+pub fn round_col(out: Vec<u32>, al: &[u32], tr: &[u32], inact: &[u32], c: usize, r: usize, k: usize) -> Vec<u32> {
+    let mut out = out;
+    let mut p: usize = 0;
+    while p < 271 {
+        let v = src_ent(al, tr, inact, c, r, k, p);
+        out.push(v[0]);
+        out.push(v[1]);
+        out.push(v[2]);
+        out.push(v[3]);
+        p += 1;
+    }
+    out
+}
+/// The round columns of n referenced sources (pb.round, pb.ground).
+pub fn fill_round(al: &[u32], tr: &[u32], inact: &[u32], kind: &[u32], srow: &[u32], slimb: &[u32], n: usize) -> Vec<u32> {
+    let mut out: Vec<u32> = Vec::new();
+    let mut t: usize = 0;
+    while t < n {
+        out = round_col(out, al, tr, inact, kind[t] as usize, srow[t] as usize, slimb[t] as usize);
+        t += 1;
+    }
+    out
+}
+
+// ------------------------------------------------------------------------------
+// Builder 6 (D72.2 hGBent): the G batched columns pb.gbat, z9.rs `Lanes::bal`
+// batched part on lane 10 (`Ctx::batched(27, tower(k), r)`: gamma^27 tower(k)
+// phi[pi r], BAT0 dropped), balanced at row 0, with `unit_functionals` cell by
+// cell (Lean CertGBatK `ucellP`): 0..7 round 0, 7..14 round 1, 14..14+nf the
+// folded word at the stored first-line points x18[n] of the folded positions,
+// then the final cells.  Source t has row srow[t], tower limb slimb[t]; its column
+// is 78 + nf WideExact values (8 (78 + nf) limbs).
+// ------------------------------------------------------------------------------
+
+/// Term t of round-0 cell c.
+pub fn u0term(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], co: usize, c: usize, t: usize) -> [u32; 8] {
+    if co % 4 + (4 - t) % 4 == c {
+        wt(al, zz, tr, inact, ti, op, 4 * (co / 4) + t)
+    } else {
+        wzero()
+    }
+}
+/// Round-0 cell c < 7 of the unit functional at co, before the quarter.
+pub fn ucell_r0(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], co: usize, c: usize) -> [u32; 8] {
+    let mut acc = wzero();
+    let mut t: usize = 0;
+    while t < 4 {
+        acc = wadd(acc, u0term(al, zz, tr, inact, ti, op, co, c, t));
+        t += 1;
+    }
+    acc
+}
+/// Term t of round-1 cell c (7 <= c < 14).
+pub fn u1term(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], co: usize, c: usize, t: usize) -> [u32; 8] {
+    if co / 4 % 4 + (4 - t) % 4 == c - 7 {
+        df1(al, zz, tr, inact, ti, op, 4 * (co / 16) + t)
+    } else {
+        wzero()
+    }
+}
+/// Round-1 cell 7 <= c < 14 of the unit functional at co, before the quarter and alpha0^(co % 4).
+pub fn ucell_r1(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], co: usize, c: usize) -> [u32; 8] {
+    let mut acc = wzero();
+    let mut t: usize = 0;
+    while t < 4 {
+        acc = wadd(acc, u1term(al, zz, tr, inact, ti, op, co, c, t));
+        t += 1;
+    }
+    acc
+}
+/// Cell c of the unit functional at natural coefficient co.
+pub fn ucell(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], x18: &[u32], nf: usize, co: usize, c: usize) -> [u32; 8] {
+    let q = wbase(536870912);
+    let a0 = wget(op, 2);
+    if c < 7 {
+        wmul(q, ucell_r0(al, zz, tr, inact, ti, op, co, c))
+    } else if c < 14 {
+        wmul(wpow(a0, co % 4), wmul(q, ucell_r1(al, zz, tr, inact, ti, op, co, c)))
+    } else if c < 14 + nf {
+        wmul(wpow(a0, co % 4), wq(nat_loop(qone(), qbase(x18[c - 14]), co / 4, 2)))
+    } else if c - (14 + nf) == co / 16 {
+        wmul(wpow(wget(op, 3), co / 4 % 4), wpow(a0, co % 4))
+    } else {
+        wzero()
+    }
+}
+/// Cell c of the G batched column at row r, tower limb k.
+pub fn gbat_cell(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], x18: &[u32], nf: usize, r: usize, k: usize, c: usize) -> [u32; 8] {
+    let g = wmul(wpow(wget(op, 0), 27), wq(tbq(k)));
+    let u0 = ucell(al, zz, tr, inact, ti, op, x18, nf, tr[r] as usize, c);
+    let u1 = ucell(al, zz, tr, inact, ti, op, x18, nf, tr[0] as usize, c);
+    wmul(g, wsub(u0, wmul(wbase(inact[r]), u1)))
+}
+/// One G batched column: the 78 + nf cells' eight limbs.
+pub fn gbat_col(out: Vec<u32>, al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], x18: &[u32], nf: usize, r: usize, k: usize) -> Vec<u32> {
+    let mut out = out;
+    let mut c: usize = 0;
+    while c < 78 + nf {
+        let v = gbat_cell(al, zz, tr, inact, ti, op, x18, nf, r, k, c);
+        out.push(v[0]);
+        out.push(v[1]);
+        out.push(v[2]);
+        out.push(v[3]);
+        out.push(v[4]);
+        out.push(v[5]);
+        out.push(v[6]);
+        out.push(v[7]);
+        c += 1;
+    }
+    out
+}
+/// The G batched columns of n referenced G sources (pb.gbat), column t at 8 (78 + nf) t.
+pub fn fill_gbat(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], x18: &[u32], srow: &[u32], slimb: &[u32], n: usize, nf: usize) -> Vec<u32> {
+    let mut out: Vec<u32> = Vec::new();
+    let mut t: usize = 0;
+    while t < n {
+        out = gbat_col(out, al, zz, tr, inact, ti, op, x18, nf, srow[t] as usize, slimb[t] as usize);
+        t += 1;
+    }
+    out
+}
