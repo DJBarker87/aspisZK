@@ -6022,3 +6022,38 @@ Loops are handled by induction; nothing is evaluated.
   production writers use Vec, closures and M31 methods the pinned extractor
   does not handle. The options are a production-source migration (as with
   Decision 1 on the verifier) or accepting tested equivalence.
+
+### Lead acceptance of the sponge/node refinement (2026-10-19); D55
+
+The worker commits d66998036..efd49c19f (9) are cherry-picked. The lead
+verified the 7 green host receipts (4263, 4266, 4268, 4271, 4272, 4275 and
+4277): SHAs match, all exited 0 in-window, standard axioms, no overrides.
+Design: §10 of `t2b2b/DESIGN-BUILDER-MODEL.txt`.
+
+**D55.1 Proved.** The Poseidon permutation is kept abstract through the
+plug-in premise `RoundsOk rounds B`: the eleven odd-round outputs lift to the
+model's block iterates.
+- `block_model`: write_block equals blockCell.
+- `node_model`: write_node equals the model's nodeIn block.
+- `m31_add_spec`/`m31_sub_spec_wide`, for all canonical inputs.
+- `sponge_model`: the full sponge, given the initial state, the absorptions,
+  chaining and RoundsOk.
+- `note_sponge_model`: the note blocks 1–3, 27–29 and 30–32.
+
+B3 is closed in Lean:
+- `node_right_lane7_lift`: the large tweak.
+- `read_back_node`: at the copy level. The production relocation still
+  links to the copy by differential test.
+
+Differential tests against production were run with `rounds` from the
+production permutation:
+- 1M M31 add/sub pairs;
+- 20k write_permutation, 20k node/forest-node and 20k sponge cases;
+- 3,648 full blocks.
+
+**D55.2 Open.**
+- Instantiating the owner and nullifier sponges and the tree/append node
+  blocks. These are mechanical, by the same pattern.
+- `RoundsOk` for the Rust permutation: the Poseidon job.
+- The input lifts (Wspend → Rust witness).
+- The copy-to-production link (D54.3).
