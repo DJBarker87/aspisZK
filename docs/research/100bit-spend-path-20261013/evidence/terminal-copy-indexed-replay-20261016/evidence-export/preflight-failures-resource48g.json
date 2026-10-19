@@ -1,0 +1,30 @@
+{
+  "label": "candidate-r18-replay-b",
+  "result": "runner preflight rejected before r18_replay invocation",
+  "systemd_invocation_id": "7d93a84ac7d846feb9b2f6d41a128f1b",
+  "runner_sha256": "7e0d929221efdd7502e0835e3761a87c2abfdc76360ced9b35a5f7e088b37881",
+  "scope_limits": {
+    "memory.high": "8589934592",
+    "memory.max": "10737418240",
+    "memory.swap.max": "0",
+    "tasks.max": "128"
+  },
+  "failure": "AssertionError: lean_max <= 6; observed unrelated Lean scope maximum 8 GiB",
+  "observed_scope": {
+    "path": "user.slice/user-1000.slice/user@1000.service/app.slice/aspis-c-adapter-success-b-20261016.scope",
+    "process": "Lean4.32 job under /home/dombarker/project-offloads/aspis-r1-j1a-adapter-reconstruct-20261016",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "rss_kib_at_preflight": 2376400
+  },
+  "reservation_review": {
+    "external_floor_gib": 24,
+    "unrelated_lean_gib": 8,
+    "own_mask_lean_reserve_gib": 6,
+    "runtime_scope_gib": 10,
+    "aggregate_gib": 48,
+    "safe_limit_gib": 50
+  },
+  "stderr": "Traceback at run-candidate.py:59: AssertionError: (8, 0.0, active=[], allowed_lean=[{pid:702392,rss_kib:2376400,comm:lean,cgroup:.../aspis-c-adapter-success-b-20261016.scope, memory.max:8589934592, memory.swap.max:0}])",
+  "work_started": false
+}

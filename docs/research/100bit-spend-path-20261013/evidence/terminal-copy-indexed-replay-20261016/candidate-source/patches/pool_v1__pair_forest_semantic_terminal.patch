@@ -1,0 +1,71 @@
+--- a/pool_v1/pair_forest_semantic_terminal.rs
++++ b/pool_v1/pair_forest_semantic_terminal.rs
+@@ -111,7 +111,7 @@
+     let first = start / 4;
+     let last = (start + N - 1) / 4;
+     for group in first..=last {
+-        let lanes: [QM31; 4] = core::array::from_fn(|slot| {
++        let lanes: [QM31; 4] = crate::array_from_fn_copy::<_, 4>(QM31::ZERO, |slot| {
+             let source = 4 * group + slot;
+             if source >= start && source < start + N {
+                 values[source - start]
+@@ -260,7 +260,7 @@
+     let full = PreparedQm31Multiplier::new(full_initial_selector);
+     let full_or_rate =
+         PreparedQm31Multiplier::new(full_initial_selector.add(rate_initial_selector));
+-    let mut initial = core::array::from_fn(|lane| {
++    let mut initial = crate::array_from_fn_copy::<_, 16>(QM31::ZERO, |lane| {
+         if lane < RATE {
+             full_or_rate.mul(openings.z[lane])
+         } else {
+@@ -321,7 +321,7 @@
+     nodes: QM31,
+     openings: &[QM31; 16],
+ ) -> [QM31; 16] {
+-    core::array::from_fn(|lane| {
++    crate::array_from_fn_copy::<_, 16>(QM31::ZERO, |lane| {
+         let blocks = if lane < 2 {
+             fixed
+         } else if lane < RATE {
+@@ -1239,11 +1239,11 @@
+     }
+     validate_transition(public)?;
+     let openings = StateOnlyPoseidonOpenings {
+-        z: core::array::from_fn(|column| selected_claim(claims, 0, column)),
+-        succ_z: core::array::from_fn(|column| selected_claim(claims, 1, column)),
+-        xor12_z: core::array::from_fn(|column| selected_claim(claims, 2, column)),
++        z: crate::array_from_fn_copy::<_, 16>(QM31::ZERO, |column| selected_claim(claims, 0, column)),
++        succ_z: crate::array_from_fn_copy::<_, 16>(QM31::ZERO, |column| selected_claim(claims, 1, column)),
++        xor12_z: crate::array_from_fn_copy::<_, 16>(QM31::ZERO, |column| selected_claim(claims, 2, column)),
+     };
+-    let mask_only = core::array::from_fn(|column| {
++    let mask_only = crate::array_from_fn_copy::<_, 10>(QM31::ZERO, |column| {
+         selected_claim(
+             claims,
+             0,
+@@ -1266,11 +1266,11 @@
+     );
+     let prepared_theta = PreparedQm31Multiplier::new(theta);
+     let mut composition = copy.residual;
+-    for lane in semantic.into_iter().rev() {
+-        composition = prepared_theta.mul(composition).add(lane);
+-    }
+-    for lane in poseidon.into_iter().rev() {
+-        composition = prepared_theta.mul(composition).add(lane);
++    for index in (0..semantic.len()).rev() {
++        composition = prepared_theta.mul(composition).add(semantic[index]);
++    }
++    for index in (0..poseidon.len()).rev() {
++        composition = prepared_theta.mul(composition).add(poseidon[index]);
+     }
+     Ok((
+         composition,
+@@ -2068,7 +2068,7 @@
+             alpha: &[QM31; 10],
+             c: &Challenges,
+         ) -> Result<QM31, Error> {
+-            let selected = core::array::from_fn(|i| claims[i / 28][i % 28]);
++            let selected = crate::array_from_fn_copy::<_, 84>(QM31::ZERO, |i| claims[i / 28][i % 28]);
+             terminal_parts(
+                 self.semantic(),
+                 &selected,

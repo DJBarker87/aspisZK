@@ -1,0 +1,26 @@
+--- a/lib.rs
++++ b/lib.rs
+@@ -8,6 +8,23 @@
+ #![no_std]
+ 
+ extern crate alloc;
++
++
++/// Isolated Copy-array construction candidate: initialize, then call FnMut
++/// at indices 0..N in increasing order.
++#[inline(always)]
++pub(crate) fn array_from_fn_copy<T: Copy, const N: usize>(
++    init: T,
++    mut f: impl FnMut(usize) -> T,
++) -> [T; N] {
++    let mut out = [init; N];
++    let mut i = 0usize;
++    while i < N {
++        out[i] = f(i);
++        i += 1;
++    }
++    out
++}
+ #[cfg(test)]
+ extern crate std;
+ 

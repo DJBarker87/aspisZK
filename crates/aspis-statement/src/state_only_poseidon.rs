@@ -139,6 +139,24 @@ fn extension_from_raw_limbs(limbs: [u64; 4]) -> QM31 {
     }
 }
 
+#[inline(always)]
+fn external_linear_lazy_row(input: [[u32; 4]; 4], output: usize) -> QM31 {
+            let raw = crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                match output {
+                    0 => 2 * a + 3 * b + c + d,
+                    1 => a + 2 * b + 3 * c + d,
+                    2 => a + b + 2 * c + 3 * d,
+                    3 => 3 * a + b + c + 2 * d,
+                    _ => unreachable!(),
+                }
+            });
+    extension_from_raw_limbs(raw)
+}
+
 /// Addition-only Poseidon external layer with one reduction per output limb.
 #[inline(never)]
 fn external_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
@@ -152,28 +170,14 @@ fn external_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
             state[start + 3],
         ];
         let input = input.map(extension_limbs);
-        let mut output = 0usize;
-        while output < 4 {
-            let raw = core::array::from_fn(|limb| {
-                let a = u64::from(input[0][limb]);
-                let b = u64::from(input[1][limb]);
-                let c = u64::from(input[2][limb]);
-                let d = u64::from(input[3][limb]);
-                match output {
-                    0 => 2 * a + 3 * b + c + d,
-                    1 => a + 2 * b + 3 * c + d,
-                    2 => a + b + 2 * c + 3 * d,
-                    3 => 3 * a + b + c + 2 * d,
-                    _ => unreachable!(),
-                }
-            });
-            state[start + output] = extension_from_raw_limbs(raw);
-            output += 1;
-        }
+        state[start] = external_linear_lazy_row(input, 0);
+        state[start + 1] = external_linear_lazy_row(input, 1);
+        state[start + 2] = external_linear_lazy_row(input, 2);
+        state[start + 3] = external_linear_lazy_row(input, 3);
         group += 1;
     }
-    let sums: [[u64; 4]; 4] = core::array::from_fn(|column| {
-        core::array::from_fn(|limb| {
+    let sums: [[u64; 4]; 4] = crate::array_from_fn_copy::<_, 4>([0u64; 4], |column| {
+        crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
             u64::from(extension_limbs(state[column])[limb])
                 + u64::from(extension_limbs(state[4 + column])[limb])
                 + u64::from(extension_limbs(state[8 + column])[limb])
@@ -183,7 +187,7 @@ fn external_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
     let mut index = 0usize;
     while index < POSEIDON2_WIDTH {
         let limbs = extension_limbs(state[index]);
-        state[index] = extension_from_raw_limbs(core::array::from_fn(|limb| {
+        state[index] = extension_from_raw_limbs(crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
             u64::from(limbs[limb]) + sums[index & 3][limb]
         }));
         index += 1;
@@ -216,8 +220,8 @@ const _: () = assert!(8 * EXTERNAL_LOCAL_LIMB_MODULUS_BOUND < (1u64 << 62));
 #[inline(always)]
 fn external_local_packed_raw(input: [QM31; 4]) -> [u64; 4] {
     let input = input.map(extension_limbs);
-    let local: [[u64; 4]; 4] = core::array::from_fn(|output| {
-        core::array::from_fn(|limb| {
+    let local: [[u64; 4]; 4] = crate::array_from_fn_copy::<_, 4>([0u64; 4], |output| {
+        crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
             let a = u64::from(input[0][limb]);
             let b = u64::from(input[1][limb]);
             let c = u64::from(input[2][limb]);
@@ -316,13 +320,13 @@ fn internal_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
         lane += 1;
     }
     let full_sum: [u64; 4] =
-        core::array::from_fn(|limb| part_sum[limb] + u64::from(old_zero[limb]));
-    state[0] = extension_from_raw_limbs(core::array::from_fn(|limb| {
+        crate::array_from_fn_copy::<_, 4>(0u64, |limb| part_sum[limb] + u64::from(old_zero[limb]));
+    state[0] = extension_from_raw_limbs(crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
         part_sum[limb] + u64::from(P) - u64::from(old_zero[limb])
     }));
     for lane in 1..POSEIDON2_WIDTH {
         let limbs = extension_limbs(state[lane]);
-        state[lane] = extension_from_raw_limbs(core::array::from_fn(|limb| {
+        state[lane] = extension_from_raw_limbs(crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
             full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[lane - 1])
         }));
     }
@@ -597,7 +601,7 @@ pub fn evaluate_state_only_poseidon_oracle_projected(
     let prepared_weights = [leading_low, full_low, internal_low].map(PreparedQm31Multiplier::new);
     let prepared_block = PreparedQm31Multiplier::new(selectors.block);
 
-    core::array::from_fn(|group| {
+    crate::array_from_fn_copy::<_, 4>(QM31::ZERO, |group| {
         let start = 4 * group;
         let target = qm31_pack_base4(&openings.succ_z[start..start + 4]);
         let internal = qm31_pack_base4(&internal[start..start + 4]);

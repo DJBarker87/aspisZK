@@ -1,0 +1,105 @@
+{
+  "scope": "isolated source candidate only; no build, replay, adoption, or equivalence claim",
+  "base_revision": "a8930e677bc745854b9f693b5628c8a8bd2ac848",
+  "base_files": {
+    "lib.rs": {
+      "sha256": "4026f1172b275a891851784b7de46268460d24a156f540328a63d88ea8078442",
+      "path": "crates/aspis-statement/src/lib.rs"
+    },
+    "state_only_poseidon.rs": {
+      "sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+      "path": "crates/aspis-statement/src/state_only_poseidon.rs"
+    },
+    "pool_v1/pair_forest_semantic_terminal.rs": {
+      "sha256": "0a446a7df661cabcf6f4c38c079f9970b03f21a7351cb2878e6fb76c62ab1ca1",
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs"
+    }
+  },
+  "candidate_files": {
+    "lib.rs": {
+      "sha256": "fd7a32a1dd9755925f318388f5895d2cd129c6697aa5969a403014e86249353b",
+      "path": "/Users/dominic/ZK/.worktrees/r1-terminal-copy-indexed-20261016/crates/aspis-statement/src/lib.rs"
+    },
+    "state_only_poseidon.rs": {
+      "sha256": "4324116f9e652d31190037ab7c5205f3107991143e4a2bbca701346b0bba66ba",
+      "path": "/Users/dominic/ZK/.worktrees/r1-terminal-copy-indexed-20261016/crates/aspis-statement/src/state_only_poseidon.rs"
+    },
+    "pool_v1/pair_forest_semantic_terminal.rs": {
+      "sha256": "41da553efb32cc342a7002ecdee8ba1909e1531dfa2b6facc95983495135c7cc",
+      "path": "/Users/dominic/ZK/.worktrees/r1-terminal-copy-indexed-20261016/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs"
+    }
+  },
+  "transformations": {
+    "lib.rs": "added local array_from_fn_copy<T:Copy,const N> helper, increasing FnMut calls after [init;N]",
+    "state_only_poseidon.rs": "lifted existing external row calculation to helper with same copied input and exact arithmetic; transformed nine remaining selected production from_fn calls",
+    "pool_v1/pair_forest_semantic_terminal.rs": "transformed eight selected production from_fn calls; replaced semantic/poseidon owning reverse iterators with reverse index loops"
+  },
+  "call_counts": {
+    "copy_array_replacements": 18,
+    "indexed_reverse_folds": 2
+  },
+  "r18_harness": {
+    "path": "tools/r1-cost-probe/src/bin/r18_replay.rs",
+    "sha256": "1b2ad3ff6ad68eb218b1ff0d42a6d04de4769457edabfeba6ee0bce4a2538d98",
+    "cargo_manifest_sha256": "5904261be44e7838bb6ce94ee7b6a364e5b7a63fb760d561771a88b08508b4da",
+    "cargo_lock_sha256": "f93f8f524fdd707c7a3b7feade31d015c891264b6c8fbd8bff885249e19600ea",
+    "current_source_revision": "a8930e677bc745854b9f693b5628c8a8bd2ac848",
+    "route": "stage1 [3,10] with 3 accounts [proof RO, public RO, verifier checkpoint W]; stage2 ASQ8 with 7 read-only nonsigner accounts"
+  },
+  "latest_prior_execution_evidence": {
+    "terminal_validator_summary": "docs/research/100bit-spend-path-20261013/evidence/terminal-validator-regression-20261016/SUMMARY.json",
+    "terminal_validator_summary_sha256": "5f5f2114770612b1bfbb674b1dcf63e8387e1bd41cb35ca868d3de591ea90472",
+    "terminal_validator_archive": "docs/research/100bit-spend-path-20261013/evidence/terminal-validator-regression-20261016/evidence.tar.gz",
+    "terminal_validator_archive_sha256": "5f7c2d96a5187136f2e7269003dce093b7bc48a36278a60ee0a2138fa792d661",
+    "r18_combined_summary": "docs/research/100bit-spend-path-20261013/evidence/r18-combined-regression-20261016/SUMMARY.json",
+    "r18_combined_summary_sha256": "6c5b910b67ac87970a63bdf770399ce35fdaa869995bbb6dd74e401853b555c4",
+    "r18_combined_archive": "docs/research/100bit-spend-path-20261013/evidence/r18-combined-regression-20261016/evidence.tar.gz",
+    "r18_combined_archive_sha256": "3ad3b3096647b2bfa4b90dbba5257ad7d20e420f5d7d68b14e7833db4b88dd6f",
+    "interpretation": "Prior successful exact 3/7-route runs; not a measurement of this candidate."
+  },
+  "fixture": {
+    "proof": "docs/research/100bit-spend-path-20261013/evidence/p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/r1-s2-proof.bin",
+    "proof_sha256": "8569435667420b36a980493477f8fef7ef47e7351122647cf3747054079d4d62",
+    "proof_bytes": 124343,
+    "public": "docs/research/100bit-spend-path-20261013/evidence/p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/r1-s2-public-asf8.bin",
+    "public_sha256": "72f067d263af326b017284579f30e3da7c843c6cbb29f1c6df94c8afbb1f2172",
+    "public_bytes": 1880
+  },
+  "instrumentation": "compare-checkpoints.py consumes one completed r18_replay output directory and records SHA-256/byte equality for checkpoint.bin, ASR8, initial images, and stage-specific result bytes; it does not run transactions or include keys.",
+  "change_inventory": {
+    "from_fn_sites": [
+      {
+        "file": "crates/aspis-statement/src/state_only_poseidon.rs",
+        "functions": [
+          "external_linear_lazy_row",
+          "external_linear_lazy",
+          "external_local_packed_raw",
+          "internal_linear_lazy",
+          "evaluate_state_only_poseidon_oracle_projected"
+        ],
+        "count": 10
+      },
+      {
+        "file": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+        "functions": [
+          "add_preweighted",
+          "semantic_initial_and_absorption",
+          "absorption_lanes_literal",
+          "composition_parts",
+          "r0::Public::terminal_qm31"
+        ],
+        "count": 8
+      }
+    ],
+    "indexed_reverse_sites": [
+      "composition_parts.semantic[23..0]",
+      "composition_parts.poseidon[3..0]"
+    ],
+    "only_tracked_source_paths_changed": [
+      "crates/aspis-statement/src/lib.rs",
+      "crates/aspis-statement/src/state_only_poseidon.rs",
+      "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs"
+    ]
+  },
+  "status": "source candidate prepared; all compilation/runtime cost validation pending root review"
+}

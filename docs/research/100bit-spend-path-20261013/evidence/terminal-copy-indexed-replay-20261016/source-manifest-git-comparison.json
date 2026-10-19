@@ -1,0 +1,46 @@
+{
+  "method": "sha256 of Git blob bytes at the exact manifest revision compared with recorded per-file SHA-256",
+  "checks": [
+    {
+      "label": "baseline-terminal-validator-source",
+      "revision": "42e5ca2011c39ee9770afc798282ff861b092428",
+      "files": 504,
+      "matched": 504,
+      "mismatches": [],
+      "missing": []
+    },
+    {
+      "label": "candidate-508-source-snapshot-versus-base-git",
+      "revision": "a8930e677bc745854b9f693b5628c8a8bd2ac848",
+      "files": 508,
+      "matched": 505,
+      "mismatches": [
+        {
+          "path": "crates/aspis-statement/src/lib.rs",
+          "git_blob_sha256_as_file_sha": "4026f1172b275a891851784b7de46268460d24a156f540328a63d88ea8078442",
+          "manifest_sha256": "fd7a32a1dd9755925f318388f5895d2cd129c6697aa5969a403014e86249353b",
+          "candidate_overlay_expected_sha256": "fd7a32a1dd9755925f318388f5895d2cd129c6697aa5969a403014e86249353b"
+        },
+        {
+          "path": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+          "git_blob_sha256_as_file_sha": "0a446a7df661cabcf6f4c38c079f9970b03f21a7351cb2878e6fb76c62ab1ca1",
+          "manifest_sha256": "41da553efb32cc342a7002ecdee8ba1909e1531dfa2b6facc95983495135c7cc",
+          "candidate_overlay_expected_sha256": "41da553efb32cc342a7002ecdee8ba1909e1531dfa2b6facc95983495135c7cc"
+        },
+        {
+          "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+          "git_blob_sha256_as_file_sha": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+          "manifest_sha256": "4324116f9e652d31190037ab7c5205f3107991143e4a2bbca701346b0bba66ba",
+          "candidate_overlay_expected_sha256": "4324116f9e652d31190037ab7c5205f3107991143e4a2bbca701346b0bba66ba"
+        }
+      ],
+      "missing": [],
+      "intentional_overlay_paths": [
+        "crates/aspis-statement/src/lib.rs",
+        "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+        "crates/aspis-statement/src/state_only_poseidon.rs"
+      ]
+    }
+  ],
+  "conclusion": "baseline 504-file manifest is byte-identical to Git; candidate 508-file snapshot has exactly three differences, each matching its explicitly pinned candidate overlay"
+}
