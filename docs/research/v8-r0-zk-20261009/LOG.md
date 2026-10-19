@@ -6168,3 +6168,43 @@ compiled blocks), with the same standing as the other writers (D54.3).
 - The copy↔production decision (D54.3): migrate the production prover
   writers to the extracted copies, or accept tested equivalence. To be put
   to the user.
+
+### Lead acceptance of the first column builder (2026-10-19); D59
+
+The worker commits 2660e7a5f..c681d4634 are cherry-picked. The lead verified
+the 8 green host receipts (4374, 4376, 4377, 4378, 4381, 4385, 4388 and
+4391): SHAs match, exit 0, standard axioms, no overrides. The 10 failed
+attempts all had changed sources.
+
+**D59.1 Proved.** The chain-target builder `fill_tq` has an extracted Rust
+copy. Its differential test matches z9c's chain_targets on all 1,175,056
+entries in each of five configurations, and the checker verdicts are
+unchanged. On the Lean side:
+- the QM31 layer (CertBuildBase/Tower) shows the extracted QM31 product is
+  the product in K, under the premise `Tower B` (i² = −1, u² = 2 + i);
+- `chain_ident` shows the builder output under φ equals Lean's chainTarget.
+
+`check_sound′` removes hChain and hhalf. In their place it adds:
+- hT, the tower premise;
+- hal and ha9, saying the Rust alpha limbs are the raw challenge limbs;
+- hbuild, saying the prover filled the target matrix with the extracted
+  builder.
+
+CertCheckSound2 peaks at 7.16 GB, near the cap.
+
+**D59.2 Remaining builder identifications.**
+- hOwn, hGOwn, hC1, hH1 and hRel (raw_c, design_relations). These need
+  copies of eq/points/h_weight/evalrow, `natural` = naturalLineValue, the
+  stored points, π against the transport table, inactive against
+  copyInactiveRows, and the flatC1/flatO layouts.
+- hRound, hGRound and hGBat (round_row/tail_row, unit_functionals). These
+  need closed forms for the pure-round coordinates, plus `ell` against weight
+  kinds 5/6.
+
+Lead ruling: π, the stored points and the OOD points may be taken as input
+arrays under named premises (for example "the input table equals π"), to be
+discharged with the transport and sampler refinement.
+
+Housekeeping: the builder extraction reused two host output directories from
+the superseded first checker extraction. That is recorded; the accepted
+chain does not reference them.
