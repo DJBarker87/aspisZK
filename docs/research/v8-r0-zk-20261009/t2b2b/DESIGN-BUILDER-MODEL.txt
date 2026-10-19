@@ -370,3 +370,80 @@ is the row-local fact the writing stage guarantees.
   model refinement (§6).  Process note: attempt 4218 re-sent the 4217 source
   unchanged after a local edit script failed; the launcher now refuses an
   already-sent source hash.
+
+§9  Rust ↔ model refinement, first writers (base c79d33eb8)
+
+  Scope: value aux, occupancy aux, forest path aux, bank merge (plus the
+  node_right tweak read-back).  Poseidon, sponge and node writers are not
+  touched.
+
+  9.1 Extraction-friendly copies: refine/writers/src/lib.rs (no_std,
+      monomorphic, u32 cells, plain while loops, ≤ one loop nest per
+      function, flat arrays, no closures/iterators).  Cells are written at
+      their final forest rows (the production writes legacy rows 960..975
+      and relocates +48).
+  9.2 Native differential test: refine/diffharness (production exported
+      read-only from origin/codex/100bit-spend-path-20261013 @ 0c46bf447 via
+      git archive, scratch-only pub shims for three private writers,
+      shim.patch.txt).  Green on the host (refine/evidence/diff-d.txt):
+      value 200,000 cases, occupancy 100,000, path 52,000, node_right
+      1,000,000, merge 2,000 (with injected shape violations), the saved
+      transfer and withdrawal fixtures, and 256 randomized full honest
+      compiles comparing rows 912..1023 and the merge against the copies,
+      with path data recomputed independently by pool_v1_tree_parent.
+      Scope 3G/4G, swap 0.  Attempts a/b failed (cargo PATH; two harness
+      type errors); c green; merge_check was then rewritten without a Bool
+      temporary (see 9.3) and d re-ran green on the new source.
+  9.3 Extraction: pinned Charon cb50ff16 (sha daad69be…) `--preset aeneas
+      --mir built`, Aeneas b59d5188 (sha 959659a6…) `-loops-to-rec`, each in
+      a 6G/8G swap-0 scope; refine/evidence/extract-b.txt,
+      refine/extract/Writers.lean (byte-for-byte output).  Release
+      semantics: arithmetic extracts as wrapping ops.  Attempt a's
+      `let in_late = a && b; if in_late` extracted to a Prop-valued
+      temporary that does not elaborate against the available Aeneas
+      library (Decidable in_late); rewriting the source as a direct `if`
+      fixed it.
+  9.4 Lean (run2-par in-window, all green attempts exit 0, standard axioms;
+      refine/evidence/lean-attempts-4232-4262.json):
+      R0Z/WritersExtracted   the extracted code (4233)
+      WriterRefineOcc/OccRow occ_loop, occ_row, occ_row_model (4235, 4238)
+      WriterRefinePath       path_loop, path_base_row_val, path_level (4241)
+      WriterRefineMerge      merge_copy_loop_spec, merge_check_loop_spec,
+                             merge_model (4246) — induction over 16,384
+                             cells, no evaluation
+      WriterRefineValue/…    value_inner, value_outer, value_block,
+                             m31_sub_spec, value_row_r (4248, 4253, 4257)
+      WriterRefineAuxBlock   aux_block_model: write_aux_block = model block 63
+                             (rows 1008..1023), every cell lifted (4258)
+      WriterRefinePathBlock/ path_block_loop, path_block_model: write_path_block
+      PathModel              = model rows 912..1007, every cell (4260, 4262)
+      The statements take the Rust inputs' lifts to the model records as
+      premises (ValueLifts, OccLifts, PathLifts) and CharP K (2^31−1)
+      (the m31_sub conservation cell).
+  9.5 Blockers and deviations (for the lead):
+      (B1) Aeneas library gap in the run2 tree: objects2 has the pinned
+           b59d5188 Aeneas.Std, Aeneas.Tactic.RustAttributes, ScalarTac and
+           the Step core, but not the Aeneas root module, Aeneas.Data.
+           {Array,Vector} or ~24 Aeneas.Tactic modules (they do not build
+           unpatched under Lean 4.32; the spend path's j17 port patches
+           them, but its Aeneas.Std differs from objects2's).  Deviation
+           D-1: the generated file is compiled with `import Aeneas` replaced
+           by `import Aeneas.Std` + `import Aeneas.Tactic.RustAttributes`
+           (refine/extract/substitute.py.txt; asserts exactly these edits).
+      (B2) The generated file sets `maxHeartbeats 1000000` and
+           `maxRecDepth 2048`.  Deviation D-2: both lines are deleted
+           (project rule 3); the extracted code compiles without them.
+      (B3) Not proved in Lean: node_right_lane7 (m31_sub with an input
+           above 2^30; m31_sub_spec assumes both inputs < 2^30), and the
+           relocation read-back of levels 0..20 (choice m3) — the copy
+           takes current/left/right as inputs; the diff test checks them
+           against independently recomputed hashes, Lean does not.
+      (B4) The input lifts are premises.  Discharging them for the real
+           build needs (i) the Wspend → Rust-witness map and (ii) for the
+           path lifts, the Poseidon/node refinement (current/left/right are
+           hash outputs).  The merge is proved against an abstract model
+           table M; instantiating M with layout (cellsOf pub w) needs the
+           block writers.
+      (B5) The copy ↔ production link is the native differential test,
+           not a proof (the production writers use Vec, closures and
+           M31 methods that the pinned extractor does not handle).
