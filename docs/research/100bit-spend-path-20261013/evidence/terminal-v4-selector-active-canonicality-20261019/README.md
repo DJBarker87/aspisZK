@@ -1,0 +1,9 @@
+# Terminal V4 selector-to-active-loop canonicality packet
+
+This is the checked selector-to-active-loop endpoint. The generic outer selector theorem proves canonical output for every successful `selector_mask_sum_16` call, all 16-cell input arrays, and arbitrary masks. The loop theorem shows that the recursive selector loop preserves canonicality. The active loop then derives the selector call’s success from its own successful execution: it reads the concrete active-mask array, inverts the generated pair-pattern `Result` bind with `bind_pair_ok_inv`, and uses the generic selector theorem. It needs only canonicality of the 64 high cells and 16 low cells. It does not take `maskStepOK` and does not enumerate or duplicate the seven literal masks. Finally `active_literal_success_canonical` specializes to the 64-step call starting from `ZERO`.
+
+This packet does not prove canonicality of the concrete low/high arrays; those remain explicit premises. It also does not assert source-level validity of generated Rust or discharge unrelated terminal semantics. The earlier failed mask-step proof attempts are retained under `attempts/failed-no-mask` and are not part of the green result.
+
+Axiom audits report only standard axioms `[propext, Classical.choice, Quot.sound]`, except the generic pair-bind inverse, which reports `[propext]`. Exact per-attempt command, source, object, import pins, elapsed time, peak RSS and process swap count are in `receipts/` and `logs/`. The current host had prior swap usage; every Lean process in this packet reported process swap count 0.
+
+`objects/AspisR1/` contains byte-identical compiled objects. Direct and transitive current terminal owners are recorded by the receipts and the previously published current-terminal base closure; this packet references that frozen closure and does not duplicate it. `SHA256SUMS` covers every packet file except itself.

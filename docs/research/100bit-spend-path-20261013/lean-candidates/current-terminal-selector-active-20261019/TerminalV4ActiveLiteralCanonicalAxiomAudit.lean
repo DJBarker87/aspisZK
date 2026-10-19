@@ -1,0 +1,4 @@
+import AspisR1.TerminalV4ActiveLiteralLoopCanonical
+import AspisR1.TerminalV4ActiveLiteralCanonicalFromInputs
+#print axioms AspisR1.TerminalV4ActiveLiteralLoopCanonical.active_loop_good
+#print axioms AspisR1.TerminalV4ActiveLiteralCanonicalFromInputs.active_literal_success_canonical

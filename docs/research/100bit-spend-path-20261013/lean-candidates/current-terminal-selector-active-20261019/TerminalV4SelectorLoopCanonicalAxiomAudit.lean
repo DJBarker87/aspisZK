@@ -1,0 +1,2 @@
+import AspisR1.TerminalV4SelectorLoopCanonical
+#print axioms AspisR1.TerminalV4SelectorLoopCanonical.loop_success_canonical

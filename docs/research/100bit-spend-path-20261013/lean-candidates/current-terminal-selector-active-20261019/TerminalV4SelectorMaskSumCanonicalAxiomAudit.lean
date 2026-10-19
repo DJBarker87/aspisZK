@@ -1,0 +1,3 @@
+import AspisR1.TerminalV4SelectorMaskSumCanonical
+#print axioms AspisR1.TerminalV4SelectorMaskSumCanonical.selector_mask_sum_success_canonical
+#print axioms AspisR1.TerminalV4SelectorMaskSumCanonical.zero_one_canonical
