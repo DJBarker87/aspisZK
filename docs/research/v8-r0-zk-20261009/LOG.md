@@ -6277,3 +6277,101 @@ equal to production. Remaining:
 - the Lean-side Wspend⁺ → RustWitness/RustPublic map (§12.6), after build
   integration. The Rust side of the map is `records` in glue.rs.
 - the copy↔production decision (D54.3).
+
+### Lead acceptance of the lift-column builder (2026-10-19); D62
+
+The worker commits a88b52d9e..830d9e275 are cherry-picked. The consistent
+chain after re-extraction is:
+
+4392 → 4393 → 4394 → 4395 → 4398 → 4399 → 4460 → 4461 → 4463 → 4464 →
+4466 → 4470 → 4473 → 4474 → 4478 → 4479 → 4480
+
+The lead verified all 17 (SHAs match, exit 0 in-window, standard axioms, no
+sorry/admit/native_decide/overrides). Eleven failed attempts all had changed
+sources.
+
+**D62.1 Proved.** `fill_lo` (C1 and H1 lifts) has an extracted Rust copy.
+Its differential test matches z9c's lift matrices on all 342,080 entries in
+each of five configurations. On the Lean side:
+- the helper values in K (eq, the successor/xor-12 points, h_weight, the
+  natural basis, evalrow);
+- `natR_eq`: Rust `natural` = naturalLineValue. This is a real lemma, and it
+  closes that D53.2 item.
+- `c1_entry_ident`/`h1_entry_ident`: every entry is the flatC1/flatH1
+  coordinate of `obs`.
+- `check_sound″`: hC1 and hH1 are removed.
+
+D59's `check_sound′` had a duplicated binder; it was harmless and is removed
+in 4479.
+
+**D62.2 New premises under the D59.2 ruling.**
+- htr (input table = π), hzx/hzy (OOD points), hsx/hsy (stored points), hin
+  (Rust inactive flags = copyInactiveRows). hin is accepted as a named input
+  premise, of the same kind as π.
+- hselC/hselHv, hloC/hloH (layout), and hblo (`pb.lo` filled by `fill_lo`).
+
+CertCheckSound3 peaks at 7.17 GB.
+
+**D62.3 Remaining in check_sound″.**
+- hOwn and hGOwn: the own-matrix builder and the blockM layout.
+- hRel: design_relations/limb_functionals.
+- hRound, hGRound and hGBat: pure-round closed forms, and `ell` against
+  weight kinds 5/6.
+- The decoder facts and the inherited premises.
+
+### Build-integration design and a coherence finding (2026-10-19); D63
+
+The worker on side branch `codex/r1-privacy-build-integration-20261019`
+(commit ee17c8c86, based on the 100-bit branch with v8-reference merged)
+produced `t2b2b/DESIGN-BUILD-INTEGRATION.txt` and compiled host attempts
+4520–4529. The branch is pushed by the lead.
+
+**D63.1 Coherence finding (lead-verified).** Neither host workspace is a
+single coherent build.
+- Lean loads one object per module name and does not check it against what
+  dependents were compiled with.
+- The privacy and spend closures share module names with different objects:
+  the sampler closures share 28 names, 23 with different objects and 6 with
+  different sources.
+- The spend side itself has more than one object for `CircleGroupOrder`.
+- In privacy objects2, `R0P/CoreExt` was re-sourced and recompiled on
+  2026-10-08 09:24, while its dependent `R0P/Copy` dates from 2026-10-07
+  18:36 and was never rebuilt.
+
+Consequence: every focused compile accepted so far, on both tracks, is
+evidence that each module checks against the objects present. None is yet
+evidence of one consistent theory. No accepted statement is withdrawn. But
+**nothing is release evidence until one clean ordered build, from one source
+per module name, on one base, with one axioms audit.** That is also the
+outstanding "single Lean 4.32 kernel" item on the soundness side.
+
+**D63.2 Lead decisions.**
+- Adopt the design's target: a new workspace with one sources tree, one
+  objects folder, Mathlib from AspisFormal, and the spend path's ported Aeneas.
+  The build compiles in dependency order from a manifest with `--check`. Where
+  the two sides' sources differ, take the spend copy and repair privacy
+  imports.
+- New item (f), the unified base, comes before (b), (d) and (e). The
+  provisional soundness release roots are:
+  - LiteralFreshAttemptBound, RawAdaptiveMembershipBound,
+    AdaptiveMembershipSoundness;
+  - SpendRelation, SpendAppendBinding;
+  - the terminal/caller correspondence modules the live session lands.
+
+  These are to be confirmed with the soundness side at final assembly.
+- SemRows01 moves to (d), as a wire-decoder fact.
+- On (e): the worker reads `line_identity` as the honest-data form of
+  `match1`, not as an assumption of R1QueryResidualBridge. This is to be
+  settled when the soundness side states which premise it would discharge.
+- Attempt range for the integration build: 5000–5299, using the private
+  joint launcher (same caps, slots and run2.py; only the objects folder and
+  search path change). The build spans several night windows.
+
+**D63.3 Done (on the side branch).**
+- BatchedAlgebra and its dependents compile against the spend path's own
+  `R1FoldCoefficientBridge`/`R1FirstFold` (byte-identical), with 0 coherence
+  conflicts over 266 modules. So `line_identity` is stated over spend
+  constants.
+- `qm31SamplerLaw_spend` is proved on the spend base from the extracted
+  `qm31_sample`, with the carrier transports, and `SamplerLawBridge.toSem1`
+  is proved. They sit on different bases until (f).

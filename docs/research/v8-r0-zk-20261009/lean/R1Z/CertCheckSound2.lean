@@ -79,7 +79,7 @@ variable (pb : Pub) (ct : Cert)
 
 /-- **`check_sound'`**: `check_sound` with `hChain` and `hhalf` discharged by the
 extracted chain-target builder. -/
-theorem check_sound' (hc : check pb ct = ok true) (hc : check pb ct = ok true) (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (hB : PackField B)
+theorem check_sound' (hc : check pb ct = ok true) (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (hB : PackField B)
     (w : K) (raw : RawChallenges K F) (φ : R1Z.CertData.ZP →+* ↥F)
     -- decoder facts
     (hup : ∀ (i : Fin 25) (k : Fin 4), raw.sem i (Fin.natAdd 4 k) = 0)
