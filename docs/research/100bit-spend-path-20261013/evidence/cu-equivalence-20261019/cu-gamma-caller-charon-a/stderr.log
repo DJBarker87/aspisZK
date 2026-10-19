@@ -1,0 +1,167 @@
+   Compiling aspis-r1-cu-gamma v0.0.0 (/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/cu-gamma-caller-input)
+error[E0433]: cannot find type `Phase` in this scope
+   --> lib.rs:909:115
+    |
+909 |     let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;mark(obs,Phase::Semantic);
+    |                                                                                                                   ^^^^^ use of undeclared type `Phase`
+    |
+help: consider importing this enum
+    |
+866 + use crate::verifier::Phase;
+    |
+
+error[E0433]: cannot find type `Phase` in this scope
+   --> lib.rs:916:40
+    |
+916 |     let v=View::parse(proof)?;mark(obs,Phase::Parsed);
+    |                                        ^^^^^ use of undeclared type `Phase`
+    |
+help: consider importing this enum
+    |
+866 + use crate::verifier::Phase;
+    |
+
+error[E0433]: cannot find type `Phase` in this scope
+   --> lib.rs:917:139
+    |
+917 | ...ariant)?;let g=powers::<29>(p.gamma);mark(obs,Phase::Prepare);
+    |                                                  ^^^^^ use of undeclared type `Phase`
+    |
+help: consider importing this enum
+    |
+866 + use crate::verifier::Phase;
+    |
+
+error[E0433]: cannot find type `Phase` in this scope
+   --> lib.rs:968:115
+    |
+968 |     let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;mark(obs,Phase::Semantic);
+    |                                                                                                                   ^^^^^ use of undeclared type `Phase`
+    |
+help: consider importing this enum
+    |
+923 + use crate::verifier::Phase;
+    |
+
+error[E0433]: cannot find type `Phase` in this scope
+   --> lib.rs:975:40
+    |
+975 |     let v=View::parse(proof)?;mark(obs,Phase::Parsed);
+    |                                        ^^^^^ use of undeclared type `Phase`
+    |
+help: consider importing this enum
+    |
+923 + use crate::verifier::Phase;
+    |
+
+error[E0433]: cannot find type `Phase` in this scope
+   --> lib.rs:977:114
+    |
+977 |     let (_semantic_claims,p)=tx1_prepare(public,&v,hash,obs,&mut g)?;let a=Accumulator::new(v.variant)?;mark(obs,Phase::Prepare);
+    |                                                                                                                  ^^^^^ use of undeclared type `Phase`
+    |
+help: consider importing this enum
+    |
+923 + use crate::verifier::Phase;
+    |
+
+warning: unused import: `P`
+   --> lib.rs:302:50
+    |
+302 |             use crate::aspis_core::{field::{M31, P}, state_only_prefix::r0::Error};
+    |                                                  ^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `field`, `powers`, and `transcript::Transcript`
+   --> lib.rs:837:167
+    |
+837 | ...e::SecureCirclePoint},transport::Variant,transcript::Transcript,weights::{powers,field}};
+    |                                             ^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^ ^^^^^
+
+warning: unused imports: `circle::SecureCirclePoint` and `transport::Variant`
+   --> lib.rs:867:69
+    |
+867 | use crate::{aspis_core::{Digest32,field::{WideExact as E,QM31 as K},circle::SecureCirclePoint},
+    |                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+868 |  verifier::{Prepared,View,Error},transcript::Transcript,transport::Variant,weights::{powers,field}};
+    |                                                         ^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `circle::SecureCirclePoint` and `transport::Variant`
+   --> lib.rs:924:69
+    |
+924 | use crate::{aspis_core::{Digest32,field::{WideExact as E,QM31 as K},circle::SecureCirclePoint},
+    |                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+925 |  verifier::{Prepared,View,Error},transcript::Transcript,transport::Variant,weights::{powers,field}};
+    |                                                         ^^^^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> lib.rs:858:58
+    |
+858 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                                                          ----^
+    |                                                          |
+    |                                                          help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `v`
+   --> lib.rs:858:31
+    |
+858 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                               ^ help: if this is intentional, prefix it with an underscore: `_v`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `p`
+   --> lib.rs:858:42
+    |
+858 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                                          ^ help: if this is intentional, prefix it with an underscore: `_p`
+
+warning: unused variable: `a`
+   --> lib.rs:858:58
+    |
+858 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                                                          ^^^^^ help: if this is intentional, prefix it with an underscore: `_a`
+
+warning: unused variable: `g`
+   --> lib.rs:858:76
+    |
+858 | ...ox<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unre...
+    |                                   ^ help: if this is intentional, prefix it with an underscore: `_g`
+
+warning: unused variable: `public_bytes`
+   --> lib.rs:858:85
+    |
+858 | ...ccumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                        ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_public_bytes`
+
+warning: unused variable: `proof`
+   --> lib.rs:858:104
+    |
+858 | ...:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                               ^^^^^ help: if this is intentional, prefix it with an underscore: `_proof`
+
+warning: unused variable: `k`
+   --> lib.rs:858:116
+    |
+858 | ...public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                                   ^ help: if this is intentional, prefix it with an underscore: `_k`
+
+warning: unused variable: `hash`
+   --> lib.rs:858:124
+    |
+858 | ...s:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                                ^^^^ help: if this is intentional, prefix it with an underscore: `_hash`
+
+warning: unused variable: `obs`
+   --> lib.rs:858:131
+    |
+858 | ...],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                                 ^^^ help: if this is intentional, prefix it with an underscore: `_obs`
+
+For more information about this error, try `rustc --explain E0433`.
+ERROR Code failed to compile
+warning: `aspis-r1-cu-gamma` (lib) generated 14 warnings
+error: could not compile `aspis-r1-cu-gamma` (lib) due to 6 previous errors; 14 warnings emitted

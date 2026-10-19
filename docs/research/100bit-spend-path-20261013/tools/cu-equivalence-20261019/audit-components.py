@@ -48,14 +48,21 @@ for module,item in audit['successful_targets'].items():
         'CuSavingsDotsSlotPost','CuSavingsDotsPrefixKernel'} else set()
     assert extra==expected,(module,extra,expected)
     item['nonstandard_axioms']=sorted(extra)
-    assert receipt['process_swaps']==0,module
+    if receipt.get('uncapped_nuc'):
+        assert receipt['resource_authorization']=='User: status update. no nuc limits (2026-10-19)',module
+        assert receipt['cgroup_limits']=={'memory.high':'max','memory.max':'max','memory.swap.max':'max'},module
+        assert not any(arg.startswith('-M') for arg in receipt['command']),module
+        assert receipt['process_swaps']>=0 and receipt['cgroup_swap_bytes']>=0,module
+        assert receipt.get('source_module_write_lock'),module
+    else:
+        assert receipt['process_swaps']==0,module
     if receipt.get('resource_scope')=='focused_local':
         assert receipt['cgroup_swap_bytes'] is None,module
         assert receipt['stopped_for_limit'] is False,module
         assert 0 < receipt['peak_aggregate_rss_bytes_sampled'] < 7*2**30,module
         assert '-M7000' in receipt['command'],module
         assert receipt['mathlib_revision']=='81a5d257c8e410db227a6665ed08f64fea08e997',module
-    else:
+    elif not receipt.get('uncapped_nuc'):
         assert receipt['cgroup_swap_bytes']==0,module
 for name in ['Types.lean','Funs.lean']:
     assert (area/'lean/AspisR1CuRho'/name).read_bytes()==(
@@ -134,6 +141,8 @@ audit['public_decode_evidence_check']=json.loads(subprocess.check_output([
     sys.executable,str(Path(__file__).with_name('check-public-decode-evidence.py'))],text=True))
 audit['gamma_evidence_check']=json.loads(subprocess.check_output([
     sys.executable,str(Path(__file__).with_name('check-gamma-evidence.py'))],text=True))
+audit['gamma_caller_evidence_check']=json.loads(subprocess.check_output([
+    sys.executable,str(Path(__file__).with_name('check-gamma-caller-evidence.py'))],text=True))
 usage=resource.getrusage(resource.RUSAGE_SELF)
 audit['audit_command']=[sys.executable,str(Path(__file__).relative_to(repo)),*sys.argv[1:]]
 audit['audit_source_revision']=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()

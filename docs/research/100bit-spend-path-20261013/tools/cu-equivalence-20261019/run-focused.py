@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""One focused Lean file, pinned cache, exclusive admission and capped receipt."""
+"""One focused Lean file, pinned cache, recorded resources and explicit admission policy."""
 import argparse, fcntl, hashlib, json, os, re, subprocess, time
 from pathlib import Path
 
@@ -15,8 +15,16 @@ assert '#print axioms' in source.read_text() or plan.get('audit_declarations')
 assert not re.search(r'\b(sorry|admit)\b|(?m:^\s*axiom\s)', source.read_text())
 cg = Path('/sys/fs/cgroup') / Path('/proc/self/cgroup').read_text().split('0::')[1].strip().lstrip('/')
 limits = {n: (cg/n).read_text().strip() for n in ['memory.high', 'memory.max', 'memory.swap.max']}
-assert limits == {'memory.high': str(6*2**30), 'memory.max': str(8*2**30), 'memory.swap.max': '0'}
-with open('/tmp/aspis-r0-lean.lock', 'a+') as lock:
+uncapped=plan.get('uncapped_nuc',False)
+if uncapped:
+    assert plan.get('resource_authorization')=='User: status update. no nuc limits (2026-10-19)'
+    assert limits=={'memory.high':'max','memory.max':'max','memory.swap.max':'max'},limits
+else:
+    assert limits == {'memory.high': str(6*2**30), 'memory.max': str(8*2**30), 'memory.swap.max': '0'}
+# Exclude concurrent writes to the same output module, not concurrent Lean jobs.
+lock_path=('/tmp/aspis-cu-module-'+hashlib.sha256(plan['module'].encode()).hexdigest()+'.lock'
+    if uncapped else '/tmp/aspis-r0-lean.lock')
+with open(lock_path, 'a+') as lock:
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     foreign = []
     for p in Path('/proc').iterdir():
@@ -25,7 +33,7 @@ with open('/tmp/aspis-r0-lean.lock', 'a+') as lock:
             if (p/'comm').read_text().strip() in {'lean', 'lake'}:
                 foreign.append(int(p.name))
         except OSError: pass
-    assert not foreign, ('wait for idle Lean host', foreign)
+    if not uncapped: assert not foreign, ('wait for idle Lean host', foreign)
     finite = []
     for p in Path('/sys/fs/cgroup').rglob('memory.max'):
         try:
@@ -33,7 +41,7 @@ with open('/tmp/aspis-r0-lean.lock', 'a+') as lock:
                 finite.append((str(p.parent), int(p.read_text())))
         except OSError: pass
     reservations = [(p,n) for p,n in finite if not any(p.startswith(q+'/') for q,_ in finite if q != p)]
-    assert sum(n for _,n in reservations) <= 50*2**30, reservations
+    if not uncapped: assert sum(n for _,n in reservations) <= 50*2**30, reservations
     env_file = Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json')
     base = json.loads(env_file.read_text())
     env = dict(os.environ, **{k:v for k,v in base.items() if v is not None})
@@ -104,11 +112,11 @@ with open('/tmp/aspis-r0-lean.lock', 'a+') as lock:
     # environment; never build missing dependencies to discover a local error.
     command = [base['LAKE'], 'env', 'env', 'LEAN_PATH='+env['LEAN_PATH'], base['LEAN'],
         '--root='+str(root/('checked' if plan.get('audit_declarations') else 'sources')),
-        '-M7000', '-o', str(obj), str(checked_source)]
+        *([] if uncapped else ['-M7000']), '-o', str(obj), str(checked_source)]
     start = time.monotonic()
     before = Path('/proc/meminfo').read_text()
     with (out/'stdout.log').open('w') as log:
-        p = subprocess.Popen(['/usr/bin/time', '-v', '-o', str(out/'time.log'), 'timeout', '600', *command],
+        p = subprocess.Popen(['/usr/bin/time', '-v', '-o', str(out/'time.log'), *([] if uncapped else ['timeout','600']), *command],
             cwd=plan['lake_workspace'], env=env, stdout=log, stderr=subprocess.STDOUT)
         aggregate_peak = 0
         while p.poll() is None:
@@ -127,6 +135,7 @@ with open('/tmp/aspis-r0-lean.lock', 'a+') as lock:
     receipt = dict(plan, command=command, exit_status=status, wall_seconds=time.monotonic()-start,
         peak_rss_kib=metric('Maximum resident set size (kbytes)'), process_swaps=metric('Swaps'),
         aggregate_rss_peak_bytes=aggregate_peak, cgroup_limits=limits, reservations=reservations,
+        foreign_lean_jobs_at_launch=foreign,source_module_write_lock=lock_path,
         cgroup_swap_bytes=int((cg/'memory.swap.current').read_text()),
         host_swap_before=[s for s in before.splitlines() if s.startswith('Swap')],
         host_swap_after=[s for s in Path('/proc/meminfo').read_text().splitlines() if s.startswith('Swap')],

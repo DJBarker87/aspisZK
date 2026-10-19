@@ -6,7 +6,12 @@ os.umask(0o077)  # Retain generated task keys and receipts privately by default.
 ap=argparse.ArgumentParser();ap.add_argument('plan');a=ap.parse_args();plan=json.loads(Path(a.plan).read_text())
 cg=Path('/sys/fs/cgroup')/Path('/proc/self/cgroup').read_text().split('0::',1)[1].strip().lstrip('/')
 limits={n:(cg/n).read_text().strip() for n in ['memory.high','memory.max','memory.swap.max']}
-assert limits['memory.swap.max']=='0' and int(limits['memory.high'])<=int(limits['memory.max'])<=8*2**30,limits
+uncapped=plan.get('uncapped_nuc',False)
+if uncapped:
+ assert plan.get('resource_authorization')=='User: status update. no nuc limits (2026-10-19)'
+ assert limits=={'memory.high':'max','memory.max':'max','memory.swap.max':'max'},limits
+else:
+ assert limits['memory.swap.max']=='0' and int(limits['memory.high'])<=int(limits['memory.max'])<=8*2**30,limits
 # Include only topmost populated finite reservations, avoiding nested double counting.
 finite=[]
 for p in Path('/sys/fs/cgroup').rglob('memory.max'):
@@ -14,7 +19,7 @@ for p in Path('/sys/fs/cgroup').rglob('memory.max'):
   if p.read_text().strip()!='max' and 'populated 1' in (p.parent/'cgroup.events').read_text():finite.append((str(p.parent),int(p.read_text())))
  except OSError:pass
 reservations=[(p,n) for p,n in finite if not any(p.startswith(q+'/') for q,_ in finite if q!=p)]
-assert sum(n for _,n in reservations)<=50*2**30,reservations
+if not uncapped:assert sum(n for _,n in reservations)<=50*2**30,reservations
 # Record foreign compiler activity; user explicitly authorized parallel NUC work.
 foreign=[]
 for p in Path('/proc').iterdir():
@@ -36,7 +41,7 @@ with (out/'stdout.log').open('w') as stdout,(out/'stderr.log').open('w') as stde
    try:rss+=int(Path('/proc',pid,'statm').read_text().split()[1])*os.sysconf('SC_PAGE_SIZE')
    except (OSError,IndexError):pass
   peak=max(peak,rss)
-  if rss>=8*2**30 or time.monotonic()-start>600:
+  if not uncapped and (rss>=8*2**30 or time.monotonic()-start>600):
    os.killpg(proc.pid,signal.SIGKILL);stopped=True;break
   time.sleep(.2)
  status=proc.wait()

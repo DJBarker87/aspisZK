@@ -33,7 +33,7 @@ planned; progress must be assessed by complete optimization-to-caller proofs.
 
 | Retained change | Required proof and source bridge | Status |
 |---|---|---|
-| 1 gamma table reuse | same-function/same-gamma table dataflow, preparation/tx1 extraction and failure preservation | complete emitted preparation table invariant, duplicate-call context equality, and old/new preparation/caller equality conditional on an explicit local claim-factor equation checked; claim source discharge and admitted tx1 wrapper composition remain open; see GAMMA-REUSE.md |
+| 1 gamma table reuse | same-function/same-gamma table dataflow, preparation/tx1 extraction and failure preservation | complete emitted preparation table invariant, duplicate-call context equality, and complete actual tx1/tx1_prepare result equivalence conditional on an explicit local claim-factor equation checked; claim source discharge and final observed/security composition remain open; see GAMMA-REUSE.md and GAMMA-TX1.md |
 | 2 opt-in observer | observer state noninterference, diagnostic-log projection, caller feature binding | open |
 | 3 S2 inactive groups | literal table correspondence, finite regrouping, source execution | all 1024 Nat-model classification cells, bounds, first-occurrence order and weighted regrouping checked; emitted machine helper/field/decoder binding open |
 | 4 delayed base dots | modular equality, all u64 bounds, decoder/failure-order and loop execution | symbolic arithmetic checked; source bridge open |
@@ -290,3 +290,23 @@ below 2.6 GiB peak RSS, taking 1.6–2.7 seconds each. Production source remains
 the full preparations with strict checks; claim helpers remain separate opaque
 parameters. Full claim emission fails in both available frontend paths and is
 not admitted. See GAMMA-REUSE.md for the distinct failure modes and exact gaps.
+
+The complete candidate-1 tx1 and tx1_prepare bodies now emit and compile,
+sharing the original gamma carrier definitions after exact declaration-body
+identity checks. CuSavingsGammaTx1.source_eq_of_claim_factor consumes the actual
+previously checked preparations and table invariant in complete tx1 execution.
+It covers arbitrary semantic/parser/allocation/finish results and arbitrary
+observer callbacks, including all modeled errors and divergence. Only the local
+claim-factor equation remains as its changed-helper premise; no preparation
+axiom or intermediate whole-verifier-equivalence premise is introduced. The
+new wrappers are byte-identical to the frozen production tip. This is result
+equality at the existing source-model boundary; the full observation relation
+and final soundness/privacy transfers still require composition.
+
+Receipts: cu-gamma-call-types-a, cu-gamma-call-externals-a, cu-gamma-call-funs-a,
+cu-gamma-tx1-a. All print standard axioms only and use zero observed process or
+cgroup swap. The latest user instruction removes NUC resource/concurrency caps;
+these new jobs record that authorization and have memory.high/max/swap.max=max,
+no Lean memory cap and no wrapper timeout. Same-module object writes remain
+exclusive for correctness. Source inspection, focused-first proof cadence,
+exact pins, receipts and axiom audits remain in effect. See GAMMA-TX1.md.

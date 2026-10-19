@@ -5,6 +5,7 @@ import argparse, hashlib, json, resource, shlex, subprocess, sys, time
 
 ap=argparse.ArgumentParser(); ap.add_argument('module'); ap.add_argument('attempt')
 ap.add_argument('--axiom',action='append',default=[])
+ap.add_argument('--uncapped-nuc',action='store_true',help='User-authorized removal of NUC resource and host-concurrency caps')
 ap.add_argument('--cache-receipt',help='Remote successful receipt whose pinned import search roots may be reused')
 ap.add_argument('--cache-source',help='Repository-relative source corresponding to the cached target')
 a=ap.parse_args()
@@ -18,6 +19,9 @@ out.mkdir(parents=True,exist_ok=False)
 plan=dict(workspace=remote,lake_workspace='/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal',
     module=a.module,attempt=a.attempt,source_revision=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip(),
     source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),features=['pool-adapter','private-leaf-salts'],audit_declarations=a.axiom)
+if a.uncapped_nuc:
+    plan['uncapped_nuc']=True
+    plan['resource_authorization']='User: status update. no nuc limits (2026-10-19)'
 (out/'source.lean').write_bytes(source.read_bytes())
 if a.cache_receipt:
     receipt_bytes=subprocess.check_output(['ssh','-o','BatchMode=yes','-o','ConnectTimeout=10',host,'cat '+shlex.quote(a.cache_receipt)])
@@ -48,7 +52,9 @@ except subprocess.CalledProcessError as error:
         launcher_process_swaps=usage.ru_nswap,proof_job_status='NOT_LAUNCHED',
         print_axioms='N/A: staging failed before launching Lean'),indent=2)+'\n')
     raise
-command=['systemd-run','--user','--scope','--quiet','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=128',
+scope_limits=(['-p','MemoryHigh=infinity','-p','MemoryMax=infinity','-p','MemorySwapMax=infinity','-p','TasksMax=infinity']
+    if a.uncapped_nuc else ['-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=128'])
+command=['systemd-run','--user','--scope','--quiet',*scope_limits,
     'python3',remote+'/run-focused.py',remote+'/'+a.attempt+'-plan.json']
 result=subprocess.run(['ssh',*ssh_options,host,shlex.join(command)],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
 (out/'launcher.log').write_text(result.stdout)
