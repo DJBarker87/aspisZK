@@ -1,0 +1,92 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
+@@ -164,7 +164,14 @@
+ 
+ #[inline]
+ fn digest_is_canonical(digest: &Digest) -> bool {
+-    digest.iter().all(|limb| limb.0 < P)
++    let mut i = 0;
++    while i < digest.len() {
++        if digest[i].0 >= P {
++            return false;
++        }
++        i += 1;
++    }
++    true
+ }
+ 
+ #[inline]
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -103,7 +103,14 @@
+ 
+ #[inline]
+ fn digest_is_canonical(value: &Digest) -> bool {
+-    value.iter().all(|limb| limb.0 < P)
++    let mut i = 0;
++    while i < value.len() {
++        if value[i].0 >= P {
++            return false;
++        }
++        i += 1;
++    }
++    true
+ }
+ 
+ impl PoolV1PairLeafWitnessV1 {
+@@ -452,13 +459,15 @@
+     if snapshot.next_pair_index >= POOL_V1_PAIR_CAPACITY {
+         return Err(PoolV1PairLiveSnapshotErrorV1::TreeFull);
+     }
+-    if !digest_is_canonical(&snapshot.current_root)
+-        || snapshot
+-            .frontier
+-            .iter()
+-            .any(|node| !digest_is_canonical(node))
+-    {
++    if !digest_is_canonical(&snapshot.current_root) {
+         return Err(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);
++    }
++    let mut level = 0;
++    while level < snapshot.frontier.len() {
++        if !digest_is_canonical(&snapshot.frontier[level]) {
++            return Err(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);
++        }
++        level += 1;
+     }
+     Ok(())
+ }
+--- a/crates/aspis-statement/src/pool_v1/pair_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_terminal.rs
+@@ -126,14 +126,23 @@
+     {
+         return Err(PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex);
+     }
+-    if afterstate.next_root.iter().any(|limb| limb.0 >= P)
+-        || afterstate
+-            .next_frontier
+-            .iter()
+-            .flatten()
+-            .any(|limb| limb.0 >= P)
+-    {
+-        return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);
++    let mut i = 0;
++    while i < afterstate.next_root.len() {
++        if afterstate.next_root[i].0 >= P {
++            return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);
++        }
++        i += 1;
++    }
++    let mut level = 0;
++    while level < afterstate.next_frontier.len() {
++        let mut limb = 0;
++        while limb < afterstate.next_frontier[level].len() {
++            if afterstate.next_frontier[level][limb].0 >= P {
++                return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);
++            }
++            limb += 1;
++        }
++        level += 1;
+     }
+     Ok(())
+ }
