@@ -1,0 +1,21 @@
+# Independent proof checkpoint, 2026-10-19 evening
+
+The lead's commitment-layer hold remains in force. No new Merkle acceptance, leaf/node grammar, commitment-word recovery, stage-2 path checks, verifier hash-call count or proof-buffer checkpoint hashing work is included here. The later proof-size lead review reports NOT VIABLE under the registered CU criterion; adoption remains awaiting decision, so the hold has not been lifted by this session. Previously in-flight Merkle work remains candidate-only at `bc5902c79`.
+
+## Checked, committed and pushed
+
+- `5496c7107`, provenance addendum `e06d3499b`: actual emitted circle sampler is unconditionally total and on-circle for every 32-byte block and either row. Canonical-parameter and inner-call-success premises are discharged. Exact actual-output-to-R0P sampler correspondence is still needed before transferring the distribution bounds.
+- `67853cdf5`, `1e75b5f9b`, `8313cbf61`: actual checked M31 add/sub, U64 reduction, widening M31 multiplication, CM31 add/sub/mul, multiplication by r, and QM31 add/mul agree exactly with wrapping-primitive bodies on their stated domains. Add/sub and tower inputs require canonicality; reducer and widening M31 multiplication do not. Fast-pairing primitive product bounds also pass. R22 remains OPEN for source caller range propagation, the optimized fast-pairing body, counter/index/control arithmetic and the whole admitted acceptance direction.
+- `c7cf97c58`: terminal arithmetic derives μ/zc canonicality from the actual same begin execution. Sparse mask 6144 and generic actual outer-loop canonicality are checked; that published outer-loop result still has the explicit `maskStepOK` premise. The generic selector-loop successor is being proved separately and must not be confused with the failed drafts in this immutable packet.
+- `beab64a5c`: actual generated successful single-block query scan yields the Q22 transition and its decoded words; all successful decoded words are below 2^18. The eight-block stopping/fallback model is also checked. The byte-rank formula, original outer source wrapper correspondence and candidate adoption remain OPEN.
+- `bc667820c`: R8's transfer counterpart at R7's structural scope passes. Actual reconstruction success derives the twelve request/account metadata facts. Seven supporting Rust function spans are unchanged from the retained extraction. Authentication, custody, caller reachability, serializer success and cross-stage provenance are separate obligations.
+
+Each evidence directory includes exact target sources, objects or object pins, import/compiler/source hashes, commands, receipts, timing, RSS, swap and standard-only axiom reports. NUC jobs ran in admitted finite cgroups with swap disabled. The focused local terminal checks reported zero process swaps; the local machine already had system swap in use. No whole manifest replay was started.
+
+## Highest-uncertainty finding resolved in the existing mathematics
+
+The circle sampler's fallback atom is about P^-2, but the existing per-row bad-event bounds do not charge it. Row 0's own fallback f0 is nonrational and distinct from f1; row 1's own fallback f1 is excluded by the preceding no-hit condition z0≠f1. Each tested bad fiber therefore has at most one accepted parameter and mass at most (1+δQ)/P^4. The ledger sums the two row bounds, approximately 4/P^4, rather than multiplying independent events or claiming a uniform full-output distribution. The remaining task is the exact pointwise actual sampler-to-model bridge. This explanation relies on the existing `R0P.SemSource.CircleSampler` and `R0P.SemD2Glue` proofs; it is not a new source-level distribution theorem.
+
+## Continuing work
+
+All four slots remain assigned: root handles independent source bridges/R22 and the transfer result; workers handle actual sampler-to-model correspondence, the query byte-rank/outer-wrapper bridge, and generic selector/active-literal canonicality. The next root uncertainty is extracting the actual `finish_relation` arithmetic/guard cone, with explicit pairing/polynomial/dot boundaries initially, while leaving the held stage-2 Merkle path code untouched. Source freeze, final re-pins and release integration remain pending the lead's format decision. The complete 100-bit source-to-deployed proof is not yet achieved.
