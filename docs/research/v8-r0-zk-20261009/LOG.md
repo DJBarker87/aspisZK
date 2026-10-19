@@ -6502,3 +6502,24 @@ Deferred decisions, recorded as open:
    premise `RSqueezeAnswer`) is written and waits on it.
 
 All agents are paused. No host job is running.
+
+### User decisions (2026-10-19 evening); D68
+
+1. **G_R1.1:** the ≤1.3M-per-transaction target stands and is to be met by
+   arithmetic savings (~120k CU on the worst case), not by rebalancing.
+   Recorded in `docs/research/100bit-spend-path-20261013/design/LEAD-DECISION-G-R1-1-20261019.md`.
+2. **D54.3 resolved:** the production prover's writers (value, occupancy,
+   path aux, bank merge, block, node, sponge, Poseidon) are to be replaced by
+   the extracted copies in `refine/`, so `builder_witness_merged` is about the
+   shipped prover. Prover-side only; no on-chain change. The migration goes
+   through the standing gates (codec 1,233 outputs byte-identical, the
+   ordered trace, checkpoint23, the saved fixtures, the 512-witness glue
+   differential) and re-pins the extracted declarations.
+3. **Lead rulings on the unified build (D67 deferred items):**
+   - `EventsR1P2`: proof-level fix of `card_NZ`, counting through the
+     existing `card_ans` equivalence; the import narrowing stays.
+   - `AspisR1PublicPreparation.{Funs,Types}`: the module of record is the
+     c16 copy the accepted proofs were compiled against (Funs `e98bb123…`),
+     promoted bytes-unchanged like the Qm31 probe modules.
+
+All work lands on `research`.
