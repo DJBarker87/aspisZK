@@ -1,0 +1,108 @@
+/home/dombarker/project-offloads/root-query-tail-body-proof-v1-20261020/sources/QueryTailBodySuccess.lean:34:62: error: Type mismatch: After simplification, term
+  h
+ has type
+  a2 = a1 ∧
+    (match o with
+      | some bw => bw
+      | x => pending) =
+      pending1
+but is expected to have type
+  a2 = a1 ∧
+    (match o with
+      | some v => v
+      | none => pending) =
+      pending1
+/home/dombarker/project-offloads/root-query-tail-body-proof-v1-20261020/sources/QueryTailBodySuccess.lean:37:6: error: Tactic `subst` failed: did not find equation for eliminating 'a2'
+
+case pos.Ok.unit
+query : Query
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array aspis_core.field.WideExact 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geometry : verifier.QueryGeometry
+a a1 : verifier.Accumulator
+pending pending1 : verifier.BatchedWeights
+ha : a.next < 22#usize
+h✝ :
+  (do
+      let (r, a1, o) ← query proof p a g obs geometry (some pending)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a =>
+          ok
+            (cont
+              (a1,
+                match o with
+                | some bw => bw
+                | x => pending))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let return_capture ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (verifier.Prepared × verifier.Accumulator × verifier.BatchedWeights)
+                (core.convert.FromSame verifier.Error) residual
+          ok
+              (done
+                (a1,
+                  match o with
+                  | some bw => bw
+                  | x => pending,
+                  some return_capture))) =
+    ok (cont (a1, pending1))
+a2 : verifier.Accumulator
+o : Option verifier.BatchedWeights
+hquery : query proof p a g obs geometry (some pending) = ok (core.result.Result.Ok PUnit.unit, a2, o)
+h :
+  (let (r, a1, o) := (core.result.Result.Ok PUnit.unit, a2, o)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a =>
+        ok
+          (cont
+            (a1,
+              match o with
+              | some bw => bw
+              | x => pending))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let return_capture ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (verifier.Prepared × verifier.Accumulator × verifier.BatchedWeights)
+              (core.convert.FromSame verifier.Error) residual
+        ok
+            (done
+              (a1,
+                match o with
+                | some bw => bw
+                | x => pending,
+                some return_capture))) =
+    ok (cont (a1, pending1))
+he : (a2, retained pending o) = (a1, pending1)
+hea : (a2, retained pending o).1 = (a1, pending1).1
+hep : (a2, retained pending o).2 = (a1, pending1).2
+⊢ a.next < 22#usize ∧
+    ∃ o,
+      query proof p a g obs geometry (some pending) = ok (core.result.Result.Ok (), a1, o) ∧
+        pending1 = retained pending o
+/home/dombarker/project-offloads/root-query-tail-body-proof-v1-20261020/sources/QueryTailBodySuccess.lean:31:9: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/root-query-tail-body-proof-v1-20261020/sources/QueryTailBodySuccess.lean:33:60: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/root-query-tail-body-proof-v1-20261020/sources/QueryTailBodySuccess.lean:57:9: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/root-query-tail-body-proof-v1-20261020/sources/QueryTailBodySuccess.lean:79:9: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'AspisR1Stage2QueryTailCut.QueryTailProof.body_cont' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1Stage2QueryTailCut.QueryTailProof.body_done_none' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1Stage2QueryTailCut.QueryTailProof.body_done_not_ok' depends on axioms: [propext, Classical.choice, Quot.sound]

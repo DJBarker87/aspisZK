@@ -1,0 +1,7 @@
+# Stage-2 query-loop source cut
+
+CANDIDATE source arrangement. Charon and Aeneas successfully translated an isolated helper containing the byte-exact `while a.next < 22` statements from the adopted frozen `tx2_common`. Passing the surrounding state by value and returning it are new helper boundaries; the production caller is unchanged and its correspondence to this helper is not proved here.
+
+PROVED for that generated helper, universally over the explicit query operation: a successful returned Rust `.Ok` yields an ordered chain of successful query invocations. Each continuation carries the emitted `Some` replacement batch state, or its old state when the callback returns `None`; an early Rust error cannot become a successful helper result. If each successful query advances `next` by one, an initial counter of 10 gives exactly 12 successful query calls and a final counter of 22, with the original prepared value preserved. The advance law is a visible hypothesis, not yet derived from actual `query_values`/`accumulate_with_node`.
+
+Five focused NUC Lean targets passed at -M4400, capped 1 GiB high / 2 GiB max and swap0. All printed theorem axioms are standard. The packet records exact source/import/tool/object pins and measurements, includes the two failed local theorem elaboration attempts as diagnostics, and contains no binaries or opaque template axioms. It does not close whole R14, arithmetic refinement, the source-cut equivalence, or verifier hash-call counts.
