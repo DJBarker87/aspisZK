@@ -1,0 +1,1 @@
+pub const SEMANTIC_BYTES:usize=12903+29*32;
