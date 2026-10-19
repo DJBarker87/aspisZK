@@ -1,0 +1,9 @@
+# Concrete 256-coefficient final-message recovery
+
+The executable final-message encoder and decoder reuse the already-proved generic natural-basis triangular encoder/inverse, specialized to width256. encodeFinal_toPoly identifies the actual CPolynomial encoding with the maintained naturalCoefficientPolynomial used by the final line encoder; this is a polynomial-level correspondence, not a new source/runtime encoder refinement claim. The old generic decode_encode theorem is reused directly; no field enumeration or interpolation is needed for this inverse.
+
+The equality filter is sound for arbitrary input and returns every encoded message. Applying it to canonicalized coefficient lists from the actual depth256 raw root recovery gives exact output-list membership iff the original RawState model vanishes at the actual encoding of that message. Completeness uses the existing final polynomial degree bound255. This composition has the same abort indicator as raw recovery on every field-pair tape.
+
+Focused Lean4.32 exit0, wall72.42s, peak process RSS3,848,929,280B, process swap0; eight printed axiom reports contain only propext, Classical.choice and Quot.sound. Exact sources/imports/object, compiler command, base revision and evidence hashes are retained. The focused source remains below8GiB, with explicit6GiB aggregate cap and -M5000. No full manifest replay or unchanged regression was run. Unused-section-variable linter warnings do not add assumptions beyond the explicitly displayed typeclass context and are retained in the log.
+
+Still open: executable GS backend/witness-to-state integration, agreement-to-root forcing, shared-list/dedup and spend-witness extraction, full operation/bit-cost and sampler/caller law, complete protocol/source/runtime/ROM composition, privacy and the two-transaction release gates. This is not a full100-bit spend theorem.
