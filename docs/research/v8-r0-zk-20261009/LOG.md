@@ -6096,3 +6096,43 @@ stopped at the external wrapper and round composition.
 3. A `perm_rounds` loop invariant, giving RoundsOk for the copy's output.
 
 The copy↔production link stays a differential test (D54.3).
+
+### Lead acceptance of C3: the extracted P_R1 checker (2026-10-19); D57
+
+The worker commits 54f39d467..4f5496ea4 are cherry-picked. The consistent
+chain is CertCheckExtracted (4345), then 4363–4373: CertCheckBase … Top,
+CertData/2, CertCheckData, CertCheckSound and CertCheckSoundAll. These are
+dependency replays: Base and Dot had originally been built against the 4341
+extraction. The lead verified all eleven (SHAs match, exit 0, standard
+axioms) and checked that no source contains sorry, admit, native_decide or
+an override. The replays used the global lock, the caps were not raised,
+and CertCheckSoundAll peaked at 7.15 GB, near the cap. The launcher now tags
+deliberate dependency replays (`DEPREPLAY=1`).
+
+**D57.1 Proved.** `check_sound`: if the extracted Rust `check pb c` returns
+`ok true`, then P_R1 holds on the decoded record. The Rust checker in
+`c3/check`:
+- is no_std, monomorphic, with checked u32/u64 arithmetic, one loop per
+  function and branch-free bodies;
+- verifies every certificate-supplied intermediate by plain equality.
+
+Differential test: same verdicts as z9c on the five configurations and the
+8 corruptions, and 6/6 corruptions of the new fields rejected. It takes about
+8.8 s per check, so the prover-side check is now ≈ 12.6 s emit + 8.8 s check
+per attempt, before optimisation.
+
+**D57.2 Hypotheses of check_sound.**
+- The builder identifications hOwn, hRound, hChain, hRel, hGOwn, hGRound,
+  hGBat, hC1 and hH1. These carry the D53.2 items: `ell` against weight kinds
+  5/6, π against the transport table, `natural`, the stored points and batch
+  inversion.
+- Decoder facts: hhalf, hup, hnq, hz, the lane layouts stO/stG, and φ.
+- From p_r1_of_checks: wb, hcov, hsel1/hselH.
+
+The checker reads values mod P, so it also accepts non-canonical
+certificates. That is sound, but the differential test does not cover it.
+
+**D57.3 Next.** Extract the column builders (raw_c, round_row/tail_row,
+unit_functionals, design_relations/limb_functionals, normalize_d) to
+discharge the builder identifications, and integrate the checker into the R1
+prover (D38.3).
