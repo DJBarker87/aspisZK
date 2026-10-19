@@ -38,7 +38,7 @@ planned; progress must be assessed by complete optimization-to-caller proofs.
 | 3 S2 inactive groups | literal table correspondence, finite regrouping, source execution | all 1024 Nat-model classification cells, bounds, first-occurrence order and weighted regrouping checked; emitted machine helper/field/decoder binding open |
 | 4 delayed base dots | modular equality, all u64 bounds, decoder/failure-order and loop execution | symbolic arithmetic checked; source bridge open |
 | 5 canonical private dots | WideExact invariant, redundant-check elimination, outer count implies inner bound, reduction/output | open |
-| 6 public decode reuse | checked same-byte decoder/selector correspondence, first_decoded and adapter execution | source call-site equality for all observers and consuming original decoder/selector/helper/serializer theorems checked; enclosing Box/SDK/runtime interpretation remains at the reference boundary; see PUBLIC-DECODE-REUSE.md |
+| 6 public decode reuse | checked same-byte decoder/selector correspondence, first_decoded and adapter execution | COMPLETE under the existing reference source/runtime boundary: exact boxed wrapper, box projection, actual selector totality and argument-order transport, contextual equality for all result paths/observers, and original helper/serializer consumption checked; see CANDIDATE6-CLOSED.md and CANDIDATE6-COMPLETION.json. Other candidates and combined security transfer remain open. |
 | 7 geometry reuse | node/denominator agreement, caller range validity, execution | open |
 | 10 fixed prefix | admitted q length, identical decoder accesses and failure behavior | complete interpreted source kernel equality and actual-query composition checked, including four-slot bound/capture invariants; std-library/shared-helper and enclosing-verifier source bindings open |
 | 12 rho residues | every-prefix modular invariant, four-term overflow bound, canonical finish, array/caller execution, heap admission | integer invariant, complete push/value execution and frame/overflow proofs checked; finish now consumes the extracted standard next body; initialization, outer callers and serialization composition open |
@@ -310,3 +310,25 @@ these new jobs record that authorization and have memory.high/max/swap.max=max,
 no Lean memory cap and no wrapper timeout. Same-module object writes remain
 exclusive for correctness. Source inspection, focused-first proof cadence,
 exact pins, receipts and axiom audits remain in effect. See GAMMA-TX1.md.
+
+Candidate 6 now has a complete relative replacement proof under the unchanged
+reference source/runtime assumptions. CuSavingsPublicDecodeClosed binds the
+exact strictly emitted boxed wrapper, proves its projection, contextual
+replacement and arbitrary-result observation/contract transport.
+CuSavingsPublicDecodeOrder consumes the actual decoder and selector theorem
+to prove selector totality on earlier decoded values, then closes the call-
+argument evaluation-order obligation without a decode-success premise on the
+exported context theorem. Source checks retain the exact whole old/new stage1
+call-site delta and immutable bytes. Existing actual decoder/selector and
+helper/serializer theorems are consumed with a coherent pinned original cache.
+Receipts: cu-public-decode-closed-a and cu-public-decode-order-b; both standard
+Lean axioms only, zero observed swap. Exact proof/source scope and requirement
+audit: CANDIDATE6-CLOSED.md and CANDIDATE6-COMPLETION.json. This closes one
+replacement, not the overall ten-change source/security transfer objective.
+
+The final CuSavingsPublicDecodeCallsite.source_eq consumes those box and
+selector facts together in the actual replacement, with arbitrary partial
+call-argument construction and the shared enclosing context. Its observations_eq
+preserves complete-result observations. Receipt cu-public-decode-callsite-a
+passes with standard axioms only and zero observed swap. This is the final
+consuming theorem audited by CANDIDATE6-COMPLETION.json.

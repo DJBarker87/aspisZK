@@ -1,0 +1,136 @@
+   Compiling aspis-r1-first-diagnostic v0.0.0 (/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/public-box-input)
+warning: unused import: `P`
+   --> lib.rs:228:50
+    |
+228 |             use crate::aspis_core::{field::{M31, P}, state_only_prefix::r0::Error};
+    |                                                  ^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `public`
+   --> lib.rs:414:12
+    |
+414 | pub fn tx1(public: Public<'_>, public_bytes: &[u8], proof: &[u8], k: usize, hash: SolanaDigest, obs: Observer) -> Result<Vec<u8>, E...
+    |            ^^^^^^ help: if this is intentional, prefix it with an underscore: `_public`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `public_bytes`
+   --> lib.rs:414:32
+    |
+414 | pub fn tx1(public: Public<'_>, public_bytes: &[u8], proof: &[u8], k: usize, hash: SolanaDigest, obs: Observer) -> Result<Vec<u8>, E...
+    |                                ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_public_bytes`
+
+warning: unused variable: `proof`
+   --> lib.rs:414:53
+    |
+414 | pub fn tx1(public: Public<'_>, public_bytes: &[u8], proof: &[u8], k: usize, hash: SolanaDigest, obs: Observer) -> Result<Vec<u8>, E...
+    |                                                     ^^^^^ help: if this is intentional, prefix it with an underscore: `_proof`
+
+warning: unused variable: `k`
+   --> lib.rs:414:67
+    |
+414 | ...ic_bytes: &[u8], proof: &[u8], k: usize, hash: SolanaDigest, obs: Observer) -> Result<Vec<u8>, Error> { unreachable!() }
+    |                                   ^ help: if this is intentional, prefix it with an underscore: `_k`
+
+warning: unused variable: `hash`
+   --> lib.rs:414:77
+    |
+414 | ...8], proof: &[u8], k: usize, hash: SolanaDigest, obs: Observer) -> Result<Vec<u8>, Error> { unreachable!() }
+    |                                ^^^^ help: if this is intentional, prefix it with an underscore: `_hash`
+
+warning: unused variable: `obs`
+   --> lib.rs:414:97
+    |
+414 | ...: usize, hash: SolanaDigest, obs: Observer) -> Result<Vec<u8>, Error> { unreachable!() }
+    |                                 ^^^ help: if this is intentional, prefix it with an underscore: `_obs`
+
+warning: struct `SolanaDigest` is never constructed
+   --> lib.rs:401:8
+    |
+401 | struct SolanaDigest;
+    |        ^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `DecodeError` is never constructed
+   --> lib.rs:403:8
+    |
+403 | struct DecodeError;
+    |        ^^^^^^^^^^^
+
+warning: enum `ProgramError` is never used
+   --> lib.rs:405:6
+    |
+405 | enum ProgramError { InvalidAccountData, InvalidInstructionData }
+    |      ^^^^^^^^^^^^
+
+warning: function `decode_pool_v1_pair_forest_terminal_statement_v1` is never used
+   --> lib.rs:406:4
+    |
+406 | fn decode_pool_v1_pair_forest_terminal_statement_v1(_: &[u8]) -> Result<PoolV1PairForestTerminalStatementV1, DecodeError> { unreach...
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `mark` is never used
+   --> lib.rs:416:4
+    |
+416 | fn mark(_: verifier::Phase) { unreachable!() }
+    |    ^^^^
+
+warning: function `error` is never used
+   --> lib.rs:417:4
+    |
+417 | fn error(_: verifier::Error) -> ProgramError { unreachable!() }
+    |    ^^^^^
+
+warning: function `first` is never used
+   --> lib.rs:419:4
+    |
+419 | fn first(public_bytes:&[u8],proof:&[u8],k:usize)->Result<Vec<u8>,ProgramError>{
+    |    ^^^^^
+
+warning: function `decode_public_statement_box` is never used
+   --> lib.rs:427:4
+    |
+427 | fn decode_public_statement_box(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: fields `pool` and `deployment_domain` are never read
+   --> lib.rs:179:5
+    |
+177 | struct SemanticPublic<'a> {
+    |        -------------- fields in this struct
+178 |     variant: CompiledVariant,
+179 |     pool: [u8; 32],
+    |     ^^^^
+180 |     deployment_domain: [u8; 32],
+    |     ^^^^^^^^^^^^^^^^^
+    |
+    = note: `SemanticPublic` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: enum `Phase` is never used
+   --> lib.rs:410:10
+    |
+410 | pub enum Phase { Parsed,Semantic,SemanticPart(u8),Prepare,CheckpointRead,Merkle(usize),Query(usize),QueryPart(usize,u8),CheckpointW...
+    |          ^^^^^
+
+warning: type alias `Observer` is never used
+   --> lib.rs:411:10
+    |
+411 | pub type Observer = Option<fn(Phase)>;
+    |          ^^^^^^^^
+
+warning: struct `Error` is never constructed
+   --> lib.rs:413:12
+    |
+413 | pub struct Error;
+    |            ^^^^^
+
+warning: function `tx1` is never used
+   --> lib.rs:414:8
+    |
+414 | pub fn tx1(public: Public<'_>, public_bytes: &[u8], proof: &[u8], k: usize, hash: SolanaDigest, obs: Observer) -> Result<Vec<u8>, E...
+    |        ^^^
+
+warning: `aspis-r1-first-diagnostic` (lib) generated 20 warnings (run `cargo fix --lib -p aspis-r1-first-diagnostic` to apply 7 suggestions)
+    Finished `release` profile [optimized] target(s) in 0.19s
