@@ -172,7 +172,7 @@ theorem toModel_toRust (w : ModelWitness F) : toModel (K := K) (toRust w) = mapW
   simp only [arr24_getF, digK_d32]
   generalize w.path l = p
   obtain ⟨b, d⟩ := p
-  cases b <;> exact Prod.ext (by decide) rfl
+  cases b <;> exact Prod.ext (by first | rfl | simp) rfl
 
 /-- T2: the Rust record of an M31 witness satisfies the builder's range facts. -/
 theorem witnessOk_toRust (w : ModelWitness F) : WitnessOk (toRust w) where
@@ -183,7 +183,6 @@ theorem witnessOk_toRust (w : ModelWitness F) : WitnessOk (toRust w) where
     intro l hl
     show ((arr24 (fun l => if (w.path l).1 then 1#u32 else 0#u32)).val[l]!).val = 0 ∨ _
     rw [arr24_get _ l hl]
-    dsimp only
     cases (w.path ⟨l, hl⟩).1
     · exact Or.inl rfl
     · exact Or.inr rfl
