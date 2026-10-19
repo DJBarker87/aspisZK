@@ -1,0 +1,11 @@
+# Concrete initial-message recovery from raw interpolation rows
+
+This focused Lean 4.32 module composes the actual finite-tape raw-row recovery with the actual public message decoder/re-encoder equality filter. It canonicalizes each returned coefficient list with CPolynomial.ofArray, using the already-proved equality to the RR mathematical coefficient-list polynomial.
+
+For every successful output of recoverMessages, membership of a message m in that very output list is equivalent to the original RawState model vanishing at the actual executable encoding of m. Soundness follows from raw root recovery and the equality filter. Completeness uses the existing circle-numerator degree bound of 1024, actual depth-1025 recovery completeness, canonical-polynomial injectivity, and unconditional public filter completeness. There is no separate ideal decoder, image-membership premise, supplied candidate message, or starting-validity premise.
+
+The same executable composition has pointwise identical abort indicator to raw recovery: filtering cannot add an abort. The root-finding finite-field-tape abort bound can therefore be transported by pointwise equality. No additional probabilistic independence assumption is introduced by this deterministic filter.
+
+Source, direct imports, object hash, compiler command/revision, status, timing, RSS, swap and printed axioms are retained. Exit0; wall50.82s; peak process RSS4,164,829,184B; process swap0; standard axioms only. Most time was mixed-closure page-in (2.28s compiler user CPU). This new mixed-source check used an explicit6GiB aggregate guard and Lean -M5000, below the local8GiB limit. A worker overlapping at its own4GiB aggregate limit stopped itself; that stop did not create an extra root result or invalidate the completed target. No full replay was run.
+
+Still open: actual interpolation backend and GS witness-to-RawState constructor integration, point-agreement root-forcing, final-round message recovery and joint-list/spend-relation extraction, list cardinality/deduplication where required, whole operation/bit cost, finite-bit sampler law and caller probability composition, protocol/source/runtime/ROM soundness, privacy and release gates. This is not a full100-bit spend proof.
