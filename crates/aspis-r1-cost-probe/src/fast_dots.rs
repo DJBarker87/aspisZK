@@ -11,6 +11,9 @@ use crate::fast_pairing::EbyKDot;
 /// Seven folded batches sum to less than `2^37`; canonicalize each limb once
 /// after all 26 products. Every byte decoder and its order are unchanged.
 pub fn four_dots(q: &[u8], g: &[WideExact; 29]) -> [WideExact; 4] {
+    // The dot payload is exactly this prefix; paths and salts are consumed
+    // separately. Expose its fixed extent to remove repeated slice bounds.
+    let q:&[u8;608]=q[..608].try_into().unwrap();
     core::array::from_fn(|slot| {
         let mut limbs = [0u64; WideExact::LIMB_COUNT];
         for start in (0..26).step_by(4) {
