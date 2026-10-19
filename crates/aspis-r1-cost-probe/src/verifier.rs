@@ -82,8 +82,8 @@ pub struct Prepared {
     pub variant:Variant,pub roots:[[u8;32];2],pub gamma:E,pub kappa:E,pub alpha:[E;2],pub rho:K,
     pub queries:[u32;22],pub semantic_alpha:[K;10],pub z:[SecureCirclePoint;2],pub claim:E,pub state:[u8;32],
 }
-fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,gamma:E,kappa:E)->Result<E,Error> {
-        let g=powers::<29>(gamma);let k=powers::<7>(kappa);
+fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {
+        let k=powers::<7>(kappa);
         let mut parts=[E::ZERO;7];parts[0]=inactive;
         for point in 0..6 {
             let mut dot=crate::fast_pairing::EbyKDot::new();
@@ -101,7 +101,7 @@ fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inac
 
 impl Prepared {
     #[inline(never)]
-    pub fn new<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,hash:H)->Result<Box<Self>,Error> {
+    pub fn new<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,hash:H,g:&mut [E;29])->Result<Box<Self>,Error> {
         let mut t=Transcript::new(hash,sem.transcript.state(),v.variant);
         let gamma=t.scalar(27,v.y1,true);
         let kappa=t.scalar(28,&v.inactive.to_le_bytes(),false);
@@ -114,7 +114,9 @@ impl Prepared {
         };
         let queries=t.queries(row,v.final_message)?;
         let rho=t.scalar_k(row+1,&[]);
-        let claim=prepared_claim(sem,v.y1,v.inactive,gamma,kappa)?;
+        // Reuse this caller-owned scratch array in tx1; it is never serialized.
+        *g=powers::<29>(gamma);
+        let claim=prepared_claim(sem,v.y1,v.inactive,g,kappa)?;
         Ok(Box::new(Self{variant:v.variant,roots:sem.roots,gamma,kappa,alpha,rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state:t.state}))
     }
 }
@@ -168,11 +170,11 @@ pub fn line_fold(alpha:E,v:usize,a:[E;4])->E {
 /// The five base-field denominators used to fold one sampled query: circle
 /// x/y, followed by line x/y/z. Their inverses are batch-computed once per
 /// transaction so each query avoids five independent field inversions.
-struct QueryGeometry { start:usize, inverses:Vec<[M31;5]> }
+struct QueryGeometry { start:usize, inverses:Vec<[M31;5]>, line_z:Vec<M31> }
 impl QueryGeometry {
     fn for_range(queries:&[u32;22],start:usize,end:usize)->Result<Self,Error> {
         if start>end||end>queries.len(){return Err(Error::Query);}
-        let mut denominators=Vec::with_capacity(end-start);
+        let mut line_z_values=Vec::with_capacity(end-start);
         let mut flat=Vec::with_capacity((end-start)*5);
         for &query in &queries[start..end] {
             let u=query as usize;
@@ -184,9 +186,9 @@ impl QueryGeometry {
             let values=[point.x,point.y,line_x,line_y,line_z];
             if values.iter().any(|x|*x==M31::ZERO){return Err(Error::Query);}
             flat.extend_from_slice(&values);
-            denominators.push(values);
+            line_z_values.push(line_z);
         }
-        if flat.is_empty(){return Ok(Self{start,inverses:Vec::new()});}
+        if flat.is_empty(){return Ok(Self{start,inverses:Vec::new(),line_z:line_z_values});}
         // Standard prefix-product/backward batch inversion. The only `inv`
         // in this routine is applied to the product of all nonzero entries.
         let mut prefixes=Vec::with_capacity(flat.len());
@@ -199,8 +201,8 @@ impl QueryGeometry {
             flat_inverse[i]=suffix_inverse.mul(prefixes[i]);
             suffix_inverse=suffix_inverse.mul(flat[i]);
         }
-        let inverses=(0..denominators.len()).map(|i|core::array::from_fn(|j|flat_inverse[5*i+j])).collect();
-        Ok(Self{start,inverses})
+        let inverses=(0..line_z_values.len()).map(|i|core::array::from_fn(|j|flat_inverse[5*i+j])).collect();
+        Ok(Self{start,inverses,line_z:line_z_values})
     }
     #[inline(always)]
     fn for_query(&self,index:usize)->&[M31;5] {&self.inverses[index-self.start]}
@@ -225,27 +227,62 @@ fn line_fold_with_inverses(alpha:E,a:[E;4],inverse:&[M31;5])->E {
     let h3=c0.sub(c1).mul_m31(half.mul(iz));
     h0.add(alpha.mul(h1.add(alpha.mul(h2.add(alpha.mul(h3))))))
 }
+/// Transaction-local residues. At a group boundary each limb is <2^34.
+/// Four products add at most 4*(P-1)^2; adding the retained folded residue
+/// still fits u64 because 4*(P-1)^2+2^34 < 2^64. Flush after each four queries.
+struct BatchedWeights { raw:Vec<[u64;4]>, terms:usize }
+impl BatchedWeights {
+    fn new(weights:&[K])->Result<Self,Error> {
+        let mut raw=aspis_core::r0::heap::filled(weights.len(),[0u64;4]).map_err(|_|Error::Allocation)?;
+        for (out,w) in raw.iter_mut().zip(weights) {
+            *out=[w.c0.a.0 as u64,w.c0.b.0 as u64,w.c1.a.0 as u64,w.c1.b.0 as u64];
+        }
+        Ok(Self{raw,terms:0})
+    }
+    #[inline(always)]
+    fn push(&mut self,index:usize,power:K,basis:M31) {
+        let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];
+        for j in 0..4 {self.raw[index][j]+=u64::from(limbs[j])*u64::from(basis.0);}
+        if self.terms&3==3 {
+            for limb in &mut self.raw[index] {*limb=(*limb&0x7fff_ffff)+(*limb>>31);}
+        }
+    }
+    fn value(&self,index:usize)->K {
+        let [a,b,c,d]=self.raw[index].map(M31::reduce_u64);
+        K{c0:aspis_core::field::CM31{a,b},c1:aspis_core::field::CM31{a:c,b:d}}
+    }
+    fn finish(&self,weights:&mut[K]) {for (i,w) in weights.iter_mut().enumerate(){*w=self.value(i);}}
+}
+
 #[inline(never)]
 pub fn accumulate(p:&Prepared,a:&mut Accumulator,index:usize,value:E) {
     let mut node=crate::fast_domain::line_node(domain::FibreIndex::new(if p.variant.folds()==1 {index}else{index/4*4}).unwrap());
     if p.variant.folds()==2 {for _ in 0..2 {node=node.mul(node).double().sub(M31::ONE);}}
+    accumulate_with_node(p,a,node,value,None)
+}
+#[inline(never)]
+fn accumulate_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E,mut pending:Option<&mut BatchedWeights>) {
     let mut basis=[M31::ZERO;256];basis[0]=M31::ONE;let mut n=1;
     while n<a.weights.len() {for j in 0..n {basis[n+j]=basis[j].mul(node);} node=node.mul(node).double().sub(M31::ONE);n*=2;}
     for j in 0..a.weights.len() {
-        a.weights[j]=a.weights[j].add(a.power.mul_m31(basis[j]));
+        if let Some(weights)=pending.as_deref_mut() {
+            weights.push(j,a.power,basis[j]);
+            #[cfg(feature="prover")] {a.weights[j]=weights.value(j);}
+        } else {a.weights[j]=a.weights[j].add(a.power.mul_m31(basis[j]));}
         crate::trace::value(12,a.next*a.weights.len()+j,E::from_qm31(a.weights[j]));
         crate::trace::value(13,a.next*a.weights.len()+j,E::from_m31(basis[j]));
     }
+    if let Some(weights)=pending {weights.terms+=1;}
     a.rhs=a.rhs.add(value.mul_qm31(a.power));crate::trace::value(11,a.next,a.rhs);
     a.power=a.power.mul(p.rho);a.next+=1;
 }
 #[inline(never)]
 pub fn query<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:H,obs:Observer)->Result<(),Error> {
     let geometry=QueryGeometry::for_range(&p.queries,a.next,a.next+1)?;
-    query_with_geometry(v,p,a,g,hash,obs,&geometry)
+    query_with_geometry(v,p,a,g,hash,obs,&geometry,None)
 }
 #[inline(never)]
-fn query_with_geometry<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry)->Result<(),Error> {
+fn query_with_geometry<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry,pending:Option<&mut BatchedWeights>)->Result<(),Error> {
     let i=a.next;let u=p.queries[i] as usize;let q=v.query(i);
     #[cfg(not(feature = "private-leaf-salts"))]
     let (c1,c2,path_at) = (merkle::leaf_with_digest(hash,merkle::C1_TAG,&q[..480]),merkle::leaf_with_digest(hash,merkle::C2_TAG,&q[480..608]),608);
@@ -277,7 +314,11 @@ fn query_with_geometry<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:
         folded=line_fold_with_inverses(p.alpha[1],values,inverse);crate::trace::value(10,2*i+1,folded);
     }
     #[cfg(feature="detail-phases")]mark(obs,Phase::QueryPart(i,2));
-    accumulate(p,a,u,folded);mark(obs,Phase::Query(i));Ok(())
+    let node=if p.variant.folds()==2 {
+        let z=geometry.line_z[i-geometry.start];z.mul(z).double().sub(M31::ONE)
+    } else {crate::fast_domain::line_node(domain::FibreIndex::new(u).unwrap())};
+    accumulate_with_node(p,a,node,folded,pending);
+    mark(obs,Phase::Query(i));Ok(())
 }
 pub fn polynomial(bytes:&[u8],x:E)->E {(0..7).rev().fold(E::ZERO,|a,i|a.mul(x).add(field(bytes,i)))}
 #[inline(never)]
@@ -347,14 +388,16 @@ pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)
 #[inline(never)]
 fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {
     let geometry=QueryGeometry::for_range(&p.queries,0,k)?;
-    while a.next<k {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}
+    let mut pending=BatchedWeights::new(&a.weights)?;
+    while a.next<k {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry,Some(&mut pending))?;}
+    pending.finish(&mut a.weights);
     let bytes=checkpoint(&p,&a,proof,public_bytes,hash);mark(obs,Phase::CheckpointWrite);Ok(bytes)
 }
 
 #[inline(never)]
-fn tx1_prepare<H:Digest32>(public:Public<'_>,v:&View<'_>,hash:H,obs:Observer)->Result<(Box<[[K;29];3]>,Box<Prepared>),Error> {
+fn tx1_prepare<H:Digest32>(public:Public<'_>,v:&View<'_>,hash:H,obs:Observer,g:&mut [E;29])->Result<(Box<[[K;29];3]>,Box<Prepared>),Error> {
     let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;mark(obs,Phase::Semantic);
-    let p=Prepared::new(&sem,v,hash)?;
+    let p=Prepared::new(&sem,v,hash,g)?;
     Ok((sem.claims,p))
 }
 
@@ -362,7 +405,8 @@ fn tx1_prepare<H:Digest32>(public:Public<'_>,v:&View<'_>,hash:H,obs:Observer)->R
 pub fn tx1<H:Digest32>(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {
     if k>22 {return Err(Error::Parse);}
     let v=View::parse(proof)?;mark(obs,Phase::Parsed);
-    let (_semantic_claims,p)=tx1_prepare(public,&v,hash,obs)?;let mut a=Accumulator::new(v.variant)?;let g=powers::<29>(p.gamma);mark(obs,Phase::Prepare);
+    let mut g=[E::ZERO;29];
+    let (_semantic_claims,p)=tx1_prepare(public,&v,hash,obs,&mut g)?;let a=Accumulator::new(v.variant)?;mark(obs,Phase::Prepare);
     tx1_finish(v,p,a,g,public_bytes,proof,k,hash,obs)
 }
 /// Complete strict verification of an R1 proof and its checkpoint.
@@ -378,7 +422,9 @@ pub fn tx2<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,ob
     let v=View::parse(proof)?;mark(obs,Phase::Parsed);
     let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);
     let geometry=QueryGeometry::for_range(&p.queries,a.next,22)?;
-    while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}
+    let mut pending=BatchedWeights::new(&a.weights)?;
+    while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry,Some(&mut pending))?;}
+    pending.finish(&mut a.weights);
     finish_relation(&v,&p,&a,obs)
 }
 
@@ -398,7 +444,9 @@ pub fn tx2_authenticated<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&
     let v=View::parse_shape(proof)?;mark(obs,Phase::Parsed);
     let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);
     let geometry=QueryGeometry::for_range(&p.queries,a.next,22)?;
-    while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}
+    let mut pending=BatchedWeights::new(&a.weights)?;
+    while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry,Some(&mut pending))?;}
+    pending.finish(&mut a.weights);
     finish_relation(&v,&p,&a,obs)
 }
 
@@ -454,6 +502,28 @@ mod query_geometry_tests {
                 assert_eq!(circle_fold_with_inverses(alpha,values,inverse),circle_fold(alpha,queries[index] as usize,values),"circle index {index}, case {case}");
                 assert_eq!(line_fold_with_inverses(alpha,values,inverse),line_fold(alpha,queries[index] as usize/4,values),"line index {index}, case {case}");
             }
+        }
+    }
+}
+
+#[cfg(test)]
+mod batched_weight_tests {
+    use super::*;
+    #[test]
+    fn bounded_rho_residues_match_all_canonical_prefixes() {
+        let hi=M31(aspis_core::field::P-1);
+        let max=K{c0:aspis_core::field::CM31{a:hi,b:hi},c1:aspis_core::field::CM31{a:hi,b:hi}};
+        for power in [K::ZERO,K::ONE,max] {
+            let mut reference=alloc::vec![max;64];let mut pending=BatchedWeights::new(&reference).unwrap();
+            for _ in 0..22 {
+                for j in 0..64 {
+                    pending.push(j,power,hi);
+                    reference[j]=reference[j].add(power.mul_m31(hi));
+                    assert_eq!(pending.value(j),reference[j]);
+                }
+                pending.terms+=1;
+            }
+            let mut actual=alloc::vec![K::ZERO;64];pending.finish(&mut actual);assert_eq!(actual,reference);
         }
     }
 }

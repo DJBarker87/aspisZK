@@ -24,6 +24,13 @@ mod canonical {
         pub fn from_limbs(x:[u32;4])->Option<Self>{if x.iter().all(|&v|v<P){Some(Self(x))}else{None}}
         pub fn from_m31(x:u32)->Option<Self>{if x<P{Some(Self([x,0,0,0]))}else{None}}
         pub const fn limbs(self)->[u32;4]{self.0}
+        /// WideExact owns private, canonical coordinates; this constructor
+        /// accepts only that validated type, never raw QM31 limbs or bytes.
+        #[inline(always)]
+        pub(super) fn from_wide(value:super::E)->[Self;2] {
+            let [a,b,c,d,e,f,g,h]=value.to_limbs();
+            [Self([a,b,c,d]),Self([e,f,g,h])]
+        }
         #[inline(always)] pub fn add(self,rhs:Self)->Self {
             let a=reduce_pair(pair(self.0[0],self.0[1]).wrapping_add(pair(rhs.0[0],rhs.0[1])));
             let b=reduce_pair(pair(self.0[2],self.0[3]).wrapping_add(pair(rhs.0[2],rhs.0[3])));
@@ -90,12 +97,13 @@ mod canonical {
 
     // Private canonical operands; bounded raw representatives, canonical result.
     // At most 4096 partial folds, each <2^34, sum <2^46. No u64 wrap.
-    pub struct Dot { sums:[u64;4], count:usize }
+    pub struct Dot { sums:[u64;4] }
     impl Dot {
-        pub fn new()->Self {Self{sums:[0;4],count:0}}
+        pub fn new()->Self {Self{sums:[0;4]}}
         #[inline(always)]
         pub fn push(&mut self,a:Q,b:Q) {
-            assert!(self.count<4096);self.count+=1;
+            // Both enclosing public accumulators check the 4096-term bound.
+            // This private accumulator cannot be reached by raw callers.
             let raw=a.raw(b);
             for j in 0..4 {
                 self.sums[j]=self.sums[j].wrapping_add(
@@ -146,8 +154,7 @@ impl EbyKDot {
     #[inline(always)]
     pub fn push(&mut self, value: E, scalar: QM31) -> Result<(), ()> {
         if self.count >= MAX_TERMS { return Err(()); }
-        let value_c0 = checked_q(value.c0())?;
-        let value_c1 = checked_q(value.c1())?;
+        let [value_c0,value_c1] = canonical::Q::from_wide(value);
         let scalar = checked_q(scalar)?;
         self.c0.push(value_c0, scalar);
         self.c1.push(value_c1, scalar);
@@ -157,7 +164,10 @@ impl EbyKDot {
 
     #[inline(always)]
     pub fn finish(self) -> E {
-        E::new(qm31_of(self.c0.finish()), qm31_of(self.c1.finish()))
+        let [a,b,c,d]=self.c0.finish().limbs();
+        let [e,f,g,h]=self.c1.finish().limbs();
+        // The private accumulator produces canonical coordinates already.
+        E::from_limbs([a,b,c,d,e,f,g,h]).unwrap()
     }
 }
 
@@ -182,10 +192,8 @@ impl EbyEDot {
     #[inline(always)]
     pub fn push(&mut self, left: E, right: E) -> Result<(), ()> {
         if self.count >= MAX_TERMS { return Err(()); }
-        let a = checked_q(left.c0())?;
-        let b = checked_q(left.c1())?;
-        let c = checked_q(right.c0())?;
-        let d = checked_q(right.c1())?;
+        let [a,b] = canonical::Q::from_wide(left);
+        let [c,d] = canonical::Q::from_wide(right);
         self.ac.push(a, c);
         self.bd.push(b, d);
         self.ad.push(a, d);

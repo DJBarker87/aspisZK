@@ -9,11 +9,35 @@ pub fn kpowers<const N:usize>(x:K)->[K;N] { let mut p=K::ONE;core::array::from_f
 pub fn double(x:K)->K { x.mul(x).add(x.mul(x)).sub(K::ONE) }
 pub fn field(bytes:&[u8],i:usize)->E { E::from_le_bytes(&bytes[i*32..(i+1)*32]).unwrap() }
 
+// Exact S2 coefficient-to-row inactive classification, in first-occurrence order.
+// Exhaustive table correspondence is checked against Variant::row and raw(0, _).
+const S2_INACTIVE_GROUPS:[u8;64]=[0,1,2,3,4,5,5,6,4,5,5,5,7,7,7,7,7,7,7,4,4,5,5,6,4,5,5,5,7,7,7,4,7,7,7,7,4,5,5,5,4,5,5,5,8,9,10,8,11,2,2,10,4,5,5,6,4,5,5,6,7,7,7,7];
+const S2_INACTIVE_MASKS:[u16;12]=[32769,49217,49280,16448,32767,16383,49151,65535,49152,57344,49216,33024];
+
+#[inline(never)]
+fn s2_grouped_inactive_pair(f:&[u8],low:&[E;16])->E {
+    let mut coefficients=[E::ZERO;12];
+    for j in 0..64 {
+        let group=S2_INACTIVE_GROUPS[j] as usize;
+        coefficients[group]=coefficients[group].add(field(f,j));
+    }
+    let mut pair=E::ZERO;
+    for group in 0..12 {
+        let mut weight=E::ZERO;
+        for (bit,&challenge) in low.iter().enumerate() {
+            if S2_INACTIVE_MASKS[group]&(1<<bit)!=0 {weight=weight.add(challenge);}
+        }
+        pair=pair.add(coefficients[group].mul(weight));
+    }
+    pair
+}
+
 /// Contract the inactive row after combining coefficients with the same
 /// sixteen-entry inactive mask. The zero mask is retained as a group; its
 /// subset weight is zero, matching the ungrouped sum.
 #[inline(never)]
 fn grouped_inactive_pair(weights:&Weights,f:&[u8],low:&[E;16])->E {
+    if weights.variant==Variant::S2 && f.len()==64*32 {return s2_grouped_inactive_pair(f,low);}
     let mut group_masks=[0u16;64];
     let mut group_coefficients=[E::ZERO;64];
     let mut groups=0;
@@ -55,6 +79,31 @@ fn twofold_libra_weights(low:&[E;16],extra:[K;2])->[E;4] {
         }
         weight
     })
+}
+
+/// Exact factorization of the existing 56-entry Libra row into two 28-entry
+/// geometric runs. The 16-entry low tensor is a product of two four-entry
+/// tensors; the only cut blocks have lengths 12 and 4 (28 = 16 + 12).
+#[inline(never)]
+fn factored_s2_libra_weights(ap0:&[E;4],ap1:&[E;4],extra:[K;2])->[E;4] {
+    let mut weights=[E::ZERO;4];
+    for side in 0..2 {
+        let q=kpowers::<4>(extra[side]);
+        let q4=q[2].square();let q8=q4.square();let q12=q8.mul(q4);let q16=q8.square();
+        let low=Weights::scalar_factor(&q,ap0);
+        let high_powers=[K::ONE,q4,q8,q12];
+        let terms:[E;4]=core::array::from_fn(|r|ap1[PERM[r]].mul_qm31(high_powers[r]).mul_m31(QUARTER));
+        let first2=terms[0].add(terms[1]);let first3=first2.add(terms[2]);let all=first3.add(terms[3]);
+        if side==0 {
+            weights[0]=low.mul(all);
+            weights[1]=low.mul(first3).mul_qm31(q16);
+        } else {
+            weights[1]=weights[1].add(low.mul(ap1[PERM[3]].mul_m31(QUARTER)));
+            weights[2]=low.mul(all).mul_qm31(q4);
+            weights[3]=low.mul(first2).mul_qm31(q16.mul(q4));
+        }
+    }
+    weights
 }
 
 pub struct Weights {
@@ -200,7 +249,7 @@ impl Weights {
             // Coefficients with the same inactive mask share one subset sum.
             let low:[E;16]=core::array::from_fn(|s|ap0[PERM[s%4]].mul(ap1[PERM[s/4]]).mul_m31(QUARTER.mul(QUARTER)));
             parts[0]=grouped_inactive_pair(self,f,&low);
-            let libra=twofold_libra_weights(&low,self.extra);
+            let libra=if self.variant==Variant::S2 {factored_s2_libra_weights(&ap0,&ap1,self.extra)}else{twofold_libra_weights(&low,self.extra)};
             for j in 0..4 {parts[4]=parts[4].add(field(f,j).mul(libra[j]));}
         }
         #[cfg(feature="prover")]
@@ -238,5 +287,48 @@ impl Weights {
         let mut w=aspis_core::r0::heap::filled(1024,E::ZERO).map_err(|_|Error::Allocation)?;
         for (j,v) in w.iter_mut().enumerate() {for kind in 0..7 {*v=v.add(kp[kind].mul_qm31(self.raw(kind,j)));}}
         Ok(w)
+    }
+}
+
+#[cfg(test)]
+mod s2_inactive_table_tests {
+    use super::*;
+    #[test]
+    fn all_s2_inactive_table_entries_match_reference() {
+        for j in 0..64 {
+            let group=S2_INACTIVE_GROUPS[j] as usize;
+            assert!(group<S2_INACTIVE_MASKS.len());
+            for bit in 0..16 {
+                assert_eq!((S2_INACTIVE_MASKS[group]>>bit)&1!=0,
+                    aspis_core::r0::opening::inactive(Variant::S2.row(16*j+bit)).unwrap());
+            }
+        }
+        // Equality of each coefficient's scalar factor establishes the
+        // regrouping identity independently of particular message values.
+        for bit in 0..16 {
+            let low=core::array::from_fn(|i|if i==bit {E::ONE}else{E::ZERO});
+            for j in 0..64 {
+                let mut f=alloc::vec![0u8;64*32];f[j*32..(j+1)*32].copy_from_slice(&E::ONE.to_le_bytes());
+                let expected=if aspis_core::r0::opening::inactive(Variant::S2.row(16*j+bit)).unwrap(){E::ONE}else{E::ZERO};
+                assert_eq!(s2_grouped_inactive_pair(&f,&low),expected);
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod libra_factor_tests {
+    use super::*;
+    #[test]
+    fn factored_libra_matches_all_four_original_weights() {
+        let mut state=0x13198a2e03707344u64;
+        let mut field=|| {state=state.wrapping_mul(6364136223846793005).wrapping_add(1);(state%u64::from(aspis_core::field::P)) as u32};
+        for case in 0..512 {
+            let mut value=||E::from_limbs(core::array::from_fn(|_|match case {0=>0,1=>1,2=>aspis_core::field::P-1,_=>field()})).unwrap();
+            let ap0=core::array::from_fn(|_|value());let ap1=core::array::from_fn(|_|value());
+            let extra=[value().c0(),value().c0()];
+            let low=core::array::from_fn(|s|ap0[PERM[s%4]].mul(ap1[PERM[s/4]]).mul_m31(QUARTER.mul(QUARTER)));
+            assert_eq!(factored_s2_libra_weights(&ap0,&ap1,extra),twofold_libra_weights(&low,extra),"case {case}");
+        }
     }
 }
