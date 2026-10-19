@@ -51,6 +51,13 @@ the verified current one, proves checked scalar multiply/add success and binds
 the actual bitmask flush predicate. Receipts: `rho-types-a`, `rho-externals-g`,
 `rho-funs-pushvalue`, `rho-scalar-a`.
 
+`CuSavingsRhoValue.value_success` proves the complete freshly extracted value
+method on every valid Vec index. It performs the actual array map and all four
+reads, returning exactly the canonical residues of arbitrary u64 input limbs.
+The read-success premise in the intermediate lemma is discharged by the
+exported theorem from the index bound. Receipt: `rho-value-c` (standard axioms
+only, 1.604 seconds, 2,670,712 KiB peak RSS, no process/cgroup swap).
+
 The full emission's finish path does not typecheck against the pinned runtime:
 the emitted mutable Iterator trait supplies a triple including a handback,
 whereas the ordinary Iterator interface expects a pair. No generated body was

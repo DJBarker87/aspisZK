@@ -1,0 +1,102 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoValue.lean:33:17: error: unsolved goals
+case cons
+x : U64
+xs : List U64
+ih :
+  mapState (BuiltinFnMut U64 field.M31).call_mut xs field.M31.reduce_u64 =
+    ok (List.map canonicalWord xs, field.M31.reduce_u64)
+⊢ (let (y, state') := (canonicalWord x, field.M31.reduce_u64)
+    do
+    let (ys, state'') ←
+      mapState
+          (fun f x =>
+            match f x with
+            | ok y => ok (y, f)
+            | fail e => fail e
+            | div => div)
+          xs state'
+    ok (y :: ys, state'')) =
+    ok (canonicalWord x :: List.map canonicalWord xs, field.M31.reduce_u64)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoValue.lean:34:64: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [mapState, ̲BuiltinFnMut, ̲reducer_returns, ̲bind_tc_ok,i̵h̵,̵ ̲List.map_cons]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoValue.lean:56:21: error: Type mismatch: After simplification, term
+  i.isLt
+ has type
+  @LT.lt ℕ instLTNat (↑i) 4
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑i ↑4#usize
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoValue.lean:60:43: error: Type mismatch: After simplification, term
+  hi
+ has type
+  @LT.lt ℕ instLTNat (↑i) 4
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑i ↑4#usize
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoValue.lean:63:14: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.fail` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `OptionT.fail`
+  [apply] `fail`
+  [apply] `Lean.Parser.Tactic.fail`
+  [apply] `Std.Internal.Parsec.fail`
+  [apply] `Lean.Parser.Tactic.Grind.fail`
+  [apply] `Std.Http.Protocol.H1.Reader.fail`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoValue.lean:64:16: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoValue.lean:64:25: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoValue.lean:73:13: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoValue.lean:71:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoValue.lean:96:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑self.raw)[↑index]?
+in the target expression
+  (match self.raw[index]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok raw
+
+self : verifier.BatchedWeights
+index : Usize
+hi : ↑index < (↑self.raw).length
+raw : Std.Array U64 4#usize := (↑self.raw)[↑index]
+⊢ (match self.raw[index]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok raw
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.CuSavingsRhoValue.reducer_returns' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoValue.array_map_reduce' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoValue.value_from_read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoValue.value_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
