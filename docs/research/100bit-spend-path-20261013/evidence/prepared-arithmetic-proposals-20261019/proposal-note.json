@@ -1,0 +1,178 @@
+{
+  "Lean_jobs": 0,
+  "P1_reuse_gamma_powers": {
+    "CU_estimate": {
+      "budget_scenario_CU": [
+        15600,
+        31200
+      ],
+      "caveat": "29Wide multiplications are not priced here; no claim that theyconsume10\u201320%Prepare or thatcompiler hasnotalreadyoptimizedthem.",
+      "classification": "ENGINEERING_BUDGET_SCENARIO_NOT_FORECAST_OR_MEASUREMENT",
+      "defensible_measured_component_bound_CU": [
+        0,
+        155799
+      ],
+      "fraction_of_rounded156k_prepare_budget": [
+        0.1,
+        0.2
+      ]
+    },
+    "checkpoint": "Byteformat/claimcontent canstayexact if arithmetic/order preserved.",
+    "do_not_return_by_value": "[E;29] is928bytes. Adding it to tx1_prepare tuplebyvalue risks reinstating exactly the largeABI/frame problem Decision1h fixed. Current1h tx1/finish boundedat4096; no stack headroom assumed.",
+    "error_order": "Reusingprecomputedg alone neednot reorderfallibleoperations; new allocation or eagerbuffercreation wouldchangeallocationfailureorder andmustbe explicit.",
+    "exact_Rust_source_call_counts": {
+      "Wide_mul_calls_per_powers29_source": 29,
+      "duplicate_source_Wide_mul_calls_potentially_removed": 29,
+      "last_power_update": "The29thupdate yields gamma^29 whichis not returned; optimizer may already eliminate it. Source-call count is not disassembly/CUcount.",
+      "powers29_invocations_in_stage1": 2
+    },
+    "problem": "prepared_claim computes powers<29>(gamma); tx1 computes same powers<29>(p.gamma) immediately afterward. tx2 computes its own powers29 for resumed queries.",
+    "proposal_options": [
+      "Caller-owned output buffer passedby mutable reference through tx1_prepare/Prepared.new; fill onceafter gamma sample, use inprepared_claim andlaterqueries. Mustaudit initialization/stack/errororder.",
+      "Heap Box<[E;29]> carry avoids large returnedvalue butadds928Bheap allocation/newallocationfailure andchanges ownership/errororder; not preferred withoutmeasurement."
+    ],
+    "transcript": "No hash/samplerinput/output/order needs tochange."
+  },
+  "P2_defer_prepared_claim_to_stage2": {
+    "checkpoint_change_options": [
+      "Keep32byteclaimslot butsetcanonicalplaceholder andbump formatmagic/version/flags toexplicitDEFERRED_CLAIM; resume rejectsold/newsemanticsmismatch andcomputesactualclaim beforefinish_relation.",
+      "Remove32byteclaimslot innewversion: S2size1768\u21921736; checkpoint_size,adapterexactsizeguard,reader/writer,driverallocation,accountcreation/rent/fixtures allchange."
+    ],
+    "checkpoint_transcript": "gamma/kappa/alpha/rho/queryvalues/state canstaybitidentical; computationalclaim notabsorbedintoFiatShamir. Checkpointbytes anderrorhashprefixes necessarilychange.",
+    "dependency_cut": "p.claim is readonlyby finish_relation, after allqueries; query_with_geometry/accumulate do not read it.",
+    "error_order": "prepared_claim Parse errors movefromstage1 beforequeries tostage2 afterresume/remainingqueries unlessexplicitly scheduledbeforethem; stage1 canwritecheckpoint onproofs previouslyrejected. Newphase semantics/formalcaller/checkpointclaims required.",
+    "exact_Rust_source_work_to_relocate": {
+      "EbyKDot_finish": 6,
+      "EbyKDot_push": 174,
+      "decoded_claim_scalar_count": 174,
+      "final_linear_mix_Wide_add": 7,
+      "final_linear_mix_Wide_mul": 7,
+      "gamma_power_source_Wide_mul": 29,
+      "kappa_power_source_Wide_mul": 7,
+      "source_validation_note": "EbyKDot.push remainsfallible (canonical andcountchecks) evenifcanonicalproofparse makes honestcount29safe; do notdropchecks."
+    },
+    "inputs_already_available": {
+      "authenticated_checkpoint": "gamma andkappa; sourceproof/public hashes; currentlyclaimE andsemantic_alpha/z stored",
+      "gamma_array": "tx2 alreadybuilds powers29gamma forqueries; pass thisbyreference to deferredclaim helper toavoidanotherduplicate.",
+      "proof_other": "y1[29] andinactiveE fromView",
+      "proof_semantic_row25": "claims[3][29] plus extra[29], decodedcanonicalK fromproof",
+      "proof_semantic_row26": "before_z1[29], decodedcanonicalK fromproof"
+    },
+    "must_not_reuse_old_version": "Existing R1P2CKP2/versionbytes[10]=1 meansvalidated computedclaim. Silentzero/unevaluatedclaim underoldversion isnot anunchangedcheckpointproof.",
+    "parameterized_unmeasured_CU_model": {
+      "consequence": "Claimdeferral alone increasesalready-over-budgetcombinedstage2. It isarebalancingtool, not120ksavings. Net savingsmustcomefromdedup/otheroptimization; queryrebalance cannotreducetotalsum.",
+      "equations": [
+        "S1new = S1old - C + Q",
+        "S2combined_new = S2combined_old + C - G + P - Q",
+        "sumnew = sumold - G + P"
+      ],
+      "scenarios": [
+        {
+          "C_assumed_CU": 25000,
+          "measured": false,
+          "stage1_reference_CU": 1316372,
+          "stage2_combined_expression": "1405079 - G + P"
+        },
+        {
+          "C_assumed_CU": 50000,
+          "measured": false,
+          "stage1_reference_CU": 1291372,
+          "stage2_combined_expression": "1430079 - G + P"
+        },
+        {
+          "C_assumed_CU": 100000,
+          "measured": false,
+          "stage1_reference_CU": 1241372,
+          "stage2_combined_expression": "1480079 - G + P"
+        }
+      ],
+      "variables": {
+        "C": "Currentstage1costofclaim includingitsgamma powers; unknowncomponent\u2264155799phaseceiling.",
+        "G": "Savedduplicategamma powers byusingexistingstage2array; unknown, noisolatedmeasurement.",
+        "P": "Newstage2canonicalPrefix/recorddecode/versionoverhead; unknownnonnegativebudgetparameter.",
+        "Q": "Querycostmovedstage2\u2192stage1 ifk increases; not included intable."
+      }
+    },
+    "trust": "Deferredrawclaims remainboundbyproofhash underexistingauthentic-stage1/checkpointcustody precondition. Unkeyedchecksum isnotauthentication. RevalidatePrefix/decodebounds beforetrustedread inauthenticatedstage2; do nottreat parse_shape alone ascanonicalproofvalidation."
+  },
+  "P3_defer_semantic_arithmetic": {
+    "CU_bounds": {
+      "estimated_saving_range": "No narrowerforecast supported. AnydeferredcomponentD increasesstage2byD plusreconstruction/formatcost; cannotalonefixcombined255withdrawaloverrun.",
+      "isolated_public_terminal_CU": "UNMEASURED",
+      "semantic_phase_ceiling_reference_CU": 566022
+    },
+    "candidate_pure_checks": [
+      "Tenroundboundary/Horner checks canmove while stage1 stillabsorbs exactrows15..24 andderivesexactalpha10.",
+      "public.terminal_qm31 plusselectedmask/eta terminalcomparison canmove; row25/26 transcriptreads depend onrecordbytes andtranscriptstate, not computedterminal acceptance."
+    ],
+    "failure_semantics": "EarlierBoundary/Public/Terminal errors become pendingstage2obligations. Stage1mustretainstrictframing/canonicalscan andeveryFSrecord/samplerstep; cannot replace actualsemanticproofwithnew relation orassumedvalidity. Invalidproofs may reachlaterstage1queries/checkpoint; exactoldfailureorder changed.",
+    "missing_current_checkpoint_dependency": "OriginalChallenges isNOT incheckpoint. terminal_qm31 needslambda,chi,theta,zc[10],mu; maskedterminalneeds eta:15QM31values=240bytes. alpha10isalreadycheckpointed; proofcontainsclaim/polynomialbytes.",
+    "options": [
+      "Newcheckpoint stores originalChallenges240bytes (S2size1768\u21922008 beforeotherchanges), withversion/authenticproducermeaning updated.",
+      "Recompute initial publictranscript+wire.begin fromboundpublic/root/rows0..14 in stage2: exactly1initialhash+15\u00d73rowhashes=46additionalDigest32calls plus15QM31samples. Preservesvalidchallengevalues but addsactualwork andduplicatestranscriptread schedule; overall583orderedcalls cannotremainunchanged."
+    ],
+    "source_work_counts_not_CU": {
+      "Horner_QM31_add_calls": 280,
+      "Horner_QM31_mul_calls": 280,
+      "boundary_QM31_add_calls": 280,
+      "boundary_comparisons": 10,
+      "masked_terminal_add_calls": 2,
+      "masked_terminal_eta_mul_calls": 1,
+      "polynomial_coefficients_each": 28,
+      "public_terminal_and_mask_internal_work": "Not counted; do notpretendthesehaveconstant lowcost without auditingtheiractualhelpers.",
+      "rounds": 10,
+      "terminal_comparison": 1
+    },
+    "trust_and_protocol": "Requiresnewcheckpointproof/callersemantics andleadapproval; notDecision1f extraction-only/helpermove. Poolmaysettleonlyafterallpendingsemanticchecks pass inauthenticatedstage2."
+  },
+  "P4_existing_k11_measurement_only": {
+    "caveat": "Differentquery/geometryrange/allocation/checkpointbytes; 48.6k isreference, notmeasuredk11delta. k11 shiftscoststage2\u2192stage1 andcannotfixbothwithoutnetoptimization.",
+    "existing_source": "r1_pool_adapter::stage1 accepts[3,10]and[3,11]; resume acceptsnext\u226422, carriesaccumulatorweights/rhs/power.",
+    "measured_reference_query_CU_range": [
+      48572,
+      48731
+    ],
+    "new_checkpoint_version_needed": false,
+    "proposal": "Measureexisting1hELF[3,11] plusmatchingASQ8 settlement beforeconsideringanycodechange. No runperformedbyB.",
+    "source_edit_needed": false,
+    "valid_transcript": "All22queries/FSstate unchanged; stageboundary/progressbytes/errors differasexistingroutepermits."
+  },
+  "analysis_revision": "a411dff1d7f6eedbb9e8263507cf89e3b6d9b4c9",
+  "classification": "READ_ONLY_UNMEASURED_ARITHMETIC_REBALANCING_PROPOSALS_NO_SOURCE_PATCH",
+  "host_jobs": 0,
+  "measured_reference": {
+    "cross_fixture_warning": "121451CU is a planning scenario combining thisstage1reference with parentworststage2; not a measuredpaired bound.",
+    "fixture_scope": "Existing canonical-transfer next_pair_index13 runtime1h; not worst255withdrawal same-pair evidence.",
+    "illustrative_net_reduction_to_fit_both_CU": 121451,
+    "meaning": "Phase deltas include observer/log/caller work; they are ceilings for contained arithmetic, not isolated operation prices.",
+    "parent_measurement_scope": "Reported by root; raw255Poolreceipt not remeasured byB.",
+    "parent_provided_worst_combined_Pool255withdrawal_stage2_CU": 1380079,
+    "path": "docs/research/100bit-spend-path-20261013/evidence/readonly-runtime-1h-20261019/run/results/after/stage1.json",
+    "prepare_phase_marker_delta_CU": 155799,
+    "semantic_phase_marker_delta_CU": 566022,
+    "sha256": "cc8e58aad9a18beaf28481d3af64ad9cb96f4b4995d278d6b64688c92f8aaae7",
+    "stage1_invoked_verifier_CU": 1340866,
+    "stage1_transaction_CU": 1341372,
+    "steady_query_marker_deltas_CU": [
+      48731,
+      48612,
+      48601,
+      48628,
+      48572,
+      48612,
+      48628,
+      48586,
+      48625
+    ],
+    "steady_query_range_CU": [
+      48572,
+      48731
+    ],
+    "target_per_transaction_CU": 1300000
+  },
+  "new_native_or_runtime_runs": 0,
+  "no_source_changes": true,
+  "recommendation": "Firstmeasureorinspectduplicatepowers withsmallapprovedAPI/frame-safeproposal; costitbeforeclaiming15.6\u201331.2k. Do notdeferclaim/semanticsasifitcutscombinedtotal; theyrequireversion/trust/error-orderdecisions andcurrentlyworsenstage2budget absentcompensatingqueryrebalance/netoptimizations.",
+  "source_pins": "source-pins.json",
+  "source_revision": "32559d2696b89cdbd75304c1f7624f94dfe125ae"
+}
