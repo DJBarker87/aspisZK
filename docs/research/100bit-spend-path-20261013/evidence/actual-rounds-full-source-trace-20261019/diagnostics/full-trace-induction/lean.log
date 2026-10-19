@@ -1,0 +1,100 @@
+/tmp/RawBeginAnnotatedFullTrace-v1.lean:21:44: error: Application type mismatch: The argument
+  ih
+has type
+  BeginCalls.SemanticRun D pre rows' after✝ after qs' →
+    BeginCalls.SemanticRun D pre (rows✝ ++ rows') mid✝ after (qs✝ ++ qs')
+but is expected to have type
+  BeginCalls.SemanticRun D pre (rows✝.append rows') mid✝ after (qs✝.append qs')
+in the application
+  BeginCalls.SemanticRun.cons hr hs ih
+/tmp/RawBeginAnnotatedFullTrace-v1.lean:62:34: error: unexpected token 'prefix'; expected '[', '{', '|', '⦃' or term
+/tmp/RawBeginAnnotatedFullTrace-v1.lean:62:31: error: Missing cases:
+/tmp/RawBeginAnnotatedFullTrace-v1.lean:62:20: error: Application type mismatch: The argument
+  congrArg (nomatch )
+has type
+  ?m.249 = ?m.250 → (nomatch ) ?m.249 = (nomatch ) ?m.250
+but is expected to have type
+  qs ++ List.map RoundEvidence.q entries = BeginCalls.challengeList challenges ++ List.map RoundEvidence.q entries
+in the application
+  Eq.trans hqs (congrArg (nomatch ))
+/tmp/RawBeginAnnotatedFullTrace-v1.lean:44:83: error: unsolved goals
+case refine_3
+H : Type
+D : aspis_core.Digest32 H
+bytes : Slice U8
+pre : r1_wire.Prefix
+hparse : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+beforeBegin before : r1_wire.SemanticTranscript H
+challenges : r1_wire.Challenges
+hbegin : r1_wire.begin D pre beforeBegin = ok (core.result.Result.Ok challenges, before)
+initial : MainQM
+initialAlpha : Std.Array MainQM 10#usize
+final : Outcome H
+entries : List (RoundEvidence D pre)
+run : AnnotatedRun D pre SemanticRoundsCheckedTrace.schedule (initial, initialAlpha, before) final entries
+values : AspisR1.SemanticPrefixCodec.Full
+hfull : AspisR1.SemanticPrefixCodec.encodeFull values = PrefixAdapter.completedRecords pre
+qs : List aspis_core.field.QM31
+hbeginRun : BeginCalls.SemanticRun D pre BeginCalls.rows beforeBegin before qs
+hbeginQs : qs = BeginCalls.challengeList challenges
+hroundRun :
+  BeginCalls.SemanticRun D pre (List.map Prod.snd SemanticRoundsCheckedTrace.schedule)
+    (initial, initialAlpha, before).2.2 final.2.2 (List.map RoundEvidence.q entries)
+hrun :
+  BeginCalls.SemanticRun D pre (BeginCalls.rows ++ List.map Prod.snd SemanticRoundsCheckedTrace.schedule) beforeBegin
+    final.2.2 (qs ++ List.map RoundEvidence.q entries)
+hrows :
+  List.map (fun row => ↑row) (BeginCalls.rows ++ List.map Prod.snd SemanticRoundsCheckedTrace.schedule) = List.range 25
+cs : List (SourceFull25.Call D pre)
+htrace : SourceFull25.Trace D pre beforeBegin final.2.2 cs
+hcallrows : List.map SourceFull25.Call.row cs = BeginCalls.rows ++ List.map Prod.snd SemanticRoundsCheckedTrace.schedule
+hqs : List.map SourceFull25.Call.q cs = qs ++ List.map RoundEvidence.q entries
+hframes : List.map (fun c => c.record.framed) cs = List.take 25 ↑pre.records
+hb : SourceFull25.rawFrames cs = PrefixAdapter.completedRecords pre
+⊢ AspisR1.SemanticPrefixCodec.decodeFrom 0 (SourceFull25.rawFrames cs) =
+    some (AspisR1.SemanticPrefixCodec.entriesOf values)
+
+case refine_4
+H : Type
+D : aspis_core.Digest32 H
+bytes : Slice U8
+pre : r1_wire.Prefix
+hparse : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+beforeBegin before : r1_wire.SemanticTranscript H
+challenges : r1_wire.Challenges
+hbegin : r1_wire.begin D pre beforeBegin = ok (core.result.Result.Ok challenges, before)
+initial : MainQM
+initialAlpha : Std.Array MainQM 10#usize
+final : Outcome H
+entries : List (RoundEvidence D pre)
+run : AnnotatedRun D pre SemanticRoundsCheckedTrace.schedule (initial, initialAlpha, before) final entries
+values : AspisR1.SemanticPrefixCodec.Full
+hfull : AspisR1.SemanticPrefixCodec.encodeFull values = PrefixAdapter.completedRecords pre
+qs : List aspis_core.field.QM31
+hbeginRun : BeginCalls.SemanticRun D pre BeginCalls.rows beforeBegin before qs
+hbeginQs : qs = BeginCalls.challengeList challenges
+hroundRun :
+  BeginCalls.SemanticRun D pre (List.map Prod.snd SemanticRoundsCheckedTrace.schedule)
+    (initial, initialAlpha, before).2.2 final.2.2 (List.map RoundEvidence.q entries)
+hrun :
+  BeginCalls.SemanticRun D pre (BeginCalls.rows ++ List.map Prod.snd SemanticRoundsCheckedTrace.schedule) beforeBegin
+    final.2.2 (qs ++ List.map RoundEvidence.q entries)
+hrows :
+  List.map (fun row => ↑row) (BeginCalls.rows ++ List.map Prod.snd SemanticRoundsCheckedTrace.schedule) = List.range 25
+cs : List (SourceFull25.Call D pre)
+htrace : SourceFull25.Trace D pre beforeBegin final.2.2 cs
+hcallrows : List.map SourceFull25.Call.row cs = BeginCalls.rows ++ List.map Prod.snd SemanticRoundsCheckedTrace.schedule
+hqs : List.map SourceFull25.Call.q cs = qs ++ List.map RoundEvidence.q entries
+hframes : List.map (fun c => c.record.framed) cs = List.take 25 ↑pre.records
+hb : SourceFull25.rawFrames cs = PrefixAdapter.completedRecords pre
+⊢ ∀ c ∈ cs, List.length (SourceDigestAddresses.rawBytes c.record.framed) ≤ 901
+/tmp/RawBeginAnnotatedFullTrace-v1.lean:62:41: error: unexpected token '=>'; expected ':'
+/tmp/RawBeginAnnotatedFullTrace-v1.lean:62:51: error: unexpected token '++'; expected ':'
+'AspisR1PublicPreparation.RawBeginAnnotatedFullTrace.semantic_run_append' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.RawBeginAnnotatedFullTrace.begin_annotated_full_trace' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
