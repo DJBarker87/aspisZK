@@ -1,0 +1,94 @@
+{
+  "classification": "Exact migrated production cuts; no Rust/compiler/syscall refinement claim",
+  "source_revision": "0ff133effe7ee299186700c2a91a35d5548b0ca5",
+  "sources": {
+    "crates/aspis-core/src/digest.rs": "e9a3476d8d3f05639253ea663aebaade2318af60e2ea0fd87a280e058208aba0",
+    "crates/aspis-r1-cost-probe/src/r1_wire.rs": "12eedce4eac403ff6446cdb6fea88e51cb6443ace9cd4264319b788ec476c245"
+  },
+  "cuts": {
+    "trait": {
+      "source": "crates/aspis-core/src/digest.rs",
+      "start_line": 6,
+      "end_line": 8,
+      "sha256": "2e472c7a8904259e475ceca2404368b727aa15145fa0bbe373bd227d43c45467",
+      "substitutions": []
+    },
+    "domain": {
+      "source": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "start_line": 9,
+      "end_line": 12,
+      "sha256": "23c7e234beb6895523dc13287b40e0799916b211efd94834c7a46053252d3a8a",
+      "substitutions": []
+    },
+    "error": {
+      "source": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "start_line": 23,
+      "end_line": 36,
+      "sha256": "852ad8dffbfac851429e401a82859f8beaf3a7109d173d56962c954bb0b0ac41",
+      "substitutions": []
+    },
+    "transcript": {
+      "source": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "start_line": 171,
+      "end_line": 176,
+      "sha256": "739b1f57ffd2b310a7a024f61a9ff6bd9f78df4fb64804cf78ac712e12ed1089",
+      "substitutions": []
+    },
+    "new": {
+      "source": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "start_line": 179,
+      "end_line": 186,
+      "sha256": "76de71eab1e5d693f91a3cb948206b0762f59ba4d368fc8b2b2b84da55b64598",
+      "substitutions": []
+    },
+    "state": {
+      "source": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "start_line": 187,
+      "end_line": 189,
+      "sha256": "c2d87d92ba6ccdca6cf602940abfa21b80a54051b3d4aa18cf1e2ac26cd31f48",
+      "substitutions": []
+    },
+    "next_row": {
+      "source": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "start_line": 190,
+      "end_line": 192,
+      "sha256": "29fef213cda62cf162e50577b492c2fd5135dccd7a013e772e33009c473ad7b8",
+      "substitutions": []
+    },
+    "step": {
+      "source": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "start_line": 194,
+      "end_line": 208,
+      "sha256": "e1727936b33c71f8359951e3fde3bc8b8cf5a46d91be67b847dc1eb99a0ebf3a",
+      "substitutions": []
+    }
+  },
+  "impl_header_exact": "impl<H: Digest32> SemanticTranscript<H> {\n",
+  "kit_wrappers": "// Extraction entrypoints only: bodies are one call to the unchanged methods.\npub fn source_new<H: Digest32>(hash: H, public_bytes: &[u8], root: &[u8; 32]) -> Result<SemanticTranscript<H>, Error> {\n    SemanticTranscript::new(hash, public_bytes, root)\n}\npub fn source_step<H: Digest32>(transcript: &mut SemanticTranscript<H>, row: u8, framed: &[u8]) -> Result<[u8; 32], Error> {\n    transcript.sample_block_validated(row, framed)\n}\npub fn source_inspect<H: Digest32>(transcript: &SemanticTranscript<H>) -> ([u8; 32], u8) {\n    (transcript.state(), transcript.next_row())\n}\n",
+  "roots": [
+    "crate::r1_wire::source_new",
+    "crate::r1_wire::source_step",
+    "crate::r1_wire::source_inspect",
+    "crate::digest::Digest32"
+  ],
+  "features": [
+    "private-leaf-salts"
+  ],
+  "excluded": "Concrete SolanaDigest backend, SDK effects, other semantic/opening/caller bodies, Observer and field arithmetic",
+  "kit_files": {
+    "lib.rs": "6a1ef93fd58d7684015d8e0ed3b94f52ed04250ceaa80f6d5bb8024a8e535373",
+    "Cargo.toml": "1542ecc0362871bb62aa94fbcd427634306784ed22f5738596304c0f9d351952",
+    "Cargo.lock": "6d41bae5dfbef53bb60864e60320d475b66feaa3ce40f9a416f7ee937622cc3b",
+    "original/digest.rs": "e9a3476d8d3f05639253ea663aebaade2318af60e2ea0fd87a280e058208aba0",
+    "original/wire.rs": "12eedce4eac403ff6446cdb6fea88e51cb6443ace9cd4264319b788ec476c245",
+    "fragments/trait.rs": "2e472c7a8904259e475ceca2404368b727aa15145fa0bbe373bd227d43c45467",
+    "fragments/domain.rs": "23c7e234beb6895523dc13287b40e0799916b211efd94834c7a46053252d3a8a",
+    "fragments/error.rs": "852ad8dffbfac851429e401a82859f8beaf3a7109d173d56962c954bb0b0ac41",
+    "fragments/transcript.rs": "739b1f57ffd2b310a7a024f61a9ff6bd9f78df4fb64804cf78ac712e12ed1089",
+    "fragments/new.rs": "76de71eab1e5d693f91a3cb948206b0762f59ba4d368fc8b2b2b84da55b64598",
+    "fragments/state.rs": "c2d87d92ba6ccdca6cf602940abfa21b80a54051b3d4aa18cf1e2ac26cd31f48",
+    "fragments/next_row.rs": "29fef213cda62cf162e50577b492c2fd5135dccd7a013e772e33009c473ad7b8",
+    "fragments/step.rs": "e1727936b33c71f8359951e3fde3bc8b8cf5a46d91be67b847dc1eb99a0ebf3a"
+  },
+  "prepare_script_sha256": "14d6b46b5eeba880e44d7bba43f8c2e9d40da65a7a42d28ad285a61e141d71a5"
+}

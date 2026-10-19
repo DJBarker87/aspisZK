@@ -1,0 +1,7 @@
+Exact migrated Digest32 source extraction kit
+
+Pinned 0ff133effe7ee299186700c2a91a35d5548b0ca5. prepare.py --check verifies eight verbatim cuts from actual digest.rs/r1_wire.rs, including the whole constructor, sample_block_validated and getters. No signature or body substitution. Scaffolding aliases this dependency-free crate as aspis_core and retains the original use spelling. Both DOMAIN cfg declarations are retained; extraction selects private-leaf-salts. Three inventoried wrappers only root calls to these actual methods; they are extraction harness, not production callers.
+
+The cb50 root matcher does not select the old inherent-method spelling reliably; wrappers make actual method bodies reachable. run-host.py asserts all four methods and three wrappers have transparent LLBC bodies in ordered_decls before Aeneas, then verifies their emission. Exact b59/cb50 tools and runtime inventory are unchanged. No dependencies, source callbacks, or compiler semantics are replaced.
+
+Current status: kit generation/check only; extraction and Lean results pending. The production SolanaDigest backend and Observer are excluded. Generic dictionary equations alone do not prove syscall purity, concrete callback/effect refinement, compiler correctness, panic/divergence traces, all33 caller reachability, or selected hread provenance. Row arithmetic bounds must be stated for admitted source rows; no unchecked arbitrary-row release equivalence.

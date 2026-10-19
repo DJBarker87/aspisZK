@@ -1,0 +1,216 @@
+{
+  "schedule-p2": {
+    "side": "combined",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--locked",
+      "--offline",
+      "--jobs",
+      "1",
+      "-p",
+      "aspis-r1-cost-probe",
+      "--features",
+      "prover",
+      "--test",
+      "digest_schedule"
+    ],
+    "expected_work": "cached optimized compilation then the named focused tests; no proof generation"
+  },
+  "prefix-lib": {
+    "side": "combined",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--locked",
+      "--offline",
+      "--jobs",
+      "1",
+      "-p",
+      "aspis-r1-cost-probe",
+      "--features",
+      "prover,private-leaf-salts",
+      "--lib",
+      "r1_wire::"
+    ],
+    "expected_work": "cached optimized compilation then the named focused tests; no proof generation"
+  },
+  "prefix-integration": {
+    "side": "combined",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--locked",
+      "--offline",
+      "--jobs",
+      "1",
+      "-p",
+      "aspis-r1-cost-probe",
+      "--features",
+      "prover,private-leaf-salts",
+      "--test",
+      "validated_prefix"
+    ],
+    "expected_work": "cached optimized compilation then the named focused tests; no proof generation"
+  },
+  "checkpoint-counts": {
+    "side": "combined",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--locked",
+      "--offline",
+      "--jobs",
+      "1",
+      "-p",
+      "aspis-r1-cost-probe-program",
+      "--features",
+      "pool-adapter,private-leaf-salts",
+      "--lib",
+      "r1_checkpoint_tests",
+      "--",
+      "--test-threads=1"
+    ],
+    "expected_work": "cached optimized compilation then the named focused tests; no proof generation"
+  },
+  "readonly-r1": {
+    "side": "combined",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--locked",
+      "--offline",
+      "--jobs",
+      "1",
+      "-p",
+      "aspis-r1-cost-probe-program",
+      "--features",
+      "pool-adapter,private-leaf-salts",
+      "--lib",
+      "readonly_metadata_",
+      "--",
+      "--test-threads=1"
+    ],
+    "expected_work": "cached optimized compilation then the named focused tests; no proof generation"
+  },
+  "readonly-v7": {
+    "side": "combined",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--locked",
+      "--offline",
+      "--jobs",
+      "1",
+      "-p",
+      "aspis-verifier",
+      "--lib",
+      "readonly_metadata_",
+      "--",
+      "--test-threads=1"
+    ],
+    "expected_work": "cached optimized compilation then the named focused tests; no proof generation"
+  },
+  "examples-typecheck": {
+    "side": "combined",
+    "command": [
+      "cargo",
+      "check",
+      "--release",
+      "--locked",
+      "--offline",
+      "--jobs",
+      "1",
+      "-p",
+      "aspis-r1-cost-probe",
+      "--features",
+      "prover,private-leaf-salts",
+      "--examples"
+    ],
+    "expected_work": "cached optimized compilation then the named focused tests; no proof generation"
+  },
+  "codec1233": {
+    "side": "combined",
+    "command": [
+      "cargo",
+      "run",
+      "--release",
+      "--locked",
+      "--offline",
+      "--jobs",
+      "1",
+      "-p",
+      "aspis-statement",
+      "--features",
+      "r0,pool-v1-kernel",
+      "--example",
+      "j1_terminal_codec_trace"
+    ],
+    "expected_work": "cached optimized compilation then the named focused tests; no proof generation"
+  },
+  "before-ordered-counter": {
+    "side": "before",
+    "command": [
+      "cargo",
+      "run",
+      "--release",
+      "--locked",
+      "--offline",
+      "--jobs",
+      "1",
+      "--manifest-path",
+      "tools/r1-hash-input-counter/Cargo.toml",
+      "--",
+      "{side}/docs/research/100bit-spend-path-20261013/evidence/p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/r1-s2-proof.bin",
+      "{side}/docs/research/100bit-spend-path-20261013/evidence/p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/r1-s2-public-asf8.bin",
+      "{root}/before-ordered-counter.json",
+      "ca137f5db50123d6157ce144e43e4f15d8fad94b"
+    ],
+    "expected_work": "cached optimized compilation then one existing saved proof; ordered per-call slices/output and checkpoint capture, no proof generation"
+  },
+  "after-ordered-counter": {
+    "side": "combined",
+    "command": [
+      "cargo",
+      "run",
+      "--release",
+      "--locked",
+      "--offline",
+      "--jobs",
+      "1",
+      "--manifest-path",
+      "tools/r1-hash-input-counter/Cargo.toml",
+      "--",
+      "{side}/docs/research/100bit-spend-path-20261013/evidence/p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/r1-s2-proof.bin",
+      "{side}/docs/research/100bit-spend-path-20261013/evidence/p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/r1-s2-public-asf8.bin",
+      "{root}/after-ordered-counter.json",
+      "b92ab28465f9ffd4edcd3e2d5300cc9306ba66af"
+    ],
+    "expected_work": "cached optimized compilation then one existing saved proof; ordered per-call slices/output and checkpoint capture, no proof generation"
+  },
+  "schedule-p3-final": {
+    "side": "combined",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--locked",
+      "--offline",
+      "--jobs",
+      "1",
+      "-p",
+      "aspis-r1-cost-probe",
+      "--features",
+      "prover,private-leaf-salts",
+      "--test",
+      "digest_schedule"
+    ],
+    "expected_work": "cached optimized compilation then the named focused tests; no proof generation"
+  }
+}
