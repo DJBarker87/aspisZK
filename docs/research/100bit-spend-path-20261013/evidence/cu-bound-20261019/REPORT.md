@@ -13,7 +13,27 @@ schedule; **[swept]** = maximum over the randomised step-5 sweep.
 
 ## 0. Target pin
 
-(pending)
+Source: research `bee5825f0` (this branch's base), shipped to the build host
+as a `git archive` of the Rust workspace and `tools/r1-cost-probe`.
+Toolchain: `cargo-build-sbf` 3.1.13, platform-tools v1.52 (as all prior R1
+CU receipts). Rebuilt on the host from `bee5825f0` [measured, receipts in
+`receipts/`]:
+
+| Artifact | Features | SHA-256 | Note |
+|---|---|---|---|
+| verifier (deployed) | `pool-adapter,private-leaf-salts` | `a70f30bd...cfea01a` | identical to the cu-savings final ELF |
+| verifier (linked, symbols) | same | `a8789ded...0344125` | identical to candidate14 `linked.elf` |
+| verifier with `cu-profiling` | `+cu-profiling` | `40d544ee...91330f` | step 4 only |
+| Pool (deployed) | `r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit` | `b33302fd...2975e5` | identical to the `pool-asq8-nodirect` ELF of every saved fixture |
+| Pool (linked) | same | `e394d02b...0237ea6` | audit input |
+| registry | (pinned, not rebuilt) | `7ad46f0d...67d01ab` | from `active-mask-basis .../aux-current` |
+
+So the measured fixtures, the merged research source and the analysed ELFs
+are the same bytes. The Pool source of the fixture ELF
+(`active-mask-basis-sbf-20261017/candidate/programs/aspis-pool/src`) is
+byte-identical to research `programs/aspis-pool/src`; `aspis-core` is
+identical; `aspis-statement` differs only in host-side trace writers.
+No ELF/.so/binary is committed; SHA-256 and size only.
 
 ## 1. Settle-early questions (a) (b) (c)
 
@@ -99,9 +119,66 @@ registry decoders), so CPI byte charges are constant.
 
 (pending)
 
-## 3. ELF control-flow audit
+## 3. ELF control-flow audit (method step 1, ELF part)
 
-(pending)
+**Method.** The linked (unstripped) ELFs have byte-identical `.text` to the
+deployed ELFs (checked by `harness/sbf_slack.py`). A LiteSVM build with
+`litesvm/register-tracing` recorded every executed instruction (pc and
+registers) of stage 1, the nested stage-2 verifier and the Pool program for
+12 accepted runs: the four saved fixtures transfer/withdrawal 13/255 and
+eight seeded runs (pairs 2^20-1 with split 11, pairs 0 with a zeroed genesis
+page, pairs 777 split 11, pairs 300000). Traced CU equals untraced CU on
+the same inputs [measured]. For every conditional branch executed in any
+trace the tool builds the containing function's CFG, finds the immediate
+post-dominator, and computes the longest and shortest instruction paths of
+each arm to it (calls weighted by the observed inclusive cost of the callee).
+Branches are analysed per transaction kind (6 traces each) and classified:
+
+- **R1** both arms taken and the per-site decision sequence differs between
+  traces: a value-dependent site; extra = (longest - shortest) x max count.
+  Almost all are M31/QM31 canonical-reduction branches (`if x >= P`), which
+  SBF lowers to a jump because it has no conditional move.
+- **R0** both arms taken but an identical decision sequence in all traces of
+  the kind (Vec growth, unrolled index tests): positional, extra 0.
+- **R2** one arm never taken and it cannot be longer than the taken arm
+  (mostly `?` early returns): extra 0.
+- **R3** one arm never taken and possibly longer: kept as a site
+  conservatively (covers rare value branches such as the final reduction in
+  `reduce_u64`, which random inputs essentially never take).
+- **R4 / U1** the untaken arm calls a panic/abort/alloc-failure routine:
+  the transaction aborts (rejected, out of scope).
+- **U2** untaken Vec-growth arms: every Vec on the path has a compile-time
+  length per kind, so growth is positional; never needed in any trace.
+- **U3** route/kind dispatch (lifecycle tags, stage1/stage2, the other
+  payment kind), **U4** error constructors, **U5** proof-variant branches
+  (variant pinned to S2 by `View::parse_shape`): constant for an accepted
+  transaction of a given kind and stage.
+- **U6** `circle_fallback_point` (never executed): costed as source site
+  S-CIRCLE. **U7** prefunded nullifier-marker path (System
+  transfer+allocate+assign instead of create): costed as S-MARKER-PREFUNDED.
+- **R5** loop branches. Loops whose trip count varies between traces of the
+  same split are data-dependent; all are lane-position loops (trailing ones
+  or zero bits of `next_leaf_index`, at most 20 by `POOL_V1_PAIR_TREE_DEPTH`;
+  Pool page fill, at most 256 by `POOL_V1_ROOT_HISTORY_CAPACITY`; page mode).
+  The traces include both extremes (pairs 0 and 2^20-1, fill 0 and 255),
+  so each is costed as the max-min instruction range of its functions.
+
+**Coverage.** Every conditional branch executed in the stage-1 and stage-2
+verifier traces is classified (no residual). In the Pool, 69 branch sites
+inside one `core::ops::FnOnce::call_once` monomorphization call a callee
+never executed in any trace and are not classified; that function holds
+1.2-3.0% of Pool instructions per trace (0.1-0.3% of settlement CU). Every
+other Pool branch is classified. Syscalls are identified through the
+deployed ELF's `R_BPF_64_32` relocations: the verifier makes no
+`sol_try_find_program_address` call; the Pool makes 11 (same page, genesis)
+to 12 (rollover) calls in a transfer and 13-14 in a withdrawal. sha256,
+memcpy, memset and memcmp counts are constant per (kind, split), and the
+lengths come from fixed layouts.
+
+**Fraction audited.** 100% of the verifier's executed instructions (stage 1
+and stage 2, both kinds) lie in functions whose every executed branch is
+classified; for the Pool it is at least 97% of its instructions. Measured
+syscall CU (sha256, PDA, CPI) is costed from source and the Agave schedule.
 
 ## 4. Bound B_tx (method step 3)
 

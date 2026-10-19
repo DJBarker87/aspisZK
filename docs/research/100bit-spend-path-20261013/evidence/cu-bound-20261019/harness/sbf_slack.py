@@ -74,6 +74,11 @@ class Text:
         return 'alu'
     def width(self, pc): return 2 if self.op(pc) == 0x18 else 1
     def target(self, pc): return pc + 1 + self.off(pc)
+    def call_target(self, pc):
+        """Internal bpf-to-bpf call (src=1): pc-relative imm; None for syscalls/callx."""
+        if self.op(pc) == 0x85 and (self.text[8 * pc + 1] >> 4) == 1:
+            return pc + 1 + self.imm(pc)
+        return None
 
 def build_cfg(T, lo, hi):
     """Successor lists for slots in [lo, hi). 'X' = leaves function (exit/outside jump)."""
@@ -133,6 +138,46 @@ def postdominators(succ):
                 ipdom[n] = new; changed = True
     return ipdom  # nodes unreachable to X (infinite loops) are absent
 
+ARMS = {}
+
+def region_paths_weighted(T, succ, flags, b, join, callcost):
+    """Like region_paths, but call nodes weigh 1 + [min,max] observed inclusive callee cost.
+    Returns ('call-bounded', longest, shortest) or ('call-unobserved', callee-list) or a loop/exit class."""
+    region = set(); stack = list(succ[b])
+    while stack:
+        n = stack.pop()
+        if n == join or n in region: continue
+        if n == 'X': return ('exit', None, None)
+        region.add(n); stack.extend(succ[n])
+    unobserved = []
+    for n in region:
+        if n in flags:
+            tgt = T.call_target(n)
+            if tgt is not None and tgt not in callcost: unobserved.append(tgt)
+    if unobserved: return ('call-unobserved', None, None, unobserved)
+    memo = {}; onstack = set()
+    def w(n):
+        if n in flags:
+            tgt = T.call_target(n)
+            if tgt is None: return (1, 1)  # syscall: instruction only; syscall CU costed separately
+            lo, hi = callcost[tgt]; return (1 + hi, 1 + lo)
+        return (1, 1)
+    def walk(n):
+        if n == join: return (0, 0)
+        if n in memo: return memo[n]
+        if n in onstack: raise ValueError('cycle')
+        onstack.add(n)
+        res = [walk(s) for s in succ[n]]
+        onstack.discard(n)
+        hi, lo = w(n)
+        r = (hi + max(x[0] for x in res), lo + min(x[1] for x in res)); memo[n] = r; return r
+    try:
+        res = [walk(s) for s in succ[b]]
+    except ValueError:
+        return ('loop', None, None)
+    ARMS[b] = res
+    return ('call-bounded', max(x[0] for x in res), min(x[1] for x in res))
+
 def region_paths(T, succ, flags, b, join):
     """Longest/shortest instruction count from b (inclusive) to join (exclusive)
     over the region; None classification if cyclic/call/exit inside."""
@@ -159,7 +204,23 @@ def region_paths(T, succ, flags, b, join):
         res = [walk(s) for s in succ[b]]
     except ValueError:
         return ('loop', None, None)
+    ARMS[b] = res
     return ('diamond', max(x[0] for x in res), min(x[1] for x in res))
+
+def reloc_syscalls(data):
+    """slot -> imported symbol name for R_BPF_64_32 relocations against .dynsym
+    (syscalls are resolved by the loader; their call imm in the file is a placeholder)."""
+    secs = elf_sections(data)
+    dyn = next(s for s in secs if s['name'] == '.dynsym'); ds = secs[dyn['link']]
+    tx = next(s for s in secs if s['name'] == '.text'); out = {}
+    for s in secs:
+        if s['type'] != 9: continue
+        for o in range(s['offset'], s['offset'] + s['size'], 16):
+            off, info = struct.unpack_from('<QQ', data, o); sym = info >> 32
+            if sym and info & 0xffffffff == 10:
+                no = u32(data, dyn['offset'] + 24 * sym); n = data[ds['offset'] + no:]
+                out[(off - tx['addr']) // 8] = n[:n.index(b'\0')].decode()
+    return out
 
 def read_regs(path):
     data = open(path, 'rb').read()
@@ -198,6 +259,7 @@ def main():
     ltext = linked[lt['offset']:lt['offset'] + lt['size']]; dtext = deployed[dt['offset']:dt['offset'] + dt['size']]
     text_identical = ltext == dtext and lt['addr'] == dt['addr']
     T = Text(ltext, lt['addr'])
+    RELOC = reloc_syscalls(deployed)
     funcs = [(v, sz, n) for v, sz, n in elf_functions(linked, ls) if lt['addr'] <= v < lt['addr'] + lt['size']]
     # sbpf pc -> slot index in .text. Detect the offset: entrypoint text_addr? use first trace pc histogram.
     traces = []
@@ -217,19 +279,29 @@ def main():
             else: return mid
         return None
     shift = 0
+    CALLCOST = {}
     per_trace = []
     for label, pcs, regs in traces:
         counts = collections.Counter(); taken = collections.Counter(); per_fn = collections.Counter()
         sys_calls = collections.defaultdict(list)
-        prev = None
+        stack = []; prev = None; seq = {}
         for i, pc in enumerate(pcs):
             slot = pc - shift
             counts[slot] += 1
-            if prev is not None and T.kind(prev) == 'cond' and slot == T.target(prev):
-                taken[prev] += 1
+            if prev is not None and T.kind(prev) == 'cond':
+                bit = 1 if slot == T.target(prev) else 0
+                taken[prev] += bit
+                seq[prev] = (seq.get(prev, 7) * 1000003 + 1 + bit) % ((1 << 61) - 1)
+            op = T.op(slot)
+            if op == 0x85 or op == 0x8d:
+                if not (op == 0x85 and RELOC.get(slot, '').startswith('sol_')) and i + 1 < len(pcs):
+                    stack.append((pcs[i + 1] - shift, i))
+            elif op == 0x95 and stack:
+                entry, start = stack.pop(); c = i - start + 1
+                lo, hi = CALLCOST.get(entry, (c, c)); CALLCOST[entry] = (min(lo, c), max(hi, c))
             if T.op(slot) == 0x85:
-                name = SYSCALL_BY_HASH.get(T.imm(slot) & 0xffffffff)
-                if name:
+                name = RELOC.get(slot)
+                if name and name.startswith('sol_'):
                     r = regs[12 * i:12 * i + 6]
                     f = fn_of(slot)
                     sys_calls[name].append(dict(slot=slot, caller=funcs[f][2] if f is not None else None,
@@ -237,7 +309,7 @@ def main():
             prev = slot
         for slot, c in counts.items():
             f = fn_of(slot); per_fn[funcs[f][2] if f is not None else '<unmapped>'] += c
-        per_trace.append(dict(label=label, total=len(pcs), counts=counts, taken=taken, per_fn=per_fn, sys_calls=sys_calls))
+        per_trace.append(dict(label=label, total=len(pcs), counts=counts, taken=taken, per_fn=per_fn, sys_calls=sys_calls, seq=seq))
     # Union of executed conditional branches.
     branches = sorted({s for t in per_trace for s, c in t['counts'].items() if 0 <= s < T.n and T.kind(s) == 'cond'})
     cfg_cache = {}
@@ -254,15 +326,25 @@ def main():
         backward = T.target(b) <= b
         join = ipd.get(b)
         cls, longest, shortest = ('noexit', None, None) if join is None else region_paths(T, succ, flags, b, join)
+        unobserved = None
+        if cls == 'call':
+            r = region_paths_weighted(T, succ, flags, b, join, CALLCOST)
+            cls = r[0]
+            if cls == 'call-bounded': longest, shortest = r[1], r[2]
+            elif cls == 'call-unobserved':
+                unobserved = sorted({funcs[fn_of(x)][2] if fn_of(x) is not None else hex(x) for x in r[3]})
         counts = [t['counts'].get(b, 0) for t in per_trace]
         tk = [t['taken'].get(b, 0) for t in per_trace]
         both = any(0 < x < c for x, c in zip(tk, counts)) or (any(x > 0 for x in tk) and any(x < c for x, c in zip(tk, counts)))
         rows.append(dict(slot=b, addr=hex(T.base + 8 * b), function=name, op=COND[T.op(b) & 0xf0],
                          backward=backward, cls=cls, longest=longest, shortest=shortest,
-                         slack=(longest - shortest) if cls == 'diamond' else None,
+                         slack=(longest - shortest) if cls in ('diamond', 'call-bounded') else None,
+                         unobserved_callees=unobserved,
+                         arms_fallthrough_target=[list(x) for x in ARMS[b]] if b in ARMS and cls in ('diamond', 'call-bounded') else None,
                          join=join if isinstance(join, int) else None,
                          counts=counts, taken=tk, both_directions_observed=both,
-                         count_varies=len(set(counts)) > 1, taken_varies=len(set(tk)) > 1))
+                         count_varies=len(set(counts)) > 1, taken_varies=len(set(tk)) > 1,
+                         sequence_varies=len({t['seq'].get(b) for t in per_trace if t['counts'].get(b)}) > 1))
     fn_totals = collections.defaultdict(list)
     for t in per_trace:
         for n, c in t['per_fn'].items(): fn_totals[n].append(c)
@@ -273,6 +355,7 @@ def main():
                                      len_arg_values=sorted(collections.Counter((x['r3'] if name.startswith('sol_mem') else x['r2']) for x in v).items()),
                                      callers=sorted(collections.Counter(x['caller'] for x in v).items(), key=lambda kv: -kv[1])[:20])
                           for name, v in t['sys_calls'].items()} for t in per_trace],
+               inclusive_call_costs={(funcs[fn_of(e)][2] if fn_of(e) is not None else hex(e)): list(v) for e, v in CALLCOST.items()},
                branches=rows)
     json.dump(out, open(a.out, 'w'), indent=1)
     print(json.dumps(dict(text_identical=text_identical, branches=len(rows), traces=[(t['label'], t['total']) for t in per_trace])))

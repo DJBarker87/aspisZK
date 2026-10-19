@@ -133,7 +133,8 @@ fn seeded_fixture(seed: u64) -> Result<SeededFixture> {
         salt: rng.digest(),
         value: input_value - WITHDRAWAL_AMOUNT as u32,
     };
-    let checkpoint_sequence = 1 + rng.below(u64::from(u32::MAX));
+    // anchor_sequence <= POOL_V1_LEAF_CAPACITY (payment_relation.rs validate_common).
+    let checkpoint_sequence = 1 + rng.below((1u64 << POOL_V1_PAIR_TREE_DEPTH) - 1);
     let lane_leaf = rng.digest();
     let nullifier = pool_v1_nullifier(&nullifier_key, &salt);
     let record = serde_json::json!({
