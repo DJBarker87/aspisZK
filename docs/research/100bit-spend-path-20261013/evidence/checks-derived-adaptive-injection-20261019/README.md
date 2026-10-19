@@ -1,0 +1,13 @@
+# Actual adaptive injection consumes Checks-derived record formats
+
+RawChecksInjectionFormat derives all 33 original proof-row constructor-validity facts and the initial/C2/final-fold commitment shapes and strict payload decodes from actual literal Checks plus the recorded compiled/original run relation. The result imports the real RawAdaptiveDecoderInjection.CommitmentMessages predicate; it no longer uses a copied predicate definition.
+
+RawChecksAdaptiveInjection constructs the actual LazyInj interface by feeding that theorem into the retained RawAdaptiveDecoderInjection.injection. The independent hformat and payload-parser premises disappear. The original total first-read budget, the explicit fixed public tag, and Checks conditional on acceptance remain required source facts. Checks are not assumed for rejected executions.
+
+RawChecksAdaptiveFailureConsumer composes this same injection with the existing actual shared-ROM extractor-failure theorem: collision kappa(Q) + N*B + 2^-126. It retains the explicit CleanAcceptedModel and decoded-start-count bound. It does not identify the fresh challenge process with the shared random-oracle process, assume N=33 for arbitrary adversaries, or claim an unconditional 100-bit conclusion. Exact recorded transcript/no-hit alignment is the next consuming proof.
+
+The three focused checks exit 0 in 8.75s, 4.23s and 7.55s. Peak RSS stays at or below 3,200,827,392 bytes; process swaps are zero. Their printed axiom reports contain only propext, Classical.choice and Quot.sound. The minimal existing adaptive dependency owners rebuilt against cached libraries are included with exact source/object/import pins, commands, revisions, wall time, RSS and full logs.
+
+These working checks deliberately reuse the coherent historical one-parameter protocol owner (source 127011d6..., object 5d04d4df...) and its transcript facts. Its addresses are unrestricted byte lists; its protocol extraction slot is specification-level choice. The actual failure theorem uses the separately implemented recorded-run byte-GS extractor. The current canonical two-parameter protocol has not been silently substituted underneath older objects. A broad cache root initially shadowed transcript facts; the successful run uses a narrow source-compatible SemanticHit overlay and the exact pinned transcript owner. The clean ordered unified release integration remains required.
+
+Accepted Rust execution to all Checks, public-tag provenance, concrete read/start budgets, remaining semantic/caller refinement, extractor bit/PPT cost and privacy composition remain open. This packet is not the complete 100-bit/private-spend theorem.

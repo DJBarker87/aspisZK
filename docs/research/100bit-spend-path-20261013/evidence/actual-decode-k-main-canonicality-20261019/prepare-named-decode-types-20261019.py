@@ -1,9 +1,13 @@
 from pathlib import Path
-import hashlib,json
+import hashlib,json,argparse
 repo=Path('/Users/dominic/ZK')
 root=repo/'docs/research/100bit-spend-path-20261013/lean/extracted-decode-k-canonicality-20261018'
 out=Path('/tmp/root-decode-main-named-instance-20261019');out.mkdir(exist_ok=True)
-source=root/'AspisR1DecodeKFullV10/Types.lean';old=source.read_text()
+args=argparse.ArgumentParser()
+args.add_argument('--original-types',type=Path)
+opts=args.parse_args()
+source=opts.original_types or root/'AspisR1DecodeKFullV10/Types.lean'
+old=source.read_text()
 assert old.count('@[discriminant isize]')==1
 new=old.replace('@[discriminant isize]\n','')
 marker='/-- [aspis_r1_cost_probe::r1_wire::ValidatedRecord]'
