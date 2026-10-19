@@ -1,0 +1,115 @@
+J1.a PUBLIC SOURCE CORRESPONDENCE -- WORK IN PROGRESS / UNCOMPILED PROPOSALS
+
+Requested base: 7dc4addc8467275ccba1c77073ae9fdb49ceb204.
+Integration: authorized fast-forward to e4a5808dd061cf373b27d130f7d66eb8f0214db9.
+Lead: f5a04e0bbe9e087f4cb33c631887e97c4958f23e, J1.R6-R9.
+Worktree/branch: r1-j1a-public-20261015 / codex/r1-j1a-public-20261015.
+Only new files; no commits, builds, host Lean, or live-worktree edits.
+
+1. Scope and source gap
+
+PublicCodecAgreement.encode_toPublic_eq_wire_encode already identifies the
+two existing Lean codecs. It is reused, not duplicated. The new layer will
+retain raw u32 fields (including noncanonical values), the source P guard,
+source field-check order, and literal section-9 output assembly. It will
+map canonical raw values to SemanticPublicWire and derive PublicByteCodec
+encode/decode facts. A raw record is the explicitly projected serialized
+part of a source public object; it is not the complete Rust object.
+
+No current public_bytes definition was found in aeneas-verif/*.lean. The
+retained selected-root extraction has private_public/withdrawal_public and
+SemanticPublic at source 68ac0c73a1f93cc42c81ea04df52cd26d80ec79c, with Lean
+4.31 and the pinned Aeneas backend; it does not extract current r0::Public
+or public_bytes. AeneasWordCodec and PublicIndexAeneas connect from_le_bytes
+primitives only. These facts do not supply serializer refinement.
+
+The source-to-model serializer implication will therefore remain an explicit
+SourceSerializerRefines hypothesis, never an axiom. Successful actual source
+validation (or its precise nonzero-amount consequence) is also required for
+checked decoding. The raw serializer permits zero withdrawal. This work
+does not establish ASF8/Pool omitted-field binding or declare J1.a closed.
+
+2. Exact current-source inspection (integration e4a5808dd)
+
+crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs:
+  private_public:1312, withdrawal_public:1330, r0::Public:1979,
+  r0::Public::semantic:1990, public_bytes:2002-2040.
+The actual r0::Public is a two-constructor enum, not an arbitrary record
+with arbitrary options. Its semantic constructors fix transfer recipient
+Some/amount None and withdrawal recipient None/amount Some. The new raw
+Public uses exactly these variants and preserves arbitrary raw u32 limbs.
+
+Source order: variant; anchor; nullifier; asset; recipient presence/payload;
+change; amount presence/payload; live_snapshot.next_pair_index;
+live_snapshot.frontier; candidate_afterstate.next_root;
+candidate_afterstate.next_frontier. Transfer tags are 0/1/0; withdrawal
+tags are 1/0/1. Fields have four little-endian bytes after the strict <P
+guard; index has eight little-endian bytes. A digest has eight fields and
+a frontier has twenty digests, visited level then limb. No mismatch found
+between this inspected layout and the new model/existing wire codec.
+
+Dimensions/constants: crates/aspis-core/src/field.rs:19 (P=2^31-1),
+crates/aspis-statement/src/poseidon2.rs:58-60 (eight-limb Digest),
+pool_v1/format.rs:28 (depth20), pair_tree_profile.rs:33,397-403
+(pair-depth alias/live snapshot), pair_terminal.rs:117-119 (afterstate).
+
+The serializer omits pool, deployment domain, anchor sequence, source
+current root, destination account, and afterstate.next_pair_index. They
+remain caller/terminal binding obligations; no injectivity claim includes
+them. Output lengths reuse the existing codec; no global oracle L follows.
+
+payment_relation.rs:232-247 rejects withdrawal amount zero or >=VALUE_LIMIT;
+spend.rs:9 sets VALUE_LIMIT=2^30. public_bytes itself only requires amount<P.
+Hence syntax parsing works for serialized zero withdrawal, while checked
+decoding additionally requires NonzeroWithdrawal. PaymentAmountGuard is
+only the amount clause, not the other validator guards or a source proof.
+
+3. New proposed Lean modules and exact contracts
+
+PublicSourceRaw: raw u32 model, literal serializer/check order, partial
+toWire, proof-indexed mapPublic, canonical reification rawPublic, amount
+predicates. mapField uses the canonical M31 residue equivalence only after
+the <P guard; it never silently reduces an invalid u32 modulo P.
+
+PublicSourceRawMap: rawPublic_mapPublic and toWire_reifies fix every field;
+serialize_rawPublic/serialize_of_toWire equate the raw model with the
+existing SemanticPublicWire encoder. encode_of_serialize reuses
+PublicCodecAgreement.encode_toPublic_eq_wire_encode; decode_of_serialize
+adds NonzeroWithdrawal. RustPublicRel is explicitly the relation to this
+raw model, not an independently established relation to Rust execution.
+
+PublicSourceRawSuccess: serialize_success_canonical obtains every limb
+guard from model success. toWire_of_serialize then yields a concrete wire
+and exact PublicByteCodec.encode result without a mapping premise;
+decode_of_serialize adds NonzeroWithdrawal and yields checked decoding.
+
+PublicSourceBoundary: SourceSerializerRefines sourceReturns project means
+  forall source bytes, sourceReturns source bytes ->
+    PublicSourceRaw.serialize (project source) = some bytes.
+It is a hypothesis, never an axiom. sourceReturns must be the pinned
+source's successful-result relation with fixed byte conversion; project
+must copy the named coordinates of that same source object. Neither is
+instantiated from current extracted Rust here. SourceValidationAmountGuard
+is separately parameterized and only supplies the payment amount clause.
+The module transports these explicit assumptions to exact encode,
+syntactic parseRaw, and checked decode; mapped/decoded variants produce
+the concrete fieldwise mapping witness from successful serialization.
+
+Compile order for coordinator only: PublicSourceRaw, PublicSourceRawMap,
+PublicSourceRawSuccess, PublicSourceBoundary. Import aliases are R1 + file
+stem, matching existing public codec aliases. All files remain uncompiled
+proposals in this worker; included #print axioms commands are requests for
+the focused audit, not evidence it has passed. No new axiom or sorry used.
+
+4. Smallest remaining source bridge
+
+Extract current r0::Public::public_bytes and its semantic constructors;
+fix current-source-to-raw coordinate projection and byte conversion;
+prove SourceSerializerRefines by the fields loop, Vec appends, and u32/u64
+to_le_bytes. Connect successful admitted caller validation to the amount
+guard. Retained generated definitions live under
+aeneas-verif/v7-tag73-selected-pool-callers-current/generated/
+V7Tag73SelectedSemanticLoopForm/{Funs,Types}.lean: constructor definitions
+9447/9469 and SemanticPublic196. Their older source pin cannot discharge
+the current serializer obligation. Source identity/extraction, validator
+call-path transport, and omitted-field caller binding remain OPEN.
