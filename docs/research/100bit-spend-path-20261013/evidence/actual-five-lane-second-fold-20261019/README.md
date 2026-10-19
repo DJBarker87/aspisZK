@@ -1,0 +1,7 @@
+# Actual final recovery and five-lane second-fold projection
+
+A successful concrete final GS call on the normalized repeated received word yields its exact runtime close-list, and preserves the sparse lift of every second-fold message agreeing on at least 2,390 small-domain positions. The five-lane theorem keeps the V lane and four distinct repeated channel words; under the existing second-fold good-challenge and matching equations, it derives the four message components, their reconstruction equation, and membership in the actual returned final candidate lists.
+
+The earlier final filter/distance owners and sparse core are reused with exact source hashes. New owners are GSActualFinalRuntimeCloseCompleteness, SecondFoldSparseProjectionBridge and GSSecondFoldActualFinalProjection. All six native artifacts and focused receipts are retained, including exact revision, command, direct import pins, exit status, wall time, GNU peak RSS, zero-swap cgroup configuration and standard-only printed axioms. No unchanged replay was performed for publication.
+
+The five-lane theorem currently assumes concrete fixed-family call success and normalized point identities. The byte-bank/fromWords caller bridge, acceptance/source correspondence, probability composition, full computational complexity, privacy and two-transaction release gates remain outside this packet. This is not a complete 100-bit soundness theorem.
