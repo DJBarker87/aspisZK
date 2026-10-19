@@ -1,0 +1,29 @@
+KNOWLEDGE DESIGN -- PROPOSED, ALL NEW OBLIGATIONS OPEN
+Base e6744568e; inspected spend branch a17829a776d533d7cd0beeb1f8676dcc793a909c.
+
+1. Required statement
+Define executable Rspend(pub,w), where w contains the input secret key,
+salt, value, authentication path, and output-note data. Require
+pub.nullifier = nullifierHash w.sk w.salt and
+pub.anchor = merkleRoot (noteCommitment (ownerKey w.sk) w.vin
+pub.assetId w.salt) w.path, together with bounded integer conservation,
+output commitment equations and canonical public-option shape. Exact
+byte/field relation refinement is OPEN; SpendSemantics.NoteFacts alone
+does not include public-option shape or settlement.
+
+Proposed full-log knowledge theorem: for each public statement and any
+randomized prover, with auxiliary input and at most Q distinct reads in
+the complete prover/verifier experiment,
+Pr[accept(v) AND NOT exists w, E(pub,proof(v),firstReadLog(v);coins)=some w
+AND Rspend(pub,w)] <= Q*epsilon + 12*Q^2/2^256 + deltaE.
+Here E is one uniform algorithm, runs after one execution without rewinding
+or oracle programming, and has the cost contract below. Probability includes
+oracle, prover and extractor coins. Adaptive public-statement selection
+needs an additional experiment refinement, OPEN.
+
+Counterexample to the existence interface: Alice's valid note/spend statement
+has witness wA while another user lacks its secret key. Classical.choose
+can return a witness independently of that user's computation or query log;
+its failure event is empty on this statement. Thus bounding that event
+does not establish knowledge. This is a logical counterexample, not a
+demonstrated forgery.
