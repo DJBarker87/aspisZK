@@ -1,4 +1,8 @@
-import Mathlib
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Algebra.Order.Field.Rat
+import Mathlib.Data.Fintype.Card
+import Mathlib.Data.Finset.Image
+import Mathlib.Tactic.NormNum
 
 /-! Finite uniform tapes, arbitrary output types, and rational total variation.
 All finite sums below are symbolic. No concrete tape/state/trace is evaluated. -/

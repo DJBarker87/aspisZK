@@ -16,11 +16,23 @@ ap.add_argument('--max-attempts', type=int, default=10**6); a = ap.parse_args()
 man = json.load(open(a.manifest)); mods = {e['module']: e for e in man['order']}
 only = set(x for x in a.only.split(',') if x)
 rec_path = f'{J}/evidence/attempts.jsonl'
-green = {}
+import hashlib
+green, gat = {}, {}          # module -> source sha / attempt number of its latest green build
 if os.path.exists(rec_path):
     for l in open(rec_path):
         r = json.loads(l)
-        if r.get('exit') == 0: green[r['module']] = r['source_sha256']
+        if r.get('exit') == 0: green[r['module']] = r['source_sha256']; gat[r['module']] = r['attempt']
+def objsha(x):
+    p = f'{J}/objects/{x.replace(".", "/")}.olean'
+    return hashlib.sha256(open(p, 'rb').read()).hexdigest() if os.path.exists(p) else 'missing'
+def fingerprint(e):
+    deps = sorted(x for x in e['imports'] if x in mods)
+    return hashlib.sha256(';'.join(f'{x}={objsha(x)}' for x in deps).encode()).hexdigest()[:16]
+def stale(m):
+    # up to date only if green with this source AND built after every manifest import's build
+    e = mods[m]
+    if green.get(m) != e['sha256']: return True
+    return any(x in mods and gat.get(x, 10**9) > gat[m] for x in e['imports'])
 def next_attempt():
     used = [int(f[4:-4]) for f in os.listdir(f'{T}/evidence') if re.match(r'^out-5[0-7]\d\d\.log$', f)]
     n = max(used) + 1 if used else 5000
@@ -35,8 +47,8 @@ sent = 0
 for m in [e['module'] for e in man['order']]:
     if only and m not in only: continue
     e = mods[m]
-    if green.get(m) == e['sha256']: continue
-    bad = [x for x in e['imports'] if x in mods and green.get(x) != mods[x]['sha256']]
+    if not stale(m): continue
+    bad = [x for x in e['imports'] if x in mods and stale(x)]
     if bad:
         print('BLOCKED', m, 'waits for', bad[:3]); sys.exit(3)
     if sent >= a.max_attempts: print('max attempts reached'); break
@@ -47,7 +59,8 @@ for m in [e['module'] for e in man['order']]:
     A = next_attempt()
     if A is None: print('attempt range 5000-5799 exhausted at', m); sys.exit(4)
     src = f'{J}/sources/{m.replace(".", "/")}.lean'
-    p = subprocess.run(['sh', f'{H}/tools/run-joint.sh', str(A), m.replace('.', '/'), 'J', '7000', '7'],
+    fp = fingerprint(e)
+    p = subprocess.run(['sh', f'{H}/tools/run-joint.sh', str(A), m.replace('.', '/'), 'J', '7000', '7', fp],
                        capture_output=True, text=True)
     out = open(f'{T}/evidence/out-{A}.log').read() if os.path.exists(f'{T}/evidence/out-{A}.log') else p.stdout
     tl = open(f'{T}/evidence/time-{A}.log').read() if os.path.exists(f'{T}/evidence/time-{A}.log') else ''
@@ -55,7 +68,7 @@ for m in [e['module'] for e in man['order']]:
         mm = re.search(pat, tl); return mm.group(1).strip() if mm else None
     ex = re.search(r'exit=(\d+)', out)
     r = {'attempt': A, 'module': m, 'kind': e['kind'], 'repo_source': e['source'],
-         'source_sha256': e['sha256'], 'gate': g, 'gate_waits': len(waits),
+         'source_sha256': e['sha256'], 'deps_fingerprint': fp, 'gate': g, 'gate_waits': len(waits),
          'launcher_stdout_head': p.stdout.splitlines()[:3],
          'exit': int(ex.group(1)) if ex else p.returncode,
          'wall': tv(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): (.+)'),
@@ -67,5 +80,5 @@ for m in [e['module'] for e in man['order']]:
     print(A, m, 'exit', r['exit'], r['wall'], r['peak_rss_kib'], flush=True)
     if r['exit'] != 0:
         print('STOP at', m); sys.exit(2)
-    green[m] = e['sha256']
+    green[m] = e['sha256']; gat[m] = A
 print('done; sent', sent)

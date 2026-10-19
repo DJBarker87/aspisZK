@@ -1,4 +1,10 @@
-import Mathlib
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Algebra.Order.Field.Rat
+import Mathlib.Data.Fin.Tuple.Basic
+import Mathlib.Data.Fintype.BigOperators
+import Mathlib.Data.Fintype.Pi
+import Mathlib.Tactic.Positivity
+import Mathlib.Tactic.Ring
 
 /-! D15's good-alpha predicate (placed here by D17′) and the D17.2 item 8
 density count. No protocol module is imported. The bad set is covered by 21
