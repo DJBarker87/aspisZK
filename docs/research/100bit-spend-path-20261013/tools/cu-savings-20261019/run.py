@@ -14,7 +14,7 @@ for p in Path('/sys/fs/cgroup').rglob('memory.max'):
  except OSError:pass
 reservations=[(p,n) for p,n in finite if not any(p.startswith(q+'/') for q,_ in finite if q!=p)]
 assert sum(n for _,n in reservations)<=50*2**30,reservations
-# Do not launch while another Lean/compiler/probe is running outside this scope.
+# Record foreign compiler activity; user explicitly authorized parallel NUC work.
 foreign=[]
 for p in Path('/proc').iterdir():
  if not p.name.isdigit():continue
@@ -22,7 +22,8 @@ for p in Path('/proc').iterdir():
   name=(p/'exe').resolve().name;pcg=(p/'cgroup').read_text()
   if name in {'lean','lake','cargo','rustc','aeneas','charon','cargo-build-sbf','rust-lld','ld.lld'} and str(cg).removeprefix('/sys/fs/cgroup') not in pcg:foreign.append((p.name,name))
  except OSError:pass
-assert not foreign,foreign
+parallel_authorization='User: you can work in parallel on nuc (2026-10-19)'
+# Own gates remain serialized by the pipeline; no own Lean job is launched.
 out=Path(plan['out']);out.mkdir(parents=True,exist_ok=False)
 env=dict(os.environ,**plan.get('env',{}));before=Path('/proc/meminfo').read_text();start=time.monotonic()
 with (out/'stdout.log').open('w') as stdout,(out/'stderr.log').open('w') as stderr:
@@ -41,5 +42,5 @@ with (out/'stdout.log').open('w') as stdout,(out/'stderr.log').open('w') as stde
 timing=(out/'time.log').read_text()
 def metric(name):
  m=re.search(re.escape(name)+r':\s*(\d+)',timing);return int(m[1]) if m else None
-receipt=dict(plan,exit_status=status,wall_seconds=time.monotonic()-start,peak_rss_kib=metric('Maximum resident set size (kbytes)'),process_swaps=metric('Swaps'),peak_aggregate_rss_bytes_sampled=peak,cgroup=str(cg),limits=limits,reservations=reservations,cgroup_memory_peak_bytes=int((cg/'memory.peak').read_text()),cgroup_swap_current=(cg/'memory.swap.current').read_text().strip(),system_swap_before=[x for x in before.splitlines() if x.startswith('Swap')],system_swap_after=[x for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('Swap')],mandatory_review_stop=stopped,print_axioms=plan.get('print_axioms','N/A: no Lean compilation'),runner_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
+receipt=dict(plan,parallel_authorization=parallel_authorization,foreign_jobs_at_launch=foreign,exit_status=status,wall_seconds=time.monotonic()-start,peak_rss_kib=metric('Maximum resident set size (kbytes)'),process_swaps=metric('Swaps'),peak_aggregate_rss_bytes_sampled=peak,cgroup=str(cg),limits=limits,reservations=reservations,cgroup_memory_peak_bytes=int((cg/'memory.peak').read_text()),cgroup_swap_current=(cg/'memory.swap.current').read_text().strip(),system_swap_before=[x for x in before.splitlines() if x.startswith('Swap')],system_swap_after=[x for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('Swap')],mandatory_review_stop=stopped,print_axioms=plan.get('print_axioms','N/A: no Lean compilation'),runner_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
 (out/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n');print(json.dumps(receipt));raise SystemExit(status if status>=0 else 128-status)
