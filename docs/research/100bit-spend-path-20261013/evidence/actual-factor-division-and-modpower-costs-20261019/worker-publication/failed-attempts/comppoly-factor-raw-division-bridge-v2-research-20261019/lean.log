@@ -1,0 +1,136 @@
+/tmp/CompPolyFactorRawDivisionBridge.lean:26:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  DecidableEq K
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/tmp/CompPolyFactorRawDivisionBridge.lean:25:60: error: unsolved goals
+K : Type u_1
+inst✝² : Field K
+inst✝¹ : BEq K
+inst✝ : LawfulBEq K
+f d : CPolynomial K
+⊢ DecidableEq K
+/tmp/CompPolyFactorRawDivisionBridge.lean:41:32: error: unsolved goals
+K : Type u_1
+inst✝² : Field K
+inst✝¹ : BEq K
+inst✝ : LawfulBEq K
+f : CPolynomial K
+hf : f.toPoly.Monic
+hlead : Array.getLastD (↑f) 0 = 1
+hz : ¬0 < Array.size ↑f
+hz' : Array.size ↑f = 0
+⊢ False
+/tmp/CompPolyFactorRawDivisionBridge.lean:48:11: error: unsolved goals
+case succ
+K : Type u_1
+inst✝² : Field K
+inst✝¹ : BEq K
+inst✝ : LawfulBEq K
+f : CPolynomial K
+hf : f.toPoly.Monic
+hlead : f.leadingCoeff = 1
+hpos : 0 < Array.size ↑f
+hnat : f.natDegree = f.toPoly.natDegree
+n : ℕ
+hs : Array.size ↑f = n + 1
+⊢ n = f.toPoly.natDegree
+/tmp/CompPolyFactorRawDivisionBridge.lean:44:36: warning: This simp argument is unused:
+  hz'
+
+Hint: Omit it from the simp argument list.
+  simp [CPolynomial.leadingCoeff,̵ ̵h̵z̵'̵] at hlead
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorRawDivisionBridge.lean:48:20: warning: This simp argument is unused:
+  CPolynomial.natDegree
+
+Hint: Omit it from the simp argument list.
+  simp [C̵P̵o̵l̵y̵n̵o̵m̵i̵a̵l̵.̵n̵a̵t̵D̵e̵g̵r̵e̵e̵,̵ ̵hs, hnat]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorRawDivisionBridge.lean:48:43: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp [CPolynomial.natDegree, hs̵,̵ ̵h̵nat]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorRawDivisionBridge.lean:48:47: warning: This simp argument is unused:
+  hnat
+
+Hint: Omit it from the simp argument list.
+  simp [CPolynomial.natDegree, hs,̵ ̵h̵n̵a̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorRawDivisionBridge.lean:72:6: error: Tactic `apply` failed: could not unify the conclusion of `@Nat.mul_le_mul_left`
+  ?k * ?n ≤ ?k * ?m
+with the goal
+  100 * (x + 4) * (x + 4) ≤ 100 * (D + 5) * (D + 5)
+
+Note: The full type of `@Nat.mul_le_mul_left` is
+  ∀ {n m : ℕ} (k : ℕ), n ≤ m → k * n ≤ k * m
+
+x D : ℕ
+hx : x ≤ D + 1
+hshift : x + 4 ≤ D + 5
+⊢ 100 * (x + 4) * (x + 4) ≤ 100 * (D + 5) * (D + 5)
+/tmp/CompPolyFactorRawDivisionBridge.lean:85:13: error(lean.unknownIdentifier): Unknown identifier `retry_quality`
+/tmp/CompPolyFactorRawDivisionBridge.lean:84:64: error: unsolved goals
+K : Type u_1
+inst✝⁴ : Field K
+inst✝³ : BEq K
+inst✝² : LawfulBEq K
+inst✝¹ : DecidableEq K
+inst✝ : Fintype K
+q t node D : ℕ
+coins : ℕ → Fin t → K × K
+f d : CPolynomial K
+hf : f.toPoly.Monic
+hdegree : f.toPoly.natDegree ≤ D
+hsplit : retry f q t (coins node) = some d
+⊢ actualDivisionCharge f d ≤ (D + 1) * (100 * (D + 5) * (D + 5))
+/tmp/CompPolyFactorRawDivisionBridge.lean:117:4: error: Type mismatch
+  fuel
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  f.toPoly.Monic
+of sort `Prop`
+/tmp/CompPolyFactorRawDivisionBridge.lean:118:4: error: Type mismatch
+  node
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  f.toPoly.natDegree ≤ f.toPoly.natDegree
+of sort `Prop`
+/tmp/CompPolyFactorRawDivisionBridge.lean:119:2: error: No goals to be solved
+'AspisR1.CompPolyFactorRawDivisionBridge.divByMonic_value_eq_costed_raw' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CompPolyFactorRawDivisionBridge.actualDivisionCharge_le_degree_bound' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CompPolyFactorRawDivisionBridge.actual_factor_division_cost_le' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        2.67 real         0.81 user         0.71 sys
+          2309537792  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              172891  page reclaims
+                9345  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                2428  voluntary context switches
+                9593  involuntary context switches
+         14472325516  instructions retired
+          5508843011  cycles elapsed
+           384608232  peak memory footprint

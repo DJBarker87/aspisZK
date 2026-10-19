@@ -1,0 +1,9 @@
+# Recorded-run extractor completeness from terminal checks
+
+The checked adapter derives MatchingSupport.Good, AcceptedPairing and the required matching-set cardinality from terminal Checks on the actual 33-row enriched literal transcript and the absence of a classifier hit. RawEnrichedOpeningWordIdentity proves that any successful enriched opening read has precisely the words recovered from the recorded run; it does not require a successful original opening read. RawRecordedChecksSpendExtractor composes these facts with the actual byte-bank extractor. Its conclusion is a successful extractFromRun returning a witness satisfying Rspend for checks.decoded.
+
+The theorem retains terminal Checks, no classifier hit and actual fixed-bank nonfailure as explicit premises. It does not prove that production verifier acceptance establishes Checks, nor that the enriched transcript is the source/runtime experiment. No independent frame-compatibility, word-match, Good, AcceptedPairing or support-cardinality hypothesis is supplied to the final recorded-run theorem.
+
+The three focused Lean 4.32 checks exited 0, took 6.35, 9.2 and 2.86 seconds, peaked at 3,162,308,608, 3,177,807,872 and 3,104,571,392 bytes RSS, and reported zero process swaps. Axiom reports contain only propext, Classical.choice and Quot.sound. Captured commands, source revisions, exact source/object/import hashes, raw logs and compiled objects are retained.
+
+The worker-publication manifest records the historical source actually corresponding to cached R1LiteralByteProtocol (127011d62beb6d8b184ddc7ebe81151c2d211982a2f1705fc8bd6b14297bf503), not the larger current canonical LiteralByteProtocol. It also supplements legacy acceptance-owner provenance. These cached focused checks are working evidence, not a clean unified-manifest release. This packet is not a complete 100-bit private-spend theorem.

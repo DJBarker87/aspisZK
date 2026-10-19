@@ -1,0 +1,241 @@
+/tmp/CompPolyFactorTotalDivisionCost.lean:56:24: error: Tactic `rfl` failed: The left-hand side
+  (match factor q t coins fuel (2 * node + 1) d with
+    | none => (none, (none, lc).2)
+    | some l =>
+      match (factorCosted q t coins charge fuel (2 * node + 2) (f.divByMonic d)).1 with
+      | none =>
+        (none, (none, lc).2 + charge f d + (factorCosted q t coins charge fuel (2 * node + 2) (f.divByMonic d)).2)
+      | some r =>
+        (some (l ++ r),
+          (none, lc).2 + charge f d + (factorCosted q t coins charge fuel (2 * node + 2) (f.divByMonic d)).2)).1
+is not definitionally equal to the right-hand side
+  match factor q t coins fuel (2 * node + 1) d with
+  | none => none
+  | some left =>
+    match factor q t coins fuel (2 * node + 2) (f.divByMonic d) with
+    | none => none
+    | some right => some (left ++ right)
+
+case succ.isFalse.isFalse.some.mk.none
+K : Type u_1
+inst✝² : Field K
+inst✝¹ : BEq K
+inst✝ : LawfulBEq K
+q t : ℕ
+coins : ℕ → Fin t → K × K
+charge : CPolynomial K → CPolynomial K → ℕ
+fuel : ℕ
+ih : ∀ (node : ℕ) (f : CPolynomial K), (factorCosted q t coins charge fuel node f).1 = factor q t coins fuel node f
+node : ℕ
+f : CPolynomial K
+h✝¹ : ¬f.natDegree = 0
+h✝ : ¬f.natDegree = 1
+d : CPolynomial K
+hd : retry f q t (coins node) = some d
+lc : ℕ
+hl : factorCosted q t coins charge fuel (2 * node + 1) d = (none, lc)
+⊢ (match factor q t coins fuel (2 * node + 1) d with
+      | none => (none, (none, lc).2)
+      | some l =>
+        match (factorCosted q t coins charge fuel (2 * node + 2) (f.divByMonic d)).1 with
+        | none =>
+          (none, (none, lc).2 + charge f d + (factorCosted q t coins charge fuel (2 * node + 2) (f.divByMonic d)).2)
+        | some r =>
+          (some (l ++ r),
+            (none, lc).2 + charge f d + (factorCosted q t coins charge fuel (2 * node + 2) (f.divByMonic d)).2)).1 =
+    match factor q t coins fuel (2 * node + 1) d with
+    | none => none
+    | some left =>
+      match factor q t coins fuel (2 * node + 2) (f.divByMonic d) with
+      | none => none
+      | some right => some (left ++ right)
+/tmp/CompPolyFactorTotalDivisionCost.lean:62:43: error: Tactic `rfl` failed: The left-hand side
+  (match factor q t coins fuel (2 * node + 1) d with
+    | none => (none, lc)
+    | some l =>
+      match factor q t coins fuel (2 * node + 2) (f.divByMonic d) with
+      | none => (none, lc + charge f d + (none, rc).2)
+      | some r => (some (l ++ r), lc + charge f d + (none, rc).2)).1
+is not definitionally equal to the right-hand side
+  match factor q t coins fuel (2 * node + 1) d with
+  | none => none
+  | some left =>
+    match factor q t coins fuel (2 * node + 2) (f.divByMonic d) with
+    | none => none
+    | some right => some (left ++ right)
+
+case succ.isFalse.isFalse.some.mk.some.mk.none
+K : Type u_1
+inst✝² : Field K
+inst✝¹ : BEq K
+inst✝ : LawfulBEq K
+q t : ℕ
+coins : ℕ → Fin t → K × K
+charge : CPolynomial K → CPolynomial K → ℕ
+fuel : ℕ
+ih : ∀ (node : ℕ) (f : CPolynomial K), (factorCosted q t coins charge fuel node f).1 = factor q t coins fuel node f
+node : ℕ
+f : CPolynomial K
+h✝¹ : ¬f.natDegree = 0
+h✝ : ¬f.natDegree = 1
+d : CPolynomial K
+hd : retry f q t (coins node) = some d
+lc : ℕ
+l : List K
+hl : factorCosted q t coins charge fuel (2 * node + 1) d = (some l, lc)
+rc : ℕ
+hr : factorCosted q t coins charge fuel (2 * node + 2) (f.divByMonic d) = (none, rc)
+⊢ (match factor q t coins fuel (2 * node + 1) d with
+      | none => (none, lc)
+      | some l =>
+        match factor q t coins fuel (2 * node + 2) (f.divByMonic d) with
+        | none => (none, lc + charge f d + (none, rc).2)
+        | some r => (some (l ++ r), lc + charge f d + (none, rc).2)).1 =
+    match factor q t coins fuel (2 * node + 1) d with
+    | none => none
+    | some left =>
+      match factor q t coins fuel (2 * node + 2) (f.divByMonic d) with
+      | none => none
+      | some right => some (left ++ right)
+/tmp/CompPolyFactorTotalDivisionCost.lean:62:43: error: Tactic `rfl` failed: The left-hand side
+  (match factor q t coins fuel (2 * node + 1) d with
+    | none => (none, lc)
+    | some l =>
+      match factor q t coins fuel (2 * node + 2) (f.divByMonic d) with
+      | none => (none, lc + charge f d + (some val✝, rc).2)
+      | some r => (some (l ++ r), lc + charge f d + (some val✝, rc).2)).1
+is not definitionally equal to the right-hand side
+  match factor q t coins fuel (2 * node + 1) d with
+  | none => none
+  | some left =>
+    match factor q t coins fuel (2 * node + 2) (f.divByMonic d) with
+    | none => none
+    | some right => some (left ++ right)
+
+case succ.isFalse.isFalse.some.mk.some.mk.some
+K : Type u_1
+inst✝² : Field K
+inst✝¹ : BEq K
+inst✝ : LawfulBEq K
+q t : ℕ
+coins : ℕ → Fin t → K × K
+charge : CPolynomial K → CPolynomial K → ℕ
+fuel : ℕ
+ih : ∀ (node : ℕ) (f : CPolynomial K), (factorCosted q t coins charge fuel node f).1 = factor q t coins fuel node f
+node : ℕ
+f : CPolynomial K
+h✝¹ : ¬f.natDegree = 0
+h✝ : ¬f.natDegree = 1
+d : CPolynomial K
+hd : retry f q t (coins node) = some d
+lc : ℕ
+l : List K
+hl : factorCosted q t coins charge fuel (2 * node + 1) d = (some l, lc)
+rc : ℕ
+val✝ : List K
+hr : factorCosted q t coins charge fuel (2 * node + 2) (f.divByMonic d) = (some val✝, rc)
+⊢ (match factor q t coins fuel (2 * node + 1) d with
+      | none => (none, lc)
+      | some l =>
+        match factor q t coins fuel (2 * node + 2) (f.divByMonic d) with
+        | none => (none, lc + charge f d + (some val✝, rc).2)
+        | some r => (some (l ++ r), lc + charge f d + (some val✝, rc).2)).1 =
+    match factor q t coins fuel (2 * node + 1) d with
+    | none => none
+    | some left =>
+      match factor q t coins fuel (2 * node + 2) (f.divByMonic d) with
+      | none => none
+      | some right => some (left ++ right)
+/tmp/CompPolyFactorTotalDivisionCost.lean:70:27: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?n * ?k + ?m * ?k
+in the target expression
+  (a - 1) * (1 * B) + 1 * B + (b - 1) * (1 * B) = (a - 1 + 1 + (b - 1)) * (1 * B)
+
+a b n B : ℕ
+hsum : a + b = n
+ha : 1 ≤ a
+hb : 1 ≤ b
+hn : a - 1 + 1 + (b - 1) = n - 1
+⊢ (a - 1) * (1 * B) + 1 * B + (b - 1) * (1 * B) = (a - 1 + 1 + (b - 1)) * (1 * B)
+/tmp/CompPolyFactorTotalDivisionCost.lean:102:14: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp [h0̵,̵ ̵h̵1, hpoly1]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorTotalDivisionCost.lean:105:22: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorTotalDivisionCost.lean:118:31: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp only [hl, P̵r̵o̵d̵.̵f̵s̵t̵,̵ ̵Prod.snd, ↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorTotalDivisionCost.lean:118:41: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [hl, Prod.fst, P̵r̵o̵d̵.̵s̵n̵d̵,̵ ̵↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorTotalDivisionCost.lean:118:51: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [hl, Prod.fst, Prod.snd,̵ ̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorTotalDivisionCost.lean:139:51: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp only [hl, hr, P̵r̵o̵d̵.̵f̵s̵t̵,̵ ̵Prod.snd, ↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorTotalDivisionCost.lean:139:61: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [hl, hr, Prod.fst, P̵r̵o̵d̵.̵s̵n̵d̵,̵ ̵↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorTotalDivisionCost.lean:139:71: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [hl, hr, Prod.fst, Prod.snd,̵ ̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CompPolyFactorTotalDivisionCost.factorCosted_output' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CompPolyFactorTotalDivisionCost.factorCosted_total_le_degree_mul' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        6.83 real         1.16 user         1.01 sys
+          2080866304  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              119335  page reclaims
+               49819  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                6349  voluntary context switches
+               44285  involuntary context switches
+         19143552754  instructions retired
+          7909472306  cycles elapsed
+           349878816  peak memory footprint

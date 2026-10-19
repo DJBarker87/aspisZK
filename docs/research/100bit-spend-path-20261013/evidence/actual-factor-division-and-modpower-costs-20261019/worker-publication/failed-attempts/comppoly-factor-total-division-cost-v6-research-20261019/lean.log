@@ -1,0 +1,133 @@
+/tmp/CompPolyFactorTotalDivisionCost.lean:42:17: error: unsolved goals
+case succ
+K : Type u_1
+inst✝² : Field K
+inst✝¹ : BEq K
+inst✝ : LawfulBEq K
+q t : ℕ
+coins : ℕ → Fin t → K × K
+charge : CPolynomial K → CPolynomial K → ℕ
+fuel : ℕ
+ih : ∀ (node : ℕ) (f : CPolynomial K), (factorCosted q t coins charge fuel node f).1 = factor q t coins fuel node f
+node : ℕ
+f : CPolynomial K
+⊢ (if f.natDegree = 0 then (some [], 0)
+      else
+        if f.natDegree = 1 then (some [-f.coeff 0], 0)
+        else
+          match retry f q t (coins node) with
+          | none => (none, 0)
+          | some d =>
+            match factor q t coins fuel (2 * node + 1) d with
+            | none => (none, (factorCosted q t coins charge fuel (2 * node + 1) d).2)
+            | some l =>
+              match factor q t coins fuel (2 * node + 2) (f.divByMonic d) with
+              | none =>
+                (none,
+                  (factorCosted q t coins charge fuel (2 * node + 1) d).2 + charge f d +
+                    (factorCosted q t coins charge fuel (2 * node + 2) (f.divByMonic d)).2)
+              | some r =>
+                (some (l ++ r),
+                  (factorCosted q t coins charge fuel (2 * node + 1) d).2 + charge f d +
+                    (factorCosted q t coins charge fuel (2 * node + 2) (f.divByMonic d)).2)).1 =
+    if f.natDegree = 0 then some []
+    else
+      if f.natDegree = 1 then some [-f.coeff 0]
+      else
+        match retry f q t (coins node) with
+        | none => none
+        | some d =>
+          match factor q t coins fuel (2 * node + 1) d with
+          | none => none
+          | some left =>
+            match factor q t coins fuel (2 * node + 2) (f.divByMonic d) with
+            | none => none
+            | some right => some (left ++ right)
+/tmp/CompPolyFactorTotalDivisionCost.lean:43:39: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp only [factorCosted, factor, P̵r̵o̵d̵.̵f̵s̵t̵,̵ ̵ih]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorTotalDivisionCost.lean:84:14: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp [h0̵,̵ ̵h̵1, hpoly1]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorTotalDivisionCost.lean:87:22: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorTotalDivisionCost.lean:100:31: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp only [hl, P̵r̵o̵d̵.̵f̵s̵t̵,̵ ̵Prod.snd, ↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorTotalDivisionCost.lean:100:41: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [hl, Prod.fst, P̵r̵o̵d̵.̵s̵n̵d̵,̵ ̵↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorTotalDivisionCost.lean:100:51: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [hl, Prod.fst, Prod.snd,̵ ̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorTotalDivisionCost.lean:121:51: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp only [hl, hr, P̵r̵o̵d̵.̵f̵s̵t̵,̵ ̵Prod.snd, ↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorTotalDivisionCost.lean:121:61: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [hl, hr, Prod.fst, P̵r̵o̵d̵.̵s̵n̵d̵,̵ ̵↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/CompPolyFactorTotalDivisionCost.lean:121:71: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [hl, hr, Prod.fst, Prod.snd,̵ ̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CompPolyFactorTotalDivisionCost.factorCosted_output' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CompPolyFactorTotalDivisionCost.factorCosted_total_le_degree_mul' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+       10.40 real         1.10 user         1.38 sys
+          2048409600  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               88006  page reclaims
+               82657  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               13902  voluntary context switches
+               70391  involuntary context switches
+         19951227992  instructions retired
+          8942247070  cycles elapsed
+           349944280  peak memory footprint
