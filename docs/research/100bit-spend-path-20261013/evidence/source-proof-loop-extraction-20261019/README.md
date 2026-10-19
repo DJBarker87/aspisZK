@@ -1,0 +1,11 @@
+# Complete extraction of isolated proof-friendly source-loop candidates
+
+The current production semantic iterators fail the pinned Aeneas backend at Iterator method-signature translation, even after separating decoder and semantic roots. The original batched methods emit two unproved external templates for mutable-array iteration and Array.map. Those original attempts, warnings and failures are retained; their output is not promoted as a complete implementation theorem.
+
+Two isolated changed candidates replace semantic folds with ordered indexed loops and replace the batched mutable iterator/map with explicit four-coordinate operations. All field implementation files remain exact source copies. Both candidates now emit complete Types/Funs without external templates; all four generated modules pass focused Lean 4.32 compilation. Exact original/candidate spans, source and tool hashes, Charon IR, commands, resource admissions/caps, outputs and extraction receipts are in the original result archives.
+
+The generated batched reducer is formally equal to the retained current-source reducer by an explicit primitive and wrapper equality. For every U64 input it succeeds with the exact canonical residue; no reducer callback or input canonicality premise is assumed. Its four axiom reports contain only standard axioms (exit 0; 7.43s; RSS2,233,073,664B;process swaps0).
+
+Candidate Rust integration is separately committed on codex/r1-source-proof-loops-20261019 at 5c63b0bba7ceae70bad1f980a766fa65728624fc. It also reuses the exact existing V10 indexed decoder source with canonicality and byte-readback proofs. The candidate is unmerged: research production still uses the measured sub-1.2M bodies. Generated-loop-to-polynomial/array-update proofs, caller refinement, decoder/counter input bounds, and changed-artifact runtime/CU gates remain required. Extraction success and compiling definitions are not full soundness proofs.
+
+NUC extraction stages use MemoryHigh 6GiB / MemoryMax 8GiB / MemorySwapMax 0, 180s per stage and fresh aggregate reservation admission. Focused local module checks remain below2.6GiB with zero process swaps; full metrics/revisions/import/object pins are retained. These are working component checks, not a clean unified release-manifest compilation or complete 100-bit/private-spend theorem.
