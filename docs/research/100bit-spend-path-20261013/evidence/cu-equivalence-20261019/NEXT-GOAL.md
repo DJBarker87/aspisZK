@@ -124,3 +124,30 @@ yet proved here. Complete actual Prepared.rho success dataflow is independently
 actionable using the already emitted prepared bodies and checked scalar_k.
 All original final goal conditions, including source reserve/resource and
 actual final transaction contexts, remain open.
+
+## Whole actual Prepared.new rho invariant
+
+CuSavingsRhoPrepared.source_success now consumes the entire actual preparation
+method (both branches), deriving canonical stored rho and exact actual
+scalar_k return/state dataflow. No child success or canonicality assumption.
+The actual method is byte-identical in candidate12, parent and frozen source;
+its existing raw complete emission is reused with only owner/import/binder
+transport. Do not restart the earlier gamma optimization: its modules and
+claim equivalence remain untouched/unproved. PreparedCommon has arbitrary
+common computations but no scalarK slot or propositional laws. The scalar
+call binds to checked source with invertible coordinates and identical
+Transcript/Digest32 carriers. See RHO-PREPARED.md/json/check-rho-prepared.py.
+
+CuSavingsRhoInitialPower.source_tail_success consumes actual Prepared.new and
+Accumulator.new successes and proves source power-tail success, canonical
+result, next1 and weights/RHS frame without canonical/counter premises. It
+still does not cover the intervening whole query/coefficient/RHS context.
+
+Next focus: source resume weights traversal and original Option reborrow
+binding, using only exact source-derived adapters/original runtime loan
+operations. Direct producer emissions already failed; no repeated flag
+variants or assumed compatible templates. If interpreting a source loop as
+for the initializer Zip, require exact source factoring/assignment binding,
+original iterator handbacks and a full error/divergence-preserving proof; do
+not label a hand-written desired loop as actual emitted source. Resource
+frame/sufficient allocation and final transaction contexts remain mandatory.
