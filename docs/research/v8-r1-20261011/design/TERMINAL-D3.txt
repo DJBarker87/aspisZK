@@ -1,0 +1,95 @@
+TERMINAL ORACLE / D3 DESIGN — proposed statements, no proofs claimed
+
+1. Scope and notation
+
+Design base e6744568e; inspected spend-path revision
+a17829a776d533d7cd0beeb1f8676dcc793a909c. Below S denotes
+docs/research/100bit-spend-path-20261013; Lean names have namespace AspisR1
+unless explicitly qualified. CausalCommitmentStability is a document topic,
+not an inspected namespace. Fix the S2 private-leaf-salts configuration,
+pr := UnifiedProtocol.protocol p hD extract,
+V := UnifiedOracleVerifier.verifier p hD extract terminal,
+v H := FS.eval H (FS2.experiment prover V pub),
+pf H := (FS.eval H prover).2,
+P H := pr.transcript H pub (pf H) 33,
+Coll := CombinedMerkleCollision.Coll p Qtot.
+All source/refinement interfaces introduced below are OPEN.
+
+2. One oracle and the complete trace
+
+Define hashvProgram chunks := ask (CanonicalByteHash.encode chunks.flatten)
+done. Require chunks.flatten.length <= L at every call: encode's overlength
+branch maps to the empty address. Include whole proof/public/checkpoint
+inputs in this bound, not only leaves. Propose source_hash_trace_refines:
+under source parsing, configuration and authentic-checkpoint premises,
+Rust's concatenated HashFn inputs/results equal the canonical verifier log,
+with the same result Boolean. No invented domain tags or freshness premise.
+
+crates/aspis-r1-cost-probe/src/verifier.rs supplies query_with_geometry,
+merkle_path, checkpoint, resume and tx1/tx2_authenticated. Include salted
+C1/C2 leaves (0x10,0x71/0xf1,payload,salt32), both six-level paths, folded
+0x72 leaf/path at u/4, and proof/public/checkpoint hashes in both phases.
+Nodes hash 0x18 followed by eight digests. Folded padding/layout refinement
+is OPEN. checkpoint authenticity is an account/lifecycle premise: its
+unkeyed checksum alone is insufficient.
+
+UnifiedOracleTrace.trace_decomposition proves old decision=true trace ++
+terminal trace; OracleVerifier.verifier_terminal_reads includes terminal
+reads. Source early rejection and exact sampler/split ordering still need
+refinement. Repeated inputs remain in the trace.
+
+3. Commitment-time recovery
+
+For k in {C1,C2,F}, define Rk from recoverAt on a consistent finite log
+representing tableBefore emptyTable (v H).1 framek. Parameters (tag,width)
+are (0x71,480), (0xf1,128), (0x72,128). Require actual literal-frame reads,
+the representation equation, full-trace consistency, hQ, leaf/node/frame
+length bounds, and absence of Coll. CombinedMerkleCollision.outside gives
+the required collision/child/root exclusions.
+
+Existing C1TableStability.c1_table_word_of_read and
+LaterTableStability.c2_table_word_of_read/folded_table_word_of_read give
+Rk = recoverAt-on-full-trace as functions of every slot path, including
+None. They compose CanonicalRecoveryStability.recover_stable with
+C1BeforeFrameStability/LaterCommitmentStability and first-read cuts.
+ThreeCommitmentFullTrace.*_recover_of_no_events additionally needs accepted
+literal openings and inclusion of every opening-program read in that trace.
+It strengthens ThreeCommitmentRecovery's appended-opening interface,
+whose CanonicalMerkleRecovery.recover_or_events keeps missing preimages
+explicit.
+
+Propose accepted_opening_recovered:
+  not (Coll (v H)) -> accepts (v H) ->
+  forall i k, Rk (slots k i) = some (openedPayload k i, openedSalt k i).
+Typed decoding and a fixed default for missing/invalid entries define total
+words; canonical accepted payloads must equal those words at every opening.
+These source/parser and algebraic-coordinate equalities are OPEN.
+
+4. Collision-qualified D3 and composition
+
+Proposed Lean interface (OPEN):
+  def D3Outside : Prop :=
+    ∀ H T, ¬ Coll (v H) -> rb.doomed (P H) T ->
+      (FS.eval H (V pub (pf H))).2 = false
+
+Factor its proof through proposed accepted_checks:
+  ∀ H, ¬ Coll (v H) -> FS2.accepts (v H) ->
+    ∃ words, CommitmentTimeWords H words ∧ TerminalChecks (P H) words
+and classifier-side final_checks:
+  ∀ H words T, CommitmentTimeWords H words -> TerminalChecks (P H) words ->
+    ¬ rb.doomed (P H) T.
+The two named predicates must expand to the recovery equalities above and
+the concrete semantic/fold/pairing/residual premises; they are obligations,
+not axioms or assumed acceptance soundness.
+
+FS2.D3 is unconditional in H, proof and table. Consequently propose NEW
+R0C.V3.lemmaB3_outside/theorem43_outside, retaining D1, ChainDensity3,
+ChainsRead, ReadsChains, Inj3 and hQ, replacing D3 by D3Outside for this
+experiment. lemmaB3 already receives the required no-collision premise.
+Target conclusion:
+  mean (fun H => indicator (FS2.accepts (v H) ∧
+    FS2.extractFails pr pub (v H))) <=
+    (Qtot : ℚ) * FS.maxErr rb.ε 33 + 12 * (Qtot : ℚ)^2 / 256^32.
+Use UnifiedOracleInj.inj, with its public-length/label/empty-record premises,
+and UnifiedChainDensity.chainDensity from D2. Arbitrary-table D2 is unchanged;
+causal recovery does not discharge it (D2TableBoundary.table_flip_cost).
