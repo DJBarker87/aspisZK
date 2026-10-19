@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+"""collect.py.txt <host dir> : one JSON record per gate step of the writer
+migration (LOG D68.2) from <host dir>/out/<label>.{cmd,exit,time,stdout,stderr}."""
+import hashlib, json, os, re, sys
+H = sys.argv[1]; O = f"{H}/out"
+def sha(p): return hashlib.sha256(open(p, "rb").read()).hexdigest()
+recs = []
+for name in sorted(os.listdir(O)):
+    if not name.endswith(".cmd"): continue
+    L = name[:-4]
+    t = open(f"{O}/{L}.time").read() if os.path.exists(f"{O}/{L}.time") else ""
+    def tv(key):
+        m = re.search(r"^\s*" + re.escape(key) + r".*: (\S+)\s*$", t, re.M); return m.group(1) if m else None
+    wall = tv("Elapsed (wall clock) time (h:mm:ss or m:ss)")
+    secs = None
+    if wall:
+        parts = [float(x) for x in wall.split(":")]; secs = sum(v * 60 ** i for i, v in enumerate(reversed(parts)))
+    recs.append({
+        "label": L,
+        "command": open(f"{O}/{L}.cmd").read().strip(),
+        "exit_status": int(open(f"{O}/{L}.exit").read().strip()),
+        "wall_seconds": secs,
+        "peak_rss_kib": int(tv("Maximum resident set size")) if tv("Maximum resident set size") else None,
+        "swaps": int(tv("Swaps")) if tv("Swaps") else None,
+        "stdout_sha256": sha(f"{O}/{L}.stdout"), "stdout_bytes": os.path.getsize(f"{O}/{L}.stdout"),
+        "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": "0", "TasksMax": 64},
+    })
+json.dump(recs, sys.stdout, indent=1)

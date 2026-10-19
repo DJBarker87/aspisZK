@@ -1,0 +1,453 @@
+{
+ "job": "LOG D68.2 writer migration: production pair-forest prover writers replaced by the extracted copies",
+ "branch": "codex/r1p-writer-migration-20261019",
+ "base": "f458169f7",
+ "source_revision": "b321d7a60",
+ "host": "dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-r1p-writer-migration-20261019",
+ "trees": {
+  "new": "git archive b321d7a60 of Cargo.toml Cargo.lock .cargo crates programs audit xtask tools docs/research/v8-r0-zk-20261009/refine docs/research/v8-full-view-zk-20260912/evidence release/aspis-v5-tag67-mainnet-v1/proof results/r0-samplers-20261009 results/spend/v7-devnet-20260825-fullc2 (tar sha256 327b546238d0b759d06688843f794365c9af04c935dc54b6b6399cf5a6132037); later added docs/research/v8-full-view-zk-20260912/tools (tar sha256 7405ee7e10e0ba50bab77cdeadbf0ca54c5b888b9c62d8c86c8b63f903604c12) and docs/research/100bit-spend-path-20261013/evidence/p3-private-leaf-salts-20261013 (tar sha256 b3ea9818d8c93066e5c45452f48f7711b2428d8314e859deed0be03307a48d07) for test-only #[path]/include_bytes",
+  "base": "git archive f458169f7, same initial paths (tar sha256 c7ad1a9d956a9e8b00650f8e7b7df35f4c91a0bfbec0fea2c726db7778b7599); used only for the masked-fixture proof comparison"
+ },
+ "toolchain": "cargo 1.94.1 (29ea6fb6a 2026-03-24), rustc 1.94.1 (e408947bf 2026-03-25), x86_64-unknown-linux-gnu",
+ "scope": "every step: systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64, /usr/bin/time -v, timeout 3000 (refine/migration/run-gate.sh, sha256 e4a9754973ca1e6a99816aeafea149f8df1c6a1a5cce04c8eb05a1052e0ed841); optimized --release builds with -j 4",
+ "copy_pins": {
+  "refine/writers/src/lib.rs": "20b9aed5bfe6e41b37bdae823c1468a7a208840f03689850cf2d478fda7a8da1",
+  "refine/blockwriters/src/lib.rs": "f5ca7ae8ba4271bd9b189b2c27d3b5ee75407598c3bde90e640f6e9b491a8782",
+  "refine/poseidon/src/lib.rs": "2591c007c8dd60d4a48e75906b429b09c22d914fc25ff15b926335162af9872c",
+  "status": "unchanged byte-for-byte (checked on host tree and by check-glue-text.py.txt); no extracted declaration needs re-pinning",
+  "glue_gen.rs": "1fa3ed853c7805111e192993e4f13928d0c9638385fe6bc943c6ff34208a0059 (unchanged; gen-glue.py.txt --check ok)",
+  "glue.rs": "982fe98fa71b2d8b7706e0224f1fb887f39b02d94e20130df18c0bd2c1c97181 (unchanged)"
+ },
+ "shipped_sources": {
+  "crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs": "b48121cab1130b4fe929c2c56c54616c6252edb9c33f2d138218effb05675a5f",
+  "crates/aspis-statement/src/pool_v1/pair_forest_trace.rs": "10f27ec3e9f2d310c989c6f45c2cf174ca296fc0669b39327e5f96e1c85ce663"
+ },
+ "local_checks": {
+  "check-glue-text.py.txt": "exit 0: 5/5 checks (pins; 30 structural glue functions verbatim; merged_banks loop; records diff = asset only; glue_gen include). Teeth: an edited bit_b and a reverted asset line each exit 1.",
+  "gen-glue.py.txt --check": "exit 0"
+ },
+ "gates": {
+  "G1_codec_1233": {
+   "step": "G1-codec-1233",
+   "result": "PASS: stdout 16,431,699 bytes, sha256 3ef16b12a329dd6d74b472cd75e5554c1ef8d98c618de3117f87b6c50d73e321 = baselines/codec1233.stdout.log",
+   "features": "aspis-statement r0,pool-v1-kernel"
+  },
+  "G2_ordered_583": {
+   "step": "G2-ordered-583",
+   "result": "PASS vs baselines/counter583.json: 583 ordered_digest_calls identical (tx1 349 / tx2 234), acceptance (checkpoint bytes) identical, hash_input_counts identical (repeated_exact_inputs equal as a 30-entry multiset), fixture hashes identical; only source_revision and paths differ",
+   "output_sha256": "c2aa26ea256ca8da95217fbd3a1f3867e01df0d267d9f5083711c697ed41452a",
+   "fixtures": "aspis-r1-worker-b-1g-final-native-20261018/fixtures r1-s2-proof.bin 8569435667420b36a980493477f8fef7ef47e7351122647cf3747054079d4d62, r1-s2-public-asf8.bin 72f067d263af326b017284579f30e3da7c843c6cbb29f1c6df94c8afbb1f2172"
+  },
+  "G3_checkpoint23": {
+   "step": "G3-checkpoint23",
+   "result": "PASS: 23 passed; stdout sha256 5365f0cbaa689d26f155450e2a6a7d7c31ceee420cc2682f1ef0826de8f6b0a7 = baselines/checkpoint23.stdout.log byte-identical",
+   "features": "aspis-r1-cost-probe-program pool-adapter,private-leaf-salts"
+  },
+  "G4_saved_fixtures": {
+   "glue_saved_fixtures": "PASS in G5 (glue_fixtures_match_production: transfer and withdrawal, 2 x 29 x 1024 cells)",
+   "migration_saved_fixtures": "PASS in G6 (both fixtures: shipped == reference on the whole compilation)",
+   "prover_forest_honest": {
+    "step": "G4-prover-forest-honest",
+    "result": "PASS: aspis-prover pool_v1_pair_forest_honest 6 passed (zero residuals, super-root binding, public/anchor/live mutations fail closed, occupancy/value mutations)"
+   },
+   "masked_fixture_proofs": {
+    "steps": [
+     "G4-masked-fixture-new",
+     "G4-masked-fixture-base"
+    ],
+    "features": "aspis-r1-cost-probe prover,private-leaf-salts",
+    "result": "PASS: all four deterministic full-mask proofs byte-identical between base f458169f7 and new b321d7a60, each with native tx1/tx2 and dense acceptance",
+    "proof_sha256": {
+     "S1-transfer": "972ad09abb1b3b36d67d6d216a5ea79ef4ef89363f3f2e2dc00b8fea4fdca461",
+     "S1-withdrawal": "4f7747707db6919dc7a09d18b8a25805fbbff9594255b7f594bfc72e017793fa",
+     "S2-transfer": "aefa5b95125eab1828cad2d70e57b1763f7da8943ff9f1cadc9cca0a924a0a16",
+     "S2-withdrawal": "3c6dd9897cec63e596c03f872984e60d8b59b5aafdb1eee4a95833426ce01c23"
+    },
+    "public_sha256": {
+     "transfer": "d2241c5432fa3d5b34084c06e9c3f510cc61542a793287aad471287563761557",
+     "withdrawal": "aacd276edc3cdfedfb8bcba5ebb443305b6c8be72a4262704181fd2b6ffaac01"
+    }
+   }
+  },
+  "G5_glue_512": {
+   "step": "G5-glue-512",
+   "harness": "refine/diffharness/tests/glue.rs + glue_gen.rs unchanged, Cargo.toml deps pointed at the new tree (sha256 5e8c7a29f137d45b5900eaede877f5ad42ed5ad40e87b9e8176080055331dc56); command as in D61",
+   "result": "PASS against the migrated compiler",
+   "stdout": [
+    "  mutation membership bit: 3809 cells differ",
+    "  mutation super-root bit: 409 cells differ",
+    "glue_fixtures_match_production: saved transfer and withdrawal fixtures, 2 x 29 x 1024 cells",
+    "test glue_fixtures_match_production ... ok",
+    "  mutation append parity: 3688 cells differ",
+    "  mutation asset word: 9788 cells differ",
+    "  mutation change salt lane 7: 4050 cells differ",
+    "  mutation pair inverse: 1 cells differ",
+    "  mutation variant: 4462 cells differ",
+    "glue_mutations_caught: 7 mutations detected",
+    "test glue_mutations_caught ... ok",
+    "glue_randomized_match_production: 512 witnesses (512 transfers / withdrawals alternating), 0 rejected by production (zero change sentinel), 29 x 1024 cells each",
+    "test glue_randomized_match_production ... ok",
+    "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.64s"
+   ]
+  },
+  "G6_migration_differential": {
+   "step": "G6-migration-differential",
+   "test": "crates/aspis-statement/tests/pair_forest_writer_migration.rs (feature pool-v1-pair-forest-writer-reference)",
+   "result": "PASS: shipped compiler == retained pre-migration compiler on the whole Result (all compilation fields, or the exact error) for 2 fixtures, 512 randomized honest witnesses and 2,046 mutation cases reaching 18 distinct outcomes",
+   "stdout": [
+    "saved fixtures: 2 compiled, shipped == reference",
+    "comparison_has_teeth: a one-cell change and a different snapshot are detected",
+    "test comparison_has_teeth ... ok",
+    "randomized: 512 honest witnesses compiled (glue.rs generator and seed), 0 rejected identically, shipped == reference",
+    "mutations: 31 kinds x 66 base cases = 2046 cases, shipped == reference",
+    "result tally (all cases): {\"AnchorMismatch\": 330, \"ChangeCommitmentMismatch\": 132, \"Conservation\": 165, \"NullifierAlreadySpent\": 66, \"NullifierMismatch\": 66, \"Ok\": 552, \"PairLeaf(EmptyInverseNonZero)\": 11, \"PairLeaf(NonCanonicalCommitment)\": 66, \"PairLeaf(SelectedSlotEmpty)\": 11, \"PairLeaf(SentinelInverseMismatch)\": 55, \"RecipientCommitmentMismatch\": 33, \"RuntimeBinding\": 264, \"SelectedCommitmentMismatch\": 121, \"SnapshotBindingMismatch\": 132, \"Tree(NonCanonicalFrontier)\": 67, \"Tree(RootMismatch)\": 159, \"ValueOutOfRange\": 132, \"WitnessDigest\": 198}",
+    "test shipped_compiler_equals_pre_migration_compiler ... ok",
+    "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.71s"
+   ]
+  },
+  "G7_statement_pair_forest_lib": {
+   "step": "G7-statement-pair-forest-lib",
+   "result": "PASS: aspis-statement lib tests pool_v1::pair_forest*, 32 passed (extra regression, not a standing gate)"
+  }
+ },
+ "steps": [
+  {
+   "label": "G1-codec-1233",
+   "command": "cargo run --release --locked --offline -j 4 -p aspis-statement --features r0,pool-v1-kernel --example j1_terminal_codec_trace",
+   "exit_status": 0,
+   "wall_seconds": 0.15,
+   "peak_rss_kib": 70260,
+   "swaps": 0,
+   "stdout_sha256": "3ef16b12a329dd6d74b472cd75e5554c1ef8d98c618de3117f87b6c50d73e321",
+   "stdout_bytes": 16431699,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "new b321d7a60"
+  },
+  {
+   "label": "G2-ordered-583",
+   "command": "cargo run --release --locked --offline -j 4 --manifest-path tools/r1-hash-input-counter/Cargo.toml -- /home/dombarker/project-offloads/aspis-r1-worker-b-1g-final-native-20261018/fixtures/r1-s2-proof.bin /home/dombarker/project-offloads/aspis-r1-worker-b-1g-final-native-20261018/fixtures/r1-s2-public-asf8.bin /home/dombarker/project-offloads/codex-r1p-writer-migration-20261019/out/ordered-counter-new.json b321d7a60",
+   "exit_status": 0,
+   "wall_seconds": 0.04,
+   "peak_rss_kib": 30072,
+   "swaps": 0,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stdout_bytes": 0,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "new b321d7a60"
+  },
+  {
+   "label": "G3-checkpoint23",
+   "command": "cargo test --release --locked --offline -j 4 -p aspis-r1-cost-probe-program --features pool-adapter,private-leaf-salts --lib r1_pool_adapter::checkpoint_tests:: -- --test-threads=1",
+   "exit_status": 0,
+   "wall_seconds": 0.12,
+   "peak_rss_kib": 75276,
+   "swaps": 0,
+   "stdout_sha256": "5365f0cbaa689d26f155450e2a6a7d7c31ceee420cc2682f1ef0826de8f6b0a7",
+   "stdout_bytes": 2407,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "new b321d7a60"
+  },
+  {
+   "label": "G4-masked-fixture-base",
+   "command": "cargo run --release --locked --offline -j 4 -p aspis-r1-cost-probe --features prover,private-leaf-salts --example masked_fixture_gate -- /home/dombarker/project-offloads/codex-r1p-writer-migration-20261019/fixtures-base",
+   "exit_status": 0,
+   "wall_seconds": 19.84,
+   "peak_rss_kib": 244384,
+   "swaps": 0,
+   "stdout_sha256": "3174db2ebc41ec48d3244d3c4d10e18d7293b35004357d10f9ce0da63becab21",
+   "stdout_bytes": 280,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "base f458169f7"
+  },
+  {
+   "label": "G4-masked-fixture-new",
+   "command": "cargo run --release --locked --offline -j 4 -p aspis-r1-cost-probe --features prover,private-leaf-salts --example masked_fixture_gate -- /home/dombarker/project-offloads/codex-r1p-writer-migration-20261019/fixtures-new",
+   "exit_status": 0,
+   "wall_seconds": 18.94,
+   "peak_rss_kib": 245240,
+   "swaps": 0,
+   "stdout_sha256": "3174db2ebc41ec48d3244d3c4d10e18d7293b35004357d10f9ce0da63becab21",
+   "stdout_bytes": 280,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "new b321d7a60"
+  },
+  {
+   "label": "G4-prover-forest-honest",
+   "command": "cargo test --release --locked --offline -j 4 -p aspis-prover --lib pool_v1_pair_forest_honest -- --test-threads=2",
+   "exit_status": 0,
+   "wall_seconds": 0.21,
+   "peak_rss_kib": 70512,
+   "swaps": 0,
+   "stdout_sha256": "8eb54edc4e3b363e202275bbacb76c1a13481412121776c77360a65d52aa62e9",
+   "stdout_bytes": 770,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "new b321d7a60"
+  },
+  {
+   "label": "G5-glue-512",
+   "command": "cargo test --release --offline -j 4 -p aspis-r0-writer-diff --test glue -- --nocapture --test-threads=3",
+   "exit_status": 0,
+   "wall_seconds": 1.66,
+   "peak_rss_kib": 24112,
+   "swaps": 0,
+   "stdout_sha256": "c0839093d6f9882e1e75edd274c3e6a0f2c9d7c51815080e24b9674c7fa626f0",
+   "stdout_bytes": 833,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "glue harness over new b321d7a60"
+  },
+  {
+   "label": "G6-migration-differential",
+   "command": "cargo test --release --locked --offline -j 4 -p aspis-statement --features pool-v1-pair-forest-writer-reference --test pair_forest_writer_migration -- --nocapture --test-threads=2",
+   "exit_status": 0,
+   "wall_seconds": 1.8,
+   "peak_rss_kib": 70500,
+   "swaps": 0,
+   "stdout_sha256": "c5bf2af1be96016a0e3296efd238aeb403a7f4ac619484102038367cf495942f",
+   "stdout_bytes": 1074,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "new b321d7a60"
+  },
+  {
+   "label": "G7-statement-pair-forest-lib",
+   "command": "cargo test --release --locked --offline -j 4 -p aspis-statement --lib pool_v1::pair_forest -- --test-threads=4",
+   "exit_status": 0,
+   "wall_seconds": 0.18,
+   "peak_rss_kib": 70796,
+   "swaps": 0,
+   "stdout_sha256": "0a04fde0e877214c0f2287c86af761cde21bfadaf6cd16045887d23b1a12c515",
+   "stdout_bytes": 3720,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "new b321d7a60"
+  },
+  {
+   "label": "build-checkpoint",
+   "command": "cargo test --release --locked --offline -j 4 -p aspis-r1-cost-probe-program --features pool-adapter,private-leaf-salts --lib --no-run",
+   "exit_status": 0,
+   "wall_seconds": 2.84,
+   "peak_rss_kib": 253732,
+   "swaps": 0,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stdout_bytes": 0,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "new b321d7a60"
+  },
+  {
+   "label": "build-codec",
+   "command": "cargo build --release --locked --offline -j 4 -p aspis-statement --features r0,pool-v1-kernel --example j1_terminal_codec_trace",
+   "exit_status": 0,
+   "wall_seconds": 0.26,
+   "peak_rss_kib": 130576,
+   "swaps": 0,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stdout_bytes": 0,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "new b321d7a60"
+  },
+  {
+   "label": "build-counter",
+   "command": "cargo build --release --locked --offline -j 4 --manifest-path tools/r1-hash-input-counter/Cargo.toml",
+   "exit_status": 0,
+   "wall_seconds": 29.38,
+   "peak_rss_kib": 563340,
+   "swaps": 0,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stdout_bytes": 0,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "new b321d7a60"
+  },
+  {
+   "label": "build-glue",
+   "command": "cargo test --release --offline -j 4 -p aspis-r0-writer-diff --test glue --no-run",
+   "exit_status": 0,
+   "wall_seconds": 15.82,
+   "peak_rss_kib": 566528,
+   "swaps": 0,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stdout_bytes": 0,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "glue harness over new b321d7a60"
+  },
+  {
+   "label": "build-masked-base",
+   "command": "cargo build --release --locked --offline -j 4 -p aspis-r1-cost-probe --features prover,private-leaf-salts --example masked_fixture_gate",
+   "exit_status": 0,
+   "wall_seconds": 29.7,
+   "peak_rss_kib": 565344,
+   "swaps": 0,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stdout_bytes": 0,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "base f458169f7"
+  },
+  {
+   "label": "build-masked-new",
+   "command": "cargo build --release --locked --offline -j 4 -p aspis-r1-cost-probe --features prover,private-leaf-salts --example masked_fixture_gate",
+   "exit_status": 0,
+   "wall_seconds": 26.25,
+   "peak_rss_kib": 564516,
+   "swaps": 0,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stdout_bytes": 0,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "new b321d7a60"
+  },
+  {
+   "label": "build-migration-test",
+   "command": "cargo test --release --locked --offline -j 4 -p aspis-statement --features pool-v1-pair-forest-writer-reference --test pair_forest_writer_migration --no-run",
+   "exit_status": 0,
+   "wall_seconds": 19.77,
+   "peak_rss_kib": 553336,
+   "swaps": 0,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stdout_bytes": 0,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "new b321d7a60"
+  },
+  {
+   "label": "build-prover-honest",
+   "command": "cargo test --release --locked --offline -j 4 -p aspis-prover --lib --no-run",
+   "exit_status": 0,
+   "wall_seconds": 9.54,
+   "peak_rss_kib": 588084,
+   "swaps": 0,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stdout_bytes": 0,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "new b321d7a60"
+  },
+  {
+   "label": "build-statement-lib",
+   "command": "cargo test --release --locked --offline -j 4 -p aspis-statement --lib --no-run",
+   "exit_status": 0,
+   "wall_seconds": 18.2,
+   "peak_rss_kib": 689376,
+   "swaps": 0,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stdout_bytes": 0,
+   "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": "0",
+    "TasksMax": 64
+   },
+   "source_tree": "new b321d7a60"
+  }
+ ],
+ "failed_steps_not_counted": [
+  {
+   "label": "build-prover-honest (1st)",
+   "exit_status": 101,
+   "wall": "0:10.78",
+   "peak_rss_kib": 507984,
+   "cause": "host tree lacked docs/research/v8-full-view-zk-20260912/tools (#[path] test modules of aspis-prover); added from b321d7a60, source unchanged"
+  },
+  {
+   "label": "G4-prover-forest-honest (1st)",
+   "exit_status": 101,
+   "wall": "0:00.11",
+   "peak_rss_kib": 70620,
+   "cause": "same build failure"
+  },
+  {
+   "label": "build-checkpoint (1st)",
+   "exit_status": 101,
+   "wall": "0:26.95",
+   "peak_rss_kib": 505456,
+   "cause": "host tree lacked the p3-private-leaf-salts-20261013 fixtures include_bytes!'d by r1_checkpoint_tests.rs; added from b321d7a60"
+  },
+  {
+   "label": "G3-checkpoint23 (1st)",
+   "exit_status": 101,
+   "wall": "0:00.31",
+   "peak_rss_kib": 182080,
+   "cause": "same build failure"
+  }
+ ],
+ "axioms": "N/A: Rust native gates; no Lean module compiled or changed",
+ "repin": "none: no extracted declaration's source changed"
+}
