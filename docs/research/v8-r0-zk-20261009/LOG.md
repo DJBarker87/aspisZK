@@ -6824,3 +6824,38 @@ named input premises (π/`ti`, OOD and stored points, `inact`, `x18`, `x16`,
 `li`, `hW`/`hwb`, `Tower`); the builder-input premises inherited from
 `check_sound''''`; manifest entries for CertColExtracted, CertRoundFill,
 CertGBatFill, CertCheckSoundCols (and D72's six) before the final replay.
+
+### Lead acceptance of the binary-format read budget (2026-10-19); D76
+
+Worker commit 6decf88a8 (branch codex/r1p-readbudget-20261019) is
+cherry-picked. The lead verified attempts 5757 (`CommitReadsR1`, 2252d377…,
+2.48 GB), 5759 (`ReadBudgetR1`, 9f1304bc…, 2.46 GB) and 5760 (`FinalR1P`,
+olean byte-identical to before, so PrivacyR1P was refused as an unchanged
+rerun and its 5547 build stands): SHAs match, exit 0, 0 swaps, standard
+axioms. Shared source `CommitReadsR1.lean` replaced in J (old source and
+objects snapshotted on the host).
+
+**D76.1 Count.** Per attempt the binary commitment phase reads 3·2^18 salts,
+3·2^18 leaves, 3·(2^18−1) = 786,429 parents and 3 seeds plus the expander
+blocks: Mc = 2,359,296 + E₁ + E₂ (eight-way: 1,685,214 + E₁ + E₂). An
+instrumented prover run (`readbudget_count`, one fixture) matches the source
+count exactly in both formats. Multiproof assembly hashes nothing.
+
+**D76.2 Bound.** `mc_le : 115 + Mc ≤ 2^22` (the old 2^21 is shown false at
+worst-case counts, `mc_gt_2_21`). No theorem statement changed: the privacy
+roots take the read count as a parameter. `ReadBudgetR1.r1_games_error_le`
+proves the `privacy_R1_games_spendSampler` error ≤ 2^-109 + 2^-137 at the
+binary count; the D41 three-term form is ≤ 2^-165 (was 2^-166). Total
+privacy error unchanged at ≈ 2^-109 (pole term dominates). The old D41
+numerals in `R0Z/FsAbortR1` (`r1_error_N8` at 8·2^21) are unused and kept;
+`r1_error_N8_bin` is the binary version. Ruling: retire the old numerals at
+the next FsAbortR1 touch, not now (every privacy root imports it).
+
+**D76.3 Remaining for the format change on the privacy side** (PROOF-SIZE-
+OBLIGATIONS items 5–6, now scoped): `GamesR1P:45–53` (`NodeIdx` over
+`Fin 8`), `LayoutR1P{,2,3}` (`childQ`, `rootChild`, `nodeBytes` with tag
+`0x18` and eight children, `openedQ` with `u / 8^(level+1)`), `EventsR1P`
+(`ROpen`, `RComLog`); the `0x12` binary node-tag disjointness; the
+retrying prover `prove_masked_retrying_with` still calls the eight-way
+prover (the adoption job covers this). After the layout rewrite, worst-case
+n1 = 2,457,717 ≤ 2^22 and `r1_games_error_le` applies directly.
