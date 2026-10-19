@@ -75,7 +75,41 @@ No single Lean theorem states (T-src). §3 names the closest composed theorem.
 
 ## 2. Links
 
-(pending)
+The status vocabulary is the one fixed for this job. Owners are inferred from
+commit messages and branch names; every commit is authored as `DJB8787`.
+- **Codex** means the user's live Codex sessions committing directly on
+  `research`, with "Prove/Derive/Bind/Connect..." subjects.
+- **Lead** means the coordinating Claude session (lead reviews, decisions and
+  inventories).
+- **Lead-worker** means a lead-issued `codex/r1-*` worker branch.
+- **Privacy** means the `codex/r1p-*` workers and the privacy LOG.
+
+Sizes:
+- S is about one focused module or a check.
+- M is a multi-module bridge over existing extraction.
+- L needs new extraction plus multi-module proof, or a whole-cone audit.
+
+Paths are relative to `docs/research/100bit-spend-path-20261013/` unless
+they start with `docs/`. Receipts are host `receipt.json` files under
+`evidence/`. "Std axioms" means the receipt or log shows only
+`[propext, Classical.choice, Quot.sound]`.
+
+### 2a. Protocol model (Lean, idealised and compiled)
+
+| id | link | status | evidence / cite | owner | deps | size |
+|---|---|---|---|---|---|---|
+| M1 | `Rspend` (Decision 1 relation, J1 `SpendRelation` + `AppendBinding`), plus executable checker | PROVED | `lean/SpendRelation.lean:42` (`Rspend`), `:85` (`check_eq_true_iff`); `lean/SpendAppendBinding.lean:17`; lead-accepted J1 (design/J1-RELATION-STATEMENT-20261015.md; evidence `lean-literal-protocol-20261015/`) | Codex, lead-accepted | none | S: done |
+| M2 | Deterministic algebraic binding: γ joint list, κ, α₀, α₁ (with repeated lift), q22 containment, ρ | PROVED | `lean/ConcreteBinding.lean:58,67,74,84,97` (`gammaBad_card`, `kappaBad_card`, `firstBad_card`, `secondBad_card`, `binding`). Accepted in v8-r1-20261011/R1_SOUNDNESS.md "Consolidated status". A per-module host receipt was not located in this read (§6) | Codex; L1/L2 lead-workers | none | S: done |
+| M3 | Round-by-round classifier for all 33 rows (S rows 0-24, circle 25-26, γ/κ/α₀/α₁ 27-30, q22 31, ρ 32): D1, D2 | PROVED | `lean/LiteralClassifier.lean:72` (`byte_density`); `lean/LiteralByteProtocol.lean` `d1`/`d2`; evidence `j1-literal-d2-lead-review-20261015.json` | Codex, lead-accepted | M2 | S: done |
+| M4 | Per-attempt arithmetic: 33·B < 2^-100, B = 15/2^109; fresh-attempt hit mass | PROVED | `lean/PerAttemptEnvelope.lean:17,54`; `lean/LiteralFreshAttemptBound.lean:100` (`thirty_three_rows_lt`); receipt `concrete-literal-per-attempt-and-wire-20261016/LiteralFreshAttemptBound/` exit 0, std axioms | Codex | M3 | S: done |
+| M5 | Terminal model implication: `Checks` + no classifier hit ⇒ `relation` (model D3) | PROVED | `lean/LiteralAcceptanceTerminal.lean:34` (`Checks`), `:87` (`checks_noHit_relation`), `:109` (`conditional_d3`) | Codex | M1, M2 | S: done |
+| M6 | Adaptive membership FS bound `Q·maxErr + kappa Q` | PROVED (conditional) | `lean/RawAdaptiveMembershipBound.lean:56` (`membership_bound`; hypotheses `hQ`, `hformat`, `hterminal`); receipt `all-round-adaptive-decoder-and-bound-20261016/RawAdaptiveMembershipBound/` exit 0 | Codex | M3, M7 | S: done (superseded by M9 for (T)) |
+| M7 | Merkle compiler (Decision 2 stage 2): compiled-run word stability; clean model derived from checked acceptance | PROVED | `lean/RawCompiledRunWordStabilityV8.lean:39`; `lean/RawChecksAdaptiveCleanModel.lean:125`; receipts `compiled-run-word-stability-20261019/`, `checked-acceptance-no-clean-model-premise-20261019/RawChecksAdaptiveCleanModel/` exit 0, std axioms | Codex | M5 | S: done |
+| M8 | Recorded-run extractor: returns only `relation` witnesses; succeeds on checks + no hit + bank success; bank abort ≤ 2^-126 | PROVED | `lean/RawRecordedPublicSpendExtractorReturnedRelation.lean:17`; `lean/RawRecordedPublicSpendExtractorCompleteness.lean:22`; `lean/LiteralFreshBankAbortComposition.lean:28` (`bankAbortMass_le`); receipt `recorded-public-extractor-completeness-20261019/` exit 0 | Codex | M5 | S: done |
+| M9 | Composed model failure bound `failureMass ≤ kappa Q + N·B + 2^-126` | PROVED (conditional) | `lean/RawChecksAdaptiveFailureNoModel.lean:34` (`checked_acceptance_failure_bound_no_model`); receipt `checked-acceptance-no-clean-model-premise-20261019/RawChecksAdaptiveFailureNoModel/receipt.json`: exit 0, 7.60 s, peak RSS 2,994,864,128 B, 0 swaps, std axioms (§3) | Codex (b3de2f610) | M6-M8 | S: done |
+| M10 | Extractor efficiency (Decision 3): expected-polynomial field/hash-log/bit cost; δE ≤ 2^-120 in the stated cost model | OPEN | Components proved: GCD/division/mod-power cost mirrors, RR traversal and retry budgets (`lean/ActualCompPolyGCDCostMirror.lean`, `lean/ActualLongDivisionTotalCostV2.lean`, 5642782d0, c60124b28). The M9 README states that "full extractor bit-cost" remains | Codex | M8 | M: compose existing cost lemmas into one bound over the `extract` call graph |
+
+(2b pending)
 
 ## 3. Closest composed theorem
 
