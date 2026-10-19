@@ -17,6 +17,10 @@ ROOTS = [
   ('privacy',  'docs/research/v8-r1-20261011/lean', False),
   ('privacy',  'docs/research/v8-r0-zk-20261009/lean', False),
 ]
+# Explicit current source owners; older split/extraction copies remain archival.
+CANONICAL_SOURCES = {'R1FunctionalBatchClean': 'docs/research/100bit-spend-path-20261013/lean/R1FunctionalBatchClean.lean', 'R1SubfieldBatchStage2': 'docs/research/100bit-spend-path-20261013/lean/R1SubfieldBatchStage2.lean', 'SpendRelation': 'docs/research/100bit-spend-path-20261013/lean/SpendRelation.lean', 'SpendAppendBinding': 'docs/research/100bit-spend-path-20261013/lean/SpendAppendBinding.lean', 'TraceAppend': 'docs/research/100bit-spend-path-20261013/lean/TraceAppend.lean', 'R1SpendRelation': 'docs/research/100bit-spend-path-20261013/lean/R1SpendRelation.lean', 'R1SpendAppendBinding': 'docs/research/100bit-spend-path-20261013/lean/R1SpendAppendBinding.lean', 'R1TraceAppend': 'docs/research/100bit-spend-path-20261013/lean/R1TraceAppend.lean', 'SelectedTranscriptParams': 'docs/research/100bit-spend-path-20261013/lean/SelectedTranscriptParams.lean', 'UnifiedSampler': 'docs/research/100bit-spend-path-20261013/lean/UnifiedSampler.lean', 'SelectedChallengeMap': 'docs/research/100bit-spend-path-20261013/lean/SelectedChallengeMap.lean', 'R1SelectedTranscriptParams': 'docs/research/100bit-spend-path-20261013/lean/R1SelectedTranscriptParams.lean', 'R1UnifiedSampler': 'docs/research/100bit-spend-path-20261013/lean/R1UnifiedSampler.lean', 'R1SelectedChallengeMap': 'docs/research/100bit-spend-path-20261013/lean/R1SelectedChallengeMap.lean', 'R1UnifiedSamplerPublic': 'docs/research/100bit-spend-path-20261013/lean/R1UnifiedSamplerPublic.lean', 'R1SelectedChallengeMapCore': 'docs/research/100bit-spend-path-20261013/lean/R1SelectedChallengeMapCore.lean', 'AspisR1PublicPreparation.Funs': 'docs/research/100bit-spend-path-20261013/lean/extracted-public-preparation-c16-20261019/AspisR1PublicPreparation/Funs.lean', 'AspisR1PublicPreparation.Types': 'docs/research/100bit-spend-path-20261013/lean/extracted-public-preparation-c16-20261019/AspisR1PublicPreparation/Types.lean'}
+CANONICAL_SOURCES.update({m: 'docs/research/100bit-spend-path-20261013/lean/bridge-selected-current-20261018/accepted-current/' + m.replace('.', '/') + '.lean' for m in ['AspisFormal.V6PublishedTheoremInterfaces', 'R0P.LogUpChain', 'R0P.LogUpAssembly', 'R0P.SemRounds']})
+
 EXCLUDE_PREFIX = ('R1Mirror.',)          # the mirror leaves the build (§4 (a))
 LIB = ('Mathlib', 'Batteries', 'Aesop', 'Qq', 'Lean', 'Init', 'Std', 'Plausible', 'ProofWidgets',
        'ImportGraph', 'LeanSearchClient', 'Lake', 'Cli', 'Aeneas', 'AeneasMeta')
@@ -51,6 +55,7 @@ for kind, root, alias in ROOTS:
             names.append('R1' + mparts[0])
         h = sha(os.path.join(a.repo, rel))
         for n in names:
+            if n in CANONICAL_SOURCES and rel != CANONICAL_SOURCES[n]: continue
             index.setdefault(n, []).append((kind, root, rel, h))
 def imports_of(path):
     out = []
@@ -101,7 +106,7 @@ rep = {'repo_revision': rev, 'repo_dirty': dirty, 'roots': a.roots.split(','),
        'problems': problems, 'conflicts': conflicts, 'imports_all_of_Mathlib': whole}
 print(json.dumps({k: v for k, v in rep.items() if k != 'conflicts'} | {'conflict_count': len(conflicts)}, indent=1))
 if a.check:
-    sys.exit(1 if problems else 0)
+    sys.exit(1 if problems or conflicts else 0)
 rep['order'] = [{'module': m, **mods[m]} for m in order]
 rep['libraries'] = libs
 json.dump(rep, open(a.out, 'w'), indent=1)
