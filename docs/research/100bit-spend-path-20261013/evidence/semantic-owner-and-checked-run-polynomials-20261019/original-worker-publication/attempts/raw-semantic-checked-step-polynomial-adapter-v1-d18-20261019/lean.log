@@ -1,0 +1,110 @@
+/tmp/RawSemanticCheckedStepPolynomialAdapter.lean:49:46: error: Application type mismatch: The argument
+  before.1
+has type
+  SemanticRoundsCheckedTrace.QM
+but is expected to have type
+  AspisR1.ExtractedMaskQM31Exact.CurrentQM
+in the application
+  AspisR1.ExtractedMaskQM31Exact.decode before.1
+/tmp/RawSemanticCheckedStepPolynomialAdapter.lean:50:44: error: Application type mismatch: The argument
+  after.1
+has type
+  SemanticRoundsCheckedTrace.QM
+but is expected to have type
+  AspisR1.ExtractedMaskQM31Exact.CurrentQM
+in the application
+  AspisR1.ExtractedMaskQM31Exact.decode after.1
+/tmp/RawSemanticCheckedStepPolynomialAdapter.lean:71:40: error: Application type mismatch: The argument
+  hvalueRun'
+has type
+  extractedMainValueAt coefficients after.2.1 round = ok after.1
+but is expected to have type
+  extractedMainValueAt coefficients (before.2.1.set round q) round = ok after.1
+in the application
+  Eq.trans (Eq.symm hvalueRun) hvalueRun'
+/tmp/RawSemanticCheckedStepPolynomialAdapter.lean:79:48: error: Application type mismatch: The argument
+  before.1
+has type
+  SemanticRoundsCheckedTrace.QM
+but is expected to have type
+  AspisR1.ExtractedMaskQM31Exact.CurrentQM
+in the application
+  AspisR1.ExtractedMaskQM31Exact.decode before.1
+/tmp/RawSemanticCheckedStepPolynomialAdapter.lean:79:60: error: unsolved goals
+H : Type
+decodeMain :
+  (N : Usize) → r1_wire.ValidatedRecord → Usize → Result (core.result.Result (Std.Array MainQM N) r1_wire.Error)
+D : aspis_core.Digest32 H
+pre : r1_wire.Prefix
+before after : Outcome H
+round : Usize
+row : U8
+hcanonicalCoeff :
+  ∀ (record : r1_wire.ValidatedRecord) (coefficients : Std.Array MainQM 28#usize),
+    decodeMain 28#usize record 0#usize = ok (core.result.Result.Ok coefficients) →
+      ∀ x ∈ (mainArrayToProbe coefficients).v, Canonical x
+hcanonicalChallenge :
+  ∀ (record : r1_wire.ValidatedRecord) (q : MainQM),
+    r1_wire.SemanticTranscript.semantic_validated D before.2.2 record = ok (core.result.Result.Ok q, after.2.2) →
+      Canonical (mainToProbe q)
+hindex : ∀ (q : MainQM), (before.2.1.set round q).index_usize round = ok q
+record : r1_wire.ValidatedRecord
+coefficients : Std.Array SemanticRoundsCheckedTrace.QM 28#usize
+boundary q : SemanticRoundsCheckedTrace.QM
+hrecord : pre.validated_record row = ok (core.result.Result.Ok record)
+hdecode : (mainRoundBoundaries decodeMain).decode 28#usize record 0#usize = ok (core.result.Result.Ok coefficients)
+hboundary : (mainRoundBoundaries decodeMain).boundary coefficients = ok boundary
+hneq : core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 boundary before.1 = ok false
+hboundaryEq : boundary = before.1
+hsemantic : r1_wire.SemanticTranscript.semantic_validated D before.2.2 record = ok (core.result.Result.Ok q, after.2.2)
+hset : after.2.1 = before.2.1.set round q
+hvalue : (mainRoundBoundaries decodeMain).value coefficients after.2.1 round = ok after.1
+hcoeff : ∀ x ∈ (mainArrayToProbe coefficients).v, Canonical x
+mappedBoundary : RawSemanticFieldOwnerAdapter.MainQM
+hboundaryRun : extractedMainBoundary coefficients = ok mappedBoundary
+hboundaryCanon : RawSemanticFieldOwnerAdapter.Canonical (mainToProbe mappedBoundary)
+hboundaryEval :
+  AspisR1.ExtractedMaskQM31Exact.decode (mainToProbe mappedBoundary) =
+    Polynomial.eval 0
+        (RawSemanticPolynomialOps.polynomial
+          (List.map AspisR1.ExtractedMaskQM31Exact.decode (mainArrayToProbe coefficients).v)) +
+      Polynomial.eval 1
+        (RawSemanticPolynomialOps.polynomial
+          (List.map AspisR1.ExtractedMaskQM31Exact.decode (mainArrayToProbe coefficients).v))
+hboundaryRun' : extractedMainBoundary coefficients = ok boundary
+hmappedBoundaryEq : mappedBoundary = boundary
+hchallengeCanon : Canonical (mainToProbe q)
+hroundIndex : (before.2.1.set round q).index_usize round = ok q
+mappedValue : RawSemanticFieldOwnerAdapter.MainQM
+hvalueRun : extractedMainValueAt coefficients (before.2.1.set round q) round = ok mappedValue
+hvalueCanon : RawSemanticFieldOwnerAdapter.Canonical (mainToProbe mappedValue)
+hvalueEval :
+  AspisR1.ExtractedMaskQM31Exact.decode (mainToProbe mappedValue) =
+    Polynomial.eval (AspisR1.ExtractedMaskQM31Exact.decode (mainToProbe q))
+      (RawSemanticPolynomialOps.polynomial
+        (List.map AspisR1.ExtractedMaskQM31Exact.decode (mainArrayToProbe coefficients).v))
+hvalueRun' : extractedMainValueAt coefficients after.2.1 round = ok after.1
+hmappedValueEq : mappedValue = after.1
+⊢ AspisR1.ExtractedMaskQM31Exact.decode (mainToProbe before.1) = AspisR1.ExtractedMaskQM31Exact.decode sorry
+'AspisR1PublicPreparation.RawSemanticCheckedStepPolynomialAdapter.checkedStep_polynomial_equations' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        3.51 real         1.07 user         1.02 sys
+          2536849408  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              187725  page reclaims
+               17068  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                2197  voluntary context switches
+               16693  involuntary context switches
+         19348809382  instructions retired
+          7501236350  cycles elapsed
+           422000008  peak memory footprint
