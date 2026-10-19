@@ -1,0 +1,96 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoPushStep.lean:55:51: error: unsolved goals
+self : verifier.BatchedWeights
+index : Usize
+basis : field.M31
+limbs : Limbs
+iter next : Range
+j : Usize
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some j, next)
+hi : ↑index < (↑self.raw).length
+hj : ↑j < 4
+hr : RhoBound ↑(wordAt (↑self.raw)[↑index] ⟨↑j, hj⟩) ↑self.terms
+hp : ↑(wordAt limbs ⟨↑j, hj⟩) < P
+hb : ↑basis < P
+raw : Std.Array U64 4#usize := (↑self.raw)[↑index]
+power : U32 := wordAt limbs ⟨↑j, hj⟩
+old : U64 := wordAt raw ⟨↑j, hj⟩
+hpower : ↑(UScalar.cast UScalarTy.U64 power) = ↑power
+hbasis : ↑(UScalar.cast UScalarTy.U64 basis) = ↑basis
+hprod : ↑power * ↑basis ≤ ProductMax
+hfit : ↑old + ↑power * ↑basis < 2 ^ 64
+product : U64
+hm : (UScalar.cast UScalarTy.U64 power).mul (UScalar.cast UScalarTy.U64 basis) = ok product
+hv : ↑product = ↑power * ↑basis
+value : U64
+ha : UScalar.add old product = ok value
+hvalue : ↑value = ↑old + ↑product
+⊢ (let (o, iter1) := (some j, next)
+    match o with
+    | none => ok (done self)
+    | some j => do
+      let i ← Array.index_usize limbs j
+      let i3 ←
+        BitVec.setWidth UScalarTy.U64.numBits i.bv#uscalar *
+            (BitVec.setWidth UScalarTy.U64.numBits (U32.bv basis)#uscalar)
+      let (a, index_mut_back) := ((↑self.raw)[↑index], Slice.set self.raw index)
+        do
+        let i4 ← a.index_usize j
+        let i5 ← i4 + i3
+        let a1 ← a.update j i5
+        ok (cont (iter1, { raw := index_mut_back a1, terms := self.terms }, basis))) =
+    ok (cont (next, { raw := Slice.set self.raw index ((↑self.raw)[↑index].set j value), terms := self.terms }, basis))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoPushStep.lean:71:4: warning: This simp argument is unused:
+  array_read limbs j hj
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.BatchedWeights.push_loop0.body, ̲hnext, ̲bind_tc_ok,
+      a̵r̵r̵a̵y̵_̵r̵e̵a̵d̵ ̵l̵i̵m̵b̵s̵ ̵j̵ ̵h̵j̵,̵vec_read_mut self.raw index hi, ̲array_read raw j hj,
+  ̵  ̵ ̵ ̵core.convert.num.FromU64U32.from, ̲lift, ̲hm,
+  ̲ ̲ ̲ ̲ ̲ha, ̲array_update raw j hj value]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoPushStep.lean:71:57: warning: This simp argument is unused:
+  array_read raw j hj
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵e̵r̵i̵f̵i̵e̵r̵.̵B̵a̵t̵c̵h̵e̵d̵W̵e̵i̵g̵h̵t̵s̵.̵p̵u̵s̵h̵_̵l̵o̵o̵p̵0̵.̵b̵o̵d̵y̵,̵h̵n̵e̵x̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲v̲e̲r̲i̲f̲i̲e̲r̲.̲B̲a̲t̲c̲h̲e̲d̲W̲e̲i̲g̲h̲t̲s̲.̲p̲u̲s̲h̲_̲l̲o̲o̲p̲0̲.̲b̲o̲d̲y̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ array_read limbs j h̵j̵,̵v̵e̵c̵_̵r̵e̵a̵d̵_̵m̵u̵t̵h̲j̲,̲
+  ̲ ̲ ̲ ̲ ̲v̲e̲c̲_̲r̲e̲a̲d̲_̲m̲u̲t̲ self.raw index h̵i̵,̵a̵r̵r̵a̵y̵_̵r̵e̵a̵d̵h̲i̲,̲ ̲c̲o̲r̲e̲.̲c̲o̲n̲v̲e̲r̲t̲.̲n̲u̲m̲.̲F̲r̲o̲m̲U̲6̲4̲U̲3̲2̲.̲f̲r̲o̲m̲,̲ ̲l̲i̲f̲t̲,̲ ̲h̲m̲,̲ ̲h̲a̲,̲
+  ̲ ̲ ̲ ̲ ̲a̲r̲r̲a̲y̲_̲u̲p̲d̲a̲t̲e̲ raw j h̵j̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵n̵u̵m̵.̵F̵r̵o̵m̵U̵6̵4̵U̵3̵2̵.̵f̵r̵o̵m̵,̵l̵i̵f̵t̵,̵h̵m̵,̵h̵a̵,̵a̵r̵r̵a̵y̵_̵u̵p̵d̵a̵t̵e̵ ̵r̵a̵w̵ ̵j̵ ̵hj value]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoPushStep.lean:72:42: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.BatchedWeights.push_loop0.body, ̲hnext, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵array_read limbs j hj,
+  ̲ ̲ ̲ ̲ ̲vec_read_mut self.raw index hi, ̲array_read raw j hj,
+  ̵  ̵ ̵ ̵core.convert.num.FromU64U32.from, ̲lift, ̲hm̵,̵h̵a,
+  ̲ ̲ ̲ ̲ ̲array_update raw j hj value]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoPushStep.lean:72:45: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.BatchedWeights.push_loop0.body, ̲hnext, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵array_read limbs j hj,
+  ̲ ̲ ̲ ̲ ̲vec_read_mut self.raw index hi, ̲array_read raw j hj,
+  ̵  ̵ ̵ ̵core.convert.num.FromU64U32.from, ̲lift, ̲hm,h̵
+  ̲ ̲ ̲ ̲ ̲a,̵a̵rray_update raw j hj value]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoPushStep.lean:72:48: warning: This simp argument is unused:
+  array_update raw j hj value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵e̵r̵i̵f̵i̵e̵r̵.̵B̵a̵t̵c̵h̵e̵d̵W̵e̵i̵g̵h̵t̵s̵.̵p̵u̵s̵h̵_̵l̵o̵o̵p̵0̵.̵b̵o̵d̵y̵,̵h̵n̵e̵x̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲v̲e̲r̲i̲f̲i̲e̲r̲.̲B̲a̲t̲c̲h̲e̲d̲W̲e̲i̲g̲h̲t̲s̲.̲p̲u̲s̲h̲_̲l̲o̲o̲p̲0̲.̲b̲o̲d̲y̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ array_read limbs j h̵j̵,̵v̵e̵c̵_̵r̵e̵a̵d̵_̵m̵u̵t̵h̲j̲,̲
+  ̲ ̲ ̲ ̲ ̲v̲e̲c̲_̲r̲e̲a̲d̲_̲m̲u̲t̲ self.raw index h̵i̵,̵a̵r̵r̵a̵y̵_̵r̵e̵a̵d̵h̲i̲,̲ ̲a̲r̲r̲a̲y̲_̲r̲e̲a̲d̲ raw j hj, c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵n̵u̵m̵.̵F̵r̵o̵m̵U̵6̵4̵U̵3̵2̵.̵f̵r̵o̵m̵,̵l̵i̵f̵t̵,̵h̵m̵,̵h̵a̵,̵a̵r̵r̵a̵y̵_̵u̵p̵d̵a̵t̵e̵ ̵r̵a̵w̵ ̵j̵ ̵h̵j̵ ̵v̵a̵l̵u̵e̵]̵c̲o̲r̲e̲.̲c̲o̲n̲v̲e̲r̲t̲.̲n̲u̲m̲.̲F̲r̲o̲m̲U̲6̲4̲U̲3̲2̲.̲f̲r̲o̲m̲,̲ ̲l̲i̲f̲t̲,̲ ̲h̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲a̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsRhoPushStep.vec_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoPushStep.vec_read_mut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoPushStep.array_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoPushStep.source_update_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

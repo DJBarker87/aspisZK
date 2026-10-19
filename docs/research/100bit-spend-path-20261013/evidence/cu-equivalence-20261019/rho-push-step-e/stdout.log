@@ -1,0 +1,32 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoPushStep.lean:55:51: error: unsolved goals
+self : verifier.BatchedWeights
+index : Usize
+basis : field.M31
+limbs : Limbs
+iter next : Range
+j : Usize
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some j, next)
+hi : ↑index < (↑self.raw).length
+hj : ↑j < 4
+hr : RhoBound ↑(wordAt (↑self.raw)[↑index] ⟨↑j, hj⟩) ↑self.terms
+hp : ↑(wordAt limbs ⟨↑j, hj⟩) < P
+hb : ↑basis < P
+raw : Std.Array U64 4#usize := (↑self.raw)[↑index]
+power : U32 := wordAt limbs ⟨↑j, hj⟩
+old : U64 := wordAt raw ⟨↑j, hj⟩
+hpower : ↑(UScalar.cast UScalarTy.U64 power) = ↑power
+hbasis : ↑(UScalar.cast UScalarTy.U64 basis) = ↑basis
+hprod : ↑power * ↑basis ≤ ProductMax
+hfit : ↑old + ↑power * ↑basis < 2 ^ 64
+product : U64
+hm : (UScalar.cast UScalarTy.U64 (wordAt limbs ⟨↑j, hj⟩)).mul (UScalar.cast UScalarTy.U64 basis) = ok product
+hv : ↑product = ↑power * ↑basis
+value : U64
+ha : UScalar.add (wordAt raw ⟨↑j, hj⟩) product = ok value
+hvalue : ↑value = ↑old + ↑product
+⊢ ok (cont (next, { raw := Slice.set self.raw index (raw.set j value), terms := self.terms }, basis)) =
+    ok (cont (next, { raw := Slice.set self.raw index ((↑self.raw)[↑index].set j value), terms := self.terms }, basis))
+'AspisR1.CuSavingsRhoPushStep.vec_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoPushStep.vec_read_mut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoPushStep.array_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoPushStep.source_update_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

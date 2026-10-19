@@ -68,3 +68,15 @@ a separate focused cone so this interface issue does not hold up its proofs.
 The existing unified source manifest check is not a proof replay. The older
 readonly-metadata runtime result is not a universal formal premise proof and
 is pinned to the older ELF. Neither substitutes for an equivalence theorem.
+
+`CuSavingsRhoPushStep.source_update_step` proves one actual emitted update-loop
+iteration, including checked multiplication/addition, both array reads, array
+write and the Vec mutable handback. Its premises are local bounds and the
+iterator next result; the enclosing four-iteration induction must discharge
+these and prove the update/frame invariant. Receipt: `rho-push-step-f`
+(standard axioms only, 1.604 seconds, 2,664,852 KiB peak RSS, zero swap).
+
+Next: close the full update-loop induction and flush-loop handback, then
+compose them with the already checked every-prefix residue invariant and
+canonical value theorem. The remaining candidates and final soundness/privacy
+transfer/replay remain required; this checkpoint is not goal completion.

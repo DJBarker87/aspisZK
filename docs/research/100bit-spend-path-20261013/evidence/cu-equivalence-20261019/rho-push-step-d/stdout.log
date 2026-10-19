@@ -1,0 +1,26 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoPushStep.lean:82:2: error: 'change' tactic failed, pattern
+  (do
+      let o ← raw.index_usize j
+      let sum ← UScalar.add o product
+      let a ← raw.update j sum
+      ok (cont (next, { raw := Slice.set self.raw index a, terms := self.terms }, basis))) =
+    ?m.272
+is not definitionally equal to target
+  (do
+      let prod ← (UScalar.cast UScalarTy.U64 (wordAt limbs ⟨↑j, hj⟩)).mul (UScalar.cast UScalarTy.U64 basis)
+      let old ← (↑self.raw)[↑index].index_usize j
+      let sum ← UScalar.add old prod
+      let a ← (↑self.raw)[↑index].update j sum
+      ok (cont (next, { raw := Slice.set self.raw index a, terms := self.terms }, basis))) =
+    ok (cont (next, { raw := Slice.set self.raw index ((↑self.raw)[↑index].set j value), terms := self.terms }, basis))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoPushStep.lean:81:35: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [array_read limbs j hj,h̵m̵,̵ ̲vec_read_mut self.raw index hi, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsRhoPushStep.vec_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoPushStep.vec_read_mut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoPushStep.array_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoPushStep.source_update_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
