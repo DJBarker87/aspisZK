@@ -1,0 +1,39 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/AspisR1CuRho/FunsExternal.lean:40:68: error: Application type mismatch: The argument
+  h
+has type
+  (do
+      let pair ← mapState call xs state'
+      ok (y :: pair.1, pair.2)) =
+    ok (ys, last)
+but is expected to have type
+  ok (y :: tail, state'') = ok (ys, last)
+in the application
+  ok.inj h
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/AspisR1CuRho/FunsExternal.lean:38:16: error: unsolved goals
+case cons.ok.ok
+T U F : Type
+call : F → T → Result (U × F)
+x : T
+xs : List T
+ih : ∀ (state : F) (ys : List U) (last : F), mapState call xs state = ok (ys, last) → ys.length = xs.length
+state : F
+ys : List U
+last : F
+y : U
+state' : F
+hc : call state x = ok (y, state')
+h :
+  (do
+      let pair ← mapState call xs state'
+      ok (y :: pair.1, pair.2)) =
+    ok (ys, last)
+tail : List U
+state'' : F
+hm : mapState call xs state' = ok (tail, state'')
+hpair : (y :: tail, state'') = (ys, last)
+hys : y :: tail = ys
+⊢ xs.length + 1 = (x :: xs).length
+'AspisR1CuRho.mapState_length' depends on axioms: [propext, sorryAx]
+'AspisR1CuRho.core.array.Array.map' depends on axioms: [propext, sorryAx]
+'AspisR1CuRho.MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter' depends on axioms: [propext,
+ Quot.sound]

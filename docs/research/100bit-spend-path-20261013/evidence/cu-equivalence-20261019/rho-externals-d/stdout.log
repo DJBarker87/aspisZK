@@ -1,0 +1,45 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/AspisR1CuRho/FunsExternal.lean:37:68: error: Application type mismatch: The argument
+  h
+has type
+  (let (y, state') := (y, state')
+    do
+    let (ys, state'') ← mapState call xs state'
+    ok (y :: ys, state'')) =
+    ok (ys, last)
+but is expected to have type
+  ok (y :: tail, state'') = ok (ys, last)
+in the application
+  ok.inj h
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/AspisR1CuRho/FunsExternal.lean:39:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (ys, last).1
+in the target expression
+  ys.length = (x :: xs).length
+
+case cons.ok.ok
+T U F : Type
+call : F → T → Result (U × F)
+x : T
+xs : List T
+ih : ∀ (state : F) (ys : List U) (last : F), mapState call xs state = ok (ys, last) → ys.length = xs.length
+state : F
+ys : List U
+last : F
+y : U
+state' : F
+hc : call state x = ok (y, state')
+h :
+  (let (y, state') := (y, state')
+    do
+    let (ys, state'') ← mapState call xs state'
+    ok (y :: ys, state'')) =
+    ok (ys, last)
+tail : List U
+state'' : F
+hm : mapState call xs state' = ok (tail, state'')
+hpair : (y :: tail, state'') = (ys, last)
+hys : (y :: tail, state'').1 = (ys, last).1
+⊢ ys.length = (x :: xs).length
+'AspisR1CuRho.mapState_length' depends on axioms: [propext, sorryAx]
+'AspisR1CuRho.core.array.Array.map' depends on axioms: [propext, sorryAx]
+'AspisR1CuRho.MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter' depends on axioms: [propext,
+ Quot.sound]
