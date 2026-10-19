@@ -1,0 +1,11 @@
+# Strict source parsing and actual rounds yield the semantic-view chain
+
+The final theorem RawActualParsedSemanticViewChain.parsed_rounds_semantic_view_chain starts from successful strict PrefixAdapter.parseAccepted and successful actual RoundModel.rounds on that same prefix. It derives one fixed Full payload view, retains the same annotated reached execution, proves that its ordered q list equals the returned alpha array, and produces a WideExact sumcheck chain for the existing SemanticPayloadView.claimAt14 and coeffAt projections. The chain ends at the embedded actual running result.
+
+There are no independent payload-equality, polynomial-constructor, polynomial-value, initial-value or challenge-list equality premises in this consumer. Generic ring-hom transport preserves chain endpoints, evaluation and degree. Codec validRow forces the polynomial constructors; source record-slot readback identifies their exact framed bytes. The initial row14 claim is decoded from the same Full view. The lightweight coefficient and claim projections are proved equal to the existing semantic-view projections by constructor injectivity, reusing their existing payload lemmas.
+
+Scope: the caller still must establish actual successful parsing and round reachability. This is not outer verifier acceptance-to-Checks, not equality with the literal soundness transcript's challenge list, not the final terminal/mask relation, and not a claim that an arbitrary supplied mask-sum claim is the true hidden-mask sum. Public/commitment/opening source coupling, sampler/query accounting, terminal integration, extractor efficiency, privacy and final artifact/release checks remain separate obligations.
+
+Twelve focused Lean 4.32 targets exited zero. All printed theorem axiom reports contain only standard axioms. Exact sources/objects/imports/revisions/commands/wall time/peak RSS/zero process swaps are retained. No package-wide or frozen-manifest replay was run. Compiled objects are archived for reuse; release evidence still requires the clean unified ordered build.
+
+The record-slot proof in RawParsedRecordRowReadback reuses the existing checked proof body from RawActualAnnotatedTypedRowReadback in a narrow parser/source module, allowing the initial-claim consumer to avoid loading the polynomial-chain graph. No production Rust change is included.
