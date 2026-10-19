@@ -1,0 +1,262 @@
+[
+ {
+  "id": "ELF-R1-stage1-transfer",
+  "kind": "transfer",
+  "tx": "stage1",
+  "source": "value-dependent conditional branches (both arms observed, decision sequence varies)",
+  "elf": "5316 branch sites in stage1 ELF; top: 0xf85e0 _ZN15aspis_statement7pool_v129pair_forest_semantic_terminal3 124x20, 0xfd0d0 _ZN15aspis_statement7pool_v129pair_forest_semantic_terminal3 1198x1, 0xae538 _ZN15aspis_statement7pool_v125pair_forest_copy_terminal22sel 3x272, 0x4a4c8 _ZN19aspis_r1_cost_probe11r1_semantic17semantic_boundary17h0 2x280, 0x4ad18 _ZN19aspis_r1_cost_probe11r1_semantic14semantic_value17hdec1 2x280, 0x4b128 _ZN19aspis_r1_cost_probe11r1_semantic14semantic_value17hdec1 2x280",
+  "max_extra_cu": 53821,
+  "max_count": "per site: max dynamic count over traces (counts fixed by code except split/loop sites)",
+  "cap": "per-branch slack = longest - shortest instruction path to the immediate post-dominator; 1 CU per SBF instruction"
+ },
+ {
+  "id": "ELF-R3-stage1-transfer",
+  "kind": "transfer",
+  "tx": "stage1",
+  "source": "one-sided conditional branches whose unobserved arm may be longer (rare value branches, e.g. final canonical reduction)",
+  "elf": "374 branch sites",
+  "max_extra_cu": 50324,
+  "max_count": "max dynamic count over traces",
+  "cap": "static unobserved-arm longest path minus observed-arm shortest path"
+ },
+ {
+  "id": "LOOP-stage1-transfer",
+  "kind": "transfer",
+  "tx": "stage1",
+  "source": "loops whose trip count depends on the lane position (trailing ones / zero bits of next_leaf_index, root-page fill and page mode)",
+  "elf": "_ZN15aspis_statement7pool_v129pair_forest_semantic_terminal17compositi; _ZN15aspis_statement7pool_v129pair_forest_semantic_terminal36public_di",
+  "max_extra_cu": 333,
+  "max_count": "trip counts <= POOL_V1_PAIR_TREE_DEPTH = 20 (format.rs:28) and <= POOL_V1_ROOT_HISTORY_CAPACITY = 256 (root_history.rs:16-17); traced runs include pairs 0 (all zero bits), 2^20-1 (all ones), page fill 0 and 255",
+  "cap": "max - min instruction count of the containing functions over traces that reach both trip-count extremes"
+ },
+ {
+  "id": "ELF-R1-stage2-transfer",
+  "kind": "transfer",
+  "tx": "settlement",
+  "source": "value-dependent conditional branches (both arms observed, decision sequence varies)",
+  "elf": "3005 branch sites in stage2 ELF; top: 0x755c0 _ZN19aspis_r1_cost_probe7weights7Weights4pair17h94d56eaec1ae 2x252, 0x75800 _ZN19aspis_r1_cost_probe7weights7Weights4pair17h94d56eaec1ae 2x252, 0x45d48 _ZN19aspis_r1_cost_probe9fast_dots9four_dots17h3d70d57f1b8be 1x336, 0x74ef8 _ZN19aspis_r1_cost_probe7weights7Weights4pair17h94d56eaec1ae 1x252, 0x74f50 _ZN19aspis_r1_cost_probe7weights7Weights4pair17h94d56eaec1ae 1x252, 0x75060 _ZN19aspis_r1_cost_probe7weights7Weights4pair17h94d56eaec1ae 1x252, 0x75120 _ZN19aspis_r1_cost_probe7weights7Weights4pair17h94d56eaec1ae 1x252, 0x75230 _ZN19aspis_r1_cost_probe7weights7Weights4pair17h94d56eaec1ae",
+  "max_extra_cu": 36118,
+  "max_count": "per site: max dynamic count over traces (counts fixed by code except split/loop sites)",
+  "cap": "per-branch slack = longest - shortest instruction path to the immediate post-dominator; 1 CU per SBF instruction"
+ },
+ {
+  "id": "ELF-R3-stage2-transfer",
+  "kind": "transfer",
+  "tx": "settlement",
+  "source": "one-sided conditional branches whose unobserved arm may be longer (rare value branches, e.g. final canonical reduction)",
+  "elf": "168 branch sites",
+  "max_extra_cu": 9336,
+  "max_count": "max dynamic count over traces",
+  "cap": "static unobserved-arm longest path minus observed-arm shortest path"
+ },
+ {
+  "id": "ELF-R1-pool-transfer",
+  "kind": "transfer",
+  "tx": "settlement",
+  "source": "value-dependent conditional branches (both arms observed, decision sequence varies)",
+  "elf": "6 branch sites in pool ELF; top: 0x130f0 _ZN10aspis_pool11pair_forest32plan_pair_forest_spend_layout_ 104621x1, 0x17fc0 _ZN10aspis_pool11pair_forest45process_pair_forest_terminal_w 66x1, 0x17fd0 _ZN10aspis_pool11pair_forest45process_pair_forest_terminal_w 59x1, 0x5cb58 _ZN25solana_program_entrypoint11deserialize17h1b07cf4a6748c7 3x13",
+  "max_extra_cu": 104841,
+  "max_count": "per site: max dynamic count over traces (counts fixed by code except split/loop sites)",
+  "cap": "per-branch slack = longest - shortest instruction path to the immediate post-dominator; 1 CU per SBF instruction"
+ },
+ {
+  "id": "ELF-R3-pool-transfer",
+  "kind": "transfer",
+  "tx": "settlement",
+  "source": "one-sided conditional branches whose unobserved arm may be longer (rare value branches, e.g. final canonical reduction)",
+  "elf": "211 branch sites",
+  "max_extra_cu": 139652,
+  "max_count": "max dynamic count over traces",
+  "cap": "static unobserved-arm longest path minus observed-arm shortest path"
+ },
+ {
+  "id": "LOOP-pool-transfer",
+  "kind": "transfer",
+  "tx": "settlement",
+  "source": "loops whose trip count depends on the lane position (trailing ones / zero bits of next_leaf_index, root-page fill and page mode)",
+  "elf": "_ZN10aspis_pool11pair_forest30account_is_zeroed_program_page17h2329d10; _ZN10aspis_pool11pair_forest32plan_pair_forest_spend_layout_v117hb50e0; _ZN10aspis_pool7history24validate_root_page_bytes17hde68ccd7a12bbff0E; _ZN10aspis_pool9processor23require_unique_accounts17he39967cbfbc0f777E; entrypoint",
+  "max_extra_cu": 163258,
+  "max_count": "trip counts <= POOL_V1_PAIR_TREE_DEPTH = 20 (format.rs:28) and <= POOL_V1_ROOT_HISTORY_CAPACITY = 256 (root_history.rs:16-17); traced runs include pairs 0 (all zero bits), 2^20-1 (all ones), page fill 0 and 255",
+  "cap": "max - min instruction count of the containing functions over traces that reach both trip-count extremes"
+ },
+ {
+  "id": "S-SPLIT-transfer",
+  "kind": "transfer",
+  "tx": "stage1",
+  "source": "programs/r1-cost-probe/src/pool_route.rs:4 admits [3,10] and [3,11]; verifier.rs tx1_finish runs k queries",
+  "elf": "verifier::tx1_finish / query_with_geometry loop",
+  "max_extra_cu": 40536,
+  "max_count": 1,
+  "cap": "k in {10,11} (pool_route.rs:4, r1_pool_adapter.rs stage1); extra = max swept stage1 at k=11 - min swept stage1 at k=10"
+ },
+ {
+  "id": "S-QSCAN-transfer",
+  "kind": "transfer",
+  "tx": "stage1",
+  "source": "aspis-core/src/r0_transcript.rs:202-214 QueryScan::scan (duplicate draws)",
+  "elf": "aspis_core::r0_transcript::QueryScan::scan (547-931 instr per 8-word call observed)",
+  "max_extra_cu": 8400,
+  "max_count": 42,
+  "cap": "draws <= QUERY_MAX_DRAWS = 64 (r0_transcript.rs:48), 22 accepted minimum; 200 CU per extra draw (contains over <= 22 u32 plus loop) is an upper bound"
+ },
+ {
+  "id": "S-CIRCLE-transfer",
+  "kind": "transfer",
+  "tx": "stage1",
+  "source": "aspis-core/src/r0_transcript.rs circle_sample fallback; transcript.rs:286-296",
+  "elf": "aspis_core::transcript::circle_fallback_point (never executed in traces)",
+  "max_extra_cu": 3940,
+  "max_count": 2,
+  "cap": "two circle rows (25, 26); extra <= max inclusive cost of secure_ood_circle_point_from_parameter = 1970 instr (traced)"
+ },
+ {
+  "id": "S-BUMP-transfer",
+  "kind": "transfer",
+  "tx": "settlement",
+  "source": "aspis-pool find_program_address: nullifier.rs:32 (marker, twice: plan + replan), history.rs:38 (current page; next page on rollover), pair_forest.rs:208/222/233 (master/lane/checkpoint), registry.rs, vault.rs",
+  "elf": "aspis_pool sol_try_find_program_address calls per settlement (traced, per trace): [11, 12, 12, 11, 11, 11]",
+  "max_extra_cu": 4572000,
+  "max_count": 12,
+  "cap": "Agave solana-syscalls-4.2.1 lib.rs:893-929: 1500 CU per bump attempt, at most 255 attempts; accepted => <= 254 failed attempts => <= 381,000 CU per call"
+ },
+ {
+  "id": "S-MARKER-PREFUNDED-transfer",
+  "kind": "transfer",
+  "tx": "settlement",
+  "source": "aspis-pool processor.rs create_or_allocate_pda_with_rent: prefunded marker PDA uses transfer+allocate+assign",
+  "elf": "solana_system_interface transfer/allocate/assign arms never executed in traces",
+  "max_extra_cu": 5000,
+  "max_count": 1,
+  "cap": "at most 3 System CPIs instead of 1: 2 x (invoke_units 946 + System builtin + CPI byte charges) < 5000 (upper bound, not traced)"
+ },
+ {
+  "id": "ELF-R1-stage1-withdrawal",
+  "kind": "withdrawal",
+  "tx": "stage1",
+  "source": "value-dependent conditional branches (both arms observed, decision sequence varies)",
+  "elf": "5293 branch sites in stage1 ELF; top: 0xf85e0 _ZN15aspis_statement7pool_v129pair_forest_semantic_terminal3 124x20, 0xfd0d0 _ZN15aspis_statement7pool_v129pair_forest_semantic_terminal3 1198x1, 0xae538 _ZN15aspis_statement7pool_v125pair_forest_copy_terminal22sel 3x272, 0x4a4c8 _ZN19aspis_r1_cost_probe11r1_semantic17semantic_boundary17h0 2x280, 0x4ad18 _ZN19aspis_r1_cost_probe11r1_semantic14semantic_value17hdec1 2x280, 0x4b128 _ZN19aspis_r1_cost_probe11r1_semantic14semantic_value17hdec1 2x280, 0x45d48 _ZN19aspis_r1_cost_probe9fast_dots9four_dots17h3d70d57f1b8be 1x308",
+  "max_extra_cu": 53774,
+  "max_count": "per site: max dynamic count over traces (counts fixed by code except split/loop sites)",
+  "cap": "per-branch slack = longest - shortest instruction path to the immediate post-dominator; 1 CU per SBF instruction"
+ },
+ {
+  "id": "ELF-R3-stage1-withdrawal",
+  "kind": "withdrawal",
+  "tx": "stage1",
+  "source": "one-sided conditional branches whose unobserved arm may be longer (rare value branches, e.g. final canonical reduction)",
+  "elf": "340 branch sites",
+  "max_extra_cu": 53438,
+  "max_count": "max dynamic count over traces",
+  "cap": "static unobserved-arm longest path minus observed-arm shortest path"
+ },
+ {
+  "id": "LOOP-stage1-withdrawal",
+  "kind": "withdrawal",
+  "tx": "stage1",
+  "source": "loops whose trip count depends on the lane position (trailing ones / zero bits of next_leaf_index, root-page fill and page mode)",
+  "elf": "_ZN15aspis_statement7pool_v129pair_forest_semantic_terminal17compositi; _ZN15aspis_statement7pool_v129pair_forest_semantic_terminal36public_di",
+  "max_extra_cu": 309,
+  "max_count": "trip counts <= POOL_V1_PAIR_TREE_DEPTH = 20 (format.rs:28) and <= POOL_V1_ROOT_HISTORY_CAPACITY = 256 (root_history.rs:16-17); traced runs include pairs 0 (all zero bits), 2^20-1 (all ones), page fill 0 and 255",
+  "cap": "max - min instruction count of the containing functions over traces that reach both trip-count extremes"
+ },
+ {
+  "id": "ELF-R1-stage2-withdrawal",
+  "kind": "withdrawal",
+  "tx": "settlement",
+  "source": "value-dependent conditional branches (both arms observed, decision sequence varies)",
+  "elf": "3004 branch sites in stage2 ELF; top: 0x755c0 _ZN19aspis_r1_cost_probe7weights7Weights4pair17h94d56eaec1ae 2x252, 0x75800 _ZN19aspis_r1_cost_probe7weights7Weights4pair17h94d56eaec1ae 2x252, 0x45d48 _ZN19aspis_r1_cost_probe9fast_dots9four_dots17h3d70d57f1b8be 1x336, 0x74ef8 _ZN19aspis_r1_cost_probe7weights7Weights4pair17h94d56eaec1ae 1x252, 0x74f50 _ZN19aspis_r1_cost_probe7weights7Weights4pair17h94d56eaec1ae 1x252, 0x75060 _ZN19aspis_r1_cost_probe7weights7Weights4pair17h94d56eaec1ae 1x252, 0x75120 _ZN19aspis_r1_cost_probe7weights7Weights4pair17h94d56eaec1ae 1x252, 0x75230 _ZN19aspis_r1_cost_probe7weights7Weights4pair17h94d56eaec1ae",
+  "max_extra_cu": 36114,
+  "max_count": "per site: max dynamic count over traces (counts fixed by code except split/loop sites)",
+  "cap": "per-branch slack = longest - shortest instruction path to the immediate post-dominator; 1 CU per SBF instruction"
+ },
+ {
+  "id": "ELF-R3-stage2-withdrawal",
+  "kind": "withdrawal",
+  "tx": "settlement",
+  "source": "one-sided conditional branches whose unobserved arm may be longer (rare value branches, e.g. final canonical reduction)",
+  "elf": "169 branch sites",
+  "max_extra_cu": 9457,
+  "max_count": "max dynamic count over traces",
+  "cap": "static unobserved-arm longest path minus observed-arm shortest path"
+ },
+ {
+  "id": "ELF-R1-pool-withdrawal",
+  "kind": "withdrawal",
+  "tx": "settlement",
+  "source": "value-dependent conditional branches (both arms observed, decision sequence varies)",
+  "elf": "6 branch sites in pool ELF; top: 0x130f0 _ZN10aspis_pool11pair_forest32plan_pair_forest_spend_layout_ 105441x1, 0x17fc0 _ZN10aspis_pool11pair_forest45process_pair_forest_terminal_w 66x1, 0x17fd0 _ZN10aspis_pool11pair_forest45process_pair_forest_terminal_w 59x1, 0x5cb58 _ZN25solana_program_entrypoint11deserialize17h1b07cf4a6748c7 3x18, 0x5ba70 _RNvCscR3e5J6VSLN_7___rustc12___rust_alloc 1x46",
+  "max_extra_cu": 105696,
+  "max_count": "per site: max dynamic count over traces (counts fixed by code except split/loop sites)",
+  "cap": "per-branch slack = longest - shortest instruction path to the immediate post-dominator; 1 CU per SBF instruction"
+ },
+ {
+  "id": "ELF-R3-pool-withdrawal",
+  "kind": "withdrawal",
+  "tx": "settlement",
+  "source": "one-sided conditional branches whose unobserved arm may be longer (rare value branches, e.g. final canonical reduction)",
+  "elf": "266 branch sites",
+  "max_extra_cu": 144680,
+  "max_count": "max dynamic count over traces",
+  "cap": "static unobserved-arm longest path minus observed-arm shortest path"
+ },
+ {
+  "id": "LOOP-pool-withdrawal",
+  "kind": "withdrawal",
+  "tx": "settlement",
+  "source": "loops whose trip count depends on the lane position (trailing ones / zero bits of next_leaf_index, root-page fill and page mode)",
+  "elf": "_ZN10aspis_pool11pair_forest30account_is_zeroed_program_page17h2329d10; _ZN10aspis_pool11pair_forest32plan_pair_forest_spend_layout_v117hb50e0; _ZN10aspis_pool7history24validate_root_page_bytes17hde68ccd7a12bbff0E; _ZN10aspis_pool9processor23require_unique_accounts17he39967cbfbc0f777E; entrypoint",
+  "max_extra_cu": 163308,
+  "max_count": "trip counts <= POOL_V1_PAIR_TREE_DEPTH = 20 (format.rs:28) and <= POOL_V1_ROOT_HISTORY_CAPACITY = 256 (root_history.rs:16-17); traced runs include pairs 0 (all zero bits), 2^20-1 (all ones), page fill 0 and 255",
+  "cap": "max - min instruction count of the containing functions over traces that reach both trip-count extremes"
+ },
+ {
+  "id": "S-SPLIT-withdrawal",
+  "kind": "withdrawal",
+  "tx": "stage1",
+  "source": "programs/r1-cost-probe/src/pool_route.rs:4 admits [3,10] and [3,11]; verifier.rs tx1_finish runs k queries",
+  "elf": "verifier::tx1_finish / query_with_geometry loop",
+  "max_extra_cu": 40673,
+  "max_count": 1,
+  "cap": "k in {10,11} (pool_route.rs:4, r1_pool_adapter.rs stage1); extra = max swept stage1 at k=11 - min swept stage1 at k=10"
+ },
+ {
+  "id": "S-QSCAN-withdrawal",
+  "kind": "withdrawal",
+  "tx": "stage1",
+  "source": "aspis-core/src/r0_transcript.rs:202-214 QueryScan::scan (duplicate draws)",
+  "elf": "aspis_core::r0_transcript::QueryScan::scan (547-931 instr per 8-word call observed)",
+  "max_extra_cu": 8400,
+  "max_count": 42,
+  "cap": "draws <= QUERY_MAX_DRAWS = 64 (r0_transcript.rs:48), 22 accepted minimum; 200 CU per extra draw (contains over <= 22 u32 plus loop) is an upper bound"
+ },
+ {
+  "id": "S-CIRCLE-withdrawal",
+  "kind": "withdrawal",
+  "tx": "stage1",
+  "source": "aspis-core/src/r0_transcript.rs circle_sample fallback; transcript.rs:286-296",
+  "elf": "aspis_core::transcript::circle_fallback_point (never executed in traces)",
+  "max_extra_cu": 3940,
+  "max_count": 2,
+  "cap": "two circle rows (25, 26); extra <= max inclusive cost of secure_ood_circle_point_from_parameter = 1970 instr (traced)"
+ },
+ {
+  "id": "S-BUMP-withdrawal",
+  "kind": "withdrawal",
+  "tx": "settlement",
+  "source": "aspis-pool find_program_address: nullifier.rs:32 (marker, twice: plan + replan), history.rs:38 (current page; next page on rollover), pair_forest.rs:208/222/233 (master/lane/checkpoint), registry.rs, vault.rs",
+  "elf": "aspis_pool sol_try_find_program_address calls per settlement (traced, per trace): [13, 14, 14, 13, 13, 13]",
+  "max_extra_cu": 5334000,
+  "max_count": 14,
+  "cap": "Agave solana-syscalls-4.2.1 lib.rs:893-929: 1500 CU per bump attempt, at most 255 attempts; accepted => <= 254 failed attempts => <= 381,000 CU per call"
+ },
+ {
+  "id": "S-MARKER-PREFUNDED-withdrawal",
+  "kind": "withdrawal",
+  "tx": "settlement",
+  "source": "aspis-pool processor.rs create_or_allocate_pda_with_rent: prefunded marker PDA uses transfer+allocate+assign",
+  "elf": "solana_system_interface transfer/allocate/assign arms never executed in traces",
+  "max_extra_cu": 5000,
+  "max_count": 1,
+  "cap": "at most 3 System CPIs instead of 1: 2 x (invoke_units 946 + System builtin + CPI byte charges) < 5000 (upper bound, not traced)"
+ }
+]

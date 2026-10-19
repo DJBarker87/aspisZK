@@ -9,7 +9,40 @@ schedule; **[swept]** = maximum over the randomised step-5 sweep.
 
 ## Verdict
 
-(pending)
+**FAIL.** B_stage1 = 1,357,041 (transfer) / 1,358,920 (withdrawal);
+B_settlement = 6,204,876 (transfer) / 6,986,751 (withdrawal) [analytical
+bound = max saved-fixture CU + sum of site maxima, method step 3]. Both
+exceed 1,300,000 for both kinds. Every site has a code-cited cap, so the
+result is not INCOMPLETE; steps 1-5 were run. No sweep value exceeds its
+bound (step 5). Swept maxima: stage 1 1,239,161 / 1,237,878; settlement
+1,231,724 / 1,245,323 (the latter two from targeted bump-search inputs;
+random-only maxima 1,192,252 / 1,206,877) [swept].
+
+Dominant sites:
+1. **Pool PDA bump searches (settlement).** The Pool calls
+   `sol_try_find_program_address` 11-12 times per transfer settlement and
+   13-14 times per withdrawal [measured, traces]. Agave charges 1,500 CU per
+   attempt and allows 255 attempts, so each call can cost up to 381,000 CU
+   more than the one-attempt path (S-BUMP). Seeds include the spent
+   nullifier (marker PDA, derived twice), the page number and the
+   checkpoint sequence, so the attempt counts vary per transaction. A
+   ground nullifier needing 19 attempts at the marker (derived twice: 2 x 18
+   x 1,500 = 54,000 CU analytical) gave settlements 46-60k above the
+   ungrounded p255 runs [measured, `target-*-marker12/16`; the baseline
+   seeds differ]. Without this site, B_settlement is
+   still 1,632,876 / 1,652,751, because of the Pool page-mode branches and
+   loops (zero scan and write of an 8,256-byte page; 245-250k across R1
+   and R3) and the bit-dependent lane loops (163k).
+2. **Stage-1 split `[3,11]` (stage 1).** 40,536 / 40,673 CU [swept range].
+   All saved fixtures used `[3,10]`; `[3,11]` is admitted and runs 11
+   queries in stage 1 (swept stage 1 up to 1,239,161).
+3. **Value-dependent field-reduction branches (both transactions).** About
+   54k CU of R1 slack in stage 1 and 36k in stage 2; 79% of it is
+   one-instruction `x >= P` canonical-reduction branches. A further 50-53k
+   (stage 1) of one-sided R3 branches is included conservatively.
+
+Stage 1 fails even on the narrowest reading: without the conservative R3
+class, B_stage1 is 1,306,717 (transfer).
 
 ## 0. Target pin
 
@@ -115,9 +148,33 @@ equality check (proof buffer `scan_proof_buffer`, checkpoint
 `require_verifier_checkpoint`, lane/page/master/checkpoint decoders,
 registry decoders), so CPI byte charges are constant.
 
-## 2. Site enumeration (method step 1-2)
+## 2. Site enumeration and maxima (method steps 1-2)
 
-(pending)
+All sites with source location, ELF location, maximum extra CU, maximum
+count and cap citation are listed in `sites.json`. Per-kind values come
+from `bound.json` [analytical; ELF classes use traced counts].
+
+| Site | Tx | Transfer max extra | Withdrawal max extra | Count cap (citation) |
+|---|---|---:|---:|---|
+| S-SPLIT `[3,11]` | stage 1 | 40,536 | 40,673 | k in {10,11}, `pool_route.rs:4` |
+| ELF-R1 value branches | stage 1 | 53,821 | 53,774 | per-site traced count (fixed by code; split at 11) |
+| ELF-R3 one-sided branches | stage 1 | 50,324 | 53,438 | traced count |
+| LOOP lane-position loops | stage 1 | 333 | 309 | <= 20 = `POOL_V1_PAIR_TREE_DEPTH` (`format.rs:28`) |
+| S-QSCAN duplicate draws | stage 1 | 8,400 | 8,400 | 42 extra draws, `QUERY_MAX_DRAWS=64` (`r0_transcript.rs:48`) |
+| S-CIRCLE fallback | stage 1 | 3,940 | 3,940 | 2 rows; 1,970 instr each (traced inclusive cost) |
+| ELF-R1 value branches | settlement (verifier) | 36,118 | 36,114 | traced count |
+| ELF-R3 one-sided branches | settlement (verifier) | 9,336 | 9,457 | traced count |
+| ELF-R1 Pool (page mode) | settlement (Pool) | 104,841 | 105,696 | page modes Genesis/SamePage/Rollover |
+| ELF-R3 Pool | settlement (Pool) | 139,652 | 144,680 | traced count |
+| LOOP Pool page/fill/bits | settlement (Pool) | 163,258 | 163,308 | <= 256 roots (`root_history.rs:16-17`), <= 20 bits |
+| S-MARKER-PREFUNDED | settlement | 5,000 | 5,000 | <= 2 extra System CPIs |
+| S-BUMP find_program_address | settlement | 4,572,000 (12 x 381,000) | 5,334,000 (14 x 381,000) | 255 attempts, `solana-syscalls-4.2.1/src/lib.rs:893-929` |
+
+Constant sites (no extra): sha256/memcpy/memset/memcmp lengths (fixed
+layouts; traced counts constant per kind and split), seven verifier
+`create_program_address` calls (flat 1,500 CU each), CPI byte charges
+(account lengths pinned by equality checks), and the gamma `wrapped` branch
+(inside ELF-R3). The verifier has no bump search.
 
 ## 3. ELF control-flow audit (method step 1, ELF part)
 
@@ -182,11 +239,38 @@ syscall CU (sha256, PDA, CPI) is costed from source and the Agave schedule.
 
 ## 4. Bound B_tx (method step 3)
 
-(pending)
+B_tx = max saved-fixture CU (the six cu-savings fixtures, reproduced
+exactly by this job's controls) + the sum of the site maxima in section 2.
+
+| | Transfer | Withdrawal |
+|---|---:|---:|
+| fixture max, stage 1 | 1,199,687 | 1,198,386 |
+| **B_stage1** | **1,357,041** | **1,358,920** |
+| fixture max, settlement | 1,174,671 | 1,188,496 |
+| **B_settlement** | **6,204,876** | **6,986,751** |
+| B_settlement without S-BUMP (information only) | 1,632,876 | 1,652,751 |
+
+These bounds are conservative. Each site maximum is the extra cost over the
+cheapest path times the maximum count, as pre-registered, so part of each
+site is already in the measured fixture and is counted twice. A tighter
+bound is possible but would not change the verdict: S-BUMP alone exceeds
+the settlement headroom, and stage 1 exceeds 1.3M without the R3 class.
 
 ## 5. Profiling consistency check (method step 4)
 
-(pending)
+The `cu-profiling` verifier (`40d544ee...`) replayed 22 accepted runs: the six
+fixtures plus 16 seeded runs (both kinds, splits 10/11, pairs 0
+with a genesis page, 255, 256, 4095, 31337, 777777 and 2^20-1). Per-phase CU
+is in `profile-phases.json`. Across (kind, split, transaction) groups, 196
+phases vary, with summed ranges of 1-2k CU per group. The largest are
+`r1:semantic` (up to 1,436, from lane-position loops and value branches),
+stage-2 `r1:parsed` (673, the adapter's lane decode on zero bits) and the
+Merkle and query phases (<= 70 each). `phase-attribution.json` maps each
+varying phase to the functions that run in it and checks that its range is
+at most the listed site maxima in those functions (or names the source
+site): **0 phases are unexplained**. The Pool has no phase markers; its
+variation is attributed at function level from the traces (page-mode
+branches, page loops, bump searches).
 
 ## 6. Randomised and targeted sweep (method step 5)
 
@@ -210,8 +294,54 @@ all additions are opt-in and a no-option run is checked to reproduce the
 saved fixture CU. `harness/sweep.py` runs every case sequentially inside one
 capped scope and records command, exit, wall, RSS and swaps per run.
 
-(results pending)
+**Results [swept].** 658 accepted runs in total, with no failures and no
+rejections (`sweep.jsonl`; `set` = control/targeted/trace/profile/random):
+
+- 6 controls: the saved fixtures replayed with the new driver reproduce every
+  stage-1, settlement and nested CU exactly.
+- 600 random runs, 300 per kind. Each has a fresh OS-masked proof and a
+  random witness (input value, outputs, membership path, super-root path,
+  `selected_second`), so the nullifier, and with it the output lane (all 8
+  lanes hit) and the marker PDA, are random. Checkpoint sequence and lane
+  position are also random: pairs uniform on [0, 2^20), rollover positions,
+  small positions, near-cap, and specials. Split is random 10/11; 172 runs
+  are rollovers.
+- 52 targeted runs (26 per kind): the cap 2^20-1 and 2^20-2, a zeroed genesis
+  page, pairs 0/1/255/256/511/1023/65535/524287 at both splits, and
+  marker-bump grinding (19 attempts). A first attempt of these 52 failed at
+  witness compilation because the seeded checkpoint sequence exceeded
+  `POOL_V1_LEAF_CAPACITY` (`payment_relation.rs` `validate_common`). The
+  generator was fixed (anchor sequence < 2^20), the driver rebuilt, and the
+  set rerun; the failed ledger is kept as `targeted-attempt1-anchor-seq`.
+- 12 traced and 22 profiled runs (sections 3 and 5).
+
+| Kind | Split | Stage 1 min-max | Settlement min-max (random) |
+|---|---|---|---|
+| transfer | 10 | 1,198,625-1,199,982 | 1,101,607-1,192,252 |
+| transfer | 11 | 1,237,692-1,239,161 | 1,061,719-1,149,636 |
+| withdrawal | 10 | 1,197,205-1,198,648 | 1,113,707-1,206,877 |
+| withdrawal | 11 | 1,236,243-1,237,878 | 1,074,162-1,182,833 |
+
+Maximum over all runs: stage 1 1,239,161 (T) / 1,237,878 (W), settlement
+1,231,724 (T) / 1,245,323 (W, marker grinding), all below their bounds.
+Three classes of accepted transaction exceed the measured fixtures and the
+old 1.2M line: stage 1 with `[3,11]`, random withdrawal settlements
+(1,206,877), and marker-ground settlements.
+Random sweep time: 0.82 h of run wall time in total, peak RSS 259 MiB,
+0 swaps.
 
 ## 7. Run ledger
 
-(pending)
+Every run's command, exit status, wall time, peak RSS, swaps and cgroup caps
+are in `receipts/run-ledger.jsonl` (sweep, targeted, trace and profile runs)
+and `receipts/build-and-analysis-receipts.json` (SBF builds, native driver
+builds including the failed first attempt with a missing `include!`
+source, and trace analyses). All ran on the NUC under `systemd-run --user
+--scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64`
+with `-j 4` and optimized profiles. Peak build RSS was 0.65 GB and peak
+analysis RSS 1.4 GB; all runs had 0 swaps. No Lean compilation ran, so
+`#print axioms` is N/A. Binaries are not committed; SHA-256 and sizes are in
+`artifacts-sha256.txt`. Host workspace:
+`/home/dombarker/project-offloads/codex-r1-cu-bound-20261019`, with task
+keys retained there privately (0700/0600). The register traces (2.5 GB)
+were deleted after analysis.

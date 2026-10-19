@@ -16,7 +16,7 @@ FIND_MAX_EXTRA = 254 * CPA  # solana-syscalls-4.2.1 lib.rs:893-929 (for _ in 0..
 UNMAPPED_CLASSES = [
     ('U1-panic-or-abort', r'panicking|panic_bounds|index_len_fail|index_order_fail|unwrap_failed|handle_alloc_error|raw_vec12handle_error|assert_failed|len_mismatch|panic_already|panic_fmt'),
     ('U2-vec-growth-fixed-length', r'do_reserve_and_handle|grow_one|__rust_realloc'),
-    ('U3-route-or-kind-constant', r'transfer_statement|private_transfer|lifecycle_|r1_pool_adapter6stage[12]|first_decoded|entrypoint11deserialize|_with_runtime_v1|withdrawal|vault|require_token_program_account|process_'),
+    ('U3-route-or-kind-constant', r'transfer_statement|transfer_terminal|private_transfer|lifecycle_|r1_pool_adapter6stage[12]|first_decoded|entrypoint11deserialize|_with_runtime_v1|withdrawal|vault|require_token_program_account|process_'),
     ('U4-error-constructor', r'program_error|ProgramError|5error17|create_program_address|format_inner|registry_v1|registry_entry_v1|validate_|decode_pool_v1_nullifier_marker|drop_in_place'),
     ('U5-proof-variant-constant', r'opening8inactive|twofold_libra|dense_point_pair|try_from_fn17h2570dfa09e326f62'),
     ('U6-circle-fallback', r'circle_fallback_point'),
