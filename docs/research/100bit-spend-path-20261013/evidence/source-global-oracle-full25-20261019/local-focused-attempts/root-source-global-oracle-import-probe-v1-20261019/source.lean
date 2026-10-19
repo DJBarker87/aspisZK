@@ -1,0 +1,2 @@
+import RawSourceGlobalOracleCoupling
+#check AspisR1PublicPreparation.SourceGlobalOracleCoupling.call_functional_from_log
