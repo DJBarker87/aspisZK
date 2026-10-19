@@ -583,5 +583,43 @@ is the row-local fact the writing stage guarantees.
            lift (rust row) = R0P row (generated, each lane a numeral-cast
            equality), applied by name inside perm_rounds' proof, never
            unfolded inside a round.
-  11.5 Status: see the commits after this section (prototype copy,
-       differential test, extraction, single-round lemma).
+  11.5 Status (base 1b56fef13; Lean attempts 4400-4407).
+       Copy (refine/poseidon/src/lib.rs) as in (a), with one change: the
+       round tables are module constants read only by apply_round, and the
+       round functions take the constant row / constant / shift row as
+       arguments.  Numerically checked (refine/evidence/diff-g.txt, host,
+       optimized, 3G/4G scope): perm_rounds equals the eleven odd-round
+       outputs of production permute_optimized_with_trace on 100,000 random
+       (pre, absorb) pairs and on all 1,824 blocks of 32 compiled traces;
+       the final state equals production permute on 50,000 states; m31_add /
+       m31_mul agree with production on 1,000,000 pairs.
+       Extraction (tag d, Charon cb50ff16 --preset aeneas --mir built,
+       Aeneas b59d5188 -loops-to-rec): no adapter or rename needed; the
+       generated file differs from R0Z/PoseidonExtracted only by D-1/D-2
+       (host 4401 green).
+       Proved (axioms propext, Classical.choice, Quot.sound only):
+       - R0Z/PoseidonRefine (4404): add_lift, mul_lift, pow5_lift,
+         mat4_lift, the three external-layer loops, external_lift and
+         full_round_lift: for every u32 state s and constant row c,
+         full_round s c = ok t and liftU t[i] = poseidonFullRound (liftA s)
+         (liftA c) i.  No canonicity hypothesis: every reduction is
+         (u64 expression) % p with no u64 wrap, and K has characteristic p.
+       - R0Z/PoseidonInternal (4406): part_lift (the u64 part sum equals
+         R0P's ordered foldl over List.ofFn, via a generic ofFn/range'
+         lemma), internal_linear_lift (lane 0 needs s[0] < p) and
+         internal_round_lift: internal_round s c0 shifts = ok t and liftU
+         t[i] = poseidonInternalRound (liftA s) (liftU c0) i, given the named
+         facts ShiftsBound shifts and ShiftsOk shifts (lane 0 canonicity is
+         supplied by pow5_canon).
+       - R0Z/PoseidonTables (4407): INTERNAL_SHIFTS satisfies ShiftsOk and
+         ShiftsBound.
+       Open, in order: (1) the K-valued table rows: liftA of each
+       EXTERNAL_INITIAL / EXTERNAL_FINAL row and liftU of each INTERNAL
+       entry equals the R0P constant (generated, one named lemma per row,
+       each lane by Nat.cast_ofNat after reading the u32 literal; never by
+       unfolding Nat.cast); (2) apply_round_lift by the three branches,
+       leading_pair_lift (absorb loop + external_lift + two full rounds);
+       (3) perm_rounds_lift: the loop invariant rounds[k] lifts to
+       blockIter B (k+1), which gives RoundsOk for perm_rounds' output;
+       (4) the copy↔production link stays numerical (diff-g), as for the
+       other writers.
