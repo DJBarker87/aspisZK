@@ -1,0 +1,68 @@
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertData2.lean:137:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nvec (Emat (fun a x => φ (rowM d.u d.q ↑a ↑x)) fun x c => φ (rowM d.rel d.bw ↑x ↑c)) (pivF d hd hB) (frF d hd hB) f t
+in the target expression
+  ∑ e,
+      (fun f e => φ (rowM d.yg d.mg ↑f ↑e)) f e *
+        kcoord (fun i t => φ (colM d.gbat d.bw ↑i ↑t))
+          ((fun e => entF φ d.gej d.ges d.gepo d.geco d.gpidx d.gcoef d.NG ↑e ⋯ ⋯) e) t =
+    (fun f =>
+        nvec (Emat (fun a x => φ (rowM d.u d.q ↑a ↑x)) fun x c => φ (rowM d.rel d.bw ↑x ↑c)) (pivF d hd hB)
+          (frF d hd hB) f)
+      f t
+
+case refine_3
+F : Type u_1
+inst✝ : Field F
+φ : ZP →+* F
+d : CData
+hd : DataOK d
+st : ℕ → ℕ
+A R B : ℕ
+hR : d.rw = R
+hB : d.bw = B
+hE :
+  ∀ e < d.mg,
+    EntOKF d.gej d.ges d.gepo d.geco d.gpidx d.gcoef d.glane d.gwl d.NG d.gown d.gw d.ground d.rw d.rw d.gbat d.bw d.bw
+      d.beta e
+hN : ∀ f < d.k, ∀ t < d.bw, d.nm (f * d.bw + t) = nvalF d.e d.bw d.tag d.r (d.lst (d.r + f)) t
+hP :
+  ∀ f < d.k,
+    ∀ t < d.bw, ∑ p ∈ Finset.range d.mg, d.yg (0 + f * d.mg + p) * d.beta (0 + t + p * d.bw) = d.nm (0 + f * d.bw + t)
+f : Fin d.k
+t : Fin B
+hc :
+  ∀ (e : Fin d.mg),
+    kcoord (fun i t => φ (colM d.gbat d.bw ↑i ↑t)) (entF φ d.gej d.ges d.gepo d.geco d.gpidx d.gcoef d.NG ↑e ⋯ ⋯) t =
+      φ (d.beta (↑e * d.bw + ↑t))
+⊢ ∑ e,
+      (fun f e => φ (rowM d.yg d.mg ↑f ↑e)) f e *
+        kcoord (fun i t => φ (colM d.gbat d.bw ↑i ↑t))
+          ((fun e => entF φ d.gej d.ges d.gepo d.geco d.gpidx d.gcoef d.NG ↑e ⋯ ⋯) e) t =
+    (fun f =>
+        nvec (Emat (fun a x => φ (rowM d.u d.q ↑a ↑x)) fun x c => φ (rowM d.rel d.bw ↑x ↑c)) (pivF d hd hB)
+          (frF d hd hB) f)
+      f t
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    hE (↑e) e.isLt
+  has type
+    EntOKF d.gej d.ges d.gepo d.geco d.gpidx d.gcoef d.glane d.gwl d.NG d.gown d.gw d.ground d.rw d.rw d.gbat d.bw d.bw
+      d.beta ↑e
+  but is expected to have type
+    d.gej ↑e < d.NG ∧
+      (∀ p < d.ges ↑e, d.gpidx (d.gepo ↑e + p) < d.NG ∧ d.glane (d.gpidx (d.gepo ↑e + p)) = d.glane (d.gej ↑e)) ∧
+        (∀ i < d.gwl (d.glane (d.gej ↑e)),
+            kcoF d.gown d.gw (d.gej ↑e) d.gpidx (d.gepo ↑e) d.gcoef (d.geco ↑e) (d.ges ↑e) i = 0) ∧
+          (∀ i < d.rw, kcoF d.ground d.rw (d.gej ↑e) d.gpidx (d.gepo ↑e) d.gcoef (d.geco ↑e) (d.ges ↑e) i = 0) ∧
+            ∀ i < d.bw,
+              kcoF d.gbat d.bw (d.gej ↑e) d.gpidx (d.gepo ↑e) d.gcoef (d.geco ↑e) (d.ges ↑e) i = d.beta (↑e * d.bw + i)
+  in the application
+    (hE (↑e) e.isLt).left
+'R1Z.CertData.data_ech' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.CertData.nvec_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.CertData.data_vg' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.CertData.data_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock

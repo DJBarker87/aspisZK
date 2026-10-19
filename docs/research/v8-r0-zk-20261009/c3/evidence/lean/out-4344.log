@@ -1,0 +1,95 @@
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertCheckKer.lean:63:38: error: Application type mismatch: The argument
+  h
+has type
+  (have __do_jp := fun ok2 => do
+      let i11 ← i + 1#usize
+      kimg_ok_loop m st nrows j idx io c co s tgt to1 ts ok2 i11;
+    if (v != i10) = true then do
+      let ok2 ← ok false
+      __do_jp ok2
+    else do
+      let ok2 ← ok b
+      __do_jp ok2) =
+    ok r
+but is expected to have type
+  ?m.335 >>= ?m.336 = ok ?m.337
+in the application
+  bind_eq_ok h
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertCheckKer.lean:99:38: error: Application type mismatch: The argument
+  h
+has type
+  (have __do_jp := fun ok2 => do
+      let p1 ← p + 1#usize
+      piv_ok_loop idx io s lane lj nsrc ok2 p1;
+    if t ≥ nsrc then do
+      let ok2 ← ok false
+      __do_jp ok2
+    else do
+      let i2 ← lane.index_usize t
+      if (i2 != lj) = true then do
+          let ok2 ← ok false
+          __do_jp ok2
+        else do
+          let ok2 ← ok b
+          __do_jp ok2) =
+    ok r
+but is expected to have type
+  ?m.152 >>= ?m.153 = ok ?m.154
+in the application
+  bind_eq_ok h
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertCheckKer.lean:162:38: error: Application type mismatch: The argument
+  h
+has type
+  (have __do_jp := fun ok2 => do
+      let e1 ← e + 1#usize
+      ents_ok_loop ej es epo eco idx coef m lane wl nsrc z1 s1 z2 s2 n2 g sg ng out zero ok2 e1;
+    if j ≥ nsrc then do
+      let ok2 ← ok false
+      __do_jp ok2
+    else do
+      let lj ← lane.index_usize j
+      let i4 ← lift (UScalar.cast UScalarTy.Usize lj)
+      let i5 ← wl.index_usize i4
+      let w1 ← lift (UScalar.cast UScalarTy.Usize i5)
+      let b_1 ← piv_ok idx io s lane lj nsrc
+      have __do_jp : Bool → Result Bool := fun ok3 => do
+        let b1 ← kimg_ok z1 s1 w1 j idx io coef co s zero 0#usize 0#usize
+        have __do_jp : Bool → Result Bool := fun ok4 => do
+          let b2 ← kimg_ok z2 s2 n2 j idx io coef co s zero 0#usize 0#usize
+          have __do_jp : Bool → Result Bool := fun ok5 => do
+            let i6 ← e * ng
+            let b3 ← kimg_ok g sg ng j idx io coef co s out i6 1#usize
+            if b3 = true then do
+                let ok2 ← ok ok5
+                __do_jp ok2
+              else do
+                let ok2 ← ok false
+                __do_jp ok2
+          if b2 = true then do
+              let ok5 ← ok ok4
+              __do_jp ok5
+            else do
+              let ok5 ← ok false
+              __do_jp ok5
+        if b1 = true then do
+            let ok4 ← ok ok3
+            __do_jp ok4
+          else do
+            let ok4 ← ok false
+            __do_jp ok4
+      if b_1 = true then do
+          let ok3 ← ok b
+          __do_jp ok3
+        else do
+          let ok3 ← ok false
+          __do_jp ok3) =
+    ok r
+but is expected to have type
+  ?m.266 >>= ?m.267 = ok ?m.268
+in the application
+  bind_eq_ok h
+'R1Z.CertCheck.kimg_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.CertCheck.piv_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.CertCheck.ents_loop_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock
