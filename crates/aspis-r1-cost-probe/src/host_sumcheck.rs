@@ -9,7 +9,7 @@
 
     /// R0 keeps all 28 coefficients on the wire, embedded in E. This is the
     /// same interpolation used by the legacy prover, with a new row driver.
-    fn interpolate(values: &[QM31; 28]) -> [QM31; 28] {
+    pub(crate) fn interpolate(values: &[QM31; 28]) -> [QM31; 28] {
         let mut out = [QM31::ZERO; 28];
         for i in 0..28 {
             let mut basis = [M31::ZERO; 28];

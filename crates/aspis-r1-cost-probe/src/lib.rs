@@ -21,6 +21,9 @@ pub mod verifier;
 pub mod prover;
 #[cfg(feature = "prover")]
 pub mod dense;
+/// G-sim (LOG D44.3): the explicit R1 simulator simE in the ideal game.
+#[cfg(feature = "r1p-check")]
+pub mod sim;
 
 #[cfg(feature="prover")] mod host_sumcheck;
 #[cfg(feature="prover")] mod host_semantic;
