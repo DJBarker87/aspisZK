@@ -26,7 +26,7 @@ remain obligations, not hidden hypotheses asserting the conclusion.
 | 6 public decode reuse | checked same-byte decoder/selector correspondence, first_decoded and adapter execution | open |
 | 7 geometry reuse | node/denominator agreement, caller range validity, execution | open |
 | 10 fixed prefix | admitted q length, identical decoder accesses and failure behavior | open |
-| 12 rho residues | every-prefix modular invariant, four-term overflow bound, canonical finish, array/caller execution, heap admission | integer invariant, complete push/value execution and frame/overflow proofs checked; initialization, finish, outer callers and serialization composition open |
+| 12 rho residues | every-prefix modular invariant, four-term overflow bound, canonical finish, array/caller execution, heap admission | integer invariant, complete push/value execution and frame/overflow proofs checked; finish execution checked under concrete mutable runtime; runtime source binding, initialization, outer callers and serialization composition open |
 | 14 Libra factorization | all four weights equal for arbitrary canonical challenges including zero; field/source execution | division-free cut/tensor algebra checked; literal-loop and field/source bridges open |
 | composition | refreshed emitted caller bodies, byte/error/effect preservation across tx1/tx2 and adapter | open |
 | soundness transfer | apply existing soundness results under their original premises to the actual optimized source model | open |
@@ -58,12 +58,14 @@ The read-success premise in the intermediate lemma is discharged by the
 exported theorem from the index bound. Receipt: `rho-value-c` (standard axioms
 only, 1.604 seconds, 2,670,712 KiB peak RSS, no process/cgroup swap).
 
-The full emission's finish path does not typecheck against the pinned runtime:
-the emitted mutable Iterator trait supplies a triple including a handback,
-whereas the ordinary Iterator interface expects a pair. No generated body was
-edited to hide this. Finish remains required; its mutable-enumerate interface
-must be modeled/translated faithfully and verified. Push/value was emitted as
-a separate focused cone so this interface issue does not hold up its proofs.
+The full emission's finish path originally did not typecheck against the
+ordinary Iterator runtime: mutable iteration supplies a triple including a
+handback, whereas the ordinary interface expects a pair. A namespace-local
+concrete mutable interface now carries that handback; the original generated
+trait instance and finish declarations compile bytes-unchanged under it.
+`CuSavingsMutableEnumerate.enumerate_control_eq` checks compatibility with
+ordinary enumeration after erasing handback. This is model compatibility,
+not a completed Rust standard-library source-admission argument.
 
 The existing unified source manifest check is not a proof replay. The older
 readonly-metadata runtime result is not a universal formal premise proof and
@@ -94,3 +96,25 @@ The prior Next paragraph about update/flush induction is superseded by those
 checked results. Next rho targets: initialization, finish mutable-enumerate
 runtime binding, and the actual outer verifier/canonical serialization callers.
 No full optimization-equivalence or soundness/privacy transfer claim is made.
+
+`CuSavingsRhoFinish.source_success` now proves the complete emitted finish
+method under that concrete mutable runtime. Given only matching output/raw
+lengths, it returns `canonicalSlice self`, the componentwise canonical
+reduction of every arbitrary u64 raw row, independently of the previous output
+values. The proof includes checked counter increments, every source value
+call, indexed overwrite, full loop induction and mutable handback composition.
+The structural list lemmas are symbolic, with no concrete-size normalization.
+
+Successful receipts: `rho-mutable-runtime-c`, `rho-finish-emission-b`,
+`rho-mutable-enumerate-c`, `rho-suffix-overwrite-a`, `rho-finish-model-c`,
+`rho-finish-next-b`, `rho-finish-loop-e`, `rho-finish-a`. All have only standard
+Lean axioms, no process/cgroup swap, peak RSS below 2.8 GiB and wall time below
+2 seconds. Failed local proof attempts remain archived and are not evidence
+of a theorem. `emit-finish.py --check` verifies the generated declaration cuts.
+
+Still open for rho: admission of the new mutable runtime to the pinned Rust
+standard-library/Aeneas source boundary, new/allocation, actual outer query
+loops/counter, and reference checkpoint/canonical serialization composition.
+The finish theorem does not discharge these by assuming whole-verifier
+equivalence. All other retained-candidate bridges and final transfers remain
+required. Production Rust remains unchanged.

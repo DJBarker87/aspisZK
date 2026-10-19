@@ -1,0 +1,109 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFinishLoop.lean:21:13: warning: This simp argument is unused:
+  Prod.casesOn
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵P̵r̵o̵d̵.̵c̵a̵s̵e̵s̵O̵n̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFinishLoop.lean:23:25: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFinishLoop.lean:24:22: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFinishLoop.lean:25:45: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFinishLoop.lean:25:63: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFinishLoop.lean:25:63: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFinishLoop.lean:71:39: error: unsolved goals
+self : verifier.BatchedWeights
+fuel : ℕ
+ih :
+  ∀ (iter : Enum) (back : Enum → Enum) (hlen : (↑iter.iter.slice).length = (↑(canonicalSlice self)).length),
+    iter.iter.i + fuel = (↑iter.iter.slice).length →
+      ↑iter.count = iter.iter.i →
+        verifier.BatchedWeights.finish_loop iter back self = ok (back (modelIter iter (canonicalSlice self) hlen))
+iter : Enum
+back : Enum → Enum
+hlen : (↑iter.iter.slice).length = (↑(canonicalSlice self)).length
+hspan : iter.iter.i + (fuel + 1) = (↑iter.iter.slice).length
+hcount : ↑iter.count = iter.iter.i
+hi : iter.iter.i < (↑iter.iter.slice).length
+hit : iter.iter.i < (↑(canonicalSlice self)).length
+count : Usize
+hc : ↑count = iter.iter.i + 1
+hn :
+  AspisR1CuRho.core.iter.adapters.enumerate.IteratorEnumerate.next instanceQM iter =
+    ok
+      (some (iter.count, (↑iter.iter.slice)[iter.iter.i]),
+        { iter := { slice := iter.iter.slice, i := iter.iter.i + 1 }, count := count }, handback iter.iter.i)
+state : Enum :=
+  {
+    iter :=
+      let __src := iter.iter;
+      { slice := __src.slice, i := iter.iter.i + 1 },
+    count := count }
+newBack : Enum → Enum :=
+  fun out =>
+    back
+      {
+        iter :=
+          let __src := out.iter;
+          { slice := out.iter.slice.setAtNat iter.iter.i (↑(canonicalSlice self))[iter.iter.i], i := __src.i },
+        count := out.count }
+hv : self.value iter.count = ok (↑(canonicalSlice self))[iter.iter.i]
+⊢ (let (o, iter1, next_back) :=
+      (some (iter.count, (↑iter.iter.slice)[iter.iter.i]),
+        { iter := { slice := iter.iter.slice, i := iter.iter.i + 1 }, count := count }, handback iter.iter.i)
+    match o with
+    | none => ok (done (back (next_back iter1 none)))
+    | some p =>
+      let (i, _) := p
+      do
+      let w ← self.value i
+      ok (cont (iter1, fun e => back (next_back e (some (i, w)))))) =
+    ok
+      (cont
+        ({ iter := { slice := iter.iter.slice, i := iter.iter.i + 1 }, count := count }, fun out =>
+          back
+            {
+              iter :=
+                { slice := out.iter.slice.setAtNat iter.iter.i (↑(canonicalSlice self))[iter.iter.i], i := out.iter.i },
+              count := out.count }))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFinishLoop.lean:72:72: warning: This simp argument is unused:
+  hv
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.BatchedWeights.finish_loop.body, ̲hn, ̲bind_tc_ok,h̵v̵,̵
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵handback, ̲state, ̲newBack]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFinishLoop.lean:73:8: warning: This simp argument is unused:
+  handback
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵e̵r̵i̵f̵i̵e̵r̵.̵B̵a̵t̵c̵h̵e̵d̵W̵e̵i̵g̵h̵t̵s̵.̵f̵i̵n̵i̵s̵h̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵v̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵h̵a̵n̵d̵b̵a̵c̵k̵,̵s̵t̵a̵t̵e̵,̵n̵e̵w̵B̵a̵c̵k̵]̵[̲v̲e̲r̲i̲f̲i̲e̲r̲.̲B̲a̲t̲c̲h̲e̲d̲W̲e̲i̲g̲h̲t̲s̲.̲f̲i̲n̲i̲s̲h̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲h̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲v̲,̲ ̲s̲t̲a̲t̲e̲,̲ ̲n̲e̲w̲B̲a̲c̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsRhoFinishLoop.loop_unroll' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoFinishLoop.value_target' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoFinishLoop.source_success_fuel' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoFinishLoop.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

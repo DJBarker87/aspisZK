@@ -1,0 +1,65 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFinishNext.lean:30:2: error: 'change' tactic failed, pattern
+  (do
+      let __x ← core.slice.iter.IteratorIterMut.next iter.iter
+      match __x with
+        | (value, state, back) =>
+          let hb := fun out item => { iter := back out.iter (Option.map Prod.snd item), count := out.count };
+          match value with
+          | none => ok (none, { iter := state, count := iter.count }, hb)
+          | some item => do
+            let count ← UScalar.add iter.count 1#usize
+            ok (some (iter.count, item), { iter := state, count := count }, hb)) =
+    ?m.86
+is not definitionally equal to target
+  (do
+      let (value, iter, back) ← instanceQM.next iter.iter
+      have handback :
+        MutableEnumerate (core.slice.iter.IterMut field.QM31) →
+          Option (Usize × field.QM31) → MutableEnumerate (core.slice.iter.IterMut field.QM31) :=
+        fun out item => { iter := back out.iter (Option.map Prod.snd item), count := out.count }
+      match value with
+        | none => ok (none, { iter := iter, count := iter.count }, handback)
+        | some item => do
+          let count ← UScalar.add iter.count 1#usize
+          ok (some (iter.count, item), { iter := iter, count := count }, handback)) =
+    ok (none, iter, fun out x => out)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFinishNext.lean:59:44: error: Type mismatch: After simplification, term
+  hval
+ has type
+  @Eq ℕ (↑count) (iter.iter.i + ↑1#usize)
+but is expected to have type
+  @Eq ℕ (↑count) (iter.iter.i + 1)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFinishNext.lean:80:2: error: 'change' tactic failed, pattern
+  (do
+      let __x ← core.slice.iter.IteratorIterMut.next iter.iter
+      match __x with
+        | (value, state, back) =>
+          let hb := fun out item => { iter := back out.iter (Option.map Prod.snd item), count := out.count };
+          match value with
+          | none => ok (none, { iter := state, count := iter.count }, hb)
+          | some item => do
+            let count ← UScalar.add iter.count 1#usize
+            ok (some (iter.count, item), { iter := state, count := count }, hb)) =
+    ?m.380
+is not definitionally equal to target
+  (do
+      let (value, iter, back) ← instanceQM.next iter.iter
+      have handback :
+        MutableEnumerate (core.slice.iter.IterMut field.QM31) →
+          Option (Usize × field.QM31) → MutableEnumerate (core.slice.iter.IterMut field.QM31) :=
+        fun out item => { iter := back out.iter (Option.map Prod.snd item), count := out.count }
+      match value with
+        | none => ok (none, { iter := iter, count := iter.count }, handback)
+        | some item => do
+          let count ← UScalar.add iter.count 1#usize
+          ok (some (iter.count, item), { iter := iter, count := count }, handback)) =
+    ok
+      (some (iter.count, (↑iter.iter.slice)[iter.iter.i]),
+        {
+          iter :=
+            let __src := iter.iter;
+            { slice := __src.slice, i := iter.iter.i + 1 },
+          count := count },
+        handback iter.iter.i)
+'AspisR1.CuSavingsRhoFinishNext.next_done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoFinishNext.next_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

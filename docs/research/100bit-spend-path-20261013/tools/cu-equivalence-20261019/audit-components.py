@@ -29,6 +29,9 @@ for module,item in audit['successful_targets'].items():
 for name in ['Types.lean','Funs.lean']:
     assert (area/'lean/AspisR1CuRho'/name).read_bytes()==(
         Path(__file__).parent/'rho-generated-pushvalue/AspisR1CuRho'/name).read_bytes(),name
+finish_check=subprocess.check_output([sys.executable,str(Path(__file__).with_name('emit-finish.py')),
+    '--check'],text=True)
+audit['finish_emission_layout_check']=json.loads(finish_check)
 usage=resource.getrusage(resource.RUSAGE_SELF)
 audit['audit_command']=[sys.executable,str(Path(__file__).relative_to(repo)),*sys.argv[1:]]
 audit['audit_source_revision']=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()

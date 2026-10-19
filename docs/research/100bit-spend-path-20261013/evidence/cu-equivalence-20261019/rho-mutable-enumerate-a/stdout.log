@@ -1,0 +1,117 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsMutableEnumerate.lean:40:15: error: unsolved goals
+case ok.some.fail
+I Item : Type
+inst : AspisR1CuRho.core.iter.traits.iterator.Iterator I Item
+self : core.iter.adapters.enumerate.Enumerate I
+state : I
+back : I → Option Item → I
+item : Item
+h : inst.next self.iter = ok (some item, state, back)
+e : Error
+hc : UScalar.add self.count 1#usize = fail e
+⊢ (do
+      let (value, state, _) ←
+        let (value, iter, back) := (some item, state, back)
+          match value with
+          | none =>
+            ok
+              (none, { iter := iter, count := self.count }, fun out item =>
+                { iter := back out.iter (Option.map Prod.snd item), count := out.count })
+          | some item => fail e
+      ok (value, state)) =
+    do
+    let __x ←
+      let (value, state, _) := (some item, state, back)
+        ok (value, state)
+    match __x.1 with
+      | none => ok (none, { iter := __x.2, count := self.count })
+      | some a => do
+        let count' ← self.count + 1#usize
+        ok (some (self.count, a), { iter := __x.2, count := count' })
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsMutableEnumerate.lean:41:12: error: unsolved goals
+case ok.some.div
+I Item : Type
+inst : AspisR1CuRho.core.iter.traits.iterator.Iterator I Item
+self : core.iter.adapters.enumerate.Enumerate I
+state : I
+back : I → Option Item → I
+item : Item
+h : inst.next self.iter = ok (some item, state, back)
+hc : UScalar.add self.count 1#usize = div
+⊢ (do
+      let (value, state, _) ←
+        let (value, iter, back) := (some item, state, back)
+          match value with
+          | none =>
+            ok
+              (none, { iter := iter, count := self.count }, fun out item =>
+                { iter := back out.iter (Option.map Prod.snd item), count := out.count })
+          | some item => div
+      ok (value, state)) =
+    do
+    let __x ←
+      let (value, state, _) := (some item, state, back)
+        ok (value, state)
+    match __x.1 with
+      | none => ok (none, { iter := __x.2, count := self.count })
+      | some a => do
+        let count' ← self.count + 1#usize
+        ok (some (self.count, a), { iter := __x.2, count := count' })
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsMutableEnumerate.lean:42:17: error: unsolved goals
+case ok.some.ok
+I Item : Type
+inst : AspisR1CuRho.core.iter.traits.iterator.Iterator I Item
+self : core.iter.adapters.enumerate.Enumerate I
+state : I
+back : I → Option Item → I
+item : Item
+h : inst.next self.iter = ok (some item, state, back)
+count : UScalar UScalarTy.Usize
+hc : UScalar.add self.count 1#usize = ok count
+⊢ (do
+      let (value, state, _) ←
+        let (value, iter, back) := (some item, state, back)
+          match value with
+          | none =>
+            ok
+              (none, { iter := iter, count := self.count }, fun out item =>
+                { iter := back out.iter (Option.map Prod.snd item), count := out.count })
+          | some item =>
+            ok
+              (some (self.count, item), { iter := iter, count := count }, fun out item =>
+                { iter := back out.iter (Option.map Prod.snd item), count := out.count })
+      ok (value, state)) =
+    do
+    let __x ←
+      let (value, state, _) := (some item, state, back)
+        ok (value, state)
+    match __x.1 with
+      | none => ok (none, { iter := __x.2, count := self.count })
+      | some a => do
+        let count' ← self.count + 1#usize
+        ok (some (self.count, a), { iter := __x.2, count := count' })
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsMutableEnumerate.lean:40:29: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵c̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsMutableEnumerate.lean:41:26: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵c̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsMutableEnumerate.lean:42:31: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵c̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsMutableEnumerate.enumerate_control_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
