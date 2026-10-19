@@ -1,0 +1,7 @@
+# Executable finite-list candidate merge
+
+The actual runtime merge takes a computable Boolean joint-distance predicate, flatMaps each retained tuple against the next lane's decoded list, updates that lane, filters and deduplicates. A recursive list loop applies the step. No quotient Finset-toList choice or mathematical noncomputable encoder is used in the runtime definitions.
+
+advance_toFinset and run_toFinset prove exact refinement to the finite-set product/image/filter loop. The output remains Nodup, and run_length_le transfers any proved finite-set cardinal bound to the actual output list length. The new runtime definitions use only propext and Quot.sound; the refinement proofs use standard axioms. Focused Lean4.32 v2 exit0/1.73s/1,339,506,688B RSS/swap0, exact source/import/object/revision/command and six reports retained. The first attempt exposed only product-membership proof shape and is diagnostics.
+
+Open: instantiate the Boolean predicate with the actual computable encoder distance test, prove equality to the retained IncrementalCandidateLoop support predicate, apply the existing joint-list<=100 theorem, and compose the actual output list with the existing checked ListWitnessExtract. The sampler/recovery, full bit-cost, protocol/ROM/source/runtime and privacy/release obligations remain separate. This packet does not itself construct the complete spend extractor or prove 100-bit soundness.

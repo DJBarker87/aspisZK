@@ -1,0 +1,51 @@
+/tmp/M31PairedSamplerMass.lean:31:29: error: Unexpected term `x.property`; expected single reference to variable
+/tmp/M31PairedSamplerMass.lean:32:30: error: Application type mismatch: The argument
+  hs
+has type
+  actualPairedTapeSampler n ↑x = some ys
+but is expected to have type
+  some ys = some ys
+in the application
+  Exists.intro ys hs
+/tmp/M31PairedSamplerMass.lean:49:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/M31PairedSamplerMass.lean:73:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype { xs // actualPairedTapeSampler n xs = some ys }
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/tmp/M31PairedSamplerMass.lean:128:4: error: 'change' tactic failed, pattern
+  ↑{xs | actualPairedTapeSampler n xs = some ys}.card / ↑{xs | (actualPairedTapeSampler n xs).isSome = true}.card =
+    1 / ↑(Fintype.card (PairedOutputTape n))
+is not definitionally equal to target
+  ↑{x | actualPairedTapeSampler n x = some ys}.card / ↑{x | (actualPairedTapeSampler n x).isSome = true}.card =
+    1 / ↑(Fintype.card (PairedOutputTape n))
+'_private.M31PairedSamplerMass.0.M31RetryOutputFiber.pairedTapeSomeSubtypeEquiv' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'_private.M31PairedSamplerMass.0.M31RetryOutputFiber.pairedTapeFiberSubtypeEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'M31RetryOutputFiber.actualPairedTape_output_mass_le_uniform' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        8.45 real         1.08 user         1.32 sys
+          2813870080  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              152050  page reclaims
+               74714  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                9096  voluntary context switches
+               57535  involuntary context switches
+         23633450103  instructions retired
+          9026229950  cycles elapsed
+           450581264  peak memory footprint

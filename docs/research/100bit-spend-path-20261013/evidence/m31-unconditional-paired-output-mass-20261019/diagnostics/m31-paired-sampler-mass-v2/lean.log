@@ -1,0 +1,60 @@
+/tmp/M31PairedSamplerMass.lean:30:6: error: Type mismatch: After simplification, term
+  x.property
+ has type
+  (actualPairedTapeSampler n ↑x).isSome = true
+but is expected to have type
+  ∃ ys, actualPairedTapeSampler n ↑x = some ys
+/tmp/M31PairedSamplerMass.lean:47:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/M31PairedSamplerMass.lean:71:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype { xs // actualPairedTapeSampler n xs = some ys }
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/tmp/M31PairedSamplerMass.lean:126:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  {xs | actualPairedTapeSampler n xs = some ys}.card
+in the target expression
+  ↑{x | actualPairedTapeSampler n x = some ys}.card / ↑{x | (actualPairedTapeSampler n x).isSome = true}.card =
+    1 / ↑(Fintype.card (PairedOutputTape n))
+
+case huniform
+n : ℕ
+this✝¹ : Fintype (PairedRawTape n) := inferInstance
+this✝ : Nonempty (PairedRawTape n) := inferInstance
+this : Fintype (PairedOutputTape n) := inferInstance
+ys : PairedOutputTape n
+hcond :
+  ↑(Nat.card (ActualWidePairOutputFiberTape n ys)) / ↑(Nat.card (ActualWidePairSuccessTape n)) = 1 / ↑P31 ^ (16 * n)
+hfiber : {xs | actualPairedTapeSampler n xs = some ys}.card = Nat.card (PairedTapeFiber n ys)
+hsuccess : {xs | (actualPairedTapeSampler n xs).isSome = true}.card = Nat.card (PairedTapeSuccess n)
+⊢ ↑{x | actualPairedTapeSampler n x = some ys}.card / ↑{x | (actualPairedTapeSampler n x).isSome = true}.card =
+    1 / ↑(Fintype.card (PairedOutputTape n))
+'_private.M31PairedSamplerMass.0.M31RetryOutputFiber.pairedTapeSomeSubtypeEquiv' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'_private.M31PairedSamplerMass.0.M31RetryOutputFiber.pairedTapeFiberSubtypeEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'M31RetryOutputFiber.actualPairedTape_output_mass_le_uniform' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        4.23 real         1.04 user         0.97 sys
+          2816032768  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              195471  page reclaims
+               29732  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                2723  voluntary context switches
+               24374  involuntary context switches
+         20053446768  instructions retired
+          7573800884  cycles elapsed
+           450351840  peak memory footprint

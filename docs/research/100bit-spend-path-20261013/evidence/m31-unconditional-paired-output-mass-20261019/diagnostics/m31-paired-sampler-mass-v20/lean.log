@@ -1,0 +1,53 @@
+/tmp/M31PairedSamplerMass.lean:52:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/M31PairedSamplerMass.lean:135:4: error: Tactic `rfl` failed: The left-hand side
+  ↑{x | actualPairedTapeSampler n x = some ys}.card / ↑{x | (actualPairedTapeSampler n x).isSome = true}.card
+is not definitionally equal to the right-hand side
+  ↑{x | actualPairedTapeSampler n x = some ys}.card / ↑{x | (actualPairedTapeSampler n x).isSome = true}.card
+
+n : ℕ
+this✝¹ : Fintype (PairedRawTape n) := inferInstance
+this✝ : Nonempty (PairedRawTape n) := inferInstance
+this : Fintype (PairedOutputTape n) := inferInstance
+ys : PairedOutputTape n
+hcond :
+  ↑(Nat.card (ActualWidePairOutputFiberTape n ys)) / ↑(Nat.card (ActualWidePairSuccessTape n)) = 1 / ↑P31 ^ (16 * n)
+hfiber : {x | actualPairedTapeSampler n x = some ys}.card = Nat.card (PairedTapeFiber n ys)
+hsuccess : {x | (actualPairedTapeSampler n x).isSome = true}.card = Nat.card (PairedTapeSuccess n)
+hratio :
+  ↑{x | actualPairedTapeSampler n x = some ys}.card / ↑{x | (actualPairedTapeSampler n x).isSome = true}.card =
+    ↑(Nat.card (PairedTapeFiber n ys)) / ↑(Nat.card (PairedTapeSuccess n))
+hmass :
+  ↑{x | actualPairedTapeSampler n x = some ys}.card / ↑{x | (actualPairedTapeSampler n x).isSome = true}.card =
+    1 / ↑P31 ^ (16 * n)
+⊢ ↑{x | actualPairedTapeSampler n x = some ys}.card / ↑{x | (actualPairedTapeSampler n x).isSome = true}.card =
+    ↑{x | actualPairedTapeSampler n x = some ys}.card / ↑{x | (actualPairedTapeSampler n x).isSome = true}.card
+'_private.M31PairedSamplerMass.0.M31RetryOutputFiber.pairedTapeSomeSubtypeEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.M31PairedSamplerMass.0.M31RetryOutputFiber.pairedTapeFiberSubtypeEquiv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'M31RetryOutputFiber.actualPairedTape_output_mass_le_uniform' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        1.79 real         1.00 user         0.76 sys
+          2826190848  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              225715  page reclaims
+                  63  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   9  voluntary context switches
+                 802  involuntary context switches
+         18906887711  instructions retired
+          6830348662  cycles elapsed
+           450532064  peak memory footprint

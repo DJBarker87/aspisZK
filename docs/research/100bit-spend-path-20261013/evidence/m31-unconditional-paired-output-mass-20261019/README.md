@@ -1,0 +1,5 @@
+# Actual Option tape sampler: unconditional output mass
+
+For every n and every output tape, the actual executable paired tape Option collector has unconditional output mass at most 1/card(output space). The proof transports its successful/output input subtypes to the exact product counts, proves success count positive, uses the paired sampler's conditional-uniform law and output-space cardinality, then applies the existing finite Option composition count adapter. Thus the output-mass premise of GSRejectingSamplerDecoderBank.failure_small is discharged by the maintained concrete sampler. Total rejection remains a separate pending obligation.
+
+Focused Lean4.32 v21 exit0/2.12s/2,864,218,112B RSS/swap0, with standard-only printed axioms. Exact source/import/object pins, revision and command are in the receipts. Earlier attempts are diagnostics; the final finite-filter proof explicitly transports the relevant sets rather than assuming their inferred Fintype/Decidable instances are definitionally identical. No full manifest replay. This is an extractor-coin distribution theorem, not a Fiat-Shamir challenge, privacy mask or full 100-bit security theorem.
