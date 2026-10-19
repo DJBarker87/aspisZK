@@ -13,4 +13,4 @@ if grep -q "^$A " "$LED"; then echo "REFUSE: attempt $A already used"; exit 3; f
 while ssh $H "ps -eo cmd | grep -E '(^| |/)(lean|aeneas|charon|cargo|rustc)( |$)|lake ' | grep -v grep | grep -q ."; do echo "gate: busy $(date +%T)"; sleep 90; done
 ssh $H "mkdir -p $T/sources/$(dirname $M)" && scp -q "$L" $H:$T/sources/$M.lean || exit 4
 echo "$A $M $SHA $(date -u +%FT%TZ)" >> "$LED"
-ssh $H "sh $T/run2-par.sh $A $M 7000 7"
+ssh $H "RUN2_GLOBAL=${RUN2_GLOBAL:-0} sh $T/run2-par.sh $A $M 7000 7"

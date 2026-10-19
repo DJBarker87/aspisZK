@@ -698,9 +698,8 @@ def half_ok (a : Slice Std.U32) (h : Slice Std.U32) : Result Bool := do
   let i1 ← lift (UScalar.cast .U64 i)
   let i2 ← i1 % P
   let i3 ← i2 + P
-  let i4 ← 1#u64 <<< 30#i32
-  let i5 ← i3 - i4
-  let x0 ← i5 % P
+  let i4 ← i3 - 1073741824#u64
+  let x0 ← i4 % P
   let x01 ← lift (UScalar.cast .U32 x0)
   let x1 ← Slice.index_usize a 1#usize
   let x2 ← Slice.index_usize a 2#usize
@@ -709,49 +708,49 @@ def half_ok (a : Slice Std.U32) (h : Slice Std.U32) : Result Bool := do
   let y1 ← Slice.index_usize h 1#usize
   let y2 ← Slice.index_usize h 2#usize
   let y3 ← Slice.index_usize h 3#usize
-  let i6 ← mm x2 y2
-  let i7 ← i6 + P
-  let i8 ← mm x3 y3
-  let i9 ← i7 - i8
-  let p ← i9 % P
-  let i10 ← mm x2 y3
-  let i11 ← mm x3 y2
-  let i12 ← i10 + i11
-  let q ← i12 % P
-  let i13 ← mm x01 y0
-  let i14 ← i13 + P
-  let i15 ← mm x1 y1
-  let i16 ← i14 - i15
-  let i17 ← 2#u64 * p
-  let i18 ← i16 + i17
-  let i19 ← i18 + P
-  let i20 ← i19 - q
-  let r0 ← i20 % P
-  let i21 ← mm x01 y1
-  let i22 ← mm x1 y0
-  let i23 ← i21 + i22
-  let i24 ← i23 + p
-  let i25 ← 2#u64 * q
-  let i26 ← i24 + i25
-  let r1 ← i26 % P
-  let i27 ← mm x01 y2
-  let i28 ← i27 + P
-  let i29 ← mm x1 y3
-  let i30 ← i28 - i29
-  let i31 ← mm x2 y0
-  let i32 ← i30 + i31
-  let i33 ← i32 + P
-  let i34 ← mm x3 y1
-  let i35 ← i33 - i34
-  let r2 ← i35 % P
-  let i36 ← mm x01 y3
-  let i37 ← mm x1 y2
-  let i38 ← i36 + i37
-  let i39 ← mm x2 y1
-  let i40 ← i38 + i39
-  let i41 ← mm x3 y0
-  let i42 ← i40 + i41
-  let r3 ← i42 % P
+  let i5 ← mm x2 y2
+  let i6 ← i5 + P
+  let i7 ← mm x3 y3
+  let i8 ← i6 - i7
+  let p ← i8 % P
+  let i9 ← mm x2 y3
+  let i10 ← mm x3 y2
+  let i11 ← i9 + i10
+  let q ← i11 % P
+  let i12 ← mm x01 y0
+  let i13 ← i12 + P
+  let i14 ← mm x1 y1
+  let i15 ← i13 - i14
+  let i16 ← 2#u64 * p
+  let i17 ← i15 + i16
+  let i18 ← i17 + P
+  let i19 ← i18 - q
+  let r0 ← i19 % P
+  let i20 ← mm x01 y1
+  let i21 ← mm x1 y0
+  let i22 ← i20 + i21
+  let i23 ← i22 + p
+  let i24 ← 2#u64 * q
+  let i25 ← i23 + i24
+  let r1 ← i25 % P
+  let i26 ← mm x01 y2
+  let i27 ← i26 + P
+  let i28 ← mm x1 y3
+  let i29 ← i27 - i28
+  let i30 ← mm x2 y0
+  let i31 ← i29 + i30
+  let i32 ← i31 + P
+  let i33 ← mm x3 y1
+  let i34 ← i32 - i33
+  let r2 ← i34 % P
+  let i35 ← mm x01 y3
+  let i36 ← mm x1 y2
+  let i37 ← i35 + i36
+  let i38 ← mm x2 y1
+  let i39 ← i37 + i38
+  let i40 ← mm x3 y0
+  let i41 ← i39 + i40
+  let r3 ← i41 % P
   if r0 = 1#u64
   then
     if r1 = 0#u64

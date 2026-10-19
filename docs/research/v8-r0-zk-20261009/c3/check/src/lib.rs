@@ -337,8 +337,8 @@ pub fn mm(x: u32, y: u32) -> u64 {
 
 /// HalfOK: (alpha_9 - 1/2) * h == 1 in QM31 = CM31[u]/(u^2 - (2 + i)), limbs (c0.a, c0.b, c1.a, c1.b).
 pub fn half_ok(a: &[u32], h: &[u32]) -> bool {
-    // x0 = a0 - 1/2, 1/2 = 2^30 in M31.
-    let x0 = ((a[0] as u64 % P) + P - (1u64 << 30)) % P;
+    // x0 = a0 - 1/2, 1/2 = 2^30 = 1073741824 in M31.
+    let x0 = ((a[0] as u64 % P) + P - 1_073_741_824) % P;
     let x0 = x0 as u32;
     let x1 = a[1];
     let x2 = a[2];
