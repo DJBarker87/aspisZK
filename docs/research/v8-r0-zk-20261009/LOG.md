@@ -6737,3 +6737,49 @@ stand for the earlier bytes.
 almost all in the P_R1 check (D38 measured 22.6 s for an earlier, unchecked
 port). A prover-speed job (overflow-check cost, builder conversion) is
 optional and does not affect soundness or privacy.
+
+### Lead acceptance of the pole/exhaustion fix (2026-10-19); D74: the Rust retry loop rejects exactly Lean's failed attempts
+
+Worker commit 6bd605419 (branch codex/r1p-pole-retry-20261019) is
+cherry-picked. Rust only, prover side; evidence `r1p-retry/evidence-pole.json`,
+`POLE-EXHAUSTION.md`; host lib tests 27/27 (3:58, 506 MB, 0 swaps).
+
+**D74.1 Lean behaviour (read from source, POLE-EXHAUSTION.md §1).**
+`realGameP` publishes the first attempt with `P ∧ VR1 ∧ exh = false`
+(GamesR1P.lean:184). A pole (¬NoPole at λ = sem 0, χ = sem 1) and a mask-decode
+exhaustion (`MaskSampleExhausted` on either 16-try stream) each skip the
+attempt and consume it. After N failures the game outputs the constant
+`failView` (GamesR1P.lean:185), the same constant as the ideal side. Ruling:
+"publish nothing" (`AttemptsExhausted`, no bytes) is the Rust reading of that
+constant; no byte encoding of `failView` is needed.
+
+**D74.2 Rust now matches.** Pole → `r1_wire::Error::ActivePole` (no row,
+side or value; exists only under `r1p-check`) and mask exhaustion both map
+to the detail-free `Error::Rejected` and consume one of the 8 attempts. Other
+errors still abort. Default-feature codegen objects of the cost-probe lib are
+identical before and after (9/9; rlib metadata only differs), so the verifier
+build is unchanged.
+
+**D74.3 Finding: the old Rust pole check was weaker than Lean's.**
+`build_copy_logup_helper` inverted only nonzero-weight slots, while Lean's
+`NoPole` covers all four slots of every copy-active row including zero-weight
+and empty ones; and the prover's copy rows put an endpoint in the first
+zero-weight slot (on a withdrawal, row 523's PrivateTransferOnly producer is
+overwritten). On the fixtures, 42 (transfer) and 50 (withdrawal) distinct
+nonzero χ values, plus 0, were Lean poles the Rust loop did not reject. The
+new `host_semantic::no_pole` computes Lean's static-slot `copyRowValues` and
+checks every slot, so the Rust pole set is Lean's `poleSet` and D40.3's ε_pole
+is unchanged. Tests: pole on attempt 1 (attempt 2 published, verifies strict
+and dense), pole on attempt 8 after 7 rejections (exhausted, 8 nonces,
+nothing published), forced mask exhaustion, NoPole on both fixtures, all 136
+static copy links against `COPY_LINKS`.
+
+**D74.4 Open.** The Rust `no_pole` ↔ Lean `VR1` match is a reading of the
+sources (a private `tuple_value` copy tested indirectly; `copyLinks` vs
+`COPY_LINKS` not re-derived; `h.build w` = compiled trace is G-ref). Other
+per-attempt failures still abort with no Lean counterpart: QueryScan
+(`Error::Transcript`; Lean's `kstarOf` is total) and Semantic errors in mask
+application, salts or builders; these join R-wire/R-commit with a required
+probability or impossibility argument. CORRESPONDENCE-G-SIM.txt §8 (a)/(b)
+are closed by this entry. SBF rebuild not run (host default-feature objects
+identical).
