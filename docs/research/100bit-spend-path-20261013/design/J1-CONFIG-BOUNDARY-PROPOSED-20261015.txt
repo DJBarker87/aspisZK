@@ -1,0 +1,114 @@
+J1.R4 CONFIGURATION / INPUT BOUNDARY -- PROPOSED, NOT PROVED
+
+1. Admitted source configuration and routes
+
+Source pin: 136b746805f3438507732622c9b4e50f36bf49f9. No build or replay.
+Pin programs/r1-cost-probe/Cargo.toml, Cargo.lock and the SBF target. Select
+default custom-heap plus pool-adapter/private-leaf-salts, no extra root features;
+pin their transitive feature closure. private-leaf-salts forwards to
+aspis-r1-cost-probe/private-leaf-salts, while the
+program dependency enables optimized-terminal. Pin the P3 PROFILE_BINDING
+and RELEASE_BINDING arrays in src/r1_pool_adapter.rs:66-75, not the P2 arrays.
+This is the UNPROVED cost-probe configuration, not a production release.
+
+Proposed admitted external routes of process_r1_cost_probe_instruction:
+data=[3,10] or [3,11] -> r1_pool_adapter::stage1 -> first -> verifier::tx1;
+data starts with ASQ8 -> stage2 -> verifier::tx2_authenticated.
+The first route decodes ASF8; the second reconstructs and encodes ASF8.
+stage1:900-929 and scan_aspu_body:689-721 enforce exact S2 proof slicing
+and tag=Variant::S2.tag(); folds()==2 would also admit D. Source locations
+are programs/r1-cost-probe/src/{lib.rs,r1_pool_adapter.rs}.
+
+This route restriction is an experiment premise, not an existing dispatch
+guard: lib.rs:36-47 still admits legacy [1,k] and [2] with pool-adapter enabled.
+Lifecycle routes 4/5/6 and runtime/CPI/PDA hashing require separate accounting.
+
+2. Rejected-execution contract (new declarations; OPEN)
+
+Define ConfigOK using the pin/features above, supplied hashv closure and
+Some(mark) observer. Define PoolRoute by the two instruction predicates above.
+Oracle abstraction replaces those designated callsites by H.
+Define SourcePrefix c i H tr as any finite execution prefix, recording every
+designated HashFn call as the concatenation of its slices BEFORE address
+encoding. Include prefixes ending in Err, allocation failure, panic or success.
+RawInvocation includes arbitrary account bytes/metadata and instruction bytes;
+do not require successful parsing, authentic checkpoints or true statements.
+
+def CallsFit (L : Nat) (tr : List Bytes) : Prop :=
+  forall b, b ∈ tr -> b.length ≤ L
+
+-- Proposed theorem, not an available Lean result:
+theorem pool_calls_fit {c : SourceCfg} {i : RawInvocation} {L : Nat}
+    (hc : ConfigOK c) (hr : PoolRoute i.data)
+    (hL : SourceShapeBound c ≤ L) :
+    forall (H : Bytes -> State) (tr : List Bytes),
+      SourcePrefix c i H tr -> CallsFit L tr
+
+SourceShapeBound is the maximum of the source-derived shapes in section 3;
+its adequacy and source refinement remain OPEN. Checkpoint authenticity remains
+a separate soundness premise, never a premise used to omit rejected hash calls.
+The enclosing adversary experiment also needs every adversary-query length ≤ L,
+or an unbounded-byte oracle model. Input length and query-count bounds differ.
+
+3. Candidate shape inventory; universal source cap OPEN
+
+All numbers here are source arithmetic, not a proved Rust execution bound.
+Paths below are relative to crates/aspis-r1-cost-probe/src unless qualified.
+verifier.rs:8-44,302-338: S2 proof=124343; checkpoint=1768; checksum preimage
+=22+(1768-32)=1758. Wholeproof hashing therefore dominates candidate L=124343.
+r1_wire.rs:39-73,174-202: semantic absorb maximum=39+3712=3751;
+transcript.rs:7-44: reseed=62, opening absorb maximum=38+2048=2086;
+squeeze/advance=33. verifier.rs:242-281: salted leaves=514,162,162;
+each 8-ary parent=257.
+
+Semantic FS initialization uses Public::public_bytes, SPEC section 9, via
+r1_semantic.rs:70-76: transfer=1455, withdrawal=1427, hence init=1530/1502.
+Definition: crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs:
+1999-2040. These differ from ASF8=1880 passed to tx1 and tx2_authenticated
+for checkpoint binding; see pair_forest_terminal.rs:32-37,386 and adapter:
+890-891,965-976. The compact ASQ8 request is not either hashed public string.
+
+Existing Lean shape facts, under docs/research/100bit-spend-path-20261013/lean:
+AspisR1.PublicInitFrame.frame_length =75+pubBytes.length;
+AspisR1.OpeningReseedFrame.frame_length =62;
+AspisR1.Merkle32Leaf.{c1,c2,folded}_leafInput_length require packed widths
+480/128/128 and salt width32; AspisR1.Merkle32Path.nodeInput_length =257.
+Each is in the correspondingly named .lean file. Their source-call alignment
+and the wholeproof/public/checkpoint maximum remain OPEN.
+
+4. Required exclusions or explicit length premises
+
+verifier::tx2 and tx2_authenticated parse proof shape before resume, so even
+their rejected wholeproof reads have parsed lengths. Direct resume:325-328
+only checks checkpoint shape before hashing arbitrary proof; mismatch then
+rejects. Its public hash follows when the proof hash matches. Direct
+checkpoint:302-316 hashes arbitrary proof/public and an accumulator-dependent
+checksum body before asserting final size. Its weights vector needs a bound.
+Raw tx1/tx2/tx2_authenticated accept an independent, arbitrary public_bytes
+slice. Legacy [2] does not decode ASF8 first and additionally hashes the
+updated checkpoint after successful tx2. These are not covered by PoolRoute.
+
+transcript::Transcript::{absorb,block,scalar,scalar_k,queries} accept arbitrary
+payloads; absorb's u32 cast does not truncate the bytes hashed. Prepared::new
+also accepts publicly constructible View slices. These APIs require explicit
+payload/state/proof/public length premises or exclusion. In contrast,
+SemanticTranscript::new checks u32 conversion: that gives a different, much
+larger possible bound, not the S2 shape bound. Unrestricted mathematical Bytes
+inputs to resume/absorb preclude any uniform finite L; machine usize limits
+are not a proved protocol cap.
+
+Optional helper admission must assume, before execution: proof.length ≤ L,
+public.length ≤ L, 734+16*a.weights.length ≤ L for checkpoint, and
+38+payload.length ≤ L for each opening absorb. These checksum constants are
+source arithmetic, OPEN. A well-shaped resume checksum instead requires
+22+checkpoint_size(v)-32 ≤ L. Oversized rejected inputs still need coverage.
+
+5. Closure obligations
+
+Prove route guards, parser slice lengths, accumulator preservation, all
+short-circuit/error prefixes, and complete callsite enumeration. Then apply
+AspisR1.CanonicalByteHash.{encode_of_length,hashBytes_of_length}; without their
+length premise, encode maps oversized inputs to the empty address. Include
+adapter Pubkey::find_program_address/runtime/CPI hashing separately if the
+experiment includes those SHA calls; the designated-verifier scope is not an
+all-program theorem. No universal L or hQ is established by this proposal.
