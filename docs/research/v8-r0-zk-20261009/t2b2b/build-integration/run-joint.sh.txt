@@ -1,7 +1,7 @@
 #!/bin/sh
 # run-joint.sh <attempt> <Module> <env-id> [M-limit-MB] [MemoryMax G]
 # run2-par.sh with the objects dir and LEAN_PATH taken from a named joint environment instead of
-# objects2/environment-base.json.  Same reservation check, same slot locks (in-window) or global
+# objects2/environment-base.json.  Same reservation check, same slot locks (in-window: 22:30-10:00 London since 2026-10-19, was 22:30-06:00) or global
 # lock (outside), same systemd scope caps (MemoryHigh MX-2 G, MemoryMax MX G, MemorySwapMax 0,
 # TasksMax 128), same timeout, same run2.py.  Evidence goes to $T/evidence/{sha,out,time}-<A>.
 # Environments (H/env/<id>.json, H/objects-<id>):
@@ -27,7 +27,7 @@ SRC="$SRCROOT/$M.lean"; ENVJ="$H/env/$E.json"
 S=$(sha256sum "$SRC" | cut -d' ' -f1)
 if grep -q "^$S $E " "$H/evidence/sent.txt" 2>/dev/null; then echo "REFUSED: $M sha $S already sent in env $E"; exit 67; fi
 hm=$(TZ=Europe/London date +%H%M)
-inwin=0; if [ "$hm" -ge 2230 ] || [ "$hm" -lt 0600 ]; then inwin=1; fi
+inwin=0; if [ "$hm" -ge 2230 ] || [ "$hm" -lt 1000 ]; then inwin=1; fi
 tot=0; for d in /sys/fs/cgroup/*.slice /sys/fs/cgroup/*/*.slice /sys/fs/cgroup/*/*/*.scope /sys/fs/cgroup/*/*.scope; do [ -f $d/memory.max ] || continue; v=$(cat $d/memory.max); [ "$v" = max ] && continue; p=$(cat $d/cgroup.procs 2>/dev/null | wc -l); [ "$p" -gt 0 ] && tot=$((tot+v)); done
 if [ $((tot/1073741824 + MX)) -gt 55 ]; then echo "RESERVATION HOLD: populated $((tot/1073741824)) GiB + $MX GiB > 55"; exit 78; fi
 echo "reservation: populated $((tot/1073741824)) GiB + $MX GiB; window=$inwin (London $hm); env=$E"

@@ -1,7 +1,7 @@
 # joint-drive.py <manifest.json> [--only M1,M2,...] [--max-attempts N]
 # Compile the manifest's modules in its topological order, one module per attempt, through
 # run-joint.sh (env J).  Before each attempt the gate is taken and recorded: London time and
-# window flag, and the list of other lean/aeneas/charon/cargo processes; outside 22:30-06:00 the
+# window flag, and the list of other lean/aeneas/charon/cargo processes; outside 22:30-10:00 (was 06:00) the
 # driver waits (90 s polls, recorded) until no other such process runs.  A module is attempted
 # only when all its manifest imports are green; a green module with the same source sha is not
 # re-sent.  The driver STOPS at the first non-zero exit (LOG D63 instruction: list the module
@@ -27,7 +27,7 @@ def next_attempt():
     return n if n <= 5799 else None
 def gate():
     now = datetime.datetime.now(ZoneInfo('Europe/London')); hm = now.hour * 100 + now.minute
-    inwin = hm >= 2230 or hm < 600
+    inwin = hm >= 2230 or hm < 1000  # window 22:30-10:00 London (user, 2026-10-19; was 06:00)
     ps = subprocess.run("ps -eo pid,rss,etime,cmd | grep -E 'bin/lean|aeneas|charon|cargo' | grep -v grep",
                         shell=True, capture_output=True, text=True).stdout.strip()
     return {'london': now.strftime('%Y-%m-%d %H:%M:%S'), 'in_window': inwin, 'other_jobs': ps}

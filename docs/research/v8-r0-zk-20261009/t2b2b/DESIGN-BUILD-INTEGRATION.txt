@@ -313,3 +313,21 @@ name collisions (R1SelectedTranscriptParams, R1UnifiedSampler, R1SelectedChallen
 file named R1X.lean and a file X.lean aliased to R1X).  These go to the soundness lead.
 
 Budget: manifest 1 alone needs 402 attempts; the range 5000-5299 has 300.
+
+Manifest 1 result (2026-10-19 03:38-04:02 London, all in-window, one job at a time, slot 1):
+403 attempts, 5000-5402; all 402 modules green; 0 swaps; peak 7,177,656 KiB
+(R1Z.CertLiftIdent4; the Cert* modules sit at 7.17 GB as on the old base, the rest 1.8-6.8 GB,
+AspisFormal/AspisV8R19/FS base modules 1.8-2.7 GB).  One stop: 5068
+AspisV8R19.R443BoundedRejectionMass, `field_simp` unknown tactic (the narrowed base no longer
+brings all of Mathlib); repaired by an import-only change (`import Mathlib.Tactic.FieldSimp`,
+base tree v8-full-view-zk-20260912), recompiled green at 5069 with the new sha.  No other
+source edits.  Axioms over all 403 logs (multi-line parse): propext, Classical.choice,
+Quot.sound only, except the error-induced sorryAx in failed attempt 5068.  Root theorems on
+the unified base: builder_witness_merged (5283), check_sound'' (5387), privacy_R1_games (5398),
+privacy_R1_games_sampler (5401), privacy_R1_games' (5402): [propext, Classical.choice,
+Quot.sound].  Evidence: joint-attempts-5000-5402.jsonl (per attempt: gate (London time,
+window flag, other lean/aeneas/cargo processes), source sha, exit, wall, peak RSS, swaps,
+axioms, errors; note the jsonl axiom field misses names containing an apostrophe, the raw
+$T/evidence/out-<A>.log is authoritative), joint-sha-5000-5402.txt, joint-objects-manifest1.sha256.
+Window: launcher and driver changed from 06:00 to 10:00 London (user extension, 2026-10-19);
+the build itself finished at 04:02, inside both.
