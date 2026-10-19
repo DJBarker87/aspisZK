@@ -35,7 +35,7 @@ def sourcePrefix {Hash : Type} {D : aspis_core.Digest32 Hash}
         (.payload ⟨SourceDigestAddresses.rawBytes c.record.framed, bound c (by simp)⟩)
         (.ordinary (sourceChallenge c), decodeState c.after.state)) cs
         (fun d hd => bound d (List.mem_cons_of_mem _ hd))
-private def literalPrefix {Hash : Type} {D : aspis_core.Digest32 Hash}
+def literalPrefix {Hash : Type} {D : aspis_core.Digest32 Hash}
     {pre : r1_wire.Prefix} (Hbytes : AspisV8R19.DuplexFrames.Bytes → State) :
     (i : Nat) → (P : LiteralTranscript.Prefix) →
     (cs : List (SourceFull25.Call D pre)) →
