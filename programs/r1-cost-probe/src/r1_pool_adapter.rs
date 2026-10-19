@@ -960,7 +960,7 @@ fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> Pro
     {
         return Err(ProgramError::InvalidAccountData);
     }
-    let checkpoint = super::first(&public_data, &proof_data[proof_start..proof_end], data[1] as usize)?;
+    let checkpoint = super::first_decoded(statement.semantic_public(), &public_data, &proof_data[proof_start..proof_end], data[1] as usize)?;
     if checkpoint.len() != checkpoint_data.len() {
         return Err(ProgramError::InvalidAccountData);
     }
