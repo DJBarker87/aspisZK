@@ -6448,3 +6448,57 @@ This settles D63 for the privacy closure. The soundness roots remain.
   and three name collisions.
 - (c) end to end: the spend sampler stack in this workspace.
 - (b), (d) (Rspend⁺ map, SemRows01) and (e).
+
+### Lead acceptance at the 2026-10-19 cleanup: hRel at CertData level (D66), manifest 2 (D67)
+
+**D66 (checker, hRel).** Worker commits 37b76b85c..82314d764 are
+cherry-picked. The lead verified attempts 4513, 4601, 4602, 4607, 4609,
+4610, 4613, 4614 and 4617: SHAs match, exit 0, standard axioms, no
+overrides.
+- `fill_rel` (WideExact ops, batched weights, both dual folds, line folds,
+  relation coefficients) has an extracted copy; its differential test equals
+  z9c's relation matrix exactly on all five configurations (499,328 and
+  232,320 entries).
+- The WideExact model (`CertRelW`): under `Tower B` and the new premise
+  w·w = B.u, the extracted `wmul` is the product in K.
+- `coefM_eq`, the weight/fold identities with weightsR1, w1, w2,
+  lineFoldValue and naturalLineValue, and `rel_data`.
+- `p_r1_of_data_rel`: `p_r1_of_data` with hRel discharged, at the CertData
+  level (6.81 GB).
+
+Not accepted: the pb/ct-level `check_sound⁗` wrapper. Two attempts (4615,
+4616) hit -M7000 while loading imports, because any importer of Sound4
+starts at about 7.18 GB. A larger-cap run is declined. The wrapper waits for
+an import refactor of Sound2–4, with replays. New named premises: w·w = B.u
+and the limb basis; the inverse transport ti = π⁻¹; the opening limbs; the
+folded-position map fp (injective); query bounds; li = lineInverse and
+x16 = storedLine16X on the line relations; size equalities.
+
+**D67 (integration, manifest 2).** Worker head 167a70d73 is merged. The
+lead verified attempts 5517 and 5520.
+- `AspisR1Qm31ArithmeticProbe.{Funs,Types}` were promoted bytes-unchanged
+  (Funs `114552b8…`, Types `c5a08408…`, matching the host extraction source
+  and the accepted sampler journal). Their generated `maxHeartbeats`/
+  `maxRecDepth` options are kept as generated.
+- `privacy_R1_games_spendSampler` (5517, 4.12 GB): the QM31SamplerLaw
+  premise is discharged from the extracted sampler, in one closure.
+- T1 `toModel_toRust`, T2 `witnessOk_toRust`, T3 `pubCorr_toRustPub` (5520).
+  T4 waits for the X/R1X decision.
+- To fit under the cap, `R0Z.GoodDensity` and `R0Z.StatisticalDistance`
+  were narrowed from `import Mathlib` to bounded sets (imports only). The
+  dependents were rebuilt. `R1Z.EventsR1P2` then failed at `card_NZ` with
+  kernel memory exhaustion: the narrower imports change the `Fintype`
+  instance found for Fin 32 → UInt8. An import-only probe did not help.
+  The unified build is stopped there: 425 of 455 modules current, with
+  `privacy_R1_games′` and `check_sound″` not current on that base.
+  Their standard-axiom status from manifest 1 (D65) stands for the
+  whole-Mathlib base.
+
+Deferred decisions, recorded as open:
+1. EventsR1P2: a proof-level fix of `card_NZ` (count through `card_ans`),
+   or revert the narrowing and size the composition another way.
+2. The module of record for `AspisR1PublicPreparation.{Funs,Types}`, which
+   has 3 and 5 repo copies; `SemRowsSpend` (`decSpend`, `semRows01_spend`,
+   premise `RSqueezeAnswer`) is written and waits on it.
+
+All agents are paused. No host job is running.
