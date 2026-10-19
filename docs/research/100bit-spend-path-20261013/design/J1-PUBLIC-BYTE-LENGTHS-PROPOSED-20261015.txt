@@ -1,0 +1,121 @@
+UNCOMPILED / PROPOSAL ONLY. No proof result claimed by this worker.
+Proposed separate module PublicByteCodecLengths.lean.
+Reads the coordinator's current PublicByteCodec and PublicByteCodecLaws;
+source base 136b746805f3438507732622c9b4e50f36bf49f9.
+No builds or commits. No source-refinement or universal oracle-length claim.
+
+The proof expands only the eleven-field product structure and option shape.
+M31/digest/frontier/u64 implementations stay behind their length lemmas.
+The raw formula is 1423 plus 32 for a present recipient plus 4 for a present
+amount. Canonical transfer/withdrawal specialize this to 1455/1427 bytes.
+
+BEGIN PROPOSED SOURCE
+import R1PublicByteCodecLaws
+
+set_option autoImplicit false
+namespace AspisR1.PublicByteCodecLengths
+
+open R0P AspisV8R15.ExactTowerBase PublicByteCodec
+
+theorem pair_emit_length {A B : Type} (c : PrefixCodec A) (d : PrefixCodec B)
+    (ab : A × B) :
+    ((PrefixCodec.pair c d).emit ab).length =
+      (c.emit ab.1).length + (d.emit ab.2).length :=
+  List.length_append _ _
+
+theorem option_emit_length {A : Type} (c : PrefixCodec A) (width : Nat)
+    (hlen : ∀ a, (c.emit a).length = width) (oa : Option A) :
+    ((PrefixCodec.option c).emit oa).length =
+      1 + if oa.isSome then width else 0 := by
+  cases oa <;> simp [PrefixCodec.option, hlen, Nat.add_comm]
+
+theorem variant_emit_length (v : Variant) : (variantCodec.emit v).length = 1 := by
+  cases v <;> rfl
+
+theorem m31_emit_length (x : M31Exact) : (m31Codec.emit x).length = 4 :=
+  ExactLeafFieldCodec.encodeM31_length x
+
+theorem digest_emit_length (d : Digest M31Exact) : (digestCodec.emit d).length = 32 :=
+  encodeDigest_length d
+
+theorem frontier_emit_length (f : Frontier) : (frontierCodec.emit f).length = 640 :=
+  encodeFrontier_length f
+
+theorem public_emit_length (pub : WirePublic) :
+    (publicCodec.emit pub).length =
+      1423 + (if pub.val.recipient.isSome then 32 else 0) +
+        (if pub.val.withdrawalAmount.isSome then 4 else 0) := by
+  change (fieldsCodec.emit (toFields pub)).length = _
+  simp only [fieldsCodec, toFields, pair_emit_length,
+    variant_emit_length, digest_emit_length, m31_emit_length,
+    u64_emit_length, frontier_emit_length,
+    option_emit_length digestCodec 32 digest_emit_length,
+    option_emit_length m31Codec 4 m31_emit_length]
+  omega
+
+theorem emit_transfer_length (pub : WirePublic)
+    (hv : pub.val.variant = .privateTransfer)
+    (hc : PublicOptionShape.canonical pub.val) :
+    (publicCodec.emit pub).length = 1455 := by
+  obtain ⟨recipient, hr, ha⟩ := PublicOptionShape.private_transfer_shape pub.val hv hc
+  simpa [hr, ha] using public_emit_length pub
+
+theorem emit_withdrawal_length (pub : WirePublic)
+    (hv : pub.val.variant = .withdrawal)
+    (hc : PublicOptionShape.canonical pub.val) :
+    (publicCodec.emit pub).length = 1427 := by
+  obtain ⟨amount, _hne, ha, hr⟩ := PublicOptionShape.withdrawal_shape pub.val hv hc
+  simpa [hr, ha] using public_emit_length pub
+
+theorem encode_transfer_length (pub : BasePublic) (bytes : Bytes)
+    (he : encode pub = some bytes) (hv : pub.variant = .privateTransfer)
+    (hc : PublicOptionShape.canonical pub) : bytes.length = 1455 := by
+  have hi := encode_success_bound pub bytes he
+  have hb : publicCodec.emit (⟨pub, hi⟩ : WirePublic) = bytes := by
+    simpa [encode, hi] using he
+  rw [← hb]
+  exact emit_transfer_length ⟨pub, hi⟩ hv hc
+
+theorem encode_withdrawal_length (pub : BasePublic) (bytes : Bytes)
+    (he : encode pub = some bytes) (hv : pub.variant = .withdrawal)
+    (hc : PublicOptionShape.canonical pub) : bytes.length = 1427 := by
+  have hi := encode_success_bound pub bytes he
+  have hb : publicCodec.emit (⟨pub, hi⟩ : WirePublic) = bytes := by
+    simpa [encode, hi] using he
+  rw [← hb]
+  exact emit_withdrawal_length ⟨pub, hi⟩ hv hc
+
+theorem decoded_transfer_length (bytes : Bytes) (pub : BasePublic)
+    (h : decode bytes = some pub) (hv : pub.variant = .privateTransfer) :
+    bytes.length = 1455 :=
+  encode_transfer_length pub bytes (encode_of_decode bytes pub h) hv
+    (decode_canonical bytes pub h)
+
+theorem decoded_withdrawal_length (bytes : Bytes) (pub : BasePublic)
+    (h : decode bytes = some pub) (hv : pub.variant = .withdrawal) :
+    bytes.length = 1427 :=
+  encode_withdrawal_length pub bytes (encode_of_decode bytes pub h) hv
+    (decode_canonical bytes pub h)
+
+theorem decoded_length (bytes : Bytes) (pub : BasePublic)
+    (h : decode bytes = some pub) :
+    bytes.length = match pub.variant with
+      | .privateTransfer => 1455
+      | .withdrawal => 1427 := by
+  cases hv : pub.variant with
+  | privateTransfer => exact decoded_transfer_length bytes pub h hv
+  | withdrawal => exact decoded_withdrawal_length bytes pub h hv
+
+#print axioms pair_emit_length
+#print axioms option_emit_length
+#print axioms public_emit_length
+#print axioms emit_transfer_length
+#print axioms emit_withdrawal_length
+#print axioms encode_transfer_length
+#print axioms encode_withdrawal_length
+#print axioms decoded_transfer_length
+#print axioms decoded_withdrawal_length
+#print axioms decoded_length
+
+end AspisR1.PublicByteCodecLengths
+END PROPOSED SOURCE
