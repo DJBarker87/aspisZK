@@ -38,11 +38,56 @@ with open('/tmp/aspis-r0-lean.lock', 'a+') as lock:
     base = json.loads(env_file.read_text())
     env = dict(os.environ, **{k:v for k,v in base.items() if v is not None})
     env['LEAN_PATH'] = str(root/'objects') + ':/home/dombarker/project-offloads/aspis-joint-20261019/objects:' + base['LEAN_PATH']
+    cache_provenance = None
+    if plan.get('cache_receipt'):
+        cache_path = Path(plan['cache_receipt']['path'])
+        assert sha(cache_path) == plan['cache_receipt']['sha256']
+        cached = json.loads(cache_path.read_text())
+        assert cached['exit_status'] == 0 and cached['axioms']['passed']
+        assert cached['source_manifest_entry']['source_sha256'] == plan['cache_target_source']['sha256']
+        old_command = cached['command']
+        assert '/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean' in old_command
+        old_lean = old_command.index('/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean')
+        old_roots = old_command[old_lean+1].split(':')
+        assert all('4.31' not in value for value in old_roots)
+        cache_objects = {}
+        for name, item in cached['key']['imports'].items():
+            pin = item['objects']['.olean']
+            assert sha(Path(pin['path'])) == pin['sha256'], name
+            cache_objects[name] = pin
+        # A cached theorem's complete original closure takes priority over the
+        # integration overlay. Mixing nominally equal module names silently
+        # dropped verifier carriers from the original PublicPreparation module.
+        original_roots = [value for value in old_roots if Path(value).is_dir()]
+        current_roots = env['LEAN_PATH'].split(':')
+        ordered = list(dict.fromkeys([str(root/'objects'), *original_roots, *current_roots]))
+        env['LEAN_PATH'] = ':'.join(ordered)
+        def resolve_object(name, roots):
+            return next((Path(value)/(name.replace('.','/')+'.olean') for value in roots
+                if (Path(value)/(name.replace('.','/')+'.olean')).is_file()), None)
+        selected = {}
+        for name,pin in {**cache_objects,cached['target']:cached['objects']['.olean']}.items():
+            resolved = resolve_object(name,ordered)
+            assert resolved is not None and sha(resolved) == pin['sha256'], ('cache shadow',name)
+            selected[name] = dict(path=str(resolved),sha256=sha(resolved))
+        owners = {}
+        for name in ['AspisR1PublicPreparation.Types','AspisR1PublicPreparation.Funs','Aeneas']:
+            original = resolve_object(name,original_roots)
+            resolved = resolve_object(name,ordered)
+            if original is not None:
+                assert resolved is not None and sha(resolved) == sha(original), ('owner shadow',name)
+                owners[name] = dict(path=str(resolved),sha256=sha(resolved))
+        cache_provenance = dict(plan['cache_receipt'],target=cached['target'],
+            validated_direct_import_objects=cache_objects,original_roots=original_roots,
+            selected_cache_objects=selected,selected_owner_objects=owners,
+            target_objects=cached['objects'],priority='NEW_CU_MODULES_THEN_EXACT_ORIGINAL_CLOSURE')
     imports = []
     for name in re.findall(r'(?m)^\s*(?:public\s+)?import\s+(\S+)', source.read_text()):
         candidates = [Path(p)/(name.replace('.','/')+'.olean') for p in env['LEAN_PATH'].split(':')]
         obj_import = next((p for p in candidates if p.is_file()), None)
         assert obj_import is not None, ('focused prerequisite missing; do not compile a dependent', name)
+        if cache_provenance and name == cached['target']:
+            assert sha(obj_import) == cached['objects']['.olean']['sha256'], name
         imports.append(dict(module=name,path=str(obj_import),sha256=sha(obj_import)))
     out = root/'runs'/plan['attempt']
     out.mkdir(parents=True, exist_ok=False)
@@ -87,7 +132,7 @@ with open('/tmp/aspis-r0-lean.lock', 'a+') as lock:
         host_swap_after=[s for s in Path('/proc/meminfo').read_text().splitlines() if s.startswith('Swap')],
         environment_sha256=sha(env_file), lean_path=env['LEAN_PATH'], runner_sha256=sha(Path(__file__)),
         checked_source_sha256=sha(checked_source),
-        direct_imports=imports,
+        direct_imports=imports,cache_provenance=cache_provenance,
         print_axioms_output=log, object_sha256=sha(obj) if status==0 else None)
     (out/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
     print(json.dumps(receipt))

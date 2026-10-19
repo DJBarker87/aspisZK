@@ -33,12 +33,12 @@ planned; progress must be assessed by complete optimization-to-caller proofs.
 
 | Retained change | Required proof and source bridge | Status |
 |---|---|---|
-| 1 gamma table reuse | power table correctness, unchanged caller dataflow, preparation/tx1 extraction | open |
+| 1 gamma table reuse | same-function/same-gamma table dataflow, preparation/tx1 extraction and failure preservation | open; duplicate-call elimination can consume the first computation instead of re-proving unchanged power arithmetic |
 | 2 opt-in observer | observer state noninterference, diagnostic-log projection, caller feature binding | open |
 | 3 S2 inactive groups | literal table correspondence, finite regrouping, source execution | all 1024 Nat-model classification cells, bounds, first-occurrence order and weighted regrouping checked; emitted machine helper/field/decoder binding open |
 | 4 delayed base dots | modular equality, all u64 bounds, decoder/failure-order and loop execution | symbolic arithmetic checked; source bridge open |
 | 5 canonical private dots | WideExact invariant, redundant-check elimination, outer count implies inner bound, reduction/output | open |
-| 6 public decode reuse | checked same-byte decoder/selector correspondence, first_decoded and adapter execution | open |
+| 6 public decode reuse | checked same-byte decoder/selector correspondence, first_decoded and adapter execution | source call-site equality for all observers and consuming original decoder/selector/helper/serializer theorems checked; enclosing Box/SDK/runtime interpretation remains at the reference boundary; see PUBLIC-DECODE-REUSE.md |
 | 7 geometry reuse | node/denominator agreement, caller range validity, execution | open |
 | 10 fixed prefix | admitted q length, identical decoder accesses and failure behavior | complete interpreted source kernel equality and actual-query composition checked, including four-slot bound/capture invariants; std-library/shared-helper and enclosing-verifier source bindings open |
 | 12 rho residues | every-prefix modular invariant, four-term overflow bound, canonical finish, array/caller execution, heap admission | integer invariant, complete push/value execution and frame/overflow proofs checked; finish now consumes the extracted standard next body; initialization, outer callers and serialization composition open |
@@ -254,3 +254,20 @@ the reference must not accidentally become a new generic compiler-verification
 project. Equally, a genuinely new unproved interpretation cannot be silently
 treated as an original premise. This scope review does not itself discharge
 any row above.
+
+
+Public-decode reuse now has a consuming source-caller proof and a transfer of
+the existing helper/serialization result. See PUBLIC-DECODE-REUSE.md and
+SECURITY-REFERENCE-BOUNDARY.md for exact scope. The reference cache initially
+collided with the integration overlay's PublicPreparation owners; the affected
+runs were superseded after restoring the exact original cache order. Accepted
+receipts: cu-public-decode-a, cu-public-decode-source-e,
+cu-public-decode-transfer-b, cu-public-decode-preparation-b. They introduce no
+decoder-success premise or new equivalence axiom. The general context theorem
+holds for every observer; the historical helper instantiation uses Some mark.
+Candidate 2 and the final combined soundness/privacy transfer remain open.
+
+Next concrete candidate: gamma-table reuse, proving the actual preparation's
+retained table is the result already computed at its returned gamma, then
+consuming that fact in the tx1 caller. No further general frontend expansion
+is needed to state this same-function replacement obligation.

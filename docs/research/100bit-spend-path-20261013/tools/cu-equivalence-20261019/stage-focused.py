@@ -4,7 +4,10 @@ from pathlib import Path
 import argparse, hashlib, json, resource, shlex, subprocess, sys, time
 
 ap=argparse.ArgumentParser(); ap.add_argument('module'); ap.add_argument('attempt')
-ap.add_argument('--axiom',action='append',default=[]);a=ap.parse_args()
+ap.add_argument('--axiom',action='append',default=[])
+ap.add_argument('--cache-receipt',help='Remote successful receipt whose pinned import search roots may be reused')
+ap.add_argument('--cache-source',help='Repository-relative source corresponding to the cached target')
+a=ap.parse_args()
 repo=Path(__file__).resolve().parents[5]
 area=repo/'docs/research/100bit-spend-path-20261013'
 source=area/'lean'/(a.module+'.lean')
@@ -16,6 +19,15 @@ plan=dict(workspace=remote,lake_workspace='/home/dombarker/project-offloads/ZK-v
     module=a.module,attempt=a.attempt,source_revision=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip(),
     source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),features=['pool-adapter','private-leaf-salts'],audit_declarations=a.axiom)
 (out/'source.lean').write_bytes(source.read_bytes())
+if a.cache_receipt:
+    receipt_bytes=subprocess.check_output(['ssh','-o','BatchMode=yes','-o','ConnectTimeout=10',host,'cat '+shlex.quote(a.cache_receipt)])
+    receipt=json.loads(receipt_bytes);assert receipt['exit_status']==0 and receipt['axioms']['passed']
+    cached_source=repo/(a.cache_source or receipt['source_manifest_entry']['source'])
+    cached_source_sha=hashlib.sha256(cached_source.read_bytes()).hexdigest()
+    assert cached_source_sha==receipt['source_manifest_entry']['source_sha256'],cached_source
+    plan['cache_target_source']=dict(path=str(cached_source.relative_to(repo)),sha256=cached_source_sha)
+    (out/'cache-receipt.json').write_bytes(receipt_bytes)
+    plan['cache_receipt']=dict(path=a.cache_receipt,sha256=hashlib.sha256(receipt_bytes).hexdigest())
 (out/'plan.json').write_text(json.dumps(plan,indent=2)+'\n')
 started=time.monotonic()
 ssh_options=['-o','BatchMode=yes','-o','ConnectTimeout=10','-o','ConnectionAttempts=1',

@@ -1,0 +1,116 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsPublicDecodeSource.lean:113:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← AspisR1PublicPreparation.FirstCaller.decode bytes
+    let r1 ← AspisR1PublicPreparation.core.result.Result.map_err { call_once := fun x x_1 => ok invalid } r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let public1 ←
+          AspisR1PublicPreparation.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public val
+        let r2 ← tx1 public1 bytes proof k () (some mark)
+        AspisR1PublicPreparation.core.result.Result.map_err (BuiltinFnOnce F E) r2 error
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame E) residual
+is not definitionally equal to the right-hand side
+  do
+    let r ← AspisR1PublicPreparation.FirstCaller.decode bytes
+    let r1 ← AspisR1PublicPreparation.core.result.Result.map_err { call_once := fun x x_1 => ok invalid } r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let public1 ←
+          AspisR1PublicPreparation.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public val
+        let r2 ← tx1 public1 bytes proof k () (some mark)
+        AspisR1PublicPreparation.core.result.Result.map_err (BuiltinFnOnce F E) r2 error
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame E) residual
+
+E F : Type
+invalid : E
+tx1 :
+  AspisR1PublicPreparation.FirstCaller.Public →
+    Slice U8 →
+      Slice U8 →
+        Usize →
+          Unit →
+            Option (AspisR1PublicPreparation.FirstCaller.Phase → Result Unit) →
+              Result (core.result.Result (alloc.vec.Vec U8) F)
+mark : AspisR1PublicPreparation.FirstCaller.Phase → Result Unit
+error : F → Result E
+bytes proof : Slice U8
+k : Usize
+⊢ (do
+      let r ← AspisR1PublicPreparation.FirstCaller.decode bytes
+      let r1 ← AspisR1PublicPreparation.core.result.Result.map_err { call_once := fun x x_1 => ok invalid } r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let public1 ←
+            AspisR1PublicPreparation.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                val
+          let r2 ← tx1 public1 bytes proof k () (some mark)
+          AspisR1PublicPreparation.core.result.Result.map_err (BuiltinFnOnce F E) r2 error
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+            (core.convert.FromSame E) residual) =
+    do
+    let r ← AspisR1PublicPreparation.FirstCaller.decode bytes
+    let r1 ← AspisR1PublicPreparation.core.result.Result.map_err { call_once := fun x x_1 => ok invalid } r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let public1 ←
+          AspisR1PublicPreparation.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public val
+        let r2 ← tx1 public1 bytes proof k () (some mark)
+        AspisR1PublicPreparation.core.result.Result.map_err (BuiltinFnOnce F E) r2 error
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame E) residual
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsPublicDecodeSource.lean:141:2: error: Type mismatch
+  adapter_context_eq (actualBoundaries tx1 error) invalid bytes proof k (some mark) reject context
+has type
+  (do
+      let result ← decodeBox (actualBoundaries tx1 error) invalid bytes
+      match result with
+        | core.result.Result.Err error => reject error
+        | core.result.Result.Ok statement =>
+          context statement (first (actualBoundaries tx1 error) invalid bytes proof k (some mark))) =
+    do
+    let result ← decodeBox (actualBoundaries tx1 error) invalid bytes
+    match result with
+      | core.result.Result.Err error => reject error
+      | core.result.Result.Ok statement =>
+        context statement (reused (actualBoundaries tx1 error) statement bytes proof k (some mark))
+but is expected to have type
+  (do
+      let result ← decodeBox (actualBoundaries tx1 error) invalid bytes
+      match result with
+        | core.result.Result.Err err => reject err
+        | core.result.Result.Ok statement =>
+          context statement (first (actualBoundaries tx1 error) invalid bytes proof k (some mark))) =
+    do
+    let result ← decodeBox (actualBoundaries tx1 error) invalid bytes
+    match result with
+      | core.result.Result.Err err => reject err
+      | core.result.Result.Ok statement =>
+        context statement do
+          let pub ← (actualBoundaries tx1 error).select statement
+          firstDecoded (actualBoundaries tx1 error) pub bytes proof k (some mark)
+'AspisR1.CuSavingsPublicDecodeSource.decodeErrorClosure' does not depend on any axioms
+'AspisR1.CuSavingsPublicDecodeSource.sourceDecoded' depends on axioms: [propext]
+'AspisR1.CuSavingsPublicDecodeSource.sourceFirst' depends on axioms: [propext]
+'AspisR1.CuSavingsPublicDecodeSource.map_error_eq' does not depend on any axioms
+'AspisR1.CuSavingsPublicDecodeSource.source_decoded_eq' depends on axioms: [propext, Quot.sound]
+'AspisR1.CuSavingsPublicDecodeSource.source_first_eq' depends on axioms: [propext, Quot.sound]
+'AspisR1.CuSavingsPublicDecodeSource.source_first_of_decode' depends on axioms: [propext, Quot.sound]
+'AspisR1.CuSavingsPublicDecodeSource.actualBoundaries' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsPublicDecodeSource.original_first_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsPublicDecodeSource.actual_adapter_context_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
