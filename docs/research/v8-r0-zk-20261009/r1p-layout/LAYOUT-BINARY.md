@@ -136,3 +136,19 @@ Actual candidate realizations of the named wire/commitment/causality
 premises remain source-refinement work, as in the original theorem.
 The candidate Rust simulator, format-adoption implementation and soundness
 proof tree were not changed. No wallet/account keys were touched.
+
+## Revision provenance
+
+Final Lean sources are committed at `bba92e316cea8350bcdcc7582dae4402236da00f`. Each successful current
+source in `attempts.jsonl` carries `verified_source_commit`; earlier
+compiles record the handover revision plus `source_dirty=true` and their
+exact source hash, including failed historical variants. The final manifest
+pins the clean Lean sources at this commit. Subsequent changes are evidence
+and audit-script metadata only.
+
+Branch history from the actual base before the evidence-only commit:
+
+```text
+bba92e316 Prove binary privacy layout and multiproof read budget
+2d7d47218 WIP snapshot at handover from Claude agent to Codex (unreviewed, may be incomplete)
+```

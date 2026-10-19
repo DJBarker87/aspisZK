@@ -45,6 +45,6 @@ for m in order:
  v.update(attempt=r['attempt'],repo_source=str(p.relative_to(ROOT)),axioms=r['axioms'])
  for d in v['dependency_objects']:
   if d in good:assert good[d]['attempt'] < r['attempt'],(m,d,'dependency order')
-report=dict(base_revision='f9016d0a2',handover_revision='2d7d47218',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_dirty=True,environment='J',order=[dict(module=m,**remote[m]) for m in order])
+report=dict(base_revision='f9016d0a2',handover_revision='2d7d47218',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_dirty=bool(subprocess.check_output(['git','status','--porcelain','--','docs/research/v8-r0-zk-20261009/lean'],text=True).strip()),environment='J',order=[dict(module=m,**remote[m]) for m in order])
 (HERE/'manifest.json').write_text(json.dumps(report,indent=2)+'\n')
 print('Verified',len(order),'modules; source hashes, import-object fingerprints, dependency order, every theorem audit and standard axioms match.')
