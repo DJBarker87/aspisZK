@@ -26,6 +26,7 @@ pub mod circle_pcs_shape;
 pub mod circle_prefix;
 pub mod circle_query;
 pub mod field;
+pub mod fast_domain;
 pub mod merkle;
 pub mod params;
 pub mod proof;
