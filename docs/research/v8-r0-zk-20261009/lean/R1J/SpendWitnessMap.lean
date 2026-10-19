@@ -181,7 +181,8 @@ theorem witnessOk_toRust (w : ModelWitness F) : WitnessOk (toRust w) where
     by show (v32 w.changeValue).val < _; rw [v32_val]; exact w.changeValue.isLt⟩
   bits := by
     intro l hl
-    show ((arr24 (fun l => if (w.path l).1 then 1#u32 else 0#u32)).val[l]!).val = 0 ∨ _
+    show ((arr24 (fun l => if (w.path l).1 then 1#u32 else 0#u32)).val[l]!).val = 0 ∨
+      ((arr24 (fun l => if (w.path l).1 then 1#u32 else 0#u32)).val[l]!).val = 1
     rw [arr24_get _ l hl]
     cases (w.path ⟨l, hl⟩).1
     · exact Or.inl rfl
