@@ -1,0 +1,7 @@
+# Exact exhaustion probability of the eight-limb sampler
+
+For the actual Fin8 product of finite sixteen-word retry inputs, eightAbortMass_exact proves that at least one limb aborts with exact mass 1-(1-2^-496)^8. eightAbortMass_le_union_bound bounds it by 8*2^-496. The accepted-output conditional mass was proved separately in M31EightLimbOutputLaw as exactly 1/P31^8 per limb tuple.
+
+The proof reuses the actual output/success/input cardinalities. Complement cardinality identifies the actual abort event; a generic symbolic Nat count-to-rational-power ratio lemma avoids reducing concrete large powers, and a generic Bernoulli inequality supplies the union bound. Earlier failed casts/normalization attempts are preserved in diagnostics. They were replaced by named symbolic lemmas before the successful check, without raising the memory cap. The accepted target has standard-only axiom reports, exact source/import/object pins and compiler command, revision, exit0, wall4.29s, peak RSS1,555,929,344 bytes, zero swaps. No full manifest replay was run.
+
+Open: packing the accepted eight limbs through the maintained computable WideExact codec; field-pair and whole-tape output laws; fresh/adaptive caller composition and retry accounting. These sampler results and the separate uniform-field-tape root-recovery theorem have not yet been joined into the complete extractor or 100-bit protocol/spend theorem.

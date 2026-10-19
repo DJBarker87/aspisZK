@@ -1,0 +1,59 @@
+/tmp/M31EightLimbAbortBound.lean:94:4: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/M31EightLimbAbortBound.lean:101:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑((2 ^ 32) ^ 16 - 2 ^ 16)
+in the target expression
+  13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006018560 =
+    13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006084096 -
+      2 ^ 16
+
+S : ℕ := (2 ^ 32) ^ 16 - 2 ^ 16
+T : ℕ := (2 ^ 32) ^ 16
+habort : Nat.card EightAbortInput = T ^ 8 - S ^ 8
+htotal : Nat.card EightRetryInputs = T ^ 8
+hle : S ^ 8 ≤ T ^ 8
+hcast : ↑(T ^ 8 - S ^ 8) = ↑T ^ 8 - ↑S ^ 8
+hle' : 2 ^ 16 ≤ (2 ^ 32) ^ 16
+⊢ 13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006018560 =
+    13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006084096 -
+      2 ^ 16
+/tmp/M31EightLimbAbortBound.lean:105:4: warning: exponent 496 exceeds the threshold 256, exponentiation operation was not evaluated, use `set_option exponentiation.threshold <num>` to set a new threshold
+/tmp/M31EightLimbAbortBound.lean:105:4: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/tmp/M31EightLimbAbortBound.lean:86:8: error: (kernel) excessive memory consumption detected
+/tmp/M31EightLimbAbortBound.lean:127:4: error: failed to prove positivity/nonnegativity/nonzeroness
+/tmp/M31EightLimbAbortBound.lean:128:2: error: unsolved goals
+case hp1
+⊢ (2 ^ 496)⁻¹ ≤ 1
+'M31RetryOutputFiber.abortProp_iff_some_none' depends on axioms: [propext, Quot.sound]
+'M31RetryOutputFiber.eightAbort_card_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.pow_failure_union_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.eightAbortMass_exact' depends on axioms: [propext,
+ Classical.choice,
+ eightAbortMass_exact,
+ Quot.sound]
+'M31RetryOutputFiber.eightAbortMass_le_union_bound' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ eightAbortMass_exact,
+ Quot.sound]
+        7.43 real         3.04 user         0.75 sys
+          2147581952  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              131981  page reclaims
+               40866  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                5096  voluntary context switches
+               32220  involuntary context switches
+         43040954028  instructions retired
+         14864061956  cycles elapsed
+           902055768  peak memory footprint

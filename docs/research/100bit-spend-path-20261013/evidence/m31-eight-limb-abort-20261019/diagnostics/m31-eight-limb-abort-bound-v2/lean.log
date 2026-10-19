@@ -1,0 +1,99 @@
+/tmp/M31EightLimbAbortBound.lean:34:26: error: Application type mismatch: The argument
+  h
+has type
+  output decode31 (xs i) = some r
+but is expected to have type
+  some r = some r
+in the application
+  Exists.intro r h
+/tmp/M31EightLimbAbortBound.lean:42:32: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Nat.card ?m.99
+in the target expression
+  Fintype.card EightAbortInput = (2 ^ 32) ^ 128 - ((2 ^ 32) ^ 16 - 2 ^ 16) ^ 8
+
+this✝¹ : Fintype EightRetryInputs := inferInstance
+this✝ : Fintype EightSuccessInput := inferInstance
+this : Fintype EightAbortInput := inferInstance
+⊢ Fintype.card EightAbortInput = (2 ^ 32) ^ 128 - ((2 ^ 32) ^ 16 - 2 ^ 16) ^ 8
+/tmp/M31EightLimbAbortBound.lean:72:24: error: Application type mismatch: The argument
+  mul_le_mul_of_nonneg_right (hpow n).right hp0
+has type
+  (1 - p) ^ n * p ≤ 1 * p
+but is expected to have type
+  (1 - p) ^ n * p ≤ p
+in the application
+  add_le_add ih (mul_le_mul_of_nonneg_right (hpow n).right hp0)
+/tmp/M31EightLimbAbortBound.lean:84:4: error: Type mismatch
+  Nat.sub_le ?m.149 ?m.150
+has type
+  ?m.149 - ?m.150 ≤ ?m.149
+but is expected to have type
+  13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006018560 ≤
+    13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006084096
+/tmp/M31EightLimbAbortBound.lean:89:4: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/tmp/M31EightLimbAbortBound.lean:89:19: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  AddGroupWithOne ℕ
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/tmp/M31EightLimbAbortBound.lean:95:6: error: mod_cast has type
+  ↑((2 ^ 32) ^ 16 - 2 ^ 16) = ↑((2 ^ 32) ^ 16 - 2 ^ 16)
+but is expected to have type
+  (2 ^ 32) ^ 16 - 2 ^ 16 = (2 ^ 32) ^ 16 - 2 ^ 16
+/tmp/M31EightLimbAbortBound.lean:96:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑((2 ^ 32) ^ 16 - 2 ^ 16)
+in the target expression
+  13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006018560 /
+      13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006084096 =
+    1 - 1 / 2 ^ 496
+
+S : ℕ := (2 ^ 32) ^ 16 - 2 ^ 16
+T : ℕ := (2 ^ 32) ^ 16
+hle : S ^ 8 ≤ T ^ 8
+hTpos : ↑T ≠ 0
+hcast : ↑(T ^ 8 - S ^ 8) = ↑T ^ 8 - ↑S ^ 8
+hle' : 2 ^ 16 ≤ (2 ^ 32) ^ 16
+hcast' : ↑((2 ^ 32) ^ 16 - 2 ^ 16) = (2 ^ 32) ^ 16 - 2 ^ 16
+⊢ 13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006018560 /
+      13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006084096 =
+    1 - 1 / 2 ^ 496
+/tmp/M31EightLimbAbortBound.lean:105:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(T ^ 8 - S ^ 8)
+in the target expression
+  ↑((2 ^ 32) ^ 128 - ((2 ^ 32) ^ 16 - 2 ^ 16) ^ 8) / ↑(((2 ^ 32) ^ 16) ^ 8) = 1 - (1 - 1 / 2 ^ 496) ^ 8
+
+S : ℕ := (2 ^ 32) ^ 16 - 2 ^ 16
+T : ℕ := (2 ^ 32) ^ 16
+hle : S ^ 8 ≤ T ^ 8
+hTpos : ↑T ≠ 0
+hcast : ↑(T ^ 8 - S ^ 8) = ↑T ^ 8 - ↑S ^ 8
+hsingle : ↑S / ↑T = 1 - 1 / 2 ^ 496
+⊢ ↑((2 ^ 32) ^ 128 - ((2 ^ 32) ^ 16 - 2 ^ 16) ^ 8) / ↑(((2 ^ 32) ^ 16) ^ 8) = 1 - (1 - 1 / 2 ^ 496) ^ 8
+/tmp/M31EightLimbAbortBound.lean:117:4: error: failed to prove positivity/nonnegativity/nonzeroness
+/tmp/M31EightLimbAbortBound.lean:118:2: error: unsolved goals
+case hp1
+⊢ (2 ^ 496)⁻¹ ≤ 1
+'M31RetryOutputFiber.abortProp_iff_some_none' depends on axioms: [propext, sorryAx, Quot.sound]
+'M31RetryOutputFiber.eightAbort_card_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.pow_failure_union_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.eightAbortMass_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'M31RetryOutputFiber.eightAbortMass_le_union_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        6.25 real         1.81 user         0.70 sys
+          1531461632  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               94466  page reclaims
+               37376  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                6393  voluntary context switches
+               33395  involuntary context switches
+         31372916812  instructions retired
+          9750049417  cycles elapsed
+           260343136  peak memory footprint
