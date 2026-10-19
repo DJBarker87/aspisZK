@@ -118,3 +118,14 @@ loops/counter, and reference checkpoint/canonical serialization composition.
 The finish theorem does not discharge these by assuming whole-verifier
 equivalence. All other retained-candidate bridges and final transfers remain
 required. Production Rust remains unchanged.
+
+The selected mutable next source now has a byte-preserving concrete-type
+extraction and a checked forward/write-observation comparison with the local
+runtime. See `ITERATOR-SOURCE.md` for the exact structural specializations,
+tool failures, successful receipts and trusted frontend boundary. It exposes
+a backward-count difference rather than claiming false whole-state equality.
+The comparison must still be consumed by a finish-context proof; the source
+binding is therefore not yet marked complete. Successful additional targets:
+`borrow-option-types-a`, `borrow-option-operations-a`, `iterator-types-a`,
+`iterator-source-option-a`, `iterator-next-a`, `iterator-source-shape-e`,
+`iterator-source-bridge-a`. All print standard axioms only with zero job swap.

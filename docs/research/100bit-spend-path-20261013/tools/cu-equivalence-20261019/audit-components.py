@@ -32,6 +32,15 @@ for name in ['Types.lean','Funs.lean']:
 finish_check=subprocess.check_output([sys.executable,str(Path(__file__).with_name('emit-finish.py')),
     '--check'],text=True)
 audit['finish_emission_layout_check']=json.loads(finish_check)
+audit['iterator_source_checks']={}
+for script in ['extract-iterator.py','extract-borrow-option.py','emit-iterator.py']:
+    output=subprocess.check_output([sys.executable,str(Path(__file__).with_name(script)),
+        '--check'],text=True)
+    audit['iterator_source_checks'][script]=json.loads(output)
+for directory,source in [('AspisR1CuIterator','iterator-generated'),
+                         ('AspisR1CuBorrowOption','borrow-option-generated')]:
+    assert (area/'lean'/directory/'Types.lean').read_bytes()==(
+        Path(__file__).parent/source/'Types.lean').read_bytes(),directory
 usage=resource.getrusage(resource.RUSAGE_SELF)
 audit['audit_command']=[sys.executable,str(Path(__file__).relative_to(repo)),*sys.argv[1:]]
 audit['audit_source_revision']=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()

@@ -120,6 +120,41 @@
       "attempt": "rho-finish-a",
       "source_sha256": "3514131a2c5d436a2e79e88df02e48fdf17aa85d2e88c0ab9d9fac963c042c72",
       "receipt_sha256": "c0d70050d7b6448ea6c6f3fea5201ad0148963ede61ebfabdd2064feb49aece8"
+    },
+    "AspisR1CuBorrowOption/Types": {
+      "attempt": "borrow-option-types-a",
+      "source_sha256": "011894a76bfddde831332fc4be8a9e382285f246fcaa55e733d12bc39b3270c4",
+      "receipt_sha256": "7a88bc78b6d4c4487910426729406d88f0c11589fe6db2ea7c677afb998fbb87"
+    },
+    "AspisR1CuBorrowOption/Operations": {
+      "attempt": "borrow-option-operations-a",
+      "source_sha256": "76366c80160acd2212de82571db0824762da32811e29355f932ae22e415b01a9",
+      "receipt_sha256": "6ac366aca9dbbf2911545186f9de7165657438246c242479b4246565aa976ec0"
+    },
+    "AspisR1CuIterator/Types": {
+      "attempt": "iterator-types-a",
+      "source_sha256": "6fcb8aeaff653a63567fdf9d145c882c3ea1233656f27e877a230f1f7b8cf891",
+      "receipt_sha256": "6dde503f9446f6f2ec9cd52a948c04d6239da4db97b66d1cdf63328def08bb2a"
+    },
+    "AspisR1CuIterator/SourceOption": {
+      "attempt": "iterator-source-option-a",
+      "source_sha256": "b450d76308d51a40ff44c3797916b2eba158ffd2df2548519faee4fb7380d06c",
+      "receipt_sha256": "cab22ea43970a8e75aff2262fbb9c80fa41f0709439c75f4feffb1bc9b16edcc"
+    },
+    "AspisR1CuIterator/Next": {
+      "attempt": "iterator-next-a",
+      "source_sha256": "e5540adc8d1f5ce113ad391bc8ec49d092471ed97f0d32607de8958777614481",
+      "receipt_sha256": "bda0946ccc5bd8e837c0ec846f449d1080060b7fa65b9f68253349d57ace78a1"
+    },
+    "CuSavingsIteratorSource": {
+      "attempt": "iterator-source-shape-e",
+      "source_sha256": "4a81a14685195e805816e50683e861e4b60c200ca0e87995a813d6dc89772922",
+      "receipt_sha256": "bdf135740069ea7f2ff176144623b4ebc59e1154c5247c089a108ec136466008"
+    },
+    "CuSavingsIteratorBridge": {
+      "attempt": "iterator-source-bridge-a",
+      "source_sha256": "761c6cd05abd3b5be512600ca99e4a8b90cbc95f06cf745226f513bbe8aa728d",
+      "receipt_sha256": "a7e1ae0e9ac0d9a530597b58da0f1ac375f23e6c883f5e584035d49700f90423"
     }
   },
   "raw_llbc_retained_on_host": true,
@@ -134,33 +169,30 @@
     "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
     "docs/research/100bit-spend-path-20261013/tools/cu-equivalence-20261019/audit-components.py",
     "--add",
-    "AspisR1CuRho/MutableIteratorRuntime",
-    "rho-mutable-runtime-c",
+    "AspisR1CuBorrowOption/Types",
+    "borrow-option-types-a",
     "--add",
-    "AspisR1CuRho/Finish",
-    "rho-finish-emission-b",
+    "AspisR1CuBorrowOption/Operations",
+    "borrow-option-operations-a",
     "--add",
-    "CuSavingsMutableEnumerate",
-    "rho-mutable-enumerate-c",
+    "AspisR1CuIterator/Types",
+    "iterator-types-a",
     "--add",
-    "CuSavingsSuffixOverwrite",
-    "rho-suffix-overwrite-a",
+    "AspisR1CuIterator/SourceOption",
+    "iterator-source-option-a",
     "--add",
-    "CuSavingsRhoFinishModel",
-    "rho-finish-model-c",
+    "AspisR1CuIterator/Next",
+    "iterator-next-a",
     "--add",
-    "CuSavingsRhoFinishNext",
-    "rho-finish-next-b",
+    "CuSavingsIteratorSource",
+    "iterator-source-shape-e",
     "--add",
-    "CuSavingsRhoFinishLoop",
-    "rho-finish-loop-e",
-    "--add",
-    "CuSavingsRhoFinish",
-    "rho-finish-a"
+    "CuSavingsIteratorBridge",
+    "iterator-source-bridge-a"
   ],
-  "audit_source_revision": "77e73fa910722f2fa2e42151c09dca801abb95dc",
-  "audit_wall_seconds": 0.06649529188871384,
-  "audit_peak_rss_bytes": 21856256,
+  "audit_source_revision": "484c78ff69bc61a49814387d41e355009b682659",
+  "audit_wall_seconds": 0.16532008396461606,
+  "audit_peak_rss_bytes": 21561344,
   "audit_process_swaps": 0,
   "audit_exit_status": 0,
   "audit_print_axioms": "N/A: receipt/source audit only; per-target axioms outputs checked above",
@@ -169,5 +201,20 @@
     "check": true,
     "output_sha256": "aa06e8c2844703542496dd1f1351922d0def0c04c1a66821b8a3f42b98977251",
     "exact_declaration_cuts": 2
+  },
+  "iterator_source_checks": {
+    "extract-iterator.py": {
+      "check": true,
+      "next_body_sha256": "9e0a2e6310a60aaff25381ea1e73d757420054b3fee3cc84cb8b917b430a6926",
+      "lib_sha256": "fe8206c3176658ae7516d39a5d082ba7c1b985b8a15338450bfdf1704e49fbdd"
+    },
+    "extract-borrow-option.py": {
+      "check": true,
+      "lib_sha256": "4ae80bcd6c4dea4924dc9fca637b86b3ca1369e883353cc861280459cbdada16"
+    },
+    "emit-iterator.py": {
+      "check": true,
+      "selected_functions": 3
+    }
   }
 }

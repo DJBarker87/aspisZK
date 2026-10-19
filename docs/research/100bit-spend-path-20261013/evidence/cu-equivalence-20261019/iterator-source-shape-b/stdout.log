@@ -1,0 +1,84 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsIteratorSource.lean:44:2: error: Tactic `rfl` failed: The left-hand side
+  let (o, im, next_back) := (some value, state, inner)
+  do
+  let (cf, branch_back) ←
+    match o with
+      | none => ok (core.ops.control_flow.ControlFlow.Break none, fun cf => none)
+      | some v =>
+        ok
+          (core.ops.control_flow.ControlFlow.Continue v, fun cf =>
+            some
+              (match cf with
+              | core.ops.control_flow.ControlFlow.Continue t1 => t1
+              | x => v))
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let i ← self.count + 1#usize
+      ok
+          (some (self.count, val), { iter := im, count := i }, fun self1 o1 =>
+            {
+              iter :=
+                next_back self1.iter
+                  (branch_back
+                    (core.ops.control_flow.ControlFlow.Continue
+                      (match o1 with
+                      | some (fst, t1) => t1
+                      | x => val))),
+              count := self.count })
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let (o1, _) ←
+        core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual (Usize × T) residual
+      ok
+          (o1, { iter := im, count := self.count }, fun self1 o2 =>
+            { iter := next_back self1.iter (branch_back cf), count := self.count })
+is not definitionally equal to the right-hand side
+  do
+    let count ← UScalar.add self.count 1#usize
+    ok (some (self.count, value), { iter := state, count := count }, someBack self value inner)
+
+T : Type
+self : Enum T
+value : T
+state : Iter T
+inner : Iter T → Option T → Iter T
+hn : core.slice.iter.IteratorIterMut.next self.iter = ok (some value, state, inner)
+⊢ (let (o, im, next_back) := (some value, state, inner)
+    do
+    let (cf, branch_back) ←
+      match o with
+        | none => ok (core.ops.control_flow.ControlFlow.Break none, fun cf => none)
+        | some v =>
+          ok
+            (core.ops.control_flow.ControlFlow.Continue v, fun cf =>
+              some
+                (match cf with
+                | core.ops.control_flow.ControlFlow.Continue t1 => t1
+                | x => v))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let i ← self.count + 1#usize
+        ok
+            (some (self.count, val), { iter := im, count := i }, fun self1 o1 =>
+              {
+                iter :=
+                  next_back self1.iter
+                    (branch_back
+                      (core.ops.control_flow.ControlFlow.Continue
+                        (match o1 with
+                        | some (fst, t1) => t1
+                        | x => val))),
+                count := self.count })
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let (o1, _) ←
+          core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual (Usize × T) residual
+        ok
+            (o1, { iter := im, count := self.count }, fun self1 o2 =>
+              { iter := next_back self1.iter (branch_back cf), count := self.count })) =
+    do
+    let count ← UScalar.add self.count 1#usize
+    ok (some (self.count, value), { iter := state, count := count }, someBack self value inner)
+'AspisR1.CuSavingsIteratorSource.source_none' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsIteratorSource.source_some' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsIteratorSource.someBack_iter' depends on axioms: [propext]
+'AspisR1.CuSavingsIteratorSource.someBack_count' depends on axioms: [propext]
+'AspisR1.CuSavingsIteratorSource.noneBack_iter' depends on axioms: [propext]
