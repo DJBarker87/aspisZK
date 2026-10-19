@@ -1,6 +1,6 @@
 The five source/finish-context modules registered in COMPONENT-AUDIT.json's
 pending_targets are drafted, not compiled. They must not be counted among the
-31 checked components or as a soundness/privacy transfer result.
+44 checked components or as a soundness/privacy transfer result.
 
 `AspisR1CuRhoSource.Runtime` transports the unchanged emitted concrete standard
 next method to the existing Enumerate layout at the selected slice instance.
@@ -29,6 +29,10 @@ still timed out, and Tailscale ping returned no reply. The IPv6 peer address
 also timed out and nuc.local did not resolve. No remote Lean job was launched.
 Local inspection found no cached Aeneas objects; no cold dependency build was
 started as a substitute for the pinned host/cache.
+
+Independent S2 table/algebra targets have since compiled using cached local
+mathlib objects. This does not compile or discharge the five pending Aeneas
+finish-context modules.
 
 Once the host is reachable and idle, the focused compile order is Runtime,
 CuSavingsRhoSourceNext, Source/Finish, CuSavingsRhoSourceFinishLoop, then

@@ -58,8 +58,8 @@ Successful focused targets: `borrow-option-types-a`,
 Each receipt includes command, source revision/hash, feature settings, exit,
 wall time, peak RSS, process/cgroup swap and #print axioms. All exit zero,
 use only standard Lean axioms, take less than two seconds, peak below 2.8 GiB
-RSS and use zero process/cgroup swap. The source receipt audit covers 31
-focused components and explicitly leaves the full goal incomplete.
+RSS and use zero process/cgroup swap. The source receipt audit tracks these
+alongside subsequent components and explicitly leaves the full goal incomplete.
 
 Why the extraction path changed
 ------------------------------

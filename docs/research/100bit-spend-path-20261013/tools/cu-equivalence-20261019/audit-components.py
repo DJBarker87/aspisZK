@@ -34,7 +34,15 @@ for module,item in audit['successful_targets'].items():
     assert receipt['exit_status']==0,module
     assert 'sorryAx' not in receipt['print_axioms_output'],module
     assert 'error:' not in receipt['print_axioms_output'],module
-    assert receipt['process_swaps']==0 and receipt['cgroup_swap_bytes']==0,module
+    assert receipt['process_swaps']==0,module
+    if receipt.get('resource_scope')=='focused_local':
+        assert receipt['cgroup_swap_bytes'] is None,module
+        assert receipt['stopped_for_limit'] is False,module
+        assert 0 < receipt['peak_aggregate_rss_bytes_sampled'] < 7*2**30,module
+        assert '-M7000' in receipt['command'],module
+        assert receipt['mathlib_revision']=='81a5d257c8e410db227a6665ed08f64fea08e997',module
+    else:
+        assert receipt['cgroup_swap_bytes']==0,module
 for name in ['Types.lean','Funs.lean']:
     assert (area/'lean/AspisR1CuRho'/name).read_bytes()==(
         Path(__file__).parent/'rho-generated-pushvalue/AspisR1CuRho'/name).read_bytes(),name
@@ -44,6 +52,9 @@ audit['finish_emission_layout_check']=json.loads(finish_check)
 finish_source_check=subprocess.check_output([sys.executable,
     str(Path(__file__).with_name('emit-finish-source.py')),'--check'],text=True)
 audit['finish_source_emission_layout_check']=json.loads(finish_source_check)
+s2_table_check=subprocess.check_output([sys.executable,
+    str(Path(__file__).with_name('emit-s2-tables.py')),'--check'],text=True)
+audit['s2_table_layout_check']=json.loads(s2_table_check)
 audit['iterator_source_checks']={}
 for script in ['extract-iterator.py','extract-borrow-option.py','emit-iterator.py']:
     output=subprocess.check_output([sys.executable,str(Path(__file__).with_name(script)),

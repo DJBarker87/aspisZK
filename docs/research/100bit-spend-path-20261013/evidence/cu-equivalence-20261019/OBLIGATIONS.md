@@ -20,7 +20,7 @@ remain obligations, not hidden hypotheses asserting the conclusion.
 |---|---|---|
 | 1 gamma table reuse | power table correctness, unchanged caller dataflow, preparation/tx1 extraction | open |
 | 2 opt-in observer | observer state noninterference, diagnostic-log projection, caller feature binding | open |
-| 3 S2 inactive groups | literal table correspondence, finite regrouping, source execution | open |
+| 3 S2 inactive groups | literal table correspondence, finite regrouping, source execution | all 1024 Nat-model classification cells, bounds, first-occurrence order and weighted regrouping checked; emitted machine helper/field/decoder binding open |
 | 4 delayed base dots | modular equality, all u64 bounds, decoder/failure-order and loop execution | symbolic arithmetic checked; source bridge open |
 | 5 canonical private dots | WideExact invariant, redundant-check elimination, outer count implies inner bound, reduction/output | open |
 | 6 public decode reuse | checked same-byte decoder/selector correspondence, first_decoded and adapter execution | open |
@@ -135,3 +135,20 @@ registered separately as NOT_COMPILED pending targets. See
 `FINISH-CONTEXT-PENDING.md`. Initial SSH staging failed before any Lean job
 launched, and retries after the user's request still found the host unreachable.
 No theorem success or source-binding completion is inferred from these drafts.
+
+With the NUC still unreachable, the independent S2 table/algebra obligations
+were checked locally using cached mathlib 4.32 objects. No Aeneas objects or
+dependencies were rebuilt. `CuSavingsGroups` proves finite-sum regrouping for
+arbitrary semiring coefficients and challenges. `CuSavingsS2Tables` discharges
+its table premise against all 1024 exact fixed S2 classification cells, and
+`CuSavingsS2Order` proves mask distinctness and first-occurrence order. All
+group indices and row bounds are included. The generator pins the current
+Rust source files and uses small named block certificates, not native_decide.
+
+Thirteen additional targets are now checked; COMPONENT-AUDIT covers 44
+components and separately retains the five uncompiled finish-context drafts.
+Successful local targets take 1.1–2.2 seconds, peak below 1.5 GiB RSS and use
+zero process swap. Local jobs use Lean's 7000 MiB limit and a descendant RSS
+monitor stopping at 7 GiB, with direct cached-import preflight. They are small
+focused jobs under the ordinary-development-machine policy, not large builds.
+See `S2-TABLES.md` for source/model scope and remaining machine bindings.
