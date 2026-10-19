@@ -6602,3 +6602,41 @@ generated table, verbatim text and differential test (D61 standing). T4
 (Wspend⁺ → RustWitness map) is untouched. Root and five tool lockfiles
 gained three path packages; no SBF source changed, but an SBF
 reproducible-build check is due before the next artifact pin.
+
+### Lead acceptance of the build fix (2026-10-19); D71: manifest 2 complete on the narrowed base
+
+Worker commits 30cd8256e, 28343384b, 21fa85681 (branch
+codex/r1p-build-fix-20261019) are cherry-picked. The lead verified attempts
+5532 (`card_NZ`, EventsR1P2 5746651a…, 3.62 GB), 5544 (`semRows01_spend`,
+4.13 GB) and 5547 (`privacy_R1_games′`, 3.61 GB): source SHA matches the
+repo, exit 0, 0 swaps, standard axioms.
+
+**D71.1 card_NZ (D68.3 carried out).** `card_NZ_of (i : Fintype NZ)` counts
+through `Equiv.optionSubtypeNe 0 : Option NZ ≃ OracleAnswer`,
+`Fintype.card_option` and `card_ans`; the foreign instance enters only through
+`Subsingleton (Fintype _)`, so the kernel never compares instances by
+reduction. `card_NZ`'s statement is unchanged; the import narrowing stays.
+
+**D71.2 PublicPreparation and SemRowsSpend.** The promoted c16 copy
+(`extracted-public-preparation-c16-20261019`, Funs e98bb123…) is the one
+used; manifest-4 overrides the generator's alphabetical pick (the
+bridge-prepared-3335 copy) and lists the override. SemRowsSpend needed
+`open AspisR1PublicPreparation`; `semRows01_spend`, `row_refines`,
+`begin_refines_decSpend` and `begin_agrees_dec` check, with `RSqueezeAnswer`
+a named premise.
+
+**D71.3 State.** All 462 modules (manifest 2's 455 plus the SemRowsSpend
+closure) are current on the narrowed base (manifest-4, CertBuildExtracted at
+d7e06b9f as D69.3 asked). Seven Cert modules are current by dependency
+fingerprint (their inputs are byte-identical after D69), not by a fresh
+compile. PrivacyR1P now peaks at 3.6 GB (6.79 GB in manifest 1). The roots
+`privacy_R1_games′` (5547) and `check_sound″` (5616) check with standard
+axioms. The worker's driver is range-confined (`joint-drive-range.py.txt`);
+two refused records (exit 67) sit in the shared attempts.jsonl.
+
+**D71.4 Axiom finding.** The 462-module audit (3,150 reports) finds one
+non-standard axiom, `core.fmt.Formatter` (an Aeneas opaque type), in
+`AspisV8R19.SamplerWordRead.{unwrap_success, read_success}` (5414). It
+predates this job and no root theorem depends on it. Ruling: those two
+lemmas are not release-root material; any future root that imports them
+fails the axiom audit until the Formatter use is removed from the extraction.
