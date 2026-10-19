@@ -1,0 +1,9 @@
+# Actual raw arithmetic mirrors and coefficient-budget bounds
+
+The cost-annotated mirror of CompPoly's linear Raw.pow computes exactly the same raw polynomial. For X^k its declared naive coefficient-operation budget is at most 12*k*(k+1). The long-division mirror follows the actual Raw.divModByMonicAux.go fuel, branch, intermediate arrays and quotient accumulation, and its value equals that implementation exactly. This packet does not yet prove a polynomial bound for the whole long-division budget.
+
+The selected root-finding call chain uses MulContext.naive and ModContext.naive, whose remainder is Raw.modByMonic backed by quotient/remainder division. It is not the separate remainderOnly context. A public bridge reuses the existing pinned private division-step shrink theorem by constructing its exact kernel constant name in a tiny elaborator tactic; the kernel still checks the resulting proof normally. No new axiom is introduced. The multiplication-size lemma reuses CompPoly's trim, polynomial correspondence and degree theorems to bound actual returned array size.
+
+These are declared coefficient-operation budgets with exact value-refinement theorems, plus actual operand-size facts. A complete operational cost semantics, active-step/whole-division budget bounds, field-bit costs, interpolation cost and whole extractor runtime remain open. The outer root algorithm's binary modular-power loop has a separate previously published logarithmic exponent bound; the linear X-power here is the internal shift operation.
+
+All four smallest changed targets passed under the focused local runner. Retained evidence records exact source/object/import pins, command, revision, exit status, wall time, peak RSS, zero process swaps and standard-only printed axioms. No full regression or source/runtime release claim is made.
