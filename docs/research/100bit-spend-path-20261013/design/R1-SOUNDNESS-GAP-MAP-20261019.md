@@ -260,7 +260,7 @@ wire/hash/sampler layer, not in the protocol logic.
 |---|---|---|---|
 | R-rom: `RomModel W`, `RAddrIn` (D52.2) | The Rust hash is the lazily programmed oracle; every read address is in the modelled address set | P1, R10 | One statement that the Digest32/`sol_sha256` calls, as executed, are queries to a single lazy byte oracle. On the verifier side this is R10's global log embedding. One ROM premise (P1) should serve both theorems; it is charged once in each ledger |
 | R-causal: `RCausal` (D52.2; phase-indexed roots, D48.3) | Row i, and the C2/folded roots, depend only on earlier challenges | R1, R4, R11, R12 | The 33-row schedule, and the causal position of the C1, C2 and folded commitment frames. Soundness proves the verifier side for C2 (R11) and rows 0-24 (R1). C1, the folded root (R12) and rows 25-32 (R4) are open on both sides |
-| QM31SamplerLaw (D47.2, inside D52.2's first bullet) | The extracted sampler is a rank bijection and embedding | R1, R4 | Already shared: both sides use the extracted sampler facts (`ExtractedQM31SamplerCorrect.sample_total`, `SourceSamplerByteRank.rank`; merge 42ab21f55). The carrier transports (`Array U8 32 ↔ Fin 32 → UInt8`, `QM31 ↔ K`) are open on both sides |
+| QM31SamplerLaw (D47.2, inside D52.2's first bullet) | The extracted sampler is a rank bijection and embedding | R1, R4 | Already shared: both sides use the extracted sampler facts (`ExtractedQM31SamplerCorrect.sample_total`, `lean/ExtractedQM31SamplerCorrect.lean:59`; `SourceSamplerByteRank.rank`, `lean/SourceSamplerByteRank.lean:20`; merge 42ab21f55). The carrier transports (`Array U8 32 ↔ Fin 32 → UInt8`, `QM31 ↔ K`) are open on both sides |
 | R-commit: `RCommitBytes` (node, leaf, salt, seed, binding and expander grammars), `hfib`, `RExh`, E bounds (D52.2) | The prover's committed byte strings have the stated grammar | R13, R11, R12 | The leaf and node byte grammar, and the 257-byte parent preimage (`RawMerkleParentBytes.lean:39`, candidate). The verifier must hash exactly the grammar the prover commits to. One byte-level grammar lemma serves the R13 Merkle acceptance and `RCommitBytes`. Seed and expander grammars are privacy-only |
 | R-wire: `eCm`, `ROpen`, `RComLog` (D52.2); framing, decoders, QueryScan and Merkle-path reads (D45.5) | The serialised proof, openings and commitment log match the model | R5, R6, R13, R16 (opening/matching readers), R4 (query row) | The proof wire format and its decoders. R5 (actual `decode_k` equals the strict parser) is already the verifier-side half of the decoder part of R-wire. The opening-section readers and QueryScan are open on both sides |
 | D73.4 item 4: tape law, and formula equality for the inactive-sum and batched cells (R-commit and G-ref) | The prover's inactive-sum and batched cells use the same formulas as the model | S3, S8, S9 | CU candidates 3 (fixed S2 inactive groups), 12 (batched ρ residues) and 14 (factored S2 Libra row) changed exactly these verifier-side formulas. The re-pins S3, S8 and S9 prove the verifier formula equals the reference. The same reference formula is what G-ref compares the prover against |
@@ -279,8 +279,87 @@ Not shared:
 
 ## 5. Critical path
 
-(pending)
+These are the minimal links that must close, in order, for (T). The
+PROVED model rows M1-M9 and the PREMISE rows are inputs, not steps. Steps
+on the same line can run in parallel.
+
+0. **Freeze the verifier source.** Decide whether the R3 source candidates
+   (heap overwrite helper, accumulator zero-initialisation, composition
+   array copy) are adopted. Adoption changes production Rust, re-triggers
+   the stage-1 CU bound (16k margin, LEAD-REVIEW-CU-BOUND-2-20261019) and
+   reopens every re-pin below. Doing the re-pins first and adopting later
+   would repeat them.
+1. **S10, then S1-S9.** Regenerate the whole-cone declaration inventory at
+   the frozen ref with `--require-complete`. Re-pin the ten kept CU
+   candidates, then re-prove R6 and R4's `prepare_success` on the re-pinned
+   `first`/`Prepared::new`.
+2. **R14: extract stage 2.** Extract `tx2_authenticated`, `resume`, the
+   12-query loop and `finish_relation`, the source as changed by candidate
+   12. This is the largest single item. Nothing in the tree covers it today.
+3. **R10, global log embedding.** This needs the tx1 and tx2 call traces
+   from steps 1-2. It turns R1, R2 and R11 into unconditional source facts.
+4. **R4 ∥ R12 ∥ R13 ∥ R17 ∥ R3.** Rows 25-32 sampler; C1 and folded
+   commitment words; Merkle acceptance; fold/domain geometry; finish-model
+   boundaries.
+5. **R15, checkpoint authentication.** Either prove it in Lean over the
+   tx1 `checkpoint` and tx2 `resume` extractions, or have the user accept
+   the G_R1.3 covering argument as a named premise alongside P2.
+6. **R16 (`hchecks`).** Compose 2-5 with R2 and R5 into every field of
+   `LiteralAcceptanceTerminal.Checks` for one concrete `decoder`/`d` read
+   off the deployed code.
+7. **R18 ∥ R19.** The tag lemma, and the universal QV bound by
+   instantiating `VerifierPhaseCost.SourceSimulation` on the stage-1 and
+   stage-2 extractions.
+8. **R6 ∥ R8 ∥ R9 ∥ R20.** The same public statement from the stage-1
+   caller through the Pool to the nested stage 2, for both variants. R20
+   needs a Pool-side extraction or a user-accepted premise.
+9. **C3, the final theorem.** Instantiate M9 with steps 6-8, add M10
+   (extractor cost, which can run in parallel from now on) and name P1-P7.
+10. **C1, then C2.** Pin one SBF artifact to the theorem's scope, then one
+    unified frozen-manifest replay with an axioms audit.
+
+Size: steps 2 and 6 are L. Steps 1, 3, 4 and 8 are M each, or several Ms
+in parallel. The rest are S. Two items sit off this path: R21 (a small
+check folded into step 1) and X1 (outside (T)).
 
 ## 6. What could not be determined
 
-(pending)
+- **Receipts for the older model modules.** No receipt keyed by module name
+  was found for `ConcreteBinding`, `LiteralClassifier`,
+  `LiteralByteProtocol`, `LiteralAcceptanceTerminal`, `SpendRelation` or
+  `PerAttemptEnvelope`. They appear only in source pins, manifests and lead
+  reviews: `evidence/j1-literal-d2-lead-review-20261015.json`,
+  `lean-literal-protocol-20261015/`, `lean-unified-event-density-20261015/`.
+  Their PROVED status rests on those lead acceptances and the
+  R1_SOUNDNESS consolidated review. They enter M9's dependency cone, and
+  M9's own audit is standard-only, which supports them, but a per-module
+  receipt was not seen.
+- **Byte identity of the extracted sources.** The Aeneas sources behind R1,
+  R2, R5, R7 and R11 were not checked against the current production Rust
+  (`db70ae3d...` for `verifier.rs`). PROVED for those rows is relative to
+  the source revisions in their receipts. Staleness was judged only from
+  the candidate inventories' changed-function lists.
+- **Live uncommitted work.** The root checkout (`/Users/dominic/ZK`, live
+  Codex session, not touched here) has staged but uncommitted evidence
+  `evidence/current-merkle-source-execution-20261019/`, with
+  accept/literal/predecessor-step-v2 kits. It probably advances R13. It is
+  not at base `ac486fac6` and is not counted.
+- **Premise acceptance for R1.** P1, P6 and P7 are cited from
+  `docs/assumptions-ledger.md` (dated 2026-08-25, the V5/v7 release). No R1
+  note re-accepts them. Whether the user regards them as carried over is not
+  recorded. P4 is named by the lead, but its last full runtime backing is on
+  the Decision 1h ELF, not on `a70f30bd`/`4421aafd`.
+- **Ownership.** Every commit is authored `DJB8787`. Owners are inferred
+  from commit subjects and branch names only. R14 has no visible owner.
+- **Field-by-field coverage of R16.** The partial proofs were mapped to
+  `Checks` fields at the level of their READMEs (semantic, parser, indexed
+  query helper). There was no line-by-line audit of which fields a proof
+  in `evidence/` or `lean-candidates/` already discharges for the current
+  source.
+- **Value positivity.** `Rspend` allows zero input and output values, while
+  the honest source requires positive ones (J1-RELATION-STATEMENT). This
+  does not affect (T), since (T) asks for `Rspend`. It would matter for a
+  claim of strict positivity.
+- **Base.** The common rules file names base `f458169f7`. This job used
+  `ac486fac6`, as the lead instructed. No commits were made between
+  `ac486fac6` and this branch's work other than this document.
