@@ -1,4 +1,6 @@
 import R1Z.EventsR1P
+import Mathlib.Data.UInt
+import Mathlib.Data.Fintype.Card
 
 /-! Events and freshness, part 2 (DESIGN-R1-REAL §5): positions, addresses,
 charging, adversary reads; the update lemmas for every designated-field lens. -/
