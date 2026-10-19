@@ -292,7 +292,19 @@ fn c3_verdict(p: &Pub, c: &Cert, ln: &Lanes) -> (bool, f64) {
     (v, t.elapsed().as_secs_f64())
 }
 
+/// Builder differential (D57.3): the extracted-copy chain targets against z9c's.
+fn builder_diff(p: &Pub, cert: &Cert, label: &str) {
+    let tb = Instant::now();
+    let al: Vec<u32> = (0..10).flat_map(|j| ql(p.a[j])).collect();
+    let tq = aspis_r1_cert_build::fill_tq(&al, &cert.hinv);
+    let t_build = tb.elapsed().as_secs_f64();
+    let want = flat(&chain_targets(&p.a), RW).expect("chain targets");
+    let diff = tq.iter().zip(&want).filter(|(x, y)| x != y).count();
+    println!("R1C3_BUILD {label} builder=chain_targets agree={} entries={} mismatches={diff} build_seconds={t_build:.3}", tq == want, tq.len());
+}
+
 pub(super) fn run(p: &Pub, cert: &Cert, label: &str, teeth: bool) {
+    builder_diff(p, cert, label);
     let ln = Lanes::new(&p.cx);
     let mut tm = CheckTimes::default();
     let (z9c_ok, why) = check(p, cert, &mut tm);

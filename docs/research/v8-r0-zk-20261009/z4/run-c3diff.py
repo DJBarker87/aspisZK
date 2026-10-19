@@ -11,7 +11,7 @@ def read(n):
     except FileNotFoundError:return None
 caps={n:read(n) for n in ['memory.high','memory.max','memory.swap.max']}
 if caps!={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0'}:raise SystemExit('Requires MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0')
-manifest={str(f.relative_to(root)):hashlib.sha256(f.read_bytes()).hexdigest() for f in [here/'probe.rs',here/'z9.rs',here/'z9b.rs',here/'z9c.rs',here/'z9d.rs',here/'z5.rs',here/'Cargo.toml',here/'Cargo.lock',here/'run-c3diff.py',here.parent/'c3/check/src/lib.rs',here.parent/'c3/check/Cargo.toml']}
+manifest={str(f.relative_to(root)):hashlib.sha256(f.read_bytes()).hexdigest() for f in [here/'probe.rs',here/'z9.rs',here/'z9b.rs',here/'z9c.rs',here/'z9d.rs',here/'z5.rs',here/'Cargo.toml',here/'Cargo.lock',here/'run-c3diff.py',here.parent/'c3/check/src/lib.rs',here.parent/'c3/check/Cargo.toml',here.parent/'c3/build/src/lib.rs',here.parent/'c3/build/Cargo.toml']}
 cargo=shutil.which('cargo') or str(pathlib.Path.home()/'.cargo/bin/cargo');receipts=[]
 def run(cmd,label):
     start=time.monotonic()
