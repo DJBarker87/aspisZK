@@ -1,0 +1,11 @@
+# Total concrete normalization and actual query cost
+
+Six focused Lean 4.32 targets passed; exact target/source/import pins, exit status, wall time, RSS, swap and printed axioms are recorded per module. Existing objects were reused. No full regression was run. Printed axioms are standard only; the generic cost predicate and several of its structural lemmas are axiom-free.
+
+RRConcreteNormalizeChildTotal proves that the actual finite row scanner succeeds for every valid parent and every scalar a, yields a valid executable child, reconstructs its mathematical polynomial model, and preserves exactly the roots under Y -> a+XY. No separate scanner success, root-membership or monic premise is assumed. The runtime None/getD fallback is therefore unreachable on valid parents. RRConcreteRawStateValidity supplies uniform degree preservation for every retained row.
+
+RRConcreteChildrenProgram is the actual general scalar root program followed by row normalization. It preserves aborts, enumerates children from precisely the returned roots, inherits the independent uniform field-answer abort bound, and makes at most degree(p)-1 asks on every branch, including aborts.
+
+ProgramQueryCost counts asks structurally on every answer branch. CompPolyGeneralRootQueryCost relates the root finder's internal cursor to that count, so the scalar budget is an actual query count. RRProgramQueryBound proves that local cost <= mass and sibling mass conservation imply total cost <= depth*initial mass. It also bounds the actual global sequential cursor and actual interpreter trace, including failures. This latter theorem still has local mass/cost premises: their concrete ValidState instantiation is the immediate next bridge, not claimed complete here.
+
+The total normalization proof compiles against a worker checkout revision 700dd4b4 recorded in its receipt and exact imported frozen objects; other checks record their own base revisions. The added source hashes, rather than the worker checkout head alone, identify the checked files. These are Lean algorithm/model results, not a deployed Rust equivalence claim. Initial GS normalization, typed full recovery composition, full interpolation/list extraction and operation/bit costs, finite-bit sampler law, and cryptographic/source/runtime closure remain open.
