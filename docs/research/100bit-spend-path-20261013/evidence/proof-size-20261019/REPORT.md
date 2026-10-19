@@ -91,7 +91,89 @@ in the shipped tree.
 
 ## 2. Prototype and teeth (measurement 5)
 
-(pending)
+Candidate code (feature `compact-binary`, default off, implies
+`private-leaf-salts`), all in `crates/aspis-r1-cost-probe`:
+
+- `src/multiproof.rs`: binary tree (`BINARY_NODE_TAG = 0x12 || left ||
+  right`, a new domain separator; leaves unchanged `0x10 || tag || values ||
+  salt`), multiproof generation and a strict verifier (strictly increasing
+  indices, exact node consumption, root and single-top checks), node counting.
+- `src/compact.rs`: compact codec and the fixed-length stored layout
+  (57,607 bytes; six zero-padded node slots).
+- `src/candidate.rs` (child module of `verifier`, appended after every
+  shipped item): `parse_shape`, strict canonical scan, logical rebuild of the
+  semantic rows and `y1` (zero high halves) before `Prefix::parse` and any
+  hash, batch multiproof checks, the shipped fold/accumulate/relation code,
+  `checkpoint`/`resume` over the compact stored bytes.
+- `src/host_commitment.rs`, `src/prover.rs` (host only): C1/C2 commitments
+  under a binary tree on request, the folded tree (still the padded 2^18
+  leaves with salted padding) binary, and `prove_masked_{fixture,attempt}_candidate`
+  emitting the stored layout. The shipped prover paths are unchanged in
+  behaviour (the extra `binary` flag is false on them).
+
+Fiat-Shamir: every transcript message has its shipped byte definition (the
+semantic records and `y1` are hashed in their rebuilt logical 32-byte form).
+Because the C1, C2 and folded roots are binary-tree roots, the C1-time
+binding, the C2 record, the alpha1 message and hence every challenge after
+them differ from the eight-way proof for the same witness. This is expected.
+
+**Six fixtures re-proved** (`native-s2.json`): the Pool B1 measurement driver
+patched by `harness/patch_driver_candidate.py` (feature `compact-binary`,
+`pool_gate` sha256 915b310d...) re-proves each fixture's witness (`--pairs N`,
+kind, fresh OS entropy, split 10); the generated ASF8 equals the saved
+fixture's public file byte for byte in all six; the candidate stage 1, strict
+stage 2 and authenticated stage 2 accept natively. Stored bytes 57,607 for
+all; the variable-length equivalents (actual node counts) are:
+
+| Fixture (re-proved) | Nodes per slot [C1A,C2A,FA,C1B,C2B,FB] | Nodes | Variable bytes |
+|---|---|---:|---:|
+| transfer-13 | 144,144,126,155,155,133 | 857 | 55,783 |
+| transfer-255 | 132,132,114,169,169,147 | 863 | 55,975 |
+| transfer-1023 | 145,145,127,164,164,142 | 887 | 56,743 |
+| withdrawal-13 | 146,146,128,166,166,144 | 896 | 57,031 |
+| withdrawal-255 | 134,134,116,152,152,130 | 818 | 54,535 |
+| withdrawal-1023 | 134,134,116,167,167,145 | 863 | 55,975 |
+
+(Query sets differ from S1's because the roots, and so the queries, differ.)
+
+**Teeth** (`examples/proof_size_s2.rs`, `teeth.json`, on the deterministic R0
+fixture; the candidate and the shipped control both accept). Each mutation is
+run through stage 1 and, where stage 1 still accepts, a fresh checkpoint and
+stage 2, so batch-B mutations are rejected by stage 2:
+
+| Mutation | Result |
+|---|---|
+| wrong sibling hash, each of the six slots | Merkle |
+| missing node (last real node removed), slots 0, 2, 3, 5 | Merkle |
+| extra node (non-zero word after the real nodes), slots 0, 4 | Parse |
+| any non-zero padding byte | Parse |
+| two openings swapped (misordered leaf indices), batch A and B | Merkle |
+| one opening duplicated over another, batch A and B | Merkle |
+| semantic value stored in 32-byte form with non-zero high half | Parse (length) |
+| y1 value with an injected high half, length kept | rejected (Parse) |
+| non-canonical compact limb (2^31-1), semantic and y1 | Parse |
+| encoder given a logical value with non-zero high half | refuses (NonZeroHigh) |
+| checkpoint whose proof hash is over the expanded bytes | Checkpoint |
+| expanded bytes presented as the proof | Parse |
+| stage 1 split 11; shipped proof to candidate; candidate to shipped | Parse |
+| proof byte changed after stage 1 | Checkpoint |
+
+Index-level teeth for the multiproof verifier (duplicated and misordered
+index lists, missing and extra node, wrong sibling) are unit tests in
+`multiproof.rs`; all 18 crate unit tests pass with the feature on.
+Interpretation of "non-zero byte where a zero half is implied": the stored
+format carries no high half, so the reachable forms are a high half inserted
+into the stored bytes (strict length / canonical rejection) and a logical
+value with a non-zero high half, which has no compact encoding.
+
+## Before S3: where the time goes
+
+S3 adds a `compact-binary` feature to `programs/r1-cost-probe` (adapter
+stage 1/stage 2 and buffer lengths switch to the candidate), one SBF build of
+the candidate verifier and one of the default verifier for the identity
+check (each ~5-10 min compile), the stack audit, and six full replays
+(prove ~6 s + LiteSVM, seconds each). Estimate 2-3 hours, below the 6-hour
+limit.
 
 ## 3. Compute (measurement 2)
 

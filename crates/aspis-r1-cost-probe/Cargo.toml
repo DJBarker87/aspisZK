@@ -29,7 +29,7 @@ r1p-check = ["prover", "private-leaf-salts", "dep:aspis-z4b-probe", "dep:getrand
 r0-op-count = ["aspis-core/r0-op-count"]
 # UNPROVED CANDIDATE (proof-size test, 2026-10-19): binary multiproofs and
 # compact QM31 storage, beside the shipped format. Default off.
-compact-binary = []
+compact-binary = ["private-leaf-salts"]
 
 [dependencies]
 aspis-core = { path = "../aspis-core", features = ["r0"] }
@@ -43,6 +43,10 @@ getrandom = { workspace = true, optional = true }
 [[example]]
 name = "proof_size_s1"
 required-features = ["prover", "private-leaf-salts", "compact-binary"]
+
+[[example]]
+name = "proof_size_s2"
+required-features = ["prover", "compact-binary"]
 
 [[example]]
 name = "semantic_gate"

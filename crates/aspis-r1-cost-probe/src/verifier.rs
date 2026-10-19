@@ -534,3 +534,9 @@ mod batched_weight_tests {
         }
     }
 }
+
+// UNPROVED CANDIDATE (proof-size test, 2026-10-19); default off. Appended
+// after every shipped item so shipped line numbers are unchanged.
+#[cfg(feature="compact-binary")]
+#[path="candidate.rs"]
+pub mod candidate;
