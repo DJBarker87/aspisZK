@@ -37,22 +37,25 @@ were compared in their original order. The candidate ELF hash is
 These observations concern the specified fixtures and gates, not a universal
 cost bound or full source-equivalence theorem.
 
-The primary commands, receipts and runtime JSON remain on the NUC under
-`/home/dombarker/project-offloads/aspis-r1-source-proof-loops-root-20261019/`
-in `runs/`, `runtime/` and the comparison JSON files. This note records the
-observed results; the curated evidence packet has not yet been copied into
-the repository. The new candidate's injection gates and full-random-mask
-measurement remain pending. No candidate source has been merged into
-`research`.
+The primary commands, receipts, ordered traces and runtime JSON are now
+retained in [the curated comparison packet](../evidence/source-loop-cu-comparison-20261019/README.md),
+with an allowlisted copy from both NUC workspaces. Task directories, keys,
+executables and source workspaces were excluded. Candidate injection gates
+and full-random-mask measurement remain pending. No candidate source has
+been merged into `research`.
 
 The inline-only follow-up `de42cba00380dcae8bc3b86590fade37dfb3a88c` adds
 `#[inline(always)]` to `decode_k_value`, without changing its function body.
 Its SBF build passed (5.504s, maximum process RSS 232,956 KiB, swaps zero,
-6 GiB high / 8 GiB maximum / swap disabled). Its artifact and CU comparison
-are still pending. NUC SSH at `100.108.41.90` became unreachable during the
-follow-up; focused proof work continues locally under the shared memory
-guard. The pending experiment must not be described as a recovered CU
-result.
+6 GiB high / 8 GiB maximum / swap disabled). After SSH recovered, its strict
+linked-ELF stack check and six runtime fixtures passed. The executed artifact
+is `320e156d1e4e17ba9f0249cc93558a3aa07402aef7e6a2ac61b35e6e228b778c`.
+Inlining recovered exactly **29,147 CU** on each fixture, leaving a stage-1
+increase of **44,675 CU** versus production and a maximum of **1,244,362 CU**.
+Settlement remains unchanged. This still misses the 1.2M target. The first
+candidate's native gates were not rerun for the inline-only change; the
+packet distinguishes those earlier gates from the new artifact measurements.
+The remaining source changes have not been individually cost-attributed.
 
 The generated semantic field operations and increasing boundary loop are
 proved in `2892f6cfd`; actual batched-value canonical residues and exact QM31
