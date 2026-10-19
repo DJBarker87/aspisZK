@@ -1,0 +1,19 @@
+{
+  "original_source": "/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/evidence/stage2-parse-variant-tag-20261019/sources/AspisR1Stage2AdoptedParseShape/Types.lean",
+  "original_sha256": "ce5c0c74ca483ff1463dee4a39d2be4b7839feeadbd02aba4439bef80e610122",
+  "adapted_sha256": "9d04b8b0f3c316224d80940f1a305693b68446e7a1bc221fb2f599a06140460b",
+  "original_source_unchanged": true,
+  "inverse_recovers_original": true,
+  "only_discriminant_instance_names_qualified": true,
+  "existing_adapter_pattern": "docs/research/100bit-spend-path-20261013/tools/public-preparation-discriminant-bridge.py",
+  "blocks": [
+    [
+      "@[discriminant isize]\ninductive transport.Variant where\n| S1 : transport.Variant\n| S2 : transport.Variant\n| D : transport.Variant",
+      "inductive transport.Variant where\n| S1 : transport.Variant\n| S2 : transport.Variant\n| D : transport.Variant\n\n-- Naming-only expansion reused from tools/public-preparation-discriminant-bridge.py.\ndef transport.Variant.read_discriminant (x : transport.Variant) : Isize :=\n  match x with\n  | .S1 => 0#isize\n  | .S2 => 1#isize\n  | .D => 2#isize\n\ninstance _root_.AspisR1Stage2AdoptedParseShape.transport.Variant.jointDiscriminant :\n    Aeneas.Std.Discriminant transport.Variant Isize where\n  read_discriminant := transport.Variant.read_discriminant"
+    ],
+    [
+      "@[discriminant isize]\ninductive verifier.Error where\n| Parse : verifier.Error\n| Semantic : verifier.Error\n| Transcript : verifier.Error\n| Relation : verifier.Error\n| Merkle : verifier.Error\n| Query : verifier.Error\n| Checkpoint : verifier.Error\n| Allocation : verifier.Error",
+      "inductive verifier.Error where\n| Parse : verifier.Error\n| Semantic : verifier.Error\n| Transcript : verifier.Error\n| Relation : verifier.Error\n| Merkle : verifier.Error\n| Query : verifier.Error\n| Checkpoint : verifier.Error\n| Allocation : verifier.Error\n\n-- Naming-only expansion reused from tools/public-preparation-discriminant-bridge.py.\ndef verifier.Error.read_discriminant (x : verifier.Error) : Isize :=\n  match x with\n  | .Parse => 0#isize\n  | .Semantic => 1#isize\n  | .Transcript => 2#isize\n  | .Relation => 3#isize\n  | .Merkle => 4#isize\n  | .Query => 5#isize\n  | .Checkpoint => 6#isize\n  | .Allocation => 7#isize\n\ninstance _root_.AspisR1Stage2AdoptedParseShape.verifier.Error.jointDiscriminant :\n    Aeneas.Std.Discriminant verifier.Error Isize where\n  read_discriminant := verifier.Error.read_discriminant"
+    ]
+  ]
+}
