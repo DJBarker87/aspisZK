@@ -184,7 +184,67 @@ candidate inventories' changed-function lists.
 
 ## 3. Closest composed theorem
 
-(pending)
+**`AspisR1.RawChecksAdaptiveFailureNoModel.checked_acceptance_failure_bound_no_model`**
+(`lean/RawChecksAdaptiveFailureNoModel.lean:34`, commit b3de2f610).
+Receipt: `evidence/checked-acceptance-no-clean-model-premise-20261019/RawChecksAdaptiveFailureNoModel/receipt.json`.
+It records exit 0, 7.60 s wall and peak RSS 2,994,864,128 B, with 0
+swaps. The log `lean.log` prints `[propext, Classical.choice, Quot.sound]`.
+This is a focused check, not a frozen-manifest replay (C2).
+
+**Conclusion.** `lazyMean (AcceptedAdaptiveFiatShamir.experiment (compiled D
+d (buildWords D) P) (verifier D d)) emptyTable failureMass ≤ kappa Q + N·B +
+2^-126`. In words: under the lazy random oracle, the probability that the
+model verifier accepts and the recorded-run extractor fails is bounded by
+`12Q²/2^256 + N·15/2^109 + 2^-126`. A successful extraction satisfies
+`relation` (M8). This is the (T-model) half of §1, in the
+`Q·max_row + collision` form, with the knowledge extractor built in. It is
+the only theorem found that joins classifier density, the collision charge,
+the Merkle compiler and the extractor, and that has no clean-model premise.
+Its predecessor `RawAdaptiveMembershipBound.membership_bound`
+(`lean/RawAdaptiveMembershipBound.lean:56`) is membership-only and still
+takes `hformat` and `hterminal`.
+
+**Parameters, universally quantified:**
+- `decoder : LiteralByteProtocol.Decoder`, the row decoder;
+- `d : ErasedPrefix → ErasedMessage → Bool`, the verifier's terminal
+  decision, which is a pure Boolean over the erased transcript;
+- `P : Prover`, the adversary program;
+- `Q N : Nat`.
+
+**Hypotheses** (lines of `RawChecksAdaptiveFailureNoModel.lean`):
+1. `hQ` (:38). For every oracle `H`, the distinct first reads of the
+   original experiment, prover and verifier together, are at most `Q`. The
+   adversary half stays symbolic. The verifier half is R19 (QV for all
+   inputs), which is REFINEMENT-OWED.
+2. `htag` (:40). The run's public statement carries transcript tag 2. This
+   is R18, OPEN, though it should be a small lemma about the deployed
+   initializer.
+3. `hchecks` (:42). Model acceptance under `d` implies
+   `LiteralAcceptanceTerminal.Checks` on the compiled run's 33-round
+   transcript. This is R16, OPEN, and it is the core of (T-src). Since `d`
+   is free, `hchecks` is also where `d` must be shown to be the deployed
+   decision.
+4. `hN` (:55). The recognised decoded-start count of the compiled
+   experiment is at most `N`. This is adversary-side accounting. It is a
+   parameter of the statement, not a gap: per attempt `N = 33` gives
+   `33·B < 2^-100` (M4).
+
+**What it does not say.** It is a theorem about the Lean model verifier
+`FS2.verifier (LiteralByteProtocol.protocol decoder) (decisionOnBytes d)`
+(`lean/RawCutProverCompiler.lean:27`), not about the deployed program. It
+does not mention stage 2, the checkpoint, the Pool or the ELF. Nothing
+connects "the stage-1 and settlement transactions accept" to "the model
+verifier accepts", and that connection is not a hypothesis either. To reach
+(T), a further theorem must:
+- simulate the deployed pair of transactions as this model verifier for a
+  specific `decoder`/`d` (R1, R4, R10, R14, R15, R20);
+- discharge `hchecks`, `htag` and the QV half of `hQ` for that
+  instantiation;
+- bound extractor running time (M10);
+- name P1-P7.
+
+Of the hypotheses, only `hN` and the adversary half of `hQ` are acceptable
+as they stand.
 
 ## 4. Links shared with the privacy track
 
