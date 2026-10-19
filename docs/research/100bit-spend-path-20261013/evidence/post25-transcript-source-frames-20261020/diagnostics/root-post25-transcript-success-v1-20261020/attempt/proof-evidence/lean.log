@@ -1,0 +1,71 @@
+/home/dombarker/project-offloads/root-post25-transcript-success-v1-20261020/sources/Post25TranscriptSuccess.lean:26:12: error: Application type mismatch: The argument
+  ?m.5
+has type
+  UScalar UScalarTy.U8
+but is expected to have type
+  Result (UScalar UScalarTy.U8)
+in the application
+  160#u8 + row = ?m.5
+/home/dombarker/project-offloads/root-post25-transcript-success-v1-20261020/sources/Post25TranscriptSuccess.lean:26:27: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  UScalar UScalarTy.U8
+/home/dombarker/project-offloads/root-post25-transcript-success-v1-20261020/sources/Post25TranscriptSuccess.lean:29:50: error: unsolved goals
+H : Type
+D : aspis_core.Digest32 H
+self : transcript.Transcript H
+row tag : U8
+payload : Slice U8
+htag : 160#u8 + row = sorry
+⊢ (do
+      let i ← sorry
+      let a1 ←
+        D.digest self.hash
+            (Array.make 4#usize
+                [self.state.to_slice, (Array.make 2#usize [0#u8, i] ⋯).to_slice,
+                  (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 payload.len)).to_slice, payload]
+                ⋯).to_slice
+      ok { state := a1, hash := self.hash }) =
+    do
+    let absorbed ←
+      D.digest self.hash
+          (Array.make 4#usize
+              [self.state.to_slice, (Array.make 2#usize [0#u8, tag] ⋯).to_slice,
+                (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 payload.len)).to_slice, payload]
+              ⋯).to_slice
+    ok { state := absorbed, hash := self.hash }
+/home/dombarker/project-offloads/root-post25-transcript-success-v1-20261020/sources/Post25TranscriptSuccess.lean:34:12: error: Application type mismatch: The argument
+  ?m.5
+has type
+  UScalar UScalarTy.U8
+but is expected to have type
+  Result (UScalar UScalarTy.U8)
+in the application
+  160#u8 + row = ?m.5
+/home/dombarker/project-offloads/root-post25-transcript-success-v1-20261020/sources/Post25TranscriptSuccess.lean:34:27: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  UScalar UScalarTy.U8
+/home/dombarker/project-offloads/root-post25-transcript-success-v1-20261020/sources/Post25TranscriptSuccess.lean:45:30: error: Application type mismatch: The argument
+  ?m.5
+has type
+  UScalar UScalarTy.U8
+but is expected to have type
+  Result (UScalar UScalarTy.U8)
+in the application
+  160#u8 + row = ?m.5
+/home/dombarker/project-offloads/root-post25-transcript-success-v1-20261020/sources/Post25TranscriptSuccess.lean:45:45: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  UScalar UScalarTy.U8
+'AspisR1Post25Transcript.TranscriptSuccess.absorb_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1Post25Transcript.TranscriptSuccess.block_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1Post25Transcript.TranscriptSuccess.block_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1Post25Transcript.TranscriptSuccess.scalar_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1Post25Transcript.TranscriptSuccess.scalar_k_success' depends on axioms: [propext, Classical.choice, Quot.sound]

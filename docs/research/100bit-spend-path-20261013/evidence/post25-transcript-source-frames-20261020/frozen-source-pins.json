@@ -1,0 +1,27 @@
+{
+  "source_revision": "c8ea8dd49c81ab970b9dbee8d8b47718f9beb005",
+  "source_path": "crates/aspis-r1-cost-probe/src/transcript.rs",
+  "source_file_sha256": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+  "functions": [
+    {
+      "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['transcript', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [{'index': 0, 'name': 'H'}], 'const_generics': [], 'trait_clauses': [{'clause_id': 0, 'span': {'data': {'file_id': 0, 'beg': {'line': 785, 'col': 9}, 'end': {'line': 785, 'col': 17}}, 'generated_from_span': None}, 'origin': 'WhereClauseOnImpl', 'trait_': {'regions': [], 'skip_binder': {'id': 0, 'generics': {'regions': [], 'types': [{'Deduplicated': 344}], 'const_generics': [], 'trait_refs': []}}}}], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'HashConsedValue': [1226, {'Adt': {'id': {'Adt': 0}, 'generics': {'regions': [], 'types': [{'Deduplicated': 345}], 'const_generics': [], 'trait_refs': []}}}]}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['scalar', 0]}]",
+      "source_text": "pub fn scalar(&mut self,row:u8,payload:&[u8],nonzero:bool)->E {\n        let block=self.block(row,payload);\n        let out=if nonzero {crate::sampler::gamma_sample(&block)} else {crate::sampler::ordinary_sample(&block)};\n        crate::trace::value(4,row as usize,out); out\n    }",
+      "sha256": "aca7dda8d17188a2d3c3e76ef7a5e31b51b19956a7fa3e2b58f45faa795996e8"
+    },
+    {
+      "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['transcript', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [{'index': 0, 'name': 'H'}], 'const_generics': [], 'trait_clauses': [{'clause_id': 0, 'span': {'data': {'file_id': 0, 'beg': {'line': 785, 'col': 9}, 'end': {'line': 785, 'col': 17}}, 'generated_from_span': None}, 'origin': 'WhereClauseOnImpl', 'trait_': {'regions': [], 'skip_binder': {'id': 0, 'generics': {'regions': [], 'types': [{'Deduplicated': 344}], 'const_generics': [], 'trait_refs': []}}}}], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 1226}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['scalar_k', 0]}]",
+      "source_text": "pub fn scalar_k(&mut self,row:u8,payload:&[u8])->aspis_core::field::QM31 {\n        let out=crate::sampler::qm31_sample(&self.block(row,payload));\n        crate::trace::value(4,row as usize,E::from_qm31(out)); out\n    }",
+      "sha256": "99bf19c2cd685610500ecd312875a1e6ad8ecd59f6ed02615f57b98aefd8911c"
+    },
+    {
+      "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['transcript', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [{'index': 0, 'name': 'H'}], 'const_generics': [], 'trait_clauses': [{'clause_id': 0, 'span': {'data': {'file_id': 0, 'beg': {'line': 785, 'col': 9}, 'end': {'line': 785, 'col': 17}}, 'generated_from_span': None}, 'origin': 'WhereClauseOnImpl', 'trait_': {'regions': [], 'skip_binder': {'id': 0, 'generics': {'regions': [], 'types': [{'Deduplicated': 344}], 'const_generics': [], 'trait_refs': []}}}}], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 1226}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['block', 0]}]",
+      "source_text": "pub fn block(&mut self,row:u8,payload:&[u8])->[u8;32] {\n        self.absorb(row,payload);\n        let block=self.hash.digest(&[&self.state,&[1]]);\n        self.state=self.hash.digest(&[&self.state,&[2]]);\n        block\n    }",
+      "sha256": "dec0a92d45f575a4c1c74343002d320f3660c20cd3d9038d56c930722931721f"
+    },
+    {
+      "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['transcript', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [{'index': 0, 'name': 'H'}], 'const_generics': [], 'trait_clauses': [{'clause_id': 0, 'span': {'data': {'file_id': 0, 'beg': {'line': 785, 'col': 9}, 'end': {'line': 785, 'col': 17}}, 'generated_from_span': None}, 'origin': 'WhereClauseOnImpl', 'trait_': {'regions': [], 'skip_binder': {'id': 0, 'generics': {'regions': [], 'types': [{'Deduplicated': 344}], 'const_generics': [], 'trait_refs': []}}}}], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 1226}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['absorb', 0]}]",
+      "source_text": "pub fn absorb(&mut self, row:u8, payload:&[u8]) {\n        self.state=self.hash.digest(&[&self.state,&[0,0xa0+row],&(payload.len() as u32).to_le_bytes(),payload]);\n    }",
+      "sha256": "9e983f12148cd10c947e2a5abfe5605ace391e38e05af56d2f65e735726412d5"
+    }
+  ]
+}

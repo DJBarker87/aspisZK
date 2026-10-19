@@ -1,0 +1,50 @@
+[
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['transcript', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [{'index': 0, 'name': 'H'}], 'const_generics': [], 'trait_clauses': [{'clause_id': 0, 'span': {'data': {'file_id': 0, 'beg': {'line': 785, 'col': 9}, 'end': {'line': 785, 'col': 17}}, 'generated_from_span': None}, 'origin': 'WhereClauseOnImpl', 'trait_': {'regions': [], 'skip_binder': {'id': 0, 'generics': {'regions': [], 'types': [{'Deduplicated': 344}], 'const_generics': [], 'trait_refs': []}}}}], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'HashConsedValue': [1226, {'Adt': {'id': {'Adt': 0}, 'generics': {'regions': [], 'types': [{'Deduplicated': 345}], 'const_generics': [], 'trait_refs': []}}}]}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['scalar', 0]}]",
+    "body_kind": [
+      "Structured"
+    ],
+    "source_text": "pub fn scalar(&mut self,row:u8,payload:&[u8],nonzero:bool)->E {\n        let block=self.block(row,payload);\n        let out=if nonzero {crate::sampler::gamma_sample(&block)} else {crate::sampler::ordinary_sample(&block)};\n        crate::trace::value(4,row as usize,out); out\n    }"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['transcript', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [{'index': 0, 'name': 'H'}], 'const_generics': [], 'trait_clauses': [{'clause_id': 0, 'span': {'data': {'file_id': 0, 'beg': {'line': 785, 'col': 9}, 'end': {'line': 785, 'col': 17}}, 'generated_from_span': None}, 'origin': 'WhereClauseOnImpl', 'trait_': {'regions': [], 'skip_binder': {'id': 0, 'generics': {'regions': [], 'types': [{'Deduplicated': 344}], 'const_generics': [], 'trait_refs': []}}}}], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 1226}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['scalar_k', 0]}]",
+    "body_kind": [
+      "Structured"
+    ],
+    "source_text": "pub fn scalar_k(&mut self,row:u8,payload:&[u8])->aspis_core::field::QM31 {\n        let out=crate::sampler::qm31_sample(&self.block(row,payload));\n        crate::trace::value(4,row as usize,E::from_qm31(out)); out\n    }"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['transcript', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [{'index': 0, 'name': 'H'}], 'const_generics': [], 'trait_clauses': [{'clause_id': 0, 'span': {'data': {'file_id': 0, 'beg': {'line': 785, 'col': 9}, 'end': {'line': 785, 'col': 17}}, 'generated_from_span': None}, 'origin': 'WhereClauseOnImpl', 'trait_': {'regions': [], 'skip_binder': {'id': 0, 'generics': {'regions': [], 'types': [{'Deduplicated': 344}], 'const_generics': [], 'trait_refs': []}}}}], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 1226}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['block', 0]}]",
+    "body_kind": [
+      "Structured"
+    ],
+    "source_text": "pub fn block(&mut self,row:u8,payload:&[u8])->[u8;32] {\n        self.absorb(row,payload);\n        let block=self.hash.digest(&[&self.state,&[1]]);\n        self.state=self.hash.digest(&[&self.state,&[2]]);\n        block\n    }"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['sampler', 0]}, {'Ident': ['gamma_sample', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": "pub fn gamma_sample(_:&[u8;32])->WideExact {unreachable!()}"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['sampler', 0]}, {'Ident': ['ordinary_sample', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": "pub fn ordinary_sample(_:&[u8;32])->WideExact {unreachable!()}"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['sampler', 0]}, {'Ident': ['qm31_sample', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": "pub fn qm31_sample(block: &[u8; 32]) -> QM31 {\n    let digits = qm31_digits(block);\n    QM31 {\n        c0: CM31::new(M31(digits[0]), M31(digits[1])),\n        c1: CM31::new(M31(digits[2]), M31(digits[3])),\n    }\n}"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['aspis_core', 0]}, {'Ident': ['field', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [], 'const_generics': [], 'trait_clauses': [], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 436}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['from_qm31', 0]}]",
+    "body_kind": "Opaque",
+    "source_text": "pub fn from_qm31(_:QM31)->Self {unreachable!()}"
+  },
+  {
+    "name": "[{'Ident': ['aspis_r1_stage2_adopted_caller', 0]}, {'Ident': ['transcript', 0]}, {'Impl': {'Ty': {'params': {'regions': [], 'types': [{'index': 0, 'name': 'H'}], 'const_generics': [], 'trait_clauses': [{'clause_id': 0, 'span': {'data': {'file_id': 0, 'beg': {'line': 785, 'col': 9}, 'end': {'line': 785, 'col': 17}}, 'generated_from_span': None}, 'origin': 'WhereClauseOnImpl', 'trait_': {'regions': [], 'skip_binder': {'id': 0, 'generics': {'regions': [], 'types': [{'Deduplicated': 344}], 'const_generics': [], 'trait_refs': []}}}}], 'regions_outlive': [], 'types_outlive': [], 'trait_type_constraints': []}, 'skip_binder': {'Deduplicated': 1226}, 'kind': 'InherentImplBlock'}}}, {'Ident': ['absorb', 0]}]",
+    "body_kind": [
+      "Structured"
+    ],
+    "source_text": "pub fn absorb(&mut self, row:u8, payload:&[u8]) {\n        self.state=self.hash.digest(&[&self.state,&[0,0xa0+row],&(payload.len() as u32).to_le_bytes(),payload]);\n    }"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "source_revision": "c8ea8dd49",
+  "retained_extraction_kit": "docs/research/100bit-spend-path-20261013/evidence/qm31-index-sampler-extraction-20261016/input/lib.rs",
+  "functions": [
+    {
+      "name": "qm31_div_pass",
+      "source": "fn qm31_div_pass(mut rank: [u32; 8]) -> ([u32; 8], u32) {\n    let mut remainder = 0u64;\n    let mut j = 8usize;\n    while j > 0 {\n        j -= 1;\n        let dividend = (remainder << 32) | u64::from(rank[j]);\n        rank[j] = (dividend / u64::from(P)) as u32;\n        remainder = dividend % u64::from(P);\n    }\n    (rank, remainder as u32)\n}",
+      "sha256": "6a456b5023e9bd0203adf36741a7abec7db9d6a080a9b5e47744cc29fab509e7"
+    },
+    {
+      "name": "qm31_digits",
+      "source": "fn qm31_digits(block: &[u8; 32]) -> [u32; 4] {\n    let mut rank = [0u32; 8];\n    let mut i = 0usize;\n    while i < 8 {\n        let start = 4 * i;\n        rank[i] = u32::from_le_bytes([\n            block[start],\n            block[start + 1],\n            block[start + 2],\n            block[start + 3],\n        ]);\n        i += 1;\n    }\n    let mut digits = [0u32; 4];\n    let mut i = 0usize;\n    while i < 4 {\n        let (quotient, digit) = qm31_div_pass(rank);\n        rank = quotient;\n        digits[i] = digit;\n        i += 1;\n    }\n    digits\n}",
+      "sha256": "cf859108cd32807a4ca39734bcb708036fbba0c10ee9711158d5279d8b6fd175"
+    },
+    {
+      "name": "qm31_sample",
+      "source": "fn qm31_sample(block: &[u8; 32]) -> QM31 {\n    let digits = qm31_digits(block);\n    QM31 {\n        c0: CM31::new(M31(digits[0]), M31(digits[1])),\n        c1: CM31::new(M31(digits[2]), M31(digits[3])),\n    }\n}",
+      "sha256": "20fe53b78a0ca274314ee498a8733aa124911d3dad8cf8f14fc1039eb503017e"
+    }
+  ]
+}
