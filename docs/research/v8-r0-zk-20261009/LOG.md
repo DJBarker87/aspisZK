@@ -6559,3 +6559,46 @@ CertBuildIdent2/CertLiftIdent. Attempt range: the wrapper worker used J
 level in one build. Its premises are named, not proved: hRound/hGRound/hGBat
 (in progress), the decoder facts (hup, hnq, hz, hrw) and the builder input
 identifications (chain, BCondG, lift, own, relation) listed in the theorem.
+
+### Lead acceptance of the writer migration (2026-10-19); D70: the shipped prover's writers are the extracted copies
+
+Worker commits b321d7a60 and 3c4282257 (branch
+codex/r1p-writer-migration-20261019) are cherry-picked as 97e16309c and
+36ddca98e. This carries out D68.2.
+
+**D70.1 What changed.** The trace is built by
+`compile_pool_v1_pair_forest_{private_transfer,withdrawal}_merged_c1_v1`
+(aspis-statement `pool_v1/pair_forest_trace.rs`), which the prover, the
+wallet adapter and the pool gate all call; `prover.rs` is untouched. Every
+cell of both banks and the merged C1 is now written by the three copy crates
+(`refine/{writers,blockwriters,poseidon}`), and the bank merge uses the
+extracted `merge_check`/`merge_copy`. The glue (`pair_forest_copy_builder.rs`)
+is the harness glue verbatim, enforced by `refine/migration/check-glue-text.py.txt`
+(copy SHAs plus verbatim text; two deliberate edits made it fail). The copies
+are host-only dependencies (`cfg(not(target_os = "solana"))`); no program or
+verifier source changed. The pre-migration compiler is kept as
+`pair_forest_trace::reference` behind the audit-only feature
+`pool-v1-pair-forest-writer-reference`.
+
+**D70.2 Gates** (`refine/evidence/writer-migration-20261019.json`, host,
+`--release -j 4`, MemoryMax 8G, no swap): codec 1,233 stdout byte-identical
+(3ef16b12…); ordered trace 583 calls identical; checkpoint23 23 passed,
+stdout byte-identical; saved fixtures pass (glue, 6 forest tests, four
+deterministic masked proofs byte-identical between f458169f7 and b321d7a60);
+512-witness glue differential passes with D61's mutation counts. Because the
+glue harness now partly compares the copies with themselves, the worker added
+`tests/pair_forest_writer_migration.rs`: new compiler vs retained reference on
+both fixtures, 512 random witnesses and 2,046 mutations (31 kinds, 18
+outcomes), passed.
+
+**D70.3 Pins.** The copy source files are unchanged (writers 20b9aed5…,
+blockwriters f5ca7ae8…, poseidon 2591c007…), so no extracted declaration needs
+re-pinning; `builder_witness_merged` is now about the shipped prover's
+writers. Only the copies' Cargo.toml lost `[workspace]` (they are root
+members now); the extraction scripts restore it in their scratch copy.
+
+**D70.4 Open.** The Rust glue still matches Lean `copyCellMerged` by
+generated table, verbatim text and differential test (D61 standing). T4
+(Wspend⁺ → RustWitness map) is untouched. Root and five tool lockfiles
+gained three path packages; no SBF source changed, but an SBF
+reproducible-build check is due before the next artifact pin.
