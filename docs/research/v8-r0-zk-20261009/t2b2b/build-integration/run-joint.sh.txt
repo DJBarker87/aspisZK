@@ -1,0 +1,46 @@
+#!/bin/sh
+# run-joint.sh <attempt> <Module> <env-id> [M-limit-MB] [MemoryMax G]
+# run2-par.sh with the objects dir and LEAN_PATH taken from a named joint environment instead of
+# objects2/environment-base.json.  Same reservation check, same slot locks (in-window) or global
+# lock (outside), same systemd scope caps (MemoryHigh MX-2 G, MemoryMax MX G, MemorySwapMax 0,
+# TasksMax 128), same timeout, same run2.py.  Evidence goes to $T/evidence/{sha,out,time}-<A>.
+# Environments (H/env/<id>.json, H/objects-<id>):
+#   A  privacy base: H/objects-A : objects2 : environment-base LEAN_PATH
+#   C  spend sampler overlay: H/objects-C : correct-c import-overlay : correct-c search path
+# Refuses a (source sha, env-id) pair that was already sent.
+set -u
+T=/home/dombarker/project-offloads/aspis-fs-generic-20261006
+H=/home/dombarker/project-offloads/r1-privacy-build-integration-20261019
+A=$1; M=$2; E=$3; ML=${4:-7000}; MX=${5:-7}; NSLOTS=4
+case "$A" in 45[2-9][0-9]) ;; *) echo "attempt $A outside 4520-4599"; exit 64;; esac
+[ -e "$T/evidence/out-$A.log" ] && { echo "attempt $A already used"; exit 65; }
+SRC="$H/sources/$M.lean"; OBJ="$H/objects-$E"; ENVJ="$H/env/$E.json"
+[ -f "$SRC" ] && [ -f "$ENVJ" ] && [ -d "$OBJ" ] || { echo "missing source/env/objects"; exit 66; }
+S=$(sha256sum "$SRC" | cut -d' ' -f1)
+if grep -q "^$S $E " "$H/evidence/sent.txt" 2>/dev/null; then echo "REFUSED: $M sha $S already sent in env $E"; exit 67; fi
+hm=$(TZ=Europe/London date +%H%M)
+inwin=0; if [ "$hm" -ge 2230 ] || [ "$hm" -lt 0600 ]; then inwin=1; fi
+tot=0; for d in /sys/fs/cgroup/*.slice /sys/fs/cgroup/*/*.slice /sys/fs/cgroup/*/*/*.scope /sys/fs/cgroup/*/*.scope; do [ -f $d/memory.max ] || continue; v=$(cat $d/memory.max); [ "$v" = max ] && continue; p=$(cat $d/cgroup.procs 2>/dev/null | wc -l); [ "$p" -gt 0 ] && tot=$((tot+v)); done
+if [ $((tot/1073741824 + MX)) -gt 55 ]; then echo "RESERVATION HOLD: populated $((tot/1073741824)) GiB + $MX GiB > 55"; exit 78; fi
+echo "reservation: populated $((tot/1073741824)) GiB + $MX GiB; window=$inwin (London $hm); env=$E"
+mkdir -p "$OBJ/$(dirname $M)"
+sha256sum "$SRC" > "$T/evidence/sha-$A.txt"
+echo "$S $E $A $M" >> "$H/evidence/sent.txt"
+run() {
+  systemd-run --user --scope --quiet -p MemoryHigh=$((MX-2))G -p MemoryMax=${MX}G -p MemorySwapMax=0 -p TasksMax=128 \
+    /usr/bin/time -v -o "$T/evidence/time-$A.log" timeout 900 python3 "$T/evidence/run2.py" "$ENVJ" "$OBJ" "$H/sources" "$OBJ/$M.olean" "$SRC" "$ML" > "$T/evidence/out-$A.log" 2>&1
+  echo "exit=$?" >> "$T/evidence/out-$A.log"
+}
+if [ $inwin = 1 ]; then
+  LOCK=""; while [ -z "$LOCK" ]; do
+    for s in $(seq 1 $NSLOTS); do f=/tmp/aspis-r0-lean-slot-$s.lock
+      exec 9>"$f"; if flock -n 9; then LOCK=$f; break; fi; done
+    [ -z "$LOCK" ] && sleep 20
+  done
+  echo "slot: $LOCK"; run
+else
+  exec 9>/tmp/aspis-r0-lean.lock; flock 9; LOCK=global; run
+fi
+echo "window=$inwin slot=$LOCK env=$E launcher=run-joint.sh" >> "$T/evidence/out-$A.log"
+tail -n 60 "$T/evidence/out-$A.log"
+grep -E "Elapsed|Maximum resident|Swaps|Exit status" "$T/evidence/time-$A.log"

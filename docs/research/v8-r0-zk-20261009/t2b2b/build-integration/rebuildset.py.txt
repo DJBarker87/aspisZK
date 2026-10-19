@@ -1,0 +1,24 @@
+# rebuildset.py <joint.json> <spend-dir-prefix,...> <seed-rebuilt,...>
+# Modules of the joint closure that must be recompiled in the joint objects dir: the seeds, and
+# every module NOT resolved from a spend-side directory that transitively imports a module that
+# is resolved from a spend-side directory or is itself rebuilt.  Prints the set in a topological
+# order (dependencies first) with a count, and the spend-side leaves it rests on.
+import sys, json
+joint = json.load(open(sys.argv[1])); spend = tuple(sys.argv[2].split(',')); seeds = set(sys.argv[3].split(',')) if len(sys.argv) > 3 and sys.argv[3] else set()
+def is_spend(m): return (joint[m]['olean'] or '').startswith(spend)
+memo = {}
+def tainted(m):
+    if m in memo: return memo[m]
+    memo[m] = False
+    r = m in seeds or any(x in joint and (is_spend(x) or tainted(x)) for x in joint[m].get('imports', []))
+    memo[m] = r and not is_spend(m)
+    return memo[m]
+order, seen = [], set()
+def visit(m):
+    if m in seen or m not in joint: return
+    seen.add(m)
+    for x in joint[m].get('imports', []): visit(x)
+    if tainted(m): order.append(m)
+for m in sorted(joint): visit(m)
+print(json.dumps({'count': len(order), 'order': order,
+                  'spend_modules': sorted(m for m in joint if is_spend(m))}, indent=1))

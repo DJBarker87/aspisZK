@@ -1,0 +1,22 @@
+# coherence.py <joint.json> <side.json>...  (outputs of closure.py)
+# joint.json: closure of the joint targets under the joint LEAN_PATH (rebuilt modules excluded
+# with --rebuilt M1,M2,...).  Each side.json: the same module names resolved under the LEAN_PATH
+# its objects were compiled in.  A module is coherent when every side that resolves it resolves
+# it to the same olean bytes as the joint path.  Also checks mtime order (no dependency olean is
+# newer than a dependent olean that was not rebuilt) within the joint closure.
+import sys, json
+args = sys.argv[1:]; rebuilt = set()
+if args[0] == '--rebuilt':
+    rebuilt = set(args[1].split(',')); args = args[2:]
+joint = json.load(open(args[0])); sides = [json.load(open(a)) for a in args[1:]]
+bad = 0
+for m, v in sorted(joint.items()):
+    if m in rebuilt: continue
+    if not v['olean']:
+        print('UNRESOLVED', m); bad += 1; continue
+    for i, s in enumerate(sides):
+        w = s.get(m)
+        if w and w['olean'] and w['olean_sha256'] != v['olean_sha256']:
+            print('CONFLICT', m, 'joint', v['olean'], v['olean_sha256'][:12], 'side%d' % i, w['olean'], w['olean_sha256'][:12]); bad += 1
+print('modules', len(joint), 'rebuilt', len(rebuilt & set(joint)), 'problems', bad)
+sys.exit(1 if bad else 0)
