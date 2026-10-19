@@ -91,7 +91,9 @@ fn run_cases(
             "writable" | "proof-writable" | "public-writable" => metas[target_index].is_writable = true,
             "executable" | "proof-executable" | "public-executable" => {
                 expected_before[protected_index].executable = true;
-                checked(svm.set_account(target, expected_before[protected_index].clone()))?;
+                // Test-only injected metadata; bypass program-loader insertion checks.
+                // Invoked verifier cache is unchanged. This is not reachable-state evidence.
+                svm.set_account_no_checks(target, expected_before[protected_index].clone().into());
             }
             "control" => {}
             _ => unreachable!(),
