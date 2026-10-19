@@ -1,0 +1,7 @@
+# Generated-block comparison plan (pending `fromfn-copy-indexed` output)
+
+Baseline G inputs: generated `Funs.lean` SHA-256 `8a612e11ee96c7a5a909c40bc09ef1f99e4e515b2b129f64059b5c033aa426fb`; `FunsExternal_Template.lean` SHA-256 `f8b3e681c06b38edb2ef0ce3988d12854b3f2216ac3616666c10e8e1e2adf63f`. Candidate output is pending.
+
+Build declaration inventories keyed by original source item path/name, source span and type signature, not generated numeric IDs. Canonicalize only the separately reviewed `field::M31` constructor rename and harmless namespace/order metadata. First compare all candidate callbacks/helper blocks for the 18 `from_fn` substitutions and the two indexed reverse folds; these are the only expected behavioral-body differences. Then compare every other shared declaration's signature and typed-body hash. List every substantive difference; do not infer identity from matching names. In particular, check that the callback/reducer and field-operation declarations not changed by the source overlay retain bodies that can reuse G proofs.
+
+Compare external-template declarations and the conservative reachable declaration graph. `core.array.from_fn` and owning-array iterator templates should be reported as removed only if no generated reachable body, callback instance or trait dispatch references them. If name resolution or dynamic trait references are ambiguous, report the compatible unresolved set rather than under-approximating reachability. A successful Aeneas process is not a source theorem or a proof of production equivalence.

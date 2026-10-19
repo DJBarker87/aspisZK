@@ -1,0 +1,164 @@
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -14,6 +14,22 @@
+ #![no_std]
+ 
+ extern crate alloc;
++
++/// Extraction-only safe fixed-array constructor for Copy outputs.
++/// Calls f in increasing index order and threads the FnMut state normally.
++#[inline(always)]
++pub(crate) fn array_from_fn_copy<T: Copy, const N: usize>(
++    init: T,
++    mut f: impl FnMut(usize) -> T,
++) -> [T; N] {
++    let mut out = [init; N];
++    let mut i = 0usize;
++    while i < N {
++        out[i] = f(i);
++        i += 1;
++    }
++    out
++}
+ 
+ // Extraction-only namespace alias: statement source resolves the exact local field module.
+ extern crate self as aspis_core;
+--- a/src/statement/state_only_poseidon.rs
++++ b/src/statement/state_only_poseidon.rs
+@@ -141,7 +141,7 @@
+ 
+ #[inline(always)]
+ fn external_linear_lazy_row(input: [[u32; 4]; 4], output: usize) -> QM31 {
+-            let raw = core::array::from_fn(|limb| {
++            let raw = crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+                 let a = u64::from(input[0][limb]);
+                 let b = u64::from(input[1][limb]);
+                 let c = u64::from(input[2][limb]);
+@@ -176,8 +176,8 @@
+         state[start + 3] = external_linear_lazy_row(input, 3);
+         group += 1;
+     }
+-    let sums: [[u64; 4]; 4] = core::array::from_fn(|column| {
+-        core::array::from_fn(|limb| {
++    let sums: [[u64; 4]; 4] = crate::array_from_fn_copy::<_, 4>([0u64; 4], |column| {
++        crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+             u64::from(extension_limbs(state[column])[limb])
+                 + u64::from(extension_limbs(state[4 + column])[limb])
+                 + u64::from(extension_limbs(state[8 + column])[limb])
+@@ -187,7 +187,7 @@
+     let mut index = 0usize;
+     while index < POSEIDON2_WIDTH {
+         let limbs = extension_limbs(state[index]);
+-        state[index] = extension_from_raw_limbs(core::array::from_fn(|limb| {
++        state[index] = extension_from_raw_limbs(crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+             u64::from(limbs[limb]) + sums[index & 3][limb]
+         }));
+         index += 1;
+@@ -220,8 +220,8 @@
+ #[inline(always)]
+ fn external_local_packed_raw(input: [QM31; 4]) -> [u64; 4] {
+     let input = input.map(extension_limbs);
+-    let local: [[u64; 4]; 4] = core::array::from_fn(|output| {
+-        core::array::from_fn(|limb| {
++    let local: [[u64; 4]; 4] = crate::array_from_fn_copy::<_, 4>([0u64; 4], |output| {
++        crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+             let a = u64::from(input[0][limb]);
+             let b = u64::from(input[1][limb]);
+             let c = u64::from(input[2][limb]);
+@@ -320,13 +320,13 @@
+         lane += 1;
+     }
+     let full_sum: [u64; 4] =
+-        core::array::from_fn(|limb| part_sum[limb] + u64::from(old_zero[limb]));
+-    state[0] = extension_from_raw_limbs(core::array::from_fn(|limb| {
++        crate::array_from_fn_copy::<_, 4>(0u64, |limb| part_sum[limb] + u64::from(old_zero[limb]));
++    state[0] = extension_from_raw_limbs(crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+         part_sum[limb] + u64::from(P) - u64::from(old_zero[limb])
+     }));
+     for lane in 1..POSEIDON2_WIDTH {
+         let limbs = extension_limbs(state[lane]);
+-        state[lane] = extension_from_raw_limbs(core::array::from_fn(|limb| {
++        state[lane] = extension_from_raw_limbs(crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+             full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[lane - 1])
+         }));
+     }
+@@ -601,7 +601,7 @@
+     let prepared_weights = [leading_low, full_low, internal_low].map(PreparedQm31Multiplier::new);
+     let prepared_block = PreparedQm31Multiplier::new(selectors.block);
+ 
+-    core::array::from_fn(|group| {
++    crate::array_from_fn_copy::<_, 4>(QM31::ZERO, |group| {
+         let start = 4 * group;
+         let target = qm31_pack_base4(&openings.succ_z[start..start + 4]);
+         let internal = qm31_pack_base4(&internal[start..start + 4]);
+--- a/src/statement/pool_v1/pair_forest_semantic_terminal.rs
++++ b/src/statement/pool_v1/pair_forest_semantic_terminal.rs
+@@ -111,7 +111,7 @@
+     let first = start / 4;
+     let last = (start + N - 1) / 4;
+     for group in first..=last {
+-        let lanes: [QM31; 4] = core::array::from_fn(|slot| {
++        let lanes: [QM31; 4] = crate::array_from_fn_copy::<_, 4>(QM31::ZERO, |slot| {
+             let source = 4 * group + slot;
+             if source >= start && source < start + N {
+                 values[source - start]
+@@ -260,7 +260,7 @@
+     let full = PreparedQm31Multiplier::new(full_initial_selector);
+     let full_or_rate =
+         PreparedQm31Multiplier::new(full_initial_selector.add(rate_initial_selector));
+-    let mut initial = core::array::from_fn(|lane| {
++    let mut initial = crate::array_from_fn_copy::<_, 16>(QM31::ZERO, |lane| {
+         if lane < RATE {
+             full_or_rate.mul(openings.z[lane])
+         } else {
+@@ -321,7 +321,7 @@
+     nodes: QM31,
+     openings: &[QM31; 16],
+ ) -> [QM31; 16] {
+-    core::array::from_fn(|lane| {
++    crate::array_from_fn_copy::<_, 16>(QM31::ZERO, |lane| {
+         let blocks = if lane < 2 {
+             fixed
+         } else if lane < RATE {
+@@ -1239,11 +1239,11 @@
+     }
+     validate_transition(public)?;
+     let openings = StateOnlyPoseidonOpenings {
+-        z: core::array::from_fn(|column| selected_claim(claims, 0, column)),
+-        succ_z: core::array::from_fn(|column| selected_claim(claims, 1, column)),
+-        xor12_z: core::array::from_fn(|column| selected_claim(claims, 2, column)),
++        z: crate::array_from_fn_copy::<_, 16>(QM31::ZERO, |column| selected_claim(claims, 0, column)),
++        succ_z: crate::array_from_fn_copy::<_, 16>(QM31::ZERO, |column| selected_claim(claims, 1, column)),
++        xor12_z: crate::array_from_fn_copy::<_, 16>(QM31::ZERO, |column| selected_claim(claims, 2, column)),
+     };
+-    let mask_only = core::array::from_fn(|column| {
++    let mask_only = crate::array_from_fn_copy::<_, 10>(QM31::ZERO, |column| {
+         selected_claim(
+             claims,
+             0,
+@@ -1266,11 +1266,11 @@
+     );
+     let prepared_theta = PreparedQm31Multiplier::new(theta);
+     let mut composition = copy.residual;
+-    for lane in semantic.into_iter().rev() {
+-        composition = prepared_theta.mul(composition).add(lane);
+-    }
+-    for lane in poseidon.into_iter().rev() {
+-        composition = prepared_theta.mul(composition).add(lane);
++    for index in (0..semantic.len()).rev() {
++        composition = prepared_theta.mul(composition).add(semantic[index]);
++    }
++    for index in (0..poseidon.len()).rev() {
++        composition = prepared_theta.mul(composition).add(poseidon[index]);
+     }
+     Ok((
+         composition,
+@@ -2068,7 +2068,7 @@
+             alpha: &[QM31; 10],
+             c: &Challenges,
+         ) -> Result<QM31, Error> {
+-            let selected = core::array::from_fn(|i| claims[i / 28][i % 28]);
++            let selected = crate::array_from_fn_copy::<_, 84>(QM31::ZERO, |i| claims[i / 28][i % 28]);
+             terminal_parts(
+                 self.semantic(),
+                 &selected,

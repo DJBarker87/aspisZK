@@ -1,0 +1,33 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRecordSplit.lean:24:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  RawRoundCompletion.recs s b m next (n + k)
+in the target expression
+  RawRoundCompletion.recs s b m next (n + (k + 1)) =
+    RawRoundCompletion.recs s b m next n ++
+      (RawRoundCompletion.recs (fun j => s (n + j)) (fun j => b (n + j)) (fun j => m (n + j)) (fun j => next (n + j))
+          k ++
+        [(s (n + k), b (n + k), m (n + k), next (n + k))])
+
+case succ
+M : Type
+s b : ℕ → State
+m : ℕ → M
+next : ℕ → State
+n k : ℕ
+ih :
+  RawRoundCompletion.recs s b m next (n + k) =
+    RawRoundCompletion.recs s b m next n ++
+      RawRoundCompletion.recs (fun j => s (n + j)) (fun j => b (n + j)) (fun j => m (n + j)) (fun j => next (n + j)) k
+⊢ RawRoundCompletion.recs s b m next (n + (k + 1)) =
+    RawRoundCompletion.recs s b m next n ++
+      (RawRoundCompletion.recs (fun j => s (n + j)) (fun j => b (n + j)) (fun j => m (n + j)) (fun j => next (n + j))
+          k ++
+        [(s (n + k), b (n + k), m (n + k), next (n + k))])
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1RawRecordSplit.lean:49:6: error: Type mismatch
+  h n (Decidable.byContradiction fun a => recs_congr._proof_2 n a)
+has type
+  s n = s' n ∧ b n = b' n ∧ m n = m' n ∧ next n = next' n
+but is expected to have type
+  [(s n, b n, m n, next n)] = [(s' n, b' n, m' n, next' n)]
+'AspisR1.RawRecordSplit.recs_split' depends on axioms: [propext, sorryAx]
+'AspisR1.RawRecordSplit.recs_congr' depends on axioms: [sorryAx]
+exit=1

@@ -1,0 +1,19 @@
+[package]
+name = "aspis-z4b-probe"
+version = "0.1.0"
+edition = "2021"
+[workspace]
+[features]
+private-leaf-salts = ["aspis-r1-cost-probe/private-leaf-salts"]
+[dependencies]
+aspis-core = { path = "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/p3-native-gates/source/crates/aspis-core", features = ["r0"] }
+aspis-statement = { path = "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/p3-native-gates/source/crates/aspis-statement", features = ["r0"] }
+aspis-prover = { path = "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/p3-native-gates/source/crates/aspis-prover", features = ["r0"] }
+aspis-r1-cost-probe = { path = "/home/dombarker/project-offloads/aspis-100bit-path-20261013/results/100bit-path-20261013/p3-native-gates/source/crates/aspis-r1-cost-probe", features = ["optimized-terminal"] }
+sha2 = "0.10"
+[[bin]]
+name = "probe"
+path = "probe.rs"
+[profile.release]
+opt-level = 3
+overflow-checks = true

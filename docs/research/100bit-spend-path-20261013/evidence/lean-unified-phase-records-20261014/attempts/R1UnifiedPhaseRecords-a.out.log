@@ -1,0 +1,63 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedPhaseRecords.lean:61:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ b ≤ 3
+  a ≥ 5
+where
+ a := ↑p.D
+ b := ↑j
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedPhaseRecords.lean:92:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  RawRoundCompletion.recs (UnifiedRecords.previous p hD H pub c1 payload)
+      (UnifiedRecords.absorbed p hD H pub c1 payload) payload (fun j => UnifiedRun.state p hD H pub c1 payload (j + 1))
+      27 ++
+    RawRoundCompletion.recs (fun j => UnifiedRecords.previous p hD H pub c1 payload (27 + j))
+      (fun j => UnifiedRecords.absorbed p hD H pub c1 payload (27 + j)) (fun j => payload (27 + j))
+      (fun j => UnifiedRun.state p hD H pub c1 payload (27 + j + 1)) 4
+in the target expression
+  RawRoundCompletion.recs (UnifiedRecords.previous p hD H pub c1 payload)
+        (UnifiedRecords.absorbed p hD H pub c1 payload) payload
+        (fun j => UnifiedRun.state p hD H pub c1 payload (j + 1)) (26 + 1) ++
+      RawRoundCompletion.recs (fun j => UnifiedRecords.previous p hD H pub c1 payload (27 + j))
+        (fun j => UnifiedRecords.absorbed p hD H pub c1 payload (27 + j)) (fun j => payload (27 + j))
+        (fun j => UnifiedRun.state p hD H pub c1 payload (28 + j)) 4 =
+    RawRoundCompletion.recs (UnifiedRecords.previous p hD H pub c1 payload)
+      (UnifiedRecords.absorbed p hD H pub c1 payload) payload (fun j => UnifiedRun.state p hD H pub c1 payload (j + 1))
+      31
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+H : Addr L → State
+pub : UnifiedSampler.Public L
+c1 : State
+payload : ℕ → M
+hsemantic :
+  RawRoundCompletion.recs (UnifiedPhases.semanticState p hD H pub c1 payload)
+      (UnifiedRecords.absorbed p hD H pub c1 payload) payload
+      (fun j => UnifiedPhases.semanticState p hD H pub c1 payload (j + 1)) 26 =
+    RawRoundCompletion.recs (UnifiedRecords.previous p hD H pub c1 payload)
+      (UnifiedRecords.absorbed p hD H pub c1 payload) payload (fun j => UnifiedRun.state p hD H pub c1 payload (j + 1))
+      26
+hopening :
+  RawRoundCompletion.recs (UnifiedPhases.openingState p hD H pub c1 payload)
+      (fun j => UnifiedRecords.absorbed p hD H pub c1 payload (27 + j)) (fun j => payload (27 + j))
+      (fun j => UnifiedPhases.openingState p hD H pub c1 payload (j + 1)) 4 =
+    RawRoundCompletion.recs (fun j => UnifiedRecords.previous p hD H pub c1 payload (27 + j))
+      (fun j => UnifiedRecords.absorbed p hD H pub c1 payload (27 + j)) (fun j => payload (27 + j))
+      (fun j => UnifiedRun.state p hD H pub c1 payload (28 + j)) 4
+hboundary :
+  (UnifiedPhases.semanticState p hD H pub c1 payload 26, UnifiedRecords.absorbed p hD H pub c1 payload 26, payload 26,
+      UnifiedPhases.openingState p hD H pub c1 payload 0) =
+    (UnifiedRecords.previous p hD H pub c1 payload 26, UnifiedRecords.absorbed p hD H pub c1 payload 26, payload 26,
+      UnifiedRun.state p hD H pub c1 payload 27)
+⊢ RawRoundCompletion.recs (UnifiedRecords.previous p hD H pub c1 payload)
+        (UnifiedRecords.absorbed p hD H pub c1 payload) payload
+        (fun j => UnifiedRun.state p hD H pub c1 payload (j + 1)) (26 + 1) ++
+      RawRoundCompletion.recs (fun j => UnifiedRecords.previous p hD H pub c1 payload (27 + j))
+        (fun j => UnifiedRecords.absorbed p hD H pub c1 payload (27 + j)) (fun j => payload (27 + j))
+        (fun j => UnifiedRun.state p hD H pub c1 payload (28 + j)) 4 =
+    RawRoundCompletion.recs (UnifiedRecords.previous p hD H pub c1 payload)
+      (UnifiedRecords.absorbed p hD H pub c1 payload) payload (fun j => UnifiedRun.state p hD H pub c1 payload (j + 1))
+      31
+'AspisR1.UnifiedPhaseRecords.ordinary_eq_records' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

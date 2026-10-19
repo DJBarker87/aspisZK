@@ -1,0 +1,60 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedExperimentInjection.lean:59:4: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedExperimentInjection.lean:60:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  tr
+in the target expression
+  firstReads emptyTable
+      (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1 ≤
+    Qtot
+
+M Cv W : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+extract : UnifiedSampler.Public L → Table (Addr L) State → Option W
+decision : UnifiedSampler.Prefix M Cv L → Message M → Bool
+H : Addr L → State
+pub : UnifiedSampler.Public L
+prover : Program (Addr L) State (UnifiedProtocol.Proof M)
+hpub : List.length pub.pubBytes < 2 ^ 32
+hl : p.lbl 0 = 160
+he : p.enc ((eval H prover).2.2 0) = PublicInitFrame.emptyRecord
+Qtot : ℕ
+hQ :
+  firstReads emptyTable
+      (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1 ≤
+    Qtot
+hold :
+  ¬hitsBad (badColl p Qtot) emptyTable
+      (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1
+htail :
+  ¬hitsBad (ParsedStateCollision.bad TrailingStateFrame.tailState Qtot) emptyTable
+      (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1
+π : UnifiedProtocol.Proof M := (eval H prover).2
+prior : List (Addr L × State) := (eval H prover).1
+tr : List (Addr L × State) :=
+  (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1
+htrace : tr = UnifiedPrefixedReads.trace p hD extract decision H pub π.1 π.2 prior
+⊢ ∃ own pend g,
+    JointUnifiedDecoder.decode p pub 27 4
+          (UnifiedQueryRun.rhoAddress p hD H pub (eval H prover).2.1 (eval H prover).2.2)
+          (tableBefore emptyTable
+            (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1
+            (UnifiedQueryRun.rhoAddress p hD H pub (eval H prover).2.1 (eval H prover).2.2)) =
+        some (own, pend, g) ∧
+      bfollow g
+          (traceFrom
+            (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1
+            (UnifiedQueryRun.rhoAddress p hD H pub (eval H prover).2.1 (eval H prover).2.2))
+          own pend
+          (tableBefore emptyTable
+            (eval H (FS.experiment prover (fun x pf => UnifiedVerifier.verifier p hD extract decision x pf) pub)).1
+            (UnifiedQueryRun.rhoAddress p hD H pub (eval H prover).2.1 (eval H prover).2.2)) =
+        some
+          (UnifiedRun.transcript p hD H pub (eval H prover).2.1 (eval H prover).2.2 32,
+            UnifiedRun.message (eval H prover).2.1 (eval H prover).2.2 32,
+            UnifiedRun.challenge p hD H pub (eval H prover).2.1 (eval H prover).2.2 32)
+'AspisR1.UnifiedExperimentInjection.decodes_and_follows' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1

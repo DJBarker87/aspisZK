@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthSlice.lean:24:61: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  e ≥ 0
+  e ≥ 1
+  d ≥ 0
+  c ≥ 0
+  c - d ≤ -1
+  b ≥ 0
+  b - c ≥ 2
+where
+ b := ↑(a :: as).length
+ c := ↑i
+ d := ↑as.length
+ e := ↑k * ↑i
+ g := ↑k
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthSlice.lean:26:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  k * i + k - (f a).length
+in the target expression
+  List.take k (List.drop (k * i + k) (f a) ++ List.flatMap f as) = f (a :: as)[i + 1]
+
+case cons.succ
+A B : Type
+f : A → List B
+k : ℕ
+hlen : ∀ (a : A), (f a).length = k
+a : A
+as : List A
+ih : ∀ (i : ℕ) (hi : i < as.length), List.take k (List.drop (k * i) (List.flatMap f as)) = f as[i]
+i : ℕ
+hi : i + 1 < (a :: as).length
+hi' : i < as.length
+hdrop : k * i + k - (f a).length = k * i
+⊢ List.take k (List.drop (k * i + k) (f a) ++ List.flatMap f as) = f (a :: as)[i + 1]
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1FixedWidthSlice.lean:32:60: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+'AspisR1.FixedWidthSlice.flatMap_slice' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.FixedWidthSlice.ofFn_flatMap_slice' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1

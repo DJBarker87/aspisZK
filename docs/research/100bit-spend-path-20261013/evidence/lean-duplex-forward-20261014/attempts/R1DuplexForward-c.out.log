@@ -1,0 +1,34 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexForward.lean:30:14: error: unsolved goals
+case succ
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+T : Table (Addr L) State
+n : ℕ
+ih :
+  ∀ (s : ℕ → State),
+    (∀ j < n, T (advanceA p (s j)) = some (s (j + 1))) → follow p T n (s 0) = some (List.map s (List.range (n + 1)))
+s : ℕ → State
+hcells : ∀ j < n + 1, T (advanceA p (s j)) = some (s (j + 1))
+hshift : ∀ j < n, T (advanceA p (s (j + 1))) = some (s (j + 1 + 1))
+ih' : follow p T n (s (0 + 1)) = some (List.map (fun j => s (j + 1)) (List.range (n + 1)))
+⊢ some (s 0 :: s (0 + 1) :: List.map ((fun j => s (j + 1)) ∘ Nat.succ) (List.range n)) =
+    some (s 0 :: s (Nat.succ 0) :: List.map (s ∘ Nat.succ ∘ Nat.succ) (List.range n))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexForward.lean:39:8: warning: This simp argument is unused:
+  Function.comp
+
+Hint: Omit it from the simp argument list.
+  simp only [List.range_succ_eq_map, List.map_cons, List.map_map,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵F̵u̵n̵c̵t̵i̵o̵n̵.̵c̵o̵m̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexForward.lean:54:28: warning: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  simp only [hnext,̵ ̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.DuplexForward.follow_of_cells' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.DuplexForward.follow_length' depends on axioms: [propext, Quot.sound]
+exit=1

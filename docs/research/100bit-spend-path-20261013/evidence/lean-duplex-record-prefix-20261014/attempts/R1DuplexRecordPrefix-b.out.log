@@ -1,0 +1,114 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexRecordPrefix.lean:40:23: error(lean.invalidField): Invalid field `toBytes`: The environment does not contain `Function.toBytes`, so it is not possible to project the field `toBytes` from an expression
+  c
+of type
+  ∀ j < 0, absorbed j = H (absorbA p (s j) (label j) (data j) ⋯)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexRecordPrefix.lean:43:65: error: Application type mismatch: The argument
+  c
+has type
+  ∀ j < 0, absorbed j = H (absorbA p (s j) (label j) (data j) ⋯)
+of sort `Prop` but is expected to have type
+  Addr L
+of sort `Type` in the application
+  noColl_prefix_after p Qtot H tr hcons hQ hcoll init c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexRecordPrefix.lean:47:55: error: Application type mismatch: The argument
+  c
+has type
+  ∀ j < n + 1, absorbed j = H (absorbA p (s j) (label j) (data j) ⋯)
+of sort `Prop` but is expected to have type
+  Addr L
+of sort `Type` in the application
+  Before tr (advanceA p (absorbed n)) c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexRecordPrefix.lean:48:21: error(lean.invalidField): Invalid field `toBytes`: The environment does not contain `Function.toBytes`, so it is not possible to project the field `toBytes` from an expression
+  c
+of type
+  ∀ j < n + 1, absorbed j = H (absorbA p (s j) (label j) (data j) ⋯)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexRecordPrefix.lean:53:36: error: Application type mismatch: The argument
+  c
+has type
+  ∀ j < n + 1, absorbed j = H (absorbA p (s j) (label j) (data j) ⋯)
+of sort `Prop` but is expected to have type
+  Addr L
+of sort `Type` in the application
+  noColl_prefix_after p Qtot H tr hcons hQ hcoll (advanceA p (absorbed n)) c
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexRecordPrefix.lean:53:39: error: Function expected at
+  hdr
+but this term has type
+  Addr L
+
+Note: Expected a function because this term is being applied to the argument
+  n
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexRecordPrefix.lean:59:32: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  s (n + 1)
+in the target expression
+  bytes (absorbed n) = bytes (H (absorbA p (s n) (label n) (data n) ⋯))
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+H : Addr L → State
+tr : List (Addr L × State)
+Qtot : ℕ
+hcons : ∀ q ∈ tr, q.2 = H q.1
+hQ : firstReads emptyTable tr ≤ Qtot
+hcoll : ¬hitsBad (badColl p Qtot) emptyTable tr
+s absorbed : ℕ → State
+label : ℕ → Byte
+data : ℕ → Bytes
+hD : ∀ (j : ℕ), List.length (data j) ≤ p.D
+init : Addr L
+hroot : s 0 = H init
+hi : Read tr init
+n : ℕ
+ih :
+  (∀ j < n, absorbed j = H (absorbA p (s j) (label j) (data j) ⋯)) →
+    (∀ j < n, s (j + 1) = H (advanceA p (absorbed j))) →
+      (∀ j < n, Read tr (absorbA p (s j) (label j) (data j) ⋯)) →
+        (∀ j < n, Read tr (advanceA p (absorbed j))) →
+          ∀ (c : Addr L),
+            Read tr c →
+              List.take 32 c.toBytes = bytes (s n) →
+                Before tr init c ∧
+                  ∀ j < n, Before tr (absorbA p (s j) (label j) (data j) ⋯) c ∧ Before tr (advanceA p (absorbed j)) c
+c : ∀ j < n + 1, absorbed j = H (absorbA p (s j) (label j) (data j) ⋯)
+habs : ∀ j < n + 1, s (j + 1) = H (advanceA p (absorbed j))
+hstep : ∀ j < n + 1, Read tr (absorbA p (s j) (label j) (data j) ⋯)
+har : ∀ j < n + 1, Read tr (advanceA p (absorbed j))
+hdr : Addr L
+hc : Read tr hdr
+hp : List.take 32 hdr.toBytes = bytes (s (n + 1))
+hlast : Before tr (advanceA p (absorbed n)) sorry
+⊢ bytes (absorbed n) = bytes (H (absorbA p (s n) (label n) (data n) ⋯))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexRecordPrefix.lean:62:36: error: Application type mismatch: The argument
+  har n ?m.233
+has type
+  Read tr (advanceA p (absorbed n))
+but is expected to have type
+  Read tr (absorbA p (s n) (label n) (data n) ⋯)
+in the application
+  noColl_prefix_after p Qtot H tr hcons hQ hcoll (absorbA p (s n) (label n) (data n) (hD n)) (advanceA p (absorbed n))
+    (har n ?m.233)
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexRecordPrefix.lean:63:11: error: Function expected at
+  hdr
+but this term has type
+  Addr L
+
+Note: Expected a function because this term is being applied to the argument
+  n
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexRecordPrefix.lean:68:24: error: Application type mismatch: The argument
+  absorbA p (s n) (label n) (data n) ⋯
+has type
+  Addr L
+of sort `Type` but is expected to have type
+  ∀ j < n, absorbed j = H (absorbA p (s j) (label j) (data j) ⋯)
+of sort `Prop` in the application
+  ih (absorbA p (s n) (label n) (data n) (hD n))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1DuplexRecordPrefix.lean:72:21: error: Function expected at
+  hdr
+but this term has type
+  Addr L
+
+Note: Expected a function because this term is being applied to the argument
+  j
+'AspisR1.DuplexRecordPrefix.before_endpoint' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.DuplexRecordPrefix.table_cells' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

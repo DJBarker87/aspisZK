@@ -1,0 +1,48 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InitialWalk.lean:88:14: error: Tactic `rfl` failed: The left-hand side
+  (c1,
+    records s absorbed label data n ++
+      [{ prev := s n, absorbed := absorbed n, label := label n, data := data n, next := s (n + 1) }])
+is not definitionally equal to the right-hand side
+  (c1, records s absorbed label data (n + 1))
+
+case neg
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+pubBytes : Bytes
+T : Table (Addr L) State
+s absorbed : ℕ → State
+label : ℕ → Byte
+data : ℕ → Bytes
+c1 : State
+hroot : rootAt pubBytes T (s 0) = some c1
+n : ℕ
+ih :
+  ∀ (fuel : ℕ),
+    0 < n →
+      n ≤ fuel →
+        (∀ j < n, theUnique (advPre p T (s (j + 1))) = some (absorbed j)) →
+          (∀ j < n,
+              ∃ a, ReseedBoundary.findCell T (absorbed j) = some a ∧ parseAbsorb a = some (s j, label j, data j)) →
+            (∀ (j : ℕ), 0 < j → j < n → rootAt pubBytes T (s j) = none) →
+              walk p pubBytes T fuel (s n) = some (c1, records s absorbed label data n)
+hn : 0 < n + 1
+hadv : ∀ j < n + 1, theUnique (advPre p T (s (j + 1))) = some (absorbed j)
+habs : ∀ j < n + 1, ∃ a, ReseedBoundary.findCell T (absorbed j) = some a ∧ parseAbsorb a = some (s j, label j, data j)
+hstop : ∀ (j : ℕ), 0 < j → j < n + 1 → rootAt pubBytes T (s j) = none
+fuel : ℕ
+hle : n + 1 ≤ fuel + 1
+hlast : n < n + 1
+a : Addr L
+ha : ReseedBoundary.findCell T (absorbed n) = some a
+hparse : parseAbsorb a = some (s n, label n, data n)
+hn0 : ¬n = 0
+hnone : rootAt pubBytes T (s n) = none
+hrec : walk p pubBytes T fuel (s n) = some (c1, records s absorbed label data n)
+⊢ (c1,
+      records s absorbed label data n ++
+        [{ prev := s n, absorbed := absorbed n, label := label n, data := data n, next := s (n + 1) }]) =
+    (c1, records s absorbed label data (n + 1))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1InitialWalk.lean:89:12: error: No goals to be solved
+'AspisR1.InitialWalk.walk_of_lookups' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1

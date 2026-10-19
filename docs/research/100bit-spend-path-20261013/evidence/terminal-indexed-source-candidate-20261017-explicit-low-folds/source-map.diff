@@ -1,0 +1,27 @@
+--- 04fc candidate 4324116f9e652d31190037ab7c5205f3107991143e4a2bbca701346b0bba66ba
++++ explicit-low-folds 82d54bbade8d81899c64ede23befce8b240b881d61b144e769c0d0e16ab5cff9
+@@ -591,10 +591,20 @@
+     selectors: &StateOnlyPoseidonSelectors,
+ ) -> [QM31; STATE_ONLY_POSEIDON_PACKED_LANES] {
+     let leading_low = selectors.local[0];
+-    let full_low = [1usize, 9, 10]
+-        .into_iter()
+-        .fold(QM31::ZERO, |sum, row| sum.add(selectors.local[row]));
+-    let internal_low = (2usize..=8).fold(QM31::ZERO, |sum, row| sum.add(selectors.local[row]));
++    // Preserve the source fold's initial ZERO and left-to-right operation order.
++    let full_low = QM31::ZERO
++        .add(selectors.local[1])
++        .add(selectors.local[9])
++        .add(selectors.local[10]);
++    // The former inclusive range fold visits 2, 3, ..., 8 in this order.
++    let internal_low = QM31::ZERO
++        .add(selectors.local[2])
++        .add(selectors.local[3])
++        .add(selectors.local[4])
++        .add(selectors.local[5])
++        .add(selectors.local[6])
++        .add(selectors.local[7])
++        .add(selectors.local[8]);
+     let leading = leading_pair_packed(openings);
+     let full = interpolated_full_pair_packed(openings.z, &selectors.local);
+     let internal = interpolated_internal_pair(openings.z, &selectors.local);

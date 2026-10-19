@@ -1,0 +1,77 @@
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedSemanticActualView.lean:44:4: error: Tactic `apply` failed: could not unify the conclusion of `@Prefix.ext`
+  Prefix ?X ?M ?C
+with the goal
+  { statement := pub,
+      rounds := ordinary c1 (completeRounds p emptyTable H 0 (UnifiedRecords.records p hD H pub c1 payload n)) } =
+    UnifiedRun.transcript p hD H pub c1 payload n
+
+Note: The full type of `@Prefix.ext` is
+  {X M C : Type} → Prefix X M C → M → C → Prefix X M C
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+H : Addr L → State
+pub : UnifiedSampler.Public L
+c1 : State
+payload : ℕ → M
+hl : p.lbl 0 = 160
+he : p.enc (payload 0) = PublicInitFrame.emptyRecord
+n : ℕ
+hn : 0 < n
+hn26 : n < 26
+hprefix :
+  ordinary c1 (completeRounds p emptyTable H 0 (UnifiedRecords.records p hD H pub c1 payload n)) =
+    (UnifiedRun.transcript p hD H pub c1 payload n).rounds
+hstatement : (UnifiedRun.transcript p hD H pub c1 payload n).statement = pub
+⊢ { statement := pub,
+      rounds := ordinary c1 (completeRounds p emptyTable H 0 (UnifiedRecords.records p hD H pub c1 payload n)) } =
+    UnifiedRun.transcript p hD H pub c1 payload n
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedSemanticActualView.lean:55:30: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UnifiedRun.challenge p hD H pub c1 payload n
+in the target expression
+  (eval H
+        (UnifiedSampler.samp p hD n (UnifiedRun.transcript p hD H pub c1 payload n)
+            (UnifiedRun.message c1 payload n)).toProgram).2 =
+    liftChallenge
+      (p.σ n (H (squeezeA p (H (UnifiedSteps.address p hD H pub c1 payload n)))),
+        H (advanceA p (H (UnifiedSteps.address p hD H pub c1 payload n))))
+
+M Cv : Type
+L : ℕ
+p : Params M Cv L
+hD : 5 ≤ p.D
+H : Addr L → State
+pub : UnifiedSampler.Public L
+c1 : State
+payload : ℕ → M
+hl : p.lbl 0 = 160
+he : p.enc (payload 0) = PublicInitFrame.emptyRecord
+n : ℕ
+hn : 0 < n
+hn26 : n < 26
+hprefix :
+  ordinary c1 (completeRounds p emptyTable H 0 (UnifiedRecords.records p hD H pub c1 payload n)) =
+    (UnifiedRun.transcript p hD H pub c1 payload n).rounds
+hstatement : (UnifiedRun.transcript p hD H pub c1 payload n).statement = pub
+hrounds :
+  { statement := pub,
+      rounds := ordinary c1 (completeRounds p emptyTable H 0 (UnifiedRecords.records p hD H pub c1 payload n)) } =
+    UnifiedRun.transcript p hD H pub c1 payload n
+hchallenge0 :
+  UnifiedRun.challenge p hD H pub c1 payload n =
+    liftChallenge
+      (p.σ n (H (squeezeA p (UnifiedRecords.absorbed p hD H pub c1 payload n))),
+        UnifiedRun.state p hD H pub c1 payload (n + 1))
+hstep :
+  UnifiedRun.state p hD H pub c1 payload (n + 1) = H (advanceA p (UnifiedRecords.absorbed p hD H pub c1 payload n))
+⊢ (eval H
+        (UnifiedSampler.samp p hD n (UnifiedRun.transcript p hD H pub c1 payload n)
+            (UnifiedRun.message c1 payload n)).toProgram).2 =
+    liftChallenge
+      (p.σ n (H (squeezeA p (H (UnifiedSteps.address p hD H pub c1 payload n)))),
+        H (advanceA p (H (UnifiedSteps.address p hD H pub c1 payload n))))
+/home/dombarker/project-offloads/aspis-r1-concrete-decoder-20261013/sources/R1UnifiedSemanticActualView.lean:58:10: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+'AspisR1.UnifiedSemanticActualView.actual_output' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
