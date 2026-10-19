@@ -6375,3 +6375,33 @@ outstanding "single Lean 4.32 kernel" item on the soundness side.
 - `qm31SamplerLaw_spend` is proved on the spend base from the extracted
   `qm31_sample`, with the carrier transports, and `SamplerLawBridge.toSem1`
   is proved. They sit on different bases until (f).
+
+### Lead acceptance of the own-column builder (2026-10-19); D64
+
+The worker commits 0a3d14c9e..a1c258b5e are cherry-picked. The consistent
+chain is 4481–4499 and 4510–4512 (`builders[2].consistent_chain` in
+c3-evidence.json); the lead verified the new modules. Attempt 4501 hit -M7000
+at 7.17 GB, and the worker split the module rather than raising the cap.
+
+**D64.1 Proved.** `fill_own` has an extracted Rust copy, and its
+differential test equals z9c on all five configurations:
+- the QPrime own matrix: 2,952 sources, 1.11M entries;
+- the G own matrix: 1,980 sources, 744k entries.
+
+On the Lean side: `obs_lane`, `own_c1_ident`/`own_h1_ident`,
+`own_src_ident` (the blockM/flatO layout), and `check_sound‴`, which removes
+hOwn and hGOwn. The QPrime sources are now defined from the Rust descriptors
+(`srcOf`), not assumed. The new premises are the builder runs and the
+descriptor, width, layout and stride facts.
+
+**D64.2 Remaining in check_sound‴.**
+- hRel: needs a WideExact (8-limb) tower premise, the relR1 relations, and
+  copies of design_relations/limb_functionals. It is a multi-session job.
+- hRound, hGRound and hGBat.
+- The decoder facts.
+- The named input premises.
+
+Memory: CertCheckSound4 peaks at 7.19 GB. Further composition must happen
+at the CertData level, with no Aeneas import in the composing module.
+
+All of this is subject to D63: release evidence requires the unified build.
