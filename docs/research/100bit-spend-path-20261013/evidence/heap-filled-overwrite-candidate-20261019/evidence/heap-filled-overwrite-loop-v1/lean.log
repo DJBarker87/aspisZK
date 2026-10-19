@@ -1,0 +1,135 @@
+/tmp/root-new-source-calls-20261019/sources/HeapFilledOverwriteLoopV1.lean:19:45: error: Application type mismatch: The argument
+  out
+has type
+  Raw T
+but is expected to have type
+  Iter × Raw T
+in the application
+  cont out
+/tmp/root-new-source-calls-20261019/sources/HeapFilledOverwriteLoopV1.lean:23:73: error: Application type mismatch: The argument
+  out
+has type
+  Raw T
+but is expected to have type
+  core.ops.range.Range Usize × alloc.vec.Vec T
+in the application
+  cont out
+/tmp/root-new-source-calls-20261019/sources/HeapFilledOverwriteLoopV1.lean:32:48: error: Application type mismatch: The argument
+  out
+has type
+  Raw T
+but is expected to have type
+  core.ops.range.Range (UScalar UScalarTy.Usize) × alloc.vec.Vec T
+in the application
+  cont out
+/tmp/root-new-source-calls-20261019/sources/HeapFilledOverwriteLoopV1.lean:56:24: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp [hm,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-new-source-calls-20261019/sources/HeapFilledOverwriteLoopV1.lean:57:21: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp [hm,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-new-source-calls-20261019/sources/HeapFilledOverwriteLoopV1.lean:101:10: error: Type mismatch
+  Eq.symm hout
+has type
+  done out = done raw
+but is expected to have type
+  out = raw
+/tmp/root-new-source-calls-20261019/sources/HeapFilledOverwriteLoopV1.lean:103:21: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵ ̵at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-new-source-calls-20261019/sources/HeapFilledOverwriteLoopV1.lean:123:49: warning: This simp argument is unused:
+  Slice.set
+
+Hint: Omit it from the simp argument list.
+  simp [alloc.vec.Vec.length, alloc.vec.Vec.set, S̵l̵i̵c̵e̵.̵s̵e̵t̵,̵ ̵List.length_set]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-new-source-calls-20261019/sources/HeapFilledOverwriteLoopV1.lean:153:56: error: Application type mismatch: The argument
+  s
+has type
+  Iter × Raw T
+but is expected to have type
+  Raw T
+in the application
+  body_cont_active value iter raw s
+/tmp/root-new-source-calls-20261019/sources/HeapFilledOverwriteLoopV1.lean:179:51: error: Application type mismatch: The argument
+  heq
+has type
+  ¬↑i = ↑iter.start
+but is expected to have type
+  ↑iter.start ≠ ↑i
+in the application
+  set_read_ne raw iter.start i value heq
+/tmp/root-new-source-calls-20261019/sources/HeapFilledOverwriteLoopV1.lean:190:36: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  iterNext.end
+in the target expression
+  ↑i < ↑iter.end
+
+T : Type
+value : T
+fuel : ℕ
+ih :
+  ∀ (iter : Iter) (raw : Raw T),
+    ↑iter.start + fuel = ↑iter.end →
+      alloc.vec.Vec.length raw = ↑iter.end →
+        (∀ (i : Usize), ↑i < ↑iter.start → Slice.index_usize raw i = ok value) →
+          ∀ (out : Raw T),
+            loop (body value) (iter, raw) = ok out →
+              alloc.vec.Vec.length out = alloc.vec.Vec.length raw ∧
+                ∀ (i : Usize), ↑i < ↑iter.end → Slice.index_usize out i = ok value
+iter : Iter
+raw : Raw T
+hspan : ↑iter.start + (fuel + 1) = ↑iter.end
+hlen : alloc.vec.Vec.length raw = ↑iter.end
+hprefix : ∀ (i : Usize), ↑i < ↑iter.start → Slice.index_usize raw i = ok value
+out : Raw T
+h : loop (body value) (iter, raw) = ok out
+hlt : ↑iter.start < ↑iter.end
+iterNext : Iter
+rawNext : Raw T
+hcont : body value (iter, raw) = ok (cont (iterNext, rawNext))
+htail : loop (body value) (iterNext, rawNext) = ok out
+hstart : ↑iterNext.start = ↑iter.start + 1
+hend : iterNext.end = iter.end
+hset : rawNext = alloc.vec.Vec.set raw iter.start value
+hspanNext : ↑iterNext.start + fuel = ↑iterNext.end
+hlenNext : alloc.vec.Vec.length rawNext = ↑iterNext.end
+hprefixNext : ∀ (i : Usize), ↑i < ↑iterNext.start → Slice.index_usize rawNext i = ok value
+htail' : loop (body value) (iterNext, rawNext) = ok out
+hresult :
+  alloc.vec.Vec.length out = alloc.vec.Vec.length rawNext ∧
+    ∀ (i : Usize), ↑i < ↑iterNext.end → Slice.index_usize out i = ok value
+i : Usize
+hi : ↑i < ↑iter.end
+⊢ ↑i < ↑iterNext.end
+'HeapFilledOverwriteLoopV1.loop_success_fill_fuel' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        3.81 real         1.98 user         1.65 sys
+          2239545344  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              182533  page reclaims
+                 252  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  64  voluntary context switches
+                8016  involuntary context switches
+         21193871736  instructions retired
+          7798751788  cycles elapsed
+           380571576  peak memory footprint

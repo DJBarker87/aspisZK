@@ -1,0 +1,12 @@
+--- parent:crates/aspis-core/src/r0/heap.rs
++++ candidate:input/heap.rs
+@@ -6,6 +6,9 @@
+     let mut out = Vec::new();
+     out.try_reserve_exact(n).map_err(|_| Error::Allocation)?;
+     out.resize(n, value);
++    for i in 0..n {
++        out[i] = value;
++    }
+     Ok(out)
+ }
+ pub fn uninit<T>() -> Result<Box<MaybeUninit<T>>, Error> {
