@@ -1,0 +1,98 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "status": "CANDIDATE ONLY. The fresh extracted ordinary_sample body is composed through the actual extracted decode8 computation and the retained digitsField/fieldRank encoding. This is not a production-equivalence or sampler-density claim.",
+  "theorem": {
+    "module": "IndexedCandidateOrdinaryRetainedBridgeV5",
+    "namespace": "AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV5",
+    "name": "ordinary_sample_candidate_eq_fieldRank",
+    "statement": "For every 32-byte block, extracted ordinary_sample returns .ok value and candidateWideToExact value equals R0C.ModuloField.fieldRank of rank(block) modulo AspisCircleGroupOrder.P^8."
+  },
+  "source": {
+    "path": "sources/IndexedCandidateOrdinaryRetainedBridgeV5.lean",
+    "sha256": "2e51fcb4695f17cb7858156fb3d2b935f4198a9fe1c0e708e2bf65509f5b9348"
+  },
+  "decode8_bridge": {
+    "module": "IndexedCandidateDecode8RetainedBridgeV3",
+    "source": "sources/IndexedCandidateDecode8RetainedBridgeV3.lean",
+    "source_sha256": "ff6a3d04b20a3d53decc4593f3f4dc5075f46f73bb22541817d0a55751c9eae8",
+    "object_sha256": "c543210d45ddd02054a3da7be651493df2874dfd91c4bb69130aafef56187253",
+    "native_object_path": "/home/dombarker/project-offloads/post25-ordinary-decode-retained-v3/attempt/objects/IndexedCandidateDecode8RetainedBridgeV3.olean",
+    "receipt": "evidence/decode8-retained-v3/receipt.json"
+  },
+  "direct_imports": {
+    "AspisR1Post25Sampler.Funs": {
+      "object_sha256": "4fc184f23d7427726cf8dee25e77792736ae508a252c799523d73bbbaee894ad",
+      "native_path": "/home/dombarker/project-offloads/r1-post25-ordinary-sample-owner-v1-20261020/attempt/objects/AspisR1Post25Sampler/Funs.olean"
+    },
+    "R0C.ModuloField": {
+      "object_sha256": "9f46e6046332afeab07ff12ceab48f2f4010707bf066d353821bb3f2f8fac6be",
+      "native_path": "/home/dombarker/project-offloads/terminal-v4-begin-mu-canonical-v1-20261019/attempt/objects/R0C/ModuloField.olean"
+    },
+    "R1SamplerNatModel": {
+      "object_sha256": "8392d0744c69ca5cc195bf92318624862745987e964720f334f189b5cd4d91c3",
+      "native_path": "/home/dombarker/project-offloads/terminal-v4-begin-mu-canonical-v1-20261019/attempt/objects/R1SamplerNatModel.olean"
+    },
+    "R1SamplerRanking": {
+      "object_sha256": "7ad89e9f50e3a6b11427483c6f89790174858b588e6df26128f6b23ff3d9286a",
+      "native_path": "/home/dombarker/project-offloads/terminal-v4-begin-mu-canonical-v1-20261019/attempt/objects/R1SamplerRanking.olean"
+    },
+    "IndexedCandidateOrdinarySampleBridgeV3": {
+      "object_sha256": "b437cc6f73307f6e44812aacf905efb1be0946a4230e96a55ddd1999a1e8ac9c",
+      "native_path": "/home/dombarker/project-offloads/r1-post25-ordinary-sample-owner-v1-20261020/attempt/objects/IndexedCandidateOrdinarySampleBridgeV3.olean"
+    },
+    "IndexedCandidateDecode8RetainedBridgeV3": {
+      "object_sha256": "c543210d45ddd02054a3da7be651493df2874dfd91c4bb69130aafef56187253",
+      "native_path": "/home/dombarker/project-offloads/post25-ordinary-decode-retained-v3/attempt/objects/IndexedCandidateDecode8RetainedBridgeV3.olean"
+    }
+  },
+  "attempt": {
+    "unit": "post25-ordinary-retained-v5-20261020",
+    "remote_workspace": "/home/dombarker/project-offloads/post25-ordinary-retained-v5-20261020",
+    "evidence": "evidence/ordinary-retained-v5",
+    "target": "IndexedCandidateOrdinaryRetainedBridgeV5",
+    "exit_status": 0,
+    "wall_seconds": 1.806,
+    "peak_process_rss_kib": 3862228,
+    "scope_memory_peak_bytes": 410419200,
+    "scope_swap_peak_bytes": 0,
+    "memory_high_bytes": 1073741824,
+    "memory_max_bytes": 2147483648,
+    "memory_swap_max_bytes": 0,
+    "lean_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  "method": "The generated ordinary_sample witness retains actual low_base_p_digits output digits. The generated digit list is equated to ordinaryDigits(rank). A proved indexed lowDigits equation identifies each digit with rank/P^i mod P, which establishes canonicality and identifies the retained digit function with SamplerRanking.canonicalDigits. The decode8 bridge then identifies the actual extracted field value with digitsField, and canonicalDigits_eq_rank_symm gives fieldRank(rank mod P^8).",
+  "failed_attempts": [
+    {
+      "attempt": "v1",
+      "source_sha256": "d09d26cc5278c04e8dd485f4a6dd06ec1abede124c28a1415cf4af1b97d9aef6",
+      "result": "Initial import preflight selected an older AspisR1Post25Sampler.Funs owner (hash 11efa680...). V1 also used top-level sampler-model module names instead of actual R1-prefixed module names. Lean did not start on the direct-owner mismatch."
+    },
+    {
+      "attempt": "v2",
+      "source_sha256": "9dcb674b991b80d7c644e2986d3b9a8436e786804ab293c7f1af122c8bcc4784",
+      "result": "Lean reported a missing SamplerNatModel module prefix after import names were corrected. See evidence/failed-retained-v2."
+    },
+    {
+      "attempt": "v3",
+      "source_sha256": "6db2b62b022c4496340d08e8194787904eaf5184a6be95900211ae3219fb51bb",
+      "result": "Proof diagnostics exposed ordinaryDigits rewrite shape, a private digit accessor collision, and distinct sampler/R0C P definitions. See evidence/failed-retained-v3."
+    },
+    {
+      "attempt": "v4",
+      "source_sha256": "e7c18d7158602287bc5cb71c74eb733f581a63394ecf13e60bebfee56278ee5c",
+      "result": "Proof diagnostic showed that the R0C finFunctionFinEquiv inverse needed an explicit canonical-digit carrier equality. See evidence/failed-retained-v4."
+    }
+  ],
+  "nonclaims": [
+    "No production sampler equivalence.",
+    "No gamma_sample or add_small bridge.",
+    "No probability/density theorem or byte-distribution claim.",
+    "No deployed-source adoption claim; these generated bodies are candidate extraction owners."
+  ],
+  "object_policy": "No .olean, .ir, binary, or archive is included. Exact native object hashes and host paths are retained."
+}

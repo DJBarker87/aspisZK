@@ -1,0 +1,47 @@
+/home/dombarker/project-offloads/post25-ordinary-retained-v4-20261020/sources/IndexedCandidateOrdinaryRetainedBridgeV4.lean:21:25: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/post25-ordinary-retained-v4-20261020/sources/IndexedCandidateOrdinaryRetainedBridgeV4.lean:118:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (SamplerRanking.digitsRank AspisCircleGroupOrder.P ?m.273).symm ⟨?m.274 % AspisCircleGroupOrder.P ^ ?m.273, ⋯⟩
+in the target expression
+  R0C.ModuloField.digitsField (finFunctionFinEquiv.symm ⟨rank block % AspisCircleGroupOrder.P ^ 8, ⋯⟩) =
+    R0C.ModuloField.digitsField (SamplerRanking.canonicalDigits P 8 (rank block) P_pos)
+
+block : Std.Array U8 32#usize
+_outRank digits : Std.Array U32 8#usize
+_highWord : U32
+_hlow : sampler.low_base_p_digits block = ok (digits, _highWord)
+hordinary : sampler.ordinary_sample block = sampler.decode8 digits
+hvalues : ExtractedQM31SamplerIndexedGeneratedBridge.values digits = ordinaryDigits (rank block)
+_hpos : SamplerAddDigits.digitsValue P (ordinaryDigits (rank block)) = rank block % P ^ 8
+_hquot : SamplerRepeatedPass.wordValue (ExtractedQM31SamplerPassLoop.words _outRank).reverse = rank block / P ^ 8
+hcanonical : ∀ (i : Fin 8), digitValueAt digits i < P
+hrank : ∀ (i : Fin 8), digitValueAt digits i = rank block / P ^ ↑i % P
+value : ExtractedQM31SamplerIndexedDecode8RetainedBridgeV3.CandidateWide
+hdecode : sampler.decode8 digits = ok value
+hretained :
+  ExtractedQM31SamplerIndexedDecode8RetainedBridgeV3.candidateWideToExact value =
+    R0C.ModuloField.digitsField (ExtractedQM31SamplerIndexedDecode8RetainedBridgeV3.retainedDigits digits ⋯)
+hretainedCanonical :
+  ExtractedQM31SamplerIndexedDecode8RetainedBridgeV3.retainedDigits digits ⋯ =
+    SamplerRanking.canonicalDigits P 8 (rank block) P_pos
+hcanonicalTransport :
+  SamplerRanking.canonicalDigits P 8 (rank block) P_pos =
+    SamplerRanking.canonicalDigits AspisCircleGroupOrder.P 8 (rank block) circleP_pos
+⊢ R0C.ModuloField.digitsField (finFunctionFinEquiv.symm ⟨rank block % AspisCircleGroupOrder.P ^ 8, ⋯⟩) =
+    R0C.ModuloField.digitsField (SamplerRanking.canonicalDigits P 8 (rank block) P_pos)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    SamplerRanking.canonicalDigits P 8 (rank block) P_pos
+  has type
+    Fin 8 → Fin P
+  but is expected to have type
+    Fin 8 → Fin AspisCircleGroupOrder.P
+  in the application
+    R0C.ModuloField.digitsField (SamplerRanking.canonicalDigits P 8 (rank block) P_pos)
+'AspisR1.ExtractedQM31SamplerIndexedOrdinaryRetainedBridgeV4.ordinary_sample_candidate_eq_fieldRank' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
