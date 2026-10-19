@@ -39,6 +39,85 @@ pub fn pool_v1_nullifier_marker_address(
     ))
 }
 
+/// Domain tag of the pair-forest (R1) marker seed digest (B1, 2026-10-19).
+pub const POOL_V1_PAIR_FOREST_MARKER_SEED_DOMAIN: &[u8; 20] = b"aspis-marker-seed-v1";
+/// Length of the `create_with_seed` seed string (`MAX_SEED_LEN`).
+pub const POOL_V1_PAIR_FOREST_MARKER_SEED_BYTES: usize = 32;
+
+/// Pack the first 28 bytes (224 bits) of `digest` into 32 seven-bit bytes.
+///
+/// The 224 bits are read big-endian (most significant bit of `digest[0]`
+/// first) and cut into 32 consecutive 7-bit groups; group `i` becomes
+/// `seed[i]`, so every byte is in `0x00..=0x7f` and the result is valid
+/// UTF-8 (ASCII) of exactly 32 bytes. Bytes `digest[28..32]` are discarded.
+pub fn pack_pool_v1_pair_forest_marker_seed_v1(digest: &[u8; 32]) -> [u8; 32] {
+    let mut seed = [0u8; POOL_V1_PAIR_FOREST_MARKER_SEED_BYTES];
+    let mut chunk = 0;
+    while chunk < 4 {
+        let mut word = 0u64;
+        let mut byte = 0;
+        while byte < 7 {
+            word = (word << 8) | u64::from(digest[7 * chunk + byte]);
+            byte += 1;
+        }
+        let mut group = 0;
+        while group < 8 {
+            seed[8 * chunk + group] = ((word >> (7 * (7 - group))) & 0x7f) as u8;
+            group += 1;
+        }
+        chunk += 1;
+    }
+    seed
+}
+
+/// B1 marker seed: 7-bit packing of the first 28 bytes of
+/// `SHA-256("aspis-marker-seed-v1" || pool || canonical nullifier)`.
+pub fn pool_v1_pair_forest_marker_seed_v1(
+    pool: &Pubkey,
+    canonical_nullifier_encoding: &[u8; 32],
+) -> [u8; 32] {
+    let digest = solana_program::hash::hashv(&[
+        POOL_V1_PAIR_FOREST_MARKER_SEED_DOMAIN,
+        pool.as_ref(),
+        canonical_nullifier_encoding,
+    ])
+    .to_bytes();
+    pack_pool_v1_pair_forest_marker_seed_v1(&digest)
+}
+
+/// The packed seed as the `&str` the System program's `*_with_seed`
+/// instructions take. Every byte is below 0x80, so this never fails for a
+/// seed produced by [`pack_pool_v1_pair_forest_marker_seed_v1`].
+pub fn pool_v1_pair_forest_marker_seed_str_v1(seed: &[u8; 32]) -> Result<&str, ProgramError> {
+    core::str::from_utf8(seed).map_err(|_| PoolV1ProgramError::InvalidNullifierMarkerAddress.into())
+}
+
+/// Canonical pair-forest (R1) nullifier-marker address (B1).
+///
+/// `address = create_with_seed(master, seed, program_id)` with
+/// `seed = pool_v1_pair_forest_marker_seed_v1(master, nullifier)`. The base is
+/// the forest master PDA (`["aspis-pair-forest-master-v1", mint]`, bump stored
+/// at master byte 7), which the Pool authenticates by its stored bump and
+/// signs for with `invoke_signed`. There is no bump and no search. Returns the
+/// address and the 32-byte seed. Non-canonical nullifier encodings are
+/// rejected before hashing, as for the legacy PDA marker.
+pub fn pool_v1_pair_forest_nullifier_marker_address(
+    program_id: &Pubkey,
+    master: &Pubkey,
+    canonical_nullifier_encoding: &[u8; 32],
+) -> Result<(Pubkey, [u8; 32]), ProgramError> {
+    decode_digest_canonical(canonical_nullifier_encoding)
+        .map_err(|_| PoolV1ProgramError::InvalidNullifierMarkerAccount)?;
+    let seed = pool_v1_pair_forest_marker_seed_v1(master, canonical_nullifier_encoding);
+    let address = Pubkey::create_with_seed(
+        master,
+        pool_v1_pair_forest_marker_seed_str_v1(&seed)?,
+        program_id,
+    )
+    .map_err(|_| PoolV1ProgramError::InvalidNullifierMarkerAddress)?;
+    Ok((address, seed))
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum NullifierMarkerPreparationV1 {
     /// A data-empty System-owned PDA. Future composition must perform the
@@ -96,34 +175,103 @@ pub fn plan_nullifier_marker_consumption_v1(
     if marker_account.key != &expected_address || marker_account.key == &pool {
         return Err(PoolV1ProgramError::InvalidNullifierMarkerAddress.into());
     }
-    if marker_account.executable || marker_account.is_signer || !marker_account.is_writable {
-        return Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into());
-    }
-
-    let preparation = if marker_account.owner == program_id {
-        let data = marker_account.try_borrow_data()?;
-        if data.len() != POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES {
-            return Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into());
-        }
-        if data.iter().all(|byte| *byte == 0) {
-            NullifierMarkerPreparationV1::PopulateProgramOwnedZeroed
-        } else if decode_pool_v1_nullifier_marker(&data).is_ok() {
-            return Err(PoolV1ProgramError::NullifierAlreadyConsumed.into());
-        } else {
-            return Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into());
-        }
-    } else if marker_account.owner == &system_program::id() && marker_account.data_is_empty() {
-        NullifierMarkerPreparationV1::CreateOrAllocateSystemOwned
-    } else {
-        return Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into());
-    };
-
+    let preparation = classify_nullifier_marker_account_v1(program_id, marker_account)?;
     Ok(PlannedNullifierMarkerV1 {
         preparation,
         address_bump,
         marker,
         encoded_marker,
     })
+}
+
+/// Privilege, owner and image classification shared by both marker address
+/// schemes. The caller has already authenticated the account key.
+fn classify_nullifier_marker_account_v1(
+    program_id: &Pubkey,
+    marker_account: &AccountInfo,
+) -> Result<NullifierMarkerPreparationV1, ProgramError> {
+    if marker_account.executable || marker_account.is_signer || !marker_account.is_writable {
+        return Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into());
+    }
+    if marker_account.owner == program_id {
+        let data = marker_account.try_borrow_data()?;
+        if data.len() != POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES {
+            return Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into());
+        }
+        if data.iter().all(|byte| *byte == 0) {
+            Ok(NullifierMarkerPreparationV1::PopulateProgramOwnedZeroed)
+        } else if decode_pool_v1_nullifier_marker(&data).is_ok() {
+            Err(PoolV1ProgramError::NullifierAlreadyConsumed.into())
+        } else {
+            Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into())
+        }
+    } else if marker_account.owner == &system_program::id() && marker_account.data_is_empty() {
+        Ok(NullifierMarkerPreparationV1::CreateOrAllocateSystemOwned)
+    } else {
+        Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into())
+    }
+}
+
+/// Fully validated but unapplied pair-forest (B1) marker plan.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct PlannedPairForestNullifierMarkerV1 {
+    preparation: NullifierMarkerPreparationV1,
+    seed: [u8; 32],
+    encoded_marker: [u8; POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES],
+}
+
+impl PlannedPairForestNullifierMarkerV1 {
+    pub(crate) fn preparation(self) -> NullifierMarkerPreparationV1 {
+        self.preparation
+    }
+
+    pub(crate) fn seed(&self) -> &[u8; 32] {
+        &self.seed
+    }
+
+    pub(crate) fn encoded_marker(self) -> [u8; POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES] {
+        self.encoded_marker
+    }
+}
+
+/// Plan consumption of the one pair-forest marker of `marker.nullifier`.
+///
+/// The address is `pool_v1_pair_forest_nullifier_marker_address(program_id,
+/// marker.pool, nullifier)`: one SHA-256 for the seed and one for the address,
+/// no curve test and no bump. Replay detection, the error codes and the image
+/// checks are those of the legacy PDA marker: a valid occupied marker returns
+/// `NullifierAlreadyConsumed`.
+pub fn plan_pair_forest_nullifier_marker_consumption_v1(
+    program_id: &Pubkey,
+    marker_account: &AccountInfo,
+    marker: PoolV1NullifierMarkerV1,
+) -> Result<PlannedPairForestNullifierMarkerV1, ProgramError> {
+    let encoded_marker = encode_pool_v1_nullifier_marker(&marker)
+        .map_err(|_| PoolV1ProgramError::InvalidNullifierMarkerAccount)?;
+    let pool = Pubkey::new_from_array(marker.pool);
+    let (expected_address, seed) = pool_v1_pair_forest_nullifier_marker_address(
+        program_id,
+        &pool,
+        &marker.canonical_nullifier_encoding(),
+    )?;
+    if marker_account.key != &expected_address || marker_account.key == &pool {
+        return Err(PoolV1ProgramError::InvalidNullifierMarkerAddress.into());
+    }
+    let preparation = classify_nullifier_marker_account_v1(program_id, marker_account)?;
+    Ok(PlannedPairForestNullifierMarkerV1 {
+        preparation,
+        seed,
+        encoded_marker,
+    })
+}
+
+/// Re-classify the already address-authenticated marker after the System
+/// CPI. The key cannot change, so no address is derived again.
+pub(crate) fn recheck_pair_forest_nullifier_marker_v1(
+    program_id: &Pubkey,
+    marker_account: &AccountInfo,
+) -> Result<NullifierMarkerPreparationV1, ProgramError> {
+    classify_nullifier_marker_account_v1(program_id, marker_account)
 }
 
 #[cfg(test)]
@@ -173,6 +321,239 @@ mod tests {
             executable,
             Epoch::default(),
         )
+    }
+
+    fn hex32(text: &str) -> [u8; 32] {
+        core::array::from_fn(|i| u8::from_str_radix(&text[2 * i..2 * i + 2], 16).unwrap())
+    }
+
+    fn le_limbs(limbs: [u32; 8]) -> [u8; 32] {
+        let mut out = [0u8; 32];
+        for (i, limb) in limbs.iter().enumerate() {
+            out[4 * i..4 * i + 4].copy_from_slice(&limb.to_le_bytes());
+        }
+        out
+    }
+
+    /// Bit-by-bit reference for the 7-bit packing (independent of the
+    /// word-wise production loop).
+    fn reference_pack(digest: &[u8; 32]) -> [u8; 32] {
+        let bit = |k: usize| (digest[k / 8] >> (7 - k % 8)) & 1;
+        core::array::from_fn(|i| (0..7).fold(0u8, |acc, j| (acc << 1) | bit(7 * i + j)))
+    }
+
+    struct SplitMix(u64);
+    impl SplitMix {
+        fn next(&mut self) -> u64 {
+            self.0 = self.0.wrapping_add(0x9e37_79b9_7f4a_7c15);
+            let mut z = self.0;
+            z = (z ^ (z >> 30)).wrapping_mul(0xbf58_476d_1ce4_e5b9);
+            z = (z ^ (z >> 27)).wrapping_mul(0x94d0_49bb_1331_11eb);
+            z ^ (z >> 31)
+        }
+        fn bytes32(&mut self) -> [u8; 32] {
+            let mut out = [0u8; 32];
+            for chunk in out.chunks_mut(8) {
+                chunk.copy_from_slice(&self.next().to_le_bytes());
+            }
+            out
+        }
+        fn canonical_nullifier(&mut self) -> [u8; 32] {
+            le_limbs(core::array::from_fn(|_| (self.next() % u64::from(P)) as u32))
+        }
+    }
+
+    #[test]
+    fn b1_marker_seed_and_address_match_fixed_vectors() {
+        // Vectors computed independently with Python hashlib (SHA-256) and a
+        // big-integer 7-bit split of the first 28 digest bytes.
+        let program_id = Pubkey::new_from_array([0x11; 32]);
+        let master = Pubkey::new_from_array([0x22; 32]);
+        let nullifier = le_limbs([1, 2, 3, 4, 5, 6, 7, 8]);
+        let seed = pool_v1_pair_forest_marker_seed_v1(&master, &nullifier);
+        assert_eq!(
+            seed,
+            hex32("217964665252030d613d413c1737232007756c6f6a6264480071683c72265b7d")
+        );
+        let (address, returned_seed) =
+            pool_v1_pair_forest_nullifier_marker_address(&program_id, &master, &nullifier)
+                .unwrap();
+        assert_eq!(returned_seed, seed);
+        assert_eq!(
+            address.to_bytes(),
+            hex32("86774708d96c52689a57843643ab11e5ebafb7f999e45817017c24a9f91a2fba")
+        );
+
+        let program_id = Pubkey::new_from_array(core::array::from_fn(|i| i as u8));
+        let master = Pubkey::new_from_array(core::array::from_fn(|i| 32 + i as u8));
+        let nullifier = le_limbs(core::array::from_fn(|i| 0x7fff_fffe - i as u32));
+        let (address, seed) =
+            pool_v1_pair_forest_nullifier_marker_address(&program_id, &master, &nullifier)
+                .unwrap();
+        assert_eq!(
+            seed,
+            hex32("6f046b26057d4727644415796c6719403510732a4a190c7e49655f15431b1269")
+        );
+        assert_eq!(
+            address.to_bytes(),
+            hex32("d7ccb51c6b2c9b4e312c0dee424b5d197bdbcee3c4d4474c6de43a341b99e3f0")
+        );
+
+        assert_eq!(
+            pack_pool_v1_pair_forest_marker_seed_v1(&[0xff; 32]),
+            [0x7f; 32]
+        );
+        let mut top = [0u8; 32];
+        top[0] = 0x80;
+        let mut expected = [0u8; 32];
+        expected[0] = 0x40;
+        assert_eq!(pack_pool_v1_pair_forest_marker_seed_v1(&top), expected);
+        // Bytes 28..32 of the digest are not used.
+        let mut tail = [0u8; 32];
+        tail[28..].fill(0xff);
+        assert_eq!(pack_pool_v1_pair_forest_marker_seed_v1(&tail), [0u8; 32]);
+    }
+
+    #[test]
+    fn b1_packed_seed_is_32_byte_utf8_and_address_is_create_with_seed_for_random_inputs() {
+        use sha2::{Digest as _, Sha256};
+        let mut rng = SplitMix(0xa5b1_5eed);
+        let mut seen = std::collections::BTreeSet::new();
+        for round in 0..20_000 {
+            let digest = rng.bytes32();
+            let packed = pack_pool_v1_pair_forest_marker_seed_v1(&digest);
+            assert_eq!(packed, reference_pack(&digest));
+            let text = core::str::from_utf8(&packed).expect("valid UTF-8");
+            assert_eq!(text.len(), 32);
+            assert!(packed.iter().all(|byte| *byte < 0x80));
+
+            let program_id = Pubkey::new_from_array(rng.bytes32());
+            let master = Pubkey::new_from_array(rng.bytes32());
+            let nullifier = rng.canonical_nullifier();
+            let (address, seed) =
+                pool_v1_pair_forest_nullifier_marker_address(&program_id, &master, &nullifier)
+                    .unwrap();
+            let seed_digest: [u8; 32] = Sha256::new()
+                .chain_update(POOL_V1_PAIR_FOREST_MARKER_SEED_DOMAIN)
+                .chain_update(master.as_ref())
+                .chain_update(nullifier)
+                .finalize()
+                .into();
+            assert_eq!(seed, reference_pack(&seed_digest));
+            assert!(core::str::from_utf8(&seed).is_ok_and(|text| text.len() == 32));
+            let independent: [u8; 32] = Sha256::new()
+                .chain_update(master.as_ref())
+                .chain_update(seed)
+                .chain_update(program_id.as_ref())
+                .finalize()
+                .into();
+            assert_eq!(address.to_bytes(), independent);
+            assert_eq!(
+                Pubkey::create_with_seed(&master, core::str::from_utf8(&seed).unwrap(), &program_id)
+                    .unwrap(),
+                address
+            );
+            if round < 5_000 {
+                assert!(seen.insert(seed), "seed collision in a 5,000 sample");
+            }
+        }
+    }
+
+    #[test]
+    fn b1_plan_accepts_only_the_seed_address_under_the_master_base() {
+        let program_id = Pubkey::new_unique();
+        let pool = Pubkey::new_unique();
+        let marker = marker(pool);
+        let nullifier = marker.canonical_nullifier_encoding();
+        let (marker_key, seed) =
+            pool_v1_pair_forest_nullifier_marker_address(&program_id, &pool, &nullifier).unwrap();
+        let seed_text = core::str::from_utf8(&seed).unwrap();
+        let mut other_seed = seed;
+        other_seed[31] ^= 1;
+        let candidates = [
+            // Wrong authority (base): an attacker can create Pool-owned
+            // accounts at its own base's seed addresses.
+            Pubkey::create_with_seed(&Pubkey::new_unique(), seed_text, &program_id).unwrap(),
+            // Wrong seed under the right base.
+            Pubkey::create_with_seed(
+                &pool,
+                core::str::from_utf8(&other_seed).unwrap(),
+                &program_id,
+            )
+            .unwrap(),
+            // Right base and seed, wrong owner program in the derivation.
+            Pubkey::create_with_seed(&pool, seed_text, &Pubkey::new_unique()).unwrap(),
+            // The legacy canonical PDA marker address.
+            pool_v1_nullifier_marker_address(&program_id, &pool, &nullifier)
+                .unwrap()
+                .0,
+        ];
+        for key in candidates {
+            let mut lamports = rent_exempt();
+            let mut zeroed = [0u8; POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES];
+            let forged = account(&key, &program_id, &mut lamports, &mut zeroed, false, true, false);
+            assert_eq!(
+                plan_pair_forest_nullifier_marker_consumption_v1(&program_id, &forged, marker),
+                Err(PoolV1ProgramError::InvalidNullifierMarkerAddress.into())
+            );
+        }
+
+        // The right address, prefunded but owned by someone else.
+        let foreign_owner = Pubkey::new_unique();
+        let mut lamports = rent_exempt();
+        let mut zeroed = [0u8; POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES];
+        let foreign = account(
+            &marker_key,
+            &foreign_owner,
+            &mut lamports,
+            &mut zeroed,
+            false,
+            true,
+            false,
+        );
+        assert_eq!(
+            plan_pair_forest_nullifier_marker_consumption_v1(&program_id, &foreign, marker),
+            Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into())
+        );
+        // Signer or read-only marker accounts.
+        for (signer, writable) in [(true, true), (false, false)] {
+            let mut lamports = 0;
+            let mut empty = [];
+            let system = system_program::id();
+            let bad = account(&marker_key, &system, &mut lamports, &mut empty, signer, writable, false);
+            assert_eq!(
+                plan_pair_forest_nullifier_marker_consumption_v1(&program_id, &bad, marker),
+                Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into())
+            );
+        }
+        // Fresh (System-owned empty, with or without lamports) plans creation;
+        // a consumed image at the address is `NullifierAlreadyConsumed`.
+        for prefund in [0u64, 1, rent_exempt()] {
+            let mut lamports = prefund;
+            let mut empty = [];
+            let system = system_program::id();
+            let fresh = account(&marker_key, &system, &mut lamports, &mut empty, false, true, false);
+            let plan =
+                plan_pair_forest_nullifier_marker_consumption_v1(&program_id, &fresh, marker)
+                    .unwrap();
+            assert_eq!(
+                plan.preparation(),
+                NullifierMarkerPreparationV1::CreateOrAllocateSystemOwned
+            );
+            assert_eq!(plan.seed(), &seed);
+        }
+        let mut consumed = encode_pool_v1_nullifier_marker(&marker).unwrap();
+        let mut lamports = rent_exempt();
+        let occupied = account(&marker_key, &program_id, &mut lamports, &mut consumed, false, true, false);
+        assert_eq!(
+            plan_pair_forest_nullifier_marker_consumption_v1(&program_id, &occupied, marker),
+            Err(PoolV1ProgramError::NullifierAlreadyConsumed.into())
+        );
+    }
+
+    fn rent_exempt() -> u64 {
+        solana_program::rent::Rent::default()
+            .minimum_balance(POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES)
     }
 
     #[test]

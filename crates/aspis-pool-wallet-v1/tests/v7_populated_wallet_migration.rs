@@ -902,9 +902,13 @@ fn finalized_terminal_observation_without_notes(
         instruction_index: 2,
         top_level_instruction_count: 3,
         instruction_program: *state.program_id(),
-        instruction_bytes: encode_pool_v1_pair_forest_terminal_request_v1(&request)
-            .unwrap()
-            .to_vec(),
+        instruction_bytes: [
+            encode_pool_v1_pair_forest_terminal_request_v1(&request)
+                .unwrap()
+                .as_slice(),
+            &[255, 0, 0, 0],
+        ]
+        .concat(),
         ciphertext_delivery: FinalizedPairForestCiphertextDeliveryV2::Verified {
             instruction_index: 1,
             authority: [0xa3; 32],

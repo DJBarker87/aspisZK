@@ -373,6 +373,81 @@ pub(crate) fn create_or_allocate_pda_with_rent<'info, R: PoolCpiRuntimeV1>(
     Ok(())
 }
 
+/// `create_with_seed` counterpart of [`create_or_allocate_pda_with_rent`]
+/// (B1 marker). `base` is a Pool PDA that signs with `base_signer_seeds`;
+/// `account` must be `create_with_seed(base, seed, owner)` (the System
+/// program re-derives and checks it). A System-owned empty account with no
+/// lamports is created with `CreateAccountWithSeed`; a prefunded one (anyone
+/// may send lamports to the address first) is topped up with `Transfer` and
+/// then given its space and owner with `AllocateWithSeed` and
+/// `AssignWithSeed`.
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn create_or_allocate_with_seed_with_rent<'info, R: PoolCpiRuntimeV1>(
+    runtime: &mut R,
+    payer: &AccountInfo<'info>,
+    account: &AccountInfo<'info>,
+    base: &AccountInfo<'info>,
+    seed: &str,
+    system_program_account: &AccountInfo<'info>,
+    exact_bytes: usize,
+    owner: &Pubkey,
+    base_signer_seeds: &[&[u8]],
+    rent: &Rent,
+) -> ProgramResult {
+    require_payer_and_system_program(payer, system_program_account)?;
+    if account.owner != &system_program::id() || !account.data_is_empty() {
+        return Err(PoolV1ProgramError::InvalidFreshAccount.into());
+    }
+    let required_lamports = rent.minimum_balance(exact_bytes).max(1);
+    let infos = [
+        payer.clone(),
+        account.clone(),
+        base.clone(),
+        system_program_account.clone(),
+    ];
+    let signer_seed_sets = [base_signer_seeds];
+    if account.lamports() == 0 {
+        runtime.invoke_signed(
+            &system_instruction::create_account_with_seed(
+                payer.key,
+                account.key,
+                base.key,
+                seed,
+                required_lamports,
+                exact_bytes as u64,
+                owner,
+            ),
+            &infos,
+            &signer_seed_sets,
+        )?;
+    } else {
+        let deficit = required_lamports.saturating_sub(account.lamports());
+        if deficit != 0 {
+            runtime.invoke(
+                &system_instruction::transfer(payer.key, account.key, deficit),
+                &infos,
+            )?;
+        }
+        runtime.invoke_signed(
+            &system_instruction::allocate_with_seed(
+                account.key,
+                base.key,
+                seed,
+                exact_bytes as u64,
+                owner,
+            ),
+            &infos,
+            &signer_seed_sets,
+        )?;
+        runtime.invoke_signed(
+            &system_instruction::assign_with_seed(account.key, base.key, seed, owner),
+            &infos,
+            &signer_seed_sets,
+        )?;
+    }
+    Ok(())
+}
+
 pub(crate) fn require_token_program_account(account: &AccountInfo<'_>) -> ProgramResult {
     if account.key != &LEGACY_SPL_TOKEN_PROGRAM_ID
         || !account.executable
@@ -1543,6 +1618,51 @@ pub(crate) fn create_nullifier_marker_if_needed_v1<'info, R: PoolCpiRuntimeV1>(
         return Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into());
     }
     Ok(ready)
+}
+
+/// Create the pair-forest (B1) marker at `create_with_seed(master, seed,
+/// program_id)` if it is still System-owned, signing as the master PDA
+/// (`master_signer_seeds` = master seeds with the stored, authenticated
+/// bump). The key was authenticated by the plan, so the re-check derives no
+/// address: it only requires the now Pool-owned, exact-size, zeroed,
+/// rent-exempt image.
+#[allow(clippy::too_many_arguments)]
+#[cfg(feature = "pair-forest-account-evidence")]
+pub(crate) fn create_pair_forest_nullifier_marker_if_needed_v1<'info, R: PoolCpiRuntimeV1>(
+    runtime: &mut R,
+    program_id: &Pubkey,
+    master_account: &AccountInfo<'info>,
+    master_signer_seeds: &[&[u8]],
+    marker_account: &AccountInfo<'info>,
+    payer: &AccountInfo<'info>,
+    system_program_account: &AccountInfo<'info>,
+    planned: crate::nullifier::PlannedPairForestNullifierMarkerV1,
+    rent: &Rent,
+) -> Result<crate::nullifier::PlannedPairForestNullifierMarkerV1, ProgramError> {
+    if planned.preparation() == NullifierMarkerPreparationV1::CreateOrAllocateSystemOwned {
+        create_or_allocate_with_seed_with_rent(
+            runtime,
+            payer,
+            marker_account,
+            master_account,
+            crate::nullifier::pool_v1_pair_forest_marker_seed_str_v1(planned.seed())?,
+            system_program_account,
+            POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES,
+            program_id,
+            master_signer_seeds,
+            rent,
+        )?;
+    }
+    if crate::nullifier::recheck_pair_forest_nullifier_marker_v1(program_id, marker_account)?
+        != NullifierMarkerPreparationV1::PopulateProgramOwnedZeroed
+        || !rent.is_exempt(
+            marker_account.lamports(),
+            POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES,
+        )
+    {
+        return Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into());
+    }
+    Ok(planned)
 }
 
 /// Consume one exact ASPS/optional ASRS plan and perform the complete final

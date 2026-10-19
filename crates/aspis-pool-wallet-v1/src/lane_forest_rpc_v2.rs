@@ -731,7 +731,11 @@ fn scanner_event_from_terminal_v2(
     if observation.return_data_program != *state.program_id() {
         return Err(LaneForestRpcErrorV2::WrongReturnDataProgram);
     }
-    let request = decode_pool_v1_pair_forest_terminal_request_v1(&observation.instruction_bytes)
+    // Pool instruction data is ASQ8 || 4 B4 bump hints; only ASQ8 is semantic.
+    let (terminal_request_bytes, _) =
+        aspis_pool::split_pair_forest_terminal_bump_hints_v1(&observation.instruction_bytes)
+            .map_err(|_| LaneForestRpcErrorV2::InvalidEvent)?;
+    let request = decode_pool_v1_pair_forest_terminal_request_v1(terminal_request_bytes)
         .map_err(|_| LaneForestRpcErrorV2::InvalidEvent)?;
     let (recipient_ciphertext, change_ciphertext) = match &observation.ciphertext_delivery {
         FinalizedPairForestCiphertextDeliveryV2::Unrecoverable(_) => (None, None),
@@ -749,7 +753,7 @@ fn scanner_event_from_terminal_v2(
             }
             carrier
                 .validate_terminal_v2(
-                    &observation.instruction_bytes,
+                    terminal_request_bytes,
                     *carrier.proof_account_v2(),
                     *instruction_index,
                     observation.instruction_index,
@@ -1588,9 +1592,13 @@ mod tests {
             instruction_index: 2,
             top_level_instruction_count: 3,
             instruction_program: program.to_bytes(),
-            instruction_bytes: encode_pool_v1_pair_forest_terminal_request_v1(&request)
-                .unwrap()
-                .to_vec(),
+            instruction_bytes: [
+                encode_pool_v1_pair_forest_terminal_request_v1(&request)
+                    .unwrap()
+                    .as_slice(),
+                &[255, 0, 0, 0],
+            ]
+            .concat(),
             ciphertext_delivery: FinalizedPairForestCiphertextDeliveryV2::Verified {
                 instruction_index: 1,
                 authority: [0xa3; 32],
@@ -1714,9 +1722,13 @@ mod tests {
             instruction_index: 2,
             top_level_instruction_count: 3,
             instruction_program: program.to_bytes(),
-            instruction_bytes: encode_pool_v1_pair_forest_terminal_request_v1(&request)
-                .unwrap()
-                .to_vec(),
+            instruction_bytes: [
+                encode_pool_v1_pair_forest_terminal_request_v1(&request)
+                    .unwrap()
+                    .as_slice(),
+                &[255, 0, 0, 0],
+            ]
+            .concat(),
             ciphertext_delivery: FinalizedPairForestCiphertextDeliveryV2::Verified {
                 instruction_index: 1,
                 authority: [0xa3; 32],

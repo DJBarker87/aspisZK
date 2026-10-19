@@ -71,8 +71,12 @@ pub use instruction::{
     POOL_V1_WITHDRAWAL_INSTRUCTION_MAGIC,
 };
 pub use nullifier::{
-    plan_nullifier_marker_consumption_v1, pool_v1_nullifier_marker_address,
-    NullifierMarkerPreparationV1, PlannedNullifierMarkerV1,
+    pack_pool_v1_pair_forest_marker_seed_v1, plan_nullifier_marker_consumption_v1,
+    plan_pair_forest_nullifier_marker_consumption_v1, pool_v1_nullifier_marker_address,
+    pool_v1_pair_forest_marker_seed_str_v1, pool_v1_pair_forest_marker_seed_v1,
+    pool_v1_pair_forest_nullifier_marker_address, NullifierMarkerPreparationV1,
+    PlannedNullifierMarkerV1, PlannedPairForestNullifierMarkerV1,
+    POOL_V1_PAIR_FOREST_MARKER_SEED_BYTES, POOL_V1_PAIR_FOREST_MARKER_SEED_DOMAIN,
 };
 pub use pair_dispatch::{
     derive_pair_verifier_account_claim_v1, dispatch_pair_verifier_readonly_v1,
@@ -87,13 +91,17 @@ pub use pair_forest::{
     encode_pair_forest_initialize_instruction_v1, plan_pair_forest_checkpoint_accounts_v1,
     pool_v1_pair_forest_checkpoint_address, pool_v1_pair_forest_global_root_v1,
     pool_v1_pair_forest_lane_address, pool_v1_pair_forest_lane_root_page_address,
-    pool_v1_pair_forest_master_address, PlannedPairForestCheckpointAccountsV1,
+    encode_pair_forest_terminal_instruction_data_v1, pool_v1_pair_forest_master_address,
+    split_pair_forest_terminal_bump_hints_v1, PlannedPairForestCheckpointAccountsV1,
+    PoolV1PairForestTerminalBumpHintsV1, POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES,
     POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_COUNT, POOL_V1_PAIR_FOREST_CHECKPOINT_INSTRUCTION_BYTES,
     POOL_V1_PAIR_FOREST_CHECKPOINT_INSTRUCTION_MAGIC, POOL_V1_PAIR_FOREST_CHECKPOINT_SEED,
     POOL_V1_PAIR_FOREST_DEPOSIT_INSTRUCTION_MAGIC, POOL_V1_PAIR_FOREST_INITIALIZE_ACCOUNT_COUNT,
     POOL_V1_PAIR_FOREST_INITIALIZE_INSTRUCTION_MAGIC, POOL_V1_PAIR_FOREST_LANE_SEED,
     POOL_V1_PAIR_FOREST_MASTER_SEED,
 };
+#[cfg(all(feature = "pair-forest-account-evidence", not(target_os = "solana")))]
+pub use pair_forest::pool_v1_pair_forest_terminal_bump_hints_v1;
 pub use pair_state::{
     pool_v1_pair_state_address, PairAppendReceiptV1, PairPoolStateV1,
     PairVerifiedAfterstateReceiptV1, POOL_V1_PAIR_STATE_ACCOUNT_BYTES,
@@ -130,6 +138,7 @@ pub use vault::{
     pool_v1_vault_authority_address, pool_v1_vault_token_account_address,
     LEGACY_SPL_TOKEN_ACCOUNT_BYTES, LEGACY_SPL_TOKEN_MINT_ACCOUNT_BYTES,
     LEGACY_SPL_TOKEN_PROGRAM_ID, POOL_V1_VAULT_AUTHORITY_SEED, POOL_V1_VAULT_TOKEN_ACCOUNT_SEED,
+    VaultBumpHintsV1,
 };
 pub use verifier_dispatch::{
     authenticate_verifier_return_data_v1, dispatch_authenticated_verifier_readonly_v1,

@@ -89,6 +89,33 @@ pub(crate) fn require_root_page_address(
     Ok(())
 }
 
+/// B4: authenticate an existing root page by a caller-supplied bump hint
+/// with one `create_program_address`. Sound for pages that already exist,
+/// because the Pool creates every page at the canonical bump (F6 of the PDA
+/// study); a mismatch is the same `InvalidRootPageAddress` as before.
+pub(crate) fn require_root_page_address_with_bump(
+    program_id: &Pubkey,
+    pool: &Pubkey,
+    page_number: u64,
+    bump: u8,
+    account: &AccountInfo,
+) -> Result<(), ProgramError> {
+    let page_number_bytes = page_number.to_le_bytes();
+    if !crate::registry::stored_bump_address_matches(
+        &[
+            POOL_V1_ROOT_HISTORY_PAGE_SEED,
+            pool.as_ref(),
+            &page_number_bytes,
+            &[bump],
+        ],
+        program_id,
+        account.key,
+    ) {
+        return Err(PoolV1ProgramError::InvalidRootPageAddress.into());
+    }
+    Ok(())
+}
+
 pub(crate) fn validate_root_page_bytes(
     data: &[u8],
     expected_pool: &Pubkey,

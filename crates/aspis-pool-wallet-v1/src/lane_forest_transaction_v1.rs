@@ -11,7 +11,9 @@
 use std::{collections::BTreeSet, io::Read, time::Duration};
 
 use aspis_pool::{
-    pool_v1_nullifier_marker_address, pool_v1_pair_forest_checkpoint_address,
+    encode_pair_forest_terminal_instruction_data_v1, pool_v1_pair_forest_checkpoint_address,
+    pool_v1_pair_forest_nullifier_marker_address, pool_v1_pair_forest_terminal_bump_hints_v1,
+    split_pair_forest_terminal_bump_hints_v1,
     pool_v1_pair_forest_lane_address, pool_v1_pair_forest_lane_root_page_address,
     pool_v1_pair_forest_master_address, pool_v1_vault_authority_address,
     pool_v1_vault_token_account_address, LEGACY_SPL_TOKEN_PROGRAM_ID,
@@ -514,7 +516,8 @@ pub fn build_pair_forest_terminal_instruction_v1_4k_v2(
     )
     .map_err(|_| PairForestTransactionV1ErrorV2::WrongLane)?
     .0;
-    let marker = pool_v1_nullifier_marker_address(
+    // B1 marker: create_with_seed(master, packed SHA-256 seed, Pool).
+    let marker = pool_v1_pair_forest_nullifier_marker_address(
         &pool_program,
         &master_address,
         &encode_digest_canonical(request.public.nullifier()),
@@ -568,9 +571,19 @@ pub fn build_pair_forest_terminal_instruction_v1_4k_v2(
     Ok(Instruction {
         program_id: pool_program,
         accounts,
-        data: encode_pool_v1_pair_forest_terminal_request_v1(request)
-            .map_err(|_| PairForestTransactionV1ErrorV2::WrongRequest)?
-            .to_vec(),
+        // ASQ8 || 4 B4 bump hints (current page, next page, vault authority,
+        // vault token account); unused hints are zero.
+        data: encode_pair_forest_terminal_instruction_data_v1(
+            &encode_pool_v1_pair_forest_terminal_request_v1(request)
+                .map_err(|_| PairForestTransactionV1ErrorV2::WrongRequest)?,
+            pool_v1_pair_forest_terminal_bump_hints_v1(
+                &pool_program,
+                &master_address,
+                &lane_address,
+                lane.tree.next_leaf_index,
+                withdrawal,
+            ),
+        ),
     })
 }
 
@@ -700,8 +713,10 @@ fn build_exact_pair_forest_v1_instructions_v2(
 fn terminal_proof_account_v2(
     instruction: &Instruction,
 ) -> Result<Pubkey, PairForestTransactionV1ErrorV2> {
+    let (request_bytes, _) = split_pair_forest_terminal_bump_hints_v1(&instruction.data)
+        .map_err(|_| PairForestTransactionV1ErrorV2::WrongRequest)?;
     let request =
-        aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_request_v1(&instruction.data)
+        aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_request_v1(request_bytes)
             .map_err(|_| PairForestTransactionV1ErrorV2::WrongRequest)?;
     let proof_index = match request.public {
         PoolV1PairForestTerminalPaymentV1::PrivateTransfer(_) => {
@@ -745,8 +760,12 @@ pub fn build_exact_pair_forest_v1_carrier_transaction_v2(
         return Err(PairForestTransactionV1ErrorV2::InvalidCarrier);
     }
     let proof_account = terminal_proof_account_v2(terminal_instruction)?;
+    // The carrier binds the ASQ8 request, not the Pool-only bump hints.
+    let (terminal_request_bytes, _) =
+        split_pair_forest_terminal_bump_hints_v1(&terminal_instruction.data)
+            .map_err(|_| PairForestTransactionV1ErrorV2::InvalidCarrier)?;
     carrier
-        .validate_terminal_v2(&terminal_instruction.data, proof_account.to_bytes(), 0, 1)
+        .validate_terminal_v2(terminal_request_bytes, proof_account.to_bytes(), 0, 1)
         .map_err(|_| PairForestTransactionV1ErrorV2::InvalidCarrier)?;
     let carrier_instruction =
         build_tx_v1_ciphertext_carrier_instruction_v2(carrier, wallet_proof_authority)
@@ -1116,10 +1135,10 @@ mod tests {
             expected_v0,
             expected_addresses,
         ) in [
-            (false, false, 11, 845, 823, 12),
-            (false, true, 12, 878, 856, 13),
-            (true, false, 16, 1_010, 988, 17),
-            (true, true, 17, 1_043, 1_021, 18),
+            (false, false, 11, 849, 827, 12),
+            (false, true, 12, 882, 860, 13),
+            (true, false, 16, 1_014, 992, 17),
+            (true, true, 17, 1_047, 1_025, 18),
         ] {
             let (program, master, lane, profile, request) = terminal_fixture(withdrawal, rollover);
             let proof_account = key(21);
@@ -1135,7 +1154,7 @@ mod tests {
             )
             .unwrap();
             assert_eq!(instruction.accounts.len(), expected_accounts);
-            assert_eq!(instruction.data.len(), 320);
+            assert_eq!(instruction.data.len(), 324);
             let transaction = build_exact_pair_forest_v1_transaction_v2(
                 &instruction,
                 marker_payer,
@@ -1163,10 +1182,10 @@ mod tests {
     #[test]
     fn immutable_registry_v2_terminal_wires_preserve_account_count_and_exact_four_kib_sizes() {
         for (withdrawal, rollover, expected_accounts, expected_v1, expected_addresses) in [
-            (false, false, 11, 845, 12),
-            (false, true, 12, 878, 13),
-            (true, false, 16, 1_010, 17),
-            (true, true, 17, 1_043, 18),
+            (false, false, 11, 849, 12),
+            (false, true, 12, 882, 13),
+            (true, false, 16, 1_014, 17),
+            (true, true, 17, 1_047, 18),
         ] {
             let (program, master, lane, profile, request) =
                 immutable_terminal_fixture(withdrawal, rollover);
@@ -1185,7 +1204,7 @@ mod tests {
             )
             .unwrap();
             assert_eq!(instruction.accounts.len(), expected_accounts);
-            assert_eq!(instruction.data.len(), 320);
+            assert_eq!(instruction.data.len(), 324);
             assert!(instruction
                 .accounts
                 .iter()

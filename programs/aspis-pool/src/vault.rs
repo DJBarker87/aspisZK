@@ -403,7 +403,17 @@ pub(crate) fn plan_legacy_withdrawal_transfer_v1(
         accounts,
         destination,
         amount,
+        None,
     )
+}
+
+/// Pool-only bump hints for the two constant-seed custody PDAs (pair-forest
+/// R1 withdrawal). They are carried in Pool instruction data only; the master
+/// format and the verifier are unchanged.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub struct VaultBumpHintsV1 {
+    pub vault_authority: u8,
+    pub vault_token_account: u8,
 }
 
 /// Pair-state and legacy-state withdrawal paths share the exact vault
@@ -416,6 +426,7 @@ pub(crate) fn plan_legacy_withdrawal_transfer_from_identity_v1(
     accounts: &[AccountInfo],
     destination: &Pubkey,
     amount: u32,
+    bump_hints: Option<VaultBumpHintsV1>,
 ) -> Result<LegacyWithdrawalTransferPlanV1, ProgramError> {
     let [mint_account, vault_account, destination_account, vault_authority, token_program] =
         exact_five_withdrawal_accounts(accounts)?;
@@ -443,7 +454,29 @@ pub(crate) fn plan_legacy_withdrawal_transfer_from_identity_v1(
 
     require_token_owned_account(vault_account, true)?;
     require_token_owned_account(destination_account, true)?;
-    let (expected_authority, authority_bump) = pool_v1_vault_authority_address(program_id, pool);
+    // With hints (B4-style, Pool-only): one `create_program_address` each.
+    // A hinted non-canonical authority cannot pass, because the vault token
+    // account (authenticated below) records the canonical authority, and the
+    // Pool creates the vault token account only at its canonical bump.
+    let (expected_authority, authority_bump) = match bump_hints {
+        Some(hints) => (
+            if crate::registry::stored_bump_address_matches(
+                &[
+                    POOL_V1_VAULT_AUTHORITY_SEED,
+                    pool.as_ref(),
+                    &[hints.vault_authority],
+                ],
+                program_id,
+                vault_authority.key,
+            ) {
+                *vault_authority.key
+            } else {
+                return Err(PoolV1ProgramError::InvalidVaultAuthority.into());
+            },
+            hints.vault_authority,
+        ),
+        None => pool_v1_vault_authority_address(program_id, pool),
+    };
     if vault_authority.key != &expected_authority
         || vault_authority.owner != &system_program::id()
         || vault_authority.executable
@@ -465,7 +498,19 @@ pub(crate) fn plan_legacy_withdrawal_transfer_from_identity_v1(
         let data = destination_account.try_borrow_data()?;
         parse_legacy_token_account_v1(&data)?
     };
-    if vault_account.key != &pool_v1_vault_token_account_address(program_id, pool).0 {
+    let vault_address_ok = match bump_hints {
+        Some(hints) => crate::registry::stored_bump_address_matches(
+            &[
+                POOL_V1_VAULT_TOKEN_ACCOUNT_SEED,
+                pool.as_ref(),
+                &[hints.vault_token_account],
+            ],
+            program_id,
+            vault_account.key,
+        ),
+        None => vault_account.key == &pool_v1_vault_token_account_address(program_id, pool).0,
+    };
+    if !vault_address_ok {
         return Err(PoolV1ProgramError::InvalidVaultTokenAddress.into());
     }
     if vault.mint != expected_mint

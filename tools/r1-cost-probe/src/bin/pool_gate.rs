@@ -11,7 +11,9 @@ use std::{
 use anyhow::{anyhow, bail, ensure, Context, Result};
 use aspis_core::field::{M31, P};
 use aspis_pool::{
-    pool_v1_nullifier_marker_address, pool_v1_pair_forest_checkpoint_address,
+    encode_pair_forest_terminal_instruction_data_v1, pool_v1_pair_forest_nullifier_marker_address,
+    pool_v1_pair_forest_terminal_bump_hints_v1, POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES,
+    pool_v1_pair_forest_checkpoint_address,
     pool_v1_pair_forest_lane_address, pool_v1_pair_forest_master_address,
     pool_v1_root_page_address, pool_v1_vault_authority_address,
     pool_v1_vault_token_account_address, POOL_V1_PAIR_EMPTY_ROOTS,
@@ -1552,12 +1554,28 @@ fn main() -> Result<()> {
     let next_page_key = rollover.then(|| {
         pool_v1_root_page_address(&pool_program, &lane_key, next_history_location.page_number).0
     });
-    let marker_key = pool_v1_nullifier_marker_address(
+    // B1: marker = create_with_seed(master, packed SHA-256 seed, Pool).
+    let marker_key = pool_v1_pair_forest_nullifier_marker_address(
         &pool_program,
         &master_key,
         &encode_digest_canonical(&nullifier),
     )?
     .0;
+    // B4: Pool-only bump hints appended to ASQ8.
+    let terminal_bump_hints = pool_v1_pair_forest_terminal_bump_hints_v1(
+        &pool_program,
+        &master_key,
+        &lane_key,
+        lane.tree.next_leaf_index,
+        args.operation == Operation::Withdrawal,
+    );
+    let terminal_instruction_data =
+        encode_pair_forest_terminal_instruction_data_v1(&instruction_data, terminal_bump_hints);
+    ensure!(
+        terminal_instruction_data.len()
+            == POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES + POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES,
+        "terminal instruction data length changed"
+    );
     let payer = retained_task_key(&args.task_dir.join("payer-keypair.json"))?;
     let authority = retained_task_key(&args.task_dir.join("authority-keypair.json"))?;
     let mut svm = LiteSVM::new();
@@ -2201,7 +2219,7 @@ fn main() -> Result<()> {
     let instruction = Instruction {
         program_id: address(&pool_program),
         accounts: instruction_accounts,
-        data: instruction_data.to_vec(),
+        data: terminal_instruction_data.clone(),
     };
     let instruction_account_count = instruction.accounts.len();
     let tx = transaction(&svm, &payer, instruction.clone(), args.tx_version)?;
@@ -2505,7 +2523,9 @@ fn main() -> Result<()> {
             "serialized_transaction_bytes": tx_bytes,
             "serialized_transaction_target_bytes": args.tx_version.target_bytes(),
             "serialized_transaction_target_headroom_bytes": args.tx_version.target_bytes() - tx_bytes,
-            "instruction_bytes": instruction_data.len(),
+            "instruction_bytes": terminal_instruction_data.len(),
+            "terminal_bump_hints": terminal_bump_hints.encode().to_vec(),
+            "marker_address_scheme": "b1-create-with-seed(master, 7bit(sha256(aspis-marker-seed-v1||master||nullifier)[..28]), pool)",
             "instruction_account_metas": instruction_account_count,
             "declared_compute_unit_limit": COMPUTE_UNIT_LIMIT,
             "priority_fee_lamports": if args.tx_version == TxVersion::V1 { Some(PRIORITY_FEE_LAMPORTS) } else { None },
