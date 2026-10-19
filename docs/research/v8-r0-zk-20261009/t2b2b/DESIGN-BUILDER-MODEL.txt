@@ -447,3 +447,55 @@ is the row-local fact the writing stage guarantees.
       (B5) The copy ↔ production link is the native differential test,
            not a proof (the production writers use Vec, closures and
            M31 methods that the pinned extractor does not handle).
+
+§10  Sponge and node writers, Poseidon abstract; B3 (base 4c8948186)
+
+  10.1 Copies: refine/blockwriters/src/lib.rs.  Every writer takes the
+       eleven odd-round outputs of its permutation (`rounds`) as an input;
+       the permutation is not in the copy.  write_block (write_permutation's
+       layout), node_pre / node_absorb / write_node (write_node and
+       write_forest_node), sponge_init / sponge_absorb / sponge_chunk /
+       place_block / write_sponge (write_sponge; running state after
+       permutation p = rounds[p][10]), read_back (the relocation read-back),
+       m31_add / m31_sub.
+  10.2 Native differential test (refine/evidence/diff-f.txt, 3G/4G, swap 0),
+       with `rounds` produced by the production permutation
+       permute_optimized_with_trace (the abstract parameter, instantiated):
+       M31 add/sub 1,000,000 pairs incl. edges; write_permutation 20,000;
+       write_node/write_forest_node 20,000 (digest and read_back checked);
+       write_sponge 20,000 (len 1..24, digest checked); and all 57 blocks of
+       64 compiled traces (3,648 blocks) have write_block's layout.  The
+       earlier tests (diff-d) re-ran green in the same run.  Attempt e:
+       two harness move-out-of-Drop errors; f green.
+  10.3 Extraction (refine/evidence/extract-c.txt): same pinned tools and
+       scopes; refine/extract/blocks/Writers.lean byte-for-byte; compiled as
+       R0Z/BlockWritersExtracted with D-1/D-2 only (host 4263).
+  10.4 Lean (refine/evidence/lean-attempts-4263-4277.json; all green exit 0,
+       standard axioms, in-window):
+       BlockRefine     ends_loop, rounds_inner/outer, block_spec,
+                       block_model: write_block = blockCell B for every cell,
+                       given EndsLift (pre/absorb lift to B) and
+                       RoundsOk rounds B := ∀ r < 11, lift rounds[r] =
+                       blockIter B (r+1)  — THE Poseidon plug-in point (4266)
+       NodeRefine      m31_add_spec, m31_sub_spec_wide (inputs < p),
+                       node_right_lane7_spec/_lift (B3 a: the large tweak,
+                       lift = x − 0x41531005 in char p), node_pre_spec,
+                       node_absorb_spec, node_ends_lift, node_model:
+                       write_node = blockCell (nodeIn L R) (4268)
+       ReadBackRefine  read_back_node (B3 b): reading a copy-written node
+                       block returns (prev[0..8], left, right) exactly (4271)
+       SpongeRefine    sponge_init/absorb/chunk/place_block specs (4272)
+       SpongeModel     sponge_model: write_sponge = blockCell (B q) for every
+                       permutation q < ceil(len/8) and cell, given the
+                       initial pre-state, the chunk absorptions, the model's
+                       chaining B(q+1).pre = blockOut (B q) and RoundsOk;
+                       later blocks zero (4275)
+       NoteSpongeModel note_sponge_model: on the note input the blocks are
+                       the model's noteB0/noteB1/noteB2 (4277)
+  10.5 Status of B3: (a) closed (node_right_lane7_lift); (b) closed at the
+       copy level (read_back_node).  The production relocation itself is
+       linked to the copy by the differential test.
+  10.6 Open for the block region: owner/nullifier sponge and tree/append
+       node instantiations are the same pattern as note_sponge_model /
+       node_model (not yet written); RoundsOk for the Rust permutation is the
+       Poseidon job; the input lifts (Wspend → Rust witness) as before.
