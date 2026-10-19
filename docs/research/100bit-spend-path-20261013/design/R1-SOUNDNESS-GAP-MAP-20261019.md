@@ -248,7 +248,34 @@ as they stand.
 
 ## 4. Links shared with the privacy track
 
-(pending)
+The sources are the privacy LOG (`docs/research/v8-r0-zk-20261009/LOG.md`):
+D52.2 (hypotheses of `privacy_R1_games′`), D45.5 (the R-* list), D47.2,
+D73.4, D74.4 and D75.4. "Shared" means one source fact, or one piece of
+extraction, would discharge both a privacy premise and a soundness link
+here. The two sides need different directions: privacy is about the
+prover's Rust, soundness about the verifier's Rust. So the sharing is in the
+wire/hash/sampler layer, not in the protocol logic.
+
+| privacy premise | what it states (LOG) | soundness links | what is shared |
+|---|---|---|---|
+| R-rom: `RomModel W`, `RAddrIn` (D52.2) | The Rust hash is the lazily programmed oracle; every read address is in the modelled address set | P1, R10 | One statement that the Digest32/`sol_sha256` calls, as executed, are queries to a single lazy byte oracle. On the verifier side this is R10's global log embedding. One ROM premise (P1) should serve both theorems; it is charged once in each ledger |
+| R-causal: `RCausal` (D52.2; phase-indexed roots, D48.3) | Row i, and the C2/folded roots, depend only on earlier challenges | R1, R4, R11, R12 | The 33-row schedule, and the causal position of the C1, C2 and folded commitment frames. Soundness proves the verifier side for C2 (R11) and rows 0-24 (R1). C1, the folded root (R12) and rows 25-32 (R4) are open on both sides |
+| QM31SamplerLaw (D47.2, inside D52.2's first bullet) | The extracted sampler is a rank bijection and embedding | R1, R4 | Already shared: both sides use the extracted sampler facts (`ExtractedQM31SamplerCorrect.sample_total`, `SourceSamplerByteRank.rank`; merge 42ab21f55). The carrier transports (`Array U8 32 ↔ Fin 32 → UInt8`, `QM31 ↔ K`) are open on both sides |
+| R-commit: `RCommitBytes` (node, leaf, salt, seed, binding and expander grammars), `hfib`, `RExh`, E bounds (D52.2) | The prover's committed byte strings have the stated grammar | R13, R11, R12 | The leaf and node byte grammar, and the 257-byte parent preimage (`RawMerkleParentBytes.lean:39`, candidate). The verifier must hash exactly the grammar the prover commits to. One byte-level grammar lemma serves the R13 Merkle acceptance and `RCommitBytes`. Seed and expander grammars are privacy-only |
+| R-wire: `eCm`, `ROpen`, `RComLog` (D52.2); framing, decoders, QueryScan and Merkle-path reads (D45.5) | The serialised proof, openings and commitment log match the model | R5, R6, R13, R16 (opening/matching readers), R4 (query row) | The proof wire format and its decoders. R5 (actual `decode_k` equals the strict parser) is already the verifier-side half of the decoder part of R-wire. The opening-section readers and QueryScan are open on both sides |
+| D73.4 item 4: tape law, and formula equality for the inactive-sum and batched cells (R-commit and G-ref) | The prover's inactive-sum and batched cells use the same formulas as the model | S3, S8, S9 | CU candidates 3 (fixed S2 inactive groups), 12 (batched ρ residues) and 14 (factored S2 Libra row) changed exactly these verifier-side formulas. The re-pins S3, S8 and S9 prove the verifier formula equals the reference. The same reference formula is what G-ref compares the prover against |
+| D74.4: QueryScan `Error::Transcript` aborts with no Lean counterpart; `copyLinks` vs `COPY_LINKS` not re-derived | Per-attempt failures need an impossibility or probability argument; the static copy-link table is read, not derived | R4, R19, S3 | The query-row sampler. Duplicate-query redraws in QueryScan on the prover side match `queries_from_pairs` on the verifier side, and the verifier's query-read count enters QV (R19). The `COPY_LINKS`/`COPY_ACTIVE_ROW_MASKS` tables are S3's obligation ("all 1024 S2 classification bits agree with ... COPY_ACTIVE_ROW_MASKS") |
+| D75.4: decoder facts `hup`, `hnq`, `hrw` | Checker input decoding | R5, R16 | Same field and limb decoders (canonical M31/QM31/WideExact limbs) |
+| D75.4: π/`ti`, OOD and stored points, `inact`, `x18`, `x16`, `li`, `hW`/`hwb`, `Tower` | The named input tables equal `storedFirstLineX18` etc.; D18 transport | R17, M2 | The same domain constants: stored line points, transport τ, tower embedding. R17 (source `circle_fold`/`line_fold`/`QueryGeometry` equal the model geometry) and `hx18` are one table-equality proof read two ways |
+| D75.4: manifest entries before the final replay; D63.2/D71 unified base | Privacy modules enter the unified manifest | C2 | One unified build and one frozen replay for both theorem families (AGENTS.md cadence) |
+| (drift) D73.3 `cfg(feature = "prover")` variants in `verifier::Error` | Prover-only enum variants | R21 | A privacy change touched the verifier source file. Soundness needs the not(prover) extraction shown unchanged |
+
+Not shared:
+- R-ser, R-retry, R-pub, the `no_pole` ↔ `VR1` match and the N = 8 numeral
+  are prover-only.
+- R14 (stage-2 extraction), R15 (checkpoint), R9/R20 (statement binding
+  across transactions), M10 (extractor cost) and S1/S2/S4-S7 have no privacy
+  counterpart.
 
 ## 5. Critical path
 
