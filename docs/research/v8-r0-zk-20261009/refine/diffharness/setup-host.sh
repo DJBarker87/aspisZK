@@ -15,9 +15,11 @@ for i in range(1, len(parts), 2):
     with open(d + '/' + path, 'a') as f:
         f.write('\n' + text)
 cargo = open(d + '/Cargo.toml').read()
-cargo = cargo.replace('members = [\n', 'members = [\n    "refine/writers",\n    "refine/diffharness",\n', 1)
+cargo = cargo.replace('members = [\n', 'members = [\n    "refine/writers",\n    "refine/blockwriters",\n    "refine/diffharness",\n', 1)
 open(d + '/Cargo.toml', 'w').write(cargo)
 PY
 mkdir -p "$D/refine"
 cp -r "$W" "$D/refine/writers"; cp -r "$H" "$D/refine/diffharness"
+cp -r "$(dirname "$W")/blockwriters" "$D/refine/blockwriters"
 sed -i '/^\[workspace\]$/d' "$D/refine/writers/Cargo.toml"
+sed -i '/^\[workspace\]$/d' "$D/refine/blockwriters/Cargo.toml"

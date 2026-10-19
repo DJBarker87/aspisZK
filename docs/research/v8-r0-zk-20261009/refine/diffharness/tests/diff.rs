@@ -492,3 +492,73 @@ fn merge_matches_random_banks() {
     }
     println!("merge_matches_random_banks: {n} cases");
 }
+
+/// Every one of the 57 Poseidon blocks of real compiled traces has the
+/// abstract-permutation layout of refine/blockwriters::write_block, with the
+/// rounds produced by the production permutation on row 0 + row 12.
+#[test]
+fn compiled_blocks_have_block_layout() {
+    use aspis_r0_block_writer_copies as bw;
+    use aspis_statement::poseidon2::permute_optimized_with_trace;
+    let mut rng = Rng(0x0bad_cafe_dead_beef);
+    let mut n = 0;
+    for i in 0..64u64 {
+        let input_value = 2 + rng.below((1 << 30) - 2) as u32;
+        let part = 1 + rng.below(input_value as u64 - 1) as u32;
+        let comp = if i == 0 {
+            None
+        } else {
+            Some((input_value, part, i % 2 == 0))
+        };
+        let c1 = compiled_c1(comp, &mut rng);
+        for block in 0..57 {
+            let pre: [u32; 16] = core::array::from_fn(|c| c1[c][block * 16].0);
+            let abs: [u32; 16] = core::array::from_fn(|c| c1[c][block * 16 + 12].0);
+            let mut state: [M31; 16] = core::array::from_fn(|c| M31(pre[c]).add(M31(abs[c])));
+            let mut rounds = [[0u32; 16]; 11];
+            permute_optimized_with_trace(&mut state, |t| {
+                if t.round & 1 == 1 {
+                    rounds[usize::from(t.round) / 2] = core::array::from_fn(|c| t.output[c].0);
+                }
+            });
+            let cells = bw::write_block(&pre, &abs, &rounds);
+            assert!(same_block(&c1, block * 16, &cells, 16), "block {block}");
+            n += 1;
+        }
+    }
+    println!("compiled_blocks_have_block_layout: {n} blocks");
+}
+
+fn compiled_c1(spec: Option<(u32, u32, bool)>, rng: &mut Rng) -> [Vec<M31>; 16] {
+    let input = match spec { None => input_witness(1_000, None), Some((v, _, _)) => input_witness(v, Some(&mut *rng)) };
+    let asset = M31(77);
+    let anchor = global_anchor(&input);
+    let snapshot = snapshot_at([1; 32], [2; 32], 13);
+    let (value, part, transfer) = spec.unwrap_or((1_000, 600, true));
+    let chg = PoolV1OutputNoteWitnessV1 { owner_key: rng.digest(), salt: rng.digest(), value: value - part };
+    let nullifier = pool_v1_nullifier(&input.pair.nullifier_key, &input.pair.salt);
+    let cc = pool_v1_note_commitment(&chg.owner_key, chg.value, asset, &chg.salt);
+    if transfer {
+        let rec = PoolV1OutputNoteWitnessV1 { owner_key: rng.digest(), salt: rng.digest(), value: part };
+        let rc = pool_v1_note_commitment(&rec.owner_key, rec.value, asset, &rec.salt);
+        let public = PoolV1PrivateTransferPublicV1 {
+            pool: [1; 32], deployment_domain: [2; 32], anchor_sequence: 42, anchor_root: anchor,
+            nullifier, asset_id: asset, recipient_commitment: rc, change_commitment: cc,
+        };
+        match compile_pool_v1_pair_forest_private_transfer_merged_c1_v1(&public,
+            &PoolV1PairForestPrivateTransferWitnessV1 { input, recipient: rec, change: chg },
+            context(public.pool, public.deployment_domain, anchor, asset), snapshot) {
+            Ok(c) => c.semantic_c1.c1.clone(),
+            Err(_) => compiled_c1(None, rng), // zero change sentinel: salt retry (D50)
+        }
+    } else {
+        let public = PoolV1WithdrawalPublicV1 {
+            pool: [1; 32], deployment_domain: [2; 32], anchor_sequence: 42, anchor_root: anchor,
+            nullifier, asset_id: asset, amount: part, destination_token_account: [9; 32],
+            change_commitment: cc,
+        };
+        compile_pool_v1_pair_forest_withdrawal_merged_c1_v1(&public,
+            &PoolV1PairForestWithdrawalWitnessV1 { input, change: chg },
+            context(public.pool, public.deployment_domain, anchor, asset), snapshot).unwrap().semantic_c1.c1.clone()
+    }
+}
