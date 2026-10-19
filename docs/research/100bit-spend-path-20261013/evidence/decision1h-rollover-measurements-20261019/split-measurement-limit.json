@@ -1,0 +1,29 @@
+{
+  "frozen_verifier_source": "32559d2696b89cdbd75304c1f7624f94dfe125ae",
+  "fixed_ELF_sha256": "4e1fd78fbddb39cb9599de7694105547d8e86e7451f8b9f3e9626789036e8711",
+  "source_facts": [
+    {
+      "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+      "sha256": "0bd2ded7298505e03300d88c7e5a72ee33a94fddc56311ae32d36d350e39262c",
+      "relevant_exact_lines": [
+        "    if !(data == &[3, 10] || data == &[3, 11]) || accounts.len() != 3 {",
+        "        _ if data == &[3, 10] || data == &[3, 11] => stage1(program_id, accounts, data),"
+      ]
+    },
+    {
+      "path": "programs/r1-cost-probe/src/pool_route.rs",
+      "sha256": "43cfa25ec59e5349773599924d318a4b8fda923c4958760fcf1482d8fb2db9f0",
+      "relevant_exact_lines": []
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/r18_replay.rs",
+      "sha256": "bc8a3a9437021d33956724bea3e9296b57b7d7fffa1fd4fad2a57e5ddf0d66bd",
+      "relevant_exact_lines": [
+        "            data: vec![3, 10],"
+      ]
+    }
+  ],
+  "existing_pool_driver": "fixed stage1[3,10], CLI supports --pairs and --reuse, no split flag (full exact existing source is retained in existing-driver-provenance.json).",
+  "exact_requested_k9_vs_k10": "BLOCKED: stage1 only admits k10/11, so stage1[3,9] cannot perform queries0..8 on this exact ELF. No source edits/ELF rebuild or native driver changes were performed.",
+  "what_was_measured": "k10 actual stage1 queries0..9 and authenticated Pool stage2 queries10..21; every existing phase marker difference is retained. Query9 mark interval supplies a measured cost component for an explicitly UNEXECUTED counterfactual."
+}

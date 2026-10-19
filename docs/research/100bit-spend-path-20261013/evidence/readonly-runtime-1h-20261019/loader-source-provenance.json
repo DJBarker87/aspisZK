@@ -1,0 +1,65 @@
+{
+  "call_chain": [
+    "LiteSVM::set_account\u2192AccountsDb::add_account",
+    "executable && nondefaultaddress && owner!=native_loader \u2192 load_program",
+    "owner unrecognized byload_program \u2192 InstructionError::IncorrectProgramId before insertion"
+  ],
+  "litesvm": "0.16.0",
+  "sources": [
+    {
+      "excerpts": [
+        {
+          "first_line": 831,
+          "last_line": 838,
+          "text": "            .collect()\n    }\n\n    /// Sets all information associated with the account of the provided pubkey.\n    pub fn set_account(&mut self, address: Address, data: Account) -> Result<(), LiteSVMError> {\n        self.accounts.add_account(address, data.into())\n    }\n\n"
+        },
+        {
+          "first_line": 1983,
+          "last_line": 1990,
+          "text": "        self.airdrop_kp = kp;\n    }\n\n    #[cfg(feature = \"persistence-internal\")]\n    pub fn set_account_no_checks(&mut self, pubkey: Address, account: AccountSharedData) {\n        self.accounts.add_account_no_checks(pubkey, account);\n    }\n\n"
+        },
+        {
+          "first_line": 2004,
+          "last_line": 2018,
+          "text": "\n    // \u2500\u2500 persistence-internal: cache rebuild \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\n    /// Rebuilds all derived caches after bulk account insertion.\n    ///\n    /// Must be called after restoring accounts via `set_account_no_checks`.\n    /// Order matters: environments first, then sysvars, then BPF programs.\n    #[cfg(feature = \"persistence-internal\")]\n    pub fn rebuild_caches(&mut self) -> Result<(), LiteSVMError> {\n        self.reserved_account_keys = Self::reserved_account_keys_for_feature_set(&self.feature_set);\n        self.set_builtins();\n        self.accounts.rebuild_sysvar_cache();\n        self.accounts.load_all_existing_programs()?;\n        Ok(())\n    }\n"
+        }
+      ],
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/litesvm-0.16.0/src/lib.rs",
+      "sha256": "7c11a398084b8b709b5e1d8a6ca0e18e6ea130282e947f4a5a1537a877218e1b"
+    },
+    {
+      "excerpts": [
+        {
+          "first_line": 117,
+          "last_line": 143,
+          "text": "    /// We should only use this when we know we're not touching any executable or sysvar accounts,\n    /// or have already handled such cases.\n    pub(crate) fn add_account_no_checks(&mut self, pubkey: Address, account: AccountSharedData) {\n        self.inner.insert(pubkey, account);\n    }\n\n    pub(crate) fn add_account(\n        &mut self,\n        pubkey: Address,\n        account: AccountSharedData,\n    ) -> Result<(), LiteSVMError> {\n        if account.executable()\n            && pubkey != Address::default()\n            && account.owner() != &native_loader::ID\n        {\n            let loaded_program = self.load_program(&account)?;\n            self.programs_cache\n                .replenish(pubkey, Arc::new(loaded_program));\n        } else {\n            self.maybe_handle_sysvar_account(pubkey, &account)?;\n        }\n        if account.lamports() == 0 {\n            self.inner.remove(&pubkey);\n        } else {\n            self.add_account_no_checks(pubkey, account);\n        }\n        Ok(())\n"
+        },
+        {
+          "first_line": 296,
+          "last_line": 308,
+          "text": "    fn load_program(\n        &self,\n        program_account: &AccountSharedData,\n    ) -> Result<ProgramCacheEntry, InstructionError> {\n        let metrics = &mut LoadProgramMetrics::default();\n\n        let owner = program_account.owner();\n        let program_runtime_for_execution = self.environments.get_env_for_execution().clone();\n        let slot = self.sysvar_cache.get_clock().map(|c| c.slot).unwrap_or(0);\n\n        if bpf_loader::check_id(owner) || bpf_loader_deprecated::check_id(owner) {\n            ProgramCacheEntry::new(\n                owner,\n"
+        },
+        {
+          "first_line": 375,
+          "last_line": 385,
+          "text": "                    InstructionError::InvalidAccountData\n                })\n            } else {\n                error!(\"Index out of bounds using loader_v4.\");\n                Err(InstructionError::InvalidAccountData)\n            }\n        } else {\n            error!(\"Owner does not match any expected loader.\");\n            Err(InstructionError::IncorrectProgramId)\n        }\n    }\n"
+        }
+      ],
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/litesvm-0.16.0/src/accounts_db.rs",
+      "sha256": "0331209d4856a43939581ce8a964276365f6b33f88d29448f98fb2cb338b103d"
+    },
+    {
+      "excerpts": [
+        {
+          "first_line": 35,
+          "last_line": 46,
+          "text": "[features]\ndefault = []\nhashbrown = [\"dep:hashbrown\"]\ninternal-test = []\ninvocation-inspect-callback = []\nnodejs-internal = [\"dep:qualifier_attr\"]\npersistence-internal = []\nprecompiles = [\"dep:agave-precompiles\"]\nregister-tracing = [\n    \"invocation-inspect-callback\",\n    \"dep:hex\",\n    \"dep:sha2\",\n"
+        }
+      ],
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/litesvm-0.16.0/Cargo.toml",
+      "sha256": "e088c9bef62cec172621775077ae2208162ca9ff0ac7758b5c5f8c9e44b8432b"
+    }
+  ],
+  "stage2_only_existing_mode": false,
+  "stage2_only_reason": "Same ASPIS_R16_READONLY_RUNTIME opt-in unconditionally runs stage1 cases before stage2 setup; run_cases propagates first setup error with ?. No stage-specific CLI or environment selector exists."
+}

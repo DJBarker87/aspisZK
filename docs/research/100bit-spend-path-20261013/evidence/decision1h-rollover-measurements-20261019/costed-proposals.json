@@ -1,0 +1,127 @@
+{
+  "status": "MEASUREMENTS AND COST TARGETS ONLY. No implementation, proof, runtime adaptation or artifact change proposed as already validated.",
+  "hard_budget_fact": {
+    "case": "withdrawal-255",
+    "stage1": 1339527,
+    "settlement": 1380079,
+    "combined": 2719606,
+    "two_1300000_caps": 2600000,
+    "minimum_combined_savings": 119606,
+    "stage1_savings_needed": 39527,
+    "settlement_savings_needed": 80079
+  },
+  "query_rebalance_alone": {
+    "conclusion": "Insufficient for two1.3M caps; estimated9/13 split additionally exceeds1.4M on all four rollovers. Combined work remains essentially unchanged; geometry/setup effects are unmeasured.",
+    "measured_query9_interval_range": [
+      48586,
+      48634
+    ],
+    "geometry_increment_estimate": 800,
+    "not_a_new_measurement": true,
+    "rollover_counterfactuals": [
+      {
+        "case": "transfer-1023",
+        "status": "NOT EXECUTED. k9 is not admitted and driver has no split CLI. Arithmetic cost projection only.",
+        "stage1_excluding_geometry_change": 1292339,
+        "settlement_excluding_geometry_change": 1411914,
+        "stage1_with_800_geometry_estimate": 1291539,
+        "settlement_with_800_geometry_estimate": 1412714,
+        "additional_unmeasured_effects": [
+          "batch geometry range/allocation and fixed inversion",
+          "first-path/cache effects for query9 moved to stage2",
+          "observer/phase boundaries, serialization and checkpoint accumulator contents"
+        ]
+      },
+      {
+        "case": "transfer-255",
+        "status": "NOT EXECUTED. k9 is not admitted and driver has no split CLI. Arithmetic cost projection only.",
+        "stage1_excluding_geometry_change": 1292300,
+        "settlement_excluding_geometry_change": 1414911,
+        "stage1_with_800_geometry_estimate": 1291500,
+        "settlement_with_800_geometry_estimate": 1415711,
+        "additional_unmeasured_effects": [
+          "batch geometry range/allocation and fixed inversion",
+          "first-path/cache effects for query9 moved to stage2",
+          "observer/phase boundaries, serialization and checkpoint accumulator contents"
+        ]
+      },
+      {
+        "case": "withdrawal-1023",
+        "status": "NOT EXECUTED. k9 is not admitted and driver has no split CLI. Arithmetic cost projection only.",
+        "stage1_excluding_geometry_change": 1291111,
+        "settlement_excluding_geometry_change": 1425413,
+        "stage1_with_800_geometry_estimate": 1290311,
+        "settlement_with_800_geometry_estimate": 1426213,
+        "additional_unmeasured_effects": [
+          "batch geometry range/allocation and fixed inversion",
+          "first-path/cache effects for query9 moved to stage2",
+          "observer/phase boundaries, serialization and checkpoint accumulator contents"
+        ]
+      },
+      {
+        "case": "withdrawal-255",
+        "status": "NOT EXECUTED. k9 is not admitted and driver has no split CLI. Arithmetic cost projection only.",
+        "stage1_excluding_geometry_change": 1290922,
+        "settlement_excluding_geometry_change": 1428684,
+        "stage1_with_800_geometry_estimate": 1290122,
+        "settlement_with_800_geometry_estimate": 1429484,
+        "additional_unmeasured_effects": [
+          "batch geometry range/allocation and fixed inversion",
+          "first-path/cache effects for query9 moved to stage2",
+          "observer/phase boundaries, serialization and checkpoint accumulator contents"
+        ]
+      }
+    ]
+  },
+  "costed_work_priorities": [
+    {
+      "priority": 1,
+      "target_interval": "Stage2 last query\u2192Relation (~468.2k CU): fold relations, Weights::new and Weights::pair.",
+      "observed_range": [
+        468191,
+        468318
+      ],
+      "engineering_savings_target_unmeasured": [
+        85000,
+        100000
+      ],
+      "interpretation": "About18\u201321% of observed coarse interval; a budget objective, not benchmarked achievable savings. Source/proof and strict SBF stack/CU revalidation required before adoption."
+    },
+    {
+      "priority": 2,
+      "target_interval": "Stage1 Parsed\u2192Semantic (~565k CU): actual semantic verification including terminal work.",
+      "observed_range": [
+        564652,
+        566096
+      ],
+      "engineering_savings_target_unmeasured": [
+        45000,
+        60000
+      ],
+      "interpretation": "About8\u201311% of observed coarse interval; source hotspot attribution needs additional approved profiling. No arithmetic shortcut or proof equivalence assumed."
+    },
+    {
+      "priority": 3,
+      "target_interval": "Duplicate29-entry gamma powers in Prepared::new and tx1 setup",
+      "savings": "UNMEASURED; no CU credit assigned",
+      "risk": "Returning an extra928-byte WideExact array by value could rebreak the solved stack bound. Caller-owned buffer/Box or deferral changes require a concrete source/ownership/proof decision. B separate source note covers dependency/claim deferral; no alternative implemented here."
+    }
+  ],
+  "budget_target_combination_unmeasured": {
+    "stage1_savings_range": [
+      45000,
+      60000
+    ],
+    "settlement_savings_range": [
+      85000,
+      100000
+    ],
+    "combined_savings_range": [
+      130000,
+      160000
+    ],
+    "reason": "Lower ends exceed all measured per-transaction1.3M shortfalls, but these are targets only and no implementation feasibility has been measured."
+  },
+  "Pool_overhead": "Transaction minus nested verifier varies with history rollover and withdrawal Token CPI; phase-costs retains both inclusive root Pool consumption and nested verifier. Do not optimize an assumed standalone-verifier/Pool gap without matching inputs.",
+  "fixture_comparison_rule": "The13transfer/withdrawal saved proof/public SHAs match the corresponding prior1h standalone transfer/withdrawal fixtures (fixture-identity.json). The prior canonical proof is different. Pool13 parent CU1340982 equals invoked verifier1340926 plus56, whereas the prior standalone transaction had506 CU outside the same invoked verifier. Do not compare parent/transaction CU with invoked CU, or extrapolate across rollover fixtures/context."
+}

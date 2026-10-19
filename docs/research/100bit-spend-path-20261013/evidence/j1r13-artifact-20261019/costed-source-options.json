@@ -1,0 +1,172 @@
+{
+  "cost_basis": "Frozen-artifact phase intervals and exact source operation/dependency counts. Numerical arithmetic savings below are budget targets, not forecasts or measured speedups; no unimplemented saving is credited.",
+  "hot_spot_candidates": [
+    {
+      "candidate": "Reuse the gamma power array computed in prepared_claim for tx1 queries",
+      "decision_needed": "Approve a frame-safe concrete API/ownership proposal, not a by-value extra928B return. Keep codec, ordered583 and failure/observer gates identical; re-extract affected declarations and batch strict SBF stack/CU gates.",
+      "estimated_savings": "UNMEASURED. No defensible CU quote narrower than the enclosing ~156k Prepare interval. The separate note gives a 15.6\u201331.2k budget scenario explicitly not a forecast.",
+      "source": "verifier.rs::prepared_claim; tx1; weights.rs::powers",
+      "work_count": "Two source calls to powers<29>(gamma) in stage1; at most one source call can be removed. Its 29th multiplication may already be dead-code eliminated."
+    },
+    {
+      "candidate": "Private prepared canonical operands for EbyKDot and repeated query dot decoding",
+      "decision_needed": "Approve a concrete arithmetic/validation-preserving patch and its equivalence obligations. Require codec1233 and ordered583 identity, checkpoint/injection regressions, extraction/re-pin and batched SBF stack/CU check.",
+      "estimated_savings": "UNMEASURED; use the measured semantic/prepare/query/relation intervals only as ceilings. Do not assign a CU reduction before a focused approved comparison.",
+      "mechanics": "Inspect redundant canonical conversions/checks for already validated private operands and precompute coefficient limb views. Keep public/untrusted entry checks and first-failure behavior; a private validated carrier must justify every avoided recheck. Existing optimized paths are the baseline, not new savings.",
+      "source": "fast_pairing.rs::EbyKDot::push; fast_dots.rs::four_dots; verifier.rs::prepared_claim and View::parse; weights.rs::pair"
+    },
+    {
+      "candidate": "Reuse query geometry values already calculated, and remove unused denominator-vector payload copies",
+      "decision_needed": "New source proposal/equivalence and layout/stack review, same codec/trace gates and batched SBF audit/CU; no new attribute assumed authorized.",
+      "estimated_savings": "UNMEASURED. First-Merkle geometry is not separately marked, so the current artifact cannot price this component. No savings credited.",
+      "mechanics": "for_range computes line_x and line_z later reconstructed in accumulate; denominators payload is only subsequently used for its length. Propose a private transient geometry carrier/count preserving query, field and Digest32 order.",
+      "source": "verifier.rs::QueryGeometry::for_range and accumulate"
+    },
+    {
+      "budget_scenario": {
+        "combined_savings_range": [
+          130000,
+          160000
+        ],
+        "reason": "Lower ends exceed all measured per-transaction1.3M shortfalls, but these are targets only and no implementation feasibility has been measured.",
+        "settlement_savings_range": [
+          85000,
+          100000
+        ],
+        "stage1_savings_range": [
+          45000,
+          60000
+        ]
+      },
+      "candidate": "Arithmetic hot-spot reduction in semantic terminal work and stage2 Weights relation",
+      "decision_needed": "Authorize focused hotspot investigation/patch proposals. Current detail-phases is off; coarse intervals do not establish finer attribution or achievable speedup. Every implementation needs exact codec/ordered-trace equivalence, affected proof re-pin, checkpoint/injection gates and strict SBF/CU validation.",
+      "estimated_savings": [
+        {
+          "engineering_savings_target_unmeasured": [
+            85000,
+            100000
+          ],
+          "interpretation": "About18\u201321% of observed coarse interval; a budget objective, not benchmarked achievable savings. Source/proof and strict SBF stack/CU revalidation required before adoption.",
+          "observed_range": [
+            468191,
+            468318
+          ],
+          "priority": 1,
+          "target_interval": "Stage2 last query\u2192Relation (~468.2k CU): fold relations, Weights::new and Weights::pair."
+        },
+        {
+          "engineering_savings_target_unmeasured": [
+            45000,
+            60000
+          ],
+          "interpretation": "About8\u201311% of observed coarse interval; source hotspot attribution needs additional approved profiling. No arithmetic shortcut or proof equivalence assumed.",
+          "observed_range": [
+            564652,
+            566096
+          ],
+          "priority": 2,
+          "target_interval": "Stage1 Parsed\u2192Semantic (~565k CU): actual semantic verification including terminal work."
+        }
+      ],
+      "mechanics": "Prioritize exact sparse/factored expressions, shared canonical field operands and reduced normalization only when proved equal to current QM31/WideExact arithmetic. Do not skip any relation, row, Merkle path, hash or sampler call.",
+      "source": "r1_semantic.rs::verify_finish; terminal_qm31; weights.rs::Weights::pair and private field kernels"
+    }
+  ],
+  "prepared_or_semantic_work_relocation": {
+    "dependency_and_version_note": {
+      "bytes": 11181,
+      "path": "docs/research/100bit-spend-path-20261013/evidence/prepared-arithmetic-proposals-20261019/proposal-note.json",
+      "sha256": "aeab92eff8471301626fdafd5211d62e367e3c4488c74700aec2841b9c05d741"
+    },
+    "equation": "Total becomes 2719606 - G + P: only duplicate-gamma removal G saves work; additional decoding/version overhead P adds work. Pure relocation cannot meet the combined budget.",
+    "existing_k11": "The current ELF also admits[3,11], moving a query in the opposite direction. It may rebalance after net savings, but worsens current stage1. No k11 run is claimed.",
+    "format_and_failure_changes": "Must explicitly version the deferred-claim checkpoint meaning/slot (or remove32bytes), preserve genuine stage1/checkpoint custody, and prove pending checks before settlement. Parse/claim failures change transaction/error order. It is not an authorized extraction-only helper move.",
+    "prepared_claim": "p.claim is only consumed by finish_relation in stage2. All pure claim inputs are in the bound proof plus gamma/kappa in the authenticated checkpoint; 174 EbyKDot pushes,6 finishes,29 gamma/7 kappa source powers and7 wide multiply/add terms can be relocated without changing Fiat\u2013Shamir bytes.",
+    "same_fixture_worst_case_scenarios": [
+      {
+        "assumed_claim_CU": 25000,
+        "settlement_expression": "1405079 - G + P",
+        "stage1": 1314527,
+        "status": "UNMEASURED_PARAMETER_SCENARIO"
+      },
+      {
+        "assumed_claim_CU": 50000,
+        "settlement_expression": "1430079 - G + P",
+        "stage1": 1289527,
+        "status": "UNMEASURED_PARAMETER_SCENARIO"
+      },
+      {
+        "assumed_claim_CU": 100000,
+        "settlement_expression": "1480079 - G + P",
+        "stage1": 1239527,
+        "status": "UNMEASURED_PARAMETER_SCENARIO"
+      }
+    ],
+    "semantic": "Deferring round/terminal arithmetic while drawing the same transcript is possible only with new pending-check semantics. Original15 QM31 challenges (240B) are absent from today\u2019s checkpoint, or re-derivation adds46 Digest32 calls plus15 samples and breaks ordered583 identity. Requires a separate protocol/checkpoint/proof decision."
+  },
+  "query_split": {
+    "conclusion": "Insufficient for two1.3M caps; estimated9/13 split additionally exceeds1.4M on all four rollovers. Combined work remains essentially unchanged; geometry/setup effects are unmeasured.",
+    "geometry_increment_estimate": 800,
+    "measured_query9_interval_range": [
+      48586,
+      48634
+    ],
+    "not_a_new_measurement": true,
+    "rollover_counterfactuals": [
+      {
+        "additional_unmeasured_effects": [
+          "batch geometry range/allocation and fixed inversion",
+          "first-path/cache effects for query9 moved to stage2",
+          "observer/phase boundaries, serialization and checkpoint accumulator contents"
+        ],
+        "case": "transfer-1023",
+        "settlement_excluding_geometry_change": 1411914,
+        "settlement_with_800_geometry_estimate": 1412714,
+        "stage1_excluding_geometry_change": 1292339,
+        "stage1_with_800_geometry_estimate": 1291539,
+        "status": "NOT EXECUTED. k9 is not admitted and driver has no split CLI. Arithmetic cost projection only."
+      },
+      {
+        "additional_unmeasured_effects": [
+          "batch geometry range/allocation and fixed inversion",
+          "first-path/cache effects for query9 moved to stage2",
+          "observer/phase boundaries, serialization and checkpoint accumulator contents"
+        ],
+        "case": "transfer-255",
+        "settlement_excluding_geometry_change": 1414911,
+        "settlement_with_800_geometry_estimate": 1415711,
+        "stage1_excluding_geometry_change": 1292300,
+        "stage1_with_800_geometry_estimate": 1291500,
+        "status": "NOT EXECUTED. k9 is not admitted and driver has no split CLI. Arithmetic cost projection only."
+      },
+      {
+        "additional_unmeasured_effects": [
+          "batch geometry range/allocation and fixed inversion",
+          "first-path/cache effects for query9 moved to stage2",
+          "observer/phase boundaries, serialization and checkpoint accumulator contents"
+        ],
+        "case": "withdrawal-1023",
+        "settlement_excluding_geometry_change": 1425413,
+        "settlement_with_800_geometry_estimate": 1426213,
+        "stage1_excluding_geometry_change": 1291111,
+        "stage1_with_800_geometry_estimate": 1290311,
+        "status": "NOT EXECUTED. k9 is not admitted and driver has no split CLI. Arithmetic cost projection only."
+      },
+      {
+        "additional_unmeasured_effects": [
+          "batch geometry range/allocation and fixed inversion",
+          "first-path/cache effects for query9 moved to stage2",
+          "observer/phase boundaries, serialization and checkpoint accumulator contents"
+        ],
+        "case": "withdrawal-255",
+        "settlement_excluding_geometry_change": 1428684,
+        "settlement_with_800_geometry_estimate": 1429484,
+        "stage1_excluding_geometry_change": 1290922,
+        "stage1_with_800_geometry_estimate": 1290122,
+        "status": "NOT EXECUTED. k9 is not admitted and driver has no split CLI. Arithmetic cost projection only."
+      }
+    ]
+  },
+  "recommended_order": "Repair the native harness setup under its own decision; then target real arithmetic savings in both transactions before changing the query split or deferring checks. Worst measured combined shortfall119606CU cannot be removed by redistribution alone.",
+  "status": "UNAPPLIED_PROPOSALS_ONLY_NO_SOURCE_CHANGE_OR_MEASURED_OPTIMIZATION"
+}
