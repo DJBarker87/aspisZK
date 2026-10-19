@@ -1,52 +1,43 @@
 #!/usr/bin/env python3
-"""Inventory failure-capable operations in Aeneas-generated Funs.lean files.
-
-For each `def`, list every monadic (`←`) operation whose translation can
-return `fail`: checked +, -, *, /, %, shifts, indexing/update, slice range
-indexing, Vec index, unwrap/massert. `lift (...)` operations are total and
-are not listed. Usage: scan_ops.py <Funs.lean>... ; prints JSON."""
-import json, re, sys, hashlib
-
-ARITH = re.compile(r"←\s*(\(?[A-Za-z0-9_.#«»\[\]]+\)?)\s*(\+|-|\*|/|%|>>>|<<<)\s*([A-Za-z0-9_.#«»]+)\s*$")
-CALLS = [
-    ("index", re.compile(r"←\s*(Array\.index_usize|Slice\.index_usize)\b")),
-    ("update", re.compile(r"←\s*(Array\.update|Slice\.update)\b")),
-    ("range_index", re.compile(r"←\s*core\.slice\.index\.Slice\.index\b")),
-    ("vec_index", re.compile(r"←\s*alloc\.vec\.Vec\.(index|index_mut)\b")),
-    ("unwrap", re.compile(r"←\s*core\.(option\.Option|result\.Result)\.(unwrap|expect)\b")),
-    ("massert", re.compile(r"\bmassert\b")),
-]
-DEF = re.compile(r"^(?:@\[[^\]]*\]\s*)?(?:noncomputable\s+)?(?:partial\s+)?def\s+([^\s]+)")
-
-def is_const(tok):
-    return bool(re.fullmatch(r"\(?\d+#[iu]\w+\)?", tok))
+"""Conservative lexical census, not a Lean parser or call-graph proof.
+Keep every monadic bind, total lift, and direct scalar/index tail; retaining
+child calls makes unsupported library/caller boundaries visible. No inference
+that lift(cast/checked_*) can fail: those operations are explicitly total.
+"""
+import hashlib, json, re, sys
+from pathlib import Path
+DEF = re.compile(r"(?:^|\n)(?:@\[[^\]]*\]\s*)?def\s+([\w.«»]+)")
+BIND = re.compile(r"\blet\s+[^\n]*?←\s*")
+DIRECT = re.compile(r"(?:^|\n)\s*(?:then |else )?(?:x\w* - |(?:Array|Slice)\.(?:index_usize|update)|core\.slice\.index\.Slice\.index)")
 
 def scan(path):
-    text = open(path, encoding="utf-8").read()
-    out = {}
-    cur = None
-    for ln, line in enumerate(text.splitlines(), 1):
-        m = DEF.match(line.strip()) if line.startswith(("def", "@[", "noncomputable", "partial")) else None
-        if m:
-            cur = m.group(1)
-            out.setdefault(cur, [])
-        if cur is None:
-            continue
-        a = ARITH.search(line)
-        if a:
-            l, op, r = a.groups()
-            kind = {"+": "add", "-": "sub", "*": "mul", "/": "div", "%": "rem",
-                    ">>>": "shr", "<<<": "shl"}[op]
-            const = is_const(l) and is_const(r)
-            out[cur].append({"line": ln, "kind": kind, "lhs": l, "rhs": r,
-                             "constant_operands": const})
-            continue
-        for kind, rx in CALLS:
-            if rx.search(line):
-                out[cur].append({"line": ln, "kind": kind, "text": line.strip()[:120]})
-                break
-    return {"file": path, "sha256": hashlib.sha256(text.encode()).hexdigest(),
-            "functions": {k: v for k, v in out.items() if v}}
+    src = Path(path).read_text()
+    matches = list(DEF.finditer(src))
+    out = []
+    for i, d in enumerate(matches):
+        end = matches[i+1].start() if i+1 < len(matches) else len(src)
+        body = src[d.end():end]
+        ops = []
+        for m, is_bind in [(m, True) for m in BIND.finditer(body)] + [(m, False) for m in DIRECT.finditer(body)]:
+            start = d.end()+m.start()
+            line = src.count('\n',0,start)+1
+            # Include continuation lines until the next monadic declaration or branch.
+            tail = src[d.end()+(m.end() if is_bind else m.start()):end].lstrip()
+            stop = re.search(r"\n\s*(?:let |if |then|else|match |\||ok |end |/--|--|#)",tail)
+            expr = tail[:stop.start() if stop else len(tail)].strip()
+            text = " ".join(expr.split())
+            if text.startswith('lift '):
+                kind = 'total_lift'
+            elif re.search(r"(?:Array|Slice|Vec)\.(?:index|update)|Slice\.index",text):
+                kind = 'index_or_update'
+            elif re.search(r" [+*/%-] | >>> | <<< ", ' '+text+' '):
+                kind = 'scalar'
+            else:
+                kind = 'child_call_or_control'
+            ops.append({'line':line,'kind':kind,'expression':text})
+        if ops:
+            out.append({'function':d.group(1),'operations':sorted(ops,key=lambda x:x['line'])})
+    return {'file':str(path),'sha256':hashlib.sha256(src.encode()).hexdigest(),'functions':out}
 
-if __name__ == "__main__":
-    print(json.dumps([scan(p) for p in sys.argv[1:]], indent=1))
+if __name__ == '__main__':
+    print(json.dumps([scan(p) for p in sys.argv[1:]],indent=2))

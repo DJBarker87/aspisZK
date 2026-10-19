@@ -1,0 +1,4048 @@
+[
+  {
+    "file": "docs/research/100bit-spend-path-20261013/lean/extracted-source-proof-loops-20261019/AspisR1SemanticCallExtraction/Funs.lean",
+    "sha256": "23015e042f01cee036fa2e7c4d64f020bed944ca7dd416668c268c39dba10555",
+    "functions": [
+      {
+        "function": "aspis_core.field.reduce_u64",
+        "operations": [
+          {
+            "line": 26,
+            "kind": "total_lift",
+            "expression": "lift (UScalar.cast .U64 aspis_core.field.P)"
+          },
+          {
+            "line": 27,
+            "kind": "total_lift",
+            "expression": "lift (x &&& i)"
+          },
+          {
+            "line": 28,
+            "kind": "scalar",
+            "expression": "x >>> 31#u32"
+          },
+          {
+            "line": 29,
+            "kind": "scalar",
+            "expression": "i1 + i2"
+          },
+          {
+            "line": 30,
+            "kind": "total_lift",
+            "expression": "lift (UScalar.cast .U64 aspis_core.field.P)"
+          },
+          {
+            "line": 31,
+            "kind": "total_lift",
+            "expression": "lift (x1 &&& i3)"
+          },
+          {
+            "line": 32,
+            "kind": "scalar",
+            "expression": "x1 >>> 31#u32"
+          },
+          {
+            "line": 33,
+            "kind": "scalar",
+            "expression": "i4 + i5"
+          },
+          {
+            "line": 34,
+            "kind": "total_lift",
+            "expression": "lift (UScalar.cast .U32 x2)"
+          },
+          {
+            "line": 35,
+            "kind": "scalar",
+            "expression": "then x3 - aspis_core.field.P"
+          }
+        ]
+      },
+      {
+        "function": "aspis_core.field.M31.add",
+        "operations": [
+          {
+            "line": 46,
+            "kind": "scalar",
+            "expression": "self + rhs"
+          },
+          {
+            "line": 48,
+            "kind": "scalar",
+            "expression": "s - aspis_core.field.P"
+          }
+        ]
+      },
+      {
+        "function": "aspis_core.field.M31.sub",
+        "operations": [
+          {
+            "line": 59,
+            "kind": "scalar",
+            "expression": "self + aspis_core.field.P"
+          },
+          {
+            "line": 60,
+            "kind": "scalar",
+            "expression": "i - rhs"
+          },
+          {
+            "line": 62,
+            "kind": "scalar",
+            "expression": "s - aspis_core.field.P"
+          }
+        ]
+      },
+      {
+        "function": "aspis_core.field.M31.mul",
+        "operations": [
+          {
+            "line": 73,
+            "kind": "total_lift",
+            "expression": "lift (UScalar.cast .U64 self)"
+          },
+          {
+            "line": 74,
+            "kind": "total_lift",
+            "expression": "lift (UScalar.cast .U64 rhs)"
+          },
+          {
+            "line": 75,
+            "kind": "scalar",
+            "expression": "i * i1"
+          },
+          {
+            "line": 76,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.reduce_u64 i2"
+          }
+        ]
+      },
+      {
+        "function": "aspis_core.field.M31.reduce_u64",
+        "operations": [
+          {
+            "line": 84,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.reduce_u64 value"
+          }
+        ]
+      },
+      {
+        "function": "aspis_core.field.CM31.add",
+        "operations": [
+          {
+            "line": 101,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.add self.a rhs.a"
+          },
+          {
+            "line": 102,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.add self.b rhs.b"
+          }
+        ]
+      },
+      {
+        "function": "aspis_core.field.CM31.sub",
+        "operations": [
+          {
+            "line": 112,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.sub self.a rhs.a"
+          },
+          {
+            "line": 113,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.sub self.b rhs.b"
+          }
+        ]
+      },
+      {
+        "function": "aspis_core.field.CM31.mul",
+        "operations": [
+          {
+            "line": 123,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.mul self.a rhs.a"
+          },
+          {
+            "line": 124,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.mul self.b rhs.b"
+          },
+          {
+            "line": 126,
+            "kind": "total_lift",
+            "expression": "lift (core.convert.num.FromU64U32.from i)"
+          },
+          {
+            "line": 128,
+            "kind": "total_lift",
+            "expression": "lift (core.convert.num.FromU64U32.from i2)"
+          },
+          {
+            "line": 129,
+            "kind": "scalar",
+            "expression": "i1 + i3"
+          },
+          {
+            "line": 131,
+            "kind": "total_lift",
+            "expression": "lift (core.convert.num.FromU64U32.from i5)"
+          },
+          {
+            "line": 133,
+            "kind": "total_lift",
+            "expression": "lift (core.convert.num.FromU64U32.from i7)"
+          },
+          {
+            "line": 134,
+            "kind": "scalar",
+            "expression": "i6 + i8"
+          },
+          {
+            "line": 135,
+            "kind": "scalar",
+            "expression": "i4 * i9"
+          },
+          {
+            "line": 136,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.reduce_u64 i10"
+          },
+          {
+            "line": 137,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.sub m0 m1"
+          },
+          {
+            "line": 138,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.sub m2 m0"
+          },
+          {
+            "line": 139,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.sub m3 m1"
+          }
+        ]
+      },
+      {
+        "function": "aspis_core.field.mul_by_r",
+        "operations": [
+          {
+            "line": 146,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.double x.a"
+          },
+          {
+            "line": 147,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.sub m x.b"
+          },
+          {
+            "line": 148,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.double x.b"
+          },
+          {
+            "line": 149,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.add x.a m2"
+          }
+        ]
+      },
+      {
+        "function": "aspis_core.field.QM31.add",
+        "operations": [
+          {
+            "line": 166,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.CM31.add self.c0 rhs.c0"
+          },
+          {
+            "line": 167,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.CM31.add self.c1 rhs.c1"
+          }
+        ]
+      },
+      {
+        "function": "aspis_core.field.QM31.mul",
+        "operations": [
+          {
+            "line": 177,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.CM31.mul self.c0 rhs.c0"
+          },
+          {
+            "line": 178,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.CM31.mul self.c1 rhs.c1"
+          },
+          {
+            "line": 179,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.CM31.add self.c0 self.c1"
+          },
+          {
+            "line": 180,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.CM31.add rhs.c0 rhs.c1"
+          },
+          {
+            "line": 181,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.CM31.mul c c1"
+          },
+          {
+            "line": 182,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.mul_by_r m1"
+          },
+          {
+            "line": 183,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.CM31.add m0 c2"
+          },
+          {
+            "line": 184,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.CM31.sub m2 m0"
+          },
+          {
+            "line": 185,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.CM31.sub c4 m1"
+          }
+        ]
+      },
+      {
+        "function": "r1_semantic.semantic_boundary_loop.body",
+        "operations": [
+          {
+            "line": 199,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize polynomial index"
+          },
+          {
+            "line": 200,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.QM31.add boundary q"
+          },
+          {
+            "line": 201,
+            "kind": "scalar",
+            "expression": "index + 1#usize"
+          }
+        ]
+      },
+      {
+        "function": "r1_semantic.semantic_boundary",
+        "operations": [
+          {
+            "line": 224,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize polynomial 0#usize r1_semantic.semantic_boundary_loop polynomial boundary 0#usize"
+          }
+        ]
+      },
+      {
+        "function": "r1_semantic.semantic_value_loop.body",
+        "operations": [
+          {
+            "line": 239,
+            "kind": "scalar",
+            "expression": "index - 1#usize"
+          },
+          {
+            "line": 240,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize alpha round"
+          },
+          {
+            "line": 241,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.QM31.mul value q"
+          },
+          {
+            "line": 242,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize polynomial index1"
+          },
+          {
+            "line": 243,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.QM31.add q1 q2"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "docs/research/100bit-spend-path-20261013/lean/extracted-source-proof-loops-20261019/AspisR1BatchedWeightsExtraction/Funs.lean",
+    "sha256": "7a8d7fa28dcd6546541ec8c39408430a137013832e46750a862882509d786776",
+    "functions": [
+      {
+        "function": "aspis_core.field.reduce_u64",
+        "operations": [
+          {
+            "line": 26,
+            "kind": "total_lift",
+            "expression": "lift (UScalar.cast .U64 aspis_core.field.P)"
+          },
+          {
+            "line": 27,
+            "kind": "total_lift",
+            "expression": "lift (x &&& i)"
+          },
+          {
+            "line": 28,
+            "kind": "scalar",
+            "expression": "x >>> 31#u32"
+          },
+          {
+            "line": 29,
+            "kind": "scalar",
+            "expression": "i1 + i2"
+          },
+          {
+            "line": 30,
+            "kind": "total_lift",
+            "expression": "lift (UScalar.cast .U64 aspis_core.field.P)"
+          },
+          {
+            "line": 31,
+            "kind": "total_lift",
+            "expression": "lift (x1 &&& i3)"
+          },
+          {
+            "line": 32,
+            "kind": "scalar",
+            "expression": "x1 >>> 31#u32"
+          },
+          {
+            "line": 33,
+            "kind": "scalar",
+            "expression": "i4 + i5"
+          },
+          {
+            "line": 34,
+            "kind": "total_lift",
+            "expression": "lift (UScalar.cast .U32 x2)"
+          },
+          {
+            "line": 35,
+            "kind": "scalar",
+            "expression": "then x3 - aspis_core.field.P"
+          }
+        ]
+      },
+      {
+        "function": "aspis_core.field.M31.reduce_u64",
+        "operations": [
+          {
+            "line": 44,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.reduce_u64 value"
+          }
+        ]
+      },
+      {
+        "function": "batched_weights.BatchedWeights.push_loop.body",
+        "operations": [
+          {
+            "line": 58,
+            "kind": "child_call_or_control",
+            "expression": "core.iter.range.IteratorRange.next core.iter.range.StepUsize iter"
+          },
+          {
+            "line": 63,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize limbs j"
+          },
+          {
+            "line": 64,
+            "kind": "total_lift",
+            "expression": "lift (core.convert.num.FromU64U32.from i)"
+          },
+          {
+            "line": 65,
+            "kind": "total_lift",
+            "expression": "lift (core.convert.num.FromU64U32.from basis)"
+          },
+          {
+            "line": 66,
+            "kind": "scalar",
+            "expression": "i1 * i2"
+          },
+          {
+            "line": 67,
+            "kind": "index_or_update",
+            "expression": "alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (Array Std.U64 4#usize)) self.\u00abraw\u00bb index"
+          },
+          {
+            "line": 70,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize a j"
+          },
+          {
+            "line": 71,
+            "kind": "scalar",
+            "expression": "i4 + i3"
+          },
+          {
+            "line": 72,
+            "kind": "index_or_update",
+            "expression": "Array.update a j i5"
+          }
+        ]
+      },
+      {
+        "function": "batched_weights.BatchedWeights.push",
+        "operations": [
+          {
+            "line": 102,
+            "kind": "child_call_or_control",
+            "expression": "batched_weights.BatchedWeights.push_loop { start := 0#usize, \u00abend\u00bb := 4#usize } self index basis (Array.make 4#usize [ i, i1, i2, i3 ])"
+          },
+          {
+            "line": 106,
+            "kind": "total_lift",
+            "expression": "lift (self1.terms &&& 3#usize)"
+          },
+          {
+            "line": 109,
+            "kind": "index_or_update",
+            "expression": "alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (Array Std.U64 4#usize)) self1.\u00abraw\u00bb index"
+          },
+          {
+            "line": 112,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize lane 0#usize"
+          },
+          {
+            "line": 113,
+            "kind": "total_lift",
+            "expression": "lift (i5 &&& 2147483647#u64)"
+          },
+          {
+            "line": 114,
+            "kind": "scalar",
+            "expression": "i5 >>> 31#i32"
+          },
+          {
+            "line": 115,
+            "kind": "scalar",
+            "expression": "i6 + i7"
+          },
+          {
+            "line": 116,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize lane 1#usize"
+          },
+          {
+            "line": 117,
+            "kind": "total_lift",
+            "expression": "lift (i9 &&& 2147483647#u64)"
+          },
+          {
+            "line": 118,
+            "kind": "scalar",
+            "expression": "i9 >>> 31#i32"
+          },
+          {
+            "line": 119,
+            "kind": "scalar",
+            "expression": "i10 + i11"
+          },
+          {
+            "line": 120,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize lane 2#usize"
+          },
+          {
+            "line": 121,
+            "kind": "total_lift",
+            "expression": "lift (i13 &&& 2147483647#u64)"
+          },
+          {
+            "line": 122,
+            "kind": "scalar",
+            "expression": "i13 >>> 31#i32"
+          },
+          {
+            "line": 123,
+            "kind": "scalar",
+            "expression": "i14 + i15"
+          },
+          {
+            "line": 124,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize lane 3#usize"
+          },
+          {
+            "line": 125,
+            "kind": "total_lift",
+            "expression": "lift (i17 &&& 2147483647#u64)"
+          },
+          {
+            "line": 126,
+            "kind": "scalar",
+            "expression": "i17 >>> 31#i32"
+          },
+          {
+            "line": 127,
+            "kind": "scalar",
+            "expression": "i18 + i19"
+          },
+          {
+            "line": 128,
+            "kind": "index_or_update",
+            "expression": "alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (Array Std.U64 4#usize)) self1.\u00abraw\u00bb index"
+          }
+        ]
+      },
+      {
+        "function": "batched_weights.BatchedWeights.value",
+        "operations": [
+          {
+            "line": 141,
+            "kind": "index_or_update",
+            "expression": "alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (Array Std.U64 4#usize)) self.\u00abraw\u00bb index"
+          },
+          {
+            "line": 144,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize lane 0#usize"
+          },
+          {
+            "line": 145,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.reduce_u64 i"
+          },
+          {
+            "line": 146,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize lane 1#usize"
+          },
+          {
+            "line": 147,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.reduce_u64 i1"
+          },
+          {
+            "line": 148,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize lane 2#usize"
+          },
+          {
+            "line": 149,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.reduce_u64 i2"
+          },
+          {
+            "line": 150,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize lane 3#usize"
+          },
+          {
+            "line": 151,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.reduce_u64 i3"
+          },
+          {
+            "line": 152,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize (Array.make 4#usize [ m, m1, m2, m3 ]) 0#usize"
+          },
+          {
+            "line": 153,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize (Array.make 4#usize [ m, m1, m2, m3 ]) 1#usize"
+          },
+          {
+            "line": 154,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize (Array.make 4#usize [ m, m1, m2, m3 ]) 2#usize"
+          },
+          {
+            "line": 155,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize (Array.make 4#usize [ m, m1, m2, m3 ]) 3#usize"
+          }
+        ]
+      },
+      {
+        "function": "batched_weights.push_entry",
+        "operations": [
+          {
+            "line": 167,
+            "kind": "child_call_or_control",
+            "expression": "batched_weights.BatchedWeights.push { \u00abraw\u00bb := raw1, terms } index power basis"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "docs/research/100bit-spend-path-20261013/lean/extracted-decode-k-canonicality-20261018/AspisR1DecodeKFullV10/Funs.lean",
+    "sha256": "9cfa90cf12f476cd1d55c247b216ce5c8734566056fc7a6e9385ad887b26247f",
+    "functions": [
+      {
+        "function": "aspis_core.field.M31.from_le_bytes",
+        "operations": [
+          {
+            "line": 73,
+            "kind": "total_lift",
+            "expression": "lift (core.num.U32.from_le_bytes bytes)"
+          }
+        ]
+      },
+      {
+        "function": "aspis_core.field.CM31.from_le_bytes",
+        "operations": [
+          {
+            "line": 85,
+            "kind": "index_or_update",
+            "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 0#usize, \u00abend\u00bb := 4#usize }"
+          },
+          {
+            "line": 85,
+            "kind": "index_or_update",
+            "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 0#usize, \u00abend\u00bb := 4#usize }"
+          },
+          {
+            "line": 88,
+            "kind": "child_call_or_control",
+            "expression": "core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s"
+          },
+          {
+            "line": 92,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.from_le_bytes value"
+          },
+          {
+            "line": 93,
+            "kind": "child_call_or_control",
+            "expression": "core.option.Option.Insts.CoreOpsTry_traitTry.branch o"
+          },
+          {
+            "line": 96,
+            "kind": "index_or_update",
+            "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 4#usize, \u00abend\u00bb := 8#usize }"
+          },
+          {
+            "line": 96,
+            "kind": "index_or_update",
+            "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 4#usize, \u00abend\u00bb := 8#usize }"
+          },
+          {
+            "line": 100,
+            "kind": "child_call_or_control",
+            "expression": "core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s1"
+          },
+          {
+            "line": 104,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.from_le_bytes value1"
+          },
+          {
+            "line": 105,
+            "kind": "child_call_or_control",
+            "expression": "core.option.Option.Insts.CoreOpsTry_traitTry.branch o1"
+          }
+        ]
+      },
+      {
+        "function": "aspis_core.field.QM31.from_le_bytes",
+        "operations": [
+          {
+            "line": 134,
+            "kind": "index_or_update",
+            "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 0#usize, \u00abend\u00bb := 8#usize }"
+          },
+          {
+            "line": 134,
+            "kind": "index_or_update",
+            "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 0#usize, \u00abend\u00bb := 8#usize }"
+          },
+          {
+            "line": 137,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.CM31.from_le_bytes s"
+          },
+          {
+            "line": 138,
+            "kind": "child_call_or_control",
+            "expression": "core.option.Option.Insts.CoreOpsTry_traitTry.branch o"
+          },
+          {
+            "line": 141,
+            "kind": "index_or_update",
+            "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 8#usize, \u00abend\u00bb := 16#usize }"
+          },
+          {
+            "line": 141,
+            "kind": "index_or_update",
+            "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 8#usize, \u00abend\u00bb := 16#usize }"
+          },
+          {
+            "line": 144,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.CM31.from_le_bytes s1"
+          },
+          {
+            "line": 145,
+            "kind": "child_call_or_control",
+            "expression": "core.option.Option.Insts.CoreOpsTry_traitTry.branch o1"
+          }
+        ]
+      },
+      {
+        "function": "r1_wire.ValidatedRecord.payload",
+        "operations": [
+          {
+            "line": 159,
+            "kind": "index_or_update",
+            "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8) self.framed { start := 5#usize }"
+          }
+        ]
+      },
+      {
+        "function": "r1_wire.ValidatedRecord.decode_k_value",
+        "operations": [
+          {
+            "line": 170,
+            "kind": "scalar",
+            "expression": "value * 32#usize"
+          },
+          {
+            "line": 171,
+            "kind": "scalar",
+            "expression": "byte_offset + i"
+          },
+          {
+            "line": 172,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.ValidatedRecord.payload self"
+          },
+          {
+            "line": 173,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes start"
+          },
+          {
+            "line": 174,
+            "kind": "scalar",
+            "expression": "start + 1#usize"
+          },
+          {
+            "line": 175,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes i2"
+          },
+          {
+            "line": 176,
+            "kind": "scalar",
+            "expression": "start + 2#usize"
+          },
+          {
+            "line": 177,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes i4"
+          },
+          {
+            "line": 178,
+            "kind": "scalar",
+            "expression": "start + 3#usize"
+          },
+          {
+            "line": 179,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes i6"
+          },
+          {
+            "line": 180,
+            "kind": "scalar",
+            "expression": "start + 4#usize"
+          },
+          {
+            "line": 181,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes i8"
+          },
+          {
+            "line": 182,
+            "kind": "scalar",
+            "expression": "start + 5#usize"
+          },
+          {
+            "line": 183,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes i10"
+          },
+          {
+            "line": 184,
+            "kind": "scalar",
+            "expression": "start + 6#usize"
+          },
+          {
+            "line": 185,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes i12"
+          },
+          {
+            "line": 186,
+            "kind": "scalar",
+            "expression": "start + 7#usize"
+          },
+          {
+            "line": 187,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes i14"
+          },
+          {
+            "line": 188,
+            "kind": "scalar",
+            "expression": "start + 8#usize"
+          },
+          {
+            "line": 189,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes i16"
+          },
+          {
+            "line": 190,
+            "kind": "scalar",
+            "expression": "start + 9#usize"
+          },
+          {
+            "line": 191,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes i18"
+          },
+          {
+            "line": 192,
+            "kind": "scalar",
+            "expression": "start + 10#usize"
+          },
+          {
+            "line": 193,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes i20"
+          },
+          {
+            "line": 194,
+            "kind": "scalar",
+            "expression": "start + 11#usize"
+          },
+          {
+            "line": 195,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes i22"
+          },
+          {
+            "line": 196,
+            "kind": "scalar",
+            "expression": "start + 12#usize"
+          },
+          {
+            "line": 197,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes i24"
+          },
+          {
+            "line": 198,
+            "kind": "scalar",
+            "expression": "start + 13#usize"
+          },
+          {
+            "line": 199,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes i26"
+          },
+          {
+            "line": 200,
+            "kind": "scalar",
+            "expression": "start + 14#usize"
+          },
+          {
+            "line": 201,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes i28"
+          },
+          {
+            "line": 202,
+            "kind": "scalar",
+            "expression": "start + 15#usize"
+          },
+          {
+            "line": 203,
+            "kind": "index_or_update",
+            "expression": "Slice.index_usize bytes i30"
+          },
+          {
+            "line": 204,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 16#usize [ i1, i3, i5, i7, i9, i11, i13, i15, i17, i19, i21, i23, i25, i27, i29, i31 ]))"
+          },
+          {
+            "line": 210,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.QM31.from_le_bytes s"
+          },
+          {
+            "line": 211,
+            "kind": "scalar",
+            "expression": "offset_values + value core.option.Option.ok_or o (r1_wire.Error.NonCanonical self.row i32)"
+          }
+        ]
+      },
+      {
+        "function": "r1_wire.ValidatedRecord.decode_k_loop.body",
+        "operations": [
+          {
+            "line": 226,
+            "kind": "child_call_or_control",
+            "expression": "core.iter.range.IteratorRange.next core.iter.range.StepUsize iter"
+          },
+          {
+            "line": 231,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.ValidatedRecord.decode_k_value { self with row := i } byte_offset value offset_values"
+          },
+          {
+            "line": 234,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+          },
+          {
+            "line": 237,
+            "kind": "index_or_update",
+            "expression": "Array.update out value val"
+          },
+          {
+            "line": 240,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Array aspis_core.field.QM31 N) (core.convert.FromSame r1_wire.Error) residual"
+          }
+        ]
+      },
+      {
+        "function": "r1_wire.ValidatedRecord.decode_k",
+        "operations": [
+          {
+            "line": 272,
+            "kind": "total_lift",
+            "expression": "lift (Usize.checked_mul offset_values 32#usize)"
+          },
+          {
+            "line": 273,
+            "kind": "child_call_or_control",
+            "expression": "core.option.Option.ok_or o (r1_wire.Error.Length self.row)"
+          },
+          {
+            "line": 274,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+          },
+          {
+            "line": 277,
+            "kind": "total_lift",
+            "expression": "lift (Usize.checked_mul N 32#usize)"
+          },
+          {
+            "line": 278,
+            "kind": "child_call_or_control",
+            "expression": "core.option.Option.ok_or o1 (r1_wire.Error.Length self.row)"
+          },
+          {
+            "line": 279,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+          },
+          {
+            "line": 282,
+            "kind": "total_lift",
+            "expression": "lift (Usize.checked_add val val1)"
+          },
+          {
+            "line": 283,
+            "kind": "child_call_or_control",
+            "expression": "core.option.Option.ok_or o2 (r1_wire.Error.Length self.row)"
+          },
+          {
+            "line": 284,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r2"
+          },
+          {
+            "line": 287,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.ValidatedRecord.payload self"
+          },
+          {
+            "line": 288,
+            "kind": "child_call_or_control",
+            "expression": "core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) s { start := val, \u00abend\u00bb := val2 }"
+          },
+          {
+            "line": 291,
+            "kind": "child_call_or_control",
+            "expression": "core.option.Option.ok_or o3 (r1_wire.Error.Length self.row)"
+          },
+          {
+            "line": 293,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+          },
+          {
+            "line": 297,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.ValidatedRecord.decode_k_loop self { start := 0#usize, \u00abend\u00bb := N } self.row offset_values val out"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "docs/research/100bit-spend-path-20261013/lean/bridge-prepared-3335-20261016/ExtractedPreparedModel.lean",
+    "sha256": "f91731f3e5102fb5e7b16a38a736f5309d5b87e28fa9627383ef4552218d4b5a",
+    "functions": [
+      {
+        "function": "PreparedModel.scalar",
+        "operations": [
+          {
+            "line": 24,
+            "kind": "child_call_or_control",
+            "expression": "transcript.Transcript.block aspis_coreDigest32Inst self row payload"
+          },
+          {
+            "line": 26,
+            "kind": "child_call_or_control",
+            "expression": "if nonzero"
+          },
+          {
+            "line": 30,
+            "kind": "total_lift",
+            "expression": "lift (UScalar.cast .Usize row) trace.value 4#u16 i out"
+          }
+        ]
+      },
+      {
+        "function": "PreparedModel.scalar_k",
+        "operations": [
+          {
+            "line": 39,
+            "kind": "child_call_or_control",
+            "expression": "transcript.Transcript.block aspis_coreDigest32Inst self row payload"
+          },
+          {
+            "line": 41,
+            "kind": "child_call_or_control",
+            "expression": "sampler.qm31_sample a"
+          },
+          {
+            "line": 42,
+            "kind": "total_lift",
+            "expression": "lift (UScalar.cast .Usize row)"
+          },
+          {
+            "line": 43,
+            "kind": "child_call_or_control",
+            "expression": "B.fromQm out trace.value 4#u16 i we"
+          }
+        ]
+      },
+      {
+        "function": "PreparedModel.prepare",
+        "operations": [
+          {
+            "line": 52,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.impl.state aspis_coreDigest32Inst sem.transcript"
+          },
+          {
+            "line": 54,
+            "kind": "child_call_or_control",
+            "expression": "transcript.Transcript.new aspis_coreDigest32Inst hash a v.variant"
+          },
+          {
+            "line": 55,
+            "kind": "child_call_or_control",
+            "expression": "PreparedModel.scalar B aspis_coreDigest32Inst t 27#u8 v.y1 true"
+          },
+          {
+            "line": 57,
+            "kind": "child_call_or_control",
+            "expression": "B.toBytes v.inactive"
+          },
+          {
+            "line": 58,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a1)"
+          },
+          {
+            "line": 59,
+            "kind": "child_call_or_control",
+            "expression": "PreparedModel.scalar B aspis_coreDigest32Inst t1 28#u8 s false"
+          },
+          {
+            "line": 61,
+            "kind": "child_call_or_control",
+            "expression": "PreparedModel.scalar B aspis_coreDigest32Inst t2 29#u8 v.round0 false"
+          },
+          {
+            "line": 63,
+            "kind": "child_call_or_control",
+            "expression": "transport.Variant.folds v.variant"
+          },
+          {
+            "line": 66,
+            "kind": "scalar",
+            "expression": "32#usize + 224#usize"
+          },
+          {
+            "line": 68,
+            "kind": "child_call_or_control",
+            "expression": "core.option.Option.unwrap v.folded_root"
+          },
+          {
+            "line": 69,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a2)"
+          },
+          {
+            "line": 70,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes s1"
+          },
+          {
+            "line": 71,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1"
+          },
+          {
+            "line": 74,
+            "kind": "child_call_or_control",
+            "expression": "PreparedModel.scalar B aspis_coreDigest32Inst t3 30#u8 s2 false"
+          },
+          {
+            "line": 76,
+            "kind": "child_call_or_control",
+            "expression": "B.queries aspis_coreDigest32Inst t4 31#u8 v.final_message"
+          },
+          {
+            "line": 79,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+          },
+          {
+            "line": 82,
+            "kind": "scalar",
+            "expression": "31#u8 + 1#u8"
+          },
+          {
+            "line": 83,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Std.Array.empty Std.U8))"
+          },
+          {
+            "line": 84,
+            "kind": "child_call_or_control",
+            "expression": "PreparedModel.scalar_k B aspis_coreDigest32Inst t5 i2 s3"
+          },
+          {
+            "line": 86,
+            "kind": "child_call_or_control",
+            "expression": "B.claim aspis_coreDigest32Inst sem v.y1 v.inactive gamma kappa"
+          },
+          {
+            "line": 89,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+          },
+          {
+            "line": 113,
+            "kind": "child_call_or_control",
+            "expression": "B.queries aspis_coreDigest32Inst t3 30#u8 v.final_message"
+          },
+          {
+            "line": 116,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+          },
+          {
+            "line": 119,
+            "kind": "scalar",
+            "expression": "30#u8 + 1#u8"
+          },
+          {
+            "line": 120,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Std.Array.empty Std.U8))"
+          },
+          {
+            "line": 121,
+            "kind": "child_call_or_control",
+            "expression": "PreparedModel.scalar_k B aspis_coreDigest32Inst t4 i1 s1"
+          },
+          {
+            "line": 123,
+            "kind": "child_call_or_control",
+            "expression": "B.claim aspis_coreDigest32Inst sem v.y1 v.inactive gamma kappa"
+          },
+          {
+            "line": 126,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "docs/research/100bit-spend-path-20261013/lean/bridge-semantic-rounds-a555-20261017/ExtractedSemanticRoundsModel.lean",
+    "sha256": "6f7690be5ef90d775795980a7f9e32725b4e018310181bcb7f021b9cb5f27a5e",
+    "functions": [
+      {
+        "function": "aspis_core.field.CM31.Insts.CoreCmpPartialEqCM31.eq",
+        "operations": [
+          {
+            "line": 17,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq self.a other.a"
+          }
+        ]
+      },
+      {
+        "function": "aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq",
+        "operations": [
+          {
+            "line": 26,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.CM31.Insts.CoreCmpPartialEqCM31.eq self.c0 other.c0"
+          }
+        ]
+      },
+      {
+        "function": "RoundModel.step",
+        "operations": [
+          {
+            "line": 50,
+            "kind": "total_lift",
+            "expression": "lift (UScalar.cast .U8 round)"
+          },
+          {
+            "line": 51,
+            "kind": "scalar",
+            "expression": "15#u8 + i"
+          },
+          {
+            "line": 52,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 row"
+          },
+          {
+            "line": 53,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+          },
+          {
+            "line": 56,
+            "kind": "child_call_or_control",
+            "expression": "B.decode 28#usize vr 0#usize"
+          },
+          {
+            "line": 57,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+          },
+          {
+            "line": 60,
+            "kind": "child_call_or_control",
+            "expression": "B.boundary val"
+          },
+          {
+            "line": 61,
+            "kind": "child_call_or_control",
+            "expression": "core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 boundary running"
+          },
+          {
+            "line": 67,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+          },
+          {
+            "line": 70,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript vr1"
+          },
+          {
+            "line": 73,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r2"
+          },
+          {
+            "line": 76,
+            "kind": "index_or_update",
+            "expression": "Array.update alpha round val1"
+          },
+          {
+            "line": 77,
+            "kind": "child_call_or_control",
+            "expression": "B.value val alpha1 round"
+          }
+        ]
+      },
+      {
+        "function": "RoundModel.rounds",
+        "operations": [
+          {
+            "line": 107,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 14#u8"
+          },
+          {
+            "line": 108,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+          },
+          {
+            "line": 111,
+            "kind": "child_call_or_control",
+            "expression": "B.decode 1#usize vr 0#usize"
+          },
+          {
+            "line": 112,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+          },
+          {
+            "line": 115,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize val 0#usize"
+          },
+          {
+            "line": 117,
+            "kind": "child_call_or_control",
+            "expression": "RoundModel.step B aspis_coreDigest32Inst prefix1 transcript alpha running 0#usize"
+          },
+          {
+            "line": 120,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r2"
+          },
+          {
+            "line": 124,
+            "kind": "child_call_or_control",
+            "expression": "RoundModel.step B aspis_coreDigest32Inst prefix1 transcript1 alpha1 running1 1#usize"
+          },
+          {
+            "line": 127,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+          },
+          {
+            "line": 131,
+            "kind": "child_call_or_control",
+            "expression": "RoundModel.step B aspis_coreDigest32Inst prefix1 transcript2 alpha2 running2 2#usize"
+          },
+          {
+            "line": 134,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r4"
+          },
+          {
+            "line": 138,
+            "kind": "child_call_or_control",
+            "expression": "RoundModel.step B aspis_coreDigest32Inst prefix1 transcript3 alpha3 running3 3#usize"
+          },
+          {
+            "line": 141,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+          },
+          {
+            "line": 145,
+            "kind": "child_call_or_control",
+            "expression": "RoundModel.step B aspis_coreDigest32Inst prefix1 transcript4 alpha4 running4 4#usize"
+          },
+          {
+            "line": 148,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+          },
+          {
+            "line": 152,
+            "kind": "child_call_or_control",
+            "expression": "RoundModel.step B aspis_coreDigest32Inst prefix1 transcript5 alpha5 running5 5#usize"
+          },
+          {
+            "line": 155,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r7"
+          },
+          {
+            "line": 159,
+            "kind": "child_call_or_control",
+            "expression": "RoundModel.step B aspis_coreDigest32Inst prefix1 transcript6 alpha6 running6 6#usize"
+          },
+          {
+            "line": 162,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r8"
+          },
+          {
+            "line": 166,
+            "kind": "child_call_or_control",
+            "expression": "RoundModel.step B aspis_coreDigest32Inst prefix1 transcript7 alpha7 running7 7#usize"
+          },
+          {
+            "line": 169,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r9"
+          },
+          {
+            "line": 173,
+            "kind": "child_call_or_control",
+            "expression": "RoundModel.step B aspis_coreDigest32Inst prefix1 transcript8 alpha8 running8 8#usize"
+          },
+          {
+            "line": 176,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r10"
+          },
+          {
+            "line": 181,
+            "kind": "child_call_or_control",
+            "expression": "RoundModel.step B aspis_coreDigest32Inst prefix1 transcript9 alpha9 running9 9#usize"
+          },
+          {
+            "line": 184,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r11"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "file": "docs/research/100bit-spend-path-20261013/lean/extracted-public-preparation-c16-20261019/AspisR1PublicPreparation/Funs.lean",
+    "sha256": "e98bb12315c0da46e34d99c74f41db6b40fa005b023cfd0679423d1452355650",
+    "functions": [
+      {
+        "function": "core.result.Result.map_err",
+        "operations": [
+          {
+            "line": 41,
+            "kind": "child_call_or_control",
+            "expression": "opsfunctionFnOnceOTupleEFInst.call_once op e"
+          }
+        ]
+      },
+      {
+        "function": "pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1.Insts.CoreCmpPartialEqPoolV1PairVerifiedAfterstateV1.eq",
+        "operations": [
+          {
+            "line": 140,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq aspis_core.field.M31.Insts.CoreCmpPartialEqM31 self.next_root other.next_root"
+          }
+        ]
+      },
+      {
+        "function": "pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1.Insts.CoreFmtDebug.fmt",
+        "operations": [
+          {
+            "line": 176,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 6#usize [ toStr \"pool\", toStr \"deployment_domain\", toStr \"sequence\", toStr \"next_pair_index\", toStr \"current_root\", toStr \"frontier\" ])) core.fmt.Formatter.debug_struct_fields_finish f (toStr \"PoolV1PairLiveSnapshotV1\") s values"
+          }
+        ]
+      },
+      {
+        "function": "pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1.Insts.CoreCmpPartialEqPoolV1PairLiveSnapshotV1.eq",
+        "operations": [
+          {
+            "line": 207,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 self.pool other.pool"
+          },
+          {
+            "line": 212,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 self.deployment_domain other.deployment_domain"
+          },
+          {
+            "line": 217,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq aspis_core.field.M31.Insts.CoreCmpPartialEqM31 self.current_root other.current_root"
+          }
+        ]
+      },
+      {
+        "function": "pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1.Insts.CoreCmpPartialEqPoolV1PairLatePublicStatementV1.eq",
+        "operations": [
+          {
+            "line": 274,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1.Insts.CoreCmpPartialEqPoolV1PairLiveSnapshotV1.eq self.live_snapshot other.live_snapshot"
+          }
+        ]
+      },
+      {
+        "function": "pool_v1.payment_relation.PoolV1PrivateTransferPublicV1.Insts.CoreFmtDebug.fmt",
+        "operations": [
+          {
+            "line": 314,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 8#usize [ toStr \"pool\", toStr \"deployment_domain\", toStr \"anchor_sequence\", toStr \"anchor_root\", toStr \"nullifier\", toStr \"asset_id\", toStr \"recipient_commitment\", toStr \"change_commitment\" ])) core.fmt.Formatter.debug_struct_fields_finish f (toStr \"PoolV1PrivateTransferPublicV1\") s values"
+          }
+        ]
+      },
+      {
+        "function": "pool_v1.payment_relation.PoolV1PrivateTransferPublicV1.Insts.CoreCmpPartialEqPoolV1PrivateTransferPublicV1.eq",
+        "operations": [
+          {
+            "line": 344,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 self.pool other.pool"
+          },
+          {
+            "line": 349,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 self.deployment_domain other.deployment_domain"
+          },
+          {
+            "line": 354,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq aspis_core.field.M31.Insts.CoreCmpPartialEqM31 self.anchor_root other.anchor_root"
+          },
+          {
+            "line": 360,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq aspis_core.field.M31.Insts.CoreCmpPartialEqM31 self.nullifier other.nullifier"
+          },
+          {
+            "line": 366,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq self.asset_id other.asset_id"
+          },
+          {
+            "line": 371,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq aspis_core.field.M31.Insts.CoreCmpPartialEqM31 self.recipient_commitment other.recipient_commitment"
+          }
+        ]
+      },
+      {
+        "function": "pool_v1.payment_relation.PoolV1WithdrawalPublicV1.Insts.CoreFmtDebug.fmt",
+        "operations": [
+          {
+            "line": 432,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 9#usize [ toStr \"pool\", toStr \"deployment_domain\", toStr \"anchor_sequence\", toStr \"anchor_root\", toStr \"nullifier\", toStr \"asset_id\", toStr \"amount\", toStr \"destination_token_account\", toStr \"change_commitment\" ])) core.fmt.Formatter.debug_struct_fields_finish f (toStr \"PoolV1WithdrawalPublicV1\") s values"
+          }
+        ]
+      },
+      {
+        "function": "pool_v1.payment_relation.PoolV1WithdrawalPublicV1.Insts.CoreCmpPartialEqPoolV1WithdrawalPublicV1.eq",
+        "operations": [
+          {
+            "line": 464,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 self.pool other.pool"
+          },
+          {
+            "line": 469,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 self.deployment_domain other.deployment_domain"
+          },
+          {
+            "line": 474,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq aspis_core.field.M31.Insts.CoreCmpPartialEqM31 self.anchor_root other.anchor_root"
+          },
+          {
+            "line": 480,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq aspis_core.field.M31.Insts.CoreCmpPartialEqM31 self.nullifier other.nullifier"
+          },
+          {
+            "line": 486,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq self.asset_id other.asset_id"
+          },
+          {
+            "line": 491,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 self.destination_token_account other.destination_token_account"
+          }
+        ]
+      },
+      {
+        "function": "pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1.Insts.CoreFmtDebug.fmt",
+        "operations": [
+          {
+            "line": 582,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 7#usize [ toStr \"master_account\", toStr \"checkpoint_account\", toStr \"selected_lane_account\", toStr \"output_lane\", toStr \"checkpoint_sequence\", toStr \"historical_global_anchor\", toStr \"lane_transition\" ])) core.fmt.Formatter.debug_struct_fields_finish f (toStr \"PoolV1PairForestTerminalCommonV1\") s values"
+          }
+        ]
+      },
+      {
+        "function": "pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1.Insts.CoreCmpPartialEqPoolV1PairForestTerminalCommonV1.eq",
+        "operations": [
+          {
+            "line": 626,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 self.master_account other.master_account"
+          },
+          {
+            "line": 631,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 self.checkpoint_account other.checkpoint_account"
+          },
+          {
+            "line": 636,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 self.selected_lane_account other.selected_lane_account"
+          },
+          {
+            "line": 641,
+            "kind": "child_call_or_control",
+            "expression": "core.array.equality.PartialEqArray.eq aspis_core.field.M31.Insts.CoreCmpPartialEqM31 self.historical_global_anchor other.historical_global_anchor"
+          }
+        ]
+      },
+      {
+        "function": "pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Insts.CoreCmpPartialEqPoolV1PairForestTerminalStatementV1.eq",
+        "operations": [
+          {
+            "line": 800,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1.Insts.CoreCmpPartialEqPoolV1PairForestTerminalCommonV1.eq __self_0 __arg1_0"
+          },
+          {
+            "line": 823,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1.Insts.CoreCmpPartialEqPoolV1PairForestTerminalCommonV1.eq __self_0 __arg1_0"
+          }
+        ]
+      },
+      {
+        "function": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields_loop.body",
+        "operations": [
+          {
+            "line": 956,
+            "kind": "child_call_or_control",
+            "expression": "core.slice.iter.IteratorSliceIter.next iter"
+          },
+          {
+            "line": 965,
+            "kind": "total_lift",
+            "expression": "lift (core.num.U32.to_le_bytes value)"
+          },
+          {
+            "line": 966,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a)"
+          },
+          {
+            "line": 967,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s"
+          }
+        ]
+      },
+      {
+        "function": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields",
+        "operations": [
+          {
+            "line": 992,
+            "kind": "child_call_or_control",
+            "expression": "SharedSlice.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter values pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields_loop iter out"
+          }
+        ]
+      },
+      {
+        "function": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier",
+        "operations": [
+          {
+            "line": 1006,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 0#usize"
+          },
+          {
+            "line": 1007,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a)"
+          },
+          {
+            "line": 1008,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out s"
+          },
+          {
+            "line": 1010,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+          },
+          {
+            "line": 1013,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 1#usize"
+          },
+          {
+            "line": 1014,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a1)"
+          },
+          {
+            "line": 1015,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out1 s1"
+          },
+          {
+            "line": 1018,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+          },
+          {
+            "line": 1021,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 2#usize"
+          },
+          {
+            "line": 1022,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a2)"
+          },
+          {
+            "line": 1023,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out2 s2"
+          },
+          {
+            "line": 1026,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r2"
+          },
+          {
+            "line": 1029,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 3#usize"
+          },
+          {
+            "line": 1030,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a3)"
+          },
+          {
+            "line": 1031,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out3 s3"
+          },
+          {
+            "line": 1034,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+          },
+          {
+            "line": 1037,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 4#usize"
+          },
+          {
+            "line": 1038,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a4)"
+          },
+          {
+            "line": 1039,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out4 s4"
+          },
+          {
+            "line": 1042,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r4"
+          },
+          {
+            "line": 1045,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 5#usize"
+          },
+          {
+            "line": 1046,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a5)"
+          },
+          {
+            "line": 1047,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out5 s5"
+          },
+          {
+            "line": 1050,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+          },
+          {
+            "line": 1053,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 6#usize"
+          },
+          {
+            "line": 1054,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a6)"
+          },
+          {
+            "line": 1055,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out6 s6"
+          },
+          {
+            "line": 1058,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+          },
+          {
+            "line": 1061,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 7#usize"
+          },
+          {
+            "line": 1062,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a7)"
+          },
+          {
+            "line": 1063,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out7 s7"
+          },
+          {
+            "line": 1066,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r7"
+          },
+          {
+            "line": 1069,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 8#usize"
+          },
+          {
+            "line": 1070,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a8)"
+          },
+          {
+            "line": 1071,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out8 s8"
+          },
+          {
+            "line": 1074,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r8"
+          },
+          {
+            "line": 1077,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 9#usize"
+          },
+          {
+            "line": 1078,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a9)"
+          },
+          {
+            "line": 1079,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out9 s9"
+          },
+          {
+            "line": 1082,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r9"
+          },
+          {
+            "line": 1085,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 10#usize"
+          },
+          {
+            "line": 1086,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a10)"
+          },
+          {
+            "line": 1087,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out10 s10"
+          },
+          {
+            "line": 1090,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r10"
+          },
+          {
+            "line": 1094,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 11#usize"
+          },
+          {
+            "line": 1095,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a11)"
+          },
+          {
+            "line": 1096,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out11 s11"
+          },
+          {
+            "line": 1099,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r11"
+          },
+          {
+            "line": 1103,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 12#usize"
+          },
+          {
+            "line": 1104,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a12)"
+          },
+          {
+            "line": 1105,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out12 s12"
+          },
+          {
+            "line": 1108,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r12"
+          },
+          {
+            "line": 1112,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 13#usize"
+          },
+          {
+            "line": 1113,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a13)"
+          },
+          {
+            "line": 1114,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out13 s13"
+          },
+          {
+            "line": 1117,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r13"
+          },
+          {
+            "line": 1121,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 14#usize"
+          },
+          {
+            "line": 1122,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a14)"
+          },
+          {
+            "line": 1123,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out14 s14"
+          },
+          {
+            "line": 1126,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r14"
+          },
+          {
+            "line": 1130,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 15#usize"
+          },
+          {
+            "line": 1131,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a15)"
+          },
+          {
+            "line": 1132,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out15 s15"
+          },
+          {
+            "line": 1135,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r15"
+          },
+          {
+            "line": 1141,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 16#usize"
+          },
+          {
+            "line": 1142,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a16)"
+          },
+          {
+            "line": 1143,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out16 s16"
+          },
+          {
+            "line": 1146,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r16"
+          },
+          {
+            "line": 1152,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 17#usize"
+          },
+          {
+            "line": 1152,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 17#usize"
+          },
+          {
+            "line": 1154,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a17)"
+          },
+          {
+            "line": 1155,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out17 s17"
+          },
+          {
+            "line": 1158,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r17"
+          },
+          {
+            "line": 1165,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 18#usize"
+          },
+          {
+            "line": 1165,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 18#usize"
+          },
+          {
+            "line": 1167,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a18)"
+          },
+          {
+            "line": 1168,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out18 s18"
+          },
+          {
+            "line": 1171,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r18"
+          },
+          {
+            "line": 1178,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 19#usize"
+          },
+          {
+            "line": 1178,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize values 19#usize"
+          },
+          {
+            "line": 1180,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a19)"
+          },
+          {
+            "line": 1181,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out19 s19"
+          },
+          {
+            "line": 1184,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r19"
+          },
+          {
+            "line": 1195,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1203,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1211,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1219,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1227,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1235,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1243,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1250,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1256,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1262,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1268,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1274,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1280,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1286,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1292,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1298,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1304,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1310,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1316,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          },
+          {
+            "line": 1322,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame aspis_core.state_only_prefix.r0.Error) residual"
+          }
+        ]
+      },
+      {
+        "function": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes",
+        "operations": [
+          {
+            "line": 1336,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.semantic self"
+          },
+          {
+            "line": 1339,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.push (alloc.vec.Vec.new Std.U8) 0#u8"
+          },
+          {
+            "line": 1340,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.anchor)"
+          },
+          {
+            "line": 1341,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out s"
+          },
+          {
+            "line": 1343,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+          },
+          {
+            "line": 1346,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.nullifier)"
+          },
+          {
+            "line": 1347,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out1 s1"
+          },
+          {
+            "line": 1350,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+          },
+          {
+            "line": 1353,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 1#usize [ p.asset_id ]))"
+          },
+          {
+            "line": 1354,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out2 s2"
+          },
+          {
+            "line": 1357,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r2"
+          },
+          {
+            "line": 1361,
+            "kind": "total_lift",
+            "expression": "lift (core.convert.num.FromU8Bool.from b)"
+          },
+          {
+            "line": 1362,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.push out3 i"
+          },
+          {
+            "line": 1365,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.change)"
+          },
+          {
+            "line": 1366,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out4 s3"
+          },
+          {
+            "line": 1369,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+          },
+          {
+            "line": 1373,
+            "kind": "total_lift",
+            "expression": "lift (core.convert.num.FromU8Bool.from b1)"
+          },
+          {
+            "line": 1374,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.push out5 i1"
+          },
+          {
+            "line": 1377,
+            "kind": "total_lift",
+            "expression": "lift (core.num.U64.to_le_bytes p.transition.live_snapshot.next_pair_index)"
+          },
+          {
+            "line": 1380,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a)"
+          },
+          {
+            "line": 1381,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out6 s4"
+          },
+          {
+            "line": 1383,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out7 p.transition.live_snapshot.frontier"
+          },
+          {
+            "line": 1386,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r4"
+          },
+          {
+            "line": 1389,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.transition.candidate_afterstate.next_root)"
+          },
+          {
+            "line": 1392,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out8 s5"
+          },
+          {
+            "line": 1395,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+          },
+          {
+            "line": 1398,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out9 p.transition.candidate_afterstate.next_frontier"
+          },
+          {
+            "line": 1401,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+          },
+          {
+            "line": 1418,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 1#usize [ value ]))"
+          },
+          {
+            "line": 1419,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out6 s4"
+          },
+          {
+            "line": 1422,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r4"
+          },
+          {
+            "line": 1425,
+            "kind": "total_lift",
+            "expression": "lift (core.num.U64.to_le_bytes p.transition.live_snapshot.next_pair_index)"
+          },
+          {
+            "line": 1428,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a)"
+          },
+          {
+            "line": 1429,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out7 s5"
+          },
+          {
+            "line": 1431,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out8 p.transition.live_snapshot.frontier"
+          },
+          {
+            "line": 1434,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+          },
+          {
+            "line": 1437,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.transition.candidate_afterstate.next_root)"
+          },
+          {
+            "line": 1440,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out9 s6"
+          },
+          {
+            "line": 1443,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+          },
+          {
+            "line": 1446,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out10 p.transition.candidate_afterstate.next_frontier"
+          },
+          {
+            "line": 1449,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r7"
+          },
+          {
+            "line": 1474,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice value)"
+          },
+          {
+            "line": 1475,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out4 s3"
+          },
+          {
+            "line": 1478,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+          },
+          {
+            "line": 1481,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.change)"
+          },
+          {
+            "line": 1482,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out5 s4"
+          },
+          {
+            "line": 1485,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r4"
+          },
+          {
+            "line": 1489,
+            "kind": "total_lift",
+            "expression": "lift (core.convert.num.FromU8Bool.from b1)"
+          },
+          {
+            "line": 1490,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.push out6 i1"
+          },
+          {
+            "line": 1493,
+            "kind": "total_lift",
+            "expression": "lift (core.num.U64.to_le_bytes p.transition.live_snapshot.next_pair_index)"
+          },
+          {
+            "line": 1496,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a)"
+          },
+          {
+            "line": 1497,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out7 s5"
+          },
+          {
+            "line": 1499,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out8 p.transition.live_snapshot.frontier"
+          },
+          {
+            "line": 1502,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+          },
+          {
+            "line": 1505,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.transition.candidate_afterstate.next_root)"
+          },
+          {
+            "line": 1508,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out9 s6"
+          },
+          {
+            "line": 1511,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+          },
+          {
+            "line": 1514,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out10 p.transition.candidate_afterstate.next_frontier"
+          },
+          {
+            "line": 1517,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r7"
+          },
+          {
+            "line": 1534,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 1#usize [ value1 ]))"
+          },
+          {
+            "line": 1536,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out7 s5"
+          },
+          {
+            "line": 1539,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+          },
+          {
+            "line": 1542,
+            "kind": "total_lift",
+            "expression": "lift (core.num.U64.to_le_bytes p.transition.live_snapshot.next_pair_index)"
+          },
+          {
+            "line": 1545,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a)"
+          },
+          {
+            "line": 1546,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out8 s6"
+          },
+          {
+            "line": 1549,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out9 p.transition.live_snapshot.frontier"
+          },
+          {
+            "line": 1552,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+          },
+          {
+            "line": 1555,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.transition.candidate_afterstate.next_root)"
+          },
+          {
+            "line": 1558,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out10 s7"
+          },
+          {
+            "line": 1561,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r7"
+          },
+          {
+            "line": 1564,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out11 p.transition.candidate_afterstate.next_frontier"
+          },
+          {
+            "line": 1568,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r8"
+          },
+          {
+            "line": 1610,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.push (alloc.vec.Vec.new Std.U8) 1#u8"
+          },
+          {
+            "line": 1611,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.anchor)"
+          },
+          {
+            "line": 1612,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out s"
+          },
+          {
+            "line": 1614,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+          },
+          {
+            "line": 1617,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.nullifier)"
+          },
+          {
+            "line": 1618,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out1 s1"
+          },
+          {
+            "line": 1621,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+          },
+          {
+            "line": 1624,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 1#usize [ p.asset_id ]))"
+          },
+          {
+            "line": 1625,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out2 s2"
+          },
+          {
+            "line": 1628,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r2"
+          },
+          {
+            "line": 1632,
+            "kind": "total_lift",
+            "expression": "lift (core.convert.num.FromU8Bool.from b)"
+          },
+          {
+            "line": 1633,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.push out3 i"
+          },
+          {
+            "line": 1636,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.change)"
+          },
+          {
+            "line": 1637,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out4 s3"
+          },
+          {
+            "line": 1640,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+          },
+          {
+            "line": 1644,
+            "kind": "total_lift",
+            "expression": "lift (core.convert.num.FromU8Bool.from b1)"
+          },
+          {
+            "line": 1645,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.push out5 i1"
+          },
+          {
+            "line": 1648,
+            "kind": "total_lift",
+            "expression": "lift (core.num.U64.to_le_bytes p.transition.live_snapshot.next_pair_index)"
+          },
+          {
+            "line": 1651,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a)"
+          },
+          {
+            "line": 1652,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out6 s4"
+          },
+          {
+            "line": 1654,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out7 p.transition.live_snapshot.frontier"
+          },
+          {
+            "line": 1657,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r4"
+          },
+          {
+            "line": 1660,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.transition.candidate_afterstate.next_root)"
+          },
+          {
+            "line": 1663,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out8 s5"
+          },
+          {
+            "line": 1666,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+          },
+          {
+            "line": 1669,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out9 p.transition.candidate_afterstate.next_frontier"
+          },
+          {
+            "line": 1672,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+          },
+          {
+            "line": 1689,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 1#usize [ value ]))"
+          },
+          {
+            "line": 1690,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out6 s4"
+          },
+          {
+            "line": 1693,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r4"
+          },
+          {
+            "line": 1696,
+            "kind": "total_lift",
+            "expression": "lift (core.num.U64.to_le_bytes p.transition.live_snapshot.next_pair_index)"
+          },
+          {
+            "line": 1699,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a)"
+          },
+          {
+            "line": 1700,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out7 s5"
+          },
+          {
+            "line": 1702,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out8 p.transition.live_snapshot.frontier"
+          },
+          {
+            "line": 1705,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+          },
+          {
+            "line": 1708,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.transition.candidate_afterstate.next_root)"
+          },
+          {
+            "line": 1711,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out9 s6"
+          },
+          {
+            "line": 1714,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+          },
+          {
+            "line": 1717,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out10 p.transition.candidate_afterstate.next_frontier"
+          },
+          {
+            "line": 1720,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r7"
+          },
+          {
+            "line": 1745,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice value)"
+          },
+          {
+            "line": 1746,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out4 s3"
+          },
+          {
+            "line": 1749,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+          },
+          {
+            "line": 1752,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.change)"
+          },
+          {
+            "line": 1753,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out5 s4"
+          },
+          {
+            "line": 1756,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r4"
+          },
+          {
+            "line": 1760,
+            "kind": "total_lift",
+            "expression": "lift (core.convert.num.FromU8Bool.from b1)"
+          },
+          {
+            "line": 1761,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.push out6 i1"
+          },
+          {
+            "line": 1764,
+            "kind": "total_lift",
+            "expression": "lift (core.num.U64.to_le_bytes p.transition.live_snapshot.next_pair_index)"
+          },
+          {
+            "line": 1767,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a)"
+          },
+          {
+            "line": 1768,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out7 s5"
+          },
+          {
+            "line": 1770,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out8 p.transition.live_snapshot.frontier"
+          },
+          {
+            "line": 1773,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+          },
+          {
+            "line": 1776,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.transition.candidate_afterstate.next_root)"
+          },
+          {
+            "line": 1779,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out9 s6"
+          },
+          {
+            "line": 1782,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+          },
+          {
+            "line": 1785,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out10 p.transition.candidate_afterstate.next_frontier"
+          },
+          {
+            "line": 1788,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r7"
+          },
+          {
+            "line": 1805,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 1#usize [ value1 ]))"
+          },
+          {
+            "line": 1807,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out7 s5"
+          },
+          {
+            "line": 1810,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+          },
+          {
+            "line": 1813,
+            "kind": "total_lift",
+            "expression": "lift (core.num.U64.to_le_bytes p.transition.live_snapshot.next_pair_index)"
+          },
+          {
+            "line": 1816,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a)"
+          },
+          {
+            "line": 1817,
+            "kind": "child_call_or_control",
+            "expression": "alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out8 s6"
+          },
+          {
+            "line": 1820,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out9 p.transition.live_snapshot.frontier"
+          },
+          {
+            "line": 1823,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+          },
+          {
+            "line": 1826,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice p.transition.candidate_afterstate.next_root)"
+          },
+          {
+            "line": 1829,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.fields out10 s7"
+          },
+          {
+            "line": 1832,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r7"
+          },
+          {
+            "line": 1835,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes.frontier out11 p.transition.candidate_afterstate.next_frontier"
+          },
+          {
+            "line": 1839,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r8"
+          }
+        ]
+      },
+      {
+        "function": "sampler.qm31_div_pass_loop.body",
+        "operations": [
+          {
+            "line": 1891,
+            "kind": "scalar",
+            "expression": "j - 1#usize"
+          },
+          {
+            "line": 1892,
+            "kind": "scalar",
+            "expression": "remainder <<< 32#i32"
+          },
+          {
+            "line": 1893,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize rank j1"
+          },
+          {
+            "line": 1894,
+            "kind": "total_lift",
+            "expression": "lift (core.convert.num.FromU64U32.from i1)"
+          },
+          {
+            "line": 1895,
+            "kind": "total_lift",
+            "expression": "lift (i ||| i2)"
+          },
+          {
+            "line": 1896,
+            "kind": "total_lift",
+            "expression": "lift (core.convert.num.FromU64U32.from aspis_core.field.P)"
+          },
+          {
+            "line": 1897,
+            "kind": "scalar",
+            "expression": "dividend / i3"
+          },
+          {
+            "line": 1898,
+            "kind": "total_lift",
+            "expression": "lift (UScalar.cast .U32 i4)"
+          },
+          {
+            "line": 1899,
+            "kind": "index_or_update",
+            "expression": "Array.update rank j1 i5"
+          },
+          {
+            "line": 1900,
+            "kind": "total_lift",
+            "expression": "lift (core.convert.num.FromU64U32.from aspis_core.field.P)"
+          },
+          {
+            "line": 1901,
+            "kind": "scalar",
+            "expression": "dividend % i6"
+          }
+        ]
+      },
+      {
+        "function": "sampler.qm31_div_pass",
+        "operations": [
+          {
+            "line": 1923,
+            "kind": "child_call_or_control",
+            "expression": "sampler.qm31_div_pass_loop rank 0#u64 8#usize"
+          },
+          {
+            "line": 1924,
+            "kind": "total_lift",
+            "expression": "lift (UScalar.cast .U32 remainder)"
+          }
+        ]
+      },
+      {
+        "function": "sampler.qm31_digits_loop0.body",
+        "operations": [
+          {
+            "line": 1938,
+            "kind": "scalar",
+            "expression": "4#usize * i"
+          },
+          {
+            "line": 1939,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize block start"
+          },
+          {
+            "line": 1940,
+            "kind": "scalar",
+            "expression": "start + 1#usize"
+          },
+          {
+            "line": 1941,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize block i2"
+          },
+          {
+            "line": 1942,
+            "kind": "scalar",
+            "expression": "start + 2#usize"
+          },
+          {
+            "line": 1943,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize block i4"
+          },
+          {
+            "line": 1944,
+            "kind": "scalar",
+            "expression": "start + 3#usize"
+          },
+          {
+            "line": 1945,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize block i6"
+          },
+          {
+            "line": 1946,
+            "kind": "total_lift",
+            "expression": "lift (core.num.U32.from_le_bytes (Array.make 4#usize [ i1, i3, i5, i7 ]))"
+          },
+          {
+            "line": 1948,
+            "kind": "index_or_update",
+            "expression": "Array.update rank i i8"
+          },
+          {
+            "line": 1949,
+            "kind": "scalar",
+            "expression": "i + 1#usize"
+          }
+        ]
+      },
+      {
+        "function": "sampler.qm31_digits_loop1.body",
+        "operations": [
+          {
+            "line": 1976,
+            "kind": "child_call_or_control",
+            "expression": "sampler.qm31_div_pass rank"
+          },
+          {
+            "line": 1977,
+            "kind": "index_or_update",
+            "expression": "Array.update digits i digit"
+          },
+          {
+            "line": 1978,
+            "kind": "scalar",
+            "expression": "i + 1#usize"
+          }
+        ]
+      },
+      {
+        "function": "sampler.qm31_digits",
+        "operations": [
+          {
+            "line": 2000,
+            "kind": "child_call_or_control",
+            "expression": "sampler.qm31_digits_loop0 block rank 0#usize"
+          }
+        ]
+      },
+      {
+        "function": "sampler.qm31_sample",
+        "operations": [
+          {
+            "line": 2009,
+            "kind": "child_call_or_control",
+            "expression": "sampler.qm31_digits block"
+          },
+          {
+            "line": 2010,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize digits 0#usize"
+          },
+          {
+            "line": 2011,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize digits 1#usize"
+          },
+          {
+            "line": 2012,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.CM31.new i i1"
+          },
+          {
+            "line": 2013,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize digits 2#usize"
+          },
+          {
+            "line": 2014,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize digits 3#usize"
+          },
+          {
+            "line": 2015,
+            "kind": "child_call_or_control",
+            "expression": "aspis_core.field.CM31.new i2 i3"
+          }
+        ]
+      },
+      {
+        "function": "r1_wire.Prefix.record",
+        "operations": [
+          {
+            "line": 2040,
+            "kind": "total_lift",
+            "expression": "lift (UScalar.cast .Usize row)"
+          },
+          {
+            "line": 2041,
+            "kind": "index_or_update",
+            "expression": "Array.index_usize self.records i"
+          }
+        ]
+      },
+      {
+        "function": "r1_wire.Prefix.validated_record",
+        "operations": [
+          {
+            "line": 2050,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.record self row"
+          },
+          {
+            "line": 2051,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+          }
+        ]
+      },
+      {
+        "function": "r1_wire.SemanticTranscript.sample_block_validated",
+        "operations": [
+          {
+            "line": 2073,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice self.state)"
+          },
+          {
+            "line": 2074,
+            "kind": "scalar",
+            "expression": "160#u8 + row"
+          },
+          {
+            "line": 2075,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 2#usize [ 0#u8, i ]))"
+          },
+          {
+            "line": 2076,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 3#usize [ s, s1, framed ]))"
+          },
+          {
+            "line": 2077,
+            "kind": "child_call_or_control",
+            "expression": "aspis_coreDigest32Inst.digest self.hash s2"
+          },
+          {
+            "line": 2078,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice absorbed)"
+          },
+          {
+            "line": 2079,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 1#usize [ 1#u8 ]))"
+          },
+          {
+            "line": 2080,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 2#usize [ s3, s4 ]))"
+          },
+          {
+            "line": 2081,
+            "kind": "child_call_or_control",
+            "expression": "aspis_coreDigest32Inst.digest self.hash s5"
+          },
+          {
+            "line": 2082,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice absorbed)"
+          },
+          {
+            "line": 2083,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 1#usize [ 2#u8 ]))"
+          },
+          {
+            "line": 2084,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 2#usize [ s6, s7 ]))"
+          },
+          {
+            "line": 2085,
+            "kind": "child_call_or_control",
+            "expression": "aspis_coreDigest32Inst.digest self.hash s8"
+          },
+          {
+            "line": 2086,
+            "kind": "scalar",
+            "expression": "self.next_row + 1#u8"
+          }
+        ]
+      },
+      {
+        "function": "r1_wire.SemanticTranscript.semantic_validated",
+        "operations": [
+          {
+            "line": 2097,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.ValidatedRecord.impl.row record1"
+          },
+          {
+            "line": 2101,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.ValidatedRecord.impl.framed record1"
+          },
+          {
+            "line": 2102,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.sample_block_validated aspis_coreDigest32Inst self row s"
+          },
+          {
+            "line": 2105,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+          },
+          {
+            "line": 2108,
+            "kind": "child_call_or_control",
+            "expression": "sampler.qm31_sample val"
+          },
+          {
+            "line": 2111,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual"
+          }
+        ]
+      },
+      {
+        "function": "r1_wire.begin",
+        "operations": [
+          {
+            "line": 2125,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 0#u8"
+          },
+          {
+            "line": 2126,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+          },
+          {
+            "line": 2129,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript vr"
+          },
+          {
+            "line": 2132,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+          },
+          {
+            "line": 2135,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 1#u8"
+          },
+          {
+            "line": 2136,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r2"
+          },
+          {
+            "line": 2139,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript1 vr1"
+          },
+          {
+            "line": 2142,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+          },
+          {
+            "line": 2145,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 2#u8"
+          },
+          {
+            "line": 2146,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r4"
+          },
+          {
+            "line": 2149,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript2 vr2"
+          },
+          {
+            "line": 2152,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+          },
+          {
+            "line": 2156,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 3#u8"
+          },
+          {
+            "line": 2157,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+          },
+          {
+            "line": 2160,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript3 vr3"
+          },
+          {
+            "line": 2163,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r7"
+          },
+          {
+            "line": 2166,
+            "kind": "index_or_update",
+            "expression": "Array.index_mut_usize zc 0#usize"
+          },
+          {
+            "line": 2167,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 4#u8"
+          },
+          {
+            "line": 2168,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r8"
+          },
+          {
+            "line": 2171,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript4 vr4"
+          },
+          {
+            "line": 2174,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r9"
+          },
+          {
+            "line": 2178,
+            "kind": "index_or_update",
+            "expression": "Array.index_mut_usize zc1 1#usize"
+          },
+          {
+            "line": 2180,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 5#u8"
+          },
+          {
+            "line": 2181,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r10"
+          },
+          {
+            "line": 2185,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript5 vr5"
+          },
+          {
+            "line": 2188,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r11"
+          },
+          {
+            "line": 2193,
+            "kind": "index_or_update",
+            "expression": "Array.index_mut_usize zc2 2#usize"
+          },
+          {
+            "line": 2195,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 6#u8"
+          },
+          {
+            "line": 2197,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r12"
+          },
+          {
+            "line": 2201,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript6 vr6"
+          },
+          {
+            "line": 2204,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r13"
+          },
+          {
+            "line": 2210,
+            "kind": "index_or_update",
+            "expression": "Array.index_mut_usize zc3 3#usize"
+          },
+          {
+            "line": 2212,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 7#u8"
+          },
+          {
+            "line": 2214,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r14"
+          },
+          {
+            "line": 2219,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript7 vr7"
+          },
+          {
+            "line": 2222,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r15"
+          },
+          {
+            "line": 2229,
+            "kind": "index_or_update",
+            "expression": "Array.index_mut_usize zc4 4#usize"
+          },
+          {
+            "line": 2231,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 8#u8"
+          },
+          {
+            "line": 2234,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r16"
+          },
+          {
+            "line": 2240,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript8 vr8"
+          },
+          {
+            "line": 2243,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r17"
+          },
+          {
+            "line": 2251,
+            "kind": "index_or_update",
+            "expression": "Array.index_mut_usize zc5 5#usize"
+          },
+          {
+            "line": 2253,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 9#u8"
+          },
+          {
+            "line": 2256,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r18"
+          },
+          {
+            "line": 2263,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript9 vr9"
+          },
+          {
+            "line": 2267,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r19"
+          },
+          {
+            "line": 2275,
+            "kind": "index_or_update",
+            "expression": "Array.index_mut_usize zc6 6#usize"
+          },
+          {
+            "line": 2277,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 10#u8"
+          },
+          {
+            "line": 2280,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r20"
+          },
+          {
+            "line": 2287,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript10 vr10"
+          },
+          {
+            "line": 2291,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r21"
+          },
+          {
+            "line": 2299,
+            "kind": "index_or_update",
+            "expression": "Array.index_mut_usize zc7 7#usize"
+          },
+          {
+            "line": 2302,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 11#u8"
+          },
+          {
+            "line": 2305,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r22"
+          },
+          {
+            "line": 2312,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript11 vr11"
+          },
+          {
+            "line": 2316,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r23"
+          },
+          {
+            "line": 2325,
+            "kind": "index_or_update",
+            "expression": "Array.index_mut_usize zc8 8#usize"
+          },
+          {
+            "line": 2328,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 12#u8"
+          },
+          {
+            "line": 2331,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r24"
+          },
+          {
+            "line": 2338,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript12 vr12"
+          },
+          {
+            "line": 2342,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r25"
+          },
+          {
+            "line": 2355,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 13#u8"
+          },
+          {
+            "line": 2358,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r26"
+          },
+          {
+            "line": 2370,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r27"
+          },
+          {
+            "line": 2377,
+            "kind": "child_call_or_control",
+            "expression": "r1_wire.Prefix.validated_record prefix1 14#u8"
+          },
+          {
+            "line": 2380,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r28"
+          },
+          {
+            "line": 2393,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r29"
+          },
+          {
+            "line": 2417,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2428,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2439,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2450,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2460,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2470,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2479,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2488,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2497,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2506,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2515,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2523,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2531,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2539,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2547,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2554,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2561,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2567,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2573,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2579,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2585,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2591,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2597,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2603,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2609,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2615,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2621,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2626,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2631,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          },
+          {
+            "line": 2636,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual"
+          }
+        ]
+      },
+      {
+        "function": "r1_wire.SemanticTranscript.new",
+        "operations": [
+          {
+            "line": 2687,
+            "kind": "child_call_or_control",
+            "expression": "core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i"
+          },
+          {
+            "line": 2688,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.map_err (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError aspis_coreDigest32Inst) r ()"
+          },
+          {
+            "line": 2692,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+          },
+          {
+            "line": 2695,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 1#usize [ 0#u8 ]))"
+          },
+          {
+            "line": 2696,
+            "kind": "total_lift",
+            "expression": "lift (core.num.U32.to_le_bytes val)"
+          },
+          {
+            "line": 2697,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a)"
+          },
+          {
+            "line": 2698,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice c1_root)"
+          },
+          {
+            "line": 2699,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 5#usize [ r1_wire.DOMAIN, s, s1, public_bytes, s2 ]))"
+          },
+          {
+            "line": 2702,
+            "kind": "child_call_or_control",
+            "expression": "aspis_coreDigest32Inst.digest hash s3"
+          }
+        ]
+      },
+      {
+        "function": "r1_semantic.public_transcript",
+        "operations": [
+          {
+            "line": 2755,
+            "kind": "child_call_or_control",
+            "expression": "pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes public1"
+          },
+          {
+            "line": 2757,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.map_err (r1_semantic.public_transcript.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError aspis_coreDigest32Inst) r ()"
+          },
+          {
+            "line": 2761,
+            "kind": "child_call_or_control",
+            "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+          }
+        ]
+      },
+      {
+        "function": "transcript.Transcript.new",
+        "operations": [
+          {
+            "line": 2788,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 29#usize [ 85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8, 69#u8, 68#u8, 58#u8, 80#u8, 51#u8 ]))"
+          },
+          {
+            "line": 2795,
+            "kind": "child_call_or_control",
+            "expression": "transport.Variant.tag variant"
+          },
+          {
+            "line": 2796,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 1#usize [ i ]))"
+          },
+          {
+            "line": 2797,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice semantic_state)"
+          },
+          {
+            "line": 2798,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 3#usize [ domain, s, s1 ]))"
+          },
+          {
+            "line": 2799,
+            "kind": "child_call_or_control",
+            "expression": "aspis_coreDigest32Inst.digest hash s2"
+          }
+        ]
+      },
+      {
+        "function": "transcript.Transcript.absorb",
+        "operations": [
+          {
+            "line": 2810,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice self.state)"
+          },
+          {
+            "line": 2811,
+            "kind": "scalar",
+            "expression": "160#u8 + row"
+          },
+          {
+            "line": 2812,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 2#usize [ 0#u8, i ]))"
+          },
+          {
+            "line": 2814,
+            "kind": "total_lift",
+            "expression": "lift (UScalar.cast .U32 i1)"
+          },
+          {
+            "line": 2815,
+            "kind": "total_lift",
+            "expression": "lift (core.num.U32.to_le_bytes i2)"
+          },
+          {
+            "line": 2816,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice a)"
+          },
+          {
+            "line": 2817,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 4#usize [ s, s1, s2, payload ]))"
+          },
+          {
+            "line": 2818,
+            "kind": "child_call_or_control",
+            "expression": "aspis_coreDigest32Inst.digest self.hash s3"
+          }
+        ]
+      },
+      {
+        "function": "transcript.Transcript.block",
+        "operations": [
+          {
+            "line": 2829,
+            "kind": "child_call_or_control",
+            "expression": "transcript.Transcript.absorb aspis_coreDigest32Inst self row payload"
+          },
+          {
+            "line": 2831,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice self1.state)"
+          },
+          {
+            "line": 2832,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 1#usize [ 1#u8 ]))"
+          },
+          {
+            "line": 2833,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 2#usize [ s, s1 ]))"
+          },
+          {
+            "line": 2834,
+            "kind": "child_call_or_control",
+            "expression": "aspis_coreDigest32Inst.digest self1.hash s2"
+          },
+          {
+            "line": 2835,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice self1.state)"
+          },
+          {
+            "line": 2836,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 1#usize [ 2#u8 ]))"
+          },
+          {
+            "line": 2837,
+            "kind": "total_lift",
+            "expression": "lift (Array.to_slice (Array.make 2#usize [ s3, s4 ]))"
+          },
+          {
+            "line": 2838,
+            "kind": "child_call_or_control",
+            "expression": "aspis_coreDigest32Inst.digest self1.hash s5"
+          }
+        ]
+      }
+    ]
+  }
+]
