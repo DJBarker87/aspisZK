@@ -29,14 +29,36 @@ COMPONENT-AUDIT; it is not reported as standard-axioms-only. Backend file:
 aspis-r1-j17-port-20261015/backend/Aeneas/Std/Core/Fmt.lean, SHA-256
 26ac770dbf97ae2947a968818c307044262756bd67275101ac0c34fb817a81ce.
 
-Remaining source composition: establish the bound from actual View.query
-execution and consume the range theorem through the four-dot array/slice
-accesses and decoder sequence. The full View carrier/query/folds/widths have
-an exact new source kit, with no invented reduced carrier or parser premise.
-Charon succeeds; the pinned Aeneas interpreter currently fails while merging
+The actual complete View.query accessor, folds method and salted width
+constants now have an exact source kit. No reduced View carrier or parser
+premise is used. CuSavingsQueryAccess.query_length proves every successful
+query has exactly the selected width (3360 for S1, 4864 otherwise), by inverting
+the actual checked index arithmetic and source subslice. query_prefix_bound
+therefore discharges the 608-byte bound from source execution.
+CuSavingsQueryPrefix consumes this result: for arbitrary View/index inputs,
+the original and fixed-prefix decoder reads agree for all three production
+range families, preserving query failure/divergence. The decoder is arbitrary;
+this is not a proof limited to valid fixture values.
+
+New successful receipts: cu-query-types-a, cu-query-funs-a,
+cu-query-constants-d, cu-query-access-b, cu-query-prefix-a. All exit zero,
+use zero process/cgroup swap, peak below 2.6 GiB and finish below 2.1 seconds.
+The query/prefix composition inherits the same Formatter TYPE boundary;
+query accessor/constants proofs use only standard Lean axioms.
+
+Frontend boundary: the pinned Aeneas interpreter fails while merging query
 branches containing nested shared references (cu-query-aeneas-a,
-InterpMatchCtxs.ml:230). An isolated no-branch-join experiment selects the
-existing path-duplication continuation rather than merging those states; all
-borrow and translation checks remain enabled. No successful consuming theorem
-is claimed from an extraction failure. Other candidate source bridges and the
-full soundness/privacy composition remain open.
+InterpMatchCtxs.ml:230). The isolated optional no-branch-join frontend selects
+the existing unmerged-context/duplicated-continuation path. It does not disable
+borrow, type, arithmetic or translation checks. The same unchanged LLBC emits
+successfully (cu-query-aeneas-b); the generated Types/Funs are promoted
+byte-for-byte and checked by audit-components.py. The original frontend and
+production Rust are untouched. AENEAS-NO-BRANCH-JOIN.md records the exact
+patch, build and paired regression boundary. This remains trusted frontend
+translation, not a theorem proving Aeneas itself correct.
+
+Remaining for candidate 10: consume these decoder-read identities through the
+complete actual four-dot loop and its array/closure machinery. The current
+proof does not yet establish equality of the whole four_dots source function.
+All other candidate source bridges and final soundness/privacy composition
+remain open.

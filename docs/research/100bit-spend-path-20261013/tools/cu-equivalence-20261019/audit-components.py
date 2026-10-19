@@ -40,7 +40,8 @@ for module,item in audit['successful_targets'].items():
     # Unwrap's Debug instance refers to the backend's opaque Formatter TYPE.
     # Record this conservative carrier boundary; never whitelist a proposition
     # asserting an optimization or a verifier equivalence.
-    expected={'core.fmt.Formatter'} if module in {'AspisR1CuPrefix/Funs','CuSavingsPrefix'} else set()
+    expected={'core.fmt.Formatter'} if module in {
+        'AspisR1CuPrefix/Funs','CuSavingsPrefix','CuSavingsQueryPrefix'} else set()
     assert extra==expected,(module,extra,expected)
     item['nonstandard_axioms']=sorted(extra)
     assert receipt['process_swaps']==0,module
@@ -83,6 +84,18 @@ audit['cu_prefix_check']=json.loads(subprocess.check_output([
 for name in ['Types.lean','Funs.lean']:
     assert (area/'lean/AspisR1CuPrefix'/name).read_bytes()==(
         Path(__file__).parent/'cu-prefix-generated'/name).read_bytes(),name
+audit['cu_query_check']=json.loads(subprocess.check_output([
+    sys.executable,str(Path(__file__).with_name('extract-cu-query.py')),'--check'],text=True))
+for name in ['Types.lean','Funs.lean']:
+    assert (area/'lean/AspisR1CuQuery'/name).read_bytes()==(
+        Path(__file__).parent/'cu-query-generated'/name).read_bytes(),name
+regression=json.loads((evidence/'nojoin-regression-emission-a/summary.json').read_text())
+assert regression['exit_status']==0
+assert len(regression['cases'])==4
+for case in regression['cases']:
+    assert case['exit_status']==0 and case['process_swaps']==0
+    assert case['byte_identical'] and case['actual_files']==case['expected_files']
+audit['no_branch_join_regression_sha256']=sha(evidence/'nojoin-regression-emission-a/summary.json')
 usage=resource.getrusage(resource.RUSAGE_SELF)
 audit['audit_command']=[sys.executable,str(Path(__file__).relative_to(repo)),*sys.argv[1:]]
 audit['audit_source_revision']=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()

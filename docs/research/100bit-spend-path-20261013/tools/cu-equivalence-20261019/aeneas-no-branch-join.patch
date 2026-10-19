@@ -1,0 +1,12 @@
+--- a/src/interp/InterpStatements.ml
++++ b/src/interp/InterpStatements.ml
+@@ -1223,6 +1223,9 @@
+      panic as once we reach a panic we stop the symbolic execution (we simply
+      synthesize a panic node in the symbolic AST). *)
+   [%sanity_check] span (List.for_all (fun (_, res) -> res = Unit) ctx_resl);
++  if Sys.getenv_opt "AENEAS_DISABLE_BRANCH_JOIN" = Some "1" then
++    (ctx_resl, cf)
++  else
+   let ctxl = List.map fst ctx_resl in
+   let num_units = List.length ctxl in
+   if num_units = 0 then (

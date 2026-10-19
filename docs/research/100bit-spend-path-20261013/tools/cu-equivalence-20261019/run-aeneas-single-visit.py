@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
-"""Build the isolated visitor fix; retain pinned compiler/cache unchanged."""
+"""Build an isolated frontend experiment; retain pinned tool/cache unchanged."""
 from pathlib import Path
-import hashlib,json,os,re,shutil,subprocess,time
+import argparse,hashlib,json,os,re,shutil,subprocess,time
 
 base=Path('/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016')
 task=Path('/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019')
 here=Path(__file__).resolve().parent
-out=task/'aeneas-single-visit'
+ap=argparse.ArgumentParser();ap.add_argument('--experiment',choices=['single-visit','no-branch-join'],default='single-visit')
+args=ap.parse_args();stem='aeneas-'+args.experiment
+out=task/stem
 limits={'memory.high':str(6*2**30),'memory.max':str(8*2**30),'memory.swap.max':'0'}
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
-pins=json.loads((here/'aeneas-single-visit-pins.json').read_text())
+pins=json.loads((here/(stem+'-pins.json')).read_text())
+source_path=pins.get('source_path','src/interp/InterpBorrowsCore.ml')
 run=lambda a:subprocess.check_output(a,text=True).strip()
 finite=[]
 for p in Path('/sys/fs/cgroup').rglob('memory.max'):
@@ -19,15 +22,16 @@ for p in Path('/sys/fs/cgroup').rglob('memory.max'):
     except OSError:pass
 reservations=[(p,n) for p,n in finite if not any(p.startswith(q+'/') for q,_ in finite if q!=p)]
 assert sum(n for _,n in reservations)+8*2**30<=50*2**30,reservations
-assert sha(base/'aeneas/src/interp/InterpBorrowsCore.ml')==pins['original_source_sha256']
+assert sha(base/'aeneas'/source_path)==pins['original_source_sha256']
 out.mkdir(exist_ok=False)
 # copy2 preserves reusable Dune objects but never shares writable source inodes.
 shutil.copytree(base/'aeneas',out/'aeneas',symlinks=True)
-subprocess.run(['patch','--batch','-p1','-i',str(here/'aeneas-single-visit.patch')],cwd=out/'aeneas',check=True)
-assert sha(out/'aeneas/src/interp/InterpBorrowsCore.ml')==pins['patched_source_sha256']
-shutil.copy2(here/'build-aeneas-single-visit.sh',out/'build.sh')
+subprocess.run(['patch','--batch','-p1','-i',str(here/(stem+'.patch'))],cwd=out/'aeneas',check=True)
+assert sha(out/'aeneas'/source_path)==pins['patched_source_sha256']
+script=(here/'build-aeneas-single-visit.sh').read_text()
+(out/'build.sh').write_text(script.replace('+single-visit-20261019','+'+args.experiment+'-20261019'))
 image='sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7'
-name='aspis-cu-aeneas-single-visit-20261019'
+name='aspis-cu-'+stem+'-20261019'
 command=['docker','create','--name',name,'--network','none','--read-only',
     '--memory','8g','--memory-swap','8g','--pids-limit','128','--cap-drop','ALL',
     '--security-opt','no-new-privileges','--tmpfs','/tmp:rw,nosuid,size=256m',

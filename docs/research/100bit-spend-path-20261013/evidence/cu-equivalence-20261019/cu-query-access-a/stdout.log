@@ -1,0 +1,64 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsQueryAccess.lean:24:84: error: unsolved goals
+case S2
+view : verifier.View
+i : Usize
+h12 : 1#usize ≠ 2#usize
+hv : view.variant = transport.Variant.S2
+⊢ (if True then do
+      let i4 ← i * 4864#usize
+      let i5 ← i + 1#usize
+      let i6 ← i5 * 4864#usize
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) view.query_bytes
+          { start := i4, «end» := i6 }
+    else do
+      let i4 ← i * 3360#usize
+      let i5 ← i + 1#usize
+      let i6 ← i5 * 3360#usize
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) view.query_bytes
+          { start := i4, «end» := i6 }) =
+    do
+    let start ← i * 4864#usize
+    let next ← i + 1#usize
+    let stop ← next * 4864#usize
+    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) view.query_bytes
+        { start := start, «end» := stop }
+
+case D
+view : verifier.View
+i : Usize
+h12 : 1#usize ≠ 2#usize
+hv : view.variant = transport.Variant.D
+⊢ (if True then do
+      let i4 ← i * 4864#usize
+      let i5 ← i + 1#usize
+      let i6 ← i5 * 4864#usize
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) view.query_bytes
+          { start := i4, «end» := i6 }
+    else do
+      let i4 ← i * 3360#usize
+      let i5 ← i + 1#usize
+      let i6 ← i5 * 3360#usize
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) view.query_bytes
+          { start := i4, «end» := i6 }) =
+    do
+    let start ← i * 4864#usize
+    let next ← i + 1#usize
+    let stop ← next * 4864#usize
+    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) view.query_bytes
+        { start := start, «end» := stop }
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsQueryAccess.lean:28:17: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.View.query, ̲hv, ̲folds_success, ̲folds, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵ ̵ ̵if_neg h12,i̵f̵_̵p̵o̵s̵ r̵f̵l̵,̵initial_size,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲second_size,
+  ̵  ̵ ̵ ̵ ̵ ̵add_eq 3360#usize 1504#usize 4864#usize (by scalar_tac),
+        add_eq 3360#usize 0#usize 3360#usize (by scalar_tac), ̲byWidth, ̲width]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsQueryAccess.query_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsQueryAccess.bind_ok' depends on axioms: [propext]
+'AspisR1.CuSavingsQueryAccess.byWidth_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsQueryAccess.query_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsQueryAccess.query_prefix_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

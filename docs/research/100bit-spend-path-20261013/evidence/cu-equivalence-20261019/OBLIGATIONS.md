@@ -25,7 +25,7 @@ remain obligations, not hidden hypotheses asserting the conclusion.
 | 5 canonical private dots | WideExact invariant, redundant-check elimination, outer count implies inner bound, reduction/output | open |
 | 6 public decode reuse | checked same-byte decoder/selector correspondence, first_decoded and adapter execution | open |
 | 7 geometry reuse | node/denominator agreement, caller range validity, execution | open |
-| 10 fixed prefix | admitted q length, identical decoder accesses and failure behavior | exact prefix statement success/short-input failure and all decoder range identities checked; View.query and four-dot source composition open |
+| 10 fixed prefix | admitted q length, identical decoder accesses and failure behavior | exact prefix and successful View.query bound checked; source-query/decoder-read composition checked for every input; whole four-dot source composition open |
 | 12 rho residues | every-prefix modular invariant, four-term overflow bound, canonical finish, array/caller execution, heap admission | integer invariant, complete push/value execution and frame/overflow proofs checked; finish now consumes the extracted standard next body; initialization, outer callers and serialization composition open |
 | 14 Libra factorization | all four weights equal for arbitrary canonical challenges including zero; field/source execution | division-free cut/tensor algebra and handwritten list-loop correspondence checked; concrete field/machine/source bridges open |
 | composition | refreshed emitted caller bodies, byte/error/effect preservation across tx1/tx2 and adapter | open |
@@ -187,3 +187,13 @@ rejecting sorryAx. The prefix success/failure source theorems carry the
 backend's opaque Formatter TYPE through Debug/unwrap; the byte/range/index
 lemmas use standard Lean axioms only. See PREFIX.md for the exact boundary
 and still-open View.query/four-dot source composition.
+
+The complete View.query accessor now discharges the prefix bound from actual
+source success. CuSavingsQueryPrefix composes it with the checked prefix and
+all three exact decoder range families, preserving failure/divergence of the
+query operation. The complete four-dot loop/array/closure comparison remains
+open, so candidate 10 is not marked fully closed. See PREFIX.md and
+AENEAS-NO-BRANCH-JOIN.md for exact source and frontend boundaries. The audit
+checks these new source/emission pins and successful receipts, including the
+Formatter TYPE in the composed query/prefix theorem. No production source,
+protocol, fixture, checkpoint format or cryptographic call schedule changed.
