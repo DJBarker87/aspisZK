@@ -428,3 +428,69 @@ the build itself finished at 04:02, inside both.
   SpendRelation and R1SpendRelation) are taken; T1-T3 need only R0Z.BuilderWitness and
   AspisFormal Pool, so they can be compiled before the spend decision if the map is stated on
   Witness-shaped records (ModelWitness) rather than SpendRelation.Witness itself.
+
+------------------------------------------------------------------------------------------
+§11  Manifest 2/3 run (attempts 5403-5531, 2026-10-19 06:49-07:15 London, in-window, serial)
+------------------------------------------------------------------------------------------
+
+Promotion (lead decision 1).  AspisR1Qm31ArithmeticProbe/{Funs,Types}.lean copied bytes-unchanged
+from evidence/current-qm31-arithmetic-20261015/extraction/attempt-a/generated/ to
+100bit-spend-path-20261013/lean/extracted-qm31-arithmetic-20261015/AspisR1Qm31ArithmeticProbe/:
+  Funs  114552b863f61e970a2ceb4bb048566e4b464b61905c6d7a175f6b117f1aed4a
+  Types c5a08408bb25ca84fcef1b3689904d27e65510c21775d6db8beeb271fbaa5b15
+equal to the host source (aspis-r1-j17-port-20261015/extracted/sources) and to the
+source_lean_sha256 pinned in the accepted ExtractedQM31SamplerCorrect journal (correct-c).  The
+generated files carry `set_option maxHeartbeats 1000000` / `maxRecDepth 2048` (Aeneas output, kept
+byte-unchanged per the decision; not privacy modules).
+
+Manifest 2 (454 modules) — 5403-5453 green; 5454 R1J.PrivacySamplerSpend: lean memory_exception
+at 'interpreter' under -M7000 (7.17 GB, 4.5 s, i.e. at import).  Diagnosis from the 403 receipts:
+the 93 privacy modules whose closure contains R0Z.GoodDensity or R0Z.StatisticalDistance (both
+`import Mathlib`) peak 6.63-7.18 GB; the other 309 peak ≤ 4.0 GB.  The composition adds the spend
+sampler stack and the full `Aeneas` root on top of the whole-Mathlib baseline.  Change (import-only,
+privacy files): GoodDensity and StatisticalDistance import a bounded Mathlib set (linear algebra,
+finite fields, big operators, tactics; listed in the files), plus Mathlib.Data.FinEnum in
+R1Z/LensR1 (Fintype UInt8).  Not rerun unchanged: the driver now rebuilds every dependent of a
+changed module and the launcher guards (sha, env, deps-fingerprint).
+
+Manifest 3 (455 modules = manifest 2 + R1J.SpendWitnessMap):
+  import-repair iterations: 5456/5459 AffineLaw (Module, LinearMap.range, Finset.sum_boole,
+  Finset.sum_div), 5457 StatisticalDistance (a shell-mangled comment line, mine), 5473
+  GoodDensity (smul_eq_mul), 5497 LensR1 (Fintype UInt8) — each fixed by imports only.
+  GREEN: 5517 R1J.PrivacySamplerSpend (4.12 GB): samplerLaw_of_spend,
+    privacy_R1_games_spendSampler [propext, Classical.choice, Quot.sound] — (c) closed: the
+    QM31SamplerLaw premise of privacy_R1_games_sampler is discharged by the extracted sampler in
+    one closure, on the unified base.
+  GREEN: 5520 R1J.SpendWitnessMap (after 5518, 5519 proof-script fixes in this new module):
+    emptyRoot_lt [propext]; toModel_toRust, witnessOk_toRust, pubCorr_toRustPub
+    [propext, Classical.choice, Quot.sound] — T1-T3.
+  STOP: 5530 R1Z.EventsR1P2 — "(kernel) excessive memory consumption detected" at line 16
+    (card_NZ: Fintype.card {v : OracleAnswer // v ≠ 0} ≥ 2^255), 7.17 GB / 21 s; on the
+    whole-Mathlib base it compiled in 3.6 s (5339).  The narrowed imports change an instance path
+    for OracleAnswer (Fin 32 → UInt8) so the kernel now unfolds a Fintype/Decidable instance over
+    2^256 points.  An import-only probe (5531: + Mathlib.Data.UInt, Mathlib.Data.Fintype.Card)
+    did not help and is reverted.  Not repaired: it is not a mechanical import change.
+  State of J now: 425 of 455 modules current; 30 stale or blocked (EventsR1P2..P4, AgreeR1P/P2,
+  the Rf*/CertR1*/CertBuildIdent*/CertLiftIdent*/CertCheckSound* chain, CommitReadsR1, FinalR1P,
+  PrivacyR1P).  Roots current on this base: privacy_R1_games_sampler, builder_witness_merged,
+  privacy_R1_games_spendSampler, T1-T3.  Not current: privacy_R1_games′ (PrivacyR1P) and
+  check_sound″ (CertCheckSound3) — some of the 30 are only unreached (the driver stops at the
+  first failure), not necessarily broken.
+  Axioms over 5403-5531: standard everywhere except error-induced sorryAx in failed attempts
+  (5456, 5459, 5473, 5497, 5518, 5519) and AspisV8R19.SamplerWordRead.read_success /
+  unwrap_success → core.fmt.Formatter (5414), the known spend-path module boundary (consumers use
+  only `four`; none of the joint theorems depends on it).
+
+SemRowsSpend (§10.3) is written (R1J/SemRowsSpend.lean, RSqueezeAnswer the single named premise)
+but NOT built: its closure needs AspisR1PublicPreparation.{Funs,Types}, which have 3 / 5 distinct
+repo sources (bridge-prepared-3335 c3dd345a = bridge-tx1 c3dd345a, bridge-public-callers-c16
+e98bb123, extracted-public-preparation d4b77a86; Types five variants).  ExtractedDigest32Begin /
+Callers were accepted on c16 (digest32-worker-a-checkpoint: Funs e98bb123); the manifest's
+root order would pick bridge-prepared — wrong.  Same class as the X/R1X collisions: a soundness
+decision (which extraction copy is the module of record).
+
+PAUSE (lead, 2026-10-19, repo cleanup): no further host job launched.  At the pause nothing of
+this worker was running on the host: the driver had already exited at its own STOP after 5531
+(R1Z.EventsR1P2); no run-joint/lean/systemd scope of this job present (ps / systemd-cgls checked).
+Last attempt used: 5531.  Open (deferred by the lead): EventsR1P2 proof fix vs revert of the
+narrowing; the AspisR1PublicPreparation copy of record.

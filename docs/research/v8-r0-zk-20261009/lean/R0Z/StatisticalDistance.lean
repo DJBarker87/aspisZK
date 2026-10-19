@@ -1,4 +1,32 @@
-import Mathlib
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Algebra.Order.Field.Rat
+import Mathlib.Data.Fintype.Card
+import Mathlib.Data.Finset.Image
+import Mathlib.Tactic.NormNum
+-- Unified-base import set (LOG D65 follow-up): this module was a whole-Mathlib import, and the
+-- 93 privacy modules above it relied on that.  The set below replaces it for them: the
+-- linear-algebra / finite-field / big-operator / tactic layer they use, not all of Mathlib.
+import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
+import Mathlib.LinearAlgebra.Matrix.ToLin
+import Mathlib.LinearAlgebra.Dimension.Constructions
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.FieldTheory.Finite.Basic
+import Mathlib.Data.ZMod.Basic
+import Mathlib.Logic.Equiv.Fin.Basic
+import Mathlib.Data.Fintype.BigOperators
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.FinCases
+import Mathlib.Tactic.IntervalCases
+import Mathlib.Tactic.Ring
+import Mathlib.Tactic.Positivity
+import Mathlib.Algebra.BigOperators.Field
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Algebra.BigOperators.Module
+import Mathlib.Algebra.BigOperators.Pi
+import Mathlib.Algebra.Order.Field.Basic
+import Mathlib.Data.Rat.Cast.Order
 
 /-! Finite uniform tapes, arbitrary output types, and rational total variation.
 All finite sums below are symbolic. No concrete tape/state/trace is evaluated. -/
