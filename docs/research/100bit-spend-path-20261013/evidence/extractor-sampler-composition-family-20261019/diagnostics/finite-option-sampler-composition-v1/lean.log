@@ -1,0 +1,95 @@
+/tmp/FiniteOptionSamplerComposition.lean:24:11: error: unsolved goals
+case some
+X Y : Type
+inst✝² : Fintype X
+inst✝¹ : Nonempty X
+inst✝ : Fintype Y
+sample : X → Option Y
+bad : Y → Prop
+x : X
+y : Y
+hs : sample x = some y
+⊢ (if bad y then 1 else 0) = ∑ x, if bad x then if y = x then 1 else 0 else 0
+/tmp/FiniteOptionSamplerComposition.lean:32:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (∑ i ∈ ?s, ?f i) * ?a
+in the target expression
+  (∑ x, (fun x => f x * c) x) / ↑(Fintype.card X) = (∑ x, f x) / ↑(Fintype.card X) * c
+
+X : Type
+inst✝¹ : Fintype X
+inst✝ : Nonempty X
+f : X → ℚ
+c : ℚ
+⊢ (∑ x, (fun x => f x * c) x) / ↑(Fintype.card X) = (∑ x, f x) / ↑(Fintype.card X) * c
+/tmp/FiniteOptionSamplerComposition.lean:47:2: error: Tactic `apply` failed: could not unify the conclusion of `@add_le_add_left`
+  ?b + ?a ≤ ?c + ?a
+with the goal
+  ((mean fun x => indicator (sample x = none)) + ∑ i, mean fun x => indicator (sample x = some i) * indicator (bad i)) ≤
+    (mean fun x => indicator (sample x = none)) + mean fun y => indicator (bad y)
+
+Note: The full type of `@add_le_add_left` is
+  ∀ {α : Type ?u.47} [inst : Add α] [inst_1 : LE α] [i : AddRightMono α] {b c : α}, b ≤ c → ∀ (a : α), b + a ≤ c + a
+
+X Y : Type
+inst✝² : Fintype X
+inst✝¹ : Nonempty X
+inst✝ : Fintype Y
+sample : X → Option Y
+bad : Y → Prop
+hmass : ∀ (y : Y), (mean fun x => indicator (sample x = some y)) ≤ 1 / ↑(Fintype.card Y)
+⊢ ((mean fun x => indicator (sample x = none)) + ∑ i, mean fun x => indicator (sample x = some i) * indicator (bad i)) ≤
+    (mean fun x => indicator (sample x = none)) + mean fun y => indicator (bad y)
+/tmp/FiniteOptionSamplerComposition.lean:65:0: warning: automatically included section variable(s) unused in theorem `AspisR1.FiniteOptionSamplerComposition.mean_indicator_count`:
+  [Nonempty X]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Nonempty X] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/FiniteOptionSamplerComposition.lean:96:6: error: Tactic `apply` failed: could not unify the conclusion of `div_le_div_of_nonneg_left (Nat.cast_nonneg ?m.145) hspos`
+  ↑?m.145 / ?m.139 ≤ ↑?m.145 / ↑{x | (sample x).isSome = true}.card
+with the goal
+  ↑{x | sample x = some y}.card / ↑(Fintype.card X) ≤
+    ↑{x | sample x = some y}.card / ↑{x | (sample x).isSome = true}.card
+
+Note: The full type of `div_le_div_of_nonneg_left (Nat.cast_nonneg ?m.145) hspos` is
+  ↑{x | (sample x).isSome = true}.card ≤ ?m.139 → ↑?m.145 / ?m.139 ≤ ↑?m.145 / ↑{x | (sample x).isSome = true}.card
+
+X Y : Type
+inst✝² : Fintype X
+inst✝¹ : Nonempty X
+inst✝ : Fintype Y
+sample : X → Option Y
+hpos : 0 < {x | (sample x).isSome = true}.card
+huniform : ∀ (y : Y), ↑{x | sample x = some y}.card / ↑{x | (sample x).isSome = true}.card = 1 / ↑(Fintype.card Y)
+y : Y
+hsle : {x | (sample x).isSome = true}.card ≤ Fintype.card X
+hspos : 0 < ↑{x | (sample x).isSome = true}.card
+⊢ ↑{x | sample x = some y}.card / ↑(Fintype.card X) ≤
+    ↑{x | sample x = some y}.card / ↑{x | (sample x).isSome = true}.card
+'AspisR1.FiniteOptionSamplerComposition.failure_le_rejection_add_uniform' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.FiniteOptionSamplerComposition.mean_indicator_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FiniteOptionSamplerComposition.output_mass_le_uniform_of_conditional' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        2.92 real         0.68 user         0.65 sys
+          1510981632  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              109132  page reclaims
+               18495  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                2512  voluntary context switches
+               15502  involuntary context switches
+         13383373552  instructions retired
+          4969689228  cycles elapsed
+           254100304  peak memory footprint

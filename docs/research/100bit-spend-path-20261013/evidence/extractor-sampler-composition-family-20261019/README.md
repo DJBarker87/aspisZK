@@ -1,0 +1,11 @@
+# Rejecting sampler composition and concrete final-family bank
+
+`failure_le_rejection_add_uniform` proves a generic rejecting finite sampler's total bad-event mass is at most sampler rejection mass plus the downstream uniform bad-event mass, provided each unconditional successful output mass is at most uniform. The count adapter derives that output-mass premise from positive success count and exact conditional uniformity. This is the missing generic probability step between a conditional sampler law and unconditional extractor failure; the actual full tape law still must instantiate it.
+
+`GSFixedInputDecoderFamily.run` generalizes the earlier fixed bank from two final lanes to any finite number, retaining all 29 initial lanes. All input arrays are fixed before extractor randomness. Initial calls share one tape and all final calls share another. The actual bank abort is bounded by 29*(1025*112*2^-t)+finalCount*(256*112*2^-t). With five final lanes and t=149, it is still strictly below 2^-127.
+
+The four second-fold channel words are distinct in general. The earlier Fin2 bank result remains a valid component theorem but does not by itself supply four separate second-fold channel recovery premises. The intended five-lane constructor uses V at lane 0 and the four repeated channel words at lanes 1..4. This is an offline extractor change, with no change to the on-chain verifier, protocol round count or transaction count. The shared-tape entropy space is unchanged. The new literal five-lane constructor and actual message-recovery consumers have not yet been compiled and are not claimed by this packet.
+
+Focused Lean 4.32 checks: composition v7 exit0/1.37s/1,532,444,672B RSS/swap0, family v1 exit0/4.48s/2,146,746,368B RSS/swap0. All six printed reports contain only standard axioms. Exact commands, revisions, sources, imports and object pins are retained. Earlier proof-local failures are preserved as diagnostics; no full manifest replay was run.
+
+Open: actual byte-pair/tape output law plus total rejection, its pushforward to the bank, fixed received-word construction from the completed log, encoder/image/close/joint-list and spend-witness extraction, full bit-cost, protocol/ROM/source/runtime composition, privacy and two-transaction release gates. This packet does not prove full 100-bit soundness.
