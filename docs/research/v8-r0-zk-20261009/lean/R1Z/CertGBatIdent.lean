@@ -2,6 +2,7 @@ import R1Z.CertGBatK
 import R1Z.CertRelWId
 import R1Z.RfBat
 import Mathlib.Tactic.FinCases
+import R1Z.CertData
 
 /-! D59.2 / D64.2 (hGBat): the G batched columns are the Rust `unit_functionals` model
 `gbatP` (CertGBatK).
@@ -28,7 +29,7 @@ namespace R1Z.CertRel
 open scoped BigOperators
 open R0P R0P.Sumcheck R0P.SemSource R0P.SemDegree R0Z.MaskLayout R0Z.HonestView R0Z.Partition R0Z.D12
   R0Z.Shift R0Z.Chain R0Z.Z4Maps R1Z.Batched R1Z.RfOwn R1Z.RfSrc R1Z.RfBat
-open AspisCircleTensorBinding
+open AspisCircleTensorBinding AspisPool.AlgorithmicCircleDecoderV7
 
 attribute [local instance] Classical.propDecidable
 
@@ -52,7 +53,7 @@ theorem round_uvec {n : ℕ} (w : Fin (4 * n) → K) (j : Fin (4 * n)) (i : ℕ)
     apply Finset.sum_congr rfl
     intro t _
     have hj : AspisR1.childIndex (⟨j.val / 4, by omega⟩ : Fin n) (⟨j.val % 4, by omega⟩ : Fin 4) = j :=
-      Fin.ext (by rw [AspisR1.childIndex_val]; omega)
+      Fin.ext (show 4 * (j.val / 4) + j.val % 4 = j.val by omega)
     rw [hj]
     by_cases hc : j.val % 4 + (4 - t.val) % 4 = i
     · rw [if_pos hc, if_pos hc]
@@ -97,16 +98,19 @@ theorem fold_uvec {n : ℕ} (α : K) (j : Fin (4 * n)) :
     Pi.smul_apply, smul_eq_mul]
   by_cases hd : d.val = j.val / 4
   · have hd' : d = ⟨j.val / 4, by omega⟩ := Fin.ext hd
+    rw [hd']
     rw [Fintype.sum_eq_single (⟨j.val % 4, by omega⟩ : Fin 4) ?_]
-    · have hj : AspisV5ComponentCConcreteFoldLinearity.childIndex d (⟨j.val % 4, by omega⟩ : Fin 4) = j :=
-        Fin.ext (by rw [AspisV5ComponentCConcreteFoldLinearity.childIndex_val]; omega)
-      simp [uvec, hj, hd']
+    · have hj : AspisV5ComponentCConcreteFoldLinearity.childIndex (⟨j.val / 4, by omega⟩ : Fin n)
+          (⟨j.val % 4, by omega⟩ : Fin 4) = j :=
+        Fin.ext (show 4 * (j.val / 4) + j.val % 4 = j.val by omega)
+      simp [uvec, hj]
     · intro s hs
-      have hne : AspisV5ComponentCConcreteFoldLinearity.childIndex d s ≠ j := fun h => hs (Fin.ext (by
-        have := congrArg Fin.val h
-        rw [AspisV5ComponentCConcreteFoldLinearity.childIndex_val] at this
-        show s.val = j.val % 4
-        omega))
+      have hne : AspisV5ComponentCConcreteFoldLinearity.childIndex (⟨j.val / 4, by omega⟩ : Fin n) s ≠ j :=
+        fun h => hs (Fin.ext (by
+          have := congrArg Fin.val h
+          change 4 * (j.val / 4) + s.val = j.val at this
+          show s.val = j.val % 4
+          omega))
       simp [uvec, hne]
   · have hd' : ¬ d = ⟨j.val / 4, by omega⟩ := fun h => hd (congrArg Fin.val h)
     have hne : ∀ s, AspisV5ComponentCConcreteFoldLinearity.childIndex d s ≠ j := fun s h => hd (by
@@ -141,17 +145,23 @@ def cellF (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) : R1Bat → (InitialM
 theorem read_cellF (π : Fin 1024 ≃ Fin 1024) (ch : Challenges K) (t : Trace K) (b : R1Bat) :
     BatchedLayer.read (Bat := R1Bat) π ch t b = cellF π ch b (batchR1 π ch t) := by
   cases b with
-  | round0 i => rfl
-  | round1 i => rfl
-  | final e => rfl
+  | round0 i =>
+    rw [read_round0]
+    simp only [cellF, LinearMap.comp_apply, Polynomial.lcoeff_apply]
+    rw [roundPolynomialLinear_apply (n := 256)]
+  | round1 i =>
+    rw [read_round1]
+    simp only [cellF, q1, LinearMap.comp_apply, Polynomial.lcoeff_apply]
+    rw [roundPolynomialLinear_apply (n := 64)]
+  | final e =>
+    rw [read_final]
+    simp only [cellF, q1, LinearMap.comp_apply, LinearMap.proj_apply]
   | folded p =>
     by_cases h : FoldedOpen ch p
     · rw [read_folded π ch t p h]
-      simp only [cellF, if_pos h]
-      rfl
+      simp only [cellF, if_pos h, q1, LinearMap.comp_apply, LinearMap.proj_apply]
     · rw [folded_unqueried_zero π ch t p h]
-      simp only [cellF, if_neg h]
-      rfl
+      simp only [cellF, if_neg h, LinearMap.zero_apply]
 
 theorem batMap_read (π : Fin 1024 ≃ Fin 1024) (B : PackBasis F) (ch : Challenges K) (m : M K F) (b : R1Bat) :
     R0Z.SilentReduction.batMap (Bat := R1Bat) π B ch m b =
@@ -220,8 +230,8 @@ theorem cellF_unit (co : Fin 1024) (c : Fin (78 + nf)) :
   unfold batCell ucellP
   by_cases h1 : c.val < 7
   · rw [dif_pos h1, if_pos h1]
-    simp only [cellF, LinearMap.comp_apply, Polynomial.lcoeff_apply, roundPolynomialLinear_apply]
-    rw [hu, round_uvec (n := 256), hQ,
+    simp only [cellF, LinearMap.comp_apply, Polynomial.lcoeff_apply]
+    rw [hu, roundPolynomialLinear_apply (n := 256), round_uvec (n := 256), hQ,
       ← Fin.sum_univ_eq_sum_range (fun t => if co.val % 4 + (4 - t) % 4 = c.val then
         wtP A Z T TI Fl κ (4 * (co.val / 4) + t) else 0) 4]
     congr 1
@@ -235,7 +245,7 @@ theorem cellF_unit (co : Fin 1024) (c : Fin (78 + nf)) :
   by_cases h2 : c.val < 14
   · rw [dif_pos h2, if_pos h2]
     simp only [cellF, LinearMap.comp_apply, Polynomial.lcoeff_apply]
-    rw [hq1, map_smul, roundPolynomialLinear_apply, Polynomial.coeff_smul, smul_eq_mul,
+    rw [hq1, map_smul, roundPolynomialLinear_apply (n := 64), Polynomial.coeff_smul, smul_eq_mul,
       round_uvec (n := 64), hQ,
       ← Fin.sum_univ_eq_sum_range (fun t => if co.val / 4 % 4 + (4 - t) % 4 = c.val - 7 then
         w1P A Z T TI Fl κ α0 AspisR1.RoundPairing.quarter (4 * (co.val / 16) + t) else 0) 4]
