@@ -1,0 +1,78 @@
+{
+  "classification": "Standalone extraction of the exact current R1 sampler::circle_sample body. Minimal harness copies the source field/row/point type declarations and exposes three explicitly opaque callees (qm31_sample, secure_ood_circle_point_from_parameter, circle_fallback_point). No callee behavior or Lean proof is claimed by this extraction.",
+  "kit_file_sha256": {
+    "Cargo.lock": "b7dcdbb785a6fd3c3ce1d785896f81b7da064bba4b94fdd24bcdd2810082d34f",
+    "Cargo.toml": "c762bbe0460baca8122341706a576d79b6a8dc9669e6144664de0e64e6c8c7f3",
+    "command-plan.json": "66bec0f087e1824e66ca1dd21bd106ee5f9c113c7d7300b668ff7214c0c5e8f0",
+    "lib.rs": "8cd3a1421542cdda61e36f8b7b689a926865f8b8995a06d0fa876bd6ceb23e9f"
+  },
+  "opaque_paths": [
+    "crate::sampler::qm31_sample",
+    "crate::circle::secure_ood_circle_point_from_parameter",
+    "crate::transcript::circle_fallback_point"
+  ],
+  "scope": "The exact R1 wrapper control flow only. It does not establish equivalence of the opaque callees to production or previous Lean owners.",
+  "source_file_pins": {
+    "crates/aspis-core/src/circle.rs": "8f6f0f32c8dd93e3ee459df0c1d0ef710b01996d3bc929dbeffb3f7d14a0227c",
+    "crates/aspis-core/src/field.rs": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "crates/aspis-core/src/r0_transcript.rs": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1",
+    "crates/aspis-core/src/transcript.rs": "9bd74c66a28567e4d964896b7e2d7c0ac79840565d44b561747879868bdd9179",
+    "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0"
+  },
+  "source_files": {
+    "crates/aspis-core/src/circle.rs": {
+      "selected_declarations": {
+        "CirclePointError": [
+          16,
+          25
+        ],
+        "SecureCirclePoint": [
+          9,
+          14
+        ]
+      },
+      "sha256": "8f6f0f32c8dd93e3ee459df0c1d0ef710b01996d3bc929dbeffb3f7d14a0227c"
+    },
+    "crates/aspis-core/src/field.rs": {
+      "selected_declarations": {
+        "CM31": [
+          253,
+          258
+        ],
+        "M31": [
+          21,
+          23
+        ],
+        "QM31": [
+          430,
+          435
+        ]
+      },
+      "sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea"
+    },
+    "crates/aspis-core/src/r0_transcript.rs": {
+      "selected_declaration": {
+        "CircleRow": [
+          64,
+          69
+        ]
+      },
+      "sha256": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1"
+    },
+    "crates/aspis-core/src/transcript.rs": {
+      "selected_decl": "circle_fallback_point signature boundary; implementation is intentionally opaque in harness",
+      "sha256": "9bd74c66a28567e4d964896b7e2d7c0ac79840565d44b561747879868bdd9179"
+    },
+    "crates/aspis-r1-cost-probe/src/sampler.rs": {
+      "selected_bytes_sha256": "c9c7b93f25a4f86e04de13995d408ca02edb7b69b77858b64fed03391774172a",
+      "selected_decl": "pub fn circle_sample",
+      "selected_lines": [
+        121,
+        127
+      ],
+      "sha256": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0"
+    }
+  },
+  "source_revision": "df7356e62a56b9ed30d797d2ddfb169f648122b5",
+  "target": "crate::sampler::circle_sample"
+}
