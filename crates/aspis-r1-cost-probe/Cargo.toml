@@ -27,6 +27,9 @@ private-leaf-salts = []
 # library) and the capped retry loop; requires private leaf salts.
 r1p-check = ["prover", "private-leaf-salts", "dep:aspis-z4b-probe", "dep:getrandom"]
 r0-op-count = ["aspis-core/r0-op-count"]
+# UNPROVED CANDIDATE (proof-size test, 2026-10-19): binary multiproofs and
+# compact QM31 storage, beside the shipped format. Default off.
+compact-binary = []
 
 [dependencies]
 aspis-core = { path = "../aspis-core", features = ["r0"] }
@@ -36,6 +39,10 @@ serde_json = { workspace = true, optional = true }
 sha2 = { workspace = true, optional = true }
 aspis-z4b-probe = { path = "../../docs/research/v8-r0-zk-20261009/z4", optional = true }
 getrandom = { workspace = true, optional = true }
+
+[[example]]
+name = "proof_size_s1"
+required-features = ["prover", "private-leaf-salts", "compact-binary"]
 
 [[example]]
 name = "semantic_gate"

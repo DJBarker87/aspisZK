@@ -28,3 +28,7 @@ pub mod sim;
 #[cfg(feature="prover")] mod host_sumcheck;
 #[cfg(feature="prover")] mod host_semantic;
 #[cfg(feature="prover")] mod host_commitment;
+
+// UNPROVED CANDIDATE (proof-size test, 2026-10-19); default off.
+#[cfg(feature="compact-binary")] pub mod multiproof;
+#[cfg(feature="compact-binary")] pub mod compact;
