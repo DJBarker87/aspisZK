@@ -1,0 +1,66 @@
+   Compiling aspis-c2-owned-host v0.0.0 (/home/dombarker/project-offloads/aspis-c2-copy-helper-only-20261017/input)
+warning: field `levels` is never read
+   --> lib.rs:126:5
+    |
+125 | pub struct Tree {
+    |            ---- field in this struct
+126 |     levels: Vec<Vec<Digest>>,
+    |     ^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `xy` and `levels` are never read
+   --> lib.rs:166:5
+    |
+165 | pub struct EncodingDomain {
+    |            -------------- fields in this struct
+166 |     xy: Vec<Point<M31>>,
+    |     ^^
+167 |     levels: Vec<Vec<M31>>,
+    |     ^^^^^^
+
+warning: variants `Base` and `Secure` are never constructed
+   --> lib.rs:175:5
+    |
+174 | enum Word {
+    |      ---- variants in this enum
+175 |     Base(Vec<M31>),
+    |     ^^^^
+176 |     Secure(Vec<QM31>),
+    |     ^^^^^^
+
+warning: fields `time`, `lanes`, `messages`, `words`, and `private_salts` are never read
+   --> lib.rs:181:5
+    |
+180 | pub struct Commitment {
+    |            ---------- fields in this struct
+181 |     time: CommitmentTime,
+    |     ^^^^
+182 |     lanes: Vec<usize>,
+    |     ^^^^^
+183 |     messages: Vec<Message<E>>,
+    |     ^^^^^^^^
+184 |     words: Vec<Word>,
+    |     ^^^^^
+185 |     tree: Tree,
+186 |     private_salts: Option<PrivateSalts>,
+    |     ^^^^^^^^^^^^^
+
+warning: field `0` is never read
+   --> lib.rs:191:25
+    |
+191 | pub struct PrivateSalts(Vec<[u8; 32]>);
+    |            ------------ ^^^^^^^^^^^^^
+    |            |
+    |            field in this struct
+    |
+    = help: consider removing this field
+
+warning: field `c1_salts` is never read
+   --> lib.rs:219:164
+    |
+219 | ...ct Backend {pub hash:HashFn,pub variant:Variant,pub domain:EncodingDomain,pub messages:Vec<Message<E>>,pub c1:Option<Commitment>,pub c2:Option<Commitment>,c1_salts:Op...
+    |       ------- field in this struct                                                                                                                            ^^^^^^^^
+
+warning: `aspis-c2-owned-host` (lib) generated 6 warnings
+    Finished `release` profile [optimized] target(s) in 0.17s

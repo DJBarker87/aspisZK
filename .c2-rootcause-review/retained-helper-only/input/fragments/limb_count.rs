@@ -1,0 +1,1 @@
+    pub const LIMB_COUNT: usize = 8;

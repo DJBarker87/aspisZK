@@ -1,0 +1,53 @@
+[package]
+name = "aspis-r1-cost-probe"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+description = "UNPROVED R1 COST PROBE, isolated P2 experiments"
+
+[features]
+default = []
+detail-phases = []
+# Existing exact terminal kernels from the selected V7/R117 bundle.
+# This changes arithmetic evaluation only; the isolated R1 protocol is unproved.
+optimized-terminal = [
+    "aspis-statement/pool-v1-pair-forest-packed-digest-selector-tensor-audit",
+    "aspis-statement/pool-v1-pair-forest-binary-copy-weights-audit",
+    "aspis-statement/pool-v1-pair-forest-endpoint-selector-cache-audit",
+    "aspis-statement/pool-v1-pair-forest-semantic-factor-audit",
+    "aspis-statement/pool-v1-pair-forest-pattern-window-audit",
+    "aspis-statement/pool-v1-pair-forest-copy-tag-dot-basis-audit",
+    "aspis-statement/pool-v1-pair-forest-copy-finish-dot-basis-audit",
+    "aspis-statement/pool-v1-pair-forest-packed-range-audit",
+    "aspis-statement/pool-v1-pair-forest-active-mask-basis-audit",
+]
+prover = ["dep:aspis-prover", "dep:serde_json", "dep:sha2"]
+private-leaf-salts = []
+r0-op-count = ["aspis-core/r0-op-count"]
+
+[dependencies]
+aspis-core = { path = "../aspis-core", features = ["r0"] }
+aspis-statement = { path = "../aspis-statement", features = ["r0", "pool-v1-kernel"] }
+aspis-prover = { path = "../aspis-prover", features = ["r0", "insecure-spend-fixture"], optional = true }
+serde_json = { workspace = true, optional = true }
+sha2 = { workspace = true, optional = true }
+
+[[example]]
+name = "semantic_gate"
+required-features = ["prover"]
+
+[[example]]
+name = "native_gate"
+required-features = ["prover"]
+
+[[example]]
+name = "masked_fixture_gate"
+required-features = ["prover"]
+
+[[example]]
+name = "authenticated_tx2_gate"
+required-features = ["prover"]
+
+[[example]]
+name = "secure_attempt_gate"
+required-features = ["prover", "private-leaf-salts"]

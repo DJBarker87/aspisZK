@@ -1,0 +1,20 @@
+[package]
+name = "aspis-r1-cost-probe-program"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+description = "UNPROVED R1 COST PROBE SBF entrypoint"
+[lib]
+crate-type = ["cdylib", "lib"]
+[features]
+default = ["custom-heap"]
+custom-heap = []
+custom-panic = []
+no-entrypoint = []
+pool-adapter = []
+private-leaf-salts = ["aspis-r1-cost-probe/private-leaf-salts"]
+[dependencies]
+aspis-r1-cost-probe = { path = "../../crates/aspis-r1-cost-probe", features = ["optimized-terminal"] }
+aspis-statement = { path = "../../crates/aspis-statement", features = ["r0", "pool-v1-kernel"] }
+solana-program.workspace = true
+aspis-core = { path = "../../crates/aspis-core" }
