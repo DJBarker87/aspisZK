@@ -1,0 +1,11 @@
+# One parsed payload and one running claim through rounds and finish
+
+`parsed_finish_view_chain` recovers one running claim from a successful finish, then applies the checked strict parser and actual-round theorem to that exact same claim. Its conclusion supplies one Full payload, its encoding equality to the same prefix, the annotated ten-round execution, the same alpha challenge list, the SemanticPayloadView claim/coefficient sumcheck chain, the reached terminal/fromFn/read witnesses, and the exact QM31 finish equation.
+
+Alpha, extra and eta canonicality are derived by the predecessor component. Canonical mask arrays, claim27 and terminal value remain premises of the endpoint equation. Claims/fromFn/terminal implementations, actual top-level acceptance-to-Checks, literal challenge/view coupling, commitment/opening binding, and the WideExact/R0P endpoint transport remain open. The finish has concrete arithmetic but retains its explicit unrelated source/library boundaries. This theorem does not by itself establish 100-bit soundness.
+
+Native Lean4.32 check exited0 in1.949s controller wall (GNU time1.90s), maximum process RSS4,079,948KiB, zero swaps. The final axiom report is only propext, Classical.choice and Quot.sound. The scope used MemoryHigh4G, MemoryMax6G, MemorySwapMax0, -j1, -M5500 and120s watchdog after fresh admission. Sampled cgroup charged-memory peak is separately recorded and must not be confused with process RSS (shared mmap pages can already be charged elsewhere).
+
+The local combined import hit its interpreter memory ceiling; this was a focused dependent integration check on the dedicated host, with no dependency compilation. Reading existing OLean headers identified6178 exact transitive object pins.6066 were reused byte-for-byte from the native cache; only112 objects (30,800,856bytes before compression) were transferred. The first native run exposed an ambiguous MainQM abbreviation; qualifying that type was the only theorem-source change before the successful second run. Both native attempts are retained, including the failed first run's sorryAx report; only the second run is accepted evidence. No package or manifest replay occurred.
+
+Large exact pin inventories are gzip-compressed; compressed-artifacts.json records both expanded and compressed hashes. Focused receipts and axiom logs remain directly readable.
