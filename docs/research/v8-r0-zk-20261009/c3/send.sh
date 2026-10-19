@@ -5,7 +5,7 @@
 set -u
 A=$1; M=$2; H=dombarker@100.108.41.90; T=/home/dombarker/project-offloads/aspis-fs-generic-20261006
 D=$(cd "$(dirname "$0")" && pwd); L=$D/../lean/$M.lean; LED=$D/evidence/lean-sent.txt
-{ [ "$A" -ge 4340 ] && [ "$A" -le 4399 ]; } || { [ "$A" -ge 4460 ] && [ "$A" -le 4519 ]; } || { echo "attempt out of range"; exit 2; }
+{ [ "$A" -ge 4340 ] && [ "$A" -le 4399 ]; } || { [ "$A" -ge 4460 ] && [ "$A" -le 4519 ]; } || { [ "$A" -ge 4600 ] && [ "$A" -le 4699 ]; } || { echo "attempt out of range"; exit 2; }
 SHA=$(shasum -a 256 "$L" | cut -d' ' -f1)
 touch "$LED"
 # DEPREPLAY=1: the source is unchanged but a dependency object was rebuilt (lead-authorised dependency replay).

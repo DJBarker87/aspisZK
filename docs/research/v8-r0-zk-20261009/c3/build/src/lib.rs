@@ -364,3 +364,184 @@ pub fn fill_own(al: &[u32], zz: &[u32], tr: &[u32], sx: &[u32], sy: &[u32], inac
     }
     out
 }
+
+// ------------------------------------------------------------------------------
+// Builder 4 (D64 hRel): the relR1 limb functionals pb.rel (z9b.rs `design_relations`
+// with line reading 1, z9.rs `Rel::limb_functionals`, BAT0 dropped).  WideExact
+// W = QM31[v]/(v^2 - u), u = (0, 0, 1, 0), limbs (lo QM31, hi QM31).  Lean cells:
+// 0..7 round0, 7..14 round1, 14..14+nf folded (positions fpos), 14+nf.. final.
+// Relation rho has kind rk[rho] (0 s2a, 1 s2b, 2 s1, 3 circ at query ru[rho],
+// 4 line at the parent ru[rho] / 4 of query ru[rho]); the line inverses
+// li[3 rho + s] and the stored log-16 node x16[rho] are inputs.  ti is the
+// inverse transport (ti[j] = pi^{-1}(j)); op holds the four openings (8 limbs each).
+// ------------------------------------------------------------------------------
+
+pub fn wlo(x: [u32; 8]) -> [u32; 4] {
+    [x[0], x[1], x[2], x[3]]
+}
+pub fn whi(x: [u32; 8]) -> [u32; 4] {
+    [x[4], x[5], x[6], x[7]]
+}
+pub fn wmk(a: [u32; 4], b: [u32; 4]) -> [u32; 8] {
+    [a[0], a[1], a[2], a[3], b[0], b[1], b[2], b[3]]
+}
+pub fn wadd(x: [u32; 8], y: [u32; 8]) -> [u32; 8] {
+    wmk(qadd(wlo(x), wlo(y)), qadd(whi(x), whi(y)))
+}
+pub fn wsub(x: [u32; 8], y: [u32; 8]) -> [u32; 8] {
+    wmk(qsub(wlo(x), wlo(y)), qsub(whi(x), whi(y)))
+}
+/// (a + b v)(c + d v) = (ac + u bd) + (ad + bc) v.
+pub fn wmul(x: [u32; 8], y: [u32; 8]) -> [u32; 8] {
+    let a = wlo(x);
+    let b = whi(x);
+    let c = wlo(y);
+    let d = whi(y);
+    wmk(qadd(qmul(a, c), qmul([0, 0, 1, 0], qmul(b, d))), qadd(qmul(a, d), qmul(b, c)))
+}
+pub fn wq(a: [u32; 4]) -> [u32; 8] {
+    wmk(a, [0, 0, 0, 0])
+}
+pub fn wbase(v: u32) -> [u32; 8] {
+    wq(qbase(v))
+}
+pub fn wzero() -> [u32; 8] {
+    wq([0, 0, 0, 0])
+}
+/// WideExact basis element m (limb m = 1).
+pub fn wunit(m: usize) -> [u32; 8] {
+    [(m == 0) as u32, (m == 1) as u32, (m == 2) as u32, (m == 3) as u32, (m == 4) as u32, (m == 5) as u32, (m == 6) as u32, (m == 7) as u32]
+}
+pub fn wget(op: &[u32], i: usize) -> [u32; 8] {
+    [op[8 * i], op[8 * i + 1], op[8 * i + 2], op[8 * i + 3], op[8 * i + 4], op[8 * i + 5], op[8 * i + 6], op[8 * i + 7]]
+}
+pub fn wpow(x: [u32; 8], e: usize) -> [u32; 8] {
+    let mut acc = wq(qone());
+    let mut t: usize = 0;
+    while t < e {
+        acc = wmul(acc, x);
+        t += 1;
+    }
+    acc
+}
+/// ell_k(e_j) at row r = pi^{-1}(j): k = 0 the inactive flag, k = 1..6 the head value k - 1.
+pub fn ellq(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], r: usize, k: usize) -> [u32; 4] {
+    if k == 0 {
+        qbase(inact[r])
+    } else {
+        head_q(al, zz, tr, r, k - 1)
+    }
+}
+pub fn wt_loop(acc: [u32; 8], al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], op: &[u32], r: usize, k: usize) -> [u32; 8] {
+    let mut acc = acc;
+    let mut k = k;
+    while k < 7 {
+        acc = wadd(acc, wmul(wpow(wget(op, 1), k), wq(ellq(al, zz, tr, inact, r, k))));
+        k += 1;
+    }
+    acc
+}
+/// weightsR1 j = sum_{k < 7} kappa^k ell_k(e_j), kappa = opening 1.
+pub fn wt(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], j: usize) -> [u32; 8] {
+    wt_loop(wzero(), al, zz, tr, inact, op, ti[j] as usize, 0)
+}
+pub fn df1_loop(acc: [u32; 8], al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], d: usize, t: usize) -> [u32; 8] {
+    let mut acc = acc;
+    let mut t = t;
+    while t < 4 {
+        acc = wadd(acc, wmul(wt(al, zz, tr, inact, ti, op, 4 * d + t), wpow(wget(op, 2), (4 - t) % 4)));
+        t += 1;
+    }
+    acc
+}
+/// w1 d = quarter * sum_t weightsR1(4 d + t) alpha0^((4 - t) % 4), alpha0 = opening 2.
+pub fn df1(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], d: usize) -> [u32; 8] {
+    wmul(wbase(536870912), df1_loop(wzero(), al, zz, tr, inact, ti, op, d, 0))
+}
+pub fn df2_loop(acc: [u32; 8], al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], e: usize, t: usize) -> [u32; 8] {
+    let mut acc = acc;
+    let mut t = t;
+    while t < 4 {
+        acc = wadd(acc, wmul(df1(al, zz, tr, inact, ti, op, 4 * e + t), wpow(wget(op, 3), (4 - t) % 4)));
+        t += 1;
+    }
+    acc
+}
+/// w2 e = quarter * sum_t w1(4 e + t) alpha1^((4 - t) % 4), alpha1 = opening 3.
+pub fn df2(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], e: usize) -> [u32; 8] {
+    wmul(wbase(536870912), df2_loop(wzero(), al, zz, tr, inact, ti, op, e, 0))
+}
+/// pairFoldValue: (l + r) / 2 + c ((l - r) inv).
+pub fn pfold(c: [u32; 8], inv: [u32; 8], l: [u32; 8], r: [u32; 8]) -> [u32; 8] {
+    wadd(wmul(wadd(l, r), wbase(1073741824)), wmul(c, wmul(wsub(l, r), inv)))
+}
+/// lineFoldValue(a, inv0, inv1, inv2, unit_t).
+pub fn lfv(a: [u32; 8], i0: [u32; 8], i1: [u32; 8], i2: [u32; 8], t: usize) -> [u32; 8] {
+    pfold(wmul(a, a), i2, pfold(a, i0, wbase((t == 0) as u32), wbase((t == 1) as u32)), pfold(a, i1, wbase((t == 2) as u32), wbase((t == 3) as u32)))
+}
+/// Coefficient of the line relation rho at the folded position p.
+pub fn line_fold(op: &[u32], ru: &[u32], li: &[u32], rho: usize, p: usize) -> [u32; 8] {
+    let v = ru[rho] as usize / 4;
+    wmul(wbase((p / 4 == v) as u32), lfv(wget(op, 3), wbase(li[3 * rho]), wbase(li[3 * rho + 1]), wbase(li[3 * rho + 2]), p % 4))
+}
+/// Coefficient of relation rho at Lean cell i.
+pub fn coef(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], fpos: &[u32], rk: &[u32], ru: &[u32], li: &[u32], x16: &[u32], nf: usize, rho: usize, i: usize) -> [u32; 8] {
+    let kind = rk[rho];
+    if kind == 0 {
+        wbase((i == 0) as u32 + (i == 4) as u32)
+    } else if kind == 1 {
+        if i < 7 {
+            wsub(wzero(), wmul(wbase(536870912), wpow(wget(op, 2), i)))
+        } else {
+            wbase(((i == 7) | (i == 11)) as u32)
+        }
+    } else if kind == 2 {
+        if i < 7 {
+            wzero()
+        } else if i < 14 {
+            wpow(wget(op, 3), i - 7)
+        } else if i < 14 + nf {
+            wzero()
+        } else {
+            wsub(wzero(), df2(al, zz, tr, inact, ti, op, i - (14 + nf)))
+        }
+    } else if kind == 3 {
+        if i < 14 {
+            wzero()
+        } else if i < 14 + nf {
+            wbase((fpos[i - 14] == ru[rho]) as u32)
+        } else {
+            wzero()
+        }
+    } else if i < 14 {
+        wzero()
+    } else if i < 14 + nf {
+        line_fold(op, ru, li, rho, fpos[i - 14] as usize)
+    } else {
+        wsub(wzero(), wq(nat_q(i - (14 + nf), qbase(x16[rho]))))
+    }
+}
+/// Entry (8 rho + k, 8 i + m): limb k of coef(rho, i) * unit(m).
+pub fn rel_entry(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], fpos: &[u32], rk: &[u32], ru: &[u32], li: &[u32], x16: &[u32], nf: usize, x: usize, c: usize) -> u32 {
+    let z = wmul(coef(al, zz, tr, inact, ti, op, fpos, rk, ru, li, x16, nf, x / 8, c / 8), wunit(c % 8));
+    z[x % 8]
+}
+pub fn rel_row(out: Vec<u32>, al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], fpos: &[u32], rk: &[u32], ru: &[u32], li: &[u32], x16: &[u32], nf: usize, x: usize) -> Vec<u32> {
+    let mut out = out;
+    let mut c: usize = 0;
+    while c < 8 * (78 + nf) {
+        out.push(rel_entry(al, zz, tr, inact, ti, op, fpos, rk, ru, li, x16, nf, x, c));
+        c += 1;
+    }
+    out
+}
+/// The checker's relation matrix pb.rel: q = 8 nr rows, bw = 8 (78 + nf) columns, row-major.
+pub fn fill_rel(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], fpos: &[u32], rk: &[u32], ru: &[u32], li: &[u32], x16: &[u32], nf: usize, q: usize) -> Vec<u32> {
+    let mut out: Vec<u32> = Vec::new();
+    let mut x: usize = 0;
+    while x < q {
+        out = rel_row(out, al, zz, tr, inact, ti, op, fpos, rk, ru, li, x16, nf, x);
+        x += 1;
+    }
+    out
+}

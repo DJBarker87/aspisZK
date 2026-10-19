@@ -1012,4 +1012,586 @@ def fill_own
   fill_own_loop al zz tr sx sy inact kind srow slimb n os nq (alloc.vec.Vec.new
     Std.U32) 0#usize
 
+/-- [aspis_r1_cert_build::wlo]:
+    Source: 'src/lib.rs', lines 379:0-381:1
+    Visibility: public -/
+def wlo (x : Array Std.U32 8#usize) : Result (Array Std.U32 4#usize) := do
+  let i ← Array.index_usize x 0#usize
+  let i1 ← Array.index_usize x 1#usize
+  let i2 ← Array.index_usize x 2#usize
+  let i3 ← Array.index_usize x 3#usize
+  ok (Array.make 4#usize [ i, i1, i2, i3 ])
+
+/-- [aspis_r1_cert_build::whi]:
+    Source: 'src/lib.rs', lines 382:0-384:1
+    Visibility: public -/
+def whi (x : Array Std.U32 8#usize) : Result (Array Std.U32 4#usize) := do
+  let i ← Array.index_usize x 4#usize
+  let i1 ← Array.index_usize x 5#usize
+  let i2 ← Array.index_usize x 6#usize
+  let i3 ← Array.index_usize x 7#usize
+  ok (Array.make 4#usize [ i, i1, i2, i3 ])
+
+/-- [aspis_r1_cert_build::wmk]:
+    Source: 'src/lib.rs', lines 385:0-387:1
+    Visibility: public -/
+def wmk
+  (a : Array Std.U32 4#usize) (b : Array Std.U32 4#usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  let i ← Array.index_usize a 0#usize
+  let i1 ← Array.index_usize a 1#usize
+  let i2 ← Array.index_usize a 2#usize
+  let i3 ← Array.index_usize a 3#usize
+  let i4 ← Array.index_usize b 0#usize
+  let i5 ← Array.index_usize b 1#usize
+  let i6 ← Array.index_usize b 2#usize
+  let i7 ← Array.index_usize b 3#usize
+  ok (Array.make 8#usize [ i, i1, i2, i3, i4, i5, i6, i7 ])
+
+/-- [aspis_r1_cert_build::wadd]:
+    Source: 'src/lib.rs', lines 388:0-390:1
+    Visibility: public -/
+def wadd
+  (x : Array Std.U32 8#usize) (y : Array Std.U32 8#usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  let a ← wlo x
+  let a1 ← wlo y
+  let a2 ← qadd a a1
+  let a3 ← whi x
+  let a4 ← whi y
+  let a5 ← qadd a3 a4
+  wmk a2 a5
+
+/-- [aspis_r1_cert_build::wsub]:
+    Source: 'src/lib.rs', lines 391:0-393:1
+    Visibility: public -/
+def wsub
+  (x : Array Std.U32 8#usize) (y : Array Std.U32 8#usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  let a ← wlo x
+  let a1 ← wlo y
+  let a2 ← qsub a a1
+  let a3 ← whi x
+  let a4 ← whi y
+  let a5 ← qsub a3 a4
+  wmk a2 a5
+
+/-- [aspis_r1_cert_build::wmul]:
+    Source: 'src/lib.rs', lines 395:0-401:1
+    Visibility: public -/
+def wmul
+  (x : Array Std.U32 8#usize) (y : Array Std.U32 8#usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  let a ← wlo x
+  let b ← whi x
+  let c ← wlo y
+  let d ← whi y
+  let a1 ← qmul a c
+  let a2 ← qmul b d
+  let a3 ← qmul (Array.make 4#usize [ 0#u32, 0#u32, 1#u32, 0#u32 ]) a2
+  let a4 ← qadd a1 a3
+  let a5 ← qmul a d
+  let a6 ← qmul b c
+  let a7 ← qadd a5 a6
+  wmk a4 a7
+
+/-- [aspis_r1_cert_build::wq]:
+    Source: 'src/lib.rs', lines 402:0-404:1
+    Visibility: public -/
+def wq (a : Array Std.U32 4#usize) : Result (Array Std.U32 8#usize) := do
+  let a1 := Array.repeat 4#usize 0#u32
+  wmk a a1
+
+/-- [aspis_r1_cert_build::wbase]:
+    Source: 'src/lib.rs', lines 405:0-407:1
+    Visibility: public -/
+def wbase (v : Std.U32) : Result (Array Std.U32 8#usize) := do
+  let a ← qbase v
+  wq a
+
+/-- [aspis_r1_cert_build::wzero]:
+    Source: 'src/lib.rs', lines 408:0-410:1
+    Visibility: public -/
+def wzero : Result (Array Std.U32 8#usize) := do
+  let a := Array.repeat 4#usize 0#u32
+  wq a
+
+/-- [aspis_r1_cert_build::wunit]:
+    Source: 'src/lib.rs', lines 412:0-414:1
+    Visibility: public -/
+def wunit (m : Std.Usize) : Result (Array Std.U32 8#usize) := do
+  let i ← lift (UScalar.cast_fromBool .U32 (m = 0#usize))
+  let i1 ← lift (UScalar.cast_fromBool .U32 (m = 1#usize))
+  let i2 ← lift (UScalar.cast_fromBool .U32 (m = 2#usize))
+  let i3 ← lift (UScalar.cast_fromBool .U32 (m = 3#usize))
+  let i4 ← lift (UScalar.cast_fromBool .U32 (m = 4#usize))
+  let i5 ← lift (UScalar.cast_fromBool .U32 (m = 5#usize))
+  let i6 ← lift (UScalar.cast_fromBool .U32 (m = 6#usize))
+  let i7 ← lift (UScalar.cast_fromBool .U32 (m = 7#usize))
+  ok (Array.make 8#usize [ i, i1, i2, i3, i4, i5, i6, i7 ])
+
+/-- [aspis_r1_cert_build::wget]:
+    Source: 'src/lib.rs', lines 415:0-417:1
+    Visibility: public -/
+def wget
+  (op : Slice Std.U32) (i : Std.Usize) : Result (Array Std.U32 8#usize) := do
+  let i1 ← 8#usize * i
+  let i2 ← Slice.index_usize op i1
+  let i3 ← i1 + 1#usize
+  let i4 ← Slice.index_usize op i3
+  let i5 ← i1 + 2#usize
+  let i6 ← Slice.index_usize op i5
+  let i7 ← i1 + 3#usize
+  let i8 ← Slice.index_usize op i7
+  let i9 ← i1 + 4#usize
+  let i10 ← Slice.index_usize op i9
+  let i11 ← i1 + 5#usize
+  let i12 ← Slice.index_usize op i11
+  let i13 ← i1 + 6#usize
+  let i14 ← Slice.index_usize op i13
+  let i15 ← i1 + 7#usize
+  let i16 ← Slice.index_usize op i15
+  ok (Array.make 8#usize [ i2, i4, i6, i8, i10, i12, i14, i16 ])
+
+/-- [aspis_r1_cert_build::wpow]: loop 0:
+    Source: 'src/lib.rs', lines 421:4-424:5
+    Visibility: public -/
+@[rust_loop]
+def wpow_loop
+  (x : Array Std.U32 8#usize) (e : Std.Usize) (acc : Array Std.U32 8#usize)
+  (t : Std.Usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  if t < e
+  then let acc1 ← wmul acc x
+       let t1 ← t + 1#usize
+       wpow_loop x e acc1 t1
+  else ok acc
+partial_fixpoint
+
+/-- [aspis_r1_cert_build::wpow]:
+    Source: 'src/lib.rs', lines 418:0-426:1
+    Visibility: public -/
+def wpow
+  (x : Array Std.U32 8#usize) (e : Std.Usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  let a ← qone
+  let acc ← wq a
+  wpow_loop x e acc 0#usize
+
+/-- [aspis_r1_cert_build::ellq]:
+    Source: 'src/lib.rs', lines 428:0-434:1
+    Visibility: public -/
+def ellq
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (inact : Slice Std.U32) (r : Std.Usize) (k : Std.Usize) :
+  Result (Array Std.U32 4#usize)
+  := do
+  if k = 0#usize
+  then let i ← Slice.index_usize inact r
+       qbase i
+  else let i ← k - 1#usize
+       head_q al zz tr r i
+
+/-- [aspis_r1_cert_build::wt_loop]: loop 0:
+    Source: 'src/lib.rs', lines 438:4-441:5
+    Visibility: public -/
+@[rust_loop]
+def wt_loop_loop
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (inact : Slice Std.U32) (op : Slice Std.U32) (r : Std.Usize)
+  (acc : Array Std.U32 8#usize) (k : Std.Usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  if k < 7#usize
+  then
+    let a ← wget op 1#usize
+    let a1 ← wpow a k
+    let a2 ← ellq al zz tr inact r k
+    let a3 ← wq a2
+    let a4 ← wmul a1 a3
+    let acc1 ← wadd acc a4
+    let k1 ← k + 1#usize
+    wt_loop_loop al zz tr inact op r acc1 k1
+  else ok acc
+partial_fixpoint
+
+/-- [aspis_r1_cert_build::wt_loop]:
+    Source: 'src/lib.rs', lines 435:0-443:1
+    Visibility: public -/
+@[reducible]
+def wt_loop
+  (acc : Array Std.U32 8#usize) (al : Slice Std.U32) (zz : Slice Std.U32)
+  (tr : Slice Std.U32) (inact : Slice Std.U32) (op : Slice Std.U32)
+  (r : Std.Usize) (k : Std.Usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  wt_loop_loop al zz tr inact op r acc k
+
+/-- [aspis_r1_cert_build::wt]:
+    Source: 'src/lib.rs', lines 445:0-447:1
+    Visibility: public -/
+def wt
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (inact : Slice Std.U32) (ti : Slice Std.U32) (op : Slice Std.U32)
+  (j : Std.Usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  let a ← wzero
+  let i ← Slice.index_usize ti j
+  let i1 ← lift (UScalar.cast .Usize i)
+  wt_loop a al zz tr inact op i1 0#usize
+
+/-- [aspis_r1_cert_build::df1_loop]: loop 0:
+    Source: 'src/lib.rs', lines 451:4-454:5
+    Visibility: public -/
+@[rust_loop]
+def df1_loop_loop
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (inact : Slice Std.U32) (ti : Slice Std.U32) (op : Slice Std.U32)
+  (d : Std.Usize) (acc : Array Std.U32 8#usize) (t : Std.Usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  if t < 4#usize
+  then
+    let i ← 4#usize * d
+    let i1 ← i + t
+    let a ← wt al zz tr inact ti op i1
+    let a1 ← wget op 2#usize
+    let i2 ← 4#usize - t
+    let i3 ← i2 % 4#usize
+    let a2 ← wpow a1 i3
+    let a3 ← wmul a a2
+    let acc1 ← wadd acc a3
+    let t1 ← t + 1#usize
+    df1_loop_loop al zz tr inact ti op d acc1 t1
+  else ok acc
+partial_fixpoint
+
+/-- [aspis_r1_cert_build::df1_loop]:
+    Source: 'src/lib.rs', lines 448:0-456:1
+    Visibility: public -/
+@[reducible]
+def df1_loop
+  (acc : Array Std.U32 8#usize) (al : Slice Std.U32) (zz : Slice Std.U32)
+  (tr : Slice Std.U32) (inact : Slice Std.U32) (ti : Slice Std.U32)
+  (op : Slice Std.U32) (d : Std.Usize) (t : Std.Usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  df1_loop_loop al zz tr inact ti op d acc t
+
+/-- [aspis_r1_cert_build::df1]:
+    Source: 'src/lib.rs', lines 458:0-460:1
+    Visibility: public -/
+def df1
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (inact : Slice Std.U32) (ti : Slice Std.U32) (op : Slice Std.U32)
+  (d : Std.Usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  let a ← wbase 536870912#u32
+  let a1 ← wzero
+  let a2 ← df1_loop a1 al zz tr inact ti op d 0#usize
+  wmul a a2
+
+/-- [aspis_r1_cert_build::df2_loop]: loop 0:
+    Source: 'src/lib.rs', lines 464:4-467:5
+    Visibility: public -/
+@[rust_loop]
+def df2_loop_loop
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (inact : Slice Std.U32) (ti : Slice Std.U32) (op : Slice Std.U32)
+  (e : Std.Usize) (acc : Array Std.U32 8#usize) (t : Std.Usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  if t < 4#usize
+  then
+    let i ← 4#usize * e
+    let i1 ← i + t
+    let a ← df1 al zz tr inact ti op i1
+    let a1 ← wget op 3#usize
+    let i2 ← 4#usize - t
+    let i3 ← i2 % 4#usize
+    let a2 ← wpow a1 i3
+    let a3 ← wmul a a2
+    let acc1 ← wadd acc a3
+    let t1 ← t + 1#usize
+    df2_loop_loop al zz tr inact ti op e acc1 t1
+  else ok acc
+partial_fixpoint
+
+/-- [aspis_r1_cert_build::df2_loop]:
+    Source: 'src/lib.rs', lines 461:0-469:1
+    Visibility: public -/
+@[reducible]
+def df2_loop
+  (acc : Array Std.U32 8#usize) (al : Slice Std.U32) (zz : Slice Std.U32)
+  (tr : Slice Std.U32) (inact : Slice Std.U32) (ti : Slice Std.U32)
+  (op : Slice Std.U32) (e : Std.Usize) (t : Std.Usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  df2_loop_loop al zz tr inact ti op e acc t
+
+/-- [aspis_r1_cert_build::df2]:
+    Source: 'src/lib.rs', lines 471:0-473:1
+    Visibility: public -/
+def df2
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (inact : Slice Std.U32) (ti : Slice Std.U32) (op : Slice Std.U32)
+  (e : Std.Usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  let a ← wbase 536870912#u32
+  let a1 ← wzero
+  let a2 ← df2_loop a1 al zz tr inact ti op e 0#usize
+  wmul a a2
+
+/-- [aspis_r1_cert_build::pfold]:
+    Source: 'src/lib.rs', lines 475:0-477:1
+    Visibility: public -/
+def pfold
+  (c : Array Std.U32 8#usize) (inv : Array Std.U32 8#usize)
+  (l : Array Std.U32 8#usize) (r : Array Std.U32 8#usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  let a ← wadd l r
+  let a1 ← wbase 1073741824#u32
+  let a2 ← wmul a a1
+  let a3 ← wsub l r
+  let a4 ← wmul a3 inv
+  let a5 ← wmul c a4
+  wadd a2 a5
+
+/-- [aspis_r1_cert_build::lfv]:
+    Source: 'src/lib.rs', lines 479:0-481:1
+    Visibility: public -/
+def lfv
+  (a : Array Std.U32 8#usize) (i0 : Array Std.U32 8#usize)
+  (i1 : Array Std.U32 8#usize) (i2 : Array Std.U32 8#usize) (t : Std.Usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  let a1 ← wmul a a
+  let i ← lift (UScalar.cast_fromBool .U32 (t = 0#usize))
+  let a2 ← wbase i
+  let i3 ← lift (UScalar.cast_fromBool .U32 (t = 1#usize))
+  let a3 ← wbase i3
+  let a4 ← pfold a i0 a2 a3
+  let i4 ← lift (UScalar.cast_fromBool .U32 (t = 2#usize))
+  let a5 ← wbase i4
+  let i5 ← lift (UScalar.cast_fromBool .U32 (t = 3#usize))
+  let a6 ← wbase i5
+  let a7 ← pfold a i1 a5 a6
+  pfold a1 i2 a4 a7
+
+/-- [aspis_r1_cert_build::line_fold]:
+    Source: 'src/lib.rs', lines 483:0-486:1
+    Visibility: public -/
+def line_fold
+  (op : Slice Std.U32) (ru : Slice Std.U32) (li : Slice Std.U32)
+  (rho : Std.Usize) (p : Std.Usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  let i ← Slice.index_usize ru rho
+  let i1 ← lift (UScalar.cast .Usize i)
+  let v ← i1 / 4#usize
+  let i2 ← p / 4#usize
+  let i3 ← lift (UScalar.cast_fromBool .U32 (i2 = v))
+  let a ← wbase i3
+  let a1 ← wget op 3#usize
+  let i4 ← 3#usize * rho
+  let i5 ← Slice.index_usize li i4
+  let a2 ← wbase i5
+  let i6 ← i4 + 1#usize
+  let i7 ← Slice.index_usize li i6
+  let a3 ← wbase i7
+  let i8 ← i4 + 2#usize
+  let i9 ← Slice.index_usize li i8
+  let a4 ← wbase i9
+  let i10 ← p % 4#usize
+  let a5 ← lfv a1 a2 a3 a4 i10
+  wmul a a5
+
+/-- [aspis_r1_cert_build::coef]:
+    Source: 'src/lib.rs', lines 488:0-523:1
+    Visibility: public -/
+def coef
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (inact : Slice Std.U32) (ti : Slice Std.U32) (op : Slice Std.U32)
+  (fpos : Slice Std.U32) (rk : Slice Std.U32) (ru : Slice Std.U32)
+  (li : Slice Std.U32) (x16 : Slice Std.U32) (nf : Std.Usize) (rho : Std.Usize)
+  (i : Std.Usize) :
+  Result (Array Std.U32 8#usize)
+  := do
+  let kind ← Slice.index_usize rk rho
+  if kind = 0#u32
+  then
+    let i1 ← lift (UScalar.cast_fromBool .U32 (i = 0#usize))
+    let i2 ← lift (UScalar.cast_fromBool .U32 (i = 4#usize))
+    let i3 ← i1 + i2
+    wbase i3
+  else
+    if kind = 1#u32
+    then
+      if i < 7#usize
+      then
+        let a ← wzero
+        let a1 ← wbase 536870912#u32
+        let a2 ← wget op 2#usize
+        let a3 ← wpow a2 i
+        let a4 ← wmul a1 a3
+        wsub a a4
+      else
+        let i1 ←
+          lift (UScalar.cast_fromBool .U32 ((i = 7#usize) || (i = 11#usize)))
+        wbase i1
+    else
+      if kind = 2#u32
+      then
+        if i < 7#usize
+        then wzero
+        else
+          if i < 14#usize
+          then let a ← wget op 3#usize
+               let i1 ← i - 7#usize
+               wpow a i1
+          else
+            let i1 ← 14#usize + nf
+            if i < i1
+            then wzero
+            else
+              let a ← wzero
+              let i2 ← i - i1
+              let a1 ← df2 al zz tr inact ti op i2
+              wsub a a1
+      else
+        if kind = 3#u32
+        then
+          if i < 14#usize
+          then wzero
+          else
+            let i1 ← 14#usize + nf
+            if i < i1
+            then
+              let i2 ← i - 14#usize
+              let i3 ← Slice.index_usize fpos i2
+              let i4 ← Slice.index_usize ru rho
+              let i5 ← lift (UScalar.cast_fromBool .U32 (i3 = i4))
+              wbase i5
+            else wzero
+        else
+          if i < 14#usize
+          then wzero
+          else
+            let i1 ← 14#usize + nf
+            if i < i1
+            then
+              let i2 ← i - 14#usize
+              let i3 ← Slice.index_usize fpos i2
+              let i4 ← lift (UScalar.cast .Usize i3)
+              line_fold op ru li rho i4
+            else
+              let a ← wzero
+              let i2 ← i - i1
+              let i3 ← Slice.index_usize x16 rho
+              let a1 ← qbase i3
+              let a2 ← nat_q i2 a1
+              let a3 ← wq a2
+              wsub a a3
+
+/-- [aspis_r1_cert_build::rel_entry]:
+    Source: 'src/lib.rs', lines 525:0-528:1
+    Visibility: public -/
+def rel_entry
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (inact : Slice Std.U32) (ti : Slice Std.U32) (op : Slice Std.U32)
+  (fpos : Slice Std.U32) (rk : Slice Std.U32) (ru : Slice Std.U32)
+  (li : Slice Std.U32) (x16 : Slice Std.U32) (nf : Std.Usize) (x : Std.Usize)
+  (c : Std.Usize) :
+  Result Std.U32
+  := do
+  let i ← x / 8#usize
+  let i1 ← c / 8#usize
+  let a ← coef al zz tr inact ti op fpos rk ru li x16 nf i i1
+  let i2 ← c % 8#usize
+  let a1 ← wunit i2
+  let z ← wmul a a1
+  let i3 ← x % 8#usize
+  Array.index_usize z i3
+
+/-- [aspis_r1_cert_build::rel_row]: loop 0:
+    Source: 'src/lib.rs', lines 532:4-535:5
+    Visibility: public -/
+@[rust_loop]
+def rel_row_loop
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (inact : Slice Std.U32) (ti : Slice Std.U32) (op : Slice Std.U32)
+  (fpos : Slice Std.U32) (rk : Slice Std.U32) (ru : Slice Std.U32)
+  (li : Slice Std.U32) (x16 : Slice Std.U32) (nf : Std.Usize) (x : Std.Usize)
+  (out : alloc.vec.Vec Std.U32) (c : Std.Usize) :
+  Result (alloc.vec.Vec Std.U32)
+  := do
+  let i ← 78#usize + nf
+  let i1 ← 8#usize * i
+  if c < i1
+  then
+    let i2 ← rel_entry al zz tr inact ti op fpos rk ru li x16 nf x c
+    let out1 ← alloc.vec.Vec.push out i2
+    let c1 ← c + 1#usize
+    rel_row_loop al zz tr inact ti op fpos rk ru li x16 nf x out1 c1
+  else ok out
+partial_fixpoint
+
+/-- [aspis_r1_cert_build::rel_row]:
+    Source: 'src/lib.rs', lines 529:0-537:1
+    Visibility: public -/
+@[reducible]
+def rel_row
+  (out : alloc.vec.Vec Std.U32) (al : Slice Std.U32) (zz : Slice Std.U32)
+  (tr : Slice Std.U32) (inact : Slice Std.U32) (ti : Slice Std.U32)
+  (op : Slice Std.U32) (fpos : Slice Std.U32) (rk : Slice Std.U32)
+  (ru : Slice Std.U32) (li : Slice Std.U32) (x16 : Slice Std.U32)
+  (nf : Std.Usize) (x : Std.Usize) :
+  Result (alloc.vec.Vec Std.U32)
+  := do
+  rel_row_loop al zz tr inact ti op fpos rk ru li x16 nf x out 0#usize
+
+/-- [aspis_r1_cert_build::fill_rel]: loop 0:
+    Source: 'src/lib.rs', lines 542:4-545:5
+    Visibility: public -/
+@[rust_loop]
+def fill_rel_loop
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (inact : Slice Std.U32) (ti : Slice Std.U32) (op : Slice Std.U32)
+  (fpos : Slice Std.U32) (rk : Slice Std.U32) (ru : Slice Std.U32)
+  (li : Slice Std.U32) (x16 : Slice Std.U32) (nf : Std.Usize) (q : Std.Usize)
+  (out : alloc.vec.Vec Std.U32) (x : Std.Usize) :
+  Result (alloc.vec.Vec Std.U32)
+  := do
+  if x < q
+  then
+    let out1 ← rel_row out al zz tr inact ti op fpos rk ru li x16 nf x
+    let x1 ← x + 1#usize
+    fill_rel_loop al zz tr inact ti op fpos rk ru li x16 nf q out1 x1
+  else ok out
+partial_fixpoint
+
+/-- [aspis_r1_cert_build::fill_rel]:
+    Source: 'src/lib.rs', lines 539:0-547:1
+    Visibility: public -/
+@[reducible]
+def fill_rel
+  (al : Slice Std.U32) (zz : Slice Std.U32) (tr : Slice Std.U32)
+  (inact : Slice Std.U32) (ti : Slice Std.U32) (op : Slice Std.U32)
+  (fpos : Slice Std.U32) (rk : Slice Std.U32) (ru : Slice Std.U32)
+  (li : Slice Std.U32) (x16 : Slice Std.U32) (nf : Std.Usize) (q : Std.Usize) :
+  Result (alloc.vec.Vec Std.U32)
+  := do
+  fill_rel_loop al zz tr inact ti op fpos rk ru li x16 nf q (alloc.vec.Vec.new
+    Std.U32) 0#usize
+
 end R1CertBuild
