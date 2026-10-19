@@ -121,10 +121,12 @@ fn main() {
     assert_eq!(compact::compact_semantic(&forged, &mut Vec::new()), Err(compact::CodecError::NonZeroHigh));
     let encoder_refusal = serde_json::json!({"mutation": "encoder: logical semantic value with non-zero high half", "result": "Err(NonZeroHigh)"});
     // (d) Non-canonical compact limb (2^31-1) in a semantic row and in y1.
-    for (name, at) in [("non-canonical compact semantic limb", compact::OFF_SEMANTIC + 32 + 5 * 15 + 32), ("non-canonical compact y1 limb", compact::OFF_Y1)] {
+    // The semantic value is rejected by the shipped Prefix::parse after the
+    // rebuild (Semantic); the y1 value by the strict scan (Parse).
+    for (name, at, want) in [("non-canonical compact semantic limb", compact::OFF_SEMANTIC + 32 + 5 * 15 + 32, Error::Semantic), ("non-canonical compact y1 limb", compact::OFF_Y1, Error::Parse)] {
         let mut p = proof.clone();
         p[at..at + 4].copy_from_slice(&0x7fff_ffffu32.to_le_bytes());
-        expect!(name, tx1(&p).map(|_| ()), Error::Parse);
+        expect!(name, tx1(&p).map(|_| ()), want);
     }
     // 6. Checkpoint over the expanded rather than the compact bytes.
     let mut expanded = proof[..compact::HEADER].to_vec();

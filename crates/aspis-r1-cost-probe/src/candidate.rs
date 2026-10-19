@@ -50,9 +50,7 @@ pub fn parse_shape(proof: &[u8]) -> Result<Variant, Error> {
 /// (the semantic prefix is checked by `Prefix::parse` after expansion).
 #[inline(never)]
 fn canonical_scan(proof: &[u8]) -> Result<(), Error> {
-    for c in proof[compact::OFF_Y1..compact::OFF_INACTIVE].chunks_exact(16) {
-        K::from_le_bytes(c).ok_or(Error::Parse)?;
-    }
+    compact::check_values(&proof[compact::OFF_Y1..compact::OFF_INACTIVE])?;
     echeck(&proof[compact::OFF_INACTIVE..compact::OFF_INACTIVE + 32], false)?;
     echeck(&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT], false)?;
     echeck(&proof[compact::OFF_ROUND1..compact::OFF_OPENINGS], false)?;
@@ -87,63 +85,58 @@ fn wide_view<'a>(proof: &'a [u8], semantic: &'a [u8], y1: &'a [u8]) -> Result<Vi
     })
 }
 
-/// Node count of one slot; error if over its fixed capacity.
-fn slot_count(queries: &[u32], tree: usize) -> Result<(usize, [u32; multiproof::MAX_BATCH]), Error> {
-    let mut idx = [0u32; multiproof::MAX_BATCH];
-    let n = queries.len();
-    for (o, &u) in idx.iter_mut().zip(queries) {
-        *o = if tree == 2 { u / 4 } else { u };
-    }
-    // Sort only (count needs distinct sorted indices).
-    let mut leaves = [[0u8; 32]; multiproof::MAX_BATCH];
-    let d = multiproof::sort_dedup(&mut idx[..n], &mut leaves[..n]).ok_or(Error::Merkle)?;
-    let count = multiproof::node_count(Arity::Two, &idx[..d]).ok_or(Error::Merkle)?;
-    Ok((count, idx))
-}
-
-/// Every slot's padding (bytes after its node count) is zero.
-#[inline(never)]
-fn check_padding(proof: &[u8], queries: &[u32; 22]) -> Result<(), Error> {
-    for (batch, range) in [(0, 0..SPLIT), (1, SPLIT..22)] {
-        for tree in 0..3 {
-            let s = 3 * batch + tree;
-            let (count, _) = slot_count(&queries[range.clone()], tree)?;
-            if count > SLOT_NODES[s] || slot(proof, s)[32 * count..].iter().any(|&b| b != 0) {
-                return Err(Error::Parse);
-            }
-        }
-    }
-    Ok(())
-}
-
-/// Verify the three multiproofs of one batch.
+/// Verify the three multiproofs of one batch. Indices are sorted as u64
+/// keys (index << 8 | position) so leaf hashes are written once, in sorted
+/// order; equal folded indices must carry identical leaves and are merged.
 #[inline(never)]
 fn batch_merkle<H: Digest32>(proof: &[u8], p: &Prepared, folded_root: &[u8; 32], batch: usize, hash: H) -> Result<(), Error> {
-    let range = if batch == 0 { 0..SPLIT } else { SPLIT..22 };
+    let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };
+    let n = hi - lo;
     let roots = [&p.roots[0], &p.roots[1], folded_root];
+    let mut idx = [0u32; multiproof::MAX_BATCH];
+    let mut val = [[0u8; 32]; multiproof::MAX_BATCH];
     for tree in 0..3 {
         let s = 3 * batch + tree;
-        let mut idx = [0u32; multiproof::MAX_BATCH];
-        let mut val = [[0u8; 32]; multiproof::MAX_BATCH];
-        let n = range.len();
-        for (j, i) in range.clone().enumerate() {
-            let q = opening(proof, i);
-            let u = p.queries[i];
-            let (tag, values, salt, index) = match tree {
-                0 => (merkle::C1_TAG, &q[..480], &q[608..640], u),
-                1 => (merkle::C2_TAG, &q[480..608], &q[640..672], u),
-                _ => (0x72, &q[672..800], &q[800..832], u / 4),
-            };
-            idx[j] = index;
-            val[j] = private_leaf_hash_with_digest(hash, tag, values, salt.try_into().unwrap());
+        let mut keys = [0u64; multiproof::MAX_BATCH];
+        for j in 0..n {
+            let u = p.queries[lo + j];
+            let index = if tree == 2 { u / 4 } else { u };
+            keys[j] = (u64::from(index) << 8) | j as u64;
         }
-        let d = multiproof::sort_dedup(&mut idx[..n], &mut val[..n]).ok_or(Error::Merkle)?;
+        for i in 1..n {
+            let mut j = i;
+            while j > 0 && keys[j - 1] > keys[j] {
+                keys.swap(j - 1, j);
+                j -= 1;
+            }
+        }
+        let mut d = 0;
+        for &key in &keys[..n] {
+            let index = (key >> 8) as u32;
+            let q = opening(proof, lo + (key & 0xff) as usize);
+            let (tag, values, salt) = match tree {
+                0 => (merkle::C1_TAG, &q[..480], &q[608..640]),
+                1 => (merkle::C2_TAG, &q[480..608], &q[640..672]),
+                _ => (0x72, &q[672..800], &q[800..832]),
+            };
+            let leaf = private_leaf_hash_with_digest(hash, tag, values, salt.try_into().unwrap());
+            if d > 0 && idx[d - 1] == index {
+                if val[d - 1] != leaf {
+                    return Err(Error::Merkle);
+                }
+                continue;
+            }
+            idx[d] = index;
+            val[d] = leaf;
+            d += 1;
+        }
         let count = multiproof::node_count(Arity::Two, &idx[..d]).ok_or(Error::Merkle)?;
         let nodes = slot(proof, s);
-        if count > SLOT_NODES[s] || nodes[32 * count..].iter().any(|&b| b != 0) {
+        // Padding is whole 32-byte words: scan it 8 bytes at a time.
+        if count > SLOT_NODES[s] || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {
             return Err(Error::Parse);
         }
-        if !multiproof::verify(hash, Arity::Two, roots[tree], &idx[..d], &val[..d], &nodes[..32 * count]) {
+        if !multiproof::verify_in_place(hash, Arity::Two, roots[tree], &mut idx, &mut val, d, &nodes[..32 * count]) {
             return Err(Error::Merkle);
         }
     }
@@ -203,7 +196,6 @@ pub fn tx1<H: Digest32>(public: Public<'_>, public_bytes: &[u8], proof: &[u8], k
     mark(obs, Phase::Parsed);
     let mut g = [E::ZERO; 29];
     let p = prepare(public, proof, hash, obs, &mut g)?;
-    check_padding(proof, &p.queries)?;
     let mut a = Accumulator::new(Variant::S2)?;
     mark(obs, Phase::Prepare);
     let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();

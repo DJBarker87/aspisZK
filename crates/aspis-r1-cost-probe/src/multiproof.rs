@@ -103,15 +103,29 @@ pub fn verify<H: Digest32>(
     }
     let mut idx = [0u32; MAX_BATCH];
     let mut val = [[0u8; 32]; MAX_BATCH];
-    let mut n = indices.len();
+    let n = indices.len();
     idx[..n].copy_from_slice(indices);
     val[..n].copy_from_slice(leaves);
+    verify_in_place(hash, arity, root, &mut idx, &mut val, n, nodes)
+}
+
+/// `verify` over caller-owned scratch arrays (no copies): the first `n`
+/// entries of `idx`/`val` are the strictly increasing indices and their
+/// leaves; both arrays are overwritten.
+#[inline(always)]
+pub fn verify_in_place<H: Digest32>(
+    hash: H,
+    arity: Arity,
+    root: &[u8; 32],
+    idx: &mut [u32; MAX_BATCH],
+    val: &mut [[u8; 32]; MAX_BATCH],
+    mut n: usize,
+    nodes: &[u8],
+) -> bool {
+    if n == 0 || n > MAX_BATCH || !well_formed(&idx[..n]) || nodes.len() % 32 != 0 {
+        return false;
+    }
     let mut at = 0usize;
-    let take = |at: &mut usize| -> Option<[u8; 32]> {
-        let out = nodes.get(*at..*at + 32)?.try_into().ok()?;
-        *at += 32;
-        Some(out)
-    };
     for _ in 0..arity.levels() {
         let mut w = 0;
         let mut i = 0;
@@ -119,18 +133,23 @@ pub fn verify<H: Digest32>(
             let parent = idx[i] >> arity.bits();
             let digest = match arity {
                 Arity::Two => {
-                    let paired = i + 1 < n && idx[i + 1] == idx[i] ^ 1;
-                    let (left, right) = if paired {
-                        let out = (val[i], val[i + 1]);
+                    // Hash straight from the stored slices: no sibling or
+                    // pair copies (SBF cost; same grammar and order).
+                    if i + 1 < n && idx[i + 1] == idx[i] ^ 1 {
+                        let d = hash.digest(&[&[BINARY_NODE_TAG], &val[i], &val[i + 1]]);
                         i += 2;
-                        out
+                        d
                     } else {
-                        let Some(sibling) = take(&mut at) else { return false };
-                        let out = if idx[i] & 1 == 0 { (val[i], sibling) } else { (sibling, val[i]) };
+                        let Some(sibling) = nodes.get(at..at + 32) else { return false };
+                        at += 32;
+                        let d = if idx[i] & 1 == 0 {
+                            hash.digest(&[&[BINARY_NODE_TAG], &val[i], sibling])
+                        } else {
+                            hash.digest(&[&[BINARY_NODE_TAG], sibling, &val[i]])
+                        };
                         i += 1;
-                        out
-                    };
-                    binary_parent(hash, &left, &right)
+                        d
+                    }
                 }
                 Arity::Eight => {
                     let mut children = [[0u8; 32]; 8];
@@ -139,8 +158,9 @@ pub fn verify<H: Digest32>(
                             *child = val[i];
                             i += 1;
                         } else {
-                            let Some(sibling) = take(&mut at) else { return false };
-                            *child = sibling;
+                            let Some(sibling) = nodes.get(at..at + 32) else { return false };
+                            child.copy_from_slice(sibling);
+                            at += 32;
                         }
                     }
                     merkle::parent_with_digest(hash, &children)

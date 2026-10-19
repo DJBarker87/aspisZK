@@ -7,7 +7,24 @@ Host work dir: `/home/dombarker/project-offloads/codex-r1-proof-size-20261019`.
 
 ## Verdict
 
-(pending)
+**NOT VIABLE** as pre-registered: the size bound passes but the settlement
+CU of the final prototype is above its B1 figure on five of the six fixtures,
+by 4,127 to 9,919 CU (transfer-255 +6,392, transfer-1023 +8,705,
+withdrawal-13 +9,504, withdrawal-255 +4,127, withdrawal-1023 +9,919).
+
+- Size: fixed-length stored proof **57,607 bytes <= 60,000** (worst-case
+  counting bound, attained); variable-length 54,535-57,031 on the re-proved
+  fixtures.
+- Stage 1 CU: at or below B1 on all six (margins 100 to 4,868).
+- Parameters unchanged (4); all teeth reject (5); obligations inventory
+  written (6).
+- Uploads: TxV1 34 -> 16, legacy 144 -> 68 transactions for the proof body.
+
+This is a measurement of one prototype. The settlement excess is of the
+same order as the query-set spread of the stage-2 multiproof (about +-5k)
+and as the remaining per-hash SBF bookkeeping; a further optimisation pass
+or a node grammar with one fewer hash slice might close it, but that is not
+measured here and the pre-registered verdict stands on the figures above.
 
 ## Plan and time estimate (written before S1)
 
@@ -177,7 +194,72 @@ limit.
 
 ## 3. Compute (measurement 2)
 
-(pending)
+Candidate SBF verifier: `programs/r1-cost-probe` feature `compact-binary`
+(with `pool-adapter`), sha256 `8e43bc63...` (1,405,816 bytes; a clean
+rebuild into an empty target dir is byte-identical). The adapter keeps the
+shipped route; `lib.rs` line 47 and `r1_pool_adapter.rs` line 14 select the
+candidate under the feature on the same lines, and a `verifier` shim module
+is appended at the end of the adapter, so no shipped line moves.
+
+**Shipped ELF identity.** The default-feature verifier
+(`pool-adapter,private-leaf-salts`) rebuilt from this branch's final tree is
+`4421aafd...6bb9291`, the whole file byte-identical to the cu-bound2 pin
+(so `.text`, `.rodata` and `.data.rel.ro` all identical; no line drift).
+
+Harness: the Pool B1 measurement driver patched by
+`harness/patch_driver_candidate.py`, the cu-bound2 Pool ELF `121f3e29...`,
+registry `7ad46f0d...`, LiteSVM 0.16.0 / Agave 4.2.1, TxV1, split 10; each
+fixture's witness re-proved with fresh OS entropy (ASF8 equal to the saved
+fixture), one run per fixture per iteration (`harness/run-fixtures.sh`).
+Both transactions are accepted in every run below.
+
+Three implementation iterations were measured; only source changes inside
+the candidate separate them (no rerun of an unchanged build):
+
+1. initial: stage 1 +86k to +92k, settlement +33k to +38k over B1. The
+   profile (cu-profiling build) put +54k in a stage-1 pre-check of all six
+   slots' padding and +45k/+53k in the batch multiproofs.
+2. opt1: hash straight from stored node slices (no sibling/pair copies),
+   padding checked only with its own batch, compact values checked once:
+   stage 1 -3k to +5k, settlement +9k to +16k.
+3. opt2 (final): sort u64 keys and hash leaves once in sorted order, verify
+   in caller scratch, scan padding 8 bytes at a time.
+
+Final candidate (opt2) against B1, per fixture [measured]:
+
+| Fixture | Stage 1 | B1 | delta | Settlement (nested stage 2) | B1 | delta |
+|---|---:|---:|---:|---:|---:|---:|
+| transfer-13 | 1,194,780 | 1,199,648 | -4,868 | 1,127,609 | 1,129,757 | -2,148 |
+| transfer-255 | 1,197,849 | 1,199,567 | -1,718 | 1,167,458 | 1,161,066 | **+6,392** |
+| transfer-1023 | 1,199,225 | 1,199,687 | -462 | 1,169,679 | 1,160,974 | **+8,705** |
+| withdrawal-13 | 1,197,866 | 1,198,225 | -359 | 1,148,454 | 1,138,950 | **+9,504** |
+| withdrawal-255 | 1,196,382 | 1,198,264 | -1,882 | 1,174,650 | 1,170,523 | **+4,127** |
+| withdrawal-1023 | 1,198,286 | 1,198,386 | -100 | 1,180,182 | 1,170,263 | **+9,919** |
+
+Stage 1 is at or below B1 on all six (margins 100 to 4,868). Settlement is
+above B1 on five of six, by 4,127 to 9,919.
+
+Where it goes (cu-profiling build, opt2, all six; `cu.json` `profile_opt2`;
+shipped phases from `cu-bound2-20261019/analysis/profile-phases.json`):
+stage 1 batch-A authentication 126k-132k against 107.6k shipped (10 x 3
+eight-way paths), checkpoint write 39.1k against 72.4k (hashing 57,607
+instead of 124,343 proof bytes); stage 2 queries plus batch-B
+authentication 520k-525k against 486.8k shipped, checkpoint read 75.1k
+against 108.4k. So the hash-length saving (-33.3k per transaction) is the
+proposal's; the binary authentication costs +20k to +25k (stage 1) and
++34k to +38k (stage 2, 12 queries) after it, against the proposal's
+syscall-only +35.4k for both transactions together: the extra binary parent
+hashes (about 465 per 10-query batch, 550 per 12-query batch, against 180 and
+216 eight-way parents) each carry SBF bookkeeping beyond the syscall charge.
+Stage-2 node counts vary by query set (batch B 130-169 nodes per tree here),
+and with them settlement by roughly +-5k.
+
+**Stack audit.** Clean candidate build log + complete unstripped linked ELF
+(`094df7d0...`) through the strict classifier (the Pool B1
+`pool-strict-stack.py`, which is the verifier's candidate14 strict-stack
+classifier without its tx1 frame scan): gate pass; none of the 34 compiler stack
+warnings names a function surviving in the linked ELF; no oversized
+frame or overwrite (`receipts/stack-audit/`).
 
 ## 4. Uploads (measurement 3)
 
@@ -203,9 +285,34 @@ Transaction size limits in the pinned sources: TxV1
 the TxV1 and legacy maxima net of the measured upload-instruction overhead
 are below (S3).
 
+**Measured upload-transaction overhead** (`receipts/upload-probe/`, the
+driver's `lifecycle_upload` transaction: tag 5 || u32 offset || chunk, payer
+and upload authority signing, the driver's compute-budget settings): TxV1
+329 bytes, TxV0 362-363 bytes, independent of the chunk. The largest chunk
+that serializes within the limit (searched exactly): **3,767 bytes in a
+4,096-byte TxV1 transaction, 869 bytes in a 1,232-byte legacy/V0
+transaction**.
+
+| Proof body (incl. 688-byte afterstate) | bytes | TxV1 max (3,767) | legacy max (869) |
+|---|---:|---:|---:|
+| shipped | 125,031 | **34** | 144 |
+| candidate (fixed) | 58,295 | **16** | 68 |
+
+The ASF8 public statement (1,880 bytes) is a further 1 TxV1 / 3 legacy
+upload in both cases. These counts assume the upload instruction measured
+here; the release build of the verifier admits only stage 1 and ASQ8, so the
+production upload path for R1 buffers is not fixed in source at the base.
+
 ## 5. Parameters (measurement 4)
 
-(pending)
+`git diff 20e596416 -- crates/aspis-r1-cost-probe/src/{transcript,weights,sampler,transport,r1_wire,r1_semantic,host_semantic}.rs crates/aspis-core crates/aspis-prover`
+is empty. The candidate uses `Variant::S2` (two folds, final length 64), the
+shipped transcript's 22 queries and row numbers 27..32, the same salt
+derivation (`derive_private_salts`, one 32-byte salt per leaf of each of
+the three trees, opened salts transmitted), and stores `inactive`, round0,
+round1, the final message and the folded opened values as 32-byte
+WideExact exactly as shipped. Only the 455 values the shipped parser already
+requires to have a zero high half are stored in 16 bytes.
 
 ## 6. Obligations (measurement 6)
 

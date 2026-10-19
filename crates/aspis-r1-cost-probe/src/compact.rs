@@ -119,16 +119,25 @@ pub fn compact_values(logical: &[u8], out: &mut Vec<u8>) -> Result<(), CodecErro
 }
 
 /// Decoder (verifier side): compact values -> logical 32-byte values with a
-/// zero high half. Each stored 16-byte value must be a canonical QM31.
+/// zero high half. Canonicality is not checked here: the verifier checks the
+/// stored `y1` values in its strict scan and the rebuilt semantic records in
+/// the shipped `Prefix::parse` (one check per value, as in the shipped path).
 #[inline(always)]
 pub fn expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
     if compact.len() % 16 != 0 || out.len() != 2 * compact.len() {
         return Err(CodecError::Length);
     }
     for (c, o) in compact.chunks_exact(16).zip(out.chunks_exact_mut(32)) {
-        QM31::from_le_bytes(c).ok_or(CodecError::NonCanonical)?;
         o[..16].copy_from_slice(c);
         o[16..].fill(0);
+    }
+    Ok(())
+}
+
+/// Every stored compact value is a canonical QM31.
+pub fn check_values(compact: &[u8]) -> Result<(), CodecError> {
+    for c in compact.chunks_exact(16) {
+        QM31::from_le_bytes(c).ok_or(CodecError::NonCanonical)?;
     }
     Ok(())
 }
@@ -186,6 +195,6 @@ mod tests {
         assert_eq!(compact_values(&high, &mut Vec::new()), Err(CodecError::NonZeroHigh));
         let mut bad = c.clone();
         bad[0..4].copy_from_slice(&0x7fff_ffffu32.to_le_bytes());
-        assert_eq!(expand_values(&bad, &mut back), Err(CodecError::NonCanonical));
+        assert_eq!(check_values(&bad), Err(CodecError::NonCanonical));
     }
 }

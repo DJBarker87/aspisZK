@@ -11,7 +11,7 @@ extern crate alloc;
 
 use alloc::boxed::Box;
 use aspis_core::field::M31;
-use aspis_r1_cost_probe::{transport::Variant, verifier};
+use aspis_r1_cost_probe::transport::Variant; #[cfg(not(feature = "compact-binary"))] use aspis_r1_cost_probe::verifier;
 use aspis_statement::decode_digest_canonical;
 use aspis_statement::pool_v1::{
     decode_pool_v1_pair_forest_checkpoint_v1, decode_pool_v1_pair_forest_master_v1,
@@ -1028,3 +1028,23 @@ pub(super) fn process(
 #[cfg(all(test, feature = "private-leaf-salts"))]
 #[path = "r1_checkpoint_tests.rs"]
 mod checkpoint_tests;
+
+// UNPROVED CANDIDATE (proof-size test, 2026-10-19), default off: the same
+// adapter over the fixed-length compact binary-multiproof proof. Appended so
+// shipped line numbers are unchanged.
+#[cfg(feature = "compact-binary")]
+mod verifier {
+    pub use aspis_r1_cost_probe::verifier::{candidate::tx2_authenticated, checkpoint_size};
+    use aspis_r1_cost_probe::{compact, transport::Variant, verifier::{candidate, Error}};
+    pub struct View {
+        pub variant: Variant,
+    }
+    impl View {
+        pub const fn proof_bytes(_: Variant) -> usize {
+            compact::PROOF_BYTES
+        }
+        pub fn parse(bytes: &[u8]) -> Result<Self, Error> {
+            candidate::parse_shape(bytes).map(|variant| Self { variant })
+        }
+    }
+}
