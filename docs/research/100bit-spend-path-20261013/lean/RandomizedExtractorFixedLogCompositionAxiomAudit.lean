@@ -1,0 +1,6 @@
+import RandomizedExtractorFixedLogComposition
+
+set_option autoImplicit false
+
+#print axioms AspisR1.RandomizedExtractorFixedLogComposition.badOutput
+#print axioms AspisR1.RandomizedExtractorFixedLogComposition.accepted_badOutput_le_protocolBad_add_fixedLogAbort

@@ -1,0 +1,9 @@
+# Randomized fixed-log composition and exact fresh-attempt scalar slack
+
+RandomizedExtractorFixedLogComposition proves a generic finite product-experiment bound. If a good completed log plus nonabort causes the actual supplied extractor to return a relation witness, and every fixed-log abort mean is at most deltaE, then accepted bad-output probability is at most the protocol bad-log bound plus deltaE. Bad output includes both no result and any invalid returned witness. The finite log is uniform in this generic theorem; it is not silently identified with the real adaptive transcript distribution. Private extractor coins are a separate independent finite product factor.
+
+LiteralFreshExtractorComposition checks the exact scalar combination 33*(15/2^109) + 2^-126 < 2^-100. Its event-cover and marginal-bound premises remain explicit. The sequential transcript-dependent averaging bridge is separate work; this scalar statement does not discharge that bridge or establish accepted execution to semantic Checks/word recovery.
+
+The fixed-log compiled source is the exact v3 snapshot, SHA pinned in the manifest. The native attempt directory happens to be named v4; that name is not source-version evidence. The later v4 source only appends print commands and was not used to label the compiled artifact. A separately checked axiom-audit module imports the exact compiled object and reports standard-only axioms for the public theorem; badOutput has no axioms. The audit import hash is explicitly checked in the manifest. All exact focused native receipts, commands, revisions, GNU RSS, zero-swap evidence and compiled objects are retained.
+
+These are two reusable probability components, not a full spend soundness theorem. Shared-random-oracle query dependence, collision terms, acceptance/source correspondence, actual randomized extractor instantiation, complete computational cost, privacy and the transaction release gates remain open.
