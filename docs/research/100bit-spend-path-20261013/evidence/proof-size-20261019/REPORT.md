@@ -316,7 +316,14 @@ requires to have a zero high half are stored in 16 bytes.
 
 ## 6. Obligations (measurement 6)
 
-See `design/PROOF-SIZE-OBLIGATIONS-20261019.md`.
+`design/PROOF-SIZE-OBLIGATIONS-20261019.md`: by name, file and size. Largest:
+the candidate verifier cone's source refinement with the batch multiproof
+(L); a privacy read-budget break, `R1Z/CommitReadsR1.lean` `mc_le`
+(`115 + Mc <= 2^21`) is false for binary trees (Mc rises from 1,685,214 to
+2,359,296 + E; 2,457,715 > 2^21), so the D41 budget and the privacy error
+terms built on it must be re-derived (M plus a decision); binary commitment
+binding and collision targets, extractor word recovery and the Merkle
+compiler, the privacy commitment layout and the Rust simulator (M each).
 
 ## Runs
 
