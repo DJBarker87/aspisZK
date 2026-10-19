@@ -1,0 +1,7 @@
+# Safe source-shaped caller schedule for actual batched pushes
+
+The caller model folds the actual generated BatchedWeights.push over row entries, then performs one checked terms increment for the completed query. SafeRows carries the precise PushAdmissible hypotheses of the proved actual selected-push theorem and the tail invariant through its resulting state. Individual push success is derived from those machine bounds and canonical operands, not separately assumed. The row fold preserves terms. SafeQueries chains those row folds and successful checked increments; its counter-cadence theorem proves that one increment per query yields exactly the returned terms.
+
+The focused Lean check exited 0 in 3.24 seconds, peak RSS 2,265,841,664 bytes, zero process swaps and standard printed axioms only. Exact source/object/import pins, revision, command, metrics and full axiom output are retained.
+
+This is a source-shaped schedule model using the actual generated push body. It does not yet extract or prove correspondence of the complete Rust accumulate_with_node caller. The global all-row bound and actual ascending row traversal must establish SafeRows; the verifier's query/counter limits must establish increment success and SafeQueries. Initialization, actual verifier arrays, full acceptance-to-Checks and the unified release build remain open. This packet is focused working evidence, not complete spend soundness.
