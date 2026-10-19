@@ -1,0 +1,102 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDotsSlot.lean:55:8: warning: automatically included section variable(s) unused in theorem `_private.CuSavingsDotsSlot.0.AspisR1.CuSavingsDotsSlot.remap_bind`:
+  [Arithmetic]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Arithmetic] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDotsSlot.lean:108:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  remap ?f (?r >>= ?k)
+in the target expression
+  remap f
+      (let (r, tail1) := (r, tail1)
+      do
+      core.result.Result.unwrap core.fmt.DebugUnit r
+      let tail2 ←
+        old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop1
+            { start := 0#usize, «end» := 2#usize } s a slot tail1
+      let we1 ← tail2.finish
+      let we2 ← value5.add we1
+      k we2) =
+    let (r, tail1) := (r, tail1)
+    do
+    core.result.Result.unwrap core.fmt.DebugUnit r
+    let tail2 ←
+      old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop1
+          { start := 0#usize, «end» := 2#usize } s a slot tail1
+    let we1 ← tail2.finish
+    let we2 ← value5.add we1
+    (fun value => remap f (k value)) we2
+
+inst✝ : Arithmetic
+A B : Type
+f : A → B
+s : Slice U8
+a : Std.Array field.wide_exact.WideExact 29#usize
+slot : Usize
+k : field.wide_exact.WideExact → Result A
+value1 : core.iter.adapters.step_by.StepBy (core.ops.range.Range (UScalar UScalarTy.Usize))
+h1 :
+  core.iter.traits.iterator.Iterator.step_by.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) { start := 0#usize, «end» := 26#usize }
+      4#usize =
+    ok value1
+value2 : Std.Array U64 8#usize
+h2 :
+  old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0 value1 s a slot
+      (Array.repeat 8#usize 0#u64) =
+    ok value2
+value3 : Std.Array U32 8#usize
+h3 :
+  core.array.from_fn 8#usize old_dots.four_dots.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32 value2 =
+    ok value3
+value4 : Option field.wide_exact.WideExact
+h4 : field.wide_exact.WideExact.from_limbs value3 = ok value4
+value5 : field.wide_exact.WideExact
+h5 : core.option.Option.unwrap value4 = ok value5
+value6 : fast_pairing.EbyKDot
+h6 : fast_pairing.EbyKDot.new = ok value6
+value7 : field.wide_exact.WideExact
+h7 : a.index_usize 28#usize = ok value7
+value8 : UScalar UScalarTy.Usize
+h8 : slot * 120#usize = ok value8
+value9 : UScalar UScalarTy.Usize
+h9 : value8 + 104#usize = ok value9
+value10 : UScalar UScalarTy.Usize
+h10 : value8 + 120#usize = ok value10
+value11 : Slice U8
+h11 :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s { start := value9, «end» := value10 } =
+    ok value11
+value12 : Option field.QM31
+h12 : field.QM31.from_le_bytes value11 = ok value12
+value13 : field.QM31
+h13 : core.option.Option.unwrap value12 = ok value13
+r : core.result.Result Unit Unit
+tail1 : fast_pairing.EbyKDot
+h14 : value6.push value7 value13 = ok (r, tail1)
+⊢ remap f
+      (let (r, tail1) := (r, tail1)
+      do
+      core.result.Result.unwrap core.fmt.DebugUnit r
+      let tail2 ←
+        old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop1
+            { start := 0#usize, «end» := 2#usize } s a slot tail1
+      let we1 ← tail2.finish
+      let we2 ← value5.add we1
+      k we2) =
+    let (r, tail1) := (r, tail1)
+    do
+    core.result.Result.unwrap core.fmt.DebugUnit r
+    let tail2 ←
+      old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop1
+          { start := 0#usize, «end» := 2#usize } s a slot tail1
+    let we1 ← tail2.finish
+    let we2 ← value5.add we1
+    (fun value => remap f (k value)) we2
+'AspisR1.CuSavingsDotsSlot.old_factor' depends on axioms: [propext, Classical.choice, Quot.sound, core.fmt.Formatter]
+'AspisR1.CuSavingsDotsSlot.new_factor' depends on axioms: [propext, Classical.choice, Quot.sound, core.fmt.Formatter]
+'AspisR1.CuSavingsDotsSlot.naturality' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]

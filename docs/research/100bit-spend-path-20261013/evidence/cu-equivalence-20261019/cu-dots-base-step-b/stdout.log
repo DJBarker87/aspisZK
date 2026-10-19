@@ -1,0 +1,61 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDotsBaseStep.lean:28:2: error: unsolved goals
+case pos
+inst✝ : Arithmetic
+bytes : Slice U8
+h : 608 ≤ (↑bytes).length
+gamma : Std.Array field.wide_exact.WideExact 29#usize
+slot : Usize
+iter : Range
+sums : Std.Array U64 8#usize
+hs : ↑slot < 4
+hend : ↑iter.end ≤ 26
+halt : ↑iter.start ≥ ↑iter.end
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, iter)
+⊢ (let (o, iter1) := (none, iter)
+    match o with
+    | none => ok (done sums)
+    | some term => do
+      let i ← slot * 120#usize
+      let i1 ← term * 4#usize
+      let i2 ← i + i1
+      let i3 ← i + i1
+      let i4 ← i3 + 4#usize
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) (prefixArray bytes h).to_slice
+            { start := i2, «end» := i4 }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s1
+      let a1 ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      let o1 ← field.M31.from_le_bytes a1
+      let scalar ← core.option.Option.unwrap o1
+      let we ← gamma.index_usize term
+      let coefficient ← we.to_limbs
+      let sums1 ←
+        old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0_loop0
+            { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } sums scalar coefficient
+      ok (cont (iter1, sums1))) =
+    let (o, iter1) := (none, iter)
+    match o with
+    | none => ok (done sums)
+    | some term => do
+      let i ← slot * 120#usize
+      let i1 ← term * 4#usize
+      let i2 ← i + i1
+      let i3 ← i + i1
+      let i4 ← i3 + 4#usize
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := i2, «end» := i4 }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s1
+      let a1 ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      let o1 ← field.M31.from_le_bytes a1
+      let scalar ← core.option.Option.unwrap o1
+      let we ← gamma.index_usize term
+      let coefficient ← we.to_limbs
+      let sums1 ←
+        old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0_loop0
+            { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } sums scalar coefficient
+      ok (cont (iter1, sums1))
+'AspisR1.CuSavingsDotsBaseStep.body_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]

@@ -1,0 +1,155 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDotsSameBytes.lean:76:2: error: Tactic `rfl` failed: The left-hand side
+  remap (fun x => (x.1, forget x.2))
+    (let (a, a1) := (bytes, gamma)
+    do
+    let iter ←
+      core.iter.traits.iterator.Iterator.step_by.trait_default
+          (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) { start := 0#usize, «end» := 26#usize }
+          4#usize
+    let limbs1 ←
+      new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0 iter a a1 slot
+          (Array.repeat 8#usize 0#u64)
+    let a2 ←
+      core.array.from_fn 8#usize new_dots.four_dots.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32 limbs1
+    let o ← field.wide_exact.WideExact.from_limbs a2
+    let value ← core.option.Option.unwrap o
+    let tail ← fast_pairing.EbyKDot.new
+    let we ← a1.index_usize 28#usize
+    let i ← slot * 120#usize
+    let i1 ← i + 104#usize
+    let i2 ← i + 120#usize
+    let s ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) a
+          { start := i1, «end» := i2 }
+    let o1 ← field.QM31.from_le_bytes s
+    let q ← core.option.Option.unwrap o1
+    let (r, tail1) ← tail.push we q
+    core.result.Result.unwrap core.fmt.DebugUnit r
+    let tail2 ←
+      new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop1
+          { start := 0#usize, «end» := 2#usize } a a1 slot tail1
+    let we1 ← tail2.finish
+    let we2 ← value.add we1
+    ok (we2, bytes, gamma))
+is not definitionally equal to the right-hand side
+  let (s, a) := (bytes.to_slice, gamma)
+  do
+  let iter ←
+    core.iter.traits.iterator.Iterator.step_by.trait_default
+        (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) { start := 0#usize, «end» := 26#usize }
+        4#usize
+  let limbs1 ←
+    old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0 iter s a slot
+        (Array.repeat 8#usize 0#u64)
+  let a1 ← core.array.from_fn 8#usize old_dots.four_dots.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32 limbs1
+  let o ← field.wide_exact.WideExact.from_limbs a1
+  let value ← core.option.Option.unwrap o
+  let tail ← fast_pairing.EbyKDot.new
+  let we ← a.index_usize 28#usize
+  let i ← slot * 120#usize
+  let i1 ← i + 104#usize
+  let i2 ← i + 120#usize
+  let s1 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s { start := i1, «end» := i2 }
+  let o1 ← field.QM31.from_le_bytes s1
+  let q ← core.option.Option.unwrap o1
+  let (r, tail1) ← tail.push we q
+  core.result.Result.unwrap core.fmt.DebugUnit r
+  let tail2 ←
+    old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop1
+        { start := 0#usize, «end» := 2#usize } s a slot tail1
+  let we1 ← tail2.finish
+  let we2 ← value.add we1
+  ok (we2, bytes.to_slice, gamma)
+
+inst✝ : Arithmetic
+slot : Usize
+bytes : Std.Array U8 608#usize
+gamma : Std.Array field.wide_exact.WideExact 29#usize
+⊢ remap (fun x => (x.1, forget x.2))
+      (let (a, a1) := (bytes, gamma)
+      do
+      let iter ←
+        core.iter.traits.iterator.Iterator.step_by.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) { start := 0#usize, «end» := 26#usize }
+            4#usize
+      let limbs1 ←
+        new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0 iter a a1 slot
+            (Array.repeat 8#usize 0#u64)
+      let a2 ←
+        core.array.from_fn 8#usize new_dots.four_dots.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32 limbs1
+      let o ← field.wide_exact.WideExact.from_limbs a2
+      let value ← core.option.Option.unwrap o
+      let tail ← fast_pairing.EbyKDot.new
+      let we ← a1.index_usize 28#usize
+      let i ← slot * 120#usize
+      let i1 ← i + 104#usize
+      let i2 ← i + 120#usize
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) a
+            { start := i1, «end» := i2 }
+      let o1 ← field.QM31.from_le_bytes s
+      let q ← core.option.Option.unwrap o1
+      let (r, tail1) ← tail.push we q
+      core.result.Result.unwrap core.fmt.DebugUnit r
+      let tail2 ←
+        new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop1
+            { start := 0#usize, «end» := 2#usize } a a1 slot tail1
+      let we1 ← tail2.finish
+      let we2 ← value.add we1
+      ok (we2, bytes, gamma)) =
+    let (s, a) := (bytes.to_slice, gamma)
+    do
+    let iter ←
+      core.iter.traits.iterator.Iterator.step_by.trait_default
+          (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) { start := 0#usize, «end» := 26#usize }
+          4#usize
+    let limbs1 ←
+      old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0 iter s a slot
+          (Array.repeat 8#usize 0#u64)
+    let a1 ←
+      core.array.from_fn 8#usize old_dots.four_dots.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32 limbs1
+    let o ← field.wide_exact.WideExact.from_limbs a1
+    let value ← core.option.Option.unwrap o
+    let tail ← fast_pairing.EbyKDot.new
+    let we ← a.index_usize 28#usize
+    let i ← slot * 120#usize
+    let i1 ← i + 104#usize
+    let i2 ← i + 120#usize
+    let s1 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s { start := i1, «end» := i2 }
+    let o1 ← field.QM31.from_le_bytes s1
+    let q ← core.option.Option.unwrap o1
+    let (r, tail1) ← tail.push we q
+    core.result.Result.unwrap core.fmt.DebugUnit r
+    let tail2 ←
+      old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop1
+          { start := 0#usize, «end» := 2#usize } s a slot tail1
+    let we1 ← tail2.finish
+    let we2 ← value.add we1
+    ok (we2, bytes.to_slice, gamma)
+'AspisR1.CuSavingsDotsSameBytes.base_loop_same' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsDotsSameBytes.batches_same' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsDotsSameBytes.tail_same' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsDotsSameBytes.callback_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsDotsSameBytes.construct_same' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsDotsSameBytes.source_same_bytes' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]

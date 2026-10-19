@@ -6,7 +6,7 @@ equivalence premise at the final transfer boundary. This is **in progress**.
 
 Reference: origin/research f458169f705f25b04e1e29546c621e4665e0f64c.
 Optimized production source: 39c2971dd16c95858a4cfd2c9ae35da052eacfa9,
-unchanged through worker head 925dc4b95ad6986fd76471fca857d4e2100f1cbf.
+unchanged throughout the current proof-only work.
 Existing candidate declaration inventories remain authoritative inputs.
 
 The observation relation must preserve acceptance/rejection, cryptographic
@@ -25,7 +25,7 @@ remain obligations, not hidden hypotheses asserting the conclusion.
 | 5 canonical private dots | WideExact invariant, redundant-check elimination, outer count implies inner bound, reduction/output | open |
 | 6 public decode reuse | checked same-byte decoder/selector correspondence, first_decoded and adapter execution | open |
 | 7 geometry reuse | node/denominator agreement, caller range validity, execution | open |
-| 10 fixed prefix | admitted q length, identical decoder accesses and failure behavior | exact prefix and successful View.query bound checked; source-query/decoder-read composition checked for every input; whole four-dot source composition open |
+| 10 fixed prefix | admitted q length, identical decoder accesses and failure behavior | exact query bound and complete source slot/base/batch/tail comparisons checked; complete old/new kernel compared on 608-byte inputs; full-width four-slot constructor/caller and std-library admission open |
 | 12 rho residues | every-prefix modular invariant, four-term overflow bound, canonical finish, array/caller execution, heap admission | integer invariant, complete push/value execution and frame/overflow proofs checked; finish now consumes the extracted standard next body; initialization, outer callers and serialization composition open |
 | 14 Libra factorization | all four weights equal for arbitrary canonical challenges including zero; field/source execution | division-free cut/tensor algebra and handwritten list-loop correspondence checked; concrete field/machine/source bridges open |
 | composition | refreshed emitted caller bodies, byte/error/effect preservation across tx1/tx2 and adapter | open |
@@ -197,3 +197,15 @@ AENEAS-NO-BRANCH-JOIN.md for exact source and frontend boundaries. The audit
 checks these new source/emission pins and successful receipts, including the
 Formatter TYPE in the composed query/prefix theorem. No production source,
 protocol, fixture, checkpoint format or cryptographic call schedule changed.
+
+The complete emitted old/new dot kernels now typecheck under universal shared
+arithmetic parameters and a concrete state-threading array builder. Their full
+same-608-byte comparison checks, and CuSavingsDotsSlotPrefix proves complete
+actual slot execution is prefix-insensitive on arbitrary longer queries for
+slot < 4, including all loops, checked operations and decoder failures. See
+DOTS-SOURCE.md. The four-slot builder must still establish this index bound
+and stable capture invariant, then consume the actual View.query bound.
+Its standard-library source admission and concrete shared-helper interpretation
+remain explicit; no optimization is newly marked fully closed. All new
+successful receipts/axiom sets are registered in COMPONENT-AUDIT. Stopped
+search attempts and symbolic replacements are in PROOF-SEARCH-REVIEW.md.

@@ -41,7 +41,10 @@ for module,item in audit['successful_targets'].items():
     # Record this conservative carrier boundary; never whitelist a proposition
     # asserting an optimization or a verifier equivalence.
     expected={'core.fmt.Formatter'} if module in {
-        'AspisR1CuPrefix/Funs','CuSavingsPrefix','CuSavingsQueryPrefix'} else set()
+        'AspisR1CuPrefix/Funs','CuSavingsPrefix','CuSavingsQueryPrefix',
+        'AspisR1CuDots/Funs','CuSavingsDotsSlot','CuSavingsDotsSameBytes',
+        'CuSavingsDotsBaseStep','CuSavingsDotsBaseProgress','CuSavingsDotsBase',
+        'CuSavingsDotsBatches','CuSavingsDotsTail','CuSavingsDotsSlotPrefix'} else set()
     assert extra==expected,(module,extra,expected)
     item['nonstandard_axioms']=sorted(extra)
     assert receipt['process_swaps']==0,module
@@ -96,6 +99,10 @@ for case in regression['cases']:
     assert case['exit_status']==0 and case['process_swaps']==0
     assert case['byte_identical'] and case['actual_files']==case['expected_files']
 audit['no_branch_join_regression_sha256']=sha(evidence/'nojoin-regression-emission-a/summary.json')
+audit['cu_dots_source_check']=json.loads(subprocess.check_output([
+    sys.executable,str(Path(__file__).with_name('extract-cu-dots.py')),'--check'],text=True))
+audit['cu_dots_emission_check']=json.loads(subprocess.check_output([
+    sys.executable,str(Path(__file__).with_name('emit-cu-dots.py')),'--check'],text=True))
 usage=resource.getrusage(resource.RUSAGE_SELF)
 audit['audit_command']=[sys.executable,str(Path(__file__).relative_to(repo)),*sys.argv[1:]]
 audit['audit_source_revision']=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()

@@ -57,8 +57,14 @@ production Rust are untouched. AENEAS-NO-BRANCH-JOIN.md records the exact
 patch, build and paired regression boundary. This remains trusted frontend
 translation, not a theorem proving Aeneas itself correct.
 
-Remaining for candidate 10: consume these decoder-read identities through the
-complete actual four-dot loop and its array/closure machinery. The current
-proof does not yet establish equality of the whole four_dots source function.
-All other candidate source bridges and final soundness/privacy composition
-remain open.
+The complete emitted slot/base/batch/tail comparisons now check under
+universal shared arithmetic and a concrete state-threading array builder.
+The complete old/new kernel comparison also checks for arbitrary same-608-byte
+inputs. See DOTS-SOURCE.md for those source-linked results and axioms.
+
+Remaining for candidate 10: lift complete slot prefix-insensitivity through
+the four-slot constructor using its actual index bound and stable capture
+invariant, then consume the actual View.query bound. Standard-library source
+admission of the array builder and concrete shared-helper interpretation are
+still required. The full-width four_dots/caller and final soundness/privacy
+composition are not marked complete.

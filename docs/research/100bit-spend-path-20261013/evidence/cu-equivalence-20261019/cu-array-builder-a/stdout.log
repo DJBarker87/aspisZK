@@ -1,0 +1,61 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsArrayBuilder.lean:56:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  cells oldInst n index1 (φ state1)
+in the target expression
+  (match
+      let (value, state1) := (value, state1)
+      do
+      let (rest, state2) ← cells newInst n index1 state1
+      ok (⟨value :: ↑rest, ⋯⟩, state2) with
+    | ok x => ok (x.1, φ x.2)
+    | fail e => fail e
+    | div => div) =
+    let (value, state1) := (value, φ state1)
+    do
+    let (rest, state2) ← cells oldInst n index1 state1
+    ok (⟨value :: ↑rest, ⋯⟩, state2)
+
+case succ.ok.ok
+T F G : Type
+newInst : core.ops.function.FnMut F Usize T
+oldInst : core.ops.function.FnMut G Usize T
+φ : F → G
+hcall :
+  ∀ (state : F) (index : Usize),
+    remap
+        (fun x =>
+          match x with
+          | (value, state1) => (value, φ state1))
+        (newInst.call_mut state index) =
+      oldInst.call_mut (φ state) index
+n : ℕ
+ih :
+  ∀ (index : Usize) (state : F),
+    remap
+        (fun x =>
+          match x with
+          | (xs, state1) => (xs, φ state1))
+        (cells newInst n index state) =
+      cells oldInst n index (φ state)
+index : Usize
+state : F
+value : T
+state1 : F
+hc : newInst.call_mut state index = ok (value, state1)
+index1 : UScalar UScalarTy.Usize
+hi : index + 1#usize = ok index1
+⊢ (match
+      let (value, state1) := (value, state1)
+      do
+      let (rest, state2) ← cells newInst n index1 state1
+      ok (⟨value :: ↑rest, ⋯⟩, state2) with
+    | ok x => ok (x.1, φ x.2)
+    | fail e => fail e
+    | div => div) =
+    let (value, state1) := (value, φ state1)
+    do
+    let (rest, state2) ← cells oldInst n index1 state1
+    ok (⟨value :: ↑rest, ⋯⟩, state2)
+'AspisR1.CuSavingsArrayBuilder.cells' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsArrayBuilder.build' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsArrayBuilder.cells_naturality' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsArrayBuilder.build_naturality' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
