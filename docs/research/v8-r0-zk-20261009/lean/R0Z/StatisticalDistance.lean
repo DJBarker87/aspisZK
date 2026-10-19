@@ -21,6 +21,12 @@ import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.IntervalCases
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Positivity
+import Mathlib.Algebra.BigOperators.Field
+import Mathlib.Algebra.Order.BigOperators.Ring.Finset
+import Mathlib.Algebra.BigOperators.Module
+import Mathlib.Algebra.BigOperators.Pi
+import Mathlib.Algebra.Order.Field.Basic
+import Mathlib.Data.Rat.Cast.Order
 
 /-! Finite uniform tapes, arbitrary output types, and rational total variation.
 All finite sums below are symbolic. No concrete tape/state/trace is evaluated. -/
