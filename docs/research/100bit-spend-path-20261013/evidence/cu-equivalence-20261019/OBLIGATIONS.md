@@ -33,7 +33,7 @@ planned; progress must be assessed by complete optimization-to-caller proofs.
 
 | Retained change | Required proof and source bridge | Status |
 |---|---|---|
-| 1 gamma table reuse | same-function/same-gamma table dataflow, preparation/tx1 extraction and failure preservation | open; duplicate-call elimination can consume the first computation instead of re-proving unchanged power arithmetic |
+| 1 gamma table reuse | same-function/same-gamma table dataflow, preparation/tx1 extraction and failure preservation | complete emitted preparation table invariant, duplicate-call context equality, and old/new preparation/caller equality conditional on an explicit local claim-factor equation checked; claim source discharge and admitted tx1 wrapper composition remain open; see GAMMA-REUSE.md |
 | 2 opt-in observer | observer state noninterference, diagnostic-log projection, caller feature binding | open |
 | 3 S2 inactive groups | literal table correspondence, finite regrouping, source execution | all 1024 Nat-model classification cells, bounds, first-occurrence order and weighted regrouping checked; emitted machine helper/field/decoder binding open |
 | 4 delayed base dots | modular equality, all u64 bounds, decoder/failure-order and loop execution | symbolic arithmetic checked; source bridge open |
@@ -271,3 +271,22 @@ Next concrete candidate: gamma-table reuse, proving the actual preparation's
 retained table is the result already computed at its returned gamma, then
 consuming that fact in the tx1 caller. No further general frontend expansion
 is needed to state this same-function replacement obligation.
+
+Gamma reuse now has a complete emitted preparation dataflow theorem: successful
+new preparation returns exactly the powers table at its returned gamma. This
+uses the same successful function call, not a new power-arithmetic axiom. The
+caller theorem consumes this fact for arbitrary result contexts, including
+failures/divergence before the table is consumed. A separate complete old/new
+preparation comparison preserves errors/divergence after erasing ephemeral
+scratch, conditional on an explicit local claim-factor equation. The combined
+caller theorem exposes that same equation; it is not silently included in the
+shared Boundaries class and is not a final security-transfer result.
+
+Successful receipts: cu-gamma-types-b, cu-gamma-externals-a, cu-gamma-funs-a,
+cu-gamma-table-d, cu-gamma-caller-a, cu-gamma-preparation-d, cu-gamma-transfer-a.
+All print standard Lean axioms only, use zero process/cgroup swap and remain
+below 2.6 GiB peak RSS, taking 1.6–2.7 seconds each. Production source remains
+39c2971dd16c95858a4cfd2c9ae35da052eacfa9. The existing reference producer emits
+the full preparations with strict checks; claim helpers remain separate opaque
+parameters. Full claim emission fails in both available frontend paths and is
+not admitted. See GAMMA-REUSE.md for the distinct failure modes and exact gaps.

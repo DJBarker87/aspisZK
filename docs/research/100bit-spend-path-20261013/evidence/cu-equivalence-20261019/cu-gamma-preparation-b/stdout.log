@@ -1,0 +1,112 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGammaPreparation.lean:17:8: warning: automatically included section variable(s) unused in theorem `_private.CuSavingsGammaPreparation.0.AspisR1.CuSavingsGammaPreparation.bind_ext`:
+  [Boundaries]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Boundaries] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGammaPreparation.lean:99:6: error: Type mismatch
+  tail_eq gamma (gamma_old.prepared_claim D sem v.y1 v.inactive gamma kappa)
+    (fun g => gamma_new.prepared_claim D sem v.y1 v.inactive g kappa) ?m.263 (claim_factor gamma kappa)
+has type
+  (do
+      let r ← gamma_old.prepared_claim D sem v.y1 v.inactive gamma kappa
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue value => ok (core.result.Result.Ok (?m.263 value))
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Prepared
+            (core.convert.FromSame Err) residual) =
+    erase (finishWithTable gamma (fun g => gamma_new.prepared_claim D sem v.y1 v.inactive g kappa) ?m.263)
+but is expected to have type
+  (do
+      let r1 ← gamma_old.prepared_claim D sem v.y1 v.inactive gamma kappa
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 =>
+          ok
+            (core.result.Result.Ok
+              { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                alpha := Array.make 2#usize [alpha0, alpha1] ⋯, rho := rho, queries := queries,
+                semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t6.state })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+            (core.convert.FromSame verifier.Error) residual) =
+    do
+    let x ← weights.powers 29#usize gamma
+    let x_1 ← gamma_new.prepared_claim D sem v.y1 v.inactive x kappa
+    let x_2 ←
+      match x_1 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    let pair ←
+      match x_2 with
+        | core.ops.control_flow.ControlFlow.Continue val1 =>
+          ok
+            (core.result.Result.Ok
+                { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                  alpha := Array.make 2#usize [alpha0, alpha1] ⋯, rho := rho, queries := queries,
+                  semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t6.state },
+              x)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, x)
+    ok pair.1
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGammaPreparation.lean:113:6: error: Type mismatch
+  tail_eq gamma (gamma_old.prepared_claim D sem v.y1 v.inactive gamma kappa)
+    (fun g => gamma_new.prepared_claim D sem v.y1 v.inactive g kappa) ?m.345 (claim_factor gamma kappa)
+has type
+  (do
+      let r ← gamma_old.prepared_claim D sem v.y1 v.inactive gamma kappa
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue value => ok (core.result.Result.Ok (?m.345 value))
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Prepared
+            (core.convert.FromSame Err) residual) =
+    erase (finishWithTable gamma (fun g => gamma_new.prepared_claim D sem v.y1 v.inactive g kappa) ?m.345)
+but is expected to have type
+  (do
+      let r1 ← gamma_old.prepared_claim D sem v.y1 v.inactive gamma kappa
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 =>
+          ok
+            (core.result.Result.Ok
+              { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                alpha := Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯, rho := rho, queries := queries,
+                semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t5.state })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+            (core.convert.FromSame verifier.Error) residual) =
+    do
+    let x ← weights.powers 29#usize gamma
+    let x_1 ← gamma_new.prepared_claim D sem v.y1 v.inactive x kappa
+    let x_2 ←
+      match x_1 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    let pair ←
+      match x_2 with
+        | core.ops.control_flow.ControlFlow.Continue val1 =>
+          ok
+            (core.result.Result.Ok
+                { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                  alpha := Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯, rho := rho,
+                  queries := queries, semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t5.state },
+              x)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, x)
+    ok pair.1
+'AspisR1.CuSavingsGammaPreparation.erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsGammaPreparation.preparations_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

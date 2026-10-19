@@ -1,0 +1,293 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGammaPreparation.lean:17:8: warning: automatically included section variable(s) unused in theorem `_private.CuSavingsGammaPreparation.0.AspisR1.CuSavingsGammaPreparation.bind_ext`:
+  [Boundaries]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Boundaries] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGammaPreparation.lean:64:2: error: Tactic `apply` failed: could not unify the conclusion of `@bind_ext`
+  (do
+      let x ← ?m
+      ?f x) =
+    do
+    let x ← ?m
+    ?g x
+with the goal
+  (do
+      let a1 ← v.inactive.to_le_bytes
+      let (kappa, t2) ← transcript.Transcript.scalar D t1 28#u8 a1.to_slice false
+      let (alpha0, t3) ← transcript.Transcript.scalar D t2 29#u8 v.round0 false
+      let i ← v.variant.folds
+      if i = 2#usize then do
+          let i1 ← 32#usize + 224#usize
+          let a2 ← core.option.Option.unwrap v.folded_root
+          let bytes1 ←
+            alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1) a2.to_slice
+          let bytes2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1
+          let (we, t4) ← transcript.Transcript.scalar D t3 30#u8 bytes2.deref false
+          let (r, t5) ← transcript.Transcript.queries D t4 31#u8 v.final_message
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let i2 ← 31#u8 + 1#u8
+              let (rho, t6) ← transcript.Transcript.scalar_k D t5 i2 (Std.Array.empty U8).to_slice
+              let r1 ← gamma_old.prepared_claim D sem v.y1 v.inactive gamma kappa
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 =>
+                  ok
+                    (core.result.Result.Ok
+                      { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                        alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho, queries := val,
+                        semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t6.state })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+        else do
+          let (r, t4) ← transcript.Transcript.queries D t3 30#u8 v.final_message
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let i1 ← 30#u8 + 1#u8
+              let (rho, t5) ← transcript.Transcript.scalar_k D t4 i1 (Std.Array.empty U8).to_slice
+              let r1 ← gamma_old.prepared_claim D sem v.y1 v.inactive gamma kappa
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 =>
+                  ok
+                    (core.result.Result.Ok
+                      { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                        alpha := Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯, rho := rho,
+                        queries := val, semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t5.state })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual) =
+    do
+    let pair ←
+      do
+        let a1 ← v.inactive.to_le_bytes
+        let (kappa, t2) ← transcript.Transcript.scalar D t1 28#u8 a1.to_slice false
+        let (alpha0, t3) ← transcript.Transcript.scalar D t2 29#u8 v.round0 false
+        let i ← v.variant.folds
+        if i = 2#usize then do
+            let i1 ← 32#usize + 224#usize
+            let a2 ← core.option.Option.unwrap v.folded_root
+            let bytes1 ←
+              alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1) a2.to_slice
+            let bytes2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1
+            let (we, t4) ← transcript.Transcript.scalar D t3 30#u8 bytes2.deref false
+            let (r, t5) ← transcript.Transcript.queries D t4 31#u8 v.final_message
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let i2 ← 31#u8 + 1#u8
+                let (rho, t6) ← transcript.Transcript.scalar_k D t5 i2 (Std.Array.empty U8).to_slice
+                let g1 ← weights.powers 29#usize gamma
+                let r1 ← gamma_new.prepared_claim D sem v.y1 v.inactive g1 kappa
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 =>
+                    ok
+                      (core.result.Result.Ok
+                          { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                            alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho, queries := val,
+                            semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t6.state },
+                        g1)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r2 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                    ok (r2, g1)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r1 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                      (core.convert.FromSame verifier.Error) residual
+                ok (r1, initial)
+          else do
+            let (r, t4) ← transcript.Transcript.queries D t3 30#u8 v.final_message
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let i1 ← 30#u8 + 1#u8
+                let (rho, t5) ← transcript.Transcript.scalar_k D t4 i1 (Std.Array.empty U8).to_slice
+                let g1 ← weights.powers 29#usize gamma
+                let r1 ← gamma_new.prepared_claim D sem v.y1 v.inactive g1 kappa
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 =>
+                    ok
+                      (core.result.Result.Ok
+                          { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                            alpha := Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯, rho := rho,
+                            queries := val, semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t5.state },
+                        g1)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r2 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                    ok (r2, g1)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r1 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                      (core.convert.FromSame verifier.Error) residual
+                ok (r1, initial)
+    ok pair.1
+
+Note: The full type of `@bind_ext` is
+  ∀ [Boundaries] {A B : Type} (m : Result A) (f g : A → Result B),
+    (∀ (x : A), f x = g x) →
+      (do
+          let x ← m
+          f x) =
+        do
+        let x ← m
+        g x
+
+inst✝ : Boundaries
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+hash : H
+initial : Table
+claim_factor :
+  ∀ (gamma kappa : aspis_core.field.WideExact),
+    gamma_old.prepared_claim D sem v.y1 v.inactive gamma kappa = do
+      let g ← weights.powers 29#usize gamma
+      gamma_new.prepared_claim D sem v.y1 v.inactive g kappa
+state : Std.Array U8 32#usize
+t : transcript.Transcript H
+gamma : aspis_core.field.WideExact
+t1 : transcript.Transcript H
+⊢ (do
+      let a1 ← v.inactive.to_le_bytes
+      let (kappa, t2) ← transcript.Transcript.scalar D t1 28#u8 a1.to_slice false
+      let (alpha0, t3) ← transcript.Transcript.scalar D t2 29#u8 v.round0 false
+      let i ← v.variant.folds
+      if i = 2#usize then do
+          let i1 ← 32#usize + 224#usize
+          let a2 ← core.option.Option.unwrap v.folded_root
+          let bytes1 ←
+            alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1) a2.to_slice
+          let bytes2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1
+          let (we, t4) ← transcript.Transcript.scalar D t3 30#u8 bytes2.deref false
+          let (r, t5) ← transcript.Transcript.queries D t4 31#u8 v.final_message
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let i2 ← 31#u8 + 1#u8
+              let (rho, t6) ← transcript.Transcript.scalar_k D t5 i2 (Std.Array.empty U8).to_slice
+              let r1 ← gamma_old.prepared_claim D sem v.y1 v.inactive gamma kappa
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 =>
+                  ok
+                    (core.result.Result.Ok
+                      { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                        alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho, queries := val,
+                        semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t6.state })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual
+        else do
+          let (r, t4) ← transcript.Transcript.queries D t3 30#u8 v.final_message
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let i1 ← 30#u8 + 1#u8
+              let (rho, t5) ← transcript.Transcript.scalar_k D t4 i1 (Std.Array.empty U8).to_slice
+              let r1 ← gamma_old.prepared_claim D sem v.y1 v.inactive gamma kappa
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 =>
+                  ok
+                    (core.result.Result.Ok
+                      { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                        alpha := Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯, rho := rho,
+                        queries := val, semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t5.state })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual) =
+    do
+    let pair ←
+      do
+        let a1 ← v.inactive.to_le_bytes
+        let (kappa, t2) ← transcript.Transcript.scalar D t1 28#u8 a1.to_slice false
+        let (alpha0, t3) ← transcript.Transcript.scalar D t2 29#u8 v.round0 false
+        let i ← v.variant.folds
+        if i = 2#usize then do
+            let i1 ← 32#usize + 224#usize
+            let a2 ← core.option.Option.unwrap v.folded_root
+            let bytes1 ←
+              alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1) a2.to_slice
+            let bytes2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1
+            let (we, t4) ← transcript.Transcript.scalar D t3 30#u8 bytes2.deref false
+            let (r, t5) ← transcript.Transcript.queries D t4 31#u8 v.final_message
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let i2 ← 31#u8 + 1#u8
+                let (rho, t6) ← transcript.Transcript.scalar_k D t5 i2 (Std.Array.empty U8).to_slice
+                let g1 ← weights.powers 29#usize gamma
+                let r1 ← gamma_new.prepared_claim D sem v.y1 v.inactive g1 kappa
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 =>
+                    ok
+                      (core.result.Result.Ok
+                          { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                            alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho, queries := val,
+                            semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t6.state },
+                        g1)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r2 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                    ok (r2, g1)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r1 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                      (core.convert.FromSame verifier.Error) residual
+                ok (r1, initial)
+          else do
+            let (r, t4) ← transcript.Transcript.queries D t3 30#u8 v.final_message
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let i1 ← 30#u8 + 1#u8
+                let (rho, t5) ← transcript.Transcript.scalar_k D t4 i1 (Std.Array.empty U8).to_slice
+                let g1 ← weights.powers 29#usize gamma
+                let r1 ← gamma_new.prepared_claim D sem v.y1 v.inactive g1 kappa
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 =>
+                    ok
+                      (core.result.Result.Ok
+                          { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                            alpha := Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯, rho := rho,
+                            queries := val, semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t5.state },
+                        g1)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r2 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          verifier.Prepared (core.convert.FromSame verifier.Error) residual
+                    ok (r2, g1)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r1 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                      (core.convert.FromSame verifier.Error) residual
+                ok (r1, initial)
+    ok pair.1
+'AspisR1.CuSavingsGammaPreparation.erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsGammaPreparation.preparations_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

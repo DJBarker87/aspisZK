@@ -1,0 +1,98 @@
+   Compiling aspis-r1-cu-gamma v0.0.0 (/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/cu-gamma-input)
+warning: unused import: `P`
+   --> lib.rs:302:50
+    |
+302 |             use crate::aspis_core::{field::{M31, P}, state_only_prefix::r0::Error};
+    |                                                  ^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `boxed::Box` and `vec::Vec`
+   --> lib.rs:837:31
+    |
+837 | pub mod verifier {use alloc::{boxed::Box,vec::Vec}; use crate::{aspis_core::{Digest32,field::{WideExact as E,QM31 as K},circle::Sec...
+    |                               ^^^^^^^^^^ ^^^^^^^^
+
+warning: unused imports: `Digest32`, `field`, `powers`, and `transcript::Transcript`
+   --> lib.rs:837:78
+    |
+837 | ...::{Digest32,field::{WideExact as E,QM31 as K},circle::SecureCirclePoint},transport::Variant,transcript::Transcript,weights::{powers,field}};
+    |       ^^^^^^^^                                                                                 ^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^ ^^^^^
+
+warning: unused imports: `QM31 as K`, `circle::SecureCirclePoint`, and `transport::Variant`
+   --> lib.rs:860:58
+    |
+860 | use crate::{aspis_core::{Digest32,field::{WideExact as E,QM31 as K},circle::SecureCirclePoint},
+    |                                                          ^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^
+861 |  verifier::{Prepared,View,Error},transcript::Transcript,transport::Variant,weights::{powers,field}};
+    |                                                         ^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `QM31 as K`, `circle::SecureCirclePoint`, and `transport::Variant`
+   --> lib.rs:901:58
+    |
+901 | use crate::{aspis_core::{Digest32,field::{WideExact as E,QM31 as K},circle::SecureCirclePoint},
+    |                                                          ^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^
+902 |  verifier::{Prepared,View,Error},transcript::Transcript,transport::Variant,weights::{powers,field}};
+    |                                                         ^^^^^^^^^^^^^^^^^^
+
+warning: type `r1_wire::ValidatedRecord<'_>` is more private than the item `r1_wire::semantic_validated_entry`
+   --> lib.rs:617:5
+    |
+617 |     pub fn semantic_validated_entry<H: Digest32>(transcript: &mut SemanticTranscript<H>, record: ValidatedRecord<'_>) -> Result<QM31, Error> { ...
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `r1_wire::semantic_validated_entry` is reachable at visibility `pub`
+    |
+note: but type `r1_wire::ValidatedRecord<'_>` is only usable at visibility `pub(crate)`
+   --> lib.rs:464:1
+    |
+464 | pub(crate) struct ValidatedRecord<'a> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: type `r1_wire::ValidatedRecord<'a>` is more private than the item `r1_wire::prefix_validated_entry`
+   --> lib.rs:618:5
+    |
+618 |     pub fn prefix_validated_entry<'a>(prefix: &Prefix<'a>, row: u8) -> Result<ValidatedRecord<'a>, Error> { prefix.validated_record...
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `r1_wire::prefix_validated_entry` is reachable at visibility `pub`
+    |
+note: but type `r1_wire::ValidatedRecord<'a>` is only usable at visibility `pub(crate)`
+   --> lib.rs:464:1
+    |
+464 | pub(crate) struct ValidatedRecord<'a> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: fields `pool` and `deployment_domain` are never read
+   --> lib.rs:253:5
+    |
+251 | struct SemanticPublic<'a> {
+    |        -------------- fields in this struct
+252 |     variant: CompiledVariant,
+253 |     pool: [u8; 32],
+    |     ^^^^
+254 |     deployment_domain: [u8; 32],
+    |     ^^^^^^^^^^^^^^^^^
+    |
+    = note: `SemanticPublic` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `c0`, `c1`, and `count` are never read
+   --> lib.rs:833:5
+    |
+832 | pub struct EbyKDot {
+    |            ------- fields in this struct
+833 |     c0: canonical::Dot,
+    |     ^^
+834 |     c1: canonical::Dot,
+    |     ^^
+835 |     count: usize,
+    |     ^^^^^
+
+warning: fields `sums` and `count` are never read
+   --> lib.rs:830:22
+    |
+830 |     pub struct Dot { sums:[u64;4], count:usize }} /// Candidate exact accumulator for sums of `WideExact * QM31`.
+    |                ---   ^^^^          ^^^^^
+    |                |
+    |                fields in this struct
+
+warning: `aspis-r1-cu-gamma` (lib) generated 10 warnings (run `cargo fix --lib -p aspis-r1-cu-gamma` to apply 5 suggestions)
+    Finished `release` profile [optimized] target(s) in 0.27s

@@ -132,6 +132,8 @@ audit['try_graph_metadata_evidence_check']=json.loads(subprocess.check_output([
     sys.executable,str(Path(__file__).with_name('check-try-graph-evidence.py'))],text=True))
 audit['public_decode_evidence_check']=json.loads(subprocess.check_output([
     sys.executable,str(Path(__file__).with_name('check-public-decode-evidence.py'))],text=True))
+audit['gamma_evidence_check']=json.loads(subprocess.check_output([
+    sys.executable,str(Path(__file__).with_name('check-gamma-evidence.py'))],text=True))
 usage=resource.getrusage(resource.RUSAGE_SELF)
 audit['audit_command']=[sys.executable,str(Path(__file__).relative_to(repo)),*sys.argv[1:]]
 audit['audit_source_revision']=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip()
