@@ -32,3 +32,5 @@ Exact command, configuration, import pins, logs, and receipt are included.
 OLean binaries are intentionally omitted.
 
 The read sequence is currently a manually isolated Lean adapter. Its equality with a generated prefix cut and its reachability from successful whole-resume execution are separate OPEN source obligations.
+
+Success in these statements means the exact returned tuple contains `.Ok` for **all five inner Rust results** (gamma, kappa, alpha0, alpha1 and rho), as written in the theorem hypotheses. The adapter stores those inner results instead of itself short-circuiting each Rust `?`. An outer Aeneas `.ok` alone therefore does not establish decoder success or canonicality. Deriving the all-five-`.Ok` tuple from actual generated prefix success is a separate source-composition obligation.
