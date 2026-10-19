@@ -5,7 +5,7 @@
     "-o",
     "BatchMode=yes",
     "dombarker@100.108.41.90",
-    "python3 - < r1-j1r13-pin.py"
+    "python3 -"
   ],
   "current_tool_sha256": {
     "/home/dombarker/.cache/solana/v1.52/platform-tools/llvm/bin/llvm-objdump": "fc4f5e9e22e43c299297db54df0bf2ef0d0d5604b5429ffd6eeeb21d821c733e",
@@ -22,6 +22,7 @@
   "inspection_script_source": "import hashlib,json,pathlib,resource,sys,time\nstarted=time.monotonic()\nworkspace=pathlib.Path('/home/dombarker/project-offloads/aspis-r1-decision1h-20261019')\nexpected={\n 'artifacts/aspis_r1_cost_probe_program.so':'4e1fd78fbddb39cb9599de7694105547d8e86e7451f8b9f3e9626789036e8711',\n 'sbf-target/sbpf-solana-solana/release/aspis_r1_cost_probe_program.so':'a7599321bcded30cb8882f60ebdd235c9dd7d5c442b1075761390b7ad3263873',\n 'source/crates/aspis-r1-cost-probe/src/verifier.rs':'2babda97eabb9e84204204f016dc37562ec7b762e7c66abbce0f6a5c17b1d6d9',\n}\npins=[]\nfor name,wanted in expected.items():\n p=workspace/name;b=p.read_bytes();h=hashlib.sha256(b).hexdigest();assert h==wanted,(name,h)\n pins.append({'host_path':str(p),'bytes':len(b),'sha256':h})\nr=json.loads((workspace/'runs/sbf-build-1h/receipt.json').read_text())\nc=json.loads((workspace/'runs/sbf-build-1h/command.json').read_text())\nassert r['source_revision']=='32559d2696b89cdbd75304c1f7624f94dfe125ae' and r['exit_status']==0\ntools={\n '/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf':'46e50d5d1bcc70abfd74f0b6281071ef91576031330d1d892622e1ea59445d6c',\n '/home/dombarker/.cache/solana/v1.52/platform-tools/rust/bin/rustc':'d95c95b68e321ad76634e1fd26b0a7c20ccdbae9ad9ca733f3ae2f2b4a0b6002',\n '/home/dombarker/.cache/solana/v1.52/platform-tools/llvm/bin/llvm-objdump':'fc4f5e9e22e43c299297db54df0bf2ef0d0d5604b5429ffd6eeeb21d821c733e',\n}\nfor name,h in tools.items():assert hashlib.sha256(pathlib.Path(name).read_bytes()).hexdigest()==h,name\nusage=resource.getrusage(resource.RUSAGE_SELF)\nprint(json.dumps({'status':'PASS_EXISTING_1H_ARTIFACT_AND_PRODUCING_TOOL_HASHES',\n 'command':['ssh','-o','BatchMode=yes','dombarker@100.108.41.90','python3 - < r1-j1r13-pin.py'],\n 'source_revision':r['source_revision'],'evidence_base_revision':'f59a21fc15dcad23fcad412afe42b83ee319ed50',\n 'features':['pool-adapter','private-leaf-salts'],'exit_status':0,'wall_seconds':time.monotonic()-started,\n 'peak_rss_kib':usage.ru_maxrss,'process_swaps':usage.ru_nswap,\n 'pins':pins,'producing_build_command':c,'producing_build_receipt':r,\n 'toolchain':'Solana cargo-build-sbf3.1.13 / platform-tools1.52 / SBF rustc1.89.0-dev LLVM20.1.7',\n 'toolchain_provenance':'Recorded producing build toolchain; current executable hashes rechecked identical to prior tool-pins.json. No tool update or rebuild.',\n 'current_tool_sha256':tools,'new_builds':0,'print_axioms':'not applicable: read-only artifact hashing, no Lean result'},sort_keys=True))\n",
   "integration_branch_base": "f59a21fc15dcad23fcad412afe42b83ee319ed50",
   "live_worktree_touched": false,
+  "measurement_scope": "Remote Python hash inspection itself; SSH transport is outside wall/RSS metrics.",
   "new_builds": 0,
   "peak_rss_kib": 35732,
   "pins": [
@@ -282,8 +283,10 @@
     "user_authorization": "User explicitly instructed: just do it in parallel; foreign Lean/build activity is permitted, task resource caps remain mandatory.",
     "wall_seconds": 39.735620292136446
   },
+  "recorded_shell_command": "ssh -o BatchMode=yes dombarker@100.108.41.90 'python3 -' < /tmp/r1-j1r13-pin.py > /tmp/r1-j1r13-artifact-pin.json",
   "source_revision": "32559d2696b89cdbd75304c1f7624f94dfe125ae",
   "status": "PASS_EXISTING_1H_ARTIFACT_AND_PRODUCING_TOOL_HASHES",
+  "stdin_script_path": "/tmp/r1-j1r13-pin.py",
   "toolchain": "Solana cargo-build-sbf3.1.13 / platform-tools1.52 / SBF rustc1.89.0-dev LLVM20.1.7",
   "toolchain_provenance": "Recorded producing build toolchain; current executable hashes rechecked identical to prior tool-pins.json. No tool update or rebuild.",
   "wall_seconds": 0.03844747110269964
