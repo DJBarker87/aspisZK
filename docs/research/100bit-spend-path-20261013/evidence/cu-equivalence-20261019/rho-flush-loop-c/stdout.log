@@ -1,0 +1,81 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFlushLoop.lean:20:13: warning: This simp argument is unused:
+  Prod.casesOn
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵P̵r̵o̵d̵.̵c̵a̵s̵e̵s̵O̵n̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFlushLoop.lean:22:25: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFlushLoop.lean:23:22: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFlushLoop.lean:24:45: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFlushLoop.lean:24:63: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFlushLoop.lean:24:63: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFlushLoop.lean:68:8: error: Tactic `rfl` failed: The left-hand side
+  ok
+    (some iter.slice[iter.i], { slice := iter.slice, i := iter.i + 1 }, fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat iter.i x, i := it'.i })
+is not definitionally equal to the right-hand side
+  ok (some limb, next, nextBack)
+
+case isTrue
+fuel : ℕ
+ih :
+  ∀ (iter : Iter) (back : Iter → Iter),
+    iter.i + fuel = (↑iter.slice).length →
+      ∃ last handback,
+        verifier.BatchedWeights.push_loop1 iter back = ok (last, handback) ∧ handback last = back (modelIter iter)
+iter : Iter
+back : Iter → Iter
+hspan : iter.i + (fuel + 1) = (↑iter.slice).length
+hi : iter.i < (↑iter.slice).length
+limb : U64 := (↑iter.slice)[iter.i]
+next : Iter := { slice := iter.slice, i := iter.i + 1 }
+nextBack : Iter → Option U64 → Iter :=
+  fun out value =>
+    match value with
+    | none => out
+    | some x => { slice := out.slice.setAtNat iter.i x, i := out.i }
+newBack : Iter → Iter := fun out => back { slice := out.slice.setAtNat iter.i (foldWord limb), i := out.i }
+hlen : ↑iter.slice.len = (↑iter.slice).length
+h✝ : iter.i < ↑iter.slice.len
+hcell : iter.slice[iter.i] = (↑iter.slice)[iter.i]
+⊢ ok
+      (some iter.slice[iter.i], { slice := iter.slice, i := iter.i + 1 }, fun it' x =>
+        match x with
+        | none => it'
+        | some x => { slice := it'.slice.setAtNat iter.i x, i := it'.i }) =
+    ok (some limb, next, nextBack)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFlushLoop.lean:67:19: warning: This simp argument is unused:
+  hcell
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵c̵e̵l̵l̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsRhoFlushLoop.loop_unroll' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoFlushLoop.source_success_fuel' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoFlushLoop.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

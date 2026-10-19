@@ -26,7 +26,7 @@ remain obligations, not hidden hypotheses asserting the conclusion.
 | 6 public decode reuse | checked same-byte decoder/selector correspondence, first_decoded and adapter execution | open |
 | 7 geometry reuse | node/denominator agreement, caller range validity, execution | open |
 | 10 fixed prefix | admitted q length, identical decoder accesses and failure behavior | open |
-| 12 rho residues | every-prefix modular invariant, four-term overflow bound, canonical finish, array/caller execution, heap admission | integer invariant and scalar source bridge checked; push/value emitted and compiled; enclosing loops/finish/callers open |
+| 12 rho residues | every-prefix modular invariant, four-term overflow bound, canonical finish, array/caller execution, heap admission | integer invariant, complete push/value execution and frame/overflow proofs checked; initialization, finish, outer callers and serialization composition open |
 | 14 Libra factorization | all four weights equal for arbitrary canonical challenges including zero; field/source execution | division-free cut/tensor algebra checked; literal-loop and field/source bridges open |
 | composition | refreshed emitted caller bodies, byte/error/effect preservation across tx1/tx2 and adapter | open |
 | soundness transfer | apply existing soundness results under their original premises to the actual optimized source model | open |
@@ -80,3 +80,17 @@ Next: close the full update-loop induction and flush-loop handback, then
 compose them with the already checked every-prefix residue invariant and
 canonical value theorem. The remaining candidates and final soundness/privacy
 transfer/replay remain required; this checkpoint is not goal completion.
+
+The full `CuSavingsRhoUpdateLoop.source_success` and
+`CuSavingsRhoFlushLoop.source_success` now check, including mutable-iterator
+handback. `CuSavingsRhoPush.source_success` composes them with the exact
+source flush predicate and proves bounded reference residues for every limb,
+with an exact replacement-row frame. Successful receipts: `rho-state-c`,
+`rho-update-loop-c`, `rho-suffix-map-a`, `rho-flush-model-b`,
+`rho-flush-loop-f`, `rho-flush-array-a`, `rho-push-a`. All print standard
+axioms only, use no process/cgroup swap and peak below 2.8 GiB RSS.
+
+The prior Next paragraph about update/flush induction is superseded by those
+checked results. Next rho targets: initialization, finish mutable-enumerate
+runtime binding, and the actual outer verifier/canonical serialization callers.
+No full optimization-equivalence or soundness/privacy transfer claim is made.

@@ -1,0 +1,67 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoUpdateLoop.lean:28:2: error: 'change' tactic failed, pattern
+  (match verifier.BatchedWeights.push_loop0.body index limbs iter self basis with
+    | ok result =>
+      match result with
+      | cont state =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, self1, basis1) => verifier.BatchedWeights.push_loop0.body index limbs iter1 self1 basis1)
+          state
+      | done out => ok out
+    | fail e => fail e
+    | div => div) =
+    ?m.60
+is not definitionally equal to target
+  (match
+      match (iter, self, basis) with
+      | (iter1, self1, basis1) => verifier.BatchedWeights.push_loop0.body index limbs iter1 self1 basis1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, self1, basis1) => verifier.BatchedWeights.push_loop0.body index limbs iter1 self1 basis1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let result ← verifier.BatchedWeights.push_loop0.body index limbs iter self basis
+    match result with
+      | done out => ok out
+      | cont (next, state, scalar) =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, self1, basis1) => verifier.BatchedWeights.push_loop0.body index limbs iter1 self1 basis1)
+          (next, state, scalar)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoUpdateLoop.lean:66:13: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoUpdateLoop.lean:66:24: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoUpdateLoop.lean:132:4: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+'AspisR1.CuSavingsRhoUpdateLoop.loop_unroll' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoUpdateLoop.loop_success_fuel' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoUpdateLoop.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

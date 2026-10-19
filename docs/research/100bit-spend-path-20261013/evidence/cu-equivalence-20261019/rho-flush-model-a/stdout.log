@@ -1,0 +1,73 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoFlushModel.lean:53:4: error: Tactic `apply` failed: could not unify the conclusion of `@Subtype.ext`
+  ?a1 = ?a2
+with the goal
+  (let __src :=
+      {
+        slice :=
+          ⟨suffixMap foldWord
+              { slice := { slice := values, i := position }.slice, i := { slice := values, i := position }.i + 1 }.i
+              ↑{ slice := { slice := values, i := position }.slice,
+                    i := { slice := values, i := position }.i + 1 }.slice,
+            ⋯⟩,
+        i :=
+          (↑{ slice := { slice := values, i := position }.slice,
+                  i := { slice := values, i := position }.i + 1 }.slice).length };
+    {
+      slice :=
+        {
+                slice :=
+                  ⟨suffixMap foldWord
+                      { slice := { slice := values, i := position }.slice,
+                          i := { slice := values, i := position }.i + 1 }.i
+                      ↑{ slice := { slice := values, i := position }.slice,
+                            i := { slice := values, i := position }.i + 1 }.slice,
+                    ⋯⟩,
+                i :=
+                  (↑{ slice := { slice := values, i := position }.slice,
+                          i := { slice := values, i := position }.i + 1 }.slice).length }.slice.setAtNat
+          { slice := values, i := position }.i
+          (foldWord (↑{ slice := values, i := position }.slice)[{ slice := values, i := position }.i]),
+      i := __src.i }) =
+    { slice := ⟨suffixMap foldWord { slice := values, i := position }.i ↑{ slice := values, i := position }.slice, ⋯⟩,
+      i := (↑{ slice := values, i := position }.slice).length }
+
+Note: The full type of `@Subtype.ext` is
+  ∀ {α : Sort ?u.26} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 = ↑a2 → a1 = a2
+
+case mk
+values : Slice U64
+position : ℕ
+hi : { slice := values, i := position }.i < (↑{ slice := values, i := position }.slice).length
+⊢ (let __src :=
+      {
+        slice :=
+          ⟨suffixMap foldWord
+              { slice := { slice := values, i := position }.slice, i := { slice := values, i := position }.i + 1 }.i
+              ↑{ slice := { slice := values, i := position }.slice,
+                    i := { slice := values, i := position }.i + 1 }.slice,
+            ⋯⟩,
+        i :=
+          (↑{ slice := { slice := values, i := position }.slice,
+                  i := { slice := values, i := position }.i + 1 }.slice).length };
+    {
+      slice :=
+        {
+                slice :=
+                  ⟨suffixMap foldWord
+                      { slice := { slice := values, i := position }.slice,
+                          i := { slice := values, i := position }.i + 1 }.i
+                      ↑{ slice := { slice := values, i := position }.slice,
+                            i := { slice := values, i := position }.i + 1 }.slice,
+                    ⋯⟩,
+                i :=
+                  (↑{ slice := { slice := values, i := position }.slice,
+                          i := { slice := values, i := position }.i + 1 }.slice).length }.slice.setAtNat
+          { slice := values, i := position }.i
+          (foldWord (↑{ slice := values, i := position }.slice)[{ slice := values, i := position }.i]),
+      i := __src.i }) =
+    { slice := ⟨suffixMap foldWord { slice := values, i := position }.i ↑{ slice := values, i := position }.slice, ⋯⟩,
+      i := (↑{ slice := values, i := position }.slice).length }
+'AspisR1.CuSavingsRhoFlushModel.foldWord_execution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoFlushModel.model_at_end' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoFlushModel.model_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoFlushModel.source_body_step' depends on axioms: [propext, Classical.choice, Quot.sound]
