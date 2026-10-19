@@ -1,0 +1,41 @@
+--- a/src/interp/InterpReduceCollapse.ml
++++ b/src/interp/InterpReduceCollapse.ml
+@@ -1931,6 +1931,9 @@
+            sequence)];
+   let ctx = ref ctx0 in
+   let nabs_map = ref AbsId.Map.empty in
++  (* A merge may be absent from this projection on both sides. Its result
++     has no abstraction here, so replaying a borrow into it has no target. *)
++  let omitted_nabs = ref AbsId.Set.empty in
+   let get_id (aid : abs_id) : abs_id =
+     match AbsId.Map.find_opt aid !nabs_map with
+     | None -> aid
+@@ -1972,6 +1975,7 @@
+       | None, None ->
+           (* The two abs come from the unprojected environment: we don't have to
+              merge anything *)
++          omitted_nabs := AbsId.Set.add nabs !omitted_nabs;
+           [%ldebug
+             "Could not find left abstraction " ^ AbsId.to_string abs0
+             ^ " and right abstraction " ^ AbsId.to_string abs1
+@@ -1986,10 +1990,18 @@
+ 
+   (* Update the ids used in the sequence of shared borrows *)
+   let shared_borrows_seq =
+-    List.map
++    List.filter_map
+       (fun (abs_id, i, pm, bid, ty) ->
+         match AbsId.Map.find_opt abs_id !nabs_map with
+-        | Some mapped_abs -> (mapped_abs, i, pm, bid, ty)
++        | Some mapped_abs -> Some (mapped_abs, i, pm, bid, ty)
++        | None
++          when AbsId.Set.mem abs_id !omitted_nabs
++               && Option.is_none (ctx_lookup_abs_opt ctx abs_id) ->
++            (* This recorded merge was absent from both inputs in the current
++               projection. It has no target abstraction to receive the borrow.
++               Do not drop any record whose target is actually present, or
++               whose omission was not established by the merge replay above. *)
++            None
+         | None ->
+             Errors.craise_recover __FILE__ __LINE__ recoverable span
+               ("Cannot replay shared borrow for abstraction "

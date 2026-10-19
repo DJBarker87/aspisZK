@@ -1,0 +1,35 @@
+   Compiling aspis-r1-stage2-adopted-resume v0.0.0 (/home/dombarker/project-offloads/root-stage2-adopted-resume-v1-20261019/input)
+error[E0433]: cannot find module or crate `aspis_core` in this scope
+   --> lib.rs:905:21
+    |
+905 |     let mut weights=aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;
+    |                     ^^^^^^^^^^ use of unresolved module or unlinked crate `aspis_core`
+    |
+    = help: if you wanted to use a crate named `aspis_core`, use `cargo add aspis_core` to add it to your `Cargo.toml`
+help: consider importing this module
+    |
+868 | pub mod verifier {use crate::aspis_core::r0::heap;
+    |                   ++++++++++++++++++++++++++++++++
+help: if you import `heap`, refer to it directly
+    |
+905 -     let mut weights=aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;
+905 +     let mut weights=heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;
+    |
+
+warning: unused import: `P`
+   --> lib.rs:325:50
+    |
+325 |             use crate::aspis_core::{field::{M31, P}, state_only_prefix::r0::Error};
+    |                                                  ^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `QUARTER` and `Weights`
+   --> lib.rs:868:40
+    |
+868 | pub mod verifier {use crate::weights::{Weights,QUARTER};use crate::aspis_core::field::M31;use alloc::{boxed::Box,vec::Vec}; use cra...
+    |                                        ^^^^^^^ ^^^^^^^
+
+warning: unused import: `crate::aspis_core::field::M31`
+   --> lib.rs:868:61
+    |

@@ -1,0 +1,12 @@
+--- a/finish_relation.rs
++++ b/finish_relation.rs
+@@ -14,7 +14,8 @@
+     if pair!=claim {return Err(Error::Relation);}
+     mark(obs,Phase::Relation);
+     let mut dot=crate::fast_pairing::EbyKDot::new();
+-    for (j,w) in a.weights.iter().enumerate() {dot.push(field(v.final_message,j),*w).map_err(|_|Error::Parse)?;}
++    let mut j=0;
++    while j<a.weights.len() {dot.push(field(v.final_message,j),a.weights[j]).map_err(|_|Error::Parse)?;j+=1;}
+     let actual=dot.finish();
+     crate::trace::value(17,0,actual);crate::trace::value(17,1,a.rhs);
+     if a.next!=22||actual!=a.rhs {return Err(Error::Query);}

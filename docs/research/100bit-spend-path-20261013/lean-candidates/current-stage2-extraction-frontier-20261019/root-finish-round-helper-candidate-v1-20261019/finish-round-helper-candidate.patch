@@ -1,0 +1,26 @@
+--- a/finish_relation.rs
++++ b/finish_relation.rs
+@@ -1,12 +1,18 @@
++#[inline(always)]
++fn finish_relation_round(v:&View<'_>,p:&Prepared,claim:E,round:usize)->Result<E,Error> {
++    let poly=if round==0 {v.round0}else{v.round1};
++    let lhs=field(poly,0).add(field(poly,4));let rhs=claim.mul_m31(QUARTER);
++    crate::trace::value(15,3*round,lhs);crate::trace::value(15,3*round+1,rhs);
++    if lhs!=rhs {return Err(Error::Relation);}
++    let claim=polynomial(poly,p.alpha[round]);crate::trace::value(15,3*round+2,claim);
++    Ok(claim)
++}
++
+ #[inline(never)]
+ pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Result<(),Error> {
+     let mut claim=p.claim;
+     for round in 0..p.variant.folds() {
+-        let poly=if round==0 {v.round0}else{v.round1};
+-        let lhs=field(poly,0).add(field(poly,4));let rhs=claim.mul_m31(QUARTER);
+-        crate::trace::value(15,3*round,lhs);crate::trace::value(15,3*round+1,rhs);
+-        if lhs!=rhs {return Err(Error::Relation);}
+-        claim=polynomial(poly,p.alpha[round]);crate::trace::value(15,3*round+2,claim);
++        claim=finish_relation_round(v,p,claim,round)?;
+     }
+     let weights=Weights::new(p.variant,&p.semantic_alpha,&p.z)?;
+     let pair=weights.pair(&p.alpha[..p.variant.folds()],v.final_message,p.kappa)?;

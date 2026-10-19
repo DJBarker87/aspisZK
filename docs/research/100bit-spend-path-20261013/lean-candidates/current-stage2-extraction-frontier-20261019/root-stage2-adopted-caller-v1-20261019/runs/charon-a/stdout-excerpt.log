@@ -1,0 +1,35 @@
+   Compiling aspis-r1-stage2-adopted-caller v0.0.0 (/home/dombarker/project-offloads/root-stage2-adopted-caller-v1-20261019/input)
+warning: unused import: `P`
+   --> lib.rs:302:50
+    |
+302 |             use crate::aspis_core::{field::{M31, P}, state_only_prefix::r0::Error};
+    |                                                  ^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `QUARTER` and `Weights`
+   --> lib.rs:844:40
+    |
+844 | pub mod verifier {use crate::weights::{Weights,QUARTER};use crate::aspis_core::field::M31;use alloc::{boxed::Box,vec::Vec}; use cra...
+    |                                        ^^^^^^^ ^^^^^^^
+
+warning: unused imports: `field` and `transcript::Transcript`
+   --> lib.rs:844:239
+    |
+844 | ...e::SecureCirclePoint},transport::Variant,transcript::Transcript,weights::{powers,field}};
+    |                                             ^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^
+
+warning: type `r1_wire::ValidatedRecord<'_>` is more private than the item `r1_wire::semantic_validated_entry`
+   --> lib.rs:617:5
+    |
+617 |     pub fn semantic_validated_entry<H: Digest32>(transcript: &mut SemanticTranscript<H>, record: ValidatedRecord<'_>) -> Result<QM31, Error> { ...
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `r1_wire::semantic_validated_entry` is reachable at visibility `pub`
+    |
+note: but type `r1_wire::ValidatedRecord<'_>` is only usable at visibility `pub(crate)`
+   --> lib.rs:464:1
+    |
+464 | pub(crate) struct ValidatedRecord<'a> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: type `r1_wire::ValidatedRecord<'a>` is more private than the item `r1_wire::prefix_validated_entry`
