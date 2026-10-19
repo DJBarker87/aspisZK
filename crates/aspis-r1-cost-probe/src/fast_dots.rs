@@ -14,29 +14,27 @@ pub fn four_dots(q: &[u8], g: &[WideExact; 29]) -> [WideExact; 4] {
     // The dot payload is exactly this prefix; paths and salts are consumed
     // separately. Expose its fixed extent to remove repeated slice bounds.
     let q:&[u8;608]=q[..608].try_into().unwrap();
-    let mut totals=[[0u64;WideExact::LIMB_COUNT];4];
-    for start in (0..26).step_by(4) {
-        let mut sums=[[0u64;WideExact::LIMB_COUNT];4];
-        for term in start..core::cmp::min(start+4,26) {
-            let scalars:[u64;4]=core::array::from_fn(|slot| {
-                let at=slot*120+term*4;
-                u64::from(M31::from_le_bytes(q[at..at+4].try_into().unwrap()).unwrap().0)
-            });
-            let coefficient=g[term].to_limbs();
+    core::array::from_fn(|slot| {
+        let mut limbs = [0u64; WideExact::LIMB_COUNT];
+        for start in (0..26).step_by(4) {
+            let mut sums = [0u64; WideExact::LIMB_COUNT];
+            for term in start..core::cmp::min(start + 4, 26) {
+                let scalar = M31::from_le_bytes(
+                    q[slot * 120 + term * 4..slot * 120 + term * 4 + 4]
+                        .try_into()
+                        .unwrap(),
+                )
+                .unwrap();
+                let coefficient = g[term].to_limbs();
+                for limb in 0..WideExact::LIMB_COUNT {
+                    sums[limb] += u64::from(coefficient[limb]) * u64::from(scalar.0);
+                }
+            }
             for limb in 0..WideExact::LIMB_COUNT {
-                let coefficient=u64::from(coefficient[limb]);
-                sums[0][limb]+=coefficient*scalars[0];
-                sums[1][limb]+=coefficient*scalars[1];
-                sums[2][limb]+=coefficient*scalars[2];
-                sums[3][limb]+=coefficient*scalars[3];
+                limbs[limb] += (sums[limb] & 0x7fff_ffff) + (sums[limb] >> 31);
             }
         }
-        for slot in 0..4 {for limb in 0..WideExact::LIMB_COUNT {
-            totals[slot][limb]+=(sums[slot][limb]&0x7fff_ffff)+(sums[slot][limb]>>31);
-        }}
-    }
-    core::array::from_fn(|slot| {
-        let limbs=totals[slot];
+
         let mut value = WideExact::from_limbs(core::array::from_fn(|i| M31::reduce_u64(limbs[i]).0)).unwrap();
         let mut tail=EbyKDot::new();
         tail.push(g[28],QM31::from_le_bytes(&q[slot*120+104..slot*120+120]).unwrap()).unwrap();
