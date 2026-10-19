@@ -1,0 +1,34 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoPowerTail.lean:50:28: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 23
+  1 ≤ b ≤ 22
+where
+ b := ↑↑next
+ c := ↑↑out.next
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoPowerTail.lean:51:2: error: unsolved goals
+case refine_1
+p : verifier.Prepared
+a : verifier.Accumulator
+hp : Canonical a.power
+hr : Canonical p.rho
+hn : ↑a.next < 22
+q : AspisR1Qm31ArithmeticProbe.field.QM31
+hm : AspisR1Qm31ArithmeticProbe.field.QM31.mul (toCurrent a.power) (toCurrent p.rho) = ok q
+hq : ExtractedCurrentTowerAdd.CanonicalQM q
+hwords :
+  ExtractedCurrentQM31Mul.wordsQM q =
+    ExtractedCurrentQM31Mul.qmMulWords (ExtractedCurrentQM31Mul.wordsQM (toCurrent a.power))
+      (ExtractedCurrentQM31Mul.wordsQM (toCurrent p.rho))
+next : Usize
+hadd : a.next + 1#usize = ok next
+hval : ↑next = ↑a.next + 1
+out : verifier.Accumulator := { weights := a.weights, rhs := a.rhs, power := fromCurrent q, next := next }
+⊢ (do
+      let q ← pure (fromCurrent q)
+      ok { weights := a.weights, rhs := a.rhs, power := q, next := next }) =
+    ok { weights := a.weights, rhs := a.rhs, power := fromCurrent q, next := next }
+'AspisR1.CuSavingsRhoPowerTail.to_from' does not depend on any axioms
+'AspisR1.CuSavingsRhoPowerTail.from_to' does not depend on any axioms
+'AspisR1.CuSavingsRhoPowerTail.next_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoPowerTail.source_outcome' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoPowerTail.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

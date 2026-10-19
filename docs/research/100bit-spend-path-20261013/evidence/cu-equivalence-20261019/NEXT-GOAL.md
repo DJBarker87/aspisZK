@@ -86,3 +86,15 @@ Proceed with actual caller invariants independently: derive power update and
 next framing from the common accumulate suffix, then source Prepared/resume
 canonicality/dataflow. The original nested-borrow lowering and final contexts
 still must be solved before full candidate completion.
+
+## Actual power/counter suffix
+
+CuSavingsRhoPowerTail.source_success now consumes the exact common source
+suffix and existing exact QM31.mul. It derives successful canonical power,
+modular product, next increment/bound and weights/rhs frame from canonical
+power/rho and entry next<22. source_outcome preserves arbitrary errors/div.
+See RHO-POWER-TAIL.md/json and check-rho-power-tail.py. No whole-candidate
+count increment. The next source caller work is complete Accumulator.new
+success invariants and actual Prepared/resume dataflow; these must establish
+the suffix entry premises. Full source-loop/transaction composition and the
+Option/resource gaps remain open.
