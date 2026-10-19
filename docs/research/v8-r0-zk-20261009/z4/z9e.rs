@@ -153,9 +153,29 @@ fn extracted_builders(p: &Pub, cert: &Cert, ln: &Lanes, pb: &mut ck::Pub) -> Opt
     Some(())
 }
 
+std::thread_local! {
+    static QUIET: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+}
+static QUIET_HOOK: std::sync::Once = std::sync::Once::new();
+/// A panic inside the check is a rejection; its message (an index or an
+/// overflow site, which can depend on the challenges) must not reach a log.
+/// The hook suppresses messages only on a thread that is inside the check.
+fn install_quiet_hook() {
+    QUIET_HOOK.call_once(|| {
+        let previous = std::panic::take_hook();
+        std::panic::set_hook(Box::new(move |info| {
+            if !QUIET.with(|q| q.get()) {
+                previous(info)
+            }
+        }));
+    });
+}
+
 /// P_chk on one attempt's challenges.  Returns the verdict and the timings.
 pub fn p_r1_check(ch: &R1PublicChallenges) -> (bool, R1CheckTimes) {
     let mut tm = R1CheckTimes::default();
+    install_quiet_hook();
+    QUIET.with(|q| q.set(true));
     let verdict = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| -> Option<bool> {
         let t = Instant::now();
         let p = public_data(ch)?;
@@ -174,5 +194,6 @@ pub fn p_r1_check(ch: &R1PublicChallenges) -> (bool, R1CheckTimes) {
         tm.check = t.elapsed().as_secs_f64();
         Some(ok)
     }));
+    QUIET.with(|q| q.set(false));
     (matches!(verdict, Ok(Some(true))), tm)
 }

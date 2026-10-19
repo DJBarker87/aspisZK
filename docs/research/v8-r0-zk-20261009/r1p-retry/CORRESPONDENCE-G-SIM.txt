@@ -1,0 +1,173 @@
+G-sim (LOG D44.3) and R-retry (D38.3): the Rust simulator simE, the prover's
+P_R1 check and retry loop, and their correspondence to the Lean definitions
+==========================================================================
+
+Branch codex/r1p-retry-sim-20261019, base f458169f7.
+Status words: IMPLEMENTED (Rust, in this branch), TESTED (host test, receipt
+cited), MEASURED (host, optimized, receipt cited), CORRESPONDS (step-by-step
+reading of the Lean definition against the Rust code; not a proof),
+MISMATCH (a recorded difference), OPEN.
+
+§0  Summary
+§1  R-retry: the P_R1 check and the capped loop (D38.3)
+§2  The ideal game: fsR1.ideal / abR1 against sim::sim_e
+§3  The draw: chOf/dec and the 115 transcript reads
+§4  The tape: Partition.T, equiv, tapeLinear against sim::tape
+§5  The L/O split: simE's payload, cell by cell
+§6  The verifier log: comLog and the commitment programming
+§7  Tests and measurements
+§8  Mismatches and open items
+
+§2  The ideal game: fsR1.ideal / abR1 against sim::sim_e
+----------------------------------------------------------------------
+Lean (R1Z/GamesR1.lean):
+  IdealRand = (Fin N → R1Coins) × (Fin N → Tape K F),
+  R1Coins   = (TRead → Ans) × (Fin 3 → Ans) × Cm × Tab,
+  ideal sim adv x r = retryOut N (P ∘ drawW) (fun c t => sim (drawW c) t)
+                        (abR1.extend adv x) (abR1.fail adv x) r,
+  extend c k V = ⟨V, verLog x V (c k) ++ adversary log against progOracle⟩,
+  verLog = tLog (115 transcript reads) ++ comLog (opening reads),
+  sim = simE π B outputs x (R0Z/RefPayload.lean).
+Rust (crates/aspis-r1-cost-probe/src/sim.rs, `sim_e_ablated`):
+  for k in 0..ATTEMPT_CAP (= 8):
+    coins       Coins streams 0 (115 transcript answers), 1 (roots C1, C2,
+                folded), 2 (Cm: salts, leaf/node answers, unopened digests),
+                3 (the tape's entropy); coin i of stream s of attempt k is
+                H("UNPROVED:R1:SIM:COIN" ‖ seed ‖ k ‖ s ‖ i)       [R1Coins k]
+    draw        walk(CoinOracle) over placeholder records          [drawW (c k)]
+    P           aspis_z4b_probe::p_r1_check (the prover's check)   [P]
+    tape        tape(): fresh mask material on the zero trace      [t_k]
+    view        semantic() + opening()                             [simE (drawW c) t]
+    log         program_tree ×3 + walk(CoinOracle, recording)      [verLog]
+  return proof bytes + table; after 8 failures AttemptsExhausted (no view).
+  The adversary's later reads are answered by `programmed_hash`: the table
+  at programmed addresses, the real hash (`HOST_HASH`) elsewhere
+  [progOracle … tab = W.look]. CORRESPONDS.
+  The Lean `fail` branch publishes failView; Rust publishes nothing and
+  returns AttemptsExhausted (same as the prover). This is the R-retry
+  convention, not a simulator difference.
+
+§3  The draw: chOf/dec and the 115 transcript reads
+----------------------------------------------------------------------
+Lean: drawW c = dec (sqS ·) (sqO ·) (qb ·) sqR of the transcript answers;
+`card_TRead = 115` (R1Z/TranscriptR1.lean): init, 27 × (absS, sqS, advS),
+reseed, 4 × (absO, sqO, advO), absQ, 8 × (qb, qa), absR, sqR, advR.
+Rust: `walk` runs the prover's own transcript objects in the prover's order
+(host_semantic rows 0..26 through r1_wire::SemanticTranscript, then
+prove_from_semantics rows 27..32 through transcript::Transcript) with the
+hash replaced by `CoinOracle`, which answers read n with transcript coin n
+whatever the address. Hence the decoded challenges are a function of the
+squeeze coins only, as in chOf: pass 1 runs on placeholder records (zero
+payloads of the right shapes) to obtain ch before the view exists; pass 2
+runs on the view's records with the same coins and records (address,
+answer) — this is tLog. `again == drawn` and `next == 115` are asserted.
+Decoders used (= W.dec, REF R-wire): qm31_sample (rows 0..24),
+circle_sample (rows 25, 26), gamma_sample (27), ordinary_sample (28..30),
+queries_from_pairs over the 8 (qb, qa) pairs (31), qm31_sample (ρ, 32).
+Lean `Challenges` = sem (rows 0..24: λ, χ, θ, zc₀..₉, μ, η, α₀..₉),
+circle (z0, z1), opening (γ, κ, α0, α1), queries; ρ is drawn and dropped,
+as in Lean's dec. CORRESPONDS (the read count 115 is asserted in the test).
+
+§4  The tape: Partition.T, equiv, tapeLinear against sim::tape
+----------------------------------------------------------------------
+Lean (R0Z/Partition.lean, R0Z/JointTrace.lean):
+  T = M × N, M = (mask-only F^(10×1024)) × G-tape × D-tape,
+             N = H1-tape × EligibleNoise;
+  equiv : T ≃ JointView.Tape (a coordinate permutation);
+  tapeLinear B s = eligibleLinear (noise, lanes 0..15, balanced at 1023)
+                   + traceLinear B (aff s) (mask-only lanes 16..25, H1 lane
+                   26, G lane 27, D lane 28).
+Rust `tape()`:
+  the prover's own derivation (StateOnlyAttemptSecrets →
+  reserve_and_build_pool_v1_pair_forest_mask_material_v1 →
+  apply_pool_v1_pair_forest_mask_material_v1, derive_…_zero_factor_d,
+  apply_pool_v1_pair_forest_h1_padding_mask_v1), with the entropy taken from
+  coin stream 3 and applied to the ZERO 16-column C1 trace:
+    lanes 0..15  = relation-free-cell noise, balanced at each column's
+                   inactive dependent row          [eligibleLinear noise]
+    lanes 16..25 = mask_only_c1                     [M.1]
+    lane 26      = padding applied to a zero helper [N.1 through traceLinear]
+    lane 27      = g                                [M.2.1]
+    lane 28      = d                                [M.2.2]
+  No copy helper is built (u′ = 0 is the payload trace itself, design ZF2
+  §3.2). The helper-sum check (Σ lane 26 = 0) is asserted as in the prover.
+  CORRESPONDS as a layout; that the prover's mask derivation realises
+  tapeLinear on a uniform tape is the R-commit item (unchanged, shared with
+  the honest prover). MISMATCH (recorded, §8): Lean's t is uniform; Rust's
+  is the expander output, as for the prover.
+
+§5  The L/O split: simE's payload, cell by cell
+----------------------------------------------------------------------
+simE x ch t = (metadata, Ψ_ch (refPayload x.1 B ch + A_ch (equiv⁻¹ t))),
+A_ch = L π B ch ∘ tapeLinear B (R0Z/D12.lean), Ψ_ch = shift (R0Z/Shift.lean):
+  shift v = v + (originalOf v · (α₉ − ½)⁻¹) • dir,
+  originalOf v = η · terminalValue(v's point claims, α),
+  dir = round-9 coefficients of X − ½.
+refPayload = roundInclusion (originalRounds pub B ch 0) − k₀ • dir + msCell S₀,
+  k₀ = fOrig 0 α · (α₉ − ½)⁻¹, S₀ = Σ_b fOrig 0 b, fOrig t a = η·terminalValue(honestClaims t a, a);
+refPayload is zero on every cell other than round cells and .maskSum
+(refPayload_cell). τ := tapeLinear(equiv⁻¹ t) is §4's trace.
+
+ cell (PayloadCell)    Lean value of Ψ_ch(refPayload + L τ)          Rust (sim.rs)
+ .maskSum              Σ_b maskLinear(τ)(b) + S₀                     `semantic`: mask_sum (host_semantic's
+                                                                     formula: Σ rows selected mask + both
+                                                                     D-extra sides) + s0 (Σ over the 1024
+                                                                     Boolean points of η·terminal_qm31(0))
+ .semanticCoeff j i    rounds_j(maskLinear τ) + originalRounds_j(0)  one sumcheck table pass on
+                       − [j=9] k₀·(X−½) + [j=9] originalOf·(α₉−½)⁻¹  f = selected mask(claims₀ τ) + extra(D)
+                       ·(X−½)                                         + η·terminal_qm31(0) (rounds is linear,
+                                                                     so rounds(a)+rounds(b) = rounds(a+b)),
+                                                                     interpolated at 0..27 as host_sumcheck;
+                                                                     round 9 += c·(X−½), c = (η·terminal(claims_τ(α))
+                                                                     − η·terminal(0)(α))·(α₉−½)⁻¹
+ .pointClaim j c       honestClaims τ α j c                          point_claims(columns_τ, α)
+ .extraClaim c         extraLinear π α c (τ)                         extra(coefficients(col_c), α₈, α₉)
+ .ood 0 c              evalMessage(coeffsOf π τ c)(z0)               row 26: eval_message at z0 (K)
+ .ood 1 c              evalMessage(coeffsOf π τ c)(z1)               y1: eval_message at z1 (E)
+ .inactiveSum          Σ_c γ^c · ⟨1_inactive, τ c⟩                   Σ_j q[j]·Weights::raw(0,j), q = Σ γ^l coeff_l
+ .opened q s c         exactInitialEncoder(coeffsOf π τ c)(child q s) encode_at (one-fibre EncodingDomain::encode)
+ .bat b                BatchedLayer.read π ch τ b                    round0 c0, round1 c1, final message,
+                                                                     folded values at u/4 (eval_at)
+metadata               ⟨x, ch, outputs x ch⟩                         public statement; ch is in the transcript
+Notes.
+  * The rows are the payload cells; the framing, the C1 root in front, the
+    C2 root in row 2 and the folded root in row 30 are R-wire/R-ser, as for
+    the honest prover.
+  * originalOf reads the published point claims, which are those of τ
+    (refPayload has none), so Ψ_ch's coefficient equals c above with
+    −k₀ folded in. The Rust asserts the verifier's terminal identity
+    p₉(α₉) = mask(claims) + η·terminal(claims) + extra₂₈ before emitting.
+  * Lean's `transport` π is the D18 permutation; Rust's is Variant::S2's
+    row map (transport.rs). maskLinear's factors are
+    MaskedProtocol.maskFactors; Rust's are state_only_selected_mask_value.
+    These identifications are the existing REF items (G-ref, R-wire), the
+    same ones the honest prover's refinement needs. CORRESPONDS.
+  * The .inactiveSum and .bat rows use the prover's coefficient-domain
+    formulas (prove_from_semantics) on τ, not a re-derivation of the Lean
+    linear maps; their equality with the Lean maps is G-ref, shared with the
+    honest prover. CORRESPONDS (by reuse), not proved.
+
+§6  The verifier log: comLog and the commitment programming
+----------------------------------------------------------------------
+Lean: comLog Cm roots V ch = the verifier's reads on the opened paths:
+per query and tree one leaf read H(0x10 ‖ T ‖ value ‖ salt) and six 8-ary
+node reads; roots are R1Coins coordinates (Fin 3 → Ans); salts and digests
+are Cm coordinates (DESIGN-R1-GAMES §1, D45.2).
+Rust `program_tree` (per tree: C1 tag, C2 tag, folded tag 0x72):
+  leaf reads: for each opened leaf (22 fibres; distinct u/4 for the folded
+  tree) a coin answer, recorded at the exact address the verifier forms
+  (the library's private_leaf_hash_with_digest called with a one-shot
+  programming oracle); node reads: for each node on the union of opened
+  paths, a coin answer at the address parent_with_digest forms from its 8
+  children, unopened children being coin digests; the top node's answer is
+  the root coin. Paths are read back from the same children arrays, so
+  shared ancestors and the folded tree's shared leaves are consistent.
+  The salts in the proof are coins (stream 2). CORRESPONDS.
+Serialisation (R-ser): the bytes are laid out exactly as
+prove_from_semantics writes them (header, C1 root, rows 0..26, y1,
+inactive, c0, folded root, c1, final, 22 query blocks); `out.len() ==
+View::proof_bytes(S2)` is asserted. Two further verifier reads (the
+checkpoint's H(proof), H(public)) are ordinary unprogrammed reads, as in
+DESIGN-R1-GAMES §1.
+
+(§1, §7 and §8 follow)
