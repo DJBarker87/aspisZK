@@ -1,0 +1,61 @@
+/tmp/M31PairedWideSamplerLaw.lean:33:11: error: unsolved goals
+case mk.none.none
+x : WidePairInput
+a b : WideExactOutput
+h1 : actualEightWideSampler x.1 = none
+h2 : actualEightWideSampler x.2 = none
+⊢ none = some (a, b) ↔ none = some a ∧ none = some b
+
+case mk.none.some
+x : WidePairInput
+a b : WideExactOutput
+h1 : actualEightWideSampler x.1 = none
+val✝ : WideExactOutput
+h2 : actualEightWideSampler x.2 = some val✝
+⊢ none = some (a, b) ↔ none = some a ∧ val✝ = b
+
+case mk.some.none
+x : WidePairInput
+a b val✝ : WideExactOutput
+h1 : actualEightWideSampler x.1 = some val✝
+h2 : actualEightWideSampler x.2 = none
+⊢ none = some (a, b) ↔ val✝ = a ∧ none = some b
+/tmp/M31PairedWideSamplerLaw.lean:182:6: error: No goals to be solved
+/tmp/M31PairedWideSamplerLaw.lean:187:6: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+/tmp/M31PairedWideSamplerLaw.lean:188:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑P31 ^ 8) ^ (2 * n)
+in the target expression
+  ((↑P31 ^ 8) ^ 2 * (↑limbBaseCount ^ 8) ^ 2) ^ n = (↑P31 ^ 16) ^ n * ↑limbBaseCount ^ (16 * n)
+
+n : ℕ
+ys : ActualWidePairOutputTape n
+hP : ↑P31 ≠ 0
+hB : ↑limbBaseCount ≠ 0
+hp : (↑P31 ^ 8) ^ (2 * n) = ↑P31 ^ (16 * n)
+hb : (↑limbBaseCount ^ 8) ^ (2 * n) = ↑limbBaseCount ^ (16 * n)
+⊢ ((↑P31 ^ 8) ^ 2 * (↑limbBaseCount ^ 8) ^ 2) ^ n = (↑P31 ^ 16) ^ n * ↑limbBaseCount ^ (16 * n)
+/tmp/M31PairedWideSamplerLaw.lean:202:6: warning: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/tmp/M31PairedWideSamplerLaw.lean:202:6: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+        3.49 real         1.13 user         0.92 sys
+          2820784128  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              207289  page reclaims
+               20361  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                 985  voluntary context switches
+               17748  involuntary context switches
+         22096315591  instructions retired
+          7981723195  cycles elapsed
+           454021544  peak memory footprint

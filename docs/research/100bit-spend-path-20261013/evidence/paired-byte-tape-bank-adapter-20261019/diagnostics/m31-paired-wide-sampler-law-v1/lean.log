@@ -1,0 +1,95 @@
+/tmp/M31PairedWideSamplerLaw.lean:30:47: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/M31PairedWideSamplerLaw.lean:37:79: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/M31PairedWideSamplerLaw.lean:45:13: error: Application type mismatch: The argument
+  (actualWideSuccess_iff (↑x).1).mp ?m.18
+has type
+  AllEightAccepted (↑x).1
+but is expected to have type
+  ∃ w, actualEightWideSampler (↑x).1 = some w
+in the application
+  ⟨(↑x).1, ⋯⟩
+/tmp/M31PairedWideSamplerLaw.lean:48:13: error: Application type mismatch: The argument
+  (actualWideSuccess_iff (↑x).2).mp ?m.31
+has type
+  AllEightAccepted (↑x).2
+but is expected to have type
+  ∃ w, actualEightWideSampler (↑x).2 = some w
+in the application
+  ⟨(↑x).2, ⋯⟩
+/tmp/M31PairedWideSamplerLaw.lean:53:56: error: Application type mismatch: The argument
+  z.1.property
+has type
+  ∃ w, actualEightWideSampler ↑z.1 = some w
+but is expected to have type
+  AllEightAccepted ↑z.1
+in the application
+  (actualWideSuccess_iff ↑z.1).mpr z.1.property
+/tmp/M31PairedWideSamplerLaw.lean:54:56: error: Application type mismatch: The argument
+  z.2.property
+has type
+  ∃ w, actualEightWideSampler ↑z.2 = some w
+but is expected to have type
+  AllEightAccepted ↑z.2
+in the application
+  (actualWideSuccess_iff ↑z.2).mpr z.2.property
+/tmp/M31PairedWideSamplerLaw.lean:90:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?a ^ ?m) ^ ?n
+in the target expression
+  limbBaseCount ^ 8 * limbBaseCount ^ 8 = limbBaseCount ^ 16
+
+y : WidePairOutput
+⊢ limbBaseCount ^ 8 * limbBaseCount ^ 8 = limbBaseCount ^ 16
+/tmp/M31PairedWideSamplerLaw.lean:138:59: error: unsolved goals
+n : ℕ
+i : Fin n
+hi : i ∈ Finset.univ
+⊢ P31 ^ 8 * limbBaseCount ^ 8 * (P31 ^ 8 * limbBaseCount ^ 8) = (P31 ^ 8 * limbBaseCount ^ 8) ^ 2
+/tmp/M31PairedWideSamplerLaw.lean:167:37: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?a ^ ?m) ^ ?n
+in the target expression
+  ↑limbBaseCount ^ (16 * n) / (↑P31 ^ (8 * 2) * ↑limbBaseCount ^ (8 * 2)) ^ n = 1 / ↑P31 ^ (16 * n)
+
+n : ℕ
+ys : ActualWidePairOutputTape n
+hP : ↑P31 ≠ 0
+hB : ↑limbBaseCount ≠ 0
+⊢ ↑limbBaseCount ^ (16 * n) / (↑P31 ^ (8 * 2) * ↑limbBaseCount ^ (8 * 2)) ^ n = 1 / ↑P31 ^ (16 * n)
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/tmp/M31PairedWideSamplerLaw.lean:174:33: error: unsolved goals
+S T k : ℕ
+hST : S ≤ T
+hT : ↑T ≠ 0
+hpow : S ^ k ≤ T ^ k
+hTp : ↑T ^ k ≠ 0
+⊢ ↑T ^ k - ↑S ^ k = ↑T ^ k - ↑T ^ k * ↑S ^ k * (↑T)⁻¹ ^ k
+       22.21 real         8.25 user         1.83 sys
+          2799419392  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               95944  page reclaims
+              133804  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               21910  voluntary context switches
+              109370  involuntary context switches
+        136183071605  instructions retired
+         38320283518  cycles elapsed
+           453906880  peak memory footprint

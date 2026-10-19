@@ -1,0 +1,77 @@
+/tmp/GSRejectingSamplerDecoderBank.lean:57:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mean fun H => ?f ((flatBank ?m.146 ?m ?n ?t) H)
+in the target expression
+  (mean fun H =>
+      indicator (GSFixedInputDecoderFamily.failed (run q 149 inputs ((flatBank K (1025 * 112) (256 * 112) 149) H)))) <
+    (1 / 2) ^ 127
+
+X K : Type
+inst✝⁶ : Field K
+inst✝⁵ : BEq K
+inst✝⁴ : LawfulBEq K
+inst✝³ : DecidableEq K
+inst✝² : Fintype K
+inst✝¹ : Fintype X
+inst✝ : Nonempty X
+sample : X → Option (FlatTape K)
+q : ℕ
+inputs : Inputs K 5
+hq : q = Fintype.card K
+hodd : ringChar K ≠ 2
+hmass : ∀ (H : FlatTape K), (mean fun x => indicator (sample x = some H)) ≤ 1 / ↑(Fintype.card (FlatTape K))
+hreject : (mean fun x => indicator (sample x = none)) ≤ (1 / 2) ^ 467
+hb : (mean fun H => indicator (GSFixedInputDecoderFamily.failed (run q 149 inputs H))) < (1 / 2) ^ 127
+⊢ (mean fun H =>
+      indicator (GSFixedInputDecoderFamily.failed (run q 149 inputs ((flatBank K (1025 * 112) (256 * 112) 149) H)))) <
+    (1 / 2) ^ 127
+/tmp/GSRejectingSamplerDecoderBank.lean:66:25: error: unsolved goals
+X K : Type
+inst✝⁶ : Field K
+inst✝⁵ : BEq K
+inst✝⁴ : LawfulBEq K
+inst✝³ : DecidableEq K
+inst✝² : Fintype K
+inst✝¹ : Fintype X
+inst✝ : Nonempty X
+sample : X → Option (FlatTape K)
+q : ℕ
+inputs : Inputs K 5
+hq : q = Fintype.card K
+hodd : ringChar K ≠ 2
+hmass : ∀ (H : FlatTape K), (mean fun x => indicator (sample x = some H)) ≤ 1 / ↑(Fintype.card (FlatTape K))
+hreject : (mean fun x => indicator (sample x = none)) ≤ (1 / 2) ^ 467
+hb : (mean fun H => indicator (GSFixedInputDecoderFamily.failed (run q 149 inputs H))) < (1 / 2) ^ 127
+hf :
+  (mean fun H =>
+      indicator (GSFixedInputDecoderFamily.failed (run q 149 inputs ((flatBank K (1025 * 112) (256 * 112) 149) H)))) <
+    (1 / 2) ^ 127
+hc :
+  (mean fun x => indicator (failed sample q inputs x)) ≤
+    (mean fun x => indicator (sample x = none)) +
+      mean fun y =>
+        indicator (GSFixedInputDecoderFamily.failed (run q 149 inputs ((flatBank K (1025 * 112) (256 * 112) 149) y)))
+⊢ (1 / 2) ^ 467 + 1 / 170141183460469231731687303715884105728 < 1 / 85070591730234615865843651857942052864
+'AspisR1.GSRejectingSamplerDecoderBank.sampleAndRun' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GSRejectingSamplerDecoderBank.failed_iff_output' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GSRejectingSamplerDecoderBank.failure_small' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        4.03 real         0.80 user         0.82 sys
+          2115076096  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              141978  page reclaims
+               29610  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                4134  voluntary context switches
+               24916  involuntary context switches
+         16639660409  instructions retired
+          6173764659  cycles elapsed
+           344100520  peak memory footprint

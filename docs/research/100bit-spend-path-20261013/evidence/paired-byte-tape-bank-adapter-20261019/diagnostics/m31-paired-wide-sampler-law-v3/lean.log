@@ -1,0 +1,81 @@
+/tmp/M31PairedWideSamplerLaw.lean:31:47: error: unsolved goals
+case none.none
+x : WidePairInput
+y : WidePairOutput
+h1 : actualEightWideSampler x.1 = none
+h2 : actualEightWideSampler x.2 = none
+⊢ none = some y ↔ none = some y.1 ∧ none = some y.2
+
+case none.some
+x : WidePairInput
+y : WidePairOutput
+h1 : actualEightWideSampler x.1 = none
+val✝ : WideExactOutput
+h2 : actualEightWideSampler x.2 = some val✝
+⊢ none = some y ↔ none = some y.1 ∧ val✝ = y.2
+
+case some.none
+x : WidePairInput
+y : WidePairOutput
+val✝ : WideExactOutput
+h1 : actualEightWideSampler x.1 = some val✝
+h2 : actualEightWideSampler x.2 = none
+⊢ none = some y ↔ val✝ = y.1 ∧ none = some y.2
+
+case some.some
+x : WidePairInput
+y : WidePairOutput
+val✝¹ : WideExactOutput
+h1 : actualEightWideSampler x.1 = some val✝¹
+val✝ : WideExactOutput
+h2 : actualEightWideSampler x.2 = some val✝
+⊢ (val✝¹, val✝) = y ↔ val✝¹ = y.1 ∧ val✝ = y.2
+/tmp/M31PairedWideSamplerLaw.lean:34:65: warning: This simp argument is unused:
+  Prod.mk.injEq
+
+Hint: Omit it from the simp argument list.
+  simp only [actualWidePairSampler, h1, h2, Option.some.injEq,̵ ̵P̵r̵o̵d̵.̵m̵k̵.̵i̵n̵j̵E̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/M31PairedWideSamplerLaw.lean:43:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Classical.choose', which is 'noncomputable'
+/tmp/M31PairedWideSamplerLaw.lean:91:6: error: No goals to be solved
+/tmp/M31PairedWideSamplerLaw.lean:138:59: error: unsolved goals
+n : ℕ
+i : Fin n
+hi : i ∈ Finset.univ
+⊢ P31 ^ 8 * limbBaseCount ^ 8 * (P31 ^ 8 * limbBaseCount ^ 8) = (P31 ^ 8 * limbBaseCount ^ 8) ^ 2
+/tmp/M31PairedWideSamplerLaw.lean:169:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  8 * (2 * n)
+in the target expression
+  ↑limbBaseCount ^ (16 * n) / (↑P31 ^ (8 * 2) * (↑limbBaseCount ^ 8) ^ 2) ^ n = 1 / ↑P31 ^ (16 * n)
+
+n : ℕ
+ys : ActualWidePairOutputTape n
+hP : ↑P31 ≠ 0
+hB : ↑limbBaseCount ≠ 0
+hexp : 8 * (2 * n) = 16 * n
+⊢ ↑limbBaseCount ^ (16 * n) / (↑P31 ^ (8 * 2) * (↑limbBaseCount ^ 8) ^ 2) ^ n = 1 / ↑P31 ^ (16 * n)
+/tmp/M31PairedWideSamplerLaw.lean:182:6: warning: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/tmp/M31PairedWideSamplerLaw.lean:182:6: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+        3.36 real         1.18 user         0.95 sys
+          2819325952  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              211275  page reclaims
+               15397  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                1502  voluntary context switches
+               14890  involuntary context switches
+         21140247777  instructions retired
+          8045801580  cycles elapsed
+           454316552  peak memory footprint

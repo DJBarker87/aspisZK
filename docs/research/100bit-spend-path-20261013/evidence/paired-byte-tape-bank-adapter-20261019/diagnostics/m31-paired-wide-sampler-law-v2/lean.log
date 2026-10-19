@@ -1,0 +1,62 @@
+/tmp/M31PairedWideSamplerLaw.lean:31:47: error: unsolved goals
+case some.some
+x : WidePairInput
+y : WidePairOutput
+val✝¹ : WideExactOutput
+h1 : actualEightWideSampler x.1 = some val✝¹
+val✝ : WideExactOutput
+h2 : actualEightWideSampler x.2 = some val✝
+⊢ (val✝¹, val✝) = y ↔ val✝¹ = y.1 ∧ val✝ = y.2
+/tmp/M31PairedWideSamplerLaw.lean:46:11: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+x : ActualWidePairSuccessInput
+x✝ : ∃ y, actualWidePairSampler ↑x = some y
+⊢ ActualWideSuccessInput × ActualWideSuccessInput
+/tmp/M31PairedWideSamplerLaw.lean:89:6: error: No goals to be solved
+/tmp/M31PairedWideSamplerLaw.lean:137:59: error: unsolved goals
+n : ℕ
+i : Fin n
+hi : i ∈ Finset.univ
+⊢ P31 ^ 8 * limbBaseCount ^ 8 * (P31 ^ 8 * limbBaseCount ^ 8) = (P31 ^ 8 * limbBaseCount ^ 8) ^ 2
+/tmp/M31PairedWideSamplerLaw.lean:166:37: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?a ^ ?m) ^ ?n
+in the target expression
+  ↑limbBaseCount ^ (16 * n) / (↑P31 ^ (8 * 2) * ↑limbBaseCount ^ (8 * 2)) ^ n = 1 / ↑P31 ^ (16 * n)
+
+n : ℕ
+ys : ActualWidePairOutputTape n
+hP : ↑P31 ≠ 0
+hB : ↑limbBaseCount ≠ 0
+⊢ ↑limbBaseCount ^ (16 * n) / (↑P31 ^ (8 * 2) * ↑limbBaseCount ^ (8 * 2)) ^ n = 1 / ↑P31 ^ (16 * n)
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/tmp/M31PairedWideSamplerLaw.lean:173:33: error: unsolved goals
+S T k : ℕ
+hST : S ≤ T
+hT : ↑T ≠ 0
+hpow : S ^ k ≤ T ^ k
+hTp : ↑T ^ k ≠ 0
+⊢ ↑T ^ k - ↑S ^ k = ↑T ^ k - ↑T ^ k * ↑S ^ k * (↑T)⁻¹ ^ k
+       10.16 real         1.18 user         1.45 sys
+          2822406144  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              146642  page reclaims
+               82931  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               10617  voluntary context switches
+               71907  involuntary context switches
+         25491756091  instructions retired
+          9930862980  cycles elapsed
+           455365032  peak memory footprint
