@@ -11,6 +11,12 @@ STAGE=/tmp/r1-commit-model-20261019-src
 LEAN=/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean
 BASE_LP=$(cat "$EV/tools/base-lean-path.txt")
 mkdir -p "$OBJ" "$STAGE" "$EV/$M"
+if [ -f "$EV/$M/receipt.json" ]; then
+  N=1
+  while [ -e "$EV/$M/attempt-$N" ]; do N=$((N+1)); done
+  mkdir "$EV/$M/attempt-$N"
+  mv "$EV/$M/receipt.json" "$EV/$M/lean.log" "$EV/$M/time.log" "$EV/$M/attempt-$N/"
+fi
 cp "$SRCDIR/$M.lean" "$STAGE/$M.lean"
 SHA=$(shasum -a 256 "$STAGE/$M.lean" | cut -d' ' -f1)
 while true; do

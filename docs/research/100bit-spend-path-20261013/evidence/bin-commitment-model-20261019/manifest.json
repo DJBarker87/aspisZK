@@ -1,0 +1,605 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "status": "blocked_before_first_compile",
+  "publication_base_revision": "f9016d0a2",
+  "handover_revision": "61e1a79286120a38181c230fe9654236954130e3",
+  "source_revision_parent": "61e1a79286120a38181c230fe9654236954130e3",
+  "modules": [
+    {
+      "module": "BinMerkle32Path",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinMerkle32Path.lean",
+      "source_sha256": "6e9a55720642c6255c97f20fb42f4641d1d0fb8fb9733e8b5c4b21041a99d768",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "nodeInput_length",
+        "nodeBytes_injective",
+        "nodeInput_injective",
+        "fillChild_ne",
+        "nodeInput_ne_of_current_ne",
+        "foldPath_cross_trace_collision",
+        "foldPath_injective_of_collisionFreeOn",
+        "depth18_cross_trace_collision"
+      ],
+      "imports": [
+        "Mathlib.Data.List.OfFn",
+        "Lean.Elab.Tactic.Omega"
+      ]
+    },
+    {
+      "module": "BinMerkleNodeCodec",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinMerkleNodeCodec.lean",
+      "source_sha256": "eb206e8eda5ceb5ddb120ebd287a32f71d442c9053d5a8c5c20f6f6d252a0cd6",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "readChildren_nodeInput",
+        "parse_nodeInput",
+        "parse_sound"
+      ],
+      "imports": [
+        "BinMerkle32Path",
+        "Mathlib.Data.List.OfFn",
+        "Mathlib.Data.List.GetD",
+        "Lean.Elab.Tactic.Omega"
+      ]
+    },
+    {
+      "module": "BinMerkle32Leaf",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinMerkle32Leaf.lean",
+      "source_sha256": "74b622ae8604a8d50f72151551bf58cfa0558dffd09b5692d9f68149c236ab8b",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "leaf_input_length",
+        "leafInput_fixedWidth_injective",
+        "leaf_path_binding",
+        "c1_leafInput_length",
+        "c2_leafInput_length",
+        "folded_leafInput_length",
+        "c1_leaf_path_binding",
+        "c2_leaf_path_binding",
+        "folded_leaf_path_binding"
+      ],
+      "imports": [
+        "BinMerkle32Path",
+        "Mathlib.Data.List.Basic"
+      ]
+    },
+    {
+      "module": "BinGrammar",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinGrammar.lean",
+      "source_sha256": "67fbf89cc236728da8f3dc3abcbf7c49701b6665b66b1131677781f12e893c16",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "nodeInput_slices",
+        "node_ne_leaf",
+        "node_ne_eight",
+        "node_ne_tagged",
+        "node_ne_length",
+        "unrestricted_public_overlap"
+      ],
+      "imports": [
+        "BinMerkleNodeCodec",
+        "BinMerkle32Leaf",
+        "R1Merkle32Path"
+      ]
+    },
+    {
+      "module": "BinMerkleProgram",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinMerkleProgram.lean",
+      "source_sha256": "a4789d7365cea40fa72b747fbb2d514b6aa6e58c14022699a2d8416ec9be5931",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "eval_pathProgram",
+        "eval_leafProgram",
+        "pathProgram_accepts_iff",
+        "leafProgram_accepts_iff"
+      ],
+      "imports": [
+        "BinMerkle32Leaf",
+        "FS2.Verifier"
+      ]
+    },
+    {
+      "module": "BinMerkleTable",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinMerkleTable.lean",
+      "source_sha256": "2e54459086cfd8795b9a0f99cbb89633f6f94f33199b235bc5c5694dc2a01452",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "lookup_mem",
+        "lookup_exists",
+        "targets_length",
+        "root_mem_targets",
+        "child_mem_targets",
+        "walk_mem_targets"
+      ],
+      "imports": [
+        "BinMerkle32Path",
+        "Mathlib.Data.List.OfFn",
+        "Mathlib.Data.List.Basic"
+      ]
+    },
+    {
+      "module": "BinMultiproof",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinMultiproof.lean",
+      "source_sha256": "55291e4d1e1e2ed97b97a02263965606715c0d026d89cbc719326a87f2e5b146",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "exact_consumption",
+        "slots_length",
+        "member_parent",
+        "accepted_path",
+        "dedup_conflict",
+        "batch_accepted_paths",
+        "padding_cannot_contribute",
+        "padded_exact_count"
+      ],
+      "imports": [
+        "BinMerkleProgram",
+        "Mathlib.Data.Finset.Sort"
+      ]
+    },
+    {
+      "module": "BinBatchDedup",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinBatchDedup.lean",
+      "source_sha256": "3673ca9ff59fcbb88baa217bba3af003922bb2ca79bf5238f7fb566f436416be",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "insert_preserves",
+        "run_preserves",
+        "dedup_sound",
+        "accepted_original_queries"
+      ],
+      "imports": [
+        "BinMultiproof",
+        "BinMerkleTable"
+      ]
+    },
+    {
+      "module": "BinRawByteCollisionTargets",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinRawByteCollisionTargets.lean",
+      "source_sha256": "2abca2507fc92c5e1905675977090522450df82fb32afc34ead1aba3a191d13c",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "pred_child",
+        "pred_tail",
+        "pred_middle",
+        "pred_prefix",
+        "fixed_frame",
+        "trailing_frame",
+        "prefix_of_take",
+        "child_node",
+        "mass",
+        "child_before_node",
+        "root_before_trailing_frame",
+        "root_before_middle_frame",
+        "duplex_state_before_frame"
+      ],
+      "imports": [
+        "AllAddressCollisionTrace",
+        "BinMerkleNodeCodec",
+        "RawByteCollisionTargets"
+      ]
+    },
+    {
+      "module": "BinCombinedMerkleCollision",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinCombinedMerkleCollision.lean",
+      "source_sha256": "82baae7eabaa109d40b5582c11dd4721b65be4696de31f43595bba050781dbba",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "target_count",
+        "mass"
+      ],
+      "imports": [
+        "BinRawByteCollisionTargets"
+      ]
+    },
+    {
+      "module": "BinOpeningBinding",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinOpeningBinding.lean",
+      "source_sha256": "7cfeb0322d828476fdcc3ce06ca132ae5dfe28b13d821740e2200a933f980df3",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "openings_agree"
+      ],
+      "imports": [
+        "BinCombinedMerkleCollision",
+        "BinMultiproof"
+      ]
+    },
+    {
+      "module": "BinMerkleRecovery",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinMerkleRecovery.lean",
+      "source_sha256": "dd55e6010df15d19f38d91d7d9e2c5d40d7fdaa56b7f7054228651078e51e60b",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "walk_reconstruct",
+        "recover_or_bad"
+      ],
+      "imports": [
+        "BinMerkleTable"
+      ]
+    },
+    {
+      "module": "BinMerkleLeafRecovery",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinMerkleLeafRecovery.lean",
+      "source_sha256": "46e27ab6c6ea562313cc19acf2f389ff0e44b633d56235d7c32d1b76d2212934",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "lookupLeaf_mem",
+        "recover_or_bad"
+      ],
+      "imports": [
+        "BinMerkleRecovery",
+        "BinMerkle32Leaf"
+      ]
+    },
+    {
+      "module": "BinMerkleLeafCodec",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinMerkleLeafCodec.lean",
+      "source_sha256": "e37832538376daeb89c68f16725351722b027fedcc42798c6061df9a2d6019e2",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "parse_leafInput",
+        "parse_sound"
+      ],
+      "imports": [
+        "BinMerkleLeafRecovery",
+        "Mathlib.Data.List.Basic"
+      ]
+    },
+    {
+      "module": "BinMerkleRecordedLog",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinMerkleRecordedLog.lean",
+      "source_sha256": "c9ac5d6e80c97f06d41bcd99b68cf664786a3aa7474cc8123c7e18c9801c3aa6",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "mem_nodes",
+        "mem_leaves",
+        "nodes_consistent",
+        "leaves_consistent",
+        "leaves_width",
+        "node_present",
+        "lookupLeaf_exists",
+        "leaf_present",
+        "missing_node_absent",
+        "missing_leaf_absent"
+      ],
+      "imports": [
+        "BinMerkleNodeCodec",
+        "BinMerkleLeafCodec"
+      ]
+    },
+    {
+      "module": "BinMerkleTraceInputs",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinMerkleTraceInputs.lean",
+      "source_sha256": "247c8f55bbc88baf2d85c0d4d8ca35bb78811d41025e27f9a7d699b49b10b6ce",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "inputTrace_node_shape"
+      ],
+      "imports": [
+        "BinMerkle32Path"
+      ]
+    },
+    {
+      "module": "BinMerkleLogRecovery",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinMerkleLogRecovery.lean",
+      "source_sha256": "cd172de78d710bcf7aa1130ba1129e6d93ad2247b31ce47ea5100848e34dcb9e",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "nodeInputs_subset",
+        "leafInputs_subset",
+        "recover_or_bad"
+      ],
+      "imports": [
+        "BinMerkleRecordedLog",
+        "BinMerkleTraceInputs"
+      ]
+    },
+    {
+      "module": "BinMerkleWalkWitness",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinMerkleWalkWitness.lean",
+      "source_sha256": "bcbe07426e13615dadbe50e71a622d8e9396b44340b14d34f34e3d866acb0dca",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "walk_witness"
+      ],
+      "imports": [
+        "BinMerkleRecovery"
+      ]
+    },
+    {
+      "module": "BinRecordedRecoveryWitness",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinRecordedRecoveryWitness.lean",
+      "source_sha256": "78e70b48df667d9abd9433ad0d24cdf7a17098a950b8230ccf7c411419dcf93f",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "recover_witness"
+      ],
+      "imports": [
+        "BinMerkleWalkWitness",
+        "BinMerkleRecordedLog",
+        "BinMerkleLogRecovery"
+      ]
+    },
+    {
+      "module": "BinMerkleLogExtension",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinMerkleLogExtension.lean",
+      "source_sha256": "4b52de766193adad2c7fec24004cd6953aa685c0096dc571e1cf5160f61a882d",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "nodes_append",
+        "leaves_append",
+        "lookup_append",
+        "lookupLeaf_append",
+        "walk_append",
+        "recover_append"
+      ],
+      "imports": [
+        "BinMerkleRecordedLog",
+        "BinMerkleLeafRecovery",
+        "Mathlib.Data.List.Basic"
+      ]
+    },
+    {
+      "module": "BinRawByteCutRecovery",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinRawByteCutRecovery.lean",
+      "source_sha256": "54c2d10b042af91d7cc537044018fd833ba687cfdc26b834725e19144063adf4",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "read_cut_iff",
+        "cut_consistent",
+        "target_cases",
+        "opening_read_of_input",
+        "recover_at_first_commitment"
+      ],
+      "imports": [
+        "BinRawByteCollisionTargets",
+        "BinMerkleLogRecovery",
+        "BinMerkleProgram"
+      ]
+    },
+    {
+      "module": "BinRawByteCutStability",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinRawByteCutStability.lean",
+      "source_sha256": "0898d310579ef1c9ec4ff5c6b2dde11484d1d1d874405eeca997e1d5a41e5293",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "later_of_cut",
+        "cut_of_later",
+        "recover_stable",
+        "all_paths_stable"
+      ],
+      "imports": [
+        "BinRawByteCutRecovery",
+        "BinRecordedRecoveryWitness",
+        "BinMerkleLogExtension"
+      ]
+    },
+    {
+      "module": "BinCanonicalCutWords",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinCanonicalCutWords.lean",
+      "source_sha256": "7d4495275c28b5a5f7ffaa2da15a7b65a19fe18bfa31089a1d44f307cb8a935a",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "wordsFromRawCuts_eq_full"
+      ],
+      "imports": [
+        "BinRawByteCutStability",
+        "BinMultiproof",
+        "CanonicalCutEnrichedTranscript"
+      ]
+    },
+    {
+      "module": "BinThreeCommitmentTypedOpening",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinThreeCommitmentTypedOpening.lean",
+      "source_sha256": "9f83de06349d34a206f1bf2e526b7778053e6aefe850931b5499cbfc22b5b890",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "typed_opening_at_cut",
+        "typed_word_stable"
+      ],
+      "imports": [
+        "BinCanonicalCutWords"
+      ]
+    },
+    {
+      "module": "BinCompiledRunWordStability",
+      "source": "docs/research/100bit-spend-path-20261013/lean/BinCompiledRunWordStability.lean",
+      "source_sha256": "fc446b4a69956ac3734c6bbc71f9d55c420f5836e9078eb629ad9af466008c80",
+      "status": "unverified_draft",
+      "receipt": null,
+      "exit_status": null,
+      "wall_seconds": null,
+      "peak_rss_bytes": null,
+      "process_swap_count": null,
+      "axioms": null,
+      "theorems": [
+        "wordsFromRun_compiled_eq_original",
+        "wordsFromRun_compiled_eq_retainedBuildWords"
+      ],
+      "imports": [
+        "BinCanonicalCutWords",
+        "RawCutWordsFromView"
+      ]
+    }
+  ],
+  "compile_order": [
+    "BinMerkle32Path",
+    "BinMerkleNodeCodec",
+    "BinMerkle32Leaf",
+    "BinGrammar",
+    "BinMerkleProgram",
+    "BinMerkleTable",
+    "BinMultiproof",
+    "BinBatchDedup",
+    "BinRawByteCollisionTargets",
+    "BinCombinedMerkleCollision",
+    "BinOpeningBinding",
+    "BinMerkleRecovery",
+    "BinMerkleLeafRecovery",
+    "BinMerkleLeafCodec",
+    "BinMerkleRecordedLog",
+    "BinMerkleTraceInputs",
+    "BinMerkleLogRecovery",
+    "BinMerkleWalkWitness",
+    "BinRecordedRecoveryWitness",
+    "BinMerkleLogExtension",
+    "BinRawByteCutRecovery",
+    "BinRawByteCutStability",
+    "BinCanonicalCutWords",
+    "BinThreeCommitmentTypedOpening",
+    "BinCompiledRunWordStability"
+  ],
+  "compiled_modules": 0,
+  "receipts": [],
+  "memory_preflight": "memory-preflight.json",
+  "obstructions": [
+    "Universal tag disjointness is false for arbitrary public-byte hashing (verifier.rs:382).",
+    "Binding local memory precheck requires 10 GiB free+inactive; threshold not met."
+  ],
+  "release_evidence": false
+}
