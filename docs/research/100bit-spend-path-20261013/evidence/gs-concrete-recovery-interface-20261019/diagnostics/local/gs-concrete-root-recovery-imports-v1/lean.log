@@ -1,0 +1,33 @@
+AspisR1.GSConcreteInterpolation.initial_state_contract {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K]
+  (points : Array (K × K)) (hs : points.size = 1048576) (Q : CompPoly.CBivariate K)
+  (hrun : AspisR1.GSConcreteInterpolation.initial points = some Q) :
+  AspisR1.RRConcreteState.model (AspisR1.GSConcreteInterpolation.initialState Q) = Q.toPoly ∧
+    (∀ i ≤ (AspisR1.GSConcreteInterpolation.initialState Q).maxX,
+        (RRVectorRowPolynomialBridge.inputPolynomial (AspisR1.GSConcreteInterpolation.initialState Q).rows
+              i).natDegree ≤
+          112) ∧
+      AspisR1.RRConcreteState.model (AspisR1.GSConcreteInterpolation.initialState Q) ≠ 0
+AspisR1.RRFixedTapeRecovery.recover_correct {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K] [Fintype K]
+  (ell q t d : ℕ) (s : AspisR1.RRConcreteState.RawState K)
+  (hd : ∀ i ≤ s.maxX, (RRVectorRowPolynomialBridge.inputPolynomial s.rows i).natDegree ≤ ell)
+  (hn : AspisR1.RRConcreteState.model s ≠ 0) (hq : q = Fintype.card K) (H : ↥(Finset.range (d * ell)) → Fin t → K × K)
+  (candidates : List (List K)) (hs : (AspisR1.RRFixedTapeRecovery.recover ell q t d s hd hn H).1 = some candidates) :
+  AspisR1.RRProgramRecoveryContracts.CandidateResult AspisR1.RRConcreteState.model d s candidates
+        8.79 real         0.76 user         1.21 sys
+          2100264960  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               80398  page reclaims
+               90546  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                1614  voluntary context switches
+               83092  involuntary context switches
+         18807068387  instructions retired
+          7367390349  cycles elapsed
+           348933488  peak memory footprint
