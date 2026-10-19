@@ -1,0 +1,51 @@
+/tmp/RawExtractedSemanticQM31Ops.lean:59:8: error: `simp` made no progress
+/tmp/RawExtractedSemanticQM31Ops.lean:96:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.map decode coefficients).headD 0
+in the target expression
+  decode out =
+    RawSemanticPolynomialOps.sourceBoundary (decode (coefficients.headD AspisR1SelectedMaskProbe.field.QM31.ZERO))
+      (List.map decode coefficients)
+
+coefficients : List QM
+hcoefficients : ∀ x ∈ coefficients, Canonical x
+out : QM
+hout : semanticBoundaryResult coefficients = ok out
+houtCanonical : Canonical out
+hdecode :
+  decode out =
+    RawSemanticPolynomialOps.sourceBoundary (decode (coefficients.headD AspisR1SelectedMaskProbe.field.QM31.ZERO))
+      (List.map decode coefficients)
+hzero : (List.map decode coefficients).headD 0 = decode (coefficients.headD AspisR1SelectedMaskProbe.field.QM31.ZERO)
+⊢ decode out =
+    Polynomial.eval 0 (RawSemanticPolynomialOps.polynomial (List.map decode coefficients)) +
+      Polynomial.eval 1 (RawSemanticPolynomialOps.polynomial (List.map decode coefficients))
+'AspisR1PublicPreparation.RawExtractedSemanticQM31Ops.foldAdd_refines_sum' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.RawExtractedSemanticQM31Ops.semanticBoundaryResult_refines' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.RawExtractedSemanticQM31Ops.semanticBoundaryResult_eq_polynomial_endpoints' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+       11.79 real         1.04 user         1.63 sys
+          2510356480  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               96396  page reclaims
+              104778  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               14013  voluntary context switches
+               82132  involuntary context switches
+         24311190761  instructions retired
+          9534631450  cycles elapsed
+           415181360  peak memory footprint

@@ -1,0 +1,11 @@
+# Clean-terminal failure means and fresh-path domination
+
+LiteralRecordedRunFailureMassBoundV6 proves that for a fixed recorded run with terminal Checks on its actual enriched 33-row transcript and no classifier hit, mean extractor-none probability over the actual private byte coins is at most that run's actual bank abort mean. It invokes the derived recorded opening-word bridge; no separate word-match/Good/support hypothesis is supplied. LiteralCheckedFailureMassBound retains the analogous fixed-public/typed-word interface.
+
+LiteralFreshTerminalFailurePathDomination proves fresh independent-row path averaging with a clean-prefix invariant. Only clean completed transcripts need the small terminal bound. A classifier hit is charged at the point it occurs, where arbitrary remaining failure probability is bounded by one. The actual finite coin event cover supplies terminal domination and gives the existing strict 33*B+2^-126 < 2^-100 bound under that fresh-process law.
+
+This packet does not identify the fresh process with a shared random oracle. A separate recorded-run fresh-path consumer was not accepted: its early fixed-H realization premise could not represent arbitrary fresh paths; the changed path-dependent HAt interface retains per-path replay/consistency as an open premise, and its last attempt failed elaboration. Those candidates are retained under lean-candidates and are not canonical proofs. The independent shared-oracle composition is recorded in the shared-oracle-extractor-components packet, with its query factor retained.
+
+All three focused Lean 4.32 checks exited 0; times 8.38, 25.67 and 2.59 seconds; maximum RSS 3,139,125,248, 3,083,419,648 and 3,177,005,056 bytes; zero process swaps. Axiom reports contain only propext, Classical.choice and Quot.sound. Exact source revisions, commands, source/object/import hashes, full logs and compiled objects are retained. LiteralCheckedFailureMassBound was checked against the final path-domination owner used here.
+
+These cached focused checks are working evidence. A clean unified ordered build, production acceptance refinement, concrete transcript realization and the whole-extractor polynomial-time proof remain open. No complete 100-bit private-spend theorem is claimed.
