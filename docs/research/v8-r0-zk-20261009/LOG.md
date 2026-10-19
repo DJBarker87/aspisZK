@@ -6057,3 +6057,42 @@ production permutation:
 - `RoundsOk` for the Rust permutation: the Poseidon job.
 - The input lifts (Wspend → Rust witness).
 - The copy-to-production link (D54.3).
+
+### Lead acceptance of the block assembly and the Poseidon round lemmas (2026-10-19); D56
+
+The worker commits after 1b56fef13 are cherry-picked. The lead verified the
+green host receipts (4400, 4401, 4404, 4406 and 4407): SHAs match, all
+exited 0 in-window, standard axioms, no overrides. Attempts 4402, 4403 and
+4405 were local elaboration fixes. Design: §11 of
+`t2b2b/DESIGN-BUILDER-MODEL.txt`.
+
+**D56.1 Proved.**
+- `builder_blocks_model`: all 57 Rust-written blocks equal buildModel, under
+  RoundsOk, the input lifts and the copy↔production links. Discharge lemmas
+  cover chaining, absorptions, node children and digests. RoundsOk is the
+  only Poseidon obligation left for the block region.
+- `full_round_lift`: an extracted full round equals R0P
+  `poseidonFullRound` for every u32 state. No canonicity hypothesis is
+  needed: the u64 reductions mod p never overflow.
+- `internal_round_lift`: the same for an internal round, matched to R0P's
+  ordered foldl through a general ofFn/range′ lemma.
+- `PoseidonTables`: INTERNAL_SHIFTS satisfies ShiftsBound/ShiftsOk with
+  small numerals only.
+
+Differential tests (diff-g):
+- perm_rounds equals the production odd-round outputs on 100k states and on
+  all 1,824 blocks of 32 traces;
+- the final state equals production `permute` on 50k states;
+- m31 add/mul agree on 1M pairs.
+
+The extraction needed no adapter. This is the first time Poseidon has
+extracted and its rounds have been proved; the spend path's earlier attempts
+stopped at the external wrapper and round composition.
+
+**D56.2 Remaining for RoundsOk.**
+1. Generated per-row constant-lift lemmas for EXTERNAL_INITIAL/FINAL and
+   INTERNAL, going through `Nat.cast_ofNat` without unfolding large literals.
+2. `apply_round_lift` and `leading_pair_lift`.
+3. A `perm_rounds` loop invariant, giving RoundsOk for the copy's output.
+
+The copy↔production link stays a differential test (D54.3).
