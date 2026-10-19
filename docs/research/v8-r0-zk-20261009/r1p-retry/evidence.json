@@ -1,0 +1,39 @@
+{
+  "branch": "codex/r1p-retry-sim-20261019",
+  "source_revision": "d951c068109949431399093da5480594e954a97f",
+  "rebased_onto": "a4aca2a1e (origin/research: D70 extracted writers, CU-savings verifier arithmetic)",
+  "host": "dombarker@100.108.41.90, /home/dombarker/project-offloads/codex-r1p-retry-sim-20261019",
+  "scope": "systemd-run --user --scope MemoryHigh=6G MemoryMax=8G MemorySwapMax=0 TasksMax=64; cargo --release -j 4",
+  "receipts": [
+    {
+      "target": "cargo test --release -p aspis-r1-cost-probe --features r1p-check --lib (all 21 lib tests, --test-threads=1)",
+      "exit": 0,
+      "wall": "3:14.05",
+      "peak_rss_kib": 506324,
+      "swaps": 0,
+      "results": "test2-results.txt"
+    },
+    {
+      "target": "examples/r1p_retry_gate 32",
+      "exit": 0,
+      "wall": "22:40.52",
+      "peak_rss_kib": 579076,
+      "swaps": 0,
+      "report": "gate2-d951c0681.json"
+    },
+    {
+      "target": "examples/r1p_sim_gate 4",
+      "exit": 0,
+      "wall": "2:17.63",
+      "peak_rss_kib": 289960,
+      "swaps": 0,
+      "report": "simgate1-d951c0681.json"
+    }
+  ],
+  "superseded": {
+    "revision": "ebc9e4bea (pre-rebase)",
+    "report": "gate1-prerebase-ebc9e4bea.json",
+    "note": "32/32 accepted; retry tests 4/4 (test1); kept for history"
+  },
+  "lean": "no Lean module compiled by this job; no #print axioms applies"
+}

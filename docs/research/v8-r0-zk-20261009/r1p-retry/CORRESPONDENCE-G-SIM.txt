@@ -18,6 +18,22 @@ MISMATCH (a recorded difference), OPEN.
 §7  Tests and measurements
 §8  Mismatches and open items
 
+§0  Summary
+----------------------------------------------------------------------
+IMPLEMENTED, TESTED, MEASURED at d951c0681 (rebased on a4aca2a1e, i.e. with
+the D70 extracted writers and the CU-savings verifier arithmetic):
+  * R-retry: P_R1 check (P_chk: z9e emit + the extracted C3 checker with the
+    extracted C3 builders' columns) in prove_from_semantics after the
+    queries, Error::Rejected before any proof byte; loop capped at 8 with
+    fresh OS secrets, durable nonce burn, AttemptsExhausted publishing
+    nothing; feature r1p-check implies private-leaf-salts.
+  * G-sim: sim::sim_e, simE inside fsR1.ideal from the public statement
+    and a seed; the simulated proof passes the CURRENT strict tx1+tx2 and
+    dense verifiers under the programmed oracle, with every programmed
+    address read by the verifier.
+  Not proved: the Rust↔Lean correspondence below is a reading, not a
+  refinement proof; P_chk ⇒ P_R1 still has the open check_sound″ premises.
+
 §1  R-retry: the P_R1 check and the capped loop (D38.3)
 ----------------------------------------------------------------------
 Lean `realGame` (R1Z/GamesR1.lean; DESIGN-R1-GAMES §4): attempts k < N with
@@ -210,6 +226,40 @@ View::proof_bytes(S2)` is asserted. Two further verifier reads (the
 checkpoint's H(proof), H(public)) are ordinary unprogrammed reads, as in
 DESIGN-R1-GAMES §1.
 
+§7  Tests and measurements (host, optimized, capped; evidence.json)
+----------------------------------------------------------------------
+Revision d951c0681. All 21 lib tests pass (test2-results.txt; 3:14 wall,
+506 MB peak, 0 swaps), including:
+  forced_rejections_then_accept_publish_the_eighth_attempt  (cfg(test) hook
+    rejects 7 times then accepts; 8 attempts; distinct mask nonces, G-mask
+    digests, first-salt digests and C1 roots; 8 durable reservations; the
+    published proof carries attempt 8's root and passes tx1+tx2+dense)
+  eight_rejections_exhaust_and_publish_nothing  (AttemptsExhausted, no 9th
+    attempt, 8 reservations)
+  real_check_publishes_a_verifying_proof  (no hook; current verifier)
+  retry_loop_refuses_non_r1_variants
+  simulated_proof_verifies_under_the_programmed_oracle  (115 transcript
+    reads; programmed = read; the same bytes fail under the real hash)
+  reference_point_ingredients_are_necessary  (without S₀, or without the
+    round-9 shift, the consistently programmed view is rejected)
+  single_index_evaluation_matches_the_encoding_domain
+  plus the upstream verifier/weights/sampler/wire tests.
+P_R1 gate (gate2-d951c0681.json; 22:41 wall, 579 MB, 0 swaps): 32 fresh
+OS-entropy attempts, accept rate 32/32, all 32 accepted proofs pass strict
+tx1+tx2 and dense. Per attempt: wall mean 41.2 s (median 41.8, 33.8–49.3);
+without the check 5.5 s; the check 35.8 s mean = public data 0.24 +
+emit 14.5 + convert & extracted builders 9.95 + extracted checker 11.1.
+retry loop end to end: 1 attempt, 40.7 s, verified. (D38 measured 22.6 s for
+the eliminating check; D57 estimated 12.6 + 8.8 s; this run is slower
+because it adds convert, the extracted builders and the unoptimised
+extracted checker with overflow checks.) Pre-rebase run at ebc9e4bea:
+32/32, check ≈ 30 s (gate1-prerebase-ebc9e4bea.json).
+Simulator gate (simgate1-d951c0681.json; 2:18 wall, 290 MB, 0 swaps): 4 OS
+seeds, each 1 attempt, wall 33.6–35.5 s, of which P_R1 32.1–33.9 s,
+semantic 1.46–1.52 s, opening 0.005 s, programming + serialisation 0.03 s;
+simulation without P_R1 ≈ 1.5 s; 442–450 programmed addresses, all read;
+every proof verified (strict tx1+tx2 and dense) under its programmed oracle.
+
 §8  Mismatches and open items
 ----------------------------------------------------------------------
 (a) MISMATCH, pole (Vp). Lean realGame moves to the next attempt on
@@ -242,4 +292,3 @@ DESIGN-R1-GAMES §1.
     the prover's direct summation (28·1023 point evaluations), not a folded
     table, so the semantic step is the dominant non-P_R1 cost (§7).
 
-(§0 and §7 follow the host runs)
