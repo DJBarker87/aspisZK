@@ -1,0 +1,7 @@
+def core.option.Option.ok_or
+  {T : Type} {E : Type} (self : Option T) (err : E) :
+  Result (core.result.Result T E)
+  := do
+  match self with
+  | none => ok (core.result.Result.Err err)
+  | some v => ok (core.result.Result.Ok v)
