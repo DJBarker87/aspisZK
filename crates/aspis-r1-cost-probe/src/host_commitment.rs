@@ -1,6 +1,6 @@
 //! UNPROVED COST PROBE. Isolated packed commitments and native encoder.
 use alloc::vec::Vec;
-use aspis_core::{HashFn,field::{WideExact as E,M31,QM31},r0::{domain::{self,FibreIndex,Point},fold,merkle::{self,Tree},wire::FibreOpening,opening::LANES,heap::filled,CodeField,Error,Message,FIBRE_COUNT,WORD_LEN}};
+use aspis_core::{HashFn,field::{WideExact as E,M31,QM31},r0::{domain::{self,FibreIndex,Point},fold,merkle,wire::FibreOpening,opening::LANES,heap::filled,CodeField,Error,Message,FIBRE_COUNT,WORD_LEN}};
 /// Natural-product evaluation tree. Coordinates are always in F.
 pub struct EncodingDomain {
     xy: Vec<Point<M31>>,
@@ -101,14 +101,10 @@ pub struct Commitment {
     lanes: Vec<usize>,
     messages: Vec<Message<E>>,
     words: Vec<Word>,
-    tree: CommitTree,
+    /// Binary tree of the adopted format (PREREG-PROOF-SIZE-2). The eight-way
+    /// tree is retired: a prover build cannot emit an eight-way proof.
+    tree: crate::multiproof::BinaryTree,
     private_salts: Option<PrivateSalts>,
-}
-/// Shipped eight-way tree, or the candidate binary tree (proof-size test).
-enum CommitTree {
-    Eight(Tree),
-    #[cfg(feature = "compact-binary")]
-    Binary(crate::multiproof::BinaryTree),
 }
 /// Host-only secret salts retained until queried openings have been emitted.
 /// Drop overwrites the full salt buffer so salts for unopened leaves are not
@@ -129,15 +125,6 @@ impl Drop for PrivateSalts {
     }
 }
 impl Commitment {
-    pub fn new(
-        hash: HashFn,
-        domain: &EncodingDomain,
-        time: CommitmentTime,
-        messages: &[Message<E>],
-        variant: crate::transport::Variant,
-    ) -> Result<Self, Error> {
-        Self::build(hash, domain, time, messages, variant, None, false)
-    }
     pub fn new_salted(
         hash: HashFn,
         domain: &EncodingDomain,
@@ -146,19 +133,7 @@ impl Commitment {
         variant: crate::transport::Variant,
         salts: PrivateSalts,
     ) -> Result<Self, Error> {
-        Self::build(hash, domain, time, messages, variant, Some(salts), false)
-    }
-    /// UNPROVED CANDIDATE: the same salted leaves under a binary tree.
-    #[cfg(feature = "compact-binary")]
-    pub fn new_salted_binary(
-        hash: HashFn,
-        domain: &EncodingDomain,
-        time: CommitmentTime,
-        messages: &[Message<E>],
-        variant: crate::transport::Variant,
-        salts: PrivateSalts,
-    ) -> Result<Self, Error> {
-        Self::build(hash, domain, time, messages, variant, Some(salts), true)
+        Self::build(hash, domain, time, messages, variant, Some(salts))
     }
     fn build(
         hash: HashFn,
@@ -167,7 +142,6 @@ impl Commitment {
         messages: &[Message<E>],
         variant: crate::transport::Variant,
         private_salts: Option<PrivateSalts>,
-        binary: bool,
     ) -> Result<Self, Error> {
         if messages.len() != LANES {
             return Err(Error::WrongLength);
@@ -234,34 +208,17 @@ impl Commitment {
             lanes,
             messages: saved,
             words,
-            tree: Self::tree(hash, leaves, binary)?,
+            tree: crate::multiproof::BinaryTree::new(aspis_core::digest::LegacyHashFn(hash), leaves)
+                .ok_or(Error::WrongLength)?,
             private_salts,
         })
     }
-    fn tree(hash: HashFn, leaves: Vec<[u8; 32]>, binary: bool) -> Result<CommitTree, Error> {
-        #[cfg(feature = "compact-binary")]
-        if binary {
-            return crate::multiproof::BinaryTree::new(aspis_core::digest::LegacyHashFn(hash), leaves)
-                .map(CommitTree::Binary)
-                .ok_or(Error::WrongLength);
-        }
-        let _ = binary;
-        Ok(CommitTree::Eight(Tree::new(hash, leaves)?))
-    }
     pub fn root(&self) -> [u8; 32] {
-        match &self.tree {
-            CommitTree::Eight(t) => t.root(),
-            #[cfg(feature = "compact-binary")]
-            CommitTree::Binary(t) => t.root(),
-        }
+        self.tree.root()
     }
-    /// UNPROVED CANDIDATE: binary multiproof for strictly increasing indices.
-    #[cfg(feature = "compact-binary")]
+    /// Binary multiproof for strictly increasing indices.
     pub(crate) fn multiproof(&self, indices: &[u32]) -> Option<Vec<u8>> {
-        match &self.tree {
-            CommitTree::Binary(t) => t.multiproof(indices),
-            CommitTree::Eight(_) => None,
-        }
+        self.tree.multiproof(indices)
     }
     fn matches(&self, messages: &[Message<E>]) -> bool {
         self.lanes
@@ -275,16 +232,12 @@ impl Commitment {
                 out.values[s][l] = self.words[j].value(4 * u.get() + s);
             }
         }
-        let path = match &self.tree {
-            CommitTree::Eight(t) => t.path(u),
-            #[cfg(feature = "compact-binary")]
-            CommitTree::Binary(_) => [[[0; 32]; 7]; 6],
-        };
+        // No per-query path: authentication is the batch multiproof.
         out.paths[if self.time == CommitmentTime::C1 {
             0
         } else {
             1
-        }] = path;
+        }] = [[[0; 32]; 7]; 6];
     }
     pub(crate) fn opening_salt(&self, u: FibreIndex) -> Option<&[u8; 32]> {
         self.private_salts.as_ref().map(|salts| salts.get(u.get()))

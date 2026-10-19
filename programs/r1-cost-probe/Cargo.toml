@@ -14,9 +14,10 @@ custom-panic = []
 cu-profiling = []
 no-entrypoint = []
 pool-adapter = []
+# Kept for the pinned build command lines; the adopted compact binary-multiproof
+# format (PREREG-PROOF-SIZE-2) is defined over private leaf salts, which the
+# verifier crate now enables by default.
 private-leaf-salts = ["aspis-r1-cost-probe/private-leaf-salts"]
-# UNPROVED CANDIDATE (proof-size test, 2026-10-19): compact binary-multiproof proof.
-compact-binary = ["private-leaf-salts", "aspis-r1-cost-probe/compact-binary"]
 [dependencies]
 aspis-r1-cost-probe = { path = "../../crates/aspis-r1-cost-probe", features = ["optimized-terminal"] }
 aspis-statement = { path = "../../crates/aspis-statement", features = ["r0", "pool-v1-kernel"] }

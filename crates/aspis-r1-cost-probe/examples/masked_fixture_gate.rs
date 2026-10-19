@@ -29,7 +29,8 @@ fn main() {
     let hash: HashFn = HOST_HASH;
     let mut records = Vec::new();
 
-    for variant in [Variant::S1, Variant::S2] {
+    // The adopted format (PREREG-PROOF-SIZE-2) is S2 only.
+    for variant in [Variant::S2] {
         for (withdrawal, name) in [(false, "transfer"), (true, "withdrawal")] {
             let fixture = aspis_prover::r0_fixture::prepare(withdrawal);
             let public_bytes =
@@ -58,7 +59,7 @@ fn main() {
             assert!(audit.h1_padding_inactive_balanced);
             assert!(audit.h1_total_balanced);
 
-            let native = verifier::tx1(fixture.public(), &public_bytes, &proof, 11, LegacyHashFn(hash), None)
+            let native = verifier::tx1(fixture.public(), &public_bytes, &proof, verifier::SPLIT, LegacyHashFn(hash), None)
                 .and_then(|checkpoint| {
                     verifier::tx2(&public_bytes, &proof, &checkpoint, LegacyHashFn(hash), None)
                 });

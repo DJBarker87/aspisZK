@@ -4,23 +4,21 @@ use aspis_core::{digest::LegacyHashFn,HashFn,field::{WideExact as E,M31,QM31 as 
 use aspis_statement::pool_v1::{pair_forest_semantic_terminal::r0::Public,pair_forest_trace::PoolV1PairForestMergedC1CompilationV1};
 use aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_row_masks_v1;
 use aspis_prover::{state_only_entropy::{StateOnlyAttemptSecrets,ReservedStateOnlyAttemptSecrets,DurableStateOnlyMaskNonceStore},state_only_hiding::{apply_pool_v1_pair_forest_mask_material_v1,InMemoryStateOnlyMaskNonceStore,StateOnlyMaskBuildError,StateOnlyMaskNonceStore}};
-use crate::{transport::Variant,verifier::{Error,View},weights::{Weights,QUARTER,PERM},transcript::Transcript,host_commitment::{Commitment,CommitmentTime,EncodingDomain,PrivateSalts},host_semantic::{BuiltSemantics,Column,Commitments},r1_wire::Error as SError};
-pub struct Backend {pub hash:HashFn,pub variant:Variant,pub domain:EncodingDomain,pub messages:Vec<Message<E>>,pub c1:Option<Commitment>,pub c2:Option<Commitment>,c1_salts:Option<crate::host_commitment::PrivateSalts>,c2_salts:Option<crate::host_commitment::PrivateSalts>,binary:bool}
-/// UNPROVED CANDIDATE (proof-size test): salted commitment, eight-way or binary.
-fn salted(binary:bool,hash:HashFn,domain:&EncodingDomain,time:CommitmentTime,messages:&[Message<E>],variant:Variant,salts:PrivateSalts)->Result<Commitment,r0::Error>{
-    #[cfg(feature="compact-binary")]
-    if binary {return Commitment::new_salted_binary(hash,domain,time,messages,variant,salts);}
-    let _=binary;Commitment::new_salted(hash,domain,time,messages,variant,salts)
-}
+use crate::{transport::Variant,verifier::{Error},weights::{Weights,QUARTER,PERM},transcript::Transcript,host_commitment::{Commitment,CommitmentTime,EncodingDomain,PrivateSalts},host_semantic::{BuiltSemantics,Column,Commitments},r1_wire::Error as SError};
+/// Host commitment backend. Adopted format (PREREG-PROOF-SIZE-2): salted
+/// leaves under binary trees; there is no unsalted or eight-way commitment.
+pub struct Backend {pub hash:HashFn,pub variant:Variant,pub domain:EncodingDomain,pub messages:Vec<Message<E>>,pub c1:Option<Commitment>,pub c2:Option<Commitment>,c1_salts:Option<crate::host_commitment::PrivateSalts>,c2_salts:Option<crate::host_commitment::PrivateSalts>}
 impl Commitments for Backend {
     fn c1(&mut self,columns:[Column<'_>;27])->Result<[u8;32],SError>{
         for (i,c) in columns.into_iter().enumerate(){self.messages[if i<26{i}else{28}]=match c {Column::Base(v)=>v.map(E::from_m31),Column::Extension(v)=>v.map(E::from_qm31)};}
-        let c=if let Some(salts)=self.c1_salts.take(){salted(self.binary,self.hash,&self.domain,CommitmentTime::C1,&self.messages,self.variant,salts)}else{Commitment::new(self.hash,&self.domain,CommitmentTime::C1,&self.messages,self.variant)}.map_err(|_|SError::Public)?;
+        let salts=self.c1_salts.take().ok_or(SError::Public)?;
+        let c=Commitment::new_salted(self.hash,&self.domain,CommitmentTime::C1,&self.messages,self.variant,salts).map_err(|_|SError::Public)?;
         let root=c.root();self.c1=Some(c);Ok(root)
     }
     fn c2(&mut self,columns:[&[K;1024];2])->Result<[u8;32],SError>{
         for (i,c) in columns.into_iter().enumerate(){self.messages[26+i]=c.map(E::from_qm31);}
-        let c=if let Some(salts)=self.c2_salts.take(){salted(self.binary,self.hash,&self.domain,CommitmentTime::C2,&self.messages,self.variant,salts)}else{Commitment::new(self.hash,&self.domain,CommitmentTime::C2,&self.messages,self.variant)}.map_err(|_|SError::Public)?;
+        let salts=self.c2_salts.take().ok_or(SError::Public)?;
+        let c=Commitment::new_salted(self.hash,&self.domain,CommitmentTime::C2,&self.messages,self.variant,salts).map_err(|_|SError::Public)?;
         let root=c.root();self.c2=Some(c);Ok(root)
     }
 }
@@ -48,20 +46,8 @@ fn tail_samples(hash:HashFn,seed:&[u8;32])->[K;56] {
     };
     core::array::from_fn(|_|K{c0:CM31::new(limb(),limb()),c1:CM31::new(limb(),limb())})
 }
-#[cfg(not(feature="private-leaf-salts"))]
-pub fn prove(public:Public<'_>,compiled:&PoolV1PairForestMergedC1CompilationV1,variant:Variant,hash:HashFn,seed:&[u8;32])->Result<Vec<u8>,Error> {
-    let masks=core::array::from_fn(|l|(0..1024).map(|r|M31(((l+16)*103+r*7+19)as u32)).collect());
-    let mut dc=core::array::from_fn(|r|K{c0:CM31::new(M31(r as u32+3),M31(11)),c1:CM31::new(M31(17),M31(19))});
-    dc[..56].copy_from_slice(&tail_samples(hash,seed));let d=variant.rows(&dc);
-    let g=core::array::from_fn(|r|K::from_m31(M31(r as u32+5)));
-    let mut backend=Backend{hash,variant,domain:EncodingDomain::new().map_err(|_|Error::Allocation)?,messages:vec![[E::ZERO;1024];29],c1:None,c2:None,c1_salts:None,c2_salts:None,binary:false};
-    let sem=crate::host_semantic::build(public,compiled,&masks,&d,&g,&mut backend,LegacyHashFn(hash),variant).map_err(|_|Error::Semantic)?;
-    prove_from_semantics(public,variant,hash,backend,sem,None)
-}
-
-/// Feature-enabled convenience API is deliberately fixture-only: it always
-/// emits fully masked P3 proofs and cannot fall back to the unsalted P2 path.
-#[cfg(feature="private-leaf-salts")]
+/// Convenience API, deliberately fixture-only: it always emits a fully masked
+/// P3 proof in the adopted compact binary-multiproof format.
 pub fn prove(public:Public<'_>,compiled:&PoolV1PairForestMergedC1CompilationV1,variant:Variant,hash:HashFn,seed:&[u8;32])->Result<Vec<u8>,Error> {
     prove_masked_fixture(public,compiled,variant,hash,seed).map(|(proof,_)|proof)
 }
@@ -100,34 +86,8 @@ pub fn prove_masked_fixture(
     hash:HashFn,
     fixture_seed:&[u8;32],
 )->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
-    prove_masked_fixture_format(public,compiled,variant,hash,fixture_seed,false)
-}
-
-/// UNPROVED CANDIDATE (proof-size test): the deterministic fixture path
-/// emitting the compact binary-multiproof format (`crate::compact`).
-#[cfg(feature="compact-binary")]
-pub fn prove_masked_fixture_candidate(
-    public:Public<'_>,
-    compiled:&PoolV1PairForestMergedC1CompilationV1,
-    hash:HashFn,
-    fixture_seed:&[u8;32],
-)->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
-    prove_masked_fixture_format(public,compiled,Variant::S2,hash,fixture_seed,true)
-}
-
-fn prove_masked_fixture_format(
-    public:Public<'_>,
-    compiled:&PoolV1PairForestMergedC1CompilationV1,
-    variant:Variant,
-    hash:HashFn,
-    fixture_seed:&[u8;32],
-    binary:bool,
-)->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
     let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
     let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),fixture_secret(hash,b"UNPROVED:R1:fixture-mask-nonce",fixture_seed,&public_bytes,variant)?);
-    #[cfg(not(feature="private-leaf-salts"))]
-    let binding=hash(&[b"UNPROVED:R1:full-mask-fixture",&public_bytes,&[variant.tag()],&context.encode()]);
-    #[cfg(feature="private-leaf-salts")]
     let binding=hash(&[b"UNPROVED:R1:P3:PRIVATE-ATTEMPT",&public_bytes,&[variant.tag()],&context.encode()]);
     let attempt=StateOnlyAttemptSecrets::deterministic_spend_fixture(
         context.mask_nonce,
@@ -135,14 +95,13 @@ fn prove_masked_fixture_format(
         fixture_secret(hash,b"UNPROVED:R1:fixture-leaf-seed",fixture_seed,&public_bytes,variant)?,
     );
     let mut nonce_store=InMemoryStateOnlyMaskNonceStore::default();
-    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,&mut nonce_store,binary)
+    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,&mut nonce_store)
 }
 
 /// Secure-source P3 host API. Callers must supply OS-generated attempt
 /// secrets and a durable nonce ledger; successful reservations happen before
 /// mask derivation and leaf-salt derivation. This is still an UNPROVED
 /// protocol: fresh entropy alone does not establish zero knowledge.
-#[cfg(feature="private-leaf-salts")]
 pub fn prove_masked_attempt(
     public:Public<'_>,
     compiled:&PoolV1PairForestMergedC1CompilationV1,
@@ -154,24 +113,7 @@ pub fn prove_masked_attempt(
     let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
     let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),attempt.mask_nonce());
     let binding=hash(&[b"UNPROVED:R1:P3:PRIVATE-ATTEMPT",&public_bytes,&[variant.tag()],&context.encode()]);
-    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,nonce_store,false)
-}
-
-/// UNPROVED CANDIDATE (proof-size test): the secure-source attempt emitting
-/// the compact binary-multiproof format. Same entropy and nonce discipline.
-#[cfg(feature="compact-binary")]
-pub fn prove_masked_attempt_candidate(
-    public:Public<'_>,
-    compiled:&PoolV1PairForestMergedC1CompilationV1,
-    hash:HashFn,
-    attempt:StateOnlyAttemptSecrets,
-    nonce_store:&mut DurableStateOnlyMaskNonceStore,
-)->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
-    let variant=Variant::S2;
-    let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
-    let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),attempt.mask_nonce());
-    let binding=hash(&[b"UNPROVED:R1:P3:PRIVATE-ATTEMPT",&public_bytes,&[variant.tag()],&context.encode()]);
-    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,nonce_store,true)
+    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,nonce_store)
 }
 
 fn prove_masked_with_attempt(
@@ -183,7 +125,6 @@ fn prove_masked_with_attempt(
     binding:[u8;32],
     attempt:StateOnlyAttemptSecrets,
     nonce_store:&mut impl StateOnlyMaskNonceStore,
-    binary:bool,
 )->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
     let (reserved,material)=attempt.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash,binding,context,nonce_store).map_err(mask_error)?;
     #[cfg(all(test,feature="r1p-check"))]
@@ -211,23 +152,15 @@ fn prove_masked_with_attempt(
         || !audit.g_inactive_balanced
         || !audit.h1_padding_inactive_balanced
     { return Err(Error::Semantic); }
-    #[cfg(feature="private-leaf-salts")]
     let (c1_salts,c2_salts)=(Some(derive_private_salts(&reserved,context,hash,merkle::C1_TAG)?),Some(derive_private_salts(&reserved,context,hash,merkle::C2_TAG)?));
     #[cfg(all(test,feature="r1p-check"))]
     test_hooks::observe_secrets(hash,reserved.mask_nonce(),&g,c1_salts.as_ref().unwrap().get(0));
-    #[cfg(not(feature="private-leaf-salts"))]
-    let (c1_salts,c2_salts)=(None,None);
-    let mut backend=Backend{hash,variant,domain:EncodingDomain::new().map_err(|_|Error::Allocation)?,messages:vec![[E::ZERO;1024];29],c1:None,c2:None,c1_salts,c2_salts,binary};
+    let mut backend=Backend{hash,variant,domain:EncodingDomain::new().map_err(|_|Error::Allocation)?,messages:vec![[E::ZERO;1024];29],c1:None,c2:None,c1_salts,c2_salts};
     let sem=crate::host_semantic::build_with_material(public,compiled,&noised_c1,&applied.mask_only_c1,&d,&g,&h1_padding,&mut backend,LegacyHashFn(hash),variant).map_err(semantic_error)?;
     let h1_total_balanced=aspis_statement::state_only_copy_helper_sum(&sem.columns[26])==Some(K::ZERO);
     if !h1_total_balanced { return Err(Error::Semantic); }
     let audit=MaskedFixtureAudit{h1_total_balanced,..audit};
-    #[cfg(feature="compact-binary")]
-    let proof=if binary {prove_candidate_from_semantics(public,variant,hash,backend,sem,(&reserved,context))?} else {prove_from_semantics(public,variant,hash,backend,sem,Some((&reserved,context)))?};
-    #[cfg(all(feature="private-leaf-salts",not(feature="compact-binary")))]
-    let proof=prove_from_semantics(public,variant,hash,backend,sem,Some((&reserved,context)))?;
-    #[cfg(not(feature="private-leaf-salts"))]
-    let proof=prove_from_semantics(public,variant,hash,backend,sem,None)?;
+    let proof=prove_from_semantics(public,variant,hash,backend,sem,(&reserved,context))?;
     Ok((proof,audit))
 }
 
@@ -253,7 +186,6 @@ fn semantic_error(e:SError)->Error {
     Error::Semantic
 }
 
-#[cfg(feature="private-leaf-salts")]
 fn derive_private_salts(reserved:&ReservedStateOnlyAttemptSecrets,context:StateOnlyHidingContext,hash:HashFn,tag:u8)->Result<PrivateSalts,Error> {
     let mut salts=Vec::new();salts.try_reserve_exact(aspis_core::r0::FIBRE_COUNT).map_err(|_|Error::Allocation)?;
     for index in 0..aspis_core::r0::FIBRE_COUNT {
@@ -262,7 +194,15 @@ fn derive_private_salts(reserved:&ReservedStateOnlyAttemptSecrets,context:StateO
     Ok(PrivateSalts::new(salts))
 }
 
-fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>,salts:Option<(&ReservedStateOnlyAttemptSecrets,StateOnlyHidingContext)>)->Result<Vec<u8>,Error> {
+/// The R1 proof (PREREG-PROOF-SIZE-2, adopted 2026-10-19): binary trees (C1/C2
+/// built by the Backend, the padded folded tree here) and the fixed-length
+/// compact stored format of `crate::compact` (57,607 bytes). Every transcript
+/// message is the logical byte string of the retired eight-way format; only
+/// the roots (binary trees) and the stored encoding differ. R1 is variant S2.
+fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>,salts:(&ReservedStateOnlyAttemptSecrets,StateOnlyHidingContext))->Result<Vec<u8>,Error> {
+    use crate::{compact,multiproof};
+    let _=public;
+    if variant!=Variant::S2 { return Err(Error::Semantic); }
     let coefficients:Vec<Message<E>>=backend.messages.iter().map(|m|variant.coefficients(m)).collect();
     let z1=Point{x:E::from_qm31(sem.z[1].x),y:E::from_qm31(sem.z[1].y)};
     let y1=encoded(coefficients.iter().map(|m|r0::encoder::eval_message(m,z1)));
@@ -275,74 +215,59 @@ fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Ba
     let weights=w.materialize(kappa)?;
     let c0=round(&q,&weights);let c0bytes=encoded(c0);
     let alpha0=t.scalar(29,&c0bytes,false);let q1=fold(&q,alpha0,false);let w1=fold(&weights,alpha0,true);
-    let mut folded_tree=None;let mut folded_word=Vec::new();
-    #[cfg(feature="private-leaf-salts")]
-    let mut folded_salts=None;
-    let mut root=[0;32];let mut c1bytes=Vec::new();
-    #[cfg(feature="r1p-check")]
-    let mut alpha1_drawn=E::ZERO;
-    let final_message=if variant.folds()==2 {
-        folded_word=backend.domain.evaluate(&q1,0).map_err(|_|Error::Allocation)?;
-        let mut leaves=Vec::with_capacity(1<<18);
-        #[cfg(feature="private-leaf-salts")]
-        let (reserved,context)=salts.ok_or(Error::Semantic)?;
-        #[cfg(feature="private-leaf-salts")]
-        let folded_salts_value=derive_private_salts(reserved,context,hash,0x72)?;
-        for u in 0..1<<18 {let values=if u<1<<16 {encoded(folded_word[4*u..4*u+4].iter().copied())}else{vec![0;128]};
-            #[cfg(feature="private-leaf-salts")]
-            let leaf=aspis_core::state_only_private_merkle::private_leaf_hash(hash,0x72,&values,folded_salts_value.get(u));
-            #[cfg(not(feature="private-leaf-salts"))]
-            let leaf=merkle::leaf(hash,0x72,&values);
-            leaves.push(leaf);
-        }
-        #[cfg(feature="private-leaf-salts")]
-        {folded_salts=Some(folded_salts_value);}
-        let tree=merkle::Tree::new(hash,leaves).map_err(|_|Error::Allocation)?;root=tree.root();folded_tree=Some(tree);
-        let c1=round(&q1,&w1);c1bytes=encoded(c1);
-        let mut payload=root.to_vec();payload.extend_from_slice(&c1bytes);
-        let alpha1=t.scalar(30,&payload,false);
-        #[cfg(feature="r1p-check")]
-        {alpha1_drawn=alpha1;}
-        fold(&q1,alpha1,false)
-    }else{q1};
-    let fbytes=encoded(final_message.iter().copied());let row=if variant.folds()==1 {30}else{31};
-    let queries=t.queries(row,&fbytes)?;let _rho=t.scalar_k(row+1,&[]);
-    // LOG D38.3: every challenge P_R1 reads is now drawn and no proof byte
-    // exists yet. A rejected attempt returns only `Error::Rejected`.
+    let folded_word=backend.domain.evaluate(&q1,0).map_err(|_|Error::Allocation)?;
+    let (reserved,context)=salts;
+    let folded_salts=derive_private_salts(reserved,context,hash,0x72)?;
+    let mut leaves=Vec::with_capacity(1<<18);
+    for u in 0..1<<18 {
+        let values=if u<1<<16 {encoded(folded_word[4*u..4*u+4].iter().copied())}else{vec![0;128]};
+        leaves.push(aspis_core::state_only_private_merkle::private_leaf_hash(hash,0x72,&values,folded_salts.get(u)));
+    }
+    let tree=multiproof::BinaryTree::new(LegacyHashFn(hash),leaves).ok_or(Error::Allocation)?;
+    let root=tree.root();
+    let c1=round(&q1,&w1);let c1bytes=encoded(c1);
+    let mut payload=root.to_vec();payload.extend_from_slice(&c1bytes);
+    let alpha1=t.scalar(30,&payload,false);
+    let final_message=fold(&q1,alpha1,false);
+    let fbytes=encoded(final_message.iter().copied());
+    let queries=t.queries(31,&fbytes)?;let _rho=t.scalar_k(32,&[]);
     #[cfg(feature="r1p-check")]
     public_check(variant,&R1PublicChallenges{
         alpha:sem.alpha,z:[[sem.z[0].x,sem.z[0].y],[sem.z[1].x,sem.z[1].y]],
-        gamma,kappa,alpha0,alpha1:alpha1_drawn,queries:queries.to_vec(),
+        gamma,kappa,alpha0,alpha1,queries:queries.to_vec(),
     },sem.roots[0])?;
-    let mut out=Vec::with_capacity(View::proof_bytes(variant));
-    #[cfg(not(feature="private-leaf-salts"))]
-    out.extend_from_slice(b"R1P2COST");
-    #[cfg(feature="private-leaf-salts")]
-    out.extend_from_slice(b"R1P3COST");
+    let mut out=Vec::with_capacity(compact::PROOF_BYTES);
+    out.extend_from_slice(compact::MAGIC);
     out.extend_from_slice(&[variant.tag(),0,0,0,0,0,0,0]);
-    assert_eq!(sem.bytes.len(),crate::verifier::SEMANTIC_BYTES);out.extend_from_slice(&sem.bytes);out.extend_from_slice(&y1);out.extend_from_slice(&inactive.to_le_bytes());out.extend_from_slice(&c0bytes);
-    if variant.folds()==2 {out.extend_from_slice(&root);out.extend_from_slice(&c1bytes);}
-    out.extend_from_slice(&fbytes);
-    for u in queries {
+    compact::compact_semantic(&sem.bytes,&mut out).map_err(|_|Error::Semantic)?;
+    compact::compact_values(&y1,&mut out).map_err(|_|Error::Semantic)?;
+    out.extend_from_slice(&inactive.to_le_bytes());out.extend_from_slice(&c0bytes);
+    out.extend_from_slice(&root);out.extend_from_slice(&c1bytes);out.extend_from_slice(&fbytes);
+    assert_eq!(out.len(),compact::OFF_OPENINGS);
+    let (cc1,cc2)=(backend.c1.as_ref().unwrap(),backend.c2.as_ref().unwrap());
+    for &u in &queries {
         let u=FibreIndex::new(u as usize).unwrap();
         let mut opening=FibreOpening{values:[[E::ZERO;29];4],paths:[[[[0;32];7];6];2]};
-        backend.c1.as_ref().unwrap().fill_opening(u,&mut opening);backend.c2.as_ref().unwrap().fill_opening(u,&mut opening);
+        cc1.fill_opening(u,&mut opening);cc2.fill_opening(u,&mut opening);
         for s in 0..4 {for l in (0..26).chain(core::iter::once(28)){out.extend_from_slice(&opening.values[s][l].to_le_bytes()[..if l<26 {4}else{16}]);}}
         for s in 0..4 {for l in 26..28 {out.extend_from_slice(&opening.values[s][l].to_le_bytes()[..16]);}}
-        #[cfg(feature="private-leaf-salts")]
-        {
-            out.extend_from_slice(backend.c1.as_ref().unwrap().opening_salt(u).unwrap());
-            out.extend_from_slice(backend.c2.as_ref().unwrap().opening_salt(u).unwrap());
-        }
-        for path in opening.paths {for level in path {for digest in level {out.extend_from_slice(&digest);}}}
-        if variant.folds()==2 {
-            out.extend_from_slice(&encoded(folded_word[4*(u.get()/4)..4*(u.get()/4)+4].iter().copied()));
-            #[cfg(feature="private-leaf-salts")]
-            out.extend_from_slice(folded_salts.as_ref().unwrap().get(u.get()/4));
-            for level in folded_tree.as_ref().unwrap().path(FibreIndex::new(u.get()/4).unwrap()){for digest in level{out.extend_from_slice(&digest);}}
+        out.extend_from_slice(cc1.opening_salt(u).unwrap());
+        out.extend_from_slice(cc2.opening_salt(u).unwrap());
+        out.extend_from_slice(&encoded(folded_word[4*(u.get()/4)..4*(u.get()/4)+4].iter().copied()));
+        out.extend_from_slice(folded_salts.get(u.get()/4));
+    }
+    assert_eq!(out.len(),compact::OFF_NODES);
+    for (batch,range) in [(0usize,0..compact::SPLIT),(1,compact::SPLIT..22)] {
+        for t in 0..3 {
+            let mut idx:Vec<u32>=queries[range.clone()].iter().map(|&u|if t==2 {u/4} else {u}).collect();
+            idx.sort();idx.dedup();
+            let nodes=match t {0=>cc1.multiproof(&idx),1=>cc2.multiproof(&idx),_=>tree.multiproof(&idx)}.ok_or(Error::Allocation)?;
+            let cap=32*compact::SLOT_NODES[3*batch+t];
+            assert!(nodes.len()<=cap);
+            out.extend_from_slice(&nodes);out.resize(out.len()+cap-nodes.len(),0);
         }
     }
-    assert_eq!(out.len(),View::proof_bytes(variant));Ok(out)
+    assert_eq!(out.len(),compact::PROOF_BYTES);Ok(out)
 }
 
 // ---------------------------------------------------------------------------
@@ -521,80 +446,3 @@ pub(crate) mod test_hooks {
 #[cfg(all(test,feature="r1p-check"))]
 #[path="prover_retry_tests.rs"]
 mod retry_tests;
-
-/// UNPROVED CANDIDATE (proof-size test, 2026-10-19): the shipped prover
-/// computation with binary trees (C1/C2 built by the Backend, the padded
-/// folded tree here) and the fixed-length compact stored format of
-/// `crate::compact`. Every transcript message is the shipped logical byte
-/// string; only roots (binary trees) and the stored encoding differ.
-#[cfg(feature="compact-binary")]
-fn prove_candidate_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>,salts:(&ReservedStateOnlyAttemptSecrets,StateOnlyHidingContext))->Result<Vec<u8>,Error> {
-    use crate::{compact,multiproof};
-    let _=public;
-    if variant!=Variant::S2 { return Err(Error::Semantic); }
-    let coefficients:Vec<Message<E>>=backend.messages.iter().map(|m|variant.coefficients(m)).collect();
-    let z1=Point{x:E::from_qm31(sem.z[1].x),y:E::from_qm31(sem.z[1].y)};
-    let y1=encoded(coefficients.iter().map(|m|r0::encoder::eval_message(m,z1)));
-    let mut t=Transcript::new(LegacyHashFn(hash),sem.transcript.state(),variant);
-    let gamma=t.scalar(27,&y1,true);let gp=crate::weights::powers::<29>(gamma);
-    let q:Vec<E>=(0..1024).map(|j|(0..29).fold(E::ZERO,|s,l|s.add(gp[l].mul(coefficients[l][j])))).collect();
-    let w=Weights::new(variant,&sem.alpha,&sem.z)?;
-    let inactive=(0..1024).fold(E::ZERO,|s,j|s.add(q[j].mul_qm31(w.raw(0,j))));
-    let kappa=t.scalar(28,&inactive.to_le_bytes(),false);
-    let weights=w.materialize(kappa)?;
-    let c0=round(&q,&weights);let c0bytes=encoded(c0);
-    let alpha0=t.scalar(29,&c0bytes,false);let q1=fold(&q,alpha0,false);let w1=fold(&weights,alpha0,true);
-    let folded_word=backend.domain.evaluate(&q1,0).map_err(|_|Error::Allocation)?;
-    let (reserved,context)=salts;
-    let folded_salts=derive_private_salts(reserved,context,hash,0x72)?;
-    let mut leaves=Vec::with_capacity(1<<18);
-    for u in 0..1<<18 {
-        let values=if u<1<<16 {encoded(folded_word[4*u..4*u+4].iter().copied())}else{vec![0;128]};
-        leaves.push(aspis_core::state_only_private_merkle::private_leaf_hash(hash,0x72,&values,folded_salts.get(u)));
-    }
-    let tree=multiproof::BinaryTree::new(LegacyHashFn(hash),leaves).ok_or(Error::Allocation)?;
-    let root=tree.root();
-    let c1=round(&q1,&w1);let c1bytes=encoded(c1);
-    let mut payload=root.to_vec();payload.extend_from_slice(&c1bytes);
-    let alpha1=t.scalar(30,&payload,false);
-    let final_message=fold(&q1,alpha1,false);
-    let fbytes=encoded(final_message.iter().copied());
-    let queries=t.queries(31,&fbytes)?;let _rho=t.scalar_k(32,&[]);
-    #[cfg(feature="r1p-check")]
-    public_check(variant,&R1PublicChallenges{
-        alpha:sem.alpha,z:[[sem.z[0].x,sem.z[0].y],[sem.z[1].x,sem.z[1].y]],
-        gamma,kappa,alpha0,alpha1,queries:queries.to_vec(),
-    },sem.roots[0])?;
-    let mut out=Vec::with_capacity(compact::PROOF_BYTES);
-    out.extend_from_slice(compact::MAGIC);
-    out.extend_from_slice(&[variant.tag(),0,0,0,0,0,0,0]);
-    compact::compact_semantic(&sem.bytes,&mut out).map_err(|_|Error::Semantic)?;
-    compact::compact_values(&y1,&mut out).map_err(|_|Error::Semantic)?;
-    out.extend_from_slice(&inactive.to_le_bytes());out.extend_from_slice(&c0bytes);
-    out.extend_from_slice(&root);out.extend_from_slice(&c1bytes);out.extend_from_slice(&fbytes);
-    assert_eq!(out.len(),compact::OFF_OPENINGS);
-    let (cc1,cc2)=(backend.c1.as_ref().unwrap(),backend.c2.as_ref().unwrap());
-    for &u in &queries {
-        let u=FibreIndex::new(u as usize).unwrap();
-        let mut opening=FibreOpening{values:[[E::ZERO;29];4],paths:[[[[0;32];7];6];2]};
-        cc1.fill_opening(u,&mut opening);cc2.fill_opening(u,&mut opening);
-        for s in 0..4 {for l in (0..26).chain(core::iter::once(28)){out.extend_from_slice(&opening.values[s][l].to_le_bytes()[..if l<26 {4}else{16}]);}}
-        for s in 0..4 {for l in 26..28 {out.extend_from_slice(&opening.values[s][l].to_le_bytes()[..16]);}}
-        out.extend_from_slice(cc1.opening_salt(u).unwrap());
-        out.extend_from_slice(cc2.opening_salt(u).unwrap());
-        out.extend_from_slice(&encoded(folded_word[4*(u.get()/4)..4*(u.get()/4)+4].iter().copied()));
-        out.extend_from_slice(folded_salts.get(u.get()/4));
-    }
-    assert_eq!(out.len(),compact::OFF_NODES);
-    for (batch,range) in [(0usize,0..compact::SPLIT),(1,compact::SPLIT..22)] {
-        for t in 0..3 {
-            let mut idx:Vec<u32>=queries[range.clone()].iter().map(|&u|if t==2 {u/4} else {u}).collect();
-            idx.sort();idx.dedup();
-            let nodes=match t {0=>cc1.multiproof(&idx),1=>cc2.multiproof(&idx),_=>tree.multiproof(&idx)}.ok_or(Error::Allocation)?;
-            let cap=32*compact::SLOT_NODES[3*batch+t];
-            assert!(nodes.len()<=cap);
-            out.extend_from_slice(&nodes);out.resize(out.len()+cap-nodes.len(),0);
-        }
-    }
-    assert_eq!(out.len(),compact::PROOF_BYTES);Ok(out)
-}

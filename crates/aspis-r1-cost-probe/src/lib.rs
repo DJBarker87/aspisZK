@@ -29,6 +29,14 @@ pub mod sim;
 #[cfg(feature="prover")] mod host_semantic;
 #[cfg(feature="prover")] mod host_commitment;
 
-// UNPROVED CANDIDATE (proof-size test, 2026-10-19); default off.
-#[cfg(feature="compact-binary")] pub mod multiproof;
-#[cfg(feature="compact-binary")] pub mod compact;
+// Adopted R1 proof format (PREREG-PROOF-SIZE-2, 2026-10-19): compact QM31
+// storage and binary multiproofs. UNPROVED: see PROOF-SIZE-OBLIGATIONS.
+pub mod multiproof;
+pub mod compact;
+
+#[cfg(not(feature="private-leaf-salts"))]
+compile_error!("the adopted R1 proof format is defined over private leaf salts; enable `private-leaf-salts` (a default feature)");
+#[cfg(all(feature="audit-eight-way",feature="prover"))]
+compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+#[cfg(all(feature="audit-eight-way",target_os="solana"))]
+compile_error!("`audit-eight-way` is audit-only: it is never built for an SBF program (PREREG-PROOF-SIZE-2 item 4)");

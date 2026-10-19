@@ -1,16 +1,18 @@
-//! UNPROVED CANDIDATE (proof-size feasibility test, 2026-10-19).
+//! ADOPTED R1 VERIFIER (PREREG-PROOF-SIZE-2, 2026-10-19; prototype from the
+//! proof-size feasibility test). UNPROVED: PROOF-SIZE-OBLIGATIONS-20261019.
 //!
 //! Two-transaction verifier for the fixed-length compact binary-multiproof
-//! format (`crate::compact`). Child module of `verifier`, so it reuses the
-//! shipped transcript, folding, accumulation, relation and checkpoint code
-//! unchanged. Differences from the shipped path, and nothing else:
+//! format (`crate::compact`), re-exported as `verifier::{tx1, tx2,
+//! tx2_authenticated, parse_shape}`. Child module of `verifier`, so it reuses
+//! the transcript, folding, accumulation, relation and checkpoint code
+//! unchanged. Differences from the retired eight-way path
+//! (`verifier::eight_way`, audit builds only), and nothing else:
 //! - the stored proof is the compact format; semantic rows 14..26 and `y1`
 //!   are expanded to their logical 32-byte form (zero high half) before any
-//!   parse or hash, so every Fiat-Shamir message keeps its shipped bytes;
-//! - C1, C2 and the folded tree are binary trees (roots, hence challenges,
-//!   differ from the eight-way proofs); authentication is one multiproof per
-//!   tree per transaction batch (queries 0..SPLIT in stage 1, SPLIT..22 in
-//!   stage 2), from fixed, zero-padded node slots;
+//!   parse or hash, so every Fiat-Shamir message keeps its byte definition;
+//! - C1, C2 and the folded tree are binary trees; authentication is one
+//!   multiproof per tree per transaction batch (queries 0..SPLIT in stage 1,
+//!   SPLIT..22 in stage 2), from fixed, zero-padded node slots;
 //! - the checkpoint hashes the compact stored bytes.
 use super::*;
 use crate::compact::{self, CodecError, OPENING, SLOT_NODES, SPLIT};

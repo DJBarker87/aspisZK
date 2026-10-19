@@ -1,5 +1,7 @@
 # Selected transcript parameters and scope
 
+> Note (2026-10-19): the R1 proof format is now the compact binary-multiproof format, fixed length 57,607 bytes (`../evidence/format-adopt-20261019/REPORT.md`); 124,343 bytes below is the retired eight-way format.
+
 Lead-fixed continuation of J1.R4, after the public codec and typed cut
 extension results in `764bf20a6`. This fixes the mathematical parameter
 instance; the source-refinement obligations are not assumed away.

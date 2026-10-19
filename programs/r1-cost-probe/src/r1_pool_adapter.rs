@@ -11,7 +11,7 @@ extern crate alloc;
 
 use alloc::boxed::Box;
 use aspis_core::field::M31;
-use aspis_r1_cost_probe::transport::Variant; #[cfg(not(feature = "compact-binary"))] use aspis_r1_cost_probe::verifier;
+use aspis_r1_cost_probe::{transport::Variant, verifier};
 use aspis_statement::decode_digest_canonical;
 use aspis_statement::pool_v1::{
     decode_pool_v1_pair_forest_checkpoint_v1, decode_pool_v1_pair_forest_master_v1,
@@ -112,7 +112,7 @@ impl LifecycleKind {
     fn body_len(self) -> Result<usize, ProgramError> {
         match self {
             Self::Proof => POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
-                .checked_add(verifier::View::proof_bytes(Variant::S2))
+                .checked_add(verifier::PROOF_BYTES)
                 .and_then(|length| length.checked_add(CHECKPOINT_TAIL_BYTES))
                 .ok_or(ProgramError::InvalidAccountData),
             Self::Public => Ok(ASRU_BODY_BYTES),
@@ -122,7 +122,7 @@ impl LifecycleKind {
     fn writable_prefix_len(self) -> Result<usize, ProgramError> {
         match self {
             Self::Proof => POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
-                .checked_add(verifier::View::proof_bytes(Variant::S2))
+                .checked_add(verifier::PROOF_BYTES)
                 .ok_or(ProgramError::InvalidAccountData),
             Self::Public => Ok(ASRU_BODY_BYTES),
         }
@@ -292,7 +292,7 @@ fn validate_lifecycle_final_body(data: &[u8], kind: LifecycleKind) -> ProgramRes
     match kind {
         LifecycleKind::Proof => {
             let candidate_end = ASPU_HEADER + POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
-            let proof_end = candidate_end + verifier::View::proof_bytes(Variant::S2);
+            let proof_end = candidate_end + verifier::PROOF_BYTES;
             let candidate_bytes = &data[ASPU_HEADER..candidate_end];
             let candidate = decode_pool_v1_pair_verified_afterstate_v1(candidate_bytes)
                 .map_err(|_| ProgramError::InvalidAccountData)?;
@@ -303,9 +303,9 @@ fn validate_lifecycle_final_body(data: &[u8], kind: LifecycleKind) -> ProgramRes
             {
                 return Err(ProgramError::InvalidAccountData);
             }
-            let proof = verifier::View::parse(&data[candidate_end..proof_end])
+            let variant = verifier::parse_shape(&data[candidate_end..proof_end])
                 .map_err(|_| ProgramError::InvalidAccountData)?;
-            if proof.variant != Variant::S2
+            if variant != Variant::S2
                 || data[proof_end..].len() != CHECKPOINT_TAIL_BYTES
                 || data[proof_end..].iter().any(|byte| *byte != 0)
             {
@@ -760,7 +760,7 @@ fn authenticate_asq8_accounts(
 
 #[inline(never)]
 fn scan_proof_buffer(bytes: &[u8]) -> Result<ScannedAsqaProof, ProgramError> {
-    let proof_length = verifier::View::proof_bytes(Variant::S2);
+    let proof_length = verifier::PROOF_BYTES;
     let expected_body = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
         .checked_add(proof_length)
         .ok_or(ProgramError::InvalidAccountData)?;
@@ -950,7 +950,7 @@ fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> Pro
     .map_err(|_| ProgramError::InvalidAccountData)?;
 
     let proof_data = proof_account.try_borrow_data()?;
-    let proof_length = verifier::View::proof_bytes(Variant::S2);
+    let proof_length = verifier::PROOF_BYTES;
     let proof_start = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
     let proof_end = proof_start.checked_add(proof_length)
         .ok_or(ProgramError::InvalidAccountData)?;
@@ -1028,23 +1028,3 @@ pub(super) fn process(
 #[cfg(all(test, feature = "private-leaf-salts"))]
 #[path = "r1_checkpoint_tests.rs"]
 mod checkpoint_tests;
-
-// UNPROVED CANDIDATE (proof-size test, 2026-10-19), default off: the same
-// adapter over the fixed-length compact binary-multiproof proof. Appended so
-// shipped line numbers are unchanged.
-#[cfg(feature = "compact-binary")]
-mod verifier {
-    pub use aspis_r1_cost_probe::verifier::{candidate::tx2_authenticated, checkpoint_size};
-    use aspis_r1_cost_probe::{compact, transport::Variant, verifier::{candidate, Error}};
-    pub struct View {
-        pub variant: Variant,
-    }
-    impl View {
-        pub const fn proof_bytes(_: Variant) -> usize {
-            compact::PROOF_BYTES
-        }
-        pub fn parse(bytes: &[u8]) -> Result<Self, Error> {
-            candidate::parse_shape(bytes).map(|variant| Self { variant })
-        }
-    }
-}

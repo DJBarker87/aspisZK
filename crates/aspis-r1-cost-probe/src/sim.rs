@@ -458,7 +458,7 @@ pub fn sim_e_ablated(public:Public<'_>,seed:[u8;32],ablation:Ablation)->Result<S
         let (p2,r2)=program_tree(&table,&mut commit_coins,merkle::C2_TAG,&leaves2,roots[1])?;
         let (pf,rf)=program_tree(&table,&mut commit_coins,0x72,&leavesf,roots[2])?;
         let records=Records{c1_root:roots[0],semantic:view.semantic.clone(),y1:view.y1.clone(),inactive:view.inactive,c0:view.c0.clone(),folded_root:roots[2],c1:view.c1.clone(),fin:view.fin.clone()};
-        let mut out=Vec::with_capacity(View::proof_bytes(variant));
+        let mut out=Vec::with_capacity(View::eight_way_proof_bytes(variant));
         out.extend_from_slice(b"R1P3COST");out.extend_from_slice(&[variant.tag(),0,0,0,0,0,0,0]);
         out.extend_from_slice(&records.c1_root);for r in &records.semantic {out.extend_from_slice(r);}
         out.extend_from_slice(&records.y1);out.extend_from_slice(&records.inactive);out.extend_from_slice(&records.c0);
@@ -472,7 +472,7 @@ pub fn sim_e_ablated(public:Public<'_>,seed:[u8;32],ablation:Ablation)->Result<S
             out.extend_from_slice(&folded[&(u/4)]);out.extend_from_slice(&leavesf[&(u/4)].1);
             for lv in &pf[&(u/4)] {for dg in lv {out.extend_from_slice(dg);}}
         }
-        if out.len()!=View::proof_bytes(variant) {return Err(Error::Parse);}
+        if out.len()!=View::eight_way_proof_bytes(variant) {return Err(Error::Parse);}
         // VerLog, transcript part: the same answers at the view's addresses.
         let state=RefCell::new(CoinState{coins:state.into_inner().coins,next:0,record:Some(Table::new()),collision:false});
         let again=walk(CoinOracle(&state),&public_bytes,&records,variant)?;
@@ -492,12 +492,15 @@ pub fn sim_e_ablated(public:Public<'_>,seed:[u8;32],ablation:Ablation)->Result<S
 
 /// Verify a simulated proof under its programmed oracle (strict tx1 + tx2,
 /// then the dense verifier). Returns (accepted, programmed, read).
+/// PREREG-PROOF-SIZE-2: the verifiers are the adopted compact
+/// binary-multiproof ones and simE still emits the retired eight-way layout,
+/// so this rejects until PROOF-SIZE-OBLIGATIONS item 5 is done.
 pub fn verify_programmed(public:Public<'_>,proof:&[u8],table:Table)->(Result<(),Error>,usize,usize) {
     install(table);
     let hash:HashFn=programmed_hash;
     let result=(|| {
         let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
-        let cp=crate::verifier::tx1(public,&public_bytes,proof,11,LegacyHashFn(hash),None)?;
+        let cp=crate::verifier::tx1(public,&public_bytes,proof,crate::verifier::SPLIT,LegacyHashFn(hash),None)?;
         crate::verifier::tx2(&public_bytes,proof,&cp,LegacyHashFn(hash),None)?;
         crate::dense::verify(public,proof,hash).map_err(|_|Error::Relation)
     })();

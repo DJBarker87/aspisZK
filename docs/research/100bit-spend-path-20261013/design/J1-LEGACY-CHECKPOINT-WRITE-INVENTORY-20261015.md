@@ -1,5 +1,7 @@
 # Legacy checkpoint writes and Pool proof-account layout
 
+> Note (2026-10-19): the R1 proof format is now the compact binary-multiproof format, fixed length 57,607 bytes (`../evidence/format-adopt-20261019/REPORT.md`); 124,343 bytes below is the retired eight-way format.
+
 Read-only source inventory of the account write interfaces relevant to the
 entrypoint boundary in `J1-ENTRYPOINT-SCOPE-DECISION-20261015.md`. This records
 the sizes, byte ranges, dispatch paths, and error-before-write behavior visible

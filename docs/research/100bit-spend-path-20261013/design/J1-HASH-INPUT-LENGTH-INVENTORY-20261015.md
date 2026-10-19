@@ -1,5 +1,7 @@
 # J1 verifier hash-input length inventory
 
+> Note (2026-10-19): the R1 proof format is now the compact binary-multiproof format, fixed length 57,607 bytes (`../evidence/format-adopt-20261019/REPORT.md`); 124,343 bytes below is the retired eight-way format.
+
 This is a source-control-flow inventory at worktree revision `136b746805f3438507732622c9b4e50f36bf49f9`. It records byte counts visible at hash call sites for the `private-leaf-salts` S2 shape and identifies where checks occur before hashing. It does not establish a global bound for arbitrary callers of the verifier APIs or a Rust-to-Lean refinement.
 
 ## Source pins

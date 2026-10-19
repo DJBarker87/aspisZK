@@ -1,4 +1,6 @@
-//! Native G9 regressions using an existing private-leaf-salt S2 proof.
+//! Native G9 regressions using a saved private-leaf-salt S2 proof in the
+//! adopted compact binary-multiproof format (PREREG-PROOF-SIZE-2; the
+//! transfer-1023 fixture regenerated in evidence/format-adopt-20261019).
 //!
 //! AccountInfo models the runtime owner/flags/data presented to the program;
 //! it does not prove System Program creation or historical write provenance.
@@ -20,12 +22,12 @@ use std::{cell::Cell, sync::OnceLock};
 const PROOF: &[u8] = include_bytes!(concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/../../docs/research/100bit-spend-path-20261013/evidence/",
-    "p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/r1-s2-proof.bin"
+    "format-adopt-20261019/fixtures/transfer-1023/r1-s2-proof.bin"
 ));
 const PUBLIC: &[u8] = include_bytes!(concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/../../docs/research/100bit-spend-path-20261013/evidence/",
-    "p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/r1-s2-public-asf8.bin"
+    "format-adopt-20261019/fixtures/transfer-1023/r1-s2-public-asf8.bin"
 ));
 
 fn sha256(parts: &[&[u8]]) -> [u8; 32] {
@@ -127,7 +129,7 @@ impl Stage1Fixture {
     fn reject_without_writes(&mut self, error: ProgramError) {
         let before: Vec<_> = self.accounts.iter().map(|a| a.data.clone()).collect();
         let lamports: Vec<_> = self.accounts.iter().map(|a| a.lamports).collect();
-        assert_eq!(self.run(11), Err(error));
+        assert_eq!(self.run(10), Err(error));
         for (index, account) in self.accounts.iter().enumerate() {
             assert_eq!(account.data, before[index], "account {index} changed");
             assert_eq!(account.lamports, lamports[index]);
@@ -139,7 +141,7 @@ fn saved_checkpoint() -> &'static [u8] {
     static CHECKPOINT: OnceLock<Vec<u8>> = OnceLock::new();
     CHECKPOINT.get_or_init(|| {
         let mut fixture = Stage1Fixture::new();
-        fixture.run(11).unwrap();
+        fixture.run(10).unwrap();
         fixture.accounts[2].data.clone()
     })
 }
@@ -161,10 +163,19 @@ fn assert_hash_binding_rejection(proof: &[u8], public: &[u8], checkpoint: &[u8],
 
 #[test]
 fn stage1_accepts_foreign_readonly_raw_buffers_and_only_writes_checkpoint() {
-    assert_eq!(PROOF.len(), 124_343);
+    assert_eq!(PROOF.len(), 57_607);
+    assert_eq!(PROOF.len(), verifier::PROOF_BYTES);
     assert_eq!(PUBLIC.len(), 1_880);
     assert_eq!(verifier::checkpoint_size(Variant::S2), 1_768);
-    for k in [10, 11] {
+    // The adopted format has one stage-1 split: [3, 11] is still an admitted
+    // route but its verification rejects without writing any account.
+    let mut fixture = Stage1Fixture::new();
+    let before: Vec<_> = fixture.accounts.iter().map(|a| a.data.clone()).collect();
+    assert_eq!(fixture.run(11), Err(ProgramError::InvalidInstructionData));
+    for (index, account) in fixture.accounts.iter().enumerate() {
+        assert_eq!(account.data, before[index], "account {index} changed");
+    }
+    for k in [10] {
         let mut fixture = Stage1Fixture::new();
         assert_ne!(fixture.accounts[0].owner, fixture.program);
         assert_ne!(fixture.accounts[1].owner, fixture.program);
@@ -299,7 +310,7 @@ fn checkpoint_borrow_conflict_returns_error_without_panicking() {
     let accounts: Vec<_> = fixture.accounts.iter_mut().map(TestAccount::info).collect();
     let _held = accounts[2].try_borrow_mut_data().unwrap();
     assert_eq!(
-        stage1(&fixture.program, &accounts, &[3, 11]),
+        stage1(&fixture.program, &accounts, &[3, 10]),
         Err(ProgramError::AccountBorrowFailed)
     );
 }
@@ -842,18 +853,43 @@ fn measured_core_call_counts_include_zero_progress_checkpoint() {
             Public::Withdrawal(public, &common.lane_transition)
         }
     };
-    for k in [10, 11] {
-        HASH_CALLS.with(|count| count.set(0));
-        let checkpoint = verifier::tx1(public, PUBLIC, PROOF, k, CountedDigest, None).unwrap();
-        HASH_CALLS.with(|count| assert_eq!(count.get(), 118 + 21 * k));
-        HASH_CALLS.with(|count| count.set(0));
-        verifier::tx2_authenticated(PUBLIC, PROOF, &checkpoint, CountedDigest, None).unwrap();
-        HASH_CALLS.with(|count| assert_eq!(count.get(), 3 + 21 * (22 - k)));
-    }
+    // Adopted format: per batch and tree, three leaf hashes per query and,
+    // for a binary multiproof over d distinct indices with n supplied nodes,
+    // n + d - 1 parent hashes (sum over levels of the occupied parents).
+    let k = verifier::SPLIT;
+    HASH_CALLS.with(|count| count.set(0));
+    let checkpoint = verifier::tx1(public, PUBLIC, PROOF, k, CountedDigest, None).unwrap();
+    let stage1_calls = HASH_CALLS.with(|count| count.get());
+    let queries: Vec<u32> = (0..22)
+        .map(|i| u32::from_le_bytes(checkpoint[320 + 4 * i..324 + 4 * i].try_into().unwrap()))
+        .collect();
+    let parents = |lo: usize, hi: usize| -> usize {
+        (0..3)
+            .map(|tree| {
+                let mut idx: Vec<u32> = queries[lo..hi]
+                    .iter()
+                    .map(|&u| if tree == 2 { u / 4 } else { u })
+                    .collect();
+                idx.sort();
+                idx.dedup();
+                aspis_r1_cost_probe::multiproof::node_count(
+                    aspis_r1_cost_probe::multiproof::Arity::Two,
+                    &idx,
+                )
+                .unwrap()
+                    + idx.len()
+                    - 1
+            })
+            .sum()
+    };
+    assert_eq!(stage1_calls, 118 + 3 * k + parents(0, k));
+    HASH_CALLS.with(|count| count.set(0));
+    verifier::tx2_authenticated(PUBLIC, PROOF, &checkpoint, CountedDigest, None).unwrap();
+    HASH_CALLS.with(|count| assert_eq!(count.get(), 3 + 3 * (22 - k) + parents(k, 22)));
     // Unkeyed checksum plus arbitrary account bytes admits next=0 at resume.
-    // All 22 query openings run. Repeating valid equations still satisfies the
-    // final relation for this honest proof, despite the checkpoint not being
-    // a tx1 output. This does not bypass the account-provenance requirement.
+    // The adopted stage 2 requires next == SPLIT (its batch multiproof covers
+    // exactly queries SPLIT..22), so this zero-progress checkpoint is rejected
+    // after the three resume hashes. Account provenance is still required.
     let mut checkpoint = saved_checkpoint().to_vec();
     checkpoint[9] = 0;
     let end = checkpoint.len() - 32;
@@ -862,7 +898,7 @@ fn measured_core_call_counts_include_zero_progress_checkpoint() {
     HASH_CALLS.with(|count| count.set(0));
     assert_eq!(
         verifier::tx2_authenticated(PUBLIC, PROOF, &checkpoint, CountedDigest, None),
-        Ok(())
+        Err(verifier::Error::Checkpoint)
     );
-    HASH_CALLS.with(|count| assert_eq!(count.get(), 465));
+    HASH_CALLS.with(|count| assert_eq!(count.get(), 3));
 }

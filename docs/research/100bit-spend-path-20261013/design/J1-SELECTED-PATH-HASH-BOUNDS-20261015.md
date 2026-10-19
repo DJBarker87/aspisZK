@@ -1,5 +1,7 @@
 # Selected guarded Pool-path query and hash-call inventory
 
+> Note (2026-10-19): the R1 proof format is now the compact binary-multiproof format, fixed length 57,607 bytes (`../evidence/format-adopt-20261019/REPORT.md`); 124,343 bytes below is the retired eight-way format.
+
 Inspection base: `e4a5808dd061cf373b27d130f7d66eb8f0214db9` (worktree HEAD). This is a source and existing-theorem inventory for the selected `pool-adapter` build. It separates (1) abstract first-read budgets, (2) source-visible `HashFn` calls, and (3) Solana PDA/CPI work. It does not assign a security budget, prove a source refinement, or close a global all-input query bound.
 
 ## Reachable guarded inputs

@@ -51,13 +51,25 @@ fn main() {
         .expect("re-encode decoded ASF8 public statement");
     assert_eq!(saved_public, reconstructed, "saved public bytes do not round-trip through the existing ASF8 reconstruction helper");
     let public = aspis_prover::r0_fixture::statement_public(&statement);
-    assert_eq!(&proof[..8], b"R1P3COST", "not a P3 proof");
     assert_eq!(proof[8], Variant::S2.tag(), "proof is not the two-fold S2 variant");
 
+    // Default: the adopted compact binary-multiproof verifier (split 10).
+    // `audit-eight-way`: the retired eight-way verifier (split 11, the
+    // baseline of the 583-call ordered trace).
+    #[cfg(not(feature = "audit-eight-way"))]
+    let (format, magic, split) = ("compact binary-multiproof (adopted)", aspis_r1_cost_probe::compact::MAGIC, verifier::SPLIT);
+    #[cfg(feature = "audit-eight-way")]
+    let (format, magic, split) = ("eight-way (audit)", b"R1P3COST", 11);
+    assert_eq!(&proof[..8], magic, "not a {format} P3 proof");
+    #[cfg(not(feature = "audit-eight-way"))]
+    use verifier::{tx1, tx2};
+    #[cfg(feature = "audit-eight-way")]
+    use verifier::eight_way::{tx1, tx2};
+
     PHASE.store(1, Ordering::Relaxed);
-    let checkpoint = verifier::tx1(public, &saved_public, &proof, 11, CountedDigest, None).expect("tx1 acceptance");
+    let checkpoint = tx1(public, &saved_public, &proof, split, CountedDigest, None).expect("tx1 acceptance");
     PHASE.store(2, Ordering::Relaxed);
-    verifier::tx2(&saved_public, &proof, &checkpoint, CountedDigest, None).expect("tx2 acceptance");
+    tx2(&saved_public, &proof, &checkpoint, CountedDigest, None).expect("tx2 acceptance");
     PHASE.store(0, Ordering::Relaxed);
 
     let map = INPUTS.get().unwrap().lock().unwrap();
@@ -73,6 +85,7 @@ fn main() {
     let report = json!({
         "scope": "host native verifier tx1+tx2 only; exact full concatenated input Vec<u8> used as identity",
         "source_revision": args[4],
+        "verifier_format": format, "stage1_split": split,
         "fixture": {
             "proof_path": proof_path, "proof_len": proof.len(), "proof_sha256": sha(&proof),
             "public_path": public_path, "public_len": saved_public.len(), "public_sha256": sha(&saved_public),

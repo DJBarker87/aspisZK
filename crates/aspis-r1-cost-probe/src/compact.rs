@@ -1,4 +1,5 @@
-//! UNPROVED CANDIDATE (proof-size feasibility test, 2026-10-19).
+//! ADOPTED R1 PROOF FORMAT (PREREG-PROOF-SIZE-2, 2026-10-19; prototype from
+//! the proof-size feasibility test). UNPROVED: PROOF-SIZE-OBLIGATIONS.
 //!
 //! Compact QM31 storage for the 455 proof values that the shipped format
 //! stores as 32-byte WideExact with the high QM31 half required to be zero:
@@ -7,7 +8,7 @@
 //! logical 32-byte form (zero high half) before any hashing, so every
 //! Fiat-Shamir message and record keeps its shipped byte definition.
 //!
-//! Candidate stored layout (`MAGIC`, variant S2 only):
+//! Stored layout (`MAGIC`, variant S2 only):
 //! header 16 | compact semantic 7,015 | compact y1 464 | inactive 32 |
 //! round0 224 | folded root 32 | round1 224 | final 2,048 |
 //! 22 openings x 832 (C1 values 480, C2 values 128, C1 salt, C2 salt,

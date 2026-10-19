@@ -24,7 +24,7 @@ use aspis_prover::{
     r0_fixture::statement_public,
     v7_pair_forest_fixture::prepare_v7_pair_forest_transfer_fixture_v1, HOST_HASH,
 };
-use aspis_r1_cost_probe::{prover, transport::Variant, verifier::View};
+use aspis_r1_cost_probe::{prover, transport::Variant, verifier};
 use aspis_registry::{
     encode_initialize_registry_v2, encode_schedule_profile_v2, encode_simple_mutation_v2,
     pool_v1_verifier_entry_v2_address, pool_v1_verifier_registry_v2_address,
@@ -108,8 +108,17 @@ const SYSTEM_PROGRAM_ID: &str = "11111111111111111111111111111111";
 const BPF_LOADER_UPGRADEABLE_ID: &str = "BPFLoaderUpgradeab1e11111111111111111111111";
 const WRONG_RELEASE_BINDING: [u8; 32] = [0xee; 32];
 const R1_CHECKPOINT_BYTES: usize = 1_768;
-const LIFECYCLE_UPLOAD_CHUNK_BYTES: usize = 900;
+/// TxV1 upload chunk (PREREG-PROOF-SIZE-2 item 6): the largest lifecycle
+/// write chunk (tag 5 || u32 offset || chunk, payer and upload authority
+/// signing, this driver's compute-budget settings) that serializes within the
+/// 4,096-byte TxV1 limit. Measured: overhead 329 bytes, maximum chunk 3,767
+/// (evidence/proof-size-20261019/receipts/upload-probe, REPORT.md section 4;
+/// re-measured in evidence/format-adopt-20261019).
+const LIFECYCLE_UPLOAD_CHUNK_BYTES: usize = 3_767;
+/// Legacy TxV1 chunk, selectable with `--upload-chunk legacy`.
+const LEGACY_LIFECYCLE_UPLOAD_CHUNK_BYTES: usize = 900;
 const TXV0_UPLOAD_CHUNK_BYTES: usize = 800;
+static LEGACY_UPLOAD_CHUNK: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
 #[cfg(not(feature = "private-leaf-salts"))]
 const PROFILE_BINDING: [u8; 32] = [
     0x78, 0x17, 0x1b, 0x56, 0x9e, 0xa7, 0xbc, 0xe5, 0x97, 0x63, 0xa2, 0xb5, 0x78, 0x81, 0x06, 0xa7,
@@ -178,6 +187,7 @@ impl TxVersion {
     fn upload_chunk_bytes(self) -> usize {
         match self {
             Self::V0 => TXV0_UPLOAD_CHUNK_BYTES,
+            Self::V1 if LEGACY_UPLOAD_CHUNK.load(std::sync::atomic::Ordering::Relaxed) => LEGACY_LIFECYCLE_UPLOAD_CHUNK_BYTES,
             Self::V1 => LIFECYCLE_UPLOAD_CHUNK_BYTES,
         }
     }
@@ -264,7 +274,7 @@ fn parse_args() -> Result<Args> {
          <evidence.json> <fresh-output-dir> <transfer|withdrawal> \
          [success|proof-rejection|wrong-release|stale-lane|replay|withdrawal-cpi-failure] \
          [--pairs N] [--reuse proof.bin public.bin] [--tx-version v0|v1] \
-         [--mask-entropy fixture|os] \
+         [--mask-entropy fixture|os] [--upload-chunk txv1-max|legacy] \
          (options may follow in either order)"
     );
     let operation = match args[5].as_str() {
@@ -280,6 +290,7 @@ fn parse_args() -> Result<Args> {
     let mut saw_pairs = false;
     let mut tx_version = TxVersion::V1;
     let mut saw_tx_version = false;
+    let mut saw_upload_chunk = false;
     let mut next_arg = 6;
     while next_arg < args.len() {
         match args[next_arg].as_str() {
@@ -331,6 +342,18 @@ fn parse_args() -> Result<Args> {
                     _ => bail!("--tx-version must be v0 or v1"),
                 };
                 saw_tx_version = true;
+                next_arg += 2;
+            }
+            "--upload-chunk" => {
+                ensure!(!saw_upload_chunk, "--upload-chunk may be specified only once");
+                ensure!(next_arg + 1 < args.len(), "expected --upload-chunk txv1-max|legacy");
+                let legacy = match args[next_arg + 1].as_str() {
+                    "txv1-max" => false,
+                    "legacy" => true,
+                    _ => bail!("--upload-chunk must be txv1-max or legacy"),
+                };
+                LEGACY_UPLOAD_CHUNK.store(legacy, std::sync::atomic::Ordering::Relaxed);
+                saw_upload_chunk = true;
                 next_arg += 2;
             }
             value if !value.starts_with("--") && scenario.is_none() => {
@@ -1511,7 +1534,7 @@ fn main() -> Result<()> {
     };
     ensure!(!proof_body.is_empty(), "R1 proof body is empty");
     ensure!(
-        proof_body.len() == View::proof_bytes(Variant::S2),
+        proof_body.len() == verifier::PROOF_BYTES,
         "R1 S2 proof body has the wrong canonical length"
     );
     let mut payload = Vec::with_capacity(

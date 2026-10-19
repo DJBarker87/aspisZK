@@ -1,4 +1,4 @@
-//! UNPROVED CANDIDATE (proof-size feasibility test, 2026-10-19).
+//! ADOPTED R1 PROOF FORMAT (PREREG-PROOF-SIZE-2, 2026-10-19); UNPROVED.
 //!
 //! Indexed Merkle multiproofs over the fixed 2^18-leaf commitment domain.
 //! `Arity::Eight` is the shipped tree shape (six levels of eight, node grammar

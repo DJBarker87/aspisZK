@@ -6,7 +6,10 @@ version.workspace = true
 description = "UNPROVED R1 COST PROBE, isolated P2 experiments"
 
 [features]
-default = []
+# PREREG-PROOF-SIZE-2 (2026-10-19): the adopted R1 proof format is the compact
+# binary-multiproof format (fixed length 57,607 bytes), which is defined only
+# over private leaf salts; the default build therefore carries them.
+default = ["private-leaf-salts"]
 detail-phases = []
 # Existing exact terminal kernels from the selected V7/R117 bundle.
 # This changes arithmetic evaluation only; the isolated R1 protocol is unproved.
@@ -21,15 +24,17 @@ optimized-terminal = [
     "aspis-statement/pool-v1-pair-forest-packed-range-audit",
     "aspis-statement/pool-v1-pair-forest-active-mask-basis-audit",
 ]
-prover = ["dep:aspis-prover", "dep:serde_json", "dep:sha2"]
+prover = ["private-leaf-salts", "dep:aspis-prover", "dep:serde_json", "dep:sha2"]
 private-leaf-salts = []
 # LOG D38.3: the prover-side P_R1 check (extracted C3 checker via the z4 probe
 # library) and the capped retry loop; requires private leaf salts.
 r1p-check = ["prover", "private-leaf-salts", "dep:aspis-z4b-probe", "dep:getrandom"]
 r0-op-count = ["aspis-core/r0-op-count"]
-# UNPROVED CANDIDATE (proof-size test, 2026-10-19): binary multiproofs and
-# compact QM31 storage, beside the shipped format. Default off.
-compact-binary = ["private-leaf-salts"]
+# AUDIT ONLY (PREREG-PROOF-SIZE-2 item 4): the retired eight-way verifier
+# (124,343-byte proof) under `verifier::eight_way`, for differential evidence
+# against saved eight-way fixtures. It never changes the default entrypoints,
+# and it is a compile error together with `prover` or on an SBF target.
+audit-eight-way = []
 
 [dependencies]
 aspis-core = { path = "../aspis-core", features = ["r0"] }
@@ -40,13 +45,16 @@ sha2 = { workspace = true, optional = true }
 aspis-z4b-probe = { path = "../../docs/research/v8-r0-zk-20261009/z4", optional = true }
 getrandom = { workspace = true, optional = true }
 
+# Historical S1 tool: reads saved eight-way fixtures with the eight-way
+# verifier and the host prover, a combination the adopted tree forbids
+# (`audit-eight-way` + `prover`). Kept for the record; not buildable.
 [[example]]
 name = "proof_size_s1"
-required-features = ["prover", "private-leaf-salts", "compact-binary"]
+required-features = ["prover", "audit-eight-way"]
 
 [[example]]
 name = "proof_size_s2"
-required-features = ["prover", "compact-binary"]
+required-features = ["prover"]
 
 [[example]]
 name = "readbudget_count"
@@ -56,9 +64,11 @@ required-features = ["prover", "compact-binary"]
 name = "semantic_gate"
 required-features = ["prover"]
 
+# Eight-way mutation offsets (pre-adoption gate); not buildable on the
+# adopted tree for the same reason as proof_size_s1.
 [[example]]
 name = "native_gate"
-required-features = ["prover"]
+required-features = ["prover", "audit-eight-way"]
 
 [[example]]
 name = "masked_fixture_gate"

@@ -18,7 +18,7 @@ fn statement_bytes(fixture: &aspis_prover::r0_fixture::Fixture) -> Vec<u8> {
 }
 
 fn verify(fixture: &aspis_prover::r0_fixture::Fixture, public_bytes: &[u8], proof: &[u8]) -> bool {
-    let Ok(cp) = verifier::tx1(fixture.public(), public_bytes, proof, 11, LegacyHashFn(HOST_HASH), None) else { return false };
+    let Ok(cp) = verifier::tx1(fixture.public(), public_bytes, proof, verifier::SPLIT, LegacyHashFn(HOST_HASH), None) else { return false };
     verifier::tx2(public_bytes, proof, &cp, LegacyHashFn(HOST_HASH), None).is_ok()
         && dense::verify(fixture.public(), proof, HOST_HASH).is_ok()
 }

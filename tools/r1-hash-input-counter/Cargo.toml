@@ -5,10 +5,15 @@ edition = "2021"
 
 [workspace]
 
+[features]
+# Differential run of the retired eight-way verifier on a saved eight-way
+# fixture (PREREG-PROOF-SIZE-2 item 4; audit only, never with the prover).
+audit-eight-way = ["aspis-r1-cost-probe/audit-eight-way"]
+
 [dependencies]
 aspis-core = { path = "../../crates/aspis-core" }
 aspis-prover = { path = "../../crates/aspis-prover", features = ["r0", "insecure-spend-fixture"] }
-aspis-r1-cost-probe = { path = "../../crates/aspis-r1-cost-probe", features = ["prover", "private-leaf-salts"] }
+aspis-r1-cost-probe = { path = "../../crates/aspis-r1-cost-probe", features = ["private-leaf-salts"] }
 aspis-statement = { path = "../../crates/aspis-statement", features = ["r0", "pool-v1-kernel"] }
 serde_json = "1.0.145"
 sha2 = "0.10.8"

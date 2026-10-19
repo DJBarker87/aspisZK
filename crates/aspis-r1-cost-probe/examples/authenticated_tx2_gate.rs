@@ -53,14 +53,8 @@ fn main() {
     );
     trace::take();
 
-    let query_start = HEADER
-        + verifier::SEMANTIC_BYTES
-        + 29 * 32
-        + 32
-        + 7 * 32
-        + 32
-        + 7 * 32
-        + Variant::S2.final_len() * 32;
+    // First C1 limb of opening 0 in the adopted compact layout.
+    let query_start = aspis_r1_cost_probe::compact::OFF_OPENINGS;
     let mut noncanonical_query = proof.clone();
     noncanonical_query[query_start..query_start + 4].copy_from_slice(&u32::MAX.to_le_bytes());
     trace::take();

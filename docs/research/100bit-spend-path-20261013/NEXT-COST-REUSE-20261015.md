@@ -1,5 +1,7 @@
 # Cost-reuse inventory (2026-10-15)
 
+> Note (2026-10-19): the R1 proof format is now the compact binary-multiproof format, fixed length 57,607 bytes (`evidence/format-adopt-20261019/REPORT.md`); 124,343 bytes below is the retired eight-way format.
+
 This is a bounded inventory of already measured code paths that could inform future cost work. It does not recommend a protocol change or establish a portable CU reduction.
 
 ## Closest implementation lead: V8 terminal query weights

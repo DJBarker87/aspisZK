@@ -20,8 +20,10 @@ fn fresh_ledger(label:&str)->std::path::PathBuf {
 
 fn verify_all(fixture:&Fixture,proof:&[u8]) {
     let public_bytes=statement_bytes(fixture);
-    let checkpoint=crate::verifier::tx1(fixture.public(),&public_bytes,proof,11,LegacyHashFn(HOST_HASH),None).expect("tx1");
+    let checkpoint=crate::verifier::tx1(fixture.public(),&public_bytes,proof,crate::verifier::SPLIT,LegacyHashFn(HOST_HASH),None).expect("tx1");
     crate::verifier::tx2(&public_bytes,proof,&checkpoint,LegacyHashFn(HOST_HASH),None).expect("tx2");
+    crate::verifier::tx2_authenticated(&public_bytes,proof,&checkpoint,LegacyHashFn(HOST_HASH),None).expect("authenticated tx2");
+    assert_eq!(proof.len(),crate::verifier::PROOF_BYTES);
     crate::dense::verify(fixture.public(),proof,HOST_HASH).expect("dense verifier");
 }
 

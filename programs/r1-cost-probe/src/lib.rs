@@ -2,6 +2,9 @@
 use aspis_r1_cost_probe::verifier::{self,Phase};
 use aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1;
 use solana_program::{account_info::AccountInfo,entrypoint::ProgramResult,pubkey::Pubkey,program_error::ProgramError,hash::hashv,msg,log::sol_log_compute_units};
+// PREREG-PROOF-SIZE-2: the program verifies the adopted compact
+// binary-multiproof format only (the eight-way verifier cannot be built for SBF).
+const _:()=assert!(verifier::PROOF_BYTES==57_607&&verifier::SPLIT==10);
 /// The sole digest backend instantiated by the admitted R1 program routes.
 #[derive(Clone, Copy)]
 struct SolanaDigest;
@@ -44,7 +47,7 @@ fn first(public_bytes:&[u8],proof:&[u8],k:usize)->Result<Vec<u8>,ProgramError>{
 /// The immutable account-data borrow keeps this value tied to those same bytes.
 #[inline(never)]
 fn first_decoded(public:aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize)->Result<Vec<u8>,ProgramError>{
-    #[cfg(not(feature="compact-binary"))] return verifier::tx1(public,public_bytes,proof,k,SolanaDigest,observer()).map_err(error); #[cfg(feature="compact-binary")] return verifier::candidate::tx1(public,public_bytes,proof,k,SolanaDigest,observer()).map_err(error);
+    verifier::tx1(public,public_bytes,proof,k,SolanaDigest,observer()).map_err(error)
 }
 #[cfg(feature="pool-adapter")]
 mod r1_pool_adapter;

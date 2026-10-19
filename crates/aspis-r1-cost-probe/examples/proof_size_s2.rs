@@ -1,6 +1,9 @@
-//! UNPROVED CANDIDATE. Proof-size test S2 (measurement 5): the candidate
-//! prover output on the deterministic R0 fixture is accepted by the candidate
-//! verifier, and every pre-registered mutation is rejected.
+//! UNPROVED. Proof-size teeth (S2 measurement 5), re-pointed at the adopted
+//! build (PREREG-PROOF-SIZE-2): the default prover's output on the
+//! deterministic R0 fixture is accepted by the default verifier (and the
+//! dense verifier), and every pre-registered mutation is rejected. The
+//! eight-way control is a saved eight-way fixture (no eight-way prover exists
+//! in a prover build any more).
 use aspis_core::{digest::LegacyHashFn, Digest32, HashFn};
 use aspis_prover::HOST_HASH;
 use aspis_r1_cost_probe::{
@@ -17,14 +20,17 @@ fn main() {
     let public = aspis_statement::pool_v1::encode_pool_v1_pair_forest_terminal_statement_v1(&fixture.statement).unwrap();
     let seed = raw(&[b"UNPROVED:R1:proof-size-s2", &public]);
     let start = std::time::Instant::now();
-    let (proof, _) = prover::prove_masked_fixture_candidate(fixture.public(), &fixture.compiled, raw, &seed).unwrap();
+    let (proof, _) = prover::prove_masked_fixture(fixture.public(), &fixture.compiled, Variant::S2, raw, &seed).unwrap();
     let prove_seconds = start.elapsed().as_secs_f64();
     assert_eq!(proof.len(), compact::PROOF_BYTES);
-    // Control: the shipped prover/verifier on the same statement and seed.
-    let (shipped, _) = prover::prove_masked_fixture(fixture.public(), &fixture.compiled, Variant::S2, raw, &seed).unwrap();
-    let shipped_ck = verifier::tx1(fixture.public(), &public, &shipped, 10, hash, None).unwrap();
-    verifier::tx2(&public, &shipped, &shipped_ck, hash, None).unwrap();
+    assert_eq!(proof.len(), verifier::PROOF_BYTES);
+    aspis_r1_cost_probe::dense::verify(fixture.public(), &proof, raw).expect("dense verifier accepts");
+    // Eight-way control: a saved retired-format S2 proof (124,343 bytes).
+    let shipped: &[u8] = include_bytes!(concat!(env!("CARGO_MANIFEST_DIR"),
+        "/../../docs/research/100bit-spend-path-20261013/evidence/p3-private-leaf-salts-20261013/p3-pool-13/transfer-1023-os-task/r1-s2-proof.bin"));
+    assert_eq!(shipped.len(), 124_343);
 
+    // `candidate::*` are the default `verifier::*` entrypoints (re-exports).
     let tx1 = |p: &[u8]| candidate::tx1(fixture.public(), &public, p, compact::SPLIT, hash, None);
     let ck = tx1(&proof).expect("candidate stage 1 accepts");
     assert_eq!(ck.len(), verifier::checkpoint_size(Variant::S2));
@@ -145,15 +151,15 @@ fn main() {
     // Other strictness: wrong split, shipped proof to candidate, candidate to
     // shipped, a semantic byte changed after stage 1.
     expect!("stage 1 split 11", candidate::tx1(fixture.public(), &public, &proof, 11, hash, None).map(|_| ()), Error::Parse);
-    expect!("shipped proof to candidate", tx1(&shipped).map(|_| ()), Error::Parse);
-    expect!("candidate proof to shipped", verifier::tx1(fixture.public(), &public, &proof, 10, hash, None).map(|_| ()), Error::Parse);
+    expect!("eight-way proof to adopted verifier", tx1(shipped).map(|_| ()), Error::Parse);
+    expect!("eight-way proof to adopted verifier, split 11", verifier::tx1(fixture.public(), &public, shipped, 11, hash, None).map(|_| ()), Error::Parse);
     expect!("proof changed after stage 1", candidate::tx2_authenticated(&public, &flip(compact::OFF_SEMANTIC + 40), &ck, hash, None), Error::Checkpoint);
     results.push(encoder_refusal);
     let out = serde_json::json!({
         "candidate_bytes": proof.len(), "shipped_bytes": shipped.len(),
         "slot_real_nodes": counts, "slot_capacity": compact::SLOT_NODES,
         "candidate_prove_seconds": prove_seconds,
-        "accepted": ["candidate tx1", "candidate tx2_authenticated", "candidate tx2 strict", "shipped control tx1/tx2"],
+        "accepted": ["default tx1", "default tx2_authenticated", "default tx2 strict", "dense"],
         "rejections": results,
     });
     println!("{}", serde_json::to_string_pretty(&out).unwrap());

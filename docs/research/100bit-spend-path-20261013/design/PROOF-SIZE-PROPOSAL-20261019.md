@@ -1,5 +1,7 @@
 # Proof-size proposal (external calculation, 2026-10-19)
 
+> Note (2026-10-19): the R1 proof format is now the compact binary-multiproof format, fixed length 57,607 bytes (`../evidence/format-adopt-20261019/REPORT.md`); 124,343 bytes below is the retired eight-way format.
+
 Supplied by the user from an outside analysis of `research` at 9d12464c. It
 is a structural calculation, not a measurement; nothing in it has been
 implemented or benchmarked. It is the input to

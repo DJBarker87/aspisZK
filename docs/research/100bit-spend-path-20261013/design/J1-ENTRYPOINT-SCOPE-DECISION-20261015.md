@@ -1,5 +1,7 @@
 # Superseded interim entrypoint decision
 
+> Note (2026-10-19): the R1 proof format is now the compact binary-multiproof format, fixed length 57,607 bytes (`../evidence/format-adopt-20261019/REPORT.md`); 124,343 bytes below is the retired eight-way format.
+
 The binding [lead review](LEAD-REVIEW-J1-R4-20261015.md), commit `f5a04e0bb`, supersedes the interim decision below. The soundness oracle is over **all finite byte strings**; no global input-length cap or empty-address fallback belongs in the soundness theorem. The all-input query-count obligation remains. Pool release builds must reject the legacy `[1,k]` and `[2]` routes before account access. Lifecycle routes are retained for proof/public-account preparation and will be brought into the state-transition/immutability theorem under J1.R8.3(b); that obligation remains open. Verifier-side PDA hash calls must be counted unless the required byte-format separation is proved. The source guard is being implemented as G_R1.7; it is not yet a checked release artifact.
 
 The checked bounded literal sampler components remain reusable mathematical results. Their transport to the full byte-string oracle is now a required adapter; the existing cap is not silently retained as an adversary restriction. No source/all-program query bound, compiler theorem, or final security claim follows from this note.
