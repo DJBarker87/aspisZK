@@ -16,3 +16,5 @@ All four printed theorem axiom reports contain only `propext`, `Classical.choice
 Archive SHA256: `9a903f37b593afbe175c90ed91e5abee1400a7185e5434889ce44cac8d4084f6`.
 Manifest SHA256: `60ca1102c6ea459709fff7d99f9a9ed103e7fba2f344c9f673883349d929cb5c`.
 Publication validated both target source/object hashes, zero-swap successful receipts and exact axiom logs; `payload-sha256.json` inventories all 40 retained payload files. Readable sources are under `lean-candidates/current-circle-wrapper-20261019`. No full manifest replay was run.
+
+The subsequent read-only `r72-owner-addendum` records selected Types/Funs realpaths and object/source hashes, ordered roots from the fallback bridge and unconditional-policy preflights, and the generated-to-selected source-diff hashes. The captured source differences are limited to expanding the umbrella Aeneas import into three explicit imports. Its manifest SHA256 is `d570be555070c3730f5ca77ee3e0e169b2a2b440679eae00cb98871d69c9620a`. This narrows the import-owner uncertainty; it is not a fresh replay or a release-wide coherent rebuild. It is separate from the immutable archive above.
