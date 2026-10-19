@@ -1,0 +1,9 @@
+# Canonicality recovered from the reached begin and finish
+
+Successful FinishModel.finish with the actual round/decoder boundaries implies canonical alpha, extra, and before_z1 arrays. Successful actual r1_wire.begin supplies canonical eta through the already checked begin_challenges_selected_canonical theorem. A successful array read preserves canonicality at the read index.
+
+The same reached arithmetic witnesses now give the exact QM31 masked-terminal equation without separate alpha, eta or extra-value canonicality assumptions. The remaining canonicality assumptions are the mask16 and mask10 arrays, claim27 and terminal output; their source-producing boundaries are still explicit. This is not a proof of the opaque claims/fromFn/terminal implementations or whole verifier acceptance.
+
+Focused Lean 4.32 checks: InputCanonicality exit0, 8.24s, RSS3,284,762,624 bytes, zero process swaps; ReachedFieldEquation exit0, 19.35s, RSS3,287,154,688 bytes, zero process swaps. Four printed axiom reports contain only standard axioms. Exact receipts pin the imported objects and sources. The unchanged older ActualBeginSelectedCanonical source matches SHA256 2ab5d4712f74c62b937830c25c6b629d8c284479bd26436e1723a89bda17a8db and reused object b294d11c4005dd8de3d34dc9eaa542a829e00da5ab732654fa84acf8774c3f24 (prior check exit0, 1.62s, 3,859,384KiB RSS, zero swaps, standard-only axioms).
+
+The attempted direct join with the parsed semantic-view sumcheck chain hit the Lean interpreter memory limit at 3,399,204,864 bytes RSS in7.84s. Its source, failed receipt and diagnostics are retained; it is not claimed checked and was not retried unchanged locally. A focused build-host integration check remains pending. No package replay or production source changes were made. The full 100-bit soundness goal remains open.
