@@ -170,11 +170,11 @@ pub fn line_fold(alpha:E,v:usize,a:[E;4])->E {
 /// The five base-field denominators used to fold one sampled query: circle
 /// x/y, followed by line x/y/z. Their inverses are batch-computed once per
 /// transaction so each query avoids five independent field inversions.
-struct QueryGeometry { start:usize, inverses:Vec<[M31;5]> }
+struct QueryGeometry { start:usize, inverses:Vec<[M31;5]>, line_z:Vec<M31> }
 impl QueryGeometry {
     fn for_range(queries:&[u32;22],start:usize,end:usize)->Result<Self,Error> {
         if start>end||end>queries.len(){return Err(Error::Query);}
-        let mut denominators=Vec::with_capacity(end-start);
+        let mut line_z_values=Vec::with_capacity(end-start);
         let mut flat=Vec::with_capacity((end-start)*5);
         for &query in &queries[start..end] {
             let u=query as usize;
@@ -186,9 +186,9 @@ impl QueryGeometry {
             let values=[point.x,point.y,line_x,line_y,line_z];
             if values.iter().any(|x|*x==M31::ZERO){return Err(Error::Query);}
             flat.extend_from_slice(&values);
-            denominators.push(values);
+            line_z_values.push(line_z);
         }
-        if flat.is_empty(){return Ok(Self{start,inverses:Vec::new()});}
+        if flat.is_empty(){return Ok(Self{start,inverses:Vec::new(),line_z:line_z_values});}
         // Standard prefix-product/backward batch inversion. The only `inv`
         // in this routine is applied to the product of all nonzero entries.
         let mut prefixes=Vec::with_capacity(flat.len());
@@ -201,8 +201,8 @@ impl QueryGeometry {
             flat_inverse[i]=suffix_inverse.mul(prefixes[i]);
             suffix_inverse=suffix_inverse.mul(flat[i]);
         }
-        let inverses=(0..denominators.len()).map(|i|core::array::from_fn(|j|flat_inverse[5*i+j])).collect();
-        Ok(Self{start,inverses})
+        let inverses=(0..line_z_values.len()).map(|i|core::array::from_fn(|j|flat_inverse[5*i+j])).collect();
+        Ok(Self{start,inverses,line_z:line_z_values})
     }
     #[inline(always)]
     fn for_query(&self,index:usize)->&[M31;5] {&self.inverses[index-self.start]}
@@ -231,6 +231,10 @@ fn line_fold_with_inverses(alpha:E,a:[E;4],inverse:&[M31;5])->E {
 pub fn accumulate(p:&Prepared,a:&mut Accumulator,index:usize,value:E) {
     let mut node=crate::fast_domain::line_node(domain::FibreIndex::new(if p.variant.folds()==1 {index}else{index/4*4}).unwrap());
     if p.variant.folds()==2 {for _ in 0..2 {node=node.mul(node).double().sub(M31::ONE);}}
+    accumulate_with_node(p,a,node,value)
+}
+#[inline(never)]
+fn accumulate_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E) {
     let mut basis=[M31::ZERO;256];basis[0]=M31::ONE;let mut n=1;
     while n<a.weights.len() {for j in 0..n {basis[n+j]=basis[j].mul(node);} node=node.mul(node).double().sub(M31::ONE);n*=2;}
     for j in 0..a.weights.len() {
@@ -279,7 +283,12 @@ fn query_with_geometry<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:
         folded=line_fold_with_inverses(p.alpha[1],values,inverse);crate::trace::value(10,2*i+1,folded);
     }
     #[cfg(feature="detail-phases")]mark(obs,Phase::QueryPart(i,2));
-    accumulate(p,a,u,folded);mark(obs,Phase::Query(i));Ok(())
+    if p.variant.folds()==2 {
+        // for_range already computed T2(line_x) for this query's denominator.
+        let z=geometry.line_z[i-geometry.start];
+        accumulate_with_node(p,a,z.mul(z).double().sub(M31::ONE),folded);
+    } else {accumulate(p,a,u,folded);}
+    mark(obs,Phase::Query(i));Ok(())
 }
 pub fn polynomial(bytes:&[u8],x:E)->E {(0..7).rev().fold(E::ZERO,|a,i|a.mul(x).add(field(bytes,i)))}
 #[inline(never)]
