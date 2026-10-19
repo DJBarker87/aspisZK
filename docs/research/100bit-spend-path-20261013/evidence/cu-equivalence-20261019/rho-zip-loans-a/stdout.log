@@ -1,0 +1,15 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsZipLoans.lean:45:79: error: unsolved goals
+T : Type
+iter : MutIter T
+hi : (↑iter.slice).length ≤ iter.i
+hlen : ↑iter.slice.len = (↑iter.slice).length
+hstop : ¬iter.i < ↑iter.slice.len
+⊢ (let (item, next, back) := (none, iter, fun it x => it)
+    match item with
+    | none => ok (none, next)
+    | some value =>
+      ok (some { value := value, write := fun state replacement => back state (some replacement) }, next)) =
+    ok (none, iter)
+'AspisR1.CuSavingsZipLoans.next_write' depends on axioms: [propext, Quot.sound]
+'AspisR1.CuSavingsZipLoans.next_done' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.CuSavingsZipLoans.zipNext' depends on axioms: [propext, Classical.choice, Quot.sound]

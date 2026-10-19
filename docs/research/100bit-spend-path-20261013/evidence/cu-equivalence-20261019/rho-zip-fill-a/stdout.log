@@ -1,0 +1,69 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsZipFill.lean:19:10: error: unsolved goals
+case zero.nil.nil
+T : Type
+hn : 0 < [].length
+⊢ overwrite (0 + 1) ([].set 0 [][0]) [] = overwrite 0 [] []
+
+case zero.nil.cons
+T : Type
+head✝ : T
+tail✝ : List T
+hn : 0 < (head✝ :: tail✝).length
+hlen✝ : [].length = (head✝ :: tail✝).length
+hlen : 0 = tail✝.length + 1
+⊢ overwrite (tail✝.length + 1 + 1) ([].set (tail✝.length + 1) (head✝ :: tail✝)[tail✝.length + 1]) (head✝ :: tail✝) =
+    overwrite (tail✝.length + 1) [] (head✝ :: tail✝)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsZipFill.lean:25:10: error: unsolved goals
+case succ.nil.nil
+T : Type
+n : ℕ
+ih :
+  ∀ (xs ys : List T),
+    xs.length = ys.length → ∀ (hn : n < ys.length), overwrite (n + 1) (xs.set n ys[n]) ys = overwrite n xs ys
+hn : n + 1 < [].length
+⊢ overwrite (n + 1 + 1) ([].set (n + 1) [][n + 1]) [] = overwrite (n + 1) [] []
+
+case succ.nil.cons
+T : Type
+n : ℕ
+ih :
+  ∀ (xs ys : List T),
+    xs.length = ys.length → ∀ (hn : n < ys.length), overwrite (n + 1) (xs.set n ys[n]) ys = overwrite n xs ys
+head✝ : T
+tail✝ : List T
+hn : n + 1 < (head✝ :: tail✝).length
+hlen : 0 = tail✝.length + 1
+⊢ overwrite (n + 1 + 1) ([].set (n + 1) (head✝ :: tail✝)[n + 1]) (head✝ :: tail✝) =
+    overwrite (n + 1) [] (head✝ :: tail✝)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsZipFill.lean:29:39: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≤ -2
+  a - c ≥ 0
+where
+ a := ↑n
+ b := ↑(x :: xs).length
+ c := ↑ys.length
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsZipFill.lean:56:4: warning: This simp argument is unused:
+  core.iter.traits.iterator.IteratorSliceIter
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵z̵i̵p̵N̵e̵x̵t̵,̵[̲b̲o̲d̲y̲,̲ ̲z̲i̲p̲N̲e̲x̲t̲,̲
+      core.iter.adapters.zip.Zip.Insts.CoreIterTraitsIteratorIteratorPair.next, l̵o̵a̵n̵I̵t̵e̵r̵a̵t̵o̵r̵,̵C̵u̵S̵a̵v̵i̵n̵g̵s̵Z̵i̵p̵L̵o̵a̵n̵s̵.̵n̵e̵x̵t̵_̵w̵r̵i̵t̵e̵l̲o̲a̲n̲I̲t̲e̲r̲a̲t̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲C̲u̲S̲a̲v̲i̲n̲g̲s̲Z̲i̲p̲L̲o̲a̲n̲s̲.̲n̲e̲x̲t̲_̲w̲r̲i̲t̲e̲ z.fst ha, c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵t̵e̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵.̵n̵e̵x̵t̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵h̵b̵'̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵f̵]̵c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲t̲e̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲S̲l̲i̲c̲e̲I̲t̲e̲r̲.̲n̲e̲x̲t̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲ ̲h̲b̲'̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsZipFill.lean:88:10: error: Type mismatch: After simplification, term
+  hlen
+ has type
+  (↑z.fst.slice).length = (↑z.snd.slice).length
+but is expected to have type
+  (↑(z.fst.slice.setAtNat z.fst.i replacement)).length = (↑z.snd.slice).length
+'AspisR1.CuSavingsZipFill.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsZipFill.done' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsZipFill.loop_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsZipFill.fill_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
