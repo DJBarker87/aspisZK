@@ -1,0 +1,78 @@
+/tmp/RawCommitmentFrameReplay.lean:86:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  RawTranscriptFrameBytes.advance ?state
+in the target expression
+  (have absorbed :=
+      H (UnifiedSampler.absorb SelectedTranscriptParams.params row (LiteralTranscript.erasePrefix P) payload).toBytes;
+    have advanced := H (RawTranscriptFrameBytes.advance absorbed);
+    if row = 26 then H (RawTranscriptFrameBytes.reseed pub.tag advanced) else advanced) =
+    (eval H (LiteralByteSampler.samp row P (LiteralTranscript.Message.payload payload)).toProgram).2.2
+
+H : Bytes → State
+pub : Public
+P : LiteralTranscript.Prefix
+hpub : P.statement = pub
+row : ℕ
+hrow0 : row ≠ 0
+hrow31 : row ≠ 31
+payload : SelectedTranscriptParams.Message
+ha :
+  RawTranscriptFrameBytes.absorb
+      (UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P)) row ↑payload =
+    (UnifiedSampler.absorb SelectedTranscriptParams.params row (LiteralTranscript.erasePrefix P) payload).toBytes
+⊢ (have absorbed :=
+      H (UnifiedSampler.absorb SelectedTranscriptParams.params row (LiteralTranscript.erasePrefix P) payload).toBytes;
+    have advanced := H (RawTranscriptFrameBytes.advance absorbed);
+    if row = 26 then H (RawTranscriptFrameBytes.reseed pub.tag advanced) else advanced) =
+    (eval H (LiteralByteSampler.samp row P (LiteralTranscript.Message.payload payload)).toProgram).2.2
+/tmp/RawCommitmentFrameReplay.lean:111:24: error: unsolved goals
+case zero.initial
+H : Bytes → State
+pub : Public
+P : LiteralTranscript.Prefix
+hpub : P.statement = pub
+hrow : 0 < 31
+root : State
+word : LiteralTranscript.C1Word
+hm : LiteralTranscript.valid 0 (LiteralTranscript.Message.initial root word)
+⊢ H
+      (advanceA SelectedTranscriptParams.params
+          (H
+            (PublicInitFrame.row0 SelectedTranscriptParams.params ⋯
+                (H (PublicInitFrame.addr pub.pubBytes ⋯ root).toBytes)).toBytes)).toBytes =
+    H
+      (advanceA AspisR1.RawCutLiteralStateSuccessor.params✝
+          (H
+            (PublicInitFrame.row0 AspisR1.RawCutLiteralStateSuccessor.params✝
+                AspisR1.RawCutLiteralStateSuccessor.params_D✝
+                (H (PublicInitFrame.addr pub.pubBytes ⋯ root).toBytes)).toBytes)).toBytes
+'AspisR1.RawCommitmentFrameReplay.frameAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RawCommitmentFrameReplay.successor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RawCommitmentFrameReplay.stateBefore' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RawCommitmentFrameReplay.frameFromView' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RawCommitmentFrameReplay.initial_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RawCommitmentFrameReplay.payloadSuccessor_eq_sampler' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.RawCommitmentFrameReplay.successor_eq_sampler' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+       21.17 real         1.38 user         2.41 sys
+          2997813248  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               97881  page reclaims
+              145718  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               29973  voluntary context switches
+              135131  involuntary context switches
+         33168733909  instructions retired
+         13920891405  cycles elapsed
+           483076096  peak memory footprint

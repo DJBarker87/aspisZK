@@ -1,0 +1,6 @@
+import GSRejectingSamplerDecoderBank
+import GSDecoderTapeReindex
+
+#check AspisR1.GSRejectingSamplerDecoderBank.failed_iff_output
+#check AspisR1.GSDecoderTapeReindex.flatBank
+#check AspisR1.GSFixedInputDecoderFamily.run

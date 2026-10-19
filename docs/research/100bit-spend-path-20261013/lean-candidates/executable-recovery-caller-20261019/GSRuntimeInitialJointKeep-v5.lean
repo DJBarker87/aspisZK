@@ -1,4 +1,4 @@
-import GSRuntimeDistanceEncoderBridge
+import GSRuntimeInitialDistanceEncoderBridge
 import IncrementalCandidateLoop
 import FiniteListCandidateMerge
 
@@ -11,8 +11,10 @@ open AspisPool.AlgorithmicCircleDecoderV7
 open AspisR1.PartialJointList
 open AspisR1.IncrementalJointCandidates
 open AspisR1.IncrementalCandidateLoop
+open AspisR1.InitialResponses
+open AspisR1.ConcreteBinding
 open AspisR1.FiniteListCandidateMerge
-open AspisWide.GSRuntimeDistanceEncoderBridge
+open AspisWide.GSRuntimeInitialDistanceEncoderBridge
 open AspisWide.InitialEncoder
 open AspisWide.WideExactGRSInstantiation
 open AspisWideTower
@@ -33,6 +35,7 @@ theorem runtimeSelectedSupport_eq (S : Finset (Fin 29))
     (W : Fin 29 → InitialWord WideExact)
     (t : Fin 29 → InitialMessage WideExact) :
     runtimeSelectedSupport S W t = selectedSupport S W t := by
+  classical
   ext x
   simp [runtimeSelectedSupport, selectedSupport,
     initialRuntimeEncoder_eq_released]
@@ -64,7 +67,7 @@ theorem runSpec_eq_legacy (W : Fin 29 → InitialWord WideExact)
     FiniteListCandidateMerge.runSpec (runtimeKeep W)
         (fun i => (decoded i).toFinset) S family lanes =
       IncrementalCandidateLoop.run W
-        (fun i => (decoded i).toFinset) lanes S family := by
+        (fun i => (decoded i).toFinset) S family lanes := by
   induction lanes generalizing S family with
   | nil => rfl
   | cons lane rest ih =>
@@ -95,8 +98,36 @@ theorem runtimeCandidates_length_le_100 (W : Fin 29 → InitialWord WideExact)
     (S := ∅) (family := [fun _ => 0])
   · simp
   · rw [runSpec_eq_legacy]
-    exact IncrementalCandidateLoop.candidates_card W
-      (fun i => (decoded i).toFinset) lanes
+    simpa [IncrementalCandidateLoop.candidates] using
+      IncrementalCandidateLoop.candidates_card W
+        (fun i => (decoded i).toFinset) lanes
+
+
+/-- If each returned decoder list contains every genuinely close initial
+message, the executable list merge refines the existing lambda set. This is
+the bridge from the checked list algorithm to concrete binding. -/
+theorem runtimeCandidates_to_lambda
+    (W : Fin 29 → InitialWord WideExact)
+    (decoded : Fin 29 → List (InitialMessage WideExact))
+    (lanes : List (Fin 29))
+    (hcover : lanes.toFinset = Finset.univ)
+    (hcomplete : ∀ lane, InitialResponses.Close (W lane) ⊆ (decoded lane).toFinset) :
+    (runtimeCandidates W decoded lanes).toFinset = InitialResponses.Lambda W := by
+  rw [runtimeCandidates_toFinset]
+  exact IncrementalCandidateLoop.candidates_eq_lambda W
+    (fun i => (decoded i).toFinset) lanes hcover hcomplete
+
+/-- Existing ConcreteBinding uses Lambda directly, so successful recovered
+lists feed its candidate set without a second enumeration. -/
+theorem runtimeCandidates_to_bindingCandidates
+    (W : Fin 29 → InitialWord WideExact)
+    (decoded : Fin 29 → List (InitialMessage WideExact))
+    (lanes : List (Fin 29))
+    (hcover : lanes.toFinset = Finset.univ)
+    (hcomplete : ∀ lane, InitialResponses.Close (W lane) ⊆ (decoded lane).toFinset) :
+    (runtimeCandidates W decoded lanes).toFinset = ConcreteBinding.candidates W := by
+  rw [runtimeCandidates_to_lambda W decoded lanes hcover hcomplete]
+  rfl
 
 #print axioms runtimeSelectedSupport
 #print axioms runtimeSelectedSupport_eq
@@ -106,5 +137,7 @@ theorem runtimeCandidates_length_le_100 (W : Fin 29 → InitialWord WideExact)
 #print axioms runSpec_eq_legacy
 #print axioms runtimeCandidates_toFinset
 #print axioms runtimeCandidates_length_le_100
+#print axioms runtimeCandidates_to_lambda
+#print axioms runtimeCandidates_to_bindingCandidates
 
 end AspisWide.GSRuntimeInitialJointKeep

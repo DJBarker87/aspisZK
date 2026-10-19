@@ -1,0 +1,32 @@
+AspisR1.GSRejectingSamplerDecoderBank.failed_iff_output {X K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K]
+  (sample : X → Option (AspisR1.GSRejectingSamplerDecoderBank.FlatTape K)) (q : ℕ)
+  (inputs : AspisR1.GSFixedInputDecoderFamily.Inputs K 5) (x : X) :
+  AspisR1.GSRejectingSamplerDecoderBank.failed sample q inputs x ↔
+    AspisR1.GSRejectingSamplerDecoderBank.sampleAndRun sample q inputs x = none ∨
+      ∃ out,
+        AspisR1.GSRejectingSamplerDecoderBank.sampleAndRun sample q inputs x = some out ∧
+          AspisR1.GSFixedInputDecoderFamily.failed out
+AspisR1.GSDecoderTapeReindex.flatBank (K : Type) (m n t : ℕ) :
+  (Fin ((m + n) * t) → K × K) ≃ AspisR1.GSDecoderTapeReindex.BankTape K m n t
+AspisR1.GSFixedInputDecoderFamily.run {finalCount : ℕ} {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K]
+  (q t : ℕ) (inputs : AspisR1.GSFixedInputDecoderFamily.Inputs K finalCount)
+  (H : AspisR1.GSFixedInputDecoderFamily.InitialTape K t × AspisR1.GSFixedInputDecoderFamily.FinalTape K t) :
+  AspisR1.GSFixedInputDecoderFamily.Results K finalCount
+        2.75 real         0.67 user         0.67 sys
+          2085126144  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              165407  page reclaims
+                4437  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                7951  voluntary context switches
+                5441  involuntary context switches
+         12316477100  instructions retired
+          4945755887  cycles elapsed
+           348802632  peak memory footprint
