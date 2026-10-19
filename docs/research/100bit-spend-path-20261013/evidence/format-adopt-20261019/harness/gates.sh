@@ -24,7 +24,7 @@ for g in "$@"; do case $g in
   pool-r1) $R gate-pool-r1-features "aspis-pool tests r1 features" $S -- cargo test $C -p aspis-pool --features r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit ;;
   pool-all) $R gate-pool-all-features "aspis-pool tests all features" $S -- cargo test $C -p aspis-pool --all-features ;;
   pool-v7) $R gate-pool-v7-candidate "aspis-pool tests v7 candidate" $S -- cargo test $C -p aspis-pool --features v7-pair-forest-one-tx-candidate ;;
-  wallet) cp $H/harness/wallet-Cargo.lock $S/crates/aspis-pool-wallet-v1/Cargo.lock; CARGO_TARGET_DIR=$H/wallet-target $R gate-wallet "wallet tests eight-lane-plumbing-v2 (B1 refreshed lock)" $S/crates/aspis-pool-wallet-v1 -- cargo test --release --offline --locked -j 4 --features eight-lane-plumbing-v2 --no-fail-fast ;;
+  wallet) CARGO_TARGET_DIR=$H/wallet-target $R gate-wallet "wallet tests eight-lane-plumbing-v2 (committed refreshed lock)" $S/crates/aspis-pool-wallet-v1 -- cargo test --release --offline --locked -j 4 --features eight-lane-plumbing-v2 --no-fail-fast ;;
   driver-repo) CARGO_TARGET_DIR=$H/driver-target-repo $R gate-repo-pool-gate-build "repo pool_gate build" $S/tools/r1-cost-probe -- cargo build --release --offline --locked -j 4 --bin pool_gate --features private-leaf-salts ;;
   *) echo "unknown gate $g";;
 esac; done

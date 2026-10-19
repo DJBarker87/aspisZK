@@ -17,8 +17,10 @@ for L, (b1s, b1t) in B1.items():
     task = H / 'runs/adopt' / L / 'task'
     proof = (task / 'r1-s2-proof.bin').read_bytes(); public = (task / 'r1-s2-public-asf8.bin').read_bytes()
     saved_public = Path('/home/dombarker/project-offloads/aspis-r1-rollover-measurement-20261019/fixtures', L, 'r1-s2-public-asf8.bin').read_bytes()
-    reuse = json.loads((H / 'runs/plan' / f'reuse-{L}' / 'evidence.json').read_text())['execution']
-    s1, st = e['stage1_compute_units'], e['compute_units']
+    reuse = json.loads((H / 'runs/verified' / f'reuse-{L}' / 'evidence.json').read_text())['execution']
+    s1, st = reuse['stage1_compute_units'], reuse['compute_units']
+    assert (s1, st) == (e['stage1_compute_units'], e['compute_units']), L
+    assert public == saved_public and len(proof) == 57607, L
     rows.append({'fixture': L, 'outcome': e.get('outcome'), 'stage1_cu': s1, 'settlement_cu': st,
         'b1_stage1': b1s, 'b1_settlement': b1t, 'stage1_delta': s1 - b1s, 'settlement_delta': st - b1t,
         'stage1_ok': s1 <= b1s, 'settlement_ok': st <= b1t + 10000,
@@ -28,7 +30,10 @@ for L, (b1s, b1t) in B1.items():
         'slot_nodes': native['slot_nodes'], 'total_nodes': native['total_nodes'], 'variable_length_bytes': native['variable_length_bytes'],
         'native_default_and_dense': [native['native_tx1_tx2_tx2_authenticated'], native['dense']],
         'receipt': {k: rec[k] for k in ['exit_status', 'wall_seconds', 'peak_rss_kib', 'swaps']}})
-out = {'criterion': 'PREREG-PROOF-SIZE-2 item 1: stage 1 <= B1, settlement <= B1 + 10,000, per fixture',
+out = {'source_revision': json.loads((H / 'source-hashes.json').read_text())['source_revision'],
+       'artifact_sha256': {k: hashlib.sha256((H / p).read_bytes()).hexdigest() for k, p in [('verifier', 'artifacts/verifier/aspis_r1_cost_probe_program.so'), ('pool', 'artifacts/pool/aspis_pool.so')]},
+       'proof_uploads': 16, 'statement_uploads': 1, 'total_uploads': 17,
+       'criterion': 'PREREG-PROOF-SIZE-2 item 1: stage 1 <= B1, settlement <= B1 + 10,000, per fixture',
        'b1_reference': 'design/LEAD-REVIEW-POOL-B1-20261019.md (settlement); proof-size-20261019/cu.json b1_stage1 (stage 1)',
        'harness': 'B1 measure driver 747cf4df patched by harness/patch_driver_adopt.py; Pool ELF 121f3e29 (cu-bound2/B1); registry as B1; LiteSVM 0.16.0; TxV1; split 10; fresh OS entropy per fixture',
        'all_stage1_ok': all(r['stage1_ok'] for r in rows), 'all_settlement_ok': all(r['settlement_ok'] for r in rows), 'rows': rows}
