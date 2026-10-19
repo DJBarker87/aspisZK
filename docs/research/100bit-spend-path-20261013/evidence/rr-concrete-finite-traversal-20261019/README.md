@@ -1,0 +1,13 @@
+# Concrete finite-input RR traversal: recovery, failure and query bounds
+
+Three focused Lean 4.32 targets passed with standard axioms only, zero process swap, and approximately 2.12 GB peak process RSS. Exact target/source/import pins, commands, base revisions, exit codes, wall time, RSS, swap and axiom reports are recorded per target. No full package replay or unchanged regression was run.
+
+RRConcreteValidState wraps the executable dense-row state with erased validity proofs. Its total child uses the actual finite scanner and list normalization, with no runtime test of the mathematical invariant. It proves root equivalence and child scalar degree <= parent root multiplicity for every a. The child definition is outside the noncomputable section.
+
+RRConcreteTraversal instantiates the same randomized bounded-depth RR program with that actual child, actual scalar root finder and actual zero-column terminal test. `run_recovery` proves soundness of every returned candidate and completeness for all polynomial roots with degree < depth (including the zero polynomial). The zero-test, local child recovery and sibling mass hypotheses from the generic theorem are discharged, not assumed by this theorem.
+
+RRConcreteTraversalLaw supplies an executable fixed finite input implementation. `runFromFiniteTape_correct` gives recovery on every successful tape. `run_finite_abort_le` proves abort probability <= depth * initial scalar degree * 2^-t under a uniform finite tape of field pairs. `run_actual_trace_bound` bounds the actual trace on every branch by depth * initial degree; the outer global cursor prevents cross-node tape-address reuse. These correctness, abort and consumption results refer to one concrete traversal, without a separate ideal root finder or success assumption on intermediate calls.
+
+Boundaries remaining: the initial constructor must normalize an arbitrary nonzero GS polynomial into a state whose scalar row0 is nonzero; that is in progress. GS interpolation, list/image filtering and deduplication, whole operation/bit cost, and finite bits -> uniform field-pair sampling are not supplied by this packet. Nor does this prove the complete cryptographic 100-bit spend statement, production Rust/runtime equivalence, privacy, or the two-transaction cost gate. The finite-tape probability law is over independent uniform field elements, not yet a concrete bounded-bit generator.
+
+The worker's ValidState receipt records its own checkout revision; exact added source hashes and imported object hashes identify the actual checked closure. Linux and Mac object hashes must not be compared as interchangeable binaries.
