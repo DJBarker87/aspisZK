@@ -16,6 +16,10 @@ members = [
     "docs/research/v8-r0-zk-20261009/refine/blockwriters",
     "docs/research/v8-r0-zk-20261009/refine/poseidon",
 ]
+# The research probes under docs/ are standalone crates with their own
+# [workspace]; the R1 cost probe uses the z4 probe library only behind its
+# `r1p-check` feature (LOG D38.3).
+exclude = ["docs"]
 resolver = "2"
 
 [workspace.package]
@@ -47,3 +51,11 @@ solana-sdk = "2.3.0"
 solana-system-interface = { version = "1.0.0", features = ["bincode"] }
 zeroize = "1.8.1"
 x25519-dalek = { version = "=3.0.0", default-features = false, features = ["zeroize"] }
+
+# The extracted P_R1 checker and builders are modelled with checked arithmetic
+# (an overflow is a failure, D57.1): keep overflow checks in optimized builds.
+[profile.release.package.aspis-r1-cert-check]
+overflow-checks = true
+
+[profile.release.package.aspis-r1-cert-build]
+overflow-checks = true

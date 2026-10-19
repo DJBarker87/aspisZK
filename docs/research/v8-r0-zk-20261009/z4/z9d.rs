@@ -453,3 +453,7 @@ pub(super) fn run(p: &Pub, cert: &Cert, label: &str, teeth: bool) {
     }
     println!("R1C3_TEETH_EXTRA_SUMMARY {label} rejected={rej}/{ne}");
 }
+
+/// Library entry of the prover-side P_R1 check (D38.3), for the R1 prover.
+#[path = "z9e.rs"]
+pub(crate) mod z9e;

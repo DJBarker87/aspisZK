@@ -17,7 +17,14 @@ pub const SECOND_QUERY_BYTES:usize=4*32+6*7*32;
 pub const SECOND_QUERY_BYTES:usize=4*32+32+6*7*32;
 pub const CHECKPOINT_FIXED:usize=16+32*3+64+32*4+16+88+160+64+32*2+16+32;
 #[derive(Debug,Clone,Copy,PartialEq,Eq)]
-pub enum Error { Parse,Semantic,Transcript,Relation,Merkle,Query,Checkpoint,Allocation }
+pub enum Error { Parse,Semantic,Transcript,Relation,Merkle,Query,Checkpoint,Allocation,
+    /// Host prover only (LOG D38.3): this attempt's challenges fail the public
+    /// P_R1 check. Carries no challenge and no conjunct.
+    #[cfg(feature="prover")] Rejected,
+    /// Host prover only (D38.3): all N = 8 attempts were rejected; nothing is published.
+    #[cfg(feature="prover")] AttemptsExhausted,
+    /// Host prover only: the operating-system entropy source failed.
+    #[cfg(feature="prover")] Entropy }
 #[derive(Debug,Clone,Copy,PartialEq,Eq)]
 pub enum Phase { Parsed,Semantic,SemanticPart(u8),Prepare,CheckpointRead,Merkle(usize),Query(usize),QueryPart(usize,u8),CheckpointWrite,Relation,Final }
 pub type Observer=Option<fn(Phase)>;

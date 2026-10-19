@@ -164,6 +164,8 @@ fn prove_masked_with_attempt(
     { return Err(Error::Semantic); }
     #[cfg(feature="private-leaf-salts")]
     let (c1_salts,c2_salts)=(Some(derive_private_salts(&reserved,context,hash,merkle::C1_TAG)?),Some(derive_private_salts(&reserved,context,hash,merkle::C2_TAG)?));
+    #[cfg(all(test,feature="r1p-check"))]
+    test_hooks::observe_secrets(hash,reserved.mask_nonce(),&g,c1_salts.as_ref().unwrap().get(0));
     #[cfg(not(feature="private-leaf-salts"))]
     let (c1_salts,c2_salts)=(None,None);
     let mut backend=Backend{hash,variant,domain:EncodingDomain::new().map_err(|_|Error::Allocation)?,messages:vec![[E::ZERO;1024];29],c1:None,c2:None,c1_salts,c2_salts};
@@ -204,6 +206,8 @@ fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Ba
     #[cfg(feature="private-leaf-salts")]
     let mut folded_salts=None;
     let mut root=[0;32];let mut c1bytes=Vec::new();
+    #[cfg(feature="r1p-check")]
+    let mut alpha1_drawn=E::ZERO;
     let final_message=if variant.folds()==2 {
         folded_word=backend.domain.evaluate(&q1,0).map_err(|_|Error::Allocation)?;
         let mut leaves=Vec::with_capacity(1<<18);
@@ -223,10 +227,20 @@ fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Ba
         let tree=merkle::Tree::new(hash,leaves).map_err(|_|Error::Allocation)?;root=tree.root();folded_tree=Some(tree);
         let c1=round(&q1,&w1);c1bytes=encoded(c1);
         let mut payload=root.to_vec();payload.extend_from_slice(&c1bytes);
-        let alpha1=t.scalar(30,&payload,false);fold(&q1,alpha1,false)
+        let alpha1=t.scalar(30,&payload,false);
+        #[cfg(feature="r1p-check")]
+        {alpha1_drawn=alpha1;}
+        fold(&q1,alpha1,false)
     }else{q1};
     let fbytes=encoded(final_message.iter().copied());let row=if variant.folds()==1 {30}else{31};
     let queries=t.queries(row,&fbytes)?;let _rho=t.scalar_k(row+1,&[]);
+    // LOG D38.3: every challenge P_R1 reads is now drawn and no proof byte
+    // exists yet. A rejected attempt returns only `Error::Rejected`.
+    #[cfg(feature="r1p-check")]
+    public_check(variant,&R1PublicChallenges{
+        alpha:sem.alpha,z:[[sem.z[0].x,sem.z[0].y],[sem.z[1].x,sem.z[1].y]],
+        gamma,kappa,alpha0,alpha1:alpha1_drawn,queries:queries.to_vec(),
+    },sem.roots[0])?;
     let mut out=Vec::with_capacity(View::proof_bytes(variant));
     #[cfg(not(feature="private-leaf-salts"))]
     out.extend_from_slice(b"R1P2COST");
@@ -257,3 +271,137 @@ fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Ba
     }
     assert_eq!(out.len(),View::proof_bytes(variant));Ok(out)
 }
+
+// ---------------------------------------------------------------------------
+// LOG D38.3 / D41.3 / D45.5 R-retry: the prover-side P_R1 check and the capped
+// retry loop. The check is the extracted C3 checker (D57) behind z9e's
+// public-data and certificate construction; it reads public challenges only.
+
+/// The attempt cap N of the retry loop (D38.3, accepted N = 8).
+pub const ATTEMPT_CAP: usize = 8;
+
+#[cfg(all(feature="r1p-check", not(feature="private-leaf-salts")))]
+compile_error!("the P_R1 retry loop requires `private-leaf-salts` (LOG D38.3)");
+
+#[cfg(feature="r1p-check")]
+pub use aspis_z4b_probe::{R1CheckTimes, R1PublicChallenges};
+
+#[cfg(feature="r1p-check")]
+std::thread_local! {
+    static CHECK_TIMES: core::cell::RefCell<Vec<R1CheckTimes>> = const { core::cell::RefCell::new(Vec::new()) };
+}
+
+/// Durations of the P_R1 checks run on this thread since the last call.
+/// Only durations are kept: never a verdict's reason, a challenge or a root.
+#[cfg(feature="r1p-check")]
+pub fn take_check_times() -> Vec<R1CheckTimes> {
+    CHECK_TIMES.with(|v| core::mem::take(&mut *v.borrow_mut()))
+}
+
+/// P_R1 on one attempt. R1 is variant S2; P_R1 is not defined for the others.
+#[cfg(feature="r1p-check")]
+fn public_check(variant:Variant,challenges:&R1PublicChallenges,c1_root:[u8;32])->Result<(),Error> {
+    if variant!=Variant::S2 { return Err(Error::Semantic); }
+    #[cfg(test)]
+    if let Some(accepted)=test_hooks::forced_verdict(c1_root) {
+        return if accepted {Ok(())} else {Err(Error::Rejected)};
+    }
+    let _=c1_root;
+    let (accepted,times)=aspis_z4b_probe::p_r1_check(challenges);
+    CHECK_TIMES.with(|v| v.borrow_mut().push(times));
+    if accepted {Ok(())} else {Err(Error::Rejected)}
+}
+
+/// One published proof from the retry loop.
+#[cfg(feature="r1p-check")]
+pub struct RetriedProof { pub proof:Vec<u8>, pub audit:MaskedFixtureAudit, pub attempts:usize }
+
+/// D38.3 retry loop with fresh OS attempt secrets for every attempt.
+#[cfg(feature="r1p-check")]
+pub fn prove_masked_retrying(
+    public:Public<'_>,
+    compiled:&PoolV1PairForestMergedC1CompilationV1,
+    variant:Variant,
+    hash:HashFn,
+    nonce_store:&mut DurableStateOnlyMaskNonceStore,
+)->Result<RetriedProof,Error> {
+    prove_masked_retrying_with(public,compiled,variant,hash,nonce_store,|_|StateOnlyAttemptSecrets::generate().map_err(|_|Error::Entropy))
+}
+
+/// D38.3 retry loop. `next_attempt(k)` must return fresh OS-generated secrets
+/// for attempt k; a client that binds the nonce to the proof-account address
+/// (D38.4) generates a fresh account keypair per attempt and calls
+/// `StateOnlyAttemptSecrets::generate_for_mask_nonce` with its public key.
+///
+/// Each attempt durably burns its nonce in `nonce_store` before any mask or
+/// salt is derived (`reserve_and_build_…`). An attempt whose challenges fail
+/// P_R1 returns `Error::Rejected` from `prove_from_semantics` before any proof
+/// byte exists; its secrets are dropped (zeroized) and nothing about it is
+/// returned or logged. After `ATTEMPT_CAP` rejections the result is
+/// `AttemptsExhausted` and nothing is published. Any other error aborts.
+#[cfg(feature="r1p-check")]
+pub fn prove_masked_retrying_with(
+    public:Public<'_>,
+    compiled:&PoolV1PairForestMergedC1CompilationV1,
+    variant:Variant,
+    hash:HashFn,
+    nonce_store:&mut DurableStateOnlyMaskNonceStore,
+    mut next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,
+)->Result<RetriedProof,Error> {
+    if variant!=Variant::S2 { return Err(Error::Semantic); }
+    for k in 0..ATTEMPT_CAP {
+        let attempt=next_attempt(k)?;
+        match prove_masked_attempt(public,compiled,variant,hash,attempt,nonce_store) {
+            Ok((proof,audit))=>return Ok(RetriedProof{proof,audit,attempts:k+1}),
+            Err(Error::Rejected)=>continue,
+            Err(e)=>return Err(e),
+        }
+    }
+    Err(Error::AttemptsExhausted)
+}
+
+/// Test-only injection (cfg(test)): a queue of forced P_R1 verdicts, and a
+/// per-attempt record of public/derived freshness witnesses.
+#[cfg(all(test,feature="r1p-check"))]
+pub(crate) mod test_hooks {
+    use alloc::{collections::VecDeque,vec::Vec};
+    use aspis_core::{HashFn,field::QM31};
+    #[derive(Clone,Debug,Default)]
+    pub struct Attempt {
+        pub mask_nonce:[u8;32],
+        /// Digest of the G mask column (a function of the field-mask entropy).
+        pub g_digest:[u8;32],
+        /// Digest of the first private C1 leaf salt (a function of the leaf-salt seed).
+        pub salt_digest:[u8;32],
+        pub c1_root:Option<[u8;32]>,
+        pub forced_verdict:Option<bool>,
+    }
+    std::thread_local! {
+        static VERDICTS: core::cell::RefCell<Option<VecDeque<bool>>> = const { core::cell::RefCell::new(None) };
+        static ATTEMPTS: core::cell::RefCell<Vec<Attempt>> = const { core::cell::RefCell::new(Vec::new()) };
+    }
+    pub fn force(verdicts:&[bool]) {
+        VERDICTS.with(|v| *v.borrow_mut()=Some(verdicts.iter().copied().collect()));
+        ATTEMPTS.with(|a| a.borrow_mut().clear());
+    }
+    pub fn clear() {
+        VERDICTS.with(|v| *v.borrow_mut()=None);
+        ATTEMPTS.with(|a| a.borrow_mut().clear());
+    }
+    pub fn attempts()->Vec<Attempt> { ATTEMPTS.with(|a| a.borrow().clone()) }
+    pub(crate) fn observe_secrets(hash:HashFn,mask_nonce:[u8;32],g:&[QM31;1024],salt0:&[u8;32]) {
+        let mut bytes=Vec::with_capacity(16*1024);
+        for x in g { let mut b=[0;16];x.write_le_bytes(&mut b);bytes.extend_from_slice(&b); }
+        let record=Attempt{mask_nonce,g_digest:hash(&[b"test:g",&bytes]),salt_digest:hash(&[b"test:salt0",salt0]),..Attempt::default()};
+        ATTEMPTS.with(|a| a.borrow_mut().push(record));
+    }
+    pub(crate) fn forced_verdict(c1_root:[u8;32])->Option<bool> {
+        let verdict=VERDICTS.with(|v| v.borrow_mut().as_mut().map(|q| q.pop_front().unwrap_or(true)))?;
+        ATTEMPTS.with(|a| if let Some(last)=a.borrow_mut().last_mut() {last.c1_root=Some(c1_root);last.forced_verdict=Some(verdict);});
+        Some(verdict)
+    }
+}
+
+#[cfg(all(test,feature="r1p-check"))]
+#[path="prover_retry_tests.rs"]
+mod retry_tests;

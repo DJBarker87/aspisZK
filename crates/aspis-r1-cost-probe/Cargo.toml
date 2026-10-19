@@ -23,6 +23,9 @@ optimized-terminal = [
 ]
 prover = ["dep:aspis-prover", "dep:serde_json", "dep:sha2"]
 private-leaf-salts = []
+# LOG D38.3: the prover-side P_R1 check (extracted C3 checker via the z4 probe
+# library) and the capped retry loop; requires private leaf salts.
+r1p-check = ["prover", "private-leaf-salts", "dep:aspis-z4b-probe", "dep:getrandom"]
 r0-op-count = ["aspis-core/r0-op-count"]
 
 [dependencies]
@@ -31,6 +34,8 @@ aspis-statement = { path = "../aspis-statement", features = ["r0", "pool-v1-kern
 aspis-prover = { path = "../aspis-prover", features = ["r0", "insecure-spend-fixture"], optional = true }
 serde_json = { workspace = true, optional = true }
 sha2 = { workspace = true, optional = true }
+aspis-z4b-probe = { path = "../../docs/research/v8-r0-zk-20261009/z4", optional = true }
+getrandom = { workspace = true, optional = true }
 
 [[example]]
 name = "semantic_gate"
@@ -51,3 +56,7 @@ required-features = ["prover"]
 [[example]]
 name = "secure_attempt_gate"
 required-features = ["prover", "private-leaf-salts"]
+
+[[example]]
+name = "r1p_retry_gate"
+required-features = ["r1p-check"]

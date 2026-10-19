@@ -814,4 +814,4 @@ pub(crate) fn main() {
 }
 
 #[path = "z9d.rs"]
-mod z9d;
+pub(crate) mod z9d;

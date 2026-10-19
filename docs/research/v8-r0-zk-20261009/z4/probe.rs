@@ -2898,6 +2898,8 @@ mod z8d;
 mod z8e;
 #[path = "z9.rs"]
 mod z9;
+/// The prover-side P_R1 check, exported by the `r1p_lib.rs` library target.
+pub(crate) use z9::z9b::z9c::z9d::z9e as r1p;
 fn main() {
     if std::env::args().any(|x| x == "--r1cert") { z9::z9b::z9c::main(); }
     else if std::env::args().any(|x| x == "--r1p") { z9::z9b::main_r1p(); }
