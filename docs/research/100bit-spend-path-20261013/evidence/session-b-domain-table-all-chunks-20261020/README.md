@@ -1,0 +1,13 @@
+# R17 table power certificate batch
+
+This packet records the 30 newly compiled chunks A01–A15 and B01–B15, plus the independently green B00 certificate. A00 is reused from the earlier R17 circle-power packet and is referenced by exact pin below; it was not recompiled here. The generated Lean source contains 32 ordered literal entries per chunk and two theorem families (`entryNN` and `entryNN_zPow`) with a `#print axioms` command for every theorem. Each new chunk log therefore contains 64 axiom reports.
+
+The source adapter is `sources/Funs-chunked-adapter.lean` (SHA-256 `f1c1765883a09cc9d9ec926127efbd3810f9f60cf5c77893d35b633e5288bb3f`). The generator is pinned in `generator/generate-r17-table-chunk.py` (SHA recorded in the generated manifest). `generator/check-r17-table-chunk-adapter.py` and each kit's `check-adapter.py` regenerate the requested chunk, compare exact output bytes, and check all 32 ordered literals against the adapter. The source-check outputs are retained in `generator/check-output.txt`.
+
+Every compiled chunk has its exact Lean source under `kits/<chunk>/sources/`, pinned Lean/toolchain/direct-import hashes and source revision in `kits/<chunk>/config.json`, and receipt, command, preflight, time, and Lean/axiom log under `evidence/<chunk>/attempt/`. Object files are intentionally omitted. All 30 A/B chunk checks and compiles exited 0 under fresh NUC admission, Lean 4.32, MemoryHigh 1 GiB, MemoryMax 2 GiB, SwapMax 0. Detailed per-target hashes and metrics are in `manifest.json`.
+
+B00 source is `sources/R17TableBChunk00Certificate-v2.lean`; source SHA `b597d34f790f9d55ebbfd2e35020194486fd43409aafef135a2aae253dc20dfa`; object SHA `476b0d7fe2ace3050ac5c1211da040a60060566cbebc798e6f1081b7070c4635`. Its attempt evidence is retained under `evidence/B00/attempt/`. Its A00 counterpart and circle-power dependencies are referenced from `/tmp/r17-circle-power-packet-v1/` (circle packet SHA-256 `adfbda23d6814a89d17ee82255b836cf54472c41c1ee4337064d5bac8c6b2a03`) and the earlier accepted A00 packet, rather than duplicated here.
+
+A duplicate A15 admission invocation after the successful A15/B15 runs was rejected because its unique admission record already existed. It launched no Lean process and is not counted as a target attempt; the original successful receipts remain authoritative.
+
+The normalized top-level manifest records 31 successful targets and references the published A00 source without recompiling it. These are literal arithmetic certificates. The checked source-span comparison does not by itself close the actual Aeneas table-lookup correspondence; that Lean composition and the complete fibre-point domain theorem remain OPEN.
