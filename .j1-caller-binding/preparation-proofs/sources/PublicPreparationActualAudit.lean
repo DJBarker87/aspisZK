@@ -1,0 +1,6 @@
+import AspisR1PublicPreparation.Funs
+#print axioms AspisR1PublicPreparation.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+#print axioms AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
+#print axioms AspisR1PublicPreparation.r1_wire.SemanticTranscript.new
+#print axioms AspisR1PublicPreparation.r1_semantic.public_transcript
+#print axioms AspisR1PublicPreparation.r1_wire.DOMAIN
