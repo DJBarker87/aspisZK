@@ -5977,3 +5977,474 @@ row formulas:
   stored points, and batch inversion.
 - check_sound, i.e. extracting the checker and composing it with
   p_r1_of_checks.
+
+### Lead acceptance of the first builder refinement (2026-10-19); D54
+
+The worker commits 8288078b9..6a655b053 (13) are cherry-picked. The lead
+verified the 11 green host receipts (4233, 4235, 4238, 4241, 4246, 4248,
+4253, 4257, 4258, 4260 and 4262): SHAs match, all exited 0 in-window,
+standard axioms, no overrides. Attempt 4237 (exit 1) was checked after the
+session-limit cut, and nothing was resent unchanged. Design:
+`t2b2b/DESIGN-BUILDER-MODEL.txt` §9.
+
+**D54.1 Proved, for the value, occupancy, path-aux and merge writers.**
+- Extraction-friendly Rust copies are in `refine/writers`.
+- Native differential tests against production (read-only from the spend
+  branch at 0c46bf447): 200k value, 100k occupancy, 52k path and 1M
+  node_right cases; 2k merge shape violations; the 2 saved fixtures; and 256
+  randomized full honest compiles.
+- Extraction with pinned Charon cb50ff16 and Aeneas b59d5188.
+- In Lean:
+  - `aux_block_model`: write_aux_block equals model block 63;
+  - `path_block_model`: rows 912..1007;
+  - `merge_model`.
+
+Loops are handled by induction; nothing is evaluated.
+
+**D54.2 Lead rulings.**
+- **B1 accepted.** `import Aeneas` is replaced by `import Aeneas.Std` and
+  `import Aeneas.Tactic.RustAttributes` in the generated file, and the edit
+  is asserted by `refine/extract/substitute.py.txt`. The full `Aeneas` root
+  does not build unpatched under 4.32 in this tree. Build integration must
+  reconcile this Aeneas.Std with the spend path's ported one: two versions
+  cannot coexist in one tree.
+- **B2 accepted.** The generated `maxHeartbeats`/`maxRecDepth` lines are
+  deleted, which is stricter than generated, and the code compiles without
+  them.
+
+**D54.3 Open.**
+- `node_right_lane7` and the path read-back are checked by differential test
+  only.
+- ValueLifts, OccLifts and PathLifts are premises. They need the
+  Wspend-to-Rust-witness map and the Poseidon/node refinement.
+- The merge is proved against an abstract table.
+- The copy-to-production link is a differential test, not a proof. The
+  production writers use Vec, closures and M31 methods the pinned extractor
+  does not handle. The options are a production-source migration (as with
+  Decision 1 on the verifier) or accepting tested equivalence.
+
+### Lead acceptance of the sponge/node refinement (2026-10-19); D55
+
+The worker commits d66998036..efd49c19f (9) are cherry-picked. The lead
+verified the 7 green host receipts (4263, 4266, 4268, 4271, 4272, 4275 and
+4277): SHAs match, all exited 0 in-window, standard axioms, no overrides.
+Design: §10 of `t2b2b/DESIGN-BUILDER-MODEL.txt`.
+
+**D55.1 Proved.** The Poseidon permutation is kept abstract through the
+plug-in premise `RoundsOk rounds B`: the eleven odd-round outputs lift to the
+model's block iterates.
+- `block_model`: write_block equals blockCell.
+- `node_model`: write_node equals the model's nodeIn block.
+- `m31_add_spec`/`m31_sub_spec_wide`, for all canonical inputs.
+- `sponge_model`: the full sponge, given the initial state, the absorptions,
+  chaining and RoundsOk.
+- `note_sponge_model`: the note blocks 1–3, 27–29 and 30–32.
+
+B3 is closed in Lean:
+- `node_right_lane7_lift`: the large tweak.
+- `read_back_node`: at the copy level. The production relocation still
+  links to the copy by differential test.
+
+Differential tests against production were run with `rounds` from the
+production permutation:
+- 1M M31 add/sub pairs;
+- 20k write_permutation, 20k node/forest-node and 20k sponge cases;
+- 3,648 full blocks.
+
+**D55.2 Open.**
+- Instantiating the owner and nullifier sponges and the tree/append node
+  blocks. These are mechanical, by the same pattern.
+- `RoundsOk` for the Rust permutation: the Poseidon job.
+- The input lifts (Wspend → Rust witness).
+- The copy-to-production link (D54.3).
+
+### Lead acceptance of the block assembly and the Poseidon round lemmas (2026-10-19); D56
+
+The worker commits after 1b56fef13 are cherry-picked. The lead verified the
+green host receipts (4400, 4401, 4404, 4406 and 4407): SHAs match, all
+exited 0 in-window, standard axioms, no overrides. Attempts 4402, 4403 and
+4405 were local elaboration fixes. Design: §11 of
+`t2b2b/DESIGN-BUILDER-MODEL.txt`.
+
+**D56.1 Proved.**
+- `builder_blocks_model`: all 57 Rust-written blocks equal buildModel, under
+  RoundsOk, the input lifts and the copy↔production links. Discharge lemmas
+  cover chaining, absorptions, node children and digests. RoundsOk is the
+  only Poseidon obligation left for the block region.
+- `full_round_lift`: an extracted full round equals R0P
+  `poseidonFullRound` for every u32 state. No canonicity hypothesis is
+  needed: the u64 reductions mod p never overflow.
+- `internal_round_lift`: the same for an internal round, matched to R0P's
+  ordered foldl through a general ofFn/range′ lemma.
+- `PoseidonTables`: INTERNAL_SHIFTS satisfies ShiftsBound/ShiftsOk with
+  small numerals only.
+
+Differential tests (diff-g):
+- perm_rounds equals the production odd-round outputs on 100k states and on
+  all 1,824 blocks of 32 traces;
+- the final state equals production `permute` on 50k states;
+- m31 add/mul agree on 1M pairs.
+
+The extraction needed no adapter. This is the first time Poseidon has
+extracted and its rounds have been proved; the spend path's earlier attempts
+stopped at the external wrapper and round composition.
+
+**D56.2 Remaining for RoundsOk.**
+1. Generated per-row constant-lift lemmas for EXTERNAL_INITIAL/FINAL and
+   INTERNAL, going through `Nat.cast_ofNat` without unfolding large literals.
+2. `apply_round_lift` and `leading_pair_lift`.
+3. A `perm_rounds` loop invariant, giving RoundsOk for the copy's output.
+
+The copy↔production link stays a differential test (D54.3).
+
+### Lead acceptance of C3: the extracted P_R1 checker (2026-10-19); D57
+
+The worker commits 54f39d467..4f5496ea4 are cherry-picked. The consistent
+chain is CertCheckExtracted (4345), then 4363–4373: CertCheckBase … Top,
+CertData/2, CertCheckData, CertCheckSound and CertCheckSoundAll. These are
+dependency replays: Base and Dot had originally been built against the 4341
+extraction. The lead verified all eleven (SHAs match, exit 0, standard
+axioms) and checked that no source contains sorry, admit, native_decide or
+an override. The replays used the global lock, the caps were not raised,
+and CertCheckSoundAll peaked at 7.15 GB, near the cap. The launcher now tags
+deliberate dependency replays (`DEPREPLAY=1`).
+
+**D57.1 Proved.** `check_sound`: if the extracted Rust `check pb c` returns
+`ok true`, then P_R1 holds on the decoded record. The Rust checker in
+`c3/check`:
+- is no_std, monomorphic, with checked u32/u64 arithmetic, one loop per
+  function and branch-free bodies;
+- verifies every certificate-supplied intermediate by plain equality.
+
+Differential test: same verdicts as z9c on the five configurations and the
+8 corruptions, and 6/6 corruptions of the new fields rejected. It takes about
+8.8 s per check, so the prover-side check is now ≈ 12.6 s emit + 8.8 s check
+per attempt, before optimisation.
+
+**D57.2 Hypotheses of check_sound.**
+- The builder identifications hOwn, hRound, hChain, hRel, hGOwn, hGRound,
+  hGBat, hC1 and hH1. These carry the D53.2 items: `ell` against weight kinds
+  5/6, π against the transport table, `natural`, the stored points and batch
+  inversion.
+- Decoder facts: hhalf, hup, hnq, hz, the lane layouts stO/stG, and φ.
+- From p_r1_of_checks: wb, hcov, hsel1/hselH.
+
+The checker reads values mod P, so it also accepts non-canonical
+certificates. That is sound, but the differential test does not cover it.
+
+**D57.3 Next.** Extract the column builders (raw_c, round_row/tail_row,
+unit_functionals, design_relations/limb_functionals, normalize_d) to
+discharge the builder identifications, and integrate the checker into the R1
+prover (D38.3).
+
+### Lead acceptance of RoundsOk for the Poseidon copy (2026-10-19); D58
+
+The worker commits dc98360df, 928e057e2, 0bac06653 and f1ef3e481 are
+cherry-picked. The lead verified host attempts 4408, 4409 and 4410 (SHAs
+match, exit 0 in-window, standard axioms). No source contains sorry, admit,
+native_decide, an override, decide or norm_num.
+
+**D58.1 Proved.**
+- `PoseidonConstLift`, generated. The generator reads production
+  poseidon2.rs, the copy, the extracted Lean and R0P PoseidonConstants.lean,
+  and aborts on any disagreement. Its tamper test is recorded: two injected
+  value changes aborted with exit 2, and a tampered output failed --check
+  with exit 1. All 142 lanes are proved by named steps; no large literal is
+  unfolded.
+- `apply_round_lift` (all 22 rounds) and `leading_pair_lift`.
+- `perm_rounds_lift`, by loop invariant: RoundsOk holds for the copy's
+  permutation.
+- `builder_blocks_model_copy`: under `BuilderInputLifts`, the old lifts
+  without RoundsOk, all 57 Rust-copy blocks equal buildModel.
+
+**The Poseidon obligation of the builder is closed for the copy.** The
+copy↔production link is the diff-g differential test (100k states and 1,824
+compiled blocks), with the same standing as the other writers (D54.3).
+
+**D58.2 Remaining builder items.**
+- Sponge pre-state chaining, which is short with RoundsOk now proved.
+- Linking BuilderInputLifts to the witness-level writer outputs, and the map
+  from Wspend⁺ to the Rust witness.
+- The copy↔production decision (D54.3): migrate the production prover
+  writers to the extracted copies, or accept tested equivalence. To be put
+  to the user.
+
+### Lead acceptance of the first column builder (2026-10-19); D59
+
+The worker commits 2660e7a5f..c681d4634 are cherry-picked. The lead verified
+the 8 green host receipts (4374, 4376, 4377, 4378, 4381, 4385, 4388 and
+4391): SHAs match, exit 0, standard axioms, no overrides. The 10 failed
+attempts all had changed sources.
+
+**D59.1 Proved.** The chain-target builder `fill_tq` has an extracted Rust
+copy. Its differential test matches z9c's chain_targets on all 1,175,056
+entries in each of five configurations, and the checker verdicts are
+unchanged. On the Lean side:
+- the QM31 layer (CertBuildBase/Tower) shows the extracted QM31 product is
+  the product in K, under the premise `Tower B` (i² = −1, u² = 2 + i);
+- `chain_ident` shows the builder output under φ equals Lean's chainTarget.
+
+`check_sound′` removes hChain and hhalf. In their place it adds:
+- hT, the tower premise;
+- hal and ha9, saying the Rust alpha limbs are the raw challenge limbs;
+- hbuild, saying the prover filled the target matrix with the extracted
+  builder.
+
+CertCheckSound2 peaks at 7.16 GB, near the cap.
+
+**D59.2 Remaining builder identifications.**
+- hOwn, hGOwn, hC1, hH1 and hRel (raw_c, design_relations). These need
+  copies of eq/points/h_weight/evalrow, `natural` = naturalLineValue, the
+  stored points, π against the transport table, inactive against
+  copyInactiveRows, and the flatC1/flatO layouts.
+- hRound, hGRound and hGBat (round_row/tail_row, unit_functionals). These
+  need closed forms for the pure-round coordinates, plus `ell` against weight
+  kinds 5/6.
+
+Lead ruling: π, the stored points and the OOD points may be taken as input
+arrays under named premises (for example "the input table equals π"), to be
+discharged with the transport and sampler refinement.
+
+Housekeeping: the builder extraction reused two host output directories from
+the superseded first checker extraction. That is recorded; the accepted
+chain does not reference them.
+
+### Lead acceptance of the witness-level Rust-copy builder (2026-10-19); D60
+
+The worker commits 8e3e1e172..f027039ef are cherry-picked. The lead verified
+host attempts 4412, 4413, 4415, 4417 and 4419 (SHAs match, exit 0 in-window,
+standard axioms). Attempts 4411, 4414, 4416 and 4418 were local fixes.
+Design: §12.
+
+**D60.1 Proved.**
+- `builder_blocks_model_chain`: sponge pre-states are computed, from
+  sponge_init and row 10 of the previous block's perm_rounds.
+- `PoseidonCanon`: perm_rounds outputs are canonical.
+- `builder_witness_model`: for u32 witness and public records (`RustWitness`,
+  `RustPublic`) with the named map `toModel` and premise sets `PubCorr` and
+  `WitnessOk`, every extracted component returns ok, and every cell of the
+  composed 29×1024 trace lifts to `buildModel pub (toModel W)`.
+
+PathLifts, ValueLifts and both OccLifts are now theorems. `invR` rests on
+the named premise `Nat.Prime 2147483647`. It is proved elsewhere in the repo
+(AspisV8R15.ExactTowerBase) and joins the build-integration list.
+
+**D60.2 Open.**
+- The Lean glue (block order, chunk words, child order, invR, assembly)
+  matches pair_trace.rs by inspection only. It needs a differential test.
+- The stable/late bank merge is not in the composition yet.
+- The Wspend⁺ → RustWitness/ModelWitness map (§12.6): values (transfer vs
+  withdrawal), keys and salts, path bits and siblings at levels 0, 1–20 and
+  21–23, the public side, the WitnessOk/PubCorr range facts, and the
+  primality import.
+- The copy↔production link (D54.3).
+
+### Lead acceptance of the merged builder, M31 primality and the glue test (2026-10-19); D61
+
+The worker commits 6cf89c077..106f12df5 are cherry-picked. The lead verified
+host attempts 4421 (`M31Prime`) and 4426 (`BuilderWitnessMerged`): SHAs
+match, exit 0 in-window, standard axioms. Attempts 4420 and 4422–4425 were
+local fixes. Design: §13.
+
+**D61.1 Proved.**
+- `m31_prime`, by a Lucas certificate with witness 7 over the factorisation
+  of p−1. It uses reduce_mod_char modular powers with no value above p², one
+  literal-comparison `decide` per check, and norm_num only on the seven small
+  primes.
+- `builder_witness_merged`: with the late bank on rows 544–863 and the stable
+  bank elsewhere, merge_check returns true, merge returns ok, and every cell
+  equals `buildModel pub (toModel W)`. The only premises are PubCorr and
+  WitnessOk.
+
+**D61.2 Glue differential test.** Production rejected none of the
+inputs. The copy's merged trace equals the production forest compile cell for
+cell in columns 0–15, on:
+- both saved fixtures;
+- 512 randomized honest witnesses.
+
+Columns 16–28 are the model's zero stage-H columns and are not compared.
+Each of seven single-field mutations makes 1 to 9,788 cells differ, which
+shows the comparison has teeth. The Lean glue and its Rust mirror are
+generated from one table (`refine/glue/gen-glue.py.txt`). Its `--check`
+requires verbatim Lean text in the proved files, and it rejected two
+deliberate edits. The structural functions are mirrored one-to-one and are
+covered by the full-trace comparison.
+
+**D61.3 Builder status.** The honest builder, as composed extracted Rust
+copies, is proved to produce the model's trace, the model satisfies the
+builder premise of `privacy_R1` (D51), and the composition is differentially
+equal to production. Remaining:
+- the Lean-side Wspend⁺ → RustWitness/RustPublic map (§12.6), after build
+  integration. The Rust side of the map is `records` in glue.rs.
+- the copy↔production decision (D54.3).
+
+### Lead acceptance of the lift-column builder (2026-10-19); D62
+
+The worker commits a88b52d9e..830d9e275 are cherry-picked. The consistent
+chain after re-extraction is:
+
+4392 → 4393 → 4394 → 4395 → 4398 → 4399 → 4460 → 4461 → 4463 → 4464 →
+4466 → 4470 → 4473 → 4474 → 4478 → 4479 → 4480
+
+The lead verified all 17 (SHAs match, exit 0 in-window, standard axioms, no
+sorry/admit/native_decide/overrides). Eleven failed attempts all had changed
+sources.
+
+**D62.1 Proved.** `fill_lo` (C1 and H1 lifts) has an extracted Rust copy.
+Its differential test matches z9c's lift matrices on all 342,080 entries in
+each of five configurations. On the Lean side:
+- the helper values in K (eq, the successor/xor-12 points, h_weight, the
+  natural basis, evalrow);
+- `natR_eq`: Rust `natural` = naturalLineValue. This is a real lemma, and it
+  closes that D53.2 item.
+- `c1_entry_ident`/`h1_entry_ident`: every entry is the flatC1/flatH1
+  coordinate of `obs`.
+- `check_sound″`: hC1 and hH1 are removed.
+
+D59's `check_sound′` had a duplicated binder; it was harmless and is removed
+in 4479.
+
+**D62.2 New premises under the D59.2 ruling.**
+- htr (input table = π), hzx/hzy (OOD points), hsx/hsy (stored points), hin
+  (Rust inactive flags = copyInactiveRows). hin is accepted as a named input
+  premise, of the same kind as π.
+- hselC/hselHv, hloC/hloH (layout), and hblo (`pb.lo` filled by `fill_lo`).
+
+CertCheckSound3 peaks at 7.17 GB.
+
+**D62.3 Remaining in check_sound″.**
+- hOwn and hGOwn: the own-matrix builder and the blockM layout.
+- hRel: design_relations/limb_functionals.
+- hRound, hGRound and hGBat: pure-round closed forms, and `ell` against
+  weight kinds 5/6.
+- The decoder facts and the inherited premises.
+
+### Build-integration design and a coherence finding (2026-10-19); D63
+
+The worker on side branch `codex/r1-privacy-build-integration-20261019`
+(commit ee17c8c86, based on the 100-bit branch with v8-reference merged)
+produced `t2b2b/DESIGN-BUILD-INTEGRATION.txt` and compiled host attempts
+4520–4529. The branch is pushed by the lead.
+
+**D63.1 Coherence finding (lead-verified).** Neither host workspace is a
+single coherent build.
+- Lean loads one object per module name and does not check it against what
+  dependents were compiled with.
+- The privacy and spend closures share module names with different objects:
+  the sampler closures share 28 names, 23 with different objects and 6 with
+  different sources.
+- The spend side itself has more than one object for `CircleGroupOrder`.
+- In privacy objects2, `R0P/CoreExt` was re-sourced and recompiled on
+  2026-10-08 09:24, while its dependent `R0P/Copy` dates from 2026-10-07
+  18:36 and was never rebuilt.
+
+Consequence: every focused compile accepted so far, on both tracks, is
+evidence that each module checks against the objects present. None is yet
+evidence of one consistent theory. No accepted statement is withdrawn. But
+**nothing is release evidence until one clean ordered build, from one source
+per module name, on one base, with one axioms audit.** That is also the
+outstanding "single Lean 4.32 kernel" item on the soundness side.
+
+**D63.2 Lead decisions.**
+- Adopt the design's target: a new workspace with one sources tree, one
+  objects folder, Mathlib from AspisFormal, and the spend path's ported Aeneas.
+  The build compiles in dependency order from a manifest with `--check`. Where
+  the two sides' sources differ, take the spend copy and repair privacy
+  imports.
+- New item (f), the unified base, comes before (b), (d) and (e). The
+  provisional soundness release roots are:
+  - LiteralFreshAttemptBound, RawAdaptiveMembershipBound,
+    AdaptiveMembershipSoundness;
+  - SpendRelation, SpendAppendBinding;
+  - the terminal/caller correspondence modules the live session lands.
+
+  These are to be confirmed with the soundness side at final assembly.
+- SemRows01 moves to (d), as a wire-decoder fact.
+- On (e): the worker reads `line_identity` as the honest-data form of
+  `match1`, not as an assumption of R1QueryResidualBridge. This is to be
+  settled when the soundness side states which premise it would discharge.
+- Attempt range for the integration build: 5000–5299, using the private
+  joint launcher (same caps, slots and run2.py; only the objects folder and
+  search path change). The build spans several night windows.
+
+**D63.3 Done (on the side branch).**
+- BatchedAlgebra and its dependents compile against the spend path's own
+  `R1FoldCoefficientBridge`/`R1FirstFold` (byte-identical), with 0 coherence
+  conflicts over 266 modules. So `line_identity` is stated over spend
+  constants.
+- `qm31SamplerLaw_spend` is proved on the spend base from the extracted
+  `qm31_sample`, with the carrier transports, and `SamplerLawBridge.toSem1`
+  is proved. They sit on different bases until (f).
+
+### Lead acceptance of the own-column builder (2026-10-19); D64
+
+The worker commits 0a3d14c9e..a1c258b5e are cherry-picked. The consistent
+chain is 4481–4499 and 4510–4512 (`builders[2].consistent_chain` in
+c3-evidence.json); the lead verified the new modules. Attempt 4501 hit -M7000
+at 7.17 GB, and the worker split the module rather than raising the cap.
+
+**D64.1 Proved.** `fill_own` has an extracted Rust copy, and its
+differential test equals z9c on all five configurations:
+- the QPrime own matrix: 2,952 sources, 1.11M entries;
+- the G own matrix: 1,980 sources, 744k entries.
+
+On the Lean side: `obs_lane`, `own_c1_ident`/`own_h1_ident`,
+`own_src_ident` (the blockM/flatO layout), and `check_sound‴`, which removes
+hOwn and hGOwn. The QPrime sources are now defined from the Rust descriptors
+(`srcOf`), not assumed. The new premises are the builder runs and the
+descriptor, width, layout and stride facts.
+
+**D64.2 Remaining in check_sound‴.**
+- hRel: needs a WideExact (8-limb) tower premise, the relR1 relations, and
+  copies of design_relations/limb_functionals. It is a multi-session job.
+- hRound, hGRound and hGBat.
+- The decoder facts.
+- The named input premises.
+
+Memory: CertCheckSound4 peaks at 7.19 GB. Further composition must happen
+at the CertData level, with no Aeneas import in the composing module.
+
+All of this is subject to D63: release evidence requires the unified build.
+
+### Unified-base build of the privacy closure (2026-10-19); D65: the R1 privacy theorems check in one coherent build
+
+Side branch `codex/r1-privacy-build-integration-20261019` (dbfe84f12, pushed)
+holds manifest 1: the closure of the privacy roots, 402 modules (8 spend, 237
+base, 157 privacy). It was built from one repo revision (v8-reference
+66bca8914 plus spend f05b0e63e) in the new host workspace
+`aspis-joint-20261019`: one sources tree, one objects folder, AspisFormal
+Mathlib and the Aeneas 4.32 port. The build ran in dependency order, one
+module at a time, as attempts 5000–5402 (03:38–04:02 London), with 0 swaps
+and peak 7.18 GB.
+
+Where repo sources differed, the spend copy was used:
+- the six narrowed base files;
+- `V6PublishedTheoremInterfaces`, `R0P.LogUpChain`, `R0P.LogUpAssembly` and
+  `R0P.SemRounds`.
+
+**Lead verification.** All 403 host logs were parsed, including wrapped axiom
+lists. The only axiom sets are subsets of {propext, Classical.choice,
+Quot.sound}: 2,437 + 340 + 90 + 6 reports. The single `sorryAx` is in the
+failed attempt 5068, which the error produced. The only non-zero exit is
+5068: `AspisV8R19.R443BoundedRejectionMass` used `field_simp` without
+importing it, and the old base supplied it through all of Mathlib. The fix
+adds `import Mathlib.Tactic.FieldSimp`, an import-only change to the base
+tree `v8-full-view-zk-20260912`. The lead accepts it; it must also reach
+v8-reference's copy. It recompiled green at 5069.
+
+The root theorems check with standard axioms only, in one coherent theory:
+- `builder_witness_merged` (5283);
+- `check_sound″` (5387);
+- `privacy_R1_games` (5398);
+- `privacy_R1_games_sampler` (5401);
+- `privacy_R1_games′` (5402).
+
+Object hashes are in `t2b2b/build-integration/joint-objects-manifest1.sha256`.
+This settles D63 for the privacy closure. The soundness roots remain.
+
+**Open (D63.2).**
+- The soundness roots wait on soundness-side hygiene: three missing sources,
+  the X/R1X double imports of SpendRelation/SpendAppendBinding/TraceAppend,
+  and three name collisions.
+- (c) end to end: the spend sampler stack in this workspace.
+- (b), (d) (Rspend⁺ map, SemRows01) and (e).

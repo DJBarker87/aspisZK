@@ -1,0 +1,287 @@
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertOwnBlock.lean:40:0: warning: automatically included section variable(s) unused in theorem `R1Z.CertOwn.limbF_zero`:
+  [Fintype K]
+  [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertOwnBlock.lean:86:38: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if j < 10 then ?m.411 else ?m.412
+in the target expression
+  stOf l.length j ≤ ↑p ∧ ↑p < stOf l.length j + wB l.length
+
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+B : PackBasis F
+φ : CertData.ZP →+* ↥F
+Bat : Type
+inst✝ : BatchedLayer K Bat
+hB : PackField B
+π : Fin 1024 ≃ Fin 1024
+ch : Challenges K
+l : List (Fin 262144)
+ownf : ℕ → CertData.ZP
+os : ℕ
+lanef wlf st : ℕ → ℕ
+t j : ℕ
+hj : j < 12
+r : Fin 1024
+hr : r ≠ 0
+k : Fin 4
+hst : st (lanef t) = stOf l.length j
+hw : wlf (lanef t) = if j < 10 then wB l.length else wE l.length
+hC :
+  j < 10 →
+    ∀ (c : Fin 29) (i : Fin (24 + 4 * l.length)),
+      flatC1 B hB l ((obs π B ch c) (balWord 0 r 1)) i = φ (ownf (t * os + ↑i))
+hE :
+  10 ≤ j →
+    ∀ (c : Fin 29) (i : Fin (24 + 16 * l.length)),
+      flatH1 B hB l ((obs π B ch c) (balWord 0 r (Mask.towerBasis B k))) i = φ (ownf (t * os + ↑i))
+p : Fin (wO l.length)
+hwB : wB l.length ≤ wE l.length
+hp : ↑p < 10 * wB l.length
+hpos : 0 < wB l.length
+hb : ↑p / wB l.length < 10
+hj10 : j < 10
+hbj : ↑p / wB l.length = j
+e16 : ⟨16 + ↑p / wB l.length, ⋯⟩ = ⟨16 + ↑⟨j, hj10⟩, ⋯⟩
+hloc : ↑p % wB l.length < wB l.length
+hlo : ↑p - j * wB l.length = ↑p % wB l.length
+⊢ stOf l.length j ≤ ↑p ∧ ↑p < stOf l.length j + wB l.length
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertOwnBlock.lean:87:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if j < 10 then ?m.417 else ?m.418
+in the target expression
+  flatC1 B hB l ((obs π B ch ⟨16 + ↑⟨j, hj10⟩, ⋯⟩) (balWord 0 r 1)) ⟨↑p % wB l.length, ⋯⟩ =
+    φ (ownf (t * os + (↑p - stOf l.length j)))
+
+case pos
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+B : PackBasis F
+φ : CertData.ZP →+* ↥F
+Bat : Type
+inst✝ : BatchedLayer K Bat
+hB : PackField B
+π : Fin 1024 ≃ Fin 1024
+ch : Challenges K
+l : List (Fin 262144)
+ownf : ℕ → CertData.ZP
+os : ℕ
+lanef wlf st : ℕ → ℕ
+t j : ℕ
+hj : j < 12
+r : Fin 1024
+hr : r ≠ 0
+k : Fin 4
+hst : st (lanef t) = stOf l.length j
+hw : wlf (lanef t) = if j < 10 then wB l.length else wE l.length
+hC :
+  j < 10 →
+    ∀ (c : Fin 29) (i : Fin (24 + 4 * l.length)),
+      flatC1 B hB l ((obs π B ch c) (balWord 0 r 1)) i = φ (ownf (t * os + ↑i))
+hE :
+  10 ≤ j →
+    ∀ (c : Fin 29) (i : Fin (24 + 16 * l.length)),
+      flatH1 B hB l ((obs π B ch c) (balWord 0 r (Mask.towerBasis B k))) i = φ (ownf (t * os + ↑i))
+p : Fin (wO l.length)
+hwB : wB l.length ≤ wE l.length
+hp : ↑p < 10 * wB l.length
+hpos : 0 < wB l.length
+hb : ↑p / wB l.length < 10
+hj10 : j < 10
+hbj : ↑p / wB l.length = j
+e16 : ⟨16 + ↑p / wB l.length, ⋯⟩ = ⟨16 + ↑⟨j, hj10⟩, ⋯⟩
+hloc : ↑p % wB l.length < wB l.length
+hlo : ↑p - j * wB l.length = ↑p % wB l.length
+⊢ flatC1 B hB l ((obs π B ch ⟨16 + ↑⟨j, hj10⟩, ⋯⟩) (balWord 0 r 1)) ⟨↑p % wB l.length, ⋯⟩ =
+    φ (ownf (t * os + (↑p - stOf l.length j)))
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertOwnBlock.lean:109:24: error: linarith failed to find a contradiction
+case right
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+B : PackBasis F
+φ : CertData.ZP →+* ↥F
+Bat : Type
+inst✝ : BatchedLayer K Bat
+hB : PackField B
+π : Fin 1024 ≃ Fin 1024
+ch : Challenges K
+l : List (Fin 262144)
+ownf : ℕ → CertData.ZP
+os : ℕ
+lanef wlf st : ℕ → ℕ
+t j : ℕ
+hj : j < 12
+r : Fin 1024
+hr : r ≠ 0
+k : Fin 4
+hst : st (lanef t) = stOf l.length j
+hw : wlf (lanef t) = if j < 10 then wB l.length else wE l.length
+hC :
+  j < 10 →
+    ∀ (c : Fin 29) (i : Fin (24 + 4 * l.length)),
+      flatC1 B hB l ((obs π B ch c) (balWord 0 r 1)) i = φ (ownf (t * os + ↑i))
+hE :
+  10 ≤ j →
+    ∀ (c : Fin 29) (i : Fin (24 + 16 * l.length)),
+      flatH1 B hB l ((obs π B ch c) (balWord 0 r (Mask.towerBasis B k))) i = φ (ownf (t * os + ↑i))
+p : Fin (wO l.length)
+hwB : wB l.length ≤ wE l.length
+hp : ↑p < 10 * wB l.length
+hpos : 0 < wB l.length
+hb : ↑p / wB l.length < 10
+hjb : ¬(j < 10 ∧ ↑p / wB l.length = j)
+hz : (pureTrace B) (mkSrc j r k) ⟨16 + ↑p / wB l.length, ⋯⟩ = 0
+h1 : j * wB l.length ≤ ↑p
+h2 : ↑p < j * wB l.length + wB l.length
+hj10 : j < 10
+a✝ : j * wB l.length + wB l.length - 1 < ↑p
+⊢ False
+failed
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertOwnBlock.lean:130:24: error: linarith failed to find a contradiction
+case left
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+B : PackBasis F
+φ : CertData.ZP →+* ↥F
+Bat : Type
+inst✝ : BatchedLayer K Bat
+hB : PackField B
+π : Fin 1024 ≃ Fin 1024
+ch : Challenges K
+l : List (Fin 262144)
+ownf : ℕ → CertData.ZP
+os : ℕ
+lanef wlf st : ℕ → ℕ
+t j : ℕ
+hj : j < 12
+r : Fin 1024
+hr : r ≠ 0
+k : Fin 4
+hst : st (lanef t) = stOf l.length j
+hw : wlf (lanef t) = if j < 10 then wB l.length else wE l.length
+hC :
+  j < 10 →
+    ∀ (c : Fin 29) (i : Fin (24 + 4 * l.length)),
+      flatC1 B hB l ((obs π B ch c) (balWord 0 r 1)) i = φ (ownf (t * os + ↑i))
+hE :
+  10 ≤ j →
+    ∀ (c : Fin 29) (i : Fin (24 + 16 * l.length)),
+      flatH1 B hB l ((obs π B ch c) (balWord 0 r (Mask.towerBasis B k))) i = φ (ownf (t * os + ↑i))
+p : Fin (wO l.length)
+hwB : wB l.length ≤ wE l.length
+hp : ¬↑p < 10 * wB l.length
+hp2 : ↑p < 10 * wB l.length + 2 * wE l.length
+hpos : 0 < wE l.length
+he : (↑p - 10 * wB l.length) / wE l.length < 2
+hj10 : 10 ≤ j
+hlo : ↑p - (10 * wB l.length + (j - 10) * wE l.length) = (↑p - 10 * wB l.length) % wE l.length
+q : ℕ
+hloc : q % wE l.length < wE l.length
+hej : q / wE l.length = j - 10
+hq : ↑p = 10 * wB l.length + q
+hdm : wE l.length * (j - 10) + q % wE l.length = q
+a✝ : 10 * wB l.length + q < 10 * wB l.length + (j - 10) * wE l.length
+⊢ False
+failed
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertOwnBlock.lean:141:30: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  1 ≤ h ≤ 1023
+  g ≥ 0
+  f ≥ 0
+  f - g ≥ 0
+  e ≥ 0
+  d ≥ 0
+  10*d - e + f ≤ -1
+  10*d + f ≥ 0
+  c ≥ 1
+  c - d ≥ 0
+  c - f ≤ 0
+  c - f + g ≥ 1
+  2*c - f ≥ 1
+  b ≥ 0
+  a ≥ 0
+  a - 10*d - f ≤ 0
+  a + b - 10*d - f ≥ 1
+where
+ a := ↑(stOf l.length j)
+ b := ↑(if j < 10 then wB l.length else wE l.length)
+ c := ↑(wE l.length)
+ d := ↑(wB l.length)
+ e := ↑(wO l.length)
+ f := ↑(↑p - 10 * wB l.length)
+ g := ↑(j - 10) * ↑(wE l.length)
+ h := ↑↑r
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertOwnBlock.lean:154:54: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  1 ≤ m ≤ 1023
+  0 ≤ i ≤ 28
+  -11 ≤ g ≤ -2
+  f ≥ 0
+  e ≥ 0
+  e - f ≤ -1
+  d ≥ 0
+  10*d - e ≤ 0
+  c ≥ 1
+  c - d ≥ 0
+  2*c + 10*d - e ≥ 1
+  b ≥ 0
+  a ≥ 0
+where
+ a := ↑(stOf l.length j)
+ b := ↑(if j < 10 then wB l.length else wE l.length)
+ c := ↑(wE l.length)
+ d := ↑(wB l.length)
+ e := ↑↑p
+ f := ↑(wO l.length)
+ g := ↑(↑p - 10 * wB l.length) / ↑(wE l.length)
+ i := ↑↑⟨16 + ↑⟨j, hj10⟩, ⋯⟩
+ m := ↑↑r
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertOwnBlock.lean:158:56: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  1 ≤ i ≤ 1023
+  g ≥ 0
+  f ≤ 1
+  f ≤ -1
+  e ≥ 0
+  d ≥ 0
+  10*d - e + g ≤ -1
+  10*d + g ≥ 0
+  c ≥ 1
+  c - d ≥ 0
+  c - g ≥ 1
+  2*c - g ≥ 1
+  b ≥ 0
+  a ≥ 0
+where
+ a := ↑(stOf l.length j)
+ b := ↑(if j < 10 then wB l.length else wE l.length)
+ c := ↑(wE l.length)
+ d := ↑(wB l.length)
+ e := ↑(wO l.length)
+ f := ↑(↑p - 10 * wB l.length) / ↑(wE l.length)
+ g := ↑(↑p - 10 * wB l.length)
+ i := ↑↑r
+'R1Z.CertOwn.limbs_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.CertOwn.flatC1_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.CertOwn.own_src_ident' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock

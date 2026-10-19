@@ -1,0 +1,112 @@
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertOwnBlock.lean:40:0: warning: automatically included section variable(s) unused in theorem `R1Z.CertOwn.limbF_zero`:
+  [Fintype K]
+  [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertOwnBlock.lean:86:38: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if j < 10 then ?m.411 else ?m.412
+in the target expression
+  stOf l.length j ≤ ↑p ∧ ↑p < stOf l.length j + wB l.length
+
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+B : PackBasis F
+φ : CertData.ZP →+* ↥F
+Bat : Type
+inst✝ : BatchedLayer K Bat
+hB : PackField B
+π : Fin 1024 ≃ Fin 1024
+ch : Challenges K
+l : List (Fin 262144)
+ownf : ℕ → CertData.ZP
+os : ℕ
+lanef wlf st : ℕ → ℕ
+t j : ℕ
+hj : j < 12
+r : Fin 1024
+hr : r ≠ 0
+k : Fin 4
+hst : st (lanef t) = stOf l.length j
+hw : wlf (lanef t) = if j < 10 then wB l.length else wE l.length
+hC :
+  j < 10 →
+    ∀ (c : Fin 29) (i : Fin (24 + 4 * l.length)),
+      flatC1 B hB l ((obs π B ch c) (balWord 0 r 1)) i = φ (ownf (t * os + ↑i))
+hE :
+  10 ≤ j →
+    ∀ (c : Fin 29) (i : Fin (24 + 16 * l.length)),
+      flatH1 B hB l ((obs π B ch c) (balWord 0 r (Mask.towerBasis B k))) i = φ (ownf (t * os + ↑i))
+p : Fin (wO l.length)
+hwB : wB l.length ≤ wE l.length
+hp : ↑p < 10 * wB l.length
+hpos : 0 < wB l.length
+hb : ↑p / wB l.length < 10
+hj10 : j < 10
+hbj : ↑p / wB l.length = j
+e16 : ⟨16 + ↑p / wB l.length, ⋯⟩ = ⟨16 + ↑⟨j, hj10⟩, ⋯⟩
+hloc : ↑p % wB l.length < wB l.length
+hlo : ↑p - j * wB l.length = ↑p % wB l.length
+⊢ stOf l.length j ≤ ↑p ∧ ↑p < stOf l.length j + wB l.length
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertOwnBlock.lean:87:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if j < 10 then ?m.417 else ?m.418
+in the target expression
+  flatC1 B hB l ((obs π B ch ⟨16 + ↑⟨j, hj10⟩, ⋯⟩) (balWord 0 r 1)) ⟨↑p % wB l.length, ⋯⟩ =
+    φ (ownf (t * os + (↑p - stOf l.length j)))
+
+case pos
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+B : PackBasis F
+φ : CertData.ZP →+* ↥F
+Bat : Type
+inst✝ : BatchedLayer K Bat
+hB : PackField B
+π : Fin 1024 ≃ Fin 1024
+ch : Challenges K
+l : List (Fin 262144)
+ownf : ℕ → CertData.ZP
+os : ℕ
+lanef wlf st : ℕ → ℕ
+t j : ℕ
+hj : j < 12
+r : Fin 1024
+hr : r ≠ 0
+k : Fin 4
+hst : st (lanef t) = stOf l.length j
+hw : wlf (lanef t) = if j < 10 then wB l.length else wE l.length
+hC :
+  j < 10 →
+    ∀ (c : Fin 29) (i : Fin (24 + 4 * l.length)),
+      flatC1 B hB l ((obs π B ch c) (balWord 0 r 1)) i = φ (ownf (t * os + ↑i))
+hE :
+  10 ≤ j →
+    ∀ (c : Fin 29) (i : Fin (24 + 16 * l.length)),
+      flatH1 B hB l ((obs π B ch c) (balWord 0 r (Mask.towerBasis B k))) i = φ (ownf (t * os + ↑i))
+p : Fin (wO l.length)
+hwB : wB l.length ≤ wE l.length
+hp : ↑p < 10 * wB l.length
+hpos : 0 < wB l.length
+hb : ↑p / wB l.length < 10
+hj10 : j < 10
+hbj : ↑p / wB l.length = j
+e16 : ⟨16 + ↑p / wB l.length, ⋯⟩ = ⟨16 + ↑⟨j, hj10⟩, ⋯⟩
+hloc : ↑p % wB l.length < wB l.length
+hlo : ↑p - j * wB l.length = ↑p % wB l.length
+⊢ flatC1 B hB l ((obs π B ch ⟨16 + ↑⟨j, hj10⟩, ⋯⟩) (balWord 0 r 1)) ⟨↑p % wB l.length, ⋯⟩ =
+    φ (ownf (t * os + (↑p - stOf l.length j)))
+'R1Z.CertOwn.limbs_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.CertOwn.flatC1_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.CertOwn.own_src_ident' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock

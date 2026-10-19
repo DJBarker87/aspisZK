@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertNatural.lean:24:6: error(lean.unknownIdentifier): Unknown constant `List.toFinset_map`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertNatural.lean:23:48: error: unsolved goals
+K : Type
+inst✝ : Field K
+x : K
+n : ℕ
+⊢ ∏ bit ∈ (List.map (fun x => x + 1) n.bitIndices).toFinset, doubledFactor x bit =
+    naturalLineValue (x * x + x * x - 1) n
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertNatural.lean:38:30: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (2 * ?n).bitIndices
+in the target expression
+  ∏ bit ∈ (m / 2).bitIndices.toFinset, doubledFactor (x * x + x * x - 1) bit = naturalLineValue x (2 * (m / 2))
+
+case inl
+K : Type
+inst✝ : Field K
+x : K
+k m : ℕ
+hm : m < 2 ^ (k + 1)
+h0 : m % 2 = 0
+hm2 : m = 2 * (m / 2)
+⊢ ∏ bit ∈ (m / 2).bitIndices.toFinset, doubledFactor (x * x + x * x - 1) bit = naturalLineValue x (2 * (m / 2))
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertNatural.lean:42:30: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (2 * ?n + 1).bitIndices
+in the target expression
+  x * ∏ bit ∈ (m / 2).bitIndices.toFinset, doubledFactor (x * x + x * x - 1) bit = naturalLineValue x (2 * (m / 2) + 1)
+
+case inr
+K : Type
+inst✝ : Field K
+x : K
+k m : ℕ
+hm : m < 2 ^ (k + 1)
+h1 : m % 2 = 1
+hm2 : m = 2 * (m / 2) + 1
+⊢ x * ∏ bit ∈ (m / 2).bitIndices.toFinset, doubledFactor (x * x + x * x - 1) bit = naturalLineValue x (2 * (m / 2) + 1)
+'R1Z.CertBuild.df_succ' depends on axioms: [propext, Quot.sound]
+'R1Z.CertBuild.natR_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock

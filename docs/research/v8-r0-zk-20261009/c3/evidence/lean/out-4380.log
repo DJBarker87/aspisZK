@@ -1,0 +1,24 @@
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertBuildFill.lean:23:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (let nlen := (↑v).length + 1;
+    if h : (decide (nlen ≤ U32.max) || decide (nlen ≤ Usize.max)) = true then ok ⟨(↑v).concat x, ⋯⟩
+    else fail Error.maximumSizeExceeded) =
+    ok w
+of `h'`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+v : alloc.vec.Vec U32
+x : U32
+w : alloc.vec.Vec U32
+h : v.push x = ok w
+h' :
+  (let nlen := (↑v).length + 1;
+    if h : (decide (nlen ≤ U32.max) || decide (nlen ≤ Usize.max)) = true then ok ⟨(↑v).concat x, ⋯⟩
+    else fail Error.maximumSizeExceeded) =
+    ok w
+⊢ ↑w = ↑v ++ [x]
+'R1Z.CertBuild.fill_row_loop_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.CertBuild.fill_tq_loop_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.CertBuild.fill_tq_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock

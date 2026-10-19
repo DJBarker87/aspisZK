@@ -1,0 +1,65 @@
+Scratch-only shims appended to the exported production sources (never to the spend-path branch).
+They only re-export three private writers; no production statement is changed.
+
+--- append to crates/aspis-statement/src/pool_v1/pair_trace.rs
+#[doc(hidden)]
+pub fn diff_write_value_aux(columns: &mut [Vec<M31>; 16], values: [u32; 3]) {
+    write_value_aux(columns, values)
+}
+#[doc(hidden)]
+pub fn diff_write_occupancy(
+    columns: &mut [Vec<M31>; 16],
+    row: usize,
+    witness: PoolV1PairLeafWitnessV1,
+    selected: Option<bool>,
+) {
+    write_occupancy(columns, row, witness, selected)
+}
+#[doc(hidden)]
+pub fn diff_write_permutation(
+    columns: &mut [Vec<M31>; 16],
+    block: usize,
+    pre_absorb: [M31; 16],
+    absorption: [M31; 8],
+) -> Result<Digest, PoolV1PairTraceErrorV1> {
+    write_permutation(columns, block, pre_absorb, absorption)
+}
+#[doc(hidden)]
+pub fn diff_write_sponge(
+    columns: &mut [Vec<M31>; 16],
+    block_start: usize,
+    domain: M31,
+    input: &[M31],
+) -> Result<Digest, PoolV1PairTraceErrorV1> {
+    write_sponge(columns, block_start, domain, input)
+}
+#[doc(hidden)]
+pub fn diff_write_node(
+    columns: &mut [Vec<M31>; 16],
+    block: usize,
+    left: Digest,
+    right: Digest,
+) -> Result<Digest, PoolV1PairTraceErrorV1> {
+    write_node(columns, block, left, right)
+}
+--- append to crates/aspis-statement/src/pool_v1/pair_forest_trace.rs
+#[doc(hidden)]
+pub fn diff_write_forest_path_aux(
+    columns: &mut [Vec<M31>; 16],
+    level: usize,
+    bit: M31,
+    current: Digest,
+    left: Digest,
+    right: Digest,
+) -> Result<(), PoolV1PairTraceErrorV1> {
+    write_forest_path_aux(columns, level, bit, current, left, right)
+}
+#[doc(hidden)]
+pub fn diff_write_forest_node(
+    columns: &mut [Vec<M31>; 16],
+    block: usize,
+    left: Digest,
+    right: Digest,
+) -> Result<Digest, PoolV1PairTraceErrorV1> {
+    write_forest_node(columns, block, left, right)
+}

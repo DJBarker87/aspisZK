@@ -1,0 +1,177 @@
+#!/usr/bin/env python3
+"""One table, two renderings (DESIGN-BUILDER-MODEL §13 (1)).
+
+The table-driven parts of the Lean glue — the sponge schedule (`spongePre`),
+the sponge chunks and lengths (`chunksOf`), the node-children dispatch
+(`childrenOf`) and the trace assembly (`copyCell`) — are rendered from the
+TABLE below twice:
+  * as Lean text, which must occur VERBATIM in the proved Lean files
+    (BuilderBlocksChain.lean, BuilderWitness.lean, BuilderWitnessTree.lean,
+    BuilderWitnessTrace.lean); `--check` fails if any rendering is missing;
+  * as Rust (refine/diffharness/tests/glue_gen.rs), included by the native
+    differential test tests/glue.rs, which mirrors the remaining structural
+    glue (orderedR, treeCurR, appCurR, invR, banks) by hand, one Rust function
+    per Lean definition with the same name in snake case.
+Usage (repository root): gen-glue.py.txt [--check]
+"""
+import sys, os
+R = "docs/research/v8-r0-zk-20261009"
+LEAN = {k: f"{R}/lean/R0Z/{v}" for k, v in {
+    "chain": "BuilderBlocksChain.lean", "wit": "BuilderWitness.lean",
+    "tree": "BuilderWitnessTree.lean", "trace": "BuilderWitnessTrace.lean"}.items()}
+RUST = f"{R}/refine/diffharness/tests/glue_gen.rs"
+
+# ---------------- the table ----------------
+INITS = {"Owner": (0x41530001, 8), "Note": (0x41530003, 18), "Nul": (0x41530002, 16)}
+SPONGES = [(0, "Owner", 1), (1, "Note", 3), (25, "Nul", 2), (27, "Note", 3), (30, "Note", 3)]
+# chunk of each sponge block, in the order of the Lean if-chain
+CHUNKS = [((0, 25), ("field", "sk")), ((1,), ("owner",)), ((2,), ("c2", "inputValue", "salt")),
+          ((3,), ("c3", "salt")), ((26,), ("field", "salt")), ((27,), ("field", "recipientOwner")),
+          ((28,), ("c2", "outputValue", "recipientSalt")), ((29,), ("c3", "recipientSalt")),
+          ((30,), ("field", "changeOwner")), ((31,), ("c2", "changeValue", "changeSalt")),
+          ((32,), ("c3", "changeSalt"))]
+SCLEN2 = (3, 29, 32)          # blocks absorbing 2 words; all others 8
+TREE_LO = (4, 24)             # node blocks of levels 0..20: level = h - 4
+TREE_HI = 54                  # node blocks of levels 21..23: level = h - 33
+OUTPAIR = 33
+APP = (34, 53)                # append levels: j = h - 34
+PATH_ROW0, AUX_ROW0, C1_COLS = 912, 1008, 16
+
+def snake(s): return "".join("_" + c.lower() if c.isupper() else c for c in s)
+
+# ---------------- Lean renderings ----------------
+def lean_sponge_pre():
+    L = ["def spongePre (R : RustChunks) (h : Nat) : Result (Array U32 16#usize) :=", "  match h with"]
+    for first, init, n in SPONGES:
+        for k in range(n):
+            h = first + k
+            if k == 0:
+                L.append(f"  | {h} => init{init}")
+            elif k == 1:
+                L.append(f"  | {h} => do let p ← init{init}; spongeStep p (R.schunk {h-1}) (R.sclen {h-1})")
+            else:
+                L.append(f"  | {h} => do")
+                L.append(f"      let p ← init{init}")
+                for j in range(first, h):
+                    last = j == h - 1
+                    L.append(("      spongeStep p" if last else "      let p ← spongeStep p") +
+                             f" (R.schunk {j}) (R.sclen {j})")
+    L.append("  | _ => ok zero16")
+    return "\n".join(L) + "\n"
+
+def lean_chunk_expr(e):
+    if e[0] == "field": return f"W.{e[1]}"
+    if e[0] == "owner": return "okOr (ownerD W) zero8"
+    if e[0] == "c2": return f"noteC2R W.{e[1]} P.asset W.{e[2]}"
+    if e[0] == "c3": return f"noteC3R W.{e[1]}"
+
+def lean_chunks():
+    L = ["  schunk := fun h =>"]
+    for i, (hs, e) in enumerate(CHUNKS):
+        cond = " ∨ ".join(f"h = {h}" for h in hs)
+        L.append(("    if " if i == 0 else "    else if ") + f"{cond} then {lean_chunk_expr(e)}")
+    L.append("    else zero8")
+    L.append("  sclen := fun h => if " + " ∨ ".join(f"h = {h}" for h in SCLEN2) + " then 2#usize else 8#usize")
+    return "\n".join(L) + "\n"
+
+def lean_children():
+    lo, hi = TREE_LO
+    off_hi = TREE_HI - 21
+    a0, a1 = APP
+    return f"""  if {lo} ≤ h ∧ h ≤ {hi} then orderedR (okOr (treeCurR W P (h - {lo})) zero8) (W.sibs.val[h - {lo}]!) (bitB W (h - {lo}))
+  else if {TREE_HI} ≤ h then orderedR (okOr (treeCurR W P (h - {off_hi})) zero8) (W.sibs.val[h - {off_hi}]!) (bitB W (h - {off_hi}))
+  else if h = {OUTPAIR} then
+    (match P.variant with
+      | .privateTransfer => (okOr (recipDR W P) zero8, okOr (changeDR W P) zero8)
+      | .withdrawal => (okOr (changeDR W P) zero8, zero8))
+  else if {a0} ≤ h ∧ h ≤ {a1} then
+    orderedR (okOr (appCurR W P (h - {a0})) zero8) (appSibR P (h - {a0})) (appBitR P (h - {a0}))
+  else (zero8, zero8)
+"""
+
+def lean_copy_cell():
+    return f"""  if c.val < {C1_COLS} then
+    if r.val < {PATH_ROW0} then (blockR W P (r.val / 16)).val[(r.val % 16) * 16 + c.val]!
+    else if r.val < {AUX_ROW0} then (okOr (pathR W P) (Array.repeat 1536#usize 0#u32)).val[(r.val - {PATH_ROW0}) * 16 + c.val]!
+    else (okOr (auxR W P) (Array.repeat 256#usize 0#u32)).val[(r.val - {AUX_ROW0}) * 16 + c.val]!
+  else 0#u32
+"""
+
+CHECKS = [("chain", lean_sponge_pre), ("wit", lean_chunks), ("tree", lean_children), ("trace", lean_copy_cell)]
+
+# ---------------- Rust rendering ----------------
+def rust_chunk_expr(e):
+    if e[0] == "field": return f"w.{snake(e[1])}"
+    if e[0] == "owner": return "owner_d(w)"
+    if e[0] == "c2": return f"note_c2r(w.{snake(e[1])}, p.asset, &w.{snake(e[2])})"
+    if e[0] == "c3": return f"note_c3r(&w.{snake(e[1])})"
+
+def rust():
+    L = ["// GENERATED by refine/glue/gen-glue.py.txt from the glue table; do not edit.",
+         "// The same table renders the Lean text checked verbatim in R0Z/BuilderBlocksChain,",
+         "// BuilderWitness, BuilderWitnessTree and BuilderWitnessTrace.", ""]
+    for k, (d, n) in INITS.items():
+        L.append(f"fn init_{k.lower()}() -> [u32; 16] {{ bw::sponge_init({d:#x}, {n}) }}")
+    L.append("")
+    L.append("fn sponge_pre(w: &RW, p: &RP, h: usize) -> [u32; 16] {")
+    L.append("    match h {")
+    for first, init, n in SPONGES:
+        for k in range(n):
+            h = first + k
+            body = f"init_{init.lower()}()"
+            for j in range(first, h):
+                body = f"sponge_step({body}, schunk(w, p, {j}), sclen({j}))"
+            L.append(f"        {h} => {body},")
+    L.append("        _ => [0u32; 16],")
+    L.append("    }")
+    L.append("}")
+    L.append("")
+    L.append("fn schunk(w: &RW, p: &RP, h: usize) -> [u32; 8] {")
+    for i, (hs, e) in enumerate(CHUNKS):
+        cond = " || ".join(f"h == {h}" for h in hs)
+        L.append(("    if " if i == 0 else "    } else if ") + f"{cond} {{ {rust_chunk_expr(e)}")
+    L.append("    } else { ZERO8 }")
+    L.append("}")
+    L.append("")
+    L.append("fn sclen(h: usize) -> usize { if " + " || ".join(f"h == {h}" for h in SCLEN2) + " { 2 } else { 8 } }")
+    L.append("")
+    lo, hi = TREE_LO
+    off_hi = TREE_HI - 21
+    a0, a1 = APP
+    L.append(f"""fn children(w: &RW, p: &RP, h: usize) -> ([u32; 8], [u32; 8]) {{
+    if {lo} <= h && h <= {hi} {{ ordered_r(tree_cur_r(w, p, h - {lo}), w.sibs[h - {lo}], bit_b(w, h - {lo})) }}
+    else if {TREE_HI} <= h {{ ordered_r(tree_cur_r(w, p, h - {off_hi}), w.sibs[h - {off_hi}], bit_b(w, h - {off_hi})) }}
+    else if h == {OUTPAIR} {{
+        if p.transfer {{ (recip_dr(w, p), change_dr(w, p)) }} else {{ (change_dr(w, p), ZERO8) }}
+    }}
+    else if {a0} <= h && h <= {a1} {{ ordered_r(app_cur_r(w, p, h - {a0}), app_sib_r(p, h - {a0}), app_bit_r(p, h - {a0})) }}
+    else {{ (ZERO8, ZERO8) }}
+}}
+
+const PATH_ROW0: usize = {PATH_ROW0};
+const AUX_ROW0: usize = {AUX_ROW0};
+const C1_COLS: usize = {C1_COLS};
+""")
+    return "\n".join(L)
+
+def main():
+    check = "--check" in sys.argv[1:]
+    bad = 0
+    for k, f in CHECKS:
+        src = open(LEAN[k]).read()
+        if f() not in src:
+            sys.stderr.write(f"gen-glue: CHECK FAILED: rendering {f.__name__} not found verbatim in {LEAN[k]}\n")
+            bad = 1
+    text = rust()
+    if check:
+        cur = open(RUST).read() if os.path.exists(RUST) else ""
+        if cur != text:
+            sys.stderr.write("gen-glue: CHECK FAILED: glue_gen.rs differs from regeneration\n"); bad = 1
+        if bad: sys.exit(1)
+        print("gen-glue: check ok (4 Lean renderings verbatim; glue_gen.rs up to date)")
+        return
+    if bad: sys.exit(2)
+    open(RUST, "w").write(text)
+    print(f"gen-glue: wrote {RUST}")
+
+main()

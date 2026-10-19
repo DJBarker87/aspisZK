@@ -1,0 +1,104 @@
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertCheckSound2.lean:29:20: error: ambiguous term, use fully qualified name, possible interpretations [@_root_.lo, @RfDec.lo]
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertCheckSound2.lean:45:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(φ (gs al (4 * ↑j + ↑3)))
+in the target expression
+  ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 0)) + B.i * ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 1)) +
+        B.u * ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 2)) +
+      B.i * B.u * ↑(φ (gs al (4 * ↑j + 3))) =
+    ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 0)) + B.i * ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 1)) +
+        B.u * ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 2)) +
+      B.i * B.u * ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 3))
+
+K : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+B : PackBasis F
+φ : CertData.ZP →+* ↥F
+w : K
+raw : RawChallenges K F
+hup : ∀ (i : Fin 25) (k : Fin 4), raw.sem i (Fin.natAdd 4 k) = 0
+al : Slice U32
+hal : ∀ (j : Fin 10) (k : Fin 4), ↑(φ (gs al (4 * ↑j + ↑k))) = ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 k))
+j : Fin 10
+h1 : ↑(φ (gs al (4 * ↑j + 1))) = ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 1))
+h2 : ↑(φ (gs al (4 * ↑j + 2))) = ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 2))
+h3 : ↑(φ (gs al (4 * ↑j + ↑3))) = ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 3))
+h0 : ↑(φ (gs al (4 * ↑j))) = ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 0))
+⊢ ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 0)) + B.i * ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 1)) +
+        B.u * ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 2)) +
+      B.i * B.u * ↑(φ (gs al (4 * ↑j + 3))) =
+    ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 0)) + B.i * ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 1)) +
+        B.u * ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 2)) +
+      B.i * B.u * ↑(raw.sem ⟨15 + ↑j, ⋯⟩ (Fin.castAdd 4 3))
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertCheckSound2.lean:72:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(φ (gs a9 ↑3))
+in the target expression
+  ↑(raw.sem 24 (Fin.castAdd 4 0)) - ↑(φ 1073741824) + B.i * ↑(raw.sem 24 (Fin.castAdd 4 1)) +
+        B.u * ↑(raw.sem 24 (Fin.castAdd 4 2)) +
+      B.i * B.u * ↑(φ (gs a9 3)) =
+    ↑(raw.sem 24 (Fin.castAdd 4 0)) + B.i * ↑(raw.sem 24 (Fin.castAdd 4 1)) + B.u * ↑(raw.sem 24 (Fin.castAdd 4 2)) +
+        B.i * B.u * ↑(raw.sem 24 (Fin.castAdd 4 3)) -
+      ↑(φ 1073741824)
+
+K : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+B : PackBasis F
+φ : CertData.ZP →+* ↥F
+hT : Tower B
+w : K
+raw : RawChallenges K F
+hup : ∀ (i : Fin 25) (k : Fin 4), raw.sem i (Fin.natAdd 4 k) = 0
+a9 hinv : Slice U32
+ha9 : ∀ (k : Fin 4), ↑(φ (gs a9 ↑k)) = ↑(raw.sem 24 (Fin.castAdd 4 k))
+e0 :
+  (gs a9 0 - 1073741824) * gs hinv 0 - gs a9 1 * gs hinv 1 + 2 * (gs a9 2 * gs hinv 2 - gs a9 3 * gs hinv 3) -
+      (gs a9 2 * gs hinv 3 + gs a9 3 * gs hinv 2) =
+    1
+e1 :
+  (gs a9 0 - 1073741824) * gs hinv 1 + gs a9 1 * gs hinv 0 + (gs a9 2 * gs hinv 2 - gs a9 3 * gs hinv 3) +
+      2 * (gs a9 2 * gs hinv 3 + gs a9 3 * gs hinv 2) =
+    0
+e2 : (gs a9 0 - 1073741824) * gs hinv 2 - gs a9 1 * gs hinv 3 + gs a9 2 * gs hinv 0 - gs a9 3 * gs hinv 1 = 0
+e3 : (gs a9 0 - 1073741824) * gs hinv 3 + gs a9 1 * gs hinv 2 + gs a9 2 * gs hinv 1 + gs a9 3 * gs hinv 0 = 0
+m :
+  ψ4 B φ 1 0 0 0 =
+    ψ4 B φ (gs a9 0 - 1073741824) (gs a9 1) (gs a9 2) (gs a9 3) * ψ4 B φ (gs hinv 0) (gs hinv 1) (gs hinv 2) (gs hinv 3)
+q0 : qmulZ (gs a9 0 - 1073741824) (gs a9 1) (gs a9 2) (gs a9 3) (gs hinv 0) (gs hinv 1) (gs hinv 2) (gs hinv 3) 0 = 1
+q1 : qmulZ (gs a9 0 - 1073741824) (gs a9 1) (gs a9 2) (gs a9 3) (gs hinv 0) (gs hinv 1) (gs hinv 2) (gs hinv 3) 1 = 0
+q2 : qmulZ (gs a9 0 - 1073741824) (gs a9 1) (gs a9 2) (gs a9 3) (gs hinv 0) (gs hinv 1) (gs hinv 2) (gs hinv 3) 2 = 0
+q3 : qmulZ (gs a9 0 - 1073741824) (gs a9 1) (gs a9 2) (gs a9 3) (gs hinv 0) (gs hinv 1) (gs hinv 2) (gs hinv 3) 3 = 0
+one : ψ4 B φ 1 0 0 0 = 1
+h0 : ↑(φ (gs a9 0)) = ↑(raw.sem 24 (Fin.castAdd 4 0))
+h1 : ↑(φ (gs a9 1)) = ↑(raw.sem 24 (Fin.castAdd 4 1))
+h2 : ↑(φ (gs a9 2)) = ↑(raw.sem 24 (Fin.castAdd 4 2))
+h3 : ↑(φ (gs a9 ↑3)) = ↑(raw.sem 24 (Fin.castAdd 4 3))
+⊢ ↑(raw.sem 24 (Fin.castAdd 4 0)) - ↑(φ 1073741824) + B.i * ↑(raw.sem 24 (Fin.castAdd 4 1)) +
+        B.u * ↑(raw.sem 24 (Fin.castAdd 4 2)) +
+      B.i * B.u * ↑(φ (gs a9 3)) =
+    ↑(raw.sem 24 (Fin.castAdd 4 0)) + B.i * ↑(raw.sem 24 (Fin.castAdd 4 1)) + B.u * ↑(raw.sem 24 (Fin.castAdd 4 2)) +
+        B.i * B.u * ↑(raw.sem 24 (Fin.castAdd 4 3)) -
+      ↑(φ 1073741824)
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertCheckSound2.lean:71:85: warning: This simp argument is unused:
+  Subfield.coe_sub
+
+Hint: Omit it from the simp argument list.
+  simp only [map_sub, RingHom.coe_comp, Function.comp_apply, Subfield.coe_subtype,̵ ̵S̵u̵b̵f̵i̵e̵l̵d̵.̵c̵o̵e̵_̵s̵u̵b̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertCheckSound2.lean:84:22: warning: Variable name `hc` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'R1Z.CertCheckSound.alimb_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.CertCheckSound.half_from' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.CertCheckSound.check_sound'' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock

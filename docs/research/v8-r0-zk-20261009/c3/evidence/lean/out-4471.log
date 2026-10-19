@@ -1,0 +1,93 @@
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertLiftIdent3.lean:21:0: warning: automatically included section variable(s) unused in theorem `R1Z.CertBuild.psi_diff`:
+  [Fintype K]
+  [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertLiftIdent3.lean:27:0: warning: automatically included section variable(s) unused in theorem `R1Z.CertBuild.tb_eq`:
+  [Fintype K]
+  [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertLiftIdent3.lean:31:0: warning: automatically included section variable(s) unused in theorem `R1Z.CertBuild.diff_eq`:
+  [Fintype K]
+  [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertLiftIdent3.lean:31:19: warning: Variable name `y` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertLiftIdent3.lean:58:34: error: Application type mismatch: The argument
+  π
+has type
+  Fin 1024 ≃ Fin 1024
+of sort `Type` but is expected to have type
+  PackField B
+of sort `Prop` in the application
+  flatHead_c1 B π
+/home/dombarker/project-offloads/aspis-fs-generic-20261006/sources/R1Z/CertLiftIdent3.lean:69:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (obs π B ch c) (balWord 1023 r 1) (OwnCell.opened (l.get ⟨(↑i - 24) / 4, ⋯⟩) ?m.413)
+in the target expression
+  limbF ((obs π B ch c) (c1Src r) (OwnCell.opened (l.get ⟨(↑i - 24) / 4, ⋯⟩) ⟨(↑i - 24) % 4, ⋯⟩)) = φ ↑↑v
+
+case neg
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+B : PackBasis F
+φ : ZP →+* ↥F
+Bat : Type
+inst✝ : BatchedLayer K Bat
+hT : Tower B
+hB : PackField B
+π : Fin 1024 ≃ Fin 1024
+ch : Challenges K
+c : Fin 29
+l : List (Fin 262144)
+hq : ch.queries = l.toFinset
+al zz tr sx sy inact : Slice U32
+ha : ∀ (j : ℕ) (h : j < 10), Alimb B φ al j = alpha ch ⟨j, h⟩
+hzx : ∀ (j : Fin 2), Alimb B φ zz (2 * ↑j) = (↑(ch.circle j)).1
+hzy : ∀ (j : Fin 2), Alimb B φ zz (2 * ↑j + 1) = (↑(ch.circle j)).2
+htr : ∀ (r : Fin 1024), gN tr ↑r = ↑(π r)
+hin : ∀ (r : Fin 1024), gs inact ↑r = if r ∈ copyInactiveRows then 1 else 0
+hsx :
+  ∀ (m : ℕ) (hm : m < 4 * l.length),
+    (embR φ) (gs sx m) = storedX (AspisV5ComponentCConcreteFoldLinearity.childIndex (l.get ⟨m / 4, ⋯⟩) ⟨m % 4, ⋯⟩)
+hsy :
+  ∀ (m : ℕ) (hm : m < 4 * l.length),
+    (embR φ) (gs sy m) = storedY (AspisV5ComponentCConcreteFoldLinearity.childIndex (l.get ⟨m / 4, ⋯⟩) ⟨m % 4, ⋯⟩)
+r : Fin 1024
+hr : r ≠ 1023
+rr ii : Usize
+hrr : ↑rr = ↑r
+i : Fin (24 + 4 * l.length)
+hii : ↑ii = ↑i
+v : U32
+hv : R1CertBuild.c1_entry al zz tr sx sy inact rr ii = ok v
+o1 o2 : U32
+h1 : R1CertBuild.c1_val al zz tr sx sy rr ii = ok o1
+h2 : R1CertBuild.c1_val al zz tr sx sy 1023#usize ii = ok o2
+hvv : ↑↑v = ↑↑o1 - gs inact ↑rr * ↑↑o2
+e1023 : ↑1023#usize = ↑1023
+hi : ¬↑i < 24
+hm : ↑i - 24 < 4 * l.length
+hql : l.get ⟨(↑i - 24) / 4, ⋯⟩ ∈ ch.queries
+⊢ limbF ((obs π B ch c) (c1Src r) (OwnCell.opened (l.get ⟨(↑i - 24) / 4, ⋯⟩) ⟨(↑i - 24) % 4, ⋯⟩)) = φ ↑↑v
+'R1Z.CertBuild.psi_diff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.CertBuild.c1_entry_ident' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock

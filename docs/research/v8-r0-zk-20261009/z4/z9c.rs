@@ -165,6 +165,7 @@ struct Pub {
     lay: Lay,
     cx: Ctx,
     rels: Vec<Vec<u32>>, // relR1 limb functionals on the 1328 read-support coordinates
+    z: [Point<QM31>; 2], // the OOD points (for the C3 lift-builder differential)
 }
 const BAT0: usize = 8; // the probe's inactive cell (not an R1Bat cell) occupies limbs 0..8
 struct Src3 {
@@ -201,7 +202,7 @@ fn build_pub(s: &str, v: usize, qspec: &str, gi: usize) -> Pub {
     rl.extend(dr.circ.iter());
     rl.extend(dr.line[1].iter());
     let rels = rl.iter().flat_map(|r| r.limb_functionals(lay.bw)).map(|f| u(&f[BAT0..])).collect();
-    Pub { a, qs, lay, cx, rels }
+    Pub { a, qs, lay, cx, rels, z: t.z }
 }
 fn src3(ln: &Lanes, li: usize, i: usize) -> Src3 {
     let (o, b, r) = ln.bal(li, i);
@@ -805,5 +806,11 @@ pub(crate) fn main() {
         }
         println!("R1CERT_TEETH_SUMMARY {label} rejected={rejected}/{n}");
     }
+    if args.iter().any(|x| x == "--c3diff") {
+        z9d::run(&p2, &cert, &label, teeth);
+    }
     println!("R1CERT_DONE {label} wall_seconds={:.3}", t0.elapsed().as_secs_f64());
 }
+
+#[path = "z9d.rs"]
+mod z9d;
