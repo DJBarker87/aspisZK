@@ -67,12 +67,29 @@ pool-v1-pair-forest-copy-tag-dot-basis-audit = [
 pool-v1-pair-forest-copy-finish-dot-basis-audit = [
     "pool-v1-pair-forest-copy-selector-tensor-basis-audit",
 ]
+# Native differential evidence only (D68.2): retains the pre-migration
+# pair-forest compiler (legacy writers plus relocation) as
+# `pair_forest_trace::reference`, so the shipped copy-built compiler can be
+# compared with it. Never selected by a prover or program build.
+pool-v1-pair-forest-writer-reference = []
 
 [dependencies]
 aspis-core.workspace = true
+
+# The shipped pair-forest trace writers are the extracted copies (D68.2). They
+# are host-only, like the trace compiler that calls them; SBF builds never
+# compile them.
+[target.'cfg(not(target_os = "solana"))'.dependencies]
+aspis-r0-writer-copies = { path = "../../docs/research/v8-r0-zk-20261009/refine/writers" }
+aspis-r0-block-writer-copies = { path = "../../docs/research/v8-r0-zk-20261009/refine/blockwriters" }
+aspis-r0-poseidon-copy = { path = "../../docs/research/v8-r0-zk-20261009/refine/poseidon" }
 
 [dev-dependencies]
 p3-field = "=0.6.1"
 p3-mersenne-31 = "=0.6.1"
 p3-symmetric = "=0.6.1"
 sha2.workspace = true
+
+[[test]]
+name = "pair_forest_writer_migration"
+required-features = ["pool-v1-pair-forest-writer-reference"]

@@ -4,6 +4,9 @@
 set -u
 R=$1; A=$2; T=/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016
 rm -rf $R/extract/writers-$A; cp -r $R/in/refine/blockwriters $R/extract/writers-$A
+# The copy crates are root-workspace members since the writer migration (D68.2);
+# extraction builds the copy as its own workspace, as before.
+printf '\n[workspace]\n' >> $R/extract/writers-$A/Cargo.toml
 mkdir -p $R/extract/charon-$A $R/extract/aeneas-$A/generated
 cd $R/extract/writers-$A && PATH=/home/dombarker/.cargo/bin:$PATH cargo generate-lockfile --offline
 systemd-run --user --scope --quiet -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \

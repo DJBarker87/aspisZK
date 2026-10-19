@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+"""Writer migration text check (LOG D68.2).  Usage (repository root):
+    python3 docs/research/v8-r0-zk-20261009/refine/migration/check-glue-text.py.txt
+
+The shipped pair-forest builder (crates/aspis-statement/src/pool_v1/
+pair_forest_copy_builder.rs) must be the glue of the differential harness
+(refine/diffharness/tests/glue.rs) over the pinned extracted copies:
+  1. the three copy sources hash to the pinned extraction inputs;
+  2. the structural glue (records, ZERO8, every function from `perm` to
+     `late_row`) is a verbatim copy of glue.rs;
+  3. `merged_banks`'s loop and merge lines are glue.rs `merged_trace`'s;
+  4. `records` equals glue.rs `records` except the signature (extra `asset`
+     argument) and `asset: asset.0` for the test asset 77;
+  5. the table-driven glue is include!d from the generated glue_gen.rs
+     (whose agreement with the Lean text is gen-glue.py.txt --check).
+Exit 0 and one line per check on success; exit 1 on the first failure.
+"""
+import hashlib, re, sys
+R = "docs/research/v8-r0-zk-20261009/refine"
+PROD = "crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs"
+GLUE = f"{R}/diffharness/tests/glue.rs"
+PINS = {f"{R}/writers/src/lib.rs": "20b9aed5bfe6e41b37bdae823c1468a7a208840f03689850cf2d478fda7a8da1",
+        f"{R}/blockwriters/src/lib.rs": "f5ca7ae8ba4271bd9b189b2c27d3b5ee75407598c3bde90e640f6e9b491a8782",
+        f"{R}/poseidon/src/lib.rs": "2591c007c8dd60d4a48e75906b429b09c22d914fc25ff15b926335162af9872c"}
+
+def fail(msg):
+    sys.stderr.write("check-glue-text: FAILED: " + msg + "\n"); sys.exit(1)
+
+for path, pin in PINS.items():
+    got = hashlib.sha256(open(path, "rb").read()).hexdigest()
+    if got != pin: fail(f"{path} sha256 {got} != pinned {pin}")
+print("1 ok: copy sources match the pinned extraction inputs (writers 20b9aed5, blockwriters f5ca7ae8, poseidon 2591c007)")
+
+prod, glue = open(PROD).read(), open(GLUE).read()
+def segment(text, start, end_line):
+    i = text.index(start); j = text.index(end_line, i) + len(end_line)
+    return text[i:j]
+START = "// ---------- the records (Lean RustWitness / RustPublic) ----------"
+END = "fn late_row(k: usize) -> bool { (544..864).contains(&(k % 1024)) }"
+if segment(prod, START, END) != segment(glue, START, END): fail("structural glue differs from glue.rs")
+n = len(re.findall(r"^fn ", segment(glue, START, END), re.M))
+print(f"2 ok: structural glue verbatim from glue.rs ({n} functions, records structs, ZERO8)")
+
+def body_lines(text, header):
+    i = text.index(header); j = text.index("\n}\n", i)
+    return [l.strip() for l in text[i:j].split("\n")[1:]]
+mt = body_lines(glue, "fn merged_trace(")
+mb = body_lines(prod, "fn merged_banks(")
+need = [l for l in mt if l.startswith(("let pt", "let mut stable", "let mut late", "for k", "stable[k]", "late[k]", "let ok"))]
+if any(l not in mb for l in need) or "let merged = Box::new(cp::merge_copy(&stable, &late));" not in mb:
+    fail("merged_banks does not reproduce merged_trace's loop and merge")
+print(f"3 ok: merged_banks reproduces merged_trace's {len(need)} loop/check lines and merge_copy")
+
+rg, rp = body_lines(glue, "fn records("), body_lines(prod, "fn records(")
+diff = [(a, b) for a, b in zip(rg, rp) if a != b]
+allowed = [("chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1) -> (RW, RP) {",
+            "chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31) -> (RW, RP) {"),
+           ("asset: 77,", "asset: asset.0,")]
+if len(rg) != len(rp) or diff != allowed: fail(f"records differs beyond the allowed lines: {diff}")
+print("4 ok: records equals glue.rs records except the asset argument and `asset: asset.0`")
+
+inc = 'include!("../../../../docs/research/v8-r0-zk-20261009/refine/diffharness/tests/glue_gen.rs");'
+if prod.count(inc) != 1 or "fn sponge_pre" in prod or "fn children" in prod: fail("table-driven glue not included from glue_gen.rs")
+print("5 ok: table-driven glue include!d from refine/diffharness/tests/glue_gen.rs")

@@ -13,40 +13,42 @@ use crate::{
     logup::{
         build_copy_logup_helper, compress_tagged_tuple, verify_copy_logup_constraints, CopyLogUpRow,
     },
-    poseidon2::{
-        permute_optimized_with_trace, Digest, MERKLE_NODE_COMPRESSION_V3_TWEAK, POSEIDON2_ROUNDS,
-    },
+    poseidon2::{evaluate_trace_round_pair, Digest, MERKLE_NODE_COMPRESSION_V3_TWEAK, RATE},
     state_only_trace::StateOnlyTraceFoundation,
     trace_v4::TraceCell,
 };
 
 use super::{
+    incremental_merkle::IncrementalMerkleTreeV1,
+    pair_forest_copy_builder::{merge_banks, CopyBanks, CopyRecords},
     pair_forest_hiding::{
-        build_pool_v1_pair_forest_copy_row_schedule_v1, pool_v1_pair_forest_path_base_row_v1,
-        POOL_V1_PAIR_FOREST_COPY_ROW_LINKS_V1, POOL_V1_PAIR_FOREST_INPUT_OCCUPANCY_AUX_ROW_V1,
+        build_pool_v1_pair_forest_copy_row_schedule_v1, POOL_V1_PAIR_FOREST_COPY_ROW_LINKS_V1,
+        POOL_V1_PAIR_FOREST_INPUT_OCCUPANCY_AUX_ROW_V1,
         POOL_V1_PAIR_FOREST_OUTPUT_OCCUPANCY_AUX_ROW_V1, POOL_V1_PAIR_FOREST_PRIVATE_DIRECTIONS_V1,
         POOL_V1_PAIR_FOREST_SUPER_ROOT_DEPTH_V1, POOL_V1_PAIR_FOREST_VALUE_AUX_ROW_START_V1,
     },
+    pair_terminal::PoolV1PairVerifiedAfterstateV1,
     pair_trace::{
-        build_pool_v1_pair_copy_registry_v1, build_pool_v1_pair_private_transfer_trace_v1,
-        build_pool_v1_pair_withdrawal_trace_v1, PoolV1PairCopyLinkV1, PoolV1PairCopyTupleV1,
-        PoolV1PairCopyWeightV1, PoolV1PairInputNoteWitnessV1, PoolV1PairPrivateTransferWitnessV1,
-        PoolV1PairTraceBankV1, PoolV1PairTraceCellV1, PoolV1PairTraceErrorV1,
-        PoolV1PairTracePublicOutputsV1, PoolV1PairTraceVariantV1, PoolV1PairTupleLimbV1,
-        PoolV1PairWithdrawalWitnessV1, POOL_V1_PAIR_COPY_TAG_BASE_V1, POOL_V1_PAIR_VALUE_BITS,
-        POOL_V1_PAIR_VALUE_COUNT,
+        build_pool_v1_pair_copy_registry_v1, pair_empty_roots, validate_common, value_bits,
+        PoolV1PairCopyLinkV1, PoolV1PairCopyTupleV1, PoolV1PairCopyWeightV1,
+        PoolV1PairInputNoteWitnessV1, PoolV1PairTraceBankV1,
+        PoolV1PairTraceCellV1, PoolV1PairTraceErrorV1, PoolV1PairTracePublicOutputsV1,
+        PoolV1PairTraceVariantV1, PoolV1PairTupleLimbV1, POOL_V1_PAIR_COPY_TAG_BASE_V1,
+        POOL_V1_PAIR_VALUE_BITS, POOL_V1_PAIR_VALUE_COUNT,
     },
     pair_tree_hiding::PoolV1PairCopyRowLinkKindV1,
     pair_tree_profile::{
-        PoolV1PairLatePublicStatementV1, PoolV1PairLiveSnapshotV1, POOL_V1_PAIR_TRACE_COLUMNS,
-        POOL_V1_PAIR_TRACE_ROWS,
+        PoolV1PairLatePublicStatementV1, PoolV1PairLeafWitnessV1, PoolV1PairLiveSnapshotV1,
+        POOL_V1_PAIR_TRACE_COLUMNS, POOL_V1_PAIR_TRACE_ROWS,
     },
     payment_relation::{
+        validate_pool_v1_private_transfer_public_v1, validate_pool_v1_withdrawal_public_v1,
         PoolV1OutputNoteWitnessV1, PoolV1PaymentRelationContextV1, PoolV1PaymentRuntimeBindingV1,
         PoolV1PrivateTransferPublicV1, PoolV1WithdrawalPublicV1,
     },
-    pool_v1_tree_parent,
+    pool_v1_nullifier, pool_v1_tree_parent,
 };
+use crate::VALUE_LIMIT;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct PoolV1PairForestInputNoteWitnessV1 {
@@ -117,167 +119,18 @@ fn temporary_context<'a>(
     }
 }
 
-#[inline]
-fn trace_digest(columns: &[Vec<M31>; 16], block: usize) -> Digest {
-    core::array::from_fn(|lane| columns[lane][block * 16 + 11])
-}
+/// The pre-migration compiler (legacy writers and relocation), retained only
+/// as native differential evidence for the migration (LOG D68.2).
+#[cfg(feature = "pool-v1-pair-forest-writer-reference")]
+#[path = "pair_forest_trace_reference.rs"]
+pub mod reference;
+// The retained reference text names `super::pair_trace` (its original path).
+#[cfg(feature = "pool-v1-pair-forest-writer-reference")]
+use super::pair_trace;
 
-#[inline]
-fn node_left(columns: &[Vec<M31>; 16], block: usize) -> Digest {
-    core::array::from_fn(|lane| columns[lane][block * 16 + 12])
-}
-
-#[inline]
-fn node_right(columns: &[Vec<M31>; 16], block: usize) -> Digest {
-    core::array::from_fn(|lane| {
-        let value = columns[8 + lane][block * 16];
-        if lane == 7 {
-            value.sub(MERKLE_NODE_COMPRESSION_V3_TWEAK)
-        } else {
-            value
-        }
-    })
-}
-
-fn write_forest_path_aux(
-    columns: &mut [Vec<M31>; 16],
-    level: usize,
-    bit: M31,
-    current: Digest,
-    left: Digest,
-    right: Digest,
-) -> Result<(), PoolV1PairTraceErrorV1> {
-    let base =
-        pool_v1_pair_forest_path_base_row_v1(level).ok_or(PoolV1PairTraceErrorV1::HashSchedule)?;
-    columns[0][base] = bit;
-    for lane in 0..8 {
-        columns[1 + lane][base] = current[lane];
-        columns[lane][base + 1] = left[lane];
-        columns[8 + lane][base + 1] = right[lane];
-    }
-    Ok(())
-}
-
-fn write_forest_node(
-    columns: &mut [Vec<M31>; 16],
-    block: usize,
-    left: Digest,
-    right: Digest,
-) -> Result<Digest, PoolV1PairTraceErrorV1> {
-    if !(54..=56).contains(&block) {
-        return Err(PoolV1PairTraceErrorV1::HashSchedule);
-    }
-    let base = block * 16;
-    let mut state = [M31::ZERO; 16];
-    state[8..].copy_from_slice(&right);
-    state[15] = state[15].add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
-    for lane in 0..8 {
-        columns[lane][base + 12] = left[lane];
-        state[lane] = state[lane].add(left[lane]);
-    }
-    for lane in 0..16 {
-        columns[lane][base] = if lane < 8 { M31::ZERO } else { state[lane] };
-    }
-    let mut rounds = 0;
-    permute_optimized_with_trace(&mut state, |transition| {
-        rounds += 1;
-        if transition.round & 1 == 1 {
-            let row = base + usize::from(transition.round) / 2 + 1;
-            for lane in 0..16 {
-                columns[lane][row] = transition.output[lane];
-            }
-        }
-    });
-    if rounds != POSEIDON2_ROUNDS {
-        return Err(PoolV1PairTraceErrorV1::HashSchedule);
-    }
-    Ok(core::array::from_fn(|lane| state[lane]))
-}
-
-fn relocate_and_extend(
-    mut legacy: super::pair_trace::PoolV1PairTraceV1,
-    input: &PoolV1PairForestInputNoteWitnessV1,
-    expected_global_anchor: Digest,
-) -> Result<PoolV1PairForestTraceV1, PoolV1PairTraceErrorV1> {
-    if input
-        .super_root_siblings
-        .iter()
-        .flatten()
-        .any(|limb| limb.0 >= aspis_core::field::P)
-    {
-        return Err(PoolV1PairTraceErrorV1::WitnessDigest);
-    }
-    let old = legacy.stable.c1.clone();
-    for column in &mut legacy.stable.c1 {
-        column[864..].fill(M31::ZERO);
-    }
-    let mut directions = [M31::ZERO; POOL_V1_PAIR_FOREST_PRIVATE_DIRECTIONS_V1];
-    directions[..21].copy_from_slice(&legacy.private_directions);
-    for level in 0..21 {
-        let target = 4 + level;
-        let previous = if level == 0 { 3 } else { target - 1 };
-        let current = trace_digest(&old, previous);
-        let left = node_left(&old, target);
-        let right = node_right(&old, target);
-        let bit = directions[level];
-        write_forest_path_aux(&mut legacy.stable.c1, level, bit, current, left, right)?;
-    }
-    for column in 0..16 {
-        legacy.stable.c1[column][1008..1024].copy_from_slice(&old[column][960..976]);
-    }
-    let mut current = trace_digest(&legacy.stable.c1, 24);
-    for level in 0..POOL_V1_PAIR_FOREST_SUPER_ROOT_DEPTH_V1 {
-        let bit = M31(u32::from(input.super_root_directions[level]));
-        directions[21 + level] = bit;
-        let sibling = input.super_root_siblings[level];
-        let (left, right) = if bit == M31::ZERO {
-            (current, sibling)
-        } else {
-            (sibling, current)
-        };
-        write_forest_path_aux(&mut legacy.stable.c1, 21 + level, bit, current, left, right)?;
-        current = write_forest_node(&mut legacy.stable.c1, 54 + level, left, right)?;
-    }
-    if current != expected_global_anchor {
-        return Err(PoolV1PairTraceErrorV1::AnchorMismatch);
-    }
-    let public_outputs = match legacy.public_outputs {
-        PoolV1PairTracePublicOutputsV1::PrivateTransfer {
-            nullifier,
-            recipient_commitment,
-            change_commitment,
-            output_pair,
-            ..
-        } => PoolV1PairTracePublicOutputsV1::PrivateTransfer {
-            anchor: current,
-            nullifier,
-            recipient_commitment,
-            change_commitment,
-            output_pair,
-        },
-        PoolV1PairTracePublicOutputsV1::Withdrawal {
-            nullifier,
-            change_commitment,
-            output_pair,
-            ..
-        } => PoolV1PairTracePublicOutputsV1::Withdrawal {
-            anchor: current,
-            nullifier,
-            change_commitment,
-            output_pair,
-        },
-    };
-    Ok(PoolV1PairForestTraceV1 {
-        stable: legacy.stable,
-        late: legacy.late,
-        variant: legacy.variant,
-        private_directions: directions,
-        value_bits: legacy.value_bits,
-        public_outputs,
-        afterstate: legacy.afterstate,
-    })
-}
-
+/// Merge the stable and late banks (rows 544..864 from the late bank). The
+/// shape check and the copy are the extracted `merge_check` / `merge_copy`
+/// (LOG D68.2); a failed shape check is `Shape`, as before.
 pub fn merge_pool_v1_pair_forest_trace_banks_v1(
     trace: &PoolV1PairForestTraceV1,
 ) -> Result<StateOnlyTraceFoundation, PoolV1PairTraceErrorV1> {
@@ -294,23 +147,223 @@ pub fn merge_pool_v1_pair_forest_trace_banks_v1(
     {
         return Err(PoolV1PairTraceErrorV1::Shape);
     }
-    for column in 0..POOL_V1_PAIR_TRACE_COLUMNS {
-        if trace.stable.c1[column][544..864]
-            .iter()
-            .any(|value| *value != M31::ZERO)
-            || trace.late[column][..544]
-                .iter()
-                .chain(&trace.late[column][864..])
-                .any(|value| *value != M31::ZERO)
-        {
-            return Err(PoolV1PairTraceErrorV1::Shape);
+    let c1 = merge_banks(&trace.stable.c1, &trace.late).ok_or(PoolV1PairTraceErrorV1::Shape)?;
+    Ok(StateOnlyTraceFoundation { c1 })
+}
+
+/// Replay every one of the 57 forest permutation blocks from its committed
+/// row-0/row-12 inputs with the production round equations, independently of
+/// the extracted writers that filled them (the forest counterpart of the
+/// legacy compiler's physical-row replay).
+fn validate_forest_poseidon_rows(banks: &CopyBanks) -> Result<(), PoolV1PairTraceErrorV1> {
+    for block in 0..57 {
+        let columns = if (34..54).contains(&block) {
+            &banks.late
+        } else {
+            &banks.stable
+        };
+        let base = block * 16;
+        let mut state = core::array::from_fn(|lane| columns[lane][base]);
+        for lane in 0..RATE {
+            state[lane] = state[lane].add(columns[lane][base + 12]);
+        }
+        for local_row in 0..11 {
+            let (_, second) = evaluate_trace_round_pair(state, local_row)
+                .ok_or(PoolV1PairTraceErrorV1::HashSchedule)?;
+            for lane in 0..16 {
+                if columns[lane][base + local_row + 1] != second[lane] {
+                    return Err(PoolV1PairTraceErrorV1::BlockMismatch {
+                        block: block as u8,
+                        local_row: (local_row + 1) as u8,
+                        lane: lane as u8,
+                    });
+                }
+            }
+            state = second;
+        }
+        for local_row in 13..16 {
+            for lane in 0..16 {
+                if columns[lane][base + local_row] != M31::ZERO {
+                    return Err(PoolV1PairTraceErrorV1::BlockMismatch {
+                        block: block as u8,
+                        local_row: local_row as u8,
+                        lane: lane as u8,
+                    });
+                }
+            }
         }
     }
-    let mut merged = trace.stable.clone();
-    for column in 0..POOL_V1_PAIR_TRACE_COLUMNS {
-        merged.c1[column][544..864].copy_from_slice(&trace.late[column][544..864]);
+    Ok(())
+}
+
+/// The checked live append (blocks 34..53): the afterstate comes from the
+/// incremental tree, and the copy-built append root must equal its root.
+fn late_append(
+    records: &CopyRecords,
+    snapshot: PoolV1PairLiveSnapshotV1,
+    output_pair: Digest,
+) -> Result<PoolV1PairVerifiedAfterstateV1, PoolV1PairTraceErrorV1> {
+    if snapshot.sequence != snapshot.next_pair_index {
+        return Err(PoolV1PairTraceErrorV1::SnapshotBindingMismatch);
     }
-    Ok(merged)
+    let empty = pair_empty_roots();
+    let source = IncrementalMerkleTreeV1::from_parts_with_empty_roots(
+        snapshot.next_pair_index,
+        snapshot.current_root,
+        snapshot.frontier,
+        &empty,
+    )
+    .map_err(PoolV1PairTraceErrorV1::Tree)?;
+    let (next, _) = source
+        .append_one_with_empty_roots(output_pair, &empty)
+        .map_err(PoolV1PairTraceErrorV1::Tree)?;
+    if records.append_root() != next.root {
+        return Err(PoolV1PairTraceErrorV1::SnapshotBindingMismatch);
+    }
+    Ok(PoolV1PairVerifiedAfterstateV1 {
+        next_pair_index: next.next_leaf_index,
+        next_root: next.root,
+        next_frontier: next.frontier,
+    })
+}
+
+/// The public values a forest compilation is checked against.
+struct ForestPublic {
+    anchor: Digest,
+    nullifier: Digest,
+    recipient_commitment: Option<Digest>,
+    change_commitment: Digest,
+    asset: M31,
+}
+
+/// Build the forest compilation from the extracted copies (LOG D68.2), after
+/// the caller's statement, binding and conservation checks.  The digest checks
+/// run in the pre-migration order: input commitment, pair leaf, lane anchor,
+/// nullifier, recipient, change, output pair, live append, super-root
+/// canonicity, global anchor.  `recipient` is `Some` exactly for a transfer.
+fn compile_forest_from_copies(
+    input: &PoolV1PairForestInputNoteWitnessV1,
+    out_value: u32,
+    recipient: Option<&PoolV1OutputNoteWitnessV1>,
+    change: &PoolV1OutputNoteWitnessV1,
+    public: ForestPublic,
+    lane_anchor: Digest,
+    snapshot: PoolV1PairLiveSnapshotV1,
+) -> Result<PoolV1PairForestMergedC1CompilationV1, PoolV1PairTraceErrorV1> {
+    let pair = &input.pair;
+    let records = CopyRecords::new(input, out_value, recipient, change, &snapshot, public.asset);
+    if pair.pair_leaf.selected_commitment(pair.selected_second) != &records.input_leaf() {
+        return Err(PoolV1PairTraceErrorV1::SelectedCommitmentMismatch);
+    }
+    if records.path_digest(1)
+        != pair
+            .pair_leaf
+            .leaf_digest()
+            .map_err(PoolV1PairTraceErrorV1::PairLeaf)?
+    {
+        return Err(PoolV1PairTraceErrorV1::SelectedCommitmentMismatch);
+    }
+    if records.path_digest(21) != lane_anchor {
+        return Err(PoolV1PairTraceErrorV1::AnchorMismatch);
+    }
+    let nullifier = records.nullifier();
+    if nullifier != public.nullifier
+        || nullifier != pool_v1_nullifier(&pair.nullifier_key, &pair.salt)
+    {
+        return Err(PoolV1PairTraceErrorV1::NullifierMismatch);
+    }
+    let change_commitment = records.change();
+    let recipient_commitment = match public.recipient_commitment {
+        Some(expected) => {
+            let recipient_commitment = records.recipient();
+            if recipient_commitment != expected {
+                return Err(PoolV1PairTraceErrorV1::RecipientCommitmentMismatch);
+            }
+            Some(recipient_commitment)
+        }
+        None => None,
+    };
+    if change_commitment != public.change_commitment {
+        return Err(PoolV1PairTraceErrorV1::ChangeCommitmentMismatch);
+    }
+    match recipient_commitment {
+        Some(recipient_commitment) => {
+            PoolV1PairLeafWitnessV1::two_outputs(recipient_commitment, change_commitment)
+        }
+        None => PoolV1PairLeafWitnessV1::single_output(change_commitment),
+    }
+    .map_err(PoolV1PairTraceErrorV1::PairLeaf)?;
+    let output_pair = records.output_pair();
+    let afterstate = late_append(&records, snapshot, output_pair)?;
+    if input
+        .super_root_siblings
+        .iter()
+        .flatten()
+        .any(|limb| limb.0 >= aspis_core::field::P)
+    {
+        return Err(PoolV1PairTraceErrorV1::WitnessDigest);
+    }
+    let anchor = records.path_digest(24);
+    if anchor != public.anchor {
+        return Err(PoolV1PairTraceErrorV1::AnchorMismatch);
+    }
+    let banks = records.banks().ok_or(PoolV1PairTraceErrorV1::Shape)?;
+    validate_forest_poseidon_rows(&banks)?;
+    let private_directions = core::array::from_fn(|level| {
+        M31(if level == 0 {
+            u32::from(pair.selected_second)
+        } else if level <= 20 {
+            (pair.membership.index >> (level - 1)) & 1
+        } else {
+            u32::from(input.super_root_directions[level - 21])
+        })
+    });
+    let (variant, public_outputs) = match recipient_commitment {
+        Some(recipient_commitment) => (
+            PoolV1PairTraceVariantV1::PrivateTransfer,
+            PoolV1PairTracePublicOutputsV1::PrivateTransfer {
+                anchor,
+                nullifier,
+                recipient_commitment,
+                change_commitment,
+                output_pair,
+            },
+        ),
+        None => (
+            PoolV1PairTraceVariantV1::Withdrawal,
+            PoolV1PairTracePublicOutputsV1::Withdrawal {
+                anchor,
+                nullifier,
+                change_commitment,
+                output_pair,
+            },
+        ),
+    };
+    let CopyBanks {
+        stable,
+        late,
+        merged,
+    } = banks;
+    Ok(PoolV1PairForestMergedC1CompilationV1 {
+        public_statement: PoolV1PairLatePublicStatementV1 {
+            live_snapshot: snapshot,
+            candidate_afterstate: afterstate,
+        },
+        trace: PoolV1PairForestTraceV1 {
+            stable: StateOnlyTraceFoundation { c1: stable },
+            late,
+            variant,
+            private_directions,
+            value_bits: [
+                value_bits(pair.value),
+                value_bits(out_value),
+                value_bits(change.value),
+            ],
+            public_outputs,
+            afterstate,
+        },
+        semantic_c1: StateOnlyTraceFoundation { c1: merged },
+    })
 }
 
 pub fn compile_pool_v1_pair_forest_private_transfer_merged_c1_v1(
@@ -324,26 +377,45 @@ pub fn compile_pool_v1_pair_forest_private_transfer_merged_c1_v1(
         anchor_root: lane_anchor,
         ..*public
     };
-    let legacy = build_pool_v1_pair_private_transfer_trace_v1(
-        &temporary_public,
-        &PoolV1PairPrivateTransferWitnessV1 {
-            input: witness.input.pair,
-            recipient: witness.recipient,
-            change: witness.change,
-        },
+    validate_pool_v1_private_transfer_public_v1(&temporary_public)
+        .map_err(PoolV1PairTraceErrorV1::Statement)?;
+    validate_common(
+        temporary_public.pool,
+        temporary_public.deployment_domain,
+        temporary_public.anchor_sequence,
+        temporary_public.anchor_root,
+        temporary_public.nullifier,
+        temporary_public.asset_id,
+        &witness.input.pair,
         temporary_context(context, lane_anchor),
-        snapshot,
     )?;
-    let trace = relocate_and_extend(legacy, &witness.input, public.anchor_root)?;
-    let semantic_c1 = merge_pool_v1_pair_forest_trace_banks_v1(&trace)?;
-    Ok(PoolV1PairForestMergedC1CompilationV1 {
-        public_statement: PoolV1PairLatePublicStatementV1 {
-            live_snapshot: snapshot,
-            candidate_afterstate: trace.afterstate,
+    if snapshot.pool != public.pool || snapshot.deployment_domain != public.deployment_domain {
+        return Err(PoolV1PairTraceErrorV1::SnapshotBindingMismatch);
+    }
+    if witness.recipient.value == 0
+        || witness.change.value == 0
+        || witness.recipient.value >= VALUE_LIMIT
+        || witness.change.value >= VALUE_LIMIT
+        || witness.recipient.value.checked_add(witness.change.value)
+            != Some(witness.input.pair.value)
+    {
+        return Err(PoolV1PairTraceErrorV1::Conservation);
+    }
+    compile_forest_from_copies(
+        &witness.input,
+        witness.recipient.value,
+        Some(&witness.recipient),
+        &witness.change,
+        ForestPublic {
+            anchor: public.anchor_root,
+            nullifier: public.nullifier,
+            recipient_commitment: Some(public.recipient_commitment),
+            change_commitment: public.change_commitment,
+            asset: public.asset_id,
         },
-        trace,
-        semantic_c1,
-    })
+        lane_anchor,
+        snapshot,
+    )
 }
 
 pub fn compile_pool_v1_pair_forest_withdrawal_merged_c1_v1(
@@ -357,25 +429,42 @@ pub fn compile_pool_v1_pair_forest_withdrawal_merged_c1_v1(
         anchor_root: lane_anchor,
         ..*public
     };
-    let legacy = build_pool_v1_pair_withdrawal_trace_v1(
-        &temporary_public,
-        &PoolV1PairWithdrawalWitnessV1 {
-            input: witness.input.pair,
-            change: witness.change,
-        },
+    validate_pool_v1_withdrawal_public_v1(&temporary_public)
+        .map_err(PoolV1PairTraceErrorV1::Statement)?;
+    validate_common(
+        temporary_public.pool,
+        temporary_public.deployment_domain,
+        temporary_public.anchor_sequence,
+        temporary_public.anchor_root,
+        temporary_public.nullifier,
+        temporary_public.asset_id,
+        &witness.input.pair,
         temporary_context(context, lane_anchor),
-        snapshot,
     )?;
-    let trace = relocate_and_extend(legacy, &witness.input, public.anchor_root)?;
-    let semantic_c1 = merge_pool_v1_pair_forest_trace_banks_v1(&trace)?;
-    Ok(PoolV1PairForestMergedC1CompilationV1 {
-        public_statement: PoolV1PairLatePublicStatementV1 {
-            live_snapshot: snapshot,
-            candidate_afterstate: trace.afterstate,
+    if snapshot.pool != public.pool || snapshot.deployment_domain != public.deployment_domain {
+        return Err(PoolV1PairTraceErrorV1::SnapshotBindingMismatch);
+    }
+    if witness.change.value == 0
+        || witness.change.value >= VALUE_LIMIT
+        || public.amount.checked_add(witness.change.value) != Some(witness.input.pair.value)
+    {
+        return Err(PoolV1PairTraceErrorV1::Conservation);
+    }
+    compile_forest_from_copies(
+        &witness.input,
+        public.amount,
+        None,
+        &witness.change,
+        ForestPublic {
+            anchor: public.anchor_root,
+            nullifier: public.nullifier,
+            recipient_commitment: None,
+            change_commitment: public.change_commitment,
+            asset: public.asset_id,
         },
-        trace,
-        semantic_c1,
-    })
+        lane_anchor,
+        snapshot,
+    )
 }
 
 fn tuple_cells(row: usize, start: usize, count: usize, tweak_right: bool) -> PoolV1PairCopyTupleV1 {

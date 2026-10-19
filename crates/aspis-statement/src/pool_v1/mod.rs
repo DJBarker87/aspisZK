@@ -18,6 +18,8 @@ pub mod pair_constraint_residuals;
 pub mod pair_forest_accounts;
 #[cfg(not(target_os = "solana"))]
 pub mod pair_forest_constraint_residuals;
+#[cfg(not(target_os = "solana"))]
+mod pair_forest_copy_builder;
 pub mod pair_forest_copy_terminal;
 #[cfg(not(target_os = "solana"))]
 pub mod pair_forest_hiding;
