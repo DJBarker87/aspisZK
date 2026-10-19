@@ -359,4 +359,5 @@ end Opened
 #print axioms fresh_or_sep
 #print axioms openedC_cposOf
 #print axioms hidden
+#print axioms div_pow_succ
 end R1Z.LayoutR1PBin

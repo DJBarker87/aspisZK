@@ -247,4 +247,13 @@ end Coupling
 #print axioms mp_prodMap
 #print axioms enc_aA
 #print axioms causalF_aA
+#print axioms mp_comp
+#print axioms mp_equiv
+#print axioms mean_comm
+#print axioms mp_fst
+#print axioms mp_snd
+#print axioms look_eqA
+#print axioms lookA_frozen
+#print axioms attVec_uVec
+#print axioms fPF_lt
 end R1Z.CouplingR1PBin

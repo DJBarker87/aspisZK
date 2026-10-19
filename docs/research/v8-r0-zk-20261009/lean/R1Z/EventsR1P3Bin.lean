@@ -162,10 +162,10 @@ theorem cm_pf (hb : RCommitBytes W Pr) (k : Fin N) (c : CPos Pr.E₁ Pr.E₂)
 theorem pub_of_opened (hop : ROpen Pr) (ch : Challenges K) (c : CPos Pr.E₁ Pr.E₂)
     (hc : openedC (Pr.openFib ch) c) : c ∈ (Pr.openList ch).map cposOf := by
   rcases c with T | (e | e) | q
-  · exact List.mem_map.mpr ⟨.inl T, (hop ch _).mpr trivial, rfl⟩
+  · exact List.mem_map.mpr ⟨.inl T, (hop.covers ch _).mpr trivial, rfl⟩
   · exact absurd hc id
   · exact absurd hc id
-  · exact List.mem_map.mpr ⟨.inr q, (hop ch _).mpr hc, rfl⟩
+  · exact List.mem_map.mpr ⟨.inr q, (hop.covers ch _).mpr hc, rfl⟩
 
 /-! ### Pair freshness -/
 
@@ -229,4 +229,11 @@ end Fresh
 #print axioms cm_pf
 #print axioms pub_of_opened
 #print axioms pair_all
+#print axioms trOf_vL_rest
+#print axioms rootsOf_vL_rest
+#print axioms restOf_chain
+#print axioms sec_chain
+#print axioms addrQ_cm
+#print axioms addrQ_other
+#print axioms addrQ_tr_inv
 end R1Z.EventsR1PBin

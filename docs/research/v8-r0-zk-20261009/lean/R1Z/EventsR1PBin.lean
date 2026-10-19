@@ -39,9 +39,67 @@ def RCommitBytes (W : R1Wire K CommitHandle Aux) (Pr : R1ProverP K CommitHandle 
     (c : CPos Pr.E₁ Pr.E₂),
     Pr.caddr h w x sec d τ rest ch c = gram (W.pubBytes x) W.vtag (Pr.leafVal h w x τ ch) sec d rest c
 
-/-- R-wire: the verifier opens exactly the roots and the paths of the opened fibres. -/
-def ROpen {W : R1Wire K CommitHandle Aux} (Pr : R1ProverP K CommitHandle Aux F W) : Prop :=
-  ∀ (ch : Challenges K) (c : Fin 3 ⊕ RIdx), c ∈ Pr.openList ch ↔ openedQ (Pr.openFib ch) c
+/-- The read set of one multiproof batch: roots and the union of binary
+paths. Supplied sibling digests are bytes, not additional oracle reads.
+Deterministic slot padding is also bytes, not an oracle position. -/
+def batchReadSet (fib : Fin 3 → Finset Fib) : Finset (Fin 3 ⊕ RIdx) :=
+  Finset.univ.filter (openedQ fib)
+
+theorem mem_batchReadSet (fib : Fin 3 → Finset Fib) (c : Fin 3 ⊕ RIdx) :
+    c ∈ batchReadSet fib ↔ openedQ fib c := by simp [batchReadSet]
+
+/-- R-wire for the two transaction batches. A node may occur in both batches,
+but occurs at most once within each. The aggregate covers the opened fibres.
+These remain source-refinement premises, not assertions about arbitrary lists. -/
+structure ROpen {W : R1Wire K CommitHandle Aux}
+    (Pr : R1ProverP K CommitHandle Aux F W) : Prop where
+  covers : ∀ (ch : Challenges K) (c : Fin 3 ⊕ RIdx),
+    c ∈ Pr.openList ch ↔ openedQ (Pr.openFib ch) c
+  batches : ∃ (fib : Challenges K → Fin 2 → Fin 3 → Finset Fib)
+      (reads : Challenges K → Fin 2 → List (Fin 3 ⊕ RIdx)),
+    (∀ ch, Pr.openList ch = reads ch 0 ++ reads ch 1) ∧
+    (∀ ch b, (reads ch b).Nodup) ∧
+    (∀ ch b c, c ∈ reads ch b ↔ openedQ (fib ch b) c) ∧
+    (∀ ch T, Pr.openFib ch T = fib ch 0 T ∪ fib ch 1 T)
+
+/-- Deduplication turns the verifier's per-batch log into exactly the path union. -/
+theorem batch_toFinset (fib : Fin 3 → Finset Fib) (reads : List (Fin 3 ⊕ RIdx))
+    (hc : ∀ c, c ∈ reads ↔ openedQ fib c) : reads.toFinset = batchReadSet fib := by
+  ext c
+  simp only [List.mem_toFinset, mem_batchReadSet, hc]
+
+/-- Each distinct node (and leaf/root) is read once in a batch. -/
+theorem batch_length (fib : Fin 3 → Finset Fib) (reads : List (Fin 3 ⊕ RIdx))
+    (hn : reads.Nodup) (hc : ∀ c, c ∈ reads ↔ openedQ fib c) :
+    reads.length = (batchReadSet fib).card := by
+  rw [← batch_toFinset fib reads hc, List.toFinset_card_of_nodup hn]
+
+/-- A symbolic bound: no enumeration of the 2^18-leaf universe. -/
+theorem batchReadSet_card_le (fib : Fin 3 → Finset Fib) :
+    (batchReadSet fib).card ≤ 2359298 := by
+  have h := Finset.card_le_univ (batchReadSet fib)
+  simp only [Fintype.card_sum, Fintype.card_fin, RIdx, Fib, Fintype.card_prod,
+    card_NodeIdx] at h
+  norm_num at h ⊢
+  exact h
+
+/-- Mapping the opening list (in particular the RComLog address/answer map)
+preserves the two deduplicated batches and their exact set cardinalities. -/
+theorem map_openList_batches {W : R1Wire K CommitHandle Aux}
+    (Pr : R1ProverP K CommitHandle Aux F W) (hop : ROpen Pr) (ch : Challenges K)
+    {β : Type} (f : (Fin 3 ⊕ RIdx) → β) :
+    ∃ (fib : Fin 2 → Fin 3 → Finset Fib) (reads : Fin 2 → List (Fin 3 ⊕ RIdx)),
+      (Pr.openList ch).map f = (reads 0).map f ++ (reads 1).map f ∧
+      (∀ b, (reads b).Nodup) ∧
+      (∀ b, (reads b).toFinset = batchReadSet (fib b)) ∧
+      (∀ b, (reads b).length = (batchReadSet (fib b)).card) := by
+  obtain ⟨fib, reads, hcat, hn, hc, _⟩ := hop.batches
+  refine ⟨fib ch, reads ch, ?_, hn ch, ?_, ?_⟩
+  · rw [hcat ch, List.map_append]
+  · intro b
+    exact batch_toFinset _ _ (hc ch b)
+  · intro b
+    exact batch_length _ _ (hn ch b) (hc ch b)
 
 /-- The answer of an opening position from the coins. -/
 def ansC (roots : Fin 3 → OracleAnswer) (rest : RIdx → OracleAnswer) : Fin 3 ⊕ RIdx → OracleAnswer
@@ -228,4 +286,21 @@ end Frame
 #print axioms selL
 #print axioms recA_chain
 #print axioms frameP
+#print axioms Lens.fnAt_set_ne
+#print axioms Lens.fnAt_set_eq
+#print axioms ksV_update_qa
+#print axioms tapeR_update_tr
+#print axioms tapeR_update_root
+#print axioms trOf_update_root
+#print axioms trOf_update_tr
+#print axioms rootsOf_update_tr
+#print axioms rootsOf_update_root
+#print axioms chOf_update_tr
+#print axioms kstar_update_tr
+
+#print axioms map_openList_batches
+#print axioms mem_batchReadSet
+#print axioms batch_toFinset
+#print axioms batch_length
+#print axioms batchReadSet_card_le
 end R1Z.EventsR1PBin

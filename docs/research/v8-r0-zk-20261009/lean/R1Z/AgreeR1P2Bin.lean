@@ -371,4 +371,11 @@ end Agree
 #print axioms oracle_none
 #print axioms firstGood_eq
 #print axioms agreeP
+#print axioms lookup_none'
+#print axioms lookup_some'
+#print axioms fail_eqP
+#print axioms extend_eqP
+#print axioms mem_runLog_idx
+#print axioms real_eqP
+#print axioms middle_eqP
 end R1Z.AgreeR1PBin

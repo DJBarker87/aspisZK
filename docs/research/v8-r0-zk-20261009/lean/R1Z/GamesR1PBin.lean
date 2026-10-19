@@ -62,6 +62,20 @@ abbrev CPos (E₁ E₂ : ℕ) := Fin 3 ⊕ (Fin E₁ ⊕ Fin E₂) ⊕ RIdx
 /-- All reads of one attempt. -/
 abbrev Pos1 (E₁ E₂ : ℕ) := TRead ⊕ CPos E₁ E₂
 
+/-- Count levels, not concrete nodes: the sum has only seventeen terms. -/
+theorem card_NodeIdx : Fintype.card NodeIdx = 262142 := by
+  rw [Fintype.card_sigma]
+  simp only [Fintype.card_fin]
+  rw [Fin.sum_univ_eq_sum_range (fun i => 2 ^ (17 - i)) 17]
+  norm_num [Finset.sum_range_succ]
+
+/-- Includes both binding reads, which `CommitReadsR1.McR1` omits. -/
+theorem card_Pos1 (E₁ E₂ : ℕ) :
+    Fintype.card (Pos1 E₁ E₂) = 2359413 + E₁ + E₂ := by
+  simp only [Pos1, CPos, RIdx, Fib, Fintype.card_sum, Fintype.card_prod,
+    Fintype.card_fin, card_NodeIdx, card_TRead]
+  norm_num <;> omega
+
 /-- A nonzero 32-byte secret. -/
 abbrev NZ := {v : OracleAnswer // v ≠ 0}
 
@@ -233,4 +247,6 @@ end Game
 #print axioms realOut
 #print axioms realGameP
 #print axioms fsR1P
+#print axioms card_NodeIdx
+#print axioms card_Pos1
 end R1Z.GamesR1PBin

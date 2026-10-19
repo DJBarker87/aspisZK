@@ -192,4 +192,13 @@ end Sep
 #print axioms sep_salt
 #print axioms sep_exp1
 #print axioms sep_exp2
+#print axioms qNode_inj
+#print axioms childQ_cases
+#print axioms childQ_ne_bind
+#print axioms childQ_ne_seed
+#print axioms childQ_ne_salt
+#print axioms childQ_eq_leaf
+#print axioms childQ_eq_node
+#print axioms rootChild_inj
+#print axioms cancel_mid
 end R1Z.LayoutR1PBin

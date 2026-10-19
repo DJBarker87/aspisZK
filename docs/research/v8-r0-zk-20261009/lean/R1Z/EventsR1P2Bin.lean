@@ -229,4 +229,5 @@ end Ev
 #print axioms tame_chain
 #print axioms tame_sec
 #print axioms tame_rest
+#print axioms pubC_tame
 end R1Z.EventsR1PBin

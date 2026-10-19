@@ -1,4 +1,6 @@
 import R1Z.FinalR1PBin
+import R1Z.LayoutTagR1PBin
+import R1Z.LayoutCountR1PBin
 import R1Z.SimulatorR1
 import R1Z.Sem1UniformR1
 

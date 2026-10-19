@@ -90,7 +90,7 @@ theorem verLog_rest (hb : RCommitBytes W Pr) (hop : ROpen Pr)
   apply List.map_congr_left
   intro c0 hc0
   obtain ⟨hdep, hne⟩ := hidden (Pr.openFib (chOf W (trOf (s k).2.1))) c0
-    ((hop _ c0).mp hc0) c (fun ho => hnp (pub_of_opened W Pr hop _ c ho)) q hs
+    ((hop.covers _ c0).mp hc0) c (fun ho => hnp (pub_of_opened W Pr hop _ c ho)) q hs
   refine Prod.ext ?_ ?_
   · show Pr.caddr _ _ _ _ _ _ _ _ _ = Pr.caddr _ _ _ _ _ _ _ _ _
     rw [hb, hb]

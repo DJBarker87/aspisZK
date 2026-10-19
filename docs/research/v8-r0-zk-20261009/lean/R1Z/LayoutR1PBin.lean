@@ -304,4 +304,7 @@ end Gram
 #print axioms fld_gram
 #print axioms gram_rest_update
 #print axioms gram_sec_update
+#print axioms child_bound0
+#print axioms child_bound
+#print axioms nodeBytes_update
 end R1Z.LayoutR1PBin
