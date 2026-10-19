@@ -18,6 +18,46 @@ MISMATCH (a recorded difference), OPEN.
 §7  Tests and measurements
 §8  Mismatches and open items
 
+§1  R-retry: the P_R1 check and the capped loop (D38.3)
+----------------------------------------------------------------------
+Lean `realGame` (R1Z/GamesR1.lean; DESIGN-R1-GAMES §4): attempts k < N with
+independent secrets; attempt k runs the commit phase, the transcript, and
+accepts iff P ch ∧ Vp ch w ∧ ¬exh; the first accepted attempt is published
+with its verifier log; discarded attempts publish nothing; if none is
+accepted a fixed failView is published.
+Rust (crates/aspis-r1-cost-probe/src/prover.rs, feature `r1p-check`, which
+implies `private-leaf-salts`; a compile_error guards the combination):
+  N                 ATTEMPT_CAP = 8.                                 [A-cap]
+  secrets           `prove_masked_retrying` draws StateOnlyAttemptSecrets::
+                    generate() (OS getrandom) for every attempt;
+                    `prove_masked_retrying_with` takes a per-attempt source,
+                    e.g. generate_for_mask_nonce(fresh proof-account key) for
+                    D38.4.                                          [A-sec]
+  nonce burn        prove_masked_attempt → reserve_and_build_…: the nonce is
+                    reserved in the DurableStateOnlyMaskNonceStore before
+                    any mask or salt is derived; salts exist only on the
+                    reserved secrets type.                          [D41.3]
+  commit phase      prove_masked_with_attempt / build_with_material /
+                    prove_from_semantics up to the queries.         [R-commit]
+  P                 `public_check` in prove_from_semantics directly after
+                    `t.queries(..)` and ρ, before the output buffer exists:
+                    P_chk = (z9e emit succeeds) ∧ (aspis_r1_cert_check::check
+                    accepts) with the extracted builders' columns. Failure →
+                    Err(Error::Rejected) (no payload).              [R-pub]
+  discard           Error::Rejected → next attempt; the attempt's secrets,
+                    masks and salts drop (zeroizing Drop impls); its ledger
+                    entry stays. Nothing about it is returned, printed or
+                    logged; panic messages inside the check are suppressed
+                    (z9e quiet hook).                               [A-erase]
+  exhaustion        8 rejections → Err(AttemptsExhausted), nothing published
+                    (Lean: failView; the Rust caller publishes nothing).
+  other errors      abort, nothing published.
+P and P_R1. The Rust predicate is P_chk. check_sound″ (D57, D62) gives
+P_chk ⇒ P_R1 under its remaining premises (hRound, hGRound, hGBat, decoder
+facts, named inputs: D62.3, D64.2, D66). The privacy theorems are applied
+with P := P_chk through antitonicity of MaskImageOn in P (D38.5, D49.3).
+CORRESPONDS, with the MISMATCHES of §8 (a), (b).
+
 §2  The ideal game: fsR1.ideal / abR1 against sim::sim_e
 ----------------------------------------------------------------------
 Lean (R1Z/GamesR1.lean):
