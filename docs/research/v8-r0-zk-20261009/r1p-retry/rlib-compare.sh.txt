@@ -1,0 +1,12 @@
+#!/bin/bash
+# Build the default-feature (verifier) cost-probe lib with the changed sources and with the base sources, same paths, and compare rlib SHA-256.
+set -u
+D=/home/dombarker/project-offloads/codex-r1p-pole-retry-20261019
+cd $D/repo
+export CARGO_TARGET_DIR=$D/target-rlib
+mkdir -p $D/hold && rm -rf $D/hold/src && cp -a crates/aspis-r1-cost-probe/src $D/hold/src
+for which in changed base changed2; do
+  if [ $which = base ]; then rm -rf crates/aspis-r1-cost-probe/src && cp -r $D/base/crates/aspis-r1-cost-probe/src crates/aspis-r1-cost-probe/src; else rm -rf crates/aspis-r1-cost-probe/src && cp -r $D/hold/src crates/aspis-r1-cost-probe/src; fi
+  ~/.cargo/bin/cargo build --release --offline -j 4 -p aspis-r1-cost-probe --lib 2>&1 | grep -E "Compiling aspis-r1|Finished" || exit 3
+  rm -rf $D/obj-$which && mkdir -p $D/obj-$which && (cd $D/obj-$which && ar x $CARGO_TARGET_DIR/release/libaspis_r1_cost_probe.rlib && echo "$which rlib $(sha256sum $CARGO_TARGET_DIR/release/libaspis_r1_cost_probe.rlib | cut -c1-64) objects $(ls *.o | wc -l) objsum $(cat $(ls *.o | sort) | sha256sum | cut -c1-64)")
+done

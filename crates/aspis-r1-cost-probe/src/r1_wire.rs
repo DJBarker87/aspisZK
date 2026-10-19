@@ -32,7 +32,7 @@ pub enum Error {
     Terminal,
     EqualCirclePoints,
     TrailingBytes,
-    Public,
+    Public, #[cfg(feature = "r1p-check")] ActivePole, // host retry loop only: Lean ¬NoPole, no detail (LOG D73.4.1)
 }
 
 /// P1 tag and exact payload length, including the message-free rows.

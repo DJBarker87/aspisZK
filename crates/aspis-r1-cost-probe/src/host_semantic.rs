@@ -245,6 +245,10 @@ pub fn build_with_material<H: Digest32>(
         g,
         h1_padding,
         |lambda, chi| {
+            #[cfg(feature = "r1p-check")]
+            if !no_pole(compiled, lambda, chi)? {
+                return Err(Error::ActivePole);
+            }
             build_pool_v1_pair_forest_copy_helper_v1(
                 &compiled.trace,
                 public.transition().live_snapshot.next_pair_index,
@@ -257,4 +261,86 @@ pub fn build_with_material<H: Digest32>(
         hash,
         variant,
     )
+}
+
+/// Lean `NoPole (h.build w) λ χ` (R0Z/HonestValidity.lean:97–99), the `VR1`
+/// conjunct of `realGameP` (R1Z/GamesR1P.lean:184): on every copy-active row,
+/// chi differs from all four slot values (producer and consumer, slots 0 and
+/// 1), whatever the slot's weight; an unused slot has value 0. The weighted
+/// slots `build_copy_logup_helper` inverts are a subset, so this check is
+/// stronger than its `ActivePole`. Only the verdict leaves this function.
+#[cfg(feature = "r1p-check")]
+pub(crate) fn no_pole(
+    compiled: &PoolV1PairForestMergedC1CompilationV1,
+    lambda: QM31,
+    chi: QM31,
+) -> Result<bool, Error> {
+    #[cfg(test)]
+    if crate::prover::test_hooks::forced_pole() {
+        return Ok(false);
+    }
+    let values = lean_copy_row_values(&compiled.trace, lambda)?;
+    let masks = aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_row_masks_v1()
+        .map_err(|_| Error::Public)?;
+    let mut clear = true;
+    for (row, sides) in values.iter().enumerate() {
+        if masks[row >> 4] & (1 << (row & 15)) == 0 {
+            continue;
+        }
+        for value in sides.iter().flatten() {
+            // No early exit: the work done does not depend on where a pole is.
+            clear &= chi != *value;
+        }
+    }
+    Ok(clear)
+}
+
+/// Lean `copyRowValues t λ b endpoint slot` (v8-r0-sem-proof-20261008
+/// lean/R0P/Copy.lean:449–452) for every row b, side (0 producer, 1 consumer)
+/// and slot: the sum of the compressed tuples of the registry endpoints at
+/// that row, side and static slot, weights ignored. The static slot is the
+/// endpoint's position among the registry endpoints on the same row and side,
+/// which is the slot of the generated terminal constants that the Lean
+/// `copyLinks` transcribe (`retry_tests::static_slots_are_the_terminal_constants`).
+/// The prover's `pool_v1_pair_forest_copy_rows_v1` cannot be used here: it
+/// places an endpoint in the first slot whose weight is zero, so a zero-weight
+/// endpoint followed by another on the same row and side is overwritten.
+#[cfg(feature = "r1p-check")]
+pub(crate) fn lean_copy_row_values(
+    trace: &aspis_statement::pool_v1::pair_forest_trace::PoolV1PairForestTraceV1,
+    lambda: QM31,
+) -> Result<Vec<[[QM31; 2]; 2]>, Error> {
+    use aspis_statement::pool_v1::pair_trace::{PoolV1PairTraceBankV1, PoolV1PairTupleLimbV1};
+    let registry = aspis_statement::pool_v1::pair_forest_trace::build_pool_v1_pair_forest_copy_registry_v1()
+        .map_err(|_| Error::Public)?;
+    let mut values = alloc::vec![[[QM31::ZERO; 2]; 2]; 1024];
+    let mut arity = alloc::vec![[0usize; 2]; 1024];
+    for link in registry {
+        for (side, tuple) in [(0usize, link.producer), (1usize, link.consumer)] {
+            let row = usize::from(tuple.row);
+            if row >= 1024 || arity[row][side] >= 2 {
+                return Err(Error::Public);
+            }
+            let slot = arity[row][side];
+            arity[row][side] += 1;
+            // The tuple read of pair_forest_trace.rs `tuple_value` (lines 580–591).
+            let mut limbs = [M31::ZERO; 16];
+            for (out, limb) in limbs.iter_mut().zip(tuple.limbs) {
+                if let PoolV1PairTupleLimbV1::Cell { source, offset } = limb {
+                    let columns = match source.bank {
+                        PoolV1PairTraceBankV1::Stable => &trace.stable.c1,
+                        PoolV1PairTraceBankV1::Late => &trace.late,
+                    };
+                    *out = columns
+                        .get(source.cell.column as usize)
+                        .and_then(|column| column.get(source.cell.row as usize))
+                        .ok_or(Error::Public)?
+                        .add(offset);
+                }
+            }
+            values[row][side][slot] = values[row][side][slot]
+                .add(aspis_statement::compress_tagged_tuple(link.tag, &limbs, lambda));
+        }
+    }
+    Ok(values)
 }

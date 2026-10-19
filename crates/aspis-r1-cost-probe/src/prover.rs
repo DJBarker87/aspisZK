@@ -3,7 +3,7 @@ use alloc::{vec,vec::Vec};
 use aspis_core::{digest::LegacyHashFn,HashFn,field::{WideExact as E,M31,QM31 as K,CM31},r0::{self,CodeField,domain::{Point,FibreIndex},merkle,wire::FibreOpening,Message},state_only_hiding::StateOnlyHidingContext};
 use aspis_statement::pool_v1::{pair_forest_semantic_terminal::r0::Public,pair_forest_trace::PoolV1PairForestMergedC1CompilationV1};
 use aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_row_masks_v1;
-use aspis_prover::{state_only_entropy::{StateOnlyAttemptSecrets,ReservedStateOnlyAttemptSecrets,DurableStateOnlyMaskNonceStore},state_only_hiding::{apply_pool_v1_pair_forest_mask_material_v1,InMemoryStateOnlyMaskNonceStore,StateOnlyMaskNonceStore}};
+use aspis_prover::{state_only_entropy::{StateOnlyAttemptSecrets,ReservedStateOnlyAttemptSecrets,DurableStateOnlyMaskNonceStore},state_only_hiding::{apply_pool_v1_pair_forest_mask_material_v1,InMemoryStateOnlyMaskNonceStore,StateOnlyMaskBuildError,StateOnlyMaskNonceStore}};
 use crate::{transport::Variant,verifier::{Error,View},weights::{Weights,QUARTER,PERM},transcript::Transcript,host_commitment::{Commitment,CommitmentTime,EncodingDomain,PrivateSalts},host_semantic::{BuiltSemantics,Column,Commitments},r1_wire::Error as SError};
 pub struct Backend {pub hash:HashFn,pub variant:Variant,pub domain:EncodingDomain,pub messages:Vec<Message<E>>,pub c1:Option<Commitment>,pub c2:Option<Commitment>,c1_salts:Option<crate::host_commitment::PrivateSalts>,c2_salts:Option<crate::host_commitment::PrivateSalts>}
 impl Commitments for Backend {
@@ -138,11 +138,13 @@ fn prove_masked_with_attempt(
     attempt:StateOnlyAttemptSecrets,
     nonce_store:&mut impl StateOnlyMaskNonceStore,
 )->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
-    let (reserved,material)=attempt.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash,binding,context,nonce_store).map_err(|_|Error::Semantic)?;
+    let (reserved,material)=attempt.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash,binding,context,nonce_store).map_err(mask_error)?;
+    #[cfg(all(test,feature="r1p-check"))]
+    if test_hooks::forced_exhaustion(reserved.mask_nonce()) { return Err(mask_error(StateOnlyMaskBuildError::MaskSampleExhausted)); }
     let mut noised_c1=compiled.semantic_c1.clone();
     let applied=apply_pool_v1_pair_forest_mask_material_v1(&mut noised_c1,material).map_err(|_|Error::Semantic)?;
     let masks=pool_v1_pair_forest_copy_active_row_masks_v1().map_err(|_|Error::Semantic)?;
-    let d: [K;1024]=reserved.derive_pool_v1_pair_forest_zero_factor_d(hash,context).map_err(|_|Error::Semantic)?.try_into().map_err(|_|Error::Semantic)?;
+    let d: [K;1024]=reserved.derive_pool_v1_pair_forest_zero_factor_d(hash,context).map_err(mask_error)?.try_into().map_err(|_|Error::Semantic)?;
     if applied.g.len()!=1024 || applied.h1_padding.len()!=1024 { return Err(Error::Semantic); }
     let g: [K;1024]=core::array::from_fn(|i|applied.g[i]);
     let h1_padding: [K;1024]=core::array::from_fn(|i|applied.h1_padding[i]);
@@ -169,7 +171,7 @@ fn prove_masked_with_attempt(
     #[cfg(not(feature="private-leaf-salts"))]
     let (c1_salts,c2_salts)=(None,None);
     let mut backend=Backend{hash,variant,domain:EncodingDomain::new().map_err(|_|Error::Allocation)?,messages:vec![[E::ZERO;1024];29],c1:None,c2:None,c1_salts,c2_salts};
-    let sem=crate::host_semantic::build_with_material(public,compiled,&noised_c1,&applied.mask_only_c1,&d,&g,&h1_padding,&mut backend,LegacyHashFn(hash),variant).map_err(|_|Error::Semantic)?;
+    let sem=crate::host_semantic::build_with_material(public,compiled,&noised_c1,&applied.mask_only_c1,&d,&g,&h1_padding,&mut backend,LegacyHashFn(hash),variant).map_err(semantic_error)?;
     let h1_total_balanced=aspis_statement::state_only_copy_helper_sum(&sem.columns[26])==Some(K::ZERO);
     if !h1_total_balanced { return Err(Error::Semantic); }
     let audit=MaskedFixtureAudit{h1_total_balanced,..audit};
@@ -178,6 +180,28 @@ fn prove_masked_with_attempt(
     #[cfg(not(feature="private-leaf-salts"))]
     let proof=prove_from_semantics(public,variant,hash,backend,sem,None)?;
     Ok((proof,audit))
+}
+
+/// LOG D73.4.2: Lean `realGameP` rejects an attempt whose mask decode is
+/// exhausted (`exh`, R1Z/GamesR1P.lean:164, 184) and moves to the next one.
+/// With the retry loop, `MaskSampleExhausted` from either expander is
+/// therefore a rejected attempt; every other mask error still aborts. Without
+/// the loop (`r1p-check` off) behaviour is unchanged.
+fn mask_error(e:StateOnlyMaskBuildError)->Error {
+    #[cfg(feature="r1p-check")]
+    if e==StateOnlyMaskBuildError::MaskSampleExhausted { return Error::Rejected; }
+    let _=e;
+    Error::Semantic
+}
+
+/// LOG D73.4.1: a LogUp pole (Lean `¬ VR1`, R1Z/MaskImageVR1.lean:29) is a
+/// rejected attempt. The pole carries no detail; it becomes the same
+/// `Error::Rejected` as a failed P_R1 check.
+fn semantic_error(e:SError)->Error {
+    #[cfg(feature="r1p-check")]
+    if e==SError::ActivePole { return Error::Rejected; }
+    let _=e;
+    Error::Semantic
 }
 
 #[cfg(feature="private-leaf-salts")]
@@ -334,11 +358,16 @@ pub fn prove_masked_retrying(
 /// `StateOnlyAttemptSecrets::generate_for_mask_nonce` with its public key.
 ///
 /// Each attempt durably burns its nonce in `nonce_store` before any mask or
-/// salt is derived (`reserve_and_build_…`). An attempt whose challenges fail
-/// P_R1 returns `Error::Rejected` from `prove_from_semantics` before any proof
-/// byte exists; its secrets are dropped (zeroized) and nothing about it is
-/// returned or logged. After `ATTEMPT_CAP` rejections the result is
-/// `AttemptsExhausted` and nothing is published. Any other error aborts.
+/// salt is derived (`reserve_and_build_…`). As in Lean `realGameP`
+/// (R1Z/GamesR1P.lean:184: accept on `P ∧ VR1 ∧ ¬ exh`), an attempt is
+/// rejected when its challenges fail P_R1, when χ is a LogUp pole (`¬ VR1`,
+/// LOG D40.3, D73.4.1), or when its mask decode is exhausted (`exh`,
+/// D73.4.2). Each returns the same detail-free `Error::Rejected` before any
+/// proof byte exists; its secrets are dropped (zeroized), it consumes one of
+/// the `ATTEMPT_CAP` attempts, and nothing about it is returned or logged.
+/// After `ATTEMPT_CAP` rejections the result is `AttemptsExhausted` and
+/// nothing is published (Lean's fixed `failView`, R1Z/GamesR1P.lean:185).
+/// Any other error aborts.
 #[cfg(feature="r1p-check")]
 pub fn prove_masked_retrying_with(
     public:Public<'_>,
@@ -375,10 +404,35 @@ pub(crate) mod test_hooks {
         pub salt_digest:[u8;32],
         pub c1_root:Option<[u8;32]>,
         pub forced_verdict:Option<bool>,
+        /// The pole hook fired on this attempt (no P_R1 check ran).
+        pub pole:bool,
+        /// The mask-exhaustion hook fired on this attempt (nothing derived).
+        pub exhausted:bool,
     }
     std::thread_local! {
         static VERDICTS: core::cell::RefCell<Option<VecDeque<bool>>> = const { core::cell::RefCell::new(None) };
         static ATTEMPTS: core::cell::RefCell<Vec<Attempt>> = const { core::cell::RefCell::new(Vec::new()) };
+        /// 1-based attempt numbers on which the Lean `NoPole` test is forced false.
+        static POLES: core::cell::RefCell<Vec<usize>> = const { core::cell::RefCell::new(Vec::new()) };
+        /// 1-based attempt numbers whose mask decode is forced exhausted.
+        static EXHAUST: core::cell::RefCell<Vec<usize>> = const { core::cell::RefCell::new(Vec::new()) };
+    }
+    pub fn force_poles(attempts:&[usize]) { POLES.with(|p| *p.borrow_mut()=attempts.to_vec()); }
+    pub fn force_exhaustion(attempts:&[usize]) { EXHAUST.with(|p| *p.borrow_mut()=attempts.to_vec()); }
+    /// Called from `host_semantic::no_pole` after `observe_secrets` recorded
+    /// the current attempt.
+    pub(crate) fn forced_pole()->bool {
+        let k=ATTEMPTS.with(|a| a.borrow().len());
+        let hit=POLES.with(|p| p.borrow().contains(&k));
+        if hit { ATTEMPTS.with(|a| if let Some(last)=a.borrow_mut().last_mut() {last.pole=true;}); }
+        hit
+    }
+    /// Called right after the nonce reservation, before `observe_secrets`.
+    pub(crate) fn forced_exhaustion(mask_nonce:[u8;32])->bool {
+        let k=ATTEMPTS.with(|a| a.borrow().len())+1;
+        let hit=EXHAUST.with(|p| p.borrow().contains(&k));
+        if hit { ATTEMPTS.with(|a| a.borrow_mut().push(Attempt{mask_nonce,exhausted:true,..Attempt::default()})); }
+        hit
     }
     pub fn force(verdicts:&[bool]) {
         VERDICTS.with(|v| *v.borrow_mut()=Some(verdicts.iter().copied().collect()));
@@ -387,6 +441,8 @@ pub(crate) mod test_hooks {
     pub fn clear() {
         VERDICTS.with(|v| *v.borrow_mut()=None);
         ATTEMPTS.with(|a| a.borrow_mut().clear());
+        POLES.with(|p| p.borrow_mut().clear());
+        EXHAUST.with(|p| p.borrow_mut().clear());
     }
     pub fn attempts()->Vec<Attempt> { ATTEMPTS.with(|a| a.borrow().clone()) }
     pub(crate) fn observe_secrets(hash:HashFn,mask_nonce:[u8;32],g:&[QM31;1024],salt0:&[u8;32]) {

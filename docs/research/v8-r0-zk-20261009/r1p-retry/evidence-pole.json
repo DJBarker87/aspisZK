@@ -1,0 +1,85 @@
+{
+ "job": "LOG D73.4 items 1 and 2: LogUp pole (Lean ¬VR1) and mask exhaustion (Lean exh) are rejected attempts of the R1 retry loop",
+ "branch": "codex/r1p-pole-retry-20261019",
+ "base": "74e78062c",
+ "host": "dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-r1p-pole-retry-20261019",
+ "host_tree": "base 74e78062c tracked files of Cargo.toml Cargo.lock crates programs xtask audit docs/research/v8-r0-zk-20261009/{c3,z4,refine}, with this branch's four changed cost-probe sources; REVISION file reads 74e78062c...+worktree",
+ "host_sources_sha256": {
+  "crates/aspis-r1-cost-probe/src/host_semantic.rs": "f45fbab6c7e5de8f315266fb78579f38b7b1931f56d55b126d9311dc88852136",
+  "crates/aspis-r1-cost-probe/src/prover.rs": "1a5c9bb02a7b9299e361d9e9b81bd86d2d203e543eedb98d33ae9d0f92bc2ee9",
+  "crates/aspis-r1-cost-probe/src/prover_retry_tests.rs": "d747d10abf8a3a805edddb620c624ed77c08322520d8b873bf910eceb290df7a",
+  "crates/aspis-r1-cost-probe/src/r1_wire.rs": "d0cf787d38cc8b801b8c8b917a5c658ec685511728380b090ae8235fe62d0f08",
+  "note": "identical to the committed files (checked locally with shasum -a 256 before commit)"
+ },
+ "aspis_statement": "unchanged (no file under crates/aspis-statement, crates/aspis-prover or refine/ is modified); the D70 codec 1,233 / ordered trace / checkpoint23 gates therefore do not apply and were not rerun",
+ "toolchain": "cargo 1.94.1 (29ea6fb6a 2026-03-24), rustc 1.94.1 (e408947bf 2026-03-25), x86_64-unknown-linux-gnu",
+ "scope": "systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64; /usr/bin/time -v; cargo --release -j 4 --offline",
+ "launcher": {
+  "path": "r1p-retry/run-host-pole.sh",
+  "sha256": "efdaf8ccfcec703bf15197b44d85799e5a6555badd892d43cc3beb63dfc42a91"
+ },
+ "expected_time": "build: compilation (seconds, cache seeded from the R-retry workspace); test: proof generation about 5.5 s per attempt, plus about 36 s per attempt of P_R1 check in real_check_publishes_a_verifying_proof only",
+ "receipts": [
+  {
+   "step": "final-build",
+   "command": "run-host-pole.sh build = cargo test --release --offline -j 4 -p aspis-r1-cost-probe --features r1p-check --lib --no-run",
+   "exit": 0,
+   "wall": "0:04.62",
+   "peak_rss_kib": 336864,
+   "swaps": 0
+  },
+  {
+   "step": "final-check",
+   "command": "run-host-pole.sh check = cargo check --release --offline -j 4 -p aspis-r1-cost-probe --lib && the same with --features prover,private-leaf-salts",
+   "exit": 0,
+   "wall": "0:00.73",
+   "peak_rss_kib": 185464,
+   "swaps": 0
+  },
+  {
+   "step": "final-test",
+   "command": "run-host-pole.sh test = cargo test --release --offline -j 4 -p aspis-r1-cost-probe --features r1p-check --lib -- --test-threads=1 --nocapture",
+   "exit": 0,
+   "wall": "3:57.76",
+   "peak_rss_kib": 506476,
+   "swaps": 0,
+   "result": "27 passed, 0 failed: the 21 tests of D73 plus 6 new (pole_on_first_attempt_is_a_rejected_attempt, pole_on_eighth_attempt_exhausts_and_publishes_nothing, mask_exhaustion_on_first_attempt_is_a_rejected_attempt, no_pole_is_lean_no_pole_transfer, no_pole_is_lean_no_pole_withdrawal, static_slots_are_the_terminal_constants)",
+   "results": "pole-test-results.txt"
+  },
+  {
+   "step": "rlib-compare",
+   "command": "rlib-compare.sh.txt: cargo build --release --offline -j 4 -p aspis-r1-cost-probe --lib (default features, the verifier build) with the changed sources, the base 74e78062c sources and the changed sources again, same paths, fresh mtimes; sha256 of the rlib and of its concatenated codegen objects",
+   "exit": 0,
+   "wall": "0:07.43",
+   "peak_rss_kib": 198736,
+   "swaps": 0,
+   "result": "codegen objects identical (9 objects, sha256 23e7ecfc35f7959ff2b562cc631cb438e38e3a8db47501c9fcb4736eb2117abc for base and changed); the rlib differs only in its metadata (source-file hashes): changed 91abb18c…, base b896b0bd…",
+   "results": "rlib-compare-results.txt"
+  }
+ ],
+ "superseded_runs": [
+  {
+   "step": "build, check (12:49)",
+   "exit": 0,
+   "note": "earlier source; compile only"
+  },
+  {
+   "step": "test (12:50–12:54)",
+   "exit": 101,
+   "wall": "4:24.14",
+   "peak_rss_kib": 502560,
+   "swaps": 0,
+   "note": "25/26 passed; copy_slots_are_static_for_pole_check failed: row 523 producer side has a PrivateTransferOnly endpoint followed by a second endpoint, so the prover's weight-based copy rows overwrite it on withdrawals. This falsified the first design (NoPole from pool_v1_pair_forest_copy_rows_v1); replaced by lean_copy_row_values (static slots) and that test by static_slots_are_the_terminal_constants"
+  },
+  {
+   "step": "build2/build3, test static_slots, test no_pole_is",
+   "exit": 0,
+   "note": "intermediate source; focused runs before the final full run"
+  },
+  {
+   "step": "rlib-compare first two runs",
+   "note": "first run invalid (cp -a kept old mtimes, cargo did not rebuild); second run compared whole rlibs only (they differed); objects were not compared. The r1_wire.rs variant was then put on the existing line so no later line number (panic locations) shifts, and the third run compared objects"
+  }
+ ],
+ "lean": "no Lean module compiled by this job; no #print axioms applies"
+}
