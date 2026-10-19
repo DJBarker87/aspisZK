@@ -1,0 +1,7 @@
+# Actual batched push: fold bounds, residues, and untouched rows
+
+The actual post-loop flush inputs are proved below 2^64 from the retained four-query cadence bound and one canonical product. The actual outer push flush maps each coordinate to its symbolic Mersenne fold, preserves its field residue, and restores its bound below 2^34. The generated index_mut continuation is identified with the actual Vec.set update.
+
+The generated inner loop also preserves vector length and every nonselected row, while retaining the exact selected-row coordinate additions. Its invariant is composed with the actual outer Vec.set write. The final general selected-push theorem covers both flush and no-flush branches, proving actual push success, unchanged terms, preserved length and unchanged nonselected rows. Existing bounded arithmetic and vector frame lemmas are reused. The four limbs remain four independent accumulation streams.
+
+All six focused checks exit 0, report zero process swaps, and print only standard axioms. Exact commands, revisions, source/object/import pins, wall times, peak RSS and logs are retained. The final general frame theorem took 13.66 seconds. The caller-level inner row sequence, single terms increment per query, initialization and full repeated-query bound/residue induction remain separate work; the Rust caller increments terms after the row loop, not after each push. This is working component evidence, not the complete current verifier-to-Checks proof or the unified release compilation.
