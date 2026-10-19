@@ -1,0 +1,7 @@
+# Actual decoder field parsers match the retained parser owner
+
+ActualDecodeKFieldParserTransport and ActualDecodeKQMParserTransport compare the actual indexed V10 decoder's M31, CM31 and QM31 byte-parser bodies to the retained candidate field-parser owner. The coordinate maps only rewrap the nominal CM31/QM31 records. The result maps preserve parser rejection, runtime failure and divergence, as well as successful values. The QM31 equality holds for every input Slice; successful parsing therefore supplies the same value to the retained parser without a field-value correspondence premise.
+
+The two focused Lean 4.32 checks exited 0 in 2.25 and 3.61 seconds, peaked at 2,251,866,112 and 2,247,491,584 bytes RSS, and recorded zero process swaps. All six printed axiom reports contain only propext, Classical.choice and Quot.sound. Exact commands, source revisions, import/object hashes and logs are retained.
+
+The next consumer is CandidateStrictQM31Parser.source_refines: its already proved correspondence to the retained canonical sixteen-byte codec can now be applied to the actual parser. That composition, its connection to ParserTrace byte reads and the strict wide-field payload, and complete source/caller acceptance remain separate obligations. The Rust indexed decoder remains an isolated candidate; this is focused working evidence, not the unified release build or the full 100-bit soundness theorem.
