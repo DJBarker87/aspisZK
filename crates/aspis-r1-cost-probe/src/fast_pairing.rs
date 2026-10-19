@@ -31,12 +31,6 @@ mod canonical {
             let [a,b,c,d,e,f,g,h]=value.to_limbs();
             [Self([a,b,c,d]),Self([e,f,g,h])]
         }
-        #[inline(always)]
-        pub fn prepare(self)->Prepared {
-            let [a,b,c,d]=self.0;
-            let ac=add(a,c);let bd=add(b,d);
-            Prepared([a,b,add(a,b),c,d,add(c,d),ac,bd,add(ac,bd)])
-        }
         #[inline(always)] pub fn add(self,rhs:Self)->Self {
             let a=reduce_pair(pair(self.0[0],self.0[1]).wrapping_add(pair(rhs.0[0],rhs.0[1])));
             let b=reduce_pair(pair(self.0[2],self.0[3]).wrapping_add(pair(rhs.0[2],rhs.0[3])));
@@ -101,36 +95,23 @@ mod canonical {
         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
     }
 
-    /// Nine canonical Karatsuba channels, constructible only from canonical Q.
-    pub struct Prepared([u32;9]);
-    /// Four raw products per channel fit u64: 4*(P-1)^2 < 2^64.
-    /// Fold each group once; <=1024 groups and a final residual give sums <2^44.
-    /// The outer E accumulators enforce <=4096 terms and supply a shared flush.
-    pub struct Dot { batch:[u64;9], sums:[u64;9] }
+    // Private canonical operands; bounded raw representatives, canonical result.
+    // At most 4096 partial folds, each <2^34, sum <2^46. No u64 wrap.
+    pub struct Dot { sums:[u64;4] }
     impl Dot {
-        pub fn new()->Self {Self{batch:[0;9],sums:[0;9]}}
+        pub fn new()->Self {Self{sums:[0;4]}}
         #[inline(always)]
-        pub fn push(&mut self,a:&Prepared,b:&Prepared,flush:bool) {
-            for j in 0..9 {self.batch[j]+=u64::from(a.0[j])*u64::from(b.0[j]);}
-            if flush {
-                for j in 0..9 {
-                    self.sums[j]+=(self.batch[j]&u64::from(P))+(self.batch[j]>>31);
-                    self.batch[j]=0;
-                }
+        pub fn push(&mut self,a:Q,b:Q) {
+            // Both enclosing public accumulators check the 4096-term bound.
+            // This private accumulator cannot be reached by raw callers.
+            let raw=a.raw(b);
+            for j in 0..4 {
+                self.sums[j]=self.sums[j].wrapping_add(
+                    (raw[j]&u64::from(P)).wrapping_add(raw[j]>>31));
             }
         }
-        pub fn finish(self)->Q {
-            let channels:[u32;9]=core::array::from_fn(|j|
-                reduce(self.sums[j]+(self.batch[j]&u64::from(P))+(self.batch[j]>>31)));
-            let sub=|a:u32,b:u32|if a>=b {a-b}else{a.wrapping_add(P).wrapping_sub(b)};
-            let cm=|i:usize|[sub(channels[i],channels[i+1]),sub(sub(channels[i+2],channels[i]),channels[i+1])];
-            let m0=cm(0);let m1=cm(3);let m2=cm(6);
-            Q([sub(add(m0[0],add(m1[0],m1[0])),m1[1]),
-               add(m0[1],add(m1[0],add(m1[1],m1[1]))),
-               sub(sub(m2[0],m0[0]),m1[0]),sub(sub(m2[1],m0[1]),m1[1])])
-        }
+        pub fn finish(self)->Q {Q(self.sums.map(reduce))}
     }
-
 }
 
 
@@ -174,11 +155,9 @@ impl EbyKDot {
     pub fn push(&mut self, value: E, scalar: QM31) -> Result<(), ()> {
         if self.count >= MAX_TERMS { return Err(()); }
         let [value_c0,value_c1] = canonical::Q::from_wide(value);
-        let scalar = checked_q(scalar)?.prepare();
-        let value_c0=value_c0.prepare();let value_c1=value_c1.prepare();
-        let flush=self.count&3==3;
-        self.c0.push(&value_c0, &scalar, flush);
-        self.c1.push(&value_c1, &scalar, flush);
+        let scalar = checked_q(scalar)?;
+        self.c0.push(value_c0, scalar);
+        self.c1.push(value_c1, scalar);
         self.count += 1;
         Ok(())
     }
@@ -215,12 +194,10 @@ impl EbyEDot {
         if self.count >= MAX_TERMS { return Err(()); }
         let [a,b] = canonical::Q::from_wide(left);
         let [c,d] = canonical::Q::from_wide(right);
-        let a=a.prepare();let b=b.prepare();let c=c.prepare();let d=d.prepare();
-        let flush=self.count&3==3;
-        self.ac.push(&a, &c, flush);
-        self.bd.push(&b, &d, flush);
-        self.ad.push(&a, &d, flush);
-        self.bc.push(&b, &c, flush);
+        self.ac.push(a, c);
+        self.bd.push(b, d);
+        self.ad.push(a, d);
+        self.bc.push(b, c);
         self.count += 1;
         Ok(())
     }
