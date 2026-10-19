@@ -1,0 +1,298 @@
+{
+  "status": "bounded current-source extraction successful after explicitly documented source-helper refactor and LLBC metadata-only rename; generated body not yet fully verified",
+  "source_basis": {
+    "repository": "/Users/dominic/ZK",
+    "branch": "research",
+    "working_tree_head": "765fd846826bed9d6c48359d4405c522e14de9ce",
+    "synthetic_source_revision_recorded_by_manifest": "3adb86d046c0b24736680a0a933dfaeb6750c8c0",
+    "selected_source_count": 137,
+    "merged_source_manifest_sha256": "4567f7f57810ee56b0b91a09fc078c7f52f19d68aa621ebff501e539c0f57cf0",
+    "synthetic_cargo_toml_sha256": "1d6680abe0ec9dff4ee7241dc173a18246adba61d0c52d163ecd7e6d1d395731",
+    "synthetic_cargo_lock_sha256": "279438b7d32eed7d55766e2b82d347b1f396eab49ef35df5fc1bad07433ac9f8",
+    "source_closure_manifest": "merged-source-manifest.json",
+    "external_includes": [
+      {
+        "path": "docs/research/v8-r0-zk-20261009/refine/diffharness/tests/glue_gen.rs",
+        "sha256": "1fa3ed853c7805111e192993e4f13928d0c9638385fe6bc943c6ff34208a0059",
+        "bytes": 2554,
+        "source_revision": "current checkout HEAD 3adb86d046c0b24736680a0a933dfaeb6750c8c0"
+      }
+    ],
+    "enabled_features": [
+      "r0",
+      "pool-v1-kernel"
+    ],
+    "disabled_features": [
+      "formal-verification",
+      "insecure-test-framing",
+      "insecure-test-logup-compression",
+      "insecure-test-ordering",
+      "pool-v1-pair-forest-active-mask-basis-audit",
+      "pool-v1-pair-forest-binary-copy-weights-audit",
+      "pool-v1-pair-forest-copy-finish-dot-basis-audit",
+      "pool-v1-pair-forest-copy-pattern-basis-audit",
+      "pool-v1-pair-forest-copy-selector-tensor-basis-audit",
+      "pool-v1-pair-forest-copy-tag-dot-basis-audit",
+      "pool-v1-pair-forest-endpoint-selector-cache-audit",
+      "pool-v1-pair-forest-packed-digest-audit",
+      "pool-v1-pair-forest-packed-digest-selector-tensor-audit",
+      "pool-v1-pair-forest-packed-range-audit",
+      "pool-v1-pair-forest-pattern-window-audit",
+      "pool-v1-pair-forest-semantic-factor-audit",
+      "r0-e4-reference",
+      "r0-hoist-reference",
+      "r0-op-count",
+      "r0-r91-audit",
+      "spend-dynamic-rate512",
+      "v7-fixed-canonical-audit",
+      "v7-fixed-canonical-exact-once-audit",
+      "v7-gamma-four-slot-block-audit"
+    ],
+    "omitted_root_module": "statement crate root r0 module is omitted because core root r0 owns the same crate-level name; it is not reachable from terminal_qm31_probe. The terminal source nested module pair_forest_semantic_terminal::r0 is included unchanged.",
+    "module_collisions": {
+      "core_vs_statement_root": [
+        "r0"
+      ],
+      "resolved": "Keep core r0; omit feature-gated statement root r0. All other root module declarations are disjoint."
+    }
+  },
+  "source_change": {
+    "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+    "original_sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+    "candidate_sha256": "a0c7aeb2269670f4c338109fdb6c092b8ce6ca61bcf74b5b9796e016fa3dbcc8",
+    "diff_file": "state-only-poseidon-helper.diff",
+    "diff_sha256": "3d64595334d81d6a762da8cfba168e540783c19c634f28e6184c20b14d51e9d4",
+    "change_summary": [
+      "lifted exact array::from_fn raw calculation into private inline(always) by-value helper external_linear_lazy_row(input, output)",
+      "replaced output loop with explicit state[start + k] helper calls for k=0..3"
+    ],
+    "semantic_review": "input snapshot is computed before any row writes and passed by value; four calls use original output order 0,1,2,3 exactly as loop iterations; helper body reads only its by-value copied input and output",
+    "label": "isolated modified-source extraction candidate; not unchanged production source"
+  },
+  "extraction": {
+    "probe_entry": "crate::extraction_probe::terminal_qm31_probe",
+    "source_method": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs:2080-2099",
+    "raw_llbc_sha256": "b88847bbee0f5c1d41cd0750e0f755b6cec82b36a9e1b783df4182e13f259f71",
+    "raw_llbc_bytes": 11337205,
+    "metadata_adaptation": {
+      "path": "Terminal-metadata-v10.json",
+      "sha256": "1b2155dfac5a154707478ae1bfa492aa617711d1370dfdd1ad15c84e4c9fc513",
+      "changed_json_path": "translated.fun_decls[227].item_meta.attr_info.rename",
+      "old_full_name": "aspis_r1_mask_extraction_probe::field::M31",
+      "new_constructor_name": "M31_constructor",
+      "type_declaration_unchanged": {
+        "kind": "type_decls",
+        "index": 14,
+        "def_id": 14,
+        "name": "aspis_r1_mask_extraction_probe::field::M31"
+      },
+      "adapted_llbc_sha256": "f7068fa7a5012a99c16910f48189aa0b05015ade4bf287b4c0053076ee5daa9b",
+      "note": "Only LLBC attr_info.rename was set for the emitted tuple constructor; the actual Rust source and generated MIR/LLBC bodies were unchanged. This is a metadata-adapted extraction, not a raw unchanged-input Aeneas pass."
+    },
+    "toolchain": {
+      "charon_version": "0.1.223",
+      "aeneas_version": "b59d5188c082f704a418c7cb4e52ad69328002d1",
+      "charon_binary_sha256": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+      "aeneas_binary_sha256": "959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3"
+    }
+  },
+  "runs": {
+    "release_build": {
+      "command": "build.command.txt",
+      "exit_status": 0,
+      "wall": "1:10.73",
+      "max_rss_kib": 811420,
+      "process_swaps": 0,
+      "profile": "--release, opt-level=3",
+      "scope": "systemd-run MemoryHigh=6G MemoryMax=8G MemorySwapMax=0"
+    },
+    "charon": {
+      "command": "charon-corrected.command.txt",
+      "exit_status": 0,
+      "wall": "1:27.04",
+      "max_rss_kib": 1151996,
+      "process_swaps": 0,
+      "scope": "systemd-run MemoryHigh=6G MemoryMax=8G MemorySwapMax=0",
+      "raw_llbc_sha256": "b88847bbee0f5c1d41cd0750e0f755b6cec82b36a9e1b783df4182e13f259f71"
+    },
+    "aeneas_metadata_v10": {
+      "command": "aeneas-metadata-v10.command.txt",
+      "exit_status": 0,
+      "wall": "9.47",
+      "max_rss_kib": 314384,
+      "process_swaps": 0,
+      "scope": "systemd-run MemoryHigh=6G MemoryMax=8G MemorySwapMax=0",
+      "admission": "aeneas-metadata-admission-v10.json",
+      "time": "aeneas-metadata-v10.time.txt",
+      "exit_file": "aeneas-metadata-v10.exit"
+    }
+  },
+  "generated_sources": {
+    "archive": "terminal-current-generated-v10.tar.gz",
+    "archive_sha256": "162b198ec2427b8588861d168ef3015c7bea4665e430db271db89b5ac7e9d8a6",
+    "generated_files": {
+      "Funs.lean": "a0fa91e43a9fd511d0746bad56d4e9bb38090187cd0c77e1a54b377388474c08",
+      "Types.lean": "bbf37b6194e90b760ed0fbb8db7c51f3b124cfc434d2c994bc13010219984c45"
+    },
+    "source_method_present": {
+      "composition_parts": "Funs.lean, around line 6350",
+      "terminal_parts": "Funs.lean, around line 6510",
+      "terminal_qm31": "Funs.lean, around line 6548"
+    },
+    "source_call_path": "terminal_qm31 -> Public.semantic -> terminal_parts -> composition_parts; terminal_parts combines original polynomial identity and returns c1/mask/g values; public method maps the result and maps the protocol error. `Types.lean` retains closure records for terminal and composition.",
+    "dependency_inventory": {
+      "file": "translation.json",
+      "sha256": "280983667e4fc362b7dba209efceb0fcdfa1f88b59a7beed9e9bc3c47cbb27c5",
+      "declaration_count": 220,
+      "generated_local_declarations": 202,
+      "external_declarations": 18,
+      "terminal_method_entries": [
+        {
+          "def_id": 10,
+          "lean_name": "AspisR1SelectedMaskProbe.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error.call_once",
+          "lean_file": "AspisR1SelectedMaskProbe/Funs.lean",
+          "rust_name": "aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::{aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::Public<'a>}::terminal_qm31::{impl core::ops::function::FnOnce<(aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::PoolV1PairForestSemanticTerminalErrorV1,), aspis_r1_mask_extraction_probe::state_only_prefix::r0::Error> for aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::{aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::Public<'a>}::terminal_qm31::closure#2<'a>}::call_once",
+          "is_local": true,
+          "source": {
+            "file": "src/statement/pool_v1/pair_forest_semantic_terminal.rs",
+            "begin_line": 2098,
+            "end_line": 2098
+          },
+          "is_opaque": false,
+          "can_fail": true,
+          "can_diverge": false,
+          "is_rec": false,
+          "reducible": false
+        },
+        {
+          "def_id": 9,
+          "lean_name": "AspisR1SelectedMaskProbe.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31.call_once",
+          "lean_file": "AspisR1SelectedMaskProbe/Funs.lean",
+          "rust_name": "aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::{aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::Public<'a>}::terminal_qm31::{impl core::ops::function::FnOnce<((aspis_r1_mask_extraction_probe::field::QM31, [aspis_r1_mask_extraction_probe::field::QM31; 16usize], [aspis_r1_mask_extraction_probe::field::QM31; 10usize], aspis_r1_mask_extraction_probe::field::QM31),), aspis_r1_mask_extraction_probe::field::QM31> for aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::{aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::Public<'a>}::terminal_qm31::closure#1<'a>}::call_once",
+          "is_local": true,
+          "source": {
+            "file": "src/statement/pool_v1/pair_forest_semantic_terminal.rs",
+            "begin_line": 2097,
+            "end_line": 2097
+          },
+          "is_opaque": false,
+          "can_fail": true,
+          "can_diverge": false,
+          "is_rec": false,
+          "reducible": false
+        },
+        {
+          "def_id": 8,
+          "lean_name": "AspisR1SelectedMaskProbe.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut",
+          "lean_file": "AspisR1SelectedMaskProbe/Funs.lean",
+          "rust_name": "aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::{aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::Public<'a>}::terminal_qm31::{impl core::ops::function::FnMut<(usize,), aspis_r1_mask_extraction_probe::field::QM31> for aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::{aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::Public<'a>}::terminal_qm31::closure<'a, '_1>}::call_mut",
+          "is_local": true,
+          "source": {
+            "file": "src/statement/pool_v1/pair_forest_semantic_terminal.rs",
+            "begin_line": 2086,
+            "end_line": 2086
+          },
+          "is_opaque": false,
+          "can_fail": true,
+          "can_diverge": false,
+          "is_rec": false,
+          "reducible": false
+        },
+        {
+          "def_id": 7,
+          "lean_name": "AspisR1SelectedMaskProbe.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31.call_once",
+          "lean_file": "AspisR1SelectedMaskProbe/Funs.lean",
+          "rust_name": "aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::{aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::Public<'a>}::terminal_qm31::{impl core::ops::function::FnOnce<(usize,), aspis_r1_mask_extraction_probe::field::QM31> for aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::{aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::Public<'a>}::terminal_qm31::closure<'a, '_1>}::call_once",
+          "is_local": true,
+          "source": {
+            "file": "src/statement/pool_v1/pair_forest_semantic_terminal.rs",
+            "begin_line": 2086,
+            "end_line": 2086
+          },
+          "is_opaque": false,
+          "can_fail": true,
+          "can_diverge": false,
+          "is_rec": false,
+          "reducible": false
+        },
+        {
+          "def_id": 1,
+          "lean_name": "AspisR1SelectedMaskProbe.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31",
+          "lean_file": "AspisR1SelectedMaskProbe/Funs.lean",
+          "rust_name": "aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::{aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::Public<'a>}::terminal_qm31",
+          "is_local": true,
+          "source": {
+            "file": "src/statement/pool_v1/pair_forest_semantic_terminal.rs",
+            "begin_line": 2080,
+            "end_line": 2099
+          },
+          "is_opaque": false,
+          "can_fail": true,
+          "can_diverge": true,
+          "is_rec": false,
+          "reducible": false
+        },
+        {
+          "def_id": 0,
+          "lean_name": "AspisR1SelectedMaskProbe.extraction_probe.terminal_qm31_probe",
+          "lean_file": "AspisR1SelectedMaskProbe/Funs.lean",
+          "rust_name": "aspis_r1_mask_extraction_probe::extraction_probe::terminal_qm31_probe",
+          "is_local": true,
+          "source": {
+            "file": "src/statement/extraction_probe.rs",
+            "begin_line": 5,
+            "end_line": 5
+          },
+          "is_opaque": false,
+          "can_fail": true,
+          "can_diverge": true,
+          "is_rec": false,
+          "reducible": false
+        }
+      ],
+      "note": "Complete function reachability/source mapping from Aeneas; each generated declaration is assigned to Funs.lean, Types.lean, or External_Template.lean. Exact source locations and opacity flags retained."
+    }
+  },
+  "dependency_and_axiom_scope": {
+    "generated_external_template": "FunsExternal_Template.lean inside archive",
+    "axiom_line_inventory": "external-template-axioms.txt",
+    "axiom_inventory_sha256": "aa9eb32cffee4a96fe74692113f7d7b30e8f07b357594431127aa5d7802e6641",
+    "axiom_stub_count": 19,
+    "known_stub_classes": [
+      "standard array iterator and fold methods",
+      "core array from_fn",
+      "U16 count_ones and trailing_zeros",
+      "Result map/map_err",
+      "range clone and iterator helpers"
+    ],
+    "warning": "Aeneas-generated External_Template axioms are not discharged by extraction. The terminal body is present, but source-call semantics are not yet a fully closed proof until the reachable template owners are implemented or matched to exact verified owners. The generated output is not yet Lean-compiled.",
+    "template_axiom_lines": 19,
+    "generated_external_templates": [
+      "TypesExternal_Template.lean",
+      "FunsExternal_Template.lean"
+    ]
+  },
+  "evidence_hashes": {
+    "Cargo.synthetic.lock": "279438b7d32eed7d55766e2b82d347b1f396eab49ef35df5fc1bad07433ac9f8",
+    "Cargo.synthetic.toml": "1d6680abe0ec9dff4ee7241dc173a18246adba61d0c52d163ecd7e6d1d395731",
+    "README.md": "ae26f6c0dcfc2d31cb6781f5c0947e78d2e7e6f760f65f78ac862c9ddf972079",
+    "Terminal-metadata-v10.json": "1b2155dfac5a154707478ae1bfa492aa617711d1370dfdd1ad15c84e4c9fc513",
+    "aeneas-metadata-admission-v10.json": "138ac96298b0b0437268610bb6a096045af459a39adadcbf3937365179fcac58",
+    "aeneas-metadata-v10.command.txt": "19e102d1ac548e70432ff40d8ed1d27e66d3bb9ab262fdcf75e7a29c7a1c43cb",
+    "aeneas-metadata-v10.exit": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061",
+    "aeneas-metadata-v10.log": "1031fe16b58e3e9df3d7cf0e3a62ffe893a9897ae5a352f9ea0fcf8891748135",
+    "aeneas-metadata-v10.time.txt": "ba7d846be519e9e72d5c4eb7c6688b7df307e151526741bd9cc4c8ace5cd9414",
+    "build.command.txt": "4c1d470531e9d9e86f770a72b3dede00478071b1e01ffc96dcea62e6da5549ef",
+    "build.time.txt": "ac4075edb59852356e02e065a0aa63253bbd8496cdcecd9aa65208335a7c33a8",
+    "charon-corrected.command.txt": "48f383a4b4a62beb35123c7d2c5307875bc70866b54b7ab08649c6e97ea95759",
+    "charon-corrected.time.txt": "7a43a64e70f0886abfab067f2e78ca5caa6af7db1ebc49a98756ed183bff5e0f",
+    "external-template-axioms.txt": "aa9eb32cffee4a96fe74692113f7d7b30e8f07b357594431127aa5d7802e6641",
+    "generated-current-metadata-v10.sha256": "68b0eba8b2d255bfb4cf64ba10f30be1177014deb4d39567259049c901db9eeb",
+    "input-validation.json": "4c0fe00a773f8f125c51483cbaf62b339c8a57d4d2d7619c12e9cf61b480d60b",
+    "merged-source-manifest.json": "4567f7f57810ee56b0b91a09fc078c7f52f19d68aa621ebff501e539c0f57cf0",
+    "state-only-poseidon-helper.diff": "3d64595334d81d6a762da8cfba168e540783c19c634f28e6184c20b14d51e9d4",
+    "state_only_poseidon.current-candidate.rs": "a0c7aeb2269670f4c338109fdb6c092b8ce6ca61bcf74b5b9796e016fa3dbcc8",
+    "terminal-current-generated-v10.tar.gz": "162b198ec2427b8588861d168ef3015c7bea4665e430db271db89b5ac7e9d8a6",
+    "translation.json": "280983667e4fc362b7dba209efceb0fcdfa1f88b59a7beed9e9bc3c47cbb27c5"
+  }
+}

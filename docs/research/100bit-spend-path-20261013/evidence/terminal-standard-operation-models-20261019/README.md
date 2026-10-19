@@ -1,0 +1,7 @@
+# Executable models for current terminal library boundaries
+
+Result.map and map_err are executable match/callback models; map_err reuses the existing checked caller model with namespace rebinding. Array.map delegates to the retained state-threaded selector model. The non-Copy from_fn model visits indices sequentially, threads each returned callback state, accumulates values in a list and constructs the returned fixed-size array using its proved output-length invariant. It requires neither a dummy initial value nor Copy.
+
+These models have been Lean-checked but are not yet substituted into a compiled complete current terminal owner. Rust standard-library correspondence, equivalence to the existing extracted copy helper where applicable, concrete current callback execution/stability, and the remaining external iterator/bit-operation models are still open. The current terminal extraction's 19 template axioms are not declared discharged by this packet.
+
+The focused Lean 4.32 checks exited 0 in 4.38 and 3.76 seconds, peak RSS at most 2,232,467,456 bytes, zero process swaps. Result.map/map_err report no axioms; delegated Array.map reports propext; the from_fn loop, length theorem and array constructor report only standard axioms. Exact sources, import/object pins, commands, revision and logs are retained. This is working component evidence, not a source/library refinement proof or unified release replay.
