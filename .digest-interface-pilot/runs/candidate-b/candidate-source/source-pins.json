@@ -1,0 +1,91 @@
+{
+  "classification": "CANDIDATE source; no unchanged-source or release-interface adoption claim",
+  "source_revision": "b2ad6649de4c1b97c2270a1c8bd4bbfe5537d52c",
+  "source_path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+  "source_sha256": "4ce97b7bc11b495dc8af3ef79f29dbbd9ebba7c2427a6db1acb8851759b1d305",
+  "cuts": {
+    "error": {
+      "lines": [
+        23,
+        36
+      ],
+      "original_sha256": "852ad8dffbfac851429e401a82859f8beaf3a7109d173d56962c954bb0b0ac41",
+      "candidate_sha256": "852ad8dffbfac851429e401a82859f8beaf3a7109d173d56962c954bb0b0ac41",
+      "substitutions": [],
+      "inverse_restores_exact_span": true
+    },
+    "transcript": {
+      "lines": [
+        168,
+        176
+      ],
+      "original_sha256": "aa329c7abea9912806d54398a7367f0d77edc5344592717528cdf4cbbdc479ce",
+      "candidate_sha256": "f4a8ef029fedbd11c0b251ca8591061af4cad1c4ad0a31256ab0591345f816fb",
+      "substitutions": [
+        [
+          "pub struct SemanticTranscript {",
+          "pub struct SemanticTranscript<H: Digest32> {",
+          1
+        ],
+        [
+          "hash: HashFn,",
+          "hash: H,",
+          1
+        ]
+      ],
+      "inverse_restores_exact_span": true
+    },
+    "impl": {
+      "lines": [
+        178,
+        178
+      ],
+      "original_sha256": "1eb12f2fd1c5f271414af60e05a2c67d633732e9e320eef2cd7c9ea6d0597f32",
+      "candidate_sha256": "35490209411bc9498da0dad176c1a1dcc53381aeb1fa964775e4c06360274c1f",
+      "substitutions": [
+        [
+          "impl SemanticTranscript {",
+          "impl<H: Digest32> SemanticTranscript<H> {",
+          1
+        ]
+      ],
+      "inverse_restores_exact_span": true
+    },
+    "method": {
+      "lines": [
+        194,
+        208
+      ],
+      "original_sha256": "dba5714992602c6d93b19675f3cace06580b4545938ecf673d5fbf8b46149240",
+      "candidate_sha256": "e1727936b33c71f8359951e3fde3bc8b8cf5a46d91be67b847dc1eb99a0ebf3a",
+      "substitutions": [
+        [
+          "(self.hash)(",
+          "self.hash.digest(",
+          3
+        ]
+      ],
+      "inverse_restores_exact_span": true
+    }
+  },
+  "candidate_trait": "pub trait Digest32: Copy {\n    fn digest(&self, parts: &[&[u8]]) -> [u8; 32];\n}\n",
+  "candidate_entry_wrapper": "pub fn candidate_sample_block<H: Digest32>(\n    transcript: &mut SemanticTranscript<H>, row: u8, framed: &[u8],\n) -> Result<[u8; 32], Error> {\n    transcript.sample_block_validated(row, framed)\n}\n",
+  "wrappers": "no_std crate and module scopes; original impl closer supplied because unrelated methods are omitted",
+  "roots": [
+    "crate::r1_wire::candidate_sample_block",
+    "crate::digest::Digest32"
+  ],
+  "excluded": "constructor, other transcript methods/callers, concrete backend, SDK, parser, fields, Observer",
+  "kit_files": {
+    "lib.rs": "cc89ecbb3afbdfb04d230da44f56dba1fdf20bec3b0d9fb4b6c0407fe0330ebc",
+    "Cargo.toml": "90c8e9fc38fa75ca87b5797b9513785341df807025f6c13d0079ff1c5a778a84",
+    "Cargo.lock": "a5087b0f24eed173de72efbfff0300656f1c24f6590872f3ca8f9b693453dec4",
+    "original/r1_wire.rs": "4ce97b7bc11b495dc8af3ef79f29dbbd9ebba7c2427a6db1acb8851759b1d305",
+    "candidate-interface.patch": "ecbba7eafdd8954989583ba26ed6ebd1839c50df2e42bba0d416930690a5a0fe",
+    "original/error.rs": "852ad8dffbfac851429e401a82859f8beaf3a7109d173d56962c954bb0b0ac41",
+    "original/transcript.rs": "aa329c7abea9912806d54398a7367f0d77edc5344592717528cdf4cbbdc479ce",
+    "original/impl.rs": "1eb12f2fd1c5f271414af60e05a2c67d633732e9e320eef2cd7c9ea6d0597f32",
+    "original/method.rs": "dba5714992602c6d93b19675f3cace06580b4545938ecf673d5fbf8b46149240"
+  },
+  "prepare_script_sha256": "b6b7c746f5340851cf57d7888668e1b91307e0a86241fb0e57889733943c4ca5"
+}

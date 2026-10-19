@@ -1,0 +1,4 @@
+import AspisR1DigestInterfaceCandidate.Funs
+
+#print axioms AspisR1DigestInterfaceCandidate.r1_wire.SemanticTranscript.sample_block_validated
+#print axioms AspisR1DigestInterfaceCandidate.r1_wire.candidate_sample_block

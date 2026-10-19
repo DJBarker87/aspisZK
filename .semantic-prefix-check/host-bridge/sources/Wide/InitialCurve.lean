@@ -1,0 +1,122 @@
+import Wide.InitialCurveBranch
+
+/-!
+# Exact initial V7 fixed-curve extraction
+-/
+
+set_option autoImplicit false
+set_option maxRecDepth 262144
+
+namespace AspisWide.Terminal
+
+variable {E : Type} [Field E] [Fintype E] [DecidableEq E]
+  [Algebra (ZMod AspisCircleGroupOrder.P) E]
+
+
+open Polynomial
+open AspisWide.Agreement
+open AspisWide.Interpolation
+open AspisWide.Factors
+open AspisWide.LocalFactors
+open AspisWide.Smooth
+open AspisWide.FunctionField
+open AspisWide.PowerSeriesLift
+open AspisWide.RegularHensel
+open AspisWide.FactorBudgets
+open AspisWide.ConcreteBranch
+open AspisWide.OuterSelection
+open AspisWide.GRSConversion
+open AspisWide.FinalEncoder
+open AspisPool.AlgorithmicCircleDecoderV7
+open AspisWide.InitialEncoder
+open AspisV5FriDegreeThreeCorrelatedAgreement
+open AspisV6Width29CorrelatedAgreement
+open AspisV6PublishedTheoremInterfaces
+open AspisCircleGroupOrder (P)
+
+noncomputable section
+
+private theorem exists_four_elim
+    {A B C D : Type*} {P : A → B → C → D → Prop} {Q : Prop}
+    (existsWitness : ∃ a b c d, P a b c d)
+    (finish : ∀ a b c d, P a b c d → Q) : Q := by
+  obtain ⟨a, b, c, d, property⟩ := existsWitness
+  exact finish a b c d property
+
+set_option maxRecDepth 1048576 in
+set_option maxHeartbeats 300000 in
+set_option linter.constructorNameAsVariable false in
+/-- Extract a released-message curve from one fixed exact symbolic
+interpolant and an explicitly supplied set of valid challenges. -/
+theorem exists_exactV7Initial_curve_of_interpolant
+    (lanes : Fin 29 → InitialWord E)
+    (strategy : Width29ProximateStrategy E (Fin 1048576)
+      (InitialMessage E))
+    (coefficients :
+      CurveMonomialIndex 1024 28 initialCurveXBound initialCurveYRows
+        initialCurveZBound → E)
+    (coefficientsNeZero : coefficients ≠ 0)
+    (kernel : curveInterpolationMap (exactInitialGRSConversion (K := E)).points
+      (exactInitialNormalizedLanes lanes) coefficients = 0)
+    (challenges : Finset E)
+    (validOn : ∀ gamma ∈ challenges,
+      Width29ValidResponse exactInitialEncoder 38229 lanes strategy gamma)
+    (outerMany :
+      initialCurveZBound + 224 * initialCurveYRows * initialCurveZBound +
+          58 * (1024 + 1) * initialCurveYRows ^ 2 * initialCurveZBound +
+            (28 * 1048576 + 1) * initialCurveYRows < challenges.card) :
+    ∃ (components : Fin 29 → InitialMessage E)
+        (selected : Finset E),
+      selected ⊆ challenges ∧
+      28 * Fintype.card (Fin 1048576) < selected.card ∧
+      ∀ gamma ∈ selected,
+        Width29CandidateOnCurve exactInitialEncoder strategy components
+          gamma := by
+  apply exists_four_elim
+    (exists_exactV7Initial_weighted_fixed_branch lanes strategy coefficients
+      coefficientsNeZero kernel challenges validOn outerMany)
+  intro globalFactor x₀ localFactor selected specification
+  obtain ⟨componentMessages, selectedLarge, onCurve⟩ :=
+    exists_exactV7Initial_components_of_selected_branch lanes strategy
+      challenges validOn globalFactor x₀ localFactor selected
+      specification.2.1 specification.2.2.1 specification.2.2.2.1
+      specification.2.2.2.2.1 specification.2.2.2.2.2.1
+      specification.2.2.2.2.2.2.1 specification.2.2.2.2.2.2.2
+  exact ⟨componentMessages, selected,
+    specification.2.2.2.2.2.2.1, selectedLarge, onCurve⟩
+
+set_option maxRecDepth 1048576 in
+set_option maxHeartbeats 300000 in
+/-- The mathematical width-29 extraction step over any explicitly supplied
+finite set of valid challenges.  Its conclusion already consists of released
+V7 messages, which keeps the concrete `goodChallenges` predicate out of the
+branch/Hensel proof term. -/
+theorem exists_exactV7Initial_curve_of_valid_challenges
+    (lanes : Fin 29 → InitialWord E)
+    (strategy : Width29ProximateStrategy E (Fin 1048576)
+      (InitialMessage E))
+    (challenges : Finset E)
+    (validOn : ∀ gamma ∈ challenges,
+      Width29ValidResponse exactInitialEncoder 38229 lanes strategy gamma)
+    (outerMany :
+      initialCurveZBound + 224 * initialCurveYRows * initialCurveZBound +
+          58 * (1024 + 1) * initialCurveYRows ^ 2 * initialCurveZBound +
+            (28 * 1048576 + 1) * initialCurveYRows < challenges.card) :
+    ∃ (components : Fin 29 → InitialMessage E)
+        (selected : Finset E),
+      selected ⊆ challenges ∧
+      28 * Fintype.card (Fin 1048576) < selected.card ∧
+      ∀ gamma ∈ selected,
+        Width29CandidateOnCurve exactInitialEncoder strategy components
+          gamma := by
+  obtain ⟨coefficients, coefficientsNeZero, kernel⟩ :=
+    exists_exactInitialCurveInterpolation lanes
+  exact exists_exactV7Initial_curve_of_interpolant lanes strategy coefficients
+    coefficientsNeZero kernel challenges validOn outerMany
+
+#print axioms exists_exactV7Initial_curve_of_interpolant
+#print axioms exists_exactV7Initial_curve_of_valid_challenges
+
+end
+
+end AspisWide.Terminal

@@ -1,0 +1,5 @@
+R17 port audit paused for semantic bridge priority. No backend mutation or build.
+Pinned Aeneas checkout 220c7ff9cce569dead1e72ef199775b3417493b7, backend Lean 4.31/mathlib fabf563a7c95a166b8d7b6efca11c8b4dc9d911f.
+Target R1 Lean 4.32/mathlib 81a5d257c8e410db227a6665ed08f64fea08e997; transplant full pinned dependency set while retaining aeneas package root/name.
+Confirmed missing import: AeneasMeta/BvEnumToBitVec.lean imports Lean.Elab.Tactic.BVDecide.Frontend.Normalize.Enums; 4.32 moves it to Lean.Meta.Tactic.BVDecide.Normalize.Enums. Namespace changes likewise. The three getEnumToBitVecFor/getEnumToBitVecLeFor/getEqIffEnumToBitVecEqFor definitions are not marked public in the new module, so simple import replacement is NOT established adequate. Preserve eager realization behavior; no deletion or axioms.
+Direct mathlib import scan: no Mathlib imported module missing; several minor source diffs identified, no confirmed required edit. Grind/Simp/custom Do APIs remain unaudited. No compatibility claim.

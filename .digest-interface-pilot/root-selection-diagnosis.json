@@ -1,0 +1,40 @@
+{
+  "source_revision": "cb50ff16b9f1066b8a97dc06da704de2da2fa41c",
+  "exact_source_archive_sha256": "d8e799da5e85805ae21798bb19ed93f8a0d1a295cc3d82047c62b85d51dc92e8",
+  "diagnosis": "Rust path resolution produces transparent method fun0, but final StartFrom name matching has Ident/Impl mismatch; trait-only ordered result is not method success",
+  "source_spans": [
+    {
+      "archive_member": "charon/charon/src/transform/add_missing_info/reorder_decls.rs",
+      "path": "charon/src/transform/add_missing_info/reorder_decls.rs",
+      "lines": [
+        305,
+        319
+      ],
+      "file_sha256": "8a1176e29a51a83c82ff5a7df2aa11021e3e0c254e9fd6c656c0a92314ba2632",
+      "text": "    // Start from the items included in `start_from`. We've mostly only translated items accessible\n    // from that, but some passes render items inaccessible again, which we filter out here.\n    deps.unprocessed = ctx\n        .translated\n        .all_items()\n        .filter(|item| {\n            ctx.options\n                .start_from\n                .iter()\n                .any(|pat| pat.matches(&ctx.translated, item.item_meta()))\n        })\n        .map(|item| item.id())\n        .collect();\n\n    // Explore reachable items.\n",
+      "span_sha256": "5f93669ba70ca8e6fc8bfd126683f067eac03e599f67cb124e874288664e0e97"
+    },
+    {
+      "archive_member": "charon/charon/src/options.rs",
+      "path": "charon/src/options.rs",
+      "lines": [
+        593,
+        604
+      ],
+      "file_sha256": "d68ea7c83465b3ce6ba9bea7d398c97ed03e0ff9abeee179f77ea04baabd7b04",
+      "text": "impl StartFrom {\n    pub fn matches(&self, ctx: &TranslatedCrate, item_meta: &ItemMeta) -> bool {\n        match self {\n            StartFrom::Pattern { pattern, .. } => pattern.matches(ctx, &item_meta.name),\n            StartFrom::Attribute(attr) => item_meta\n                .attr_info\n                .attributes\n                .iter()\n                .filter_map(|a| a.as_unknown())\n                .any(|raw_attr| raw_attr.path == *attr),\n            StartFrom::Pub => item_meta.attr_info.public && item_meta.is_local,\n        }\n",
+      "span_sha256": "ef03939b6fedc914c4ae5f68d3badea83d515fa55fe88ea7577e5dfdbd3b8f29"
+    },
+    {
+      "archive_member": "charon/charon/src/name_matcher/mod.rs",
+      "path": "charon/src/name_matcher/mod.rs",
+      "lines": [
+        245,
+        282
+      ],
+      "file_sha256": "c9ac2cb3b5c868da191f77a185868c635ff574ab3e02bd97fac95b12e7796da6",
+      "text": "\nimpl PatElem {\n    fn matches_with_generics(\n        &self,\n        ctx: &TranslatedCrate,\n        elem: &PathElem,\n        args: Option<&GenericArgs>,\n    ) -> bool {\n        match (self, elem) {\n            (PatElem::Glob, _) => true,\n            (\n                PatElem::Ident {\n                    name: pat_ident,\n                    generics,\n                    ..\n                },\n                PathElem::Ident(ident, _),\n            ) => {\n                // `crate` is a special keyword that referes to the current crate.\n                let same_ident =\n                    pat_ident == ident || (pat_ident == \"crate\" && ident == &ctx.crate_name);\n                same_ident && PatTy::matches_generics(ctx, generics, args)\n            }\n            (PatElem::Impl(_pat), PathElem::Impl(ImplElem::Ty(..))) => {\n                // TODO\n                false\n            }\n            (PatElem::Impl(pat), PathElem::Impl(ImplElem::Trait(impl_id))) => {\n                let Some(timpl) = ctx.trait_impls.get(*impl_id) else {\n                    return false;\n                };\n                let trait_name = ctx.item_name(timpl.impl_trait.id);\n                pat.matches_with_generics(ctx, trait_name, Some(&timpl.impl_trait.generics))\n            }\n            _ => false,\n        }\n    }\n}\n",
+      "span_sha256": "b5eda415f739c4daa944e00e426902926cfb62c8095b50c16feddc896e644fc5"
+    }
+  ]
+}
