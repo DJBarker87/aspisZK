@@ -1,0 +1,87 @@
+# joint-drive-range.py <manifest.json> --lo A --hi B [--only M1,M2,...] [--max-attempts N]
+# joint-drive.py with the attempt numbers confined to an assigned range [lo, hi] (several agents
+# share 5000-5799 since 2026-10-19 evening); otherwise unchanged.
+# Compile the manifest's modules in its topological order, one module per attempt, through
+# run-joint.sh (env J).  Before each attempt the gate is taken and recorded: London time and
+# window flag, and the list of other lean/aeneas/charon/cargo processes; outside 22:30-10:00 (was 06:00) the
+# driver waits (90 s polls, recorded) until no other such process runs.  A module is attempted
+# only when all its manifest imports are green; a green module with the same source sha is not
+# re-sent.  The driver STOPS at the first non-zero exit (LOG D63 instruction: list the module
+# and its error; repair only mechanical import changes).  Records: J/evidence/attempts.jsonl.
+import sys, os, json, re, subprocess, time, datetime, argparse
+from zoneinfo import ZoneInfo
+T = '/home/dombarker/project-offloads/aspis-fs-generic-20261006'
+H = '/home/dombarker/project-offloads/r1-privacy-build-integration-20261019'
+J = '/home/dombarker/project-offloads/aspis-joint-20261019'
+ap = argparse.ArgumentParser(); ap.add_argument('manifest'); ap.add_argument('--only', default='')
+ap.add_argument('--max-attempts', type=int, default=10**6)
+ap.add_argument('--lo', type=int, required=True); ap.add_argument('--hi', type=int, required=True); a = ap.parse_args()
+man = json.load(open(a.manifest)); mods = {e['module']: e for e in man['order']}
+only = set(x for x in a.only.split(',') if x)
+rec_path = f'{J}/evidence/attempts.jsonl'
+import hashlib
+green, gat = {}, {}          # module -> source sha / attempt number of its latest green build
+if os.path.exists(rec_path):
+    for l in open(rec_path):
+        r = json.loads(l)
+        if r.get('exit') == 0: green[r['module']] = r['source_sha256']; gat[r['module']] = r['attempt']
+def objsha(x):
+    p = f'{J}/objects/{x.replace(".", "/")}.olean'
+    return hashlib.sha256(open(p, 'rb').read()).hexdigest() if os.path.exists(p) else 'missing'
+def fingerprint(e):
+    deps = sorted(x for x in e['imports'] if x in mods)
+    return hashlib.sha256(';'.join(f'{x}={objsha(x)}' for x in deps).encode()).hexdigest()[:16]
+def stale(m):
+    # up to date only if green with this source AND built after every manifest import's build
+    e = mods[m]
+    if green.get(m) != e['sha256']: return True
+    return any(x in mods and gat.get(x, 10**9) > gat[m] for x in e['imports'])
+def next_attempt():
+    for n in range(a.lo, a.hi + 1):
+        if not os.path.exists(f'{T}/evidence/out-{n}.log'): return n
+    return None
+def gate():
+    now = datetime.datetime.now(ZoneInfo('Europe/London')); hm = now.hour * 100 + now.minute
+    inwin = hm >= 2230 or hm < 1000  # window 22:30-10:00 London (user, 2026-10-19; was 06:00)
+    ps = subprocess.run("ps -eo pid,rss,etime,cmd | grep -E 'bin/lean|aeneas|charon|cargo' | grep -v grep",
+                        shell=True, capture_output=True, text=True).stdout.strip()
+    return {'london': now.strftime('%Y-%m-%d %H:%M:%S'), 'in_window': inwin, 'other_jobs': ps}
+sent = 0
+for m in [e['module'] for e in man['order']]:
+    if only and m not in only: continue
+    e = mods[m]
+    if not stale(m): continue
+    bad = [x for x in e['imports'] if x in mods and stale(x)]
+    if bad:
+        print('BLOCKED', m, 'waits for', bad[:3]); sys.exit(3)
+    if sent >= a.max_attempts: print('max attempts reached'); break
+    waits = []
+    g = gate()
+    while not g['in_window'] and g['other_jobs']:
+        waits.append(g); time.sleep(90); g = gate()
+    A = next_attempt()
+    if A is None: print('attempt range', a.lo, a.hi, 'exhausted at', m); sys.exit(4)
+    src = f'{J}/sources/{m.replace(".", "/")}.lean'
+    fp = fingerprint(e)
+    p = subprocess.run(['sh', f'{H}/tools/run-joint.sh', str(A), m.replace('.', '/'), 'J', '7000', '7', fp],
+                       capture_output=True, text=True)
+    out = open(f'{T}/evidence/out-{A}.log').read() if os.path.exists(f'{T}/evidence/out-{A}.log') else p.stdout
+    tl = open(f'{T}/evidence/time-{A}.log').read() if os.path.exists(f'{T}/evidence/time-{A}.log') else ''
+    def tv(pat):
+        mm = re.search(pat, tl); return mm.group(1).strip() if mm else None
+    ex = re.search(r'exit=(\d+)', out)
+    r = {'attempt': A, 'module': m, 'kind': e['kind'], 'repo_source': e['source'],
+         'source_sha256': e['sha256'], 'deps_fingerprint': fp, 'gate': g, 'gate_waits': len(waits),
+         'launcher_stdout_head': p.stdout.splitlines()[:3],
+         'exit': int(ex.group(1)) if ex else p.returncode,
+         'wall': tv(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): (.+)'),
+         'peak_rss_kib': int(tv(r'Maximum resident set size \(kbytes\): (\d+)') or 0),
+         'swaps': int(tv(r'Swaps: (\d+)') or 0),
+         'axioms': [' '.join(x.split()) for x in re.findall(r"^('[^']+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms))", out, re.M | re.S)],
+         'errors': [l for l in out.splitlines() if 'error' in l][:8]}
+    open(rec_path, 'a').write(json.dumps(r) + '\n'); sent += 1
+    print(A, m, 'exit', r['exit'], r['wall'], r['peak_rss_kib'], flush=True)
+    if r['exit'] != 0:
+        print('STOP at', m); sys.exit(2)
+    green[m] = e['sha256']; gat[m] = A
+print('done; sent', sent)
