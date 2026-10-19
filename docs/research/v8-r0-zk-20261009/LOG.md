@@ -6136,3 +6136,35 @@ certificates. That is sound, but the differential test does not cover it.
 unit_functionals, design_relations/limb_functionals, normalize_d) to
 discharge the builder identifications, and integrate the checker into the R1
 prover (D38.3).
+
+### Lead acceptance of RoundsOk for the Poseidon copy (2026-10-19); D58
+
+The worker commits dc98360df, 928e057e2, 0bac06653 and f1ef3e481 are
+cherry-picked. The lead verified host attempts 4408, 4409 and 4410 (SHAs
+match, exit 0 in-window, standard axioms). No source contains sorry, admit,
+native_decide, an override, decide or norm_num.
+
+**D58.1 Proved.**
+- `PoseidonConstLift`, generated. The generator reads production
+  poseidon2.rs, the copy, the extracted Lean and R0P PoseidonConstants.lean,
+  and aborts on any disagreement. Its tamper test is recorded: two injected
+  value changes aborted with exit 2, and a tampered output failed --check
+  with exit 1. All 142 lanes are proved by named steps; no large literal is
+  unfolded.
+- `apply_round_lift` (all 22 rounds) and `leading_pair_lift`.
+- `perm_rounds_lift`, by loop invariant: RoundsOk holds for the copy's
+  permutation.
+- `builder_blocks_model_copy`: under `BuilderInputLifts`, the old lifts
+  without RoundsOk, all 57 Rust-copy blocks equal buildModel.
+
+**The Poseidon obligation of the builder is closed for the copy.** The
+copy↔production link is the diff-g differential test (100k states and 1,824
+compiled blocks), with the same standing as the other writers (D54.3).
+
+**D58.2 Remaining builder items.**
+- Sponge pre-state chaining, which is short with RoundsOk now proved.
+- Linking BuilderInputLifts to the witness-level writer outputs, and the map
+  from Wspend⁺ to the Rust witness.
+- The copy↔production decision (D54.3): migrate the production prover
+  writers to the extracted copies, or accept tested equivalence. To be put
+  to the user.
