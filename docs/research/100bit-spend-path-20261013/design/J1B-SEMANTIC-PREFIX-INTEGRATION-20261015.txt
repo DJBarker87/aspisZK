@@ -1,0 +1,102 @@
+J1.b SEMANTIC PREFIX INTEGRATION — UNCOMPILED PROPOSALS
+
+Created branch codex/r1-j1b-prefix-20261015 in isolated worktree
+/Users/dominic/ZK/.worktrees/r1-j1b-prefix-20261015 at requested base
+7dc4addc8467275ccba1c77073ae9fdb49ceb204, then used the coordinator-authorized
+fast-forward to e4a5808dd061cf373b27d130f7d66eb8f0214db9. Read AGENTS.md and
+lead review f5a04e0bb. No live spend-path worktree edit, build, commit or host
+execution. All new Lean declarations below remain proposals until the
+coordinator's sequential focused checks succeed.
+
+1. Proposed boundary
+
+LiteralSemanticCodecBridge.lean projects completed record bytes from literal
+messages. An initial C1 message projects to PublicInitFrame.emptyRecord;
+payload/C2 messages retain their bytes. Constructor validity is checked by
+the existing literal reader, not inferred from that total projection.
+
+row_zero_record_of_decode proves the exact reverse byte equality needed for
+row zero: strict semantic decode at row zero implies the five zero bytes.
+This respects the binding warning: the 25 payload records include the empty
+row-zero record, while literal/Unified row zero carries C1 and synthesizes
+that record. No one-position shift is introduced.
+
+decodeFrom_of_read converts any successful literal semantic read to the
+accepted SemanticPrefixCodec decode of the projected records. full_of_read
+adds length 25, constructs a dependent payload vector, and supplies exact
+re-encoding. read_prefix_stable preserves parsed message/challenge pairs
+under successful completed-record extension.
+
+LiteralSemanticPayloadBridge.lean supplies the converse representation
+bridge. Given constructor-valid literal messages, successful decodeFull of
+their record bytes, explicit ordinary challenge/state coordinates, and the
+C2 word carried at row two, read_of_decodeFull_atC2 yields exactly
+SemanticPayloadView.pairs for that vector. lifted_read_of_decodeFull gives
+the old semantic rounds. No future recovery callback is introduced: the
+callback is the pair of lanes of that row-two literal word. pair_c2Base and
+pair_c2Words connect it to LiteralTypedContext, so the existing
+SemanticPayloadOpeningView.opening_view_of_payloads is the next consumer;
+its circle/opening premises remain explicit.
+
+The constructors, bytes and challenges are representation premises. These
+files do not assert actual Rust execution, verifier acceptance, D1–D3,
+density, candidate extraction or Merkle recovery. They introduce no global
+hash-input length cap; the inherited bounded message carrier is used only
+for its existing representation, consistent with lead decision J1.R7.
+
+2. Reused checked declarations
+
+SemanticRecordCodec.decode_encode / encode_of_decode are strict per-row
+round trips, with RowPayload carrying validRow for Fin25. No constructor
+validity or challenge facts follow from those byte laws.
+SemanticPrefixCodec.fullOfDecoded / decodeFull_of_decoded require exactly
+25 records and successful decodeFrom. encodeFull_of_decodeFull gives exact
+back equality. entriesOf_rows / entriesOf_length supply sequential indices.
+LiteralSemanticPrefix.read_length / read_append operate on completed
+Message x Challenge lists with one fixed eK. LiteralSemanticFacts.read_values
+already preserves ordinary challenge values; it is not reimplemented here.
+LiteralSemanticMessageFacts already rejects invalid literal constructors.
+SemanticPayloadView.pairs / rounds / semChalsZ_rounds / c2OfZ_rounds /
+claimOf_rounds / semPolysZ_rounds consume the resulting vector and callback.
+LiteralTypedContext.c2Words_full / c2Base_full consume literal C1/C2 words,
+field embeddings, and (for context construction) PublicBase explicitly.
+Later e4 modules LiteralSemanticView, LiteralOpeningView, LiteralChallengeRead
+and literal density wrappers are retained without duplication or edits.
+
+Central check order: R1LiteralSemanticCodecBridge first, then
+R1LiteralSemanticPayloadBridge using its retained object. Both targets need
+the imported accepted objects; do not discover missing imports by rebuilding
+the dependency graph. Audit printed axioms after successful elaboration.
+
+3. Actual source extraction link still missing
+
+Source inspected at e4a5808dd:
+crates/aspis-r1-cost-probe/src/r1_wire.rs:39–73 fixes each tag/size, rejects
+noncanonical field limbs and nonzero wide high halves for rows >=14.
+Prefix::parse at 273–292 splits 32 C1 bytes then 27 completed framed records,
+validates every record, and rejects trailing bytes. It stores row zero too;
+that record must be proved equal to the synthesized emptyRecord, not dropped
+without explanation. ValidatedRecord at 113–159 / 306–307 binds a row to its
+already validated frame. begin at 344–356 consumes rows0..14 without a shift.
+SemanticTranscript::sample_block_validated at 189–202 absorbs the frame,
+squeezes and advances from the absorbed state, and increments next_row.
+semantic_validated at 215–225 applies qm31_sample. r1_semantic.rs:66–93 parses
+the prefix, initializes the transcript, then consumes polynomial rows15..24.
+
+Required next extracted-source theorem, not supplied here: successful actual
+Prefix::parse must yield the same slices whose first25 decodeFull succeeds;
+actual parse_record/field-decoder success must imply the corresponding Lean
+strict decodes. A second execution relation must identify the source's
+challenge values, hash inputs/answers and carried states with the literal
+sequence, including the fixed row-zero frame and prior hash state. The
+sampler coordinate/source relation and public serializer relation remain
+their respective dependencies. No extracted parser/execution function was
+identified in the audited imported Lean dependency chain. Rewriting these
+Rust functions by hand in Lean would not discharge that extraction link.
+
+Literal full words are ideal-protocol messages. Connecting them to source
+commitments requires the separate commitment-cut/Merkle compiler. This
+proposal does not infer a literal word from a root, a later opening, or a
+successful record parse. Later circle/opening/query/rho integration belongs
+to the existing concurrent modules and remains outside these two files.
+
