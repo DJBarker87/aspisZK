@@ -1,0 +1,104 @@
+/home/dombarker/project-offloads/powers-p6-generated-total-v1-20261020/sources/PowersP6GeneratedTotalV1.lean:32:87: error: unsolved goals
+N : Usize
+callback : core.ops.function.FnMut (PowerState N) Usize CallbackWide
+hcallback : ∀ (state : PowerState N) (i : Usize), callback.call_mut state i = powerFnMutCall state i
+count✝ start✝ : ℕ
+initial final✝ : PowerState N
+values✝ : List CallbackWide
+count start : ℕ
+state state' final : PowerState N
+value : CallbackWide
+values : List CallbackWide
+hcall : powerStep state start = ok (value, state')
+htail : StatefulFromFnTrace powerStep count (start + 1) state' values final
+ih :
+  ∀ (cursor : Usize),
+    ↑cursor = start + 1 →
+      start + 1 + count ≤ Usize.max →
+        ∃ finalCursor,
+          StatefulFromFnTrace (fnMutStep callback) count (start + 1) (state', cursor) values (final, finalCursor)
+cursor : Usize
+hc : ↑cursor = start
+hb : start + (count + 1) ≤ Usize.max
+hone : ↑1#usize = 1
+cursor' : UScalar UScalarTy.Usize
+hnext : cursor + 1#usize = ok cursor'
+hval : ↑cursor' = ↑cursor + ↑1#usize
+hc' : ↑cursor' = start + 1
+hoperation : callback.call_mut state cursor = powerStep state start
+⊢ (let (value, state') := (value, state')
+    ok (value, state', cursor')) =
+    ok (value, state', cursor')
+/home/dombarker/project-offloads/powers-p6-generated-total-v1-20261020/sources/PowersP6GeneratedTotalV1.lean:48:59: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  a ≥ 0
+  a - b ≤ -1
+  a - c ≥ 1
+where
+ a := ↑↑N
+ b := ↑2 ^ UScalarTy.Usize.numBits
+ c := ↑Usize.max
+/home/dombarker/project-offloads/powers-p6-generated-total-v1-20261020/sources/PowersP6GeneratedTotalV1.lean:57:88: error: unsolved goals
+N : Usize
+x : AspisR1CurrentPreparedClaim.Concrete.E
+hx : AspisR1CurrentPreparedClaim.Concrete.Canonical x
+hx' : Canonical (fromClaim x)
+values : List CallbackWide
+final : PowerState N
+hrun : statefulFromFnRun powerStep (↑N) 0 (AspisR1CurrentPowers.field.WideExact.ONE, fromClaim x) = ok (values, final)
+hlen : values.length = ↑N
+hall : ∀ value ∈ values, Canonical value
+hfinal : powerStateOK (fromClaim x) final ↑N
+ht : StatefulFromFnTrace powerStep (↑N) 0 (AspisR1CurrentPowers.field.WideExact.ONE, fromClaim x) values final
+hb : 0 + ↑N ≤ Usize.max
+cursor : Usize
+htrace :
+  StatefulFromFnTrace (fnMutStep (sourcePowerCallback N)) (↑N) 0
+    ((AspisR1CurrentPowers.field.WideExact.ONE, fromClaim x), 0#usize) values (final, cursor)
+hr :
+  statefulFromFnRun (fnMutStep (sourcePowerCallback N)) (↑N) 0
+      ((AspisR1CurrentPowers.field.WideExact.ONE, fromClaim x), 0#usize) =
+    ok (values, final, cursor)
+arr : Std.Array CallbackWide N := ⟨values, hlen⟩
+⊢ ok (⟨values, hlen⟩, final, cursor) = ok (arr, final, cursor)
+/home/dombarker/project-offloads/powers-p6-generated-total-v1-20261020/sources/PowersP6GeneratedTotalV1.lean:42:43: error: unsolved goals
+N : Usize
+x : AspisR1CurrentPreparedClaim.Concrete.E
+hx : AspisR1CurrentPreparedClaim.Concrete.Canonical x
+hx' : Canonical (fromClaim x)
+values : List CallbackWide
+final : PowerState N
+hrun : statefulFromFnRun powerStep (↑N) 0 (AspisR1CurrentPowers.field.WideExact.ONE, fromClaim x) = ok (values, final)
+hlen : values.length = ↑N
+hall : ∀ value ∈ values, Canonical value
+hfinal : powerStateOK (fromClaim x) final ↑N
+ht : StatefulFromFnTrace powerStep (↑N) 0 (AspisR1CurrentPowers.field.WideExact.ONE, fromClaim x) values final
+hb : 0 + ↑N ≤ Usize.max
+cursor : Usize
+htrace :
+  StatefulFromFnTrace (fnMutStep (sourcePowerCallback N)) (↑N) 0
+    ((AspisR1CurrentPowers.field.WideExact.ONE, fromClaim x), 0#usize) values (final, cursor)
+hr :
+  statefulFromFnRun (fnMutStep (sourcePowerCallback N)) (↑N) 0
+      ((AspisR1CurrentPowers.field.WideExact.ONE, fromClaim x), 0#usize) =
+    ok (values, final, cursor)
+arr : Std.Array CallbackWide N := ⟨values, hlen⟩
+ha :
+  core.array.from_fn_model N (sourcePowerCallback N) (AspisR1CurrentPowers.field.WideExact.ONE, fromClaim x) =
+    ok (arr, final, cursor)
+⊢ (let (values, _) := (arr, final, cursor)
+    ok (mapClaimArray values)) =
+    ok (mapClaimArray arr)
+'AspisR1PowersP6GeneratedTotalV1.generated_trace_lifts' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PowersP6GeneratedTotalV1.sourceArrayPowers_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PowersP6GeneratedTotalV1.sourceArrayPowers_eq_claimPowers' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
