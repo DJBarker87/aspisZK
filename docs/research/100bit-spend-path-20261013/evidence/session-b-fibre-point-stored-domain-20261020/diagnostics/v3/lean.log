@@ -1,0 +1,282 @@
+/home/dombarker/project-offloads/r17-fibre-point-actual-success-v3/sources/R17FibrePointActualSuccess.lean:103:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ix0
+in the target expression
+  lift (ix &&& 511#usize) = ok iA0
+
+ops : CM31Ops
+hspec : R17FibrePointDecodedProduct.CM31OpsSemantics ops
+u : domain.FibreIndex
+hu : ↑u < 262144
+ix : Usize
+hget : u.get = ok ix
+iA : UScalar UScalarTy.Usize
+hmask : lift (ix &&& 511#usize) = ok iA
+entryA : U32 × U32
+hlookupA : fast_domain.TABLE_A.index_usize iA = ok entryA
+left : field.CM31
+hleft : fast_domain.table_value ops entryA = ok left
+iB : UScalar UScalarTy.Usize
+hshift : ix >>> 9#i32 = ok iB
+entryB : U32 × U32
+hlookupB : fast_domain.TABLE_B.index_usize iB = ok entryB
+right : field.CM31
+hright : fast_domain.table_value ops entryB = ok right
+product : field.CM31
+hmul : ops.mul left right = ok product
+hcall : fast_domain.fibre_point ops u = ok { x := product.a, y := product.b }
+h :
+  (do
+      let index ← u.get
+      let i ← lift (index &&& 511#usize)
+      let p ← fast_domain.TABLE_A.index_usize i
+      let left ← fast_domain.table_value ops p
+      let i1 ← index >>> 9#i32
+      let p1 ← fast_domain.TABLE_B.index_usize i1
+      let right ← fast_domain.table_value ops p1
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hrest1 :
+  (do
+      let i ← lift (ix &&& 511#usize)
+      let p ← fast_domain.TABLE_A.index_usize i
+      let left ← fast_domain.table_value ops p
+      let i1 ← ix >>> 9#i32
+      let p1 ← fast_domain.TABLE_B.index_usize i1
+      let right ← fast_domain.table_value ops p1
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hrest2 :
+  (do
+      let p ← fast_domain.TABLE_A.index_usize iA
+      let left ← fast_domain.table_value ops p
+      let i1 ← ix >>> 9#i32
+      let p1 ← fast_domain.TABLE_B.index_usize i1
+      let right ← fast_domain.table_value ops p1
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hrest3 :
+  (do
+      let left ← fast_domain.table_value ops entryA
+      let i1 ← ix >>> 9#i32
+      let p1 ← fast_domain.TABLE_B.index_usize i1
+      let right ← fast_domain.table_value ops p1
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hrest4 :
+  (do
+      let i1 ← ix >>> 9#i32
+      let p1 ← fast_domain.TABLE_B.index_usize i1
+      let right ← fast_domain.table_value ops p1
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hrest5 :
+  (do
+      let p1 ← fast_domain.TABLE_B.index_usize iB
+      let right ← fast_domain.table_value ops p1
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hrest6 :
+  (do
+      let right ← fast_domain.table_value ops entryB
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hrest7 :
+  (do
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hfinal : ok { x := product.a, y := product.b } = ok { x := product.a, y := product.b }
+ix0 : Usize
+iA0 iB0 : UScalar UScalarTy.Usize
+entryA0 entryB0 : U32 × U32
+hget0 : u.get = ok ix0
+hix0 : ↑ix0 = ↑u
+hmask0 : lift (ix0 &&& 511#usize) = ok iA0
+hia0 : ↑iA0 = ↑u % 512
+hshift0 : ix0 >>> 9#i32 = ok iB0
+hib0 : ↑iB0 = ↑u / 512
+hlookupA0 : fast_domain.TABLE_A.index_usize iA0 = ok entryA0
+hlookupB0 : fast_domain.TABLE_B.index_usize iB0 = ok entryB0
+hixeq : ix = ix0
+hix : ↑ix = ↑u
+⊢ lift (ix &&& 511#usize) = ok iA0
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (511 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/r17-fibre-point-actual-success-v3/sources/R17FibrePointActualSuccess.lean:108:47: error: Application type mismatch: The argument
+  hiaeq
+has type
+  iA0 = iA
+but is expected to have type
+  iA = iA0
+in the application
+  congrArg UScalar.val hiaeq
+/home/dombarker/project-offloads/r17-fibre-point-actual-success-v3/sources/R17FibrePointActualSuccess.lean:112:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ix0
+in the target expression
+  ix >>> 9#i32 = ok iB0
+
+ops : CM31Ops
+hspec : R17FibrePointDecodedProduct.CM31OpsSemantics ops
+u : domain.FibreIndex
+hu : ↑u < 262144
+ix : Usize
+hget : u.get = ok ix
+iA : UScalar UScalarTy.Usize
+hmask : lift (ix &&& 511#usize) = ok iA
+entryA : U32 × U32
+hlookupA : fast_domain.TABLE_A.index_usize iA = ok entryA
+left : field.CM31
+hleft : fast_domain.table_value ops entryA = ok left
+iB : UScalar UScalarTy.Usize
+hshift : ix >>> 9#i32 = ok iB
+entryB : U32 × U32
+hlookupB : fast_domain.TABLE_B.index_usize iB = ok entryB
+right : field.CM31
+hright : fast_domain.table_value ops entryB = ok right
+product : field.CM31
+hmul : ops.mul left right = ok product
+hcall : fast_domain.fibre_point ops u = ok { x := product.a, y := product.b }
+h :
+  (do
+      let index ← u.get
+      let i ← lift (index &&& 511#usize)
+      let p ← fast_domain.TABLE_A.index_usize i
+      let left ← fast_domain.table_value ops p
+      let i1 ← index >>> 9#i32
+      let p1 ← fast_domain.TABLE_B.index_usize i1
+      let right ← fast_domain.table_value ops p1
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hrest1 :
+  (do
+      let i ← lift (ix &&& 511#usize)
+      let p ← fast_domain.TABLE_A.index_usize i
+      let left ← fast_domain.table_value ops p
+      let i1 ← ix >>> 9#i32
+      let p1 ← fast_domain.TABLE_B.index_usize i1
+      let right ← fast_domain.table_value ops p1
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hrest2 :
+  (do
+      let p ← fast_domain.TABLE_A.index_usize iA
+      let left ← fast_domain.table_value ops p
+      let i1 ← ix >>> 9#i32
+      let p1 ← fast_domain.TABLE_B.index_usize i1
+      let right ← fast_domain.table_value ops p1
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hrest3 :
+  (do
+      let left ← fast_domain.table_value ops entryA
+      let i1 ← ix >>> 9#i32
+      let p1 ← fast_domain.TABLE_B.index_usize i1
+      let right ← fast_domain.table_value ops p1
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hrest4 :
+  (do
+      let i1 ← ix >>> 9#i32
+      let p1 ← fast_domain.TABLE_B.index_usize i1
+      let right ← fast_domain.table_value ops p1
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hrest5 :
+  (do
+      let p1 ← fast_domain.TABLE_B.index_usize iB
+      let right ← fast_domain.table_value ops p1
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hrest6 :
+  (do
+      let right ← fast_domain.table_value ops entryB
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hrest7 :
+  (do
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := product.a, y := product.b }
+hfinal : ok { x := product.a, y := product.b } = ok { x := product.a, y := product.b }
+ix0 : Usize
+iA0 iB0 : UScalar UScalarTy.Usize
+entryA0 entryB0 : U32 × U32
+hget0 : u.get = ok ix0
+hix0 : ↑ix0 = ↑u
+hmask0 : lift (ix0 &&& 511#usize) = ok iA0
+hia0 : ↑iA0 = ↑u % 512
+hshift0 : ix0 >>> 9#i32 = ok iB0
+hib0 : ↑iB0 = ↑u / 512
+hlookupA0 : fast_domain.TABLE_A.index_usize iA0 = ok entryA0
+hlookupB0 : fast_domain.TABLE_B.index_usize iB0 = ok entryB0
+hixeq : ix = ix0
+hix : ↑ix = ↑u
+hmask0' : lift (ix &&& 511#usize) = ok iA0
+hiaeq : iA0 = iA
+hia : ↑iA = ↑ix % 512
+⊢ ix >>> 9#i32 = ok iB0
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (IScalar.cMin IScalarTy.I32 ≤ 9 ∧ 9 ≤ IScalar.cMax IScalarTy.I32)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/r17-fibre-point-actual-success-v3/sources/R17FibrePointActualSuccess.lean:117:47: error: Application type mismatch: The argument
+  hibeq
+has type
+  iB0 = iB
+but is expected to have type
+  iB = iB0
+in the application
+  congrArg UScalar.val hibeq
+/home/dombarker/project-offloads/r17-fibre-point-actual-success-v3/sources/R17FibrePointActualSuccess.lean:122:74: error: Application type mismatch: The argument
+  hlookupA0
+has type
+  fast_domain.TABLE_A.index_usize iA0 = ok entryA0
+but is expected to have type
+  fast_domain.TABLE_A.index_usize iA = ok entryA0
+in the application
+  Eq.trans (Eq.symm hlookupA) hlookupA0
+/home/dombarker/project-offloads/r17-fibre-point-actual-success-v3/sources/R17FibrePointActualSuccess.lean:123:74: error: Application type mismatch: The argument
+  hlookupB0
+has type
+  fast_domain.TABLE_B.index_usize iB0 = ok entryB0
+but is expected to have type
+  fast_domain.TABLE_B.index_usize iB = ok entryB0
+in the application
+  Eq.trans (Eq.symm hlookupB) hlookupB0
+/home/dombarker/project-offloads/r17-fibre-point-actual-success-v3/sources/R17FibrePointActualSuccess.lean:127:28: error(lean.unknownIdentifier): Unknown identifier `entryA`
+/home/dombarker/project-offloads/r17-fibre-point-actual-success-v3/sources/R17FibrePointActualSuccess.lean:127:35: error(lean.unknownIdentifier): Unknown identifier `entryB`
+'R17FibrePointActualSuccess.source_indices_and_table_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R17FibrePointActualSuccess.successful_call_eq_stored' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
