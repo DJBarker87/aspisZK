@@ -1,0 +1,730 @@
+{
+  "candidate": "190e1779c3b9530047e4d2dfcdf0022b200d6c35",
+  "parent": "0330ae7300b3df6602600a727dfd1b969bfbe19a",
+  "production": "39c2971dd16c95858a4cfd2c9ae35da052eacfa9",
+  "pins": [
+    {
+      "name": "phase",
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "revision": "190e1779c3b9530047e4d2dfcdf0022b200d6c35",
+      "start_byte": 1123,
+      "end_byte_exclusive": 1275,
+      "file_sha256": "107fbb12c42fd666cc247c8c2539d5439cfdaaf56c641203b4213b35a0d8e62c",
+      "fragment_sha256": "45f0e1fae6619f1d10829bc0fe476d9aac09a82f946924acaf3b3250a76bb15b"
+    },
+    {
+      "name": "mark",
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "revision": "190e1779c3b9530047e4d2dfcdf0022b200d6c35",
+      "start_byte": 1313,
+      "end_byte_exclusive": 1373,
+      "file_sha256": "107fbb12c42fd666cc247c8c2539d5439cfdaaf56c641203b4213b35a0d8e62c",
+      "fragment_sha256": "a5a0353988fae702486eae09eb66005ebad3e2c6346c28703429530c5b60641d"
+    }
+  ],
+  "source_inventory": [
+    {
+      "revision": "0330ae7300b3df6602600a727dfd1b969bfbe19a",
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "sha256": "107fbb12c42fd666cc247c8c2539d5439cfdaaf56c641203b4213b35a0d8e62c",
+      "observer_lines": [
+        {
+          "line": 24,
+          "text": "fn mark(obs:Observer,p:Phase) { if let Some(f)=obs {f(p);} }"
+        },
+        {
+          "line": 245,
+          "text": "pub fn query<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:H,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 247,
+          "text": "    query_with_geometry(v,p,a,g,hash,obs,&geometry)"
+        },
+        {
+          "line": 250,
+          "text": "fn query_with_geometry<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry)->Result<(),Error> {"
+        },
+        {
+          "line": 272,
+          "text": "    mark(obs,Phase::Merkle(i));"
+        },
+        {
+          "line": 273,
+          "text": "    let dots=crate::fast_dots::four_dots(q,g);#[cfg(feature=\"detail-phases\")]mark(obs,Phase::QueryPart(i,0));for s in 0..4 {crate::trace::value(9,4*i+s,dots[s]);}"
+        },
+        {
+          "line": 275,
+          "text": "    let mut folded=circle_fold_with_inverses(p.alpha[0],dots,inverse);crate::trace::value(10,2*i,folded);#[cfg(feature=\"detail-phases\")]mark(obs,Phase::QueryPart(i,1));"
+        },
+        {
+          "line": 281,
+          "text": "    #[cfg(feature=\"detail-phases\")]mark(obs,Phase::QueryPart(i,2));"
+        },
+        {
+          "line": 282,
+          "text": "    accumulate(p,a,u,folded);mark(obs,Phase::Query(i));Ok(())"
+        },
+        {
+          "line": 286,
+          "text": "pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 299,
+          "text": "    mark(obs,Phase::Relation);"
+        },
+        {
+          "line": 305,
+          "text": "    mark(obs,Phase::Final);Ok(())"
+        },
+        {
+          "line": 350,
+          "text": "fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {"
+        },
+        {
+          "line": 352,
+          "text": "    while a.next<k {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}"
+        },
+        {
+          "line": 353,
+          "text": "    let bytes=checkpoint(&p,&a,proof,public_bytes,hash);mark(obs,Phase::CheckpointWrite);Ok(bytes)"
+        },
+        {
+          "line": 357,
+          "text": "fn tx1_prepare<H:Digest32>(public:Public<'_>,v:&View<'_>,hash:H,obs:Observer,g:&mut [E;29])->Result<(Box<[[K;29];3]>,Box<Prepared>),Error> {"
+        },
+        {
+          "line": 358,
+          "text": "    let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;mark(obs,Phase::Semantic);"
+        },
+        {
+          "line": 364,
+          "text": "pub fn tx1<H:Digest32>(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {"
+        },
+        {
+          "line": 366,
+          "text": "    let v=View::parse(proof)?;mark(obs,Phase::Parsed);"
+        },
+        {
+          "line": 368,
+          "text": "    let (_semantic_claims,p)=tx1_prepare(public,&v,hash,obs,&mut g)?;let a=Accumulator::new(v.variant)?;mark(obs,Phase::Prepare);"
+        },
+        {
+          "line": 369,
+          "text": "    tx1_finish(v,p,a,g,public_bytes,proof,k,hash,obs)"
+        },
+        {
+          "line": 380,
+          "text": "pub fn tx2<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 381,
+          "text": "    let v=View::parse(proof)?;mark(obs,Phase::Parsed);"
+        },
+        {
+          "line": 382,
+          "text": "    let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);"
+        },
+        {
+          "line": 384,
+          "text": "    while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}"
+        },
+        {
+          "line": 385,
+          "text": "    finish_relation(&v,&p,&a,obs)"
+        },
+        {
+          "line": 400,
+          "text": "pub fn tx2_authenticated<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 401,
+          "text": "    let v=View::parse_shape(proof)?;mark(obs,Phase::Parsed);"
+        },
+        {
+          "line": 402,
+          "text": "    let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);"
+        },
+        {
+          "line": 404,
+          "text": "    while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}"
+        },
+        {
+          "line": 405,
+          "text": "    finish_relation(&v,&p,&a,obs)"
+        }
+      ]
+    },
+    {
+      "revision": "0330ae7300b3df6602600a727dfd1b969bfbe19a",
+      "path": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+      "sha256": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "observer_lines": [
+        {
+          "line": 59,
+          "text": "    verify_observed(public, bytes, hash, None)"
+        },
+        {
+          "line": 75,
+          "text": "fn mark(obs: crate::verifier::Observer, i: u8) {"
+        },
+        {
+          "line": 77,
+          "text": "    if let Some(f)=obs {f(crate::verifier::Phase::SemanticPart(i));}"
+        },
+        {
+          "line": 79,
+          "text": "    let _=(obs,i);"
+        },
+        {
+          "line": 232,
+          "text": "fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {"
+        },
+        {
+          "line": 237,
+          "text": "    mark(obs, 2);"
+        },
+        {
+          "line": 250,
+          "text": "    mark(obs, 3);"
+        },
+        {
+          "line": 262,
+          "text": "    mark(obs, 4);"
+        },
+        {
+          "line": 267,
+          "text": "    mark(obs, 5);"
+        },
+        {
+          "line": 311,
+          "text": "pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {"
+        },
+        {
+          "line": 313,
+          "text": "    mark(obs, 0);"
+        },
+        {
+          "line": 316,
+          "text": "    mark(obs, 1);"
+        },
+        {
+          "line": 317,
+          "text": "    verify_finish(public, prefix, transcript, challenges, obs)"
+        }
+      ]
+    },
+    {
+      "revision": "0330ae7300b3df6602600a727dfd1b969bfbe19a",
+      "path": "programs/r1-cost-probe/src/lib.rs",
+      "sha256": "7434f5dd0c1748191a74013cb4994ba028429a279a75c48c908c7ddbd049d594",
+      "observer_lines": [
+        {
+          "line": 20,
+          "text": "fn mark(phase:Phase){"
+        }
+      ]
+    },
+    {
+      "revision": "0330ae7300b3df6602600a727dfd1b969bfbe19a",
+      "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+      "sha256": "0bd2ded7298505e03300d88c7e5a72ee33a94fddc56311ae32d36d350e39262c",
+      "observer_lines": []
+    },
+    {
+      "revision": "190e1779c3b9530047e4d2dfcdf0022b200d6c35",
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "sha256": "107fbb12c42fd666cc247c8c2539d5439cfdaaf56c641203b4213b35a0d8e62c",
+      "observer_lines": [
+        {
+          "line": 24,
+          "text": "fn mark(obs:Observer,p:Phase) { if let Some(f)=obs {f(p);} }"
+        },
+        {
+          "line": 245,
+          "text": "pub fn query<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:H,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 247,
+          "text": "    query_with_geometry(v,p,a,g,hash,obs,&geometry)"
+        },
+        {
+          "line": 250,
+          "text": "fn query_with_geometry<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry)->Result<(),Error> {"
+        },
+        {
+          "line": 272,
+          "text": "    mark(obs,Phase::Merkle(i));"
+        },
+        {
+          "line": 273,
+          "text": "    let dots=crate::fast_dots::four_dots(q,g);#[cfg(feature=\"detail-phases\")]mark(obs,Phase::QueryPart(i,0));for s in 0..4 {crate::trace::value(9,4*i+s,dots[s]);}"
+        },
+        {
+          "line": 275,
+          "text": "    let mut folded=circle_fold_with_inverses(p.alpha[0],dots,inverse);crate::trace::value(10,2*i,folded);#[cfg(feature=\"detail-phases\")]mark(obs,Phase::QueryPart(i,1));"
+        },
+        {
+          "line": 281,
+          "text": "    #[cfg(feature=\"detail-phases\")]mark(obs,Phase::QueryPart(i,2));"
+        },
+        {
+          "line": 282,
+          "text": "    accumulate(p,a,u,folded);mark(obs,Phase::Query(i));Ok(())"
+        },
+        {
+          "line": 286,
+          "text": "pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 299,
+          "text": "    mark(obs,Phase::Relation);"
+        },
+        {
+          "line": 305,
+          "text": "    mark(obs,Phase::Final);Ok(())"
+        },
+        {
+          "line": 350,
+          "text": "fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {"
+        },
+        {
+          "line": 352,
+          "text": "    while a.next<k {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}"
+        },
+        {
+          "line": 353,
+          "text": "    let bytes=checkpoint(&p,&a,proof,public_bytes,hash);mark(obs,Phase::CheckpointWrite);Ok(bytes)"
+        },
+        {
+          "line": 357,
+          "text": "fn tx1_prepare<H:Digest32>(public:Public<'_>,v:&View<'_>,hash:H,obs:Observer,g:&mut [E;29])->Result<(Box<[[K;29];3]>,Box<Prepared>),Error> {"
+        },
+        {
+          "line": 358,
+          "text": "    let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;mark(obs,Phase::Semantic);"
+        },
+        {
+          "line": 364,
+          "text": "pub fn tx1<H:Digest32>(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {"
+        },
+        {
+          "line": 366,
+          "text": "    let v=View::parse(proof)?;mark(obs,Phase::Parsed);"
+        },
+        {
+          "line": 368,
+          "text": "    let (_semantic_claims,p)=tx1_prepare(public,&v,hash,obs,&mut g)?;let a=Accumulator::new(v.variant)?;mark(obs,Phase::Prepare);"
+        },
+        {
+          "line": 369,
+          "text": "    tx1_finish(v,p,a,g,public_bytes,proof,k,hash,obs)"
+        },
+        {
+          "line": 380,
+          "text": "pub fn tx2<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 381,
+          "text": "    let v=View::parse(proof)?;mark(obs,Phase::Parsed);"
+        },
+        {
+          "line": 382,
+          "text": "    let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);"
+        },
+        {
+          "line": 384,
+          "text": "    while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}"
+        },
+        {
+          "line": 385,
+          "text": "    finish_relation(&v,&p,&a,obs)"
+        },
+        {
+          "line": 400,
+          "text": "pub fn tx2_authenticated<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 401,
+          "text": "    let v=View::parse_shape(proof)?;mark(obs,Phase::Parsed);"
+        },
+        {
+          "line": 402,
+          "text": "    let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);"
+        },
+        {
+          "line": 404,
+          "text": "    while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry)?;}"
+        },
+        {
+          "line": 405,
+          "text": "    finish_relation(&v,&p,&a,obs)"
+        }
+      ]
+    },
+    {
+      "revision": "190e1779c3b9530047e4d2dfcdf0022b200d6c35",
+      "path": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+      "sha256": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "observer_lines": [
+        {
+          "line": 59,
+          "text": "    verify_observed(public, bytes, hash, None)"
+        },
+        {
+          "line": 75,
+          "text": "fn mark(obs: crate::verifier::Observer, i: u8) {"
+        },
+        {
+          "line": 77,
+          "text": "    if let Some(f)=obs {f(crate::verifier::Phase::SemanticPart(i));}"
+        },
+        {
+          "line": 79,
+          "text": "    let _=(obs,i);"
+        },
+        {
+          "line": 232,
+          "text": "fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {"
+        },
+        {
+          "line": 237,
+          "text": "    mark(obs, 2);"
+        },
+        {
+          "line": 250,
+          "text": "    mark(obs, 3);"
+        },
+        {
+          "line": 262,
+          "text": "    mark(obs, 4);"
+        },
+        {
+          "line": 267,
+          "text": "    mark(obs, 5);"
+        },
+        {
+          "line": 311,
+          "text": "pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {"
+        },
+        {
+          "line": 313,
+          "text": "    mark(obs, 0);"
+        },
+        {
+          "line": 316,
+          "text": "    mark(obs, 1);"
+        },
+        {
+          "line": 317,
+          "text": "    verify_finish(public, prefix, transcript, challenges, obs)"
+        }
+      ]
+    },
+    {
+      "revision": "190e1779c3b9530047e4d2dfcdf0022b200d6c35",
+      "path": "programs/r1-cost-probe/src/lib.rs",
+      "sha256": "af51784790c7e779ce845d4e8a6dbbeab03141d9a0d040a103048c100de50d88",
+      "observer_lines": [
+        {
+          "line": 19,
+          "text": "#[cfg(feature=\"cu-profiling\")]"
+        },
+        {
+          "line": 21,
+          "text": "fn mark(phase:Phase){"
+        },
+        {
+          "line": 33,
+          "text": "fn observer()->verifier::Observer {"
+        },
+        {
+          "line": 34,
+          "text": "    #[cfg(feature=\"cu-profiling\")] {Some(mark)}"
+        },
+        {
+          "line": 35,
+          "text": "    #[cfg(not(feature=\"cu-profiling\"))] {None}"
+        },
+        {
+          "line": 42,
+          "text": "    verifier::tx1(public,public_bytes,proof,k,SolanaDigest,observer()).map_err(error)"
+        },
+        {
+          "line": 71,
+          "text": "        verifier::tx2(&public,&proof,&checkpoint,SolanaDigest,observer()).map_err(error)?;"
+        }
+      ]
+    },
+    {
+      "revision": "190e1779c3b9530047e4d2dfcdf0022b200d6c35",
+      "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+      "sha256": "ae645d9e0c6636c9f97f49042879d0b5134052cb8babad0e0bff0c1971ab6cc8",
+      "observer_lines": [
+        {
+          "line": 968,
+          "text": "    #[cfg(feature=\"cu-profiling\")]"
+        },
+        {
+          "line": 983,
+          "text": "    #[cfg(feature=\"cu-profiling\")]"
+        },
+        {
+          "line": 1007,
+          "text": "        super::observer(),"
+        }
+      ]
+    },
+    {
+      "revision": "39c2971dd16c95858a4cfd2c9ae35da052eacfa9",
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "sha256": "e65f41484906ce3cbe766a24995fafda3254358423c145c54e699f4c2f6e99ca",
+      "observer_lines": [
+        {
+          "line": 24,
+          "text": "fn mark(obs:Observer,p:Phase) { if let Some(f)=obs {f(p);} }"
+        },
+        {
+          "line": 280,
+          "text": "pub fn query<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:H,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 282,
+          "text": "    query_with_geometry(v,p,a,g,hash,obs,&geometry,None)"
+        },
+        {
+          "line": 285,
+          "text": "fn query_with_geometry<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry,pending:Option<&mut BatchedWeights>)->Result<(),Error> {"
+        },
+        {
+          "line": 307,
+          "text": "    mark(obs,Phase::Merkle(i));"
+        },
+        {
+          "line": 308,
+          "text": "    let dots=crate::fast_dots::four_dots(q,g);#[cfg(feature=\"detail-phases\")]mark(obs,Phase::QueryPart(i,0));for s in 0..4 {crate::trace::value(9,4*i+s,dots[s]);}"
+        },
+        {
+          "line": 310,
+          "text": "    let mut folded=circle_fold_with_inverses(p.alpha[0],dots,inverse);crate::trace::value(10,2*i,folded);#[cfg(feature=\"detail-phases\")]mark(obs,Phase::QueryPart(i,1));"
+        },
+        {
+          "line": 316,
+          "text": "    #[cfg(feature=\"detail-phases\")]mark(obs,Phase::QueryPart(i,2));"
+        },
+        {
+          "line": 321,
+          "text": "    mark(obs,Phase::Query(i));Ok(())"
+        },
+        {
+          "line": 325,
+          "text": "pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 338,
+          "text": "    mark(obs,Phase::Relation);"
+        },
+        {
+          "line": 344,
+          "text": "    mark(obs,Phase::Final);Ok(())"
+        },
+        {
+          "line": 389,
+          "text": "fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {"
+        },
+        {
+          "line": 392,
+          "text": "    while a.next<k {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry,Some(&mut pending))?;}"
+        },
+        {
+          "line": 394,
+          "text": "    let bytes=checkpoint(&p,&a,proof,public_bytes,hash);mark(obs,Phase::CheckpointWrite);Ok(bytes)"
+        },
+        {
+          "line": 398,
+          "text": "fn tx1_prepare<H:Digest32>(public:Public<'_>,v:&View<'_>,hash:H,obs:Observer,g:&mut [E;29])->Result<(Box<[[K;29];3]>,Box<Prepared>),Error> {"
+        },
+        {
+          "line": 399,
+          "text": "    let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;mark(obs,Phase::Semantic);"
+        },
+        {
+          "line": 405,
+          "text": "pub fn tx1<H:Digest32>(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {"
+        },
+        {
+          "line": 407,
+          "text": "    let v=View::parse(proof)?;mark(obs,Phase::Parsed);"
+        },
+        {
+          "line": 409,
+          "text": "    let (_semantic_claims,p)=tx1_prepare(public,&v,hash,obs,&mut g)?;let a=Accumulator::new(v.variant)?;mark(obs,Phase::Prepare);"
+        },
+        {
+          "line": 410,
+          "text": "    tx1_finish(v,p,a,g,public_bytes,proof,k,hash,obs)"
+        },
+        {
+          "line": 421,
+          "text": "pub fn tx2<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 422,
+          "text": "    let v=View::parse(proof)?;mark(obs,Phase::Parsed);"
+        },
+        {
+          "line": 423,
+          "text": "    let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);"
+        },
+        {
+          "line": 426,
+          "text": "    while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry,Some(&mut pending))?;}"
+        },
+        {
+          "line": 428,
+          "text": "    finish_relation(&v,&p,&a,obs)"
+        },
+        {
+          "line": 443,
+          "text": "pub fn tx2_authenticated<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 444,
+          "text": "    let v=View::parse_shape(proof)?;mark(obs,Phase::Parsed);"
+        },
+        {
+          "line": 445,
+          "text": "    let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);"
+        },
+        {
+          "line": 448,
+          "text": "    while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry,Some(&mut pending))?;}"
+        },
+        {
+          "line": 450,
+          "text": "    finish_relation(&v,&p,&a,obs)"
+        }
+      ]
+    },
+    {
+      "revision": "39c2971dd16c95858a4cfd2c9ae35da052eacfa9",
+      "path": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+      "sha256": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "observer_lines": [
+        {
+          "line": 59,
+          "text": "    verify_observed(public, bytes, hash, None)"
+        },
+        {
+          "line": 75,
+          "text": "fn mark(obs: crate::verifier::Observer, i: u8) {"
+        },
+        {
+          "line": 77,
+          "text": "    if let Some(f)=obs {f(crate::verifier::Phase::SemanticPart(i));}"
+        },
+        {
+          "line": 79,
+          "text": "    let _=(obs,i);"
+        },
+        {
+          "line": 232,
+          "text": "fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {"
+        },
+        {
+          "line": 237,
+          "text": "    mark(obs, 2);"
+        },
+        {
+          "line": 250,
+          "text": "    mark(obs, 3);"
+        },
+        {
+          "line": 262,
+          "text": "    mark(obs, 4);"
+        },
+        {
+          "line": 267,
+          "text": "    mark(obs, 5);"
+        },
+        {
+          "line": 311,
+          "text": "pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {"
+        },
+        {
+          "line": 313,
+          "text": "    mark(obs, 0);"
+        },
+        {
+          "line": 316,
+          "text": "    mark(obs, 1);"
+        },
+        {
+          "line": 317,
+          "text": "    verify_finish(public, prefix, transcript, challenges, obs)"
+        }
+      ]
+    },
+    {
+      "revision": "39c2971dd16c95858a4cfd2c9ae35da052eacfa9",
+      "path": "programs/r1-cost-probe/src/lib.rs",
+      "sha256": "916798990b613df4a2b552f8f46e6ebee335bdaad1afda850bf16ccafb1570cc",
+      "observer_lines": [
+        {
+          "line": 19,
+          "text": "#[cfg(feature=\"cu-profiling\")]"
+        },
+        {
+          "line": 21,
+          "text": "fn mark(phase:Phase){"
+        },
+        {
+          "line": 33,
+          "text": "fn observer()->verifier::Observer {"
+        },
+        {
+          "line": 34,
+          "text": "    #[cfg(feature=\"cu-profiling\")] {Some(mark)}"
+        },
+        {
+          "line": 35,
+          "text": "    #[cfg(not(feature=\"cu-profiling\"))] {None}"
+        },
+        {
+          "line": 47,
+          "text": "    verifier::tx1(public,public_bytes,proof,k,SolanaDigest,observer()).map_err(error)"
+        },
+        {
+          "line": 76,
+          "text": "        verifier::tx2(&public,&proof,&checkpoint,SolanaDigest,observer()).map_err(error)?;"
+        }
+      ]
+    },
+    {
+      "revision": "39c2971dd16c95858a4cfd2c9ae35da052eacfa9",
+      "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+      "sha256": "d8a0f8f68880008c82a63433b8d27a0d555fd65d9185710bf745dab21915bc2f",
+      "observer_lines": [
+        {
+          "line": 968,
+          "text": "    #[cfg(feature=\"cu-profiling\")]"
+        },
+        {
+          "line": 983,
+          "text": "    #[cfg(feature=\"cu-profiling\")]"
+        },
+        {
+          "line": 1007,
+          "text": "        super::observer(),"
+        }
+      ]
+    }
+  ],
+  "kit_files": {
+    "fragments/phase.rs": "45f0e1fae6619f1d10829bc0fe476d9aac09a82f946924acaf3b3250a76bb15b",
+    "fragments/mark.rs": "a5a0353988fae702486eae09eb66005ebad3e2c6346c28703429530c5b60641d",
+    "lib.rs": "55784d574b41e395ac6a4d06f7cad73553a2e61a056f0969fbdadf9bfa1f92e7",
+    "Cargo.toml": "4c8cb3f5565cffaf65ee90990596f3469405be463e8236cae225fe7acaa8f029",
+    "Cargo.lock": "7a3bbf258c7a60a04f915381abc153f9a690113ba8a88b6bc15e1ec30a736581"
+  },
+  "scope": "Exact source marker only. Full observer-sensitive call closure and fixed Solana callback effect/resource binding remain separate obligations. No source equivalence is inferred from inventory alone."
+}

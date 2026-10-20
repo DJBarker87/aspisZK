@@ -1,0 +1,617 @@
+{
+  "candidate": "190e1779c3b9530047e4d2dfcdf0022b200d6c35",
+  "parent": "0330ae7300b3df6602600a727dfd1b969bfbe19a",
+  "production": "39c2971dd16c95858a4cfd2c9ae35da052eacfa9",
+  "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+  ],
+  "disabled_features": [
+    "cu-profiling",
+    "detail-phases",
+    "prover"
+  ],
+  "source_files": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "candidate_sha256": "107fbb12c42fd666cc247c8c2539d5439cfdaaf56c641203b4213b35a0d8e62c",
+      "parent_identical": true,
+      "production_sha256": "e65f41484906ce3cbe766a24995fafda3254358423c145c54e699f4c2f6e99ca",
+      "production_observer_lines": [
+        {
+          "line": 24,
+          "text": "fn mark(obs:Observer,p:Phase) { if let Some(f)=obs {f(p);} }"
+        },
+        {
+          "line": 280,
+          "text": "pub fn query<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:H,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 282,
+          "text": "    query_with_geometry(v,p,a,g,hash,obs,&geometry,None)"
+        },
+        {
+          "line": 285,
+          "text": "fn query_with_geometry<H:Digest32>(v:&View<'_>,p:&Prepared,a:&mut Accumulator,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry,pending:Option<&mut BatchedWeights>)->Result<(),Error> {"
+        },
+        {
+          "line": 307,
+          "text": "    mark(obs,Phase::Merkle(i));"
+        },
+        {
+          "line": 308,
+          "text": "    let dots=crate::fast_dots::four_dots(q,g);#[cfg(feature=\"detail-phases\")]mark(obs,Phase::QueryPart(i,0));for s in 0..4 {crate::trace::value(9,4*i+s,dots[s]);}"
+        },
+        {
+          "line": 310,
+          "text": "    let mut folded=circle_fold_with_inverses(p.alpha[0],dots,inverse);crate::trace::value(10,2*i,folded);#[cfg(feature=\"detail-phases\")]mark(obs,Phase::QueryPart(i,1));"
+        },
+        {
+          "line": 316,
+          "text": "    #[cfg(feature=\"detail-phases\")]mark(obs,Phase::QueryPart(i,2));"
+        },
+        {
+          "line": 321,
+          "text": "    mark(obs,Phase::Query(i));Ok(())"
+        },
+        {
+          "line": 325,
+          "text": "pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 338,
+          "text": "    mark(obs,Phase::Relation);"
+        },
+        {
+          "line": 344,
+          "text": "    mark(obs,Phase::Final);Ok(())"
+        },
+        {
+          "line": 389,
+          "text": "fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {"
+        },
+        {
+          "line": 392,
+          "text": "    while a.next<k {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry,Some(&mut pending))?;}"
+        },
+        {
+          "line": 394,
+          "text": "    let bytes=checkpoint(&p,&a,proof,public_bytes,hash);mark(obs,Phase::CheckpointWrite);Ok(bytes)"
+        },
+        {
+          "line": 398,
+          "text": "fn tx1_prepare<H:Digest32>(public:Public<'_>,v:&View<'_>,hash:H,obs:Observer,g:&mut [E;29])->Result<(Box<[[K;29];3]>,Box<Prepared>),Error> {"
+        },
+        {
+          "line": 399,
+          "text": "    let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;mark(obs,Phase::Semantic);"
+        },
+        {
+          "line": 405,
+          "text": "pub fn tx1<H:Digest32>(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {"
+        },
+        {
+          "line": 407,
+          "text": "    let v=View::parse(proof)?;mark(obs,Phase::Parsed);"
+        },
+        {
+          "line": 409,
+          "text": "    let (_semantic_claims,p)=tx1_prepare(public,&v,hash,obs,&mut g)?;let a=Accumulator::new(v.variant)?;mark(obs,Phase::Prepare);"
+        },
+        {
+          "line": 410,
+          "text": "    tx1_finish(v,p,a,g,public_bytes,proof,k,hash,obs)"
+        },
+        {
+          "line": 421,
+          "text": "pub fn tx2<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 422,
+          "text": "    let v=View::parse(proof)?;mark(obs,Phase::Parsed);"
+        },
+        {
+          "line": 423,
+          "text": "    let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);"
+        },
+        {
+          "line": 426,
+          "text": "    while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry,Some(&mut pending))?;}"
+        },
+        {
+          "line": 428,
+          "text": "    finish_relation(&v,&p,&a,obs)"
+        },
+        {
+          "line": 443,
+          "text": "pub fn tx2_authenticated<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,obs:Observer)->Result<(),Error> {"
+        },
+        {
+          "line": 444,
+          "text": "    let v=View::parse_shape(proof)?;mark(obs,Phase::Parsed);"
+        },
+        {
+          "line": 445,
+          "text": "    let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);"
+        },
+        {
+          "line": 448,
+          "text": "    while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry,Some(&mut pending))?;}"
+        },
+        {
+          "line": 450,
+          "text": "    finish_relation(&v,&p,&a,obs)"
+        }
+      ]
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+      "candidate_sha256": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "parent_identical": true,
+      "production_sha256": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "production_observer_lines": [
+        {
+          "line": 75,
+          "text": "fn mark(obs: crate::verifier::Observer, i: u8) {"
+        },
+        {
+          "line": 77,
+          "text": "    if let Some(f)=obs {f(crate::verifier::Phase::SemanticPart(i));}"
+        },
+        {
+          "line": 79,
+          "text": "    let _=(obs,i);"
+        },
+        {
+          "line": 232,
+          "text": "fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {"
+        },
+        {
+          "line": 237,
+          "text": "    mark(obs, 2);"
+        },
+        {
+          "line": 250,
+          "text": "    mark(obs, 3);"
+        },
+        {
+          "line": 262,
+          "text": "    mark(obs, 4);"
+        },
+        {
+          "line": 267,
+          "text": "    mark(obs, 5);"
+        },
+        {
+          "line": 311,
+          "text": "pub fn verify_observed<H: Digest32>(public: Public<'_>, bytes: &[u8], hash: H, obs: crate::verifier::Observer) -> Result<Verified<H>, Error> {"
+        },
+        {
+          "line": 313,
+          "text": "    mark(obs, 0);"
+        },
+        {
+          "line": 316,
+          "text": "    mark(obs, 1);"
+        },
+        {
+          "line": 317,
+          "text": "    verify_finish(public, prefix, transcript, challenges, obs)"
+        }
+      ]
+    }
+  ],
+  "observer_closure": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "name": "mark",
+      "start_byte": 1313,
+      "end_byte_exclusive": 1373,
+      "sha256": "a5a0353988fae702486eae09eb66005ebad3e2c6346c28703429530c5b60641d",
+      "observer_uses": [
+        {
+          "body_byte": 16,
+          "callee": "tuple"
+        }
+      ],
+      "classification": "source dispatcher"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "name": "query",
+      "start_byte": 12917,
+      "end_byte_exclusive": 13161,
+      "sha256": "1b6d11b5e1025b2ff0af05de79997a6f7f5b586dd9577fc2bf1dcbe79fcf9877",
+      "observer_uses": [
+        {
+          "body_byte": 110,
+          "callee": "query_with_geometry"
+        }
+      ],
+      "classification": "dispatcher calls and internal forwarding only"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "name": "query_with_geometry",
+      "start_byte": 13179,
+      "end_byte_exclusive": 15620,
+      "sha256": "c932f58fd9f2913a3f6b619adfd191c51592b182002cf68e62d81c94d859d71e",
+      "observer_uses": [
+        {
+          "body_byte": 1485,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 1590,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 1851,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 2198,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 2260,
+          "callee": "mark"
+        }
+      ],
+      "classification": "dispatcher calls and internal forwarding only"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "name": "finish_relation",
+      "start_byte": 15739,
+      "end_byte_exclusive": 16923,
+      "sha256": "1d2dfc4050518cc753bdd54a4916fa54e9f38fd56ddffb4c5566fabdd162658b",
+      "observer_uses": [
+        {
+          "body_byte": 706,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 1063,
+          "callee": "mark"
+        }
+      ],
+      "classification": "dispatcher calls and internal forwarding only"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "name": "tx1_finish",
+      "start_byte": 20061,
+      "end_byte_exclusive": 20465,
+      "sha256": "07f740d9eaac9d2ac5e85ef1a2e7cad04ed8c7a19f005f757988a55df9b06517",
+      "observer_uses": [
+        {
+          "body_byte": 122,
+          "callee": "query_with_geometry"
+        },
+        {
+          "body_byte": 201,
+          "callee": "mark"
+        }
+      ],
+      "classification": "dispatcher calls and internal forwarding only"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "name": "tx1_prepare",
+      "start_byte": 20484,
+      "end_byte_exclusive": 20822,
+      "sha256": "8bfb7104cc2d3c2f76d040a900ab417edc53caf1ed05979b148416d4693dfd34",
+      "observer_uses": [
+        {
+          "body_byte": 72,
+          "callee": "verify_observed"
+        },
+        {
+          "body_byte": 111,
+          "callee": "mark"
+        }
+      ],
+      "classification": "dispatcher calls and internal forwarding only"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "name": "tx1",
+      "start_byte": 20841,
+      "end_byte_exclusive": 21275,
+      "sha256": "25635b8c112f57b51c31a6c5940fdeafb212f648d2e3418fa8db87f7a44644e8",
+      "observer_uses": [
+        {
+          "body_byte": 76,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 180,
+          "callee": "tx1_prepare"
+        },
+        {
+          "body_byte": 233,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 303,
+          "callee": "tx1_finish"
+        }
+      ],
+      "classification": "dispatcher calls and internal forwarding only"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "name": "tx2",
+      "start_byte": 21816,
+      "end_byte_exclusive": 22297,
+      "sha256": "8f706200a0986badc6229797f6cdd65beceab9047bfd2dfd294e8f39f308ce18",
+      "observer_uses": [
+        {
+          "body_byte": 36,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 161,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 317,
+          "callee": "query_with_geometry"
+        },
+        {
+          "body_byte": 364,
+          "callee": "finish_relation"
+        }
+      ],
+      "classification": "dispatcher calls and internal forwarding only"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "name": "tx2_authenticated",
+      "start_byte": 22962,
+      "end_byte_exclusive": 23463,
+      "sha256": "54495074dff48e193c94fc438c87f4c59fdd366c909197c098de0310f9a869fd",
+      "observer_uses": [
+        {
+          "body_byte": 42,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 167,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 323,
+          "callee": "query_with_geometry"
+        },
+        {
+          "body_byte": 370,
+          "callee": "finish_relation"
+        }
+      ],
+      "classification": "dispatcher calls and internal forwarding only"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+      "name": "mark",
+      "start_byte": 2436,
+      "end_byte_exclusive": 2651,
+      "sha256": "555c5156146811da00c61e332409113a00b4f522934ea65c7bb2015ff80777b2",
+      "observer_uses": [
+        {
+          "body_byte": 56,
+          "callee": "tuple"
+        },
+        {
+          "body_byte": 158,
+          "callee": "tuple"
+        }
+      ],
+      "classification": "compiled no-op semantic marker"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+      "name": "verify_finish",
+      "start_byte": 8744,
+      "end_byte_exclusive": 11684,
+      "sha256": "e35ca50a3b472d40538941b6c5eb2a28e31ab0143966925a99a1a851572495c7",
+      "observer_uses": [
+        {
+          "body_byte": 255,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 699,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 1170,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 1449,
+          "callee": "mark"
+        }
+      ],
+      "classification": "dispatcher calls and internal forwarding only"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+      "name": "verify_observed",
+      "start_byte": 11703,
+      "end_byte_exclusive": 12122,
+      "sha256": "27205d3c1b0d1ae48ed5912d7cd971268c0721d1e6f16073d877ddd356aefa14",
+      "observer_uses": [
+        {
+          "body_byte": 50,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 204,
+          "callee": "mark"
+        },
+        {
+          "body_byte": 271,
+          "callee": "verify_finish"
+        }
+      ],
+      "classification": "dispatcher calls and internal forwarding only"
+    }
+  ],
+  "delta_inverse_checked": true,
+  "factorization": "The complete original recursive closure consumes only the single observer dispatcher. Changing Observer alias and dispatcher definition to an abstract notify function is eta-lifting mark obs. Every other source byte is unchanged. Lean proves equality of the actual dispatcher functions and arbitrary common computational contexts. This is source-factorization admission, not a second Rust interpreter.",
+  "fixed_callback": {
+    "sha256": "3fa2d6b0fff459a468c18023d1c3f28bf533eaf55163c6ff22f2ad8655dc32a2",
+    "all_phase_arms_checked": true,
+    "diagnostic_effects_per_invocation": 2,
+    "formatted_arms": [
+      "QueryPart",
+      "SemanticPart",
+      "Merkle",
+      "Query"
+    ],
+    "message_byte_bounds_64bit": {
+      "QueryPart": 38,
+      "SemanticPart": 20,
+      "Merkle": 30,
+      "Query": 29
+    },
+    "message_bound_scope": "Decimal unsigned formatting: at most20 digits for64bit usize,3 foru8. These are payload bounds, not claims about allocator capacity/growth.",
+    "application_effects": "No application event is erased; only the two exact adapter strings and the fixed program mark messages/CU reports. Error logs, set_return_data and emit_result are unchanged.",
+    "resource_contract": "Sufficient reference compute/stack/heap, standard returning SDK log syscalls, private formatter allocations with no escape. Does not equate resource exhaustion/panic/divergence to success. Formatted allocations use bump allocator and are not freed; total reference heap sufficiency is essential."
+  },
+  "sdk_packages": {
+    "solana-msg": {
+      "name": "solana-msg",
+      "version": "2.2.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "f36a1a14399afaabc2781a1db09cb14ee4cc4ee5c7a5a3cfcc601811379a8092",
+      "dependencies": [
+        "solana-define-syscall"
+      ]
+    },
+    "solana-program": {
+      "name": "solana-program",
+      "version": "2.3.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "98eca145bd3545e2fbb07166e895370576e47a00a7d824e325390d33bf467210",
+      "dependencies": [
+        "bincode",
+        "blake3",
+        "borsh 0.10.4",
+        "borsh 1.5.7",
+        "bs58",
+        "bytemuck",
+        "console_error_panic_hook",
+        "console_log",
+        "getrandom 0.2.17",
+        "lazy_static",
+        "log",
+        "memoffset",
+        "num-bigint",
+        "num-derive",
+        "num-traits",
+        "rand 0.8.6",
+        "serde",
+        "serde_bytes",
+        "serde_derive",
+        "solana-account-info",
+        "solana-address-lookup-table-interface",
+        "solana-atomic-u64",
+        "solana-big-mod-exp",
+        "solana-bincode",
+        "solana-blake3-hasher",
+        "solana-borsh",
+        "solana-clock",
+        "solana-cpi",
+        "solana-decode-error",
+        "solana-define-syscall",
+        "solana-epoch-rewards",
+        "solana-epoch-schedule",
+        "solana-example-mocks",
+        "solana-feature-gate-interface",
+        "solana-fee-calculator",
+        "solana-hash",
+        "solana-instruction",
+        "solana-instructions-sysvar",
+        "solana-keccak-hasher",
+        "solana-last-restart-slot",
+        "solana-loader-v2-interface",
+        "solana-loader-v3-interface",
+        "solana-loader-v4-interface",
+        "solana-message",
+        "solana-msg",
+        "solana-native-token",
+        "solana-nonce",
+        "solana-program-entrypoint",
+        "solana-program-error",
+        "solana-program-memory",
+        "solana-program-option",
+        "solana-program-pack",
+        "solana-pubkey",
+        "solana-rent",
+        "solana-sanitize",
+        "solana-sdk-ids",
+        "solana-sdk-macro",
+        "solana-secp256k1-recover",
+        "solana-serde-varint",
+        "solana-serialize-utils",
+        "solana-sha256-hasher",
+        "solana-short-vec",
+        "solana-slot-hashes",
+        "solana-slot-history",
+        "solana-stable-layout",
+        "solana-stake-interface",
+        "solana-system-interface",
+        "solana-sysvar",
+        "solana-sysvar-id",
+        "solana-vote-interface",
+        "thiserror",
+        "wasm-bindgen"
+      ]
+    },
+    "solana-program-entrypoint": {
+      "name": "solana-program-entrypoint",
+      "version": "2.3.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "checksum": "32ce041b1a0ed275290a5008ee1a4a6c48f5054c8a3d78d313c08958a06aedbd",
+      "dependencies": [
+        "solana-account-info",
+        "solana-msg",
+        "solana-program-error",
+        "solana-pubkey"
+      ]
+    }
+  },
+  "sdk_sources": {
+    "msg": {
+      "path": "/Users/dominic/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-msg-2.2.1/src/lib.rs",
+      "sha256": "4e93dc3b9480d228899978daa74844571aad8beb79b27d4b74d81a7070bd8391"
+    },
+    "entrypoint": {
+      "path": "/Users/dominic/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-entrypoint-2.3.0/src/lib.rs",
+      "sha256": "027efed4018bc8f1a340e576bbb0135cb70ba31fc465a23f4732ff8d5196d919"
+    }
+  },
+  "kit_files": {
+    "fragments/verifier-mark.rs": "a5a0353988fae702486eae09eb66005ebad3e2c6346c28703429530c5b60641d",
+    "fragments/verifier-query.rs": "1b6d11b5e1025b2ff0af05de79997a6f7f5b586dd9577fc2bf1dcbe79fcf9877",
+    "fragments/verifier-query_with_geometry.rs": "c932f58fd9f2913a3f6b619adfd191c51592b182002cf68e62d81c94d859d71e",
+    "fragments/verifier-finish_relation.rs": "1d2dfc4050518cc753bdd54a4916fa54e9f38fd56ddffb4c5566fabdd162658b",
+    "fragments/verifier-tx1_finish.rs": "07f740d9eaac9d2ac5e85ef1a2e7cad04ed8c7a19f005f757988a55df9b06517",
+    "fragments/verifier-tx1_prepare.rs": "8bfb7104cc2d3c2f76d040a900ab417edc53caf1ed05979b148416d4693dfd34",
+    "fragments/verifier-tx1.rs": "25635b8c112f57b51c31a6c5940fdeafb212f648d2e3418fa8db87f7a44644e8",
+    "fragments/verifier-tx2.rs": "8f706200a0986badc6229797f6cdd65beceab9047bfd2dfd294e8f39f308ce18",
+    "fragments/verifier-tx2_authenticated.rs": "54495074dff48e193c94fc438c87f4c59fdd366c909197c098de0310f9a869fd",
+    "factored/verifier.rs": "653dc28a820752999ee082dc61d33c048fc5a170e326dd4046548529db15abcd",
+    "fragments/semantic-mark.rs": "555c5156146811da00c61e332409113a00b4f522934ea65c7bb2015ff80777b2",
+    "fragments/semantic-verify_finish.rs": "e35ca50a3b472d40538941b6c5eb2a28e31ab0143966925a99a1a851572495c7",
+    "fragments/semantic-verify_observed.rs": "27205d3c1b0d1ae48ed5912d7cd971268c0721d1e6f16073d877ddd356aefa14",
+    "factored/r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+    "fragments/program-mark.rs": "3fa2d6b0fff459a468c18023d1c3f28bf533eaf55163c6ff22f2ad8655dc32a2",
+    "fragments/program-observer.rs": "40e3ceae0418aae92321c19651f8a3ff3660e31468f6197f82186a3b01f9d50c",
+    "sdk/msg-macro.rs": "666d8492c430c710507e1074111e98751d8bd705dd0a0fa91835f3d8a646a1e9",
+    "sdk/bump-allocator.rs": "7f1c5522f7be2bc38d0ea23a0896705f5fc2cdb3e797a5ff2d151179ba42609e"
+  }
+}
