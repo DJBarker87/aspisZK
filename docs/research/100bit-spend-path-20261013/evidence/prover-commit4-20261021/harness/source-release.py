@@ -12,8 +12,15 @@ for x in rows:
  for c in commits:
   p=subprocess.run(['git','show',c+':'+rel],cwd=R,capture_output=True)
   if p.returncode==0 and hashlib.sha256(p.stdout).hexdigest()==x['source_sha256']:matches.append(c)
- x['source_revision']=matches[-1] if matches else 'uncommitted rejected draft; exact source SHA recorded'
- assert matches or not x['accepted'], x
+ if matches:
+  x['source_revision']=matches[-1]
+ elif x['accepted']:
+  snap=E/'lean/snapshots'/f"{x['attempt']}.lean"
+  assert snap.exists() and hashlib.sha256(snap.read_bytes()).hexdigest()==x['source_sha256'], (x['attempt'],x['module'])
+  x['source_revision']='13fe95654 plus recorded working-tree snapshot'
+  x['source_snapshot']=str(snap.relative_to(R))
+ else:
+  x['source_revision']='uncommitted rejected draft; exact source SHA recorded'
 (E/'lean/attempts.jsonl').write_text(''.join(json.dumps(x)+'\n' for x in rows))
 paths=[R/'crates/aspis-prover/src'/n for n in ['lib.rs','prover_commit_oracle.rs','prover_commit_reference.rs','state_only_entropy.rs','state_only_hiding.rs']]
 paths += [p for d in ['R1Z','AspisR1ProverCommitReference'] for p in (R/'docs/research/v8-r0-zk-20261009/lean'/d).glob('*.lean') if d!='R1Z' or p.name in ['ProverCommitOracleRefinement.lean','ProverCommitReferenceSource.lean','ProverCommitOracleAudit.lean','ProverCommitFibreScope.lean']]

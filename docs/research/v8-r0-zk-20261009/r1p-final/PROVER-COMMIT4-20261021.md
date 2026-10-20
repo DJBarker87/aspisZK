@@ -14,9 +14,9 @@ is assumed or proved. Evidence is collected under
 Proof-only modules use one memoised table for both sides, keyed by the
 concatenation of hashv slices. New points receive arbitrary 32-byte answers;
 repeats receive the stored answer. Collisions remain possible. Capacity and
-per-harness query budgets are assertions, not assumptions. Every loop has an
-explicit unwind bound and unwinding assertions remain enabled. The initial legacy-output runs are diagnostic only; final structured-output
-verification is pending.
+per-harness query budgets are assertions, not assumptions. Every accepted harness has an explicit unwind bound and enabled unwinding
+assertions. The initial legacy-output runs are diagnostic only; final
+structured-output function checks passed.
 
 ## Checklist scope
 
@@ -88,8 +88,10 @@ All three pass `cmp --silent` against the preceding continuation's frozen
 artifacts. `frozen-elf-check.json` contains exact commands, sizes, source
 hashes and resource receipts; `#print axioms` is N/A for these Rust builds.
 The SBF diagnostics remain in the logs; byte identity is the claimed gate.
-Runtime suites were not repeated for cfg-only additions. No keys, accounts,
-wallets, deployments, peer worktrees or branches were changed; no push.
+Runtime suites were not repeated for cfg-only additions. No account/wallet transactions, deployments, peer worktree changes, or push
+were performed. The three SBF-generated program key files remain on the
+host at mode 0600; their private contents were not read and no key cleanup
+was attempted (`key-retention.json`).
 
 ## Stage 5: exact ROM specialization and zero-fill obstruction
 
@@ -137,3 +139,139 @@ point for a repeated input. It passes; this detects an ignored pointer stub.
 That proof-only addition is committed at `8517407c1`. All three ELFs were
 rebuilt again from this final Rust revision and match the same pins and
 retained frozen artifacts (`cmp`); see `frozen-elf-final-check.json`.
+
+## Verbatim checklist before / after
+
+The original `PRIVACY-FINAL-20261020.md` is unchanged. The following are the
+nine complete source rows, rather than the nine successful function harnesses.
+`checklist-before-after.json` records their checklist SHA and explicit
+`discharged=false` flags.
+
+Before (verbatim):
+
+```text
+| R_commit_D80.roots/nodes | AddressAt for all three roots/internal binary parents, child order, padded folded geometry, byte carrier and D81 grammar. Do not substitute eight-way C2 recovery for binary recovery. |
+| R_commit_D80.leaves | Exact 0x71/0xf1/0x72 tags, packed leafVal/trailing salt, private-leaf backend and byte/digest conversions, on the actual prover tree. |
+| R_commit_D80.bindings | Both secret-attempt binding reads, source/public/variant mapping, context encoding and digest answers (P`R1Z/LayoutR1PBin.lean:133`). |
+| R_commit_D80.seeds | All three seed derivations, reserved secret distribution and source/D stream selection (P`R1Z/LayoutR1PBin.lean:136`). |
+| R_commit_D80.salts | Full per-leaf secret salt derivation, nonce/tree/secret binding and LE32(u) (P`R1Z/LayoutR1PBin.lean:140`); verifier facts only consume disclosed salts. |
+| R_commit_D80.mask_expander/source_expander | Stream/domain/seed/LE64(counter), eight words per block, no counter reuse, index/stream selection and complete hash-read coverage (P`R1Z/LayoutR1PBin.lean:131`). |
+| R_commit_equal_fibres, cF | Exact equal-cardinality successful tape fibres for every τ. Deterministic expansion and successful tests do not establish uniform tapes. |
+| R_commit_exhaustion | Every tapeOf failure implies one of the actual two 16-try little-endian stream-exhaustion events; exact source wordsE transport (P`R1Z/FinalR1PBin.lean:44,54`). |
+| R_commit_counter₁/₂, R_commit_stream₁/₂, R_commit_cell_count, R_commit_blocks₁/₂ | E≤2^64, 16L≤8E, RCommitCount cell bounds and E≤2L; universal source commitment read completeness. D76's fixture count alone is not this universal refinement. |
+```
+
+After (verbatim, retained open):
+
+```text
+| R_commit_D80.roots/nodes | AddressAt for all three roots/internal binary parents, child order, padded folded geometry, byte carrier and D81 grammar. Do not substitute eight-way C2 recovery for binary recovery. |
+| R_commit_D80.leaves | Exact 0x71/0xf1/0x72 tags, packed leafVal/trailing salt, private-leaf backend and byte/digest conversions, on the actual prover tree. |
+| R_commit_D80.bindings | Both secret-attempt binding reads, source/public/variant mapping, context encoding and digest answers (P`R1Z/LayoutR1PBin.lean:133`). |
+| R_commit_D80.seeds | All three seed derivations, reserved secret distribution and source/D stream selection (P`R1Z/LayoutR1PBin.lean:136`). |
+| R_commit_D80.salts | Full per-leaf secret salt derivation, nonce/tree/secret binding and LE32(u) (P`R1Z/LayoutR1PBin.lean:140`); verifier facts only consume disclosed salts. |
+| R_commit_D80.mask_expander/source_expander | Stream/domain/seed/LE64(counter), eight words per block, no counter reuse, index/stream selection and complete hash-read coverage (P`R1Z/LayoutR1PBin.lean:131`). |
+| R_commit_equal_fibres, cF | Exact equal-cardinality successful tape fibres for every τ. Deterministic expansion and successful tests do not establish uniform tapes. |
+| R_commit_exhaustion | Every tapeOf failure implies one of the actual two 16-try little-endian stream-exhaustion events; exact source wordsE transport (P`R1Z/FinalR1PBin.lean:44,54`). |
+| R_commit_counter₁/₂, R_commit_stream₁/₂, R_commit_cell_count, R_commit_blocks₁/₂ | E≤2^64, 16L≤8E, RCommitCount cell bounds and E≤2L; universal source commitment read completeness. D76's fixture count alone is not this universal refinement. |
+```
+
+The component frontier is precise:
+
+- Roots/nodes: no complete tree-construction or padded-geometry source join.
+- Leaves: the actual private-leaf function agrees with independent byte
+  concatenation for C1/0x71 (416 bytes), C2/0xf1 (192), and folded/0x72 (128).
+  Actual packed `Pr.leafVal` and tree caller coverage remain unconstructed.
+- Bindings: Pool private-attempt binding is checked, including independent
+  81-byte context encoding and descriptor. The earlier public precommit
+  binding and the source/public/variant mapping remain separate.
+- Seeds: arbitrary-oracle block refinement supplies no OS/reservation law,
+  full three-seed caller identification, or source/D stream-selection theorem.
+- Salts: the actual valid forest-context leaf-salt method agrees with its
+  independent two-hash reference for arbitrary nonce/binding/secret/tag/index.
+  The complete per-tree caller loops and `Pr.caddr` carrier remain separate.
+- Expanders: both block helpers and every valid local word slot are checked,
+  including counter wrap, LE32 return, block/counter/seed/slot state. This
+  is not a global non-reuse or complete-read/count certificate.
+- Equal fibres: the direct zero-fill adapter is ruled out by the checked
+  theorem above. A different successful full-tape completion or quotient
+  construction, with a real source coupling, is still required.
+- Exhaustion: the scalar/reference facts do not construct the source
+  `tapeOf`, its failure classification or `wordsE` transport.
+- Counts/budgets: no universal source caller/read-completeness instance is
+  obtained from local wrapping arithmetic or the finite harness query budgets.
+
+No `stub_verified` annotation is installed: the proved relational callees
+are harness results, not Kani function contracts suitable for verified
+summary substitution. Pretending otherwise would leave the caller proof
+without an established contract. Direct full scalar comparisons are recorded
+separately below, including any timeout; none can replace the tape laws.
+
+## Final Kani results and stopping frontier
+
+Eleven focused harnesses pass. Both sides use the same memoised oracle;
+no reset occurs between sides. The finite table has four entries, with
+asserted per-harness call budgets (2 for the function checks, 3 for the
+regrouping check, 4 for the two-hash salt check; 6 conservatively for the
+unresolved scalar comparisons). No capacity assertion is assumed away.
+All accepted runs use explicit `#[kani::unwind(514)]` and
+`--cbmc-args --unwinding-assertions`. Exact full targets/commands, source
+snapshots, resource limits and tool-output logs are in the receipt directories
+and matching `*-inputs.json` files. Kani `#print axioms`: N/A.
+
+| Receipt / target | Exit | Wall s | Peak RSS KiB | Swap |
+|---|---:|---:|---:|---:|
+| `oracle-v3` | 0 | 39.171 | 716580 | 0 |
+| `callback-v1` | 0 | 18.53 | 807252 | 0 |
+| `mask_block-v1` | 0 | 23.039 | 561140 | 0 |
+| `source_block-v1` | 0 | 21.867 | 579488 | 0 |
+| `mask_next_word-v1` | 0 | 41.201 | 1560536 | 0 |
+| `source_next_word-v1` | 0 | 46.073 | 596692 | 0 |
+| `pool_binding-v1` | 0 | 135.445 | 1677528 | 0 |
+| `pool_leaf_salt-v1` | 0 | 337.862 | 2013148 | 0 |
+| `private_leaf_c1-v1` | 0 | 175.394 | 2593196 | 0 |
+| `private_leaf_c2-v1` | 0 | 65.236 | 1397692 | 0 |
+| `private_leaf_folded-v1` | 0 | 44.439 | 1055660 | 0 |
+| `mask_limb-v1` | 124 | 600.002 | unavailable† | 0 |
+| `source_limb-v1` | 124 | 600.002 | unavailable† | 0 |
+
+† Both direct scalar comparisons stop at the 600-second timeout, exit 124,
+without a proof or counterexample. They were not rerun, and no cap or timeout
+was raised. The timeout wrapper's reported 15 MiB RSS omits killed-child
+rusage; it is not the CBMC peak. Kernel cgroup memory peaks are
+4,133,142,528 bytes (mask) and 4,348,395,520 bytes (source), below the cap.
+The attached two-second source sampler measured aggregate child RSS up to
+4,189,048 KiB; this is a sampled peak, not an exact high-water mark.
+`*-timeout-resource-note.json` and `source_limb-v1/rss-samples.json` preserve
+these distinctions. Neither incomplete scalar check is release evidence.
+The expensive step was bounded CBMC symbolic unrolling of the 16-try
+sampler and shared cache, not SHA-256 or unoptimized finite-field arithmetic.
+The next proof step is an established step contract/inductive sampler
+refinement; the successful word-transition checks alone are not that contract.
+
+Oracle-v1 was stopped to replace a variable-length cache search by a fixed
+four-entry search and add explicit unwinding assertions; it is excluded.
+Oracle-v2 used legacy output, which reported reachable instrumentation probes
+as failures even though the functional assertions passed; the structured
+v3 result is the accepted evidence. No property is claimed from either
+failed diagnostic run. The two smaller builder references remain distinct:
+this packet's scalar reference translates; the full builder lowering and
+actual source/tape/carrier/caller construction from the previous report are
+not repaired merely by this scalar result.
+
+**Stopping result: the requested nine-row discharge is incomplete.**
+The zero-fill route has a checked mathematical obstruction, and the two
+full scalar comparisons have a demonstrated bounded backend obstruction.
+A valid full-tape completion (or a quotient-tape endpoint), successful-source
+exhaustion law, verified scalar composition, complete builder/caller/packing
+identification, secret law and universal read/count transport still remain.
+No complete row or unconditional source privacy statement is claimed.
+
+All fourteen new top theorems and the unchanged endpoint pass the final
+8157 axioms audit. Source revisions/SHA/dependency fingerprints and rejected
+drafts are in `lean/attempts.jsonl`; the intermediate 8154 working-tree audit
+snapshot is retained explicitly. `source-release.json` pins the adopted
+source. `harness/validate.py` validates the retained packet without rerunning
+any proof/build. `branch-log.txt` records the requested base-to-source-stage
+commit history; the final evidence-only commit follows that snapshot.
+No full frozen-manifest, adversarial or runtime suite was replayed unchanged.
+All work is committed on the assigned branch; no push or peer-file edit.
