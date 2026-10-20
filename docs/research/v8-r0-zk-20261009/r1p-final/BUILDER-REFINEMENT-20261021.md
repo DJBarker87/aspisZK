@@ -613,3 +613,31 @@ This is a source-facing conditional endpoint, **not** a claim that the new
 binder is weaker than BuilderSoundOn. The canonical endpoint above has no
 builder binder at all. The actual shipped runtime has not yet been made an
 inhabitant of either SourceIdentification or RustRuntimeJoin.
+
+## Continuation 4, Stage 3: actual deployed public projection extracted
+
+Directly extracted **the shipped** private_public and withdrawal_public in
+pair_forest_semantic_terminal.rs, without any reference or stubs. Charon
+passes (20.667 s, 612,152 KiB, zero swaps); Aeneas passes (0.314 s,
+68,640 KiB, zero swaps). The raw LLBC/generated pins, exact commands, source
+and tool pins and logs are in `builder-cont4-evidence/public-extraction.json`.
+The inherited private runner's old revision label is explicitly corrected
+there against exact shipped source hashes; it is not source identification.
+The env-J adaptation changes only imports and removes the unsupported enum
+`discriminant isize` metadata attribute. No enum constructor or function body
+is edited; no generated options are added or increased.
+
+`BuilderPublicProjection` proves both complete Public projections and
+successful-result implications. These include recipient/amount option shape,
+asset, anchor, nullifier, change, live nextPairIndex/frontier and candidate
+afterstate root/frontier. Pool/domain and the exact transition remain in
+the extracted outer source record. It also derives PublicBase of their
+embedded M31 public input. This closes the **projection-function** part of
+deployed public mapping, not the successful-compiler admission implication
+or identity of a particular source HonestProver.public.
+
+Env J 9215/9217 pass. Retained failures: 9213 missing metadata attribute,
+9214 missing predecessor object, 9216 incorrect PublicBase namespace. The
+corrected dependency fingerprint justifies the 9217 dependent compile.
+All five projection theorems have only standard axioms. No existing privacy
+root changes or shipped crate edits are made.
