@@ -6894,3 +6894,17 @@ lengths are proved.
 **D77.3 Remaining for the format on the privacy side:** the simulator layout
 (Lean `simE`/ZF2 and Rust `sim.rs`, now ignored in the adopted build) and the
 `TranscriptNodeLengths` discharge.
+
+### Lead acceptance of the binary simulator (2026-10-20); D78
+
+Codex job cx-sim-bin (d2bda2ae1) is cherry-picked. Lean: a binary read-set
+bridge and `privacy_R1_eff_binary` compile in env J (attempts 6100, 6105,
+6106 verified: exit 0, standard axioms, 0 swaps), bound 2^-109 + 2^-137 on
+the D76 budget; the explicit simulator now programs the oracle at the binary
+multiproof read set (D77 `batchReadSet`). Rust: `sim.rs` ported to the
+compact binary format, its four tests un-ignored and passing; four timed
+simulated proofs pass strict tx1+tx2 and dense under the programmed oracle,
+fail under the real hash, 36.4–38.4 s each, every programmed address read.
+`CORRESPONDENCE-G-SIM.txt` updated. PROOF-SIZE-OBLIGATIONS item 5 is closed.
+Remaining on the privacy side for the format: `TranscriptNodeLengths`
+(D77.2; job cx-wire-len) and the inherited source-refinement premises.
