@@ -1,0 +1,338 @@
+{
+  "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "declarations": [
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "M31::from_le_bytes",
+      "line": 239,
+      "sha256": "61801dea89bcc6f411c3b373fcf966d9f257f4ca5b251f4b896c1c428c1102b7",
+      "body_edit": "none",
+      "attributes": "#[kani::ensures(|r:&Option<M31>| r.as_ref().map_or(true, |x| x.0<P))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "CM31::from_le_bytes",
+      "line": 410,
+      "sha256": "9339c7b25fa5476fad3aed6ecf65112ddf503bbdc5155e8d0bd4792f54b94ccd",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(bytes.len()==8)]\n#[kani::ensures(|r:&Option<CM31>| r.as_ref().map_or(true, |x| cm_ok(*x)))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "QM31::from_le_bytes",
+      "line": 1022,
+      "sha256": "3e58a8f03ca2ece6801dbfee02fa6b119fcde8c9f3240ab4f0c5e9e0e2b22a56",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(bytes.len()==16)]\n#[kani::ensures(|r:&Option<QM31>| r.as_ref().map_or(true, |x| k_ok(*x)))]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "Reader<'a>::raw",
+      "line": 344,
+      "sha256": "1dfd358e3d4fb3651e0254d7b1cefc4c80134b8f413060506cea75af7629dc4b",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(N<=32 && self.bytes.len()<=4880 && N<=self.bytes.len() && self.at<=self.bytes.len()-N)]\n#[kani::modifies(&mut self.at)]\n#[kani::ensures(|_r:&[u8;N]| self.at==old(self.at)+N && self.at<=self.bytes.len())]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "Reader<'a>::k",
+      "line": 347,
+      "sha256": "4315bd6550f53c55a204c14f3252f1a47b9596bcc312704eb998eb87cdd6fa9d",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(self.bytes.len()<=4880 && self.bytes.len()>=16 && self.at<=self.bytes.len()-16)]\n#[kani::modifies(&mut self.at)]\n#[kani::ensures(|r:&Result<K,Error>| self.at==old(self.at)+16 && r.as_ref().map_or(true, |x| k_ok(*x)))]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "read_checkpoint_semantic_alpha",
+      "line": 375,
+      "sha256": "47e1f58fde8c0eb0f4984049bb07a1a75c95a6e73cd00880ec5e9b77b593d0d1",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(bytes.len()<=4880 && bytes.len()>=160 && at<=bytes.len()-160)]\n#[kani::ensures(|r:&Result<([K;10],usize),Error>| r.as_ref().map_or(true, |(ks,end)| *end==at+160 && k_ok(ks[0]) && k_ok(ks[1]) && k_ok(ks[2]) && k_ok(ks[3]) && k_ok(ks[4]) && k_ok(ks[5]) && k_ok(ks[6]) && k_ok(ks[7]) && k_ok(ks[8]) && k_ok(ks[9])))]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "read_checkpoint_weights",
+      "line": 363,
+      "sha256": "1db3ac2f95869b25b000d211488dae053ca25ccf35f81a148b74d826fab519e1",
+      "body_edit": "four-statement iteration body lifted verbatim with at-reference reborrows into verified read_one_weight; original for loop retained",
+      "attributes": "#[kani::requires(bytes.len()<=4880 && weights.len()<=256 && 16*weights.len()<=bytes.len() && at<=bytes.len()-16*weights.len())]\n#[kani::ensures(|r:&Result<(Vec<K>,usize),Error>| r.as_ref().map_or(true, |(ks,end)| ks.len()==old(weights.len()) && *end==at+16*ks.len() && ks.iter().all(|x| k_ok(*x))))]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "read_checkpoint_weights::iteration",
+      "body_edit": "lift four statements into read_one_weight; at:*at and *at=reader.at, plus Ok(()); preserves early error and write order",
+      "sha256": "1db3ac2f95869b25b000d211488dae053ca25ccf35f81a148b74d826fab519e1"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "residue_limb_at",
+      "line": 231,
+      "sha256": "3c5a08ca4bb87cff68e45a3053c19b362a71c6a1826b043810eca16c141654c2",
+      "body_edit": "none",
+      "attributes": ""
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "power_limb_at",
+      "line": 233,
+      "sha256": "9c5f9f10878149a246a2b8ef0d302de32547afc9cb65df5cd901dccea8b88879",
+      "body_edit": "none",
+      "attributes": ""
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "update_residue_row",
+      "line": 235,
+      "sha256": "c41e4a73f9e82be3deabe0d7fdcd4c91700079864b2b049a3a8e05f4f05a71d0",
+      "body_edit": "for limb in row -> for limb in &mut *row: explicit reborrow required by Kani contract macro; identical iter_mut traversal; unused phase:u64 ghost parameter constrains requires/ensures only",
+      "attributes": "#[kani::requires(k_ok(power) && basis.0<P && phase<4 && flush==(phase==3) && row_bound(row,B+phase*C))]\n#[kani::modifies(row)]\n#[kani::ensures(|_:&()| row_bound(row,B+((phase+1)%4)*C))]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "BatchedWeights::push",
+      "line": 217,
+      "sha256": "d13128f743c7d410d2d90654990c0f2fc7bab88381d367248d43aab10a4bb09b",
+      "body_edit": "append (self.terms%4) as u64 as unused phase ghost argument; original arithmetic and traversal unchanged",
+      "attributes": "#[kani::requires((self.raw.len()==64 || self.raw.len()==256) && index<self.raw.len() && self.terms<=22 && k_ok(power) && basis.0<P && row_bound(&self.raw[index],B+(self.terms%4) as u64*C))]\n#[kani::modifies(&mut self.raw[index])]\n#[kani::ensures(|_:&()| row_bound(&self.raw[index],B+((self.terms+1)%4) as u64*C))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "reduce_u64",
+      "line": 31,
+      "sha256": "921c2899b2c0cc1770cf39fa1f2a6c4812fa0d76cae9214eb05acbbb84141342",
+      "body_edit": "none",
+      "attributes": "#[kani::ensures(|r:&u32| *r<P)]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "M31::add",
+      "line": 62,
+      "sha256": "42fe24a14212955364519ca5b7ceabe6cab95877daf39af5a3939b28abdd1eec",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(self.0<P && rhs.0<P)]\n#[kani::ensures(|r:&M31| r.0<P)]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "M31::sub",
+      "line": 94,
+      "sha256": "2d7781d9a1f1201acadbde8ce0f9b12df4441cbd870874b577e6e7dc85f586b4",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(self.0<P && rhs.0<P)]\n#[kani::ensures(|r:&M31| r.0<P)]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "M31::neg",
+      "line": 122,
+      "sha256": "20969911ca81623d7e2879b54355027744f111bb10f1d91e5883cbf27432ea7e",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(self.0<P)]\n#[kani::ensures(|r:&M31| r.0<P)]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "M31::double",
+      "line": 183,
+      "sha256": "577ad1380073d0cde68dc807f33af7cea9915e53cac00f814e05db3006b6b650",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(self.0<P)]\n#[kani::ensures(|r:&M31| r.0<P)]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "M31::mul",
+      "line": 133,
+      "sha256": "e1d9a77516d552af515e728f4ca6ca05dbbf7a582629ad81cf1c4cc0e902db79",
+      "body_edit": "none",
+      "attributes": "#[kani::ensures(|r:&M31| r.0<P)]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "M31::reduce_u64",
+      "line": 153,
+      "sha256": "31537fbfb7b63dc0c862ec4a684ab5c81c22ce3e9d847c7812fef64220172915",
+      "body_edit": "none",
+      "attributes": "#[kani::ensures(|r:&M31| r.0<P)]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "CM31::new",
+      "line": 271,
+      "sha256": "67b40a34e4de780871a1d5216430959a57e4ce4b83ec6f541c5c5a3bd763c22e",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(a.0<P && b.0<P)]\n#[kani::ensures(|r:&CM31| cm_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "CM31::mul",
+      "line": 306,
+      "sha256": "28e89d2b8e8ab876209034c0580de97c8c176538d351505447e93598d8dfb11f",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(cm_ok(self) && cm_ok(rhs))]\n#[kani::ensures(|r:&CM31| cm_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/r0/domain.rs",
+      "owner": "index_type!::FibreIndex::new",
+      "sha256": "1e72814cb7a812a31d32e4619d11506c5eab0c7c594deafbba31632569cd257c",
+      "body_edit": "expand bound FIBRE_COUNT=262144; map sole error discriminant to local Checkpoint; source-shaped private newtype"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/fast_domain.rs",
+      "owner": "TABLE_A",
+      "sha256": "2712b39b6bf823218117511c284ad974b18bad5412cfc5cdbd7137b0053cf81d",
+      "body_edit": "none"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/fast_domain.rs",
+      "owner": "TABLE_B",
+      "sha256": "32f9bd345ff99f8a5701f8af03282eb110a85363411c85e4868bc7fa0de5ca61",
+      "body_edit": "none"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/fast_domain.rs",
+      "owner": "table_value",
+      "line": 276,
+      "sha256": "9b161ac817a454fbb14b967a29be939a130b87734825c2e23134f6634b0995bf",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(value.0<P && value.1<P)]\n#[kani::ensures(|r:&CM31| cm_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/fast_domain.rs",
+      "owner": "fibre_point",
+      "line": 282,
+      "sha256": "2b8b4a5c955307105db3437def92d5c8bea1679f826b1aa9822c11213674938f",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(u.0<262144)]\n#[kani::ensures(|r:&Point<M31>| r.x.0<P && r.y.0<P)]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/fast_domain.rs",
+      "owner": "line_node",
+      "line": 295,
+      "sha256": "b66dbb69852f3a92b6b41025ca135d068e6289c29ad8c8a3100bf87da23b27ad",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(u.0<262144)]\n#[kani::ensures(|r:&M31| r.0<P)]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "CM31::add",
+      "line": 281,
+      "sha256": "9d5e4dde28e798fd67fc08c03fb44a65b14c7a5e0f11d6b4566f8229ba8e7756",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(cm_ok(self) && cm_ok(rhs))]\n#[kani::ensures(|r:&CM31| cm_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "CM31::sub",
+      "line": 289,
+      "sha256": "a6a4305b95295c5b15b00d1a5570250782338ae6f42a8537b66ca10fb51a68b7",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(cm_ok(self) && cm_ok(rhs))]\n#[kani::ensures(|r:&CM31| cm_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "mul_by_r",
+      "line": 860,
+      "sha256": "0353d0a0f92eb1335a5afe92df187ad3283cd7229e3107685a8262cfdda68a25",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(cm_ok(x))]\n#[kani::ensures(|r:&CM31| cm_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "QM31::add",
+      "line": 896,
+      "sha256": "8391d08d885fda440246dd03ac7a6963257fd1496be901f4ce548e9a9588584e",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(k_ok(self) && k_ok(rhs))]\n#[kani::ensures(|r:&QM31| k_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "QM31::sub",
+      "line": 906,
+      "sha256": "0f63921f7c69f3e6f428453d7a326af1c1d4319409ac45469aeeca84a1160c49",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(k_ok(self) && k_ok(rhs))]\n#[kani::ensures(|r:&QM31| k_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "QM31::mul",
+      "line": 935,
+      "sha256": "7e538107feb215c05141c196f523de52c79fb74c6c975389942749c8db760de8",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(k_ok(self) && k_ok(rhs))]\n#[kani::ensures(|r:&QM31| k_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "owner": "canonical_qm31",
+      "line": 283,
+      "sha256": "5cc339b12c5b4cc11876e623b2695b698fde8c2163195bc97b70beeea4cd9aef",
+      "body_edit": "none",
+      "attributes": "#[kani::ensures(|r:&QM31| k_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "owner": "WideExact::add",
+      "line": 81,
+      "sha256": "711892452ab80cd1a37abcdd41e42375b86d82b577586567da82c5eacadf0f4f",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(e_ok(self) && e_ok(rhs))]\n#[kani::ensures(|r:&WideExact| e_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "owner": "WideExact::mul_qm31",
+      "line": 178,
+      "sha256": "617f4bfe9aaaabf3129ada726faaf601dfac8e1d978eb62ba007dcc6032fdf9f",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(e_ok(self))]\n#[kani::ensures(|r:&WideExact| e_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/multiproof.rs",
+      "owner": "Arity::bits",
+      "line": 32,
+      "sha256": "8bd56f1e543354ce7ba9152ab83e6f6248b59f98217b51a9425a03107bb24e04",
+      "body_edit": "none",
+      "attributes": ""
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/multiproof.rs",
+      "owner": "Arity::width",
+      "line": 39,
+      "sha256": "9530b09cfaf7893da9af948dbb285a70f96edc946aeea274a4300881441a0c42",
+      "body_edit": "none",
+      "attributes": ""
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/multiproof.rs",
+      "owner": "Arity::levels",
+      "line": 43,
+      "sha256": "8f5e23817998bb43f3fda206e985d651038e23c392c3b80e1979634412c304d8",
+      "body_edit": "none",
+      "attributes": ""
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/multiproof.rs",
+      "owner": "well_formed",
+      "line": 54,
+      "sha256": "0f56ddcea55b5129e9c71b59112b68c6daebd2de707debe0c0e7e8d7a70e64fb",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(indices.len()<=16)]\n#[kani::ensures(|r:&bool| !*r || (!indices.is_empty() && (0>=indices.len() || (indices[0]<(1<<18))) && (1>=indices.len() || (indices[1]<(1<<18) && indices[0]<indices[1])) && (2>=indices.len() || (indices[2]<(1<<18) && indices[1]<indices[2])) && (3>=indices.len() || (indices[3]<(1<<18) && indices[2]<indices[3])) && (4>=indices.len() || (indices[4]<(1<<18) && indices[3]<indices[4])) && (5>=indices.len() || (indices[5]<(1<<18) && indices[4]<indices[5])) && (6>=indices.len() || (indices[6]<(1<<18) && indices[5]<indices[6])) && (7>=indices.len() || (indices[7]<(1<<18) && indices[6]<indices[7])) && (8>=indices.len() || (indices[8]<(1<<18) && indices[7]<indices[8])) && (9>=indices.len() || (indices[9]<(1<<18) && indices[8]<indices[9])) && (10>=indices.len() || (indices[10]<(1<<18) && indices[9]<indices[10])) && (11>=indices.len() || (indices[11]<(1<<18) && indices[10]<indices[11])) && (12>=indices.len() || (indices[12]<(1<<18) && indices[11]<indices[12])) && (13>=indices.len() || (indices[13]<(1<<18) && indices[12]<indices[13])) && (14>=indices.len() || (indices[14]<(1<<18) && indices[13]<indices[14])) && (15>=indices.len() || (indices[15]<(1<<18) && indices[14]<indices[15]))))]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/multiproof.rs",
+      "owner": "index_at",
+      "line": 62,
+      "sha256": "a4c3d00608db7c440100b34b0bbfa7e723ef0c259aba50f875129c852f3f675e",
+      "body_edit": "none",
+      "attributes": ""
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/multiproof.rs",
+      "owner": "node_count::parent_group",
+      "sha256": "c7b731019a65071939f6a6309f2095c29d0b5d5159729d57cae313ec60fdb393",
+      "body_edit": "exact inner scan lifted into group_end; returns j; suffix-only sorted invariant ignores overwritten prefix and dead gap"
+    }
+  ],
+  "generated": {
+    "lib.rs": "680f9b3dc4128ea6431e4052a697a8fe267cfbef8786f4da92fe9f3f7ae1238d",
+    "Cargo.toml": "f5905ddc2202cb7b13fb0263fe1b115422e7a70dc98cb118b3af2fbd1ea75cdf",
+    "geometry.rs": "72d88ed98529232863a2710687509e7ff6a9c6987416038f198ccde93d52a565",
+    "frontier.rs": "970a0b049e5b051292de3a4e2ede447c6bc95400f0f69df5211fdd4a0f71e9d0"
+  },
+  "context": "Exact copied bodies, source-shaped field structs and Error::Checkpoint only. Contracts are added attributes; no shipped edits. This is not a Charon/Aeneas or ELF refinement proof. Finite harness extents are recorded separately; contract syntax is not universal proof evidence."
+}

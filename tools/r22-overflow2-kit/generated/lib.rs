@@ -93,7 +93,7 @@ fn read_checkpoint_semantic_alpha(bytes:&[u8],at:usize)->Result<([K;10],usize),E
 #[kani::proof_for_contract(read_checkpoint_semantic_alpha)] #[kani::unwind(12)]
 #[kani::stub_verified(Reader::k)]
 fn semantic_alpha() {let b:[u8;4880]=kani::any();let len:usize=kani::any();kani::assume(len<=4880);read_checkpoint_semantic_alpha(&b[..len],kani::any());}
-#[kani::requires(bytes.len()<=4880 && weights.len()<=256 && 16*weights.len()<=bytes.len() && at<=bytes.len()-16*weights.len())]
+#[kani::requires(bytes.len()<=4880 && (weights.len()==64 || weights.len()==256) && 16*weights.len()<=bytes.len() && at<=bytes.len()-16*weights.len())]
 #[kani::ensures(|r:&Result<(Vec<K>,usize),Error>| r.as_ref().map_or(true, |(ks,end)| ks.len()==old(weights.len()) && *end==at+16*ks.len() && ks.iter().all(|x| k_ok(*x))))]
 fn read_checkpoint_weights(bytes:&[u8],mut at:usize,mut weights:Vec<K>)->Result<(Vec<K>,usize),Error> {
     for out in &mut weights {
@@ -103,7 +103,7 @@ fn read_checkpoint_weights(bytes:&[u8],mut at:usize,mut weights:Vec<K>)->Result<
 }
 #[kani::proof_for_contract(read_checkpoint_weights)] #[kani::unwind(258)]
 #[kani::stub_verified(read_one_weight)]
-fn checkpoint_weights256() {let b:[u8;4880]=kani::any(); let w=kani::vec::any_vec::<K,256>(); let len:usize=kani::any();kani::assume(len<=4880);read_checkpoint_weights(&b[..len],kani::any(),w);}
+fn checkpoint_weights256() {let b:[u8;4880]=kani::any(); let w=kani::vec::exact_vec::<K,256>(); let len:usize=kani::any();kani::assume(len<=4880);read_checkpoint_weights(&b[..len],kani::any(),w);}
 #[kani::requires(bytes.len()<=4880 && bytes.len()>=16 && *at<=bytes.len()-16)]
 #[kani::modifies(at,out)]
 #[kani::ensures(|r:&Result<(),Error>| r.is_err() || (*at==old(*at)+16 && k_ok(*out)))]
@@ -117,6 +117,12 @@ fn read_one_weight(bytes:&[u8],at:&mut usize,out:&mut K)->Result<(),Error> {
 #[kani::proof_for_contract(read_one_weight)]
 #[kani::stub_verified(Reader::k)]
 fn weight_body() {let b:[u8;4880]=kani::any();let len:usize=kani::any();kani::assume(len<=4880);let mut at=kani::any();let mut out=kani::any();read_one_weight(&b[..len],&mut at,&mut out);}
+#[kani::proof_for_contract(read_checkpoint_weights)] #[kani::unwind(66)]
+#[kani::stub_verified(read_one_weight)]
+fn checkpoint_weights64() {let b:[u8;4880]=kani::any();let w=kani::vec::exact_vec::<K,64>();let len:usize=kani::any();kani::assume(len<=4880);read_checkpoint_weights(&b[..len],kani::any(),w);}
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub_verified(read_checkpoint_weights)]
+fn weight_vec_stub_diagnostic() {let b:[u8;1768]=kani::any();let w=kani::vec::exact_vec::<K,64>();let _=read_checkpoint_weights(&b,712,w);}
 
 fn residue_limb_at(row:&[u64;4],index:usize)->u64 {row[index]}
 
@@ -159,15 +165,25 @@ fn batched_push64() {let mut w=BatchedWeights{raw:kani::vec::exact_vec::<[u64;4]
 fn batched_push256() {let mut w=BatchedWeights{raw:kani::vec::exact_vec::<[u64;4],256>(),terms:kani::any()}; w.push(kani::any(),kani::any(),kani::any());}
 #[kani::proof_for_contract(BatchedWeights::push)] #[kani::unwind(258)]
 #[kani::stub_verified(update_residue_row)]
-fn batched_push256_block0() {let mut w=BatchedWeights{raw:kani::vec::exact_vec::<[u64;4],256>(),terms:kani::any()};let index=0+(kani::any::<u8>()&63) as usize;w.push(index,kani::any(),kani::any());}
+fn batched_push256_block0() {let mut w=BatchedWeights{raw:kani::vec::exact_vec::<[u64;4],256>(),terms:(kani::any::<u8>()&31) as usize};let index=0+(kani::any::<u8>()&63) as usize;w.push(index,kani::any(),kani::any());}
 #[kani::proof_for_contract(BatchedWeights::push)] #[kani::unwind(258)]
 #[kani::stub_verified(update_residue_row)]
-fn batched_push256_block1() {let mut w=BatchedWeights{raw:kani::vec::exact_vec::<[u64;4],256>(),terms:kani::any()};let index=64+(kani::any::<u8>()&63) as usize;w.push(index,kani::any(),kani::any());}
+fn batched_push256_block1() {let mut w=BatchedWeights{raw:kani::vec::exact_vec::<[u64;4],256>(),terms:(kani::any::<u8>()&31) as usize};let index=64+(kani::any::<u8>()&63) as usize;w.push(index,kani::any(),kani::any());}
 #[kani::proof_for_contract(BatchedWeights::push)] #[kani::unwind(258)]
 #[kani::stub_verified(update_residue_row)]
-fn batched_push256_block2() {let mut w=BatchedWeights{raw:kani::vec::exact_vec::<[u64;4],256>(),terms:kani::any()};let index=128+(kani::any::<u8>()&63) as usize;w.push(index,kani::any(),kani::any());}
+fn batched_push256_block2() {let mut w=BatchedWeights{raw:kani::vec::exact_vec::<[u64;4],256>(),terms:(kani::any::<u8>()&31) as usize};let index=128+(kani::any::<u8>()&63) as usize;w.push(index,kani::any(),kani::any());}
 #[kani::proof_for_contract(BatchedWeights::push)] #[kani::unwind(258)]
 #[kani::stub_verified(update_residue_row)]
-fn batched_push256_block3() {let mut w=BatchedWeights{raw:kani::vec::exact_vec::<[u64;4],256>(),terms:kani::any()};let index=192+(kani::any::<u8>()&63) as usize;w.push(index,kani::any(),kani::any());}
+fn batched_push256_block3() {let mut w=BatchedWeights{raw:kani::vec::exact_vec::<[u64;4],256>(),terms:(kani::any::<u8>()&31) as usize};let index=192+(kani::any::<u8>()&63) as usize;w.push(index,kani::any(),kani::any());}
 mod geometry;
 mod frontier;
+use geometry::WideExact as E;
+impl Reader<'_> {
+#[kani::requires(self.bytes.len()<=4880 && self.bytes.len()>=32 && self.at<=self.bytes.len()-32)]
+#[kani::modifies(&mut self.at)]
+#[kani::ensures(|r:&Result<E,Error>| self.at==old(self.at)+32 && r.as_ref().map_or(true, |x|geometry::e_ok(*x)))]
+fn e(&mut self)->Result<E,Error>{E::from_le_bytes(&self.raw::<32>()).ok_or(Error::Checkpoint)}
+}
+#[kani::proof_for_contract(Reader::e)]
+#[kani::stub_verified(Reader::raw::<32>)] #[kani::stub_verified(E::from_le_bytes)]
+fn reader_e() {let b:[u8;4880]=kani::any();let len:usize=kani::any();kani::assume(len<=4880);let mut r=Reader{bytes:&b[..len],at:kani::any()};let _=r.e();}

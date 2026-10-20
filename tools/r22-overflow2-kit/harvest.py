@@ -4,7 +4,7 @@ import hashlib,json,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'docs/research/100bit-spend-path-20261013/evidence/r22-overflow2-20261021'
-subprocess.run(['rsync','-a','--include=*/','--include=receipt.json','--exclude=*','dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-r22-overflow2-20261021/receipts/',str(OUT/'attempts')+'/'],check=True)
+subprocess.run(['rsync','-a','--include=*/','--include=receipt.json','--include=diagnostics.json','--exclude=*','dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-r22-overflow2-20261021/receipts/',str(OUT/'attempts')+'/'],check=True)
 rows=[]
 for p in sorted((OUT/'attempts').glob('*/receipt.json')):
     r=json.loads(p.read_text());rows.append(r)

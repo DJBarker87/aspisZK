@@ -79,3 +79,29 @@ stub_verified for its proved child contracts. Attempt48 is a setup failure:
 Point needed an Arbitrary derive for verified stubbing;49 supplies it and
 passes. The enabled field branch is the non-r0-r91-audit branch; no build
 feature or syscall correspondence to the frozen ELF is claimed.
+
+Stage 4/final: contract-index.json selects the accepted contracts and explains
+all domains/dependencies; remaining-summary.tsv identifies the concrete missing
+joins and references the unchanged exact prior OPEN site IDs. 75 Kani attempts
+include51 successful attempts/43 distinct targets. Four new Lean theorems pass.
+All successful standard-axiom lines are preserved in the focused Lean receipts.
+
+The256-row push proof uses Z3 after SAT formula expansion; all four index
+partitions pass in11–13s at approximately538000KiB RSS. Object-bits8 diagnostic
+attempts reject with too many addressed objects; object-bits9 does not cure SAT
+formula size. No cap is raised. Source field contracts extend to concrete
+QM31 and WideExact operations and strict WideExact decoding. Decoder Reader.e
+and the composed Merkle caller pass with CaDiCaL after Z3 internal map::at
+failures. The Merkle suffix scan ignores the overwritten/dead prefix, and the
+composed caller still assumes legal i/w: it is not a whole frontier proof.
+
+Attempt108 is an expected diagnostic: the actual owned-Vec-return weight reader
+cannot be used by stub_verified because its return type lacks kani::Arbitrary.
+Attempts106/109 additionally retain the stopped variable-length loop / fixed64
+SMT internal error. The complete weight loop remains open. boundary-status.json
+records the missing FunsExternal source and unchanged endpoints verbatim.
+No failed compile, diagnostic target or conditional local contract discharges R22.
+
+Run generate.py --check and audit.py for read-only validation. Never run all
+harnesses as a regression: historical bounded tests and deliberate failing
+API diagnostics are retained, and a full suite would repeat unchanged work.

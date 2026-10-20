@@ -1,0 +1,12 @@
+{
+  "stdout_sha256": "a4f5c98a0e30416a2cfd66ab618b7508c4fd6321d585e106f6c1c51fa1180fa7",
+  "stderr_sha256": "2388bc37b5b162dc3abdd6a8c085ac862a619080740582b373c02a847c3bc1e7",
+  "verification_summary": [
+    "",
+    "For more information about this error, try `rustc --explain E0503`.",
+    "error: Failed to execute cargo (exit status: 101). Found 1 compilation errors."
+  ],
+  "stderr": "   Compiling r22-overflow2-contracts v0.1.0 (/home/dombarker/project-offloads/codex-cx-r22-overflow2-20261021/generated)\nerror: could not compile `r22-overflow2-contracts` (lib) due to 1 previous error; 8 warnings emitted\n",
+  "compiler_errors": "error[E0503]: cannot use value because it was mutably borrowed\n   --> lib.rs:132:49\n    |\n128 | #[kani::requires(k_ok(power) && basis.0<P)]\n    | -------------------------------------------\n    | |\n    | value is borrowed here\n    | borrow later used here\n...\n132 | #[kani::ensures(|_:&()| flush || growth(row,old(*row)))]\n    |                                                 ^^^^ use of borrowed value\n...\n138 |         row[j]=old+u64::from(limb)*u64::from(basis.0);\n    |         --- borrow occurs due to use of value in closure\n\nFor more information about this error, try `rustc --explain E0503`.\nerror: Failed to execute cargo (exit status: 101). Found 1 compilation errors.\n",
+  "failed_properties": []
+}

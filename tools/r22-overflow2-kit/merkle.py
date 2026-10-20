@@ -7,12 +7,10 @@ impl Arity {
 '''
     for q in ['bits','width','levels']:s+=get(M,'Arity::'+q)
     s+='}\n'
-    s+='''fn sorted_suffix(a:&[u32;16],i:usize,n:usize)->bool {
-    (i..n).all(|k| a[k]<(1<<18) && (k==i || a[k-1]<a[k]))
-}
-'''
-    s+=get(M,'well_formed','''#[kani::requires(indices.len()<=16)]
-#[kani::ensures(|r:&bool| !*r || (!indices.is_empty() && (0..indices.len()).all(|k|indices[k]<(1<<18) && (k==0 || indices[k-1]<indices[k]))))]''')
+    suffix=' && '.join(f'({k}<i || {k}>=n || (a[{k}]<(1<<18)'+(f' && ({k}==i || a[{k-1}]<a[{k}])' if k else '')+'))' for k in range(16))
+    s+='fn sorted_suffix(a:&[u32;16],i:usize,n:usize)->bool {'+suffix+'}\n'
+    ordered=' && '.join(f'({k}>=indices.len() || (indices[{k}]<(1<<18)'+(f' && indices[{k-1}]<indices[{k}]' if k else '')+'))' for k in range(16))
+    s+=get(M,'well_formed','#[kani::requires(indices.len()<=16)]\n#[kani::ensures(|r:&bool| !*r || (!indices.is_empty() && '+ordered+'))]')
     s+=get(M,'index_at')
     s+='''#[kani::proof_for_contract(well_formed)] #[kani::unwind(18)]
 fn validator() {let a:[u32;16]=kani::any();let n:usize=kani::any();kani::assume(n<=16);well_formed(&a[..n]);}

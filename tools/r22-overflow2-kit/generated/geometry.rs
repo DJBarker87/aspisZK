@@ -449,3 +449,174 @@ pub fn line_node(u: FibreIndex) -> M31 {
 #[kani::stub_verified(fibre_point)] #[kani::stub_verified(M31::mul)]
 #[kani::stub_verified(M31::double)] #[kani::stub_verified(M31::sub)]
 fn line_coordinate(){line_node(kani::any());}
+impl CM31 {
+#[kani::requires(cm_ok(self) && cm_ok(rhs))]
+#[kani::ensures(|r:&CM31| cm_ok(*r))]
+pub fn add(self, rhs: CM31) -> CM31 {
+        CM31 {
+            a: self.a.add(rhs.a),
+            b: self.b.add(rhs.b),
+        }
+    }
+#[kani::requires(cm_ok(self) && cm_ok(rhs))]
+#[kani::ensures(|r:&CM31| cm_ok(*r))]
+pub fn sub(self, rhs: CM31) -> CM31 {
+        CM31 {
+            a: self.a.sub(rhs.a),
+            b: self.b.sub(rhs.b),
+        }
+    }
+}
+#[kani::proof_for_contract(CM31::add)] #[kani::stub_verified(M31::add)] fn complex_add(){CM31::add(kani::any(),kani::any());}
+#[kani::proof_for_contract(CM31::sub)] #[kani::stub_verified(M31::sub)] fn complex_sub(){CM31::sub(kani::any(),kani::any());}
+#[kani::requires(cm_ok(x))]
+#[kani::ensures(|r:&CM31| cm_ok(*r))]
+fn mul_by_r(x: CM31) -> CM31 {
+    // (2 + i)(a + bi) = (2a - b) + (a + 2b) i
+    CM31 {
+        a: x.a.double().sub(x.b),
+        b: x.a.add(x.b.double()),
+    }
+}
+#[kani::proof_for_contract(mul_by_r)] #[kani::stub_verified(M31::double)] #[kani::stub_verified(M31::sub)] #[kani::stub_verified(M31::add)] fn complex_nonresidue(){mul_by_r(kani::any());}
+impl QM31 {
+#[kani::requires(k_ok(self) && k_ok(rhs))]
+#[kani::ensures(|r:&QM31| k_ok(*r))]
+pub fn add(self, rhs: QM31) -> QM31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KAdd);
+        QM31 {
+            c0: self.c0.add(rhs.c0),
+            c1: self.c1.add(rhs.c1),
+        }
+    }
+#[kani::requires(k_ok(self) && k_ok(rhs))]
+#[kani::ensures(|r:&QM31| k_ok(*r))]
+pub fn sub(self, rhs: QM31) -> QM31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KSub);
+        QM31 {
+            c0: self.c0.sub(rhs.c0),
+            c1: self.c1.sub(rhs.c1),
+        }
+    }
+#[kani::requires(k_ok(self) && k_ok(rhs))]
+#[kani::ensures(|r:&QM31| k_ok(*r))]
+pub fn mul(self, rhs: QM31) -> QM31 {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMul);
+        let m0 = self.c0.mul(rhs.c0);
+        let m1 = self.c1.mul(rhs.c1);
+        let m2 = self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));
+        QM31 {
+            c0: m0.add(mul_by_r(m1)),
+            c1: m2.sub(m0).sub(m1),
+        }
+    }
+}
+#[kani::proof_for_contract(QM31::add)]
+#[kani::stub_verified(CM31::add)]
+fn secure_add(){QM31::add(kani::any(),kani::any());}
+#[kani::proof_for_contract(QM31::sub)]
+#[kani::stub_verified(CM31::sub)]
+fn secure_sub(){QM31::sub(kani::any(),kani::any());}
+#[kani::proof_for_contract(QM31::mul)]
+#[kani::stub_verified(CM31::mul)]
+#[kani::stub_verified(CM31::add)]
+#[kani::stub_verified(CM31::sub)]
+#[kani::stub_verified(mul_by_r)]
+fn secure_mul(){QM31::mul(kani::any(),kani::any());}
+#[kani::ensures(|r:&QM31| k_ok(*r))]
+fn canonical_qm31(value: QM31) -> QM31 {
+    let reduce = |x: M31| M31(x.0 % P);
+    QM31 {
+        c0: CM31 {
+            a: reduce(value.c0.a),
+            b: reduce(value.c0.b),
+        },
+        c1: CM31 {
+            a: reduce(value.c1.a),
+            b: reduce(value.c1.b),
+        },
+    }
+}
+#[kani::proof_for_contract(canonical_qm31)] fn secure_canonicalize(){canonical_qm31(kani::any());}
+#[derive(Clone,Copy,Debug,kani::Arbitrary)] pub(crate) struct WideExact {c0:QM31,c1:QM31}
+pub(crate) fn e_ok(x:WideExact)->bool {k_ok(x.c0)&&k_ok(x.c1)}
+impl WideExact {
+#[kani::requires(e_ok(self) && e_ok(rhs))]
+#[kani::ensures(|r:&WideExact| e_ok(*r))]
+pub fn add(self, rhs: Self) -> Self {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EAdd);
+        Self {
+            c0: self.c0.add(rhs.c0),
+            c1: self.c1.add(rhs.c1),
+        }
+    }
+#[kani::requires(e_ok(self))]
+#[kani::ensures(|r:&WideExact| e_ok(*r))]
+pub fn mul_qm31(self, rhs: QM31) -> Self {
+        #[cfg(feature = "r0-op-count")]
+        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMulK);
+        let rhs = canonical_qm31(rhs);
+        Self {
+            c0: self.c0.mul(rhs),
+            c1: self.c1.mul(rhs),
+        }
+    }
+}
+#[kani::proof_for_contract(WideExact::add)] #[kani::stub_verified(QM31::add)] fn wide_add(){WideExact::add(kani::any(),kani::any());}
+#[kani::proof_for_contract(WideExact::mul_qm31)] #[kani::stub_verified(QM31::mul)] #[kani::stub_verified(canonical_qm31)] fn wide_mul_qm31(){WideExact::mul_qm31(kani::any(),kani::any());}
+impl WideExact {pub const LIMB_COUNT:usize=8;pub const BYTE_LEN:usize=32;
+#[kani::ensures(|r:&Option<Self>| r.as_ref().map_or(true, |x|e_ok(*x)))]
+pub fn from_limbs(limbs: [u32; Self::LIMB_COUNT]) -> Option<Self> {
+        if limbs[0] >= P || limbs[1] >= P || limbs[2] >= P || limbs[3] >= P
+            || limbs[4] >= P || limbs[5] >= P || limbs[6] >= P || limbs[7] >= P {
+            return None;
+        }
+        let [a, b, c, d, e, f, g, h] = limbs;
+        Some(Self {
+            c0: QM31 {
+                c0: CM31 {
+                    a: M31(a),
+                    b: M31(b),
+                },
+                c1: CM31 {
+                    a: M31(c),
+                    b: M31(d),
+                },
+            },
+            c1: QM31 {
+                c0: CM31 {
+                    a: M31(e),
+                    b: M31(f),
+                },
+                c1: CM31 {
+                    a: M31(g),
+                    b: M31(h),
+                },
+            },
+        })
+    }
+#[kani::requires(bytes.len()==32)]
+#[kani::ensures(|r:&Option<Self>| r.as_ref().map_or(true, |x|e_ok(*x)))]
+pub fn from_le_bytes(bytes: &[u8]) -> Option<Self> {
+        if bytes.len() != Self::BYTE_LEN {
+            return None;
+        }
+        let limbs = [
+            u32::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]),
+            u32::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]]),
+            u32::from_le_bytes([bytes[8], bytes[9], bytes[10], bytes[11]]),
+            u32::from_le_bytes([bytes[12], bytes[13], bytes[14], bytes[15]]),
+            u32::from_le_bytes([bytes[16], bytes[17], bytes[18], bytes[19]]),
+            u32::from_le_bytes([bytes[20], bytes[21], bytes[22], bytes[23]]),
+            u32::from_le_bytes([bytes[24], bytes[25], bytes[26], bytes[27]]),
+            u32::from_le_bytes([bytes[28], bytes[29], bytes[30], bytes[31]]),
+        ];
+        Self::from_limbs(limbs)
+    }
+}
+#[kani::proof_for_contract(WideExact::from_limbs)] fn wide_limbs(){WideExact::from_limbs(kani::any());}
+#[kani::proof_for_contract(WideExact::from_le_bytes)] #[kani::stub_verified(WideExact::from_limbs)] fn wide_bytes(){let b:[u8;32]=kani::any();WideExact::from_le_bytes(&b);}

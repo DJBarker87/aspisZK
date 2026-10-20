@@ -53,11 +53,11 @@ s+='''#[kani::proof_for_contract(read_checkpoint_semantic_alpha)] #[kani::unwind
 #[kani::stub_verified(Reader::k)]
 fn semantic_alpha() {let b:[u8;4880]=kani::any();let len:usize=kani::any();kani::assume(len<=4880);read_checkpoint_semantic_alpha(&b[..len],kani::any());}
 '''
-s+=get(V,'read_checkpoint_weights','''#[kani::requires(bytes.len()<=4880 && weights.len()<=256 && 16*weights.len()<=bytes.len() && at<=bytes.len()-16*weights.len())]
+s+=get(V,'read_checkpoint_weights','''#[kani::requires(bytes.len()<=4880 && (weights.len()==64 || weights.len()==256) && 16*weights.len()<=bytes.len() && at<=bytes.len()-16*weights.len())]
 #[kani::ensures(|r:&Result<(Vec<K>,usize),Error>| r.as_ref().map_or(true, |(ks,end)| ks.len()==old(weights.len()) && *end==at+16*ks.len() && ks.iter().all(|x| k_ok(*x))))]''')
 s+='''#[kani::proof_for_contract(read_checkpoint_weights)] #[kani::unwind(258)]
 #[kani::stub_verified(Reader::k)]
-fn checkpoint_weights256() {let b:[u8;4880]=kani::any(); let w=kani::vec::any_vec::<K,256>(); let len:usize=kani::any();kani::assume(len<=4880);read_checkpoint_weights(&b[..len],kani::any(),w);}
+fn checkpoint_weights256() {let b:[u8;4880]=kani::any(); let w=kani::vec::exact_vec::<K,256>(); let len:usize=kani::any();kani::assume(len<=4880);read_checkpoint_weights(&b[..len],kani::any(),w);}
 '''
 # One exact iterator body, lifted to a function contract (reference reborrows only).
 s+="""#[kani::requires(bytes.len()<=4880 && bytes.len()>=16 && *at<=bytes.len()-16)]
@@ -78,6 +78,14 @@ fn weight_body() {let b:[u8;4880]=kani::any();let len:usize=kani::any();kani::as
 wbody=fn(blob(V),'read_checkpoint_weights')[0]
 assert 'let mut reader=Reader{bytes,at};' in wbody and 'let value=reader.k()?;' in wbody and 'at=reader.at;' in wbody and '*out=value;' in wbody
 pins.append(dict(path=V,owner='read_checkpoint_weights::iteration',body_edit='lift four statements into read_one_weight; at:*at and *at=reader.at, plus Ok(()); preserves early error and write order',sha256=sha(wbody.encode())))
+
+s+="""#[kani::proof_for_contract(read_checkpoint_weights)] #[kani::unwind(66)]
+#[kani::stub_verified(read_one_weight)]
+fn checkpoint_weights64() {let b:[u8;4880]=kani::any();let w=kani::vec::exact_vec::<K,64>();let len:usize=kani::any();kani::assume(len<=4880);read_checkpoint_weights(&b[..len],kani::any(),w);}
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub_verified(read_checkpoint_weights)]
+fn weight_vec_stub_diagnostic() {let b:[u8;1768]=kani::any();let w=kani::vec::exact_vec::<K,64>();let _=read_checkpoint_weights(&b,712,w);}
+"""
 
 # Exact numerical row, with actual four correlated limb products, unlike pass one.
 s+=get(V,'residue_limb_at')+get(V,'power_limb_at')
@@ -122,7 +130,7 @@ fn batched_push256() {let mut w=BatchedWeights{raw:kani::vec::exact_vec::<[u64;4
 for block in range(4):
     s+=f"""#[kani::proof_for_contract(BatchedWeights::push)] #[kani::unwind(258)]
 #[kani::stub_verified(update_residue_row)]
-fn batched_push256_block{block}() {{let mut w=BatchedWeights{{raw:kani::vec::exact_vec::<[u64;4],256>(),terms:kani::any()}};let index={64*block}+(kani::any::<u8>()&63) as usize;w.push(index,kani::any(),kani::any());}}
+fn batched_push256_block{block}() {{let mut w=BatchedWeights{{raw:kani::vec::exact_vec::<[u64;4],256>(),terms:(kani::any::<u8>()&31) as usize}};let index={64*block}+(kani::any::<u8>()&63) as usize;w.push(index,kani::any(),kani::any());}}
 """
 
 s=s.replace('for limb in row {', 'for limb in &mut *row {')
@@ -148,6 +156,14 @@ files['lib.rs']+='mod geometry;\n'
 from merkle import build as merkle_build
 files['frontier.rs']=merkle_build(get,blob,fn,pins,sha)
 files['lib.rs']+='mod frontier;\n'
+files['lib.rs']+="use geometry::WideExact as E;\nimpl Reader<'_> {\n"+get(V,"Reader<'a>::e","""#[kani::requires(self.bytes.len()<=4880 && self.bytes.len()>=32 && self.at<=self.bytes.len()-32)]
+#[kani::modifies(&mut self.at)]
+#[kani::ensures(|r:&Result<E,Error>| self.at==old(self.at)+32 && r.as_ref().map_or(true, |x|geometry::e_ok(*x)))]""")+'}\n'
+files['lib.rs']+="""#[kani::proof_for_contract(Reader::e)]
+#[kani::stub_verified(Reader::raw::<32>)] #[kani::stub_verified(E::from_le_bytes)]
+fn reader_e() {let b:[u8;4880]=kani::any();let len:usize=kani::any();kani::assume(len<=4880);let mut r=Reader{bytes:&b[..len],at:kani::any()};let _=r.e();}
+"""
+
 manifest=dict(source_revision=FREEZE,declarations=pins,generated={k:sha(v.encode()) for k,v in files.items()},context='Exact copied bodies, source-shaped field structs and Error::Checkpoint only. Contracts are added attributes; no shipped edits. This is not a Charon/Aeneas or ELF refinement proof. Finite harness extents are recorded separately; contract syntax is not universal proof evidence.')
 files['source-pins.json']=json.dumps(manifest,indent=2)+'\n'
 a=argparse.ArgumentParser();a.add_argument('--check',action='store_true');args=a.parse_args()

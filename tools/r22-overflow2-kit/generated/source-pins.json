@@ -55,7 +55,7 @@
       "line": 363,
       "sha256": "1db3ac2f95869b25b000d211488dae053ca25ccf35f81a148b74d826fab519e1",
       "body_edit": "four-statement iteration body lifted verbatim with at-reference reborrows into verified read_one_weight; original for loop retained",
-      "attributes": "#[kani::requires(bytes.len()<=4880 && weights.len()<=256 && 16*weights.len()<=bytes.len() && at<=bytes.len()-16*weights.len())]\n#[kani::ensures(|r:&Result<(Vec<K>,usize),Error>| r.as_ref().map_or(true, |(ks,end)| ks.len()==old(weights.len()) && *end==at+16*ks.len() && ks.iter().all(|x| k_ok(*x))))]"
+      "attributes": "#[kani::requires(bytes.len()<=4880 && (weights.len()==64 || weights.len()==256) && 16*weights.len()<=bytes.len() && at<=bytes.len()-16*weights.len())]\n#[kani::ensures(|r:&Result<(Vec<K>,usize),Error>| r.as_ref().map_or(true, |(ks,end)| ks.len()==old(weights.len()) && *end==at+16*ks.len() && ks.iter().all(|x| k_ok(*x))))]"
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
@@ -210,6 +210,94 @@
       "attributes": "#[kani::requires(u.0<262144)]\n#[kani::ensures(|r:&M31| r.0<P)]"
     },
     {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "CM31::add",
+      "line": 281,
+      "sha256": "9d5e4dde28e798fd67fc08c03fb44a65b14c7a5e0f11d6b4566f8229ba8e7756",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(cm_ok(self) && cm_ok(rhs))]\n#[kani::ensures(|r:&CM31| cm_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "CM31::sub",
+      "line": 289,
+      "sha256": "a6a4305b95295c5b15b00d1a5570250782338ae6f42a8537b66ca10fb51a68b7",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(cm_ok(self) && cm_ok(rhs))]\n#[kani::ensures(|r:&CM31| cm_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "mul_by_r",
+      "line": 860,
+      "sha256": "0353d0a0f92eb1335a5afe92df187ad3283cd7229e3107685a8262cfdda68a25",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(cm_ok(x))]\n#[kani::ensures(|r:&CM31| cm_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "QM31::add",
+      "line": 896,
+      "sha256": "8391d08d885fda440246dd03ac7a6963257fd1496be901f4ce548e9a9588584e",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(k_ok(self) && k_ok(rhs))]\n#[kani::ensures(|r:&QM31| k_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "QM31::sub",
+      "line": 906,
+      "sha256": "0f63921f7c69f3e6f428453d7a326af1c1d4319409ac45469aeeca84a1160c49",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(k_ok(self) && k_ok(rhs))]\n#[kani::ensures(|r:&QM31| k_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "QM31::mul",
+      "line": 935,
+      "sha256": "7e538107feb215c05141c196f523de52c79fb74c6c975389942749c8db760de8",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(k_ok(self) && k_ok(rhs))]\n#[kani::ensures(|r:&QM31| k_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "owner": "canonical_qm31",
+      "line": 283,
+      "sha256": "5cc339b12c5b4cc11876e623b2695b698fde8c2163195bc97b70beeea4cd9aef",
+      "body_edit": "none",
+      "attributes": "#[kani::ensures(|r:&QM31| k_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "owner": "WideExact::add",
+      "line": 81,
+      "sha256": "711892452ab80cd1a37abcdd41e42375b86d82b577586567da82c5eacadf0f4f",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(e_ok(self) && e_ok(rhs))]\n#[kani::ensures(|r:&WideExact| e_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "owner": "WideExact::mul_qm31",
+      "line": 178,
+      "sha256": "617f4bfe9aaaabf3129ada726faaf601dfac8e1d978eb62ba007dcc6032fdf9f",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(e_ok(self))]\n#[kani::ensures(|r:&WideExact| e_ok(*r))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "owner": "WideExact::from_limbs",
+      "line": 207,
+      "sha256": "7c9bee4826779e5e09f4f2dbe141734912e459f831371b0ffd78de7e1bef62b1",
+      "body_edit": "none",
+      "attributes": "#[kani::ensures(|r:&Option<Self>| r.as_ref().map_or(true, |x|e_ok(*x)))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "owner": "WideExact::from_le_bytes",
+      "line": 255,
+      "sha256": "3c8221fc32a5e31add7156b811703333966857b7bbec1145d11491fbb4926c1a",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(bytes.len()==32)]\n#[kani::ensures(|r:&Option<Self>| r.as_ref().map_or(true, |x|e_ok(*x)))]"
+    },
+    {
       "path": "crates/aspis-r1-cost-probe/src/multiproof.rs",
       "owner": "Arity::bits",
       "line": 32,
@@ -239,7 +327,7 @@
       "line": 54,
       "sha256": "0f56ddcea55b5129e9c71b59112b68c6daebd2de707debe0c0e7e8d7a70e64fb",
       "body_edit": "none",
-      "attributes": "#[kani::requires(indices.len()<=16)]\n#[kani::ensures(|r:&bool| !*r || (!indices.is_empty() && (0..indices.len()).all(|k|indices[k]<(1<<18) && (k==0 || indices[k-1]<indices[k]))))]"
+      "attributes": "#[kani::requires(indices.len()<=16)]\n#[kani::ensures(|r:&bool| !*r || (!indices.is_empty() && (0>=indices.len() || (indices[0]<(1<<18))) && (1>=indices.len() || (indices[1]<(1<<18) && indices[0]<indices[1])) && (2>=indices.len() || (indices[2]<(1<<18) && indices[1]<indices[2])) && (3>=indices.len() || (indices[3]<(1<<18) && indices[2]<indices[3])) && (4>=indices.len() || (indices[4]<(1<<18) && indices[3]<indices[4])) && (5>=indices.len() || (indices[5]<(1<<18) && indices[4]<indices[5])) && (6>=indices.len() || (indices[6]<(1<<18) && indices[5]<indices[6])) && (7>=indices.len() || (indices[7]<(1<<18) && indices[6]<indices[7])) && (8>=indices.len() || (indices[8]<(1<<18) && indices[7]<indices[8])) && (9>=indices.len() || (indices[9]<(1<<18) && indices[8]<indices[9])) && (10>=indices.len() || (indices[10]<(1<<18) && indices[9]<indices[10])) && (11>=indices.len() || (indices[11]<(1<<18) && indices[10]<indices[11])) && (12>=indices.len() || (indices[12]<(1<<18) && indices[11]<indices[12])) && (13>=indices.len() || (indices[13]<(1<<18) && indices[12]<indices[13])) && (14>=indices.len() || (indices[14]<(1<<18) && indices[13]<indices[14])) && (15>=indices.len() || (indices[15]<(1<<18) && indices[14]<indices[15]))))]"
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/multiproof.rs",
@@ -254,13 +342,21 @@
       "owner": "node_count::parent_group",
       "sha256": "c7b731019a65071939f6a6309f2095c29d0b5d5159729d57cae313ec60fdb393",
       "body_edit": "exact inner scan lifted into group_end; returns j; suffix-only sorted invariant ignores overwritten prefix and dead gap"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "Reader<'a>::e",
+      "line": 345,
+      "sha256": "2f93dbb7291a1ac270916a9404e1d94b92b453779f89dc6c000ebf8e15b8ae0d",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(self.bytes.len()<=4880 && self.bytes.len()>=32 && self.at<=self.bytes.len()-32)]\n#[kani::modifies(&mut self.at)]\n#[kani::ensures(|r:&Result<E,Error>| self.at==old(self.at)+32 && r.as_ref().map_or(true, |x|geometry::e_ok(*x)))]"
     }
   ],
   "generated": {
-    "lib.rs": "5e5cf014127224a7e220fbb51bd16aad53ef877a870392140ac8aed230e4b982",
+    "lib.rs": "7caff4b71ab8646981b3b952d378078254162bb23fdb60c1c7edfaca52d3ac8f",
     "Cargo.toml": "f5905ddc2202cb7b13fb0263fe1b115422e7a70dc98cb118b3af2fbd1ea75cdf",
-    "geometry.rs": "3deaa68a0cdfdba771f0d28a13a3d4a5351ca2471e2866d899d347097cb1c2fd",
-    "frontier.rs": "f9c1489f3ef2a16af873606d0950bea5c389fab0f18584ed2bcb778b0c3c4553"
+    "geometry.rs": "9e0d04a1bff17a357cc00e2c15e06c23ec68c0cf311334d1c01ac568384c543b",
+    "frontier.rs": "970a0b049e5b051292de3a4e2ede447c6bc95400f0f69df5211fdd4a0f71e9d0"
   },
   "context": "Exact copied bodies, source-shaped field structs and Error::Checkpoint only. Contracts are added attributes; no shipped edits. This is not a Charon/Aeneas or ELF refinement proof. Finite harness extents are recorded separately; contract syntax is not universal proof evidence."
 }

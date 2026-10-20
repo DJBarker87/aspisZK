@@ -63,4 +63,37 @@ fn fibre_coordinates(){fibre_point(kani::any());}
 #[kani::stub_verified(M31::double)] #[kani::stub_verified(M31::sub)]
 fn line_coordinate(){line_node(kani::any());}
 '''
+    # Concrete arithmetic fields of the continuation backend, never arbitrary callbacks.
+    s+='impl CM31 {\n'
+    for name in ['add','sub']:
+        s+=get(F,'CM31::'+name,'#[kani::requires(cm_ok(self) && cm_ok(rhs))]\n#[kani::ensures(|r:&CM31| cm_ok(*r))]')
+    s+='}\n'
+    for name in ['add','sub']:
+        s+=f'#[kani::proof_for_contract(CM31::{name})] #[kani::stub_verified(M31::{name})] fn complex_{name}(){{CM31::{name}(kani::any(),kani::any());}}\n'
+    s+=get(F,'mul_by_r','#[kani::requires(cm_ok(x))]\n#[kani::ensures(|r:&CM31| cm_ok(*r))]')
+    s+='#[kani::proof_for_contract(mul_by_r)] #[kani::stub_verified(M31::double)] #[kani::stub_verified(M31::sub)] #[kani::stub_verified(M31::add)] fn complex_nonresidue(){mul_by_r(kani::any());}\n'
+    s+='impl QM31 {\n'
+    for name in ['add','sub','mul']:
+        s+=get(F,'QM31::'+name,'#[kani::requires(k_ok(self) && k_ok(rhs))]\n#[kani::ensures(|r:&QM31| k_ok(*r))]')
+    s+='}\n'
+    for name in ['add','sub','mul']:
+        deps=[f'CM31::{name}'] if name!='mul' else ['CM31::mul','CM31::add','CM31::sub','mul_by_r']
+        s+=f'#[kani::proof_for_contract(QM31::{name})]\n'+''.join(f'#[kani::stub_verified({dep})]\n' for dep in deps)+f'fn secure_{name}(){{QM31::{name}(kani::any(),kani::any());}}\n'
+    W='crates/aspis-core/src/field/wide_exact.rs'
+    s+=get(W,'canonical_qm31','#[kani::ensures(|r:&QM31| k_ok(*r))]')
+    s+='#[kani::proof_for_contract(canonical_qm31)] fn secure_canonicalize(){canonical_qm31(kani::any());}\n'
+    s+='#[derive(Clone,Copy,Debug,kani::Arbitrary)] pub(crate) struct WideExact {c0:QM31,c1:QM31}\npub(crate) fn e_ok(x:WideExact)->bool {k_ok(x.c0)&&k_ok(x.c1)}\nimpl WideExact {\n'
+    for name in ['add','mul_qm31']:
+        req='e_ok(self) && e_ok(rhs)' if name=='add' else 'e_ok(self)'
+        s+=get(W,'WideExact::'+name,f'#[kani::requires({req})]\n#[kani::ensures(|r:&WideExact| e_ok(*r))]')
+    s+='}\n'
+    for name,dep in [('add','add'),('mul_qm31','mul')]:
+        s+=f'#[kani::proof_for_contract(WideExact::{name})] #[kani::stub_verified(QM31::{dep})] '+('#[kani::stub_verified(canonical_qm31)] ' if name=='mul_qm31' else '')+f'fn wide_{name}(){{WideExact::{name}(kani::any(),kani::any());}}\n'
+    s+='impl WideExact {pub const LIMB_COUNT:usize=8;pub const BYTE_LEN:usize=32;\n'
+    for name in ['from_limbs','from_le_bytes']:
+        req='#[kani::requires(bytes.len()==32)]\n' if name=='from_le_bytes' else ''
+        s+=get(W,'WideExact::'+name,req+'#[kani::ensures(|r:&Option<Self>| r.as_ref().map_or(true, |x|e_ok(*x)))]')
+    s+='}\n'
+    s+='#[kani::proof_for_contract(WideExact::from_limbs)] fn wide_limbs(){WideExact::from_limbs(kani::any());}\n'
+    s+='#[kani::proof_for_contract(WideExact::from_le_bytes)] #[kani::stub_verified(WideExact::from_limbs)] fn wide_bytes(){let b:[u8;32]=kani::any();WideExact::from_le_bytes(&b);}\n'
     return s
