@@ -3,7 +3,7 @@
 Run from this worktree and the retained Linux task workspace. No wallet key,
 ELF, proof binary or nonce ledger belongs in git. Keep every task key on the
 host, directory 0700 and files 0600, including loader buffers after failures.
-The [report](REPORT.md) distinguishes executed phases from pending phases.
+The [report](REPORT.md) records the completed phases, failed attempts and timing limits.
 
 Host: `dombarker@100.108.41.90`; task:
 `/home/dombarker/project-offloads/codex-cx-devnet-20261020`.
@@ -24,9 +24,13 @@ compiled cache and keys. From this worktree:
 ```sh
 git ls-files crates programs tools/r1-cost-probe tools/r1-buffer-carrier \
   Cargo.toml Cargo.lock > /tmp/cx-devnet3-source-files.txt
+git ls-files docs/research/v8-r0-zk-20261009/z4 \
+  docs/research/v8-r0-zk-20261009/c3/build \
+  docs/research/v8-r0-zk-20261009/c3/check | \
+  rg '\.(rs|toml|lock)$' >> /tmp/cx-devnet3-source-files.txt
 rsync -a --files-from=/tmp/cx-devnet3-source-files.txt ./ \
   dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-devnet-20261020/src/
-scp scripts/r1_devnet_{receipt.sh,rpc.py,release_gate.py,deploy_paced.py,spend.py,collect.py,carrier_build.sh} \
+scp scripts/r1_devnet_{receipt.sh,rpc.py,release_gate.py,deploy_paced.py,spend.py,collect.py,inventory.py,carrier_build.sh} \
   config/r1-devnet.template.json \
   dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-devnet-20261020/
 ```
@@ -127,11 +131,13 @@ followed by the proof; the statement is exact ASF8. The carrier requires its
 buffer key to sign every bounded upload. At most four disjoint upload ranges
 are in flight, and all must finalize before full byte readback and stage 1.
 
+All RPC requests share 0.65-second pacing with bounded transient retries.
 The sender simulates each transaction, records each signed attempt before
 submission, queries history until finalized or demonstrably expired, and only
 then re-signs with a fresh blockhash (maximum three attempts). Finalized
-metadata supplies CU, fees and slot. A prior incomplete named transaction
-requires inspection before resumption. Existing completed names are reused;
+metadata supplies CU, fees and slot. Known signed attempts are reconciled from finalized history or proven expired
+before re-signing. Simulation-only failures require inspection before resumption.
+Existing completed names are reused;
 never blindly start a second spend over changed live state.
 
 The negative checks send a fresh-blockhash replay and a mutated proof with a
@@ -156,7 +162,8 @@ buffer signatures without fetching every loader-write transaction. Optional
 The collector incrementally fetches missing finalized metadata and preserves
 signature, explorer link, slot, CU, fee, error and logs without embedding ELF
 upload bytes. Copy only public receipts; exclude `*-proof-private/`, binary
-files, nonce ledgers and every key. Keep old failed-attempt receipts intact.
+files, nonce ledgers and every key. Keep old failed-attempt receipts intact. Exclude raw `*.text` binary section
+snapshots too; their public evidence consists of SHA-256/size sidecars.
 
 Generate the public signature and phase summary after exporting receipts:
 
@@ -178,3 +185,16 @@ python3 r1_devnet_spend.py r1-devnet.repeat02.json receipts/spend-repeat02
 A completed receipt directory returns its recorded completion without new
 transactions. Do not repeat a successful measurement unless a new result is
 actually needed.
+
+The final inventory command is read-only apart from enforcing retained task
+key-file permissions to 0600. It never closes an account or removes a key:
+
+```sh
+# Use a new capped receipt scope/directory and a new inventory output filename:
+python3 r1_devnet_inventory.py r1-devnet.template.json receipts/key-inventory-next.json
+```
+
+The transfer upload wall time is reconstructed from the first legacy simulation
+receipt timestamp and includes the HTTP-429 recovery gap. It is approximate;
+the withdrawal phase has a phase-entry timestamp. See the report for measured
+CU, times, negative outcomes and scope resource receipts.

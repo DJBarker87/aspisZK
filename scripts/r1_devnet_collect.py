@@ -16,6 +16,12 @@ cli=pathlib.Path.home()/'.local/share/solana/install/active_release/bin/solana-k
 for key in (pathlib.Path('keys').glob('*deploy-buffer.json') if any(x in sys.argv for x in ['--loader-writes','--histories-only']) else []):
     addresses.add(subprocess.check_output([str(cli),'pubkey',str(key)],text=True).strip())
 candidates={}
+# Spend execution already fetched complete finalized metadata; reuse it.
+for path in root.glob('*-transaction.json'):
+    try:
+        tx=json.load(open(path));sig=tx['transaction']['signatures'][0];m=tx['meta']
+        known[sig]={'signature':sig,'explorer':f'https://explorer.solana.com/tx/{sig}?cluster=devnet','slot':tx['slot'],'block_time':tx.get('blockTime'),'compute_units':m.get('computeUnitsConsumed'),'fee':m['fee'],'error':m['err'],'logs':m.get('logMessages'),'finalized':True}
+    except (ValueError,KeyError,IndexError,OSError):pass
 for address in sorted(addresses):
     before=None;history=[]
     while True:
