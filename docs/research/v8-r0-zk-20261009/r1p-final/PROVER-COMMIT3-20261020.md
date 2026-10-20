@@ -89,3 +89,29 @@ or an explicitly approved implementation-independent relational callback
 proof that never assumes unmatched inputs have equal answers. Merely
 substituting Poseidon2 would change the proved implementation. The concurrent
 builder/SourceIdentification and ScanCoupling owners' files are untouched.
+
+## Stage 2: exact checklist frontier retained
+
+`checklist-before-after.json` stores the nine prover-commitment rows from
+`PRIVACY-FINAL-20261020.md` **verbatim**, with a separate identical
+`before_verbatim` and `after_verbatim` for each row and `discharged=false`.
+`harness/checklist-frontier.py` reproduces that inventory and checks the row
+count. The checklist's SHA256 is recorded. It is not edited.
+
+No new Lean module is claimed: the prerequisite callback contract was not
+established, so no new source theorem can legitimately be transported into
+the endpoint. The rows remain roots/nodes, leaves, bindings, seeds, salts,
+mask/source expanders, equal fibres, exhaustion, and counts/stream budgets.
+The previously checked local grammar and bounded-step facts remain useful
+but do not construct their full quantified source instances. D89's model
+endpoint already discharges model commitment grammar; this does not discharge
+the remaining Rust correspondence.
+
+No new generic recurrence lemma, generated certificate, extraction, formal
+release target, or full manifest replay was introduced. Env J remains at this
+worker's last attempt 8143; no new attempt number was consumed. Every new
+formal top theorem would require its own checked axiom audit; there are none
+in this continuation. The final obstruction is the actual SHA-256 callback
+contract/refinement, followed by the caller/carrier/tape/count joins listed
+in `PROVER-COMMIT-20261020.md`. Builder/SourceIdentification and ScanCoupling
+ownership is unchanged. No push or peer-file edit was performed.
