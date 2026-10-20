@@ -67,3 +67,19 @@ Attempt 8443 passes (2.12 s, 3,522,140 KiB, 0 swaps), all six theorems use
 standard axioms. Failed attempts 8441/8442 were corrected proof sources;
 no resource limit changed. This closes T4's semantic relation implication,
 but does not yet connect the shipped records function to this witness map.
+
+## Stage 4: canonical inputs and the four fields
+
+`R1Z.BuilderCanonical` defines the canonical RustWitness/RustPublic maps
+from M31 public inputs and Wspend, and proves their lifted merged trace
+equals the model on the embedded semantic witness. All public/witness
+base-membership facts are derived: any subfield contains the image of the
+prime field. Its honest instance is a subtype carrying only Rspend⁺ on the
+embedded witness and public input, with no ModelRel or trace-validity field.
+`builderSoundOn` supplies all four fields for this concrete extracted
+builder. Attempt 8444 passes (2.35 s, 4,005,424 KiB, 0 swaps); all seven
+theorems have standard axiom audits.
+
+This still is not a theorem that the shipped compiler's successful input
+projects to this subtype, or that its Rust structural glue is the extracted
+Lean composition. Those are the next source obligations.
