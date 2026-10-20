@@ -1,0 +1,94 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/checked/CuSavingsGeometryStage.lean:119:4: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff (oldQuery queries folds before work mark state)
+    ?m.155 ?m.156).mpr`
+  oldQuery queries folds before work mark state >>= ?m.155 = oldQuery queries folds before work mark state >>= ?m.156
+with the goal
+  (do
+      let flow ←
+        do
+          let result ← oldQuery queries folds before work mark state
+          match result with
+            | core.result.Result.Err error => ok (done (core.result.Result.Err error))
+            | core.result.Result.Ok next => ok (cont next)
+      match flow with
+        | done out => ok out
+        | cont next => run finish (newQuery queries folds start front.line_z_values before work mark) next) =
+    do
+    let flow ←
+      do
+        let result ← oldQuery queries folds before work mark state
+        match result with
+          | core.result.Result.Err error => ok (done (core.result.Result.Err error))
+          | core.result.Result.Ok next => ok (cont next)
+    match flow with
+      | done out => ok out
+      | cont next => run finish (oldQuery queries folds before work mark) next
+
+Note: The full type of `(bind_eq_iff (oldQuery queries folds before work mark state) ?m.155 ?m.156).mpr` is
+  (∀ (v : Output P), oldQuery queries folds before work mark state = ok v → ?m.155 v = ?m.156 v) →
+    oldQuery queries folds before work mark state >>= ?m.155 = oldQuery queries folds before work mark state >>= ?m.156
+
+case succ
+P A : Type
+queries : Queries
+folds start finish : Usize
+front : new.Front
+built : new.front queries start finish = ok (core.result.Result.Ok front)
+before : State P → Result (core.result.Result A verifier.Error)
+work : State P → M → A → Result P
+mark : Usize → Result Unit
+hend : ↑finish ≤ 22
+fuel : ℕ
+ih :
+  ∀ (state : State P),
+    Calls start state.1 →
+      ↑finish - ↑state.1 = fuel →
+        run finish (newQuery queries folds start front.line_z_values before work mark) state =
+          run finish (oldQuery queries folds before work mark) state
+state : State P
+calls : Calls start state.1
+span : ↑finish - ↑state.1 = fuel + 1
+guard : state.1 < finish
+hi : ↑state.1 < 22
+heq :
+  newQuery queries folds start front.line_z_values before work mark state =
+    oldQuery queries folds before work mark state
+⊢ (do
+      let flow ←
+        do
+          let result ← oldQuery queries folds before work mark state
+          match result with
+            | core.result.Result.Err error => ok (done (core.result.Result.Err error))
+            | core.result.Result.Ok next => ok (cont next)
+      match flow with
+        | done out => ok out
+        | cont next => run finish (newQuery queries folds start front.line_z_values before work mark) next) =
+    do
+    let flow ←
+      do
+        let result ← oldQuery queries folds before work mark state
+        match result with
+          | core.result.Result.Err error => ok (done (core.result.Result.Err error))
+          | core.result.Result.Ok next => ok (cont next)
+    match flow with
+      | done out => ok out
+      | cont next => run finish (oldQuery queries folds before work mark) next
+'AspisR1.CuSavingsGeometryStage.suffix_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsGeometryStage.query_next' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsGeometryStage.loop_equivalence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsGeometryStage.source_loop_equivalence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsGeometryStage.source_loop_equivalence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ Aeneas.Std.core.fmt.Formatter]

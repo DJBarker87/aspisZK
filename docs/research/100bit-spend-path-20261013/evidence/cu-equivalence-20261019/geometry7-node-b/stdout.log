@@ -1,0 +1,88 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryNode.lean:14:91: error: Tactic `rfl` failed: The left-hand side
+  core.iter.range.IteratorRange.next core.iter.range.StepI32 { start := 0#i32, «end» := 2#i32 }
+is not definitionally equal to the right-hand side
+  ok (some 0#i32, { start := 1#i32, «end» := 2#i32 })
+
+⊢ core.iter.range.IteratorRange.next core.iter.range.StepI32 { start := 0#i32, «end» := 2#i32 } =
+    ok (some 0#i32, { start := 1#i32, «end» := 2#i32 })
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryNode.lean:16:91: error: Tactic `rfl` failed: The left-hand side
+  core.iter.range.IteratorRange.next core.iter.range.StepI32 { start := 1#i32, «end» := 2#i32 }
+is not definitionally equal to the right-hand side
+  ok (some 1#i32, { start := 2#i32, «end» := 2#i32 })
+
+⊢ core.iter.range.IteratorRange.next core.iter.range.StepI32 { start := 1#i32, «end» := 2#i32 } =
+    ok (some 1#i32, { start := 2#i32, «end» := 2#i32 })
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryNode.lean:50:2: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff (field.M31.sub doubled1 field.M31.ONE) ?m.87
+    ?m.88).mpr`
+  field.M31.sub doubled1 field.M31.ONE >>= ?m.87 = field.M31.sub doubled1 field.M31.ONE >>= ?m.88
+with the goal
+  (do
+      let x ← field.M31.sub doubled1 field.M31.ONE
+      let flow ← ok (cont ({ start := 2#i32, «end» := 2#i32 }, x))
+      match flow with
+        | done value => ok value
+        | cont next =>
+          loop
+            (fun x => do
+              let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepI32 x.1
+              match o with
+                | none => ok (done x.2)
+                | some val => do
+                  let m ← field.M31.mul x.2 x.2
+                  let m1 ← field.M31.double m
+                  let node1 ← field.M31.sub m1 field.M31.ONE
+                  ok (cont (iter1, node1)))
+            next) =
+    field.M31.sub doubled1 field.M31.ONE
+
+Note: The full type of `(bind_eq_iff (field.M31.sub doubled1 field.M31.ONE) ?m.87 ?m.88).mpr` is
+  (∀ (v : AspisR1WideArithmetic.field.M31), field.M31.sub doubled1 field.M31.ONE = ok v → ?m.87 v = ?m.88 v) →
+    field.M31.sub doubled1 field.M31.ONE >>= ?m.87 = field.M31.sub doubled1 field.M31.ONE >>= ?m.88
+
+node : M
+square : AspisR1Qm31ArithmeticProbe.field.M31
+a✝⁴ : field.M31.mul node node = ok square
+doubled : AspisR1WideArithmetic.field.M31
+a✝³ : field.M31.double square = ok doubled
+first : AspisR1WideArithmetic.field.M31
+a✝² : field.M31.sub doubled field.M31.ONE = ok first
+square1 : AspisR1Qm31ArithmeticProbe.field.M31
+a✝¹ : field.M31.mul first first = ok square1
+doubled1 : AspisR1WideArithmetic.field.M31
+a✝ : field.M31.double square1 = ok doubled1
+⊢ (do
+      let x ← field.M31.sub doubled1 field.M31.ONE
+      let flow ← ok (cont ({ start := 2#i32, «end» := 2#i32 }, x))
+      match flow with
+        | done value => ok value
+        | cont next =>
+          loop
+            (fun x => do
+              let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepI32 x.1
+              match o with
+                | none => ok (done x.2)
+                | some val => do
+                  let m ← field.M31.mul x.2 x.2
+                  let m1 ← field.M31.double m
+                  let node1 ← field.M31.sub m1 field.M31.ONE
+                  ok (cont (iter1, node1)))
+            next) =
+    field.M31.sub doubled1 field.M31.ONE
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryNode.lean:42:24: warning: This simp argument is unused:
+  uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryNode.lean:44:13: warning: This simp argument is unused:
+  old.node_loop1.body
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵l̵d̵.̵n̵o̵d̵e̵_̵l̵o̵o̵p̵1̵.̵b̵o̵d̵y̵,̵n̵e̵x̵t̵1̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]̵[̲n̲e̲x̲t̲1̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲u̲n̲c̲u̲r̲r̲y̲_̲a̲p̲p̲l̲y̲_̲p̲a̲i̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsGeometryNode.next0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsGeometryNode.next1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsGeometryNode.next2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsGeometryNode.two_steps' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,7 @@
+import CuSavingsRetainedClosure
+import CuSavingsGeometryFront
+import CuSavingsGeometryDispatch
+namespace AspisR1.CuSavingsGeometryJoint
+#print axioms AspisR1.CuSavingsGeometryDispatch.query_context
+#print axioms AspisR1.CuSavingsGeometryFront.inversion_context
+end AspisR1.CuSavingsGeometryJoint

@@ -1,0 +1,56 @@
+{
+  "candidate": "2aa1b879c58a63fbc47df5a4662e808e261af41a",
+  "parent": "e5a93db5c9a4883245dc575eaa94742f9adeb629",
+  "frozen": "39c2971dd16c95858a4cfd2c9ae35da052eacfa9",
+  "source_path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+  "source_files_sha256": {
+    "e5a93db5c9a4883245dc575eaa94742f9adeb629": "107fbb12c42fd666cc247c8c2539d5439cfdaaf56c641203b4213b35a0d8e62c",
+    "2aa1b879c58a63fbc47df5a4662e808e261af41a": "51025b39d7e22658b67d441172773a33ea3536ad1b8b99fc331f552e48c4b473",
+    "39c2971dd16c95858a4cfd2c9ae35da052eacfa9": "e65f41484906ce3cbe766a24995fafda3254358423c145c54e699f4c2f6e99ca"
+  },
+  "caller_fragments": {
+    "query": {
+      "parent_sha256": "f7b545f0910f987bd649ffa4ae9595d14b3d7299b779924b44ed4de16e85a501",
+      "candidate_sha256": "f7b545f0910f987bd649ffa4ae9595d14b3d7299b779924b44ed4de16e85a501",
+      "caller_byte_identical_at_candidate": true
+    },
+    "query_with_geometry": {
+      "parent_sha256": "9ffebf28c3b0e3ca038a732bf61819e2963eca74a26edef9b38edb34a9168549",
+      "candidate_sha256": "b84ee628f1891ec5a4a0d0b6a7863a240387eaf4f65a775549419b9a2ee35f81",
+      "caller_byte_identical_at_candidate": false
+    },
+    "tx1_finish": {
+      "parent_sha256": "848cc87318803c94449945b5652bbd3101aa249853c5e0646d85a82ea5f0e05a",
+      "candidate_sha256": "848cc87318803c94449945b5652bbd3101aa249853c5e0646d85a82ea5f0e05a",
+      "caller_byte_identical_at_candidate": true
+    },
+    "tx1": {
+      "parent_sha256": "3263a0eaf77c13b53eb3c6d8277a50c76853ad62c027f99fc07d697a137d94c9",
+      "candidate_sha256": "3263a0eaf77c13b53eb3c6d8277a50c76853ad62c027f99fc07d697a137d94c9",
+      "caller_byte_identical_at_candidate": true
+    },
+    "tx2": {
+      "parent_sha256": "5d8206dd7a79ace4bfdf433f7f2690f18f9203386a9c12d26360758b8172fcda",
+      "candidate_sha256": "5d8206dd7a79ace4bfdf433f7f2690f18f9203386a9c12d26360758b8172fcda",
+      "caller_byte_identical_at_candidate": true
+    },
+    "tx2_authenticated": {
+      "parent_sha256": "056e2633facdd10a836a8578de433f4c3c00349881b049cd617a271927a8d7c6",
+      "candidate_sha256": "056e2633facdd10a836a8578de433f4c3c00349881b049cd617a271927a8d7c6",
+      "caller_byte_identical_at_candidate": true
+    }
+  },
+  "shared_counter_payload_tail_sha256": "09c01806dac0fcec11e5eab0c9d2fe23423306d4ee61697149bb49d7c80234b2",
+  "single_counter_write": "a.next+=1",
+  "query_mark_after_counter": true,
+  "observer_has_no_accumulator_borrow": true,
+  "caller_ranges": {
+    "query": "QueryGeometry::for_range(&p.queries,a.next,a.next+1)?;",
+    "tx1_finish": "QueryGeometry::for_range(&p.queries,0,k)?;",
+    "tx2": "QueryGeometry::for_range(&p.queries,a.next,22)?;",
+    "tx2_authenticated": "QueryGeometry::for_range(&p.queries,a.next,22)?;"
+  },
+  "fresh_initial_counter": 0,
+  "resume_initial_counter": "captured a.next before for_range",
+  "interpretation": "Explicit inverse-audited counter/payload field fission: work keeps reads/traces at the original index; checked increment follows work; mark(Query(old index)) follows increment. Actual source Counter theorem independently verifies successful query increments. Loop starts at its literal/captured start and internally constructs Calls witnesses. Standard source/compiler/ownership/library and sufficient-resource boundaries remain; no arbitrary index-validity or candidate-equivalence premise."
+}

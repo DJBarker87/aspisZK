@@ -1,0 +1,77 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:48:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:57:87: error: unsolved goals
+fuel : ℕ
+ih :
+  ∀ (iter : Iter) (rows : Rows) (cache flat : alloc.vec.Vec M),
+    (↑rows).length = iter.i →
+      (↑cache).length = iter.i →
+        (↑iter.slice).length ≤ 22 →
+          iter.i ≤ (↑iter.slice).length →
+            (↑iter.slice).length - iter.i = fuel →
+              observe newView (new.front_loop iter cache flat) = observe oldView (old.front_loop iter rows flat)
+iter : Iter
+rows : Rows
+cache flat : alloc.vec.Vec M
+ho : (↑rows).length = iter.i
+hn : (↑cache).length = iter.i
+hb : (↑iter.slice).length ≤ 22
+hi : iter.i ≤ (↑iter.slice).length
+hf : (↑iter.slice).length - iter.i = fuel + 1
+hlt : iter.i < (↑iter.slice).length
+query : U32 := iter.slice[iter.i]
+after : Iter := { slice := iter.slice, i := iter.i + 1 }
+⊢ ok (some iter.slice[iter.i], { slice := iter.slice, i := iter.i + 1 }) =
+    ok (some iter.slice[iter.i], { slice := iter.slice, i := iter.i + 1 })
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:59:64: warning: This simp argument is unused:
+  Slice.getElem_Nat_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [dif_pos (show i̵t̵e̵r̵.̵i̵<̵i̲t̲e̲r̲.̲i̲ ̲<̲ iter.slice.len from h̵l̵t̵)̵,̵S̵l̵i̵c̵e̵.̵g̵e̵t̵E̵l̵e̵m̵_̵N̵a̵t̵_̵e̵q̵,̵q̵u̵e̵r̵y̵,̵a̵f̵t̵e̵r̵]̵h̲l̲t̲)̲,̲ ̲q̲u̲e̲r̲y̲,̲ ̲a̲f̲t̲e̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:65:31: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:66:24: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:149:2: error: Type mismatch
+  Eq.trans (bind_view newView (new.front queries start finish))
+    (Eq.trans (congrArg (fun run => run >>= after) (source_equivalence queries start finish))
+      (Eq.symm (bind_view oldView (old.front queries start finish))))
+has type
+  (do
+      let result ← new.front queries start finish
+      match result with
+        | core.result.Result.Err e => error e
+        | core.result.Result.Ok front => tail (newView front)) =
+    do
+    let result ← old.front queries start finish
+    match result with
+      | core.result.Result.Err e => error e
+      | core.result.Result.Ok front => tail (oldView front)
+but is expected to have type
+  (do
+      let result ← new.front queries start finish
+      match result with
+        | core.result.Result.Err e => error e
+        | core.result.Result.Ok front => tail (newView front)) =
+    do
+    let result ← old.front queries start finish
+    match result with
+      | core.result.Result.Err e => error e
+      | core.result.Result.Ok front => tail (oldView front)
+'AspisR1.CuSavingsGeometryFront.source_equivalence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsGeometryFront.inversion_context' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsGeometryFront.push_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsGeometryFront.loops_equivalence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

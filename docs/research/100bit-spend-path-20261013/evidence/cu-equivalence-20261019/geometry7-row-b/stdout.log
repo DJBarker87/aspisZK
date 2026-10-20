@@ -1,0 +1,305 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryRow.lean:31:14: error: unsolved goals
+case Err
+query : U32
+values : Std.Array M 5#usize
+z : M
+h✝¹ :
+  (do
+      let u ← lift (UScalar.cast UScalarTy.Usize query)
+      let r ← r0.domain.FibreIndex.new u
+      let r1 ← core.result.Result.map_err new.row.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let point ← fast_domain.fibre_point val
+          let i ← u / 4#usize
+          let i1 ← i * 4#usize
+          let r2 ← r0.domain.FibreIndex.new i1
+          let r3 ← core.result.Result.map_err new.row.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError r2 ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let line_x ← fast_domain.line_node val1
+              let i2 ← i * 4#usize
+              let i3 ← i2 + 3#usize
+              let r4 ← r0.domain.FibreIndex.new i3
+              let r5 ← core.result.Result.map_err new.row.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError r4 ()
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let line_y ← fast_domain.line_node val2
+                  let m ← field.M31.mul line_x line_x
+                  let m1 ← field.M31.double m
+                  let line_z ← field.M31.sub m1 field.M31.ONE
+                  let s ← lift (Array.make 5#usize [point.x, point.y, line_x, line_y, line_z] ⋯).to_slice
+                  let i4 ← core.slice.Slice.iter s
+                  let (b, _) ←
+                    core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+                        new.row.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool i4 ()
+                  if b = true then ok (core.result.Result.Err verifier.Error.Query)
+                    else
+                      ok
+                        (core.result.Result.Ok
+                          (Array.make 5#usize [point.x, point.y, line_x, line_y, line_z] ⋯, line_z))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (Std.Array field.M31 5#usize × field.M31) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array field.M31 5#usize × field.M31) (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array field.M31 5#usize × field.M31) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (values, z))
+u : UScalar UScalarTy.Usize
+hu : lift (UScalar.cast UScalarTy.Usize query) = ok u
+h✝ :
+  (do
+      let r ← r0.domain.FibreIndex.new u
+      let r1 ← core.result.Result.map_err new.row.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let point ← fast_domain.fibre_point val
+          let i ← u / 4#usize
+          let i1 ← i * 4#usize
+          let r2 ← r0.domain.FibreIndex.new i1
+          let r3 ← core.result.Result.map_err new.row.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError r2 ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let line_x ← fast_domain.line_node val1
+              let i2 ← i * 4#usize
+              let i3 ← i2 + 3#usize
+              let r4 ← r0.domain.FibreIndex.new i3
+              let r5 ← core.result.Result.map_err new.row.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError r4 ()
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let line_y ← fast_domain.line_node val2
+                  let m ← field.M31.mul line_x line_x
+                  let m1 ← field.M31.double m
+                  let line_z ← field.M31.sub m1 field.M31.ONE
+                  let s ← lift (Array.make 5#usize [point.x, point.y, line_x, line_y, line_z] ⋯).to_slice
+                  let i4 ← core.slice.Slice.iter s
+                  let (b, _) ←
+                    core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+                        new.row.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool i4 ()
+                  if b = true then ok (core.result.Result.Err verifier.Error.Query)
+                    else
+                      ok
+                        (core.result.Result.Ok
+                          (Array.make 5#usize [point.x, point.y, line_x, line_y, line_z] ⋯, line_z))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (Std.Array field.M31 5#usize × field.M31) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array field.M31 5#usize × field.M31) (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array field.M31 5#usize × field.M31) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (values, z))
+error : r0.Error
+hr : r0.domain.FibreIndex.new u = ok (core.result.Result.Err error)
+h :
+  (do
+      let r1 ←
+        AspisR1ViewParseProbe.core.result.Result.map_err
+            { call_once := new.row.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once }
+            (core.result.Result.Err error) ()
+      let cf ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let point ← fast_domain.fibre_point val
+          let i ← u / 4#usize
+          let i1 ← i * 4#usize
+          let r2 ← r0.domain.FibreIndex.new i1
+          let r3 ←
+            AspisR1ViewParseProbe.core.result.Result.map_err
+                new.row.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError r2 ()
+          let cf1 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let line_x ← fast_domain.line_node val1
+              let i2 ← i * 4#usize
+              let i3 ← i2 + 3#usize
+              let r4 ← r0.domain.FibreIndex.new i3
+              let r5 ←
+                AspisR1ViewParseProbe.core.result.Result.map_err
+                    new.row.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError r4 ()
+              let cf2 ←
+                match r5 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let line_y ← fast_domain.line_node val2
+                  let m ← field.M31.mul line_x line_x
+                  let m1 ← field.M31.double m
+                  let line_z ← field.M31.sub m1 field.M31.ONE
+                  let s ← lift (Array.make 5#usize [point.x, point.y, line_x, line_y, line_z] ⋯).to_slice
+                  let i4 ← core.slice.Slice.iter s
+                  let (b, _) ←
+                    core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+                        new.row.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool i4 ()
+                  if b = true then ok (core.result.Result.Err verifier.Error.Query)
+                    else
+                      ok
+                        (core.result.Result.Ok
+                          (Array.make 5#usize [point.x, point.y, line_x, line_y, line_z] ⋯, line_z))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec
+                      (fun x => Result (core.result.Result (Std.Array field.M31 5#usize × field.M31) verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec
+                  (fun x => Result (core.result.Result (Std.Array field.M31 5#usize × field.M31) verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec
+              (fun x => Result (core.result.Result (Std.Array field.M31 5#usize × field.M31) verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Ok (values, z))
+⊢ Origin query z ∧ (↑values).getD 4 field.M31.ZERO = z
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryRow.lean:34:6: warning: This simp argument is unused:
+  new.row.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
+
+Hint: Omit it from the simp argument list.
+  simp [core.result.Result.map_err, new.row.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+        n̵e̵w̵.̵r̵o̵w̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵.̵c̵a̵l̵l̵_̵o̵n̵c̵e̵,̵core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryRow.lean:46:12: warning: This simp argument is unused:
+  core.result.Result.map_err
+
+Hint: Omit it from the simp argument list.
+  simp [c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵new.row.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+          new.row.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+          core.result.Result.Insts.CoreOpsTry.branch,
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryRow.lean:47:8: warning: This simp argument is unused:
+  new.row.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+
+Hint: Omit it from the simp argument list.
+  simp [core.result.Result.map_err,
+          n̵e̵w̵.̵r̵o̵w̵.̵c̵l̵o̵s̵u̵r̵e̵_̵1̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵,̵new.row.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+          core.result.Result.Insts.CoreOpsTry.branch,
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryRow.lean:49:8: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp [core.result.Result.map_err,
+          new.row.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+          new.row.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+          core.result.Result.Insts.CoreOpsTry.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵Try̵T̵r̵aitFromResidualResultInfallible.from_residual] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryRow.lean:52:17: warning: This simp argument is unused:
+  core.result.Result.map_err
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵A̵s̵p̵i̵s̵R̵1̵V̵i̵e̵w̵P̵a̵r̵s̵e̵P̵r̵o̵b̵e̵.̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲A̲s̲p̲i̲s̲R̲1̲V̲i̲e̲w̲P̲a̲r̲s̲e̲P̲r̲o̲b̲e̲.̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryRow.lean:52:44: warning: This simp argument is unused:
+  AspisR1ViewParseProbe.core.result.Result.map_err
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵A̵s̵p̵i̵s̵R̵1̵V̵i̵e̵w̵P̵a̵r̵s̵e̵P̵r̵o̵b̵e̵.̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryRow.lean:53:19: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵A̵s̵p̵i̵s̵R̵1̵V̵i̵e̵w̵P̵a̵r̵s̵e̵P̵r̵o̵b̵e̵.̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲V̲i̲e̲w̲P̲a̲r̲s̲e̲P̲r̲o̲b̲e̲.̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryRow.lean:60:14: warning: This simp argument is unused:
+  core.result.Result.map_err
+
+Hint: Omit it from the simp argument list.
+  simp [c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵new.row.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+            new.row.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+            core.result.Result.Insts.CoreOpsTry.branch,
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryRow.lean:61:10: warning: This simp argument is unused:
+  new.row.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+
+Hint: Omit it from the simp argument list.
+  simp [core.result.Result.map_err,
+            n̵e̵w̵.̵r̵o̵w̵.̵c̵l̵o̵s̵u̵r̵e̵_̵2̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵,̵new.row.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+            core.result.Result.Insts.CoreOpsTry.branch,
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryRow.lean:63:10: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp [core.result.Result.map_err,
+            new.row.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+            new.row.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+            core.result.Result.Insts.CoreOpsTry.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵Try̵T̵r̵aitFromResidualResultInfallible.from_residual] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryRow.lean:66:19: warning: This simp argument is unused:
+  core.result.Result.map_err
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵A̵s̵p̵i̵s̵R̵1̵V̵i̵e̵w̵P̵a̵r̵s̵e̵P̵r̵o̵b̵e̵.̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲A̲s̲p̲i̲s̲R̲1̲V̲i̲e̲w̲P̲a̲r̲s̲e̲P̲r̲o̲b̲e̲.̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryRow.lean:66:46: warning: This simp argument is unused:
+  AspisR1ViewParseProbe.core.result.Result.map_err
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵A̵s̵p̵i̵s̵R̵1̵V̵i̵e̵w̵P̵a̵r̵s̵e̵P̵r̵o̵b̵e̵.̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryRow.lean:67:21: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵A̵s̵p̵i̵s̵R̵1̵V̵i̵e̵w̵P̵a̵r̵s̵e̵P̵r̵o̵b̵e̵.̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲V̲i̲e̲w̲P̲a̲r̲s̲e̲P̲r̲o̲b̲e̲.̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsGeometryRow.row_equivalence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsGeometryRow.row_origin' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

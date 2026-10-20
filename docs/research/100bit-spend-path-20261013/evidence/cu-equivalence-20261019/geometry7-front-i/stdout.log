@@ -1,0 +1,120 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:48:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:59:64: warning: This simp argument is unused:
+  Slice.getElem_Nat_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [dif_pos (show i̵t̵e̵r̵.̵i̵<̵i̲t̲e̲r̲.̲i̲ ̲<̲ iter.slice.len from h̵l̵t̵)̵,̵S̵l̵i̵c̵e̵.̵g̵e̵t̵E̵l̵e̵m̵_̵N̵a̵t̵_̵e̵q̵,̵q̵u̵e̵r̵y̵,̵a̵f̵t̵e̵r̵]̵h̲l̲t̲)̲,̲ ̲q̲u̲e̲r̲y̲,̲ ̲a̲f̲t̲e̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:66:31: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:67:24: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:152:77: error: Tactic `rfl` failed: The left-hand side
+  do
+    let result ← new.front queries start finish
+    match result with
+      | core.result.Result.Err e => error e
+      | core.result.Result.Ok front => tail (newView front)
+is not definitionally equal to the right-hand side
+  do
+    let result ← new.front queries start finish
+    match result with
+      | core.result.Result.Err e => error e
+      | core.result.Result.Ok front => tail (newView front)
+
+case e'_2
+T : Type
+queries : Std.Array U32 22#usize
+start finish : Usize
+tail : Common → Result T
+error : verifier.Error → Result T
+bind_view :
+  ∀ {F : Type} (view : F → Common) (run : Result (core.result.Result F verifier.Error)),
+    (do
+        let result ← run
+        match result with
+          | core.result.Result.Err e => error e
+          | core.result.Result.Ok front => tail (view front)) =
+      do
+      let result ← observe view run
+      match result with
+        | core.result.Result.Err e => error e
+        | core.result.Result.Ok front => tail front
+after : core.result.Result Common verifier.Error → Result T :=
+  fun result =>
+    match result with
+    | core.result.Result.Err e => error e
+    | core.result.Result.Ok front => tail front
+⊢ (do
+      let result ← new.front queries start finish
+      match result with
+        | core.result.Result.Err e => error e
+        | core.result.Result.Ok front => tail (newView front)) =
+    do
+    let result ← new.front queries start finish
+    match result with
+      | core.result.Result.Err e => error e
+      | core.result.Result.Ok front => tail (newView front)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:152:77: error: Tactic `rfl` failed: The left-hand side
+  do
+    let result ← old.front queries start finish
+    match result with
+      | core.result.Result.Err e => error e
+      | core.result.Result.Ok front => tail (oldView front)
+is not definitionally equal to the right-hand side
+  do
+    let result ← old.front queries start finish
+    match result with
+      | core.result.Result.Err e => error e
+      | core.result.Result.Ok front => tail (oldView front)
+
+case e'_3
+T : Type
+queries : Std.Array U32 22#usize
+start finish : Usize
+tail : Common → Result T
+error : verifier.Error → Result T
+bind_view :
+  ∀ {F : Type} (view : F → Common) (run : Result (core.result.Result F verifier.Error)),
+    (do
+        let result ← run
+        match result with
+          | core.result.Result.Err e => error e
+          | core.result.Result.Ok front => tail (view front)) =
+      do
+      let result ← observe view run
+      match result with
+        | core.result.Result.Err e => error e
+        | core.result.Result.Ok front => tail front
+after : core.result.Result Common verifier.Error → Result T :=
+  fun result =>
+    match result with
+    | core.result.Result.Err e => error e
+    | core.result.Result.Ok front => tail front
+⊢ (do
+      let result ← old.front queries start finish
+      match result with
+        | core.result.Result.Err e => error e
+        | core.result.Result.Ok front => tail (oldView front)) =
+    do
+    let result ← old.front queries start finish
+    match result with
+      | core.result.Result.Err e => error e
+      | core.result.Result.Ok front => tail (oldView front)
+'AspisR1.CuSavingsGeometryFront.source_equivalence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsGeometryFront.inversion_context' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsGeometryFront.push_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsGeometryFront.loops_equivalence' depends on axioms: [propext, Classical.choice, Quot.sound]

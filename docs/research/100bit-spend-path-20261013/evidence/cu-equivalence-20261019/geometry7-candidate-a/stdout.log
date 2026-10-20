@@ -1,0 +1,77 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryCandidate7.lean:127:20: error: Type mismatch
+  source_query_context queries folds index start finish front hbuild calls guard
+has type
+  ∀ (before : Result (core.result.Result ?m.330 verifier.Error)) (tail : M → ?m.330 → Result ?m.331)
+    (error : verifier.Error → Result ?m.331),
+    optimizedQuery queries folds index start front.line_z_values before tail error =
+      referenceQuery queries folds index before tail error
+but is expected to have type
+  (match core.result.Result.Ok value with
+    | core.result.Result.Err e => error e
+    | core.result.Result.Ok value =>
+      optimizedQuery queries folds index start front.line_z_values (before value) tail error) =
+    match core.result.Result.Ok value with
+    | core.result.Result.Err e => error e
+    | core.result.Result.Ok value => referenceQuery queries folds index (before value) tail error
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryCandidate7.lean:101:90: error: unsolved goals
+X A T : Type
+queries : Queries
+folds index start finish : Usize
+calls : Calls start index
+guard : index < finish
+prepare : Common → Result (core.result.Result X verifier.Error)
+before : X → Result (core.result.Result A verifier.Error)
+tail : M → A → Result T
+error : verifier.Error → Result T
+after : Common → Result T :=
+  fun common => do
+    let prepared ← prepare common
+    match prepared with
+      | core.result.Result.Err e => error e
+      | core.result.Result.Ok value => referenceQuery queries folds index (before value) tail error
+replace :
+  (do
+      let result ← new.front queries start finish
+      match result with
+        | core.result.Result.Err e => error e
+        | core.result.Result.Ok front => do
+          let prepared ← prepare (newView front)
+          match prepared with
+            | core.result.Result.Err e => error e
+            | core.result.Result.Ok value =>
+              optimizedQuery queries folds index start front.line_z_values (before value) tail error) =
+    do
+    let result ← new.front queries start finish
+    match result with
+      | core.result.Result.Err e => error e
+      | core.result.Result.Ok front => after (newView front)
+⊢ (do
+      let result ← new.front queries start finish
+      match result with
+        | core.result.Result.Err e => error e
+        | core.result.Result.Ok front => do
+          let prepared ← prepare (newView front)
+          match prepared with
+            | core.result.Result.Err e => error e
+            | core.result.Result.Ok value =>
+              optimizedQuery queries folds index start front.line_z_values (before value) tail error) =
+    do
+    let result ← old.front queries start finish
+    match result with
+      | core.result.Result.Err e => error e
+      | core.result.Result.Ok front => do
+        let prepared ← prepare (oldView front)
+        match prepared with
+          | core.result.Result.Err e => error e
+          | core.result.Result.Ok value => referenceQuery queries folds index (before value) tail error
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryCandidate7.lean:128:10: error: unexpected token '('; expected command
+'AspisR1.CuSavingsGeometryCandidate7.query_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsGeometryCandidate7.source_query_context' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsGeometryCandidate7.source_caller_context' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]

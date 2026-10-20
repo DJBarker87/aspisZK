@@ -1,0 +1,257 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:46:80: error: unsolved goals
+iter : Iter
+rows : Rows
+cache flat : alloc.vec.Vec M
+ho : (↑rows).length = iter.i
+hn : (↑cache).length = iter.i
+hb : (↑iter.slice).length ≤ 22
+hi : iter.i ≤ (↑iter.slice).length
+hf : (↑iter.slice).length - iter.i = 0
+hge : ¬iter.i < (↑iter.slice).length
+⊢ (if h : False then ok (some iter.slice[iter.i], { slice := iter.slice, i := iter.i + 1 }) else ok (none, iter)) =
+    ok (none, iter)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:69:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  new.row query
+in the target expression
+  (do
+      let flow ←
+        do
+          let r ← ok result
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              let (values, line_z) := val
+              do
+              let s ← lift values.to_slice
+              let flat1 ← alloc.vec.Vec.extend_from_slice field.M31.Insts.CoreCloneClone flat s
+              let line_z_values1 ← cache.push line_z
+              ok (cont (after, line_z_values1, flat1))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual new.Front
+                    (core.convert.FromSame verifier.Error) residual
+              ok (done r1)
+      match flow with
+        | done value => observe newView (ok value)
+        | cont next =>
+          observe newView
+            (loop
+              (fun x => do
+                let (o, iter1) ← core.slice.iter.IteratorSliceIter.next x.1
+                match o with
+                  | none => ok (done (core.result.Result.Ok { flat := x.2.2, line_z_values := x.2.1 }))
+                  | some query => do
+                    let r ← new.row query
+                    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                    match cf with
+                      | core.ops.control_flow.ControlFlow.Continue val =>
+                        let (values, line_z) := val
+                        do
+                        let s ← lift values.to_slice
+                        let flat1 ← alloc.vec.Vec.extend_from_slice field.M31.Insts.CoreCloneClone x.2.2 s
+                        let line_z_values1 ← x.2.1.push line_z
+                        ok (cont (iter1, line_z_values1, flat1))
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r1 ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual new.Front
+                              (core.convert.FromSame verifier.Error) residual
+                        ok (done r1))
+              next)) =
+    do
+    let flow ←
+      do
+        let r ← ok result
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            let (values, _) := val
+            do
+            let s ← lift values.to_slice
+            let flat1 ← alloc.vec.Vec.extend_from_slice field.M31.Insts.CoreCloneClone flat s
+            let denominators1 ← alloc.vec.Vec.push rows values
+            ok (cont (after, denominators1, flat1))
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual old.Front
+                  (core.convert.FromSame verifier.Error) residual
+            ok (done r1)
+    match flow with
+      | done value => observe oldView (ok value)
+      | cont next =>
+        observe oldView
+          (loop
+            (fun x => do
+              let (o, iter1) ← core.slice.iter.IteratorSliceIter.next x.1
+              match o with
+                | none => ok (done (core.result.Result.Ok { flat := x.2.2, denominators := x.2.1 }))
+                | some query => do
+                  let r ← new.row query
+                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val =>
+                      let (values, _) := val
+                      do
+                      let s ← lift values.to_slice
+                      let flat1 ← alloc.vec.Vec.extend_from_slice field.M31.Insts.CoreCloneClone x.2.2 s
+                      let denominators1 ← x.2.1.push values
+                      ok (cont (iter1, denominators1, flat1))
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r1 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual old.Front
+                            (core.convert.FromSame verifier.Error) residual
+                      ok (done r1))
+            next)
+
+case succ.ok
+fuel : ℕ
+ih :
+  ∀ (iter : Iter) (rows : Rows) (cache flat : alloc.vec.Vec M),
+    (↑rows).length = iter.i →
+      (↑cache).length = iter.i →
+        (↑iter.slice).length ≤ 22 →
+          iter.i ≤ (↑iter.slice).length →
+            (↑iter.slice).length - iter.i = fuel →
+              observe newView (new.front_loop iter cache flat) = observe oldView (old.front_loop iter rows flat)
+iter : Iter
+rows : Rows
+cache flat : alloc.vec.Vec M
+ho : (↑rows).length = iter.i
+hn : (↑cache).length = iter.i
+hb : (↑iter.slice).length ≤ 22
+hi : iter.i ≤ (↑iter.slice).length
+hf : (↑iter.slice).length - iter.i = fuel + 1
+hlt : iter.i < (↑iter.slice).length
+query : U32 := (↑iter.slice)[iter.i]
+after : Iter := { slice := iter.slice, i := iter.i + 1 }
+hnext : core.slice.iter.IteratorSliceIter.next iter = ok (some query, after)
+result : core.result.Result (Std.Array field.M31 5#usize × field.M31) verifier.Error
+hr : new.row query = ok result
+⊢ (do
+      let flow ←
+        do
+          let r ← ok result
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              let (values, line_z) := val
+              do
+              let s ← lift values.to_slice
+              let flat1 ← alloc.vec.Vec.extend_from_slice field.M31.Insts.CoreCloneClone flat s
+              let line_z_values1 ← cache.push line_z
+              ok (cont (after, line_z_values1, flat1))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual new.Front
+                    (core.convert.FromSame verifier.Error) residual
+              ok (done r1)
+      match flow with
+        | done value => observe newView (ok value)
+        | cont next =>
+          observe newView
+            (loop
+              (fun x => do
+                let (o, iter1) ← core.slice.iter.IteratorSliceIter.next x.1
+                match o with
+                  | none => ok (done (core.result.Result.Ok { flat := x.2.2, line_z_values := x.2.1 }))
+                  | some query => do
+                    let r ← new.row query
+                    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                    match cf with
+                      | core.ops.control_flow.ControlFlow.Continue val =>
+                        let (values, line_z) := val
+                        do
+                        let s ← lift values.to_slice
+                        let flat1 ← alloc.vec.Vec.extend_from_slice field.M31.Insts.CoreCloneClone x.2.2 s
+                        let line_z_values1 ← x.2.1.push line_z
+                        ok (cont (iter1, line_z_values1, flat1))
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r1 ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual new.Front
+                              (core.convert.FromSame verifier.Error) residual
+                        ok (done r1))
+              next)) =
+    do
+    let flow ←
+      do
+        let r ← ok result
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            let (values, _) := val
+            do
+            let s ← lift values.to_slice
+            let flat1 ← alloc.vec.Vec.extend_from_slice field.M31.Insts.CoreCloneClone flat s
+            let denominators1 ← alloc.vec.Vec.push rows values
+            ok (cont (after, denominators1, flat1))
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual old.Front
+                  (core.convert.FromSame verifier.Error) residual
+            ok (done r1)
+    match flow with
+      | done value => observe oldView (ok value)
+      | cont next =>
+        observe oldView
+          (loop
+            (fun x => do
+              let (o, iter1) ← core.slice.iter.IteratorSliceIter.next x.1
+              match o with
+                | none => ok (done (core.result.Result.Ok { flat := x.2.2, denominators := x.2.1 }))
+                | some query => do
+                  let r ← new.row query
+                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val =>
+                      let (values, _) := val
+                      do
+                      let s ← lift values.to_slice
+                      let flat1 ← alloc.vec.Vec.extend_from_slice field.M31.Insts.CoreCloneClone x.2.2 s
+                      let denominators1 ← x.2.1.push values
+                      ok (cont (iter1, denominators1, flat1))
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r1 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual old.Front
+                            (core.convert.FromSame verifier.Error) residual
+                      ok (done r1))
+            next)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (5 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:48:56: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [show ¬̵ ̵i̵t̵e̵r̵.̵i̵<̵¬̲i̲t̲e̲r̲.̲i̲ ̲<̲ iter.slice.len from h̵g̵e̵,̵i̵f̵_̵n̵e̵g̵]̵h̲g̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:59:54: warning: This simp argument is unused:
+  if_pos
+
+Hint: Omit it from the simp argument list.
+  simp only [show iter.i ̲< iter.slice.len from hlt,̵i̵f̵_̵p̵o̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:66:31: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsGeometryFront.lean:67:24: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsGeometryFront.push_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsGeometryFront.loops_equivalence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
