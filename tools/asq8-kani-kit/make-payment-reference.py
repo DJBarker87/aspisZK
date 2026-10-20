@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Generate a reviewed fixed-eight-word serializer copy; no shipped edits."""
 from pathlib import Path
+import sys
 root=Path(__file__).resolve().parents[2]
 p=root/'crates/aspis-statement/src/pool_v1/payment_relation.rs'
 s=p.read_text()
@@ -22,4 +23,8 @@ out=out.replace('encode_digest_canonical','digest_reference')
 out+='\nfn digest_reference(digest: &Digest) -> [u8; 32] {\n'
 for i in range(8):out+=f'    let b{i} = digest[{i}].0.to_le_bytes();\n'
 out+='    [\n'+''.join('        '+', '.join(f'b{i}[{j}]' for j in range(4))+',\n' for i in range(8))+'    ]\n}\n'
-(root/'crates/aspis-statement/src/pool_v1/asq8_payment_reference.rs').write_text(out)
+target=root/'crates/aspis-statement/src/pool_v1/asq8_payment_reference.rs'
+if '--check' in sys.argv:
+    assert target.read_text() == out, 'reference differs from fixed-word generator'
+else:
+    target.write_text(out)
