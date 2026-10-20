@@ -20,6 +20,11 @@ MISMATCH (a recorded difference), OPEN.
 
 §0  Summary
 ----------------------------------------------------------------------
+Current binary-format follow-up: ../r1p-sim/SIM-BINARY.md. The historical
+measurements below predate adoption and do not establish binary acceptance.
+The adopted-format simulator and its tests now use binary multiproofs;
+current receipts are in ../r1p-sim/attempts.jsonl and evidence.json.
+
 IMPLEMENTED, TESTED, MEASURED at d951c0681 (rebased on a4aca2a1e, i.e. with
 the D70 extracted writers and the CU-savings verifier arithmetic):
   * R-retry: P_R1 check (P_chk: z9e emit + the extracted C3 checker with the
@@ -205,28 +210,52 @@ Notes.
 
 §6  The verifier log: comLog and the commitment programming
 ----------------------------------------------------------------------
-Lean: comLog Cm roots V ch = the verifier's reads on the opened paths:
-per query and tree one leaf read H(0x10 ‖ T ‖ value ‖ salt) and six 8-ary
-node reads; roots are R1Coins coordinates (Fin 3 → Ans); salts and digests
-are Cm coordinates (DESIGN-R1-GAMES §1, D45.2).
-Rust `program_tree` (per tree: C1 tag, C2 tag, folded tag 0x72):
-  leaf reads: for each opened leaf (22 fibres; distinct u/4 for the folded
-  tree) a coin answer, recorded at the exact address the verifier forms
-  (the library's private_leaf_hash_with_digest called with a one-shot
-  programming oracle); node reads: for each node on the union of opened
-  paths, a coin answer at the address parent_with_digest forms from its 8
-  children, unopened children being coin digests; the top node's answer is
-  the root coin. Paths are read back from the same children arrays, so
-  shared ancestors and the folded tree's shared leaves are consistent.
-  The salts in the proof are coins (stream 2). CORRESPONDS.
-Serialisation (R-ser): the bytes are laid out exactly as
-prove_from_semantics writes them (header, C1 root, rows 0..26, y1,
-inactive, c0, folded root, c1, final, 22 query blocks); `out.len() ==
-View::proof_bytes(S2)` is asserted. Two further verifier reads (the
-checkpoint's H(proof), H(public)) are ordinary unprogrammed reads, as in
-DESIGN-R1-GAMES §1.
+CURRENT FORMAT (2026-10-20, PROOF-SIZE-OBLIGATIONS item 5):
+Lean: GamesR1PBin / EventsR1PBin.ROpen, batchReadSet. Each transaction
+batch reads roots, opened leaves and the union of eighteen-level binary
+paths once per batch. The combined log may repeat shared ancestors across
+batches. Supplied sibling digests and deterministic slot padding are bytes,
+not oracle reads. Salts are leaf-preimage bytes, not verifier salt-derivation
+reads. Node grammar: 0x12 || left || right (65 bytes).
 
-§7  Tests and measurements (host, optimized, capped; evidence.json)
+Rust program_tree constructs a sparse consistent tree for the union of the
+opened leaves of BOTH batches, for each of C1, C2 and folded (tag 0x72).
+Each leaf address uses private_leaf_hash_with_digest; each distinct parent
+address uses multiproof::binary_parent. Both receive coin answers; the
+level-18 answer is the root coin. Unopened child digests are coins without
+programming their preimages. ProgrammedTree::multiproof calls the adopted
+multiproof::generate (level order, ascending index, missing child slots).
+Each batch uses that SAME tree, so nodes shared within/across transactions
+have consistent answers. The table deduplicates the complete verifier log.
+Its distinct-address count is transcript_reads + commitment_reads, checked
+against the addresses actually read under strict tx1+tx2 plus dense.
+
+Serialisation uses compact::MAGIC (R1P3CB18), compact_semantic and
+compact_values(y1), then the adopted 22 openings and six padded slots:
+C1/C2/folded for queries 0..10, then C1/C2/folded for 10..22. All padding
+is zero; the fixed proof length is 57,607 bytes. Semantic rows 14..26 and
+y1 store the low QM31 halves; the codec refuses nonzero high halves and the
+verifier restores zero halves before the original transcript walk. The C1,
+C2 and folded roots remain 32-byte digests at the original transcript rows.
+The 115 transcript addresses are recorded on those logical records, never
+on the compact stored slices. Checkpoint H(proof) and H(public) use the real
+hash fallback and are not programmed.
+
+Lean SimulatorLogR1PBin.simE_comLog_batches transports the ACTUAL RComLog
+premise (stated on honest views) to simE using hvzk_R1S and finite-law
+support. This holds on P_R1 AND VR1 for a matching public witness, exactly
+the HVZK domain; it does not assume RComLog holds on arbitrary views. The
+preimage tape is used only in the proof, not by the algorithm. The theorem
+exhibits two mapped read lists with Nodup, toFinset = batchReadSet, and
+length = card batchReadSet. simE_progOracle unfolds the actual programmed
+lookup at transcript ++ comLog. PrivacySimulatorBin.privacy_R1_eff_binary
+exports the existing Bin privacy bound through that dependency cone:
+2^-109 + 2^-137, n1 worst case 2,457,717 (D76/D77).
+CORRESPONDS; this is not an extracted Rust-to-Lean refinement proof.
+See ../r1p-sim/SIM-BINARY.md and its attempts.jsonl/evidence.json for the
+current source citations, measured runs and residual premises.
+
+§7  Historical eight-way tests and measurements (pre-adoption)
 ----------------------------------------------------------------------
 Revision d951c0681. All 21 lib tests pass (test2-results.txt; 3:14 wall,
 506 MB peak, 0 swaps), including:
@@ -260,8 +289,16 @@ semantic 1.46–1.52 s, opening 0.005 s, programming + serialisation 0.03 s;
 simulation without P_R1 ≈ 1.5 s; 442–450 programmed addresses, all read;
 every proof verified (strict tx1+tx2 and dense) under its programmed oracle.
 
-§8  Mismatches and open items
+§8  Historical mismatches and residual premises
 ----------------------------------------------------------------------
+The entries below record the D73 state. Lead-accepted D74 supersedes (a)
+and (b): the honest prover now retries on distinguished pole/exhaustion
+failures. D72/D75 supersede the hRound/hGRound/hGBat and column-writer
+premises mentioned in (c); remaining decoder/source-refinement premises
+stay open as recorded in the current LOG. The binary simulator change does
+not re-prove those independent refinements. Current layout-specific scope
+and evidence are in ../r1p-sim/SIM-BINARY.md.
+
 (a) MISMATCH, pole (Vp). Lean realGame moves to the next attempt on
     P ∧ ¬NoPole; the Rust helper builder maps LogUpError::ActivePole to
     CopyImbalance → Error::Semantic, so the loop aborts and publishes

@@ -34,7 +34,7 @@ use aspis_core::{Digest32,HashFn,circle::SecureCirclePoint,digest::LegacyHashFn,
 use aspis_statement::{multilinear_evaluate_qm31,StateOnlyTraceFoundation,pool_v1::pair_forest_semantic_terminal::r0::Public};
 use aspis_prover::{HOST_HASH,state_only_entropy::StateOnlyAttemptSecrets,
     state_only_hiding::{apply_pool_v1_pair_forest_mask_material_v1,apply_pool_v1_pair_forest_h1_padding_mask_v1,InMemoryStateOnlyMaskNonceStore}};
-use crate::{transport::Variant,verifier::{Error,View},weights::Weights,transcript::Transcript,
+use crate::{compact, multiproof,transport::Variant,verifier::Error,weights::Weights,transcript::Transcript,
     r1_wire::{self as wire,Challenges,SemanticTranscript},host_semantic::{extra,point_claims},
     prover::{encoded,fold,round,ATTEMPT_CAP,R1PublicChallenges}};
 
@@ -351,44 +351,42 @@ fn opening(columns:&[Vec<K>;29],tau:&Tape,d:&Drawn,variant:Variant)->Result<View
 }
 
 // ------------------------------------------------- commitment programming
-type Path=[[[u8;32];7];6];
-/// Program one 8-ary depth-6 tree over the opened leaves (index → (value,
-/// salt)): leaf reads and the node reads on the union of opened paths get
-/// coin answers, the top node's answer is `root`; unopened children are coin
-/// digests. Returns the opened paths.
-fn program_tree(table:&RefCell<(Table,bool)>,coins:&mut Coins,tag:u8,leaves:&BTreeMap<usize,(Vec<u8>,[u8;32])>,root:[u8;32])->Result<(BTreeMap<usize,Path>,usize),Error> {
+/// Sparse binary tree containing exactly the opened path union. Sibling
+/// digests are coins, stored for multiproof assembly without oracle reads.
+struct ProgrammedTree { children: Vec<BTreeMap<usize, [[u8;32];2]>> }
+impl ProgrammedTree {
+    fn multiproof(&self, indices:&[u32])->Result<Vec<u8>,Error> {
+        multiproof::generate(multiproof::Arity::Two,indices,|depth,index| {
+            self.children[depth as usize][&(index as usize/2)][index as usize%2]
+        }).ok_or(Error::Merkle)
+    }
+}
+
+/// Program leaves and each distinct binary parent in the union of both
+/// transaction batches. Shared nodes receive one consistent answer, including
+/// the root coin. Each batch later emits its own canonical sibling sequence.
+fn program_tree(table:&RefCell<(Table,bool)>,coins:&mut Coins,tag:u8,leaves:&BTreeMap<usize,(Vec<u8>,[u8;32])>,root:[u8;32])->Result<(ProgrammedTree,usize),Error> {
     let mut reads=0;
-    let mut level:BTreeMap<usize,[u8;32]>=BTreeMap::new();
+    let mut level=BTreeMap::new();
     for (&i,(value,salt)) in leaves {
         let answer=coins.coin();
         private_leaf_hash_with_digest(ProgramOne{table,answer},tag,value,salt);
         level.insert(i,answer);reads+=1;
     }
-    let mut kids_at:Vec<BTreeMap<usize,[[u8;32];8]>>=Vec::new();
-    for depth in 0..6 {
-        let parents:BTreeSet<usize>=level.keys().map(|i|i/8).collect();
+    let mut children=Vec::new();
+    for depth in 0..multiproof::LEAF_BITS {
+        let parents:BTreeSet<usize>=level.keys().map(|i|i/2).collect();
         let (mut next,mut kids_here)=(BTreeMap::new(),BTreeMap::new());
         for p in parents {
-            let mut kids=[[0u8;32];8];
-            for (s,k) in kids.iter_mut().enumerate() {*k=match level.get(&(8*p+s)) {Some(x)=>*x,None=>coins.coin()};}
-            let answer=if depth==5 {root} else {coins.coin()};
-            merkle::parent_with_digest(ProgramOne{table,answer},&kids);reads+=1;
+            let kids=core::array::from_fn(|s|level.get(&(2*p+s)).copied().unwrap_or_else(||coins.coin()));
+            let answer=if depth+1==multiproof::LEAF_BITS {root} else {coins.coin()};
+            multiproof::binary_parent(ProgramOne{table,answer},&kids[0],&kids[1]);reads+=1;
             next.insert(p,answer);kids_here.insert(p,kids);
         }
-        kids_at.push(kids_here);level=next;
+        children.push(kids_here);level=next;
     }
     if level.len()!=1||level.get(&0)!=Some(&root) {return Err(Error::Merkle);}
-    let mut paths=BTreeMap::new();
-    for &i in leaves.keys() {
-        let mut path=[[[0u8;32];7];6];let mut idx=i;
-        for (depth,lv) in path.iter_mut().enumerate() {
-            let kids=kids_at[depth][&(idx/8)];let slot=idx%8;
-            for (j,dst) in lv.iter_mut().enumerate() {*dst=kids[if j<slot {j} else {j+1}];}
-            idx/=8;
-        }
-        paths.insert(i,path);
-    }
-    Ok((paths,reads))
+    Ok((ProgrammedTree{children},reads))
 }
 
 // ------------------------------------------------------------- simE
@@ -458,21 +456,32 @@ pub fn sim_e_ablated(public:Public<'_>,seed:[u8;32],ablation:Ablation)->Result<S
         let (p2,r2)=program_tree(&table,&mut commit_coins,merkle::C2_TAG,&leaves2,roots[1])?;
         let (pf,rf)=program_tree(&table,&mut commit_coins,0x72,&leavesf,roots[2])?;
         let records=Records{c1_root:roots[0],semantic:view.semantic.clone(),y1:view.y1.clone(),inactive:view.inactive,c0:view.c0.clone(),folded_root:roots[2],c1:view.c1.clone(),fin:view.fin.clone()};
-        let mut out=Vec::with_capacity(View::eight_way_proof_bytes(variant));
-        out.extend_from_slice(b"R1P3COST");out.extend_from_slice(&[variant.tag(),0,0,0,0,0,0,0]);
-        out.extend_from_slice(&records.c1_root);for r in &records.semantic {out.extend_from_slice(r);}
-        out.extend_from_slice(&records.y1);out.extend_from_slice(&records.inactive);out.extend_from_slice(&records.c0);
+        let mut out=Vec::with_capacity(compact::PROOF_BYTES);
+        out.extend_from_slice(compact::MAGIC);out.extend_from_slice(&[variant.tag(),0,0,0,0,0,0,0]);
+        let mut logical=records.c1_root.to_vec();
+        for r in &records.semantic {logical.extend_from_slice(r);}
+        compact::compact_semantic(&logical,&mut out).map_err(|_|Error::Semantic)?;
+        compact::compact_values(&records.y1,&mut out).map_err(|_|Error::Semantic)?;
+        out.extend_from_slice(&records.inactive);out.extend_from_slice(&records.c0);
         out.extend_from_slice(&records.folded_root);out.extend_from_slice(&records.c1);out.extend_from_slice(&records.fin);
         for &u in &drawn.queries {
             let u=u as usize;let (_,c1v,c2v)=&opened[&u];
-            // Opened values in the proof's lane order (identical to the leaf bytes).
             out.extend_from_slice(c1v);out.extend_from_slice(c2v);
             out.extend_from_slice(&leaves1[&u].1);out.extend_from_slice(&leaves2[&u].1);
-            for path in [&p1[&u],&p2[&u]] {for lv in path {for dg in lv {out.extend_from_slice(dg);}}}
             out.extend_from_slice(&folded[&(u/4)]);out.extend_from_slice(&leavesf[&(u/4)].1);
-            for lv in &pf[&(u/4)] {for dg in lv {out.extend_from_slice(dg);}}
         }
-        if out.len()!=View::eight_way_proof_bytes(variant) {return Err(Error::Parse);}
+        if out.len()!=compact::OFF_NODES {return Err(Error::Parse);}
+        for (batch,range) in [(0,0..compact::SPLIT),(1,compact::SPLIT..compact::QUERIES)] {
+            for (tree,programmed) in [&p1,&p2,&pf].into_iter().enumerate() {
+                let mut indices:Vec<u32>=drawn.queries[range.clone()].iter().map(|&u|if tree==2 {u/4} else {u}).collect();
+                indices.sort();indices.dedup();
+                let nodes=programmed.multiproof(&indices)?;
+                let cap=32*compact::SLOT_NODES[3*batch+tree];
+                if nodes.len()>cap {return Err(Error::Parse);}
+                out.extend_from_slice(&nodes);out.resize(out.len()+cap-nodes.len(),0);
+            }
+        }
+        if out.len()!=compact::PROOF_BYTES {return Err(Error::Parse);}
         // VerLog, transcript part: the same answers at the view's addresses.
         let state=RefCell::new(CoinState{coins:state.into_inner().coins,next:0,record:Some(Table::new()),collision:false});
         let again=walk(CoinOracle(&state),&public_bytes,&records,variant)?;
@@ -492,9 +501,7 @@ pub fn sim_e_ablated(public:Public<'_>,seed:[u8;32],ablation:Ablation)->Result<S
 
 /// Verify a simulated proof under its programmed oracle (strict tx1 + tx2,
 /// then the dense verifier). Returns (accepted, programmed, read).
-/// PREREG-PROOF-SIZE-2: the verifiers are the adopted compact
-/// binary-multiproof ones and simE still emits the retired eight-way layout,
-/// so this rejects until PROOF-SIZE-OBLIGATIONS item 5 is done.
+/// Both verifiers parse the adopted compact binary-multiproof format.
 pub fn verify_programmed(public:Public<'_>,proof:&[u8],table:Table)->(Result<(),Error>,usize,usize) {
     install(table);
     let hash:HashFn=programmed_hash;
