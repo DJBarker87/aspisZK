@@ -1,0 +1,15 @@
+# Stage2 generated-prefix decoder canonicality (20 Oct 2026)
+
+This packet repairs the stale Aeneas `core.fmt.Formatter` object selected by the previous generated Reader build, then records the focused theorem that a successful generated resume-prefix call yields canonical field values.
+
+`Stage2GeneratedPrefixCallCanonicality.successful_generated_prefix_outputs_canonical` derives parser success for all five decoded values from the generated `Reader.e`/`Reader.k` calls. It transports those successes through the generated-to-concrete decoder maps and applies the retained concrete decoder canonicality theorems. Its result covers gamma, kappa, alpha0, alpha1, and rho in the Reader representation. It does not prove that the whole resume function is reachable from an accepted protocol execution, nor does it prove full generated/concrete `readPrefix` equality.
+
+The exact Aeneas source revision is `d860ac47ed548d3da6d799afc013779ce470516c`. Rebuilt owners are source-identical Aeneas `Fmt`, `ArraySlice`, and the `Core`, `Array`, `Std`, and `Aeneas` umbrellas, followed by regenerated Funs and focused dependent Reader modules. The selected old Formatter object was axiomatized; after rebuilding its source owner and the dependent ArraySlice/umbrella/Funs chain, the audit reports no axioms for `Formatter`, `DebugTryFromSliceError`, or its array formatter. The generated Reader bridge remains only dependent on `[propext, Quot.sound]`; the call-success and canonicality theorems report `[propext, Classical.choice, Quot.sound]`.
+
+The canonicality target was compiled on the approved NUC with Lean 4.32.0, `-j1 -M 4400`, MemoryHigh 512 MiB, MemoryMax 2 GiB, MemorySwapMax 0. The final attempt was `stage2-generated-prefix-call-canonicality-v4`, exit 0, 1.404 s, process peak RSS 2,645,388 KiB, cgroup peak 293,826,560 bytes, swap 0. Exact command, preflight, receipt, time log, and Lean output are included under `attempts/`.
+
+No OLean objects are included. `manifest.json` pins the source bytes, evidence files, and accepted OLean hashes used by the final target.
+
+The Rust `resume_read_prefix` helper is a CANDIDATE source arrangement: its read statements are copied from the frozen adopted `resume`, with an isolated input/return boundary. Its Charon/Aeneas input, receipts, source-cut checks and raw generated owners are included under `extraction/` and `raw-generated/`. This closes canonicality conditional on success of that generated helper, while whole-resume reachability remains OPEN.
+
+The compiled Funs body differs from raw generation only by removing generated resource options. Types additionally omits the unused Error-discriminant instance attribute to avoid an anonymous-instance collision; the Error constructors are unchanged, and the checker verifies no generated function reads discriminants. This adapter is explicitly distinct from the exact-source formatter cache repair. The redundant source-only evidence archive has been unpacked. The normalized top-level manifest is authoritative over the worker's provisional listing.
