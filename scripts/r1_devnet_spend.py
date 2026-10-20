@@ -27,12 +27,35 @@ def send(name,ixs,keys=['keys/payer.json'],negative=False):
     done=O/(name+'.json')
     if done.exists():
         old=json.load(open(done))
-        if old.get('finalized'):return old
+        if old.get('finalized'):
+            if bool(old['error'])!=negative:raise RuntimeError(f'{name}: prior finalized result had an unexpected error')
+            return old
         raise RuntimeError(f'{name}: prior incomplete transaction; inspect attempt signatures before resuming')
-    if list(O.glob(name+'-attempt-*.json')):
-        raise RuntimeError(f'{name}: prior attempt receipts exist; reconcile their signatures before resuming')
+    prior=[]
+    for path in O.glob(name+'-attempt-*.json'):
+        if re.fullmatch(re.escape(name)+r'-attempt-[0-9]+\.json',path.name):prior.append((path,json.load(open(path))))
+    for path,attempt_record in sorted(prior):
+        sig=attempt_record['signature']
+        while True:
+            status=rpc(URL,'getSignatureStatuses',[[sig],{'searchTransactionHistory':True}])['value'][0]
+            if status and status['confirmationStatus']=='finalized':
+                tx=rpc(URL,'getTransaction',[sig,{'encoding':'json','commitment':'finalized','maxSupportedTransactionVersion':1}])
+                if not tx:raise RuntimeError(f'{name}: finalized metadata not yet available')
+                write(name+'-transaction',tx)
+                origin=attempt_record.get('started_unix',path.stat().st_mtime)
+                result={'signature':sig,'explorer':f'https://explorer.solana.com/tx/{sig}?cluster=devnet','slot':tx['slot'],'compute_units':tx['meta'].get('computeUnitsConsumed'),'fee':tx['meta']['fee'],'error':tx['meta']['err'],'wall_seconds':time.time()-origin,'wall_seconds_kind':'reconciled_since_signed_receipt','serialized_bytes':attempt_record['serialized_bytes'],'finalized':True,'negative':negative,'reconciled':True}
+                write(name,result)
+                if bool(result['error'])!=negative:raise RuntimeError(f'{name}: reconciled unexpected result {result}')
+                print(name,json.dumps(result),flush=True);return result
+            if status is None and rpc(URL,'getBlockHeight',[{'commitment':'finalized'}])>attempt_record['blockhash']['lastValidBlockHeight']:
+                write(path.stem+'-expired',{'signature':sig,'expired_unlanded':True});break
+            time.sleep(2)
+    if not prior and list(O.glob(name+'-attempt-*.json')):
+        raise RuntimeError(f'{name}: prior simulation-only failure requires inspection before resuming')
     start=time.monotonic()
-    for attempt in range(3):
+    started_unix=time.time()
+    first_attempt=1+max((int(path.stem.rsplit('-',1)[1]) for path,_ in prior),default=-1)
+    for attempt in range(first_attempt,3):
         bh=rpc(URL,'getLatestBlockhash',[{'commitment':'confirmed'}])['value']
         signed=invoke({'keys':keys,'instructions':ixs,'blockhash':bh['blockhash']})
         wire=base64.b64encode(bytes.fromhex(signed['hex'])).decode();sig=signed['signature']
@@ -40,7 +63,7 @@ def send(name,ixs,keys=['keys/payer.json'],negative=False):
         simerr=simulation['value']['err']
         if simerr=='BlockhashNotFound':continue
         if bool(simerr)!=negative:raise RuntimeError(f'{name} unexpected simulation: {simulation}')
-        write(f'{name}-attempt-{attempt}',{'signature':sig,'blockhash':bh,'simulation_error':simerr,'serialized_bytes':signed['bytes']})
+        write(f'{name}-attempt-{attempt}',{'signature':sig,'blockhash':bh,'simulation_error':simerr,'serialized_bytes':signed['bytes'],'started_unix':started_unix})
         try:
             sent=rpc(URL,'sendTransaction',[wire,{'encoding':'base64','skipPreflight':negative,'maxRetries':5,'preflightCommitment':'confirmed'}]);assert sent==sig
         except Exception as e:
@@ -81,7 +104,12 @@ def readhex(address,owner):
     a=account(address);assert a['value'] and a['value']['owner']==owner and not a['value']['executable']
     return base64.b64decode(a['value']['data'][0]).hex()
 def upload(label,address,path,body):
-    phase=time.monotonic()
+    timing_file=O/(label+'-phase-timing.json')
+    if timing_file.exists():timing=json.load(open(timing_file))
+    else:
+        earlier=list(O.glob(label+'-*-attempt-*.json'))
+        timing={'started_unix':min(p.stat().st_mtime for p in earlier) if earlier else time.time(),'origin_kind':'first_legacy_receipt_mtime' if earlier else 'phase_entry'}
+        write(label+'-phase-timing',timing)
     def one(item):
         i,start=item;time.sleep((i%4)*.25)
         return send(f'{label}-{i}',[ix(C['carrier'],[[address,True,True]],start.to_bytes(4,'little')+body[start:start+3763])],['keys/payer.json',path])
@@ -90,7 +118,7 @@ def upload(label,address,path,body):
     with ThreadPoolExecutor(max_workers=4) as pool:
         stats=list(pool.map(one,enumerate(range(0,len(body),3763))))
     actual=bytes.fromhex(readhex(address,C['carrier']));assert actual==body
-    result={'count':len(stats),'compute_units':sum(s['compute_units'] for s in stats),'wall_seconds':time.monotonic()-phase,'transaction_wall_seconds_sum':sum(s['wall_seconds'] for s in stats),'sha256':hashlib.sha256(body).hexdigest()};write(label+'-summary',result);return result
+    result={'count':len(stats),'compute_units':sum(s['compute_units'] for s in stats),'wall_seconds':time.time()-timing['started_unix'],'wall_origin_kind':timing['origin_kind'],'transaction_wall_seconds_sum':sum(s['wall_seconds'] for s in stats),'sha256':hashlib.sha256(body).hexdigest()};write(label+'-summary',result);return result
 
 assert subprocess.check_output([str(CLI/'solana-keygen'),'pubkey','keys/payer.json'],text=True).strip()==C['payer']
 assert rpc(URL,'getGenesisHash',[])==C['genesis_hash']
@@ -141,7 +169,7 @@ for n,label in enumerate(['transfer','withdrawal']):
     create(label+'-proof-create',proofaccount,C['carrier'],len(proof),proofkey);create(label+'-public-create',publicaccount,C['carrier'],len(public),publickey)
     t=time.monotonic();proof_stats=upload(label+'-proof-upload',proofaccount,proofkey,proof);statement_stats=upload(label+'-statement-upload',publicaccount,publickey,public)
     assert (proof_stats['count'],statement_stats['count'])==(16,1), 'frozen upload count changed'
-    write(label+'-uploads-phase',{'wall_seconds':time.monotonic()-t,'proof_count':proof_stats['count'],'statement_count':statement_stats['count'],'compute_units':proof_stats['compute_units']+statement_stats['compute_units']})
+    write(label+'-uploads-phase',{'wall_seconds':proof_stats['wall_seconds']+statement_stats['wall_seconds'],'wall_origin_kind':proof_stats['wall_origin_kind'],'proof_count':proof_stats['count'],'statement_count':statement_stats['count'],'compute_units':proof_stats['compute_units']+statement_stats['compute_units']})
     create(label+'-checkpoint-create',verifiercp,C['programs']['verifier'],1768,cpkey)
     send(label+'-stage1',[p['stage1']]);send(label+'-stage2',[p['settle']])
     readback={a:account(a) for a in [p['marker'],p['output_lane'],setup['vault'],dest,verifiercp]};write(label+'-readback',readback)
