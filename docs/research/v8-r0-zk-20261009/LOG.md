@@ -7114,3 +7114,20 @@ counters and budgets; coin carrier, normalised batches and ordered log;
 source experiments, randomness and observer; real builder/checker/retry
 coupling; ideal simulator coupling and reached-query history. Owners in the
 report's table. 21 standard-axiom audits, zero swap.
+
+## D90 — builder refinement part 3: ELF gate passed, components proved (2026-10-20, lead)
+
+Landed from `codex/cx-builder-ref2-20261021` (the D86 hold is released).
+Rebuilt from the final source, all three programs are byte-identical to the
+frozen pins (default `dfc2a91a…`, devnet `fb2fc048…`, Pool `121f3e29…`),
+covering the `pair_forest_trace.rs` restructure and the cfg(kani) references
+added to `pair_forest_copy_builder.rs` and `poseidon2.rs`. Six Kani
+projections cover all 20 `records` fields; the raw-word leaf and the
+decomposed Poseidon external layer (four-lane mat4 proved for all inputs,
+then used as a verified stub) are proved equal to owned references, which
+translate and compile in env J (9200, 9202, 9203). An extracted-reference
+scalar projection theorem is added. `builder_refinement_D46_D51` stays open:
+deployed admission/public mapping, the full canonical mapping (including
+empty-root meaning), Rust glue equality and the final `SourceIdentification`
+assembly remain. Note for candidate adoption: these shipped-file edits must be
+carried onto the candidate freeze branch and its ELF pins rechecked.
