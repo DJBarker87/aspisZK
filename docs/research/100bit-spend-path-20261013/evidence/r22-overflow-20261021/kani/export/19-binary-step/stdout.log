@@ -1,0 +1,78 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unused attribute
+  --> canonical.rs:30:9
+   |
+30 |         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+   |         ^^^^^^^^^^^^^^^^^ help: remove this attribute
+   |
+note: attribute also specified here
+  --> canonical.rs:28:9
+   |
+28 |         #[inline(always)]
+   |         ^^^^^^^^^^^^^^^^^
+   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+   = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `level` is never read
+   --> multiproof.rs:125:5
+    |
+125 |     level[w]=parent;let next_w=w+1;
+    |     ^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: type `multiproof::Arity` is more private than the item `multiproof::node_count`
+  --> multiproof.rs:26:1
+   |
+26 | pub fn node_count(arity: Arity, indices: &[u32]) -> Option<usize> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `multiproof::node_count` is reachable at visibility `pub(crate)`
+   |
+note: but type `multiproof::Arity` is only usable at visibility `pub(self)`
+  --> multiproof.rs:2:23
+   |
+ 2 | #[derive(Clone,Copy)] enum Arity {Two,Eight}
+   |                       ^^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+Checking harness multiproof::binary_frontier_step...
+CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-r22-overflow-20261021/generated/target/kani/x86_64-unknown-linux-gnu/debug/deps/r22_overflow_leaves-f57423c2bd8bcda7__RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof20binary_frontier_step.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 16 object bits, 48 offset bits (user-specified)
+Starting Bounded Model Checking
+Runtime Symex: 0.00472556s
+size of program expression: 458 steps
+slicing removed 204 assignments
+Generated 8 VCC(s), 8 remaining after simplification
+Runtime Postprocess Equation: 4.5865e-05s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.00136929s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 2.928e-06s
+Solving with CaDiCaL 2.0.0
+1606 variables, 5819 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 0.00878171s
+Runtime decision procedure: 0.010179s
+
+** Results:
+multiproof.rs function multiproof::binary_frontier_step
+[multiproof::binary_frontier_step.assertion.1] line 134 attempt to add with overflow: SUCCESS
+[multiproof::binary_frontier_step.assertion.2] line 134 attempt to add with overflow: SUCCESS
+[multiproof::binary_frontier_step.assertion.3] line 134 attempt to add with overflow: SUCCESS
+[multiproof::binary_frontier_step.assertion.4] line 135 attempt to add with overflow: SUCCESS
+[multiproof::binary_frontier_step.assertion.5] line 136 assertion failed: next_w<=next_i && next_i<=n && next_w<=16: SUCCESS
+[multiproof::binary_frontier_step.assertion.6] line 137 attempt to subtract with overflow: SUCCESS
+[multiproof::binary_frontier_step.assertion.7] line 137 attempt to subtract with overflow: SUCCESS
+[multiproof::binary_frontier_step.assertion.8] line 137 assertion failed: n-next_i<n-i: SUCCESS
+
+** 0 of 8 failed (1 iterations)
+VERIFICATION SUCCESSFUL
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

@@ -36,7 +36,7 @@ def build():
     for q in ['canonical::reduce','canonical::add','canonical::pair','canonical::reduce_pair','canonical::Q::add','canonical::Q::sub','canonical::Q::half','canonical::Q::half_pow']:
         s,line=fn(b,q);manifest.append(dict(owner=q,path=p,line=line,original_sha256=sha(s.encode()),edit='wrapping_add/sub renamed to r22_add/sub; checked_*().expect assertion; no other body edits'))
     bodies={q:fn(m,q)[0] for q in selected}
-    files['multiproof.rs']='const MAX_BATCH:usize=16; const LEAF_BITS:u32=18;\n#[derive(Clone,Copy)] enum Arity {Two,Eight}\nimpl Arity {\n'+'\n'.join(bodies[q] for q in selected[:3])+'\n}\n'+'\n'.join(bodies[q] for q in selected[3:])+'\n'+(KIT/'multiproof-harnesses.rs').read_text()
+    files['multiproof.rs']='pub const MAX_BATCH:usize=16; const LEAF_BITS:u32=18;\n#[derive(Clone,Copy)] enum Arity {Two,Eight}\nimpl Arity {\n'+'\n'.join(bodies[q] for q in selected[:3])+'\n}\n'+'\n'.join(bodies[q] for q in selected[3:])+'\n'+(KIT/'multiproof-harnesses.rs').read_text()
     for q in selected:
         s,line=fn(m,q);manifest.append(dict(owner=q,path='crates/aspis-r1-cost-probe/src/multiproof.rs',line=line,original_sha256=sha(s.encode()),edit='none; declaration copied verbatim; namespace/import context only'))
     files['lib.rs']='#![allow(dead_code)]\nmod canonical;\nmod multiproof;\n'

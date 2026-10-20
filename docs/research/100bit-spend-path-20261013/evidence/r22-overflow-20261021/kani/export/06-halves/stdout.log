@@ -1,0 +1,539 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unused attribute
+  --> canonical.rs:30:9
+   |
+30 |         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+   |         ^^^^^^^^^^^^^^^^^ help: remove this attribute
+   |
+note: attribute also specified here
+  --> canonical.rs:28:9
+   |
+28 |         #[inline(always)]
+   |         ^^^^^^^^^^^^^^^^^
+   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+   = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+warning: type `multiproof::Arity` is more private than the item `multiproof::node_count`
+  --> multiproof.rs:26:1
+   |
+26 | pub fn node_count(arity: Arity, indices: &[u32]) -> Option<usize> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `multiproof::node_count` is reachable at visibility `pub(crate)`
+   |
+note: but type `multiproof::Arity` is only usable at visibility `pub(self)`
+  --> multiproof.rs:2:23
+   |
+ 2 | #[derive(Clone,Copy)] enum Arity {Two,Eight}
+   |                       ^^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+Checking harness canonical::canonical::half_and_half_pow...
+CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-r22-overflow-20261021/generated/target/kani/x86_64-unknown-linux-gnu/debug/deps/r22_overflow_leaves-c93a74dcf91cee90__RNvNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonical17half_and_half_pow.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 16 object bits, 48 offset bits (user-specified)
+Starting Bounded Model Checking
+Unwinding loop _RNvNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonical11arbitrary_q.0 iteration 1 file canonical.rs line 126 column 5 function canonical::canonical::arbitrary_q thread 0
+Unwinding loop _RNvNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonical11arbitrary_q.0 iteration 2 file canonical.rs line 126 column 5 function canonical::canonical::arbitrary_q thread 0
+Unwinding loop _RNvNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonical11arbitrary_q.0 iteration 3 file canonical.rs line 126 column 5 function canonical::canonical::arbitrary_q thread 0
+Unwinding loop _RNvNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonical11arbitrary_q.0 iteration 4 file canonical.rs line 126 column 5 function canonical::canonical::arbitrary_q thread 0
+Unwinding loop _RINvNtCsci0VKyKEi6N_4core5array18try_from_fn_erasedmINtNtNtB4_3ops9try_trait17NeverShortCircuitmENCINvNvB2_25try_from_trusted_iterator4nextBO_INtNtNtNtB4_4iter8adapters3map3MapINtNtB2_5drain5DrainmENCINvMBR_BO_10wrap_mut_1mNCNvMNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonicalNtB3E_1Q4half0E0EE0EB3I_.0 iteration 1 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs line 897 column 5 function std::array::try_from_fn_erased::<u32, std::ops::try_trait::NeverShortCircuit<u32>, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:41:19: 41:26}>::{closure#0}}>>::{closure#0}}> thread 0
+Unwinding loop _RINvNtCsci0VKyKEi6N_4core5array18try_from_fn_erasedmINtNtNtB4_3ops9try_trait17NeverShortCircuitmENCINvNvB2_25try_from_trusted_iterator4nextBO_INtNtNtNtB4_4iter8adapters3map3MapINtNtB2_5drain5DrainmENCINvMBR_BO_10wrap_mut_1mNCNvMNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonicalNtB3E_1Q4half0E0EE0EB3I_.0 iteration 2 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs line 897 column 5 function std::array::try_from_fn_erased::<u32, std::ops::try_trait::NeverShortCircuit<u32>, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:41:19: 41:26}>::{closure#0}}>>::{closure#0}}> thread 0
+Unwinding loop _RINvNtCsci0VKyKEi6N_4core5array18try_from_fn_erasedmINtNtNtB4_3ops9try_trait17NeverShortCircuitmENCINvNvB2_25try_from_trusted_iterator4nextBO_INtNtNtNtB4_4iter8adapters3map3MapINtNtB2_5drain5DrainmENCINvMBR_BO_10wrap_mut_1mNCNvMNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonicalNtB3E_1Q4half0E0EE0EB3I_.0 iteration 3 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs line 897 column 5 function std::array::try_from_fn_erased::<u32, std::ops::try_trait::NeverShortCircuit<u32>, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:41:19: 41:26}>::{closure#0}}>>::{closure#0}}> thread 0
+Unwinding loop _RINvNtCsci0VKyKEi6N_4core5array18try_from_fn_erasedmINtNtNtB4_3ops9try_trait17NeverShortCircuitmENCINvNvB2_25try_from_trusted_iterator4nextBO_INtNtNtNtB4_4iter8adapters3map3MapINtNtB2_5drain5DrainmENCINvMBR_BO_10wrap_mut_1mNCNvMNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonicalNtB3E_1Q4half0E0EE0EB3I_.0 iteration 4 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs line 897 column 5 function std::array::try_from_fn_erased::<u32, std::ops::try_trait::NeverShortCircuit<u32>, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:41:19: 41:26}>::{closure#0}}>>::{closure#0}}> thread 0
+Unwinding loop _RNvNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonical17half_and_half_pow.0 iteration 1 file canonical.rs line 149 column 5 function canonical::canonical::half_and_half_pow thread 0
+Unwinding loop _RNvNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonical17half_and_half_pow.0 iteration 2 file canonical.rs line 149 column 5 function canonical::canonical::half_and_half_pow thread 0
+Unwinding loop _RNvNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonical17half_and_half_pow.0 iteration 3 file canonical.rs line 149 column 5 function canonical::canonical::half_and_half_pow thread 0
+Unwinding loop _RNvNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonical17half_and_half_pow.0 iteration 4 file canonical.rs line 149 column 5 function canonical::canonical::half_and_half_pow thread 0
+Unwinding loop _RINvNtCsci0VKyKEi6N_4core5array18try_from_fn_erasedmINtNtNtB4_3ops9try_trait17NeverShortCircuitmENCINvNvB2_25try_from_trusted_iterator4nextBO_INtNtNtNtB4_4iter8adapters3map3MapINtNtB2_5drain5DrainmENCINvMBR_BO_10wrap_mut_1mNCNvMNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonicalNtB3E_1Q8half_pow0E0EE0EB3I_.0 iteration 1 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs line 897 column 5 function std::array::try_from_fn_erased::<u32, std::ops::try_trait::NeverShortCircuit<u32>, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:45:34: 45:37}>::{closure#0}}>>::{closure#0}}> thread 0
+Unwinding loop _RINvNtCsci0VKyKEi6N_4core5array18try_from_fn_erasedmINtNtNtB4_3ops9try_trait17NeverShortCircuitmENCINvNvB2_25try_from_trusted_iterator4nextBO_INtNtNtNtB4_4iter8adapters3map3MapINtNtB2_5drain5DrainmENCINvMBR_BO_10wrap_mut_1mNCNvMNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonicalNtB3E_1Q8half_pow0E0EE0EB3I_.0 iteration 2 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs line 897 column 5 function std::array::try_from_fn_erased::<u32, std::ops::try_trait::NeverShortCircuit<u32>, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:45:34: 45:37}>::{closure#0}}>>::{closure#0}}> thread 0
+Unwinding loop _RINvNtCsci0VKyKEi6N_4core5array18try_from_fn_erasedmINtNtNtB4_3ops9try_trait17NeverShortCircuitmENCINvNvB2_25try_from_trusted_iterator4nextBO_INtNtNtNtB4_4iter8adapters3map3MapINtNtB2_5drain5DrainmENCINvMBR_BO_10wrap_mut_1mNCNvMNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonicalNtB3E_1Q8half_pow0E0EE0EB3I_.0 iteration 3 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs line 897 column 5 function std::array::try_from_fn_erased::<u32, std::ops::try_trait::NeverShortCircuit<u32>, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:45:34: 45:37}>::{closure#0}}>>::{closure#0}}> thread 0
+Unwinding loop _RINvNtCsci0VKyKEi6N_4core5array18try_from_fn_erasedmINtNtNtB4_3ops9try_trait17NeverShortCircuitmENCINvNvB2_25try_from_trusted_iterator4nextBO_INtNtNtNtB4_4iter8adapters3map3MapINtNtB2_5drain5DrainmENCINvMBR_BO_10wrap_mut_1mNCNvMNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonicalNtB3E_1Q8half_pow0E0EE0EB3I_.0 iteration 4 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs line 897 column 5 function std::array::try_from_fn_erased::<u32, std::ops::try_trait::NeverShortCircuit<u32>, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:45:34: 45:37}>::{closure#0}}>>::{closure#0}}> thread 0
+aborting path on assume(false) at file lib.rs line 0 column 0 function canonical::canonical::half_and_half_pow thread 0
+Unwinding loop _RNvNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonical17half_and_half_pow.1 iteration 1 file canonical.rs line 150 column 35 function canonical::canonical::half_and_half_pow thread 0
+Unwinding loop _RNvNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonical17half_and_half_pow.1 iteration 2 file canonical.rs line 150 column 35 function canonical::canonical::half_and_half_pow thread 0
+Unwinding loop _RNvNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonical17half_and_half_pow.1 iteration 3 file canonical.rs line 150 column 35 function canonical::canonical::half_and_half_pow thread 0
+Unwinding loop _RNvNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonical17half_and_half_pow.1 iteration 4 file canonical.rs line 150 column 35 function canonical::canonical::half_and_half_pow thread 0
+Runtime Symex: 0.400997s
+size of program expression: 16060 steps
+slicing removed 11078 assignments
+Generated 1400 VCC(s), 80 remaining after simplification
+Runtime Postprocess Equation: 0.00856766s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.0733799s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 3.6e-06s
+Solving with CaDiCaL 2.0.0
+85426 variables, 142032 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 0.0194127s
+Runtime decision procedure: 0.0941692s
+
+** Results:
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs function <std::array::Guard<'_, u32> as std::ops::Drop>::drop
+[<std::array::Guard<'_, u32> as std::ops::Drop>::drop.pointer_dereference.1] line 951 dereference failure: pointer NULL in self->array_mut: SUCCESS
+[<std::array::Guard<'_, u32> as std::ops::Drop>::drop.pointer_dereference.2] line 951 dereference failure: pointer invalid in self->array_mut: SUCCESS
+[<std::array::Guard<'_, u32> as std::ops::Drop>::drop.pointer_dereference.3] line 951 dereference failure: deallocated dynamic object in self->array_mut: SUCCESS
+[<std::array::Guard<'_, u32> as std::ops::Drop>::drop.pointer_dereference.4] line 951 dereference failure: dead object in self->array_mut: SUCCESS
+[<std::array::Guard<'_, u32> as std::ops::Drop>::drop.pointer_dereference.5] line 951 dereference failure: pointer outside object bounds in self->array_mut: SUCCESS
+[<std::array::Guard<'_, u32> as std::ops::Drop>::drop.pointer_dereference.6] line 951 dereference failure: invalid integer address in self->array_mut: SUCCESS
+[<std::array::Guard<'_, u32> as std::ops::Drop>::drop.pointer_dereference.7] line 951 dereference failure: pointer NULL in self->initialized: SUCCESS
+[<std::array::Guard<'_, u32> as std::ops::Drop>::drop.pointer_dereference.8] line 951 dereference failure: pointer invalid in self->initialized: SUCCESS
+[<std::array::Guard<'_, u32> as std::ops::Drop>::drop.pointer_dereference.9] line 951 dereference failure: deallocated dynamic object in self->initialized: SUCCESS
+[<std::array::Guard<'_, u32> as std::ops::Drop>::drop.pointer_dereference.10] line 951 dereference failure: dead object in self->initialized: SUCCESS
+[<std::array::Guard<'_, u32> as std::ops::Drop>::drop.pointer_dereference.11] line 951 dereference failure: pointer outside object bounds in self->initialized: SUCCESS
+[<std::array::Guard<'_, u32> as std::ops::Drop>::drop.pointer_dereference.12] line 951 dereference failure: invalid integer address in self->initialized: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs function std::array::Guard::<'_, u32>::push_unchecked
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.1] line 938 dereference failure: pointer NULL in self->array_mut: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.2] line 938 dereference failure: pointer invalid in self->array_mut: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.3] line 938 dereference failure: deallocated dynamic object in self->array_mut: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.4] line 938 dereference failure: dead object in self->array_mut: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.5] line 938 dereference failure: pointer outside object bounds in self->array_mut: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.6] line 938 dereference failure: invalid integer address in self->array_mut: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.7] line 938 dereference failure: pointer NULL in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.8] line 938 dereference failure: pointer invalid in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.9] line 938 dereference failure: deallocated dynamic object in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.10] line 938 dereference failure: dead object in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.11] line 938 dereference failure: pointer outside object bounds in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.12] line 938 dereference failure: invalid integer address in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.13] line 939 dereference failure: pointer NULL in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.14] line 939 dereference failure: pointer invalid in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.15] line 939 dereference failure: deallocated dynamic object in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.16] line 939 dereference failure: dead object in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.17] line 939 dereference failure: pointer outside object bounds in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.18] line 939 dereference failure: invalid integer address in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.19] line 939 dereference failure: pointer NULL in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.20] line 939 dereference failure: pointer invalid in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.21] line 939 dereference failure: deallocated dynamic object in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.22] line 939 dereference failure: dead object in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.23] line 939 dereference failure: pointer outside object bounds in self->initialized: SUCCESS
+[std::array::Guard::<'_, u32>::push_unchecked.pointer_dereference.24] line 939 dereference failure: invalid integer address in self->initialized: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs function std::array::try_from_fn::<std::ops::try_trait::NeverShortCircuit<u32>, 4, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:41:19: 41:26}>::{closure#0}}>>::{closure#0}}>
+[std::array::try_from_fn::<std::ops::try_trait::NeverShortCircuit<u32>, 4, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:41:19: 41:26}>::{closure#0}}>>::{closure#0}}>.unreachable.1] line 153 unreachable code: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs function std::array::try_from_fn::<std::ops::try_trait::NeverShortCircuit<u32>, 4, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:45:34: 45:37}>::{closure#0}}>>::{closure#0}}>
+[std::array::try_from_fn::<std::ops::try_trait::NeverShortCircuit<u32>, 4, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:45:34: 45:37}>::{closure#0}}>>::{closure#0}}>.unreachable.1] line 153 unreachable code: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs function std::array::try_from_fn_erased::<u32, std::ops::try_trait::NeverShortCircuit<u32>, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:41:19: 41:26}>::{closure#0}}>>::{closure#0}}>
+[std::array::try_from_fn_erased::<u32, std::ops::try_trait::NeverShortCircuit<u32>, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:41:19: 41:26}>::{closure#0}}>>::{closure#0}}>.unreachable.1] line 898 unreachable code: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs function std::array::try_from_fn_erased::<u32, std::ops::try_trait::NeverShortCircuit<u32>, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:45:34: 45:37}>::{closure#0}}>>::{closure#0}}>
+[std::array::try_from_fn_erased::<u32, std::ops::try_trait::NeverShortCircuit<u32>, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<u32>, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:45:34: 45:37}>::{closure#0}}>>::{closure#0}}>.unreachable.1] line 898 unreachable code: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs function std::array::try_from_trusted_iterator::<u32, std::ops::try_trait::NeverShortCircuit<u32>, 4, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:41:19: 41:26}>::{closure#0}}>>
+[std::array::try_from_trusted_iterator::<u32, std::ops::try_trait::NeverShortCircuit<u32>, 4, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:41:19: 41:26}>::{closure#0}}>>.assertion.1] line 862 assertion failed: iter.size_hint().0 >= N: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs function std::array::try_from_trusted_iterator::<u32, std::ops::try_trait::NeverShortCircuit<u32>, 4, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:45:34: 45:37}>::{closure#0}}>>
+[std::array::try_from_trusted_iterator::<u32, std::ops::try_trait::NeverShortCircuit<u32>, 4, std::iter::Map<std::array::drain::Drain<'_, u32>, {closure@std::ops::try_trait::NeverShortCircuit<u32>::wrap_mut_1<u32, {closure@canonical.rs:45:34: 45:37}>::{closure#0}}>>.assertion.1] line 862 assertion failed: iter.size_hint().0 >= N: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/mod.rs function std::fmt::Arguments::<'_>::from_str
+[std::fmt::Arguments::<'_>::from_str.assertion.1] line 820 attempt to shift left with overflow: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs function core::panicking::panic_nounwind_fmt
+[core::panicking::panic_nounwind_fmt.sanity_check.1] line 2449 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/exact_size.rs function <&mut std::ops::index_range::IndexRange as std::iter::ExactSizeIterator>::len
+[<&mut std::ops::index_range::IndexRange as std::iter::ExactSizeIterator>::len.pointer_dereference.1] line 156 dereference failure: pointer NULL in *self: SUCCESS
+[<&mut std::ops::index_range::IndexRange as std::iter::ExactSizeIterator>::len.pointer_dereference.2] line 156 dereference failure: pointer invalid in *self: SUCCESS
+[<&mut std::ops::index_range::IndexRange as std::iter::ExactSizeIterator>::len.pointer_dereference.3] line 156 dereference failure: deallocated dynamic object in *self: SUCCESS
+[<&mut std::ops::index_range::IndexRange as std::iter::ExactSizeIterator>::len.pointer_dereference.4] line 156 dereference failure: dead object in *self: SUCCESS
+[<&mut std::ops::index_range::IndexRange as std::iter::ExactSizeIterator>::len.pointer_dereference.5] line 156 dereference failure: pointer outside object bounds in *self: SUCCESS
+[<&mut std::ops::index_range::IndexRange as std::iter::ExactSizeIterator>::len.pointer_dereference.6] line 156 dereference failure: invalid integer address in *self: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_uninit.rs function std::mem::MaybeUninit::<u32>::assume_init_mut
+[std::mem::MaybeUninit::<u32>::assume_init_mut.safety_check.1] line 998 misaligned pointer to reference cast: address must be a multiple of its type's alignment: SUCCESS
+[std::mem::MaybeUninit::<u32>::assume_init_mut.safety_check.2] line 998 dereference failure: pointer invalid: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_uninit.rs function std::mem::MaybeUninit::<u32>::write
+[std::mem::MaybeUninit::<u32>::write.pointer_dereference.1] line 565 dereference failure: pointer NULL in *self: SUCCESS
+[std::mem::MaybeUninit::<u32>::write.pointer_dereference.2] line 565 dereference failure: pointer invalid in *self: SUCCESS
+[std::mem::MaybeUninit::<u32>::write.pointer_dereference.3] line 565 dereference failure: deallocated dynamic object in *self: SUCCESS
+[std::mem::MaybeUninit::<u32>::write.pointer_dereference.4] line 565 dereference failure: dead object in *self: SUCCESS
+[std::mem::MaybeUninit::<u32>::write.pointer_dereference.5] line 565 dereference failure: pointer outside object bounds in *self: SUCCESS
+[std::mem::MaybeUninit::<u32>::write.pointer_dereference.6] line 565 dereference failure: invalid integer address in *self: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs function core::num::<impl usize>::unchecked_add
+[core::num::<impl usize>::unchecked_add.arithmetic_overflow.1] line 729 attempt to compute `unchecked_add` which would overflow: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/control_flow.rs function <std::ops::ControlFlow<std::ops::try_trait::NeverShortCircuitResidual, u32> as std::ops::Try>::branch
+[<std::ops::ControlFlow<std::ops::try_trait::NeverShortCircuitResidual, u32> as std::ops::Try>::branch.unreachable.1] line 116 unreachable code: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/index_range.rs function <std::ops::index_range::IndexRange as std::clone::Clone>::clone
+[<std::ops::index_range::IndexRange as std::clone::Clone>::clone.pointer_dereference.1] line 15 dereference failure: pointer NULL in *var_3: SUCCESS
+[<std::ops::index_range::IndexRange as std::clone::Clone>::clone.pointer_dereference.2] line 15 dereference failure: pointer invalid in *var_3: SUCCESS
+[<std::ops::index_range::IndexRange as std::clone::Clone>::clone.pointer_dereference.3] line 15 dereference failure: deallocated dynamic object in *var_3: SUCCESS
+[<std::ops::index_range::IndexRange as std::clone::Clone>::clone.pointer_dereference.4] line 15 dereference failure: dead object in *var_3: SUCCESS
+[<std::ops::index_range::IndexRange as std::clone::Clone>::clone.pointer_dereference.5] line 15 dereference failure: pointer outside object bounds in *var_3: SUCCESS
+[<std::ops::index_range::IndexRange as std::clone::Clone>::clone.pointer_dereference.6] line 15 dereference failure: invalid integer address in *var_3: SUCCESS
+[<std::ops::index_range::IndexRange as std::clone::Clone>::clone.pointer_dereference.7] line 16 dereference failure: pointer NULL in *var_5: SUCCESS
+[<std::ops::index_range::IndexRange as std::clone::Clone>::clone.pointer_dereference.8] line 16 dereference failure: pointer invalid in *var_5: SUCCESS
+[<std::ops::index_range::IndexRange as std::clone::Clone>::clone.pointer_dereference.9] line 16 dereference failure: deallocated dynamic object in *var_5: SUCCESS
+[<std::ops::index_range::IndexRange as std::clone::Clone>::clone.pointer_dereference.10] line 16 dereference failure: dead object in *var_5: SUCCESS
+[<std::ops::index_range::IndexRange as std::clone::Clone>::clone.pointer_dereference.11] line 16 dereference failure: pointer outside object bounds in *var_5: SUCCESS
+[<std::ops::index_range::IndexRange as std::clone::Clone>::clone.pointer_dereference.12] line 16 dereference failure: invalid integer address in *var_5: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/index_range.rs function std::ops::index_range::IndexRange::end
+[std::ops::index_range::IndexRange::end.pointer_dereference.1] line 45 dereference failure: pointer NULL in self->end: SUCCESS
+[std::ops::index_range::IndexRange::end.pointer_dereference.2] line 45 dereference failure: pointer invalid in self->end: SUCCESS
+[std::ops::index_range::IndexRange::end.pointer_dereference.3] line 45 dereference failure: deallocated dynamic object in self->end: SUCCESS
+[std::ops::index_range::IndexRange::end.pointer_dereference.4] line 45 dereference failure: dead object in self->end: SUCCESS
+[std::ops::index_range::IndexRange::end.pointer_dereference.5] line 45 dereference failure: pointer outside object bounds in self->end: SUCCESS
+[std::ops::index_range::IndexRange::end.pointer_dereference.6] line 45 dereference failure: invalid integer address in self->end: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/index_range.rs function std::ops::index_range::IndexRange::len
+[std::ops::index_range::IndexRange::len.arithmetic_overflow.1] line 52 attempt to compute `unchecked_sub` which would overflow: SUCCESS
+[std::ops::index_range::IndexRange::len.pointer_dereference.1] line 52 dereference failure: pointer NULL in self->end: SUCCESS
+[std::ops::index_range::IndexRange::len.pointer_dereference.2] line 52 dereference failure: pointer invalid in self->end: SUCCESS
+[std::ops::index_range::IndexRange::len.pointer_dereference.3] line 52 dereference failure: deallocated dynamic object in self->end: SUCCESS
+[std::ops::index_range::IndexRange::len.pointer_dereference.4] line 52 dereference failure: dead object in self->end: SUCCESS
+[std::ops::index_range::IndexRange::len.pointer_dereference.5] line 52 dereference failure: pointer outside object bounds in self->end: SUCCESS
+[std::ops::index_range::IndexRange::len.pointer_dereference.6] line 52 dereference failure: invalid integer address in self->end: SUCCESS
+[std::ops::index_range::IndexRange::len.pointer_dereference.7] line 52 dereference failure: pointer NULL in self->start: SUCCESS
+[std::ops::index_range::IndexRange::len.pointer_dereference.8] line 52 dereference failure: pointer invalid in self->start: SUCCESS
+[std::ops::index_range::IndexRange::len.pointer_dereference.9] line 52 dereference failure: deallocated dynamic object in self->start: SUCCESS
+[std::ops::index_range::IndexRange::len.pointer_dereference.10] line 52 dereference failure: dead object in self->start: SUCCESS
+[std::ops::index_range::IndexRange::len.pointer_dereference.11] line 52 dereference failure: pointer outside object bounds in self->start: SUCCESS
+[std::ops::index_range::IndexRange::len.pointer_dereference.12] line 52 dereference failure: invalid integer address in self->start: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/index_range.rs function std::ops::index_range::IndexRange::next_unchecked
+[std::ops::index_range::IndexRange::next_unchecked.pointer_dereference.1] line 61 dereference failure: pointer NULL in self->start: SUCCESS
+[std::ops::index_range::IndexRange::next_unchecked.pointer_dereference.2] line 61 dereference failure: pointer invalid in self->start: SUCCESS
+[std::ops::index_range::IndexRange::next_unchecked.pointer_dereference.3] line 61 dereference failure: deallocated dynamic object in self->start: SUCCESS
+[std::ops::index_range::IndexRange::next_unchecked.pointer_dereference.4] line 61 dereference failure: dead object in self->start: SUCCESS
+[std::ops::index_range::IndexRange::next_unchecked.pointer_dereference.5] line 61 dereference failure: pointer outside object bounds in self->start: SUCCESS
+[std::ops::index_range::IndexRange::next_unchecked.pointer_dereference.6] line 61 dereference failure: invalid integer address in self->start: SUCCESS
+[std::ops::index_range::IndexRange::next_unchecked.pointer_dereference.7] line 63 dereference failure: pointer NULL in self->start: SUCCESS
+[std::ops::index_range::IndexRange::next_unchecked.pointer_dereference.8] line 63 dereference failure: pointer invalid in self->start: SUCCESS
+[std::ops::index_range::IndexRange::next_unchecked.pointer_dereference.9] line 63 dereference failure: deallocated dynamic object in self->start: SUCCESS
+[std::ops::index_range::IndexRange::next_unchecked.pointer_dereference.10] line 63 dereference failure: dead object in self->start: SUCCESS
+[std::ops::index_range::IndexRange::next_unchecked.pointer_dereference.11] line 63 dereference failure: pointer outside object bounds in self->start: SUCCESS
+[std::ops::index_range::IndexRange::next_unchecked.pointer_dereference.12] line 63 dereference failure: invalid integer address in self->start: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/index_range.rs function std::ops::index_range::IndexRange::start
+[std::ops::index_range::IndexRange::start.pointer_dereference.1] line 40 dereference failure: pointer NULL in self->start: SUCCESS
+[std::ops::index_range::IndexRange::start.pointer_dereference.2] line 40 dereference failure: pointer invalid in self->start: SUCCESS
+[std::ops::index_range::IndexRange::start.pointer_dereference.3] line 40 dereference failure: deallocated dynamic object in self->start: SUCCESS
+[std::ops::index_range::IndexRange::start.pointer_dereference.4] line 40 dereference failure: dead object in self->start: SUCCESS
+[std::ops::index_range::IndexRange::start.pointer_dereference.5] line 40 dereference failure: pointer outside object bounds in self->start: SUCCESS
+[std::ops::index_range::IndexRange::start.pointer_dereference.6] line 40 dereference failure: invalid integer address in self->start: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/try_trait.rs function <std::ops::try_trait::NeverShortCircuit<[u32; 4]> as std::ops::FromResidual>::from_residual
+[<std::ops::try_trait::NeverShortCircuit<[u32; 4]> as std::ops::FromResidual>::from_residual.unreachable.1] line 435 unreachable code: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs function std::option::Option::<usize>::map::<u32, {closure@std::array::iter::iter_inner::PolymorphicIter<[std::mem::MaybeUninit<u32>]>::next::{closure#0}}>
+[std::option::Option::<usize>::map::<u32, {closure@std::array::iter::iter_inner::PolymorphicIter<[std::mem::MaybeUninit<u32>]>::next::{closure#0}}>.unreachable.1] line 1164 unreachable code: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic/location.rs function std::panic::Location::<'_>::caller
+[std::panic::Location::<'_>::caller.unsupported_construct.1] line 147 caller_location is not currently supported by Kani. Please post your example at https://github.com/model-checking/kani/issues/374: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs function core::panicking::panic_nounwind_fmt::runtime
+[core::panicking::panic_nounwind_fmt::runtime.unsupported_construct.1] line 110 call to foreign "Rust" function `_RNvCs1hStedNDpZ2_7___rustc17rust_begin_unwind` is not currently supported by Kani. Please post your example at https://github.com/model-checking/kani/issues/new/choose: SUCCESS
+[core::panicking::panic_nounwind_fmt::runtime.sanity_check.1] line 122 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs function std::ptr::const_ptr::<impl *const ()>::is_aligned_to
+[std::ptr::const_ptr::<impl *const ()>::is_aligned_to.assertion.2] line 1374 This is a placeholder message; Kani doesn't support message formatted at runtime: SUCCESS
+[std::ptr::const_ptr::<impl *const ()>::is_aligned_to.assertion.1] line 1377 attempt to subtract with overflow: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs function std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime
+[std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer.1] line 712 same object violation in this >= origin: SUCCESS
+[std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer_arithmetic.1] line 712 pointer relation: pointer NULL in this: SUCCESS
+[std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer_arithmetic.2] line 712 pointer relation: pointer invalid in this: SUCCESS
+[std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer_arithmetic.3] line 712 pointer relation: deallocated dynamic object in this: SUCCESS
+[std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer_arithmetic.4] line 712 pointer relation: dead object in this: SUCCESS
+[std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer_arithmetic.5] line 712 pointer relation: pointer outside object bounds in this: SUCCESS
+[std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer_arithmetic.6] line 712 pointer relation: invalid integer address in this: SUCCESS
+[std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer_arithmetic.7] line 712 pointer relation: pointer NULL in origin: SUCCESS
+[std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer_arithmetic.8] line 712 pointer relation: pointer invalid in origin: SUCCESS
+[std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer_arithmetic.9] line 712 pointer relation: deallocated dynamic object in origin: SUCCESS
+[std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer_arithmetic.10] line 712 pointer relation: dead object in origin: SUCCESS
+[std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer_arithmetic.11] line 712 pointer relation: pointer outside object bounds in origin: SUCCESS
+[std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer_arithmetic.12] line 712 pointer relation: invalid integer address in origin: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs function std::ptr::const_ptr::<impl *const u32>::offset_from_unsigned
+[std::ptr::const_ptr::<impl *const u32>::offset_from_unsigned.assertion.1] line 727 assertion failed: 0 < pointee_size && pointee_size <= isize::MAX as usize: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs function std::ptr::drop_in_place::<std::array::Guard<'_, u32>>
+[std::ptr::drop_in_place::<std::array::Guard<'_, u32>>.safety_check.1] line 805 misaligned pointer to reference cast: address must be a multiple of its type's alignment: SUCCESS
+[std::ptr::drop_in_place::<std::array::Guard<'_, u32>>.safety_check.2] line 805 dereference failure: pointer invalid: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs function std::ptr::drop_in_place::<std::array::IntoIter<u32, 4>>
+[std::ptr::drop_in_place::<std::array::IntoIter<u32, 4>>.safety_check.1] line 805 misaligned pointer to reference cast: address must be a multiple of its type's alignment: SUCCESS
+[std::ptr::drop_in_place::<std::array::IntoIter<u32, 4>>.safety_check.2] line 805 dereference failure: pointer invalid: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs function std::ptr::drop_in_place::<std::array::drain::Drain<'_, u32>>
+[std::ptr::drop_in_place::<std::array::drain::Drain<'_, u32>>.safety_check.1] line 805 misaligned pointer to reference cast: address must be a multiple of its type's alignment: SUCCESS
+[std::ptr::drop_in_place::<std::array::drain::Drain<'_, u32>>.safety_check.2] line 805 dereference failure: pointer invalid: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs function std::ptr::drop_in_place::<std::array::iter::iter_inner::PolymorphicIter<[std::mem::MaybeUninit<u32>; 4]>>
+[std::ptr::drop_in_place::<std::array::iter::iter_inner::PolymorphicIter<[std::mem::MaybeUninit<u32>; 4]>>.safety_check.1] line 805 misaligned pointer to reference cast: address must be a multiple of its type's alignment: SUCCESS
+[std::ptr::drop_in_place::<std::array::iter::iter_inner::PolymorphicIter<[std::mem::MaybeUninit<u32>; 4]>>.safety_check.2] line 805 dereference failure: pointer invalid: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs function std::ptr::read::<u32>
+[std::ptr::read::<u32>.pointer_dereference.1] line 1708 dereference failure: pointer NULL in *src: SUCCESS
+[std::ptr::read::<u32>.pointer_dereference.2] line 1708 dereference failure: pointer invalid in *src: SUCCESS
+[std::ptr::read::<u32>.pointer_dereference.3] line 1708 dereference failure: deallocated dynamic object in *src: SUCCESS
+[std::ptr::read::<u32>.pointer_dereference.4] line 1708 dereference failure: dead object in *src: SUCCESS
+[std::ptr::read::<u32>.pointer_dereference.5] line 1708 dereference failure: pointer outside object bounds in *src: SUCCESS
+[std::ptr::read::<u32>.pointer_dereference.6] line 1708 dereference failure: invalid integer address in *src: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs function std::ptr::NonNull::<u32>::as_mut::<'_>
+[std::ptr::NonNull::<u32>::as_mut::<'_>.pointer_dereference.1] line 482 dereference failure: pointer NULL in *self: SUCCESS
+[std::ptr::NonNull::<u32>::as_mut::<'_>.pointer_dereference.2] line 482 dereference failure: pointer invalid in *self: SUCCESS
+[std::ptr::NonNull::<u32>::as_mut::<'_>.pointer_dereference.3] line 482 dereference failure: deallocated dynamic object in *self: SUCCESS
+[std::ptr::NonNull::<u32>::as_mut::<'_>.pointer_dereference.4] line 482 dereference failure: dead object in *self: SUCCESS
+[std::ptr::NonNull::<u32>::as_mut::<'_>.pointer_dereference.5] line 482 dereference failure: pointer outside object bounds in *self: SUCCESS
+[std::ptr::NonNull::<u32>::as_mut::<'_>.pointer_dereference.6] line 482 dereference failure: invalid integer address in *self: SUCCESS
+[std::ptr::NonNull::<u32>::as_mut::<'_>.safety_check.1] line 482 misaligned pointer to reference cast: address must be a multiple of its type's alignment: SUCCESS
+[std::ptr::NonNull::<u32>::as_mut::<'_>.safety_check.2] line 482 dereference failure: pointer invalid: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs function <std::ops::Range<usize> as std::slice::SliceIndex<[std::mem::MaybeUninit<u32>]>>::get_unchecked_mut
+[<std::ops::Range<usize> as std::slice::SliceIndex<[std::mem::MaybeUninit<u32>]>>::get_unchecked_mut.arithmetic_overflow.1] line 429 attempt to compute `unchecked_sub` which would overflow: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs function <usize as std::slice::SliceIndex<[std::mem::MaybeUninit<u32>]>>::get_unchecked
+[<usize as std::slice::SliceIndex<[std::mem::MaybeUninit<u32>]>>::get_unchecked.assume.1] line 252 Rust intrinsic assumption failed: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs function std::slice::IterMut::<'_, u32>::as_mut_slice
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.1] line 352 dereference failure: pointer NULL in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.2] line 352 dereference failure: pointer invalid in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.3] line 352 dereference failure: deallocated dynamic object in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.4] line 352 dereference failure: dead object in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.5] line 352 dereference failure: pointer outside object bounds in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.6] line 352 dereference failure: invalid integer address in self->ptr: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs function <std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.1] line 29 dereference failure: pointer NULL in self->end_or_len: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.2] line 29 dereference failure: pointer invalid in self->end_or_len: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.3] line 29 dereference failure: deallocated dynamic object in self->end_or_len: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.4] line 29 dereference failure: dead object in self->end_or_len: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.5] line 29 dereference failure: pointer outside object bounds in self->end_or_len: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.6] line 29 dereference failure: invalid integer address in self->end_or_len: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.7] line 33 dereference failure: pointer NULL in self->end_or_len: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.8] line 33 dereference failure: pointer invalid in self->end_or_len: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.9] line 33 dereference failure: deallocated dynamic object in self->end_or_len: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.10] line 33 dereference failure: dead object in self->end_or_len: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.11] line 33 dereference failure: pointer outside object bounds in self->end_or_len: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.12] line 33 dereference failure: invalid integer address in self->end_or_len: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.13] line 57 dereference failure: pointer NULL in self->ptr: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.14] line 57 dereference failure: pointer invalid in self->ptr: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.15] line 57 dereference failure: deallocated dynamic object in self->ptr: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.16] line 57 dereference failure: dead object in self->ptr: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.17] line 57 dereference failure: pointer outside object bounds in self->ptr: SUCCESS
+[<std::slice::IterMut<'_, u32> as std::iter::ExactSizeIterator>::len.pointer_dereference.18] line 57 dereference failure: invalid integer address in self->ptr: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs function std::slice::IterMut::<'_, u32>::as_mut_slice
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.7] line 29 dereference failure: pointer NULL in self->end_or_len: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.8] line 29 dereference failure: pointer invalid in self->end_or_len: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.9] line 29 dereference failure: deallocated dynamic object in self->end_or_len: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.10] line 29 dereference failure: dead object in self->end_or_len: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.11] line 29 dereference failure: pointer outside object bounds in self->end_or_len: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.12] line 29 dereference failure: invalid integer address in self->end_or_len: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.13] line 33 dereference failure: pointer NULL in self->end_or_len: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.14] line 33 dereference failure: pointer invalid in self->end_or_len: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.15] line 33 dereference failure: deallocated dynamic object in self->end_or_len: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.16] line 33 dereference failure: dead object in self->end_or_len: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.17] line 33 dereference failure: pointer outside object bounds in self->end_or_len: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.18] line 33 dereference failure: invalid integer address in self->end_or_len: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.19] line 57 dereference failure: pointer NULL in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.20] line 57 dereference failure: pointer invalid in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.21] line 57 dereference failure: deallocated dynamic object in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.22] line 57 dereference failure: dead object in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.23] line 57 dereference failure: pointer outside object bounds in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::as_mut_slice.pointer_dereference.24] line 57 dereference failure: invalid integer address in self->ptr: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs function std::slice::IterMut::<'_, u32>::post_inc_start
+[std::slice::IterMut::<'_, u32>::post_inc_start.safety_check.1] line 17 misaligned pointer to reference cast: address must be a multiple of its type's alignment: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.safety_check.2] line 17 dereference failure: pointer invalid: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.safety_check.3] line 21 misaligned pointer to reference cast: address must be a multiple of its type's alignment: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.safety_check.4] line 21 dereference failure: pointer invalid: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.1] line 100 dereference failure: pointer NULL in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.2] line 100 dereference failure: pointer invalid in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.3] line 100 dereference failure: deallocated dynamic object in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.4] line 100 dereference failure: dead object in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.5] line 100 dereference failure: pointer outside object bounds in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.6] line 100 dereference failure: invalid integer address in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.arithmetic_overflow.1] line 107 attempt to compute `unchecked_sub` which would overflow: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.7] line 107 dereference failure: pointer NULL in *len: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.8] line 107 dereference failure: pointer invalid in *len: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.9] line 107 dereference failure: deallocated dynamic object in *len: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.10] line 107 dereference failure: dead object in *len: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.11] line 107 dereference failure: pointer outside object bounds in *len: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.12] line 107 dereference failure: invalid integer address in *len: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.13] line 108 dereference failure: pointer NULL in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.14] line 108 dereference failure: pointer invalid in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.15] line 108 dereference failure: deallocated dynamic object in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.16] line 108 dereference failure: dead object in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.17] line 108 dereference failure: pointer outside object bounds in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.18] line 108 dereference failure: invalid integer address in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.19] line 108 dereference failure: pointer NULL in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.20] line 108 dereference failure: pointer invalid in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.21] line 108 dereference failure: deallocated dynamic object in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.22] line 108 dereference failure: dead object in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.23] line 108 dereference failure: pointer outside object bounds in self->ptr: SUCCESS
+[std::slice::IterMut::<'_, u32>::post_inc_start.pointer_dereference.24] line 108 dereference failure: invalid integer address in self->ptr: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs function core::slice::<impl [std::mem::MaybeUninit<u32>]>::get_unchecked::<usize>
+[core::slice::<impl [std::mem::MaybeUninit<u32>]>::get_unchecked::<usize>.safety_check.1] line 645 misaligned pointer to reference cast: address must be a multiple of its type's alignment: SUCCESS
+[core::slice::<impl [std::mem::MaybeUninit<u32>]>::get_unchecked::<usize>.safety_check.2] line 645 dereference failure: pointer invalid: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs function core::slice::<impl [std::mem::MaybeUninit<u32>]>::get_unchecked_mut::<std::ops::RangeTo<usize>>
+[core::slice::<impl [std::mem::MaybeUninit<u32>]>::get_unchecked_mut::<std::ops::RangeTo<usize>>.safety_check.1] line 690 misaligned pointer to reference cast: address must be a multiple of its type's alignment: SUCCESS
+[core::slice::<impl [std::mem::MaybeUninit<u32>]>::get_unchecked_mut::<std::ops::RangeTo<usize>>.safety_check.2] line 690 dereference failure: pointer invalid: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs function core::slice::<impl [std::mem::MaybeUninit<u32>]>::get_unchecked_mut::<std::ops::index_range::IndexRange>
+[core::slice::<impl [std::mem::MaybeUninit<u32>]>::get_unchecked_mut::<std::ops::index_range::IndexRange>.safety_check.1] line 690 misaligned pointer to reference cast: address must be a multiple of its type's alignment: SUCCESS
+[core::slice::<impl [std::mem::MaybeUninit<u32>]>::get_unchecked_mut::<std::ops::index_range::IndexRange>.safety_check.2] line 690 dereference failure: pointer invalid: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs function core::slice::<impl [std::mem::MaybeUninit<u32>]>::get_unchecked_mut::<usize>
+[core::slice::<impl [std::mem::MaybeUninit<u32>]>::get_unchecked_mut::<usize>.safety_check.1] line 690 misaligned pointer to reference cast: address must be a multiple of its type's alignment: SUCCESS
+[core::slice::<impl [std::mem::MaybeUninit<u32>]>::get_unchecked_mut::<usize>.safety_check.2] line 690 dereference failure: pointer invalid: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/raw.rs function std::slice::from_raw_parts_mut::<'_, u32>
+[std::slice::from_raw_parts_mut::<'_, u32>.safety_check.1] line 194 misaligned pointer to reference cast: address must be a multiple of its type's alignment: SUCCESS
+[std::slice::from_raw_parts_mut::<'_, u32>.safety_check.2] line 194 dereference failure: pointer invalid: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs function <std::ops::Range<usize> as std::slice::SliceIndex<[T]>>::get_unchecked_mut::precondition_check
+[<std::ops::Range<usize> as std::slice::SliceIndex<[T]>>::get_unchecked_mut::precondition_check.sanity_check.1] line 73 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs function <std::ops::index_range::IndexRange as std::slice::SliceIndex<[T]>>::get_unchecked_mut::precondition_check
+[<std::ops::index_range::IndexRange as std::slice::SliceIndex<[T]>>::get_unchecked_mut::precondition_check.sanity_check.1] line 73 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs function <usize as std::slice::SliceIndex<[T]>>::get_unchecked::precondition_check
+[<usize as std::slice::SliceIndex<[T]>>::get_unchecked::precondition_check.sanity_check.1] line 73 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs function <usize as std::slice::SliceIndex<[T]>>::get_unchecked_mut::precondition_check
+[<usize as std::slice::SliceIndex<[T]>>::get_unchecked_mut::precondition_check.sanity_check.1] line 73 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs function core::num::<impl usize>::unchecked_add::precondition_check
+[core::num::<impl usize>::unchecked_add::precondition_check.sanity_check.1] line 73 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs function core::ub_checks::is_valid_allocation_size
+[core::ub_checks::is_valid_allocation_size.arithmetic_overflow.1] line 149 attempt to divide by zero: SUCCESS
+[core::ub_checks::is_valid_allocation_size.assertion.1] line 149 attempt to divide by zero: SUCCESS
+[core::ub_checks::is_valid_allocation_size.division-by-zero.1] line 149 division by zero in var_4 / size: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs function std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::precondition_check
+[std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::precondition_check.sanity_check.1] line 73 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs function std::slice::from_raw_parts_mut::precondition_check
+[std::slice::from_raw_parts_mut::precondition_check.sanity_check.1] line 73 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/work/kani/kani/library/kani/src/lib.rs function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+[<usize as kani::rustc_intrinsics::ToISize>::to_isize.assertion.1] line 57 internal error: entered unreachable code: SUCCESS
+[<usize as kani::rustc_intrinsics::ToISize>::to_isize.safety_check.1] line 57 Offset value overflows isize: SUCCESS
+
+/home/runner/work/kani/kani/library/kani/src/lib.rs function kani::mem::cbmc::same_allocation
+[kani::mem::cbmc::same_allocation.unsupported_construct.1] line 57 Kani does not support reasoning about pointer to unallocated memory: SUCCESS
+
+/home/runner/work/kani/kani/library/kani/src/lib.rs function kani::rustc_intrinsics::offset::<std::mem::MaybeUninit<u32>, *mut std::mem::MaybeUninit<u32>, usize>
+[kani::rustc_intrinsics::offset::<std::mem::MaybeUninit<u32>, *mut std::mem::MaybeUninit<u32>, usize>.safety_check.1] line 57 Offset in bytes overflows isize: SUCCESS
+[kani::rustc_intrinsics::offset::<std::mem::MaybeUninit<u32>, *mut std::mem::MaybeUninit<u32>, usize>.safety_check.2] line 57 Offset result and original pointer must point to the same allocation: SUCCESS
+
+/home/runner/work/kani/kani/library/kani/src/lib.rs function kani::rustc_intrinsics::offset::<u32, *const u32, usize>
+[kani::rustc_intrinsics::offset::<u32, *const u32, usize>.safety_check.1] line 57 Offset in bytes overflows isize: SUCCESS
+[kani::rustc_intrinsics::offset::<u32, *const u32, usize>.safety_check.2] line 57 Offset result and original pointer must point to the same allocation: SUCCESS
+
+/home/runner/work/kani/kani/library/kani/src/lib.rs function kani::rustc_intrinsics::offset::<u32, *mut u32, usize>
+[kani::rustc_intrinsics::offset::<u32, *mut u32, usize>.safety_check.1] line 57 Offset in bytes overflows isize: SUCCESS
+[kani::rustc_intrinsics::offset::<u32, *mut u32, usize>.safety_check.2] line 57 Offset result and original pointer must point to the same allocation: SUCCESS
+
+/home/runner/work/kani/kani/library/kani/src/lib.rs function kani::rustc_intrinsics::ptr_offset_from::<u32>
+[kani::rustc_intrinsics::ptr_offset_from::<u32>.assertion.1] line 57 Cannot compute offset of a ZST: SUCCESS
+[kani::rustc_intrinsics::ptr_offset_from::<u32>.safety_check.1] line 57 Offset result and original pointer should point to the same allocation: SUCCESS
+[kani::rustc_intrinsics::ptr_offset_from::<u32>.safety_check.2] line 57 Expected the distance between the pointers, in bytes, to be a
+                        multiple of the size of `T`: SUCCESS
+
+/home/runner/work/kani/kani/library/kani/src/lib.rs function kani::rustc_intrinsics::ptr_offset_from_unsigned::<u32>
+[kani::rustc_intrinsics::ptr_offset_from_unsigned::<u32>.safety_check.1] line 57 Expected non-negative distance between pointers: SUCCESS
+
+/home/runner/work/kani/kani/library/kani_core/src/models.rs function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+[<usize as kani::rustc_intrinsics::ToISize>::to_isize.unreachable.1] line 176 unreachable code: SUCCESS
+
+/home/runner/work/kani/kani/library/kani_core/src/models.rs function kani::rustc_intrinsics::ptr_offset_from::<u32>
+[kani::rustc_intrinsics::ptr_offset_from::<u32>.arithmetic_overflow.1] line 93 attempt to calculate the remainder with overflow: SUCCESS
+[kani::rustc_intrinsics::ptr_offset_from::<u32>.arithmetic_overflow.2] line 93 attempt to calculate the remainder with a divisor of zero: SUCCESS
+[kani::rustc_intrinsics::ptr_offset_from::<u32>.assertion.2] line 93 attempt to calculate the remainder with a divisor of zero: SUCCESS
+[kani::rustc_intrinsics::ptr_offset_from::<u32>.assertion.3] line 93 attempt to calculate the remainder with overflow: SUCCESS
+[kani::rustc_intrinsics::ptr_offset_from::<u32>.division-by-zero.1] line 93 division by zero in offset_bytes % t_size: SUCCESS
+[kani::rustc_intrinsics::ptr_offset_from::<u32>.arithmetic_overflow.3] line 97 attempt to divide with overflow: SUCCESS
+[kani::rustc_intrinsics::ptr_offset_from::<u32>.arithmetic_overflow.4] line 97 attempt to divide by zero: SUCCESS
+[kani::rustc_intrinsics::ptr_offset_from::<u32>.assertion.4] line 97 attempt to divide by zero: SUCCESS
+[kani::rustc_intrinsics::ptr_offset_from::<u32>.assertion.5] line 97 attempt to divide with overflow: SUCCESS
+[kani::rustc_intrinsics::ptr_offset_from::<u32>.division-by-zero.2] line 97 division by zero in offset_bytes / t_size: SUCCESS
+
+canonical.rs function canonical::canonical::Q::half_pow::{closure#0}
+[canonical::canonical::Q::half_pow::{closure#0}.assertion.1] line 45 attempt to shift right with overflow: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.assertion.2] line 45 attempt to shift left with overflow: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.assertion.3] line 45 attempt to subtract with overflow: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.assertion.4] line 45 attempt to subtract with overflow: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.assertion.5] line 45 attempt to shift left with overflow: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.1] line 45 dereference failure: pointer NULL in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.2] line 45 dereference failure: pointer invalid in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.3] line 45 dereference failure: deallocated dynamic object in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.4] line 45 dereference failure: dead object in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.5] line 45 dereference failure: pointer outside object bounds in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.6] line 45 dereference failure: invalid integer address in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.7] line 45 dereference failure: pointer NULL in *var_17: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.8] line 45 dereference failure: pointer invalid in *var_17: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.9] line 45 dereference failure: deallocated dynamic object in *var_17: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.10] line 45 dereference failure: dead object in *var_17: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.11] line 45 dereference failure: pointer outside object bounds in *var_17: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.12] line 45 dereference failure: invalid integer address in *var_17: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.13] line 45 dereference failure: pointer NULL in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.14] line 45 dereference failure: pointer invalid in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.15] line 45 dereference failure: deallocated dynamic object in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.16] line 45 dereference failure: dead object in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.17] line 45 dereference failure: pointer outside object bounds in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.18] line 45 dereference failure: invalid integer address in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.19] line 45 dereference failure: pointer NULL in *var_18: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.20] line 45 dereference failure: pointer invalid in *var_18: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.21] line 45 dereference failure: deallocated dynamic object in *var_18: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.22] line 45 dereference failure: dead object in *var_18: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.23] line 45 dereference failure: pointer outside object bounds in *var_18: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.24] line 45 dereference failure: invalid integer address in *var_18: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.25] line 45 dereference failure: pointer NULL in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.26] line 45 dereference failure: pointer invalid in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.27] line 45 dereference failure: deallocated dynamic object in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.28] line 45 dereference failure: dead object in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.29] line 45 dereference failure: pointer outside object bounds in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.30] line 45 dereference failure: invalid integer address in var_1->0: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.31] line 45 dereference failure: pointer NULL in *var_19: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.32] line 45 dereference failure: pointer invalid in *var_19: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.33] line 45 dereference failure: deallocated dynamic object in *var_19: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.34] line 45 dereference failure: dead object in *var_19: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.35] line 45 dereference failure: pointer outside object bounds in *var_19: SUCCESS
+[canonical::canonical::Q::half_pow::{closure#0}.pointer_dereference.36] line 45 dereference failure: invalid integer address in *var_19: SUCCESS
+
+canonical.rs function canonical::canonical::arbitrary_q
+[canonical::canonical::arbitrary_q.unreachable.1] line 126 unreachable code: SUCCESS
+
+canonical.rs function canonical::canonical::half_and_half_pow
+[canonical::canonical::half_and_half_pow.assertion.1] line 149 assertion failed: x<P: SUCCESS
+[canonical::canonical::half_and_half_pow.assertion.2] line 150 assertion failed: x<P: SUCCESS
+[canonical::canonical::half_and_half_pow.unreachable.1] file lib.rs line 0 unreachable code: SUCCESS
+
+** 0 of 314 failed (1 iterations)
+VERIFICATION SUCCESSFUL
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

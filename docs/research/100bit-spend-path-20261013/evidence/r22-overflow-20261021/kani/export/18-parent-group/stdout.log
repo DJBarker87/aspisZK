@@ -1,0 +1,223 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unused attribute
+  --> canonical.rs:30:9
+   |
+30 |         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+   |         ^^^^^^^^^^^^^^^^^ help: remove this attribute
+   |
+note: attribute also specified here
+  --> canonical.rs:28:9
+   |
+28 |         #[inline(always)]
+   |         ^^^^^^^^^^^^^^^^^
+   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+   = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `level` is never read
+   --> multiproof.rs:125:5
+    |
+125 |     level[w]=parent;let next_w=w+1;
+    |     ^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: type `multiproof::Arity` is more private than the item `multiproof::node_count`
+  --> multiproof.rs:26:1
+   |
+26 | pub fn node_count(arity: Arity, indices: &[u32]) -> Option<usize> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `multiproof::node_count` is reachable at visibility `pub(crate)`
+   |
+note: but type `multiproof::Arity` is only usable at visibility `pub(self)`
+  --> multiproof.rs:2:23
+   |
+ 2 | #[derive(Clone,Copy)] enum Arity {Two,Eight}
+   |                       ^^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+Checking harness multiproof::parent_group_all_frontiers...
+CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-r22-overflow-20261021/generated/target/kani/x86_64-unknown-linux-gnu/debug/deps/r22_overflow_leaves-63c92dca837b331a__RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 16 object bits, 48 offset bits (user-specified)
+Starting Bounded Model Checking
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 1 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 2 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 3 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 4 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 5 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 6 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 7 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 8 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 9 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 10 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 11 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 12 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 13 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 14 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 15 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.0 iteration 16 file multiproof.rs line 111 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 1 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 2 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 3 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 4 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 5 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 6 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 7 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 8 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 9 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 10 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 11 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 12 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 13 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 14 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 15 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 16 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 17 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 18 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 19 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Not unwinding loop _RNvNtCsce0LJNirgKX_19r22_overflow_leaves10multiproof26parent_group_all_frontiers.1 iteration 20 file multiproof.rs line 118 column 5 function multiproof::parent_group_all_frontiers thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+aborting path on assume(false) at file multiproof.rs line 5 column 15 function multiproof::Arity::bits thread 0
+Runtime Symex: 0.0842205s
+size of program expression: 5973 steps
+slicing removed 3700 assignments
+Generated 763 VCC(s), 118 remaining after simplification
+Runtime Postprocess Equation: 0.00100115s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.0341352s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 3.068e-06s
+Solving with CaDiCaL 2.0.0
+41652 variables, 168242 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 0.53872s
+Runtime decision procedure: 0.573079s
+
+** Results:
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs function std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt
+[std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.1] line 1903 dereference failure: pointer NULL in *self: SUCCESS
+[std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.2] line 1903 dereference failure: pointer invalid in *self: SUCCESS
+[std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.3] line 1903 dereference failure: deallocated dynamic object in *self: SUCCESS
+[std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.4] line 1903 dereference failure: dead object in *self: SUCCESS
+[std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.5] line 1903 dereference failure: pointer outside object bounds in *self: SUCCESS
+[std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.6] line 1903 dereference failure: invalid integer address in *self: SUCCESS
+[std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.7] line 1903 dereference failure: pointer NULL in *other: SUCCESS
+[std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.8] line 1903 dereference failure: pointer invalid in *other: SUCCESS
+[std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.9] line 1903 dereference failure: deallocated dynamic object in *other: SUCCESS
+[std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.10] line 1903 dereference failure: dead object in *other: SUCCESS
+[std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.11] line 1903 dereference failure: pointer outside object bounds in *other: SUCCESS
+[std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.12] line 1903 dereference failure: invalid integer address in *other: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/mod.rs function std::fmt::Arguments::<'_>::from_str
+[std::fmt::Arguments::<'_>::from_str.assertion.1] line 820 attempt to shift left with overflow: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs function core::panicking::panic_nounwind_fmt
+[core::panicking::panic_nounwind_fmt.sanity_check.1] line 2449 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs function <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next
+[<std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.1] line 766 dereference failure: pointer NULL in self->start: SUCCESS
+[<std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.2] line 766 dereference failure: pointer invalid in self->start: SUCCESS
+[<std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.3] line 766 dereference failure: deallocated dynamic object in self->start: SUCCESS
+[<std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.4] line 766 dereference failure: dead object in self->start: SUCCESS
+[<std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.5] line 766 dereference failure: pointer outside object bounds in self->start: SUCCESS
+[<std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.6] line 766 dereference failure: invalid integer address in self->start: SUCCESS
+[<std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.7] line 768 dereference failure: pointer NULL in self->start: SUCCESS
+[<std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.8] line 768 dereference failure: pointer invalid in self->start: SUCCESS
+[<std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.9] line 768 dereference failure: deallocated dynamic object in self->start: SUCCESS
+[<std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.10] line 768 dereference failure: dead object in self->start: SUCCESS
+[<std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.11] line 768 dereference failure: pointer outside object bounds in self->start: SUCCESS
+[<std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.12] line 768 dereference failure: invalid integer address in self->start: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs function core::num::<impl usize>::unchecked_add
+[core::num::<impl usize>::unchecked_add.arithmetic_overflow.1] line 729 attempt to compute `unchecked_add` which would overflow: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic/location.rs function std::panic::Location::<'_>::caller
+[std::panic::Location::<'_>::caller.unsupported_construct.1] line 147 caller_location is not currently supported by Kani. Please post your example at https://github.com/model-checking/kani/issues/374: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs function core::panicking::panic_nounwind_fmt::runtime
+[core::panicking::panic_nounwind_fmt::runtime.unsupported_construct.1] line 110 call to foreign "Rust" function `_RNvCs1hStedNDpZ2_7___rustc17rust_begin_unwind` is not currently supported by Kani. Please post your example at https://github.com/model-checking/kani/issues/new/choose: SUCCESS
+[core::panicking::panic_nounwind_fmt::runtime.sanity_check.1] line 122 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs function core::num::<impl usize>::unchecked_add::precondition_check
+[core::num::<impl usize>::unchecked_add::precondition_check.sanity_check.1] line 73 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+multiproof.rs function multiproof::Arity::bits
+[multiproof::Arity::bits.unreachable.1] line 5 unreachable code: SUCCESS
+
+multiproof.rs function multiproof::Arity::width
+[multiproof::Arity::width.assertion.1] line 11 attempt to shift left with overflow: SUCCESS
+
+multiproof.rs function multiproof::index_at
+[multiproof::index_at.array_bounds.1] line 24 array dynamic object upper bound in (*indices)[index]: SUCCESS
+[multiproof::index_at.assertion.1] line 24 index out of bounds: the length is less than or equal to the given index: SUCCESS
+[multiproof::index_at.pointer_dereference.1] line 24 dereference failure: pointer NULL in *indices: SUCCESS
+[multiproof::index_at.pointer_dereference.2] line 24 dereference failure: pointer invalid in *indices: SUCCESS
+[multiproof::index_at.pointer_dereference.3] line 24 dereference failure: deallocated dynamic object in *indices: SUCCESS
+[multiproof::index_at.pointer_dereference.4] line 24 dereference failure: dead object in *indices: SUCCESS
+[multiproof::index_at.pointer_dereference.5] line 24 dereference failure: pointer outside object bounds in *indices: SUCCESS
+[multiproof::index_at.pointer_dereference.6] line 24 dereference failure: invalid integer address in *indices: SUCCESS
+
+multiproof.rs function multiproof::parent_group_all_frontiers
+[multiproof::parent_group_all_frontiers.array_bounds.1] line 111 array 'level' upper bound in level[k]: SUCCESS
+[multiproof::parent_group_all_frontiers.array_bounds.2] line 111 array 'level' upper bound in level[var_16]: SUCCESS
+[multiproof::parent_group_all_frontiers.array_bounds.3] line 111 array 'level' upper bound in level[k]: SUCCESS
+[multiproof::parent_group_all_frontiers.assertion.1] line 111 index out of bounds: the length is less than or equal to the given index: SUCCESS
+[multiproof::parent_group_all_frontiers.assertion.2] line 111 attempt to subtract with overflow: SUCCESS
+[multiproof::parent_group_all_frontiers.assertion.3] line 111 index out of bounds: the length is less than or equal to the given index: SUCCESS
+[multiproof::parent_group_all_frontiers.assertion.4] line 111 index out of bounds: the length is less than or equal to the given index: SUCCESS
+[multiproof::parent_group_all_frontiers.unreachable.1] line 111 unreachable code: SUCCESS
+[multiproof::parent_group_all_frontiers.assertion.5] line 116 attempt to shift right with overflow: SUCCESS
+[multiproof::parent_group_all_frontiers.assertion.6] line 118 attempt to shift right with overflow: SUCCESS
+[multiproof::parent_group_all_frontiers.unwind.1] line 118 unwinding assertion loop 1: SUCCESS
+[multiproof::parent_group_all_frontiers.assertion.7] line 119 attempt to add with overflow: SUCCESS
+[multiproof::parent_group_all_frontiers.assertion.8] line 121 attempt to subtract with overflow: SUCCESS
+[multiproof::parent_group_all_frontiers.assertion.9] line 121 assertion failed: i<j && j<=n && j-i<=arity.width(): SUCCESS
+[multiproof::parent_group_all_frontiers.assertion.10] line 122 attempt to subtract with overflow: SUCCESS
+[multiproof::parent_group_all_frontiers.assertion.11] line 122 attempt to subtract with overflow: SUCCESS
+[multiproof::parent_group_all_frontiers.assertion.12] line 122 assertion failed: siblings<=8: SUCCESS
+[multiproof::parent_group_all_frontiers.array_bounds.4] line 125 array 'level' upper bound in level[w]: SUCCESS
+[multiproof::parent_group_all_frontiers.assertion.13] line 125 index out of bounds: the length is less than or equal to the given index: SUCCESS
+[multiproof::parent_group_all_frontiers.assertion.14] line 125 attempt to add with overflow: SUCCESS
+[multiproof::parent_group_all_frontiers.assertion.15] line 126 assertion failed: next_w<=j && next_w<=16: SUCCESS
+
+** 0 of 62 failed (1 iterations)
+VERIFICATION SUCCESSFUL
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

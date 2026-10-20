@@ -1,0 +1,82 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unused attribute
+  --> canonical.rs:30:9
+   |
+30 |         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+   |         ^^^^^^^^^^^^^^^^^ help: remove this attribute
+   |
+note: attribute also specified here
+  --> canonical.rs:28:9
+   |
+28 |         #[inline(always)]
+   |         ^^^^^^^^^^^^^^^^^
+   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+   = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+warning: type `multiproof::Arity` is more private than the item `multiproof::node_count`
+  --> multiproof.rs:26:1
+   |
+26 | pub fn node_count(arity: Arity, indices: &[u32]) -> Option<usize> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `multiproof::node_count` is reachable at visibility `pub(crate)`
+   |
+note: but type `multiproof::Arity` is only usable at visibility `pub(self)`
+  --> multiproof.rs:2:23
+   |
+ 2 | #[derive(Clone,Copy)] enum Arity {Two,Eight}
+   |                       ^^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+Checking harness canonical::canonical::reduce_all_u64...
+CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-r22-overflow-20261021/generated/target/kani/x86_64-unknown-linux-gnu/debug/deps/r22_overflow_leaves-489e2f6ba580e9d2__RNvNtNtCslPWoVUGqbfx_19r22_overflow_leaves9canonical9canonical14reduce_all_u64.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 16 object bits, 48 offset bits (user-specified)
+Starting Bounded Model Checking
+Runtime Symex: 0.00300859s
+size of program expression: 248 steps
+slicing removed 122 assignments
+Generated 12 VCC(s), 10 remaining after simplification
+Runtime Postprocess Equation: 2.988e-05s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.000521625s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 2.776e-06s
+Solving with CaDiCaL 2.0.0
+425 variables, 1296 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 6.8179e-05s
+Runtime decision procedure: 0.000632275s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+426 variables, 1297 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 8.7234e-05s
+Runtime decision procedure: 9.4518e-05s
+
+** Results:
+canonical.rs function canonical::canonical::reduce
+[canonical::canonical::reduce.assertion.1] line 10 [KANI_CHECK_ID_r22_overflow_leaves.fe5ba9a4450ffc01::r22_overflow_leaves_0] attempt to shift right with overflow: SUCCESS
+[canonical::canonical::reduce.assertion.2] line 10 [KANI_CHECK_ID_r22_overflow_leaves.fe5ba9a4450ffc01::r22_overflow_leaves_1] attempt to add with overflow: SUCCESS
+[canonical::canonical::reduce.reachability_check.1] line 10 KANI_CHECK_ID_r22_overflow_leaves.fe5ba9a4450ffc01::r22_overflow_leaves_0: FAILURE
+[canonical::canonical::reduce.reachability_check.2] line 10 KANI_CHECK_ID_r22_overflow_leaves.fe5ba9a4450ffc01::r22_overflow_leaves_1: FAILURE
+[canonical::canonical::reduce.assertion.3] line 11 [KANI_CHECK_ID_r22_overflow_leaves.fe5ba9a4450ffc01::r22_overflow_leaves_2] attempt to shift right with overflow: SUCCESS
+[canonical::canonical::reduce.assertion.4] line 11 [KANI_CHECK_ID_r22_overflow_leaves.fe5ba9a4450ffc01::r22_overflow_leaves_3] attempt to add with overflow: SUCCESS
+[canonical::canonical::reduce.reachability_check.3] line 11 KANI_CHECK_ID_r22_overflow_leaves.fe5ba9a4450ffc01::r22_overflow_leaves_2: FAILURE
+[canonical::canonical::reduce.reachability_check.4] line 11 KANI_CHECK_ID_r22_overflow_leaves.fe5ba9a4450ffc01::r22_overflow_leaves_3: FAILURE
+[canonical::canonical::reduce.assertion.5] line 12 [KANI_CHECK_ID_r22_overflow_leaves.fe5ba9a4450ffc01::r22_overflow_leaves_4] attempt to subtract with overflow: SUCCESS
+[canonical::canonical::reduce.reachability_check.5] line 12 KANI_CHECK_ID_r22_overflow_leaves.fe5ba9a4450ffc01::r22_overflow_leaves_4: FAILURE
+
+canonical.rs function canonical::canonical::reduce_all_u64
+[canonical::canonical::reduce_all_u64.assertion.1] line 130 [KANI_CHECK_ID_r22_overflow_leaves.fe5ba9a4450ffc01::r22_overflow_leaves_5] assertion failed: reduce(x)<P: SUCCESS
+[canonical::canonical::reduce_all_u64.reachability_check.1] line 130 KANI_CHECK_ID_r22_overflow_leaves.fe5ba9a4450ffc01::r22_overflow_leaves_5: FAILURE
+
+** 6 of 12 failed (2 iterations)
+VERIFICATION FAILED
+Manual Harness Summary:
+Verification failed for - canonical::canonical::reduce_all_u64
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.

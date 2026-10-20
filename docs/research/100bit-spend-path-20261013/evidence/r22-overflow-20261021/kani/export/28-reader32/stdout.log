@@ -1,0 +1,267 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unused attribute
+  --> canonical.rs:30:9
+   |
+30 |         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+   |         ^^^^^^^^^^^^^^^^^ help: remove this attribute
+   |
+note: attribute also specified here
+  --> canonical.rs:28:9
+   |
+28 |         #[inline(always)]
+   |         ^^^^^^^^^^^^^^^^^
+   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+   = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `level` is never read
+   --> multiproof.rs:125:5
+    |
+125 |     level[w]=parent;let next_w=w+1;
+    |     ^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: type `multiproof::Arity` is more private than the item `multiproof::node_count`
+  --> multiproof.rs:26:1
+   |
+26 | pub fn node_count(arity: Arity, indices: &[u32]) -> Option<usize> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `multiproof::node_count` is reachable at visibility `pub(crate)`
+   |
+note: but type `multiproof::Arity` is only usable at visibility `pub(self)`
+  --> multiproof.rs:2:23
+   |
+ 2 | #[derive(Clone,Copy)] enum Arity {Two,Eight}
+   |                       ^^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+Checking harness layout::checkpoint_reader_32...
+CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-r22-overflow-20261021/generated/target/kani/x86_64-unknown-linux-gnu/debug/deps/r22_overflow_leaves-ab0ed26ded6a519d__RNvNtCsce0LJNirgKX_19r22_overflow_leaves6layout20checkpoint_reader_32.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 16 object bits, 48 offset bits (user-specified)
+Starting Bounded Model Checking
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 435 column 5 function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index thread 0
+aborting path on assume(false) at file /home/runner/work/kani/kani/library/kani_core/src/models.rs line 176 column 17 function <usize as kani::rustc_intrinsics::ToISize>::to_isize thread 0
+aborting path on assume(false) at file /home/runner/work/kani/kani/library/kani/src/lib.rs line 57 column 1 function <usize as kani::rustc_intrinsics::ToISize>::to_isize thread 0
+aborting path on assume(false) at file /home/runner/work/kani/kani/library/kani/src/lib.rs line 57 column 1 function <usize as kani::rustc_intrinsics::ToISize>::to_isize thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 40 column 9 function core::slice::index::slice_index_fail::do_panic::runtime thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs line 2449 column 9 function core::slice::index::slice_index_fail::do_panic thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic.rs line 178 column 9 function core::slice::index::slice_index_fail thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 49 column 9 function core::slice::index::slice_index_fail::do_panic::runtime thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs line 2449 column 9 function core::slice::index::slice_index_fail::do_panic thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic.rs line 178 column 9 function core::slice::index::slice_index_fail thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 58 column 9 function core::slice::index::slice_index_fail::do_panic::runtime thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs line 2449 column 9 function core::slice::index::slice_index_fail::do_panic thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic.rs line 178 column 9 function core::slice::index::slice_index_fail thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 68 column 5 function core::slice::index::slice_index_fail::do_panic::runtime thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs line 2449 column 9 function core::slice::index::slice_index_fail::do_panic thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic.rs line 178 column 9 function core::slice::index::slice_index_fail thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 443 column 13 function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs line 1338 column 15 function std::option::Option::<&[u8; 32]>::ok_or::<std::array::TryFromSliceError> thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs line 1717 column 15 function std::result::Result::<&[u8; 32], std::array::TryFromSliceError>::copied thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs line 1231 column 15 function std::result::Result::<[u8; 32], std::array::TryFromSliceError>::unwrap thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs line 1867 column 5 function std::result::unwrap_failed thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs line 1233 column 23 function std::result::Result::<[u8; 32], std::array::TryFromSliceError>::unwrap thread 0
+Unwinding loop memcmp.0 iteration 1 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 2 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 3 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 4 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 5 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 6 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 7 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 8 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 9 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 10 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 11 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 12 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 13 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 14 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 15 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 16 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 17 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 18 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 19 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Not unwinding loop memcmp.0 iteration 20 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Runtime Symex: 0.0906746s
+size of program expression: 5416 steps
+slicing removed 3175 assignments
+Generated 305 VCC(s), 25 remaining after simplification
+Runtime Postprocess Equation: 0.00071957s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 1.0511s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 0.00175627s
+Solving with CaDiCaL 2.0.0
+307812 variables, 6175220 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 0.0961632s
+Runtime decision procedure: 1.14997s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+307813 variables, 6175221 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 42.2863s
+Runtime decision procedure: 42.2865s
+
+** Results:
+[pointer_dereference.1] dereference failure: pointer NULL in self->at: SUCCESS
+[pointer_dereference.2] dereference failure: pointer invalid in self->at: SUCCESS
+[pointer_dereference.3] dereference failure: deallocated dynamic object in self->at: SUCCESS
+[pointer_dereference.4] dereference failure: dead object in self->at: SUCCESS
+[pointer_dereference.5] dereference failure: pointer outside object bounds in self->at: SUCCESS
+[pointer_dereference.6] dereference failure: invalid integer address in self->at: SUCCESS
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/builders.rs function core::fmt::builders::PadAdapter::<'_, '_>::wrap::<'_, '_>::{closure#0}
+[core::fmt::builders::PadAdapter::<'_, '_>::wrap::<'_, '_>::{closure#0}.sanity_check.1] line 26 Kani-internal sanity check: Correct CBMC vtable size for StructTag("tag-_318316341002789937844443197556935641341") (MIR type RigidTy(Adt(AdtDef(DefId { id: 573, name: "core::fmt::builders::PadAdapter" }), GenericArgs([Lifetime(Region { kind: ReErased }), Lifetime(Region { kind: ReErased })])))). Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs function core::slice::index::slice_index_fail::do_panic
+[core::slice::index::slice_index_fail::do_panic.sanity_check.1] line 2449 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+[core::slice::index::slice_index_fail::do_panic.sanity_check.2] line 2449 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+[core::slice::index::slice_index_fail::do_panic.sanity_check.3] line 2449 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+[core::slice::index::slice_index_fail::do_panic.sanity_check.4] line 2449 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/error.rs function <std::num::TryFromIntError as std::fmt::Debug>::fmt
+[<std::num::TryFromIntError as std::fmt::Debug>::fmt.sanity_check.1] line 10 Kani-internal sanity check: Correct CBMC vtable size for Pointer { typ: StructTag("tag-Unit") } (MIR type RigidTy(Ref(Region { kind: ReErased }, Ty { id: 5, kind: RigidTy(Tuple([])) }, Not))). Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs function core::num::<impl usize>::checked_sub
+[core::num::<impl usize>::checked_sub.arithmetic_overflow.1] line 812 attempt to compute `unchecked_sub` which would overflow: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs function std::option::Option::<&[u8; 32]>::ok_or::<std::array::TryFromSliceError>
+[std::option::Option::<&[u8; 32]>::ok_or::<std::array::TryFromSliceError>.pointer_dereference.1] line 1338 dereference failure: dead object in *((unsigned char **)&self): SUCCESS
+[std::option::Option::<&[u8; 32]>::ok_or::<std::array::TryFromSliceError>.unreachable.1] line 1338 unreachable code: SUCCESS
+[std::option::Option::<&[u8; 32]>::ok_or::<std::array::TryFromSliceError>.pointer_dereference.2] line 1340 dereference failure: dead object in *((unsigned char **)&temp_1): SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic.rs function core::slice::index::slice_index_fail
+[core::slice::index::slice_index_fail.sanity_check.1] line 178 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+[core::slice::index::slice_index_fail.sanity_check.2] line 178 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+[core::slice::index::slice_index_fail.sanity_check.3] line 178 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+[core::slice::index::slice_index_fail.sanity_check.4] line 178 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs function std::result::Result::<&[u8; 32], std::array::TryFromSliceError>::copied
+[std::result::Result::<&[u8; 32], std::array::TryFromSliceError>::copied.pointer_dereference.1] line 1717 dereference failure: dead object in *((unsigned char **)&self): SUCCESS
+[std::result::Result::<&[u8; 32], std::array::TryFromSliceError>::copied.unreachable.1] line 1717 unreachable code: SUCCESS
+[std::result::Result::<&[u8; 32], std::array::TryFromSliceError>::copied.pointer_dereference.2] line 1718 dereference failure: pointer NULL in *var_5: SUCCESS
+[std::result::Result::<&[u8; 32], std::array::TryFromSliceError>::copied.pointer_dereference.3] line 1718 dereference failure: pointer invalid in *var_5: SUCCESS
+[std::result::Result::<&[u8; 32], std::array::TryFromSliceError>::copied.pointer_dereference.4] line 1718 dereference failure: deallocated dynamic object in *var_5: SUCCESS
+[std::result::Result::<&[u8; 32], std::array::TryFromSliceError>::copied.pointer_dereference.5] line 1718 dereference failure: dead object in *var_5: SUCCESS
+[std::result::Result::<&[u8; 32], std::array::TryFromSliceError>::copied.pointer_dereference.6] line 1718 dereference failure: pointer outside object bounds in *var_5: SUCCESS
+[std::result::Result::<&[u8; 32], std::array::TryFromSliceError>::copied.pointer_dereference.7] line 1718 dereference failure: invalid integer address in *var_5: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs function std::result::Result::<[u8; 32], std::array::TryFromSliceError>::unwrap
+[std::result::Result::<[u8; 32], std::array::TryFromSliceError>::unwrap.unreachable.1] line 1231 unreachable code: SUCCESS
+[std::result::Result::<[u8; 32], std::array::TryFromSliceError>::unwrap.sanity_check.1] line 1233 Kani-internal sanity check: Correct CBMC vtable size for StructTag("tag-_254962015006346427832721307148407582332") (MIR type RigidTy(Adt(AdtDef(DefId { id: 536, name: "std::array::TryFromSliceError" }), GenericArgs([])))). Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+[std::result::Result::<[u8; 32], std::array::TryFromSliceError>::unwrap.sanity_check.2] line 1233 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs function std::result::Result::<usize, std::num::TryFromIntError>::expect
+[std::result::Result::<usize, std::num::TryFromIntError>::expect.sanity_check.1] line 1185 Kani-internal sanity check: Correct CBMC vtable size for StructTag("tag-_321011115446266303818723333843652093965") (MIR type RigidTy(Adt(AdtDef(DefId { id: 713, name: "std::num::TryFromIntError" }), GenericArgs([])))). Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs function std::result::unwrap_failed
+[std::result::unwrap_failed.assertion.1] line 1867 This is a placeholder message; Kani doesn't support message formatted at runtime: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index
+[<std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index.unreachable.1] line 435 unreachable code: SUCCESS
+[<std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index.safety_check.1] line 441 misaligned pointer to reference cast: address must be a multiple of its type's alignment: SUCCESS
+[<std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index.safety_check.2] line 441 dereference failure: pointer invalid: SUCCESS
+[<std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index.sanity_check.1] line 443 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs function core::slice::index::slice_index_fail::do_panic::runtime
+[core::slice::index::slice_index_fail::do_panic::runtime.assertion.4] line 40 This is a placeholder message; Kani doesn't support message formatted at runtime: SUCCESS
+[core::slice::index::slice_index_fail::do_panic::runtime.assertion.2] line 49 This is a placeholder message; Kani doesn't support message formatted at runtime: SUCCESS
+[core::slice::index::slice_index_fail::do_panic::runtime.assertion.1] line 58 This is a placeholder message; Kani doesn't support message formatted at runtime: SUCCESS
+[core::slice::index::slice_index_fail::do_panic::runtime.assertion.3] line 68 This is a placeholder message; Kani doesn't support message formatted at runtime: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs function core::slice::<impl [u8]>::as_array::<32>
+[core::slice::<impl [u8]>::as_array::<32>.safety_check.1] line 854 misaligned pointer to reference cast: address must be a multiple of its type's alignment: SUCCESS
+[core::slice::<impl [u8]>::as_array::<32>.safety_check.2] line 854 dereference failure: pointer invalid: SUCCESS
+[core::slice::<impl [u8]>::as_array::<32>.pointer_dereference.1] line 857 dereference failure: dead object in *((unsigned char **)&temp_1): SUCCESS
+
+/home/runner/work/kani/kani/library/kani/src/lib.rs function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+[<usize as kani::rustc_intrinsics::ToISize>::to_isize.assertion.1] line 57 internal error: entered unreachable code: SUCCESS
+[<usize as kani::rustc_intrinsics::ToISize>::to_isize.safety_check.1] line 57 Offset value overflows isize: SUCCESS
+
+/home/runner/work/kani/kani/library/kani/src/lib.rs function kani::mem::cbmc::same_allocation
+[kani::mem::cbmc::same_allocation.unsupported_construct.1] line 57 Kani does not support reasoning about pointer to unallocated memory: SUCCESS
+
+/home/runner/work/kani/kani/library/kani/src/lib.rs function kani::rustc_intrinsics::offset::<u8, *const u8, usize>
+[kani::rustc_intrinsics::offset::<u8, *const u8, usize>.safety_check.1] line 57 Offset in bytes overflows isize: SUCCESS
+[kani::rustc_intrinsics::offset::<u8, *const u8, usize>.safety_check.2] line 57 Offset result and original pointer must point to the same allocation: SUCCESS
+
+/home/runner/work/kani/kani/library/kani_core/src/models.rs function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+[<usize as kani::rustc_intrinsics::ToISize>::to_isize.unreachable.1] line 176 unreachable code: SUCCESS
+
+<builtin-library-memcmp> function memcmp
+[memcmp.precondition.1] line 19 memcmp region 1 readable: SUCCESS
+[memcmp.precondition.2] line 21 memcpy region 2 readable: SUCCESS
+[memcmp.unwind.0] line 25 unwinding assertion loop 0: FAILURE
+[memcmp.pointer_dereference.1] line 27 dereference failure: pointer NULL in *tmp_post_sc1: SUCCESS
+[memcmp.pointer_dereference.2] line 27 dereference failure: pointer invalid in *tmp_post_sc1: SUCCESS
+[memcmp.pointer_dereference.3] line 27 dereference failure: deallocated dynamic object in *tmp_post_sc1: SUCCESS
+[memcmp.pointer_dereference.4] line 27 dereference failure: dead object in *tmp_post_sc1: SUCCESS
+[memcmp.pointer_dereference.5] line 27 dereference failure: pointer outside object bounds in *tmp_post_sc1: SUCCESS
+[memcmp.pointer_dereference.6] line 27 dereference failure: invalid integer address in *tmp_post_sc1: SUCCESS
+[memcmp.pointer_dereference.7] line 27 dereference failure: pointer NULL in *tmp_post_sc2: SUCCESS
+[memcmp.pointer_dereference.8] line 27 dereference failure: pointer invalid in *tmp_post_sc2: SUCCESS
+[memcmp.pointer_dereference.9] line 27 dereference failure: deallocated dynamic object in *tmp_post_sc2: SUCCESS
+[memcmp.pointer_dereference.10] line 27 dereference failure: dead object in *tmp_post_sc2: SUCCESS
+[memcmp.pointer_dereference.11] line 27 dereference failure: pointer outside object bounds in *tmp_post_sc2: SUCCESS
+[memcmp.pointer_dereference.12] line 27 dereference failure: invalid integer address in *tmp_post_sc2: SUCCESS
+
+layout.rs function layout::Reader::<'_>::raw::<32>
+[layout::Reader::<'_>::raw::<32>.assertion.1] line 58 attempt to add with overflow: SUCCESS
+[layout::Reader::<'_>::raw::<32>.assertion.2] line 58 attempt to add with overflow: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.1] line 58 dereference failure: pointer NULL in self->bytes: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.2] line 58 dereference failure: pointer invalid in self->bytes: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.3] line 58 dereference failure: deallocated dynamic object in self->bytes: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.4] line 58 dereference failure: dead object in self->bytes: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.5] line 58 dereference failure: pointer outside object bounds in self->bytes: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.6] line 58 dereference failure: invalid integer address in self->bytes: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.7] line 58 dereference failure: pointer NULL in self->at: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.8] line 58 dereference failure: pointer invalid in self->at: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.9] line 58 dereference failure: deallocated dynamic object in self->at: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.10] line 58 dereference failure: dead object in self->at: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.11] line 58 dereference failure: pointer outside object bounds in self->at: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.12] line 58 dereference failure: invalid integer address in self->at: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.13] line 58 dereference failure: pointer NULL in self->at: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.14] line 58 dereference failure: pointer invalid in self->at: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.15] line 58 dereference failure: deallocated dynamic object in self->at: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.16] line 58 dereference failure: dead object in self->at: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.17] line 58 dereference failure: pointer outside object bounds in self->at: SUCCESS
+[layout::Reader::<'_>::raw::<32>.pointer_dereference.18] line 58 dereference failure: invalid integer address in self->at: SUCCESS
+
+layout.rs function layout::reader_case::<32>
+[layout::reader_case::<32>.assertion.1] line 83 attempt to subtract with overflow: SUCCESS
+[layout::reader_case::<32>.assertion.2] line 85 attempt to add with overflow: SUCCESS
+[layout::reader_case::<32>.assertion.3] line 85 assertion failed: r.at == at+N: SUCCESS
+[layout::reader_case::<32>.assertion.4] line 85 assertion failed: out == [0;N]: SUCCESS
+
+** 1 of 89 failed (2 iterations)
+VERIFICATION FAILED
+Manual Harness Summary:
+Verification failed for - layout::checkpoint_reader_32
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.

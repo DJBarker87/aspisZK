@@ -3,7 +3,7 @@
 import json,subprocess,sys
 from pathlib import Path
 BASE=Path('/home/dombarker/project-offloads/codex-cx-r22-overflow-20261021')
-CASES=[('17-reduce-safety-only','canonical::canonical::reduce_all_u64'),('03-scalar-add','canonical::canonical::scalar_add_canonical'),('04-packed-add','canonical::canonical::packed_add'),('05-packed-sub','canonical::canonical::packed_sub'),('06-halves','canonical::canonical::half_and_half_pow'),('07-u32-product','canonical::canonical::widened_u32_product'),('08-raw-partials','canonical::canonical::raw_partial_ranges'),('09-raw-c0','canonical::canonical::raw_coordinate0'),('10-raw-c1','canonical::canonical::raw_coordinate1'),('11-raw-c2','canonical::canonical::raw_coordinate2'),('12-raw-c3','canonical::canonical::raw_coordinate3'),('13-dot-prefix','canonical::canonical::dot_prefix_step'),('14-node-single','multiproof::node_count_single'),('15-node-pair','multiproof::node_count_pair'),('16-sort-four','multiproof::sort_dedup_four')]
+CASES=[('18-parent-group', 'multiproof::parent_group_all_frontiers'), ('19-binary-step', 'multiproof::binary_frontier_step'), ('20-sibling-cursor', 'multiproof::sibling_cursor_step'), ('21-insertion-inner', 'multiproof::insertion_inner_all_positions'), ('22-dedup-step', 'multiproof::dedup_step_all_positions'), ('23-slots', 'layout::all_compact_slots'), ('24-openings', 'layout::all_compact_openings'), ('25-batch-keys', 'layout::batch_key_ranges'), ('26-reader4', 'layout::checkpoint_reader_4'), ('27-reader16', 'layout::checkpoint_reader_16'), ('28-reader32', 'layout::checkpoint_reader_32')]
 for attempt,harness in CASES:
     if len(sys.argv)>1 and attempt not in sys.argv[1:]:continue
     # Admission includes populated systemd app scopes; reserve <=55 GiB total.

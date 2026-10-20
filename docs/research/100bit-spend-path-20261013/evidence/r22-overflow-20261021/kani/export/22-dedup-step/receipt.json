@@ -1,0 +1,81 @@
+{
+  "schema": "r22-kani-attempt-v1",
+  "attempt": "22-dedup-step",
+  "module": [
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS=4",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=10s",
+    "180s",
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--lib",
+    "--exact",
+    "--harness",
+    "multiproof::dedup_step_all_positions",
+    "--no-assertion-reach-checks",
+    "--default-unwind",
+    "20",
+    "--output-format",
+    "old"
+  ],
+  "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "source_sha256": "f4770af767258db3e0ddf83266a20b2e820ce34e2cf900b243c6800b8bc8a706",
+  "deps_fingerprint": "6760a65bed7e9f30d58fb6fca0ebee7f7e529862b216f28d3f54955544e852e4",
+  "command": [
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS=4",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=10s",
+    "180s",
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--lib",
+    "--exact",
+    "--harness",
+    "multiproof::dedup_step_all_positions",
+    "--no-assertion-reach-checks",
+    "--default-unwind",
+    "20",
+    "--output-format",
+    "old"
+  ],
+  "cwd": "/home/dombarker/project-offloads/codex-cx-r22-overflow-20261021/generated",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rfaf30f237b7f4b768f9baf2c104e7160.scope",
+  "inputs": {
+    "canonical.rs": "ebf1006382f82d1fbe8c05a9a9c3a4654151bfdd9550be659142deb2590d2b45",
+    "layout.rs": "e241205c7e9679e584535afc96de6a438fb74950ef376a08c78c44813879831b",
+    "lib.rs": "19ca0f64e2e5a5822e26a511d4c26252e127a4cddba861c8592beec888c72de7",
+    "multiproof.rs": "a655f965e77fc2d5f42247ad5e3ef11905532b472bf58d96baee995ff8e594e8"
+  },
+  "print_axioms": "N/A: Kani proof, no Lean theorem",
+  "expected_time": "Compile isolated dependency-free harness, then CBMC bit-vector safety; no field elimination or certificate generation",
+  "kani_version": "cargo-kani 0.67.0",
+  "exit_status": 1,
+  "wall_seconds": 2.5313966691028327,
+  "peak_rss_kib": 369848,
+  "swaps": 0,
+  "cgroup_memory_peak_bytes": 379371520,
+  "verification_success": false,
+  "errors": [
+    "[<usize as kani::rustc_intrinsics::ToISize>::to_isize.assertion.1] line 57 internal error: entered unreachable code: SUCCESS",
+    "[memcmp.unwind.0] line 25 unwinding assertion loop 0: FAILURE"
+  ],
+  "receipt_normalization": "verification_success parsed from VERIFICATION SUCCESSFUL (the first launcher looked for a colon/hyphen spelling); source proof logs retained by hash",
+  "checks_by_result": {
+    "FAILURE": 1,
+    "SUCCESS": 255
+  },
+  "stdout_sha256": "3791759abd4ddd86c8b61b5ee13b711135b08e696670a4f468ed02bee95e618f",
+  "stdout_bytes": 68646
+}
