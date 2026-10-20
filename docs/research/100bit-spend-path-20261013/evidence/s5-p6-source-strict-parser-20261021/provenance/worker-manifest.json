@@ -1,0 +1,102 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "packet": "s5-p6-source-strict-parser-20261021",
+  "status": "PROVED: under eight source limb bounds, the unchanged extracted serializer output is accepted by the strict extracted parser and parsed eight coordinate values equal the original source coordinates; corrected P6 model-to-Rust Std correspondence remains OPEN.",
+  "source_revision": "f42c60008fd149e9a766cdbd3e869c269b96c682",
+  "module": {
+    "module": "S5P6SourceStrictEncodingV1",
+    "source": "sources/S5P6SourceStrictEncodingV1.lean",
+    "source_sha256": "1ea94958189f2f5b601305110dfdc24e1915c2c1ca7444989aa7b51c6bc60139",
+    "object_sha256": "fe29617cc0428912620d04c295f5f8f4fd822784fc68085d6683f9941e31c55c",
+    "imports": [
+      "ToBytesP6IndexedCarrierBridgeV1",
+      "S5P6WordCodecBridgeV1",
+      "S5P6ParserSuccessV1",
+      "UnrolledWideParserRefinement",
+      "R1WideParserArrayHalves"
+    ],
+    "exit_status": 0,
+    "wall_seconds": 13.039482542313635,
+    "peak_rss_bytes": 3312975872,
+    "swap_bytes": 0,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "receipt": "evidence/receipt.json",
+    "command": "evidence/command.json",
+    "log": "evidence/lean.log",
+    "source_revision": "exact source snapshot SHA256 1ea94958189f2f5b601305110dfdc24e1915c2c1ca7444989aa7b51c6bc60139; Git HEAD at actual launch f42c60008fd149e9a766cdbd3e869c269b96c682"
+  },
+  "direct_import_source_map": {
+    "ToBytesP6IndexedCarrierBridgeV1": {
+      "source": "relative:sources/ToBytesP6IndexedCarrierBridgeV1.lean",
+      "source_sha256": "1d0b9e7a832adef9abc6a516f1614cef100258f3758b51e61f20c257861212c3",
+      "object_sha256": "993da8f15ffbf33dde959d9001ccb07f525b069ef787c29650df179cd970082d",
+      "producer_packet": "docs/research/100bit-spend-path-20261013/evidence/s5-p6-indexed-carrier-bridge-v2-20261021/manifest.json",
+      "producer_receipt_status": "final selected cache object; source snapshot included"
+    },
+    "S5P6WordCodecBridgeV1": {
+      "source": "relative:sources/S5P6WordCodecBridgeV1.lean",
+      "source_sha256": "b99bb49a43d44388af0358ff6f8e71e656ccc3e1d1930af774f705c20dc4160c",
+      "object_sha256": "6c9f09135d7c99c3cfb5482e4202f0dc650fb245c9f9f0ae795630117b4b074b",
+      "producer_packet": "this-packet/evidence/receipt.json",
+      "producer_receipt_status": "final selected cache object; source snapshot included"
+    },
+    "S5P6ParserSuccessV1": {
+      "source": "relative:sources/S5P6ParserSuccessV1.lean",
+      "source_sha256": "881f99aef227c939591cfde799e972f047437152b36a9ae0050b1038ab7193cf",
+      "object_sha256": "792fceb2c7dda27a97205c94b8ff29a0c99801b368e19d44b017dbc2d912bab5",
+      "producer_packet": "this-packet/evidence/receipt.json",
+      "producer_receipt_status": "final selected cache object; source snapshot included"
+    },
+    "UnrolledWideParserRefinement": {
+      "source": "relative:sources/UnrolledWideParserRefinement.lean",
+      "source_sha256": "e057b44f28ffb7b398c9439c6945ce7ab05537053f956dd4c70b28016cc00aa6",
+      "object_sha256": "bc361ffd9a4a9c21a309037e81a450094848f10ed38888b10a469b7dd5b1ce19",
+      "producer_packet": "docs/research/100bit-spend-path-20261013/evidence/lean-unrolled-wide-refinement-20261015/manifest.json",
+      "producer_receipt_status": "final selected cache object; source snapshot included"
+    },
+    "R1WideParserArrayHalves": {
+      "source": "relative:sources/R1WideParserArrayHalves.lean",
+      "source_sha256": "12e7c7ce74d2a88437075c141099f1669f6a31afa0c772fff1b54c3015016039",
+      "object_sha256": "741e73c2a9cb5bda01342f532a8a5faf8828a125284f88d578a0beb02fe5d51a",
+      "producer_packet": "docs/research/100bit-spend-path-20261013/evidence/lean-candidate-wide-refinement-20261015/manifest.json",
+      "producer_receipt_status": "final selected cache object; source snapshot included"
+    }
+  },
+  "checks": [
+    "Focused Lean 4.32 compile used explicit -j1 -M4400 with warm pinned caches.",
+    "#print axioms for all new theorems contains only standard axioms.",
+    "Source coordinate statement compares all eight parsed U32 .val fields against source fields."
+  ],
+  "limitations": [
+    "No Lean objects are included.",
+    "The theorem assumes each of the eight source U32 coordinates is < m31Modulus.",
+    "The corrected explicit-P6 ChunksExactMut/zip harness model correspondence to Rust standard-library mutable iterator behavior remains open; no runtime or adoption claim is made."
+  ],
+  "diagnostics": [
+    "evidence/command.json",
+    "evidence/receipt.json",
+    "evidence/lean.log"
+  ],
+  "supporting_selected_modules": {
+    "S5P6WordCodecBridgeV1": {
+      "source": "sources/S5P6WordCodecBridgeV1.lean",
+      "source_sha256": "b99bb49a43d44388af0358ff6f8e71e656ccc3e1d1930af774f705c20dc4160c",
+      "object_sha256": "6c9f09135d7c99c3cfb5482e4202f0dc650fb245c9f9f0ae795630117b4b074b",
+      "command": "evidence/word-command.json",
+      "receipt": "evidence/word-receipt.json",
+      "log": "evidence/word.log"
+    },
+    "S5P6ParserSuccessV1": {
+      "source": "sources/S5P6ParserSuccessV1.lean",
+      "source_sha256": "881f99aef227c939591cfde799e972f047437152b36a9ae0050b1038ab7193cf",
+      "object_sha256": "792fceb2c7dda27a97205c94b8ff29a0c99801b368e19d44b017dbc2d912bab5",
+      "command": "evidence/parser-command.json",
+      "receipt": "evidence/parser-receipt.json",
+      "log": "evidence/parser.log"
+    }
+  }
+}
