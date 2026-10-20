@@ -1,0 +1,146 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "publication_base_revision": "845ec93a810f39c711dd14ba0bbd09643ed3fdd4",
+  "status": "PROVED generic stateful P6 powers-model totality and canonical outputs for canonical input, with generated FnMut back-state adapter; actual Rust std::array::from_fn correspondence remains the reviewed P6 library-model/differential boundary, and caller-level canonical-low remains open.",
+  "scope": "The source-specific generated powers closure has a checked FnMut\u2192FnOnce equivalence that preserves the returned back closure state. The P6 stateful from_fn harness then proves that every modeled N-step powers run from ONE and canonical x succeeds, yields N canonical values, and finishes at exponent N. This packet does not claim the Rust standard-library implementation is proved in Lean, nor that Weights::pair constructs a CanonicalLow array.",
+  "toolchain": {
+    "lean": "Lean 4.32.0",
+    "lean_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "native_cache": "/home/dombarker/project-offloads/s3-powers-canonical-trace-v13-20261020/attempt/objects/S3PowersCanonicalTraceV1.olean"
+  },
+  "modules": [
+    {
+      "module": "S3PowersCanonicalTraceV1",
+      "source": "sources/S3PowersCanonicalTraceV1.lean",
+      "source_sha256": "693be7cf35ea1023d90a7bb7013f1b7504853ffd35fded2ef102650697e651e0",
+      "object_sha256": "784c48fb1dd024f27c75a450b178491a3553cfbea1edf3593405f0f9c7559b05",
+      "receipt": "evidence/receipt.json",
+      "receipt_sha256": "e8618387b3ee88690b693998e0efc6ad2a37842435e1d2b39d8e85f5164625dd",
+      "exit_status": 0,
+      "wall_seconds": 2.608,
+      "peak_rss_bytes": 4026204160,
+      "scope_memory_peak_bytes": 378871808,
+      "swap_bytes": 0,
+      "source_revision": "S3 powers P6 consumer v13; selected immutable source in this packet",
+      "compiler_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+      "direct_imports": {
+        "StatefulArrayFromFnModelV1": "c00c795e3e234b9c1efb38d56d159b3cc075ce312c4ed54c400054a782dd672d",
+        "CurrentPowersCallbackInvariant": "8932735ac613318b97adcfadd2761fe8b550c1d35cf7cc98e40f244c3e89c21a"
+      },
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "theorems": [
+        "AspisR1S3PowersCanonicalTraceV1.generatedFnMut_eq_callOnce",
+        "AspisR1S3PowersCanonicalTraceV1.powersN_model_success",
+        "AspisR1S3PowersCanonicalTraceV1.powersN_model_total"
+      ]
+    }
+  ],
+  "direct_import_source_map": {
+    "StatefulArrayFromFnModelV1": {
+      "repository_path": "docs/research/100bit-spend-path-20261013/lean-candidates/stateful-array-from-fn-p6-20261020/sources/StatefulArrayFromFnModelV1.lean",
+      "source_sha256": "7a07bc03407a1e0feead49f3fc2a525b8b5756ba11a164fc295af1c5243d84fd",
+      "object_sha256": "c00c795e3e234b9c1efb38d56d159b3cc075ce312c4ed54c400054a782dd672d",
+      "producer_manifest": "docs/research/100bit-spend-path-20261013/lean-candidates/stateful-array-from-fn-p6-20261020/manifest.json",
+      "status": "reviewed P6 operational model; Rust std correspondence is scoped to its differential-test evidence"
+    },
+    "CurrentPowersCallbackInvariant": {
+      "repository_path": "docs/research/100bit-spend-path-20261013/evidence/s1-powers-invariant-library-frontier-20261020/sources/CurrentPowersCallbackInvariant.lean",
+      "source_sha256": "8f58aaf8097e848a047d6961c1a4009942d60397dc7339a17be5e0a1e54e6975",
+      "object_sha256": "8932735ac613318b97adcfadd2761fe8b550c1d35cf7cc98e40f244c3e89c21a",
+      "producer_manifest": "docs/research/100bit-spend-path-20261013/evidence/s1-powers-invariant-library-frontier-20261020/manifest.json",
+      "status": "retained checked exact callback invariant owner"
+    },
+    "CurrentPowersExactProduct": {
+      "repository_path": "docs/research/100bit-spend-path-20261013/evidence/s1-current-powers-exact-product-20261020/sources/CurrentPowersExactProduct.lean",
+      "source_sha256": "cffeea93c6659050e29b85ec3297627bc2053b81ff927371c3c15509565984c4",
+      "object_sha256": "ad429f6e34db6f4a1a90f694310ac0ef79761a10430bf0244b474edff4eddf36",
+      "producer_manifest": "docs/research/100bit-spend-path-20261013/evidence/s1-current-powers-exact-product-20261020/manifest.json",
+      "status": "transitive owner used through CurrentPowersCallbackInvariant"
+    }
+  },
+  "evidence_files": {
+    "evidence/admission-proof.json": "2a80e91ff76f10cd7b14d170cacdc84e92ba6ba7ecab97baaffc754112231aa7",
+    "evidence/command.json": "1fbf435247de0c00bde4719a6653624564e7bf8c8bffc2aa21b1654d31d46631",
+    "evidence/config.json": "dcffb765a9e326d0fe6635b87621b40912ad81dc0887ee5b8b28dfb7177a7745",
+    "evidence/lean.log": "28b0f13b2e353e47e95e4e4ba8c376e038f965746cb25afcf3a99e2cb2f655f3",
+    "evidence/preflight.json": "a22add9266b13c82738d55ba7bfbdd67c7295b88c95b3e30c9f628925c1610a2",
+    "evidence/receipt.json": "e8618387b3ee88690b693998e0efc6ad2a37842435e1d2b39d8e85f5164625dd",
+    "evidence/reservation-proof.json": "640fbd79c46ae2dea2838ea05fa0907a847938a3694981df4ddf8c9ada60815d",
+    "evidence/time.log": "52587bec650aad2f986dd19dc8c8f0e29753f16f188f32efc96cafb99c64e3a1"
+  },
+  "files": [
+    {
+      "path": "evidence/admission-proof.json",
+      "bytes": 149734,
+      "sha256": "2a80e91ff76f10cd7b14d170cacdc84e92ba6ba7ecab97baaffc754112231aa7"
+    },
+    {
+      "path": "evidence/command.json",
+      "bytes": 15085,
+      "sha256": "1fbf435247de0c00bde4719a6653624564e7bf8c8bffc2aa21b1654d31d46631"
+    },
+    {
+      "path": "evidence/config.json",
+      "bytes": 17382,
+      "sha256": "dcffb765a9e326d0fe6635b87621b40912ad81dc0887ee5b8b28dfb7177a7745"
+    },
+    {
+      "path": "evidence/lean.log",
+      "bytes": 1256,
+      "sha256": "28b0f13b2e353e47e95e4e4ba8c376e038f965746cb25afcf3a99e2cb2f655f3"
+    },
+    {
+      "path": "evidence/preflight.json",
+      "bytes": 15826,
+      "sha256": "a22add9266b13c82738d55ba7bfbdd67c7295b88c95b3e30c9f628925c1610a2"
+    },
+    {
+      "path": "evidence/receipt.json",
+      "bytes": 530,
+      "sha256": "e8618387b3ee88690b693998e0efc6ad2a37842435e1d2b39d8e85f5164625dd"
+    },
+    {
+      "path": "evidence/reservation-proof.json",
+      "bytes": 864,
+      "sha256": "640fbd79c46ae2dea2838ea05fa0907a847938a3694981df4ddf8c9ada60815d"
+    },
+    {
+      "path": "evidence/time.log",
+      "bytes": 15470,
+      "sha256": "52587bec650aad2f986dd19dc8c8f0e29753f16f188f32efc96cafb99c64e3a1"
+    },
+    {
+      "path": "sources/CurrentPowersCallbackInvariant.lean",
+      "bytes": 1149,
+      "sha256": "8f58aaf8097e848a047d6961c1a4009942d60397dc7339a17be5e0a1e54e6975"
+    },
+    {
+      "path": "sources/S3PowersCanonicalTraceV1.lean",
+      "bytes": 10411,
+      "sha256": "693be7cf35ea1023d90a7bb7013f1b7504853ffd35fded2ef102650697e651e0"
+    },
+    {
+      "path": "sources/StatefulArrayFromFnModelV1.lean",
+      "bytes": 5504,
+      "sha256": "7a07bc03407a1e0feead49f3fc2a525b8b5756ba11a164fc295af1c5243d84fd"
+    },
+    {
+      "path": "check_packet.py",
+      "bytes": 1031,
+      "sha256": "ad188c8df1bd4890d4d877796cebca1eda4c614d10323290d168c8d924385954"
+    },
+    {
+      "path": "SHA256SUMS",
+      "bytes": 1117,
+      "sha256": "b5b609103be7fceaa26a6f3e7f969518446ab0054d47f6378ab8a587f4589047"
+    }
+  ],
+  "checkers": {
+    "check_packet.py": "ad188c8df1bd4890d4d877796cebca1eda4c614d10323290d168c8d924385954"
+  },
+  "transitive_boundary": "The proof run uses exact selected dependency objects recorded in evidence/config.json and preflight.json. The P6 model source and CurrentPowers callback source are snapshotted here; deeper sources/receipts remain referenced through their producer manifests."
+}
