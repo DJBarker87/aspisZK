@@ -51,6 +51,10 @@ def build(basefiles,pins):
     src+='const OPENING:usize=compact::OPENING;\nstruct Reader<\'a>{bytes:&\'a[u8],at:usize}\nimpl Reader<\'_> {\n'+fn(verifier,"Reader<'a>::raw")[0]+'\n}\n'+(KIT/'layout-harnesses.rs').read_text()
     basefiles['layout.rs']=src
     basefiles['lib.rs']+='mod layout;\nmod verifier {\n'+sem+'\n}\n'
+    for qual,srcpath,data in [('slot_offset','crates/aspis-r1-cost-probe/src/compact.rs',compact),("Reader<'a>::raw",'crates/aspis-r1-cost-probe/src/verifier.rs',verifier)]:
+        body,line=fn(data,qual)
+        pins['declarations'].append(dict(owner=qual,path=srcpath,line=line,original_sha256=sha(body.encode()),edit='none; exact frozen body; isolated namespace context'))
+    pins['compact_constants']=[dict(expression=x,sha256=sha(x.encode())) for x in consts]
     pins['split_fragments']=checks
     # Verify abstract raw formulas against all four frozen source expressions.
     fast=blob('crates/aspis-r1-cost-probe/src/fast_pairing.rs');raw,_=fn(fast,'canonical::Q::raw')

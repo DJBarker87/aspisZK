@@ -1,9 +1,10 @@
 #[cfg(kani)] #[kani::proof] #[kani::unwind(20)]
 fn parent_group_all_frontiers() {
     let mut level:[u32;16]=kani::any();
-    for k in 0..16 {kani::assume(level[k]<(1<<18));if k>0 {kani::assume(level[k-1]<level[k]);}}
     let n:usize=kani::any();let i:usize=kani::any();
     kani::assume(n<=16);kani::assume(i<n);
+    // Only the live prefix is constrained. Dead suffix entries are arbitrary.
+    for k in 0..16 {if k<n {kani::assume(level[k]<(1<<18));if k>0 {kani::assume(level[k-1]<level[k]);}}}
     let arity=if kani::any() {Arity::Two}else{Arity::Eight};
     // Exact frozen node_count inner group (source-pins.json).
     let parent = index_at(&level, i) >> arity.bits();
@@ -62,7 +63,7 @@ fn dedup_step(idx:&mut[u32;16],val:&mut[[u8;32];16],i:usize,mut w:usize)->Option
     }
     Some(w)
 }
-#[cfg(kani)] #[kani::proof]
+#[cfg(kani)] #[kani::proof] #[kani::unwind(34)]
 fn dedup_step_all_positions() {
     let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();
     let i:usize=kani::any();let w:usize=kani::any();

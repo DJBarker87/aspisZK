@@ -69,7 +69,7 @@ fn all_compact_openings() {
     let i:usize=kani::any();kani::assume(i<22);
     let proof=[0u8;compact::PROOF_BYTES];assert_eq!(opening(&proof,i).len(),OPENING);
 }
-#[cfg(kani)] #[kani::proof] #[kani::unwind(20)]
+#[cfg(kani)] #[kani::proof] #[kani::unwind(24)]
 fn batch_key_ranges() {
     let q:[u32;22]=kani::any();
     for i in 0..22 {kani::assume(q[i]<(1<<18));}
@@ -89,4 +89,22 @@ fn checkpoint_reader_4() {reader_case::<4>();}
 #[cfg(kani)] #[kani::proof]
 fn checkpoint_reader_16() {reader_case::<16>();}
 #[cfg(kani)] #[kani::proof]
-fn checkpoint_reader_32() {reader_case::<32>();}
+fn checkpoint_reader_32() {
+    let bytes=[0u8;4880];let at:usize=kani::any();kani::assume(at<=4880-32);
+    let mut r=Reader{bytes:&bytes,at};let _out=r.raw::<32>();
+    assert_eq!(r.at,at+32);
+}
+
+#[cfg(kani)]
+fn dynamic_reader<const N:usize>() {
+    let bytes=[0u8;4880];let len:usize=kani::any();let at:usize=kani::any();
+    kani::assume(len<=4880);kani::assume(at<=len);kani::assume(N<=len-at);
+    let mut r=Reader{bytes:&bytes[..len],at};let _out=r.raw::<N>();
+    assert_eq!(r.at,at+N);assert!(r.at<=len);
+}
+#[cfg(kani)] #[kani::proof]
+fn dynamic_checkpoint_reader4() {dynamic_reader::<4>();}
+#[cfg(kani)] #[kani::proof]
+fn dynamic_checkpoint_reader16() {dynamic_reader::<16>();}
+#[cfg(kani)] #[kani::proof]
+fn dynamic_checkpoint_reader32() {dynamic_reader::<32>();}
