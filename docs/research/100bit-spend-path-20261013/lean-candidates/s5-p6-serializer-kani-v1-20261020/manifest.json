@@ -1,6 +1,6 @@
 {
   "schema": "focused-extractor-proof-packet-v1",
-  "status": "CANDIDATE symbolic equivalence gate; MEASURED finite optimized native controls; Kani NOT RUN after denied admission",
+  "status": "CHECKED Kani symbolic equivalence for the selected unchanged serializer source cut vs captured-writeback executable projection; optimized finite native controls also passed; Lean ABI/full caller/runtime correspondence remains OPEN",
   "modules": [],
   "scope": "Selected unchanged serializer method bodies and minimal eight-u32 carrier; explicit P6 executable projection only",
   "publication_revision": "15470cfc5a7f8af66526ffa039c4d2c8de100408",
@@ -15,15 +15,33 @@
     "native/compile.receipt.json",
     "native/controls.receipt.json"
   ],
-  "kani_admission": "kani-v1/admission.json",
-  "kani_proof_claim": false,
+  "kani_admission": "kani-v6/admission.json",
+  "kani_proof_claim": true,
   "new_lean_proof_claim": false,
   "open": [
-    "Kani universal result",
     "executable Rust projection to Lean ABI correspondence",
     "full Std/source/caller/runtime/deployment binding",
     "global per-attempt soundness"
   ],
   "constant_carrier_binding": "constant-and-carrier-binding.json",
-  "constant_carrier_binding_sha256": "3146a4a5a0d12e59884e4e2a6826068d1be4d8443b6fbb362daba7223e6e56e2"
+  "constant_carrier_binding_sha256": "3146a4a5a0d12e59884e4e2a6826068d1be4d8443b6fbb362daba7223e6e56e2",
+  "kani_selected_result": {
+    "receipt": "kani-v6/receipt.json",
+    "preflight": "kani-v6/preflight.json",
+    "log": "kani-v6/kani.log",
+    "time": "kani-v6/time.log",
+    "failed_checks": 0,
+    "total_checks": 188,
+    "unreachable_checks": 5,
+    "harnesses_verified": 1,
+    "scope": "All eight arbitrary u32 limbs and all 32 arbitrary initial u8 buffer values; no assumptions. Unchanged selected source method vs explicit executable captured-writeback projection; not full implementation or a Lean-kernel Rust theorem."
+  },
+  "diagnostics": {
+    "kani-v1": "denied admission; no compiler",
+    "kani-v2": "denied admission; no compiler",
+    "kani-v3": "admitted but systemd rejected incompatible --wait with --scope before in-scope execution",
+    "kani-v4": "scope launched, cargo metadata could not find rustc in inherited PATH; no proof",
+    "kani-v5": "raw old output format reported reachability instrumentation as failures; rejected as accepted result",
+    "kani-v6": "default regular Kani result processing, same source and enabled checks, exit0"
+  }
 }

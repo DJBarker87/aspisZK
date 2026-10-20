@@ -21,7 +21,7 @@ with open('/tmp/aspis-global-extraction-admission-20261019.lock','a') as lock:
  admission={'allowed':allowed,'not_started':not allowed,'reserved_bytes':reserved,'requested_bytes':requested,'safe_reservation_limit_bytes':48*2**30,'uncapped_current_bytes':uncapped_current,'os_reserve_bytes':8*2**30,'physical_bytes':physical,'available_bytes':inv['MemAvailable_kB']*1024,'minimum_available_bytes':14*2**30,'source_binding_sha256':sha(w/'source-binding.json'),'collector_sha256':sha(collector)}
  (e/'admission.json').write_text(json.dumps(admission,indent=2)+'\n');print(json.dumps(admission),flush=True)
  if not allowed:raise SystemExit(78)
- cmd=['systemd-run','--user','--scope','--quiet','--wait','-p','MemoryHigh=1536M','-p','MemoryMax=2G','-p','MemorySwapMax=0','python3',str(w/'in-scope.py'),str(e)]
+ cmd=['systemd-run','--user','--scope','--quiet','-p','MemoryHigh=1536M','-p','MemoryMax=2G','-p','MemorySwapMax=0','python3',str(w/'in-scope.py'),str(e)]
  (e/'scope-command.json').write_text(json.dumps(cmd,indent=2)+'\n')
  p=subprocess.Popen(cmd,cwd=w)
  started=time.monotonic()

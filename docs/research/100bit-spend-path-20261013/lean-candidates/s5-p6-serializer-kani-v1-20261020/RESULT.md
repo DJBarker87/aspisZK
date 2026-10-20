@@ -1,0 +1,9 @@
+# Serializer source-cut symbolic result
+
+Kani 0.67.0 verified `original_serializer_matches_captured_writeback` for arbitrary eight-u32 source limbs and arbitrary 32-byte initial buffer, with no assumptions. The exact unchanged selected serializer and its executable captured-start/writeback projection agree. The source SHA remains 4a1243e4410f3987ee19cbd7c0f5af0bab354cd261c61c419f8bc1d5f4db4366. Constants and carrier fields remain tied to the frozen source by the existing checker.
+
+Selected run: kani-v6, exit 0, 3.221 seconds, process RSS 170,016 KiB, cgroup memory peak 214,925,312 bytes, zero swaps. MemoryHigh 1536 MiB, MemoryMax 2 GiB, MemorySwapMax 0. Optimized cargo dev/test profiles were 3; solver kissat, unwind 34, default safety/reachability checks and explicit unwinding assertions retained. Kani reports 0 of 188 failed, 5 unreachable checks, and one verified harness.
+
+Rejected setup/result attempts remain: v1/v2 admission denials; v3 incompatible systemd scope/wait flags; v4 missing rustc PATH; v5 raw old output formatting, which did not perform normal reachability result processing and was not counted as a pass. V6 changes output processing to Kani's default regular mode, with the source, bound and checks unchanged. No safety/reachability checks were disabled.
+
+This is a Kani symbolic source-cut result, not a Lean proof of Rust standard-library semantics or whole caller/runtime/deployment refinement. The executable projection-to-Lean ABI connection and the full 100-bit per-attempt theorem remain open. `source-binding.json` is the immutable original input-binding snapshot; its initial NOT RUN fields are superseded for result status only by manifest.json and the selected receipt. `publication_revision`/receipt source_revision identifies the source-cut staging revision, not a claimed fresh checkout of the whole verifier.
