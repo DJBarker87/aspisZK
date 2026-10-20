@@ -146,4 +146,35 @@ mod tests {
         let mut different_public=PUBLIC.to_vec();different_public[8]^=1;
         assert!(matches!(verifier::resume(ck,PROOF,&different_public,Variant::S2,Sha),Err(verifier::Error::Checkpoint)));
     }
+    #[test]
+    fn pool_checkpoint_root_identity_asset_and_raw_sequence() {
+        let checkpoint=PoolV1PairForestCheckpointV1 {
+            bump: 255, master: [41;32], deployment_domain: [42;32],
+            checkpoint_sequence: 1, global_root: [M31::ZERO;8], lane_sequences: [0;8],
+        };
+        let base=encode_pool_v1_pair_forest_checkpoint_v1(&checkpoint).unwrap();
+        assert_eq!(decode_pool_v1_pair_forest_checkpoint_v1(&base),Ok(checkpoint));
+        for limb in 0..8 {for value in BAD {
+            let mut bytes=base;word(&mut bytes,80+4*limb,value);
+            assert!(decode_pool_v1_pair_forest_checkpoint_v1(&bytes).is_err());
+        }}
+        // Checkpoint sequence is an integer seed, never a single M31 limb.
+        for value in [u64::from(P),u64::from(P)+1,1<<31,u64::MAX] {
+            let mut bytes=base;bytes[72..80].copy_from_slice(&value.to_le_bytes());
+            let decoded=decode_pool_v1_pair_forest_checkpoint_v1(&bytes).unwrap();
+            assert_eq!(decoded.checkpoint_sequence,value);
+            assert_eq!(encode_pool_v1_pair_forest_checkpoint_v1(&decoded).unwrap(),bytes);
+        }
+        let identity=PoolIdentityV1 {
+            pool:[41;32],asset_mint:[43;32],token_program:[44;32],
+            asset_id:M31::ONE,deployment_domain:[42;32],
+        };
+        let base=encode_pool_identity_v1(&identity);
+        assert_eq!(decode_pool_identity_v1(&base),Ok(identity));
+        for value in BAD {
+            let mut bytes=base;word(&mut bytes,104,value);
+            assert!(decode_pool_identity_v1(&bytes).is_err());
+        }
+    }
+
 }
