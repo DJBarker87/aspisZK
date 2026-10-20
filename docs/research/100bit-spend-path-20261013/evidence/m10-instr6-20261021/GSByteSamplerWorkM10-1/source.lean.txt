@@ -1,0 +1,43 @@
+import SharedFiniteMaterializationM10
+import GSConcreteByteDecoderBank
+
+/-! Eager finite byte sampling with retained outputs. One paired draw has
+two eight-limb outputs and sixteen fixed-word retries per limb. The 65536
+tariff includes both tag tests and successful readback/packing; failures are
+paid too. Every later tape read uses the retained finite array. -/
+set_option autoImplicit false
+namespace AspisR1.GSByteSamplerWorkM10
+open M31RetryOutputFiber M31AcceptFiber
+
+def pair (x : WidePairInput) : Option WidePairOutput × Nat :=
+  (actualWidePairSampler x,65536)
+
+def sample (n : Nat) (xs : ActualWidePairInputTape n) :
+    Option (ActualWidePairOutputTape n) × Nat :=
+  let table := SharedFiniteMaterializationM10.batch (fun i => pair (xs i))
+  (if ∀ i, table.1 i ≠ none then some (fun i => (table.1 i).getD (0,0)) else none,
+    table.2+2*n+1)
+
+attribute [local irreducible] SharedFiniteMaterializationM10.batch
+
+theorem value (n : Nat) (xs : ActualWidePairInputTape n) :
+    (sample n xs).1 = actualWidePairSamplerTape n xs := by
+  simp only [sample, SharedFiniteMaterializationM10.value, pair,
+    actualWidePairSamplerTape]
+
+theorem work (n : Nat) (xs : ActualWidePairInputTape n) :
+    (sample n xs).2 ≤ 65541*n+2 := by
+  have h := SharedFiniteMaterializationM10.work (fun i => pair (xs i)) 65536
+    (fun _ => Nat.le_refl _)
+  change _+2*n+1 ≤ _
+  omega
+
+theorem concrete_work (xs : GSConcreteByteDecoderBank.RawCoins) :
+    (sample 21377328 xs).2 ≤ 1401078824650 := by
+  have h := work 21377328 xs
+  omega
+
+#print axioms value
+#print axioms work
+#print axioms concrete_work
+end AspisR1.GSByteSamplerWorkM10

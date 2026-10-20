@@ -1,0 +1,94 @@
+import SharedFiniteMaterializationM10
+import RRRowConstructionWorkM10
+import GSConstraintCount
+import GSInterpolationRowBasis
+
+/-! Dense Hasse matrix construction. Each cell pays the fixed degree-capped
+binomial/cast/power tariff. Constraints pay six pushes per point with complete
+array copies, so sharing is not required for the allocation envelope. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.GSInterpolationMatrixWorkM10
+open CompPoly CompPoly.GuruswamiSudan
+variable {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K]
+
+def constraints (points : Array (K × K)) : Array (InterpolationConstraint K) × Nat :=
+  (interpolationConstraints points 3,100*(points.size+1)^2)
+
+def hasse (D : Nat) (m : CBivariate.Monomial) (c : InterpolationConstraint K) : K × Nat :=
+  (hasseMonomialEval m c, RRRowConstructionWorkM10.termTariff D)
+
+def matrix (D : Nat) (basis : Array CBivariate.Monomial) (points : Array (K × K)) :
+    DenseMatrix K × Nat :=
+  let cs := constraints points
+  let r := cs.1.size
+  let c := basis.size
+  let cells := SharedFiniteMaterializationM10.batch (fun i : Fin (r*c) =>
+    hasse D (basis.getD (i.val % c) ⟨0,0⟩)
+      (cs.1.getD (i.val/c) ⟨0,0,0,0⟩))
+  (⟨r,c,Array.ofFn cells.1⟩,cs.2+cells.2+3*r*c+1)
+
+attribute [local irreducible] SharedFiniteMaterializationM10.batch
+
+theorem value (D : Nat) (basis : Array CBivariate.Monomial) (points : Array (K × K)) :
+    (matrix D basis points).1 = interpolationConstraintMatrixOnBasis basis
+      (interpolationConstraints points 3) := by
+  unfold matrix
+  simp only [constraints, interpolationConstraintMatrixOnBasis, DenseMatrix.ofFn]
+  congr 1
+  apply Array.ext
+  · simp only [Array.size_ofFn]
+  · intro i h1 h2
+    simp only [Array.getElem_ofFn, SharedFiniteMaterializationM10.value, hasse]
+
+theorem rows (D : Nat) (basis : Array CBivariate.Monomial) (points : Array (K × K)) :
+    (matrix D basis points).1.rows = 6*points.size := by
+  change (interpolationConstraints points 3).size = _
+  exact AspisWide.GSConstraintCount.interpolationConstraints_size_three points
+
+theorem cols (D : Nat) (basis : Array CBivariate.Monomial) (points : Array (K × K)) :
+    (matrix D basis points).1.cols = basis.size := rfl
+
+theorem stored_cells (D : Nat) (basis : Array CBivariate.Monomial) (points : Array (K × K)) :
+    (matrix D basis points).1.data.size = 6*points.size*basis.size := by
+  change (Array.ofFn _).size = _
+  rw [Array.size_ofFn]
+  change (interpolationConstraints points 3).size*basis.size = _
+  rw [AspisWide.GSConstraintCount.interpolationConstraints_size_three]
+
+theorem work (D : Nat) (basis : Array CBivariate.Monomial) (points : Array (K × K)) :
+    (matrix D basis points).2 ≤ 100*(points.size+1)^2+
+      (6*points.size*basis.size)*(RRRowConstructionWorkM10.termTariff D+6)+2 := by
+  have h := SharedFiniteMaterializationM10.work
+    (fun i : Fin ((interpolationConstraints points 3).size*basis.size) =>
+      hasse D (basis.getD (i.val%basis.size) ⟨0,0⟩)
+        ((interpolationConstraints points 3).getD (i.val/basis.size) ⟨0,0,0,0⟩))
+    (RRRowConstructionWorkM10.termTariff D) (fun _ => Nat.le_refl _)
+  rw [AspisWide.GSConstraintCount.interpolationConstraints_size_three] at h
+  change 100*(points.size+1)^2+_+3*(interpolationConstraints points 3).size*basis.size+1 ≤ _
+  simp only [constraints] at *
+  rw [AspisWide.GSConstraintCount.interpolationConstraints_size_three]
+  calc
+    _ ≤ 100*(points.size+1)^2+
+        ((6*points.size*basis.size)*(RRRowConstructionWorkM10.termTariff D+3)+1)+
+          3*(6*points.size)*basis.size+1 := by omega
+    _ = _ := by ring
+
+theorem basis_degree (d D ell : Nat) (hd : 1 ≤ d) (htri : d*ell ≤ D)
+    (m : CBivariate.Monomial)
+    (hm : m ∈ (AspisWide.GSInterpolationRowBasis.basis d D ell).toList) :
+    m.xDegree+m.yDegree ≤ D := by
+  have hw := AspisWide.GSInterpolationRowBasis.row_weighted_bound d D ell htri
+    (show m ∈ AspisWide.GSInterpolationRowBasis.rows d D ell by simpa
+      only [AspisWide.GSInterpolationRowBasis.basis, List.toList_toArray] using hm)
+  have hy := Nat.mul_le_mul_right m.yDegree hd
+  omega
+
+#print axioms value
+#print axioms rows
+#print axioms cols
+#print axioms stored_cells
+#print axioms work
+#print axioms basis_degree
+end AspisR1.GSInterpolationMatrixWorkM10
+end

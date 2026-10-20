@@ -1,0 +1,137 @@
+import GSConcreteInterpolation
+import ExtractorWorkMonad
+import GSDenseKernelExtractionCost
+
+/-! Complete post-kernel normalization: first-nonzero search, vector division
+and the basis-to-bivariate fold. The fold reserves a full square coefficient
+grid per addition. Its invariant is total degree at most the basis cap. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.GSInterpolationNormalizationWorkM10
+open CompPoly CompPoly.GuruswamiSudan ExtractorWorkMonad
+variable {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K]
+
+def vector (v : Array K) : Option (Array K) × Nat :=
+  let found := DenseMatrix.findCounted (fun i => !(v.getD i 0 == 0)) (List.range v.size)
+  (match found.1 with
+    | none => none
+    | some i => if v.getD i 0 == 0 then none else some (v.map (fun c => c/v.getD i 0)),
+    found.2+4*v.size+4)
+
+theorem vector_value (v : Array K) : (vector v).1 = normalizeVector? v := by
+  simp only [vector, DenseMatrix.findCounted_refines, normalizeVector?, firstNonzeroIndex?]
+  rfl
+
+theorem vector_work (v : Array K) : (vector v).2 ≤ 5*v.size+4 := by
+  have h := DenseMatrix.findCounted_cost_le (fun i => !(v.getD i 0 == 0)) (List.range v.size)
+  simp only [List.length_range] at h
+  change _+4*v.size+4 ≤ _
+  omega
+
+theorem vector_size (v w : Array K) (h : (vector v).1 = some w) : w.size = v.size := by
+  rw [vector_value] at h
+  unfold normalizeVector? at h
+  split at h
+  · contradiction
+  · dsimp only at h
+    split at h
+    · contradiction
+    · cases h
+      exact Array.size_map
+
+def addTariff (D : Nat) : Nat := 100*(D+1)^2
+
+def polynomial (D : Nat) (basis : Array CBivariate.Monomial) (cs : Array K) :
+    CBivariate K × Nat :=
+  ExtractorWorkMonad.foldl (fun out col =>
+    let m := basis.getD col ⟨0,0⟩
+    (out+CBivariate.monomialXY m.xDegree m.yDegree (cs.getD col 0),addTariff D))
+    0 (List.range' 0 basis.size)
+
+theorem polynomial_value (D : Nat) (basis : Array CBivariate.Monomial) (cs : Array K) :
+    (polynomial D basis cs).1 = interpolationPolynomialOnBasis basis cs := by
+  rw [polynomial, ExtractorWorkMonad.foldl_value]
+  rfl
+
+theorem polynomial_work (D : Nat) (basis : Array CBivariate.Monomial) (cs : Array K) :
+    (polynomial D basis cs).2 ≤ basis.size*addTariff D := by
+  simpa only [polynomial, List.length_range'] using
+    ExtractorWorkMonad.foldl_bound
+      (fun (out : CBivariate K) col =>
+        let m := basis.getD col ⟨0,0⟩
+        (out+CBivariate.monomialXY m.xDegree m.yDegree (cs.getD col 0),addTariff D))
+      (List.range' 0 basis.size) (addTariff D) (fun _ _ _ => Nat.le_refl _) 0
+
+theorem monomial_degree (x y D : Nat) (c : K) (h : x+y ≤ D) :
+    CBivariate.natWeightedDegree (CBivariate.monomialXY x y c) 1 1 ≤ D := by
+  by_cases hc : c = 0
+  · subst c
+    have hi : CPolynomial.monomial x (0 : K) = 0 := by
+      apply CPolynomial.eq_zero_iff_coeff_zero.mpr
+      intro i
+      change CPolynomial.coeff _ i = 0
+      rw [CPolynomial.coeff_monomial]
+      split <;> rfl
+    have ho : CPolynomial.monomial y (0 : CPolynomial K) = 0 := by
+      apply CPolynomial.eq_zero_iff_coeff_zero.mpr
+      intro i
+      change CPolynomial.coeff _ i = 0
+      rw [CPolynomial.coeff_monomial]
+      split <;> rfl
+    simp only [CBivariate.monomialXY, hi, ho, CBivariate.natWeightedDegree_zero]
+    exact Nat.zero_le _
+  · rw [CBivariate.natWeightedDegree_monomialXY hc]
+    simpa only [Nat.one_mul] using h
+
+/-- This invariant applies to every prefix, so paying a square coefficient
+grid for each addition does not infer intermediate storage from the final
+interpolation witness alone. -/
+theorem fold_degree (basis : Array CBivariate.Monomial) (cs : Array K)
+    (D : Nat) (xs : List Nat)
+    (hxs : ∀ i ∈ xs, (basis.getD i ⟨0,0⟩).xDegree+(basis.getD i ⟨0,0⟩).yDegree ≤ D)
+    (out : CBivariate K) (ho : CBivariate.natWeightedDegree out 1 1 ≤ D) :
+    CBivariate.natWeightedDegree
+      (xs.foldl (fun out col =>
+        let m := basis.getD col ⟨0,0⟩
+        out+CBivariate.monomialXY m.xDegree m.yDegree (cs.getD col 0)) out) 1 1 ≤ D := by
+  induction xs generalizing out with
+  | nil => exact ho
+  | cons i xs ih =>
+    apply ih (fun j hj => hxs j (List.mem_cons_of_mem _ hj))
+    exact (CBivariate.natWeightedDegree_add_le _ _ 1 1).trans
+      (max_le ho (monomial_degree _ _ D _ (hxs i List.mem_cons_self)))
+
+def normalize (D : Nat) (basis : Array CBivariate.Monomial) (cs : Array K) :
+    Option (CBivariate K) × Nat :=
+  let v := vector cs
+  match v.1 with
+  | none => (none,v.2+1)
+  | some w => let p := polynomial D basis w; (some p.1,v.2+p.2+1)
+
+theorem normalize_value (D : Nat) (basis : Array CBivariate.Monomial) (cs : Array K) :
+    (normalize D basis cs).1 = normalizeInterpolationPolynomialOnBasis? basis cs := by
+  simp only [normalize, vector_value, polynomial_value, normalizeInterpolationPolynomialOnBasis?]
+  split <;> rename_i h <;> simp only [h]
+
+theorem normalize_work (D : Nat) (basis : Array CBivariate.Monomial) (cs : Array K) :
+    (normalize D basis cs).2 ≤ 5*cs.size+basis.size*addTariff D+5 := by
+  have hv := vector_work cs
+  simp only [normalize]
+  split
+  · dsimp only; omega
+  · rename_i w hw
+    have hp := polynomial_work D basis w
+    dsimp only
+    omega
+
+#print axioms vector_value
+#print axioms vector_work
+#print axioms vector_size
+#print axioms polynomial_value
+#print axioms polynomial_work
+#print axioms monomial_degree
+#print axioms fold_degree
+#print axioms normalize_value
+#print axioms normalize_work
+end AspisR1.GSInterpolationNormalizationWorkM10
+end

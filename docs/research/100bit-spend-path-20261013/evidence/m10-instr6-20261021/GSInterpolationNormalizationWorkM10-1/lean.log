@@ -1,0 +1,148 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSInterpolationNormalizationWorkM10.lean:21:74: error: unsolved goals
+K : Type
+inst✝³ : Field K
+inst✝² : BEq K
+inst✝¹ : LawfulBEq K
+inst✝ : DecidableEq K
+v : Array K
+⊢ (match List.find? (fun i => !v.getD i 0 == 0) (List.range v.size) with
+    | none => none
+    | some i => if (v.getD i 0 == 0) = true then none else some (Array.map (fun c => c / v.getD i 0) v)) =
+    match List.find? (fun i => !v.getD i 0 == 0) (List.range v.size) with
+    | none => none
+    | some i => if (v.getD i 0 == 0) = true then none else some (Array.map (fun c => c / v.getD i 0) v)
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSInterpolationNormalizationWorkM10.lean:24:0: warning: automatically included section variable(s) unused in theorem `AspisR1.GSInterpolationNormalizationWorkM10.vector_work`:
+  [LawfulBEq K]
+  [DecidableEq K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [LawfulBEq K] [DecidableEq K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSInterpolationNormalizationWorkM10.lean:35:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (have pivot := v.getD i✝ 0;
+    if (pivot == 0) = true then none else some (Array.map (fun c => c / pivot) v)) =
+    some w
+of `h`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case h_2
+K : Type
+inst✝³ : Field K
+inst✝² : BEq K
+inst✝¹ : LawfulBEq K
+inst✝ : DecidableEq K
+v w : Array K
+x✝ : Option ℕ
+i✝ : ℕ
+heq✝ : firstNonzeroIndex? v = some i✝
+h :
+  (have pivot := v.getD i✝ 0;
+    if (pivot == 0) = true then none else some (Array.map (fun c => c / pivot) v)) =
+    some w
+⊢ w.size = v.size
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSInterpolationNormalizationWorkM10.lean:66:2: error: unsolved goals
+case pos
+K : Type
+inst✝³ : Field K
+inst✝² : BEq K
+inst✝¹ : LawfulBEq K
+inst✝ : DecidableEq K
+x y D : ℕ
+h : x + y ≤ D
+⊢ CBivariate.natWeightedDegree (CPolynomial.monomial y (CPolynomial.monomial x 0)) 1 1 ≤ D
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSInterpolationNormalizationWorkM10.lean:67:33: warning: This simp argument is unused:
+  CBivariate.natWeightedDegree_zero
+
+Hint: Omit it from the simp argument list.
+  simp [CBivariate.monomialXY,̵ ̵C̵B̵i̵v̵a̵r̵i̵a̵t̵e̵.̵n̵a̵t̵W̵e̵i̵g̵h̵t̵e̵d̵D̵e̵g̵r̵e̵e̵_̵z̵e̵r̵o̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSInterpolationNormalizationWorkM10.lean:99:12: error: Tactic `rfl` failed: The left-hand side
+  (none, (vector cs).2 + 1).1
+is not definitionally equal to the right-hand side
+  match normalizeVector? cs with
+  | none => none
+  | some normalized => some (interpolationPolynomialOnBasis basis normalized)
+
+case h_1
+K : Type
+inst✝³ : Field K
+inst✝² : BEq K
+inst✝¹ : LawfulBEq K
+inst✝ : DecidableEq K
+D : ℕ
+basis : Array CBivariate.Monomial
+cs : Array K
+x✝ : Option (Array K)
+heq✝ : normalizeVector? cs = none
+⊢ (none, (vector cs).2 + 1).1 =
+    match normalizeVector? cs with
+    | none => none
+    | some normalized => some (interpolationPolynomialOnBasis basis normalized)
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSInterpolationNormalizationWorkM10.lean:99:12: error: Tactic `rfl` failed: The left-hand side
+  (some (interpolationPolynomialOnBasis basis w✝), (vector cs).2 + (polynomial D basis w✝).2 + 1).1
+is not definitionally equal to the right-hand side
+  match normalizeVector? cs with
+  | none => none
+  | some normalized => some (interpolationPolynomialOnBasis basis normalized)
+
+case h_2
+K : Type
+inst✝³ : Field K
+inst✝² : BEq K
+inst✝¹ : LawfulBEq K
+inst✝ : DecidableEq K
+D : ℕ
+basis : Array CBivariate.Monomial
+cs : Array K
+x✝ : Option (Array K)
+w✝ : Array K
+heq✝ : normalizeVector? cs = some w✝
+⊢ (some (interpolationPolynomialOnBasis basis w✝), (vector cs).2 + (polynomial D basis w✝).2 + 1).1 =
+    match normalizeVector? cs with
+    | none => none
+    | some normalized => some (interpolationPolynomialOnBasis basis normalized)
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSInterpolationNormalizationWorkM10.lean:105:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+K : Type
+inst✝³ : Field K
+inst✝² : BEq K
+inst✝¹ : LawfulBEq K
+inst✝ : DecidableEq K
+D : ℕ
+basis : Array CBivariate.Monomial
+cs : Array K
+hv : (vector cs).2 ≤ 5 * cs.size + 4
+⊢ (have v := vector cs;
+      match v.1 with
+      | none => (none, v.2 + 1)
+      | some w =>
+        have p := polynomial D basis w;
+        (some p.1, v.2 + p.2 + 1)).2 ≤
+    5 * cs.size + basis.size * addTariff D + 5
+'AspisR1.GSInterpolationNormalizationWorkM10.vector_value' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.GSInterpolationNormalizationWorkM10.vector_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GSInterpolationNormalizationWorkM10.vector_size' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.GSInterpolationNormalizationWorkM10.polynomial_value' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.GSInterpolationNormalizationWorkM10.polynomial_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GSInterpolationNormalizationWorkM10.monomial_degree' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.GSInterpolationNormalizationWorkM10.fold_degree' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.GSInterpolationNormalizationWorkM10.normalize_value' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.GSInterpolationNormalizationWorkM10.normalize_work' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
