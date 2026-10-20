@@ -1,0 +1,13 @@
+--- R19.final_soundness
++++ R3.final_soundness_from_equations
+@@ -19,8 +19,8 @@
+       ∀ q : Fin 22 → Fin 262144,
+         LiteralQueryRead.decode (source H).queryBytes = some q →
+         ∀ j, MatchingSupport.match0 (source H).data (q j))
+-    (h_R3_semantic : ∀ H, FS2.accepts (eval H (original D d P)) →
+-      HchecksReaderComposition.SemanticEndpoint (source H).decoded
++    (h_R3_equations : ∀ H, FS2.accepts (eval H (original D d P)) →
++      R3SemanticRemainingJoins.EquationEndpoint (source H).decoded
+         (compiledRows D d P H) (source H).data)
+     (h_Rwire : BoundaryEvidence s → BinaryCompletion D d P (Q + 1161))
+     (h_R9_transport : BoundaryEvidence s → DeployedTransport D d P deployedFailure)

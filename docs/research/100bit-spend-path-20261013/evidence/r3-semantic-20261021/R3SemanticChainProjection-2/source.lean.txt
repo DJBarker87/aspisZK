@@ -1,0 +1,90 @@
+import R3SemanticEquationCore
+import RawGenericPolynomialSumcheckChain
+
+/-! Symbolic R2-to-R3 interface. No source execution is postulated here:
+callers must identify the R2 chain's ordered entries and both endpoints. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.R3SemanticChainProjection
+open R3SemanticEquationCore
+open AspisR1PublicPreparation.RawGenericPolynomialSumcheckChain
+variable {K : Type} [CommSemiring K]
+
+/-- Head boundary of a nonempty chain. -/
+theorem first_boundary {start target : K} {p : Polynomial K} {q : K}
+    {rest : List (Polynomial K × K)}
+    (h : Chain start target ((p,q) :: rest)) :
+    p.eval 0 + p.eval 1 = start := by
+  cases h with
+  | cons _ hb _ _ => exact hb
+
+/-- Every adjacent pair obeys the boundary/evaluation equation. -/
+theorem adjacent {start target : K} {xs : List (Polynomial K × K)}
+    (h : Chain start target xs) (i : Nat) (a b : Polynomial K × K)
+    (ha : xs[i]? = some a) (hb : xs[i+1]? = some b) :
+    b.1.eval 0 + b.1.eval 1 = a.1.eval a.2 := by
+  induction h generalizing i with
+  | nil x => simp only [List.getElem?_nil] at ha; cases ha
+  | @cons p q rest start mid target hd hboundary hn ht ih =>
+    cases i with
+    | zero =>
+      simp only [List.getElem?_cons_zero, Option.some.injEq] at ha
+      subst a
+      simp only [Nat.zero_add, List.getElem?_cons_succ] at hb
+      cases rest with
+      | nil => simp only [List.getElem?_nil] at hb; cases hb
+      | cons c cs =>
+        simp only [List.getElem?_cons_zero, Option.some.injEq] at hb
+        subst c
+        exact (first_boundary ht).trans hn
+    | succ i =>
+      simp only [List.getElem?_cons_succ] at ha hb
+      exact ih i ha hb
+
+/-- A final entry evaluates to the target; only list structure is used. -/
+theorem last_value {start target : K} {xs : List (Polynomial K × K)}
+    (h : Chain start target xs) (i : Nat) (a : Polynomial K × K)
+    (ha : xs[i]? = some a) (hend : xs[i+1]? = none) :
+    a.1.eval a.2 = target := by
+  induction h generalizing i with
+  | nil x => simp only [List.getElem?_nil] at ha; cases ha
+  | @cons p q rest start mid target hd hb hn ht ih =>
+    cases i with
+    | zero =>
+      simp only [List.getElem?_cons_zero, Option.some.injEq] at ha
+      subst a
+      cases rest with
+      | nil =>
+        cases ht
+        exact hn.symm
+      | cons c cs => simp at hend
+    | succ i =>
+      simp only [List.getElem?_cons_succ] at ha hend
+      exact ih i ha hend
+
+/-- A ten-round R2 chain on the exact parser polynomials/challenges supplies
+all remaining R3 equations. Endpoint and ordered-entry identification remain
+source joins, rather than being hidden in this algebraic theorem. -/
+theorem equations_of_chain (claim terminal : K) (alpha : Fin 10 → K)
+    (polys : Fin 10 → Polynomial K)
+    (h : Chain claim terminal (List.ofFn (fun j => (polys j, alpha j)))) :
+    Equations claim terminal alpha polys := by
+  constructor
+  · rw [List.ofFn_succ] at h
+    exact first_boundary h
+  constructor
+  · intro j
+    exact adjacent h j.val (polys j.castSucc, alpha j.castSucc)
+      (polys j.succ, alpha j.succ)
+      (by simp only [List.getElem?_ofFn]; rw [dif_pos (show j.val < 10 by omega)])
+      (by simp only [List.getElem?_ofFn]; rw [dif_pos (show j.val + 1 < 10 by omega)])
+  · exact last_value h 9 (polys 9, alpha 9)
+      (by simp only [List.getElem?_ofFn]; rfl)
+      (by simp only [List.getElem?_ofFn]; rfl)
+
+#print axioms first_boundary
+#print axioms adjacent
+#print axioms last_value
+#print axioms equations_of_chain
+end AspisR1.R3SemanticChainProjection
+end

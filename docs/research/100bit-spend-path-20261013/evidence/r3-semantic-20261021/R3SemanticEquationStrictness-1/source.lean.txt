@@ -1,0 +1,33 @@
+import R3SemanticEquationCore
+
+/-! Dropping the degree guard strictly weakens the arithmetic predicate on
+arbitrary polynomials. Parser image membership restores that guard. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.R3SemanticEquationStrictness
+open R3SemanticEquationCore Polynomial
+
+/-- Boundary/terminal comparisons alone permit degree 28. This is a symbolic
+counterexample, not a claim about any literal parser output or frozen source. -/
+theorem equations_do_not_imply_degrees :
+    ∃ polys : Fin 10 → Polynomial ℚ,
+      Equations 1 0 (fun _ => 0) polys ∧
+      ¬ (∀ j : Fin 10, (polys j).natDegree ≤ 27) := by
+  classical
+  let polys : Fin 10 → Polynomial ℚ := fun j => if j = 0 then X ^ 28 else 0
+  refine ⟨polys, ?_, ?_⟩
+  · constructor
+    · simp [polys]
+    constructor
+    · intro j
+      have hsucc : j.succ ≠ 0 := Fin.succ_ne_zero j
+      simp only [polys, if_neg hsucc, eval_zero, zero_add]
+      split_ifs <;> simp
+    · simp [polys]
+  · intro h
+    have hd := h 0
+    simp [polys] at hd
+
+#print axioms equations_do_not_imply_degrees
+end AspisR1.R3SemanticEquationStrictness
+end
