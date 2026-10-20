@@ -1,0 +1,59 @@
+import R1Z.PrivacyR1FinalProtocolQuotient
+import R1Z.ProverCommitSourceCallerLaw
+import R1Z.ProverCommitSourceFailure
+import R1Z.ProverCommitQuotientObservable
+
+/-! One final coherent audit of the new quotient cone and unchanged release endpoint. -/
+
+#print axioms R1Z.ProverCommitTapeCompletion.mp_completeOrSpare
+#print axioms R1Z.ProverCommitTapeCompletion.quotient_success
+#print axioms R1Z.ProverCommitTapeCompletion.projectedFibreEquiv
+#print axioms R1Z.ProverCommitTapeCompletion.full_fibres_imply_quotient
+#print axioms R1Z.ProverCommitTapeCompletion.quotient_law_strict
+#print axioms R1Z.ProverCommitQuotientCoupling.mp_gMQ
+#print axioms R1Z.ProverCommitQuotientCoupling.meanM_Q
+#print axioms R1Z.ProverCommitQuotientCoupling.completed_view
+#print axioms R1Z.ProverCommitQuotientCoupling.retryTest_tapes
+#print axioms R1Z.ProverCommitQuotientCoupling.middle_completion
+#print axioms R1Z.ProverCommitQuotientModel.cpQ
+#print axioms R1Z.ProverCommitQuotientModel.realModel_quotient
+#print axioms R1Z.ProverCommitQuotientPrivacy.privacy_R1_games_quotient
+#print axioms R1Z.PrivacyR1FinalProtocolQuotient.privacy_R1_protocol_quotient_of_lazy_budget
+#print axioms R1Z.PrivacyR1FinalProtocolQuotient.privacy_R1_protocol_quotient
+#print axioms R1Z.ProverCommitQuotientObservable.leaf_completion
+#print axioms R1Z.ProverCommitQuotientObservable.constructed_commitment_completion
+#print axioms R1Z.ProverCommitQuotientObservable.commitment_completion
+#print axioms R1Z.ProverCommitQuotientObservable.protocol_observable_mass
+#print axioms R1Z.ProverCommitWordCarrier.baseEquiv
+#print axioms R1Z.ProverCommitWordCarrier.accepted_failure
+#print axioms R1Z.ProverCommitWordCarrier.accepted_fibre
+#print axioms R1Z.ProverCommitWordCarrier.accepted_equal_fibres
+#print axioms R1Z.ProverCommitSourceCarrier.from_to
+#print axioms R1Z.ProverCommitSourceCarrier.to_from
+#print axioms R1Z.ProverCommitSourceCarrier.sourceCarrierEquiv
+#print axioms R1Z.ProverCommitSourceCarrier.source_fibre_card
+#print axioms R1Z.ProverCommitSequentialFibres.step_fibre_card
+#print axioms R1Z.ProverCommitSequentialFibres.wordTailEquiv
+#print axioms R1Z.ProverCommitSequentialFibres.consumingFibreEquiv
+#print axioms R1Z.ProverCommitSequentialFibres.sequential_equal_fibres
+#print axioms R1Z.ProverCommitSequentialFibres.valuesEquiv
+#print axioms R1Z.ProverCommitSequentialFibres.array_equal_fibres
+#print axioms R1Z.ProverCommitSequentialFibres.pair_equal_fibres
+#print axioms R1Z.ProverCommitSourceDecoder.streamCarrierEquiv
+#print axioms R1Z.ProverCommitSourceDecoder.arrayCarrierEquiv
+#print axioms R1Z.ProverCommitSourceDecoder.inputEquiv
+#print axioms R1Z.ProverCommitSourceDecoder.map_equiv_some
+#print axioms R1Z.ProverCommitSourceDecoder.fibre_transport
+#print axioms R1Z.ProverCommitSourceDecoder.rejected_fibre
+#print axioms R1Z.ProverCommitSourceDecoder.quotient_equal_fibres
+#print axioms R1Z.ProverCommitSourceDecoder.noiseIndex_injective
+#print axioms R1Z.ProverCommitSourceDecoder.source_counts
+#print axioms R1Z.ProverCommitSourceDecoder.source_budgets
+#print axioms R1Z.ProverCommitSourceDecoder.quotient_failure
+#print axioms R1Z.ProverCommitSequentialFibres.constant_success
+#print axioms R1Z.ProverCommitSourceDecoder.decoder_has_success
+#print axioms R1Z.ProverCommitSourceDecoder.quotient_premise_of_caller
+#print axioms R1Z.ProverCommitSourceDecoder.representative_quotient
+#print axioms R1Z.ProverCommitSourceDecoder.source_representative_not_full_fibres
+#print axioms R1Z.ProverCommitTapeCompletion.spareEquiv
+#print axioms R1Z.PrivacyR1FinalProtocolHistoryReal.privacy_R1_protocol_history_real
