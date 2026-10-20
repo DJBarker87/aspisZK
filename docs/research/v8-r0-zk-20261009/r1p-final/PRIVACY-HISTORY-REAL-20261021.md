@@ -43,3 +43,40 @@ word's first-read sampling law from benign verifier/observer repeats. It must
 prove that each *scan* reuse implies one chosen first-read collision/target
 hit, then transport the fresh lazy words and charge that single fixed event
 once. Post-proof observer repeats alone cannot belong to that excluded event.
+
+## Stage 2: exact real carrier and independent numerical check
+
+`QueryScanWholeRunRepeatReal.finite_real_repeat_mass` specializes the
+counterexample to the retained `fsR1P.RealRand`, a uniform finite table times
+eight attempt-secret tuples. It is an unconditional mass-one result for any
+honest prover, instance, public statement and acceptance predicates. It uses
+the exact `RomFiniteBin.wire` budget, symbolically proving `2 ≤ 2^64`, and
+proves `[]` belongs to every finite-ROM domain. It therefore applies to the
+constructed phase protocol as a specialization, with no change to its parser,
+source joins or builder assumptions. Adding output collisions, self-loops or
+prior-read events by union cannot decrease this mass-one exclusion.
+
+Env J 9825: exit 0, wall 1.87 s, peak RSS 3,507,464 KiB, swaps 0; all four
+audits use standard axioms. An unused-section-variable linter warning does
+not affect the statement or proof.
+
+`QueryScanHistoryRealNumerics` proves the **independent numerical** portion:
+
+- `kappa q = 6 * (q : ℚ)^2 / 2^256`; coefficient `c = 6` matches the
+  five-reader-plus-output coefficient of `BinCombinedMerkleCollision.kappa`.
+- The candidate *numerical* budget envelope is `q ≤ 2^65`. This packet does
+  **not** assert a theorem bounding all actual run reads by that envelope.
+- Symbolically, `kappa (2^65) = 6 / 2^126` and `kappa q ≤ 1 / 2^109` under
+  that envelope. The proof is monotonicity plus exponent splitting.
+- For any κ ≤ 2^-109, the proposed total is at most `4 / 2^109 = 2^-107`,
+  which is strictly below `2^-100`.
+
+This validates numerical slack; it does not supply the false event-mass law.
+No claimed endpoint follows from this conditional numerical fact.
+
+Final env J numerical attempt 9828: exit 0, wall 2.04 s, peak RSS
+3,521,588 KiB, swaps 0; all six audits use standard axioms. 9826/9827 retain
+elaboration failures. The final proof uses explicit addition monotonicity;
+it neither normalizes the 454-bit term nor enumerates a carrier. Earlier
+9826 emitted a threshold warning during arithmetic preprocessing; that tactic
+was replaced rather than increasing any threshold or resource limit.
