@@ -1,0 +1,62 @@
+diff --git a/crates/aspis-r1-cost-probe/src/verifier.rs b/crates/aspis-r1-cost-probe/src/verifier.rs
+index d8e2588d3..2c41f2e25 100644
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -323,21 +323,45 @@ pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Res
+ 
+ fn put(out:&mut Vec<u8>,x:E) {out.extend_from_slice(&x.to_le_bytes());}
+ fn put_k(out:&mut Vec<u8>,x:K) {let mut b=[0;16];x.write_le_bytes(&mut b);out.extend_from_slice(&b);}
++// Keep each serialization loop in its own borrow context for pinned Aeneas.
++#[inline(always)]
++fn checkpoint_roots(mut out:Vec<u8>,roots:[[u8;32];2])->Vec<u8> {
++    for root in roots {out.extend_from_slice(&root);}out
++}
++#[inline(always)]
++fn checkpoint_queries(mut out:Vec<u8>,queries:[u32;22])->Vec<u8> {
++    for q in queries {out.extend_from_slice(&q.to_le_bytes());}out
++}
++#[inline(always)]
++fn checkpoint_scalars<const N:usize>(mut out:Vec<u8>,values:[K;N])->Vec<u8> {
++    for x in values {put_k(&mut out,x);}out
++}
++#[inline(always)]
++fn checkpoint_points(mut out:Vec<u8>,points:[SecureCirclePoint;2])->Vec<u8> {
++    for z in points {put_k(&mut out,z.x);put_k(&mut out,z.y);}out
++}
++#[inline(always)]
++fn checkpoint_weights(mut out:Vec<u8>,weights:&[K])->Vec<u8> {
++    let mut i=0;
++    while i<weights.len() {put_k(&mut out,weights[i]);i+=1;}out
++}
+ pub fn checkpoint<H:Digest32>(p:&Prepared,a:&Accumulator,proof:&[u8],public:&[u8],hash:H)->Vec<u8> {
+-    let mut out=Vec::with_capacity(checkpoint_size(p.variant));
+-    out.extend_from_slice(b"R1P2CKP2");out.extend_from_slice(&[p.variant.tag(),a.next as u8,1,0,0,0,0,0]);
+-    out.extend_from_slice(&hash.digest(&[proof]));out.extend_from_slice(&hash.digest(&[public]));out.extend_from_slice(&p.state);
+-    for root in &p.roots {out.extend_from_slice(root);}
+-    for x in [p.gamma,p.kappa,p.alpha[0],p.alpha[1]] {put(&mut out,x);}
+-    put_k(&mut out,p.rho);
+-    for q in p.queries {out.extend_from_slice(&q.to_le_bytes());}
+-    for x in p.semantic_alpha {let mut b=[0;16];x.write_le_bytes(&mut b);out.extend_from_slice(&b);}
+-    for z in p.z {for x in [z.x,z.y] {let mut b=[0;16];x.write_le_bytes(&mut b);out.extend_from_slice(&b);}}
+-    for x in [p.claim,a.rhs] {put(&mut out,x);}
++    let Prepared {variant,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state}=*p;
++    let mut out=Vec::with_capacity(checkpoint_size(variant));
++    out.extend_from_slice(b"R1P2CKP2");out.extend_from_slice(&[variant.tag(),a.next as u8,1,0,0,0,0,0]);
++    out.extend_from_slice(&hash.digest(&[proof]));out.extend_from_slice(&hash.digest(&[public]));out.extend_from_slice(&state);
++    out=checkpoint_roots(out,roots);
++    let [alpha0,alpha1]=alpha;
++    put(&mut out,gamma);put(&mut out,kappa);put(&mut out,alpha0);put(&mut out,alpha1);
++    put_k(&mut out,rho);
++    out=checkpoint_queries(out,queries);
++    out=checkpoint_scalars(out,semantic_alpha);
++    out=checkpoint_points(out,z);
++    put(&mut out,claim);put(&mut out,a.rhs);
+     put_k(&mut out,a.power);
+-    for &x in &a.weights {put_k(&mut out,x);}
++    out=checkpoint_weights(out,&a.weights);
+     let sum=hash.digest(&[b"UNPROVED:R1:checkpoint",&out]);out.extend_from_slice(&sum);
+-    assert_eq!(out.len(),checkpoint_size(p.variant));out
++    assert_eq!(out.len(),checkpoint_size(variant));out
+ }
+ struct Reader<'a>{bytes:&'a[u8],at:usize}
+ impl<'a> Reader<'a>{

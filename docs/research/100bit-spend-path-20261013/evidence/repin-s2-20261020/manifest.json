@@ -1,0 +1,593 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "worktree_revision": "eb9b122b6856fd91c7681cd03bb8a8ce767ba3fb",
+  "status": "PARTIAL_PROOF_ADAPTER_TRANSLATION_BLOCKED",
+  "s2_status": "OPEN",
+  "working_tree_differences": [
+    {
+      "path": "programs/r1-cost-probe/src/r1_checkpoint_tests.rs",
+      "working_tree_sha256": "d2fb734dded09d39e94765dab4c745a495092ddd596896aaf981aa9d9773eab9",
+      "extracted_frozen_sha256": "f6c63e74b2ef3280141948da6596111d0ffcd67bc65c688143d072a8ee6a1758",
+      "classification": "cfg(test)-only module, excluded from --lib non-test extraction"
+    }
+  ],
+  "r22_status": "OPEN_FOR_ADAPTER",
+  "llbc": [
+    {
+      "cone": "first",
+      "sha256": "498403ba30d4f5f739ce0ce28e9379056b329155e2df2ae6c5c6a4a135b25288",
+      "bytes": 361558,
+      "has_errors": false,
+      "host_path": "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/extraction-first/S2.llbc"
+    },
+    {
+      "cone": "adapter",
+      "sha256": "18171c40e888cf8452df2be608039022b986fb022116594876929b1d3d079a5c",
+      "bytes": 2851857,
+      "has_errors": false,
+      "host_path": "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/extraction-adapter/S2.llbc"
+    }
+  ],
+  "extraction_receipts": [
+    {
+      "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+      "command": [
+        "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static",
+        "-log-debug",
+        "Translate,InterpLoops",
+        "-sequential",
+        "-no-progress-bar",
+        "-abort-on-error",
+        "-backend",
+        "lean",
+        "-namespace",
+        "AspisR1S2Adapter",
+        "-dest",
+        "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/extraction-adapter/generated",
+        "-subdir",
+        "AspisR1S2Adapter",
+        "-split-files",
+        "-emit-json",
+        "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/extraction-adapter/S2.llbc"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/src",
+      "expected_time": "Compilation and pinned aeneas lowering; no arithmetic gate",
+      "exit_status": 2,
+      "wall_seconds": 0.598,
+      "peak_rss_kib": 96448,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rb88e6d632cc441a3bb8f3f157a52a52a.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 80961536,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/charon-target",
+        "CARGO_BUILD_JOBS": "1",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation",
+      "receipt": "receipts/extract-adapter-aeneas/receipt.json"
+    },
+    {
+      "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+        "cargo",
+        "--preset",
+        "aeneas",
+        "--mir",
+        "built",
+        "--sysroot",
+        "default",
+        "--include",
+        "core::option::Option",
+        "--include",
+        "core::result::Result",
+        "--include",
+        "core::result::_::map_err",
+        "--opaque",
+        "aspis_core",
+        "--opaque",
+        "aspis_statement",
+        "--opaque",
+        "aspis_r1_cost_probe",
+        "--opaque",
+        "solana_program",
+        "--opaque",
+        "crate::r1_pool_adapter",
+        "--include",
+        "aspis_r1_cost_probe::verifier::Phase",
+        "--include",
+        "aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public",
+        "--start-from",
+        "crate::observer",
+        "--include",
+        "crate::observer",
+        "--start-from",
+        "crate::r1_pool_adapter::stage1",
+        "--include",
+        "crate::r1_pool_adapter::stage1",
+        "--start-from",
+        "crate::r1_pool_adapter::stage2",
+        "--include",
+        "crate::r1_pool_adapter::stage2",
+        "--start-from",
+        "crate::process_r1_cost_probe_instruction",
+        "--include",
+        "crate::process_r1_cost_probe_instruction",
+        "--dest-file",
+        "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/extraction-adapter/S2.llbc",
+        "--",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/src/programs/r1-cost-probe/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--release",
+        "--lib",
+        "--features",
+        "pool-adapter,private-leaf-salts",
+        "--jobs",
+        "1"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/src",
+      "expected_time": "Compilation and pinned charon lowering; no arithmetic gate",
+      "exit_status": 0,
+      "wall_seconds": 116.517,
+      "peak_rss_kib": 549848,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rd22fe2d6b9954fffa90e688e444444ef.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 575012864,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/charon-target",
+        "CARGO_BUILD_JOBS": "1",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation",
+      "receipt": "receipts/extract-adapter-charon/receipt.json"
+    },
+    {
+      "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+      "command": [
+        "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static",
+        "-log-debug",
+        "Translate,InterpLoops",
+        "-sequential",
+        "-no-progress-bar",
+        "-abort-on-error",
+        "-backend",
+        "lean",
+        "-namespace",
+        "AspisR1S2First",
+        "-dest",
+        "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/extraction-first/generated",
+        "-subdir",
+        "AspisR1S2First",
+        "-split-files",
+        "-emit-json",
+        "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/extraction-first/S2.llbc"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/src",
+      "expected_time": "Compilation and pinned aeneas lowering; no arithmetic gate",
+      "exit_status": 0,
+      "wall_seconds": 0.431,
+      "peak_rss_kib": 66528,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rc77d9469cd264b3888e5b0d11a8f63c3.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 50458624,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/charon-target",
+        "CARGO_BUILD_JOBS": "1",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation",
+      "receipt": "receipts/extract-first-aeneas/receipt.json"
+    },
+    {
+      "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+        "cargo",
+        "--preset",
+        "aeneas",
+        "--mir",
+        "built",
+        "--sysroot",
+        "default",
+        "--include",
+        "core::option::Option",
+        "--include",
+        "core::result::Result",
+        "--include",
+        "core::result::_::map_err",
+        "--opaque",
+        "aspis_core",
+        "--opaque",
+        "aspis_statement",
+        "--opaque",
+        "aspis_r1_cost_probe",
+        "--opaque",
+        "solana_program",
+        "--opaque",
+        "crate::r1_pool_adapter",
+        "--include",
+        "aspis_r1_cost_probe::verifier::Phase",
+        "--include",
+        "aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public",
+        "--start-from",
+        "crate::observer",
+        "--include",
+        "crate::observer",
+        "--start-from",
+        "crate::first",
+        "--include",
+        "crate::first",
+        "--start-from",
+        "crate::first_decoded",
+        "--include",
+        "crate::first_decoded",
+        "--dest-file",
+        "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/extraction-first/S2.llbc",
+        "--",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/src/programs/r1-cost-probe/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--release",
+        "--lib",
+        "--features",
+        "pool-adapter,private-leaf-salts",
+        "--jobs",
+        "1"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/src",
+      "expected_time": "Compilation and pinned charon lowering; no arithmetic gate",
+      "exit_status": 0,
+      "wall_seconds": 173.709,
+      "peak_rss_kib": 549928,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rbb1b74b796034df88a78af56c656d63f.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 1073164288,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-repin-s2-20261020/charon-target",
+        "CARGO_BUILD_JOBS": "1",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation",
+      "receipt": "receipts/extract-first-charon/receipt.json"
+    }
+  ],
+  "accepted_proof": {
+    "schema": "focused-extractor-proof-packet-v1",
+    "module": "S2ObserverOffRepin",
+    "source": "docs/research/100bit-spend-path-20261013/lean/S2ObserverOffRepin.lean",
+    "source_revision": "eb9b122b6856fd91c7681cd03bb8a8ce767ba3fb",
+    "source_sha256": "7b9360392f25f354b131f084488906c0d6a3d7f56cba9473c7443ea27b22af40",
+    "command": [
+      "/usr/bin/time",
+      "-l",
+      "/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+      "-j1",
+      "-M4400",
+      "-DElab.async=false",
+      "-o",
+      "/tmp/codex-cx-repin-s2-20261020-objects/S2ObserverOffRepin.olean",
+      "/Users/dominic/ZK/.worktrees/cx-repin-s2/docs/research/100bit-spend-path-20261013/lean/S2ObserverOffRepin.lean"
+    ],
+    "lean_path": "/tmp/codex-cx-repin-s2-20261020-objects:/tmp/root-finish-prefix-deps-20261018:/tmp/g3-missing-mac-incoming-20261018/objects:/tmp/r1-overflow-free-20261019-objects:/tmp/unbounded-hitfrom-canonical-overlay-20261019:/tmp/literal-hitfrom-publication-20261019/evidence/accepted-adaptive-owner-native-query-20261019/objects:/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean:/tmp/aspis-comppoly-432cache-objects-20261018/lib/lean:/tmp/literal-bank-composition-green-20261019/objects:/tmp/gs-byte-extractor-compiled-objects-20261019/objects:/tmp/eventcover-coalesced-R0P-20261019/objects:/tmp/gs-byte-extractor-deps-20261019/objects:/tmp/literal-closure-coalesced-local/objects:/tmp/root-checked-components-native-evidence-20261019/root-gs-byte-joint-extractor-completeness-v1-20261019/objects:/tmp/gs-secondfold-project-closure-20261019-v2/objects:/tmp/gs-bytebank-project-closure-local/objects:/tmp/root-merkle-cost-20261018/objects:/Users/dominic/ZK/AspisFormal/.lake/packages/mathlib/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/batteries/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/aesop/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/Qq/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/plausible/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/importGraph/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/tmp/lean432-nuc-aeneas-cache:/tmp/fieldsum-static-dependency-objects:/tmp/lean432-project-closure:/tmp/lean432-gather-array-objects:/Users/dominic/ZK/AspisFormal/.lake/build/lib/lean:/tmp/literal-acceptance-terminal-object-reuse/objects:/tmp/root-checked-components-native-evidence-20261019/root-query-rho-transcript-support-native-v1-20261019/objects:/tmp/root-checked-components-native-evidence-20261019/root-literal-pairing-checks-native-v1-20261019/objects",
+    "imports": [
+      {
+        "module": "ExtractedFirstCallerReachability",
+        "object": "/tmp/root-finish-prefix-deps-20261018/ExtractedFirstCallerReachability.olean",
+        "sha256": "ef845d38e6497ca052901fa08ae14fe355d3f4053432bf396ababca2c912fa28"
+      }
+    ],
+    "compiler_sha256": "1b370cfcbf44e80d1b004ab1b1ab9a4c73951f9f7c242140bcff9bc577576554",
+    "admission_rule": "mkdir lock plus no other -M4400 Lean process",
+    "started_utc": "2026-10-20T15:55:47.305591+00:00",
+    "exit": 0,
+    "wall_s": 7.821915041655302,
+    "peak_rss_bytes": 3248046080,
+    "process_swaps": 0,
+    "axioms": [
+      "'AspisR1S2ObserverOff.observer' does not depend on any axioms",
+      "'AspisR1S2ObserverOff.first_decoded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'AspisR1S2ObserverOff.first' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'AspisR1S2ObserverOff.first_eq_historical' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'AspisR1S2ObserverOff.first_success' depends on axioms: [propext, Classical.choice, Quot.sound]"
+    ],
+    "deps_fingerprint": "2182748a54b131ec0262d495fcea672daffb4576924efb5c0f253af3ba276e64"
+  },
+  "proof_scope": "Token-checked explicit-boundary interpretation of frozen observer, first_decoded and first; not concrete SDK/downstream refinement",
+  "blocked": {
+    "owner": "r1_pool_adapter::stage1",
+    "location": "programs/r1-cost-probe/src/r1_pool_adapter.rs:950:24-36",
+    "reason": "Generic shared slice index instantiated with AccountInfo containing mutable borrows",
+    "parked_candidate_fixes_blocker": false
+  },
+  "attempts": [
+    {
+      "attempt": "first-proof-v1",
+      "status": "preflight_cancelled_no_Lean"
+    },
+    {
+      "attempt": "first-proof-v2",
+      "status": "missing_dependency"
+    },
+    {
+      "attempt": "first-proof-v3",
+      "status": "parse_and_namespace_errors"
+    },
+    {
+      "attempt": "first-proof-v4",
+      "status": "unclosed_reflexive_goal"
+    },
+    {
+      "attempt": "first-proof-v5",
+      "status": "accepted"
+    }
+  ],
+  "files": [
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/aeneas-adapter-input.json",
+      "sha256": "a758e4e3f7f44a0c96e02b7ff33ab1f75bd80cf3945564b6b45fc828ae962a72",
+      "bytes": 5713
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/aeneas-first-input.json",
+      "sha256": "591c68256c5320fd24e956a6c988b781ddc0399fb0eea158dc272b8882e91ab5",
+      "bytes": 5629
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/binding-audit.json",
+      "sha256": "84fc98eafe9825be1fd9754de61be02e9fbdaf8012d0d2e108ebe94975100e60",
+      "bytes": 2267
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/charon-adapter-input.json",
+      "sha256": "a105bf07aa586f9bacfa1957d1f6054bde57c777fe862a38e8c3b9c44ee46f04",
+      "bytes": 6634
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/charon-first-input.json",
+      "sha256": "78090ab9b721dd1e51259942cea34c99d1dabc5b5d8260c1975f90a67b123b61",
+      "bytes": 6367
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/first-proof-v1/preflight.json",
+      "sha256": "b73fb16426912b8dee955f682d1653c42e87842ff6ec37d17b11ed584535cbb3",
+      "bytes": 159
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/first-proof-v2/command.json",
+      "sha256": "dd2a9842b3207c292a9c062574696da84d2c086086457770b5745b8ace5437d7",
+      "bytes": 3363
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/first-proof-v2/out.log",
+      "sha256": "4b11e4cace619c6c550ca392d2713ed43d7a2e52f11ed7a28e2fa992f3d74318",
+      "bytes": 2332
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/first-proof-v2/time.log",
+      "sha256": "042abfc9644e4b29e92506b54ec55ec878b91490538dc4b8eb03987029e84795",
+      "bytes": 777
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/first-proof-v3/command.json",
+      "sha256": "7c0504f4767f1f96d99af6b5af565de54725a3eadeb8412b516ce1c99041e0f7",
+      "bytes": 6990
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/first-proof-v3/out.log",
+      "sha256": "5e659bc2ec69822b16a86219eb649899d57f51c1417345efd0cc64c4a01719a0",
+      "bytes": 3667
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/first-proof-v3/time.log",
+      "sha256": "e008774a5ae1fb504ae97c79cb98051990587713035cd8d3a9d0959c11872b74",
+      "bytes": 777
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/first-proof-v4/command.json",
+      "sha256": "d093a35969e7736c02f10c4a5a23d7ad0f6f758e0fcd90e625b098066a7c5eed",
+      "bytes": 3910
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/first-proof-v4/out.log",
+      "sha256": "1b7f4f166d296fc6707ad1c57b6cb3c362780fda05552c2700f20b7dc79f8094",
+      "bytes": 2305
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/first-proof-v4/time.log",
+      "sha256": "bb0375b22b629b81c438ec228dcb23f0ad85f1acf2e75faad854e26b55609fe4",
+      "bytes": 777
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/first-proof-v5/command.json",
+      "sha256": "518de4cecda938a095a31d4769de4312390cbc1774d063d88d2bac10183b50b4",
+      "bytes": 3891
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/first-proof-v5/out.log",
+      "sha256": "844de34d66892f9c998ce6a4cc8a22c9ce6af8a9314ec8b43241113d57c996ae",
+      "bytes": 713
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/first-proof-v5/time.log",
+      "sha256": "b24bae6651a68c80ab7d474fb63537d86a55650370ab7cbedb2609cae841bac2",
+      "bytes": 777
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/freeze-prep-relevant.patch",
+      "sha256": "a5ed39876d5c0e09fb8e6b0b971422329879111720161e0228d986a1cb4e580a",
+      "bytes": 3416
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/generated-first/AspisR1S2First/Funs.lean",
+      "sha256": "178bae59f54fd02e611b4508dd2961eda2167cb2ded346312155feb2e884e4e3",
+      "bytes": 8099
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/generated-first/AspisR1S2First/FunsExternal_Template.lean",
+      "sha256": "db99ea792be6655b302288313541bb5ea28f22562a5c1d9b81d4389bfb0e8a83",
+      "bytes": 5665
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/generated-first/AspisR1S2First/Types.lean",
+      "sha256": "d70811d6078c18a8c0007a73cbb837e0515ea75687977d66999761f6971f00df",
+      "bytes": 5134
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/generated-first/AspisR1S2First/TypesExternal_Template.lean",
+      "sha256": "b9bfa4eaa21b896f5184ca8ba431a79423e583c9796d9e73d11b069e1ad4dff7",
+      "bytes": 3568
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/generated-first/translation.json",
+      "sha256": "66fdfb1fa96bb9d7d8ef0f2942622a39c5829843ff11dc1a5dd1496440bb3f31",
+      "bytes": 18654
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/harness/capped-run.sh",
+      "sha256": "5a13bff119916903a3aa7128acf5dcd0b44789890127e464220918d8438451a6",
+      "bytes": 733
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/harness/capped.py",
+      "sha256": "fab44b93235e919618573b28552724b96f01ef375bcdf23a234137a928a19598",
+      "bytes": 1894
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/harness/check-binding.py",
+      "sha256": "2168f2445a1fc25ab3444f2b23526c37c2ea8db291afb2dd805a3d56d0e733bf",
+      "bytes": 2490
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/harness/extract.py",
+      "sha256": "6fc548f56399ec092d57cb2e551c93bd53fff64415bc4c18055b0a28cfa49bd2",
+      "bytes": 3304
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/harness/lean.py",
+      "sha256": "51ae7da2c3d650eda0a5074b126c2d16e978414957b4693a495725ad70f1faaa",
+      "bytes": 3057
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/harness/package.py",
+      "sha256": "262a064724eff88dde8e0b1fd9c0f73fe5f0d28a2a7113c3797623eb7c84994d",
+      "bytes": 3256
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-adapter-aeneas/receipt.json",
+      "sha256": "b380870b3584abf6f7518a0b7a22108a81e0facb9d73c5caf182d81e3b542c70",
+      "bytes": 1420
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-adapter-aeneas/stderr.log",
+      "sha256": "c06efdc8b5f43b5c0fd1eca2ada4568dc371a20631a4f2f1b5a8b3784866e116",
+      "bytes": 6091
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-adapter-aeneas/stdout.log",
+      "sha256": "e2bf2a611776880a8f9c6eb859f0050c8474f8dbbb72a774e686b26857d83905",
+      "bytes": 51866
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-adapter-aeneas/time.log",
+      "sha256": "7602c1664992729801908de4e1bf59482a67e9023bcbd87573cf516c46d3fa83",
+      "bytes": 1241
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-adapter-charon/receipt.json",
+      "sha256": "02279bb606d4e9adbbbe551a379b47135a4869a09a7a993bd51ae62d54c5587c",
+      "bytes": 2265
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-adapter-charon/stderr.log",
+      "sha256": "ee1d5a869ca484669302d2d9182582a5381ef8f1d53f1aa32c64d4529894f418",
+      "bytes": 74955
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-adapter-charon/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-adapter-charon/time.log",
+      "sha256": "26c581af068d0bfd94498519d9db21c22002c02f096d20e94e6c90f719ac9535",
+      "bytes": 1865
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-first-aeneas/receipt.json",
+      "sha256": "6645ccf3ae9456d8b4b74f342f80b946cfdafff4b517efe99de4b98e3fb48608",
+      "bytes": 1412
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-first-aeneas/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-first-aeneas/stdout.log",
+      "sha256": "17ba0f5e4105241f29850bf84d38ac4c27cb9e29f658650320517bae1977d717",
+      "bytes": 22403
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-first-aeneas/time.log",
+      "sha256": "da06475daa5e1e03b01ead5c7d7e2cd5782a4b13f606ff4237b00aaa1f64bd21",
+      "bytes": 1196
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-first-charon/receipt.json",
+      "sha256": "e2fef4bb63af29cc1c4b06e688a1ad1c820a62d7a8020d1ece1c000581540e03",
+      "bytes": 2083
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-first-charon/stderr.log",
+      "sha256": "99a05bb835c8949a1d3c37b3baa6d8c640a91d5d9d2b9e31598a934b99b4c17c",
+      "bytes": 80142
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-first-charon/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/receipts/extract-first-charon/time.log",
+      "sha256": "b6874937adcbfb32b7e66ee72914dade1031896f97cbf4b91259ea92ee64a7db",
+      "bytes": 1706
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/repin-s2-20261020/source-pins.json",
+      "sha256": "15a32c2d9b84f8a8940a8eb7d9fcee9be7ae30cb84fcb4441aa77df2dfa2aba3",
+      "bytes": 1079
+    }
+  ]
+}
