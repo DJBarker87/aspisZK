@@ -1,6 +1,9 @@
 {
-  "scope": "local imports reachable from listed roots; includes historical helper imports, excludes mathlib/external FS2. Textual references are not semantic dependence.",
+  "scope": "local imports reachable from listed roots; includes historical helper imports, includes explicit FS2.Verifier and OracleVerifier API roots; excludes other external libraries. Textual references are not semantic dependence.",
   "seeds": [
+    "FS2.Verifier",
+    "OracleVerifier",
+    "OracleProgramReplay",
     "R1FinalSoundnessBinPerQueryR19",
     "R1FinalSoundnessBinPerQueryRWire",
     "R1FinalSoundnessBinPerQueryR9",
@@ -11,7 +14,7 @@
     "R16CanonReduction",
     "R16CanonRecorded"
   ],
-  "module_count": 458,
+  "module_count": 460,
   "pure_signature_modules": [
     "BinCompiledRunWordStability",
     "BinHonestQueryBudget",
@@ -185,6 +188,7 @@
     "ExtractedAdapterTransferBindings",
     "ExtractedPublicCheckedBridge432",
     "ExtractorPowComplexity",
+    "FS2.Verifier",
     "FSRetryOutputUniformity",
     "FieldInterpolationNodes",
     "FiniteFieldCompleteRootCertificate",
@@ -283,6 +287,7 @@
     "OracleProgramLawExt",
     "OracleProgramRecording",
     "OracleProgramReplay",
+    "OracleVerifier",
     "PartialAddressImage",
     "PartialAddressTrace",
     "PrivateDivStepBridgeV2",
@@ -739,6 +744,17 @@
       "module": "BinCompiledRunWordStability",
       "declaration": "wordsFromRun_compiled_eq_original",
       "declaration_line": 27,
+      "line": 29,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "BinCompiledRunWordStability",
+      "declaration": "wordsFromRun_compiled_eq_original",
+      "declaration_line": 27,
       "line": 39,
       "kinds": [
         "compiler replay"
@@ -755,6 +771,17 @@
         "compiler replay"
       ],
       "text": "rw [compiled_experiment_eval]",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "BinCompiledRunWordStability",
+      "declaration": "wordsFromRun_compiled_eq_retainedBuildWords",
+      "declaration_line": 73,
+      "line": 75,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -915,6 +942,17 @@
       "module": "BinHonestQueryBudget",
       "declaration": "verifier_starts",
       "declaration_line": 104,
+      "line": 105,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "B: add terminal decoder starts; zero starts requires a label/domain proof"
+    },
+    {
+      "module": "BinHonestQueryBudget",
+      "declaration": "verifier_starts",
+      "declaration_line": 104,
       "line": 108,
       "kinds": [
         "budgets"
@@ -931,6 +969,17 @@
         "exact evaluation"
       ],
       "text": "rw [FS2.verifier_eval]",
+      "classification": "B: add terminal decoder starts; zero starts requires a label/domain proof"
+    },
+    {
+      "module": "BinHonestQueryBudget",
+      "declaration": "recorded_starts",
+      "declaration_line": 113,
+      "line": 114,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "B: add terminal decoder starts; zero starts requires a label/domain proof"
     },
     {
@@ -1264,6 +1313,116 @@
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
+      "module": "D0ErasedWordObstruction",
+      "declaration": "no_erased_final_reader",
+      "declaration_line": 37,
+      "line": 39,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "\u00ac \u2203 read : ErasedPrefix \u2192 Option LiteralTranscript.VWord,",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "D0ScheduleAdmission",
+      "declaration": "Schedule",
+      "declaration_line": 18,
+      "line": 18,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "def Schedule (p : ErasedPrefix) : Prop :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "D0ScheduleAdmission",
+      "declaration": "guard",
+      "declaration_line": 22,
+      "line": 22,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "def guard (p : ErasedPrefix) (_ : ErasedMessage) : Bool := decide (Schedule p)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "D0ScheduleAdmission",
+      "declaration": "withSchedule",
+      "declaration_line": 24,
+      "line": 24,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "def withSchedule (core : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "D0ScheduleAdmission",
+      "declaration": "withSchedule",
+      "declaration_line": 24,
+      "line": 25,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(p : ErasedPrefix) (m : ErasedMessage) : Bool := guard p m && core p m",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "D0ScheduleAdmission",
+      "declaration": "accepted_schedule",
+      "declaration_line": 27,
+      "line": 27,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "theorem accepted_schedule (core : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "D0ScheduleAdmission",
+      "declaration": "accepted_schedule",
+      "declaration_line": 27,
+      "line": 28,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(p : ErasedPrefix) (m : ErasedMessage)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "D0ScheduleAdmission",
+      "declaration": "reject_initial31",
+      "declaration_line": 34,
+      "line": 34,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "theorem reject_initial31 (core : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "D0ScheduleAdmission",
+      "declaration": "reject_initial31",
+      "declaration_line": 34,
+      "line": 35,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(p : ErasedPrefix) (m : ErasedMessage) (root : State)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "D0ScheduleAdmission",
+      "declaration": "accepted_canonical_valid",
+      "declaration_line": 57,
+      "line": 58,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(core : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (H : Bytes \u2192 State)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
       "module": "D0ScheduleAdmission",
       "declaration": "accepted_canonical_valid",
       "declaration_line": 57,
@@ -1272,6 +1431,28 @@
         "exact evaluation"
       ],
       "text": "rw [RawCutProverCompiler.verifier, FS2.verifier_eval] at accepted",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "D0ScheduleAdmission",
+      "declaration": "accepted_canon_prover_valid",
+      "declaration_line": 89,
+      "line": 90,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(core : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "D0ScheduleAdmission",
+      "declaration": "arbitrary_prover_reduction",
+      "declaration_line": 101,
+      "line": 102,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(core : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (Q : Nat)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -1627,6 +1808,127 @@
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
+      "module": "DecoderInstanceBoundary",
+      "declaration": "annotatedRun",
+      "declaration_line": 16,
+      "line": 17,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State) :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "DecoderInstanceBoundary",
+      "declaration": "compiledPublic",
+      "declaration_line": 20,
+      "line": 21,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State) :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "DecoderInstanceBoundary",
+      "declaration": "compiledRows",
+      "declaration_line": 24,
+      "line": 25,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State) :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "DecoderInstanceBoundary",
+      "declaration": "verifier_decoder_independent",
+      "declaration_line": 31,
+      "line": 32,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) : verifier D d = verifier D' d := by",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "DecoderInstanceBoundary",
+      "declaration": "decoder_not_identified_by_verifier",
+      "declaration_line": 37,
+      "line": 40,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) :",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "DecoderInstanceBoundary",
+      "declaration": "compiled_publicParsed_of_serializer",
+      "declaration_line": 52,
+      "line": 54,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "DecoderInstanceBoundary",
+      "declaration": "hchecks_deployed_partial",
+      "declaration_line": 72,
+      "line": 74,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "DecoderInstanceBoundaryBin",
+      "declaration": "annotatedRun",
+      "declaration_line": 12,
+      "line": 13,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State) :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "DecoderInstanceBoundaryBin",
+      "declaration": "compiledPublic",
+      "declaration_line": 16,
+      "line": 17,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State) :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "DecoderInstanceBoundaryBin",
+      "declaration": "compiledRows",
+      "declaration_line": 20,
+      "line": 21,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State) :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "DecoderInstanceBoundaryBin",
+      "declaration": "hchecks_deployed_partial",
+      "declaration_line": 30,
+      "line": 32,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
       "module": "DecoderQueryAccounting",
       "declaration": "starts_le_queries",
       "declaration_line": 17,
@@ -1718,6 +2020,17 @@
       "module": "DecoderQueryAccounting",
       "declaration": "verifier_starts_le_33",
       "declaration_line": 53,
+      "line": 54,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "B: add terminal decoder starts; zero starts requires a label/domain proof"
+    },
+    {
+      "module": "DecoderQueryAccounting",
+      "declaration": "verifier_starts_le_33",
+      "declaration_line": 53,
       "line": 58,
       "kinds": [
         "budgets"
@@ -1734,6 +2047,17 @@
         "exact evaluation"
       ],
       "text": "rw [FS2.verifier_eval]",
+      "classification": "B: add terminal decoder starts; zero starts requires a label/domain proof"
+    },
+    {
+      "module": "DecoderQueryAccounting",
+      "declaration": "recorded_starts_le",
+      "declaration_line": 70,
+      "line": 71,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "B: add terminal decoder starts; zero starts requires a label/domain proof"
     },
     {
@@ -1869,6 +2193,50 @@
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
+      "module": "FS2.Verifier",
+      "declaration": "verifierFrom_eval",
+      "declaration_line": 32,
+      "line": 32,
+      "kinds": [
+        "exact evaluation"
+      ],
+      "text": "theorem verifierFrom_eval (pr : Protocol X M C W Pf I A) (decision : Prefix X M C \u2192 M \u2192 Bool)",
+      "classification": "B: sampler-only exact formula must append terminal log and evaluate terminal program"
+    },
+    {
+      "module": "FS2.Verifier",
+      "declaration": "verifier_eval",
+      "declaration_line": 63,
+      "line": 63,
+      "kinds": [
+        "exact evaluation"
+      ],
+      "text": "theorem verifier_eval (pr : Protocol X M C W Pf I A) (decision : Prefix X M C \u2192 M \u2192 Bool)",
+      "classification": "B: sampler-only exact formula must append terminal log and evaluate terminal program"
+    },
+    {
+      "module": "FS2.Verifier",
+      "declaration": "verifier_eval",
+      "declaration_line": 63,
+      "line": 68,
+      "kinds": [
+        "exact evaluation"
+      ],
+      "text": "have h := verifierFrom_eval pr decision H x \u03c0 pr.r le_rfl",
+      "classification": "B: sampler-only exact formula must append terminal log and evaluate terminal program"
+    },
+    {
+      "module": "FS2.Verifier",
+      "declaration": "verifier_reads",
+      "declaration_line": 73,
+      "line": 77,
+      "kinds": [
+        "exact evaluation"
+      ],
+      "text": "rw [verifier_eval]",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
       "module": "FullPublicEarlyCase",
       "declaration": "actual_first_cell",
       "declaration_line": 16,
@@ -1990,6 +2358,160 @@
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
+      "module": "LiteralDecoderEnrichment",
+      "declaration": "ErasedMessage",
+      "declaration_line": 14,
+      "line": 14,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "abbrev ErasedMessage := TranscriptView.Message LiteralTranscript.BytesMessage",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralDecoderEnrichment",
+      "declaration": "ErasedPrefix",
+      "declaration_line": 15,
+      "line": 15,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "abbrev ErasedPrefix := UnifiedSampler.Prefix LiteralTranscript.BytesMessage",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralDecoderEnrichment",
+      "declaration": "message",
+      "declaration_line": 18,
+      "line": 18,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "def message (w : Words) (i : Nat) : ErasedMessage \u2192 LiteralTranscript.Message",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralDecoderEnrichment",
+      "declaration": "rounds",
+      "declaration_line": 22,
+      "line": 22,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "def rounds (w : Words) : Nat \u2192 List (ErasedMessage \u00d7 LiteralTranscript.Challenge) \u2192",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralDecoderEnrichment",
+      "declaration": "restorePrefix",
+      "declaration_line": 27,
+      "line": 27,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "def restorePrefix (w : Words) (P : ErasedPrefix) : LiteralTranscript.Prefix :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralDecoderEnrichment",
+      "declaration": "restorePrefix",
+      "declaration_line": 27,
+      "line": 30,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "@[simp] theorem erase_message (w : Words) (i : Nat) (m : ErasedMessage) :",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralDecoderEnrichment",
+      "declaration": "restorePrefix",
+      "declaration_line": 27,
+      "line": 42,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(rs : List (ErasedMessage \u00d7 LiteralTranscript.Challenge)) :",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralDecoderEnrichment",
+      "declaration": "erase_rounds",
+      "declaration_line": 48,
+      "line": 49,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(rs : List (ErasedMessage \u00d7 LiteralTranscript.Challenge)) :",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralDecoderEnrichment",
+      "declaration": "erase_rounds",
+      "declaration_line": 48,
+      "line": 55,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "@[simp] theorem erase_prefix (w : Words) (P : ErasedPrefix) :",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralDecoderEnrichment",
+      "declaration": "erase_rounds",
+      "declaration_line": 48,
+      "line": 60,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "@[simp] theorem prefix_round (w : Words) (P : ErasedPrefix) : (restorePrefix w P).round = P.round := by",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralDecoderEnrichment",
+      "declaration": "density",
+      "declaration_line": 89,
+      "line": 89,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "theorem density (w : Words) (P : ErasedPrefix) (m : ErasedMessage) (hi : P.round < 33) :",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralDecoderPrefixRestore",
+      "declaration": "rounds_append",
+      "declaration_line": 14,
+      "line": 15,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(rs tail : List (ErasedMessage \u00d7 LiteralTranscript.Challenge)) :",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralDecoderPrefixRestore",
+      "declaration": "prefix_ext",
+      "declaration_line": 21,
+      "line": 21,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "theorem prefix_ext (w : Words) (P : ErasedPrefix) (m : ErasedMessage)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralLegacyDecoderCompletion",
+      "declaration": "rawTrace",
+      "declaration_line": 34,
+      "line": 38,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "prior ++ (eval H (FS2.verifier (LiteralByteProtocol.protocol decoder) draw pub pf)).1",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
       "module": "LiteralLegacyDecoderCompletion",
       "declaration": "decodes_and_follows",
       "declaration_line": 40,
@@ -1998,6 +2520,28 @@
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable (rawTrace decoder draw H pub pf prior) \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralLegacyDecoderCompletion",
+      "declaration": "decodes_and_follows",
+      "declaration_line": 40,
+      "line": 66,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "let V := FS2.verifier legacyProtocol (fun _ _ => true)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralLegacyDecoderCompletion",
+      "declaration": "decodes_and_follows",
+      "declaration_line": 40,
+      "line": 79,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "(prior ++ (eval H (FS2.verifier (LiteralByteProtocol.protocol decoder) draw pub pf)).1)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -2026,11 +2570,44 @@
       "module": "LiteralLegacyVerifierTrace",
       "declaration": "trace_eq_map",
       "declaration_line": 18,
+      "line": 24,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "(eval H (FS2.verifier (LiteralByteProtocol.protocol decoder) draw pub pf)).1 =",
+      "classification": "C: whole-log equality/canonical-label claim breaks for arbitrary decision queries; retain sampler prefix or constrain terminal labels"
+    },
+    {
+      "module": "LiteralLegacyVerifierTrace",
+      "declaration": "trace_eq_map",
+      "declaration_line": 18,
+      "line": 26,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "(FS2.verifier legacyProtocol dold pub (proof pf))).1.map",
+      "classification": "C: whole-log equality/canonical-label claim breaks for arbitrary decision queries; retain sampler prefix or constrain terminal labels"
+    },
+    {
+      "module": "LiteralLegacyVerifierTrace",
+      "declaration": "trace_eq_map",
+      "declaration_line": 18,
       "line": 28,
       "kinds": [
         "exact evaluation"
       ],
       "text": "rw [FS2.verifier_eval, FS2.verifier_eval]",
+      "classification": "C: whole-log equality/canonical-label claim breaks for arbitrary decision queries; retain sampler prefix or constrain terminal labels"
+    },
+    {
+      "module": "LiteralLegacyVerifierTrace",
+      "declaration": "verifier_trace_canonical",
+      "declaration_line": 49,
+      "line": 54,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "\u2200 q \u2208 (eval H (FS2.verifier legacyProtocol dold pub pf)).1,",
       "classification": "C: whole-log equality/canonical-label claim breaks for arbitrary decision queries; retain sampler prefix or constrain terminal labels"
     },
     {
@@ -2043,6 +2620,39 @@
       ],
       "text": "rw [FS2.verifier_eval] at hq",
       "classification": "C: whole-log equality/canonical-label claim breaks for arbitrary decision queries; retain sampler prefix or constrain terminal labels"
+    },
+    {
+      "module": "LiteralLegacyVerifierTrace",
+      "declaration": "restricted_trace_eq",
+      "declaration_line": 64,
+      "line": 71,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "(eval H (FS2.verifier (LiteralByteProtocol.protocol decoder) draw pub pf)).1 =",
+      "classification": "C: whole-log equality/canonical-label claim breaks for arbitrary decision queries; retain sampler prefix or constrain terminal labels"
+    },
+    {
+      "module": "LiteralLegacyVerifierTrace",
+      "declaration": "restricted_trace_eq",
+      "declaration_line": 64,
+      "line": 73,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "(FS2.verifier legacyProtocol dold pub (proof pf))).1 := by",
+      "classification": "C: whole-log equality/canonical-label claim breaks for arbitrary decision queries; retain sampler prefix or constrain terminal labels"
+    },
+    {
+      "module": "LiteralTableChoiceWords",
+      "declaration": "components",
+      "declaration_line": 21,
+      "line": 22,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
       "module": "LiteralTableChoiceWords",
@@ -2059,11 +2669,143 @@
       "module": "LiteralTableChoiceWords",
       "declaration": "constructed_components",
       "declaration_line": 76,
+      "line": 77,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralTableChoiceWords",
+      "declaration": "constructed_components",
+      "declaration_line": 76,
       "line": 80,
       "kinds": [
         "budgets"
       ],
       "text": "(iv : State) (Q : Nat) (hQ : firstReads emptyTable run.1 \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralTableWordChoice",
+      "declaration": "messageAt",
+      "declaration_line": 16,
+      "line": 16,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "def messageAt (P : ErasedPrefix) (m : ErasedMessage) (i : Nat) : Option ErasedMessage :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralTableWordChoice",
+      "declaration": "c1Root",
+      "declaration_line": 19,
+      "line": 19,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "def c1Root (P : ErasedPrefix) (m : ErasedMessage) : State :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralTableWordChoice",
+      "declaration": "c2Root",
+      "declaration_line": 24,
+      "line": 24,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "def c2Root (P : ErasedPrefix) (m : ErasedMessage) : State :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralTableWordChoice",
+      "declaration": "finalRoot",
+      "declaration_line": 30,
+      "line": 30,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "def finalRoot (P : ErasedPrefix) (m : ErasedMessage) : State :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralTableWordChoice",
+      "declaration": "choose",
+      "declaration_line": 35,
+      "line": 35,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "def choose (_ : Bytes) (T : Table Bytes State) (P : ErasedPrefix) (m : ErasedMessage) : Words :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralTableWordChoice",
+      "declaration": "at_current",
+      "declaration_line": 38,
+      "line": 38,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "theorem at_current (P : ErasedPrefix) (m : ErasedMessage) : messageAt P m P.round = some m := by",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralTableWordChoice",
+      "declaration": "at_past",
+      "declaration_line": 41,
+      "line": 41,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "theorem at_past (P : ErasedPrefix) (m : ErasedMessage) (i : Nat) (hi : i < P.round) :",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralTableWordChoice",
+      "declaration": "c1Root_of_message",
+      "declaration_line": 44,
+      "line": 44,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "theorem c1Root_of_message (P : ErasedPrefix) (m : ErasedMessage) (r : State)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralTableWordChoice",
+      "declaration": "c2Root_of_message",
+      "declaration_line": 47,
+      "line": 47,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "theorem c2Root_of_message (P : ErasedPrefix) (m : ErasedMessage)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralTableWordChoice",
+      "declaration": "finalRoot_of_message",
+      "declaration_line": 59,
+      "line": 59,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "theorem finalRoot_of_message (P : ErasedPrefix) (m : ErasedMessage)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "LiteralTableWordChoiceBin",
+      "declaration": "choose",
+      "declaration_line": 11,
+      "line": 11,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "def choose (_ : Bytes) (T : Table Bytes State) (P : ErasedPrefix) (m : ErasedMessage) : Words :=",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -2152,6 +2894,127 @@
         "budgets"
       ],
       "text": "apply firstReads_append_reused",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "OracleProgramReplay",
+      "declaration": "transcript_eq_of_agrees",
+      "declaration_line": 48,
+      "line": 51,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "(h : \u2200 a \u2208 (eval H (FS2.verifier pr decision x pf)).1.map Prod.fst, H' a = H a)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "OracleProgramReplay",
+      "declaration": "transcript_eq_of_agrees",
+      "declaration_line": 48,
+      "line": 61,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "exact h a (FS2.verifier_reads pr decision H x pf n (by omega) a ha)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "OracleVerifier",
+      "declaration": "verifierFrom_eval",
+      "declaration_line": 27,
+      "line": 27,
+      "kinds": [
+        "exact evaluation"
+      ],
+      "text": "theorem verifierFrom_eval (pr : FS2.Protocol X M C W Pf I A)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "OracleVerifier",
+      "declaration": "verifier_eval",
+      "declaration_line": 70,
+      "line": 70,
+      "kinds": [
+        "exact evaluation"
+      ],
+      "text": "theorem verifier_eval (pr : FS2.Protocol X M C W Pf I A)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "OracleVerifier",
+      "declaration": "verifier_eval",
+      "declaration_line": 70,
+      "line": 78,
+      "kinds": [
+        "exact evaluation"
+      ],
+      "text": "have h := verifierFrom_eval pr decision H x \u03c0 pr.r le_rfl",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "OracleVerifier",
+      "declaration": "verifier_chain_reads",
+      "declaration_line": 85,
+      "line": 90,
+      "kinds": [
+        "exact evaluation"
+      ],
+      "text": "rw [verifier_eval]",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "OracleVerifier",
+      "declaration": "verifier_terminal_reads",
+      "declaration_line": 96,
+      "line": 102,
+      "kinds": [
+        "exact evaluation"
+      ],
+      "text": "rw [verifier_eval]",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "OracleVerifier",
+      "declaration": "verifier_specializes_done",
+      "declaration_line": 107,
+      "line": 110,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "FS2.verifier pr decision x \u03c0 := by",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "OracleVerifier",
+      "declaration": "verifier_specializes_done",
+      "declaration_line": 107,
+      "line": 111,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "unfold verifier FS2.verifier",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "OracleVerifier",
+      "declaration": "verifier_specializes_done",
+      "declaration_line": 107,
+      "line": 114,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "FS2.verifierFrom pr decision \u03c0 n P := by",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "OracleVerifier",
+      "declaration": "verifier_specializes_done",
+      "declaration_line": 107,
+      "line": 120,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "simp only [verifierFrom, FS2.verifierFrom]",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -2254,6 +3117,61 @@
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
+      "module": "QueryScanRow31SourcePlacement",
+      "declaration": "compiled_row31_shape",
+      "declaration_line": 44,
+      "line": 45,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "QueryScanRow31SourcePlacement",
+      "declaration": "instanceFields_row31",
+      "declaration_line": 58,
+      "line": 59,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R15WriterModel",
+      "declaration": "acceptance_alone_obstruction",
+      "declaration_line": 84,
+      "line": 85,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(D : LiteralByteProtocol.Decoder) (d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R16CanonRecorded",
+      "declaration": "original_proof",
+      "declaration_line": 17,
+      "line": 18,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State) :",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R16CanonRecorded",
+      "declaration": "compiled_observations",
+      "declaration_line": 23,
+      "line": 24,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
       "module": "R16CanonRecorded",
       "declaration": "compiled_observations",
       "declaration_line": 23,
@@ -2273,6 +3191,50 @@
         "compiler replay"
       ],
       "text": "simp only [compiled_experiment_eval, he]",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R16CanonRecorded",
+      "declaration": "recorded_observations",
+      "declaration_line": 53,
+      "line": 54,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State) :",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R16CanonRecorded",
+      "declaration": "recorded_extract",
+      "declaration_line": 59,
+      "line": 60,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R16CanonRecorded",
+      "declaration": "recorded_failure",
+      "declaration_line": 66,
+      "line": 67,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) :",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R16CanonRecorded",
+      "declaration": "deployed_transport_iff",
+      "declaration_line": 75,
+      "line": 76,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (deployedFailure : \u211a) :",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -2312,9 +3274,21 @@
       "module": "R16CanonReduction",
       "declaration": "verifier_congr",
       "declaration_line": 44,
-      "line": 51,
+      "line": 45,
       "kinds": [
         "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (pub : LiteralTranscript.Public)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R16CanonReduction",
+      "declaration": "verifier_congr",
+      "declaration_line": 44,
+      "line": 51,
+      "kinds": [
+        "decision adapter",
+        "verifier API"
       ],
       "text": "FS2.verifierFrom (LiteralByteProtocol.protocol D) (decisionOnBytes d) pf' n a =",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
@@ -2325,9 +3299,21 @@
       "declaration_line": 44,
       "line": 52,
       "kinds": [
-        "decision adapter"
+        "decision adapter",
+        "verifier API"
       ],
       "text": "FS2.verifierFrom (LiteralByteProtocol.protocol D) (decisionOnBytes d) pf n b := by",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R16CanonReduction",
+      "declaration": "original_canon",
+      "declaration_line": 74,
+      "line": 75,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State) :",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -2345,11 +3331,33 @@
       "module": "R16DecisionErasure",
       "declaration": "acceptance_retag",
       "declaration_line": 71,
+      "line": 72,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (H : Bytes \u2192 State)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R16DecisionErasure",
+      "declaration": "acceptance_retag",
+      "declaration_line": 71,
       "line": 77,
       "kinds": [
         "exact evaluation"
       ],
       "text": "rw [FS2.verifier_eval, FS2.verifier_eval]",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R16DecisionErasure",
+      "declaration": "accepted_without_instance",
+      "declaration_line": 87,
+      "line": 88,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (H : Bytes \u2192 State)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -2362,6 +3370,17 @@
       ],
       "text": "rw [compiled_experiment_eval]",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R19BudgetOriginalReads",
+      "declaration": "verifier_queries",
+      "declaration_line": 26,
+      "line": 27,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (H : Bytes \u2192 State)",
+      "classification": "B: add terminal issued queries/first reads; 561 alone is false for arbitrary dO"
     },
     {
       "module": "R19BudgetOriginalReads",
@@ -2383,6 +3402,17 @@
         "exact evaluation"
       ],
       "text": "rw [FS2.verifier_eval]",
+      "classification": "B: add terminal issued queries/first reads; 561 alone is false for arbitrary dO"
+    },
+    {
+      "module": "R19BudgetOriginalReads",
+      "declaration": "verifier_reads",
+      "declaration_line": 42,
+      "line": 43,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (H : Bytes \u2192 State)",
       "classification": "B: add terminal issued queries/first reads; 561 alone is false for arbitrary dO"
     },
     {
@@ -2439,6 +3469,17 @@
       ],
       "text": "simp only [List.cons_append, firstReads, List.length_cons,",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R19BudgetOriginalReads",
+      "declaration": "original_reads",
+      "declaration_line": 67,
+      "line": 68,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (Q : Nat)",
+      "classification": "B: add terminal issued queries/first reads; 561 alone is false for arbitrary dO"
     },
     {
       "module": "R19BudgetOriginalReads",
@@ -2530,6 +3571,83 @@
     },
     {
       "module": "R1FinalSoundness",
+      "declaration": "original",
+      "declaration_line": 151,
+      "line": 152,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) := experiment P (verifier D d)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R1FinalSoundness",
+      "declaration": "recorded",
+      "declaration_line": 153,
+      "line": 154,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R1FinalSoundness",
+      "declaration": "InstanceFields",
+      "declaration_line": 164,
+      "line": 165,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R1FinalSoundness",
+      "declaration": "BinaryCompletion",
+      "declaration_line": 177,
+      "line": 178,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (Q : Nat) : Prop :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R1FinalSoundness",
+      "declaration": "BinaryClean",
+      "declaration_line": 197,
+      "line": 198,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (Q : Nat) : Prop :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R1FinalSoundness",
+      "declaration": "DeployedTransport",
+      "declaration_line": 205,
+      "line": 206,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (deployedFailure : \u211a) : Prop :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R1FinalSoundness",
+      "declaration": "final_soundness",
+      "declaration_line": 247,
+      "line": 249,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
+      "classification": "A conditional: generic probability/semantic composition; rethread dO and retain named premises; numerical budget/start inputs must first be reproved"
+    },
+    {
+      "module": "R1FinalSoundness",
       "declaration": "final_soundness",
       "declaration_line": 247,
       "line": 290,
@@ -2570,6 +3688,17 @@
         "budgets"
       ],
       "text": "have hQ : \u2200 H, firstReads emptyTable (eval H (original D d P)).1 \u2264 Q + 1161 := by",
+      "classification": "A conditional: generic probability/semantic composition; rethread dO and retain named premises; numerical budget/start inputs must first be reproved"
+    },
+    {
+      "module": "R1FinalSoundnessBinPerQuery",
+      "declaration": "final_soundness",
+      "declaration_line": 29,
+      "line": 31,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
       "classification": "A conditional: generic probability/semantic composition; rethread dO and retain named premises; numerical budget/start inputs must first be reproved"
     },
     {
@@ -2629,6 +3758,17 @@
     },
     {
       "module": "R1FinalSoundnessBinPerQueryCanon",
+      "declaration": "erased_transcript_row",
+      "declaration_line": 30,
+      "line": 36,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "have h := congrArg (fun p : ErasedPrefix => p.rounds[i]?) same",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R1FinalSoundnessBinPerQueryCanon",
       "declaration": "accepted_no_canonical_transcript",
       "declaration_line": 44,
       "line": 53,
@@ -2636,6 +3776,61 @@
         "exact evaluation"
       ],
       "text": "\u00b7 rw [RawCutProverCompiler.verifier, FS2.verifier_eval]",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R1FinalSoundnessBinPerQueryCanon",
+      "declaration": "failure_event",
+      "declaration_line": 85,
+      "line": 86,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R1FinalSoundnessBinPerQueryCanon",
+      "declaration": "costed_value",
+      "declaration_line": 97,
+      "line": 98,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(D : LiteralByteProtocol.Decoder) (d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R1FinalSoundnessBinPerQueryCanon",
+      "declaration": "writer_premise_of_checkpoint_acceptance",
+      "declaration_line": 106,
+      "line": 107,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(D : LiteralByteProtocol.Decoder) (d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R1FinalSoundnessBinPerQueryDecision",
+      "declaration": "no_nonvacuous_specialisation",
+      "declaration_line": 19,
+      "line": 21,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R1FinalSoundnessBinPerQueryDecision",
+      "declaration": "true_decision_counterexample",
+      "declaration_line": 38,
+      "line": 41,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "let d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool := fun _ _ => true",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -2648,6 +3843,17 @@
       ],
       "text": "rw [FS2.verifier_eval]",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R1FinalSoundnessBinPerQueryR18",
+      "declaration": "final_soundness",
+      "declaration_line": 25,
+      "line": 27,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
+      "classification": "A conditional: generic probability/semantic composition; rethread dO and retain named premises; numerical budget/start inputs must first be reproved"
     },
     {
       "module": "R1FinalSoundnessBinPerQueryR18",
@@ -2708,6 +3914,17 @@
       "module": "R1FinalSoundnessBinPerQueryR19",
       "declaration": "final_soundness",
       "declaration_line": 25,
+      "line": 27,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
+      "classification": "A conditional: generic probability/semantic composition; rethread dO and retain named premises; numerical budget/start inputs must first be reproved"
+    },
+    {
+      "module": "R1FinalSoundnessBinPerQueryR19",
+      "declaration": "final_soundness",
+      "declaration_line": 25,
       "line": 29,
       "kinds": [
         "budgets"
@@ -2730,6 +3947,17 @@
       "module": "R1FinalSoundnessBinPerQueryR9",
       "declaration": "final_soundness",
       "declaration_line": 26,
+      "line": 28,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
+      "classification": "A conditional: generic probability/semantic composition; rethread dO and retain named premises; numerical budget/start inputs must first be reproved"
+    },
+    {
+      "module": "R1FinalSoundnessBinPerQueryR9",
+      "declaration": "final_soundness",
+      "declaration_line": 26,
       "line": 30,
       "kinds": [
         "budgets"
@@ -2746,6 +3974,17 @@
         "budgets"
       ],
       "text": "(eval H (recorded D d P)).1.length \u2264 Q + 1161) :",
+      "classification": "A conditional: generic probability/semantic composition; rethread dO and retain named premises; numerical budget/start inputs must first be reproved"
+    },
+    {
+      "module": "R1FinalSoundnessBinPerQueryRWire",
+      "declaration": "final_soundness",
+      "declaration_line": 25,
+      "line": 27,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
       "classification": "A conditional: generic probability/semantic composition; rethread dO and retain named premises; numerical budget/start inputs must first be reproved"
     },
     {
@@ -2914,6 +4153,50 @@
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
+      "module": "R9DeployedBinaryExperiment",
+      "declaration": "CallerReachability",
+      "declaration_line": 40,
+      "line": 42,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) : Prop :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R9DeployedBinaryExperiment",
+      "declaration": "caller_of_ordered_rejects",
+      "declaration_line": 48,
+      "line": 50,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R9DeployedBinaryExperiment",
+      "declaration": "transport_no_scan_charge",
+      "declaration_line": 62,
+      "line": 64,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "R9DeployedBinaryExperiment",
+      "declaration": "transport",
+      "declaration_line": 79,
+      "line": 81,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
       "module": "RRConcreteTraversalLaw",
       "declaration": "run_actual_trace_bound",
       "declaration_line": 84,
@@ -2933,6 +4216,39 @@
         "budgets"
       ],
       "text": "(collectProgram zeroTest children d s) cursor)).1.length \u2264 d * mass s := by",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireCompletion",
+      "declaration": "InitialTag",
+      "declaration_line": 15,
+      "line": 16,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (Q : Nat) : Prop :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireCompletion",
+      "declaration": "initialTag_of_completion",
+      "declaration_line": 23,
+      "line": 24,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (Q : Nat)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireCompletion",
+      "declaration": "completion_of_format",
+      "declaration_line": 45,
+      "line": 46,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (Q : Nat)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -2961,11 +4277,33 @@
       "module": "RWireCompletion",
       "declaration": "completion_iff_initialTag",
       "declaration_line": 98,
+      "line": 99,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (Q : Nat)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireCompletion",
+      "declaration": "completion_iff_initialTag",
+      "declaration_line": 98,
       "line": 100,
       "kinds": [
         "budgets"
       ],
       "text": "(hQ : \u2200 H, firstReads emptyTable (eval H (original D d P)).1 \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireConstructedWords",
+      "declaration": "buildWords_eq_full_from_messages",
+      "declaration_line": 65,
+      "line": 66,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -2981,6 +4319,17 @@
     },
     {
       "module": "RWireLiteralLegacyDecoderCompletion",
+      "declaration": "rawTrace",
+      "declaration_line": 34,
+      "line": 38,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "prior ++ (eval H (FS2.verifier (LiteralByteProtocol.protocol decoder) draw pub pf)).1",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireLiteralLegacyDecoderCompletion",
       "declaration": "decodes_and_follows",
       "declaration_line": 40,
       "line": 46,
@@ -2988,6 +4337,28 @@
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable (rawTrace decoder draw H pub pf prior) \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireLiteralLegacyDecoderCompletion",
+      "declaration": "decodes_and_follows",
+      "declaration_line": 40,
+      "line": 66,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "let V := FS2.verifier legacyProtocol (fun _ _ => true)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireLiteralLegacyDecoderCompletion",
+      "declaration": "decodes_and_follows",
+      "declaration_line": 40,
+      "line": 79,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "(prior ++ (eval H (FS2.verifier (LiteralByteProtocol.protocol decoder) draw pub pf)).1)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3016,11 +4387,33 @@
       "module": "RWireLiteralTableChoiceWords",
       "declaration": "components",
       "declaration_line": 25,
+      "line": 26,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireLiteralTableChoiceWords",
+      "declaration": "components",
+      "declaration_line": 25,
       "line": 29,
       "kinds": [
         "budgets"
       ],
       "text": "(iv : State) (Q : Nat) (hQ : firstReads emptyTable run.1 \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireLiteralTableChoiceWords",
+      "declaration": "constructed_components",
+      "declaration_line": 80,
+      "line": 81,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3043,6 +4436,17 @@
         "budgets"
       ],
       "text": "have hwidth : left.1.length = right.1.length :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawAdaptiveCompiledCompletion",
+      "declaration": "actual_compiled_transcript",
+      "declaration_line": 20,
+      "line": 22,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3203,11 +4607,99 @@
       "module": "RWireRawCompiledDecoderCompletion",
       "declaration": "actual_compiled_transcript",
       "declaration_line": 19,
+      "line": 21,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCompiledDecoderCompletion",
+      "declaration": "actual_compiled_transcript",
+      "declaration_line": 19,
       "line": 24,
       "kinds": [
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCompiledTranscript",
+      "declaration": "original",
+      "declaration_line": 17,
+      "line": 18,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCompiledTranscript",
+      "declaration": "output",
+      "declaration_line": 22,
+      "line": 23,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCompiledTranscript",
+      "declaration": "output_eq",
+      "declaration_line": 27,
+      "line": 28,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCompiledTranscript",
+      "declaration": "transcript",
+      "declaration_line": 38,
+      "line": 39,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCompiledTranscript",
+      "declaration": "chain",
+      "declaration_line": 49,
+      "line": 50,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCompiledTranscript",
+      "declaration": "challenge",
+      "declaration_line": 59,
+      "line": 60,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCompiledTranscript",
+      "declaration": "frame",
+      "declaration_line": 68,
+      "line": 69,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3219,6 +4711,17 @@
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable tr \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLaterTableLiteralWords",
+      "declaration": "actual_frame_order_or_eq",
+      "declaration_line": 81,
+      "line": 83,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3269,11 +4772,33 @@
       "module": "RWireRawCutLaterTableLiteralWords",
       "declaration": "actual_c1_map_eq_current_table",
       "declaration_line": 164,
+      "line": 166,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLaterTableLiteralWords",
+      "declaration": "actual_c1_map_eq_current_table",
+      "declaration_line": 164,
       "line": 170,
       "kinds": [
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable run.1 \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLaterTableLiteralWords",
+      "declaration": "actual_c2_map_eq_current_table",
+      "declaration_line": 200,
+      "line": 202,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3291,11 +4816,33 @@
       "module": "RWireRawCutLaterTableLiteralWords",
       "declaration": "actual_folded_map_eq_current_table",
       "declaration_line": 238,
+      "line": 240,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLaterTableLiteralWords",
+      "declaration": "actual_folded_map_eq_current_table",
+      "declaration_line": 238,
       "line": 244,
       "kinds": [
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable run.1 \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralAllFrames",
+      "declaration": "all_adjacent_frame_order",
+      "declaration_line": 23,
+      "line": 25,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3313,11 +4860,44 @@
       "module": "RWireRawCutLiteralNextFrame",
       "declaration": "ordinary_advance_read",
       "declaration_line": 108,
+      "line": 110,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralNextFrame",
+      "declaration": "ordinary_advance_read",
+      "declaration_line": 108,
+      "line": 161,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hverifier := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralNextFrame",
+      "declaration": "ordinary_advance_read",
+      "declaration_line": 108,
       "line": 162,
       "kinds": [
         "decision adapter"
       ],
       "text": "(RawCutTranscriptRun.decisionOnBytes d) H pub pf i hi adv.toBytes htrace",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralNextFrame",
+      "declaration": "ordinary_advance_read",
+      "declaration_line": 108,
+      "line": 165,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "(eval H (FS2.verifier (LiteralByteProtocol.protocol decoder)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3335,11 +4915,33 @@
       "module": "RWireRawCutLiteralNextFrame",
       "declaration": "state_address_before_next_frame",
       "declaration_line": 224,
+      "line": 226,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralNextFrame",
+      "declaration": "state_address_before_next_frame",
+      "declaration_line": 224,
       "line": 230,
       "kinds": [
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable run.1 \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralNextFrame",
+      "declaration": "adjacent_frame_order_of_sampler_state",
+      "declaration_line": 254,
+      "line": 256,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3357,6 +4959,28 @@
       "module": "RWireRawCutLiteralQueryAdjacent",
       "declaration": "query_read_pair",
       "declaration_line": 85,
+      "line": 87,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralQueryAdjacent",
+      "declaration": "query_read_pair",
+      "declaration_line": 85,
+      "line": 154,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hsqV := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralQueryAdjacent",
+      "declaration": "query_read_pair",
+      "declaration_line": 85,
       "line": 155,
       "kinds": [
         "decision adapter"
@@ -3368,11 +4992,33 @@
       "module": "RWireRawCutLiteralQueryAdjacent",
       "declaration": "query_read_pair",
       "declaration_line": 85,
+      "line": 156,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hadvV := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralQueryAdjacent",
+      "declaration": "query_read_pair",
+      "declaration_line": 85,
       "line": 157,
       "kinds": [
         "decision adapter"
       ],
       "text": "(RawCutTranscriptRun.decisionOnBytes d) H pub pf 31 hi _ hadvTrace",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralQueryAdjacent",
+      "declaration": "row31_frame_before_row32",
+      "declaration_line": 180,
+      "line": 182,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3401,11 +5047,44 @@
       "module": "RWireRawCutLiteralReseedOrder",
       "declaration": "reseed_read_pair",
       "declaration_line": 84,
+      "line": 86,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralReseedOrder",
+      "declaration": "reseed_read_pair",
+      "declaration_line": 84,
+      "line": 149,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hvA := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralReseedOrder",
+      "declaration": "reseed_read_pair",
+      "declaration_line": 84,
       "line": 150,
       "kinds": [
         "decision adapter"
       ],
       "text": "(RawCutTranscriptRun.decisionOnBytes d) H pub pf 26 hi adv.toBytes (htrace adv (Or.inl rfl))",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralReseedOrder",
+      "declaration": "reseed_read_pair",
+      "declaration_line": 84,
+      "line": 151,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hvR := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3423,11 +5102,33 @@
       "module": "RWireRawCutLiteralReseedOrder",
       "declaration": "row26_frame_before_row27",
       "declaration_line": 171,
+      "line": 173,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralReseedOrder",
+      "declaration": "row26_frame_before_row27",
+      "declaration_line": 171,
       "line": 177,
       "kinds": [
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable run.1 \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralRowZeroOrder",
+      "declaration": "row_zero_frame_before_advance",
+      "declaration_line": 34,
+      "line": 36,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3445,11 +5146,33 @@
       "module": "RWireRawCutLiteralRowZeroOrder",
       "declaration": "row_zero_frame_before_advance",
       "declaration_line": 34,
+      "line": 109,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hverifier := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralRowZeroOrder",
+      "declaration": "row_zero_frame_before_advance",
+      "declaration_line": 34,
       "line": 110,
       "kinds": [
         "decision adapter"
       ],
       "text": "(RawCutTranscriptRun.decisionOnBytes d) H pub pf 0 hi row0.toBytes htrace",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralSamplerOrder",
+      "declaration": "ordinary_frame_before_advance",
+      "declaration_line": 90,
+      "line": 92,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3467,11 +5190,33 @@
       "module": "RWireRawCutLiteralSamplerOrder",
       "declaration": "ordinary_frame_before_advance",
       "declaration_line": 90,
+      "line": 176,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hverifier := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawCutLiteralSamplerOrder",
+      "declaration": "ordinary_frame_before_advance",
+      "declaration_line": 90,
       "line": 177,
       "kinds": [
         "decision adapter"
       ],
       "text": "(RawCutTranscriptRun.decisionOnBytes d) H",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawFullPublicRun",
+      "declaration": "select_actual_run",
+      "declaration_line": 42,
+      "line": 44,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3522,6 +5267,17 @@
       "module": "RWireRawFullPublicRun",
       "declaration": "adaptive_run_decodes_and_follows",
       "declaration_line": 83,
+      "line": 85,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawFullPublicRun",
+      "declaration": "adaptive_run_decodes_and_follows",
+      "declaration_line": 83,
       "line": 88,
       "kinds": [
         "budgets"
@@ -3538,6 +5294,28 @@
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable (rawTrace decoder draw H pub pf prior) \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawFullPublicSelection",
+      "declaration": "bounded_at_first_cell",
+      "declaration_line": 20,
+      "line": 38,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "let V := FS2.verifier legacyProtocol (fun _ _ => true)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawFullPublicSelection",
+      "declaration": "bounded_at_first_cell",
+      "declaration_line": 20,
+      "line": 51,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "(prior ++ (eval H (FS2.verifier (LiteralByteProtocol.protocol decoder) draw pub pf)).1)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3571,6 +5349,17 @@
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable (rawTrace decoder draw H pub pf prior) \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawLiteralCompiledDecoder",
+      "declaration": "compiled_run_decodes_and_follows",
+      "declaration_line": 21,
+      "line": 23,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3615,6 +5404,17 @@
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable (RWireLiteralLegacyDecoderCompletion.rawTrace decoder draw H pub pf prior) \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RWireRawLiteralRecordedDecoder",
+      "declaration": "actual_run_decodes_and_follows",
+      "declaration_line": 47,
+      "line": 49,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -3698,6 +5498,17 @@
       "module": "RawAdaptiveCompiledCompletion",
       "declaration": "actual_compiled_transcript",
       "declaration_line": 16,
+      "line": 18,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawAdaptiveCompiledCompletion",
+      "declaration": "actual_compiled_transcript",
+      "declaration_line": 16,
       "line": 21,
       "kinds": [
         "budgets"
@@ -3714,6 +5525,17 @@
         "compiler replay"
       ],
       "text": "rw [RawCutProverCompiler.compiled_experiment_eval]",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawAdaptiveDecoderInjection",
+      "declaration": "injection",
+      "declaration_line": 33,
+      "line": 34,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4039,11 +5861,44 @@
       "module": "RawChecksAdaptiveCleanModel",
       "declaration": "verifier_reads",
       "declaration_line": 97,
+      "line": 98,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool) :",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveCleanModel",
+      "declaration": "verifier_reads",
+      "declaration_line": 97,
+      "line": 101,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hread := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveCleanModel",
+      "declaration": "verifier_reads",
+      "declaration_line": 97,
       "line": 102,
       "kinds": [
         "decision adapter"
       ],
       "text": "(RawCutTranscriptRun.decisionOnBytes d) H pub pf i hi a",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveCleanModel",
+      "declaration": "verifier_reads",
+      "declaration_line": 97,
+      "line": 103,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "change a \u2208 (eval H (FS2.verifier (LiteralByteProtocol.protocol decoder)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4061,11 +5916,44 @@
       "module": "RawChecksAdaptiveCleanModel",
       "declaration": "clean_model_of_checked_acceptance_no_hit",
       "declaration_line": 125,
+      "line": 127,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveCleanModel",
+      "declaration": "clean_model_of_checked_acceptance_no_hit",
+      "declaration_line": 125,
       "line": 196,
       "kinds": [
         "compiler replay"
       ],
       "text": "simpa only [orig] using compiled_experiment_eval decoder d",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveCleanModelBin",
+      "declaration": "verifier_reads",
+      "declaration_line": 102,
+      "line": 103,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool) :",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveCleanModelBin",
+      "declaration": "verifier_reads",
+      "declaration_line": 102,
+      "line": 106,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hread := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4083,11 +5971,33 @@
       "module": "RawChecksAdaptiveCleanModelBin",
       "declaration": "verifier_reads",
       "declaration_line": 102,
+      "line": 108,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "change a \u2208 (eval H (FS2.verifier (LiteralByteProtocol.protocol decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveCleanModelBin",
+      "declaration": "verifier_reads",
+      "declaration_line": 102,
       "line": 109,
       "kinds": [
         "decision adapter"
       ],
       "text": "(RawCutTranscriptRun.decisionOnBytes d) pub pf)).1.map Prod.fst",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveCleanModelBin",
+      "declaration": "extractor_word_alignment",
+      "declaration_line": 128,
+      "line": 130,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4105,11 +6015,33 @@
       "module": "RawChecksAdaptiveCleanModelBin",
       "declaration": "clean_model_of_checked_acceptance_no_hit",
       "declaration_line": 178,
+      "line": 180,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveCleanModelBin",
+      "declaration": "clean_model_of_checked_acceptance_no_hit",
+      "declaration_line": 178,
       "line": 249,
       "kinds": [
         "compiler replay"
       ],
       "text": "simpa only [orig] using compiled_experiment_eval decoder d",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveFailureConsumer",
+      "declaration": "checked_acceptance_failure_bound",
+      "declaration_line": 33,
+      "line": 35,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4138,6 +6070,17 @@
       "module": "RawChecksAdaptiveFailureNoModel",
       "declaration": "checked_acceptance_failure_bound_no_model",
       "declaration_line": 34,
+      "line": 36,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveFailureNoModel",
+      "declaration": "checked_acceptance_failure_bound_no_model",
+      "declaration_line": 34,
       "line": 38,
       "kinds": [
         "budgets"
@@ -4158,6 +6101,28 @@
     },
     {
       "module": "RawChecksAdaptiveFailureNoModelBin",
+      "declaration": "CheckedAcceptance",
+      "declaration_line": 20,
+      "line": 21,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) : Type :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveFailureNoModelBin",
+      "declaration": "injection_of_binary_completion",
+      "declaration_line": 27,
+      "line": 29,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (Q : Nat)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveFailureNoModelBin",
       "declaration": "injection_of_binary_completion",
       "declaration_line": 27,
       "line": 31,
@@ -4171,11 +6136,33 @@
       "module": "RawChecksAdaptiveFailureNoModelBin",
       "declaration": "binaryClean_of_checked_acceptance",
       "declaration_line": 46,
+      "line": 48,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (Q : Nat)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveFailureNoModelBin",
+      "declaration": "binaryClean_of_checked_acceptance",
+      "declaration_line": 46,
       "line": 50,
       "kinds": [
         "budgets"
       ],
       "text": "firstReads emptyTable (eval H (original D d P)).1 \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveFailureNoModelBin",
+      "declaration": "checked_acceptance_failure_bound_no_model_binary",
+      "declaration_line": 60,
+      "line": 62,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (Q N : Nat)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4198,6 +6185,17 @@
         "budgets"
       ],
       "text": "(hN : \u2200 H : Bytes \u2192 State, DecodedFirstReadUnionBound.decoderFirstReads dec",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveFailureNoModelBin",
+      "declaration": "composed_binary_failure_bound",
+      "declaration_line": 82,
+      "line": 84,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4237,11 +6235,33 @@
       "module": "RawChecksAdaptiveInjection",
       "declaration": "injection_of_checked_acceptance",
       "declaration_line": 27,
+      "line": 29,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (Q : Nat)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksAdaptiveInjection",
+      "declaration": "injection_of_checked_acceptance",
+      "declaration_line": 27,
       "line": 30,
       "kinds": [
         "budgets"
       ],
       "text": "(hQ : \u2200 H : Bytes \u2192 State, firstReads emptyTable",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawChecksInjectionFormat",
+      "declaration": "checks_imply_injection_format",
+      "declaration_line": 47,
+      "line": 49,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4257,6 +6277,39 @@
     },
     {
       "module": "RawCompiledChecksOriginalSchedule",
+      "declaration": "originalRun",
+      "declaration_line": 22,
+      "line": 23,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State) : RunView :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledChecksOriginalSchedule",
+      "declaration": "annotatedRun",
+      "declaration_line": 26,
+      "line": 27,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State) : RunView :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledChecksOriginalSchedule",
+      "declaration": "checks_force_original_constructor_schedule",
+      "declaration_line": 49,
+      "line": 51,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledChecksOriginalSchedule",
       "declaration": "checks_force_original_constructor_schedule",
       "declaration_line": 49,
       "line": 71,
@@ -4264,6 +6317,39 @@
         "compiler replay"
       ],
       "text": "(compiled_experiment_eval decoder d (RawCutWordsFromView.buildWords decoder) P H)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledChecksOriginalScheduleBin",
+      "declaration": "originalRun",
+      "declaration_line": 22,
+      "line": 23,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State) : RunView :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledChecksOriginalScheduleBin",
+      "declaration": "annotatedRun",
+      "declaration_line": 26,
+      "line": 27,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State) : RunView :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledChecksOriginalScheduleBin",
+      "declaration": "checks_force_original_constructor_schedule",
+      "declaration_line": 49,
+      "line": 51,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4281,11 +6367,33 @@
       "module": "RawCompiledDecoderCompletion",
       "declaration": "actual_compiled_transcript",
       "declaration_line": 15,
+      "line": 17,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledDecoderCompletion",
+      "declaration": "actual_compiled_transcript",
+      "declaration_line": 15,
       "line": 20,
       "kinds": [
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledRunWordStabilityV8",
+      "declaration": "wordsFromRun_compiled_eq_original",
+      "declaration_line": 39,
+      "line": 41,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4311,6 +6419,105 @@
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
+      "module": "RawCompiledRunWordStabilityV8",
+      "declaration": "wordsFromRun_compiled_eq_retainedBuildWords",
+      "declaration_line": 161,
+      "line": 163,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledTranscript",
+      "declaration": "original",
+      "declaration_line": 15,
+      "line": 16,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledTranscript",
+      "declaration": "output",
+      "declaration_line": 20,
+      "line": 21,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledTranscript",
+      "declaration": "output_eq",
+      "declaration_line": 25,
+      "line": 26,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledTranscript",
+      "declaration": "transcript",
+      "declaration_line": 36,
+      "line": 37,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledTranscript",
+      "declaration": "chain",
+      "declaration_line": 47,
+      "line": 48,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledTranscript",
+      "declaration": "challenge",
+      "declaration_line": 57,
+      "line": 58,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledTranscript",
+      "declaration": "frame",
+      "declaration_line": 66,
+      "line": 67,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCompiledTranscriptRoundAlignmentV7",
+      "declaration": "compiled_rounds_eq_enrich_recoveredWords",
+      "declaration_line": 48,
+      "line": 50,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
       "module": "RawCompiledTranscriptRoundAlignmentV7",
       "declaration": "compiled_rounds_eq_enrich_recoveredWords",
       "declaration_line": 48,
@@ -4330,6 +6537,17 @@
         "compiler replay"
       ],
       "text": "theorem decoderStarts_eq",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutCompilerDecoderStartLaw",
+      "declaration": "decoderStarts_eq",
+      "declaration_line": 20,
+      "line": 24,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4380,6 +6598,17 @@
       "module": "RawCutCompilerDecoderStartLaw",
       "declaration": "decoderStart_bound_preserved",
       "declaration_line": 34,
+      "line": 38,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutCompilerDecoderStartLaw",
+      "declaration": "decoderStart_bound_preserved",
+      "declaration_line": 34,
       "line": 40,
       "kinds": [
         "budgets"
@@ -4407,6 +6636,28 @@
         "compiler replay"
       ],
       "text": "rw [decoderStarts_eq dec decoder d buildWords P H]",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutCompilerLaw",
+      "declaration": "membership_probability_eq",
+      "declaration_line": 19,
+      "line": 22,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutCompilerLaw",
+      "declaration": "query_bound_preserved",
+      "declaration_line": 34,
+      "line": 35,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4444,6 +6695,28 @@
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
+      "module": "RawCutCompilerLaw",
+      "declaration": "transfer_membership_bound",
+      "declaration_line": 47,
+      "line": 50,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutConstructedWords",
+      "declaration": "buildWords_eq_full_from_messages",
+      "declaration_line": 66,
+      "line": 67,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
       "module": "RawCutConstructedWords",
       "declaration": "buildWords_eq_full_from_messages",
       "declaration_line": 66,
@@ -4463,6 +6736,17 @@
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable tr \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLaterTableLiteralWords",
+      "declaration": "actual_frame_order_or_eq",
+      "declaration_line": 78,
+      "line": 80,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4513,11 +6797,33 @@
       "module": "RawCutLaterTableLiteralWords",
       "declaration": "actual_c1_map_eq_current_table",
       "declaration_line": 161,
+      "line": 163,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLaterTableLiteralWords",
+      "declaration": "actual_c1_map_eq_current_table",
+      "declaration_line": 161,
       "line": 167,
       "kinds": [
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable run.1 \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLaterTableLiteralWords",
+      "declaration": "actual_c2_map_eq_current_table",
+      "declaration_line": 197,
+      "line": 199,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4535,11 +6841,33 @@
       "module": "RawCutLaterTableLiteralWords",
       "declaration": "actual_folded_map_eq_current_table",
       "declaration_line": 235,
+      "line": 237,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLaterTableLiteralWords",
+      "declaration": "actual_folded_map_eq_current_table",
+      "declaration_line": 235,
       "line": 241,
       "kinds": [
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable run.1 \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralAllFrames",
+      "declaration": "all_adjacent_frame_order",
+      "declaration_line": 23,
+      "line": 25,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4557,11 +6885,55 @@
       "module": "RawCutLiteralInitialAdvanceRead",
       "declaration": "initial_advance_read",
       "declaration_line": 23,
+      "line": 25,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralInitialAdvanceRead",
+      "declaration": "initial_advance_read",
+      "declaration_line": 23,
+      "line": 84,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hverifier := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralInitialAdvanceRead",
+      "declaration": "initial_advance_read",
+      "declaration_line": 23,
       "line": 85,
       "kinds": [
         "decision adapter"
       ],
       "text": "(RawCutTranscriptRun.decisionOnBytes d) H pub pf 0 hi adv.toBytes hchainTrace",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralNextFrame",
+      "declaration": "ordinary_advance_read",
+      "declaration_line": 108,
+      "line": 110,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralNextFrame",
+      "declaration": "ordinary_advance_read",
+      "declaration_line": 108,
+      "line": 161,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hverifier := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4579,11 +6951,33 @@
       "module": "RawCutLiteralNextFrame",
       "declaration": "ordinary_advance_read",
       "declaration_line": 108,
+      "line": 165,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "(eval H (FS2.verifier (LiteralByteProtocol.protocol decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralNextFrame",
+      "declaration": "ordinary_advance_read",
+      "declaration_line": 108,
       "line": 166,
       "kinds": [
         "decision adapter"
       ],
       "text": "(RawCutTranscriptRun.decisionOnBytes d) pub pf)).1 := by",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralNextFrame",
+      "declaration": "state_address_before_next_frame",
+      "declaration_line": 224,
+      "line": 226,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4601,11 +6995,44 @@
       "module": "RawCutLiteralNextFrame",
       "declaration": "adjacent_frame_order_of_sampler_state",
       "declaration_line": 254,
+      "line": 256,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralNextFrame",
+      "declaration": "adjacent_frame_order_of_sampler_state",
+      "declaration_line": 254,
       "line": 260,
       "kinds": [
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable run.1 \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralQueryAdjacent",
+      "declaration": "query_read_pair",
+      "declaration_line": 85,
+      "line": 87,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralQueryAdjacent",
+      "declaration": "query_read_pair",
+      "declaration_line": 85,
+      "line": 154,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hsqV := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4623,11 +7050,33 @@
       "module": "RawCutLiteralQueryAdjacent",
       "declaration": "query_read_pair",
       "declaration_line": 85,
+      "line": 156,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hadvV := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralQueryAdjacent",
+      "declaration": "query_read_pair",
+      "declaration_line": 85,
       "line": 157,
       "kinds": [
         "decision adapter"
       ],
       "text": "(RawCutTranscriptRun.decisionOnBytes d) H pub pf 31 hi _ hadvTrace",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralQueryAdjacent",
+      "declaration": "row31_frame_before_row32",
+      "declaration_line": 180,
+      "line": 182,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4656,11 +7105,44 @@
       "module": "RawCutLiteralReseedOrder",
       "declaration": "reseed_read_pair",
       "declaration_line": 84,
+      "line": 86,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralReseedOrder",
+      "declaration": "reseed_read_pair",
+      "declaration_line": 84,
+      "line": 149,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hvA := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralReseedOrder",
+      "declaration": "reseed_read_pair",
+      "declaration_line": 84,
       "line": 150,
       "kinds": [
         "decision adapter"
       ],
       "text": "(RawCutTranscriptRun.decisionOnBytes d) H pub pf 26 hi adv.toBytes (htrace adv (Or.inl rfl))",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralReseedOrder",
+      "declaration": "reseed_read_pair",
+      "declaration_line": 84,
+      "line": 151,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hvR := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4678,11 +7160,33 @@
       "module": "RawCutLiteralReseedOrder",
       "declaration": "row26_frame_before_row27",
       "declaration_line": 171,
+      "line": 173,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralReseedOrder",
+      "declaration": "row26_frame_before_row27",
+      "declaration_line": 171,
       "line": 177,
       "kinds": [
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable run.1 \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralRowZeroOrder",
+      "declaration": "row_zero_frame_before_advance",
+      "declaration_line": 34,
+      "line": 36,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4700,11 +7204,33 @@
       "module": "RawCutLiteralRowZeroOrder",
       "declaration": "row_zero_frame_before_advance",
       "declaration_line": 34,
+      "line": 109,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hverifier := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralRowZeroOrder",
+      "declaration": "row_zero_frame_before_advance",
+      "declaration_line": 34,
       "line": 110,
       "kinds": [
         "decision adapter"
       ],
       "text": "(RawCutTranscriptRun.decisionOnBytes d) H pub pf 0 hi row0.toBytes htrace",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralSamplerOrder",
+      "declaration": "ordinary_frame_before_advance",
+      "declaration_line": 90,
+      "line": 92,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4722,6 +7248,17 @@
       "module": "RawCutLiteralSamplerOrder",
       "declaration": "ordinary_frame_before_advance",
       "declaration_line": 90,
+      "line": 176,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "have hverifier := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutLiteralSamplerOrder",
+      "declaration": "ordinary_frame_before_advance",
+      "declaration_line": 90,
       "line": 177,
       "kinds": [
         "decision adapter"
@@ -4733,11 +7270,45 @@
       "module": "RawCutProverCompiler",
       "declaration": "verifier",
       "declaration_line": 27,
-      "line": 29,
+      "line": 28,
       "kinds": [
         "decision adapter"
       ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) : Public \u2192 Proof \u2192 Program Bytes State Bool :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutProverCompiler",
+      "declaration": "verifier",
+      "declaration_line": 27,
+      "line": 29,
+      "kinds": [
+        "decision adapter",
+        "verifier API"
+      ],
       "text": "FS2.verifier (LiteralByteProtocol.protocol decoder) (decisionOnBytes d)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutProverCompiler",
+      "declaration": "compiled",
+      "declaration_line": 41,
+      "line": 42,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutProverCompiler",
+      "declaration": "eval_compiled",
+      "declaration_line": 47,
+      "line": 48,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4766,11 +7337,33 @@
       "module": "RawCutProverCompiler",
       "declaration": "compiled_experiment_eval",
       "declaration_line": 56,
+      "line": 57,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutProverCompiler",
+      "declaration": "compiled_experiment_eval",
+      "declaration_line": 56,
       "line": 67,
       "kinds": [
         "verifier equality"
       ],
       "text": "verifier decoder d pub pf := RawCutTranscriptRun.verifier_eq decoder d w pub pf",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutProverCompiler",
+      "declaration": "public_and_acceptance",
+      "declaration_line": 76,
+      "line": 77,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4794,6 +7387,17 @@
         "budgets"
       ],
       "text": "theorem firstReads_eq (decoder : LiteralByteProtocol.Decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutProverCompiler",
+      "declaration": "firstReads_eq",
+      "declaration_line": 88,
+      "line": 89,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4844,11 +7448,44 @@
       "module": "RawCutProverCompiler",
       "declaration": "commitment_cut_eq",
       "declaration_line": 100,
+      "line": 101,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutProverCompiler",
+      "declaration": "commitment_cut_eq",
+      "declaration_line": 100,
       "line": 107,
       "kinds": [
         "compiler replay"
       ],
       "text": "rw [compiled_experiment_eval]",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutTranscriptRun",
+      "declaration": "ErasedPrefix",
+      "declaration_line": 61,
+      "line": 61,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "abbrev ErasedPrefix :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutTranscriptRun",
+      "declaration": "ErasedMessage",
+      "declaration_line": 63,
+      "line": 63,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "abbrev ErasedMessage := TranscriptView.Message LiteralTranscript.BytesMessage",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4860,6 +7497,17 @@
         "decision adapter"
       ],
       "text": "def decisionOnBytes (d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutTranscriptRun",
+      "declaration": "decision_enrich",
+      "declaration_line": 69,
+      "line": 69,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "theorem decision_enrich (d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4899,9 +7547,21 @@
       "module": "RawCutTranscriptRun",
       "declaration": "verifierFrom_eq",
       "declaration_line": 74,
-      "line": 77,
+      "line": 75,
       "kinds": [
         "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (w : Words)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutTranscriptRun",
+      "declaration": "verifierFrom_eq",
+      "declaration_line": 74,
+      "line": 77,
+      "kinds": [
+        "decision adapter",
+        "verifier API"
       ],
       "text": "FS2.verifierFrom (AspisR1.LiteralByteProtocol.protocol decoder) (decisionOnBytes d)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
@@ -4912,7 +7572,8 @@
       "declaration_line": 74,
       "line": 79,
       "kinds": [
-        "decision adapter"
+        "decision adapter",
+        "verifier API"
       ],
       "text": "FS2.verifierFrom (AspisR1.LiteralByteProtocol.protocol decoder) (decisionOnBytes d)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
@@ -4943,11 +7604,33 @@
       "module": "RawCutTranscriptRun",
       "declaration": "verifierFrom_eq",
       "declaration_line": 74,
+      "line": 89,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "(fun c => FS2.verifierFrom (AspisR1.LiteralByteProtocol.protocol decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutTranscriptRun",
+      "declaration": "verifierFrom_eq",
+      "declaration_line": 74,
       "line": 90,
       "kinds": [
         "decision adapter"
       ],
       "text": "(decisionOnBytes d) (proof w pf) n",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutTranscriptRun",
+      "declaration": "verifierFrom_eq",
+      "declaration_line": 74,
+      "line": 93,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "(fun c => FS2.verifierFrom (AspisR1.LiteralByteProtocol.protocol decoder)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -4976,9 +7659,21 @@
       "module": "RawCutTranscriptRun",
       "declaration": "verifier_eq",
       "declaration_line": 103,
-      "line": 106,
+      "line": 104,
       "kinds": [
         "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (w : Words)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutTranscriptRun",
+      "declaration": "verifier_eq",
+      "declaration_line": 103,
+      "line": 106,
+      "kinds": [
+        "decision adapter",
+        "verifier API"
       ],
       "text": "FS2.verifier (AspisR1.LiteralByteProtocol.protocol decoder) (decisionOnBytes d) pub (proof w pf) =",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
@@ -4989,7 +7684,8 @@
       "declaration_line": 103,
       "line": 107,
       "kinds": [
-        "decision adapter"
+        "decision adapter",
+        "verifier API"
       ],
       "text": "FS2.verifier (AspisR1.LiteralByteProtocol.protocol decoder) (decisionOnBytes d) pub pf := by",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
@@ -5007,6 +7703,17 @@
     },
     {
       "module": "RawCutWordsFromView",
+      "declaration": "verifier_reads_in_experiment",
+      "declaration_line": 38,
+      "line": 39,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutWordsFromView",
       "declaration": "recorded_transcript_eq",
       "declaration_line": 49,
       "line": 49,
@@ -5014,6 +7721,17 @@
         "recording"
       ],
       "text": "theorem recorded_transcript_eq (decoder : LiteralByteProtocol.Decoder)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutWordsFromView",
+      "declaration": "recorded_transcript_eq",
+      "declaration_line": 49,
+      "line": 50,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -5031,6 +7749,17 @@
       "module": "RawCutWordsFromView",
       "declaration": "frameFromView_eq",
       "declaration_line": 64,
+      "line": 65,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutWordsFromView",
+      "declaration": "frameFromView_eq",
+      "declaration_line": 64,
       "line": 70,
       "kinds": [
         "recording"
@@ -5042,11 +7771,45 @@
       "module": "RawCutWordsFromView",
       "declaration": "frame_read",
       "declaration_line": 86,
-      "line": 93,
+      "line": 87,
       "kinds": [
         "decision adapter"
       ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutWordsFromView",
+      "declaration": "frame_read",
+      "declaration_line": 86,
+      "line": 93,
+      "kinds": [
+        "decision adapter",
+        "verifier API"
+      ],
       "text": "apply FS2.verifier_reads (LiteralByteProtocol.protocol decoder) (decisionOnBytes d)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutWordsFromView",
+      "declaration": "buildWords_eq_actual_cuts",
+      "declaration_line": 122,
+      "line": 123,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State) :",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawCutWordsFromView",
+      "declaration": "buildWords_eq_full",
+      "declaration_line": 138,
+      "line": 139,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -5119,6 +7882,17 @@
       "module": "RawExtractorCostComposedV2",
       "declaration": "recorded_extractor_cost_and_failure",
       "declaration_line": 124,
+      "line": 126,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawExtractorCostComposedV2",
+      "declaration": "recorded_extractor_cost_and_failure",
+      "declaration_line": 124,
       "line": 128,
       "kinds": [
         "budgets"
@@ -5146,6 +7920,17 @@
         "budgets"
       ],
       "text": "cursor)).1.length * perAsk + fixed) :",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawFullPublicRun",
+      "declaration": "select_actual_run",
+      "declaration_line": 38,
+      "line": 40,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -5196,6 +7981,17 @@
       "module": "RawFullPublicRun",
       "declaration": "adaptive_run_decodes_and_follows",
       "declaration_line": 79,
+      "line": 81,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawFullPublicRun",
+      "declaration": "adaptive_run_decodes_and_follows",
+      "declaration_line": 79,
       "line": 84,
       "kinds": [
         "budgets"
@@ -5212,6 +8008,28 @@
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable (rawTrace decoder draw H pub pf prior) \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawFullPublicSelection",
+      "declaration": "bounded_at_first_cell",
+      "declaration_line": 20,
+      "line": 38,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "let V := FS2.verifier legacyProtocol (fun _ _ => true)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawFullPublicSelection",
+      "declaration": "bounded_at_first_cell",
+      "declaration_line": 20,
+      "line": 51,
+      "kinds": [
+        "verifier API"
+      ],
+      "text": "(prior ++ (eval H (FS2.verifier (LiteralByteProtocol.protocol decoder) draw pub pf)).1)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -5251,6 +8069,17 @@
       "module": "RawLiteralCompiledDecoder",
       "declaration": "compiled_run_decodes_and_follows",
       "declaration_line": 17,
+      "line": 19,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawLiteralCompiledDecoder",
+      "declaration": "compiled_run_decodes_and_follows",
+      "declaration_line": 17,
       "line": 22,
       "kinds": [
         "budgets"
@@ -5281,6 +8110,39 @@
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
+      "module": "RawLiteralDecoderDensity",
+      "declaration": "Output",
+      "declaration_line": 18,
+      "line": 18,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "abbrev Output := ErasedPrefix \u00d7 ErasedMessage \u00d7 LiteralTranscript.Challenge",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawLiteralDecoderDensity",
+      "declaration": "WordChoice",
+      "declaration_line": 20,
+      "line": 20,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "abbrev WordChoice := Bytes \u2192 Table Bytes State \u2192 ErasedPrefix \u2192 ErasedMessage \u2192 Words",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawLiteralDecoderDensity",
+      "declaration": "restore",
+      "declaration_line": 22,
+      "line": 22,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "def restore (choose : ErasedPrefix \u2192 ErasedMessage \u2192 Words) (out : Output) : LiteralOutput :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
       "module": "RawLiteralDecoderRestore",
       "declaration": "decodes_and_follows",
       "declaration_line": 15,
@@ -5289,6 +8151,17 @@
         "budgets"
       ],
       "text": "(hQ : firstReads emptyTable (LiteralLegacyDecoderCompletion.rawTrace decoder draw H pub pf prior) \u2264 Q)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RawLiteralRecordedDecoder",
+      "declaration": "actual_run_decodes_and_follows",
+      "declaration_line": 43,
+      "line": 45,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : RawCutTranscriptRun.ErasedPrefix \u2192 RawCutTranscriptRun.ErasedMessage \u2192 Bool)",
       "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
@@ -5504,6 +8377,17 @@
       "module": "RawRecordedLogLengthBin",
       "declaration": "compiled_log_length",
       "declaration_line": 57,
+      "line": 58,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (H : Bytes \u2192 State) :",
+      "classification": "A: equality still appends entire verifier log, including terminal queries; does not prove the log-length envelope"
+    },
+    {
+      "module": "RawRecordedLogLengthBin",
+      "declaration": "compiled_log_length",
+      "declaration_line": 57,
       "line": 61,
       "kinds": [
         "budgets"
@@ -5532,6 +8416,72 @@
       ],
       "text": "rw [compiled_experiment_eval]",
       "classification": "A: equality still appends entire verifier log, including terminal queries; does not prove the log-length envelope"
+    },
+    {
+      "module": "RecordedBinaryExperimentBin",
+      "declaration": "original",
+      "declaration_line": 16,
+      "line": 17,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) := experiment P (verifier D d)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RecordedBinaryExperimentBin",
+      "declaration": "recorded",
+      "declaration_line": 18,
+      "line": 19,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RecordedBinaryExperimentBin",
+      "declaration": "InstanceFields",
+      "declaration_line": 29,
+      "line": 30,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover)",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RecordedBinaryExperimentBin",
+      "declaration": "BinaryCompletion",
+      "declaration_line": 42,
+      "line": 43,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (Q : Nat) : Prop :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RecordedBinaryExperimentBin",
+      "declaration": "BinaryClean",
+      "declaration_line": 62,
+      "line": 63,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (Q : Nat) : Prop :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
+    },
+    {
+      "module": "RecordedBinaryExperimentBin",
+      "declaration": "DeployedTransport",
+      "declaration_line": 70,
+      "line": 71,
+      "kinds": [
+        "decision adapter"
+      ],
+      "text": "(d : ErasedPrefix \u2192 ErasedMessage \u2192 Bool) (P : Prover) (deployedFailure : \u211a) : Prop :=",
+      "classification": "A: no purity-sensitive arithmetic/equality; unchanged mathematical fact or mechanical program-valued adapter/replay port (see study for obligations)"
     },
     {
       "module": "SemanticPublicSelection",

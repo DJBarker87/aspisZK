@@ -47,9 +47,9 @@ that module; a production port should reuse its API.
 Reproducible audit: `evidence/oracle-dec-20261021/inventory.py`, with
 `inventory.json` (exact matched text) and `inventory.md` (declaration/line index
 and per-declaration assessment). Roots include R19, R-wire, R9, canonical and
-d₀ helpers; local transitive imports comprise 458 modules, including historical
-helper imports, with 73 textual pure-signature modules. The 459 matched lines
-span 261 declarations. This is a textual audit, not a kernel dependency claim;
+d₀ helpers; local transitive imports comprise 460 modules, including historical
+helper imports, with 73 textual pure-signature modules. The 726 matched lines
+span 373 declarations. This is a textual audit, not a kernel dependency claim;
 incidental uses of list length or first reads are marked unchanged.
 
 | Existing theorem/family | Assessment for oracle decisions |
@@ -80,11 +80,142 @@ to each matched declaration, including unaffected generic arithmetic helpers.
 
 ## 3. Generic-depth Merkle prototype
 
-To be completed with checked recovery, operational read containment and limits.
+`OracleDecisionFeasibilityMerkle.checkPath path leaf root` runs the existing
+`BinMerkleProgram.leafProgram` and compares the computed digest with `root`.
+`decision` places this program at the erased terminal interface. The path,
+leaf and root are explicit parameters: this is a checking primitive, not a
+parser that locates the real opening in erased protocol messages.
+
+Checked results, for an arbitrary slot list (hence symbolic depth):
+
+* `eval_check` preserves the opening-program log exactly; comparison adds no
+  oracle calls.
+* `path_trace_length` and `check_queries` give exactly depth + 1 issued calls,
+  including the leaf hash. A depth-18 path costs 19 calls.
+* `opening_reads` places every opening read in the full prover/sampler/decision
+  experiment. There is no caller-supplied read-containment hypothesis.
+* `accepted_root` obtains actual opening success from experiment acceptance.
+* `accepted_leaf_determined` applies existing binary causal cut recovery using
+  these operational facts. It recovers `some (packed, salt)` from the recorded
+  log strictly before the first committed-root frame.
+* `recorded_log` identifies that trace with the self-recorder's returned log.
+
+Remaining hypotheses are explicit: the committed frame was read; one of the
+five existing parsers extracts the claimed root from it; packed width and salt
+length are correct; the first-read budget holds; the existing
+`AllAddressCollision.bad iv BinRawByteCollisionTargets.pred Q` event did not
+occur. Consistency follows from actual program execution. The strengthened
+prototype supplies neither a free success premise nor a free opening-read
+containment premise. It does not remove any endpoint premise.
+
+Contrast `D0OpeningRecoveryObstruction.successful_opening_not_recovered` and
+`depth18_counterexample`: the zero oracle admits two different leaves at the
+same root even with both opening traces recorded. This experiment also runs
+against arbitrary H, but its recovery theorem deliberately requires collision
+exclusion. Oracle decisions make the hash reads operational; they do not make
+hash functions injective on collision runs. Likewise, the universal typed
+metadata obstruction `D0ErasedWordObstruction.no_erased_final_reader` remains
+true; only checked openings on clean runs are identified with recovered data.
 
 ## 4. Budget, cost, risks and acceptance decision
 
-To be completed with the port estimate and explicit remaining obligations.
+### Numerical feasibility
+
+The checked coarse budget theorem is `OracleDecisionFeasibilityBudget.queries`:
+verifier calls ≤ `561 + B`, where B bounds the terminal decision calls.
+`original_reads` retains `Q + 1161` when `561 + B ≤ 1161`. This is enough for
+one generic path with depth ≤ 599, and in particular depth 18. **It is not a
+proof that the full frozen decision fits.**
+
+Inspection gives a plausible route to the exact existing envelope. The 33
+samplers contain 30 ordinary rows (3 calls), the initial row (4), reseed row
+(4), and query row (17): `30*3 + 4 + 4 + 17 = 115`. Invalid message cases
+reject with fewer reads. These counts are visible in `DuplexSamplers` and
+`R19BudgetSamplerReads`; their aggregate **115 bound has not been proved in
+these prototypes**. The existing `QvStage1.transcriptBudget` is also 115.
+The existing conditional multiproof profiles give 447 batch-A parents and
+527 batch-B parents, with 66 leaf calls, totaling 1040 Merkle calls. Adding
+three checkpoint and three resume calls gives terminal allowance 1046;
+`115 + 1046 = 1161`. This arithmetic explains feasibility but still requires
+an actual decision program and source/profile/stop-prefix correspondence.
+Naively recomputing 66 independent depth-18 paths issues 1254 calls before
+samplers and cannot justify the same issued-query envelope; shared multiproof
+work or a separate distinct-read proof is essential.
+
+M9 needs a separate lemma: Merkle/checksum terminal addresses introduce no
+fresh *recognised decoder starts*. The unconditional existing sampler bound
+is 34 because the reseed row has two starts. With that label exclusion,
+`Q + 34` survives; without it the generic safe bound is `Q + 34 + B`.
+Changing this coefficient requires redoing the query-normalised numeric
+closure. A bound on distinct oracle reads alone does not preserve Q+34.
+
+M10's log-size condition is a second issue. A compiler run records the whole
+original verification and then repeats verification externally. If a full
+verifier issues at most 1161 calls, the immediate safe log bound is
+`Q + 2322`, not `Q + 1161`. A first-read replay lemma does not shorten this
+log. Current `h_M10_log_length` must remain explicit unless separately
+established; a future port can enlarge the extractor's size envelope and
+reprove the resulting constant cost bound, or redesign logging with exact
+value correspondence. No such endpoint change is proposed as a premise
+weakening here.
+
+### Port estimate
+
+The audit finds 73 modules with textual pure decision signatures in a
+460-module local import cone. The whole cone is **not** a rewrite target.
+Allow approximately **70–95 modules and 180–280 proof declarations** to
+thread the new type through the active binary, canonical, R-wire and source
+premise paths, if the historical helpers are retained. Of these, about
+**15–30 proofs** need substantive work: terminal evaluation/read inclusion,
+sampler-prefix legacy transport, sharper budgets, zero terminal decoder
+starts, checked opening-to-word alignment and altered log-size accounting.
+The rest are mechanical parameter changes, erasure congruence or unchanged
+trace/probability lemmas. This is a source-inspection estimate, not measured
+port labour or a promise that all source joins close. A narrow migration that
+keeps pure compatibility wrappers should reduce churn.
+
+Suggested order after acceptance:
+
+1. Expose the existing `OracleVerifier` through a byte-decision adapter and
+   keep the pure API as `done` lifting. Port compiler/replay/canonical laws.
+2. Construct the actual erased-message parser and shared Merkle multiproof
+   decision; prove decoded checks, malformed-schedule rejection and
+   checkpoint writer composition. Use collision-conditioned statements for
+   recovered words, not universal typed-word reconstruction.
+3. Prove sampler ≤115, terminal ≤1046, and zero terminal decoder starts;
+   settle compiled log length and the M10 envelope before numerical closure.
+4. Port binary completion/semantic consumers and endpoint wrappers with
+   signature diffs for any genuine premise weakening. Then run one final
+   pinned manifest and axioms audit. Re-pin frozen Rust correspondence only
+   after the model is settled.
+
+### Risks and user decision
+
+* Terminal-only recomputation moves reads after challenge generation, whereas
+  the deployed two-transaction verifier interleaves checks and can stop early.
+  Under a fixed total H, moving deterministic work may preserve accepted
+  outputs, but literal traces, stopping prefixes, checkpoint state and caller
+  reachability need a proved transport, not an assumed log equality.
+* dO can branch on oracle answers and can issue arbitrarily many calls. Every
+  numerical bound must refer to the constructed decision, with coverage of
+  rejection/suspension prefixes, not an arbitrary dO.
+* The terminal decision sees erased bytes and H, not the prover's query
+  history or compiler-supplied hidden words. Openings must be parsed from
+  available bytes; recovered metadata is related by clean-run binding.
+* Whole-log bounded-address/canonical proofs are unsuitable for arbitrary
+  raw Merkle inputs. Keep sampler-prefix recovery and unrestricted binary
+  collision accounting distinct at the API level.
+* Frozen-verifier equality, the actual tx1/Pool caller law, pairing backend,
+  semantic arithmetic joins, and efficient extractor adequacy remain source
+  obligations. This study is not evidence that R3/R13/R14/R15/R16/R9 or M10
+  have been discharged.
+
+**Accept** means authorise a compatibility-preserving oracle-decision port
+with the budget/start/log criteria above and the concrete frozen decision as
+the eventual instance. **Reject/defer** means retain the pure endpoint and
+its source premises (with the separately owned clean-run weakening); keep
+these prototypes as feasibility evidence. No approval is needed to complete
+this study, and no production migration has been performed.
 
 ## 5. Verification and signature accounting
 
