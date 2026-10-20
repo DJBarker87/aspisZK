@@ -1,0 +1,96 @@
+import BinEagerWordsReads
+
+/-! A log-read-instrumented extractor with an eager, fixed recovery schedule.
+No resource claim about the log-free GS and witness-checking continuation
+is made by this record-read accounting module. -/
+set_option autoImplicit false
+namespace AspisR1.RawRecordedEagerExtractorReadsBin
+open AspisV8R15.ExactTowerBase SpendRelation
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open RawCutWordsFromRunExecutableBin (wordsFromRun initialWordsFromRun finalWordFromRun)
+open CanonicalCutEnrichedTranscript (Words)
+abbrev RunView := RawCutProverCompiler.RunView
+abbrev Coins := GSConcreteByteDecoderBank.RawCoins
+
+def continueWithWords (decoded : R0P.Public M31Exact) (words : Words)
+    (coins : Coins) : Option Wspend :=
+  GSByteJointSpendExtractor.extract decoded
+    (LiteralTypedWords.word ExactBaseProjection.embed
+      (algebraMap QM31Exact AspisWideTower.WideExact) words.c1 words.c2)
+    (fun _ => words.final) coins
+
+def eval (run : RunView) (coins : Coins) : Option Wspend × Nat :=
+  match RawCutWordsFromRunPublicValidBin.runDecodedPublic run with
+  | none => (none, 0)
+  | some decoded =>
+    let cached := BinEagerWordsReads.words run
+    (continueWithWords decoded cached.1 coins, cached.2)
+
+attribute [local irreducible] GSByteJointSpendExtractor.extract
+  RawRecordedPublicSpendExtractorBoundedBin.wordsFromRun BinEagerWordsReads.words
+
+theorem value (run : RunView) (coins : Coins) :
+    (eval run coins).1 = RawRecordedPublicSpendExtractorBin.extract run coins := by
+  rw [← RawRecordedPublicSpendExtractorBoundedBin.value]
+  unfold eval RawRecordedPublicSpendExtractorBoundedBin.extract
+  cases hp : RawCutWordsFromRunPublicValidBin.runDecodedPublic run with
+  | none => rfl
+  | some decoded =>
+    dsimp only
+    rw [BinEagerWordsReads.words_value]
+    rfl
+
+theorem all_log_reads (run : RunView) (coins : Coins) :
+    (eval run coins).2 ≤ 12976224 * run.1.length := by
+  unfold eval
+  cases RawCutWordsFromRunPublicValidBin.runDecodedPublic run with
+  | none => exact Nat.zero_le _
+  | some decoded => exact BinEagerWordsReads.words_reads run
+
+/-- A single fixed linear polynomial for this algorithm's entire log-read
+counter. Rejected tapes and public-parser failure are included. -/
+theorem bounded_log_reads (run : RunView) (coins : Coins) (Q : Nat)
+    (hlog : run.1.length ≤ Q + 1161) :
+    (eval run coins).2 ≤ 12976224 * (Q + 1161) :=
+  (all_log_reads run coins).trans (Nat.mul_le_mul_left _ hlog)
+
+theorem returned_relation (run : RunView) (coins : Coins) (w : Wspend)
+    (h : (eval run coins).1 = some w) : LiteralProtocol.relation run.2.1.1 w :=
+  RawRecordedPublicSpendExtractorBin.returned_relation run coins w
+    ((value run coins).symm.trans h)
+
+/-- Completeness transfers without altering the hypotheses in the existing
+Checks/no-hit/private-bank theorem. -/
+theorem success_iff (run : RunView) (coins : Coins) (w : Wspend) :
+    (eval run coins).1 = some w ↔
+      RawRecordedPublicSpendExtractorBin.extract run coins = some w := by
+  rw [value]
+
+theorem extract_of_checks_noHit_bank
+    (decoder : AspisR1.LiteralByteProtocol.Decoder)
+    (H : Bytes → AspisR1.LiteralByteProtocol.State)
+    (run : RawCutProverCompiler.RunView)
+    (checks : LiteralAcceptanceTerminal.Checks run.2.1.1
+      ((AspisR1.LiteralByteProtocol.protocol decoder).transcript H run.2.1.1
+        (RawCutTranscriptRun.proof (wordsFromRun run) run.2.1.2) 33).rounds)
+    (hno : ¬ GenericNoHit.hitFrom LiteralClassifier.bad run.2.1.1 []
+      ((AspisR1.LiteralByteProtocol.protocol decoder).transcript H run.2.1.1
+        (RawCutTranscriptRun.proof (wordsFromRun run) run.2.1.2) 33).rounds)
+    (coins : Coins)
+    (hbank : ¬ AspisR1.GSConcreteByteDecoderBank.failed
+      (AspisWide.GSConcreteReceivedWordInputs.fromWords (initialWordsFromRun run)
+        (fun _ => finalWordFromRun run)) coins) :
+    ∃ witness,
+      (eval run coins).1 = some witness ∧
+      LiteralProtocol.relation run.2.1.1 witness := by
+  obtain ⟨w, hw, hr⟩ := RawRecordedPublicSpendExtractorBin.extract_of_checks_noHit_bank
+    decoder H run checks hno coins hbank
+  exact ⟨w, (value run coins).trans hw, hr⟩
+
+#print axioms value
+#print axioms all_log_reads
+#print axioms bounded_log_reads
+#print axioms returned_relation
+#print axioms success_iff
+#print axioms extract_of_checks_noHit_bank
+end AspisR1.RawRecordedEagerExtractorReadsBin

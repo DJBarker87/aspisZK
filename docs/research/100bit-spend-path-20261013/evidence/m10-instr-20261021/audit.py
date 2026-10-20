@@ -11,6 +11,10 @@ packet = here.parent.parent
 manifest = json.loads((here / 'manifest.json').read_text())
 def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+pins = json.loads((here / 'source-pins.json').read_text())
+for pin in pins:
+    assert sha(pin['path']) == pin['sha256']
+    assert Path(pin['path']).stat().st_size == pin['size']
 checked = []
 for receipt in manifest['attempts']:
     if not receipt['final_current']:
@@ -18,6 +22,9 @@ for receipt in manifest['attempts']:
     source = packet / 'lean' / (receipt['module'] + '.lean')
     assert receipt['exit'] == 0
     assert sha(source) == receipt['source_sha256']
+    obj = Path(receipt['argv'][receipt['argv'].index('-o') + 1])
+    assert sha(obj) == receipt['object_sha256']
+    assert obj.stat().st_size == receipt['object_size']
     assert all(sha(i['path']) == i['sha256'] for i in receipt['direct_imports'])
     text = source.read_text()
     assert not re.search(r'\b(sorry|admit|axiom|native_decide|maxHeartbeats|maxRecDepth)\b', text)

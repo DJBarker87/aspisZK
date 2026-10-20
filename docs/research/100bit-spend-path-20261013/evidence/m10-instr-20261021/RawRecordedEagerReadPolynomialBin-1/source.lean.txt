@@ -1,0 +1,61 @@
+import RawRecordedEagerExtractorReadsBin
+import RawExtractorCostComposedBin
+
+/-! Uniformity for the complete eager extractor record-read counter only.
+This does not instantiate the ledger's field/bit adequacy fields. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.RawRecordedEagerReadPolynomialBin
+open RawRecordedEagerExtractorReadsBin
+open RawExtractorCostComposedV2
+open AspisV8R19.OracleResampling
+
+attribute [local instance] Classical.propDecidable
+
+def failureMass (run : RunView) : ℚ :=
+  mean (fun coins : Coins => AspisV8R19.CausalFirstHitUnionBound.indicator
+    (run.2.2 = true ∧ (eval run coins).1 = none))
+
+theorem failureMass_value (run : RunView) : failureMass run =
+    RawRecordedOracleExtractionMassBin.failureMass run := by
+  simp only [failureMass, RawRecordedOracleExtractionMassBin.failureMass,
+    RawRecordedEagerExtractorReadsBin.value]
+
+def readPolynomial : Polynomial Nat :=
+  Polynomial.C 12976224 * (Polynomial.X + Polynomial.C 1161)
+
+theorem readPolynomial_eval (Q : Nat) :
+    readPolynomial.eval Q = 12976224 * (Q + 1161) := by
+  simp only [readPolynomial, Polynomial.eval_mul, Polynomial.eval_C,
+    Polynomial.eval_add, Polynomial.eval_X]
+
+theorem uniform_reads (Q : Nat) (run : RunView)
+    (hlog : run.1.length ≤ Q + 1161) :
+    (∀ coins, (eval run coins).2 ≤ readPolynomial.eval Q) ∧
+    mean (fun coins : Coins => ((eval run coins).2 : ℚ)) ≤
+      (readPolynomial.eval Q : ℚ) := by
+  have hall (coins : Coins) : (eval run coins).2 ≤ readPolynomial.eval Q := by
+    rw [readPolynomial_eval]
+    exact bounded_log_reads run coins Q hlog
+  refine ⟨hall, ?_⟩
+  calc
+    _ ≤ mean (fun _ : Coins => (readPolynomial.eval Q : ℚ)) := mean_mono (by
+      intro coins
+      exact_mod_cast hall coins)
+    _ = _ := mean_const _
+
+/-- Existing ledger capacity sufficient for the chosen eager algorithm's
+reads field. No claimed arithmetic/storage bound is hidden in p.n here. -/
+theorem ledger_read_budget (Q : Nat) (run : RunView) (coins : Coins)
+    (p : Parameters) (hlog : run.1.length ≤ Q + 1161)
+    (hn : 1853747 ≤ p.n) (hl : Q + 1161 ≤ p.logSize) :
+    (eval run coins).2 ≤ p.readBudget := by
+  have hc : 12976224 ≤ 7 * p.n := by omega
+  exact (bounded_log_reads run coins Q hlog).trans (Nat.mul_le_mul hc hl)
+
+#print axioms failureMass_value
+#print axioms readPolynomial_eval
+#print axioms uniform_reads
+#print axioms ledger_read_budget
+end AspisR1.RawRecordedEagerReadPolynomialBin
+end
