@@ -1,0 +1,14 @@
+instHAddUScalarResult
+instHMulUScalarResult
+instHShiftLeftUScalarResult
+def Aeneas.Std.UScalar.add : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x + ↑y)
+def Aeneas.Std.UScalar.shiftLeft : {ty : UScalarTy} → UScalar ty → ℕ → Result (UScalar ty) :=
+fun {ty} x s => if s < ty.numBits then ok (x.bv.shiftLeft s#uscalar) else fail Error.integerOverflow
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index.step_spec {α : Type} (r : core.ops.range.Range Usize)
+  (s : Slice α) (h0 : r.start ≤ r.end) (h1 : ↑r.end ≤ s.length) :
+  core.slice.index.SliceIndexRangeUsizeSlice.index r s ⦃ s1 =>
+    ↑s1 = List.slice ↑r.start ↑r.end ↑s ∧ s1.length = ↑r.end - ↑r.start ⦄
+Aeneas.Std.Slice.index_SliceIndexRangeUsizeSliceInst {α : Type} (s : Slice α) (r : core.ops.range.Range Usize) :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice α) s r =
+    core.slice.index.SliceIndexRangeUsizeSlice.index r s

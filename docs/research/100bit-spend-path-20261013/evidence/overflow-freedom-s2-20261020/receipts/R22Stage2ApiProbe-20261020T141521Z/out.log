@@ -1,0 +1,68 @@
+instHAddUScalarResult
+instHMulUScalarResult
+instHShiftLeftUScalarResult
+def Aeneas.Std.UScalar.add : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x + ↑y)
+def Aeneas.Std.UScalar.shiftLeft : {ty : UScalarTy} → UScalar ty → ℕ → Result (UScalar ty) :=
+fun {ty} x s => if s < ty.numBits then ok (x.bv.shiftLeft s#uscalar) else fail Error.integerOverflow
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index.step_spec {α : Type} (r : core.ops.range.Range Usize)
+  (s : Slice α) (h0 : r.start ≤ r.end) (h1 : ↑r.end ≤ s.length) :
+  core.slice.index.SliceIndexRangeUsizeSlice.index r s ⦃ s1 =>
+    ↑s1 = List.slice ↑r.start ↑r.end ↑s ∧ s1.length = ↑r.end - ↑r.start ⦄
+Aeneas.Std.Slice.index_SliceIndexRangeUsizeSliceInst {α : Type} (s : Slice α) (r : core.ops.range.Range Usize) :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice α) s r =
+    core.slice.index.SliceIndexRangeUsizeSlice.index r s
+def AspisR1Stage2.compact.OPENING : Aeneas.Std.Result.{0} Aeneas.Std.Usize :=
+@Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+  (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+  (@HAdd.hAdd.{0, 0, 0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize) (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+    (Aeneas.Std.Result.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize))
+    (@Aeneas.Std.instHAddUScalarResult Aeneas.Std.UScalarTy.Usize)
+    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 480) (instOfNatNat (nat_lit 480)))
+      AspisR1Stage2.compact.OPENING._proof_1)
+    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 128) (instOfNatNat (nat_lit 128)))
+      AspisR1Stage2.compact.OPENING._proof_2))
+  fun (i : Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize) =>
+  @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+    (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+    (@HAdd.hAdd.{0, 0, 0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+      (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+      (Aeneas.Std.Result.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize))
+      (@Aeneas.Std.instHAddUScalarResult Aeneas.Std.UScalarTy.Usize) i
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+        AspisR1Stage2.verifier.SEMANTIC_BYTES._proof_1))
+    fun (i1 : Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize) =>
+    @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+      (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize) (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+      (@HAdd.hAdd.{0, 0, 0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+        (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+        (Aeneas.Std.Result.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize))
+        (@Aeneas.Std.instHAddUScalarResult Aeneas.Std.UScalarTy.Usize) i1
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+          AspisR1Stage2.verifier.SEMANTIC_BYTES._proof_1))
+      fun (i2 : Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize) =>
+      @Bind.bind.{0, 0} Aeneas.Std.Result.{0} Aeneas.Std.instBindResult.{0}
+        (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize) (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+        (@HAdd.hAdd.{0, 0, 0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+          (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+          (Aeneas.Std.Result.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize))
+          (@Aeneas.Std.instHAddUScalarResult Aeneas.Std.UScalarTy.Usize) i2
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 128) (instOfNatNat (nat_lit 128)))
+            AspisR1Stage2.compact.OPENING._proof_2))
+        fun (i3 : Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize) =>
+        @HAdd.hAdd.{0, 0, 0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+          (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize)
+          (Aeneas.Std.Result.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize))
+          (@Aeneas.Std.instHAddUScalarResult Aeneas.Std.UScalarTy.Usize) i3
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+            AspisR1Stage2.verifier.SEMANTIC_BYTES._proof_1)
+@[implicit_reducible] def Aeneas.Std.instHAddUScalarResult : {ty : UScalarTy} →
+  HAdd (UScalar ty) (UScalar ty) (Result (UScalar ty)) :=
+fun {ty} => { hAdd := fun x y => x.add y }
+Aeneas.Std.UScalar.add_spec {ty : UScalarTy} {x y : UScalar ty} (hmax : ↑x + ↑y ≤ UScalar.max ty) :
+  x + y ⦃ z => ↑z = ↑x + ↑y ⦄
+/Users/dominic/ZK/.worktrees/cx-overflow-s2/docs/research/100bit-spend-path-20261013/lean/R22Stage2ApiProbe.lean:14:67: error: unsolved goals
+⊢ (match if h : 608 < 2 ^ System.Platform.numBits then some (UScalar.ofNatCore 608 ⋯) else none with
+    | some x => ok x
+    | none => fail Error.integerOverflow) =
+    ok 608#usize

@@ -1,0 +1,44 @@
+import R22Stage2ControlBounds
+import R22Stage2LeafTotal
+import R22Stage2ReaderTotal
+import R22Stage2OpeningTotal
+
+#print axioms AspisR1.R22Stage2ControlBounds.binary_frontier
+#print axioms AspisR1.R22Stage2ControlBounds.parent_group
+#print axioms AspisR1.R22Stage2ControlBounds.sibling_read
+#print axioms AspisR1.R22Stage2ControlBounds.compact_opening
+#print axioms AspisR1.R22Stage2ControlBounds.compact_nodes
+#print axioms AspisR1.R22Stage2ControlBounds.checkpoint_read
+#print axioms AspisR1.R22Stage2ControlBounds.query_offsets
+#print axioms AspisR1.R22Stage2ControlBounds.geometry_layout
+#print axioms AspisR1.R22Stage2ControlBounds.basis_indices
+#print axioms AspisR1.R22Stage2ControlBounds.finish_indices
+#print axioms AspisR1.R22Stage2ControlBounds.add_total
+#print axioms AspisR1.R22Stage2ControlBounds.mul_total
+#print axioms AspisR1.R22Stage2ControlBounds.shared_field_byte_bounds
+#print axioms AspisR1Stage2.r22_checked_add_eq
+#print axioms AspisR1Stage2.r22_checked_mul_eq
+#print axioms AspisR1Stage2.r22_checked_sub_eq
+#print axioms AspisR1Stage2.r22_compact_SEMANTIC_COMPACT_VALUES_total
+#print axioms AspisR1Stage2.r22_verifier_SEMANTIC_BYTES_total
+#print axioms AspisR1Stage2.r22_compact_LOGICAL_SEMANTIC_total
+#print axioms AspisR1Stage2.r22_compact_COMPACT_SEMANTIC_total
+#print axioms AspisR1Stage2.r22_compact_OFF_Y1_total
+#print axioms AspisR1Stage2.r22_compact_COMPACT_Y1_total
+#print axioms AspisR1Stage2.r22_compact_OFF_INACTIVE_total
+#print axioms AspisR1Stage2.r22_compact_OFF_ROUND0_total
+#print axioms AspisR1Stage2.r22_compact_OFF_FOLDED_ROOT_total
+#print axioms AspisR1Stage2.r22_compact_OFF_ROUND1_total
+#print axioms AspisR1Stage2.r22_compact_OFF_FINAL_total
+#print axioms AspisR1Stage2.r22_compact_OFF_OPENINGS_total
+#print axioms AspisR1Stage2.r22_compact_OPENING_total
+#print axioms AspisR1Stage2.r22_compact_OFF_NODES_total
+#print axioms AspisR1Stage2.r22_compact_MAX_NODES_total
+#print axioms AspisR1Stage2.r22_compact_FIXED_total
+#print axioms AspisR1Stage2.r22_compact_MAX_PROOF_total
+#print axioms AspisR1Stage2.r22_compact_PROOF_BYTES_total
+#print axioms AspisR1Stage2.r22_verifier_CHECKPOINT_FIXED_total
+#print axioms AspisR1Stage2.r22_index_at_total
+#print axioms AspisR1Stage2.r22_value_at_total
+#print axioms AspisR1Stage2.r22_reader_raw_total
+#print axioms AspisR1Stage2.r22_opening_total
