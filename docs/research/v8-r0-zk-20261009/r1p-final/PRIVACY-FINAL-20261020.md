@@ -12,6 +12,14 @@ receipts, and the remaining universal source read-coverage handoff. The
 original no-existing-module-edited statement above describes the 2026-10-20
 composition, before this update.
 
+Protocol release update (2026-10-21, D88): the release theorem is now
+`R1Z.PrivacyR1FinalProtocol.privacy_R1_protocol`, over the constructed phase
+model with exact public-byte ROM width. It discharges causality, sampler
+inputs, commitment grammar and typed read coverage. The original generic
+statement and its historical premise table below remain for reference;
+[PRIVACY-PROTOCOL-ENDPOINT-20261021.md](PRIVACY-PROTOCOL-ENDPOINT-20261021.md)
+is the authoritative statement and remaining-premise table for that release.
+
 ## Theorem in words and exact scope
 
 `R1Z.PrivacyR1Final.privacy_R1_final` is one **conditional** endpoint:
@@ -136,7 +144,7 @@ Rust instance of arbitrary W, Pr, h or source. It is a conditional endpoint.
 | Constructed ROM (formerly R_rom_classical) | Finite carrier/table equivalence, codec round trips, lookup and lazy uniformity are proved in RomFiniteBin/RomObserverBin and constructed in the endpoint. Source backend/common logged-oracle correspondence remains R10/R-wire. |
 | R_wire_read_coverage (formerly R_rom_address_domain) | RomGrammarBin proves RAddrIn from typed read coverage at every w/sec/d/answer-vector/position, including default/exhausted tapes and the frozen public digest. Source must supply public width and full typed membership, including complete source read inventory beyond opening-only comLog. |
 | Constructed cap/observer map (formerly R_rom_adversary_budget and observer map) | qmax=2^64, adaptive call-count bound and full-ROMView observer preservation are proved; observer_program supplies the operational program. Source ScanCoupling/R10/R19 accounting through both transactions, backend, normalization and checkpoint/resume remains open. |
-| R_causal_D80 | D80 Earlier form of RCausal at all counterfactual answer vectors (P`R1Z/CausalPremisesR1PBin.lean:19,23`): instantiate Pr.ord, children before parents/roots, row-2 C2 and row-30 folded absorbs after roots; prove all tape/leafVal/outputs/challenge and secret-record dependencies. Root AddressAt plus child-predecessor facts suffice for its root component (`:45`). Successful-cut word stability under collision exclusion is weaker. |
+| R_causal_D80 — discharged at the constructed protocol release endpoint | `PrivacyR1FinalProtocol.privacy_R1_protocol` specializes base/Pr to PhaseProtocolInstanceBin and supplies causal_premise at every counterfactual answer vector. See [PRIVACY-PROTOCOL-ENDPOINT-20261021.md](PRIVACY-PROTOCOL-ENDPOINT-20261021.md) for the verbatim statement, construction-owned satisfiability proof and remaining premise owners. Rust sampler/guard/rejection/FFT/serialization/query-history/execution correspondences belong to SourceIdentification / builder refinement, not causality. The unchanged generic PrivacyR1Final theorem still has its original causal premise. |
 | R_commit_D80.roots/nodes | AddressAt for all three roots/internal binary parents, child order, padded folded geometry, byte carrier and D81 grammar. Do not substitute eight-way C2 recovery for binary recovery. |
 | R_commit_D80.leaves | Exact 0x71/0xf1/0x72 tags, packed leafVal/trailing salt, private-leaf backend and byte/digest conversions, on the actual prover tree. |
 | R_commit_D80.bindings | Both secret-attempt binding reads, source/public/variant mapping, context encoding and digest answers (P`R1Z/LayoutR1PBin.lean:133`). |
