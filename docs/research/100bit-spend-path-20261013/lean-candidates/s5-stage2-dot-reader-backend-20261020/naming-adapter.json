@@ -1,0 +1,24 @@
+{
+  "original_source": "lean/Stage2ContinuationTypes.lean",
+  "original_sha256": "4dbf3fd0b3e53924265058c2f8bdea85dcddca877c84a1a0965aec80f82f4e96",
+  "adapter_sha256": "306e143d7f9ceb5f552fe39c2c77d14daa50e4aa089d6d48b9e66f2bc76bdbd8",
+  "inverse_exact": true,
+  "changes": [
+    {
+      "original": "@[discriminant isize]\ninductive verifier.Error where\n| Parse : verifier.Error\n| Semantic : verifier.Error\n| Transcript : verifier.Error\n| Relation : verifier.Error\n| Merkle : verifier.Error\n| Query : verifier.Error\n| Checkpoint : verifier.Error\n| Allocation : verifier.Error\n",
+      "replacement": "inductive verifier.Error where\n| Parse : verifier.Error\n| Semantic : verifier.Error\n| Transcript : verifier.Error\n| Relation : verifier.Error\n| Merkle : verifier.Error\n| Query : verifier.Error\n| Checkpoint : verifier.Error\n| Allocation : verifier.Error\n\ndef verifier.Error.read_discriminant (x : verifier.Error) : Isize :=\n  match x with\n  | .Parse => 0#isize\n  | .Semantic => 1#isize\n  | .Transcript => 2#isize\n  | .Relation => 3#isize\n  | .Merkle => 4#isize\n  | .Query => 5#isize\n  | .Checkpoint => 6#isize\n  | .Allocation => 7#isize\n\ninstance _root_.AspisR1Stage2.verifier.Error.instDiscriminant :\n    Aeneas.Std.Discriminant verifier.Error Isize where\n  read_discriminant := verifier.Error.read_discriminant\n"
+    },
+    {
+      "original": "@[discriminant isize]\ninductive transport.Variant where\n| S1 : transport.Variant\n| S2 : transport.Variant\n| D : transport.Variant\n",
+      "replacement": "inductive transport.Variant where\n| S1 : transport.Variant\n| S2 : transport.Variant\n| D : transport.Variant\n\ndef transport.Variant.read_discriminant (x : transport.Variant) : Isize :=\n  match x with\n  | .S1 => 0#isize\n  | .S2 => 1#isize\n  | .D => 2#isize\n\ninstance _root_.AspisR1Stage2.transport.Variant.instDiscriminant :\n    Aeneas.Std.Discriminant transport.Variant Isize where\n  read_discriminant := transport.Variant.read_discriminant\n"
+    },
+    {
+      "original": "@[discriminant isize]\ninductive multiproof.Arity where\n| Two : multiproof.Arity\n| Eight : multiproof.Arity\n",
+      "replacement": "inductive multiproof.Arity where\n| Two : multiproof.Arity\n| Eight : multiproof.Arity\n\ndef multiproof.Arity.read_discriminant (x : multiproof.Arity) : Isize :=\n  match x with\n  | .Two => 0#isize\n  | .Eight => 1#isize\n\ninstance _root_.AspisR1Stage2.multiproof.Arity.instDiscriminant :\n    Aeneas.Std.Discriminant multiproof.Arity Isize where\n  read_discriminant := multiproof.Arity.read_discriminant\n"
+    },
+    {
+      "original": "@[discriminant isize]\ninductive verifier.Phase where\n| Parsed : verifier.Phase\n| Semantic : verifier.Phase\n| SemanticPart : Std.U8 \u2192 verifier.Phase\n| Prepare : verifier.Phase\n| CheckpointRead : verifier.Phase\n| Merkle : Std.Usize \u2192 verifier.Phase\n| Query : Std.Usize \u2192 verifier.Phase\n| QueryPart : Std.Usize \u2192 Std.U8 \u2192 verifier.Phase\n| CheckpointWrite : verifier.Phase\n| Relation : verifier.Phase\n| Final : verifier.Phase\n",
+      "replacement": "inductive verifier.Phase where\n| Parsed : verifier.Phase\n| Semantic : verifier.Phase\n| SemanticPart : Std.U8 \u2192 verifier.Phase\n| Prepare : verifier.Phase\n| CheckpointRead : verifier.Phase\n| Merkle : Std.Usize \u2192 verifier.Phase\n| Query : Std.Usize \u2192 verifier.Phase\n| QueryPart : Std.Usize \u2192 Std.U8 \u2192 verifier.Phase\n| CheckpointWrite : verifier.Phase\n| Relation : verifier.Phase\n| Final : verifier.Phase\n\ndef verifier.Phase.read_discriminant (x : verifier.Phase) : Isize :=\n  match x with\n  | .Parsed => 0#isize\n  | .Semantic => 1#isize\n  | .SemanticPart _ => 2#isize\n  | .Prepare => 3#isize\n  | .CheckpointRead => 4#isize\n  | .Merkle _ => 5#isize\n  | .Query _ => 6#isize\n  | .QueryPart _ _ => 7#isize\n  | .CheckpointWrite => 8#isize\n  | .Relation => 9#isize\n  | .Final => 10#isize\n\ninstance _root_.AspisR1Stage2.verifier.Phase.instDiscriminant :\n    Aeneas.Std.Discriminant verifier.Phase Isize where\n  read_discriminant := verifier.Phase.read_discriminant\n"
+    }
+  ]
+}
