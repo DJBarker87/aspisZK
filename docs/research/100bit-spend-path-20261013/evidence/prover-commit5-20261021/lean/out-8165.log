@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedStep.lean:25:71: error: unexpected identifier; expected ':=', 'where' or '|'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedStep.lean:23:79: error: unsupported `do` element (kind: Lean.Parser.Term.doReassign)
+   ok (cont (after, I32.wrapping_add attempts 1#i32, sampled)) := by
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedStep.lean:61:14: error: Type mismatch: After simplification, term
+  ih t
+ has type
+  @Eq (Result S) (loop (rankedBody body) (t, n)) (iterate body n t)
+but is expected to have type
+  @Eq (Result S)
+    (match do
+      let t ← ok t
+      ok (cont (t, n)) with
+    | ok r =>
+      match r with
+      | cont x => loop (rankedBody body) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div)
+    do
+    let t ← ok t
+    iterate body n t
+'R1Z.ProverCommitExtractedStep.extracted_body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.step_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.iterate_refines' depends on axioms: [Quot.sound]
+'R1Z.ProverCommitExtractedStep.loop_eq_iterate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.extracted_sixteen' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

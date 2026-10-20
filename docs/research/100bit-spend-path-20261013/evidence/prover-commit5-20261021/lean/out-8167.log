@@ -1,0 +1,44 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedStep.lean:31:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case Err.ok
+hash : Hash
+domain : Slice U8
+state : State
+attempts : I32
+running : attempts < 16#i32
+a✝ : state_only_hiding.StateOnlyMaskBuildError
+v✝ : U32 × prover_commit_reference.State
+h : prover_commit_reference.next hash domain state = ok v✝
+⊢ (do
+      let (state1, result1) ←
+        let (word, after) := v✝
+          do
+          let r ←
+            if word &&& 2147483647#u32 < 2147483647#u32 then ok (core.result.Result.Ok (word &&& 2147483647#u32))
+              else ok (core.result.Result.Err a✝)
+          ok (after, r)
+      ok (cont (state1, attempts.wrapping_add 1#i32, result1))) =
+    do
+    let (after, sampled) ←
+      let (word, after) := v✝
+        ok
+          (after,
+            if word &&& 2147483647#u32 < 2147483647#u32 then core.result.Result.Ok (word &&& 2147483647#u32)
+            else core.result.Result.Err a✝)
+    ok (cont (after, attempts.wrapping_add 1#i32, sampled))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedStep.lean:30:15: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵ ̵bind_tc_ok, bind_tc_fail, bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitExtractedStep.extracted_body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.step_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.iterate_refines' depends on axioms: [Quot.sound]
+'R1Z.ProverCommitExtractedStep.loop_eq_iterate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.extracted_sixteen' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -1,0 +1,92 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedStep.lean:35:28: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 : Type _abstMVar.0) → (x_1 : Type _abstMVar.1) → Result x_0 → (x_0 → Result x_1) → Result x_1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedStep.lean:35:28: error: Ambiguous term
+  bind
+Possible interpretations:
+  Std.bind : Result ?m.139 → (?m.139 → Result ?m.140) → Result ?m.140
+  
+  Bind.bind : ?m.139 ?m.141 → (?m.141 → ?m.139 ?m.142) → ?m.139 ?m.142
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedStep.lean:32:12: error: unsolved goals
+case pos
+hash : Hash
+domain : Slice U8
+state : State
+attempts : I32
+running : attempts < 16#i32
+a✝ : state_only_hiding.StateOnlyMaskBuildError
+word : U32
+after : prover_commit_reference.State
+h : prover_commit_reference.next hash domain state = ok (word, after)
+accepted : word &&& 2147483647#u32 < 2147483647#u32
+⊢ (Std.bind (ok (word, after)) fun x =>
+      Std.bind
+        (let (word, after) := x
+        Std.bind
+          (if word &&& 2147483647#u32 < 2147483647#u32 then ok (core.result.Result.Ok (word &&& 2147483647#u32))
+          else ok (core.result.Result.Err a✝))
+          fun r => ok (after, r))
+        (uncurry fun state1 result1 => ok (cont (state1, attempts.wrapping_add 1#i32, result1)))) =
+    Std.bind (ok (word, after)) fun x =>
+      Std.bind
+        (let (word, after) := x
+        ok
+          (after,
+            if word &&& 2147483647#u32 < 2147483647#u32 then core.result.Result.Ok (word &&& 2147483647#u32)
+            else core.result.Result.Err a✝))
+        (uncurry fun after sampled => ok (cont (after, attempts.wrapping_add 1#i32, sampled)))
+
+case neg
+hash : Hash
+domain : Slice U8
+state : State
+attempts : I32
+running : attempts < 16#i32
+a✝ : state_only_hiding.StateOnlyMaskBuildError
+word : U32
+after : prover_commit_reference.State
+h : prover_commit_reference.next hash domain state = ok (word, after)
+accepted : ¬word &&& 2147483647#u32 < 2147483647#u32
+⊢ (Std.bind (ok (word, after)) fun x =>
+      Std.bind
+        (let (word, after) := x
+        Std.bind
+          (if word &&& 2147483647#u32 < 2147483647#u32 then ok (core.result.Result.Ok (word &&& 2147483647#u32))
+          else ok (core.result.Result.Err a✝))
+          fun r => ok (after, r))
+        (uncurry fun state1 result1 => ok (cont (state1, attempts.wrapping_add 1#i32, result1)))) =
+    Std.bind (ok (word, after)) fun x =>
+      Std.bind
+        (let (word, after) := x
+        ok
+          (after,
+            if word &&& 2147483647#u32 < 2147483647#u32 then core.result.Result.Ok (word &&& 2147483647#u32)
+            else core.result.Result.Err a✝))
+        (uncurry fun after sampled => ok (cont (after, attempts.wrapping_add 1#i32, sampled)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedStep.lean:35:34: warning: This simp argument is unused:
+  accepted
+
+Hint: Omit it from the simp argument list.
+  simp only [Bind.bind, bind, a̵c̵c̵e̵p̵t̵e̵d̵,̵ ̵if_true, if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedStep.lean:35:44: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [Bind.bind, bind, accepted, if_t̵r̵u̵e̵,̵ ̵i̵f_̵f̵alse]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedStep.lean:35:53: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [Bind.bind, bind, accepted, if_true,̵ ̵i̵f̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitExtractedStep.extracted_body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.step_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.iterate_refines' depends on axioms: [Quot.sound]
+'R1Z.ProverCommitExtractedStep.loop_eq_iterate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.extracted_sixteen' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

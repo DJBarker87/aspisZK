@@ -1,0 +1,75 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTapeCompletion.lean:39:4: error: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+case right
+K : Type
+inst✝ : Field K
+F : Subfield K
+h : Padding K F
+v : Visible → ↥F
+e : EligibleNoise K F
+⊢ True
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTapeCompletion.lean:66:5: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (SourceTape K F × Padding K F)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTapeCompletion.lean:69:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Fintype (SourceTape K F × Padding K F)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTapeCompletion.lean:74:6: error(lean.unknownIdentifier): Unknown identifier `h`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTapeCompletion.lean:67:41: error: unsolved goals
+case refine_1
+K : Type
+inst✝¹ : Field K
+F : Subfield K
+inst✝ : Fintype K
+t : Tape K F
+⊢ Fintype (SourceTape K F × Padding K F)
+
+case refine_2
+K : Type
+inst✝¹ : Field K
+F : Subfield K
+inst✝ : Fintype K
+t : Tape K F
+h : {s | complete s.1 s.2 = t} = {completionEquiv.symm t}
+⊢ {s | complete s.1 s.2 = t}.card = 1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTapeCompletion.lean:84:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => complete _a (padding ↑t) = ↑t
+Error: Application type mismatch: The argument
+  t
+has type
+  { t // project t = s }
+but is expected to have type
+  { t // project t = _a }
+in the application
+  ↑t
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+K : Type
+inst✝ : Field K
+F : Subfield K
+s : SourceTape K F
+t : { t // project t = s }
+⊢ complete s (padding ↑t) = ↑t
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTapeCompletion.lean:98:4: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTapeCompletion.lean:115:22: error: `simp` made no progress
+'R1Z.ProverCommitTapeCompletion.project_complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.padding_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.complete_project' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTapeCompletion.lean:120:14: error(lean.unknownIdentifier): Unknown constant `completion_equal_fibres`
+'R1Z.ProverCommitTapeCompletion.quotient_equal_fibres' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitTapeCompletion.balance_congr' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.h1_completion' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
