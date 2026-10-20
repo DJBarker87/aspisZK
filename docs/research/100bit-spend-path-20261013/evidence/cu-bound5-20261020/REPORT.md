@@ -34,3 +34,13 @@ verifier, devnet verifier and Pool pins; see `pins.json`. Default/devnet
 reconstructs the devnet file. Native release measurement/trace drivers built.
 Builds so far exited zero with zero swaps; individual time/RSS receipts
 are in `receipts/builds/`. No production source was edited.
+
+## Stage 2: accepted-input sweep
+
+All six controls reproduce prep5's CU exactly. All 746 corpus replays accept:
+373 per kind, including 300 prior OS-masked random witnesses per kind. The
+740 non-control proofs and publics are byte-identical to the retained original
+corpus (`corpus-inventory.jsonl`). Positions span 0 through 1,048,575, with
+same-page/rollover/genesis histories, fresh/prefunded markers and split 10.
+Per-input measurements are in `sweep.jsonl`. These are measurements only;
+branch/residual/consistency analysis is still pending.
