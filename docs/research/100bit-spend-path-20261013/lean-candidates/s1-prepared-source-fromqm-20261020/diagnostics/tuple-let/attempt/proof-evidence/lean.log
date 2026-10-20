@@ -1,0 +1,36 @@
+/home/dombarker/project-offloads/s1-prepared-source-fromqm-v1-20261020/sources/CurrentPreparedSourceFromQm.lean:24:50: error: unsolved goals
+H : Type
+sampling : PreparedModel.Boundaries
+D : aspis_core.Digest32 H
+before after : transcript.Transcript H
+row : U8
+payload : Slice U8
+block : Std.Array U8 32#usize
+hblock : transcript.Transcript.block D before row payload = ok (block, after)
+q : SamplerTransport.NewQM
+hq : sampler.qm31_sample block = ok q
+hcan :
+  AspisR1.ExtractedQM31SamplerCarrier.CurrentCanonicalQM
+    (AspisR1.ExtractedQM31SamplerCarrier.toCurrent (SamplerTransport.toOld q))
+hcoords :
+  AspisR1.ExtractedQM31SamplerCorrect.coordinates (SamplerTransport.toOld q) =
+    AspisR1.SamplerNatModel.qm31Digits (AspisR1.SourceSamplerByteRank.rank block)
+⊢ (let (a, self1) := (block, after)
+    do
+    let out ← sampler.qm31_sample a
+    ok (out, self1)) =
+    ok (q, after)
+/home/dombarker/project-offloads/s1-prepared-source-fromqm-v1-20261020/sources/CurrentPreparedSourceFromQm.lean:27:60: warning: This simp argument is unused:
+  hq
+
+Hint: Omit it from the simp argument list.
+  simp only [PreparedModel.scalar_k, ̲withSourceFromQm, ̲hblock,h̵q̵,̵ ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵fromQmSource_success,
+  ̲ ̲ ̲ ̲ ̲lift, ̲trace.value]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1ClaimPreparedBridge.SourceFromQm.embedding_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1ClaimPreparedBridge.SourceFromQm.scalar_k_source_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

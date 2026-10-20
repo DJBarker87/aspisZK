@@ -1,0 +1,7 @@
+# Source QM31 embedding and successful sampler trace
+
+PROVED candidate source-model composition. PreparedFromQmSourceBridge installs the retained extracted WideExact.from_qm31 primitive through exact coordinate-preserving carrier maps. Its success is total, its lower four coordinates are reduced modulo P and its upper four are zero. CurrentPreparedSourceFromQm proves the mapped result canonical for every raw QM31 input and derives successful current scalar_k execution from the actual transcript block and existing total QM31 sampler. No independent embedding-success or canonicality premise remains.
+
+The historical C2HostEmbedding arithmetic proof is reused with its exact committed source/object producer pairing. The earlier wrapper draft was not a proved wrapper; this packet contains its first successful focused check. This arithmetic embedding is not a Merkle commitment theorem. Actual current-freeze Rust correspondence, remaining serializer/library semantics, candidate adoption, caller authentication, runtime and the global 100-bit theorem remain OPEN. No production Rust, ELF or deployment changes.
+
+Two focused NUC Lean4.32 checks passed -j1 -M4400 with High1GiB/Max2GiB/Swap0 and standard axioms only: wrapper1.707s and canonical trace2.709s. Raw process-RSS values and cgroup memory peaks are retained separately as reported, without treating them as interchangeable measurements. Earlier import/irreducible-zero and tuple-let elaboration failures are retained; an admission-denied attempt ran no Lean. No whole-package replay.
