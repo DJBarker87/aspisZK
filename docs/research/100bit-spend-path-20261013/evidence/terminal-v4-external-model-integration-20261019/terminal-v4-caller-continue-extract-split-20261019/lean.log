@@ -1,0 +1,107 @@
+/tmp/terminal-v4-model-sources-20261019/AspisR1/TerminalV4CompositionCallerContinueExtractV2.lean:33:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (let (o, invalid_amount) := (none, false)
+    if invalid_amount = true then
+      ok
+        (core.result.Result.Err
+          pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+    else do
+      let r ←
+        pool_v1.pair_forest_semantic_terminal.validate_transition
+            { variant := public1.variant, pool := public1.pool, deployment_domain := public1.deployment_domain,
+              anchor := public1.anchor, nullifier := public1.nullifier, asset_id := public1.asset_id,
+              recipient := public1.recipient, change := public1.change, withdrawal_amount := o,
+              transition := public1.transition }
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a =>
+          composition_parts_continue poseidonEval semanticEval public1 o claims point lambda chi theta
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (field.QM31 ×
+              Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+            (core.convert.FromSame pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+            residual) =
+    ok (core.result.Result.Ok (composition, c1, mask, g, h1Z, copyActive))
+of `hcaller`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+poseidonEval : PoseidonEvaluator
+semanticEval : SemanticEvaluator
+public1 : pool_v1.pair_forest_semantic_terminal.SemanticPublic
+claims : Std.Array QM 84#usize
+point : Std.Array QM 10#usize
+lambda chi theta composition : QM
+c1 : Std.Array QM 16#usize
+mask : Std.Array QM 10#usize
+g h1Z copyActive : QM
+hwithdrawal : public1.withdrawal_amount = none
+htransition :
+  pool_v1.pair_forest_semantic_terminal.validate_transition
+      { variant := public1.variant, pool := public1.pool, deployment_domain := public1.deployment_domain,
+        anchor := public1.anchor, nullifier := public1.nullifier, asset_id := public1.asset_id,
+        recipient := public1.recipient, change := public1.change, withdrawal_amount := none,
+        transition := public1.transition } =
+    ok (core.result.Result.Ok ())
+hcaller :
+  (let (o, invalid_amount) := (none, false)
+    if invalid_amount = true then
+      ok
+        (core.result.Result.Err
+          pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+    else do
+      let r ←
+        pool_v1.pair_forest_semantic_terminal.validate_transition
+            { variant := public1.variant, pool := public1.pool, deployment_domain := public1.deployment_domain,
+              anchor := public1.anchor, nullifier := public1.nullifier, asset_id := public1.asset_id,
+              recipient := public1.recipient, change := public1.change, withdrawal_amount := o,
+              transition := public1.transition }
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a =>
+          composition_parts_continue poseidonEval semanticEval public1 o claims point lambda chi theta
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (field.QM31 ×
+              Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+            (core.convert.FromSame pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+            residual) =
+    ok (core.result.Result.Ok (composition, c1, mask, g, h1Z, copyActive))
+⊢ composition_parts_continue poseidonEval semanticEval public1 none claims point lambda chi theta =
+    ok (core.result.Result.Ok (composition, c1, mask, g, h1Z, copyActive))
+/tmp/terminal-v4-model-sources-20261019/AspisR1/TerminalV4CompositionCallerContinueExtractV2.lean:32:38: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp only [hwithdrawal, bind_tc_ok, Prod.f̵st̵,̵ ̵P̵r̵o̵d̵.̵s̵nd] at hcaller
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/terminal-v4-model-sources-20261019/AspisR1/TerminalV4CompositionCallerContinueExtractV2.lean:32:48: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [hwithdrawal, bind_tc_ok, Prod.fst,̵ ̵P̵r̵o̵d̵.̵s̵n̵d̵] at hcaller
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.TerminalV4CompositionCallerContinueExtractV2.caller_success_extracts_continue_none' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        6.45 real         1.90 user         2.16 sys
+          2535243776  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              179373  page reclaims
+               27648  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                2857  voluntary context switches
+               23422  involuntary context switches
+         23087075240  instructions retired
+          8667043591  cycles elapsed
+           419116904  peak memory footprint

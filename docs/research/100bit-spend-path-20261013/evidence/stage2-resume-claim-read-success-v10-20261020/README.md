@@ -1,0 +1,7 @@
+# Isolated stage-2 claim/rhs/power read success inversion
+
+This packet records a focused proof about the isolated source cut `resume_read_claim_rhs_power`, not a theorem that the whole resume path reaches this cut. From successful return of the helper, the Lean theorem derives the three ordered concrete `Reader.e`, `Reader.e`, `Reader.k` calls and that the final reader cursor equals the returned cursor. The proof compiles the source-cut generated Types/Funs with a concrete `FunsExternal` that adapts to the retained parser and decoder modules; the raw external-template axioms are not imported by the proof.
+
+The proof source reports only `[propext, Classical.choice, Quot.sound]`. It does not yet derive decoder canonicality for the suffix field values, nor establish the isolated helper's reachability from the complete resume verifier. The next changed target, a decoder-canonicality composition, was staged but its NUC admission was rejected before any Lean process started because finite reservations exceeded the launcher limit; that attempt is not included as a proof result.
+
+The NUC attempt used the shared admitted runner with `MemoryHigh=512 MiB`, `MemoryMax=2 GiB`, `MemorySwapMax=0`, Lean `-M4400 -j1`. Exact attempt receipt, admission/reservation records, compiler stdout logs, and `/usr/bin/time -v` logs are included. OLean files are intentionally omitted; their hashes remain in the receipt.

@@ -1,0 +1,61 @@
+/tmp/terminal-v4-model-sources-20261019/TerminalV4EqualityValueAdapterDiag.lean:51:4: error: `simp` made no progress
+case refine_1
+a b : QM
+ha : Canonical a
+hb : Canonical b
+ab : TerminalV4QM31Exact.CurrentQM
+hab : AspisR1SelectedMaskProbe.field.QM31.mul a b = ok ab
+habcan : TerminalV4QM31Exact.CurrentCanonicalQM ab
+habval : TerminalV4QM31Exact.decode ab = TerminalV4QM31Exact.decode a * TerminalV4QM31Exact.decode b
+q : TerminalV4QM31Exact.CurrentQM
+hq : AspisR1SelectedMaskProbe.field.QM31.ONE.sub a = ok q
+hqcan : TerminalV4QM31Exact.CurrentCanonicalQM q
+hqval :
+  TerminalV4QM31Exact.decode q =
+    TerminalV4QM31Exact.decode AspisR1SelectedMaskProbe.field.QM31.ONE - TerminalV4QM31Exact.decode a
+q1 : TerminalV4QM31Exact.CurrentQM
+hq1 : AspisR1SelectedMaskProbe.field.QM31.sub q b = ok q1
+hq1can : TerminalV4QM31Exact.CurrentCanonicalQM q1
+hq1val : TerminalV4QM31Exact.decode q1 = TerminalV4QM31Exact.decode q - TerminalV4QM31Exact.decode b
+q2 : TerminalV4QM31Exact.CurrentQM
+hq2 : AspisR1SelectedMaskProbe.field.QM31.add q1 ab = ok q2
+hq2can : TerminalV4QM31Exact.CurrentCanonicalQM q2
+hq2val : TerminalV4QM31Exact.decode q2 = TerminalV4QM31Exact.decode q1 + TerminalV4QM31Exact.decode ab
+q3 : TerminalV4QM31Exact.CurrentQM
+hq3 : AspisR1SelectedMaskProbe.field.QM31.add q2 ab = ok q3
+hq3can : TerminalV4QM31Exact.CurrentCanonicalQM q3
+hq3val : TerminalV4QM31Exact.decode q3 = TerminalV4QM31Exact.decode q2 + TerminalV4QM31Exact.decode ab
+hqval' :
+  TerminalV4QM31Exact.decode q =
+    TerminalV4QM31Exact.decode AspisR1SelectedMaskProbe.field.QM31.ONE - TerminalV4QM31Exact.decode a
+hq1val' : TerminalV4QM31Exact.decode q1 = TerminalV4QM31Exact.decode q - TerminalV4QM31Exact.decode b
+⊢ (let (a, b) := (a, b)
+    do
+    let ab ← a.mul b
+    let q ← AspisR1SelectedMaskProbe.field.QM31.ONE.sub a
+    let q1 ← q.sub b
+    let q2 ← q1.add ab
+    q2.add ab) =
+    ok q3
+'AspisR1.TerminalV4EqualityValueAdapter.equality_factor_call' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        7.71 real         1.94 user         2.28 sys
+          2537013248  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              174032  page reclaims
+               37273  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                 362  voluntary context switches
+               39745  involuntary context switches
+         23966409037  instructions retired
+          9068268944  cycles elapsed
+           421869104  peak memory footprint

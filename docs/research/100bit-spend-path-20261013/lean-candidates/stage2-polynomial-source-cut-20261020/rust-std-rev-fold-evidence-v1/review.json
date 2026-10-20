@@ -1,0 +1,60 @@
+{
+  "classification": "pinned standard-library source analysis; not a formal proof or adoption",
+  "rustc": {
+    "version": "rustc 1.98.0-nightly (14210df0e 2026-05-31)",
+    "commit": "14210df0e27ccd7d9e6a05b8085cbd438e4bbc65",
+    "host": "x86_64-unknown-linux-gnu",
+    "sysroot_source_root": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core"
+  },
+  "inputs": {
+    "range_type": "core::ops::Range<usize>",
+    "constructed_range": "0..7",
+    "iterator_chain": "(0..7).rev().fold(init, callback)",
+    "candidate_callback_index_order": [6, 5, 4, 3, 2, 1, 0]
+  },
+  "source_chain": [
+    {
+      "file": "library/core/src/iter/adapters/rev.rs",
+      "sha256": "2c733c153c7ca12c09f3d7639709ab005843e25fb80fd348480db349b80004ff",
+      "lines": [79, 84],
+      "fact": "Rev::fold calls self.iter.rfold(init, f)."
+    },
+    {
+      "file": "library/core/src/iter/traits/double_ended.rs",
+      "sha256": "25a7fddff2da4400f3d67502804bd0f0253830d7f9d8fa64538c6bdf4ccf7c72",
+      "lines": [305, 315],
+      "fact": "default DoubleEndedIterator::rfold repeatedly calls next_back and applies f to each item."
+    },
+    {
+      "file": "library/core/src/iter/range.rs",
+      "sha256": "df884a169ec674a8d97312096d195b68f0d1761f4ef282a85450f02b1e4ca079",
+      "lines": [17, 18],
+      "fact": "usize implements TrustedStep."
+    },
+    {
+      "file": "library/core/src/iter/range.rs",
+      "sha256": "df884a169ec674a8d97312096d195b68f0d1761f4ef282a85450f02b1e4ca079",
+      "lines": [210, 223, 438, 440],
+      "fact": "The unsigned Step implementation uses unchecked_sub for backward_unchecked; the x86_64 macro invocation includes usize in that implementation family."
+    },
+    {
+      "file": "library/core/src/iter/range.rs",
+      "sha256": "df884a169ec674a8d97312096d195b68f0d1761f4ef282a85450f02b1e4ca079",
+      "lines": [897, 948, 1113, 1117],
+      "fact": "The TrustedStep specialization of Range::spec_next_back subtracts one from the exclusive end and returns it when start < end; Range::next_back delegates to spec_next_back."
+    },
+    {
+      "file": "library/core/src/iter/traits/iterator.rs",
+      "sha256": "db43b7acc33fca53d85fef3ddea29ec9f8c1e768df428676fe2de160f21d5f6b",
+      "lines": [2587],
+      "fact": "The trait documentation identifies rfold as the right-associative counterpart to fold; this is supporting documentation, not the operational rule."
+    }
+  ],
+  "derived_item_sequence": [6, 5, 4, 3, 2, 1, 0],
+  "conclusion": "The pinned library source yields the same index order as the seven-step candidate, for Range<usize> on this target.",
+  "remaining": [
+    "No Lean theorem connects these Rust std method bodies to the candidate sequence.",
+    "No source-adoption change has been made.",
+    "This does not establish equivalence for arbitrary iterator types or arbitrary ranges."
+  ]
+}

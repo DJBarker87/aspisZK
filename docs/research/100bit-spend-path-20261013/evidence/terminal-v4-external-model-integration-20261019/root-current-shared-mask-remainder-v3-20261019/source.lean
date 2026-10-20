@@ -1,0 +1,411 @@
+import TerminalV4CurrentArithmeticSourceBridgeV9
+
+/-! Private shared-owner prototype. The26 common generated operation bodies
+are byte-identical; this adds the21 old mask-specific declarations and4 shared helpers absent
+from the current dependency cut to the
+current terminal extraction environment. No canonical owner is replaced. -/
+open Aeneas Aeneas.Std Result ControlFlow Error
+set_option autoImplicit false
+set_option maxHeartbeats 1000000
+set_option maxRecDepth 2048
+noncomputable section
+namespace AspisR1SelectedMaskProbe
+/-- [aspis_r1_mask_extraction_probe::field::{aspis_r1_mask_extraction_probe::field::CM31}::double]:
+    Source: 'src/field.rs', lines 346:4-348:5
+    Visibility: public -/
+def field.CM31.double (self : field.CM31) : Result field.CM31 := do
+  field.CM31.add self self
+
+
+/-- [aspis_r1_mask_extraction_probe::field::{aspis_r1_mask_extraction_probe::field::CM31}::new]:
+    Source: 'src/field.rs', lines 271:4-273:5
+    Visibility: public -/
+def field.CM31.new (a : field.M31) (b : field.M31) : Result field.CM31 := do
+  ok { a, b }
+
+
+/-- [aspis_r1_mask_extraction_probe::field::{aspis_r1_mask_extraction_probe::field::CM31}::square]:
+    Source: 'src/field.rs', lines 325:4-335:5
+    Visibility: public -/
+def field.CM31.square (self : field.CM31) : Result field.CM31 := do
+  let i := self.a
+  let i1 ← lift (core.convert.num.FromU64U32.from i)
+  let i2 := self.b
+  let i3 ← lift (core.convert.num.FromU64U32.from i2)
+  let i4 ← i1 + i3
+  let i5 ← lift (core.convert.num.FromU64U32.from i)
+  let i6 ← lift (core.convert.num.FromU64U32.from field.P)
+  let i7 ← i5 + i6
+  let i8 ← lift (core.convert.num.FromU64U32.from i2)
+  let i9 ← i7 - i8
+  let i10 ← i4 * i9
+  let m ← field.M31.reduce_u64 i10
+  let m1 ← field.M31.mul self.a self.b
+  let m2 ← field.M31.double m1
+  ok { a := m, b := m2 }
+
+
+/-- [aspis_r1_mask_extraction_probe::field::{aspis_r1_mask_extraction_probe::field::QM31}::square]:
+    Source: 'src/field.rs', lines 951:4-960:5
+    Visibility: public -/
+def field.QM31.square (self : field.QM31) : Result field.QM31 := do
+  let c0_square ← field.CM31.square self.c0
+  let c1_square ← field.CM31.square self.c1
+  let c ← field.mul_by_r c1_square
+  let c1 ← field.CM31.add c0_square c
+  let c2 ← field.CM31.mul self.c0 self.c1
+  let c3 ← field.CM31.double c2
+  ok { c0 := c1, c1 := c3 }
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::mask_power_26]:
+    Source: 'src/state_only_hiding.rs', lines 520:0-526:1 -/
+def state_only_hiding.mask_power_26
+  (value : field.QM31) : Result field.QM31 := do
+  let x2 ← field.QM31.square value
+  let x4 ← field.QM31.square x2
+  let x8 ← field.QM31.square x4
+  let x16 ← field.QM31.square x8
+  let q ← field.QM31.mul x16 x8
+  field.QM31.mul q x2
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::STATE_ONLY_HIDING_SUMCHECK_ROUNDS]
+    Source: 'src/state_only_hiding.rs', lines 28:0-28:56
+    Visibility: public -/
+@[global_simps, irreducible]
+def state_only_hiding.STATE_ONLY_HIDING_SUMCHECK_ROUNDS : Std.Usize := 10#usize
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::selected_mask_linears]: loop body 0:
+    Source: 'src/state_only_hiding.rs', lines 502:4-507:5 -/
+@[rust_loop_body]
+def state_only_hiding.selected_mask_linears_loop.body
+  (point : Array field.QM31 10#usize)
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
+  (suffix : field.QM31) (weighted : field.QM31) :
+  Result (ControlFlow ((core.iter.adapters.rev.Rev (core.ops.range.Range
+    Std.Usize)) × field.QM31 × field.QM31) (field.QM31 × field.QM31))
+  := do
+  let (o, iter1) ←
+    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator
+      core.iter.range.StepUsize) iter
+  match o with
+  | none => ok (done (suffix, weighted))
+  | some variable1 =>
+    let q ← Array.index_usize point variable1
+    let suffix1 ← field.QM31.add suffix q
+    if variable1 != 0#usize
+    then
+      let weighted1 ← field.QM31.add weighted suffix1
+      ok (cont (iter1, suffix1, weighted1))
+    else ok (cont (iter1, suffix1, weighted))
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::selected_mask_linears]: loop 0:
+    Source: 'src/state_only_hiding.rs', lines 502:4-507:5 -/
+@[rust_loop]
+def state_only_hiding.selected_mask_linears_loop
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
+  (point : Array field.QM31 10#usize) (suffix : field.QM31)
+  (weighted : field.QM31) :
+  Result (field.QM31 × field.QM31)
+  := do
+  loop
+    (fun (iter1, suffix1, weighted1) =>
+      state_only_hiding.selected_mask_linears_loop.body point iter1 suffix1
+      weighted1)
+    (iter, suffix, weighted)
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::selected_mask_linears]:
+    Source: 'src/state_only_hiding.rs', lines 499:0-512:1 -/
+def state_only_hiding.selected_mask_linears
+  (point : Array field.QM31 10#usize) : Result (field.QM31 × field.QM31) := do
+  let iter ←
+    core.iter.traits.iterator.Iterator.rev.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      (core.ops.range.Range.Insts.DoubleEndedIterator
+      core.iter.range.StepUsize)
+      {
+        start := 0#usize,
+        «end» := state_only_hiding.STATE_ONLY_HIDING_SUMCHECK_ROUNDS
+      }
+  let (suffix, weighted) ←
+    state_only_hiding.selected_mask_linears_loop iter point field.QM31.ZERO
+      field.QM31.ZERO
+  let q ← field.QM31.mul_m31 suffix 3#u32
+  let q1 ← field.QM31.mul_m31 weighted 22#u32
+  let q2 ← field.QM31.add q q1
+  let q3 ← field.QM31.mul_m31 suffix 275#u32
+  let q4 ← field.QM31.mul_m31 weighted 150#u32
+  let q5 ← field.QM31.add q3 q4
+  ok (q2, q5)
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::cm31_mul_r]:
+    Source: 'src/state_only_hiding.rs', lines 442:0-444:1 -/
+def state_only_hiding.cm31_mul_r (value : field.CM31) : Result field.CM31 := do
+  let m ← field.M31.double value.a
+  let m1 ← field.M31.sub m value.b
+  let m2 ← field.M31.double value.b
+  let m3 ← field.M31.add value.a m2
+  field.CM31.new m1 m3
+
+
+/-- [aspis_r1_mask_extraction_probe::field::{aspis_r1_mask_extraction_probe::field::M31}::neg]:
+    Source: 'src/field.rs', lines 122:4-130:5
+    Visibility: public -/
+def field.M31.neg (self : field.M31) : Result field.M31 := do
+  if self = 0#u32
+  then ok 0#u32
+  else let i ← field.P - self
+       ok i
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::cm31_mul_i]:
+    Source: 'src/state_only_hiding.rs', lines 437:0-439:1 -/
+def state_only_hiding.cm31_mul_i (value : field.CM31) : Result field.CM31 := do
+  let m ← field.M31.neg value.b
+  field.CM31.new m value.a
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::mul_tower_basis]:
+    Source: 'src/state_only_hiding.rs', lines 448:0-465:1 -/
+def state_only_hiding.mul_tower_basis
+  (value : field.QM31) (coordinate : Std.Usize) : Result field.QM31 := do
+  match coordinate.val with
+  | 0 => ok value
+  | 1 =>
+    let c ← state_only_hiding.cm31_mul_i value.c0
+    let c1 ← state_only_hiding.cm31_mul_i value.c1
+    ok { c0 := c, c1 }
+  | 2 =>
+    let c ← state_only_hiding.cm31_mul_r value.c1
+    ok { c0 := c, c1 := value.c0 }
+  | 3 =>
+    let c ← state_only_hiding.cm31_mul_r value.c1
+    let c1 ← state_only_hiding.cm31_mul_i c
+    let c2 ← state_only_hiding.cm31_mul_i value.c0
+    ok { c0 := c1, c1 := c2 }
+  | _ => fail panic
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::MASK_ONLY_FACTOR_EXPONENTS]
+    Source: 'src/state_only_hiding.rs', lines 394:0-395:40 -/
+@[global_simps, irreducible]
+def state_only_hiding.MASK_ONLY_FACTOR_EXPONENTS : Array Std.U8 10#usize :=
+  Array.make 10#usize [
+    1#u8, 3#u8, 5#u8, 7#u8, 9#u8, 11#u8, 15#u8, 17#u8, 19#u8, 21#u8
+    ]
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::FACTOR_EXPONENTS]
+    Source: 'src/state_only_hiding.rs', lines 392:0-393:64 -/
+@[global_simps, irreducible]
+def state_only_hiding.FACTOR_EXPONENTS : Array Std.U8 16#usize :=
+  Array.make 16#usize [
+    0#u8, 2#u8, 4#u8, 6#u8, 8#u8, 10#u8, 12#u8, 14#u8, 16#u8, 18#u8, 20#u8,
+    22#u8, 24#u8, 26#u8, 13#u8, 25#u8
+    ]
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::STATE_ONLY_HIDING_FACTOR_DEGREE]
+    Source: 'src/state_only_hiding.rs', lines 29:0-29:54
+    Visibility: public -/
+@[global_simps, irreducible]
+def state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE : Std.Usize := 26#usize
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::STATE_ONLY_HIDING_C1_COLUMNS]
+    Source: 'src/state_only_hiding.rs', lines 12:0-12:51
+    Visibility: public -/
+@[global_simps, irreducible]
+def state_only_hiding.STATE_ONLY_HIDING_C1_COLUMNS : Std.Usize := 16#usize
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::state_only_selected_mask_value]: loop body 0:
+    Source: 'src/state_only_hiding.rs', lines 655:4-658:5
+    Visibility: public -/
+@[rust_loop_body]
+def state_only_hiding.state_only_selected_mask_value_loop0.body
+  (c1 : Array field.QM31 16#usize) (iter : core.ops.range.Range Std.Usize)
+  (coefficients : Array field.QM31 27#usize) :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (Array field.QM31
+    27#usize)) (Array field.QM31 27#usize))
+  := do
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done coefficients)
+  | some column =>
+    let q ← Array.index_usize c1 column
+    let i ← lift (column &&& 3#usize)
+    let q1 ← state_only_hiding.mul_tower_basis q i
+    let i1 ← Array.index_usize state_only_hiding.FACTOR_EXPONENTS column
+    let i2 ← lift (core.convert.num.FromUsizeU8.from i1)
+    let a ← Array.update coefficients i2 q1
+    ok (cont (iter1, a))
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::state_only_selected_mask_value]: loop 0:
+    Source: 'src/state_only_hiding.rs', lines 655:4-658:5
+    Visibility: public -/
+@[rust_loop]
+def state_only_hiding.state_only_selected_mask_value_loop0
+  (iter : core.ops.range.Range Std.Usize) (c1 : Array field.QM31 16#usize)
+  (coefficients : Array field.QM31 27#usize) :
+  Result (Array field.QM31 27#usize)
+  := do
+  loop
+    (fun (iter1, coefficients1) =>
+      state_only_hiding.state_only_selected_mask_value_loop0.body c1 iter1
+      coefficients1)
+    (iter, coefficients)
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::state_only_selected_mask_value]: loop body 1:
+    Source: 'src/state_only_hiding.rs', lines 659:4-662:5
+    Visibility: public -/
+@[rust_loop_body]
+def state_only_hiding.state_only_selected_mask_value_loop1.body
+  (mask_only_c1 : Array field.QM31 10#usize)
+  (iter : core.ops.range.Range Std.Usize)
+  (coefficients : Array field.QM31 27#usize) :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (Array field.QM31
+    27#usize)) (Array field.QM31 27#usize))
+  := do
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done coefficients)
+  | some column =>
+    let q ← Array.index_usize mask_only_c1 column
+    let i ← lift (column &&& 3#usize)
+    let q1 ← state_only_hiding.mul_tower_basis q i
+    let i1 ←
+      Array.index_usize state_only_hiding.MASK_ONLY_FACTOR_EXPONENTS column
+    let i2 ← lift (core.convert.num.FromUsizeU8.from i1)
+    let a ← Array.update coefficients i2 q1
+    ok (cont (iter1, a))
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::state_only_selected_mask_value]: loop 1:
+    Source: 'src/state_only_hiding.rs', lines 659:4-662:5
+    Visibility: public -/
+@[rust_loop]
+def state_only_hiding.state_only_selected_mask_value_loop1
+  (iter : core.ops.range.Range Std.Usize)
+  (mask_only_c1 : Array field.QM31 10#usize)
+  (coefficients : Array field.QM31 27#usize) :
+  Result (Array field.QM31 27#usize)
+  := do
+  loop
+    (fun (iter1, coefficients1) =>
+      state_only_hiding.state_only_selected_mask_value_loop1.body mask_only_c1
+      iter1 coefficients1)
+    (iter, coefficients)
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::state_only_selected_mask_value]: loop body 2:
+    Source: 'src/state_only_hiding.rs', lines 666:4-668:5
+    Visibility: public -/
+@[rust_loop_body]
+def state_only_hiding.state_only_selected_mask_value_loop2.body
+  (coefficients : Array field.QM31 27#usize)
+  (prepared_linear : field.PreparedQm31Multiplier)
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
+  (shared : field.QM31) :
+  Result (ControlFlow ((core.iter.adapters.rev.Rev (core.ops.range.Range
+    Std.Usize)) × field.QM31) field.QM31)
+  := do
+  let (o, iter1) ←
+    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator
+      core.iter.range.StepUsize) iter
+  match o with
+  | none => ok (done shared)
+  | some exponent =>
+    let q ← field.PreparedQm31Multiplier.mul prepared_linear shared
+    let q1 ← Array.index_usize coefficients exponent
+    let shared1 ← field.QM31.add q q1
+    ok (cont (iter1, shared1))
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::state_only_selected_mask_value]: loop 2:
+    Source: 'src/state_only_hiding.rs', lines 666:4-668:5
+    Visibility: public -/
+@[rust_loop]
+def state_only_hiding.state_only_selected_mask_value_loop2
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
+  (coefficients : Array field.QM31 27#usize)
+  (prepared_linear : field.PreparedQm31Multiplier) (shared : field.QM31) :
+  Result field.QM31
+  := do
+  loop
+    (fun (iter1, shared1) =>
+      state_only_hiding.state_only_selected_mask_value_loop2.body coefficients
+      prepared_linear iter1 shared1)
+    (iter, shared)
+
+
+/-- [aspis_r1_mask_extraction_probe::state_only_hiding::state_only_selected_mask_value]:
+    Source: 'src/state_only_hiding.rs', lines 647:0-675:1
+    Visibility: public -/
+def state_only_hiding.state_only_selected_mask_value
+  (c1 : Array field.QM31 16#usize) (mask_only_c1 : Array field.QM31 10#usize)
+  (explicit_g : field.QM31) (point : Array field.QM31 10#usize) :
+  Result field.QM31
+  := do
+  let (linear, explicit_linear) ←
+    state_only_hiding.selected_mask_linears point
+  let coefficients := Array.repeat 27#usize field.QM31.ZERO
+  let coefficients1 ←
+    state_only_hiding.state_only_selected_mask_value_loop0
+      {
+        start := 0#usize,
+        «end» := state_only_hiding.STATE_ONLY_HIDING_C1_COLUMNS
+      } c1 coefficients
+  let coefficients2 ←
+    state_only_hiding.state_only_selected_mask_value_loop1
+      {
+        start := 0#usize,
+        «end» := state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS
+      } mask_only_c1 coefficients1
+  let prepared_linear ← field.PreparedQm31Multiplier.new linear
+  let shared ←
+    Array.index_usize coefficients2
+      state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE
+  let iter ←
+    core.iter.traits.iterator.Iterator.rev.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      (core.ops.range.Range.Insts.DoubleEndedIterator
+      core.iter.range.StepUsize)
+      {
+        start := 0#usize,
+        «end» := state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE
+      }
+  let shared1 ←
+    state_only_hiding.state_only_selected_mask_value_loop2 iter coefficients2
+      prepared_linear shared
+  let q ← state_only_hiding.mask_power_26 explicit_linear
+  let q1 ← field.QM31.add field.QM31.ONE q
+  let q2 ← field.QM31.mul q1 explicit_g
+  field.QM31.add shared1 q2
+
+
+/-- [aspis_r1_mask_extraction_probe::extraction_probe::state_only_selected_mask_value_probe]:
+    Source: 'src/extraction_probe.rs', lines 5:0-14:1
+    Visibility: public -/
+def extraction_probe.state_only_selected_mask_value_probe
+  (c1 : Array field.QM31 16#usize) (mask_only_c1 : Array field.QM31 10#usize)
+  (explicit_g : field.QM31) (point : Array field.QM31 10#usize) :
+  Result field.QM31
+  := do
+  state_only_hiding.state_only_selected_mask_value c1 mask_only_c1 explicit_g
+    point
+
+
+end AspisR1SelectedMaskProbe
+#print axioms AspisR1SelectedMaskProbe.state_only_hiding.state_only_selected_mask_value

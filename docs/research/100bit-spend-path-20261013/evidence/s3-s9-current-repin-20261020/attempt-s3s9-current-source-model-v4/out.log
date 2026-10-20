@@ -1,0 +1,33 @@
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/S3S9CurrentSourceModel.lean:118:10: error: No applicable extensionality theorem found for type
+  Type
+
+Note: Extensionality theorems can be registered by marking them with the `[ext]` attribute
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/S3S9CurrentSourceModel.lean:126:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x ∈ ?s, if x = ?a then ?b x else 0
+in the target expression
+  (∑ g, (if group j = g then coeff j else 0) * if mask g s = true then low s else 0) =
+    if mask (group j) s = true then coeff j * low s else 0
+
+E : Type
+inst✝ : CommSemiring E
+coeff : Fin 64 → E
+low : Fin 16 → E
+group : Fin 64 → Fin 12
+mask : Fin 12 → Fin 16 → Bool
+inactive : Fin 64 → Fin 16 → Bool
+hclass : ∀ (j : Fin 64) (s : Fin 16), inactive j s = mask (group j) s
+j : Fin 64
+hj : j ∈ Finset.univ
+s : Fin 16
+hs : s ∈ Finset.univ
+⊢ (∑ g, (if group j = g then coeff j else 0) * if mask g s = true then low s else 0) =
+    if mask (group j) s = true then coeff j * low s else 0
+'AspisR1.S3S9CurrentSourceModel.s3_table_matches_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S3S9CurrentSourceModel.s3_group_classification' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S3S9CurrentSourceModel.s3_grouped_pair_exact' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.S3S9CurrentSourceModel.s3_group_ranges' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S3S9CurrentSourceModel.s9_source_weights_equal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S3S9CurrentSourceModel.s9_index_ranges' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,58 @@
+/tmp/root-terminal-named-types-20261019/sources/RawMerklePathWalk.lean:76:6: error: 'change' tactic failed, pattern
+  (do
+      let pair ← step D hash path d index node
+      let flow ← ok (cont (iter1, pair.1, pair.2))
+      match flow with
+        | cont (it, i, n) => verifier.merkle_path_loop D it hash i n path
+        | done out => ok out) =
+    do
+    let pair ← step D hash path d index node
+    verifier.merkle_path_loop D iter1 hash pair.1 pair.2 path
+is not definitionally equal to target
+  (do
+      let x ← ok (some d, iter1)
+      let flow ←
+        let (o, iter1) := x
+          match o with
+          | none => ok (done (index, node))
+          | some d => do
+            let (index1, node1) ← step D hash path d index node
+            ok (cont (iter1, index1, node1))
+      match flow with
+        | cont (iter1, index1, node1) => verifier.merkle_path_loop D iter1 hash index1 node1 path
+        | done out => ok out) =
+    do
+    let (o, iter1) ← ok (some d, iter1)
+    match o with
+      | none => ok (index, node)
+      | some d => do
+        let (index1, node1) ← step D hash path d index node
+        verifier.merkle_path_loop D iter1 hash index1 node1 path
+'AspisR1MerklePathChildren.RawMerklePathWalk.loop_equation' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1MerklePathChildren.RawMerklePathWalk.loop_success_walk' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+       12.20 real         2.11 user         2.87 sys
+          2232647680  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              113894  page reclaims
+               70633  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               11705  voluntary context switches
+               63460  involuntary context switches
+         26428441774  instructions retired
+         10822879906  cycles elapsed
+           378195824  peak memory footprint

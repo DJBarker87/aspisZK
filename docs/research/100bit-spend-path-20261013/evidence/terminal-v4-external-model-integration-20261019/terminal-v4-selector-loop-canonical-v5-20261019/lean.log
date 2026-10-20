@@ -1,0 +1,197 @@
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:15:24: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:31:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑a)[↑i]?
+in the target expression
+  (match a[i]? with
+    | none => fail arrayOutOfBounds
+    | some x => ok x) =
+    ok x
+
+case neg
+α : Type
+a : Std.Array α 16#usize
+i : Usize
+x : α
+h :
+  (match a[i]? with
+    | none => fail arrayOutOfBounds
+    | some x => ok x) =
+    ok x
+hi : ¬↑i < (↑a).length
+hge : (↑a).length ≤ ↑i
+hnone : (↑a)[↑i]? = none
+⊢ ↑i < (↑a).length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:90:56: error: Application type mismatch: The argument
+  hread
+has type
+  (if complement = true then do
+      let q ← Array.index_usize values index
+      AspisR1SelectedMaskProbe.field.QM31.sub sum q
+    else do
+      let q ← Array.index_usize values index
+      AspisR1SelectedMaskProbe.field.QM31.add sum q) =
+    ok q
+but is expected to have type
+  Array.index_usize values index = ok q
+in the application
+  index_success_bound values index q hread
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:95:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if complement = true then do
+    let q ← Array.index_usize values index
+    AspisR1SelectedMaskProbe.field.QM31.sub sum q
+  else do
+    let q ← Array.index_usize values index
+    AspisR1SelectedMaskProbe.field.QM31.add sum q
+in the target expression
+  Array.index_usize values index ⦃ x => x = (↑values)[↑index] ⦄
+
+values : Values
+mask : U16
+complement : Bool
+sum✝ out✝ : QM
+hvalues : ∀ (i : Fin 16), Canonical (valueCell values i)
+hsum✝ : Canonical sum✝
+hrun✝ : Loop values mask complement sum✝ = ok out✝
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (mask : U16),
+      ↑mask = m → ∀ (sum out : QM), Canonical sum → Loop values mask complement sum = ok out → Canonical out
+current : U16
+hcurrent : ↑current = n
+sum out : QM
+hsum : Canonical sum
+hrun : Loop values current complement sum = ok out
+hzero : ¬current = 0#u16
+hnonzero : (current != 0#u16) = true
+h :
+  (do
+      let i ← core.num.U16.trailing_zeros current
+      let index ← lift (UScalar.cast UScalarTy.Usize i)
+      let sum1 ←
+        if complement = true then do
+            let q ← Array.index_usize values index
+            AspisR1SelectedMaskProbe.field.QM31.sub sum q
+          else do
+            let q ← Array.index_usize values index
+            AspisR1SelectedMaskProbe.field.QM31.add sum q
+      let i1 ← current - 1#u16
+      let mask1 ← lift (current &&& i1)
+      AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values mask1 complement
+          sum1) =
+    ok out
+ti : U32
+htrail : core.num.U16.trailing_zeros current = ok ti
+hrest✝¹ :
+  (do
+      let index ← lift (UScalar.cast UScalarTy.Usize ti)
+      let sum1 ←
+        if complement = true then do
+            let q ← Array.index_usize values index
+            AspisR1SelectedMaskProbe.field.QM31.sub sum q
+          else do
+            let q ← Array.index_usize values index
+            AspisR1SelectedMaskProbe.field.QM31.add sum q
+      let i1 ← current - 1#u16
+      let mask1 ← lift (current &&& i1)
+      AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values mask1 complement
+          sum1) =
+    ok out
+index : UScalar UScalarTy.Usize
+hcast : lift (UScalar.cast UScalarTy.Usize ti) = ok index
+hrest✝ :
+  (do
+      let sum1 ←
+        if complement = true then do
+            let q ← Array.index_usize values index
+            AspisR1SelectedMaskProbe.field.QM31.sub sum q
+          else do
+            let q ← Array.index_usize values index
+            AspisR1SelectedMaskProbe.field.QM31.add sum q
+      let i1 ← current - 1#u16
+      let mask1 ← lift (current &&& i1)
+      AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values mask1 complement
+          sum1) =
+    ok out
+q : AspisR1SelectedMaskProbe.field.QM31
+hread :
+  (if complement = true then do
+      let q ← Array.index_usize values index
+      AspisR1SelectedMaskProbe.field.QM31.sub sum q
+    else do
+      let q ← Array.index_usize values index
+      AspisR1SelectedMaskProbe.field.QM31.add sum q) =
+    ok q
+hrest :
+  (do
+      let i1 ← current - 1#u16
+      let mask1 ← lift (current &&& i1)
+      AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values mask1 complement q) =
+    ok out
+hidx : ↑index < (↑values).length
+hvalue : Canonical (valueCell values ⟨↑index, ⋯⟩)
+hspec : Array.index_usize values index ⦃ x => x = (↑values)[↑index] ⦄
+⊢ q = valueCell values ⟨↑index, ⋯⟩
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:108:32: error: Application type mismatch: The argument
+  hmask1
+has type
+  ok (current &&& i1) = ok mask1
+but is expected to have type
+  ok mask1 = ok (current &&& i1)
+in the application
+  ok.inj hmask1
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:110:12: error: Type mismatch: After simplification, term
+  hrest
+ has type
+  AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values (current &&& i1) false
+      (valueCell values ⟨↑index, ⋯⟩) =
+    ok out
+but is expected to have type
+  Loop values (current &&& i1) false sum1 = ok out
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:122:32: error: Application type mismatch: The argument
+  hmask1
+has type
+  ok (current &&& i1) = ok mask1
+but is expected to have type
+  ok mask1 = ok (current &&& i1)
+in the application
+  ok.inj hmask1
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:124:12: error: Type mismatch: After simplification, term
+  hrest
+ has type
+  AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values (current &&& i1) true
+      (valueCell values ⟨↑index, ⋯⟩) =
+    ok out
+but is expected to have type
+  Loop values (current &&& i1) true sum1 = ok out
+       25.20 real         2.53 user         5.82 sys
+          2154872832  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               82640  page reclaims
+              104850  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               20165  voluntary context switches
+              130550  involuntary context switches
+         30562830128  instructions retired
+         17050856674  cycles elapsed
+           378277864  peak memory footprint

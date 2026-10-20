@@ -1,0 +1,41 @@
+{
+  "classification": "complete source/declaration adapter check + all-Result Lean equality; Rust std Rev::fold to Aeneas actual Rev::next loop remains explicit",
+  "rust_function": {
+    "sha256": "ca19094cb9ea4f1b293554b0ec68d055ccc1dd71488f16f6e5f5043c631e48a7",
+    "extraction_input_span": [
+      33146,
+      33246
+    ],
+    "frozen_verifier_span": [
+      12595,
+      12695
+    ],
+    "frozen_verifier_sha256": "8a704eea668d04ca173290ca894c7cb0ab1f29abef4fec9bb49fbb36476779ea",
+    "text": "pub fn polynomial(bytes:&[u8],x:E)->E {(0..7).rev().fold(E::ZERO,|a,i|a.mul(x).add(field(bytes,i)))}"
+  },
+  "full_generated_funs_sha256": "2c7ba8935b7365531286ea1c4c8d1db578dd32b9c55b590ac748ad571bb4e08d",
+  "full_generated_types_sha256": "5ce4bbbb73823bc22b3870fca2a8eca1c87fdfcdfaf321cb85e68fe8b35e97c1",
+  "generated_function": "AspisR1VerifierPolynomialCurrent.verifier.polynomial",
+  "generated_body_sha256": "aa4f24fb0d1f5c1a122a5a1fd384cf051349ec26446c7a10c273e4e27eb6e775",
+  "generated_callback_sha256": "e8f410efcdf8848cfdc44aab0a4d868308985ca31491cdf23644feeae34b1ceb",
+  "whole_body_mapping": {
+    "Range(0,7).rev() construction": "actualInitialRevRange",
+    "Rev.fold DoubleEndedIterator/FnMut invocation": "actualRfoldLoop 8 actualInitialRevRange",
+    "fold accumulator": "WideExact.ZERO -> currentWideZero",
+    "fold closure environment": "(x, bytes), fixed across loop; callback accumulator is current state",
+    "callback order": [
+      "generated mul a we -> current mul state x",
+      "weights.field s i -> currentRecordFieldLookupNat bytes index",
+      "generated add we1 we2 -> current WideExact.add product coefficient"
+    ],
+    "callback return": "generated (we3,c) with unchanged closure state -> updated accumulator; closure environment remains (x,bytes)",
+    "usize index": "Aeneas actualRevNext index.val -> Nat passed to current parser adapter"
+  },
+  "lean_adapter_sha256": "0e783e8d9b5777ae085b6fa8e7e69f3b54f8738e8d0ef117b66eee0e64db1d71",
+  "lean_adapter_theorem": "originalEmittedPolynomialBody_eq_unrolled; success iff unrolled, for all bytes/x/results",
+  "current_step_source_sha256": "b106b70f94ea41a7cd91688950c4ace8237531b0b2e024cc6d679e1567829f4a",
+  "actual_rev_loop_source_sha256": "17bb5a2f9e7c259f20c1b53a2d070664d7e591546200c563321216ff19213177",
+  "rust_source_file_sha256": "332b5b7ccdfd48e1c7ebcf40dce39b8a0f471b360508fc872fd1e862a1e52d6e",
+  "source_pins_file_sha256": "34ef4efb8afc6a50158bc73fea7bcf7496f40d695a48692225c6d6b074715b45",
+  "unproved_boundary": "Rust core iter Rev::fold/Range reverse iteration correspondence to emitted Aeneas Rev.next loop; generated arithmetic/field stubs excluded and replaced by checked current operations/parser adapter"
+}

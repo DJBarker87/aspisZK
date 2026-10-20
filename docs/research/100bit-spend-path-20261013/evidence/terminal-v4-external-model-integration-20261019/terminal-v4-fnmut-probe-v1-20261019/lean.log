@@ -1,0 +1,45 @@
+structure Aeneas.Std.core.ops.function.FnMut.{u, v, w} (Self : Type u) (Args : Type v) (Output : Type w) :
+  Type (max (max u v) w)
+number of parameters: 3
+fields:
+  Aeneas.Std.core.ops.function.FnMut.FnOnceInst : core.ops.function.FnOnce Self Args Output
+  Aeneas.Std.core.ops.function.FnMut.call_mut : Self → Args → Result (Output × Self)
+constructor:
+  Aeneas.Std.core.ops.function.FnMut.mk.{u, v, w} {Self : Type u} {Args : Type v} {Output : Type w}
+    (FnOnceInst : core.ops.function.FnOnce Self Args Output) (call_mut : Self → Args → Result (Output × Self)) :
+    core.ops.function.FnMut Self Args Output
+structure Aeneas.Std.core.ops.function.FnOnce.{u, v, w} (Self : Type u) (Args : Type v) (Output : Type w) :
+  Type (max (max u v) w)
+number of parameters: 3
+fields:
+  Aeneas.Std.core.ops.function.FnOnce.call_once : Self → Args → Result Output
+constructor:
+  Aeneas.Std.core.ops.function.FnOnce.mk.{u, v, w} {Self : Type u} {Args : Type v} {Output : Type w}
+    (call_once : Self → Args → Result Output) : core.ops.function.FnOnce Self Args Output
+/tmp/terminal-v4-model-sources-20261019/TerminalV4FnMutProbe.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.ops.function.FnMut.call`
+Aeneas.Std.core.ops.function.FnOnce.call_once.{u, v, w} {Self : Type u} {Args : Type v} {Output : Type w}
+  (self : core.ops.function.FnOnce Self Args Output) : Self → Args → Result Output
+Aeneas.Std.core.ops.function.FnMut.call_mut.{u, v, w} {Self : Type u} {Args : Type v} {Output : Type w}
+  (self : core.ops.function.FnMut Self Args Output) : Self → Args → Result (Output × Self)
+Aeneas.Std.core.slice.iter.IteratorSliceIter.next {T : Type} (it : core.slice.iter.Iter T) :
+  Result (Option T × core.slice.iter.Iter T)
+/tmp/terminal-v4-model-sources-20261019/TerminalV4FnMutProbe.lean:9:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.slice.iter.Iter.Insts.CoreIterTraitsDouble_endedDoubleEndedIteratorSharedT.next_back`
+/tmp/terminal-v4-model-sources-20261019/TerminalV4FnMutProbe.lean:10:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.fold`
+        4.47 real         0.93 user         1.17 sys
+          2206040064  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              149321  page reclaims
+               31343  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                2525  voluntary context switches
+               25098  involuntary context switches
+         20381046249  instructions retired
+          7431280492  cycles elapsed
+           369462864  peak memory footprint

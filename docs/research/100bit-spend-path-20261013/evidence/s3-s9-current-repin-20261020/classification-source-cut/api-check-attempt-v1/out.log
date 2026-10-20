@@ -1,0 +1,24 @@
+Aeneas.Std.UScalar.div_spec {ty : UScalarTy} (x : UScalar ty) {y : UScalar ty} (hzero : ↑y ≠ 0) :
+  ∃ z, x / y = ok z ∧ ↑z = ↑x / ↑y
+Aeneas.Std.UScalar.rem_spec {ty : UScalarTy} (x : UScalar ty) {y : UScalar ty} (hzero : ↑y ≠ 0) :
+  x % y ⦃ z => ↑z = ↑x % ↑y ⦄
+Aeneas.Std.UScalar.ShiftRight_spec {ty0 ty1 : UScalarTy} (x : UScalar ty0) (y : UScalar ty1) (hy : ↑y < ty0.numBits) :
+  x >>> y ⦃ z => ↑z = ↑x >>> ↑y ∧ z.bv = x.bv >>> ↑y ⦄
+Aeneas.Std.UScalar.and_spec {ty : UScalarTy} (x y : UScalar ty) :
+  lift (x &&& y) ⦃ z => ↑z = ↑(x &&& y) ∧ z.bv = x.bv &&& y.bv ⦄
+Aeneas.Std.Array.index_usize_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize)
+  (hbound : ↑i < v.length) : v.index_usize i ⦃ x => x = (↑v)[↑i] ⦄
+Aeneas.Std.UScalar.eq_of_val_eq {ty : UScalarTy} {i j : UScalar ty} : ↑i = ↑j → i = j
+fun x => x = 0#u16 : UScalar UScalarTy.U16 → Prop
+def AspisR1S3InactiveSource.r0.opening.inactive : Usize →
+  Result (core.result.Result Bool AspisR1S3InactiveSource.r0.Error) :=
+fun r =>
+  if r ≥ 1024#usize then ok (core.result.Result.Err AspisR1S3InactiveSource.r0.Error.IndexOutOfRange)
+  else do
+    let i ← r / 16#usize
+    let i1 ← AspisR1S3InactiveSource.r0.opening.COPY_ACTIVE_ROW_MASKS.index_usize i
+    let i2 ← r % 16#usize
+    let i3 ← i1 >>> i2
+    let i4 ← lift (i3 &&& 1#u16)
+    ok (core.result.Result.Ok (decide (i4 = 0#u16)))
+'AspisR1S3InactiveSource.r0.opening.inactive' depends on axioms: [propext, Classical.choice, Quot.sound]

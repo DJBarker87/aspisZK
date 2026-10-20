@@ -1,0 +1,28 @@
+/tmp/terminal-v4-model-sources-20261019/TerminalV4OperationNameDiagV1.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.result.Result.map`
+def AspisR1SelectedMaskProbe.core.result.Result.map : {T E U F : Type} →
+  core.ops.function.FnOnce F T U → core.result.Result T E → F → Result (core.result.Result U E) :=
+fun {T E U F} callback self op =>
+  match self with
+  | core.result.Result.Ok value => do
+    let mapped ← callback.call_once op value
+    Result.ok (core.result.Result.Ok mapped)
+  | core.result.Result.Err error => Result.ok (core.result.Result.Err error)
+'AspisR1SelectedMaskProbe.core.result.Result.map' does not depend on any axioms
+       13.19 real         1.07 user         2.11 sys
+          2168193024  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               80079  page reclaims
+              103010  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               18234  voluntary context switches
+               93273  involuntary context switches
+         26528259404  instructions retired
+         11235687158  cycles elapsed
+           370675880  peak memory footprint

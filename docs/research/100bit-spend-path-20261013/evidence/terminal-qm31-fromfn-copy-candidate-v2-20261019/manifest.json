@@ -1,0 +1,119 @@
+{
+  "status": "UNCOMPILED_SOURCE_CANDIDATE",
+  "base_revision": "2517a884266c7f10dd1e13e63f9a1f8af8111e12",
+  "scope": "Replace only five terminal-reachable array::from_fn calls: the 84-cell terminal selector and four composition_parts selected-claim gathers (16,16,16,10). Add existing extraction helper implementation to isolated aspis-core candidate.",
+  "source_files": [
+    {
+      "path": "crates/aspis-core/src/lib.rs",
+      "base_sha256": "c179731989675fa3218cf2230ec3681d2e61d23c2b2694ea10b72fb68ee377d0",
+      "candidate_sha256": "1f0949d63253b825b22b59151598c4e6e6b29e251e8761c5c3fa3f738c7282a0"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+      "base_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+      "candidate_sha256": "c57044bfc3c36673c9f844d43a417353e1583c3b25ef88f22c0584e29aeeb3c1"
+    }
+  ],
+  "patch_sha256": "3166c05dfb43b2cc97fab3ea4fa78d7e8fb2c11d26fb6a6711f72d5fab210782",
+  "green_lean_support": [
+    {
+      "module": "TerminalClaimsFromFnCallbackV5",
+      "source_sha256": "b12de711075fc3c24cfa605dee56e3edb2c63b197304bc0381991535d9fef846",
+      "olean_sha256": "ed8db6ce42d936a09c1d502ff494efa2269a0a5a3f81f58f781190efb1a83597"
+    },
+    {
+      "module": "TerminalClaimsFromFnCopyEquivalenceV1",
+      "source_sha256": "985940e3aafc19bec90269fe26b95909be542bcec584300eeda3c276d79c3e36",
+      "olean_sha256": "915a638d062c992c53a66e237ffa4d311195dae1fc0496ea6ad61860f1d18c3b"
+    },
+    {
+      "module": "CompositionPartsGatherStable",
+      "source_sha256": "2fd435655b86ac4206e14952c97ee9ea2374a6baaee789f298f89e67b92cf95f",
+      "olean_sha256": "34653b82b742822f396bb989634451e7fa63b6f9e14ee63fa48bdd455a272878",
+      "receipt": "docs/research/100bit-spend-path-20261013/evidence/composition-source-prelude-tail-20261017/CompositionPartsGatherStable/receipt.json"
+    },
+    {
+      "module": "CompositionPartsGatherSlice",
+      "source_sha256": "a1605f79b73b420853c49b2c1727563e608ba2793b54c336d3701e5d9b3b6620",
+      "olean_sha256": "c97528d788def17ab6d4dfdee6e2b941f66e24ef628320e94f2d0c499ebd42a2",
+      "receipt": "direct import pin in CompositionPartsGatherStable receipt"
+    }
+  ],
+  "generated_reference": {
+    "archive": "docs/research/100bit-spend-path-20261013/evidence/terminal-current-aeneas-v10/terminal-current-generated-v10.tar.gz",
+    "archive_sha256": "162b198ec2427b8588861d168ef3015c7bea4665e430db271db89b5ac7e9d8a6",
+    "Funs_sha256": "a0fa91e43a9fd511d0746bad56d4e9bb38090187cd0c77e1a54b377388474c08"
+  },
+  "limits": [
+    "No Rust build, Aeneas run, or generated Funs compile was run for this candidate.",
+    "The candidate removes five direct source calls; the generated terminal dependency still has core::array::from_fn in nested Poseidon and state-only helpers. The external-template from_fn axiom remains a live obligation until those reachable uses are adapted or discharged.",
+    "CompositionPartsGatherStable proves the four callback gathers in the extracted source-cut under its explicit canonical-QM premise; this is component-level support, not a whole terminal success theorem.",
+    "The Lean claims-selector callback proof is source-adapted to the exact generated body. No claim is made that Rust std core::array::from_fn has been verified."
+  ],
+  "remaining_known_external_template_call_sites": [
+    {
+      "owner": "state_only_poseidon.evaluate_state_only_poseidon_oracle_projected",
+      "stub": "core.array.from_fn",
+      "generated_lines": [
+        2853
+      ]
+    },
+    {
+      "owner": "state_only_poseidon.external_linear_lazy",
+      "stub": "core.array.from_fn",
+      "generated_lines": [
+        2581
+      ]
+    },
+    {
+      "owner": "state_only_poseidon.internal_linear_lazy",
+      "stub": "core.array.from_fn",
+      "generated_lines": [
+        1716,
+        1720
+      ]
+    },
+    {
+      "owner": "state_only_poseidon.external_local_packed_raw",
+      "stub": "core.array.from_fn",
+      "generated_lines": [
+        2097
+      ]
+    },
+    {
+      "owner": "state_only_poseidon.evaluate_state_only_poseidon_oracle_projected",
+      "stub": "core.array.Array.map",
+      "generated_lines": [
+        2849
+      ]
+    },
+    {
+      "owner": "state_only_poseidon.evaluate_state_only_poseidon_oracle_projected",
+      "stub": "IntoIter.into_iter / iterator fold / RangeInclusive fold",
+      "generated_lines": [
+        2829,
+        2832,
+        2837
+      ]
+    },
+    {
+      "owner": "Public.terminal_qm31",
+      "stub": "core.result.Result.map and map_err",
+      "generated_lines": [
+        6563,
+        6566
+      ]
+    },
+    {
+      "owner": "semantic_packed / mask extraction path (transitive candidate)",
+      "stub": "core.num.U16.count_ones and trailing_zeros",
+      "generated_lines": [
+        6076,
+        6053
+      ]
+    }
+  ],
+  "known_direct_generated_from_fn_occurrences_before_candidate": 18,
+  "known_direct_generated_from_fn_occurrences_after_candidate": 13,
+  "reachability_qualification": "Call-site inventory is source based and identifies plausible/known transitively called definitions. It is not a complete generated-module reachability proof; the exact remaining external-template set should be discharged after bounded re-extraction or a verified source-level call graph."
+}

@@ -1,0 +1,43 @@
+import TerminalV4CopyPatternsRows01V1
+open Aeneas Aeneas.Std Result ControlFlow Error
+set_option linter.dupNamespace false
+set_option linter.hashCommand false
+set_option linter.unusedVariables false
+set_option maxHeartbeats 1000000
+set_option maxRecDepth 2048
+noncomputable section
+namespace AspisR1SelectedMaskProbe
+namespace pool_v1.pair_forest_copy_terminal.constants
+def copyPattern_01_source : pool_v1.pair_forest_copy_terminal.CompiledPoolV1PairForestPattern :=
+  let a := Array.repeat 16#usize 1#u8;
+  let a1 := Array.repeat 16#usize 0#u32;
+  let a2 := Array.repeat 16#usize 0#u32;
+  let a3 := Array.repeat 16#usize 0#u32;
+  let a4 := Array.repeat 16#usize 0#u32;
+  let a5 := Array.repeat 16#usize 0#u32;
+  let a6 := Array.repeat 16#usize 0#u32;
+  let a7 := Array.repeat 16#usize 0#u8;
+  let a8 := Array.repeat 16#usize 0#u32;
+  let a9 := Array.repeat 16#usize 0#u32;
+  let a10 := Array.repeat 16#usize 0#u32;
+  let a11 := Array.repeat 16#usize 0#u32;
+  let a12 := Array.repeat 16#usize 0#u32;
+  let a13 := Array.repeat 16#usize 0#u32;
+  let a14 := Array.repeat 16#usize 0#u32;
+      {
+      kinds :=
+        (Array.make 16#usize [
+          1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 0#u8, 0#u8, 0#u8,
+          0#u8, 0#u8, 0#u8, 0#u8, 0#u8
+          ]),
+      columns :=
+        (Array.make 16#usize [
+          0#u8, 1#u8, 2#u8, 3#u8, 4#u8, 5#u8, 6#u8, 7#u8, 0#u8, 0#u8, 0#u8,
+          0#u8, 0#u8, 0#u8, 0#u8, 0#u8
+          ]),
+      offsets := a2
+    }
+theorem copyPattern_01_source_eq_factored : copyPattern_01_source = copyPattern_01 := by
+  ext <;> rfl
+end pool_v1.pair_forest_copy_terminal.constants
+end AspisR1SelectedMaskProbe

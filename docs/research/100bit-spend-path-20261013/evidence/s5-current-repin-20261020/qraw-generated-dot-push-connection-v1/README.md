@@ -1,0 +1,7 @@
+# Q.raw to generated Dot.push connection
+
+This packet composes the generated-nominal four-coordinate `Dot.push` refinement with the v24 actual-Q.raw coefficient theorem. The consumer defines its callback by directly applying the selected actual extracted `AspisR1CanonicalDotFinish.canonical.Q.raw`; generated `Q` is definitionally the same `Array Std.U32 4#usize`. Under eight input limb bounds (`≤ 2^31 - 2`), it derives the actual four output coefficient formulas from `actual_raw_coefficients_of_input_bounds`, and feeds those exact result words into the emitted `Dot.push_raw` loop theorem. The final target and both exported axioms audits are in `evidence/connection/`.
+
+The prior v3 packet establishes generated `Dot.push` vs the callback-parameterized source body. Its source checker, generated Funs/Types, and proof source are copied here; its full dependency receipts remain in the sibling v3 packet. The source map records direct hashes and references. The v24 actual-coefficient source, config, preflight, receipt, and transitive direct-import source/object pins are copied. The actual `Q.raw` generated owner sources and owner receipts come from `qraw-extracted-source-model-20261020`, whose manifest marks Rust callback/Array.map correspondence as open.
+
+This result is a source/model connection under canonical-input bounds. It does not close the EbyK caller's guarantee of those bounds, the original Rust standard-library `Array.map` semantics, or full S5/S1 completion. No production source was modified. No compiled binaries or LLBC files are included.

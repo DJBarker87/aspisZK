@@ -1,0 +1,99 @@
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralCanonical.lean:14:24: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralCanonical.lean:26:23: error: Tactic `assumption` failed
+
+values : Values
+out : QM
+hvalues : ∀ (i : Fin 16), CanonicalQM (valueCell values i)
+hrun : AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16 values 6144#u16 = ok out
+h :
+  (do
+      let i ←
+        ok
+            (BitVec.ofNat 32
+                ((if (↑6144#u16).testBit 15 = true then 1 else 0) +
+                  ((if (↑6144#u16).testBit 14 = true then 1 else 0) +
+                    ((if (↑6144#u16).testBit 13 = true then 1 else 0) +
+                      ((if (↑6144#u16).testBit 12 = true then 1 else 0) +
+                        ((if (↑6144#u16).testBit 11 = true then 1 else 0) +
+                          ((if (↑6144#u16).testBit 10 = true then 1 else 0) +
+                            ((if (↑6144#u16).testBit 9 = true then 1 else 0) +
+                              ((if (↑6144#u16).testBit 8 = true then 1 else 0) +
+                                ((if (↑6144#u16).testBit 7 = true then 1 else 0) +
+                                  ((if (↑6144#u16).testBit 6 = true then 1 else 0) +
+                                    ((if (↑6144#u16).testBit 5 = true then 1 else 0) +
+                                      ((if (↑6144#u16).testBit 4 = true then 1 else 0) +
+                                        ((if (↑6144#u16).testBit 3 = true then 1 else 0) +
+                                          ((if (↑6144#u16).testBit 2 = true then 1 else 0) +
+                                            ((if (↑6144#u16).testBit 1 = true then 1 else 0) +
+                                              ((if (↑6144#u16).testBit 0 = true then 1 else 0) +
+                                                0))))))))))))))))#uscalar)
+      let (mask1, complement) ←
+        if i > 8#u32 then do
+            let mask2 ← lift (~~~6144#u16)
+            ok (mask2, true)
+          else ok (6144#u16, false)
+      let sum ←
+        if complement = true then ok AspisR1SelectedMaskProbe.field.QM31.ONE
+          else ok AspisR1SelectedMaskProbe.field.QM31.ZERO
+      AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values mask1 complement
+          sum) =
+    ok out
+⊢ False
+values : Values
+out : QM
+hvalues : ∀ (i : Fin 16), CanonicalQM (valueCell values i)
+hrun : AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16 values 6144#u16 = ok out
+h :
+  (do
+      let i ←
+        ok
+            (BitVec.ofNat 32
+                ((if (↑6144#u16).testBit 15 = true then 1 else 0) +
+                  ((if (↑6144#u16).testBit 14 = true then 1 else 0) +
+                    ((if (↑6144#u16).testBit 13 = true then 1 else 0) +
+                      ((if (↑6144#u16).testBit 12 = true then 1 else 0) +
+                        ((if (↑6144#u16).testBit 11 = true then 1 else 0) +
+                          ((if (↑6144#u16).testBit 10 = true then 1 else 0) +
+                            ((if (↑6144#u16).testBit 9 = true then 1 else 0) +
+                              ((if (↑6144#u16).testBit 8 = true then 1 else 0) +
+                                ((if (↑6144#u16).testBit 7 = true then 1 else 0) +
+                                  ((if (↑6144#u16).testBit 6 = true then 1 else 0) +
+                                    ((if (↑6144#u16).testBit 5 = true then 1 else 0) +
+                                      ((if (↑6144#u16).testBit 4 = true then 1 else 0) +
+                                        ((if (↑6144#u16).testBit 3 = true then 1 else 0) +
+                                          ((if (↑6144#u16).testBit 2 = true then 1 else 0) +
+                                            ((if (↑6144#u16).testBit 1 = true then 1 else 0) +
+                                              ((if (↑6144#u16).testBit 0 = true then 1 else 0) +
+                                                0))))))))))))))))#uscalar)
+      let (mask1, complement) ←
+        if i > 8#u32 then do
+            let mask2 ← lift (~~~6144#u16)
+            ok (mask2, true)
+          else ok (6144#u16, false)
+      let sum ←
+        if complement = true then ok AspisR1SelectedMaskProbe.field.QM31.ONE
+          else ok AspisR1SelectedMaskProbe.field.QM31.ZERO
+      AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values mask1 complement
+          sum) =
+    ok out
+⊢ CanonicalQM out
+       17.63 real         2.07 user         3.69 sys
+          2179088384  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               81445  page reclaims
+              103639  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               16131  voluntary context switches
+              105387  involuntary context switches
+         27875782158  instructions retired
+         12125662944  cycles elapsed
+           372347048  peak memory footprint

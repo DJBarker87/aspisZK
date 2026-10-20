@@ -1,0 +1,7 @@
+# Terminal claims selector: `array_from_fn_copy` source candidate
+
+Status: source-only, uncompiled candidate. Base revision is recorded in `manifest.json`. The patch changes exactly two current Rust source files: it adds the generic `Copy`-initialized fixed-array helper to the isolated `aspis-core` candidate and replaces the 84-element `core::array::from_fn` call in `Public::terminal_qm31` with that helper. The callback body remains `claims[i / 28][i % 28]`, and iteration order remains increasing `i`.
+
+The extracted-helper Lean support is already green: `TerminalClaimsFromFnCallbackV5` proves the exact callback succeeds and leaves its captured claims unchanged on all 84 indices; `TerminalClaimsFromFnCopyEquivalenceV1` instantiates the existing stable-copy theorem with the `Copy` instance and zero initializer. Its receipts and object pins are in `manifest.json`. The generated Funs file was also patched in `/tmp` as a single call-site diagnostic (hashes in the manifest); it was not compiled.
+
+This is a local source candidate, not a verified source change. It addresses only the claims-selector call. `composition_parts` and nested `state_only_poseidon` code still call `core::array::from_fn`, so this candidate alone does not remove the external-template axiom from the whole terminal call graph. It also does not claim that the extracted Lean helper is already a production `aspis-core` API or that the Rust standard-library body has been proved.

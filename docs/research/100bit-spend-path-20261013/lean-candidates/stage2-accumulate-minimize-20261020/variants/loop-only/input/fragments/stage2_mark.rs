@@ -1,0 +1,1 @@
+fn mark(obs:Observer,p:Phase) { if let Some(f)=obs {f(p);} }

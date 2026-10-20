@@ -1,0 +1,14 @@
+{
+  "classification": "candidate only, no production edit or adoption",
+  "base_revision": "c8ea8dd49c81ab970b9dbee8d8b47718f9beb005",
+  "base_input_lib_sha256": "332b5b7ccdfd48e1c7ebcf40dce39b8a0f471b360508fc872fd1e862a1e52d6e",
+  "candidate_input_lib_sha256": "be90dce6ab6bc06ac357454d03ecb747313775695bcc1a60a12881db4a840eed",
+  "base_polynomial": "pub fn polynomial(bytes:&[u8],x:E)->E {(0..7).rev().fold(E::ZERO,|a,i|a.mul(x).add(field(bytes,i)))}",
+  "candidate_polynomial": "pub fn polynomial(bytes:&[u8],x:E)->E {\n    let a=E::ZERO;\n    let a=a.mul(x).add(field(bytes,6));\n    let a=a.mul(x).add(field(bytes,5));\n    let a=a.mul(x).add(field(bytes,4));\n    let a=a.mul(x).add(field(bytes,3));\n    let a=a.mul(x).add(field(bytes,2));\n    let a=a.mul(x).add(field(bytes,1));\n    let a=a.mul(x).add(field(bytes,0));\n    a\n}",
+  "changed_files": [
+    "input/lib.rs",
+    "input/fragments/polynomial.rs",
+    "input/source-pins.json"
+  ],
+  "semantic_frontier": "Each iteration retains the extracted expression order acc.mul(x).add(field(bytes,i)); the relation between explicit steps and the original Rust Rev.fold remains open."
+}

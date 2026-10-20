@@ -1,0 +1,15 @@
+# Fission loop success model v1
+
+This packet records a source-fission candidate and a checked Lean model for the generated loop body. It is not a proof of the frozen `finish_relation` implementation and does not claim that the candidate helper is equivalent to the original round-body statements.
+
+The frozen production source is `extraction/fission-v1b/frozen-verifier-c8.rs`, SHA-256 `8a704eea668d04ca173290ca894c7cb0ab1f29abef4fec9bb49fbb36476779ea`. The original `finish_relation` is at line 239 onward; it contains the `for round in 0..p.variant.folds()` loop. The extracted fission candidate is `extraction/fission-v1b/lib.rs`, SHA-256 `41a718e209ff5bb22e38de67d499a3218db70355095560bd704da95dcb842b2c`. It retains the same loop count and calls one extracted `finish_relation_round` helper per round. This is explicitly a candidate source arrangement.
+
+The Aeneas output `extraction/fission-v1b/Funs.lean` is included only as generated-source evidence. It imports `AspisR1FinishRelationCurrent.FunsExternal`, whose template is deliberately not included or imported by the Lean model. `sources/FissionLoopStepSemanticsV1.lean` imports only `Aeneas` and the checked `FinishCandidateEquations` owner. `tools/check_adapter.py` checks the generated body shape and the complete captured-field mapping into `RoundEnvironment`, `assembledView`, and `assembledPrepared`; it is a source/dataflow consistency check, not a semantic theorem connecting the Rust helper to the model.
+
+The Lean model parameterizes only the helper implementation. Its body preserves `IteratorRange.next`, `None` completion, the helper `Result` bind, `CoreOpsTry.branch`, `Continue`, `Break`, residual conversion, and loop-state updates. `loopAdapter_two_rounds` proves that two successful calls followed by iterator exhaustion return the second claim. `loopAdapter_first_error_propagates` proves a first-round `Err` is returned through the generated residual path. `loopAdapter_two_rounds_explicit_ops` additionally derives both `FinishCandidateEquations.RoundEquation` results, but requires explicit per-round `hmodel0` and `hmodel1` equalities relating the parameterized helper call to the checked explicit-ops round model.
+
+The exact helper body was separately sent through Charon/Aeneas; Charon succeeded, while Aeneas failed at `InterpReduceCollapse.ml:1880` (helper-v2 receipt). Thus the helper implementation/source correspondence remains open. The two-round theorem also assumes the three iterator `next` equations and successful helper outputs as hypotheses. This packet does not establish the original caller reaching this fission body, nor the source helper's arithmetic correctness.
+
+The v21 focused Lean receipt records exit 0, wall time 1.405 s, peak process RSS 2,383,272 KiB, cgroup peak 299,286,528 bytes, swap 0, and no cgroup memory events. All five printed axiom reports use `[propext, Classical.choice, Quot.sound]`. The object is not included; its SHA-256 is recorded in the receipt.
+
+No object files, LLBC files, or other binaries are included. `manifest.json` hashes every file in this packet.

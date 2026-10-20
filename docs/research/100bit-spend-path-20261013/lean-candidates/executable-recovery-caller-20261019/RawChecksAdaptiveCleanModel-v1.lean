@@ -1,0 +1,283 @@
+import RawChecksAdaptiveFailureConsumer
+import RawCompiledRunWordStabilityV8
+import LiteralNoHitFromTranscriptAlignment
+
+set_option autoImplicit false
+set_option maxHeartbeats 800000
+set_option backward.isDefEq.respectTransparency true
+set_option backward.isDefEq.respectTransparency.types true
+noncomputable section
+namespace AspisR1.RawChecksAdaptiveCleanModel
+
+open FS FS2 FS2.Duplex R0C.V3
+open AspisV8R19.DuplexFrames
+open FS2.Duplex
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open AspisR1.RawCutProverCompiler
+open AspisR1.RawCutWordsFromView
+open AspisR1.RawCutWordsFromRunExecutable
+open AspisR1.RawCutTranscriptRun
+open AspisR1.CanonicalCutEnrichedTranscript
+open AspisR1.RawRecordedOracleExtractionMass
+open AspisR1.RawAdaptiveDecoderInjection
+open AspisR1.RawAdaptiveLiteralDecoder
+open AspisR1.RawAdaptiveClassifierHitDensity
+open AspisR1.GenericNoHit
+open AspisV8R19.AdaptiveFirstReadLaw
+open AspisV8R19.OracleResampling
+
+attribute [local irreducible] RawCutProverCompiler.compiled
+  RawCutWordsFromView.buildWords R0C.V3.hitsChain3 GenericNoHit.hitFrom
+  RawRecordedOracleExtractionMass.CleanAcceptedModel
+  AcceptedAdaptiveFiatShamir.experiment
+
+abbrev Bytes := AspisV8R19.DuplexFrames.Bytes
+abbrev State := AspisV8R19.SourceDuplexStep.State
+
+private theorem valid_enrichMessage (w : CanonicalCutEnrichedTranscript.Words)
+    (i : Nat) (m : LiteralTranscript.Message) :
+    LiteralTranscript.valid i (enrichMessage w m) ↔ LiteralTranscript.valid i m := by
+  cases m with
+  | initial root word =>
+      by_cases hi : i = 0
+      · subst i; simp [LiteralTranscript.valid, enrichMessage]
+      · simp [LiteralTranscript.valid, enrichMessage, hi]
+  | payload bytes => simp [LiteralTranscript.valid, enrichMessage]
+  | c2 bytes word =>
+      by_cases hi : i = 2
+      · subst i; simp [LiteralTranscript.valid, enrichMessage]
+      · simp [LiteralTranscript.valid, enrichMessage, hi]
+  | second bytes word =>
+      by_cases hi : i = 30
+      · subst i; simp [LiteralTranscript.valid, enrichMessage]
+      · simp [LiteralTranscript.valid, enrichMessage, hi]
+
+private theorem proof_idempotent (w : CanonicalCutEnrichedTranscript.Words)
+    (pf : LiteralProtocol.Proof) :
+    RawCutTranscriptRun.proof w (RawCutTranscriptRun.proof w pf) =
+      RawCutTranscriptRun.proof w pf := by
+  funext i
+  cases h : pf i <;> simp [RawCutTranscriptRun.proof, enrichMessage, h]
+
+private theorem firstCell_map {I J A C : Type} [DecidableEq I] [Inhabited A]
+    (f : I → J) (s : Sampler I A C) :
+    firstCell (ProgramSamplerMap.map f s) = (firstCell s).map f := by
+  cases s <;> rfl
+
+private theorem chains_read (decoder : LiteralByteProtocol.Decoder) :
+    ChainsRead (LiteralByteProtocol.protocol decoder) := by
+  intro i P m hi
+  change firstCell (ProgramSamplerMap.map Addr.toBytes
+    (LiteralTranscript.samp i P m)) ≠ none
+  rw [firstCell_map]
+  have hn : firstCell (LiteralTranscript.samp i P m) ≠ none :=
+    UnifiedSampler.firstCell_some _ _ _ _ _
+  cases h : firstCell (LiteralTranscript.samp i P m) with
+  | none => exact absurd h hn
+  | some a => simp
+
+private theorem firstCell_mem {I A C : Type} [DecidableEq I] [Inhabited A]
+    (H : I → A) (s : Sampler I A C) (a : I)
+    (ha : firstCell s = some a) :
+    a ∈ (eval H s.toProgram).1.map Prod.fst := by
+  cases s with
+  | done c => cases ha
+  | ask i k =>
+      simp only [firstCell, Option.some.injEq] at ha
+      subst i
+      exact List.mem_cons_self ..
+  | multi c cs nd k =>
+      simp only [firstCell, Option.some.injEq] at ha
+      subst c
+      exact List.mem_cons_self ..
+
+private theorem verifier_reads (decoder : LiteralByteProtocol.Decoder)
+    (d : RawCutTranscriptRun.ErasedPrefix → RawCutTranscriptRun.ErasedMessage → Bool) :
+    ReadsChains (LiteralByteProtocol.protocol decoder) (verifier decoder d) := by
+  intro H pub pf i a hi ha
+  have hread := FS2.verifier_reads (LiteralByteProtocol.protocol decoder)
+    (RawCutTranscriptRun.decisionOnBytes d) H pub pf i hi a
+  change a ∈ (eval H (FS2.verifier (LiteralByteProtocol.protocol decoder)
+    (RawCutTranscriptRun.decisionOnBytes d) pub pf)).1.map Prod.fst
+  apply hread
+  exact firstCell_mem H _ a ha
+
+/-- Checked acceptance plus absence of the actual lazy-injection collision and
+decoded-chain events supplies the exact clean-model premise used by the
+recorded shared-oracle failure theorem. Word recovery is aligned through the
+compiled-run stability theorem; no fresh/shared-ROM identification is made. -/
+theorem clean_model_of_checked_acceptance_no_hit
+    (decoder : LiteralByteProtocol.Decoder)
+    (d : RawCutTranscriptRun.ErasedPrefix → RawCutTranscriptRun.ErasedMessage → Bool)
+    (P : Prover) (Q : Nat)
+    (hchecks : ∀ H : Bytes → State,
+      FS2.accepts (eval H (experiment P (verifier decoder d))) →
+      LiteralAcceptanceTerminal.Checks
+        (eval H (experiment
+          (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+          (verifier decoder d))).2.1.1
+        (((LiteralByteProtocol.protocol decoder).transcript H
+          (eval H (experiment
+            (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+            (verifier decoder d))).2.1.1
+          (eval H (experiment
+            (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+            (verifier decoder d))).2.1.2 33).rounds))
+    (inj : AcceptedAdaptiveFiatShamir.LazyInj
+      (LiteralByteProtocol.protocol decoder)
+      (RawAdaptiveLiteralDecoder.decode RawFullPublicSelection.select
+        LiteralTableWordChoice.choose)
+      (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+      (verifier decoder d) RawAdaptiveDecoderInjection.kappa Q)
+    (exp : RawRecordedOracleExtractionMass.Experiment)
+    (hexp : exp = AcceptedAdaptiveFiatShamir.experiment
+      (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+      (verifier decoder d))
+    (hit : RawCutProverCompiler.RunView → Prop)
+    (hHit : ∀ run, hit run ↔ inj.Coll run ∨ hitsChain3
+      (RawAdaptiveLiteralDecoder.decode RawFullPublicSelection.select
+        LiteralTableWordChoice.choose)
+      RawAdaptiveClassifierHitDensity.classifier emptyTable run.1) :
+    CleanAcceptedModel decoder
+      exp
+      hit := by
+  unfold RawRecordedOracleExtractionMass.CleanAcceptedModel
+  intro H run ha hnot
+  have hexpRaw : exp = RawCutProverCompiler.experiment
+      (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+      (verifier decoder d) := by
+    rw [hexp]
+    unfold AcceptedAdaptiveFiatShamir.experiment RawCutProverCompiler.experiment
+    rfl
+  have hrunAccepted : run = eval H (AcceptedAdaptiveFiatShamir.experiment
+      (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+      (verifier decoder d)) := by
+    change eval H exp = _
+    rw [hexp]
+  let orig := eval H (experiment P (verifier decoder d))
+  have hexp : AcceptedAdaptiveFiatShamir.experiment
+      (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+      (verifier decoder d) = RawCutProverCompiler.experiment
+      (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+      (verifier decoder d) := by
+    unfold AcceptedAdaptiveFiatShamir.experiment RawCutProverCompiler.experiment
+    rfl
+  have hrunRaw : run = eval H (RawCutProverCompiler.experiment
+      (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+      (verifier decoder d)) := by
+    change eval H exp = _
+    rw [hexpRaw]
+  have hrun : run =
+      let v := orig
+      (v.1 ++ (eval H (verifier decoder d v.2.1.1 v.2.1.2)).1,
+        ((v.2.1.1, RawCutTranscriptRun.proof
+          (RawCutWordsFromView.buildWords decoder v) v.2.1.2), v.2.2)) := by
+    calc
+      run = eval H (RawCutProverCompiler.experiment
+        (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+        (verifier decoder d)) := hrunRaw
+      _ = _ := by
+        simpa only [orig] using compiled_experiment_eval decoder d
+          (RawCutWordsFromView.buildWords decoder) P H
+  have hpub : run.2.1.1 = orig.2.1.1 := by rw [hrun]
+  have hpf : run.2.1.2 = RawCutTranscriptRun.proof
+      (RawCutWordsFromView.buildWords decoder orig) orig.2.1.2 := by rw [hrun]
+  have haccOriginal : FS2.accepts orig := by
+    change orig.2.2 = true
+    have haccRun : run.2.2 = true := ha
+    rw [hrun] at haccRun
+    exact haccRun
+  have checks : LiteralAcceptanceTerminal.Checks run.2.1.1
+      ((LiteralByteProtocol.protocol decoder).transcript H run.2.1.1 run.2.1.2 33).rounds := by
+    simpa only [← hrunRaw] using hchecks H haccOriginal
+  have hvalidOrig : ∀ j, j ≤ 30 → LiteralTranscript.valid j (orig.2.1.2 j) := by
+    exact RawCompiledChecksOriginalSchedule.checks_force_original_constructor_schedule
+      decoder d P H orig run rfl hrunRaw checks
+  have hvalidRun : ∀ j, j ≤ 30 → LiteralTranscript.valid j (run.2.1.2 j) := by
+    intro j hj
+    rw [hpf]
+    exact (valid_enrichMessage (RawCutWordsFromView.buildWords decoder orig) j
+      (orig.2.1.2 j)).2 (hvalidOrig j hj)
+  have hvalidRunRaw : ∀ j, j ≤ 30 → LiteralTranscript.valid j
+      ((eval H (RawCutProverCompiler.experiment
+        (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+        (verifier decoder d))).2.1.2 j) := by
+    simpa only [← hrunRaw] using hvalidRun
+  have hwordsRaw := AspisR1.RawCompiledRunWordStability.wordsFromRun_compiled_eq_retainedBuildWords
+    decoder d P H hvalidOrig hvalidRunRaw
+  have hwordsRun : wordsFromRun run =
+      RawCutWordsFromView.buildWords decoder orig := by
+    simpa only [← hrunRaw] using hwordsRaw
+  have hpfFixed : RawCutTranscriptRun.proof (wordsFromRun run) run.2.1.2 = run.2.1.2 := by
+    rw [hwordsRun, hpf]
+    exact proof_idempotent (RawCutWordsFromView.buildWords decoder orig) orig.2.1.2
+  have hnoRaw : ¬ hitFrom LiteralClassifier.bad run.2.1.1 []
+      ((LiteralByteProtocol.protocol decoder).transcript H run.2.1.1 run.2.1.2 33).rounds := by
+    have hnotEvent : ¬ (inj.Coll run ∨ hitsChain3
+        (RawAdaptiveLiteralDecoder.decode RawFullPublicSelection.select
+          LiteralTableWordChoice.choose)
+        RawAdaptiveClassifierHitDensity.classifier emptyTable run.1) := by
+      intro he
+      exact hnot ((hHit run).2 he)
+    have hcoll : ¬ inj.Coll run := by
+      intro hc
+      exact hnotEvent (Or.inl hc)
+    have hchain : ¬ hitsChain3
+        (RawAdaptiveLiteralDecoder.decode RawFullPublicSelection.select
+          LiteralTableWordChoice.choose)
+        RawAdaptiveClassifierHitDensity.classifier emptyTable run.1 := by
+      intro hc
+      exact hnotEvent (Or.inr hc)
+    have hchain' : ¬ hitsChain3
+        (RawAdaptiveLiteralDecoder.decode RawFullPublicSelection.select
+          LiteralTableWordChoice.choose)
+        (fun p m _T c => LiteralClassifier.bad p m c) emptyTable run.1 := by
+      change ¬ hitsChain3
+        (RawAdaptiveLiteralDecoder.decode RawFullPublicSelection.select
+          LiteralTableWordChoice.choose)
+        (fun p m _T c => LiteralClassifier.bad p m c) emptyTable run.1 at hchain
+      exact hchain
+    have haccAccepted : FS2.accepts
+        (eval H (AcceptedAdaptiveFiatShamir.experiment
+          (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+          (verifier decoder d))) := by
+      change (eval H (AcceptedAdaptiveFiatShamir.experiment
+        (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+        (verifier decoder d))).2.2 = true
+      rw [← hrunAccepted]
+      exact ha
+    have hnoRawAccepted : ¬ hitFrom LiteralClassifier.bad
+        (eval H (AcceptedAdaptiveFiatShamir.experiment
+          (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+          (verifier decoder d))).2.1.1 []
+        ((LiteralByteProtocol.protocol decoder).transcript H
+          (eval H (AcceptedAdaptiveFiatShamir.experiment
+            (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+            (verifier decoder d))).2.1.1
+          (eval H (AcceptedAdaptiveFiatShamir.experiment
+            (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+            (verifier decoder d))).2.1.2 33).rounds) := by
+      apply AspisR1.LiteralNoHitFromTranscriptAlignment.no_raw_hit_of_no_chain
+      (LiteralByteProtocol.protocol decoder) LiteralClassifier.bad
+      (RawAdaptiveLiteralDecoder.decode RawFullPublicSelection.select
+        LiteralTableWordChoice.choose)
+      (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+      (verifier decoder d) RawAdaptiveDecoderInjection.kappa Q inj
+      (chains_read decoder)
+      (verifier_reads decoder d) H
+      (eval H (AcceptedAdaptiveFiatShamir.experiment
+        (compiled decoder d (RawCutWordsFromView.buildWords decoder) P)
+        (verifier decoder d))).2.1.2
+      · simpa only [← hrunAccepted] using hcoll
+      · exact haccAccepted
+      · simpa only [← hrunAccepted] using hchain'
+      · rfl
+    rw [hrunAccepted]
+    exact hnoRawAccepted
+  refine ⟨checks, ?_⟩
+  simpa only [hpfFixed] using hnoRaw
+
+#print axioms clean_model_of_checked_acceptance_no_hit
+end AspisR1.RawChecksAdaptiveCleanModel
+end

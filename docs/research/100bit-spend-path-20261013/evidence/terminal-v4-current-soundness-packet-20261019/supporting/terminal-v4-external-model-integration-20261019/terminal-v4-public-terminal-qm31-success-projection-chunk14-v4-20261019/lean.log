@@ -1,0 +1,93 @@
+/tmp/terminal-v4-model-sources-20261019/TerminalV4PublicTerminalQM31SuccessProjectionChunk14V4.lean:54:26: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  terminal_parts_from_composition_callers poseidonEval semanticEval sem selected alpha c.lambda c.chi c.theta c.zc c.mu
+in the target expression
+  (do
+      let selected ← ok selected
+      let sp ← ok sem
+      let r ←
+        terminal_parts_from_composition_callers poseidonEval semanticEval sp selected alpha c.lambda c.chi c.theta c.zc
+            c.mu
+      let r1 ←
+        core.result.Result.map
+            pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+            r ()
+      core.result.Result.map_err
+          pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+          r1 ()) =
+    ok (core.result.Result.Ok g)
+
+poseidonEval : PoseidonEvaluator
+semanticEval : SemanticEvaluator
+self : pool_v1.pair_forest_semantic_terminal.r0.Public
+claims : Std.Array (Std.Array field.QM31 29#usize) 3#usize
+alpha : Std.Array field.QM31 10#usize
+c : state_only_prefix.r0.Challenges
+selected : Std.Array field.QM31 84#usize
+sem : pool_v1.pair_forest_semantic_terminal.SemanticPublic
+out : field.QM31
+c1 : Std.Array field.QM31 16#usize
+mask : Std.Array field.QM31 10#usize
+g : field.QM31
+hgather :
+  array_from_fn_copy 84#usize field.QM31.Insts.CoreMarkerCopy
+      pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+      field.QM31.ZERO claims =
+    ok selected
+hsemantic : self.semantic = ok sem
+hparts :
+  terminal_parts_from_composition_callers poseidonEval semanticEval sem selected alpha c.lambda c.chi c.theta c.zc
+      c.mu =
+    ok (core.result.Result.Ok (out, c1, mask, g))
+hmap :
+  core.result.Result.map
+      pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+      (core.result.Result.Ok (out, c1, mask, g)) () =
+    ok (core.result.Result.Ok g)
+hmapErr :
+  core.result.Result.map_err
+      pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+      (core.result.Result.Ok g) () =
+    ok (core.result.Result.Ok g)
+⊢ (do
+      let selected ← ok selected
+      let sp ← ok sem
+      let r ←
+        terminal_parts_from_composition_callers poseidonEval semanticEval sp selected alpha c.lambda c.chi c.theta c.zc
+            c.mu
+      let r1 ←
+        core.result.Result.map
+            pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+            r ()
+      core.result.Result.map_err
+          pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+          r1 ()) =
+    ok (core.result.Result.Ok g)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (84 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+        2.59 real         0.99 user         1.14 sys
+          2214887424  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              182152  page reclaims
+                 221  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  84  voluntary context switches
+               10293  involuntary context switches
+         19288327607  instructions retired
+          7459611792  cycles elapsed
+           371446024  peak memory footprint

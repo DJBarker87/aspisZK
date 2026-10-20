@@ -1,0 +1,82 @@
+/tmp/terminal-v4-model-sources-20261019/TerminalV4PartsCallerInversionV2.lean:24:44: error: Application type mismatch: The argument
+  zc
+has type
+  QM
+but is expected to have type
+  Std.Array field.QM31 10#usize
+in the application
+  terminal_parts_from_composition_callers poseidonEval semanticEval public1 claims point lambda chi theta zc
+/tmp/terminal-v4-model-sources-20261019/TerminalV4PartsCallerInversionV2.lean:38:59: error: Application type mismatch: The argument
+  hcall
+has type
+  pool_v1.pair_forest_semantic_terminal.composition_parts_with_callers poseidonEval semanticEval public1 claims point
+      lambda chi theta =
+    ok (core.result.Result.Ok (composition, c1', mask', g', h1Z, copyActive))
+but is expected to have type
+  ok (core.result.Result.Ok (composition, c1', mask', g', h1Z, copyActive)) =
+    ok (core.result.Result.Ok (composition, c1', mask', g', h1Z, copyActive))
+in the application
+  Exists.intro copyActive hcall
+/tmp/terminal-v4-model-sources-20261019/TerminalV4PartsCallerInversionV2.lean:39:14: error: unsolved goals
+case ok.Err
+poseidonEval : PoseidonEvaluator
+semanticEval : SemanticEvaluator
+public1 : pool_v1.pair_forest_semantic_terminal.SemanticPublic
+claims : Std.Array QM 84#usize
+point : Std.Array QM 10#usize
+lambda chi theta zc mu out : QM
+c1 : Std.Array QM 16#usize
+mask : Std.Array QM 10#usize
+g : QM
+err : pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1
+hcall :
+  pool_v1.pair_forest_semantic_terminal.composition_parts_with_callers poseidonEval semanticEval public1 claims point
+      lambda chi theta =
+    ok (core.result.Result.Err err)
+hparts :
+  (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err err)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (composition, c1, mask_only, g, h1_z, copy_active) := val
+          do
+          let q ← pool_v1.pair_forest_semantic_terminal.equality_value (sorry ()) point
+          let q1 ← q.mul composition
+          let q2 ← field.QM31.mul mu h1_z
+          let q3 ← q1.add q2
+          let q4 ← field.QM31.mul mu mu
+          let q5 ← field.QM31.ONE.sub copy_active
+          let q6 ← q5.mul h1_z
+          let q7 ← q4.mul q6
+          let original ← q3.add q7
+          ok (core.result.Result.Ok (original, c1, mask_only, g))
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+            (core.convert.FromSame pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+            residual) =
+    ok (core.result.Result.Ok (out, c1, mask, g))
+⊢ ∃ composition c1' mask' g' h1Z copyActive,
+    ok (core.result.Result.Err err) = ok (core.result.Result.Ok (composition, c1', mask', g', h1Z, copyActive))
+'_private.«terminal-v4-model-sources-20261019».TerminalV4PartsCallerInversionV2.0.AspisR1.TerminalV4PartsCallerInversion.composition_success_of_parts_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        6.30 real         1.87 user         2.08 sys
+          2223947776  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              160607  page reclaims
+               23041  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                2837  voluntary context switches
+               27190  involuntary context switches
+         22509009100  instructions retired
+          8507912490  cycles elapsed
+           374526408  peak memory footprint

@@ -1,0 +1,31 @@
+{
+  "status": "uncompiled source-refactor candidate; production files unchanged",
+  "candidate_revision_base": "d2c5af4e3c3b662ee67c31f717aee79daaa37487",
+  "source_pins": {
+    "crates/aspis-core/src/r0_transcript.rs": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1",
+    "crates/aspis-core/src/r0/transcript.rs": "0871a78b1c20a2b1dd2108dedf5865200a9213f6c2b5633cd920303f631bb623",
+    "docs/research/100bit-spend-path-20261013/lean-candidates/query31-materialized-schedule-20261020/sources/Query31SourceCalls.lean": "756df7176dd464d4310f4ef35c8e82eff3b1525ec9a7ca16c9a64fa1995568b2",
+    "docs/research/100bit-spend-path-20261013/lean-candidates/query31-materialized-schedule-20261020/sources/Query31MathematicalSchedule.lean": "3972c3d601eae761b231d830e286a21ffabb2a1b1f3f0fbcb286030cc7223b9c"
+  },
+  "candidate_files": {
+    "r0_transcript.rs.candidate": "1657037382f24cc706903d5bf7b9f5e43dc548415356e3e1dcbe303a63f31528",
+    "r0_transcript_adapter.rs.candidate": "abce44f46481962ffc97e907b57ded17fb2374f2a0aa33231677ea2059115446",
+    "r0_transcript.rs.patch": "e5b29bcb68be88fd365c3c10d789be2e1721da0b688a754e3fcfc6ea7dc1c700",
+    "r0_transcript_adapter.rs.patch": "7b7748b741cc54ec62ffd225afd67fdf8f2081c22b059203cf183006177c2625",
+    "README.md": "e24e0a6fec19a2246e55d9ea1db06814cfae4116923108928de2305816b93b7f"
+  },
+  "candidate_behavior": [
+    "eight squeeze/advance pairs are materialized in the same state chain: block 0 uses absorbed state; block 7 uses the state after exactly seven advances",
+    "decoder receives the same ordered fixed arrays (blocks, advances); its selected continuation remains its explicit output",
+    "scan visits blocks in order and returns immediately after the first scan=true with advances[k]",
+    "when the first seven scans are false, block 7 is scanned and advances[7] is selected whether its scan returns true or false",
+    "QueryScan.scan and QueryScan.finish bodies are unchanged; finish errors and the current-block stop test are preserved"
+  ],
+  "equivalence_frontier": {
+    "smallest_needed_theorem": "For each input state, explicit eight-pair materialization equals the existing materialized loop output arrays; and the unrolled scan driver equals the loop driver on those arrays, including QueryScan state, Result from finish, and selected advance.",
+    "reuse": "Query31SourceCalls.queries_success_with_digest_pairs_full / queries_success_with_digest_pairs and Query31MathematicalSchedule.queries_success_on_querySampler_schedule supply the existing digest-pair schedule and materializedOutputs contract. QueryScanActualScanBridge.queryscan_actual_success_q22 plus QueryScanFiniteCorrespondence.queryscan_q22_finite_correspondence supply per-block scan semantics; existing finish theorem must be checked in its owner before composing.",
+    "not_claimed": "No Aeneas/Lean extraction, compile, equivalence proof, or production behavior change is claimed. The caller-decoder continuation remains the decoder output; this candidate does not infer it from advance[7]."
+  },
+  "extraction_evidence": "evidence/unrolled-decoder-v1/evidence-manifest.json",
+  "extraction_evidence_sha256": "76b24284f7f28c8a4519c90b53ad8e9fa8d72a6f95e8db7046ce5e21e5d22331"
+}

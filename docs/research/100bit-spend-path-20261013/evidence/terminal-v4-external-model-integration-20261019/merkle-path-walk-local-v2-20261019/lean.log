@@ -1,0 +1,170 @@
+/tmp/root-terminal-named-types-20261019/sources/RawMerklePathWalk.lean:53:43: error: unsolved goals
+H : Type
+D : Digest32 H
+hash : H
+path : Slice U8
+iter : Range
+index : Usize
+node : Digest
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (done (index, node))
+        | some d => do
+          let slot ← index % 8#usize
+          let a ← verifier.merkle_child slot node path d 0#usize
+          let a1 ← verifier.merkle_child slot node path d 1#usize
+          let a2 ← verifier.merkle_child slot node path d 2#usize
+          let a3 ← verifier.merkle_child slot node path d 3#usize
+          let a4 ← verifier.merkle_child slot node path d 4#usize
+          let a5 ← verifier.merkle_child slot node path d 5#usize
+          let a6 ← verifier.merkle_child slot node path d 6#usize
+          let a7 ← verifier.merkle_child slot node path d 7#usize
+          let node1 ← merkle.parent_with_digest D hash (Array.make 8#usize [a, a1, a2, a3, a4, a5, a6, a7] ⋯)
+          let index1 ← index / 8#usize
+          ok (cont (iter1, index1, node1))) =
+    do
+    let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match o with
+      | none => ok (done (index, node))
+      | some d => do
+        let x ← index % 8#usize
+        let x_1 ← verifier.merkle_child x node path d 0#usize
+        let x_2 ← verifier.merkle_child x node path d 1#usize
+        let x_3 ← verifier.merkle_child x node path d 2#usize
+        let x_4 ← verifier.merkle_child x node path d 3#usize
+        let x_5 ← verifier.merkle_child x node path d 4#usize
+        let x_6 ← verifier.merkle_child x node path d 5#usize
+        let x_7 ← verifier.merkle_child x node path d 6#usize
+        let x ← verifier.merkle_child x node path d 7#usize
+        let x ← merkle.parent_with_digest D hash (Array.make 8#usize [x_1, x_2, x_3, x_4, x_5, x_6, x_7, x] ⋯)
+        let x_8 ← index / 8#usize
+        let (index1, node1) := (x_8, x)
+          ok (cont (iter1, index1, node1))
+/tmp/root-terminal-named-types-20261019/sources/RawMerklePathWalk.lean:73:11: error: unsolved goals
+case ok.none
+H : Type
+D : Digest32 H
+hash : H
+path : Slice U8
+iter : Range
+index : Usize
+node : Digest
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, iter1)
+⊢ (do
+      let flow ←
+        let (o, iter1) := (none, iter1)
+          match o with
+          | none => ok (done (index, node))
+          | some d => do
+            let (index1, node1) ← step D hash path d index node
+            ok (cont (iter1, index1, node1))
+      match flow with
+        | cont (iter1, index1, node1) => verifier.merkle_path_loop D iter1 hash index1 node1 path
+        | done out => ok out) =
+    let (o, iter1) := (none, iter1)
+    match o with
+    | none => ok (index, node)
+    | some d => do
+      let (index1, node1) ← step D hash path d index node
+      verifier.merkle_path_loop D iter1 hash index1 node1 path
+/tmp/root-terminal-named-types-20261019/sources/RawMerklePathWalk.lean:77:18: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/tmp/root-terminal-named-types-20261019/sources/RawMerklePathWalk.lean:78:15: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/tmp/root-terminal-named-types-20261019/sources/RawMerklePathWalk.lean:79:43: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/tmp/root-terminal-named-types-20261019/sources/RawMerklePathWalk.lean:68:25: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵n̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-terminal-named-types-20261019/sources/RawMerklePathWalk.lean:69:22: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵n̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-terminal-named-types-20261019/sources/RawMerklePathWalk.lean:73:25: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵n̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-terminal-named-types-20261019/sources/RawMerklePathWalk.lean:75:17: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵n̵,̵bind_tc_ok, ̲bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-terminal-named-types-20261019/sources/RawMerklePathWalk.lean:75:31: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲h̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1MerklePathChildren.RawMerklePathWalk.loop_equation' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1MerklePathChildren.RawMerklePathWalk.loop_success_walk' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+        4.99 real         2.33 user         1.94 sys
+          2236956672  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              183038  page reclaims
+                 528  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                 103  voluntary context switches
+               16436  involuntary context switches
+         22919199904  instructions retired
+          9013033188  cycles elapsed
+           378244976  peak memory footprint

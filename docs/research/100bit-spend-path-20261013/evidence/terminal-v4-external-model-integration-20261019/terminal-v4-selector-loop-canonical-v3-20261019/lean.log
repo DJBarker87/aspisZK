@@ -1,0 +1,93 @@
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:15:24: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:23:8: warning: This simp argument is unused:
+  Array.index_usize
+
+Hint: Omit it from the simp argument list.
+  simp [A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵ ̵hnone] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:45:14: error: Function expected at
+  Nat.and_le_right
+but this term has type
+  ?m.186 &&& ?m.187 ≤ ?m.187
+
+Note: Expected a function because this term is being applied to the argument
+  mask.val
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:27:36: error: unsolved goals
+mask i1 : U16
+hnz : mask ≠ 0#u16
+hsub : UScalar.sub mask 1#u16 = ok i1
+hone : ↑1#u16 = 1
+hsubSpec : UScalar.sub mask 1#u16 ⦃ z => ↑z = ↑mask - 1 ∧ 1 ≤ ↑mask ⦄
+i1' : UScalar UScalarTy.U16
+heq : UScalar.sub mask 1#u16 = ok i1'
+hpost : ↑i1' = ↑mask - 1 ∧ 1 ≤ ↑mask
+hsame : i1' = i1
+hval : ↑i1 = ↑mask - 1
+honeq : 1 ≤ ↑mask
+hand : ↑mask &&& ↑i1 = ↑mask &&& ↑i1
+⊢ ↑(mask &&& i1) < ↑mask
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:76:17: error: unsolved goals
+case neg.fail
+values : Values
+mask : U16
+complement : Bool
+sum✝ out✝ : QM
+hvalues : ∀ (i : Fin 16), Canonical (valueCell values i)
+hsum✝ : Canonical sum✝
+hrun✝ : Loop values mask complement sum✝ = ok out✝
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (mask : U16),
+      ↑mask = m → ∀ (sum out : QM), Canonical sum → Loop values mask complement sum = ok out → Canonical out
+current : U16
+hcurrent : ↑current = n
+sum out : QM
+hsum : Canonical sum
+hrun : Loop values current complement sum = ok out
+hzero : ¬current = 0#u16
+hnonzero : (current != 0#u16) = true
+e : Error
+htrail : core.num.U16.trailing_zeros current = fail e
+h :
+  (do
+      let i ← fail e
+      let index ← lift (UScalar.cast UScalarTy.Usize i)
+      let sum1 ←
+        if complement = true then do
+            let q ← Array.index_usize values index
+            AspisR1SelectedMaskProbe.field.QM31.sub sum q
+          else do
+            let q ← Array.index_usize values index
+            AspisR1SelectedMaskProbe.field.QM31.add sum q
+      let i1 ← current - 1#u16
+      let mask1 ← lift (current &&& i1)
+      AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values mask1 complement
+          sum1) =
+    ok out
+⊢ Canonical out
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:79:10: error: Invalid alternative name `fail`: Expected `mk`
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:80:10: error: Invalid alternative name `ok`: Expected `mk`
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:78:10: error: Alternative `mk` has not been provided
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4SelectorLoopCanonical.lean:75:8: error: Alternative `div` has not been provided
+       14.74 real         2.22 user         3.15 sys
+          2195636224  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              112664  page reclaims
+               73691  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               12801  voluntary context switches
+               71483  involuntary context switches
+         24998438175  instructions retired
+         11460045623  cycles elapsed
+           374575176  peak memory footprint

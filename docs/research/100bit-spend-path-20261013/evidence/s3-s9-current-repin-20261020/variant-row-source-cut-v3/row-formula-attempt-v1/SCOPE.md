@@ -1,0 +1,7 @@
+# Variant::row S2 arithmetic formula
+
+The v3 Aeneas output is pinned at `generated/AspisR1VariantRowSource/Funs.lean` (SHA256 `65c71d6184ebfcd1967d25c2258d8ab503677d943aa058aca57cd36237f93fd4`). Its `transport.Variant.row` body is mapped to `transport.rs` lines 10–15 by `generated/translation.json`; its S2/non-D loop body takes each `d` in the range 0..5, extracts `(j >>> (2*d)) &&& 3`, shifts by `2*TAU[d]`, and ORs into the accumulator. The emitted `TAU` definition is `[3,4,2,0,1]`.
+
+`source.lean` proves that the resulting five Nat contributions equal the current `s2Row` formula. It is a focused arithmetic lemma, audited with `#print axioms` (`[propext]`), compiled with `lake env lean` using Lean 4.35.0. It is not yet a theorem about the Aeneas `row_loop` declaration: the raw generated owner has Aeneas option overrides and imports a template containing axioms for unrelated `from_fn` and the D-only coefficient table. That closure has not been imported into the accepted proof. The exact iterator/usize-to-Nat operational bridge remains open.
+
+The source-only checker `../check-row-cut.py` passes: it verifies the extracted loop body against the clean cut after namespace renaming, verifies the loop wrapper modulo single-expression `do`, and checks the exact S2 else-branch initializer. The clean loop cut itself compiles on pinned Lean 4.32/Aeneas with only standard axioms; receipt is `../lean-row-cut-v1-nuc432/attempt/receipt.json`. The loop-result-to-Nat-formula reduction remains unproved.

@@ -1,0 +1,15 @@
+# Reverse-range model and source checker
+
+This supplement freezes the green bounded operational model for the seven-step unrolled polynomial consumer and the strengthened mechanical source checker. It is source/evidence only; no OLean objects are included.
+
+`CurrentWideReverseRangeFoldModelV1.lean` defines a callback-parameterized, Result-aware traversal that visits indices 6, 5, 4, 3, 2, 1, 0. It proves that the exact current-E unrolled consumer equals that model, and that success at `.ok out` is equivalent on both sides. The seven-step consumer's existing success theorem supplies the coefficient trace, canonicality and Horner value. The model proof adds no hypothesis about callback results. `#print axioms` reports only standard Lean logical axioms: the index-order lemma uses `[propext]`; the concrete equality and success iff use `[propext, Classical.choice, Quot.sound]`.
+
+The source checker validates the whole generated `:= do` body against the whole current-E consumer body after exactly four named substitutions (mul, add, zero, field lookup). It therefore checks operands, intermediate names, do-bind order, indices and returned expression. It separately checks the full generic callback body, the concrete parser instantiation, and all seven callback-shaped dataflow triples. This is a mechanical source/shape checker, not a Lean theorem about the Rust library implementation.
+
+The Rust source candidate pins the standard-library operation chain for `Range<usize>.rev().fold`: `Rev::fold` delegates to `rfold`, `rfold` repeatedly calls `next_back`, and the range specialization decrements the exclusive end. The Lean recursion formalizes the resulting 6-to-0 call order for length 7. **The equivalence of this Rust standard-library chain to the candidate's explicit source sequence remains open**; the candidate still needs source adoption or a separate equivalence proof. The generated arithmetic fail stubs and external `weights.field` template are excluded from the formal trusted path; the concrete current-E parser and operations are used instead.
+
+## Native check
+
+Target: `CurrentWideReverseRangeFoldModelV1.lean`, Lean 4.32.0, frozen source revision `c8ea8dd49c81ab970b9dbee8d8b47718f9beb005`. NUC admission passed with finite reservations 24.375 GiB, measured uncapped working set 8.820 GiB, 8 GiB OS reserve, scope `MemoryHigh=1 GiB`, `MemoryMax=2 GiB`, `MemorySwapMax=0`. Exit 0; elapsed 2.057 s; process maximum RSS 4,036,164 KiB; cgroup peak 402,817,024 bytes; swap 0; no memory events. The exact command, Lean output, `/usr/bin/time -v` log, admission and reservation records are in `attempt/`.
+
+The selected direct import is the previously accepted `CurrentWideUnrolledRecordPolynomialV1` source SHA `f24bce0e57dc68809c7054e2a81a80e796185de456ba4cfb874f132867f8d756`, OLean SHA `f085072be74e80d5f3cbd913fa1476a2f0cd98e8f8eaaa17d55cf5c60472b2ec` (see direct pin below). Its two direct imports and exact pins are captured in `attempt/upstream-import-map.json`; the v13 config puts that accepted owner directory first. The proof object SHA is `89e58a3da385af0980a3783986893735d8fafa85d72fa58b8bc47ff7308ad630`.

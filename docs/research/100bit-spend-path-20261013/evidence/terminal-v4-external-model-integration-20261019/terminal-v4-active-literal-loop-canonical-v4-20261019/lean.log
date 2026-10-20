@@ -1,0 +1,62 @@
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralLoopCanonical.lean:18:24: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralLoopCanonical.lean:49:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.Selectors.active_literal_loop ?self ?sum ?block
+in the target expression
+  Active s sum block = ok out
+
+case zero
+s : Selectors
+hhigh : ∀ (i : Fin 64), Canonical (highCell s i)
+hmask : maskStepOK s
+block : Usize
+sum out : QM
+hbound : ↑block + 0 = 64
+hsum : Canonical sum
+hrun : Active s sum block = ok out
+hblock : ↑block = 64
+hnot : ¬block < 64#usize
+h : Active s sum block = ok out
+⊢ Canonical out
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralLoopCanonical.lean:58:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.Selectors.active_literal_loop ?self ?sum ?block
+in the target expression
+  Active s sum block = ok out
+
+case succ
+s : Selectors
+hhigh : ∀ (i : Fin 64), Canonical (highCell s i)
+hmask : maskStepOK s
+n : ℕ
+ih : ∀ (block : Usize) (sum out : QM), ↑block + n = 64 → Canonical sum → Active s sum block = ok out → Canonical out
+block : Usize
+sum out : QM
+hbound : ↑block + (n + 1) = 64
+hsum : Canonical sum
+hrun : Active s sum block = ok out
+hb : ↑block < 64
+hlt : block < 64#usize
+mask : U16
+hmaskRead : Masks.index_usize block = ok mask
+hsumMask : mask = 0#u16 ∨ ∃ q, SumMask s.low mask = ok q ∧ Canonical q
+h : Active s sum block = ok out
+⊢ Canonical out
+        5.57 real         1.90 user         2.03 sys
+          2229370880  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              172832  page reclaims
+               11543  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  81  voluntary context switches
+               23824  involuntary context switches
+         21370143512  instructions retired
+          8408150686  cycles elapsed
+           373002312  peak memory footprint

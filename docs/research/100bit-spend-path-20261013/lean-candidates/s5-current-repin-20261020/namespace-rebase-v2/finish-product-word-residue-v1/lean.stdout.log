@@ -1,0 +1,33 @@
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s5-current-repin-20261020/sources/FinishDotReturnedProductWordsV2.lean:11:7: error(lean.unknownIdentifier): Unknown identifier `withConcreteDot`
+
+Note: It is not possible to treat `withConcreteDot` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s5-current-repin-20261020/sources/FinishDotReturnedProductWordsV2.lean:15:15: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.U32.val`
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s5-current-repin-20261020/sources/FinishDotReturnedProductWordsV2.lean:17:54: error: unsolved goals
+W : Type
+ops : FinishOps W PushState
+fm : Slice U8
+ws : Slice FinishQM
+out : FinishE
+hrun : verifier.finish_query_dot sorry fm ws = ok (core.result.Result.Ok out)
+final : PushState
+xs : List (Usize × FinishE × FinishQM)
+hfinish : AspisR1FinishDotSourceABI.finishFromPush final = ok out
+hwords :
+  AspisR1FinishDotSourceABI.finishWords out = List.map AspisR1EbyKFinish.Proof.word (↑final.c0.sums ++ ↑final.c1.sums)
+hdelta : stateDelta final = deltaSum xs
+hlen : xs.length = ↑ws.len
+hseq : ∀ (k : ℕ) (hk : k < xs.length), ↑xs[k].1 = k
+hreads : ∀ t ∈ xs, t.1 < ws.len ∧ AspisR1CurrentWide.Proof.finishField fm t.1 = ok t.2.1 ∧ ws.index_usize t.1 = ok t.2.2
+⊢ List.map (fun x => sorry () (AspisR1CanonicalDotFinish.Proof.canonicalWord x)) ↑final.c0.sums ++
+      List.map (fun x => sorry () (AspisR1CanonicalDotFinish.Proof.canonicalWord x)) ↑final.c1.sums =
+    List.map (fun x => ↑x % AspisV8R17.RawReducer.P) ↑final.c0.sums ++
+      List.map (fun x => ↑x % AspisV8R17.RawReducer.P) ↑final.c1.sums
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s5-current-repin-20261020/sources/FinishDotReturnedProductWordsV2.lean:25:4: warning: This simp argument is unused:
+  AspisR1CanonicalDotFinish.Proof.canonicalWord_val
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1EbyKFinish.Proof.word,̵
+  ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵C̵a̵n̵o̵n̵i̵c̵a̵l̵D̵o̵t̵F̵i̵n̵i̵s̵h̵.̵P̵r̵o̵o̵f̵.̵c̵a̵n̵o̵n̵i̵c̵a̵l̵W̵o̵r̵d̵_̵v̵a̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s5-current-repin-20261020/sources/FinishDotReturnedProductWordsV2.lean:27:14: error(lean.unknownIdentifier): Unknown constant `successful_finish_words_are_reduced_accumulators`

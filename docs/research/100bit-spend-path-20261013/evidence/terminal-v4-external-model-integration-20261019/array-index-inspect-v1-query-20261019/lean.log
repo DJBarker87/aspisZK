@@ -1,0 +1,26 @@
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some x => Result.ok x
+Aeneas.Std.Array.index_usize.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) : Result α
+def Aeneas.Std.Array.{u} : Type u → Usize → Type (max 0 u) :=
+fun α n => { l // l.length = ↑n }
+        3.44 real         1.56 user         1.64 sys
+          2221965312  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              181146  page reclaims
+                  85  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  31  voluntary context switches
+                8571  involuntary context switches
+         18901500677  instructions retired
+          6907937115  cycles elapsed
+           378277600  peak memory footprint

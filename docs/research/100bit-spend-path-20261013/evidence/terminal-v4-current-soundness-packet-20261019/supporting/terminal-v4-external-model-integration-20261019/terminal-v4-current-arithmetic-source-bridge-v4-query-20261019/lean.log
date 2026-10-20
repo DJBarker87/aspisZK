@@ -1,0 +1,102 @@
+/tmp/terminal-v4-model-sources-20261019/TerminalV4CurrentArithmeticSourceBridgeV4.lean:55:2: error: unsolved goals
+case refine_1
+compositionCaller : TerminalPartsCompositionCaller
+public1 : pool_v1.pair_forest_semantic_terminal.SemanticPublic
+claims : Std.Array QM 84#usize
+point zerocheck_point : Std.Array QM 10#usize
+lambda chi theta mu composition h1Z copyActive : QM
+c1 : Std.Array QM 16#usize
+mask_only : Std.Array QM 10#usize
+g q : QM
+hcaller :
+  compositionCaller public1 claims point lambda chi theta =
+    ok (core.result.Result.Ok (composition, c1, mask_only, g, h1Z, copyActive))
+heq : pool_v1.pair_forest_semantic_terminal.equality_value zerocheck_point point = ok q
+hq : AspisR1.TerminalV4QM31Exact.CurrentCanonicalQM q
+hc : AspisR1.TerminalV4QM31Exact.CurrentCanonicalQM composition
+hh : AspisR1.TerminalV4QM31Exact.CurrentCanonicalQM h1Z
+ha : AspisR1.TerminalV4QM31Exact.CurrentCanonicalQM copyActive
+hm : AspisR1.TerminalV4QM31Exact.CurrentCanonicalQM mu
+out : TerminalV4CurrentArithmeticContract.QM
+hrun : run q composition h1Z copyActive mu = ok out
+hcanon : AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.canonical out
+hdecode :
+  AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode out =
+    AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode q *
+          AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode composition +
+        AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode mu *
+          AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode h1Z +
+      AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode mu *
+          AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode mu *
+        ((AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.one -
+            AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode copyActive) *
+          AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode h1Z)
+⊢ (do
+      let q1 ← field.QM31.mul q composition
+      let q2 ← field.QM31.mul mu h1Z
+      let q3 ← q1.add q2
+      let q4 ← field.QM31.mul mu mu
+      let q5 ← field.QM31.ONE.sub copyActive
+      let q6 ← q5.mul h1Z
+      let q7 ← q4.mul q6
+      let original ← q3.add q7
+      ok (core.result.Result.Ok (original, c1, mask_only, g))) =
+    ok (core.result.Result.Ok (out, c1, mask_only, g))
+/tmp/terminal-v4-model-sources-20261019/TerminalV4CurrentArithmeticSourceBridgeV4.lean:60:4: error: Type mismatch: After simplification, term
+  hdecode
+ has type
+  @Eq AspisR1.TerminalV4CurrentArithmeticInstantiation.ExactQM
+    (AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode out)
+    (AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode q *
+          AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode composition +
+        AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode mu *
+          AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode h1Z +
+      AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode mu *
+          AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode mu *
+        ((AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.one -
+            AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode copyActive) *
+          AspisR1.TerminalV4CurrentArithmeticInstantiation.laws.decode h1Z))
+but is expected to have type
+  @Eq AspisR1.TerminalV4QM31Exact.QM31Exact (AspisR1.TerminalV4QM31Exact.decode out)
+    (AspisR1.TerminalV4QM31Exact.decode q * AspisR1.TerminalV4QM31Exact.decode composition +
+        AspisR1.TerminalV4QM31Exact.decode mu * AspisR1.TerminalV4QM31Exact.decode h1Z +
+      AspisR1.TerminalV4QM31Exact.decode mu * AspisR1.TerminalV4QM31Exact.decode mu *
+        ((1 - AspisR1.TerminalV4QM31Exact.decode copyActive) * AspisR1.TerminalV4QM31Exact.decode h1Z))
+/tmp/terminal-v4-model-sources-20261019/TerminalV4CurrentArithmeticSourceBridgeV4.lean:58:10: warning: This simp argument is unused:
+  AspisR1SelectedMaskProbe.TerminalV4CurrentArithmeticContract.run
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵[̵A̵s̵p̵i̵s̵R̵1̵S̵e̵l̵e̵c̵t̵e̵d̵M̵a̵s̵k̵P̵r̵o̵b̵e̵.̵T̵e̵r̵m̵i̵n̵a̵l̵V̵4̵C̵u̵r̵r̵e̵n̵t̵A̵r̵i̵t̵h̵m̵e̵t̵i̵c̵C̵o̵n̵t̵r̵a̵c̵t̵.̵r̵u̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵h̵e̵q̵,̵ ̵h̵r̵u̵n̵]̵s̲i̲m̲p̲ ̲[̲h̲e̲q̲,̲ ̲h̲r̲u̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/terminal-v4-model-sources-20261019/TerminalV4CurrentArithmeticSourceBridgeV4.lean:59:11: warning: This simp argument is unused:
+  hrun
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1SelectedMaskProbe.TerminalV4CurrentArithmeticContract.run,
+  ̵  ̵ ̵ ̵ ̵ ̵heq,̵ ̵h̵r̵u̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1SelectedMaskProbe.TerminalV4CurrentArithmeticSourceBridgeV4.terminal_parts_success_of_caller_and_exact_value' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+       20.57 real         2.55 user         4.15 sys
+          2525675520  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               88741  page reclaims
+              118787  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               22071  voluntary context switches
+              118007  involuntary context switches
+         34313553999  instructions retired
+         14387117130  cycles elapsed
+           421639872  peak memory footprint

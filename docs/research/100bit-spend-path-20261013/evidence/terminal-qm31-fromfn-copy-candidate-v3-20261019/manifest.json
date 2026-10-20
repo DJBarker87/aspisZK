@@ -1,0 +1,215 @@
+{
+  "status": "UNCOMPILED_SOURCE_CANDIDATE_WITH_MINIMAL_RUST_TYPECHECK",
+  "base_revision": "2517a884266c7f10dd1e13e63f9a1f8af8111e12",
+  "scope": "Add array_from_fn_copy as a crate-local helper in aspis-statement/src/lib.rs (not aspis-core); replace five terminal-reachable from_fn calls (terminal 84 selector plus four composition_parts gathers).",
+  "source_files": [
+    {
+      "path": "crates/aspis-statement/src/lib.rs",
+      "base_sha256": "4026f1172b275a891851784b7de46268460d24a156f540328a63d88ea8078442",
+      "candidate_sha256": "10114a48ad444d02f5e504d00abf6bf88e4a95bea48ea96ab592fe3a945030e8"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+      "base_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+      "candidate_sha256": "c57044bfc3c36673c9f844d43a417353e1583c3b25ef88f22c0584e29aeeb3c1"
+    }
+  ],
+  "patch_sha256": "42b0d3f1d5e719073f24b69546e719709ea1c24633d22b665ef94b5342f2293b",
+  "green_lean_support": [
+    {
+      "module": "TerminalClaimsFromFnCallbackV5",
+      "source_sha256": "b12de711075fc3c24cfa605dee56e3edb2c63b197304bc0381991535d9fef846",
+      "olean_sha256": "ed8db6ce42d936a09c1d502ff494efa2269a0a5a3f81f58f781190efb1a83597"
+    },
+    {
+      "module": "TerminalClaimsFromFnCopyEquivalenceV1",
+      "source_sha256": "985940e3aafc19bec90269fe26b95909be542bcec584300eeda3c276d79c3e36",
+      "olean_sha256": "915a638d062c992c53a66e237ffa4d311195dae1fc0496ea6ad61860f1d18c3b"
+    },
+    {
+      "module": "CompositionPartsGatherStable",
+      "source_sha256": "2fd435655b86ac4206e14952c97ee9ea2374a6baaee789f298f89e67b92cf95f",
+      "olean_sha256": "34653b82b742822f396bb989634451e7fa63b6f9e14ee63fa48bdd455a272878",
+      "receipt": "docs/research/100bit-spend-path-20261013/evidence/composition-source-prelude-tail-20261017/CompositionPartsGatherStable/receipt.json"
+    },
+    {
+      "module": "CompositionPartsGatherSlice",
+      "source_sha256": "a1605f79b73b420853c49b2c1727563e608ba2793b54c336d3701e5d9b3b6620",
+      "olean_sha256": "c97528d788def17ab6d4dfdee6e2b941f66e24ef628320e94f2d0c499ebd42a2"
+    }
+  ],
+  "generated_reference": {
+    "archive": "docs/research/100bit-spend-path-20261013/evidence/terminal-current-aeneas-v10/terminal-current-generated-v10.tar.gz",
+    "archive_sha256": "162b198ec2427b8588861d168ef3015c7bea4665e430db271db89b5ac7e9d8a6",
+    "Funs_sha256": "a0fa91e43a9fd511d0746bad56d4e9bb38090187cd0c77e1a54b377388474c08"
+  },
+  "remaining_known_external_template_call_sites": [
+    {
+      "owner": "state_only_poseidon.evaluate_state_only_poseidon_oracle_projected",
+      "stub": "core.array.from_fn",
+      "generated_lines": [
+        2853
+      ]
+    },
+    {
+      "owner": "state_only_poseidon.external_linear_lazy",
+      "stub": "core.array.from_fn",
+      "generated_lines": [
+        2581
+      ]
+    },
+    {
+      "owner": "state_only_poseidon.internal_linear_lazy",
+      "stub": "core.array.from_fn",
+      "generated_lines": [
+        1716,
+        1720
+      ]
+    },
+    {
+      "owner": "state_only_poseidon.external_local_packed_raw",
+      "stub": "core.array.from_fn",
+      "generated_lines": [
+        2097
+      ]
+    },
+    {
+      "owner": "state_only_poseidon.evaluate_state_only_poseidon_oracle_projected",
+      "stub": "core.array.Array.map",
+      "generated_lines": [
+        2849
+      ]
+    },
+    {
+      "owner": "state_only_poseidon.evaluate_state_only_poseidon_oracle_projected",
+      "stub": "IntoIter.into_iter / iterator fold / RangeInclusive fold",
+      "generated_lines": [
+        2829,
+        2832,
+        2837
+      ]
+    },
+    {
+      "owner": "Public.terminal_qm31",
+      "stub": "core.result.Result.map and map_err",
+      "generated_lines": [
+        6563,
+        6566
+      ]
+    },
+    {
+      "owner": "semantic_packed / mask extraction path (transitive candidate)",
+      "stub": "core.num.U16.count_ones and trailing_zeros",
+      "generated_lines": [
+        6076,
+        6053
+      ]
+    }
+  ],
+  "limits": [
+    "No package build, Aeneas run, or generated Funs compile was run. A tiny rustc harness type-check is recorded separately.",
+    "Five direct from_fn uses are removed; nested Poseidon/state-only from_fn uses remain, so the external-template axiom remains live.",
+    "CompositionPartsGatherStable covers the four exact callback gathers in its source-cut with a CanonicalQM premise; it is not a whole terminal success theorem.",
+    "The claims-selector Lean proof is source-adapted to the exact generated callback; standard-library core::array::from_fn remains unproved."
+  ],
+  "rust_typecheck": {
+    "source": "rustc_typecheck.rs",
+    "source_sha256": "e6f587a8086b51df4583b27297956f36dfa23a51ac5d7ba35d0d04ec3b0bca47",
+    "compiler": "rustc 1.93.0 (254b59607 2026-01-19)",
+    "command": "rustc --edition=2021 --crate-type lib --emit=metadata rustc_typecheck.rs -o /tmp/terminal-qm31-copy-typecheck.rmeta",
+    "exit_status": 0,
+    "stderr_file": "rustc.stderr",
+    "scope_limit": "Tiny source-only harness with a Copy QM31-shaped stand-in and exact helper/call closure shapes. This is not a cargo check and does not typecheck the actual workspace modules or production QM31 type."
+  },
+  "candidate_artifacts": [
+    {
+      "path": "rustc.version",
+      "sha256": "28b365392950403f9fea8df93860dc8dd11fef9c2b55723de9f71f88144d9f56"
+    },
+    {
+      "path": "rustc.exit",
+      "sha256": "19eaf43821a7660ec323a87c8457bf74823beb296c39f5e01aa8a683aa50f061"
+    },
+    {
+      "path": "rustc.stderr",
+      "sha256": "bdfa06e5b1143746abb49f53b0a3580d32005339a4f696139d5830f656805182"
+    },
+    {
+      "path": "rustc_typecheck.rs",
+      "sha256": "e6f587a8086b51df4583b27297956f36dfa23a51ac5d7ba35d0d04ec3b0bca47"
+    },
+    {
+      "path": "cargo-check-r0-pool.log",
+      "sha256": "6dd85d5562adb2c435e4c5e5d4a8d82cfded63dc9a4fe9f70a7a9b9718a0f87e"
+    },
+    {
+      "path": "cargo-check-r0-pool.status",
+      "sha256": "2b88576a4991ad094264dc2601237d03651867f5da3c8308d1c0b447a40fcec3"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "7ac7bd3f2fbff97bf106f701c0ffdbae9ae04c1b3c42b6a842de6fda416b370b"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "d253e67019f607e195464d4adfaa8b589c7b9ac80e7d52f9231b83dae7964fe9"
+    },
+    {
+      "path": "docs__research__v8-r0-zk-20261009__refine__diffharness__tests__glue_gen.rs",
+      "sha256": "1fa3ed853c7805111e192993e4f13928d0c9638385fe6bc943c6ff34208a0059"
+    },
+    {
+      "path": "rustc.version",
+      "sha256": "28b365392950403f9fea8df93860dc8dd11fef9c2b55723de9f71f88144d9f56"
+    },
+    {
+      "path": "cargo.version",
+      "sha256": "49f46ff5ffe434e6c1c66388a9230ac33bbe3dbd9175314e9ffc9aa7c418d329"
+    },
+    {
+      "path": "two-crate-typecheck-source.tar.gz",
+      "sha256": "83753433fe1f03da6afe0d87fcb911d2cc82a43a445600528be0696a766c19b1"
+    }
+  ],
+  "actual_workspace_typecheck": {
+    "status": "GREEN_ACTUAL_TWO_CRATE_CARGO_CHECK",
+    "command": "cargo check --release --offline --manifest-path /tmp/terminal-qm31-candidate-v3-sparse-workspace/Cargo.toml -p aspis-statement --features r0,pool-v1-kernel --lib",
+    "base_revision": "2517a884266c7f10dd1e13e63f9a1f8af8111e12",
+    "feature_selection": "r0,pool-v1-kernel; pool-v1-kernel alone does not activate r0",
+    "workspace": "isolated sparse workspace containing exact base-revision aspis-core, aspis-statement, three host writer packages, the included glue_gen.rs, plus the two v3 candidate source files; root manifest narrowed to these five packages",
+    "cargo_lock_sha256": "d253e67019f607e195464d4adfaa8b589c7b9ac80e7d52f9231b83dae7964fe9",
+    "source_archive": "two-crate-typecheck-source.tar.gz",
+    "source_archive_sha256": "83753433fe1f03da6afe0d87fcb911d2cc82a43a445600528be0696a766c19b1",
+    "cargo_version": "cargo 1.93.0 (083ac5135 2025-12-15)",
+    "rustc_version": "rustc 1.93.0 (254b59607 2026-01-19)",
+    "exit_status": 0,
+    "wall_seconds": 5.06,
+    "peak_aggregate_rss_bytes": 433963008,
+    "rss_watchdog_cap_bytes": 7516192768,
+    "watchdog_timeout_seconds": 120,
+    "build_jobs": 1,
+    "incremental": false,
+    "network": "offline",
+    "expected_work": "release-profile Rust type checking only; no linking or SBF build",
+    "log_file": "cargo-check-r0-pool.log",
+    "status_file": "cargo-check-r0-pool.status",
+    "scope_limit": "Checks the actual aspis-statement and aspis-core crate sources/types, including all changed terminal call sites under r0+pool-v1-kernel, with actual crate-root visibility. This is an isolated sparse Cargo workspace, not a full workspace regression."
+  },
+  "copy_helper_support": {
+    "helper_function_body_sha256": "aad4a04611bdce9b1161805a5811614935527d82d7dc8ddb22a6b5f27f5abe56",
+    "candidate_helper_body_matches_existing_extracted_helper": true,
+    "existing_helper_source": "docs/research/100bit-spend-path-20261013/evidence/terminal-indexed-source-candidate-20261017-explicit-low-folds/input/src/lib.rs",
+    "lean_model_modules": [
+      {
+        "module": "ArrayFromFnCopySlice",
+        "source_sha256": "2bceca4086c49313185e907f1d6fd40b125b616be046c09808f5e91cc19aa6fa",
+        "olean_sha256": "1e18e90ef59ebcae47e67643c90d0d2498349f3acf80786886360b05e9a41da2"
+      },
+      {
+        "module": "ArrayFromFnCopyStable",
+        "source_sha256": "968fe03b148d700090a9682bcc87fe158643e2a4c128f2289cb9e8c5103e7fda",
+        "olean_sha256": "b2b915c959b1ab009d093bbb574c0f4471988bba3380e6e8bd306a7b218f676e"
+      }
+    ]
+  }
+}

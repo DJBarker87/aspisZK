@@ -1,0 +1,29 @@
+structure Aeneas.Std.UScalar (ty : UScalarTy) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.UScalar.bv : BitVec ty.numBits
+constructor:
+  Aeneas.Std.UScalar.mk {ty : UScalarTy} (bv : BitVec ty.numBits) : UScalar ty
+def Aeneas.Std.UScalar.cast : {src_ty : UScalarTy} → (tgt_ty : UScalarTy) → UScalar src_ty → UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4UScalarProbe.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ext`
+Aeneas.Std.UScalar.val {ty : UScalarTy} (x : UScalar ty) : ℕ
+Aeneas.Std.UScalarTy.numBits (ty : UScalarTy) : ℕ
+       13.66 real         1.76 user         3.11 sys
+          2176352256  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               95279  page reclaims
+               87855  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               12261  voluntary context switches
+               78932  involuntary context switches
+         25304639267  instructions retired
+         10361454290  cycles elapsed
+           370970336  peak memory footprint

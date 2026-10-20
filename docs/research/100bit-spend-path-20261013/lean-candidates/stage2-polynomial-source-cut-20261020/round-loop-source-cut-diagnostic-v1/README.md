@@ -1,0 +1,9 @@
+# Finish round-loop extraction cut diagnostics
+
+This candidate series isolates the frozen `finish_relation` loop. The original frozen source is verifier.rs SHA `8a704eea668d04ca173290ca894c7cb0ab1f29abef4fec9bb49fbb36476779ea`; exact finish function span bytes `[12713,13897)`, SHA `1d2dfc4050518cc753bdd54a4916fa54e9f38fd56ddffb4c5566fabdd162658b`. The original loop block includes `for round in 0..p.variant.folds()`, round selection, field/quarter arithmetic, three trace calls, `Error::Relation`, and polynomial update. The direct cut helper in v3 copies this loop block exactly and leaves the original function unchanged in the candidate source.
+
+The standalone round-slice selector cut translated successfully. The enclosing loop did not: direct struct-field version failed in Aeneas at `InterpReduceCollapse.add_shared_borrows.update.update_avalues` on the round selector; moving that selector into its own translated helper still failed with a missing projected abstraction at the loop join (`InterpReduceCollapse:1994`, abstraction 53); passing round slices, alpha array, and variant as explicit typed inputs still failed at `InterpBorrows:2731`. The pre-existing unchanged full-function attempt likewise fails strict borrow replay at `InterpReduceCollapse:1994`, abstraction 68. Each attempt retained its exact command, input snapshot, tool hashes, cgroup admission/reservation, and process/scope memory evidence.
+
+No successful round-loop lowering or Lean round-loop theorem is claimed. The frozen operation arithmetic/field/polynomial proofs remain usable only behind the already named call boundaries; full caller reachability and the original finish_relation→loop result link remain open. No production source was changed.
+
+All files are source/evidence only; there are no LLBC or compiled object files.

@@ -1,0 +1,56 @@
+AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.Selectors.active_literal_loop.eq_def
+  (self : AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.Selectors)
+  (sum : AspisR1SelectedMaskProbe.field.QM31) (block : Usize) :
+  self.active_literal_loop sum block =
+    if block < 64#usize then do
+      let mask ← AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.constants.ACTIVE_ROW_MASKS.index_usize block
+      let (self1, sum1) ←
+        if (mask != 0#u16) = true then do
+            let q ← self.high.index_usize block
+            let q1 ← AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16 self.low mask
+            let q2 ← q.mul q1
+            let sum2 ← sum.add q2
+            ok (self, sum2)
+          else ok (self, sum)
+      let block1 ← block + 1#usize
+      self1.active_literal_loop sum1 block1
+    else ok sum
+AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.Selectors.active_literal_loop
+  (self : AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.Selectors)
+  (sum : AspisR1SelectedMaskProbe.field.QM31) (block : Usize) : Result AspisR1SelectedMaskProbe.field.QM31
+AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop.eq_def
+  (values : Std.Array AspisR1SelectedMaskProbe.field.QM31 16#usize) (mask : U16) (complement : Bool)
+  (sum : AspisR1SelectedMaskProbe.field.QM31) :
+  AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values mask complement sum =
+    if (mask != 0#u16) = true then do
+      let i ← core.num.U16.trailing_zeros mask
+      let index ← lift (UScalar.cast UScalarTy.Usize i)
+      let sum1 ←
+        if complement = true then do
+            let q ← values.index_usize index
+            sum.sub q
+          else do
+            let q ← values.index_usize index
+            sum.add q
+      let i1 ← mask - 1#u16
+      let mask1 ← lift (mask &&& i1)
+      AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values mask1 complement sum1
+    else ok sum
+       17.25 real         1.78 user         3.73 sys
+          2215165952  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               80107  page reclaims
+              102964  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               20474  voluntary context switches
+              105023  involuntary context switches
+         27480138546  instructions retired
+         11950449084  cycles elapsed
+           378277696  peak memory footprint

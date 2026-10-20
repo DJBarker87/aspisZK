@@ -1,0 +1,43 @@
+--- a/crates/aspis-core/src/r0/transcript.rs
++++ b/crates/aspis-core/src/r0/transcript.rs
+@@ -61,6 +61,14 @@
+     MaskSum(E),
+     RoundPolynomial(&'a [E; 28]),
+ }
++/// Materializes the two row-31 outputs from one source state. The caller
++/// advances to the returned second component before generating the next pair.
++fn query_squeeze_advance(hash: HashFn, state: &[u8; 32]) -> ([u8; 32], [u8; 32]) {
++    let squeeze = hash(&[state, &[1]]);
++    let advance = hash(&[state, &[2]]);
++    (squeeze, advance)
++}
++
+ impl SemanticTranscript {
+     /// public_bytes must be the existing semantic phase's canonical §9
+     /// R0P.Public encoding. This opening module does not parse that statement.
+@@ -271,14 +279,17 @@
+     /// Canonical field bytes, already validated by OpeningView. Same row-31
+     /// absorb and sampler as the owned proof path, without a final array.
+     pub(crate) fn queries_canonical_bytes(&mut self, bytes: &[u8]) -> Result<QuerySet, Error> {
+-        let mut state = self.duplex.absorb(31, 10, bytes)?;
+-        let mut blocks = [[0u8; 32]; 8];
+-        let mut advances = blocks;
+-        for k in 0..8 {
+-            blocks[k] = (self.duplex.hash)(&[&state, &[1]]);
+-            advances[k] = (self.duplex.hash)(&[&state, &[2]]);
+-            state = advances[k];
+-        }
++        let state0 = self.duplex.absorb(31, 10, bytes)?;
++        let (block0, advance0) = query_squeeze_advance(self.duplex.hash, &state0);
++        let (block1, advance1) = query_squeeze_advance(self.duplex.hash, &advance0);
++        let (block2, advance2) = query_squeeze_advance(self.duplex.hash, &advance1);
++        let (block3, advance3) = query_squeeze_advance(self.duplex.hash, &advance2);
++        let (block4, advance4) = query_squeeze_advance(self.duplex.hash, &advance3);
++        let (block5, advance5) = query_squeeze_advance(self.duplex.hash, &advance4);
++        let (block6, advance6) = query_squeeze_advance(self.duplex.hash, &advance5);
++        let (block7, advance7) = query_squeeze_advance(self.duplex.hash, &advance6);
++        let blocks = [block0, block1, block2, block3, block4, block5, block6, block7];
++        let advances = [advance0, advance1, advance2, advance3, advance4, advance5, advance6, advance7];
+         let (s, returned) =
+             rb::queries_from_pairs(&blocks, &advances).map_err(|_| Error::Sampler)?;
+         self.duplex.state = returned;

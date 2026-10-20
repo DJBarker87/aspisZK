@@ -1,0 +1,9 @@
+# Terminal `from_fn` source adaptation candidate v3
+
+Status: isolated source candidate with a successful **actual two-crate Rust type check**. The candidate adds the Copy-initialized helper privately at the `aspis-statement` crate root and changes five calls in the current terminal path: the 84-cell selector and four `composition_parts` gathers (16, 16, 16, 10). It does not expand the `aspis-core` API.
+
+The exact candidate source and patch are included here. The release-profile check compiled the actual pinned `aspis-statement` and `aspis-core` sources, with the `r0,pool-v1-kernel` features, in an isolated sparse Cargo workspace. This checks that `crate::array_from_fn_copy` resolves from the correct crate root and that real `QM31` callback/result types fit. The workspace source archive, Cargo manifest/lock, compiler versions, complete log, watchdog metrics, and source pins are in the manifest and artifacts. The root workspace manifest was narrowed to the two target crates and their three path writer packages; this was not the full workspace regression.
+
+Existing Lean support covers the callback slice for the 84 claims and the four composition gathers. The helper function body matches the existing extracted helper source byte-for-byte after removing surrounding documentation. The green Lean copy-helper support modules and source/object pins are listed in the manifest. This is source correspondence support, not a proof of Rust's standard-library `core::array::from_fn` implementation.
+
+Remaining terminal-reachable external-template operations include nested `core::array::from_fn` calls in state-only Poseidon helpers, array map, iterator/fold operations, and Result map/map_err. Therefore this candidate does **not** close the generated external-template axiom. See the manifest callsite inventory for exact generated locations.

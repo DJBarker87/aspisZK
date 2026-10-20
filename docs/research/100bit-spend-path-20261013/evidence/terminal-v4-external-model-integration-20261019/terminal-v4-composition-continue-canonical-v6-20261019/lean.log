@@ -1,0 +1,132 @@
+/tmp/terminal-v4-model-sources-20261019/TerminalV4CompositionContinueCanonicalV2.lean:37:43: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/terminal-v4-model-sources-20261019/TerminalV4CompositionContinueCanonicalV2.lean:39:43: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/terminal-v4-model-sources-20261019/TerminalV4CompositionContinueCanonicalV2.lean:78:4: error: Tactic `injection` failed: equality of constructor applications expected
+
+poseidonEval : PoseidonEvaluator
+semanticEval : SemanticEvaluator
+public1 : pool_v1.pair_forest_semantic_terminal.SemanticPublic
+o : Option U32
+claims : Std.Array QM 84#usize
+point : Std.Array QM 10#usize
+lambda chi theta : QM
+a a1 a2 : Std.Array QM 16#usize
+maskOnly : Std.Array QM 10#usize
+selectors : pool_v1.pair_forest_copy_terminal.Selectors
+sops : state_only_poseidon.StateOnlyPoseidonSelectors
+poseidon : Std.Array QM 4#usize
+semantic : Std.Array QM 24#usize
+h1Z : QM
+pvpfcvv : pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1
+copy : pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledCopyTerminalV1
+iH iG : Usize
+composition : QM
+c1 : Std.Array QM 16#usize
+mask : Std.Array QM 10#usize
+g copyActive : QM
+htheta : CanonicalQM theta
+hseed : CanonicalQM copy.residual
+hsemanticCanonical : ∀ (i : Fin 24), CanonicalQM (↑semantic)[↑i]
+hposeidonCanonical : ∀ (i : Fin 4), CanonicalQM (↑poseidon)[↑i]
+hA :
+  array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+      pool_v1.pair_forest_semantic_terminal.composition_parts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+      field.QM31.ZERO claims =
+    ok a
+hA1 :
+  array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+      pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+      field.QM31.ZERO claims =
+    ok a1
+hA2 :
+  array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+      pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+      field.QM31.ZERO claims =
+    ok a2
+hMask :
+  array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+      pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+      field.QM31.ZERO claims =
+    ok maskOnly
+hselectors : pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = ok selectors
+hsops : pool_v1.pair_forest_semantic_terminal.poseidon_selectors selectors = ok sops
+hposeidon : poseidonEval { z := a, succ_z := a1, xor12_z := a2 } sops = ok poseidon
+hsemantic :
+  semanticEval
+      { variant := public1.variant, pool := public1.pool, deployment_domain := public1.deployment_domain,
+        anchor := public1.anchor, nullifier := public1.nullifier, asset_id := public1.asset_id,
+        recipient := public1.recipient, change := public1.change, withdrawal_amount := o,
+        transition := public1.transition }
+      { z := a, succ_z := a1, xor12_z := a2 } selectors =
+    ok semantic
+hI1 : pool_v1.pair_forest_semantic_terminal.SELECTED_H1_COLUMN = ok iH
+hclaim1 : pool_v1.pair_forest_semantic_terminal.selected_claim claims 0#usize iH = ok h1Z
+hcopyVariant : pool_v1.pair_forest_semantic_terminal.copy_variant public1.variant = ok pvpfcvv
+hcopy :
+  pool_v1.pair_forest_copy_terminal.evaluate_with_selectors a h1Z selectors lambda chi
+      public1.transition.live_snapshot.next_pair_index pvpfcvv =
+    ok copy
+hI2 : pool_v1.pair_forest_semantic_terminal.SELECTED_G_COLUMN = ok iG
+hclaim2 : pool_v1.pair_forest_semantic_terminal.selected_claim claims 0#usize iG = ok g
+hcontinue :
+  composition_parts_continue poseidonEval semanticEval public1 o claims point lambda chi theta =
+    ok (core.result.Result.Ok (composition, c1, mask, g, h1Z, copyActive))
+prepared : TerminalV4CompositionPartsTwoFoldCanonical.Prepared
+hnew : field.PreparedQm31Multiplier.new theta = ok prepared
+middle : TerminalV4CompositionPartsTwoFoldCanonical.QM
+hloop0 :
+  pool_v1.pair_forest_semantic_terminal.composition_parts_loop0 { iter := ↑semantic } prepared copy.residual = ok middle
+hmiddleCanonical : TerminalV4CompositionPartsTwoFoldCanonical.CanonicalQM middle
+out : TerminalV4CompositionPartsTwoFoldCanonical.QM
+hloop1 : pool_v1.pair_forest_semantic_terminal.composition_parts_loop1 { iter := ↑poseidon } prepared middle = ok out
+houtCanonical : TerminalV4CompositionPartsTwoFoldCanonical.CanonicalQM out
+hcontinue' :
+  (do
+      let iter ← core.iter.traits.iterator.Iterator.rev.default ↑semantic
+      let composition ← pool_v1.pair_forest_semantic_terminal.composition_parts_loop0 iter prepared copy.residual
+      let iter1 ← core.iter.traits.iterator.Iterator.rev.default ↑poseidon
+      let composition1 ← pool_v1.pair_forest_semantic_terminal.composition_parts_loop1 iter1 prepared composition
+      ok (core.result.Result.Ok (composition1, a, maskOnly, g, h1Z, copy.active))) =
+    ok (core.result.Result.Ok (composition, c1, mask, g, h1Z, copyActive))
+⊢ (out, a, maskOnly, g, h1Z, copy.active) = (composition, c1, mask, g, h1Z, copyActive)
+/tmp/terminal-v4-model-sources-20261019/TerminalV4CompositionContinueCanonicalV2.lean:73:31: warning: This simp argument is unused:
+  hloop0
+
+Hint: Omit it from the simp argument list.
+  simp only [hA, hA1, hA2, hMask, hselectors, hsops, hposeidon, hsemantic, hI1, hclaim1,
+      hcopyVariant, hcopy, hnew, hloop0̵,̵ ̵h̵l̵o̵o̵p̵1, hI2, hclaim2, bind_tc_ok] at hcontinue'
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/terminal-v4-model-sources-20261019/TerminalV4CompositionContinueCanonicalV2.lean:73:39: warning: This simp argument is unused:
+  hloop1
+
+Hint: Omit it from the simp argument list.
+  simp only [hA, hA1, hA2, hMask, hselectors, hsops, hposeidon, hsemantic, hI1, hclaim1,
+      hcopyVariant, hcopy, hnew, hloop0, hl̵o̵o̵p̵1̵,̵ ̵h̵I2, hclaim2, bind_tc_ok] at hcontinue'
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.TerminalV4CompositionContinueCanonicalV2.actual_continue_success_composition_canonical' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+       17.61 real         2.33 user         3.94 sys
+          2422063104  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              110025  page reclaims
+              101985  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               16524  voluntary context switches
+              100045  involuntary context switches
+         29129429808  instructions retired
+         13614714858  cycles elapsed
+           423180136  peak memory footprint

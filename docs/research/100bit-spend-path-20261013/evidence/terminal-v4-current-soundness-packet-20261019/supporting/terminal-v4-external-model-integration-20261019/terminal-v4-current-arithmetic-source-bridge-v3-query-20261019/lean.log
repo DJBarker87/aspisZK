@@ -1,0 +1,79 @@
+/tmp/terminal-v4-model-sources-20261019/TerminalV4CurrentArithmeticSourceBridgeV3.lean:44:69: error: unsolved goals
+K : Type
+inst✝² : Add K
+inst✝¹ : Sub K
+inst✝ : Mul K
+laws : Laws K
+compositionCaller : TerminalPartsCompositionCaller
+public1 : pool_v1.pair_forest_semantic_terminal.SemanticPublic
+claims : Std.Array field.QM31 84#usize
+point zerocheck_point : Std.Array field.QM31 10#usize
+lambda chi theta mu composition h1Z copyActive : field.QM31
+c1 : Std.Array field.QM31 16#usize
+mask_only : Std.Array field.QM31 10#usize
+g q : field.QM31
+hcaller :
+  compositionCaller public1 claims point lambda chi theta =
+    ok (core.result.Result.Ok (composition, c1, mask_only, g, h1Z, copyActive))
+heq : pool_v1.pair_forest_semantic_terminal.equality_value zerocheck_point point = ok q
+hq : laws.canonical q
+hc : laws.canonical composition
+hh : laws.canonical h1Z
+ha : laws.canonical copyActive
+hm : laws.canonical mu
+out : TerminalV4CurrentArithmeticContract.QM
+hrun : run q composition h1Z copyActive mu = ok out
+houtCanonical : laws.canonical out
+houtDecode :
+  laws.decode out =
+    laws.decode q * laws.decode composition + laws.decode mu * laws.decode h1Z +
+      laws.decode mu * laws.decode mu * ((laws.one - laws.decode copyActive) * laws.decode h1Z)
+⊢ (do
+      let q1 ← q.mul composition
+      let q2 ← mu.mul h1Z
+      let q3 ← q1.add q2
+      let q4 ← mu.mul mu
+      let q5 ← field.QM31.ONE.sub copyActive
+      let q6 ← q5.mul h1Z
+      let q7 ← q4.mul q6
+      let original ← q3.add q7
+      ok (core.result.Result.Ok (original, c1, mask_only, g))) =
+    ok (core.result.Result.Ok (out, c1, mask_only, g))
+/tmp/terminal-v4-model-sources-20261019/TerminalV4CurrentArithmeticSourceBridgeV3.lean:52:8: warning: This simp argument is unused:
+  AspisR1SelectedMaskProbe.TerminalV4CurrentArithmeticContract.run
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵[̵A̵s̵p̵i̵s̵R̵1̵S̵e̵l̵e̵c̵t̵e̵d̵M̵a̵s̵k̵P̵r̵o̵b̵e̵.̵T̵e̵r̵m̵i̵n̵a̵l̵V̵4̵C̵u̵r̵r̵e̵n̵t̵A̵r̵i̵t̵h̵m̵e̵t̵i̵c̵C̵o̵n̵t̵r̵a̵c̵t̵.̵r̵u̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵e̵q̵,̵ ̵h̵r̵u̵n̵]̵s̲i̲m̲p̲ ̲[̲h̲e̲q̲,̲ ̲h̲r̲u̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/terminal-v4-model-sources-20261019/TerminalV4CurrentArithmeticSourceBridgeV3.lean:53:9: warning: This simp argument is unused:
+  hrun
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1SelectedMaskProbe.TerminalV4CurrentArithmeticContract.run,
+  ̵  ̵ ̵ ̵heq,̵ ̵h̵r̵u̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1SelectedMaskProbe.TerminalV4CurrentArithmeticSourceBridge.terminal_parts_success_of_caller_and_exact_value' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        4.17 real         1.82 user         1.72 sys
+          2188951552  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              175788  page reclaims
+                7196  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   1  voluntary context switches
+               11194  involuntary context switches
+         19580698850  instructions retired
+          7336094160  cycles elapsed
+           371577144  peak memory footprint

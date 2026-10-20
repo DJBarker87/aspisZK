@@ -1,0 +1,67 @@
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/S3InactiveExecutionBridge.lean:39:4: error: 'change' tactic failed, pattern
+  ↑i < ↑64#usize
+is not definitionally equal to target
+  ↑i < AspisR1S3InactiveSource.r0.opening.COPY_ACTIVE_ROW_MASKS.length
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/S3InactiveExecutionBridge.lean:79:30: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable p
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/S3InactiveExecutionBridge.lean:32:64: error: unsolved goals
+r : Usize
+hbelow : ¬r ≥ 1024#usize
+hr : ↑r < 1024
+h16 : ↑16#usize = 16
+hden : ↑16#usize ≠ 0
+i : UScalar UScalarTy.Usize
+hdiv : r / 16#usize = ok i
+hdivVal✝ : ↑i = ↑r / ↑16#usize
+hdivVal : ↑i = ↑r / 16
+hi : ↑i < 64
+hArrayBound : ↑i < AspisR1S3InactiveSource.r0.opening.COPY_ACTIVE_ROW_MASKS.length
+mask : Std.U16
+hread : AspisR1S3InactiveSource.r0.opening.COPY_ACTIVE_ROW_MASKS.index_usize i = ok mask
+hreadVal : mask = (↑AspisR1S3InactiveSource.r0.opening.COPY_ACTIVE_ROW_MASKS)[↑i]
+hremSpec : r % 16#usize ⦃ z => ↑z = ↑r % ↑16#usize ⦄
+rem : UScalar UScalarTy.Usize
+hremRun : r % 16#usize = ok rem
+hremVal✝ : ↑rem = ↑r % ↑16#usize
+hrem : UScalar.rem r 16#usize = ok rem
+hremVal : ↑rem = ↑r % 16
+hremBound : ↑rem < UScalarTy.U16.numBits
+shifted : UScalar UScalarTy.U16
+hshift : mask >>> rem = ok shifted
+hshiftSpec : ↑shifted = ↑mask >>> ↑rem ∧ shifted.bv = mask.bv >>> ↑rem
+bit : UScalar UScalarTy.U16
+hand : lift (shifted &&& 1#u16) = ok bit
+handSpec : ↑bit = ↑(shifted &&& 1#u16) ∧ bit.bv = shifted.bv &&& 1#u16.bv
+hone : ↑1#u16 = 1
+hzero : ↑0#u16 = 0
+hbitVal : ↑bit = ↑mask >>> ↑rem &&& 1
+hbitIff : bit = 0#u16 ↔ ↑mask >>> ↑rem &&& 1 = 0
+hbitDecide : decide (bit = 0#u16) = decide (↑mask >>> ↑rem &&& 1 = 0)
+⊢ shifted &&& 1#u16 = 0#u16 ↔ ↑mask >>> (↑r % 16) % 2 = 0
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/S3InactiveExecutionBridge.lean:82:66: warning: This simp argument is unused:
+  hand
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg hbelow, hdiv, hread, HMod.hMod, hrem, hshift, h̵a̵n̵d̵,̵ ̵lift, bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/S3InactiveExecutionBridge.lean:83:25: warning: This simp argument is unused:
+  hbitDecide
+
+Hint: Omit it from the simp argument list.
+  simp [inactiveMaskBit, hb̵i̵t̵D̵e̵c̵i̵d̵e̵,̵ ̵h̵remVal]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/S3InactiveExecutionBridge.lean:83:37: warning: This simp argument is unused:
+  hremVal
+
+Hint: Omit it from the simp argument list.
+  simp [inactiveMaskBit, hbitDecide,̵ ̵h̵r̵e̵m̵V̵a̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S3InactiveExecutionBridge.inactive_mask_exec_spec' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

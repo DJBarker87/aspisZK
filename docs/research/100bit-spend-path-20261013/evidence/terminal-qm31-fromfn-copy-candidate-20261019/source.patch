@@ -1,0 +1,37 @@
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -14,6 +14,23 @@
+ #![no_std]
+ 
+ extern crate alloc;
++
++/// Extraction candidate: construct a fixed array in increasing index order
++/// using a Copy initializer and a stateful callback. This replaces the
++/// `core::array::from_fn` use at the 84-cell terminal claims selector only.
++#[inline(always)]
++pub(crate) fn array_from_fn_copy<T: Copy, const N: usize>(
++    init: T,
++    mut f: impl FnMut(usize) -> T,
++) -> [T; N] {
++    let mut out = [init; N];
++    let mut i = 0usize;
++    while i < N {
++        out[i] = f(i);
++        i += 1;
++    }
++    out
++}
+ 
+ pub mod circle;
+ pub mod circle_fri;
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -2083,7 +2083,7 @@
+             alpha: &[QM31; 10],
+             c: &Challenges,
+         ) -> Result<QM31, Error> {
+-            let selected = core::array::from_fn(|i| claims[i / 28][i % 28]);
++            let selected = crate::array_from_fn_copy::<_, 84>(QM31::ZERO, |i| claims[i / 28][i % 28]);
+             terminal_parts(
+                 self.semantic(),
+                 &selected,

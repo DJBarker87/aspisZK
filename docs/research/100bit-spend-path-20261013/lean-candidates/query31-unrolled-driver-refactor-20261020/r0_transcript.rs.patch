@@ -1,0 +1,45 @@
+--- a/crates/aspis-core/src/r0_transcript.rs
++++ b/crates/aspis-core/src/r0_transcript.rs
+@@ -307,14 +307,34 @@
+     advances: &[[u8; 32]; 8],
+ ) -> Result<([u32; QUERY_COUNT], [u8; 32]), QuerySampleError> {
+     let mut scan = QueryScan::default();
+-    let mut state = advances[7];
+-    for k in 0..8 {
+-        if scan.scan(&blocks[k]) {
+-            state = advances[k];
+-            break;
+-        }
+-    }
+-    Ok((scan.finish()?, state))
++
++    // Each fixed array access is at a literal index: there is no shared read
++    // address carried through a loop fixed point. Keep the scan and finish
++    // implementation unchanged so their existing contracts remain applicable.
++    if scan.scan(&blocks[0]) {
++        return Ok((scan.finish()?, advances[0]));
++    }
++    if scan.scan(&blocks[1]) {
++        return Ok((scan.finish()?, advances[1]));
++    }
++    if scan.scan(&blocks[2]) {
++        return Ok((scan.finish()?, advances[2]));
++    }
++    if scan.scan(&blocks[3]) {
++        return Ok((scan.finish()?, advances[3]));
++    }
++    if scan.scan(&blocks[4]) {
++        return Ok((scan.finish()?, advances[4]));
++    }
++    if scan.scan(&blocks[5]) {
++        return Ok((scan.finish()?, advances[5]));
++    }
++    if scan.scan(&blocks[6]) {
++        return Ok((scan.finish()?, advances[6]));
++    }
++    // The eighth pair is always consumed; its state is also the no-stop default.
++    let _stopped_on_eighth = scan.scan(&blocks[7]);
++    Ok((scan.finish()?, advances[7]))
+ }
+ 
+ #[cfg(test)]

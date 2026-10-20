@@ -1,0 +1,95 @@
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralCanonical.lean:14:24: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralCanonical.lean:27:23: error: Tactic `assumption` failed
+
+values : Values
+out : QM
+hvalues : ∀ (i : Fin 16), CanonicalQM (valueCell values i)
+hrun : AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16 values 6144#u16 = ok out
+h :
+  (do
+      let (mask1, complement) ←
+        if
+              8 <
+                ↑(BitVec.ofNat 32
+                      ((if 6144 >>> 15 % 2 = 1 then 1 else 0) +
+                        ((if 6144 >>> 14 % 2 = 1 then 1 else 0) +
+                          ((if 6144 >>> 13 % 2 = 1 then 1 else 0) +
+                            ((if 6144 >>> 12 % 2 = 1 then 1 else 0) +
+                              ((if 6144 >>> 11 % 2 = 1 then 1 else 0) +
+                                ((if 6144 >>> 10 % 2 = 1 then 1 else 0) +
+                                  ((if 6144 >>> 9 % 2 = 1 then 1 else 0) +
+                                    ((if 6144 >>> 8 % 2 = 1 then 1 else 0) +
+                                      ((if 6144 >>> 7 % 2 = 1 then 1 else 0) +
+                                        ((if 6144 >>> 6 % 2 = 1 then 1 else 0) +
+                                          ((if 6144 >>> 5 % 2 = 1 then 1 else 0) +
+                                            ((if 6144 >>> 4 % 2 = 1 then 1 else 0) +
+                                              ((if 6144 >>> 3 % 2 = 1 then 1 else 0) +
+                                                ((if 6144 >>> 2 % 2 = 1 then 1 else 0) +
+                                                  if 6144 >>> 1 % 2 = 1 then 1 else 0))))))))))))))#uscalar) then
+            do
+            let mask2 ← lift (~~~6144#u16)
+            ok (mask2, true)
+          else ok (6144#u16, false)
+      let sum ←
+        if complement = true then ok AspisR1SelectedMaskProbe.field.QM31.ONE
+          else ok AspisR1SelectedMaskProbe.field.QM31.ZERO
+      AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values mask1 complement
+          sum) =
+    ok out
+⊢ False
+values : Values
+out : QM
+hvalues : ∀ (i : Fin 16), CanonicalQM (valueCell values i)
+hrun : AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16 values 6144#u16 = ok out
+h :
+  (do
+      let (mask1, complement) ←
+        if
+              8 <
+                ↑(BitVec.ofNat 32
+                      ((if 6144 >>> 15 % 2 = 1 then 1 else 0) +
+                        ((if 6144 >>> 14 % 2 = 1 then 1 else 0) +
+                          ((if 6144 >>> 13 % 2 = 1 then 1 else 0) +
+                            ((if 6144 >>> 12 % 2 = 1 then 1 else 0) +
+                              ((if 6144 >>> 11 % 2 = 1 then 1 else 0) +
+                                ((if 6144 >>> 10 % 2 = 1 then 1 else 0) +
+                                  ((if 6144 >>> 9 % 2 = 1 then 1 else 0) +
+                                    ((if 6144 >>> 8 % 2 = 1 then 1 else 0) +
+                                      ((if 6144 >>> 7 % 2 = 1 then 1 else 0) +
+                                        ((if 6144 >>> 6 % 2 = 1 then 1 else 0) +
+                                          ((if 6144 >>> 5 % 2 = 1 then 1 else 0) +
+                                            ((if 6144 >>> 4 % 2 = 1 then 1 else 0) +
+                                              ((if 6144 >>> 3 % 2 = 1 then 1 else 0) +
+                                                ((if 6144 >>> 2 % 2 = 1 then 1 else 0) +
+                                                  if 6144 >>> 1 % 2 = 1 then 1 else 0))))))))))))))#uscalar) then
+            do
+            let mask2 ← lift (~~~6144#u16)
+            ok (mask2, true)
+          else ok (6144#u16, false)
+      let sum ←
+        if complement = true then ok AspisR1SelectedMaskProbe.field.QM31.ONE
+          else ok AspisR1SelectedMaskProbe.field.QM31.ZERO
+      AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values mask1 complement
+          sum) =
+    ok out
+⊢ CanonicalQM out
+        7.27 real         1.76 user         2.16 sys
+          2224095232  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              138443  page reclaims
+               45786  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                 139  voluntary context switches
+               38784  involuntary context switches
+         23494161587  instructions retired
+          8367123777  cycles elapsed
+           372559920  peak memory footprint

@@ -1,0 +1,49 @@
+{
+  "status": "UNCOMPILED_SOURCE_CANDIDATE",
+  "base_revision": "2517a884266c7f10dd1e13e63f9a1f8af8111e12",
+  "change": "Add generic Copy-initialized fixed array helper to isolated asp\u200b\u200bis-core candidate; replace only terminal_qm31 84-element claims selector core::array::from_fn with crate::array_from_fn_copy while preserving callback body/order.",
+  "source_files": [
+    {
+      "path": "crates/aspis-core/src/lib.rs",
+      "base_sha256": "c179731989675fa3218cf2230ec3681d2e61d23c2b2694ea10b72fb68ee377d0",
+      "candidate_sha256": "21f540cce6ee3ec16a9a205759ab6b7e1b211f4da0a1c7f0a97ac58841d414be"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+      "base_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+      "candidate_sha256": "be582f501c07117ae720bd980656e1f0bc3c1fea906ca779f06721d0809544c6"
+    }
+  ],
+  "patch_sha256": "ad4167b3f73210c49f0b9aa53bfae90a13f173e12e7ab56b41a2fc8b0a1fe243",
+  "lean_support": [
+    {
+      "module": "TerminalClaimsFromFnCallbackV5",
+      "source_sha256": "b12de711075fc3c24cfa605dee56e3edb2c63b197304bc0381991535d9fef846",
+      "olean_sha256": "ed8db6ce42d936a09c1d502ff494efa2269a0a5a3f81f58f781190efb1a83597",
+      "receipt": "/tmp/root-merkle-cost-20261018/evidence/terminal-claims-fromfn-callback-v5-20261019/receipt.json"
+    },
+    {
+      "module": "TerminalClaimsFromFnCopyEquivalenceV1",
+      "source_sha256": "985940e3aafc19bec90269fe26b95909be542bcec584300eeda3c276d79c3e36",
+      "olean_sha256": "915a638d062c992c53a66e237ffa4d311195dae1fc0496ea6ad61860f1d18c3b",
+      "receipt": "/tmp/root-merkle-cost-20261018/evidence/terminal-claims-fromfn-copy-equivalence-v1-20261019/receipt.json"
+    },
+    {
+      "module": "TerminalArrayFromFnCopyEquivalenceV8",
+      "source_sha256": "6596d694e551e07788295daddec02f3f81cebb30fe48bcc2be031bdade4d36b6",
+      "olean_sha256": "d67a98e4debc1a4b72664f066ccf0d0aa4f98c24f631702f7763fe0d8c49ef46",
+      "receipt": "/tmp/root-merkle-cost-20261018/evidence/terminal-array-fromfn-copy-equivalence-v8-20261019/receipt.json"
+    }
+  ],
+  "generated_reference": {
+    "archive": "docs/research/100bit-spend-path-20261013/evidence/terminal-current-aeneas-v10/terminal-current-generated-v10.tar.gz",
+    "archive_sha256": "162b198ec2427b8588861d168ef3015c7bea4665e430db271db89b5ac7e9d8a6",
+    "Funs_sha256": "a0fa91e43a9fd511d0746bad56d4e9bb38090187cd0c77e1a54b377388474c08",
+    "changed_candidate_Funs_sha256": "aec42077637afa50b537d5ba80a1c94d78a7e3e5114610e4a864e50cf2d67606"
+  },
+  "limits": [
+    "No Rust build, Aeneas run, or generated Funs compile was run for this candidate.",
+    "This removes only the 84-cell claims selector use. The remaining terminal-reachable path still contains from_fn in composition_parts and nested state_only_poseidon paths, so the generic external-template axiom is not eliminated from the complete terminal dependency closure.",
+    "The Lean callback proof is source-adapted to the exact generated callback body and proves behavior of the extracted array_from_fn_copy model; it does not establish Rust std core::array::from_fn behavior or full source-to-generated correspondence for this source delta."
+  ]
+}

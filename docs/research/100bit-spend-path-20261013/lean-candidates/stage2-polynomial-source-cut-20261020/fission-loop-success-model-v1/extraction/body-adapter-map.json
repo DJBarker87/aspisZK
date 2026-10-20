@@ -1,0 +1,42 @@
+{
+  "candidate_classification": "fission candidate; not adopted as the frozen finish_relation implementation",
+  "generated_owner": "AspisR1FinishRelationCurrent.verifier.finish_round_loop_fission_loop.body",
+  "generated_funs_sha256": "a81a574728cc24acfc64934a6c2cde476669291987f9ec4d3f01d974ad374734",
+  "lean_adapter": "AspisR1FinishFissionProof.bodyAdapter",
+  "mapping": {
+    "view_update": {
+      "v": "env.v",
+      "variant": "env.v1",
+      "inactive": "env.inactive",
+      "folded_root": "env.foldedRoot"
+    },
+    "prepared_fields": {
+      "variant": "env.v2",
+      "roots": "env.roots",
+      "gamma": "env.gamma",
+      "kappa": "env.kappa",
+      "alpha": "env.alpha",
+      "rho": "env.rho",
+      "queries": "env.queries",
+      "semantic_alpha": "env.semanticAlpha",
+      "z": "env.z",
+      "claim": "env.preparedClaim",
+      "state": "env.state"
+    },
+    "loop_state": ["iter", "claim"],
+    "only_parameterized_call": "verifier.finish_relation_round ... claim round -> step (assembledView env) (assembledPrepared env) claim round"
+  },
+  "control_flow_preserved": [
+    "IteratorRange.next result is split into option and iterator tail",
+    "None returns done (claim, none)",
+    "Some round calls one helper and binds its Result",
+    "CoreOpsTry.branch maps helper Ok to Continue and helper Err to Break",
+    "Continue returns cont (iter1, val)",
+    "Break converts the residual with FromResidual and returns done (claim, some return_capture)"
+  ],
+  "excluded_from_lean_imports": [
+    "generated/AspisR1FinishRelationCurrent/Funs.lean",
+    "generated/AspisR1FinishRelationCurrent/FunsExternal_Template.lean"
+  ],
+  "semantic_frontier": "The Lean model proves loop success/error behavior for a parameterized helper. Explicit hmodel0/hmodel1 are required to instantiate each successful helper call with FinishCandidateEquations.round_equation; the source helper body and original finish_relation caller remain open."
+}

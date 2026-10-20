@@ -1,0 +1,11 @@
+# Terminal-v4 U16 and array IntoIter model candidate
+
+This packet records an isolated Lean model candidate for two terminal-reachable U16 operations and the array IntoIter interface. No canonical Rust or generated Lean source was changed.
+
+The U16 model computes `count_ones` by a structurally recursive scan of bits 0 through 15 and computes `trailing_zeros` by scanning the same positions and taking the least set-bit index (returning 16 for zero). Both are ordinary Lean definitions built with `UScalar.mk (BitVec.ofNat ...)`; the local bounds and operations report only standard Lean axioms (`propext`, plus `Quot.sound` for the count bound). The current generated selector uses the count to choose whether to complement its mask, then calls trailing-zeros only on the nonzero loop mask before clearing its least set bit. The matching Rust standard-library source documents that these methods delegate to `ctpop` and `cttz`; a formal compiler-intrinsic-to-model correspondence is not proved in this packet.
+
+The array iterator candidate represents `IntoIter T N` as `List T`, using the underlying list stored by Aeneas's `Array` subtype. `next`, `next_back`, and the recursive `FnMut.call_mut`-threading `fold` compile without axioms, and `into_iter` preserves the array's list order. The generated `FunsExternal` module compiles against the candidate type and these definitions in a private coherent overlay. This is a candidate refinement model, not a theorem establishing Rust `IntoIter` semantics. In particular, source-level equivalence to the Rust array iterator implementation and all reachable callback consequences remain open.
+
+The generated Funs dependent module was checked once against this changed external owner under the existing 4 GiB aggregate Lean cap. It stopped at 4,344,037,376 bytes after 25.02 seconds, with no Lean diagnostic and no object; no higher-cap retry was made. This is a retained failed dependency check, not a green Funs module.
+
+Each attempt directory preserves the frozen source, command/import pins, compiler receipt, log, and available OLean. The isolated overlay object paths preserve the actual module names and must be placed before older external-module roots when reused.

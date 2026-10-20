@@ -1,0 +1,44 @@
+poseidonEval : PoseidonEvaluator
+semanticEval : SemanticEvaluator
+self : pool_v1.pair_forest_semantic_terminal.r0.Public
+claims : Std.Array (Std.Array field.QM31 29#usize) 3#usize
+alpha : Std.Array field.QM31 10#usize
+c : state_only_prefix.r0.Challenges
+out : field.QM31
+hsuccess :
+  (do
+      let selected ←
+        array_from_fn_copy 84#usize field.QM31.Insts.CoreMarkerCopy
+            pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+            field.QM31.ZERO claims
+      let sp ← self.semantic
+      let r ←
+        terminal_parts_from_composition_callers poseidonEval semanticEval sp selected alpha c.lambda c.chi c.theta c.zc
+            c.mu
+      let r1 ←
+        core.result.Result.map
+            pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+            r ()
+      core.result.Result.map_err
+          pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+          r1 ()) =
+    ok (core.result.Result.Ok out)
+⊢ True
+       10.44 real         1.10 user         1.76 sys
+          2203172864  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               90008  page reclaims
+               94640  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                2681  voluntary context switches
+               83788  involuntary context switches
+         24221373210  instructions retired
+         10180081367  cycles elapsed
+           380899664  peak memory footprint

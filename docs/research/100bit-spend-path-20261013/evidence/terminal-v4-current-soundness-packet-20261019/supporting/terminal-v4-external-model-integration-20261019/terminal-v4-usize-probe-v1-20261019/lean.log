@@ -1,0 +1,41 @@
+def Aeneas.Std.UScalar.cMax : UScalarTy → ℕ :=
+fun ty =>
+  match ty with
+  | UScalarTy.Usize => UScalar.rMax UScalarTy.U32
+  | x => UScalar.rMax ty
+def Aeneas.Std.UScalar.rMax : UScalarTy → ℕ :=
+fun ty =>
+  match ty with
+  | UScalarTy.Usize => Usize.rMax
+  | UScalarTy.U8 => U8.rMax
+  | UScalarTy.U16 => U16.rMax
+  | UScalarTy.U32 => U32.rMax
+  | UScalarTy.U64 => U64.rMax
+  | UScalarTy.U128 => U128.rMax
+@[irreducible] def Aeneas.Std.Usize.max : ℕ :=
+wrapped✝.1
+18446744073709551615
+4294967295
+/tmp/terminal-v4-model-sources-20261019/TerminalV4UsizeProbe.lean:8:7: error(lean.unknownIdentifier): Unknown constant `BitVec.toNat_lt`
+/tmp/terminal-v4-model-sources-20261019/TerminalV4UsizeProbe.lean:9:7: error(lean.unknownIdentifier): Unknown constant `BitVec.toNat_lt_of_lt`
+Nat.lt_succ_iff {m n : ℕ} : m < n.succ ↔ m ≤ n
+/tmp/terminal-v4-model-sources-20261019/TerminalV4UsizeProbe.lean:11:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.val_lt_cMax`
+/tmp/terminal-v4-model-sources-20261019/TerminalV4UsizeProbe.lean:12:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.val_le_cMax`
+        1.89 real         0.93 user         0.91 sys
+          2220785664  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              181165  page reclaims
+                  79  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   0  voluntary context switches
+                2713  involuntary context switches
+         18862904096  instructions retired
+          6523614953  cycles elapsed
+           369888872  peak memory footprint

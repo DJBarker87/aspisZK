@@ -1,0 +1,9 @@
+# EbyK raw-to-decoded per-call update (V2)
+
+This source-only packet adds `successful_push_decoded_product_update`. For one successful `EbyKPushDotBackend.pushWithDotBackend QRaw`, it proves that both `c0` and `c1` accumulator arrays advance coordinatewise in the R22 residue field by the exact `qmulCoefficients` product. The proof composes the V17 actual-QRaw coefficient contract, the checked generated Dot loop update, the S5 canonical-limb range theorem, and R22 raw coefficient residues.
+
+The theorem keeps the pre-call value canonicality premise explicit and requires every pre-call accumulator cell in each lane to be below `2^46`. The successful push itself supplies the checked scalar bounds and both raw-call results; S5 discharges the R22 subtraction guards from the eight canonical value limbs and four checked scalar limbs.
+
+The focused Lean target exited 0 in 3.31 s. Process peak RSS was 3,737,284 KiB; cgroup peak was 415,649,792 bytes; swap was 0. `#print axioms successful_push_decoded_product_update` reports only `[propext, Classical.choice, Quot.sound]`. The NUC phase was admitted at `MemoryHigh=1 GiB`, `MemoryMax=2 GiB`, `MemorySwapMax=0`.
+
+This theorem is a per-call update result, not a whole-call-traversal theorem. The powers-array traversal, construction/maintenance of the accumulator bound over all prior calls, and full production Rust/standard-library correspondence remain separate obligations. The QRaw source and four-coordinate generated Dot loop connection are the exact focused source owners referenced by the V1 and Dot upstream packets; this packet does not claim the standard library `Array.map` correspondence is closed. The V1 producing packet is embedded under `upstream/eby-k-qraw-dot-product-update-v1/` because it was an untracked working artifact at freeze time. Other upstream packets are linked by repository-relative path and manifest hash. No Lean object files are included.

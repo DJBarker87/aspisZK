@@ -1,0 +1,11 @@
+# Explicit seven-step polynomial candidate
+
+This is a candidate-only source transformation based on the exact frozen polynomial in revision `c8ea8dd49c81ab970b9dbee8d8b47718f9beb005`. The original Rust cut is `crates/aspis-r1-cost-probe/src/verifier.rs`, bytes `[12595,12695)`, source-file SHA-256 `8a704eea668d04ca173290ca894c7cb0ab1f29abef4fec9bb49fbb36476779ea`, body SHA-256 `ca19094cb9ea4f1b293554b0ec68d055ccc1dd71488f16f6e5f5043c631e48a7`.
+
+The candidate changes only this function in its isolated flattened input: it spells out the same seven expressions in order for indices 6, 5, 4, 3, 2, 1, 0. The candidate body hash is `75079706c460c8264cd5c52d07a35366d49c07167e34939e48601bfb6c9121ec`; candidate `input/lib.rs` SHA-256 is `be90dce6ab6bc06ac357454d03ecb747313775695bcc1a60a12881db4a840eed`.
+
+Charon and Aeneas both completed successfully under a fresh 512 MiB `MemoryHigh`, 2 GiB `MemoryMax`, `MemorySwapMax=0` scope. The LLBC hash is `69056cf57ba3a5d266483921ec2b2feaee7af0cc6e90c4a9ea7b6dd7e53e8674`. Generated `verifier.polynomial` has seven sequential `mul → weights.field → add` triples with the expected indices; `evidence/source-structure-check.json` records the mechanical check. The only generated external template entry is the field lookup boundary `weights.field`; the template is retained as a diagnostic and is not imported into proof modules.
+
+The candidate removes `Rev.fold` from this candidate body, making the emitted sequence directly checkable. It does **not** establish that the explicit body is semantically equivalent to the original `Rev.fold` over all Rust behaviors, that the candidate is adopted, that generated nominal field operations are the current Wide operations, or that the full finish caller is verified. `Rev.fold` equivalence/adoption remains an explicit frontier. The current-Wide one-step callback-success theorem and the concrete `finishField` lookup theorem are separate pinned sources/owners and are not evidence of full candidate/source equivalence.
+
+Per-attempt commands, environment, admission/reservation evidence and `/usr/bin/time -v` logs are under `evidence/charon` and `evidence/aeneas`. Binary LLBC and compiled Lean objects are not included; their hashes are recorded in the receipts.

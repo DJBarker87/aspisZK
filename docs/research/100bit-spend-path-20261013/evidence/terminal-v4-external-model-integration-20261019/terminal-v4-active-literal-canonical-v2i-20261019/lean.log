@@ -1,0 +1,76 @@
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralCanonical.lean:14:24: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralCanonical.lean:50:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralCanonical.lean:76:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  6144#u16.sub 1#u16
+in the target expression
+  (do
+      let i1 ← 6144#u16 - 1#u16
+      AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values (6144#u16 &&& i1)
+          false sum1) =
+    ok out
+
+values : Values
+out : QM
+hvalues : ∀ (i : Fin 16), CanonicalQM (valueCell values i)
+hrun : AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16 values 6144#u16 = ok out
+hcount : core.num.U16.count_ones 6144#u16 = ok 2#u32
+h :
+  AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values 6144#u16 false
+      AspisR1SelectedMaskProbe.field.QM31.ZERO =
+    ok out
+htrail11 : core.num.U16.trailing_zeros 6144#u16 = ok 11#u32
+hcast11 : UScalar.cast UScalarTy.Usize 11#u32 = 11#usize
+hread11 : Array.index_usize values 11#usize = ok (valueCell values 11)
+hz : CanonicalQM AspisR1SelectedMaskProbe.field.QM31.ZERO
+hq : CanonicalQM (valueCell values 11)
+sum1 : AspisR1SelectedMaskProbe.field.QM31
+hadd : AspisR1SelectedMaskProbe.field.QM31.ZERO.add (valueCell values 11) = ok sum1
+hsum1 : TerminalV4TowerAdd.CanonicalQM sum1
+right✝ :
+  TerminalV4TowerAdd.wordsQM sum1 =
+    (((↑AspisR1SelectedMaskProbe.field.QM31.ZERO.c0.a + ↑(valueCell values 11).c0.a) % TerminalV4TowerAdd.P,
+        (↑AspisR1SelectedMaskProbe.field.QM31.ZERO.c0.b + ↑(valueCell values 11).c0.b) % TerminalV4TowerAdd.P),
+      (↑AspisR1SelectedMaskProbe.field.QM31.ZERO.c1.a + ↑(valueCell values 11).c1.a) % TerminalV4TowerAdd.P,
+      (↑AspisR1SelectedMaskProbe.field.QM31.ZERO.c1.b + ↑(valueCell values 11).c1.b) % TerminalV4TowerAdd.P)
+hloop :
+  (do
+      let i1 ← 6144#u16 - 1#u16
+      AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values (6144#u16 &&& i1)
+          false sum1) =
+    ok out
+hsub : 6144#u16.sub 1#u16 = ok 6143#u16
+hand : 6144#u16 &&& 6143#u16 = 4096#u16
+⊢ CanonicalQM out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (6144 ≤ UScalar.cMax UScalarTy.U16)) true
+  in the application
+    id (Eq.refl true)
+       10.90 real         2.16 user         2.78 sys
+          2231205888  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              128092  page reclaims
+               57229  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               10980  voluntary context switches
+               58965  involuntary context switches
+         24734821197  instructions retired
+         10489117179  cycles elapsed
+           377278608  peak memory footprint

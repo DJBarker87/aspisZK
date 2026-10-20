@@ -1,0 +1,74 @@
+/tmp/terminal-v4-model-sources-20261019/TerminalV4PublicTerminalQM31SuccessInversionV3.lean:51:12: error: Type mismatch
+  hproj
+has type
+  core.result.Result.Ok tuple.1 = core.result.Result.Ok out
+but is expected to have type
+  tuple.1 = out
+/tmp/terminal-v4-model-sources-20261019/TerminalV4PublicTerminalQM31SuccessInversionV3.lean:52:49: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.217 = ?m.217
+but is expected to have type
+  terminal_parts_from_composition_callers poseidonEval semanticEval sem selected alpha c.lambda c.chi c.theta c.zc
+      c.mu =
+    ok (core.result.Result.Ok tuple)
+in the application
+  And.intro rfl
+/tmp/terminal-v4-model-sources-20261019/TerminalV4PublicTerminalQM31SuccessInversionV3.lean:53:16: error: unsolved goals
+case ok.ok.ok.Err
+poseidonEval : PoseidonEvaluator
+semanticEval : SemanticEvaluator
+self : pool_v1.pair_forest_semantic_terminal.r0.Public
+claims : Std.Array (Std.Array field.QM31 29#usize) 3#usize
+alpha : Std.Array field.QM31 10#usize
+c : state_only_prefix.r0.Challenges
+out : field.QM31
+selected : Std.Array field.QM31 84#usize
+hgather :
+  array_from_fn_copy 84#usize field.QM31.Insts.CoreMarkerCopy
+      pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+      field.QM31.ZERO claims =
+    ok selected
+sem : pool_v1.pair_forest_semantic_terminal.SemanticPublic
+hsemantic : self.semantic = ok sem
+e : pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1
+hparts :
+  terminal_parts_from_composition_callers poseidonEval semanticEval sem selected alpha c.lambda c.chi c.theta c.zc
+      c.mu =
+    ok (core.result.Result.Err e)
+hsuccess :
+  (do
+      let mapped ←
+        pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error.call_once
+            () e
+      ok (core.result.Result.Err mapped)) =
+    ok (core.result.Result.Ok out)
+⊢ ∃ selected_1 sem_1 tuple,
+    ok selected = ok selected_1 ∧
+      ok sem = ok sem_1 ∧
+        terminal_parts_from_composition_callers poseidonEval semanticEval sem_1 selected_1 alpha c.lambda c.chi c.theta
+              c.zc c.mu =
+            ok (core.result.Result.Ok tuple) ∧
+          tuple.1 = out
+'AspisR1SelectedMaskProbe.terminal_success_reaches_parts' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        5.06 real         1.12 user         1.31 sys
+          2190311424  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              166140  page reclaims
+               18080  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                 192  voluntary context switches
+               36376  involuntary context switches
+         20471248338  instructions retired
+          8498632689  cycles elapsed
+           374428104  peak memory footprint

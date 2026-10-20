@@ -1,0 +1,63 @@
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralCanonical.lean:14:24: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralCanonical.lean:40:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralCanonical.lean:61:2: error: `simp` made no progress
+values : Values
+initial out : QM
+hvalues : ∀ (i : Fin 16), CanonicalQM (valueCell values i)
+hinit : CanonicalQM initial
+hrun :
+  AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values 4096#u16 false initial =
+    ok out
+htrail12 : core.num.U16.trailing_zeros 4096#u16 = ok 12#u32
+hcast12 : UScalar.cast UScalarTy.Usize 12#u32 = 12#usize
+hread12 : Array.index_usize values 12#usize = ok (valueCell values 12)
+hq : CanonicalQM (valueCell values 12)
+sum2 : AspisR1SelectedMaskProbe.field.QM31
+hadd : AspisR1SelectedMaskProbe.field.QM31.add initial (valueCell values 12) = ok sum2
+hsum2 : TerminalV4TowerAdd.CanonicalQM sum2
+right✝ :
+  TerminalV4TowerAdd.wordsQM sum2 =
+    (((↑initial.c0.a + ↑(valueCell values 12).c0.a) % TerminalV4TowerAdd.P,
+        (↑initial.c0.b + ↑(valueCell values 12).c0.b) % TerminalV4TowerAdd.P),
+      (↑initial.c1.a + ↑(valueCell values 12).c1.a) % TerminalV4TowerAdd.P,
+      (↑initial.c1.b + ↑(valueCell values 12).c1.b) % TerminalV4TowerAdd.P)
+hloop :
+  (do
+      let i1 ← 4096#u16 - 1#u16
+      AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop values (4096#u16 &&& i1)
+          false sum2) =
+    ok out
+hsub : 4096#u16.sub 1#u16 = ok 4095#u16
+hand : 4096#u16 &&& 4095#u16 = 0#u16
+⊢ CanonicalQM out
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralCanonical.lean:102:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralCanonical.lean:102:53: warning: 'decide' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/tmp/root-terminal-shared-mask-owner-20261019/sources/AspisR1/TerminalV4ActiveLiteralCanonical.lean:102:53: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+        7.75 real         2.30 user         2.33 sys
+          2204516352  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              151923  page reclaims
+               33909  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                2400  voluntary context switches
+               35766  involuntary context switches
+         25568289288  instructions retired
+          9949990190  cycles elapsed
+           385060840  peak memory footprint

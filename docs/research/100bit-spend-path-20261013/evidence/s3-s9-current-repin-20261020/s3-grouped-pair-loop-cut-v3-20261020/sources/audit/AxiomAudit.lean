@@ -1,0 +1,9 @@
+import AspisR1GroupedPairCut.Funs
+
+#print axioms AspisR1GroupedPairCut.weights.s2_grouped_inactive_pair_loop0.body
+#print axioms AspisR1GroupedPairCut.weights.s2_grouped_inactive_pair_loop0
+#print axioms AspisR1GroupedPairCut.weights.s2_grouped_inactive_pair_loop1_loop0.body
+#print axioms AspisR1GroupedPairCut.weights.s2_grouped_inactive_pair_loop1_loop0
+#print axioms AspisR1GroupedPairCut.weights.s2_grouped_inactive_pair_loop1.body
+#print axioms AspisR1GroupedPairCut.weights.s2_grouped_inactive_pair_loop1
+#print axioms AspisR1GroupedPairCut.weights.s2_grouped_inactive_pair

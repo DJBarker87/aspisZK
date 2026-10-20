@@ -1,0 +1,75 @@
+/tmp/root-terminal-named-types-20261019/sources/RawMerklePathWalk.lean:40:2: error: Tactic `rfl` failed: The left-hand side
+  loop (fun x => verifier.merkle_path_loop.body D hash path x.1 x.2.1 x.2.2) (iter, index, node)
+is not definitionally equal to the right-hand side
+  do
+    let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match o with
+      | none => ok (index, node)
+      | some d => do
+        let x ← index % 8#usize
+        let x_1 ← verifier.merkle_child x node path d 0#usize
+        let x_2 ← verifier.merkle_child x node path d 1#usize
+        let x_3 ← verifier.merkle_child x node path d 2#usize
+        let x_4 ← verifier.merkle_child x node path d 3#usize
+        let x_5 ← verifier.merkle_child x node path d 4#usize
+        let x_6 ← verifier.merkle_child x node path d 5#usize
+        let x_7 ← verifier.merkle_child x node path d 6#usize
+        let x ← verifier.merkle_child x node path d 7#usize
+        let x ← merkle.parent_with_digest D hash (Array.make 8#usize [x_1, x_2, x_3, x_4, x_5, x_6, x_7, x] ⋯)
+        let x_8 ← index / 8#usize
+        let (index1, node1) ← ok (x_8, x)
+        verifier.merkle_path_loop D iter1 hash index1 node1 path
+
+H : Type
+D : Digest32 H
+hash : H
+path : Slice U8
+iter : Range
+index : Usize
+node : Digest
+⊢ loop (fun x => verifier.merkle_path_loop.body D hash path x.1 x.2.1 x.2.2) (iter, index, node) = do
+    let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match o with
+      | none => ok (index, node)
+      | some d => do
+        let x ← index % 8#usize
+        let x_1 ← verifier.merkle_child x node path d 0#usize
+        let x_2 ← verifier.merkle_child x node path d 1#usize
+        let x_3 ← verifier.merkle_child x node path d 2#usize
+        let x_4 ← verifier.merkle_child x node path d 3#usize
+        let x_5 ← verifier.merkle_child x node path d 4#usize
+        let x_6 ← verifier.merkle_child x node path d 5#usize
+        let x_7 ← verifier.merkle_child x node path d 6#usize
+        let x ← verifier.merkle_child x node path d 7#usize
+        let x ← merkle.parent_with_digest D hash (Array.make 8#usize [x_1, x_2, x_3, x_4, x_5, x_6, x_7, x] ⋯)
+        let x_8 ← index / 8#usize
+        let (index1, node1) ← ok (x_8, x)
+        verifier.merkle_path_loop D iter1 hash index1 node1 path
+'AspisR1MerklePathChildren.RawMerklePathWalk.loop_equation' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1MerklePathChildren.RawMerklePathWalk.loop_success_walk' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+        4.26 real         1.89 user         1.92 sys
+          2237251584  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              182898  page reclaims
+                 555  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  83  voluntary context switches
+                8355  involuntary context switches
+         22091879938  instructions retired
+          8007969267  cycles elapsed
+           375705360  peak memory footprint

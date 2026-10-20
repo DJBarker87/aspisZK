@@ -1,0 +1,5 @@
+import TerminalV4ActiveLiteralClosureV2
+open Aeneas Aeneas.Std Result
+#check AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.Selectors.active_literal_loop.eq_def
+#check AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.Selectors.active_literal_loop
+#check AspisR1SelectedMaskProbe.pool_v1.pair_forest_copy_terminal.selector_mask_sum_16_loop.eq_def

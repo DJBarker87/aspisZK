@@ -1,0 +1,56 @@
+{
+  "schema": "terminal-v4-external-model-integration.v3",
+  "status": "FOCUSED_OVERLAYS_GREEN; FULL_GENERATED_FUNS_CHECK_STOPPED_AT_AGGREGATE_GUARD",
+  "template_counts": {
+    "Funs": 17,
+    "Types": 1,
+    "count_method": "multiline-aware rust_fun/rust_type annotation block count; original source receipt is in v4 Aeneas packet"
+  },
+  "overlay_progress": [
+    {
+      "source": "FunsExternal.lean",
+      "models": [
+        "Array.map",
+        "Result.map",
+        "Result.map_err"
+      ],
+      "remaining_funs_axioms": 14,
+      "result": "green elaboration"
+    },
+    {
+      "source": "FunsExternalV2.lean",
+      "models": [
+        "Array.map",
+        "Result.map",
+        "Result.map_err",
+        "Range.clone"
+      ],
+      "remaining_funs_axioms": 13,
+      "result": "green; range_clone_usize axiom-free"
+    },
+    {
+      "source": "FunsExternalV5.lean",
+      "models": [
+        "Array.map",
+        "Result.map",
+        "Result.map_err",
+        "Range.clone",
+        "Option PartialEq::eq"
+      ],
+      "remaining_funs_axioms": 12,
+      "result": "green; range_clone_usize and Option.eq report no axioms"
+    }
+  ],
+  "option_model_note": "Option.eq uses nested Option pattern matching to avoid relying on a Discriminant instance unavailable in the external template. It is an explicit candidate implementation; source-level equivalence to Rust core::option::PartialEq remains to be discharged.",
+  "remaining_open": "12 Funs external declarations plus the IntoIter type; iterator/fold models and actual remaining callback reachability are open.",
+  "full_generated_Funs_attempt": {
+    "result": "stopped by aggregate RSS guard before completion",
+    "source": "sources/FunsWithModeledExternal.lean",
+    "aggregate_rss_cap_bytes": 4294967296,
+    "peak_aggregate_lean_rss_bytes": 4342841344,
+    "observed_wall_seconds": 26.26,
+    "exit_status": -15,
+    "process_swap_count": "unavailable (runner terminated before time summary)",
+    "unchanged_higher_cap_retry": "not performed"
+  }
+}

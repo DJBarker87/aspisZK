@@ -1,0 +1,52 @@
+structure Aeneas.Std.core.iter.traits.iterator.Iterator (Self Self_Item : Type) : Type
+number of parameters: 2
+fields:
+  Aeneas.Std.core.iter.traits.iterator.Iterator.next : Self → Result (Option Self_Item × Self)
+  Aeneas.Std.core.iter.traits.iterator.Iterator.step_by : Self →
+      Usize → Result (core.iter.adapters.step_by.StepBy Self) :=
+    core.iter.traits.iterator.Iterator.step_by.default
+  Aeneas.Std.core.iter.traits.iterator.Iterator.enumerate : Self →
+      Result (core.iter.adapters.enumerate.Enumerate Self) :=
+    core.iter.traits.iterator.Iterator.enumerate.default
+  Aeneas.Std.core.iter.traits.iterator.Iterator.take : Self → Usize → Result (core.iter.adapters.take.Take Self) :=
+    core.iter.traits.iterator.Iterator.take.default
+constructor:
+  Aeneas.Std.core.iter.traits.iterator.Iterator.mk {Self Self_Item : Type}
+    (next : Self → Result (Option Self_Item × Self))
+    (step_by : Self → Usize → Result (core.iter.adapters.step_by.StepBy Self))
+    (enumerate : Self → Result (core.iter.adapters.enumerate.Enumerate Self))
+    (take : Self → Usize → Result (core.iter.adapters.take.Take Self)) :
+    core.iter.traits.iterator.Iterator Self Self_Item
+@[reducible] def Aeneas.Std.core.iter.traits.iterator.IteratorSliceIter : (T : Type) →
+  core.iter.traits.iterator.Iterator (core.slice.iter.Iter T) T :=
+fun T => { next := core.slice.iter.IteratorSliceIter.next }
+@[reducible] def Aeneas.Std.Usize : Type :=
+UScalar UScalarTy.Usize
+Aeneas.Std.Usize.max : ℕ
+Aeneas.Std.UScalar.cMax (ty : UScalarTy) : ℕ
+/tmp/terminal-v4-model-sources-20261019/TerminalV4ArrayIterProbe4.lean:9:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.val`
+/tmp/terminal-v4-model-sources-20261019/TerminalV4ArrayIterProbe4.lean:10:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Array.val`
+/tmp/terminal-v4-model-sources-20261019/TerminalV4ArrayIterProbe4.lean:11:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Array.property`
+/tmp/terminal-v4-model-sources-20261019/TerminalV4ArrayIterProbe4.lean:12:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.mk`
+/tmp/terminal-v4-model-sources-20261019/TerminalV4ArrayIterProbe4.lean:13:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.val`
+/tmp/terminal-v4-model-sources-20261019/TerminalV4ArrayIterProbe4.lean:14:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.property`
+Aeneas.Std.core.slice.iter.Iter.slice {T : Type} (self : core.slice.iter.Iter T) : Slice T
+Aeneas.Std.core.slice.iter.Iter.i {T : Type} (self : core.slice.iter.Iter T) : ℕ
+        8.01 real         0.97 user         1.42 sys
+          2204286976  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              122989  page reclaims
+               58853  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                8011  voluntary context switches
+               48888  involuntary context switches
+         22102964753  instructions retired
+          8511609106  cycles elapsed
+           369692384  peak memory footprint

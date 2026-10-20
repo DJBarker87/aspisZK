@@ -1,0 +1,13 @@
+import Mathlib.Data.Nat.Bitwise
+#check Nat.and_le_left
+#check Nat.and_le_right
+#check Nat.and_le
+#check Nat.and_two_pow_sub_one_eq_mod
+#check Nat.and_comm
+#check Nat.and_assoc
+#check Nat.and_lt_left
+#check Nat.and_lt_right
+#check Nat.land_lt_left
+#check Nat.land_le_left
+#check Nat.and_lt_self
+#check Nat.and_sub_one

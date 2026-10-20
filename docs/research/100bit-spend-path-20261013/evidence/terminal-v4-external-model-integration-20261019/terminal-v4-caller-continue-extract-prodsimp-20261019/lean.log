@@ -1,0 +1,82 @@
+/tmp/terminal-v4-model-sources-20261019/AspisR1/TerminalV4CompositionCallerContinueExtractV2.lean:35:2: error: Type mismatch
+  hcaller
+has type
+  (let (o, invalid_amount) := (none, false)
+    if invalid_amount = true then
+      ok
+        (core.result.Result.Err
+          pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+    else do
+      let r ←
+        pool_v1.pair_forest_semantic_terminal.validate_transition
+            { variant := public1.variant, pool := public1.pool, deployment_domain := public1.deployment_domain,
+              anchor := public1.anchor, nullifier := public1.nullifier, asset_id := public1.asset_id,
+              recipient := public1.recipient, change := public1.change, withdrawal_amount := o,
+              transition := public1.transition }
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a =>
+          composition_parts_continue poseidonEval semanticEval public1 o claims point lambda chi theta
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (field.QM31 ×
+              Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+            (core.convert.FromSame pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+            residual) =
+    ok (core.result.Result.Ok (composition, c1, mask, g, h1Z, copyActive))
+but is expected to have type
+  composition_parts_continue poseidonEval semanticEval public1 none claims point lambda chi theta =
+    ok (core.result.Result.Ok (composition, c1, mask, g, h1Z, copyActive))
+/tmp/terminal-v4-model-sources-20261019/AspisR1/TerminalV4CompositionCallerContinueExtractV2.lean:32:38: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp only [hwithdrawal, bind_tc_ok, Prod.f̵st̵,̵ ̵P̵r̵o̵d̵.̵s̵nd] at hcaller
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/terminal-v4-model-sources-20261019/AspisR1/TerminalV4CompositionCallerContinueExtractV2.lean:32:48: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [hwithdrawal, bind_tc_ok, Prod.fst,̵ ̵P̵r̵o̵d̵.̵s̵n̵d̵] at hcaller
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/terminal-v4-model-sources-20261019/AspisR1/TerminalV4CompositionCallerContinueExtractV2.lean:33:13: warning: This simp argument is unused:
+  htransition
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵t̵r̵a̵n̵s̵i̵t̵i̵o̵n̵,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ core.result.Result.Insts.CoreOpsTry.branch] at hcaller
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/terminal-v4-model-sources-20261019/AspisR1/TerminalV4CompositionCallerContinueExtractV2.lean:33:26: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [htransition, b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵core.result.Result.Insts.CoreOpsTry.branch] at hcaller
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.TerminalV4CompositionCallerContinueExtractV2.caller_success_extracts_continue_none' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+        7.52 real         1.86 user         2.43 sys
+          2533703680  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              171846  page reclaims
+               34351  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                5033  voluntary context switches
+               32990  involuntary context switches
+         24398503135  instructions retired
+          9203963360  cycles elapsed
+           419198872  peak memory footprint
