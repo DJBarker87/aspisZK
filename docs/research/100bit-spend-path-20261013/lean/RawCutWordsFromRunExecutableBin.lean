@@ -2,7 +2,7 @@ import BinCompiledRunWordStability
 import BinThreeCommitmentTypedOpening
 import BinRecordedRecoveryWitness
 import SharedBinaryRecordGrammar
-import RawCutRecordedWordsExecutable
+import RawCutRecordedWordsExecutableBin
 import RawCommitmentFrameReplay
 import RawCommitmentFrameReplayCorrect
 import RawCutWordsFromView
@@ -32,7 +32,7 @@ def wordsFromRun (run : RunView) : Words :=
   let f0 := RawCommitmentFrameReplay.frameFromView run 0
   let f2 := RawCommitmentFrameReplay.frameFromView run 2
   let f30 := RawCommitmentFrameReplay.frameFromView run 30
-  BinCanonicalCutWords.wordsFromRawCuts run.1 f0 f2 f30
+  RawCutRecordedWordsExecutableBin.wordsFromRecordedCutsExec run.1 f0 f2 f30
     (RawCutWordsFromView.rootFrom 8 f0) (RawCutWordsFromView.rootFrom 8 f2)
     (RawCutWordsFromView.rootFrom 9 f30)
 
@@ -68,6 +68,7 @@ theorem wordsFromRun_eq_buildWords (decoder : LiteralByteProtocol.Decoder)
     (run : RunView) (hvalid : ValidPrefix run) :
     wordsFromRun run = BinCompiledRunWordStability.wordsFromRun decoder run := by
   unfold wordsFromRun BinCompiledRunWordStability.wordsFromRun
+  rw [RawCutRecordedWordsExecutableBin.wordsFromRecordedCutsExec_eq_wordsFromRawCuts]
   obtain ⟨h0, h2, h30⟩ :=
     RawCommitmentFrameReplayCorrect.frameFromView_commitments_eq decoder run hvalid
   simp only [RawCutWordsFromView.frameFromView] at h0 h2 h30
