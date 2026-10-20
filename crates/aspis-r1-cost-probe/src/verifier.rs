@@ -271,7 +271,7 @@ fn basis_at(basis:&[M31;256],index:usize)->M31 {basis[index]}
 #[inline(always)]
 fn accumulated_weight_at(weights:&[K],index:usize)->K {weights[index]}
 
-#[inline(always)]
+#[inline(never)]
 fn accumulate_batched_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E,weights:&mut BatchedWeights) {
     let width=a.weights.len();
     let mut basis=[M31::ZERO;256];basis[0]=M31::ONE;let mut n=1;
