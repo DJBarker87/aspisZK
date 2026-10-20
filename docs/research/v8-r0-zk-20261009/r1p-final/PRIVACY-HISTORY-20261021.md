@@ -96,3 +96,37 @@ Env J attempt 9808: exit 0, wall 2.66 s, peak RSS 4,038,828 KiB, swaps 0;
 13 theorem audits, all standard or subsets. 9806 is a green predecessor;
 9804 was a variable-substitution elaboration failure. Only this branch's
 new module was replaced on the host, with its source/object snapshotted.
+
+## Stage 4: exact first-stop failure and ideal randomness
+
+`QueryScanFirstStopHistory` proves that an error at `stop done q` must be at
+the eighth block. Before then, done=true implies either 22 accepted values
+(success) or 64 draws, but the symbolic prefix-length bound excludes 64 draws.
+The full LE word list is exactly `words64 q`, via the finite-product indexing
+bijection. The selected failure therefore implies the existing independent
+word failure event. This respects the scanner's check-before-next-word policy,
+including completion on a block's final word and exhaustion on the last block.
+
+`QueryScanIdealHistory` splits independent coordinates by a symbolic
+bijection, projects `.qb` from transcript coins, and projects those coins from
+the exact `fsR1P.IdealRand` retry/tape product. `selectedBad` is the **actual
+selected parser error**, not merely a guessed 64-word event. Its mass and
+that of any reached subevent are bounded by scanProbability, without any
+source hypothesis, counter enumeration, or assumption about the observer.
+Uniformity of the programmed table is not used to infer uniformity of
+repeated source reads: these are the ideal experiment's independent coins.
+
+Final focused env J results: FirstStop 9817, exit 0, 2.43 s,
+4,034,796 KiB, zero swaps, five standard-axiom audits; IdealHistory 9818,
+exit 0, 2.36 s, 4,046,436 KiB, zero swaps, seven standard-axiom audits.
+9811 was the earlier green ideal-coordinate proof. 9807/9809/9810 exposed
+an elaboration issue comparing inferred byte-carrier Fintype instances;
+`mean_fintype_transport` proves universe equality extensionally rather than
+reducing either enumeration. 9812/9814/9815 were local list/index and
+projection elaboration failures, each followed by changed source.
+
+At this point the ideal model's probability content is proved. The source
+ideal join must still identify the same selectedBad events and prove the
+whole-observation agreement, including programmed-oracle, retry, failure and
+publication behavior. Such agreement mentions an arbitrary source experiment
+and cannot be a model-only theorem.

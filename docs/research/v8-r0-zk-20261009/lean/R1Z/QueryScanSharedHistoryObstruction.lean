@@ -133,6 +133,15 @@ theorem shared_loop_finish_fails (H : List UInt8 → OracleAnswer) (s : OracleAn
   rw [queryBlocks_self_loop H s loop]
   exact repeated_block_finish_fails _ _
 
+/-- With the release-sized domain, both self-loop read addresses are valid;
+the example does not rely on the lookup fallback outside the finite ROM. -/
+theorem loop_addresses_in_domain (bound : ℕ) (hbound : 33 ≤ bound) (s : OracleAnswer) :
+    squeezeAddress s ∈ R1Z.RomFiniteBin.domain bound ∧
+    advanceAddress s ∈ R1Z.RomFiniteBin.domain bound := by
+  constructor <;> apply (R1Z.RomFiniteBin.mem_domain _ _).mpr <;>
+    simpa only [squeezeAddress, advanceAddress, List.length_append, length_ans,
+      List.length_singleton] using hbound
+
 /-- This history is inhabited in the existing finite byte-string ROM. The
 only condition is a previously seen advance answer, not a source assumption. -/
 abbrev LoopHistory (bound : ℕ) :=
@@ -179,6 +188,7 @@ theorem reached_shared_history_not_bounded (bound : ℕ) :
 #print axioms repeated_block_scan_bound
 #print axioms repeated_block_finish_fails
 #print axioms shared_loop_finish_fails
+#print axioms loop_addresses_in_domain
 #print axioms reached_shared_history_failure_mass
 #print axioms reached_shared_history_not_bounded
 end R1Z.QueryScanSharedHistoryObstruction
