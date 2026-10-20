@@ -1487,3 +1487,49 @@ pub mod r0 {
 fn state_only_mask_expander_block(hash: HashFn, seed: [u8;32], counter: u64) -> [u8;32] {
     hash(&[MASK_EXPAND_DOMAIN, &seed, &counter.to_le_bytes()])
 }
+
+#[cfg(kani)]
+mod prover_commit_rom {
+    use super::*;
+    use crate::prover_commit_oracle as rom;
+
+    #[kani::proof]
+    #[kani::unwind(514)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn mask_block() {
+        rom::reset(2);
+        let seed: [u8; 32] = kani::any();
+        let counter: u64 = kani::any();
+        let actual = state_only_mask_expander_block(crate::HOST_HASH, seed, counter);
+        let expected = crate::HOST_HASH(&[
+            b"aspis:state-only:private-mask-expand:v1", &seed, &counter.to_le_bytes(),
+        ]);
+        assert_eq!(actual, expected);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(514)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn mask_next_word() {
+        rom::reset(2);
+        let seed = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8; 32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        let mut actual = SeedExpander { hash: crate::HOST_HASH, seed, counter, block, word };
+        let (expected_block, expected_counter, slot) = if word == 8 {
+            (crate::HOST_HASH(&[b"aspis:state-only:private-mask-expand:v1", &seed, &counter.to_le_bytes()]), counter.wrapping_add(1), 0)
+        } else { (block, counter, word) };
+        let offset = 4 * slot;
+        let expected = u32::from_le_bytes([
+            expected_block[offset], expected_block[offset+1],
+            expected_block[offset+2], expected_block[offset+3],
+        ]);
+        assert_eq!(actual.next_word(), expected);
+        assert_eq!(actual.block, expected_block);
+        assert_eq!(actual.counter, expected_counter);
+        assert_eq!(actual.word, slot + 1);
+        assert_eq!(actual.seed, seed);
+    }
+}

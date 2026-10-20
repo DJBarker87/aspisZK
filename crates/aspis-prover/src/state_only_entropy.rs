@@ -1246,3 +1246,62 @@ mod tests {
 fn profile21_source_expander_block(hash: HashFn, seed: [u8;32], counter: u64) -> [u8;32] {
     hash(&[PROFILE21_SOURCE_EXPAND_DOMAIN, &seed, &counter.to_le_bytes()])
 }
+
+#[cfg(kani)]
+mod prover_commit_rom {
+    use super::*;
+    use crate::prover_commit_oracle as rom;
+
+    #[kani::proof]
+    #[kani::unwind(514)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn source_block() {
+        rom::reset(2);
+        let seed: [u8; 32] = kani::any();
+        let counter: u64 = kani::any();
+        assert_eq!(profile21_source_expander_block(crate::HOST_HASH, seed, counter),
+            crate::HOST_HASH(&[b"aspis:state-only:profile21:source-expand:v1", &seed, &counter.to_le_bytes()]));
+    }
+
+    #[kani::proof]
+    #[kani::unwind(514)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn source_next_word() {
+        rom::reset(2);
+        let seed: [u8; 32] = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8; 32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        let mut actual = Profile21SourceExpander { hash: crate::HOST_HASH, seed: Zeroizing::new(seed), counter, block, word };
+        let (expected_block, expected_counter, slot) = if word == 8 {
+            (crate::HOST_HASH(&[b"aspis:state-only:profile21:source-expand:v1", &seed, &counter.to_le_bytes()]), counter.wrapping_add(1), 0)
+        } else { (block, counter, word) };
+        let offset = 4 * slot;
+        let expected = u32::from_le_bytes([expected_block[offset], expected_block[offset+1], expected_block[offset+2], expected_block[offset+3]]);
+        assert_eq!(actual.next_word(), expected);
+        assert_eq!(actual.block, expected_block);
+        assert_eq!(actual.counter, expected_counter);
+        assert_eq!(actual.word, slot + 1);
+        assert_eq!(*actual.seed, seed);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(514)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn pool_binding() {
+        rom::reset(2);
+        let binding: [u8; 32] = kani::any();
+        let context = StateOnlyHidingContext { statement_digest: kani::any(), mask_nonce: kani::any(), mask_layout_fingerprint: kani::any(), layout_factor_fingerprint: kani::any() };
+        let mut encoded = [0u8; 80];
+        encoded[..32].copy_from_slice(&context.statement_digest);
+        encoded[32..64].copy_from_slice(&context.mask_nonce);
+        encoded[64..72].copy_from_slice(&context.mask_layout_fingerprint.to_le_bytes());
+        encoded[72..80].copy_from_slice(&context.layout_factor_fingerprint.to_le_bytes());
+        let expected = crate::HOST_HASH(&[
+            b"aspis:state-only:pool-v1:private-attempt-binding:v1", &binding, &encoded,
+            b"profile=pool-v1-tag73;generators=H26,G27,D28;factorD=0;rows=1024;c1=16;selected=28;theta=29;queries=16;first-cap=203",
+        ]);
+        assert_eq!(pool_v1_private_attempt_binding(crate::HOST_HASH, &binding, context), expected);
+    }
+}

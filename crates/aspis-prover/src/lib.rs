@@ -1608,3 +1608,7 @@ pub mod r0;
 
 #[cfg(all(feature = "r0", feature = "insecure-spend-fixture"))]
 pub mod r0_fixture;
+
+// D92: proof-only shared byte random oracle; absent from shipped builds.
+#[cfg(kani)]
+mod prover_commit_oracle;
