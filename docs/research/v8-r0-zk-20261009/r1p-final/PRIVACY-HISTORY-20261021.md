@@ -33,7 +33,23 @@ snapshotted under `snapshots/codex-cx-priv-history-20261021/<attempt>`.
 
 ## Stage 2: adaptive shared-oracle histories
 
-Pending focused symbolic history check.
+`QueryScanIndependentHistory` proves the model-level law that is actually
+available on independent coins: the retained LE eight-word, low-18-bit parser
+is a measure-preserving projection, eight blocks flatten to 64 independent
+words, and reached failure is bounded by `scanProbability`. The reachability
+predicate is arbitrary and may depend on every coin. The eight-attempt result
+marginalizes the selected attempt by `mean_eval`; it assumes no independence
+between the eight failure events. This reuses the existing byte/word bijection
+and symbolic first-22 failure-small-range theorem.
+
+These are **unconditional masses of reached-failure subevents**, not masses
+conditional on an arbitrary already-revealed shared-oracle history. The latter
+is a different statement. Shared-ROM addresses may repeat.
+
+Env J attempt 9805: exit 0, wall 2.24 s, peak RSS 4,028,516 KiB, swaps 0;
+six standard-axiom audits. Earlier 9802/9803 were elaboration failures resolved
+by explicit equivalence/coordinate arguments and symbolic cardinality
+transport; no limits were raised or concrete finite universes reduced.
 
 ## Endpoint signature and before/after
 
