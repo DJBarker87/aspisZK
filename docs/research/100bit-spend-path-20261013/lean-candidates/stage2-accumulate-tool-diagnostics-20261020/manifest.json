@@ -1,0 +1,84 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "status": "DIAGNOSTIC ONLY; all tool-repair and borrowed-Option source candidates rejected; actual accumulate_with_node extraction remains OPEN",
+  "publication_base_revision": "c8ea8dd49c81ab970b9dbee8d8b47718f9beb005",
+  "source_revision": "c8ea8dd49c81ab970b9dbee8d8b47718f9beb005",
+  "modules": [],
+  "source_function": "crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_with_node (free function)",
+  "source_file_sha256": "8a704eea668d04ca173290ca894c7cb0ab1f29abef4fec9bb49fbb36476779ea",
+  "source_span_bytes": [
+    11655,
+    12595
+  ],
+  "source_function_lines": [
+    222,
+    236
+  ],
+  "source_function_sha256": "e444d1e9a98eeb97269b1db6e6bc98db1c30bc8f717e4af243d7a8871d304ea4",
+  "attempts": [
+    {
+      "candidate": "v23 pending-update reorder",
+      "result": "rejected; extraction succeeds, but source/effect/order equivalence is unproved",
+      "evidence": "remote-evidence-complete"
+    },
+    {
+      "candidate": "v25 narrow marked-shared-loan simplifier guard",
+      "result": "rejected; minimized cut succeeds, full actual caller fails at InterpJoin.ml:2209 with missing mutable output mapping",
+      "evidence": "trace-v4"
+    },
+    {
+      "candidate": "node-preserve-v1",
+      "result": "rejected; preserves marked abstraction but Aeneas fails at InterpBorrowsCore.ml:1829",
+      "evidence": "node-preserve-v1"
+    },
+    {
+      "candidate": "owned-option-branch-v1",
+      "result": "rejected; moving the Some/None branch before the loop still fails at InterpBorrows.ml:2731",
+      "evidence": "owned-option-branch-v1",
+      "charon_exit_status": 0,
+      "charon_wall_seconds": 0.402,
+      "charon_peak_rss_bytes": 216809472,
+      "aeneas_exit_status": 2,
+      "aeneas_wall_seconds": 0.603,
+      "aeneas_peak_rss_bytes": 103268352,
+      "swap_bytes": 0,
+      "source_sha256": "a8e8fb07bcba091f6d4c8a2b28e7d33c6b330c494d67a7087903e650d3c382e5",
+      "llbc_sha256": "859ea7657a7254a9404cb95971671173c58b65cf471582b7e5902ab48d43c065"
+    },
+    {
+      "candidate": "owned-state-v1",
+      "result": "rejected; even with Option<BatchedWeights> passed and returned by value, Aeneas fails at InterpBorrows.ml:2731 in the owned mutable weights.push loop",
+      "evidence": "owned-state-v1",
+      "source_sha256": "23fb3f8cdb71512ab9d56abbfdbd192810095a40c80c5dcdf1c4662c78ca4361",
+      "llbc_sha256": "327f1faa00699fd826867c21d8f0403f526477958027d29c9c5762e6cd95748c",
+      "charon_exit_status": 0,
+      "charon_wall_seconds": 0.403,
+      "charon_peak_rss_bytes": 216801280,
+      "aeneas_exit_status": 2,
+      "aeneas_wall_seconds": 0.603,
+      "aeneas_peak_rss_bytes": 102727680,
+      "swap_bytes": 0
+    },
+    {
+      "candidate": "owned-helper-v1",
+      "result": "rejected; transferring BatchedWeights by value through opaque push_owned does not remove the outstanding shared-loan projection failure; Aeneas still fails at InterpBorrows.ml:2731 inside the outer loop",
+      "evidence": "owned-helper-v1",
+      "charon_exit_status": 0,
+      "charon_wall_seconds": 0.403,
+      "charon_peak_rss_bytes": 211652000,
+      "aeneas_exit_status": 2,
+      "aeneas_wall_seconds": 0.603,
+      "aeneas_peak_rss_bytes": 101376000,
+      "aeneas_cgroup_peak_bytes": 95158272,
+      "swap_bytes": 0,
+      "source_sha256": "6fee1dbd54c4a10a4aad8afac9db4a7c6e3e8fb775e6d64a6fdfaf3155cd2ed9",
+      "source_pins_sha256": "8df41d9580a48a6467a66ce02593bd61979e7b84b96f8b29e39c8fd523a8bca2",
+      "llbc_sha256": "067487a188c8533ba4b6ab60372f96056d7cbb544c28ba8fbdcbf926c563f380",
+      "runner_sha256": "050eba92a7bed33dd61dd59eb95446fa7cf57ab05ab8137088b41a20730c071c",
+      "aeneas_binary_sha256": "22232f96de983a1cdd4043a3fe2091b3ea4202fdec7a27789ad2612358fb62ae",
+      "limits": "MemoryHigh=512 MiB, MemoryMax=2 GiB, MemorySwapMax=0"
+    }
+  ],
+  "diagnostic_summary": "The PLeft merged mutable Option output contains the as_deref_mut write-back continuation. Right-branch projection drops that body-only output; existing sequence replay records no correspondence, so the loop/pending join cannot match. Region termination is not a valid reason to prune the output. No assertion was bypassed and no candidate is accepted.",
+  "resource_policy": "All listed native attempts used fresh admission and bounded MemoryHigh/MemoryMax with MemorySwapMax=0. This packet contains source/evidence only; no compiled binaries or LLBC/OLean artifacts."
+}

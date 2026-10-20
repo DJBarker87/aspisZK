@@ -1,0 +1,48 @@
+--- /home/dombarker/project-offloads/root-finish-aeneas-combined-v3-20261019/src/interp/InterpBorrows.ml	2026-08-25 20:11:21.236882253 +0000
++++ /home/dombarker/project-offloads/aeneas-2731-projection-guard-v3-20261020/src/interp/InterpBorrows.ml	2026-10-20 03:22:55.033642335 +0000
+@@ -2574,6 +2574,19 @@
+      symbolic value doesn't appear anywhere else in the context
+    However we ignore the "fixed" abstractions.
+ *)
++let abs_has_marked_shared_loan (abs : abs) : bool =
++  let found = ref false in
++  let visitor =
++    object
++      inherit [_] iter_abs as super
++      method! visit_ASharedLoan env pm bid sv child =
++        if pm <> PNone then found := true;
++        super#visit_ASharedLoan env pm bid sv child
++    end
++  in
++  visitor#visit_abs abs.regions.owned abs;
++  !found
++
+ let rec simplify_dummy_values_useless_abs_aux (config : config)
+     ~(snapshots : bool) (span : Meta.span) ~(changed : bool ref) : cm_fun =
+  fun ctx ->
+@@ -2707,7 +2720,8 @@
+     | EAbs abs :: env
+       when simplify_abs && abs.can_end
+            && AbsId.Set.is_empty abs.parents
+-           && not (AbsId.Set.mem abs.abs_id frozen_abs) -> (
++           && not (AbsId.Set.mem abs.abs_id frozen_abs)
++           && not (abs_has_marked_shared_loan abs) -> (
+         [%ldebug "Diving into abs:\n" ^ abs_to_string span ctx abs];
+         (* End the shared loans with no corresponding borrows *)
+         let visitor =
+@@ -2728,6 +2742,15 @@
+               | _ -> super#visit_VLoan () lc
+ 
+             method! visit_ASharedLoan () pm l sv child =
++              if pm <> PNone then
++                Format.eprintf
++                  "[DIAG2731] pm=%s loan=%s sv=%s current_abs=%s\nCURRENT_ABS\n%s\nCONTEXT\n%s\n%!"
++                  (match pm with PNone -> "PNone" | PLeft -> "PLeft" | PRight -> "PRight")
++                  (BorrowId.to_string l)
++                  (tvalue_to_string ctx sv)
++                  (AbsId.to_string abs.abs_id)
++                  (abs_to_string span ctx abs)
++                  (eval_ctx_to_string ~span:(Some span) ctx);
+               [%sanity_check] span (pm = PNone);
+               match lookup_shared_reserved_borrows l ctx with
+               | [] ->

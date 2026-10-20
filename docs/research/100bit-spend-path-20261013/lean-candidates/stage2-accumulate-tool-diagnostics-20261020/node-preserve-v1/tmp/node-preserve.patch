@@ -1,0 +1,26 @@
+--- /home/dombarker/project-offloads/root-finish-aeneas-combined-v3-20261019/src/interp/InterpBorrows.ml	2026-08-25 20:11:21.236882253 +0000
++++ /home/dombarker/project-offloads/aeneas-2731-node-preserve-v1-20261020/src/interp/InterpBorrows.ml	2026-10-20 03:36:13.565868604 +0000
+@@ -2728,13 +2728,16 @@
+               | _ -> super#visit_VLoan () lc
+ 
+             method! visit_ASharedLoan () pm l sv child =
+-              [%sanity_check] span (pm = PNone);
+-              match lookup_shared_reserved_borrows l ctx with
+-              | [] ->
+-                  (* End the loan *)
+-                  changed := true;
+-                  super#visit_AEndedSharedLoan () sv child
+-              | _ -> super#visit_ASharedLoan () pm l sv child
++              if pm <> PNone then ASharedLoan (pm, l, sv, child)
++              else begin
++                [%sanity_check] span (pm = PNone);
++                match lookup_shared_reserved_borrows l ctx with
++                | [] ->
++                    (* End the loan *)
++                    changed := true;
++                    super#visit_AEndedSharedLoan () sv child
++                | _ -> super#visit_ASharedLoan () pm l sv child
++              end
+           end
+         in
+         let abs = visitor#visit_abs () abs in
