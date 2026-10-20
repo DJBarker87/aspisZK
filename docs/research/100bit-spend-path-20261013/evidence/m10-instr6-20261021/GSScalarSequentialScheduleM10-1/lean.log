@@ -1,0 +1,95 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSScalarSequentialScheduleM10.lean:47:19: error: Ambiguous term
+  retry
+Possible interpretations:
+  CompPolySplitRetries.retry f q t (H cursor) : Option (CPolynomial K)
+  
+  GSScalarCallScheduleM10.retry f q t (H cursor) : Option (CPolynomial K) × List (Call K)
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSScalarSequentialScheduleM10.lean:47:8: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.76
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case succ.isFalse.isFalse
+K : Type
+inst✝² : Field K
+inst✝¹ : BEq K
+inst✝ : LawfulBEq K
+q t : ℕ
+H : ℕ → Fin t → K × K
+fuel : ℕ
+ih :
+  ∀ (node cursor : ℕ) (f : CPolynomial K),
+    (factor q t H fuel node cursor f).1 = (eval H (sequential (factorProgram q t fuel node f) cursor)).2
+node cursor : ℕ
+f : CPolynomial K
+h✝¹ : ¬f.natDegree = 0
+h✝ : ¬f.natDegree = 1
+x✝ : ?m.76
+hr : sorry = x✝
+⊢ (match CompPolySplitRetries.retry f q t (H cursor) with
+      | none => ((none, cursor + 1), (GSScalarCallScheduleM10.retry f q t (H cursor)).2)
+      | some d =>
+        match (factor q t H fuel (2 * node + 1) (cursor + 1) d).1.1 with
+        | none =>
+          ((none, (factor q t H fuel (2 * node + 1) (cursor + 1) d).1.2),
+            (GSScalarCallScheduleM10.retry f q t (H cursor)).2 ++ (factor q t H fuel (2 * node + 1) (cursor + 1) d).2)
+        | some left =>
+          ((Option.map (fun rs => left ++ rs)
+                (factor q t H fuel (2 * node + 2) (factor q t H fuel (2 * node + 1) (cursor + 1) d).1.2
+                      (f.divByMonic d)).1.1,
+              (factor q t H fuel (2 * node + 2) (factor q t H fuel (2 * node + 1) (cursor + 1) d).1.2
+                    (f.divByMonic d)).1.2),
+            (GSScalarCallScheduleM10.retry f q t (H cursor)).2 ++ (factor q t H fuel (2 * node + 1) (cursor + 1) d).2 ++
+                [Call.division f d] ++
+              (factor q t H fuel (2 * node + 2) (factor q t H fuel (2 * node + 1) (cursor + 1) d).1.2
+                  (f.divByMonic d)).2)).1 =
+    (eval H
+        (sequential
+          (match CompPolySplitRetries.retry f q t (H cursor) with
+          | none => Program.done none
+          | some d =>
+            AspisV8R19.OracleProgramOps.bind (factorProgram q t fuel (2 * node + 1) d) fun left =>
+              match left with
+              | none => Program.done none
+              | some l =>
+                AspisV8R19.OracleProgramOps.bind (factorProgram q t fuel (2 * node + 2) (f.divByMonic d)) fun right =>
+                  match right with
+                  | none => Program.done none
+                  | some r => Program.done (some (l ++ r)))
+          (cursor + 1))).2
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSScalarSequentialScheduleM10.lean:126:45: error: don't know how to synthesize placeholder
+context:
+t n m m✝ : ℕ
+h : n.le m✝
+ih : fuelBudget t n ≤ fuelBudget t m✝
+⊢ ℕ
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSScalarSequentialScheduleM10.lean:126:27: error: don't know how to synthesize placeholder
+context:
+t n m m✝ : ℕ
+h : n.le m✝
+ih : fuelBudget t n ≤ fuelBudget t m✝
+⊢ ℕ
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSScalarSequentialScheduleM10.lean:139:52: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑ell
+ b := ↑p.monicNormalize.natDegree
+ c := ↑?m.76
+'AspisR1.GSScalarSequentialScheduleM10.factor_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GSScalarSequentialScheduleM10.factor_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GSScalarSequentialScheduleM10.roots_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GSScalarSequentialScheduleM10.roots_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GSScalarSequentialScheduleM10.general_value' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.GSScalarSequentialScheduleM10.fuelBudget_mono' depends on axioms: [sorryAx]
+'AspisR1.GSScalarSequentialScheduleM10.general_length' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
