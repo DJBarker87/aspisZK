@@ -215,9 +215,8 @@ impl BatchedWeights {
     }
     #[inline(always)]
     fn push(&mut self,index:usize,power:K,basis:M31) {
-        let row=residue_row_at(&self.raw,index);
-        let row=update_residue_row(row,power,basis,self.terms&3==3);
-        self.raw[index]=row;
+        let flush=self.terms&3==3;
+        update_residue_row(&mut self.raw[index],power,basis,flush);
     }
 
     fn value(&self,index:usize)->K {
@@ -229,9 +228,7 @@ impl BatchedWeights {
 
 
 #[inline(always)]
-fn residue_row_at(rows:&[[u64;4]],index:usize)->[u64;4] {rows[index]}
-#[inline(always)]
-fn update_residue_row(mut row:[u64;4],power:K,basis:M31,flush:bool)->[u64;4] {
+fn update_residue_row(row:&mut [u64;4],power:K,basis:M31,flush:bool) {
     let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];
     row[0]+=u64::from(limbs[0])*u64::from(basis.0);
     row[1]+=u64::from(limbs[1])*u64::from(basis.0);
@@ -243,7 +240,6 @@ fn update_residue_row(mut row:[u64;4],power:K,basis:M31,flush:bool)->[u64;4] {
         row[2]=(row[2]&0x7fff_ffff)+(row[2]>>31);
         row[3]=(row[3]&0x7fff_ffff)+(row[3]>>31);
     }
-    row
 }
 
 #[inline(never)]
