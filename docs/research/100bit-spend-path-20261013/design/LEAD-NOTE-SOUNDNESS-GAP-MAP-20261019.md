@@ -456,3 +456,18 @@ retained boundary; standard axioms, 3.25 GiB (`design/REPIN-s2-20261020.md`).
 The adapter-side translation stops at the same `AccountInfo` indexing as
 S6 (`r1_pool_adapter.rs:950`); covered by the adapter read audit
 (cx-adapter-audit2) beside P2. Row S2: PROVED on the verifier cone.
+
+## Addendum (2026-10-20): S8 blocked on the frozen source (fourth translation blocker)
+
+Codex job cx-repin-s8 (77b3b6815): Charon succeeds; pinned Aeneas fails in
+`compact::check_values`' borrowed `chunks_exact` loop; one concrete
+residue-update iteration is proved total (`S8FrozenRow.row_step_total`,
+standard axioms); source unchanged (`design/REPIN-s8-20261020.md`). S8 stays
+REPIN-OWED. Ruling: this is the fourth translation blocker on the frozen
+source (checkpoint writer, roots loop, `Option<&mut>` reborrow loop,
+`chunks_exact` loop). Rather than stacking them one at a time, the next
+candidate-freeze pass (cx-freeze-prep3, after prep2 lands) extracts EVERY
+admitted-route cone — stage 1 including tx1_finish, stage 2, the
+candidate-7 and candidate-12 cones including `compact::check_values` — and
+fixes all remaining blockers in one gated pass, so the adopted freeze is
+fully translatable and no re-pin can stop on a borrow pattern again.
