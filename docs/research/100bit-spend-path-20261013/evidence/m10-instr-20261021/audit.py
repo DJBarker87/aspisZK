@@ -26,7 +26,7 @@ for receipt in manifest['attempts']:
     for name, line in zip(names, receipt['axioms']):
         assert '.' + name + "'" in line
         if 'depends on axioms:' in line:
-            axioms = set(re.search(r'\[([^]]*)\]', line)[1].split(', '))
+            axioms = set(re.findall(r'[A-Za-z][A-Za-z.]*', re.search(r'\[([^]]*)\]', line)[1]))
             assert axioms <= {'propext', 'Classical.choice', 'Quot.sound'}
     checked.append({'module': receipt['module'], 'theorems': names})
 changes = subprocess.check_output(['git', 'diff', '--name-status', '339907977'], text=True)
