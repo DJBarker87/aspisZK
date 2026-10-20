@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:40:9: error: unsolved goals
+case none
+Input K : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+F : Subfield K
+inst✝¹ : Fintype Input
+inst✝ : Nonempty Input
+decode : Input → Option (Tape K F)
+i : Input
+s : SourceTape K F
+hi : decode i = none
+hs : none = some s
+⊢ none = some (none.getD (0, 0)) ∧ project (none.getD (0, 0)) = s
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:39:2: error: Alternative `some` has not been provided
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:41:4: error: unexpected identifier; expected command
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:58:4: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    congrArg some (project_complete s ⟨p, ⟨i, hi⟩⟩.fst)
+  has type
+    @Eq (Option (SourceTape K F)) (some (project (complete s ⟨p, ⟨i, hi⟩⟩.fst))) (some s)
+  but is expected to have type
+    @Eq (Option (SourceTape K F)) (Option.map project (some (complete s ⟨p, ⟨i, hi⟩⟩.fst))) (some s)
+  in the application
+    Eq.trans (congrArg (Option.map project) ⟨p, ⟨i, hi⟩⟩.snd.property)
+      (congrArg some (project_complete s ⟨p, ⟨i, hi⟩⟩.fst))
+'R1Z.ProverCommitTapeCompletion.mp_completeOrSpare' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.quotient_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.projectedFibreEquiv' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.full_fibres_imply_quotient' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -1,0 +1,89 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:28:52: error: Application type mismatch: The argument
+  hfib
+has type
+  ∀ (s : SourceTape K F), {i | quotientDecode decode i = some s}.card = c
+but is expected to have type
+  ∀ (t : SourceTape K F), {b | quotientDecode decode b = some t}.card = c
+in the application
+  R0Z.FsAbortTape.mean_decodeOrSpare (quotientDecode decode) c hfib
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:38:11: error: unsolved goals
+case none
+Input K : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+F : Subfield K
+inst✝¹ : Fintype Input
+inst✝ : Nonempty Input
+decode : Input → Option (Tape K F)
+s : SourceTape K F
+i✝ : { i // quotientDecode decode i = some s }
+hi : decode ↑i✝ = none
+i : { i // ∃ a b, decode i = some (a, b) ∧ project (a, b) = s }
+⊢ (p : Padding K F) × { i // decode i = some (complete s p) }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:46:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+Input K : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+F : Subfield K
+inst✝¹ : Fintype Input
+inst✝ : Nonempty Input
+decode : Input → Option (Tape K F)
+s : SourceTape K F
+i : { i // quotientDecode decode i = some s }
+⊢ ↑(Option.rec (motive := fun t => decode ↑i = t → (p : Padding K F) × { i // decode i = some (complete s p) })
+          (fun h =>
+            Eq.rec (motive := fun x x_1 => decode ↑i = x → (p : Padding K F) × { i // decode i = some (complete s p) })
+              (fun hi => sorry) ⋯ ⋯)
+          (fun val h =>
+            Eq.rec (motive := fun x x_1 => decode ↑i = x → (p : Padding K F) × { i // decode i = some (complete s p) })
+              (fun hi => ⟨padding val, ⟨↑i, ⋯⟩⟩) ⋯ ⋯)
+          (decode ↑i) ⋯).snd =
+    ↑i
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:52:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+Input K : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+F : Subfield K
+inst✝¹ : Fintype Input
+inst✝ : Nonempty Input
+decode : Input → Option (Tape K F)
+s : SourceTape K F
+p : Padding K F
+i : Input
+hi : decode i = some (complete s p)
+⊢ Option.rec (motive := fun t => decode i = t → (p : Padding K F) × { i // decode i = some (complete s p) })
+      (fun h =>
+        Eq.rec (motive := fun x x_1 => decode i = x → (p : Padding K F) × { i // decode i = some (complete s p) })
+          (fun hi => sorry) ⋯ ⋯)
+      (fun val h =>
+        Eq.rec (motive := fun x x_1 => decode i = x → (p : Padding K F) × { i // decode i = some (complete s p) })
+          (fun hi_1 => ⟨padding val, ⟨i, ⋯⟩⟩) ⋯ ⋯)
+      (decode i) ⋯ =
+    ⟨p, ⟨i, hi⟩⟩
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:38:36: warning: This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp [quotientDecode,̵ ̵h̵i̵] at i
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:59:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverCommitTapeCompletion.full_fibres_imply_quotient`:
+  [Nonempty Input]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Nonempty Input] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+'R1Z.ProverCommitTapeCompletion.mp_completeOrSpare' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.projectedFibreEquiv' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.full_fibres_imply_quotient' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

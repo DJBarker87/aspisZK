@@ -1,0 +1,124 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientCoupling.lean:33:26: error: Application type mismatch: The argument
+  hfib
+[Error pretty printing: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientCoupling.lean:83:4: error: Tactic `rfl` failed: The left-hand side
+  (fun c => bit ((fsR1P W Pr N hN P Vp).observe adv ((abR1P W N hN).fail adv x c))) (toMQ W Pr eCm s).1
+is not definitionally equal to the right-hand side
+  match
+    firstGood (fun coin => P ((abR1P W N hN).draw adv x coin) ∧ V ((abR1P W N hN).draw adv x coin) w)
+      (toMP W Pr eCm s).1 with
+  | none => (fun c => bit ((fsR1P W Pr N hN P Vp).observe adv ((abR1P W N hN).fail adv x c))) (toMP W Pr eCm s).1
+  | some k =>
+    (fun c k v => bit ((fsR1P W Pr N hN P Vp).observe adv ((abR1P W N hN).extend adv x c k v))) (toMP W Pr eCm s).1 k
+      ((fun coin t => view h B outputs x w ((abR1P W N hN).draw adv x coin) t) ((toMP W Pr eCm s).1 k)
+        ((toMP W Pr eCm s).2 k))
+
+case h_1
+K CommitHandle Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+W : R1Wire K CommitHandle Aux
+Pr : R1ProverP K CommitHandle Aux F W
+eCm : W.Cm ≃ (RIdx → OracleAnswer)
+N : ℕ
+hN : 0 < N
+P : Challenges K → Prop
+Vp : (h : HonestProver K) → Challenges K → h.Instance → Prop
+h : HonestProver K
+V : Challenges K → h.Instance → Prop
+B : PackBasis F
+outputs : Statement K CommitHandle → Challenges K → Aux
+adv : (fsR1P W Pr N hN P Vp).Adversary
+x : Statement K CommitHandle
+w : h.Instance
+s : Fin N → AttS W Pr
+x✝ : Option (Fin N)
+heq✝ :
+  firstGood (fun coin => P ((abR1P W N hN).draw adv x coin) ∧ V ((abR1P W N hN).draw adv x coin) w)
+      (toMP W Pr eCm s).1 =
+    none
+⊢ (fun c => bit ((fsR1P W Pr N hN P Vp).observe adv ((abR1P W N hN).fail adv x c))) (toMQ W Pr eCm s).1 =
+    match
+      firstGood (fun coin => P ((abR1P W N hN).draw adv x coin) ∧ V ((abR1P W N hN).draw adv x coin) w)
+        (toMP W Pr eCm s).1 with
+    | none => (fun c => bit ((fsR1P W Pr N hN P Vp).observe adv ((abR1P W N hN).fail adv x c))) (toMP W Pr eCm s).1
+    | some k =>
+      (fun c k v => bit ((fsR1P W Pr N hN P Vp).observe adv ((abR1P W N hN).extend adv x c k v))) (toMP W Pr eCm s).1 k
+        ((fun coin t => view h B outputs x w ((abR1P W N hN).draw adv x coin) t) ((toMP W Pr eCm s).1 k)
+          ((toMP W Pr eCm s).2 k))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientCoupling.lean:84:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  view ?h ?B ?outputs ?x ?w ?ch (gMQ ?W ?Pr ?eCm ?a).2
+in the target expression
+  (fun c k v => bit ((fsR1P W Pr N hN P Vp).observe adv ((abR1P W N hN).extend adv x c k v))) (toMQ W Pr eCm s).1 k✝
+      ((fun coin t => view h B outputs x w ((abR1P W N hN).draw adv x coin) t) ((toMQ W Pr eCm s).1 k✝)
+        ((toMQ W Pr eCm s).2 k✝)) =
+    match
+      firstGood (fun coin => P ((abR1P W N hN).draw adv x coin) ∧ V ((abR1P W N hN).draw adv x coin) w)
+        (toMP W Pr eCm s).1 with
+    | none => (fun c => bit ((fsR1P W Pr N hN P Vp).observe adv ((abR1P W N hN).fail adv x c))) (toMP W Pr eCm s).1
+    | some k =>
+      (fun c k v => bit ((fsR1P W Pr N hN P Vp).observe adv ((abR1P W N hN).extend adv x c k v))) (toMP W Pr eCm s).1 k
+        ((fun coin t => view h B outputs x w ((abR1P W N hN).draw adv x coin) t) ((toMP W Pr eCm s).1 k)
+          ((toMP W Pr eCm s).2 k))
+
+case h_2
+K CommitHandle Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+W : R1Wire K CommitHandle Aux
+Pr : R1ProverP K CommitHandle Aux F W
+eCm : W.Cm ≃ (RIdx → OracleAnswer)
+N : ℕ
+hN : 0 < N
+P : Challenges K → Prop
+Vp : (h : HonestProver K) → Challenges K → h.Instance → Prop
+h : HonestProver K
+V : Challenges K → h.Instance → Prop
+B : PackBasis F
+outputs : Statement K CommitHandle → Challenges K → Aux
+adv : (fsR1P W Pr N hN P Vp).Adversary
+x : Statement K CommitHandle
+w : h.Instance
+s : Fin N → AttS W Pr
+x✝ : Option (Fin N)
+k✝ : Fin N
+heq✝ :
+  firstGood (fun coin => P ((abR1P W N hN).draw adv x coin) ∧ V ((abR1P W N hN).draw adv x coin) w)
+      (toMP W Pr eCm s).1 =
+    some k✝
+⊢ (fun c k v => bit ((fsR1P W Pr N hN P Vp).observe adv ((abR1P W N hN).extend adv x c k v))) (toMQ W Pr eCm s).1 k✝
+      ((fun coin t => view h B outputs x w ((abR1P W N hN).draw adv x coin) t) ((toMQ W Pr eCm s).1 k✝)
+        ((toMQ W Pr eCm s).2 k✝)) =
+    match
+      firstGood (fun coin => P ((abR1P W N hN).draw adv x coin) ∧ V ((abR1P W N hN).draw adv x coin) w)
+        (toMP W Pr eCm s).1 with
+    | none => (fun c => bit ((fsR1P W Pr N hN P Vp).observe adv ((abR1P W N hN).fail adv x c))) (toMP W Pr eCm s).1
+    | some k =>
+      (fun c k v => bit ((fsR1P W Pr N hN P Vp).observe adv ((abR1P W N hN).extend adv x c k v))) (toMP W Pr eCm s).1 k
+        ((fun coin t => view h B outputs x w ((abR1P W N hN).draw adv x coin) t) ((toMP W Pr eCm s).1 k)
+          ((toMP W Pr eCm s).2 k))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    abR1P W N hN
+  has type
+    @AbortBridge K CommitHandle Aux R1Bat (R1Adv K CommitHandle Aux) inst✝³
+  but is expected to have type
+    @AbortBridge K CommitHandle Aux R1Bat (fsR1P W Pr N hN P Vp).Adversary inst✝³
+  in the application
+    (abR1P W N hN).N
+'R1Z.ProverCommitQuotientCoupling.mp_gMQ' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitQuotientCoupling.meanM_Q' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitQuotientCoupling.completed_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitQuotientCoupling.middle_completion' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

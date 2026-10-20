@@ -1,0 +1,69 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:30:16: error: Application type mismatch: The argument
+  mp_comp (mp_equiv spareEquiv) hp
+has type
+  MP fun x =>
+    ((quotientDecode decode (spareEquiv x).1.1).getD (spareEquiv x).1.2, (Equiv.refl (Padding K F)) (spareEquiv x).2)
+but is expected to have type
+  MP fun x => x
+in the application
+  mp_comp (mp_comp (mp_equiv spareEquiv) hp)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:37:60: error(lean.unknownIdentifier): Unknown constant `Option.none_ne_some`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:37:9: error: unsolved goals
+case none
+Input K : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+F : Subfield K
+inst✝¹ : Fintype Input
+inst✝ : Nonempty Input
+decode : Input → Option (Tape K F)
+i : Input
+s : SourceTape K F
+hi : decode i = none
+hs : none = some s
+⊢ none = some (none.getD (0, 0)) ∧ project (none.getD (0, 0)) = s
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:40:11: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.75 = ?m.75
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:48:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => decode ↑i = some (complete _a (padding ((decode ↑i).getD (0, 0))))
+Error: Application type mismatch: The argument
+  i
+has type
+  { i // quotientDecode decode i = some s }
+but is expected to have type
+  { i // quotientDecode decode i = some _a }
+in the application
+  ↑i
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+Input K : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+F : Subfield K
+inst✝¹ : Fintype Input
+inst✝ : Nonempty Input
+decode : Input → Option (Tape K F)
+s : SourceTape K F
+i : { i // quotientDecode decode i = some s }
+ht : decode ↑i = some ((decode ↑i).getD (0, 0)) ∧ project ((decode ↑i).getD (0, 0)) = s
+⊢ decode ↑i = some (complete s (padding ((decode ↑i).getD (0, 0))))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:56:12: error(lean.unknownIdentifier): Unknown constant `HEq.of_eq`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientLaw.lean:57:6: error: No goals to be solved
+'R1Z.ProverCommitTapeCompletion.mp_completeOrSpare' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.quotient_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.projectedFibreEquiv' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.full_fibres_imply_quotient' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
