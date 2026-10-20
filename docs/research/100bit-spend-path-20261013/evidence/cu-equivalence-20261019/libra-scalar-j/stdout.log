@@ -1,0 +1,119 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:19:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsLibraSourceScalar.partialSum_succ`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:37:2: error: unsolved goals
+case e_a.e_body
+inst✝ : Shared
+f : Powers
+p : Points
+iter : core.ops.range.Range (UScalar UScalarTy.Usize)
+acc : field.wide_exact.WideExact
+c : Weights.scalar_factor.closure
+⊢ (let ⟨fst✝, snd✝⟩ := (iter, acc, c)
+    let ⟨fst✝¹, snd✝¹⟩ := snd✝
+    (fun state acc c => do
+        let (entry, state1) ← (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize).next state
+        match entry with
+          | none => ok (done acc)
+          | some item => do
+            let (acc1, c1) ←
+              Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut c (acc, item)
+            ok (cont (state1, acc1, c1)))
+      fst✝ fst✝¹ snd✝¹) =
+    let ⟨fst✝², snd✝²⟩ := (iter, acc, c)
+    let ⟨fst✝³, snd✝³⟩ := snd✝²
+    (fun iter acc c => do
+        let (entry, iter1) ← (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize).next iter
+        match entry with
+          | none => ok (done acc)
+          | some i => do
+            let (acc1, c1) ←
+              Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut c (acc, i)
+            ok (cont (iter1, acc1, c1)))
+      fst✝² fst✝³ snd✝³
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:42:2: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:101:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Array.index_usize p index
+in the target expression
+  (do
+      let index ← ok index
+      let point ← Array.index_usize p index
+      let scalar ← Array.index_usize f iter.start
+      let product ← field.wide_exact.WideExact.mul_qm31 point scalar
+      let sum ← field.wide_exact.WideExact.add acc product
+      ok (cont (iter1, sum, p, f))) =
+    ok (cont (iter1, sum, p, f))
+
+case refine_1
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+f : Powers
+p : Points
+hf : ∀ i < 4, A.canonicalK (lookup f field.QM31.ONE i)
+hp : ∀ i < 4, A.canonicalE (lookup p field.wide_exact.WideExact.ZERO i)
+I : State → Prop :=
+  fun state =>
+    state.1.end = 4#usize ∧
+      ↑state.1.start ≤ 4 ∧
+        state.2.2 = (p, f) ∧ A.canonicalE state.2.1 ∧ A.decodeE state.2.1 = partialSum (term A f p) ↑state.1.start
+Q : E → Prop := fun value => A.canonicalE value ∧ A.decodeE value = partialSum (term A f p) 4
+iter : Range
+acc : E
+hend : iter.end = 4#usize
+hstart : ↑iter.start ≤ 4
+hi : ↑iter.start < 4
+hacc : A.canonicalE acc
+hvalue : A.decodeE acc = partialSum (term A f p) ↑iter.start
+hit : ↑iter.start < ↑iter.end
+iter1 : Range
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hiter1 : ↑iter1.start = ↑iter.start + 1
+hend1 : iter1.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+index : Usize
+hindex : PERM.index_usize iter.start = ok index
+hib : ↑index < 4
+hiv : ↑index = CuSavingsLibraSourcePerm.perm ↑iter.start
+hpr : Array.index_usize p index = ok (lookup p field.wide_exact.WideExact.ZERO ↑index)
+hfr : Array.index_usize f iter.start = ok (lookup f field.QM31.ONE ↑iter.start)
+product : field.wide_exact.WideExact
+hproduct :
+  field.wide_exact.WideExact.mul_qm31 (lookup p field.wide_exact.WideExact.ZERO ↑index)
+      (lookup f field.QM31.ONE ↑iter.start) =
+    ok product
+hproductC : A.canonicalE product
+hproductV :
+  A.decodeE product =
+    A.decodeE (lookup p field.wide_exact.WideExact.ZERO ↑index) *
+      A.embedding (A.decodeK (lookup f field.QM31.ONE ↑iter.start))
+sum : field.wide_exact.WideExact
+hsum : field.wide_exact.WideExact.add acc product = ok sum
+hsumC : A.canonicalE sum
+hsumV : A.decodeE sum = A.decodeE acc + A.decodeE product
+⊢ (do
+      let index ← ok index
+      let point ← Array.index_usize p index
+      let scalar ← Array.index_usize f iter.start
+      let product ← field.wide_exact.WideExact.mul_qm31 point scalar
+      let sum ← field.wide_exact.WideExact.add acc product
+      ok (cont (iter1, sum, p, f))) =
+    ok (cont (iter1, sum, p, f))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (p, f)
+  has type
+    Std.Array field.wide_exact.WideExact 4#usize × Std.Array field.QM31 4#usize
+  but is expected to have type
+    Closure
+  in the application
+    (sum, p, f)
+'AspisR1.CuSavingsLibraSourceScalar.fold_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsLibraSourceScalar.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

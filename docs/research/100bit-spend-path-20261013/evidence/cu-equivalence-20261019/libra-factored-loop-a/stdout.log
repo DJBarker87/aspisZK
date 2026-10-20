@@ -1,0 +1,83 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraFactoredLoop.lean:36:41: error: unsolved goals
+inst✝ : Shared
+i : ℕ
+⊢ [field.wide_exact.WideExact.ZERO, field.wide_exact.WideExact.ZERO, field.wide_exact.WideExact.ZERO,
+            field.wide_exact.WideExact.ZERO][i]?.getD
+      field.wide_exact.WideExact.ZERO =
+    field.wide_exact.WideExact.ZERO
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraFactoredLoop.lean:48:19: warning: This simp argument is unused:
+  h3
+
+Hint: Omit it from the simp argument list.
+  simp only [h3̵,̵h̵2, ̲h1, ̲↓reduceIte, ̲h 1 (by omega)]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraFactoredLoop.lean:48:22: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp only [h3, ̲h2̵,̵h̵1, ̲↓reduceIte, ̲h 1 (by omega)]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraFactoredLoop.lean:114:75: error: unsolved goals
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+ap0 ap1 : Points
+extra : Extra
+hp0 : ∀ i < 4, A.canonicalE (lookup ap0 field.wide_exact.WideExact.ZERO i)
+hp1 : ∀ i < 4, A.canonicalE (lookup ap1 field.wide_exact.WideExact.ZERO i)
+he : ∀ i < 2, A.canonicalK (lookup extra field.QM31.ONE i)
+initial : Points := Array.repeat 4#usize field.wide_exact.WideExact.ZERO
+iter0 : Range := { start := 0#usize, «end» := 2#usize }
+iter1 : Range
+hnext0 : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter0 = ok (some iter0.start, iter1)
+hstart1 : ↑iter1.start = ↑iter0.start + 1
+hend1 : iter1.end = iter0.end
+right✝¹ : ↑iter0.start + 1 ≤ Usize.max
+hs1 : ↑iter1.start = 1
+he1 : iter1.end = 2#usize
+iter2 : Range
+hnext1 : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter1 = ok (some iter1.start, iter2)
+hstart2 : ↑iter2.start = ↑iter1.start + 1
+hend2 : iter2.end = iter1.end
+right✝ : ↑iter1.start + 1 ≤ Usize.max
+hs2 : ↑iter2.start = 2
+he2 : iter2.end = 2#usize
+hdone : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter2 = ok (none, iter2)
+hn1 : iter1.start ≠ 0#usize
+hread0 : Array.index_usize extra 0#usize = ok (lookup extra field.QM31.ONE 0)
+hread1 : Array.index_usize extra iter1.start = ok (lookup extra field.QM31.ONE 1)
+data0 : Prepared
+hprepare0 : prepare ap0 ap1 (lookup extra field.QM31.ONE 0) = ok data0
+hd0 : Valid A ap0 ap1 (lookup extra field.QM31.ONE 0) data0
+data1 : Prepared
+hprepare1 : prepare ap0 ap1 (lookup extra field.QM31.ONE 1) = ok data1
+hd1 : Valid A ap0 ap1 (lookup extra field.QM31.ONE 1) data1
+hiC : Canonical A initial
+hiV : decoded A initial = fun x => 0
+weights0 : Points
+hside0 : side0 data0 initial = ok weights0
+hc0 : Canonical A weights0
+hv0 : ∀ j < 4, decoded A weights0 j = first A ap0 ap1 (lookup extra field.QM31.ONE 0) (decoded A initial) j
+weights1 : Points
+hside1 : side1 ap1 data1 weights0 = ok weights1
+hc1 : Canonical A weights1
+hv1 : ∀ j < 4, decoded A weights1 j = second A ap0 ap1 (lookup extra field.QM31.ONE 1) (decoded A weights0) j
+hb0 : body ap0 ap1 extra (iter0, initial) = ok (cont (iter1, weights0))
+hb1 : body ap0 ap1 extra (iter1, weights0) = ok (cont (iter2, weights1))
+hb2 : body ap0 ap1 extra (iter2, weights1) = ok (done weights1)
+⊢ (do
+      let step ← ok (done weights1)
+      match step with
+        | done value => ok value
+        | cont next => execute (body ap0 ap1 extra) next) =
+    ok weights1
+'AspisR1.CuSavingsLibraFactoredLoop.two_steps_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsLibraFactoredLoop.combined_eq_factored' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsLibraFactoredLoop.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

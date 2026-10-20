@@ -1,0 +1,214 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:19:37: error: unsolved goals
+case ok
+inst✝ : Shared
+N i : Usize
+power q v✝ : field.QM31
+h : power.mul q = ok v✝
+⊢ (let (_, q) := (power, q)
+    do
+    let (q1, c1, call_mut_back) ←
+      let (a, q) := (power, q)
+        do
+        let q1 ← a.mul q
+        ok (a, (q1, q), fun c1 => (c1.1, q))
+    let (q2, _) := call_mut_back c1
+      ok (q1, q2, q)) =
+    do
+    let (value, updated, back) ←
+      let (a, q) := (power, q)
+        do
+        let q1 ← a.mul q
+        ok (a, (q1, q), fun c1 => (c1.1, q))
+    ok (value, back updated)
+
+case fail
+inst✝ : Shared
+N i : Usize
+power q : field.QM31
+e✝ : Error
+h : power.mul q = fail e✝
+⊢ (let (_, q) := (power, q)
+    do
+    let (q1, c1, call_mut_back) ←
+      let (a, q) := (power, q)
+        do
+        let q1 ← a.mul q
+        ok (a, (q1, q), fun c1 => (c1.1, q))
+    let (q2, _) := call_mut_back c1
+      ok (q1, q2, q)) =
+    do
+    let (value, updated, back) ←
+      let (a, q) := (power, q)
+        do
+        let q1 ← a.mul q
+        ok (a, (q1, q), fun c1 => (c1.1, q))
+    ok (value, back updated)
+
+case div
+inst✝ : Shared
+N i : Usize
+power q : field.QM31
+h : power.mul q = div
+⊢ (let (_, q) := (power, q)
+    do
+    let (q1, c1, call_mut_back) ←
+      let (a, q) := (power, q)
+        do
+        let q1 ← a.mul q
+        ok (a, (q1, q), fun c1 => (c1.1, q))
+    let (q2, _) := call_mut_back c1
+      ok (q1, q2, q)) =
+    do
+    let (value, updated, back) ←
+      let (a, q) := (power, q)
+        do
+        let q1 ← a.mul q
+        ok (a, (q1, q), fun c1 => (c1.1, q))
+    ok (value, back updated)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:26:31: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [kpowers.closure,h̵,̵ ̲bind_tc_ok, ̲bind_tc_fail, ̲bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:26:33: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵k̵p̵o̵w̵e̵r̵s̵.̵c̵l̵o̵s̵u̵r̵e̵,̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]̵[̲k̲p̲o̲w̲e̲r̲s̲.̲c̲l̲o̲s̲u̲r̲e̲,̲ ̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲f̲a̲i̲l̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲d̲i̲v̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:26:44: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [̵k̵p̵o̵w̵e̵r̵s̵.̵c̵l̵o̵s̵u̵r̵e̵,̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]̵[̲k̲p̲o̲w̲e̲r̲s̲.̲c̲l̲o̲s̲u̲r̲e̲,̲ ̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲d̲i̲v̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:26:57: warning: This simp argument is unused:
+  bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only [̵k̵p̵o̵w̵e̵r̵s̵.̵c̵l̵o̵s̵u̵r̵e̵,̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]̵[̲k̲p̲o̲w̲e̲r̲s̲.̲c̲l̲o̲s̲u̲r̲e̲,̲ ̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲f̲a̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:41:11: error: unsolved goals
+case fail
+inst✝ : Shared
+i : Usize
+power : field.QM31
+extra : Std.Array field.QM31 2#usize
+side : Usize
+e : Error
+hi : extra.index_usize side = fail e
+⊢ (let (_, a, i1) := (power, extra, side)
+    do
+    let (q, c1, call_mut_back) ←
+      let (value, a, i) := (power, extra, side)
+        do
+        let q ← a.index_usize i
+        let q1 ← value.mul q
+        ok (value, (q1, a, i), fun c1 => (c1.1, a, i))
+    let (q1, _, _) := call_mut_back c1
+      ok (q, q1, a, i1)) =
+    do
+    let (value, updated, back) ←
+      let (value, a, i) := (power, extra, side)
+        do
+        let q ← a.index_usize i
+        let q1 ← value.mul q
+        ok (value, (q1, a, i), fun c1 => (c1.1, a, i))
+    ok (value, back updated)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:42:8: error: unsolved goals
+case div
+inst✝ : Shared
+i : Usize
+power : field.QM31
+extra : Std.Array field.QM31 2#usize
+side : Usize
+hi : extra.index_usize side = div
+⊢ (let (_, a, i1) := (power, extra, side)
+    do
+    let (q, c1, call_mut_back) ←
+      let (value, a, i) := (power, extra, side)
+        do
+        let q ← a.index_usize i
+        let q1 ← value.mul q
+        ok (value, (q1, a, i), fun c1 => (c1.1, a, i))
+    let (q1, _, _) := call_mut_back c1
+      ok (q, q1, a, i1)) =
+    do
+    let (value, updated, back) ←
+      let (value, a, i) := (power, extra, side)
+        do
+        let q ← a.index_usize i
+        let q1 ← value.mul q
+        ok (value, (q1, a, i), fun c1 => (c1.1, a, i))
+    ok (value, back updated)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:45:42: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:45:42: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:45:42: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:41:67: warning: This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp only [old.twofold_libra_weights.closure.closure,h̵i̵,̵ ̲bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:41:70: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵l̵d̵.̵t̵w̵o̵f̵o̵l̵d̵_̵l̵i̵b̵r̵a̵_̵w̵e̵i̵g̵h̵t̵s̵.̵c̵l̵o̵s̵u̵r̵e̵.̵c̵l̵o̵s̵u̵r̵e̵,̵h̵i̵,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵]̵[̲o̲l̲d̲.̲t̲w̲o̲f̲o̲l̲d̲_̲l̲i̲b̲r̲a̲_̲w̲e̲i̲g̲h̲t̲s̲.̲c̲l̲o̲s̲u̲r̲e̲.̲c̲l̲o̲s̲u̲r̲e̲,̲ ̲h̲i̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:42:64: warning: This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp only [old.twofold_libra_weights.closure.closure,h̵i̵,̵ ̲bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:42:67: warning: This simp argument is unused:
+  bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵l̵d̵.̵t̵w̵o̵f̵o̵l̵d̵_̵l̵i̵b̵r̵a̵_̵w̵e̵i̵g̵h̵t̵s̵.̵c̵l̵o̵s̵u̵r̵e̵.̵c̵l̵o̵s̵u̵r̵e̵,̵h̵i̵,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]̵[̲o̲l̲d̲.̲t̲w̲o̲f̲o̲l̲d̲_̲l̲i̲b̲r̲a̲_̲w̲e̲i̲g̲h̲t̲s̲.̲c̲l̲o̲s̲u̲r̲e̲.̲c̲l̲o̲s̲u̲r̲e̲,̲ ̲h̲i̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:44:57: warning: This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp only [old.twofold_libra_weights.closure.closure,h̵i̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:44:60: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵l̵d̵.̵t̵w̵o̵f̵o̵l̵d̵_̵l̵i̵b̵r̵a̵_̵w̵e̵i̵g̵h̵t̵s̵.̵c̵l̵o̵s̵u̵r̵e̵.̵c̵l̵o̵s̵u̵r̵e̵,̵h̵i̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲o̲l̲d̲.̲t̲w̲o̲f̲o̲l̲d̲_̲l̲i̲b̲r̲a̲_̲w̲e̲i̲g̲h̲t̲s̲.̲c̲l̲o̲s̲u̲r̲e̲.̲c̲l̲o̲s̲u̲r̲e̲,̲ ̲h̲i̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:47:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsLibraSourceHandback.mutable_builder_projection`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceHandback.lean:54:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsLibraSourceHandback.array_source_admission`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+'AspisR1.CuSavingsLibraSourceHandback.array_source_admission' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsLibraSourceHandback.power_callback' depends on axioms: [sorryAx]
+'AspisR1.CuSavingsLibraSourceHandback.reference_power_callback' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsLibraSourceHandback.mutable_builder_projection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

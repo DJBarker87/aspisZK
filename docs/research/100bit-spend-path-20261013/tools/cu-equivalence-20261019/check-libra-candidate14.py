@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+"""Audit the checked Libra helper/caller replacement and coherent proof receipts."""
+from pathlib import Path
+import hashlib,json,re,resource,subprocess,sys,time
+started=time.monotonic();tool=Path(__file__).resolve().parent;area=tool.parents[1];repo=tool.parents[4];ev=area/'evidence/cu-equivalence-20261019';sha=lambda b:hashlib.sha256(b).hexdigest()
+subprocess.run([sys.executable,str(tool/'check-libra-source.py')],check=True,capture_output=True)
+subprocess.run([sys.executable,str(tool/'check-wide-arithmetic.py')],check=True,capture_output=True)
+selected=json.loads((tool/'libra-final-selected.json').read_text())
+selected.update({'AspisR1Libra/Types':'libra-types-a','AspisR1Libra/FunsExternal':'libra-externals-a','AspisR1Libra/Funs':'libra-funs-b','CuSavingsLibraSourceHandback':'libra-handback-i','CuSavingsLibraSourceProjection':'libra-projection-a','CuSavingsLibraSourceControl':'libra-control-c','CuSavingsLibraSourcePerm':'libra-perm-b',**{module:'libra-reuse-'+module.lower()+'-a' for module in ['CuSavingsLibra','CuSavingsLibraLoop','CuSavingsPowerLoop','CuSavingsLibraProgram']}})
+allowed={'propext','Classical.choice','Quot.sound'};records={};objects={};sources={}
+for module,attempt in selected.items():
+ path=ev/attempt/'receipt.json';r=json.loads(path.read_text());src=area/'lean'/(module+'.lean');data=src.read_bytes()
+ assert r['exit_status']==0 and sha(data)==r['source_sha256'],module
+ assert data==(ev/attempt/'source.lean').read_bytes(),module
+ assert not re.search(rb'(?m)^\s*(?:axiom|constant)\s|\b(?:sorry|admit)\b',data),module
+ output=r['print_axioms_output'];assert 'sorryAx'not in output and 'error:'not in output,module
+ audited=re.findall(r"'([^']+)' (?:depends on axioms: \[([^\]]*)\]|does not depend on any axioms)",output);assert audited,module
+ for decl,axs in audited:assert set(filter(None,re.sub(r'\s+','',axs).split(',')))<=allowed,(decl,axs)
+ assert r['cache_provenance']['selected_owner_objects']['Aeneas']['sha256']=='d3bfce818c2409992274bc1852aa00280cb7a8139465ef0bab674498e4cdc69d'
+ key=module.replace('/','.');objects[key]=r['object_sha256'];records[key]=r;sources[key]=str(src.relative_to(repo))
+for module,r in records.items():
+ for d in r['direct_imports']:
+  if d['module'] in objects:assert d['sha256']==objects[d['module']],(module,'incoherent direct import',d)
+provenance=json.loads((tool/'libra-emission-provenance.json').read_text())
+for name in ['Funs.lean','Types.lean']:assert provenance['hashes'][name]==sha((tool/'libra-generated'/name).read_bytes())
+results={module:dict(attempt=selected[module.replace('.','/') ] if module.replace('.','/') in selected else selected[module],source_path=sources[module],receipt_sha256=sha((ev/(selected[module.replace('.','/')] if module.replace('.','/') in selected else selected[module])/'receipt.json').read_bytes()),**{key:r.get(key) for key in ['source_revision','source_sha256','object_sha256','features','command','exit_status','wall_seconds','peak_rss_kib','process_swaps','cgroup_swap_bytes','foreign_lean_jobs_at_launch','print_axioms_output']}) for module,r in records.items()}
+report=dict(status='CONCRETE_SOURCE_HELPER_AND_CALLER_CONTEXT_EQUIVALENCE_CHECKED',candidate='39c2971dd16c95858a4cfd2c9ae35da052eacfa9',parent='16724ebd0bc2cb38f0115681386ecb4f12ceddc7',successes=results,source_binding_audit='LIBRA-CANDIDATE14-SOURCE.json',declaration_repins='LIBRA-CANDIDATE14-DECLARATION-REPIN.json',source_emission_provenance=provenance,production_source_changed=False,measured_stage1_saving_cu=0,measured_settlement_saving_cu=[33363,33427],runtime_evidence='../cu-savings-20261019/FINAL-REPORT.md',boundary=['Concrete production_equivalence/caller_context have no Arithmetic, Shared, candidate-equivalence or arithmetic-law hypothesis: the source-derived concrete arithmetic and original source low16 constructor discharge them.','Caller ap0/ap1 and extra have canonical-field premises. The reference input boundary must discharge these through actual powers, strict e/k parsing or sampler origins. This helper/caller-context proof does not quantify over arbitrary forged raw Weights/field carriers. Source input-origin specialization is recorded separately by the integrating root.','Exact source field arithmetic, iterator/array primitive and source translation boundaries are the existing reference boundary. No compiler/machine-code correctness theorem or universal CU bound is claimed.','The sole modified source caller dispatch is audited bytewise. The full Weights.pair/transactions are not separately re-extracted; arbitrary common computational before/after contexts are proved, preserving their errors/divergence.','Six runtime signature projections transport actual emitted callbacks and apply their handbacks before mutable state is passed onward. Existing source array admission is consumed. No desired arithmetic loop is substituted for original source.','Selected feature family pool-adapter,private-leaf-salts, without internal arithmetic op counting. Unchanged runtime suites reused. Whole-bundle soundness/privacy transfer remains separate.'],concurrency='Small focused NUC targets may overlap other authorized agents after root coordination; actual foreign PID lists retained. No exclusive-host timing claim.',audit=dict(command=[sys.executable,*sys.argv],source_revision=subprocess.check_output(['git','-C',str(repo),'rev-parse','HEAD'],text=True).strip(),features=[],exit_status=0,wall_seconds=time.monotonic()-started,peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss//1024,process_swaps=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,print_axioms='N/A: receipt/source audit; exact kernel axiom outputs in successes.'))
+(ev/'LIBRA-CANDIDATE14-FINAL.json').write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps(dict(status=report['status'],lean_targets=len(results),candidate_equivalence_axioms=0,coherent_selected_imports=True)))

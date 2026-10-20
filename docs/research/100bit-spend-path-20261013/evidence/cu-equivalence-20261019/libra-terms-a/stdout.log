@@ -1,0 +1,124 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceTerms.lean:11:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsLibraSourceTerms.perm_eq`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceTerms.lean:12:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsLibraSourceTerms.quarter_eq`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceTerms.lean:44:30: error: Application type mismatch: The argument
+  hvalueC
+has type
+  A.canonicalE value
+but is expected to have type
+  V j value
+in the application
+  And.intro hvalueC
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceTerms.lean:44:11: error: Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 2 were provided
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceTerms.lean:45:4: error: unsolved goals
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+p : Points
+high : Powers
+hp : ∀ j < 4, A.canonicalE (lookup p field.wide_exact.WideExact.ZERO j)
+hh : ∀ j < 4, A.canonicalK (lookup high field.QM31.ONE j)
+inst : core.ops.function.FnMut new.factored_s2_libra_weights.closure Usize field.wide_exact.WideExact :=
+  new.factored_s2_libra_weights.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+C : Type := new.factored_s2_libra_weights.closure
+P : ℕ → C → Prop := fun x c => c = (p, high)
+V : ℕ → E → Prop := fun j value => A.canonicalE value ∧ A.decodeE value = term A p high j
+j : ℕ
+index : Usize
+hj : j < 4
+hi : ↑index = j
+hib : ↑index < 4
+entry : Usize
+hentry : PERM.index_usize index = ok entry
+heb : ↑entry < 4
+hev : ↑entry = CuSavingsLibraSourcePerm.perm ↑index
+hrp : Array.index_usize p entry = ok (lookup p field.wide_exact.WideExact.ZERO ↑entry)
+hrh : Array.index_usize high index = ok (lookup high field.QM31.ONE ↑index)
+product : field.wide_exact.WideExact
+hproduct :
+  field.wide_exact.WideExact.mul_qm31 (lookup p field.wide_exact.WideExact.ZERO ↑entry)
+      (lookup high field.QM31.ONE ↑index) =
+    ok product
+hproductC : A.canonicalE product
+hproductV :
+  A.decodeE product =
+    A.decodeE (lookup p field.wide_exact.WideExact.ZERO ↑entry) *
+      A.embedding (A.decodeK (lookup high field.QM31.ONE ↑index))
+value : field.wide_exact.WideExact
+hvalue : product.mul_m31 QUARTER = ok value
+hvalueC : A.canonicalE value
+hvalueV : A.decodeE value = A.decodeE product * A.quarter
+⊢ ok (value, p, high) = ok (value, p, high)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceTerms.lean:56:4: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceTerms.lean:62:48: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceTerms.lean:66:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  CuSavingsArrayBuilder.cells new.factored_s2_libra_weights.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact 4
+    0#usize (p, high)
+in the target expression
+  (do
+      let (xs, _) ←
+        CuSavingsArrayBuilder.cells new.factored_s2_libra_weights.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+            (↑4#usize) 0#usize (p, high)
+      ok ⟨↑xs, ⋯⟩) =
+    ok terms
+
+case refine_1
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+p : Points
+high : Powers
+hp : ∀ j < 4, A.canonicalE (lookup p field.wide_exact.WideExact.ZERO j)
+hh : ∀ j < 4, A.canonicalK (lookup high field.QM31.ONE j)
+inst : core.ops.function.FnMut new.factored_s2_libra_weights.closure Usize field.wide_exact.WideExact :=
+  new.factored_s2_libra_weights.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+C : Type := new.factored_s2_libra_weights.closure
+P : ℕ → C → Prop := fun x c => c = (p, high)
+V : ℕ → E → Prop := fun j value => A.canonicalE value ∧ A.decodeE value = term A p high j
+step :
+  ∀ (j : ℕ) (c : C) (index : Usize),
+    j < 4 → ↑index = j → P j c → ∃ value c1, inst.call_mut c index = ok (value, c1) ∧ V j value ∧ P (j + 1) c1
+values : { xs // xs.length = 4 }
+finalState : new.factored_s2_libra_weights.closure
+hcells :
+  CuSavingsArrayBuilder.cells new.factored_s2_libra_weights.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact 4
+      0#usize (p, high) =
+    ok (values, finalState)
+hvalues : ∀ (i : ℕ) (hi : i < 4), V (↑0#usize + i) (↑values)[i]
+right✝ : P (↑0#usize + 4) finalState
+terms : Std.Array E 4#usize := ⟨↑values, ⋯⟩
+⊢ (do
+      let (xs, _) ←
+        CuSavingsArrayBuilder.cells new.factored_s2_libra_weights.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+            (↑4#usize) 0#usize (p, high)
+      ok ⟨↑xs, ⋯⟩) =
+    ok terms
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.CuSavingsLibraSourceTerms.perm_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsLibraSourceTerms.quarter_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsLibraSourceTerms.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

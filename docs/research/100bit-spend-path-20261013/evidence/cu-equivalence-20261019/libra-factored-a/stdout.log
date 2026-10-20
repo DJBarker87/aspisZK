@@ -1,0 +1,100 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceFactored.lean:74:39: error: unsolved goals
+inst✝ : Shared
+ap0 ap1 : Points
+extra : Std.Array K 2#usize
+iter : core.ops.range.Range Usize
+weights : Points
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (done weights)
+        | some side => do
+          let q ← extra.index_usize side
+          let q1 ← kpowers 4#usize q
+          let q2 ← q1.index_usize 2#usize
+          let q4 ← q2.square
+          let q8 ← q4.square
+          let q12 ← q8.mul q4
+          let q16 ← q8.square
+          let low ← Weights.scalar_factor q1 ap0
+          let terms ←
+            core.array.from_fn 4#usize
+                new.factored_s2_libra_weights.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+                (ap1, Array.make 4#usize [field.QM31.ONE, q4, q8, q12] ⋯)
+          let we ← terms.index_usize 0#usize
+          let we1 ← terms.index_usize 1#usize
+          let first2 ← we.add we1
+          let we2 ← terms.index_usize 2#usize
+          let first3 ← first2.add we2
+          let we3 ← terms.index_usize 3#usize
+          let all ← first3.add we3
+          if side = 0#usize then do
+              let we4 ← low.mul all
+              let weights1 ← Array.update weights 0#usize we4
+              let we5 ← low.mul first3
+              let we6 ← we5.mul_qm31 q16
+              let weights2 ← weights1.update 1#usize we6
+              ok (cont (iter1, weights2))
+            else do
+              let we4 ← Array.index_usize weights 1#usize
+              let i ← new.PERM.index_usize 3#usize
+              let we5 ← Array.index_usize ap1 i
+              let we6 ← we5.mul_m31 new.QUARTER
+              let we7 ← low.mul we6
+              let we8 ← we4.add we7
+              let weights1 ← Array.update weights 1#usize we8
+              let we9 ← low.mul all
+              let we10 ← we9.mul_qm31 q4
+              let weights2 ← weights1.update 2#usize we10
+              let we11 ← low.mul first2
+              let q3 ← q16.mul q4
+              let we12 ← we11.mul_qm31 q3
+              let weights3 ← weights2.update 3#usize we12
+              ok (cont (iter1, weights3))) =
+    do
+    let (entry, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match entry with
+      | none => ok (done weights)
+      | some side => do
+        let q ← extra.index_usize side
+        let x ← kpowers 4#usize q
+        let x_1 ← x.index_usize 2#usize
+        let x_2 ← x_1.square
+        let x_3 ← x_2.square
+        let x_4 ← x_3.mul x_2
+        let x_5 ← x_3.square
+        let x ← Weights.scalar_factor x ap0
+        let x_6 ←
+          core.array.from_fn 4#usize new.factored_s2_libra_weights.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+              (ap1, Array.make 4#usize [field.QM31.ONE, x_2, x_3, x_4] ⋯)
+        let x_7 ← x_6.index_usize 0#usize
+        let x_8 ← x_6.index_usize 1#usize
+        let x_9 ← x_7.add x_8
+        let x_10 ← x_6.index_usize 2#usize
+        let x_11 ← x_9.add x_10
+        let x_12 ← x_6.index_usize 3#usize
+        let x_13 ← x_11.add x_12
+        let result ←
+          if side = 0#usize then do
+              let value0 ← x.mul x_13
+              let weights ← Array.update weights 0#usize value0
+              let value1 ← x.mul x_11
+              let value1 ← value1.mul_qm31 x_5
+              weights.update 1#usize value1
+            else do
+              let previous ← Array.index_usize weights 1#usize
+              let index ← new.PERM.index_usize 3#usize
+              let point ← Array.index_usize ap1 index
+              let tail ← field.wide_exact.WideExact.mul_m31 point new.QUARTER
+              let value1 ← x.mul tail
+              let value1 ← field.wide_exact.WideExact.add previous value1
+              let weights ← Array.update weights 1#usize value1
+              let value2 ← x.mul x_13
+              let value2 ← value2.mul_qm31 x_2
+              let weights ← weights.update 2#usize value2
+              let value3 ← x.mul x_9
+              let scalar ← x_5.mul x_2
+              let value3 ← value3.mul_qm31 scalar
+              weights.update 3#usize value3
+        ok (cont (iter1, result))
+'AspisR1.CuSavingsLibraSourceFactored.body_factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

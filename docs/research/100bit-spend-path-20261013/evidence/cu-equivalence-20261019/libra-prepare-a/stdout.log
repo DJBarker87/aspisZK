@@ -1,0 +1,235 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePrepare.lean:102:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let q4 ← (lookup powers field.QM31.ONE ↑2#usize).square
+    let q8 ← q4.square
+    let q12 ← q8.mul q4
+    let q16 ← q8.square
+    let terms ←
+      core.array.from_fn 4#usize new.factored_s2_libra_weights.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+          (ap1, Array.make 4#usize [field.QM31.ONE, q4, q8, q12] ⋯)
+    let term0 ← terms.index_usize 0#usize
+    let term1 ← terms.index_usize 1#usize
+    let first2 ← term0.add term1
+    let term2 ← terms.index_usize 2#usize
+    let first3 ← first2.add term2
+    let term3 ← terms.index_usize 3#usize
+    let all ← first3.add term3
+    ok { low := low, first2 := first2, first3 := first3, all := all, q4 := q4, q16 := q16 }
+is not definitionally equal to the right-hand side
+  ok data
+
+case refine_1
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+ap0 ap1 : Points
+q : K
+hp0 : ∀ i < 4, A.canonicalE (lookup ap0 field.wide_exact.WideExact.ZERO i)
+hp1 : ∀ i < 4, A.canonicalE (lookup ap1 field.wide_exact.WideExact.ZERO i)
+hq : A.canonicalK q
+powers : Std.Array field.QM31 4#usize
+hpowers : kpowers 4#usize q = ok powers
+hpv : ∀ (i : ℕ) (hi : i < ↑4#usize), A.canonicalK (↑powers)[i] ∧ A.decodeK (↑powers)[i] = A.decodeK q ^ i
+powerValues :
+  ∀ i < 4, A.canonicalK (lookup powers field.QM31.ONE i) ∧ A.decodeK (lookup powers field.QM31.ONE i) = A.decodeK q ^ i
+q2 : field.QM31 := lookup powers field.QM31.ONE 2
+hr2 : powers.index_usize 2#usize = ok (lookup powers field.QM31.ONE ↑2#usize)
+q4 : field.QM31
+hq4 : q2.square = ok q4
+hq4C : A.canonicalK q4
+hq4V : A.decodeK q4 = A.decodeK q2 ^ 2
+vq4 : A.decodeK q4 = A.decodeK q ^ 4
+q8 : field.QM31
+hq8 : q4.square = ok q8
+hq8C : A.canonicalK q8
+hq8V : A.decodeK q8 = A.decodeK q4 ^ 2
+vq8 : A.decodeK q8 = A.decodeK q ^ 8
+q12 : field.QM31
+hq12 : q8.mul q4 = ok q12
+hq12C : A.canonicalK q12
+hq12V : A.decodeK q12 = A.decodeK q8 * A.decodeK q4
+vq12 : A.decodeK q12 = A.decodeK q ^ 12
+q16 : field.QM31
+hq16 : q8.square = ok q16
+hq16C : A.canonicalK q16
+hq16V : A.decodeK q16 = A.decodeK q8 ^ 2
+vq16 : A.decodeK q16 = A.decodeK q ^ 16
+low : field.wide_exact.WideExact
+hlow : Weights.scalar_factor powers ap0 = ok low
+hlowC : A.canonicalE low
+hlowV :
+  A.decodeE low = CuSavingsLibraSourceScalar.partialSum (CuSavingsLibraSourceScalar.term A powers ap0) 4 * A.quarter
+lowV : A.decodeE low = lowValue A ap0 q
+high : Powers := Array.make 4#usize [field.QM31.ONE, q4, q8, q12] ⋯
+highValues :
+  ∀ i < 4,
+    A.canonicalK (lookup high field.QM31.ONE i) ∧ A.decodeK (lookup high field.QM31.ONE i) = A.decodeK q ^ (4 * i)
+terms : Std.Array E 4#usize
+hterms :
+  core.array.from_fn 4#usize new.factored_s2_libra_weights.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+      (ap1, high) =
+    ok terms
+htv :
+  ∀ j < 4,
+    A.canonicalE (lookup terms field.wide_exact.WideExact.ZERO j) ∧
+      A.decodeE (lookup terms field.wide_exact.WideExact.ZERO j) = CuSavingsLibraSourceTerms.term A ap1 high j
+termValues :
+  ∀ i < 4,
+    A.canonicalE (lookup terms field.wide_exact.WideExact.ZERO i) ∧
+      A.decodeE (lookup terms field.wide_exact.WideExact.ZERO i) = highTerm A ap1 q i
+t0 : E := lookup terms field.wide_exact.WideExact.ZERO 0
+t1 : E := lookup terms field.wide_exact.WideExact.ZERO 1
+t2 : E := lookup terms field.wide_exact.WideExact.ZERO 2
+t3 : E := lookup terms field.wide_exact.WideExact.ZERO 3
+first2 : field.wide_exact.WideExact
+hfirst2 : field.wide_exact.WideExact.add t0 t1 = ok first2
+hfirst2C : A.canonicalE first2
+hfirst2V : A.decodeE first2 = A.decodeE t0 + A.decodeE t1
+first3 : field.wide_exact.WideExact
+hfirst3 : first2.add t2 = ok first3
+hfirst3C : A.canonicalE first3
+hfirst3V : A.decodeE first3 = A.decodeE first2 + A.decodeE t2
+all : field.wide_exact.WideExact
+hall : first3.add t3 = ok all
+hallC : A.canonicalE all
+hallV : A.decodeE all = A.decodeE first3 + A.decodeE t3
+data : Prepared := { low := low, first2 := first2, first3 := first3, all := all, q4 := q4, q16 := q16 }
+hrt : ∀ (i : Usize), ↑i < 4 → terms.index_usize i = ok (lookup terms field.wide_exact.WideExact.ZERO ↑i)
+⊢ (do
+      let q4 ← (lookup powers field.QM31.ONE ↑2#usize).square
+      let q8 ← q4.square
+      let q12 ← q8.mul q4
+      let q16 ← q8.square
+      let terms ←
+        core.array.from_fn 4#usize new.factored_s2_libra_weights.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+            (ap1, Array.make 4#usize [field.QM31.ONE, q4, q8, q12] ⋯)
+      let term0 ← terms.index_usize 0#usize
+      let term1 ← terms.index_usize 1#usize
+      let first2 ← term0.add term1
+      let term2 ← terms.index_usize 2#usize
+      let first3 ← first2.add term2
+      let term3 ← terms.index_usize 3#usize
+      let all ← first3.add term3
+      ok { low := low, first2 := first2, first3 := first3, all := all, q4 := q4, q16 := q16 }) =
+    ok data
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePrepare.lean:103:4: error: Type mismatch: After simplification, term
+  hfirst2V
+ has type
+  A.decodeE first2 = A.decodeE t0 + A.decodeE t1
+but is expected to have type
+  A.decodeE data.first2 = highTerm A ap1 q 0 + highTerm A ap1 q 1
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePrepare.lean:99:27: warning: This simp argument is unused:
+  hq4
+
+Hint: Omit it from the simp argument list.
+  simp only [hpowers, ̲hr2, ̲hq4̵,̵h̵q̵8, ̲hq12, ̲hq16, ̲hlow, ̲hterms,
+  ̵  ̵ ̵ ̵ ̵ ̵hrt 0#usize (by scalar_tac),
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲hrt 1#usize (by scalar_tac), ̲hrt 2#usize (by scalar_tac), ̲hrt 3#usize (by scalar_tac),
+        hfirst2, ̲hfirst3, ̲hall, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePrepare.lean:99:31: warning: This simp argument is unused:
+  hq8
+
+Hint: Omit it from the simp argument list.
+  simp only [hpowers, ̲hr2, ̲hq4, ̲hq8̵,̵h̵q̵12, ̲hq16, ̲hlow, ̲hterms,
+  ̵  ̵ ̵ ̵ ̵ ̵hrt 0#usize (by scalar_tac),
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲hrt 1#usize (by scalar_tac), ̲hrt 2#usize (by scalar_tac), ̲hrt 3#usize (by scalar_tac),
+        hfirst2, ̲hfirst3, ̲hall, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePrepare.lean:99:35: warning: This simp argument is unused:
+  hq12
+
+Hint: Omit it from the simp argument list.
+  simp only [hpowers, ̲hr2, ̲hq4, ̲hq8, ̲hq12̵,̵h̵q̵1̵6, ̲hlow, ̲hterms,
+  ̵  ̵ ̵ ̵ ̵ ̵hrt 0#usize (by scalar_tac),
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲hrt 1#usize (by scalar_tac), ̲hrt 2#usize (by scalar_tac), ̲hrt 3#usize (by scalar_tac),
+        hfirst2, ̲hfirst3, ̲hall, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePrepare.lean:99:40: warning: This simp argument is unused:
+  hq16
+
+Hint: Omit it from the simp argument list.
+  simp only [hpowers, ̲hr2, ̲hq4, ̲hq8, ̲hq12, ̲hq̵1̵6̵,̵h̵low, ̲hterms,
+  ̵  ̵ ̵ ̵ ̵ ̵hrt 0#usize (by scalar_tac),
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲hrt 1#usize (by scalar_tac), ̲hrt 2#usize (by scalar_tac), ̲hrt 3#usize (by scalar_tac),
+        hfirst2, ̲hfirst3, ̲hall, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePrepare.lean:99:50: warning: This simp argument is unused:
+  hterms
+
+Hint: Omit it from the simp argument list.
+  simp only [hpowers, ̲hr2, ̲hq4, ̲hq8, ̲hq12, ̲hq16, ̲hlow,h̵t̵e̵r̵m̵s̵,̵
+  ̵  ̵ ̵ ̵ ̵ ̵hrt 0#usize (by scalar_tac),
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲hrt 1#usize (by scalar_tac), ̲hrt 2#usize (by scalar_tac), ̲hrt 3#usize (by scalar_tac),
+        hfirst2, ̲hfirst3, ̲hall, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePrepare.lean:100:6: warning: This simp argument is unused:
+  hrt 0#usize (by scalar_tac)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵p̵o̵w̵e̵r̵s̵,̵h̵r̵2̵,̵h̵q̵4̵,̵h̵q̵8̵,̵h̵q̵1̵2̵,̵h̵q̵1̵6̵,̵h̵l̵o̵w̵,̵h̵t̵e̵r̵m̵s̵,̵[̲h̲p̲o̲w̲e̲r̲s̲,̲ ̲h̲r̲2̲,̲ ̲h̲q̲4̲,̲ ̲h̲q̲8̲,̲ ̲h̲q̲1̲2̲,̲ ̲h̲q̲1̲6̲,̲ ̲h̲l̲o̲w̲,̲ ̲h̲t̲e̲r̲m̲s̲,̲ hrt 0̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵h̵r̵t̵ ̵1#usize (by s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵h̵r̵t̵s̲c̲a̲l̲a̲r̲_̲t̲a̲c̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲r̲t̲ 2#usize (by s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵h̵r̵t̵s̲c̲a̲l̲a̲r̲_̲t̲a̲c̲)̲,̲ ̲h̲r̲t̲ 3#usize (by scalar_tac), h̵f̵i̵r̵s̵t̵2̵,̵h̵f̵i̵r̵s̵t̵3̵,̵h̵a̵l̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵h̲f̲i̲r̲s̲t̲2̲,̲ ̲h̲f̲i̲r̲s̲t̲3̲,̲ ̲h̲a̲l̲l̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePrepare.lean:100:34: warning: This simp argument is unused:
+  hrt 1#usize (by scalar_tac)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵p̵o̵w̵e̵r̵s̵,̵h̵r̵2̵,̵h̵q̵4̵,̵h̵q̵8̵,̵h̵q̵1̵2̵,̵h̵q̵1̵6̵,̵h̵l̵o̵w̵,̵h̵t̵e̵r̵m̵s̵,̵[̲h̲p̲o̲w̲e̲r̲s̲,̲ ̲h̲r̲2̲,̲ ̲h̲q̲4̲,̲ ̲h̲q̲8̲,̲ ̲h̲q̲1̲2̲,̲ ̲h̲q̲1̲6̲,̲ ̲h̲l̲o̲w̲,̲ ̲h̲t̲e̲r̲m̲s̲,̲ hrt 0#usize (by s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵h̵r̵t̵ ̵1̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵h̵r̵t̵s̲c̲a̲l̲a̲r̲_̲t̲a̲c̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲r̲t̲ 2#usize (by s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵h̵r̵t̵s̲c̲a̲l̲a̲r̲_̲t̲a̲c̲)̲,̲ ̲h̲r̲t̲ 3#usize (by scalar_tac), h̵f̵i̵r̵s̵t̵2̵,̵h̵f̵i̵r̵s̵t̵3̵,̵h̵a̵l̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵h̲f̲i̲r̲s̲t̲2̲,̲ ̲h̲f̲i̲r̲s̲t̲3̲,̲ ̲h̲a̲l̲l̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePrepare.lean:100:62: warning: This simp argument is unused:
+  hrt 2#usize (by scalar_tac)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵p̵o̵w̵e̵r̵s̵,̵h̵r̵2̵,̵h̵q̵4̵,̵h̵q̵8̵,̵h̵q̵1̵2̵,̵h̵q̵1̵6̵,̵h̵l̵o̵w̵,̵h̵t̵e̵r̵m̵s̵,̵[̲h̲p̲o̲w̲e̲r̲s̲,̲ ̲h̲r̲2̲,̲ ̲h̲q̲4̲,̲ ̲h̲q̲8̲,̲ ̲h̲q̲1̲2̲,̲ ̲h̲q̲1̲6̲,̲ ̲h̲l̲o̲w̲,̲ ̲h̲t̲e̲r̲m̲s̲,̲ hrt 0#usize (by s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵h̵r̵t̵s̲c̲a̲l̲a̲r̲_̲t̲a̲c̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲r̲t̲ 1#usize (by s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵h̵r̵t̵ ̵2̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵h̵r̵t̵s̲c̲a̲l̲a̲r̲_̲t̲a̲c̲)̲,̲ ̲h̲r̲t̲ 3#usize (by scalar_tac), h̵f̵i̵r̵s̵t̵2̵,̵h̵f̵i̵r̵s̵t̵3̵,̵h̵a̵l̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵h̲f̲i̲r̲s̲t̲2̲,̲ ̲h̲f̲i̲r̲s̲t̲3̲,̲ ̲h̲a̲l̲l̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePrepare.lean:100:90: warning: This simp argument is unused:
+  hrt 3#usize (by scalar_tac)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵p̵o̵w̵e̵r̵s̵,̵h̵r̵2̵,̵h̵q̵4̵,̵h̵q̵8̵,̵h̵q̵1̵2̵,̵h̵q̵1̵6̵,̵h̵l̵o̵w̵,̵h̵t̵e̵r̵m̵s̵,̵[̲h̲p̲o̲w̲e̲r̲s̲,̲ ̲h̲r̲2̲,̲ ̲h̲q̲4̲,̲ ̲h̲q̲8̲,̲ ̲h̲q̲1̲2̲,̲ ̲h̲q̲1̲6̲,̲ ̲h̲l̲o̲w̲,̲ ̲h̲t̲e̲r̲m̲s̲,̲ hrt 0#usize (by s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵h̵r̵t̵s̲c̲a̲l̲a̲r̲_̲t̲a̲c̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲r̲t̲ 1#usize (by s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵h̵r̵t̵s̲c̲a̲l̲a̲r̲_̲t̲a̲c̲)̲,̲ ̲h̲r̲t̲ 2#usize (by s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵h̵r̵t̵ ̵3̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵scalar_tac), h̵f̵i̵r̵s̵t̵2̵,̵h̵f̵i̵r̵s̵t̵3̵,̵h̵a̵l̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵h̲f̲i̲r̲s̲t̲2̲,̲ ̲h̲f̲i̲r̲s̲t̲3̲,̲ ̲h̲a̲l̲l̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePrepare.lean:101:6: warning: This simp argument is unused:
+  hfirst2
+
+Hint: Omit it from the simp argument list.
+  simp only [hpowers, ̲hr2, ̲hq4, ̲hq8, ̲hq12, ̲hq16, ̲hlow, ̲hterms,
+  ̵  ̵ ̵ ̵ ̵ ̵hrt 0#usize (by scalar_tac),
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲hrt 1#usize (by scalar_tac), ̲hrt 2#usize (by scalar_tac), ̲hrt 3#usize (by scalar_tac),
+        hfirst2̵,̵h̵f̵i̵r̵s̵t̵3, ̲hall, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePrepare.lean:101:14: warning: This simp argument is unused:
+  hfirst3
+
+Hint: Omit it from the simp argument list.
+  simp only [hpowers, ̲hr2, ̲hq4, ̲hq8, ̲hq12, ̲hq16, ̲hlow, ̲hterms,
+  ̵  ̵ ̵ ̵ ̵ ̵hrt 0#usize (by scalar_tac),
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲hrt 1#usize (by scalar_tac), ̲hrt 2#usize (by scalar_tac), ̲hrt 3#usize (by scalar_tac),
+        hfirst2, ̲hf̵i̵r̵s̵t̵3̵,̵h̵all, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePrepare.lean:101:22: warning: This simp argument is unused:
+  hall
+
+Hint: Omit it from the simp argument list.
+  simp only [hpowers, ̲hr2, ̲hq4, ̲hq8, ̲hq12, ̲hq16, ̲hlow, ̲hterms,
+  ̵  ̵ ̵ ̵ ̵ ̵hrt 0#usize (by scalar_tac),
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲hrt 1#usize (by scalar_tac), ̲hrt 2#usize (by scalar_tac), ̲hrt 3#usize (by scalar_tac),
+        hfirst2, ̲hfirst3,h̵a̵l̵l̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsLibraSourcePrepare.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

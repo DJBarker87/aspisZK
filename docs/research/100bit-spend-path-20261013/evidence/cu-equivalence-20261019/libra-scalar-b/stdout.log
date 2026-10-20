@@ -1,0 +1,206 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:19:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsLibraSourceScalar.partialSum_succ`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:36:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let we ←
+      loop
+          (fun x =>
+            match x with
+            | (state, acc, c) => do
+              let (entry, state1) ← (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize).next state
+              match entry with
+                | none => ok (done acc)
+                | some item => do
+                  let (acc1, c1) ←
+                    Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut c
+                        (acc, item)
+                  ok (cont (state1, acc1, c1)))
+          ({ start := 0#usize, «end» := 4#usize }, field.wide_exact.WideExact.ZERO, p, f)
+    we.mul_m31 QUARTER
+is not definitionally equal to the right-hand side
+  do
+    let value ←
+      loop
+          (fun state =>
+            let (iter, acc, c) := state
+            do
+            let (entry, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+            match entry with
+              | none => ok (done acc)
+              | some i => do
+                let (acc1, c1) ←
+                  Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut c
+                      (acc, i)
+                ok (cont (iter1, acc1, c1)))
+          ({ start := 0#usize, «end» := 4#usize }, field.wide_exact.WideExact.ZERO, p, f)
+    field.wide_exact.WideExact.mul_m31 value QUARTER
+
+inst✝ : Shared
+f : Powers
+p : Points
+⊢ (do
+      let we ←
+        loop
+            (fun x =>
+              match x with
+              | (state, acc, c) => do
+                let (entry, state1) ← (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize).next state
+                match entry with
+                  | none => ok (done acc)
+                  | some item => do
+                    let (acc1, c1) ←
+                      Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut c
+                          (acc, item)
+                    ok (cont (state1, acc1, c1)))
+            ({ start := 0#usize, «end» := 4#usize }, field.wide_exact.WideExact.ZERO, p, f)
+      we.mul_m31 QUARTER) =
+    do
+    let value ←
+      loop
+          (fun state =>
+            let (iter, acc, c) := state
+            do
+            let (entry, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+            match entry with
+              | none => ok (done acc)
+              | some i => do
+                let (acc1, c1) ←
+                  Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut c
+                      (acc, i)
+                ok (cont (iter1, acc1, c1)))
+          ({ start := 0#usize, «end» := 4#usize }, field.wide_exact.WideExact.ZERO, p, f)
+    field.wide_exact.WideExact.mul_m31 value QUARTER
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:58:15: error: Application type mismatch: The argument
+  ↑iter.start
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.115
+of sort `Type (?u.115 + 1)` in the application
+  @PrincipalSeg ↑iter.start
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:58:31: error(lean.unknownIdentifier): Unknown identifier `ter.end.val`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:69:6: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    c
+  has type
+    Closure
+  but is expected to have type
+    Weights.scalar_factor.closure
+  in the application
+    (we2, c)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:79:34: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 5
+  0 ≤ d ≤ 3
+  c ≥ 0
+  b ≥ 0
+  b - c ≤ -1
+  0 ≤ a ≤ 3
+where
+ a := ↑↑(iter, acc, p, f).1.start
+ b := ↑↑iter.start
+ c := ↑Usize.max
+ d := ↑(CuSavingsLibraSourcePerm.perm ↑iter.start)
+ e := ↑↑(iter1, sum, p, f).1.start
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:88:82: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ a ≤ 3
+where
+ a := ↑↑iter.start
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:91:6: error: Tactic `assumption` failed
+
+case refine_1
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+f : Powers
+p : Points
+hf : ∀ i < 4, A.canonicalK (lookup f field.QM31.ONE i)
+hp : ∀ i < 4, A.canonicalE (lookup p field.wide_exact.WideExact.ZERO i)
+I : State → Prop :=
+  fun state =>
+    state.1.end = 4#usize ∧
+      ↑state.1.start ≤ 4 ∧
+        state.2.2 = (p, f) ∧ A.canonicalE state.2.1 ∧ A.decodeE state.2.1 = partialSum (term A f p) ↑state.1.start
+Q : E → Prop := fun value => A.canonicalE value ∧ A.decodeE value = partialSum (term A f p) 4
+step :
+  ∀ (state : State),
+    I state → ↑state.1.start < 4 → ∃ next, body state = ok (cont next) ∧ I next ∧ ↑next.1.start = ↑state.1.start + 1
+iter : Range
+acc : E
+c : Closure
+hi : ↑(iter, acc, c).1.start = 4
+hend : (iter, acc, c).1.end = 4#usize
+left✝¹ : ↑(iter, acc, c).1.start ≤ 4
+left✝ : (iter, acc, c).2.2 = (p, f)
+hacc : A.canonicalE (iter, acc, c).2.1
+hvalue : A.decodeE (iter, acc, c).2.1 = partialSum (term A f p) ↑(iter, acc, c).1.start
+hd : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, iter)
+⊢ (let (iter, acc, c) := (iter, acc, c)
+    do
+    let (entry, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match entry with
+      | none => ok (done acc)
+      | some i => do
+        let (acc1, c1) ←
+          Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut c (acc, i)
+        ok (cont (iter1, acc1, c1))) =
+    ok (done acc)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:94:37: error: Type mismatch: After simplification, term
+  A.zero_value
+ has type
+  @Eq R (A.decodeE field.wide_exact.WideExact.ZERO) 0
+but is expected to have type
+  @Eq R (A.decodeE field.wide_exact.WideExact.ZERO) (List.map (term A f p) (List.range ↑0#usize)).sum
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:99:26: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  field.wide_exact.WideExact.mul_m31 sum QUARTER
+in the target expression
+  (do
+      let value ← ok sum
+      field.wide_exact.WideExact.mul_m31 value QUARTER) =
+    ok out
+
+case refine_1
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+f : Powers
+p : Points
+hf : ∀ i < 4, A.canonicalK (lookup f field.QM31.ONE i)
+hp : ∀ i < 4, A.canonicalE (lookup p field.wide_exact.WideExact.ZERO i)
+I : State → Prop :=
+  fun state =>
+    state.1.end = 4#usize ∧
+      ↑state.1.start ≤ 4 ∧
+        state.2.2 = (p, f) ∧ A.canonicalE state.2.1 ∧ A.decodeE state.2.1 = partialSum (term A f p) ↑state.1.start
+Q : E → Prop := fun value => A.canonicalE value ∧ A.decodeE value = partialSum (term A f p) 4
+step :
+  ∀ (state : State),
+    I state → ↑state.1.start < 4 → ∃ next, body state = ok (cont next) ∧ I next ∧ ↑next.1.start = ↑state.1.start + 1
+done : ∀ (state : State), I state → ↑state.1.start = 4 → ∃ value, body state = ok (ControlFlow.done value) ∧ Q value
+initial : I ({ start := 0#usize, «end» := 4#usize }, field.wide_exact.WideExact.ZERO, p, f)
+sum : E
+hloop : execute body ({ start := 0#usize, «end» := 4#usize }, field.wide_exact.WideExact.ZERO, p, f) = ok sum
+hsumC : A.canonicalE sum
+hsumV : A.decodeE sum = partialSum (term A f p) 4
+out : field.wide_exact.WideExact
+hout : field.wide_exact.WideExact.mul_m31 sum QUARTER = ok out
+houtC : A.canonicalE out
+houtV : A.decodeE out = A.decodeE sum * A.quarter
+⊢ (do
+      let value ← ok sum
+      field.wide_exact.WideExact.mul_m31 value QUARTER) =
+    ok out
+'AspisR1.CuSavingsLibraSourceScalar.fold_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsLibraSourceScalar.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

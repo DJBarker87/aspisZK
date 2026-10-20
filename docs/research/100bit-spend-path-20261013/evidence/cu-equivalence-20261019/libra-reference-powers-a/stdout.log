@@ -1,0 +1,288 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferencePowers.lean:9:17: error: failed to set `[local reducible]` for `old.twofold_libra_weights.closure`, recall that `[reducible]` affects the term indexing datastructures used by `simp` and type class resolution
+
+Note: Use `set_option allowUnsafeReducibility true` to override reducibility status validation
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferencePowers.lean:10:17: error: failed to set `[local reducible]` for `old.twofold_libra_weights.closure.closure`, recall that `[reducible]` affects the term indexing datastructures used by `simp` and type class resolution
+
+Note: Use `set_option allowUnsafeReducibility true` to override reducibility status validation
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferencePowers.lean:21:22: error: Application type mismatch: The argument
+  product
+has type
+  field.QM31
+but is expected to have type
+  old.twofold_libra_weights.closure.closure
+in the application
+  Prod.mk product
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferencePowers.lean:64:45: error: Application type mismatch: The argument
+  product
+has type
+  field.QM31
+but is expected to have type
+  old.twofold_libra_weights.closure.closure
+in the application
+  Prod.mk product
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferencePowers.lean:77:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  CuSavingsArrayBuilder.cells old.twofold_libra_weights.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 28
+    0#usize (field.QM31.ONE, extra, side)
+in the target expression
+  (do
+      let (a, _) ←
+        do
+          let (xs, finalState) ←
+            CuSavingsArrayBuilder.cells
+                old.twofold_libra_weights.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 (↑28#usize) 0#usize
+                (field.QM31.ONE, extra, side)
+          ok (⟨↑xs, ⋯⟩, finalState)
+      ok (a, extra)) =
+    ok (powers, extra)
+
+case refine_1
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+extra : Extra
+side : Usize
+hs : ↑side < 2
+he : A.canonicalK (lookup extra field.QM31.ONE ↑side)
+q : K := lookup extra field.QM31.ONE ↑side
+inst : core.ops.function.FnMut old.twofold_libra_weights.closure.closure Usize field.QM31 :=
+  old.twofold_libra_weights.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+P : ℕ → PowerClosure → Prop :=
+  fun j state => A.canonicalK state.1 ∧ state.2.1 = extra ∧ state.2.2 = side ∧ A.decodeK state.1 = A.decodeK q ^ j
+V : ℕ → K → Prop := fun j value => A.canonicalK value ∧ A.decodeK value = A.decodeK q ^ j
+hread : Array.index_usize extra side = ok (lookup extra field.QM31.ONE ↑side)
+hstep :
+  ∀ (j : ℕ) (state : PowerClosure) (index : Usize),
+    j < 28 →
+      ↑index = j →
+        P j state → ∃ value state1, inst.call_mut state index = ok (value, state1) ∧ V j value ∧ P (j + 1) state1
+initial : P 0 (field.QM31.ONE, extra, side)
+values : { xs // xs.length = 28 }
+finalState : old.twofold_libra_weights.closure.closure
+hcells :
+  CuSavingsArrayBuilder.cells old.twofold_libra_weights.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 28
+      0#usize (field.QM31.ONE, extra, side) =
+    ok (values, finalState)
+hvalues : ∀ (i : ℕ) (hi : i < 28), V (↑0#usize + i) (↑values)[i]
+right✝ : P (↑0#usize + 28) finalState
+powers : Powers := ⟨↑values, ⋯⟩
+⊢ (do
+      let (a, _) ←
+        do
+          let (xs, finalState) ←
+            CuSavingsArrayBuilder.cells
+                old.twofold_libra_weights.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 (↑28#usize) 0#usize
+                (field.QM31.ONE, extra, side)
+          ok (⟨↑xs, ⋯⟩, finalState)
+      ok (a, extra)) =
+    ok (powers, extra)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (28 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferencePowers.lean:88:22: error(lean.invalidField): Invalid field notation: Type of
+  lookup powers ?m.117 side
+is not known; cannot resolve field `val`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `AddUnits.val`
+  • `Byte.val`
+  • `Char.val`
+  • `Fin.val`
+  • `Finset.val`
+  • `Float.val`
+  • `Float32.val`
+  • `FloatSpec.val`
+  • `NonScalar.val`
+  • `PNat.val`
+  • `Subtype.val`
+  • `Units.val`
+  • `ZMod.val`
+  • `Array.Mem.val`
+  • `LLVM.AttributeIndex.val`
+  • `LLVM.CodegenFileType.val`
+  • `LLVM.DLLStorageClass.val`
+  • `LLVM.IntPredicate.val`
+  • `LLVM.Linkage.val`
+  • `LLVM.Visibility.val`
+  • `Lean.ElabBlock.val`
+  • `Lean.ElabInline.val`
+  • `Lean.ExprStructEq.val`
+  • `OrderHom.Subtype.val`
+  • `ST.Out.val`
+  • `Vector.Mem.val`
+  • `IScalar.val`
+  • `UScalar.val`
+  • `Do.Tests.ExBox.val`
+  • `Lean.Doc.Parser.val`
+  • `Lean.Doc.WithSyntax.val`
+  • `Lean.Elab.FieldInfo.val`
+  • `Lean.Language.DynamicSnapshot.val`
+  • `Lean.Language.SyntaxGuarded.val`
+  • `Lean.Meta.InstanceEntry.val`
+  • `Lean.Meta.UnificationHintEntry.val`
+  • `Lean.Server.WithRpcRef.val`
+  • `Std.Time.Timestamp.val`
+  • `Std.Time.WallTime.val`
+  • `Step.Test.U8.val`
+  • `Batteries.BinomialHeap.Imp.FindMin.val`
+  • `Lean.Elab.ComputedFields.Context.val`
+  • `Lean.Elab.Term.LetRecToLift.val`
+  • `Lean.Elab.Term.NamedArg.val`
+  • `Lean.Meta.Match.Example.val`
+  • `Lean.Meta.Match.Pattern.val`
+  • `Lean.Meta.Sym.BitVecValue.val`
+  • `Lean.Meta.Sym.FinValue.val`
+  • `Lean.Meta.SynthInstance.Instance.val`
+  • `Std.Sat.AIG.Fanin.val`
+  • `Std.Time.Internal.UnitVal.val`
+  • `Lean.Compiler.LCNF.FixedParams.AbsValue.val`
+  • `Lean.Elab.Term.StructInst.FieldView.val`
+  • `Lean.Meta.Try.Collector.InductionCandidate.val`
+  • `Mathlib.Tactic.Ring.Common.Result.val`
+  • `Std.Tactic.BVDecide.BVExpr.WithCache.val`
+  • `Lean.Meta.Grind.Arith.Cutsat.SymbolicBound.val`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferencePowers.lean:89:19: error(lean.invalidField): Invalid field notation: Type of
+  lookup powers ?m.124 side
+is not known; cannot resolve field `val`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `AddUnits.val`
+  • `Byte.val`
+  • `Char.val`
+  • `Fin.val`
+  • `Finset.val`
+  • `Float.val`
+  • `Float32.val`
+  • `FloatSpec.val`
+  • `NonScalar.val`
+  • `PNat.val`
+  • `Subtype.val`
+  • `Units.val`
+  • `ZMod.val`
+  • `Array.Mem.val`
+  • `LLVM.AttributeIndex.val`
+  • `LLVM.CodegenFileType.val`
+  • `LLVM.DLLStorageClass.val`
+  • `LLVM.IntPredicate.val`
+  • `LLVM.Linkage.val`
+  • `LLVM.Visibility.val`
+  • `Lean.ElabBlock.val`
+  • `Lean.ElabInline.val`
+  • `Lean.ExprStructEq.val`
+  • `OrderHom.Subtype.val`
+  • `ST.Out.val`
+  • `Vector.Mem.val`
+  • `IScalar.val`
+  • `UScalar.val`
+  • `Do.Tests.ExBox.val`
+  • `Lean.Doc.Parser.val`
+  • `Lean.Doc.WithSyntax.val`
+  • `Lean.Elab.FieldInfo.val`
+  • `Lean.Language.DynamicSnapshot.val`
+  • `Lean.Language.SyntaxGuarded.val`
+  • `Lean.Meta.InstanceEntry.val`
+  • `Lean.Meta.UnificationHintEntry.val`
+  • `Lean.Server.WithRpcRef.val`
+  • `Std.Time.Timestamp.val`
+  • `Std.Time.WallTime.val`
+  • `Step.Test.U8.val`
+  • `Batteries.BinomialHeap.Imp.FindMin.val`
+  • `Lean.Elab.ComputedFields.Context.val`
+  • `Lean.Elab.Term.LetRecToLift.val`
+  • `Lean.Elab.Term.NamedArg.val`
+  • `Lean.Meta.Match.Example.val`
+  • `Lean.Meta.Match.Pattern.val`
+  • `Lean.Meta.Sym.BitVecValue.val`
+  • `Lean.Meta.Sym.FinValue.val`
+  • `Lean.Meta.SynthInstance.Instance.val`
+  • `Std.Sat.AIG.Fanin.val`
+  • `Std.Time.Internal.UnitVal.val`
+  • `Lean.Compiler.LCNF.FixedParams.AbsValue.val`
+  • `Lean.Elab.Term.StructInst.FieldView.val`
+  • `Lean.Meta.Try.Collector.InductionCandidate.val`
+  • `Mathlib.Tactic.Ring.Common.Result.val`
+  • `Std.Tactic.BVDecide.BVExpr.WithCache.val`
+  • `Lean.Meta.Grind.Arith.Cutsat.SymbolicBound.val`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferencePowers.lean:88:97: error: overloaded, errors 
+  Unknown constant `Array.property`
+  
+  Unknown constant `Aeneas.Std.Array.property`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferencePowers.lean:88:90: error: unsolved goals
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+extra : Extra
+he : ∀ side < 2, A.canonicalK (lookup extra field.QM31.ONE side)
+powers : Std.Array (Std.Array field.QM31 28#usize) 2#usize
+side : ℕ
+hs : side < 2
+i : ℕ
+hi : i < 28
+⊢ ?m.98 powers side hs i hi sorry i
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferencePowers.lean:89:94: error: overloaded, errors 
+  Unknown constant `Array.property`
+  
+  Unknown constant `Aeneas.Std.Array.property`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferencePowers.lean:89:87: error: unsolved goals
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+extra : Extra
+he : ∀ side < 2, A.canonicalK (lookup extra field.QM31.ONE side)
+powers : Std.Array (Std.Array field.QM31 28#usize) 2#usize
+side : ℕ
+hs : side < 2
+i : ℕ
+hi : i < 28
+⊢ ?m.104 powers side hs i hi sorry i
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferencePowers.lean:104:2: error: Tactic `generalize` failed: result is not type correct
+  (∃ values finalState,
+      CuSavingsArrayBuilder.cells inst 2 0#usize extra = ok (values, finalState) ∧
+        (∀ (i : ℕ) (hi : i < 2), V (↑0#usize + i) (↑values)[i]) ∧ P (↑0#usize + 2) finalState) →
+    ∃ powers,
+      core.array.from_fn 2#usize old.twofold_libra_weights.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayQM3128
+            extra =
+          ok powers ∧
+        ∀ (side : ℕ) (hs : side < 2) (i : ℕ) (hi : i < 28),
+          A.canonicalK ?m.54[i] ∧ A.decodeK ?m.68[i] = A.decodeK (lookup extra field.QM31.ONE side) ^ i
+
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+extra : Extra
+he : ∀ side < 2, A.canonicalK (lookup extra field.QM31.ONE side)
+inst : core.ops.function.FnMut old.twofold_libra_weights.closure Usize (Std.Array field.QM31 28#usize) :=
+  old.twofold_libra_weights.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayQM3128
+P : ℕ → Extra → Prop := fun x state => state = extra
+V : ℕ → Powers → Prop :=
+  fun side value =>
+    ∀ (i : ℕ) (hi : i < 28),
+      A.canonicalK (↑value)[i] ∧ A.decodeK (↑value)[i] = A.decodeK (lookup extra field.QM31.ONE side) ^ i
+hstep :
+  ∀ (j : ℕ) (state : Extra) (index : Usize),
+    j < 2 →
+      ↑index = j →
+        P j state → ∃ value state1, inst.call_mut state index = ok (value, state1) ∧ V j value ∧ P (j + 1) state1
+⊢ ∃ powers,
+    core.array.from_fn 2#usize old.twofold_libra_weights.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayQM3128 extra =
+        ok powers ∧
+      ∀ (side : ℕ) (hs : side < 2) (i : ℕ) (hi : i < 28),
+        A.canonicalK ?m.54[i] ∧ A.decodeK ?m.68[i] = A.decodeK (lookup extra field.QM31.ONE side) ^ i
+'AspisR1.CuSavingsLibraReferencePowers.callback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsLibraReferencePowers.side_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferencePowers.lean:124:14: error(lean.unknownIdentifier): Unknown constant `source_success`

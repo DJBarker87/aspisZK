@@ -1,0 +1,85 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePowers.lean:21:50: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok, ̲bind_tc_fail, ̲bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePowers.lean:38:4: error: Tactic `subst` failed: did not find equation for eliminating 'base'
+
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+N : Usize
+q : K
+hq : A.canonicalK q
+hN : ↑N < Usize.size
+inst : core.ops.function.FnMut (kpowers.closure N) Usize field.QM31 :=
+  kpowers.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 N
+P : ℕ → kpowers.closure N → Prop :=
+  fun j state => A.canonicalK state.1 ∧ state.2 = q ∧ A.decodeK state.1 = A.decodeK q ^ j
+V : ℕ → K → Prop := fun j value => A.canonicalK value ∧ A.decodeK value = A.decodeK q ^ j
+j : ℕ
+index : Usize
+a✝¹ : j < ↑N
+a✝ : ↑index = j
+power base : field.QM31
+hpower : A.canonicalK (power, base).1
+hbase : (power, base).2 = q
+hvalue : A.decodeK (power, base).1 = A.decodeK q ^ j
+⊢ ∃ value state1, inst.call_mut (power, base) index = ok (value, state1) ∧ V j value ∧ P (j + 1) state1
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePowers.lean:50:2: error: unsolved goals
+case refine_1
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+N : Usize
+q : K
+hq : A.canonicalK q
+hN : ↑N < Usize.size
+inst : core.ops.function.FnMut (kpowers.closure N) Usize field.QM31 :=
+  kpowers.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 N
+P : ℕ → kpowers.closure N → Prop :=
+  fun j state => A.canonicalK state.1 ∧ state.2 = q ∧ A.decodeK state.1 = A.decodeK q ^ j
+V : ℕ → K → Prop := fun j value => A.canonicalK value ∧ A.decodeK value = A.decodeK q ^ j
+hstep :
+  ∀ (j : ℕ) (state : kpowers.closure N) (index : Usize),
+    j < ↑N →
+      ↑index = j →
+        P j state → ∃ value state1, inst.call_mut state index = ok (value, state1) ∧ V j value ∧ P (j + 1) state1
+initial : P 0 (field.QM31.ONE, q)
+values : { xs // xs.length = ↑N }
+finalState : kpowers.closure N
+hcells : CuSavingsArrayBuilder.cells inst (↑N) 0#usize (field.QM31.ONE, q) = ok (values, finalState)
+hvalues : ∀ (i : ℕ) (hi : i < ↑N), V (↑0#usize + i) (↑values)[i]
+right✝ : P (↑0#usize + ↑N) finalState
+powers : Std.Array K N := ⟨↑values, ⋯⟩
+⊢ (do
+      let (a, _) ←
+        do
+          let (xs, finalState) ←
+            CuSavingsArrayBuilder.cells (kpowers.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31 N) (↑N) 0#usize
+                (field.QM31.ONE, q)
+          ok (⟨↑xs, ⋯⟩, finalState)
+      ok a) =
+    ok ⟨↑values, ⋯⟩
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePowers.lean:51:15: warning: This simp argument is unused:
+  hcells
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵c̵e̵l̵l̵s̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵p̵o̵w̵e̵r̵s̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲p̲o̲w̲e̲r̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourcePowers.lean:51:22: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵c̵e̵l̵l̵s̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵p̵o̵w̵e̵r̵s̵]̵[̲h̲c̲e̲l̲l̲s̲,̲ ̲p̲o̲w̲e̲r̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsLibraSourcePowers.callback' depends on axioms: [propext]
+'AspisR1.CuSavingsLibraSourcePowers.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

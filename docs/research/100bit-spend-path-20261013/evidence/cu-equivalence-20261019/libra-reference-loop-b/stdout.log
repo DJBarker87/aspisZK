@@ -1,0 +1,193 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferenceLoop.lean:16:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsLibraReferenceLoop.partialSum_succ`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferenceLoop.lean:32:8: warning: automatically included section variable(s) unused in theorem `_private.CuSavingsLibraReferenceLoop.0.AspisR1.CuSavingsLibraReferenceLoop.source_index`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferenceLoop.lean:90:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  base + iter.start
+in the target expression
+  (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (done acc)
+    | some s => do
+      let index ← base + s
+      if index < 56#usize then do
+          let we ← Array.index_usize low s
+          let i1 ← index / 28#usize
+          let i2 ← index % 28#usize
+          let a2 ← Array.index_usize powers i1
+          let q ← a2.index_usize i2
+          let we1 ← we.mul_qm31 q
+          let weight1 ← field.wide_exact.WideExact.add acc we1
+          ok (cont (iter1, weight1))
+        else ok (cont (iter1, acc))) =
+    ok (cont (iter1, sum))
+
+case pos.refine_1
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+low : Low
+powers : Tables
+extra : Extra
+j : Usize
+hj : ↑j < 4
+hlow : ∀ s < 16, A.canonicalE (lookup low field.wide_exact.WideExact.ZERO s)
+hpowers : CuSavingsLibraReferencePowers.Valid A powers extra
+I : State → Prop :=
+  fun state =>
+    state.1.end = 16#usize ∧
+      ↑state.1.start ≤ 16 ∧ A.canonicalE state.2 ∧ A.decodeE state.2 = partialSum (term A low extra ↑j) ↑state.1.start
+Q : E → Prop := fun value => A.canonicalE value ∧ A.decodeE value = block A low extra ↑j
+iter : Range
+acc : E
+hend : iter.end = 16#usize
+hstart : ↑iter.start ≤ 16
+hacc : A.canonicalE acc
+hvalue : A.decodeE acc = partialSum (term A low extra ↑j) ↑iter.start
+hi : ↑iter.start < 16
+hit : ↑iter.start < ↑iter.end
+iter1 : Range
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hiter1 : ↑iter1.start = ↑iter.start + 1
+hend1 : iter1.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+base index : UScalar UScalarTy.Usize
+hbase : 16#usize * j = ok base
+hindex : base + iter.start = ok index
+hindexV : ↑index = 16 * ↑j + ↑iter.start
+hactive : 16 * ↑j + ↑iter.start < 56
+hilt : index < 56#usize
+side : UScalar UScalarTy.Usize
+hside : index / 28#usize = ok side
+hsideV : ↑side = ↑index / ↑28#usize
+exponent : UScalar UScalarTy.Usize
+hexponent : index % 28#usize = ok exponent
+hexponentV : ↑exponent = ↑index % ↑28#usize
+hsV : ↑side = (16 * ↑j + ↑iter.start) / 28
+heV : ↑exponent = (16 * ↑j + ↑iter.start) % 28
+hsb : ↑side < 2
+heb : ↑exponent < 28
+hlread : Array.index_usize low iter.start = ok (lookup low field.wide_exact.WideExact.ZERO ↑iter.start)
+htread : Array.index_usize powers side = ok (lookup powers (Array.repeat 28#usize field.QM31.ONE) ↑side)
+hqread :
+  (lookup powers (Array.repeat 28#usize field.QM31.ONE) ↑side).index_usize exponent =
+    ok (lookup (lookup powers (Array.repeat 28#usize field.QM31.ONE) ↑side) field.QM31.ONE ↑exponent)
+hpc : A.canonicalK (lookup (lookup powers (Array.repeat 28#usize field.QM31.ONE) ↑side) field.QM31.ONE ↑exponent)
+hpv :
+  A.decodeK (lookup (lookup powers (Array.repeat 28#usize field.QM31.ONE) ↑side) field.QM31.ONE ↑exponent) =
+    A.decodeK (lookup extra field.QM31.ONE ↑side) ^ ↑exponent
+product : field.wide_exact.WideExact
+hproduct :
+  field.wide_exact.WideExact.mul_qm31 (lookup low field.wide_exact.WideExact.ZERO ↑iter.start)
+      (lookup (lookup powers (Array.repeat 28#usize field.QM31.ONE) ↑side) field.QM31.ONE ↑exponent) =
+    ok product
+hproductC : A.canonicalE product
+hproductV :
+  A.decodeE product =
+    A.decodeE (lookup low field.wide_exact.WideExact.ZERO ↑iter.start) *
+      A.embedding
+        (A.decodeK (lookup (lookup powers (Array.repeat 28#usize field.QM31.ONE) ↑side) field.QM31.ONE ↑exponent))
+sum : field.wide_exact.WideExact
+hsum : field.wide_exact.WideExact.add acc product = ok sum
+hsumC : A.canonicalE sum
+hsumV : A.decodeE sum = A.decodeE acc + A.decodeE product
+⊢ (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (done acc)
+    | some s => do
+      let index ← base + s
+      if index < 56#usize then do
+          let we ← Array.index_usize low s
+          let i1 ← index / 28#usize
+          let i2 ← index % 28#usize
+          let a2 ← Array.index_usize powers i1
+          let q ← a2.index_usize i2
+          let we1 ← we.mul_qm31 q
+          let weight1 ← field.wide_exact.WideExact.add acc we1
+          ok (cont (iter1, weight1))
+        else ok (cont (iter1, acc))) =
+    ok (cont (iter1, sum))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraReferenceLoop.lean:119:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  base + iter.start
+in the target expression
+  (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (done acc)
+    | some s => do
+      let index ← base + s
+      if index < 56#usize then do
+          let we ← Array.index_usize low s
+          let i1 ← index / 28#usize
+          let i2 ← index % 28#usize
+          let a2 ← Array.index_usize powers i1
+          let q ← a2.index_usize i2
+          let we1 ← we.mul_qm31 q
+          let weight1 ← field.wide_exact.WideExact.add acc we1
+          ok (cont (iter1, weight1))
+        else ok (cont (iter1, acc))) =
+    ok (cont (iter1, acc))
+
+case neg.refine_1
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+low : Low
+powers : Tables
+extra : Extra
+j : Usize
+hj : ↑j < 4
+hlow : ∀ s < 16, A.canonicalE (lookup low field.wide_exact.WideExact.ZERO s)
+hpowers : CuSavingsLibraReferencePowers.Valid A powers extra
+I : State → Prop :=
+  fun state =>
+    state.1.end = 16#usize ∧
+      ↑state.1.start ≤ 16 ∧ A.canonicalE state.2 ∧ A.decodeE state.2 = partialSum (term A low extra ↑j) ↑state.1.start
+Q : E → Prop := fun value => A.canonicalE value ∧ A.decodeE value = block A low extra ↑j
+iter : Range
+acc : E
+hend : iter.end = 16#usize
+hstart : ↑iter.start ≤ 16
+hacc : A.canonicalE acc
+hvalue : A.decodeE acc = partialSum (term A low extra ↑j) ↑iter.start
+hi : ↑iter.start < 16
+hit : ↑iter.start < ↑iter.end
+iter1 : Range
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hiter1 : ↑iter1.start = ↑iter.start + 1
+hend1 : iter1.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+base index : UScalar UScalarTy.Usize
+hbase : 16#usize * j = ok base
+hindex : base + iter.start = ok index
+hindexV : ↑index = 16 * ↑j + ↑iter.start
+hactive : ¬16 * ↑j + ↑iter.start < 56
+hinactive : ¬index < 56#usize
+⊢ (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (done acc)
+    | some s => do
+      let index ← base + s
+      if index < 56#usize then do
+          let we ← Array.index_usize low s
+          let i1 ← index / 28#usize
+          let i2 ← index % 28#usize
+          let a2 ← Array.index_usize powers i1
+          let q ← a2.index_usize i2
+          let we1 ← we.mul_qm31 q
+          let weight1 ← field.wide_exact.WideExact.add acc we1
+          ok (cont (iter1, weight1))
+        else ok (cont (iter1, acc))) =
+    ok (cont (iter1, acc))
+'AspisR1.CuSavingsLibraReferenceLoop.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

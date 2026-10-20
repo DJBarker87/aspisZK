@@ -1,0 +1,190 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceSides.lean:71:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let value1 ← field.wide_exact.WideExact.add (lookup weights field.wide_exact.WideExact.ZERO ↑1#usize) term1
+    let weights ← Array.update weights 1#usize value1
+    let weights ← weights.update 2#usize value2
+    weights.update 3#usize value3
+is not definitionally equal to the right-hand side
+  ok result
+
+case refine_1
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+ap0 ap1 : Points
+q : K
+data : Prepared
+weights : Points
+hd : Valid A ap0 ap1 q data
+hw : Canonical A weights
+hap1 : ∀ j < 4, A.canonicalE (lookup ap1 field.wide_exact.WideExact.ZERO j)
+previous : E := lookup weights field.wide_exact.WideExact.ZERO 1
+hrw : Array.index_usize weights 1#usize = ok (lookup weights field.wide_exact.WideExact.ZERO ↑1#usize)
+index : Usize
+hindex : PERM.index_usize 3#usize = ok index
+hib : ↑index < 4
+hiv : ↑index = CuSavingsLibraSourcePerm.perm ↑3#usize
+hrp : Array.index_usize ap1 index = ok (lookup ap1 field.wide_exact.WideExact.ZERO ↑index)
+tail : field.wide_exact.WideExact
+htail : field.wide_exact.WideExact.mul_m31 (lookup ap1 field.wide_exact.WideExact.ZERO ↑index) QUARTER = ok tail
+ctail : A.canonicalE tail
+vtail : A.decodeE tail = A.decodeE (lookup ap1 field.wide_exact.WideExact.ZERO ↑index) * A.quarter
+term1 : field.wide_exact.WideExact
+ht1 : field.wide_exact.WideExact.mul data.low tail = ok term1
+ct1 : A.canonicalE term1
+vt1 : A.decodeE term1 = A.decodeE data.low * A.decodeE tail
+value1 : field.wide_exact.WideExact
+h1 : field.wide_exact.WideExact.add previous term1 = ok value1
+c1 : A.canonicalE value1
+v1 : A.decodeE value1 = A.decodeE previous + A.decodeE term1
+weights1 : Std.Array E 4#usize := Std.Array.set weights 1#usize value1
+product2 : field.wide_exact.WideExact
+hp2 : field.wide_exact.WideExact.mul data.low data.all = ok product2
+cp2 : A.canonicalE product2
+vp2 : A.decodeE product2 = A.decodeE data.low * A.decodeE data.all
+value2 : field.wide_exact.WideExact
+h2 : product2.mul_qm31 data.q4 = ok value2
+c2 : A.canonicalE value2
+v2 : A.decodeE value2 = A.decodeE product2 * A.embedding (A.decodeK data.q4)
+weights2 : Std.Array E 4#usize := weights1.set 2#usize value2
+product3 : field.wide_exact.WideExact
+hp3 : field.wide_exact.WideExact.mul data.low data.first2 = ok product3
+cp3 : A.canonicalE product3
+vp3 : A.decodeE product3 = A.decodeE data.low * A.decodeE data.first2
+scalar : field.QM31
+hs : field.QM31.mul data.q16 data.q4 = ok scalar
+cs : A.canonicalK scalar
+vs : A.decodeK scalar = A.decodeK data.q16 * A.decodeK data.q4
+value3 : field.wide_exact.WideExact
+h3 : product3.mul_qm31 scalar = ok value3
+c3 : A.canonicalE value3
+v3 : A.decodeE value3 = A.decodeE product3 * A.embedding (A.decodeK scalar)
+result : Std.Array E 4#usize := weights2.set 3#usize value3
+⊢ (do
+      let value1 ← field.wide_exact.WideExact.add (lookup weights field.wide_exact.WideExact.ZERO ↑1#usize) term1
+      let weights ← Array.update weights 1#usize value1
+      let weights ← weights.update 2#usize value2
+      weights.update 3#usize value3) =
+    ok result
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceSides.lean:84:4: error: unsolved goals
+case pos
+R S : Type
+inst✝² : CommSemiring R
+inst✝¹ : CommSemiring S
+inst✝ : Shared
+A : Arithmetic R S
+ap0 ap1 : Points
+q : K
+data : Prepared
+weights : Points
+hd : Valid A ap0 ap1 q data
+hw : Canonical A weights
+hap1 : ∀ j < 4, A.canonicalE (lookup ap1 field.wide_exact.WideExact.ZERO j)
+previous : E := lookup weights field.wide_exact.WideExact.ZERO 1
+hrw : Array.index_usize weights 1#usize = ok (lookup weights field.wide_exact.WideExact.ZERO ↑1#usize)
+index : Usize
+hindex : PERM.index_usize 3#usize = ok index
+hib : ↑index < 4
+hiv : ↑index = CuSavingsLibraSourcePerm.perm ↑3#usize
+hrp : Array.index_usize ap1 index = ok (lookup ap1 field.wide_exact.WideExact.ZERO ↑index)
+tail : field.wide_exact.WideExact
+htail : field.wide_exact.WideExact.mul_m31 (lookup ap1 field.wide_exact.WideExact.ZERO ↑index) QUARTER = ok tail
+ctail : A.canonicalE tail
+vtail : A.decodeE tail = A.decodeE (lookup ap1 field.wide_exact.WideExact.ZERO ↑index) * A.quarter
+term1 : field.wide_exact.WideExact
+ht1 : field.wide_exact.WideExact.mul data.low tail = ok term1
+ct1 : A.canonicalE term1
+vt1 : A.decodeE term1 = A.decodeE data.low * A.decodeE tail
+value1 : field.wide_exact.WideExact
+h1 : field.wide_exact.WideExact.add previous term1 = ok value1
+c1 : A.canonicalE value1
+v1 : A.decodeE value1 = A.decodeE previous + A.decodeE term1
+weights1 : Std.Array E 4#usize := Std.Array.set weights 1#usize value1
+product2 : field.wide_exact.WideExact
+hp2 : field.wide_exact.WideExact.mul data.low data.all = ok product2
+cp2 : A.canonicalE product2
+vp2 : A.decodeE product2 = A.decodeE data.low * A.decodeE data.all
+value2 : field.wide_exact.WideExact
+h2 : product2.mul_qm31 data.q4 = ok value2
+c2 : A.canonicalE value2
+v2 : A.decodeE value2 = A.decodeE product2 * A.embedding (A.decodeK data.q4)
+weights2 : Std.Array E 4#usize := weights1.set 2#usize value2
+product3 : field.wide_exact.WideExact
+hp3 : field.wide_exact.WideExact.mul data.low data.first2 = ok product3
+cp3 : A.canonicalE product3
+vp3 : A.decodeE product3 = A.decodeE data.low * A.decodeE data.first2
+scalar : field.QM31
+hs : field.QM31.mul data.q16 data.q4 = ok scalar
+cs : A.canonicalK scalar
+vs : A.decodeK scalar = A.decodeK data.q16 * A.decodeK data.q4
+value3 : field.wide_exact.WideExact
+h3 : product3.mul_qm31 scalar = ok value3
+c3 : A.canonicalE value3
+v3 : A.decodeE value3 = A.decodeE product3 * A.embedding (A.decodeK scalar)
+result : Std.Array E 4#usize := weights2.set 3#usize value3
+hpow : A.embedding (A.decodeK q) ^ 16 * A.embedding (A.decodeK q) ^ 4 = A.embedding (A.decodeK q) ^ 20
+a✝ : 1 < 4
+⊢ (if 1 = 3 then lowValue A ap0 q * (highTerm A ap1 q 0 + highTerm A ap1 q 1) * A.embedding (A.decodeK q) ^ 20
+    else
+      if 1 = 2 then
+        lowValue A ap0 q * (highTerm A ap1 q 0 + highTerm A ap1 q 1 + highTerm A ap1 q 2 + highTerm A ap1 q 3) *
+          A.embedding (A.decodeK q) ^ 4
+      else
+        A.decodeE (lookup weights field.wide_exact.WideExact.ZERO 1) +
+          lowValue A ap0 q *
+            (A.decodeE (lookup ap1 field.wide_exact.WideExact.ZERO (CuSavingsLibraSourcePerm.perm ↑3#usize)) *
+              A.quarter)) =
+    if 1 = 3 then lowValue A ap0 q * (highTerm A ap1 q 0 + highTerm A ap1 q 1) * A.embedding (A.decodeK q) ^ 20
+    else
+      if 1 = 2 then
+        lowValue A ap0 q * (highTerm A ap1 q 0 + highTerm A ap1 q 1 + highTerm A ap1 q 2 + highTerm A ap1 q 3) *
+          A.embedding (A.decodeK q) ^ 4
+      else
+        A.decodeE (lookup weights field.wide_exact.WideExact.ZERO 1) +
+          lowValue A ap0 q *
+            (A.decodeE (lookup ap1 field.wide_exact.WideExact.ZERO (CuSavingsLibraSourcePerm.perm 3)) * A.quarter)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceSides.lean:68:31: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵u̵S̵a̵v̵i̵n̵g̵s̵L̵i̵b̵r̵a̵S̵o̵u̵r̵c̵e̵T̵e̵r̵m̵s̵.̵p̵e̵r̵m̵_̵e̵q̵,̵C̵u̵S̵a̵v̵i̵n̵g̵s̵L̵i̵b̵r̵a̵S̵o̵u̵r̵c̵e̵T̵e̵r̵m̵s̵.̵q̵u̵a̵r̵t̵e̵r̵_̵e̵q̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵h̵r̵w̵,̵h̵i̵n̵d̵e̵x̵,̵h̵r̵p̵,̵h̵t̵a̵i̵l̵,̵h̵t̵1̵,̵h̵1̵,̵h̵p̵2̵,̵h̵2̵,̵h̵p̵3̵,̵h̵s̵,̵h̵3̵,̵[̲C̲u̲S̲a̲v̲i̲n̲g̲s̲L̲i̲b̲r̲a̲S̲o̲u̲r̲c̲e̲T̲e̲r̲m̲s̲.̲p̲e̲r̲m̲_̲e̲q̲,̲ ̲C̲u̲S̲a̲v̲i̲n̲g̲s̲L̲i̲b̲r̲a̲S̲o̲u̲r̲c̲e̲T̲e̲r̲m̲s̲.̲q̲u̲a̲r̲t̲e̲r̲_̲e̲q̲,̲ ̲h̲r̲w̲,̲ ̲h̲i̲n̲d̲e̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲r̲p̲,̲ ̲h̲t̲a̲i̲l̲,̲ ̲h̲t̲1̲,̲ ̲h̲p̲2̲,̲ ̲h̲2̲,̲ ̲h̲p̲3̲,̲ ̲h̲s̲,̲ ̲h̲3̲,̲ update w̵e̵i̵g̵h̵t̵s̵ ̵1̵#̵u̵s̵i̵z̵e̵ ̵v̵a̵l̵u̵e̵1̵ ̵(̵b̵y̵ ̵s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵u̵p̵d̵a̵t̵e̵w̲e̲i̲g̲h̲t̲s̲ ̲1̲#̲u̲s̲i̲z̲e̲ ̲v̲a̲l̲u̲e̲1̲ ̲(̲b̲y̲ ̲s̲c̲a̲l̲a̲r̲_̲t̲a̲c̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲u̲p̲d̲a̲t̲e̲ weights1 2#usize value2 (by scalar_tac),
+        update weights2 3#usize value3 (by s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵s̲c̲a̲l̲a̲r̲_̲t̲a̲c̲)̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceSides.lean:69:6: warning: This simp argument is unused:
+  update weights 1#usize value1 (by scalar_tac)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵u̵S̵a̵v̵i̵n̵g̵s̵L̵i̵b̵r̵a̵S̵o̵u̵r̵c̵e̵T̵e̵r̵m̵s̵.̵p̵e̵r̵m̵_̵e̵q̵,̵C̵u̵S̵a̵v̵i̵n̵g̵s̵L̵i̵b̵r̵a̵S̵o̵u̵r̵c̵e̵T̵e̵r̵m̵s̵.̵q̵u̵a̵r̵t̵e̵r̵_̵e̵q̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵h̵r̵w̵,̵h̵i̵n̵d̵e̵x̵,̵h̵r̵p̵,̵h̵t̵a̵i̵l̵,̵h̵t̵1̵,̵h̵1̵,̵h̵p̵2̵,̵h̵2̵,̵h̵p̵3̵,̵h̵s̵,̵h̵3̵,̵[̲C̲u̲S̲a̲v̲i̲n̲g̲s̲L̲i̲b̲r̲a̲S̲o̲u̲r̲c̲e̲T̲e̲r̲m̲s̲.̲p̲e̲r̲m̲_̲e̲q̲,̲ ̲C̲u̲S̲a̲v̲i̲n̲g̲s̲L̲i̲b̲r̲a̲S̲o̲u̲r̲c̲e̲T̲e̲r̲m̲s̲.̲q̲u̲a̲r̲t̲e̲r̲_̲e̲q̲,̲ ̲h̲r̲w̲,̲ ̲h̲i̲n̲d̲e̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲r̲p̲,̲ ̲h̲t̲a̲i̲l̲,̲ ̲h̲t̲1̲,̲ ̲h̲1̲,̲ ̲h̲p̲2̲,̲ ̲h̲2̲,̲ ̲h̲p̲3̲,̲ ̲h̲s̲,̲ ̲h̲3̲,̲ update w̵e̵i̵g̵h̵t̵s̵ ̵1̵#̵u̵s̵i̵z̵e̵ ̵v̵a̵l̵u̵e̵1̵ ̵(̵b̵y̵ ̵s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵u̵p̵d̵a̵t̵e̵ ̵weights1 2#usize value2 (by scalar_tac),
+        update weights2 3#usize value3 (by s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵s̲c̲a̲l̲a̲r̲_̲t̲a̲c̲)̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceSides.lean:69:52: warning: This simp argument is unused:
+  update weights1 2#usize value2 (by scalar_tac)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵u̵S̵a̵v̵i̵n̵g̵s̵L̵i̵b̵r̵a̵S̵o̵u̵r̵c̵e̵T̵e̵r̵m̵s̵.̵p̵e̵r̵m̵_̵e̵q̵,̵C̵u̵S̵a̵v̵i̵n̵g̵s̵L̵i̵b̵r̵a̵S̵o̵u̵r̵c̵e̵T̵e̵r̵m̵s̵.̵q̵u̵a̵r̵t̵e̵r̵_̵e̵q̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵h̵r̵w̵,̵h̵i̵n̵d̵e̵x̵,̵h̵r̵p̵,̵h̵t̵a̵i̵l̵,̵h̵t̵1̵,̵h̵1̵,̵h̵p̵2̵,̵h̵2̵,̵h̵p̵3̵,̵h̵s̵,̵h̵3̵,̵[̲C̲u̲S̲a̲v̲i̲n̲g̲s̲L̲i̲b̲r̲a̲S̲o̲u̲r̲c̲e̲T̲e̲r̲m̲s̲.̲p̲e̲r̲m̲_̲e̲q̲,̲ ̲C̲u̲S̲a̲v̲i̲n̲g̲s̲L̲i̲b̲r̲a̲S̲o̲u̲r̲c̲e̲T̲e̲r̲m̲s̲.̲q̲u̲a̲r̲t̲e̲r̲_̲e̲q̲,̲ ̲h̲r̲w̲,̲ ̲h̲i̲n̲d̲e̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲r̲p̲,̲ ̲h̲t̲a̲i̲l̲,̲ ̲h̲t̲1̲,̲ ̲h̲1̲,̲ ̲h̲p̲2̲,̲ ̲h̲2̲,̲ ̲h̲p̲3̲,̲ ̲h̲s̲,̲ ̲h̲3̲,̲ update weights 1#usize value1 (by s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵u̵p̵d̵a̵t̵e̵ ̵w̵e̵i̵g̵h̵t̵s̵1̵ ̵2̵#̵u̵s̵i̵z̵e̵ ̵v̵a̵l̵u̵e̵2̵ ̵(̵b̵y̵ ̵scalar_tac),
+        update weights2 3#usize value3 (by s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵s̲c̲a̲l̲a̲r̲_̲t̲a̲c̲)̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceSides.lean:70:6: warning: This simp argument is unused:
+  update weights2 3#usize value3 (by scalar_tac)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵u̵S̵a̵v̵i̵n̵g̵s̵L̵i̵b̵r̵a̵S̵o̵u̵r̵c̵e̵T̵e̵r̵m̵s̵.̵p̵e̵r̵m̵_̵e̵q̵,̵C̵u̵S̵a̵v̵i̵n̵g̵s̵L̵i̵b̵r̵a̵S̵o̵u̵r̵c̵e̵T̵e̵r̵m̵s̵.̵q̵u̵a̵r̵t̵e̵r̵_̵e̵q̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵h̵r̵w̵,̵h̵i̵n̵d̵e̵x̵,̵h̵r̵p̵,̵h̵t̵a̵i̵l̵,̵h̵t̵1̵,̵h̵1̵,̵h̵p̵2̵,̵h̵2̵,̵h̵p̵3̵,̵h̵s̵,̵h̵3̵,̵[̲C̲u̲S̲a̲v̲i̲n̲g̲s̲L̲i̲b̲r̲a̲S̲o̲u̲r̲c̲e̲T̲e̲r̲m̲s̲.̲p̲e̲r̲m̲_̲e̲q̲,̲ ̲C̲u̲S̲a̲v̲i̲n̲g̲s̲L̲i̲b̲r̲a̲S̲o̲u̲r̲c̲e̲T̲e̲r̲m̲s̲.̲q̲u̲a̲r̲t̲e̲r̲_̲e̲q̲,̲ ̲h̲r̲w̲,̲ ̲h̲i̲n̲d̲e̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲r̲p̲,̲ ̲h̲t̲a̲i̲l̲,̲ ̲h̲t̲1̲,̲ ̲h̲1̲,̲ ̲h̲p̲2̲,̲ ̲h̲2̲,̲ ̲h̲p̲3̲,̲ ̲h̲s̲,̲ ̲h̲3̲,̲ update w̵e̵i̵g̵h̵t̵s̵ ̵1̵#̵u̵s̵i̵z̵e̵ ̵v̵a̵l̵u̵e̵1̵ ̵(̵b̵y̵ ̵s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵u̵p̵d̵a̵t̵e̵w̲e̲i̲g̲h̲t̲s̲ ̲1̲#̲u̲s̲i̲z̲e̲ ̲v̲a̲l̲u̲e̲1̲ ̲(̲b̲y̲ ̲s̲c̲a̲l̲a̲r̲_̲t̲a̲c̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲u̲p̲d̲a̲t̲e̲ weights1 2#usize value2 (by scalar_tac), u̵p̵d̵a̵t̵e̵ ̵w̵e̵i̵g̵h̵t̵s̵2̵ ̵3̵#̵u̵s̵i̵z̵e̵ ̵v̵a̵l̵u̵e̵3̵ ̵(̵b̵y̵ ̵s̵c̵a̵l̵a̵r̵_̵t̵a̵c̵)̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsLibraSourceSides.side0_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsLibraSourceSides.side1_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

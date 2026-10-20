@@ -1,0 +1,152 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:19:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsLibraSourceScalar.partialSum_succ`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:36:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let we ←
+      loop
+          (fun x =>
+            match x with
+            | (state, acc, c) => do
+              let (entry, state1) ← (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize).next state
+              match entry with
+                | none => ok (done acc)
+                | some item => do
+                  let (acc1, c1) ←
+                    Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut c
+                        (acc, item)
+                  ok (cont (state1, acc1, c1)))
+          ({ start := 0#usize, «end» := 4#usize }, field.wide_exact.WideExact.ZERO, p, f)
+    we.mul_m31 QUARTER
+is not definitionally equal to the right-hand side
+  do
+    let value ←
+      loop
+          (fun x =>
+            match x with
+            | (iter, acc, c) => do
+              let (entry, iter1) ← (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize).next iter
+              match entry with
+                | none => ok (done acc)
+                | some i => do
+                  let (acc1, c1) ←
+                    Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut c
+                        (acc, i)
+                  ok (cont (iter1, acc1, c1)))
+          ({ start := 0#usize, «end» := 4#usize }, field.wide_exact.WideExact.ZERO, p, f)
+    field.wide_exact.WideExact.mul_m31 value QUARTER
+
+inst✝ : Shared
+f : Powers
+p : Points
+⊢ (do
+      let we ←
+        loop
+            (fun x =>
+              match x with
+              | (state, acc, c) => do
+                let (entry, state1) ← (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize).next state
+                match entry with
+                  | none => ok (done acc)
+                  | some item => do
+                    let (acc1, c1) ←
+                      Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut c
+                          (acc, item)
+                    ok (cont (state1, acc1, c1)))
+            ({ start := 0#usize, «end» := 4#usize }, field.wide_exact.WideExact.ZERO, p, f)
+      we.mul_m31 QUARTER) =
+    do
+    let value ←
+      loop
+          (fun x =>
+            match x with
+            | (iter, acc, c) => do
+              let (entry, iter1) ← (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize).next iter
+              match entry with
+                | none => ok (done acc)
+                | some i => do
+                  let (acc1, c1) ←
+                    Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut c
+                        (acc, i)
+                  ok (cont (iter1, acc1, c1)))
+          ({ start := 0#usize, «end» := 4#usize }, field.wide_exact.WideExact.ZERO, p, f)
+    field.wide_exact.WideExact.mul_m31 value QUARTER
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:77:23: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.done` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `ForInStep.done`
+  [apply] `Lean.Doc.done`
+  [apply] `Lean.TransformStep.done`
+  [apply] `ProofWidgets.CheckRequestResponse.done`
+  [apply] `Std.CancellationContext.done`
+  [apply] `Std.IterStep.done`
+  [apply] `Std.PlausibleIterStep.done`
+  [apply] `done`
+  [apply] `StepStar.TaskOrDone.done`
+  [apply] `ByteArray.utf8DecodeChar?.FirstByte.done`
+  [apply] `Lean.Elab.Tactic.done`
+  [apply] `Lean.Expr.FindStep.done`
+  [apply] `Lean.Parser.Tactic.done`
+  [apply] `Lean.PersistentHashMap.Zipper.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.done`
+  [apply] `Lean.Elab.Tactic.Grind.done`
+  [apply] `Lean.Meta.Grind.Action.done`
+  [apply] `Lean.Meta.Simp.Step.done`
+  [apply] `Lean.Meta.Simp.StepQ.done`
+  [apply] `Lean.Parser.Tactic.Grind.done`
+  [apply] `Std.DTreeMap.Internal.Zipper.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.below.done`
+  [apply] `Lean.Language.SnapshotTree.foldSnaps.Control.done`
+  [apply] `Std.Iterators.Types.Drop.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.DropWhile.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.FilterMap.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.Take.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.TakeWhile.PlausibleStep.done`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:80:15: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.cont` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `cont`
+  [apply] `Lean.Meta.DeltaStepResult.cont`
+  [apply] `Std.Async.Selectable.cont`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:113:23: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.done` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `ForInStep.done`
+  [apply] `Lean.Doc.done`
+  [apply] `Lean.TransformStep.done`
+  [apply] `ProofWidgets.CheckRequestResponse.done`
+  [apply] `Std.CancellationContext.done`
+  [apply] `Std.IterStep.done`
+  [apply] `Std.PlausibleIterStep.done`
+  [apply] `done`
+  [apply] `StepStar.TaskOrDone.done`
+  [apply] `ByteArray.utf8DecodeChar?.FirstByte.done`
+  [apply] `Lean.Elab.Tactic.done`
+  [apply] `Lean.Expr.FindStep.done`
+  [apply] `Lean.Parser.Tactic.done`
+  [apply] `Lean.PersistentHashMap.Zipper.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.done`
+  [apply] `Lean.Elab.Tactic.Grind.done`
+  [apply] `Lean.Meta.Grind.Action.done`
+  [apply] `Lean.Meta.Simp.Step.done`
+  [apply] `Lean.Meta.Simp.StepQ.done`
+  [apply] `Lean.Parser.Tactic.Grind.done`
+  [apply] `Std.DTreeMap.Internal.Zipper.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.below.done`
+  [apply] `Lean.Language.SnapshotTree.foldSnaps.Control.done`
+  [apply] `Std.Iterators.Types.Drop.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.DropWhile.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.FilterMap.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.Take.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.TakeWhile.PlausibleStep.done`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsLibraSourceScalar.lean:116:15: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.cont` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `cont`
+  [apply] `Lean.Meta.DeltaStepResult.cont`
+  [apply] `Std.Async.Selectable.cont`
+'AspisR1.CuSavingsLibraSourceScalar.fold_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsLibraSourceScalar.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
