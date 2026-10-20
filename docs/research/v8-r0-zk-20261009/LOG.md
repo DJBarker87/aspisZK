@@ -6953,3 +6953,18 @@ tree; a shared module is the next hygiene step), carrier transport,
 source-loop simulation, normalisation and the execution-log correspondence
 — the same items R-wire/R13 carry on the soundness side. No premise is
 fully discharged yet; each now names its exact remaining fact.
+
+### Lead acceptance of the shared binary record grammar (2026-10-20); D81
+
+Codex job cx-shared-grammar (1f557c18f) is cherry-picked. One module of
+record, `docs/research/100bit-spend-path-20261013/lean/SharedBinaryRecordGrammar.lean`
+(node 0x12 ‖ two children, leaf tag/salt layout, the D79 record classes and
+lengths), enters the unified manifest; two bridging modules prove the
+privacy `LayoutR1PBin.nodeBytes`/leaf layout/wire tables and the soundness
+`BinMerkle32Path.nodeInput`/leaf grammar equal to it (with the explicit
+Fin 256 → UInt8 transport). All three compile in env J (and the soundness
+bridge locally); 21 audits, standard axioms, 0 swaps. The dependent privacy
+roots were fingerprint-refused (unchanged inputs), so their builds stand.
+Existing separation proofs carry over by rewriting; no statement changed.
+The two trees now share one grammar; the remaining cross-tree item is the
+R-wire execution correspondence.
