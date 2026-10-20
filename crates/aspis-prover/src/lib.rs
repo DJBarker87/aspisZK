@@ -1612,3 +1612,6 @@ pub mod r0_fixture;
 // D92: proof-only shared byte random oracle; absent from shipped builds.
 #[cfg(kani)]
 mod prover_commit_oracle;
+
+#[cfg(any(kani, aeneas_ref))]
+mod prover_commit_reference;

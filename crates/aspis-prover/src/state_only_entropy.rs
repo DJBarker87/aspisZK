@@ -1340,4 +1340,25 @@ mod prover_commit_rom {
         assert_eq!(reserved.derive_pool_v1_leaf_salt(crate::HOST_HASH, context, tag, index), Ok(expected));
     }
 
+    #[kani::proof]
+    #[kani::unwind(514)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn source_limb() {
+        // At most three fresh blocks per side from any valid word slot.
+        rom::reset(6);
+        let seed: [u8; 32] = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8; 32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        let state = crate::prover_commit_reference::State { seed, counter, block, word };
+        let (expected, after) = crate::prover_commit_reference::limb(crate::HOST_HASH, b"aspis:state-only:profile21:source-expand:v1", state);
+        let mut actual = Profile21SourceExpander { hash: crate::HOST_HASH, seed: Zeroizing::new(seed), counter, block, word };
+        assert_eq!(actual.m31(), expected);
+        assert_eq!(*actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+    }
+
 }
