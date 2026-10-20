@@ -1,0 +1,7 @@
+# Current finish arithmetic and equality joins
+
+PROVED: the exact derived Rust WideExact equality exposed by an isolated wrapper returns true only for identical raw records, without a canonicality premise. Both generated nested equality bodies and their short-circuit order are retained; the proof module removes only generated resource override lines, imports the same checked Types owner as current arithmetic, and appends proofs. The wrapper does not change production or prove full caller reachability.
+
+PROVED: explicit inverse record conversions connect the finish candidate ABI to current extracted arithmetic. Current add/scale return canonical outputs with exact field meaning. The checked finish-round candidate now yields the numeric guard equation x0+x4=claim*536870912 using the actual current arithmetic, literal source quarter, and derived raw equality. No assumed arithmetic or equality-law premise remains. Successful field-selector canonicality at offsets0 and4 is still explicit here; polynomial/pairing/dot backends, candidate equivalence/adoption, complete frozen caller and runtime remain OPEN.
+
+Three focused NUC targets and nine standard-only axiom reports passed under -M4400/default options, High1GiB/Max2GiB/Swap0. The initial local-source proof attempt had an extra tactic after congr closed the goal; only that tactic tail was removed for the accepted v2. No unchanged replay or whole-manifest build was used. No binary artifacts or production edits.
