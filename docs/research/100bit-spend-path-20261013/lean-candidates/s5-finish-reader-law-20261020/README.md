@@ -1,0 +1,7 @@
+# Finish dot law from individual source read interpretations
+
+PROVED source-model component refinement. queryProductWide_eq_mul_embedding identifies the retained E-by-K term with multiplication by the actual QM31-to-wide algebra embedding. successful_finish_dot_of_reader_interpretation applies the indexed source trace: if the consumed weight slice has64 entries and each reached parser/weight read interprets the supplied model coefficient/weight at that same index, the returned successful finish dot equals the64-coordinate model dot product.
+
+The complete dot equality is a conclusion, not a premise. Actual parser and weight read successes, complete traversal, ascending index identity and the output product sum all come from the successful kernel call through the existing indexed-source theorem. The remaining assumptions are explicitly length64 and interpretation of individual reads; authenticated final-message/reader binding, finalized weight meanings and actual enclosing Stage2 backend/caller instantiation remain open. This does not close full R14, S5 caller refinement, runtime or global100-bit soundness.
+
+Focused NUC Lean4.32 check passed -j1 -M4400,High1GiB/Max2GiB/Swap0,1.907s,cgroup peak385236992B,standard axioms only. Earlier drafts had a tower-alias instance mismatch and substituted n=weightLength before n=64; explicit exact base-field typing and function congruence fix these without resource-option changes. Exact source/object/import/compiler/command/admission/resource evidence retained. No package replay or production changes.
