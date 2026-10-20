@@ -47,7 +47,7 @@
       "line": 375,
       "sha256": "47e1f58fde8c0eb0f4984049bb07a1a75c95a6e73cd00880ec5e9b77b593d0d1",
       "body_edit": "none",
-      "attributes": "#[kani::requires(bytes.len()<=4880 && bytes.len()>=160 && at<=bytes.len()-160)]\n#[kani::ensures(|r:&Result<([K;10],usize),Error>| r.as_ref().map_or(true, |(ks,end)| *end==at+160 && ks.iter().all(|x| k_ok(*x))))]"
+      "attributes": "#[kani::requires(bytes.len()<=4880 && bytes.len()>=160 && at<=bytes.len()-160)]\n#[kani::ensures(|r:&Result<([K;10],usize),Error>| r.as_ref().map_or(true, |(ks,end)| *end==at+160 && k_ok(ks[0]) && k_ok(ks[1]) && k_ok(ks[2]) && k_ok(ks[3]) && k_ok(ks[4]) && k_ok(ks[5]) && k_ok(ks[6]) && k_ok(ks[7]) && k_ok(ks[8]) && k_ok(ks[9])))]"
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
@@ -56,6 +56,12 @@
       "sha256": "1db3ac2f95869b25b000d211488dae053ca25ccf35f81a148b74d826fab519e1",
       "body_edit": "none",
       "attributes": "#[kani::requires(bytes.len()<=4880 && weights.len()<=256 && 16*weights.len()<=bytes.len() && at<=bytes.len()-16*weights.len())]\n#[kani::ensures(|r:&Result<(Vec<K>,usize),Error>| r.as_ref().map_or(true, |(ks,end)| ks.len()==old(weights.len()) && *end==at+16*ks.len() && ks.iter().all(|x| k_ok(*x))))]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "read_checkpoint_weights::iteration",
+      "body_edit": "lift four statements into read_one_weight; at:*at and *at=reader.at, plus Ok(()); preserves early error and write order",
+      "sha256": "1db3ac2f95869b25b000d211488dae053ca25ccf35f81a148b74d826fab519e1"
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
@@ -83,7 +89,7 @@
     }
   ],
   "generated": {
-    "lib.rs": "16fa5dbd60acb7afd8ca4500fb0cf8c8fa2b7e2a8b438caca1b00ed585e576c0",
+    "lib.rs": "150fdb2159de567b1574a5384a29c6a404f0a197509489f29df4ec05e464135c",
     "Cargo.toml": "f5905ddc2202cb7b13fb0263fe1b115422e7a70dc98cb118b3af2fbd1ea75cdf"
   },
   "context": "Exact copied bodies, source-shaped field structs and Error::Checkpoint only. Contracts are added attributes; no shipped edits. This is not a Charon/Aeneas or ELF refinement proof. Finite harness extents are recorded separately; contract syntax is not universal proof evidence."

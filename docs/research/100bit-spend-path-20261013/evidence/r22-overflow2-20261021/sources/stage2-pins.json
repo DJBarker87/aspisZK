@@ -1,0 +1,90 @@
+{
+  "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "declarations": [
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "M31::from_le_bytes",
+      "line": 239,
+      "sha256": "61801dea89bcc6f411c3b373fcf966d9f257f4ca5b251f4b896c1c428c1102b7",
+      "body_edit": "none",
+      "attributes": "#[kani::ensures(|r:&Option<M31>| r.as_ref().map_or(true, |x| x.0<P))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "CM31::from_le_bytes",
+      "line": 410,
+      "sha256": "9339c7b25fa5476fad3aed6ecf65112ddf503bbdc5155e8d0bd4792f54b94ccd",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(bytes.len()==8)]\n#[kani::ensures(|r:&Option<CM31>| r.as_ref().map_or(true, |x| cm_ok(*x)))]"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "owner": "QM31::from_le_bytes",
+      "line": 1022,
+      "sha256": "3e58a8f03ca2ece6801dbfee02fa6b119fcde8c9f3240ab4f0c5e9e0e2b22a56",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(bytes.len()==16)]\n#[kani::ensures(|r:&Option<QM31>| r.as_ref().map_or(true, |x| k_ok(*x)))]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "Reader<'a>::raw",
+      "line": 344,
+      "sha256": "1dfd358e3d4fb3651e0254d7b1cefc4c80134b8f413060506cea75af7629dc4b",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(N<=32 && self.bytes.len()<=4880 && N<=self.bytes.len() && self.at<=self.bytes.len()-N)]\n#[kani::modifies(&mut self.at)]\n#[kani::ensures(|_r:&[u8;N]| self.at==old(self.at)+N && self.at<=self.bytes.len())]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "Reader<'a>::k",
+      "line": 347,
+      "sha256": "4315bd6550f53c55a204c14f3252f1a47b9596bcc312704eb998eb87cdd6fa9d",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(self.bytes.len()<=4880 && self.bytes.len()>=16 && self.at<=self.bytes.len()-16)]\n#[kani::modifies(&mut self.at)]\n#[kani::ensures(|r:&Result<K,Error>| self.at==old(self.at)+16 && r.as_ref().map_or(true, |x| k_ok(*x)))]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "read_checkpoint_semantic_alpha",
+      "line": 375,
+      "sha256": "47e1f58fde8c0eb0f4984049bb07a1a75c95a6e73cd00880ec5e9b77b593d0d1",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(bytes.len()<=4880 && bytes.len()>=160 && at<=bytes.len()-160)]\n#[kani::ensures(|r:&Result<([K;10],usize),Error>| r.as_ref().map_or(true, |(ks,end)| *end==at+160 && ks.iter().all(|x| k_ok(*x))))]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "read_checkpoint_weights",
+      "line": 363,
+      "sha256": "1db3ac2f95869b25b000d211488dae053ca25ccf35f81a148b74d826fab519e1",
+      "body_edit": "none",
+      "attributes": "#[kani::requires(bytes.len()<=4880 && weights.len()<=256 && 16*weights.len()<=bytes.len() && at<=bytes.len()-16*weights.len())]\n#[kani::ensures(|r:&Result<(Vec<K>,usize),Error>| r.as_ref().map_or(true, |(ks,end)| ks.len()==old(weights.len()) && *end==at+16*ks.len() && ks.iter().all(|x| k_ok(*x))))]"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "residue_limb_at",
+      "line": 231,
+      "sha256": "3c5a08ca4bb87cff68e45a3053c19b362a71c6a1826b043810eca16c141654c2",
+      "body_edit": "none",
+      "attributes": ""
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "power_limb_at",
+      "line": 233,
+      "sha256": "9c5f9f10878149a246a2b8ef0d302de32547afc9cb65df5cd901dccea8b88879",
+      "body_edit": "none",
+      "attributes": ""
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "owner": "update_residue_row",
+      "line": 235,
+      "sha256": "c41e4a73f9e82be3deabe0d7fdcd4c91700079864b2b049a3a8e05f4f05a71d0",
+      "body_edit": "for limb in row -> for limb in &mut *row: explicit reborrow required by Kani contract macro; identical iter_mut traversal",
+      "attributes": "#[kani::requires(k_ok(power) && basis.0<P)]\n#[kani::requires(row_bound(row,if flush {B+3*C} else {B+2*C}))]\n#[kani::modifies(row)]\n#[kani::ensures(|_:&()| row_bound(row,if flush {B} else {B+3*C}))]"
+    }
+  ],
+  "generated": {
+    "lib.rs": "2b9ac3a9daac9950b751fb7e57e9a3b4ca46abbf0935c465b18e78e2c3dd90a9",
+    "Cargo.toml": "f5905ddc2202cb7b13fb0263fe1b115422e7a70dc98cb118b3af2fbd1ea75cdf"
+  },
+  "context": "Exact copied bodies, source-shaped field structs and Error::Checkpoint only. Contracts are added attributes; no shipped edits. This is not a Charon/Aeneas or ELF refinement proof. Finite harness extents are recorded separately; contract syntax is not universal proof evidence."
+}

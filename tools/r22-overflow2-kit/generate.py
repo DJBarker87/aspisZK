@@ -48,17 +48,37 @@ s+='''#[kani::proof_for_contract(Reader::k)]
 fn reader_k() {let b:[u8;4880]=kani::any();let len:usize=kani::any();kani::assume(len<=4880);let mut r=Reader{bytes:&b[..len],at:kani::any()};r.k();}
 '''
 s+=get(V,'read_checkpoint_semantic_alpha', '''#[kani::requires(bytes.len()<=4880 && bytes.len()>=160 && at<=bytes.len()-160)]
-#[kani::ensures(|r:&Result<([K;10],usize),Error>| r.as_ref().map_or(true, |(ks,end)| *end==at+160 && ks.iter().all(|x| k_ok(*x))))]''')
+#[kani::ensures(|r:&Result<([K;10],usize),Error>| r.as_ref().map_or(true, |(ks,end)| *end==at+160 && k_ok(ks[0]) && k_ok(ks[1]) && k_ok(ks[2]) && k_ok(ks[3]) && k_ok(ks[4]) && k_ok(ks[5]) && k_ok(ks[6]) && k_ok(ks[7]) && k_ok(ks[8]) && k_ok(ks[9])))]''')
 s+='''#[kani::proof_for_contract(read_checkpoint_semantic_alpha)] #[kani::unwind(12)]
 #[kani::stub_verified(Reader::k)]
-fn semantic_alpha() {let b:[u8;192]=kani::any();read_checkpoint_semantic_alpha(&b,kani::any());}
+fn semantic_alpha() {let b:[u8;4880]=kani::any();let len:usize=kani::any();kani::assume(len<=4880);read_checkpoint_semantic_alpha(&b[..len],kani::any());}
 '''
 s+=get(V,'read_checkpoint_weights','''#[kani::requires(bytes.len()<=4880 && weights.len()<=256 && 16*weights.len()<=bytes.len() && at<=bytes.len()-16*weights.len())]
 #[kani::ensures(|r:&Result<(Vec<K>,usize),Error>| r.as_ref().map_or(true, |(ks,end)| ks.len()==old(weights.len()) && *end==at+16*ks.len() && ks.iter().all(|x| k_ok(*x))))]''')
-s+='''#[kani::proof_for_contract(read_checkpoint_weights)] #[kani::unwind(6)]
+s+='''#[kani::proof_for_contract(read_checkpoint_weights)] #[kani::unwind(258)]
 #[kani::stub_verified(Reader::k)]
-fn checkpoint_weights4() {let b:[u8;96]=kani::any(); let w=kani::vec::any_vec::<K,4>(); read_checkpoint_weights(&b,kani::any(),w);}
+fn checkpoint_weights256() {let b:[u8;4880]=kani::any(); let w=kani::vec::any_vec::<K,256>(); let len:usize=kani::any();kani::assume(len<=4880);read_checkpoint_weights(&b[..len],kani::any(),w);}
 '''
+# One exact iterator body, lifted to a function contract (reference reborrows only).
+s+="""#[kani::requires(bytes.len()<=4880 && bytes.len()>=16 && *at<=bytes.len()-16)]
+#[kani::modifies(at,out)]
+#[kani::ensures(|r:&Result<(),Error>| r.is_err() || (*at==old(*at)+16 && k_ok(*out)))]
+fn read_one_weight(bytes:&[u8],at:&mut usize,out:&mut K)->Result<(),Error> {
+    let mut reader=Reader{bytes,at:*at};
+    let value=reader.k()?;
+    *at=reader.at;
+    *out=value;
+    Ok(())
+}
+#[kani::proof_for_contract(read_one_weight)]
+#[kani::stub_verified(Reader::k)]
+fn weight_body() {let b:[u8;4880]=kani::any();let len:usize=kani::any();kani::assume(len<=4880);let mut at=kani::any();let mut out=kani::any();read_one_weight(&b[..len],&mut at,&mut out);}
+"""
+# Validate the lift against the exact original body. Not a source-language equivalence theorem.
+wbody=fn(blob(V),'read_checkpoint_weights')[0]
+assert 'let mut reader=Reader{bytes,at};' in wbody and 'let value=reader.k()?;' in wbody and 'at=reader.at;' in wbody and '*out=value;' in wbody
+pins.append(dict(path=V,owner='read_checkpoint_weights::iteration',body_edit='lift four statements into read_one_weight; at:*at and *at=reader.at, plus Ok(()); preserves early error and write order',sha256=sha(wbody.encode())))
+
 # Exact numerical row, with actual four correlated limb products, unlike pass one.
 s+=get(V,'residue_limb_at')+get(V,'power_limb_at')
 s+='''const B:u64=1<<34;

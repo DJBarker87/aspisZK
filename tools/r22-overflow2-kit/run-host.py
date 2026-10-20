@@ -16,5 +16,5 @@ assert used+8*2**30<=55*2**30,('host reservation exceeds safe limit',used)
 out=BASE/'receipts'/attempt
 assert not out.exists(),'immutable attempt exists'
 print(json.dumps(dict(attempt=attempt,harness=harness,other_memory_max_bytes=used)),flush=True)
-cmd=['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(BASE/'capped.py'),str(out),'--','env','PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS=4','timeout','--signal=TERM','--kill-after=10s','240s','/home/dombarker/.cargo/bin/cargo-kani','kani','--lib','--exact','--harness',harness,'--no-assertion-reach-checks','--default-unwind','34','--output-format','old','-Z','function-contracts','-Z','stubbing']
+cmd=['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(BASE/'capped.py'),str(out),'--','env','PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS=4','timeout','--signal=TERM','--kill-after=10s','240s','/home/dombarker/.cargo/bin/cargo-kani','kani','--lib','--exact','--harness',harness,'--no-assertion-reach-checks','--default-unwind','34','--output-format','old','-Z','function-contracts','-Z','stubbing','-Z','unstable-options','--cbmc-args','--object-bits','10']
 sys.exit(subprocess.run(cmd,cwd=BASE/'generated').returncode)
