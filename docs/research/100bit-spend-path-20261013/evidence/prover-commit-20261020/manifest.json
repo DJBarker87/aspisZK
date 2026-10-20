@@ -1,0 +1,218 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "source_revision": "6bb2b9cb1f2517b51763ed09b16b8716d3226caa",
+  "status": "blocked-on-translation",
+  "branch": "codex/cx-prover-commit-20261020",
+  "frozen_verifier": "b2727acd3",
+  "scope": "Actual prover derive_private_salts cone; no production changes",
+  "blocker": {
+    "source": "crates/aspis-r1-cost-probe/src/prover.rs:191-195",
+    "compiler": "interp/InterpAbs.ml:191",
+    "diagnostic": "Unexpected",
+    "stage": "loop fixed-point context joining / convert_value_to_abstractions",
+    "exit": 2,
+    "memory_failure": false
+  },
+  "lean": {
+    "environment": "J",
+    "reserved_attempt_range": [
+      8100,
+      8399
+    ],
+    "attempts_used": [],
+    "new_modules": [],
+    "changed_roots": [],
+    "axioms": "N/A; no generated Lean or proof claims"
+  },
+  "discharged_checklist_rows": [],
+  "llbc": {
+    "path": "/home/dombarker/project-offloads/codex-cx-prover-commit-20261020/extraction/ProverCommit.llbc",
+    "sha256": "0245f16895211f4153fe3e473a4cb6ca990a6a1d9a40852c46f2d5e07ad12290",
+    "bytes": 991844
+  },
+  "attempts": [
+    {
+      "kind": "source-extraction",
+      "attempt": "salts-charon",
+      "source_revision": "6bb2b9cb1f2517b51763ed09b16b8716d3226caa",
+      "module": null,
+      "lean_attempt": null,
+      "source_sha256": "868a4aeca5d2157af79fbf09f68f69a15a53721fde63299f9c7f2bed21ec0fe5",
+      "deps_fingerprint": null,
+      "dependency_pins": "source-pins.json",
+      "exit": 0,
+      "wall_seconds": 36.281,
+      "peak_rss_kib": 577276,
+      "swaps": 0,
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+        "cargo",
+        "--preset",
+        "aeneas",
+        "--mir",
+        "built",
+        "--sysroot",
+        "default",
+        "--include",
+        "core::option::Option",
+        "--include",
+        "core::result::Result",
+        "--include",
+        "core::result::_::map_err",
+        "--start-from",
+        "crate::prover::derive_private_salts",
+        "--include",
+        "aspis_prover::state_only_entropy",
+        "--include",
+        "aspis_core::state_only_hiding",
+        "--opaque",
+        "aspis_statement",
+        "--opaque",
+        "aspis_core",
+        "--dest-file",
+        "/home/dombarker/project-offloads/codex-cx-prover-commit-20261020/extraction/ProverCommit.llbc",
+        "--",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-prover-commit-20261020/src/crates/aspis-r1-cost-probe/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--release",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "prover",
+        "--jobs",
+        "4"
+      ],
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "axioms": [],
+      "axioms_status": "not applicable: no Lean generated or compiled",
+      "stdout": "salts-charon/stdout.log",
+      "stderr": "salts-charon/stderr.log",
+      "time": "salts-charon/time.log"
+    },
+    {
+      "kind": "source-extraction",
+      "attempt": "salts-aeneas",
+      "source_revision": "6bb2b9cb1f2517b51763ed09b16b8716d3226caa",
+      "module": null,
+      "lean_attempt": null,
+      "source_sha256": "868a4aeca5d2157af79fbf09f68f69a15a53721fde63299f9c7f2bed21ec0fe5",
+      "deps_fingerprint": null,
+      "dependency_pins": "source-pins.json",
+      "exit": 2,
+      "wall_seconds": 0.459,
+      "peak_rss_kib": 71808,
+      "swaps": 0,
+      "command": [
+        "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static",
+        "-log-debug",
+        "Translate,InterpLoops",
+        "-sequential",
+        "-no-progress-bar",
+        "-abort-on-error",
+        "-backend",
+        "lean",
+        "-namespace",
+        "AspisR1ProverCommit",
+        "-dest",
+        "/home/dombarker/project-offloads/codex-cx-prover-commit-20261020/extraction/generated",
+        "-subdir",
+        "AspisR1ProverCommit",
+        "-split-files",
+        "-emit-json",
+        "/home/dombarker/project-offloads/codex-cx-prover-commit-20261020/extraction/ProverCommit.llbc"
+      ],
+      "limits": {
+        "memory.high": "4294967296",
+        "memory.max": "6442450944",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "axioms": [],
+      "axioms_status": "not applicable: no Lean generated or compiled",
+      "stdout": "salts-aeneas/stdout.log",
+      "stderr": "salts-aeneas/stderr.log",
+      "time": "salts-aeneas/time.log"
+    }
+  ],
+  "artifacts": {
+    "attempts.jsonl": {
+      "sha256": "7b2173d24305ca696899d304365ca6f3a17eb2969261e4f2b9c1692bb7b651c0",
+      "bytes": 2771
+    },
+    "capped.py": {
+      "sha256": "91678fcfc926b95929e1cc27a7dfb14784a72c0bc590f3a8e40064764085508e",
+      "bytes": 1782
+    },
+    "collect.py": {
+      "sha256": "23f0df76b860bf6031e55fd3409d67381ed3023c5ac64a8f8e1075a61df13b0a",
+      "bytes": 2636
+    },
+    "extract.py": {
+      "sha256": "a5eee6d6d9689687b4db2e4df06a6d0a907ea57ee61136882d709e4f7556cd28",
+      "bytes": 3656
+    },
+    "llbc-functions.json": {
+      "sha256": "031d9e835cc642a2926d122b164decab7b06c4b6a716dd5e0d18b424fafb29ee",
+      "bytes": 53359
+    },
+    "llbc-pin.json": {
+      "sha256": "80717f419437ba020533e62318a4823773fa2e849f1e254748a30db4055f7273",
+      "bytes": 209
+    },
+    "reservation-hold.json": {
+      "sha256": "7c1b71d820607bcb86ba5d10d5b608326bdb3ffc9ed419e2111bf9e319a3fab0",
+      "bytes": 1917
+    },
+    "salts-aeneas/receipt.json": {
+      "sha256": "7bc29d34ca3ea5b4e94eec19563fc07e3c2f60e86ebf50ebc7faa1b6917daff6",
+      "bytes": 1458
+    },
+    "salts-aeneas/stderr.log": {
+      "sha256": "489be6f524fe9099a288884c15b4caa026294949dbdca5c45e170b338c9b4383",
+      "bytes": 10512
+    },
+    "salts-aeneas/stdout.log": {
+      "sha256": "efbe389d99fcb7549513191831f28ae3ce93851bcc0a41507d6d9dda510f9b4b",
+      "bytes": 32195
+    },
+    "salts-aeneas/time.log": {
+      "sha256": "b4759fc8a0cd824c7ee3b5d6c2ffefa7c056392bfa544f72732d2702b0020147",
+      "bytes": 1250
+    },
+    "salts-aeneas-reservation.json": {
+      "sha256": "af3eedda526f9f47b867d3871fd5c1c18a4786512a2c8e943e9d1df54d4be0fa",
+      "bytes": 1917
+    },
+    "salts-charon/receipt.json": {
+      "sha256": "0b105c904b5e023ca3eecefed56435f1dd54aedb84f40f7b12858306784fa463",
+      "bytes": 1803
+    },
+    "salts-charon/stderr.log": {
+      "sha256": "dfa7d11199a263a42a07553c61772132888a73d0fab85a5f8403e11cbfa2b270",
+      "bytes": 73363
+    },
+    "salts-charon/stdout.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "salts-charon/time.log": {
+      "sha256": "5e179c93c7d7d0a1e0654a33ee6eb8e759615a82afd4838f2b049023568c877b",
+      "bytes": 1469
+    },
+    "salts-charon-reservation.json": {
+      "sha256": "6559d1e5cee249543d51ab70a8f516603a7b58df533b0364739eabb1e1bc1d0f",
+      "bytes": 1755
+    },
+    "source-pins.json": {
+      "sha256": "76c1f4a7a44d0e6b190aece9acff573de2ac85ea2a66f42e42b4c2363224c0b4",
+      "bytes": 2066
+    }
+  }
+}

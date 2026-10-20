@@ -7,7 +7,9 @@ No production Rust or existing Lean module is changed.
 
 ## Status
 
-Source inventory in progress; no checklist row is yet discharged.
+STOPPED on the pinned Aeneas translation blocker below. **No requested
+checklist row is discharged.** Charon lowered the actual salt cone, but
+no Lean module was generated, added or compiled; attempts 8100–8399 remain unused.
 Extraction uses the pinned stage2-continuation Charon/Aeneas kit on the
 build host, own source/cache, optimized compilation and capped scopes.
 Lean targets, if translation succeeds, use env J attempts 8100–8399 only.
@@ -60,7 +62,54 @@ no binary or LLBC is committed. This is lowering evidence, not a Lean proof.
 The actual Charon and extended-static Aeneas binaries are hashed in
 `source-pins.json`; the kit is the one used by stage2-continuation.
 
-Aeneas is paused before launch by the host reservation gate: concurrent
-populated caps plus this job's 8 GiB would exceed the 55 GiB safe limit.
-The completed Charon step is never rerun; `extract.py --resume-aeneas`
-resumes only the unattempted translation using the same retained LLBC.
+The initial 8 GiB Aeneas reservation was held while other jobs occupied
+the host. At a later snapshot the populated caps totalled 48.375 GiB;
+Aeneas was launched with MemoryHigh=4G / MemoryMax=6G, fitting the
+55 GiB limit. Charon was not rerun. The exact admitted snapshot is
+`salts-aeneas-reservation.json`. `--resume-aeneas` selects the completed
+Charon artifact; it is not permission to repeat the failed translation
+unchanged (the receipt directory guard refuses that).
+
+## Translation blocker and final disposition
+
+Aeneas exits **2** after **0.459 s**, peak RSS **71808 KiB**, swaps **0**.
+The diagnostic is exactly:
+
+```
+Unexpected
+Source: 'crates/aspis-r1-cost-probe/src/prover.rs', lines 191:4-195:1
+Compiler source: interp/InterpAbs.ml, line 191
+```
+
+`salts-aeneas/stdout.log` ends after the symbolic fixed-point context of
+the `for index in 0..FIBRE_COUNT` loop, with borrowed `reserved`, `salts`,
+iterator, pending return and shared usize loans. `salts-aeneas/stderr.log`
+records `convert_value_to_abstractions`, `match_bottom_with_other` and
+`join_ctxs.join_prefixes` in the stack. This identifies a translator
+loop/context-joining failure; it does **not** establish a Rust defect or
+that a particular refactor would repair it. This was not a memory failure.
+No generated destination directory exists.
+
+Per the explicit stop-on-translation-blocker instruction, no source
+refactor, substitute extraction, smaller helper retry, new Lean theorem,
+or privacy-root replay follows. In particular this does not close the
+salts row merely because Charon could lower its code. Seeds, reserved
+secret law, both expanders, leaves, exhaustion (including the requested
+converse) and universal counter/stream/cell/block bounds all remain open.
+The existing final privacy endpoint and its conditional premises stand
+unchanged. No false deployed source target was asserted; the unrestricted
+counter claim would wrap, so only invocation-bounded non-reuse is relevant.
+
+Resumption needs a lead-authorized translator repair or prover-loop
+refactor with new source/dependency pins, then actual generated proofs and
+D80/wordsE/carrier joins. No such change is proposed as already validated.
+The parked candidate and adopted verifier were not changed or copied in.
+
+`attempts.jsonl` records two **extraction** steps, not invented Lean
+attempts. `manifest.json` records status, commands, source revision,
+source/tool hashes, LLBC hash/size, full diagnostic/log paths, limits and
+empty theorem/axioms lists. `collect.py` checks the retained source hashes
+and reconstructs these summaries without running tools. `#print axioms`
+is not applicable because no Lean declaration was generated or claimed.
+No runtime or frozen-manifest suite was needed: production source is
+unchanged. No keys or wallets were accessed; no push was made.
