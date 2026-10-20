@@ -6968,3 +6968,26 @@ roots were fingerprint-refused (unchanged inputs), so their builds stand.
 Existing separation proofs carry over by rewriting; no statement changed.
 The two trees now share one grammar; the remaining cross-tree item is the
 R-wire execution correspondence.
+
+### Lead acceptance of the final R1 privacy composition (2026-10-20); D82
+
+Codex job cx-priv-final (678846822) is cherry-picked. `R1Z/PrivacyR1Final.lean`
+(env J 8000, 8004, 8008 verified: exit 0, standard axioms, 0 swaps) composes
+privacy_R1 / games′ / the binary simulator with D76–D81 and the query-scan
+abort into one theorem for the adopted binary format. Error at the deployed
+parameters (N = 8, q ≤ 2^64, worst-case counts): ε ≤ 2^-109 + 2^-137 +
+2^-454 — the LogUp pole ≈ 2^-109 dominates; adversary hit 2^-166.8, prover
+collision 2^-206.5, mask-word exhaustion ≈ 2^-473.4, frozen/public-digest
+hit 2^-230.8, ideal programming 0, query scan 16·2^-486 = 2^-482 (eight real
+and eight simulator attempts; the sharpened per-scan bound is 2^-486).
+
+**The privacy definition of done** is the premise checklist in
+`r1p-final/PRIVACY-FINAL-20261020.md` ("Open obligations: exact top-level
+source interfaces"): builder refinement (D46/D51), Sem1Uniform's wire form,
+the classical-ROM address domain and observer map, R-causal in D80 form,
+R-commit for roots/nodes, leaves, bindings, seeds, salts, expanders, equal
+fibres and exhaustion counters, R-wire coin carrier, batches, ordered log
+and typed-record membership, the builder/checker/retry coupling (D75), the
+simulator coupling (G-sim R-wire), and the query-word history/agreement off
+the scan events. Every one is a source-to-model refinement fact; none is a
+probability or rank fact. This list replaces D42.5 as the tracking list.
