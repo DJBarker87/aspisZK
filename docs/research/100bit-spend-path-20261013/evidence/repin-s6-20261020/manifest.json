@@ -1,0 +1,511 @@
+{
+  "axioms": "Only standard axioms in proved modules; generated external templates unused",
+  "boundary_binding": "first-binding-check.json",
+  "design": {
+    "path": "docs/research/100bit-spend-path-20261013/design/REPIN-s6-20261020.md",
+    "sha256": "0d511d1aa24f5c644485f017889c184e6f64615909ad124177a2f7c8aecc0292"
+  },
+  "extraction_runs": [
+    {
+      "attempt": "s6-first-aeneas",
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r5c1cb23de66e4e749d049194c6b12902.scope",
+      "cgroup_memory_peak_bytes": 49553408,
+      "command": [
+        "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static",
+        "-sequential",
+        "-no-progress-bar",
+        "-abort-on-error",
+        "-backend",
+        "lean",
+        "-namespace",
+        "AspisR1S6",
+        "-dest",
+        "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/extraction-first/generated",
+        "-subdir",
+        "AspisR1S6",
+        "-split-files",
+        "-emit-json",
+        "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/extraction-first/S6.llbc"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src",
+      "env": {
+        "CARGO_BUILD_JOBS": "1",
+        "CARGO_NET_OFFLINE": "true",
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/charon-target",
+        "SBF_TRACE_DIR": null
+      },
+      "exit_status": 0,
+      "expected_time": "Compilation and pinned aeneas lowering only; no arithmetic execution or proof generation",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "peak_rss_kib": 65648,
+      "print_axioms": "N/A: no Lean compilation",
+      "receipt": "receipts/s6-first-aeneas/receipt.json",
+      "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+      "swaps": 0,
+      "wall_seconds": 0.461
+    },
+    {
+      "attempt": "s6-first-charon",
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rca6a74df7ca641eca3553cd80e7575f9.scope",
+      "cgroup_memory_peak_bytes": 863318016,
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+        "cargo",
+        "--preset",
+        "aeneas",
+        "--mir",
+        "built",
+        "--sysroot",
+        "default",
+        "--include",
+        "core::option::Option",
+        "--include",
+        "core::result::Result",
+        "--include",
+        "core::result::_::map_err",
+        "--start-from",
+        "crate::first",
+        "--start-from",
+        "crate::first_decoded",
+        "--opaque",
+        "aspis_core",
+        "--opaque",
+        "aspis_statement",
+        "--opaque",
+        "aspis_r1_cost_probe",
+        "--opaque",
+        "solana_program",
+        "--include",
+        "solana_program_error::ProgramError",
+        "--include",
+        "aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public",
+        "--dest-file",
+        "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/extraction-first/S6.llbc",
+        "--",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src/programs/r1-cost-probe/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--release",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "pool-adapter,private-leaf-salts,no-entrypoint",
+        "--jobs",
+        "1"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src",
+      "env": {
+        "CARGO_BUILD_JOBS": "1",
+        "CARGO_NET_OFFLINE": "true",
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/charon-target",
+        "SBF_TRACE_DIR": null
+      },
+      "exit_status": 0,
+      "expected_time": "Compilation and pinned charon lowering only; no arithmetic execution or proof generation",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "peak_rss_kib": 546244,
+      "print_axioms": "N/A: no Lean compilation",
+      "receipt": "receipts/s6-first-charon/receipt.json",
+      "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+      "swaps": 0,
+      "wall_seconds": 172.149
+    },
+    {
+      "attempt": "s6-stage1-aeneas",
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r258b11c6589440dea34523a86a6c5463.scope",
+      "cgroup_memory_peak_bytes": 77799424,
+      "command": [
+        "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static",
+        "-sequential",
+        "-no-progress-bar",
+        "-abort-on-error",
+        "-backend",
+        "lean",
+        "-namespace",
+        "AspisR1S6",
+        "-dest",
+        "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/extraction-stage1/generated",
+        "-subdir",
+        "AspisR1S6",
+        "-split-files",
+        "-emit-json",
+        "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/extraction-stage1/S6.llbc"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src",
+      "env": {
+        "CARGO_BUILD_JOBS": "1",
+        "CARGO_NET_OFFLINE": "true",
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/charon-target",
+        "SBF_TRACE_DIR": null
+      },
+      "exit_status": 2,
+      "expected_time": "Compilation and pinned aeneas lowering only; no arithmetic execution or proof generation",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "peak_rss_kib": 90464,
+      "print_axioms": "N/A: no Lean compilation",
+      "receipt": "receipts/s6-stage1-aeneas/receipt.json",
+      "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+      "swaps": 0,
+      "wall_seconds": 0.441
+    },
+    {
+      "attempt": "s6-stage1-charon",
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rf65042805723483389281281cbddc752.scope",
+      "cgroup_memory_peak_bytes": 574517248,
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+        "cargo",
+        "--preset",
+        "aeneas",
+        "--mir",
+        "built",
+        "--sysroot",
+        "default",
+        "--include",
+        "core::option::Option",
+        "--include",
+        "core::result::Result",
+        "--include",
+        "core::result::_::map_err",
+        "--start-from",
+        "crate::r1_pool_adapter::stage1",
+        "--opaque",
+        "aspis_core",
+        "--opaque",
+        "aspis_statement",
+        "--opaque",
+        "aspis_r1_cost_probe",
+        "--opaque",
+        "solana_program",
+        "--include",
+        "solana_program_error::ProgramError",
+        "--include",
+        "aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public",
+        "--dest-file",
+        "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/extraction-stage1/S6.llbc",
+        "--",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src/programs/r1-cost-probe/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--release",
+        "--lib",
+        "--no-default-features",
+        "--features",
+        "pool-adapter,private-leaf-salts,no-entrypoint",
+        "--jobs",
+        "1"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src",
+      "env": {
+        "CARGO_BUILD_JOBS": "1",
+        "CARGO_NET_OFFLINE": "true",
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/charon-target",
+        "SBF_TRACE_DIR": null
+      },
+      "exit_status": 0,
+      "expected_time": "Compilation and pinned charon lowering only; no arithmetic execution or proof generation",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "peak_rss_kib": 548948,
+      "print_axioms": "N/A: no Lean compilation",
+      "receipt": "receipts/s6-stage1-charon/receipt.json",
+      "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+      "swaps": 0,
+      "wall_seconds": 120.706
+    }
+  ],
+  "files": {
+    "capped-run.sh": {
+      "bytes": 733,
+      "sha256": "d930098d69662a4b9000208df98f953fb1e219bf487da15ba54865bbee8db9b5"
+    },
+    "capped.py": {
+      "bytes": 1894,
+      "sha256": "3ad8ab891e3b55a2ba6b1acb67811295029721c86af9bc01099a3396bc2a20ca"
+    },
+    "check-first-binding.py": {
+      "bytes": 4435,
+      "sha256": "79adf1868b7bb925205e31279558ab0131bb5235111adaf250d344bbe78da892"
+    },
+    "declaration-pins.json": {
+      "bytes": 2094,
+      "sha256": "f8454ab6bde18ed63b661f9ef51084935e94cd49a0a4a4860a2f0d7ac3cb940c"
+    },
+    "extract-host.py": {
+      "bytes": 3117,
+      "sha256": "58940f9aad9ce4e63273d0e2fc3667abed9a5e86c2c2a7b67ca0de4045312cbd"
+    },
+    "extraction-first/aeneas-input.json": {
+      "bytes": 5541,
+      "sha256": "65e9be769f0a49e3e0447073d7a5c4251028df220ac5cc502b423753dd500e93"
+    },
+    "extraction-first/charon-input.json": {
+      "bytes": 6166,
+      "sha256": "3da1e4b0a2d163abc7f57a1c9186ec210c51be46f33b66f93b1371f441c92815"
+    },
+    "extraction-first/generated/AspisR1S6/Funs.lean": {
+      "bytes": 8079,
+      "sha256": "c2e45275aa4af48bafe7f7f3d4119cd6a438fa49c51bddd8de37049ed323f555"
+    },
+    "extraction-first/generated/AspisR1S6/FunsExternal_Template.lean": {
+      "bytes": 5655,
+      "sha256": "a2cad49fb8bfa4af90bd1466be52f01ff3c5b40cfdbd63db07165592494dc9f7"
+    },
+    "extraction-first/generated/AspisR1S6/Types.lean": {
+      "bytes": 4195,
+      "sha256": "75060d70285a2677b109685ab8bf6267546277d6b59c589c2b99dcfca7a333e5"
+    },
+    "extraction-first/generated/AspisR1S6/TypesExternal_Template.lean": {
+      "bytes": 3870,
+      "sha256": "e56805dbea766c6741023c2c7a9c6e7b826e737df05396eecdc6701860969860"
+    },
+    "extraction-first/generated/translation.json": {
+      "bytes": 18310,
+      "sha256": "7390d9c8f6ce6b11115d9616e34a238c68b51c86349ac919b7bf874a14dab2e8"
+    },
+    "extraction-stage1/aeneas-input.json": {
+      "bytes": 5543,
+      "sha256": "54d3a44041243a9f07beca6a4d8d24d40ad4be566f6627c41088e8560430d17b"
+    },
+    "extraction-stage1/charon-input.json": {
+      "bytes": 6137,
+      "sha256": "fd8a182ea477db6d0e54aac42604bc58fd68bcc1358ff5ecec3398f7ae5bd3ed"
+    },
+    "first-binding-check.json": {
+      "bytes": 7649,
+      "sha256": "9242c3f6fb2d19c29af51fa31f25470d607888c9c0879c6e69872054129f56d3"
+    },
+    "frozen-source-check.json": {
+      "bytes": 1072,
+      "sha256": "b24f10e5eb0c953a13c85495f19344976025f4bd15c8717e1be73a83dfbaadc1"
+    },
+    "llbc-pins.json": {
+      "bytes": 596,
+      "sha256": "891f9f83fe75a7e56bbd6d6d68d87f1d44adbfbf5dd0ca6267178d219dab60f3"
+    },
+    "local-proof.py": {
+      "bytes": 2774,
+      "sha256": "c8b58d986046aea1d14761fc5592ab15a78cd03851c83fbdd6195bde04b2ee5e"
+    },
+    "packet.py": {
+      "bytes": 3998,
+      "sha256": "b837a95e9cde403f7af1c927fb2734e4fad83ede6a5ad8357fe167696ba15728"
+    },
+    "proofs/first-v1/preflight.json": {
+      "bytes": 142,
+      "sha256": "2484c7a37c0221e209a0665ad415ccc806352a72d5144f577675c759de8095a8"
+    },
+    "proofs/first-v2/command.json": {
+      "bytes": 2574,
+      "sha256": "6d5fcdd2147c9133b1362806fbf28b42505adb2083ed3a2e61f0fdf39b3c2814"
+    },
+    "proofs/first-v2/lean.log": {
+      "bytes": 642,
+      "sha256": "d040551e54626299d083b05a0488d8e8b2373046c6bf40a13b3b7f4a35d40502"
+    },
+    "proofs/first-v2/receipt.json": {
+      "bytes": 3384,
+      "sha256": "d94ebb87b59b7afc0dd63ba8d26491c0ebe76c830be2a3e44d65896a67acdb2f"
+    },
+    "proofs/first-v2/source.lean": {
+      "bytes": 4931,
+      "sha256": "cb143f84fe23b5adcfe79648493957ef1bb46c07319a2f9763910f5bb061698d"
+    },
+    "proofs/first-v2/time.log": {
+      "bytes": 777,
+      "sha256": "6f62bbe197b85517067f3fcd7a65b71de5310730c834f134bc508a5c42fbf4f7"
+    },
+    "proofs/ranges-v1/command.json": {
+      "bytes": 2799,
+      "sha256": "b0166d374c469dbdca9f98f8696ba7eeae24024e015554c90387a906fbb15883"
+    },
+    "proofs/ranges-v1/lean.log": {
+      "bytes": 479,
+      "sha256": "822096cf0fc77f9f30c445cf304802f656fffa4af74adc90958b6b30f753f7ed"
+    },
+    "proofs/ranges-v1/receipt.json": {
+      "bytes": 3440,
+      "sha256": "a0718e39e5fb52ed000e44c1068cb0bb24f990cf94be8e5d84384bfe8632b59a"
+    },
+    "proofs/ranges-v1/source.lean": {
+      "bytes": 1803,
+      "sha256": "eb583a78e455e9cddb1c2c62386cc053b7d224032d0727f1b63682de8b76465a"
+    },
+    "proofs/ranges-v1/time.log": {
+      "bytes": 777,
+      "sha256": "e2116f07bd3d3991dce25043f3d7c56a1b9eccb899bc4a7a7b6c356a0c86f385"
+    },
+    "receipts/s6-first-aeneas/receipt.json": {
+      "bytes": 1389,
+      "sha256": "a1f28fd6fb3f74085ccf3827480818c31155574210b9a4eae3cb3ce361b024a5"
+    },
+    "receipts/s6-first-aeneas/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "receipts/s6-first-aeneas/stdout.log": {
+      "bytes": 1026,
+      "sha256": "6b812c47e9e4b7872308fad3d6b11e891772d03bfe495da0ee9bf3419fa90e7b"
+    },
+    "receipts/s6-first-aeneas/time.log": {
+      "bytes": 1153,
+      "sha256": "a5793c3c4969b45714bccd74089a9846b491a0a8d76ad844589d74677f1fdc19"
+    },
+    "receipts/s6-first-charon/receipt.json": {
+      "bytes": 1960,
+      "sha256": "ebcd5921756a905cbe4756ac441517010f839e821ed603ae34176e4c1a7de4ef"
+    },
+    "receipts/s6-first-charon/stderr.log": {
+      "bytes": 77642,
+      "sha256": "6d9111314684674afe9e415bb4ed579c0f71e07a651c62f50a303601f6749d44"
+    },
+    "receipts/s6-first-charon/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "receipts/s6-first-charon/time.log": {
+      "bytes": 1597,
+      "sha256": "229e3a9ad616bd791c2c8ed677cfb5ec8f093aebea7be23d84bdb2e1f0846ac5"
+    },
+    "receipts/s6-stage1-aeneas/receipt.json": {
+      "bytes": 1391,
+      "sha256": "279d07d64703a5f11c938ed7afefc2ec386fbf193cbe340340656b73c5520a52"
+    },
+    "receipts/s6-stage1-aeneas/stderr.log": {
+      "bytes": 6009,
+      "sha256": "4a97a299ddcbe6c9f06c514222696ce27bec67331957af0d33df4cf939ec5299"
+    },
+    "receipts/s6-stage1-aeneas/stdout.log": {
+      "bytes": 439,
+      "sha256": "ce291e4e9d05a9060d2c4b0f5c81431d4d4b77ca0a7671c03fb63beb7b2856e8"
+    },
+    "receipts/s6-stage1-aeneas/time.log": {
+      "bytes": 1196,
+      "sha256": "736c0f59ed2a054cd1298e7c184d8340e8acb6d8d6f014df34e24852d0c19116"
+    },
+    "receipts/s6-stage1-charon/receipt.json": {
+      "bytes": 1935,
+      "sha256": "207b74da93355ac416adbe0416e42554c3dc89e2b32fc1f9b9a79617c2a57ad1"
+    },
+    "receipts/s6-stage1-charon/stderr.log": {
+      "bytes": 72455,
+      "sha256": "c14a3ecdc6a88d73ff7fed391fd54f7682f46e5cb1d72973d3fee6b14d5a38ee"
+    },
+    "receipts/s6-stage1-charon/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "receipts/s6-stage1-charon/time.log": {
+      "bytes": 1579,
+      "sha256": "a7734015ee7ee22bcf5022df1e15c5f53072a37541324f246b290746b593b2a7"
+    },
+    "reservations.json": {
+      "bytes": 1771,
+      "sha256": "4b44dee4c3be5ed24dcd4156b9cb42dd6022bafc252b3ed2317baabe3904b7c4"
+    },
+    "source-fragments/adapter-decode-box.rs": {
+      "bytes": 287,
+      "sha256": "624f6d0ba37275b743a488b6eb13df2de0c960362f63a43191e31f8fd247d7c8"
+    },
+    "source-fragments/adapter-stage1.rs": {
+      "bytes": 2197,
+      "sha256": "15613685577ae293a6ead44415ebd69e5e76c67f6d458132b4070dd8d7bfa59d"
+    },
+    "source-fragments/program-first-decoded.rs": {
+      "bytes": 428,
+      "sha256": "d7f1a8b153af299bf8c8fa395780e12ba5f10b679dd4f9b8308274a31e1a8175"
+    },
+    "source-fragments/program-first.rs": {
+      "bytes": 294,
+      "sha256": "4d1485bfa8b462a3cae47a40e2c762f49e53c87661d45616dfed9b857a8084ae"
+    },
+    "source-fragments/program-observer.rs": {
+      "bytes": 150,
+      "sha256": "2b4bb92a740fbb2c03d4b26e4b91d9fbfdd54687156a0145cb9178949ad0a665"
+    }
+  },
+  "frozen_source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "full_manifest_replay": "Not run: adapter translation blocked, focused preconditions not green",
+  "generated_lean": "extraction-first/generated/AspisR1S6",
+  "host_workspace": "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020",
+  "llbc": [
+    {
+      "bytes": 357358,
+      "committed": false,
+      "cone": "first",
+      "has_errors": false,
+      "retained_host_path": "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/extraction-first/S6.llbc",
+      "sha256": "30ac57b60f4d7f25ed4e0ec3405383fa5313857422ebf91b731a5d67afe3a26d"
+    },
+    {
+      "bytes": 2449840,
+      "committed": false,
+      "cone": "stage1",
+      "has_errors": false,
+      "retained_host_path": "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/extraction-stage1/S6.llbc",
+      "sha256": "fce58a827e251c513d6218656087bee6c8b558f47c1fa60ded23b07e332f61df"
+    }
+  ],
+  "modules": [
+    {
+      "exit_status": 0,
+      "module": "RepinS6Ranges",
+      "peak_rss_bytes": 817856512,
+      "print_axioms": [
+        "'AspisR1.RepinS6Ranges.instruction_indices' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.RepinS6Ranges.account_indices' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.RepinS6Ranges.local_additions' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.RepinS6Ranges.proof_indices' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.RepinS6Ranges.checkpoint_copy' depends on axioms: [propext, Quot.sound]"
+      ],
+      "receipt": "proofs/ranges-v1/receipt.json",
+      "source": "docs/research/100bit-spend-path-20261013/lean/RepinS6Ranges.lean",
+      "source_sha256": "eb583a78e455e9cddb1c2c62386cc053b7d224032d0727f1b63682de8b76465a",
+      "swaps": 0,
+      "wall_seconds": 0.5797817502170801
+    },
+    {
+      "exit_status": 0,
+      "module": "RepinS6First",
+      "peak_rss_bytes": 3224420352,
+      "print_axioms": [
+        "'AspisR1PublicPreparation.RepinS6First.observer' does not depend on any axioms",
+        "'AspisR1PublicPreparation.RepinS6First.first_decoded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1PublicPreparation.RepinS6First.first' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1PublicPreparation.RepinS6First.first_eq_historical' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1PublicPreparation.RepinS6First.first_success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1PublicPreparation.RepinS6First.reuse_decoded' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "receipt": "proofs/first-v2/receipt.json",
+      "source": "docs/research/100bit-spend-path-20261013/lean/RepinS6First.lean",
+      "source_sha256": "cb143f84fe23b5adcfe79648493957ef1bb46c07319a2f9763910f5bb061698d",
+      "swaps": 0,
+      "wall_seconds": 8.27226687502116
+    }
+  ],
+  "parked_candidate_s6_diff": "",
+  "schema": "focused-extractor-proof-packet-v1",
+  "status": "STOPPED_SDK_ACCOUNT_BORROW; first caller re-proved; adapter binding and full R22 remain OPEN",
+  "worktree_base_revision": "eb9b122b6856fd91c7681cd03bb8a8ce767ba3fb"
+}
