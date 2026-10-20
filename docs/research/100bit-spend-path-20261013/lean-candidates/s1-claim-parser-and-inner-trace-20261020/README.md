@@ -1,0 +1,15 @@
+# Actual parser and source-shaped cached-claim inner trace
+
+PROVED for the isolated fission candidate; NOT ADOPTED. No production Rust or ELF changes.
+
+The existing claim model and current FinishField closure had colliding anonymous Error discriminant instances. The new model expands only that generated attribute into the same eight constructor codes 0–7 and qualifies the instance name. All enum cases and Rust/source bodies remain identical. The inverse checker recovers the previously checked model bytes exactly; the pinned Aeneas generator is recorded. Nine focused model/dependent checks passed after this parent change; they are integration rechecks, not nine newly invented mathematical results.
+
+CurrentClaimParserInstance binds field to the actual current weights.field/record decoder (through the checked FinishField owner and coordinate-preserving carrier map). It proves success gives a canonical result and the same decoded field value. c0 is the exact low-half projection and inherits canonicality. No arbitrary parser-canonicality law is assumed.
+
+CurrentClaimInnerPoint5 and Done prove the two actual source-shaped loop-body branches for point5: successful continuation supplies the same parser read, weight read and successful push; successful termination supplies actual finishDot success. Semantic state and point remain unchanged. The accepted parse result is canonical. The proof retains the source error-mapping/try branches and rules out an accepted continuation on push failure.
+
+CurrentClaimPoint5Chain derives a finite chain from successful execution of the actual loop model, decreasing 29-start via the source iterator specification. CurrentClaimPoint5Reads proves the chain contains exactly 29-start reads in source index order. From successful point5 helper execution, it obtains the actual initial Dot allocation, the chain, and exactly29 canonical parser reads with matching actual g-array reads. Independent child/iteration success and canonicality premises are eliminated. The Dot new/push/finish callbacks remain explicit and are not yet bound to the concrete accumulator backend in this packet.
+
+All14 focused checks passed on the NUC with Lean4.32 -j1 -M4400, MemoryHigh1GiB/Max2GiB/SwapMax0, standard axioms only. Source, object, direct import, exact command, wall/RSS/cgroup/swap evidence is retained. Failed development attempts are not accepted results; no cap was raised. No package or whole-manifest replay and no unchanged runtime replay were run.
+
+OPEN: concrete Dot backend binding and returned product equation; the first five semantic-field points and canonicality/source binding of their actual Verified payload; coefficient/gamma powers at the caller; joining all parts to the concrete weighted sum; candidate/original source equivalence or adoption with full gates and new frozen pins; actual Prepared/tx1/runtime correspondence and the global100-bit theorem. The source-shaped fission and early-return powers are still candidates; no proof of the frozen original cached-claim function is claimed.

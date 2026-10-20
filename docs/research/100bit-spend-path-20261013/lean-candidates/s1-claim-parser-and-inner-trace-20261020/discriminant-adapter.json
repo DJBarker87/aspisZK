@@ -1,0 +1,19 @@
+{
+  "scope": "same enum and constructor codes; qualified instance identity only",
+  "original_source_sha256": "6c095ddd204e0482a01a23d17d59fa98fc2642adb2593cd4bd92a2ffdfe7a55d",
+  "adapted_source_sha256": "3d6757445941b8dee686f9cec2a0aa3666b7a856cf82fb7b461c945312dc5516",
+  "old_block": "@[discriminant isize]\ninductive verifier.Error where\n| Parse : verifier.Error\n| Semantic : verifier.Error\n| Transcript : verifier.Error\n| Relation : verifier.Error\n| Merkle : verifier.Error\n| Query : verifier.Error\n| Checkpoint : verifier.Error\n| Allocation : verifier.Error",
+  "new_block": "inductive verifier.Error where\n| Parse : verifier.Error\n| Semantic : verifier.Error\n| Transcript : verifier.Error\n| Relation : verifier.Error\n| Merkle : verifier.Error\n| Query : verifier.Error\n| Checkpoint : verifier.Error\n| Allocation : verifier.Error\n\n-- Naming-only expansion of the pinned Aeneas discriminant generator.\ndef verifier.Error.read_discriminant (x : verifier.Error) : Isize :=\n  match x with\n  | .Parse => 0#isize\n  | .Semantic => 1#isize\n  | .Transcript => 2#isize\n  | .Relation => 3#isize\n  | .Merkle => 4#isize\n  | .Query => 5#isize\n  | .Checkpoint => 6#isize\n  | .Allocation => 7#isize\n\ninstance _root_.AspisR1CurrentPreparedClaim.verifier.Error.instDiscriminant :\n    Aeneas.Std.Discriminant verifier.Error Isize where\n  read_discriminant := verifier.Error.read_discriminant",
+  "constructor_codes": {
+    "Parse": 0,
+    "Semantic": 1,
+    "Transcript": 2,
+    "Relation": 3,
+    "Merkle": 4,
+    "Query": 5,
+    "Checkpoint": 6,
+    "Allocation": 7
+  },
+  "generator_sha256": "98dca07cb483eda5c4fe4322806650d3288fd0c2504c3153e0cebc195e649d03",
+  "inverse_recovers_original_bytes": true
+}
