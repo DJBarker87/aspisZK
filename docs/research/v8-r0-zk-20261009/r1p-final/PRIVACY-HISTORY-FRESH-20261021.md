@@ -50,3 +50,29 @@ standard-axiom audits. 9833–9838 preserve elaboration failures; changes factor
 coordinate projection and finite-instance transport symbolically. No limit
 was raised and no unchanged source was rerun. Only this new module's drafts
 and objects were replaced, with branch-specific host snapshots.
+
+## Stage 3: a real-law-free endpoint and actual E_fresh
+
+`PrivacyR1FinalProtocolHistoryReal.privacy_R1_protocol_history_real` compiles
+with `real_model_history_law` deleted, realBad fixed to the actual real
+selected parser failure, and the same execution-only joins. It proves ZK
+with error `modelError + 16/2^486 + (M²+M)/2^255`, its corresponding numerical
+upper bound, and strict error `< 2^-100`. The honest collision charge appears
+once across all eight real attempts. No new probability premise replaces the
+deleted law. Source joins still preserve the complete observation; their
+event identification is now fixed. This is a conservative endpoint, not yet
+the requested sharp scan-only endpoint.
+
+`QueryScanRealFreshMass.real_fresh_mass` also bounds the actual E_fresh by
+`(M²+M)/2^255`. It proves that addresses computed at issue time equal their
+final causal-vector addresses, then transports the scan-specific reuse event
+through the real lazy coupling. It does not equate E_fresh to the broader
+honest collision event or charge observer repeats.
+
+Final focused receipts so far: join/numerics 9842, exit 0, 2.69 s,
+4,063,136 KiB, zero swaps, three standard-axiom audits; actual E_fresh 9847,
+exit 0, 2.52 s, 4,052,056 KiB, zero swaps, three audits; endpoint 9848,
+exit 0, 9.69 s, 4,077,540 KiB, zero swaps, one standard-axiom audit.
+9840/9841/9843–9846 retain errors followed by source changes. One endpoint
+arithmetic warning concerns tactic preprocessing of an exponent; the proof
+succeeds without evaluating any recurrence or large finite universe.
