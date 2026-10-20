@@ -1,0 +1,9 @@
+# Same-run source powers claim and joint transcript ranks
+
+PROVED: prepared_sourcePowers_joint_rank_trace starts from successful preparation with the source callback/P6 array powers interface and installed sampler/query/rho boundaries. The same returned states supply row27 gamma on y1, row28 kappa on serialized inactive, row29 alpha0, optional row30 alpha1, ordered query facts and rho ranks. Successful sampler calls provide the canonical gamma/kappa needed for the checked powers replacement; the existing single/double tail rank theorem is reused. No inactive canonicality or internal powers-run assumption is needed for this transcript statement.
+
+PROVED: prepared_sourcePowers_claim_and_rank combines the selected-source gamma/kappa claim equation with that joint rank trace from the SAME successful preparation/output/scratch. It retains inactive canonicality for the claim arithmetic, but assumes neither canonical gamma/kappa nor successful child powers/callback runs. This is deterministic source-model/rank correspondence, not an adaptive random-oracle or independence theorem.
+
+OPEN: P6 Rust standard-library correspondence; actual enclosing source/caller and cached-claim/fission installation; concrete inactive serializer/semantic authentication, runtime/artifact, full Fiat-Shamir distribution and global100-bit closure. Frozen S1 is not promoted to closed. No production Rust, CU, ELF or deployment changes.
+
+Focused local Lean4.32 -j1 -M4400 passed: exit0,9.121s,aggregate peak3731013632B,process peak3757228032B,process swaps0. Both exports have standard axioms only. Atomic mkdir lock released after check; watchdog7.5GiB/120s; no dependency builds. The prior exact warm cache was extended by79 pinned cached objects (32,355,208 bytes) copied from NUC; the complete selected closure is retained. Initial draft had an ambiguous PE alias; its diagnostic is retained. Exact source/compiler/import/command/resource pins retained, no binaries.
