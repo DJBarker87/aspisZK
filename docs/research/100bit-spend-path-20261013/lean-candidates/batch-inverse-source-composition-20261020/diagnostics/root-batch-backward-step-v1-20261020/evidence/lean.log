@@ -1,0 +1,41 @@
+/home/dombarker/project-offloads/root-batch-backward-step-v1-20261020/sources/BatchBackwardStepSemantics.lean:49:46: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+mul : Mul
+hr : RefinesMul mul
+flat pref state : Vec U32
+suffix : U32
+iter : ReverseRange
+out : ControlFlow (ReverseRange × U32 × Vec U32) (Vec U32)
+hstart : iter.iter.start = 0#usize
+hpos : 0 < ↑iter.iter.end
+hflat : ↑iter.iter.end ≤ (↑flat).length
+hpref : ↑iter.iter.end ≤ (↑pref).length
+hstate : ↑iter.iter.end ≤ (↑state).length
+h : backward_loop.body mul flat pref iter suffix state = ok out
+suffix1 written : U32
+j : Usize := iter.iter.end.wrapping_sub 1#usize
+⊢ ↑j < (↑pref).length
+/home/dombarker/project-offloads/root-batch-backward-step-v1-20261020/sources/BatchBackwardStepSemantics.lean:50:46: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+mul : Mul
+hr : RefinesMul mul
+flat pref state : Vec U32
+suffix : U32
+iter : ReverseRange
+out : ControlFlow (ReverseRange × U32 × Vec U32) (Vec U32)
+hstart : iter.iter.start = 0#usize
+hpos : 0 < ↑iter.iter.end
+hflat : ↑iter.iter.end ≤ (↑flat).length
+hpref : ↑iter.iter.end ≤ (↑pref).length
+hstate : ↑iter.iter.end ≤ (↑state).length
+h : backward_loop.body mul flat pref iter suffix state = ok out
+suffix1 written : U32
+j : Usize := iter.iter.end.wrapping_sub 1#usize
+⊢ ↑j < (↑flat).length
+'AspisR1BatchBackward.Proof.backward_body_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

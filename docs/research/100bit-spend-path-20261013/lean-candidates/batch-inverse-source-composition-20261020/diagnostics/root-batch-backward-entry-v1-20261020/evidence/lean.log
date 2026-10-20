@@ -1,0 +1,100 @@
+/home/dombarker/project-offloads/root-batch-backward-entry-v1-20261020/sources/BatchBackwardEntrypoint.lean:45:12: error(lean.unknownIdentifier): Unknown constant `List.length_resize`
+/home/dombarker/project-offloads/root-batch-backward-entry-v1-20261020/sources/BatchBackwardEntrypoint.lean:51:33: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.take (List.length ?m.286) ?m.286
+in the target expression
+  (List.map decode ↑flat).prod⁻¹ = (List.take flat.length (List.map decode ↑flat)).prod⁻¹
+
+flat pref : Vec U32
+product : U32
+out : Vec U32
+hprefsize : (↑flat).length ≤ (↑pref).length
+hprefix :
+  ∀ j < (↑flat).length, ∀ (hp : j < (↑pref).length), decode (↑pref)[j] = (List.take j (List.map decode ↑flat)).prod
+hproduct : decode product = (List.map decode ↑flat).prod
+hnonzero : ∀ x ∈ ↑flat, decode x ≠ 0
+hrun✝¹ :
+  (do
+      let suffix_inverse ← currentInv product
+      have i : Usize := flat.len
+      have flat_inverse : Vec field.M31 := Vec.with_capacity field.M31 i
+      have i1 : Usize := flat.len
+      let flat_inverse1 ← Vec.resize field.M31.Insts.CoreCloneClone flat_inverse i1 field.M31.ZERO
+      have i2 : Usize := flat.len
+      let iter ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) { start := 0#usize, «end» := i2 }
+      backward_loop currentMul iter flat pref suffix_inverse flat_inverse1) =
+    ok out
+hnprod : decode product ≠ 0
+suffix : field.M31
+hinv : currentInv product = ok suffix
+hrun✝ :
+  (have i := flat.len;
+    have flat_inverse := Vec.with_capacity field.M31 i;
+    have i1 := flat.len;
+    do
+    let flat_inverse1 ← Vec.resize field.M31.Insts.CoreCloneClone flat_inverse i1 field.M31.ZERO
+    have i2 : Usize := flat.len
+    let iter ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+          (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+          (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) { start := 0#usize, «end» := i2 }
+    backward_loop currentMul iter flat pref suffix flat_inverse1) =
+    ok out
+state : Vec field.M31
+hresize :
+  Vec.resize field.M31.Insts.CoreCloneClone (Vec.with_capacity field.M31 flat.len) flat.len field.M31.ZERO = ok state
+hrun :
+  (have i2 := flat.len;
+    do
+    let iter ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+          (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+          (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) { start := 0#usize, «end» := i2 }
+    backward_loop currentMul iter flat pref suffix state) =
+    ok out
+hiv : decode suffix = (decode product)⁻¹
+hclone : field.M31.Insts.CoreCloneClone.clone field.M31.ZERO = ok field.M31.ZERO
+hr1 : Vec.resize field.M31.Insts.CoreCloneClone (Vec.with_capacity U32 flat.len) flat.len field.M31.ZERO = ok state
+hv1 : ↑state = (↑(Vec.with_capacity U32 flat.len)).resize (↑flat.len) field.M31.ZERO
+hlen : (↑state).length = (↑flat).length
+hrev :
+  core.iter.traits.iterator.Iterator.rev.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+      { start := 0#usize, «end» := flat.len } =
+    ok { iter := { start := 0#usize, «end» := flat.len } }
+hloop : backward_loop currentMul { iter := { start := 0#usize, «end» := flat.len } } flat pref suffix state = ok out
+⊢ (List.map decode ↑flat).prod⁻¹ = (List.take flat.length (List.map decode ↑flat)).prod⁻¹
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    flat
+  has type
+    Vec U32
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑flat
+/home/dombarker/project-offloads/root-batch-backward-entry-v1-20261020/sources/BatchBackwardEntrypoint.lean:54:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  b - c ≥ 1
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑(↑pref).length
+ b := ↑(↑state).length
+ c := ↑i
+ d := ↑↑{ iter := { start := 0#usize, «end» := flat.len } }.iter.end
+ e := ↑flat.length
+'AspisR1BatchBackward.Proof.backward_success_inverses' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
