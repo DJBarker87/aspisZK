@@ -28,7 +28,7 @@ Authoritative focused emitted inputs (all paths relative to this research direct
 - `lean/extracted-decode-k-canonicality-20261018/AspisR1DecodeKFullV10/Funs.lean`
   (strict decoder including checked size guards).
 - `lean/bridge-prepared-3335-20261016/AspisR1PublicPreparation/Funs.lean`
-  plus `lean/ExtractedPreparedModel.lean` and
+  plus `lean/bridge-prepared-3335-20261016/ExtractedPreparedModel.lean` and
   `lean/ExtractedSemanticRoundsModel.lean`: the models retain explicit child
   boundaries; their successful-execution reachability theorems are not
   no-overflow theorems for those boundaries.
@@ -191,7 +191,7 @@ from eventual successful checked execution.
 
 ## 6. Theorems (proved, reused, open)
 
-Existing theorem sources inspected (not freshly replayed in this packet):
+Existing theorem sources (fresh focused replay status is recorded in the manifest and theorem index):
 
 | Theorem | Source location | What it establishes |
 |---|---|---|
@@ -210,12 +210,18 @@ Earlier R22 field/tower packets under `lean-candidates/r22-current-field-wrappin
 prove checked/wrapping equality for primitive kernels and canonical output;
 their reports explicitly exclude optimized private fast-pairing bodies.
 
-New draft: `AspisR1.R22FastPairingRawRanges.partial_le_three_p` and
-`raw_ranges` in `lean/R22FastPairingRawRanges.lean`. These statements bound
-source-shaped Nat expressions, not an emitted Q function. **Not compiled or
-claimed proved** until the local memory admission gate passes. The committed
-receipt records the refused preflight, rather than fabricating compile metrics
-or an axioms audit.
+Fresh replay on 2026-10-20: all six prior R22 scalar/field/tower modules,
+the raw-pairing range draft, semantic add/mul/boundary/value targets, both
+rho outer-push branches, the all-prefix invariant and fast-dot reducer
+composition now compile locally. Exact hashes, exit status, wall time, peak
+RSS, swaps and full axiom reports are retained under the packet's receipts.
+No existing Lean source was edited. Missing cache dependencies were compiled
+into `/tmp/r1-overflow-free-20261019-objects`; no shared object was overwritten.
+
+New totality modules and their final statuses are listed in the packet report.
+They distinguish successful Aeneas execution returning a Rust error from an
+Aeneas overflow/index failure. Their framing, range and canonicality premises
+are explicit; none assumes the checked execution it is intended to prove.
 
 ## 7. Findings
 
@@ -225,18 +231,22 @@ helper inputs can overflow (e.g. noncanonical M31 add, unbounded decoder
 value*32 or mutable raw accumulation); the required caller range hypotheses
 must not be omitted. No Rust wrapping/checked choice was changed.
 
-The stopped item's obstruction is environmental: the binding local compile
-rule requires free+inactive≥10 GiB; the recorded preflight has substantially
-less. No Lean process was launched, killed, or retried with a larger cap.
+The historical 10 GiB gate is superseded by the revised local rules:
+shared mkdir lock, no concurrent `lean -M4400`, own object directory. It is
+no longer a blocker. Import-loading failures and their replacement dependency
+builds are retained in the manifest. No memory cap was raised.
 
 ## 8. What remains
 
 R22 remains OPEN. Needed before declaring the requested stage-1 proof complete:
 
-1. Compile the new arithmetic draft and audit every added theorem's axioms;
-   replay a new focused consumer of each reused totality theorem.
-2. Discharge all decoder size/iterator bounds and parsed/sampled canonicality
-   premises bottom-up; distinguish ordinary rejection from Aeneas failure.
+1. The raw arithmetic draft and listed existing totality targets have fresh
+   focused receipts. This is not a coherent release-manifest replay of the
+   complete deployed verifier closure.
+2. The new actual value/loop decoder totality theorems discharge inner
+   arithmetic/iterator obligations under explicit payload/end bounds. Connect
+   the outer size/slice guards, framing and parsed/sampled canonicality to
+   callers; distinguish ordinary rejection from Aeneas failure.
 3. Connect all ten semantic rounds and prepare children with total-execution
    statements, not success-inversion lemmas.
 4. Re-emit/re-pin optimized weights, private fast_pairing and fast_dots, then
@@ -248,3 +258,21 @@ R22 remains OPEN. Needed before declaring the requested stage-1 proof complete:
    after its extraction; the replacement parser and Merkle paths are excluded.
 
 No full manifest replay, Rust/SBF rebuild or release acceptance claim is made.
+
+## 9. Resume proof packet (2026-10-20)
+
+The previously blocked raw-coordinate draft now compiles. New modules
+`R22DecodeValueTotal`, `R22DecodeLoopTotal`, `R22BatchedPushTotal`,
+`R22BatchedValueTotal`, and `R22ControlBounds` compile in dependency order,
+with no changes to existing Lean source. They provide actual decoder
+value/loop totality, both-phase actual rho push totality, unrestricted-row
+actual rho value totality with canonical output, and symbolic control/index
+bounds. All their premises and exact theorem locations are in
+`../evidence/overflow-freedom-20261019/theorem-index.json`.
+
+The combined `R22OverflowAudit` checks 50 public theorem axiom reports.
+The manifest records 36 successful focused targets; every accepted axiom
+report uses only standard axioms. This is focused proof evidence, not a full
+release closure or a completion of the optimized-body/caller obligations in
+section 8. Full metrics, failed attempts and the precise remaining frontier
+are in the packet's `REPORT.md`.

@@ -1,0 +1,143 @@
+/Users/dominic/ZK/.worktrees/r1-overflow-free/docs/research/100bit-spend-path-20261013/lean/R22DecodeLoopTotal.lean:38:49: error: Type mismatch: After simplification, term
+  hlt
+ has type
+  ↑iter.start < ↑iter.end
+but is expected to have type
+  ↑iter.start < ↑n
+/Users/dominic/ZK/.worktrees/r1-overflow-free/docs/research/100bit-spend-path-20261013/lean/R22DecodeLoopTotal.lean:48:8: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    fun r =>
+      match r with
+      | done y => True
+      | cont x' => (x'.1.end = n ∧ ↑x'.1.start ≤ ↑n) ∧ ↑n - ↑x'.1.start < ↑n - ↑iter.start
+  has type
+    ControlFlow (Range × Std.Array Q n)
+        (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 n ×
+          Option
+            (core.result.Result (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 n)
+              AspisR1DecodeKFullV10.r1_wire.Error)) →
+      Prop
+  but is expected to have type
+    WP.Post
+      (ControlFlow (Range × Std.Array Q n)
+        (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 n ×
+          Option
+            (core.result.Result (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 n)
+              AspisR1DecodeKFullV10.r1_wire.Error)))
+  in the application
+    (let (o, iter1) := (some iter.start, next)
+      match o with
+      | none => ok (done (current, none))
+      | some value => do
+        let r ← { row := row, framed := self.framed }.decode_k_value byteOffset value offset
+        let cf ←
+          match r with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let out1 ← current.update value val
+            ok (cont (iter1, out1))
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              match residual with
+                | core.result.Result.Ok x =>
+                  core.convert.Infallible.rec
+                    (fun x =>
+                      Result
+                        (core.result.Result (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 n)
+                          AspisR1DecodeKFullV10.r1_wire.Error))
+                    x
+                | core.result.Result.Err e => ok (core.result.Result.Err (core.convert.FromSame.from e))
+            ok (done (current, some r1))) ⦃
+      r =>
+      match r with
+      | done y => True
+      | cont x' => (x'.1.end = n ∧ ↑x'.1.start ≤ ↑n) ∧ ↑n - ↑x'.1.start < ↑n - ↑iter.start ⦄
+/Users/dominic/ZK/.worktrees/r1-overflow-free/docs/research/100bit-spend-path-20261013/lean/R22DecodeLoopTotal.lean:55:8: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    fun r =>
+      match r with
+      | done y => True
+      | cont x' => (x'.1.end = n ∧ ↑x'.1.start ≤ ↑n) ∧ ↑n - ↑x'.1.start < ↑n - ↑iter.start
+  has type
+    ControlFlow (Range × Std.Array Q n)
+        (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 n ×
+          Option
+            (core.result.Result (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 n)
+              AspisR1DecodeKFullV10.r1_wire.Error)) →
+      Prop
+  but is expected to have type
+    WP.Post
+      (ControlFlow (Range × Std.Array Q n)
+        (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 n ×
+          Option
+            (core.result.Result (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 n)
+              AspisR1DecodeKFullV10.r1_wire.Error)))
+  in the application
+    (let (o, iter1) := (some iter.start, next)
+      match o with
+      | none => ok (done (current, none))
+      | some value => do
+        let r ← { row := row, framed := self.framed }.decode_k_value byteOffset value offset
+        let cf ←
+          match r with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let out1 ← current.update value val
+            ok (cont (iter1, out1))
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (Std.Array AspisR1DecodeKFullV10.aspis_core.field.QM31 n)
+                  (core.convert.FromSame AspisR1DecodeKFullV10.r1_wire.Error) residual
+            ok (done (current, some r1))) ⦃
+      r =>
+      match r with
+      | done y => True
+      | cont x' => (x'.1.end = n ∧ ↑x'.1.start ≤ ↑n) ∧ ↑n - ↑x'.1.start < ↑n - ↑iter.start ⦄
+/Users/dominic/ZK/.worktrees/r1-overflow-free/docs/research/100bit-spend-path-20261013/lean/R22DecodeLoopTotal.lean:46:29: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_loop.body,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵hnext,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok, h̵r̵,̵ ̵core.result.Result.Insts.CoreOpsTry.branch,
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-overflow-free/docs/research/100bit-spend-path-20261013/lean/R22DecodeLoopTotal.lean:54:29: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_loop.body,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵hnext,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok, h̵r̵,̵ ̵core.result.Result.Insts.CoreOpsTry.branch, hupdate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-overflow-free/docs/research/100bit-spend-path-20261013/lean/R22DecodeLoopTotal.lean:54:77: warning: This simp argument is unused:
+  hupdate
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_loop.body,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵hnext,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok, hr, core.result.Result.Insts.CoreOpsTry.branch,̵ ̵h̵u̵p̵d̵a̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/r1-overflow-free/docs/research/100bit-spend-path-20261013/lean/R22DecodeLoopTotal.lean:59:27: warning: This simp argument is unused:
+  WP.spec_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_loop.body, hnext,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̵W̵P̵.̵s̵p̵e̵c̵_̵o̵k̵]̵b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.R22DecodeLoopTotal.decode_loop_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
