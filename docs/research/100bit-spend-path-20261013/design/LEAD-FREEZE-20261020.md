@@ -55,3 +55,14 @@ interface gap (R13), and the two generated-name collisions
 (stage-1/stage-2; `Stage2ContinuationTypes` vs
 `AspisR1PublicPreparation.Types`), with every admitted-route cone extracted
 on the result.
+
+## Sweep v1 (2026-10-20): stopped on CU; candidate kept at prep2
+
+The one-pass sweep's indexed refactors of compact/semantic/weight code
+(trial commit fc62e4705, moved to branch codex/cx-sweep-trial-v1-20261020)
+regress stage 1 on transfer-255 to 1,204,246 CU, 4,679 over its B1 figure
+(the adoption criterion of PREREG-PROOF-SIZE-2 item 1), and Aeneas still
+fails in the inactive-weight reduction. The parked candidate branch is
+reset to the gated prep2 state (6306b3959; pins 73cf9fd5/ea9cb9cd). The
+next sweep keeps a per-change CU ledger and admits only changes that keep
+stage 1 ≤ B1 on every fixture.
