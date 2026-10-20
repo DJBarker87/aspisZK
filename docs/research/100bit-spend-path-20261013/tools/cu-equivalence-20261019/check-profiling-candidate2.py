@@ -3,13 +3,13 @@
 from pathlib import Path
 import hashlib,json,subprocess,sys
 here=Path(__file__).resolve().parent;area=here.parents[1];repo=here.parents[4];ev=area/'evidence/cu-equivalence-20261019';sha=lambda b:hashlib.sha256(b).hexdigest()
-for script in ['extract-profiling-marker.py','check-profiling-source.py']:subprocess.run([sys.executable,str(here/script),'--check'],check=True)
+for script in ['extract-profiling-marker.py','check-profiling-source.py','emit-profiling-source.py']:subprocess.run([sys.executable,str(here/script),'--check'],check=True)
 r=json.loads((ev/'PROFILING-CANDIDATE2-FINAL.json').read_text())
 assert r['candidate']=='190e1779c3b9530047e4d2dfcdf0022b200d6c35'
 assert r['parent']=='0330ae7300b3df6602600a727dfd1b969bfbe19a'
 assert not r['direct_whole_program_emission'] and not r['additional_interpreter'] and not r['candidate_equivalence_assumption']
 assert r['source_audit_sha256']==sha((here/'profiling-source-audit/source-audit.json').read_bytes())
-objects={x['module']:x['object_sha256'] for x in r['selected']}
+objects={x['module'].replace('/','.'):x['object_sha256'] for x in r['selected']}
 for entry in r['selected']:
  receipt=ev/entry['attempt']/'receipt.json';assert entry['receipt_sha256']==sha(receipt.read_bytes())
  rec=json.loads(receipt.read_text());source=(area/'lean'/(entry['module']+'.lean')).read_bytes()
@@ -23,7 +23,8 @@ for entry in r['selected']:
   name=imp.get('module')
   if name in objects:assert imp.get('object_sha256',imp.get('sha256'))==objects[name],imp
 for name,expected in r['raw_emission'].items():
- raw=(here/'profiling-marker-generated'/name).read_bytes();assert sha(raw)==expected and raw==(area/'lean/AspisR1Profiling'/name).read_bytes()
+ raw=(here/'profiling-marker-generated'/name).read_bytes();assert sha(raw)==expected
+ if name=='Funs.lean':assert raw==(area/'lean/AspisR1Profiling'/name).read_bytes()
 # No production-source changes are part of this formal-only work package.
 paths=['crates/aspis-r1-cost-probe/src/verifier.rs','crates/aspis-r1-cost-probe/src/r1_semantic.rs','programs/r1-cost-probe/src/lib.rs','programs/r1-cost-probe/src/r1_pool_adapter.rs']
 for path in paths:assert (repo/path).read_bytes()==subprocess.check_output(['git','-C',str(repo),'show',r['production_revision']+':'+path])

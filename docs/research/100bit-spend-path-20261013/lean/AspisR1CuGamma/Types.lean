@@ -91,11 +91,18 @@ structure r1_semantic.Verified (H : Type) where
 /-- [aspis_r1_cu_gamma::transport::Variant]
     Source: 'lib.rs', lines 774:0-774:30
     Visibility: public -/
-@[discriminant isize]
 inductive transport.Variant where
 | S1 : transport.Variant
 | S2 : transport.Variant
 | D : transport.Variant
+
+def transport.Variant.read_discriminant : transport.Variant → Isize
+  | .S1 => 0#isize
+  | .S2 => 1#isize
+  | .D => 2#isize
+instance _root_.AspisR1CuGamma.transport.Variant.instDiscriminant :
+    Aeneas.Std.Discriminant transport.Variant Isize where
+  read_discriminant := transport.Variant.read_discriminant
 
 /-- [aspis_r1_cu_gamma::transcript::Transcript]
     Source: 'lib.rs', lines 784:0-784:64
@@ -107,7 +114,6 @@ structure transcript.Transcript (H : Type) where
 /-- [aspis_r1_cu_gamma::verifier::Error]
     Source: 'lib.rs', lines 839:0-839:88
     Visibility: public -/
-@[discriminant isize]
 inductive verifier.Error where
 | Parse : verifier.Error
 | Semantic : verifier.Error
@@ -117,6 +123,19 @@ inductive verifier.Error where
 | Query : verifier.Error
 | Checkpoint : verifier.Error
 | Allocation : verifier.Error
+
+def verifier.Error.read_discriminant : verifier.Error → Isize
+  | .Parse => 0#isize
+  | .Semantic => 1#isize
+  | .Transcript => 2#isize
+  | .Relation => 3#isize
+  | .Merkle => 4#isize
+  | .Query => 5#isize
+  | .Checkpoint => 6#isize
+  | .Allocation => 7#isize
+instance _root_.AspisR1CuGamma.verifier.Error.instDiscriminant :
+    Aeneas.Std.Discriminant verifier.Error Isize where
+  read_discriminant := verifier.Error.read_discriminant
 
 /-- [aspis_r1_cu_gamma::verifier::View]
     Source: 'lib.rs', lines 843:0-847:1

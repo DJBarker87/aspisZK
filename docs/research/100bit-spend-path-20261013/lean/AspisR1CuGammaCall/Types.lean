@@ -70,7 +70,6 @@ structure pool_v1.payment_relation.PoolV1WithdrawalPublicV1 where
 /-- [aspis_r1_cu_gamma::pool_v1::pair_forest_semantic_terminal::r0::Public]
     Source: 'lib.rs', lines 305:4-314:5
     Visibility: public -/
-@[discriminant isize]
 inductive pool_v1.pair_forest_semantic_terminal.r0.Public where
 | Transfer :
   pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 →
@@ -81,10 +80,16 @@ inductive pool_v1.pair_forest_semantic_terminal.r0.Public where
   pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 →
   pool_v1.pair_forest_semantic_terminal.r0.Public
 
+def pool_v1.pair_forest_semantic_terminal.r0.Public.read_discriminant : pool_v1.pair_forest_semantic_terminal.r0.Public → Isize
+  | .Transfer _ _ => 0#isize
+  | .Withdrawal _ _ => 1#isize
+instance _root_.AspisR1CuGamma.pool_v1.pair_forest_semantic_terminal.r0.Public.instDiscriminant :
+    Aeneas.Std.Discriminant pool_v1.pair_forest_semantic_terminal.r0.Public Isize where
+  read_discriminant := pool_v1.pair_forest_semantic_terminal.r0.Public.read_discriminant
+
 /-- [aspis_r1_cu_gamma::r1_wire::Error]
     Source: 'lib.rs', lines 536:0-548:1
     Visibility: public -/
-@[discriminant isize]
 inductive r1_wire.Error where
 | Allocation : r1_wire.Error
 | RowOrder : Std.U8 → Std.U8 → r1_wire.Error
@@ -98,10 +103,25 @@ inductive r1_wire.Error where
 | TrailingBytes : r1_wire.Error
 | Public : r1_wire.Error
 
+def r1_wire.Error.read_discriminant : r1_wire.Error → Isize
+  | .Allocation => 0#isize
+  | .RowOrder _ _ => 1#isize
+  | .InvalidRow => 2#isize
+  | .Tag _ => 3#isize
+  | .Length _ => 4#isize
+  | .NonCanonical _ _ => 5#isize
+  | .Boundary _ => 6#isize
+  | .Terminal => 7#isize
+  | .EqualCirclePoints => 8#isize
+  | .TrailingBytes => 9#isize
+  | .Public => 10#isize
+instance _root_.AspisR1CuGamma.r1_wire.Error.instDiscriminant :
+    Aeneas.Std.Discriminant r1_wire.Error Isize where
+  read_discriminant := r1_wire.Error.read_discriminant
+
 /-- [aspis_r1_cu_gamma::verifier::Phase]
     Source: 'lib.rs', lines 841:0-841:152
     Visibility: public -/
-@[discriminant isize]
 inductive verifier.Phase where
 | Parsed : verifier.Phase
 | Semantic : verifier.Phase
@@ -114,6 +134,22 @@ inductive verifier.Phase where
 | CheckpointWrite : verifier.Phase
 | Relation : verifier.Phase
 | Final : verifier.Phase
+
+def verifier.Phase.read_discriminant : verifier.Phase → Isize
+  | .Parsed => 0#isize
+  | .Semantic => 1#isize
+  | .SemanticPart _ => 2#isize
+  | .Prepare => 3#isize
+  | .CheckpointRead => 4#isize
+  | .Merkle _ => 5#isize
+  | .Query _ => 6#isize
+  | .QueryPart _ _ => 7#isize
+  | .CheckpointWrite => 8#isize
+  | .Relation => 9#isize
+  | .Final => 10#isize
+instance _root_.AspisR1CuGamma.verifier.Phase.instDiscriminant :
+    Aeneas.Std.Discriminant verifier.Phase Isize where
+  read_discriminant := verifier.Phase.read_discriminant
 
 /-- [aspis_r1_cu_gamma::verifier::Accumulator]
     Source: 'lib.rs', lines 853:0-853:82

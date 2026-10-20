@@ -2,6 +2,7 @@
 """Share only byte-identical emitted carriers/constants; retain all caller bodies."""
 from pathlib import Path
 import argparse,hashlib,json,re
+from qualify_discriminants import qualify
 ap=argparse.ArgumentParser();ap.add_argument('--check',action='store_true');args=ap.parse_args()
 here=Path(__file__).resolve().parent;area=here.parents[1]
 def blocks(raw):
@@ -30,6 +31,7 @@ for filename,original in [('Types.lean','Types.lean'),('Funs.lean','Funs.lean')]
 rawpins['FunsExternal_Template.lean']=hashlib.sha256((here/'cu-gamma-caller-generated/FunsExternal_Template.lean').read_bytes()).hexdigest()
 manifest=dict(raw_inputs=rawpins,removed_identical_declarations=removed,
  scope='Reuse exact original nominal carriers and constants after byte-equality of declaration bodies. Complete new caller bodies unchanged; imports and universal class variables only. No preparation axiom is introduced: original checked preparations are imported.')
+outputs['Types.lean']=qualify(outputs['Types.lean'],'AspisR1CuGamma')
 outputs['emission-layout.json']=(json.dumps(manifest,indent=2)+'\n').encode()
 for name,raw in outputs.items():
  p=(here/'cu-gamma-caller-emission-layout.json') if name=='emission-layout.json' else area/'lean/AspisR1CuGammaCall'/name

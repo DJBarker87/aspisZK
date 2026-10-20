@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+"""Read-only source boundary audit for retained candidates 4,5,10."""
+from pathlib import Path
+import argparse,hashlib,json,subprocess
+ap=argparse.ArgumentParser();ap.add_argument('--check',action='store_true');a=ap.parse_args();tool=Path(__file__).resolve().parent;repo=tool.parents[4];ev=tool.parents[1]/'evidence/cu-equivalence-20261019';sha=lambda b:hashlib.sha256(b).hexdigest()
+r4='d11f9b2fcbddf68fd1ffec297f987de0aa95a6c0';r5='e58b87665233febecc1b1a75c506eac1a8b72e00';r10='225a3736d8afb8e8d77b38f1b62edbc7f227b5fe';frozen='39c2971dd16c95858a4cfd2c9ae35da052eacfa9'
+def at(r,p):return subprocess.check_output(['git','-C',str(repo),'show',r+':'+p])
+rows=[]
+for p,revs in [('crates/aspis-r1-cost-probe/src/fast_dots.rs',[r4,r5,r10+'^']),('crates/aspis-r1-cost-probe/src/fast_pairing.rs',[r5,r10+'^',frozen]),('crates/aspis-core/src/field.rs',[r4,r5,r10,frozen]),('crates/aspis-core/src/field/wide_exact.rs',[r4,r5,r10,frozen]),('crates/aspis-r1-cost-probe/src/fast_dots.rs',[r10,frozen])]:
+ values=[at(r,p) for r in revs];assert all(v==values[0] for v in values),p
+ rows.append(dict(path=p,revisions=revs,source_sha256=sha(values[0]),all_byte_identical=True))
+report=dict(status='PASS',scope='Chronological original-source composition, no cross-namespace nominal-type identification asserted.',stages=[dict(before='original base dots + old canonical dot accumulator',after='delayed-four base dots + old canonical dot accumulator',proof='CuSavingsDelayedCandidate4.all_callers_equivalence',premises='No canonical gamma/query success premise; shared helper computations arbitrary and identical within this local replacement.'),dict(before='delayed-four base dots + old canonical dot accumulator',after='delayed-four base dots + new canonical dot accumulator',proof='CuSavingsCanonicalVectorContexts.four_slot_tail_context',premises='Actual source gamma powers; producer/origin and constructor-counter invariants discharged in candidate5. Head-plus-two tail is the only dot client within four_dots; base reduction is untouched.'),dict(before='delayed-four base dots + new canonical dot accumulator',after='fixed608 prefix + delayed-four base dots + new canonical dot accumulator',proof='CuSavingsPrefixCandidate10.caller_context',premises='Actual View.query supplies608bound; no valid-proof/decoder-success premise; actual std array.from_fn admitted by source_eq_build.')],source_boundaries=rows,conclusion='Composable under the inherited original-source/runtime boundary with no extra arithmetic equivalence or success law. Do not directly identify candidate4 old/private-count state carrier with candidate10 current/no-private-count carrier; chronological exact-source replacement avoids that unsupported identification.',kernel_limitation='This audit is source binding, not a new Lean theorem equating three independently generated nominal interpreter namespaces or proving the compiler. Existing local checked context results and source factoring supply the replacement chain.')
+b=(json.dumps(report,indent=2)+'\n').encode();p=ev/'DOTS-RETAINED-COMPOSITION-REVIEW.json'
+if a.check:assert p.read_bytes()==b
+else:p.write_bytes(b)
+print(json.dumps(dict(check=a.check,status='PASS',exact_source_boundaries=len(rows),extra_arithmetic_assumptions=False)))

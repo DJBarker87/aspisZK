@@ -53,6 +53,10 @@ selected={
 'CuSavingsS2SourceTables':'s2-source-tables-a','CuSavingsS2SourceInactive':'s2-inactive-c','CuSavingsS2MaskBits':'s2-mask-bits-b','CuSavingsS2SourceSearch':'s2-search-b',
 'CuSavingsS2SourceMaskFlag':'s2-mask-flag-a','CuSavingsS2SourceMask':'s2-mask-b','CuSavingsS2SourceArrays':'s2-arrays-b','CuSavingsS2SourceCatalog':'s2-catalog-d',
 'CuSavingsS2SourceCoefficientStep':'s2-coefficient-step-b','CuSavingsS2SourceCoefficientLoop':'s2-coefficient-loop-b','CuSavingsS2SourceTailStep':'s2-tail-step-a','CuSavingsS2SourceTail':'s2-tail-a','CuSavingsS2SourceKernel':'s2-kernel-b','CuSavingsS2Candidate3':'s2-candidate3-d'}
+refresh_path=tool/'qualified-registration-selected.json'
+if refresh_path.is_file():
+ for mod,attempt in json.loads(refresh_path.read_text()).items():
+  if mod in selected:selected[mod]=attempt
 objects={};receipts={};results={}
 allowed={'propext','Classical.choice','Quot.sound','core.fmt.Formatter','Aeneas.Std.core.fmt.Formatter'}
 for module,attempt in selected.items():
@@ -63,9 +67,12 @@ for module,attempt in selected.items():
  decls=re.findall(r"'([^']+)' (?:depends on axioms: \[([^\]]*)\]|does not depend on any axioms)",output);assert decls,module
  for name,axs in decls:assert set(filter(None,re.sub(r'\s+','',axs).split(',')))<=allowed,(name,axs)
  assert r['cache_provenance']['selected_owner_objects']['Aeneas']['sha256']=='d3bfce818c2409992274bc1852aa00280cb7a8139465ef0bab674498e4cdc69d'
- assert not r['foreign_lean_jobs_at_launch'],(module,r['foreign_lean_jobs_at_launch'])
+ if r.get('uncapped_nuc'):
+  assert r['resource_authorization']=='User: status update. no nuc limits (2026-10-19)'
+  assert r['cgroup_limits']=={'memory.high':'max','memory.max':'max','memory.swap.max':'max'}
+ else:assert not r['foreign_lean_jobs_at_launch'],(module,r['foreign_lean_jobs_at_launch'])
  objects[module.replace('/','.')]=r['object_sha256'];receipts[module]=r
- results[module]={k:r[k] for k in ['source_revision','source_sha256','object_sha256','features','command','exit_status','wall_seconds','peak_rss_kib','process_swaps','cgroup_swap_bytes','print_axioms_output']}
+ results[module]={k:r[k] for k in ['source_revision','source_sha256','object_sha256','features','command','exit_status','wall_seconds','peak_rss_kib','process_swaps','cgroup_swap_bytes','foreign_lean_jobs_at_launch','print_axioms_output']}
  results[module].update(attempt=attempt,receipt_sha256=sha(rp.read_bytes()))
 reused=json.loads((tool/'s2-reused-table-objects.json').read_text())
 for module,p in reused['entries'].items():

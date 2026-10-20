@@ -20,6 +20,10 @@ assert pins['old_tail_tokens']==pins['new_tail_tokens'] and len(pins['new_tail_t
 assert pins['old_tail_sha256']==pins['new_tail_sha256']
 assert sha((area/'lean/CuSavingsGammaPrefixData.lean').read_bytes())==pins['lean_sha256']
 selected={'CuSavingsGammaSourceBinding':'gamma-source-binding-b','CuSavingsGammaPrefixData':'gamma-prefix-data-b','CuSavingsGammaCandidate1':'gamma-candidate1-a'}
+refresh_path=tool/'qualified-registration-selected.json'
+if refresh_path.is_file():
+ for mod,attempt in json.loads(refresh_path.read_text()).items():
+  if mod in selected:selected[mod]=attempt
 results={};objects={};receipts={}
 for module,attempt in selected.items():
  rp=ev/attempt/'receipt.json';r=json.loads(rp.read_text());src=(area/'lean'/(module+'.lean')).read_bytes()

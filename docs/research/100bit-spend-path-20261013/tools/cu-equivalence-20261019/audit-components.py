@@ -97,9 +97,8 @@ for name in ['Types.lean','Funs.lean']:
         Path(__file__).parent/'cu-prefix-generated'/name).read_bytes(),name
 audit['cu_query_check']=json.loads(subprocess.check_output([
     sys.executable,str(Path(__file__).with_name('extract-cu-query.py')),'--check'],text=True))
-for name in ['Types.lean','Funs.lean']:
-    assert (area/'lean/AspisR1CuQuery'/name).read_bytes()==(
-        Path(__file__).parent/'cu-query-generated'/name).read_bytes(),name
+audit['cu_query_promotion_check']=[json.loads(line) for line in subprocess.check_output([
+    sys.executable,str(Path(__file__).with_name('emit-cu-query.py')),'--check'],text=True).splitlines()]
 regression=json.loads((evidence/'nojoin-regression-emission-a/summary.json').read_text())
 assert regression['exit_status']==0
 assert len(regression['cases'])==4

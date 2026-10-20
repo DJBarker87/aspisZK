@@ -17,7 +17,6 @@ namespace AspisR1Profiling
 /-- [aspis_r1_profiling::Phase]
     Source: 'lib.rs', lines 1:0-1:152
     Visibility: public -/
-@[discriminant isize]
 inductive Phase where
 | Parsed : Phase
 | Semantic : Phase
@@ -30,5 +29,21 @@ inductive Phase where
 | CheckpointWrite : Phase
 | Relation : Phase
 | Final : Phase
+
+def Phase.read_discriminant : Phase → Isize
+  | .Parsed => 0#isize
+  | .Semantic => 1#isize
+  | .SemanticPart _ => 2#isize
+  | .Prepare => 3#isize
+  | .CheckpointRead => 4#isize
+  | .Merkle _ => 5#isize
+  | .Query _ => 6#isize
+  | .QueryPart _ _ => 7#isize
+  | .CheckpointWrite => 8#isize
+  | .Relation => 9#isize
+  | .Final => 10#isize
+instance _root_.AspisR1Profiling.Phase.instDiscriminant :
+    Aeneas.Std.Discriminant Phase Isize where
+  read_discriminant := Phase.read_discriminant
 
 end AspisR1Profiling

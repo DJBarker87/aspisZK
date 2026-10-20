@@ -44,11 +44,18 @@ structure field.wide_exact.WideExact where
 /-- [aspis_r1_s2_groups::transport::Variant]
     Source: 'transport.rs', lines 3:0-3:30
     Visibility: public -/
-@[discriminant isize]
 inductive transport.Variant where
 | S1 : transport.Variant
 | S2 : transport.Variant
 | D : transport.Variant
+
+def transport.Variant.read_discriminant : transport.Variant → Isize
+  | .S1 => 0#isize
+  | .S2 => 1#isize
+  | .D => 2#isize
+instance _root_.AspisR1S2Groups.transport.Variant.instDiscriminant :
+    Aeneas.Std.Discriminant transport.Variant Isize where
+  read_discriminant := transport.Variant.read_discriminant
 
 /-- [aspis_r1_s2_groups::Weights]
     Source: 'lib.rs', lines 6:0-11:1
@@ -62,7 +69,6 @@ structure Weights where
 /-- [aspis_r1_s2_groups::r0::Error]
     Source: 'r0/mod.rs', lines 2:0-20:1
     Visibility: public -/
-@[discriminant isize]
 inductive r0.Error where
 | IndexOutOfRange : r0.Error
 | WrongLength : r0.Error
@@ -81,6 +87,28 @@ inductive r0.Error where
 | Authentication : r0.Error
 | V1 : r0.Error
 | V2 : r0.Error
+
+def r0.Error.read_discriminant : r0.Error → Isize
+  | .IndexOutOfRange => 0#isize
+  | .WrongLength => 1#isize
+  | .ZeroDenominator => 2#isize
+  | .Allocation => 3#isize
+  | .NonCanonical => 4#isize
+  | .WrongField => 5#isize
+  | .InvalidPoints => 6#isize
+  | .QuotientNotInImage => 7#isize
+  | .RankDeficient => 8#isize
+  | .Parse => 9#isize
+  | .Semantic => 10#isize
+  | .Schedule => 11#isize
+  | .Sampler => 12#isize
+  | .Commitment => 13#isize
+  | .Authentication => 14#isize
+  | .V1 => 15#isize
+  | .V2 => 16#isize
+instance _root_.AspisR1S2Groups.r0.Error.instDiscriminant :
+    Aeneas.Std.Discriminant r0.Error Isize where
+  read_discriminant := r0.Error.read_discriminant
 
 /-- [aspis_r1_s2_groups::{aspis_r1_s2_groups::Weights}::raw::closure#1]
     Source: 'lib.rs', lines 23:35-23:79 -/

@@ -44,11 +44,18 @@ structure field.WideExact where
 /-- [aspis_r1_cu_query::transport::Variant]
     Source: 'lib.rs', lines 48:0-48:30
     Visibility: public -/
-@[discriminant isize]
 inductive transport.Variant where
 | S1 : transport.Variant
 | S2 : transport.Variant
 | D : transport.Variant
+
+def transport.Variant.read_discriminant : transport.Variant → Isize
+  | .S1 => 0#isize
+  | .S2 => 1#isize
+  | .D => 2#isize
+instance _root_.AspisR1CuQuery.transport.Variant.instDiscriminant :
+    Aeneas.Std.Discriminant transport.Variant Isize where
+  read_discriminant := transport.Variant.read_discriminant
 
 /-- [aspis_r1_cu_query::verifier::View]
     Source: 'lib.rs', lines 63:0-67:1

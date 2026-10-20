@@ -2,6 +2,7 @@
 """Pin gamma reuse sources and checked conditional caller theorems, not closure."""
 from pathlib import Path
 import hashlib,importlib.util,json,re,resource,subprocess,sys,time
+from qualify_discriminants import qualify
 started=time.monotonic()
 here=Path(__file__).resolve().parent;area=here.parents[1];repo=here.parents[4]
 evidence=area/'evidence/cu-equivalence-20261019'
@@ -45,7 +46,7 @@ for name,pin in raw_pins.items():
 for name in ['CuGamma.llbc','CuGammaPrepared.llbc']:
  assert re.fullmatch('[0-9a-f]{64}',artifacts['files'][remote+'/'+name]),name
 
-assert (area/'lean/AspisR1CuGamma/Types.lean').read_bytes()==(here/'cu-gamma-generated/Types.lean').read_bytes()
+assert (area/'lean/AspisR1CuGamma/Types.lean').read_bytes()==qualify((here/'cu-gamma-generated/Types.lean').read_bytes(),'AspisR1CuGamma')
 raw=(here/'cu-gamma-generated/Funs.lean').read_bytes()
 model=(area/'lean/AspisR1CuGamma/Funs.lean').read_bytes()
 assert model==raw.replace(b'namespace AspisR1CuGamma\n',b'namespace AspisR1CuGamma\n\nvariable [Boundaries]\n',1)
@@ -61,13 +62,21 @@ attempts={
  'CuSavingsGammaCaller':'cu-gamma-caller-a',
  'CuSavingsGammaPreparation':'cu-gamma-preparation-d',
  'CuSavingsGammaTransfer':'cu-gamma-transfer-a'}
+refresh_path=here/'qualified-registration-selected.json'
+if refresh_path.is_file():
+ for mod,attempt in json.loads(refresh_path.read_text()).items():
+  if mod in attempts:attempts[mod]=attempt
 records={}
 for module,attempt in attempts.items():
  directory=evidence/attempt;r=read(directory/'receipt.json')
  assert r['source_sha256']==sha(area/'lean'/(module+'.lean'))==sha(directory/'source.lean'),module
  assert r['exit_status']==0 and r['process_swaps']==0 and r['cgroup_swap_bytes']==0,module
- assert r['cgroup_limits']=={'memory.high':str(6*2**30),'memory.max':str(8*2**30),'memory.swap.max':'0'}
- assert sum(value for _,value in r['reservations'])<=50*2**30,module
+ if r.get('uncapped_nuc'):
+  assert r['resource_authorization']=='User: status update. no nuc limits (2026-10-19)'
+  assert r['cgroup_limits']=={'memory.high':'max','memory.max':'max','memory.swap.max':'max'}
+ else:
+  assert r['cgroup_limits']=={'memory.high':str(6*2**30),'memory.max':str(8*2**30),'memory.swap.max':'0'}
+  assert sum(value for _,value in r['reservations'])<=50*2**30,module
  log=r['print_axioms_output'];assert 'sorryAx' not in log and 'error:' not in log
  axioms={n.strip() for b in re.findall(r'depends on axioms:\s*\[([^\]]*)\]',log) for n in b.split(',')}
  assert axioms<={'propext','Classical.choice','Quot.sound'},(module,axioms)

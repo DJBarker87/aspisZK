@@ -29,6 +29,10 @@ attempts={
  'AspisR1CuGammaCall/FunsExternal':'cu-gamma-call-externals-a',
  'AspisR1CuGammaCall/Funs':'cu-gamma-call-funs-a',
  'CuSavingsGammaTx1':'cu-gamma-tx1-a'}
+refresh_path=here/'qualified-registration-selected.json'
+if refresh_path.is_file():
+ for mod,attempt in json.loads(refresh_path.read_text()).items():
+  if mod in attempts:attempts[mod]=attempt
 records={}
 for module,attempt in attempts.items():
  directory=evidence/attempt;r=read(directory/'receipt.json')

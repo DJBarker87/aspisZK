@@ -98,3 +98,5 @@ The failed no-branch-join arrow emission and first local nil-case proof are
 retained as excluded diagnostics. The existing pinned arrow-capable producer
 succeeded without compiler changes. No unchanged SBF/codec/injection/CU suite
 was repeated, and no ELF, shared object or compiled Lean object is committed.
+
+Unified-import normalization: the generated Phase discriminant instance now has a qualified registration name with identical constructors and ordinals. emit-profiling-source.py inversely audits that mechanical change; raw Funs is unchanged. The six affected targets were refreshed as profiling-{types,funs,marker,projection,resources,candidate2}-qualified-a. All exit0, about1.604seconds each, zero process/cgroup swap, only previously reported standard axioms. The final JSON selects these coherent receipts. No proof statement or Rust body changed.

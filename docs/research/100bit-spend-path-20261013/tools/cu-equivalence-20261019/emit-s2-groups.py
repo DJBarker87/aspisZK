@@ -2,10 +2,12 @@
 """Check/install exact source emissions with one shared-instance binder."""
 from pathlib import Path
 import argparse,hashlib,json
+from qualify_discriminants import qualify
 p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');a=p.parse_args()
 tool=Path(__file__).resolve().parent;area=tool.parents[1]
 for n in ['Types.lean','Funs.lean']:
  raw=(tool/'s2-groups-generated'/n).read_bytes();data=raw
+ if n=='Types.lean':data=qualify(raw,'AspisR1S2Groups')
  if n=='Funs.lean':
   marker=b'namespace AspisR1S2Groups\n';assert raw.count(marker)==1
   data=raw.replace(marker,marker+b'\nvariable [Shared]\n',1)

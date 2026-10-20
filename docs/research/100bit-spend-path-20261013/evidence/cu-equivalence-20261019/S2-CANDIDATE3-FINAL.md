@@ -73,3 +73,7 @@ production source or artifact changed. Worst measured values remain
 1,199,687 stage-1 CU and 1,188,496 settlement CU. These are fixture measurements,
 not a universal compute bound. No protocol, public-input, checkpoint or proof
 encoding changed.
+
+## Joint-import registration refresh
+
+The final selected JSON now supersedes the historical run metrics above: all 21 dependent targets were refreshed after generated discriminator registrations were qualified to avoid global instance-name collisions in the joint proof closure. Constructor declarations, ordering, ordinal equations, computation and theorem statements are unchanged. The refreshed runs record overlapping focused jobs under the user's later parallel/no-NUC-limits authorization; no exclusive-host claim applies to these refreshed targets. See `QUALIFIED-REGISTRATIONS.json` and `qualified-registration-selected.json` under tooling for the inverse audit and selected receipts.
