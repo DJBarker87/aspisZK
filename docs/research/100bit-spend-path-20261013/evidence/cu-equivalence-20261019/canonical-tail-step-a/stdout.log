@@ -1,0 +1,106 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalTailStep.lean:47:12: error: unsolved goals
+case ok.ok
+inst✝¹ : Shared
+inst✝ : VectorCommon
+state : old_pairing.EbyKDot
+value : field.wide_exact.WideExact
+scalar : field.QM31
+hv : WideCanonical value
+hc : RelatedCounts state
+result : core.result.Result Unit Unit
+after : old_pairing.EbyKDot
+hp : state.push value scalar = ok (result, after)
+v✝ : Unit
+hu : core.result.Result.unwrap core.fmt.DebugUnit result = ok v✝
+⊢ (let (result, after) := (result, project after)
+    do
+    core.result.Result.unwrap core.fmt.DebugUnit result
+    ok after) =
+    do
+    let after ←
+      let (result, after) := (result, after)
+        do
+        core.result.Result.unwrap core.fmt.DebugUnit result
+        ok after
+    ok (project after)
+
+case ok.fail
+inst✝¹ : Shared
+inst✝ : VectorCommon
+state : old_pairing.EbyKDot
+value : field.wide_exact.WideExact
+scalar : field.QM31
+hv : WideCanonical value
+hc : RelatedCounts state
+result : core.result.Result Unit Unit
+after : old_pairing.EbyKDot
+hp : state.push value scalar = ok (result, after)
+e✝ : Std.Error
+hu : core.result.Result.unwrap core.fmt.DebugUnit result = fail e✝
+⊢ (let (result, after) := (result, project after)
+    do
+    core.result.Result.unwrap core.fmt.DebugUnit result
+    ok after) =
+    do
+    let after ←
+      let (result, after) := (result, after)
+        do
+        core.result.Result.unwrap core.fmt.DebugUnit result
+        ok after
+    ok (project after)
+
+case ok.div
+inst✝¹ : Shared
+inst✝ : VectorCommon
+state : old_pairing.EbyKDot
+value : field.wide_exact.WideExact
+scalar : field.QM31
+hv : WideCanonical value
+hc : RelatedCounts state
+result : core.result.Result Unit Unit
+after : old_pairing.EbyKDot
+hp : state.push value scalar = ok (result, after)
+hu : core.result.Result.unwrap core.fmt.DebugUnit result = div
+⊢ (let (result, after) := (result, project after)
+    do
+    core.result.Result.unwrap core.fmt.DebugUnit result
+    ok after) =
+    do
+    let after ←
+      let (result, after) := (result, after)
+        do
+        core.result.Result.unwrap core.fmt.DebugUnit result
+        ok after
+    ok (project after)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalTailStep.lean:68:7: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalTailStep.lean:80:65: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 1
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑↑i
+ b := ↑(↑g).length
+ c := ↑(List.length ?m.71)
+ d := ↑?m.72
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalTailStep.lean:81:4: error: Dependent elimination failed: Failed to solve equation
+  ok value =
+    match (↑g)[↑i]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x
+'AspisR1.CuSavingsCanonicalTailStep.advance_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsCanonicalTailStep.advance_counts' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsCanonicalTailStep.read_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalTailStep.input_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

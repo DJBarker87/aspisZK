@@ -1,0 +1,69 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsPush.lean:36:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsCanonicalDotsPush.scalar_checks`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsPush.lean:55:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsCanonicalDotsPush.from_wide`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsPush.lean:71:6: error: Type mismatch: After simplification, term
+  Nat.lt_of_not_ge hlimit
+ has type
+  @LT.lt ℕ instLTNat ↑self.count ↑4096#usize
+but is expected to have type
+  @LT.lt ℕ instLTNat (↑self.count) 4096
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsPush.lean:86:39: error: unsolved goals
+inst✝ : Shared
+self : old_pairing.EbyKDot
+value : field.wide_exact.WideExact
+scalar : field.QM31
+hc : WideCanonical value
+hcounts : RelatedCounts self
+hmax : new_pairing.MAX_TERMS = old_pairing.MAX_TERMS
+hlimit : ¬self.count ≥ old_pairing.MAX_TERMS
+hbound : ↑self.count < 4096
+hc0 : ↑self.c0.count < 4096
+hc1 : ↑self.c1.count < 4096
+⊢ ∀ (v : core.result.Result new_pairing.canonical.Q Unit),
+    old_pairing.checked_q scalar = ok v →
+      ∀
+        (v_1 :
+          core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible Unit) new_pairing.canonical.Q),
+        core.result.Result.Insts.CoreOpsTry.branch v = ok v_1 →
+          (match v_1 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let d ← (projectDot self.c0).push (limbs value.c0) val
+              let d1 ← (projectDot self.c1).push (limbs value.c1) val
+              let i ← self.count + 1#usize
+              ok (core.result.Result.Ok (), { c0 := d, c1 := d1, count := i })
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame Unit) residual
+              ok (r1, { c0 := projectDot self.c0, c1 := projectDot self.c1, count := self.count })) =
+            match v_1 with
+            | core.ops.control_flow.ControlFlow.Continue scalar => do
+              let left ← (projectDot self.c0).push (limbs value.c0) scalar
+              let right ← (projectDot self.c1).push (limbs value.c1) scalar
+              let count ← self.count + 1#usize
+              ok (core.result.Result.Ok (), { c0 := left, c1 := right, count := count })
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame Unit) residual
+              ok (r1, { c0 := projectDot self.c0, c1 := projectDot self.c1, count := self.count })
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsPush.lean:102:30: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsCanonicalDotsPush.dot_push' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsPush.scalar_checks' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsPush.from_wide' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsPush.public_push' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

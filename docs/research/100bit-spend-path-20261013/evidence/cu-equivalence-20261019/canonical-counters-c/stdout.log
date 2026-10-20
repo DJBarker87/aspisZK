@@ -1,0 +1,262 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:26:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsCanonicalDotsCounters.new_body`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:36:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsCanonicalDotsCounters.old_body`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:67:26: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  cell raw sums iter.start
+in the target expression
+  (do
+      let x ←
+        match do
+            let out ← fail error
+            ok (cont (next, projected out)) with
+          | ok r =>
+            match r with
+            | cont x => loop (fun x => new_pairing.canonical.Dot.push_loop.body raw x.1 x.2) x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      ok x.sums) =
+    match do
+      let out ← fail error
+      ok (cont (next, out)) with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => old_pairing.canonical.Dot.push_loop.body raw x.1 x.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+
+case succ.fail
+inst✝ : Shared
+raw : Raw
+fuel : ℕ
+ih :
+  ∀ (sums : Raw) (iter : Range),
+    ↑iter.end = 4 →
+      ↑iter.start ≤ 4 →
+        4 - ↑iter.start = fuel →
+          loopResult (new_pairing.canonical.Dot.push_loop iter (projected sums) raw) =
+            old_pairing.canonical.Dot.push_loop iter sums raw
+sums : Raw
+iter : Range
+he : ↑iter.end = 4
+hi : ↑iter.start ≤ 4
+hf : 4 - ↑iter.start = fuel + 1
+next : OccupancyRangeTraversal.Range
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, next)
+hinc : ↑next.start = ↑iter.start + 1
+hend : next.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+error : Error
+hcell : cell raw sums iter.start = fail error
+⊢ (do
+      let x ←
+        match do
+            let out ← fail error
+            ok (cont (next, projected out)) with
+          | ok r =>
+            match r with
+            | cont x => loop (fun x => new_pairing.canonical.Dot.push_loop.body raw x.1 x.2) x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      ok x.sums) =
+    match do
+      let out ← fail error
+      ok (cont (next, out)) with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => old_pairing.canonical.Dot.push_loop.body raw x.1 x.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:68:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  cell raw sums iter.start
+in the target expression
+  (do
+      let x ←
+        match do
+            let out ← div
+            ok (cont (next, projected out)) with
+          | ok r =>
+            match r with
+            | cont x => loop (fun x => new_pairing.canonical.Dot.push_loop.body raw x.1 x.2) x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      ok x.sums) =
+    match do
+      let out ← div
+      ok (cont (next, out)) with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => old_pairing.canonical.Dot.push_loop.body raw x.1 x.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+
+case succ.div
+inst✝ : Shared
+raw : Raw
+fuel : ℕ
+ih :
+  ∀ (sums : Raw) (iter : Range),
+    ↑iter.end = 4 →
+      ↑iter.start ≤ 4 →
+        4 - ↑iter.start = fuel →
+          loopResult (new_pairing.canonical.Dot.push_loop iter (projected sums) raw) =
+            old_pairing.canonical.Dot.push_loop iter sums raw
+sums : Raw
+iter : Range
+he : ↑iter.end = 4
+hi : ↑iter.start ≤ 4
+hf : 4 - ↑iter.start = fuel + 1
+next : OccupancyRangeTraversal.Range
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, next)
+hinc : ↑next.start = ↑iter.start + 1
+hend : next.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+hcell : cell raw sums iter.start = div
+⊢ (do
+      let x ←
+        match do
+            let out ← div
+            ok (cont (next, projected out)) with
+          | ok r =>
+            match r with
+            | cont x => loop (fun x => new_pairing.canonical.Dot.push_loop.body raw x.1 x.2) x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      ok x.sums) =
+    match do
+      let out ← div
+      ok (cont (next, out)) with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => old_pairing.canonical.Dot.push_loop.body raw x.1 x.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:70:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  cell raw sums iter.start
+in the target expression
+  (do
+      let x ←
+        match do
+            let out ← ok updated
+            ok (cont (next, projected out)) with
+          | ok r =>
+            match r with
+            | cont x => loop (fun x => new_pairing.canonical.Dot.push_loop.body raw x.1 x.2) x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      ok x.sums) =
+    match do
+      let out ← ok updated
+      ok (cont (next, out)) with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => old_pairing.canonical.Dot.push_loop.body raw x.1 x.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+
+case succ.ok
+inst✝ : Shared
+raw : Raw
+fuel : ℕ
+ih :
+  ∀ (sums : Raw) (iter : Range),
+    ↑iter.end = 4 →
+      ↑iter.start ≤ 4 →
+        4 - ↑iter.start = fuel →
+          loopResult (new_pairing.canonical.Dot.push_loop iter (projected sums) raw) =
+            old_pairing.canonical.Dot.push_loop iter sums raw
+sums : Raw
+iter : Range
+he : ↑iter.end = 4
+hi : ↑iter.start ≤ 4
+hf : 4 - ↑iter.start = fuel + 1
+next : OccupancyRangeTraversal.Range
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, next)
+hinc : ↑next.start = ↑iter.start + 1
+hend : next.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+updated : Raw
+hcell : cell raw sums iter.start = ok updated
+⊢ (do
+      let x ←
+        match do
+            let out ← ok updated
+            ok (cont (next, projected out)) with
+          | ok r =>
+            match r with
+            | cont x => loop (fun x => new_pairing.canonical.Dot.push_loop.body raw x.1 x.2) x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      ok x.sums) =
+    match do
+      let out ← ok updated
+      ok (cont (next, out)) with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => old_pairing.canonical.Dot.push_loop.body raw x.1 x.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.CuSavingsCanonicalDotsCounters.projected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsCounters.new_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsCounters.old_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsCounters.loop_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsCounters.push_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

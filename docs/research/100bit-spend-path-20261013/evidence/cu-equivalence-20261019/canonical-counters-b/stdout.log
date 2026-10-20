@@ -1,0 +1,66 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:26:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsCanonicalDotsCounters.new_body`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:36:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsCanonicalDotsCounters.old_body`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:66:6: error: 'change' tactic failed, pattern
+  (do
+      let updated ← cell raw sums iter.start
+      loopResult (new_pairing.canonical.Dot.push_loop next (projected updated) raw)) =
+    do
+    let updated ← cell raw sums iter.start
+    old_pairing.canonical.Dot.push_loop next updated raw
+is not definitionally equal to target
+  (do
+      let x ←
+        match do
+            let out ← cell raw sums iter.start
+            ok (cont (next, projected out)) with
+          | ok r =>
+            match r with
+            | cont x => loop (fun x => new_pairing.canonical.Dot.push_loop.body raw x.1 x.2) x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      ok x.sums) =
+    match do
+      let out ← cell raw sums iter.start
+      ok (cont (next, out)) with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => old_pairing.canonical.Dot.push_loop.body raw x.1 x.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:89:2: error: Type mismatch: After simplification, term
+  hl
+ has type
+  (do
+      let x ← new_pairing.canonical.Dot.push_loop { start := 0#usize, «end» := 4#usize } (projected self.sums) raw
+      ok x.sums) =
+    old_pairing.canonical.Dot.push_loop { start := 0#usize, «end» := 4#usize } self.sums raw
+but is expected to have type
+  (do
+      let x ← new_pairing.canonical.Dot.push_loop { start := 0#usize, «end» := 4#usize } (projected self.sums) raw
+      ok x.sums) =
+    do
+    let x ← old_pairing.canonical.Dot.push_loop { start := 0#usize, «end» := 4#usize } self.sums raw
+    ok x
+'AspisR1.CuSavingsCanonicalDotsCounters.projected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsCounters.new_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsCounters.old_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsCounters.loop_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsCounters.push_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

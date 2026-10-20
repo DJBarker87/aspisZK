@@ -1,0 +1,464 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalFieldStreamLoop.lean:13:8: warning: automatically included section variable(s) unused in theorem `_private.CuSavingsCanonicalFieldStreamLoop.0.AspisR1.CuSavingsCanonicalFieldStreamLoop.bind_ok`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalFieldStreamLoop.lean:45:30: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalFieldStreamLoop.lean:79:8: warning: automatically included section variable(s) unused in theorem `_private.CuSavingsCanonicalFieldStreamLoop.0.AspisR1.CuSavingsCanonicalFieldStreamLoop.unroll`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalFieldStreamLoop.lean:104:14: error: Tactic `rfl` failed: The left-hand side
+  do
+    let flow ←
+      do
+        let (entry, cursor) ← ok (some (value, scalar), cursor1)
+        match entry with
+          | none => do
+            let value ← finish state
+            ok (done (core.result.Result.Ok value))
+          | some (value, scalar) => do
+            let (result, dot) ← push state value scalar
+            match result with
+              | core.result.Result.Ok a => ok (cont (cursor, dot))
+              | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+    match flow with
+      | done v => ok v
+      | cont t =>
+        loop
+          (fun state => do
+            let (entry, cursor) ← next state.1
+            match entry with
+              | none => do
+                let value ← finish state.2
+                ok (done (core.result.Result.Ok value))
+              | some (value, scalar) => do
+                let (result, dot) ← push state.2 value scalar
+                match result with
+                  | core.result.Result.Ok a => ok (cont (cursor, dot))
+                  | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+          t
+is not definitionally equal to the right-hand side
+  do
+    let (result, state1) ← fail e
+    match result with
+      | core.result.Result.Ok a =>
+        loop
+          (fun state => do
+            let (entry, cursor) ← next state.1
+            match entry with
+              | none => do
+                let value ← finish state.2
+                ok (done (core.result.Result.Ok value))
+              | some (value, scalar) => do
+                let (result, dot) ← push state.2 value scalar
+                match result with
+                  | core.result.Result.Ok a => ok (cont (cursor, dot))
+                  | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+          (cursor1, state1)
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Parse)
+
+case fail
+inst✝ : Shared
+S T : Type
+next : S → Result (Option (E × K) × S)
+push : T → E → K → Result (core.result.Result Unit Unit × T)
+finish : T → Result E
+cursor cursor1 : S
+state : T
+value : E
+scalar : K
+h : next cursor = ok (some (value, scalar), cursor1)
+e : Error
+⊢ (do
+      let flow ←
+        do
+          let (entry, cursor) ← ok (some (value, scalar), cursor1)
+          match entry with
+            | none => do
+              let value ← finish state
+              ok (done (core.result.Result.Ok value))
+            | some (value, scalar) => do
+              let (result, dot) ← push state value scalar
+              match result with
+                | core.result.Result.Ok a => ok (cont (cursor, dot))
+                | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+      match flow with
+        | done v => ok v
+        | cont t =>
+          loop
+            (fun state => do
+              let (entry, cursor) ← next state.1
+              match entry with
+                | none => do
+                  let value ← finish state.2
+                  ok (done (core.result.Result.Ok value))
+                | some (value, scalar) => do
+                  let (result, dot) ← push state.2 value scalar
+                  match result with
+                    | core.result.Result.Ok a => ok (cont (cursor, dot))
+                    | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+            t) =
+    do
+    let (result, state1) ← fail e
+    match result with
+      | core.result.Result.Ok a =>
+        loop
+          (fun state => do
+            let (entry, cursor) ← next state.1
+            match entry with
+              | none => do
+                let value ← finish state.2
+                ok (done (core.result.Result.Ok value))
+              | some (value, scalar) => do
+                let (result, dot) ← push state.2 value scalar
+                match result with
+                  | core.result.Result.Ok a => ok (cont (cursor, dot))
+                  | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+          (cursor1, state1)
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Parse)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalFieldStreamLoop.lean:105:11: error: Tactic `rfl` failed: The left-hand side
+  do
+    let flow ←
+      do
+        let (entry, cursor) ← ok (some (value, scalar), cursor1)
+        match entry with
+          | none => do
+            let value ← finish state
+            ok (done (core.result.Result.Ok value))
+          | some (value, scalar) => do
+            let (result, dot) ← push state value scalar
+            match result with
+              | core.result.Result.Ok a => ok (cont (cursor, dot))
+              | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+    match flow with
+      | done v => ok v
+      | cont t =>
+        loop
+          (fun state => do
+            let (entry, cursor) ← next state.1
+            match entry with
+              | none => do
+                let value ← finish state.2
+                ok (done (core.result.Result.Ok value))
+              | some (value, scalar) => do
+                let (result, dot) ← push state.2 value scalar
+                match result with
+                  | core.result.Result.Ok a => ok (cont (cursor, dot))
+                  | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+          t
+is not definitionally equal to the right-hand side
+  do
+    let (result, state1) ← div
+    match result with
+      | core.result.Result.Ok a =>
+        loop
+          (fun state => do
+            let (entry, cursor) ← next state.1
+            match entry with
+              | none => do
+                let value ← finish state.2
+                ok (done (core.result.Result.Ok value))
+              | some (value, scalar) => do
+                let (result, dot) ← push state.2 value scalar
+                match result with
+                  | core.result.Result.Ok a => ok (cont (cursor, dot))
+                  | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+          (cursor1, state1)
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Parse)
+
+case div
+inst✝ : Shared
+S T : Type
+next : S → Result (Option (E × K) × S)
+push : T → E → K → Result (core.result.Result Unit Unit × T)
+finish : T → Result E
+cursor cursor1 : S
+state : T
+value : E
+scalar : K
+h : next cursor = ok (some (value, scalar), cursor1)
+⊢ (do
+      let flow ←
+        do
+          let (entry, cursor) ← ok (some (value, scalar), cursor1)
+          match entry with
+            | none => do
+              let value ← finish state
+              ok (done (core.result.Result.Ok value))
+            | some (value, scalar) => do
+              let (result, dot) ← push state value scalar
+              match result with
+                | core.result.Result.Ok a => ok (cont (cursor, dot))
+                | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+      match flow with
+        | done v => ok v
+        | cont t =>
+          loop
+            (fun state => do
+              let (entry, cursor) ← next state.1
+              match entry with
+                | none => do
+                  let value ← finish state.2
+                  ok (done (core.result.Result.Ok value))
+                | some (value, scalar) => do
+                  let (result, dot) ← push state.2 value scalar
+                  match result with
+                    | core.result.Result.Ok a => ok (cont (cursor, dot))
+                    | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+            t) =
+    do
+    let (result, state1) ← div
+    match result with
+      | core.result.Result.Ok a =>
+        loop
+          (fun state => do
+            let (entry, cursor) ← next state.1
+            match entry with
+              | none => do
+                let value ← finish state.2
+                ok (done (core.result.Result.Ok value))
+              | some (value, scalar) => do
+                let (result, dot) ← push state.2 value scalar
+                match result with
+                  | core.result.Result.Ok a => ok (cont (cursor, dot))
+                  | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+          (cursor1, state1)
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Parse)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalFieldStreamLoop.lean:106:67: error: Tactic `rfl` failed: The left-hand side
+  do
+    let flow ←
+      do
+        let (entry, cursor) ← ok (some (value, scalar), cursor1)
+        match entry with
+          | none => do
+            let value ← finish state
+            ok (done (core.result.Result.Ok value))
+          | some (value, scalar) => do
+            let (result, dot) ← push state value scalar
+            match result with
+              | core.result.Result.Ok a => ok (cont (cursor, dot))
+              | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+    match flow with
+      | done v => ok v
+      | cont t =>
+        loop
+          (fun state => do
+            let (entry, cursor) ← next state.1
+            match entry with
+              | none => do
+                let value ← finish state.2
+                ok (done (core.result.Result.Ok value))
+              | some (value, scalar) => do
+                let (result, dot) ← push state.2 value scalar
+                match result with
+                  | core.result.Result.Ok a => ok (cont (cursor, dot))
+                  | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+          t
+is not definitionally equal to the right-hand side
+  do
+    let (result, state1) ← ok (core.result.Result.Ok a✝, state1)
+    match result with
+      | core.result.Result.Ok a =>
+        loop
+          (fun state => do
+            let (entry, cursor) ← next state.1
+            match entry with
+              | none => do
+                let value ← finish state.2
+                ok (done (core.result.Result.Ok value))
+              | some (value, scalar) => do
+                let (result, dot) ← push state.2 value scalar
+                match result with
+                  | core.result.Result.Ok a => ok (cont (cursor, dot))
+                  | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+          (cursor1, state1)
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Parse)
+
+case ok.Ok
+inst✝ : Shared
+S T : Type
+next : S → Result (Option (E × K) × S)
+push : T → E → K → Result (core.result.Result Unit Unit × T)
+finish : T → Result E
+cursor cursor1 : S
+state : T
+value : E
+scalar : K
+h : next cursor = ok (some (value, scalar), cursor1)
+state1 : T
+a✝ : Unit
+⊢ (do
+      let flow ←
+        do
+          let (entry, cursor) ← ok (some (value, scalar), cursor1)
+          match entry with
+            | none => do
+              let value ← finish state
+              ok (done (core.result.Result.Ok value))
+            | some (value, scalar) => do
+              let (result, dot) ← push state value scalar
+              match result with
+                | core.result.Result.Ok a => ok (cont (cursor, dot))
+                | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+      match flow with
+        | done v => ok v
+        | cont t =>
+          loop
+            (fun state => do
+              let (entry, cursor) ← next state.1
+              match entry with
+                | none => do
+                  let value ← finish state.2
+                  ok (done (core.result.Result.Ok value))
+                | some (value, scalar) => do
+                  let (result, dot) ← push state.2 value scalar
+                  match result with
+                    | core.result.Result.Ok a => ok (cont (cursor, dot))
+                    | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+            t) =
+    do
+    let (result, state1) ← ok (core.result.Result.Ok a✝, state1)
+    match result with
+      | core.result.Result.Ok a =>
+        loop
+          (fun state => do
+            let (entry, cursor) ← next state.1
+            match entry with
+              | none => do
+                let value ← finish state.2
+                ok (done (core.result.Result.Ok value))
+              | some (value, scalar) => do
+                let (result, dot) ← push state.2 value scalar
+                match result with
+                  | core.result.Result.Ok a => ok (cont (cursor, dot))
+                  | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+          (cursor1, state1)
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Parse)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalFieldStreamLoop.lean:106:67: error: Tactic `rfl` failed: The left-hand side
+  do
+    let flow ←
+      do
+        let (entry, cursor) ← ok (some (value, scalar), cursor1)
+        match entry with
+          | none => do
+            let value ← finish state
+            ok (done (core.result.Result.Ok value))
+          | some (value, scalar) => do
+            let (result, dot) ← push state value scalar
+            match result with
+              | core.result.Result.Ok a => ok (cont (cursor, dot))
+              | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+    match flow with
+      | done v => ok v
+      | cont t =>
+        loop
+          (fun state => do
+            let (entry, cursor) ← next state.1
+            match entry with
+              | none => do
+                let value ← finish state.2
+                ok (done (core.result.Result.Ok value))
+              | some (value, scalar) => do
+                let (result, dot) ← push state.2 value scalar
+                match result with
+                  | core.result.Result.Ok a => ok (cont (cursor, dot))
+                  | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+          t
+is not definitionally equal to the right-hand side
+  do
+    let (result, state1) ← ok (core.result.Result.Err a✝, state1)
+    match result with
+      | core.result.Result.Ok a =>
+        loop
+          (fun state => do
+            let (entry, cursor) ← next state.1
+            match entry with
+              | none => do
+                let value ← finish state.2
+                ok (done (core.result.Result.Ok value))
+              | some (value, scalar) => do
+                let (result, dot) ← push state.2 value scalar
+                match result with
+                  | core.result.Result.Ok a => ok (cont (cursor, dot))
+                  | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+          (cursor1, state1)
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Parse)
+
+case ok.Err
+inst✝ : Shared
+S T : Type
+next : S → Result (Option (E × K) × S)
+push : T → E → K → Result (core.result.Result Unit Unit × T)
+finish : T → Result E
+cursor cursor1 : S
+state : T
+value : E
+scalar : K
+h : next cursor = ok (some (value, scalar), cursor1)
+state1 : T
+a✝ : Unit
+⊢ (do
+      let flow ←
+        do
+          let (entry, cursor) ← ok (some (value, scalar), cursor1)
+          match entry with
+            | none => do
+              let value ← finish state
+              ok (done (core.result.Result.Ok value))
+            | some (value, scalar) => do
+              let (result, dot) ← push state value scalar
+              match result with
+                | core.result.Result.Ok a => ok (cont (cursor, dot))
+                | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+      match flow with
+        | done v => ok v
+        | cont t =>
+          loop
+            (fun state => do
+              let (entry, cursor) ← next state.1
+              match entry with
+                | none => do
+                  let value ← finish state.2
+                  ok (done (core.result.Result.Ok value))
+                | some (value, scalar) => do
+                  let (result, dot) ← push state.2 value scalar
+                  match result with
+                    | core.result.Result.Ok a => ok (cont (cursor, dot))
+                    | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+            t) =
+    do
+    let (result, state1) ← ok (core.result.Result.Err a✝, state1)
+    match result with
+      | core.result.Result.Ok a =>
+        loop
+          (fun state => do
+            let (entry, cursor) ← next state.1
+            match entry with
+              | none => do
+                let value ← finish state.2
+                ok (done (core.result.Result.Ok value))
+              | some (value, scalar) => do
+                let (result, dot) ← push state.2 value scalar
+                match result with
+                  | core.result.Result.Ok a => ok (cont (cursor, dot))
+                  | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse)))
+          (cursor1, state1)
+      | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Parse)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalFieldStreamLoop.lean:162:15: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'AspisR1.CuSavingsCanonicalFieldStreamLoop.push_progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalFieldStreamLoop.run_equivalence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

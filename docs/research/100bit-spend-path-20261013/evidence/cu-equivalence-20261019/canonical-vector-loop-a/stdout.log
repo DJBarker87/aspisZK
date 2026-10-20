@@ -1,0 +1,294 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalVectorLoop.lean:27:42: error: Tactic `rfl` failed: The left-hand side
+  match
+    let (o, iter1) := (some iter.start, next)
+    match o with
+    | none => do
+      let we ← dot.finish
+      ok (done (core.result.Result.Ok we))
+    | some l => do
+      let scalar ← claim_scalar l
+      let we ← Array.index_usize g l
+      let (r, dot1) ← dot.push we scalar
+      let r1 ← core.result.Result.map_err old_callers.claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame AspisR1CanonicalDots.Error) residual
+          ok (done r2) with
+  | ok r =>
+    match r with
+    | cont x =>
+      loop
+        (fun x => do
+          let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize x.1
+          match o with
+            | none => do
+              let we ← x.2.finish
+              ok (done (core.result.Result.Ok we))
+            | some l => do
+              let scalar ← claim_scalar l
+              let we ← Array.index_usize g l
+              let (r, dot1) ← x.2.push we scalar
+              let r1 ←
+                core.result.Result.map_err old_callers.claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r2 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        field.wide_exact.WideExact (core.convert.FromSame AspisR1CanonicalDots.Error) residual
+                  ok (done r2))
+        x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  fail e
+
+case fail
+inst✝¹ : Shared
+inst✝ : VectorCommon
+g : G
+iter next : Range
+dot : old_pairing.EbyKDot
+value : field.wide_exact.WideExact
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, next)
+hr : Array.index_usize g iter.start = ok value
+e : Std.Error
+hs : claim_scalar iter.start = fail e
+⊢ (match
+      let (o, iter1) := (some iter.start, next)
+      match o with
+      | none => do
+        let we ← dot.finish
+        ok (done (core.result.Result.Ok we))
+      | some l => do
+        let scalar ← claim_scalar l
+        let we ← Array.index_usize g l
+        let (r, dot1) ← dot.push we scalar
+        let r1 ←
+          core.result.Result.map_err old_callers.claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r2 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  field.wide_exact.WideExact (core.convert.FromSame AspisR1CanonicalDots.Error) residual
+            ok (done r2) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize x.1
+            match o with
+              | none => do
+                let we ← x.2.finish
+                ok (done (core.result.Result.Ok we))
+              | some l => do
+                let scalar ← claim_scalar l
+                let we ← Array.index_usize g l
+                let (r, dot1) ← x.2.push we scalar
+                let r1 ←
+                  core.result.Result.map_err old_callers.claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r
+                      ()
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r2 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          field.wide_exact.WideExact (core.convert.FromSame AspisR1CanonicalDots.Error) residual
+                    ok (done r2))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    fail e
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalVectorLoop.lean:28:38: error: Tactic `rfl` failed: The left-hand side
+  match
+    let (o, iter1) := (some iter.start, next)
+    match o with
+    | none => do
+      let we ← dot.finish
+      ok (done (core.result.Result.Ok we))
+    | some l => do
+      let scalar ← claim_scalar l
+      let we ← Array.index_usize g l
+      let (r, dot1) ← dot.push we scalar
+      let r1 ← core.result.Result.map_err old_callers.claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame AspisR1CanonicalDots.Error) residual
+          ok (done r2) with
+  | ok r =>
+    match r with
+    | cont x =>
+      loop
+        (fun x => do
+          let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize x.1
+          match o with
+            | none => do
+              let we ← x.2.finish
+              ok (done (core.result.Result.Ok we))
+            | some l => do
+              let scalar ← claim_scalar l
+              let we ← Array.index_usize g l
+              let (r, dot1) ← x.2.push we scalar
+              let r1 ←
+                core.result.Result.map_err old_callers.claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r2 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        field.wide_exact.WideExact (core.convert.FromSame AspisR1CanonicalDots.Error) residual
+                  ok (done r2))
+        x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  div
+
+case div
+inst✝¹ : Shared
+inst✝ : VectorCommon
+g : G
+iter next : Range
+dot : old_pairing.EbyKDot
+value : field.wide_exact.WideExact
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, next)
+hr : Array.index_usize g iter.start = ok value
+hs : claim_scalar iter.start = div
+⊢ (match
+      let (o, iter1) := (some iter.start, next)
+      match o with
+      | none => do
+        let we ← dot.finish
+        ok (done (core.result.Result.Ok we))
+      | some l => do
+        let scalar ← claim_scalar l
+        let we ← Array.index_usize g l
+        let (r, dot1) ← dot.push we scalar
+        let r1 ←
+          core.result.Result.map_err old_callers.claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r2 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  field.wide_exact.WideExact (core.convert.FromSame AspisR1CanonicalDots.Error) residual
+            ok (done r2) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize x.1
+            match o with
+              | none => do
+                let we ← x.2.finish
+                ok (done (core.result.Result.Ok we))
+              | some l => do
+                let scalar ← claim_scalar l
+                let we ← Array.index_usize g l
+                let (r, dot1) ← x.2.push we scalar
+                let r1 ←
+                  core.result.Result.map_err old_callers.claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r
+                      ()
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r2 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          field.wide_exact.WideExact (core.convert.FromSame AspisR1CanonicalDots.Error) residual
+                    ok (done r2))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    div
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalVectorLoop.lean:37:63: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.cont` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `cont`
+  [apply] `Lean.Meta.DeltaStepResult.cont`
+  [apply] `Std.Async.Selectable.cont`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalVectorLoop.lean:40:62: error: Ambiguous term
+  Error
+Possible interpretations:
+  AspisR1CanonicalDots.Error : Type
+  
+  Std.Error : Type
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalVectorLoop.lean:41:15: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.done` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `ForInStep.done`
+  [apply] `Lean.Doc.done`
+  [apply] `Lean.TransformStep.done`
+  [apply] `ProofWidgets.CheckRequestResponse.done`
+  [apply] `Std.CancellationContext.done`
+  [apply] `Std.IterStep.done`
+  [apply] `Std.PlausibleIterStep.done`
+  [apply] `done`
+  [apply] `StepStar.TaskOrDone.done`
+  [apply] `ByteArray.utf8DecodeChar?.FirstByte.done`
+  [apply] `Lean.Elab.Tactic.done`
+  [apply] `Lean.Expr.FindStep.done`
+  [apply] `Lean.Parser.Tactic.done`
+  [apply] `Lean.PersistentHashMap.Zipper.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.done`
+  [apply] `Lean.Elab.Tactic.Grind.done`
+  [apply] `Lean.Meta.Grind.Action.done`
+  [apply] `Lean.Meta.Simp.Step.done`
+  [apply] `Lean.Meta.Simp.StepQ.done`
+  [apply] `Lean.Parser.Tactic.Grind.done`
+  [apply] `Std.DTreeMap.Internal.Zipper.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.below.done`
+  [apply] `Lean.Language.SnapshotTree.foldSnaps.Control.done`
+  [apply] `Std.Iterators.Types.Drop.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.DropWhile.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.FilterMap.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.Take.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.TakeWhile.PlausibleStep.done`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalVectorLoop.lean:42:13: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.cont` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `cont`
+  [apply] `Lean.Meta.DeltaStepResult.cont`
+  [apply] `Std.Async.Selectable.cont`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalVectorLoop.lean:27:25: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalVectorLoop.lean:28:22: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalVectorLoop.lean:30:15: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsCanonicalVectorLoop.old_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

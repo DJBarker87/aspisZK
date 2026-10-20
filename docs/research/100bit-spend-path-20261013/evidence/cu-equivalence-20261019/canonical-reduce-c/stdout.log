@@ -1,0 +1,52 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsReduce.lean:36:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  foldExecution first
+in the target expression
+  ∃ out,
+    (do
+          let first ← ok first
+          let second ← foldExecution first
+          if P ≤ ↑second then do
+              let out ← UScalar.sub second mask64
+              ok (UScalar.cast UScalarTy.U32 out)
+            else ok (UScalar.cast UScalarTy.U32 second)) =
+        ok out ∧
+      ↑out = ↑x % P ∧ ↑out < P
+
+x first : U64
+hfirst : foldExecution x = ok first
+hfv : ↑first = foldBits ↑x
+second : U64
+hsecond : foldExecution first = ok second
+hsv : ↑second = foldBits (foldBits ↑x)
+hsecondBound : ↑second < 2 ^ 32
+factor :
+  new_pairing.canonical.reduce x = do
+    let first ← foldExecution x
+    let second ← foldExecution first
+    if P ≤ ↑second then do
+        let out ← UScalar.sub second mask64
+        ok (UScalar.cast UScalarTy.U32 out)
+      else ok (UScalar.cast UScalarTy.U32 second)
+hraw : rawReduceU64 ↑x = condSubP ↑second
+hcanon : condSubP ↑second < P
+hmod : condSubP ↑second = ↑x % P
+⊢ ∃ out,
+    (do
+          let first ← ok first
+          let second ← foldExecution first
+          if P ≤ ↑second then do
+              let out ← UScalar.sub second mask64
+              ok (UScalar.cast UScalarTy.U32 out)
+            else ok (UScalar.cast UScalarTy.U32 second)) =
+        ok out ∧
+      ↑out = ↑x % P ∧ ↑out < P
+'AspisR1.CuSavingsCanonicalDotsReduce.reduce_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsReduce.reduce_returns' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsReduce.old_reduce_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsReduce.reduce_eq_runtime' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

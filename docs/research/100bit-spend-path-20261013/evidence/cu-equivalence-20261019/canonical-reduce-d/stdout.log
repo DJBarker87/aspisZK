@@ -1,0 +1,64 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsReduce.lean:45:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑reduced % 2 ^ 32
+in the target expression
+  ↑reduced % 2 ^ UScalarTy.U32.numBits = ↑reduced
+
+x first : U64
+hfirst : foldExecution x = ok first
+hfv : ↑first = foldBits ↑x
+second : U64
+hsecond : foldExecution first = ok second
+hsv : ↑second = foldBits (foldBits ↑x)
+hsecondBound : ↑second < 2 ^ 32
+factor :
+  new_pairing.canonical.reduce x = do
+    let first ← foldExecution x
+    let second ← foldExecution first
+    if P ≤ ↑second then do
+        let out ← UScalar.sub second mask64
+        ok (UScalar.cast UScalarTy.U32 out)
+      else ok (UScalar.cast UScalarTy.U32 second)
+hraw : rawReduceU64 ↑x = condSubP ↑second
+hcanon : condSubP ↑second < P
+hmod : condSubP ↑second = ↑x % P
+h : P ≤ ↑second
+reduced : UScalar UScalarTy.U64
+hr : UScalar.sub second mask64 = ok reduced
+hrv : ↑reduced = ↑second - ↑mask64
+hrbound : ↑reduced < 2 ^ 32
+⊢ ↑reduced % 2 ^ UScalarTy.U32.numBits = ↑reduced
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsReduce.lean:53:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑second % 2 ^ 32
+in the target expression
+  ↑second % 2 ^ UScalarTy.U32.numBits = ↑second
+
+x first : U64
+hfirst : foldExecution x = ok first
+hfv : ↑first = foldBits ↑x
+second : U64
+hsecond : foldExecution first = ok second
+hsv : ↑second = foldBits (foldBits ↑x)
+hsecondBound : ↑second < 2 ^ 32
+factor :
+  new_pairing.canonical.reduce x = do
+    let first ← foldExecution x
+    let second ← foldExecution first
+    if P ≤ ↑second then do
+        let out ← UScalar.sub second mask64
+        ok (UScalar.cast UScalarTy.U32 out)
+      else ok (UScalar.cast UScalarTy.U32 second)
+hraw : rawReduceU64 ↑x = condSubP ↑second
+hcanon : condSubP ↑second < P
+hmod : condSubP ↑second = ↑x % P
+h : ¬P ≤ ↑second
+⊢ ↑second % 2 ^ UScalarTy.U32.numBits = ↑second
+'AspisR1.CuSavingsCanonicalDotsReduce.reduce_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsReduce.reduce_returns' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsReduce.old_reduce_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsReduce.reduce_eq_runtime' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

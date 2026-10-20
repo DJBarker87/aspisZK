@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsAll.lean:35:68: error: unexpected token 'if'; expected ')', ',' or ':'
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsAll.lean:35:17: error: invalid `do` notation, expected type is not a monad application
+  Prop
+You can use the `do` notation in pure code by writing `Id.run do` instead of `do`, where `Id` is the identity monad.
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsAll.lean:20:17: error: unsolved goals
+case succ
+T : Type
+inst : core.ops.function.FnMut Unit T Bool
+slice : Slice T
+hcall : ∀ value ∈ ↑slice, inst.call_mut () value = ok (true, ())
+fuel : ℕ
+ih :
+  ∀ i ≤ (↑slice).length,
+    (↑slice).length - i = fuel →
+      AspisR1CanonicalStd.all_loop inst { slice := slice, i := i } () =
+        ok (true, { slice := slice, i := (↑slice).length })
+i : ℕ
+hi : i ≤ (↑slice).length
+hf : (↑slice).length - i = fuel + 1
+hlt : i < (↑slice).length
+hmem : (↑slice)[i] ∈ ↑slice
+hc : inst.call_mut () (↑slice)[i] = ok (true, ())
+hn :
+  core.slice.iter.IteratorSliceIter.next { slice := slice, i := i } =
+    ok (some (↑slice)[i], { slice := slice, i := i + 1 })
+hb :
+  AspisR1CanonicalStd.all_loop.body inst { slice := slice, i := i } () = ok (cont ({ slice := slice, i := i + 1 }, ()))
+⊢ (match
+      match ({ slice := slice, i := i }, ()) with
+      | (iter1, f1) => AspisR1CanonicalStd.all_loop.body inst iter1 f1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, f1) => AspisR1CanonicalStd.all_loop.body inst iter1 f1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (true, { slice := slice, i := (↑slice).length })
+'AspisR1.CuSavingsCanonicalDotsAll.source_true' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

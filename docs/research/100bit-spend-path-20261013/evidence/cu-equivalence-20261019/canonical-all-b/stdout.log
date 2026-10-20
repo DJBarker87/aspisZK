@@ -1,0 +1,44 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsAll.lean:29:45: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsAll.lean:30:15: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsAll.lean:29:8: error: 'change' tactic failed, pattern
+  (if h : i < (↑slice).length then ?m.189 else ?m.192) = ?m.195
+is not definitionally equal to target
+  (if h : { slice := slice, i := i }.i < ↑{ slice := slice, i := i }.slice.len then
+      have x := { slice := slice, i := i }.slice[{ slice := slice, i := i }.i];
+      have it := { slice := { slice := slice, i := i }.slice, i := { slice := slice, i := i }.i + 1 };
+      ok (some x, it)
+    else ok (none, { slice := slice, i := i })) =
+    ok (some (↑slice)[i], { slice := slice, i := i + 1 })
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsAll.lean:35:8: error: `dsimp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    slice
+  has type
+    Slice T
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑slice
+'AspisR1.CuSavingsCanonicalDotsAll.source_true' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

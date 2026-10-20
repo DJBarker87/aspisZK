@@ -1,0 +1,42 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsChecked.lean:18:6: error: Type mismatch: After simplification, term
+  hc
+ has type
+  @LT.lt ℕ instLTNat (↑value) 2147483647
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑value ↑2147483647#u32
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsChecked.lean:14:78: error: unsolved goals
+x : Q
+hc✝ : CanonicalArray x
+inst : core.ops.function.FnMut new_pairing.canonical.Q.from_limbs.closure U32 Bool :=
+  new_pairing.canonical.Q.from_limbs.closure.Insts.CoreOpsFunctionFnMutTupleSharedU32Bool
+value : U32
+hv : value ∈ ↑(Array.to_slice x)
+hc : ↑value < 2147483647
+hcmp : value < new_pairing.canonical.P
+⊢ ok (decide True, ()) = ok (true, ())
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsChecked.lean:30:89: error: unsolved goals
+case e_a
+x : Q
+hc : CanonicalArray x
+⊢ (fun s => do
+      let i ← core.slice.Slice.iter s
+      let (b, _) ←
+        core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.all
+            old_pairing.canonical.Q.from_limbs.closure.Insts.CoreOpsFunctionFnMutTupleSharedU32Bool i ()
+      if b = true then ok (some x) else ok none) =
+    fun s => do
+    let i ← core.slice.Slice.iter s
+    let (b, _) ←
+      core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.all
+          new_pairing.canonical.Q.from_limbs.closure.Insts.CoreOpsFunctionFnMutTupleSharedU32Bool i ()
+    if b = true then ok (some x) else ok none
+'AspisR1.CuSavingsCanonicalDotsChecked.new_constructor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsChecked.old_constructor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsChecked.limbs_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsChecked.checked_q' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

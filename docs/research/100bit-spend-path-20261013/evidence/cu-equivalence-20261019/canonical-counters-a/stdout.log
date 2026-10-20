@@ -1,0 +1,226 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:30:13: error: unsolved goals
+case ok.some
+inst✝ : Shared
+raw : Raw
+iter : Range
+sums : Raw
+next : core.ops.range.Range (UScalar UScalarTy.Usize)
+val✝ : UScalar UScalarTy.Usize
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some val✝, next)
+⊢ (do
+      let step ←
+        let (o, iter1) := (some val✝, next)
+          match o with
+          | none => ok (done { sums := sums })
+          | some j => do
+            let i ← Array.index_usize sums j
+            let i1 ← Array.index_usize raw j
+            let i2 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+            let i3 ← lift (i1 &&& i2)
+            let i4 ← i1 >>> 31#i32
+            let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+            let i6 ← lift (core.num.U64.wrapping_add i i5)
+            let a ← Array.update sums j i6
+            ok (cont (iter1, { sums := a }))
+      ok
+          (match step with
+          | done out => done out.sums
+          | cont (next, out) => cont (next, out.sums))) =
+    let (o, iter1) := (some val✝, next)
+    match o with
+    | none => ok (done sums)
+    | some j => do
+      let i ← Array.index_usize sums j
+      let i1 ← Array.index_usize raw j
+      let i2 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+      let i3 ← lift (i1 &&& i2)
+      let i4 ← i1 >>> 31#i32
+      let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+      let i6 ← lift (core.num.U64.wrapping_add i i5)
+      let a1 ← Array.update sums j i6
+      ok (cont (iter1, a1))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:35:72: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [new_pairing.canonical.Dot.push_loop.body,
+            o̵l̵d̵_̵p̵a̵i̵r̵i̵n̵g̵.̵c̵a̵n̵o̵n̵i̵c̵a̵l̵.̵D̵o̵t̵.̵p̵u̵s̵h̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵p̵r̵o̵j̵e̵c̵t̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵n̵e̵w̵_̵p̵a̵i̵r̵i̵n̵g̵.̵c̵a̵n̵o̵n̵i̵c̵a̵l̵.̵P̵,̵o̵l̵d̵_̵p̵a̵i̵r̵i̵n̵g̵.̵c̵a̵n̵o̵n̵i̵c̵a̵l̵.̵P̵,̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵o̲l̲d̲_̲p̲a̲i̲r̲i̲n̲g̲.̲c̲a̲n̲o̲n̲i̲c̲a̲l̲.̲D̲o̲t̲.̲p̲u̲s̲h̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲p̲r̲o̲j̲e̲c̲t̲e̲d̲,̲ ̲n̲e̲w̲_̲p̲a̲i̲r̲i̲n̲g̲.̲c̲a̲n̲o̲n̲i̲c̲a̲l̲.̲P̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲o̲l̲d̲_̲p̲a̲i̲r̲i̲n̲g̲.̲c̲a̲n̲o̲n̲i̲c̲a̲l̲.̲P̲,̲ ̲h̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:47:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsCanonicalDotsCounters.new_body`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:57:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsCanonicalDotsCounters.old_body`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:73:9: error: unsolved goals
+case zero
+inst✝ : Shared
+raw sums : Raw
+iter : Range
+he : ↑iter.end = 4
+hi : ↑iter.start ≤ 4
+hf : 4 - ↑iter.start = 0
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, iter)
+⊢ (do
+      let x ←
+        match
+            let (o, iter1) := (none, iter)
+            match o with
+            | none => ok (done { sums := sums })
+            | some j => do
+              let i ← Array.index_usize sums j
+              let i1 ← Array.index_usize raw j
+              let i2 ← lift (core.convert.num.FromU64U32.from new_pairing.canonical.P)
+              let i3 ← lift (i1 &&& i2)
+              let i4 ← i1 >>> 31#i32
+              let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+              let i6 ← lift (core.num.U64.wrapping_add i i5)
+              let a ← Array.update sums j i6
+              ok (cont (iter1, { sums := a })) with
+          | ok r =>
+            match r with
+            | cont x =>
+              loop
+                (fun x => do
+                  let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize x.1
+                  match o with
+                    | none => ok (done x.2)
+                    | some j => do
+                      let i ← x.2.sums.index_usize j
+                      let i1 ← Array.index_usize raw j
+                      let i2 ← lift (core.convert.num.FromU64U32.from new_pairing.canonical.P)
+                      let i3 ← lift (i1 &&& i2)
+                      let i4 ← i1 >>> 31#i32
+                      let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+                      let i6 ← lift (core.num.U64.wrapping_add i i5)
+                      let a ← x.2.sums.update j i6
+                      ok (cont (iter1, { sums := a })))
+                x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      ok x.sums) =
+    match
+      let (o, iter1) := (none, iter)
+      match o with
+      | none => ok (done sums)
+      | some j => do
+        let i ← Array.index_usize sums j
+        let i1 ← Array.index_usize raw j
+        let i2 ← lift (core.convert.num.FromU64U32.from old_pairing.canonical.P)
+        let i3 ← lift (i1 &&& i2)
+        let i4 ← i1 >>> 31#i32
+        let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+        let i6 ← lift (core.num.U64.wrapping_add i i5)
+        let a1 ← Array.update sums j i6
+        ok (cont (iter1, a1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize x.1
+            match o with
+              | none => ok (done x.2)
+              | some j => do
+                let i ← x.2.index_usize j
+                let i1 ← Array.index_usize raw j
+                let i2 ← lift (core.convert.num.FromU64U32.from old_pairing.canonical.P)
+                let i3 ← lift (i1 &&& i2)
+                let i4 ← i1 >>> 31#i32
+                let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+                let i6 ← lift (core.num.U64.wrapping_add i i5)
+                let a1 ← x.2.update j i6
+                ok (cont (iter1, a1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:86:6: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:98:22: error: Application type mismatch: The argument
+  self.count
+has type
+  Usize
+of sort `Type` but is expected to have type
+  ↑?m.39 + ↑?m.40 ≤ UScalar.max ?m.38
+of sort `Prop` in the application
+  UScalar.add_spec self.count
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:102:2: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff (Shared.raw a b) ?m.63 ?m.64).mpr`
+  Shared.raw a b >>= ?m.63 = Shared.raw a b >>= ?m.64
+with the goal
+  (do
+      let x ← new_pairing.canonical.Q.raw a b
+      let x ← new_pairing.canonical.Dot.push_loop { start := 0#usize, «end» := 4#usize } (projected self.sums) x
+      ok x.sums) =
+    do
+    let _ ← self.count + 1#usize
+    let x ← old_pairing.canonical.Q.raw a b
+    let x ← old_pairing.canonical.Dot.push_loop { start := 0#usize, «end» := 4#usize } self.sums x
+    ok x
+
+Note: The full type of `(bind_eq_iff (Shared.raw a b) ?m.63 ?m.64).mpr` is
+  (∀ (v : Std.Array U64 4#usize), Shared.raw a b = ok v → ?m.63 v = ?m.64 v) →
+    Shared.raw a b >>= ?m.63 = Shared.raw a b >>= ?m.64
+
+inst✝ : Shared
+self : old_pairing.canonical.Dot
+a b : Q
+hc : ↑self.count < 4096
+hcmp : self.count < 4096#usize
+count1 : ?m.35
+hadd : ?m.36 = ok count1
+right✝ : ?m.37 count1
+⊢ (do
+      let x ← new_pairing.canonical.Q.raw a b
+      let x ← new_pairing.canonical.Dot.push_loop { start := 0#usize, «end» := 4#usize } (projected self.sums) x
+      ok x.sums) =
+    do
+    let _ ← self.count + 1#usize
+    let x ← old_pairing.canonical.Q.raw a b
+    let x ← old_pairing.canonical.Dot.push_loop { start := 0#usize, «end» := 4#usize } self.sums x
+    ok x
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsCounters.lean:100:59: warning: This simp argument is unused:
+  hadd
+
+Hint: Omit it from the simp argument list.
+  simp only [loopResult, ̲new_pairing.canonical.Dot.push,
+  ̵  ̵ ̵ ̵old_pairing.canonical.Dot.push, ̲hcmp,
+  ̲ ̲ ̲ ̲ ̲massert, ̲↓reduceIte,h̵a̵d̵d̵,̵
+  ̵  ̵ ̵ ̵bind_tc_ok, ̲bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsCanonicalDotsCounters.projected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsCounters.body_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsCounters.new_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsCounters.old_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsCounters.loop_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalDotsCounters.push_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

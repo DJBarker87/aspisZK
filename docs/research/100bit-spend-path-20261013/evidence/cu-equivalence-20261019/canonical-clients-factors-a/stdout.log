@@ -1,0 +1,651 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:49:6: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff (partials.index_usize index) ?m.78 ?m.79).mpr`
+  partials.index_usize index >>= ?m.78 = partials.index_usize index >>= ?m.79
+with the goal
+  (let (o, iter1) := (some index, after)
+    match o with
+    | none => do
+      let we ← dot.finish
+      ok (done (core.result.Result.Ok we))
+    | some s => do
+      let we ← partials.index_usize s
+      let q ← scalars.index_usize s
+      let (r, high1) ← dot.push we q
+      let r1 ←
+        core.result.Result.map_err old_clients.shared_high.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, high1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, after) := (some index, after)
+        match entry with
+        | none => ok (none, after)
+        | some s => do
+          let value ← partials.index_usize s
+          let scalar ← scalars.index_usize s
+          ok (some (value, scalar), after)
+    match entry with
+      | none => do
+        let value ← dot.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← dot.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+
+Note: The full type of `(bind_eq_iff (partials.index_usize index) ?m.78 ?m.79).mpr` is
+  (∀ (v : E), partials.index_usize index = ok v → ?m.78 v = ?m.79 v) →
+    partials.index_usize index >>= ?m.78 = partials.index_usize index >>= ?m.79
+
+case some
+inst✝ : Shared
+partials : Std.Array E 4#usize
+scalars : Std.Array K 4#usize
+iter : Range
+dot : old_pairing.EbyKDot
+after : core.ops.range.Range (UScalar UScalarTy.Usize)
+index : UScalar UScalarTy.Usize
+a✝ : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, after)
+⊢ (let (o, iter1) := (some index, after)
+    match o with
+    | none => do
+      let we ← dot.finish
+      ok (done (core.result.Result.Ok we))
+    | some s => do
+      let we ← partials.index_usize s
+      let q ← scalars.index_usize s
+      let (r, high1) ← dot.push we q
+      let r1 ←
+        core.result.Result.map_err old_clients.shared_high.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, high1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, after) := (some index, after)
+        match entry with
+        | none => ok (none, after)
+        | some s => do
+          let value ← partials.index_usize s
+          let scalar ← scalars.index_usize s
+          ok (some (value, scalar), after)
+    match entry with
+      | none => do
+        let value ← dot.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← dot.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:42:27: warning: This simp argument is unused:
+  uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_assoc_eq,̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsCanonicalDotClientFactors.old_shared_high_factor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:75:6: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff (partials.index_usize index) ?m.78 ?m.79).mpr`
+  partials.index_usize index >>= ?m.78 = partials.index_usize index >>= ?m.79
+with the goal
+  (let (o, iter1) := (some index, after)
+    match o with
+    | none => do
+      let we ← dot.finish
+      ok (done (core.result.Result.Ok we))
+    | some s => do
+      let we ← partials.index_usize s
+      let q ← scalars.index_usize s
+      let (r, high1) ← dot.push we q
+      let r1 ←
+        core.result.Result.map_err new_clients.shared_high.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, high1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, after) := (some index, after)
+        match entry with
+        | none => ok (none, after)
+        | some s => do
+          let value ← partials.index_usize s
+          let scalar ← scalars.index_usize s
+          ok (some (value, scalar), after)
+    match entry with
+      | none => do
+        let value ← dot.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← dot.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+
+Note: The full type of `(bind_eq_iff (partials.index_usize index) ?m.78 ?m.79).mpr` is
+  (∀ (v : E), partials.index_usize index = ok v → ?m.78 v = ?m.79 v) →
+    partials.index_usize index >>= ?m.78 = partials.index_usize index >>= ?m.79
+
+case some
+inst✝ : Shared
+partials : Std.Array E 4#usize
+scalars : Std.Array K 4#usize
+iter : Range
+dot : new_pairing.EbyKDot
+after : core.ops.range.Range (UScalar UScalarTy.Usize)
+index : UScalar UScalarTy.Usize
+a✝ : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, after)
+⊢ (let (o, iter1) := (some index, after)
+    match o with
+    | none => do
+      let we ← dot.finish
+      ok (done (core.result.Result.Ok we))
+    | some s => do
+      let we ← partials.index_usize s
+      let q ← scalars.index_usize s
+      let (r, high1) ← dot.push we q
+      let r1 ←
+        core.result.Result.map_err new_clients.shared_high.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, high1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, after) := (some index, after)
+        match entry with
+        | none => ok (none, after)
+        | some s => do
+          let value ← partials.index_usize s
+          let scalar ← scalars.index_usize s
+          ok (some (value, scalar), after)
+    match entry with
+      | none => do
+        let value ← dot.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← dot.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:68:27: warning: This simp argument is unused:
+  uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_assoc_eq,̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsCanonicalDotClientFactors.new_shared_high_factor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:101:6: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff (16#usize * s) ?m.80 ?m.81).mpr`
+  16#usize * s >>= ?m.80 = 16#usize * s >>= ?m.81
+with the goal
+  (let (o, iter1) := (some index, after)
+    match o with
+    | none => do
+      let we ← dot.finish
+      ok (done (core.result.Result.Ok we))
+    | some j => do
+      let i ← 16#usize * s
+      let i1 ← i + j
+      let we ← weights.field f i1
+      let q ← common.index_usize j
+      let (r, dot1) ← dot.push we q
+      let r1 ← core.result.Result.map_err old_clients.shared_row.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, after) := (some index, after)
+        match entry with
+        | none => ok (none, after)
+        | some j => do
+          let i ← 16#usize * s
+          let i1 ← i + j
+          let value ← weights.field f i1
+          let scalar ← common.index_usize j
+          ok (some (value, scalar), after)
+    match entry with
+      | none => do
+        let value ← dot.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← dot.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+
+Note: The full type of `(bind_eq_iff (16#usize * s) ?m.80 ?m.81).mpr` is
+  (∀ (v : UScalar UScalarTy.Usize), 16#usize * s = ok v → ?m.80 v = ?m.81 v) →
+    16#usize * s >>= ?m.80 = 16#usize * s >>= ?m.81
+
+case some
+inst✝ : Shared
+f : Slice U8
+common : Std.Array K 16#usize
+s : Usize
+iter : Range
+dot : old_pairing.EbyKDot
+after : core.ops.range.Range (UScalar UScalarTy.Usize)
+index : UScalar UScalarTy.Usize
+a✝ : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, after)
+⊢ (let (o, iter1) := (some index, after)
+    match o with
+    | none => do
+      let we ← dot.finish
+      ok (done (core.result.Result.Ok we))
+    | some j => do
+      let i ← 16#usize * s
+      let i1 ← i + j
+      let we ← weights.field f i1
+      let q ← common.index_usize j
+      let (r, dot1) ← dot.push we q
+      let r1 ← core.result.Result.map_err old_clients.shared_row.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, after) := (some index, after)
+        match entry with
+        | none => ok (none, after)
+        | some j => do
+          let i ← 16#usize * s
+          let i1 ← i + j
+          let value ← weights.field f i1
+          let scalar ← common.index_usize j
+          ok (some (value, scalar), after)
+    match entry with
+      | none => do
+        let value ← dot.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← dot.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:94:27: warning: This simp argument is unused:
+  uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_assoc_eq,̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsCanonicalDotClientFactors.old_shared_row_factor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:131:6: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff (16#usize * s) ?m.80 ?m.81).mpr`
+  16#usize * s >>= ?m.80 = 16#usize * s >>= ?m.81
+with the goal
+  (let (o, iter1) := (some index, after)
+    match o with
+    | none => do
+      let we ← dot.finish
+      ok (done (core.result.Result.Ok we))
+    | some j => do
+      let i ← 16#usize * s
+      let i1 ← i + j
+      let we ← weights.field f i1
+      let q ← common.index_usize j
+      let (r, dot1) ← dot.push we q
+      let r1 ← core.result.Result.map_err new_clients.shared_row.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, after) := (some index, after)
+        match entry with
+        | none => ok (none, after)
+        | some j => do
+          let i ← 16#usize * s
+          let i1 ← i + j
+          let value ← weights.field f i1
+          let scalar ← common.index_usize j
+          ok (some (value, scalar), after)
+    match entry with
+      | none => do
+        let value ← dot.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← dot.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+
+Note: The full type of `(bind_eq_iff (16#usize * s) ?m.80 ?m.81).mpr` is
+  (∀ (v : UScalar UScalarTy.Usize), 16#usize * s = ok v → ?m.80 v = ?m.81 v) →
+    16#usize * s >>= ?m.80 = 16#usize * s >>= ?m.81
+
+case some
+inst✝ : Shared
+f : Slice U8
+common : Std.Array K 16#usize
+s : Usize
+iter : Range
+dot : new_pairing.EbyKDot
+after : core.ops.range.Range (UScalar UScalarTy.Usize)
+index : UScalar UScalarTy.Usize
+a✝ : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, after)
+⊢ (let (o, iter1) := (some index, after)
+    match o with
+    | none => do
+      let we ← dot.finish
+      ok (done (core.result.Result.Ok we))
+    | some j => do
+      let i ← 16#usize * s
+      let i1 ← i + j
+      let we ← weights.field f i1
+      let q ← common.index_usize j
+      let (r, dot1) ← dot.push we q
+      let r1 ← core.result.Result.map_err new_clients.shared_row.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, after) := (some index, after)
+        match entry with
+        | none => ok (none, after)
+        | some j => do
+          let i ← 16#usize * s
+          let i1 ← i + j
+          let value ← weights.field f i1
+          let scalar ← common.index_usize j
+          ok (some (value, scalar), after)
+    match entry with
+      | none => do
+        let value ← dot.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← dot.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:124:27: warning: This simp argument is unused:
+  uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_assoc_eq,̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsCanonicalDotClientFactors.new_shared_row_factor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:162:6: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff (weights.field f index) ?m.81 ?m.82).mpr`
+  weights.field f index >>= ?m.81 = weights.field f index >>= ?m.82
+with the goal
+  (let (o, iter1) := (some (index, scalar), after)
+    match o with
+    | none => do
+      let we ← dot.finish
+      ok (done (core.result.Result.Ok we))
+    | some p =>
+      let (j, w) := p
+      do
+      let we ← weights.field f j
+      let (r, dot1) ← dot.push we w
+      let r1 ←
+        core.result.Result.map_err old_clients.final_stream.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, after) := (some (index, scalar), after)
+        match entry with
+        | none => ok (none, after)
+        | some (j, scalar) => do
+          let value ← weights.field f j
+          ok (some (value, scalar), after)
+    match entry with
+      | none => do
+        let value ← dot.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← dot.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+
+Note: The full type of `(bind_eq_iff (weights.field f index) ?m.81 ?m.82).mpr` is
+  (∀ (v : field.wide_exact.WideExact), weights.field f index = ok v → ?m.81 v = ?m.82 v) →
+    weights.field f index >>= ?m.81 = weights.field f index >>= ?m.82
+
+case some
+inst✝ : Shared
+f : Slice U8
+iter : Enum
+dot : old_pairing.EbyKDot
+after : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter K)
+index : Usize
+scalar : K
+a✝ :
+  core.iter.adapters.enumerate.IteratorEnumerate.next (core.iter.traits.iterator.IteratorSliceIter K) iter =
+    ok (some (index, scalar), after)
+⊢ (let (o, iter1) := (some (index, scalar), after)
+    match o with
+    | none => do
+      let we ← dot.finish
+      ok (done (core.result.Result.Ok we))
+    | some p =>
+      let (j, w) := p
+      do
+      let we ← weights.field f j
+      let (r, dot1) ← dot.push we w
+      let r1 ←
+        core.result.Result.map_err old_clients.final_stream.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, after) := (some (index, scalar), after)
+        match entry with
+        | none => ok (none, after)
+        | some (j, scalar) => do
+          let value ← weights.field f j
+          ok (some (value, scalar), after)
+    match entry with
+      | none => do
+        let value ← dot.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← dot.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:154:27: warning: This simp argument is unused:
+  uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_assoc_eq,̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsCanonicalDotClientFactors.old_final_stream_factor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:187:6: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff (weights.field f index) ?m.81 ?m.82).mpr`
+  weights.field f index >>= ?m.81 = weights.field f index >>= ?m.82
+with the goal
+  (let (o, iter1) := (some (index, scalar), after)
+    match o with
+    | none => do
+      let we ← dot.finish
+      ok (done (core.result.Result.Ok we))
+    | some p =>
+      let (j, w) := p
+      do
+      let we ← weights.field f j
+      let (r, dot1) ← dot.push we w
+      let r1 ←
+        core.result.Result.map_err new_clients.final_stream.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, after) := (some (index, scalar), after)
+        match entry with
+        | none => ok (none, after)
+        | some (j, scalar) => do
+          let value ← weights.field f j
+          ok (some (value, scalar), after)
+    match entry with
+      | none => do
+        let value ← dot.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← dot.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+
+Note: The full type of `(bind_eq_iff (weights.field f index) ?m.81 ?m.82).mpr` is
+  (∀ (v : field.wide_exact.WideExact), weights.field f index = ok v → ?m.81 v = ?m.82 v) →
+    weights.field f index >>= ?m.81 = weights.field f index >>= ?m.82
+
+case some
+inst✝ : Shared
+f : Slice U8
+iter : Enum
+dot : new_pairing.EbyKDot
+after : core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter K)
+index : Usize
+scalar : K
+a✝ :
+  core.iter.adapters.enumerate.IteratorEnumerate.next (core.iter.traits.iterator.IteratorSliceIter K) iter =
+    ok (some (index, scalar), after)
+⊢ (let (o, iter1) := (some (index, scalar), after)
+    match o with
+    | none => do
+      let we ← dot.finish
+      ok (done (core.result.Result.Ok we))
+    | some p =>
+      let (j, w) := p
+      do
+      let we ← weights.field f j
+      let (r, dot1) ← dot.push we w
+      let r1 ←
+        core.result.Result.map_err new_clients.final_stream.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, dot1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, after) := (some (index, scalar), after)
+        match entry with
+        | none => ok (none, after)
+        | some (j, scalar) => do
+          let value ← weights.field f j
+          ok (some (value, scalar), after)
+    match entry with
+      | none => do
+        let value ← dot.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← dot.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:179:27: warning: This simp argument is unused:
+  uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_assoc_eq,̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsCanonicalDotClientFactors.new_final_stream_factor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:200:8: warning: automatically included section variable(s) unused in theorem `_private.CuSavingsCanonicalDotClientFactors.0.AspisR1.CuSavingsCanonicalDotClientFactors.bind_ok`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:222:69: error(lean.unknownIdentifier): Unknown identifier `decoded`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:237:66: error(lean.unknownIdentifier): Unknown identifier `decoded`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotClientFactors.lean:257:19: error(lean.unknownIdentifier): Unknown identifier `decoded`
+'AspisR1.CuSavingsCanonicalDotClientFactors.rowNext_canonical' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalDotClientFactors.finalNext_canonical' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalDotClientFactors.highNext_canonical' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

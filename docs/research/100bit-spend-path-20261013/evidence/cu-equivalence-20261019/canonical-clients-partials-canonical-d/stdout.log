@@ -1,0 +1,60 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotPartialsCanonical.lean:51:76: warning: This simp argument is unused:
+  uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵h̵u̵,̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲h̲u̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotPartialsCanonical.lean:106:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  new_clients.shared_high values
+in the target expression
+  (match core.result.Result.Ok values with
+    | core.result.Result.Err error => onError error
+    | core.result.Result.Ok values => after values (new_clients.shared_high values)) =
+    match core.result.Result.Ok values with
+    | core.result.Result.Err error => onError error
+    | core.result.Result.Ok values => after values (old_clients.shared_high values)
+
+case Ok
+inst✝ : Shared
+R : Type
+f : Slice U8
+common : Std.Array K 16#usize
+onError : verifier.Error → Result R
+after : Std.Array E 4#usize → (Std.Array K 4#usize → Result Output) → Result R
+values : Std.Array field.wide_exact.WideExact 4#usize
+hr : old_clients.shared_partials f common = ok (core.result.Result.Ok values)
+hh : new_clients.shared_high values = old_clients.shared_high values
+⊢ (match core.result.Result.Ok values with
+    | core.result.Result.Err error => onError error
+    | core.result.Result.Ok values => after values (new_clients.shared_high values)) =
+    match core.result.Result.Ok values with
+    | core.result.Result.Err error => onError error
+    | core.result.Result.Ok values => after values (old_clients.shared_high values)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.CuSavingsCanonicalDotPartialsCanonical.caller_context' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalDotPartialsCanonical.row_canonical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalDotPartialsCanonical.loop_canonical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalDotPartialsCanonical.source_canonical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalDotPartialsCanonical.shared_context_equivalence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

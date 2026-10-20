@@ -1,0 +1,104 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsAll.lean:29:8: error: Tactic `rfl` failed: The left-hand side
+  if h : i < ↑(Usize.ofNatCore (↑slice).length ⋯) then ok (some slice[i], { slice := slice, i := i + 1 })
+  else ok (none, { slice := slice, i := i })
+is not definitionally equal to the right-hand side
+  ok (some (↑slice)[i], { slice := slice, i := i + 1 })
+
+T : Type
+inst : core.ops.function.FnMut Unit T Bool
+slice : Slice T
+hcall : ∀ value ∈ ↑slice, inst.call_mut () value = ok (true, ())
+fuel : ℕ
+ih :
+  ∀ i ≤ (↑slice).length,
+    (↑slice).length - i = fuel →
+      AspisR1CanonicalStd.all_loop inst { slice := slice, i := i } () =
+        ok (true, { slice := slice, i := (↑slice).length })
+i : ℕ
+hi : i ≤ (↑slice).length
+hf : (↑slice).length - i = fuel + 1
+hlt : i < (↑slice).length
+hmem : (↑slice)[i] ∈ ↑slice
+hc : inst.call_mut () (↑slice)[i] = ok (true, ())
+⊢ (if h : i < ↑(Usize.ofNatCore (↑slice).length ⋯) then ok (some slice[i], { slice := slice, i := i + 1 })
+    else ok (none, { slice := slice, i := i })) =
+    ok (some (↑slice)[i], { slice := slice, i := i + 1 })
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsAll.lean:31:42: error: unsolved goals
+T : Type
+inst : core.ops.function.FnMut Unit T Bool
+slice : Slice T
+hcall : ∀ value ∈ ↑slice, inst.call_mut () value = ok (true, ())
+fuel : ℕ
+ih :
+  ∀ i ≤ (↑slice).length,
+    (↑slice).length - i = fuel →
+      AspisR1CanonicalStd.all_loop inst { slice := slice, i := i } () =
+        ok (true, { slice := slice, i := (↑slice).length })
+i : ℕ
+hi : i ≤ (↑slice).length
+hf : (↑slice).length - i = fuel + 1
+hlt : i < (↑slice).length
+hmem : (↑slice)[i] ∈ ↑slice
+hc : inst.call_mut () (↑slice)[i] = ok (true, ())
+hn :
+  core.slice.iter.IteratorSliceIter.next { slice := slice, i := i } =
+    ok (some (↑slice)[i], { slice := slice, i := i + 1 })
+⊢ (let (o, iter1) := (some (↑slice)[i], { slice := slice, i := i + 1 })
+    match o with
+    | none => ok (done (true, iter1))
+    | some x => do
+      let (b, f1) ← inst.call_mut () x
+      if b = true then ok (cont (iter1, f1)) else ok (done (false, iter1))) =
+    ok (cont ({ slice := slice, i := i + 1 }, ()))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsAll.lean:33:6: error: 'change' tactic failed, pattern
+  (match AspisR1CanonicalStd.all_loop.body inst { slice := slice, i := i } () with
+    | ok (cont state) => AspisR1CanonicalStd.all_loop inst state.1 state.2
+    | ok (done value) => ok value
+    | fail error => fail error
+    | div => div) =
+    ?m.209
+is not definitionally equal to target
+  (match
+      match ({ slice := slice, i := i }, ()) with
+      | (iter1, f1) => AspisR1CanonicalStd.all_loop.body inst iter1 f1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, f1) => AspisR1CanonicalStd.all_loop.body inst iter1 f1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (true, { slice := slice, i := (↑slice).length })
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsAll.lean:28:68: warning: This simp argument is unused:
+  hlt
+
+Hint: Omit it from the simp argument list.
+  simp only [core.slice.iter.IteratorSliceIter.next, ̲Slice.len,h̵l̵t̵,̵ ̲↓reduceDIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsAll.lean:28:72: warning: This simp argument is unused:
+  ↓reduceDIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵t̵e̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵.̵n̵e̵x̵t̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵h̵l̵t̵,̵↓̵r̵e̵d̵u̵c̵e̵D̵I̵t̵e̵]̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲t̲e̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲S̲l̲i̲c̲e̲I̲t̲e̲r̲.̲n̲e̲x̲t̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲h̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsAll.lean:32:67: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1CanonicalStd.all_loop.body, ̲hn, ̲bind_tc_ok,h̵c̵,̵ ̲↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalDotsAll.lean:32:70: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵s̵p̵i̵s̵R̵1̵C̵a̵n̵o̵n̵i̵c̵a̵l̵S̵t̵d̵.̵a̵l̵l̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵c̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲A̲s̲p̲i̲s̲R̲1̲C̲a̲n̲o̲n̲i̲c̲a̲l̲S̲t̲d̲.̲a̲l̲l̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲h̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsCanonicalDotsAll.source_true' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

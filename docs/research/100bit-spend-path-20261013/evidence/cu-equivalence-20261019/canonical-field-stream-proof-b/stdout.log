@@ -1,0 +1,210 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalFieldStream.lean:19:8: warning: automatically included section variable(s) unused in theorem `_private.CuSavingsCanonicalFieldStream.0.AspisR1.CuSavingsCanonicalFieldStream.bind_ok`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalFieldStream.lean:48:30: error(lean.unknownIdentifier): Unknown identifier `input`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalFieldStream.lean:62:6: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff (weights.field f index) ?m.70 ?m.71).mpr`
+  weights.field f index >>= ?m.70 = weights.field f index >>= ?m.71
+with the goal
+  (let (o, iter1) := (some index, after)
+    match o with
+    | none => do
+      let we ← pair.finish
+      ok (done (core.result.Result.Ok we))
+    | some j => do
+      let we ← weights.field f j
+      let q ← scratch.index_usize j
+      let (r, pair1) ← pair.push we q
+      let r1 ←
+        core.result.Result.map_err old_stream.field_stream.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, pair1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, iter1) := (some index, after)
+        match entry with
+        | none => ok (none, iter1)
+        | some j => do
+          let value ← weights.field f j
+          let scalar ← scratch.index_usize j
+          ok (some (value, scalar), iter1)
+    match entry with
+      | none => do
+        let value ← pair.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← pair.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+
+Note: The full type of `(bind_eq_iff (weights.field f index) ?m.70 ?m.71).mpr` is
+  (∀ (v : field.wide_exact.WideExact), weights.field f index = ok v → ?m.70 v = ?m.71 v) →
+    weights.field f index >>= ?m.70 = weights.field f index >>= ?m.71
+
+case some
+inst✝ : Shared
+f : Slice U8
+scratch : Slice K
+iter : Range
+pair : old_pairing.EbyKDot
+after : core.ops.range.Range (UScalar UScalarTy.Usize)
+index : UScalar UScalarTy.Usize
+a✝ : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, after)
+⊢ (let (o, iter1) := (some index, after)
+    match o with
+    | none => do
+      let we ← pair.finish
+      ok (done (core.result.Result.Ok we))
+    | some j => do
+      let we ← weights.field f j
+      let q ← scratch.index_usize j
+      let (r, pair1) ← pair.push we q
+      let r1 ←
+        core.result.Result.map_err old_stream.field_stream.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, pair1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, iter1) := (some index, after)
+        match entry with
+        | none => ok (none, iter1)
+        | some j => do
+          let value ← weights.field f j
+          let scalar ← scratch.index_usize j
+          ok (some (value, scalar), iter1)
+    match entry with
+      | none => do
+        let value ← pair.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← pair.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsCanonicalFieldStream.lean:88:6: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff (weights.field f index) ?m.70 ?m.71).mpr`
+  weights.field f index >>= ?m.70 = weights.field f index >>= ?m.71
+with the goal
+  (let (o, iter1) := (some index, after)
+    match o with
+    | none => do
+      let we ← pair.finish
+      ok (done (core.result.Result.Ok we))
+    | some j => do
+      let we ← weights.field f j
+      let q ← scratch.index_usize j
+      let (r, pair1) ← pair.push we q
+      let r1 ←
+        core.result.Result.map_err new_stream.field_stream.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, pair1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, iter1) := (some index, after)
+        match entry with
+        | none => ok (none, iter1)
+        | some j => do
+          let value ← weights.field f j
+          let scalar ← scratch.index_usize j
+          ok (some (value, scalar), iter1)
+    match entry with
+      | none => do
+        let value ← pair.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← pair.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+
+Note: The full type of `(bind_eq_iff (weights.field f index) ?m.70 ?m.71).mpr` is
+  (∀ (v : field.wide_exact.WideExact), weights.field f index = ok v → ?m.70 v = ?m.71 v) →
+    weights.field f index >>= ?m.70 = weights.field f index >>= ?m.71
+
+case some
+inst✝ : Shared
+f : Slice U8
+scratch : Slice K
+iter : Range
+pair : new_pairing.EbyKDot
+after : core.ops.range.Range (UScalar UScalarTy.Usize)
+index : UScalar UScalarTy.Usize
+a✝ : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, after)
+⊢ (let (o, iter1) := (some index, after)
+    match o with
+    | none => do
+      let we ← pair.finish
+      ok (done (core.result.Result.Ok we))
+    | some j => do
+      let we ← weights.field f j
+      let q ← scratch.index_usize j
+      let (r, pair1) ← pair.push we q
+      let r1 ←
+        core.result.Result.map_err new_stream.field_stream.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, pair1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    do
+    let (entry, cursor) ←
+      let (entry, iter1) := (some index, after)
+        match entry with
+        | none => ok (none, iter1)
+        | some j => do
+          let value ← weights.field f j
+          let scalar ← scratch.index_usize j
+          ok (some (value, scalar), iter1)
+    match entry with
+      | none => do
+        let value ← pair.finish
+        ok (done (core.result.Result.Ok value))
+      | some (value, scalar) => do
+        let (result, dot) ← pair.push value scalar
+        match result with
+          | core.result.Result.Ok a => ok (cont (cursor, dot))
+          | core.result.Result.Err a => ok (done (core.result.Result.Err verifier.Error.Parse))
+'AspisR1.CuSavingsCanonicalFieldStream.field_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsCanonicalFieldStream.fetch_canonical' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalFieldStream.old_body_factor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalFieldStream.new_body_factor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalFieldStream.source_loop_equivalence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsCanonicalFieldStream.source_equivalence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
