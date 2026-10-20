@@ -1,0 +1,136 @@
+import BinDecoderCompletionBoundary
+import BinFullPublicSelection
+
+/-! Public selection for C3's exact first-read table under the Bin event.
+The residual completion obligation is the known-public decoder follow law. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.BinCheckedPublicSelection
+open FS FS2 FS2.Duplex R0C.V3 AspisV8PairedCommitment
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open AspisV8R19.CausalFirstHitUnionBound
+open CanonicalCutEnrichedTranscript
+open RawCutProverCompiler RawCutTranscriptRun R1FinalSoundness
+open BinChecksAdaptiveFailureNoModel BinDecoderCompletionBoundary
+
+theorem select_actual_run
+    (decoder : LiteralByteProtocol.Decoder)
+    (d : RawCutTranscriptRun.ErasedPrefix → RawCutTranscriptRun.ErasedMessage → Bool)
+    (prover : RawCutProverCompiler.Prover) (H : Bytes → State) (Q : Nat)
+    (hQ : firstReads emptyTable
+      (eval H (RawCutProverCompiler.experiment prover (RawCutProverCompiler.verifier decoder d))).1 ≤ Q)
+    (hout : ¬ hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv BinRawByteCollisionTargets.pred Q)
+      emptyTable (eval H (RawCutProverCompiler.experiment prover (RawCutProverCompiler.verifier decoder d))).1)
+    (hvalid : ∀ i < 33, LiteralTranscript.valid i
+      ((eval H (RawCutProverCompiler.experiment prover (RawCutProverCompiler.verifier decoder d))).2.1.2 i))
+    (htag : (eval H (RawCutProverCompiler.experiment prover
+      (RawCutProverCompiler.verifier decoder d))).2.1.1.tag = 2)
+    (n : Nat) (hn : n < 33) :
+    let run := eval H (RawCutProverCompiler.experiment prover (RawCutProverCompiler.verifier decoder d))
+    let raw := RawCutWordsFromView.frame decoder H run.2.1.1 run.2.1.2 n
+    RawFullPublicSelection.select raw (tableBefore emptyTable run.1 raw) = some run.2.1.1 := by
+  let run : RawCutProverCompiler.RunView := eval H
+    (RawCutProverCompiler.experiment prover (RawCutProverCompiler.verifier decoder d))
+  let pub := run.2.1.1
+  let pf := run.2.1.2
+  let prior := (eval H prover).1
+  let draw := RawCutTranscriptRun.decisionOnBytes d
+  have htr : LiteralLegacyDecoderCompletion.rawTrace decoder draw H pub pf prior = run.1 := by
+    dsimp [LiteralLegacyDecoderCompletion.rawTrace, run, pub, pf, prior, draw,
+      RawCutTranscriptRun.decisionOnBytes]
+    rw [RawCutProverCompiler.experiment_eval]
+    rfl
+  have hQ' : firstReads emptyTable
+      (LiteralLegacyDecoderCompletion.rawTrace decoder draw H pub pf prior) ≤ Q := by
+    rw [htr]
+    exact hQ
+  have hout' : ¬ hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv BinRawByteCollisionTargets.pred Q)
+      emptyTable (LiteralLegacyDecoderCompletion.rawTrace decoder draw H pub pf prior) := by
+    rw [htr]
+    exact hout
+  have hs := BinFullPublicSelection.at_first_cell decoder draw H pub pf hvalid htag
+    prior (FS.eval_consistent H prover) Q hQ' hout' n hn
+    (RawCutWordsFromView.frame decoder H pub pf n) (RawFullPublicRun.frame_firstCell decoder H pub pf n)
+  rw [htr] at hs
+  exact hs
+
+/-- The public-selection half of h_Rwire follows from model Checks,
+public tag and query budget, with precisely the five-reader collision event. -/
+theorem publicSelection_of_checked_acceptance
+    (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (Q : Nat)
+    (hQ : ∀ H : Bytes → State,
+      firstReads emptyTable (eval H (original D d P)).1 ≤ Q)
+    (htag : ∀ H : Bytes → State, (eval H (original D d P)).2.1.1.tag = 2)
+    (hchecks : CheckedAcceptance D d P) : PublicSelection D d P Q := by
+  intro H hc ha n a hn hf
+  let orig := eval H (original D d P)
+  let run := eval H (recorded D d P)
+  have horig : orig = eval H (experiment P (verifier D d)) := rfl
+  have hrunRaw : run = eval H (experiment
+      (compiled D d (RawCutWordsFromView.buildWords D) P) (verifier D d)) := rfl
+  have hsplit := congrArg (fun v : RunView => v.1)
+    (compiled_experiment_eval D d (RawCutWordsFromView.buildWords D) P H)
+  have hac : FS2.accepts orig := by
+    have hb := (public_and_acceptance D d (RawCutWordsFromView.buildWords D) P H).2
+    change run.2.2 = orig.2.2 at hb
+    change run.2.2 = true at ha
+    change orig.2.2 = true
+    rw [← hb]
+    exact ha
+  have hout : ¬ hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv
+      BinRawByteCollisionTargets.pred Q) emptyTable orig.1 := by
+    intro hbad
+    apply hc
+    change hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv
+      BinRawByteCollisionTargets.pred Q) emptyTable run.1
+    change run.1 = orig.1 ++ _ at hsplit
+    rw [hsplit]
+    exact TraceAppend.hitsBad_of_prefix _ _ _ _ hbad
+  have hfmt := RawChecksInjectionFormat.checks_imply_injection_format
+    D d P H orig run horig hrunRaw
+    (((LiteralByteProtocol.protocol D).transcript H run.2.1.1 run.2.1.2 33).rounds)
+    rfl (hchecks H hac) (htag H)
+  let out := RawCompiledTranscript.output D d P H
+  have hx : run.2.1 = out := by
+    rw [hrunRaw]
+    dsimp only [RawCompiledTranscript.output, out]
+    rw [RawCutProverCompiler.experiment_eval]
+  have hframe := RawFullPublicRun.frame_firstCell D H out.1 out.2 n
+  change firstCell ((LiteralByteProtocol.protocol D).chain H run.2.1.1 run.2.1.2 n) = some a at hf
+  rw [hx] at hf
+  have he : a = RawCutWordsFromView.frame D H out.1 out.2 n :=
+    Option.some.inj (hf.symm.trans hframe)
+  subst a
+  change RawFullPublicSelection.select (RawCutWordsFromView.frame D H out.1 out.2 n)
+    (tableBefore emptyTable run.1 (RawCutWordsFromView.frame D H out.1 out.2 n)) = some run.2.1.1
+  have hpub : run.2.1.1 = out.1 := congrArg Prod.fst hx
+  rw [hpub]
+  rw [hrunRaw]
+  dsimp only [out]
+  rw [RawCompiledTranscript.frame, RawCompiledTranscript.output_eq]
+  rw [RawCutProverCompiler.compiled_experiment_eval]
+  have hread := RawCutWordsFromView.frame_read D d P H n hn
+  dsimp only [RawCompiledTranscript.original] at hread ⊢
+  rw [TraceAppend.tableBefore_append _ _ _ _ hread]
+  exact select_actual_run D d P H Q (hQ H) hout hfmt.1 (htag H) n hn
+
+/-- Under the model public/tag/checks/read laws, h_Rwire reduces exactly to
+LiteralCompletion. No independent BinaryClean premise is reintroduced. -/
+theorem binaryCompletion_iff_known_public
+    (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (Q : Nat)
+    (hQ : ∀ H : Bytes → State,
+      firstReads emptyTable (eval H (original D d P)).1 ≤ Q)
+    (htag : ∀ H : Bytes → State, (eval H (original D d P)).2.1.1.tag = 2)
+    (hchecks : CheckedAcceptance D d P) :
+    BinaryCompletion D d P Q ↔ LiteralCompletion D d P Q :=
+  binaryCompletion_iff_literalCompletion D d P Q
+    (publicSelection_of_checked_acceptance D d P Q hQ htag hchecks)
+
+#print axioms select_actual_run
+#print axioms publicSelection_of_checked_acceptance
+#print axioms binaryCompletion_iff_known_public
+end AspisR1.BinCheckedPublicSelection
+end
