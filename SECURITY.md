@@ -1,3 +1,8 @@
+> R1 update (2026-10-20): the R1 pair-forest marker path is no longer the
+> nullifier-marker PDA path described below. B1 uses `create_with_seed` under
+> the forest master; see [the accepted B1 review](docs/research/100bit-spend-path-20261013/design/LEAD-REVIEW-POOL-B1-20261019.md)
+> and its freshness premise. Historical results and legacy PDA routes are unchanged.
+
 # Security
 
 Report sensitive vulnerabilities through GitHub's private security-advisory

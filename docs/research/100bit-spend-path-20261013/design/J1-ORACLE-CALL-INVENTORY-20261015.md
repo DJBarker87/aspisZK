@@ -1,3 +1,8 @@
+> R1 update (2026-10-20): the R1 pair-forest marker path is no longer the
+> nullifier-marker PDA path described below. B1 uses `create_with_seed` under
+> the forest master; see [the accepted B1 review](LEAD-REVIEW-POOL-B1-20261019.md)
+> and its freshness premise. Historical results and legacy PDA routes are unchanged.
+
 # J1 adapter, verifier, and Pool call-site inventory
 
 Inspection base: `3c79ec30fa44f408c716bb345050c137e907fa67` (worktree HEAD).

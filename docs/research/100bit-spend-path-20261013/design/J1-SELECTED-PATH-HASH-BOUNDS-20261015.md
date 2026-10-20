@@ -1,3 +1,8 @@
+> R1 update (2026-10-20): the R1 pair-forest marker path is no longer the
+> nullifier-marker PDA path described below. B1 uses `create_with_seed` under
+> the forest master; see [the accepted B1 review](LEAD-REVIEW-POOL-B1-20261019.md)
+> and its freshness premise. Historical results and legacy PDA routes are unchanged.
+
 # Selected guarded Pool-path query and hash-call inventory
 
 > Note (2026-10-19): the R1 proof format is now the compact binary-multiproof format, fixed length 57,607 bytes (`../evidence/format-adopt-20261019/REPORT.md`); 124,343 bytes below is the retired eight-way format.
