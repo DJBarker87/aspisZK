@@ -1,0 +1,7 @@
+# Claim caller substitution for source-callback powers
+
+PROVED: prepared_claim_sourcePowers_eq preserves the complete Result of the existing prepared claim caller when only its powers operation changes from the retained checked early-loop backend to sourceModelPowers, for canonical kappa. The proof derives raw powers equality from the prior callback-model agreement theorem; no array equality or successful-run premise is assumed. claim_loop_powers_irrelevant shows the nested claim loop does not consult powers, allowing existing downstream dot/claim proofs to be reused unchanged. Both normal return and errors/divergence are covered by Result equality.
+
+OPEN: the generic generated FnMut/cursor array interface must be connected to sourceModelPowers. The reviewed P6 library correspondence, concrete remaining operations, actual enclosing caller/source/runtime/artifact integration and final 100-bit theorem remain open. This theorem is about the installed checked caller model, not a claim that all source transport is finished. No production Rust or CU changes.
+
+Focused NUC Lean4.32 -j1 -M4400 check passed: exit0,2.106s, scope peak363950080B, swap0, explicit High1GiB/Max2GiB. Both exported axioms reports contain only standard axioms. The first draft had redundant tactics after congr had already closed the goal; its exit1 receipt is retained separately. No resource changes or package/manifest replay.
