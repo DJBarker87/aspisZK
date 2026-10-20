@@ -1,0 +1,19 @@
+Host: dombarker@100.108.41.90
+Read-only audit; no build or mutation.
+
+D=/home/dombarker/project-offloads/codex-r1-format-adopt-20261019/artifacts
+O=/home/dombarker/.cache/solana/v1.52/platform-tools/llvm/bin/llvm-objdump
+for f in "$D/verifier/aspis_r1_cost_probe_program.so" "$D/pool/aspis_pool.so"; do
+  sha256sum "$f"
+  readelf -W -r "$f" | rg 'sol_sha256|sol_create_program_address|sol_try_find_program_address'
+done
+sha256sum "$O"
+"$O" --version | head -2
+"$O" -d --start-address=0x23c50 --stop-address=0x23d98 "$D/verifier/aspis_r1_cost_probe_program.so"
+"$O" -d --start-address=0x65a18 --stop-address=0x65ce8 "$D/pool/aspis_pool.so"
+
+Complete undefined symbols / R_BPF_64_32 counts:
+for f in "$D/verifier/aspis_r1_cost_probe_program.so" "$D/pool/aspis_pool.so"; do
+  readelf -W -s "$f" | awk '$7=="UND" {print $8}' | sort -u
+  readelf -W -r "$f" | awk 'NR>3 && /unrecognized: a/ {n++} END{print n}'
+done
