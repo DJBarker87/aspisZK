@@ -88,3 +88,28 @@ explicitly under premise P6 with a differential test against Rust `std`
 behaviour on the admitted inputs; (2) the borrow blockers continue under
 the same CU ledger, with more forms; any blocker still needing a CU
 increase is reported with its cheapest form for a user decision.
+
+## Candidate update (2026-10-20, prep5) and the ruling on the last two cones
+
+Branch codex/cx-freeze-prep-20261020 at 2318acd43 (production source
+c16e59e77): `wide_view`, the semantic boundary and `echeck` resolved within
+the CU ledger; two P6 iterator models (`Iterator.any.default` and the slice
+`any`) bound with explicit instance arguments, 21,208 differential cases
+against Rust std passing; 12 cones re-extracted with has_errors=false, 10
+translating in Aeneas (scanner, boundary, view, borrow owners, Libra,
+values/inactive, scoped stage 2/finish/candidate 7); all gates pass;
+margins 748 CU (stage 1) / 1,910 CU (settlement); pins default f9ecbc27…,
+devnet 3f21a42f…, Pool 121f3e29….
+
+Two cones remain: the compact-field expansion (cheapest translating form
++4,431 stage-1 CU per fixture, 3,683 over transfer-255's B1 and most of the
+5.4k worst-case margin — not taken) and `Weights::new`'s unsafe
+initialisation (no translating form). **Ruling:** both are proved by a
+Rust-level equivalence route instead of rewriting the shipped code: a
+translatable reference form of each function is written beside the shipped
+one (test/extraction-only, never compiled into the program), Kani proves
+the shipped and reference forms equal for all inputs of the fixed admitted
+sizes (the repository already uses Kani for V5: `kani-verif/` on main), and
+Aeneas extracts the reference form for the Lean proofs. Kani's soundness on
+these harnesses joins premise P6 by name. The shipped bytes and CU are
+unchanged.
