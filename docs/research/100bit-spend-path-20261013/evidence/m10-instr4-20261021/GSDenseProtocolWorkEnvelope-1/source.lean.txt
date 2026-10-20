@@ -1,0 +1,57 @@
+import GSDenseRrefLoopFullWorkCost
+import ExtractorWorkMonad
+
+/-! Dimension-only bounds for the existing GS elimination mirror. A field
+value's numerical size never appears. The counted quantity remains pivot
+visits and row-operation cells; full allocation/bit adequacy is separate. -/
+set_option autoImplicit false
+namespace AspisR1.GSDenseProtocolWorkEnvelope
+open CompPoly.DenseMatrix ExtractorWorkMonad
+
+/-- An explicitly fixed protocol dimension gives a cubic cell envelope. -/
+theorem cubic_cells {F : Type} [Field F] [BEq F]
+    (rows cols d : Nat) (data : Array F) (pivots : Array Nat)
+    (hr : rows ≤ d) (hc : cols ≤ d) :
+    (rrefLoopDataFullWorkCounted (cols + 1) rows cols 0 0 data pivots).2 ≤
+      4 * (d + 1)^3 := by
+  have h := rrefLoopDataFullWorkCounted_initial_le rows cols data pivots
+  have hm : (cols + 1) * (rows + cols + (rows + 1) * cols) ≤
+      (d + 1) * (d + d + (d + 1) * d) :=
+    Nat.mul_le_mul (Nat.add_le_add_right hc 1)
+      (Nat.add_le_add (Nat.add_le_add hr hc)
+        (Nat.mul_le_mul (Nat.add_le_add_right hr 1) hc))
+  apply h.trans (hm.trans ?_)
+  nlinarith [Nat.zero_le d, Nat.zero_le (d*d)]
+
+/-- A fixed per-cell tariff is independent of the represented field values.
+This is tariff arithmetic, not an assertion that cell counts cover the heap. -/
+theorem fixed_width_cells {F : Type} [Field F] [BEq F]
+    (rows cols d tariff : Nat) (data : Array F) (pivots : Array Nat)
+    (hr : rows ≤ d) (hc : cols ≤ d) :
+    tariff * (rrefLoopDataFullWorkCounted (cols + 1) rows cols 0 0 data pivots).2 ≤
+      (4 * tariff) * (d + 1)^3 := by
+  have h := Nat.mul_le_mul_left tariff (cubic_cells rows cols d data pivots hr hc)
+  simpa only [Nat.mul_assoc, Nat.mul_comm tariff 4] using h
+
+/-- Finite retry composition includes every attempted failing body. Both the
+protocol fuel and the protocol matrix dimension are fixed, not value sizes. -/
+theorem retry_cells {S : Type} (fuel d tariff : Nat)
+    (step : S → Nat → Work (Option S))
+    (hstep : ∀ s i, i < fuel → (step s i).2 ≤ (4 * tariff) * (d + 1)^3)
+    (initial : Option S) :
+    (forLoop fuel (retryStep step) initial).2 ≤
+      fuel * ((4 * tariff) * (d + 1)^3) :=
+  retry_bound fuel _ step hstep initial
+
+/-- A fixed-degree coefficient representation requires a live-slot invariant.
+It is deliberately explicit; degree alone does not bound an untrimmed array. -/
+theorem fixed_degree_live_bits (degree polynomials auxiliary width live : Nat)
+    (hslots : live ≤ polynomials * (degree + 1) + auxiliary) :
+    live * width ≤ (polynomials * (degree + 1) + auxiliary) * width :=
+  representation_bound live (polynomials * (degree + 1)) auxiliary width hslots
+
+#print axioms cubic_cells
+#print axioms fixed_width_cells
+#print axioms retry_cells
+#print axioms fixed_degree_live_bits
+end AspisR1.GSDenseProtocolWorkEnvelope

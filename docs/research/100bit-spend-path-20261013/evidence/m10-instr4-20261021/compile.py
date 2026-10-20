@@ -30,7 +30,7 @@ def lean_processes():
 module = sys.argv[1]
 source = PACKET / 'lean' / (module + '.lean')
 baseline = json.loads((PACKET / 'evidence/m9-binary-20261020/manifest.json').read_text())
-path = str(OBJECTS) + ':/tmp/codex-cx-m10-instr3-20261021-objects:/tmp/codex-cx-m10-instr-20261021-objects:/tmp/codex-cx-extractor-bin-20261021-objects:/tmp/codex-cx-m10-ledger-20261020-objects:/tmp/cx-shared-grammar-objects:' + baseline['attempts'][-1]['lean_path']
+path = str(OBJECTS) + ':/tmp/gs-rref-cost-proof-evidence-20261019/attempts/gs-rref-loop-full-work-cost-v4-attempt-20261019/objects:/tmp/gs-rref-cost-proof-evidence-20261019/attempts/gs-normalize-cell-count-v11-attempt-20261019/objects:/tmp/gs-rref-cost-proof-evidence-20261019/attempts/gs-row-update-counted-cost-v2-attempt-20261019/objects:/tmp/gs-pivot-scan-cost-v2-evidence/objects:/tmp/codex-cx-m10-instr3-20261021-objects:/tmp/codex-cx-m10-instr-20261021-objects:/tmp/codex-cx-extractor-bin-20261021-objects:/tmp/codex-cx-m10-ledger-20261020-objects:/tmp/cx-shared-grammar-objects:' + baseline['attempts'][-1]['lean_path']
 imports = []
 for name in re.findall(r'^import (\S+)', source.read_text(), re.M):
     obj = next((Path(p) / (name.replace('.', '/') + '.olean')
