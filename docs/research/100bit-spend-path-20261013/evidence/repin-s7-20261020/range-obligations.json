@@ -1,0 +1,55 @@
+{
+  "status": "SOURCE_INVENTORY_ONLY_NOT_PROVED",
+  "notes": [
+    "Geometry/basis callers are explicitly excluded from the old overflow inventory closure.",
+    "Field kernels, batched residue canonicality/cadence and opaque iterator arithmetic require their own actual-execution joins.",
+    "No bound is inferred merely from final checked success."
+  ],
+  "operations": [
+    {
+      "owner": "QueryGeometry::for_range",
+      "operations": "end-start; (end-start)*5",
+      "sufficient_invariant": "start<=end<=22 implies 0<=end-start<=22 and product<=110"
+    },
+    {
+      "owner": "QueryGeometry::for_range",
+      "operations": "u/4*4; u/4*4+3",
+      "sufficient_invariant": "successful FibreIndex::new(u) implies u<262144; quartet base<=262140 and last<=262143"
+    },
+    {
+      "owner": "QueryGeometry::for_range",
+      "operations": "5*i+j",
+      "sufficient_invariant": "i<end-start<=22, j<5 implies 5*i+j<5*(end-start)<=110; needs flat/prefix length invariant"
+    },
+    {
+      "owner": "QueryGeometry::for_query",
+      "operations": "index-self.start",
+      "sufficient_invariant": "self.start<=index<end; inverse length=end-self.start"
+    },
+    {
+      "owner": "batch_prefix_products",
+      "operations": "index+1",
+      "sufficient_invariant": "index<flat.len()<=110 implies successor<=110"
+    },
+    {
+      "owner": "accumulate_with_node; accumulate_batched_with_node",
+      "operations": "n+j; n*=2",
+      "sufficient_invariant": "width in {64,256}, n power of two, n<width and j<n imply n+j<2*n<=width<=256"
+    },
+    {
+      "owner": "accumulate_with_node; accumulate_batched_with_node",
+      "operations": "next*width+j; next+1; terms+1",
+      "sufficient_invariant": "next<22,width<=256,j<width gives trace index<5632; next+1<=22; terms<22 gives terms+1<=22"
+    },
+    {
+      "owner": "candidate::query_values",
+      "operations": "4*i+s; 2*i+s; i-geometry.start",
+      "sufficient_invariant": "i<22, s<4 or s<2 gives trace indices<88 or<44; geometry.start<=i<end and vector length=end-start"
+    },
+    {
+      "owner": "candidate::query_values",
+      "operations": "q[672..800]; values[u%4]",
+      "sufficient_invariant": "q has logical opening length>=800; u%4<4"
+    }
+  ]
+}
