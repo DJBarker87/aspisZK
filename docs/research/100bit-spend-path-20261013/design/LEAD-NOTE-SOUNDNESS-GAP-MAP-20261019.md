@@ -533,3 +533,24 @@ C2 is not yet closed only because the full UNION of the closures still
 hits the two generated-name collisions (each root builds; a single file
 importing everything does not); the candidate-freeze hygiene pass removes
 them, and C2's final replay runs on the adopted freeze.
+
+## Addendum (2026-10-20): C3 stated — the soundness definition of done
+
+Codex job cx-c3-skeleton (64b1bccc2): `lean/R1FinalSoundness.lean` composes
+the proved pieces into the final theorem (T) with every open link as a
+named hypothesis, and proves the numeric instance; eight audits, standard
+axioms (`design/C3-SKELETON-20261020.md`). Numeric result: per attempt, the
+failure probability is strictly below 2^-100 for every adversary making at
+most 22,482,956,455,467,539,568,187 ≈ 2^74.25 hash queries (the verifier's
+own 1,161 reads reserved; the next integer fails, proved exact); the bank
+and query-scan aborts fit inside 2^-120. The Q-dependence is the binary
+collision term 6·Q²/2^256 on top of the fixed classifier term 33·15/2^109.
+
+**The soundness definition of done** is the C3 hypothesis inventory:
+(a) open source obligations — h_R16_instance, h_R4_row31, h_R13,
+h_R14_backend, h_R15_writer, h_R3_semantic, h_R18, h_R19, h_Rwire,
+h_R12_binary_words, h_R9_transport, h_M10_ledger (+ the extractor value
+equation), and the evidence slots h_R10, h_R22, h_R4_transport, h_R17,
+h_R20, h_R21, h_S1–h_S10, h_M10_uniform; (b) accepted premises P1–P7 and
+P2′, for user/lead acceptance at step 9. With D82's privacy checklist, this
+replaces the gap-map table as the tracking list.
