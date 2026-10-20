@@ -1,0 +1,63 @@
+--- a/crates/aspis-r1-cost-probe/src/sampler.rs
++++ b/crates/aspis-r1-cost-probe/src/sampler.rs
+@@ -54,22 +54,28 @@
+ /// the remaining quotient. This uses eight long divisions by P rather than
+ /// first reducing the full block with 256 binary steps.
+ fn low_base_p_digits(block: &[u8; 32]) -> ([u32; 8], u32) {
+-    let mut quotient: [u32; 8] =
+-        core::array::from_fn(|i| u32::from_le_bytes(block[4 * i..4 * i + 4].try_into().unwrap()));
+-    let digits = core::array::from_fn(|_| {
+-        let mut remainder = 0u64;
+-        for limb in quotient.iter_mut().rev() {
+-            let dividend = (remainder << 32) | u64::from(*limb);
+-            *limb = (dividend / u64::from(P)) as u32;
+-            remainder = dividend % u64::from(P);
+-        }
+-        remainder as u32
+-    });
+-
+-    // After eight divisions, the quotient is at most 256 and fits in u32.
+-    debug_assert!(quotient[1..].iter().all(|&limb| limb == 0));
+-    debug_assert!(quotient[0] <= 256);
+-    (digits, quotient[0])
++    let mut rank = [0u32; 8];
++    let mut i = 0usize;
++    while i < 8 {
++        let start = 4 * i;
++        rank[i] = u32::from_le_bytes([
++            block[start],
++            block[start + 1],
++            block[start + 2],
++            block[start + 3],
++        ]);
++        i += 1;
++    }
++
++    let mut digits = [0u32; 8];
++    let mut i = 0usize;
++    while i < 8 {
++        let (quotient, digit) = qm31_div_pass(rank);
++        rank = quotient;
++        digits[i] = digit;
++        i += 1;
++    }
++    (digits, rank[0])
+ }
+ 
+ fn decode8(digits: [u32; 8]) -> WideExact {
+@@ -88,10 +94,12 @@
+ /// Add a small integer to a base-P digit vector. Returns the carry beyond
+ /// the final digit, which is at most one for the values used by the sampler.
+ fn add_small_base_p(digits: &mut [u32; 8], mut addend: u32) -> bool {
+-    for digit in digits {
+-        let sum = u64::from(*digit) + u64::from(addend);
+-        *digit = (sum % u64::from(P)) as u32;
++    let mut i: usize = 0;
++    while i < 8 {
++        let sum = u64::from(digits[i]) + u64::from(addend);
++        digits[i] = (sum % u64::from(P)) as u32;
+         addend = (sum / u64::from(P)) as u32;
++        i += 1;
+     }
+     debug_assert!(addend <= 1);
+     addend != 0

@@ -1,0 +1,73 @@
+{
+  "after_sha256": "4a04a3feaf539d55091142ddbdd83d8f738518ee31198be07ce9f771b3032dc0",
+  "apply_check": "git apply --check --unsafe-paths in isolated temporary tree with pinned before-file; passed",
+  "base_revision": "51098dd08858eec9c4cc2c411d98e5329f9daeeb",
+  "before_sha256": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+  "boundary": "The patch exactly applies the already-proved indexed helper bodies and uses unchanged qm31_div_pass. It does not itself prove source equivalence or establish adoption, CU, or runtime results.",
+  "candidate_function_hashes": {
+    "add_small_base_p": "29786e6671832484c3c2a6269d57c8a784587846948ccebd62040297d8b89229",
+    "low_base_p_digits": "eb5f897889c5e6c0397f041864806557146d42035469673e5b7ea1a46e6287b1"
+  },
+  "candidate_proof_links": {
+    "addsmall_candidate_entrypoint": "AspisR1.ExtractedIndexedAddSmallWrapperNatModelV1.add_small_base_p_refines_addDigits",
+    "addsmall_candidate_manifest": "docs/research/100bit-spend-path-20261013/lean-candidates/post25-indexed-addsmall-source-model-20261020/manifest.json",
+    "addsmall_helper_module_pins": {
+      "AspisR1Post25SamplerIndexedAddSmallCandidate.Funs": {
+        "object_sha256": "f1c998a0ad026aa4cf9b2861fc8dbdaa306c00f17f977ff4602151c482b50ea2",
+        "source_sha256": "2338911331a74d7717f3292d74a594d0808a05fc5b8dd7ca855a621adbac5b76"
+      },
+      "GammaCandidateAddSmallHelpersRefine": {
+        "object_sha256": "bdceb8dce7b8aa71e67e034a9746eefce2465e12ccdd14e0f20c6862620dfe98",
+        "source_sha256": "6be5469f64916fc6307022d9a26d0e2c8b4e3b4a0353c17be8c4ec9376f30b6c"
+      },
+      "IndexedCandidateAddSmallWrapperNatModelV3": {
+        "object_sha256": "8850158aa78a451e0c94ec3f1ae2040c8d9927864a74b16893fe2e34be8f0a5e",
+        "source_sha256": "996d36e9a4c84ffaf4dfa566387300701509d4770d7cb1c7b4719d34b0083b83"
+      }
+    },
+    "gamma_helper_instance": "AspisR1GammaCaller.DigitsModel.candidate_helpers_refine",
+    "gamma_rank_model": "AspisR1GammaCaller.DigitsModel.candidate_gamma_rank_success",
+    "low_candidate_function_sha256": "eb5f897889c5e6c0397f041864806557146d42035469673e5b7ea1a46e6287b1",
+    "low_candidate_owner_object_sha256": {
+      "AspisR1Post25Sampler.Funs": {
+        "object_sha256": "11efa6801d2fc83bc2de94aa5927bdce061904b1b61dafcb7355d6b2fc8b1060",
+        "source_sha256": "38e3f79b27bdf427d2de621313fb718808baf7a36ca7619104690725cdd8067a"
+      },
+      "ExtractedQM31SamplerIndexedCandidate": {
+        "object_sha256": "9ae0abbe5b917e307a6af810efb7f19f24ee5e60695b7018ff392a0234c1d100",
+        "source_sha256": "41ff68f6bdfccb5f6b599e0398937aaf08c00828129c207b106f1eda34750601"
+      },
+      "IndexedCandidateGeneratedLoopBridgeV4": {
+        "object_sha256": "1409b3937ebeefc184ba40e5040e68fe9e1e40ca0552d34f67c567c5e5495849",
+        "source_sha256": "c5dbcd41a17a0187dd8e0d5cdce7e3ebdefdf3346efd030b24726de1769c284a"
+      }
+    },
+    "low_candidate_source": "docs/research/100bit-spend-path-20261013/lean-candidates/post25-indexed-sampler-candidate-20261019/sources/ExtractedQM31SamplerIndexedCandidate.lean",
+    "low_candidate_source_sha256": "41ff68f6bdfccb5f6b599e0398937aaf08c00828129c207b106f1eda34750601"
+  },
+  "changed_functions": [
+    "low_base_p_digits",
+    "add_small_base_p"
+  ],
+  "patch": "sampler-indexed-helpers.patch",
+  "patch_sha256": "bac80b6dd310a3b292db873da7dc27a6602a3fb6b1dcf832afd5a4ff2d28acf3",
+  "required_gates_ordered": [
+    "human review and explicit adoption of this source delta",
+    "re-pin changed sampler.rs spans and re-extract only changed declarations from adopted source",
+    "focused Lean replay for indexed low/add generated owners and result bridges against adopted source",
+    "selected source/caller correspondence checks against the adopted owner",
+    "lead-owned optimized CU/codegen gate and release runtime fixture checks"
+  ],
+  "review_notes": [
+    "qm31_div_pass is byte-identical in the frozen production source and candidate extraction; candidate low helper reuses it.",
+    "The indexed low helper removes the production debug_assert that upper quotient limbs are zero and quotient[0] <= 256; the mathematical helper proof bounds the returned quotient, but debug-assert behavior is not certified by this proposal. Adoption review must accept this change or request a candidate that preserves checks.",
+    "The patch is source proposal only; no source-equivalence or production owner has been checked against the proposed after-file."
+  ],
+  "schema": "sampler-indexed-helper-adoption-proposal-v1",
+  "status": "unadopted source proposal; no production file or build gate changed",
+  "target": "crates/aspis-r1-cost-probe/src/sampler.rs",
+  "unchanged_dependencies": {
+    "candidate_helper_bytes_identical": true,
+    "qm31_div_pass_source_sha256": "6a456b5023e9bd0203adf36741a7abec7db9d6a080a9b5e47744cc29fab509e7"
+  }
+}

@@ -1,0 +1,7 @@
+# Indexed sampler helper adoption proposal
+
+CANDIDATE source delta against frozen c8ea8dd49. The patch changes only low_base_p_digits and add_small_base_p to the indexed helper bodies already covered by the checked loop/entrypoint contracts. The existing qm31_div_pass is unchanged. The complete proposed file, before/after hashes, exact helper proof links and isolated apply checker make this reviewable without touching production.
+
+This is a practical way to remove the outstanding unsafe mutable-iterator source boundary: adopt the implementations whose result contracts have been proved directly, then connect their frozen source owners to the already checked ordinary/gamma field and transcript consumers. No claim is made here that the original iterator restoration semantics are proved equivalent. The low helper's two debug assertions are removed in this exact checked candidate and are an explicit review point; the new proof bounds the quotient but the proposal does not certify debug-mode equivalence.
+
+NOT ADOPTED. Production source/freeze is untouched. Required continuation is recorded in proposal-details.json: source-delta review/adoption, exact source re-extraction and focused proof re-pins, whole-caller binding, and the lead/session-A owned optimized CU/codegen/runtime gates. None is silently counted as passed. This proposal has no Lean build result or new security claim; all proof results are linked to their existing source packets.
