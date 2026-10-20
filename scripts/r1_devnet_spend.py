@@ -3,6 +3,7 @@
 Run inside r1_devnet_receipt.sh and the documented capped scope.
 """
 import base64,json,os,pathlib,subprocess,sys,time,hashlib
+from concurrent.futures import ThreadPoolExecutor
 from r1_devnet_rpc import rpc
 C=json.load(open(sys.argv[1]));O=pathlib.Path(sys.argv[2]);O.mkdir(exist_ok=True,mode=0o700)
 URL=C['rpc_url'];SIGNER=C.get('signer','native-target/release/devnet_spend')
@@ -35,6 +36,7 @@ def send(name,ixs,keys=['keys/payer.json'],negative=False):
         wire=base64.b64encode(bytes.fromhex(signed['hex'])).decode();sig=signed['signature']
         simulation=rpc(URL,'simulateTransaction',[wire,{'encoding':'base64','sigVerify':True,'commitment':'confirmed'}]);write(f'{name}-attempt-{attempt}-simulation',simulation)
         simerr=simulation['value']['err']
+        if simerr=='BlockhashNotFound':continue
         if bool(simerr)!=negative:raise RuntimeError(f'{name} unexpected simulation: {simulation}')
         write(f'{name}-attempt-{attempt}',{'signature':sig,'blockhash':bh,'simulation_error':simerr,'serialized_bytes':signed['bytes']})
         try:
@@ -77,15 +79,24 @@ def readhex(address,owner):
     a=account(address);assert a['value'] and a['value']['owner']==owner and not a['value']['executable']
     return base64.b64decode(a['value']['data'][0]).hex()
 def upload(label,address,path,body):
-    stats=[]
-    for i,start in enumerate(range(0,len(body),3763)):
-        stats.append(send(f'{label}-{i}',[ix(C['carrier'],[[address,True,True]],start.to_bytes(4,'little')+body[start:start+3763])],['keys/payer.json',path]))
+    phase=time.monotonic()
+    def one(item):
+        i,start=item;time.sleep((i%4)*.25)
+        return send(f'{label}-{i}',[ix(C['carrier'],[[address,True,True]],start.to_bytes(4,'little')+body[start:start+3763])],['keys/payer.json',path])
+    # Disjoint ranges may be submitted concurrently. Every transaction must
+    # finalize before byte readback or stage 1; at most four are in flight.
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        stats=list(pool.map(one,enumerate(range(0,len(body),3763))))
     actual=bytes.fromhex(readhex(address,C['carrier']));assert actual==body
-    result={'count':len(stats),'compute_units':sum(s['compute_units'] for s in stats),'transaction_wall_seconds':sum(s['wall_seconds'] for s in stats),'sha256':hashlib.sha256(body).hexdigest()};write(label+'-summary',result);return result
+    result={'count':len(stats),'compute_units':sum(s['compute_units'] for s in stats),'wall_seconds':time.monotonic()-phase,'transaction_wall_seconds_sum':sum(s['wall_seconds'] for s in stats),'sha256':hashlib.sha256(body).hexdigest()};write(label+'-summary',result);return result
 
+assert subprocess.check_output([str(CLI/'solana-keygen'),'pubkey','keys/payer.json'],text=True).strip()==C['payer']
 assert rpc(URL,'getGenesisHash',[])==C['genesis_hash']
 assert 'carrier' in C,'deploy and pin the raw-buffer carrier before setup'
 mintkey,mint=key('spend-mint');sourcekey,source=key('spend-source');destkey,dest=key('spend-destination');govkey,gov=key('spend-governance')
+if C.get('mint'):assert C['mint']==mint, 'retained mint key does not match public config'
+for role,actual in [('source',source),('destination',dest),('token_owner',gov)]:
+    if role in C.get('accounts',{}):assert C['accounts'][role]==actual
 # This demonstration deliberately uses public fixture note witnesses; it measures R1, not wallet secrecy.
 create('mint-create',mint,TOKEN,82,mintkey)
 if not (O/'mint-initialize.json').exists():send('mint-initialize',[ix(TOKEN,[[mint,False,True]],bytes([20,6])+b58(C['payer'])+bytes([0]))])
@@ -93,6 +104,8 @@ for label,address,path in [('source',source,sourcekey),('destination',dest,destk
     create(label+'-create',address,TOKEN,165,path)
     send(label+'-initialize',[ix(TOKEN,[[address,False,True],[mint,False,False]],bytes([18])+b58(gov))])
 send('mint-supply',[ix(TOKEN,[[mint,False,True],[source,False,True],[C['payer'],True,False]],bytes([7])+(2000).to_bytes(8,'little'))])
+write('mint-setup',{'mint':mint,'source':source,'destination':dest,'token_owner':gov,'mint_authority':C['payer'],'decimals':6,'supply_base_units':2000})
+if '--mint-only' in sys.argv:sys.exit(0)
 slot=rpc(URL,'getSlot',[{'commitment':'finalized'}]);setupfile=O/'setup-plan.json'
 if setupfile.exists():setup=json.load(open(setupfile))
 else:

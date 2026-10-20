@@ -29,7 +29,10 @@ Its retained buffer `3jhdwvMA6DMNwheHDewWvf2E2PUmiGP171dpQwLktd9z` holds
 ranges. Payer readback: 8,788,444,160 lamports. The key remains retained.
 A 3,763-byte loader write failed simulation with InvalidInstructionData;
 no transaction was sent for that simulation. Paced 900-byte TxV1 repair
-writes are in progress, with each batch confirmed finalized.
+writes reached 1,380 finalized chunks before a batch hit a blockhash-expiry
+preflight error. A byte readback found 251 ranges still needing repair.
+The replacement deployment driver fetches a fresh blockhash for each write
+and records every signed attempt; those 251 repairs completed.
 
 The external raw-buffer carrier is a new, separate transport-only program;
 it requires the buffer account's signature for every bounded write. It has
@@ -45,7 +48,16 @@ payload and absent authority. Keys are retained.
 
 ## (3) Initialization
 
-Pending deployment. The config-driven driver uses actual SPL mint/token
+The independent SPL setup is finalized: mint
+`CHnSQGrPPiP2jPgiARzWF6jx169rsSHciXbszjpL3gV1`, 6 decimals, 2,000 base units
+minted to source `6hy6xhsh7evJa9WhHk4nPdALY7H6yeqPh882smc1XhUH`.
+Destination: `5mZHfocHAqKSFMA5J28SFGhX94EHqK9M58yUbPtDMR9Y`; both token
+accounts belong to retained governance key
+`ALZGcQnvvfGuCLDYrNeiYszq3jgohHKQ3Tmyhk7jZq7S`. Mint authority is the payer.
+Seven setup transactions finalized; their signatures/CU/wall are in
+`receipts/spend/`, with the capped run in `receipts/mint-run/`.
+
+Pool/registry setup awaits deployment. The config-driven driver uses actual SPL mint/token
 instructions, Pool initialization, Registry V2 schedule/activate/freeze,
 two vault-backed deposits and a permissionless forest checkpoint.
 Fixture witnesses are intentionally public demonstration data; OS attempt

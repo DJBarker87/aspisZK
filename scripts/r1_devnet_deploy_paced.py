@@ -23,14 +23,35 @@ def wait(batch):
         e.update(s)
         if s['err']:raise RuntimeError(s)
 def submit(name,ixs,keys,bh):
-    t=time.monotonic();s=signed(ixs,keys,bh);wire=base64.b64encode(bytes.fromhex(s['hex'])).decode()
-    sim=rpc(URL,'simulateTransaction',[wire,{'encoding':'base64','sigVerify':True,'commitment':'confirmed'}]);write(name+'-simulation',sim)
-    if sim['value']['err']:raise RuntimeError(sim)
-    sig=rpc(URL,'sendTransaction',[wire,{'encoding':'base64','skipPreflight':False,'maxRetries':5,'preflightCommitment':'confirmed'}]);assert sig==s['signature']
-    entry={'signature':sig,'serialized_bytes':s['bytes'],'submit_wall_seconds':time.monotonic()-t,'explorer':f'https://explorer.solana.com/tx/{sig}?cluster=devnet'};write(name,entry);return entry
+    t=time.monotonic()
+    for attempt in range(3):
+        # Bulk RPC throttling can consume a batch's blockhash lifetime. Each
+        # individual write gets a new hash, and every signed attempt is retained.
+        block=rpc(URL,'getLatestBlockhash',[{'commitment':'confirmed'}])['value']
+        s=signed(ixs,keys,block['blockhash']);wire=base64.b64encode(bytes.fromhex(s['hex'])).decode()
+        sim=rpc(URL,'simulateTransaction',[wire,{'encoding':'base64','sigVerify':True,'commitment':'confirmed'}]);write(f'{name}-attempt-{attempt}-simulation',sim)
+        if sim['value']['err']=='BlockhashNotFound':continue
+        if sim['value']['err']:raise RuntimeError(sim)
+        entry={'signature':s['signature'],'serialized_bytes':s['bytes'],'explorer':f"https://explorer.solana.com/tx/{s['signature']}?cluster=devnet"};write(f'{name}-attempt-{attempt}',entry)
+        try:
+            sig=rpc(URL,'sendTransaction',[wire,{'encoding':'base64','skipPreflight':False,'maxRetries':5,'preflightCommitment':'confirmed'}]);assert sig==s['signature']
+        except Exception as error:
+            write(f'{name}-attempt-{attempt}-error',{'error':str(error)})
+            if 'Blockhash not found' in str(error):continue  # preflight rejected; not submitted
+            while True:
+                status=rpc(URL,'getSignatureStatuses',[[s['signature']],{'searchTransactionHistory':True}])['value'][0]
+                if status:break
+                if rpc(URL,'getBlockHeight',[{'commitment':'finalized'}])>block['lastValidBlockHeight']:break
+                time.sleep(2)
+            if not status:continue
+        entry['submit_wall_seconds']=time.monotonic()-t;write(name,entry);return entry
+    raise RuntimeError(f'{name}: blockhash retry cap')
+assert pub('keys/payer.json')==C['payer']
+assert rpc(URL,'getGenesisHash',[])==C['genesis_hash']
 for role in sys.argv[3:] or ['verifier','pool','registry','carrier']:
     started=time.monotonic();spec=C['release_artifacts']['devnet_verifier' if role=='verifier' else role];elf=pathlib.Path(spec['path']).read_bytes();assert hashlib.sha256(elf).hexdigest()==spec['sha256']
     program=C['programs'].get(role,C.get(role));assert program
+    assert pub(f'keys/{role}.json')==program
     if account(program)['value']:raise RuntimeError(f'{role} exists; inspect instead of redeploying')
     path=pathlib.Path('keys')/(role+'-deploy-buffer.json')
     if not path.exists():subprocess.run([str(CLI/'solana-keygen'),'new','--no-bip39-passphrase','--silent','-o',str(path)],stdout=subprocess.DEVNULL,check=True)

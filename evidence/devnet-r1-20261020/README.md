@@ -109,6 +109,10 @@ systemd-run --user --scope --unit=cx-devnet3-spend-new \
   python3 r1_devnet_spend.py r1-devnet.template.json receipts/spend
 ```
 
+The optional `--mint-only` flag completes just the independent mint/source/
+destination setup. Resume the same receipt directory without that flag to
+reuse the finalized setup and continue, without a second mint-to operation.
+
 The script creates the devnet SPL mint, source/destination accounts, registry
 release, master, eight lanes and vault, deposits two spendable notes and
 creates a forest checkpoint. It reconstructs the historical witness from
@@ -117,7 +121,8 @@ output lane for each proof. Separate verifier-owned zero checkpoints are
 created through System Program. Proof/statement buffers are read-only during
 verification. The compact proof buffer contains candidate-afterstate bytes
 followed by the proof; the statement is exact ASF8. The carrier requires its
-buffer key to sign every bounded upload.
+buffer key to sign every bounded upload. At most four disjoint upload ranges
+are in flight, and all must finalize before full byte readback and stage 1.
 
 The sender simulates each transaction, records each signed attempt before
 submission, queries history until finalized or demonstrably expired, and only
@@ -138,8 +143,12 @@ systemd-run --user --scope --unit=cx-devnet3-collect-new \
   -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
   bash r1_devnet_receipt.sh receipts/collect-new SOURCE_REVISION \
   'Read-only finalized transaction metadata; no proving' \
-  python3 r1_devnet_collect.py r1-devnet.template.json receipts receipts/metadata
+  python3 r1_devnet_collect.py r1-devnet.template.json receipts/spend receipts/spend-metadata
 ```
+
+Use `--histories-only` with the whole receipt root to inventory all loader
+buffer signatures without fetching every loader-write transaction. Optional
+`--loader-writes` also fetches their complete metadata.
 
 The collector incrementally fetches missing finalized metadata and preserves
 signature, explorer link, slot, CU, fee, error and logs without embedding ELF
