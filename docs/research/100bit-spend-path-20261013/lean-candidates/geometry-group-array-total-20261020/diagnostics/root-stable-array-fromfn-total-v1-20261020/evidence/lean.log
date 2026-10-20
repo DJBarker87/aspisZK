@@ -1,0 +1,86 @@
+/home/dombarker/project-offloads/root-stable-array-fromfn-total-v1-20261020/sources/StableArrayFromFnTotal.lean:18:25: error: unsolved goals
+T F : Type
+N : Usize
+callback : core.ops.function.FnMut F Usize T
+value : ℕ → T
+f : F
+hstable : ∀ (j : Usize), ↑j < ↑N → callback.call_mut f j = ok (value ↑j, f)
+i : Usize
+acc : List T
+hi : ↑i ≤ ↑N
+hbudget : ↑N - ↑i ≤ 0
+hn : ¬i < N
+⊢ (if h : False then div else ok (acc.reverse, f)) = ok (acc.reverse, f)
+/home/dombarker/project-offloads/root-stable-array-fromfn-total-v1-20261020/sources/StableArrayFromFnTotal.lean:34:19: error: unsolved goals
+T F : Type
+N : Usize
+callback : core.ops.function.FnMut F Usize T
+value : ℕ → T
+f : F
+hstable : ∀ (j : Usize), ↑j < ↑N → callback.call_mut f j = ok (value ↑j, f)
+fuel : ℕ
+ih :
+  ∀ (i : Usize) (acc : List T), ↑i ≤ ↑N → ↑N - ↑i ≤ fuel → ∃ out, arrayFromFnLoop N callback fuel i f acc = ok (out, f)
+i : Usize
+acc : List T
+hi : ↑i ≤ ↑N
+hbudget : ↑N - ↑i ≤ fuel + 1
+hlt : i < N
+hiv : ↑i < ↑N
+hNmax : ↑N ≤ Usize.max
+haddSpec : i + 1#usize ⦃ j => ↑j = ↑i + 1 ⦄
+j : UScalar UScalarTy.Usize
+hadd : i + 1#usize = ok j
+hj : ↑j = ↑i + 1
+out : List T
+hout : arrayFromFnLoop N callback fuel j f (value ↑i :: acc) = ok (out, f)
+⊢ (if h : True then
+      let (value, f') := (value ↑i, f)
+      arrayFromFnLoop N callback fuel j f' (value :: acc)
+    else ok (acc.reverse, f)) =
+    ok (out, f)
+/home/dombarker/project-offloads/root-stable-array-fromfn-total-v1-20261020/sources/StableArrayFromFnTotal.lean:35:27: error: unsolved goals
+T F : Type
+N : Usize
+callback : core.ops.function.FnMut F Usize T
+value : ℕ → T
+f : F
+hstable : ∀ (j : Usize), ↑j < ↑N → callback.call_mut f j = ok (value ↑j, f)
+fuel : ℕ
+ih :
+  ∀ (i : Usize) (acc : List T), ↑i ≤ ↑N → ↑N - ↑i ≤ fuel → ∃ out, arrayFromFnLoop N callback fuel i f acc = ok (out, f)
+i : Usize
+acc : List T
+hi : ↑i ≤ ↑N
+hbudget : ↑N - ↑i ≤ fuel + 1
+hlt : ¬i < N
+⊢ (if h : False then do
+      let (value, f') ← callback.call_mut f i
+      let i' ← i + 1#usize
+      arrayFromFnLoop N callback fuel i' f' (value :: acc)
+    else ok (acc.reverse, f)) =
+    ok (acc.reverse, f)
+/home/dombarker/project-offloads/root-stable-array-fromfn-total-v1-20261020/sources/StableArrayFromFnTotal.lean:34:83: warning: This simp argument is unused:
+  hout
+
+Hint: Omit it from the simp argument list.
+  simp only [arrayFromFnLoop, ̲hlt, ̲hstable i hiv, ̲bind_tc_ok, ̲hadd,̵h̵o̵u̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/root-stable-array-fromfn-total-v1-20261020/sources/StableArrayFromFnTotal.lean:50:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ⟨values, ⋯⟩
+  has type
+    { l // l.length = ↑N }
+  but is expected to have type
+    Std.Array T N
+  in the application
+    ok ⟨values, ⋯⟩
+'AspisR1SelectedMaskProbe.arrayFromFnLoop_total_of_stable' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1SelectedMaskProbe.arrayFromFn_stable_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

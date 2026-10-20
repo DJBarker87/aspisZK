@@ -1,0 +1,44 @@
+/home/dombarker/project-offloads/root-stable-array-fromfn-total-v3-20261020/sources/StableArrayFromFnTotal.lean:36:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let y ← ok ?x
+    ?f y
+in the target expression
+  (let (value, f') := (value ↑i, f)
+    do
+    let i' ← ok j
+    arrayFromFnLoop N callback fuel i' f' (value :: acc)) =
+    ok (out, f)
+
+case pos
+T F : Type
+N : Usize
+callback : core.ops.function.FnMut F Usize T
+value : ℕ → T
+f : F
+hstable : ∀ (j : Usize), ↑j < ↑N → callback.call_mut f j = ok (value ↑j, f)
+fuel : ℕ
+ih :
+  ∀ (i : Usize) (acc : List T), ↑i ≤ ↑N → ↑N - ↑i ≤ fuel → ∃ out, arrayFromFnLoop N callback fuel i f acc = ok (out, f)
+i : Usize
+acc : List T
+hi : ↑i ≤ ↑N
+hbudget : ↑N - ↑i ≤ fuel + 1
+hlt : i < N
+hiv : ↑i < ↑N
+hNmax : ↑N ≤ Usize.max
+haddSpec : i + 1#usize ⦃ j => ↑j = ↑i + 1 ⦄
+j : UScalar UScalarTy.Usize
+hadd : i + 1#usize = ok j
+hj : ↑j = ↑i + 1
+out : List T
+hout : arrayFromFnLoop N callback fuel j f (value ↑i :: acc) = ok (out, f)
+⊢ (let (value, f') := (value ↑i, f)
+    do
+    let i' ← ok j
+    arrayFromFnLoop N callback fuel i' f' (value :: acc)) =
+    ok (out, f)
+'AspisR1SelectedMaskProbe.arrayFromFnLoop_total_of_stable' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1SelectedMaskProbe.arrayFromFn_stable_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
