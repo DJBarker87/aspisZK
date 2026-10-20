@@ -7025,3 +7025,17 @@ by one source premise, `R_wire_read_coverage` (universal typed read
 coverage). Three D82 checklist rows are discharged; the ROM side of the
 privacy proof is now closed except that coverage fact, which belongs with
 the other R-wire source items (`r1p-final/ROM-ROWS-20261021.md`).
+
+## D85 — causal row: generic wire interface is too permissive (2026-10-20, lead)
+
+Reviewed `codex/cx-priv-causal-20261021` (landed as c94f789bf..ae629bd5d).
+`R_causal_D80` stays open, and for a reason that changes the plan: the generic
+`R1Wire`/`R1ProverP` interfaces carry none of the D48.3 phase restrictions, so
+`prematureC2_not_causal` exhibits an admissible wire whose row-zero absorb
+reads C2's root. No execution-order argument can discharge causality over all
+admissible wires. The fix is a model refinement, not a proof: construct the
+concrete protocol wire/prover (phase-restricted frame, payload, decode and leaf
+values) and prove `RCausal` for that instance, with the final theorem stated
+over it. Symbolic binary-tree layer facts (`CausalTreeOrderBin.lean`) landed
+as independent progress. `PrivacyR1Final.lean` unchanged. Forbidden-construct
+scan clean; host attempts 8802/8804 standard axioms, zero swap, RSS < 3.6 GB.
