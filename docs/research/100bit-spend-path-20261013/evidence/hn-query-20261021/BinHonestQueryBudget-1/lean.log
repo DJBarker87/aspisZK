@@ -1,0 +1,61 @@
+/Users/dominic/ZK/.worktrees/cx-hn-query/docs/research/100bit-spend-path-20261013/lean/BinHonestQueryBudget.lean:53:8: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  n + 1 = 26
+
+case pos
+H : Addr L → State
+P : UnifiedSampler.Prefix SelectedTranscriptParams.Message LiteralTranscript.E L
+T : Table Bytes State
+n : ℕ
+msg : SelectedTranscriptParams.Message
+h26 : n + 1 = 26
+⊢ decoderFirstReads dec T
+      (raw (eval H (UnifiedSampler.samp p ⋯ (n + 1) P (TranscriptView.Message.payload msg)).toProgram).1) ≤
+    1 + if n + 1 = 26 then 1 else 0
+/Users/dominic/ZK/.worktrees/cx-hn-query/docs/research/100bit-spend-path-20261013/lean/BinHonestQueryBudget.lean:60:10: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  n + 1 = 31
+
+case pos
+H : Addr L → State
+P : UnifiedSampler.Prefix SelectedTranscriptParams.Message LiteralTranscript.E L
+T : Table Bytes State
+n : ℕ
+msg : SelectedTranscriptParams.Message
+h26 : ¬n + 1 = 26
+h31 : n + 1 = 31
+⊢ decoderFirstReads dec T
+      (raw (eval H (UnifiedSampler.samp p ⋯ (n + 1) P (TranscriptView.Message.payload msg)).toProgram).1) ≤
+    1 + if n + 1 = 26 then 1 else 0
+/Users/dominic/ZK/.worktrees/cx-hn-query/docs/research/100bit-spend-path-20261013/lean/BinHonestQueryBudget.lean:95:58: error: don't know how to synthesize placeholder
+context:
+D : LiteralByteProtocol.Decoder
+H : Bytes → State
+pub : LiteralTranscript.Public
+pf : Proof
+n : ℕ
+ns : List ℕ
+ih :
+  ns.Nodup →
+    ∀ (T : Table Bytes State),
+      decoderFirstReads dec T
+          (List.map (fun n => (eval H ((LiteralByteProtocol.protocol D).chain H pub pf n).toProgram).1) ns).flatten ≤
+        ns.length + if 26 ∈ ns then 1 else 0
+hn : (n :: ns).Nodup
+T : Table Bytes State
+hb :
+  decoderFirstReads dec T (eval H ((LiteralByteProtocol.protocol D).chain H pub pf n).toProgram).1 ≤
+    1 + if n = 26 then 1 else 0
+⊢ List (Bytes × State)
+/Users/dominic/ZK/.worktrees/cx-hn-query/docs/research/100bit-spend-path-20261013/lean/BinHonestQueryBudget.lean:95:9: error: failed to infer `have` declaration type
+/Users/dominic/ZK/.worktrees/cx-hn-query/docs/research/100bit-spend-path-20261013/lean/BinHonestQueryBudget.lean:113:48: error: Function expected at
+  List.nodup_range
+but this term has type
+  (List.range ?m.36).Nodup
+
+Note: Expected a function because this term is being applied to the argument
+  33
+'AspisR1.BinHonestQueryBudget.query_tail_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BinHonestQueryBudget.sampler_starts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.BinHonestQueryBudget.row_starts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.BinHonestQueryBudget.rows_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.BinHonestQueryBudget.verifier_starts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.BinHonestQueryBudget.recorded_starts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

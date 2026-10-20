@@ -1,0 +1,70 @@
+import R1FinalSoundnessNumericBin
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.BinPerQueryNumeric
+
+/-- Maximum integer query budget for this exact rational envelope, c=34. -/
+def Qmax : Nat := 14777960484892959601791002642008314224629686680
+
+def totalBound (Q : Nat) : ℚ :=
+  ((Q + 34 : Nat) : ℚ) * PerAttemptEnvelope.B +
+    BinCombinedMerkleCollision.kappa (Q + 1161) +
+      1 / (2 : ℚ)^126 + 1 / (2 : ℚ)^454
+
+/-- A convex quadratic lies below the chord between its endpoints.
+Only symbolic ordered-ring arithmetic is used over the interval. -/
+theorem quadratic_interval (a b c m x : ℚ) (ha : 0 ≤ a) (hm : 0 < m)
+    (hx : 0 ≤ x) (hxm : x ≤ m) (hzero : c ≤ 0)
+    (hend : a*m^2 + b*m + c ≤ 0) : a*x^2 + b*x + c ≤ 0 := by
+  have hgap : 0 ≤ a*x*(m-x) := mul_nonneg (mul_nonneg ha hx) (sub_nonneg.mpr hxm)
+  have he := mul_nonpos_of_nonneg_of_nonpos hx hend
+  have hz := mul_nonpos_of_nonneg_of_nonpos (sub_nonneg.mpr hxm) hzero
+  have hscaled : m * (a*x^2+b*x+c) ≤ 0 := by nlinarith
+  exact (mul_nonpos_iff_of_pos_left hm).mp hscaled
+
+def gap (x : ℚ) : ℚ :=
+  6 * (x+1161)^2 / (2:ℚ)^256 + (x+34)*15/(2:ℚ)^109 +
+    1/(2:ℚ)^126 + 1/(2:ℚ)^454 - (x+1)/(2:ℚ)^100
+
+theorem gap_zero : gap 0 ≤ 0 := by norm_num [gap]
+theorem gap_Qmax : gap Qmax ≤ 0 := by norm_num [gap, Qmax]
+theorem gap_next : 0 < gap (Qmax+1) := by norm_num [gap, Qmax]
+
+theorem query_normalised (Q : Nat) (hQ : Q ≤ Qmax) :
+    totalBound Q ≤ (Q+1 : ℚ) * (1/(2:ℚ)^100) := by
+  let a : ℚ := 6/(2:ℚ)^256
+  let b : ℚ := 13932/(2:ℚ)^256 - 497/(2:ℚ)^109
+  let c : ℚ := gap 0
+  have hid (x : ℚ) : gap x = a*x^2+b*x+c := by
+    dsimp [gap, a, b, c]
+    norm_num
+    <;> ring
+  have he : a*(Qmax:ℚ)^2+b*Qmax+c ≤ 0 := by rw [← hid]; exact gap_Qmax
+  have hg := quadratic_interval a b c Qmax Q (by dsimp [a]; positivity)
+    (by norm_num [Qmax]) (Nat.cast_nonneg Q) (by exact_mod_cast hQ) gap_zero he
+  rw [← hid] at hg
+  have hb : PerAttemptEnvelope.B = 15/(2:ℚ)^109 := by norm_num [PerAttemptEnvelope.B]
+  unfold totalBound BinCombinedMerkleCollision.kappa
+  rw [hb]
+  norm_num only [Nat.cast_add, Nat.cast_ofNat] at *
+  have hden : (256:ℚ)^32 = (2:ℚ)^256 := by norm_num
+  rw [hden]
+  dsimp [gap] at hg
+  linarith
+
+theorem maximal : (Qmax+1 : ℚ) * (1/(2:ℚ)^100) < totalBound (Qmax+1) := by
+  have h := gap_next
+  norm_num [gap, Qmax, totalBound, PerAttemptEnvelope.B, BinCombinedMerkleCollision.kappa] at *
+
+theorem range_at_least_64 : 2^64 ≤ Qmax := by norm_num [Qmax]
+
+#print axioms quadratic_interval
+#print axioms gap_zero
+#print axioms gap_Qmax
+#print axioms gap_next
+#print axioms query_normalised
+#print axioms maximal
+#print axioms range_at_least_64
+end AspisR1.BinPerQueryNumeric
+end
