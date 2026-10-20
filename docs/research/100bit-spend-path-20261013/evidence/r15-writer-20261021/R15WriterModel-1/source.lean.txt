@@ -1,0 +1,89 @@
+import R1FinalSoundnessBinPerQueryR18
+
+/-! R15 model facts and the precise acceptance-only obstruction.
+No assertion of frozen-source reachability or writer refinement. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.R15WriterModel
+open AspisV8R19.SourceDuplexStep AspisV8R19.DuplexFrames
+open AspisV8R19.OracleProgramOps
+open RawCutProverCompiler RawCutTranscriptRun RecordedBinaryExperimentBin
+abbrev E := AspisWideTower.WideExact
+
+/-- Only these four fields occur in first matching. Other checkpoint fields
+still need their own consumers' preservation proofs. -/
+structure FirstMatchState (before after : MatchingSupport.Data E) : Prop where
+  word : before.W = after.W
+  finalWord : before.V = after.V
+  gamma : before.gamma = after.gamma
+  alpha0 : before.alpha0 = after.alpha0
+
+/-- This is the mathematical content of a sound authenticated comparison.
+The source comparison and its two identifications are separate frontiers. -/
+theorem checked_opening_match (data : MatchingSupport.Data E) (i : Fin 262144)
+    (folded opened : E)
+    (hfold : folded = FirstFold.foldWord data.alpha0
+      (TwoFoldExtraction.batchedWord data.W data.gamma) i)
+    (hvalue : opened = data.V i) (hcompare : folded = opened) :
+    MatchingSupport.match0 data i := by
+  exact hfold.symm.trans (hcompare.trans hvalue)
+
+theorem match_transport (before after : MatchingSupport.Data E)
+    (preserved : FirstMatchState before after) (i : Fin 262144)
+    (matched : MatchingSupport.match0 before i) : MatchingSupport.match0 after i := by
+  unfold MatchingSupport.match0 at matched ⊢
+  rw [← preserved.word, ← preserved.finalWord, ← preserved.gamma, ← preserved.alpha0]
+  exact matched
+
+def Prefix (data : MatchingSupport.Data E) (q : Fin 22 → Fin 262144)
+    (next : Nat) : Prop := ∀ j, j.val < next → MatchingSupport.match0 data (q j)
+
+theorem prefix_transport (before after : MatchingSupport.Data E)
+    (preserved : FirstMatchState before after) (q : Fin 22 → Fin 262144)
+    (next : Nat) (saved : Prefix before q next) : Prefix after q next := by
+  intro j hj
+  exact match_transport before after preserved (q j) (saved j hj)
+
+/-- The ten saved checks plus twelve independently checked resumed positions
+suffice. This does not infer either half from the arbitrary model decision. -/
+theorem saved_and_resumed (data : MatchingSupport.Data E)
+    (q : Fin 22 → Fin 262144) (saved : Prefix data q 10)
+    (resumed : ∀ j, 10 ≤ j.val → MatchingSupport.match0 data (q j)) :
+    ∀ j, MatchingSupport.match0 data (q j) := by
+  intro j
+  by_cases hj : j.val < 10
+  · exact saved j hj
+  · exact resumed j (by omega)
+
+/-- Keep every field except V, setting V to fold+1 symbolically. -/
+def mismatched (data : MatchingSupport.Data E) : MatchingSupport.Data E :=
+  { data with V := fun i => FirstFold.foldWord data.alpha0
+      (TwoFoldExtraction.batchedWord data.W data.gamma) i + 1 }
+
+theorem mismatched_no_match (data : MatchingSupport.Data E) (i : Fin 262144) :
+    ¬ MatchingSupport.match0 (mismatched data) i := by
+  change ¬ (_ = _ + (1 : E))
+  exact fun h => one_ne_zero (add_left_cancel (a :=
+    FirstFold.foldWord data.alpha0 (TwoFoldExtraction.batchedWord data.W data.gamma) i)
+    (by simpa only [add_zero] using h.symm))
+
+/-- For ANY accepted experiment, an independent model Data can fail every
+first match. This refutes deriving matching from bare acceptance, not from
+the complete endpoint hypotheses (notably R13). -/
+theorem acceptance_alone_obstruction
+    (D : LiteralByteProtocol.Decoder) (d : ErasedPrefix → ErasedMessage → Bool)
+    (P : Prover) (H : Bytes → State) (data : MatchingSupport.Data E)
+    (accepted : FS2.accepts (eval H (original D d P))) :
+    ∃ bad : MatchingSupport.Data E,
+      FS2.accepts (eval H (original D d P)) ∧
+      ∀ i, ¬ MatchingSupport.match0 bad i := by
+  exact ⟨mismatched data, accepted, mismatched_no_match data⟩
+
+#print axioms checked_opening_match
+#print axioms match_transport
+#print axioms prefix_transport
+#print axioms saved_and_resumed
+#print axioms mismatched_no_match
+#print axioms acceptance_alone_obstruction
+end AspisR1.R15WriterModel
+end
