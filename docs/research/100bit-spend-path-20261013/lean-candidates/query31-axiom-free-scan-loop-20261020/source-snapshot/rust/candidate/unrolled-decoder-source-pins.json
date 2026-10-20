@@ -1,0 +1,104 @@
+{
+  "classification": "source-refactor candidate based on exact frozen queries_from_pairs; all selected non-target helper declarations remain exact; candidate explicitly unrolls 8 block scans; no production change",
+  "target": "crate::aspis_core::r0_transcript::queries_from_pairs",
+  "source_files": {
+    "crates/aspis-core/src/r0_transcript.rs": {
+      "sha256": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1",
+      "selected_spans": [
+        {
+          "lines": [
+            23,
+            23
+          ],
+          "decl": "type Rank"
+        },
+        {
+          "lines": [
+            46,
+            48
+          ],
+          "decl": "QUERY_COUNT/QUERY_BOUND/QUERY_MAX_DRAWS"
+        },
+        {
+          "lines": [
+            89,
+            94
+          ],
+          "decl": "block_rank"
+        },
+        {
+          "lines": [
+            186,
+            188
+          ],
+          "decl": "query_words"
+        },
+        {
+          "lines": [
+            190,
+            226
+          ],
+          "decl": "QueryScan"
+        },
+        {
+          "lines": [
+            302,
+            318
+          ],
+          "decl": "queries_from_pairs"
+        }
+      ]
+    },
+    "crates/aspis-core/src/transcript.rs": {
+      "sha256": "9bd74c66a28567e4d964896b7e2d7c0ac79840565d44b561747879868bdd9179",
+      "selected_spans": [
+        {
+          "lines": [
+            303,
+            313
+          ],
+          "decl": "QuerySampleError"
+        }
+      ]
+    }
+  },
+  "cut_files": {
+    "Cargo.lock": "a10541a92bed72c6f2ba0558e599c07afaf9d9b96158006249b20c695ae2ed96",
+    "Cargo.toml": "4cff700d1b5d7a0054781b8df2ffbb6df0148ee3cd81c802d6087ba6e97071de",
+    "src/lib.rs": "b0456f2e481522764c57066576d12537cdc485bb8e16ac16bb6d4ed3e5e98219",
+    "src/query_error.rs": "4b7009bbe546ffeb97c3f7f15e86bfe55e43934abb62736ec77fe90b49c3355a",
+    "src/r0_transcript_cut.rs": "408b61662c20d638d90764bf9ba09430acf66479e5f3679a39340b4ed99bcc76"
+  },
+  "source_revision": "candidate refactor from c8ea8dd49... exact source hash; only queries_from_pairs loop replaced by literal-index steps",
+  "scope": "Charon/Aeneas extraction of the unrolled queries_from_pairs candidate only; actual QueryScan.scan remains the named external boundary; QueryScan.finish and the complete unrolled outer driver remain emitted. This is not a production extraction.",
+  "kit_files": {
+    "Cargo.lock": "a10541a92bed72c6f2ba0558e599c07afaf9d9b96158006249b20c695ae2ed96",
+    "Cargo.toml": "e6486b523329a6adc8145bdb62525b93d20a21d99504188ce39de75439483e8b",
+    "src/lib.rs": "b0456f2e481522764c57066576d12537cdc485bb8e16ac16bb6d4ed3e5e98219",
+    "src/query_error.rs": "4b7009bbe546ffeb97c3f7f15e86bfe55e43934abb62736ec77fe90b49c3355a",
+    "src/r0_transcript_cut.rs": "1aca7eac3de54d703eb8772c4fea0ecdc2e4e0fd808708626e72aeb5a4d35cbb"
+  },
+  "features": [
+    "r0",
+    "private-leaf-salts"
+  ],
+  "root_targets": [
+    "crate::aspis_core::r0_transcript::queries_from_pairs"
+  ],
+  "opaque_paths": [
+    "crate::aspis_core::r0_transcript::QueryScan::scan"
+  ],
+  "repository_revision": "research candidate; source copied from current worktree; no production changes",
+  "revision": "same source cut; QueryScan::scan remains a named external boundary to isolate the actual materialized decoder loop from Aeneas shared-borrow replay",
+  "candidate_source": {
+    "frozen_source": "crates/aspis-core/src/r0_transcript.rs",
+    "frozen_sha256": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1",
+    "selected_source_span_lines": [
+      302,
+      318
+    ],
+    "candidate_function_sha256": "89468b8a12297a70d673f3224a1c111a2d6bc86cf9207ec1f58b36fd34ac9388",
+    "candidate_file_sha256": "1aca7eac3de54d703eb8772c4fea0ecdc2e4e0fd808708626e72aeb5a4d35cbb",
+    "candidate_packet": "docs/research/100bit-spend-path-20261013/lean-candidates/query31-unrolled-driver-refactor-20261020"
+  }
+}
