@@ -1,0 +1,9 @@
+# Concrete query sampler schedule with accepted output and exact stop state
+
+PROVED in the checked source-shaped sampler model: successful query sampling uses exactly the same eight squeeze/advance blocks and state chain as the extracted actual row31 transcript schedule. All selected words are the concrete little-endian 18-bit masked words. The stronger theorem retains the SAME first-stop DriverTrace and final scan state: accepted count=22, final buffer equals the returned query array, and selected continuation is the advance block at the actual stop index (0 through7). It carries these identities together with the valid Q22 transition chain; none is inferred by assuming the eighth advance.
+
+PROVED default specialization: the explicitly spelled source-shaped zero-counter/zero-array initial scan state projects to the empty Q22 state and is valid. The source std Default-array implementation is still a correspondence boundary, not silently proved by this specialization.
+
+Four selected owners are pinned coherently: the retained mathematical schedule plus the base concrete schedule, the new terminal trace-facts bridge, and the full output-bearing schedule theorem. Focused NUC receipts use -M4400, High1GiB/Max2GiB/Swap0 and standard-only theorem reports. Sources and immutable worker evidence are included, not binaries. Old schedule receipts are reused rather than replayed unchanged.
+
+OPEN: equality/adoption of production queries_from_pairs and the candidate first-stop driver; Rust array iterator/from_fn/map/default semantics; concrete full Prepared caller and adaptive global-oracle refinement; final source/runtime theorem. The output theorem closes the formerly omitted accepted-buffer and stop-state model join, not the complete production row31 soundness obligation or 100-bit claim.
