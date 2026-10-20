@@ -1,5 +1,6 @@
 import R1LiteralTypedWords
 import R1SelectedTranscriptParams
+import R1UnifiedSampler
 
 /-! Literal-word message carrier and projection to the selected sampler.
 The words are part of messages before the corresponding challenges. This

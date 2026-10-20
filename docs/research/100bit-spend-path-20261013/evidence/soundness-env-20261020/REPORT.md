@@ -161,3 +161,130 @@ with SHA-256 and byte sizes in `log-manifest.json`; every source attempt's
 exit, time, RSS, swaps, source hash, dependency fingerprint and complete emitted
 `#print axioms` lines are in `attempts.jsonl`. No further Lean run is authorized
 within this exhausted allocation.
+
+## Continuation — env S, 7000–7999 allocation
+
+Branch: `codex/cx-soundness-env2-20261020`. This continuation supersedes the
+blocked status and exhausted-allocation statements above; the earlier attempts
+and failures remain historical evidence. Source base is `61e11eb177c48960f9b96ce29ede2e4bb6551d95`
+plus the exact per-file hashes in the updated `manifest-S.json`.
+
+### Import and staging repairs
+
+The complete preflight now resolves **1,294 source modules and 139 library
+imports**, with **zero unresolved imports and zero source conflicts**.
+`continuation-owners.json` pins the evidence/candidate source owners explicitly;
+no candidate was silently promoted into a canonical source directory.
+`continuation-preflight.json` records the successful `--require-complete` run.
+The 24 former unresolved imports resolve through the retained parser/row-shape,
+withdrawal-validation and serializer packets, the six current-field candidates,
+two recovered provenance sources, and the pinned CompPoly package cache.
+`RRBoundedSliceScannerV5` was found at its retained host source path; no theorem
+was invented. The recovered source hashes and paths are recorded in
+`retained-input-provenance.json`.
+
+The three artifact failures use the original generated inputs selected in the
+manifest and the complete retained object bundles, including server/private
+sidecars and IR. The source-proof-loop and batched-rho-fold evidence packets
+identify those inputs. All 15 auxiliary artifacts pass final hash checks.
+The retry fingerprints include these additional input artifacts; the earlier
+failed inputs and attempts remain recorded. `R1LiteralTranscript` gains only
+`import R1UnifiedSampler`; its proof and definition bodies are unchanged.
+
+| Former failure | New successful attempt |
+|---|---:|
+| AspisR1BatchedActualCounter | 7017 |
+| AspisR1BatchedReducerBridge | 7018 |
+| BatchedWeightsActualReducer | 7036 |
+| R1LiteralTranscript | 7043 |
+
+### Current source closure
+
+**474/474 continuation source attempts succeed (7000–7473)**: all 454 formerly
+skipped modules, the four repaired failures, and 16 newly resolved source
+modules. Every module is attempted exactly once in this continuation. Together
+with the 820 unchanged current objects, **all 1,294 source modules are current**.
+There are no failed or skipped modules and no memory-limit kills.
+
+The final read-only coherence check verifies all 1,294 source/object hashes,
+current dependency fingerprints, 139 library identities and 15 retained
+auxiliary artifacts, with zero problems. J's sources and objects were not
+rewritten. The only existing S source replacement is the import-only transcript
+repair, snapshotted under `snapshots/codex-cx-soundness-env2-20261020` on the host;
+it had no successful prior S object. No successful shared proof object was
+replaced. `source-archive-env2.json` identifies the exact source archive retained
+on the host; no binary or archive is committed.
+
+All four terminal roots are current, and **all 36 Bin roots are current**, as
+are **all 107 requested manifest roots**. `root-status-table.md` and
+`roots-current.json` record every root, its attempt, import-closure size and audit
+status. These are source-closure results, not discharge of the terminal theorems'
+named model/deployment hypotheses.
+
+### Generated declaration collision
+
+`Stage2ContinuationTypes` and `AspisR1PublicPreparation.Types` remain unchanged.
+Their two import closures are compiled and audited separately. **None of the
+107 requested roots imports both**; therefore no individual requested root
+waits on this collision. `collision-closures.json` records the exact empty
+blocked-root set; the root table identifies each root's collision side.
+The full union still fails the prior joint-import probe (6975) on
+`instDiscriminantVariantIsize` and waits for the candidate-freeze hygiene fix.
+That unchanged probe is not rerun. No generated file was edited by hand, and
+this continuation does not close C2's single-union requirement.
+
+The new declaration audit additionally exposes `instDiscriminantErrorIsize`
+between `AspisR1PublicSerializer.Types` and `AspisR1RecordParser.Types` (7909).
+The failed union is retained; its modules are audited in new serializer and
+record-parser import partitions (7960 onward). No source module is recompiled.
+None of the 107 roots needs both of these owners either. The additional pair,
+empty affected-root set and repair partitions are in `collision-closures.json`.
+This second collision is also a hygiene blocker for the full union.
+
+### Final declaration audit and resources
+
+The final audit covers **1,294/1,294 current source modules** and **84 reachable
+CompPoly library modules**, totaling **34,746 declarations** (30,483 owned by
+source modules and 4,263 by CompPoly). The earlier successful audits of 790
+byte-current source modules are retained; the remaining 504 source modules are
+newly audited. `axioms-audit.json`, `continuation-retained-audits.json` and
+`continuation-axioms-batches.jsonl` give the coverage and raw-log references.
+
+All four terminal theorems report exactly `[propext, Classical.choice,
+Quot.sound]`, confirmed by both their compilation logs and the complete owned
+declaration audit; see `named-root-axioms.json`. All 36 Bin roots have complete
+standard-only owned-declaration audits. **1,288 source modules have only standard
+axioms across every owned declaration**. The six Formatter-dependent modules are:
+
+- `AspisR1PrefixAggregateParser.Funs`
+- `AspisR1PublicPreparation.Funs`
+- `AspisR1RecordParser.Funs`
+- `AspisR72Sampler.Funs`
+- `AspisV8R19.SamplerWordRead`
+- `R22Stage2LocalBodies`
+
+The audit lists 44 Formatter-dependent declarations and 180 declarations with
+generated formatting-related native-decision dependencies. These are retained
+generated declarations, not new admissions. All 4,263 CompPoly declarations in
+the imported package closure are standard-only. There is no claim that every
+declaration in the full source closure is standard-only.
+
+Continuation totals: **474 successful source attempts plus 22 audit attempts**
+(21 successful audits; one retained collision failure, repaired by three new
+partitioned helpers). Attempts are 7000–7473, 7900–7918 and 7960–7962 only.
+No unchanged source or audit input is rerun. There are **no memory-limit kills**,
+so there is no killed import-closure size to report. Every attempt records its
+exact command/target, exit, wall time, peak RSS, swaps, source revision/hash,
+dependency fingerprint and emitted axiom reports or the complete audit log.
+The failed combined audit is not source proof evidence.
+
+Continuation receipt interval through the final audit: **28m 21.576s**
+(1,701.576 seconds). Peak RSS **4,945,516 KiB / 4.72 GiB**, process swaps **0**.
+All jobs retain `-M7000`, MemoryHigh=6G, MemoryMax=7G, MemorySwapMax=0 and the
+55-GiB populated-host reservation check. No cap was raised. All inputs, objects
+and full raw logs remain on host S; only source and text evidence are committed.
+
+What remains blocked is the **single union of all roots**, due to the two
+unchanged generated-name collisions, plus any stronger claim that every owned
+declaration uses only standard axioms. No individual requested root remains
+blocked. No verifier/Pool source, generated proof text, wallet or key was changed.
