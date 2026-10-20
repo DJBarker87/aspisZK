@@ -1,0 +1,46 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCompletionAdapter.lean:27:59: error(lean.unknownIdentifier): Unknown constant `Option.none_ne_some`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCompletionAdapter.lean:27:9: error: unsolved goals
+case none
+Input K : Type
+inst✝ : Field K
+F : Subfield K
+decode : Input → Option (SourceTape K F)
+input : Input × Padding K F
+t : Tape K F
+h : decode input.1 = none
+⊢ none = some t ↔ none = some (project t) ∧ input.2 = padding t
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCompletionAdapter.lean:33:8: error: Type mismatch
+  congrArg project eq
+has type
+  project (complete s input.2) = project t
+but is expected to have type
+  s = project t
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCompletionAdapter.lean:27:80: warning: This simp argument is unused:
+  false_and
+
+Hint: Omit it from the simp argument list.
+  simp only [completeDecode, h, Option.map_none, Option.none_ne_some,̵ ̵f̵a̵l̵s̵e̵_̵a̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCompletionAdapter.lean:48:4: error: Tactic `apply` failed: could not unify the conclusion of `Prod.ext rfl`
+  ?m.75 = ?m.75
+with the goal
+  ↑((fun x => ⟨(↑x, padding t), ⋯⟩) ((fun x => ⟨(↑x).1, ⋯⟩) x)) = ↑x
+
+Note: The full type of `Prod.ext rfl` is
+  ?m.75.2 = ?m.75.2 → ?m.75 = ?m.75
+
+Input K : Type
+inst✝ : Field K
+F : Subfield K
+decode : Input → Option (SourceTape K F)
+t : Tape K F
+x : { x // completeDecode decode x = some t }
+⊢ ↑((fun x => ⟨(↑x, padding t), ⋯⟩) ((fun x => ⟨(↑x).1, ⋯⟩) x)) = ↑x
+'R1Z.ProverCommitTapeCompletion.completion_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.completion_fibre' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.decodedFibreEquiv' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.decoded_fibre_card' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.completion_exhaustion' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

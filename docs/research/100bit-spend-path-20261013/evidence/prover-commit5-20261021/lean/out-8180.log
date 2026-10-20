@@ -1,0 +1,74 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQuotientView.lean:19:30: error: unsolved goals
+K CommitHandle Bat : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+inst✝ : R0Z.HonestView.BatchedLayer K Bat
+h : HonestProver K
+B : PackBasis F
+x : Statement K CommitHandle
+w : HonestInstance h
+ch : Challenges K
+t : Tape K F
+pad : Padding K F
+⊢ (have t := applyAff B (R0Z.HonestView.prepare x.1 (applyEligible (h.build w) (complete (project t) pad).2) ch) t.1;
+    fun coord =>
+    match coord with
+    | R0Z.HonestView.PayloadCell.maskSum =>
+      ∑ bits,
+        have a := fun i => if bits i = true then 1 else 0;
+        Mask.maskValue B (fun c => SemSource.honestClaims t a 0 (Fin.castLE R0Z.HonestView.semanticOpenings._proof_1 c))
+            (fun c => SemSource.honestClaims t a 0 ⟨16 + ↑c, ⋯⟩) (SemSource.honestClaims t a 0 27) a +
+          Mask.honestExtra h.transport t a 28
+    | R0Z.HonestView.PayloadCell.semanticCoeff j i =>
+      ((Lagrange.interpolate Finset.univ fun k => ↑↑k) fun k =>
+            ∑ tail,
+              have a := R0Z.HonestView.roundPoint ch j (↑↑k) tail;
+              R0Z.MaskedProtocol.terminalZ x.1 (ch.sem 0) (ch.sem 1) (ch.sem 2) (ch.sem 13) (ch.sem 14)
+                (R0Z.HonestView.zc ch) B (SemSource.honestClaims t a) (Mask.honestExtra h.transport t a) a).coeff
+        ↑i
+    | R0Z.HonestView.PayloadCell.pointClaim j c => SemSource.honestClaims t (R0Z.HonestView.alpha ch) j c
+    | R0Z.HonestView.PayloadCell.extraClaim c => Mask.honestExtra h.transport t (R0Z.HonestView.alpha ch) c
+    | R0Z.HonestView.PayloadCell.ood j c => AspisR0.Chord.evalMessage (SemSource.coeffsOf h.transport t c) (ch.circle j)
+    | R0Z.HonestView.PayloadCell.inactiveSum =>
+      ∑ c, ch.opening 0 ^ ↑c * AspisR0.LinearDual.dot (AspisR0.Opening.indicator copyInactiveRows) (t c)
+    | R0Z.HonestView.PayloadCell.opened q s c =>
+      if q ∈ ch.queries then
+        AspisWide.InitialEncoder.exactInitialEncoder (SemSource.coeffsOf h.transport t c)
+          (AspisV5ComponentCConcreteFoldLinearity.childIndex q s)
+      else 0
+    | R0Z.HonestView.PayloadCell.bat b => (R0Z.HonestView.BatchedLayer.read h.transport ch) t b) =
+    have t := applyAff B (R0Z.HonestView.prepare x.1 (applyEligible (h.build w) t.2) ch) t.1;
+    fun coord =>
+    match coord with
+    | R0Z.HonestView.PayloadCell.maskSum =>
+      ∑ bits,
+        have a := fun i => if bits i = true then 1 else 0;
+        Mask.maskValue B (fun c => SemSource.honestClaims t a 0 (Fin.castLE R0Z.HonestView.semanticOpenings._proof_1 c))
+            (fun c => SemSource.honestClaims t a 0 ⟨16 + ↑c, ⋯⟩) (SemSource.honestClaims t a 0 27) a +
+          Mask.honestExtra h.transport t a 28
+    | R0Z.HonestView.PayloadCell.semanticCoeff j i =>
+      ((Lagrange.interpolate Finset.univ fun k => ↑↑k) fun k =>
+            ∑ tail,
+              have a := R0Z.HonestView.roundPoint ch j (↑↑k) tail;
+              R0Z.MaskedProtocol.terminalZ x.1 (ch.sem 0) (ch.sem 1) (ch.sem 2) (ch.sem 13) (ch.sem 14)
+                (R0Z.HonestView.zc ch) B (SemSource.honestClaims t a) (Mask.honestExtra h.transport t a) a).coeff
+        ↑i
+    | R0Z.HonestView.PayloadCell.pointClaim j c => SemSource.honestClaims t (R0Z.HonestView.alpha ch) j c
+    | R0Z.HonestView.PayloadCell.extraClaim c => Mask.honestExtra h.transport t (R0Z.HonestView.alpha ch) c
+    | R0Z.HonestView.PayloadCell.ood j c => AspisR0.Chord.evalMessage (SemSource.coeffsOf h.transport t c) (ch.circle j)
+    | R0Z.HonestView.PayloadCell.inactiveSum =>
+      ∑ c, ch.opening 0 ^ ↑c * AspisR0.LinearDual.dot (AspisR0.Opening.indicator copyInactiveRows) (t c)
+    | R0Z.HonestView.PayloadCell.opened q s c =>
+      if q ∈ ch.queries then
+        AspisWide.InitialEncoder.exactInitialEncoder (SemSource.coeffsOf h.transport t c)
+          (AspisV5ComponentCConcreteFoldLinearity.childIndex q s)
+      else 0
+    | R0Z.HonestView.PayloadCell.bat b => (R0Z.HonestView.BatchedLayer.read h.transport ch) t b
+'R1Z.ProverCommitTapeCompletion.payload_completion' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.view_completion' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTapeCompletion.quotient_view_mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

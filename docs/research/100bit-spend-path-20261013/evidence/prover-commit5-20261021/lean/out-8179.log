@@ -1,0 +1,91 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedLoop.lean:14:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ a ≤ 15
+  a - b ≥ 0
+where
+ a := ↑attempts
+ b := (↑attempts + ↑1#i32).bmod (2 ^ 32)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedLoop.lean:41:11: error: unexpected rec
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedLoop.lean:23:9: error: unsolved goals
+case zero
+hash : Hash
+domain : Slice U8
+state : State
+attempts : I32
+result : Sample
+lo : 0 ≤ ↑attempts
+remaining : ↑attempts + ↑0 = 16
+stop : ¬attempts < 16#i32
+⊢ ok (result, state) =
+    let (after, sampled) := (state, result)
+    ok (sampled, after)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedLoop.lean:33:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  prover_commit_reference.limb_loop.body hash domain state attempts result
+in the target expression
+  (match
+      match (state, attempts, result) with
+      | (state1, attempts1, result1) => prover_commit_reference.limb_loop.body hash domain state1 attempts1 result1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (state1, attempts1, result1) =>
+              prover_commit_reference.limb_loop.body hash domain state1 attempts1 result1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let (after, sampled) ← iterate (step hash domain) (n + 1) (state, result)
+    ok (sampled, after)
+
+case succ
+hash : Hash
+domain : Slice U8
+n : ℕ
+ih :
+  ∀ (state : State) (attempts : I32) (result : Sample),
+    0 ≤ ↑attempts →
+      ↑attempts + ↑n = 16 →
+        prover_commit_reference.limb_loop hash domain state attempts result = do
+          let (after, sampled) ← iterate (step hash domain) n (state, result)
+          ok (sampled, after)
+state : State
+attempts : I32
+result : Sample
+lo : 0 ≤ ↑attempts
+remaining : ↑attempts + ↑(n + 1) = 16
+running : attempts < 16#i32
+hi : ↑attempts < 16
+inc : ↑(attempts.wrapping_add 1#i32) = ↑attempts + 1
+⊢ (match
+      match (state, attempts, result) with
+      | (state1, attempts1, result1) => prover_commit_reference.limb_loop.body hash domain state1 attempts1 result1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (state1, attempts1, result1) =>
+              prover_commit_reference.limb_loop.body hash domain state1 attempts1 result1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let (after, sampled) ← iterate (step hash domain) (n + 1) (state, result)
+    ok (sampled, after)
+'R1Z.ProverCommitExtractedStep.counter_increment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.reference_loop_composition' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitExtractedStep.reference_limb_sixteen' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

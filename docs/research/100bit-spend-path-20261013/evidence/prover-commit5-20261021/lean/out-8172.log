@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedStep.lean:38:6: error: 'change' tactic failed, pattern
+  (do
+      let r ←
+        if word &&& 2147483647#u32 < 2147483647#u32 then ok (core.result.Result.Ok (word &&& 2147483647#u32))
+          else ok (core.result.Result.Err error)
+      ok (cont (after, attempts.wrapping_add 1#i32, r))) =
+    ok
+      (cont
+        (after, attempts.wrapping_add 1#i32,
+          if word &&& 2147483647#u32 < 2147483647#u32 then core.result.Result.Ok (word &&& 2147483647#u32)
+          else core.result.Result.Err error))
+is not definitionally equal to target
+  (do
+      let x ← ok (word, after)
+      let (state1, result1) ←
+        let (word, after) := x
+          do
+          let r ←
+            if word &&& 2147483647#u32 < 2147483647#u32 then ok (core.result.Result.Ok (word &&& 2147483647#u32))
+              else ok (core.result.Result.Err error)
+          ok (after, r)
+      ok (cont (state1, attempts.wrapping_add 1#i32, result1))) =
+    do
+    let x ← ok (word, after)
+    let (after, sampled) ←
+      let (word, after) := x
+        ok
+          (after,
+            if word &&& 2147483647#u32 < 2147483647#u32 then core.result.Result.Ok (word &&& 2147483647#u32)
+            else core.result.Result.Err error)
+    ok (cont (after, attempts.wrapping_add 1#i32, sampled))
+'R1Z.ProverCommitExtractedStep.extracted_body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.step_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.iterate_refines' depends on axioms: [Quot.sound]
+'R1Z.ProverCommitExtractedStep.loop_eq_iterate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.extracted_sixteen' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

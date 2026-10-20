@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedStep.lean:39:6: error: 'change' tactic failed, pattern
+  (do
+      let r ←
+        if word &&& 2147483647#u32 < 2147483647#u32 then ok (core.result.Result.Ok (word &&& 2147483647#u32))
+          else ok (core.result.Result.Err error)
+      ok (cont (after, attempts.wrapping_add 1#i32, r))) =
+    ok
+      (cont
+        (after, attempts.wrapping_add 1#i32,
+          if word &&& 2147483647#u32 < 2147483647#u32 then core.result.Result.Ok (word &&& 2147483647#u32)
+          else core.result.Result.Err error))
+is not definitionally equal to target
+  (do
+      let (state1, result1) ←
+        let (word, after) := (word, after)
+          do
+          let r ←
+            if word &&& 2147483647#u32 < 2147483647#u32 then ok (core.result.Result.Ok (word &&& 2147483647#u32))
+              else ok (core.result.Result.Err error)
+          ok (after, r)
+      ok (cont (state1, attempts.wrapping_add 1#i32, result1))) =
+    do
+    let (after, sampled) ←
+      let (word, after) := (word, after)
+        ok
+          (after,
+            if word &&& 2147483647#u32 < 2147483647#u32 then core.result.Result.Ok (word &&& 2147483647#u32)
+            else core.result.Result.Err error)
+    ok (cont (after, attempts.wrapping_add 1#i32, sampled))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtractedStep.lean:38:29: warning: This simp argument is unused:
+  Function.uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵ ̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitExtractedStep.extracted_body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.step_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.iterate_refines' depends on axioms: [Quot.sound]
+'R1Z.ProverCommitExtractedStep.loop_eq_iterate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtractedStep.extracted_sixteen' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

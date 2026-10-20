@@ -1,0 +1,57 @@
+import R1Z.ProverCommitSamplerComposition
+import R1Z.ProverCommitExtractedStep
+import R1Z.ProverCommitExtractedLoop
+import R1Z.ProverCommitTapeCompletion
+import R1Z.ProverCommitTapeMeasure
+import R1Z.ProverCommitCompletionAdapter
+import R1Z.ProverCommitBudgetJoin
+import R1Z.ProverCommit5Joins
+import R1Z.ProverCommitQuotientView
+import R1Z.ProverCommitSectionObstruction
+import R1Z.PrivacyR1FinalProtocol
+
+/-! Final audit of this continuation and the unchanged conditional endpoint. -/
+#print axioms R1Z.ProverCommitSamplerComposition.run_success
+#print axioms R1Z.ProverCommitSamplerComposition.early_eq_run
+#print axioms R1Z.ProverCommitSamplerComposition.run_refines
+#print axioms R1Z.ProverCommitSamplerComposition.sixteen_tries
+#print axioms R1Z.ProverCommitExtractedStep.extracted_body
+#print axioms R1Z.ProverCommitExtractedStep.step_success
+#print axioms R1Z.ProverCommitExtractedStep.iterate_refines
+#print axioms R1Z.ProverCommitExtractedStep.loop_eq_iterate
+#print axioms R1Z.ProverCommitExtractedStep.extracted_sixteen
+#print axioms R1Z.ProverCommitExtractedStep.counter_increment
+#print axioms R1Z.ProverCommitExtractedStep.reference_loop_composition
+#print axioms R1Z.ProverCommitExtractedStep.reference_limb_sixteen
+#print axioms R1Z.ProverCommitTapeCompletion.project_complete
+#print axioms R1Z.ProverCommitTapeCompletion.padding_complete
+#print axioms R1Z.ProverCommitTapeCompletion.complete_project
+#print axioms R1Z.ProverCommitTapeCompletion.completion_equal_fibres
+#print axioms R1Z.ProverCommitTapeCompletion.quotient_equal_fibres
+#print axioms R1Z.ProverCommitTapeCompletion.balance_congr
+#print axioms R1Z.ProverCommitTapeCompletion.h1_completion
+#print axioms R1Z.ProverCommitTapeCompletion.completion_mass
+#print axioms R1Z.ProverCommitTapeCompletion.quotient_mass
+#print axioms R1Z.ProverCommitTapeCompletion.observable_mass
+#print axioms R1Z.ProverCommitTapeCompletion.maskOnly_completion
+#print axioms R1Z.ProverCommitTapeCompletion.extension_completion
+#print axioms R1Z.ProverCommitTapeCompletion.applyAff_completion
+#print axioms R1Z.ProverCommitTapeCompletion.completion_failure
+#print axioms R1Z.ProverCommitTapeCompletion.completion_fibre
+#print axioms R1Z.ProverCommitTapeCompletion.decodedFibreEquiv
+#print axioms R1Z.ProverCommitTapeCompletion.decoded_fibre_card
+#print axioms R1Z.ProverCommitTapeCompletion.completion_exhaustion
+#print axioms R1Z.ProverCommitBudgetJoin.exact_block_budget
+#print axioms R1Z.ProverCommitBudgetJoin.counter_bounds
+#print axioms R1Z.ProverCommitBudgetJoin.canonical_budgets
+#print axioms R1Z.ProverCommitBudgetJoin.no_counter_wrap
+#print axioms R1Z.ProverCommit5Joins.counter_slots
+#print axioms R1Z.ProverCommit5Joins.exhaustion_slot
+#print axioms R1Z.ProverCommitTapeCompletion.payload_completion
+#print axioms R1Z.ProverCommitTapeCompletion.view_completion
+#print axioms R1Z.ProverCommitTapeCompletion.quotient_view_mass
+#print axioms R1Z.ProverCommitTapeCompletion.section_missing
+#print axioms R1Z.ProverCommitTapeCompletion.deterministic_section_not_equal_fibres
+#print axioms R1Z.ProverCommitTapeCompletion.completionEquiv
+#print axioms R1Z.ProverCommitTapeCompletion.quotientFibreEquiv
+#print axioms R1Z.PrivacyR1FinalProtocol.privacy_R1_protocol
