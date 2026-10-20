@@ -7187,3 +7187,20 @@ earlier scan step. Its mass is bounded through what makes the scan inputs
 unpredictable: fresh oracle outputs or fresh prover randomness in the scan
 state. The bound is about (scan queries) × q / 2^k, with k the min-entropy of
 that state, charged once. Adversarial repeats on other inputs cost nothing.
+
+## D94 — real-side history law discharged by scan freshness (2026-10-20, lead)
+
+Landed from `codex/cx-priv-history3-20261021` (`r1p-final/PRIVACY-HISTORY-FRESH-20261021.md`).
+`PrivacyR1FinalProtocolHistoryReal` removes `real_model_history_law`. The
+real failure events are fixed to the actual parser. The scan-input identities
+are traced, the scan state is proved to carry a conservative 190 bits of
+entropy, and E_fresh (a scan input already in the table) is bounded by a
+union bound: mass ≤ 128q/2^190, with q = 8·n1 + 1 the instance's honest scan
+count, not an adversary parameter. Internally a broader honest lazy-collision
+budget is proved to fit inside that allowance; the note states this as an
+inequality of budgets, not an equality of events. Error:
+modelError + 16/2^486 + 128q/2^190 ≤ 2^-109 + 2^-137 + 2^-454 + 2^-118 < 2^-100.
+The current release privacy theorem is
+`PrivacyR1FinalProtocolHistoryReal`. The remaining premises are source
+execution joins (the ModelExecutionJoins and the builder/SourceIdentification
+rows of D89). 10 modules, 41 audits, zero swap.
