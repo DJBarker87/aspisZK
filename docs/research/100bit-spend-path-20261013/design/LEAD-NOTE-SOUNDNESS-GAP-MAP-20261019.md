@@ -256,3 +256,18 @@ accepted-source-map pattern) beside the runtime premise P2, not by
 extraction; the extracted writer facts cover everything up to the write.
 R15's remaining proof items: unconditional digest preservation and the
 guarded account-write audit. The refactor is folded into the next freeze.
+
+## Addendum (2026-10-20): R16 partial, with the field audit
+
+Codex job cx-hchecks (772de5b07): `hchecks_partial : Nonempty (Checks pub rs)`
+under explicit remaining hypotheses, deriving the opening and semantic
+parses, query decoding and residual batching from the proved source facts;
+a conditional public-parser composition; five audits, standard axioms,
+≤ 3.41 GiB. `design/HCHECKS-20261020.md` tables all 26 fields of `Checks`
+with the supplying fact, the exact gap and the owner. Finding: no deployed
+protocol-decoder/decision instance is yet justified by the available
+refinement, and a counterexample shows a free decision cannot establish
+R16 — the decoder/decision instance must come from the stage-1 + stage-2
+extractions (R14 refinement, R-wire). Remaining field groups: transcript,
+checkpoint (R15), reader, pairing, accumulator and the semantic endpoints.
+R16 stays OPEN; this table is the working list for closing it.
