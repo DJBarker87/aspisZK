@@ -416,3 +416,17 @@ R4 row 31's source closure stays open: the pinned abstract `B.decode` admits
 duplicate indices and arbitrary continuation states (checked countermodels),
 so the concrete driver/library correspondence and source-to-ROM coupling are
 required — the same R-wire items as elsewhere.
+
+## Addendum (2026-10-20): S7 blocked on the frozen source; refactor goes to the candidate freeze
+
+Codex job cx-repin-s7 (5a2c1f4f1): Charon succeeds on the candidate-7 cone,
+pinned Aeneas exits 2 at `verifier.rs:257–264` (the `Option<&mut
+BatchedWeights>` reborrow loop in `accumulate_with_node`); no Lean emitted;
+source unchanged (`design/REPIN-s7-20261020.md`). Inventory finding:
+`query_with_geometry` is audit-only now; the production owners are
+`candidate::query_values` and `accumulate_batched_with_node` — the S10
+inventory must be reconciled to the production owners (session A). Ruling:
+the minimal reborrow-loop refactor is stacked on the parked candidate
+freeze (branch codex/cx-freeze-prep-20261020), gated there, and S7 with its
+R22/R17/R13 joins re-pins against the candidate; S7 is therefore a
+next-freeze item, like R15.
