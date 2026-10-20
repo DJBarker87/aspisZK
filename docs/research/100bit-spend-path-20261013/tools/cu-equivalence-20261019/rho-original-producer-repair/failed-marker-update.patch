@@ -1,0 +1,20 @@
+--- a/src/interp/InterpBorrowsCore.ml
++++ b/src/interp/InterpBorrowsCore.ml
+@@ -984,2 +984,3 @@
+-            [%sanity_check] span (pm = PNone);
+-            if UMut bid = l then update ()
++            if UMut bid = l then (
++              [%sanity_check] span (pm = PNone);
++              update ())
+@@ -989,2 +990,3 @@
+-            [%sanity_check] span (pm = PNone);
+-            if UShared (bid, sid) = l then update ()
++            if UShared (bid, sid) = l then (
++              [%sanity_check] span (pm = PNone);
++              update ())
+@@ -1007,2 +1009,3 @@
+-            [%sanity_check] span (pm = PNone);
+-            if UMut bid = l then update_evalue ()
++            if UMut bid = l then (
++              [%sanity_check] span (pm = PNone);
++              update_evalue ())

@@ -1,0 +1,47 @@
+--- a/src/interp/InterpJoin.ml
++++ b/src/interp/InterpJoin.ml
+@@ -1470,0 +1471,44 @@
++  (* A moved return value can leave a source-local immutable alias where
++     the projected target local is bottom. End that alias with the ordinary
++     borrow operation before matching. Restrict this to concrete shared
++     borrows at the exact structurally corresponding bottom place: never
++     erase a mutable borrow, loan, symbolic value, or a live target value. *)
++  let dead_shared = ref [] in
++  let rec collect_dead_shared (source : tvalue) (target : tvalue) =
++    match (source.value, target.value) with
++    | VBorrow (VSharedBorrow (bid, sid)), VBottom ->
++        dead_shared := UShared (bid, sid) :: !dead_shared
++    | VAdt source, VAdt target
++      when source.variant_id = target.variant_id
++           && List.length source.fields = List.length target.fields ->
++        List.iter2 collect_dead_shared source.fields target.fields
++    | VAdt source, VBottom ->
++        List.iter
++          (fun child -> collect_dead_shared child { child with value = VBottom })
++          source.fields
++    | _ -> ()
++  in
++  let rec local_bindings = function
++    | [] | EFrame :: _ -> []
++    | EBinding (BVar var, value) :: rest ->
++        (var.index, value) :: local_bindings rest
++    | _ :: rest -> local_bindings rest
++  in
++  let target_bindings = local_bindings tgt_ctx.env in
++  List.iter
++    (fun (id, value) ->
++      match List.assoc_opt id target_bindings with
++      | None -> ()
++      | Some target -> collect_dead_shared value target)
++    (local_bindings src_ctx.env);
++  let src_ctx, cc =
++    List.fold_left
++      (fun (ctx, cc) borrow ->
++        match InterpBorrowsCore.lookup_borrow_opt span
++                InterpBorrowsCore.ek_all borrow ctx with
++        | None -> (ctx, cc)
++        | Some _ ->
++            comp cc (InterpBorrows.end_borrow config span ~snapshots:false borrow ctx))
++      (src_ctx, cc) (List.sort_uniq Stdlib.compare !dead_shared)
++  in
++

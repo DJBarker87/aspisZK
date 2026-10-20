@@ -214,3 +214,6 @@ separate `aeneas-rho-original-repair` workspace; do not overwrite the e89763ed
 producer used by the already checked helper. All original typing/invariant
 checks remain enabled. Capture the separate producer build/provenance before
 admitting any new output.
+
+
+Caller input milestone: whole resume weight canonicality and whole allocation/constructor/new-zip invariants checked; see RHO-CALLER-INPUTS.md. Next: actual query/stage contexts, resume header and sufficient-resource binding. Candidate 12 remains incomplete.

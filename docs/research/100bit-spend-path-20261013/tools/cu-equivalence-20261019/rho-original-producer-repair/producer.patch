@@ -1,0 +1,66 @@
+--- a/src/interp/InterpReduceCollapse.ml
++++ b/src/interp/InterpReduceCollapse.ml
+@@ -1642,4 +1642,8 @@
+-  (* One last cleanup.  This may end an unmatched immutable loan projection
+-     exposed by the final merge, which also removes its branch marker. *)
+-  let ctx, _ =
+-    InterpBorrows.simplify_dummy_values_useless_abs config span ctx
++  (* Operational borrow ending requires a fully joined context. Recording
++     collapses can still contain alternative branch markers here; retain that
++     state until projection/marker reconciliation, rather than ending a loan
++     while its opposite-branch borrow is still present. The ordinary collapse
++     below still requires all markers to be eliminated. *)
++  let ctx =
++    if eval_ctx_has_markers ctx then ctx
++    else fst (InterpBorrows.simplify_dummy_values_useless_abs config span ctx)
+@@ -1933,0 +1938 @@
++  let projected_out_merge_outputs = ref AbsId.Set.empty in
+@@ -1973,2 +1978,4 @@
+-          (* The two abs come from the unprojected environment: we don't have to
+-             merge anything *)
++          (* Both endpoints were projected out. Their shared-borrow replay
++             entries must be projected out with the owning merge result. *)
++          projected_out_merge_outputs :=
++            AbsId.Set.add nabs !projected_out_merge_outputs;
+@@ -1989 +1996 @@
+-    List.map
++    List.filter_map
+@@ -1991 +1998,9 @@
+-        (AbsId.Map.find abs_id !nabs_map, i, pm, bid, ty))
++        let mapped = get_id abs_id in
++        match ctx_lookup_abs_opt ctx mapped with
++        | Some _ -> Some (mapped, i, pm, bid, ty)
++        | None ->
++            (* Do not suppress an arbitrary missing owner: only the result of
++               a merge whose two branch endpoints were projected out. *)
++            [%sanity_check] span
++              (AbsId.Set.mem abs_id !projected_out_merge_outputs);
++            None)
+--- a/src/interp/InterpExpressions.ml
++++ b/src/interp/InterpExpressions.ml
+@@ -227 +227,10 @@
+-      | VMutBorrow (_, _) -> [%craise] span "Can't copy a mutable borrow"
++      | VMutBorrow (bid, child) ->
++          (* Optimized MIR may express a mutable reborrow as Copy. Preserve
++             exclusivity: the original reference contains the fresh loan,
++             and the result owns the corresponding fresh borrow. Never clone
++             the mutable borrow id or the referent value. *)
++          let reborrow = ctx.fresh_borrow_id () in
++          let loan = { child with value = VLoan (VMutLoan reborrow) } in
++          ( { v with value = VBorrow (VMutBorrow (bid, loan)) },
++            { v with value = VBorrow (VMutBorrow (reborrow, child)) },
++            ctx, fun e -> e )
+--- a/src/symbolic/SymbolicToPureValues.ml
++++ b/src/symbolic/SymbolicToPureValues.ml
+@@ -867,2 +867,2 @@
+-and aproj_to_given_back_aux (_abs_level : abs_level)
+-    (_current_level : abs_level) (mp : mplace option) (aproj : V.aproj)
++and aproj_to_given_back_aux (abs_level : abs_level)
++    (current_level : abs_level) (mp : mplace option) (aproj : V.aproj)
+@@ -895,0 +896,4 @@
++  | AEmpty | AProjLoans _ when current_level <> abs_level ->
++      (* An ancestor loan projector is visited while collecting the deeper
++         given-back layer. It contributes no borrow value at this layer. *)
++      (ctx, None)
+@@ -896,0 +901 @@
++

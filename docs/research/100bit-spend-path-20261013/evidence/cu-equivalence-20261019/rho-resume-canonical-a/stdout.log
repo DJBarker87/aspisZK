@@ -1,0 +1,254 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCanonical.lean:40:16: error: Application type mismatch: The argument
+  iter.i
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.40
+of sort `Type (?u.40 + 1)` in the application
+  @PrincipalSeg iter.i
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCanonical.lean:40:24: error(lean.unknownIdentifier): Unknown identifier `ter.slice.val.length`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCanonical.lean:41:19: error: Application type mismatch: The argument
+  iter.i
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.52
+of sort `Type (?u.52 + 1)` in the application
+  @PrincipalSeg iter.i
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCanonical.lean:41:27: error(lean.unknownIdentifier): Unknown identifier `ter.slice.len`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCanonical.lean:45:40: error: Application type mismatch: The argument
+  h
+has type
+  (let (o, iter1, next_back) := nextAt
+    match o with
+    | none => ok (done (offset, none, back (next_back iter1 none)))
+    | some val => do
+      let i1 ← offset + 16#usize
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := offset, «end» := i1 }
+      let r ← core.array.TryFromArrayCopySlice.try_from 16#usize core.marker.CopyU8 s1
+      let b ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      let s2 ← lift b.to_slice
+      let o1 ← AspisR1RhoResumeInlined.field.QM31.from_le_bytes s2
+      let r1 ← AspisR1RhoResumeInlined.core.option.Option.ok_or o1 AspisR1RhoResumeInlined.verifier.Error.Checkpoint
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          ok (cont (iter1, fun im => back (next_back im (some val)), i1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (alloc.vec.Vec AspisR1RhoResumeInlined.field.QM31 × AspisR1RhoResumeInlined.verifier.Reader)
+                (core.convert.FromSame AspisR1RhoResumeInlined.verifier.Error) residual
+          ok (done (i1, some r2, back (next_back iter1 o)))) =
+    ok out
+but is expected to have type
+  (do
+      let x ← ?m.118
+      ?m.119 x) =
+    ok ?m.120
+in the application
+  bind_ok ?m.118 ?m.119 ?m.120 h
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCanonical.lean:71:19: error: Application type mismatch: The argument
+  iter.i
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ¬iter.i
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCanonical.lean:71:27: error(lean.unknownIdentifier): Unknown identifier `ter.slice.len`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCanonical.lean:74:24: error: Application type mismatch: The argument
+  h
+has type
+  (do
+      let (o, iter1, next_back) ←
+        if h : iter.i < ↑iter.slice.len then
+            ok
+              (some iter.slice[iter.i], { slice := iter.slice, i := iter.i + 1 }, fun it' x =>
+                match x with
+                | none => it'
+                | some x => { slice := it'.slice.setAtNat iter.i x, i := it'.i })
+          else ok (none, iter, fun it x => it)
+      match o with
+        | none => ok (done (offset, none, back (next_back iter1 none)))
+        | some val => do
+          let i1 ← offset + 16#usize
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := offset, «end» := i1 }
+          let r ← core.array.TryFromArrayCopySlice.try_from 16#usize core.marker.CopyU8 s1
+          let b ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+          let s2 ← lift b.to_slice
+          let o1 ← AspisR1RhoResumeInlined.field.QM31.from_le_bytes s2
+          let r1 ← AspisR1RhoResumeInlined.core.option.Option.ok_or o1 AspisR1RhoResumeInlined.verifier.Error.Checkpoint
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              ok (cont (iter1, fun im => back (next_back im (some val)), i1))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (alloc.vec.Vec AspisR1RhoResumeInlined.field.QM31 × AspisR1RhoResumeInlined.verifier.Reader)
+                    (core.convert.FromSame AspisR1RhoResumeInlined.verifier.Error) residual
+              ok (done (i1, some r2, back (next_back iter1 o)))) =
+    ok out
+but is expected to have type
+  ok ?m.148 = ok ?m.149
+in the application
+  ok.inj h
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCanonical.lean:75:68: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  b - d ≥ 1
+  a ≥ 0
+where
+ a := ↑(↑iter.slice).length
+ b := ↑size
+ c := ↑(iter, back, offset).1.i
+ d := ↑iter.i
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCanonical.lean:76:4: error: Tactic `apply` failed: could not unify the conclusion of `back_done back iter size`
+  (↑(back iter).slice).length = size ∧ CanonicalFrom (back iter).slice 0
+with the goal
+  match out, h✝ with
+  | cont state, h => Invariant size state
+  | done result, h => Post size result
+
+Note: The full type of `back_done back iter size` is
+  BackGood back size size →
+    (↑iter.slice).length = size → (↑(back iter).slice).length = size ∧ CanonicalFrom (back iter).slice 0
+
+case neg.refl
+size : ℕ
+bytes : Slice U8
+iter : It
+back : It → It
+offset : Usize
+hinv : Invariant size (iter, back, offset)
+out : ControlFlow State Out
+h✝ :
+  (do
+      let (o, iter1, next_back) ← core.slice.iter.IteratorIterMut.next iter
+      match o with
+        | none =>
+          have im := next_back iter1 none;
+          ok (done (offset, none, back im))
+        | some val => do
+          let i1 ← offset + 16#usize
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := offset, «end» := i1 }
+          let r ← core.array.TryFromArrayCopySlice.try_from 16#usize core.marker.CopyU8 s1
+          let b ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+          let s2 ← lift b.to_slice
+          let o1 ← AspisR1RhoResumeInlined.field.QM31.from_le_bytes s2
+          let r1 ← AspisR1RhoResumeInlined.core.option.Option.ok_or o1 AspisR1RhoResumeInlined.verifier.Error.Checkpoint
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              ok
+                (cont
+                  (iter1, fun im =>
+                    have im1 := next_back im (some val);
+                    back im1,
+                    i1))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (alloc.vec.Vec AspisR1RhoResumeInlined.field.QM31 × AspisR1RhoResumeInlined.verifier.Reader)
+                    (core.convert.FromSame AspisR1RhoResumeInlined.verifier.Error) residual
+              have im : core.slice.iter.IterMut AspisR1RhoResumeInlined.field.QM31 := next_back iter1 o
+              ok (done (i1, some r2, back im))) =
+    ok out
+hlen : ↑iter.slice.len = (↑iter.slice).length
+hi : ¬sorry
+hstop : PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+h :
+  (do
+      let (o, iter1, next_back) ←
+        if h : iter.i < ↑iter.slice.len then
+            ok
+              (some iter.slice[iter.i], { slice := iter.slice, i := iter.i + 1 }, fun it' x =>
+                match x with
+                | none => it'
+                | some x => { slice := it'.slice.setAtNat iter.i x, i := it'.i })
+          else ok (none, iter, fun it x => it)
+      match o with
+        | none => ok (done (offset, none, back (next_back iter1 none)))
+        | some val => do
+          let i1 ← offset + 16#usize
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := offset, «end» := i1 }
+          let r ← core.array.TryFromArrayCopySlice.try_from 16#usize core.marker.CopyU8 s1
+          let b ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+          let s2 ← lift b.to_slice
+          let o1 ← AspisR1RhoResumeInlined.field.QM31.from_le_bytes s2
+          let r1 ← AspisR1RhoResumeInlined.core.option.Option.ok_or o1 AspisR1RhoResumeInlined.verifier.Error.Checkpoint
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              ok (cont (iter1, fun im => back (next_back im (some val)), i1))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (alloc.vec.Vec AspisR1RhoResumeInlined.field.QM31 × AspisR1RhoResumeInlined.verifier.Reader)
+                    (core.convert.FromSame AspisR1RhoResumeInlined.verifier.Error) residual
+              ok (done (i1, some r2, back (next_back iter1 o)))) =
+    ok out
+hpos : iter.i = size
+⊢ match out, h✝ with
+  | cont state, h => Invariant size state
+  | done result, h => Post size result
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCanonical.lean:43:68: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵t̵e̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵I̵t̵e̵r̵M̵u̵t̵.̵n̵e̵x̵t̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵h̵a̵c̵t̵i̵v̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲t̲e̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲I̲t̲e̲r̲M̲u̲t̲.̲n̲e̲x̲t̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲ ̲h̲a̲c̲t̲i̲v̲e̲,̲ ̲u̲n̲c̲u̲r̲r̲y̲_̲a̲p̲p̲l̲y̲_̲p̲a̲i̲r̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCanonical.lean:43:79: warning: This simp argument is unused:
+  uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵t̵e̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵I̵t̵e̵r̵M̵u̵t̵.̵n̵e̵x̵t̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵h̵a̵c̵t̵i̵v̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲t̲e̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲I̲t̲e̲r̲M̲u̲t̲.̲n̲e̲x̲t̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲ ̲h̲a̲c̲t̲i̲v̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCanonical.lean:73:66: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵t̵e̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵I̵t̵e̵r̵M̵u̵t̵.̵n̵e̵x̵t̵,̵d̵i̵f̵_̵n̵e̵g̵ ̵h̵s̵t̵o̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲t̲e̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲I̲t̲e̲r̲M̲u̲t̲.̲n̲e̲x̲t̲,̲ ̲d̲i̲f̲_̲n̲e̲g̲ ̲h̲s̲t̲o̲p̲,̲ ̲u̲n̲c̲u̲r̲r̲y̲_̲a̲p̲p̲l̲y̲_̲p̲a̲i̲r̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCanonical.lean:73:77: warning: This simp argument is unused:
+  uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵t̵e̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵I̵t̵e̵r̵M̵u̵t̵.̵n̵e̵x̵t̵,̵d̵i̵f̵_̵n̵e̵g̵ ̵h̵s̵t̵o̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲t̲e̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲I̲t̲e̲r̲M̲u̲t̲.̲n̲e̲x̲t̲,̲ ̲d̲i̲f̲_̲n̲e̲g̲ ̲h̲s̲t̲o̲p̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCanonical.lean:87:40: error: Type mismatch
+  body_good size bytes state.1 state.2.1 state.2.2 hs control hcontrol
+has type
+  match control, hcontrol with
+  | cont state_1, h => Invariant size state_1
+  | done result, h => Post size result
+but is expected to have type
+  match control with
+  | cont next => Invariant size next
+  | done out => Post size out
+'AspisR1.CuSavingsRhoResumeCanonical.body_good' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsRhoResumeCanonical.loop_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
