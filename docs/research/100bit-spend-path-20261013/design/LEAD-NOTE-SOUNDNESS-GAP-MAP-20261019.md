@@ -103,3 +103,20 @@ overflow proofs wait for the S1–S9 re-pins; then round/prepare composition,
 the outer decoder guards, the global ρ caller invariants and the
 deployed-to-checked bridge. Sequence: S1–S9 → R22 (stage 1) → R22 (stage 2,
 after R14).
+
+## Addendum (2026-10-20): binary commitment model landed
+
+Codex job r1-commit-model (5e3d9b2c4 after 61e1a7928, d217103e1): 25 `Bin*`
+modules (`design/BIN-COMMITMENT-MODEL-20261019.md` maps each to the
+eight-way theorem it replaces), 106 theorems, standard axioms, ≤ 3.03 GiB,
+receipts in `evidence/bin-commitment-model-20261019/`. Proved at the model
+level for the binary format: node/leaf grammar, multiproof ⇒ per-query path
+acceptance with dedup preservation and padding isolation, opening binding
+with collision targets counted as 6·Q²/256³² (the κ input), causal word
+recovery and compiled-run word stability. Rows M7, M8 and R11's model half
+are PROVED for the binary format; their eight-way versions stay as history.
+Obstruction (same as D77.2): unconditional disjointness of node preimages
+from arbitrary public-byte hashes is false (`verifier.rs:382` hashes public
+bytes verbatim); separation is proved under a length premise, to be
+discharged from the fixed public-statement length in R-wire. Source side
+(R12, R13, R14) continues in the stage-2 extraction.
