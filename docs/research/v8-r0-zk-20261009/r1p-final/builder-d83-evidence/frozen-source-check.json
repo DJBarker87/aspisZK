@@ -1,14 +1,48 @@
 {
   "frozen_revision": "b2727acd3",
-  "worker_start": "5b1a6582b",
-  "tested_source": "5b1a6582b + validator change pinned in continuation.json",
+  "tested_source_revision": "df54ab57e13fa4957589162dd08bfe4eded6c815",
   "source_paths": [
-    "crates/aspis-r1-cost-probe/src",
-    "programs/r1-cost-probe/src",
-    "crates/aspis-core/src"
+    "crates/aspis-r1-cost-probe",
+    "programs/r1-cost-probe",
+    "crates/aspis-core",
+    "crates/aspis-statement",
+    "programs/aspis-pool"
   ],
+  "workspace_pins": [
+    "Cargo.toml",
+    "Cargo.lock"
+  ],
+  "source_pins": "builder-cont3-evidence/source-pins.json",
+  "verified_source_files": 258,
+  "source_pin_host_verification": "258/258 exact",
   "changes_since_frozen": [
+    "crates/aspis-statement/src/pool_v1/asq8_kani.rs",
+    "crates/aspis-statement/src/pool_v1/asq8_payment_reference.rs",
+    "crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs",
+    "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+    "crates/aspis-statement/src/pool_v1/pair_forest_trace.rs",
     "programs/r1-cost-probe/src/r1_checkpoint_tests.rs"
   ],
-  "delta_scope": "Only native checkpoint tests changed; verifier and core implementation sources are unchanged. No SBF rebuild or ELF equivalence rerun is claimed."
+  "delta_scope": "All repository SBF-linked crates and both program roots, including aspis-statement decode paths; host-only writer dependencies are excluded by target cfg. Cargo.lock pins third-party dependencies.",
+  "identity": "PASS: all three stripped shipped ELFs byte-identical",
+  "build_receipts": "builder-cont3-evidence/elf-rebuild.json",
+  "artifacts": {
+    "default": {
+      "sha256": "dfc2a91ab24e1ec4f57debd8f124cb4f6a3c38ba2662b7318e2e4f3b4acdde34",
+      "size": 1507400,
+      "matches_frozen": true
+    },
+    "devnet": {
+      "sha256": "fb2fc048f6499a4775051d0267c76e8ca273b28f557bfd3b5fb65b2f687c8b78",
+      "size": 1507400,
+      "matches_frozen": true
+    },
+    "pool": {
+      "sha256": "121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548",
+      "size": 605704,
+      "matches_frozen": true
+    }
+  },
+  "axioms": "N/A: SBF builds, no Lean theorem changed",
+  "d83_rerun": "Not required: no source restructuring was necessary; prior D83 runtime receipts retained."
 }

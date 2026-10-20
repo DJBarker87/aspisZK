@@ -317,3 +317,15 @@ verifier, on-chain source, writer extraction input, wallet or key changed.
 Continuation commits: `057c5c5e0` (S2 Kani), `d294bed4b` (S2 extraction and
 Lean refinement), `bc2867479` (validator and all required gates); the final
 report commit retains the records experiments and exact outstanding boundary.
+
+## Continuation 3, Stage 0: exact-source ELF gate
+
+Rebuilt all three selected SBF programs from revision df54ab57e on the host.
+All 258 pinned files across both program roots, all three linked repository
+crates (including aspis-statement), Cargo.toml and Cargo.lock match this checkout.
+Default verifier, devnet verifier and Pool match every frozen stripped ELF hash
+in freeze-20261020/artifacts-sha256.txt exactly. Receipts retain commands, feature
+sets, deployment IDs, toolchain path, exit, wall time, RSS, swap, source revision
+and no-swap cgroup limits. No source restructuring or D83 runtime rerun was needed.
+See builder-d83-evidence/frozen-source-check.json and
+builder-cont3-evidence/elf-rebuild.json.
