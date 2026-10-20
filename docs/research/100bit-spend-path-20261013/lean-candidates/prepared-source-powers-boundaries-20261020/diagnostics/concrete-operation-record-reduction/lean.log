@@ -1,0 +1,50 @@
+/home/dombarker/project-offloads/prepared-source-powers-boundaries-v2-20261020/sources/PreparedSourcePowersBoundariesV1.lean:38:89: error: unsolved goals
+H : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H
+sem : AspisR1PublicPreparation.r1_semantic.Verified H
+y1 : Slice U8
+inactive : PE
+g : Std.Array PE 29#usize
+kappa : PE
+hk : Concrete.Canonical (toClaimE kappa)
+hc :
+  verifier.prepared_claim
+      (withSourceArrayPowers (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw))
+      (toClaimDigest D) (toClaimSem sem) y1 (toClaimE inactive) (mapArray toClaimE g) (toClaimE kappa) =
+    verifier.prepared_claim
+      (ClaimPowers.withConcretePowers
+        (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw))
+      (toClaimDigest D) (toClaimSem sem) y1 (toClaimE inactive) (mapArray toClaimE g) (toClaimE kappa)
+⊢ (do
+      let r ←
+        verifier.prepared_claim
+            (ClaimPowers.withConcretePowers
+              (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw))
+            (toClaimDigest D) (toClaimSem sem) y1 (toClaimE inactive) (mapArray toClaimE g) (toClaimE kappa)
+      ok
+          (match r with
+          | core.result.Result.Ok x => core.result.Result.Ok (fromClaimE x)
+          | core.result.Result.Err e => core.result.Result.Err (fromClaimError e))) =
+    do
+    let r ←
+      verifier.prepared_claim (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+          (toClaimDigest D) (toClaimSem sem) y1 (toClaimE inactive) (mapArray toClaimE g) (toClaimE kappa)
+    ok
+        (match r with
+        | core.result.Result.Ok x => core.result.Result.Ok (fromClaimE x)
+        | core.result.Result.Err e => core.result.Result.Err (fromClaimError e))
+'AspisR1PreparedSourcePowersBoundariesV1.sourcePowersPublic_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PreparedSourcePowersBoundariesV1.sourceClaimPublic_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PreparedSourcePowersBoundariesV1.sourceAfterQueries_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PreparedSourcePowersBoundariesV1.sourceTail_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
