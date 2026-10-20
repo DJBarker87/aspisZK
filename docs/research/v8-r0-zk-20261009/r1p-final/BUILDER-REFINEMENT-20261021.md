@@ -895,3 +895,13 @@ new claim about the reference loops' admission checks: WitnessOk and PubCorr
 remain explicit. Env J 9225 passes (2.10 s, 4,016,576 KiB RSS, zero swaps,
 standard axioms). The next consumer is the concrete RuntimeJoin record-data
 instantiation, once successful-source admission and full glue are supplied.
+
+## D99 continuation 6: complete owned-reference record computation
+
+The D99 P6 route now has the missing total Lean computation theorem for
+all twenty fields of the already-extracted owned reference. Seven new modules
+have 26 standard-axiom audits (env J 9249, 9251–9253, 9261–9263), composed
+with D90's six retained Kani verdicts in the named P6 route certificate.
+The exact route and remaining bank/admission boundary are documented in
+`BUILDER-CONT6-20261021.md`; receipts and source checks are in
+`builder-cont6-p6-certificate.json`. No shipped Rust changed.
