@@ -1,7 +1,7 @@
 # R4 sampler and prefix transport
 
 Branch `codex/cx-r4-transport-20261021`, base `9b9b652a9`.
-Status: work in progress. No boundary premise is removed.
+Status: **R4_transport remains open**. No boundary premise is removed.
 
 ## Stage 1: frozen-path inventory
 
@@ -34,12 +34,203 @@ constructs a protocol model and explicitly retains Rust sampler/parser/execution
 
 ## Stage 2: focused sampler work
 
-Pending.
+### Optimized wide-sampler reference
+
+`R4TransportGammaFold` proves the quotient-fold identity symbolically. If
+`total = x % modulus + x / modulus + 1`, the optimized integer result is
+`total` below modulus and `total - modulus + 1` otherwise. Under the source
+quotient bound this is exactly `x % (modulus - 1) + 1`. Equality at modulus
+belongs to the carry branch and returns1. No field carrier is enumerated.
+
+`R4TransportGammaRank` specializes to `modulus = 2147483647^8`: every
+`x < 2^256` has quotient below257; the rank is strictly positive and below
+the modulus. `R4TransportWideReference` connects that integer reference to
+`SourceSamplerByteRank.gammaBytes` through its existing `rank_lt` and
+`gammaBytes_value` theorems. The retained `run8_bytes` and
+`remaining8_value` already describe ordinary digits and the high quotient.
+These are reference/model identities, **not** a proof that Rust's mutable
+helper loops return those digit arrays.
+
+The exact optimized `low_base_p_digits` and `add_small_base_p` bodies were
+cut without modification into an isolated native crate. Pinned Charon and
+Aeneas each exited0. Translation nevertheless emits six external function
+axioms, including `from_fn`, mutable `into_iter`, iterator `all`, and
+reverse `next_back`. The diagnostic template is committed as `.lean.txt`
+and is never imported into an accepted owner. This is a concrete extraction
+boundary, not a silently accepted standard-library assumption.
+
+### Query-word and library checks
+
+The kit cuts complete shipped `block_rank`, `query_words`, `QueryScan`
+structure/scan/finish, and `queries_from_pairs` bodies. Its source checker
+also checks that the contract-scanner body differs only at the named
+membership expression. No field, circle, digest or transcript stub is used.
+
+Kani passes:
+
+- arbitrary32-byte little-endian words, low18 mask = modulo262144, and all
+  eight by-value array visits in order;
+- successful finish exactly at length22, otherwise the exact exhaustion
+  error and accepted count, for all lengths0..22;
+- indexed membership and the exact Boolean membership contract at **each**
+  length0..22, with arbitrary stored words and candidate. Both original and
+  strengthened23-harness partitions pass; the latter additionally checks
+  the predicate substituted into the contracted scanner.
+
+These are25 distinct accepted component roots, not a complete query proof.
+The direct arbitrary-state block comparison times out after300s. Isolated
+symbolic-length membership times out after120s; partitioning by length
+replaces that attempt and succeeds in23.911s, then25.272s for the strengthened
+version. The first contracted scanner attempt finds an insufficient unwind
+bound in bytewise `memcmp`, not a source scan counterexample. Replacing
+array comparison by22 scalar comparisons and raising the harness loop
+bound from10 to24 preserves every unwinding check; that changed attempt
+times out after180s. None of these failed attempts is passing evidence.
+No cap was raised and no unchanged failed job was repeated.
+
+The existing row31 packet proves list scan steps, stable first22 order,
+range, distinctness, rejection and first-stop facts. Our library component
+checks narrow its source gap but do not instantiate the complete generated
+scan loop or the eight-block caller with those contracts.
+
+### Circle and rho composition
+
+`R4TransportCircleCoordinates.parameter_eq` transports the actual extracted
+QM31 parameter to `R0P.SemSource.qm31Sample` at the decoded byte block.
+`circle_total_coordinates` then proves, for **every**32-byte block and both
+First/Second rows, existence of a successful actual wrapper result whose two
+embedded coordinates are exactly `(model block row).1`. The secure branch
+uses the retained R72 source execution; singular and CM31-rejected inputs
+use the checked row-specific fallback outputs and coordinates. No success,
+regularity or canonicality premise remains on this top theorem. This is
+stronger than merely showing its result lies on the circle. It is stated
+against the retained extracted wrapper, not a new current-caller re-pin.
+
+`R4TransportRhoSource.qm31_total_model` proves that the primitive sampler
+always succeeds with precisely the model QM31 value. `rho_success` obtains
+the block and primitive success from the actual retained `scalar_k` call.
+`rho_call_transport` composes that value with the source duplex block law:
+the model row32 result is exactly the embedded returned QM31 and the same
+returned source state. It quantifies over arbitrary prefixes and oracles,
+but **retains** preceding-state and encoded-frame agreement and a successful
+digest interpretation. It does not derive those hypotheses from row31 or
+from the frozen verifier. In particular, it does not replace the selected
+query advance with the eighth advance.
+
+
 
 ## Stage 3: prefix composition and remaining boundary
 
-Pending.
+`R4TransportPrefixFrame.opening_frame_eq_iff` proves that, with the same
+label, length and payload, equality of the opening preimages is **equivalent**
+to equality of the preceding32-byte states. It takes32 bytes on both sides
+and uses injectivity of `List.ofFn`; it never computes a concrete transcript.
+`absorption_preimage` identifies the model address and source digest parts
+for arbitrary row and payload once their state, label and encoded bytes
+agree. It also applies before row31, without asserting its returned state.
+
+The surviving ordinary-row interface is verbatim:
+
+```lean
+(hstate : UnifiedSampler.stateOf SelectedTranscriptParams.params
+  (LiteralTranscript.erasePrefix P) = decodeState sourceState)
+(hlabel : SelectedTranscriptParams.params.lbl i = decodeByte tag)
+(hbytes : SelectedTranscriptParams.params.enc b =
+  PublicInitFrame.lengthBytes n.val ++ rawBytes payload)
+```
+
+The first25-row source-prefix theorem already exists. It must be connected
+to the reached row25/26 records, their exact framed bytes, the row26 P3
+reseed (including the S2 tag), and subsequent reached opening payloads.
+Local suffix laws retain precisely these byte/state hypotheses. An equality
+of sampled values at one block does not prove them.
+
+A second checked obstruction is at the actual pinned `PreparedModel`
+interface. `R4TransportBoundaryFreedom.arbitrary_gamma_success` shows that
+for any successful row27 source block, overriding `B.gamma` can make the
+scalar call successfully return **any** machine value without changing its
+returned transcript state. `universal_gamma_property` proves that a claimed
+property of every such boundary call must hold for every machine value.
+Thus the missing optimized scalar refinement cannot be inferred from block
+success or the current free boundary record. This is an interface
+countermodel, not a counterexample to the shipped gamma implementation.
+
+| Row | Narrow remaining source/prefix obligation |
+|---|---|
+| 25 | Current reached circle wrapper/source binding; preceding full25 state; actual validated record bytes equal the selected row25 payload |
+| 26 | Same for row26; opening constructor consumes its returned semantic state and performs the P3/S2 reseed |
+| 27 | `low_base_p_digits` and `add_small_base_p` machine-array refinement to the proved byte/gamma reference; bind `B.gamma`; reached `y1` frame and prior state |
+| 28 | Bind `B.ordinary` to the same low8-digit model and inactive canonical serialization; prior state |
+| 29 | Ordinary sampler as row28; exact reached round0 polynomial bytes and prior state |
+| 30 | Ordinary sampler as row28; S2 branch and exact folded-root32 || round1 bytes, including length prefix; prior state |
+| 31 | Whole shipped scan/first-stop/finish composition with the Lean recurrence, error mapping, eight digest pairs and **selected** advance; reached final-message bytes and prior state |
+| 32 | Exact reached empty-payload call; query-selected prior state. The local extracted QM31 arithmetic and block/state composition do not supply row31's state |
+
+Consequently the full frozen33-row prefix transport is **not proved**.
+The point/carrier, helper-loop, current-caller, and prefix obligations above
+remain separate. No generic endpoint is specialized to an arbitrary boundary
+chosen to make these facts true. No new premise replaces R4 and no signature
+is weakened: both Headline and R19 are byte-identical to the task base, as
+checked in `headline-unchanged.json`.
+
 
 ## Validation
 
-No compiler or verifier attempts in stage1. Source inspection only.
+Stage1 was source inspection only. The final focused results are:
+
+| Target module (all exit0) | Attempt | Wall seconds | Peak RSS bytes | Swap |
+|---|---:|---:|---:|---:|
+| R4TransportGammaFold | 3 | 5.109 | 2865512448 | 0 |
+| R4TransportGammaRank | 2 | 3.265 | 2836283392 | 0 |
+| R4TransportWideReference | 1 | 3.604 | 3242409984 | 0 |
+| R4TransportBoundaryFreedom | 3 | 2.305 | 2246262784 | 0 |
+| R4TransportPrefixFrame | 2 | 4.649 | 3468132352 | 0 |
+| R4TransportCircleCoordinates | 7 | 27.290 | 3255353344 | 0 |
+| R4TransportRhoSource | 9 | 14.989 | 3392520192 | 0 |
+
+All19 new theorem audits, including the private bind helpers, use only a
+subset of `[propext, Classical.choice, Quot.sound]`. The exact theorem names,
+full axiom lines, commands, source revisions and SHA256s, ordered object paths,
+dependency/environment fingerprints, exit status, wall time, peak RSS and
+swaps are in `manifest.json`, each attempt directory, and `audit.json` under
+`evidence/r4-transport-20261021/`. Failed elaborations retain their diagnostics
+and generated `sorryAx` reports; they are not current results. Queued jobs
+cancelled before compiler invocation have separate preflight receipts with
+null resource/axiom fields, not fabricated compiler measurements.
+
+The early environment failures exposed several distinct retained-cache
+issues: incomplete package paths shadowing later packages, missing split
+`.olean.server`/`.olean.private` and IR artifacts, and an old function owner
+omitting `trace.value` expected by Prepared. A private package union with
+pinned nominal owner objects and matched sidecars repairs the environment;
+missing selected sampler objects are retrieved read-only from the retained
+host closure, with source-indexed plans, hashes and sizes. The circle source
+execution object matches the already committed upstream packet pin. No
+shared cache or source is overwritten and no dependency rebuild is used.
+The failed unchanged `ExtractedPreparedReachability` source probe is retained
+and was not retried; the new rho owner inverts only the needed scalar call.
+This is **focused cached-object evidence, not a coherent frozen release
+manifest replay or C2/P6/R21 discharge**.
+
+Host outcomes and resource reservations are in `host-manifest.json` and
+`host-receipts/`; extraction inputs and tool hashes are in `wide-extraction/`
+and `toolchain.json`. Every host scope uses MemoryHigh6G, MemoryMax8G,
+MemorySwapMax0 and TasksMax64. Failed time-limited jobs retain both GNU-time
+RSS and cgroup charged-memory peaks: on timeout the former can omit killed
+unreaped descendants, so it must not be read as aggregate RSS. No timed-out
+job is accepted evidence. Historical full-crate harness hashes were not
+captured before adding unused harness roots; unchanged tested root bodies,
+the final source cut and shipped-source hashes are retained. No full-release
+reproducibility claim rests on those historical hashes.
+
+The packet's source/receipt/axiom/source-cut audit runs without Lean or Kani:
+
+```sh
+python3 -B docs/research/100bit-spend-path-20261013/evidence/r4-transport-20261021/audit.py
+```
+
+No existing Lean module, concurrent S1/S3/S4/S5/S9/S10 candidate, M10
+instrumentation file, shipped crate or program source was changed. No ELF
+rebuild was needed, no keys/accounts were touched, and no push was made.
+No full frozen manifest, adversarial/runtime suite, or unrelated reproducible
+build was repeated for this open source boundary.
