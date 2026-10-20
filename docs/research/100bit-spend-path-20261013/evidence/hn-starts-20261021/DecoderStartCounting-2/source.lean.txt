@@ -1,0 +1,44 @@
+import DecodedFirstReadTraceBridge
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.DecoderStartCounting
+open FS FS2 R0C.V3 AspisV8PairedCommitment
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open AspisV8R19.AdaptiveFirstReadLaw
+open DecodedFirstReadUnionBound
+variable {X M C I A Y : Type} [DecidableEq I]
+
+theorem append_lower (dec : Dec X M C I A Y) (t : Table I A)
+    (xs ys : List (I × A)) :
+    decoderFirstReads dec t xs ≤ decoderFirstReads dec t (xs ++ ys) := by
+  induction xs generalizing t with
+  | nil => exact Nat.zero_le _
+  | cons q xs ih =>
+    simp only [List.cons_append, decoderFirstReads]
+    exact Nat.add_le_add_left (ih (put t q.1 q.2)) _
+
+theorem all_fresh (dec : Dec X M C I A Y) (t : Table I A)
+    (tr : List (I × A)) (hn : (tr.map Prod.fst).Nodup)
+    (hf : ∀ q ∈ tr, t q.1 = none)
+    (hd : ∀ q ∈ tr, ∀ T : Table I A, dec q.1 T ≠ none) :
+    decoderFirstReads dec t tr = tr.length := by
+  induction tr generalizing t with
+  | nil => rfl
+  | cons q tr ih =>
+    have hn' := List.nodup_cons.mp hn
+    have hr := ih (put t q.1 q.2) hn'.2 (by
+      intro r hr
+      have hneq : r.1 ≠ q.1 := by
+        intro he
+        exact hn'.1 (List.mem_map.mpr ⟨r, hr, he⟩)
+      simpa [put, hneq] using hf r (List.mem_cons_of_mem q hr))
+      (fun r hr => hd r (List.mem_cons_of_mem q hr))
+    rw [decoderFirstReads, if_pos ⟨hf q (List.mem_cons_self ..),
+      hd q (List.mem_cons_self ..) t⟩, hr, List.length_cons]
+    omega
+
+#print axioms append_lower
+#print axioms all_fresh
+end AspisR1.DecoderStartCounting
+end

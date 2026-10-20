@@ -1,0 +1,46 @@
+import RecordedBinaryExperimentBin
+
+/-! Every canonical initialization frame starts the causal decoder, regardless
+of the current table. Row labels bound the kinds of starts, not their number. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.BinDecoderInitialStarts
+open FS FS2 FS2.Duplex R0C.V3
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open CanonicalAddressEmbedding RecordedBinaryExperimentBin
+
+def initialAddress (pub : LiteralTranscript.Public) (root : State) : AddrC SelectedTranscriptParams.L :=
+  ⟨PublicInitFrame.addr pub.pubBytes pub.initFits root,
+    CanonicalByteAddress.canonical_ofBytes _ _⟩
+
+theorem recognizes_initial (pub : LiteralTranscript.Public) (root : State)
+    (hlen : pub.pubBytes.length < 2^32) (htag : pub.tag = 2)
+    (T : Table Bytes State) : dec (toBytes (initialAddress pub root)) T ≠ none := by
+  have hp := PublicInitParse.parse_addr pub.pubBytes hlen pub.initFits root
+  have hs : RawFullPublicSelection.select (toBytes (initialAddress pub root)) T = some pub := by
+    rw [RawFullPublicSelection.select, RawPublicSelectionLift.of_canonical]
+    exact FullPublicSelection.initial _ pub root hlen htag _
+  rw [RawAdaptiveLiteralDecoder.decode_of_public _ _ _ _ _ hs]
+  unfold RawLiteralDecoderDensity.decode
+  rw [RawUnifiedDecoder.decode_of_canonical]
+  have hd := UnifiedInitialDecoder.decode_of_parse SelectedTranscriptParams.params
+    (by norm_num [SelectedTranscriptParams.params, SelectedTranscriptParams.D])
+    pub _ (RawBoundedTrace.table SelectedTranscriptParams.L T) root hp
+  have hu : UnifiedDecoder.decode SelectedTranscriptParams.params
+      (by norm_num [SelectedTranscriptParams.params, SelectedTranscriptParams.D]) pub
+      (initialAddress pub root).val (RawBoundedTrace.table SelectedTranscriptParams.L T) ≠ none := by
+    rw [UnifiedDecoder.decode_of_init_parse _ _ _ _ _ root hp,
+      UnifiedDecoder.component_initial]
+    simp only [DecoderStateList.lift, hd, Option.map_some, ne_eq, reduceCtorEq, not_false_eq_true]
+  cases he : UnifiedDecoder.decode SelectedTranscriptParams.params
+      (by norm_num [SelectedTranscriptParams.params, SelectedTranscriptParams.D]) pub
+      (initialAddress pub root).val (RawBoundedTrace.table SelectedTranscriptParams.L T) with
+  | none => exact False.elim (hu he)
+  | some result =>
+    rcases result with ⟨s, ps, g⟩
+    rw [RawUnifiedDecoder.atCanonical_of_decode _ _ _ _ _ s ps g he]
+    simp only [Option.map_some, ne_eq, reduceCtorEq, not_false_eq_true]
+
+#print axioms recognizes_initial
+end AspisR1.BinDecoderInitialStarts
+end
