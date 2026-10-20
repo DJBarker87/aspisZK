@@ -6936,3 +6936,20 @@ audits; standard axioms; privacy roots unchanged). With these, the extended
 class inventory covers all 31 tx1 digest sites of WIRE-TX1. The carrying
 obligation is unchanged: that deployed execution hashes only members of the
 inventory (R-wire whole-tx1 refinement, then tx2).
+
+### Lead acceptance of the premise reduction (2026-10-20); D80
+
+Codex job cx-priv-premises (265ab669b) is cherry-picked. Ten theorems
+(env J 6322, 6325, 6326 verified: standard axioms, 0 swaps, ≤ 3.8 GiB)
+reduce the binary-format refinement premises — the commitment grammars
+(RCommitBytes), the opening batches (ROpen), the ordered logs (RComLog) and
+the root causality (RCausal) — to explicit remaining source facts, tabled in
+`r1p-premises/PREMISES-20261020.md`. One counterexample is recorded: raw
+leaf-read calls cannot be identified with ROpen's duplicate-free batches
+when a folded leaf index repeats, so the identification goes through the
+deduplicated batch (D77's batchReadSet), not the raw call list. Remaining,
+per premise: the soundness-tree imports (the Bin grammar lives on the other
+tree; a shared module is the next hygiene step), carrier transport,
+source-loop simulation, normalisation and the execution-log correspondence
+— the same items R-wire/R13 carry on the soundness side. No premise is
+fully discharged yet; each now names its exact remaining fact.
