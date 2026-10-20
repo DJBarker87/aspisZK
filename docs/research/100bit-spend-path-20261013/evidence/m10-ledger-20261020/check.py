@@ -32,6 +32,7 @@ OBJECTS.mkdir(exist_ok=True)
 argv = ['/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean', '-j1', '-M4400', '-DElab.async=false', '-R', str(BASE/'lean'), '-o', str(OBJECTS/(module+'.olean')), str(source)]
 receipt = {'module': module, 'attempt': number, 'argv': argv, 'lean_path': lean_path, 'source_revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(), 'source_sha256': sha(source), 'direct_imports': imports, 'deps_fingerprint': fingerprint}
 (folder/'command.json').write_text(json.dumps(receipt, indent=2)+'\n')
+(folder/'source.lean').write_bytes(source.read_bytes())
 def lean_processes():
     # Exact executable name avoids matching agent prompts containing Lean commands.
     p = subprocess.run(['pgrep', '-x', 'lean'], text=True, capture_output=True)
@@ -48,8 +49,8 @@ while True:
         continue
     if lean_processes():
         LOCK.rmdir()
-        print('waiting for existing Lean process', flush=True)
-        time.sleep(15)
+        print('waiting 60 seconds for existing Lean process', flush=True)
+        time.sleep(60)
         continue
     break
 try:
