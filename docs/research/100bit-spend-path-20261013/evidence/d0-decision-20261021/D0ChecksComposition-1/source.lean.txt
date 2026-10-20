@@ -1,0 +1,31 @@
+import D0TypedChecks
+
+/-! Exact HCHECKS consumer of the constructed instance and typed decision.
+The typed admission hypothesis is explicit: no erased decision/source join
+is hidden in this bridge. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.D0ChecksComposition
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open RawCutProverCompiler RawCutTranscriptRun RecordedBinaryExperimentBin
+open DecoderInstanceBoundaryBin LiteralAcceptanceTerminal
+
+theorem hchecks (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (H : Bytes → State)
+    (i : SourceInputs) (instanceFields : InstanceFields D d P H i)
+    (typedAccepted : D0TypedChecks.verify (compiledRows D d P H) i = true) :
+    Nonempty (Checks (compiledPublic D d P H) (compiledRows D d P H)) := by
+  obtain ⟨publicParsed, row31, row32, valid31, valid32⟩ := instanceFields
+  obtain ⟨pairing, accumulator⟩ := D0TypedChecks.accepted_backend _ i typedAccepted
+  exact hchecks_deployed_partial D d P H i.decoded i.data publicParsed
+    (D0TypedChecks.accepted_matching _ i typedAccepted) pairing
+    i.m31 i.queryBytes i.state31 i.m32 i.rho i.state32
+    row31 row32 valid31 valid32
+    (QueryScanRow31SourcePlacement.instanceFields_row31 D d P H i instanceFields)
+    (D0TypedChecks.accepted_writer _ i typedAccepted) accumulator
+    (D0TypedChecks.accepted_semantic _ i typedAccepted)
+
+#print axioms hchecks
+end AspisR1.D0ChecksComposition
+end

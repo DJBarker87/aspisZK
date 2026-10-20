@@ -1,0 +1,79 @@
+import D0ScheduleAdmission
+
+/-! The byte interface erases the final word which the matching reader uses.
+The first result is a representation counterexample on prefixes, not a
+counterexample to the deployed verifier or to collision-conditioned binding. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.D0ErasedWordObstruction
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw
+open RawCutProverCompiler RawCutTranscriptRun
+open R16DecisionCheckpoint
+attribute [local instance] Classical.propDecidable
+
+def prefix (pub : LiteralTranscript.Public) (b : LiteralTranscript.BytesMessage)
+    (c : LiteralTranscript.Challenge) (word : LiteralTranscript.VWord) :
+    LiteralTranscript.Prefix :=
+  ⟨pub, List.replicate 30 (.payload b,c) ++ [(.second b word,c)]⟩
+
+theorem prefix_read (pub : LiteralTranscript.Public) (b : LiteralTranscript.BytesMessage)
+    (c : LiteralTranscript.Challenge) (word : LiteralTranscript.VWord) :
+    LiteralTranscript.vAt (prefix pub b c word).rounds = some word := by
+  unfold prefix LiteralTranscript.vAt
+  rw [List.getElem?_append_right (by simp)]
+  simp only [List.length_replicate, Nat.sub_self, List.getElem?_cons_zero,
+    Option.bind_some]
+
+theorem prefix_erased (pub : LiteralTranscript.Public) (b : LiteralTranscript.BytesMessage)
+    (c : LiteralTranscript.Challenge) (w w' : LiteralTranscript.VWord) :
+    LiteralTranscript.erasePrefix (prefix pub b c w) =
+      LiteralTranscript.erasePrefix (prefix pub b c w') := by
+  simp only [prefix, LiteralTranscript.erasePrefix, List.map_append, List.map_cons,
+    List.map_nil, LiteralTranscript.erase]
+
+/-- No exact final-word reader factors through erasure on all typed inputs. -/
+theorem no_erased_final_reader (pub : LiteralTranscript.Public)
+    (b : LiteralTranscript.BytesMessage) (c : LiteralTranscript.Challenge) :
+    ¬ ∃ read : ErasedPrefix → Option LiteralTranscript.VWord,
+      ∀ p : LiteralTranscript.Prefix,
+        read (LiteralTranscript.erasePrefix p) = LiteralTranscript.vAt p.rounds := by
+  rintro ⟨read, correct⟩
+  have h0 := correct (prefix pub b c (fun _ => 0))
+  have h1 := correct (prefix pub b c (fun _ => 1))
+  rw [prefix_read] at h0 h1
+  rw [prefix_erased pub b c (fun _ => 0) (fun _ => 1)] at h0
+  have same := Option.some.inj (h0.symm.trans h1)
+  exact zero_ne_one (congrFun same 0)
+
+/-- The checkpoint checker really depends on those words; replacing them
+arbitrarily is not justified by its honest-data non-vacuity theorem. -/
+theorem checkpoint_rejects_mismatched (seed : Data) (q : Queries) :
+    decision (R15WriterModel.mismatched seed) q = false := by
+  apply Bool.eq_false_iff.mpr
+  intro accepted
+  have matched := accepted_first_match (R15WriterModel.mismatched seed) q accepted 0
+  exact R15WriterModel.mismatched_no_match seed (q 0) matched
+
+theorem checkpoint_separates (q : Queries) :
+    decision honestData q = true ∧
+      decision (R15WriterModel.mismatched honestData) q = false :=
+  ⟨R16DecisionQueryModel.honest_decision q, checkpoint_rejects_mismatched honestData q⟩
+
+/-- A universal-word admission workaround has no accepted value. -/
+theorem universal_checkpoint_vacuous (q : Queries) :
+    ¬ ∀ data : Data, decision data q = true := by
+  intro all
+  have h := all (R15WriterModel.mismatched honestData)
+  rw [checkpoint_rejects_mismatched honestData q] at h
+  cases h
+
+#print axioms prefix_read
+#print axioms prefix_erased
+#print axioms no_erased_final_reader
+#print axioms checkpoint_rejects_mismatched
+#print axioms checkpoint_separates
+#print axioms universal_checkpoint_vacuous
+end AspisR1.D0ErasedWordObstruction
+end

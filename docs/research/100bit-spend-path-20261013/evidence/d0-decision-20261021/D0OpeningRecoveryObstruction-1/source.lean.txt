@@ -1,0 +1,139 @@
+import D0ScheduleAdmission
+import BinThreeCommitmentTypedOpening
+
+/-! Counterexample to dropping collision exclusion from opening-to-cut
+identification. Both successful openings and all their reads are present in
+one consistent log. No finite-domain enumeration or concrete tree reduction. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.D0OpeningRecoveryObstruction
+open FS FS2 FS2.Duplex
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw
+open BinMerkle32Path BinMerkle32Leaf
+attribute [local instance] Classical.propDecidable
+
+def zeroRoot : State := fun _ => 0
+def zeroOracle : Bytes → State := fun _ => zeroRoot
+def salt : Bytes := List.replicate 32 0
+def leftPacked : Bytes := List.replicate 480 0
+def rightPacked : Bytes := List.replicate 480 1
+
+theorem packed_ne : leftPacked ≠ rightPacked := by
+  intro h
+  have hx := congrArg (fun xs : Bytes => xs.head?) h
+  have bad : (0 : Fin 256) = 1 := by
+    simpa only [leftPacked, rightPacked, List.replicate_succ,
+      List.head?_cons, Option.some.injEq] using hx
+  exact (by decide : (0 : Fin 256) ≠ 1) bad
+
+theorem constant_fold {slots : List (Fin 2)} (path : Path slots) :
+    foldPath zeroOracle path zeroRoot = zeroRoot := by
+  induction path with
+  | nil => rfl
+  | cons siblings tail ih => exact ih
+
+theorem constant_opening {slots : List (Fin 2)} (path : Path slots)
+    (packed : Bytes) :
+    (eval zeroOracle (BinMerkleProgram.leafProgram path
+      (leafInput 0x71 packed salt))).2 = zeroRoot := by
+  rw [BinMerkleProgram.eval_leafProgram]
+  exact constant_fold path
+
+def inputs {slots : List (Fin 2)} (path : Path slots) : List Bytes :=
+  fullTrace zeroOracle path (leafInput 0x71 leftPacked salt) ++
+  fullTrace zeroOracle path (leafInput 0x71 rightPacked salt) ++
+  [bytes zeroRoot]
+
+def log {slots : List (Fin 2)} (path : Path slots) : List (Bytes × State) :=
+  (inputs path).map fun input => (input, zeroOracle input)
+
+theorem log_consistent {slots : List (Fin 2)} (path : Path slots) :
+    ∀ q ∈ log path, q.2 = zeroOracle q.1 := by
+  intro q h
+  obtain ⟨input, _, rfl⟩ := List.mem_map.mp h
+  rfl
+
+theorem frame_read {slots : List (Fin 2)} (path : Path slots) :
+    Read (log path) (bytes zeroRoot) := by
+  change bytes zeroRoot ∈ (log path).map Prod.fst
+  simp only [log, List.map_map, Function.comp_def, List.map_id_fun]
+  simp only [inputs, List.mem_append, List.mem_singleton]
+  exact Or.inr rfl
+
+theorem frame_target :
+    BinRawByteCollisionTargets.pred 2 (bytes zeroRoot) = some zeroRoot := by
+  rw [BinRawByteCollisionTargets.pred_tail]
+  exact BinRawByteCollisionTargets.trailing_frame [] zeroRoot
+
+theorem opening_reads {slots : List (Fin 2)} (path : Path slots)
+    (packed : Bytes) (hp : packed = leftPacked ∨ packed = rightPacked) :
+    ∀ a, Read (eval zeroOracle (BinMerkleProgram.leafProgram path
+      (leafInput 0x71 packed salt))).1 a → Read (log path) a := by
+  intro a ha
+  rw [BinMerkleProgram.eval_leafProgram] at ha
+  change a ∈ ((fullTrace zeroOracle path (leafInput 0x71 packed salt)).map
+    (fun input => (input, zeroOracle input))).map Prod.fst at ha
+  simp only [List.map_map, Function.comp_def, List.map_id_fun] at ha
+  change a ∈ (log path).map Prod.fst
+  simp only [log, List.map_map, Function.comp_def, List.map_id_fun, inputs,
+    List.mem_append, List.mem_singleton]
+  rcases hp with rfl | rfl
+  · exact Or.inl (Or.inl ha)
+  · exact Or.inl (Or.inr ha)
+
+/-- This holds at ANY depth, in particular the frozen eighteen binary levels.
+A deterministic recovered leaf cannot equal both different accepted leaves.
+The collision-exclusion premise of typed_opening_at_cut is indispensable. -/
+theorem successful_opening_not_recovered {slots : List (Fin 2)} (path : Path slots) :
+    ∃ packed : Bytes,
+      packed.length = 480 ∧ salt.length = 32 ∧
+      (eval zeroOracle (BinMerkleProgram.leafProgram path
+        (leafInput 0x71 packed salt))).2 = zeroRoot ∧
+      (∀ a, Read (eval zeroOracle (BinMerkleProgram.leafProgram path
+        (leafInput 0x71 packed salt))).1 a → Read (log path) a) ∧
+      BinRawByteCutStability.recoverAt 0x71 480
+        (BinRawByteCutRecovery.cut (log path) (bytes zeroRoot)) slots zeroRoot ≠
+          some (packed,salt) := by
+  let recovered := BinRawByteCutStability.recoverAt 0x71 480
+    (BinRawByteCutRecovery.cut (log path) (bytes zeroRoot)) slots zeroRoot
+  by_cases hl : recovered = some (leftPacked,salt)
+  · refine ⟨rightPacked, List.length_replicate .., List.length_replicate ..,
+      constant_opening path rightPacked, opening_reads path rightPacked (Or.inr rfl), ?_⟩
+    intro hr
+    have same : (leftPacked,salt) = (rightPacked,salt) := Option.some.inj (hl.symm.trans hr)
+    exact packed_ne (congrArg Prod.fst same)
+  · exact ⟨leftPacked, List.length_replicate .., List.length_replicate ..,
+      constant_opening path leftPacked, opening_reads path leftPacked (Or.inl rfl), hl⟩
+
+/-- A concrete path constructor, used symbolically rather than normalized. -/
+def zeroPath : (slots : List (Fin 2)) → Path slots
+  | [] => .nil
+  | _ :: slots => .cons (fun _ => zeroRoot) (zeroPath slots)
+
+theorem depth18_counterexample :
+    ∃ packed : Bytes,
+      packed.length = 480 ∧ salt.length = 32 ∧
+      (eval zeroOracle (BinMerkleProgram.leafProgram
+        (zeroPath (BinMultiproof.slots 18 0))
+        (leafInput 0x71 packed salt))).2 = zeroRoot ∧
+      (∀ a, Read (eval zeroOracle (BinMerkleProgram.leafProgram
+        (zeroPath (BinMultiproof.slots 18 0))
+        (leafInput 0x71 packed salt))).1 a →
+        Read (log (zeroPath (BinMultiproof.slots 18 0))) a) ∧
+      BinRawByteCutStability.recoverAt 0x71 480
+        (BinRawByteCutRecovery.cut (log (zeroPath (BinMultiproof.slots 18 0)))
+          (bytes zeroRoot)) (BinMultiproof.slots 18 0) zeroRoot ≠ some (packed,salt) :=
+  successful_opening_not_recovered (zeroPath (BinMultiproof.slots 18 0))
+
+#print axioms packed_ne
+#print axioms constant_fold
+#print axioms constant_opening
+#print axioms log_consistent
+#print axioms frame_read
+#print axioms frame_target
+#print axioms opening_reads
+#print axioms successful_opening_not_recovered
+#print axioms depth18_counterexample
+end AspisR1.D0OpeningRecoveryObstruction
+end
