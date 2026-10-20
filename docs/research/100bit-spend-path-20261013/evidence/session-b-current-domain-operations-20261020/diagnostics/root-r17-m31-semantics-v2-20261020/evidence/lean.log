@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/root-r17-m31-semantics-v2-20261020/sources/R17CurrentM31Semantics.lean:25:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UScalar.add a b
+in the target expression
+  match a + b with
+  | ok z => ↑a + ↑b < 2 ^ UScalarTy.U32.numBits ∧ ↑z = ↑a + ↑b ∧ z.bv = a.bv + b.bv
+  | fail e => ¬UScalar.inBounds UScalarTy.U32 (↑a + ↑b)
+  | x => ⊥
+
+a b z : U32
+h : UScalar.add a b = ok z
+hs :
+  match a + b with
+  | ok z => ↑a + ↑b < 2 ^ UScalarTy.U32.numBits ∧ ↑z = ↑a + ↑b ∧ z.bv = a.bv + b.bv
+  | fail e => ¬UScalar.inBounds UScalarTy.U32 (↑a + ↑b)
+  | x => ⊥
+⊢ ↑z = ↑a + ↑b
+/home/dombarker/project-offloads/root-r17-m31-semantics-v2-20261020/sources/R17CurrentM31Semantics.lean:32:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UScalar.sub a b
+in the target expression
+  match a - b with
+  | ok z => ↑b ≤ ↑a ∧ ↑a = ↑z + ↑b ∧ z.bv = a.bv - b.bv
+  | fail e => ↑a < ↑b
+  | x => ⊥
+
+a b z : U32
+h : UScalar.sub a b = ok z
+hs :
+  match a - b with
+  | ok z => ↑b ≤ ↑a ∧ ↑a = ↑z + ↑b ∧ z.bv = a.bv - b.bv
+  | fail e => ↑a < ↑b
+  | x => ⊥
+⊢ ↑z + ↑b = ↑a
+/home/dombarker/project-offloads/root-r17-m31-semantics-v2-20261020/sources/R17CurrentM31Semantics.lean:53:25: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [decode, hv, h̵p̵,̵ ̵ZMod.natCast_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R17CurrentM31Semantics.current_add_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R17CurrentM31Semantics.current_sub_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R17CurrentM31Semantics.current_mul_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R17CurrentM31Semantics.operations_semantics' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,9 @@
+# Concrete checked arithmetic instances for the domain callers
+
+PROVED: the retained current checked M31 mul/double/sub and CM31 multiplication satisfy the explicit decoded field-operation interfaces. The M31 multiplication and full-u64 reducer theorems are reused. New add/sub laws invert successful checked operations and preserve field decoding for every such success, without canonical-input assumptions. The complex cross-product proof reuses the generated seven-stage multiplication graph and derives its widening-product value from that same successful call; it does not assume intermediate successes or canonical inputs independently.
+
+PROVED composition: successful extracted fibre_point with these concrete operation adapters yields storedInitialFibrePoint20; successful exact line_node sequencing with both adapters yields storedFirstLineX18. Both earlier arithmetic-law premises are discharged. The CM31 adapter changes only the two-field Lean representation and uses the ordinary pair constructor.
+
+OPEN: identifying these selected checked backend interfaces and representation adapters with the complete deployed caller/build, runtime wrapping/overflow preservation (lead-owned R22), QueryGeometry index/Vec/inversion caller composition, and whole-stage-2 source correspondence. Successful-call arithmetic is not an overflow-freedom theorem or a whole-runtime claim. This packet does not change the frozen production source.
+
+Three focused NUC targets passed -M4400, High1GiB/Max2GiB/Swap0, nine standard-only axiom reports. Exact receipts record 1.605–1.906 seconds and scope peaks below 366 MB. Existing selected reducer/complex-graph owners are pinned to their earlier release receipts and reused without recompilation. Failed elaboration/notation diagnostics are preserved; no resource limits were raised and no binary objects are included.

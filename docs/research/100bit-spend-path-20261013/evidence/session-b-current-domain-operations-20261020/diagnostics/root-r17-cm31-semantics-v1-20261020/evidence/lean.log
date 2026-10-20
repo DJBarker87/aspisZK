@@ -1,0 +1,19 @@
+/home/dombarker/project-offloads/root-r17-cm31-semantics-v1-20261020/sources/R17CurrentCM31Semantics.lean:31:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  a * b
+in the target expression
+  match UScalar.mul a b with
+  | ok z => ↑a * ↑b ≤ UScalar.max UScalarTy.U64 ∧ ↑z = ↑a * ↑b ∧ z.bv = a.bv * b.bv
+  | fail e => UScalar.max UScalarTy.U64 < ↑a * ↑b
+  | div => False
+
+a b z : U64
+h : a * b = ok z
+hs :
+  match UScalar.mul a b with
+  | ok z => ↑a * ↑b ≤ UScalar.max UScalarTy.U64 ∧ ↑z = ↑a * ↑b ∧ z.bv = a.bv * b.bv
+  | fail e => UScalar.max UScalarTy.U64 < ↑a * ↑b
+  | div => False
+⊢ ↑z = ↑a * ↑b
+'R17CurrentCM31Semantics.cross_fragment_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R17CurrentCM31Semantics.current_cm31_mul_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R17CurrentCM31Semantics.operations_semantics' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
