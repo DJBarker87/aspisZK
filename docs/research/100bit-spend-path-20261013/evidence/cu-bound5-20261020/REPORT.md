@@ -24,3 +24,13 @@ No Lean work is in scope; axioms audit N/A.
 The packet references `C3-SKELETON-20261020.md` and
 `PRIVACY-FINAL-20261020.md`; neither exists in this task base. This CU job
 makes no soundness/privacy closure claim and does not depend on either file.
+
+## Stage 1: candidate reproduction
+
+The 59 source input SHA-256s match this branch and the prep5 source binding.
+Fresh optimized capped builds reproduce all six deployed/linked candidate
+verifier, devnet verifier and Pool pins; see `pins.json`. Default/devnet
+`.text` is identical and replacing ID slots at 1,492,256 / 1,492,288 exactly
+reconstructs the devnet file. Native release measurement/trace drivers built.
+Builds so far exited zero with zero swaps; individual time/RSS receipts
+are in `receipts/builds/`. No production source was edited.

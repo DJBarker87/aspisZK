@@ -1,6 +1,6 @@
 #!/bin/sh
 # usage: build-sbf.sh <receipt-name> <program: pool|verifier|verifier-profiling> <note>
-# Builds one SBF program from the frozen b2727acd3 source in its own capped scope.
+# Builds one SBF program from the exact candidate c16e59e77 source in its own capped scope.
 # DEBUGLINES=1: line-tables-only build into a separate target/out dir, used only to map
 # .text slots to source lines (its .text must equal the deployed build, checked by cmp).
 set -e
@@ -11,6 +11,9 @@ SOL=/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/b
 case $2 in
   pool) M=programs/aspis-pool; F=r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit; SO=aspis_pool.so; T=$H/sbf-target-pool;;
   verifier) M=programs/r1-cost-probe; F=pool-adapter,private-leaf-salts; SO=aspis_r1_cost_probe_program.so; T=$H/sbf-target-verifier;;
+  verifier-devnet) M=programs/r1-cost-probe; F=pool-adapter,private-leaf-salts; SO=aspis_r1_cost_probe_program.so; T=$H/sbf-target-verifier-devnet
+    export ASPIS_R1_POOL_PROGRAM_ID=$(jq -er .programs.pool "$H/r1-devnet.template.json")
+    export ASPIS_R1_REGISTRY_PROGRAM_ID=$(jq -er .programs.registry "$H/r1-devnet.template.json");;
   verifier-profiling) M=programs/r1-cost-probe; F=pool-adapter,private-leaf-salts,cu-profiling; SO=aspis_r1_cost_probe_program.so; T=$H/sbf-target-verifier-profiling;;
 esac
 O=$H/artifacts/$2

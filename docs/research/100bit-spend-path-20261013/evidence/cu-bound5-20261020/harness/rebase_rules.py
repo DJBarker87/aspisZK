@@ -31,12 +31,12 @@ for key in ['exclusions','loop_caps','callee_caps']:
  rr=[]
  for entry in r[key]:
   e=dict(entry)
-  e['citation_revision']=e.get('citation_revision','e90cf2f80 (instruction matched from cu-bound3)')
+  e['citation_revision']=e.get('citation_revision','b2727acd3 (instruction matched from cu-bound4)')
   if 'addr' in e and e['role']!='pool':
    aa=e['addr'] if isinstance(e['addr'],list) else [e['addr']];bb=[addr(a) for a in aa];e['addr']=[a for a in bb if a]
    if not e['addr']:continue
   rr.append(e)
  r[key]=rr
-r['target_revision']='fa894d83d (frozen verifier source b2727acd3)'
+r['target_revision']='2318acd430 (candidate source c16e59e77)'
 json.dump(r,open(out,'w'),indent=1);json.dump(mp,open(mapping,'w'),indent=1)
 print('rules rebased',sum(bool(x['new']) for x in mp.values()),'of',len(mp));print('unmapped',[(k,v['old_function']) for k,v in mp.items() if not v['new']])

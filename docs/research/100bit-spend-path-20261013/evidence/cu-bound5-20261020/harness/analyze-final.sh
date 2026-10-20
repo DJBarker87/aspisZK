@@ -2,9 +2,9 @@
 set -euo pipefail
 H=/home/dombarker/project-offloads/codex-cx-cu-bound5-20261020
 A=$H/analysis
-O=/home/dombarker/project-offloads/codex-cx-cu-bound3-20261020
+O=/home/dombarker/project-offloads/codex-cx-cu-bound4-20261020
 python3 "$H/harness/rebase_rules.py" "$O/artifacts/verifier/linked.elf" "$H/artifacts/verifier/linked.elf" "$O/harness/rules.json" "$H/harness/rules-rebased.json" "$H/rule-address-mapping.json"
-python3 "$H/harness/frozen_rules.py" "$H" "$A" "$H/harness/rules-rebased.json" "$H/harness/rules.json"
+python3 "$H/harness/candidate_rules.py" "$H" "$A" "$H/harness/rules-rebased.json" "$H/harness/rules.json"
 python3 "$H/harness/residual.py" "$A" "$A/runs.json" "$H/harness/rules.json" "$A"
 python3 "$H/harness/hash_residual.py" "$H" "$A" "$A/hash-residuals.json"
 python3 "$H/harness/profile_phases.py" "$H/sweep/profile" "$A/profile-phases.json"
