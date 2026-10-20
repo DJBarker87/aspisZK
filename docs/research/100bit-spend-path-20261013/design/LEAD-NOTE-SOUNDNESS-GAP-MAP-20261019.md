@@ -74,3 +74,17 @@ critical path before step 9 (C3). Size: M for (a), S for (b) and (c).
 
 Prover side: measure how much of the 35.8 s P_R1 check is the overflow
 checks before deciding between a no-overflow proof and keeping them on.
+
+## Addendum (2026-10-20): M10 composed, conditional
+
+Codex job cx-m10 (commits d1281b25f, f7c7392a8) landed.
+`RawExtractorCostComposedV2.recorded_extractor_cost_and_failure`
+(`lean/RawExtractorCostComposedV2.lean:124`) bounds the accepted-run expected
+field, hash-log and bit cost of the recorded-run extractor by an explicit
+polynomial and carries the exact M9 failure bound with δE = 2^-126 ≤ 2^-120.
+Four targets compiled locally (exit 0, ≤ 2.23 GiB, standard axioms;
+receipts in `evidence/extractor-cost-composed-20261019/`). Status of row
+M10: PROVED (conditional). Named implementation hypotheses still to
+discharge: output refinement, bounded arithmetic jobs, implementation
+overhead, log-read accounting, bit accounting, uniform overhead
+constants/degree. These join the source-side list (step 9 inputs).
