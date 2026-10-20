@@ -180,3 +180,17 @@ still fail. Candidate ELFs unchanged (`f9ecbc27…`, `3f21a42f…`). prep9 is
 running: verified primitive field contracts plus per-row `stub_verified`
 harnesses for `Weights::new`, and per-caller harnesses for `prepared_claim`,
 with no change to candidate source.
+
+## Candidate update prep9 — track parked (lead, 2026-10-21 00:40)
+
+Parked branch `codex/cx-freeze-prep-20261020` at ce345a4bd (not merged).
+prep9 proved the M31/CM31 modular contracts and QM31 add/sub against
+independent specs, bound the exact-source Lean QM31 multiplication proof,
+and passed the direct product cell. Still 10/12 cones: the full
+statement/circle rows of `Weights::new`, constructor composition, and all
+three `prepared_claim` caller comparisons. No unverified stubs and no
+larger-cap retries. Candidate ELFs unchanged (`f9ecbc27…`, `3f21a42f…`,
+1,529,128 bytes). Lead decision: park the candidate track. The release
+proofs target the frozen verifier (`dfc2a91a…`), adoption waits for session
+A's re-pins, and prep9 cost about 0.9M tokens for one cell. Resume with the
+two open cones when the user wants the 1.19M CU candidate adopted.
