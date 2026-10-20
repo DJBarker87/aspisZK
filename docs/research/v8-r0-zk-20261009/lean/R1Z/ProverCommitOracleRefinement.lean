@@ -88,10 +88,41 @@ theorem leaf_refines (oracle : ByteOracle) (tree : Fin 3)
     (ProverCommitLeafSource.leafSlices (ProverCommitLeafSource.tagOf tree) value salt))) = _
   rw [ProverCommitLeafSource.leaf_shared]
 
+/-- Successful salt evaluation under the same oracle used for its binding.
+Validation/binding remain named source joins, not assumptions about hashing. -/
+theorem salt_refines (oracle : ByteOracle)
+    (self : ProverCommitSaltSource.Reserved)
+    (context : ProverCommitSaltSource.Context)
+    (tag : U8) (index : U32) (binding : Bytes32)
+    (valid : AspisR1ProverCommit.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.validate_pool_v1_context self context = ok (.Ok ()))
+    (bound : AspisR1ProverCommit.aspis_prover.state_only_entropy.pool_v1_private_attempt_binding
+      (hashOf oracle) self.precommit_binding context = ok binding) :
+    AspisR1ProverCommit.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.derive_pool_v1_leaf_salt
+      self (hashOf oracle) context tag index =
+      ok (.Ok (oracle (R1Z.LayoutR1PBin.dLeafSalt ++
+        binding.val.map ProverCommitSaltBytes.byte ++
+        self.mask_nonce.val.map ProverCommitSaltBytes.byte ++
+        [ProverCommitSaltBytes.byte tag] ++ R1Z.TranscriptR1.le32 index.val ++
+        self.leaf_salt_seed.val.map ProverCommitSaltBytes.byte))) := by
+  rw [ProverCommitSaltSource.salt_source self (hashOf oracle) context tag index binding valid bound]
+  change ok (core.result.Result.Ok (oracle (ProverCommitSaltBytes.wireBytes
+    (ProverCommitSaltSource.saltSlices binding self.mask_nonce self.leaf_salt_seed tag index)))) = _
+  rw [ProverCommitSaltBytes.salt_bytes]
+
+/-- Pointwise byte equality lifts to complete ordered byte/answer lists for
+one arbitrary oracle. Multiplicity and order are preserved by List.map. -/
+theorem ordered_reads_refine (oracle : ByteOracle)
+    (source model : List (List UInt8)) (same : source = model) :
+    source.map (fun input => (input, oracle input)) =
+      model.map (fun input => (input, oracle input)) := by
+  rw [same]
+
 #print axioms cached_eq
 #print axioms cache_insert
 #print axioms arbitrary_fresh_extension
 #print axioms mask_block_refines
 #print axioms source_block_refines
 #print axioms leaf_refines
+#print axioms salt_refines
+#print axioms ordered_reads_refine
 end R1Z.ProverCommitOracleRefinement

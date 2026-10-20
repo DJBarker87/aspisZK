@@ -26,12 +26,18 @@ pub(crate) fn limb(hash: HashFn, domain: &[u8], mut state: State)
     -> (Result<M31, StateOnlyMaskBuildError>, State)
 {
     let mut attempts = 0;
+    let mut result = Err(StateOnlyMaskBuildError::MaskSampleExhausted);
     while attempts < 16 {
-        let (word, after) = next(hash, domain, state);
-        state = after;
-        let candidate = word & 0x7fff_ffff;
-        if candidate < P { return (Ok(M31(candidate)), state); }
+        result = match result {
+            Ok(value) => Ok(value),
+            Err(error) => {
+                let (word, after) = next(hash, domain, state);
+                state = after;
+                let candidate = word & 0x7fff_ffff;
+                if candidate < P { Ok(M31(candidate)) } else { Err(error) }
+            }
+        };
         attempts += 1;
     }
-    (Err(StateOnlyMaskBuildError::MaskSampleExhausted), state)
+    (result, state)
 }
