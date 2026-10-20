@@ -1,0 +1,68 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "status": "Candidate-only theorem: successful extracted ordinary_sample output has all eight U32 coordinates below P. This proves output canonicality in the candidate generated carrier. It does not specialize PreparedModel.Boundaries, establish production equivalence, prove sampler density, or close runtime/source adoption.",
+  "source_revision": "v5: expose ordinary_sample canonical limbs through its exact decode8 call; source snapshot is frozen from the NUC target source SHA in receipt.",
+  "modules": [
+    {
+      "module": "CurrentSamplerCanonicalV5",
+      "source": "sources/CurrentSamplerCanonicalV5.lean",
+      "source_sha256": "3af633baa1465cd99634408e3e354ae40dfe9bcad92bc6e86a19e8f706c3042b",
+      "object_sha256": "47971910cb7a304595702cfbc6f70be58b75338a9babb56ff569aa562c0fc7fe",
+      "receipt": "evidence/CurrentSamplerCanonicalV5/receipt.json",
+      "receipt_sha256": "c701ea9dd6e1a30e928b9654372a330e549004ecc47aa413d299de0736016f57",
+      "exit_status": 0,
+      "wall_seconds": 1.806,
+      "peak_rss_bytes": 3019218944,
+      "scope_memory_peak_bytes": 335687680,
+      "swap_bytes": 0,
+      "theorems": [
+        "AspisR1Post25SamplerCanonical.decode8_success_bounds",
+        "AspisR1Post25SamplerCanonical.ordinary_sample_success_bounds"
+      ],
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    }
+  ],
+  "direct_import_source_map": {
+    "AspisR1Post25Sampler.Funs": {
+      "repository_path": "docs/research/100bit-spend-path-20261013/lean-candidates/s5-current-repin-20261020/sampler-canonical-output-v1/dependencies/Post25SamplerFuns.lean",
+      "source_sha256": "f02a8fc4503304c2630052a116be257ef507780ffe166844e1b08d71e0e9ec11",
+      "object_sha256": "4fc184f23d7427726cf8dee25e77792736ae508a252c799523d73bbbaee894ad",
+      "status": "retained generated owner; exact sanitized source bytes also pinned by post25-ordinary-sample-candidate-20261020/manifest.json"
+    },
+    "ExtractedMaskHornerStep": {
+      "repository_path": "docs/research/100bit-spend-path-20261013/lean-candidates/s5-current-repin-20261020/sampler-canonical-output-v1/dependencies/ExtractedMaskHornerStep.lean",
+      "source_sha256": "18e7527a4e436fe9344f1f8f507e56020fa81c0de94fb72b1ee47e3fbac65a13",
+      "object_sha256": "60998de1c6cae98b4613fc1c504fdc1d0953444c96706dc4b5c581a914c6bd2e",
+      "status": "retained checked array-index success lemma; object pin recorded by post25-ordinary-retained-field-candidate-20261020/manifest.json"
+    }
+  },
+  "toolchain": {
+    "lean": "Lean 4.32.0",
+    "lean_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "runner_sha256": "61079dc0c9e552b2944fa54096c7d0929619026dfdd9c8907db9d34e2a0e3da3"
+  },
+  "evidence": {
+    "directory": "evidence/CurrentSamplerCanonicalV5",
+    "config": "evidence/CurrentSamplerCanonicalV5/config.json",
+    "command": "evidence/CurrentSamplerCanonicalV5/command.json",
+    "preflight": "evidence/CurrentSamplerCanonicalV5/preflight.json",
+    "receipt": "evidence/CurrentSamplerCanonicalV5/receipt.json",
+    "lean_log": "evidence/CurrentSamplerCanonicalV5/lean.log",
+    "time_log": "evidence/CurrentSamplerCanonicalV5/time.log"
+  },
+  "resource_limits": {
+    "memory_high_bytes": 1073741824,
+    "memory_max_bytes": 2147483648,
+    "memory_swap_max_bytes": 0
+  },
+  "boundaries": [
+    "ordinary_sample is from the extracted candidate owner, not a production-source equivalence theorem.",
+    "No theorem specializes an arbitrary PreparedModel.Boundaries callback; the callback constructor remains an independent obligation.",
+    "The result is in AspisR1Post25Sampler.field.WideExact coordinates; a carrier-map consumer can use the eight coordinate facts, but no current-Wide carrier equality is claimed here.",
+    "No sampler distribution/density theorem follows from canonicality."
+  ]
+}
