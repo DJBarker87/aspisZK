@@ -7320,3 +7320,19 @@ P6 pattern. D90 already proved all 20 `records` fields equal to an owned
 reference by Kani, and that reference translates, so cite Kani shipped =
 reference and Lean on the extracted reference, instead of extracting the
 shipped function.
+
+## D100 — prover commitment part 6: quotient-form privacy endpoint (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit6-20261021` (`r1p-final/PROVER-COMMIT6-20261021.md`).
+Per D98, `PrivacyR1FinalProtocolQuotient` replaces the full-tape equal-fibre
+premise with the H1 quotient law; the old premise is proved to imply the new
+one (strictly weaker), and the release conclusion is unchanged. Also proved:
+full constructed commitment-observable transport, sequential decoder
+quotient fibres with derived cF, sampled field carriers, successful input,
+and model count/budget bounds. Final audit J8239: 52 standard-axiom results,
+zero swap; all 491 ELF input hashes unchanged. Open: the shipped caller
+identity (the aggregate Aeneas obstruction persists), exact RExh cursor
+classification, and universal read coverage. No checklist row is closed yet.
+Note: this endpoint is built on `PrivacyR1FinalProtocolHistoryReal`, while
+builder part 6 builds on `PrivacyR1FinalRelease`; the two will be merged
+into one release endpoint once both land.
