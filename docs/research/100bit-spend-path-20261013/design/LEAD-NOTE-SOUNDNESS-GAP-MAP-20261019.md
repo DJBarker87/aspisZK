@@ -337,3 +337,19 @@ literal constructors, and a stage-2 folded-leaf adapter. Row R12: PROVED
 R10 composition and accounting, R13's source acceptance/decoding/read
 containment, the folded payload/checkpoint linkage, backend/conversion
 correspondence, caller re-pins and scalar transport.
+
+## Addendum (2026-10-20): the deployed decoder/decision instance
+
+Codex job cx-decoder-inst (57d1c639f): `hchecks_deployed_partial` over the
+exact compiled run with explicit source obligations, the public
+serializer/binding composition, a conditional universal `htag`, and the
+conditional hQ shape QP + 595 + Q2 (two modules, six audits, standard
+axioms; `design/DECODER-INSTANCE-20261020.md`). The instance itself cannot
+yet be fixed: the frozen stage-1 extraction leaves `B.finish` opaque (the
+R15 finding) and the stage-2 first facts do not yet give the
+authenticated-source-to-compiled-rows map (the R14 finish refinement, in
+flight). A checked counterexample shows two different protocol decoders can
+produce identical verifier behaviour, so the decoder must be fixed by
+construction from the extractions, never inferred from acceptance.
+Consequence: R16 closes only after the next freeze (tx1_finish extracted)
+and the R14 finish refinement; both are already queued.
