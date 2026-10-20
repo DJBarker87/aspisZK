@@ -1,0 +1,126 @@
+import RawCompiledChecksOriginalScheduleBin
+import R1LiteralMatchingFacts
+import R1LiteralOpeningPrefixFacts
+import R1LiteralSemanticIndex
+import R1LiteralReadAtFacts
+import R1LiteralByteRunFacts
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.RWireCheckedFormat
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open RawCutProverCompiler RawCutTranscriptRun CanonicalCutEnrichedTranscript
+
+/-- Only syntax and strict commitment-root parsing; no opening/path/recovery law. -/
+def Format (pf : LiteralProtocol.Proof) : Prop :=
+  (∀ i < 33, LiteralTranscript.valid i (pf i)) ∧
+  ∃ r1 w1 b2 w2 r2 b30 w30, ∃ v30 : OpeningRecordCodec.Payload .second,
+    pf 0 = .initial r1 w1 ∧ pf 2 = .c2 b2 w2 ∧ pf 30 = .second b30 w30 ∧
+    SemanticRecordCodec.decode ⟨2, by decide⟩ b2.val = some ⟨.c2Root r2, by rfl⟩ ∧
+    OpeningRecordCodec.decode .second b30.val = some v30
+
+theorem valid_enrich (w : Words) (i : Nat) (m : LiteralTranscript.Message) :
+    LiteralTranscript.valid i (enrichMessage w m) ↔ LiteralTranscript.valid i m := by
+  cases m with
+  | initial root word =>
+    by_cases hi : i = 0 <;> simp [LiteralTranscript.valid, enrichMessage, hi]
+  | payload bytes => simp [LiteralTranscript.valid, enrichMessage]
+  | c2 bytes word =>
+    by_cases hi : i = 2 <;> simp [LiteralTranscript.valid, enrichMessage, hi]
+  | second bytes word =>
+    by_cases hi : i = 30 <;> simp [LiteralTranscript.valid, enrichMessage, hi]
+
+theorem format_of_enrich (w : Words) (pf : LiteralProtocol.Proof)
+    (h : Format (proof w pf)) : Format pf := by
+  obtain ⟨hv, r1, w1, b2, w2, r2, b30, w30, v30, h0, h2, h30, hp2, hp30⟩ := h
+  have hvalid : ∀ i < 33, LiteralTranscript.valid i (pf i) :=
+    fun i hi => (valid_enrich w i (pf i)).mp (hv i hi)
+  refine ⟨hvalid, ?_⟩
+  cases hm0 : pf 0 <;> simp [proof, hm0, enrichMessage] at h0
+  rename_i root word
+  cases hm2 : pf 2 <;> simp [proof, hm2, enrichMessage] at h2
+  rename_i bytes2 word2
+  cases hm30 : pf 30 <;> simp [proof, hm30, enrichMessage] at h30
+  rename_i bytes30 word30
+  obtain ⟨rfl, _⟩ := h0
+  obtain ⟨rfl, _⟩ := h2
+  obtain ⟨rfl, _⟩ := h30
+  exact ⟨root, word, bytes2, word2, r2, bytes30, word30, v30,
+    rfl, rfl, rfl, hp2, hp30⟩
+
+/-- Checked transcript readers force the exact format the causal decoder needs. -/
+theorem format_of_checks (D : LiteralByteProtocol.Decoder) (H : Bytes → State)
+    (pub : LiteralTranscript.Public) (pf : LiteralProtocol.Proof)
+    (checks : LiteralAcceptanceTerminal.Checks pub
+      ((LiteralByteProtocol.protocol D).transcript H pub pf 33).rounds) : Format pf := by
+  let rs := ((LiteralByteProtocol.protocol D).transcript H pub pf 33).rounds
+  have hindex (i : Nat) (hi : i < 33) :=
+    LiteralByteRunFacts.transcript_index D H pub pf 33 i hi
+  have hlen : rs.length = 33 := LiteralByteRunFacts.transcript_round D H pub pf 33
+  have hv := RawChecksConstructorSchedule.checks_force_constructor_schedule pub rs checks (by omega)
+  have valid_of_entry (i : Nat) (m : LiteralTranscript.Message) (c : LiteralTranscript.Challenge)
+      (hi : i < 33) (he : rs[i]? = some (m,c)) (h : LiteralTranscript.valid i m) :
+      LiteralTranscript.valid i (pf i) := by
+    have hm : m = pf i := congrArg Prod.fst (Option.some.inj (he.symm.trans (hindex i hi)))
+    rw [← hm]
+    exact h
+  have hvalid : ∀ i < 33, LiteralTranscript.valid i (pf i) := by
+    intro i hi
+    by_cases h30 : i ≤ 30
+    · obtain ⟨m,c,he,h⟩ := hv i h30
+      exact valid_of_entry i m c hi he h
+    · have hcases : i = 31 ∨ i = 32 := by omega
+      rcases hcases with rfl | rfl
+      · exact valid_of_entry 31 checks.m31 _ (by decide) checks.entry31 checks.valid31
+      · exact valid_of_entry 32 checks.m32 _ (by decide) checks.entry32 checks.valid32
+  refine ⟨hvalid, ?_⟩
+  obtain ⟨common, staged, row31, word, gamma, kappa, alpha0, alpha1,
+    hcommon, hstaged, hrow31, hword, hgamma, hkappa, halpha0, halpha1, _⟩ :=
+    LiteralMatchingFacts.read_success_components rs checks.data checks.matchingRead
+  obtain ⟨hprelen, _, _, hsemantic, _⟩ :=
+    LiteralOpeningPrefixFacts.read_prefix_components rs common hcommon
+  obtain ⟨hr, parsed, c, hp, _, _⟩ :=
+    LiteralSemanticIndex.read_index LiteralOpeningView.eK 0 (rs.take 25)
+      common.semantic hsemantic 2 (by omega)
+  have hget2 : (rs.take 25)[2]'(by omega) = (pf 2,
+      (eval H (LiteralByteSampler.samp 2
+        ((LiteralByteProtocol.protocol D).transcript H pub pf 2) (pf 2)).toProgram).2) := by
+    apply Option.some.inj
+    rw [← List.getElem?_eq_getElem]
+    simpa using hindex 2 (by decide)
+  rw [hget2] at hp
+  have hp30 := LiteralReadAtFacts.readSecond_current rs staged hstaged
+  unfold LiteralOpeningStages.readAt at hp30
+  rw [hindex 30 (by decide)] at hp30
+  simp only [Option.bind_some, if_pos (hvalid 30 (by decide))] at hp30
+  cases h0 : pf 0 <;> try { have := hvalid 0 (by decide); simp [h0, LiteralTranscript.valid] at this }
+  rename_i r1 w1
+  cases h2 : pf 2 <;> try { have := hvalid 2 (by decide); simp [h2, LiteralTranscript.valid] at this }
+  rename_i b2 w2
+  cases h30 : pf 30 <;> try { have := hvalid 30 (by decide); simp [h30, LiteralTranscript.valid] at this }
+  rename_i b30 w30
+  rw [h2] at hp
+  have hv2 : LiteralTranscript.valid 2 (.c2 b2 w2) := by
+    simpa only [h2] using hvalid 2 (by decide)
+  unfold LiteralSemanticPrefix.parseMessage at hp
+  rw [if_pos hv2] at hp
+  change (SemanticRecordCodec.decode ⟨2, by decide⟩ b2.val).map _ = some parsed at hp
+  cases hd : SemanticRecordCodec.decode ⟨2, by decide⟩ b2.val with
+  | none => rw [hd] at hp; cases hp
+  | some payload =>
+    obtain ⟨value, hvrow⟩ := payload
+    cases value with
+    | empty => simp [SemanticRecordCodec.validRow] at hvrow
+    | maskSum value => simp [SemanticRecordCodec.validRow] at hvrow
+    | polynomial value => simp [SemanticRecordCodec.validRow] at hvrow
+    | c2Root r2 =>
+      refine ⟨r1, w1, b2, w2, r2, b30, w30, staged.row30, rfl, rfl, rfl, hd, ?_⟩
+      simpa [h30, LiteralTranscript.erase] using hp30
+
+#print axioms valid_enrich
+#print axioms format_of_enrich
+#print axioms format_of_checks
+end AspisR1.RWireCheckedFormat
+end

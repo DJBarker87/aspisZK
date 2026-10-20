@@ -1,0 +1,136 @@
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireCheckedFormat.lean:51:4: error: Application type mismatch: The argument
+  hm0
+has type
+  pf 0 = LiteralTranscript.Message.initial root word
+but is expected to have type
+  LiteralTranscript.Message.initial root word = LiteralTranscript.Message.initial root word
+in the application
+  And.intro hm0
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireCheckedFormat.lean:51:9: error: Application type mismatch: The argument
+  hm2
+has type
+  pf 2 = LiteralTranscript.Message.c2 bytes2 word2
+but is expected to have type
+  LiteralTranscript.Message.c2 bytes2 word2 = LiteralTranscript.Message.c2 bytes2 word2
+in the application
+  And.intro hm2
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireCheckedFormat.lean:51:14: error: Application type mismatch: The argument
+  hm30
+has type
+  pf 30 = LiteralTranscript.Message.second bytes30 word30
+but is expected to have type
+  LiteralTranscript.Message.second bytes30 word30 = LiteralTranscript.Message.second bytes30 word30
+in the application
+  And.intro hm30
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireCheckedFormat.lean:107:9: error: unsolved goals
+case initial.c2.second.none
+D : LiteralByteProtocol.Decoder
+H : Bytes → State
+pub : LiteralTranscript.Public
+pf : LiteralProtocol.Proof
+checks : LiteralAcceptanceTerminal.Checks pub ((LiteralByteProtocol.protocol D).transcript H pub pf 33).rounds
+rs : List (LiteralTranscript.Message × LiteralTranscript.Challenge) :=
+  ((LiteralByteProtocol.protocol D).transcript H pub pf 33).rounds
+hindex :
+  ∀ i < 33,
+    ((LiteralByteProtocol.protocol D).transcript H pub pf 33).rounds[i]? =
+      some
+        (pf i,
+          (eval H
+              (LiteralByteSampler.samp i ((LiteralByteProtocol.protocol D).transcript H pub pf i) (pf i)).toProgram).2)
+hlen : rs.length = 33
+hv : ∀ i ≤ 30, ∃ m c, rs[i]? = some (m, c) ∧ LiteralTranscript.valid i m
+valid_of_entry :
+  ∀ (i : ℕ) (m : LiteralTranscript.Message) (c : LiteralTranscript.Challenge),
+    i < 33 → rs[i]? = some (m, c) → LiteralTranscript.valid i m → LiteralTranscript.valid i (pf i)
+hvalid : ∀ i < 33, LiteralTranscript.valid i (pf i)
+common : LiteralOpeningView.View
+staged : LiteralOpeningStages.Second
+row31 : OpeningRecordCodec.Payload OpeningRecordCodec.Row.final
+word : LiteralTranscript.VWord
+gamma kappa alpha0 alpha1 : LiteralMatchingFacts.E
+hcommon : LiteralOpeningView.read rs = some common
+hstaged : LiteralOpeningStages.readSecond rs = some staged
+hrow31 : LiteralOpeningStages.readAt rs 31 (OpeningRecordCodec.decode OpeningRecordCodec.Row.final) = some row31
+hword : LiteralTranscript.vAt rs = some word
+hgamma : LiteralChallengeRead.ordinaryAt rs 27 = some gamma
+hkappa : LiteralChallengeRead.ordinaryAt rs 28 = some kappa
+halpha0 : LiteralChallengeRead.ordinaryAt rs 29 = some alpha0
+halpha1 : LiteralChallengeRead.ordinaryAt rs 30 = some alpha1
+right✝² :
+  checks.data =
+    SelectedOpeningData.data (LiteralMatchingFacts.payloads staged row31) common.word word common.functionals
+      common.baseFunctional gamma kappa alpha0 alpha1
+hprelen : (List.take 25 rs).length = 25
+left✝² : LiteralTranscript.c1At (List.take 25 rs) = some common.c1
+left✝¹ : LiteralTranscript.c2At (List.take 25 rs) = some common.c2
+hsemantic : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) = some common.semantic
+right✝¹ : common.word = LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK common.c1 common.c2
+hr : 0 + 2 < 25
+parsed : R0P.Mask.SemMsgZ LiteralSemanticPrefix.E
+c : LiteralTranscript.E
+left✝ : (List.take 25 rs)[2].2.1 = TranscriptView.Value.ordinary c
+right✝ : common.semantic[2] = (parsed, c)
+hget2 :
+  (List.take 25 rs)[2] =
+    (pf 2,
+      (eval H (LiteralByteSampler.samp 2 ((LiteralByteProtocol.protocol D).transcript H pub pf 2) (pf 2)).toProgram).2)
+hp30 :
+  (match LiteralTranscript.erase (pf 30) with
+    | TranscriptView.Message.initial c1 => none
+    | TranscriptView.Message.payload bytes => OpeningRecordCodec.decode OpeningRecordCodec.Row.second ↑bytes) =
+    some staged.row30
+r1 : State
+w1 : LiteralTranscript.C1Word
+h0 : pf 0 = LiteralTranscript.Message.initial r1 w1
+b2 : LiteralTranscript.BytesMessage
+w2 : LiteralTranscript.C2Word
+h2 : pf 2 = LiteralTranscript.Message.c2 b2 w2
+b30 : LiteralTranscript.BytesMessage
+w30 : LiteralTranscript.VWord
+h30 : pf 30 = LiteralTranscript.Message.second b30 w30
+hd : SemanticRecordCodec.decode ⟨2, ⋯⟩ ↑b2 = none
+hp :
+  LiteralTranscript.valid 2 (LiteralTranscript.Message.c2 b2 w2) ∧
+    ∃ a,
+      (SemanticRecordCodec.decode 2 ↑b2).unattach = some a ∧
+        SemanticPayloadView.toMessage (fun x => LiteralSemanticPrefix.c2Pair LiteralOpeningView.eK w2) a = parsed
+⊢ ∃ r1_1 w1_1 b2_1 w2_1 r2 b30_1 w30_1 v30,
+    LiteralTranscript.Message.initial r1 w1 = LiteralTranscript.Message.initial r1_1 w1_1 ∧
+      LiteralTranscript.Message.c2 b2 w2 = LiteralTranscript.Message.c2 b2_1 w2_1 ∧
+        LiteralTranscript.Message.second b30 w30 = LiteralTranscript.Message.second b30_1 w30_1 ∧
+          SemanticRecordCodec.decode ⟨2, Format._proof_1⟩ ↑b2_1 =
+              some ⟨SemanticRecordCodec.Payload.c2Root r2, Format._proof_2⟩ ∧
+            OpeningRecordCodec.decode OpeningRecordCodec.Row.second ↑b30_1 = some v30
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireCheckedFormat.lean:112:28: error: Application type mismatch: The argument
+  r2
+has type
+  SemanticRecordCodec.validRow ⟨2, ⋯⟩ (SemanticRecordCodec.Payload.c2Root root✝)
+of sort `Prop` but is expected to have type
+  State
+of sort `Type` in the application
+  Exists.intro r2
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireCheckedFormat.lean:105:49: warning: This simp argument is unused:
+  if_pos (hvalid 2 (by decide))
+
+Hint: Omit it from the simp argument list.
+  simp only [LiteralSemanticPrefix.parseMessage, i̵f̵_̵p̵o̵s̵ ̵(̵h̵v̵a̵l̵i̵d̵ ̵2̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵)̵,̵ ̵h2] at hp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireCheckedFormat.lean:105:80: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp only [LiteralSemanticPrefix.parseMessage, if_pos (hvalid 2 (by decide)),̵ ̵h̵2̵] at hp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireCheckedFormat.lean:107:18: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵d̵]̵ ̵at hp
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.RWireCheckedFormat.valid_enrich' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RWireCheckedFormat.format_of_enrich' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RWireCheckedFormat.format_of_checks' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

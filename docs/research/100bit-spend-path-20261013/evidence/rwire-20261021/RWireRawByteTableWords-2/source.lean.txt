@@ -1,0 +1,101 @@
+import RWireRawByteCutTable
+import TableLogRepresentative
+import BinCanonicalCutWords
+import RawByteTableWordsBin
+
+/-! Concrete table-only recovered-word functions for the three commitment
+rows. Unlike the earlier represented-log interface, these functions have no
+trace or future-oracle argument. The specification-level table representative
+is total; efficient extraction remains a separate obligation. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.RWireRawByteTableWords
+
+open FS FS2 FS2.Duplex AspisV8PairedCommitment
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.AdaptiveFirstReadLaw
+open BinRawByteCutRecovery BinRawByteCutStability
+open CanonicalCutEnrichedTranscript (Words wordsFromMaps)
+open BinCanonicalCutWords
+
+/-- Recover solely from the table supplied at a commitment's first read. -/
+def recoverFromTable (T : Table Bytes State) (tag : BinMerkle32Path.Byte) (width : Nat)
+    (slots : List (Fin 2)) (root : State) : Option BinMerkleLeafRecovery.LeafData :=
+  recoverAt tag width (TableLogRepresentative.logOf T) slots root
+
+def c1Map (T : Table Bytes State) (root : State) : Fin 262144 → Option Bytes :=
+  fun q => (recoverFromTable T 0x71 480 (BinMultiproof.slots 18 q.val) root).map Prod.fst
+
+def c2Map (T : Table Bytes State) (root : State) : Fin 262144 → Option Bytes :=
+  fun q => (recoverFromTable T 0xf1 128 (BinMultiproof.slots 18 q.val) root).map Prod.fst
+
+def foldedMap (T : Table Bytes State) (root : State) : Fin 65536 → Option Bytes :=
+  fun q => (recoverFromTable T 0x72 128 (BinMultiproof.slots 18 q.val) root).map Prod.fst
+
+def words (T0 T2 T30 : Table Bytes State) (root0 root2 root30 : State) : Words :=
+  wordsFromMaps (c1Map T0 root0) (c2Map T2 root2) (foldedMap T30 root30)
+
+theorem recover_table_eq_cut (iv : State) (H : Bytes → State)
+    (tr : List (Bytes × State)) (Q : Nat) (frame : Bytes)
+    (hcons : ∀ q ∈ tr, q.2 = H q.1)
+    (hQ : firstReads emptyTable tr ≤ Q)
+    (hout : ¬ hitsBad (AllAddressCollision.bad iv BinRawByteCollisionTargets.pred Q)
+      emptyTable tr)
+    (tag : BinMerkle32Path.Byte) (width : Nat) (slots : List (Fin 2)) (root : State) :
+    recoverFromTable (tableBefore emptyTable tr frame) tag width slots root =
+      recoverAt tag width (cut tr frame) slots root := by
+  have hct := RWireRawByteCutTable.replay_cut_eq_tableBefore H tr frame hcons
+  have hrep := TableLogRepresentative.logOf_replay H (cut tr frame)
+    (fun q hq => hcons q (List.mem_of_mem_take hq))
+  rw [hct] at hrep
+  exact (RWireRawByteCutTable.recover_eq_of_cut_table iv H tr
+    (TableLogRepresentative.logOf (tableBefore emptyTable tr frame)) Q frame
+    hcons hrep.1 hQ hout hrep.2 tag width slots root).symm
+
+/-- All coordinates agree at once with the first-read cut maps. The proof
+charges no event per leaf or per coordinate. -/
+theorem words_eq_cuts (iv : State) (H : Bytes → State)
+    (tr : List (Bytes × State)) (Q : Nat)
+    (hcons : ∀ q ∈ tr, q.2 = H q.1)
+    (hQ : firstReads emptyTable tr ≤ Q)
+    (hout : ¬ hitsBad (AllAddressCollision.bad iv BinRawByteCollisionTargets.pred Q)
+      emptyTable tr)
+    (f0 f2 f30 : Bytes) (root0 root2 root30 : State) :
+    words (tableBefore emptyTable tr f0) (tableBefore emptyTable tr f2)
+      (tableBefore emptyTable tr f30) root0 root2 root30 =
+      wordsFromRawCuts tr f0 f2 f30 root0 root2 root30 := by
+  have h0 : c1Map (tableBefore emptyTable tr f0) root0 = rawC1Map tr f0 root0 := by
+    funext q
+    exact congrArg (Option.map Prod.fst)
+      (recover_table_eq_cut iv H tr Q f0 hcons hQ hout 0x71 480 _ root0)
+  have h2 : c2Map (tableBefore emptyTable tr f2) root2 = rawC2Map tr f2 root2 := by
+    funext q
+    exact congrArg (Option.map Prod.fst)
+      (recover_table_eq_cut iv H tr Q f2 hcons hQ hout 0xf1 128 _ root2)
+  have h30 : foldedMap (tableBefore emptyTable tr f30) root30 = rawFoldedMap tr f30 root30 := by
+    funext q
+    exact congrArg (Option.map Prod.fst)
+      (recover_table_eq_cut iv H tr Q f30 hcons hQ hout 0x72 128 _ root30)
+  simp only [words, wordsFromRawCuts, h0, h2, h30]
+
+theorem recover_table_eq_full (iv : State) (H : Bytes → State)
+    (tr : List (Bytes × State)) (Q : Nat) (frame : Bytes)
+    (hcons : ∀ q ∈ tr, q.2 = H q.1)
+    (hQ : firstReads emptyTable tr ≤ Q)
+    (hout : ¬ hitsBad (AllAddressCollision.bad iv BinRawByteCollisionTargets.pred Q)
+      emptyTable tr)
+    (tag : BinMerkle32Path.Byte) (width : Nat) (root : State)
+    (j : Fin 5) (hframe : Read tr frame)
+    (hpred : BinRawByteCollisionTargets.pred j frame = some root) :
+    (fun slots => recoverFromTable (tableBefore emptyTable tr frame) tag width slots root) =
+      (fun slots => recoverAt tag width tr slots root) := by
+  funext slots
+  exact (recover_table_eq_cut iv H tr Q frame hcons hQ hout tag width slots root).trans
+    (recover_stable iv H tr Q hcons hQ hout tag width slots root frame j hframe hpred)
+
+#print axioms recover_table_eq_cut
+#print axioms words_eq_cuts
+#print axioms recover_table_eq_full
+
+end AspisR1.RWireRawByteTableWords
+end
