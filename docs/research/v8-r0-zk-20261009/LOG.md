@@ -7008,3 +7008,20 @@ lines 158–197). Ruling: the prover is not frozen, so the break is
 restructured (early-return helper) under the byte-identical fixed-seed gate
 (job cx-builder-ref2), then the shipped records/public mapping, the Rust
 glue equality and the S2 transport complete SourceIdentification.
+
+### Lead acceptance of the ROM rows (2026-10-21); D84
+
+Codex job cx-priv-rom (ee6ad61d3, 6323a578a, 59f374e0d) is cherry-picked
+(env J 8604, 8605, 8607 verified: standard axioms, 0 swaps; 8606 failed and
+was fixed by a source change). New modules `RomFiniteBin`, `RomGrammarBin`,
+`RomObserverBin` construct the finite classical ROM tables, prove
+address-domain membership from typed read coverage over the binary grammar,
+fix qmax = 2^64 and prove the source observer's decision function is
+preserved. The endpoint `PrivacyR1Final` is edited (the one exception to
+"no edits to existing modules", accepted because the statement strictly
+narrows and nothing imports it): the premises `R_rom_classical`,
+`R_rom_address_domain` and `R_rom_adversary_budget` are removed and replaced
+by one source premise, `R_wire_read_coverage` (universal typed read
+coverage). Three D82 checklist rows are discharged; the ROM side of the
+privacy proof is now closed except that coverage fact, which belongs with
+the other R-wire source items (`r1p-final/ROM-ROWS-20261021.md`).
