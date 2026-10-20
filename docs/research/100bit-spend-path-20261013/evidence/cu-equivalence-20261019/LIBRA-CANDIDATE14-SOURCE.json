@@ -1,0 +1,54 @@
+{
+  "status": "SOURCE_BINDINGS_AND_SIGNATURE_TRANSPORT_AUDITED_NOT_FINAL_PROOF_STATUS",
+  "candidate": "39c2971dd16c95858a4cfd2c9ae35da052eacfa9",
+  "parent": "16724ebd0bc2cb38f0115681386ecb4f12ceddc7",
+  "source_pins_sha256": "98e77a0d08a7cab46e9ee2eb973ff16582fa6f6d11aff2345d51a2eb4063a86b",
+  "caller": {
+    "source_path": "crates/aspis-r1-cost-probe/src/weights.rs",
+    "parent_source_text_sha256": "b67073dae9781092a34f8859de2b607ed350227322af97f40e2a26e79c2112f2",
+    "candidate_source_text_sha256": "f91f1e8b864eaad2e2a38e22894de0bf950de2e5c6185f15d80a76db8452026a",
+    "only_replacement": {
+      "parent": "let libra=twofold_libra_weights(&low,self.extra);",
+      "candidate": "let libra=if self.variant==Variant::S2 {factored_s2_libra_weights(&ap0,&ap1,self.extra)}else{twofold_libra_weights(&low,self.extra)};"
+    },
+    "binding": "The original low16 constructor and every statement surrounding the call are identical. The S2 helper equality is substituted under the existing compositional source/runtime boundary; non-S2 call unchanged. No separately extracted full transaction body is claimed."
+  },
+  "emission": {
+    "raw_types_sha256": "91260c91835f1895555aa0688c91fd9be30d383d13e97a710e9614767cee062a",
+    "raw_funs_sha256": "877c492bcf5b94df40966b2fc3ee83ce342e5e66a7cd9f673e5f2943403d62bf",
+    "installed_funs_sha256": "58b2ab2372554e26ae1b53ddd23711fb3b66ecc7e4172ba9afa159177fa799b5",
+    "raw_callback_bodies_unchanged": [
+      "kpowers.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut",
+      "kpowers.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31.call_once",
+      "old.twofold_libra_weights.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31.call_mut",
+      "old.twofold_libra_weights.closure.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeQM31.call_once"
+    ],
+    "signature_transports": [
+      "Two mutable FnMut dictionary fields invoke the exact emitted call_once, which applies the exact call_mut handback before returning updated closure state.",
+      "Two FnOnce dictionary fields project the value after that same exact emitted call_once.",
+      "Two from_fn call sites use the mutable source-runtime wrapper that retains final captures; the original caller discards the second returned item."
+    ],
+    "kernel_checks": [
+      "CuSavingsLibraSourceHandback.power_callback",
+      "CuSavingsLibraSourceHandback.reference_power_callback",
+      "CuSavingsLibraSourceHandback.mutable_builder_projection",
+      "CuSavingsLibraSourceProjection.power_once_projection",
+      "CuSavingsLibraSourceProjection.reference_once_instance_projection"
+    ],
+    "array_source_admission": "CuSavingsArrayFromFn.source_eq_build (existing boundary/primitive interpretation)"
+  },
+  "production_source_changed": false,
+  "audit": {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/Users/dominic/ZK/.worktrees/r1-cu-savings-20261019/docs/research/100bit-spend-path-20261013/tools/cu-equivalence-20261019/check-libra-source.py"
+    ],
+    "source_revision": "1d1cbbf2741fab7b8339151a8df6d2dc4fbc8fa6",
+    "features": [],
+    "exit_status": 0,
+    "wall_seconds": 0.39956645807251334,
+    "peak_rss_kib": 20400,
+    "process_swaps": 0,
+    "print_axioms": "N/A: source audit; kernel checks recorded by focused Lean receipts."
+  }
+}

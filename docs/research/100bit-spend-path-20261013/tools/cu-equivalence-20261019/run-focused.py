@@ -3,6 +3,31 @@
 import argparse, fcntl, hashlib, json, os, re, subprocess, time
 from pathlib import Path
 
+def lean_imports(text):
+    """Ignore nested Lean comments and strings when inventorying imports."""
+    clean = []; depth = 0; quoted = False; escaped = False; i = 0
+    while i < len(text):
+        pair = text[i:i+2]; char = text[i]
+        if depth:
+            if pair == '/-': depth += 1; clean.extend('  '); i += 2; continue
+            if pair == '-/': depth -= 1; clean.extend('  '); i += 2; continue
+            clean.append('\n' if char == '\n' else ' ')
+        elif quoted:
+            clean.append('\n' if char == '\n' else ' ')
+            if escaped: escaped = False
+            elif char == '\\': escaped = True
+            elif char == '"': quoted = False
+        elif pair == '/-':
+            depth = 1; clean.extend('  '); i += 2; continue
+        elif pair == '--':
+            end = text.find('\n', i)
+            if end < 0: break
+            clean.extend(' ' * (end-i)); i = end; continue
+        elif char == '"': quoted = True; clean.append(' ')
+        else: clean.append(char)
+        i += 1
+    return re.findall(r'(?m)^\s*(?:public\s+)?import\s+(\S+)', ''.join(clean))
+
 ap = argparse.ArgumentParser()
 ap.add_argument('plan', type=Path)
 a = ap.parse_args()
@@ -90,7 +115,7 @@ with open(lock_path, 'a+') as lock:
             selected_cache_objects=selected,selected_owner_objects=owners,
             target_objects=cached['objects'],priority='NEW_CU_MODULES_THEN_EXACT_ORIGINAL_CLOSURE')
     imports = []
-    for name in re.findall(r'(?m)^\s*(?:public\s+)?import\s+(\S+)', source.read_text()):
+    for name in lean_imports(source.read_text()):
         candidates = [Path(p)/(name.replace('.','/')+'.olean') for p in env['LEAN_PATH'].split(':')]
         obj_import = next((p for p in candidates if p.is_file()), None)
         assert obj_import is not None, ('focused prerequisite missing; do not compile a dependent', name)
