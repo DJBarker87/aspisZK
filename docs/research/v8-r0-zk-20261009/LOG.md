@@ -6925,3 +6925,14 @@ message carrier still admits arbitrary lengths; the result applies through
 the typed records and the extracted parsers, so the R-wire execution
 correspondence (that the deployed transcript only ever hashes those
 records) remains the carrying obligation, with the ASQ8 decoder extraction.
+
+### D79 addendum (2026-10-20): three more hashed record classes
+
+Codex job cx-record-classes (4dd8a0a64): the 57,607-byte compact proof, the
+1,880-byte ASF8 account and the 1,758-byte checkpoint checksum input are
+proved to have those fixed lengths and to separate from 65-byte binary nodes
+and 31-byte frames, on both trees (15 local audits; env J 6302–6303, 14
+audits; standard axioms; privacy roots unchanged). With these, the extended
+class inventory covers all 31 tx1 digest sites of WIRE-TX1. The carrying
+obligation is unchanged: that deployed execution hashes only members of the
+inventory (R-wire whole-tx1 refinement, then tx2).
