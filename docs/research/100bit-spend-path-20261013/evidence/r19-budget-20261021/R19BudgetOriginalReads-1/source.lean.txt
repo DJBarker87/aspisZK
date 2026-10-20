@@ -1,0 +1,82 @@
+import R19BudgetSamplerReads
+import R1VerifierCallBudget
+import QvStage2Count
+
+/-! R19 for the original literal experiment. The Rust stage budgets are used
+only as a proved numerical envelope, not as a source refinement premise. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.R19BudgetOriginalReads
+open FS FS2 FS2.Duplex R0C.V3 AspisV8PairedCommitment
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open RawCutProverCompiler RawCutTranscriptRun RecordedBinaryExperimentBin
+
+/-- A symbolic bound for a list of sampler logs, with no concrete evaluation. -/
+theorem flatten_length_le {A : Type} (trs : List (List A)) (k : Nat)
+    (h : ∀ tr ∈ trs, tr.length ≤ k) : trs.flatten.length ≤ trs.length * k := by
+  induction trs with
+  | nil => simp
+  | cons tr trs ih =>
+    have ha := h tr (List.mem_cons_self ..)
+    have hb := ih (fun xs hx => h xs (List.mem_cons_of_mem tr hx))
+    simp only [List.flatten_cons, List.length_append, List.length_cons, Nat.add_mul, Nat.one_mul]
+    omega
+
+theorem verifier_queries (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (H : Bytes → State)
+    (pub : LiteralTranscript.Public) (pf : RawCutProverCompiler.Proof) :
+    (eval H (verifier D d pub pf)).1.length ≤ 561 := by
+  unfold RawCutProverCompiler.verifier
+  rw [FS2.verifier_eval]
+  have hb := flatten_length_le
+    ((List.range 33).map (fun n =>
+      (eval H ((LiteralByteProtocol.protocol D).chain H pub pf n).toProgram).1)) 17
+    (by
+      intro tr htr
+      obtain ⟨n, hn, rfl⟩ := List.mem_map.mp htr
+      exact R19BudgetSamplerReads.row_length D H pub pf n)
+  simpa only [List.length_map, List.length_range] using hb
+
+theorem verifier_reads (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (H : Bytes → State)
+    (pub : LiteralTranscript.Public) (pf : RawCutProverCompiler.Proof)
+    (T : Table Bytes State) :
+    firstReads T (eval H (verifier D d pub pf)).1 ≤
+      QvStage1.stage1Budget 10 + QvStage2.stage2Budget 12 := by
+  have hb := (VerifierCallBudget.firstReads_le_length T _).trans
+    (verifier_queries D d H pub pf)
+  rw [QvStage1.stage1Budget_ten, QvStage2.stage2Budget_twelve]
+  omega
+
+/-- A prefix costs at most its issued queries, followed by suffix misses in
+exactly the table left by that prefix. -/
+theorem prefix_queries {I A : Type} [DecidableEq I] (T : Table I A)
+    (pre post : List (I × A)) :
+    firstReads T (pre ++ post) ≤ pre.length +
+      firstReads (DecodedFirstReadUnionBound.applyTrace T pre) post := by
+  induction pre generalizing T with
+  | nil => simp [firstReads, DecodedFirstReadUnionBound.applyTrace]
+  | cons q pre ih =>
+    have hb := ih (put T q.1 q.2)
+    simp only [List.cons_append, firstReads, List.length_cons,
+      DecodedFirstReadUnionBound.applyTrace] at *
+    split <;> omega
+
+theorem original_reads (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (Q : Nat)
+    (hqueries : DecoderQueryAccounting.AdversaryQueries P Q) (H : Bytes → State) :
+    firstReads emptyTable (eval H (original D d P)).1 ≤
+      Q + (QvStage1.stage1Budget 10 + QvStage2.stage2Budget 12) := by
+  change firstReads emptyTable (eval H (experiment P (verifier D d))).1 ≤ _
+  rw [RawCutProverCompiler.experiment_eval]
+  exact (prefix_queries emptyTable _ _).trans
+    (Nat.add_le_add (hqueries H) (verifier_reads D d H _ _ _))
+
+#print axioms flatten_length_le
+#print axioms verifier_queries
+#print axioms verifier_reads
+#print axioms prefix_queries
+#print axioms original_reads
+end AspisR1.R19BudgetOriginalReads
+end
