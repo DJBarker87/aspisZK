@@ -1,0 +1,41 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceControl.lean:14:75: error: unsolved goals
+d : Usize
+hd : ↑d < 5
+hlen : ↑d < transport.TAU.length
+t : Usize
+ht : transport.TAU.index_usize d = ok t
+hv : t = (↑transport.TAU)[↑d]
+⊢ List.map UScalar.val ↑(Array.make 5#usize [3#usize, 4#usize, 2#usize, 0#usize, 1#usize] transport.TAU._proof_7) =
+    [3, 4, 2, 0, 1]
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceControl.lean:17:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.getD ?m.82 ?n ?d
+in the target expression
+  ↑t = (List.map UScalar.val ↑transport.TAU).getD (↑d) 0
+
+d : Usize
+hd : ↑d < 5
+hlen : ↑d < transport.TAU.length
+t : Usize
+ht : transport.TAU.index_usize d = ok t
+hv : t = (↑transport.TAU)[↑d]
+hmap : List.map UScalar.val ↑transport.TAU = CuSavingsS2Tables.tau
+⊢ ↑t = (List.map UScalar.val ↑transport.TAU).getD (↑d) 0
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (5 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceControl.lean:17:39: error: Type mismatch: After simplification, term
+  hlen
+ has type
+  ↑d < transport.TAU.length
+of sort `Prop` but is expected to have type
+  List ?m.81
+of sort `Type ?u.33`
+'AspisR1.CuSavingsS2SourceControl.tau_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

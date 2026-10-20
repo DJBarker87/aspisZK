@@ -1,0 +1,39 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2Candidate3.lean:22:6: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2Candidate3.lean:8:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+case neg
+inst✝ : Shared
+w : Weights
+f : Slice U8
+low : Std.Array E 16#usize
+hw : w.variant = transport.Variant.S2
+hl : ¬f.len = 2048#usize
+⊢ (do
+      let i3 ← f.len / 32#usize
+      let (group_masks1, group_coefficients1, groups) ←
+        new.grouped_inactive_pair_loop0 { start := 0#usize, «end» := i3 } transport.Variant.S2 w.factors w.points
+            w.extra f (Array.repeat 64#usize 0#u16) (Array.repeat 64#usize field.wide_exact.WideExact.ZERO) 0#usize
+      old.grouped_inactive_pair_loop1 { start := 0#usize, «end» := groups } low group_masks1 group_coefficients1
+          field.wide_exact.WideExact.ZERO) =
+    old.grouped_inactive_pair w f low
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2Candidate3.lean:20:31: warning: This simp argument is unused:
+  fallback0
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵l̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵f̵a̵l̵l̵b̵a̵c̵k̵0̵,̵f̵a̵l̵l̵b̵a̵c̵k̵1̵]̵[̲h̲l̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲f̲a̲l̲l̲b̲a̲c̲k̲1̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2Candidate3.lean:28:8: error: (kernel) unknown constant 'AspisR1.CuSavingsS2Candidate3.helper_equivalence'
+'AspisR1.CuSavingsS2Candidate3.helper_equivalence' does not depend on any axioms
+'AspisR1.CuSavingsS2Candidate3.all_callers_equivalence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ all_callers_equivalence,
+ core.fmt.Formatter]

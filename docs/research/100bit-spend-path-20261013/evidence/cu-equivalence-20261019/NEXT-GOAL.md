@@ -1,3 +1,16 @@
+# Candidate 3 closed (2026-10-20)
+
+See S2-CANDIDATE3-FINAL.md/json: unconditional exact parent/candidate helper
+equality, actual source classifier/table/search/array/loop composition, and
+unchanged-context substitution checked. No candidate-equivalence premise.
+Candidate 3 closes **40,517–40,520 settlement CU**. Candidates 6, 12, 4 and 3
+are now closed within their stated source/runtime boundaries: **4 of 10**.
+Next largest: candidate 1 gamma reuse, **34,201–34,243 stage-1 CU**.
+Whole combined soundness/privacy transfer remains open. No new goal is created
+here; entries below are historical.
+
+---
+
 # Candidate 4 closed (2026-10-20)
 
 See DELAYED-CANDIDATE4-FINAL.md/json: exact full helper equality for every

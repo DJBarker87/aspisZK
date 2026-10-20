@@ -1,0 +1,91 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceCoefficientStep.lean:26:68: error: unexpected token 'let'; expected ')', ',' or ':'
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceCoefficientStep.lean:62:25: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let __x ← extend ?masks ?groups ?group ?mask
+    match __x with
+      | (ms, n) => ?k ms n
+in the target expression
+  (if group = groups then do
+      let ms ← Array.update masks group mask
+      let n ← groups + 1#usize
+      oldUpdate next coeff group coefficient ms n
+    else oldUpdate next coeff group coefficient masks groups) =
+    do
+    let (ms, n) ← extend masks groups group mask
+    oldUpdate next coeff group coefficient ms n
+
+inst✝ : Shared
+w : Weights
+f : Slice U8
+iter next : Range
+masks : Masks
+coeff : OldCoeffs
+groups group : Usize
+mask : U16
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, next)
+hmask : old.grouped_inactive_pair_loop0_loop0 { start := 0#usize, «end» := 16#usize } w iter.start 0#u16 = ok mask
+hsearch : old.grouped_inactive_pair_loop0_loop1 masks groups mask 0#usize = ok group
+coefficient : field.wide_exact.WideExact
+hc : old.field f iter.start = ok coefficient
+⊢ (if group = groups then do
+      let ms ← Array.update masks group mask
+      let n ← groups + 1#usize
+      oldUpdate next coeff group coefficient ms n
+    else oldUpdate next coeff group coefficient masks groups) =
+    do
+    let (ms, n) ← extend masks groups group mask
+    oldUpdate next coeff group coefficient ms n
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceCoefficientStep.lean:73:70: error: unsolved goals
+inst✝ : Shared
+w : Weights
+f : Slice U8
+iter next : Range
+masks masks1 : Masks
+coeff : OldCoeffs
+groups group groups1 : Usize
+mask : U16
+hg : ↑group < 12
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, next)
+hmask : old.grouped_inactive_pair_loop0_loop0 { start := 0#usize, «end» := 16#usize } w iter.start 0#u16 = ok mask
+hsearch : old.grouped_inactive_pair_loop0_loop1 masks groups mask 0#usize = ok group
+hext : extend masks groups group mask = ok (masks1, groups1)
+⊢ (do
+      let coefficient ← old.field f iter.start
+      let (ms, n) := (masks1, groups1)
+        do
+        let value ← field.wide_exact.WideExact.add (lookup coeff zero ↑group) coefficient
+        ok (cont (next, ms, Std.Array.set coeff group value, n))) =
+    do
+    let x ← old.field f iter.start
+    let value ← field.wide_exact.WideExact.add (lookup coeff zero ↑group) x
+    ok (cont (next, masks1, Std.Array.set coeff group value, groups1))
+'AspisR1.CuSavingsS2SourceCoefficientStep.extend_context' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsS2SourceCoefficientStep.old_factor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsS2SourceCoefficientStep.old_body' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsS2SourceCoefficientStep.new_body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]

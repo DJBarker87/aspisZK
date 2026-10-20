@@ -1,0 +1,33 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceInactive.lean:28:2: error: unsolved goals
+case refine_2
+r : Usize
+hrange : ↑r < 1024
+h16 : ↑16#usize = 16
+h1024 : ↑1024#usize = 1024
+h0 : ↑0#u16 = 0
+h1 : ↑1#u16 = 1
+quot : UScalar UScalarTy.Usize
+hq : r / 16#usize = ok quot
+hqv : ↑quot = ↑r / 16
+mask : U16
+hm : r0.opening.COPY_ACTIVE_ROW_MASKS.index_usize quot = ok mask
+hmv : ↑mask = CuSavingsS2Tables.active.getD (↑quot) 0
+rem : UScalar UScalarTy.Usize
+hr : r % 16#usize = ok rem
+hrv : ↑rem = ↑r % 16
+shifted : UScalar UScalarTy.U16
+hs : mask >>> rem = ok shifted
+hsv : ↑shifted = ↑mask >>> ↑rem
+right✝ : shifted.bv = mask.bv >>> ↑rem
+bits : UScalar UScalarTy.U16 := shifted &&& 1#u16
+hb : ↑bits = CuSavingsS2Tables.active.getD (↑r / 16) 0 >>> (↑r % 16) &&& 1
+hcond : ¬r ≥ 1024#usize
+heq : bits = 0#u16 ↔ CuSavingsS2Tables.active.getD (↑r / 16) 0 >>> (↑r % 16) &&& 1 = 0
+⊢ decide (CuSavingsS2Tables.active[↑r / 16]?.getD 0 >>> (↑r % 16) % 2 = 0) =
+    !CuSavingsS2Tables.active[↑r / 16]?.getD 0 >>> (↑r % 16) % 2 == 1
+'AspisR1.CuSavingsS2SourceInactive.inactive_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsS2SourceInactive.raw_zero' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]

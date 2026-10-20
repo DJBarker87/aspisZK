@@ -1,0 +1,109 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceInactive.lean:15:45: error: Application type mismatch: The argument
+  UScalar.div_spec r ?m.81
+has type
+  ∃ z, r / 16#usize = ok z ∧ ↑z = ↑r / ↑16#usize
+but is expected to have type
+  ?m.75 ⦃ ?m.76 ⦄
+in the application
+  WP.spec_imp_exists (UScalar.div_spec r ?m.81)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceInactive.lean:16:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑16#usize
+in the target expression
+  ?m.76 quot
+
+r : Usize
+hrange : ↑r < 1024
+h16 : ↑16#usize = 16
+h1024 : ↑1024#usize = 1024
+h0 : ↑0#u16 = 0
+h1 : ↑1#u16 = 1
+quot : ?m.74
+hq : ?m.75 = ok quot
+hqv : ?m.76 quot
+⊢ ∃ b,
+    r0.opening.inactive r = ok (core.result.Result.Ok b) ∧
+      b = !(CuSavingsS2Tables.active.getD (↑r / 16) 0).testBit (↑r % 16)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  function expected
+    ?m.76 quot
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceInactive.lean:38:88: error: unsolved goals
+inst✝ : Shared
+w : Weights
+j : Usize
+hw : w.variant = transport.Variant.S2
+hj : ↑j < 1024
+row : Usize
+hr : transport.Variant.S2.row j = ok row
+hv : ↑row = CuSavingsS2Tables.row ↑j
+hrow : ↑row < 1024
+b : Bool
+hb : r0.opening.inactive row = ok (core.result.Result.Ok b)
+hbv : b = !(CuSavingsS2Tables.active.getD (↑row / 16) 0).testBit (↑row % 16)
+bval : b = CuSavingsS2Tables.inactive ↑j
+⊢ (match ↑0#usize with
+    | 0 => if CuSavingsS2Tables.inactive ↑j = true then ok field.QM31.ONE else ok field.QM31.ZERO
+    | 4 =>
+      if j < 56#usize then do
+        let i ← j / 28#usize
+        let q ← w.extra.index_usize i
+        let i1 ← j % 28#usize
+        let i2 ← lift (UScalar.cast UScalarTy.U64 i1)
+        q.pow i2
+      else ok field.QM31.ZERO
+    | x =>
+      if 1#usize ≤ 0#usize then
+        if 0#usize ≤ 3#usize then do
+          let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq transport.Variant.S2 transport.Variant.D
+          if b = true then
+              core.iter.traits.iterator.Iterator.fold.default
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                Weights.raw.closure.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31 { start := 0#usize, «end» := 10#usize }
+                field.QM31.ONE (row, w, 0#usize)
+            else
+              if 0#usize < 4#usize then do
+                let k ← 0#usize - 1#usize
+                core.iter.traits.iterator.Iterator.fold.default
+                    (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                    Weights.raw.closure_1.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31
+                    { start := 0#usize, «end» := 5#usize } field.QM31.ONE (w, k, j)
+              else do
+                let k ← 0#usize - 2#usize
+                core.iter.traits.iterator.Iterator.fold.default
+                    (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                    Weights.raw.closure_1.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31
+                    { start := 0#usize, «end» := 5#usize } field.QM31.ONE (w, k, j)
+        else
+          if 0#usize < 4#usize then do
+            let k ← 0#usize - 1#usize
+            core.iter.traits.iterator.Iterator.fold.default
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                Weights.raw.closure_1.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31 { start := 0#usize, «end» := 5#usize }
+                field.QM31.ONE (w, k, j)
+          else do
+            let k ← 0#usize - 2#usize
+            core.iter.traits.iterator.Iterator.fold.default
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                Weights.raw.closure_1.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31 { start := 0#usize, «end» := 5#usize }
+                field.QM31.ONE (w, k, j)
+      else
+        if 0#usize < 4#usize then do
+          let k ← 0#usize - 1#usize
+          core.iter.traits.iterator.Iterator.fold.default
+              (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+              Weights.raw.closure_1.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31 { start := 0#usize, «end» := 5#usize }
+              field.QM31.ONE (w, k, j)
+        else do
+          let k ← 0#usize - 2#usize
+          core.iter.traits.iterator.Iterator.fold.default
+              (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+              Weights.raw.closure_1.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31 { start := 0#usize, «end» := 5#usize }
+              field.QM31.ONE (w, k, j)) =
+    ok (if CuSavingsS2Tables.inactive ↑j = true then field.QM31.ONE else field.QM31.ZERO)
+'AspisR1.CuSavingsS2SourceInactive.inactive_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsS2SourceInactive.raw_zero' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]

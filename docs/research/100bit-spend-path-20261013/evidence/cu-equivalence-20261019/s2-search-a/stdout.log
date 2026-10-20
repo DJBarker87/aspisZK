@@ -1,0 +1,34 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceSearch.lean:26:4: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceSearch.lean:33:108: error: unsolved goals
+masks : Std.Array U16 64#usize
+groups target : Usize
+mask : U16
+ht : ↑target ≤ ↑groups
+hg : ↑groups ≤ 12
+hskip : ∀ (i : Usize), ↑i < ↑target → ∃ m, masks.index_usize i = ok m ∧ m ≠ mask
+hfound : ↑target < ↑groups → masks.index_usize target = ok mask
+fuel : ℕ
+ih :
+  ∀ (current : Usize),
+    ↑current ≤ ↑target →
+      ↑target - ↑current = fuel → old.grouped_inactive_pair_loop0_loop1 masks groups mask current = ok target
+current : Usize
+hc : ↑current ≤ ↑target
+hf : ↑target - ↑current = fuel + 1
+hlt : current < groups
+m : U16
+hm : masks.index_usize current = ok m
+hne : m ≠ mask
+next : UScalar UScalarTy.Usize
+hn : current + 1#usize = ok next
+hnv : ↑next = ↑current + 1
+hone : ↑1#usize = 1
+⊢ ¬↑m = ↑mask
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceSearch.lean:34:62: warning: This simp argument is unused:
+  hne
+
+Hint: Omit it from the simp argument list.
+  simp [old.grouped_inactive_pair_loop0_loop1.body, ̲hlt, ̲hm, ̲hne̵,̵h̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsS2SourceSearch.source_find' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

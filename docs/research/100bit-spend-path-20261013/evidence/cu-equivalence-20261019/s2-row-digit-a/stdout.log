@@ -1,0 +1,87 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceRowDigit.lean:21:47: error: Type mismatch
+  UScalarTy.cNumBits_le UScalarTy.Usize
+has type
+  UScalarTy.Usize.cNumBits ≤ UScalarTy.Usize.numBits
+but is expected to have type
+  32 ≤ UScalarTy.Usize.numBits
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceRowDigit.lean:24:83: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 32
+  0 ≤ a ≤ 4
+  a ≥ 0
+  2*a - c ≥ 0
+where
+ a := ↑↑d
+ b := ↑UScalarTy.Usize.numBits
+ c := ↑System.Platform.numBits
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceRowDigit.lean:40:4: error: 'change' tactic failed, pattern
+  2 ^ 32 ≤ 2 ^ UScalarTy.Usize.numBits
+is not definitionally equal to target
+  2 ^ 32 ≤ Usize.size
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceRowDigit.lean:42:87: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  k ≥ 0
+  i ≥ 4294967296
+  h ≤ 4294967295
+  g ≤ 256
+  0 ≤ f ≤ 3
+  0 ≤ e ≤ 4
+  e ≥ 0
+  2*e - k ≥ 0
+  c ≥ 0
+  b ≥ 32
+  0 ≤ a ≤ 4
+  a ≥ 0
+where
+ a := ↑↑d
+ b := ↑UScalarTy.Usize.numBits
+ c := ↑↑j / ↑(2 ^ ↑shift)
+ e := ↑(CuSavingsS2Tables.tau.getD (↑d) 0)
+ f := ↑↑masked
+ g := ↑2 ^ ↑shift1
+ h := ↑↑masked * ↑(2 ^ ↑shift1)
+ i := ↑Usize.size
+ k := ↑System.Platform.numBits
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceRowDigit.lean:45:2: error: unsolved goals
+case refine_1
+j d out : Usize
+hd : ↑d < 5
+htwo : ↑2#usize = 2
+hthree : ↑3#usize = 3
+hbits : 32 ≤ UScalarTy.Usize.numBits
+shift : UScalar UScalarTy.Usize
+hs : 2#usize * d = ok shift
+hsv : ↑shift = 2 * ↑d
+right : UScalar UScalarTy.Usize
+hr : j >>> shift = ok right
+hrv : ↑right = ↑j >>> ↑shift
+right✝¹ : right.bv = j.bv >>> ↑shift
+tau : Usize
+ht : transport.TAU.index_usize d = ok tau
+htv : ↑tau = CuSavingsS2Tables.tau.getD (↑d) 0
+htb : ↑tau < 5
+shift1 : UScalar UScalarTy.Usize
+hs1 : 2#usize * tau = ok shift1
+hs1v : ↑shift1 = 2 * ↑tau
+masked : UScalar UScalarTy.Usize := right &&& 3#usize
+hm : ↑masked ≤ 3
+hpow : 2 ^ ↑shift1 ≤ 2 ^ 8
+hfit32 : ↑masked <<< ↑shift1 < 2 ^ 32
+hsize : 2 ^ 32 ≤ Usize.size
+left : UScalar UScalarTy.Usize
+hl : masked <<< shift1 = ok left
+hlv : ↑left = ↑masked <<< ↑shift1
+right✝ : left.bv = Usize.bv masked <<< ↑shift1
+⊢ (do
+      let left ← (right &&& 3#usize) <<< shift1
+      ok (out ||| left)) =
+    ok (out ||| left)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsS2SourceRowDigit.lean:45:34: warning: This simp argument is unused:
+  hl
+
+Hint: Omit it from the simp argument list.
+  simp only [digit, ̲hs, ̲hr, ̲ht, ̲hs1,h̵l̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsS2SourceRowDigit.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
