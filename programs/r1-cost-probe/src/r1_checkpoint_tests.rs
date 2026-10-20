@@ -967,3 +967,61 @@ fn measured_core_call_counts_include_zero_progress_checkpoint() {
     );
     HASH_CALLS.with(|count| assert_eq!(count.get(), 3));
 }
+
+#[test]
+fn r15_read_binding_rejects_account_buffer_changes_after_stage1() {
+    let mut fixture = Stage1Fixture::new();
+    // Use the admitted release entrypoint to produce the checkpoint, then end
+    // all AccountInfo borrows before modelling the inter-transaction mutation.
+    {
+        let infos: Vec<_> = fixture.accounts.iter_mut().map(TestAccount::info).collect();
+        super::super::process_r1_cost_probe_instruction(&fixture.program, &infos, &[3, 10])
+            .unwrap();
+    }
+    let checkpoint = fixture.accounts[2].data.clone();
+    let proof_start = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
+    verifier::resume(&checkpoint, &fixture.accounts[0].data[proof_start..],
+        &fixture.accounts[1].data, Variant::S2, TestDigest).unwrap();
+    assert_eq!(verifier::tx2_authenticated(&fixture.accounts[1].data,
+        &fixture.accounts[0].data[proof_start..], &checkpoint, TestDigest, None), Ok(()));
+
+    fixture.accounts[0].data[proof_start + verifier::HEADER] ^= 1;
+    assert_hash_binding_rejection(&fixture.accounts[0].data[proof_start..],
+        &fixture.accounts[1].data, &checkpoint, 1);
+    fixture.accounts[0].data[proof_start + verifier::HEADER] ^= 1;
+    fixture.accounts[1].data[0] ^= 1;
+    assert_hash_binding_rejection(&fixture.accounts[0].data[proof_start..],
+        &fixture.accounts[1].data, &checkpoint, 2);
+    // Stage2 has no public account: this is its resume input contract. The
+    // separate reconstruction regression checks the ASQ8-to-public binding.
+    assert_eq!(fixture.accounts[2].data, checkpoint);
+}
+
+#[test]
+fn r15_read_stage1_rejects_wrong_lengths_and_non_distinct_accounts() {
+    let reject = |mut fixture: Stage1Fixture, error| {
+        let before: Vec<_> = fixture.accounts.iter().map(|a| a.data.clone()).collect();
+        let balances: Vec<_> = fixture.accounts.iter().map(|a| a.lamports).collect();
+        let infos: Vec<_> = fixture.accounts.iter_mut().map(TestAccount::info).collect();
+        assert_eq!(super::super::process_r1_cost_probe_instruction(
+            &fixture.program, &infos, &[3, 10]), Err(error));
+        drop(infos);
+        for (i, account) in fixture.accounts.iter().enumerate() {
+            assert_eq!(account.data, before[i]);
+            assert_eq!(account.lamports, balances[i]);
+        }
+    };
+    for index in 0..3 {
+        for delta in [-1isize, 1] {
+            let mut fixture = Stage1Fixture::new();
+            let length = (fixture.accounts[index].data.len() as isize + delta) as usize;
+            fixture.accounts[index].data.resize(length, 0);
+            reject(fixture, ProgramError::InvalidAccountData);
+        }
+    }
+    for (left, right) in [(0, 1), (0, 2), (1, 2)] {
+        let mut fixture = Stage1Fixture::new();
+        fixture.accounts[right].key = fixture.accounts[left].key;
+        reject(fixture, ProgramError::InvalidArgument);
+    }
+}

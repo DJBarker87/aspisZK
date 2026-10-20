@@ -197,3 +197,14 @@ evidence is inherited, not replayed here. No Lean work was performed;
 ```
 python3 docs/research/100bit-spend-path-20261013/evidence/r15-adapter-write-audit-20261020/packet.py --check
 ```
+
+## Account-read extension (2026-10-20)
+
+The companion [R15 account-read audit](R15-ADAPTER-READ-AUDIT-20261020.md)
+extends this map for release `[3,10]` and ASQ8 stage 2: every account data
+read, preceding owner/flag/length/distinctness guards, exact core input slices,
+and the reconstructed stage-2 public encoding. It distinguishes inherited
+stage-2 digest facts from parked, unadopted writer facts and states the
+remaining P2/same-byte runtime premise. New focused receipts and test delta
+are under `evidence/r15-adapter-read-audit-20261020/`; the original write-audit
+packet and its source/doc hashes remain historical evidence for its own revision.
