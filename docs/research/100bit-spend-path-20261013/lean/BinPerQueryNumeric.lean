@@ -56,7 +56,7 @@ theorem query_normalised (Q : Nat) (hQ : Q ≤ Qmax) :
   norm_num [gap, power454, Nat.cast_add, Nat.cast_ofNat] at hg ⊢
   linarith
 
-theorem maximal : (Qmax+1 : ℚ) * (1/(2:ℚ)^100) < totalBound (Qmax+1) := by
+theorem maximal : (Qmax+2 : ℚ) * (1/(2:ℚ)^100) < totalBound (Qmax+1) := by
   have h := gap_next
   norm_num [gap, Qmax, power454, totalBound, PerAttemptEnvelope.B, BinCombinedMerkleCollision.kappa] at *
 

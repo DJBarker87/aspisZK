@@ -1,4 +1,5 @@
 import BinHonestQueryBudget
+import DecoderFiniteStartSupport
 
 set_option autoImplicit false
 noncomputable section
@@ -24,12 +25,22 @@ theorem initial_le_queries (tr : List (Bytes × State)) : initialQueries tr ≤ 
   exact (Finset.card_filter_le _ _).trans
     ((List.toFinset_card_le _).trans (by simp only [List.length_map]; exact le_rfl))
 
-/-- Optional adversary restriction. The all-row causal decoder can recognise
-noninitial starts too, so no unconditional charging to initial frames is assumed.
+/-- Optional, explicit adversary restriction: an address it issues can
+start this decoder only when it is a canonical initialization frame.
 The query-normalised endpoint does NOT use this premise. -/
 def InitialisationCharging (P : Prover) : Prop :=
-  ∀ H : Bytes → State, decoderFirstReads dec emptyTable (eval H P).1 ≤
-    initialQueries (eval H P).1
+  ∀ (H : Bytes → State) (q : Bytes × State), q ∈ (eval H P).1 →
+    ∀ T : Table Bytes State, dec q.1 T ≠ none → CanonicalInitial q.1
+
+theorem adversary_starts_le_initial (P : Prover)
+    (hcharge : InitialisationCharging P) (H : Bytes → State) :
+    decoderFirstReads dec emptyTable (eval H P).1 ≤ initialQueries (eval H P).1 := by
+  let s := (((eval H P).1.map Prod.fst).toFinset.filter CanonicalInitial)
+  have hb := DecoderFiniteStartSupport.starts_le_support dec emptyTable (eval H P).1 s (by
+    intro q hq T hd
+    exact Finset.mem_filter.mpr ⟨List.mem_toFinset.mpr (List.mem_map.mpr ⟨q,hq,rfl⟩),
+      hcharge H q hq T hd⟩)
+  simpa only [emptyTable, eq_self, Finset.filter_true, s, initialQueries] using hb
 
 theorem recorded_le_initial_add (D : LiteralByteProtocol.Decoder)
     (d : RawCutTranscriptRun.ErasedPrefix → RawCutTranscriptRun.ErasedMessage → Bool)
@@ -42,13 +53,14 @@ theorem recorded_le_initial_add (D : LiteralByteProtocol.Decoder)
   rw [RawCutCompilerDecoderStartLaw.decoderStarts_eq dec D d
     (BinCompiledRunWordStability.wordsFromRun D) P H,
     RawCutProverCompiler.experiment_eval, decoderFirstReads_append]
-  exact Nat.add_le_add (hcharge H) (BinHonestQueryBudget.verifier_starts D d H _ _ _)
+  exact Nat.add_le_add (adversary_starts_le_initial P hcharge H) (BinHonestQueryBudget.verifier_starts D d H _ _ _)
 
 theorem adversary_initial_le_Q (P : Prover) (Q : Nat)
     (hq : DecoderQueryAccounting.AdversaryQueries P Q) (H : Bytes → State) :
     initialQueries (eval H P).1 ≤ Q := (initial_le_queries _).trans (hq H)
 
 #print axioms initial_le_queries
+#print axioms adversary_starts_le_initial
 #print axioms recorded_le_initial_add
 #print axioms adversary_initial_le_Q
 end AspisR1.BinInitialQueryAccounting
