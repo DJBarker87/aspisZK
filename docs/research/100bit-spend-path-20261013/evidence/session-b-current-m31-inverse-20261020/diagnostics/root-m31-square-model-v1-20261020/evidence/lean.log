@@ -1,0 +1,104 @@
+/home/dombarker/project-offloads/root-m31-square-model-v1-20261020/sources/M31SquareSourceModel.lean:27:4: error: unsolved goals
+case zero.refine_1
+mul : Mul
+htotal : TotalMul mul
+href : RefinesMul mul
+iter : Range
+value : field.M31
+hfuel : ↑iter.end - ↑iter.start = 0
+hge : ↑iter.start ≥ ↑iter.end
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, iter)
+⊢ (match
+      let (o, iter1) := (none, iter)
+      match o with
+      | none => ok (done value)
+      | some val => do
+        let value1 ← mul value value
+        ok (cont (iter1, value1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize x.1
+            match o with
+              | none => ok (done x.2)
+              | some val => do
+                let value1 ← mul x.2 x.2
+                ok (cont (iter1, value1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok value
+/home/dombarker/project-offloads/root-m31-square-model-v1-20261020/sources/M31SquareSourceModel.lean:44:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑iter1.end - ↑iter1.start
+in the target expression
+  decode out = decode v ^ 2 ^ n
+
+mul : Mul
+htotal : TotalMul mul
+href : RefinesMul mul
+n : ℕ
+ih :
+  ∀ (iter : Range) (value : field.M31),
+    ↑iter.end - ↑iter.start = n → ∃ out, field.square_n_loop mul iter value = ok out ∧ decode out = decode value ^ 2 ^ n
+iter : Range
+value : field.M31
+hfuel : ↑iter.end - ↑iter.start = n + 1
+hlt : ↑iter.start < ↑iter.end
+iter1 : Range
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hinc : ↑iter1.start = ↑iter.start + 1
+hend : iter1.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+v : U32
+hmul : mul value value = ok v
+hn1 : ↑iter1.end - ↑iter1.start = n
+out : field.M31
+hout : field.square_n_loop mul iter1 v = ok out
+hdecode : decode out = decode v ^ 2 ^ n
+⊢ decode out = (decode value * decode value) ^ 2 ^ n
+/home/dombarker/project-offloads/root-m31-square-model-v1-20261020/sources/M31SquareSourceModel.lean:42:4: error: unsolved goals
+case succ.refine_2.calc.step
+mul : Mul
+htotal : TotalMul mul
+href : RefinesMul mul
+n : ℕ
+ih :
+  ∀ (iter : Range) (value : field.M31),
+    ↑iter.end - ↑iter.start = n → ∃ out, field.square_n_loop mul iter value = ok out ∧ decode out = decode value ^ 2 ^ n
+iter : Range
+value : field.M31
+hfuel : ↑iter.end - ↑iter.start = n + 1
+hlt : ↑iter.start < ↑iter.end
+iter1 : Range
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hinc : ↑iter1.start = ↑iter.start + 1
+hend : iter1.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+v : U32
+hmul : mul value value = ok v
+hn1 : ↑iter1.end - ↑iter1.start = n
+out : field.M31
+hout : field.square_n_loop mul iter1 v = ok out
+hdecode : decode out = decode v ^ 2 ^ n
+⊢ decode value ^ 2 ^ (↑iter.end - ↑iter.start) = decode value ^ 2 ^ (n + 1)
+/home/dombarker/project-offloads/root-m31-square-model-v1-20261020/sources/M31SquareSourceModel.lean:30:17: warning: This simp argument is unused:
+  hfuel
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵f̵u̵e̵l̵,̵p̵o̵w̵_̵z̵e̵r̵o̵,̵p̵o̵w̵_̵o̵n̵e̵]̵[̲p̲o̲w̲_̲z̲e̲r̲o̲,̲ ̲p̲o̲w̲_̲o̲n̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/root-m31-square-model-v1-20261020/sources/M31SquareSourceModel.lean:57:2: error: Type mismatch: After simplification, term
+  hv
+ has type
+  @Eq (ZMod P) (decode out) (decode value ^ 2 ^ (↑count - ↑0#usize))
+but is expected to have type
+  @Eq (ZMod P) (decode out) (decode value ^ 2 ^ ↑count)
+'AspisR1M31Inverse.SquareProof.square_loop_total_model' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1M31Inverse.SquareProof.square_n_total_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

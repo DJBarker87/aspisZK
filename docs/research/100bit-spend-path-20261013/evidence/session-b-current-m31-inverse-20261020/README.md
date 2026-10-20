@@ -1,0 +1,11 @@
+# Current M31 inverse source refinement
+
+PROVED: the exact frozen `core/field.rs` M31.inv and square_n source cuts, with multiplication made an explicit interface, terminate under total multiplication and compute the addition-chain exponent P-2. The actual forward Range.next facts and symbolic loop induction are reused from the older mask-loop proof pattern. No large concrete squaring recurrence is reduced.
+
+The retained current reducer proves total multiplication and its field decoding law. Instantiating it removes the multiplication totality/refinement premises. For any raw word whose decoded field value is nonzero, the extracted inverse returns its mathematical inverse. A successful inverse returns a canonical word. For canonical input words, raw zero equals decoded field zero, giving a total canonical inverse for any canonical nonzero word.
+
+Seven focused Lean targets passed, with thirteen standard-only theorem axiom reports (Types/body contain definitions, not proof claims). All jobs ran on the NUC with -M4400, default heartbeats/recursion, High1GiB/Max2GiB/Swap0. Charon/Aeneas extraction ran under High512MiB/Max2GiB/Swap0. Exact target/source/object/import/time/RSS/swap receipts are included. Historical backend and multiplication owners are reused without a full replay. Two failed local elaborations are retained as diagnostics, excluded from accepted claims.
+
+OPEN: actual QueryGeometry Vec/batch-inversion caller, actual callback/nonzero check composition, runtime source/backend identification and overflow-freedom outside these checked calls. This is not a complete R17 or 100-bit theorem. No production source change, binaries, external-template axioms or option increases are included. Archived external templates are uncompiled extraction output. Inherited replay-config source_adapter descriptions refer to earlier table work; exact selected sources and direct_imports plus this packet's reverse checker identify the proof targets.
+
+`source-pin-coordinate-correction.json` repairs the archived pin file’s character/byte-offset labels without changing extraction input or Lean source. `verify-source-adapter.py` checks the exact frozen byte spans, generated interface adaptation and unchanged reused range proof text.
