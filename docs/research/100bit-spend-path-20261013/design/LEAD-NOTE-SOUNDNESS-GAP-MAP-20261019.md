@@ -353,3 +353,17 @@ produce identical verifier behaviour, so the decoder must be fixed by
 construction from the extractions, never inferred from acceptance.
 Consequence: R16 closes only after the next freeze (tx1_finish extracted)
 and the R14 finish refinement; both are already queued.
+
+## Addendum (2026-10-20): R19 stage-2 constant
+
+Codex job cx-qv-stage2 (021b68804): `stage2Budget k = 43·k + 50`, 566 at
+twelve queries; verifier-core allowance 595 + 566 = 1,161 distinct first
+reads; conditional batch-B cap of 563 commitment positions; three ordered
+resume digest witnesses; `finish_relation` makes no designated digest call.
+All twelve measured stage-2 rows show 545–563 SHA calls, under 566. Four
+modules, 19 audits, standard axioms, ≤ 2.23 GiB
+(`design/QV-STAGE2-20261020.md`). R19 is now stated for both transactions
+on the binary format; it stays conditional on complete source-prefix
+coverage (R-wire), the trie/privacy transport, backend/runtime
+correspondence and any separately designated external reads. The hQ
+verifier half for the deployed instance is 1,161.
