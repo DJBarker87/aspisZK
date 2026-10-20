@@ -373,6 +373,25 @@ fn read_checkpoint_weights(bytes:&[u8],mut at:usize,mut weights:Vec<K>)->Result<
     Ok((weights,at))
 }
 
+
+#[inline(always)]
+fn read_checkpoint_semantic_alpha(bytes:&[u8],at:usize)->Result<([K;10],usize),Error> {
+    let mut r=Reader{bytes,at};
+    let values=[
+        r.k()?,
+        r.k()?,
+        r.k()?,
+        r.k()?,
+        r.k()?,
+        r.k()?,
+        r.k()?,
+        r.k()?,
+        r.k()?,
+        r.k()?,
+    ];
+    Ok((values,r.at))
+}
+
 #[inline(never)]
 pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)->Result<(Box<Prepared>,Accumulator),Error> {
     if bytes.len()!=checkpoint_size(v)||&bytes[..8]!=b"R1P2CKP2"||bytes[8]!=v.tag()||bytes[9]>22||bytes[10]!=1||bytes[11..16].iter().any(|&b|b!=0) {return Err(Error::Checkpoint);}
@@ -405,18 +424,8 @@ pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)
         u32::from_le_bytes(r.raw()),
     ];
     validate_checkpoint_queries(&queries)?;
-    let semantic_alpha=[
-        r.k()?,
-        r.k()?,
-        r.k()?,
-        r.k()?,
-        r.k()?,
-        r.k()?,
-        r.k()?,
-        r.k()?,
-        r.k()?,
-        r.k()?,
-    ];
+    let (semantic_alpha,at)=read_checkpoint_semantic_alpha(bytes,r.at)?;
+    r.at=at;
     let z=[SecureCirclePoint{x:r.k()?,y:r.k()?},SecureCirclePoint{x:r.k()?,y:r.k()?}];
     let claim=r.e()?;let rhs=r.e()?;let power=r.k()?;
     let weights=aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;
