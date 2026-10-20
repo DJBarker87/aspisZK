@@ -1,0 +1,4 @@
+import Stage2ConcreteDotAdapterV1
+import Stage2FinishAccumulator
+#check AspisR1Stage2ConcreteDotAdapterV1.sourceDot_reader_law
+#check AspisR1.Stage2FinishAccumulator.DotLaw
