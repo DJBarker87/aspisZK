@@ -134,7 +134,9 @@ for n,label in enumerate(['transfer','withdrawal']):
         p=plan('prove',note=n,withdrawal=n==1,destination=dest,checkpoint=cp['checkpoint'],lane_bytes=readhex(deposits[n]['output_lane'],C['programs']['pool']),checkpoint_bytes=readhex(cp['checkpoint'],C['programs']['pool']),proof_dir=str(O/(label+'-proof-private')),proof_account=proofaccount,public_account=publicaccount,verifier_checkpoint=verifiercp);write(label+'-proof-plan',p)
     proof=(O/(label+'-proof-private')/'proof.bin').read_bytes();public=(O/(label+'-proof-private')/'statement.bin').read_bytes()
     create(label+'-proof-create',proofaccount,C['carrier'],len(proof),proofkey);create(label+'-public-create',publicaccount,C['carrier'],len(public),publickey)
-    t=time.monotonic();upload(label+'-proof-upload',proofaccount,proofkey,proof);upload(label+'-statement-upload',publicaccount,publickey,public);write(label+'-uploads-phase',{'wall_seconds':time.monotonic()-t,'proof_count':16,'statement_count':1})
+    t=time.monotonic();proof_stats=upload(label+'-proof-upload',proofaccount,proofkey,proof);statement_stats=upload(label+'-statement-upload',publicaccount,publickey,public)
+    assert (proof_stats['count'],statement_stats['count'])==(16,1), 'frozen upload count changed'
+    write(label+'-uploads-phase',{'wall_seconds':time.monotonic()-t,'proof_count':proof_stats['count'],'statement_count':statement_stats['count'],'compute_units':proof_stats['compute_units']+statement_stats['compute_units']})
     create(label+'-checkpoint-create',verifiercp,C['programs']['verifier'],1768,cpkey)
     send(label+'-stage1',[p['stage1']]);send(label+'-stage2',[p['settle']])
     readback={a:account(a) for a in [p['marker'],p['output_lane'],setup['vault'],dest,verifiercp]};write(label+'-readback',readback)

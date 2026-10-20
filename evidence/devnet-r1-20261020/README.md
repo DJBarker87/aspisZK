@@ -99,7 +99,10 @@ remaining roles when resuming.
 Expected time is RPC finality, then the named P_R1 check/proof generation,
 then 16 proof uploads plus one statement upload, stage 1 and Pool settlement
 for each operation. This is deliberately a fixture-witness demonstration;
-it is not a private wallet UX. Keys and nonce stores remain host-only.
+it is not a private wallet UX. Keys, nonce stores and `note-recovery.json` remain host-only. Output owner
+keys are derived from retained note keys, so transfer outputs and withdrawal
+change retain a recovery path. The recovery files are 0600 and excluded
+from public evidence.
 
 ```sh
 systemd-run --user --scope --unit=cx-devnet3-spend-new \
@@ -154,3 +157,9 @@ The collector incrementally fetches missing finalized metadata and preserves
 signature, explorer link, slot, CU, fee, error and logs without embedding ELF
 upload bytes. Copy only public receipts; exclude `*-proof-private/`, binary
 files, nonce ledgers and every key. Keep old failed-attempt receipts intact.
+
+Generate the public signature and phase summary after exporting receipts:
+
+```sh
+python3 scripts/r1_devnet_summarize.py evidence/devnet-r1-20261020
+```
