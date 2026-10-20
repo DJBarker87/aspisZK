@@ -1,0 +1,104 @@
+import R9PoolConcreteExperiment
+import R9PoolRuntimeBinding
+
+/-! Compose the concrete byte-handoff model with P2′ on complete presented
+proof/public buffers. Only the local nested-verifier source equation remains;
+no caller-reachability or probability inequality is an input. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.R9PoolP2Caller
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open RawCutProverCompiler RawCutTranscriptRun RecordedBinaryExperimentBin
+open R9DeployedBinaryExperiment R9PoolSavedTenModel R9PoolConcreteExperiment
+open R9PoolRuntimeBinding
+attribute [local instance] Classical.propDecidable
+
+abbrev Presentation := Checkpoint → Inputs
+abbrev Nested := Inputs → Checkpoint → Program Bytes State R9TwoTransactionExperiment.Run
+
+/-- Hash comparisons are part of admission. The result-validation check
+stays after the nested call, as in the frozen Pool source. -/
+def boundPolicy (hash : Bytes → State) (written current : Presentation)
+    (policy : Policy) : Policy := fun c =>
+  { (policy c) with authenticatedAccounts := ((policy c).authenticatedAccounts &&
+      decide (digestMatches hash (written c) (current c))) }
+
+theorem admitted_digest (hash : Bytes → State) (written current : Presentation)
+    (policy : Policy) (c : Checkpoint)
+    (ha : admitted (boundPolicy hash written current policy c) = true) :
+    digestMatches hash (written c) (current c) := by
+  simp only [admitted, boundPolicy, Bool.and_eq_true] at ha
+  exact of_decide_eq_true ha.1.1.1.1.2
+
+/-- Local source join: the selected nested implementation on the writer's
+complete bound input buffers equals saved-ten/resumed-twelve under d.
+Account/runtime presentation equality is deliberately not built into it. -/
+def FrozenNestedEqualsSavedResume (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (written : Presentation)
+    (nested : Nested) : Prop :=
+  ∀ c, nested (written c) c = resume D d c
+
+def presentedPool (D : LiteralByteProtocol.Decoder) (P : Prover)
+    (hash : Bytes → State) (written current : Presentation) (policy : Policy)
+    (nested : Nested) : R9DeployedBinaryExperiment.PoolTx2 := fun bytes =>
+  match R9PoolCheckpointCodec.decode (stage1 D P) bytes with
+  | some (some c) =>
+    if admitted (boundPolicy hash written current policy c) then
+      bind (nested (current c) c) fun run => .done (postcheck (policy c) run)
+    else .done rejectRun
+  | _ => .done rejectRun
+
+theorem presented_pool_eq (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover)
+    (hash : Bytes → State) (written current : Presentation) (policy : Policy)
+    (nested : Nested)
+    (hP2 : ∀ c, P2Prime hash (written c) (current c))
+    (join : FrozenNestedEqualsSavedResume D d written nested) :
+    presentedPool D P hash written current policy nested =
+      poolTx2 D d P (boundPolicy hash written current policy) := by
+  funext bytes
+  unfold presentedPool poolTx2
+  cases hd : R9PoolCheckpointCodec.decode (stage1 D P) bytes with
+  | none => rfl
+  | some saved =>
+    cases saved with
+    | none => rfl
+    | some c =>
+      by_cases ha : admitted (boundPolicy hash written current policy c) = true
+      · simp only [if_pos ha]
+        have hi := accepted_same_inputs hash (written c) (current c) (hP2 c)
+          (admitted_digest hash written current policy c ha)
+        rw [hi, join c]
+        rfl
+      · simp only [if_neg ha]
+
+theorem caller_under_p2 (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (tape : Tape)
+    (hash : Bytes → State) (written current : Presentation) (policy : Policy)
+    (nested : Nested)
+    (hP2 : ∀ c, P2Prime hash (written c) (current c))
+    (join : FrozenNestedEqualsSavedResume D d written nested) :
+    CallerReachability (tx1 D P tape)
+      (presentedPool D P hash written current policy nested) D d P := by
+  rw [presented_pool_eq D d P hash written current policy nested hP2 join]
+  exact caller D d P tape (boundPolicy hash written current policy)
+
+theorem transport_under_p2 (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (tape : Tape)
+    (hash : Bytes → State) (written current : Presentation) (policy : Policy)
+    (nested : Nested)
+    (hP2 : ∀ c, P2Prime hash (written c) (current c))
+    (join : FrozenNestedEqualsSavedResume D d written nested) :
+    DeployedTransport D d P (deployedFailureModel (tx1 D P tape)
+      (presentedPool D P hash written current policy nested)) :=
+  R9DeployedBinaryExperiment.transport _ _ D d P
+    (caller_under_p2 D d P tape hash written current policy nested hP2 join)
+
+#print axioms admitted_digest
+#print axioms presented_pool_eq
+#print axioms caller_under_p2
+#print axioms transport_under_p2
+end AspisR1.R9PoolP2Caller
+end
