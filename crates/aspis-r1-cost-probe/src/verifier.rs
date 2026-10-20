@@ -276,7 +276,7 @@ fn basis_at(basis:&[M31;256],index:usize)->M31 {basis[index]}
 fn accumulated_weight_at(weights:&[K],index:usize)->K {weights[index]}
 
 #[inline(never)]
-fn accumulate_batched_with_node(p:&Prepared,mut a:Accumulator,mut node:M31,value:E,mut weights:BatchedWeights)->(Accumulator,BatchedWeights) {
+fn accumulate_batched_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E,weights:&mut BatchedWeights) {
     let width=a.weights.len();
     let mut basis=[M31::ZERO;256];basis[0]=M31::ONE;let mut n=1;
     while n<width {for j in 0..n {basis[n+j]=basis[j].mul(node);} node=node.mul(node).double().sub(M31::ONE);n*=2;}
@@ -289,7 +289,6 @@ fn accumulate_batched_with_node(p:&Prepared,mut a:Accumulator,mut node:M31,value
     weights.terms+=1;
     a.rhs=a.rhs.add(value.mul_qm31(a.power));crate::trace::value(11,a.next,a.rhs);
     a.power=a.power.mul(p.rho);a.next+=1;
-    (a,weights)
 }
 
 pub fn polynomial(bytes:&[u8],x:E)->E {(0..7).rev().fold(E::ZERO,|a,i|a.mul(x).add(field(bytes,i)))}

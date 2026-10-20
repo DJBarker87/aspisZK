@@ -208,8 +208,8 @@ fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], bat
 /// The shipped per-query folding and accumulation, reading the candidate
 /// opening (C1/C2 values at the shipped offsets 0..608, folded values at
 /// 672..800). Merkle authentication was done per batch.
-#[inline(never)]
-fn query_values(proof: &[u8], p: &Prepared, a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: BatchedWeights) -> Result<(Accumulator, BatchedWeights), Error> {
+#[inline(always)]
+fn query_values(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, mut pending: BatchedWeights) -> Result<(Accumulator, BatchedWeights), Error> {
     let i = a.next;
     let u = p.queries[i] as usize;
     let q = opening(proof, i);
@@ -229,14 +229,14 @@ fn query_values(proof: &[u8], p: &Prepared, a: Accumulator, g: &[E; 29], obs: Ob
     crate::trace::value(10, 2 * i + 1, folded);
     let z = geometry.line_z[i - geometry.start];
     let node = z.mul(z).double().sub(M31::ONE);
-    let (a, pending) = accumulate_batched_with_node(p, a, node, folded, pending);
+    accumulate_batched_with_node(p, &mut a, node, folded, &mut pending);
     mark(obs, Phase::Query(i));
     Ok((a, pending))
 }
 
 
 #[inline(always)]
-fn query_loop(proof: &[u8], p: &Prepared, a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: BatchedWeights, end: usize) -> Result<(Accumulator, BatchedWeights), Error> {
+fn query_loop(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: BatchedWeights, end: usize) -> Result<(Accumulator, BatchedWeights), Error> {
     let mut state = Ok((a, pending));
     loop {
         match state {
