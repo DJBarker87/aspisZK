@@ -1,0 +1,7 @@
+# Every source powers output has its exact index
+
+PROVED: every successful P6 stateful powers run started at exponent start returns, at list index j, a canonical actual callback output decoding to x^(start+j). The theorem follows the actual ordered source callback trace and reuses powers_callback_success_power_invariant at each step; output-to-index correspondence is derived, not assumed. powersN_model_total_indexed additionally reuses the totality theorem to obtain such a complete N-output run from actual ONE and canonical x. Generic N includes4,7,29.
+
+The earlier canonicality/final-state theorem alone did not identify individual powers. This packet adds that missing ordered meaning for later caller/constructor equivalence. The reviewed P6 std::array::from_fn correspondence remains an external library-model boundary, not an unconditional Lean theorem about Rust Std. Array materialization, actual prepared/Weights callers, source/runtime/artifact equivalence and full100-bit soundness remain OPEN. No production source or artifacts changed.
+
+Focused NUC Lean4.32 -j1/-M4400, High1GiB/Max2GiB/Swap0 passed,2.308s, processRSS3917920KiB,cgroup373506048B,zero swap, four standard-only axiom reports. Exact commands/source/object/import/compiler/admission evidence retained; no dependency or manifest replay. Initial draft had only a tactic-term continuation parse error, retained as a diagnostic.
