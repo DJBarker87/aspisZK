@@ -7054,3 +7054,21 @@ show the default, devnet and Pool ELFs byte-identical to the frozen pins
 before it merges. `builder_refinement_D46_D51` stays open: Aeneas hits borrow
 blockers in `records` and the Poseidon lazy external layer; the continuation
 moves those to per-function Kani harnesses with contracts and stubs.
+
+## D87 — causality proved over the phase-restricted interface (2026-10-20, lead)
+
+Landed from `codex/cx-priv-phase-20261021` (note `r1p-final/PHASE-CAUSAL-20261021.md`).
+`PhaseCausalityBin.R_causal_D80` proves the endpoint's causal premise, in its
+exact position-indexed form, for every `R1PhaseWire`/`R1PhaseProver` at all
+answer vectors, from a symbolic stage schedule (no position enumeration) and
+the binary-tree order facts. Leaf dependencies are proved on the actual
+`HonestView.prepare`, `MaskLayout` and `Batched.q1` maps (C1's 27 columns
+challenge-independent; C2 after rows 0–1; folded fixed after row 29), and a
+prefix-dependent QueryScan and block-local decoder are constructed.
+`prematureC2_excluded` confirms the D85 wire cannot inhabit the interface.
+The premise in `PrivacyR1Final` is therefore reduced to one modelling join:
+show the shipped encoding inhabits the phase interface — (1) message encoding
+from `JointView.view` with its dependency proofs, (2) sampler/parser identity,
+(3) leaf encoder identity with the shipped C1/C2/folded leaves, (4) execution
+refinement of the hash-call order. `PrivacyR1Final.lean` unchanged. Eight
+modules, 31 theorems, standard axioms, all attempts zero swap, RSS < 3.6 GB.
