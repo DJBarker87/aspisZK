@@ -1,6 +1,8 @@
 from pathlib import Path
 import json,hashlib,subprocess,sys
 root=Path('/Users/dominic/ZK');w=Path(__file__).resolve().parent
+model=w/'model/P6ChunksExactMutModelV3.lean'
+if not model.is_file(): model=Path('/tmp/s5-p6-v3-overlay/sources/P6ChunksExactMutModelV3.lean')
 src=root/'crates/aspis-core/src/field/wide_exact.rs';text=src.read_text()
 sha=lambda s:hashlib.sha256(s.encode()).hexdigest()
 def extract(signature):
@@ -94,7 +96,7 @@ mod tests {
  }
 }
 '''
-manifest={'scope':'Exact selected Rust method/struct cuts over a minimal eight-u32 carrier; not whole crate or runtime. Executable P6 projection correspondence to Lean is still an explicit obligation.', 'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'file':str(src.relative_to(root)),'file_sha256':sha(text),'cuts':[{'signature':x.split('{',1)[0].strip(),'sha256':sha(x)} for x in [struct]+methods], 'generated_source_sha256':sha(out), 'lean_model':{'path':'/tmp/s5-p6-v3-overlay/sources/P6ChunksExactMutModelV3.lean','sha256':hashlib.sha256(Path('/tmp/s5-p6-v3-overlay/sources/P6ChunksExactMutModelV3.lean').read_bytes()).hexdigest()},'kani_status':'NOT RUN','native_status':'NOT RUN'}
+manifest={'scope':'Exact selected Rust method/struct cuts over a minimal eight-u32 carrier; not whole crate or runtime. Executable P6 projection correspondence to Lean is still an explicit obligation.', 'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'file':str(src.relative_to(root)),'file_sha256':sha(text),'cuts':[{'signature':x.split('{',1)[0].strip(),'sha256':sha(x)} for x in [struct]+methods], 'generated_source_sha256':sha(out), 'lean_model':{'path':'/tmp/s5-p6-v3-overlay/sources/P6ChunksExactMutModelV3.lean','sha256':hashlib.sha256(model.read_bytes()).hexdigest()},'kani_status':'NOT RUN','native_status':'NOT RUN'}
 f=w/'src/lib.rs';m=w/'source-binding.json'
 if '--check' in sys.argv:
  assert f.read_text()==out
