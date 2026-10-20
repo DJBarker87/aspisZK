@@ -301,3 +301,25 @@ No Rust harness, wallet, account key, production file, merge, push, SBF build,
 or unrelated full regression was touched. The focused endpoint is the final
 dependent bridge; no frozen certificate or manifest was changed, so no
 unchanged package-wide replay was run.
+
+Final endpoint env J 9822: exit 0, wall 7.01 s, peak RSS 4,058,352 KiB,
+swaps 0; all three audits `[propext, Classical.choice, Quot.sound]`.
+9813/9819 were green adapter predecessors; the final change specializes the
+named ideal-history theorem to the actual selected parser error. No old
+source or object was replaced; only the branch's new endpoint was updated.
+
+`python3 r1p-final/audit-history.py` passes: 23 assigned attempts, seven final
+modules, 48 theorem audits, all final source SHA256 and independent launcher
+SHA pins matching, no duplicate source/dependency pairs, zero swaps throughout,
+and only standard axioms in every final receipt. It also verifies the current
+direct dependency object hashes, records object SHA256/size without binaries,
+checks protected sources against d93756b49, validates the endpoint generator
+with `--check`, and matches the quoted before/after statements against source.
+`history-final-audit.json` contains these pins and the final target metrics;
+`history-attempts-9800-9999.jsonl` preserves full outputs, errors, timings,
+source revisions, source hashes and dependency fingerprints for every attempt.
+
+What remains open is the real model's unconditional history/event law with
+collision/prior-read accounting and both source execution joins. The requested
+per-every-history bound and literal probability-field erasure have compiled
+counterexamples. The complete execution-only replacement is not claimed.
