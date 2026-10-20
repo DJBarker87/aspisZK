@@ -1,0 +1,9 @@
+# Finish query count-bound caller theorem
+
+This focused theorem closes the actual `finish_query_dot` count and accumulator-bound initialization/cadence for the selected concrete Dot backend. From successful `finish_query_dot`, it derives a final state with `count = ws.len`, both four-coordinate accumulator arrays satisfying the count-indexed bound, and successful `finishFromPush` output. The proof obtains the trace from `FinishCandidateDotTrace.finish_success_trace`, uses the actual `sourceNewDot_zero` constructor bridge, and discharges every trace step using the accepted `pushWithDotBackend` success and checked Usize increment facts. The invariant starts at zero and is not a caller premise.
+
+Exact source: `sources/FinishDotCountBoundV3.lean` (SHA-256 `2186a49e27b6bff9a688f09975a967b867ca357e3eb6da7e7c581bb7922d8be7`). Direct import is the already accepted `FinishDotLoopCount` owner, source SHA `2179a159d37aedec39c46863a8b2ef632735481756feb33389fb5d061c28e6f4`, object SHA `c3c6eabb0497d21d1625f8c74a69cb53de4cd8e7de926038b3b18682676ff0f5`; its exact repository packet is named in `direct-import-source-map.json`. No Lean objects are included.
+
+The fresh NUC run is under `replay/` and `evidence/`: exit 0, 2.609 s wall, 3,728,844 KiB peak process RSS, 397,041,664-byte cgroup peak, 0 swap, no memory events, axioms `[propext, Classical.choice, Quot.sound]`. Lean 4.32.0. Source revision is explicitly recorded as a working-tree-only source revision; no Git commit is asserted. Focused target only; no package-wide replay.
+
+The statement proves the `finish_query_dot` trace's count/bound propagation. It does not itself identify the QRaw decoded product-update owner with the selected Finish/Push nominal types, nor prove the outer `finish_relation` call into this helper. Those remain separate source-owner composition obligations.
