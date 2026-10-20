@@ -446,3 +446,13 @@ bytes feed `first`/`first_decoded`, same-byte binding to the checkpoint) is
 discharged by extending the R15 adapter source-map audit to the stage-1
 account READS (job cx-adapter-audit2), beside premise P2. Row S6: PROVED on
 the verifier cone; adapter binding by audit.
+
+## Addendum (2026-10-20): S2 re-pinned on the verifier side
+
+Codex job cx-repin-s2 (3d16b68c8): `observer`, `first_decoded` and `first`
+extracted from the frozen source; caller success re-proved with the
+observer off (the shipped configuration) and symbolic equivalence at the
+retained boundary; standard axioms, 3.25 GiB (`design/REPIN-s2-20261020.md`).
+The adapter-side translation stops at the same `AccountInfo` indexing as
+S6 (`r1_pool_adapter.rs:950`); covered by the adapter read audit
+(cx-adapter-audit2) beside P2. Row S2: PROVED on the verifier cone.
