@@ -635,3 +635,18 @@ correspondence, runtime/provenance and decoder completion — the same
 source-side items as R10/R-wire. A declaration collision appears when this
 is combined with the R10 environment; each compiles separately (joins the
 candidate-freeze hygiene list).
+
+## Addendum (2026-10-21): M10 instrumentation, first pass
+
+Codex job cx-m10-instr (06bfab35d, a1fddaa68): twelve theorems, standard
+axioms (`design/M10-INSTR-20261021.md`). Finding: the extractor's binary
+leaf parser traverses the full salt-length field, so its work is unbounded
+even on singleton logs (`BinLeafLengthWork.no_entry_count_bound`) — an
+implementation inefficiency of the Lean extractor, not of the protocol. A
+bounded replacement preserves the parser's output (`BinLeafBoundedLength.
+parse_value`), with table refinement and a length-test cost of
+(width + 34)·(Q + 1161). Ruling: the extractor is a Lean algorithm we
+define, so the bounded parser replaces the unbounded one in a
+value-equivalent extractor (job cx-m10-instr2), which then carries the
+complete accounting (field operations, repeated log reads, retries,
+candidates, allocation, bits). No C3 hypothesis is removed yet.
