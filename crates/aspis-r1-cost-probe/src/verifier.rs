@@ -228,17 +228,19 @@ impl BatchedWeights {
 
 
 #[inline(always)]
+fn residue_limb_at(row:&[u64;4],index:usize)->u64 {row[index]}
+#[inline(always)]
+fn power_limb_at(limbs:&[u32;4],index:usize)->u32 {limbs[index]}
+#[inline(always)]
 fn update_residue_row(row:&mut [u64;4],power:K,basis:M31,flush:bool) {
     let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];
-    row[0]+=u64::from(limbs[0])*u64::from(basis.0);
-    row[1]+=u64::from(limbs[1])*u64::from(basis.0);
-    row[2]+=u64::from(limbs[2])*u64::from(basis.0);
-    row[3]+=u64::from(limbs[3])*u64::from(basis.0);
+    for j in 0..4 {
+        let old=residue_limb_at(row,j);
+        let limb=power_limb_at(&limbs,j);
+        row[j]=old+u64::from(limb)*u64::from(basis.0);
+    }
     if flush {
-        row[0]=(row[0]&0x7fff_ffff)+(row[0]>>31);
-        row[1]=(row[1]&0x7fff_ffff)+(row[1]>>31);
-        row[2]=(row[2]&0x7fff_ffff)+(row[2]>>31);
-        row[3]=(row[3]&0x7fff_ffff)+(row[3]>>31);
+        for limb in row {*limb=(*limb&0x7fff_ffff)+(*limb>>31);}
     }
 }
 
