@@ -4,8 +4,12 @@ Branch `codex/cx-builder-ref-20261021`, base `9ba738457`.
 
 ## Scope and status
 
-Work in progress. The target is the first open obligation in
-`PRIVACY-FINAL-20261020.md`. No deployed closure is claimed by this draft.
+**Partial closure; the deployed obligation remains OPEN.** All four builder
+fields are proved for the canonical extracted composition on embedded
+Rspend⁺ instances. The shipped compile entry points do not yet have the
+source-identification certificate. Pinned Aeneas rejects their validation
+loop; this item stops at that translation blocker, as permitted by the task.
+No prover, verifier, on-chain source, or existing Lean module was changed.
 
 ## Evidence
 
@@ -83,3 +87,96 @@ theorems have standard axiom audits.
 This still is not a theorem that the shipped compiler's successful input
 projects to this subtype, or that its Rust structural glue is the extracted
 Lean composition. Those are the next source obligations.
+
+## Stage 5: fixed transport and source handoff
+
+`R1Z.BuilderSource.prover` fixes π to `AspisR1.rowEquiv`, D18's involution.
+The `coefficients` theorem checks the orientation: `coeffsOf π t c j` is
+`t c (row j)`, as in S2's `Variant::coefficients`. `rows_coefficients`
+restores the original rows. These are mathematical transport facts; this
+module does not claim extraction of `Variant::row`'s Rust bitwise loop.
+
+`BuilderSource.builderSoundOn` closes all four fields for this fixed
+mathematical h, public map, relation and extracted build. The separate
+`SourceIdentification source toInstance` has exactly public_eq, build_eq,
+and transport_eq. Its `toInstance` codomain requires membership in embedded
+Rspend⁺. `builder_refinement_D46_D51` transports all four fields along such
+a certificate. **The certificate is not constructed for shipped Rust.**
+
+Attempt 8445 compiles unchanged D18Transport; 8446 compiles the new root
+(exit 0, 2.47 s, 4,000,548 KiB, 0 swaps). The final five extension modules
+have 39 theorems; `builder-audit.py` checks each axiom line, final source SHA,
+and current direct-import object fingerprint. `builder-audit.json` records
+the exact commands, revisions, object SHA/size and caps. No existing privacy
+root changes, so none is rerun; no full frozen-manifest replay is claimed.
+
+## Shipped path identified by source inspection
+
+All paths below are repository-relative. This table is source inspection,
+not a replacement for the missing `SourceIdentification` proof.
+
+| Component | Shipped source and correspondence |
+|---|---|
+| Honest domain | Successful `compile_pool_v1_pair_forest_{private_transfer,withdrawal}_merged_c1_v1` in `crates/aspis-statement/src/pool_v1/pair_forest_trace.rs:369,421`. Its admission checks additionally constrain positive values, context, pool/domain, snapshot binding, pair selection, canonical words, roots and output digests. Rspend⁺ is the semantic privacy relation, not a claim that these admission checks are equivalent to the whole relation. |
+| Raw witness | `pair_forest_copy_builder.rs:227` (`records`): values; key/salt; selected pair bit and other commitment at level 0; membership index bits/siblings at levels 1–20; super-root bits/siblings at 21–23; pair coordinates/inverse; output owner/salts. Withdrawal uses zero recipient owner/salt. The canonical Wspend projection must reflect that choice. |
+| Public semantic map | `pair_forest_semantic_terminal.rs:1327–1361`: anchor/nullifier/asset/change from the transaction; Some recipient and no amount for transfer; no recipient and Some amount for withdrawal. `nextPairIndex` and snapshot frontier come from `compiled.public_statement.live_snapshot`; nextRoot and nextFrontier from its candidate_afterstate (`pair_forest_trace.rs:347–352`). Pool/domain and other byte-level context remain outside R0P.Public and must be retained by the outer wire mapping. |
+| Builder | `compile_forest_from_copies` creates CopyRecords, checks digests/admission, obtains `records.banks()`, validates Poseidon rows, and returns merged bank columns as `semantic_c1`. The noised trace and random mask/helper columns are later supplied by `prover.rs`/`host_semantic::build_with_material`; the h.build here is the unmasked trace, with columns 16–28 zero. This does not prove the later masking/refusal path. |
+| π | S2 is required by the binary prover (`crates/aspis-r1-cost-probe/src/prover.rs:205,302,356`). `transport.rs:4–21` uses TAU=[3,4,2,0,1] and coefficients[j]=rows[row(j)], the D18 arithmetic permutation instantiated above. |
+
+The standing `check-glue-text.py.txt` and `gen-glue.py.txt --check` both pass
+on this revision. They verify pinned copies, 30 verbatim structural glue
+functions, bank-merge lines and the shared generated table. They remain
+text/generator evidence, not a Lean theorem about the complete Rust caller.
+The prior D70 differential suites were not rerun: their sources are unchanged.
+
+## Actual extraction attempt and stop reason
+
+`builder-extract.sh` runs the two shipped compile entry points, with the
+pinned r18 kit, in a separate MemoryHigh=6G / MemoryMax=8G /
+MemorySwapMax=0 / TasksMax=64 scope, release profile, four cargo jobs.
+The workspace contains byte-identical Rust sources (170 source pins verified
+against this worktree) and only narrows workspace membership. The first
+resolution attempt lacked Cargo.lock and failed on the yanked spin 0.12.1
+transitive dev dependency. Supplying this revision's Cargo.lock resolved it;
+that failure and the changed environment are recorded, not discarded.
+Two initial reservation preflights declined launch while +8 GiB would exceed
+the 55 GiB host allowance. No other job was stopped.
+
+Charon succeeds: has_errors=false, exit 0, 16.85 s, peak 614,524 KiB,
+0 swaps. LLBC SHA256 is
+`f7324890645069fed416506943f37c5b490927f7b2188b93110ea10f7c7d1a9b`,
+size 7,258,347 bytes, retained on host only. Aeneas fails: exit 2, 0.45 s,
+133,056 KiB, 0 swaps:
+
+> Breaks to outer loops are not supported yet
+
+It names `pair_forest_trace.rs:158–197` (`validate_forest_poseidon_rows`)
+and `PrePasses.ml:648`. This is a translation blocker, not a memory failure.
+No unchanged larger-cap retry, prover rewrite, or Kani equivalence claim was
+made. The task explicitly permits stopping and reporting at a translation
+blocker. A later reference/equivalence route would need Kani's fixed admitted
+sizes and a named P6 soundness premise under the prep5 ruling.
+
+`builder-extraction.json` contains full logs, exact targets, source/tool pins,
+source revision and time receipts. Charon tool SHA is `daad69be…336af8`;
+Aeneas is `959659a6…709e3`. No binary or LLBC is committed.
+
+## Exactly what remains
+
+1. Construct a source instance map from successful shipped compiler inputs
+   and outputs into `BuilderCanonical.Instance`: prove the semantic public
+   projection and embedded Rspend⁺, including admission/value ranges and the
+   withdrawal recipient-zero convention. The equivalence between the
+   relation evaluated in M31 and its embedded K form is not separately proved.
+2. Prove that shipped `records` equals the canonical Rust record map, and
+   that the complete Rust structural glue/banks yield the Lean merged trace.
+   D70 migration, generated text and prior differential tests are evidence;
+   they do not discharge build_eq in Lean.
+3. Prove the Rust S2 bitwise row loop equals D18 π and assemble the three
+   SourceIdentification fields for the actual h. The current transport
+   theorems identify the mathematical orientation only.
+
+Until these are supplied, leave the first open row of
+PRIVACY-FINAL-20261020.md in place. No other privacy definition-of-done row,
+retry/publication coupling, wire identification or final release claim is
+closed by this work.
