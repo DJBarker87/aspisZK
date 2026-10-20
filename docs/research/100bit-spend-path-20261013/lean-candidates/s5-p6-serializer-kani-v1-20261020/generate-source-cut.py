@@ -1,5 +1,5 @@
 from pathlib import Path
-import json,hashlib,subprocess,sys
+import json,hashlib,subprocess,sys,re
 root=Path('/Users/dominic/ZK');w=Path(__file__).resolve().parent
 model=w/'model/P6ChunksExactMutModelV3.lean'
 if not model.is_file(): model=Path('/tmp/s5-p6-v3-overlay/sources/P6ChunksExactMutModelV3.lean')
@@ -10,6 +10,15 @@ def extract(signature):
  while depth:
   depth+=(text[i]=='{')-(text[i]=='}');i+=1
  return text[start:i]
+constants=[re.search(r'pub const '+n+r': usize = \d+;',text).group(0)
+           for n in ['LIMB_COUNT','BYTE_LEN']]
+assert constants==['pub const LIMB_COUNT: usize = 8;', 'pub const BYTE_LEN: usize = 32;']
+carrier_source=(root/'crates/aspis-core/src/field.rs').read_text()
+assert 'pub struct M31(pub u32);' in carrier_source
+for name,fields in [('CM31',['pub a: M31','pub b: M31']),('QM31',['pub c0: CM31','pub c1: CM31'])]:
+ body=carrier_source[carrier_source.index('pub struct '+name):]
+ body=body[:body.index('}')+1]
+ assert all(field in body for field in fields)
 methods=[extract('pub const fn to_limbs('),extract('pub fn to_le_bytes(')]
 struct=extract('pub struct WideExact')
 # Minimal carrier declarations preserve the actual eight u32 leaves. The
