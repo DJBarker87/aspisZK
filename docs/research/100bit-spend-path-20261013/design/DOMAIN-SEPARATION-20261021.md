@@ -60,3 +60,25 @@ and encoded little-endian. `aspis-statement` supplies `Public::public_bytes`
 in SPEC §9 order (variant, anchor, nullifier, asset, optional recipient,
 change, optional withdrawal amount, source next index/frontier, afterstate
 root/frontier); `SemanticTranscript::new` adds the length and C1 root.
+
+## Checked literal refinement and public-init separation
+
+`OracleDecisionDomSepFrozen.lean` independently spells the selected node,
+leaf and public-init byte layouts. `shared_node_refines` and
+`path_node_refines` identify both existing Lean node encodings with that
+layout; `shared_leaf_refines` does the same for leaves. `initial_refines`
+identifies `PublicInitFrame.frame` with the literal initial frame (using the
+existing explicit four-byte little-endian encoder). These are byte-list
+refinements, not proofs of Rust machine execution or public serialization.
+
+`node_not_initial` and `leaf_not_initial` prove disjointness by the first
+byte, for arbitrary contents. `node_init_parse_none` and
+`leaf_init_parse_none` then prove that `PublicInitParse.parse` returns none
+on any address with those exact bytes. No canonical-address enumeration,
+large concrete recurrence, or collision assumption is used.
+
+Focused attempt Frozen-1: exit 0, 3.447 s, peak RSS 1,539,686,400 bytes,
+zero swaps. All eight theorem axiom reports are subsets of
+`{propext, Classical.choice, Quot.sound}`. Exact command, source revision,
+source snapshot/hash, import hashes/fingerprint and full outputs are in
+`evidence/domsep-20261021/OracleDecisionDomSepFrozen-1/` and `manifest.json`.
