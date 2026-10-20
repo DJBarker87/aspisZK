@@ -222,3 +222,17 @@ soundness, twelve ordered query calls with the increment. Row R14:
 EXTRACTED (source pinned; refinement open). Next: one combined gate run and
 ELF pin on the research tip (ids + stage-2 refactor) = the freeze; then
 cx-tx1-finish (R15), the final CU bound, devnet.
+
+## Addendum (2026-10-20): R15 extraction blocked on the frozen source; refactor prepared, not applied
+
+Codex job cx-tx1-finish (c5183dc19): Charon extracts the checkpoint
+serializer, pinned Aeneas fails with "Could not match the contexts" at
+`verifier.rs:330` (`for root in &p.roots`); verifier source unchanged, 58
+frozen pins match (`design/TX1-FINISH-20261020.md`). Ruling: the freeze
+(`LEAD-FREEZE-20261020.md`) stands. The minimal source change that lets the
+tx1 finish cone translate is prepared and gated on a side branch
+(cx-tx1-finish-prep) and NOT merged; it is folded into the next freeze
+together with any other source change the R14 refinement requires, so the
+re-pins and the CU bound are reopened once, not per finding. R15 stays open
+until then; the devnet deployment and the final CU bound proceed on the
+current freeze.
