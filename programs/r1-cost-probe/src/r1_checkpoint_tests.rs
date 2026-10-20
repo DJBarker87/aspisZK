@@ -315,6 +315,71 @@ fn checkpoint_borrow_conflict_returns_error_without_panicking() {
     );
 }
 
+// R15: exercise the release entrypoint as well as the existing stage1 tests.
+#[test]
+fn r15_release_stage1_rejects_occupied_and_wrong_size_without_writes() {
+    for (length, occupied, expected) in [
+        (1_768, true, ProgramError::AccountAlreadyInitialized),
+        (0, false, ProgramError::InvalidAccountData),
+        (1_767, false, ProgramError::InvalidAccountData),
+        (1_769, false, ProgramError::InvalidAccountData),
+    ] {
+        let mut fixture = Stage1Fixture::new();
+        fixture.accounts[2].data.resize(length, 0);
+        if occupied { fixture.accounts[2].data[length - 1] = 1; }
+        let before: Vec<_> = fixture.accounts.iter().map(|a| (a.data.clone(), a.lamports)).collect();
+        {
+            let accounts: Vec<_> = fixture.accounts.iter_mut().map(TestAccount::info).collect();
+            assert_eq!(crate::process_r1_cost_probe_instruction(&fixture.program, &accounts, &[3, 10]), Err(expected));
+        }
+        for (account, (data, lamports)) in fixture.accounts.iter().zip(before) {
+            assert_eq!(account.data, data);
+            assert_eq!(account.lamports, lamports);
+        }
+    }
+}
+
+#[test]
+fn r15_lifecycle_requires_recorded_signer_to_upload_or_seal() {
+    let program = Pubkey::new_unique();
+    let mut target = TestAccount::new(program, vec![0; ASPU_HEADER + ASRU_BODY_BYTES], true);
+    let mut authority = TestAccount::new(Pubkey::new_unique(), vec![], false);
+    authority.signer = true;
+    process(&program, &[target.info(), authority.info()], &[4, 1]).unwrap();
+    // A valid body ensures the authorised control reaches the sealing write.
+    target.data[ASPU_HEADER..].copy_from_slice(PUBLIC);
+    for wrong_key in [false, true] {
+        let mut attacker = TestAccount::new(Pubkey::new_unique(), vec![], false);
+        if wrong_key { attacker.signer = true; } else { attacker.key = authority.key; }
+        for instruction in [&[5, 0, 0, 0, 0, 1][..], &[6][..]] {
+            let before = (target.data.clone(), target.lamports, attacker.data.clone(), attacker.lamports);
+            assert_eq!(process(&program, &[target.info(), attacker.info()], instruction), Err(ProgramError::InvalidAccountData));
+            assert_eq!((target.data.clone(), target.lamports, attacker.data.clone(), attacker.lamports), before);
+        }
+    }
+    process(&program, &[target.info(), authority.info()], &[6]).unwrap();
+    assert!(target.data[ASPU_AUTHORITY.clone()].iter().all(|b| *b == 0));
+    assert_eq!(&target.data[ASPU_HEADER..], PUBLIC);
+    assert_eq!(target.lamports, 1);
+    let sealed = target.data.clone();
+    assert_eq!(process(&program, &[target.info(), authority.info()], &[6]), Err(ProgramError::InvalidAccountData));
+    assert_eq!(target.data, sealed);
+}
+
+#[test]
+fn r15_release_rejects_lifecycle_close_attempts_on_real_checkpoint_shape() {
+    let program = Pubkey::new_unique();
+    // Synthetic AccountInfo only: no wallet/keypair or network transaction.
+    let mut target = TestAccount::new(program, vec![0x55; verifier::checkpoint_size(Variant::S2)], true);
+    let mut stranger = TestAccount::new(Pubkey::new_unique(), vec![], false);
+    stranger.signer = true;
+    for instruction in [&[4, 0][..], &[4, 1][..], &[5, 0, 0, 0, 0, 1][..], &[6][..]] {
+        let before = (target.data.clone(), target.lamports, stranger.data.clone(), stranger.lamports);
+        assert_eq!(crate::process_r1_cost_probe_instruction(&program, &[target.info(), stranger.info()], instruction), Err(ProgramError::InvalidInstructionData));
+        assert_eq!((target.data.clone(), target.lamports, stranger.data.clone(), stranger.lamports), before);
+    }
+}
+
 #[test]
 fn stage2_checkpoint_guard_requires_readonly_owner_and_exact_size() {
     let program = Pubkey::new_unique();
