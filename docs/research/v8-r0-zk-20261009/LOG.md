@@ -7257,3 +7257,26 @@ parser alias. Native tests against frozen source: 7/7, including the saved
 tx1/tx2 proofs and checksum-repaired checkpoint mutations (20.6 s, 500 MB,
 zero swap). No shipped change, 0 CU. Optional: an off-chain witness
 canonicality check in the prover, which is not needed for soundness.
+
+## D98 — prover commitment part 5: sampler and tape quotient proved; premise shape wrong (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit5-20261021` (`r1p-final/PROVER-COMMIT5-20261021.md`).
+Both single-try Kani comparisons pass with the shared memoised oracle, and
+Lean proves the extracted reference sampler equals 16 compositions of its
+extracted step, so the timed-out 16-try harness is replaced. Proved: the H1
+tape quotient with a measure-preserving completion, exact measure transport,
+full honest-view invariance, partial-decoder fibre/failure transport, and the
+counter subslots from the existing count/block premises. Env J 8187, 44
+audits, standard axioms, zero swap. Additions only in
+`state_only_{entropy,hiding}.rs` (cfg-gated); all three frozen ELFs rebuilt
+byte-identical.
+
+All nine checklist rows stay open, because the checklist premise asks for an
+equal-fibre map on full tapes, and a checked theorem shows that every
+deterministic quotient representative misses full tapes. Lead ruling: the
+premise has the wrong shape. Restate it as the quotient law (equal fibres on
+the H1 quotient, plus the proved measure-preserving completion), which the
+full-tape form implies and is therefore strictly weaker, and show the
+privacy endpoint still follows. Then close the concrete source quotient
+decoder/carrier law, commitment-observable transport and the
+caller/count/exhaustion instance.
