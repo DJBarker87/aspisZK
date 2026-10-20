@@ -516,3 +516,20 @@ skipped downstream, so the four terminal roots are not yet current in S.
 C2 stays open; the joint launcher range is extended to 9999 and the build
 continues (cx-soundness-env2). The collision joins the candidate-freeze
 hygiene list.
+
+## Addendum (2026-10-20): env S complete — the soundness closure builds in one environment
+
+Codex job cx-soundness-env2 (489e0cdd6): 474/474 further attempts green;
+all 1,294 modules, 107 requested roots and 36 Bin roots current in env S
+on the host; 34,746 declarations audited (including 84 CompPoly modules);
+six Formatter-dependent modules listed explicitly (none is a root
+dependency); peak 4.72 GiB, no swaps, no memory kills
+(`evidence/soundness-env-20261020/REPORT.md`, `named-root-axioms.json`).
+The four terminal roots check with standard axioms in this environment:
+`checked_acceptance_failure_bound_no_model`,
+`recorded_extractor_cost_and_failure`, `hchecks_partial`,
+`hchecks_deployed_partial` (lead-verified audit attempts 7917, 7960).
+C2 is not yet closed only because the full UNION of the closures still
+hits the two generated-name collisions (each root builds; a single file
+importing everything does not); the candidate-freeze hygiene pass removes
+them, and C2's final replay runs on the adopted freeze.
