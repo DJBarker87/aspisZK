@@ -18,6 +18,11 @@ for line in src.read_text().splitlines():
    imports.append({'module':name,'path':str(found),'sha256':sha(found) if found else None})
 argv=[pin['argv'][0],'-j1','-M4400','-DElab.async=false','-R',str(base/'lean'),'-o',str(obj/f'{module}.olean'),str(src)]
 cmd={'module':module,'attempt':attempt,'argv':argv,'lean_path':':'.join(paths),'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'source_sha256':sha(src),'direct_imports':imports,'deps_fingerprint':hashlib.sha256(json.dumps(imports,sort_keys=True).encode()).hexdigest()}
+manifest_path=ev/'manifest.json'
+if manifest_path.exists():
+ for old in json.loads(manifest_path.read_text()).get('attempts',[]):
+  if all(old.get(k)==cmd.get(k) for k in ['module','source_sha256','deps_fingerprint']):
+   raise SystemExit('REFUSED unchanged source and dependencies; use existing receipt')
 (out/'command.json').write_text(json.dumps(cmd,indent=2)+'\n')
 (out/'source.lean').write_bytes(src.read_bytes())
 lock=pathlib.Path('/tmp/aspis-local-lean.lock.d')
@@ -25,9 +30,10 @@ while True:
  try:lock.mkdir()
  except FileExistsError:time.sleep(15);continue
  running=subprocess.run(['pgrep','-fl','/bin/lean '],text=True,capture_output=True).stdout
- if any('-M4400' in line for line in running.splitlines()):lock.rmdir();time.sleep(30);continue
+ if any('-M4400' in line for line in running.splitlines()):lock.rmdir();time.sleep(60);continue
  break
 try:
+ assert sha(src)==cmd['source_sha256'], 'source changed while waiting for local lock'
  start=time.monotonic()
  with (out/'lean.log').open('w') as log,(out/'time.log').open('w') as timing:
   result=subprocess.run(['/usr/bin/time','-l']+argv,env={**os.environ,'LEAN_PATH':cmd['lean_path']},stdout=log,stderr=timing,cwd=root)
