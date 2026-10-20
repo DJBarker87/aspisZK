@@ -1,0 +1,86 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoAccumulate.lean:48:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    AspisR1RhoCoefficients.rho_new.coefficients a.weights a.power a.next basis (some pending) = do
+      let out ← CuSavingsRhoQueryBatch.batch a.power (CuSavingsRhoInputs.items basis _a hl) pending
+      ok (a.weights, some out)
+Error: Application type mismatch: The argument
+  hl
+has type
+  ↑a.weights.len ≤ 256
+but is expected to have type
+  ↑_a ≤ 256
+in the application
+  CuSavingsRhoInputs.items basis _a hl
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case ok
+inst✝ : AccumulateCommon
+p : Prep
+a : Acc
+pending : BW
+node : U32
+value : aspis_core.field.WideExact
+hg : Good pending []
+hp : Canonical a.power
+hn : ↑a.next ≤ 22
+hc : ↑pending.terms < 22
+hl : ↑a.weights.len ≤ 256
+hrows : (↑a.weights).length = (↑pending.raw).length
+hlen : a.weights.len = alloc.vec.Vec.len (canonicalSlice pending)
+hl' : ↑(alloc.vec.Vec.len (canonicalSlice pending)) ≤ 256
+basis : Std.Array AspisR1RhoBasis.field.M31 256#usize
+hb : AspisR1RhoBasis.basis (alloc.vec.Vec.len (canonicalSlice pending)) node = ok basis
+out : AspisR1CuRho.verifier.BatchedWeights
+hbatch :
+  CuSavingsRhoQueryBatch.batch a.power (CuSavingsRhoInputs.items basis (alloc.vec.Vec.len (canonicalSlice pending)) hl')
+      pending =
+    ok out
+hold :
+  AspisR1RhoCoefficients.rho_old.coefficients (canonicalSlice pending) a.power a.next basis = ok (canonicalSlice out)
+hcount : ↑out.terms = ↑pending.terms + 1
+hlength : (↑out.raw).length = (↑pending.raw).length
+hgood : Good out []
+hnew :
+  AspisR1RhoCoefficients.rho_new.coefficients a.weights a.power a.next basis (some pending) = do
+    let out ← CuSavingsRhoQueryBatch.batch a.power (CuSavingsRhoInputs.items basis a.weights.len hl) pending
+    ok (a.weights, some out)
+⊢ (do
+      let basis ← ok basis
+      let v ← AspisR1RhoCoefficients.rho_old.coefficients (canonicalSlice pending) a.power a.next basis
+      let we ← WideExact.mul_qm31 value a.power
+      let we1 ← a.rhs.add we
+      trace.value 11#u16 a.next we1
+      let q ← a.power.mul p.rho
+      let i1 ← a.next + 1#usize
+      ok { weights := v, rhs := we1, power := q, next := i1 }) =
+    do
+    let out ←
+      do
+        let basis ← ok basis
+        let (v, pending1) ← AspisR1RhoCoefficients.rho_new.coefficients a.weights a.power a.next basis (some pending)
+        let we ← WideExact.mul_qm31 value a.power
+        let we1 ← a.rhs.add we
+        trace.value 11#u16 a.next we1
+        let q ← a.power.mul p.rho
+        let i1 ← a.next + 1#usize
+        ok ({ weights := v, rhs := we1, power := q, next := i1 }, pending1)
+    materialize out
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoAccumulate.lean:42:29: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵b,̵b̵ind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoAccumulate.lean:43:22: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵b,̵b̵ind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsRhoAccumulate.materialize' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoAccumulate.source_equivalence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

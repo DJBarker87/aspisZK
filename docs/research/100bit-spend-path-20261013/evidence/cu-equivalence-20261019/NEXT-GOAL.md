@@ -196,3 +196,21 @@ now succeeds), original resume iterator/Reader support, actual allocation
 frame/resource conditions, and transaction observables. The repaired producer
 still rejects the unchanged resume loop at a typing invariant during loop join;
 no invalid result is admitted. Do not erase or bypass that invariant.
+
+## Whole accumulation result checked (2026-10-20)
+
+`RHO-ACCUMULATE.md/json`: complete inverse-factored actual old/new source
+accumulation outcome equivalence and successful-call invariant preservation
+now pass (`CuSavingsRhoAccumulate`, `rho-accumulate-proof-e`; standard axioms).
+The query prefix is identical in parent/candidate and reads only `a.next`,
+never weights/rhs/power; after it returns `(node,folded)` the source calls the
+proved accumulation function. This is the next context-composition boundary.
+
+Resume investigation: the clean upstream/native source tree used for the
+narrow reborrow repair lacks prior patches in the actual pinned 4632746d
+producer source. The original source tree's cached main.exe hashes to exactly
+4632746d. The two new repairs are being applied atop that original tree in a
+separate `aeneas-rho-original-repair` workspace; do not overwrite the e89763ed
+producer used by the already checked helper. All original typing/invariant
+checks remain enabled. Capture the separate producer build/provenance before
+admitting any new output.

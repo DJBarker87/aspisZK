@@ -1,9 +1,6 @@
 --- a/src/interp/InterpExpressions.ml
 +++ b/src/interp/InterpExpressions.ml
-@@ -194,7 +194,16 @@
-             { v with value = VBorrow (VSharedBorrow (bid, sid')) },
-             ctx,
-             fun e -> e )
+@@ -197 +197,10 @@
 -      | VMutBorrow (_, _) -> [%craise] span "Can't copy a mutable borrow"
 +      | VMutBorrow (bid, child) ->
 +          (* Optimized MIR may express a mutable reborrow as Copy. Preserve
@@ -15,30 +12,15 @@
 +          ( { v with value = VBorrow (VMutBorrow (bid, loan)) },
 +            { v with value = VBorrow (VMutBorrow (reborrow, child)) },
 +            ctx, fun e -> e )
-       | VReservedMutBorrow _ ->
-           [%craise] span "Can't copy a reserved mut borrow")
-   | VLoan lc -> (
 --- a/src/symbolic/SymbolicToPureValues.ml
 +++ b/src/symbolic/SymbolicToPureValues.ml
-@@ -864,8 +864,8 @@
-         let ty = translate_fwd_ty (Some ctx.span) ctx.decls_ctx ty in
-         (ctx, Some (mk_ignored_pat ty))
- 
+@@ -867,2 +867,2 @@
 -and aproj_to_given_back_aux (_abs_level : abs_level)
 -    (_current_level : abs_level) (mp : mplace option) (aproj : V.aproj)
 +and aproj_to_given_back_aux (abs_level : abs_level)
 +    (current_level : abs_level) (mp : mplace option) (aproj : V.aproj)
-     (ty : T.ty) (ctx : bs_ctx) : bs_ctx * tpat option =
-   match aproj with
-   | V.AEndedProjLoans { proj = _; consumed; borrows } ->
-@@ -893,6 +893,10 @@
-         }
-       in
-       (ctx, Some pat)
+@@ -895,0 +896,4 @@
 +  | AEmpty | AProjLoans _ when current_level <> abs_level ->
 +      (* An ancestor loan projector is visited while collecting the deeper
 +         given-back layer. It contributes no borrow value at this layer. *)
 +      (ctx, None)
-   | AEmpty | AProjLoans _ | AProjBorrows _ -> [%craise] ctx.span "Unreachable"
- 
- let tavalue_to_given_back (abs_regions : T.RegionId.Set.t)
