@@ -29,8 +29,12 @@ def lean_processes():
 
 module = sys.argv[1]
 source = PACKET / 'lean' / (module + '.lean')
-baseline = json.loads((PACKET / 'evidence/r19-budget-20261021/R1FinalSoundnessBinPerQueryR19-1/command.json').read_text())
-path = str(OBJECTS) + ':/tmp/codex-cx-inittag-20261021-objects:/tmp/codex-cx-r9-pool-20261021-objects:/tmp/codex-cx-r9-deployed-20261021-objects:/tmp/codex-cx-r16-decision-20261021-objects:/tmp/codex-cx-r15-writer-20261021-objects:' + ':/tmp/codex-cx-nocoll-20261021-objects:/tmp/codex-cx-rwire-20261021-objects:' + '/tmp/codex-cx-r19-budget-20261021-objects:' + baseline['lean_path']
+tag_command = json.loads((PACKET / 'evidence/inittag-20261021/R1FinalSoundnessBinPerQueryTag-1/command.json').read_text())
+pool_command = json.loads((PACKET / 'evidence/r9-pool-20261021/R1FinalSoundnessBinPerQueryR9Pool-1/command.json').read_text())
+# Keep each predecessor's complete successful path, rather than manually
+# reconstructing its transitive cache. Private objects always come first.
+path = ':'.join(dict.fromkeys([str(OBJECTS)] + tag_command['lean_path'].split(':') + pool_command['lean_path'].split(':')))
+assert any((Path(x) / 'R9TwoTransactionExperiment.olean').exists() for x in path.split(':'))
 imports = []
 for name in re.findall(r'^import (\S+)', source.read_text(), re.M):
     obj = next((Path(p) / (name.replace('.', '/') + '.olean')
@@ -39,7 +43,7 @@ for name in re.findall(r'^import (\S+)', source.read_text(), re.M):
     if obj is None:
         raise SystemExit('Missing cached import: ' + name)
     imports.append({'module': name, 'path': str(obj), 'sha256': sha(obj)})
-fp = hashlib.sha256(json.dumps(imports, sort_keys=True).encode()).hexdigest()
+fp = hashlib.sha256(json.dumps({'imports': imports, 'lean_path': path}, sort_keys=True).encode()).hexdigest()
 manifest = HERE / 'manifest.json'
 data = json.loads(manifest.read_text()) if manifest.exists() else {
     'schema': 'focused-extractor-proof-packet-v1', 'attempts': [],
