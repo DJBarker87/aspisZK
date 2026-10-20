@@ -83,17 +83,50 @@ pins.append(dict(path=V,owner='read_checkpoint_weights::iteration',body_edit='li
 s+=get(V,'residue_limb_at')+get(V,'power_limb_at')
 s+='''const B:u64=1<<34;
 const C:u64=(P as u64-1)*(P as u64-1);
-fn row_bound(row:&[u64;4],limit:u64)->bool {row.iter().all(|x|*x<limit)}
+fn row_bound(row:&[u64;4],limit:u64)->bool {row[0]<limit && row[1]<limit && row[2]<limit && row[3]<limit}
+fn growth(row:&[u64;4],before:[u64;4])->bool {(0..4).all(|i|row[i]<=before[i]+C)}
 '''
-s+=get(V,'update_residue_row','''#[kani::requires(k_ok(power) && basis.0<P)]
-#[kani::requires(row_bound(row,if flush {B+3*C} else {B+2*C}))]
+s+=get(V,'update_residue_row',"""#[kani::requires(k_ok(power) && basis.0<P && phase<4 && flush==(phase==3) && row_bound(row,B+phase*C))]
 #[kani::modifies(row)]
-#[kani::ensures(|_:&()| row_bound(row,if flush {B} else {B+3*C}))]''')
+#[kani::ensures(|_:&()| row_bound(row,B+((phase+1)%4)*C))]""")
+s=s.replace('flush:bool) {', 'flush:bool,phase:u64) {')
 s+='''#[kani::proof_for_contract(update_residue_row)] #[kani::unwind(6)]
-fn residue_row() {let mut row=kani::any();update_residue_row(&mut row,kani::any(),kani::any(),kani::any());}
+fn residue_row() {let mut row=kani::any();update_residue_row(&mut row,kani::any(),kani::any(),kani::any(),kani::any());}
 '''
+# Replace the previously isolated loop body by its verified extracted helper.
+old_weight_body="""let mut reader=Reader{bytes,at};
+        let value=reader.k()?;
+        at=reader.at;
+        *out=value;"""
+assert s.count(old_weight_body)==1
+s=s.replace(old_weight_body,'read_one_weight(bytes,&mut at,out)?;')
+for pin in pins:
+    if pin['owner']=='read_checkpoint_weights':pin['body_edit']='four-statement iteration body lifted verbatim with at-reference reborrows into verified read_one_weight; original for loop retained'
+s=s.replace('#[kani::stub_verified(Reader::k)]\nfn checkpoint_weights256()', '#[kani::stub_verified(read_one_weight)]\nfn checkpoint_weights256()')
+# Distinct proof of actual BatchedWeights::push, preserving its source body.
+s+='struct BatchedWeights { raw:Vec<[u64;4]>, terms:usize }\nimpl BatchedWeights {\n'
+s+=get(V,'BatchedWeights::push',"""#[kani::requires((self.raw.len()==64 || self.raw.len()==256) && index<self.raw.len() && self.terms<=22 && k_ok(power) && basis.0<P && row_bound(&self.raw[index],B+(self.terms%4) as u64*C))]
+#[kani::modifies(&mut self.raw[index])]
+#[kani::ensures(|_:&()| row_bound(&self.raw[index],B+((self.terms+1)%4) as u64*C))]""")
+s+='}\n'
+next(p for p in pins if p['owner']=='BatchedWeights::push')['body_edit']='append (self.terms%4) as u64 as unused phase ghost argument; original arithmetic and traversal unchanged'
+s=s.replace('power,basis,flush);','power,basis,flush,(self.terms%4) as u64);')
+s+="""#[kani::proof_for_contract(BatchedWeights::push)] #[kani::unwind(258)]
+#[kani::stub_verified(update_residue_row)]
+fn batched_push64() {let mut w=BatchedWeights{raw:kani::vec::exact_vec::<[u64;4],64>(),terms:kani::any()}; w.push(kani::any(),kani::any(),kani::any());}
+#[kani::proof_for_contract(BatchedWeights::push)] #[kani::unwind(258)]
+#[kani::stub_verified(update_residue_row)]
+fn batched_push256() {let mut w=BatchedWeights{raw:kani::vec::exact_vec::<[u64;4],256>(),terms:kani::any()}; w.push(kani::any(),kani::any(),kani::any());}
+"""
+
+for block in range(4):
+    s+=f"""#[kani::proof_for_contract(BatchedWeights::push)] #[kani::unwind(258)]
+#[kani::stub_verified(update_residue_row)]
+fn batched_push256_block{block}() {{let mut w=BatchedWeights{{raw:kani::vec::exact_vec::<[u64;4],256>(),terms:kani::any()}};let index={64*block}+(kani::any::<u8>()&63) as usize;w.push(index,kani::any(),kani::any());}}
+"""
+
 s=s.replace('for limb in row {', 'for limb in &mut *row {')
-pins[-1]['body_edit']='for limb in row -> for limb in &mut *row: explicit reborrow required by Kani contract macro; identical iter_mut traversal'
+next(p for p in pins if p['owner']=='update_residue_row')['body_edit']='for limb in row -> for limb in &mut *row: explicit reborrow required by Kani contract macro; identical iter_mut traversal; unused phase:u64 ghost parameter constrains requires/ensures only'
 files={'lib.rs':s,'Cargo.toml':'''[package]
 name="r22-overflow2-contracts"
 version="0.1.0"
@@ -109,6 +142,12 @@ debug=false
 opt-level=3
 overflow-checks=true
 '''}
+from extra import build as extra_build
+files['geometry.rs']=extra_build(get,blob,fn,pins,sha)
+files['lib.rs']+='mod geometry;\n'
+from merkle import build as merkle_build
+files['frontier.rs']=merkle_build(get,blob,fn,pins,sha)
+files['lib.rs']+='mod frontier;\n'
 manifest=dict(source_revision=FREEZE,declarations=pins,generated={k:sha(v.encode()) for k,v in files.items()},context='Exact copied bodies, source-shaped field structs and Error::Checkpoint only. Contracts are added attributes; no shipped edits. This is not a Charon/Aeneas or ELF refinement proof. Finite harness extents are recorded separately; contract syntax is not universal proof evidence.')
 files['source-pins.json']=json.dumps(manifest,indent=2)+'\n'
 a=argparse.ArgumentParser();a.add_argument('--check',action='store_true');args=a.parse_args()

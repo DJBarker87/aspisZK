@@ -44,3 +44,38 @@ products and flush, with source-shaped M31/CM31/QM31 types, no independent-produ
 abstraction. It covers canonical power/basis, and row<B+3C for flush or row<B+2C
 otherwise (B=2^34, C=(p-1)^2). This is a local contract; downstream row phase and
 one-visit traversal still need composition. No endpoint premise is removed.
+
+Stage 3 strengthens the numerical row contract to an exact phase transition.
+Attempts21/24/27 are compile diagnostics: Kani's old(row) macro interferes
+with the mutable borrow. Replacement adds an unused phase:u64 ghost argument
+in the tool copy and supplies terms%4 at the unchanged push call. Attempt28
+finds overflow in an *instrumentation precondition* evaluated before phase<4;
+attempt31 combines the dependent checks in one short-circuit precondition and
+passes. Attempt34 replaces row_bound's four-element iterator with four explicit
+comparisons, and passes the same exact arithmetic body. No frozen overflow
+counterexample is found by these diagnostics.
+
+Attempts32/35 (variable-size vector push contracts) were stopped for symbolic
+iterator/formula expansion. Attempt50 covers all 64-row positions, and passes
+using the phase contract. Attempt51 reaches approximately6.1GiB cgroup current
+memory during formula conversion and is stopped before the high watermark;
+the replacement partitions the 256-row position space into four syntactically
+six-bit offsets, with unchanged limits. These checks are source-shaped exact
+body replay plus the explicit unused ghost parameter, not ELF equivalence.
+
+The new R22OverflowContinuation2Cadence Lean module proves step safety,
+induction over an arbitrary list of bounded products, pointwise row lifting,
+and the exact checkpoint cursor schedule. First compile fails because an
+unreduced let hides the arithmetic from omega; second changes to dsimp only
+and passes (1.11s,836993024bytes). All four successful axiom lines contain
+only standard axioms. Failed compile diagnostic lines containing sorryAx
+are retained as failed evidence, never accepted as proofs.
+
+Attempts36–47 and49 establish source-bound contracts for the actual field
+reducer, scalar add/sub/neg/double/mul/reduce, CM31 construction/multiplication,
+the checked fibre-index constructor (macro expansion), immutable table access,
+fibre-point and line-node functions. Every downstream arithmetic harness uses
+stub_verified for its proved child contracts. Attempt48 is a setup failure:
+Point needed an Arbitrary derive for verified stubbing;49 supplies it and
+passes. The enabled field branch is the non-r0-r91-audit branch; no build
+feature or syscall correspondence to the frozen ELF is claimed.
