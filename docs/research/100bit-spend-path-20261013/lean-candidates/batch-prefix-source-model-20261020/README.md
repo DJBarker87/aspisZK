@@ -1,0 +1,11 @@
+# Checked indexed batch-prefix source candidate
+
+PROVED for the extracted indexed candidate: successful execution returns every prefix product before multiplying its corresponding denominator, in source order, and the product of all input field values. This includes the emitted checked Vec.push, Vec.index and index increment. The loop theorem derives all intermediate successful operations from caller success and uses a symbolic remaining-length induction. The entrypoint instantiates the multiplication boundary with the retained current M31 implementation, reuses `R1ZBatchInverseSourceModelV4.prefixRun_getD_eq_take_prod`, and proves the final product is nonzero when all input field values are nonzero.
+
+Five focused Lean targets passed -M4400, High1GiB/Max2GiB/Swap0, with six standard-only theorem axiom reports. Charon/Aeneas passed for the indexed candidate under High512MiB/Max2GiB/Swap0. Exact target/source/import/object/time/RSS/swap receipts are included. No unchanged full replay, concrete long recurrence normalization, external-template axioms or production changes.
+
+CANDIDATE: the frozen original prefix loop and a borrowed-input helper version both failed Aeneas borrow lowering at InterpBorrows.ml:2731; those failures are retained. The successful candidate replaces only the borrowed iterator loop with forward usize indexing, retaining push-before-multiply order and checked Vec calls. Its production source equivalence/adoption and whole QueryGeometry caller remain OPEN. An initial wrapper typo passed &&Vec to IntoIterator and failed Rust compilation; it is retained separately. Four focused theorem elaboration failures were corrected without increasing resource settings.
+
+The extracted backward pass is separate and is not claimed here. The product nonzero corollary prepares the checked source M31 inverse bridge. Allocator/backend/runtime identity and full caller composition remain OPEN. Archived generated external templates are uncompiled; no binaries are included.
+
+`check-source.py` checks the frozen original byte span, exact indexed Rust candidate edit and multiplication-only emitted Lean parameterization. It does not prove original/candidate execution equivalence.

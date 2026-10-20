@@ -1,0 +1,18 @@
+   Compiling aspis-r1-stage2-adopted-caller v0.0.0 (/home/dombarker/project-offloads/root-batch-prefix-extraction-v1-20261020/input)
+error[E0277]: `&&std::vec::Vec<field::M31>` is not an iterator
+  --> lib.rs:14:23
+   |
+14 |         for &value in &flat {prefixes.push(product);product=product.mul(value);}
+   |                       ^^^^^ `&&std::vec::Vec<field::M31>` is not an iterator
+   |
+   = help: the trait `std::iter::Iterator` is not implemented for `&&std::vec::Vec<field::M31>`
+   = note: required for `&&std::vec::Vec<field::M31>` to implement `std::iter::IntoIterator`
+help: consider removing the leading `&`-reference
+   |
+14 -         for &value in &flat {prefixes.push(product);product=product.mul(value);}
+14 +         for &value in flat {prefixes.push(product);product=product.mul(value);}
+   |
+
+For more information about this error, try `rustc --explain E0277`.
+ERROR Code failed to compile
+error: could not compile `aspis-r1-stage2-adopted-caller` (lib) due to 1 previous error

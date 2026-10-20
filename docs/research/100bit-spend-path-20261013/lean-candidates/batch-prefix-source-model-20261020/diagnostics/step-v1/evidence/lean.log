@@ -1,0 +1,45 @@
+/home/dombarker/project-offloads/root-batch-prefix-step-v1-20261020/sources/BatchPrefixStepSemantics.lean:24:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (let nlen := (↑v).length + 1;
+    if h : (decide (nlen ≤ U32.max) || decide (nlen ≤ Usize.max)) = true then ok ⟨(↑v).concat x, ⋯⟩
+    else fail Error.maximumSizeExceeded) =
+    ok out
+of `h`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+v out : Vec U32
+x : U32
+h :
+  (let nlen := (↑v).length + 1;
+    if h : (decide (nlen ≤ U32.max) || decide (nlen ≤ Usize.max)) = true then ok ⟨(↑v).concat x, ⋯⟩
+    else fail Error.maximumSizeExceeded) =
+    ok out
+⊢ ↑out = ↑v ++ [x]
+/home/dombarker/project-offloads/root-batch-prefix-step-v1-20261020/sources/BatchPrefixStepSemantics.lean:55:14: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - c ≤ -1
+where
+ a := ↑↑i
+ b := ↑flat.length
+ c := ↑(↑flat).length
+/home/dombarker/project-offloads/root-batch-prefix-step-v1-20261020/sources/BatchPrefixStepSemantics.lean:73:45: error: Type mismatch: After simplification, term
+  hi
+ has type
+  i < flat.len
+but is expected to have type
+  ↑i < (↑flat).length
+/home/dombarker/project-offloads/root-batch-prefix-step-v1-20261020/sources/BatchPrefixStepSemantics.lean:74:34: error(lean.unknownIdentifier): Unknown identifier `p1`
+/home/dombarker/project-offloads/root-batch-prefix-step-v1-20261020/sources/BatchPrefixStepSemantics.lean:75:23: error(lean.unknownIdentifier): Unknown identifier `prod1`
+/home/dombarker/project-offloads/root-batch-prefix-step-v1-20261020/sources/BatchPrefixStepSemantics.lean:78:18: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.val_ofNat`
+/home/dombarker/project-offloads/root-batch-prefix-step-v1-20261020/sources/BatchPrefixStepSemantics.lean:78:6: error: Type mismatch: After simplification, term
+  hs.right.left
+ has type
+  @Eq ℕ (↑i1) (↑i + ↑1#usize)
+but is expected to have type
+  @Eq ℕ (↑i1) (↑i + 1)
+'AspisR1BatchPrefix.Proof.body_done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1BatchPrefix.Proof.body_cont' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
