@@ -1305,4 +1305,39 @@ mod prover_commit_rom {
         ]);
         assert_eq!(pool_v1_private_attempt_binding(crate::HOST_HASH, &binding, context), expected);
     }
+    #[kani::proof]
+    #[kani::unwind(514)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn pool_leaf_salt() {
+        rom::reset(4);
+        let nonce: [u8; 32] = kani::any();
+        let binding: [u8; 32] = kani::any();
+        let secret: [u8; 32] = kani::any();
+        let tag: u8 = kani::any();
+        let index: u32 = kani::any();
+        let context = StateOnlyHidingContext {
+            statement_digest: kani::any(), mask_nonce: nonce,
+            mask_layout_fingerprint: PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1,
+            layout_factor_fingerprint: PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1,
+        };
+        let reserved = ReservedStateOnlyAttemptSecrets {
+            mask_nonce: nonce, precommit_binding: binding, reserved_context: context,
+            leaf_salt_seed: Zeroizing::new(secret), source_mask_seed: Zeroizing::new(kani::any()),
+        };
+        let mut encoded = [0u8; 81];
+        encoded[0] = 1;
+        encoded[1..33].copy_from_slice(&context.statement_digest);
+        encoded[33..65].copy_from_slice(&nonce);
+        encoded[65..73].copy_from_slice(&0xf9daf3d54f4285d1u64.to_le_bytes());
+        encoded[73..81].copy_from_slice(&0x698bcdedff44a4dbu64.to_le_bytes());
+        let attempt = crate::HOST_HASH(&[
+            b"aspis:state-only:pool-v1:private-attempt-binding:v1", &binding, &encoded,
+            b"profile=pool-v1-tag73;generators=H26,G27,D28;factorD=0;rows=1024;c1=16;selected=28;theta=29;queries=16;first-cap=203",
+        ]);
+        let expected = crate::HOST_HASH(&[
+            b"aspis:state-only:private-leaf-salt:v1", &attempt, &nonce, &[tag], &index.to_le_bytes(), &secret,
+        ]);
+        assert_eq!(reserved.derive_pool_v1_leaf_salt(crate::HOST_HASH, context, tag, index), Ok(expected));
+    }
+
 }

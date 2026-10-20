@@ -58,3 +58,51 @@ fn regrouping_and_repeated_points() {
     assert_eq!(first, query(&[&joined]));
     assert_eq!(first, query(&[&a, &[], &b]));
 }
+
+#[kani::proof]
+#[kani::unwind(514)]
+#[kani::stub(crate::host_hashv, query)]
+fn private_leaf_c1() {
+    reset(2);
+    let value: [u8; 416] = kani::any();
+    let salt: [u8; 32] = kani::any();
+    let actual = aspis_core::state_only_private_merkle::private_leaf_hash(crate::HOST_HASH, 0x71, &value, &salt);
+    let mut bytes = [0; 450];
+    bytes[0] = 0x10;
+    bytes[1] = 0x71;
+    bytes[2..418].copy_from_slice(&value);
+    bytes[418..].copy_from_slice(&salt);
+    assert_eq!(actual, crate::HOST_HASH(&[&bytes]));
+}
+
+#[kani::proof]
+#[kani::unwind(514)]
+#[kani::stub(crate::host_hashv, query)]
+fn private_leaf_c2() {
+    reset(2);
+    let value: [u8; 192] = kani::any();
+    let salt: [u8; 32] = kani::any();
+    let actual = aspis_core::state_only_private_merkle::private_leaf_hash(crate::HOST_HASH, 0xf1, &value, &salt);
+    let mut bytes = [0; 226];
+    bytes[0] = 0x10;
+    bytes[1] = 0xf1;
+    bytes[2..194].copy_from_slice(&value);
+    bytes[194..].copy_from_slice(&salt);
+    assert_eq!(actual, crate::HOST_HASH(&[&bytes]));
+}
+
+#[kani::proof]
+#[kani::unwind(514)]
+#[kani::stub(crate::host_hashv, query)]
+fn private_leaf_folded() {
+    reset(2);
+    let value: [u8; 128] = kani::any();
+    let salt: [u8; 32] = kani::any();
+    let actual = aspis_core::state_only_private_merkle::private_leaf_hash(crate::HOST_HASH, 0x72, &value, &salt);
+    let mut bytes = [0; 162];
+    bytes[0] = 0x10;
+    bytes[1] = 0x72;
+    bytes[2..130].copy_from_slice(&value);
+    bytes[130..].copy_from_slice(&salt);
+    assert_eq!(actual, crate::HOST_HASH(&[&bytes]));
+}
