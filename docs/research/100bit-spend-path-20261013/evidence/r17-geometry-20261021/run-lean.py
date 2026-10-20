@@ -41,7 +41,7 @@ try:
  output=(packet/'output.log').read_text(); timing=(packet/'time.log').read_text()
  rss=re.search(r'(\d+)\s+maximum resident set size',timing)
  swaps=re.search(r'(\d+)\s+swaps',timing)
- receipt={**command,'schema':'focused-extractor-proof-packet-v1','exit':result.returncode,'wall_seconds':wall,'peak_rss_bytes':int(rss[1]) if rss else None,'swaps':int(swaps[1]) if swaps else None,'axioms':[l for l in output.splitlines() if 'depends on axioms' in l or 'does not depend on any axioms' in l], 'full_output':output.splitlines(),'errors': [l for l in output.splitlines() if 'error:' in l]}
+ receipt={**command,'schema':'focused-extractor-proof-packet-v1','exit':result.returncode,'wall_seconds':wall,'peak_rss_bytes':int(rss[1]) if rss else None,'swaps':int(swaps[1]) if swaps else None,'axioms':re.findall(r"'[^']+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms)",output,re.S), 'full_output':output.splitlines(),'errors': [l for l in output.splitlines() if 'error:' in l]}
  (packet/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
  manifest=out/'manifest.json'
  old=json.loads(manifest.read_text()) if manifest.exists() else {'schema':'focused-extractor-proof-packet-v1','attempts':[]}
