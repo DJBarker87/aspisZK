@@ -236,3 +236,23 @@ together with any other source change the R14 refinement requires, so the
 re-pins and the CU bound are reopened once, not per finding. R15 stays open
 until then; the devnet deployment and the final CU bound proceed on the
 current freeze.
+
+## Addendum (2026-10-20): R15 preparation; the account write is an audit item
+
+Codex job cx-tx1-finish-prep (branch codex/cx-tx1-finish-prep-20261020,
+commits 6a7d2d816, 24c99396d; RETAINED UNMERGED for the next freeze): with
+the checkpoint serialisation loops isolated, the checkpoint writer and the
+compact finish cone extract with the pinned Charon/Aeneas; all standing
+gates pass on the refactored source (P_R1 8/8; six-fixture CU with minimum
+margins 119 CU stage 1 / 134 CU settlement; candidate ELF 4aa7e8a1…).
+Proved locally: writer length, conditional determinism, writer/resume
+digest agreement (standard axioms). Blocker: the adapter's account write
+indexes `AccountInfo` slices, whose type carries mutable borrows; pinned
+Aeneas rejects it and the slice-pattern alternative alike. Ruling: the
+account-write fact of R15 ("stage 1 writes only into an all-zero,
+verifier-owned account of exactly checkpoint_size", G_R1.7/G_R1.9) is
+discharged by an audited source map of the adapter write path (the V5
+accepted-source-map pattern) beside the runtime premise P2, not by
+extraction; the extracted writer facts cover everything up to the write.
+R15's remaining proof items: unconditional digest preservation and the
+guarded account-write audit. The refactor is folded into the next freeze.
