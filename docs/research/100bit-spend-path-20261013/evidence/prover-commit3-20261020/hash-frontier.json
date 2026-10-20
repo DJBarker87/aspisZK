@@ -1,0 +1,92 @@
+{
+  "source_revision": "ecdcfb6fe2e3ced44a56e3e742584d534187c562",
+  "kind": "read-only exact source-span inventory; no solver/Lean claim",
+  "checks": {
+    "hash_fn_byte_interface": {
+      "path": "crates/aspis-core/src/transcript.rs",
+      "sha256": "9bd74c66a28567e4d964896b7e2d7c0ac79840565d44b561747879868bdd9179",
+      "line": 45,
+      "verbatim": "pub type HashFn = fn(&[&[u8]]) -> [u8; 32];",
+      "found": true
+    },
+    "host_hash_implementation": {
+      "path": "crates/aspis-prover/src/lib.rs",
+      "sha256": "2d9fba825112af0f19865c39638d34bfe74a69bcaa9118f90d199e3c68607439",
+      "line": 82,
+      "verbatim": "pub fn host_hashv(inputs: &[&[u8]]) -> [u8; 32] {\n    use sha2::{Digest, Sha256};\n    let mut hasher = Sha256::new();\n    for input in inputs {\n        hasher.update(input);\n    }\n    hasher.finalize().into()\n}",
+      "found": true
+    },
+    "host_hash_selection": {
+      "path": "crates/aspis-prover/src/lib.rs",
+      "sha256": "2d9fba825112af0f19865c39638d34bfe74a69bcaa9118f90d199e3c68607439",
+      "line": 91,
+      "verbatim": "pub const HOST_HASH: HashFn = host_hashv;",
+      "found": true
+    },
+    "fixture_hash_import": {
+      "path": "crates/aspis-r1-cost-probe/examples/masked_fixture_gate.rs",
+      "sha256": "0c692c0394cc92f3bcd40acc7ad7ee4b687437662baf1424b388f28327093650",
+      "line": 4,
+      "verbatim": "use aspis_prover::HOST_HASH;",
+      "found": true
+    },
+    "fixture_hash_selection": {
+      "path": "crates/aspis-r1-cost-probe/examples/masked_fixture_gate.rs",
+      "sha256": "0c692c0394cc92f3bcd40acc7ad7ee4b687437662baf1424b388f28327093650",
+      "line": 29,
+      "verbatim": "let hash: HashFn = HOST_HASH;",
+      "found": true
+    },
+    "retry_hash_selection": {
+      "path": "crates/aspis-r1-cost-probe/examples/r1p_retry_gate.rs",
+      "sha256": "720d109e9c509f579dba4b82f108ceee2c33d1624d7689b13acbf68401118d5e",
+      "line": 54,
+      "verbatim": "prover::prove_masked_attempt(fixture.public(), &fixture.compiled, Variant::S2, HOST_HASH, secrets, &mut ledger)",
+      "found": true
+    },
+    "shipped_digest_backend": {
+      "path": "programs/r1-cost-probe/src/lib.rs",
+      "sha256": "806264e5de0b54762872f72f129afad7c1ee5b71333c1a3375955dd8d6080172",
+      "line": 13,
+      "verbatim": "fn digest(&self, parts: &[&[u8]]) -> [u8; 32] {\n        hashv(parts).to_bytes()\n    }",
+      "found": true
+    },
+    "poseidon_field_interface": {
+      "path": "crates/aspis-statement/src/poseidon2.rs",
+      "sha256": "4563a7192a69748ab0a56ddc023a9f13f2d96d0064cd829dd17ac358bce1a740",
+      "line": 357,
+      "verbatim": "pub fn permute_optimized(state: &mut [M31; 16])",
+      "found": true
+    },
+    "poseidon_compression_interface": {
+      "path": "crates/aspis-statement/src/poseidon2.rs",
+      "sha256": "4563a7192a69748ab0a56ddc023a9f13f2d96d0064cd829dd17ac358bce1a740",
+      "line": 495,
+      "verbatim": "pub fn merkle_node_compress_v3(left: &Digest, right: &Digest) -> Digest",
+      "found": true
+    },
+    "poseidon_digest_type": {
+      "path": "crates/aspis-statement/src/poseidon2.rs",
+      "sha256": "4563a7192a69748ab0a56ddc023a9f13f2d96d0064cd829dd17ac358bce1a740",
+      "line": 60,
+      "verbatim": "pub type Digest = [M31; DIGEST_ELEMS];",
+      "found": true
+    },
+    "mask_seed_calls_callback": {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "sha256": "69406573ccdad6d528ac3ca85cbd2fdeb5c6cb677901d2c2db0c02a483663185",
+      "line": 396,
+      "verbatim": "Ok(hash(&[\n        MASK_SEED_DOMAIN,\n        &precommit_binding,\n        &context.encode(),\n        private_entropy,\n    ]))",
+      "found": true
+    },
+    "leaf_salt_calls_callback": {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "sha256": "6b949d49a6dfb1d9fa76d78a81321ffeb5d570dd40e76b3cd732b10fe2ab7818",
+      "line": 484,
+      "verbatim": "Ok(hash(&[\n            LEAF_SALT_DOMAIN,\n            &attempt_binding,\n            &self.mask_nonce,\n            &[tree_tag],\n            &leaf_index.to_le_bytes(),\n            self.leaf_salt_seed.as_ref(),\n        ]))",
+      "found": true
+    }
+  },
+  "conclusion": "D90 Poseidon field permutation/compression equality does not identify the SHA-256 callback in the prover seed/salt/expander cone. No Poseidon-to-byte-HashFn bridge has been supplied or proved.",
+  "stage_1": "blocked: requested admitted backend differs from the actual callback backend; no arbitrary output model or stub installed"
+}

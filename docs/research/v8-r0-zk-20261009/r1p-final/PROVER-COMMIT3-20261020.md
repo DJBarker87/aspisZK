@@ -42,3 +42,50 @@ remain recorded in the previous continuation; they were not rerun unchanged.
 The build logs retain SBF stack diagnostics also emitted for non-entrypoint
 functions; exact identity establishes the same frozen bytes, not a new
 stack-safety theorem. No shipped source, key, account or peer worktree changed.
+
+## Stage 1: demonstrated backend obstruction
+
+The premise “the prover's hash is Poseidon2” is false for the HashFn callback
+that blocked the previous continuation. `hash-frontier.json` records exact
+source spans, line numbers and SHA256 pins; `harness/hash-frontier.py`
+rechecks them from the repository root without changing any source.
+
+The concrete chain is:
+
+1. `aspis-core/src/transcript.rs:45` defines
+   `HashFn = fn(&[&[u8]]) -> [u8; 32]`.
+2. `aspis-prover/src/lib.rs:82-91` defines `host_hashv` using
+   `sha2::{Digest, Sha256}`, updating once per input slice and finalizing,
+   then sets `HOST_HASH: HashFn = host_hashv`.
+3. `masked_fixture_gate.rs:4,29` selects that HOST_HASH;
+   `r1p_retry_gate.rs:54,89` passes it to both proof entrypoints.
+4. `state_only_hiding.rs:399` and `state_only_entropy.rs:580` call this
+   supplied byte callback for the mask seed and leaf salt. The source/D
+   and refill paths likewise accept/call the supplied HashFn; neither file
+   calls Poseidon2.
+5. The program's `SolanaDigest` routes to `solana_program::hash::hashv`,
+   matching the SHA-256 backend described in the core and prover sources.
+
+In contrast, `aspis-statement/src/poseidon2.rs` implements the statement's
+field-based hash: `permute_optimized(&mut [M31;16]) -> ()` and
+`merkle_node_compress_v3(&[M31;8], &[M31;8]) -> [M31;8]`. Neither has the
+HashFn signature. There is no byte encoding/framing adapter identifying
+these with host_hashv. D90's component equality therefore cannot establish a
+contract for the callback in this prover cone. Statement Poseidon2 and the
+PCS transcript/commitment byte hash are distinct uses of hashing.
+
+Per common rule 4, stop this item rather than prove an irrelevant backend
+and call it source closure. No `stub_verified` was installed, no hash outputs
+were postulated, and no symbolic hash/builder result is claimed. No Kani
+job was launched for the wrong backend. This is a source-identification
+obstruction, not a solver timeout or a counterexample to the desired builder
+equivalence. The old `kani::any::<HashFn>()` diagnostic remains a harness
+problem: selecting a concrete function pointer would remove that diagnostic,
+but does not by itself verify an admitted abstraction for the function.
+
+A sound continuation needs either a verified SHA-256 callback contract on
+the actual byte framing (then per-function shipped/reference builder checks),
+or an explicitly approved implementation-independent relational callback
+proof that never assumes unmatched inputs have equal answers. Merely
+substituting Poseidon2 would change the proved implementation. The concurrent
+builder/SourceIdentification and ScanCoupling owners' files are untouched.
