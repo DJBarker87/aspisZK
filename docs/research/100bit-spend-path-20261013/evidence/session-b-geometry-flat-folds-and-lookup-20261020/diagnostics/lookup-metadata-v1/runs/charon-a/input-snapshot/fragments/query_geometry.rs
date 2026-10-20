@@ -1,0 +1,1 @@
+struct QueryGeometry { start:usize, inverses:Vec<[M31;5]>, line_z:Vec<M31> }
