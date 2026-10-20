@@ -28,7 +28,7 @@ An actual successful hash trace alone does not establish this target.
 | Checklist row | Actual source and matching definition | Status |
 |---|---|---|
 | salts | `crates/aspis-prover/src/state_only_entropy.rs:568`: validate reserved context, derive attempt binding, hash domain / binding / nonce / tag / LE32(index) / leaf secret. `crates/aspis-r1-cost-probe/src/prover.rs:189` calls for every index below FIBRE_COUNT. Model P`LayoutR1PBin.lean:140`. | Awaiting translation and address/carrier transport. |
-| seeds | `crates/aspis-prover/src/state_only_hiding.rs:388` mask seed; `crates/aspis-prover/src/state_only_entropy.rs:426` source seed and `:650` D seed. Match P`LayoutR1PBin.lean:136`. The reserved object retains source seed, not raw field entropy (`:437`). | Awaiting translation. |
+| seeds | `crates/aspis-prover/src/state_only_hiding.rs:388` mask seed; `crates/aspis-prover/src/state_only_entropy.rs:426` source seed and `:650` D seed. Match P`LayoutR1PBin.lean:136`. The reserved object retains source seed, not raw field entropy (`:439`). | Awaiting translation. |
 | reserved secret distribution | `crates/aspis-prover/src/state_only_entropy.rs:172` samples 96 OS bytes, splits nonce / field entropy / leaf secret, rejects if any is zero, caps retries. `:202` instead fixes a supplied nonce and samples 64 bytes. Model P`GamesR1PBin.lean:84` uses three nonzero coordinates. | OS law, conditioning, bounded entropy failure, reservation and caller law remain; deterministic source code cannot alone prove the OS distribution. |
 | mask_expander / source_expander | `crates/aspis-prover/src/state_only_hiding.rs:340` and `crates/aspis-prover/src/state_only_entropy.rs:770`: domain / seed / LE64(counter), counter initially 0, word initially 8, refill then wrapping increment, four-byte word slices. Match P`LayoutR1PBin.lean:131` and P`FinalR1PBin.lean:44`. | No counter reuse needs an invocation bound; it is false for an unrestricted lifetime because increments wrap. No unrestricted non-wrapping theorem is claimed. |
 | stream selection | `crates/aspis-prover/src/state_only_hiding.rs:447` initializes SeedExpander from the mask seed; `crates/aspis-prover/src/state_only_entropy.rs:647` initializes Profile21SourceExpander from the D seed. Actual pair-forest caller `crates/aspis-r1-cost-probe/src/prover.rs:135`; wrapper `crates/aspis-prover/src/state_only_entropy.rs:703`. | Seed 1 is intermediate input to seed 2, not a third commitment expansion stream. |
@@ -41,3 +41,26 @@ and 4×1024 = 4096. At 16 trials/limb and eight words/block the padded
 worst-case block budgets are E1=90112 and E2=8192. Both satisfy
 16L=8E, E=2L and E<2^64. These arithmetic readings do not supply an
 `R1ProverP` instance or prove complete source-read coverage.
+
+## Extraction stage 1: actual salt cone lowered
+
+The extraction root is the unmodified `prover::derive_private_salts`, with
+transparent dependency selection for `aspis_prover::state_only_entropy`
+and `aspis_core::state_only_hiding`. It includes actual bodies for
+`derive_pool_v1_leaf_salt` (LLBC function 8), `validate_pool_v1_context`
+(114), `pool_v1_private_attempt_binding` (115) and context `encode` (158).
+`llbc-functions.json` records all extracted names, opacities and source spans;
+foreign library interfaces are not claimed proved. The model source remains
+unchanged. No handwritten replacement Rust implementation is used.
+
+Charon exit 0, wall 36.281 s, peak RSS 577276 KiB, swaps 0;
+`salts-charon/receipt.json` records the exact command, environment and cgroup.
+`llbc-pin.json` records the retained host artifact by hash and size only;
+no binary or LLBC is committed. This is lowering evidence, not a Lean proof.
+The actual Charon and extended-static Aeneas binaries are hashed in
+`source-pins.json`; the kit is the one used by stage2-continuation.
+
+Aeneas is paused before launch by the host reservation gate: concurrent
+populated caps plus this job's 8 GiB would exceed the 55 GiB safe limit.
+The completed Charon step is never rerun; `extract.py --resume-aeneas`
+resumes only the unattempted translation using the same retained LLBC.
