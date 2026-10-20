@@ -1,0 +1,44 @@
+/Users/dominic/ZK/.worktrees/cx-asq8-kani/docs/research/100bit-spend-path-20261013/lean/ASQ8Normalization.lean:25:37: error: unsolved goals
+case ok
+bytes out : Bytes
+v✝ : core.result.Result PoolV1PairForestTerminalRequestV1 PoolV1PairForestTerminalFormatErrorV1
+h :
+  (do
+      let cf ←
+        match v✝ with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok bytes)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec
+              (fun x => Result (core.result.Result (Std.Array U8 320#usize) PoolV1PairForestTerminalFormatErrorV1)) x
+          | core.result.Result.Err e => ok (core.result.Result.Err e)) =
+    ok (core.result.Result.Ok out)
+hd : decode_pool_v1_pair_forest_terminal_request_reference_v1 bytes = ok v✝
+⊢ out = bytes
+/Users/dominic/ZK/.worktrees/cx-asq8-kani/docs/research/100bit-spend-path-20261013/lean/ASQ8Normalization.lean:30:6: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp_all [core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-asq8-kani/docs/research/100bit-spend-path-20261013/lean/ASQ8Normalization.lean:37:73: error: unexpected identifier; expected '}'
+/Users/dominic/ZK/.worktrees/cx-asq8-kani/docs/research/100bit-spend-path-20261013/lean/ASQ8Normalization.lean:49:73: error: unexpected identifier; expected '}'
+'AspisR20Request.ASQ8Normalization.success_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/Users/dominic/ZK/.worktrees/cx-asq8-kani/docs/research/100bit-spend-path-20261013/lean/ASQ8Normalization.lean:57:14: error(lean.unknownIdentifier): Unknown constant `transfer_bytes`
+/Users/dominic/ZK/.worktrees/cx-asq8-kani/docs/research/100bit-spend-path-20261013/lean/ASQ8Normalization.lean:58:14: error(lean.unknownIdentifier): Unknown constant `withdrawal_bytes`
+'AspisR20Request.pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_request_reference_v1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR20Request.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_request_reference_v1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR20Request.pool_v1.pair_forest_terminal.normalize_pool_v1_pair_forest_terminal_request_reference_v1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
