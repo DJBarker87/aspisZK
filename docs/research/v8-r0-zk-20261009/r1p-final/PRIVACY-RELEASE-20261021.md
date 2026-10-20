@@ -125,3 +125,71 @@ whole-bank equivalence theorem: the extracted Parts/loop/writer outputs
 still need pointwise identification with `R0Z.WriterRefine.copyCellMerged`.
 The raw mapper and full public projection also still need to be joined to
 successful compiler executions. RustRuntimeJoin is not claimed inhabited.
+
+## Extracted-call bridges and isolated source obstruction
+
+`BuilderBankShape` proves the actual extracted `late_row`, `node_kind` and
+`zero_kind` dispatch predicates against their mathematical intervals, using
+standard usize comparison specifications. `BuilderStdArray` proves the
+bounded-index array adapter at one fixed closure state, and
+`BuilderBankArray.digest8` applies it to the actual extracted closure, proving
+its output equals the existing `WriterRefine.digest8`. These are symbolic
+proofs about all inputs, with no finite table normalization.
+
+| Focused final target | Attempt | Exit | Wall | Peak RSS KiB | Swap |
+|---|---:|---:|---:|---:|---:|
+| `R1Z.BuilderBankShape` (5 theorems) | 9243 | 0 | 2.06 s | 3,717,912 | 0 |
+| `R1Z.BuilderStdArray` (3 theorems) | 9244 | 0 | 1.22 s | 2,536,200 | 0 |
+| `R1Z.BuilderBankArray.digest8` | 9247 | 0 | 1.82 s | 3,732,336 | 0 |
+
+To isolate the admission frontier rather than rerun the whole compiler,
+`extract-records-focused.py` extracts just the actual Rust `records` function,
+with all three copy crates included, in this branch's own capped host
+workspace. This is a new, smaller target than D83's whole-compiler run.
+Charon passes (exit 0, 10.329 s, 614,304 KiB RSS, zero swap); Aeneas fails
+(exit 2, 0.290 s, 81,136 KiB RSS, zero swap):
+
+```
+Failure "Unreachable"
+Source: crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs:230:16-230:117
+Compiler source: interp/InterpAbs.ml:1688
+```
+
+The failing expression borrows one of the selected pair's two commitment
+arrays. `records-focused-evidence.json` contains both full receipts, full
+translation failure, exact command, source revision `4b44a9495`, verified
+current source pins, tool pins, and LLBC SHA/size. LLBC and compiled artifacts
+remain on the host. Both scopes have MemoryHigh=6G, MemoryMax=8G,
+MemorySwapMax=0, TasksMax=64, four Cargo jobs and the requested RUSTFLAGS.
+This is a translation failure, not a memory failure; it was not rerun.
+The prior owned-record Kani certificates remain applicable component evidence;
+they do not by themselves give a successful-compiler semantic relation proof.
+
+## Final status and exact handoff
+
+Part 2 is proved for the canonical protocol instance. Part 1 is **not closed**.
+The direct source route still fails at the isolated records borrow above.
+The reference route still needs the following proofs; this report does not
+claim that those mathematical obligations are impossible:
+
+| Obligation | Exact next work | Owner |
+|---|---|---|
+| Successful-source admission | Relate successful shipped compile inputs/outputs to the same raw RW/RP and semantic public projection; derive WitnessOk, PubCorr, embedded RspendPlus (including append/carry and the change sentinel). | Builder source worker / lead |
+| `RustRuntimeJoin.raw_trace_eq` | Use the now-compiled bank definition to prove Parts/57-block materialization, recursive callee refinements, bank-fill loop, merge and final Vec/column-wrapper equality with copyCellMerged. Dispatch and digest8 are proved here; whole-bank equality is not. | Builder source worker |
+| Concrete `RustRuntimeJoin` | Define the shipped successful-source HonestProver domain and fill all fields from the above results, existing mapper/empty-root certificates, and S2 transport. An instance subtype carrying RspendPlus would assume the admission being requested and is not supplied. | Builder source worker |
+| Real checker/retry `ModelExecutionJoin` | Refine actual checker-input construction, P_chk/P_R1, no-pole/VR1, mask tape, retries, errors, publication/serialization and oracle history to D94's fixed-event experiment. Builder trace validity alone gives neither a coupling with uniform marginals nor off-event observation agreement. | Real runtime worker |
+
+No source h or source FSExperiments is silently defined to equal the model.
+No execution join is discharged by choosing arbitrary exception events.
+No successful-source admission, shipped RuntimeJoin inhabitant, or real
+checker/retry coupling is claimed.
+
+`release-final-audit.py` verifies all eight new current modules, every one of
+25 theorem audits, the bank definition audit, current source hashes, retained
+successful receipts, and unchanged direct dependency objects. It also
+verifies no shipped crate file changed against `b89c4bae8`. The resulting
+`release-final-audit.json` records resolved import object SHA/size and the
+env-J/launcher pins. Every final audit uses only a subset of propext,
+Classical.choice and Quot.sound. Failed elaborations remain in the JSONL
+and are excluded from final evidence. No frozen-manifest replay, SBF rebuild,
+merge or push is claimed; no frozen or shipped source changed.

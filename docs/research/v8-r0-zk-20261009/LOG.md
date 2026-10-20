@@ -7280,3 +7280,30 @@ full-tape form implies and is therefore strictly weaker, and show the
 privacy endpoint still follows. Then close the concrete source quotient
 decoder/carrier law, commitment-observable transport and the
 caller/count/exhaustion instance.
+## Builder refinement continuation 5 — composed release endpoint and std-model bank port (2026-10-21, worker)
+
+Branch `codex/cx-builder-ref5-20261021`, base `b89c4bae8`.
+`PrivacyR1FinalRelease.privacy_R1_release` composes D94's fixed-event history
+reduction with D96's canonical-builder/public reduction. Its conclusion is
+D94's error bound including freshness and <2^-100; builder soundness and
+hpub are removed at the canonical instance. Exact signature comparisons and
+all remaining premise owners are in `r1p-final/PRIVACY-RELEASE-20261021.md`.
+
+Five proved std models now replace the rejected bank extraction's externals;
+the adapted complete merged_banks definition compiles and audits to standard
+axioms. Additional results cover finite Vec map collection, bounded array
+construction, shift-count port semantics, actual bank dispatch predicates,
+and the actual extracted digest8-to-canonical bridge. Eight new modules,
+25 theorems, env J 9226–9247 (including retained failures), final current-object
+and dependency audit in `r1p-final/release-final-audit.json`; every successful
+attempt has zero swaps. No shipped crate source changed.
+
+Part 1 remains open. A new isolated extraction of actual records (all three
+copy crates included) still fails at the selected-sibling borrow,
+pair_forest_copy_builder.rs:230 / InterpAbs.ml:1688. Charon 0, Aeneas 2;
+full source/tool pins and capped resource receipts are in
+`r1p-final/records-focused-evidence.json`. This was not a whole-compiler rerun
+or a memory failure. The std blocker is cleared, but whole-bank refinement,
+successful-source admission, a concrete shipped RustRuntimeJoin and real
+checker/retry execution coupling are not proved. The canonical release
+composition is conditional on the same fixed-event execution joins as D94.
