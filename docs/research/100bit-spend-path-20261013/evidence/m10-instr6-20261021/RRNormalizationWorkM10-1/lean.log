@@ -1,0 +1,140 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/RRNormalizationWorkM10.lean:17:0: warning: automatically included section variable(s) unused in theorem `AspisR1.RRNormalizationWorkM10.rows_value`:
+  [DecidableEq K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/RRNormalizationWorkM10.lean:24:0: warning: automatically included section variable(s) unused in theorem `AspisR1.RRNormalizationWorkM10.rows_work`:
+  [DecidableEq K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/RRNormalizationWorkM10.lean:78:12: error: Tactic `rfl` failed: The left-hand side
+  (none,
+      (rows D s.rows a s.maxX ell).2 +
+          (scan (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n)).2 +
+        4).1
+is not definitionally equal to the right-hand side
+  match
+    RRFiniteCoeffScannerV9.firstNonzeroFullRows
+      (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n) with
+  | none => none
+  | some (v, snd) =>
+    some
+      { rows := List.drop v (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n),
+        maxX := s.maxX + ell - v }
+
+case h_1
+K : Type
+inst✝¹ : Field K
+inst✝ : DecidableEq K
+D ell : ℕ
+s : RawState K
+a : K
+x✝ : Option (ℕ × List K)
+heq✝ :
+  RRFiniteCoeffScannerV9.firstNonzeroFullRows (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n) =
+    none
+⊢ (none,
+        (rows D s.rows a s.maxX ell).2 +
+            (scan (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n)).2 +
+          4).1 =
+    match
+      RRFiniteCoeffScannerV9.firstNonzeroFullRows
+        (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n) with
+    | none => none
+    | some (v, snd) =>
+      some
+        { rows := List.drop v (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n),
+          maxX := s.maxX + ell - v }
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/RRNormalizationWorkM10.lean:78:12: error: Tactic `rfl` failed: The left-hand side
+  (some
+        { rows := List.drop v✝ (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n),
+          maxX := s.maxX + ell - v✝ },
+      (rows D s.rows a s.maxX ell).2 +
+              (scan (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n)).2 +
+            (rows D s.rows a s.maxX (s.maxX + ell)).2 +
+          (s.maxX + ell + 1) +
+        8).1
+is not definitionally equal to the right-hand side
+  match
+    RRFiniteCoeffScannerV9.firstNonzeroFullRows
+      (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n) with
+  | none => none
+  | some (v, snd) =>
+    some
+      { rows := List.drop v (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n),
+        maxX := s.maxX + ell - v }
+
+case h_2
+K : Type
+inst✝¹ : Field K
+inst✝ : DecidableEq K
+D ell : ℕ
+s : RawState K
+a : K
+x✝ : Option (ℕ × List K)
+v✝ : ℕ
+snd✝ : List K
+heq✝ :
+  RRFiniteCoeffScannerV9.firstNonzeroFullRows (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n) =
+    some (v✝, snd✝)
+⊢ (some
+          { rows := List.drop v✝ (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n),
+            maxX := s.maxX + ell - v✝ },
+        (rows D s.rows a s.maxX ell).2 +
+                (scan (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n)).2 +
+              (rows D s.rows a s.maxX (s.maxX + ell)).2 +
+            (s.maxX + ell + 1) +
+          8).1 =
+    match
+      RRFiniteCoeffScannerV9.firstNonzeroFullRows
+        (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n) with
+    | none => none
+    | some (v, snd) =>
+      some
+        { rows := List.drop v (List.ofFn fun n => RRVectorRowPolynomialBridge.row s.rows a s.maxX ↑n),
+          maxX := s.maxX + ell - v }
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/RRNormalizationWorkM10.lean:77:4: warning: This simp argument is unused:
+  RRRuntimeNormalizedChildReconstruction.runtimeRows
+
+Hint: Omit it from the simp argument list.
+  simp only [normalize, rows_value, scan_value, normalizeChild?, RRVectorActualScanner.rowsUpTo,
+  ̲  ̲ ̲ ̲RRVectorNormalizedRows.rowsThrough,
+      R̵R̵F̵i̵n̵i̵t̵e̵R̵o̵o̵t̵S̵a̵m̵p̵l̵e̵r̵N̵o̵r̵m̵a̵l̵i̵z̵e̵d̵S̵t̵a̵t̵e̵B̵r̵i̵d̵g̵e̵.̵n̵o̵r̵m̵a̵l̵i̵z̵e̵d̵R̵u̵n̵t̵i̵m̵e̵S̵t̵a̵t̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵R̵R̵R̵u̵n̵t̵i̵m̵e̵N̵o̵r̵m̵a̵l̵i̵z̵e̵d̵C̵h̵i̵l̵d̵R̵e̵c̵o̵n̵s̵t̵r̵u̵c̵t̵i̵o̵n̵.̵r̵u̵n̵t̵i̵m̵e̵R̵o̵w̵s̵]̵R̲R̲F̲i̲n̲i̲t̲e̲R̲o̲o̲t̲S̲a̲m̲p̲l̲e̲r̲N̲o̲r̲m̲a̲l̲i̲z̲e̲d̲S̲t̲a̲t̲e̲B̲r̲i̲d̲g̲e̲.̲n̲o̲r̲m̲a̲l̲i̲z̲e̲d̲R̲u̲n̲t̲i̲m̲e̲S̲t̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/RRNormalizationWorkM10.lean:99:45: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  i ≥ 1
+  h ≥ 0
+  h - 3*i ≥ 1
+  g ≥ 0
+  g - h + 3*i ≥ -1
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ -1
+  d - f ≥ -1
+  c ≥ 0
+  b ≥ 0
+  b - c - i ≥ -1
+  b - i ≥ -1
+  4*b - c + 2*d - e - f + g - h - i ≤ -7
+where
+ b := ↑D
+ c := ↑s.maxX
+ d := ↑(D + 1) * ↑(rowBudget D + 3)
+ e := ↑(rows D s.rows a s.maxX ell).2
+ f := ↑(rows D s.rows a s.maxX (s.maxX + ell)).2
+ g := ↑((D + 1) ^ 2)
+ h := ↑(scan (rows D s.rows a s.maxX ell).1).2
+ i := ↑(rows D s.rows a s.maxX ell).1.length
+'AspisR1.RRNormalizationWorkM10.rows_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RRNormalizationWorkM10.rows_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RRNormalizationWorkM10.scan_value' depends on axioms: [propext, Quot.sound]
+'AspisR1.RRNormalizationWorkM10.scan_work' depends on axioms: [propext, Quot.sound]
+'AspisR1.RRNormalizationWorkM10.normalize_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RRNormalizationWorkM10.normalize_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

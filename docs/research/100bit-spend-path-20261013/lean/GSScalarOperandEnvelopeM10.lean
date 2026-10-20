@@ -55,7 +55,7 @@ theorem linear_degree (c : K × K) : (linear c).toPoly.natDegree ≤ 1 := by
 
 def Bounded (D q : Nat) : Call K → Prop
   | .gcd a b => a.val.size ≤ D+1 ∧ b.val.size ≤ D+1
-  | .power a m e => a.val.size ≤ D+1 ∧ m.val.size ≤ D+1 ∧ e ≤ q
+  | .power a m e => a.val.size ≤ D+1 ∧ m.val.size ≤ D+1 ∧ e ≤ q ∧ m.toPoly.Monic
   | .division a b => a.val.size ≤ D+1 ∧ b.val.size ≤ D+1 ∧ b.toPoly.Monic
 
 theorem trial_bounded (f h : CPolynomial K) (q D : Nat)
@@ -80,7 +80,7 @@ theorem trial_bounded (f h : CPolynomial K) (q D : Nat)
     simp only [List.mem_cons, List.not_mem_nil, or_false] at hc
     rcases hc with rfl | rfl | rfl
     · exact ⟨sf,sh⟩
-    · exact ⟨sh,sf,Nat.div_le_self _ _⟩
+    · exact ⟨sh,sf,Nat.div_le_self _ _,hf⟩
     · exact ⟨sf,sa⟩
 
 theorem retry_bounded (f : CPolynomial K) (q t D : Nat) (tape : Fin t → K × K)
