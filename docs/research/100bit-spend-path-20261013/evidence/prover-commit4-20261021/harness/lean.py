@@ -17,7 +17,7 @@ from pathlib import Path
 R=Path(%r);J=Path('/home/dombarker/project-offloads/aspis-joint-20261019')
 rel=%r;attempt=%r;memory_gib=%r
 p=J/'sources'/rel
-assert rel.startswith('AspisR1ProverCommit/') or rel.startswith('AspisR1ProverLeaf/') or rel.startswith('AspisR1ProverStreams/') or rel.startswith('R1Z/ProverCommit')
+assert rel.startswith('AspisR1ProverCommitReference/') or rel.startswith('AspisR1ProverCommit/') or rel.startswith('AspisR1ProverLeaf/') or rel.startswith('AspisR1ProverStreams/') or rel.startswith('R1Z/ProverCommit')
 p.parent.mkdir(parents=True,exist_ok=True)
 if p.exists():
  q=R/'snapshots'/attempt/rel;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(p.read_bytes())
@@ -36,7 +36,7 @@ def visit(m):
  assert o,m
  deps.append((m,hashlib.sha256(o.read_bytes()).hexdigest()))
  q=J/'sources'/Path(m.replace('.','/')+'.lean')
- if q.exists() and m.startswith(('AspisR1ProverCommit.','AspisR1ProverStreams.','AspisR1ProverLeaf.','R1Z.ProverCommit')):
+ if q.exists() and m.startswith(('AspisR1ProverCommitReference.','AspisR1ProverCommit.','AspisR1ProverStreams.','AspisR1ProverLeaf.','R1Z.ProverCommit')):
   for child in re.findall(r'^import (\\S+)',q.read_text(),re.M):visit(child)
 for m in re.findall(r'^import (\\S+)',p.read_text(),re.M):visit(m)
 deps.sort()

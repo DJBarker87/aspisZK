@@ -33,3 +33,54 @@ All six `#print axioms` lines are in `lean/out-8144.log`: cache theorems use
 `[propext, Classical.choice, Quot.sound]`. Source SHA, dependency fingerprint,
 revision and complete resource/audit receipts are in `lean/attempts.jsonl`.
 The existing capped launcher was used, with no shared module overwritten.
+
+## Stage 3: owned reference lowering and final axioms audit
+
+The proof-only `prover_commit_reference` module is enabled by `cfg(kani)` or
+`cfg(aeneas_ref)`. It has an owned expander state, byte-exact word extraction
+and a 16-try sampler carrying its result. The first reference failed Aeneas's
+nested-return prepass (`Option` language-item diagnostic); the carried-result
+replacement translates successfully. Both Charon lowerings have
+`has_errors=false`; only the successful replacement is adopted. The accepted
+LLBC SHA and size are recorded in `reference-llbc.json`. The only external
+constant is M31's exact `P = 2147483647`, defined rather than axiomatized.
+
+The three generated modules compile separately in env J 8148–8150. The
+scoped discriminant expansion follows the previous continuation and avoids
+its global instance-name collision; raw constructor order and 0–4 values
+are preserved. New `ProverCommitReferenceSource` proves cached reads ignore
+the callback, termination at 16 attempts, and preservation after success
+(attempt 8151). These are component properties, not a full tape theorem.
+
+Final audit `R1Z.ProverCommitOracleAudit`, env J **8152**: exit 0, **2.37 s**,
+**4,028,280 KiB** peak RSS, **0 swaps**. Its twelve complete axiom lines cover
+all eleven new theorems and `privacy_R1_protocol`. Only
+`propext`, `Classical.choice`, and `Quot.sound` occur. Attempts 8145/8146 are
+rejected proof drafts with a constructor elaboration error; their recovery
+`sorryAx` output is not accepted. Final salt refinement passes in 8147.
+No existing privacy/source-identification/history module was edited.
+
+## Stage 4: final shipped-source ELF gate
+
+All shipped-file additions are proof-only; no production function was
+changed. The final Rust source revision is `b5406a591`. Rebuilt in this job's
+own host workspace using the retained cache, Solana 3.1.13/platform-tools
+v1.52, locked offline dependencies, four jobs and the frozen feature sets.
+Native RUSTFLAGS is `-C link-arg=-Wl,--threads=4`; the freeze recipe unsets it
+only for SBF and uses `-C link-arg=--threads=4` as the target-specific flag.
+Every build scope has MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0,
+TasksMax=64. Reservation holds were respected. Time was expected in
+incremental optimized compilation/linking, with no arithmetic gate.
+
+| Program | SHA256 | Exit | Wall s | Peak RSS KiB | Swap |
+|---|---|---:|---:|---:|---:|
+| default | `dfc2a91ab24e1ec4f57debd8f124cb4f6a3c38ba2662b7318e2e4f3b4acdde34` | 0 | 41.233 | 648668 | 0 |
+| devnet | `fb2fc048f6499a4775051d0267c76e8ca273b28f557bfd3b5fb65b2f687c8b78` | 0 | 3.713 | 204192 | 0 |
+| pool | `121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548` | 0 | 34.048 | 645152 | 0 |
+
+All three pass `cmp --silent` against the preceding continuation's frozen
+artifacts. `frozen-elf-check.json` contains exact commands, sizes, source
+hashes and resource receipts; `#print axioms` is N/A for these Rust builds.
+The SBF diagnostics remain in the logs; byte identity is the claimed gate.
+Runtime suites were not repeated for cfg-only additions. No keys, accounts,
+wallets, deployments, peer worktrees or branches were changed; no push.
