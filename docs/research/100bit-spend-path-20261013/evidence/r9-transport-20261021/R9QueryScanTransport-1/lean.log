@@ -1,0 +1,34 @@
+/Users/dominic/ZK/.worktrees/cx-r9-transport/docs/research/100bit-spend-path-20261013/lean/R9QueryScanTransport.lean:37:2: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/Users/dominic/ZK/.worktrees/cx-r9-transport/docs/research/100bit-spend-path-20261013/lean/R9QueryScanTransport.lean:45:20: error(lean.unknownIdentifier): Unknown identifier `emptyTable`
+
+Note: It is not possible to treat `emptyTable` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/Users/dominic/ZK/.worktrees/cx-r9-transport/docs/research/100bit-spend-path-20261013/lean/R9QueryScanTransport.lean:69:20: error(lean.unknownIdentifier): Unknown identifier `emptyTable`
+
+Note: It is not possible to treat `emptyTable` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/Users/dominic/ZK/.worktrees/cx-r9-transport/docs/research/100bit-spend-path-20261013/lean/R9QueryScanTransport.lean:70:21: error(lean.unknownIdentifier): Unknown identifier `emptyTable`
+
+Note: It is not possible to treat `emptyTable` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/Users/dominic/ZK/.worktrees/cx-r9-transport/docs/research/100bit-spend-path-20261013/lean/R9QueryScanTransport.lean:79:13: error(lean.unknownIdentifier): Unknown identifier `mean_mono`
+/Users/dominic/ZK/.worktrees/cx-r9-transport/docs/research/100bit-spend-path-20261013/lean/R9QueryScanTransport.lean:71:59: error: unsolved goals
+C Residual : Type
+inst✝¹ : Fintype Residual
+inst✝ : Nonempty Residual
+source : Program Bytes State (Outcome C)
+model : Experiment
+hrefine : OrderedSourceRefinement source model
+hwords : QueryWordCorrespondence source Residual
+s : Finset Bytes := support source ∪ support model
+hs : support source ⊆ s
+hm : support model ⊆ s
+lawS : (mean fun H => deployedMass (eval (extend s H default) source)) = lazyMean source (fun x => none) deployedMass
+lawM : (mean fun H => failureMass (eval (extend s H default) model)) = lazyMean model (fun x => none) failureMass
+lawA :
+  (mean fun H => indicator (abort (eval (extend s H default) source))) =
+    lazyMean source (fun x => none) fun v => indicator (abort v)
+⊢ lazyMean source sorry deployedMass ≤
+    lazyMean model sorry failureMass + QueryScanModelFailure.failureProbability (2 ^ 18)
+'AspisR1.R9QueryScanTransport.word_failure_mean' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.R9QueryScanTransport.abort_mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.R9QueryScanTransport.transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

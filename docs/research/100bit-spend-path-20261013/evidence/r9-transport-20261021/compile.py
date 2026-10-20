@@ -83,7 +83,12 @@ try:
                                 env={**os.environ, 'LEAN_PATH': path}, stdout=log, stderr=timing)
     receipt.update(exit=result.returncode, wall_seconds=time.monotonic() - start)
 finally:
-    LOCK.rmdir()
+    try:
+        LOCK.rmdir()
+    except OSError as error:
+        # Do not touch files placed in the shared lock by another worker.
+        receipt['lock_cleanup_error'] = str(error)
+        print('Shared lock cleanup deferred: ' + str(error), flush=True)
 timing = (out / 'time.log').read_text()
 log = (out / 'lean.log').read_text()
 receipt.update(peak_rss_bytes=int(re.search(r'(\d+)\s+maximum resident set size', timing)[1]),

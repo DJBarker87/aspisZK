@@ -1,0 +1,104 @@
+import R9TwoTransactionExperiment
+
+/-! Equal-fibre source-word correspondence, followed by finite lazy-oracle
+transport. The correspondence is intentionally stronger than log consistency:
+repeated/preadversarially fixed scan addresses do not satisfy it in general. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.R9QueryScanTransport
+open FS
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open AspisV8R19.OracleFiniteSupport AspisV8R19.OracleResampling
+open AspisV8R19.CausalFirstHitUnionBound AspisV8PairedCommitment
+open R9TwoTransactionExperiment RawRecordedOracleExtractionMass
+attribute [local instance] Classical.propDecidable
+attribute [local irreducible] QueryScanModelFailure.fails
+
+/-- Full potential-support tables, including rejecting prefixes. No uniform
+probability measure over the infinite address space is postulated. -/
+abbrev Tables {C : Type} (source : Program Bytes State (Outcome C)) :=
+  {i // i ∈ support source} → State
+
+/-- R4/R9/R10/R19 backend correspondence: a lossless reindexing of the
+finite oracle table into the completed 64-word tape and unused randomness.
+This is a pointwise equal-fibre contract, not a supplied probability bound.
+It must account for the reached history, byte decoding and address reuse.
+Ghost padding on rejected prefixes must preserve the actual outcomes. -/
+structure QueryWordCorrespondence {C : Type}
+    (source : Program Bytes State (Outcome C))
+    (Residual : Type) [Fintype Residual] where
+  reindex : Tables source ≃ WordTape × Residual
+  words : ∀ H : Tables source,
+    (eval (extend (support source) H default) source).2.first.words = (reindex H).1
+
+theorem word_failure_mean (N : Nat) :
+    mean (fun w : Fin 64 → Fin N => indicator (QueryScanModelFailure.fails w)) =
+      QueryScanModelFailure.failureProbability N := by
+  unfold mean QueryScanModelFailure.failureProbability
+  rw [Fintype.card_fun, Fintype.card_fin, Fintype.card_fin, Nat.cast_pow]
+  congr 1
+  simp only [indicator, Finset.sum_boole, Fintype.card_subtype]
+
+/-- The model scan probability is *derived* from the source word law. -/
+theorem abort_mass {C Residual : Type} [Fintype Residual] [Nonempty Residual]
+    (source : Program Bytes State (Outcome C))
+    (hwords : QueryWordCorrespondence source Residual) :
+    lazyMean source emptyTable (fun v => indicator (abort v)) =
+      QueryScanModelFailure.failureProbability (2^18) := by
+  change lazyMean source (fun _ => none) (fun v => indicator (abort v)) = _
+  rw [← finite_support_oracle_law source (support source) (fun _ h => h) default]
+  calc
+    _ = mean (fun H : Tables source =>
+        indicator (QueryScanModelFailure.fails (hwords.reindex H).1)) := by
+          apply mean_congr
+          intro H
+          simp only [abort, hwords.words H]
+    _ = mean (fun wr : WordTape × Residual =>
+        indicator (QueryScanModelFailure.fails wr.1)) :=
+      mean_equiv (X := Tables source) (Y := WordTape × Residual) hwords.reindex
+        (fun wr => indicator (QueryScanModelFailure.fails wr.1))
+    _ = mean (fun w : WordTape => indicator (QueryScanModelFailure.fails w)) := by
+      rw [mean_prod]
+      apply mean_congr
+      intro w
+      exact mean_const _
+    _ = _ := word_failure_mean (2^18)
+
+/-- Transport over the actual shared lazy byte oracle. Only source execution
+refinement and the explicit word correspondence remain as hypotheses. -/
+theorem transport {C Residual : Type} [Fintype Residual] [Nonempty Residual]
+    (source : Program Bytes State (Outcome C)) (model : Experiment)
+    (hrefine : OrderedSourceRefinement source model)
+    (hwords : QueryWordCorrespondence source Residual) :
+    lazyMean source emptyTable deployedMass ≤
+      lazyMean model emptyTable failureMass +
+        QueryScanModelFailure.failureProbability (2^18) := by
+  let s := support source ∪ support model
+  have hs : support source ⊆ s := Finset.subset_union_left
+  have hm : support model ⊆ s := Finset.subset_union_right
+  have lawS := finite_support_oracle_law source s hs default deployedMass
+  have lawM := finite_support_oracle_law model s hm default failureMass
+  have lawA := finite_support_oracle_law source s hs default
+    (fun v => indicator (abort v))
+  have hp := mean_mono (fun H : {i // i ∈ s} → State =>
+    pointwise_transfer source model hrefine (extend s H default))
+  have hadd : mean (fun H : {i // i ∈ s} → State =>
+      failureMass (eval (extend s H default) model) +
+        indicator (abort (eval (extend s H default) source))) =
+      mean (fun H : {i // i ∈ s} → State => failureMass (eval (extend s H default) model)) +
+      mean (fun H : {i // i ∈ s} → State => indicator (abort (eval (extend s H default) source))) := by
+    unfold mean
+    rw [Finset.sum_add_distrib, add_div]
+  rw [hadd, lawM, lawA, lawS] at hp
+  change lazyMean source emptyTable deployedMass ≤
+    lazyMean model emptyTable failureMass +
+      lazyMean source emptyTable (fun v => indicator (abort v)) at hp
+  rw [abort_mass source hwords] at hp
+  exact hp
+
+#print axioms word_failure_mean
+#print axioms abort_mass
+#print axioms transport
+end AspisR1.R9QueryScanTransport
+end

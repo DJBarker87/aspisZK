@@ -1,0 +1,44 @@
+/Users/dominic/ZK/.worktrees/cx-r9-transport/docs/research/100bit-spend-path-20261013/lean/R9QueryScanTransport.lean:48:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  lazyMean source (fun x => none) ?observe
+in the target expression
+  (lazyMean source emptyTable fun v => indicator (abort v)) = QueryScanModelFailure.failureProbability (2 ^ 18)
+
+C Residual : Type
+inst✝¹ : Fintype Residual
+inst✝ : Nonempty Residual
+source : Program Bytes State (Outcome C)
+hwords : QueryWordCorrespondence source Residual
+⊢ (lazyMean source emptyTable fun v => indicator (abort v)) = QueryScanModelFailure.failureProbability (2 ^ 18)
+/Users/dominic/ZK/.worktrees/cx-r9-transport/docs/research/100bit-spend-path-20261013/lean/R9QueryScanTransport.lean:89:24: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  lazyMean source emptyTable fun v => indicator (abort v)
+in the target expression
+  (mean fun H => deployedMass (eval (extend s H default) source)) ≤
+    lazyMean model (fun x => none) failureMass + lazyMean source (fun x => none) fun v => indicator (abort v)
+
+C Residual : Type
+inst✝¹ : Fintype Residual
+inst✝ : Nonempty Residual
+source : Program Bytes State (Outcome C)
+model : Experiment
+hrefine : OrderedSourceRefinement source model
+hwords : QueryWordCorrespondence source Residual
+s : Finset Bytes := support source ∪ support model
+hs : support source ⊆ s
+hm : support model ⊆ s
+lawS : (mean fun H => deployedMass (eval (extend s H default) source)) = lazyMean source (fun x => none) deployedMass
+lawM : (mean fun H => failureMass (eval (extend s H default) model)) = lazyMean model (fun x => none) failureMass
+lawA :
+  (mean fun H => indicator (abort (eval (extend s H default) source))) =
+    lazyMean source (fun x => none) fun v => indicator (abort v)
+hp :
+  (mean fun H => deployedMass (eval (extend s H default) source)) ≤
+    lazyMean model (fun x => none) failureMass + lazyMean source (fun x => none) fun v => indicator (abort v)
+hadd :
+  (mean fun H => failureMass (eval (extend s H default) model) + indicator (abort (eval (extend s H default) source))) =
+    (mean fun H => failureMass (eval (extend s H default) model)) +
+      mean fun H => indicator (abort (eval (extend s H default) source))
+⊢ lazyMean source emptyTable deployedMass ≤
+    lazyMean model emptyTable failureMass + QueryScanModelFailure.failureProbability (2 ^ 18)
+'AspisR1.R9QueryScanTransport.word_failure_mean' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.R9QueryScanTransport.abort_mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.R9QueryScanTransport.transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
