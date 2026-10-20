@@ -1,0 +1,5 @@
+import AspisR1RhoReferenceLoop.FunsExternal
+import AspisR1RhoSourceOption.Funs
+namespace AspisR1RhoCoefficients
+abbrev BatchedWeights.push := AspisR1CuRho.verifier.BatchedWeights.push
+end AspisR1RhoCoefficients

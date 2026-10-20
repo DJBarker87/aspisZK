@@ -1,0 +1,97 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoOptimizedTraversal.lean:39:29: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoOptimizedTraversal.lean:40:22: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoOptimizedTraversal.lean:42:15: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoOptimizedTraversal.lean:66:13: warning: This simp argument is unused:
+  Prod.casesOn
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵P̵r̵o̵d̵.̵c̵a̵s̵e̵s̵O̵n̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoOptimizedTraversal.lean:70:66: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoOptimizedTraversal.lean:70:66: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoOptimizedTraversal.lean:100:31: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoOptimizedTraversal.lean:101:24: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoOptimizedTraversal.lean:103:17: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoOptimizedTraversal.lean:119:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  sourceLoop { start := 0#usize, «end» := alloc.vec.Vec.len rows } (fun o => o) rows power next basis (some self)
+in the target expression
+  (do
+      let (rows1, pending1, back) ←
+        AspisR1RhoCoefficients.rho_new.coefficients_loop { start := 0#usize, «end» := alloc.vec.Vec.len rows }
+            (fun o => o) rows power next basis (some self)
+      match pending1 with
+        | none => ok (rows1, back none)
+        | some weights => do
+          let i1 ← weights.terms + 1#usize
+          ok (rows1, back (some { raw := weights.raw, terms := i1 }))) =
+    do
+    let out ← CuSavingsRhoQueryBatch.batch power (CuSavingsRhoInputs.items basis (alloc.vec.Vec.len rows) hl) self
+    ok (rows, some out)
+
+rows : Rows
+self : BW
+power : field.QM31
+next : Usize
+basis : Basis
+hn : ↑next ≤ 22
+hl : ↑(alloc.vec.Vec.len rows) ≤ 256
+hlen : ↑(alloc.vec.Vec.len rows) = (↑rows).length
+⊢ (do
+      let (rows1, pending1, back) ←
+        AspisR1RhoCoefficients.rho_new.coefficients_loop { start := 0#usize, «end» := alloc.vec.Vec.len rows }
+            (fun o => o) rows power next basis (some self)
+      match pending1 with
+        | none => ok (rows1, back none)
+        | some weights => do
+          let i1 ← weights.terms + 1#usize
+          ok (rows1, back (some { raw := weights.raw, terms := i1 }))) =
+    do
+    let out ← CuSavingsRhoQueryBatch.batch power (CuSavingsRhoInputs.items basis (alloc.vec.Vec.len rows) hl) self
+    ok (rows, some out)
+'AspisR1.CuSavingsRhoOptimizedTraversal.source_traverse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoOptimizedTraversal.source_eq_some' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsRhoOptimizedTraversal.source_body' depends on axioms: [propext, Classical.choice, Quot.sound]

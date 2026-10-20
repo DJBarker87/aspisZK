@@ -1,0 +1,44 @@
+--- a/src/interp/InterpExpressions.ml
++++ b/src/interp/InterpExpressions.ml
+@@ -194,7 +194,16 @@
+             { v with value = VBorrow (VSharedBorrow (bid, sid')) },
+             ctx,
+             fun e -> e )
+-      | VMutBorrow (_, _) -> [%craise] span "Can't copy a mutable borrow"
++      | VMutBorrow (bid, child) ->
++          (* Optimized MIR may express a mutable reborrow as Copy. Preserve
++             exclusivity: the original reference contains the fresh loan,
++             and the result owns the corresponding fresh borrow. Never clone
++             the mutable borrow id or the referent value. *)
++          let reborrow = ctx.fresh_borrow_id () in
++          let loan = { child with value = VLoan (VMutLoan reborrow) } in
++          ( { v with value = VBorrow (VMutBorrow (bid, loan)) },
++            { v with value = VBorrow (VMutBorrow (reborrow, child)) },
++            ctx, fun e -> e )
+       | VReservedMutBorrow _ ->
+           [%craise] span "Can't copy a reserved mut borrow")
+   | VLoan lc -> (
+--- a/src/symbolic/SymbolicToPureValues.ml
++++ b/src/symbolic/SymbolicToPureValues.ml
+@@ -864,8 +864,8 @@
+         let ty = translate_fwd_ty (Some ctx.span) ctx.decls_ctx ty in
+         (ctx, Some (mk_ignored_pat ty))
+ 
+-and aproj_to_given_back_aux (_abs_level : abs_level)
+-    (_current_level : abs_level) (mp : mplace option) (aproj : V.aproj)
++and aproj_to_given_back_aux (abs_level : abs_level)
++    (current_level : abs_level) (mp : mplace option) (aproj : V.aproj)
+     (ty : T.ty) (ctx : bs_ctx) : bs_ctx * tpat option =
+   match aproj with
+   | V.AEndedProjLoans { proj = _; consumed; borrows } ->
+@@ -893,6 +893,10 @@
+         }
+       in
+       (ctx, Some pat)
++  | AEmpty | AProjLoans _ when current_level <> abs_level ->
++      (* An ancestor loan projector is visited while collecting the deeper
++         given-back layer. It contributes no borrow value at this layer. *)
++      (ctx, None)
+   | AEmpty | AProjLoans _ | AProjBorrows _ -> [%craise] ctx.span "Unreachable"
+ 
+ let tavalue_to_given_back (abs_regions : T.RegionId.Set.t)

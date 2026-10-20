@@ -1,0 +1,4 @@
+import AspisR1RhoReferenceLoop.Types
+namespace AspisR1RhoSourceOption
+abbrev BatchedWeights := AspisR1RhoCoefficients.BatchedWeights
+end AspisR1RhoSourceOption

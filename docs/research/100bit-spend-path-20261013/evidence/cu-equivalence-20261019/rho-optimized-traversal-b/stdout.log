@@ -1,0 +1,67 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoOptimizedTraversal.lean:51:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let _ ← from_m31 (↑basis)[↑index]
+    ok (cont (after, fun o2 => back o2, rows, some out))
+is not definitionally equal to the right-hand side
+  ok (cont (after, back, rows, some out))
+
+case ok
+power : field.QM31
+next : Usize
+basis : Basis
+iter after : Range
+index : Usize
+rows : Rows
+self : BW
+back : Option BW → Option BW
+hn : ↑next ≤ 22
+hl : (↑rows).length ≤ 256
+hi : ↑index < (↑rows).length
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, after)
+hb : ↑index < (↑basis).length
+b : U32 := (↑basis)[↑index]
+out : verifier.BatchedWeights
+hs : verifier.BatchedWeights.push self index power b = ok out
+productIndex ix : UScalar UScalarTy.Usize
+hprod : next * alloc.vec.Vec.len rows = ok productIndex
+hadd : productIndex + index = ok ix
+wide : field.WideExact
+hw : field.WideExact.from_qm31 (↑rows)[↑index] = ok wide
+wide1 : field.WideExact
+hw1 : from_m31 b = ok wide1
+⊢ (do
+      let _ ← from_m31 (↑basis)[↑index]
+      ok (cont (after, fun o2 => back o2, rows, some out))) =
+    ok (cont (after, back, rows, some out))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoOptimizedTraversal.lean:38:29: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoOptimizedTraversal.lean:39:22: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoOptimizedTraversal.lean:41:15: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵s̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoOptimizedTraversal.lean:49:65: warning: This simp argument is unused:
+  hw1
+
+Hint: Omit it from the simp argument list.
+  simp only [hprod, ̲hadd, ̲bind_tc_ok, ̲vec_read rows index hi,
+        AspisR1RhoCoefficients.aspis_core.field.WideExact.from_qm31, ̲hw,
+        AspisR1RhoCoefficients.aspis_core.field.WideExact.from_m31,h̵w̵1̵,̵
+        AspisR1RhoCoefficients.trace.value, ̲trace.value]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsRhoOptimizedTraversal.source_body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -178,3 +178,21 @@ A scope decision is pending for producer/runtime support of the exact Option
 reborrow and original resume iterator/Reader patterns. Preserve the full goal;
 mark blocked after the current blocker audit, never complete. A later user
 choice to repair supplies the expanded scope; revalidate state when resumed.
+
+## Producer repair authorized and coefficient source blocker cleared (2026-10-20)
+
+The user's explicit instruction to proceed authorized repair; the old pending
+scope/blocked recommendation above is superseded. Goal status is active.
+
+`RHO-OPTIMIZED-TRAVERSAL.md/json` records the exact std-method source emission,
+two producer repairs, whole optimized traversal, and consuming `source_both`
+reference/materialization theorem. Successful target:
+`CuSavingsRhoOptimizedTraversal` / `rho-optimized-traversal-h`, consuming bridge
+`CuSavingsRhoSourceBatch` / `rho-source-both-a`; standard axioms only.
+No candidate-level completion is claimed.
+
+Next: full inverse-factored `accumulate_with_node` contexts (source extraction
+now succeeds), original resume iterator/Reader support, actual allocation
+frame/resource conditions, and transaction observables. The repaired producer
+still rejects the unchanged resume loop at a typing invariant during loop join;
+no invalid result is admitted. Do not erase or bypass that invariant.
