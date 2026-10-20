@@ -1,0 +1,41 @@
+import Mathlib.Data.Nat.ModEq
+import Mathlib.Tactic
+
+/-! Natural-number specification of the optimized source's quotient fold.
+This arithmetic result does not identify a machine digit loop or decoder. -/
+set_option autoImplicit false
+namespace AspisR1.R4TransportGammaFold
+
+def folded (x modulus : Nat) : Nat :=
+  let total := x % modulus + x / modulus + 1
+  if total < modulus then total else total - modulus + 1
+
+/-- Replacing one factor modulus by 1 is exact modulo modulus-1. -/
+theorem quotient_fold_mod (x modulus : Nat) (hm : 1 < modulus) :
+    x % (modulus - 1) = (x % modulus + x / modulus) % (modulus - 1) := by
+  have hrepr : x = (x % modulus + x / modulus) + (x / modulus) * (modulus - 1) := by
+    have h := Nat.mod_add_div x modulus
+    have hm' : modulus = (modulus - 1) + 1 := by omega
+    nlinarith
+  conv_lhs => rw [hrepr]
+  simp only [Nat.add_mul_mod_self_right]
+
+/-- The source's one carry, followed by the extra increment, implements the
+nonzero rank law. The quotient bound excludes a second carry; equality at
+modulus is deliberately in the carry branch and yields 1. -/
+theorem folded_eq_nonzero_rank (x modulus : Nat) (hm : 2 < modulus)
+    (hq : x / modulus + 2 < modulus) :
+    folded x modulus = x % (modulus - 1) + 1 := by
+  rw [quotient_fold_mod x modulus (by omega)]
+  have hr := Nat.mod_lt x (show 0 < modulus by omega)
+  dsimp only [folded]
+  split_ifs with ht
+  · rw [Nat.mod_eq_of_lt (show x % modulus + x / modulus < modulus - 1 by omega)]
+  · have hsmall : x % modulus + x / modulus - (modulus - 1) < modulus - 1 := by omega
+    rw [Nat.mod_eq_sub_mod (show modulus - 1 ≤ x % modulus + x / modulus by omega),
+      Nat.mod_eq_of_lt hsmall]
+    omega
+
+#print axioms quotient_fold_mod
+#print axioms folded_eq_nonzero_rank
+end AspisR1.R4TransportGammaFold

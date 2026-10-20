@@ -1,0 +1,273 @@
+#[cfg(kani)]
+mod r4_transport_kani {
+    use super::*;
+
+    // Indexed reference: input order is explicit, as in the Lean list recurrence.
+    fn reference_scan(s: &mut QueryScan, block: &[u8;32]) -> bool {
+        let mut i=0;
+        while i<8 {
+            if s.accepted_len==22 || s.draws==64 { return true; }
+            let j=4*i;
+            let word=u32::from_le_bytes([block[j],block[j+1],block[j+2],block[j+3]]);
+            let candidate=word % 262144;
+            s.draws+=1;
+            let mut duplicate=false;
+            let mut k=0;
+            while k<s.accepted_len {
+                if s.accepted[k]==candidate {duplicate=true;}
+                k+=1;
+            }
+            if !duplicate {
+                s.accepted[s.accepted_len]=candidate;
+                s.accepted_len+=1;
+            }
+            i+=1;
+        }
+        false
+    }
+
+    fn prefix_contract(accepted:&[u32;22],len:usize,candidate:u32)->bool {
+        (0<len && accepted[0]==candidate) ||
+        (1<len && accepted[1]==candidate) ||
+        (2<len && accepted[2]==candidate) ||
+        (3<len && accepted[3]==candidate) ||
+        (4<len && accepted[4]==candidate) ||
+        (5<len && accepted[5]==candidate) ||
+        (6<len && accepted[6]==candidate) ||
+        (7<len && accepted[7]==candidate) ||
+        (8<len && accepted[8]==candidate) ||
+        (9<len && accepted[9]==candidate) ||
+        (10<len && accepted[10]==candidate) ||
+        (11<len && accepted[11]==candidate) ||
+        (12<len && accepted[12]==candidate) ||
+        (13<len && accepted[13]==candidate) ||
+        (14<len && accepted[14]==candidate) ||
+        (15<len && accepted[15]==candidate) ||
+        (16<len && accepted[16]==candidate) ||
+        (17<len && accepted[17]==candidate) ||
+        (18<len && accepted[18]==candidate) ||
+        (19<len && accepted[19]==candidate) ||
+        (20<len && accepted[20]==candidate) ||
+        (21<len && accepted[21]==candidate)
+    }
+
+    impl QueryScan {
+    fn scan_contract(&mut self, block: &[u8; 32]) -> bool {
+        for candidate in query_words(block) {
+            if self.accepted_len == QUERY_COUNT || self.draws == QUERY_MAX_DRAWS {
+                return true;
+            }
+            self.draws += 1;
+            if !prefix_contract(&self.accepted,self.accepted_len,candidate) {
+                self.accepted[self.accepted_len] = candidate;
+                self.accepted_len += 1;
+            }
+        }
+        false
+    }
+    }
+
+    fn reference_scan_contract(s: &mut QueryScan, block: &[u8;32]) -> bool {
+        let mut i=0;
+        while i<8 {
+            if s.accepted_len==22 || s.draws==64 { return true; }
+            let j=4*i;
+            let word=u32::from_le_bytes([block[j],block[j+1],block[j+2],block[j+3]]);
+            let candidate=word % 262144;
+            s.draws+=1;
+            let duplicate=prefix_contract(&s.accepted,s.accepted_len,candidate);
+            if !duplicate {
+                s.accepted[s.accepted_len]=candidate;
+                s.accepted_len+=1;
+            }
+            i+=1;
+        }
+        false
+    }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn scan_with_verified_membership_contract() {
+        let block:[u8;32]=kani::any();
+        let accepted:[u32;22]=kani::any();
+        let len:usize=kani::any();
+        let draws:usize=kani::any();
+        kani::assume(len<=22);
+        kani::assume(draws<=64);
+        let mut a=QueryScan{accepted,accepted_len:len,draws};
+        let mut b=QueryScan{accepted,accepted_len:len,draws};
+        assert_eq!(a.scan_contract(&block),reference_scan_contract(&mut b,&block));
+        assert_eq!(a.accepted_len,b.accepted_len);
+        assert_eq!(a.draws,b.draws);
+        for k in 0..22 { assert_eq!(a.accepted[k],b.accepted[k]); }
+    }
+
+    fn contains_fixed<const N:usize>() {
+        let accepted:[u32;22]=kani::any();
+        let candidate:u32=kani::any();
+        let shipped=accepted[..N].contains(&candidate);
+        let mut reference=false;
+        let mut k=0;
+        while k<N {
+            if accepted[k]==candidate {reference=true;}
+            k+=1;
+        }
+        assert_eq!(shipped,reference);
+        assert_eq!(shipped,prefix_contract(&accepted,N,candidate));
+    }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_0() { contains_fixed::<0>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_1() { contains_fixed::<1>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_2() { contains_fixed::<2>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_3() { contains_fixed::<3>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_4() { contains_fixed::<4>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_5() { contains_fixed::<5>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_6() { contains_fixed::<6>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_7() { contains_fixed::<7>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_8() { contains_fixed::<8>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_9() { contains_fixed::<9>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_10() { contains_fixed::<10>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_11() { contains_fixed::<11>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_12() { contains_fixed::<12>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_13() { contains_fixed::<13>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_14() { contains_fixed::<14>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_15() { contains_fixed::<15>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_16() { contains_fixed::<16>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_17() { contains_fixed::<17>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_18() { contains_fixed::<18>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_19() { contains_fixed::<19>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_20() { contains_fixed::<20>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_21() { contains_fixed::<21>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_len_22() { contains_fixed::<22>(); }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn prefix_contains_equals_indexed_membership() {
+        let accepted:[u32;22]=kani::any();
+        let len:usize=kani::any();
+        let candidate:u32=kani::any();
+        kani::assume(len<=22);
+        let shipped=accepted[..len].contains(&candidate);
+        let mut reference=false;
+        let mut k=0;
+        while k<len {
+            if accepted[k]==candidate {reference=true;}
+            k+=1;
+        }
+        assert_eq!(shipped,reference);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(10)]
+    fn words_and_iterator_order() {
+        let block: [u8;32]=kani::any();
+        let got=query_words(&block);
+        let mut count=0;
+        for candidate in got {
+            let j=4*count;
+            let w=u32::from_le_bytes([block[j],block[j+1],block[j+2],block[j+3]]);
+            assert_eq!(candidate,w % 262144);
+            count+=1;
+        }
+        assert_eq!(count,8);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(24)]
+    fn shipped_scan_equals_indexed_reference() {
+        let block:[u8;32]=kani::any();
+        let accepted:[u32;22]=kani::any();
+        let len:usize=kani::any();
+        let draws:usize=kani::any();
+        kani::assume(len<=22);
+        kani::assume(draws<=64);
+        let mut shipped=QueryScan{accepted,accepted_len:len,draws};
+        let mut reference=QueryScan{accepted,accepted_len:len,draws};
+        let a=shipped.scan(&block);
+        let b=reference_scan(&mut reference,&block);
+        assert_eq!(a,b);
+        assert_eq!(shipped.accepted_len,reference.accepted_len);
+        assert_eq!(shipped.draws,reference.draws);
+        assert_eq!(shipped.accepted,reference.accepted);
+    }
+
+    #[kani::proof]
+    fn finish_rejects_short_and_accepts_full() {
+        let accepted:[u32;22]=kani::any();
+        let len:usize=kani::any();
+        kani::assume(len<=22);
+        let s=QueryScan{accepted,accepted_len:len,draws:kani::any()};
+        let expected=if len==22 {Ok(accepted)} else {
+            Err(QuerySampleError::DrawLimitExhausted{accepted:len,max_draws:64})
+        };
+        assert_eq!(s.finish(),expected);
+    }
+}

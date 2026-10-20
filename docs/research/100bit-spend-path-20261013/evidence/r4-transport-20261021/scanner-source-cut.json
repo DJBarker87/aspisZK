@@ -1,0 +1,23 @@
+{
+  "source": "crates/aspis-core/src/r0_transcript.rs",
+  "source_sha256": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1",
+  "cut_sha256": "acb45dfa6e03361f774e361d4b095f21fa964fd32f19569c1d4dd5d836079c63",
+  "items": [
+    "#[derive(Clone,Copy,Debug,PartialEq,Eq)]\npub enum QuerySampleError {\n    /// Masking is exact only when the domain size is a nonzero power of two.\n    BoundNotPowerOfTwo { bound: u32 },\n    /// A without-replacement sample cannot contain more points than its domain.\n    CountExceedsBound { count: usize, bound: u32 },\n    /// The configured candidate-draw cap was reached before `count` distinct\n    /// positions were accepted. This is an explicit completeness abort.\n    DrawLimitExhausted { accepted: usize, max_draws: usize },\n}",
+    "type Rank = [u32; 8];",
+    "pub const QUERY_COUNT: usize = 22;",
+    "pub const QUERY_BOUND: u32 = 1 << 18;",
+    "pub const QUERY_MAX_DRAWS: usize = 64;",
+    "fn block_rank(block: &[u8; 32]) -> Rank {\n    core::array::from_fn(|i| {\n        let j = 4 * i;\n        u32::from_le_bytes([block[j], block[j + 1], block[j + 2], block[j + 3]])\n    })\n}",
+    "fn query_words(block: &[u8; 32]) -> [u32; 8] {\n    block_rank(block).map(|word| word & (QUERY_BOUND - 1))\n}",
+    "#[derive(Default)]\nstruct QueryScan {\n    accepted: [u32; QUERY_COUNT],\n    accepted_len: usize,\n    draws: usize,\n}",
+    "impl QueryScan {\n    /// Checks before each word, with no check after the last word. In\n    /// particular, success on word 8 is detected in the next block.\n    fn scan(&mut self, block: &[u8; 32]) -> bool {\n        for candidate in query_words(block) {\n            if self.accepted_len == QUERY_COUNT || self.draws == QUERY_MAX_DRAWS {\n                return true;\n            }\n            self.draws += 1;\n            if !self.accepted[..self.accepted_len].contains(&candidate) {\n                self.accepted[self.accepted_len] = candidate;\n                self.accepted_len += 1;\n            }\n        }\n        false\n    }\n\n    fn finish(self) -> Result<[u32; QUERY_COUNT], QuerySampleError> {\n        if self.accepted_len == QUERY_COUNT {\n            Ok(self.accepted)\n        } else {\n            Err(QuerySampleError::DrawLimitExhausted {\n                accepted: self.accepted_len,\n                max_draws: QUERY_MAX_DRAWS,\n            })\n        }\n    }\n}",
+    "pub fn queries_from_pairs(\n    blocks: &[[u8; 32]; 8],\n    advances: &[[u8; 32]; 8],\n) -> Result<([u32; QUERY_COUNT], [u8; 32]), QuerySampleError> {\n    let mut scan = QueryScan::default();\n    let mut state = advances[7];\n    for k in 0..8 {\n        if scan.scan(&blocks[k]) {\n            state = advances[k];\n            break;\n        }\n    }\n    Ok((scan.finish()?, state))\n}"
+  ],
+  "membership_substitution": {
+    "from": "self.accepted[..self.accepted_len].contains(&candidate)",
+    "to": "prefix_contract(&self.accepted,self.accepted_len,candidate)",
+    "check": "Complete scan body matches after only this substitution; Kani contracts cover each prefix length0..22"
+  },
+  "qualification": "Exact complete scanner bodies plus Rank/constants/error data. No field/circle/hash stubs; no transcript implementation included. Harness uses Kani Rust standard library directly."
+}

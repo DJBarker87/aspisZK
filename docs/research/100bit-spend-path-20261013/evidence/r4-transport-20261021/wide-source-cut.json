@@ -1,0 +1,7 @@
+{
+  "source": "crates/aspis-r1-cost-probe/src/sampler.rs",
+  "source_sha256": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+  "helper_source": "const P: u32 = 2147483647;\n\nfn low_base_p_digits(block: &[u8; 32]) -> ([u32; 8], u32) {\n    let mut quotient: [u32; 8] =\n        core::array::from_fn(|i| u32::from_le_bytes(block[4 * i..4 * i + 4].try_into().unwrap()));\n    let digits = core::array::from_fn(|_| {\n        let mut remainder = 0u64;\n        for limb in quotient.iter_mut().rev() {\n            let dividend = (remainder << 32) | u64::from(*limb);\n            *limb = (dividend / u64::from(P)) as u32;\n            remainder = dividend % u64::from(P);\n        }\n        remainder as u32\n    });\n\n    // After eight divisions, the quotient is at most 256 and fits in u32.\n    debug_assert!(quotient[1..].iter().all(|&limb| limb == 0));\n    debug_assert!(quotient[0] <= 256);\n    (digits, quotient[0])\n}\n\nfn add_small_base_p(digits: &mut [u32; 8], mut addend: u32) -> bool {\n    for digit in digits {\n        let sum = u64::from(*digit) + u64::from(addend);\n        *digit = (sum % u64::from(P)) as u32;\n        addend = (sum / u64::from(P)) as u32;\n    }\n    debug_assert!(addend <= 1);\n    addend != 0\n}\n",
+  "helper_sha256": "148ac9646f2558457b64cfefd4e814542390fb265ddb3a5327d5835d9aa689ab",
+  "scope": "Exact complete low_base_p_digits and add_small_base_p bodies; data constant P only. No sampler/decoder stub."
+}
