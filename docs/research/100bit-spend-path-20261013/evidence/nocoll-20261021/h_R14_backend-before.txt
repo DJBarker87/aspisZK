@@ -1,0 +1,6 @@
+    (h_R14_backend : ∀ H, FS2.accepts (eval H (original D d P)) →
+      LiteralPairingChecks.checks (compiledRows D d P H) ∧
+      ∀ q : Fin 22 → Fin 262144,
+        LiteralQueryRead.decode (source H).queryBytes = some q →
+        HchecksAccumulator.ClosedSum LiteralOpeningView.eK (source H).data q
+          (SelectedChallengeMap.rhoOf (source H).rho))
