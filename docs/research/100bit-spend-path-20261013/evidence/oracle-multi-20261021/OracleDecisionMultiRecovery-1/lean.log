@@ -1,0 +1,517 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:28:29: error: Function expected at
+  ih
+but this term has type
+  foldPath H (extend tail slot cs) d = H (nodeInput (fillChild slot cs (foldPath H tail d)))
+
+Note: Expected a function because this term is being applied to the argument
+  _
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:36:20: error: unsolved goals
+case cons
+slots : List (Fin 2)
+slot : Fin 2
+cs : Children
+H : Bytes → State
+d : State
+slot✝ : Fin 2
+slots✝ : List (Fin 2)
+ss : Children
+tail : BinMerkle32Path.Path slots✝
+ih : inputTrace H (extend tail slot cs) d = inputTrace H tail d ++ [nodeInput (fillChild slot cs (foldPath H tail d))]
+⊢ nodeInput (fillChild slot✝ ss d) :: inputTrace H (extend tail slot cs) (H (nodeInput (fillChild slot✝ ss d))) =
+    nodeInput (fillChild slot✝ ss d) ::
+      (inputTrace H tail (H (nodeInput (fillChild slot✝ ss d))) ++
+        [nodeInput (fillChild slot cs (foldPath H tail (H (nodeInput (fillChild slot✝ ss d)))))])
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:37:47: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [extend, inputTrace, foldPath, i̵h̵,̵ ̵List.cons_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:57:21: error: unsolved goals
+case branch
+H : Bytes → State
+l r : OracleDecisionMultiTree.Tree
+il : List.map Prod.fst (eval H (execute l)).1 = inputs H l
+ir : List.map Prod.fst (eval H (execute r)).1 = inputs H r
+⊢ inputs H l ++ (inputs H r ++ [nodeInput (children (root H l) (root H r))]) =
+    inputs H l ++ inputs H r ++ [nodeInput (children (root H l) (root H r))]
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:92:10: error: Tactic `subst` failed: did not find equation for eliminating 'b'
+
+case left.refine_2.inr.inr
+H : Bytes → State
+t : OracleDecisionMultiTree.Tree
+slots✝ : List (Fin 2)
+a✝ : Bytes
+l r : OracleDecisionMultiTree.Tree
+slots : List (Fin 2)
+a : Bytes
+ho : OpenedAt l slots a
+p : BinMerkle32Path.Path slots.reverse
+hp : foldPath H p (H a) = root H l
+ht : ∀ b ∈ BinMerkle32Leaf.fullTrace H p a, b ∈ inputs H l
+b : List BinMerkle32Leaf.Byte
+hb : b = nodeInput (children (root H l) (root H r)) ∨ b ∈ []
+⊢ b ∈ inputs H (l.branch r)
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:110:10: error: Tactic `subst` failed: did not find equation for eliminating 'b'
+
+case right.refine_2.inr.inr
+H : Bytes → State
+t : OracleDecisionMultiTree.Tree
+slots✝ : List (Fin 2)
+a✝ : Bytes
+l r : OracleDecisionMultiTree.Tree
+slots : List (Fin 2)
+a : Bytes
+ho : OpenedAt r slots a
+p : BinMerkle32Path.Path slots.reverse
+hp : foldPath H p (H a) = root H r
+ht : ∀ b ∈ BinMerkle32Leaf.fullTrace H p a, b ∈ inputs H r
+b : List BinMerkle32Leaf.Byte
+hb : b = nodeInput (children (root H l) (root H r)) ∨ b ∈ []
+⊢ b ∈ inputs H (l.branch r)
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:83:42: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [BinMerkle32Leaf.fullTrace, trace_extend, hp, fill_children_left, List.mem_cons,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̵i̵s̵t̵.̵m̵e̵m̵_̵a̵p̵p̵e̵n̵d̵,̵ ̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵L̲i̲s̲t̲.̲m̲e̲m̲_̲a̲p̲p̲e̲n̲d̲]̲ at hb
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:101:42: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [BinMerkle32Leaf.fullTrace, trace_extend, hp, fill_children_right, List.mem_cons,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̵i̵s̵t̵.̵m̵e̵m̵_̵a̵p̵p̵e̵n̵d̵,̵ ̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵L̲i̲s̲t̲.̲m̲e̲m̲_̲a̲p̲p̲e̲n̲d̲]̲ at hb
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:133:18: error(lean.invalidField): Invalid field notation: Type of
+  ?m.38 ++ ?m.40
+is not known; cannot resolve field `map`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `Abelianization.map`
+  • `AbstractCompletion.map`
+  • `AddCommute.map`
+  • `AddCon.map`
+  • `AddConjClasses.map`
+  • `AddIrreducible.map`
+  • `AddMonoidAlgebra.map`
+  • `AddSemiconjBy.map`
+  • `AddSubgroup.map`
+  • `AddSubmonoid.map`
+  • `AddSubsemigroup.map`
+  • `AddUnits.map`
+  • `AddValuation.map`
+  • `AdicCompletion.map`
+  • `AdjoinRoot.map`
+  • `AffineSubspace.map`
+  • `AlgebraicIndependent.map`
+  • `Array.map`
+  • `Associated.map`
+  • `BaseIO.map`
+  • `BinaryTree.map`
+  • `BooleanSubalgebra.map`
+  • `Cardinal.map`
+  • `Cauchy.map`
+  • `ClusterPt.map`
+  • `Codisjoint.map`
+  • `Commute.map`
+  • `CompactCoherentification.map`
+  • `Computation.map`
+  • `Con.map`
+  • `ConjClasses.map`
+  • `ContT.map`
+  • `Cycle.map`
+  • `DirectSum.map`
+  • `Disjoint.map`
+  • `EIO.map`
+  • `ENat.map`
+  • `EStateM.map`
+  • `EquivFunctor.map`
+  • `Even.map`
+  • `Except.map`
+  • `ExceptT.map`
+  • `Filter.map`
+  • `FinVec.map`
+  • `Finset.map`
+  • `Flag.map`
+  • `FractionalIdeal.map`
+  • `FreeAbelianGroup.map`
+  • `FreeAddGroup.map`
+  • `FreeAddMonoid.map`
+  • `FreeCommRing.map`
+  • `FreeGroup.map`
+  • `FreeMonoid.map`
+  • `FreeRing.map`
+  • `FunOnFinite.map`
+  • `Functor.map`
+  • `HasProd.map`
+  • `HasSum.map`
+  • `Ideal.map`
+  • `Inseparable.map`
+  • `IntermediateField.map`
+  • `Invertible.map`
+  • `Irreducible.map`
+  • `IsAddUnit.map`
+  • `IsCompl.map`
+  • `IsCoprime.map`
+  • `IsFractionRing.map`
+  • `IsFractional.map`
+  • `IsIdempotentElem.map`
+  • `IsIntegral.map`
+  • `IsLocalization.map`
+  • `IsLocalizedModule.map`
+  • `IsNilpotent.map`
+  • `IsPGroup.map`
+  • `IsSMulRegular.map`
+  • `IsSelfAdjoint.map`
+  • `IsSeparable.map`
+  • `IsSquare.map`
+  • `IsStarNormal.map`
+  • `IsStarProjection.map`
+  • `IsTensorProduct.map`
+  • `IsTopologicallyNilpotent.map`
+  • `IsTrans.map`
+  • `IsUnit.map`
+  • `JoinedIn.map`
+  • `LTSeries.map`
+  • `LieSubalgebra.map`
+  • `LieSubmodule.map`
+  • `LinearIndependent.map`
+  • `List.map`
+  • `LocalizedModule.map`
+  • `LowerSet.map`
+  • `MLList.map`
+  • `Matrix.map`
+  • `Matroid.map`
+  • `MonoidAlgebra.map`
+  • `MultilinearMap.map`
+  • `Multipliable.map`
+  • `Multiset.map`
+  • `MvPolynomial.map`
+  • `MvPowerSeries.map`
+  • `NonUnitalStarSubalgebra.map`
+  • `NonUnitalSubalgebra.map`
+  • `NonUnitalSubring.map`
+  • `NonUnitalSubsemiring.map`
+  • `Nondet.map`
+  • `Nonempty.map`
+  • `Odd.map`
+  • `Option.map`
+  • `PLift.map`
+  • `PSigma.map`
+  • `Part.map`
+  • `Path.map`
+  • `Pi.map`
+  • `Polynomial.map`
+  • `PolynomialModule.map`
+  • `PowerBasis.map`
+  • `PowerSeries.map`
+  • `Prefunctor.map`
+  • `Prod.map`
+  • `Quot.map`
+  • `Quotient.map`
+  • `QuotientAddGroup.map`
+  • `QuotientGroup.map`
+  • `RCLike.map`
+  • `RatFunc.map`
+  • `RelSeries.map`
+  • `SModEq.map`
+  • `SameRay.map`
+  • `SemiconjBy.map`
+  • `SeparationQuotient.map`
+  • `Setoid.map`
+  • `Sigma.map`
+  • `Specializes.map`
+  • `StarSubalgebra.map`
+  • `StateT.map`
+  • `Stream'.map`
+  • `String.map`
+  • `Subalgebra.map`
+  • `Subfield.map`
+  • `Subgroup.map`
+  • `Sublattice.map`
+  • `Submodule.map`
+  • `Submonoid.map`
+  • `Subring.map`
+  • `Subsemigroup.map`
+  • `Subsemiring.map`
+  • `Subtype.map`
+  • `Sum.map`
+  • `Summable.map`
+  • `SummationFilter.map`
+  • `Sym.map`
+  • `Sym2.map`
+  • `Task.map`
+  • `TensorProduct.map`
+  • `Thunk.map`
+  • `Tree.map`
+  • `Trunc.map`
+  • `TwoSidedIdeal.map`
+  • `ULift.map`
+  • `Ultrafilter.map`
+  • `Unitary.map`
+  • `Units.map`
+  • `UpperSet.map`
+  • `Valuation.map`
+  • `Vector.map`
+  • `WithBot.map`
+  • `WithOne.map`
+  • `WithTop.map`
+  • `WithVal.map`
+  • `WithZero.map`
+  • `stdSimplex.map`
+  • `AddCommGroup.ModEq.map`
+  • `AddSubgroup.Normal.map`
+  • `AddSubmonoid.FG.map`
+  • `AddSubmonoid.LocalizationMap.map`
+  • `AddValuation.IsEquiv.map`
+  • `AdicCompletion.AdicCauchySequence.map`
+  • `Aesop.EMap.map`
+  • `Aesop.InstMap.map`
+  • `Aesop.Rule.map`
+  • `Aesop.RulePatternCache.map`
+  • `Aesop.VariableMap.map`
+  • `Affine.Simplex.map`
+  • `Algebra.TensorProduct.map`
+  • `Array.mapFinIdxM.map`
+  • `BackgroundOwnMap.map`
+  • `ProgramSamplerMap.map`
+  • `CategoryTheory.Bundled.map`
+  • `CategoryTheory.CategoryOfElements.map`
+  • `CategoryTheory.CommSq.map`
+  • `CategoryTheory.Comma.map`
+  • `CategoryTheory.CostructuredArrow.map`
+  • `CategoryTheory.Functor.map`
+  • `CategoryTheory.Grothendieck.map`
+  • `CategoryTheory.IsPullback.map`
+  • `CategoryTheory.IsPushout.map`
+  • `CategoryTheory.MorphismProperty.map`
+  • `CategoryTheory.ObjectProperty.map`
+  • `CategoryTheory.Over.map`
+  • `CategoryTheory.Retract.map`
+  • `CategoryTheory.RetractArrow.map`
+  • `CategoryTheory.SplitEpi.map`
+  • `CategoryTheory.SplitMono.map`
+  • `CategoryTheory.StructuredArrow.map`
+  • `CategoryTheory.ThinSkeleton.map`
+  • `CategoryTheory.Under.map`
+  • `Filter.HasAntitoneBasis.map`
+  • `Filter.HasBasis.map`
+  • `Filter.NeBot.map`
+  • `Filter.Subsingleton.map`
+  • `Filter.TotallyBounded.map`
+  • `Finset.Nonempty.map`
+  • `Function.IsFixedPt.map`
+  • `Function.IsPeriodicPt.map`
+  • `Functor.Comp.map`
+  • `Functor.Const.map`
+  • `Ideal.FG.map`
+  • `Ideal.ResidueField.map`
+  • `IsLocalRing.ResidueField.map`
+  • `IsLocalization.Away.map`
+  • `Lean.AttributeExtensionState.map`
+  • `Lean.ClosedTermCache.map`
+  • `Lean.PersistentArray.map`
+  • `Lean.PersistentHashMap.map`
+  • `Lean.RBNode.map`
+  • `List.Disjoint.map`
+  • `List.IsInfix.map`
+  • `List.IsPrefix.map`
+  • `List.IsRotated.map`
+  • `List.IsSuffix.map`
+  • `List.Nodup.map`
+  • `List.Pairwise.map`
+  • `List.Perm.map`
+  • `List.Sublist.map`
+  • `List.Subperm.map`
+  • `List.Vector.map`
+  • `Matrix.BlockTriangular.map`
+  • `Matrix.GeneralLinearGroup.map`
+  • `Matrix.IsSymm.map`
+  • `Matrix.SpecialLinearGroup.map`
+  • `Matroid.Indep.map`
+  • `Matroid.IsBase.map`
+  • `Matroid.IsBasis.map`
+  • `Module.Basis.map`
+  • `Module.Finite.map`
+  • `Module.Ray.map`
+  • `Multiset.Nodup.map`
+  • `MvPolynomial.IsHomogeneous.map`
+  • `MvPolynomial.IsSymmetric.map`
+  • `MvPowerSeries.HasEval.map`
+  • `MvPowerSeries.HasSubst.map`
+  • `NormedAddGroupHom.Equalizer.map`
+  • `OmegaCompletePartialOrder.Chain.map`
+  • `OmegaCompletePartialOrder.ContinuousHom.map`
+  • `Polynomial.IsRoot.map`
+  • `Polynomial.IsSplittingField.map`
+  • `Polynomial.IsWeaklyEisensteinAt.map`
+  • `Polynomial.Monic.map`
+  • `Polynomial.MonicDegreeEq.map`
+  • `Polynomial.Separable.map`
+  • `Polynomial.Splits.map`
+  • `PowerSeries.HasEval.map`
+  • `RingHom.IsIntegralElem.map`
+  • `Set.Finite.map`
+  • `Std.DHashMap.map`
+  • `Std.DTreeMap.map`
+  • `Std.ExtDHashMap.map`
+  • `Std.ExtDTreeMap.map`
+  • `Std.ExtHashMap.map`
+  • `Std.ExtTreeMap.map`
+  • `Std.HashMap.map`
+  • `Std.Iter.map`
+  • `Std.IterM.map`
+  • `Std.Refl.map`
+  • `Std.Symm.map`
+  • `Std.TreeMap.map`
+  • `Stream'.Seq.map`
+  • `Stream'.Seq1.map`
+  • `Subalgebra.FG.map`
+  • `Subgroup.Normal.map`
+  • `Submodule.FG.map`
+  • `Submodule.IsPrincipal.map`
+  • `Submonoid.FG.map`
+  • `Submonoid.LocalizationMap.map`
+  • `Sym2.IsDiag.map`
+  • `TensorProduct.AlgebraTensorModule.map`
+  • `TopologicalSpace.CompactOpens.map`
+  • `TopologicalSpace.Compacts.map`
+  • `TopologicalSpace.IrreducibleCloseds.map`
+  • `TopologicalSpace.NonemptyCompacts.map`
+  • `TopologicalSpace.PositiveCompacts.map`
+  • `UniformSpace.Completion.map`
+  • `Valuation.IsEquiv.map`
+  • `Vector.mapFinIdxM.map`
+  • `Aeneas.Step.OptTask.map`
+  • `CategoryTheory.Limits.BinaryCofan.map`
+  • `CategoryTheory.Limits.BinaryFan.map`
+  • `CategoryTheory.Limits.ImageMap.map`
+  • `CategoryTheory.Limits.IsColimit.map`
+  • `CategoryTheory.Limits.IsLimit.map`
+  • `CategoryTheory.Limits.IsZero.map`
+  • `CategoryTheory.Limits.Pi.map`
+  • `CategoryTheory.Limits.PullbackCone.map`
+  • `CategoryTheory.Limits.PushoutCocone.map`
+  • `CategoryTheory.Limits.Sigma.map`
+  • `CategoryTheory.Limits.cokernel.map`
+  • `CategoryTheory.Limits.coprod.map`
+  • `CategoryTheory.Limits.image.map`
+  • `CategoryTheory.Limits.kernel.map`
+  • `CategoryTheory.Limits.prod.map`
+  • `CategoryTheory.Limits.pullback.map`
+  • `CategoryTheory.Limits.pushout.map`
+  • `CategoryTheory.MorphismProperty.strictMap.map`
+  • `CommRingCat.Colimits.Relation.map`
+  • `Lean.Language.SnapshotTask.map`
+  • `Lean.Meta.CustomEliminators.map`
+  • `Lean.Meta.FVarSubst.map`
+  • `Lean.Meta.KExprMap.map`
+  • `Lean.Meta.MVarRenaming.map`
+  • `Lean.Omega.Coeffs.map`
+  • `Lean.Omega.Constraint.map`
+  • `Lean.ScopedEnvExtension.ScopedEntries.map`
+  • `Lean.Widget.TaggedText.map`
+  • `OmegaCompletePartialOrder.ContinuousHom.ωScottContinuous.map`
+  • `RingCat.Colimits.Relation.map`
+  • `Std.Async.AsyncTask.map`
+  • `Std.Async.BaseAsync.map`
+  • `Std.Async.EAsync.map`
+  • `Std.Async.ETask.map`
+  • `Std.Async.MaybeTask.map`
+  • `Std.DHashMap.Equiv.map`
+  • `Std.DHashMap.Raw.map`
+  • `Std.DTreeMap.Equiv.map`
+  • `Std.DTreeMap.Raw.map`
+  • `Std.Do.Spec.map`
+  • `Std.Do.WP.map`
+  • `Std.HashMap.Equiv.map`
+  • `Std.HashMap.Raw.map`
+  • `Std.Http.Headers.map`
+  • `Std.Internal.Small.map`
+  • `Std.IterM.Equiv.map`
+  • `Std.IterM.InternalCombinators.map`
+  • `Std.Iterators.HetT.map`
+  • `Std.Iterators.PostconditionT.map`
+  • `Std.TreeMap.Equiv.map`
+  • `Std.TreeMap.Raw.map`
+  • `CommRingCat.Colimits.Relation.below.map`
+  • `Lean.Compiler.CSimp.State.map`
+  • `Lean.Compiler.LCNF.Probe.map`
+  • `Lean.Meta.Grind.SymbolPriorities.map`
+  • `Lean.Meta.Grind.VarRename.map`
+  • `Lean.Meta.Match.MatchEqnsExtState.map`
+  • `Lean.Meta.Match.Overlaps.map`
+  • `Lean.Meta.Simp.UsedSimps.map`
+  • `RingCat.Colimits.Relation.below.map`
+  • `Std.DHashMap.Internal.AssocList.map`
+  • `Std.DHashMap.Internal.Raw₀.map`
+  • `Std.DHashMap.Raw.Equiv.map`
+  • `Std.DHashMap.Raw.WF.map`
+  • `Std.DTreeMap.Internal.Impl.map`
+  • `Std.DTreeMap.Raw.Equiv.map`
+  • `Std.HashMap.Raw.Equiv.map`
+  • `Std.HashMap.Raw.WF.map`
+  • `Std.Internal.Do.Spec.map`
+  • `Std.Internal.Do.Triple.map`
+  • `Std.Internal.List.DistinctKeys.map`
+  • `Std.Sat.AIG.RefVec.map`
+  • `Std.TreeMap.Raw.Equiv.map`
+  • `Tactic.ComputeAsymptotics.MultiseriesExpansion.Multiseries.map`
+  • `Lean.Compiler.LCNF.CSE.State.map`
+  • `Lean.Compiler.LCNF.NormLevelParam.State.map`
+  • `Lean.Compiler.LCNF.Simp.FunDeclInfoMap.map`
+  • `Lean.Meta.Grind.UnitLike.State.map`
+  • `Lean.Meta.Match.Extension.State.map`
+  • `Std.DTreeMap.Internal.Impl.Balanced.map`
+  • `Std.DTreeMap.Internal.Impl.Equiv.map`
+  • `Std.DTreeMap.Internal.Impl.WF.map`
+  • `Std.Sat.AIG.RelabelNat.State.map`
+  • `Std.Tactic.BVDecide.BVExpr.Cache.map`
+  • `Aeneas.Std.alloc.vec.into_iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.map`
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:154:31: error: Application type mismatch: The argument
+  ha
+has type
+  (eval H (terminal cs duplicates frames)).2 = true
+but is expected to have type
+  (eval H (verifyTrees cs)).2 = true
+in the application
+  verifyTrees_roots H cs ha
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:182:4: error: Type mismatch
+  Eq.trans hp (accepted_roots D H cs duplicates frames P hacc c hc)
+has type
+  foldPath H path (H (BinMerkle32Leaf.leafInput tag packed salt)) = c.committed
+but is expected to have type
+  (eval H (BinMerkleProgram.leafProgram path (BinMerkle32Leaf.leafInput tag packed salt))).2 = c.committed
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:187:65: error: Application type mismatch: The argument
+  hb
+has type
+  b ∈ List.map (fun x => x) (BinMerkle32Leaf.fullTrace H path (BinMerkle32Leaf.leafInput tag packed salt))
+but is expected to have type
+  b ∈ BinMerkle32Leaf.fullTrace H path (BinMerkle32Leaf.leafInput tag packed salt)
+in the application
+  ht b hb
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:186:48: warning: This simp argument is unused:
+  List.map_id_fun
+
+Hint: Omit it from the simp argument list.
+  simp only [List.map_map, Function.comp_def,̵ ̵L̵i̵s̵t̵.̵m̵a̵p̵_̵i̵d̵_̵f̵u̵n̵] at hb
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.OracleDecisionMultiRecovery.fold_extend' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.trace_extend' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.execute_inputs' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.fill_children_left' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.fill_children_right' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.shared_path' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.verifyTrees_roots' depends on axioms: [propext, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.verifyTrees_reads' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.original_reads' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.accepted_roots' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.accepted_leaf_recovery' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

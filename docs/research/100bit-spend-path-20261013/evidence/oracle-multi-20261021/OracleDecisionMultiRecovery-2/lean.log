@@ -1,0 +1,79 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:92:10: error: Tactic `subst` failed: did not find equation for eliminating 'b'
+
+case left.refine_2.inr.inr
+H : Bytes → State
+t : OracleDecisionMultiTree.Tree
+slots✝ : List (Fin 2)
+a✝ : Bytes
+l r : OracleDecisionMultiTree.Tree
+slots : List (Fin 2)
+a : Bytes
+ho : OpenedAt l slots a
+p : BinMerkle32Path.Path slots.reverse
+hp : foldPath H p (H a) = root H l
+ht : ∀ b ∈ BinMerkle32Leaf.fullTrace H p a, b ∈ inputs H l
+b : List BinMerkle32Leaf.Byte
+hb : b = nodeInput (children (root H l) (root H r)) ∨ b ∈ []
+⊢ b ∈ inputs H (l.branch r)
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:110:10: error: Tactic `subst` failed: did not find equation for eliminating 'b'
+
+case right.refine_2.inr.inr
+H : Bytes → State
+t : OracleDecisionMultiTree.Tree
+slots✝ : List (Fin 2)
+a✝ : Bytes
+l r : OracleDecisionMultiTree.Tree
+slots : List (Fin 2)
+a : Bytes
+ho : OpenedAt r slots a
+p : BinMerkle32Path.Path slots.reverse
+hp : foldPath H p (H a) = root H r
+ht : ∀ b ∈ BinMerkle32Leaf.fullTrace H p a, b ∈ inputs H r
+b : List BinMerkle32Leaf.Byte
+hb : b = nodeInput (children (root H l) (root H r)) ∨ b ∈ []
+⊢ b ∈ inputs H (l.branch r)
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:83:27: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [BinMerkle32Leaf.fullTrace, trace_extend, hp, fill_children_left, List.mem_append,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵,̵ ̵List.mem_cons] at hb
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:101:27: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [BinMerkle32Leaf.fullTrace, trace_extend, hp, fill_children_right,
+            List.mem_append, List.mem_s̵i̵n̵g̵l̵e̵t̵o̵n̵,̵ ̵L̵i̵s̵t̵.̵m̵e̵m̵_̵cons] at hb
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:189:65: error: Application type mismatch: The argument
+  hb
+has type
+  b ∈ List.map (fun x => x) (BinMerkle32Leaf.fullTrace H path (BinMerkle32Leaf.leafInput tag packed salt))
+but is expected to have type
+  b ∈ BinMerkle32Leaf.fullTrace H path (BinMerkle32Leaf.leafInput tag packed salt)
+in the application
+  ht b hb
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiRecovery.lean:188:48: warning: This simp argument is unused:
+  List.map_id
+
+Hint: Omit it from the simp argument list.
+  simp only [List.map_map, Function.comp_def,̵ ̵L̵i̵s̵t̵.̵m̵a̵p̵_̵i̵d̵] at hb
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.OracleDecisionMultiRecovery.fold_extend' depends on axioms: [propext, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.trace_extend' depends on axioms: [propext, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.execute_inputs' depends on axioms: [propext, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.fill_children_left' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.fill_children_right' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.shared_path' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.verifyTrees_roots' depends on axioms: [propext, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.verifyTrees_reads' depends on axioms: [propext, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.original_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.accepted_roots' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiRecovery.accepted_leaf_recovery' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
