@@ -1,0 +1,129 @@
+import BinChecksAdaptiveFailureNoModel
+import BinCompiledRunWordStability
+
+/-! Exact sub-obligations of C3 binary completion, and replay of the binary
+builder on C3's historical compiler. No deployed instance is asserted. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.BinDecoderCompletionBoundary
+open FS FS2 FS2.Duplex R0C.V3
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open AspisV8R19.CausalFirstHitUnionBound
+open RawCutProverCompiler RawCutTranscriptRun R1FinalSoundness
+
+/-- Selection of the actual recorded public at each accepting first cell.
+This is a byte/table law, not existence of a reverse Decoder parameter. -/
+def PublicSelection (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (Q : Nat) : Prop :=
+  ∀ H : Bytes → State, ¬ binaryCollision Q (eval H (recorded D d P)) →
+    FS2.accepts (eval H (recorded D d P)) →
+    ∀ n a, n < (LiteralByteProtocol.protocol D).r →
+      firstCell ((LiteralByteProtocol.protocol D).chain H
+        (eval H (recorded D d P)).2.1.1 (eval H (recorded D d P)).2.1.2 n) = some a →
+      RawFullPublicSelection.select a
+        (tableBefore emptyTable (eval H (recorded D d P)).1 a) =
+          some (eval H (recorded D d P)).2.1.1
+
+/-- Decoder completion with the public already supplied. Its table WordChoice
+is still LiteralTableWordChoice.choose, as required by the actual C3 dec.
+Bin cut stability does not silently replace that function. -/
+def LiteralCompletion (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (Q : Nat) : Prop :=
+  ∀ H : Bytes → State, ¬ binaryCollision Q (eval H (recorded D d P)) →
+    FS2.accepts (eval H (recorded D d P)) →
+    ∀ n a, n < (LiteralByteProtocol.protocol D).r →
+      firstCell ((LiteralByteProtocol.protocol D).chain H
+        (eval H (recorded D d P)).2.1.1 (eval H (recorded D d P)).2.1.2 n) = some a →
+      ∃ own pend g,
+        RawLiteralDecoderDensity.decode LiteralTableWordChoice.choose
+          (eval H (recorded D d P)).2.1.1 a
+          (tableBefore emptyTable (eval H (recorded D d P)).1 a) = some (own, pend, g) ∧
+        bfollow g (traceFrom (eval H (recorded D d P)).1 a) own pend
+          (tableBefore emptyTable (eval H (recorded D d P)).1 a) =
+          some ((LiteralByteProtocol.protocol D).transcript H
+              (eval H (recorded D d P)).2.1.1 (eval H (recorded D d P)).2.1.2 n,
+            (LiteralByteProtocol.protocol D).msg (eval H (recorded D d P)).2.1.2 n,
+            (LiteralByteProtocol.protocol D).chal H
+              (eval H (recorded D d P)).2.1.1 (eval H (recorded D d P)).2.1.2 n)
+
+/-- With public selection fixed, the remaining completion law is exactly
+the known-public literal decoder law in both directions. -/
+theorem binaryCompletion_iff_literalCompletion
+    (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (Q : Nat)
+    (hpublic : PublicSelection D d P Q) :
+    BinaryCompletion D d P Q ↔ LiteralCompletion D d P Q := by
+  constructor
+  · intro h H hc ha n a hn hf
+    obtain ⟨own, pend, g, hd, hg⟩ := h H hc ha n a hn hf
+    refine ⟨own, pend, g, ?_, hg⟩
+    change RawAdaptiveLiteralDecoder.decode RawFullPublicSelection.select
+      LiteralTableWordChoice.choose a _ = _ at hd
+    rw [RawAdaptiveLiteralDecoder.decode_of_public _ _ _ _ _
+      (hpublic H hc ha n a hn hf)] at hd
+    exact hd
+  · intro h H hc ha n a hn hf
+    obtain ⟨own, pend, g, hd, hg⟩ := h H hc ha n a hn hf
+    refine ⟨own, pend, g, ?_, hg⟩
+    change RawAdaptiveLiteralDecoder.decode RawFullPublicSelection.select
+      LiteralTableWordChoice.choose a _ = _
+    rw [RawAdaptiveLiteralDecoder.decode_of_public _ _ _ _ _
+      (hpublic H hc ha n a hn hf)]
+    exact hd
+
+/-- M7's binary recovery is stable even when the replay compiler retains
+C3's historical builder. This is deliberately a replay equality, not an
+identification of eight-way recovery with binary recovery. -/
+theorem binary_words_stable_under_any_builder
+    (decoder : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool)
+    (builder : RunView → CanonicalCutEnrichedTranscript.Words)
+    (P : Prover) (H : Bytes → State) :
+    BinCompiledRunWordStability.wordsFromRun decoder (eval H (experiment
+      (compiled decoder d builder P) (verifier decoder d))) =
+    BinCompiledRunWordStability.wordsFromRun decoder
+      (eval H (experiment P (verifier decoder d))) := by
+  let original := eval H (experiment P (verifier decoder d))
+  let annotated := eval H (experiment
+    (compiled decoder d builder P) (verifier decoder d))
+  have hpub : annotated.2.1.1 = original.2.1.1 := by
+    dsimp only [annotated, original]
+    rw [compiled_experiment_eval]
+  have hproof : annotated.2.1.2 = RawCutTranscriptRun.proof
+      (builder original) original.2.1.2 := by
+    dsimp only [annotated, original]
+    rw [compiled_experiment_eval]
+  have frames (row : Nat) (hrow : row < 33) :
+      RawCutWordsFromView.frameFromView decoder annotated row =
+      RawCutWordsFromView.frameFromView decoder original row := by
+    rw [RawCutWordsFromView.frameFromView_eq decoder d
+      (compiled decoder d builder P) H row (by omega),
+      RawCutWordsFromView.frameFromView_eq decoder d P H row (by omega)]
+    change RawCutWordsFromView.frame decoder H annotated.2.1.1 annotated.2.1.2 row =
+      RawCutWordsFromView.frame decoder H original.2.1.1 original.2.1.2 row
+    rw [hpub, hproof]
+    exact congrArg (fun s => (firstCell s).getD [])
+      (RawCutTranscriptRun.chain_eq decoder (builder original)
+        H original.2.1.1 original.2.1.2 row)
+  have cuts (row : Nat) (hrow : row < 33) :
+      BinRawByteCutRecovery.cut annotated.1 (RawCutWordsFromView.frameFromView decoder original row) =
+      BinRawByteCutRecovery.cut original.1 (RawCutWordsFromView.frameFromView decoder original row) := by
+    have hf : Read original.1 (RawCutWordsFromView.frameFromView decoder original row) := by
+      rw [RawCutWordsFromView.frameFromView_eq decoder d P H row (by omega)]
+      exact RawCutWordsFromView.frame_read decoder d P H row hrow
+    exact commitment_cut_eq decoder d builder P H _ hf
+  change BinCompiledRunWordStability.wordsFromRun decoder annotated =
+    BinCompiledRunWordStability.wordsFromRun decoder original
+  unfold BinCompiledRunWordStability.wordsFromRun
+  rw [frames 0 (by decide), frames 2 (by decide), frames 30 (by decide)]
+  unfold BinCanonicalCutWords.wordsFromRawCuts
+    BinCanonicalCutWords.rawC1Map BinCanonicalCutWords.rawC2Map
+    BinCanonicalCutWords.rawFoldedMap
+  dsimp only
+  rw [cuts 0 (by decide), cuts 2 (by decide), cuts 30 (by decide)]
+
+#print axioms binaryCompletion_iff_literalCompletion
+#print axioms binary_words_stable_under_any_builder
+end AspisR1.BinDecoderCompletionBoundary
+end

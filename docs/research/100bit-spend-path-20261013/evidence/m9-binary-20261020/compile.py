@@ -24,7 +24,7 @@ def sha(p):
 def lean_processes():
     rows = subprocess.check_output(['ps', '-axo', 'pid=,comm=,args='], text=True)
     return [r for r in rows.splitlines()
-            if len(r.split()) > 1 and Path(r.split()[1]).name == 'lean']
+            if len(r.split()) > 2 and Path(r.split()[2]).name == 'lean']
 
 
 module = sys.argv[1]
@@ -47,7 +47,7 @@ data = json.loads(manifest.read_text()) if manifest.exists() else {
 if any(a['source_sha256'] == sha(source) and a['deps_fingerprint'] == fp
        for a in data['attempts']):
     raise SystemExit('Refused unchanged source/dependency retry')
-n = 1 + sum(a['module'] == module for a in data['attempts'])
+n = 1 + max([int(p.name.rsplit('-', 1)[1]) for p in HERE.glob(module + '-*') if p.is_dir()] or [0])
 out = HERE / (module + '-' + str(n))
 out.mkdir()
 (out / 'source.lean.txt').write_text(source.read_text())
@@ -75,6 +75,8 @@ while True:
         continue
     break
 try:
+    if sha(source) != receipt['source_sha256']:
+        raise RuntimeError('Source changed while waiting for lock')
     start = time.monotonic()
     with (out / 'lean.log').open('w') as log, (out / 'time.log').open('w') as timing:
         result = subprocess.run(['/usr/bin/time', '-l', *argv],
@@ -93,6 +95,8 @@ receipt.update(peak_rss_bytes=int(re.search(r'(\d+)\s+maximum resident set size'
 if result.returncode == 0:
     obj = OBJECTS / (module + '.olean')
     receipt.update(object_sha256=sha(obj), object_size=obj.stat().st_size)
+(out / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
+data = json.loads(manifest.read_text()) if manifest.exists() else data
 for a in data['attempts']:
     if a['module'] == module:
         a['final_current'] = False
