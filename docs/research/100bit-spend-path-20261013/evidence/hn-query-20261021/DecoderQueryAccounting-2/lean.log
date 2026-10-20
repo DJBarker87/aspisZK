@@ -1,0 +1,44 @@
+/Users/dominic/ZK/.worktrees/cx-hn-query/docs/research/100bit-spend-path-20261013/lean/DecoderQueryAccounting.lean:62:2: error: unsolved goals
+D : LiteralByteProtocol.Decoder
+d : RawCutTranscriptRun.ErasedPrefix → RawCutTranscriptRun.ErasedMessage → Bool
+hrows : HonestRowStarts D
+H : Bytes → State
+pub : LiteralTranscript.Public
+pf : Proof
+T : Table Bytes State
+⊢ 33 ≤ 33
+/Users/dominic/ZK/.worktrees/cx-hn-query/docs/research/100bit-spend-path-20261013/lean/DecoderQueryAccounting.lean:79:6: error: Ambiguous term
+  experiment_eval
+Possible interpretations:
+  RawCutProverCompiler.experiment_eval : ∀ (P : Prover) (V : Public → Proof → Program Bytes State Bool)
+    (H : Bytes → State),
+    eval H (RawCutProverCompiler.experiment P V) =
+      ((eval H P).1 ++ (eval H (V (eval H P).2.1 (eval H P).2.2)).1, (eval H P).2,
+        (eval H (V (eval H P).2.1 (eval H P).2.2)).2)
+  
+  FS2.experiment_eval : ∀ (P : Program ?m.51 ?m.52 ?m.50) (V : ?m.49 → ?m.50 → Program ?m.51 ?m.52 Bool) (x : ?m.49)
+    (H : ?m.51 → ?m.52),
+    eval H (FS2.experiment P V x) =
+      ((eval H P).1 ++ (eval H (V x (eval H P).2)).1, (eval H P).2, (eval H (V x (eval H P).2)).2)
+  
+  FS.experiment_eval : ∀ (P : Program ?m.51 (Block ?m.52 ?m.53) ?m.50)
+    (V : ?m.49 → ?m.50 → Program ?m.51 (Block ?m.52 ?m.53) Bool) (x : ?m.49) (H : ?m.51 → Block ?m.52 ?m.53),
+    eval H (FS.experiment P V x) =
+      ((eval H P).1 ++ (eval H (V x (eval H P).2)).1, (eval H P).2, (eval H (V x (eval H P).2)).2)
+/Users/dominic/ZK/.worktrees/cx-hn-query/docs/research/100bit-spend-path-20261013/lean/DecoderQueryAccounting.lean:73:77: error: unsolved goals
+D : LiteralByteProtocol.Decoder
+d : RawCutTranscriptRun.ErasedPrefix → RawCutTranscriptRun.ErasedMessage → Bool
+P : Prover
+Q : ℕ
+hqueries : AdversaryQueries P Q
+hrows : HonestRowStarts D
+H : Bytes → State
+⊢ decoderFirstReads dec emptyTable (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier D d))).1 ≤
+    Q + 33
+'AspisR1.DecoderQueryAccounting.starts_le_queries' depends on axioms: [propext, Quot.sound]
+'AspisR1.DecoderQueryAccounting.flatten_bound' depends on axioms: [propext, Quot.sound]
+'AspisR1.DecoderQueryAccounting.verifier_starts_le_33' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.DecoderQueryAccounting.recorded_starts_le' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

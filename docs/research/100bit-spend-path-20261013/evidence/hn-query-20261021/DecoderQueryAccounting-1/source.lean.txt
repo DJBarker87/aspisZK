@@ -1,0 +1,84 @@
+import RawCutCompilerDecoderStartLaw
+import RecordedBinaryExperimentBin
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.DecoderQueryAccounting
+open FS FS2 R0C.V3 AspisV8PairedCommitment
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open AspisV8R19.AdaptiveFirstReadLaw
+open DecodedFirstReadUnionBound RawCutProverCompiler RecordedBinaryExperimentBin
+
+variable {X M C I A Y : Type} [DecidableEq I]
+
+/-- Every recognised fresh address costs at least one issued query, including
+when the adversary repeats addresses. Induction does not evaluate a log. -/
+theorem starts_le_queries (decoder : Dec X M C I A Y)
+    (t : Table I A) (tr : List (I × A)) :
+    decoderFirstReads decoder t tr ≤ tr.length := by
+  induction tr generalizing t with
+  | nil => rfl
+  | cons q tr ih =>
+    simp only [decoderFirstReads, List.length_cons]
+    split <;> have := ih (put t q.1 q.2) <;> omega
+
+/-- A local one-start-per-row contract, uniform in the incoming table.
+This is a narrow honest-sampler obligation, not a bound on adversarial starts. -/
+def HonestRowStarts (D : LiteralByteProtocol.Decoder) : Prop :=
+  ∀ (H : Bytes → State) (pub : LiteralTranscript.Public)
+    (pf : RawCutProverCompiler.Proof) (n : Nat), n < 33 →
+    ∀ T : Table Bytes State,
+      decoderFirstReads dec T
+        (eval H ((LiteralByteProtocol.protocol D).chain H pub pf n).toProgram).1 ≤ 1
+
+/-- Q counts queries made by P, before the honest verifier and compiler.
+Repeated addresses count again. R19 alone does not imply this proposition. -/
+def AdversaryQueries (P : Prover) (Q : Nat) : Prop :=
+  ∀ H : Bytes → State, (eval H P).1.length ≤ Q
+
+theorem flatten_bound (decoder : Dec X M C I A Y)
+    (trs : List (List (I × A))) (t : Table I A)
+    (h : ∀ tr ∈ trs, ∀ T, decoderFirstReads decoder T tr ≤ 1) :
+    decoderFirstReads decoder t trs.flatten ≤ trs.length := by
+  induction trs generalizing t with
+  | nil => rfl
+  | cons tr trs ih =>
+    rw [List.flatten_cons, decoderFirstReads_append]
+    have ha := h tr (List.mem_cons_self ..) t
+    have hb := ih (applyTrace t tr) (fun xs hx => h xs (List.mem_cons_of_mem tr hx))
+    simp only [List.length_cons]
+    omega
+
+theorem verifier_starts_le_33 (D : LiteralByteProtocol.Decoder)
+    (d : RawCutTranscriptRun.ErasedPrefix → RawCutTranscriptRun.ErasedMessage → Bool)
+    (hrows : HonestRowStarts D) (H : Bytes → State)
+    (pub : LiteralTranscript.Public) (pf : RawCutProverCompiler.Proof)
+    (T : Table Bytes State) :
+    decoderFirstReads dec T (eval H (verifier D d pub pf)).1 ≤ 33 := by
+  rw [verifier, FS2.verifier_eval]
+  apply (flatten_bound dec _ T ?_).trans
+  · simp only [List.length_map, List.length_range, LiteralByteProtocol.protocol]
+  · intro tr htr U
+    obtain ⟨n, hn, rfl⟩ := List.mem_map.mp htr
+    exact hrows H pub pf n (List.mem_range.mp hn) U
+
+/-- Honest verification adds at most 33 starts; compiler replay adds zero.
+The adversary contribution is charged to its own Q queries. -/
+theorem recorded_starts_le (D : LiteralByteProtocol.Decoder)
+    (d : RawCutTranscriptRun.ErasedPrefix → RawCutTranscriptRun.ErasedMessage → Bool)
+    (P : Prover) (Q : Nat) (hqueries : AdversaryQueries P Q)
+    (hrows : HonestRowStarts D) (H : Bytes → State) :
+    decoderFirstReads dec emptyTable (eval H (recorded D d P)).1 ≤ Q + 33 := by
+  rw [RawCutCompilerDecoderStartLaw.decoderStarts_eq dec D d
+    (BinCompiledRunWordStability.wordsFromRun D) P H]
+  rw [experiment_eval, decoderFirstReads_append]
+  exact Nat.add_le_add ((starts_le_queries dec _ _).trans (hqueries H))
+    (verifier_starts_le_33 D d hrows H _ _ _)
+
+#print axioms starts_le_queries
+#print axioms flatten_bound
+#print axioms verifier_starts_le_33
+#print axioms recorded_starts_le
+end AspisR1.DecoderQueryAccounting
+end
