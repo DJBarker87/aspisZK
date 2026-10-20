@@ -58,6 +58,28 @@ fn well_formed(indices: &[u32]) -> bool {
         && indices.iter().all(|&i| i < 1 << LEAF_BITS)
 }
 
+#[inline(always)]
+fn index_at(indices: &[u32; MAX_BATCH], index: usize) -> u32 {
+    indices[index]
+}
+
+#[inline(always)]
+fn value_at(values: &[[u8; 32]; MAX_BATCH], index: usize) -> [u8; 32] { values[index] }
+
+#[inline(always)]
+fn root_matches(values: &[[u8; 32]; MAX_BATCH], root: &[u8; 32]) -> bool { values[0] == *root }
+
+#[inline(always)]
+fn occupied_binary_parent<H: Digest32>(hash: H, values: &[[u8; 32]; MAX_BATCH], index: usize) -> [u8; 32] {
+    hash.digest(&[&[BINARY_NODE_TAG], &values[index], &values[index + 1]])
+}
+
+#[inline(always)]
+fn sibling_binary_parent<H: Digest32>(hash: H, values: &[[u8; 32]; MAX_BATCH], index: usize, sibling: &[u8], left: bool) -> [u8; 32] {
+    if left { hash.digest(&[&[BINARY_NODE_TAG], &values[index], sibling]) }
+    else { hash.digest(&[&[BINARY_NODE_TAG], sibling, &values[index]]) }
+}
+
 /// Number of supplied sibling nodes for a strictly increasing index set:
 /// at each level, (width x distinct parents) - occupied nodes.
 pub fn node_count(arity: Arity, indices: &[u32]) -> Option<usize> {
@@ -72,9 +94,9 @@ pub fn node_count(arity: Arity, indices: &[u32]) -> Option<usize> {
         let mut w = 0;
         let mut i = 0;
         while i < n {
-            let parent = level[i] >> arity.bits();
+            let parent = index_at(&level, i) >> arity.bits();
             let mut j = i;
-            while j < n && level[j] >> arity.bits() == parent {
+            while j < n && index_at(&level, j) >> arity.bits() == parent {
                 j += 1;
             }
             count += arity.width() - (j - i);
@@ -130,23 +152,19 @@ pub fn verify_in_place<H: Digest32>(
         let mut w = 0;
         let mut i = 0;
         while i < n {
-            let parent = idx[i] >> arity.bits();
+            let parent = index_at(idx, i) >> arity.bits();
             let digest = match arity {
                 Arity::Two => {
                     // Hash straight from the stored slices: no sibling or
                     // pair copies (SBF cost; same grammar and order).
-                    if i + 1 < n && idx[i + 1] == idx[i] ^ 1 {
-                        let d = hash.digest(&[&[BINARY_NODE_TAG], &val[i], &val[i + 1]]);
+                    if i + 1 < n && index_at(idx, i + 1) == index_at(idx, i) ^ 1 {
+                        let d = occupied_binary_parent(hash, val, i);
                         i += 2;
                         d
                     } else {
                         let Some(sibling) = nodes.get(at..at + 32) else { return false };
                         at += 32;
-                        let d = if idx[i] & 1 == 0 {
-                            hash.digest(&[&[BINARY_NODE_TAG], &val[i], sibling])
-                        } else {
-                            hash.digest(&[&[BINARY_NODE_TAG], sibling, &val[i]])
-                        };
+                        let d = sibling_binary_parent(hash, val, i, sibling, index_at(idx, i) & 1 == 0);
                         i += 1;
                         d
                     }
@@ -154,8 +172,8 @@ pub fn verify_in_place<H: Digest32>(
                 Arity::Eight => {
                     let mut children = [[0u8; 32]; 8];
                     for (slot, child) in children.iter_mut().enumerate() {
-                        if i < n && idx[i] >> 3 == parent && (idx[i] & 7) as usize == slot {
-                            *child = val[i];
+                        if i < n && index_at(idx, i) >> 3 == parent && (index_at(idx, i) & 7) as usize == slot {
+                            *child = value_at(val, i);
                             i += 1;
                         } else {
                             let Some(sibling) = nodes.get(at..at + 32) else { return false };
@@ -172,7 +190,7 @@ pub fn verify_in_place<H: Digest32>(
         }
         n = w;
     }
-    n == 1 && idx[0] == 0 && val[0] == *root && at == nodes.len()
+    n == 1 && index_at(idx, 0) == 0 && root_matches(val, root) && at == nodes.len()
 }
 
 /// Prover side: emit the canonical node sequence. `node(level, index)` returns

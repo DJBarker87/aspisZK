@@ -129,6 +129,21 @@ pub fn line_fold(alpha:E,v:usize,a:[E;4])->E {
 /// x/y, followed by line x/y/z. Their inverses are batch-computed once per
 /// transaction so each query avoids five independent field inversions.
 struct QueryGeometry { start:usize, inverses:Vec<[M31;5]>, line_z:Vec<M31> }
+
+#[inline(always)]
+fn batch_prefix_products(flat:&[M31])->(Vec<M31>,M31) {
+    let mut prefixes=Vec::with_capacity(flat.len());
+    let mut product=M31::ONE;
+    let mut index=0;
+    while index<flat.len() {
+        let value=flat[index];
+        prefixes.push(product);
+        product=product.mul(value);
+        index+=1;
+    }
+    (prefixes,product)
+}
+
 impl QueryGeometry {
     fn for_range(queries:&[u32;22],start:usize,end:usize)->Result<Self,Error> {
         if start>end||end>queries.len(){return Err(Error::Query);}
@@ -137,11 +152,11 @@ impl QueryGeometry {
         for &query in &queries[start..end] {
             let u=query as usize;
             let fibre=domain::FibreIndex::new(u).map_err(|_|Error::Query)?;
-            let point=crate::fast_domain::fibre_point(fibre);
+            let domain::Point{x:circle_x,y:circle_y}=crate::fast_domain::fibre_point(fibre);
             let line_x=crate::fast_domain::line_node(domain::FibreIndex::new(u/4*4).map_err(|_|Error::Query)?);
             let line_y=crate::fast_domain::line_node(domain::FibreIndex::new(u/4*4+3).map_err(|_|Error::Query)?);
             let line_z=line_x.mul(line_x).double().sub(M31::ONE);
-            let values=[point.x,point.y,line_x,line_y,line_z];
+            let values=[circle_x,circle_y,line_x,line_y,line_z];
             if values.iter().any(|x|*x==M31::ZERO){return Err(Error::Query);}
             flat.extend_from_slice(&values);
             line_z_values.push(line_z);
@@ -149,9 +164,7 @@ impl QueryGeometry {
         if flat.is_empty(){return Ok(Self{start,inverses:Vec::new(),line_z:line_z_values});}
         // Standard prefix-product/backward batch inversion. The only `inv`
         // in this routine is applied to the product of all nonzero entries.
-        let mut prefixes=Vec::with_capacity(flat.len());
-        let mut product=M31::ONE;
-        for &value in &flat {prefixes.push(product);product=product.mul(value);}
+        let (prefixes,product)=batch_prefix_products(&flat);
         let mut suffix_inverse=product.inv();
         let mut flat_inverse=Vec::with_capacity(flat.len());
         flat_inverse.resize(flat.len(),M31::ZERO);
@@ -192,24 +205,45 @@ struct BatchedWeights { raw:Vec<[u64;4]>, terms:usize }
 impl BatchedWeights {
     fn new(weights:&[K])->Result<Self,Error> {
         let mut raw=aspis_core::r0::heap::filled(weights.len(),[0u64;4]).map_err(|_|Error::Allocation)?;
-        for (out,w) in raw.iter_mut().zip(weights) {
-            *out=[w.c0.a.0 as u64,w.c0.b.0 as u64,w.c1.a.0 as u64,w.c1.b.0 as u64];
+        let mut index=0;
+        while index<weights.len() {
+            let w=weights[index];
+            raw[index]=[w.c0.a.0 as u64,w.c0.b.0 as u64,w.c1.a.0 as u64,w.c1.b.0 as u64];
+            index+=1;
         }
         Ok(Self{raw,terms:0})
     }
     #[inline(always)]
     fn push(&mut self,index:usize,power:K,basis:M31) {
-        let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];
-        for j in 0..4 {self.raw[index][j]+=u64::from(limbs[j])*u64::from(basis.0);}
-        if self.terms&3==3 {
-            for limb in &mut self.raw[index] {*limb=(*limb&0x7fff_ffff)+(*limb>>31);}
-        }
+        let row=residue_row_at(&self.raw,index);
+        let row=update_residue_row(row,power,basis,self.terms&3==3);
+        self.raw[index]=row;
     }
+
     fn value(&self,index:usize)->K {
         let [a,b,c,d]=self.raw[index].map(M31::reduce_u64);
         K{c0:aspis_core::field::CM31{a,b},c1:aspis_core::field::CM31{a:c,b:d}}
     }
     fn finish(&self,weights:&mut[K]) {for (i,w) in weights.iter_mut().enumerate(){*w=self.value(i);}}
+}
+
+
+#[inline(always)]
+fn residue_row_at(rows:&[[u64;4]],index:usize)->[u64;4] {rows[index]}
+#[inline(always)]
+fn update_residue_row(mut row:[u64;4],power:K,basis:M31,flush:bool)->[u64;4] {
+    let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];
+    row[0]+=u64::from(limbs[0])*u64::from(basis.0);
+    row[1]+=u64::from(limbs[1])*u64::from(basis.0);
+    row[2]+=u64::from(limbs[2])*u64::from(basis.0);
+    row[3]+=u64::from(limbs[3])*u64::from(basis.0);
+    if flush {
+        row[0]=(row[0]&0x7fff_ffff)+(row[0]>>31);
+        row[1]=(row[1]&0x7fff_ffff)+(row[1]>>31);
+        row[2]=(row[2]&0x7fff_ffff)+(row[2]>>31);
+        row[3]=(row[3]&0x7fff_ffff)+(row[3]>>31);
+    }
+    row
 }
 
 #[inline(never)]
@@ -234,6 +268,30 @@ fn accumulate_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E,mut 
     a.rhs=a.rhs.add(value.mul_qm31(a.power));crate::trace::value(11,a.next,a.rhs);
     a.power=a.power.mul(p.rho);a.next+=1;
 }
+
+
+#[inline(always)]
+fn basis_at(basis:&[M31;256],index:usize)->M31 {basis[index]}
+#[inline(always)]
+fn accumulated_weight_at(weights:&[K],index:usize)->K {weights[index]}
+
+#[inline(never)]
+fn accumulate_batched_with_node(p:&Prepared,mut a:Accumulator,mut node:M31,value:E,mut weights:BatchedWeights)->(Accumulator,BatchedWeights) {
+    let width=a.weights.len();
+    let mut basis=[M31::ZERO;256];basis[0]=M31::ONE;let mut n=1;
+    while n<width {for j in 0..n {basis[n+j]=basis[j].mul(node);} node=node.mul(node).double().sub(M31::ONE);n*=2;}
+    for j in 0..width {
+        weights.push(j,a.power,basis_at(&basis,j));
+        #[cfg(feature="prover")] {a.weights[j]=weights.value(j);}
+        crate::trace::value(12,a.next*width+j,E::from_qm31(accumulated_weight_at(&a.weights,j)));
+        crate::trace::value(13,a.next*width+j,E::from_m31(basis_at(&basis,j)));
+    }
+    weights.terms+=1;
+    a.rhs=a.rhs.add(value.mul_qm31(a.power));crate::trace::value(11,a.next,a.rhs);
+    a.power=a.power.mul(p.rho);a.next+=1;
+    (a,weights)
+}
+
 pub fn polynomial(bytes:&[u8],x:E)->E {(0..7).rev().fold(E::ZERO,|a,i|a.mul(x).add(field(bytes,i)))}
 fn finish_relation_round(poly:&[u8],alpha:E,mut claim:E,round:usize)->Result<E,Error> {
         let lhs=field(poly,0).add(field(poly,4));let rhs=claim.mul_m31(QUARTER);
@@ -290,6 +348,32 @@ impl<'a> Reader<'a>{
     fn e(&mut self)->Result<E,Error>{E::from_le_bytes(&self.raw::<32>()).ok_or(Error::Checkpoint)}
     fn k(&mut self)->Result<K,Error>{K::from_le_bytes(&self.raw::<16>()).ok_or(Error::Checkpoint)}
 }
+
+
+#[inline(always)]
+fn validate_checkpoint_queries(queries:&[u32;22])->Result<(),Error> {
+    let mut i=0;
+    while i<queries.len() {
+        let q=queries[i];
+        if q>=1<<18||queries[..i].contains(&q){return Err(Error::Checkpoint);}
+        i+=1;
+    }
+    Ok(())
+}
+
+#[inline(always)]
+fn read_checkpoint_weights(bytes:&[u8],mut at:usize,mut weights:Vec<K>)->Result<(Vec<K>,usize),Error> {
+    let mut index=0;
+    while index<weights.len() {
+        let mut reader=Reader{bytes,at};
+        let value=reader.k()?;
+        at=reader.at;
+        weights[index]=value;
+        index+=1;
+    }
+    Ok((weights,at))
+}
+
 #[inline(never)]
 pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)->Result<(Box<Prepared>,Accumulator),Error> {
     if bytes.len()!=checkpoint_size(v)||&bytes[..8]!=b"R1P2CKP2"||bytes[8]!=v.tag()||bytes[9]>22||bytes[10]!=1||bytes[11..16].iter().any(|&b|b!=0) {return Err(Error::Checkpoint);}
@@ -297,16 +381,48 @@ pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)
     if bytes[16..48]!=hash.digest(&[proof])||bytes[48..80]!=hash.digest(&[public])||bytes[end..]!=hash.digest(&[b"UNPROVED:R1:checkpoint",&bytes[..end]]) {return Err(Error::Checkpoint);}
     let mut r=Reader{bytes,at:80};let state=r.raw();let roots=[r.raw(),r.raw()];
     let gamma=r.e()?;let kappa=r.e()?;let alpha=[r.e()?,r.e()?];let rho=r.k()?;
-    let mut queries=[0u32;22];
-    let mut query_index=0;
-    while query_index<queries.len() {queries[query_index]=u32::from_le_bytes(r.raw());query_index+=1;}
-    for (i,q) in queries.iter().enumerate(){if *q>=1<<18||queries[..i].contains(q){return Err(Error::Checkpoint);}}
-    let mut semantic_alpha=[K::ZERO;10];for x in &mut semantic_alpha {*x=r.k()?;}
+    let queries=[
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+    ];
+    validate_checkpoint_queries(&queries)?;
+    let semantic_alpha=[
+        r.k()?,
+        r.k()?,
+        r.k()?,
+        r.k()?,
+        r.k()?,
+        r.k()?,
+        r.k()?,
+        r.k()?,
+        r.k()?,
+        r.k()?,
+    ];
     let z=[SecureCirclePoint{x:r.k()?,y:r.k()?},SecureCirclePoint{x:r.k()?,y:r.k()?}];
     let claim=r.e()?;let rhs=r.e()?;let power=r.k()?;
-    let mut weights=aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;
-    for x in &mut weights {*x=r.k()?;}
-    if r.at!=end {return Err(Error::Checkpoint);}
+    let weights=aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;
+    let (weights,at)=read_checkpoint_weights(bytes,r.at,weights)?;
+    if at!=end {return Err(Error::Checkpoint);}
     Ok((Box::new(Prepared{variant:v,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state}),Accumulator{weights,rhs,power,next:bytes[9] as usize}))
 }
 
