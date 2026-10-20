@@ -1,0 +1,7 @@
+# EbyE decoded product update (focused proof packet)
+
+The selected emitted `EbyEDot.push` sequence, instantiated with the source `fromWide`, `dotViaRawSource(QRaw)`, and checked `addUsize`, advances the decoded accumulator by the field product. The proved theorem is `AspisR1EbyEFourDotDecodedProductUpdateV1.emitted_push_decoded_product_update`. It assumes the current state satisfies the count-indexed bounded invariant, the count field equals `n`, both Wide operands are source-canonical, and the generated push succeeds. The proof then derives the four raw operations and their exact source update states from that success.
+
+The result is one-step arithmetic. It leaves constructor initialization, whole-caller traversal, canonicality of all caller-provided operands, and full R22 range discharge open. The compilation used the coherent source-aggregation import order after the four focused EbyE roots; the nested `S5QRaw.EbyKPushDecodedProductUpdateV1` owner is the selected QRaw bridge. No old flat QRaw namespace owner was substituted.
+
+The main theorem's `#print axioms` output contains only Lean's standard `propext`, `Classical.choice`, and `Quot.sound`. The frozen v11 run is exit 0 (5.015s), process RSS 3,960,148 KiB, scope peak 421,605,376 bytes, swap 0. Exact command, source preflight, config, admission, reservation, and logs are under `evidence/AspisR1EbyEFourDotDecodedProductUpdateV1/`.
