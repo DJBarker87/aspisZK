@@ -1,0 +1,9 @@
+# Parsed inactive value to preparation entry
+
+PROVED: `parsed_canonical` reuses `UnrolledWideParserRefinement.slice_success_canonical` and a literal eight-limb-preserving carrier map to derive exact input length32 and the current claim arithmetic's canonicality predicate from successful retained unrolled parsing. No canonical-input or independent output-canonicality premise is required.
+
+PROVED: `entry_parsed_inactive_original_payload_and_rank` uses that result to discharge the inactive-canonicality premise of the source-powers preparation-entry theorem. It returns the original semantic-payload claim polynomial and the same execution's complete challenge/query/rho rank trace. The explicit premises are successful retained parsing into precisely `v.inactive`, and successful extraction-scoped preparation entry under the installed boundaries.
+
+OPEN: installation of the retained parser/carrier map in the actual View decoder, cached-claim/source-fission correspondence, P6 standard-library correspondence, actual tx1/adapter, authenticated payload/custody, adaptive random-oracle, runtime/artifact and global100-bit closure. This does not claim that arbitrary proof bytes satisfy an actual caller invariant. `parser-source-reuse.json` and its read-only checker confirm both retained Rust methods (`from_limbs`, `from_le_bytes`) are byte-identical in frozen b2727acd3 and parked candidate d8578002f. This source reuse does not install the carrier map at the View caller or assert full-cone/runtime refinement; the candidate remains unadopted.
+
+Focused Lean4.32 -j1 -M4400: exit0,8.176s,aggregate3751428096B,process3759849472B,zero swaps; both axiom reports are standard only. Reused the existing exact parser and preparation cached objects; no dependency compilation or unchanged replay. No production code, CU, ELF or deployment change. No binaries included.
