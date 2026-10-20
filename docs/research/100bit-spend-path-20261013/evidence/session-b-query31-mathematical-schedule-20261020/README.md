@@ -1,0 +1,9 @@
+# Exact query31 source digest schedule
+
+PROVED: successful unchanged query row31 execution makes exactly eight ordered squeeze/advance pairs. Every actual hash argument is identified, each advance state feeds the next pair, the first state is the actual absorbed state, and every pair output is exactly its corresponding element in the successful decoder's arrays. The state list equals the retained mathematical QuerySampler state recurrence, with each output interpreted by SourceDigestOracle at the same actual source address. The decoder-selected continuation remains explicit; it is not assumed to be the eighth advance.
+
+The active closure contains five focused checked owners (array readback, source calls, input bridge, oracle bridge and mathematical schedule). The source-calls proof reuses the exact retained OpeningQueriesModel source owner whose function body was freshly compared to unchanged extraction in the preceding packet. The old v5 bridge depended on older SourceCalls; its v44 rebuild selects v32, and v45/v47 rebuilds give one coherent active import chain. Those environment-change rechecks produced identical objects and are not counted as newly added proofs. Earlier variants are retained as historical evidence only.
+
+Focused NUC checks used -M4400/defaults and High1GiB/Max2GiB/Swap0, with standard-only axiom audits. The pinned QuerySampler and Lean4.32 Omega sources are included as retained owners. No proof/compiler resource options were raised, full replays repeated, binaries included or production sources changed.
+
+OPEN: instantiate the actual decoder B.decode, prove its selected continuation/source sampler correspondence, compose all Prepared rows/caller effects and join the adaptive/random-oracle/runtime experiment. This source schedule is not the complete Fiat-Shamir/100-bit theorem.
