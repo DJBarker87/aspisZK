@@ -1,0 +1,11 @@
+# Current WideExact multiplication equals exact field multiplication
+
+PROVED: on canonical inputs, the fully extracted current WideExact::mul is total, returns a canonical result, and decodes to multiplication in the retained degree-eight field `AspisWideTower.WideExact`. The successful-operation theorem derives every intermediate component call from the actual source result. No child-operation success or additional backend semantics premise is supplied by the caller.
+
+The proof reuses the existing full current no-opaque field extraction, checked record conversions, canonical QM31 multiplication, and exact tower addition/multiplication. New M31/CM31/QM31 subtraction and multiplication-by-generator lemmas follow the actual source calls. The outer Karatsuba expression is proved equal to the quadratic field product by two symbolic coordinate identities, not by concrete finite-field reduction.
+
+Two new focused modules, nine standard-only axiom reports. CurrentWideMulExact: exit0, 2.308 seconds, process RSS 3,697,152 KiB, scope peak 376,307,712 bytes, swap0. CurrentWideMulExactProduct: exit0, 2.310 seconds, process RSS 3,700,532 KiB, scope peak 380,305,408 bytes, swap0. Both use the pinned NUC Lean4.32, -M4400, MemoryHigh1GiB/MemoryMax2GiB/MemorySwapMax0, no cap events. Shared mapped imports explain RSS versus cgroup accounting. Exact source/object/import/compiler pins, commands and axiom output are recorded. No unchanged dependency replay, source edits, or compiled binaries.
+
+Current field.rs and wide_exact.rs still equal the whole-file inputs of the retained extraction; current source identity is recorded. These lemmas preserve the existing compiler/source trust boundary. The field construction and cardinality/nonresidue facts are reused from the retained WideTower proof.
+
+OPEN: remaining Wide operations and the complete finish/fold operation instance, caller reachability and canonical input invariants, powers array/from_fn borrowing correspondence, actual parent/caller source links, final source/ELF freeze and whole-runtime refinement, and composition with the cryptographic probability ledger. This closes the arithmetic multiplication dependency, not S1/S5/R22 as a whole or the final 100-bit theorem. Transparency, privacy and per-attempt security are not concluded by an arithmetic lemma.
