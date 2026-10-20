@@ -1,0 +1,7 @@
+# Extracted inverse-consuming fold helpers
+
+PROVED: successful execution of the unchanged frozen circle/line inverse-consuming helpers yields canonical output and the retained fold-model value, assuming explicit primitive arithmetic refinement and canonical inputs. Every intermediate operation's success is derived from the helper's successful execution. The actual source order, selected array slots, quarter/half constants, pairing of values and negative second line coordinate are preserved. Existing fold algebra is reused.
+
+This closes the source expression-to-fold composition under the stated boundary. The concrete Rust field-operation instance, actual caller input/inverse canonicality, QueryGeometry/Vec state and whole source/runtime join remain OPEN. It does not close R22, all R17, or 100-bit soundness. No production source changed.
+
+The extraction kit retains exact helper bodies and field carrier layout; primitive arithmetic methods are explicit opaque boundaries. Compiled Lean uses function parameters instead of opaque template axioms. Charon/Aeneas and four focused Lean targets passed on the NUC with explicit caps and zero swap. Lean uses -M4400. Four printed theorem audits contain only standard axioms. The first refinement elaboration failure is preserved as a diagnostic. Sources, exact tool/import/object pins, commands, timings and memory receipts are included without binaries.
