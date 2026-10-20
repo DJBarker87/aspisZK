@@ -1,0 +1,78 @@
+import D0ScheduleAdmission
+
+/-! R16 fields that are actually visible at the erased decision interface.
+This module constructs the instance witness on admitted canonical runs. It
+makes no claim about recovered-word matching or frozen source equality. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.D0InstanceAdmission
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open RawCutProverCompiler RawCutTranscriptRun RecordedBinaryExperimentBin
+open DecoderInstanceBoundaryBin
+attribute [local instance] Classical.propDecidable
+
+/-- The two late messages are payloads, hence have no hidden word metadata. -/
+def Fields (p : ErasedPrefix) (i : SourceInputs) : Prop :=
+  SemanticPublicWire.parsePublic p.statement.pubBytes = some i.decoded ∧
+  p.rounds[31]? = some (LiteralTranscript.erase i.m31,
+    (TranscriptView.Value.queries (.ok i.queryBytes), i.state31)) ∧
+  p.rounds[32]? = some (LiteralTranscript.erase i.m32,
+    (TranscriptView.Value.ordinary i.rho, i.state32)) ∧
+  LiteralTranscript.valid 31 i.m31 ∧ LiteralTranscript.valid 32 i.m32
+
+def verify (core : ErasedPrefix → ErasedMessage → Bool)
+    (p : ErasedPrefix) (m : ErasedMessage) : Bool :=
+  D0ScheduleAdmission.withSchedule (fun p m => decide (∃ i, Fields p i) && core p m) p m
+
+theorem accepted_fields (core : ErasedPrefix → ErasedMessage → Bool)
+    (p : ErasedPrefix) (m : ErasedMessage) (h : verify core p m = true) :
+    ∃ i, Fields p i := by
+  by_cases hex : ∃ i, Fields p i
+  · exact hex
+  · simp [verify, D0ScheduleAdmission.withSchedule, hex] at h
+
+/-- At these two rows erasure is injective on valid constructors. -/
+theorem valid_payload_injective (row : Nat) (h0 : row ≠ 0)
+    (h2 : row ≠ 2) (h30 : row ≠ 30)
+    (a b : LiteralTranscript.Message)
+    (ha : LiteralTranscript.valid row a) (hb : LiteralTranscript.valid row b)
+    (same : LiteralTranscript.erase a = LiteralTranscript.erase b) : a = b := by
+  cases row with
+  | zero => exact False.elim (h0 rfl)
+  | succ row =>
+    cases a <;> cases b <;>
+      simp_all [LiteralTranscript.valid, LiteralTranscript.erase]
+
+/-- No decision assumption is needed to transport a parsed erased witness to
+R16 once the two compiled constructors have been identified. -/
+theorem fields_to_instance (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (H : Bytes → State)
+    (i : SourceInputs)
+    (h : Fields (LiteralTranscript.erasePrefix
+      ((LiteralByteProtocol.protocol D).transcript H (compiledPublic D d P H)
+        (annotatedRun D d P H).2.1.2 33)) i)
+    (v31 : LiteralTranscript.valid 31 ((annotatedRun D d P H).2.1.2 31))
+    (v32 : LiteralTranscript.valid 32 ((annotatedRun D d P H).2.1.2 32)) :
+    InstanceFields D d P H i := by
+  let pub := compiledPublic D d P H
+  let pf := (annotatedRun D d P H).2.1.2
+  have at31 := LiteralByteRunFacts.transcript_index D H pub pf 33 31 (by decide)
+  have at32 := LiteralByteRunFacts.transcript_index D H pub pf 33 32 (by decide)
+  have e31 := h.2.1
+  have e32 := h.2.2.1
+  simp only [LiteralTranscript.erasePrefix, List.getElem?_map, at31, at32,
+    Option.map_some, Option.some.injEq, Prod.mk.injEq] at e31 e32
+  have m31 := valid_payload_injective 31 (by decide) (by decide) (by decide)
+    (pf 31) i.m31 v31 h.2.2.2.1 e31.1
+  have m32 := valid_payload_injective 32 (by decide) (by decide) (by decide)
+    (pf 32) i.m32 v32 h.2.2.2.2 e32.1
+  exact ⟨h.1, at31.trans (by rw [m31, e31.2]),
+    at32.trans (by rw [m32, e32.2]), h.2.2.2.1, h.2.2.2.2⟩
+
+#print axioms accepted_fields
+#print axioms valid_payload_injective
+#print axioms fields_to_instance
+end AspisR1.D0InstanceAdmission
+end

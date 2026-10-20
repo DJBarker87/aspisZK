@@ -5,7 +5,7 @@ LEAN=ROOT/'docs/research/100bit-spend-path-20261013/lean'
 OUT=pathlib.Path(__file__).resolve().parent
 OBJ=pathlib.Path('/tmp/codex-cx-d0-decision-20261021-objects'); OBJ.mkdir(exist_ok=True)
 base=json.loads((OUT.parent/'r3-semantic-20261021/R3SemanticRemainingJoins-3/command.json').read_text())
-paths=[str(OBJ), '/tmp/codex-cx-r15-writer-20261021-objects','/tmp/codex-cx-r16-canon-20261021-objects','/tmp/codex-cx-r16-decision-20261021-objects']+base['lean_path'].split(':')
+paths=[str(OBJ), '/tmp/codex-cx-r3-semantic-20261021-objects', '/tmp/codex-cx-r15-writer-20261021-objects','/tmp/codex-cx-r16-canon-20261021-objects','/tmp/codex-cx-r16-decision-20261021-objects']+base['lean_path'].split(':')
 module=sys.argv[1]; attempt=int(sys.argv[2]); source=LEAN/(module+'.lean')
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 imports=[]
@@ -33,7 +33,7 @@ finally: lock.rmdir()
 log=(dest/'lean.log').read_text(); timing=(dest/'time.log').read_text()
 def stat(pattern):
     m=re.search(pattern,timing); return int(m.group(1)) if m else None
-receipt={**cmd,'exit':result.returncode,'wall_seconds':wall,'peak_rss_bytes':stat(r'(\d+)\s+maximum resident set size'),'swaps':stat(r'(\d+)\s+swaps'),'axioms':[l for l in log.splitlines() if 'depends on axioms' in l or 'does not depend on any axioms' in l],'errors':[l for l in log.splitlines() if 'error:' in l]}
+receipt={**cmd,'exit':result.returncode,'wall_seconds':wall,'peak_rss_bytes':stat(r'(\d+)\s+maximum resident set size'),'swaps':stat(r'(\d+)\s+swaps'),'axioms':[' '.join(m.split()) for m in re.findall(r"'[^']+' (?:depends on axioms:\s*\[[^\]]*\]|does not depend on any axioms)",log)],'errors':[l for l in log.splitlines() if re.search(r'error(?:\([^)]*\))?:',l)]}
 (dest/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
 receipts=[json.loads(p.read_text()) for p in sorted(OUT.glob('*/receipt.json'))]
 (OUT/'manifest.json').write_text(json.dumps({'schema':'focused-extractor-proof-packet-v1','attempts':receipts},indent=2)+'\n')
