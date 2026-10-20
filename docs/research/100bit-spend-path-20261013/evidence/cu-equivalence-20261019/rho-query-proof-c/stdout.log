@@ -1,0 +1,383 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:15:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsRhoQuery.node_equivalence`:
+  [AspisR1RhoAccumulate.AccumulateCommon]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [AspisR1RhoAccumulate.AccumulateCommon] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:20:81: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:31:8: warning: automatically included section variable(s) unused in theorem `_private.CuSavingsRhoQuery.0.AspisR1.CuSavingsRhoQuery.bind_ok`:
+  [AspisR1RhoAccumulate.AccumulateCommon]
+  [QueryCommon]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [AspisR1RhoAccumulate.AccumulateCommon] [QueryCommon] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:71:87: error: Application type mismatch: The argument
+  result
+has type
+  AspisR1RhoAccumulate.verifier.Accumulator
+but is expected to have type
+  CuSavingsRhoAccumulate.Acc × Option CuSavingsRhoAccumulate.BW
+in the application
+  CuSavingsRhoAccumulate.source_preserves p a b node value hg hp hr hn hc hl hrows result
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:72:68: error(lean.invalidField): Invalid field `weights`: The environment does not contain `Subtype.weights`, so it is not possible to project the field `weights` from an expression
+  result.weights
+of type `{ l // l.length ≤ Usize.max }`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:73:21: error(lean.invalidField): Invalid field `weights`: The environment does not contain `Subtype.weights`, so it is not possible to project the field `weights` from an expression
+  result.weights
+of type `{ l // l.length ≤ Usize.max }`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:76:48: error: Tactic `rfl` failed: The left-hand side
+  do
+    let out ←
+      match pending with
+        | none => fail Error.panic
+        | some pending => do
+          let weights ← AspisR1CuRhoSource.verifier.BatchedWeights.finish pending result.weights
+          ok { weights := weights, rhs := result.rhs, power := result.power, next := result.next }
+    ok v✝
+    ok (core.result.Result.Ok out)
+is not definitionally equal to the right-hand side
+  let (out, pending) := (result, pending)
+  do
+  ok v✝
+  let weights ←
+    AspisR1CuRhoSource.verifier.BatchedWeights.finish
+        (match pending with
+        | some x => x
+        | none => b)
+        out.weights
+  ok (core.result.Result.Ok { weights := weights, rhs := out.rhs, power := out.power, next := out.next })
+
+case ok.ok
+inst✝¹ : AspisR1RhoAccumulate.AccumulateCommon
+inst✝ : QueryCommon
+p : Prep
+a : Acc
+b : BW
+node : U32
+value : aspis_core.field.WideExact
+hg : Good b []
+hp : Canonical a.power
+hr : Canonical p.rho
+hn : ↑a.next < 22
+hc : ↑b.terms < 22
+hl : ↑a.weights.len ≤ 256
+hrows : (↑a.weights).length = (↑b.raw).length
+obs : Option (verifier.Phase → Result Unit)
+result : AspisR1RhoAccumulate.verifier.Accumulator
+pending : Option AspisR1RhoAccumulate.BatchedWeights
+hm : AspisR1RhoAccumulate.factored_new.accumulate_with_node p a node value (some b) = ok (result, pending)
+out : CuSavingsRhoAccumulate.BW
+hout : sorry.2 = some out
+hgood : Good out []
+left✝² : ↑out.terms = ↑b.terms + 1
+hlen : (↑out.raw).length = (↑b.raw).length
+hw : sorry.1.weights = a.weights
+left✝¹ : Canonical sorry.1.power
+left✝ : ↑sorry.1.next = ↑a.next + 1
+right✝ : ↑sorry.1.next ≤ 22
+hf : AspisR1CuRhoSource.verifier.BatchedWeights.finish out sorry = ok (canonicalSlice out)
+heq :
+  AspisR1RhoAccumulate.factored_old.accumulate_with_node p
+      { weights := canonicalVec b, rhs := a.rhs, power := a.power, next := a.next } node value =
+    match pending with
+    | none => fail Error.panic
+    | some pending => do
+      let weights ← AspisR1CuRhoSource.verifier.BatchedWeights.finish pending result.weights
+      ok { weights := weights, rhs := result.rhs, power := result.power, next := result.next }
+v✝ : Unit
+⊢ (do
+      let out ←
+        match pending with
+          | none => fail Error.panic
+          | some pending => do
+            let weights ← AspisR1CuRhoSource.verifier.BatchedWeights.finish pending result.weights
+            ok { weights := weights, rhs := result.rhs, power := result.power, next := result.next }
+      ok v✝
+      ok (core.result.Result.Ok out)) =
+    let (out, pending) := (result, pending)
+    do
+    ok v✝
+    let weights ←
+      AspisR1CuRhoSource.verifier.BatchedWeights.finish
+          (match pending with
+          | some x => x
+          | none => b)
+          out.weights
+    ok (core.result.Result.Ok { weights := weights, rhs := out.rhs, power := out.power, next := out.next })
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:76:48: error: Tactic `rfl` failed: The left-hand side
+  do
+    let out ←
+      match pending with
+        | none => fail Error.panic
+        | some pending => do
+          let weights ← AspisR1CuRhoSource.verifier.BatchedWeights.finish pending result.weights
+          ok { weights := weights, rhs := result.rhs, power := result.power, next := result.next }
+    fail e✝
+    ok (core.result.Result.Ok out)
+is not definitionally equal to the right-hand side
+  let (out, pending) := (result, pending)
+  do
+  fail e✝
+  let weights ←
+    AspisR1CuRhoSource.verifier.BatchedWeights.finish
+        (match pending with
+        | some x => x
+        | none => b)
+        out.weights
+  ok (core.result.Result.Ok { weights := weights, rhs := out.rhs, power := out.power, next := out.next })
+
+case ok.fail
+inst✝¹ : AspisR1RhoAccumulate.AccumulateCommon
+inst✝ : QueryCommon
+p : Prep
+a : Acc
+b : BW
+node : U32
+value : aspis_core.field.WideExact
+hg : Good b []
+hp : Canonical a.power
+hr : Canonical p.rho
+hn : ↑a.next < 22
+hc : ↑b.terms < 22
+hl : ↑a.weights.len ≤ 256
+hrows : (↑a.weights).length = (↑b.raw).length
+obs : Option (verifier.Phase → Result Unit)
+result : AspisR1RhoAccumulate.verifier.Accumulator
+pending : Option AspisR1RhoAccumulate.BatchedWeights
+hm : AspisR1RhoAccumulate.factored_new.accumulate_with_node p a node value (some b) = ok (result, pending)
+out : CuSavingsRhoAccumulate.BW
+hout : sorry.2 = some out
+hgood : Good out []
+left✝² : ↑out.terms = ↑b.terms + 1
+hlen : (↑out.raw).length = (↑b.raw).length
+hw : sorry.1.weights = a.weights
+left✝¹ : Canonical sorry.1.power
+left✝ : ↑sorry.1.next = ↑a.next + 1
+right✝ : ↑sorry.1.next ≤ 22
+hf : AspisR1CuRhoSource.verifier.BatchedWeights.finish out sorry = ok (canonicalSlice out)
+heq :
+  AspisR1RhoAccumulate.factored_old.accumulate_with_node p
+      { weights := canonicalVec b, rhs := a.rhs, power := a.power, next := a.next } node value =
+    match pending with
+    | none => fail Error.panic
+    | some pending => do
+      let weights ← AspisR1CuRhoSource.verifier.BatchedWeights.finish pending result.weights
+      ok { weights := weights, rhs := result.rhs, power := result.power, next := result.next }
+e✝ : Error
+⊢ (do
+      let out ←
+        match pending with
+          | none => fail Error.panic
+          | some pending => do
+            let weights ← AspisR1CuRhoSource.verifier.BatchedWeights.finish pending result.weights
+            ok { weights := weights, rhs := result.rhs, power := result.power, next := result.next }
+      fail e✝
+      ok (core.result.Result.Ok out)) =
+    let (out, pending) := (result, pending)
+    do
+    fail e✝
+    let weights ←
+      AspisR1CuRhoSource.verifier.BatchedWeights.finish
+          (match pending with
+          | some x => x
+          | none => b)
+          out.weights
+    ok (core.result.Result.Ok { weights := weights, rhs := out.rhs, power := out.power, next := out.next })
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:76:48: error: Tactic `rfl` failed: The left-hand side
+  do
+    let out ←
+      match pending with
+        | none => fail Error.panic
+        | some pending => do
+          let weights ← AspisR1CuRhoSource.verifier.BatchedWeights.finish pending result.weights
+          ok { weights := weights, rhs := result.rhs, power := result.power, next := result.next }
+    div
+    ok (core.result.Result.Ok out)
+is not definitionally equal to the right-hand side
+  let (out, pending) := (result, pending)
+  do
+  div
+  let weights ←
+    AspisR1CuRhoSource.verifier.BatchedWeights.finish
+        (match pending with
+        | some x => x
+        | none => b)
+        out.weights
+  ok (core.result.Result.Ok { weights := weights, rhs := out.rhs, power := out.power, next := out.next })
+
+case ok.div
+inst✝¹ : AspisR1RhoAccumulate.AccumulateCommon
+inst✝ : QueryCommon
+p : Prep
+a : Acc
+b : BW
+node : U32
+value : aspis_core.field.WideExact
+hg : Good b []
+hp : Canonical a.power
+hr : Canonical p.rho
+hn : ↑a.next < 22
+hc : ↑b.terms < 22
+hl : ↑a.weights.len ≤ 256
+hrows : (↑a.weights).length = (↑b.raw).length
+obs : Option (verifier.Phase → Result Unit)
+result : AspisR1RhoAccumulate.verifier.Accumulator
+pending : Option AspisR1RhoAccumulate.BatchedWeights
+hm : AspisR1RhoAccumulate.factored_new.accumulate_with_node p a node value (some b) = ok (result, pending)
+out : CuSavingsRhoAccumulate.BW
+hout : sorry.2 = some out
+hgood : Good out []
+left✝² : ↑out.terms = ↑b.terms + 1
+hlen : (↑out.raw).length = (↑b.raw).length
+hw : sorry.1.weights = a.weights
+left✝¹ : Canonical sorry.1.power
+left✝ : ↑sorry.1.next = ↑a.next + 1
+right✝ : ↑sorry.1.next ≤ 22
+hf : AspisR1CuRhoSource.verifier.BatchedWeights.finish out sorry = ok (canonicalSlice out)
+heq :
+  AspisR1RhoAccumulate.factored_old.accumulate_with_node p
+      { weights := canonicalVec b, rhs := a.rhs, power := a.power, next := a.next } node value =
+    match pending with
+    | none => fail Error.panic
+    | some pending => do
+      let weights ← AspisR1CuRhoSource.verifier.BatchedWeights.finish pending result.weights
+      ok { weights := weights, rhs := result.rhs, power := result.power, next := result.next }
+⊢ (do
+      let out ←
+        match pending with
+          | none => fail Error.panic
+          | some pending => do
+            let weights ← AspisR1CuRhoSource.verifier.BatchedWeights.finish pending result.weights
+            ok { weights := weights, rhs := result.rhs, power := result.power, next := result.next }
+      div
+      ok (core.result.Result.Ok out)) =
+    let (out, pending) := (result, pending)
+    do
+    div
+    let weights ←
+      AspisR1CuRhoSource.verifier.BatchedWeights.finish
+          (match pending with
+          | some x => x
+          | none => b)
+          out.weights
+    ok (core.result.Result.Ok { weights := weights, rhs := out.rhs, power := out.power, next := out.next })
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:74:29: warning: This simp argument is unused:
+  hout
+
+Hint: Omit it from the simp argument list.
+  simp only [hm, ̲bind_tc_ok,h̵o̵u̵t̵,̵ ̲CuSavingsRhoAccumulate.materialize, ̲hf] at heq
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:74:69: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp only [hm, ̲bind_tc_ok, ̲hout, ̲CuSavingsRhoAccumulate.materialize,̵h̵f̵] at heq
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:75:19: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [heq,h̵m̵,̵ ̲bind_tc_ok, ̲hout, ̲observe, ̲hf]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:75:33: warning: This simp argument is unused:
+  hout
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵e̵q̵,̵h̵m̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵o̵u̵t̵,̵o̵b̵s̵e̵r̵v̵e̵,̵h̵f̵]̵[̲h̲e̲q̲,̲ ̲h̲m̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲h̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:75:46: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp only [heq, ̲hm, ̲bind_tc_ok, ̲hout, ̲observe,̵h̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:108:8: error: Type mismatch
+  accumulation_context p a b node folded hg hp hr hn hc hl hrows obs
+has type
+  (do
+      let out ←
+        factored_old.accumulate_with_node p
+            { weights := canonicalVec b, rhs := a.rhs, power := a.power, next := a.next } node folded
+      verifier.mark obs (verifier.Phase.Query a.next)
+      ok (core.result.Result.Ok out)) =
+    do
+    let (out, pending) ← factored_new.accumulate_with_node p a node folded (some b)
+    have b' : AspisR1RhoAccumulate.BatchedWeights :=
+      match pending with
+      | some x => x
+      | none => b
+    verifier.mark obs (verifier.Phase.Query a.next)
+    observe (core.result.Result.Ok (out, b'))
+but is expected to have type
+  (do
+      let a1 ←
+        factored_old.accumulate_with_node p
+            { weights := canonicalVec b, rhs := a.rhs, power := a.power, next := a.next } node folded
+      verifier.mark obs (verifier.Phase.Query a.next)
+      ok (core.result.Result.Ok a1)) =
+    do
+    let r ←
+      do
+        let (a1, o) ← factored_new.accumulate_with_node p a node folded (some b)
+        verifier.mark obs (verifier.Phase.Query a.next)
+        ok
+            (core.result.Result.Ok
+              (a1,
+                match o with
+                | some bw => bw
+                | x => b))
+    observe r
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:95:25: warning: This simp argument is unused:
+  hpre
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵r̵e̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:96:22: warning: This simp argument is unused:
+  hpre
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵r̵e̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:102:17: warning: This simp argument is unused:
+  hpre
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵r̵e̵,̵bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch, ̲uncurry_apply_pair]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:104:29: warning: This simp argument is unused:
+  hnode
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵n̵o̵d̵e̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:105:26: warning: This simp argument is unused:
+  hnode
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵n̵o̵d̵e̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:107:19: warning: This simp argument is unused:
+  hnode
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵n̵o̵d̵e̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsRhoQuery.node_equivalence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoQuery.accumulation_context' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoQuery.source_equivalence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoQuery.observe' depends on axioms: [propext, Classical.choice, Quot.sound]

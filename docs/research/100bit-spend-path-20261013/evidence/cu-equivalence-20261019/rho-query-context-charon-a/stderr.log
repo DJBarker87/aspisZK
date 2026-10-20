@@ -1,0 +1,462 @@
+   Compiling aspis-r1-cu-gamma v0.0.0 (/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/rho-query-context-input)
+warning: unused import: `P`
+   --> lib.rs:302:50
+    |
+302 |             use crate::aspis_core::{field::{M31, P}, state_only_prefix::r0::Error};
+    |                                                  ^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `field`, `powers`, and `transcript::Transcript`
+   --> lib.rs:837:167
+    |
+837 | ...e::SecureCirclePoint},transport::Variant,transcript::Transcript,weights::{powers,field}};
+    |                                             ^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^ ^^^^^
+
+warning: unused imports: `circle::SecureCirclePoint` and `transport::Variant`
+   --> lib.rs:867:69
+    |
+867 | use crate::{aspis_core::{Digest32,field::{WideExact as E,QM31 as K},circle::SecureCirclePoint},
+    |                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+868 |  verifier::{Prepared,View,Error},transcript::Transcript,transport::Variant,weights::{powers,field}};
+    |                                                         ^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `circle::SecureCirclePoint` and `transport::Variant`
+   --> lib.rs:924:69
+    |
+924 | use crate::{aspis_core::{Digest32,field::{WideExact as E,QM31 as K},circle::SecureCirclePoint},
+    |                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+925 |  verifier::{Prepared,View,Error},transcript::Transcript,transport::Variant,weights::{powers,field}};
+    |                                                         ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `BatchedWeights`
+   --> lib.rs:998:81
+    |
+998 | pub mod rho_old {use crate::{aspis_core,aspis_core::field::{M31,WideExact as E},BatchedWeights};
+    |                                                                                 ^^^^^^^^^^^^^^
+
+warning: unused import: `BatchedWeights`
+    --> lib.rs:1027:108
+     |
+1027 | pub mod factored_old {use crate::{verifier::{Prepared,Accumulator},aspis_core::field::{M31,WideExact as E},BatchedWeights};
+     |                                                                                                            ^^^^^^^^^^^^^^
+
+error[E0592]: duplicate definitions with name `ONE`
+    --> lib.rs:986:29
+     |
+ 986 | pub const ZERO:Self=Self(0);pub const ONE:Self=Self(1);
+     |                             ^^^^^^^^^^^^^^^^^^ duplicate definitions for `ONE`
+...
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |           ------------------ other definition for `ONE`
+
+error[E0592]: duplicate definitions with name `mul`
+    --> lib.rs:987:1
+     |
+ 987 | pub fn mul(self,_rhs:Self)->Self{unreachable!()}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ duplicate definitions for `mul`
+...
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |                                      ------------------------------ other definition for `mul`
+
+error[E0592]: duplicate definitions with name `sub`
+    --> lib.rs:988:1
+     |
+ 988 | pub fn sub(self,_rhs:Self)->Self{unreachable!()}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ duplicate definitions for `sub`
+...
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn sub(self,_y:Self)->Self{un...
+     |                                                                                                                             ------------------------------ other definition for `sub`
+
+error[E0592]: duplicate definitions with name `double`
+    --> lib.rs:989:1
+     |
+ 989 | pub fn double(self)->Self{unreachable!()}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^ duplicate definitions for `double`
+...
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |                                                                                    ------------------------- other definition for `double`
+
+error[E0034]: multiple applicable items in scope
+    --> lib.rs:1023:49
+     |
+1023 |     let mut basis=[M31::ZERO;256];basis[0]=M31::ONE;let mut n=1;
+     |                                                 ^^^ multiple `ONE` found
+     |
+note: candidate #1 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:986:29
+     |
+ 986 | pub const ZERO:Self=Self(0);pub const ONE:Self=Self(1);
+     |                             ^^^^^^^^^^^^^^^^^^
+note: candidate #2 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:1057:11
+     |
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |           ^^^^^^^^^^^^^^^^^^
+
+error[E0034]: multiple applicable items in scope
+    --> lib.rs:1024:56
+     |
+1024 |     while n<length {for j in 0..n {basis[n+j]=basis[j].mul(node);} node=node.mul(node).double().sub(M31::ONE);n*=2;}
+     |                                                        ^^^ multiple `mul` found
+     |
+note: candidate #1 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:987:1
+     |
+ 987 | pub fn mul(self,_rhs:Self)->Self{unreachable!()}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: candidate #2 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:1057:38
+     |
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0034]: multiple applicable items in scope
+    --> lib.rs:1024:78
+     |
+1024 |     while n<length {for j in 0..n {basis[n+j]=basis[j].mul(node);} node=node.mul(node).double().sub(M31::ONE);n*=2;}
+     |                                                                              ^^^ multiple `mul` found
+     |
+note: candidate #1 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:987:1
+     |
+ 987 | pub fn mul(self,_rhs:Self)->Self{unreachable!()}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: candidate #2 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:1057:38
+     |
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0034]: multiple applicable items in scope
+    --> lib.rs:1024:106
+     |
+1024 |     while n<length {for j in 0..n {basis[n+j]=basis[j].mul(node);} node=node.mul(node).double().sub(M31::ONE);n*=2;}
+     |                                                                                                          ^^^ multiple `ONE` found
+     |
+note: candidate #1 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:986:29
+     |
+ 986 | pub const ZERO:Self=Self(0);pub const ONE:Self=Self(1);
+     |                             ^^^^^^^^^^^^^^^^^^
+note: candidate #2 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:1057:11
+     |
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |           ^^^^^^^^^^^^^^^^^^
+
+error[E0034]: multiple applicable items in scope
+    --> lib.rs:1039:49
+     |
+1039 |     let mut basis=[M31::ZERO;256];basis[0]=M31::ONE;let mut n=1;
+     |                                                 ^^^ multiple `ONE` found
+     |
+note: candidate #1 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:986:29
+     |
+ 986 | pub const ZERO:Self=Self(0);pub const ONE:Self=Self(1);
+     |                             ^^^^^^^^^^^^^^^^^^
+note: candidate #2 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:1057:11
+     |
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |           ^^^^^^^^^^^^^^^^^^
+
+error[E0034]: multiple applicable items in scope
+    --> lib.rs:1040:56
+     |
+1040 |     while n<length {for j in 0..n {basis[n+j]=basis[j].mul(node);} node=node.mul(node).double().sub(M31::ONE);n*=2;}
+     |                                                        ^^^ multiple `mul` found
+     |
+note: candidate #1 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:987:1
+     |
+ 987 | pub fn mul(self,_rhs:Self)->Self{unreachable!()}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: candidate #2 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:1057:38
+     |
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0034]: multiple applicable items in scope
+    --> lib.rs:1040:78
+     |
+1040 |     while n<length {for j in 0..n {basis[n+j]=basis[j].mul(node);} node=node.mul(node).double().sub(M31::ONE);n*=2;}
+     |                                                                              ^^^ multiple `mul` found
+     |
+note: candidate #1 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:987:1
+     |
+ 987 | pub fn mul(self,_rhs:Self)->Self{unreachable!()}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: candidate #2 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:1057:38
+     |
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0034]: multiple applicable items in scope
+    --> lib.rs:1040:106
+     |
+1040 |     while n<length {for j in 0..n {basis[n+j]=basis[j].mul(node);} node=node.mul(node).double().sub(M31::ONE);n*=2;}
+     |                                                                                                          ^^^ multiple `ONE` found
+     |
+note: candidate #1 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:986:29
+     |
+ 986 | pub const ZERO:Self=Self(0);pub const ONE:Self=Self(1);
+     |                             ^^^^^^^^^^^^^^^^^^
+note: candidate #2 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:1057:11
+     |
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |           ^^^^^^^^^^^^^^^^^^
+
+error[E0034]: multiple applicable items in scope
+    --> lib.rs:1064:36
+     |
+1064 |         accumulate_with_node(p,a,z.mul(z).double().sub(M31::ONE),folded);
+     |                                    ^^^ multiple `mul` found
+     |
+note: candidate #1 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:987:1
+     |
+ 987 | pub fn mul(self,_rhs:Self)->Self{unreachable!()}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: candidate #2 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:1057:38
+     |
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0034]: multiple applicable items in scope
+    --> lib.rs:1064:61
+     |
+1064 |         accumulate_with_node(p,a,z.mul(z).double().sub(M31::ONE),folded);
+     |                                                             ^^^ multiple `ONE` found
+     |
+note: candidate #1 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:986:29
+     |
+ 986 | pub const ZERO:Self=Self(0);pub const ONE:Self=Self(1);
+     |                             ^^^^^^^^^^^^^^^^^^
+note: candidate #2 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:1057:11
+     |
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |           ^^^^^^^^^^^^^^^^^^
+
+error[E0034]: multiple applicable items in scope
+    --> lib.rs:1070:55
+     |
+1070 |     if p.variant.folds()==2 {for _ in 0..2 {node=node.mul(node).double().sub(M31::ONE);}}
+     |                                                       ^^^ multiple `mul` found
+     |
+note: candidate #1 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:987:1
+     |
+ 987 | pub fn mul(self,_rhs:Self)->Self{unreachable!()}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: candidate #2 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:1057:38
+     |
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0034]: multiple applicable items in scope
+    --> lib.rs:1070:83
+     |
+1070 |     if p.variant.folds()==2 {for _ in 0..2 {node=node.mul(node).double().sub(M31::ONE);}}
+     |                                                                                   ^^^ multiple `ONE` found
+     |
+note: candidate #1 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:986:29
+     |
+ 986 | pub const ZERO:Self=Self(0);pub const ONE:Self=Self(1);
+     |                             ^^^^^^^^^^^^^^^^^^
+note: candidate #2 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:1057:11
+     |
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |           ^^^^^^^^^^^^^^^^^^
+
+error[E0034]: multiple applicable items in scope
+    --> lib.rs:1078:51
+     |
+1078 |         let z=geometry.line_z[i-geometry.start];z.mul(z).double().sub(M31::ONE)
+     |                                                   ^^^ multiple `mul` found
+     |
+note: candidate #1 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:987:1
+     |
+ 987 | pub fn mul(self,_rhs:Self)->Self{unreachable!()}
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: candidate #2 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:1057:38
+     |
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0034]: multiple applicable items in scope
+    --> lib.rs:1078:76
+     |
+1078 |         let z=geometry.line_z[i-geometry.start];z.mul(z).double().sub(M31::ONE)
+     |                                                                            ^^^ multiple `ONE` found
+     |
+note: candidate #1 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:986:29
+     |
+ 986 | pub const ZERO:Self=Self(0);pub const ONE:Self=Self(1);
+     |                             ^^^^^^^^^^^^^^^^^^
+note: candidate #2 is defined in an impl for the type `aspis_core::field::M31`
+    --> lib.rs:1057:11
+     |
+1057 | impl M31 {pub const ONE:Self=Self(1);pub fn mul(self,_y:Self)->Self{unreachable!()}pub fn double(self)->Self{unreachable!()}pub fn...
+     |           ^^^^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> lib.rs:858:58
+    |
+858 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                                                          ----^
+    |                                                          |
+    |                                                          help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `v`
+   --> lib.rs:858:31
+    |
+858 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                               ^ help: if this is intentional, prefix it with an underscore: `_v`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `p`
+   --> lib.rs:858:42
+    |
+858 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                                          ^ help: if this is intentional, prefix it with an underscore: `_p`
+
+warning: unused variable: `a`
+   --> lib.rs:858:58
+    |
+858 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                                                          ^^^^^ help: if this is intentional, prefix it with an underscore: `_a`
+
+warning: unused variable: `g`
+   --> lib.rs:858:76
+    |
+858 | ...ox<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unre...
+    |                                   ^ help: if this is intentional, prefix it with an underscore: `_g`
+
+warning: unused variable: `public_bytes`
+   --> lib.rs:858:85
+    |
+858 | ...ccumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                        ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_public_bytes`
+
+warning: unused variable: `proof`
+   --> lib.rs:858:104
+    |
+858 | ...:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                               ^^^^^ help: if this is intentional, prefix it with an underscore: `_proof`
+
+warning: unused variable: `k`
+   --> lib.rs:858:116
+    |
+858 | ...public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                                   ^ help: if this is intentional, prefix it with an underscore: `_k`
+
+warning: unused variable: `hash`
+   --> lib.rs:858:124
+    |
+858 | ...s:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                                ^^^^ help: if this is intentional, prefix it with an underscore: `_hash`
+
+warning: unused variable: `obs`
+   --> lib.rs:858:131
+    |
+858 | ...],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                                 ^^^ help: if this is intentional, prefix it with an underscore: `_obs`
+
+warning: variable does not need to be mutable
+   --> lib.rs:917:67
+    |
+917 |     let (_semantic_claims,p)=tx1_prepare(public,&v,hash,obs)?;let mut a=Accumulator::new(v.variant)?;let g=powers::<29>(p.gamma);ma...
+    |                                                                   ----^
+    |                                                                   |
+    |                                                                   help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> lib.rs:1029:60
+     |
+1029 | pub fn accumulate_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E) {
+     |                                                            ----^^^^
+     |                                                            |
+     |                                                            help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> lib.rs:1045:60
+     |
+1045 | pub fn accumulate_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E,mut pending:Option<&mut BatchedWeights>) {
+     |                                                            ----^^^^
+     |                                                            |
+     |                                                            help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> lib.rs:1045:81
+     |
+1045 | pub fn accumulate_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E,mut pending:Option<&mut BatchedWeights>) {
+     |                                                                                 ----^^^^^^^
+     |                                                                                 |
+     |                                                                                 help: remove this `mut`
+
+warning: unused variable: `v`
+    --> lib.rs:1055:36
+     |
+1055 | fn source_query_prefix<H:Digest32>(v:&View<'_>,p:&Prepared,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry,i:usize)->Result<...
+     |                                    ^ help: if this is intentional, prefix it with an underscore: `_v`
+
+warning: unused variable: `p`
+    --> lib.rs:1055:48
+     |
+1055 | fn source_query_prefix<H:Digest32>(v:&View<'_>,p:&Prepared,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry,i:usize)->Result<...
+     |                                                ^ help: if this is intentional, prefix it with an underscore: `_p`
+
+warning: unused variable: `g`
+    --> lib.rs:1055:60
+     |
+1055 | fn source_query_prefix<H:Digest32>(v:&View<'_>,p:&Prepared,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry,i:usize)->Result<...
+     |                                                            ^ help: if this is intentional, prefix it with an underscore: `_g`
+
+warning: unused variable: `hash`
+    --> lib.rs:1055:70
+     |
+1055 | ...<'_>,p:&Prepared,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry,i:usize)->Result<(usize,E),Error> {unreachable!()}
+     |                               ^^^^ help: if this is intentional, prefix it with an underscore: `_hash`
+
+warning: unused variable: `obs`
+    --> lib.rs:1055:77
+     |
+1055 | ...:&Prepared,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry,i:usize)->Result<(usize,E),Error> {unreachable!()}
+     |                                ^^^ help: if this is intentional, prefix it with an underscore: `_obs`
+
+warning: unused variable: `geometry`
+    --> lib.rs:1055:90
+     |
+1055 | ...9],hash:H,obs:Observer,geometry:&QueryGeometry,i:usize)->Result<(usize,E),Error> {unreachable!()}
+     |                           ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_geometry`
+
+warning: unused variable: `i`
+    --> lib.rs:1055:114
+     |
+1055 | ...erver,geometry:&QueryGeometry,i:usize)->Result<(usize,E),Error> {unreachable!()}
+     |                                  ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+Some errors have detailed explanations: E0034, E0592.
+For more information about an error, try `rustc --explain E0034`.
+ERROR Code failed to compile
+warning: `aspis-r1-cu-gamma` (lib) generated 27 warnings
+error: could not compile `aspis-r1-cu-gamma` (lib) due to 18 previous errors; 27 warnings emitted

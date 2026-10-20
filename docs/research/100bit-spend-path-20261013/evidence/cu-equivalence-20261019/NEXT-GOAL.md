@@ -217,3 +217,5 @@ admitting any new output.
 
 
 Caller input milestone: whole resume weight canonicality and whole allocation/constructor/new-zip invariants checked; see RHO-CALLER-INPUTS.md. Next: actual query/stage contexts, resume header and sufficient-resource binding. Candidate 12 remains incomplete.
+
+Whole source query and transaction stage outcome milestone checked: RHO-QUERY-STAGE.md/json. Whole stage equals old stage preceded solely by extra initializer, including all errors/divergence; final allocation/caller/observable composition remains open.

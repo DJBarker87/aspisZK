@@ -1,0 +1,263 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:15:71: error: unsolved goals
+case S1
+inst✝¹ : AspisR1RhoAccumulate.AccumulateCommon
+inst✝ : QueryCommon
+p : Prep
+geometry : QueryGeometry
+i u : Usize
+hv : p.variant = AspisR1RhoPowerTail.transport.Variant.S1
+⊢ (do
+      let node ← source_line_node u
+      ok node) =
+    source_line_node u
+
+case S2
+inst✝¹ : AspisR1RhoAccumulate.AccumulateCommon
+inst✝ : QueryCommon
+p : Prep
+geometry : QueryGeometry
+i u : Usize
+hv : p.variant = AspisR1RhoPowerTail.transport.Variant.S2
+⊢ ∀ (v : Usize),
+    (if AspisR1RhoPowerTail.transport.Variant.S2.read_discriminant = transport.Variant.S1.read_discriminant then
+          ok 1#usize
+        else ok 2#usize) =
+        ok v →
+      (if v = 2#usize then do
+          let i2 ← i - geometry.start
+          let z ← geometry.line_z.index_usize i2
+          let m ← M31.mul z z
+          let m1 ← M31.double m
+          M31.sub m1 M31.ONE
+        else do
+          let u1 ←
+            if v = 1#usize then ok u
+              else do
+                let i2 ← u / 4#usize
+                i2 * 4#usize
+          let node ← source_line_node u1
+          if v = 2#usize then source_node_old_loop { start := 0#i32, «end» := 2#i32 } node else ok node) =
+        if v = 2#usize then do
+          let i2 ← i - geometry.start
+          let z ← geometry.line_z.index_usize i2
+          let m ← M31.mul z z
+          let m1 ← M31.double m
+          M31.sub m1 M31.ONE
+        else source_line_node u
+
+case D
+inst✝¹ : AspisR1RhoAccumulate.AccumulateCommon
+inst✝ : QueryCommon
+p : Prep
+geometry : QueryGeometry
+i u : Usize
+hv : p.variant = AspisR1RhoPowerTail.transport.Variant.D
+⊢ ∀ (v : Usize),
+    (if AspisR1RhoPowerTail.transport.Variant.D.read_discriminant = transport.Variant.S1.read_discriminant then
+          ok 1#usize
+        else ok 2#usize) =
+        ok v →
+      (if v = 2#usize then do
+          let i2 ← i - geometry.start
+          let z ← geometry.line_z.index_usize i2
+          let m ← M31.mul z z
+          let m1 ← M31.double m
+          M31.sub m1 M31.ONE
+        else do
+          let u1 ←
+            if v = 1#usize then ok u
+              else do
+                let i2 ← u / 4#usize
+                i2 * 4#usize
+          let node ← source_line_node u1
+          if v = 2#usize then source_node_old_loop { start := 0#i32, «end» := 2#i32 } node else ok node) =
+        if v = 2#usize then do
+          let i2 ← i - geometry.start
+          let z ← geometry.line_z.index_usize i2
+          let m ← M31.mul z z
+          let m1 ← M31.double m
+          M31.sub m1 M31.ONE
+        else source_line_node u
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:29:8: warning: automatically included section variable(s) unused in theorem `_private.CuSavingsRhoQuery.0.AspisR1.CuSavingsRhoQuery.bind_ok`:
+  [AspisR1RhoAccumulate.AccumulateCommon]
+  [QueryCommon]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [AspisR1RhoAccumulate.AccumulateCommon] [QueryCommon] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:58:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1RhoAccumulate.factored_old.accumulate_with_node p
+    { weights := canonicalSlice b, rhs := a.rhs, power := a.power, next := a.next } node value
+in the target expression
+  (do
+      let out ←
+        factored_old.accumulate_with_node p
+            { weights := canonicalSlice b, rhs := a.rhs, power := a.power, next := a.next } node value
+      verifier.mark obs (verifier.Phase.Query a.next)
+      ok (core.result.Result.Ok out)) =
+    fail e
+
+case fail
+inst✝¹ : AspisR1RhoAccumulate.AccumulateCommon
+inst✝ : QueryCommon
+p : Prep
+a : Acc
+b : BW
+node : U32
+value : aspis_core.field.WideExact
+hg : Good b []
+hp : Canonical a.power
+hr : Canonical p.rho
+hn : ↑a.next < 22
+hc : ↑b.terms < 22
+hl : ↑a.weights.len ≤ 256
+hrows : (↑a.weights).length = (↑b.raw).length
+obs : Option (verifier.Phase → Result Unit)
+e : Error
+hm : factored_new.accumulate_with_node p a node value (some b) = fail e
+heq :
+  AspisR1RhoAccumulate.factored_old.accumulate_with_node p
+      { weights := canonicalSlice b, rhs := a.rhs, power := a.power, next := a.next } node value =
+    fail e
+⊢ (do
+      let out ←
+        factored_old.accumulate_with_node p
+            { weights := canonicalSlice b, rhs := a.rhs, power := a.power, next := a.next } node value
+      verifier.mark obs (verifier.Phase.Query a.next)
+      ok (core.result.Result.Ok out)) =
+    fail e
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    canonicalSlice b
+  has type
+    Slice AspisR1CuRho.field.QM31
+  but is expected to have type
+    alloc.vec.Vec AspisR1RhoAccumulate.aspis_core.field.QM31
+  in the application
+    AspisR1RhoAccumulate.verifier.Accumulator.mk (canonicalSlice b)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:62:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1RhoAccumulate.factored_old.accumulate_with_node p
+    { weights := canonicalSlice b, rhs := a.rhs, power := a.power, next := a.next } node value
+in the target expression
+  (do
+      let out ←
+        factored_old.accumulate_with_node p
+            { weights := canonicalSlice b, rhs := a.rhs, power := a.power, next := a.next } node value
+      verifier.mark obs (verifier.Phase.Query a.next)
+      ok (core.result.Result.Ok out)) =
+    div
+
+case div
+inst✝¹ : AspisR1RhoAccumulate.AccumulateCommon
+inst✝ : QueryCommon
+p : Prep
+a : Acc
+b : BW
+node : U32
+value : aspis_core.field.WideExact
+hg : Good b []
+hp : Canonical a.power
+hr : Canonical p.rho
+hn : ↑a.next < 22
+hc : ↑b.terms < 22
+hl : ↑a.weights.len ≤ 256
+hrows : (↑a.weights).length = (↑b.raw).length
+obs : Option (verifier.Phase → Result Unit)
+hm : factored_new.accumulate_with_node p a node value (some b) = div
+heq :
+  AspisR1RhoAccumulate.factored_old.accumulate_with_node p
+      { weights := canonicalSlice b, rhs := a.rhs, power := a.power, next := a.next } node value =
+    div
+⊢ (do
+      let out ←
+        factored_old.accumulate_with_node p
+            { weights := canonicalSlice b, rhs := a.rhs, power := a.power, next := a.next } node value
+      verifier.mark obs (verifier.Phase.Query a.next)
+      ok (core.result.Result.Ok out)) =
+    div
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    canonicalSlice b
+  has type
+    Slice AspisR1CuRho.field.QM31
+  but is expected to have type
+    alloc.vec.Vec AspisR1RhoAccumulate.aspis_core.field.QM31
+  in the application
+    AspisR1RhoAccumulate.verifier.Accumulator.mk (canonicalSlice b)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:70:4: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    canonicalSlice b
+  has type
+    Slice AspisR1CuRho.field.QM31
+  but is expected to have type
+    alloc.vec.Vec AspisR1RhoAccumulate.aspis_core.field.QM31
+  in the application
+    AspisR1RhoAccumulate.verifier.Accumulator.mk (canonicalSlice b)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:98:18: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    canonicalSlice b
+  has type
+    Slice AspisR1CuRho.field.QM31
+  but is expected to have type
+    alloc.vec.Vec AspisR1RhoAccumulate.aspis_core.field.QM31
+  in the application
+    AspisR1RhoAccumulate.verifier.Accumulator.mk (canonicalSlice b)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:99:15: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    canonicalSlice b
+  has type
+    Slice AspisR1CuRho.field.QM31
+  but is expected to have type
+    alloc.vec.Vec AspisR1RhoAccumulate.aspis_core.field.QM31
+  in the application
+    AspisR1RhoAccumulate.verifier.Accumulator.mk (canonicalSlice b)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:101:8: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    canonicalSlice b
+  has type
+    Slice AspisR1CuRho.field.QM31
+  but is expected to have type
+    alloc.vec.Vec AspisR1RhoAccumulate.aspis_core.field.QM31
+  in the application
+    AspisR1RhoAccumulate.verifier.Accumulator.mk (canonicalSlice b)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:90:25: warning: This simp argument is unused:
+  hpre
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵r̵e̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:91:22: warning: This simp argument is unused:
+  hpre
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵r̵e̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoQuery.lean:96:17: warning: This simp argument is unused:
+  hpre
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵r̵e̵,̵bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsRhoQuery.node_equivalence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoQuery.accumulation_context' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoQuery.source_equivalence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoQuery.observe' depends on axioms: [propext, Classical.choice, Quot.sound]

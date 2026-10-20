@@ -1,0 +1,261 @@
+   Compiling aspis-r1-cu-gamma v0.0.0 (/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/rho-query-context-input)
+warning: unused import: `P`
+   --> lib.rs:302:50
+    |
+302 |             use crate::aspis_core::{field::{M31, P}, state_only_prefix::r0::Error};
+    |                                                  ^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `field`, `powers`, and `transcript::Transcript`
+   --> lib.rs:837:167
+    |
+837 | ...e::SecureCirclePoint},transport::Variant,transcript::Transcript,weights::{powers,field}};
+    |                                             ^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^ ^^^^^
+
+warning: unused imports: `circle::SecureCirclePoint` and `transport::Variant`
+   --> lib.rs:867:69
+    |
+867 | use crate::{aspis_core::{Digest32,field::{WideExact as E,QM31 as K},circle::SecureCirclePoint},
+    |                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+868 |  verifier::{Prepared,View,Error},transcript::Transcript,transport::Variant,weights::{powers,field}};
+    |                                                         ^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `circle::SecureCirclePoint` and `transport::Variant`
+   --> lib.rs:924:69
+    |
+924 | use crate::{aspis_core::{Digest32,field::{WideExact as E,QM31 as K},circle::SecureCirclePoint},
+    |                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+925 |  verifier::{Prepared,View,Error},transcript::Transcript,transport::Variant,weights::{powers,field}};
+    |                                                         ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `BatchedWeights`
+   --> lib.rs:998:81
+    |
+998 | pub mod rho_old {use crate::{aspis_core,aspis_core::field::{M31,WideExact as E},BatchedWeights};
+    |                                                                                 ^^^^^^^^^^^^^^
+
+warning: unused import: `BatchedWeights`
+    --> lib.rs:1027:108
+     |
+1027 | pub mod factored_old {use crate::{verifier::{Prepared,Accumulator},aspis_core::field::{M31,WideExact as E},BatchedWeights};
+     |                                                                                                            ^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> lib.rs:858:58
+    |
+858 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                                                          ----^
+    |                                                          |
+    |                                                          help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `v`
+   --> lib.rs:858:31
+    |
+858 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                               ^ help: if this is intentional, prefix it with an underscore: `_v`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `p`
+   --> lib.rs:858:42
+    |
+858 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                                          ^ help: if this is intentional, prefix it with an underscore: `_p`
+
+warning: unused variable: `a`
+   --> lib.rs:858:58
+    |
+858 | pub fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,o...
+    |                                                          ^^^^^ help: if this is intentional, prefix it with an underscore: `_a`
+
+warning: unused variable: `g`
+   --> lib.rs:858:76
+    |
+858 | ...ox<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unre...
+    |                                   ^ help: if this is intentional, prefix it with an underscore: `_g`
+
+warning: unused variable: `public_bytes`
+   --> lib.rs:858:85
+    |
+858 | ...ccumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                        ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_public_bytes`
+
+warning: unused variable: `proof`
+   --> lib.rs:858:104
+    |
+858 | ...:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                               ^^^^^ help: if this is intentional, prefix it with an underscore: `_proof`
+
+warning: unused variable: `k`
+   --> lib.rs:858:116
+    |
+858 | ...public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                                   ^ help: if this is intentional, prefix it with an underscore: `_k`
+
+warning: unused variable: `hash`
+   --> lib.rs:858:124
+    |
+858 | ...s:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                                ^^^^ help: if this is intentional, prefix it with an underscore: `_hash`
+
+warning: unused variable: `obs`
+   --> lib.rs:858:131
+    |
+858 | ...],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {unreachable!()}
+    |                                 ^^^ help: if this is intentional, prefix it with an underscore: `_obs`
+
+warning: variable does not need to be mutable
+   --> lib.rs:917:67
+    |
+917 |     let (_semantic_claims,p)=tx1_prepare(public,&v,hash,obs)?;let mut a=Accumulator::new(v.variant)?;let g=powers::<29>(p.gamma);ma...
+    |                                                                   ----^
+    |                                                                   |
+    |                                                                   help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> lib.rs:1029:60
+     |
+1029 | pub fn accumulate_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E) {
+     |                                                            ----^^^^
+     |                                                            |
+     |                                                            help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> lib.rs:1045:60
+     |
+1045 | pub fn accumulate_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E,mut pending:Option<&mut BatchedWeights>) {
+     |                                                            ----^^^^
+     |                                                            |
+     |                                                            help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> lib.rs:1045:81
+     |
+1045 | pub fn accumulate_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E,mut pending:Option<&mut BatchedWeights>) {
+     |                                                                                 ----^^^^^^^
+     |                                                                                 |
+     |                                                                                 help: remove this `mut`
+
+warning: unused variable: `v`
+    --> lib.rs:1055:36
+     |
+1055 | fn source_query_prefix<H:Digest32>(v:&View<'_>,p:&Prepared,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry,i:usize)->Result<...
+     |                                    ^ help: if this is intentional, prefix it with an underscore: `_v`
+
+warning: unused variable: `p`
+    --> lib.rs:1055:48
+     |
+1055 | fn source_query_prefix<H:Digest32>(v:&View<'_>,p:&Prepared,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry,i:usize)->Result<...
+     |                                                ^ help: if this is intentional, prefix it with an underscore: `_p`
+
+warning: unused variable: `g`
+    --> lib.rs:1055:60
+     |
+1055 | fn source_query_prefix<H:Digest32>(v:&View<'_>,p:&Prepared,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry,i:usize)->Result<...
+     |                                                            ^ help: if this is intentional, prefix it with an underscore: `_g`
+
+warning: unused variable: `hash`
+    --> lib.rs:1055:70
+     |
+1055 | ...<'_>,p:&Prepared,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry,i:usize)->Result<(usize,E),Error> {unreachable!()}
+     |                               ^^^^ help: if this is intentional, prefix it with an underscore: `_hash`
+
+warning: unused variable: `obs`
+    --> lib.rs:1055:77
+     |
+1055 | ...:&Prepared,g:&[E;29],hash:H,obs:Observer,geometry:&QueryGeometry,i:usize)->Result<(usize,E),Error> {unreachable!()}
+     |                                ^^^ help: if this is intentional, prefix it with an underscore: `_obs`
+
+warning: unused variable: `geometry`
+    --> lib.rs:1055:90
+     |
+1055 | ...9],hash:H,obs:Observer,geometry:&QueryGeometry,i:usize)->Result<(usize,E),Error> {unreachable!()}
+     |                           ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_geometry`
+
+warning: unused variable: `i`
+    --> lib.rs:1055:114
+     |
+1055 | ...erver,geometry:&QueryGeometry,i:usize)->Result<(usize,E),Error> {unreachable!()}
+     |                                  ^ help: if this is intentional, prefix it with an underscore: `_i`
+
+warning: type `r1_wire::ValidatedRecord<'_>` is more private than the item `r1_wire::semantic_validated_entry`
+   --> lib.rs:617:5
+    |
+617 |     pub fn semantic_validated_entry<H: Digest32>(transcript: &mut SemanticTranscript<H>, record: ValidatedRecord<'_>) -> Result<QM31, Error> { ...
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `r1_wire::semantic_validated_entry` is reachable at visibility `pub`
+    |
+note: but type `r1_wire::ValidatedRecord<'_>` is only usable at visibility `pub(crate)`
+   --> lib.rs:464:1
+    |
+464 | pub(crate) struct ValidatedRecord<'a> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: type `r1_wire::ValidatedRecord<'a>` is more private than the item `r1_wire::prefix_validated_entry`
+   --> lib.rs:618:5
+    |
+618 |     pub fn prefix_validated_entry<'a>(prefix: &Prefix<'a>, row: u8) -> Result<ValidatedRecord<'a>, Error> { prefix.validated_record...
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `r1_wire::prefix_validated_entry` is reachable at visibility `pub`
+    |
+note: but type `r1_wire::ValidatedRecord<'a>` is only usable at visibility `pub(crate)`
+   --> lib.rs:464:1
+    |
+464 | pub(crate) struct ValidatedRecord<'a> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: field `raw` is never read
+   --> lib.rs:993:28
+    |
+993 | pub struct BatchedWeights {raw:alloc::vec::Vec<[u64;4]>,terms:usize}
+    |            --------------  ^^^
+    |            |
+    |            field in this struct
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `inverses` is never read
+    --> lib.rs:1054:41
+     |
+1054 | pub struct QueryGeometry { start:usize, inverses:Vec<[M31;5]>, line_z:Vec<M31> }
+     |            -------------                ^^^^^^^^
+     |            |
+     |            field in this struct
+
+warning: fields `pool` and `deployment_domain` are never read
+   --> lib.rs:253:5
+    |
+251 | struct SemanticPublic<'a> {
+    |        -------------- fields in this struct
+252 |     variant: CompiledVariant,
+253 |     pool: [u8; 32],
+    |     ^^^^
+254 |     deployment_domain: [u8; 32],
+    |     ^^^^^^^^^^^^^^^^^
+    |
+    = note: `SemanticPublic` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: fields `c0`, `c1`, and `count` are never read
+   --> lib.rs:833:5
+    |
+832 | pub struct EbyKDot {
+    |            ------- fields in this struct
+833 |     c0: canonical::Dot,
+    |     ^^
+834 |     c1: canonical::Dot,
+    |     ^^
+835 |     count: usize,
+    |     ^^^^^
+
+warning: fields `sums` and `count` are never read
+   --> lib.rs:830:22
+    |
+830 |     pub struct Dot { sums:[u64;4], count:usize }} /// Candidate exact accumulator for sums of `WideExact * QM31`.
+    |                ---   ^^^^          ^^^^^
+    |                |
+    |                fields in this struct
+
+warning: `aspis-r1-cu-gamma` (lib) generated 34 warnings (run `cargo fix --lib -p aspis-r1-cu-gamma` to apply 27 suggestions)
+    Finished `release` profile [optimized] target(s) in 0.32s
