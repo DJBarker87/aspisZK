@@ -1,0 +1,115 @@
+import BinChecksAdaptiveCleanModel
+import R1FinalSoundness
+
+/-! Binary M9 for C3's exact recorded extractor. The clean model is derived,
+not assumed; binary completion remains the precise decoder-instance boundary.
+The collision event and coefficient are supplied directly by the five-reader
+Bin model, never by rescaling the historical M9 inequality. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.BinChecksAdaptiveFailureNoModel
+open FS FS2 R0C.V3
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open AspisV8R19.CausalFirstHitUnionBound
+open RawCutProverCompiler RawCutTranscriptRun
+open RawRecordedOracleExtractionMass DecoderInstanceBoundary
+open R1FinalSoundness
+
+/-- The terminal law already derived by C3 from its named source inputs. -/
+def CheckedAcceptance (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) : Type :=
+  ∀ H : Bytes → State, FS2.accepts (eval H (original D d P)) →
+    LiteralAcceptanceTerminal.Checks (compiledPublic D d P H) (compiledRows D d P H)
+
+/-- M7 injection: only mass and query preservation are model facts here.
+The remaining field is exactly C3 BinaryCompletion, without strengthening. -/
+def injection_of_binary_completion
+    (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (Q : Nat)
+    (hQ : ∀ H : Bytes → State,
+      firstReads emptyTable (eval H (original D d P)).1 ≤ Q)
+    (hcompletion : BinaryCompletion D d P Q) :
+    AcceptedAdaptiveFiatShamir.LazyInj (LiteralByteProtocol.protocol D) dec
+      (compiled D d (RawCutWordsFromView.buildWords D) P) (verifier D d)
+      BinCombinedMerkleCollision.kappa Q :=
+  { Coll := binaryCollision Q
+    mass := BinCombinedMerkleCollision.mass SelectedTranscriptParams.params.iv Q
+      (recorded D d P)
+      (RawCutCompilerLaw.query_bound_preserved D d
+        (RawCutWordsFromView.buildWords D) P Q hQ)
+    decodes := hcompletion }
+
+/-- M8: C3's clean-word obligation follows from checked acceptance and its
+already separately required completion. No eight-way collision exclusion,
+extra word equality, fixed-tag premise or supplied clean model is needed. -/
+theorem binaryClean_of_checked_acceptance
+    (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (Q : Nat)
+    (hQ : ∀ H : Bytes → State,
+      firstReads emptyTable (eval H (original D d P)).1 ≤ Q)
+    (hchecks : CheckedAcceptance D d P)
+    (hcompletion : BinaryCompletion D d P Q) : BinaryClean D d P Q := by
+  let inj := injection_of_binary_completion D d P Q hQ hcompletion
+  exact BinChecksAdaptiveCleanModel.clean_model_of_checked_acceptance_no_hit
+    D d P BinCombinedMerkleCollision.kappa Q hchecks inj
+    (recorded D d P) rfl _ (fun _ => Iff.rfl)
+
+/-- M9 binary analogue of checked_acceptance_failure_bound_no_model.
+N counts recognized decoder starts and is not inferred from Q. -/
+theorem checked_acceptance_failure_bound_no_model_binary
+    (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (Q N : Nat)
+    (hQ : ∀ H : Bytes → State,
+      firstReads emptyTable (eval H (original D d P)).1 ≤ Q)
+    (hchecks : CheckedAcceptance D d P)
+    (hcompletion : BinaryCompletion D d P Q)
+    (hN : ∀ H : Bytes → State, DecodedFirstReadUnionBound.decoderFirstReads dec
+      emptyTable (eval H (recorded D d P)).1 ≤ N) :
+    lazyMean (recorded D d P) emptyTable failureMass ≤
+      6 * (Q : ℚ)^2 / (256^32 : ℚ) + (N : ℚ) * PerAttemptEnvelope.B +
+        1 / (2 : ℚ)^126 := by
+  let inj := injection_of_binary_completion D d P Q hQ hcompletion
+  exact RawRecordedActualAdaptiveFailureBound.actual_recorded_failure_le_collision_add_start_density_add_abort
+    D RawFullPublicSelection.select LiteralTableWordChoice.choose
+    (compiled D d (RawCutWordsFromView.buildWords D) P) (verifier D d)
+    BinCombinedMerkleCollision.kappa Q N inj
+    (binaryClean_of_checked_acceptance D d P Q hQ hchecks hcompletion) hN
+
+/-- C3's deployed numeric endpoint, now without an independent BinaryClean
+assumption. The source mass transport, completion, Checks and both budgets
+remain explicit. This is still a conditional endpoint for the frozen source. -/
+theorem composed_binary_failure_bound
+    (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover)
+    (Q : Nat) (deployedFailure : ℚ)
+    (hQ : ∀ H : Bytes → State,
+      firstReads emptyTable (eval H (original D d P)).1 ≤ Q + 1161)
+    (hchecks : CheckedAcceptance D d P)
+    (hcompletion : BinaryCompletion D d P (Q + 1161))
+    (hN : ∀ H : Bytes → State, DecodedFirstReadUnionBound.decoderFirstReads dec
+      emptyTable (eval H (recorded D d P)).1 ≤ 33)
+    (htransport : DeployedTransport D d P deployedFailure) :
+    BinaryClean D d P (Q + 1161) ∧
+    deployedFailure ≤ R1FinalSoundnessNumeric.totalBound Q ∧
+    (Q ≤ R1FinalSoundnessNumeric.maxAdversaryQueries →
+      deployedFailure < 1 / (2 : ℚ)^100) := by
+  have hb := checked_acceptance_failure_bound_no_model_binary
+    D d P (Q + 1161) 33 hQ hchecks hcompletion hN
+  have hd : deployedFailure ≤ R1FinalSoundnessNumeric.totalBound Q := by
+    calc
+      deployedFailure ≤ lazyMean (recorded D d P) emptyTable failureMass +
+          QueryScanModelFailure.failureProbability (2^18) := htransport
+      _ ≤ (6 * ((Q + 1161 : Nat) : ℚ)^2 / (256^32 : ℚ) +
+          (33 : ℚ) * PerAttemptEnvelope.B + 1 / (2 : ℚ)^126) + 1 / (2 : ℚ)^454 :=
+        add_le_add hb QueryScanModelFailure.exhaustion_bound
+      _ = R1FinalSoundnessNumeric.totalBound Q := rfl
+  exact ⟨binaryClean_of_checked_acceptance D d P (Q + 1161) hQ hchecks hcompletion,
+    hd, fun h => hd.trans_lt ((R1FinalSoundnessNumeric.numeric_iff Q).2 h)⟩
+
+#print axioms injection_of_binary_completion
+#print axioms binaryClean_of_checked_acceptance
+#print axioms checked_acceptance_failure_bound_no_model_binary
+#print axioms composed_binary_failure_bound
+end AspisR1.BinChecksAdaptiveFailureNoModel
+end
