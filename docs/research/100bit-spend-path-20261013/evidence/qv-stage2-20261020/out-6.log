@@ -1,0 +1,35 @@
+/Users/dominic/ZK/.worktrees/cx-qv-stage2/docs/research/100bit-spend-path-20261013/lean/QvStage2Retained.lean:25:29: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  c = (checksumParts body, d2) ∨ c ∈ []
+
+case inr.inr
+ops : ResumeOps
+H : Type
+D : aspis_core.digest.Digest32 H
+bytes proof public1 : Slice U8
+v : transport.Variant
+hash : H
+p : verifier.Prepared
+acc : verifier.Accumulator
+success : verifier.resumeWithOps ops D bytes proof public1 v hash = ok (core.result.Result.Ok (p, acc))
+w✝ : Usize
+body : Slice U8
+d0 d1 d2 : Std.Array U8 32#usize
+left✝¹ : bytes.len - 32#usize = ok w✝
+left✝ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes { «end» := w✝ } = ok body
+h0 : D.digest hash (singletonParts proof) = ok d0
+h1 : D.digest hash (singletonParts public1) = ok d1
+h2 : D.digest hash (checksumParts body) = ok d2
+c : Slice (Slice U8) × Std.Array U8 32#usize
+h✝ : c = (checksumParts body, d2) ∨ c ∈ []
+⊢ D.digest hash c.1 = ok c.2
+/Users/dominic/ZK/.worktrees/cx-qv-stage2/docs/research/100bit-spend-path-20261013/lean/QvStage2Retained.lean:24:28: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [List.mem_cons,̵ ̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵] at hc
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1Stage2.QvStage2Retained.resume_three_witnesses' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
