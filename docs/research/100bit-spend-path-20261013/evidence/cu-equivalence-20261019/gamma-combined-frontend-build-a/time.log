@@ -1,0 +1,41 @@
+Command exited with non-zero status 1
+	Command being timed: "python3 -c from pathlib import Path
+import shutil,hashlib,json,subprocess
+root=Path('/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019');base=root/'aeneas-rho-original-repair';dest=root/'aeneas-gamma-combined'
+assert not dest.exists();(dest/'aeneas').mkdir(parents=True)
+shutil.copytree(base/'aeneas/src',dest/'aeneas/src')
+shutil.copy2(base/'aeneas/charon-pin',dest/'aeneas/charon-pin')
+p=dest/'aeneas/src/interp/InterpStatements.ml';raw=p.read_bytes();marker=b'  [%sanity_check] span (List.for_all (fun (_, res) -> res = Unit) ctx_resl);\n'
+# literal LF, not backslash-n
+marker=marker.replace(b'\\n',b'\n')
+assert raw.count(marker)==1
+addition=b'  if Sys.getenv_opt "AENEAS_DISABLE_BRANCH_JOIN" = Some "1" then\n    (ctx_resl, cf)\n  else\n'
+addition=addition.replace(b'\\n',b'\n');out=raw.replace(marker,marker+addition);p.write_bytes(out)
+(dest/'patch-pins.json').write_text(json.dumps(dict(base_binary_sha256=hashlib.sha256((base/'bin/aeneas').read_bytes()).hexdigest(),source_path='src/interp/InterpStatements.ml',before_sha256=hashlib.sha256(raw).hexdigest(),after_sha256=hashlib.sha256(out).hexdigest(),scope='Compose the previously checked opt-in no-branch-join strategy with the existing nested-return/borrow repairs. No original checks removed; all valid context branches are kept.'),indent=2)+'\n')
+s=(base/'build.sh').read_text().replace('rho-original-borrow-repair-20261020','gamma-combined-20261020');(dest/'build.sh').write_text(s)
+cmd=['docker','run','--name','aspis-gamma-combined-20261020','--network','none','--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--tmpfs','/tmp:rw,nosuid,size=256m','--mount','type=bind,src='+str(dest/'aeneas')+',dst=/work/aeneas','--mount','type=bind,src=/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon,dst=/work/charon,readonly','--mount','type=bind,src='+str(dest)+',dst=/out','--entrypoint','/bin/bash','sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7','/out/build.sh']
+(dest/'command.json').write_text(json.dumps(cmd,indent=2)+'\n');subprocess.run(cmd,check=True)
+print(hashlib.sha256((dest/'bin/aeneas').read_bytes()).hexdigest())
+"
+	User time (seconds): 0.07
+	System time (seconds): 0.14
+	Percent of CPU this job got: 60%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.37
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 30868
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 4495
+	Voluntary context switches: 1711
+	Involuntary context switches: 2
+	Swaps: 0
+	File system inputs: 462528
+	File system outputs: 461488
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

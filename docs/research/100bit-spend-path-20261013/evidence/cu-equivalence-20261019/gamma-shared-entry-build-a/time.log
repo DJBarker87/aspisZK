@@ -1,0 +1,44 @@
+Command exited with non-zero status 1
+	Command being timed: "python3 -c from pathlib import Path
+import json,hashlib,subprocess
+root=Path('/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/aeneas-gamma-combined');src=root/'aeneas/src';pins={}
+def edit(name,f):
+ p=src/name;b=p.read_text();o=f(b);assert o!=b;pins[name]={'before_sha256':hashlib.sha256(b.encode()).hexdigest(),'after_sha256':hashlib.sha256(o.encode()).hexdigest()};(root/(p.name+'.before-entry-repair')).write_text(b);p.write_text(o)
+def patch(s):
+ s=s.replace('let reborrow_ashared_loans (span : Meta.span)', 'let reborrow_ashared_loans ?(include_endable = false) (span : Meta.span)',1)
+ needle='if not abs.can_end then\n              let bid, sid = push_abs_for_shared_value'
+ needle=needle.replace('\\n','\n')
+ assert s.count(needle)==1;s=s.replace(needle,needle.replace('if not abs.can_end then','if include_endable || not abs.can_end then'),1)
+ s=s.replace('let reborrow_ashared_loans_symbolic_borrows (span : Meta.span)','let reborrow_ashared_loans_symbolic_borrows ?(include_endable = false) (span : Meta.span)',1)
+ s=s.replace('reborrow_ashared_loans span loop_id ~with_abs_conts ctx','reborrow_ashared_loans ~include_endable span loop_id ~with_abs_conts ctx',1)
+ s=s.replace('let reborrow_ashared_loans_symbolic_borrows_no_synth (span : Meta.span)','let reborrow_ashared_loans_symbolic_borrows_no_synth ?(include_endable = false) (span : Meta.span)',1)
+ s=s.replace('reborrow_ashared_loans_symbolic_borrows span (Some loop_id) ~with_abs_conts','reborrow_ashared_loans_symbolic_borrows ~include_endable span (Some loop_id) ~with_abs_conts',1)
+ return s
+edit('interp/InterpJoin.ml',patch)
+edit('interp/InterpLoopsFixedPoint.ml',lambda s:s.replace('InterpJoin.reborrow_ashared_loans_symbolic_borrows_no_synth span loop_id','InterpJoin.reborrow_ashared_loans_symbolic_borrows_no_synth ~include_endable:true span loop_id',1))
+(root/'entry-repair-pins.json').write_text(json.dumps(dict(changes=pins,scope='At loop fixed-point entry reborrow all immutable abstract loan inputs, including endable loans belonging to an enclosing loop. Uses original reborrow operation and continuation; no validity check removed.'),indent=2)+'\n')
+subprocess.run(['docker','start','-a','aspis-gamma-combined-20261020'],check=True)
+print(hashlib.sha256((root/'bin/aeneas').read_bytes()).hexdigest())
+"
+	User time (seconds): 0.08
+	System time (seconds): 0.01
+	Percent of CPU this job got: 6%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.42
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 30756
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 7399
+	Voluntary context switches: 506
+	Involuntary context switches: 5
+	Swaps: 0
+	File system inputs: 464
+	File system outputs: 432
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

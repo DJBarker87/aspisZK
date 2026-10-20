@@ -1,3 +1,17 @@
+# Candidate 1 source-prefix result (2026-10-20)
+
+See GAMMA-CANDIDATE1-FINAL.md/json. The source-prefix interpretation discharges
+the local claim factor and composes the complete emitted tx1 callers, without
+a candidate-equivalence premise. This route explicitly trusts a narrow source-
+prefix extractor and immutable-binding interpretation. Direct whole-claim
+Aeneas extraction still fails and is not admitted. The four direct-emission
+closures remain four; gamma adds a source-level result with the separately
+stated trust boundary. Do not conflate these counts or claim whole security
+transfer. Measured saving: 34,201–34,243 stage-1 CU. Next largest remaining:
+candidate 14 Libra factorization, 33,363–33,427 settlement CU.
+
+---
+
 # Candidate 3 closed (2026-10-20)
 
 See S2-CANDIDATE3-FINAL.md/json: unconditional exact parent/candidate helper
