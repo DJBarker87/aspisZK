@@ -1,0 +1,143 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiDecoder.lean:56:4: error: No goals to be solved
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiDecoder.lean:73:52: warning: This simp argument is unused:
+  reduceCtorEq
+
+Hint: Omit it from the simp argument list.
+  simp_all only [Option.some.injEq, r̵e̵d̵u̵c̵e̵C̵t̵o̵r̵E̵q̵,̵Ne.symm hsa, Ne.symm hse, Ne.symm hsz,
+  ̲  ̲ ̲ ̲ ̲ ̲Ne.symm hae, Ne.symm haz, Ne.symm hez]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiDecoder.lean:123:11: error: Application type mismatch: The argument
+  advanceA_injective p
+has type
+  Function.Injective (advanceA p)
+but is expected to have type
+  advanceA p s = advanced → s = absorbed
+in the application
+  Iff.intro (advanceA_injective p)
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiDecoder.lean:140:45: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ReseedBoundary.findCell (RawBoundedTrace.table L table) absorbed
+in the target expression
+  (match some absorbed with
+    | none => none
+    | some absorbed =>
+      match ReseedBoundary.findCell (RawBoundedTrace.table L table) absorbed with
+      | none => none
+      | some a =>
+        match parseAbsorb a with
+        | none => none
+        | some (prev, label, data) =>
+          have record := { prev := prev, absorbed := absorbed, label := label, data := data, next := endpoint };
+          match InitialPublicWalk.rootAt (RawBoundedTrace.table L table) prev with
+          | some c1 => some (c1, [record])
+          | none =>
+            Option.map (fun result => (result.1, result.2 ++ [record]))
+              (InitialPublicWalk.walk p (RawBoundedTrace.table L table) 26 prev)) =
+    some ((pub, zero), RawRoundDecode.encode p 0 records)
+
+case left
+hp : PublicInitParse.parse pub.pubBytes initial = some zero
+hr : RawPublicInitParser.parse initial = some (pub, zero)
+ha : parseAbsorb row0 = some (s0, p.lbl 0, p.enc m0)
+⊢ (match some absorbed with
+    | none => none
+    | some absorbed =>
+      match ReseedBoundary.findCell (RawBoundedTrace.table L table) absorbed with
+      | none => none
+      | some a =>
+        match parseAbsorb a with
+        | none => none
+        | some (prev, label, data) =>
+          have record := { prev := prev, absorbed := absorbed, label := label, data := data, next := endpoint };
+          match InitialPublicWalk.rootAt (RawBoundedTrace.table L table) prev with
+          | some c1 => some (c1, [record])
+          | none =>
+            Option.map (fun result => (result.1, result.2 ++ [record]))
+              (InitialPublicWalk.walk p (RawBoundedTrace.table L table) 26 prev)) =
+    some ((pub, zero), RawRoundDecode.encode p 0 records)
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiDecoder.lean:143:39: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ReseedBoundary.findCell (RawBoundedTrace.table L table) absorbed
+in the target expression
+  (match some absorbed with
+    | none => none
+    | some absorbed =>
+      match ReseedBoundary.findCell (RawBoundedTrace.table L table) absorbed with
+      | none => none
+      | some a =>
+        match parseAbsorb a with
+        | none => none
+        | some (prev, label, data) =>
+          have record := { prev := prev, absorbed := absorbed, label := label, data := data, next := endpoint };
+          match InitialWalk.rootAt pub.pubBytes (RawBoundedTrace.table L table) prev with
+          | some c1 => some (c1, [record])
+          | none =>
+            Option.map (fun result => (result.1, result.2 ++ [record]))
+              (InitialWalk.walk p pub.pubBytes (RawBoundedTrace.table L table) 26 prev)) =
+    some (zero, RawRoundDecode.encode p 0 records)
+
+case right
+hp : PublicInitParse.parse pub.pubBytes initial = some zero
+hr : RawPublicInitParser.parse initial = some (pub, zero)
+ha : parseAbsorb row0 = some (s0, p.lbl 0, p.enc m0)
+⊢ (match some absorbed with
+    | none => none
+    | some absorbed =>
+      match ReseedBoundary.findCell (RawBoundedTrace.table L table) absorbed with
+      | none => none
+      | some a =>
+        match parseAbsorb a with
+        | none => none
+        | some (prev, label, data) =>
+          have record := { prev := prev, absorbed := absorbed, label := label, data := data, next := endpoint };
+          match InitialWalk.rootAt pub.pubBytes (RawBoundedTrace.table L table) prev with
+          | some c1 => some (c1, [record])
+          | none =>
+            Option.map (fun result => (result.1, result.2 ++ [record]))
+              (InitialWalk.walk p pub.pubBytes (RawBoundedTrace.table L table) 26 prev)) =
+    some (zero, RawRoundDecode.encode p 0 records)
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiDecoder.lean:178:77: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UnifiedSemanticDecoder.decode p pub nodeAddr (RawBoundedTrace.table L table)
+in the target expression
+  DecoderStateList.lift (UnifiedSemanticDecoder.decode p pub) nodeAddr (RawBoundedTrace.table L table) ≠ none
+
+habs : parseAbsorb nodeAddr = some (endpoint, p.lbl 1, p.enc m1)
+hc : CanonicalByteAddress.Canonical nodeAddr
+hbytes : nodeAddr.toBytes = node
+hrow : UnifiedLabels.row (p.lbl 1) = 1
+hpub : RawFullPublicSelection.select node table = some pub
+hctx :
+  UnifiedSemanticContext.parse p pub.pubBytes nodeAddr (RawBoundedTrace.table L table) =
+    some { c1 := zero, records := records, message := m1 }
+hd :
+  UnifiedSemanticDecoder.decode p pub nodeAddr (RawBoundedTrace.table L table) =
+    some
+      (QueryNextLaw.own p nodeAddr,
+        List.map (fun b => (b, none))
+          (PrefixAnswers.missing p (RawBoundedTrace.table L table)
+            { c1 := zero, records := records, message := m1 }.records),
+        UnifiedSemanticDecoder.output p pub (RawBoundedTrace.table L table)
+          { c1 := zero, records := records, message := m1 })
+hi : PublicInitParse.parse pub.pubBytes nodeAddr = none
+⊢ DecoderStateList.lift (UnifiedSemanticDecoder.decode p pub) nodeAddr (RawBoundedTrace.table L table) ≠ none
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiDecoder.lean:191:67: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiDecoder.lean:147:8: error: (kernel) excessive memory consumption detected
+'AspisR1.OracleDecisionMultiDecoder.node_absorb' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiDecoder.byte_lengths' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiDecoder.state_distinct' depends on axioms: [propext, Quot.sound]
+'AspisR1.OracleDecisionMultiDecoder.table_fibers' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiDecoder.bounded_fiber' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiDecoder.bounded_fibers' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiDecoder.lookups' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiDecoder.walks' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiDecoder.recognized_node' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ recognized_node]
+'AspisR1.OracleDecisionMultiDecoder.node_fresh' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiDecoder.node_start_count' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ recognized_node]
