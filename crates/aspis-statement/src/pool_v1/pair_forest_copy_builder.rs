@@ -371,3 +371,8 @@ pub(super) fn merge_banks(stable: &[Vec<M31>; 16], late: &[Vec<M31>; 16]) -> Opt
     }
     Some(columns(&cp::merge_copy(&s, &l)))
 }
+
+// Extraction-only equivalence harness; absent from normal prover/program builds.
+#[cfg(kani)]
+#[path = "../../../../tools/r1-builder-reference/records.rs"]
+mod records_proofs;

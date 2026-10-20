@@ -1,15 +1,22 @@
 # Builder refinement — 2026-10-21
 
-Branch `codex/cx-builder-ref-20261021`, base `9ba738457`.
+Initial branch `codex/cx-builder-ref-20261021`, base `9ba738457`.
+D83 continuation checkout: `codex/cx-builder-ref2-20261021`, starting
+from the previous worker result `5b1a6582b`. No push or merge.
 
 ## Scope and status
 
 **Partial closure; the deployed obligation remains OPEN.** All four builder
 fields are proved for the canonical extracted composition on embedded
 Rspend⁺ instances. The shipped compile entry points do not yet have the
-source-identification certificate. Pinned Aeneas rejects their validation
-loop; this item stops at that translation blocker, as permitted by the task.
-No prover, verifier, on-chain source, or existing Lean module was changed.
+source-identification certificate. D83's continuation removes the outer-loop
+break shape and advances the source work; the full compiler now reaches a
+separate borrow blocker in `records`. The focused validator cone also reaches
+an existing borrow blocker in the optimized Poseidon external layer.
+
+The continuation's exact results and gates are recorded below. Sections
+Stage 1 through the original stop reason describe the previous run; their
+statement that no prover source changed applies only to that run.
 
 ## Evidence
 
@@ -161,7 +168,7 @@ sizes and a named P6 soundness premise under the prep5 ruling.
 source revision and time receipts. Charon tool SHA is `daad69be…336af8`;
 Aeneas is `959659a6…709e3`. No binary or LLBC is committed.
 
-## Exactly what remains
+## What remained after the first run
 
 1. Construct a source instance map from successful shipped compiler inputs
    and outputs into `BuilderCanonical.Instance`: prove the semantic public
@@ -180,3 +187,133 @@ Until these are supplied, leave the first open row of
 PRIVACY-FINAL-20261020.md in place. No other privacy definition-of-done row,
 retry/publication coupling, wire identification or final release claim is
 closed by this work.
+
+
+## D83 continuation: validator control flow
+
+The candidate splits validation into row, block, and bank traversal. Row
+validation retains early return for the first bad lane. Block/bank traversal
+carries the first error in a Result and stops through the while condition.
+It preserves block order, local rows, lane order, error payloads, round
+schedule failure, and the stable/late bank selection. No writers or copy
+arithmetic change. The validator is retained after every required before/after gate passes.
+
+Two distinct extraction failures are retained in
+`builder-d83-evidence/continuation.json`: the first early-return split still
+failed at PrePasses.ml:648; the Result-carrying form gets past that pass.
+Both complete compile entry points were Charon-extracted together, with
+has_errors=false. Their Aeneas translation then fails at
+`pair_forest_copy_builder.rs:230`, InterpAbs.ml:1688 (selected sibling).
+Extracting only the validator reaches `poseidon2.rs:193`,
+InterpBorrowsCore.ml:1498 (the existing lazy external-layer iterator).
+Neither failure is memory pressure. No larger-cap retry is used.
+
+The fixed-seed S2 transfer and withdrawal proofs and public bytes compare
+byte-for-byte. The codec 1,233 trace is byte-identical. Ordered digest calls
+compare exactly; the randomized HashMap summary `repeated_exact_inputs`
+compares as a multiset, as already specified in D70. The 512-witness glue
+suite and the 2-fixture/512-honest/2,046-mutation migration suite pass.
+P_R1 accepts and verifies all eight independent attempts, and its retry loop
+publishes a proof after one attempt which also verifies. All D83 runtime gates
+pass; full receipts are in `builder-d83-evidence/validator-gates.json`.
+The ordered trace has 1,095 entries for the adopted frozen fixture.
+
+## D83 continuation: S2 equivalence and Lean reference
+
+`tools/r1-builder-reference` is a standalone test/extraction-only crate.
+Its Kani harness includes the actual shipped transport source by path,
+with no stubs. Kani 0.67.0 proves, for all usize j < 1024, S2.row(j) equals
+D18's arithmetic digit permutation, lies below 1024, and is involutive.
+All 78 checks pass (two unreachable), unwind 6 with unwinding assertions.
+Kani's default solver is embedded CaDiCaL; the inventoried Kissat binary
+was not selected. `transport-kani.json` pins the sources and tools and
+records 4.98 seconds / 528,804 KiB / zero swaps. This route depends by name
+on P6's Kani/CBMC soundness, rather than adding a Lean postulate.
+
+The arithmetic reference extracts successfully with the pinned kit, and
+`R1Z.BuilderTransport.reference_row` proves its extracted machine-word
+result equals D18.rowNat, including absence of wrapping. This holds for
+all machine words; `reference_row_fin` identifies the admitted Fin 1024
+transport. Env-J attempts 8450 (extracted definition) and 8452 (refinement)
+pass. Attempt 8451 was a local proof failure corrected by reducing each
+monadic bind before rewriting the next operation. Both theorems audit to
+propext, Classical.choice, Quot.sound. No proof limit was raised.
+
+The generated Lean definition is unchanged except that import Aeneas is
+replaced with the two standard env-J port imports. The raw and adapted
+source pins are in `transport-extraction.json`. Focused audit now covers
+41 extension theorems. Existing privacy roots were not changed or replayed.
+
+This certifies S2's row-index function through the approved P6 reference
+route. It does not construct a source HonestProver or its records/glue/public
+relation map. The array wrappers and the actual source h must still be
+assembled before claiming its SourceIdentification.transport_eq field.
+The SourceIdentification structure and the final privacy theorem therefore
+retain their existing conditional statements.
+
+## D83 continuation: records reference route
+
+A Kani-only same-crate harness calls the actual shipped records function
+and a reference that copies the input records before branching. It compares
+every RustWitness and RustPublic field, without stubbing pair_empty_roots
+or the record mapper. The unstubbed job was stopped after 7:49.06 during whole-cone verification, including the fixed
+empty-root hashes; the dominant substep was not profiled (SIGTERM, no solver verdict; last sampled CBMC RSS
+3,649,508 KiB, true peak not captured). GNU time's stopped-parent RSS/exit
+line is not used as a success or whole-job peak. No cap increase or unchanged
+solver retry followed.
+
+The replacement harness uses a single shared arbitrary `[Digest; 21]` return
+for the identical pure zero-argument `pair_empty_roots` call in both mappers.
+This isolates record projection for all possible helper results. Its scope
+is explicitly parametric in that result; transporting it to the actual
+helper requires the common pure-call congruence argument. It does not prove
+the hash implementation, caller admission, or the final SourceIdentification.
+Kani requires the named unstable `stubbing` feature for this route; the
+initial invocation without that option failed at compilation and is retained.
+The changed invocation compiled, and Kani metadata confirms the intended
+stub. It was stopped at a MemoryHigh review after 6:08.11, again without a
+solver verdict. The last recorded aggregate cgroup peak is 6,547,927,040 bytes
+(about 6.10 GiB), swap 0; memory events report no OOM or hard-cap hit.
+Its GNU-time parent RSS is incomplete after SIGTERM, so no true process
+peak RSS is claimed. The shared-root replacement is also expensive; the
+hash computation was not the only cost. Both stopped commands have effective
+exit 143, overriding GNU time's misleading stopped-parent `Exit status: 0`.
+Neither is a successful equivalence certificate. No unchanged rerun, higher
+cap, or fabricated P6 fact is used to close the source obligation.
+
+Both harnesses are absent from ordinary prover and program builds. No
+successful whole-compiler reference extraction or Rust glue equality
+certificate is claimed.
+
+
+## Current open obligations after D83 continuation
+
+1. Translate the complete compile entry points or finish the approved reference
+   route. The new blockers are the records selected-sibling borrow and the
+   optimized Poseidon external-layer borrow, at the locations above. The
+   bounded whole-record Kani experiments are not sufficient; isolate per-loop
+   or per-field contracts before another large run.
+2. Derive the embedded Rspend⁺ instance and semantic public projection from
+   successful shipped compilation, including canonical word/value bounds,
+   the change sentinel, live snapshot/afterstate fields and withdrawal's
+   zero recipient convention. No actual source HonestProver is defined here.
+3. Certify the shipped records against the canonical RustWitness/RustPublic
+   maps, and prove the Rust structural glue/banks equal the R1Z builder model.
+   The unchanged text/generator checks and successful 512-witness gates remain
+   measured/textual evidence, not a universal source identification theorem.
+4. Assemble the actual source h, its array transport wrappers and all three
+   SourceIdentification fields. S2's row-index function now has the named-P6
+   Kani/reference plus kernel-refinement evidence. It alone does not supply
+   the missing public_eq/build_eq fields or the source instance map.
+
+`builder_refinement_D46_D51` in PrivacyR1Final remains conditional and the
+first definition-of-done row stays open. PrivacyR1Final itself is unchanged;
+its roots were not recompiled. The two added Lean modules were compiled in
+isolation through env J (8450, 8451 failed, 8452 corrected); final audits have
+only standard axioms and zero swaps. No complete frozen-manifest replay was
+run. All native gates and extractions used capped no-swap host scopes. No
+verifier, on-chain source, writer extraction input, wallet or key changed.
+
+Continuation commits: `057c5c5e0` (S2 Kani), `d294bed4b` (S2 extraction and
+Lean refinement), `bc2867479` (validator and all required gates); the final
+report commit retains the records experiments and exact outstanding boundary.

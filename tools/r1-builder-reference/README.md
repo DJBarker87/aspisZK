@@ -20,3 +20,14 @@ finished in 0.214 seconds (4.98 seconds including compilation).
 Evidence: `docs/research/v8-r0-zk-20261009/r1p-final/builder-d83-evidence/transport-kani.json`.
 This is a named P6 tool-soundness dependency. It supplies neither a Lean
 certificate nor the shipped compiler's records/glue identification.
+
+
+The extracted arithmetic reference is kernel-refined to D18 in
+`R1Z/BuilderTransport.lean` (env J 8452, standard axioms). The separate
+`records.rs` module is included only under `cfg(kani)` in the statement
+crate. It contains the unstubbed whole-mapper experiment and a parametric
+shared-root experiment. Neither should be read as a completed source
+certificate without checking `BUILDER-REFINEMENT-20261021.md` and the exact
+Kani receipts. The shared-root experiment explicitly requires `-Z stubbing`;
+its scope is all possible returns of the common pure helper. It proves
+neither the helper's hash computation nor caller admission.
