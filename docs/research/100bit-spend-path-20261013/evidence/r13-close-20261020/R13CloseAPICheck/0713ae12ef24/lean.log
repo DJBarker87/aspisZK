@@ -1,0 +1,63 @@
+def Aeneas.Std.Array.set.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Std.Array α n :=
+fun {α} {n} v i x => ⟨(↑v).set (↑i) x, ⋯⟩
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α → Std.Array α n :=
+fun {α} {n} a s => if h : (↑s).length = ↑n then ⟨↑s, ⋯⟩ else a
+def Aeneas.Std.Array.to_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α :=
+fun {α} {n} v => ⟨↑v, ⋯⟩
+def Aeneas.Std.Slice.update.{u} : {α : Type u} → Slice α → Usize → α → Result (Slice α) :=
+fun {α} v i x =>
+  match (↑v)[↑i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+@[irreducible] def Aeneas.Std.loop.{u, v} : {α : Type u} →
+  {β : Type v} → (α → Result (ControlFlow α β)) → α → Result β :=
+fun {α} {β} body =>
+  Lean.Order.fix
+    (fun f x =>
+      match body x with
+      | ok r =>
+        match r with
+        | cont x => f x
+        | done x => ok x
+      | fail e => fail e
+      | div => div)
+    ⋯
+Aeneas.Std.loop.fixpoint_induct.{u, v} {α : Type u} {β : Type v} (body : α → Result (ControlFlow α β))
+  (motive : (α → Result β) → Prop) (adm : Lean.Order.admissible motive)
+  (h :
+    ∀ (loop : α → Result β),
+      motive loop →
+        motive fun x =>
+          match body x with
+          | ok r =>
+            match r with
+            | cont x => loop x
+            | done x => ok x
+          | fail e => fail e
+          | div => div) :
+  motive (loop body)
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:9:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Array.update_eq`
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:10:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.swap_spec`
+Aeneas.Std.core.slice.Slice.swap_spec {T : Type} [Inhabited T] (s : Slice T) (a b : Usize) (ha : ↑a < s.length)
+  (hb : ↑b < s.length) :
+  core.slice.Slice.swap s a b ⦃ s' =>
+    s'.length = s.length ∧
+      (↑s')[↑a]! = (↑s)[↑b]! ∧ (↑s')[↑b]! = (↑s)[↑a]! ∧ ∀ (i : ℕ), i ≠ ↑a → i ≠ ↑b → (↑s')[i]! = (↑s)[i]! ⦄
+Aeneas.Std.Array.to_slice_mut_spec.{u} {α : Type u} {n : Usize} (a : Std.Array α n) :
+  lift a.to_slice_mut ⦃ s back => ↑s = ↑a ∧ back = a.from_slice ⦄
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:13:7: error(lean.unknownIdentifier): Unknown constant `List.perm_set`
+List.Perm.swap.{u} {α : Type u} (x y : α) (l : List α) : (y :: x :: l).Perm (x :: y :: l)
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:15:7: error(lean.unknownIdentifier): Unknown constant `List.Perm.set_perm_cons_eraseIdx`
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:16:7: error(lean.unknownIdentifier): Unknown constant `List.perm_of_count_eq`
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:17:7: error(lean.unknownIdentifier): Unknown constant `List.perm_set_swap`
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:18:7: error(lean.unknownIdentifier): Unknown constant `List.Perm.set`
+List.mem_set.{u_1} {α : Type u_1} {l : List α} {i : ℕ} (h : i < l.length) (a : α) : a ∈ l.set i a
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:20:7: error(lean.unknownIdentifier): Unknown constant `List.mem_set_iff`
+def Aeneas.Std.core.slice.iter.IteratorChunksExact.next : {T : Type} →
+  core.slice.iter.ChunksExact T → Result (Option (Slice T) × core.slice.iter.ChunksExact T) :=
+fun {T} self =>
+  match self.chunks with
+  | [] => ok (none, self)
+  | chunk :: chunks => ok (some chunk, { chunks := chunks, remainder := self.remainder })
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:22:7: error(lean.unknownIdentifier): Unknown constant `List.toChunksExact_flatten`
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:23:7: error(lean.unknownIdentifier): Unknown constant `List.toChunksExact_spec`

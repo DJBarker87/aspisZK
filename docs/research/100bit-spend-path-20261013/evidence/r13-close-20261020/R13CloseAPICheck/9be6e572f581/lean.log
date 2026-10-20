@@ -1,0 +1,854 @@
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:3:6: error: unexpected token 'prefix'; expected 'axioms', 'eqns', 'equations', 'sig', 'sorries', 'tactic', identifier or string literal
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:3:13: error: unexpected identifier; expected ':'
+@[irreducible] def Aeneas.Std.List.toChunksExact.{u_1} : {α : Type u_1} →
+  (n : ℕ) → 0 < n → List α → List (List α) × List α :=
+fun {α} n hn =>
+  WellFounded.Nat.fix (fun x => x.length) fun l a =>
+    if _h : l.length < n then ([], l)
+    else
+      match a (List.drop n l) ⋯ with
+      | (chunks, rem) => (List.take n l :: chunks, rem)
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:5:7: error(lean.unknownIdentifier): Unknown constant `core.iter.traits.iterator.Iterator.any.default`
+def Aeneas.Std.core.array.TryFromArrayCopySlice.try_from : {T : Type} →
+  (N : Usize) →
+    core.marker.Copy T → Slice T → Result (core.result.Result (Std.Array T N) core.array.TryFromSliceError) :=
+fun {T} N _copyInst s =>
+  if h0 : s.length = ↑N then ok (core.result.Result.Ok ⟨↑s, ⋯⟩) else ok (core.result.Result.Err ())
+def Aeneas.Std.core.result.Result.unwrap : {T E : Type} → core.fmt.Debug E → core.result.Result T E → Result T :=
+fun {T E} x e =>
+  match e with
+  | core.result.Result.Ok x => ok x
+  | core.result.Result.Err a => fail Error.panic
+def BitVec.fromLEBytes : (l : List Byte) → BitVec (8 * l.length) :=
+fun l => List.brecOn l BitVec.fromLEBytes._f
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:9:6: error: unexpected token 'prefix'; expected 'axioms', 'eqns', 'equations', 'sig', 'sorries', 'tactic', identifier or string literal
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:9:13: error: unexpected identifier; expected ':'
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:10:6: error: unexpected token 'prefix'; expected 'axioms', 'eqns', 'equations', 'sig', 'sorries', 'tactic', identifier or string literal
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:10:13: error: unexpected identifier; expected ':'
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:11:6: error: unexpected token 'prefix'; expected 'axioms', 'eqns', 'equations', 'sig', 'sorries', 'tactic', identifier or string literal
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:11:13: error: unexpected identifier; expected ':'
+theorem Aeneas.Std.UScalar.add_equiv : ∀ {ty : UScalarTy} (x y : UScalar ty),
+  match x + y with
+  | ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+  | fail e => ¬UScalar.inBounds ty (↑x + ↑y)
+  | x => ⊥ :=
+fun {ty} x y =>
+  have this := Eq.refl (x + y);
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          match _a with
+          | ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+          | fail e => ¬UScalar.inBounds ty (↑x + ↑y)
+          | x => ⊥)
+        this))
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg
+            (UScalar.add_equiv.match_1 (fun x => Prop) (UScalar.tryMk ty (↑x + ↑y)) fun z =>
+              ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv)
+            (funext fun e => not_lt._simp_1))
+          fun x => False))
+      (have h := UScalar.tryMk_eq ty (↑x + ↑y);
+      Aeneas.Std.UScalar.tryMk_eq.match_1.splitter✝ ty
+        (fun x_1 =>
+          UScalar.tryMk ty (↑x + ↑y) = x_1 →
+            (match UScalar.tryMk ty (↑x + ↑y) with
+              | ok y_1 => ↑y_1 = ↑x + ↑y ∧ ↑x + ↑y < 2 ^ ty.numBits
+              | fail e => 2 ^ ty.numBits ≤ ↑x + ↑y
+              | x => False) →
+              match UScalar.tryMk ty (↑x + ↑y) with
+              | ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+              | fail e => 2 ^ ty.numBits ≤ ↑x + ↑y
+              | x => False)
+        (UScalar.tryMk ty (↑x + ↑y))
+        (fun y_1 h =>
+          Eq.ndrec (motive := fun x_1 =>
+            UScalar.tryMk ty (↑x + ↑y) = x_1 →
+              (match x_1 with
+                | ok y_2 => ↑y_2 = ↑x + ↑y ∧ ↑x + ↑y < 2 ^ ty.numBits
+                | fail e => 2 ^ ty.numBits ≤ ↑x + ↑y
+                | x => False) →
+                match UScalar.tryMk ty (↑x + ↑y) with
+                | ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+                | fail e => 2 ^ ty.numBits ≤ ↑x + ↑y
+                | x => False)
+            (fun heq =>
+              id fun h =>
+                Eq.mpr
+                  (id
+                    (Eq.trans
+                      (congrArg
+                        (fun x_1 =>
+                          match x_1 with
+                          | ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+                          | fail e => 2 ^ ty.numBits ≤ ↑x + ↑y
+                          | x => False)
+                        heq)
+                      (Eq.trans
+                        (congr (congrArg And (eq_true h.2))
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg And
+                                (Eq.trans
+                                  (Eq.trans (congrFun' (congrArg Eq h.1) (↑x + ↑y)) Nat.add_left_cancel_iff._simp_1)
+                                  (eq_self ↑y)))
+                              (y_1.bv = x.bv + y.bv))
+                            (true_and (y_1.bv = x.bv + y.bv))))
+                        (true_and (y_1.bv = x.bv + y.bv)))))
+                  (Eq.mpr
+                    (id
+                      (Eq.trans BitVec.toNat_eq._simp_2
+                        (Eq.trans Int.ofNat_inj._simp_2
+                          (congrArg (Eq ↑y_1.bv.toNat)
+                            (congr (congrArg HMod.hMod (Nat.cast_add x.bv.toNat y.bv.toNat))
+                              (Nat.cast_pow 2 ty.numBits))))))
+                    (Eq.mpr
+                      (id
+                        (congr (congrArg Eq (congrArg Nat.cast (UScalar.bv_toNat y_1)))
+                          (congrFun'
+                            (congrArg HMod.hMod
+                              (congr (congrArg HAdd.hAdd (congrArg Nat.cast (UScalar.bv_toNat x)))
+                                (congrArg Nat.cast (UScalar.bv_toNat y))))
+                            (2 ^ ty.numBits))))
+                      (have this :=
+                        Int.emod_eq_of_lt
+                          (Decidable.byContradiction fun a =>
+                            UScalar.add_equiv._proof_1_4 x y y_1
+                              (Eq.mp
+                                (congr
+                                  (congrArg And
+                                    (Eq.trans Int.ofNat_inj._simp_2 (congrArg (Eq ↑↑y_1) (Nat.cast_add ↑x ↑y))))
+                                  (Eq.trans Int.ofNat_lt._simp_2
+                                    (congr (congrArg LT.lt (Nat.cast_add ↑x ↑y)) (Nat.cast_pow 2 ty.numBits))))
+                                h)
+                              a)
+                          (Decidable.byContradiction fun a =>
+                            UScalar.add_equiv._proof_1_5 x y y_1
+                              (Eq.mp
+                                (congr
+                                  (congrArg And
+                                    (Eq.trans Int.ofNat_inj._simp_2 (congrArg (Eq ↑↑y_1) (Nat.cast_add ↑x ↑y))))
+                                  (Eq.trans Int.ofNat_lt._simp_2
+                                    (congr (congrArg LT.lt (Nat.cast_add ↑x ↑y)) (Nat.cast_pow 2 ty.numBits))))
+                                h)
+                              a);
+                      of_eq_true
+                        (Eq.trans
+                          (congr
+                            (congrArg Eq
+                              (Eq.mp
+                                  (congr
+                                    (congrArg And
+                                      (Eq.trans Int.ofNat_inj._simp_2 (congrArg (Eq ↑↑y_1) (Nat.cast_add ↑x ↑y))))
+                                    (Eq.trans Int.ofNat_lt._simp_2
+                                      (congr (congrArg LT.lt (Nat.cast_add ↑x ↑y)) (Nat.cast_pow 2 ty.numBits))))
+                                  h).1)
+                            this)
+                          (eq_self (↑↑x + ↑↑y)))))))
+            (Eq.symm h) (Eq.refl (UScalar.tryMk ty (↑x + ↑y))))
+        (fun e h =>
+          Eq.ndrec (motive := fun x_1 =>
+            UScalar.tryMk ty (↑x + ↑y) = x_1 →
+              (match x_1 with
+                | ok y_1 => ↑y_1 = ↑x + ↑y ∧ ↑x + ↑y < 2 ^ ty.numBits
+                | fail e => 2 ^ ty.numBits ≤ ↑x + ↑y
+                | x => False) →
+                match UScalar.tryMk ty (↑x + ↑y) with
+                | ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+                | fail e => 2 ^ ty.numBits ≤ ↑x + ↑y
+                | x => False)
+            (fun heq =>
+              id fun h =>
+                of_eq_true
+                  (Eq.trans
+                    (congrArg
+                      (fun x_1 =>
+                        match x_1 with
+                        | ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+                        | fail e => 2 ^ ty.numBits ≤ ↑x + ↑y
+                        | x => False)
+                      heq)
+                    (eq_true h)))
+            (Eq.symm h) (Eq.refl (UScalar.tryMk ty (↑x + ↑y))))
+        (fun x_1 x_2 x_3 h =>
+          Eq.ndrec (motive := fun x_4 =>
+            (∀ (y : UScalar ty), x_4 = ok y → False) →
+              (∀ (e : Error), x_4 = fail e → False) →
+                (match UScalar.tryMk ty (↑x + ↑y) with
+                  | ok y_1 => ↑y_1 = ↑x + ↑y ∧ ↑x + ↑y < 2 ^ ty.numBits
+                  | fail e => 2 ^ ty.numBits ≤ ↑x + ↑y
+                  | x => False) →
+                  match UScalar.tryMk ty (↑x + ↑y) with
+                  | ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+                  | fail e => 2 ^ ty.numBits ≤ ↑x + ↑y
+                  | x => False)
+            (fun x_4 x_5 =>
+              Eq.ndrec (motive := fun x_6 =>
+                (∀ (y : UScalar ty), x_6 = ok y → False) →
+                  (∀ (e : Error), x_6 = fail e → False) →
+                    (match x_6 with
+                      | ok y_1 => ↑y_1 = ↑x + ↑y ∧ ↑x + ↑y < 2 ^ ty.numBits
+                      | fail e => 2 ^ ty.numBits ≤ ↑x + ↑y
+                      | x => False) →
+                      match UScalar.tryMk ty (↑x + ↑y) with
+                      | ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+                      | fail e => 2 ^ ty.numBits ≤ ↑x + ↑y
+                      | x => False)
+                (fun x_6 x_7 =>
+                  Eq.mpr
+                    (id
+                      (implies_congr
+                        (Aeneas.Std.UScalar.tryMk_eq.match_1.eq_3✝ ty (fun x => Prop) (UScalar.tryMk ty (↑x + ↑y))
+                          (fun y_1 => ↑y_1 = ↑x + ↑y ∧ ↑x + ↑y < 2 ^ ty.numBits) (fun e => 2 ^ ty.numBits ≤ ↑x + ↑y)
+                          (fun x => False) x_6 x_7)
+                        (Eq.refl
+                          (match UScalar.tryMk ty (↑x + ↑y) with
+                          | ok z => ↑x + ↑y < 2 ^ ty.numBits ∧ ↑z = ↑x + ↑y ∧ z.bv = x.bv + y.bv
+                          | fail e => 2 ^ ty.numBits ≤ ↑x + ↑y
+                          | x => False))))
+                    fun h => False.elim h)
+                (Eq.refl (UScalar.tryMk ty (↑x + ↑y))) x_4 x_5)
+            h x_2 x_3)
+        (Eq.refl (UScalar.tryMk ty (↑x + ↑y)))
+        (Eq.mp
+          (congrFun'
+            (congrArg
+              (UScalar.tryMk_eq.match_1 ty (fun x => Prop) (UScalar.tryMk ty (↑x + ↑y)) fun y_1 =>
+                ↑y_1 = ↑x + ↑y ∧ ↑x + ↑y < 2 ^ ty.numBits)
+              (funext fun e => not_lt._simp_1))
+            fun x => False)
+          h)))
+theorem Aeneas.Std.UScalar.sub_equiv : ∀ {ty : UScalarTy} (x y : UScalar ty),
+  match x - y with
+  | ok z => ↑y ≤ ↑x ∧ ↑x = ↑z + ↑y ∧ z.bv = x.bv - y.bv
+  | fail e => ↑x < ↑y
+  | x => ⊥ :=
+fun {ty} x y =>
+  have this := Eq.refl (x - y);
+  Eq.mpr
+    (id
+      (congrArg
+        (fun x_1 =>
+          match x_1 with
+          | ok z => ↑y ≤ ↑x ∧ ↑x = ↑z + ↑y ∧ z.bv = x.bv - y.bv
+          | fail e => ↑x < ↑y
+          | x => ⊥)
+        this))
+    (if h : ↑x < ↑y then
+      of_eq_true
+        (Eq.trans
+          (congrArg
+            (fun x_1 =>
+              match x_1 with
+              | ok z => ↑y ≤ ↑x ∧ ↑x = ↑z + ↑y ∧ z.bv = x.bv - y.bv
+              | fail e => ↑x < ↑y
+              | x => False)
+            (ite_cond_eq_true (fail Error.integerOverflow) (ok (BitVec.ofNat ty.numBits (↑x - ↑y)#uscalar))
+              (eq_true h)))
+          (eq_true h))
+    else
+      Eq.mpr
+        (id
+          (congrArg
+            (fun x_1 =>
+              match x_1 with
+              | ok z => ↑y ≤ ↑x ∧ ↑x = ↑z + ↑y ∧ z.bv = x.bv - y.bv
+              | fail e => ↑x < ↑y
+              | x => False)
+            (ite_cond_eq_false (fail Error.integerOverflow) (ok (BitVec.ofNat ty.numBits (↑x - ↑y)#uscalar))
+              (eq_false h))))
+        (Eq.mpr
+          (id
+            (Eq.trans
+              (congrFun' (congrArg And (eq_true (id (Eq.mp not_lt._simp_1 h))))
+                (↑x = ↑(BitVec.ofNat ty.numBits (↑x - ↑y)#uscalar) + ↑y ∧
+                  BitVec.ofNat ty.numBits (↑x - ↑y) = x.bv - y.bv))
+              (true_and
+                (↑x = ↑(BitVec.ofNat ty.numBits (↑x - ↑y)#uscalar) + ↑y ∧
+                  BitVec.ofNat ty.numBits (↑x - ↑y) = x.bv - y.bv))))
+          (id
+            (Eq.mpr
+              (id
+                (congr
+                  (congrArg And
+                    (congr (congrArg Eq (UScalar.bv_toNat x))
+                      (congr
+                        (congrArg HAdd.hAdd
+                          (Eq.trans
+                            (congrArg BitVec.toNat
+                              (congrArg (BitVec.ofNat ty.numBits)
+                                (congr (congrArg HSub.hSub (UScalar.bv_toNat x)) (UScalar.bv_toNat y))))
+                            (BitVec.toNat_ofNat (↑x - ↑y) ty.numBits)))
+                        (UScalar.bv_toNat y))))
+                  (congrFun'
+                    (congrArg Eq
+                      (congrArg (BitVec.ofNat ty.numBits)
+                        (congr (congrArg HSub.hSub (UScalar.bv_toNat x)) (UScalar.bv_toNat y))))
+                    (x.bv - y.bv))))
+              ⟨have this :=
+                  have this :=
+                    of_eq_true
+                      (pow_pos._simp_1 (of_eq_true (Eq.trans Order.lt_two_iff._simp_1 zero_le._simp_1)) ty.numBits);
+                  have this := UScalar.hBounds x;
+                  Nat.mod_eq_of_lt
+                    (Decidable.byContradiction fun a =>
+                      UScalar.sub_equiv._proof_1_3 x y (Eq.mp not_lt._simp_1 h) this a);
+                Eq.mpr (id (congrArg (Eq ↑x) (congrFun' (congrArg HAdd.hAdd this) ↑y)))
+                  (Decidable.byContradiction fun a => UScalar.sub_equiv._proof_1_4 x y (Eq.mp not_lt._simp_1 h) a),
+                Eq.mpr
+                  (id
+                    (Eq.trans BitVec.toNat_eq._simp_2
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun' (congrArg Eq (BitVec.toNat_ofNat (↑x - ↑y) ty.numBits))
+                            ((2 ^ ty.numBits - y.bv.toNat + x.bv.toNat) % 2 ^ ty.numBits))
+                          Int.ofNat_inj._simp_2)
+                        (congr (congrArg Eq (congrArg (HMod.hMod ↑(↑x - ↑y)) (Nat.cast_pow 2 ty.numBits)))
+                          (congr (congrArg HMod.hMod (Nat.cast_add (2 ^ ty.numBits - y.bv.toNat) x.bv.toNat))
+                            (Nat.cast_pow 2 ty.numBits))))))
+                  (Eq.mpr
+                    (id
+                      (congrArg (Eq (↑(↑x - ↑y) % 2 ^ ty.numBits))
+                        (congrFun'
+                          (congrArg HMod.hMod
+                            (congr
+                              (congrArg HAdd.hAdd
+                                (congrArg Nat.cast (congrArg (HSub.hSub (2 ^ ty.numBits)) (UScalar.bv_toNat y))))
+                              (congrArg Nat.cast (UScalar.bv_toNat x))))
+                          (2 ^ ty.numBits))))
+                    (have this :=
+                      Decidable.byContradiction fun a => UScalar.sub_equiv._proof_1_5 x y (Eq.mp not_lt._simp_1 h) a;
+                    Eq.mpr
+                      (id
+                        (congrArg (fun _a => _a % 2 ^ ty.numBits = (↑(2 ^ ty.numBits - ↑y) + ↑↑x) % 2 ^ ty.numBits)
+                          this))
+                      (Eq.mpr
+                        (id
+                          (congrArg (Eq ((↑↑x - ↑↑y) % 2 ^ ty.numBits))
+                            (congrFun'
+                              (congrArg HMod.hMod
+                                (Eq.trans
+                                  (Mathlib.Tactic.Ring.Common.add_congr
+                                    (Mathlib.Tactic.Ring.Common.atom_pf (↑(2 ^ ty.numBits - ↑y)) rfl
+                                      (Eq.mpr
+                                        (id
+                                          (congrArg
+                                            (fun _a =>
+                                              ↑(2 ^ ty.numBits - ↑y) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                ↑(2 ^ ty.numBits - ↑y) ^ Nat.rawCast 1 * _a)
+                                            (Eq.symm rfl)))
+                                        (Eq.refl (↑(2 ^ ty.numBits - ↑y) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                    (Mathlib.Tactic.Ring.Common.atom_pf (↑↑x) rfl
+                                      (Eq.mpr
+                                        (id
+                                          (congrArg
+                                            (fun _a => ↑↑x ^ Nat.rawCast 1 * Nat.rawCast 1 = ↑↑x ^ Nat.rawCast 1 * _a)
+                                            (Eq.symm rfl)))
+                                        (Eq.refl (↑↑x ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_gt (↑↑x ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                        (↑(2 ^ ty.numBits - ↑y) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))
+                                  (Eq.trans
+                                    (Mathlib.Tactic.RingNF.add_assoc_rev (↑↑x ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                      (↑(2 ^ ty.numBits - ↑y) ^ Nat.rawCast 1 * Nat.rawCast 1) 0)
+                                    (Eq.trans
+                                      (congrFun'
+                                        (congrArg HAdd.hAdd
+                                          (congr
+                                            (congrArg HAdd.hAdd
+                                              (Eq.trans
+                                                (congr
+                                                  (congrArg HMul.hMul
+                                                    (Eq.trans
+                                                      (congrArg (HPow.hPow ↑↑x) Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                      (pow_one ↑↑x)))
+                                                  Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                (mul_one ↑↑x)))
+                                            (Eq.trans
+                                              (congr
+                                                (congrArg HMul.hMul
+                                                  (Eq.trans
+                                                    (congrArg (HPow.hPow ↑(2 ^ ty.numBits - ↑y))
+                                                      Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                    (pow_one ↑(2 ^ ty.numBits - ↑y))))
+                                                Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                              (mul_one ↑(2 ^ ty.numBits - ↑y)))))
+                                        0)
+                                      (add_zero (↑↑x + ↑(2 ^ ty.numBits - ↑y)))))))
+                              (2 ^ ty.numBits))))
+                        (Eq.mpr
+                          (id
+                            (congrArg (fun _a => (↑↑x - ↑↑y) % 2 ^ ty.numBits = _a)
+                              (Int.add_emod (↑↑x) (↑(2 ^ ty.numBits - ↑y)) (2 ^ ty.numBits))))
+                          (have this :=
+                            have this :=
+                              have hBounds := UScalar.hBounds y;
+                              have this :=
+                                of_eq_true
+                                  (Eq.trans (congrFun' (congrArg Eq (Nat.cast_pow 2 ty.numBits)) (2 ^ ty.numBits))
+                                    (eq_self (2 ^ ty.numBits)));
+                              Decidable.byContradiction fun a =>
+                                UScalar.sub_equiv._proof_1_6 x y
+                                  (Eq.mp
+                                    (Eq.trans Int.ofNat_lt._simp_2 (congrArg (LT.lt ↑↑y) (Nat.cast_pow 2 ty.numBits)))
+                                    hBounds)
+                                  this a;
+                            Eq.mpr (id (congrArg (fun _a => _a % 2 ^ ty.numBits = -↑↑y % 2 ^ ty.numBits) this))
+                              (have this := Int.emod_add_emod (2 ^ ty.numBits) (2 ^ ty.numBits) (-↑↑y);
+                              Eq.mpr
+                                (id
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congrFun'
+                                        (congrArg HMod.hMod
+                                          (Eq.trans
+                                            (Mathlib.Tactic.Ring.Common.sub_congr
+                                              (Mathlib.Tactic.Ring.Common.pow_congr
+                                                (Mathlib.Tactic.Ring.cast_pos
+                                                  (Mathlib.Meta.NormNum.isNat_ofNat ℤ (Eq.refl 2)))
+                                                (Mathlib.Tactic.Ring.Common.atom_pf ty.numBits rfl
+                                                  (Eq.mpr
+                                                    (id
+                                                      (congrArg
+                                                        (fun _a =>
+                                                          ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                            ty.numBits ^ Nat.rawCast 1 * _a)
+                                                        (Eq.symm rfl)))
+                                                    (Eq.refl (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                                (Mathlib.Tactic.Ring.Common.pow_add
+                                                  (Mathlib.Tactic.Ring.Common.single_pow
+                                                    (Mathlib.Tactic.Ring.Common.pow_prod_atom (Nat.rawCast 2)
+                                                      (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                                      (Eq.mpr
+                                                        (id
+                                                          (congrArg
+                                                            (fun _a =>
+                                                              (Nat.rawCast 2 + 0) ^
+                                                                    (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                                  Nat.rawCast 1 =
+                                                                (Nat.rawCast 2 + 0) ^
+                                                                    (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                                  _a)
+                                                            (Eq.symm rfl)))
+                                                        (Eq.refl
+                                                          ((Nat.rawCast 2 + 0) ^
+                                                              (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                            Nat.rawCast 1)))))
+                                                  (Mathlib.Tactic.Ring.Common.pow_zero (Nat.rawCast 2 + 0) rfl)
+                                                  (Mathlib.Tactic.Ring.Common.add_mul
+                                                    (Mathlib.Tactic.Ring.Common.mul_add
+                                                      (Mathlib.Tactic.Ring.Common.mul_pf_left (Nat.rawCast 2 + 0)
+                                                        (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                                        (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                          (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                            (Mathlib.Meta.NormNum.IsNat.of_raw ℤ 1)
+                                                            (Mathlib.Meta.NormNum.IsNat.of_raw ℤ 1) (Eq.refl 1))))
+                                                      (Mathlib.Tactic.Ring.Common.mul_zero
+                                                        ((Nat.rawCast 2 + 0) ^
+                                                            (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                          Nat.rawCast 1))
+                                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                                        ((Nat.rawCast 2 + 0) ^
+                                                              (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                            Nat.rawCast 1 +
+                                                          0)))
+                                                    (Mathlib.Tactic.Ring.Common.zero_mul (Nat.rawCast 1 + 0))
+                                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                                      ((Nat.rawCast 2 + 0) ^
+                                                            (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                          Nat.rawCast 1 +
+                                                        0)))))
+                                              (Mathlib.Tactic.Ring.Common.atom_pf (↑↑y) rfl
+                                                (Eq.mpr
+                                                  (id
+                                                    (congrArg
+                                                      (fun _a =>
+                                                        ↑↑y ^ Nat.rawCast 1 * Nat.rawCast 1 = ↑↑y ^ Nat.rawCast 1 * _a)
+                                                      (Eq.symm rfl)))
+                                                  (Eq.refl (↑↑y ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                              (Mathlib.Tactic.Ring.Common.sub_pf
+                                                (Mathlib.Tactic.Ring.Common.neg_add
+                                                  (Mathlib.Tactic.Ring.Common.neg_mul (↑↑y) (Nat.rawCast 1)
+                                                    (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                                      (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                                                        (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                                          (Mathlib.Meta.NormNum.IsNat.of_raw ℤ 1))
+                                                        (Eq.refl (Int.negOfNat 1)))))
+                                                  Mathlib.Tactic.Ring.Common.neg_zero)
+                                                (Mathlib.Tactic.Ring.Common.add_pf_add_gt
+                                                  (↑↑y ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast)
+                                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                                    ((Nat.rawCast 2 + 0) ^
+                                                          (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                        Nat.rawCast 1 +
+                                                      0)))))
+                                            (Eq.trans
+                                              (Mathlib.Tactic.RingNF.add_assoc_rev
+                                                (↑↑y ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast)
+                                                ((Nat.rawCast 2 + 0) ^ (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                  Nat.rawCast 1)
+                                                0)
+                                              (Eq.trans
+                                                (congrFun'
+                                                  (congrArg HAdd.hAdd
+                                                    (congr
+                                                      (congrArg HAdd.hAdd
+                                                        (Eq.trans
+                                                          (Eq.trans
+                                                            (congr
+                                                              (congrArg HMul.hMul
+                                                                (Eq.trans
+                                                                  (congrArg (HPow.hPow ↑↑y)
+                                                                    Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                                  (pow_one ↑↑y)))
+                                                              (Eq.trans Mathlib.Tactic.RingNF.int_rawCast_neg
+                                                                (congrArg Neg.neg Mathlib.Tactic.RingNF.nat_rawCast_1)))
+                                                            (Mathlib.Tactic.RingNF.mul_neg (↑↑y) 1))
+                                                          (congrArg Neg.neg (mul_one ↑↑y))))
+                                                      (Eq.trans
+                                                        (congr
+                                                          (congrArg HMul.hMul
+                                                            (congr (congrArg HPow.hPow (add_zero 2))
+                                                              (Eq.trans
+                                                                (congr
+                                                                  (congrArg HMul.hMul
+                                                                    (Eq.trans
+                                                                      (congrArg (HPow.hPow ty.numBits)
+                                                                        Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                                      (pow_one ty.numBits)))
+                                                                  Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                                (mul_one ty.numBits))))
+                                                          Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                        (mul_one (2 ^ ty.numBits)))))
+                                                  0)
+                                                (add_zero (-↑↑y + 2 ^ ty.numBits))))))
+                                        (2 ^ ty.numBits)))
+                                    (-↑↑y % 2 ^ ty.numBits)))
+                                (Eq.mpr
+                                  (id
+                                    (congrArg (fun _a => _a = -↑↑y % 2 ^ ty.numBits)
+                                      (Eq.symm
+                                        (Eq.mp
+                                          (congr
+                                            (congrArg Eq
+                                              (congrFun'
+                                                (congrArg HMod.hMod
+                                                  (Eq.trans
+                                                    (Mathlib.Tactic.Ring.Common.add_congr
+                                                      (Mathlib.Tactic.Ring.Common.atom_pf
+                                                        (2 ^ ty.numBits % 2 ^ ty.numBits) rfl
+                                                        (Eq.mpr
+                                                          (id
+                                                            (congrArg
+                                                              (fun _a =>
+                                                                (2 ^ ty.numBits % 2 ^ ty.numBits) ^ Nat.rawCast 1 *
+                                                                    Nat.rawCast 1 =
+                                                                  (2 ^ ty.numBits % 2 ^ ty.numBits) ^ Nat.rawCast 1 *
+                                                                    _a)
+                                                              (Eq.symm rfl)))
+                                                          (Eq.refl
+                                                            ((2 ^ ty.numBits % 2 ^ ty.numBits) ^ Nat.rawCast 1 *
+                                                              Nat.rawCast 1))))
+                                                      (Mathlib.Tactic.Ring.Common.neg_congr
+                                                        (Mathlib.Tactic.Ring.Common.atom_pf (↑↑y) rfl
+                                                          (Eq.mpr
+                                                            (id
+                                                              (congrArg
+                                                                (fun _a =>
+                                                                  ↑↑y ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                                    ↑↑y ^ Nat.rawCast 1 * _a)
+                                                                (Eq.symm rfl)))
+                                                            (Eq.refl (↑↑y ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                                        (Mathlib.Tactic.Ring.Common.neg_add
+                                                          (Mathlib.Tactic.Ring.Common.neg_mul (↑↑y) (Nat.rawCast 1)
+                                                            (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                                              (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                                                                (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                                                  (Mathlib.Meta.NormNum.IsNat.of_raw ℤ 1))
+                                                                (Eq.refl (Int.negOfNat 1)))))
+                                                          Mathlib.Tactic.Ring.Common.neg_zero))
+                                                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                                        ((2 ^ ty.numBits % 2 ^ ty.numBits) ^ Nat.rawCast 1 *
+                                                          Nat.rawCast 1)
+                                                        (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                                          (↑↑y ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast + 0))))
+                                                    (Eq.trans
+                                                      (Mathlib.Tactic.RingNF.add_assoc_rev
+                                                        ((2 ^ ty.numBits % 2 ^ ty.numBits) ^ Nat.rawCast 1 *
+                                                          Nat.rawCast 1)
+                                                        (↑↑y ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) 0)
+                                                      (Eq.trans
+                                                        (congrFun'
+                                                          (congrArg HAdd.hAdd
+                                                            (Eq.trans
+                                                              (congr
+                                                                (congrArg HAdd.hAdd
+                                                                  (Eq.trans
+                                                                    (congr
+                                                                      (congrArg HMul.hMul
+                                                                        (Eq.trans
+                                                                          (congrArg
+                                                                            (HPow.hPow
+                                                                              (2 ^ ty.numBits % 2 ^ ty.numBits))
+                                                                            Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                                          (pow_one (2 ^ ty.numBits % 2 ^ ty.numBits))))
+                                                                      Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                                    (mul_one (2 ^ ty.numBits % 2 ^ ty.numBits))))
+                                                                (Eq.trans
+                                                                  (Eq.trans
+                                                                    (congr
+                                                                      (congrArg HMul.hMul
+                                                                        (Eq.trans
+                                                                          (congrArg (HPow.hPow ↑↑y)
+                                                                            Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                                          (pow_one ↑↑y)))
+                                                                      (Eq.trans Mathlib.Tactic.RingNF.int_rawCast_neg
+                                                                        (congrArg Neg.neg
+                                                                          Mathlib.Tactic.RingNF.nat_rawCast_1)))
+                                                                    (Mathlib.Tactic.RingNF.mul_neg (↑↑y) 1))
+                                                                  (congrArg Neg.neg (mul_one ↑↑y))))
+                                                              (Mathlib.Tactic.RingNF.add_neg
+                                                                (2 ^ ty.numBits % 2 ^ ty.numBits) ↑↑y)))
+                                                          0)
+                                                        (add_zero (2 ^ ty.numBits % 2 ^ ty.numBits - ↑↑y))))))
+                                                (2 ^ ty.numBits)))
+                                            (congrFun'
+                                              (congrArg HMod.hMod
+                                                (Eq.trans
+                                                  (Mathlib.Tactic.Ring.Common.add_congr
+                                                    (Mathlib.Tactic.Ring.Common.pow_congr
+                                                      (Mathlib.Tactic.Ring.cast_pos
+                                                        (Mathlib.Meta.NormNum.isNat_ofNat ℤ (Eq.refl 2)))
+                                                      (Mathlib.Tactic.Ring.Common.atom_pf ty.numBits rfl
+                                                        (Eq.mpr
+                                                          (id
+                                                            (congrArg
+                                                              (fun _a =>
+                                                                ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                                  ty.numBits ^ Nat.rawCast 1 * _a)
+                                                              (Eq.symm rfl)))
+                                                          (Eq.refl (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                                      (Mathlib.Tactic.Ring.Common.pow_add
+                                                        (Mathlib.Tactic.Ring.Common.single_pow
+                                                          (Mathlib.Tactic.Ring.Common.pow_prod_atom (Nat.rawCast 2)
+                                                            (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                                            (Eq.mpr
+                                                              (id
+                                                                (congrArg
+                                                                  (fun _a =>
+                                                                    (Nat.rawCast 2 + 0) ^
+                                                                          (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                                        Nat.rawCast 1 =
+                                                                      (Nat.rawCast 2 + 0) ^
+                                                                          (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                                        _a)
+                                                                  (Eq.symm rfl)))
+                                                              (Eq.refl
+                                                                ((Nat.rawCast 2 + 0) ^
+                                                                    (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                                  Nat.rawCast 1)))))
+                                                        (Mathlib.Tactic.Ring.Common.pow_zero (Nat.rawCast 2 + 0) rfl)
+                                                        (Mathlib.Tactic.Ring.Common.add_mul
+                                                          (Mathlib.Tactic.Ring.Common.mul_add
+                                                            (Mathlib.Tactic.Ring.Common.mul_pf_left (Nat.rawCast 2 + 0)
+                                                              (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                                  (Mathlib.Meta.NormNum.IsNat.of_raw ℤ 1)
+                                                                  (Mathlib.Meta.NormNum.IsNat.of_raw ℤ 1) (Eq.refl 1))))
+                                                            (Mathlib.Tactic.Ring.Common.mul_zero
+                                                              ((Nat.rawCast 2 + 0) ^
+                                                                  (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                                Nat.rawCast 1))
+                                                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                                              ((Nat.rawCast 2 + 0) ^
+                                                                    (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                                  Nat.rawCast 1 +
+                                                                0)))
+                                                          (Mathlib.Tactic.Ring.Common.zero_mul (Nat.rawCast 1 + 0))
+                                                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                                            ((Nat.rawCast 2 + 0) ^
+                                                                  (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                                Nat.rawCast 1 +
+                                                              0)))))
+                                                    (Mathlib.Tactic.Ring.Common.neg_congr
+                                                      (Mathlib.Tactic.Ring.Common.atom_pf (↑↑y) rfl
+                                                        (Eq.mpr
+                                                          (id
+                                                            (congrArg
+                                                              (fun _a =>
+                                                                ↑↑y ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                                  ↑↑y ^ Nat.rawCast 1 * _a)
+                                                              (Eq.symm rfl)))
+                                                          (Eq.refl (↑↑y ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                                      (Mathlib.Tactic.Ring.Common.neg_add
+                                                        (Mathlib.Tactic.Ring.Common.neg_mul (↑↑y) (Nat.rawCast 1)
+                                                          (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                                            (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                                                              (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                                                (Mathlib.Meta.NormNum.IsNat.of_raw ℤ 1))
+                                                              (Eq.refl (Int.negOfNat 1)))))
+                                                        Mathlib.Tactic.Ring.Common.neg_zero))
+                                                    (Mathlib.Tactic.Ring.Common.add_pf_add_gt
+                                                      (↑↑y ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast)
+                                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                                        ((Nat.rawCast 2 + 0) ^
+                                                              (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                            Nat.rawCast 1 +
+                                                          0))))
+                                                  (Eq.trans
+                                                    (Mathlib.Tactic.RingNF.add_assoc_rev
+                                                      (↑↑y ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast)
+                                                      ((Nat.rawCast 2 + 0) ^
+                                                          (ty.numBits ^ Nat.rawCast 1 * Nat.rawCast 1) *
+                                                        Nat.rawCast 1)
+                                                      0)
+                                                    (Eq.trans
+                                                      (congrFun'
+                                                        (congrArg HAdd.hAdd
+                                                          (congr
+                                                            (congrArg HAdd.hAdd
+                                                              (Eq.trans
+                                                                (Eq.trans
+                                                                  (congr
+                                                                    (congrArg HMul.hMul
+                                                                      (Eq.trans
+                                                                        (congrArg (HPow.hPow ↑↑y)
+                                                                          Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                                        (pow_one ↑↑y)))
+                                                                    (Eq.trans Mathlib.Tactic.RingNF.int_rawCast_neg
+                                                                      (congrArg Neg.neg
+                                                                        Mathlib.Tactic.RingNF.nat_rawCast_1)))
+                                                                  (Mathlib.Tactic.RingNF.mul_neg (↑↑y) 1))
+                                                                (congrArg Neg.neg (mul_one ↑↑y))))
+                                                            (Eq.trans
+                                                              (congr
+                                                                (congrArg HMul.hMul
+                                                                  (congr (congrArg HPow.hPow (add_zero 2))
+                                                                    (Eq.trans
+                                                                      (congr
+                                                                        (congrArg HMul.hMul
+                                                                          (Eq.trans
+                                                                            (congrArg (HPow.hPow ty.numBits)
+                                                                              Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                                            (pow_one ty.numBits)))
+                                                                        Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                                      (mul_one ty.numBits))))
+                                                                Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                              (mul_one (2 ^ ty.numBits)))))
+                                                        0)
+                                                      (add_zero (-↑↑y + 2 ^ ty.numBits))))))
+                                              (2 ^ ty.numBits)))
+                                          this))))
+                                  (of_eq_true
+                                    (Eq.trans
+                                      (congrFun'
+                                        (congrArg Eq
+                                          (congrFun'
+                                            (congrArg HMod.hMod
+                                              (Eq.trans
+                                                (congrFun'
+                                                  (congrArg HSub.hSub (EuclideanDomain.mod_self (2 ^ ty.numBits))) ↑↑y)
+                                                (zero_sub ↑↑y)))
+                                            (2 ^ ty.numBits)))
+                                        (-↑↑y % 2 ^ ty.numBits))
+                                      (eq_self (-↑↑y % 2 ^ ty.numBits))))));
+                          Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a => (↑↑x - ↑↑y) % 2 ^ ty.numBits = (↑↑x % 2 ^ ty.numBits + _a) % 2 ^ ty.numBits)
+                                this))
+                            (Eq.mpr
+                              (id
+                                (congrArg (fun _a => (↑↑x - ↑↑y) % 2 ^ ty.numBits = _a)
+                                  (Eq.symm (Int.add_emod (↑↑x) (-↑↑y) (2 ^ ty.numBits)))))
+                              (of_eq_true
+                                (Eq.trans
+                                  (congrArg (Eq ((↑↑x - ↑↑y) % 2 ^ ty.numBits))
+                                    (congrFun'
+                                      (congrArg HMod.hMod
+                                        (Eq.trans
+                                          (Mathlib.Tactic.Ring.Common.add_congr
+                                            (Mathlib.Tactic.Ring.Common.atom_pf (↑↑x) rfl
+                                              (Eq.mpr
+                                                (id
+                                                  (congrArg
+                                                    (fun _a =>
+                                                      ↑↑x ^ Nat.rawCast 1 * Nat.rawCast 1 = ↑↑x ^ Nat.rawCast 1 * _a)
+                                                    (Eq.symm rfl)))
+                                                (Eq.refl (↑↑x ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                            (Mathlib.Tactic.Ring.Common.neg_congr
+                                              (Mathlib.Tactic.Ring.Common.atom_pf (↑↑y) rfl
+                                                (Eq.mpr
+                                                  (id
+                                                    (congrArg
+                                                      (fun _a =>
+                                                        ↑↑y ^ Nat.rawCast 1 * Nat.rawCast 1 = ↑↑y ^ Nat.rawCast 1 * _a)
+                                                      (Eq.symm rfl)))
+                                                  (Eq.refl (↑↑y ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                              (Mathlib.Tactic.Ring.Common.neg_add
+                                                (Mathlib.Tactic.Ring.Common.neg_mul (↑↑y) (Nat.rawCast 1)
+                                                  (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                                    (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                                                      (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                                        (Mathlib.Meta.NormNum.IsNat.of_raw ℤ 1))
+                                                      (Eq.refl (Int.negOfNat 1)))))
+                                                Mathlib.Tactic.Ring.Common.neg_zero))
+                                            (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                              (↑↑x ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                              (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                                (↑↑y ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast + 0))))
+                                          (Eq.trans
+                                            (Mathlib.Tactic.RingNF.add_assoc_rev (↑↑x ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                              (↑↑y ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast) 0)
+                                            (Eq.trans
+                                              (congrFun'
+                                                (congrArg HAdd.hAdd
+                                                  (Eq.trans
+                                                    (congr
+                                                      (congrArg HAdd.hAdd
+                                                        (Eq.trans
+                                                          (congr
+                                                            (congrArg HMul.hMul
+                                                              (Eq.trans
+                                                                (congrArg (HPow.hPow ↑↑x)
+                                                                  Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                                (pow_one ↑↑x)))
+                                                            Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                          (mul_one ↑↑x)))
+                                                      (Eq.trans
+                                                        (Eq.trans
+                                                          (congr
+                                                            (congrArg HMul.hMul
+                                                              (Eq.trans
+                                                                (congrArg (HPow.hPow ↑↑y)
+                                                                  Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                                                (pow_one ↑↑y)))
+                                                            (Eq.trans Mathlib.Tactic.RingNF.int_rawCast_neg
+                                                              (congrArg Neg.neg Mathlib.Tactic.RingNF.nat_rawCast_1)))
+                                                          (Mathlib.Tactic.RingNF.mul_neg (↑↑y) 1))
+                                                        (congrArg Neg.neg (mul_one ↑↑y))))
+                                                    (Mathlib.Tactic.RingNF.add_neg ↑↑x ↑↑y)))
+                                                0)
+                                              (add_zero (↑↑x - ↑↑y))))))
+                                      (2 ^ ty.numBits)))
+                                  (eq_self ((↑↑x - ↑↑y) % 2 ^ ty.numBits))))))))))⟩))))
+def Aeneas.Std.core.array.equality.PartialEqArray.eq : {T U : Type} →
+  {N : Usize} → core.cmp.PartialEq T U → Std.Array T N → Std.Array U N → Result Bool :=
+fun {T U} {N} partialEqInst a0 a1 =>
+  if a0.length = a1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          ok (decide ¬b = true))
+      ((↑a0).zip ↑a1)
+  else ok false
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:15:6: error: unexpected token 'prefix'; expected 'axioms', 'eqns', 'equations', 'sig', 'sorries', 'tactic', identifier or string literal
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:15:13: error: unexpected identifier; expected ':'
+@[reducible] def Aeneas.Std.core.cmp.PartialEqU8 : core.cmp.PartialEq U8 U8 :=
+{ eq := liftFun2 core.cmp.impls.PartialEqU8.eq, ne := liftFun2 core.cmp.impls.PartialEqU8.ne }

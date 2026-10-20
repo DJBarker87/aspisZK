@@ -1,0 +1,81 @@
+AspisR1Stage2.R13Close.Sort.sort_prefix (keys out : AspisR1Stage2.R13Close.Sort.Keys) (n : Aeneas.Std.Usize)
+  (hn : ↑n ≤ 16) (h : AspisR1Stage2.R13Close.Sort.verifier.candidate.sort_batch_keys keys n = Aeneas.Std.Result.ok out)
+  (x : Aeneas.Std.U64) : AspisR1Stage2.R13Close.Sort.Prefix out (↑n) x ↔ AspisR1Stage2.R13Close.Sort.Prefix keys (↑n) x
+AspisR1Stage2.R13Close.Dedup.dedup_step_pairs (idx idx' : AspisR1Stage2.R13Close.Dedup.Idx)
+  (val val' : AspisR1Stage2.R13Close.Dedup.Val) (d d' pos pos' : Aeneas.Std.Usize) (index : Aeneas.Std.U32)
+  (leaf : AspisR1Stage2.R13Close.Dedup.Leaf)
+  (h :
+    AspisR1Stage2.R13Close.Dedup.dedupStep idx val d pos index leaf =
+      Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (idx', val', d', pos'))) :
+  pos' = pos ∧
+    ∀ (q : Aeneas.Std.U32 × AspisR1Stage2.R13Close.Dedup.Leaf),
+      AspisR1Stage2.R13Close.Dedup.PairIn idx' val' (↑d') q ↔
+        AspisR1Stage2.R13Close.Dedup.PairIn idx val (↑d) q ∨ q = (index, leaf)
+AspisR1Stage2.R13Close.Level.binary_loop_write_fold (ops : AspisR1Stage2.R13Close.Level.LevelOps) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (idx idx' : AspisR1Stage2.R13Close.Level.Idx)
+  (val val' : AspisR1Stage2.R13Close.Level.Val) (n : Aeneas.Std.Usize) (nodes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (at1 w i at' n' : Aeneas.Std.Usize) (pending pending' : Option Bool) (arity' : AspisR1Stage2.multiproof.Arity)
+  (code : Aeneas.Std.U32)
+  (h :
+    AspisR1Stage2.R13Close.Level.levelLoop ops D hash AspisR1Stage2.multiproof.Arity.Two idx val n nodes at1 w i
+        pending =
+      Aeneas.Std.Result.ok (arity', idx', val', n', at', pending', code)) :
+  arity' = AspisR1Stage2.multiproof.Arity.Two ∧
+    ∃ writes, (↑idx', ↑val') = List.foldl AspisR1Stage2.R13Close.Level.applyWrite (↑idx, ↑val) writes
+AspisR1Stage2.R13Close.Padding.source_chunks_cover (tail : Aeneas.Std.Slice Aeneas.Std.U8)
+  (chunks : Aeneas.Std.core.slice.iter.ChunksExact Aeneas.Std.U8) (hmod : (↑tail).length % 8 = 0)
+  (h : Aeneas.Std.core.slice.Slice.chunks_exact tail 8#usize = Aeneas.Std.Result.ok chunks) :
+  ↑chunks.remainder = [] ∧ (List.map (fun s => ↑s) chunks.chunks).flatten = ↑tail
+AspisR1Stage2.R13Close.Padding.source_tail_mod (stored tail : Aeneas.Std.Slice Aeneas.Std.U8)
+  (count cut : Aeneas.Std.Usize) (capacity : ℕ) (hslot : (↑stored).length = 32 * capacity)
+  (hmul : 32#usize * count = Aeneas.Std.Result.ok cut)
+  (hread :
+    Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8)
+        stored { start := cut } =
+      Aeneas.Std.Result.ok tail) :
+  (↑tail).length % 8 = 0
+AspisR1Stage2.R13Close.Padding.source_prefix_exact (stored usedPrefix : Aeneas.Std.Slice Aeneas.Std.U8)
+  (cut : Aeneas.Std.Usize)
+  (h :
+    Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8)
+        stored { «end» := cut } =
+      Aeneas.Std.Result.ok usedPrefix) :
+  ↑usedPrefix = List.take ↑cut ↑stored
+AspisR1.BinBatchDedup.dedup_sound {batch canonical : List AspisR1.BinBatchDedup.Entry}
+  {active : AspisR1.BinMultiproof.Active} {v : AspisR1.BinMultiproof.Values}
+  (hrun : AspisR1.BinBatchDedup.run batch = some canonical) (hrep : AspisR1.BinMultiproof.Dedup canonical active v) :
+  AspisR1.BinMultiproof.Dedup batch active v
+AspisR1.BinBatchDedup.accepted_original_queries {H : List AspisR1.BinMerkle32Path.Byte → AspisR1.BinMerkle32Path.Digest}
+  {root : AspisR1.BinMerkle32Path.Digest} {depth : ℕ} {active : AspisR1.BinMultiproof.Active}
+  {v : AspisR1.BinMultiproof.Values} {nodes : List AspisR1.BinMerkle32Path.Digest}
+  {trace : List (List AspisR1.BinMerkle32Path.Byte)} {batch canonical : List AspisR1.BinBatchDedup.Entry}
+  (hrun : AspisR1.BinBatchDedup.run batch = some canonical) (hrep : AspisR1.BinMultiproof.Dedup canonical active v)
+  (h : AspisR1.BinMultiproof.Accept H root depth active v nodes trace) (q : AspisR1.BinBatchDedup.Entry) :
+  q ∈ batch →
+    ∃ path, AspisR1.BinMerkle32Path.foldPath H path q.2 = root ∧ AspisR1.BinMerkle32Path.inputTrace H path q.2 ⊆ trace
+AspisR1.BinMultiproof.Level (active : AspisR1.BinMultiproof.Active) (v : AspisR1.BinMultiproof.Values)
+  (cs : ℕ → AspisR1.BinMerkle32Path.Children) (supplied : List AspisR1.BinMerkle32Path.Digest) : Prop
+AspisR1.BinMultiproof.Accept (H : List AspisR1.BinMerkle32Path.Byte → AspisR1.BinMerkle32Path.Digest)
+  (root : AspisR1.BinMerkle32Path.Digest) :
+  ℕ →
+    AspisR1.BinMultiproof.Active →
+      AspisR1.BinMultiproof.Values →
+        List AspisR1.BinMerkle32Path.Digest → List (List AspisR1.BinMerkle32Path.Byte) → Prop
+AspisR1.BinMultiproof.PaddedAccept (H : List AspisR1.BinMerkle32Path.Byte → AspisR1.BinMerkle32Path.Digest)
+  (root : AspisR1.BinMerkle32Path.Digest) (depth : ℕ) (active : AspisR1.BinMultiproof.Active)
+  (v : AspisR1.BinMultiproof.Values) (count capacity : ℕ) (stored : List AspisR1.BinMerkle32Path.Digest)
+  (trace : List (List AspisR1.BinMerkle32Path.Byte)) : Prop
+AspisR1.R13MultiproofReadSet.accepted_family {H : List AspisR1.BinMerkle32Path.Byte → AspisR1.BinMerkle32Path.Digest}
+  {root : AspisR1.BinMerkle32Path.Digest} {depth : ℕ} {active : AspisR1.BinMultiproof.Active}
+  {v : AspisR1.BinMultiproof.Values} {nodes : List AspisR1.BinMerkle32Path.Digest}
+  {trace : List (List AspisR1.BinMerkle32Path.Byte)}
+  (h : AspisR1.BinMultiproof.Accept H root depth active v nodes trace) :
+  ∃ paths,
+    (∀ (i : ℕ) (hi : i ∈ active),
+        AspisR1.BinMerkle32Path.foldPath H (paths i hi) (v i) = root ∧
+          AspisR1.BinMerkle32Path.inputTrace H (paths i hi) (v i) ⊆ trace) ∧
+      ∀ (input : List AspisR1.BinMerkle32Path.Byte),
+        input ∈ trace ↔ ∃ i, ∃ (hi : i ∈ active), input ∈ AspisR1.BinMerkle32Path.inputTrace H (paths i hi) (v i)
+AspisR1.QvStage2.RetainedPrivacy.batchReadSet (fib : Fin 3 → Finset AspisR1.QvStage2.RetainedPrivacy.Fib) :
+  Finset (Fin 3 ⊕ AspisR1.QvStage2.RetainedPrivacy.RIdx)
+AspisR1.QvStage2.stage2Budget_twelve : AspisR1.QvStage2.stage2Budget 12 = 566

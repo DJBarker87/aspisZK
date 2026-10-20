@@ -1,0 +1,22 @@
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseSort.lean:69:6: error: 'change' tactic failed, pattern
+  (do
+      let out ← swapKeys keys i j
+      ok (cont (out, i))) =
+    ok r
+is not definitionally equal to target
+  (do
+      let (s, to_slice_mut_back) ← lift (Array.to_slice_mut keys)
+      let s1 ← core.slice.Slice.swap s i j
+      have keys1 : Std.Array U64 16#usize := to_slice_mut_back s1
+      ok (cont (keys1, i))) =
+    ok r
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseSort.lean:110:67: error: Type mismatch: After simplification, term
+  hlt
+ has type
+  ↑iter.start < ↑iter.end
+but is expected to have type
+  ↑iter.start < ↑n
+'AspisR1Stage2.R13Close.Sort.swap_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1Stage2.R13Close.Sort.inner_body_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1Stage2.R13Close.Sort.inner_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1Stage2.R13Close.Sort.sort_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

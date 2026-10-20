@@ -1,0 +1,22 @@
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13ClosePaddingTail.lean:16:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  32#usize * count
+in the target expression
+  match 32#usize.mul count with
+  | ok z => ↑32#usize * ↑count ≤ UScalar.max UScalarTy.Usize ∧ ↑z = ↑32#usize * ↑count ∧ z.bv = 32#usize.bv * count.bv
+  | fail e => UScalar.max UScalarTy.Usize < ↑32#usize * ↑count
+  | div => False
+
+stored tail : Slice U8
+count cut : Usize
+capacity : ℕ
+hslot : (↑stored).length = 32 * capacity
+hmul : 32#usize * count = ok cut
+hread :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) stored { start := cut } = ok tail
+hm :
+  match 32#usize.mul count with
+  | ok z => ↑32#usize * ↑count ≤ UScalar.max UScalarTy.Usize ∧ ↑z = ↑32#usize * ↑count ∧ z.bv = 32#usize.bv * count.bv
+  | fail e => UScalar.max UScalarTy.Usize < ↑32#usize * ↑count
+  | div => False
+⊢ (↑tail).length % 8 = 0
+'AspisR1Stage2.R13Close.Padding.source_tail_mod' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

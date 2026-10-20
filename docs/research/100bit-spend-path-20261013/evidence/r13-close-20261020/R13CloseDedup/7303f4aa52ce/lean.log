@@ -1,0 +1,31 @@
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseDedup.lean:113:20: error: unexpected identifier; expected '⟩'
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseDedup.lean:112:21: error: Type mismatch: After simplification, term
+  append_pairs
+ has type
+  ∀ (idx idx' : Idx) (val val' : Val) (d : Usize) (index : U32) (leaf : Leaf),
+    Array.update idx d index = ok idx' →
+      Array.update val d leaf = ok val' →
+        ∀ (q : U32 × Leaf), PairIn idx' val' (↑d + 1) q ↔ PairIn idx val (↑d) q ∨ q = (index, leaf)
+but is expected to have type
+  ∀ (q : U32 × Leaf), PairIn idx' val' (↑d + 1) q ↔ PairIn idx val (↑d) q ∨ q = (index, leaf)
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseDedup.lean:73:52: error: unsolved goals
+case isFalse
+idx idx' : Idx
+val val' : Val
+d d' pos pos' : Usize
+index : U32
+leaf : Leaf
+h✝ : ¬d > 0#usize
+h :
+  (do
+      let idx1 ← Array.update idx d index
+      let val1 ← Array.update val d leaf
+      let d1 ← d + 1#usize
+      ok (cont (idx1, val1, d1, pos))) =
+    ok (cont (idx', val', d', pos'))
+⊢ pos' = pos ∧ ∀ (q : U32 × Leaf), PairIn idx' val' (↑d') q ↔ PairIn idx val (↑d) q ∨ q = (index, leaf)
+'AspisR1Stage2.R13Close.Dedup.read_success' depends on axioms: [propext]
+'_private.lean.R13CloseDedup.0.AspisR1Stage2.R13Close.Dedup.u8_ne' depends on axioms: [propext]
+'AspisR1Stage2.R13Close.Dedup.same_leaf_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1Stage2.R13Close.Dedup.append_pairs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1Stage2.R13Close.Dedup.dedup_step_pairs' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

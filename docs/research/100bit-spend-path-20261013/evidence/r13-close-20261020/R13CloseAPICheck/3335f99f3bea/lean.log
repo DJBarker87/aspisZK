@@ -1,0 +1,65 @@
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+def Aeneas.Std.Array.to_slice_mut.{u} : {α : Type u} →
+  {n : Usize} → Std.Array α n → Slice α × (Slice α → Std.Array α n) :=
+fun {α} {n} a => (a.to_slice, a.from_slice)
+def Aeneas.Std.core.slice.Slice.swap : {T : Type} → Slice T → Usize → Usize → Result (Slice T) :=
+fun {T} s a b => do
+  let av ← s.index_usize a
+  let bv ← s.index_usize b
+  let s1 ← s.update a bv
+  s1.update b av
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:7:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.loop.induct`
+Aeneas.Std.loop.spec.{u, v, w} {α : Type u} {β : Type v} {γ : Type w} (measure : α → γ) [wf : WellFoundedRelation γ]
+  (inv : α → Prop) (post : β → Prop) (body : α → Result (ControlFlow α β)) (x : α)
+  (hBody :
+    ∀ (x : α),
+      inv x →
+        body x ⦃ r =>
+          match r with
+          | done y => post y
+          | cont x' => inv x' ∧ WellFoundedRelation.rel (measure x') (measure x) ⦄)
+  (hInv : inv x) : loop body x ⦃ post ⦄
+Aeneas.Std.loop.spec_decr_nat.{u, v} {α : Type u} {β : Type v} (measure : α → ℕ) (inv : α → Prop) (post : β → Prop)
+  (body : α → Result (ControlFlow α β)) (x : α)
+  (hBody :
+    ∀ (x : α),
+      inv x →
+        body x ⦃ r =>
+          match r with
+          | done y => post y
+          | cont x' => inv x' ∧ measure x' < measure x ⦄)
+  (hInv : inv x) : loop body x ⦃ post ⦄
+def Aeneas.Std.core.slice.Slice.chunks_exact : {T : Type} → Slice T → Usize → Result (core.slice.iter.ChunksExact T) :=
+fun {T} s chunk_size =>
+  if hcs : ↑chunk_size > 0 then
+    let result := List.toChunksExact (↑chunk_size) hcs ↑s;
+    have sliceChunks :=
+      List.map
+        (fun x =>
+          match x with
+          | ⟨c, hc⟩ => ⟨c, ⋯⟩)
+        result.1.attach;
+    ok { chunks := sliceChunks, remainder := ⟨result.2, ⋯⟩ }
+  else fail Error.panic
+@[reducible] def Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact : (T : Type) →
+  core.iter.traits.iterator.Iterator (core.slice.iter.ChunksExact T) (Slice T) :=
+fun T => { next := core.slice.iter.IteratorChunksExact.next }
+def Aeneas.Std.core.num.U64.from_le_bytes : Std.Array U8 8#usize → U64 :=
+fun a => BitVec.cast ⋯ (BitVec.fromLEBytes (List.map U8.bv ↑a))#uscalar
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:13:7: error(lean.unknownIdentifier): Unknown constant `List.perm_swap`
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseAPICheck.lean:14:7: error(lean.unknownIdentifier): Unknown constant `List.Perm.set`
+List.getElem_set.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} {a : α} (h : j < (l.set i a).length) :
+  (l.set i a)[j] = if i = j then a else l[j]
+Aeneas.Std.Array.update_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α)
+  (hbound : ↑i < v.length) : v.update i x ⦃ nv => nv = v.set i x ⦄
+Aeneas.Std.Array.index_usize_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize)
+  (hbound : ↑i < v.length) : v.index_usize i ⦃ x => x = (↑v)[↑i] ⦄

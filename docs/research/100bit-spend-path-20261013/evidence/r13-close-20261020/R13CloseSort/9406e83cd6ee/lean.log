@@ -1,0 +1,35 @@
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseSort.lean:23:43: error: Type mismatch: After simplification, term
+  h
+ has type
+  (do
+      let (s, back) ← lift (Array.to_slice keys, Array.from_slice keys)
+      let s1 ← core.slice.Slice.swap s i j
+      ok (back s1)) =
+    ok out
+but is expected to have type
+  Array.from_slice keys s' = out
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseSort.lean:28:19: error: Ambiguous term
+  dite_true
+Possible interpretations:
+  _root_.dite_true : dite True ?m.154 ?m.155 = ?m.154 True.intro
+  
+  Aeneas.dite_true : dite True ?m.154 ?m.155 = ?m.154 True.intro
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseSort.lean:24:34: error: unsolved goals
+keys out : Keys
+i j : Usize
+n : ℕ
+hn : n ≤ 16
+hi : ↑i < n
+hj : ↑j < n
+h : swapKeys keys i j = ok out
+hlen : (↑keys).length = 16
+s' : Slice U64
+hs' : core.slice.Slice.swap (Array.to_slice keys) i j = ok s'
+hlen' : s'.length = (Array.to_slice keys).length
+hai : (↑s')[↑i]! = (↑(Array.to_slice keys))[↑j]!
+hbj : (↑s')[↑j]! = (↑(Array.to_slice keys))[↑i]!
+hframe : ∀ (i_1 : ℕ), i_1 ≠ ↑i → i_1 ≠ ↑j → (↑s')[i_1]! = (↑(Array.to_slice keys))[i_1]!
+he : Array.from_slice keys s' = out
+hl : (↑s').length = ↑16#usize
+⊢ ↑(if h : True then ⟨↑s', ⋯⟩ else keys) = ↑s'
+'AspisR1Stage2.R13Close.Sort.swap_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

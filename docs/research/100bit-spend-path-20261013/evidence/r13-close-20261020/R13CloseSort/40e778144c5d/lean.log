@@ -1,0 +1,92 @@
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseSort.lean:71:70: error: unsolved goals
+keys : Keys
+j : Usize
+n : ℕ
+hn : n ≤ 16
+hj : ↑j < n
+r : ControlFlow (Keys × Usize) Keys
+h✝⁶ :
+  (if j > 0#usize then do
+      let i ← j - 1#usize
+      let i1 ← verifier.candidate.batch_key_at keys i
+      let i2 ← verifier.candidate.batch_key_at keys j
+      if i1 > i2 then do
+          let (s, to_slice_mut_back) ← lift (Array.to_slice_mut keys)
+          let s1 ← core.slice.Slice.swap s i j
+          have keys1 : Std.Array U64 16#usize := to_slice_mut_back s1
+          ok (cont (keys1, i))
+        else ok (done keys)
+    else ok (done keys)) =
+    ok r
+h✝⁵ : j > 0#usize
+h✝⁴ :
+  (do
+      let i ← j - 1#usize
+      let i1 ← verifier.candidate.batch_key_at keys i
+      let i2 ← verifier.candidate.batch_key_at keys j
+      if i1 > i2 then do
+          let (s, to_slice_mut_back) ← lift (Array.to_slice_mut keys)
+          let s1 ← core.slice.Slice.swap s i j
+          have keys1 : Std.Array U64 16#usize := to_slice_mut_back s1
+          ok (cont (keys1, i))
+        else ok (done keys)) =
+    ok r
+i : UScalar UScalarTy.Usize
+hi : j - 1#usize = ok i
+h✝³ :
+  (do
+      let i1 ← verifier.candidate.batch_key_at keys i
+      let i2 ← verifier.candidate.batch_key_at keys j
+      if i1 > i2 then do
+          let (s, to_slice_mut_back) ← lift (Array.to_slice_mut keys)
+          let s1 ← core.slice.Slice.swap s i j
+          have keys1 : Std.Array U64 16#usize := to_slice_mut_back s1
+          ok (cont (keys1, i))
+        else ok (done keys)) =
+    ok r
+left : U64
+hleft : verifier.candidate.batch_key_at keys i = ok left
+h✝² :
+  (do
+      let i2 ← verifier.candidate.batch_key_at keys j
+      if left > i2 then do
+          let (s, to_slice_mut_back) ← lift (Array.to_slice_mut keys)
+          let s1 ← core.slice.Slice.swap s i j
+          have keys1 : Std.Array U64 16#usize := to_slice_mut_back s1
+          ok (cont (keys1, i))
+        else ok (done keys)) =
+    ok r
+right : U64
+hright : verifier.candidate.batch_key_at keys j = ok right
+hsub :
+  match ok i with
+  | ok z => ↑1#usize ≤ ↑j ∧ ↑j = ↑z + ↑1#usize ∧ z.bv = j.bv - 1#usize.bv
+  | fail e => ↑j < ↑1#usize
+  | x => ⊥
+hi' : ↑i < n
+h✝¹ : left > right
+h✝ :
+  (let (s, to_slice_mut_back) := (Array.to_slice keys, Array.from_slice keys)
+    do
+    let s1 ← core.slice.Slice.swap s i j
+    ok (cont (to_slice_mut_back s1, i))) =
+    ok r
+swapped : Slice U64
+hswap : core.slice.Slice.swap (Array.to_slice keys) i j = ok swapped
+h : ok (cont (Array.from_slice keys swapped, i)) = ok r
+⊢ (let (s, back) := (Array.to_slice keys, Array.from_slice keys)
+    do
+    let s1 ← core.slice.Slice.swap s i j
+    ok (back s1)) =
+    ok (Array.from_slice keys swapped)
+/Users/dominic/ZK/.worktrees/cx-r13-close/docs/research/100bit-spend-path-20261013/lean/R13CloseSort.lean:72:67: warning: This simp argument is unused:
+  hswap
+
+Hint: Omit it from the simp argument list.
+  simp only [swapKeys, Array.to_slice_mut, lift, bind_tc_ok,̵ ̵h̵s̵w̵a̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1Stage2.R13Close.Sort.swap_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1Stage2.R13Close.Sort.inner_body_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1Stage2.R13Close.Sort.inner_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1Stage2.R13Close.Sort.sort_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
