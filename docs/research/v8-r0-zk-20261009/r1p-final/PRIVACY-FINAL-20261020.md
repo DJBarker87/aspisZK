@@ -5,6 +5,13 @@ Frozen verifier: `b2727acd3`, as required by
 `docs/research/100bit-spend-path-20261013/design/LEAD-FREEZE-20261020.md`.
 No existing Lean module or verifier source is edited.
 
+ROM update (2026-10-21): `PrivacyR1Final` now specializes its wire to the
+constructed finite classical ROM, capped at 2^64 calls, and constructs the
+observer map. See [ROM-ROWS-20261021.md](ROM-ROWS-20261021.md) for proofs,
+receipts, and the remaining universal source read-coverage handoff. The
+original no-existing-module-edited statement above describes the 2026-10-20
+composition, before this update.
+
 ## Theorem in words and exact scope
 
 `R1Z.PrivacyR1Final.privacy_R1_final` is one **conditional** endpoint:
@@ -91,8 +98,8 @@ Rust instance of arbitrary W, Pr, h or source. It is a conditional endpoint.
   relation (P`R1Z/PrivacyR1PBin.lean:54`). N=8 and q≤2^64 delimit the claim.
 - **Classical ROM:** finite uniform byte-answer tables and classical observers
   are modelling assumptions. The hash-as-ROM interpretation is accepted,
-  not a theorem about SHA-256 or QROM. A concrete RomModel instance still
-  needs carrier/lookup correspondence as listed below.
+  not a theorem about SHA-256 or QROM. The finite model carrier/lookup correspondence is now constructed in
+  RomFiniteBin; source backend/log correspondence remains open.
 - **Builder model, D46/D51:** BuilderSoundOn is ∀w with h.public w=x.1,
   HonestBuilderSound ... (h.build w) (P`R0Z/HonestValidity.lean:151`). Its
   fields are baseTyped, lanes, helperSum, helperInactive (`:126`). The model
@@ -126,9 +133,9 @@ Rust instance of arbitrary W, Pr, h or source. It is a conditional endpoint.
 |---|---|
 | builder_refinement_D46_D51 | Identify the deployed honest relation/public mapping/π and actual builder with h.build; supply all four BuilderSoundOn fields, including D50's change sentinel on the deployed witness relation. |
 | D, ι, hι, R_wire_Sem1Uniform | SemRows01.sem1 and sem0 on every answer vector (P`R1Z/Sem1UniformR1.lean:38`), injective field/carrier transport, D.s1=s1Spend ι. Source sampler correspondence includes scalar/circle transport, reseed/nonzero-γ and selected query advance. |
-| R_rom_classical | RomModel's full finite address/table equivalence and lookup law on the chosen W (P`R1Z/CouplingR1PBin.lean:115`); source backend matches the common logged oracle. |
-| R_rom_address_domain | RAddrIn for every w/sec/d/answer-vector/position (P`R1Z/CouplingR1PBin.lean:169`), including complete read coverage, not just successful traces. |
-| R_rom_adversary_budget and observer map | qmax≤2^64 and observer-map preservation; R10/R19 designated first-read accounting through both transactions, backend and normalization, including checkpoint/resume hashes outside opening-only comLog. |
+| Constructed ROM (formerly R_rom_classical) | Finite carrier/table equivalence, codec round trips, lookup and lazy uniformity are proved in RomFiniteBin/RomObserverBin and constructed in the endpoint. Source backend/common logged-oracle correspondence remains R10/R-wire. |
+| R_wire_read_coverage (formerly R_rom_address_domain) | RomGrammarBin proves RAddrIn from typed read coverage at every w/sec/d/answer-vector/position, including default/exhausted tapes and the frozen public digest. Source must supply public width and full typed membership, including complete source read inventory beyond opening-only comLog. |
+| Constructed cap/observer map (formerly R_rom_adversary_budget and observer map) | qmax=2^64, adaptive call-count bound and full-ROMView observer preservation are proved; observer_program supplies the operational program. Source ScanCoupling/R10/R19 accounting through both transactions, backend, normalization and checkpoint/resume remains open. |
 | R_causal_D80 | D80 Earlier form of RCausal at all counterfactual answer vectors (P`R1Z/CausalPremisesR1PBin.lean:19,23`): instantiate Pr.ord, children before parents/roots, row-2 C2 and row-30 folded absorbs after roots; prove all tape/leafVal/outputs/challenge and secret-record dependencies. Root AddressAt plus child-predecessor facts suffice for its root component (`:45`). Successful-cut word stability under collision exclusion is weaker. |
 | R_commit_D80.roots/nodes | AddressAt for all three roots/internal binary parents, child order, padded folded geometry, byte carrier and D81 grammar. Do not substitute eight-way C2 recovery for binary recovery. |
 | R_commit_D80.leaves | Exact 0x71/0xf1/0x72 tags, packed leafVal/trailing salt, private-leaf backend and byte/digest conversions, on the actual prover tree. |

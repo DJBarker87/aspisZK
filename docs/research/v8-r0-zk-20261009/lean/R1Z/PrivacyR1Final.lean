@@ -1,6 +1,8 @@
 import R1Z.PrivacyPremisesBin
 import R1Z.SharedGrammarBridgeBin
 import R1Z.QueryScanPrivacyFinal
+import R1Z.RomGrammarBin
+import R1Z.RomObserverBin
 
 /-! Final conditional privacy statement for the adopted binary format.
 The source experiments remain parameters: their operational handoff (including
@@ -98,13 +100,19 @@ theorem deployed_exact_error (W : R1Wire K CommitHandle Aux)
   rw [modelError, n1_worst_case W Pr hE₁ hE₂, hq]
   norm_num only [εexhP, Nat.cast_ofNat, Nat.cast_mul, Nat.cast_pow]
 
+section ChosenROM
+variable (base : R1Wire K CommitHandle Aux) (publicWidth : ℕ)
+local notation "W" => RomFiniteBin.wire base (RomGrammarBin.bound publicWidth)
+
 /-- ONE composed endpoint. The two ScanCoupling hypotheses are the source
 handoffs: real includes builder/checker/retry/publication correctness; ideal
 includes the Rust sim_e/programmed-oracle correspondence. They permit only
 QueryScan disagreement and require its actual reached-history law.
-All other Semantic errors must be impossible or agree in those handoffs. -/
+All other Semantic errors must be impossible or agree in those handoffs.
+The table backend, query cap and Boolean observer map are constructed here;
+the source supplies typed read coverage and its operational query program. -/
 theorem privacy_R1_final
-    (W : R1Wire K CommitHandle Aux) (Pr : R1ProverP K CommitHandle Aux F W)
+    (Pr : R1ProverP K CommitHandle Aux F W)
     (h : HonestProver K) (B : PackBasis F) (hB : R0Z.K4.PackField B)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
     (x : Statement K CommitHandle) (hpub : PublicBase F x.1)
@@ -112,8 +120,7 @@ theorem privacy_R1_final
     (D : SemRows01 W)
     (ι : R1J.SamplerLawSpend.QF → K) (hι : Function.Injective ι)
     (R_wire_Sem1Uniform : D.s1 = R1J.SamplerLawSpend.s1Spend ι)
-    (R_rom_classical : RomModel W)
-    (R_rom_address_domain : ∀ w : h.Instance, RAddrIn W Pr R_rom_classical h B outputs x w)
+    (R_wire_read_coverage : RomGrammarBin.ReadCoverage W Pr publicWidth h B outputs x)
     (R_causal_D80 : ∀ (w : h.Instance) sec d p v v', Earlier W Pr p v v' →
       attAddr W Pr h B outputs x w sec d v p = attAddr W Pr h B outputs x w sec d v' p)
     (R_commit_D80 : RCommitSource W Pr) (cF : ℕ)
@@ -123,35 +130,40 @@ theorem privacy_R1_final
     (L₁ L₂ : ℕ) (R_commit_exhaustion : RExh Pr L₁ L₂)
     (R_commit_counter₁ : Pr.E₁ ≤ 2^64) (R_commit_counter₂ : Pr.E₂ ≤ 2^64)
     (R_commit_stream₁ : 16 * L₁ ≤ Pr.E₁ * 8) (R_commit_stream₂ : 16 * L₂ ≤ Pr.E₂ * 8)
-    (R_wire_coin_carrier : W.Cm ≃ (RIdx → OracleAnswer))
+    (R_wire_coin_carrier : (W).Cm ≃ (RIdx → OracleAnswer))
     (R_wire_D80_batches : RWireBatches W Pr)
     (R_wire_D80_ordered_log : ∀ (w : h.Instance) (sec : SecP) (d : OracleAnswer)
       (τ : Tape K F) (roots : Fin 3 → OracleAnswer) (rest : RIdx → OracleAnswer) (ch : Challenges K),
-      W.comLog (R_wire_coin_carrier.symm rest) roots (view h B outputs x w ch τ) ch =
+      (W).comLog (R_wire_coin_carrier.symm rest) roots (view h B outputs x w ch τ) ch =
         (Pr.openList ch).map (fun c =>
-          (gram (W.pubBytes x) W.vtag (Pr.leafVal h w x τ ch) sec d rest
+          (gram ((W).pubBytes x) (W).vtag (Pr.leafVal h w x τ ch) sec d rest
             (cposOf (E₁ := Pr.E₁) (E₂ := Pr.E₂) c), ansC roots rest c)))
     (R_commit_cell_count : RCommitCount L₁ L₂)
     (R_commit_blocks₁ : Pr.E₁ ≤ 2 * L₁) (R_commit_blocks₂ : Pr.E₂ ≤ 2 * L₂)
-    (R_rom_adversary_budget : W.qmax ≤ 2^64)
     (source : FSExperiments K CommitHandle Aux R1Bat F)
     [Fintype source.RealRand] [Nonempty source.RealRand]
     [Fintype source.IdealRand] [Nonempty source.IdealRand]
-    (adversary : source.Adversary → (fsR1P W Pr 8 (by decide)
-      (P_R1 h.transport B hB) (fun h' => VR1 h')).Adversary)
+    (observer_program : source.Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
     (R_wire_builder_checker_D75_retry : ∀ (adv : source.Adversary) (w : h.Instance),
       h.public w = x.1 → ScanCoupling
         (realTest h B outputs source adv x w)
         (realTest h B outputs (fsR1P W Pr 8 (by decide)
-          (P_R1 h.transport B hB) (fun h' => VR1 h')) (adversary adv) x w))
+          (P_R1 h.transport B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w))
     (G_sim_R_wire : ∀ adv : source.Adversary, ScanCoupling
       (idealTestS source adv x (simE h.transport B outputs x))
       (idealTestS (fsR1P W Pr 8 (by decide) (P_R1 h.transport B hB) (fun h' => VR1 h'))
-        (adversary adv) x (simE h.transport B outputs x))) :
+        (RomObserverBin.observerMap source observer_program adv) x (simE h.transport B outputs x))) :
     ZK_FSS h B outputs source x (simE h.transport B outputs x)
       (modelError W Pr L₁ L₂ + 16 / (2 : ℚ)^486) ∧
     modelError W Pr L₁ L₂ + 16 / (2 : ℚ)^486 ≤
       1 / 2^109 + 1 / 2^137 + 1 / 2^454 := by
+  let R_rom_classical : RomModel W := RomFiniteBin.rom base (RomGrammarBin.bound publicWidth)
+  have R_rom_address_domain : ∀ w : h.Instance,
+      RAddrIn W Pr R_rom_classical h B outputs x w :=
+    RomGrammarBin.address_domain base publicWidth Pr h B outputs x R_wire_read_coverage
+  have R_rom_adversary_budget : (W).qmax ≤ 2^64 :=
+    RomFiniteBin.adversary_budget base (RomGrammarBin.bound publicWidth)
   have hb := commit_source W Pr R_commit_D80
   have hc : ∀ w : h.Instance, RCausal W Pr h B outputs x w :=
     fun w => (causal_iff W Pr h B outputs x w).mpr (R_causal_D80 w)
@@ -173,18 +185,18 @@ theorem privacy_R1_final
       (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) (fun _ => ⟨bit_nonneg _, bit_le_one _⟩)
     have hi := scan_coupling_le _ _ (G_sim_R_wire adv)
       (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) (fun _ => ⟨bit_nonneg _, bit_le_one _⟩)
-    have hmid := hm (adversary adv) w hw
+    have hmid := hm (RomObserverBin.observerMap source observer_program adv) w hw
     have t₁ := abs_sub_le
       (mean (realTest h B outputs source adv x w))
       (mean (realTest h B outputs (fsR1P W Pr 8 (by decide)
-        (P_R1 h.transport B hB) (fun h' => VR1 h')) (adversary adv) x w))
+        (P_R1 h.transport B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w))
       (mean (idealTestS (fsR1P W Pr 8 (by decide)
-        (P_R1 h.transport B hB) (fun h' => VR1 h')) (adversary adv) x
+        (P_R1 h.transport B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x
           (simE h.transport B outputs x)))
     have t₂ := abs_sub_le
       (mean (realTest h B outputs source adv x w))
       (mean (idealTestS (fsR1P W Pr 8 (by decide)
-        (P_R1 h.transport B hB) (fun h' => VR1 h')) (adversary adv) x
+        (P_R1 h.transport B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x
           (simE h.transport B outputs x)))
       (mean (idealTestS source adv x (simE h.transport B outputs x)))
     rw [abs_sub_comm] at hi
@@ -193,12 +205,14 @@ theorem privacy_R1_final
          _ = _ := by ring
   · have he := R1Z.PrivacyBoundR1PBin.binary_exhaustion_le W Pr L₁ L₂
       R_commit_cell_count R_commit_blocks₁ R_commit_blocks₂
-    have hn := R1Z.GamesR1PBin.binary_games_error_le W Pr L₁ L₂ W.qmax
+    have hn := R1Z.GamesR1PBin.binary_games_error_le W Pr L₁ L₂ (W).qmax
       (εexhP 8 L₁ L₂ (8 * n1 W Pr)) R_commit_cell_count R_commit_blocks₁ R_commit_blocks₂
       R_rom_adversary_budget he
     have hn' : modelError W Pr L₁ L₂ ≤ 1 / 2^109 + 1 / 2^137 := by
       simpa only [modelError, Nat.cast_ofNat, Nat.cast_pow, Nat.cast_zero, pow_two, zero_mul, zero_div] using hn
     linarith [query_error_le]
+
+end ChosenROM
 
 #print axioms commit_source
 #print axioms wire_batches
