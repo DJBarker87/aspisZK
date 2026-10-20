@@ -55,3 +55,34 @@ exit 0, 2.27s, 3522128 KiB, zero swaps, only the standard three axioms.
 Replacing this branch's new shared module snapshots its source/object under
 `aspis-joint-20261019/snapshots/codex-cx-priv-phase2-20261021/<attempt>`;
 no pre-existing shared module is replaced.
+
+## Stage 3: logical message encoder and phase inhabitant
+
+`PhaseMessageEncodingBin` selects the actual cells of JointView.view: maskSum,
+ten semantic coefficient vectors, three point-claim vectors plus extra claims,
+OOD0/1, inactive claim, R1 round0/1, final64. C2 is supplied only at row2;
+the folded root only at row30. The arbitrary metadata/Aux output is never
+passed to the encoder. `auxiliary_irrelevant` proves this for the entire
+encoded transcript, not just its early bytes. Frame/payload/final locality
+and `phaseWire` compile. `wideBytes` reuses FoldedLeafCodec.encodeWide;
+`encoded` reuses FixedWidthDecoder.encode; `framed` reuses RecordFrameCodec.
+The abstract field-encoder version permits reusable dependency proofs;
+wideBytes is the explicit exact-wide specialization, not a new field codec.
+
+The existing codec objects were missing in env J. Attempts 9405–9417 compile
+13 unchanged existing source modules, individually in dependency order, with
+full evidence and original source paths. Their sources were not edited or
+added to the branch. They were absent from the shared objects tree; any
+existing shared sources/objects were snapshotted by the runner before upload.
+The runner now resolves imports using the actual env-J object search paths
+and can read unchanged spend-path dependencies. The initial 9404 preflight
+failed on a missing object before invoking the launcher (no compile occurred).
+
+9418 exposed broad congruence trying to unfold finite encodings. Replaced it
+with explicit congrArg applications and kept encoded/framed locally opaque;
+no resource settings were raised. 9419 passes all 11 new audits: exit 0,
+3.60s, 3542044 KiB, zero swaps, standard axioms only. The other failed
+diagnostics remain in the evidence and are not counted as proof results.
+
+This closes message locality for the constructed model. It supplies no
+equality between that model and the final theorem's arbitrary `base`.

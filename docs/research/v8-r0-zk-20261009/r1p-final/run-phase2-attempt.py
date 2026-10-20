@@ -5,14 +5,28 @@ attempt = int(sys.argv[1]); module = sys.argv[2]
 assert 9400 <= attempt <= 9599
 root = pathlib.Path(__file__).resolve().parents[1]
 src = root / 'lean' / (module + '.lean')
+if not src.exists():
+    spend = root.parent / '100bit-spend-path-20261013/lean'
+    src = spend / (module + '.lean')
+    if not src.exists() and module.startswith('R1'):
+        src = spend / (module[2:] + '.lean')
+assert src.is_file(), src
 remote = 'dombarker@100.108.41.90'
 j = '/home/dombarker/project-offloads/aspis-joint-20261019'
 t = '/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence'
 h = '/home/dombarker/project-offloads/r1-privacy-build-integration-20261019'
 imports = re.findall(r'^import (\S+)', src.read_text(), re.M)
-mathlib = '/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib/.lake/build/lib/lean'
-cmd = ['sha256sum ' + (mathlib if x.startswith('Mathlib.') else j + '/objects') + '/' + x.replace('.', '/') + '.olean' for x in sorted(imports)]
-deps = subprocess.check_output(['ssh', remote, 'set -e\n' + '\n'.join(cmd)], text=True)
+lookup = """import pathlib, json, subprocess
+j = pathlib.Path('/home/dombarker/project-offloads/aspis-joint-20261019/objects')
+e = json.loads(pathlib.Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json').read_text())
+paths = [j] + [pathlib.Path(p) for p in e['LEAN_PATH'].split(':')]
+for m in IMPORTS:
+    found = next((p / (m.replace('.', '/') + '.olean') for p in paths if (p / (m.replace('.', '/') + '.olean')).exists()), None)
+    if found is None: raise SystemExit('missing dependency object: ' + m)
+    print(subprocess.check_output(['sha256sum', str(found)], text=True).strip())
+""".replace('IMPORTS', repr(sorted(imports)))
+import shlex
+deps = subprocess.check_output(['ssh', remote, 'python3 -c ' + shlex.quote(lookup)], text=True)
 fp = hashlib.sha256(deps.encode()).hexdigest()[:16]
 exists = subprocess.run(['ssh', remote, 'test -e ' + j + '/sources/' + module + '.lean']).returncode == 0
 if exists:
@@ -30,7 +44,7 @@ def val(pat):
     return m.group(1) if m else None
 r = dict(attempt=attempt, module=module, env='J', source_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),
          source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
-         deps_fingerprint=fp, dependency_objects=deps.splitlines(),
+         deps_fingerprint=fp, dependency_objects=deps.splitlines(), source_path=str(src),
          exit=int(re.search(r'exit=(\d+)', out)[1]), wall=val(r'Elapsed.*: (\S+)'),
          peak_rss_kib=val(r'Maximum resident set size \(kbytes\): (\d+)'), swaps=val(r'Swaps: (\d+)'),
          output=out, timing=time, launcher=p.stdout)
