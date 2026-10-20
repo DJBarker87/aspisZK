@@ -1,0 +1,132 @@
+#!/usr/bin/env python3
+"""Config-driven R1 devnet setup and spends; wallet files stay in host keys/.
+Run inside r1_devnet_receipt.sh and the documented capped scope.
+"""
+import base64,json,os,pathlib,subprocess,sys,time,hashlib
+from r1_devnet_rpc import rpc
+C=json.load(open(sys.argv[1]));O=pathlib.Path(sys.argv[2]);O.mkdir(exist_ok=True,mode=0o700)
+URL=C['rpc_url'];SIGNER=C.get('signer','native-target/release/devnet_spend')
+CLI=pathlib.Path.home()/'.local/share/solana/install/active_release/bin'
+SYSTEM='11111111111111111111111111111111';TOKEN='TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'
+def write(name,v):
+    p=O/(name+'.json');p.write_text(json.dumps(v,indent=2)+'\n')
+def key(name):
+    p=pathlib.Path('keys')/(name+'.json')
+    if not p.exists():subprocess.run([str(CLI/'solana-keygen'),'new','--no-bip39-passphrase','--silent','-o',str(p)],stdout=subprocess.DEVNULL,check=True)
+    os.chmod(p,0o600)
+    return str(p),subprocess.check_output([str(CLI/'solana-keygen'),'pubkey',str(p)],text=True).strip()
+def account(address):
+    a=rpc(URL,'getAccountInfo',[address,{'encoding':'base64','commitment':'finalized'}])
+    return a
+
+def invoke(q):return json.loads(subprocess.check_output([SIGNER],input=json.dumps(q).encode()))
+def send(name,ixs,keys=['keys/payer.json'],negative=False):
+    done=O/(name+'.json')
+    if done.exists():
+        old=json.load(open(done))
+        if old.get('finalized'):return old
+        raise RuntimeError(f'{name}: prior incomplete transaction; inspect attempt signatures before resuming')
+    start=time.monotonic()
+    for attempt in range(3):
+        bh=rpc(URL,'getLatestBlockhash',[{'commitment':'confirmed'}])['value']
+        signed=invoke({'keys':keys,'instructions':ixs,'blockhash':bh['blockhash']})
+        wire=base64.b64encode(bytes.fromhex(signed['hex'])).decode();sig=signed['signature']
+        simulation=rpc(URL,'simulateTransaction',[wire,{'encoding':'base64','sigVerify':True,'commitment':'confirmed'}]);write(f'{name}-attempt-{attempt}-simulation',simulation)
+        simerr=simulation['value']['err']
+        if bool(simerr)!=negative:raise RuntimeError(f'{name} unexpected simulation: {simulation}')
+        write(f'{name}-attempt-{attempt}',{'signature':sig,'blockhash':bh,'simulation_error':simerr,'serialized_bytes':signed['bytes']})
+        try:
+            sent=rpc(URL,'sendTransaction',[wire,{'encoding':'base64','skipPreflight':negative,'maxRetries':5,'preflightCommitment':'confirmed'}]);assert sent==sig
+        except Exception as e:
+            write(f'{name}-attempt-{attempt}-send-error',{'error':str(e)})
+        while True:
+            status=rpc(URL,'getSignatureStatuses',[[sig],{'searchTransactionHistory':True}])['value'][0]
+            if status and status['confirmationStatus']=='finalized':break
+            if not status and rpc(URL,'getBlockHeight',[{'commitment':'finalized'}])>bh['lastValidBlockHeight']:break
+            time.sleep(2)
+        if not status:continue
+        tx=None
+        for _ in range(10):
+            tx=rpc(URL,'getTransaction',[sig,{'encoding':'json','commitment':'finalized','maxSupportedTransactionVersion':1}])
+            if tx:break
+            time.sleep(2)
+        if not tx:raise RuntimeError('finalized tx metadata unavailable')
+        write(name+'-transaction',tx)
+        result={'signature':sig,'explorer':f'https://explorer.solana.com/tx/{sig}?cluster=devnet','slot':tx['slot'],'compute_units':tx['meta'].get('computeUnitsConsumed'),'fee':tx['meta']['fee'],'error':tx['meta']['err'],'wall_seconds':time.monotonic()-start,'serialized_bytes':signed['bytes'],'finalized':True,'negative':negative}
+        write(name,result)
+        if bool(result['error'])!=negative:raise RuntimeError(f'{name} unexpected finalized result: {result}')
+        print(name,json.dumps(result),flush=True);return result
+    raise RuntimeError(f'{name}: blockhash expiry attempt cap reached')
+def ix(program,accounts,data):return {'program':program,'accounts':accounts,'data':data.hex()}
+def create(name,address,owner,size,signer):
+    if account(address)['value'] is not None:return
+    rent=rpc(URL,'getMinimumBalanceForRentExemption',[size])
+    data=(0).to_bytes(4,'little')+rent.to_bytes(8,'little')+size.to_bytes(8,'little')+b58(owner)
+    return send(name,[ix(SYSTEM,[[C['payer'],True,True],[address,True,True]],data)],['keys/payer.json',signer])
+def b58(s):
+    alphabet='123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';n=0
+    for x in s:n=n*58+alphabet.index(x)
+    return b'\0'*(len(s)-len(s.lstrip('1')))+n.to_bytes((n.bit_length()+7)//8,'big')
+def plan(action,**kw):return invoke({**C['programs'],'payer':C['payer'],'mint':mint,'action':action,**kw})
+def readhex(address,owner):
+    a=account(address);assert a['value'] and a['value']['owner']==owner and not a['value']['executable']
+    return base64.b64decode(a['value']['data'][0]).hex()
+def upload(label,address,path,body):
+    stats=[]
+    for i,start in enumerate(range(0,len(body),3763)):
+        stats.append(send(f'{label}-{i}',[ix(C['carrier'],[[address,True,True]],start.to_bytes(4,'little')+body[start:start+3763])],['keys/payer.json',path]))
+    actual=bytes.fromhex(readhex(address,C['carrier']));assert actual==body
+    result={'count':len(stats),'compute_units':sum(s['compute_units'] for s in stats),'transaction_wall_seconds':sum(s['wall_seconds'] for s in stats),'sha256':hashlib.sha256(body).hexdigest()};write(label+'-summary',result);return result
+
+assert rpc(URL,'getGenesisHash',[])==C['genesis_hash']
+assert 'carrier' in C,'deploy and pin the raw-buffer carrier before setup'
+mintkey,mint=key('spend-mint');sourcekey,source=key('spend-source');destkey,dest=key('spend-destination');govkey,gov=key('spend-governance')
+# This demonstration deliberately uses public fixture note witnesses; it measures R1, not wallet secrecy.
+create('mint-create',mint,TOKEN,82,mintkey)
+if not (O/'mint-initialize.json').exists():send('mint-initialize',[ix(TOKEN,[[mint,False,True]],bytes([20,6])+b58(C['payer'])+bytes([0]))])
+for label,address,path in [('source',source,sourcekey),('destination',dest,destkey)]:
+    create(label+'-create',address,TOKEN,165,path)
+    send(label+'-initialize',[ix(TOKEN,[[address,False,True],[mint,False,False]],bytes([18])+b58(gov))])
+send('mint-supply',[ix(TOKEN,[[mint,False,True],[source,False,True],[C['payer'],True,False]],bytes([7])+(2000).to_bytes(8,'little'))])
+slot=rpc(URL,'getSlot',[{'commitment':'finalized'}]);setupfile=O/'setup-plan.json'
+if setupfile.exists():setup=json.load(open(setupfile))
+else:
+    setup=plan('setup',funding_payer=C['payer'],governance=gov,activation_slot=slot+100,registry_hash=C['release_artifacts']['registry']['sha256'],verifier_hash=C['release_artifacts']['devnet_verifier']['sha256']);write('setup-plan',setup)
+send('pool-initialize',[setup['initialize']])
+send('registry-initialize',[setup['registry_initialize']],['keys/payer.json',govkey])
+if not (O/'registry-schedule.json').exists():
+    activation=rpc(URL,'getSlot',[{'commitment':'confirmed'}])+100
+    setup=plan('setup',funding_payer=C['payer'],governance=gov,activation_slot=activation,registry_hash=C['release_artifacts']['registry']['sha256'],verifier_hash=C['release_artifacts']['devnet_verifier']['sha256']);setup['activation_slot']=activation;write('setup-plan',setup)
+send('registry-schedule',[setup['schedule']],['keys/payer.json',govkey])
+while rpc(URL,'getSlot',[{'commitment':'finalized'}])<setup['activation_slot']:time.sleep(2)
+send('registry-activate',[setup['activate']],['keys/payer.json',govkey])
+send('registry-freeze',[setup['freeze']],['keys/payer.json',govkey])
+deposits=[]
+for n in range(2):
+    d=plan('deposit',note=n,source=source,token_owner=gov,genesis=True)
+    # The second note may land in the same lane; then use its existing root page.
+    if account(d['page'])['value'] is not None:d=plan('deposit',note=n,source=source,token_owner=gov,genesis=False)
+    write(f'deposit-{n}-plan',d);send(f'deposit-{n}',[d['instruction']],['keys/payer.json',govkey]);deposits.append(d)
+cp=plan('checkpoint',sequence=0);send('forest-checkpoint',[cp['instruction']]);write('forest-checkpoint-plan',cp)
+for n,label in enumerate(['transfer','withdrawal']):
+    proofkey,proofaccount=key(label+'-proof');publickey,publicaccount=key(label+'-public');cpkey,verifiercp=key(label+'-checkpoint')
+    saved=O/(label+'-proof-plan.json')
+    if saved.exists():p=json.load(open(saved))
+    else:
+        p=plan('prove',note=n,withdrawal=n==1,destination=dest,checkpoint=cp['checkpoint'],lane_bytes=readhex(deposits[n]['output_lane'],C['programs']['pool']),checkpoint_bytes=readhex(cp['checkpoint'],C['programs']['pool']),proof_dir=str(O/(label+'-proof-private')),proof_account=proofaccount,public_account=publicaccount,verifier_checkpoint=verifiercp);write(label+'-proof-plan',p)
+    proof=(O/(label+'-proof-private')/'proof.bin').read_bytes();public=(O/(label+'-proof-private')/'statement.bin').read_bytes()
+    create(label+'-proof-create',proofaccount,C['carrier'],len(proof),proofkey);create(label+'-public-create',publicaccount,C['carrier'],len(public),publickey)
+    t=time.monotonic();upload(label+'-proof-upload',proofaccount,proofkey,proof);upload(label+'-statement-upload',publicaccount,publickey,public);write(label+'-uploads-phase',{'wall_seconds':time.monotonic()-t,'proof_count':16,'statement_count':1})
+    create(label+'-checkpoint-create',verifiercp,C['programs']['verifier'],1768,cpkey)
+    send(label+'-stage1',[p['stage1']]);send(label+'-stage2',[p['settle']])
+    readback={a:account(a) for a in [p['marker'],p['output_lane'],setup['vault'],dest,verifiercp]};write(label+'-readback',readback)
+    assert readback[p['marker']]['value'] is not None,'settled nullifier marker missing'
+    send(label+'-replay',[p['settle']],negative=True)
+    negkey,negcp=key(label+'-negative-checkpoint');create(label+'-negative-checkpoint-create',negcp,C['programs']['verifier'],1768,negkey)
+    # Mutate the compact proof header, leaving candidate bytes intact, and use a fresh checkpoint.
+    offset=len(proof)-57607
+    send(label+'-mutate-proof',[ix(C['carrier'],[[proofaccount,True,True]],offset.to_bytes(4,'little')+bytes([proof[offset]^1]))],['keys/payer.json',proofkey])
+    negstage=json.loads(json.dumps(p['stage1']));negstage['accounts'][2][0]=negcp
+    send(label+'-mutated-stage1',[negstage],negative=True)
+    send(label+'-restore-proof',[ix(C['carrier'],[[proofaccount,True,True]],offset.to_bytes(4,'little')+proof[offset:offset+1])],['keys/payer.json',proofkey])
+write('complete',{'settled':['transfer','withdrawal'],'negative_checks':['transfer-replay','withdrawal-replay','transfer-mutated-stage1','withdrawal-mutated-stage1'],'mint':mint,'source':source,'destination':dest,'fixture_witnesses_public':True})
