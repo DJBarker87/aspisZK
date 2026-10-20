@@ -1,0 +1,58 @@
+import R1FixedWidthDecoder
+import BinLeafListWork
+
+/-! Bounded structural work for the public codec's repeated fixed-width
+cursor. The element decoder is a separate primitive/mirror. This counts
+copies, drops, branch tests and retained Fin.cons closures. Later accesses to
+the function-valued output must be charged by the consuming caller. -/
+set_option autoImplicit false
+namespace AspisR1.FixedWidthDecoderWork
+abbrev Byte := BinMerkle32Path.Byte
+
+def decode {A : Type} (d : List Byte → Option A × Nat) (k : Nat) :
+    (n : Nat) → List Byte → Option (Fin n → A) × Nat
+  | 0, bytes => (if bytes.isEmpty then some Fin.elim0 else none, 1)
+  | n + 1, bytes =>
+    let packed := BinLeafListWork.take k bytes
+    let head := d packed.1
+    match head.1 with
+    | none => (none, packed.2 + head.2 + 1)
+    | some a =>
+      let suffix := BinLeafListWork.drop k bytes
+      let tail := decode d k n suffix.1
+      (tail.1.map (Fin.cons a), packed.2 + head.2 + suffix.2 + tail.2 + 3)
+
+theorem value {A : Type} (d : List Byte → Option A × Nat) (k n : Nat)
+    (bytes : List Byte) :
+    (decode d k n bytes).1 = FixedWidthDecoder.decode (fun bs => (d bs).1) k n bytes := by
+  induction n generalizing bytes with
+  | zero => cases bytes <;> rfl
+  | succ n ih =>
+    simp only [decode, BinLeafListWork.take_value, BinLeafListWork.drop_value,
+      FixedWidthDecoder.decode]
+    cases h : (d (bytes.take k)).1 with
+    | none => simp only [Option.bind_none]
+    | some a =>
+      simp only [ih, Option.bind_some]
+      cases ht : FixedWidthDecoder.decode (fun bs => (d bs).1) k n (bytes.drop k) <;> rfl
+
+/-- The primitive bound is required only on the capped prefix handed to it.
+Every failure and the end-of-input test are counted. -/
+theorem work {A : Type} (d : List Byte → Option A × Nat) (k n c : Nat)
+    (hd : ∀ bs, bs.length ≤ k → (d bs).2 ≤ c) (bytes : List Byte) :
+    (decode d k n bytes).2 ≤ n * (3*k+c+5) + 1 := by
+  induction n generalizing bytes with
+  | zero => simp only [decode, Nat.zero_mul, Nat.zero_add, Nat.le_refl]
+  | succ n ih =>
+    have hp := BinLeafListWork.take_work k bytes
+    have hs := BinLeafListWork.drop_work k bytes
+    have hh := hd (BinLeafListWork.take k bytes).1 (by
+      rw [BinLeafListWork.take_value]
+      exact List.length_take_le _ _)
+    have ht := ih (BinLeafListWork.drop k bytes).1
+    simp only [decode]
+    split <;> dsimp only <;> rw [Nat.add_mul, Nat.one_mul] <;> omega
+
+#print axioms value
+#print axioms work
+end AspisR1.FixedWidthDecoderWork

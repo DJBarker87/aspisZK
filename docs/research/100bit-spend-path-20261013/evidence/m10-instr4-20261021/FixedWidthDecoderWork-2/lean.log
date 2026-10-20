@@ -1,0 +1,28 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr4/docs/research/100bit-spend-path-20261013/lean/FixedWidthDecoderWork.lean:34:11: error: unsolved goals
+case succ.none
+A : Type
+d : List Byte → Option A × ℕ
+k n : ℕ
+ih : ∀ (bytes : List Byte), (decode d k n bytes).1 = FixedWidthDecoder.decode (fun bs => (d bs).1) k n bytes
+bytes : List Byte
+h : (d (List.take k bytes)).1 = none
+⊢ none = do
+    let head ← none
+    let tail ← FixedWidthDecoder.decode (fun bs => (d bs).1) k n (List.drop k bytes)
+    pure (Fin.cons head tail)
+/Users/dominic/ZK/.worktrees/cx-m10-instr4/docs/research/100bit-spend-path-20261013/lean/FixedWidthDecoderWork.lean:34:25: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr4/docs/research/100bit-spend-path-20261013/lean/FixedWidthDecoderWork.lean:36:21: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [ih,̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FixedWidthDecoderWork.value' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.FixedWidthDecoderWork.work' depends on axioms: [propext, Quot.sound]
