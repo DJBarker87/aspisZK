@@ -100,6 +100,13 @@ Checked results, for an arbitrary slot list (hence symbolic depth):
   log strictly before the first committed-root frame.
 * `recorded_log` identifies that trace with the self-recorder's returned log.
 
+`OracleDecisionFeasibilityBridge` additionally proves
+`opening_reads_compiled` and `compiled_leaf_determined` for the **actual
+compiled experiment shape**, with arbitrary `buildWords`. Thus recovery is
+not confined to a detached toy log or to the self-recording wrapper.
+`single_path_budget` proves the existing total first-read envelope for one
+path of depth ≤599 (including depth18), given the adversary issued-query bound.
+
 Remaining hypotheses are explicit: the committed frame was read; one of the
 five existing parsers extracts the claimed root from it; packed width and salt
 length are correct; the first-read budget holds; the existing
@@ -223,3 +230,52 @@ No premise is removed or replaced from any existing theorem signature. The
 endpoint signature diff is empty: no before/after deletion is claimed. Prototype
 lemmas have their own explicit assumptions; they are not premise removals from
 R19. In particular collision exclusion remains necessary.
+
+
+Focused verification used the prescribed Lean 4.32 executable, `-j1 -M4400
+-DElab.async=false`, a private `/tmp/codex-cx-oracle-dec-20261021-objects`
+overlay, the pinned local search path, the shared mkdir lock and a process
+gate. Each target ran separately under `/usr/bin/time -l`. No package build,
+large numeral reduction, certificate regeneration or full frozen-manifest
+rerun was needed for this study. This is cache-based focused evidence, not a
+new clean unified-release claim (the D63 coherence distinction applies).
+
+| Final target | Attempt | Exit | Wall seconds | Peak RSS bytes | Swaps | Axioms audits |
+|---|---:|---:|---:|---:|---:|---:|
+| `OracleDecisionFeasibilityCore` | 1 | 0 | 5.483 | 3102507008 | 0 | 5 |
+| `OracleDecisionFeasibilityCompiler` | 4 | 0 | 9.300 | 3109928960 | 0 | 9 |
+| `OracleDecisionFeasibilityBudget` | 3 | 0 | 7.580 | 3643326464 | 0 | 4 |
+| `OracleDecisionFeasibilityMerkle` | 1 | 0 | 19.749 | 3624960000 | 0 | 7 |
+| `OracleDecisionFeasibilityBridge` | 2 | 0 | 4.008 | 3622174720 | 0 | 3 |
+
+All 28 new theorems have explicit `#print axioms` reports, with only subsets
+of `{propext, Classical.choice, Quot.sound}` in their final green attempts.
+Every attempt's exact target/argv, source revision, source SHA256, source
+snapshot, direct-import paths/SHA256s, dependency fingerprint, exit, wall time,
+RSS, swaps, full wrapped axiom lines and diagnostics are retained under
+`evidence/oracle-dec-20261021/`; `manifest.json` indexes the receipts.
+Revision denotes the Git parent at launch; the exact working source is pinned
+by its hash and snapshot, so subsequent stage commits do not obscure the input.
+`audit.json`/`audit.py` verify current source equality with green receipts,
+current direct-import hashes, all theorem audits and the no-existing-module
+change rule without rerunning Lean.
+
+There were ten actual compilations: six successful (including a superseded
+seven-theorem compiler checkpoint) and four local elaboration failures.
+Compiler attempt 2 needed qualified experiment names; budget attempts 1/2
+needed an open-command fix, qualified recursive definition, pair refinement
+and projection simplification; bridge attempt 1 needed a list type annotation.
+Each repair changed the source before recompiling. Error-recovery `sorryAx`
+reports in failed logs are preserved as diagnostics and are not accepted
+proofs. Compiler attempt 1 was cancelled before Lean launch while narrowing
+the launcher's process match; its prelaunch receipt has null resource fields.
+No compile failed for memory, no cap was raised, and all measured swaps were
+zero. Final peak RSS across attempts was 3,643,326,464 bytes.
+
+Completed: exact embedding, effectful compiler replay, declared query-budget
+condition, full declaration audit, generic-depth leaf recovery and compiled-run
+bridge, recommendation and port estimate. Still proposed: the production
+migration, concrete decision parsing/multiproof implementation, sharp full
+budget, zero terminal decoder starts, the new log-size envelope, and the
+remaining source joins. These are follow-on work, not unfinished feasibility
+proofs or a claimed endpoint improvement.
