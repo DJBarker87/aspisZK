@@ -271,3 +271,19 @@ R16 — the decoder/decision instance must come from the stage-1 + stage-2
 extractions (R14 refinement, R-wire). Remaining field groups: transcript,
 checkpoint (R15), reader, pairing, accumulator and the semantic endpoints.
 R16 stays OPEN; this table is the working list for closing it.
+
+## Addendum (2026-10-20): R10 stage 2 and cross-transaction consistency
+
+Codex job cx-log-tx2 (1d973fd4d): the three resume digest witnesses and the
+conditional tx2 log assembly are proved; tx1/tx2 shared-oracle log
+consistency is proved through a common byte interface; the checkpoint
+digest linkage is stated with explicit frozen-writer/provenance premises
+(the parked tx1_finish writer agreement is cited as a named premise until
+the next freeze); five modules, 17 audits, standard axioms
+(`design/LOG-TX2-20261020.md`). A direct combined import of the stage-1 and
+stage-2 generated modules fails on a generated instance-name collision
+(evidence retained) — the combination goes through the byte interface for
+now; the collision is an extraction-hygiene item for the next freeze. R10
+stays conditional on: complete call coverage (R-wire tx1/tx2), backend
+correspondence, writer preservation/provenance (R15), ordering and
+first-read accounting (R19).
