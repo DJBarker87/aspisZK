@@ -52,3 +52,18 @@ existing R1-prefixed module names where their imports require them. The
 build receipts record `repo_source` for each promoted alias. The first
 AppendPair attempt (8422) exposed the missing V7PairLeafOccupancy object;
 8424 builds it and 8425 is the dependent retry with changed inputs.
+
+## Stage 3: Rspend⁺ to ModelRel
+
+`R1Z.BuilderSpendRelation.modelWitness` maps every field of the existing
+`AspisR1.SpendRelation.Witness`. `RspendPlus` is exactly Rspend plus D50's
+transfer change sentinel. `modelRel_of_spend` derives all semantic ModelRel
+fields: auxiliary occupancy/conservation/amount, public digest identities,
+append root/carry, and PairRight. It takes only public/witness base-field
+membership in addition to Rspend⁺. PairRight is derived from the selected
+commitment and first sibling, not assumed.
+
+Attempt 8443 passes (2.12 s, 3,522,140 KiB, 0 swaps), all six theorems use
+standard axioms. Failed attempts 8441/8442 were corrected proof sources;
+no resource limit changed. This closes T4's semantic relation implication,
+but does not yet connect the shipped records function to this witness map.
