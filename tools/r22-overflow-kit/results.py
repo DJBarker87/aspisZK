@@ -69,12 +69,12 @@ def make():
 def write():
     rows=make();dest=OUT/'operation-results.tsv'
     with dest.open('w') as f:
-        w=csv.DictWriter(f,fieldnames=list(rows[0]),delimiter='\t');w.writeheader();w.writerows(rows)
+        w=csv.DictWriter(f,fieldnames=list(rows[0]),delimiter='\t',lineterminator='\n');w.writeheader();w.writerows(rows)
     groups=collections.defaultdict(list)
     for r in rows:
-        if r['result']=='OPEN':groups[(r['site'].rsplit(':',3)[0],r['owner'])].append(r['site'])
+        if r['result']=='OPEN':groups[(r['site'].split(':',1)[0],r['owner'])].append(r['site'])
     with (OUT/'remaining-functions.tsv').open('w') as f:
-        w=csv.writer(f,delimiter='\t');w.writerow(['frozen_path','owner','open_sites','exact_site_ids'])
+        w=csv.writer(f,delimiter='\t',lineterminator='\n');w.writerow(['frozen_path','owner','open_sites','exact_site_ids'])
         for (p,o),sites in sorted(groups.items()):w.writerow([p,o,len(sites),' '.join(sites)])
     summary=dict(site_count=len(rows),result_counts=dict(collections.Counter(r['result'] for r in rows)),open_function_groups=len(groups),meaning='OPEN counts a lexical superset including inactive/prover/legacy and overloaded operations; not the number of reachable R22 failures. LOCAL results have explicit range premises and do not close R22.',table_sha256=hashlib.sha256(dest.read_bytes()).hexdigest())
     (OUT/'operation-results-summary.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary))
