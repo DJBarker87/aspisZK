@@ -6859,3 +6859,38 @@ OBLIGATIONS items 5–6, now scoped): `GamesR1P:45–53` (`NodeIdx` over
 retrying prover `prove_masked_retrying_with` still calls the eight-way
 prover (the adoption job covers this). After the layout rewrite, worst-case
 n1 = 2,457,717 ≤ 2^22 and `r1_games_error_le` applies directly.
+
+### Lead acceptance of the binary privacy layout (2026-10-20); D77
+
+Worker commits bba92e316, 5a3eb2d90 (branch codex/r1-privacy-layout-20261019,
+Codex, after the stopped Claude agent's WIP 2d7d47218) are cherry-picked.
+Attempts 6000–6027 in env J, 20 green (10 failed sources fixed by source
+changes, none rerun unchanged); the lead checked the last (6027,
+`PrivacyBoundR1PBin.privacy_R1_games_binary_bound`, 4.15 GB, 0 swaps) and the
+JSONL: every green module has standard axioms.
+
+**D77.1** The concrete layout chain is duplicated in `Bin` modules
+(`LayoutR1PBin`, `LayoutTagR1PBin`, `EventsR1P*Bin`, `FinalR1PBin`,
+`PrivacyR1PBin`, `PrivacySamplerSpendBin`, `PrivacyBoundR1PBin`, …), the
+eight-way API untouched and still compiling. Proved: `n1_worst_case`
+(n1 = 2,457,717 including both binding reads), `batchReadSet`/
+`batch_toFinset`/`batch_length` (exact per-batch read sets with the
+deduplication `ROpen` requires), and the binary privacy error ≤ 2^-109 +
+2^-137 (N = 8, q ≤ 2^64) from the unchanged `ReadBudgetR1` bound (D76).
+
+**D77.2 Obstruction, accepted as conditional.** Unconditional disjointness of
+binary node records from arbitrary abstract transcript records is false
+(`LayoutObstructionR1PBin.binary_duplex_overlap`, kernel-checked: an
+`addrWith (.absS 0)` record with a 31-byte framed message equals a 65-byte
+node record). Separation holds for every commitment record class and
+eight-way nodes unconditionally, and against transcript records under the
+named premise `TranscriptNodeLengths` (`LayoutR1PBin.nodeBytes_ne_transcript`).
+Discharging that premise from the actual wire encodings (framed length ≠ 31,
+payload/final lengths) is an R-wire item; the soundness-side commitment
+model reports the same shape of obstruction at `verifier.rs:382` (public
+bytes hashed verbatim) and will carry the same premise until the wire
+lengths are proved.
+
+**D77.3 Remaining for the format on the privacy side:** the simulator layout
+(Lean `simE`/ZF2 and Rust `sim.rs`, now ignored in the adopted build) and the
+`TranscriptNodeLengths` discharge.
