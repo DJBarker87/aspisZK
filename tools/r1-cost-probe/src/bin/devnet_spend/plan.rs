@@ -39,7 +39,7 @@ pub fn run(q:&Value)->Result<Value>{
  let slot=q["activation_slot"].as_u64().unwrap();let loader=Pubkey::from_str(LOADER)?;
  let rd=Pubkey::find_program_address(&[registry.as_ref()],&loader).0;let vd=Pubkey::find_program_address(&[verifier.as_ref()],&loader).0;
  let rh:[u8;32]=bytes(q,"registry_hash").try_into().unwrap();let vh:[u8;32]=bytes(q,"verifier_hash").try_into().unwrap();
- let reginit=ix(registry,vec![rw(reg),meta(payer,true,false),meta(pk(q,"funding_payer"),true,true),ro(system),ro(registry),ro(rd)],aspis_registry::encode_initialize_registry_v2(master.to_bytes(),[7;32],0,rh));
+ let reginit=ix(registry,vec![rw(reg),meta(payer,true,false),meta(pk(q,"funding_payer"),true,true),ro(system),ro(registry),ro(rd)],aspis_registry::encode_initialize_registry_v2(master.to_bytes(),[7;32],20,rh));
  // Governance authority must differ from the fee payer: exact ABI requires unique accounts.
  let gov=pk(q,"governance");let fee=pk(q,"funding_payer");
  let reginit= {let mut v=reginit;v["accounts"][1]=meta(gov,true,false);v};
