@@ -309,3 +309,36 @@ theorem privacy_R1_protocol_history_real
       1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) ∧
     modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) < 1 / 2^100
 ```
+
+## Final evidence and retained source boundary
+
+`python3 r1p-final/audit-history-fresh.py` passes: 34 new assigned attempts
+9830–9863, ten final modules, 41 theorem audits, no duplicate source/dependency
+retries, final source and dependency-object SHA256 pins, compiled object
+SHA256/size (no binaries), zero swaps, generator `--check`, and verbatim
+signature checks. `history-fresh-final-audit.json` records all final targets,
+exit, wall, peak RSS, swap, source revision/hash, dependencies, object pins and
+axioms. `history-fresh-attempts-9800-9999.jsonl` retains every raw output,
+failed elaboration, launcher reservation and full timing record. Audited
+proof-source revision: `75e1fe6b9c233d3b2cb759ed87bc7003b0660b11`.
+
+All 302 pre-existing PRIVACY Lean modules match base `55c62085d`. In
+particular, PrivacyR1Final, PrivacyR1FinalProtocol and PrivacyR1FinalProtocolHistory
+are unchanged; only new modules are added. BuilderSource, SourceIdentification,
+builder_refinement_D46_D51 and Rust harnesses are untouched. Each host update
+was to this branch's new source/object, with prior drafts snapshotted under
+`snapshots/codex-cx-priv-history3-20261021/<attempt>`.
+
+No frozen certificate/manifest or runtime artifact changed. The final focused
+endpoint bridge is green; no unchanged package-wide/certificate replay,
+Rust suite, SBF rebuild or frozen ELF gate was repeated. All Lean jobs used
+the assigned env J launcher, -M7000, MemoryHigh=5G, MemoryMax=7G and
+MemorySwapMax=0, with the launcher's aggregate reservation check.
+
+The retained obligations are the explicit builder/packing/tape/batch/log and
+source real/ideal execution joins in the quoted final statement. They remain
+source correspondence work; no model proof here asserts Rust extraction or
+whole-observation agreement for an arbitrary source. The real model mass law
+is no longer an endpoint premise. The probability proof is conservative and
+does not claim a tight 256-bit conditional state law. No wallet/key operation,
+push, merge or edit outside this worktree was performed.
