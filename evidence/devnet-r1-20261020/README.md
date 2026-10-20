@@ -1,137 +1,86 @@
-# R1 devnet resumption evidence
+# R1 devnet resume commands
 
-**Funded, blocked at release admission.** The payer holds 5 SOL. Default builds
-reproduce the frozen pin, but env-configured IDs change `.text` because the
-frozen ELF embeds its placeholder IDs as instruction immediates. The candidate
-is **not** admitted as a data-only release. See [REPORT.md](REPORT.md) and
-[artifacts-sha256.txt](artifacts-sha256.txt). No deployment or spend ran.
+The frozen-source devnet build and data-only identity audit pass. Deployment
+is blocked by the task/lead decision naming the LLBC hash as the default ELF
+pin; see [REPORT.md](REPORT.md). No deploy/init/upload/spend ran.
 
-Source: `30eb0519a`, branch `codex/cx-devnet2-20261020`.
-Host task root (reused, keys retained):
-`dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-devnet-20261020`.
-`keys/` is 0700, keys are 0600; never copy keys into the repository. No binaries
-are committed. All utilities added here are Rust or shell orchestration.
+Source/base: `fa894d83d2f3ad6df34bc8493881c780621d553e`, branch
+`codex/cx-devnet3-20261020`. Host task directory:
+`/home/dombarker/project-offloads/codex-cx-devnet-20261020`.
+[Public config](../../config/r1-devnet.template.json) contains no secrets.
+Keys remain on the host (0700 directory, 0600 key files); never copy them
+into the repository or remove funded keys. No binary is committed.
 
-The [public config](../../config/r1-devnet.template.json) retains the reserved
-identities and original frozen artifact paths. Its `devnet_build_candidate`
-field identifies the rejected candidate separately; it does not promote it.
-Mint is still null. There is **no end-to-end RPC spend driver** in this result.
-Raw proof/statement account carrier setup remains open. The admitted verifier
-still rejects legacy lifecycle tags 4/5/6.
+## Source preparation and optimized build
 
-## Build commands executed
+Commands below describe the executed run. Receipt directories already exist;
+do not repeat an unchanged build. Inspect populated cgroup reservations first
+and keep total MemoryMax below the host's 55-GiB safe limit.
 
-The host `src/` and SBF/native caches were copied into this task's own directory
-from the pinned adoption workspace, then the assigned worktree's changed
-sources and current crate manifest were copied over. No shared source or cache
-was rewritten. Before launch, inspect populated cgroup reservations; sum of
-`MemoryMax` including the next scope must stay below 55 GiB. Builds expect
-incremental optimized compilation, not proof generation.
+From this worktree, source synchronization used:
 
-Final commands, on the host (receipt directories must not already exist;
-the script refuses overwrites). Do not rerun unchanged builds unnecessarily:
+```sh
+git ls-files crates programs Cargo.toml Cargo.lock > /tmp/cx-devnet3-source-files.txt
+rsync -a --files-from=/tmp/cx-devnet3-source-files.txt ./ \
+  dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-devnet-20261020/src/
+scp scripts/r1_devnet_build.sh scripts/r1_devnet_receipt.sh \
+  scripts/r1_devnet_release_gate.py config/r1-devnet.template.json \
+  dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-devnet-20261020/
+```
+
+On the host, expected time is incremental compilation, not proving:
 
 ```sh
 cd /home/dombarker/project-offloads/codex-cx-devnet-20261020
-task=$PWD
-systemd-run --user --scope \
+systemd-run --user --scope --unit=cx-devnet3-build \
   -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
-  bash r1_devnet_build.sh "$task" default 30eb0519a
-systemd-run --user --scope \
-  -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
-  bash r1_devnet_build.sh "$task" devnet 30eb0519a
+  bash ./r1_devnet_build.sh "$PWD" devnet fa894d83d frozen
 ```
 
-The script reads `.programs.pool` and `.programs.registry` from
-`r1-devnet.template.json`, exporting `ASPIS_R1_POOL_PROGRAM_ID` and
-`ASPIS_R1_REGISTRY_PROGRAM_ID` for the devnet build only. Both use
-`pool-adapter,private-leaf-salts`, SBF 3.1.13/platform-tools v1.52,
-`--offline --locked -j 4`. Default unsets both env variables.
-`option_env!` tracks environment changes for recompilation. Invalid or
-non-canonical 32-byte base58 values fail const evaluation.
+This uses `pool-adapter,private-leaf-salts`, SBF 3.1.13/platform-tools v1.52,
+`--offline --locked -j 4`, and the retained task SBF cache. It reads the
+reserved Pool/registry IDs from the JSON config. Native commands retain
+`RUSTFLAGS='-C link-arg=-Wl,--threads=4'`; SBF removes that cc-driver spelling
+and passes `-C link-arg=--threads=4` directly to rust-lld.
+The optional fourth build argument names a receipt/artifact series so old
+attempts remain intact. This run produced `artifacts/frozen-devnet/` and
+`receipts/build-frozen-devnet/`.
 
-Native jobs use `RUSTFLAGS='-C link-arg=-Wl,--threads=4'`. SBF's direct
-`rust-lld` rejects that cc-driver spelling, so the build script removes it
-for SBF and sets the equivalent target flag
-`CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS='-C link-arg=--threads=4'`.
-All three affected linker/build-script failed or rejected attempts have
-retained receipts; see REPORT for the replacement.
+## Config-driven release gate
 
-## Identity gate commands executed
+On the host, expected time is byte comparison and read-only RPC:
 
 ```sh
-frozen=/home/dombarker/project-offloads/codex-r1-format-adopt-20261019/artifacts/verifier/aspis_r1_cost_probe_program.so
-obj=$HOME/.cache/solana/v1.52/platform-tools/llvm/bin
-sha256sum "$frozen" artifacts/default/aspis_r1_cost_probe_program.so \
-  artifacts/devnet/aspis_r1_cost_probe_program.so
-cmp "$frozen" artifacts/default/aspis_r1_cost_probe_program.so
-"$obj/llvm-objdump" -h "$frozen"
-"$obj/llvm-objdump" -h artifacts/devnet/aspis_r1_cost_probe_program.so
-"$obj/llvm-objcopy" --dump-section .text=frozen.text "$frozen"
-"$obj/llvm-objcopy" --dump-section .text=devnet.text artifacts/devnet/aspis_r1_cost_probe_program.so
-cmp frozen.text devnet.text
-"$obj/llvm-objdump" -d "$frozen"
-```
-
-Default `cmp` returns 0. Devnet text `cmp` returns 1. Do not treat a successful
-compiler exit as release admission. The independent Rust auditor checks section
-layout, `.text`, exact data substitutions, and all remaining file bytes:
-
-```sh
-systemd-run --user --scope \
+cd /home/dombarker/project-offloads/codex-cx-devnet-20261020
+systemctl --user list-units --type=scope --state=running --no-pager \
+  > receipts/resume-reservations.txt
+systemd-run --user --scope --unit=cx-devnet3-preflight \
   -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
-  /home/dombarker/.cargo/bin/rustc --edition=2021 -O \
-  -C link-arg=-Wl,--threads=4 src/scripts/r1_deployment_elf_check.rs -o elf-check
-./elf-check "$frozen" artifacts/devnet/aspis_r1_cost_probe_program.so \
-  BmsNikL97uF7bb1hMnJxsas7a9LjjK8vvT5Q1b7W34Qs \
-  9pWwAcBgwhnkA8JWSA6GvjpYqGzSibLF6GqGH8v6EC9Q
+  bash r1_devnet_receipt.sh receipts/resume-preflight-run fa894d83d \
+  'Read-only ELF byte audit and finalized RPC reads; no proving or submission' \
+  python3 r1_devnet_release_gate.py r1-devnet.template.json receipts/resume-preflight
 ```
 
-The auditor **must return 1** for the current candidate. Final receipts are
-under `receipts/final-native-checks/audit.*`. The audit itself used the same
-capped scope as its compilation and the native tests. Native test command:
+Executed exit: **4**, solely because `declared_default_elf_sha256` names
+`f11e40b4…`, the LLBC hash. Documented default ELF `dfc2a91a…`, rebuilt devnet
+ELF `fb2fc048…`, Pool and registry all match their inventory pins; section
+layouts, `.text`, both IDs and the exact two-slot patch pass. Genesis, TxV1
+activation and permanent rent coverage also pass. Each RPC request/response
+and attempt timing is retained. Read-only transient RPC errors have bounded
+retries; no signing, transaction submission or key access exists in this tool.
 
-```sh
-cd src
-RUSTFLAGS='-C link-arg=-Wl,--threads=4' \
-CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-cx-devnet-20261020/native-target \
-  cargo test --release --offline --locked -j 4 \
-  -p aspis-r1-cost-probe-program --features pool-adapter,private-leaf-salts --lib
-```
+The config deliberately retains the disputed declared hash. After a lead
+correction, update that field and use new receipt directories for a new gate.
+Exit 0 would mean these listed preflight checks pass; it would not establish
+working uploads, proof acceptance or settlement.
 
-Run that command only inside the capped scope above; final result: **34 passed**.
+## Work still required
 
-## Bounded funding watcher
+There is **no end-to-end RPC spend driver** in this result. The raw-buffer
+carrier, real setup/deposit, retrying live-state proofs, 3,763-byte uploads,
+checkpoint creation, tx1/tx2 confirmation/expiry handling, state readbacks,
+negative checks and phase measurements remain open after release admission.
+Do not use legacy verifier tags 4/5/6: the frozen entrypoint rejects them.
 
-The executed watcher verified devnet genesis, called finalized `getBalance`
-every five minutes, and retried public `requestAirdrop` once per hour. It
-stops at >=3 SOL or after eight hours, preserving every request and response.
-It observed 0 SOL at 07:43:58 UTC, faucet 429, then 5 SOL at 07:48:58 UTC,
-and exited 0. It is no longer running. `signatures.json` links the finalized
-incoming funding transfer; it was submitted externally.
-
-For a genuinely needed new funding watch, use a new unit and receipt name:
-
-```sh
-task=/home/dombarker/project-offloads/codex-cx-devnet-20261020
-systemd-run --user --unit=cx-devnet2-funding-N \
-  -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
-  /bin/bash "$task/r1_devnet_funding_watch.sh" \
-  "$task/r1-devnet.template.json" "$task/receipts/funding-watch-N"
-```
-
-The 3-SOL trigger is not sufficient deployment funding: measured programdata
-rent for the candidate plus Pool and registry is **11.284747560 SOL**, before
-other accounts, fees, setup and temporary buffer requirements. Keep all keys.
-No refund or cleanup has been attempted.
-
-## What remains
-
-The lead decision must account for instruction-embedded IDs and admit an
-appropriate new `.text` pin and validations. Then sufficient funding, three
-program deployments, registry/master/lanes/pages/vault/mint setup, spendable
-note deposit, P_R1 retrying proof generation, carrier uploads, verifier
-checkpoint, transfer/withdrawal, both negative checks, and a complete RPC
-driver remain. No deploy command or placeholder driver is presented as ready
-while the required identity gate is false. Per-phase CU/wall data for those
-stages remains unmeasured, with zero uploads and worker submissions.
+[Prior commands](README-prior-cx-devnet2.md) and
+[prior report](REPORT-prior-cx-devnet2.md) describe superseded artifacts only.
