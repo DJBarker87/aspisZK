@@ -1,0 +1,86 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "module": "RawSamplerSuffixSourceBridge",
+  "attempt": "bridge-v2",
+  "argv": [
+    "/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+    "-j1",
+    "-M4400",
+    "-DElab.async=false",
+    "-R",
+    "/Users/dominic/ZK/.worktrees/cx-sampler/docs/research/100bit-spend-path-20261013/lean",
+    "-o",
+    "/tmp/codex-cx-sampler-20261020-objects/RawSamplerSuffixSourceBridge.olean",
+    "/Users/dominic/ZK/.worktrees/cx-sampler/docs/research/100bit-spend-path-20261013/lean/RawSamplerSuffixSourceBridge.lean"
+  ],
+  "env": {
+    "LEAN_PATH": "/tmp/codex-cx-sampler-20261020-objects:/Users/dominic/ZK/AspisFormal/.lake/packages/mathlib/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/plausible/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/proofwidgets/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/batteries/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/aesop/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/importGraph/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/packages/Qq/.lake/build/lib/lean:/tmp/r1-circle-pointwise-coalesced-local-v1/objects:/tmp/lean432-nuc-aeneas-cache:/tmp/root-terminal-named-types-20261019/objects:/tmp/literal-acceptance-terminal-object-reuse/objects:/tmp/root-finish-prefix-deps-20261018:/tmp/r1-circle-sampler-policy-unconditional-publication-v1/r1-circle-actual-policy-unconditional-v9/attempt/objects:/tmp/r1-circle-sampler-policy-unconditional-publication-v1/r1-circle-sampler-canonical-v9/attempt/objects:/tmp/r1-circle-actual-sampler-policy-publication-v1/attempts/policy/r1-circle-actual-policy-v3/attempt/objects:/tmp/r1-circle-actual-sampler-policy-publication-v1/attempts/result/r1-circle-actual-emitted-fallback-result-v4/attempt/objects:/tmp/r1-circle-actual-sampler-policy-publication-v1/attempts/circle-v2/r1-circle-actual-fallback-circle-v2/attempt/objects:/tmp/r1-circle-actual-sampler-policy-publication-v1/attempts/coordinates/r1-circle-actual-fallback-coordinates-v1/attempt/objects:/tmp/r1-circle-actual-sampler-policy-publication-v1/attempts/secure/r1-circle-actual-secure-bridge-v1/attempt/objects:/tmp/root-finish-semantic-mask-join-20261019/objects:/tmp/lean432-project-closure:/tmp/semantic-selected-canonical-closure-20261019/objects:/tmp/literal-closure-coalesced-local/objects:/tmp/root-merkle-cost-20261018/objects:/tmp/fieldsum-static-dependency-objects:/tmp/aspis-comppoly-432cache-objects-20261018/lib/lean:/Users/dominic/ZK/AspisFormal/.lake/build/lib/lean:/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean:/tmp/lean432-gather-array-objects:/tmp/checks-schedule-deps-20261019/objects:/tmp/gs-byte-extractor-deps-20261019/objects:/tmp/aspis-root-local-semantic-20261015/objects"
+  },
+  "source_revision": "f2c084bc8f51c02f4c58b6d0a4e3dd450867e1f5",
+  "source_sha256": "48b0a594513acf0ec5862395bf10365d728aaf49a3c3a31e2704b28b99c525bb",
+  "exit_status": 1,
+  "wall_seconds": 9.763778917025775,
+  "time_log": "        9.75 real         2.60 user         2.45 sys\n          3368058880  maximum resident set size\n                   0  average shared memory size\n                   0  average unshared data size\n                   0  average unshared stack size\n              221131  page reclaims\n               51023  page faults\n                   0  swaps\n                   0  block input operations\n                   0  block output operations\n                   0  messages sent\n                   0  messages received\n                   0  signals received\n                3589  voluntary context switches\n               46915  involuntary context switches\n         27942958556  instructions retired\n         10719319119  cycles elapsed\n           534150128  peak memory footprint\n",
+  "axioms_lines": [
+    "'AspisR1PublicPreparation.SamplerSuffixSourceBridge.circle_block_reads' depends on axioms: [propext,",
+    "'AspisR1PublicPreparation.SamplerSuffixSourceBridge.circle25_correspondence' depends on axioms: [propext,",
+    "'AspisR1PublicPreparation.SamplerSuffixSourceBridge.circle26_correspondence' depends on axioms: [propext,",
+    "'AspisR1PublicPreparation.SamplerSuffixSourceBridge.opening_block_correspondence' depends on axioms: [propext,"
+  ],
+  "errors": "/Users/dominic/ZK/.worktrees/cx-sampler/docs/research/100bit-spend-path-20261013/lean/RawSamplerSuffixSourceBridge.lean:98:99: error: unsolved goals\nHash : Type\nD : aspis_core.Digest32 Hash\nself after : r1_wire.SemanticTranscript Hash\nrow : U8\npayload : Slice U8\nblock : Bytes32\nhcall : r1_wire.SemanticTranscript.sample_block_validated D self row payload = ok (core.result.Result.Ok block, after)\nhrow : \u2191row = 25 \u2228 \u2191row = 26\nP : LiteralTranscript.Prefix\nb : SelectedTranscriptParams.Message\nhstate :\n  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState self.state\nhbytes : SelectedTranscriptParams.params.enc b = rawBytes payload\nH : Bytes \u2192 State\nhdigest :\n  \u2200 (hash : Hash) (parts : Slice (Slice U8)) (out : Std.Array U8 32#usize),\n    D.digest hash parts = ok out \u2192 decodeState out = H (flatten parts)\nleft\u271d\u00b9 : row = self.next_row\ntag next : U8\nabsorbed state : Std.Array U8 32#usize\nht : \u2191tag = 160 + \u2191row\nleft\u271d : \u2191next = \u2191row + 1\nha : D.digest self.hash (absorbParts self.state tag payload) = ok absorbed\nhb : D.digest self.hash (readParts absorbed 1#u8) = ok block\nhn : D.digest self.hash (readParts absorbed 2#u8) = ok state\nhe : after = { state := state, hash := self.hash, next_row := next }\nhlabel : SelectedTranscriptParams.params.lbl \u2191row = decodeByte tag\n\u22a2 absorb (bytes (decodeState self.state)) (decodeByte tag) (rawBytes payload) =\n    bytes (decodeState self.state) ++ [0, decodeByte tag] ++ rawBytes payload\n'AspisR1PublicPreparation.SamplerSuffixSourceBridge.circle_block_reads' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]\n'AspisR1PublicPreparation.SamplerSuffixSourceBridge.circle25_correspondence' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]\n'AspisR1PublicPreparation.SamplerSuffixSourceBridge.circle26_correspondence' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]\n'AspisR1PublicPreparation.SamplerSuffixSourceBridge.opening_block_correspondence' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]\n",
+  "deps_fingerprint": "f1b6adcc8ea1a811505196af8eba85fba96a1c3bbb7eaa1efb1ee5acd46ed47e",
+  "direct_imports": [
+    {
+      "module": "RawSamplerSuffixCorrespondence",
+      "object": "/tmp/codex-cx-sampler-20261020-objects/RawSamplerSuffixCorrespondence.olean",
+      "sha256": "9e1e9a9e1638c1879a1959fdb727c6642213e3b1501639ac72db133626008924",
+      "size": 200360
+    },
+    {
+      "module": "RawSamplerSuffixSourceFrames",
+      "object": "/tmp/codex-cx-sampler-20261020-objects/RawSamplerSuffixSourceFrames.olean",
+      "sha256": "f7badeea74e789ec8d1d138141ad577a32ab21896f1b508fe7c6d18263a686dc",
+      "size": 96328
+    }
+  ],
+  "dependency_capture": "postflight direct-import artifact snapshot; search path/compile input hashes retained per attempt",
+  "peak_rss_bytes": 3368058880,
+  "swaps": 0,
+  "axioms": [
+    {
+      "theorem": "AspisR1PublicPreparation.SamplerSuffixSourceBridge.circle_block_reads",
+      "axioms": [
+        "propext",
+        "sorryAx",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "theorem": "AspisR1PublicPreparation.SamplerSuffixSourceBridge.circle25_correspondence",
+      "axioms": [
+        "propext",
+        "sorryAx",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "theorem": "AspisR1PublicPreparation.SamplerSuffixSourceBridge.circle26_correspondence",
+      "axioms": [
+        "propext",
+        "sorryAx",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "theorem": "AspisR1PublicPreparation.SamplerSuffixSourceBridge.opening_block_correspondence",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    }
+  ]
+}

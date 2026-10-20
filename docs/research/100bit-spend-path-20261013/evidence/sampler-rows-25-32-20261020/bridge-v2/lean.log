@@ -1,0 +1,45 @@
+/Users/dominic/ZK/.worktrees/cx-sampler/docs/research/100bit-spend-path-20261013/lean/RawSamplerSuffixSourceBridge.lean:98:99: error: unsolved goals
+Hash : Type
+D : aspis_core.Digest32 Hash
+self after : r1_wire.SemanticTranscript Hash
+row : U8
+payload : Slice U8
+block : Bytes32
+hcall : r1_wire.SemanticTranscript.sample_block_validated D self row payload = ok (core.result.Result.Ok block, after)
+hrow : ↑row = 25 ∨ ↑row = 26
+P : LiteralTranscript.Prefix
+b : SelectedTranscriptParams.Message
+hstate :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState self.state
+hbytes : SelectedTranscriptParams.params.enc b = rawBytes payload
+H : Bytes → State
+hdigest :
+  ∀ (hash : Hash) (parts : Slice (Slice U8)) (out : Std.Array U8 32#usize),
+    D.digest hash parts = ok out → decodeState out = H (flatten parts)
+left✝¹ : row = self.next_row
+tag next : U8
+absorbed state : Std.Array U8 32#usize
+ht : ↑tag = 160 + ↑row
+left✝ : ↑next = ↑row + 1
+ha : D.digest self.hash (absorbParts self.state tag payload) = ok absorbed
+hb : D.digest self.hash (readParts absorbed 1#u8) = ok block
+hn : D.digest self.hash (readParts absorbed 2#u8) = ok state
+he : after = { state := state, hash := self.hash, next_row := next }
+hlabel : SelectedTranscriptParams.params.lbl ↑row = decodeByte tag
+⊢ absorb (bytes (decodeState self.state)) (decodeByte tag) (rawBytes payload) =
+    bytes (decodeState self.state) ++ [0, decodeByte tag] ++ rawBytes payload
+'AspisR1PublicPreparation.SamplerSuffixSourceBridge.circle_block_reads' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.SamplerSuffixSourceBridge.circle25_correspondence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.SamplerSuffixSourceBridge.circle26_correspondence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.SamplerSuffixSourceBridge.opening_block_correspondence' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
