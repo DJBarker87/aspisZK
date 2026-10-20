@@ -367,3 +367,18 @@ on the binary format; it stays conditional on complete source-prefix
 coverage (R-wire), the trie/privacy transport, backend/runtime
 correspondence and any separately designated external reads. The hQ
 verifier half for the deployed instance is 1,161.
+
+## Addendum (2026-10-20): R14 finish refinement, conditional
+
+Codex job cx-r14-finish (5d268e741): the extracted `finish_relation`
+supplies the `pairingChecks`, `firstMatch` and `residualBatch` fields of
+`Checks`, composed with the parser/digest facts and the twelve ordered
+queries; stored-domain fold bridges, the candidate-12 reducer transport and
+the finalized-weights handoff are proved; twelve targets, 26 audits,
+standard axioms, ≤ 3.43 GiB (`design/R14-FINISH-20261020.md`). Row R14:
+refinement PARTIAL (conditional). Remaining: the named backend/re-pin
+premises (S8, S9, S4/S5), the R13 acceptance items, accumulator
+finalisation, and R15 provenance. With this, every `Checks` field has
+either a supplying theorem or a named missing lemma (see
+DECODER-INSTANCE-20261020.md); the composition into R16 waits on the next
+freeze and the re-pins.
