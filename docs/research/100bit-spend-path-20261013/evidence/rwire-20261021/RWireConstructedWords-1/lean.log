@@ -1,0 +1,151 @@
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireConstructedWords.lean:34:2: error: Type mismatch: After simplification, term
+  RawCutCommitmentFrames.initial_root ((LiteralByteProtocol.protocol decoder).transcript H pub pf 0) root w
+ has type
+  @Eq (Option State)
+    ((firstCell
+          (LiteralByteSampler.samp 0 ((LiteralByteProtocol.protocol decoder).transcript H pub pf 0)
+            (LiteralTranscript.Message.initial root w))).bind
+      fun a => RawByteCollisionTargets.trailing a)
+    (some root)
+but is expected to have type
+  @Eq (Option State)
+    ((firstCell
+          (LiteralByteSampler.samp 0 ((LiteralByteProtocol.protocol decoder).transcript H pub pf 0)
+            (LiteralTranscript.Message.initial root w))).bind
+      fun a => BinRawByteCollisionTargets.trailing a)
+    (some root)
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireConstructedWords.lean:48:2: error: Type mismatch: After simplification, term
+  RawCutCommitmentFrames.c2_root ((LiteralByteProtocol.protocol decoder).transcript H pub pf 2) m w root hdecode
+ has type
+  @Eq (Option State)
+    ((firstCell
+          (LiteralByteSampler.samp 2 ((LiteralByteProtocol.protocol decoder).transcript H pub pf 2)
+            (LiteralTranscript.Message.c2 m w))).bind
+      fun a => RawByteCollisionTargets.trailing a)
+    (some root)
+but is expected to have type
+  @Eq (Option State)
+    ((firstCell
+          (LiteralByteSampler.samp 2 ((LiteralByteProtocol.protocol decoder).transcript H pub pf 2)
+            (LiteralTranscript.Message.c2 m w))).bind
+      fun a => BinRawByteCollisionTargets.trailing a)
+    (some root)
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireConstructedWords.lean:63:2: error: Type mismatch: After simplification, term
+  RawCutCommitmentFrames.second_root ((LiteralByteProtocol.protocol decoder).transcript H pub pf 30) m w payload hdecode
+ has type
+  @Eq (Option State)
+    ((firstCell
+          (LiteralByteSampler.samp 30 ((LiteralByteProtocol.protocol decoder).transcript H pub pf 30)
+            (LiteralTranscript.Message.second m w))).bind
+      fun a => RawByteCollisionTargets.fixed 38 a)
+    (some payload.1)
+but is expected to have type
+  @Eq (Option State)
+    ((firstCell
+          (LiteralByteSampler.samp 30 ((LiteralByteProtocol.protocol decoder).transcript H pub pf 30)
+            (LiteralTranscript.Message.second m w))).bind
+      fun a => BinRawByteCollisionTargets.fixed 38 a)
+    (some payload.1)
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireConstructedWords.lean:94:62: error: don't know how to synthesize placeholder for argument `pub`
+context:
+decoder : LiteralByteProtocol.Decoder
+d : ErasedPrefix → ErasedMessage → Bool
+P : Prover
+H : Bytes → State
+iv : State
+Q : ℕ
+hQ : firstReads emptyTable (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).1 ≤ Q
+hout :
+  ¬hitsBad (AllAddressCollision.bad iv BinRawByteCollisionTargets.pred Q) emptyTable
+      (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).1
+c1root : State
+c1 : LiteralTranscript.C1Word
+c2msg : LiteralTranscript.BytesMessage
+c2 : LiteralTranscript.C2Word
+c2root : State
+secondmsg : LiteralTranscript.BytesMessage
+final : LiteralTranscript.VWord
+second : OpeningRecordCodec.Payload OpeningRecordCodec.Row.second
+h0 :
+  (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).2.1.2 0 =
+    LiteralTranscript.Message.initial c1root c1
+h2 :
+  (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).2.1.2 2 =
+    LiteralTranscript.Message.c2 c2msg c2
+h30 :
+  (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).2.1.2 30 =
+    LiteralTranscript.Message.second secondmsg final
+hc2 : SemanticRecordCodec.decode ⟨2, ⋯⟩ ↑c2msg = some ⟨SemanticRecordCodec.Payload.c2Root c2root, ⋯⟩
+hsecond : OpeningRecordCodec.decode OpeningRecordCodec.Row.second ↑secondmsg = some second
+v : View Bytes State ((Public × Proof) × Bool) := ⋯
+h0' : BinRawByteCollisionTargets.pred 2 (RawCutWordsFromView.frame decoder H v.2.1.1 v.2.1.2 0) = some c1root
+h2' : BinRawByteCollisionTargets.pred 2 (RawCutWordsFromView.frame decoder H v.2.1.1 v.2.1.2 2) = some c2root
+h30' : BinRawByteCollisionTargets.pred 3 (RawCutWordsFromView.frame decoder H v.2.1.1 v.2.1.2 30) = some second.1
+⊢ Public
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireConstructedWords.lean:94:7: error: failed to infer `have` declaration type
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireConstructedWords.lean:84:61: error: unsolved goals
+decoder : LiteralByteProtocol.Decoder
+d : ErasedPrefix → ErasedMessage → Bool
+P : Prover
+H : Bytes → State
+iv : State
+Q : ℕ
+hQ : firstReads emptyTable (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).1 ≤ Q
+hout :
+  ¬hitsBad (AllAddressCollision.bad iv BinRawByteCollisionTargets.pred Q) emptyTable
+      (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).1
+c1root : State
+c1 : LiteralTranscript.C1Word
+c2msg : LiteralTranscript.BytesMessage
+c2 : LiteralTranscript.C2Word
+c2root : State
+secondmsg : LiteralTranscript.BytesMessage
+final : LiteralTranscript.VWord
+second : OpeningRecordCodec.Payload OpeningRecordCodec.Row.second
+h0 :
+  (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).2.1.2 0 =
+    LiteralTranscript.Message.initial c1root c1
+h2 :
+  (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).2.1.2 2 =
+    LiteralTranscript.Message.c2 c2msg c2
+h30 :
+  (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).2.1.2 30 =
+    LiteralTranscript.Message.second secondmsg final
+hc2 : SemanticRecordCodec.decode ⟨2, ⋯⟩ ↑c2msg = some ⟨SemanticRecordCodec.Payload.c2Root c2root, ⋯⟩
+hsecond : OpeningRecordCodec.decode OpeningRecordCodec.Row.second ↑secondmsg = some second
+v : View Bytes State ((Public × Proof) × Bool) :=
+  eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))
+h0' : BinRawByteCollisionTargets.pred 2 (RawCutWordsFromView.frame decoder H v.2.1.1 v.2.1.2 0) = some c1root
+h2' : BinRawByteCollisionTargets.pred 2 (RawCutWordsFromView.frame decoder H v.2.1.1 v.2.1.2 2) = some c2root
+h30' : BinRawByteCollisionTargets.pred 3 (RawCutWordsFromView.frame decoder H v.2.1.1 v.2.1.2 30) = some second.1
+⊢ (have f0 :=
+      RawCutWordsFromView.frame decoder H
+        (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).2.1.1
+        (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).2.1.2 0;
+    have f2 :=
+      RawCutWordsFromView.frame decoder H
+        (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).2.1.1
+        (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).2.1.2 2;
+    have f30 :=
+      RawCutWordsFromView.frame decoder H
+        (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).2.1.1
+        (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).2.1.2 30;
+    BinCanonicalCutWords.wordsFromRawCuts
+      (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).1 f0 f2 f30
+      (RawCutWordsFromView.rootFrom 8 f0) (RawCutWordsFromView.rootFrom 8 f2) (RawCutWordsFromView.rootFrom 9 f30)) =
+    wordsFromMaps
+      (BinCanonicalCutWords.fullC1Map
+        (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).1 c1root)
+      (BinCanonicalCutWords.fullC2Map
+        (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).1 c2root)
+      (BinCanonicalCutWords.fullFoldedMap
+        (eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))).1 second.1)
+'_private.RWireConstructedWords.0.AspisR1.RWireConstructedWords.pred_getD_of_bind' depends on axioms: [propext,
+ Quot.sound]
+'AspisR1.RWireConstructedWords.initial_root' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RWireConstructedWords.c2_root' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RWireConstructedWords.second_root' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RWireConstructedWords.buildWords_eq_full_from_messages' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,110 @@
+import RawCutConstructedWords
+import BinCompiledRunWordStability
+
+/-! Instantiate the recorded-view word construction with the actual strictly
+parsed commitment messages. No root-target equation or equality to supplied
+word metadata is assumed. Actual verifier acceptance must still imply these
+message/parser facts in the source-refinement layer. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.RWireConstructedWords
+
+open FS FS2 FS2.Duplex
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.AdaptiveFirstReadLaw
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open CanonicalCutEnrichedTranscript RawCutTranscriptRun RawCutProverCompiler
+
+private theorem pred_getD_of_bind (o : Option Bytes) (j : Fin 5) (root : State)
+    (h : o.bind (BinRawByteCollisionTargets.pred j) = some root) :
+    BinRawByteCollisionTargets.pred j (o.getD []) = some root := by
+  cases o with
+  | none => cases h
+  | some input => exact h
+
+theorem initial_root (decoder : LiteralByteProtocol.Decoder) (H : Bytes → State)
+    (pub : RawCutProverCompiler.Public) (pf : RawCutProverCompiler.Proof)
+    (root : State) (w : LiteralTranscript.C1Word)
+    (h : pf 0 = .initial root w) :
+    BinRawByteCollisionTargets.pred 2 (RawCutWordsFromView.frame decoder H pub pf 0) = some root := by
+  unfold RawCutWordsFromView.frame
+  apply pred_getD_of_bind
+  change (firstCell (LiteralByteSampler.samp 0
+    ((LiteralByteProtocol.protocol decoder).transcript H pub pf 0) (pf 0))).bind _ = _
+  rw [h]
+  simpa only [BinRawByteCollisionTargets.pred_tail, RawByteCollisionTargets.pred_tail, BinRawByteCollisionTargets.trailing, RawByteCollisionTargets.trailing] using RawCutCommitmentFrames.initial_root _ root w
+
+theorem c2_root (decoder : LiteralByteProtocol.Decoder) (H : Bytes → State)
+    (pub : RawCutProverCompiler.Public) (pf : RawCutProverCompiler.Proof)
+    (m : LiteralTranscript.BytesMessage) (w : LiteralTranscript.C2Word) (root : State)
+    (h : pf 2 = .c2 m w)
+    (hdecode : SemanticRecordCodec.decode ⟨2, by decide⟩ m.val =
+      some ⟨.c2Root root, by rfl⟩) :
+    BinRawByteCollisionTargets.pred 2 (RawCutWordsFromView.frame decoder H pub pf 2) = some root := by
+  unfold RawCutWordsFromView.frame
+  apply pred_getD_of_bind
+  change (firstCell (LiteralByteSampler.samp 2
+    ((LiteralByteProtocol.protocol decoder).transcript H pub pf 2) (pf 2))).bind _ = _
+  rw [h]
+  simpa only [BinRawByteCollisionTargets.pred_tail, RawByteCollisionTargets.pred_tail, BinRawByteCollisionTargets.trailing, RawByteCollisionTargets.trailing] using RawCutCommitmentFrames.c2_root _ m w root hdecode
+
+theorem second_root (decoder : LiteralByteProtocol.Decoder) (H : Bytes → State)
+    (pub : RawCutProverCompiler.Public) (pf : RawCutProverCompiler.Proof)
+    (m : LiteralTranscript.BytesMessage) (w : LiteralTranscript.VWord)
+    (payload : OpeningRecordCodec.Payload .second)
+    (h : pf 30 = .second m w)
+    (hdecode : OpeningRecordCodec.decode .second m.val = some payload) :
+    BinRawByteCollisionTargets.pred 3 (RawCutWordsFromView.frame decoder H pub pf 30) =
+      some payload.1 := by
+  unfold RawCutWordsFromView.frame
+  apply pred_getD_of_bind
+  change (firstCell (LiteralByteSampler.samp 30
+    ((LiteralByteProtocol.protocol decoder).transcript H pub pf 30) (pf 30))).bind _ = _
+  rw [h]
+  simpa only [BinRawByteCollisionTargets.pred_middle, RawByteCollisionTargets.pred_middle, BinRawByteCollisionTargets.fixed, RawByteCollisionTargets.fixed] using RawCutCommitmentFrames.second_root _ m w payload hdecode
+
+theorem buildWords_eq_full_from_messages (decoder : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (H : Bytes → State)
+    (iv : State) (Q : Nat)
+    (hQ : firstReads emptyTable (eval H (experiment P (verifier decoder d))).1 ≤ Q)
+    (hout : ¬ hitsBad (AllAddressCollision.bad iv BinRawByteCollisionTargets.pred Q)
+      emptyTable (eval H (experiment P (verifier decoder d))).1)
+    (c1root : State) (c1 : LiteralTranscript.C1Word)
+    (c2msg : LiteralTranscript.BytesMessage) (c2 : LiteralTranscript.C2Word) (c2root : State)
+    (secondmsg : LiteralTranscript.BytesMessage) (final : LiteralTranscript.VWord)
+    (second : OpeningRecordCodec.Payload .second)
+    (h0 : (eval H (experiment P (verifier decoder d))).2.1.2 0 = .initial c1root c1)
+    (h2 : (eval H (experiment P (verifier decoder d))).2.1.2 2 = .c2 c2msg c2)
+    (h30 : (eval H (experiment P (verifier decoder d))).2.1.2 30 = .second secondmsg final)
+    (hc2 : SemanticRecordCodec.decode ⟨2, by decide⟩ c2msg.val =
+      some ⟨.c2Root c2root, by rfl⟩)
+    (hsecond : OpeningRecordCodec.decode .second secondmsg.val = some second) :
+    let v := eval H (experiment P (verifier decoder d))
+    BinCompiledRunWordStability.wordsFromRun decoder v =
+      wordsFromMaps (BinCanonicalCutWords.fullC1Map v.1 c1root) (BinCanonicalCutWords.fullC2Map v.1 c2root)
+        (BinCanonicalCutWords.fullFoldedMap v.1 second.1) := by
+  dsimp only
+  let v := eval H (experiment P (verifier decoder d))
+  have h0' := initial_root decoder H v.2.1.1 v.2.1.2 c1root c1 h0
+  have h2' := c2_root decoder H v.2.1.1 v.2.1.2 c2msg c2 c2root h2 hc2
+  have h30' := second_root decoder H v.2.1.1 v.2.1.2 secondmsg final second h30 hsecond
+  unfold BinCompiledRunWordStability.wordsFromRun
+  rw [RawCutWordsFromView.frameFromView_eq decoder d P H 0 (by decide),
+    RawCutWordsFromView.frameFromView_eq decoder d P H 2 (by decide),
+    RawCutWordsFromView.frameFromView_eq decoder d P H 30 (by decide)]
+  have h0old := RawCutConstructedWords.initial_root decoder H v.2.1.1 v.2.1.2 c1root c1 h0
+  have h2old := RawCutConstructedWords.c2_root decoder H v.2.1.1 v.2.1.2 c2msg c2 c2root h2 hc2
+  have h30old := RawCutConstructedWords.second_root decoder H v.2.1.1 v.2.1.2 secondmsg final second h30 hsecond
+  simp only [RawCutWordsFromView.rootFrom, h0old, h2old, h30old, Option.getD_some]
+  exact BinCanonicalCutWords.wordsFromRawCuts_eq_full iv H v.1 Q
+    (FS.eval_consistent H _) hQ hout _ _ _ _ _ _ 2 2 3
+    (RawCutWordsFromView.frame_read decoder d P H 0 (by decide))
+    (RawCutWordsFromView.frame_read decoder d P H 2 (by decide))
+    (RawCutWordsFromView.frame_read decoder d P H 30 (by decide)) h0' h2' h30'
+
+#print axioms pred_getD_of_bind
+#print axioms initial_root
+#print axioms c2_root
+#print axioms second_root
+#print axioms buildWords_eq_full_from_messages
+end AspisR1.RWireConstructedWords
+end

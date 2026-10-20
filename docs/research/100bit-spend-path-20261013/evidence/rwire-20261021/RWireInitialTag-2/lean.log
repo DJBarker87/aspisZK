@@ -1,0 +1,85 @@
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireInitialTag.lean:19:71: error: unsolved goals
+case ask
+I A X C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+g : X → List A → C
+tr : List (I × A)
+own : BS I A X
+pend : List (I × Option A)
+T : Table I A
+out : C
+h✝ : bfollow g tr own pend T = some out
+ps : List (I × Option A)
+i✝ : I
+k✝ : A → BS I A X
+h : none = some out
+⊢ ∃ x extra, g x extra = out
+
+case spawn
+I A X C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+g : X → List A → C
+tr : List (I × A)
+own : BS I A X
+pend : List (I × Option A)
+T : Table I A
+out : C
+h✝ : bfollow g tr own pend T = some out
+ps : List (I × Option A)
+c✝ : I
+nxt✝ : BS I A X
+h : none = some out
+⊢ ∃ x extra, g x extra = out
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireInitialTag.lean:30:24: error: Tactic `assumption` failed
+
+I A X C : Type
+inst✝¹ : DecidableEq I
+inst✝ : Inhabited A
+g : X → List A → C
+out : C
+fin : ∀ (s : BS I A X) (ps : List (I × Option A)), finished g s ps = some out → ∃ x extra, g x extra = out
+q : I × A
+rest : List (I × A)
+ih :
+  ∀ (own : BS I A X) (pend : List (I × Option A)) (T : Table I A),
+    bfollow g rest own pend T = some out → ∃ x extra, g x extra = out
+own : BS I A X
+pend : List (I × Option A)
+T : Table I A
+x✝ : Option C
+c✝ : C
+heq✝ : finished g (pushSpawns own pend).1 (pushSpawns own pend).2 = some c✝
+h : some c✝ = some out
+⊢ finished g ?m.196 ?m.197 = some out
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireInitialTag.lean:90:35: error: don't know how to synthesize placeholder for argument `h`
+context:
+pub : LiteralTranscript.Public
+root : State
+T : Table Bytes State
+tr : List (Bytes × State)
+own : BS Bytes State (List State)
+pend : List (Bytes × Option State)
+g : List State → List State → RawLiteralDecoderDensity.LiteralOutput
+out : RawLiteralDecoderDensity.LiteralOutput
+hd : RecordedBinaryExperimentBin.dec (PublicInitFrame.frame pub.pubBytes root) T = some (own, pend, g)
+hf : bfollow g tr own pend T = some out
+pub2 : LiteralTranscript.Public := ⋯
+a : Addr SelectedTranscriptParams.L := ⋯
+ha : CanonicalByteAddress.Canonical a
+ac : AddrC SelectedTranscriptParams.L := ⋯
+hlen : List.length pub2.pubBytes < 2 ^ 32
+⊢ List.length (PublicInitFrame.frame pub.pubBytes root) ≤ SelectedTranscriptParams.L
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireInitialTag.lean:109:43: error(lean.unknownIdentifier): Unknown identifier `s`
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireInitialTag.lean:109:45: error(lean.unknownIdentifier): Unknown identifier `ps`
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireInitialTag.lean:109:58: error: Type mismatch: After simplification, term
+  hp
+ has type
+  True
+but is expected to have type
+  PublicInitParse.parse pub2.pubBytes ↑ac = some ((PublicInitParse.parse pub2.pubBytes ↑ac).getD fun a => 0)
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireInitialTag.lean:111:4: error: No goals to be solved
+'AspisR1.RWireInitialTag.follow_range' depends on axioms: [propext, sorryAx]
+'AspisR1.RWireInitialTag.raw_pointwise' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RWireInitialTag.initial_follow_tag' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
