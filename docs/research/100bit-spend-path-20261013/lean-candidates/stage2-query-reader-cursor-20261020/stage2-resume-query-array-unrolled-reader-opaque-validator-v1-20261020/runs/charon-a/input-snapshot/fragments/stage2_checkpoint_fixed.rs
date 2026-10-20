@@ -1,0 +1,1 @@
+pub const CHECKPOINT_FIXED:usize=16+32*3+64+32*4+16+88+160+64+32*2+16+32;

@@ -1,0 +1,1 @@
+pub fn checkpoint_size(v:Variant)->usize {CHECKPOINT_FIXED+16*v.final_len()}

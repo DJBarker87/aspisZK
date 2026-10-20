@@ -1,0 +1,1 @@
+    pub fn final_len(self) -> usize { 1024 >> (2*self.folds()) }

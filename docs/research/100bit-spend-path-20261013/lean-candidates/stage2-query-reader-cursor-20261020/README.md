@@ -1,0 +1,7 @@
+# Query reader successful calls and exact cursor advance
+
+PROVED for the extracted unrolled reader source CANDIDATE with an explicit validator parameter: success supplies all 22 ordered Reader.raw(4) calls, all 22 little-endian u32 decodes, the same Array.make input to the validator, its successful output, and final cursor value equal to initial cursor plus 88. No independent read-success assumptions are used. The generic raw cursor step follows the actual checked addition; a separate Nat-only chain avoids pathological combined elaboration.
+
+The in-place validator parameter transformation is mechanically reversible to the original generated reader declaration. All compiled owners are free of opaque template axioms. The repaired concrete Formatter overlay is referenced by its earlier release; accepted theorem audits use standard axioms only. Exact target/source/import/tool/object receipts and zero-swap metrics are retained. Seven focused modules are indexed; duplicate old-reader runs are not counted as new modules.
+
+OPEN: equivalence/adoption of the unrolled source cut, reachability and state preservation from the whole frozen resume, and actual validator semantics. Standalone validator diagnostics prove no validator theorem: the Option anchor resolves missing language-item context, then Aeneas still rejects shared-borrow replay. These failures are preserved separately. No production source changed; no binaries are included. This does not close R14 or full soundness.
