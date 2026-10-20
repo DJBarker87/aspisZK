@@ -339,8 +339,7 @@ impl SeedExpander {
 
     fn next_word(&mut self) -> u32 {
         if self.word == 8 {
-            self.block =
-                (self.hash)(&[MASK_EXPAND_DOMAIN, &self.seed, &self.counter.to_le_bytes()]);
+            self.block = state_only_mask_expander_block(self.hash, self.seed, self.counter);
             self.counter = self.counter.wrapping_add(1);
             self.word = 0;
         }
@@ -1483,4 +1482,8 @@ pub mod r0 {
         }
         Ok((point, running))
     }
+}
+
+fn state_only_mask_expander_block(hash: HashFn, seed: [u8;32], counter: u64) -> [u8;32] {
+    hash(&[MASK_EXPAND_DOMAIN, &seed, &counter.to_le_bytes()])
 }

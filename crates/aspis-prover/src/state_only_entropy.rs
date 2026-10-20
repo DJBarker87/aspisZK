@@ -769,11 +769,10 @@ impl Profile21SourceExpander {
 
     fn next_word(&mut self) -> u32 {
         if self.word == 8 {
-            self.block = (self.hash)(&[
-                PROFILE21_SOURCE_EXPAND_DOMAIN,
-                self.seed.as_ref(),
-                &self.counter.to_le_bytes(),
-            ]);
+            let hash = self.hash;
+            let seed: [u8; 32] = *self.seed;
+            let counter = self.counter;
+            self.block = profile21_source_expander_block(hash, seed, counter);
             self.counter = self.counter.wrapping_add(1);
             self.word = 0;
         }
@@ -1242,4 +1241,8 @@ mod tests {
         assert_eq!(winners, 1);
         fs::remove_dir_all(directory).unwrap();
     }
+}
+
+fn profile21_source_expander_block(hash: HashFn, seed: [u8;32], counter: u64) -> [u8;32] {
+    hash(&[PROFILE21_SOURCE_EXPAND_DOMAIN, &seed, &counter.to_le_bytes()])
 }
