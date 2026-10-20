@@ -430,3 +430,19 @@ the minimal reborrow-loop refactor is stacked on the parked candidate
 freeze (branch codex/cx-freeze-prep-20261020), gated there, and S7 with its
 R22/R17/R13 joins re-pins against the candidate; S7 is therefore a
 next-freeze item, like R15.
+
+## Addendum (2026-10-20): S6 re-pinned on the verifier side; adapter half is an audit item
+
+Codex job cx-repin-s6 (127878968): `first` and `first_decoded` extracted
+from the frozen source with the pinned Charon/Aeneas; `first_success`
+re-proved on the new bodies (row R6 is no longer stale), full-result
+equivalence and decoded-statement reuse proved through the documented
+boundary; local range/index lemmas (the R22 cone part); 11 audits, standard
+axioms (`design/REPIN-s6-20261020.md`). Blocker: the adapter's `accounts[0]`
+read at `r1_pool_adapter.rs:950` is `SliceIndexShared<AccountInfo>`, which
+pinned Aeneas cannot translate — the same tool boundary as R15's account
+write. Ruling: S6's adapter half (the stage-1 caller binding: which account
+bytes feed `first`/`first_decoded`, same-byte binding to the checkpoint) is
+discharged by extending the R15 adapter source-map audit to the stage-1
+account READS (job cx-adapter-audit2), beside premise P2. Row S6: PROVED on
+the verifier cone; adapter binding by audit.
