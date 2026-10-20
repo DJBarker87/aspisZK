@@ -360,3 +360,16 @@ fn records_public_empty_indexed_reference() {
     kani::assume(level < 20 && lane < 8);
     assert_eq!(p.empty[level][lane], q.empty[level][lane]);
 }
+
+// Continuation 4: each leaf has its own unstubbed proof.
+#[path = "glue_leaves.rs"]
+mod glue_leaves;
+
+#[path = "empty_roots.rs"]
+mod empty_roots;
+
+#[path = "glue_tree.rs"]
+mod glue_tree;
+
+#[path = "glue_append.rs"]
+mod glue_append;

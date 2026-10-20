@@ -1,5 +1,6 @@
 import R1Z.PrivacyR1FinalProtocol
 import R1Z.BuilderRuntimeJoin
+import R1Z.BuilderProtocolBounds
 
 /-! Protocol endpoint with the canonical extracted builder. The four builder
 soundness fields are theorems. Real source execution/checker/retry coupling
@@ -30,7 +31,7 @@ variable (seed : R1ProverP K CommitHandle Aux F (wire base publicWidth h B outpu
 theorem privacy_R1_protocol_builder
     (seed : R1ProverP K CommitHandle Aux F
       (wire base ((base.pubBytes x).length) h B outputs x).toWire)
-    (hB : R0Z.K4.PackField B) (hpub : PublicBase F x.1)
+    (hB : R0Z.K4.PackField B)
     (cF : ℕ)
     (R_commit_equal_fibres : ∀ τ : Tape K F, (Finset.univ.filter
       (fun e : (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ → OracleAnswer) × (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ → OracleAnswer) =>
@@ -66,12 +67,19 @@ theorem privacy_R1_protocol_builder
       (modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486) ∧
     modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 ≤
       1 / 2^109 + 1 / 2^137 + 1 / 2^454 := by
-  exact PrivacyR1FinalProtocol.privacy_R1_protocol base h B outputs x seed hB hpub
+  constructor
+  · intro adv w hw
+    have hpub : PublicBase F x.1 := by
+      rw [← hw]
+      exact BuilderCanonical.publicBase_map F w.val.1
+    exact (PrivacyR1FinalProtocol.privacy_R1_protocol base h B outputs x seed hB hpub
     (BuilderProtocolInstance.builder_sound B x) cF R_commit_equal_fibres
     L₁ L₂ R_commit_exhaustion R_commit_counter₁ R_commit_counter₂
     R_commit_stream₁ R_commit_stream₂ R_wire_coin_carrier R_wire_D80_batches
     R_wire_D80_ordered_log R_commit_cell_count R_commit_blocks₁ R_commit_blocks₂
-    source observer_program R_wire_builder_checker_D75_retry G_sim_R_wire
+    source observer_program R_wire_builder_checker_D75_retry G_sim_R_wire).1 adv w hw
+  · exact BuilderProtocolBounds.error_bound base ((base.pubBytes x).length) h B outputs x seed
+      L₁ L₂ R_commit_cell_count R_commit_blocks₁ R_commit_blocks₂
 
 #print axioms privacy_R1_protocol_builder
 end R1Z.PrivacyR1FinalProtocolBuilder
@@ -102,7 +110,7 @@ No inhabitant of this join for the shipped compiler is claimed. -/
 theorem privacy_R1_protocol_source
     (seed : R1ProverP K CommitHandle Aux F
       (wire base ((base.pubBytes x).length) h B outputs x).toWire)
-    (hB : R0Z.K4.PackField B) (hpub : PublicBase F x.1)
+    (hB : R0Z.K4.PackField B)
     (runtime_join : BuilderRuntimeJoin.RustRuntimeJoin h)
     (cF : ℕ)
     (R_commit_equal_fibres : ∀ τ : Tape K F, (Finset.univ.filter
@@ -139,12 +147,19 @@ theorem privacy_R1_protocol_source
       (modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486) ∧
     modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 ≤
       1 / 2^109 + 1 / 2^137 + 1 / 2^454 := by
-  exact PrivacyR1FinalProtocol.privacy_R1_protocol base h B outputs x seed hB hpub
+  constructor
+  · intro adv w hw
+    have hpub : PublicBase F x.1 := by
+      rw [← hw, runtime_join.public_eq w]
+      exact BuilderCanonical.publicBase_map F _
+    exact (PrivacyR1FinalProtocol.privacy_R1_protocol base h B outputs x seed hB hpub
     (BuilderRuntimeJoin.builder_refinement_D46_D51 BuilderProtocolInstance.field_large F B x runtime_join)
     cF R_commit_equal_fibres L₁ L₂ R_commit_exhaustion R_commit_counter₁ R_commit_counter₂
     R_commit_stream₁ R_commit_stream₂ R_wire_coin_carrier R_wire_D80_batches
     R_wire_D80_ordered_log R_commit_cell_count R_commit_blocks₁ R_commit_blocks₂
-    source observer_program R_wire_builder_checker_D75_retry G_sim_R_wire
+    source observer_program R_wire_builder_checker_D75_retry G_sim_R_wire).1 adv w hw
+  · exact BuilderProtocolBounds.error_bound base ((base.pubBytes x).length) h B outputs x seed
+      L₁ L₂ R_commit_cell_count R_commit_blocks₁ R_commit_blocks₂
 
 #print axioms privacy_R1_protocol_source
 end R1Z.PrivacyR1FinalProtocolBuilderSource

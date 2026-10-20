@@ -1,0 +1,52 @@
+//! Parametric call-trace proof for membership-tree structural recursion.
+//! The two callees return arbitrary shared values. Every node argument,
+//! base-call pointer, node order and call count is checked. This certifies
+//! composition only; the callee refinements are separate obligations.
+use super::super::*;
+fn words() -> [u32;8] { [kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any()] }
+fn path() -> [[u32;8];24] { [words(), words(), words(), words(), words(), words(), words(), words(), words(), words(), words(), words(), words(), words(), words(), words(), words(), words(), words(), words(), words(), words(), words(), words()] }
+fn bits() -> [u32;24] { [kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any(), kani::any()] }
+static mut SIBS: [[u32;8];24] = [[0;8];24];
+static mut BITS: [u32;24] = [0;24];
+static mut RETURNS: [[u32;8];24] = [[0;8];24];
+static mut STATE: [u32;8] = [0;8];
+static mut NODE_CALLS: usize = 0;
+static mut BASE_CALLS: usize = 0;
+static mut WPTR: *const RW = core::ptr::null();
+static mut PPTR: *const RP = core::ptr::null();
+fn checked_base(w: &RW, p: &RP) -> [u32;8] {
+    assert_eq!(w as *const RW, unsafe { WPTR });
+    assert_eq!(p as *const RP, unsafe { PPTR });
+    assert_eq!(unsafe { NODE_CALLS },0);
+    unsafe { BASE_CALLS += 1; STATE }
+}
+fn checked_node(left: [u32;8], right: [u32;8]) -> [u32;8] {
+    let n = unsafe { NODE_CALLS }; assert!(n < 24);
+    assert_eq!(unsafe { BASE_CALLS },1);
+    let cur = unsafe { STATE }; let sib = unsafe { SIBS[n] };
+    let bit = unsafe { BITS[n] } != 0;
+    for i in 0..8 {
+        assert_eq!(left[i], if bit { sib[i] } else { cur[i] });
+        assert_eq!(right[i], if bit { cur[i] } else { sib[i] });
+    }
+    unsafe { STATE = RETURNS[n]; NODE_CALLS = n+1; STATE }
+}
+#[kani::proof]
+#[kani::unwind(26)]
+#[kani::stub(crate::pool_v1::pair_forest_copy_builder::input_leaf_r, checked_base)]
+#[kani::stub(crate::pool_v1::pair_forest_copy_builder::node_digest_r, checked_node)]
+fn tree_structural_call_trace() {
+    let w = RW { input_value: kani::any(), output_value: kani::any(), change_value: kani::any(),
+        sk: words(), salt: words(), bits: bits(), sibs: path(),
+        pair_first: words(), pair_occupied: kani::any(), pair_second: words(), pair_inverse: kani::any(),
+        recipient_owner: words(), recipient_salt: words(), change_owner: words(), change_salt: words() };
+    let p = RP { transfer: kani::any(), asset: kani::any(), next_pair_index: kani::any(),
+        frontier: [[0;8];20], empty: [[0;8];20] };
+    let n: usize = kani::any(); kani::assume(n <=24);
+    unsafe { SIBS=w.sibs; BITS=w.bits; RETURNS=path(); STATE=words();
+        WPTR=&w; PPTR=&p; BASE_CALLS=0; NODE_CALLS=0; }
+    let actual = tree_cur_r(&w,&p,n);
+    assert_eq!(unsafe { BASE_CALLS },1); assert_eq!(unsafe { NODE_CALLS },n);
+    let expected = unsafe { STATE };
+    for i in 0..8 { assert_eq!(actual[i],expected[i]); }
+}

@@ -13,8 +13,10 @@ source-identification certificate. D83's continuation removes the outer-loop
 break shape and advances the source work; the full compiler now reaches a
 separate borrow blocker in `records`. Continuation 3 now supplies extracted
 owned references and decomposed, passing Kani equality gates for records and
-the optimized Poseidon external layer. The complete caller/public/glue source
-identification is still open.
+the optimized Poseidon external layer. Continuation 4 adds the protocol-builder endpoints, direct public projections,
+field-normalized complete record reconstruction, and P6 empty-root/recursive
+component certificates. Deployed admission and complete bank/glue source
+identification remain open in the named runtime join.
 
 The continuation's exact results and gates are recorded below. Sections
 Stage 1 through the original stop reason describe the previous run; their
@@ -641,3 +643,245 @@ Env J 9215/9217 pass. Retained failures: 9213 missing metadata attribute,
 corrected dependency fingerprint justifies the 9217 dependent compile.
 All five projection theorems have only standard axioms. No existing privacy
 root changes or shipped crate edits are made.
+
+## Continuation 4, Stage 4: empty-root certificate and recursive glue contracts
+
+The P6 route now certifies the actual pair_empty_roots helper against all
+21 frozen rows (168 words). Each of the 21 **unstubbed** leaf harnesses calls
+actual pool_v1_tree_parent on its fixed literal predecessor (zero at level 0)
+and checks every output word. A separate helper-composition harness checks
+all arguments, exact order and exact count of its 21 parent calls while
+returning those independently checked rows. Pure-call substitution composes
+these certificates. The Rust table and the optimized native test table are
+compared verbatim with R0P.EmptyRoots by `builder-cont4-kani-audit.py`.
+This is the named prep5/P6 Kani/CBMC soundness route, **not a new Lean
+postulate**. The existing frozen_word/public_roundtrip facts identify the
+same literal words with the canonical mathematical empty-root table.
+
+Thirteen small unstubbed glue/adapter harnesses pass: the two note chunks,
+digest projection, ordered pair, membership bit, append bit/sibling, node
+kind, zero kind, late rows, chunk length, input occupancy, and std from_fn
+at eight arbitrary u32 callback returns (including ordered callback indices
+and exact count). All 25 membership horizons 0..24 and all 21 append horizons
+0..20 have successful parametric call-trace certificates. They check every
+node argument and result, base-call pointers, call order and exact counts
+for arbitrary raw records and arbitrary callee result tables. They do **not**
+claim that the base/node callees have been identified with all Lean glue, or
+that the full merged banks have been certified. Those are separate joins.
+
+There are 81 distinct successful harness verdicts. The audit names each
+one and its receipt. Five reused component verdicts (the helper call trace
+and four membership horizons) are explicitly inside commands whose later
+work timed out: their parent status remains 124, never converted to a
+whole-command success. Other final target groups exit 0, including all 21
+append horizons (51.006 s, 1,079,560 KiB process RSS), the remaining twenty
+membership horizons (52.652 s, 1,053,132 KiB), root 0 (30.102 s,
+1,325,608 KiB), and the remaining twenty roots (227.979 s, 1,349,452 KiB).
+All swaps are zero. Aggregate cgroup peaks and exact commands are retained.
+
+Three 300-second unsuccessful groups remain in the packet. The symbolic
+membership horizon was split into named fixed horizons. Optional assertion
+reachability analysis, rather than assertion validity or unwinding, was
+then isolated as the bottleneck: disabling only reachability makes the
+previously stalled horizon 4 pass in 1.47 solver seconds. Every assertion,
+normal safety check and explicit unwinding assertion remains enabled.
+Only missing/unfinished horizons and roots were selected in the follow-up
+commands; successful cases were not repeated. The initial small-glue group
+also retains five memcmp byte-loop unwinding failures; replacing whole-array
+assertions with all eight per-word assertions preserves coverage and passes.
+No memory cap was raised. Timeout-parent GNU-time RSS is marked incomplete;
+only the cgroup aggregate peak is used for those groups.
+
+The optimized native check evaluates all 168 fixed words against the same
+frozen table (exit 0, 18.152 s including compilation, 559,992 KiB RSS,
+zero swaps). This measured check is kept distinct from the Kani certificates.
+Kani 0.67.0 and all installed tool binary hashes are recorded; CBMC uses its
+embedded CaDiCaL, not the separately inventoried Kissat. Proof time is in
+Kani compilation/CBMC, not native debug arithmetic. All executed native
+Rust tests use --release. Scopes are 6G/8G/zero-swap/64 tasks, with four cargo
+jobs and the specified four-thread linker flag. Rust launches wait on the
+55-GiB reservation preflight and serialize this worker's subsequent jobs.
+
+All source bodies added here are under the already-present cfg(kani) proof
+module, or in the standalone test/reference crate. No shipped crate file
+changes. Program ELF rebuilds are therefore not required by this continuation's
+changes; the previous three frozen-ELF results are not claimed rerun.
+
+## Continuation 4, Stage 5: admission counterexample and weaker field handoff
+
+**The Stage 2 raw-canonical join was too restrictive to derive from successful
+compilation.** The new optimized noncanonical_outputs test supplies the D70
+fixed transfer fixture, then adds p to recipient.owner_key[0]. The actual
+compiler still succeeds with the original public statement. The owner word
+appears unreduced in C1 row 27*16+12, while all 16*1024 trace cells agree with
+the canonical fixture modulo p. Exit 0, 0.197 s including incremental
+compilation, 136,200 KiB RSS, zero swaps. This is a concrete counterexample
+to “successful compile implies all raw output-owner words are canonical”; it
+is not a counterexample to builder soundness. It tests compiler success only,
+not prover publication; normalization does not certify later field guards
+or serialization. The earlier byte-roundtrip
+lemmas remain valid at their stated canonical-word hypotheses.
+
+The final source handoff therefore **does not require CanonicalWords or
+assetCanonical**. BuilderFieldNormalization.decoded_witness proves, for every
+raw witness record, that lifting its M31 decoding equals its direct K-valued
+model witness. It uses ring-hom preservation of Nat casts, not raw-word bounds
+or concrete hash evaluation. trace_normalization then derives equality of
+the raw-record merged K-trace and the canonical-record merged K-trace using
+only the existing WitnessOk and PubCorr requirements. This covers all fifteen
+witness fields, including noncanonical owner/key/salt/pair coordinates.
+
+RustRuntimeJoin.sourceIdentification now uses this field-trace equality.
+Its optional witness_record/public_record byte-equality lemmas take their
+extra canonical hypotheses explicitly and are not assembly premises. The
+primitive join's public correspondence is over K, so a raw asset does not
+need a separate canonicality premise either. The exact final join is quoted
+below. Attempts 9218/9219 retain local instance/simplification errors; 9220
+passes the two normalization theorems (2.03 s, 4,000,904 KiB), 9221 passes the
+weakened assembly (2.15 s, 4,096,256 KiB). Only standard axioms occur.
+
+The endpoint also removes hpub. For each honest witness on the selected
+public fibre, canonical public mapping (or runtime_join.public_eq in the
+source-facing version) derives PublicBase. ZK_FSS is proved at those exact
+witness/fibre quantifiers. A separate BuilderProtocolBounds.error_bound proves
+the numerical conclusion without a public-membership premise or a witness;
+no nonempty-fibre hypothesis is added. Attempt 9223 passes that helper
+(2.98 s, 4,062,884 KiB), and 9224 passes both final endpoint variants (5.68 s,
+4,105,560 KiB). Both builder_refinement_D46_D51 and hpub are absent at the
+canonical endpoint. At the source-facing endpoint only the named primitive
+runtime join replaces builder soundness; hpub is absent there too.
+
+The original D89 real/ideal ScanCoupling statements and all their quantifiers
+remain unchanged. In particular builder soundness and public membership do
+not determine arbitrary source FSExperiments, checker inputs, tape/retry law,
+publication, serialization or actual reached-query histories. No real
+execution coupling is claimed proved, and no history-worker module changes.
+
+### Exact final primitive Rust join (supersedes the Stage 2 interface)
+
+```lean
+structure RustRuntimeJoin (source : HonestProver K) where
+  publicInput : source.Instance → Public F
+  witnessRecord : source.Instance → RustWitness
+  publicRecord : source.Instance → RustPublic
+  words : ∀ w, WitnessOk (witnessRecord w)
+  publicCorr : ∀ w, PubCorr (publicRecord w) (mapPub (K := K) (publicInput w))
+  admission : ∀ w, BuilderSpendRelation.RspendPlus
+    (mapPub (K := K) (publicInput w))
+    (BuilderCanonical.liftWitness (witness (witnessRecord w)))
+  public_eq : ∀ w, source.public w = mapPub (publicInput w)
+  raw_trace_eq : ∀ w, source.build w =
+    BuilderRefinement.mergedTrace (witnessRecord w) (publicRecord w)
+  transport_eq : source.transport = BuilderSource.π
+```
+
+### Final verbatim after signature
+
+The D89 before signature is quoted above. This final version supersedes the
+initial Stage 1 after signature: h is fixed to BuilderSource.prover, and both
+builder soundness and hpub have been discharged without replacement binders.
+
+```lean
+theorem privacy_R1_protocol_builder
+    (seed : R1ProverP K CommitHandle Aux F
+      (wire base ((base.pubBytes x).length) h B outputs x).toWire)
+    (hB : R0Z.K4.PackField B)
+    (cF : ℕ)
+    (R_commit_equal_fibres : ∀ τ : Tape K F, (Finset.univ.filter
+      (fun e : (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ → OracleAnswer) × (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ → OracleAnswer) =>
+        ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).tapeOf e.1 e.2 = some τ)).card = cF)
+    (L₁ L₂ : ℕ) (R_commit_exhaustion : RExh (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂)
+    (R_commit_counter₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2^64) (R_commit_counter₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2^64)
+    (R_commit_stream₁ : 16 * L₁ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ * 8) (R_commit_stream₂ : 16 * L₂ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ * 8)
+    (R_wire_coin_carrier : ((wire base ((base.pubBytes x).length) h B outputs x).toWire).Cm ≃ (RIdx → OracleAnswer))
+    (R_wire_D80_batches : RWireBatches (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver)
+    (R_wire_D80_ordered_log : ∀ (w : (h).Instance) (sec : SecP) (d : OracleAnswer)
+      (τ : Tape K F) (roots : Fin 3 → OracleAnswer) (rest : RIdx → OracleAnswer) (ch : Challenges K),
+      ((wire base ((base.pubBytes x).length) h B outputs x).toWire).comLog (R_wire_coin_carrier.symm rest) roots (view h B outputs x w ch τ) ch =
+        (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).openList ch).map (fun c =>
+          (gram (((wire base ((base.pubBytes x).length) h B outputs x).toWire).pubBytes x) ((wire base ((base.pubBytes x).length) h B outputs x).toWire).vtag (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).leafVal h w x τ ch) sec d rest
+            (cposOf (E₁ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁) (E₂ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂) c), ansC roots rest c)))
+    (R_commit_cell_count : RCommitCount L₁ L₂)
+    (R_commit_blocks₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2 * L₁) (R_commit_blocks₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2 * L₂)
+    (source : FSExperiments K CommitHandle Aux R1Bat F)
+    [Fintype source.RealRand] [Nonempty source.RealRand]
+    [Fintype source.IdealRand] [Nonempty source.IdealRand]
+    (observer_program : source.Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
+    (R_wire_builder_checker_D75_retry : ∀ (adv : source.Adversary) (w : (h).Instance),
+      (h).public w = x.1 → ScanCoupling
+        (realTest h B outputs source adv x w)
+        (realTest h B outputs (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide)
+          (P_R1 (h).transport B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w))
+    (G_sim_R_wire : ∀ adv : source.Adversary, ScanCoupling
+      (idealTestS source adv x (simE (h).transport B outputs x))
+      (idealTestS (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide) (P_R1 (h).transport B hB) (fun h' => VR1 h'))
+        (RomObserverBin.observerMap source observer_program adv) x (simE (h).transport B outputs x))) :
+    ZK_FSS h B outputs source x (simE (h).transport B outputs x)
+      (modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486) ∧
+    modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454
+```
+
+For privacy_R1_protocol_source, the final difference from D89 is exactly
+removing `(hpub : PublicBase F x.1)` and replacing the verbatim builder binder
+by `(runtime_join : BuilderRuntimeJoin.RustRuntimeJoin h)`. Every other binder,
+coupling and conclusion is retained verbatim; the audit checks this string
+comparison against the final source. This conditional source binder is not
+asserted weaker than BuilderSoundOn itself.
+
+## Continuation 4: demonstrated boundary and final status
+
+Focused extraction of tree_cur_r/app_cur_r succeeds, but the raw output has
+an external core.array.from_fn declaration. Including both pinned copy crates
+removes their opaque declarations, leaving that std adapter. The eight-u32
+Kani adapter contract above is checked; an axiom-free extracted Lean adapter
+and its integration with all source wrappers are not supplied here.
+
+The more consequential focused target, actual merged_banks, was also extracted.
+After explicitly including all three pinned copy crates, Charon exits 0
+(11.008 s, 611,780 KiB RSS) and Aeneas exits 0 (2.044 s, 152,144 KiB), but
+its output still declares five unsupported externals: core.array.from_fn,
+Iterator.map.default, Map.Iterator.next, Range.contains and
+RangeInclusive.contains. The backend additionally reports missing Iterator
+map/collect model fields at Extract.ml:2868. **This is not an accepted Lean
+certificate:** the generated source contains external declarations forbidden
+by the no-new-axioms rule. It remains on the host, with SHA/size and exact
+rejected declaration lines in host-receipts.json; it is neither committed as
+Lean source nor counted among the successful theorem audits. The original
+successful-compiler records borrow frontier remains as recorded in D83/D90;
+no unchanged whole-compiler extraction or larger-cap retry was performed.
+A remaining reference route must certify iterator/Vec materialization,
+dispatch/writer composition, all bank cells and the final column wrapper.
+The bounded recursive-call contracts alone do not establish that equality.
+
+| Requested item | Final continuation-4 result | Exact remaining source obligation |
+|---|---|---|
+| Deployed admission/public mapping | Actual two public projection functions extracted and proved; PublicBase removed from both new endpoints. Noncanonical-owner successful-compile counterexample measured and accounted for. | Derive embedded RspendPlus and WitnessOk from the adopted successful source domain, including D50 sentinel, append/carry and all caller checks; instantiate the source h/public map. No assertion that the entire compiler has been refined. |
+| Complete records-to-canonical mapping, empty-root meaning | All fifteen witness fields decode naturally into K without owner/key/salt canonicality; canonical and raw K-traces coincide under WitnessOk/PubCorr. Optional byte round trips cover all witness/public fields. Actual empty-root helper has the P6 fixed-leaf/call-trace certificate. | Instantiate the exact raw mapper/public correspondence and honest-domain facts for the concrete source h. P6 component certificates are not silently turned into kernel postulates. |
+| D61/D70 Rust glue | Thirteen small gates, all 25 membership and 21 append call-trace horizons; all exact source pins and unchanged glue/generator checks pass. | Complete the remaining callee, iterator/Vec, bank aggregation and column-wrapper join. Rejected extraction output is not proof evidence. |
+| Final SourceIdentification | sourceIdentification assembles all three fields from the single explicit RustRuntimeJoin; public/canonical reconstruction and field normalization are kernel theorems. | RustRuntimeJoin is not inhabited for a concrete shipped HonestProver here. Its primitive source obligations remain visible in the quoted definition. |
+| D89 builder soundness row | Removed at PrivacyR1FinalProtocolBuilder; supplied by builder_sound. At the source-facing endpoint it follows from RustRuntimeJoin. | Deployed identification remains open; no stronger assumption was substituted into PrivacyR1Final. |
+| D89 real builder/checker/retry row | Mathematical builder/public facts have their own proved handoff; the real source-to-model ScanCoupling retains its exact statement. | One real execution join still owes checker-input identity, P_chk/P_R1, no-pole/VR1, tape/retry/error/publication/serialization law and reached-query history. These cannot follow from builder soundness for arbitrary source FSExperiments. No history-worker-owned module was edited. |
+
+The final audit covers nine current Lean modules and 26 theorems (plus the
+sourceIdentification proof definition), with 21 retained env-J attempts
+9204–9224. Every final source hash and current direct-import object fingerprint
+matches its successful receipt; all final axioms are subsets of propext,
+Classical.choice and Quot.sound; all attempts report zero swaps. The original
+PrivacyR1Final/PrivacyR1FinalProtocol files and all shipped crate files are
+byte-unchanged from 5f877a406. All executed native Rust tests use --release.
+No source-wide release, complete frozen-manifest replay, new ELF rebuild,
+merge or push is claimed.
+
+Evidence entry points: builder-cont4-evidence/final-audit.json,
+kani-audit.json, kani-tools.json, source-check.json, attempts.jsonl and
+host-receipts.json. Long compiler warnings/unknown-external dumps are condensed
+in the packet; full host logs remain pinned by SHA/size/path. Every solver
+verdict and all timing/receipt records are retained. The host's narrowed
+workspace prunes lock packages/features and version disambiguators; all
+188 crate/reference source pins match this checkout, with no new lock
+package/version and identical shared registry source/checksum identities.
+Historical inherited runner revision labels are retained and explicitly
+corrected by source-base plus exact per-run source/tool pins, not treated
+as source identification. No object, LLBC, executable, ELF or key is committed.
