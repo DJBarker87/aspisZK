@@ -36,11 +36,35 @@ experiment by `Q + B_V`, when the prover issues at most Q calls.
 
 ## Stage 2: decoder starts
 
-In progress.
+The existing decoder counts recognised fresh *chain starts*, including
+ordinary absorb addresses, not only canonical initialisation frames.
+`BinInitialQueryAccounting.InitialisationCharging` explicitly labels
+initialisation-only charging as an additional restriction which the endpoint
+does not assume. The selected message codec enforces only a size bound.
+Merkle leaves and nodes start with 16 and 18, whereas initial frames start
+with 85; this proves they are not canonical initial frames. It is insufficient
+to prove decoder rejection: the absorb parser inspects positions 32 and 33,
+which contain unconstrained leaf/child bytes. No universal zero-start claim
+is made from this first-byte separation.
+
+`OracleDecisionPrereqStarts` reuses `BinHonestQueryBudget.rows_bound` and
+proves exact compiler start preservation for arbitrary effectful decisions.
+It gives `Q + 34 + N` if terminal starts are at most N, hence `Q + 34` under
+an explicit zero-terminal-start condition. Unconditionally the independent
+path/frame decision has `N ≤ 1260`, yielding **Q + 1294**. This is a proved
+safe constant, not a claimed optimum. Arbitrary extra frame inputs can even
+be recognised initial frames (`arbitrary_frame_can_start`, reusing
+`BinDecoderInitialStarts.recognizes_initial`), so the feasibility interface
+alone cannot assign all extra frame calls zero starts.
+
+A production port retaining Q+34 needs a theorem about the actual parsed
+terminal addresses and their chronological tables, or a different decoder
+with a proved density/completion bridge. This work does not add such a
+premise to an endpoint.
 
 ## Stage 3: recorded log and numeric envelope
 
-In progress.
+Verification in progress.
 
 ## Signature accounting and port estimate
 
