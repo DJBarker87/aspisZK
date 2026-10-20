@@ -1,0 +1,57 @@
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireCounterexamples.lean:55:2: error: Type mismatch
+  Eq.trans he.right ha
+has type
+  (eval H
+          (RawCutProverCompiler.experiment
+            (compiled D (fun x x_1 => true) (BinCompiledRunWordStability.wordsFromRun D) (badProver tag))
+            (RawCutProverCompiler.verifier D fun x x_1 => true))).2.2 =
+    true
+but is expected to have type
+  FS2.accepts (eval H (recorded D (fun x x_1 => true) (badProver tag)))
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireCounterexamples.lean:65:2: error: Type mismatch
+  Eq.trans (congrArg (fun pub => pub.tag) he.left) hpub
+has type
+  (eval H
+              (RawCutProverCompiler.experiment
+                (compiled D (fun x x_1 => true) (BinCompiledRunWordStability.wordsFromRun D) (badProver tag))
+                (RawCutProverCompiler.verifier D fun x x_1 => true))).2.1.1.tag =
+    tag
+but is expected to have type
+  (eval H (recorded D (fun x x_1 => true) (badProver tag))).2.1.1.tag = tag
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireCounterexamples.lean:78:2: error: 'change' tactic failed, pattern
+  (eval H (recorded D (fun x x_1 => true) (badProver tag))).2.1.2 n =
+    CanonicalCutEnrichedTranscript.enrichMessage (BinCompiledRunWordStability.wordsFromRun D orig) (orig.2.1.2 n)
+is not definitionally equal to target
+  (eval H
+              (RawCutProverCompiler.experiment
+                (compiled D (fun x x_1 => true) (BinCompiledRunWordStability.wordsFromRun D) (badProver tag))
+                (RawCutProverCompiler.verifier D fun x x_1 => true))).2.1.2
+      n =
+    (have v :=
+              eval H
+                (RawCutProverCompiler.experiment (badProver tag) (RawCutProverCompiler.verifier D fun x x_1 => true));
+            (v.1 ++ (eval H (RawCutProverCompiler.verifier D (fun x x_1 => true) v.2.1.1 v.2.1.2)).1,
+              (v.2.1.1, proof (BinCompiledRunWordStability.wordsFromRun D v) v.2.1.2), v.2.2)).2.1.2
+      n
+/Users/dominic/ZK/.worktrees/cx-rwire/docs/research/100bit-spend-path-20261013/lean/RWireCounterexamples.lean:92:2: error: Type mismatch
+  Eq.trans_le he hb
+has type
+  firstReads emptyTable
+      (eval H
+          (RawCutProverCompiler.experiment
+            (compiled D (fun x x_1 => true) (BinCompiledRunWordStability.wordsFromRun D) (badProver tag))
+            (RawCutProverCompiler.verifier D fun x x_1 => true))).1 ≤
+    0 + (QvStage1.stage1Budget 10 + QvStage2.stage2Budget 12)
+but is expected to have type
+  firstReads emptyTable (eval H (recorded D (fun x x_1 => true) (badProver tag))).1 ≤ 1161
+'AspisR1.RWireCounterexamples.exists_clean' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RWireCounterexamples.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RWireCounterexamples.bad_public' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RWireCounterexamples.bad_initial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RWireCounterexamples.bad_budget' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RWireCounterexamples.non_two_accepted_counterexample' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.RWireCounterexamples.distinct_first_cells' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RWireCounterexamples.strict_weakening' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

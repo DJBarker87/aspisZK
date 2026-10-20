@@ -1,0 +1,114 @@
+import R1FinalSoundnessBinPerQueryR19
+import RWireCompletion
+import R19BudgetOriginalReads
+
+/-! R19 endpoint with binary causal completion derived symbolically from the
+existing checked readers and a strictly narrower initial-public tag law. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.R1FinalSoundnessBinPerQueryRWire
+open FS FS2 R0C.V3
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open AspisV8R19.CausalFirstHitUnionBound
+open RawCutProverCompiler RawCutTranscriptRun
+open RawRecordedOracleExtractionMassBin DecoderInstanceBoundaryBin
+open RecordedBinaryExperimentBin LiteralAcceptanceTerminal
+open RawExtractorCostComposedV2 (Parameters Coins)
+open RawExtractorCostComposedBin
+abbrev BoundaryStatements := R1FinalSoundness.BoundaryStatements
+abbrev BoundaryEvidence := R1FinalSoundness.BoundaryEvidence
+
+abbrev totalBound := BinPerQueryNumeric.totalBound
+abbrev Qmax := BinPerQueryNumeric.Qmax
+
+theorem final_soundness
+    (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover)
+    (Q : Nat) (deployedFailure : ℚ)
+    (hqueries : DecoderQueryAccounting.AdversaryQueries P Q)
+    (s : BoundaryStatements) (evidence : BoundaryEvidence s)
+    (source : (Bytes → State) → SourceInputs)
+    /- R16: construct the authenticated decoder/decision map, public bytes and
+       exact row-31/32 placements. DECODER-INSTANCE, owner Codex/lead. -/
+    (h_R16_instance : BoundaryEvidence s → ∀ H,
+      FS2.accepts (eval H (original D d P)) → InstanceFields D d P H (source H))
+    /- R13: accepted binary reads give literal matching data; R13-CLOSE,
+       batch A on S7, owner Codex. -/
+    (h_R13 : ∀ H, FS2.accepts (eval H (original D d P)) →
+      LiteralMatchingData.read (compiledRows D d P H) = some (source H).data)
+    /- R14 backend: pairing and finalized accumulator; R14-FINISH,
+       S4/S5/S8/S9 boundaries, owner Codex. -/
+    (h_R14_backend : ∀ H, FS2.accepts (eval H (original D d P)) →
+      LiteralPairingChecks.checks (compiledRows D d P H) ∧
+      ∀ q : Fin 22 → Fin 262144,
+        LiteralQueryRead.decode (source H).queryBytes = some q →
+        HchecksAccumulator.ClosedSum LiteralOpeningView.eK (source H).data q
+          (SelectedChallengeMap.rhoOf (source H).rho))
+    /- R15 writer: authenticated first-match state; TX1-FINISH and read/write
+       audits, unconditional frozen-writer preservation still owed, owner Codex. -/
+    (h_R15_writer : ∀ H, FS2.accepts (eval H (original D d P)) →
+      ∀ q : Fin 22 → Fin 262144,
+        LiteralQueryRead.decode (source H).queryBytes = some q →
+        ∀ j, MatchingSupport.match0 (source H).data (q j))
+    /- R3/R2: actual semantic endpoint with arithmetic/allocation/circle
+       boundaries; HCHECKS field table, owner Codex. -/
+    (h_R3_semantic : ∀ H, FS2.accepts (eval H (original D d P)) →
+      HchecksReaderComposition.SemanticEndpoint (source H).decoded
+        (compiledRows D d P H) (source H).data)
+    /- R-wire: binary causal decoder completion, distinct from collision mass;
+       BIN model §6, WIRE-TX1/TX2, owner Codex/privacy. -/
+    (h_Rwire_tag : BoundaryEvidence s → RWireCompletion.InitialTag D d P (Q + 1161))
+    /- R9/R20: same statement, caller reachability and probability law,
+       including a single query-scan abort charge; owner Codex/lead-worker. -/
+    (h_R9_transport : BoundaryEvidence s → DeployedTransport D d P deployedFailure)
+    (e : RawExtractorCostComposedBin.CostedExtractor) (p : Parameters)
+    /- Size-restricted M10 adequacy; length is independent of distinct reads. -/
+    (h_M10_ledger : RawExtractorCostComposedBin.LedgerRefinement e p Q)
+    (h_M10_log_length : BoundaryEvidence s → ∀ H,
+      (eval H (recorded D d P)).2.2 = true →
+        (eval H (recorded D d P)).1.length ≤ Q + 1161) :
+    (∀ H : Bytes → State, (eval H (recorded D d P)).2.2 = true →
+      AspisV8R19.OracleResampling.mean (fun coins : Coins =>
+        ((e.eval (eval H (recorded D d P)) coins).2.total : ℚ)) ≤ (p.attemptBudget : ℚ)) ∧
+    (∀ run coins w, (e.eval run coins).1 = some w → LiteralProtocol.relation run.2.1.1 w) ∧
+    (1 / (2 : ℚ)^126 + 1 / (2 : ℚ)^454 ≤ 1 / (2 : ℚ)^120) ∧
+    (deployedFailure ≤ totalBound Q) ∧
+    (Q ≤ Qmax → deployedFailure ≤ (Q+1 : ℚ) * (1/(2:ℚ)^100)) := by
+  have hchecks : ∀ H, FS2.accepts (eval H (original D d P)) →
+      Checks (compiledPublic D d P H) (compiledRows D d P H) := by
+    intro H ha
+    have hfields := h_R16_instance evidence H ha
+    have hq := QueryScanRow31SourcePlacement.instanceFields_row31 D d P H (source H) hfields
+    obtain ⟨hpub, h31, h32, hv31, hv32⟩ := hfields
+    obtain ⟨hpair, haccum⟩ := h_R14_backend H ha
+    exact Classical.choice (hchecks_deployed_partial D d P H
+      (source H).decoded (source H).data hpub (h_R13 H ha) hpair
+      (source H).m31 (source H).queryBytes (source H).state31
+      (source H).m32 (source H).rho (source H).state32
+      h31 h32 hv31 hv32 hq (h_R15_writer H ha) haccum (h_R3_semantic H ha))
+  have hformat : ∀ H, FS2.accepts (eval H (original D d P)) →
+      RWireCheckedFormat.Format (eval H (original D d P)).2.1.2 := by
+    intro H ha
+    have h := RWireCheckedFormat.format_of_checks D H (compiledPublic D d P H)
+      (eval H (recorded D d P)).2.1.2 (hchecks H ha)
+    have hp : (eval H (recorded D d P)).2.1.2 =
+        RawCutTranscriptRun.proof
+          (BinCompiledRunWordStability.wordsFromRun D (eval H (original D d P)))
+          (eval H (original D d P)).2.1.2 := by
+      change (eval H (experiment (compiled D d (BinCompiledRunWordStability.wordsFromRun D) P)
+        (verifier D d))).2.1.2 = _
+      rw [compiled_experiment_eval]
+    rw [hp] at h
+    exact RWireCheckedFormat.format_of_enrich _ _ h
+  have hwire : BinaryCompletion D d P (Q + 1161) :=
+    RWireCompletion.completion_of_format D d P (Q + 1161)
+      (R19BudgetOriginalReads.original_reads D d P Q hqueries) hformat (h_Rwire_tag evidence)
+  exact R1FinalSoundnessBinPerQueryR19.final_soundness
+    D d P Q deployedFailure hqueries s evidence source
+    h_R16_instance h_R13 h_R14_backend h_R15_writer h_R3_semantic
+    (fun _ => hwire) h_R9_transport e p h_M10_ledger h_M10_log_length
+
+#print axioms final_soundness
+end AspisR1.R1FinalSoundnessBinPerQueryRWire
+end

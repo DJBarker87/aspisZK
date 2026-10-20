@@ -20,6 +20,7 @@ for name,s in [('before',before),('after',after)]:
  assert s.rstrip() in (PACKET/'design/RWIRE-20261021.md').read_text()
 assert (HERE/'signature.diff').read_text()==''.join(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile='R19.final_soundness',tofile='RWire.final_soundness'))
 data=json.loads((HERE/'manifest.json').read_text());assert data['schema']=='focused-extractor-proof-packet-v1'
+assert len({(a['module'],a['source_sha256'],a['deps_fingerprint']) for a in data['attempts']})==len(data['attempts'])
 accepted=[a for a in data['attempts'] if a['final_current']]
 modules={a['module'] for a in accepted}
 expected={p.stem for p in (PACKET/'lean').glob('RWire*.lean')}|{'R1FinalSoundnessBinPerQueryRWire'}
@@ -37,7 +38,7 @@ for a in data['attempts']:
  source=PACKET/'lean'/(a['module']+'.lean'); assert sha(source)==a['source_sha256']
  code=source.read_text()
  names=re.findall(r'^(?:private )?(?:@\[[^\n]+\] )?theorem (\w+)',code,re.M)
- audits=re.findall(r'^#print axioms (\w+)',code,re.M)
+ audits=[n.rsplit('.',1)[-1] for n in re.findall(r'^#print axioms ([\w.]+)',code,re.M)]
  assert set(names)==set(audits),(a['module'],set(names)^set(audits))
  assert len(audits)==len(a['axioms'])
  for name in names:
