@@ -1,0 +1,9 @@
+# Query31 concrete byte decoder and stateful first-stop chain
+
+PROVED model/source-consumer facts: successful concrete query_words decoding yields eight ordered little-endian 32-bit words masked to 18 bits. The complete successful unrolled candidate driver now supplies a Q22-valid state transition chain through exactly its first stopping block (one through eight), using that concrete decoder rather than an arbitrary decoding function. Each block is tied to its exact byte-array position, decode result, checked scan result and Q22 transition; the final valid state and stopping evidence are retained. Existing little-endian/mask facts and standard array models are reused.
+
+The new Query31ExplicitListLoop source/object a35e683e/2986d776 is selected throughout this packet. The old API remains as a corollary; Query31ArrayIteratorOrder was rebuilt against that exact object. Older b88/876 owner combinations in the historical scan packet are not co-selected. The byte/mask packet's from_fn model is exactly the retained model minus its two resource-option lines. Standard-operation and array-map model sources are pinned as retained dependencies; their Rust-library correspondence remains explicit.
+
+Eight focused NUC Lean targets pass, all at -M4400 with High1GiB/Max2GiB/Swap0 and standard-only theorem reports. Immutable worker source-only archives retain raw receipts and source-reference checks. No generated external templates enter the accepted import closure, and no production code or binaries are included.
+
+OPEN: equality/adoption of the production query driver and the unrolled candidate; actual Rust array-iterator/from_fn/map correspondence; origin and materialized transcript schedule of the supplied byte-block array; full Prepared/adaptive transcript/semantic sampler join and whole frozen verifier/runtime soundness. This proves a concrete successful decoder and conditional chain, not production row31 completion or the 100-bit claim.
