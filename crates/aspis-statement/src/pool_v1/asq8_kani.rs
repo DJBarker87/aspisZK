@@ -57,3 +57,14 @@ fn request_decoder_equivalence() {
     assert_eq!(decode_pool_v1_pair_forest_terminal_request_v1(&bytes),
         decode_pool_v1_pair_forest_terminal_request_reference_v1(&bytes));
 }
+
+// Checks the entire fused normalization, including all parser/encoder errors.
+// No assumption of successful decoding or canonical encoding is supplied.
+#[kani::proof]
+#[kani::unwind(321)]
+fn shipped_pipeline_normalization_equivalence() {
+    let bytes: [u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES] = kani::any();
+    let shipped = decode_pool_v1_pair_forest_terminal_request_v1(&bytes)
+        .and_then(|r| encode_pool_v1_pair_forest_terminal_request_v1(&r));
+    assert_eq!(shipped, normalize_pool_v1_pair_forest_terminal_request_reference_v1(&bytes));
+}

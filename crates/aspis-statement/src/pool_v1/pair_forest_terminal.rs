@@ -571,6 +571,17 @@ pub fn decode_pool_v1_pair_forest_terminal_request_reference_v1(
     Ok(request)
 }
 
+// Fused reference for the exact Pool decode/re-encode handoff. Kani proves
+// this whole Result equal to the shipped pipeline on every 320-byte input;
+// successful normalization therefore preserves the original verifier bytes.
+#[cfg(any(test, kani, aeneas_ref))]
+pub fn normalize_pool_v1_pair_forest_terminal_request_reference_v1(
+    bytes: &[u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES],
+) -> Result<[u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES], PoolV1PairForestTerminalFormatErrorV1> {
+    decode_pool_v1_pair_forest_terminal_request_reference_v1(bytes)?;
+    Ok(*bytes)
+}
+
 pub fn decode_pool_v1_pair_forest_terminal_request_v1(
     bytes: &[u8],
 ) -> Result<PoolV1PairForestTerminalRequestV1, PoolV1PairForestTerminalFormatErrorV1> {
