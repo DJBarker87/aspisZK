@@ -7131,3 +7131,25 @@ deployed admission/public mapping, the full canonical mapping (including
 empty-root meaning), Rust glue equality and the final `SourceIdentification`
 assembly remain. Note for candidate adoption: these shipped-file edits must be
 carried onto the candidate freeze branch and its ELF pins rechecked.
+
+## D91 — query-history split: ideal side proved, real side needs a collision charge (2026-10-20, lead)
+
+Landed from `codex/cx-priv-history-20261021` (`r1p-final/PRIVACY-HISTORY-20261021.md`).
+The ScanCoupling premises are split into a `ModelExecutionJoin` (execution
+and agreement only, with fixed model events) and model mass laws. On the
+ideal side it proves the LE low-18-bit independent-word law, the symbolic
+first-stop/failure bridge and the scan bound on the constructed ideal
+experiment's exact randomness, and discharges the ideal law in
+`PrivacyR1FinalProtocolHistory`. Two findings: (a) deleting the probability
+fields while leaving arbitrary exception events would be vacuous (constant
+events join anything), so events must be fixed model events; (b) on the real
+side, shared-oracle self-loop histories fail with certainty, and a
+uniform-ROM scan from a fixed state has failure mass ≥ 2^-256, above the
+independent-word bound. `real_model_history_law` is therefore kept.
+
+Lead ruling: the per-history bound is false as stated, and that is not a
+privacy problem. The real-side law is restated over fresh-word histories,
+with the excluded repeated-read and collision events charged once as an
+explicit ROM collision term (order q²/2^256) added to the privacy error. The
+final error, now ≤ 2^-109 + 2^-137 + 2^-454, gains that term and stays far
+below 2^-100. Six commits, seven modules, 48 standard-axiom audits, zero swap.
