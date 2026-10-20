@@ -26,12 +26,34 @@ for role in ['stage1','stage2','pool']:
  bs=[b for i,b in enumerate(d['branches']) if any(t['counts'][i] for t in d['traces'])];assert all('arms' in b for b in bs)
  checks['coverage'][role]=dict(executed_conditional_branches=len(bs),traces=len(d['traces']),irreducible_functions=0,loop_entry_mismatches=0)
 r=json.loads((A/'residuals.json').read_text());assert not r['unclassified'];checks['unclassified_sites']=0
+# Require a classification for each executed branch in each admitted variant,
+# not merely an arm-cost record in the CFG. This also covers all Pool closures.
+spv=json.loads((A/'sites-per-variant.json').read_text());meta=json.loads((A/'runs.json').read_text())
+for role in ['stage1','stage2','pool']:
+ d=json.loads((A/f'{role}.json').read_text())
+ for v in [x for x in spv if x['role']==role]:
+  def same(t):
+   m=meta[t['label']];group=[m['kind'],m['split']]
+   if role!='stage1':group+=[m['mode'],m['prefund']]
+   return group==v['variant']
+  ts=[t for t in d['traces'] if same(t)]
+  classified={x['addr'] for x in v['sites'] if x['cls'] not in ['loop','loop-in-arm'] and '?' not in x['rule']}
+  assert all(b['addr'] in classified for i,b in enumerate(d['branches']) if any(t['counts'][i] for t in ts)),(role,v['variant'])
+checks['per_variant_executed_branch_coverage']='complete'
 p=json.loads((A/'phase-attribution.json').read_text());assert not p['verifier_unexplained'] and not p['pool_unexplained'];checks['phase_consistency']=dict(verifier_varying=len(p['verifier']),pool_varying=len(p['pool']),unexplained=0)
 b=json.loads((A/'bound.json').read_text());assert not b['sweep']['violations'];checks['sweep_violations']=0
 for tx,vs in b['B'].items():
  for v,x in vs.items():
   parts=['worst_cu','residual_elf','residual_qscan','residual_parent_sha'] if tx=='stage1' else ['worst_cu','residual_stage2','residual_pool','residual_parent_sha']
   assert x['B']==sum(x[k] for k in parts)
+vm=json.loads((H/'variants-measured.json').read_text())
+for tx,entries in vm.items():
+ for x in entries:
+  v=[x['kind'],x['split']]
+  if tx=='settlement':v += [x['mode'],x['prefund']]
+  cu=x['worst_stage1_cu' if tx=='stage1' else 'worst_settlement_cu']
+  assert cu==b['B'][tx][json.dumps(v)]['worst_cu']
+checks['measured_variant_maxima_match_complete_corpus']=True
 checks['bound_arithmetic']='verified';checks['per_kind']=b['per_kind']
 ledger=[r for s in sets+['trace-main','trace-control','profile'] for r in read(H/f'sweep/{s}/ledger.jsonl')]
 assert all(r['exit_status']==0 and r['swaps']==0 and r['limits']['memory.swap.max']=='0' and int(r['limits']['memory.max'])==8*2**30 and int(r['limits']['memory.high'])==6*2**30 for r in ledger)

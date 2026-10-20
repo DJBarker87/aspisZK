@@ -5,12 +5,13 @@ H=Path(sys.argv[1]);A=H/'analysis';E=H/'export';E.mkdir(exist_ok=True)
 read=lambda p:json.loads(p.read_text())
 check=read(H/'validation.json');b=read(A/'bound.json')
 assert check['unclassified_sites']==0 and check['phase_consistency']['unexplained']==0 and check['sweep_violations']==0
-assert b['verdict']=='PASS'
-b.update(target_revision='fa894d83d2f3ad6df34bc8493881c780621d553e',frozen_source_revision='b2727acd3abf79315d18b754a260f58f4b1c6326',
+assert b['verdict'] in ['PASS','FAIL']
+b.update(target_revision='2318acd430b8474de01e6117248442e3ab0b17b9',candidate_source_revision='c16e59e77a8ee3249d61838b535a6a44ac918caf',
  accepted_splits=[10],admitted_domain_ruling='LEAD-REVIEW-CU-BOUND-3-20261020.md',validation=check,
- verifier_elf_sha256='dfc2a91ab24e1ec4f57debd8f124cb4f6a3c38ba2662b7318e2e4f3b4acdde34',
- request_pin_discrepancy='f11e40b4119578eee1ebef90874f436dc35b1076f6db27baaa92a79c0919538d is Stage2.llbc JSON, not ELF; target is FREEZE.md executable table and reproduced bytes',
- corpus='Exact retained prior grid/random proof corpus, remeasured on frozen ELF; random witnesses and OS masks inherited, not newly sampled',
+ verifier_elf_sha256='f9ecbc275b71cf55886351d9445f93e44198d400f7c519573b8f44c9cdb91ae3',
+ devnet_elf_sha256='3f21a42fa6376edf68be160894c4be50db1940e13234a99934127dd49a06f851',
+ pool_elf_sha256='121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548',
+ corpus='Exact retained prior grid/random proof corpus, remeasured on candidate ELF; random witnesses and OS masks inherited, not newly sampled',
  label='Analytical argument with executable checks; inherited second-method assumptions, not a formal proof')
 (E/'bound.json').write_text(json.dumps(b,indent=1)+'\n')
 v=read(A/'variants.json');v.update(verdict=b['verdict'],target_revision=b['target_revision'],accepted_splits=[10]);(E/'variants.json').write_text(json.dumps(v,indent=1)+'\n')
@@ -20,7 +21,7 @@ for ss in sets:lines+=(H/f'sweep/{ss}/sweep.jsonl').read_text().splitlines()
 (E/'sweep.jsonl').write_text('\n'.join(lines)+'\n')
 for ss in sets+['trace-main','trace-control','profile']:
  for l in (H/f'sweep/{ss}/ledger.jsonl').read_text().splitlines():
-  r=json.loads(l);r.update(target_revision=b['target_revision'],frozen_source_revision=b['frozen_source_revision'],scope_tasks_max=64,print_axioms='N/A: Rust/SBF only');ledger.append(r)
+  r=json.loads(l);r.update(target_revision=b['target_revision'],candidate_source_revision=b['candidate_source_revision'],scope_tasks_max=64,print_axioms='N/A: Rust/SBF only');ledger.append(r)
 R=E/'receipts';R.mkdir(exist_ok=True);(R/'run-ledger.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in ledger))
 for p in (H/'receipts').iterdir():
  if not p.is_dir():continue
@@ -28,14 +29,15 @@ for p in (H/'receipts').iterdir():
  for n in ['receipt.json','stdout.log','stderr.log','time.log']:
   if (p/n).exists():shutil.copy2(p/n,dst/n)
  if (dst/'receipt.json').exists():
-  r=read(dst/'receipt.json');r.update(target_revision=b['target_revision'],frozen_source_revision=b['frozen_source_revision'],scope_tasks_max=64);(dst/'receipt.json').write_text(json.dumps(r,indent=1)+'\n')
-for f in ['corpus-inventory.jsonl','validation.json','pins.json','source-validation.json','freeze-source-hashes.json','rule-address-mapping.json','reservation-setup.json','reservation-tracing.json','reservation-analysis.json','trace-inventory.json','artifacts.json','artifacts-sha256.txt','new-path-audit.json','first-key-disassembly.txt']:
+  r=read(dst/'receipt.json');r.update(target_revision=b['target_revision'],candidate_source_revision=b['candidate_source_revision'],scope_tasks_max=64);(dst/'receipt.json').write_text(json.dumps(r,indent=1)+'\n')
+for f in ['corpus-inventory.jsonl','validation.json','pins.json','source-validation.json','candidate-source-hashes.json','rule-address-mapping.json','reservation-setup.json','reservation-tracing.json','reservation-analysis.json','trace-inventory.json','artifacts.json','artifacts-sha256.txt','new-path-audit.json','canonical-cap-check.json','canonical-scan-disassembly.txt','package-check.json','harness-inputs.json','definition-audit.json']:
  shutil.copy2(H/f,E/f)
+for p in H.glob('reservation-*.json'):shutil.copy2(p,E/p.name)
 DA=E/'analysis';DA.mkdir(exist_ok=True)
 for f in ['runs.json','residuals.json','profile-phases.json','phase-attribution.json','hash-residuals.json','hash-counts-stage1.json','hash-counts-stage2.json']:
  shutil.copy2(A/f,DA/f)
 shutil.copy2(H/'variants-measured.json',DA/'variants-measured.json')
-shutil.copy2(A/'conservative/bound.json',DA/'conservative-before-nonempty-exclusion.json')
+# No obsolete-address conservative calculation is used for the candidate.
 # Preserve every per-variant residual as compact text JSON, no binary archive.
 spv=read(A/'sites-per-variant.json');compact=[]
 for e in spv:

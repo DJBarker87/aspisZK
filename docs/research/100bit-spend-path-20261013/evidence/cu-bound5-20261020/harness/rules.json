@@ -4,20 +4,22 @@
   {
    "id": "X-VEC-CHECKPOINT",
    "reason": "checkpoint writer: Vec::with_capacity(checkpoint_size(variant)) and every push has a fixed length; the final assert pins len == capacity, so growth is never needed",
-   "citation": "crates/aspis-r1-cost-probe/src/verifier.rs:354-371",
+   "citation": "verifier.rs:32,340-376: capacity checkpoint_size(S2) equals the sum of the fixed header, roots, scalars, queries, two points, 64 weights and trailing digest; helpers each serialize once; final length assertion rejects any mismatch.",
    "role": "*",
    "function_regex": "verifier3put|verifier5put_k|verifier10tx1_finish|verifier10checkpoint",
    "src_regex": "raw_vec/mod\\.rs|vec/mod\\.rs",
-   "citation_revision": "cf1828114 (historical source; instruction-matched unless Pool unchanged)"
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "crates/aspis-r1-cost-probe/src/verifier.rs:354-371"
   },
   {
    "id": "X-VEC-GEOMETRY",
    "reason": "QueryGeometry::for_range: capacities end-start, 5*(end-start), flat.len() equal the number of pushes; inverses collect from an exact-size range",
-   "citation": "crates/aspis-r1-cost-probe/src/verifier.rs:184-211",
+   "citation": "verifier.rs:156-184: line_z capacity=end-start, flat capacity=5*(end-start), prefixes/flat_inverse capacity=flat.len(); pushes/resize exactly fill them. collect consumes an exact-size range.",
    "role": "*",
    "function_regex": "QueryGeometry9for_range|SpecFromIterNested",
    "src_regex": "raw_vec/mod\\.rs|vec/mod\\.rs|with_capacity",
-   "citation_revision": "cf1828114 (historical source; instruction-matched unless Pool unchanged)"
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "crates/aspis-r1-cost-probe/src/verifier.rs:184-211"
   },
   {
    "id": "X-VEC-PUBLIC",
@@ -31,11 +33,12 @@
   {
    "id": "X-VEC-HEAP",
    "reason": "heap::filled(n): try_reserve_exact(n) then resize(n): the resize never grows; n = final_len(S2) or weights.len(), fixed",
-   "citation": "crates/aspis-core/src/r0/heap.rs:5-10; crates/aspis-r1-cost-probe/src/verifier.rs:243, weights.rs:185",
+   "citation": "aspis-core/src/r0/heap.rs:5-10: try_reserve_exact(n) before resize(n). verifier.rs:214-222 and weights.rs:239-243 fix n to 64 for S2.",
    "role": "*",
    "function_regex": "BatchedWeights3new|Weights4pair|Vec\\$LT\\$T\\$C\\$A\\$GT\\$6resize|heap6filled",
    "inner_regex": "raw_vec/mod\\.rs|vec/mod\\.rs|iter/range\\.rs",
-   "citation_revision": "cf1828114 (historical source; instruction-matched unless Pool unchanged)"
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "crates/aspis-core/src/r0/heap.rs:5-10; crates/aspis-r1-cost-probe/src/verifier.rs:243, weights.rs:185"
   },
   {
    "id": "X-VEC-ENTRYPOINT",
@@ -66,10 +69,11 @@
   {
    "id": "X-ROUTE-ADAPTER",
    "reason": "verifier instruction route: stage 1 data is exactly [3,10] or [3,11], stage 2 otherwise; tags 4/5/6 (proof-buffer lifecycle) are other transactions",
-   "citation": "programs/r1-cost-probe/src/r1_pool_adapter.rs:1019-1025; pool_route.rs:4",
+   "citation": "programs/r1-cost-probe/src/r1_pool_adapter.rs:1032-1043 dispatches lifecycle tags 4/5/6 separately. Admitted stage 1 is [3,10]; [3,11] reaches stage1 but candidate.rs:270-274 rejects k != SPLIT=10. Settlement is the stage2 route.",
    "role": "*",
    "function_regex": "r1_pool_adapter7process",
-   "citation_revision": "cf1828114 (historical source; instruction-matched unless Pool unchanged)"
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "programs/r1-cost-probe/src/r1_pool_adapter.rs:1019-1025; pool_route.rs:4"
   },
   {
    "id": "X-ROUTE-POOL",
@@ -82,11 +86,12 @@
   {
    "id": "X-PROOF-S2",
    "reason": "proof variant: the adapter passes exactly View::proof_bytes(S2) bytes and parse_shape requires len == proof_bytes(tag), so the tag is S2 (folds()==2) in every accepted run; variant branches are constant",
-   "citation": "programs/r1-cost-probe/src/r1_pool_adapter.rs:115-125, 295; crates/aspis-r1-cost-probe/src/verifier.rs:44-60, transport.rs:8-9",
+   "citation": "candidate.rs:40-48,76-86 fixes Variant::S2; verifier.rs:321-326 uses that variant for relation; weights.rs:314 selects the S2 Libra path; transport.rs:8.",
    "role": "*",
    "function_regex": "verifier4View5parse|Weights4pair",
-   "ws_regex": "verifier\\.rs:(72|81)$|transport\\.rs:8$|weights\\.rs:252$",
-   "citation_revision": "cf1828114 (historical source; instruction-matched unless Pool unchanged)"
+   "ws_regex": "transport\\.rs:8$|weights\\.rs:314$",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "programs/r1-cost-probe/src/r1_pool_adapter.rs:115-125, 295; crates/aspis-r1-cost-probe/src/verifier.rs:44-60, transport.rs:8-9"
   },
   {
    "id": "X-KIND-RECIPIENT",
@@ -94,8 +99,8 @@
    "citation": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs:1327-1361, 874, 1248",
    "role": "stage1",
    "addr": [
-    "0x111328",
-    "0x12a6d8"
+    "0x116818",
+    "0x12fbc8"
    ],
    "citation_revision": "cf1828114 (historical source; instruction-matched unless Pool unchanged)"
   },
@@ -174,11 +179,12 @@
   {
    "id": "X-S2-GROUPED",
    "reason": "grouped_inactive_pair: the S2 fast path is taken when variant == S2 and f.len() == 64*32; Weights::pair requires n == 1024 >> (2*folds) = 64 for S2, so the general grouping path never runs",
-   "citation": "crates/aspis-r1-cost-probe/src/weights.rs:40, 181-182; transport.rs:8-9",
+   "citation": "weights.rs:76-77,238-243,312-313: S2 two-fold final message has exactly 64*32 bytes; grouped_inactive_pair therefore takes its S2 fast path. transport.rs:8-9 fixes S2 folds/final_len.",
    "role": "stage2",
    "function_regex": "grouped_inactive_pair",
-   "ws_regex": "weights\\.rs:(39|40)$",
-   "citation_revision": "cf1828114 (historical source; instruction-matched unless Pool unchanged)"
+   "ws_regex": "weights\\.rs:(76|77)$",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "crates/aspis-r1-cost-probe/src/weights.rs:40, 181-182; transport.rs:8-9"
   },
   {
    "id": "X-COPY-CHUNK",
@@ -186,19 +192,20 @@
    "citation": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs:696-699",
    "role": "stage1",
    "addr": [
-    "0xc86b8"
+    "0xcdba8"
    ],
    "citation_revision": "cf1828114 (historical source; instruction-matched unless Pool unchanged)"
   },
   {
    "id": "X-WEIGHTS-S2",
    "reason": "Weights::pair on S2: folds == 2 and variant == S2 fix the D, one-fold and non-S2 Libra arms; shared_two_point always holds because statement point rows 0 and 2 differ only at coordinates 6 and 7 (absorption), while factors d = 2, 3 read coordinates 5, 4, 9, 8 (TAU = [3,4,2,0,1])",
-   "citation": "crates/aspis-r1-cost-probe/src/weights.rs:120-127, 181-253; crates/aspis-core/src/state_only_prefix.rs:600-614; transport.rs:4",
+   "citation": "weights.rs:238-265,289-315 and transport.rs:8: S2, folds=2 fix D/one-fold/non-S2 Libra arms. shared_two_point follows statement point rows differing only at coordinates 6/7, while factors d2/d3 read 5,4,9,8 (TAU=[3,4,2,0,1]); state_only_prefix.rs:600-614 and weights.rs:162-178.",
    "role": "stage2",
    "function_regex": "Weights4pair",
-   "ws_regex": "weights\\.rs:(18[6-9]|19[0-9]|20[0-7]|23[01]|24[4-9]|25[0-3])$",
+   "ws_regex": "weights\\.rs:(24[4-9]|25[0-9]|26[0-5]|288|289|30[6-9]|31[0-5])$",
    "inner_regex": "weights\\.rs|transport\\.rs",
-   "citation_revision": "cf1828114 (historical source; instruction-matched unless Pool unchanged)"
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "crates/aspis-r1-cost-probe/src/weights.rs:120-127, 181-253; crates/aspis-core/src/state_only_prefix.rs:600-614; transport.rs:4"
   },
   {
    "id": "X-CPI-NONEMPTY",
@@ -248,9 +255,9 @@
    "citation": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:420-426, 485-492; pair_forest_semantic_terminal.rs:2057-2066; programs/aspis-pool/src/pair_forest.rs:1665-1705",
    "role": "*",
    "addr": [
-    "0x137bd0",
-    "0x13d510",
-    "0x13d788"
+    "0x13d0c0",
+    "0x142a00",
+    "0x142c78"
    ],
    "citation_revision": "cf1828114 (historical source; instruction-matched unless Pool unchanged)"
   },
@@ -268,25 +275,27 @@
    "id": "X-BINARY-ARITY",
    "role": "*",
    "addr": [
-    "0xbf388"
+    "0xc4878"
    ],
    "arm": "t",
    "reason": "The only deployed node_count caller passes Arity::Two; the Eight arm cannot execute on the adopted route.",
-   "citation": "crates/aspis-r1-cost-probe/src/candidate.rs:135; multiproof.rs:44,71",
-   "citation_revision": "e90cf2f80 (instruction matched from cu-bound3)"
+   "citation": "candidate.rs:196,202 explicitly passes Arity::Two to node_count and verify_in_place; multiproof.rs:44,71 distinguishes the unexecuted Eight arm.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "crates/aspis-r1-cost-probe/src/candidate.rs:135; multiproof.rs:44,71"
   },
   {
    "id": "F-FIRST-KEY-NONEMPTY",
    "role": "*",
    "addr": [
-    "0x29c80",
-    "0x2ae68",
-    "0x2c0e8"
+    "0x29260",
+    "0x2a448",
+    "0x2b6c8"
    ],
    "arm": "t",
    "reason": "Each check is reached only through d==0. d starts zero, the first unique leaf increments it, and it never decreases. Thus key_position is still zero at this first-key check. n is 10/12, so key_position>=n is impossible; the compiler branch to downstream multiproof loops cannot execute here.",
-   "citation": "candidate.rs:173-195; ELF: r6=0 at 0x29938/0x2ab28/0x2bd90; d==0 dispatch at 0x29978/0x2ab68/0x2bdd8 targets first-key check 0x29c78/0x2ae60/0x2c0e0. Checks compare r6 to n loaded from [r10-0x578]; n in {10,12}. This re-derives predecessor X-BATCH-NONEMPTY, rather than carrying an unmatched address.",
-   "citation_revision": "b2727acd3 frozen"
+   "citation": "candidate.rs:178-195: d and key_position start zero. The d==0 first-key check occurs before the first unique leaf increments d; d never decreases. Thus key_position is zero there and n=10/12 is nonzero (:174-175). All three copies are mapped by equal whole-function instructions in rule-address-mapping.json.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "candidate.rs:173-195; ELF: r6=0 at 0x29938/0x2ab28/0x2bd90; d==0 dispatch at 0x29978/0x2ab68/0x2bdd8 targets first-key check 0x29c78/0x2ae60/0x2c0e0. Checks compare r6 to n loaded from [r10-0x578]; n in {10,12}. This re-derives predecessor X-BATCH-NONEMPTY, rather than carrying an unmatched address."
   }
  ],
  "loop_caps": [
@@ -294,7 +303,7 @@
    "id": "C-FOURDOTS",
    "role": "stage1",
    "addr": [
-    "0x5f190"
+    "0x5e770"
    ],
    "N": "observed",
    "citation": "fast_dots.rs:17: from_fn over exactly 4 slots (a constant trip count)",
@@ -304,7 +313,7 @@
    "id": "C-FOURDOTS",
    "role": "stage2",
    "addr": [
-    "0x5f190"
+    "0x5e770"
    ],
    "N": "observed",
    "citation": "fast_dots.rs:17: from_fn over exactly 4 slots (a constant trip count)",
@@ -314,8 +323,8 @@
    "id": "C-FOURDOTS-BLOCK",
    "role": "stage1",
    "addr": [
-    "0x5f538",
-    "0x5f558"
+    "0x5eb18",
+    "0x5eb38"
    ],
    "N": "observed",
    "citation": "fast_dots.rs:19-21: (0..26).step_by(4) is exactly 7 blocks (a constant trip count); each min(start+4, 26)-start <= 4 terms",
@@ -325,8 +334,8 @@
    "id": "C-FOURDOTS-BLOCK",
    "role": "stage2",
    "addr": [
-    "0x5f538",
-    "0x5f558"
+    "0x5eb18",
+    "0x5eb38"
    ],
    "N": "observed",
    "citation": "fast_dots.rs:19-21: (0..26).step_by(4) is exactly 7 blocks (a constant trip count); each min(start+4, 26)-start <= 4 terms",
@@ -336,7 +345,7 @@
    "id": "C-QSCAN-WORDS",
    "role": "stage1",
    "addr": [
-    "0x15aeb0"
+    "0x1603a0"
    ],
    "N": 9,
    "citation": "r0_transcript.rs:203: for candidate in query_words(block): 8 words",
@@ -346,8 +355,8 @@
    "id": "C-QSCAN-CONTAINS",
    "role": "stage1",
    "addr": [
-    "0x15afb0",
-    "0x15b128"
+    "0x1604a0",
+    "0x160618"
    ],
    "N": "observed",
    "citation": "r0_transcript.rs:209 accepted[..accepted_len].contains: trips are a function of accepted_len <= QUERY_COUNT-1 = 21 (r0_transcript.rs:46, 205); every accepted run passes accepted_len = 0..21, so the traced maximum per call is the maximum",
@@ -357,8 +366,8 @@
    "id": "C-SNAPSHOT",
    "role": "stage1",
    "addr": [
-    "0x140508",
-    "0x8e1c8"
+    "0x1459f8",
+    "0x93698"
    ],
    "N": 21,
    "citation": "pair_tree_profile.rs:466-471: level loop over the 20-entry frontier (digest_is_canonical over 8 lanes, :106-114)",
@@ -368,8 +377,8 @@
    "id": "C-SNAPSHOT",
    "role": "stage2",
    "addr": [
-    "0x140508",
-    "0x8e1c8"
+    "0x1459f8",
+    "0x93698"
    ],
    "N": 21,
    "citation": "pair_tree_profile.rs:466-471: level loop over the 20-entry frontier (digest_is_canonical over 8 lanes, :106-114)",
@@ -390,7 +399,7 @@
    "id": "C-PARSE-RECORD",
    "role": "stage1",
    "addr": [
-    "0x61e10"
+    "0x613f0"
    ],
    "N": "observed",
    "citation": "r1_wire.rs parse_record: every record has a fixed length and field layout (r1_wire.rs:65-83, length equality), so the trips are constants",
@@ -400,10 +409,10 @@
    "id": "C-APPEND-CARRY",
    "role": "stage1",
    "addr": [
-    "0x11ad78",
-    "0x11ad88",
-    "0x12a948",
-    "0x12a958"
+    "0x120268",
+    "0x120278",
+    "0x12fe38",
+    "0x12fe48"
    ],
    "N": 21,
    "citation": "pair_forest_semantic_terminal.rs:107-118 bounded_append_carry: while carry < 20",
@@ -413,7 +422,7 @@
    "id": "C-QM31DOT",
    "role": "stage1",
    "addr": [
-    "0x15a6c0"
+    "0x15fbb0"
    ],
    "N": 3,
    "citation": "field.rs:1478: (0..weights.len()).step_by(4) with weights.len() = 7 (state_only_poseidon.rs:525-533, ROWS: [usize; 7])",
@@ -423,7 +432,7 @@
    "id": "C-QM31DOT-SHORT",
    "role": "stage1",
    "addr": [
-    "0x15a458"
+    "0x15f948"
    ],
    "N": 5,
    "citation": "field.rs:1455-1457: while index < weights.len() <= 4",
@@ -433,11 +442,11 @@
    "id": "C-COPY",
    "role": "stage1",
    "addr": [
-    "0xc8678",
-    "0xd4750",
-    "0xdc5d8",
-    "0xdd278",
-    "0xdd390"
+    "0xcdb68",
+    "0xd9c40",
+    "0xe1ac8",
+    "0xe2768",
+    "0xe2880"
    ],
    "N": "observed",
    "citation": "pair_forest_copy_terminal.rs:543-660, 690-700, 795-802, 905-920: trips over compile-time constant tables (COPY_PATTERN_GROUP_OFFSETS, COPY_PATTERN_LOCAL_COORDINATE_GROUPS[43], COPY_TAG_COORDINATE_OFFSETS)",
@@ -447,7 +456,7 @@
    "id": "C-SCHEDULE",
    "role": "stage1",
    "addr": [
-    "0xf0310"
+    "0xf5800"
    ],
    "N": "observed",
    "citation": "pair_forest_semantic_terminal.rs:118-130 add_preweighted::<N>: first..=last groups for a const N",
@@ -457,8 +466,8 @@
    "id": "C-LANE-DECODE",
    "role": "stage2",
    "addr": [
-    "0x4a070",
-    "0x4a038"
+    "0x49650",
+    "0x49618"
    ],
    "N": 21,
    "citation": "r1_pool_adapter.rs:476-483: frontier.iter_mut() over POOL_V1_PAIR_TREE_DEPTH = 20 levels",
@@ -468,21 +477,22 @@
    "id": "C-WEIGHTS-PAIR",
    "role": "stage2",
    "addr": [
-    "0x8e268",
-    "0x8e3d0",
-    "0x8e498",
-    "0x8e680",
-    "0x91b90",
-    "0x95610",
-    "0x95678",
-    "0x961b8",
-    "0x96268",
-    "0xa5ac8",
-    "0xa87d0"
+    "0x93738",
+    "0x938a0",
+    "0x93968",
+    "0x93b50",
+    "0x97060",
+    "0x9aae0",
+    "0x9ab48",
+    "0x9b688",
+    "0x9b738",
+    "0xaaf98",
+    "0xadca0"
    ],
    "N": "observed",
-   "citation": "weights.rs:181-232: kinds [1,2,3,5,6], n = 64 (checked :182), tensor loops over 5 factors x 4 (:155-162), 0..4 x 0..16 (:209-217): every trip is a constant",
-   "citation_revision": "cf1828114 (historical source; instruction-matched unless Pool unchanged)"
+   "citation": "weights.rs:238-286: n=64 for S2 two folds (transport.rs:8); kinds [1,2,3,5,6], three tensor factors of four, 4 x 16 shared-point terms, and 2 x 4 high terms. The constant-shape maximum is attained in every accepted relation call.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "weights.rs:181-232: kinds [1,2,3,5,6], n = 64 (checked :182), tensor loops over 5 factors x 4 (:155-162), 0..4 x 0..16 (:209-217): every trip is a constant"
   },
   {
    "id": "C-ZERO-SCAN-CURRENT",
@@ -604,7 +614,7 @@
    "id": "C-BINARY-LEVELS",
    "role": "stage1",
    "addr": [
-    "0xbf538"
+    "0xc4a28"
    ],
    "N": 18,
    "citation": "multiproof.rs:29,45-46,71,147: LEAF_BITS=18, Two.bits()=1; exactly 18 levels.",
@@ -614,7 +624,7 @@
    "id": "C-BINARY-LEVELS",
    "role": "stage2",
    "addr": [
-    "0xbf538"
+    "0xc4a28"
    ],
    "N": 18,
    "citation": "multiproof.rs:29,45-46,71,147: LEAF_BITS=18, Two.bits()=1; exactly 18 levels.",
@@ -624,501 +634,543 @@
    "id": "C-BINARY-PARENTS",
    "role": "stage1",
    "addr": [
-    "0xbf558"
+    "0xc4a48"
    ],
    "N": 11,
-   "citation": "candidate.rs:98-102,135,141: batch size 10 (A) / 12 (B); at every level distinct parents <= batch size, plus one exit test. multiproof.rs:71-85,147-189. Globally parent iterations = supplied_nodes + distinct_leaves - 1; six-slot supplied_nodes <=914 by evidence/proof-size-20261019/REPORT.md section 1 counting bound (420 A, 494 B; parent totals <=447 A /527 B).",
-   "citation_revision": "e90cf2f80 (instruction matched from cu-bound3)"
+   "citation": "multiproof.rs:85-109 node_count: each distinct parent is written once, never increasing n; candidate.rs:174-196 bounds initial leaves by 10/12, plus loop exit. Parent totals <=447/527 from compact.rs:54 capacities and three roots.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "candidate.rs:98-102,135,141: batch size 10 (A) / 12 (B); at every level distinct parents <= batch size, plus one exit test. multiproof.rs:71-85,147-189. Globally parent iterations = supplied_nodes + distinct_leaves - 1; six-slot supplied_nodes <=914 by evidence/proof-size-20261019/REPORT.md section 1 counting bound (420 A, 494 B; parent totals <=447 A /527 B)."
   },
   {
    "id": "C-BINARY-CHECK-INDICES",
    "role": "stage1",
    "addr": [
-    "0xbf070",
-    "0xbf0d0",
-    "0xbf178",
-    "0xbf1f8"
+    "0xc4560",
+    "0xc45c0",
+    "0xc4668",
+    "0xc46e8"
    ],
    "N": 11,
-   "citation": "multiproof.rs:54-58: windows/indices scans <= batch size 10/12 plus exit; candidate.rs:98-102 dedup only reduces count.",
-   "citation_revision": "e90cf2f80 (instruction matched from cu-bound3)"
+   "citation": "multiproof.rs:54-58: windows and domain scans visit at most d leaves; candidate.rs:174-196 gives d<=10/12. At most batch size plus exit.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "multiproof.rs:54-58: windows/indices scans <= batch size 10/12 plus exit; candidate.rs:98-102 dedup only reduces count."
   },
   {
    "id": "C-BINARY-PARENTS",
    "role": "stage2",
    "addr": [
-    "0xbf558"
+    "0xc4a48"
    ],
    "N": 13,
-   "citation": "candidate.rs:98-102,135,141: batch size 10 (A) / 12 (B); at every level distinct parents <= batch size, plus one exit test. multiproof.rs:71-85,147-189. Globally parent iterations = supplied_nodes + distinct_leaves - 1; six-slot supplied_nodes <=914 by evidence/proof-size-20261019/REPORT.md section 1 counting bound (420 A, 494 B; parent totals <=447 A /527 B).",
-   "citation_revision": "e90cf2f80 (instruction matched from cu-bound3)"
+   "citation": "multiproof.rs:85-109 node_count: each distinct parent is written once, never increasing n; candidate.rs:174-196 bounds initial leaves by 10/12, plus loop exit. Parent totals <=447/527 from compact.rs:54 capacities and three roots.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "candidate.rs:98-102,135,141: batch size 10 (A) / 12 (B); at every level distinct parents <= batch size, plus one exit test. multiproof.rs:71-85,147-189. Globally parent iterations = supplied_nodes + distinct_leaves - 1; six-slot supplied_nodes <=914 by evidence/proof-size-20261019/REPORT.md section 1 counting bound (420 A, 494 B; parent totals <=447 A /527 B)."
   },
   {
    "id": "C-BINARY-CHECK-INDICES",
    "role": "stage2",
    "addr": [
-    "0xbf070",
-    "0xbf0d0",
-    "0xbf178",
-    "0xbf1f8"
+    "0xc4560",
+    "0xc45c0",
+    "0xc4668",
+    "0xc46e8"
    ],
    "N": 13,
-   "citation": "multiproof.rs:54-58: windows/indices scans <= batch size 10/12 plus exit; candidate.rs:98-102 dedup only reduces count.",
-   "citation_revision": "e90cf2f80 (instruction matched from cu-bound3)"
+   "citation": "multiproof.rs:54-58: windows and domain scans visit at most d leaves; candidate.rs:174-196 gives d<=10/12. At most batch size plus exit.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "multiproof.rs:54-58: windows/indices scans <= batch size 10/12 plus exit; candidate.rs:98-102 dedup only reduces count."
   },
   {
    "id": "C-NODECOUNT-CHILDREN",
    "role": "stage1",
    "addr": [
-    "0xbf5c0"
+    "0xc4ab0"
    ],
    "N": 3,
-   "citation": "multiproof.rs:76-79: sorted distinct binary children of one parent are at most 2, plus exit test; counts summed over levels <= supplied_nodes+2*distinct-2. Evidence/proof-size-20261019/REPORT.md section 1: at most 914 supplied nodes across all six slots.",
-   "citation_revision": "e90cf2f80 (instruction matched from cu-bound3)"
+   "citation": "multiproof.rs:96-105: sorted distinct binary children of one parent are at most two, plus exit. Candidate passes binary arity at candidate.rs:196.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "multiproof.rs:76-79: sorted distinct binary children of one parent are at most 2, plus exit test; counts summed over levels <= supplied_nodes+2*distinct-2. Evidence/proof-size-20261019/REPORT.md section 1: at most 914 supplied nodes across all six slots."
   },
   {
    "id": "C-NODECOUNT-CHILDREN",
    "role": "stage2",
    "addr": [
-    "0xbf5c0"
+    "0xc4ab0"
    ],
    "N": 3,
-   "citation": "multiproof.rs:76-79: sorted distinct binary children of one parent are at most 2, plus exit test; counts summed over levels <= supplied_nodes+2*distinct-2. Evidence/proof-size-20261019/REPORT.md section 1: at most 914 supplied nodes across all six slots.",
-   "citation_revision": "e90cf2f80 (instruction matched from cu-bound3)"
+   "citation": "multiproof.rs:96-105: sorted distinct binary children of one parent are at most two, plus exit. Candidate passes binary arity at candidate.rs:196.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "multiproof.rs:76-79: sorted distinct binary children of one parent are at most 2, plus exit test; counts summed over levels <= supplied_nodes+2*distinct-2. Evidence/proof-size-20261019/REPORT.md section 1: at most 914 supplied nodes across all six slots."
   },
   {
    "id": "C-COMPACT-ROWS",
    "role": "stage1",
    "addr": [
-    "0xbf878"
+    "0xc4d68"
    ],
    "N": 28,
-   "citation": "compact.rs:30,172-189: exactly 27 framed rows, sizes from r1_wire::row_shape, plus exit. Rows 14..26 expand 426 values; y1 expands 29 values (compact.rs:34-38). Every canonical/expansion scan has fixed input length.",
-   "citation_revision": "e90cf2f80 (instruction matched from cu-bound3)"
+   "citation": "compact.rs:29,150-173: exactly 27 framed rows, lengths from r1_wire::row_shape, plus exit. Each accepted copy/check length is fixed by row_shape.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "compact.rs:30,172-189: exactly 27 framed rows, sizes from r1_wire::row_shape, plus exit. Rows 14..26 expand 426 values; y1 expands 29 values (compact.rs:34-38). Every canonical/expansion scan has fixed input length."
   },
   {
    "id": "C-COMPACT-ROWS",
    "role": "stage2",
    "addr": [
-    "0xbf878"
+    "0xc4d68"
    ],
    "N": 28,
-   "citation": "compact.rs:30,172-189: exactly 27 framed rows, sizes from r1_wire::row_shape, plus exit. Rows 14..26 expand 426 values; y1 expands 29 values (compact.rs:34-38). Every canonical/expansion scan has fixed input length.",
-   "citation_revision": "e90cf2f80 (instruction matched from cu-bound3)"
-  },
-  {
-   "id": "C-CANONICAL-OPENINGS",
-   "role": "stage1",
-   "addr": [
-    "0xbe898"
-   ],
-   "N": 23,
-   "citation": "candidate.rs:63: for i in 0..22, plus exit test; opening has fixed 832-byte layout.",
-   "citation_revision": "e90cf2f80 (instruction matched from cu-bound3)"
-  },
-  {
-   "id": "C-CANONICAL-OPENINGS",
-   "role": "stage2",
-   "addr": [
-    "0xbe898"
-   ],
-   "N": 23,
-   "citation": "candidate.rs:63: for i in 0..22, plus exit test; opening has fixed 832-byte layout.",
-   "citation_revision": "e90cf2f80 (instruction matched from cu-bound3)"
-  },
-  {
-   "id": "C-CANONICAL-SLOTS",
-   "role": "stage1",
-   "addr": [
-    "0xbe948"
-   ],
-   "N": 5,
-   "citation": "candidate.rs:65-72: four subslots per opening; 26 M31, one K, two K per subslot, plus four wide folded fields; fixed canonical scan trip counts.",
-   "citation_revision": "e90cf2f80 (instruction matched from cu-bound3)"
-  },
-  {
-   "id": "C-CANONICAL-SLOTS",
-   "role": "stage2",
-   "addr": [
-    "0xbe948"
-   ],
-   "N": 5,
-   "citation": "candidate.rs:65-72: four subslots per opening; 26 M31, one K, two K per subslot, plus four wide folded fields; fixed canonical scan trip counts.",
-   "citation_revision": "e90cf2f80 (instruction matched from cu-bound3)"
+   "citation": "compact.rs:29,150-173: exactly 27 framed rows, lengths from r1_wire::row_shape, plus exit. Each accepted copy/check length is fixed by row_shape.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "compact.rs:30,172-189: exactly 27 framed rows, sizes from r1_wire::row_shape, plus exit. Rows 14..26 expand 426 values; y1 expands 29 values (compact.rs:34-38). Every canonical/expansion scan has fixed input length."
   },
   {
    "id": "C-COMPACT-COPY",
    "role": "stage1",
    "addr": [
-    "0xbfa68"
+    "0xc4f58"
    ],
    "N": "observed",
-   "citation": "compact.rs:172-189 and r1_wire.rs:row_shape: every row payload size and every copy length is a compile-time constant; 27 rows always processed; accepted framing cannot change copy lengths. The per-entry maximum is attained in every stage-1 scan.",
-   "citation_revision": "e90cf2f80 (instruction matched from cu-bound3)"
+   "citation": "compact.rs:150-173 and r1_wire.rs:39-48 row_shape: each of 27 accepted row payload sizes and copy lengths is fixed by the row index; accepted framing cannot lengthen copies.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "compact.rs:172-189 and r1_wire.rs:row_shape: every row payload size and every copy length is a compile-time constant; 27 rows always processed; accepted framing cannot change copy lengths. The per-entry maximum is attained in every stage-1 scan."
   },
   {
    "id": "C-COMPACT-COPY",
    "role": "stage2",
    "addr": [
-    "0xbfa68"
+    "0xc4f58"
    ],
    "N": "observed",
-   "citation": "compact.rs:172-189 and r1_wire.rs:row_shape: every row payload size and every copy length is a compile-time constant; 27 rows always processed; accepted framing cannot change copy lengths. The per-entry maximum is attained in every stage-1 scan.",
-   "citation_revision": "e90cf2f80 (instruction matched from cu-bound3)"
+   "citation": "compact.rs:150-173 and r1_wire.rs:39-48 row_shape: each of 27 accepted row payload sizes and copy lengths is fixed by the row index; accepted framing cannot lengthen copies.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "compact.rs:172-189 and r1_wire.rs:row_shape: every row payload size and every copy length is a compile-time constant; 27 rows always processed; accepted framing cannot change copy lengths. The per-entry maximum is attained in every stage-1 scan."
   },
   {
    "id": "F-INSERT-OUTER",
    "role": "stage1",
    "addr": [
-    "0x298a0",
-    "0x2a9d0",
-    "0x2bcf8"
+    "0x28e80",
+    "0x29fb0",
+    "0x2b2d8"
    ],
    "N": 11,
-   "citation": "candidate.rs:109-118 sort_batch_keys: outer 1..n; batch_tree :173-176 sets n=10/12; three explicit calls :165-167, no outer tree loop remains.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "candidate.rs:104-111 sort_batch_keys: i in 1..n; batch_tree :174-177 fixes n=10/12. Three explicit calls :166-168; each outer loop has at most n trips plus exit.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "candidate.rs:109-118 sort_batch_keys: outer 1..n; batch_tree :173-176 sets n=10/12; three explicit calls :165-167, no outer tree loop remains."
   },
   {
    "id": "F-INSERT-INNER",
    "role": "stage1",
    "addr": [
-    "0x298b0",
-    "0x2a9e0",
-    "0x2bd08"
+    "0x28e90",
+    "0x29fc0",
+    "0x2b2e8"
    ],
    "N": 11,
-   "citation": "candidate.rs:112-116: j starts i<n and strictly decreases on every swap, at most n iterations plus exit.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "candidate.rs:106-109: j starts i<n, strictly decreases on swaps and cannot underflow. At most n trips plus exit.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "candidate.rs:112-116: j starts i<n and strictly decreases on every swap, at most n iterations plus exit."
   },
   {
    "id": "F-BATCH-LEAVES",
    "role": "stage1",
    "addr": [
-    "0x29948",
-    "0x2ab38",
-    "0x2bda8"
+    "0x28f28",
+    "0x2a118",
+    "0x2b388"
    ],
    "N": 11,
-   "citation": "candidate.rs:178-195: key_position starts 0, advances once before any continue, stops at n=10/12. Every query is visited exactly once per tree.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "candidate.rs:178-195: key_position starts 0, increments once before any continue and stops at n=10/12; each query is visited once per tree.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "candidate.rs:178-195: key_position starts 0, advances once before any continue, stops at n=10/12. Every query is visited exactly once per tree."
   },
   {
    "id": "F-FOLDED-DUPLICATES",
    "role": "stage1",
    "addr": [
-    "0x299f8",
-    "0x2abe8",
-    "0x2be60"
+    "0x28fd8",
+    "0x2a1c8",
+    "0x2b440"
    ],
    "N": 5,
-   "citation": "candidate.rs:102,178-195: sorted equal folded indices are u/4; distinct transcript queries (r0_transcript.rs:205-211) give at most four preimages, plus the next-key/exit check. C1/C2 indices are distinct. Compiler inner continue cycle cannot exceed this run length.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "candidate.rs:94-97,178-195 and r0_transcript.rs:205-211: transcript queries distinct; only folded u/4 indices can coincide, at most four preimages plus next-key/exit. C1/C2 indices distinct.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "candidate.rs:102,178-195: sorted equal folded indices are u/4; distinct transcript queries (r0_transcript.rs:205-211) give at most four preimages, plus the next-key/exit check. C1/C2 indices are distinct. Compiler inner continue cycle cannot exceed this run length."
   },
   {
    "id": "F-SLOT-PADDING",
    "role": "stage1",
    "addr": [
-    "0x2a078",
-    "0x2b280",
-    "0x2c6c8"
+    "0x29658",
+    "0x2a860",
+    "0x2bca8"
    ],
    "N": 689,
-   "citation": "candidate.rs:196-200: padding chunks_exact(8), count<=SLOT_NODES[s]; compact.rs:56 capacities [146,146,128,172,172,150], at most 4*172 words plus exit.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "candidate.rs:196-200: padding scanned in 8-byte chunks, count<=SLOT_NODES[s]; compact.rs:54 capacities [146,146,128,172,172,150]. At most 4*172 words plus exit.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "candidate.rs:196-200: padding chunks_exact(8), count<=SLOT_NODES[s]; compact.rs:56 capacities [146,146,128,172,172,150], at most 4*172 words plus exit."
   },
   {
    "id": "F-BINARY-LEVELS",
    "role": "stage1",
    "addr": [
-    "0x2a148",
-    "0x2b330",
-    "0x2c7e8"
+    "0x29728",
+    "0x2a910",
+    "0x2bdc8"
    ],
    "N": 18,
-   "citation": "multiproof.rs:147-189 verify_in_place: LEAF_BITS=18, Arity::Two.bits()=1, exactly 18 levels; candidate.rs:202 fixes binary arity.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "multiproof.rs:147-189 verify_in_place: LEAF_BITS=18, Two.bits()=1, exactly 18 levels; candidate.rs:202 fixes binary arity.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "multiproof.rs:147-189 verify_in_place: LEAF_BITS=18, Arity::Two.bits()=1, exactly 18 levels; candidate.rs:202 fixes binary arity."
   },
   {
    "id": "F-BINARY-PARENTS",
    "role": "stage1",
    "addr": [
-    "0x2a1a0",
-    "0x2b378",
-    "0x2c848"
+    "0x29780",
+    "0x2a958",
+    "0x2be28"
    ],
    "N": 11,
-   "citation": "multiproof.rs:147-189: distinct parents at any level <= distinct initial leaves <= batch size 10/12, plus exit. candidate.rs:173-176 fixes batch sizes, :202 fixes binary arity. Parent totals <=447/527 by 420/494 supplied nodes +30/36 leaves -3 roots (proof-size-20261019/REPORT.md section 1).",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "multiproof.rs:147-189: at each level distinct parents <= distinct initial leaves <=10/12; plus exit. candidate.rs:174-175,202. Parent totals <=447/527 from supplied nodes 420/494 + leaves 30/36 - 3 roots; compact.rs:54 and proof-size-20261019/REPORT.md section 1.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "multiproof.rs:147-189: distinct parents at any level <= distinct initial leaves <= batch size 10/12, plus exit. candidate.rs:173-176 fixes batch sizes, :202 fixes binary arity. Parent totals <=447/527 by 420/494 supplied nodes +30/36 leaves -3 roots (proof-size-20261019/REPORT.md section 1)."
   },
   {
    "id": "F-QUERY-LOOP",
    "role": "stage1",
    "addr": [
-    "0x2da60"
+    "0x2d040"
    ],
    "N": 11,
-   "citation": "candidate.rs:239-251 query_loop: each successful query_values advances a.next once via verifier.rs:287-290; tx1 :280-286 starts 0 and ends SPLIT=10; tx2_common :295-310 resumes exactly 10 and ends 22. Error states exit. Loan-scope moves/destructuring at :311-315 do not introduce further iteration.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "candidate.rs:239-251,280-286,295-315: query loop starts at 0 (tx1) or checkpoint 10 (tx2) and ends at 10/22; verifier.rs:289-301 increments a.next exactly once per success. Borrow moves do not restart it.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "candidate.rs:239-251 query_loop: each successful query_values advances a.next once via verifier.rs:287-290; tx1 :280-286 starts 0 and ends SPLIT=10; tx2_common :295-310 resumes exactly 10 and ends 22. Error states exit. Loan-scope moves/destructuring at :311-315 do not introduce further iteration."
   },
   {
    "id": "F-GEOMETRY-QUERIES",
    "role": "stage1",
    "addr": [
-    "0xb4e70"
+    "0xba398"
    ],
    "N": 11,
-   "citation": "verifier.rs:148-177 QueryGeometry::for_range iterates queries[start..end], lengths 10/12 by candidate.rs:284,307; five denominators per query and no accepted early zero return.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:156-184: for queries[start..end], length 10/12 via candidate.rs:284,305-307; exactly five denominators per successful query.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:148-177 QueryGeometry::for_range iterates queries[start..end], lengths 10/12 by candidate.rs:284,307; five denominators per query and no accepted early zero return."
   },
   {
    "id": "F-GEOMETRY-PREFIX-BACKWARD",
    "role": "stage1",
    "addr": [
-    "0xb5908",
-    "0xb5b40"
+    "0xbae30",
+    "0xbb068"
    ],
    "N": 51,
-   "citation": "verifier.rs:134-144,167-174: batch_prefix_products visits flat.len()=5*(end-start), backward inversion visits precisely the same flat length; accepted ranges have 10/12 queries.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:142-152,175-181: prefix and backward loops each visit flat.len()=5*(end-start), with accepted range length 10/12.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:134-144,167-174: batch_prefix_products visits flat.len()=5*(end-start), backward inversion visits precisely the same flat length; accepted ranges have 10/12 queries."
   },
   {
    "id": "F-BATCHED-WEIGHTS-NEW",
    "role": "stage1",
    "addr": [
-    "0xb5ff0",
-    "0xb6088"
+    "0xbb518",
+    "0xbb5b0"
    ],
    "N": 65,
-   "citation": "verifier.rs:205-215: raw initialization and index loop visit weights.len()=64 (transport.rs final_len(S2), Accumulator::new and resume); compiler peeled first fill leaves 63. At most 64 plus exit.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:214-222: raw fill and conversion visit weights.len()=64, fixed by transport.rs:8 and Accumulator::new/resume. At most 64 trips plus exit.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:205-215: raw initialization and index loop visit weights.len()=64 (transport.rs final_len(S2), Accumulator::new and resume); compiler peeled first fill leaves 63. At most 64 plus exit."
   },
   {
    "id": "F-BATCHED-WEIGHTS-FINISH",
    "role": "stage1",
    "addr": [
-    "0xb6190"
+    "0xbb6b8"
    ],
    "N": 65,
-   "citation": "verifier.rs:226: finish iterates all 64 weights once. candidate.rs:286,311-315 ends query_loop before finishing moved weights; the move is constant-size and neither duplicates nor retries a query.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:234: one pass through 64 weights. candidate.rs:286,311-315 finishes only after query_loop; moved weights are not retried or duplicated.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:226: finish iterates all 64 weights once. candidate.rs:286,311-315 ends query_loop before finishing moved weights; the move is constant-size and neither duplicates nor retries a query."
   },
   {
    "id": "F-ACCUMULATE-BASIS-OUTER",
    "role": "stage1",
    "addr": [
-    "0xb6410"
+    "0xbb938"
    ],
    "N": 7,
-   "citation": "verifier.rs:278-280: n doubles from 1 until width=64; six iterations plus exit; transport.rs final_len(S2)=64.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:289-292: width=64; n doubles from 1, six iterations plus exit; transport.rs:9 final_len(S2).",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:278-280: n doubles from 1 until width=64; six iterations plus exit; transport.rs final_len(S2)=64."
   },
   {
    "id": "F-ACCUMULATE-BASIS-INNER",
    "role": "stage1",
    "addr": [
-    "0xb6480"
+    "0xbb9a8"
    ],
    "N": 33,
-   "citation": "verifier.rs:280: inner 0..n, n in {1,2,4,8,16,32}; at most 32 plus exit.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:292: j in 0..n, n in {1,2,4,8,16,32}; at most 32 trips plus exit.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:280: inner 0..n, n in {1,2,4,8,16,32}; at most 32 plus exit."
   },
   {
    "id": "F-ACCUMULATE-WEIGHTS",
    "role": "stage1",
    "addr": [
-    "0xb6690",
-    "0xb6818"
+    "0xbbbb8",
+    "0xbbd40"
    ],
    "N": 65,
-   "citation": "verifier.rs:281-290: 0..width=64; update_residue_row :235-244 always has four limbs, flush depends only on terms modulo four. terms advances once per query. The alternate compiler loop is the same 64-weight scan, not an input-sized loan retry.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:293-301: width=64 scan once per query; update_residue_row :243-251 has four limbs, flush determined by terms modulo four. No input-sized borrow retry.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:281-290: 0..width=64; update_residue_row :235-244 always has four limbs, flush depends only on terms modulo four. terms advances once per query. The alternate compiler loop is the same 64-weight scan, not an input-sized loan retry."
   },
   {
    "id": "F-INSERT-OUTER",
    "role": "stage2",
    "addr": [
-    "0x298a0",
-    "0x2a9d0",
-    "0x2bcf8"
+    "0x28e80",
+    "0x29fb0",
+    "0x2b2d8"
    ],
    "N": 13,
-   "citation": "candidate.rs:109-118 sort_batch_keys: outer 1..n; batch_tree :173-176 sets n=10/12; three explicit calls :165-167, no outer tree loop remains.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "candidate.rs:104-111 sort_batch_keys: i in 1..n; batch_tree :174-177 fixes n=10/12. Three explicit calls :166-168; each outer loop has at most n trips plus exit.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "candidate.rs:109-118 sort_batch_keys: outer 1..n; batch_tree :173-176 sets n=10/12; three explicit calls :165-167, no outer tree loop remains."
   },
   {
    "id": "F-INSERT-INNER",
    "role": "stage2",
    "addr": [
-    "0x298b0",
-    "0x2a9e0",
-    "0x2bd08"
+    "0x28e90",
+    "0x29fc0",
+    "0x2b2e8"
    ],
    "N": 13,
-   "citation": "candidate.rs:112-116: j starts i<n and strictly decreases on every swap, at most n iterations plus exit.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "candidate.rs:106-109: j starts i<n, strictly decreases on swaps and cannot underflow. At most n trips plus exit.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "candidate.rs:112-116: j starts i<n and strictly decreases on every swap, at most n iterations plus exit."
   },
   {
    "id": "F-BATCH-LEAVES",
    "role": "stage2",
    "addr": [
-    "0x29948",
-    "0x2ab38",
-    "0x2bda8"
+    "0x28f28",
+    "0x2a118",
+    "0x2b388"
    ],
    "N": 13,
-   "citation": "candidate.rs:178-195: key_position starts 0, advances once before any continue, stops at n=10/12. Every query is visited exactly once per tree.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "candidate.rs:178-195: key_position starts 0, increments once before any continue and stops at n=10/12; each query is visited once per tree.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "candidate.rs:178-195: key_position starts 0, advances once before any continue, stops at n=10/12. Every query is visited exactly once per tree."
   },
   {
    "id": "F-FOLDED-DUPLICATES",
    "role": "stage2",
    "addr": [
-    "0x299f8",
-    "0x2abe8",
-    "0x2be60"
+    "0x28fd8",
+    "0x2a1c8",
+    "0x2b440"
    ],
    "N": 5,
-   "citation": "candidate.rs:102,178-195: sorted equal folded indices are u/4; distinct transcript queries (r0_transcript.rs:205-211) give at most four preimages, plus the next-key/exit check. C1/C2 indices are distinct. Compiler inner continue cycle cannot exceed this run length.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "candidate.rs:94-97,178-195 and r0_transcript.rs:205-211: transcript queries distinct; only folded u/4 indices can coincide, at most four preimages plus next-key/exit. C1/C2 indices distinct.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "candidate.rs:102,178-195: sorted equal folded indices are u/4; distinct transcript queries (r0_transcript.rs:205-211) give at most four preimages, plus the next-key/exit check. C1/C2 indices are distinct. Compiler inner continue cycle cannot exceed this run length."
   },
   {
    "id": "F-SLOT-PADDING",
    "role": "stage2",
    "addr": [
-    "0x2a078",
-    "0x2b280",
-    "0x2c6c8"
+    "0x29658",
+    "0x2a860",
+    "0x2bca8"
    ],
    "N": 689,
-   "citation": "candidate.rs:196-200: padding chunks_exact(8), count<=SLOT_NODES[s]; compact.rs:56 capacities [146,146,128,172,172,150], at most 4*172 words plus exit.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "candidate.rs:196-200: padding scanned in 8-byte chunks, count<=SLOT_NODES[s]; compact.rs:54 capacities [146,146,128,172,172,150]. At most 4*172 words plus exit.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "candidate.rs:196-200: padding chunks_exact(8), count<=SLOT_NODES[s]; compact.rs:56 capacities [146,146,128,172,172,150], at most 4*172 words plus exit."
   },
   {
    "id": "F-BINARY-LEVELS",
    "role": "stage2",
    "addr": [
-    "0x2a148",
-    "0x2b330",
-    "0x2c7e8"
+    "0x29728",
+    "0x2a910",
+    "0x2bdc8"
    ],
    "N": 18,
-   "citation": "multiproof.rs:147-189 verify_in_place: LEAF_BITS=18, Arity::Two.bits()=1, exactly 18 levels; candidate.rs:202 fixes binary arity.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "multiproof.rs:147-189 verify_in_place: LEAF_BITS=18, Two.bits()=1, exactly 18 levels; candidate.rs:202 fixes binary arity.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "multiproof.rs:147-189 verify_in_place: LEAF_BITS=18, Arity::Two.bits()=1, exactly 18 levels; candidate.rs:202 fixes binary arity."
   },
   {
    "id": "F-BINARY-PARENTS",
    "role": "stage2",
    "addr": [
-    "0x2a1a0",
-    "0x2b378",
-    "0x2c848"
+    "0x29780",
+    "0x2a958",
+    "0x2be28"
    ],
    "N": 13,
-   "citation": "multiproof.rs:147-189: distinct parents at any level <= distinct initial leaves <= batch size 10/12, plus exit. candidate.rs:173-176 fixes batch sizes, :202 fixes binary arity. Parent totals <=447/527 by 420/494 supplied nodes +30/36 leaves -3 roots (proof-size-20261019/REPORT.md section 1).",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "multiproof.rs:147-189: at each level distinct parents <= distinct initial leaves <=10/12; plus exit. candidate.rs:174-175,202. Parent totals <=447/527 from supplied nodes 420/494 + leaves 30/36 - 3 roots; compact.rs:54 and proof-size-20261019/REPORT.md section 1.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "multiproof.rs:147-189: distinct parents at any level <= distinct initial leaves <= batch size 10/12, plus exit. candidate.rs:173-176 fixes batch sizes, :202 fixes binary arity. Parent totals <=447/527 by 420/494 supplied nodes +30/36 leaves -3 roots (proof-size-20261019/REPORT.md section 1)."
   },
   {
    "id": "F-QUERY-LOOP",
    "role": "stage2",
    "addr": [
-    "0x12d50"
+    "0x12330"
    ],
    "N": 13,
-   "citation": "candidate.rs:239-251 query_loop: each successful query_values advances a.next once via verifier.rs:287-290; tx1 :280-286 starts 0 and ends SPLIT=10; tx2_common :295-310 resumes exactly 10 and ends 22. Error states exit. Loan-scope moves/destructuring at :311-315 do not introduce further iteration.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "candidate.rs:239-251,280-286,295-315: query loop starts at 0 (tx1) or checkpoint 10 (tx2) and ends at 10/22; verifier.rs:289-301 increments a.next exactly once per success. Borrow moves do not restart it.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "candidate.rs:239-251 query_loop: each successful query_values advances a.next once via verifier.rs:287-290; tx1 :280-286 starts 0 and ends SPLIT=10; tx2_common :295-310 resumes exactly 10 and ends 22. Error states exit. Loan-scope moves/destructuring at :311-315 do not introduce further iteration."
   },
   {
    "id": "F-GEOMETRY-QUERIES",
    "role": "stage2",
    "addr": [
-    "0xb4e70"
+    "0xba398"
    ],
    "N": 13,
-   "citation": "verifier.rs:148-177 QueryGeometry::for_range iterates queries[start..end], lengths 10/12 by candidate.rs:284,307; five denominators per query and no accepted early zero return.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:156-184: for queries[start..end], length 10/12 via candidate.rs:284,305-307; exactly five denominators per successful query.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:148-177 QueryGeometry::for_range iterates queries[start..end], lengths 10/12 by candidate.rs:284,307; five denominators per query and no accepted early zero return."
   },
   {
    "id": "F-GEOMETRY-PREFIX-BACKWARD",
    "role": "stage2",
    "addr": [
-    "0xb5908",
-    "0xb5b40"
+    "0xbae30",
+    "0xbb068"
    ],
    "N": 61,
-   "citation": "verifier.rs:134-144,167-174: batch_prefix_products visits flat.len()=5*(end-start), backward inversion visits precisely the same flat length; accepted ranges have 10/12 queries.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:142-152,175-181: prefix and backward loops each visit flat.len()=5*(end-start), with accepted range length 10/12.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:134-144,167-174: batch_prefix_products visits flat.len()=5*(end-start), backward inversion visits precisely the same flat length; accepted ranges have 10/12 queries."
   },
   {
    "id": "F-BATCHED-WEIGHTS-NEW",
    "role": "stage2",
    "addr": [
-    "0xb5ff0",
-    "0xb6088"
+    "0xbb518",
+    "0xbb5b0"
    ],
    "N": 65,
-   "citation": "verifier.rs:205-215: raw initialization and index loop visit weights.len()=64 (transport.rs final_len(S2), Accumulator::new and resume); compiler peeled first fill leaves 63. At most 64 plus exit.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:214-222: raw fill and conversion visit weights.len()=64, fixed by transport.rs:8 and Accumulator::new/resume. At most 64 trips plus exit.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:205-215: raw initialization and index loop visit weights.len()=64 (transport.rs final_len(S2), Accumulator::new and resume); compiler peeled first fill leaves 63. At most 64 plus exit."
   },
   {
    "id": "F-BATCHED-WEIGHTS-FINISH",
    "role": "stage2",
    "addr": [
-    "0xb6190"
+    "0xbb6b8"
    ],
    "N": 65,
-   "citation": "verifier.rs:226: finish iterates all 64 weights once. candidate.rs:286,311-315 ends query_loop before finishing moved weights; the move is constant-size and neither duplicates nor retries a query.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:234: one pass through 64 weights. candidate.rs:286,311-315 finishes only after query_loop; moved weights are not retried or duplicated.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:226: finish iterates all 64 weights once. candidate.rs:286,311-315 ends query_loop before finishing moved weights; the move is constant-size and neither duplicates nor retries a query."
   },
   {
    "id": "F-ACCUMULATE-BASIS-OUTER",
    "role": "stage2",
    "addr": [
-    "0xb6410"
+    "0xbb938"
    ],
    "N": 7,
-   "citation": "verifier.rs:278-280: n doubles from 1 until width=64; six iterations plus exit; transport.rs final_len(S2)=64.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:289-292: width=64; n doubles from 1, six iterations plus exit; transport.rs:9 final_len(S2).",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:278-280: n doubles from 1 until width=64; six iterations plus exit; transport.rs final_len(S2)=64."
   },
   {
    "id": "F-ACCUMULATE-BASIS-INNER",
    "role": "stage2",
    "addr": [
-    "0xb6480"
+    "0xbb9a8"
    ],
    "N": 33,
-   "citation": "verifier.rs:280: inner 0..n, n in {1,2,4,8,16,32}; at most 32 plus exit.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:292: j in 0..n, n in {1,2,4,8,16,32}; at most 32 trips plus exit.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:280: inner 0..n, n in {1,2,4,8,16,32}; at most 32 plus exit."
   },
   {
    "id": "F-ACCUMULATE-WEIGHTS",
    "role": "stage2",
    "addr": [
-    "0xb6690",
-    "0xb6818"
+    "0xbbbb8",
+    "0xbbd40"
    ],
    "N": 65,
-   "citation": "verifier.rs:281-290: 0..width=64; update_residue_row :235-244 always has four limbs, flush depends only on terms modulo four. terms advances once per query. The alternate compiler loop is the same 64-weight scan, not an input-sized loan retry.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:293-301: width=64 scan once per query; update_residue_row :243-251 has four limbs, flush determined by terms modulo four. No input-sized borrow retry.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:281-290: 0..width=64; update_residue_row :235-244 always has four limbs, flush depends only on terms modulo four. terms advances once per query. The alternate compiler loop is the same 64-weight scan, not an input-sized loan retry."
   },
   {
    "id": "F-FINISH-QUERY-DOT",
    "role": "stage1",
    "addr": [
-    "0xbc530"
+    "0xc1a58"
    ],
    "N": 65,
-   "citation": "verifier.rs:301-305 finish_query_dot: j advances once until weights.len()=64; finish_relation :312-321 checks relation then this 64-term dot, then a.next==22. candidate.rs:311-321 creates the relation view once after ending the 12-query loop. Polynomial evaluation is exactly seven coefficients (:292); rounds are fixed by Variant::S2.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:313-332: j increases once until 64 weights; relation rounds fixed by S2 and polynomial :304 has seven coefficients; candidate.rs:311-321 constructs relation view once.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:301-305 finish_query_dot: j advances once until weights.len()=64; finish_relation :312-321 checks relation then this 64-term dot, then a.next==22. candidate.rs:311-321 creates the relation view once after ending the 12-query loop. Polynomial evaluation is exactly seven coefficients (:292); rounds are fixed by Variant::S2."
   },
   {
    "id": "F-FINISH-QUERY-DOT",
    "role": "stage2",
    "addr": [
-    "0xbc530"
+    "0xc1a58"
    ],
    "N": 65,
-   "citation": "verifier.rs:301-305 finish_query_dot: j advances once until weights.len()=64; finish_relation :312-321 checks relation then this 64-term dot, then a.next==22. candidate.rs:311-321 creates the relation view once after ending the 12-query loop. Polynomial evaluation is exactly seven coefficients (:292); rounds are fixed by Variant::S2.",
-   "citation_revision": "b2727acd3 frozen; fa894d83d task base"
+   "citation": "verifier.rs:313-332: j increases once until 64 weights; relation rounds fixed by S2 and polynomial :304 has seven coefficients; candidate.rs:311-321 constructs relation view once.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430",
+   "predecessor_citation": "verifier.rs:301-305 finish_query_dot: j advances once until weights.len()=64; finish_relation :312-321 checks relation then this 64-term dot, then a.next==22. candidate.rs:311-321 creates the relation view once after ending the 12-query loop. Polynomial evaluation is exactly seven coefficients (:292); rounds are fixed by Variant::S2."
+  },
+  {
+   "id": "C-CANONICAL-OPENINGS",
+   "role": "stage1",
+   "addr": [
+    "0xc3da0"
+   ],
+   "N": 23,
+   "citation": "candidate.rs:59-71: exactly 22 openings of fixed 832-byte layout; compact.rs:28,37,47. At most 22 trips plus exit. ELF: canonical-scan-disassembly.txt; counter initializations 0xc3d78/0xc3e30, bounds 0xc3db0/0xc40d0 and increment 0xc40c8.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430"
+  },
+  {
+   "id": "C-CANONICAL-SLOTS",
+   "role": "stage1",
+   "addr": [
+    "0xc3e48"
+   ],
+   "N": 5,
+   "citation": "candidate.rs:61-68: exactly four subslots per opening, 26 M31 values, one K and two more K values per subslot. At most four trips plus exit. ELF: canonical-scan-disassembly.txt; counter initializations 0xc3d78/0xc3e30, bounds 0xc3db0/0xc40d0 and increment 0xc40c8.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430"
+  },
+  {
+   "id": "C-CANONICAL-OPENINGS",
+   "role": "stage2",
+   "addr": [
+    "0xc3da0"
+   ],
+   "N": 23,
+   "citation": "candidate.rs:59-71: exactly 22 openings of fixed 832-byte layout; compact.rs:28,37,47. At most 22 trips plus exit. ELF: canonical-scan-disassembly.txt; counter initializations 0xc3d78/0xc3e30, bounds 0xc3db0/0xc40d0 and increment 0xc40c8.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430"
+  },
+  {
+   "id": "C-CANONICAL-SLOTS",
+   "role": "stage2",
+   "addr": [
+    "0xc3e48"
+   ],
+   "N": 5,
+   "citation": "candidate.rs:61-68: exactly four subslots per opening, 26 M31 values, one K and two more K values per subslot. At most four trips plus exit. ELF: canonical-scan-disassembly.txt; counter initializations 0xc3d78/0xc3e30, bounds 0xc3db0/0xc40d0 and increment 0xc40c8.",
+   "citation_revision": "c16e59e77 candidate; task base 2318acd430"
   }
  ],
  "callee_caps": [
@@ -1154,5 +1206,5 @@
   "sol_get_return_data": 110,
   "sol_get_stack_height": 100
  },
- "target_revision": "fa894d83d (frozen verifier source b2727acd3)"
+ "target_revision": "c16e59e77 candidate; task base 2318acd430"
 }
