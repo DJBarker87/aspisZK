@@ -560,3 +560,56 @@ theorem privacy_R1_protocol_builder
     modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 ≤
       1 / 2^109 + 1 / 2^137 + 1 / 2^454
 ```
+
+## Continuation 4, Stage 2: complete raw-record reconstruction and assembly
+
+`BuilderRecordCanonical` proves a lossless round trip for **all fifteen**
+RustWitness fields. CanonicalWords lists every required bound: the three
+30-bit values, all direction bits, every sibling limb, every key/salt/owner
+limb and every pair coordinate. No modular reduction or nonzero-bit alias is
+silently accepted. The decoded Wspend retains pairFirst and all withdrawal
+recipient coordinates; whether those coordinates are zero is determined by
+the source record map, not erased by reconstruction.
+
+`BuilderPublicCanonical.public_roundtrip` recovers all five RustPublic fields
+from PubCorr over M31 and canonical asset. In particular the empty table is
+recovered word-for-word using the frozen table bounds. This does not infer
+PubCorr.empty from the earlier arbitrary-root Kani checks. Attempts 9209
+and 9210 pass; 9208 is a retained proof error (List lookup lemma name and a
+bit-expression rewriting shape). There is no large numeral or recurrence
+reduction, and no new heartbeat/recursion setting.
+
+`BuilderRuntimeJoin` now gives the complete final SourceIdentification
+assembly: `toInstance`, both canonical record equalities, public_eq, build_eq
+and transport_eq. It takes **one named uninhabited RustRuntimeJoin** with
+primitive runtime data/obligations: exact public projection; canonical raw
+words; PubCorr including computed empty roots; RspendPlus admission including
+the sentinel; raw glue trace equality; S2 transport. It assumes no
+BuilderSoundOn, lane, helper or trace-validity conclusion. This factors out
+the record reconstruction and final assembly from the genuinely unproved
+Rust admission/glue handoff; it does not claim that bundling those obligations
+is itself a deployed-source proof. Attempt 9211 passes.
+
+`PrivacyR1FinalProtocolBuilderSource.privacy_R1_protocol_source`, in the same
+endpoint file, keeps D89's arbitrary h and consumes this named runtime join
+in place of builder_refinement_D46_D51. Its real/ideal ScanCoupling statements
+are exactly unchanged. Both endpoint variants compile at 9212 (6.93 s,
+4,101,960 KiB RSS, zero swaps); every audit uses only standard axioms.
+PrivacyR1Final and PrivacyR1FinalProtocol remain byte-unchanged.
+
+Source-facing signature change, verbatim binder before:
+
+```lean
+    (builder_refinement_D46_D51 : R0Z.HonestValidity.BuilderSoundOn h B x)
+```
+
+Verbatim binder after (every other D89 binder and conclusion is retained):
+
+```lean
+    (runtime_join : BuilderRuntimeJoin.RustRuntimeJoin h)
+```
+
+This is a source-facing conditional endpoint, **not** a claim that the new
+binder is weaker than BuilderSoundOn. The canonical endpoint above has no
+builder binder at all. The actual shipped runtime has not yet been made an
+inhabitant of either SourceIdentification or RustRuntimeJoin.
