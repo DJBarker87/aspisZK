@@ -554,3 +554,20 @@ equation), and the evidence slots h_R10, h_R22, h_R4_transport, h_R17,
 h_R20, h_R21, h_S1–h_S10, h_M10_uniform; (b) accepted premises P1–P7 and
 P2′, for user/lead acceptance at step 9. With D82's privacy checklist, this
 replaces the gap-map table as the tracking list.
+
+## Addendum (2026-10-21): binary M9; the extractor still recovers eight-way words
+
+Codex job cx-m9-binary (274b5d631..20c4c762b): seven modules, 29 audits,
+standard axioms (`design/M9-BINARY-20261020.md`). Proved: the binary M9
+bound 6·Q²/2^256 + N·B + 2^-126; C3's `BinaryClean` from checked
+acceptance, the read budget and `BinaryCompletion`; exact extractor-word
+alignment including failed/default recoveries; public selection under the
+Bin event (narrowing h_Rwire to known-public literal completion); the
+composed query-scan bound with C3's numeric endpoint. **Finding:** C3's
+decoder and the recorded-run extractor still use the historical eight-way
+recovery; a checked counterexample shows binary nodes parse in the Bin
+parser and fail in the old one, so the old extractor cannot be reused by
+substitution. Ruling: port the recorded-run extractor to the Bin recovery
+modules (job cx-extractor-bin) and restate C3 over it; the M10 cost results
+carry over where the extractor's call structure is unchanged and are
+re-checked where recovery changes.
