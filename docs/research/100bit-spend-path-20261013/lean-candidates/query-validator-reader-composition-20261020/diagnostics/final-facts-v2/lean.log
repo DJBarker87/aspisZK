@@ -1,0 +1,37 @@
+/home/dombarker/project-offloads/query-validator-final-facts-v2-20261020/sources/QueryValidatorFinalFacts.lean:19:54: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ a ≤ 21
+  a - b ≥ 0
+where
+ a := ↑i
+ b := ↑2 ^ UScalarTy.Usize.numBits
+/home/dombarker/project-offloads/query-validator-final-facts-v2-20261020/sources/QueryValidatorFinalFacts.lean:22:4: error: Type mismatch: After simplification, term
+  h.right.left
+ has type
+  @LT.lt ℕ instLTNat (↑((↑queries)[↑ui]?.getD default)) 262144
+but is expected to have type
+  @LT.lt ℕ instLTNat (↑((↑queries)[i]?.getD default)) 262144
+/home/dombarker/project-offloads/query-validator-final-facts-v2-20261020/sources/QueryValidatorFinalFacts.lean:26:54: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  b - c ≤ -1
+  a ≥ 0
+  a - b ≥ 1
+  a - c ≥ 1
+where
+ a := ↑(queryValueList queries).length
+ b := ↑i
+ c := ↑j
+ d := ↑2 ^ UScalarTy.Usize.numBits
+/home/dombarker/project-offloads/query-validator-final-facts-v2-20261020/sources/QueryValidatorFinalFacts.lean:29:4: error: Type mismatch: After simplification, term
+  h.right.right i (Decidable.byContradiction fun a => all_validAt_range_pairwise._proof_1_2 queries i j hij huv a)
+ has type
+  Not (↑((↑queries)[i]?.getD default) = ↑((↑queries)[↑uj]?.getD default))
+but is expected to have type
+  Not (↑((↑queries)[i]?.getD default) = ↑((↑queries)[j]?.getD default))
+'AspisR1.QueryValidatorFinalFacts.validate_queries_success_range_pairwise' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

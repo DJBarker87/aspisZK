@@ -1,0 +1,9 @@
+# Query validator extraction provenance supplement
+
+This supplement preserves the requested source-only provenance for the eager-chunk validator candidate and points to the separate reversible reader-prefix adapter checker.
+
+`chunked-v5/` contains the exact isolated Rust source/pins, generated Types/Funs, translation metadata, and Charon/Aeneas command, environment, time, and receipt records for `/home/dombarker/project-offloads/stage2-query-validator-chunked-v5-20261020`. It intentionally does not include the LLBC artifact or compiled objects. The Aeneas receipt records LLBC SHA-256 `839592192ed8295f0c210bb87044a96dd3214ac469d28386df8b51f2139cbe4b`, generated Funs SHA-256 `39201df525352aaa34f82d86bce8c09b07d5617a3d89f619d1af9e2f784833c0`, and Types SHA-256 `cbce0f7d0fee71de2dc0d37a75e7754fa9b7af2bc912fab22f16c471921aafaf`. The cut is a candidate source arrangement: the validator checks 22 range bounds and prior-pair distinctness using eager fixed-index chunks of 8, 8, and 6, then returns one final error. Source/effect equivalence and production adoption remain open.
+
+`reversible-reader-prefix-parameterization-checker.py` is a byte-identical copy of the checker in `../stage2-query-reader-cursor-20261020/check_in_place_parameterization.py` (SHA-256 `f78b3db596bd2f15f4ad0fd7dae8b0fa3d0b1c546be1498f2f67e7d4de6b5690`). That checker reverses the explicit-validator parameter/callee substitution in the unrolled reader candidate; it is not a proof that the chunked validator is equivalent to the production function.
+
+`../sources/QueryValidatorLoopInvariant.lean` and `../evidence/QueryValidatorLoopInvariant/` preserve the previously green loop-invariant source and receipt, including the exact object hash and import preflight. No binary or object files are included in this packet.

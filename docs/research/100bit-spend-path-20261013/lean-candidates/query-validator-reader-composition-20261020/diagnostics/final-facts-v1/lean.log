@@ -1,0 +1,63 @@
+/home/dombarker/project-offloads/query-validator-final-facts-v1-20261020/sources/QueryValidatorFinalFacts.lean:19:40: error(lean.unknownIdentifier): Unknown constant `Nat.Usize`
+
+Note: Inferred this name from the expected resulting type of `.Usize`:
+  ℕ
+/home/dombarker/project-offloads/query-validator-final-facts-v1-20261020/sources/QueryValidatorFinalFacts.lean:20:29: error: unsolved goals
+queries : QueryArray
+hvalid : ∀ (i : Usize), ↑i < 22 → validAt queries i
+i : ℕ
+hi : i < 22
+ui : Usize := sorry
+⊢ ↑(sorry ()) = i
+/home/dombarker/project-offloads/query-validator-final-facts-v1-20261020/sources/QueryValidatorFinalFacts.lean:22:4: error: Type mismatch
+  h.right.left
+has type
+  queryValue queries ↑ui < 2 ^ 18
+but is expected to have type
+  queryValue queries i < 2 ^ 18
+/home/dombarker/project-offloads/query-validator-final-facts-v1-20261020/sources/QueryValidatorFinalFacts.lean:26:40: error(lean.unknownIdentifier): Unknown constant `Nat.Usize`
+
+Note: Inferred this name from the expected resulting type of `.Usize`:
+  ℕ
+/home/dombarker/project-offloads/query-validator-final-facts-v1-20261020/sources/QueryValidatorFinalFacts.lean:27:29: error: unsolved goals
+queries : QueryArray
+hvalid : ∀ (i : Usize), ↑i < 22 → validAt queries i
+i j : ℕ
+hi : i < (queryValueList queries).length
+hj : j < (queryValueList queries).length
+hij : i < j
+uj : Usize := sorry
+⊢ ↑(sorry ()) = j
+/home/dombarker/project-offloads/query-validator-final-facts-v1-20261020/sources/QueryValidatorFinalFacts.lean:29:4: error: Type mismatch
+  h.right.right i (Decidable.byContradiction fun a => all_validAt_range_pairwise._proof_1_2 queries i j hij huv a)
+has type
+  queryValue queries i ≠ queryValue queries ↑uj
+but is expected to have type
+  ↑(↑queries)[i]! ≠ ↑(↑queries)[j]!
+/home/dombarker/project-offloads/query-validator-final-facts-v1-20261020/sources/QueryValidatorFinalFacts.lean:20:42: warning: This simp argument is unused:
+  UScalar.ofNatCore_val_eq
+
+Hint: Omit it from the simp argument list.
+  simp [ui,̵ ̵U̵S̵c̵a̵l̵a̵r̵.̵o̵f̵N̵a̵t̵C̵o̵r̵e̵_̵v̵a̵l̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/query-validator-final-facts-v1-20261020/sources/QueryValidatorFinalFacts.lean:27:42: warning: This simp argument is unused:
+  UScalar.ofNatCore_val_eq
+
+Hint: Omit it from the simp argument list.
+  simp [uj,̵ ̵U̵S̵c̵a̵l̵a̵r̵.̵o̵f̵N̵a̵t̵C̵o̵r̵e̵_̵v̵a̵l̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/query-validator-final-facts-v1-20261020/sources/QueryValidatorFinalFacts.lean:34:53: error: Function expected at
+  ok
+but this term has type
+  ?m.1
+
+Note: Expected a function because this term is being applied to the argument
+  (core.result.Result.Ok ())
+
+Hint: The identifier `ok` is unknown, and Lean's `autoImplicit` option causes an unknown identifier to be treated as an implicitly bound variable with an unknown type. However, the unknown type cannot be a function, and a function is what Lean expects here. This is often the result of a typo or a missing `import` or `open` statement.
+'AspisR1.QueryValidatorFinalFacts.validate_queries_success_range_pairwise' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
