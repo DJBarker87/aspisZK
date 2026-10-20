@@ -166,3 +166,17 @@ reproducing Rust function, then either reshape a cfg-gated reference form
 around it (Kani-equivalent, as for the expansion) or record the minimal
 reproducer as a tool defect with the exact construct, for a decision on a
 tool upgrade.
+
+## Candidate update prep8 (lead, 2026-10-20 night)
+
+Parked branch `codex/cx-freeze-prep-20261020` at 3aa3caf0e (not merged; the
+candidate is adopted only after session A's re-pins). Route translation stays
+10/12. `Weights::new`: supplied-row ownership and assembly proved via
+verified store contracts (87 s, 2.25 GiB, zero swap); full row arithmetic
+still unproved, stopped without raising caps. `prepared_claim`: the pinned
+Aeneas failure is reduced to a one-iteration `Box<u8>` read loop; the scalar
+helper translates and its Kani composition passes, while three full callers
+still fail. Candidate ELFs unchanged (`f9ecbc27…`, `3f21a42f…`). prep9 is
+running: verified primitive field contracts plus per-row `stub_verified`
+harnesses for `Weights::new`, and per-caller harnesses for `prepared_claim`,
+with no change to candidate source.
