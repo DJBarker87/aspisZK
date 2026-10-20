@@ -1,0 +1,1 @@
+    let dots=crate::fast_dots::four_dots(q,g);

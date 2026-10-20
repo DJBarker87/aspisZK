@@ -1,0 +1,47 @@
+import CuSavingsGammaCandidate1
+import CuSavingsProfilingCandidate2
+import CuSavingsS2Candidate3
+import CuSavingsDelayedCandidate4
+import CuSavingsCanonicalCandidate5Consumers
+import CuSavingsPublicDecodeCallsite
+import CuSavingsRhoCandidate12
+import CuSavingsLibraSourceOrigins
+import CuSavingsPrefixCandidate10
+import CuSavingsRetainedCompositionTx1
+
+import CuSavingsGeometryStage
+import CuSavingsGeometrySingle
+import CuSavingsRetainedClaimBindingGammaRho
+import CuSavingsRetainedPreparationInputs
+import CuSavingsRetainedQueryPrefixTx1
+import CuSavingsRetainedQueryPrefixTx2
+import CuSavingsRetainedQueryPrefixGammaRho
+import CuSavingsRetainedFinishDotContexts
+
+/-! Release import/axioms checkpoint. This file checks these source proof
+components can coexist in one Lean environment. Importing the components is
+not a proof of their semantic composition or a new cryptographic theorem. -/
+#print axioms AspisR1.CuSavingsGammaCandidate1.source_tx1_equivalence
+#print axioms AspisR1.CuSavingsProfilingCandidate2.all_observations_eq
+#print axioms AspisR1.CuSavingsS2Candidate3.all_callers_equivalence
+#print axioms AspisR1.CuSavingsDelayedCandidate4.all_callers_equivalence
+#print axioms AspisR1.CuSavingsCanonicalCandidate5Consumers.plain_pair_context
+#print axioms AspisR1.CuSavingsPublicDecodeCallsite.observations_eq
+#print axioms AspisR1.CuSavingsRhoCandidate12.all_callers_equivalence
+#print axioms AspisR1.CuSavingsLibraSourceOrigins.source_caller_context
+
+#print axioms AspisR1.CuSavingsPrefixCandidate10.caller_context
+
+#print axioms AspisR1.CuSavingsRetainedCompositionTx1.source_tx1_rho_equivalence
+
+#print axioms AspisR1.CuSavingsGeometryStage.source_caller_equivalence
+#print axioms AspisR1.CuSavingsGeometrySingle.source_public_query_context
+#print axioms AspisR1.CuSavingsRetainedPreparationInputs.preparation_inputs
+#print axioms AspisR1.CuSavingsRetainedClaimBindingGammaRho.source_tx1_equivalence
+#print axioms AspisR1.CuSavingsRetainedFinishDotContexts.Prepared.source_equivalence
+#print axioms AspisR1.CuSavingsRetainedFinishDotContexts.Resumed.source_equivalence
+
+#print axioms AspisR1.CuSavingsRetainedQueryPrefixTx1.source_equivalence
+#print axioms AspisR1.CuSavingsRetainedQueryPrefixTx2.tx2_equivalence
+#print axioms AspisR1.CuSavingsRetainedQueryPrefixTx2.tx2_authenticated_equivalence
+#print axioms AspisR1.CuSavingsRetainedQueryPrefixGammaRho.source_tx1_equivalence

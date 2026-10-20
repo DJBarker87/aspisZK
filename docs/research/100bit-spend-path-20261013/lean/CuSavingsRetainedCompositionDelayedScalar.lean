@@ -1,0 +1,80 @@
+import CuSavingsRetainedCompositionDotsSource
+import ExtractedCurrentReducer
+import CuSavingsResidues
+
+/-! Candidate 4: exact emitted scalar operations, with overflow and residue
+facts. No optimized/reference equality is assumed as a primitive. -/
+set_option autoImplicit false
+namespace AspisR1.CuSavingsRetainedCompositionDelayedScalar
+open Aeneas Aeneas.Std Result
+open AspisR1RetainedDots
+open AspisV8R17.RawReducer
+open ExtractedCurrentReducerOps
+open CuSavingsResidues
+
+theorem reducer_eq (x : U64) :
+    field.reduce_u64 x = AspisR1Qm31ArithmeticProbe.field.reduce_u64 x := by
+  simp only [field.reduce_u64,field.P,
+    AspisR1Qm31ArithmeticProbe.field.reduce_u64,AspisR1Qm31ArithmeticProbe.field.P]
+
+theorem reducer_mod (x : U64) :
+    ∃ z : U32, field.M31.reduce_u64 x = .ok z ∧ z.val = x.val % P ∧ z.val < P := by
+  obtain ⟨z,hr,hm,hc⟩ := ExtractedCurrentReducer.current_reduce_mod x
+  refine ⟨z,?_,hm,hc⟩
+  simp only [field.M31.reduce_u64,reducer_eq,hr,bind_tc_ok]
+
+theorem add_mod (a b : U32) (ha : a.val < P) (hb : b.val < P) :
+    ∃ z : U32, field.M31.add a b = .ok z ∧ z.val = (a.val+b.val)%P ∧ z.val < P := by
+  have hf : a.val+b.val < 2^UScalarTy.U32.numBits := by
+    change a.val < 2147483647 at ha
+    change b.val < 2147483647 at hb
+    change a.val+b.val < 4294967296
+    omega
+  obtain ⟨s,hs,hsv⟩ := tryMk_success (a.val+b.val) hf
+  have hadd : (a+b : Result U32) = .ok s := hs
+  have hP : field.P.val = P := by simp [field.P,P]
+  by_cases hc : P ≤ s.val
+  · obtain ⟨z,hz,hzv⟩ := sub_success s field.P (by rw [hP];exact hc)
+    refine ⟨z,?_,?_,?_⟩
+    · simp only [field.M31.add,hadd,bind_tc_ok]
+      rw [if_pos (by simpa only [UScalar.le_equiv,hP] using hc)]
+      change (do let s1 ← UScalar.sub s field.P; ok s1) = .ok z
+      rw [hz];rfl
+    · rw [hzv,hP,hsv]
+      have hlo : P ≤ a.val+b.val := by omega
+      have hhi : a.val+b.val-P < P := by omega
+      symm
+      rw [Nat.mod_eq_sub_mod hlo,Nat.mod_eq_of_lt hhi]
+    · rw [hzv,hP];omega
+  · refine ⟨s,?_,?_,by omega⟩
+    · simp only [field.M31.add,hadd,bind_tc_ok]
+      rw [if_neg (by simpa only [UScalar.le_equiv,hP] using hc)]
+    · rw [hsv,Nat.mod_eq_of_lt (by omega)]
+
+def foldAdd (raw sum : U64) : Result U64 := do
+  let folded ← ExtractedCurrentReducer.foldExecution sum
+  UScalar.add raw folded
+
+theorem foldAdd_success (raw sum : U64) (count : Nat)
+    (hc : count < 7) (hr : raw.val < (count+1)*FoldBound) :
+    ∃ out : U64, foldAdd raw sum = .ok out ∧
+      out.val = raw.val + foldBits sum.val ∧ out.val < (count+2)*FoldBound ∧
+      out.val%P = (raw.val+sum.val)%P := by
+  obtain ⟨folded,hfold,hv⟩ := ExtractedCurrentReducer.foldExecution_success sum
+  have hf := fold_bound sum.val sum.bv.isLt
+  have hfit : raw.val+folded.val < 2^64 := by
+    rw [hv]
+    norm_num [FoldBound] at hr hf ⊢
+    omega
+  obtain ⟨out,ha,hov⟩ := add_success raw folded hfit
+  refine ⟨out,?_,by rw [hov,hv],?_,?_⟩
+  · simp only [foldAdd,hfold,bind_tc_ok,ha]
+  · rw [hov,hv]
+    norm_num [FoldBound] at hr hf ⊢
+    omega
+  · rw [hov,hv,Nat.add_mod,fold_mod,←Nat.add_mod]
+
+#print axioms reducer_mod
+#print axioms add_mod
+#print axioms foldAdd_success
+end AspisR1.CuSavingsRetainedCompositionDelayedScalar

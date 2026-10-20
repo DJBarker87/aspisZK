@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRetainedCompositionWeightsPrepared.lean:71:76: error: Tactic `rfl` failed: The left-hand side
+  transport.Variant.S2.folds
+is not definitionally equal to the right-hand side
+  ok 2#usize
+
+inst✝⁴ : AspisR1S2Groups.Shared
+inst✝³ : AspisR1CanonicalSampler.Shared
+inst✝² : AspisR1CanonicalReader.Runtime
+inst✝¹ : AspisR1CanonicalKReader.Runtime
+inst✝ : AspisR1CuRho.ScalarKBlocks
+State Output : Type
+common : PreparedCommon
+prefixCommon : RetainedPrefix
+R : AspisR1PublicPreparation.RoundModel.Boundaries
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+v : verifier.View
+hash : H
+obs : Option (verifier.Phase → Result Unit)
+initial : Std.Array aspis_core.field.WideExact 29#usize
+weights : State → AspisR1S2Groups.Weights
+after : verifier.Prepared → State → Low → GroupE → Parts → Result (core.result.Result Output verifier.Error)
+context :
+  verifier.Prepared →
+    Std.Array aspis_core.field.WideExact 29#usize →
+      (State → Result (core.result.Result Output verifier.Error)) → Result (core.result.Result Output verifier.Error)
+fallback :
+  verifier.Prepared → Std.Array aspis_core.field.WideExact 29#usize → Result (core.result.Result Output verifier.Error)
+this✝ : PreparedCommon := CuSavingsRetainedSamplerBinding.binding common
+this : RetainedPrefix := CuSavingsRetainedSemanticBinding.binding prefixCommon R B
+gamma : Std.Array aspis_core.field.WideExact 29#usize
+claims : Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize
+p : verifier.Prepared
+hprepared : retained.tx1_prepare D pub v hash obs initial = ok (core.result.Result.Ok (claims, p), gamma)
+hv : v.variant = transport.Variant.S2
+⊢ transport.Variant.S2.folds = ok 2#usize
+'AspisR1.CuSavingsRetainedCompositionWeightsPrepared.source_context_equivalence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]

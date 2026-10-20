@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRetainedFinishDotClients.lean:32:2: error: Type mismatch
+  CuSavingsCanonicalDotPartialsCanonical.caller_context f common (fun e => ok ?m.12) fun values high => ok ?m.18
+has type
+  (do
+      let rows ← new_clients.shared_partials f common
+      match rows with
+        | core.result.Result.Err error => ok ?m.12
+        | core.result.Result.Ok values => ok (?m.19 values (new_clients.shared_high values))) =
+    do
+    let rows ← old_clients.shared_partials f common
+    match rows with
+      | core.result.Result.Err error => ok ?m.12
+      | core.result.Result.Ok values => ok (?m.19 values (old_clients.shared_high values))
+but is expected to have type
+  newShared f common = oldShared f common
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRetainedFinishDotClients.lean:33:17: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRetainedFinishDotClients.lean:33:49: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+'AspisR1.CuSavingsRetainedFinishDotClients.shared_equivalence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsRetainedFinishDotClients.clients_equivalence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

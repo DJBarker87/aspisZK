@@ -1,0 +1,54 @@
+{
+  "original_resume_sha256": "53b819619ef7b9c87872ff5ca77ff5f2514a6d85bb7f96bd9bb1f4f2138fbaed",
+  "original_revisions": [
+    "f458169f705f25b04e1e29546c621e4665e0f64c",
+    "39c2971dd16c95858a4cfd2c9ae35da052eacfa9"
+  ],
+  "complete_fragment_reassembly": true,
+  "fragments": {
+    "header_auth_state_roots": {
+      "sha256": "9bac94d1fe893f64d6783fa51bc761782ab33d806beb674ce947b574ad866896",
+      "source": "\n    if bytes.len()!=checkpoint_size(v)||&bytes[..8]!=b\"R1P2CKP2\"||bytes[8]!=v.tag()||bytes[9]>22||bytes[10]!=1||bytes[11..16].iter().any(|&b|b!=0) {return Err(Error::Checkpoint);}\n    let end=bytes.len()-32;\n    if bytes[16..48]!=hash.digest(&[proof])||bytes[48..80]!=hash.digest(&[public])||bytes[end..]!=hash.digest(&[b\"UNPROVED:R1:checkpoint\",&bytes[..end]]) {return Err(Error::Checkpoint);}\n    let mut r=Reader{bytes,at:80};let state=r.raw();let roots=[r.raw(),r.raw()];\n    "
+    },
+    "actual_e4_decoder_calls": {
+      "sha256": "112fd492e942c959f00569303b2ecdb6327739284aac4970ea115a219fbbb507",
+      "source": "let gamma=r.e()?;let kappa=r.e()?;let alpha=[r.e()?,r.e()?];"
+    },
+    "rho": {
+      "sha256": "33d50c49b9eda1545e3a0fdaf228011613090c226db13dd181542b412f5b90d6",
+      "source": "let rho=r.k()?;"
+    },
+    "queries_checks": {
+      "sha256": "13d7845ca28119724fff268307e038dfb0aadb8646aeb530b9dfbbce04b4637f",
+      "source": "\n    let queries=core::array::from_fn(|_|u32::from_le_bytes(r.raw()));\n    for (i,q) in queries.iter().enumerate(){if *q>=1<<18||queries[..i].contains(q){return Err(Error::Checkpoint);}}\n    "
+    },
+    "semantic_array10_fill": {
+      "sha256": "1d26a614051b188466f3405827ef3e1d9c5052767a49386261e90543b9fc31dc",
+      "source": "let mut semantic_alpha=[K::ZERO;10];for x in &mut semantic_alpha {*x=r.k()?;}\n"
+    },
+    "point_claim_rhs": {
+      "sha256": "b2c836955d43a795613dae8aabea21e57cdf25570893b8189be7d49e45b1de4d",
+      "source": "    let z=[SecureCirclePoint{x:r.k()?,y:r.k()?},SecureCirclePoint{x:r.k()?,y:r.k()?}];\n    let claim=r.e()?;let rhs=r.e()?;"
+    },
+    "power": {
+      "sha256": "2b87ef5750d402eff195dd59a5fd10921cfd98764a248d2f14df8c3b283e7f4c",
+      "source": "let power=r.k()?;"
+    },
+    "allocation_weights_tail": {
+      "sha256": "825f5b7c91e2f7c6ca97491fcc38474c61872ef56124caa9b9f9fed897d7c498",
+      "source": "\n    let mut weights=aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;\n    for x in &mut weights {*x=r.k()?;}\n    if r.at!=end {return Err(Error::Checkpoint);}\n    Ok((Box::new(Prepared{variant:v,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state}),Accumulator{weights,rhs,power,next:bytes[9] as usize}))\n}"
+    }
+  },
+  "selected_direct_extraction_roots": [
+    "crate::begin_fields"
+  ],
+  "array_loop_direct_aeneas_checked": false,
+  "array_frontend_failure": "InterpReduceCollapse.ml1137, receipts retained-resume-fields-aeneas-{a,b,c,d,e,f,g}; never admitted as successful extraction",
+  "explicit_source_interpretation": "CuSavingsRetainedResumeCells.cells n executes ordered actual source_read_k calls, exits immediately with same first runtime failure/divergence/Rust error, constructs the length-indexed result via one cons per successful read. n=10 instantiates the source fixed MutArray full-overwrite loop. Standard owning-array/iterator handback admission: each successful iteration writes its unique next cell, no alias/escape/observer of initial zeros, error exit does not return local array. This narrow source interpretation is an explicit boundary, not claimed direct full-loop Aeneas emission.",
+  "retained_source_bindings": [
+    "actual CanonicalReader.Reader.e plus coordinate-only transport",
+    "actual source_read_k -> existing AspisR1CuRho.verifier.Reader.k with exact parser/raw source",
+    "original complete RhoResumeCaller constructs returned Prepared/Accumulator with exact retained fields"
+  ],
+  "common_fragments": "Only exact header/auth/state/roots, queries/checks and point/claim/rhs source computations remain opaque computational fields; no proposition/canonicality/equivalence law. They cannot receive or overwrite stored alpha/gamma/semantic_alpha."
+}

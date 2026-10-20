@@ -1,0 +1,89 @@
+{
+  "revision": "39c2971dd16c95858a4cfd2c9ae35da052eacfa9",
+  "constructor_unchanged_from_reference": true,
+  "complete_pair_reassembly": true,
+  "complete_finish_reassembly": true,
+  "constructor_sha256": "ff0bcb8f0e47a3863947f20ce32f7f6e24997c70928e60bbccf3eab80e14128d",
+  "pair_fragments": {
+    "pair_guard": {
+      "sha256": "0d8ee171eca4246adbe853b8aa9d1929432ae2a3cb6ed5b9026c793765348947",
+      "source": "pub fn pair(&self,alpha:&[E],f:&[u8],kappa:E)->Result<E,Error> {\n        let n=f.len()/32; let folds=alpha.len();\n        if n!=1024>>(2*folds) {return Err(Error::Parse);}\n"
+    },
+    "actual_ap0_ap1": {
+      "sha256": "75bc8c4fab8fd4761ee6c400d2621f9433125b431e6dda670bae8298ab6c1e38",
+      "source": "        let ap0=powers::<4>(alpha[0]);\n        let ap1=if folds==2 {powers::<4>(alpha[1])}else{[E::ONE;4]};\n"
+    },
+    "pointPrefix": {
+      "sha256": "1857b156aa01303439a53e23f1b8c6bbeb29d6e0748e6c52d44c0d6006fb06c7",
+      "source": "        let mut scratch=aspis_core::r0::heap::filled(n,K::ZERO).map_err(|_|Error::Allocation)?;\n        let mut parts=[E::ZERO;7];\n        // On S2's two-fold path the high tensor factors for point rows 0 and\n        // 2 are identical. Keep the equality guard so arbitrary constructed\n        // `Weights` values retain the original per-row fallback.\n        let shared_two_point = self.variant==Variant::S2 && folds==2\n            && self.factors[0][2]==self.factors[2][2]\n            && self.factors[0][3]==self.factors[2][3];\n        for kind in [1usize,2,3,5,6] {\n            if shared_two_point && (kind==1 || kind==3) { continue; }\n            if self.variant==Variant::D && kind<4 {\n                parts[kind]=self.dense_point_pair(kind,alpha,f)?;\n            } else {\n                let k=if kind<4 {kind-1}else{kind-2};\n                self.tensor(k,folds,&mut scratch);\n                let mut scale=Self::scalar_factor(&self.factors[k][0],&ap0);\n                if folds==2 {scale=scale.mul(Self::scalar_factor(&self.factors[k][1],&ap1));}\n                let mut pair=crate::fast_pairing::EbyKDot::new();\n                for j in 0..n {pair.push(field(f,j),scratch[j]).map_err(|_|Error::Parse)?;}\n                parts[kind]=scale.mul(pair.finish());\n            }\n        }\n        if shared_two_point {\n            // The two point rows share the d2/d3 coefficients. Preserve the\n            // tensor's least-significant-first order: d2 is j mod 4 and d3\n            // is j / 4. Each d4 slice then contracts one 16-term EbyKDot.\n            let common:[K;16]=core::array::from_fn(|j|\n                self.factors[0][2][j&3].mul(self.factors[0][3][j>>2]));\n            let mut partials=[E::ZERO;4];\n            for s in 0..4 {\n                let mut dot=crate::fast_pairing::EbyKDot::new();\n                for j in 0..16 {\n                    dot.push(field(f,16*s+j),common[j]).map_err(|_|Error::Parse)?;\n                }\n                partials[s]=dot.finish();\n            }\n            for (kind,k) in [(1usize,0usize),(3usize,2usize)] {\n                let mut high=crate::fast_pairing::EbyKDot::new();\n                for s in 0..4 {\n                    high.push(partials[s],self.factors[k][4][s]).map_err(|_|Error::Parse)?;\n                }\n                let scale=Self::scalar_factor(&self.factors[k][0],&ap0)\n                    .mul(Self::scalar_factor(&self.factors[k][1],&ap1));\n                parts[kind]=scale.mul(high.finish());\n            }\n        }\n"
+    },
+    "onefold_common_fallback": {
+      "sha256": "51cfed0b51a2f6e0e40177383a116b02893e3566d311811c5d53412dac851843",
+      "source": "        if folds==1 {\n            let dual:[E;16]=core::array::from_fn(|mask|(0..4).filter(|&s|mask&(1<<s)!=0).fold(E::ZERO,|v,s|v.add(ap0[PERM[s]])).mul_m31(QUARTER));\n            let mut groups=[E::ZERO;16];\n            for j in 0..n {\n                let mut mask=0;\n                for s in 0..4 {if self.raw(0,4*j+s)==K::ONE {mask|=1<<s;}}\n                groups[mask]=groups[mask].add(field(f,j));\n            }\n            for m in 1..16 {parts[0]=parts[0].add(groups[m].mul(dual[m]));}\n            for side in 0..2 {\n                let p=kpowers::<5>(self.extra[side]);\n                let scale=Self::scalar_factor(&[p[0],p[1],p[2],p[3]],&ap0);\n                let mut power=K::ONE; let mut pair=E::ZERO;\n                for j in 0..7 {pair=pair.add(field(f,j+7*side).mul_qm31(power));power=power.mul(p[4]);}\n                parts[4]=parts[4].add(pair.mul(scale));\n            }\n        } else {\n"
+    },
+    "twofold_comment": {
+      "sha256": "ad1fd5f5e08e587a8c673d8a4277c75c9f2ba202fd82b95ab680a7dc431038cd",
+      "source": "            // Two-fold 0/1 row: compute the sixteen challenge products once.\n            // Coefficients with the same inactive mask share one subset sum.\n"
+    },
+    "actual_low": {
+      "sha256": "f5dc445b1d1ca550143a0d5a708342f2c06804c5632ae5ee1e2c47338df5a09b",
+      "source": "            let low:[E;16]=core::array::from_fn(|s|ap0[PERM[s%4]].mul(ap1[PERM[s/4]]).mul_m31(QUARTER.mul(QUARTER)));\n"
+    },
+    "actual_inactive": {
+      "sha256": "fdbdf2d45b892f344807c15041ce88914d61567ed55322639938cf24f59ac5e6",
+      "source": "            parts[0]=grouped_inactive_pair(self,f,&low);\n"
+    },
+    "actual_libra": {
+      "sha256": "88d295442b07423685059cdea386827391d31095bbf71d5ed680783e30aba4e6",
+      "source": "            let libra=if self.variant==Variant::S2 {factored_s2_libra_weights(&ap0,&ap1,self.extra)}else{twofold_libra_weights(&low,self.extra)};\n"
+    },
+    "parts4_tail": {
+      "sha256": "01756b29cf1c4a2dd5fd0f08fa7b42ac5f6a4216424adb3afede3eb4e953685b",
+      "source": "            for j in 0..4 {parts[4]=parts[4].add(field(f,j).mul(libra[j]));}\n        }\n"
+    },
+    "prover_only_unselected": {
+      "sha256": "0a0d3cff30fea9aefe9adda4e36236e13d0d505d482831b1be6fe26b98ed3a74",
+      "source": "        #[cfg(feature=\"prover\")]\n        for kind in 0..7 {\n            for j in 0..1024 {crate::trace::value(6,kind*1024+j,E::from_qm31(self.raw(kind,j)));}\n            for j in 0..n {crate::trace::value(7,kind*n+j,self.dual_raw(kind,j,alpha));}\n        }\n"
+    },
+    "kappa_sum_tail": {
+      "sha256": "c60c9132171022a23f921b4be590b424faf971459b4092dcfaceb0e52006ab57",
+      "source": "        let k=powers::<7>(kappa);let mut sum=E::ZERO;\n        for kind in 0..7 {crate::trace::value(8,kind,parts[kind]);sum=sum.add(k[kind].mul(parts[kind]));}\n        Ok(sum)\n    }"
+    }
+  },
+  "finish_fragments": {
+    "claimPrefix": {
+      "sha256": "10477bb17012cf6f69177235d342e44a2d5ad141720ddab579d1468cc6ecc2bc",
+      "source": "pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Result<(),Error> {\n    let mut claim=p.claim;\n    for round in 0..p.variant.folds() {\n        let poly=if round==0 {v.round0}else{v.round1};\n        let lhs=field(poly,0).add(field(poly,4));let rhs=claim.mul_m31(QUARTER);\n        crate::trace::value(15,3*round,lhs);crate::trace::value(15,3*round+1,rhs);\n        if lhs!=rhs {return Err(Error::Relation);}\n        claim=polynomial(poly,p.alpha[round]);crate::trace::value(15,3*round+2,claim);\n    }\n"
+    },
+    "constructor_call": {
+      "sha256": "9a1c3dccb6304b2d5f935083ba6366609d1bbfe6b165b674547b1fa154ddd4d5",
+      "source": "    let weights=Weights::new(p.variant,&p.semantic_alpha,&p.z)?;\n"
+    },
+    "pair_call": {
+      "sha256": "f8389b33091bcd0bf194c30c2054a10627e362f1b1a6b474f85e66eed553d8e4",
+      "source": "    let pair=weights.pair(&p.alpha[..p.variant.folds()],v.final_message,p.kappa)?;\n"
+    },
+    "finalTail": {
+      "sha256": "fdd60eed99a30b900f62a1cfbbc87103fdf7b18fb672b00914640d6ab6e0f12b",
+      "source": "    crate::trace::value(16,0,pair);crate::trace::value(16,1,claim);\n    if pair!=claim {return Err(Error::Relation);}\n    mark(obs,Phase::Relation);\n    let mut dot=crate::fast_pairing::EbyKDot::new();\n    for (j,w) in a.weights.iter().enumerate() {dot.push(field(v.final_message,j),*w).map_err(|_|Error::Parse)?;}\n    let actual=dot.finish();\n    crate::trace::value(17,0,actual);crate::trace::value(17,1,a.rhs);\n    if a.next!=22||actual!=a.rhs {return Err(Error::Query);}\n    mark(obs,Phase::Final);Ok(())\n}"
+    }
+  },
+  "source_boundaries": [
+    "S2 specialization: p.variant=S2 gives folds2; source caller borrows exactly its two-element alpha array. Non-S2 paths are the identical original fallback.",
+    "Fixed array alpha[0]/alpha[1] and semantic[8]/semantic[9] reads are always in bounds. Moving their pure checked projections through source structural packing does not change errors/effects.",
+    "Constructor storage projects original factors/points fields; actual variant/extra field writes are explicitly reconstructed. Standard owning-allocation/unsafe-field frame: private partially initialized storage never escapes on failure; the fixed private extra copy has no log/allocation/effect and is unread until construction succeeds. No unsafe allocator reproof is asserted.",
+    "Actual ap0/ap1 source powers execute before allocation/point-row prefix. Actual low16 executes after that prefix, then inactive helper then Libra helper then original parts4/kappa tail.",
+    "Unchanged transaction work has immutable Prepared input and returns only the updated Accumulator. Direct source finishRelation is invoked on work success; errors/divergence bypass it identically.",
+    "PointPrefix/finalTail select the exact pinned source fragments. Candidate5 replacement inside them must be separately instantiated from its concrete checked consumers; c3/c14 endpoints alone do not claim candidate5 closure."
+  ],
+  "direct_full_finish_aeneas_emission": false,
+  "admission": "Narrow source factoring/nominal-coordinate interpretation plus standard owning constructor/immutable frame. Common fields are identical computational source fragments, never old/new-equivalence or canonicality laws.",
+  "features": [
+    "pool-adapter",
+    "private-leaf-salts"
+  ],
+  "excluded_features": [
+    "cu-profiling",
+    "prover"
+  ]
+}

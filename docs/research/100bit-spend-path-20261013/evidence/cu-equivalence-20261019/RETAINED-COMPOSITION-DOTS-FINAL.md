@@ -1,0 +1,7 @@
+# Delayed reduction and prefix source composition
+
+`CuSavingsRetainedCompositionDots.kernel_equivalence` directly compares the candidate10 prefix kernel with the original pre-candidate4 canonical-reduction kernel on one source public-field carrier. All nineteen middle-kernel source declarations are literally identical after the audited module rename. `query_context` derives the query-byte bound from the actual View.query source outcome; `all_query_callers` lifts repeated calls through an identical caller context.
+
+The source carrier sharing is explicit: the source kernel never inspects Dot fields and uses only its constructor/push/finish API. The Dot representation is therefore an opaque computational parameter; it is not claimed that old/private and new/private accumulator layouts are identical. The next actual candidate5 API binding must instantiate that parameter before claiming the full4/5/10 endpoint.
+
+The twenty-two small source/proof targets and final theorem are selected in `retained-composition-dots-selected.json` and `RETAINED-COMPOSITION-DOTS-FINAL.json`. Final focused receipt `retained-composition-dots-final-b`: exit0, wall1.604s, peakRSS2,584,320KiB, swap0. Axioms are propext, Classical.choice, Quot.sound and inherited core.fmt.Formatter. Exact command/revision/features and direct imported object hashes are retained in every receipt. `check-retained-composition-dots.py` passes all twenty-three coherent targets and inverse source emission checks. No whole-bundle closure is asserted by this report.

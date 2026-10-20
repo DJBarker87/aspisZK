@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRetainedQueryPrefixGammaRho.lean:50:8: error: Type mismatch: After simplification, term
+  @Eq.symm (Result (core.result.Result (alloc.vec.Vec U8) verifier.Error))
+    (@retained.tx1 (@CuSavingsRetainedClaimBindingFinal.binding inst✝⁹ inst✝⁸ inst✝⁷ true prepared) inst✝⁴ this✝ inst✝³
+      (fun {H} =>
+        @CuSavingsRetainedQueryPrefixFinishAdapter.finish inst✝⁹ inst✝² inst✝ true common B dot start len cursor H)
+      H D pub publicBytes proof k hash obs)
+    (@retained.tx1 (@CuSavingsRetainedClaimBindingFinal.binding inst✝⁹ inst✝⁸ inst✝⁷ true prepared) inst✝⁴ this✝ inst✝³
+      (fun {H} =>
+        @CuSavingsRetainedQueryPrefixFinishAdapter.finish inst✝⁹ inst✝² inst✝ false common B dot start len cursor H)
+      H D pub publicBytes proof k hash obs)
+    h
+ has type
+  @Eq (Result (core.result.Result (alloc.vec.Vec U8) verifier.Error))
+    (@retained.tx1 (@CuSavingsRetainedClaimBindingFinal.binding inst✝⁹ inst✝⁸ inst✝⁷ true prepared) inst✝⁴ this✝ inst✝³
+      (fun {H} =>
+        @finishNew inst✝²
+          (@ite AspisR1RhoQuery.QueryCommon (@Eq Bool false true) (instDecidableEqBool false true)
+            (@newBinding inst✝⁹ common B dot) (@oldBinding inst✝⁹ common B dot))
+          inst✝ start len cursor H)
+      H D pub publicBytes proof k hash obs)
+    (@retained.tx1 (@CuSavingsRetainedClaimBindingFinal.binding inst✝⁹ inst✝⁸ inst✝⁷ true prepared) inst✝⁴ this✝ inst✝³
+      (fun {H} =>
+        @finishNew inst✝²
+          (@ite AspisR1RhoQuery.QueryCommon (@Eq Bool true true) (instDecidableEqBool true true)
+            (@newBinding inst✝⁹ common B dot) (@oldBinding inst✝⁹ common B dot))
+          inst✝ start len cursor H)
+      H D pub publicBytes proof k hash obs)
+but is expected to have type
+  @Eq (Result (core.result.Result (alloc.vec.Vec U8) verifier.Error))
+    (@retained.tx1 (@CuSavingsRetainedClaimBindingFinal.binding inst✝⁹ inst✝⁸ inst✝⁷ true prepared) inst✝⁴ this✝ inst✝³
+      (fun {H} => @finishNew inst✝² (@oldBinding inst✝⁹ common B dot) inst✝ start len cursor H) H D pub publicBytes
+      proof k hash obs)
+    (@retained.tx1 (@CuSavingsRetainedClaimBindingFinal.binding inst✝⁹ inst✝⁸ inst✝⁷ true prepared) inst✝⁴ this✝ inst✝³
+      (fun {H} => @finishNew inst✝² (@newBinding inst✝⁹ common B dot) inst✝ start len cursor H) H D pub publicBytes
+      proof k hash obs)
+'AspisR1.CuSavingsRetainedQueryPrefixGammaRho.source_tx1_equivalence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]

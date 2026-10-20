@@ -1,5 +1,7 @@
 # CU optimization equivalence — completion requirements
 
+> Current status: see [CURRENT-EQUIVALENCE-GOAL.md](CURRENT-EQUIVALENCE-GOAL.md) and `RETAINED-EQUIVALENCE-INVENTORY.json`. The chronological status table and notes below are historical checkpoints.
+
 Goal: full equivalence proofs connecting the retained optimized verifier to the
 reference used by the existing soundness/privacy results, with no new unproved
 equivalence premise at the final transfer boundary. This is **in progress**.
