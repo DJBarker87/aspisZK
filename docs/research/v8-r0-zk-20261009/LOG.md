@@ -7153,3 +7153,20 @@ with the excluded repeated-read and collision events charged once as an
 explicit ROM collision term (order q²/2^256) added to the privacy error. The
 final error, now ≤ 2^-109 + 2^-137 + 2^-454, gains that term and stays far
 below 2^-100. Six commits, seven modules, 48 standard-axiom audits, zero swap.
+
+## D92 — prover commitment: refactors merged after ELF gate; SHA-256 callback (2026-10-20, lead)
+
+Landed from `codex/cx-prover-commit2-20261020` (reports
+`r1p-final/PROVER-COMMIT-20261020.md`, `PROVER-COMMIT3-20261020.md`). The
+translating salt-loop and expander refactors (shipped `aspis-r1-cost-probe/src/prover.rs`,
+`aspis-prover/src/state_only_{entropy,hiding}.rs`) are kept. Fixed-seed proof
+bytes are identical, with 33/33 library/D78 tests and 8/8 P_R1, and all three
+frozen ELFs were rebuilt byte-identical (`cmp`, evidence
+`prover-commit3-20261020/frozen-source-check.json`). 26 subsidiary
+theorems, standard axioms. Nine checklist rows stay open: the prover's
+`HashFn` is SHA-256 (`HOST_HASH = host_hashv`), not Poseidon2, so D90 cannot
+stub it. Lead ruling: in the model this callback is the random oracle, so
+the Kani route is a symbolic memoised oracle (fresh `kani::any` per new
+input, cached for repeats) shared by the shipped code and the reference. That
+gives equality for every oracle function on the queried points without
+postulating any property of SHA-256.
