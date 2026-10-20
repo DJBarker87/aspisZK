@@ -133,3 +133,16 @@ reference until it extracts, and treat allocation failure as abort-
 equivalent: on Solana a failed allocation aborts the transaction in both
 forms — stated as a named runtime fact under P2 with a host test of the
 abort path, not proved in Kani.
+
+## Candidate CU bound (2026-10-21, cu-bound5)
+
+The all-input bound on the candidate (pins f9ecbc27…/3f21a42f…/121f3e29…,
+reproduced exactly), same pre-registered method as cu-bound4: PASS over the
+admitted split [3,10] — B_stage1 1,293,948 (transfer) / 1,293,330
+(withdrawal), B_settlement 1,267,581 / 1,280,616; minimum margin 6,052 CU,
+better than the frozen build's 5,440 (the ledgered restructurings saved
+CU). 746 accepted runs, 17,206 branches classified, zero unexplained
+variation or violations (`evidence/cu-bound5-20261020/REPORT.md`). The
+adoption checklist's CU item is therefore satisfied for the candidate as it
+stands; a further source change (prep7's reference forms are cfg-gated and
+leave the ELFs unchanged) would need a re-check only if the ELF moves.
