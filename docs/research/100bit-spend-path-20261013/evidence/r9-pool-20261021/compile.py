@@ -33,6 +33,8 @@ baseline = json.loads((PACKET / 'evidence/rwire-20261021/R1FinalSoundnessBinPerQ
 path = str(OBJECTS) + ':/tmp/codex-cx-r9-deployed-20261021-objects:/tmp/codex-cx-r16-decision-20261021-objects:/tmp/codex-cx-r15-writer-20261021-objects' + ':/tmp/codex-cx-r9-transport-20261021-objects:' + baseline['lean_path']
 r9 = json.loads((PACKET / 'evidence/r9-transport-20261021/R9RejectingScanTransport-1/command.json').read_text())
 path += ':' + r9['lean_path']
+r20 = json.loads((PACKET / 'evidence/transfer-bindings-20261020/ExtractedAdapterTransferBindings/command.json').read_text())
+path += ':/tmp/codex-cx-r20-pool-handoff-20261020-objects:/tmp/root-finish-prefix-deps-20261018:' + r20['environment']['LEAN_PATH']
 imports = []
 for name in re.findall(r'^import (\S+)', source.read_text(), re.M):
     obj = next((Path(p) / (name.replace('.', '/') + '.olean')
