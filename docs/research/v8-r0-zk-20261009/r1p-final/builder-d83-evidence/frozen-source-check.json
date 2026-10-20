@@ -1,6 +1,6 @@
 {
   "frozen_revision": "b2727acd3",
-  "tested_source_revision": "df54ab57e13fa4957589162dd08bfe4eded6c815",
+  "tested_source_revision": "9e3edfbafa094858f2ab8ec863aa26ca4d58d4fa",
   "source_paths": [
     "crates/aspis-r1-cost-probe",
     "programs/r1-cost-probe",
@@ -12,20 +12,21 @@
     "Cargo.toml",
     "Cargo.lock"
   ],
-  "source_pins": "builder-cont3-evidence/source-pins.json",
+  "source_pins": "builder-cont3-evidence/source-pins-final.json",
   "verified_source_files": 258,
-  "source_pin_host_verification": "258/258 exact",
+  "source_pin_host_verification": "258/258 exact after both EOF proof-module additions",
   "changes_since_frozen": [
     "crates/aspis-statement/src/pool_v1/asq8_kani.rs",
     "crates/aspis-statement/src/pool_v1/asq8_payment_reference.rs",
     "crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs",
     "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
     "crates/aspis-statement/src/pool_v1/pair_forest_trace.rs",
+    "crates/aspis-statement/src/poseidon2.rs",
     "programs/r1-cost-probe/src/r1_checkpoint_tests.rs"
   ],
   "delta_scope": "All repository SBF-linked crates and both program roots, including aspis-statement decode paths; host-only writer dependencies are excluded by target cfg. Cargo.lock pins third-party dependencies.",
   "identity": "PASS: all three stripped shipped ELFs byte-identical",
-  "build_receipts": "builder-cont3-evidence/elf-rebuild.json",
+  "build_receipts": "builder-cont3-evidence/elf-rebuild-final.json",
   "artifacts": {
     "default": {
       "sha256": "dfc2a91ab24e1ec4f57debd8f124cb4f6a3c38ba2662b7318e2e4f3b4acdde34",
@@ -44,5 +45,8 @@
     }
   },
   "axioms": "N/A: SBF builds, no Lean theorem changed",
-  "d83_rerun": "Not required: no source restructuring was necessary; prior D83 runtime receipts retained."
+  "d83_rerun": "Not required: no production function body or ordinary prover behavior changed in Continuation 3. Both added module declarations are proof-only and at EOF. Final exact-source SBF rebuild verifies all three frozen ELF hashes again.",
+  "source_pins_before_proof_modules": "builder-cont3-evidence/source-pins.json",
+  "initial_rebuild_receipts": "builder-cont3-evidence/elf-rebuild.json",
+  "source_continuity": "All pinned program-linked files at 808392111 and the final evidence commit are identical to tested 9e3edfbaf; subsequent changes are Lean proofs and documentation only."
 }

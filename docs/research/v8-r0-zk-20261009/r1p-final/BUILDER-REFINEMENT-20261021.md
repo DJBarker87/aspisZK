@@ -412,3 +412,23 @@ hypothesis. No strictly weaker sufficient premise has been proved for the
 actual source h, so no privacy-root replay or final-manifest replay is claimed.
 The exact before/after source hashes and outstanding typed boundary are in
 builder-cont3-evidence/premise-status.json. Causal/phase-model files are untouched.
+
+The canonical-record handoff also owes the meaning of the actual
+`pair_empty_roots` result. The shared arbitrary-root Kani argument establishes
+projection equality for every possible helper return; it does not identify
+that table with the semantic canonical empty roots or prove its hash calls.
+
+
+## Final ELF continuity recheck after the reference additions
+
+All 258 program-linked source/manifest pins at 9e3edfbaf match the isolated
+host snapshot and remain unchanged in 808392111. After waiting for the total
+host reservation to fall below the 55 GiB allowance, the final builds ran in
+separate 6G/8G/zero-swap/64-task scopes. Default verifier (22.722 s,
+446,856 KiB RSS), devnet verifier (2.407 s, 202,672 KiB) and Pool (21.980 s,
+429,724 KiB) all exit 0 with zero swaps and match their frozen hashes exactly.
+This second rebuild has a source-change justification: the EOF proof-module
+additions landed after the first Stage 0 check. No unchanged full native or
+Lean regression was repeated. frozen-source-check.json now points to the final
+source pins and elf-rebuild-final.json while retaining the initial receipts.
+No binaries, keys, or generated objects are committed; nothing was pushed.
