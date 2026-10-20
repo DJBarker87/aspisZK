@@ -400,3 +400,19 @@ checkpoint rent (1,768 bytes) has no refund route — a wallet/lifecycle item
 to decide before release. With this audit beside P2, R15's account-write
 fact is discharged by source map; the writer facts remain on the parked
 freeze candidate.
+
+## Addendum (2026-10-20): query-scan exhaustion bounded; R4 row 31 source boundary
+
+Codex job cx-queryscan (d09bc1482): five modules, 29 audits, standard
+axioms, ≤ 2.87 GiB (`design/QUERYSCAN-20261020.md`). Proved on the model:
+the query-scan exhaustion probability (fewer than 22 distinct indices within
+64 draws of 8 words from 2^18 positions) is ≤ 2^-454 (exact value ≈
+2^-559.8), so the prover's `Error::Transcript` abort (D74.4) enters both
+error budgets as a negligible abort term; the report gives the exact
+insertion points (soundness: an abort term beside the bank-abort 2^-126;
+privacy: an abort premise beside D73.4/D74.4). Also proved: stable first-22
+ordering, distinctness, block/word agreement, generic abort accounting.
+R4 row 31's source closure stays open: the pinned abstract `B.decode` admits
+duplicate indices and arbitrary continuation states (checked countermodels),
+so the concrete driver/library correspondence and source-to-ROM coupling are
+required — the same R-wire items as elsewhere.
