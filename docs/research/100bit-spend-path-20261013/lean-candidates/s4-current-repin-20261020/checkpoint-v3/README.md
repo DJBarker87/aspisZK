@@ -1,0 +1,9 @@
+# S4 current `four_dots` batch trace checkpoint
+
+This packet pins the current-source `fast_dots::four_dots` extraction and the selected Lean adapter that exposes its function operations as the explicit `FourDotsOps` record. The target Aeneas run stops at the existing `crate::fast_pairing` opaque boundary, so it does not extract `Dot.push`.
+
+The checked Lean results now compose the real emitted outer `StepBy` loop with the body success decomposition and the successful `start + 4` / `min(..., 26)` width lemma. `actual_outer_seven_bounded_work` proves that successful initialized execution has exactly seven continuing work items. Each item retains an actual successful call to the emitted inner term loop and proves that its selected range has width at most four. This removes the earlier “exact seven not yet proved” limitation in checkpoint-v2.
+
+The result is still a control-flow and call-boundary result. It does not prove the four term-loop iterations' dot arithmetic, identify the emitted `FourDotsOps` operations with concrete `Dot.push`, prove `wideLimbCount = 8`, or establish the reducer's output arithmetic. Those are explicit remaining boundaries. The M31 and wide-limb bindings included here establish only their recorded coordinate/ABI relationships.
+
+`manifest.json` records source SHA-256, object SHA-256, receipt and preflight pins for each selected Lean module, plus source/object pins for its direct imports. The raw generated source, adapter checker, extraction receipt and LLBC hash are retained as source-only provenance. No `.olean` or LLBC binary is included. Each focused check used the capped NUC harness, Lean `-M4400`, 1 GiB `MemoryHigh`, 2 GiB `MemoryMax`, and `MemorySwapMax=0`; exact per-attempt commands, wall times, process RSS, scope peaks and axiom reports are in `evidence/`.
