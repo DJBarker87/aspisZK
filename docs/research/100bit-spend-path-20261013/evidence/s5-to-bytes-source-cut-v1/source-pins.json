@@ -1,0 +1,49 @@
+{
+  "schema": "s5-to-bytes-source-cut-v1",
+  "source_revision": "exact compiled module snapshot SHA256 6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+  "git_head_captured": false,
+  "source_files": {
+    "source_field_rs": {
+      "path": "crates/aspis-core/src/field.rs",
+      "sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea"
+    },
+    "source_wide_exact_rs": {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b"
+    },
+    "cut_field_rs": {
+      "path": "docs/research/100bit-spend-path-20261013/lean-candidates/s5-current-repin-20261020/to-bytes-source-cut-v1/input/field.rs",
+      "sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea"
+    },
+    "cut_wide_exact_rs": {
+      "path": "docs/research/100bit-spend-path-20261013/lean-candidates/s5-current-repin-20261020/to-bytes-source-cut-v1/input/field/wide_exact.rs",
+      "sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b"
+    },
+    "entry_lib_rs": {
+      "path": "docs/research/100bit-spend-path-20261013/lean-candidates/s5-current-repin-20261020/to-bytes-source-cut-v1/input/lib.rs",
+      "sha256": "7bddcf3e9b9e69ab42a6ccef9cc5d364bd505feb80b58bb143e0cbedb6b5edc6"
+    },
+    "cargo_toml": {
+      "path": "docs/research/100bit-spend-path-20261013/lean-candidates/s5-current-repin-20261020/to-bytes-source-cut-v1/input/Cargo.toml",
+      "sha256": "dd746fc4d04e7eeb33496bf369579d18e2ef6981cfb7a8930954cd015f75dc55"
+    },
+    "cargo_lock": {
+      "path": "docs/research/100bit-spend-path-20261013/lean-candidates/s5-current-repin-20261020/to-bytes-source-cut-v1/input/Cargo.lock",
+      "sha256": "2285349b7ed136af9fbf891acffddfe2277e10d87c8b3ee9a078bc82df800ec0"
+    }
+  },
+  "method_span": {
+    "path": "crates/aspis-core/src/field/wide_exact.rs",
+    "start_line": 273,
+    "end_line": 279,
+    "sha256": "a54b5ffbd734cab9cbd0fc2b894a192e20ee816302589335291b9f836e0384f7",
+    "text": "    pub fn to_le_bytes(self) -> [u8; Self::BYTE_LEN] {\n        let mut bytes = [0; Self::BYTE_LEN];\n        for (chunk, limb) in bytes.chunks_exact_mut(4).zip(self.to_limbs()) {\n            chunk.copy_from_slice(&limb.to_le_bytes());\n        }\n        bytes\n    }"
+  },
+  "transformations": [
+    "Copied exact field.rs and field/wide_exact.rs bytes from current repository source.",
+    "Added only a public typed entry wrapper calling x.to_le_bytes(); serializer body unchanged."
+  ],
+  "limits": [
+    "This is a source cut and Cargo typecheck only; no Charon/Aeneas translation or Lean correctness theorem is claimed."
+  ]
+}
