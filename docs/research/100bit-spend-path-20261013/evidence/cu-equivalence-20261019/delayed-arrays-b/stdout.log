@@ -1,0 +1,91 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedArrays.lean:13:19: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedArrays.lean:19:45: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.fail` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `OptionT.fail`
+  [apply] `fail`
+  [apply] `Lean.Parser.Tactic.fail`
+  [apply] `Std.Internal.Parsec.fail`
+  [apply] `Lean.Parser.Tactic.Grind.fail`
+  [apply] `Std.Http.Protocol.H1.Reader.fail`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedArrays.lean:19:86: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedArrays.lean:60:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑j < upto + 1 then ?m.72 else ?m.73
+in the target expression
+  ↑o = ↑r % P ∧ ↑r < (count + if ↑i < upto + 1 then 2 else 1) * FoldBound
+
+case pos
+count upto : ℕ
+old : Canon
+raw : Raw
+i : Usize
+hi : ↑i < 8
+hu : ↑i = upto
+h : State count upto old raw
+o : U32
+r : U64
+he : ↑o = ↑r % P
+hr : ↑r < (count + 2) * FoldBound
+j : Fin 8
+hj : ↑j = upto
+⊢ ↑o = ↑r % P ∧ ↑r < (count + if ↑i < upto + 1 then 2 else 1) * FoldBound
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedArrays.lean:63:54: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ e ≤ 7
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 1
+  b ≥ 0
+  0 ≤ a ≤ 7
+  a - e ≥ 1
+where
+ a := ↑upto
+ b := ↑↑r % ↑P
+ c := ↑(count + 2) * ↑FoldBound
+ d := ↑↑r
+ e := ↑↑j
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedArrays.lean:64:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ↑(wordAt old j) = ↑(wordAt raw j) % P ∧ ↑(wordAt raw j) < (count + if _a then 2 else 1) * FoldBound
+Error: Application type mismatch: The argument
+  (↑j).decLt (upto + 1)
+has type
+  Decidable (↑j < upto + 1)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite ℕ _a ((↑j).decLt (upto + 1))
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case neg
+count upto : ℕ
+old : Canon
+raw : Raw
+i : Usize
+hi : ↑i < 8
+hu : ↑i = upto
+h : State count upto old raw
+o : U32
+r : U64
+he : ↑o = ↑r % P
+hr : ↑r < (count + 2) * FoldBound
+j : Fin 8
+hj : ¬↑j = ↑i
+hb : (↑j < upto + 1) = (↑j < upto)
+⊢ ↑(wordAt old j) = ↑(wordAt raw j) % P ∧ ↑(wordAt raw j) < (count + if ↑j < upto + 1 then 2 else 1) * FoldBound
+'AspisR1.CuSavingsDelayedArrays.scalar_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsDelayedArrays.state_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

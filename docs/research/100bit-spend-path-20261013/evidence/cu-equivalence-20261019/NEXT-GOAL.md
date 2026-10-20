@@ -1,3 +1,15 @@
+# Candidate 4 closed (2026-10-20)
+
+See DELAYED-CANDIDATE4-FINAL.md/json: exact full helper equality for every
+input, source-bound scalar/array/batch traversal and unchanged-context
+substitution checked; no candidate-equivalence premise. Candidate 4 closes
+62,101–62,184 combined measured CU. Candidates 6, 12 and 4 are now closed
+within their stated source/runtime boundaries: **3 of 10**. Next largest:
+candidate 3 fixed S2 inactive groups, **40,517–40,520 settlement CU**.
+No new goal is created here. Earlier entries below are historical.
+
+---
+
 # Candidate 12 closed for the selected production source entrypoints
 
 Latest result: **RHO-CANDIDATE12-FINAL.md/json** and

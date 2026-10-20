@@ -1,0 +1,87 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedScalar.lean:40:64: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  s.sub field.P
+in the target expression
+  (do
+      let s1 ← s - field.P
+      ok s1) =
+    ok z
+
+case pos.refine_1
+a b : U32
+ha : ↑a < P
+hb : ↑b < P
+hf : ↑a + ↑b < 2 ^ UScalarTy.U32.numBits
+s : UScalar UScalarTy.U32
+hs : UScalar.tryMk UScalarTy.U32 (↑a + ↑b) = ok s
+hsv : ↑s = ↑a + ↑b
+hadd : a + b = ok s
+hP : ↑field.P = P
+hc : P ≤ ↑s
+z : UScalar UScalarTy.U32
+hz : s.sub field.P = ok z
+hzv : ↑z = ↑s - ↑field.P
+⊢ (do
+      let s1 ← s - field.P
+      ok s1) =
+    ok z
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedScalar.lean:73:6: error: Type mismatch: After simplification, term
+  hfold
+ has type
+  @Eq (Result U64)
+    (do
+      let high ← UScalar.shiftRight sum 31
+      (UScalar.and sum (UScalar.cast UScalarTy.U64 (UScalar.ofNatCore P ExtractedCurrentReducer.mask32._proof_1))).add
+          high)
+    (ok folded)
+but is expected to have type
+  @Eq (Result (UScalar UScalarTy.U64))
+    (do
+      let hi ← sum >>> 31#i32
+      (sum &&& 2147483647#u64) + hi)
+    (ok folded)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedScalar.lean:76:38: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UScalar.add raw folded
+in the target expression
+  raw + folded = ok out
+
+case refine_1
+raw sum : U64
+count : ℕ
+hc : count < 7
+hr : ↑raw < (count + 1) * FoldBound
+folded : U64
+hfold : ExtractedCurrentReducer.foldExecution sum = ok folded
+hv : ↑folded = foldBits ↑sum
+hf : foldBits ↑sum < FoldBound
+hfit : ↑raw + ↑folded < 2 ^ 64
+out : U64
+ha : UScalar.add raw folded = ok out
+hov : ↑out = ↑raw + ↑folded
+heq :
+  (do
+      let hi ← sum >>> 31#i32
+      (sum &&& 2147483647#u64) + hi) =
+    ok folded
+⊢ raw + folded = ok out
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedScalar.lean:77:16: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  0 ≤ e ≤ 18446744073709551615
+  e - f ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≤ -1
+  c - e ≤ 0
+  b ≥ 0
+  b + c - e ≥ 1
+  0 ≤ a ≤ 6
+where
+ a := ↑count
+ b := ↑(count + 1) * ↑FoldBound
+ c := ↑(foldBits ↑sum)
+ d := ↑FoldBound
+ e := ↑↑out
+ f := ↑(count + 2) * ↑FoldBound
+'AspisR1.CuSavingsDelayedScalar.reducer_mod' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsDelayedScalar.add_mod' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsDelayedScalar.foldAdd_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

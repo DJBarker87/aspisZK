@@ -1,0 +1,121 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedKernel.lean:55:27: error: unsolved goals
+inst✝ : Shared
+slot : Usize
+bytes : Slice U8
+gamma : Std.Array field.wide_exact.WideExact 29#usize
+⊢ (let (s, a) := (bytes, gamma)
+    do
+    let iter ←
+      core.iter.traits.iterator.Iterator.step_by.trait_default
+          (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) { start := 0#usize, «end» := 26#usize }
+          4#usize
+    let limbs1 ←
+      new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0 iter s a slot
+          (Array.repeat 8#usize 0#u64)
+    let a1 ←
+      core.array.from_fn 8#usize new_dots.four_dots.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32 limbs1
+    let o ← field.wide_exact.WideExact.from_limbs a1
+    let value ← core.option.Option.unwrap o
+    let tail ← fast_pairing.EbyKDot.new
+    let we ← a.index_usize 28#usize
+    let i ← slot * 120#usize
+    let i1 ← i + 104#usize
+    let i2 ← i + 120#usize
+    let s1 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s { start := i1, «end» := i2 }
+    let o1 ← field.QM31.from_le_bytes s1
+    let q ← core.option.Option.unwrap o1
+    let (r, tail1) ← tail.push we q
+    core.result.Result.unwrap core.fmt.DebugUnit r
+    let tail2 ←
+      old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop1
+          { start := 0#usize, «end» := 2#usize } s a slot tail1
+    let we1 ← tail2.finish
+    let we2 ← value.add we1
+    ok (we2, bytes, gamma)) =
+    do
+    let iter ←
+      core.iter.traits.iterator.Iterator.step_by.trait_default
+          (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) { start := 0#usize, «end» := 26#usize }
+          4#usize
+    let limbs ←
+      new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0 iter bytes gamma slot
+          (Array.repeat 8#usize 0#u64)
+    let a1 ← core.array.from_fn 8#usize new_dots.four_dots.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32 limbs
+    let (s, a) := (bytes, gamma)
+      do
+      let o ← field.wide_exact.WideExact.from_limbs a1
+      let value ← core.option.Option.unwrap o
+      let tail ← fast_pairing.EbyKDot.new
+      let we ← a.index_usize 28#usize
+      let i ← slot * 120#usize
+      let i1 ← i + 104#usize
+      let i2 ← i + 120#usize
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s { start := i1, «end» := i2 }
+      let o1 ← field.QM31.from_le_bytes s1
+      let q ← core.option.Option.unwrap o1
+      let (r, tail1) ← tail.push we q
+      core.result.Result.unwrap core.fmt.DebugUnit r
+      let tail2 ←
+        old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop1
+            { start := 0#usize, «end» := 2#usize } s a slot tail1
+      let we1 ← tail2.finish
+      let we2 ← value.add we1
+      ok (we2, bytes, gamma)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedKernel.lean:59:101: error: unsolved goals
+inst✝ : Shared
+j : Fin 8
+⊢ ↑[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32][↑j] =
+      ↑[0#u64, 0#u64, 0#u64, 0#u64, 0#u64, 0#u64, 0#u64, 0#u64][↑j] % P ∧
+    ↑[0#u64, 0#u64, 0#u64, 0#u64, 0#u64, 0#u64, 0#u64, 0#u64][↑j] < 17179869184
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedKernel.lean:88:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut ?c ?slot
+in the target expression
+  CuSavingsArrayBuilder.remap
+      (fun x =>
+        match x with
+        | (value, state1) => (value, id state1))
+      (new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut state index) =
+    old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut (id state) index
+
+inst✝ : Shared
+bytes : Slice U8
+gamma : Std.Array field.wide_exact.WideExact 29#usize
+state : new_dots.four_dots.closure
+index : Usize
+⊢ CuSavingsArrayBuilder.remap
+      (fun x =>
+        match x with
+        | (value, state1) => (value, id state1))
+      (new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut state index) =
+    old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut (id state) index
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+  has type
+    core.ops.function.FnMut old_dots.four_dots.closure Usize field.wide_exact.WideExact
+  but is expected to have type
+    core.ops.function.FnMut new_dots.four_dots.closure Usize field.wide_exact.WideExact
+  in the application
+    old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut
+'AspisR1.CuSavingsDelayedKernel.old_factor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsDelayedKernel.new_factor' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsDelayedKernel.slot_equivalence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsDelayedKernel.source_equivalence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]

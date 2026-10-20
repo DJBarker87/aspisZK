@@ -1,0 +1,455 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:22:33: error: unsolved goals
+sums : Raw
+iter next : CuSavingsDelayedArrays.Range
+old : Canon
+raw : Raw
+i : Usize
+hi : ↑i < 8
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some i, next)
+o : U32
+r : U64
+ho :
+  (do
+      let s ← field.M31.reduce_u64 (wordAt sums ⟨↑i, hi⟩)
+      (wordAt old ⟨↑i, hi⟩).add s) =
+    ok o
+hr : foldAdd (wordAt raw ⟨↑i, hi⟩) (wordAt sums ⟨↑i, hi⟩) = ok r
+⊢ (let (o, iter1) := (some i, next)
+    match o with
+    | none => ok (done old)
+    | some limb => do
+      let m ← Array.index_usize old limb
+      let i ← Array.index_usize sums limb
+      let m1 ← field.M31.reduce_u64 i
+      let m2 ← m.add m1
+      let a ← Array.update old limb m2
+      ok (cont (iter1, a))) =
+    do
+    let x ← field.M31.reduce_u64 (wordAt sums ⟨↑i, hi⟩)
+    let o ← (wordAt old ⟨↑i, hi⟩).add x
+    let a ← Array.update old i o
+    ok (cont (next, a))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:32:6: error: Tactic `rfl` failed: The left-hand side
+  let (o, iter1) := (some i, next)
+  match o with
+  | none => ok (done raw)
+  | some limb => do
+    let i ← Array.index_usize sums limb
+    let i2 ← i >>> 31#i32
+    let i3 ← (i &&& 2147483647#u64) + i2
+    let i4 ← Array.index_usize raw limb
+    let i5 ← i4 + i3
+    let a ← Array.update raw limb i5
+    ok (cont (iter1, a))
+is not definitionally equal to the right-hand side
+  do
+    let x ← UScalar.shiftRight (wordAt sums ⟨↑i, hi⟩) 31
+    let x ←
+      (UScalar.and (wordAt sums ⟨↑i, hi⟩)
+              (UScalar.cast UScalarTy.U64 (UScalar.ofNatCore P ExtractedCurrentReducer.mask32._proof_1))).add
+          x
+    let r ← UScalar.add (wordAt raw ⟨↑i, hi⟩) x
+    let a ← Array.update raw i r
+    ok (cont (next, a))
+
+sums : Raw
+iter next : CuSavingsDelayedArrays.Range
+old : Canon
+raw : Raw
+i : Usize
+hi : ↑i < 8
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some i, next)
+o : U32
+r : U64
+ho :
+  (do
+      let s ← field.M31.reduce_u64 (wordAt sums ⟨↑i, hi⟩)
+      (wordAt old ⟨↑i, hi⟩).add s) =
+    ok o
+hr : foldAdd (wordAt raw ⟨↑i, hi⟩) (wordAt sums ⟨↑i, hi⟩) = ok r
+⊢ (let (o, iter1) := (some i, next)
+    match o with
+    | none => ok (done raw)
+    | some limb => do
+      let i ← Array.index_usize sums limb
+      let i2 ← i >>> 31#i32
+      let i3 ← (i &&& 2147483647#u64) + i2
+      let i4 ← Array.index_usize raw limb
+      let i5 ← i4 + i3
+      let a ← Array.update raw limb i5
+      ok (cont (iter1, a))) =
+    do
+    let x ← UScalar.shiftRight (wordAt sums ⟨↑i, hi⟩) 31
+    let x ←
+      (UScalar.and (wordAt sums ⟨↑i, hi⟩)
+              (UScalar.cast UScalarTy.U64 (UScalar.ofNatCore P ExtractedCurrentReducer.mask32._proof_1))).add
+          x
+    let r ← UScalar.add (wordAt raw ⟨↑i, hi⟩) x
+    let a ← Array.update raw i r
+    ok (cont (next, a))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:23:130: warning: This simp argument is unused:
+  read old i hi
+
+Hint: Omit it from the simp argument list.
+  simp only [old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲hn, ̲bind_tc_ok,r̵e̵a̵d̵ o̵l̵d̵ ̵i̵ ̵h̵i̵,̵read sums i hi, ̲bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:23:144: warning: This simp argument is unused:
+  read sums i hi
+
+Hint: Omit it from the simp argument list.
+  simp only [old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲hn, ̲bind_tc_ok, ̲read old i hi,r̵e̵a̵d̵ s̵u̵m̵s̵ ̵i̵ ̵h̵i̵,̵bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:29:130: warning: This simp argument is unused:
+  read raw i hi
+
+Hint: Omit it from the simp argument list.
+  simp only [new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲hn, ̲bind_tc_ok,r̵e̵a̵d̵ ra̵w̵ ̵i̵ ̵h̵i̵,̵r̵ead sums i hi,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵foldAdd, ̲ExtractedCurrentReducer.foldExecution,
+          ExtractedCurrentReducer.mask64, ̲ExtractedCurrentReducer.mask32, ̲lift, ̲bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:29:144: warning: This simp argument is unused:
+  read sums i hi
+
+Hint: Omit it from the simp argument list.
+  simp only [new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲hn, ̲bind_tc_ok, ̲read raw i hi,r̵e̵a̵d̵ s̵u̵m̵s̵ ̵i̵ ̵h̵i̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵foldAdd, ̲ExtractedCurrentReducer.foldExecution,
+          ExtractedCurrentReducer.mask64, ̲ExtractedCurrentReducer.mask32, ̲lift, ̲bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:46:4: error: unsolved goals
+case zero.refine_1
+sums : Raw
+count : ℕ
+hc : count < 7
+iter : CuSavingsDelayedArrays.Range
+old : Canon
+raw : Raw
+he : ↑iter.end = 8
+hi : ↑iter.start ≤ 8
+hf : 8 - ↑iter.start = 0
+h : State count (↑iter.start) old raw
+hend : ↑iter.start ≥ ↑iter.end
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, iter)
+⊢ (match
+      let (o, iter1) := (none, iter)
+      match o with
+      | none => ok (done old)
+      | some limb => do
+        let m ← Array.index_usize old limb
+        let i ← Array.index_usize sums limb
+        let m1 ← field.M31.reduce_u64 i
+        let m2 ← m.add m1
+        let a ← Array.update old limb m2
+        ok (cont (iter1, a)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize x.1
+            match o with
+              | none => ok (done x.2)
+              | some limb => do
+                let m ← x.2.index_usize limb
+                let i ← Array.index_usize sums limb
+                let m1 ← field.M31.reduce_u64 i
+                let m2 ← m.add m1
+                let a ← x.2.update limb m2
+                ok (cont (iter1, a)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok old
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:49:4: error: unsolved goals
+case zero.refine_2
+sums : Raw
+count : ℕ
+hc : count < 7
+iter : CuSavingsDelayedArrays.Range
+old : Canon
+raw : Raw
+he : ↑iter.end = 8
+hi : ↑iter.start ≤ 8
+hf : 8 - ↑iter.start = 0
+h : State count (↑iter.start) old raw
+hend : ↑iter.start ≥ ↑iter.end
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, iter)
+⊢ (match
+      let (o, iter1) := (none, iter)
+      match o with
+      | none => ok (done raw)
+      | some limb => do
+        let i ← Array.index_usize sums limb
+        let i1 ← lift (i &&& 2147483647#u64)
+        let i2 ← i >>> 31#i32
+        let i3 ← i1 + i2
+        let i4 ← Array.index_usize raw limb
+        let i5 ← i4 + i3
+        let a ← Array.update raw limb i5
+        ok (cont (iter1, a)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize x.1
+            match o with
+              | none => ok (done x.2)
+              | some limb => do
+                let i ← Array.index_usize sums limb
+                let i1 ← lift (i &&& 2147483647#u64)
+                let i2 ← i >>> 31#i32
+                let i3 ← i1 + i2
+                let i4 ← x.2.index_usize limb
+                let i5 ← i4 + i3
+                let a ← x.2.update limb i5
+                ok (cont (iter1, a)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok raw
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:70:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body sums iter old
+in the target expression
+  (match
+      match (iter, old) with
+      | (iter1, limbs1) =>
+        old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body sums iter1
+          limbs1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, limbs1) =>
+              old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body sums
+                iter1 limbs1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok out
+
+case succ.refine_1
+sums : Raw
+count : ℕ
+hc : count < 7
+fuel : ℕ
+ih :
+  ∀ (iter : CuSavingsDelayedArrays.Range) (old : Canon) (raw : Raw),
+    ↑iter.end = 8 →
+      ↑iter.start ≤ 8 →
+        8 - ↑iter.start = fuel →
+          State count (↑iter.start) old raw →
+            ∃ o r,
+              old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1 iter old
+                    sums =
+                  ok o ∧
+                new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1 iter raw
+                      sums =
+                    ok r ∧
+                  State count 8 o r
+iter : CuSavingsDelayedArrays.Range
+old : Canon
+raw : Raw
+he : ↑iter.end = 8
+hi : ↑iter.start ≤ 8
+hf : 8 - ↑iter.start = fuel + 1
+h : State count (↑iter.start) old raw
+his : ↑iter.start < 8
+next : OccupancyRangeTraversal.Range
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, next)
+hinc : ↑next.start = ↑iter.start + 1
+hend : next.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+entry :
+  ↑(wordAt old ⟨↑iter.start, his⟩) = ↑(wordAt raw ⟨↑iter.start, his⟩) % P ∧
+    ↑(wordAt raw ⟨↑iter.start, his⟩) < (count + if ↑⟨↑iter.start, his⟩ < ↑iter.start then 2 else 1) * FoldBound
+hraw : ↑(wordAt raw ⟨↑iter.start, his⟩) < (count + 1) * FoldBound
+o : U32
+r : U64
+ho :
+  (do
+      let s ← field.M31.reduce_u64 (wordAt sums ⟨↑iter.start, his⟩)
+      field.M31.add (wordAt old ⟨↑iter.start, his⟩) s) =
+    ok o
+hr : foldAdd (wordAt raw ⟨↑iter.start, his⟩) (wordAt sums ⟨↑iter.start, his⟩) = ok r
+her : ↑o = ↑r % P
+hrb : ↑r < (count + 2) * FoldBound
+steps :
+  old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body sums iter old =
+      ok (cont (next, Std.Array.set old iter.start o)) ∧
+    new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body sums iter raw =
+      ok (cont (next, Std.Array.set raw iter.start r))
+hstate : State count (↑iter.start + 1) (Std.Array.set old iter.start o) (Std.Array.set raw iter.start r)
+hstate1 : State count (↑next.start) (Std.Array.set old iter.start o) (Std.Array.set raw iter.start r)
+out : Canon
+res : Raw
+hold :
+  old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1 next
+      (Std.Array.set old iter.start o) sums =
+    ok out
+hnew :
+  new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1 next
+      (Std.Array.set raw iter.start r) sums =
+    ok res
+hfinal : State count 8 out res
+⊢ (match
+      match (iter, old) with
+      | (iter1, limbs1) =>
+        old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body sums iter1
+          limbs1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, limbs1) =>
+              old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body sums
+                iter1 limbs1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:73:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body sums iter raw
+in the target expression
+  (match
+      match (iter, raw) with
+      | (iter1, limbs1) =>
+        new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body sums iter1
+          limbs1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, limbs1) =>
+              new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body sums
+                iter1 limbs1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok res
+
+case succ.refine_2
+sums : Raw
+count : ℕ
+hc : count < 7
+fuel : ℕ
+ih :
+  ∀ (iter : CuSavingsDelayedArrays.Range) (old : Canon) (raw : Raw),
+    ↑iter.end = 8 →
+      ↑iter.start ≤ 8 →
+        8 - ↑iter.start = fuel →
+          State count (↑iter.start) old raw →
+            ∃ o r,
+              old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1 iter old
+                    sums =
+                  ok o ∧
+                new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1 iter raw
+                      sums =
+                    ok r ∧
+                  State count 8 o r
+iter : CuSavingsDelayedArrays.Range
+old : Canon
+raw : Raw
+he : ↑iter.end = 8
+hi : ↑iter.start ≤ 8
+hf : 8 - ↑iter.start = fuel + 1
+h : State count (↑iter.start) old raw
+his : ↑iter.start < 8
+next : OccupancyRangeTraversal.Range
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, next)
+hinc : ↑next.start = ↑iter.start + 1
+hend : next.end = iter.end
+right✝ : ↑iter.start + 1 ≤ Usize.max
+entry :
+  ↑(wordAt old ⟨↑iter.start, his⟩) = ↑(wordAt raw ⟨↑iter.start, his⟩) % P ∧
+    ↑(wordAt raw ⟨↑iter.start, his⟩) < (count + if ↑⟨↑iter.start, his⟩ < ↑iter.start then 2 else 1) * FoldBound
+hraw : ↑(wordAt raw ⟨↑iter.start, his⟩) < (count + 1) * FoldBound
+o : U32
+r : U64
+ho :
+  (do
+      let s ← field.M31.reduce_u64 (wordAt sums ⟨↑iter.start, his⟩)
+      field.M31.add (wordAt old ⟨↑iter.start, his⟩) s) =
+    ok o
+hr : foldAdd (wordAt raw ⟨↑iter.start, his⟩) (wordAt sums ⟨↑iter.start, his⟩) = ok r
+her : ↑o = ↑r % P
+hrb : ↑r < (count + 2) * FoldBound
+steps :
+  old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body sums iter old =
+      ok (cont (next, Std.Array.set old iter.start o)) ∧
+    new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body sums iter raw =
+      ok (cont (next, Std.Array.set raw iter.start r))
+hstate : State count (↑iter.start + 1) (Std.Array.set old iter.start o) (Std.Array.set raw iter.start r)
+hstate1 : State count (↑next.start) (Std.Array.set old iter.start o) (Std.Array.set raw iter.start r)
+out : Canon
+res : Raw
+hold :
+  old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1 next
+      (Std.Array.set old iter.start o) sums =
+    ok out
+hnew :
+  new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1 next
+      (Std.Array.set raw iter.start r) sums =
+    ok res
+hfinal : State count 8 out res
+⊢ (match
+      match (iter, raw) with
+      | (iter1, limbs1) =>
+        new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body sums iter1
+          limbs1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, limbs1) =>
+              new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1.body sums
+                iter1 limbs1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok res
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.CuSavingsDelayedLimbLoop.body_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsDelayedLimbLoop.source_both' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

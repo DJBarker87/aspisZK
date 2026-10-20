@@ -1,0 +1,415 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedBatches.lean:31:2: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff ?m.67 ?m.68 ?m.69).mpr`
+  ?m.67 >>= ?m.68 = ?m.67 >>= ?m.69
+with the goal
+  (match do
+      let (o, iter1) ←
+        core.iter.adapters.step_by.IteratorStepBy.next
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) iter
+      match o with
+        | none => ok (done limbs)
+        | some start => do
+          let i ← start + 4#usize
+          let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+          let sums1 ←
+            old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+                { start := start, «end» := i1 } bytes gamma slot (Array.repeat 8#usize 0#u64)
+          let limbs1 ←
+            old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+                { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } limbs sums1
+          ok (cont (iter1, limbs1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ←
+              core.iter.adapters.step_by.IteratorStepBy.next
+                  (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) x.1
+            match o with
+              | none => ok (done x.2)
+              | some start => do
+                let i ← start + 4#usize
+                let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+                let sums1 ←
+                  old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+                      { start := start, «end» := i1 } bytes gamma slot (Array.repeat 8#usize 0#u64)
+                let limbs1 ←
+                  old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+                      { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } x.2 sums1
+                ok (cont (iter1, limbs1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let (opt, next) ←
+      core.iter.adapters.step_by.IteratorStepBy.next (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+          iter
+    match opt with
+      | none => ok limbs
+      | some start => do
+        let stop0 ← start + 4#usize
+        let stop ← core.cmp.min core.cmp.OrdUsize stop0 26#usize
+        let sums ←
+          old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+              { start := start, «end» := stop } bytes gamma slot (Array.repeat 8#usize 0#u64)
+        let out ←
+          old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+              { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } limbs sums
+        loop
+            (fun x => do
+              let (o, iter1) ←
+                core.iter.adapters.step_by.IteratorStepBy.next
+                    (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) x.1
+              match o with
+                | none => ok (done x.2)
+                | some start => do
+                  let i ← start + 4#usize
+                  let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+                  let sums1 ←
+                    old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+                        { start := start, «end» := i1 } bytes gamma slot (Array.repeat 8#usize 0#u64)
+                  let limbs1 ←
+                    old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+                        { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } x.2 sums1
+                  ok (cont (iter1, limbs1)))
+            (next, out)
+
+Note: The full type of `(bind_eq_iff ?m.67 ?m.68 ?m.69).mpr` is
+  (∀ (v : ?m.65), ?m.67 = ok v → ?m.68 v = ?m.69 v) → ?m.67 >>= ?m.68 = ?m.67 >>= ?m.69
+
+inst✝ : Shared
+iter : Iter
+bytes : Slice U8
+gamma : Std.Array field.wide_exact.WideExact 29#usize
+slot : Usize
+limbs : Canon
+⊢ (match do
+      let (o, iter1) ←
+        core.iter.adapters.step_by.IteratorStepBy.next
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) iter
+      match o with
+        | none => ok (done limbs)
+        | some start => do
+          let i ← start + 4#usize
+          let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+          let sums1 ←
+            old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+                { start := start, «end» := i1 } bytes gamma slot (Array.repeat 8#usize 0#u64)
+          let limbs1 ←
+            old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+                { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } limbs sums1
+          ok (cont (iter1, limbs1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ←
+              core.iter.adapters.step_by.IteratorStepBy.next
+                  (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) x.1
+            match o with
+              | none => ok (done x.2)
+              | some start => do
+                let i ← start + 4#usize
+                let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+                let sums1 ←
+                  old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+                      { start := start, «end» := i1 } bytes gamma slot (Array.repeat 8#usize 0#u64)
+                let limbs1 ←
+                  old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+                      { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } x.2 sums1
+                ok (cont (iter1, limbs1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let (opt, next) ←
+      core.iter.adapters.step_by.IteratorStepBy.next (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+          iter
+    match opt with
+      | none => ok limbs
+      | some start => do
+        let stop0 ← start + 4#usize
+        let stop ← core.cmp.min core.cmp.OrdUsize stop0 26#usize
+        let sums ←
+          old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+              { start := start, «end» := stop } bytes gamma slot (Array.repeat 8#usize 0#u64)
+        let out ←
+          old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+              { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } limbs sums
+        loop
+            (fun x => do
+              let (o, iter1) ←
+                core.iter.adapters.step_by.IteratorStepBy.next
+                    (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) x.1
+              match o with
+                | none => ok (done x.2)
+                | some start => do
+                  let i ← start + 4#usize
+                  let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+                  let sums1 ←
+                    old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+                        { start := start, «end» := i1 } bytes gamma slot (Array.repeat 8#usize 0#u64)
+                  let limbs1 ←
+                    old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+                        { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } x.2 sums1
+                  ok (cont (iter1, limbs1)))
+            (next, out)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedBatches.lean:30:106: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0.body,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedBatches.lean:67:2: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff ?m.67 ?m.68 ?m.69).mpr`
+  ?m.67 >>= ?m.68 = ?m.67 >>= ?m.69
+with the goal
+  (match do
+      let (o, iter1) ←
+        core.iter.adapters.step_by.IteratorStepBy.next
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) iter
+      match o with
+        | none => ok (done limbs)
+        | some start => do
+          let i ← start + 4#usize
+          let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+          let sums1 ←
+            new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+                { start := start, «end» := i1 } bytes gamma slot (Array.repeat 8#usize 0#u64)
+          let limbs1 ←
+            new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+                { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } limbs sums1
+          ok (cont (iter1, limbs1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ←
+              core.iter.adapters.step_by.IteratorStepBy.next
+                  (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) x.1
+            match o with
+              | none => ok (done x.2)
+              | some start => do
+                let i ← start + 4#usize
+                let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+                let sums1 ←
+                  new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+                      { start := start, «end» := i1 } bytes gamma slot (Array.repeat 8#usize 0#u64)
+                let limbs1 ←
+                  new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+                      { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } x.2 sums1
+                ok (cont (iter1, limbs1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let (opt, next) ←
+      core.iter.adapters.step_by.IteratorStepBy.next (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+          iter
+    match opt with
+      | none => ok limbs
+      | some start => do
+        let stop0 ← start + 4#usize
+        let stop ← core.cmp.min core.cmp.OrdUsize stop0 26#usize
+        let sums ←
+          new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+              { start := start, «end» := stop } bytes gamma slot (Array.repeat 8#usize 0#u64)
+        let out ←
+          new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+              { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } limbs sums
+        loop
+            (fun x => do
+              let (o, iter1) ←
+                core.iter.adapters.step_by.IteratorStepBy.next
+                    (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) x.1
+              match o with
+                | none => ok (done x.2)
+                | some start => do
+                  let i ← start + 4#usize
+                  let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+                  let sums1 ←
+                    new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+                        { start := start, «end» := i1 } bytes gamma slot (Array.repeat 8#usize 0#u64)
+                  let limbs1 ←
+                    new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+                        { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } x.2 sums1
+                  ok (cont (iter1, limbs1)))
+            (next, out)
+
+Note: The full type of `(bind_eq_iff ?m.67 ?m.68 ?m.69).mpr` is
+  (∀ (v : ?m.65), ?m.67 = ok v → ?m.68 v = ?m.69 v) → ?m.67 >>= ?m.68 = ?m.67 >>= ?m.69
+
+inst✝ : Shared
+iter : Iter
+bytes : Slice U8
+gamma : Std.Array field.wide_exact.WideExact 29#usize
+slot : Usize
+limbs : Raw
+⊢ (match do
+      let (o, iter1) ←
+        core.iter.adapters.step_by.IteratorStepBy.next
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) iter
+      match o with
+        | none => ok (done limbs)
+        | some start => do
+          let i ← start + 4#usize
+          let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+          let sums1 ←
+            new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+                { start := start, «end» := i1 } bytes gamma slot (Array.repeat 8#usize 0#u64)
+          let limbs1 ←
+            new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+                { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } limbs sums1
+          ok (cont (iter1, limbs1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ←
+              core.iter.adapters.step_by.IteratorStepBy.next
+                  (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) x.1
+            match o with
+              | none => ok (done x.2)
+              | some start => do
+                let i ← start + 4#usize
+                let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+                let sums1 ←
+                  new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+                      { start := start, «end» := i1 } bytes gamma slot (Array.repeat 8#usize 0#u64)
+                let limbs1 ←
+                  new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+                      { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } x.2 sums1
+                ok (cont (iter1, limbs1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let (opt, next) ←
+      core.iter.adapters.step_by.IteratorStepBy.next (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+          iter
+    match opt with
+      | none => ok limbs
+      | some start => do
+        let stop0 ← start + 4#usize
+        let stop ← core.cmp.min core.cmp.OrdUsize stop0 26#usize
+        let sums ←
+          new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+              { start := start, «end» := stop } bytes gamma slot (Array.repeat 8#usize 0#u64)
+        let out ←
+          new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+              { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } limbs sums
+        loop
+            (fun x => do
+              let (o, iter1) ←
+                core.iter.adapters.step_by.IteratorStepBy.next
+                    (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) x.1
+              match o with
+                | none => ok (done x.2)
+                | some start => do
+                  let i ← start + 4#usize
+                  let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+                  let sums1 ←
+                    new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+                        { start := start, «end» := i1 } bytes gamma slot (Array.repeat 8#usize 0#u64)
+                  let limbs1 ←
+                    new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+                        { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } x.2 sums1
+                  ok (cont (iter1, limbs1)))
+            (next, out)
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedBatches.lean:66:106: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0.body,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedBatches.lean:87:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsDelayedBatches.next_state`:
+  [Shared]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Shared] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedBatches.lean:120:4: error: 'change' tactic failed, pattern
+  (do
+      let stop0 ← iter.iter.start + 4#usize
+      let stop ← core.cmp.min core.cmp.OrdUsize stop0 26#usize
+      let sums ←
+        new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+            { start := iter.iter.start, «end» := stop } bytes gamma slot (Array.repeat 8#usize 0#u64)
+      let out ←
+        new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+            { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } raw sums
+      let r ←
+        new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0 next bytes gamma slot
+            out
+      kRaw r) =
+    do
+    let stop0 ← iter.iter.start + 4#usize
+    let stop ← core.cmp.min core.cmp.OrdUsize stop0 26#usize
+    let sums ←
+      old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+          { start := iter.iter.start, «end» := stop } bytes gamma slot (Array.repeat 8#usize 0#u64)
+    let out ←
+      old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+          { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } old sums
+    let o ←
+      old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0 next bytes gamma slot out
+    kOld o
+is not definitionally equal to target
+  (do
+      let r ←
+        let (opt, next) := (some iter.iter.start, next)
+          match opt with
+          | none => ok raw
+          | some start => do
+            let stop0 ← start + 4#usize
+            let stop ← core.cmp.min core.cmp.OrdUsize stop0 26#usize
+            let sums ←
+              new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+                  { start := start, «end» := stop } bytes gamma slot (Array.repeat 8#usize 0#u64)
+            let out ←
+              new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+                  { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } raw sums
+            new_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0 next bytes gamma
+                slot out
+      kRaw r) =
+    do
+    let o ←
+      let (opt, next) := (some iter.iter.start, next)
+        match opt with
+        | none => ok old
+        | some start => do
+          let stop0 ← start + 4#usize
+          let stop ← core.cmp.min core.cmp.OrdUsize stop0 26#usize
+          let sums ←
+            old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+                { start := start, «end» := stop } bytes gamma slot (Array.repeat 8#usize 0#u64)
+          let out ←
+            old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+                { start := 0#usize, «end» := field.wide_exact.WideExact.LIMB_COUNT } old sums
+          old_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0 next bytes gamma slot
+              out
+    kOld o
+'AspisR1.CuSavingsDelayedBatches.old_unroll' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsDelayedBatches.new_unroll' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsDelayedBatches.next_state' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsDelayedBatches.source_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]

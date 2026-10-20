@@ -1,0 +1,132 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:12:44: error: Ambiguous term
+  Range
+Possible interpretations:
+  OccupancyRangeTraversal.Range : Type
+  
+  CuSavingsDelayedArrays.Range : Type
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:12:44: error: Ambiguous term
+  Range
+Possible interpretations:
+  OccupancyRangeTraversal.Range : Type
+  
+  CuSavingsDelayedArrays.Range : Type
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:27:17: error: Invalid simp theorem: Expected a proposition, but found
+  Std.Array U64 8#usize →
+    core.ops.range.Range Usize →
+      Std.Array field.M31 8#usize →
+        Result (ControlFlow (core.ops.range.Range Usize × Std.Array field.M31 8#usize) (Std.Array field.M31 8#usize))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:26:33: error: unsolved goals
+sums : Raw
+iter : sorry
+next : sorry
+old : Canon
+raw : Raw
+i : Usize
+hi : ↑i < 8
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize sorry = ok (some i, sorry)
+o : U32
+r : U64
+ho :
+  (do
+      let s ← field.M31.reduce_u64 (wordAt sums ⟨↑i, hi⟩)
+      (wordAt old ⟨↑i, hi⟩).add s) =
+    ok o
+hr : foldAdd (wordAt raw ⟨↑i, hi⟩) (wordAt sums ⟨↑i, hi⟩) = ok r
+⊢ oldBody sums sorry old = do
+    let x ← field.M31.reduce_u64 (wordAt sums ⟨↑i, hi⟩)
+    let o ← (wordAt old ⟨↑i, hi⟩).add x
+    let a ← Array.update old i o
+    ok (cont (sorry, a))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:33:17: error: Invalid simp theorem: Expected a proposition, but found
+  Std.Array U64 8#usize →
+    core.ops.range.Range Usize →
+      Std.Array U64 8#usize →
+        Result (ControlFlow (core.ops.range.Range Usize × Std.Array U64 8#usize) (Std.Array U64 8#usize))
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:27:25: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [oldBody,h̵n̵,̵ ̲bind_tc_ok, ̲read old i hi, ̲read sums i hi, ̲bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:27:28: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵l̵d̵B̵o̵d̵y̵,̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵a̵d̵[̲o̲l̲d̲B̲o̲d̲y̲,̲ ̲h̲n̲,̲ ̲r̲e̲a̲d̲ old i h̵i̵,̵r̵e̵a̵d̵h̲i̲,̲ ̲r̲e̲a̲d̲ sums i h̵i̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵h̲i̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:27:39: warning: This simp argument is unused:
+  read old i hi
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵l̵d̵B̵o̵d̵y̵,̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵a̵d̵ ̵o̵l̵d̵ ̵i̵ ̵h̵i̵,̵r̵e̵a̵d̵[̲o̲l̲d̲B̲o̲d̲y̲,̲ ̲h̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲r̲e̲a̲d̲ sums i h̵i̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵h̲i̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:27:53: warning: This simp argument is unused:
+  read sums i hi
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵l̵d̵B̵o̵d̵y̵,̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵a̵d̵[̲o̲l̲d̲B̲o̲d̲y̲,̲ ̲h̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲r̲e̲a̲d̲ old i h̵i̵,̵r̵e̵a̵d̵ ̵s̵u̵m̵s̵ ̵i̵ ̵h̵i̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵h̲i̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:33:25: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵w̵B̵o̵d̵y̵,̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵a̵d̵[̲n̲e̲w̲B̲o̲d̲y̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲r̲e̲a̲d̲ raw i h̵i̵,̵r̵e̵a̵d̵h̲i̲,̲ ̲r̲e̲a̲d̲ sums i hi, f̵o̵l̵d̵A̵d̵d̵,̵E̵x̵t̵r̵a̵c̵t̵e̵d̵C̵u̵r̵r̵e̵n̵t̵R̵e̵d̵u̵c̵e̵r̵.̵f̵o̵l̵d̵E̵x̵e̵c̵u̵t̵i̵o̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵E̵x̵t̵r̵a̵c̵t̵e̵d̵C̵u̵r̵r̵e̵n̵t̵R̵e̵d̵u̵c̵e̵r̵.̵m̵a̵s̵k̵6̵4̵,̵E̵x̵t̵r̵a̵c̵t̵e̵d̵C̵u̵r̵r̵e̵n̵t̵R̵e̵d̵u̵c̵e̵r̵.̵m̵a̵s̵k̵3̵2̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵f̲o̲l̲d̲A̲d̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲E̲x̲t̲r̲a̲c̲t̲e̲d̲C̲u̲r̲r̲e̲n̲t̲R̲e̲d̲u̲c̲e̲r̲.̲f̲o̲l̲d̲E̲x̲e̲c̲u̲t̲i̲o̲n̲,̲ ̲E̲x̲t̲r̲a̲c̲t̲e̲d̲C̲u̲r̲r̲e̲n̲t̲R̲e̲d̲u̲c̲e̲r̲.̲m̲a̲s̲k̲6̲4̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲E̲x̲t̲r̲a̲c̲t̲e̲d̲C̲u̲r̲r̲e̲n̲t̲R̲e̲d̲u̲c̲e̲r̲.̲m̲a̲s̲k̲3̲2̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:33:28: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵w̵B̵o̵d̵y̵,̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵a̵d̵[̲n̲e̲w̲B̲o̲d̲y̲,̲ ̲h̲n̲,̲ ̲r̲e̲a̲d̲ raw i h̵i̵,̵r̵e̵a̵d̵h̲i̲,̲ ̲r̲e̲a̲d̲ sums i hi, f̵o̵l̵d̵A̵d̵d̵,̵E̵x̵t̵r̵a̵c̵t̵e̵d̵C̵u̵r̵r̵e̵n̵t̵R̵e̵d̵u̵c̵e̵r̵.̵f̵o̵l̵d̵E̵x̵e̵c̵u̵t̵i̵o̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵E̵x̵t̵r̵a̵c̵t̵e̵d̵C̵u̵r̵r̵e̵n̵t̵R̵e̵d̵u̵c̵e̵r̵.̵m̵a̵s̵k̵6̵4̵,̵E̵x̵t̵r̵a̵c̵t̵e̵d̵C̵u̵r̵r̵e̵n̵t̵R̵e̵d̵u̵c̵e̵r̵.̵m̵a̵s̵k̵3̵2̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵f̲o̲l̲d̲A̲d̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲E̲x̲t̲r̲a̲c̲t̲e̲d̲C̲u̲r̲r̲e̲n̲t̲R̲e̲d̲u̲c̲e̲r̲.̲f̲o̲l̲d̲E̲x̲e̲c̲u̲t̲i̲o̲n̲,̲ ̲E̲x̲t̲r̲a̲c̲t̲e̲d̲C̲u̲r̲r̲e̲n̲t̲R̲e̲d̲u̲c̲e̲r̲.̲m̲a̲s̲k̲6̲4̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲E̲x̲t̲r̲a̲c̲t̲e̲d̲C̲u̲r̲r̲e̲n̲t̲R̲e̲d̲u̲c̲e̲r̲.̲m̲a̲s̲k̲3̲2̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:33:39: warning: This simp argument is unused:
+  read raw i hi
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵w̵B̵o̵d̵y̵,̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵a̵d̵ ̵r̵a̵w̵ ̵i̵ ̵h̵i̵,̵r̵e̵a̵d̵[̲n̲e̲w̲B̲o̲d̲y̲,̲ ̲h̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲r̲e̲a̲d̲ sums i hi, f̵o̵l̵d̵A̵d̵d̵,̵E̵x̵t̵r̵a̵c̵t̵e̵d̵C̵u̵r̵r̵e̵n̵t̵R̵e̵d̵u̵c̵e̵r̵.̵f̵o̵l̵d̵E̵x̵e̵c̵u̵t̵i̵o̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵E̵x̵t̵r̵a̵c̵t̵e̵d̵C̵u̵r̵r̵e̵n̵t̵R̵e̵d̵u̵c̵e̵r̵.̵m̵a̵s̵k̵6̵4̵,̵E̵x̵t̵r̵a̵c̵t̵e̵d̵C̵u̵r̵r̵e̵n̵t̵R̵e̵d̵u̵c̵e̵r̵.̵m̵a̵s̵k̵3̵2̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵f̲o̲l̲d̲A̲d̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲E̲x̲t̲r̲a̲c̲t̲e̲d̲C̲u̲r̲r̲e̲n̲t̲R̲e̲d̲u̲c̲e̲r̲.̲f̲o̲l̲d̲E̲x̲e̲c̲u̲t̲i̲o̲n̲,̲ ̲E̲x̲t̲r̲a̲c̲t̲e̲d̲C̲u̲r̲r̲e̲n̲t̲R̲e̲d̲u̲c̲e̲r̲.̲m̲a̲s̲k̲6̲4̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲E̲x̲t̲r̲a̲c̲t̲e̲d̲C̲u̲r̲r̲e̲n̲t̲R̲e̲d̲u̲c̲e̲r̲.̲m̲a̲s̲k̲3̲2̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:33:53: warning: This simp argument is unused:
+  read sums i hi
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵w̵B̵o̵d̵y̵,̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵a̵d̵[̲n̲e̲w̲B̲o̲d̲y̲,̲ ̲h̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲r̲e̲a̲d̲ raw i h̵i̵,̵r̵e̵a̵d̵ ̵s̵u̵m̵s̵ ̵i̵ ̵hi, f̵o̵l̵d̵A̵d̵d̵,̵E̵x̵t̵r̵a̵c̵t̵e̵d̵C̵u̵r̵r̵e̵n̵t̵R̵e̵d̵u̵c̵e̵r̵.̵f̵o̵l̵d̵E̵x̵e̵c̵u̵t̵i̵o̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵E̵x̵t̵r̵a̵c̵t̵e̵d̵C̵u̵r̵r̵e̵n̵t̵R̵e̵d̵u̵c̵e̵r̵.̵m̵a̵s̵k̵6̵4̵,̵E̵x̵t̵r̵a̵c̵t̵e̵d̵C̵u̵r̵r̵e̵n̵t̵R̵e̵d̵u̵c̵e̵r̵.̵m̵a̵s̵k̵3̵2̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵f̲o̲l̲d̲A̲d̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲E̲x̲t̲r̲a̲c̲t̲e̲d̲C̲u̲r̲r̲e̲n̲t̲R̲e̲d̲u̲c̲e̲r̲.̲f̲o̲l̲d̲E̲x̲e̲c̲u̲t̲i̲o̲n̲,̲ ̲E̲x̲t̲r̲a̲c̲t̲e̲d̲C̲u̲r̲r̲e̲n̲t̲R̲e̲d̲u̲c̲e̲r̲.̲m̲a̲s̲k̲6̲4̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲E̲x̲t̲r̲a̲c̲t̲e̲d̲C̲u̲r̲r̲e̲n̲t̲R̲e̲d̲u̲c̲e̲r̲.̲m̲a̲s̲k̲3̲2̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:35:70: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵w̵B̵o̵d̵y̵,̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵a̵d̵[̲n̲e̲w̲B̲o̲d̲y̲,̲ ̲h̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲r̲e̲a̲d̲ raw i h̵i̵,̵r̵e̵a̵d̵h̲i̲,̲ ̲r̲e̲a̲d̲ sums i hi, f̵o̵l̵d̵A̵d̵d̵,̵E̵x̵t̵r̵a̵c̵t̵e̵d̵C̵u̵r̵r̵e̵n̵t̵R̵e̵d̵u̵c̵e̵r̵.̵f̵o̵l̵d̵E̵x̵e̵c̵u̵t̵i̵o̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵E̵x̵t̵r̵a̵c̵t̵e̵d̵C̵u̵r̵r̵e̵n̵t̵R̵e̵d̵u̵c̵e̵r̵.̵m̵a̵s̵k̵6̵4̵,̵E̵x̵t̵r̵a̵c̵t̵e̵d̵C̵u̵r̵r̵e̵n̵t̵R̵e̵d̵u̵c̵e̵r̵.̵m̵a̵s̵k̵3̵2̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵f̲o̲l̲d̲A̲d̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲E̲x̲t̲r̲a̲c̲t̲e̲d̲C̲u̲r̲r̲e̲n̲t̲R̲e̲d̲u̲c̲e̲r̲.̲f̲o̲l̲d̲E̲x̲e̲c̲u̲t̲i̲o̲n̲,̲ ̲E̲x̲t̲r̲a̲c̲t̲e̲d̲C̲u̲r̲r̲e̲n̲t̲R̲e̲d̲u̲c̲e̲r̲.̲m̲a̲s̲k̲6̲4̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲E̲x̲t̲r̲a̲c̲t̲e̲d̲C̲u̲r̲r̲e̲n̲t̲R̲e̲d̲u̲c̲e̲r̲.̲m̲a̲s̲k̲3̲2̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:50:12: error: unexpected token 'oldLoop'; expected identifier
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:39:41: error: Ambiguous term
+  Range
+Possible interpretations:
+  OccupancyRangeTraversal.Range : Type
+  
+  CuSavingsDelayedArrays.Range : Type
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsDelayedLimbLoop.lean:45:2: error: Alternative `succ` has not been provided
+'AspisR1.CuSavingsDelayedLimbLoop.body_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsDelayedLimbLoop.source_both' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
