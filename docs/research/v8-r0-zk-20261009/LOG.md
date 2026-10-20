@@ -7039,3 +7039,18 @@ values) and prove `RCausal` for that instance, with the final theorem stated
 over it. Symbolic binary-tree layer facts (`CausalTreeOrderBin.lean`) landed
 as independent progress. `PrivacyR1Final.lean` unchanged. Forbidden-construct
 scan clean; host attempts 8802/8804 standard axioms, zero swap, RSS < 3.6 GB.
+
+## D86 — builder refinement: S2 transport certified; restructure held for ELF gate (2026-10-20, lead)
+
+Landed from `codex/cx-builder-ref2-20261021`: the shipped S2 row transport is
+proved equal to the D18 arithmetic reference by Kani and refined in Lean via
+an extracted reference (`R1Z/BuilderTransport*.lean`, env J 8450/8452,
+standard axioms). Held back pending a gate: the restructure of
+`validate_forest_poseidon_rows` in `aspis-statement/src/pool_v1/pair_forest_trace.rs`
+passes the D83 prover gates (fixed-seed bytes, codec, ordered trace, both
+differentials, P_R1 8/8), but its frozen-source check omitted
+`aspis-statement`, which the verifier and Pool link. The continuation must
+show the default, devnet and Pool ELFs byte-identical to the frozen pins
+before it merges. `builder_refinement_D46_D51` stays open: Aeneas hits borrow
+blockers in `records` and the Poseidon lazy external layer; the continuation
+moves those to per-function Kani harnesses with contracts and stubs.
