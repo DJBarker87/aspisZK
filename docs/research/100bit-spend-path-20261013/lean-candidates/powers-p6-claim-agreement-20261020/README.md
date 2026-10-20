@@ -1,0 +1,11 @@
+# P6 original callback powers agree with the existing claim backend
+
+PROVED: canonical wide/callback decoding is injective, reusing ExtractedCurrentQM31Equality.decode_eq_iff on each half instead of reproving limb cast arithmetic. The eight-word claim/callback maps preserve canonicality and decoded values and round-trip exactly.
+
+PROVED: source_model_run_agrees_with_claim_powers uses the actual source callback's indexed P6 output theorem and the retained early-loop claim-powers theorem to prove equality of the RAW returned coefficient lists. The equality is derived from canonicality and exact indexed decoded powers; no whole-output equality premise is assumed.
+
+PROVED: sourceModelPowers_eq_claimPowers removes the successful-run premise by reusing P6-model totality. The explicit source-callback P6 constructor can replace the existing claim-powers backend on canonical input with the same Result and same Array. It is generic N (including4,7,29). This enables reuse of the existing prepared-claim/preparation proofs without adopting the alternative early-loop Rust routine.
+
+OPEN: connect this state-threaded constructor to the generic generated FnMut/cursor array interface and the actual enclosing caller. The reviewed P6 standard-library model/differential correspondence remains explicit; the theorem is not an unconditional Rust Std proof or a claim that the frozen caller already installs sourceModelPowers. Actual field/source/runtime/artifact and full100-bit closure remain open. No production Rust/CU/artifact/deployment changes.
+
+Two focused NUC checks passed Lean4.32 -j1/-M4400, High1GiB/Max2GiB/Swap0: injectivity2.006s/cgroup370114560B; agreement+constructor2.508s/cgroup376045568B. All exported axiom reports are standard only. The injectivity check waited for fresh atomic admission at unchanged caps; bounded queued-launcher code and exact final report are retained. Earlier admission denials started no process. Initial constructor drafts had unsupported dependent-if do syntax and an erased closure-size argument; explicit Bind and N annotation fix these without resource changes. Exact sources/objects/imports/compiler/commands/admission/resource evidence retained; no package/manifest replay.
