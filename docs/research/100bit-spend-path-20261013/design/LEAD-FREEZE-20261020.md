@@ -24,3 +24,20 @@ Launched on this freeze: cx-tx1-finish (R15), cx-cu-bound4 (final CU bound,
 same method as cu-bound3), cx-devnet3 (deployment with the devnet-id build).
 
 Note: the pin evidence was committed at the repository root (`evidence/freeze-20261020/`); it is to be relocated under `docs/research/100bit-spend-path-20261013/evidence/` once the jobs that cite the root path have landed.
+
+## Next-freeze candidate (2026-10-20, parked)
+
+Branch `codex/cx-freeze-prep-20261020` (commits f6639066e, 0e340502c,
+92e30def9; retained unmerged; it subsumes codex/cx-tx1-finish-prep-20261020,
+now deleted) carries the checkpoint-serialisation refactor that lets the
+tx1 finish cone extract, and the generated-import hygiene fix (stage-1 and
+stage-2 generated modules import together). All standing gates pass on it:
+P_R1 8/8, prover/simulator 33/33, D78 simulations, 13 runtime scenarios,
+six-fixture CU with minimum margins 119 CU (stage 1) / 134 CU
+(settlement); default/devnet `.text` identical. Candidate pins: default
+verifier 4aa7e8a1…, devnet b5a81324…, Pool 121f3e29… (unchanged).
+Adoption rule: taken as the next freeze once the S1–S10 re-pins against the
+current freeze have landed; at adoption the lead re-runs the all-input CU
+bound, re-checks the re-pins whose cones the refactor touches (S8:
+tx1_finish) and the R19 constants (checklist in
+`evidence/freeze-prep-20261020/FREEZE-CANDIDATE.md`).
