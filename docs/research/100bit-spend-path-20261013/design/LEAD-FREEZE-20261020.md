@@ -66,3 +66,25 @@ fails in the inactive-weight reduction. The parked candidate branch is
 reset to the gated prep2 state (6306b3959; pins 73cf9fd5/ea9cb9cd). The
 next sweep keeps a per-change CU ledger and admits only changes that keep
 stage 1 ≤ B1 on every fixture.
+
+## Candidate update (2026-10-20, prep4 — ledgered sweep)
+
+Branch codex/cx-freeze-prep-20261020 at 9d726fc3f (source ed0027cfb): 22
+ledgered iterations (132 fixture measurements); the retained borrow
+restructurings SAVE 224 CU on stage 1 and 1,774–1,779 CU on settlement per
+fixture; minimum margins against B1 now 343 CU (stage 1) / 1,910 CU
+(settlement); all gates pass (P_R1 8/8, simulator 33/33, D78, stack audits,
+`.text` identity); joint generated-type imports pass. Newly translating:
+the values/inactive cone (LLBC fb4f18d5…) and the Libra cone (b5aa456f…).
+Candidate pins: default 98067cc7…, devnet 016bb79c…, Pool 121f3e29….
+Remaining blockers: the mask expansion, `echeck`, the semantic boundary,
+`wide_view`, and the missing `Iterator.any.default` interface; the only
+translating split form found for expansion costs +796 CU (453 over
+transfer-255's B1).
+Ruling for prep5: (1) std-library iterator interfaces that the pinned
+Aeneas lacks (`Iterator.any.default` and any like it) may be supplied as a
+small, reviewed Aeneas library model in the extraction harness — listed
+explicitly under premise P6 with a differential test against Rust `std`
+behaviour on the admitted inputs; (2) the borrow blockers continue under
+the same CU ledger, with more forms; any blocker still needing a CU
+increase is reported with its cheapest form for a user decision.
