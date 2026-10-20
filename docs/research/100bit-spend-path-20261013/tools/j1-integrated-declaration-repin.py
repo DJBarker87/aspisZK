@@ -475,9 +475,14 @@ def reconcile_followup_statements(rows, cones, followup_names):
             row["prior_current_emission_comparison"] = comparisons
             row.pop("previous_statement_status", None)
             row["statement_diff"] = "\n".join(c["statement_diff"] for c in comparisons)
-            if len(comparisons) == len(outputs) and all(c["statement_status"] == c["body_status"] == "identical" for c in comparisons):
+            # Identical generated Lean does not repair missing correspondence
+            # to the selected Rust revision. Preserve that unresolved status;
+            # otherwise a stale body can be silently promoted to unchanged.
+            if row["classification"] != "unresolved" and len(comparisons) == len(outputs) and all(c["statement_status"] == c["body_status"] == "identical" for c in comparisons):
                 row["classification"] = "unchanged"
                 row["identity_basis"] += " Current and prior retained generated signatures/body token hashes are also identical."
+            elif row["classification"] == "unresolved":
+                row["generated_diff_status"] = "Generated comparison recorded only; unresolved Rust source correspondence is not repaired by retained Lean identity."
             else:
                 row["generated_diff_status"] = "Re-extracted; explicit raw signature diffs shown. Unchanged statement with changed body is recorded separately; canonical naming/alpha/parenthesis normalizations are in the binding audit."
 

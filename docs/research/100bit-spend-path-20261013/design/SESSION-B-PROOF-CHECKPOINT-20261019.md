@@ -2,7 +2,9 @@
 
 The 100-bit per-attempt soundness proof is still OPEN. These results do not use grinding credit or change the transparent protocol. Production verifier source is unchanged by this session.
 
-The adopted-format source used for continuity checks is `c8ea8dd49c81ab970b9dbee8d8b47718f9beb005` on `codex/r1-format-adopt-20261019`, with verifier SHA-256 `8a704eea668d04ca173290ca894c7cb0ab1f29abef4fec9bb49fbb36476779ea`. That branch has not yet been merged into this session's research ancestry. Its successful-fixture evidence is not a claim that every adoption criterion is closed.
+Current working source baseline: research `f2c084bc8f51c02f4c58b6d0a4e3dd450867e1f5`, after the adopted-format, stage-2 refactor and deployment-ID data-slot changes. The earlier acceptance `e90cf2f80`/freeze `9a71031d3` is historical. `evidence/session-b-freeze-continuity-20261020/continuity.json` establishes only the earlier c8-to-9a byte identity, not continuity through the later verifier refactor. Existing receipts retain their exact original revisions. The current S10 run is in `evidence/s10-current-repin-20261020/`: 29 unresolved registered declaration records, plus adopted-format cones not yet in that historical registry. No complete soundness or runtime claim follows.
+
+Latest assignment: S1–S10 source re-pins with arithmetic range/totality lemmas in the same focused packets. R14 extraction belongs to the incoming cx-stage2b worker; this session holds its earlier R14 work as candidates and waits for that generated Lean before stage-2 S8. The final source/artifact pin follows the stage-2 borrow fix.
 
 | Obligation | Checked progress | What is still open |
 |---|---|---|
