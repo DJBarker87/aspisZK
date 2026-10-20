@@ -1,0 +1,86 @@
+import D0InstanceAdmission
+import R3SemanticRemainingJoins
+
+/-! Symbolic composition of the available checks on the typed reader's exact
+data. This is deliberately a typed checker: converting it to the erased
+interface requires recovered-word binding, including its collision guard. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.D0TypedChecks
+open LiteralAcceptanceTerminal
+open RecordedBinaryExperimentBin
+attribute [local instance] Classical.propDecidable
+
+/-- The data reader is executed explicitly; the semantic obligation uses the
+equation-only checker, whose degree guards follow from literal parsing. -/
+def verify (rs : TranscriptRounds) (i : SourceInputs) : Bool :=
+  match LiteralMatchingData.read rs with
+  | none => false
+  | some data => decide (
+      data = i.data ∧
+      LiteralPairingChecks.checks rs ∧
+      R16DecisionQueryModel.verify data i.queryBytes = true ∧
+      R3SemanticRemainingJoins.EquationEndpoint i.decoded rs data ∧
+      ∀ q : Fin 22 → Fin 262144,
+        LiteralQueryRead.decode i.queryBytes = some q →
+        HchecksAccumulator.ClosedSum LiteralOpeningView.eK data q
+          (SelectedChallengeMap.rhoOf i.rho))
+
+theorem accepted_components (rs : TranscriptRounds) (i : SourceInputs)
+    (h : verify rs i = true) :
+    LiteralMatchingData.read rs = some i.data ∧
+    LiteralPairingChecks.checks rs ∧
+    R16DecisionQueryModel.verify i.data i.queryBytes = true ∧
+    R3SemanticRemainingJoins.EquationEndpoint i.decoded rs i.data ∧
+    ∀ q : Fin 22 → Fin 262144,
+      LiteralQueryRead.decode i.queryBytes = some q →
+      HchecksAccumulator.ClosedSum LiteralOpeningView.eK i.data q
+        (SelectedChallengeMap.rhoOf i.rho) := by
+  cases hr : LiteralMatchingData.read rs with
+  | none => simp only [verify, hr, Bool.false_eq_true] at h
+  | some data =>
+    have checks := of_decide_eq_true (show decide _ = true from
+      (by simpa only [verify, hr] using h))
+    rcases checks with ⟨same, pairing, writer, equations, accumulator⟩
+    subst data
+    exact ⟨rfl, pairing, writer, equations, accumulator⟩
+
+/-- R13 at the typed model, with the exact same data as the reader. -/
+theorem accepted_matching (rs : TranscriptRounds) (i : SourceInputs)
+    (h : verify rs i = true) : LiteralMatchingData.read rs = some i.data :=
+  (accepted_components rs i h).1
+
+/-- R15 at the typed model, via the saved-ten/resumed-twelve checker. -/
+theorem accepted_writer (rs : TranscriptRounds) (i : SourceInputs)
+    (h : verify rs i = true) (q : Fin 22 → Fin 262144)
+    (decoded : LiteralQueryRead.decode i.queryBytes = some q) :
+    ∀ j, MatchingSupport.match0 i.data (q j) :=
+  R16DecisionQueryModel.accepted_writer i.data i.queryBytes q decoded
+    (accepted_components rs i h).2.2.1
+
+/-- R3 at the typed model. All ten polynomial degree guards are supplied by
+semantic_of_equations/parsed_degrees, rather than checked by big reduction. -/
+theorem accepted_semantic (rs : TranscriptRounds) (i : SourceInputs)
+    (h : verify rs i = true) :
+    HchecksReaderComposition.SemanticEndpoint i.decoded rs i.data :=
+  R3SemanticRemainingJoins.semantic_of_equations i.decoded rs i.data
+    (accepted_components rs i h).2.2.2.1
+
+/-- R14 at the typed model. Identifying the frozen arithmetic implementation
+with these checks still requires the unchanged S4/S5/S8/S9 boundaries. -/
+theorem accepted_backend (rs : TranscriptRounds) (i : SourceInputs)
+    (h : verify rs i = true) :
+    LiteralPairingChecks.checks rs ∧
+      ∀ q : Fin 22 → Fin 262144,
+        LiteralQueryRead.decode i.queryBytes = some q →
+        HchecksAccumulator.ClosedSum LiteralOpeningView.eK i.data q
+          (SelectedChallengeMap.rhoOf i.rho) :=
+  ⟨(accepted_components rs i h).2.1, (accepted_components rs i h).2.2.2.2⟩
+
+#print axioms accepted_components
+#print axioms accepted_matching
+#print axioms accepted_writer
+#print axioms accepted_semantic
+#print axioms accepted_backend
+end AspisR1.D0TypedChecks
+end
