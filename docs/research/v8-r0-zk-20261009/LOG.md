@@ -7094,3 +7094,23 @@ correspondence (sampler, field-guard and rejection behaviour, FFT,
 serialisation, reached-query history, execution order) belongs with
 `SourceIdentification`/builder refinement as source joins, not with
 causality. Seven modules, 57 standard-axiom audits, zero swap.
+
+## D89 — release privacy theorem over the protocol model (2026-10-20, lead)
+
+Landed from `codex/cx-priv-endpoint-20261021`
+(`r1p-final/PRIVACY-PROTOCOL-ENDPOINT-20261021.md`, verbatim statement there).
+`PrivacyR1FinalProtocol.privacy_R1_protocol` specialises `PrivacyR1Final` to
+the constructed phase protocol and proves
+`ZK_FSS … (modelError … + 16/2^486)` with
+`modelError … + 16/2^486 ≤ 2^-109 + 2^-137 + 2^-454`.
+Removed at the instance: `R_causal_D80`, all eight `R_commit_D80` families,
+`D/ι/hι/R_wire_Sem1Uniform`, `R_wire_read_coverage`, and the public-width
+assumption (exact ROM width chosen). Lengths, typed coverage and joint
+satisfiability of the construction-owned checks are proved with an explicit
+structural instance and a real statement witness, so the theorem is not
+vacuous on that part. Remaining premises are all source and execution joins:
+packing/public domain and builder soundness; tape fibres, exhaustion,
+counters and budgets; coin carrier, normalised batches and ordered log;
+source experiments, randomness and observer; real builder/checker/retry
+coupling; ideal simulator coupling and reached-query history. Owners in the
+report's table. 21 standard-axiom audits, zero swap.
