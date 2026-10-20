@@ -205,3 +205,20 @@ eight-way format and cannot certify a 595-call trace; the new constant
 replaces it in the hQ instantiation. R19 stays open on: compact-source
 coverage via the re-pins, the privacy read-set transport, the stop-label
 refinement, the opaque `B.finish` (the R15 finding), and stage 2.
+
+## Addendum (2026-10-20): R14 extracted
+
+Codex job cx-stage2b continuation (14 commits through 41b2dd71b): the
+stage-2 cone translates with the pinned Charon/Aeneas after isolating the
+`&v` loan (the relation View is reconstructed after the queries) and the
+later loan scopes; 55 attempts receipted
+(`evidence/stage2-continuation-20261020/REPORT.md`). All 21 gates pass on
+the final source; six-fixture CU meets PREREG-2 item 1 with minimum margins
+281 CU (stage 1) and 201 CU (settlement); verifier ELF 9672cc48…
+(1,506,920 bytes), measured WITHOUT the deployment-id data slots, which
+landed on research separately. Proved locally on the extraction: fixed
+parse-length equality, checkpoint proof-digest equality under comparison
+soundness, twelve ordered query calls with the increment. Row R14:
+EXTRACTED (source pinned; refinement open). Next: one combined gate run and
+ELF pin on the research tip (ids + stage-2 refactor) = the freeze; then
+cx-tx1-finish (R15), the final CU bound, devnet.
