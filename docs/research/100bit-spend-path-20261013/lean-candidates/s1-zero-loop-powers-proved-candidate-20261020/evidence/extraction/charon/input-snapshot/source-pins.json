@@ -1,0 +1,96 @@
+{
+  "revision": "d8cb8b0081f55a6a3d63f0f34ab790082f8d0ad0",
+  "features": [
+    "r0",
+    "private-leaf-salts"
+  ],
+  "cuts": [
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start_byte": 1000,
+      "end_byte_exclusive": 1024,
+      "sha256": "0f603974e070feacec4d17e6529e2591708dfb371ea45bb5222c0e4f4b7faeef",
+      "file_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+      "anchor": "pub struct M31(pub u32);"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start_byte": 9062,
+      "end_byte_exclusive": 9113,
+      "sha256": "70788522ae518a81cf038cef9116d5bebc9dc6a097406a62c79f3635b8998d10",
+      "file_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+      "anchor": "pub struct CM31 {"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start_byte": 13734,
+      "end_byte_exclusive": 13789,
+      "sha256": "7602e05ad6f14b7feb141cb99aceceb0d24174c409e0ccca4ae3e1911dc247dd",
+      "file_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+      "anchor": "pub struct QM31 {"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "start_byte": 1267,
+      "end_byte_exclusive": 1319,
+      "sha256": "ab7cfdf32a34bde6f086dcd3d7e95c6d39eb8bdff0f22b8fc9a40ace373c15e5",
+      "file_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+      "anchor": "pub struct WideExact {"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "start_byte": 1661,
+      "end_byte_exclusive": 1743,
+      "sha256": "a27b0d8aa30d5ce5d71ed5e637a8223e17f1a553df03b5c4511dde429a4003fd",
+      "file_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+      "anchor": "pub const ONE: Self = Self {"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start_byte": 29237,
+      "end_byte_exclusive": 29425,
+      "sha256": "2ef8015b0fe4cc4b9bbd3d391a831e9e5ba51559c597ee1db8945b9d67393189",
+      "file_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+      "anchor": "pub const ZERO: QM31 = QM31 {"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start_byte": 29430,
+      "end_byte_exclusive": 29617,
+      "sha256": "f80470ca6cbfcc5c4fd9029af9eba06168486ce39e1172e4288f56471bb00d6e",
+      "file_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+      "anchor": "pub const ONE: QM31 = QM31 {"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/weights.rs",
+      "start_byte": 323,
+      "end_byte_exclusive": 433,
+      "sha256": "3919d83b539f8819c40251a84625b582ac88338fed2fa14b18951a69c0e1d018",
+      "file_sha256": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+      "anchor": "pub fn powers<const N:usize>"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "start_byte": 1568,
+      "end_byte_exclusive": 1656,
+      "sha256": "f8662ed261fda375430a32125081fea8f642a7ac15a035c2eeb73bb3cf7d121d",
+      "file_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+      "anchor": "pub const ZERO: Self = Self {"
+    }
+  ],
+  "opaque_paths": [
+    "crate::field::_::mul"
+  ],
+  "kit_files": {
+    "Cargo.toml": "d6cf462876a66aacd35d23fded42db547878b2366dfba64cfdd9c3554ce159ec",
+    "lib.rs": "da9bf2ad2834037947f9a313c7df24085dab958acff67347dd07252a5f48e3d6",
+    "Cargo.lock": "9f7e6c34b37956720b2dc73492c83b40fce7e23b54f912ed992a76d58d755891"
+  },
+  "classification": "CANDIDATE explicit powers loop zero initializer; ZERO const is exact frozen source cut; production unchanged",
+  "prior_diagnostic": "v1 failed the intended opacity cut: wrong name pattern included synthetic panic body. No v1 Lean accepted.",
+  "candidate_transform": {
+    "before": "pub fn powers<const N:usize>(x:E)->[E;N] { let mut p=E::ONE;core::array::from_fn(|_| {let a=p;p=p.mul(x);a}) }",
+    "after": "pub fn powers<const N:usize>(x:E)->[E;N]{\n let mut out=[E::ZERO;N];\n let mut p=E::ONE;\n let mut i=0usize;\n while i<N {\n  out[i]=p;\n  p=p.mul(x);\n  i+=1;\n }\n out\n}",
+    "classification": "CANDIDATE explicit safe array loop; production source unchanged"
+  }
+}
