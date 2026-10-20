@@ -1,0 +1,102 @@
+diff --git a/crates/aspis-r1-cost-probe/src/candidate.rs b/crates/aspis-r1-cost-probe/src/candidate.rs
+index a094e3b4e..8bb579653 100644
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -234,7 +234,7 @@ fn tx2_common<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8],
+     let Accumulator { mut weights, rhs, power, next } = a;
+     pending.finish(&mut weights);
+     let a = Accumulator { weights, rhs, power, next };
+-    finish_relation(&v, &p, &a, obs)
++    finish_relation(&wide_view(proof, &[], &[])?, &p, &a, obs)
+ }
+ 
+ /// Stage 2 with checkpoint provenance established by the caller (Pool
+diff --git a/crates/aspis-r1-cost-probe/src/verifier.rs b/crates/aspis-r1-cost-probe/src/verifier.rs
+index 614e3a791..5ba7c728f 100644
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -290,6 +290,27 @@ impl<'a> Reader<'a>{
+     fn e(&mut self)->Result<E,Error>{E::from_le_bytes(&self.raw::<32>()).ok_or(Error::Checkpoint)}
+     fn k(&mut self)->Result<K,Error>{K::from_le_bytes(&self.raw::<16>()).ok_or(Error::Checkpoint)}
+ }
++
++
++#[inline(never)]
++fn validate_checkpoint_queries(queries:&[u32;22])->Result<(),Error> {
++    for (i,q) in queries.iter().enumerate(){if *q>=1<<18||queries[..i].contains(q){return Err(Error::Checkpoint);}}
++    Ok(())
++}
++
++#[inline(never)]
++fn read_checkpoint_weights(bytes:&[u8],mut at:usize,mut weights:Vec<K>)->Result<(Vec<K>,usize),Error> {
++    let mut index=0;
++    while index<weights.len() {
++        let mut reader=Reader{bytes,at};
++        let value=reader.k()?;
++        at=reader.at;
++        weights[index]=value;
++        index+=1;
++    }
++    Ok((weights,at))
++}
++
+ #[inline(never)]
+ pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)->Result<(Box<Prepared>,Accumulator),Error> {
+     if bytes.len()!=checkpoint_size(v)||&bytes[..8]!=b"R1P2CKP2"||bytes[8]!=v.tag()||bytes[9]>22||bytes[10]!=1||bytes[11..16].iter().any(|&b|b!=0) {return Err(Error::Checkpoint);}
+@@ -297,16 +318,48 @@ pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)
+     if bytes[16..48]!=hash.digest(&[proof])||bytes[48..80]!=hash.digest(&[public])||bytes[end..]!=hash.digest(&[b"UNPROVED:R1:checkpoint",&bytes[..end]]) {return Err(Error::Checkpoint);}
+     let mut r=Reader{bytes,at:80};let state=r.raw();let roots=[r.raw(),r.raw()];
+     let gamma=r.e()?;let kappa=r.e()?;let alpha=[r.e()?,r.e()?];let rho=r.k()?;
+-    let mut queries=[0u32;22];
+-    let mut query_index=0;
+-    while query_index<queries.len() {queries[query_index]=u32::from_le_bytes(r.raw());query_index+=1;}
+-    for (i,q) in queries.iter().enumerate(){if *q>=1<<18||queries[..i].contains(q){return Err(Error::Checkpoint);}}
+-    let mut semantic_alpha=[K::ZERO;10];for x in &mut semantic_alpha {*x=r.k()?;}
++    let queries=[
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++    ];
++    validate_checkpoint_queries(&queries)?;
++    let semantic_alpha=[
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++    ];
+     let z=[SecureCirclePoint{x:r.k()?,y:r.k()?},SecureCirclePoint{x:r.k()?,y:r.k()?}];
+     let claim=r.e()?;let rhs=r.e()?;let power=r.k()?;
+-    let mut weights=aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;
+-    for x in &mut weights {*x=r.k()?;}
+-    if r.at!=end {return Err(Error::Checkpoint);}
++    let weights=aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;
++    let (weights,at)=read_checkpoint_weights(bytes,r.at,weights)?;
++    if at!=end {return Err(Error::Checkpoint);}
+     Ok((Box::new(Prepared{variant:v,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state}),Accumulator{weights,rhs,power,next:bytes[9] as usize}))
+ }
+ 

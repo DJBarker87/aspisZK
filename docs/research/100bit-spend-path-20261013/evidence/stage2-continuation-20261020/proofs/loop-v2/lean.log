@@ -1,0 +1,36 @@
+/Users/dominic/ZK/.worktrees/cx-stage2b/docs/research/100bit-spend-path-20261013/lean/Stage2ContinuationLoop.lean:98:56: error: unsolved goals
+case hfuel
+A B E : Type
+next : A → ℕ
+call : Call A B E
+advance : ∀ (a a1 : A) (b b1 : B), call a b = ok (core.result.Result.Ok (), a1, b1) → next a1 = next a + 1
+out : A
+bout : B
+step : A × B → Result (ControlFlow (A × B) (A × B × Option (core.result.Result Unit E))) := ⋯
+k : ℕ
+ih :
+  ∀ (a : A) (b : B),
+    next a ≤ 22 →
+      run next call a b = ok (out, bout, none) →
+        loop step (a, b) = ok (out, bout, none) → 22 - next a = k → Chain next call a b out bout k
+a : A
+b : B
+ha : next a ≤ 22
+h : run next call a b = ok (out, bout, none)
+hl : loop step (a, b) = ok (out, bout, none)
+hfuel : 22 - next a = k + 1
+a1 : A
+b1 : B
+hc : step (a, b) = ok (cont (a1, b1))
+ht : loop step (a1, b1) = ok (out, bout, none)
+active : next a < 22
+hcall : call a b = ok (core.result.Result.Ok (), a1, b1)
+hnext : next a1 = next a + 1
+⊢ 22 - next a1 = k
+'_private.Stage2ContinuationLoop.0.Stage2ContinuationLoop.loop_cases' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.Stage2ContinuationLoop.0.Stage2ContinuationLoop.body_done' depends on axioms: [propext, Quot.sound]
+'_private.Stage2ContinuationLoop.0.Stage2ContinuationLoop.body_cont' depends on axioms: [propext]
+'Stage2ContinuationLoop.successful_loop_chain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Stage2ContinuationLoop.twelve_ordered_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

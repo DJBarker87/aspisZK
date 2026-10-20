@@ -50,3 +50,12 @@ Source revision: `7d4c136f0` (full revision in the extraction input JSON and man
 Aeneas error (exact): **There should be no bottoms in the value**. Source: `crates/aspis-r1-cost-probe/src/candidate.rs`, span **237:20–237:22**, the `&a` argument of `finish_relation(&v, &p, &a, obs)`, after moving out the fields, finishing weights and reconstructing `a`. Compiler source: `interp/InterpExpressions.ml:55`. The move/reconstruction refactor therefore does **not** solve the pinned translator's post-finish accumulator problem. This failure is not memory pressure and was not rerun or retried with another tool/cap. See `receipts/extract-aeneas/{stdout,stderr}.log` and both phase input JSONs for commands and exact tools.
 
 Per the mandate, work stops at stage 2. No generated Lean files were emitted; no Lean compilation or `#print axioms` run occurred (N/A). Length equality, whole-resume proof-digest equality and the 12-query ordered-call theorem are all still obligations. Runtime traces supply regression evidence only. The stage-1 refactor is retained as a runtime-gated candidate, not an accepted whole-cone extraction or a formal source/model refinement. R13/R12, R15, R19 and S8 remain open.
+
+## Source-changing continuation
+
+The original span was misidentified above: zero-based columns 237:20–22 are
+`&v`, not `&a`. The continuation authorized by the lead repairs that borrow
+and subsequent whole-cone loan joins. Pinned Aeneas now emits the full cone;
+local first shape facts and later runtime evidence are tracked separately in
+`../stage2-continuation-20261020/REPORT.md`. The measurements and failure in
+this historical packet remain bound to its old source and ELF.

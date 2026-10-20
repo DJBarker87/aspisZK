@@ -1,0 +1,91 @@
+namespace AspisR1Stage2
+private theorem advance_bind_success {A B : Type} (m : Result A) (k : A → Result B) (v : B)
+    (h : (do let x ← m; k x) = ok v) : ∃ x, m = ok x ∧ k x = ok v := by
+  cases m with
+  | ok x => exact ⟨x,rfl,h⟩
+  | fail e => simp only [bind_tc_fail] at h; cases h
+  | div => simp only [bind_tc_div] at h; cases h
+
+private theorem checked_add_value (x y z : Usize) (h : x + y = ok z) :
+    z.val = x.val + y.val := by
+  change UScalar.tryMk _ (x.val+y.val) = ok z at h
+  unfold UScalar.tryMk UScalar.tryMkOpt UScalar.check_bounds at h
+  split at h
+  · cases h; rfl
+  · cases h
+
+theorem accumulate_next (ops : AccumulateOps) (p : verifier.Prepared)
+    (a out : verifier.Accumulator) (node : Stage2M) (value : Stage2E)
+    (b bout : verifier.BatchedWeights)
+    (h : verifier.accumulateWithOps ops p a node value b = ok (out,bout)) :
+    out.next.val = a.next.val + 1 := by
+  unfold verifier.accumulateWithOps at h
+  obtain ⟨m, _, h⟩ := advance_bind_success _ _ _ h
+  obtain ⟨m1, _, h⟩ := advance_bind_success _ _ _ h
+  obtain ⟨basis1, _, h⟩ := advance_bind_success _ _ _ h
+  obtain ⟨basis2, _, h⟩ := advance_bind_success _ _ _ h
+  obtain ⟨weights1, _, h⟩ := advance_bind_success _ _ _ h
+  obtain ⟨terms, _, h⟩ := advance_bind_success _ _ _ h
+  obtain ⟨we, _, h⟩ := advance_bind_success _ _ _ h
+  obtain ⟨we1, _, h⟩ := advance_bind_success _ _ _ h
+  obtain ⟨traceResult, _, h⟩ := advance_bind_success _ _ _ h
+  obtain ⟨power, _, h⟩ := advance_bind_success _ _ _ h
+  obtain ⟨next, hnext, h⟩ := advance_bind_success _ _ _ h
+  have hp := Result.ok.inj h
+  cases hp
+  exact checked_add_value a.next 1#usize next hnext
+
+private theorem query_guard (b : Bool) (a : verifier.Accumulator)
+    (w : verifier.BatchedWeights)
+    (tail : Result (core.result.Result Unit verifier.Error × verifier.Accumulator × verifier.BatchedWeights))
+    (out : verifier.Accumulator) (bout : verifier.BatchedWeights)
+    (h : (if b then ok (.Err verifier.Error.Query,a,w) else tail) =
+      ok (.Ok (),out,bout)) : tail = ok (.Ok (),out,bout) := by
+  cases b
+  · exact h
+  · cases h
+
+theorem query_in_place_next (aops : AccumulateOps) (ops : QueryOps)
+    (proof : Slice U8) (p : verifier.Prepared) (a out : verifier.Accumulator)
+    (g : Array Stage2E 29#usize) (obs : Option (verifier.Phase → Result Unit))
+    (geometry : verifier.QueryGeometry) (b bout : verifier.BatchedWeights)
+    (h : verifier.candidate.queryInPlaceWithOps aops ops proof p a g obs geometry b =
+      ok (.Ok (),out,bout)) : out.next.val = a.next.val + 1 := by
+  unfold verifier.candidate.queryInPlaceWithOps at h
+  iterate 25 obtain ⟨x, hx, h⟩ := advance_bind_success _ _ _ h
+  have h := query_guard _ _ _ _ _ _ h
+  iterate 10 obtain ⟨x, hx, h⟩ := advance_bind_success _ _ _ h
+  obtain ⟨pair, hacc, h⟩ := advance_bind_success _ _ _ h
+  rcases pair with ⟨a1,b1⟩
+  obtain ⟨markResult, _, h⟩ := advance_bind_success _ _ _ h
+  have hp := Result.ok.inj h
+  cases hp
+  exact accumulate_next aops p a out _ _ b bout hacc
+
+theorem query_next (aops : AccumulateOps) (ops : QueryOps)
+    (proof : Slice U8) (p : verifier.Prepared) (a out : verifier.Accumulator)
+    (g : Array Stage2E 29#usize) (obs : Option (verifier.Phase → Result Unit))
+    (geometry : verifier.QueryGeometry) (b bout : verifier.BatchedWeights)
+    (h : verifier.candidate.queryWithOps aops ops proof p a g obs geometry b =
+      ok (.Ok (out,bout))) : out.next.val = a.next.val + 1 := by
+  unfold verifier.candidate.queryWithOps at h
+  obtain ⟨triple,hcall,h⟩ := advance_bind_success _ _ _ h
+  rcases triple with ⟨r,a1,b1⟩
+  cases r with
+  | Err e =>
+    change (ok (core.result.Result.Err e) : Result (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error)) = ok (.Ok (out,bout)) at h
+    cases h
+  | Ok unit =>
+    cases unit
+    change (ok (core.result.Result.Ok (a1,b1)) : Result (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error)) = ok (.Ok (out,bout)) at h
+    have hp := Result.ok.inj h
+    cases hp
+    exact query_in_place_next aops ops proof p a out g obs geometry b bout hcall
+
+#print axioms advance_bind_success
+#print axioms checked_add_value
+#print axioms accumulate_next
+#print axioms query_guard
+#print axioms query_in_place_next
+#print axioms query_next
+end AspisR1Stage2

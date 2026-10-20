@@ -1,0 +1,46 @@
+diff --git a/crates/aspis-r1-cost-probe/src/candidate.rs b/crates/aspis-r1-cost-probe/src/candidate.rs
+index a094e3b4e..a954e3697 100644
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -231,10 +231,9 @@ fn tx2_common<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8],
+         query_values(proof, &p, &mut a, &g, obs, &geometry, Some(&mut pending))?;
+     }
+     // End the loop accumulator borrow before finishing its weights.
+-    let Accumulator { mut weights, rhs, power, next } = a;
++    let Accumulator { mut weights, rhs, power: _, next } = a;
+     pending.finish(&mut weights);
+-    let a = Accumulator { weights, rhs, power, next };
+-    finish_relation(&v, &p, &a, obs)
++    finish_relation_parts(&v, &p, &weights, rhs, next, obs)
+ }
+ 
+ /// Stage 2 with checkpoint provenance established by the caller (Pool
+diff --git a/crates/aspis-r1-cost-probe/src/verifier.rs b/crates/aspis-r1-cost-probe/src/verifier.rs
+index 614e3a791..2b5e373bd 100644
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -252,6 +252,11 @@ fn finish_query_dot(final_message:&[u8],weights:&[K])->Result<E,Error> {
+ 
+ #[inline(never)]
+ pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Result<(),Error> {
++    finish_relation_parts(v,p,&a.weights,a.rhs,a.next,obs)
++}
++
++#[inline(never)]
++fn finish_relation_parts(v:&View<'_>,p:&Prepared,query_weights:&[K],rhs:E,next:usize,obs:Observer)->Result<(),Error> {
+     let mut claim=p.claim;
+     claim=finish_relation_round(v.round0,p.alpha[0],claim,0)?;
+     if p.variant.folds()==2 {claim=finish_relation_round(v.round1,p.alpha[1],claim,1)?;}
+@@ -260,9 +265,9 @@ pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Res
+     crate::trace::value(16,0,pair);crate::trace::value(16,1,claim);
+     if pair!=claim {return Err(Error::Relation);}
+     mark(obs,Phase::Relation);
+-    let actual=finish_query_dot(v.final_message,&a.weights)?;
+-    crate::trace::value(17,0,actual);crate::trace::value(17,1,a.rhs);
+-    if a.next!=22||actual!=a.rhs {return Err(Error::Query);}
++    let actual=finish_query_dot(v.final_message,query_weights)?;
++    crate::trace::value(17,0,actual);crate::trace::value(17,1,rhs);
++    if next!=22||actual!=rhs {return Err(Error::Query);}
+     mark(obs,Phase::Final);Ok(())
+ }
+ 

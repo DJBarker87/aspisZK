@@ -1,0 +1,14 @@
+diff --git a/crates/aspis-r1-cost-probe/src/candidate.rs b/crates/aspis-r1-cost-probe/src/candidate.rs
+index a094e3b4e..8f4b2b735 100644
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -223,7 +223,8 @@ fn tx2_common<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8],
+     let g = powers::<29>(p.gamma);
+     mark(obs, Phase::CheckpointRead);
+     let v = wide_view(proof, &[], &[])?;
+-    batch_merkle(proof, &p, v.folded_root.unwrap(), 1, hash)?;
++    let folded_root = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();
++    batch_merkle(proof, &p, folded_root, 1, hash)?;
+     mark(obs, Phase::Merkle(SPLIT));
+     let geometry = QueryGeometry::for_range(&p.queries, a.next, 22)?;
+     let mut pending = BatchedWeights::new(&a.weights)?;

@@ -1,0 +1,43 @@
+diff --git a/crates/aspis-r1-cost-probe/src/candidate.rs b/crates/aspis-r1-cost-probe/src/candidate.rs
+index a094e3b4e..389260b01 100644
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -216,25 +216,30 @@ pub fn tx1<H: Digest32>(public: Public<'_>, public_bytes: &[u8], proof: &[u8], k
+ 
+ #[inline(never)]
+ fn tx2_common<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8], hash: H, obs: Observer) -> Result<(), Error> {
+-    let (p, mut a) = resume(checkpoint, proof, public_bytes, Variant::S2, hash)?;
++    let (p, a) = resume(checkpoint, proof, public_bytes, Variant::S2, hash)?;
+     if a.next != SPLIT {
+         return Err(Error::Checkpoint);
+     }
+     let g = powers::<29>(p.gamma);
+     mark(obs, Phase::CheckpointRead);
+     let v = wide_view(proof, &[], &[])?;
+-    batch_merkle(proof, &p, v.folded_root.unwrap(), 1, hash)?;
++    batch_merkle(proof, &p, v.folded_root.as_ref().unwrap(), 1, hash)?;
+     mark(obs, Phase::Merkle(SPLIT));
+     let geometry = QueryGeometry::for_range(&p.queries, a.next, 22)?;
++    let a = finish_queries(proof, &p, a, &g, obs, &geometry)?;
++    finish_relation(&v, &p, &a, obs)
++}
++
++
++// Keep the query-loop borrow context independent of the later View borrow.
++#[inline(never)]
++fn finish_queries(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry) -> Result<Accumulator, Error> {
+     let mut pending = BatchedWeights::new(&a.weights)?;
+     while a.next < 22 {
+-        query_values(proof, &p, &mut a, &g, obs, &geometry, Some(&mut pending))?;
++        query_values(proof, p, &mut a, g, obs, geometry, Some(&mut pending))?;
+     }
+-    // End the loop accumulator borrow before finishing its weights.
+-    let Accumulator { mut weights, rhs, power, next } = a;
+-    pending.finish(&mut weights);
+-    let a = Accumulator { weights, rhs, power, next };
+-    finish_relation(&v, &p, &a, obs)
++    pending.finish(&mut a.weights);
++    Ok(a)
+ }
+ 
+ /// Stage 2 with checkpoint provenance established by the caller (Pool

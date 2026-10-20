@@ -1,0 +1,11 @@
+#!/usr/bin/python3
+"""Adapt the requested cc-style thread flag for the direct SBPF lld only."""
+import hashlib,json,os,sys,time
+from pathlib import Path
+exe=Path('/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/bin/rust-lld')
+original=sys.argv[1:];args=['--threads=4' if x=='-Wl,--threads=4' else x for x in original]
+H=Path('/home/dombarker/project-offloads/codex-cx-stage2b-20261020');out=H/'stack-r5';out.mkdir(exist_ok=True)
+sha=lambda x:hashlib.sha256(x).hexdigest()
+record=dict(utc=time.time(),pid=os.getpid(),linker=str(exe),linker_sha256=sha(exe.read_bytes()),input_args_sha256=sha(json.dumps(original).encode()),output_args_sha256=sha(json.dumps(args).encode()),thread_flag_translated=original!=args,rustflags=os.environ.get('RUSTFLAGS'))
+with (out/'linker-adapter-calls.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
+os.execv(str(exe),[str(exe),*args])

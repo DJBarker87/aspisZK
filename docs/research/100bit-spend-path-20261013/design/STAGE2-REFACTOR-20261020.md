@@ -1,21 +1,76 @@
 # Stage-2 refactor (2026-10-20)
 
 VERIFIER SOURCE CHANGE under LEAD-DECISION-STAGE2-REFACTOR-20261020.
-Stage 1 runtime gates PASS (`7d4c136f0`). Stage 2 Aeneas extraction FAILED; stopped before first facts.
+Final Rust source: `2ec37343acfb1b857cbec6569ad3175930a962bb`.
+Pinned Charon and Aeneas now translate the whole stage-2 cone successfully.
+The prior failed source and measurements remain historical in
+`../evidence/stage2-refactor-extraction-20261020/REPORT.md`.
+Current report, all attempts and pins:
+`../evidence/stage2-continuation-20261020/REPORT.md`.
 
-## Changes and extraction purpose
+## Repair
 
-- `finish_relation_round` isolates each scalar fold guard and polynomial update. `finish_relation` spells out the only supported one/two-round cases. This adopts the retained successful finish candidate rather than replaying its failed shared-borrow loop.
-- `finish_query_dot` performs the same ordered dot pushes through indexed shared slices, avoiding the accumulator iterator borrow. It retains the original error mapping and trace order.
-- `resume` replaces the mutable Reader/from_fn capture with a fixed 22-element indexed read. All cursor updates, validation, decoding and digest comparisons retain their order.
-- `tx2_common` moves the accumulator fields out after the query loop, finishes the standalone weight vector, and reconstructs the accumulator. This avoids borrowing the partially borrowed whole accumulator after finishing its weights. No new allocation or field arithmetic is introduced. This change is insufficient for the pinned translator: Aeneas rejects the final `&a` borrow at candidate.rs:237. `Variant::folds` is 1 only for S1 and 2 for S2/D, so the explicit cases cover every existing variant. The reader loop visits the same 22 positions as from_fn. Moving/reconstructing the Vec changes no payload, allocation, observer or digest call; pending owns its separate residue buffer.
+The old span description was wrong: candidate.rs:237:20–22 (zero-based
+columns) identifies `&v`, not `&a`. Constructing the relation View after the
+query loop avoids reborrowing the View whose folded-root field had been used.
+The early inactive decoder and folded-root Merkle authentication are retained.
+The late View supplies the three fields actually read by finish_relation;
+its unused folded_root is None. Moving/reconstructing the accumulator remains
+safe source structure but was not the original failing loan.
 
-`compact.rs` and `multiproof.rs` remain byte-identical. Default Pool and registry ids remain `[0x41;32]` and `[0x44;32]`; the deployment-constant change is absent from this branch base.
+Whole-cone extraction then exposed further joins in Reader/cursor loops,
+root/query accesses, batch sorting, Merkle scratch state, residue updates,
+geometry and query accumulation. Concrete helpers isolate those loans. The
+query loop carries an owned Result state; its successful query returns the
+next accumulator and pending weights. Three explicit ordered Merkle calls
+reuse borrowed scratch arrays. Arithmetic, byte layouts and digest inputs
+retain their definitions; exact runtime comparisons are supplied separately.
 
-## Gates and artifact
+Checkpoint query reads are explicit and ordered. Ten semantic-alpha reads
+use a separate concrete helper so the emitted resume body stays below the
+pinned pretty-printer indentation limit. Reader::k is inlined for CU. The
+original four-limb residue loops run inside an isolated row helper with
+transparent getters; this avoids both the translator's nested loan failure
+and the measured cost of forced unrolling. The optional legacy accumulator
+and historical eight-way source remain available to audit builds.
 
-All required runtime gates passed, including 8/8 P_R1 plus a verified retry loop and all six per-fixture B1 criteria. See `../evidence/stage2-refactor-extraction-20261020/REPORT.md`, manifest and receipts for results and retained staging failures. Rebuilt verifier: SHA-256 `0622ad3f19b81d71776f1a0b2fdb624cca3f371c7c4bccb14adc8ea1dfbc8090`, 1,403,912 bytes. Strict stack audit passed against the complete linked ELF.
+The extraction starts at the actual crate's tx2_authenticated. Orchestration,
+resume, parsing, query loops, accumulation, relation and Merkle bodies remain
+concrete. Arithmetic/heap/hash/weights/domain/dot/pairing/trace methods are
+explicit backend frontiers. Only required field/point data layouts cross
+those opaque boundaries; no synthetic orchestration is substituted.
+
+## Verification and artifacts
+
+Codec 1,233; ordered traces; checkpoint/program, crate and Pool suites;
+proof-size teeth; strict/authenticated path; complete-linked-ELF stack audit;
+and all six per-fixture B1 CU criteria pass on the final source. The optimized
+P_R1 gate accepts and strictly/densely verifies 8/8; its separate retry loop
+accepts and verifies in one attempt. All 21 final-source gate receipts exit 0.
+
+ELF SHA-256:
+`9672cc4842d478313293133f5597e8da5a352842f2fbf96371b5fa189fe0f16a`
+(1,506,920 bytes). LLBC SHA-256:
+`4c36344e1de0f90dfa074fc35a0664408b4f258a11c72617d7a0241fd6aa3182`
+(7,009,222 bytes, has_errors=false). Raw generated Lean and all source/tool
+pins are committed; executable and LLBC binaries remain on the build host.
+
+Nine focused local modules support the first three shape facts: fixed parse
+length, successful resume proof-rehash equality with checkpoint bytes 16..48
+under byte-comparison soundness, and twelve ordered query calls from 10 to 22.
+The last fact derives the increment from complete emitted query/accumulation
+bodies with typed backend operations universally quantified. All successful
+axioms audits use only propext, Classical.choice and Quot.sound. Mechanical
+bindings connect these complete bodies to the final raw emission; raw
+external templates are pinned, not accepted as proof assumptions.
 
 ## Open
 
-R13/R12 source/model/Checks refinement, concrete arithmetic and Merkle backends; R15 authenticated checkpoint provenance and skipped-value canonicality; R19 all-input oracle/first-read bound; S8 re-pin and analytical CU bound on this verifier. Runtime differential evidence does not establish universal formal source equivalence. Charon produced valid LLBC (SHA `1bb25f41…8df5`), but pinned Aeneas exited 2 at `candidate.rs:237:20–237:22`: “There should be no bottoms in the value” (`interp/InterpExpressions.ml:55`). The runtime-gated source is retained as a candidate; no successful whole-cone translation or generated Lean is claimed. Per the mandate, no replacement refactor was attempted after this gate failed. All three first facts remain obligations.
+Concrete backend instantiation/correspondence and full source/model/Checks
+refinement (R13/R12); arithmetic and Merkle correctness; authenticated
+checkpoint provenance and skipped-value canonicality (R15); all-input
+oracle/first-read bounds (R19); deployment/release-certificate correspondence
+and analytical CU bounds (S8). The ELF itself is pinned here. Fixture CU
+margins are small (minimum 201 CU settlement, 281 CU stage 1); these
+measurements do not prove an all-input budget. Whole-cone emission is not a
+backend-complete Lean verification package or universal source equivalence.

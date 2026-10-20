@@ -34,6 +34,6 @@ try:
   t=time.monotonic();p=subprocess.run(['/usr/bin/time','-l',*cmd],cwd=source.parent,env=env,stdout=log,stderr=timing);wall=time.monotonic()-t
  log=(E/'lean.log').read_text();timing=(E/'time.log').read_text()
  rss=re.search(r'(\d+)\s+maximum resident set size',timing)
- rec=dict(**meta,exit_status=p.returncode,wall_seconds=wall,peak_rss_bytes=int(rss[1]) if rss else None,swaps=int(re.search(r'(\d+)\s+swaps',timing)[1]),print_axioms=[l for l in log.splitlines() if 'axioms' in l or 'depends on' in l])
+ rec=dict(**meta,exit_status=p.returncode,wall_seconds=wall,peak_rss_bytes=int(rss[1]) if rss else None,swaps=int(re.search(r'(\d+)\s+swaps',timing)[1]),print_axioms=re.findall(r"'[^\n]+' (?:depends on axioms:\s*\[[\s\S]*?\]|does not depend on any axioms)",log))
  (E/'receipt.json').write_text(json.dumps(rec,indent=2)+'\n');print(json.dumps(rec));print(log);raise SystemExit(p.returncode)
 finally:lock.rmdir()

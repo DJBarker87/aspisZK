@@ -1,0 +1,13 @@
+diff --git a/crates/aspis-r1-cost-probe/src/candidate.rs b/crates/aspis-r1-cost-probe/src/candidate.rs
+index a094e3b4e..8bb579653 100644
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -234,7 +234,7 @@ fn tx2_common<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8],
+     let Accumulator { mut weights, rhs, power, next } = a;
+     pending.finish(&mut weights);
+     let a = Accumulator { weights, rhs, power, next };
+-    finish_relation(&v, &p, &a, obs)
++    finish_relation(&wide_view(proof, &[], &[])?, &p, &a, obs)
+ }
+ 
+ /// Stage 2 with checkpoint provenance established by the caller (Pool

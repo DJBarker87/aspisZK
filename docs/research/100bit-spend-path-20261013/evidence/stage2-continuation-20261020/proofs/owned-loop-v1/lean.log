@@ -1,0 +1,55 @@
+/Users/dominic/ZK/.worktrees/cx-stage2b/docs/research/100bit-spend-path-20261013/lean/Stage2ContinuationOwnedLoop.lean:22:8: error: Nested action `← call a b` must be nested inside a `do` expression.
+/Users/dominic/ZK/.worktrees/cx-stage2b/docs/research/100bit-spend-path-20261013/lean/Stage2ContinuationOwnedLoop.lean:23:4: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+/Users/dominic/ZK/.worktrees/cx-stage2b/docs/research/100bit-spend-path-20261013/lean/Stage2ContinuationOwnedLoop.lean:57:16: error: unsolved goals
+A B E : Type
+next : A → ℕ
+call : Call A B E
+advance : ∀ (a a1 : A) (b b1 : B), call a b = ok (core.result.Result.Ok (a1, b1)) → next a1 = next a + 1
+out : A
+bout : B
+k : ℕ
+ih :
+  ∀ (a : A) (b : B),
+    next a ≤ 22 →
+      loop (body next call) (core.result.Result.Ok (a, b)) = ok (core.result.Result.Ok (out, bout)) →
+        22 - next a = k → Stage2ContinuationLoop.Chain next (adapt call) a b out bout k
+a : A
+b : B
+ha : next a ≤ 22
+hfuel : 22 - next a = k + 1
+active : next a < 22
+inactive : ¬22 ≤ next a
+h :
+  (match do
+      let r ← call a b
+      ok (cont r) with
+    | ok r =>
+      match r with
+      | cont x => loop (body next call) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (out, bout))
+a1 : A
+b1 : B
+hc : call a b = ok (core.result.Result.Ok (a1, b1))
+ht : loop (body next call) (core.result.Result.Ok (a1, b1)) = ok (core.result.Result.Ok (out, bout))
+hnext : next a1 = next a + 1
+hchain : Stage2ContinuationLoop.Chain next (adapt call) a1 b1 out bout k
+⊢ sorry () = ok (core.result.Result.Ok (), a1, b1)
+/Users/dominic/ZK/.worktrees/cx-stage2b/docs/research/100bit-spend-path-20261013/lean/Stage2ContinuationOwnedLoop.lean:66:20: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp [adapt,̵h̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-stage2b/docs/research/100bit-spend-path-20261013/lean/Stage2ContinuationOwnedLoop.lean:66:14: warning: declaration uses `sorry`
+'_private.Stage2ContinuationOwnedLoop.0.Stage2ContinuationOwnedLoop.loop_error' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Stage2ContinuationOwnedLoop.successful_loop_chain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Stage2ContinuationOwnedLoop.twelve_ordered_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

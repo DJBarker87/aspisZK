@@ -1,0 +1,380 @@
+diff --git a/crates/aspis-r1-cost-probe/src/candidate.rs b/crates/aspis-r1-cost-probe/src/candidate.rs
+index a094e3b4e..f6efc095d 100644
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -87,88 +87,132 @@ fn wide_view<'a>(proof: &'a [u8], semantic: &'a [u8], y1: &'a [u8]) -> Result<Vi
+     })
+ }
+ 
++
++#[inline(always)]
++fn batch_keys(queries: &[u32; 22], lo: usize, n: usize, tree: usize) -> [u64; multiproof::MAX_BATCH] {
++    let mut keys = [0u64; multiproof::MAX_BATCH];
++    for j in 0..n {
++        let u = queries[lo + j];
++        let index = if tree == 2 { u / 4 } else { u };
++        keys[j] = (u64::from(index) << 8) | j as u64;
++    }
++    keys
++}
++
++
++#[inline(always)]
++fn sort_batch_keys(mut keys: [u64; multiproof::MAX_BATCH], n: usize) -> [u64; multiproof::MAX_BATCH] {
++    for i in 1..n {
++        let mut j = i;
++        while j > 0 && keys[j - 1] > keys[j] {
++            keys.swap(j - 1, j);
++            j -= 1;
++        }
++    }
++    keys
++}
++
++
++#[inline(always)]
++fn batch_leaf<H: Digest32>(hash: H, tree: usize, q: &[u8]) -> [u8; 32] {
++    match tree {
++        0 => {
++            let salt: [u8; 32] = q[608..640].try_into().unwrap();
++            private_leaf_hash_with_digest(hash, merkle::C1_TAG, &q[..480], &salt)
++        }
++        1 => {
++            let salt: [u8; 32] = q[640..672].try_into().unwrap();
++            private_leaf_hash_with_digest(hash, merkle::C2_TAG, &q[480..608], &salt)
++        }
++        _ => {
++            let salt: [u8; 32] = q[800..832].try_into().unwrap();
++            private_leaf_hash_with_digest(hash, 0x72, &q[672..800], &salt)
++        }
++    }
++}
++
+ /// Verify the three multiproofs of one batch. Indices are sorted as u64
+ /// keys (index << 8 | position) so leaf hashes are written once, in sorted
+ /// order; equal folded indices must carry identical leaves and are merged.
+ #[inline(never)]
+ fn batch_merkle<H: Digest32>(proof: &[u8], p: &Prepared, folded_root: &[u8; 32], batch: usize, hash: H) -> Result<(), Error> {
+-    let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };
+-    let n = hi - lo;
+-    let roots = [&p.roots[0], &p.roots[1], folded_root];
++    let [root0, root1] = p.roots;
++    batch_merkle_values(proof, p.queries, [root0, root1, *folded_root], batch, hash)
++}
++
++#[inline(always)]
++fn batch_merkle_values<H: Digest32>(proof: &[u8], queries: [u32; 22], roots: [[u8; 32]; 3], batch: usize, hash: H) -> Result<(), Error> {
+     let mut idx = [0u32; multiproof::MAX_BATCH];
+     let mut val = [[0u8; 32]; multiproof::MAX_BATCH];
+     for tree in 0..3 {
+-        let s = 3 * batch + tree;
+-        let mut keys = [0u64; multiproof::MAX_BATCH];
+-        for j in 0..n {
+-            let u = p.queries[lo + j];
+-            let index = if tree == 2 { u / 4 } else { u };
+-            keys[j] = (u64::from(index) << 8) | j as u64;
+-        }
+-        for i in 1..n {
+-            let mut j = i;
+-            while j > 0 && keys[j - 1] > keys[j] {
+-                keys.swap(j - 1, j);
+-                j -= 1;
+-            }
+-        }
+-        let mut d = 0;
+-        for &key in &keys[..n] {
+-            let index = (key >> 8) as u32;
+-            let q = opening(proof, lo + (key & 0xff) as usize);
+-            let (tag, values, salt) = match tree {
+-                0 => (merkle::C1_TAG, &q[..480], &q[608..640]),
+-                1 => (merkle::C2_TAG, &q[480..608], &q[640..672]),
+-                _ => (0x72, &q[672..800], &q[800..832]),
+-            };
+-            let leaf = private_leaf_hash_with_digest(hash, tag, values, salt.try_into().unwrap());
+-            if d > 0 && idx[d - 1] == index {
+-                if val[d - 1] != leaf {
+-                    return Err(Error::Merkle);
+-                }
+-                continue;
++        let (next_idx, next_val) = batch_tree(proof, queries, roots[tree], batch, tree, idx, val, hash)?;
++        idx = next_idx;
++        val = next_val;
++    }
++    Ok(())
++}
++
++#[inline(always)]
++fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], batch: usize, tree: usize, mut idx: [u32; multiproof::MAX_BATCH], mut val: [[u8; 32]; multiproof::MAX_BATCH], hash: H) -> Result<([u32; multiproof::MAX_BATCH], [[u8; 32]; multiproof::MAX_BATCH]), Error> {
++    let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };
++    let n = hi - lo;
++    let s = 3 * batch + tree;
++    let keys = sort_batch_keys(batch_keys(&queries, lo, n, tree), n);
++    let mut d = 0;
++    let mut key_position = 0;
++    while key_position < n {
++        let key = keys[key_position];
++        key_position += 1;
++        let index = (key >> 8) as u32;
++        let q = opening(proof, lo + (key & 0xff) as usize);
++        let leaf = batch_leaf(hash, tree, q);
++        if d > 0 && idx[d - 1] == index {
++            if val[d - 1] != leaf {
++                return Err(Error::Merkle);
+             }
+-            idx[d] = index;
+-            val[d] = leaf;
+-            d += 1;
+-        }
+-        let count = multiproof::node_count(Arity::Two, &idx[..d]).ok_or(Error::Merkle)?;
+-        let nodes = slot(proof, s);
+-        // Padding is whole 32-byte words: scan it 8 bytes at a time.
+-        if count > SLOT_NODES[s] || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {
+-            return Err(Error::Parse);
+-        }
+-        if !multiproof::verify_in_place(hash, Arity::Two, roots[tree], &mut idx, &mut val, d, &nodes[..32 * count]) {
+-            return Err(Error::Merkle);
++            continue;
+         }
++        idx[d] = index;
++        val[d] = leaf;
++        d += 1;
+     }
+-    Ok(())
++    let count = multiproof::node_count(Arity::Two, &idx[..d]).ok_or(Error::Merkle)?;
++    let nodes = slot(proof, s);
++    // Padding is whole 32-byte words: scan it 8 bytes at a time.
++    if count > SLOT_NODES[s] || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {
++        return Err(Error::Parse);
++    }
++    if !multiproof::verify_in_place(hash, Arity::Two, &root, &mut idx, &mut val, d, &nodes[..32 * count]) {
++        return Err(Error::Merkle);
++    }
++    Ok((idx, val))
+ }
+ 
+ /// The shipped per-query folding and accumulation, reading the candidate
+ /// opening (C1/C2 values at the shipped offsets 0..608, folded values at
+ /// 672..800). Merkle authentication was done per batch.
+ #[inline(never)]
+-fn query_values(proof: &[u8], p: &Prepared, a: &mut Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: Option<&mut BatchedWeights>) -> Result<(), Error> {
++fn query_values(proof: &[u8], p: &Prepared, a: &mut Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: &mut BatchedWeights) -> Result<(), Error> {
+     let i = a.next;
+     let u = p.queries[i] as usize;
+     let q = opening(proof, i);
+     let dots = crate::fast_dots::four_dots(q, g);
+-    for s in 0..4 {
+-        crate::trace::value(9, 4 * i + s, dots[s]);
+-    }
+-    let inverse = geometry.for_query(i);
+-    let folded = circle_fold_with_inverses(p.alpha[0], dots, inverse);
++    crate::trace::value(9, 4 * i, dots[0]);
++    crate::trace::value(9, 4 * i + 1, dots[1]);
++    crate::trace::value(9, 4 * i + 2, dots[2]);
++    crate::trace::value(9, 4 * i + 3, dots[3]);
++    let inverse = *geometry.for_query(i);
++    let folded = circle_fold_with_inverses(p.alpha[0], dots, &inverse);
+     crate::trace::value(10, 2 * i, folded);
+     let values = core::array::from_fn(|s| field(&q[672..800], s));
+     if folded != values[u % 4] {
+         return Err(Error::Query);
+     }
+-    let folded = line_fold_with_inverses(p.alpha[1], values, inverse);
++    let folded = line_fold_with_inverses(p.alpha[1], values, &inverse);
+     crate::trace::value(10, 2 * i + 1, folded);
+     let z = geometry.line_z[i - geometry.start];
+     let node = z.mul(z).double().sub(M31::ONE);
+-    accumulate_with_node(p, a, node, folded, pending);
++    accumulate_with_node(p, a, node, folded, Some(pending));
+     mark(obs, Phase::Query(i));
+     Ok(())
+ }
+@@ -206,7 +250,7 @@ pub fn tx1<H: Digest32>(public: Public<'_>, public_bytes: &[u8], proof: &[u8], k
+     let geometry = QueryGeometry::for_range(&p.queries, 0, k)?;
+     let mut pending = BatchedWeights::new(&a.weights)?;
+     while a.next < k {
+-        query_values(proof, &p, &mut a, &g, obs, &geometry, Some(&mut pending))?;
++        query_values(proof, &p, &mut a, &g, obs, &geometry, &mut pending)?;
+     }
+     pending.finish(&mut a.weights);
+     let bytes = checkpoint(&p, &a, proof, public_bytes, hash);
+@@ -222,18 +266,28 @@ fn tx2_common<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8],
+     }
+     let g = powers::<29>(p.gamma);
+     mark(obs, Phase::CheckpointRead);
+-    let v = wide_view(proof, &[], &[])?;
+-    batch_merkle(proof, &p, v.folded_root.unwrap(), 1, hash)?;
++    let inactive = E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?;
++    let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();
++    batch_merkle(proof, &p, &folded_root, 1, hash)?;
+     mark(obs, Phase::Merkle(SPLIT));
+     let geometry = QueryGeometry::for_range(&p.queries, a.next, 22)?;
+     let mut pending = BatchedWeights::new(&a.weights)?;
+     while a.next < 22 {
+-        query_values(proof, &p, &mut a, &g, obs, &geometry, Some(&mut pending))?;
++        query_values(proof, &p, &mut a, &g, obs, &geometry, &mut pending)?;
+     }
+     // End the loop accumulator borrow before finishing its weights.
+     let Accumulator { mut weights, rhs, power, next } = a;
+     pending.finish(&mut weights);
+     let a = Accumulator { weights, rhs, power, next };
++    // Construct only the relation view after the last proof-consuming loop.
++    let v = View {
++        variant: Variant::S2, semantic: &[], y1: &[], inactive,
++        round0: &proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT],
++        folded_root: None,
++        round1: &proof[compact::OFF_ROUND1..compact::OFF_FINAL],
++        final_message: &proof[compact::OFF_FINAL..compact::OFF_OPENINGS],
++        query_bytes: &[],
++    };
+     finish_relation(&v, &p, &a, obs)
+ }
+ 
+diff --git a/crates/aspis-r1-cost-probe/src/verifier.rs b/crates/aspis-r1-cost-probe/src/verifier.rs
+index 614e3a791..9d0f9b3ba 100644
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -129,6 +129,15 @@ pub fn line_fold(alpha:E,v:usize,a:[E;4])->E {
+ /// x/y, followed by line x/y/z. Their inverses are batch-computed once per
+ /// transaction so each query avoids five independent field inversions.
+ struct QueryGeometry { start:usize, inverses:Vec<[M31;5]>, line_z:Vec<M31> }
++
++#[inline(always)]
++fn batch_prefix_products(flat:&[M31])->(Vec<M31>,M31) {
++    let mut prefixes=Vec::with_capacity(flat.len());
++    let mut product=M31::ONE;
++    for &value in flat {prefixes.push(product);product=product.mul(value);}
++    (prefixes,product)
++}
++
+ impl QueryGeometry {
+     fn for_range(queries:&[u32;22],start:usize,end:usize)->Result<Self,Error> {
+         if start>end||end>queries.len(){return Err(Error::Query);}
+@@ -137,11 +146,11 @@ impl QueryGeometry {
+         for &query in &queries[start..end] {
+             let u=query as usize;
+             let fibre=domain::FibreIndex::new(u).map_err(|_|Error::Query)?;
+-            let point=crate::fast_domain::fibre_point(fibre);
++            let domain::Point{x:circle_x,y:circle_y}=crate::fast_domain::fibre_point(fibre);
+             let line_x=crate::fast_domain::line_node(domain::FibreIndex::new(u/4*4).map_err(|_|Error::Query)?);
+             let line_y=crate::fast_domain::line_node(domain::FibreIndex::new(u/4*4+3).map_err(|_|Error::Query)?);
+             let line_z=line_x.mul(line_x).double().sub(M31::ONE);
+-            let values=[point.x,point.y,line_x,line_y,line_z];
++            let values=[circle_x,circle_y,line_x,line_y,line_z];
+             if values.iter().any(|x|*x==M31::ZERO){return Err(Error::Query);}
+             flat.extend_from_slice(&values);
+             line_z_values.push(line_z);
+@@ -149,9 +158,7 @@ impl QueryGeometry {
+         if flat.is_empty(){return Ok(Self{start,inverses:Vec::new(),line_z:line_z_values});}
+         // Standard prefix-product/backward batch inversion. The only `inv`
+         // in this routine is applied to the product of all nonzero entries.
+-        let mut prefixes=Vec::with_capacity(flat.len());
+-        let mut product=M31::ONE;
+-        for &value in &flat {prefixes.push(product);product=product.mul(value);}
++        let (prefixes,product)=batch_prefix_products(&flat);
+         let mut suffix_inverse=product.inv();
+         let mut flat_inverse=Vec::with_capacity(flat.len());
+         flat_inverse.resize(flat.len(),M31::ZERO);
+@@ -192,8 +199,11 @@ struct BatchedWeights { raw:Vec<[u64;4]>, terms:usize }
+ impl BatchedWeights {
+     fn new(weights:&[K])->Result<Self,Error> {
+         let mut raw=aspis_core::r0::heap::filled(weights.len(),[0u64;4]).map_err(|_|Error::Allocation)?;
+-        for (out,w) in raw.iter_mut().zip(weights) {
+-            *out=[w.c0.a.0 as u64,w.c0.b.0 as u64,w.c1.a.0 as u64,w.c1.b.0 as u64];
++        let mut index=0;
++        while index<weights.len() {
++            let w=weights[index];
++            raw[index]=[w.c0.a.0 as u64,w.c0.b.0 as u64,w.c1.a.0 as u64,w.c1.b.0 as u64];
++            index+=1;
+         }
+         Ok(Self{raw,terms:0})
+     }
+@@ -290,6 +300,32 @@ impl<'a> Reader<'a>{
+     fn e(&mut self)->Result<E,Error>{E::from_le_bytes(&self.raw::<32>()).ok_or(Error::Checkpoint)}
+     fn k(&mut self)->Result<K,Error>{K::from_le_bytes(&self.raw::<16>()).ok_or(Error::Checkpoint)}
+ }
++
++
++#[inline(always)]
++fn validate_checkpoint_queries(queries:&[u32;22])->Result<(),Error> {
++    let mut i=0;
++    while i<queries.len() {
++        let q=queries[i];
++        if q>=1<<18||queries[..i].contains(&q){return Err(Error::Checkpoint);}
++        i+=1;
++    }
++    Ok(())
++}
++
++#[inline(always)]
++fn read_checkpoint_weights(bytes:&[u8],mut at:usize,mut weights:Vec<K>)->Result<(Vec<K>,usize),Error> {
++    let mut index=0;
++    while index<weights.len() {
++        let mut reader=Reader{bytes,at};
++        let value=reader.k()?;
++        at=reader.at;
++        weights[index]=value;
++        index+=1;
++    }
++    Ok((weights,at))
++}
++
+ #[inline(never)]
+ pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)->Result<(Box<Prepared>,Accumulator),Error> {
+     if bytes.len()!=checkpoint_size(v)||&bytes[..8]!=b"R1P2CKP2"||bytes[8]!=v.tag()||bytes[9]>22||bytes[10]!=1||bytes[11..16].iter().any(|&b|b!=0) {return Err(Error::Checkpoint);}
+@@ -297,16 +333,48 @@ pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)
+     if bytes[16..48]!=hash.digest(&[proof])||bytes[48..80]!=hash.digest(&[public])||bytes[end..]!=hash.digest(&[b"UNPROVED:R1:checkpoint",&bytes[..end]]) {return Err(Error::Checkpoint);}
+     let mut r=Reader{bytes,at:80};let state=r.raw();let roots=[r.raw(),r.raw()];
+     let gamma=r.e()?;let kappa=r.e()?;let alpha=[r.e()?,r.e()?];let rho=r.k()?;
+-    let mut queries=[0u32;22];
+-    let mut query_index=0;
+-    while query_index<queries.len() {queries[query_index]=u32::from_le_bytes(r.raw());query_index+=1;}
+-    for (i,q) in queries.iter().enumerate(){if *q>=1<<18||queries[..i].contains(q){return Err(Error::Checkpoint);}}
+-    let mut semantic_alpha=[K::ZERO;10];for x in &mut semantic_alpha {*x=r.k()?;}
++    let queries=[
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++        u32::from_le_bytes(r.raw()),
++    ];
++    validate_checkpoint_queries(&queries)?;
++    let semantic_alpha=[
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++        r.k()?,
++    ];
+     let z=[SecureCirclePoint{x:r.k()?,y:r.k()?},SecureCirclePoint{x:r.k()?,y:r.k()?}];
+     let claim=r.e()?;let rhs=r.e()?;let power=r.k()?;
+-    let mut weights=aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;
+-    for x in &mut weights {*x=r.k()?;}
+-    if r.at!=end {return Err(Error::Checkpoint);}
++    let weights=aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;
++    let (weights,at)=read_checkpoint_weights(bytes,r.at,weights)?;
++    if at!=end {return Err(Error::Checkpoint);}
+     Ok((Box::new(Prepared{variant:v,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state}),Accumulator{weights,rhs,power,next:bytes[9] as usize}))
+ }
+ 

@@ -1,0 +1,2049 @@
+[
+  {
+    "attempt": "parts-01",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "058f8a66e7278a0ae9abccb3bd8ff3e73a9a25b1eba2c8f25136c6ed157612a1",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "cb7a6bf70635d978dc54837c474a80065aa31b565cfd51b3d03f2dacdd0ed8a5"
+    },
+    "change": "Pass completed weights, rhs and next as separate inputs; no reconstructed accumulator borrow.",
+    "patch_sha256": "c219af0991fc16be37712ba98eacd42dc489eba3a598c66fbc878aa2fad7099f",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/parts-01/extract-parts-01-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 97.081,
+        "peak_rss_kib": 549328,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/parts-01/extract-parts-01-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 0.8,
+        "peak_rss_kib": 124608,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"There should be no bottoms in the value\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 236:26-236:28\\\n   \\nCompiler source: interp/InterpExpressions.ml, line 55\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__Errors.cassert_opt_span in file \"Errors.ml\" (inlined), line 152, characters 16-50\nCalled from Aeneas__Errors.cassert in file \"Errors.ml\" (inlined), line 156, characters 2-46\nCalled from Aeneas__InterpExpressions.read_place_check in file \"interp/InterpExpressions.ml\", lines 55-57, characters 2-45\nCalled from Aeneas__InterpExpressions.access_rplace_reorganize_and_read in file \"interp/InterpExpressions.ml\", line 81, characters 19-53\nCalled from Aeneas__InterpExpressions.eval_rvalue_ref in file \"interp/InterpExpressions.ml\", line 1242, characters 8-80\nCalled from Aen",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "view-02",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "9540b35885c6f1aced1e3604f454a16dc408ec7f87dfb379404f219828946c49"
+    },
+    "change": "Read folded root directly from the identical proof slice; avoid moving v.folded_root before borrowing v.",
+    "patch_sha256": "5167d65de6e6329f2d92954669ff701ab1666a6c59408c2d46a3a47f124984f0",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/view-02/extract-view-02-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 87.805,
+        "peak_rss_kib": 549984,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/view-02/extract-view-02-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 0.752,
+        "peak_rss_kib": 124608,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Could not match the contexts\\\n   \\n- source:\\\n   \\n# Ended regions: { 3, 4, 5, 9, 10, 11, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33 }\\\n   \\n# 1 frame(s)\\\n   \\n\\\n   \\n# Frame 0:\\\n   \\n- locals: 127\\\n   \\n- dummy bindings: 8\\\n   \\n- abstractions: 7\\\n   \\n{\\\n   \\n  abs@0{parents={},regions={ 0 },frozen} {\\\n   \\n    SL@0(s@5 : [u8], _)\\\n   \\n  }\\226\\159\\166\\226\\136\\133  :=\\\n   \\n    InputAbs@0[((_ : &'0 [u8]), (_ : &'1 [u8]), (_ : &'2 [u8]), (_ : H), (_ : core::option::Option<fn(aspis_r1_cost_probe::verifier::Phase)>))]\\226\\159\\167\\\n   \\n  abs@1{parents={},regions={ 1 },frozen} {\\\n   \\n    SL@1(s@6 : [u8], _)\\\n   \\n  }\\226\\159\\166\\226\\136\\133  :=\\\n   \\n    InputAbs@1[((_ : &'0 [u8]), (_ : &'1 [u8]), (_ : &'2 [u8]), (_ : H), (_ : core::option::Option<fn(aspis_r1_cost_probe::verifier::Phase)>))]\\226\\159\\167\\\n   \\n  abs",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "view-03",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "90551a2cc0de5d0cc10dbff27c70ffb2f55026d14ad3976b5641777ba3a21fc2"
+    },
+    "change": "Borrow Option using as_ref before unwrap; avoid consuming the View field.",
+    "patch_sha256": "850595b6cff33a0c1569e500de4141d6aab63d7d56db353b2d78ddaebae2c76e",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/view-03/extract-view-03-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 86.563,
+        "peak_rss_kib": 550004,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/view-03/extract-view-03-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 0.718,
+        "peak_rss_kib": 125136,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"end_abs_aux: detected a loop in the chain of ids: abs@56(level:0) -> abs@56(level:1) -> abs@56(level:1)\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 230:4-238:1\\\n   \\nCompiler source: interp/InterpBorrowsCore.ml, line 98\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpBorrows.end_abs_aux.(fun) in file \"interp/InterpBorrows.ml\", lines 1213-1215, characters 4-11\nCalled from Aeneas__Cps.fold_left_apply_continuation.eval_list.(fun) in file \"interp/Cps.ml\", line 57, characters 22-29\nCalled from Aeneas__InterpBorrows.end_proj_loans_symbolic.(fun) in file \"interp/InterpBorrows.ml\", line 1801, characters 8-64\nCalled from Aeneas__InterpBorrows.end_abs_loans.(fun) in file \"interp/InterpBorrows.ml\", lines 1500-1501, characters 8-36\nCalled from Aeneas__InterpBorrows.end_a",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "loop-04",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "e023abf4c734a5fa06e798d89630d985d71ee00a7bed1edc768bf4ad10b4de23"
+    },
+    "change": "Isolate query loop in owned Accumulator helper; leave View outside loop borrow context.",
+    "patch_sha256": "bd1d9c519eb714cfb39272d17e0a10e160e310c44684e719f85094f472ac19b1",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/loop-04/extract-loop-04-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 84.578,
+        "peak_rss_kib": 549552,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/loop-04/extract-loop-04-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 0.606,
+        "peak_rss_kib": 161744,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"There should be no bottoms in the value\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 230:20-230:22\\\n   \\nCompiler source: interp/InterpExpressions.ml, line 55\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__Errors.cassert_opt_span in file \"Errors.ml\" (inlined), line 152, characters 16-50\nCalled from Aeneas__Errors.cassert in file \"Errors.ml\" (inlined), line 156, characters 2-46\nCalled from Aeneas__InterpExpressions.read_place_check in file \"interp/InterpExpressions.ml\", lines 55-57, characters 2-45\nCalled from Aeneas__InterpExpressions.access_rplace_reorganize_and_read in file \"interp/InterpExpressions.ml\", line 81, characters 19-53\nCalled from Aeneas__InterpExpressions.eval_rvalue_ref in file \"interp/InterpExpressions.ml\", line 1242, characters 8-80\nCalled from Aen",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "loop-05",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "4077f545ae7880db4d6d2c3fae78d8c981fb8a0ad0738c05caaf07d5cbc789b9"
+    },
+    "change": "Owned accumulator query-loop helper plus borrowing Option through as_ref.",
+    "patch_sha256": "0b7bd0287457632b5622d5993071fb3182b4f348ed610e869999b21e9aeef606",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/loop-05/extract-loop-05-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 84.439,
+        "peak_rss_kib": 550004,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/loop-05/extract-loop-05-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 0.573,
+        "peak_rss_kib": 161920,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"There should be no bottoms in the value\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 230:20-230:22\\\n   \\nCompiler source: interp/InterpExpressions.ml, line 55\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__Errors.cassert_opt_span in file \"Errors.ml\" (inlined), line 152, characters 16-50\nCalled from Aeneas__Errors.cassert in file \"Errors.ml\" (inlined), line 156, characters 2-46\nCalled from Aeneas__InterpExpressions.read_place_check in file \"interp/InterpExpressions.ml\", lines 55-57, characters 2-45\nCalled from Aeneas__InterpExpressions.access_rplace_reorganize_and_read in file \"interp/InterpExpressions.ml\", line 81, characters 19-53\nCalled from Aeneas__InterpExpressions.eval_rvalue_ref in file \"interp/InterpExpressions.ml\", line 1242, characters 8-80\nCalled from Aen",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "fields-06",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "c6b2d47ab6c7871aff02297189d9057a5469fb222fc94f772c477cf4924db56d",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "24ffd47c509ab47171b1f8e4843929539fdc1dfe340c53e073432afbde49816f"
+    },
+    "change": "Destructure View before consuming folded_root, pass three relation slices separately; revert owned-loop experiment.",
+    "patch_sha256": "5616244a842bcfa307253b665cc862058765fdaf826de9a829951dd918b729a3",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/fields-06/extract-fields-06-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.821,
+        "peak_rss_kib": 549996,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/fields-06/extract-fields-06-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 0.717,
+        "peak_rss_kib": 166144,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Can not apply a projection to the \\226\\138\\165 value\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 237:26-237:32\\\n   \\nCompiler source: interp/InterpPaths.ml, line 231\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpPaths.access_place in file \"interp/InterpPaths.ml\", line 274, characters 16-56\nCalled from Aeneas__InterpPaths.access_update_place in file \"interp/InterpPaths.ml\", line 299, characters 8-41\nCalled from Aeneas__InterpPaths.try_read_place in file \"interp/InterpPaths.ml\", line 344, characters 8-52\nCalled from Aeneas__InterpPaths.update_ctx_along_read_place.(fun) in file \"interp/InterpPaths.ml\", line 476, characters 8-40\nCalled from Aeneas__InterpExpressions.access_rplace_reorganize_and_read in file \"interp/InterpExpressions.ml\", line 70, characters 16-",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "owned-root-07",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "c44ab0d869e886507f649ba774905007bcf5d117bea5f89e47c8e9ddda77456e",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "aa472a593037d7987e174f0e374b791f6440244167ccf5aac6ad0e8e7a85350d"
+    },
+    "change": "Keep View untouched; copy folded root to an owned 32-byte local before batch_merkle.",
+    "patch_sha256": "02e8166886ac2e4856f15aef0902e8efb1c2de086e78be911034e77778b83955",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/owned-root-07/extract-owned-root-07-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.982,
+        "peak_rss_kib": 549744,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/owned-root-07/extract-owned-root-07-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 0.744,
+        "peak_rss_kib": 124608,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"There should be no bottoms in the value\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 238:20-238:22\\\n   \\nCompiler source: interp/InterpExpressions.ml, line 55\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__Errors.cassert_opt_span in file \"Errors.ml\" (inlined), line 152, characters 16-50\nCalled from Aeneas__Errors.cassert in file \"Errors.ml\" (inlined), line 156, characters 2-46\nCalled from Aeneas__InterpExpressions.read_place_check in file \"interp/InterpExpressions.ml\", lines 55-57, characters 2-45\nCalled from Aeneas__InterpExpressions.access_rplace_reorganize_and_read in file \"interp/InterpExpressions.ml\", line 81, characters 19-53\nCalled from Aeneas__InterpExpressions.eval_rvalue_ref in file \"interp/InterpExpressions.ml\", line 1242, characters 8-80\nCalled from Aen",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "fresh-view-08",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "d437251210c8bee017422d79078f625289908a5622e87c0eb60608d5a7e329ac"
+    },
+    "change": "Reconstruct the read-only View immediately at final relation check; retain the original early validation.",
+    "patch_sha256": "84f6d913925272e1b40070493a15be867cfb8a5bff52f5d4fe64452b2ecf4bca",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/fresh-view-08/extract-fresh-view-08-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.868,
+        "peak_rss_kib": 546760,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/fresh-view-08/extract-fresh-view-08-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 1.426,
+        "peak_rss_kib": 193760,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  Not_found\n\nRaised at Stdlib__Map.Make.find in file \"map.ml\", line 141, characters 10-25\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence.(fun) in file \"interp/InterpReduceCollapse.ml\", line 1991, characters 9-40\nCalled from Stdlib__List.map in file \"list.ml\", line 83, characters 15-19\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 1989-1992, characters 4-24\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_no_markers_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 2009-2010, characters 4-43\nCalled from Aeneas__InterpJoin.match_ctx_with_target in file \"interp/InterpJoin.ml\", lines 1809-1810, characters 4-52\nCalled from Aeneas__InterpLoops.eval_loop_symbolic_apply_loop in file \"interp/InterpLoops.ml\", lines 117-118, characters 6-69\nCalled from Ae",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "fresh-loop-09",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "f1426559ca8af09fed9054f876164e6d38e8463d06d7c5bda3ce89908570d953"
+    },
+    "change": "Owned accumulator query helper and late fresh View after original early validation.",
+    "patch_sha256": "c34cbaae98249b0243fd011442c47fc62538fd63f277518731bcc4b9e4d306bf",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/fresh-loop-09/extract-fresh-loop-09-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.713,
+        "peak_rss_kib": 549800,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/fresh-loop-09/extract-fresh-loop-09-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 1.197,
+        "peak_rss_kib": 193852,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  Not_found\n\nRaised at Stdlib__Map.Make.find in file \"map.ml\", line 141, characters 10-25\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence.(fun) in file \"interp/InterpReduceCollapse.ml\", line 1991, characters 9-40\nCalled from Stdlib__List.map in file \"list.ml\", line 83, characters 15-19\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 1989-1992, characters 4-24\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_no_markers_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 2009-2010, characters 4-43\nCalled from Aeneas__InterpJoin.match_ctx_with_target in file \"interp/InterpJoin.ml\", lines 1809-1810, characters 4-52\nCalled from Aeneas__InterpLoops.eval_loop_symbolic_apply_loop in file \"interp/InterpLoops.ml\", lines 117-118, characters 6-69\nCalled from Ae",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "reader-10",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "d437251210c8bee017422d79078f625289908a5622e87c0eb60608d5a7e329ac",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "89e74c57ea33c7ce5378a62242a5af0e6ec2bbe15f00be560357818673cf978e"
+    },
+    "change": "Minimal fresh View at relation; explicit fixed 22 ordered query reads in resume.",
+    "patch_sha256": "3ed2c8808de63393c66b689bc4ab0cf3cf5416798cc59a22ed025daf8675faf1",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/reader-10/extract-reader-10-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.403,
+        "peak_rss_kib": 548064,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/reader-10/extract-reader-10-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 1.891,
+        "peak_rss_kib": 243944,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Invalid_argument\n    \"Can't get the list of fields of this adt:\\\n   \\n{ Generated_Types.def_id = 53;\\\n   \\n  item_meta =\\\n   \\n  { Generated_Types.name =\\\n   \\n    [(Generated_Types.PeIdent (\\\"aspis_core\\\", 0));\\\n   \\n      (Generated_Types.PeIdent (\\\"circle\\\", 0));\\\n   \\n      (Generated_Types.PeIdent (\\\"SecureCirclePoint\\\", 0))];\\\n   \\n    span =\\\n   \\n    { Generated_Meta.data =\\\n   \\n      { Generated_Meta.file =\\\n   \\n        { Generated_Meta.name =\\\n   \\n          (Generated_Meta.Local \\\"crates/aspis-core/src/circle.rs\\\");\\\n   \\n          crate_name = \\\"aspis_core\\\"; contents = None };\\\n   \\n        beg_loc = { Generated_Meta.line = 11; col = 0 };\\\n   \\n        end_loc = { Generated_Meta.line = 11; col = 28 } };\\\n   \\n      generated_from_span = None };\\\n   \\n    source_text = None;\\\n   \\n    attr_info =\\\n   \\n    { Generated_Meta.attributes =\\\n   \\n      ",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "layouts-11",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "d437251210c8bee017422d79078f625289908a5622e87c0eb60608d5a7e329ac",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "41c7873ac322e0a79d39fca0d2546870779c5c2e8b274ff66eaafec0438bd227"
+    },
+    "change": "Explicit ten ordered semantic-alpha reads; retain explicit query reads and fresh View. Charon includes data type layouts only, methods remain backend frontiers.",
+    "patch_sha256": "6c1d2d75225076ea575d7cea0162313b2db527a4361ad2156a0f202d9a70a564",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/layouts-11/extract-layouts-11-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.809,
+        "peak_rss_kib": 549856,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/layouts-11/extract-layouts-11-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 4.687,
+        "peak_rss_kib": 449320,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"A mutable region escaped while ending an abstraction\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 340:4-343:1\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 1392\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__Errors.cassert_opt_span in file \"Errors.ml\" (inlined), line 152, characters 16-50\nCalled from Aeneas__Errors.cassert in file \"Errors.ml\" (inlined), line 156, characters 2-46\nCalled from Aeneas__InterpBorrows.end_abs_aux.(fun).object#visit_symbolic_value in file \"interp/InterpBorrows.ml\", lines 1392-1394, characters 16-72\nCalled from Aeneas__Values.iter_tvalue#visit_VSymbolic in file \"llbc/Values.ml\", lines 76-168, characters 0-6\nCalled from Aeneas__Values.iter_tvalue#visit_tvalue in file \"llbc/Values.ml\", lines 76-168, characters 0-6\nCalled from Aeneas__V",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "weights-12",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "d437251210c8bee017422d79078f625289908a5622e87c0eb60608d5a7e329ac",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "1bcfe29699b423838afe427746ad4a2da91cdf5d354c30cd793191158b7082d7"
+    },
+    "change": "Resume weight reads use index loop, completing r.k before vector element borrow; same read/write order.",
+    "patch_sha256": "ce92e18042fc4c40d7bba8f4bcf7b3b4e2b8f3dc849575f0faea1645d5a0a1a2",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/weights-12/extract-weights-12-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.614,
+        "peak_rss_kib": 549540,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/weights-12/extract-weights-12-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 4.929,
+        "peak_rss_kib": 524476,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  Not_found\n\nRaised at Stdlib__Map.Make.find in file \"map.ml\", line 141, characters 10-25\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence.(fun) in file \"interp/InterpReduceCollapse.ml\", line 1991, characters 9-40\nCalled from Stdlib__List.map in file \"list.ml\", line 83, characters 15-19\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 1989-1992, characters 4-24\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_no_markers_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 2009-2010, characters 4-43\nCalled from Aeneas__InterpJoin.match_ctx_with_target in file \"interp/InterpJoin.ml\", lines 1809-1810, characters 4-52\nCalled from Aeneas__InterpLoops.eval_loop_symbolic_apply_loop in file \"interp/InterpLoops.ml\", lines 117-118, characters 6-69\nCalled from Ae",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "cursor-13",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "d437251210c8bee017422d79078f625289908a5622e87c0eb60608d5a7e329ac",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "d1895c125699ce80b07d09f4bb1cbaa9edb9875d21ad5bf1a732d73d66333859"
+    },
+    "change": "Weight reader helper carries numeric cursor and owned vector across iterations; temporary Reader per value.",
+    "patch_sha256": "6c477a3b1a1e41c36273ac92138c31ae6051cf7c895e52e1f3288234edaba275",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/cursor-13/extract-cursor-13-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.655,
+        "peak_rss_kib": 549604,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/cursor-13/extract-cursor-13-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 13.614,
+        "peak_rss_kib": 706464,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Internal error, please file an issue\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 338:4-357:1\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 2731\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpBorrows.simplify_dummy_values_useless_abs_aux.(fun).explore_env.object#visit_ASharedLoan in file \"interp/InterpBorrows.ml\", line 2731, characters 14-47\nCalled from Aeneas__Values.map_env#visit_ALoan in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from Aeneas__Values.map_env#visit_tavalue in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 264, characters 18-25\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 265, characters",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "validate-14",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "d437251210c8bee017422d79078f625289908a5622e87c0eb60608d5a7e329ac",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "826373421b6254a95dad55c044a2ab955f7a1202106e9858025c9e081f83a76c"
+    },
+    "change": "Extract unchanged query validation loop into concrete helper, removing remaining outer resume loop.",
+    "patch_sha256": "736bd1b3a542a901bd2ae2370ee4a85b46cc1b9ad462f3ea0570bb3c44cead89",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/validate-14/extract-validate-14-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.788,
+        "peak_rss_kib": 549752,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/validate-14/extract-validate-14-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 9.766,
+        "peak_rss_kib": 1434024,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"There should be no bottoms in the value\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 76:0-88:1\\\n   \\nCompiler source: interp/InterpExpressions.ml, line 55\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__Errors.cassert_opt_span in file \"Errors.ml\" (inlined), line 152, characters 16-50\nCalled from Aeneas__Errors.cassert in file \"Errors.ml\" (inlined), line 156, characters 2-46\nCalled from Aeneas__InterpExpressions.read_place_check in file \"interp/InterpExpressions.ml\", lines 55-57, characters 2-45\nCalled from Aeneas__InterpExpressions.access_rplace_reorganize_and_read in file \"interp/InterpExpressions.ml\", line 81, characters 19-53\nCalled from Aeneas__InterpExpressions.access_rplace_reorganize.(fun) in file \"interp/InterpExpressions.ml\", line 121, characters 6-78\nCalle",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "owned-view-root-15",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "a29665dfc1e02223a52c9a4e72ef5463e6352e8796948e5d7af7e4c865b5476d",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "13813dd54d0f94837079c82db6a8c92f2919dd84631bcf62e20c98812bb68f22",
+      "crates/aspis-r1-cost-probe/src/eight_way.rs": "339e541227165f1fc57bb7a59135d60f6c2dd6c0d6e09e214a07de6e69979550"
+    },
+    "change": "View owns the 32-byte root; consumers borrow that copy. Remove duplicate final View decoding. Resume changes retained.",
+    "patch_sha256": "59990d99e1e6df55fdffdeaccb26c4e474a1f10269b6920f175912e818d0a966",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/owned-view-root-15/extract-owned-view-root-15-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.723,
+        "peak_rss_kib": 550012,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/owned-view-root-15/extract-owned-view-root-15-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 0.743,
+        "peak_rss_kib": 173712,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"There should be no bottoms in the value\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 237:20-237:22\\\n   \\nCompiler source: interp/InterpExpressions.ml, line 55\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__Errors.cassert_opt_span in file \"Errors.ml\" (inlined), line 152, characters 16-50\nCalled from Aeneas__Errors.cassert in file \"Errors.ml\" (inlined), line 156, characters 2-46\nCalled from Aeneas__InterpExpressions.read_place_check in file \"interp/InterpExpressions.ml\", lines 55-57, characters 2-45\nCalled from Aeneas__InterpExpressions.access_rplace_reorganize_and_read in file \"interp/InterpExpressions.ml\", line 81, characters 19-53\nCalled from Aeneas__InterpExpressions.eval_rvalue_ref in file \"interp/InterpExpressions.ml\", line 1242, characters 8-80\nCalled from Aen",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "owned-fresh-16",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "a945bd558aea444b347eb543a34190a45ea7d952167c26919f5625b7058399dd",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "a7a397f8d1306f0e483173bb587bc8f97421f864f1f73bf71e4328768d53e5ea",
+      "crates/aspis-r1-cost-probe/src/eight_way.rs": "339e541227165f1fc57bb7a59135d60f6c2dd6c0d6e09e214a07de6e69979550"
+    },
+    "change": "Owned View root plus fresh final View; inline reader helpers for runtime without built-MIR opacity.",
+    "patch_sha256": "18e506d578ed722805d86ba104273783fe6f89d1c306e5a0d84b73c416861a99",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/owned-fresh-16/extract-owned-fresh-16-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.816,
+        "peak_rss_kib": 547776,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/owned-fresh-16/extract-owned-fresh-16-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 9.921,
+        "peak_rss_kib": 1434424,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"There should be no bottoms in the value\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 76:0-88:1\\\n   \\nCompiler source: interp/InterpExpressions.ml, line 55\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__Errors.cassert_opt_span in file \"Errors.ml\" (inlined), line 152, characters 16-50\nCalled from Aeneas__Errors.cassert in file \"Errors.ml\" (inlined), line 156, characters 2-46\nCalled from Aeneas__InterpExpressions.read_place_check in file \"interp/InterpExpressions.ml\", lines 55-57, characters 2-45\nCalled from Aeneas__InterpExpressions.access_rplace_reorganize_and_read in file \"interp/InterpExpressions.ml\", line 81, characters 19-53\nCalled from Aeneas__InterpExpressions.access_rplace_reorganize.(fun) in file \"interp/InterpExpressions.ml\", line 121, characters 6-78\nCalle",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "late-view-17",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "126c5adddb5b610cba7268a63be3cb22b0e1153bfb155f862663b91622e3e206",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "0151b9ac1400b0fc8ceb7f8c1805c4b1e27cf5197854f54fd253b5d34d72792d"
+    },
+    "change": "Retain inactive guard, authenticate owned root, construct relation-only View inline after loop. Original View type and audit source restored.",
+    "patch_sha256": "7ccd1883c1f439d3d8c3cc64c33d967ea91474f83d9f2581d4e09757c733fd5d",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/late-view-17/extract-late-view-17-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 84.177,
+        "peak_rss_kib": 550556,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/late-view-17/extract-late-view-17-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 10.121,
+        "peak_rss_kib": 1439320,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Could not match the contexts\\\n   \\n- source:\\\n   \\n# Ended regions: { 6, 7, 16, 17 }\\\n   \\n# 1 frame(s)\\\n   \\n\\\n   \\n# Frame 0:\\\n   \\n- locals: 252\\\n   \\n- dummy bindings: 0\\\n   \\n- abstractions: 8\\\n   \\n{\\\n   \\n  abs@0{parents={},regions={ 0 },frozen} {\\\n   \\n    SL@0(s@5 : [u8], _)\\\n   \\n  }\\226\\159\\166\\226\\136\\133  :=\\\n   \\n    InputAbs@0[((_ : &'0 [u8]), (_ : &'1 aspis_r1_cost_probe::verifier::Prepared), (_ : &'2 [u8; 32usize]), (_ : usize), (_ : H))]\\226\\159\\167\\\n   \\n  abs@1{parents={},regions={ 1 },frozen} {\\\n   \\n    SL@1(s@6 : aspis_r1_cost_probe::verifier::Prepared, _)\\\n   \\n  }\\226\\159\\166\\226\\136\\133  :=\\\n   \\n    InputAbs@1[((_ : &'0 [u8]), (_ : &'1 aspis_r1_cost_probe::verifier::Prepared), (_ : &'2 [u8; 32usize]), (_ : usize), (_ : H))]\\226\\159\\167\\\n   \\n  abs@2{parents={},regions={ 2 },frozen} {\\\n   \\n    SL@2(s@7 : [u8; 32usize], _)\\",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "batch-queries-18",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "aa7b796dac01901903e07fe337d28602ada86ebc8f2394bfa7ff305a57a1014e",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "0151b9ac1400b0fc8ceb7f8c1805c4b1e27cf5197854f54fd253b5d34d72792d"
+    },
+    "change": "Copy query indices before borrowing Prepared roots for batch loops.",
+    "patch_sha256": "9d0bef51e9266c6e60abfdea8e6f4a6a2d81e4427bad6f43d6f51272719f6b9d",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/batch-queries-18/extract-batch-queries-18-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 84.468,
+        "peak_rss_kib": 547964,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/batch-queries-18/extract-batch-queries-18-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 9.918,
+        "peak_rss_kib": 1439352,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Could not match the contexts\\\n   \\n- source:\\\n   \\n# Ended regions: { 6, 7, 16, 17 }\\\n   \\n# 1 frame(s)\\\n   \\n\\\n   \\n# Frame 0:\\\n   \\n- locals: 253\\\n   \\n- dummy bindings: 0\\\n   \\n- abstractions: 8\\\n   \\n{\\\n   \\n  abs@0{parents={},regions={ 0 },frozen} {\\\n   \\n    SL@0(s@5 : [u8], _)\\\n   \\n  }\\226\\159\\166\\226\\136\\133  :=\\\n   \\n    InputAbs@0[((_ : &'0 [u8]), (_ : &'1 aspis_r1_cost_probe::verifier::Prepared), (_ : &'2 [u8; 32usize]), (_ : usize), (_ : H))]\\226\\159\\167\\\n   \\n  abs@1{parents={},regions={ 1 },frozen} {\\\n   \\n    SL@1(s@6 : aspis_r1_cost_probe::verifier::Prepared, _)\\\n   \\n  }\\226\\159\\166\\226\\136\\133  :=\\\n   \\n    InputAbs@1[((_ : &'0 [u8]), (_ : &'1 aspis_r1_cost_probe::verifier::Prepared), (_ : &'2 [u8; 32usize]), (_ : usize), (_ : H))]\\226\\159\\167\\\n   \\n  abs@2{parents={},regions={ 2 },frozen} {\\\n   \\n    SL@2(s@7 : [u8; 32usize], _)\\",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "batch-roots-19",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "129197372b11fbb4b474ae147cef1cc5d5ef51271d515293b17cdd97e8dd94f6",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "0151b9ac1400b0fc8ceb7f8c1805c4b1e27cf5197854f54fd253b5d34d72792d"
+    },
+    "change": "Batch roots array owns three digest copies; borrow a selected root only at verify_in_place.",
+    "patch_sha256": "2032b3c3bc0acc4685e8c5cf2e334c50ff52819edaf6081ce553e2e337a63481",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/batch-roots-19/extract-batch-roots-19-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.56,
+        "peak_rss_kib": 550116,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/batch-roots-19/extract-batch-roots-19-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 9.912,
+        "peak_rss_kib": 1439740,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Could not match the contexts\\\n   \\n- source:\\\n   \\n# Ended regions: { 6, 7, 16, 17 }\\\n   \\n# 1 frame(s)\\\n   \\n\\\n   \\n# Frame 0:\\\n   \\n- locals: 253\\\n   \\n- dummy bindings: 0\\\n   \\n- abstractions: 8\\\n   \\n{\\\n   \\n  abs@0{parents={},regions={ 0 },frozen} {\\\n   \\n    SL@0(s@5 : [u8], _)\\\n   \\n  }\\226\\159\\166\\226\\136\\133  :=\\\n   \\n    InputAbs@0[((_ : &'0 [u8]), (_ : &'1 aspis_r1_cost_probe::verifier::Prepared), (_ : &'2 [u8; 32usize]), (_ : usize), (_ : H))]\\226\\159\\167\\\n   \\n  abs@1{parents={},regions={ 1 },frozen} {\\\n   \\n    SL@1(s@6 : aspis_r1_cost_probe::verifier::Prepared, _)\\\n   \\n  }\\226\\159\\166\\226\\136\\133  :=\\\n   \\n    InputAbs@1[((_ : &'0 [u8]), (_ : &'1 aspis_r1_cost_probe::verifier::Prepared), (_ : &'2 [u8; 32usize]), (_ : usize), (_ : H))]\\226\\159\\167\\\n   \\n  abs@2{parents={},regions={ 2 },frozen} {\\\n   \\n    SL@2(s@7 : [u8; 32usize], _)\\",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "batch-keys-20",
+    "base_revision": "879d8bc09ab67bb5e9bdd423cff2052099c87ba9",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "367190efe3ce0c0907d9026ef7e0aada4a09c10011de4f04eac78cfaab16d3b7",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "0151b9ac1400b0fc8ceb7f8c1805c4b1e27cf5197854f54fd253b5d34d72792d"
+    },
+    "change": "Destructure root values without indexing loans; inline concrete key-generation helper with unchanged loop.",
+    "patch_sha256": "81e06dfdc5ec2aee19e7aea078e2aa11f9e49277b48113db923e312048182ba2",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/batch-keys-20/extract-batch-keys-20-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.728,
+        "peak_rss_kib": 547796,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/batch-keys-20/extract-batch-keys-20-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 10.062,
+        "peak_rss_kib": 1444524,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Could not match the contexts\\\n   \\n- source:\\\n   \\n# Ended regions: { 6, 7, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26 }\\\n   \\n# 1 frame(s)\\\n   \\n\\\n   \\n# Frame 0:\\\n   \\n- locals: 231\\\n   \\n- dummy bindings: 0\\\n   \\n- abstractions: 7\\\n   \\n{\\\n   \\n  abs@0{parents={},regions={ 0 },frozen} {\\\n   \\n    SL@0(s@5 : [u8], _)\\\n   \\n  }\\226\\159\\166\\226\\136\\133  :=\\\n   \\n    InputAbs@0[((_ : &'0 [u8]), (_ : &'1 aspis_r1_cost_probe::verifier::Prepared), (_ : &'2 [u8; 32usize]), (_ : usize), (_ : H))]\\226\\159\\167\\\n   \\n  abs@1{parents={},regions={ 1 },frozen} {\\\n   \\n    SL@1(s@6 : aspis_r1_cost_probe::verifier::Prepared, _)\\\n   \\n  }\\226\\159\\166\\226\\136\\133  :=\\\n   \\n    InputAbs@1[((_ : &'0 [u8]), (_ : &'1 aspis_r1_cost_probe::verifier::Prepared), (_ : &'2 [u8; 32usize]), (_ : usize), (_ : H))]\\226\\159\\167\\\n   \\n  abs@2{parents={},regions={ 2 },frozen} {\\\n  ",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "batch-sort-21",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "3127889429e2f3dc74fec978f5e4f02c1c919e0507b33c1801a5631e277135fa",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "0151b9ac1400b0fc8ceb7f8c1805c4b1e27cf5197854f54fd253b5d34d72792d"
+    },
+    "change": "Concrete inline sorting helper takes and returns owned key array; identical insertion-sort statements.",
+    "patch_sha256": "5b52380f6a350fbad8178c572eaf9fb284fb7e1e4c2b3d1c60fc48750b99529e",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/batch-sort-21/extract-batch-sort-21-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.601,
+        "peak_rss_kib": 549588,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/batch-sort-21/extract-batch-sort-21-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 10.237,
+        "peak_rss_kib": 1475792,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  Not_found\n\nRaised at Stdlib__Map.Make.find in file \"map.ml\", line 141, characters 10-25\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence.(fun) in file \"interp/InterpReduceCollapse.ml\", line 1991, characters 9-40\nCalled from Stdlib__List.map in file \"list.ml\", line 83, characters 15-19\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 1989-1992, characters 4-24\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_no_markers_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 2009-2010, characters 4-43\nCalled from Aeneas__InterpJoin.match_ctx_with_target in file \"interp/InterpJoin.ml\", lines 1809-1810, characters 4-52\nCalled from Aeneas__InterpStatements.eval_switch_with_join.match_ctx in file \"interp/InterpStatements.ml\", lines 1407-1409, characters 8-59\n",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "batch-owned-22",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "0a6ec2680da729026b224e48d2a3cefc27827263ba313157f1b03cd12be5f7e7",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "0151b9ac1400b0fc8ceb7f8c1805c4b1e27cf5197854f54fd253b5d34d72792d"
+    },
+    "change": "Batch wrapper passes owned query/root arrays to concrete inline processing helper; removes Prepared from processing-loop borrow context.",
+    "patch_sha256": "39a7321993f5caa23f467a39585dfe7a87ffe46b2eb40c82c9532da86b7c4ddd",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/batch-owned-22/extract-batch-owned-22-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.423,
+        "peak_rss_kib": 547172,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/batch-owned-22/extract-batch-owned-22-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 9.934,
+        "peak_rss_kib": 1433168,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Internal error, please file an issue\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 154:8-154:80\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 2731\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpBorrows.simplify_dummy_values_useless_abs_aux.(fun).explore_env.object#visit_ASharedLoan in file \"interp/InterpBorrows.ml\", line 2731, characters 14-47\nCalled from Aeneas__Values.map_env#visit_ALoan in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from Aeneas__Values.map_env#visit_tavalue in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 264, characters 18-25\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 265, character",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "geometry-prefix-23",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "0a6ec2680da729026b224e48d2a3cefc27827263ba313157f1b03cd12be5f7e7",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "c4ef9238b319b0bf82c4108dbb8530465c550aef86659805982f15a4d90e64f3"
+    },
+    "change": "Concrete inline prefix-product helper returns owned prefix vector and product, preserving multiplication order.",
+    "patch_sha256": "223866251430593d7a1fc215c07e74116615241b14db5b7e37699a154e9c9ab6",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/geometry-prefix-23/extract-geometry-prefix-23-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.423,
+        "peak_rss_kib": 549692,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/geometry-prefix-23/extract-geometry-prefix-23-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 9.827,
+        "peak_rss_kib": 1433156,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Can't retrieve the variants of non-adt type: [(Generated_Types.PeIdent (\\\"aspis_core\\\", 0));\\\n   \\n  (Generated_Types.PeIdent (\\\"r0\\\", 0));\\\n   \\n  (Generated_Types.PeIdent (\\\"domain\\\", 0));\\\n   \\n  (Generated_Types.PeIdent (\\\"Point\\\", 0))]\")\n\nRaised at Charon__Substitute.type_decl_get_instantiated_variants_fields_types in file \"charon-ml/src/Substitute.ml\", lines 377-380, characters 8-45\nCalled from Aeneas__InterpExpansion.compute_expanded_symbolic_non_builtin_adt_value in file \"interp/InterpExpansion.ml\", lines 285-286, characters 4-14\nCalled from Aeneas__InterpExpansion.expand_symbolic_value_no_branching.(fun) in file \"interp/InterpExpansion.ml\", lines 562-563, characters 10-24\nCalled from Aeneas__InterpPaths.update_ctx_along_read_place.(fun) in file \"interp/InterpPaths.ml\", lines 486-488, characters 12-17\nCalled from Aeneas__InterpExpressions.ac",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "point-layout-24",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "0a6ec2680da729026b224e48d2a3cefc27827263ba313157f1b03cd12be5f7e7",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "e97e5978d7d439aec49b9aa7a8d92ab79f3cc0a5c1d2c53e3b5796f7069f778a"
+    },
+    "change": "Expose Point data layout, retain domain function opacity; destructure owned circle coordinates before denominator construction.",
+    "patch_sha256": "9df3e51f4e8002b900b10b49703dfa54f1f4b961d9137cbb5bf802ca001b5095",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/point-layout-24/extract-point-layout-24-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.536,
+        "peak_rss_kib": 550028,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/point-layout-24/extract-point-layout-24-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 10.382,
+        "peak_rss_kib": 1597212,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Markers remain after collapsing a context:\\\n   \\n# Ended regions: { 1, 7 }\\\n   \\n# 1 frame(s)\\\n   \\n\\\n   \\n# Frame 0:\\\n   \\n- locals: 36\\\n   \\n- dummy bindings: 0\\\n   \\n- abstractions: 8\\\n   \\n{\\\n   \\n  abs@0{parents={},regions={ 0 },frozen} {\\\n   \\n    SL@0(s@1 : [aspis_core::field::QM31], _)\\\n   \\n  }\\226\\159\\166\\226\\136\\133  :=\\\n   \\n    InputAbs@0[((_ : &'0 [aspis_core::field::QM31]))]\\226\\159\\167\\\n   \\n  ...\\\n   \\n  weights^1 : &'_ [aspis_core::field::QM31] -> SB@1(^8) ;\\\n   \\n  raw^2 : alloc::vec::Vec<[u64; 4usize]> -> ML@2 ;\\\n   \\n  ...\\\n   \\n  _17 : &'_ mut [[u64; 4usize]] -> MB@3 (ML@4) ;\\\n   \\n  ...\\\n   \\n  iter^20 : core::iter::adapters::zip::Zip<core::slice::iter::IterMut<'_, [u64; 4usize]>, core::slice::iter::Iter<'_, aspis_core::field::QM31>> -> s@37 : core::iter::adapters::zip::Zip<core::slice::iter::IterMut<'8, [u64; 4usize]>, core::",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "weights-new-25",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "0a6ec2680da729026b224e48d2a3cefc27827263ba313157f1b03cd12be5f7e7",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "b4a2d8d3066cab1c21e43c309590312a5c06046fcbaf1fd718e72408be91b397"
+    },
+    "change": "Replace BatchedWeights::new mutable/read zip with ordered indexed writes using owned weight local.",
+    "patch_sha256": "d21aa439f6629a467777174577b030b5d7037929ad9e7fe4c41277749dfeb017",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/weights-new-25/extract-weights-new-25-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.433,
+        "peak_rss_kib": 549936,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/weights-new-25/extract-weights-new-25-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 10.456,
+        "peak_rss_kib": 1605352,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  Not_found\n\nRaised at Stdlib__Map.Make.find in file \"map.ml\", line 141, characters 10-25\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence.(fun) in file \"interp/InterpReduceCollapse.ml\", line 1991, characters 9-40\nCalled from Stdlib__List.map in file \"list.ml\", line 83, characters 15-19\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 1989-1992, characters 4-24\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_no_markers_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 2009-2010, characters 4-43\nCalled from Aeneas__InterpJoin.match_ctx_with_target in file \"interp/InterpJoin.ml\", lines 1809-1810, characters 4-52\nCalled from Aeneas__InterpLoops.eval_loop_symbolic_apply_loop in file \"interp/InterpLoops.ml\", lines 117-118, characters 6-69\nCalled from Ae",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "query-trace-26",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "1fed5085f5904c5c446edb311ebb5814f214aa7838033badc4868036b5a628ff",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "b4a2d8d3066cab1c21e43c309590312a5c06046fcbaf1fd718e72408be91b397"
+    },
+    "change": "Spell out four ordered dot trace calls; copy five geometry inverses before folding calls, avoiding borrowed inverse value across calls.",
+    "patch_sha256": "6b98f8f14d4b5b5d35c4816c250674fab5972bcbc079a840b76707f97b8c2218",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/query-trace-26/extract-query-trace-26-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.77,
+        "peak_rss_kib": 547620,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/query-trace-26/extract-query-trace-26-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 10.571,
+        "peak_rss_kib": 1619144,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"A mutable region escaped while ending an abstraction\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 170:0-193:1\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 1392\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__Errors.cassert_opt_span in file \"Errors.ml\" (inlined), line 152, characters 16-50\nCalled from Aeneas__Errors.cassert in file \"Errors.ml\" (inlined), line 156, characters 2-46\nCalled from Aeneas__InterpBorrows.end_abs_aux.(fun).object#visit_symbolic_value in file \"interp/InterpBorrows.ml\", lines 1392-1394, characters 16-72\nCalled from Aeneas__Values.iter_tvalue#visit_VSymbolic in file \"llbc/Values.ml\", lines 76-168, characters 0-6\nCalled from Aeneas__Values.iter_tvalue#visit_tvalue in file \"llbc/Values.ml\", lines 76-168, characters 0-6\nCalled from Aeneas__",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "query-pending-27",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "2401dd6a5606f61a0bb38c6c0e43dfc7f012733dbb93a1f3dfa4e10c463c2148",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "b4a2d8d3066cab1c21e43c309590312a5c06046fcbaf1fd718e72408be91b397"
+    },
+    "change": "Private compact query argument is direct mutable batch reference; both actual callers were always Some. Preserve Some at shared accumulation call.",
+    "patch_sha256": "5a5aaebcbc5f5c0608ba19c097bcf9f85e0ed682517fd6f5877554b0005fcca9",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/query-pending-27/extract-query-pending-27-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.667,
+        "peak_rss_kib": 549868,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/query-pending-27/extract-query-pending-27-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 10.999,
+        "peak_rss_kib": 1713536,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  Not_found\n\nRaised at Stdlib__Map.Make.find in file \"map.ml\", line 141, characters 10-25\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence.(fun) in file \"interp/InterpReduceCollapse.ml\", line 1991, characters 9-40\nCalled from Stdlib__List.map in file \"list.ml\", line 83, characters 15-19\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 1989-1992, characters 4-24\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_no_markers_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 2009-2010, characters 4-43\nCalled from Aeneas__InterpJoin.match_ctx_with_target in file \"interp/InterpJoin.ml\", lines 1809-1810, characters 4-52\nCalled from Aeneas__InterpLoops.eval_loop_symbolic_apply_loop in file \"interp/InterpLoops.ml\", lines 117-118, characters 6-69\nCalled from Ae",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "validate-index-28",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "2401dd6a5606f61a0bb38c6c0e43dfc7f012733dbb93a1f3dfa4e10c463c2148",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "0a949e4cab0f3703c8351e01c61eaa04f77502008e5fca5921e3c4f4dc4e5181"
+    },
+    "change": "Checkpoint query validator uses indexed owned query values with same bounds/prefix-contains checks.",
+    "patch_sha256": "453fe67dd87fdca81c60a184904f76404db694f69e6fd110fc314cde865acbb9",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/validate-index-28/extract-validate-index-28-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.857,
+        "peak_rss_kib": 550428,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/validate-index-28/extract-validate-index-28-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 11.198,
+        "peak_rss_kib": 1695132,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  Not_found\n\nRaised at Stdlib__Map.Make.find in file \"map.ml\", line 141, characters 10-25\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence.(fun) in file \"interp/InterpReduceCollapse.ml\", line 1991, characters 9-40\nCalled from Stdlib__List.map in file \"list.ml\", line 83, characters 15-19\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 1989-1992, characters 4-24\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_no_markers_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 2009-2010, characters 4-43\nCalled from Aeneas__InterpJoin.match_ctx_with_target in file \"interp/InterpJoin.ml\", lines 1809-1810, characters 4-52\nCalled from Aeneas__InterpStatements.eval_switch_with_join.match_ctx in file \"interp/InterpStatements.ml\", lines 1407-1409, characters 8-59\n",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "batch-leaf-29",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "539a745b61c5a1ba36df44e3cb1ce8080448c269f66069c113a68ea0ca6d324e",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "0a949e4cab0f3703c8351e01c61eaa04f77502008e5fca5921e3c4f4dc4e5181"
+    },
+    "change": "Indexed sorted-key processing and owned-salt leaf helper; same hash inputs and order.",
+    "patch_sha256": "ea8600136b5ffacca9dc7b955d326e9f5be4eeda945196167b8384040e7cf2a1",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/batch-leaf-29/extract-batch-leaf-29-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.596,
+        "peak_rss_kib": 550356,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/batch-leaf-29/extract-batch-leaf-29-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 11.384,
+        "peak_rss_kib": 1696032,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Internal error, please file an issue\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 149:4-179:5\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 2731\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpBorrows.simplify_dummy_values_useless_abs_aux.(fun).explore_env.object#visit_ASharedLoan in file \"interp/InterpBorrows.ml\", line 2731, characters 14-47\nCalled from Aeneas__Values.map_env#visit_ALoan in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from Aeneas__Values.map_env#visit_tavalue in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 264, characters 18-25\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 265, character",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "batch-tree-30",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "7b6ac66eb9dafc19d3413fd5f4d6ed576bc0fbe83e41b4ee39498d50c47db6cf",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "0a949e4cab0f3703c8351e01c61eaa04f77502008e5fca5921e3c4f4dc4e5181"
+    },
+    "change": "Per-tree helper carries owned scratch arrays across tree calls.",
+    "patch_sha256": "238e396617c4b9383fa528b63d0717dbd0ddaec0e8853997998dcc6d620bbd40",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/batch-tree-30/extract-batch-tree-30-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.614,
+        "peak_rss_kib": 547828,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/batch-tree-30/extract-batch-tree-30-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 10.856,
+        "peak_rss_kib": 1685756,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Internal error, please file an issue\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 147:4-153:1\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 2731\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpBorrows.simplify_dummy_values_useless_abs_aux.(fun).explore_env.object#visit_ASharedLoan in file \"interp/InterpBorrows.ml\", line 2731, characters 14-47\nCalled from Aeneas__Values.map_env#visit_ALoan in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from Aeneas__Values.map_env#visit_tavalue in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 264, characters 18-25\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 265, character",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "batch-three-31",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "942d39488a203367b8356ceb8d33c382e0b41d61537d823a5f873a44e77a0529",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "0a949e4cab0f3703c8351e01c61eaa04f77502008e5fca5921e3c4f4dc4e5181"
+    },
+    "change": "Spell out the three ordered tree calls, preserving updated scratch state between calls.",
+    "patch_sha256": "28419043537c4bc505d27dca798400a276c9574cfe1c9f68fbb039f02590c054",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/batch-three-31/extract-batch-three-31-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.594,
+        "peak_rss_kib": 547676,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/batch-three-31/extract-batch-three-31-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 10.898,
+        "peak_rss_kib": 1688208,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  Not_found\n\nRaised at Stdlib__Map.Make.find in file \"map.ml\", line 141, characters 10-25\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence.(fun) in file \"interp/InterpReduceCollapse.ml\", line 1991, characters 9-40\nCalled from Stdlib__List.map in file \"list.ml\", line 83, characters 15-19\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 1989-1992, characters 4-24\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_no_markers_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 2009-2010, characters 4-43\nCalled from Aeneas__InterpJoin.match_ctx_with_target in file \"interp/InterpJoin.ml\", lines 1809-1810, characters 4-52\nCalled from Aeneas__InterpLoops.eval_loop_symbolic_apply_loop in file \"interp/InterpLoops.ml\", lines 117-118, characters 6-69\nCalled from Ae",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "prefix-index-32",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "942d39488a203367b8356ceb8d33c382e0b41d61537d823a5f873a44e77a0529",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "00ab64b44e1433ceb85fabc1bfd702be04e83015bc4bccd93dc009bcf2e9d90e"
+    },
+    "change": "Prefix-product helper uses indexed owned values instead of borrowing iterator.",
+    "patch_sha256": "57e3090e1f28f2d62fcaa403e88438e2e8edf82d28dd5187acb5be13d442914a",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/prefix-index-32/extract-prefix-index-32-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.684,
+        "peak_rss_kib": 549864,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/prefix-index-32/extract-prefix-index-32-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 11.519,
+        "peak_rss_kib": 1770976,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Internal error, please file an issue\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 241:4-248:5\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 2731\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpBorrows.simplify_dummy_values_useless_abs_aux.(fun).explore_env.object#visit_ASharedLoan in file \"interp/InterpBorrows.ml\", line 2731, characters 14-47\nCalled from Aeneas__Values.map_env#visit_ALoan in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from Aeneas__Values.map_env#visit_tavalue in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 264, characters 18-25\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 265, characters",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "accumulate-batched-33",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "24c45345a256b62ffd7e8ab14047de15de68dfff62d810dd75d8145b90beea0f",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "088cc50a7f6d9f0ebb446549f56e1f37b095292492c5b9d9eb62769a8bdbed8d"
+    },
+    "change": "Concrete always-batched accumulation helper is the exact old Some specialization; legacy optional body retained.",
+    "patch_sha256": "3696013321300e38cc7d0096913f86c14fda5cf36e3469febea642a567658926",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/accumulate-batched-33/extract-accumulate-batched-33-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.814,
+        "peak_rss_kib": 550044,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/accumulate-batched-33/extract-accumulate-batched-33-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 11.224,
+        "peak_rss_kib": 1751664,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Internal error, please file an issue\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 258:4-263:5\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 2731\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpBorrows.simplify_dummy_values_useless_abs_aux.(fun).explore_env.object#visit_ASharedLoan in file \"interp/InterpBorrows.ml\", line 2731, characters 14-47\nCalled from Aeneas__Values.map_env#visit_ALoan in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from Aeneas__Values.map_env#visit_tavalue in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 264, characters 18-25\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 265, characters",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "owned-query-34",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "38d133a34919c388dc05b40dcb69f3e20460211ae3e59ad85e34a02fdac8d5fd",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "c4a4473f8e91dbe1cda3bb5709eb04021097fe693b39a9b6d3afc399322879c4"
+    },
+    "change": "Private compact query and batched accumulation take and return owned accumulator/batch values; same Some-case operations.",
+    "patch_sha256": "966dbf0defa36354e1328e8afc05772d69aa8ea202b3d7a535990b035e228ac4",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/owned-query-34/extract-owned-query-34-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.687,
+        "peak_rss_kib": 550212,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/owned-query-34/extract-owned-query-34-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 0.811,
+        "peak_rss_kib": 174976,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Found bottom while reading a place\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 282:22-282:33\\\n   \\nCompiler source: interp/InterpPaths.ml, line 491\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__Errors.craise in file \"Errors.ml\" (inlined), line 126, characters 2-43\nCalled from Aeneas__InterpPaths.update_ctx_along_read_place.(fun) in file \"interp/InterpPaths.ml\", line 491, characters 12-63\nCalled from Aeneas__InterpExpressions.access_rplace_reorganize_and_read in file \"interp/InterpExpressions.ml\", line 70, characters 16-68\nCalled from Aeneas__InterpExpressions.access_rplace_reorganize.(fun) in file \"interp/InterpExpressions.ml\", line 121, characters 6-78\nCalled from Aeneas__InterpExpressions.eval_operand in file \"interp/InterpExpressions.ml\", line 612, characters ",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "query-state-35",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "c90a245fc17c980e6e00d5f47499e71fc5971ba09a95b4bfa98cd47f3de60f4f",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "c4a4473f8e91dbe1cda3bb5709eb04021097fe693b39a9b6d3afc399322879c4"
+    },
+    "change": "Concrete query helper carries Result of owned state, returning directly on error or completion without reading moved loop state.",
+    "patch_sha256": "8ab9bff95423b5e69276ef114412171a8305b588900b150f44b0912d77aadf71",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/query-state-35/extract-query-state-35-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.599,
+        "peak_rss_kib": 549876,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/query-state-35/extract-query-state-35-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 11.136,
+        "peak_rss_kib": 1612860,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Internal error, please file an issue\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 162:4-188:1\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 2731\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpBorrows.simplify_dummy_values_useless_abs_aux.(fun).explore_env.object#visit_ASharedLoan in file \"interp/InterpBorrows.ml\", line 2731, characters 14-47\nCalled from Aeneas__Values.map_env#visit_ALoan in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from Aeneas__Values.map_env#visit_tavalue in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 264, characters 18-25\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 265, character",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "leaf-compare-36",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "a09cfac92377bfde24e400cd881ca4e599d8b8edf0a67ba750c15246945d66da",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "c4a4473f8e91dbe1cda3bb5709eb04021097fe693b39a9b6d3afc399322879c4"
+    },
+    "change": "Concrete inline leaf-comparison helper confines the nested array-element borrow to one call.",
+    "patch_sha256": "0a245a69437563d7c0a479292f488cdf8839a3cbf01e550e4fc475a39ddcb4f1",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/leaf-compare-36/extract-leaf-compare-36-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.506,
+        "peak_rss_kib": 549548,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/leaf-compare-36/extract-leaf-compare-36-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 11.126,
+        "peak_rss_kib": 1581904,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Internal error, please file an issue\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 168:4-194:1\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 2731\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpBorrows.simplify_dummy_values_useless_abs_aux.(fun).explore_env.object#visit_ASharedLoan in file \"interp/InterpBorrows.ml\", line 2731, characters 14-47\nCalled from Aeneas__Values.map_env#visit_ALoan in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from Aeneas__Values.map_env#visit_tavalue in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 264, characters 18-25\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 265, character",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "index-compare-37",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "5809315a82fa9c16c1cf4add8e65e367462dbd4c18df899fc5eda5c0ca3d9132",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "c4a4473f8e91dbe1cda3bb5709eb04021097fe693b39a9b6d3afc399322879c4"
+    },
+    "change": "Concrete inline index-comparison helper confines scalar element borrowing to one call.",
+    "patch_sha256": "f975409d8f26e4eb48e6a5abba8e86ece00e578722969b86c0d3e8884b63eef0",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/index-compare-37/extract-index-compare-37-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.63,
+        "peak_rss_kib": 549816,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/index-compare-37/extract-index-compare-37-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 11.24,
+        "peak_rss_kib": 1608864,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Internal error, please file an issue\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 174:4-200:1\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 2731\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpBorrows.simplify_dummy_values_useless_abs_aux.(fun).explore_env.object#visit_ASharedLoan in file \"interp/InterpBorrows.ml\", line 2731, characters 14-47\nCalled from Aeneas__Values.map_env#visit_ALoan in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from Aeneas__Values.map_env#visit_tavalue in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 264, characters 18-25\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 265, character",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "key-read-38",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "567cf3019d7b83c89b9efad883224a5242bca7627e65866aa4ad58561b4bdf38",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "c4a4473f8e91dbe1cda3bb5709eb04021097fe693b39a9b6d3afc399322879c4"
+    },
+    "change": "Concrete inline key getter returns owned u64, confining the key-array element borrow to one call.",
+    "patch_sha256": "faf9cce2b7771eac7e308b0c53ab257491027ad14338edb38539bfe9e993dcc1",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/key-read-38/extract-key-read-38-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.437,
+        "peak_rss_kib": 546464,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/key-read-38/extract-key-read-38-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 11.518,
+        "peak_rss_kib": 1647312,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Internal error, please file an issue\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 258:4-263:5\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 2731\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpBorrows.simplify_dummy_values_useless_abs_aux.(fun).explore_env.object#visit_ASharedLoan in file \"interp/InterpBorrows.ml\", line 2731, characters 14-47\nCalled from Aeneas__Values.map_env#visit_ALoan in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from Aeneas__Values.map_env#visit_tavalue in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 264, characters 18-25\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 265, characters",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "accumulate-reads-39",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "567cf3019d7b83c89b9efad883224a5242bca7627e65866aa4ad58561b4bdf38",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "f344515a2b1331aa9a13c17e3a5fa15536acd25833c91bf201ce2e5797c684cf"
+    },
+    "change": "Owned-value getters for basis and trace-weight reads; copy fixed vector width before accumulation loops.",
+    "patch_sha256": "09f602dd689ee292892d3c5a7e1d5ec8b7f160db248c8f3a520ac417a7dd2cc9",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/accumulate-reads-39/extract-accumulate-reads-39-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.587,
+        "peak_rss_kib": 546964,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/accumulate-reads-39/extract-accumulate-reads-39-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 11.736,
+        "peak_rss_kib": 1682284,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Internal error, please file an issue\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/candidate.rs', lines 107:8-110:9\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 2731\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpBorrows.simplify_dummy_values_useless_abs_aux.(fun).explore_env.object#visit_ASharedLoan in file \"interp/InterpBorrows.ml\", line 2731, characters 14-47\nCalled from Aeneas__Values.map_env#visit_ALoan in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from Aeneas__Values.map_env#visit_tavalue in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 264, characters 18-25\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 265, character",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "sort-reads-40",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "978d6a81812aa69ab88e21653c4078118756c29392ecca24d0d9a96ee0fed817",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "f344515a2b1331aa9a13c17e3a5fa15536acd25833c91bf201ce2e5797c684cf"
+    },
+    "change": "Use concrete owned-u64 getter for both insertion-sort comparisons.",
+    "patch_sha256": "18f65a0c08814c2f34f3d93a67b93f4e22ac00e7fbebb3ad923cb5a68f6eea89",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/sort-reads-40/extract-sort-reads-40-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.913,
+        "peak_rss_kib": 547600,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/sort-reads-40/extract-sort-reads-40-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 11.857,
+        "peak_rss_kib": 1652204,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  Not_found\n\nRaised at Stdlib__Map.Make.find in file \"map.ml\", line 141, characters 10-25\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence.(fun) in file \"interp/InterpReduceCollapse.ml\", line 1991, characters 9-40\nCalled from Stdlib__List.map in file \"list.ml\", line 83, characters 15-19\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 1989-1992, characters 4-24\nCalled from Aeneas__InterpReduceCollapse.collapse_ctx_no_markers_following_sequence in file \"interp/InterpReduceCollapse.ml\", lines 2009-2010, characters 4-43\nCalled from Aeneas__InterpJoin.match_ctx_with_target in file \"interp/InterpJoin.ml\", lines 1809-1810, characters 4-52\nCalled from Aeneas__InterpLoops.eval_loop_symbolic_apply_loop in file \"interp/InterpLoops.ml\", lines 117-118, characters 6-69\nCalled from Ae",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "node-index-41",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "978d6a81812aa69ab88e21653c4078118756c29392ecca24d0d9a96ee0fed817",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "f344515a2b1331aa9a13c17e3a5fa15536acd25833c91bf201ce2e5797c684cf",
+      "crates/aspis-r1-cost-probe/src/multiproof.rs": "46a700a69e2879e46ff8781fb5deb35ab4ae1bf5a82d4b407435f1f162dbcb88"
+    },
+    "change": "Concrete inline index getter confines node_count and verify index-element reads to one call; same traversal/arithmetic.",
+    "patch_sha256": "9653c066b9dbf829a7daf3ea5f49b2d6f7a022807fe38b1f424e668ac1cbe060",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/node-index-41/extract-node-index-41-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 84.836,
+        "peak_rss_kib": 547784,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/node-index-41/extract-node-index-41-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 12.721,
+        "peak_rss_kib": 1642232,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Internal error, please file an issue\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/multiproof.rs', lines 161:20-172:17\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 2731\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpBorrows.simplify_dummy_values_useless_abs_aux.(fun).explore_env.object#visit_ASharedLoan in file \"interp/InterpBorrows.ml\", line 2731, characters 14-47\nCalled from Aeneas__Values.map_env#visit_ALoan in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from Aeneas__Values.map_env#visit_tavalue in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 264, characters 18-25\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 265, charac",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "merkle-hash-42",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "978d6a81812aa69ab88e21653c4078118756c29392ecca24d0d9a96ee0fed817",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "f344515a2b1331aa9a13c17e3a5fa15536acd25833c91bf201ce2e5797c684cf",
+      "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3"
+    },
+    "change": "Concrete inline binary-parent hash helpers retain stored-slice hashing; confine value/root element borrows to owned-result calls.",
+    "patch_sha256": "4133066036fec68be1d23064e2792248e126860346b368291c06fa6cf5279e03",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/merkle-hash-42/extract-merkle-hash-42-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 99.73,
+        "peak_rss_kib": 549868,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/merkle-hash-42/extract-merkle-hash-42-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 25.7,
+        "peak_rss_kib": 1667492,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Internal error, please file an issue\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 219:8-219:83\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 2731\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpBorrows.simplify_dummy_values_useless_abs_aux.(fun).explore_env.object#visit_ASharedLoan in file \"interp/InterpBorrows.ml\", line 2731, characters 14-47\nCalled from Aeneas__Values.map_env#visit_ALoan in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from Aeneas__Values.map_env#visit_tavalue in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 264, characters 18-25\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 265, character",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "residue-row-43",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "978d6a81812aa69ab88e21653c4078118756c29392ecca24d0d9a96ee0fed817",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "3e84d389097bf1f157632680cef02d42e5d8daa90a83eaed7d6f7235b5211856",
+      "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3"
+    },
+    "change": "Batched residue update uses an owned four-limb row with four additions then optional four reductions; one final row write.",
+    "patch_sha256": "1c49622759a38d39a0b69a67a50d776eeda2abe244eb65ca4ddb329a3e1d0ec9",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/residue-row-43/extract-residue-row-43-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 90.749,
+        "peak_rss_kib": 549160,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/residue-row-43/extract-residue-row-43-aeneas/receipt.json",
+        "exit": 0,
+        "wall_seconds": 26.129,
+        "peak_rss_kib": 1703172,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "query-inline-44",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/fast_dots.rs": "32d90c30e36dea620da0619bfdd9bd7fce3973fb22a3d8c30deb42a79a0ccd61",
+      "crates/aspis-r1-cost-probe/src/compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+      "crates/aspis-r1-cost-probe/src/eight_way.rs": "11d8279926d0cede6bf347df889e315b465082856bb199effdf1d1d55ca47599",
+      "crates/aspis-r1-cost-probe/src/prover_retry_tests.rs": "e5defe18de27c7138e75c04fb51dcc81beed5c3879d656063e95056e89f79f26",
+      "crates/aspis-r1-cost-probe/src/fast_domain.rs": "bf4b66a59f6a23d19adf6f0021dfa0b9ddb010d6611181d13374fec12c612151",
+      "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "07310ed4a7d656af0ca75e03372064789f5ad17f9049a7b3b886f500a3d96ab3",
+      "crates/aspis-r1-cost-probe/src/sim_tests.rs": "9f2191e1d16a2d71a165b2773d31cf5535ba7bf3c3f75611d5b56aa92cf4cb32",
+      "crates/aspis-r1-cost-probe/src/host_semantic.rs": "f45fbab6c7e5de8f315266fb78579f38b7b1931f56d55b126d9311dc88852136",
+      "crates/aspis-r1-cost-probe/src/prover.rs": "868a4aeca5d2157af79fbf09f68f69a15a53721fde63299f9c7f2bed21ec0fe5",
+      "crates/aspis-r1-cost-probe/src/host_sumcheck.rs": "8295e94c3802332e2c0e9b408dc0f6b5ebd4bb4be565d07a25e9ce6bb12d925f",
+      "crates/aspis-r1-cost-probe/src/weights.rs": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+      "crates/aspis-r1-cost-probe/src/sim.rs": "e996090da85103804576dd66f86bbb9f51a14c0248eee9f5a62591db83e1debf",
+      "crates/aspis-r1-cost-probe/src/trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd",
+      "crates/aspis-r1-cost-probe/src/r1_wire.rs": "d0cf787d38cc8b801b8c8b917a5c658ec685511728380b090ae8235fe62d0f08",
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0",
+      "crates/aspis-r1-cost-probe/src/semantic.rs": "75d83ce86b203023c3a9a9d35420853b6a5a9196b634a971859f6f4b98b0d0c5",
+      "crates/aspis-r1-cost-probe/src/lib.rs": "7ae79452db136d013872d1f7d5344557e971470e913546a10317a97d1f0390a4",
+      "crates/aspis-r1-cost-probe/src/transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+      "crates/aspis-r1-cost-probe/src/transcript.rs": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+      "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "e4ce0c97490d141776ff59cd9d9d556cc68562fae4c11eb6e38b25768cfe7b03",
+      "crates/aspis-r1-cost-probe/src/semantic_wire.rs": "58c671cee016246aa464a35ba443009813581e4a53bce37dd528d048009f2db7",
+      "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+      "crates/aspis-r1-cost-probe/src/dense.rs": "291917ca9248b542ee9fb67f3f3978510a12fbce8882ffb652acacd64ec99234",
+      "crates/aspis-r1-cost-probe/src/host_commitment.rs": "9afd423191513a8fcd1e9951df8c9e12349e9ecdd1749e8e697f192e7576b735"
+    },
+    "change": "Inline query_values and query_loop; borrowed batched accumulator interface",
+    "patch_sha256": "61c2493c2a4b65893db71650039eb7db14d3777a0aedeae3bec06faf5be799b6",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/query-inline-44/extract-query-inline-44-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 88.553,
+        "peak_rss_kib": 549816,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/query-inline-44/extract-query-inline-44-aeneas/receipt.json",
+        "exit": 0,
+        "wall_seconds": 25.312,
+        "peak_rss_kib": 1650580,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "resume-alpha-45",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/fast_dots.rs": "32d90c30e36dea620da0619bfdd9bd7fce3973fb22a3d8c30deb42a79a0ccd61",
+      "crates/aspis-r1-cost-probe/src/compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+      "crates/aspis-r1-cost-probe/src/eight_way.rs": "11d8279926d0cede6bf347df889e315b465082856bb199effdf1d1d55ca47599",
+      "crates/aspis-r1-cost-probe/src/prover_retry_tests.rs": "e5defe18de27c7138e75c04fb51dcc81beed5c3879d656063e95056e89f79f26",
+      "crates/aspis-r1-cost-probe/src/fast_domain.rs": "bf4b66a59f6a23d19adf6f0021dfa0b9ddb010d6611181d13374fec12c612151",
+      "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "07310ed4a7d656af0ca75e03372064789f5ad17f9049a7b3b886f500a3d96ab3",
+      "crates/aspis-r1-cost-probe/src/sim_tests.rs": "9f2191e1d16a2d71a165b2773d31cf5535ba7bf3c3f75611d5b56aa92cf4cb32",
+      "crates/aspis-r1-cost-probe/src/host_semantic.rs": "f45fbab6c7e5de8f315266fb78579f38b7b1931f56d55b126d9311dc88852136",
+      "crates/aspis-r1-cost-probe/src/prover.rs": "868a4aeca5d2157af79fbf09f68f69a15a53721fde63299f9c7f2bed21ec0fe5",
+      "crates/aspis-r1-cost-probe/src/host_sumcheck.rs": "8295e94c3802332e2c0e9b408dc0f6b5ebd4bb4be565d07a25e9ce6bb12d925f",
+      "crates/aspis-r1-cost-probe/src/weights.rs": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+      "crates/aspis-r1-cost-probe/src/sim.rs": "e996090da85103804576dd66f86bbb9f51a14c0248eee9f5a62591db83e1debf",
+      "crates/aspis-r1-cost-probe/src/trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd",
+      "crates/aspis-r1-cost-probe/src/r1_wire.rs": "d0cf787d38cc8b801b8c8b917a5c658ec685511728380b090ae8235fe62d0f08",
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0",
+      "crates/aspis-r1-cost-probe/src/semantic.rs": "75d83ce86b203023c3a9a9d35420853b6a5a9196b634a971859f6f4b98b0d0c5",
+      "crates/aspis-r1-cost-probe/src/lib.rs": "7ae79452db136d013872d1f7d5344557e971470e913546a10317a97d1f0390a4",
+      "crates/aspis-r1-cost-probe/src/transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+      "crates/aspis-r1-cost-probe/src/transcript.rs": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+      "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "7ce85d9c51bf8d1ed9865426f6885eff8972e4aedc032fe3b39e29ae10bd82ec",
+      "crates/aspis-r1-cost-probe/src/semantic_wire.rs": "58c671cee016246aa464a35ba443009813581e4a53bce37dd528d048009f2db7",
+      "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+      "crates/aspis-r1-cost-probe/src/dense.rs": "291917ca9248b542ee9fb67f3f3978510a12fbce8882ffb652acacd64ec99234",
+      "crates/aspis-r1-cost-probe/src/host_commitment.rs": "9afd423191513a8fcd1e9951df8c9e12349e9ecdd1749e8e697f192e7576b735"
+    },
+    "change": "Split ten semantic-alpha reads to avoid emitted Lean indentation clamp",
+    "patch_sha256": "d174230829941693564a80779e60fb2442244ebc012bd18779d724af3a65cd79",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/resume-alpha-45/extract-resume-alpha-45-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 82.036,
+        "peak_rss_kib": 550184,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/resume-alpha-45/extract-resume-alpha-45-aeneas/receipt.json",
+        "exit": 0,
+        "wall_seconds": 20.852,
+        "peak_rss_kib": 928912,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "weights-iter-46",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/prover_retry_tests.rs": "e5defe18de27c7138e75c04fb51dcc81beed5c3879d656063e95056e89f79f26",
+      "crates/aspis-r1-cost-probe/src/compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+      "crates/aspis-r1-cost-probe/src/fast_dots.rs": "32d90c30e36dea620da0619bfdd9bd7fce3973fb22a3d8c30deb42a79a0ccd61",
+      "crates/aspis-r1-cost-probe/src/dense.rs": "291917ca9248b542ee9fb67f3f3978510a12fbce8882ffb652acacd64ec99234",
+      "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "crates/aspis-r1-cost-probe/src/r1_wire.rs": "d0cf787d38cc8b801b8c8b917a5c658ec685511728380b090ae8235fe62d0f08",
+      "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+      "crates/aspis-r1-cost-probe/src/fast_domain.rs": "bf4b66a59f6a23d19adf6f0021dfa0b9ddb010d6611181d13374fec12c612151",
+      "crates/aspis-r1-cost-probe/src/semantic.rs": "75d83ce86b203023c3a9a9d35420853b6a5a9196b634a971859f6f4b98b0d0c5",
+      "crates/aspis-r1-cost-probe/src/transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+      "crates/aspis-r1-cost-probe/src/lib.rs": "7ae79452db136d013872d1f7d5344557e971470e913546a10317a97d1f0390a4",
+      "crates/aspis-r1-cost-probe/src/semantic_wire.rs": "58c671cee016246aa464a35ba443009813581e4a53bce37dd528d048009f2db7",
+      "crates/aspis-r1-cost-probe/src/transcript.rs": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+      "crates/aspis-r1-cost-probe/src/sim.rs": "e996090da85103804576dd66f86bbb9f51a14c0248eee9f5a62591db83e1debf",
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0",
+      "crates/aspis-r1-cost-probe/src/trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd",
+      "crates/aspis-r1-cost-probe/src/host_semantic.rs": "f45fbab6c7e5de8f315266fb78579f38b7b1931f56d55b126d9311dc88852136",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "c5fdfbcbcab99ada61e8a058ff7a14ff7573c48248df39b60601e9dda6d42d95",
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "07310ed4a7d656af0ca75e03372064789f5ad17f9049a7b3b886f500a3d96ab3",
+      "crates/aspis-r1-cost-probe/src/prover.rs": "868a4aeca5d2157af79fbf09f68f69a15a53721fde63299f9c7f2bed21ec0fe5",
+      "crates/aspis-r1-cost-probe/src/weights.rs": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+      "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "crates/aspis-r1-cost-probe/src/host_sumcheck.rs": "8295e94c3802332e2c0e9b408dc0f6b5ebd4bb4be565d07a25e9ce6bb12d925f",
+      "crates/aspis-r1-cost-probe/src/eight_way.rs": "11d8279926d0cede6bf347df889e315b465082856bb199effdf1d1d55ca47599",
+      "crates/aspis-r1-cost-probe/src/sim_tests.rs": "9f2191e1d16a2d71a165b2773d31cf5535ba7bf3c3f75611d5b56aa92cf4cb32",
+      "crates/aspis-r1-cost-probe/src/host_commitment.rs": "9afd423191513a8fcd1e9951df8c9e12349e9ecdd1749e8e697f192e7576b735"
+    },
+    "change": "Resume-only weight iteration avoids indexed vector writes; temporary Reader loan is local to each iteration.",
+    "patch_sha256": "65e60f76fcf3231d7aafddfc43b7762e57b2e2f1b0ba75ab96c9ed854a233f12",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/weights-iter-46/extract-weights-iter-46-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 81.479,
+        "peak_rss_kib": 550264,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/weights-iter-46/extract-weights-iter-46-aeneas/receipt.json",
+        "exit": 0,
+        "wall_seconds": 19.86,
+        "peak_rss_kib": 926208,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "reader-queries-47",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/prover_retry_tests.rs": "e5defe18de27c7138e75c04fb51dcc81beed5c3879d656063e95056e89f79f26",
+      "crates/aspis-r1-cost-probe/src/compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+      "crates/aspis-r1-cost-probe/src/fast_dots.rs": "32d90c30e36dea620da0619bfdd9bd7fce3973fb22a3d8c30deb42a79a0ccd61",
+      "crates/aspis-r1-cost-probe/src/dense.rs": "291917ca9248b542ee9fb67f3f3978510a12fbce8882ffb652acacd64ec99234",
+      "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "crates/aspis-r1-cost-probe/src/r1_wire.rs": "d0cf787d38cc8b801b8c8b917a5c658ec685511728380b090ae8235fe62d0f08",
+      "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+      "crates/aspis-r1-cost-probe/src/fast_domain.rs": "bf4b66a59f6a23d19adf6f0021dfa0b9ddb010d6611181d13374fec12c612151",
+      "crates/aspis-r1-cost-probe/src/semantic.rs": "75d83ce86b203023c3a9a9d35420853b6a5a9196b634a971859f6f4b98b0d0c5",
+      "crates/aspis-r1-cost-probe/src/transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+      "crates/aspis-r1-cost-probe/src/lib.rs": "7ae79452db136d013872d1f7d5344557e971470e913546a10317a97d1f0390a4",
+      "crates/aspis-r1-cost-probe/src/semantic_wire.rs": "58c671cee016246aa464a35ba443009813581e4a53bce37dd528d048009f2db7",
+      "crates/aspis-r1-cost-probe/src/transcript.rs": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+      "crates/aspis-r1-cost-probe/src/sim.rs": "e996090da85103804576dd66f86bbb9f51a14c0248eee9f5a62591db83e1debf",
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0",
+      "crates/aspis-r1-cost-probe/src/trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd",
+      "crates/aspis-r1-cost-probe/src/host_semantic.rs": "f45fbab6c7e5de8f315266fb78579f38b7b1931f56d55b126d9311dc88852136",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "620cb5435073b3ee178b7512350ff92b47d82ce5d5e9eb04233ad9f233b546f2",
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "07310ed4a7d656af0ca75e03372064789f5ad17f9049a7b3b886f500a3d96ab3",
+      "crates/aspis-r1-cost-probe/src/prover.rs": "868a4aeca5d2157af79fbf09f68f69a15a53721fde63299f9c7f2bed21ec0fe5",
+      "crates/aspis-r1-cost-probe/src/weights.rs": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+      "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "crates/aspis-r1-cost-probe/src/host_sumcheck.rs": "8295e94c3802332e2c0e9b408dc0f6b5ebd4bb4be565d07a25e9ce6bb12d925f",
+      "crates/aspis-r1-cost-probe/src/eight_way.rs": "11d8279926d0cede6bf347df889e315b465082856bb199effdf1d1d55ca47599",
+      "crates/aspis-r1-cost-probe/src/sim_tests.rs": "9f2191e1d16a2d71a165b2773d31cf5535ba7bf3c3f75611d5b56aa92cf4cb32",
+      "crates/aspis-r1-cost-probe/src/host_commitment.rs": "9afd423191513a8fcd1e9951df8c9e12349e9ecdd1749e8e697f192e7576b735"
+    },
+    "change": "Resume query reader helper owns numeric cursor and output array; temporary Reader each iteration replaces unrolled22 calls.",
+    "patch_sha256": "879755bb067acaa6c4237a2bd8c0f22994581b1109946e929c6f03e4f2080f0d",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/reader-queries-47/extract-reader-queries-47-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 81.762,
+        "peak_rss_kib": 550020,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/reader-queries-47/extract-reader-queries-47-aeneas/receipt.json",
+        "exit": 0,
+        "wall_seconds": 17.519,
+        "peak_rss_kib": 615592,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "batch-borrow-48",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/prover_retry_tests.rs": "e5defe18de27c7138e75c04fb51dcc81beed5c3879d656063e95056e89f79f26",
+      "crates/aspis-r1-cost-probe/src/compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+      "crates/aspis-r1-cost-probe/src/fast_dots.rs": "32d90c30e36dea620da0619bfdd9bd7fce3973fb22a3d8c30deb42a79a0ccd61",
+      "crates/aspis-r1-cost-probe/src/dense.rs": "291917ca9248b542ee9fb67f3f3978510a12fbce8882ffb652acacd64ec99234",
+      "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "crates/aspis-r1-cost-probe/src/r1_wire.rs": "d0cf787d38cc8b801b8c8b917a5c658ec685511728380b090ae8235fe62d0f08",
+      "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+      "crates/aspis-r1-cost-probe/src/fast_domain.rs": "bf4b66a59f6a23d19adf6f0021dfa0b9ddb010d6611181d13374fec12c612151",
+      "crates/aspis-r1-cost-probe/src/semantic.rs": "75d83ce86b203023c3a9a9d35420853b6a5a9196b634a971859f6f4b98b0d0c5",
+      "crates/aspis-r1-cost-probe/src/transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+      "crates/aspis-r1-cost-probe/src/lib.rs": "7ae79452db136d013872d1f7d5344557e971470e913546a10317a97d1f0390a4",
+      "crates/aspis-r1-cost-probe/src/semantic_wire.rs": "58c671cee016246aa464a35ba443009813581e4a53bce37dd528d048009f2db7",
+      "crates/aspis-r1-cost-probe/src/transcript.rs": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+      "crates/aspis-r1-cost-probe/src/sim.rs": "e996090da85103804576dd66f86bbb9f51a14c0248eee9f5a62591db83e1debf",
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0",
+      "crates/aspis-r1-cost-probe/src/trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd",
+      "crates/aspis-r1-cost-probe/src/host_semantic.rs": "f45fbab6c7e5de8f315266fb78579f38b7b1931f56d55b126d9311dc88852136",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "620cb5435073b3ee178b7512350ff92b47d82ce5d5e9eb04233ad9f233b546f2",
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+      "crates/aspis-r1-cost-probe/src/prover.rs": "868a4aeca5d2157af79fbf09f68f69a15a53721fde63299f9c7f2bed21ec0fe5",
+      "crates/aspis-r1-cost-probe/src/weights.rs": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+      "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "crates/aspis-r1-cost-probe/src/host_sumcheck.rs": "8295e94c3802332e2c0e9b408dc0f6b5ebd4bb4be565d07a25e9ce6bb12d925f",
+      "crates/aspis-r1-cost-probe/src/eight_way.rs": "11d8279926d0cede6bf347df889e315b465082856bb199effdf1d1d55ca47599",
+      "crates/aspis-r1-cost-probe/src/sim_tests.rs": "9f2191e1d16a2d71a165b2773d31cf5535ba7bf3c3f75611d5b56aa92cf4cb32",
+      "crates/aspis-r1-cost-probe/src/host_commitment.rs": "9afd423191513a8fcd1e9951df8c9e12349e9ecdd1749e8e697f192e7576b735"
+    },
+    "change": "Three explicit tree calls reuse borrowed scratch arrays, avoiding owned array return ABI; transparent getters already isolate element loans.",
+    "patch_sha256": "1a10212b4e8eaafb719198e5e8509897e97dcf1066d238202ab5e599f9beae75",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/batch-borrow-48/extract-batch-borrow-48-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 81.61,
+        "peak_rss_kib": 550400,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/batch-borrow-48/extract-batch-borrow-48-aeneas/receipt.json",
+        "exit": 0,
+        "wall_seconds": 17.645,
+        "peak_rss_kib": 604488,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "row-borrow-49",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/prover_retry_tests.rs": "e5defe18de27c7138e75c04fb51dcc81beed5c3879d656063e95056e89f79f26",
+      "crates/aspis-r1-cost-probe/src/compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+      "crates/aspis-r1-cost-probe/src/fast_dots.rs": "32d90c30e36dea620da0619bfdd9bd7fce3973fb22a3d8c30deb42a79a0ccd61",
+      "crates/aspis-r1-cost-probe/src/dense.rs": "291917ca9248b542ee9fb67f3f3978510a12fbce8882ffb652acacd64ec99234",
+      "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "crates/aspis-r1-cost-probe/src/r1_wire.rs": "d0cf787d38cc8b801b8c8b917a5c658ec685511728380b090ae8235fe62d0f08",
+      "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+      "crates/aspis-r1-cost-probe/src/fast_domain.rs": "bf4b66a59f6a23d19adf6f0021dfa0b9ddb010d6611181d13374fec12c612151",
+      "crates/aspis-r1-cost-probe/src/semantic.rs": "75d83ce86b203023c3a9a9d35420853b6a5a9196b634a971859f6f4b98b0d0c5",
+      "crates/aspis-r1-cost-probe/src/transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+      "crates/aspis-r1-cost-probe/src/lib.rs": "7ae79452db136d013872d1f7d5344557e971470e913546a10317a97d1f0390a4",
+      "crates/aspis-r1-cost-probe/src/semantic_wire.rs": "58c671cee016246aa464a35ba443009813581e4a53bce37dd528d048009f2db7",
+      "crates/aspis-r1-cost-probe/src/transcript.rs": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+      "crates/aspis-r1-cost-probe/src/sim.rs": "e996090da85103804576dd66f86bbb9f51a14c0248eee9f5a62591db83e1debf",
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0",
+      "crates/aspis-r1-cost-probe/src/trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd",
+      "crates/aspis-r1-cost-probe/src/host_semantic.rs": "f45fbab6c7e5de8f315266fb78579f38b7b1931f56d55b126d9311dc88852136",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "bf7d7584ad593e02cbb1e2d23fb257aa84e23efc912a4cef0782da28c7ac3792",
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+      "crates/aspis-r1-cost-probe/src/prover.rs": "868a4aeca5d2157af79fbf09f68f69a15a53721fde63299f9c7f2bed21ec0fe5",
+      "crates/aspis-r1-cost-probe/src/weights.rs": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+      "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "crates/aspis-r1-cost-probe/src/host_sumcheck.rs": "8295e94c3802332e2c0e9b408dc0f6b5ebd4bb4be565d07a25e9ce6bb12d925f",
+      "crates/aspis-r1-cost-probe/src/eight_way.rs": "11d8279926d0cede6bf347df889e315b465082856bb199effdf1d1d55ca47599",
+      "crates/aspis-r1-cost-probe/src/sim_tests.rs": "9f2191e1d16a2d71a165b2773d31cf5535ba7bf3c3f75611d5b56aa92cf4cb32",
+      "crates/aspis-r1-cost-probe/src/host_commitment.rs": "9afd423191513a8fcd1e9951df8c9e12349e9ecdd1749e8e697f192e7576b735"
+    },
+    "change": "Borrow one residue row for the fixed four-limb update; read flush flag before the borrow. Arithmetic and reduction schedule unchanged.",
+    "patch_sha256": "6042b1a6e18b1d13b1bf047c7390a8933b77bac7c80ed81f77ebee2c34a34165",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/row-borrow-49/extract-row-borrow-49-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 81.629,
+        "peak_rss_kib": 550428,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/row-borrow-49/extract-row-borrow-49-aeneas/receipt.json",
+        "exit": 0,
+        "wall_seconds": 17.646,
+        "peak_rss_kib": 604560,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "accumulate-inline-50",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/prover_retry_tests.rs": "e5defe18de27c7138e75c04fb51dcc81beed5c3879d656063e95056e89f79f26",
+      "crates/aspis-r1-cost-probe/src/compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+      "crates/aspis-r1-cost-probe/src/fast_dots.rs": "32d90c30e36dea620da0619bfdd9bd7fce3973fb22a3d8c30deb42a79a0ccd61",
+      "crates/aspis-r1-cost-probe/src/dense.rs": "291917ca9248b542ee9fb67f3f3978510a12fbce8882ffb652acacd64ec99234",
+      "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "crates/aspis-r1-cost-probe/src/r1_wire.rs": "d0cf787d38cc8b801b8c8b917a5c658ec685511728380b090ae8235fe62d0f08",
+      "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+      "crates/aspis-r1-cost-probe/src/fast_domain.rs": "bf4b66a59f6a23d19adf6f0021dfa0b9ddb010d6611181d13374fec12c612151",
+      "crates/aspis-r1-cost-probe/src/semantic.rs": "75d83ce86b203023c3a9a9d35420853b6a5a9196b634a971859f6f4b98b0d0c5",
+      "crates/aspis-r1-cost-probe/src/transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+      "crates/aspis-r1-cost-probe/src/lib.rs": "7ae79452db136d013872d1f7d5344557e971470e913546a10317a97d1f0390a4",
+      "crates/aspis-r1-cost-probe/src/semantic_wire.rs": "58c671cee016246aa464a35ba443009813581e4a53bce37dd528d048009f2db7",
+      "crates/aspis-r1-cost-probe/src/transcript.rs": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+      "crates/aspis-r1-cost-probe/src/sim.rs": "e996090da85103804576dd66f86bbb9f51a14c0248eee9f5a62591db83e1debf",
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0",
+      "crates/aspis-r1-cost-probe/src/trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd",
+      "crates/aspis-r1-cost-probe/src/host_semantic.rs": "f45fbab6c7e5de8f315266fb78579f38b7b1931f56d55b126d9311dc88852136",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "85318c8cfe62c7ef510e79f0e15e1786d1b1db8bc0b08e47a0dcb8af2b8412c9",
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+      "crates/aspis-r1-cost-probe/src/prover.rs": "868a4aeca5d2157af79fbf09f68f69a15a53721fde63299f9c7f2bed21ec0fe5",
+      "crates/aspis-r1-cost-probe/src/weights.rs": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+      "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "crates/aspis-r1-cost-probe/src/host_sumcheck.rs": "8295e94c3802332e2c0e9b408dc0f6b5ebd4bb4be565d07a25e9ce6bb12d925f",
+      "crates/aspis-r1-cost-probe/src/eight_way.rs": "11d8279926d0cede6bf347df889e315b465082856bb199effdf1d1d55ca47599",
+      "crates/aspis-r1-cost-probe/src/sim_tests.rs": "9f2191e1d16a2d71a165b2773d31cf5535ba7bf3c3f75611d5b56aa92cf4cb32",
+      "crates/aspis-r1-cost-probe/src/host_commitment.rs": "9afd423191513a8fcd1e9951df8c9e12349e9ecdd1749e8e697f192e7576b735"
+    },
+    "change": "Inline the unchanged batched accumulation function in the query loop. Stack gate remains mandatory.",
+    "patch_sha256": "d240ff3ac7a43ef762e141c2af91de6b3cee17535afb0eb9db00e1859b20e2e6",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/accumulate-inline-50/extract-accumulate-inline-50-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 81.816,
+        "peak_rss_kib": 550140,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/accumulate-inline-50/extract-accumulate-inline-50-aeneas/receipt.json",
+        "exit": 0,
+        "wall_seconds": 17.63,
+        "peak_rss_kib": 604360,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "query-borrow-51",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/prover_retry_tests.rs": "e5defe18de27c7138e75c04fb51dcc81beed5c3879d656063e95056e89f79f26",
+      "crates/aspis-r1-cost-probe/src/compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+      "crates/aspis-r1-cost-probe/src/fast_dots.rs": "32d90c30e36dea620da0619bfdd9bd7fce3973fb22a3d8c30deb42a79a0ccd61",
+      "crates/aspis-r1-cost-probe/src/dense.rs": "291917ca9248b542ee9fb67f3f3978510a12fbce8882ffb652acacd64ec99234",
+      "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "crates/aspis-r1-cost-probe/src/r1_wire.rs": "d0cf787d38cc8b801b8c8b917a5c658ec685511728380b090ae8235fe62d0f08",
+      "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+      "crates/aspis-r1-cost-probe/src/fast_domain.rs": "bf4b66a59f6a23d19adf6f0021dfa0b9ddb010d6611181d13374fec12c612151",
+      "crates/aspis-r1-cost-probe/src/semantic.rs": "75d83ce86b203023c3a9a9d35420853b6a5a9196b634a971859f6f4b98b0d0c5",
+      "crates/aspis-r1-cost-probe/src/transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+      "crates/aspis-r1-cost-probe/src/lib.rs": "7ae79452db136d013872d1f7d5344557e971470e913546a10317a97d1f0390a4",
+      "crates/aspis-r1-cost-probe/src/semantic_wire.rs": "58c671cee016246aa464a35ba443009813581e4a53bce37dd528d048009f2db7",
+      "crates/aspis-r1-cost-probe/src/transcript.rs": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+      "crates/aspis-r1-cost-probe/src/sim.rs": "e996090da85103804576dd66f86bbb9f51a14c0248eee9f5a62591db83e1debf",
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0",
+      "crates/aspis-r1-cost-probe/src/trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd",
+      "crates/aspis-r1-cost-probe/src/host_semantic.rs": "f45fbab6c7e5de8f315266fb78579f38b7b1931f56d55b126d9311dc88852136",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "bf7d7584ad593e02cbb1e2d23fb257aa84e23efc912a4cef0782da28c7ac3792",
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "42347cc4c5b21d7e8015c6d97c0610f27324b1fde858a97e34c70bbdba1961c8",
+      "crates/aspis-r1-cost-probe/src/prover.rs": "868a4aeca5d2157af79fbf09f68f69a15a53721fde63299f9c7f2bed21ec0fe5",
+      "crates/aspis-r1-cost-probe/src/weights.rs": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+      "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "crates/aspis-r1-cost-probe/src/host_sumcheck.rs": "8295e94c3802332e2c0e9b408dc0f6b5ebd4bb4be565d07a25e9ce6bb12d925f",
+      "crates/aspis-r1-cost-probe/src/eight_way.rs": "11d8279926d0cede6bf347df889e315b465082856bb199effdf1d1d55ca47599",
+      "crates/aspis-r1-cost-probe/src/sim_tests.rs": "9f2191e1d16a2d71a165b2773d31cf5535ba7bf3c3f75611d5b56aa92cf4cb32",
+      "crates/aspis-r1-cost-probe/src/host_commitment.rs": "9afd423191513a8fcd1e9951df8c9e12349e9ecdd1749e8e697f192e7576b735"
+    },
+    "change": "Profiling identifies query overhead. Restore non-inlined borrowed query core inside the owned adapter; revert harmful accumulator inlining. Same calls and arithmetic order.",
+    "patch_sha256": "a43d7c5ac3a160442c7ccab26940b962b0ed772f7c5296f32fb0903afb499dd1",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/query-borrow-51/extract-query-borrow-51-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.427,
+        "peak_rss_kib": 550016,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/query-borrow-51/extract-query-borrow-51-aeneas/receipt.json",
+        "exit": 0,
+        "wall_seconds": 17.519,
+        "peak_rss_kib": 616988,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "residue-loops-52",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/prover_retry_tests.rs": "e5defe18de27c7138e75c04fb51dcc81beed5c3879d656063e95056e89f79f26",
+      "crates/aspis-r1-cost-probe/src/compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+      "crates/aspis-r1-cost-probe/src/fast_dots.rs": "32d90c30e36dea620da0619bfdd9bd7fce3973fb22a3d8c30deb42a79a0ccd61",
+      "crates/aspis-r1-cost-probe/src/dense.rs": "291917ca9248b542ee9fb67f3f3978510a12fbce8882ffb652acacd64ec99234",
+      "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "crates/aspis-r1-cost-probe/src/r1_wire.rs": "d0cf787d38cc8b801b8c8b917a5c658ec685511728380b090ae8235fe62d0f08",
+      "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+      "crates/aspis-r1-cost-probe/src/fast_domain.rs": "bf4b66a59f6a23d19adf6f0021dfa0b9ddb010d6611181d13374fec12c612151",
+      "crates/aspis-r1-cost-probe/src/semantic.rs": "75d83ce86b203023c3a9a9d35420853b6a5a9196b634a971859f6f4b98b0d0c5",
+      "crates/aspis-r1-cost-probe/src/transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+      "crates/aspis-r1-cost-probe/src/lib.rs": "7ae79452db136d013872d1f7d5344557e971470e913546a10317a97d1f0390a4",
+      "crates/aspis-r1-cost-probe/src/semantic_wire.rs": "58c671cee016246aa464a35ba443009813581e4a53bce37dd528d048009f2db7",
+      "crates/aspis-r1-cost-probe/src/transcript.rs": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+      "crates/aspis-r1-cost-probe/src/sim.rs": "e996090da85103804576dd66f86bbb9f51a14c0248eee9f5a62591db83e1debf",
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0",
+      "crates/aspis-r1-cost-probe/src/trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd",
+      "crates/aspis-r1-cost-probe/src/host_semantic.rs": "f45fbab6c7e5de8f315266fb78579f38b7b1931f56d55b126d9311dc88852136",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "de9fc5b1603af71c73c1bd6565d9a52411da82f60a3834617e0b82a7d7214150",
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "42347cc4c5b21d7e8015c6d97c0610f27324b1fde858a97e34c70bbdba1961c8",
+      "crates/aspis-r1-cost-probe/src/prover.rs": "868a4aeca5d2157af79fbf09f68f69a15a53721fde63299f9c7f2bed21ec0fe5",
+      "crates/aspis-r1-cost-probe/src/weights.rs": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+      "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "crates/aspis-r1-cost-probe/src/host_sumcheck.rs": "8295e94c3802332e2c0e9b408dc0f6b5ebd4bb4be565d07a25e9ce6bb12d925f",
+      "crates/aspis-r1-cost-probe/src/eight_way.rs": "11d8279926d0cede6bf347df889e315b465082856bb199effdf1d1d55ca47599",
+      "crates/aspis-r1-cost-probe/src/sim_tests.rs": "9f2191e1d16a2d71a165b2773d31cf5535ba7bf3c3f75611d5b56aa92cf4cb32",
+      "crates/aspis-r1-cost-probe/src/host_commitment.rs": "9afd423191513a8fcd1e9951df8c9e12349e9ecdd1749e8e697f192e7576b735"
+    },
+    "change": "Restore original four-limb loops inside isolated borrowed row helper, removing forced unrolling identified by per-query/flush profile overhead.",
+    "patch_sha256": "413cd167c9d34316e25b4e979051d81e29171c9ce06679f532342a3582c35eca",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/residue-loops-52/extract-residue-loops-52-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.63,
+        "peak_rss_kib": 550300,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/residue-loops-52/extract-residue-loops-52-aeneas/receipt.json",
+        "exit": 2,
+        "wall_seconds": 15.851,
+        "peak_rss_kib": 560784,
+        "swaps": 0,
+        "error_prefix": "Uncaught exception:\n  \n  (Failure\n    \"Internal error, please file an issue\\\n   \\nSource: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 233:4-233:67\\\n   \\nCompiler source: interp/InterpBorrows.ml, line 2731\")\n\nRaised at Aeneas__Errors.craise_opt_span in file \"Errors.ml\", line 120, characters 4-23\nCalled from Aeneas__InterpBorrows.simplify_dummy_values_useless_abs_aux.(fun).explore_env.object#visit_ASharedLoan in file \"interp/InterpBorrows.ml\", line 2731, characters 14-47\nCalled from Aeneas__Values.map_env#visit_ALoan in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from Aeneas__Values.map_env#visit_tavalue in file \"llbc/Values.ml\", lines 460-1573, characters 0-6\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 264, characters 18-25\nCalled from VisitorsRuntime.map#visit_list in file \"runtime/VisitorsRuntime.ml\", line 265, character",
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "residue-reads-53",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/prover_retry_tests.rs": "e5defe18de27c7138e75c04fb51dcc81beed5c3879d656063e95056e89f79f26",
+      "crates/aspis-r1-cost-probe/src/compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+      "crates/aspis-r1-cost-probe/src/fast_dots.rs": "32d90c30e36dea620da0619bfdd9bd7fce3973fb22a3d8c30deb42a79a0ccd61",
+      "crates/aspis-r1-cost-probe/src/dense.rs": "291917ca9248b542ee9fb67f3f3978510a12fbce8882ffb652acacd64ec99234",
+      "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "crates/aspis-r1-cost-probe/src/r1_wire.rs": "d0cf787d38cc8b801b8c8b917a5c658ec685511728380b090ae8235fe62d0f08",
+      "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+      "crates/aspis-r1-cost-probe/src/fast_domain.rs": "bf4b66a59f6a23d19adf6f0021dfa0b9ddb010d6611181d13374fec12c612151",
+      "crates/aspis-r1-cost-probe/src/semantic.rs": "75d83ce86b203023c3a9a9d35420853b6a5a9196b634a971859f6f4b98b0d0c5",
+      "crates/aspis-r1-cost-probe/src/transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+      "crates/aspis-r1-cost-probe/src/lib.rs": "7ae79452db136d013872d1f7d5344557e971470e913546a10317a97d1f0390a4",
+      "crates/aspis-r1-cost-probe/src/semantic_wire.rs": "58c671cee016246aa464a35ba443009813581e4a53bce37dd528d048009f2db7",
+      "crates/aspis-r1-cost-probe/src/transcript.rs": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+      "crates/aspis-r1-cost-probe/src/sim.rs": "e996090da85103804576dd66f86bbb9f51a14c0248eee9f5a62591db83e1debf",
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0",
+      "crates/aspis-r1-cost-probe/src/trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd",
+      "crates/aspis-r1-cost-probe/src/host_semantic.rs": "f45fbab6c7e5de8f315266fb78579f38b7b1931f56d55b126d9311dc88852136",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "65da53e3ffb9c6da09af35b2915bce78769a7e9f4f5631ea5bd308b8da504a45",
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "42347cc4c5b21d7e8015c6d97c0610f27324b1fde858a97e34c70bbdba1961c8",
+      "crates/aspis-r1-cost-probe/src/prover.rs": "868a4aeca5d2157af79fbf09f68f69a15a53721fde63299f9c7f2bed21ec0fe5",
+      "crates/aspis-r1-cost-probe/src/weights.rs": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+      "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "crates/aspis-r1-cost-probe/src/host_sumcheck.rs": "8295e94c3802332e2c0e9b408dc0f6b5ebd4bb4be565d07a25e9ce6bb12d925f",
+      "crates/aspis-r1-cost-probe/src/eight_way.rs": "11d8279926d0cede6bf347df889e315b465082856bb199effdf1d1d55ca47599",
+      "crates/aspis-r1-cost-probe/src/sim_tests.rs": "9f2191e1d16a2d71a165b2773d31cf5535ba7bf3c3f75611d5b56aa92cf4cb32",
+      "crates/aspis-r1-cost-probe/src/host_commitment.rs": "9afd423191513a8fcd1e9951df8c9e12349e9ecdd1749e8e697f192e7576b735"
+    },
+    "change": "Isolate residue/power limb reads before the mutating indexed update in the restored four-limb loop. Attempt52 fails at this loop loan join.",
+    "patch_sha256": "ea857e1275b17233ebc855a1c2a3bb2c4b74af1ee70e44c1fc3daa499a921817",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/residue-reads-53/extract-residue-reads-53-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 83.659,
+        "peak_rss_kib": 570404,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/residue-reads-53/extract-residue-reads-53-aeneas/receipt.json",
+        "exit": 0,
+        "wall_seconds": 17.643,
+        "peak_rss_kib": 569252,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "trim-adapters-54",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/prover_retry_tests.rs": "e5defe18de27c7138e75c04fb51dcc81beed5c3879d656063e95056e89f79f26",
+      "crates/aspis-r1-cost-probe/src/compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+      "crates/aspis-r1-cost-probe/src/fast_dots.rs": "32d90c30e36dea620da0619bfdd9bd7fce3973fb22a3d8c30deb42a79a0ccd61",
+      "crates/aspis-r1-cost-probe/src/dense.rs": "291917ca9248b542ee9fb67f3f3978510a12fbce8882ffb652acacd64ec99234",
+      "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "crates/aspis-r1-cost-probe/src/r1_wire.rs": "d0cf787d38cc8b801b8c8b917a5c658ec685511728380b090ae8235fe62d0f08",
+      "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+      "crates/aspis-r1-cost-probe/src/fast_domain.rs": "bf4b66a59f6a23d19adf6f0021dfa0b9ddb010d6611181d13374fec12c612151",
+      "crates/aspis-r1-cost-probe/src/semantic.rs": "75d83ce86b203023c3a9a9d35420853b6a5a9196b634a971859f6f4b98b0d0c5",
+      "crates/aspis-r1-cost-probe/src/transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+      "crates/aspis-r1-cost-probe/src/lib.rs": "7ae79452db136d013872d1f7d5344557e971470e913546a10317a97d1f0390a4",
+      "crates/aspis-r1-cost-probe/src/semantic_wire.rs": "58c671cee016246aa464a35ba443009813581e4a53bce37dd528d048009f2db7",
+      "crates/aspis-r1-cost-probe/src/transcript.rs": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+      "crates/aspis-r1-cost-probe/src/sim.rs": "e996090da85103804576dd66f86bbb9f51a14c0248eee9f5a62591db83e1debf",
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0",
+      "crates/aspis-r1-cost-probe/src/trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd",
+      "crates/aspis-r1-cost-probe/src/host_semantic.rs": "f45fbab6c7e5de8f315266fb78579f38b7b1931f56d55b126d9311dc88852136",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "f1f9f2846f7cf3ff34f69ccfe611c5c4ab86c6fb5ad4ee8a1f3c65a12164b7ae",
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+      "crates/aspis-r1-cost-probe/src/prover.rs": "868a4aeca5d2157af79fbf09f68f69a15a53721fde63299f9c7f2bed21ec0fe5",
+      "crates/aspis-r1-cost-probe/src/weights.rs": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+      "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "crates/aspis-r1-cost-probe/src/host_sumcheck.rs": "8295e94c3802332e2c0e9b408dc0f6b5ebd4bb4be565d07a25e9ce6bb12d925f",
+      "crates/aspis-r1-cost-probe/src/eight_way.rs": "11d8279926d0cede6bf347df889e315b465082856bb199effdf1d1d55ca47599",
+      "crates/aspis-r1-cost-probe/src/sim_tests.rs": "9f2191e1d16a2d71a165b2773d31cf5535ba7bf3c3f75611d5b56aa92cf4cb32",
+      "crates/aspis-r1-cost-probe/src/host_commitment.rs": "9afd423191513a8fcd1e9951df8c9e12349e9ecdd1749e8e697f192e7576b735"
+    },
+    "change": "Remove borrowed query adapter and checkpoint query reader helper: both measured slower. Keep restored residue loops. Reuse previously accepted inline owned query and explicit22 reads.",
+    "patch_sha256": "3ae2125ba3e5c549deba8547ad19c72d89868421d4b1bd2c75c77bde41d98d22",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/trim-adapters-54/extract-trim-adapters-54-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 81.821,
+        "peak_rss_kib": 549792,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/trim-adapters-54/extract-trim-adapters-54-aeneas/receipt.json",
+        "exit": 0,
+        "wall_seconds": 19.95,
+        "peak_rss_kib": 910996,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  },
+  {
+    "attempt": "checkpoint-k-inline-55",
+    "base_revision": "ca9ce10be29a46ff4891b7e8c6f94e76f1b94d58",
+    "source_hashes": {
+      "crates/aspis-r1-cost-probe/src/prover_retry_tests.rs": "e5defe18de27c7138e75c04fb51dcc81beed5c3879d656063e95056e89f79f26",
+      "crates/aspis-r1-cost-probe/src/compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+      "crates/aspis-r1-cost-probe/src/fast_dots.rs": "32d90c30e36dea620da0619bfdd9bd7fce3973fb22a3d8c30deb42a79a0ccd61",
+      "crates/aspis-r1-cost-probe/src/dense.rs": "291917ca9248b542ee9fb67f3f3978510a12fbce8882ffb652acacd64ec99234",
+      "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+      "crates/aspis-r1-cost-probe/src/r1_wire.rs": "d0cf787d38cc8b801b8c8b917a5c658ec685511728380b090ae8235fe62d0f08",
+      "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+      "crates/aspis-r1-cost-probe/src/fast_domain.rs": "bf4b66a59f6a23d19adf6f0021dfa0b9ddb010d6611181d13374fec12c612151",
+      "crates/aspis-r1-cost-probe/src/semantic.rs": "75d83ce86b203023c3a9a9d35420853b6a5a9196b634a971859f6f4b98b0d0c5",
+      "crates/aspis-r1-cost-probe/src/transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+      "crates/aspis-r1-cost-probe/src/lib.rs": "7ae79452db136d013872d1f7d5344557e971470e913546a10317a97d1f0390a4",
+      "crates/aspis-r1-cost-probe/src/semantic_wire.rs": "58c671cee016246aa464a35ba443009813581e4a53bce37dd528d048009f2db7",
+      "crates/aspis-r1-cost-probe/src/transcript.rs": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+      "crates/aspis-r1-cost-probe/src/sim.rs": "e996090da85103804576dd66f86bbb9f51a14c0248eee9f5a62591db83e1debf",
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0",
+      "crates/aspis-r1-cost-probe/src/trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd",
+      "crates/aspis-r1-cost-probe/src/host_semantic.rs": "f45fbab6c7e5de8f315266fb78579f38b7b1931f56d55b126d9311dc88852136",
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+      "crates/aspis-r1-cost-probe/src/prover.rs": "868a4aeca5d2157af79fbf09f68f69a15a53721fde63299f9c7f2bed21ec0fe5",
+      "crates/aspis-r1-cost-probe/src/weights.rs": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+      "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "crates/aspis-r1-cost-probe/src/host_sumcheck.rs": "8295e94c3802332e2c0e9b408dc0f6b5ebd4bb4be565d07a25e9ce6bb12d925f",
+      "crates/aspis-r1-cost-probe/src/eight_way.rs": "11d8279926d0cede6bf347df889e315b465082856bb199effdf1d1d55ca47599",
+      "crates/aspis-r1-cost-probe/src/sim_tests.rs": "9f2191e1d16a2d71a165b2773d31cf5535ba7bf3c3f75611d5b56aa92cf4cb32",
+      "crates/aspis-r1-cost-probe/src/host_commitment.rs": "9afd423191513a8fcd1e9951df8c9e12349e9ecdd1749e8e697f192e7576b735"
+    },
+    "change": "Inline Reader::k on checkpoint reads. Source54 meets all transfer budgets but withdrawal13 settlement misses by153CU; no byte checks or arithmetic change.",
+    "patch_sha256": "253ac74610febf0ac9d825f26ba2dc8d600e969415bd473181b52dae0fc5d2dd",
+    "phases": [
+      {
+        "phase": "charon",
+        "receipt": "attempts/checkpoint-k-inline-55/extract-checkpoint-k-inline-55-charon/receipt.json",
+        "exit": 0,
+        "wall_seconds": 82.14,
+        "peak_rss_kib": 549820,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      },
+      {
+        "phase": "aeneas",
+        "receipt": "attempts/checkpoint-k-inline-55/extract-checkpoint-k-inline-55-aeneas/receipt.json",
+        "exit": 0,
+        "wall_seconds": 20.261,
+        "peak_rss_kib": 911412,
+        "swaps": 0,
+        "error_prefix": null,
+        "print_axioms": "N/A: extraction, not Lean compilation"
+      }
+    ]
+  }
+]
