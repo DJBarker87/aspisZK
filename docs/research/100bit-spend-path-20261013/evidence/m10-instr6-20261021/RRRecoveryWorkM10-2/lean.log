@@ -1,0 +1,28 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/RRRecoveryWorkM10.lean:22:0: warning: automatically included section variable(s) unused in theorem `AspisR1.RRRecoveryWorkM10.initialScan_bound`:
+  [Field K]
+  [BEq K]
+  [LawfulBEq K]
+  [DecidableEq K]
+  [Fintype K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Field K] [BEq K] [LawfulBEq K] [DecidableEq K] [Fintype K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/RRRecoveryWorkM10.lean:50:26: error: Application type mismatch: The argument
+  RRActualScalarTraceM10.value ell q t ?m.56 d (initialValidState ell s hd hn) 0
+has type
+  (RRActualScalarTraceM10.collect ell q t ?m.56 d (initialValidState ell s hd hn) 0).1 =
+    (AspisV8R19.MemoizedProgramLaw.eval ?m.56
+        (SequentialFreshProgram.sequential (RRConcreteTraversal.run ell q t d (initialValidState ell s hd hn)) 0)).2
+but is expected to have type
+  (have start := initialValidState ell s hd hn;
+    have tape := extend (Finset.range (d * ell)) H fun x => (0, 0);
+    ((RRActualScalarTraceM10.collect ell q t tape d start 0).1.1,
+      initialScan s + RRActualTraversalWorkM10.work (cap D ell d) ell q t tape d start 0)) =
+    (AspisV8R19.MemoizedProgramLaw.eval (extend (Finset.range (d * ell)) H fun x => (0, 0))
+        (SequentialFreshProgram.sequential (RRConcreteTraversal.run ell q t d (initialValidState ell s hd hn)) 0)).2
+in the application
+  congrArg Prod.fst (RRActualScalarTraceM10.value ell q t ?m.56 d (initialValidState ell s hd hn) 0)
+'AspisR1.RRRecoveryWorkM10.initialScan_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RRRecoveryWorkM10.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RRRecoveryWorkM10.work' depends on axioms: [propext, Classical.choice, Quot.sound]
