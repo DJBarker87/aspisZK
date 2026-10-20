@@ -1,0 +1,26 @@
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+theorem Aeneas.Std.Array.index_usize_spec.{u} : ∀ {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize)
+  (hbound : ↑i < v.length), v.index_usize i ⦃ x => x = (↑v)[↑i] ⦄ :=
+fun {α} {n} v i hbound => Array.index_usize_spec._proof_1_5 v i hbound
+/home/dombarker/project-offloads/s1-prepared-public-source-v2-20261020/sources/CurrentPreparedPublicSources.lean:14:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Std.Array B N
+  but is expected to have type
+    { l // l.length = ↑N }
+  in the application
+    ↑a
+'AspisR1ClaimPreparedBridge.mapArray_index_success' depends on axioms: [propext, sorryAx]
+'AspisR1ClaimPreparedBridge.mapArray_index_inverse' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1ClaimPreparedBridge.selected_source_original_payload' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
