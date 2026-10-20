@@ -1,0 +1,26 @@
+def RRVectorNormalizedRows.rowsThrough.{u_1} : {K : Type u_1} → [Field K] → List (List K) → K → ℕ → ℕ → List (List K) :=
+fun {K} [Field K] gs a M B => List.ofFn fun n => RRVectorRowPolynomialBridge.row gs a M ↑n
+def RRVectorActualScanner.rowsUpTo.{u_1} : {K : Type u_1} → [Field K] → List (List K) → K → ℕ → ℕ → List (List K) :=
+fun {K} [Field K] gs a M L => List.ofFn fun i => RRVectorRowPolynomialBridge.row gs a M ↑i
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/GSStorageInspectionM10.lean:6:7: error(lean.unknownIdentifier): Unknown constant `RRVectorActualScanner.rowAt`
+def RRDenseCoeffVector.coeffAt.{u_1} : {K : Type u_1} → [Field K] → List K → ℕ → K :=
+fun {K} [Field K] cs i => cs[i]?.getD 0
+def RRDenseCoeffVector.toPolynomial.{u_1} : {K : Type u_1} → [inst : Field K] → List K → Polynomial K :=
+fun {K} [Field K] cs => ∑ i ∈ Finset.range cs.length, (Polynomial.monomial i) (RRDenseCoeffVector.coeffAt cs i)
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/GSStorageInspectionM10.lean:9:7: error(lean.unknownIdentifier): Unknown constant `RRVectorNormalizedRows.coefficientRow`
+def CompPoly.GuruswamiSudan.denseInterpolateWithBasisAndKernel.{u_1} : {F : Type u_1} →
+  [inst : Field F] →
+    [inst_1 : BEq F] →
+      [inst_2 : LawfulBEq F] →
+        [DecidableEq F] →
+          CompPoly.GuruswamiSudan.LinearKernelContext F →
+            Array CompPoly.CBivariate.Monomial →
+              Array (F × F) → CompPoly.GuruswamiSudan.GSInterpParams → Option (CompPoly.CBivariate F) :=
+fun {F} [Field F] [BEq F] [LawfulBEq F] [DecidableEq F] kernelContext basis points params =>
+  have matrix := CompPoly.GuruswamiSudan.interpolationMatrixOnBasis basis points params;
+  CompPoly.GuruswamiSudan.normalizeInterpolationPolynomialOnBasis? basis =<< kernelContext.homogeneousWitness matrix
+def CompPoly.GuruswamiSudan.denseLinearKernelContext.{u_1} : (F : Type u_1) →
+  [inst : Field F] → [inst_1 : BEq F] → [inst_2 : LawfulBEq F] → CompPoly.GuruswamiSudan.LinearKernelContext F :=
+fun F [Field F] [BEq F] [LawfulBEq F] =>
+  { homogeneousWitness := CompPoly.DenseMatrix.homogeneousWitnessInPlace, witness_width := ⋯, witness_sound := ⋯,
+    witness_nonzero := ⋯, witness_complete := ⋯ }
