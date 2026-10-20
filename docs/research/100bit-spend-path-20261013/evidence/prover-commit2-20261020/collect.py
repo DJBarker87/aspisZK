@@ -39,6 +39,9 @@ for a in range(8100,8400):
  current=P/meta['module']
  matches=current.exists() and hashlib.sha256(current.read_bytes()).hexdigest()==meta['source_sha256']
  row['matches_current_source']=matches
+ row['source_revision']=release.get('code_revision') if matches and status==0 else base+' + attempt source_sha256 / dependency pins'
+ if wall:
+  fields=wall[1].strip().split(':');row['wall_seconds']=sum(float(v)*60**i for i,v in enumerate(reversed(fields)))
  if status==0:
   assert all(set(re.search(r'\[(.*)\]',x)[1].split(', '))<= {'propext','Classical.choice','Quot.sound',''} for x in axioms),(a,axioms)
   if matches:accepted[meta['module']]=row
@@ -58,6 +61,6 @@ for pattern in ['AspisR1ProverCommit/*.lean','AspisR1ProverStreams/*.lean','Aspi
 (D/'attempts.jsonl').write_text(''.join(json.dumps(r,sort_keys=True)+'\n' for r in rows))
 (D/'accepted.json').write_text(json.dumps(accepted,indent=2)+'\n')
 artifacts={str(p.relative_to(D)):{'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size} for p in sorted(D.rglob('*')) if p.is_file() and p.name!='manifest.json'}
-manifest=dict(schema='focused-extractor-proof-packet-v1',branch='codex/cx-prover-commit2-20261020',source_revision_base=base,source_release=release,frozen_verifier='b2727acd3',status='partial-source-facts; blocked on whole-builder/reference',discharged_checklist_rows=[],new_theorems=26,environment='J',attempt_range=[8100,8399],accepted_modules=accepted,attempts=rows,artifacts=artifacts)
+manifest=dict(schema='focused-extractor-proof-packet-v1',branch='codex/cx-prover-commit2-20261020',source_revision=release.get('code_revision',base),source_revision_base=base,source_release=release,frozen_verifier='b2727acd3',status='partial-source-facts; blocked on whole-builder/reference',discharged_checklist_rows=[],new_theorems=26,environment='J',attempt_range=[8100,8399],accepted_modules=accepted,attempts=rows,artifacts=artifacts)
 (D/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print(f'Validated {len(accepted)} current modules; collected {len(rows)} receipts/control records; no builds launched.')
