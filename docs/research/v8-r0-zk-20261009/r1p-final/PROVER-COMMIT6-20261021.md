@@ -199,3 +199,75 @@ all other binders byte-identical. The generated diff is:
      (R_commit_counter₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2^64) (R_commit_counter₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2^64)
      (R_commit_stream₁ : 16 * L₁ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ * 8) (R_commit_stream₂ : 16 * L₂ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ * 8)
 ```
+
+## Before (verbatim)
+
+```text
+| R_commit_D80.roots/nodes | AddressAt for all three roots/internal binary parents, child order, padded folded geometry, byte carrier and D81 grammar. Do not substitute eight-way C2 recovery for binary recovery. |
+| R_commit_D80.leaves | Exact 0x71/0xf1/0x72 tags, packed leafVal/trailing salt, private-leaf backend and byte/digest conversions, on the actual prover tree. |
+| R_commit_D80.bindings | Both secret-attempt binding reads, source/public/variant mapping, context encoding and digest answers (P`R1Z/LayoutR1PBin.lean:133`). |
+| R_commit_D80.seeds | All three seed derivations, reserved secret distribution and source/D stream selection (P`R1Z/LayoutR1PBin.lean:136`). |
+| R_commit_D80.salts | Full per-leaf secret salt derivation, nonce/tree/secret binding and LE32(u) (P`R1Z/LayoutR1PBin.lean:140`); verifier facts only consume disclosed salts. |
+| R_commit_D80.mask_expander/source_expander | Stream/domain/seed/LE64(counter), eight words per block, no counter reuse, index/stream selection and complete hash-read coverage (P`R1Z/LayoutR1PBin.lean:131`). |
+| R_commit_equal_fibres, cF | Exact equal-cardinality successful tape fibres for every τ. Deterministic expansion and successful tests do not establish uniform tapes. |
+| R_commit_exhaustion | Every tapeOf failure implies one of the actual two 16-try little-endian stream-exhaustion events; exact source wordsE transport (P`R1Z/FinalR1PBin.lean:44,54`). |
+| R_commit_counter₁/₂, R_commit_stream₁/₂, R_commit_cell_count, R_commit_blocks₁/₂ | E≤2^64, 16L≤8E, RCommitCount cell bounds and E≤2L; universal source commitment read completeness. D76's fixture count alone is not this universal refinement. |
+```
+
+## After (verbatim; nine complete source rows remain open)
+
+```text
+| R_commit_D80.roots/nodes | AddressAt for all three roots/internal binary parents, child order, padded folded geometry, byte carrier and D81 grammar. Do not substitute eight-way C2 recovery for binary recovery. |
+| R_commit_D80.leaves | Exact 0x71/0xf1/0x72 tags, packed leafVal/trailing salt, private-leaf backend and byte/digest conversions, on the actual prover tree. |
+| R_commit_D80.bindings | Both secret-attempt binding reads, source/public/variant mapping, context encoding and digest answers (P`R1Z/LayoutR1PBin.lean:133`). |
+| R_commit_D80.seeds | All three seed derivations, reserved secret distribution and source/D stream selection (P`R1Z/LayoutR1PBin.lean:136`). |
+| R_commit_D80.salts | Full per-leaf secret salt derivation, nonce/tree/secret binding and LE32(u) (P`R1Z/LayoutR1PBin.lean:140`); verifier facts only consume disclosed salts. |
+| R_commit_D80.mask_expander/source_expander | Stream/domain/seed/LE64(counter), eight words per block, no counter reuse, index/stream selection and complete hash-read coverage (P`R1Z/LayoutR1PBin.lean:131`). |
+| R_commit_quotient_fibres, cF | Equal successful fibres on the H1 quotient; measure-preserving completion is proved. The explicit sequential wordsE decoder has a derived fibre constant and a successful input; the actual source/caller/order/field-image equation remains open. |
+| R_commit_exhaustion | Every tapeOf failure must imply one of the actual two 16-try little-endian stream-exhaustion events. Quotient packing adds no failures; the source caller/cursor law and exact wordsE-to-Exhausted classification remain open. |
+| R_commit_counter₁/₂, R_commit_stream₁/₂, R_commit_cell_count, R_commit_blocks₁/₂ | All coordinate-model count, canonical stream/block and counter bounds are proved. The universal shipped caller/read-completeness instance remains open; model cardinalities do not establish source coverage. |
+```
+
+## Final release evidence and ELF rule
+
+One final coherent new-cone audit, `R1Z.ProverCommit6Audit`, env J **8239**:
+exit **0**, wall **1.74 s**, peak RSS **4,038,252 KiB**, **zero swaps**.
+Source revision **d8f573e17** contains every adopted source byte; the audit
+was compiled from the same SHA before its source-only commit. The exact
+source SHA256, dependency fingerprint, host source/object hashes and all
+52 verbatim `#print axioms` results are retained in `lean/`,
+`source-release.json`, `final-host-hashes.json` and `final-audit.json`.
+Every axiom set is a subset of `[propext, Classical.choice, Quot.sound]`.
+All 17 release modules match accepted focused receipts and the final own
+object dependencies; `harness/validate.py` passes without rerunning a
+compiler/solver. Failed drafts remain excluded and their exact source text
+is retained under `lean/sources/`. Two dependency preflights (before actual
+8211 and 8232) launched no compiler and consumed no attempt; both numbers
+were subsequently used normally. Attempts **8188–8239** are consumed;
+next available is **8240**.
+
+The final scope uses MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0,
+TasksMax=64, Lean -M7000, and the existing shared reservation/slot locks.
+No global launcher or peer-owned source/object is replaced. Only own new
+modules are installed; any previous own draft/source/object is snapshotted.
+The existing frozen manifest is not replayed unchanged; all changed targets
+were checked in order and the complete additive cone imported in the final
+audit. No generated certificate, arithmetic gate or cold dependency build
+runs.
+
+No crate, program, Cargo input or shipped function changed in this
+continuation. All **491** hashes in the retained accepted ELF source
+inventory match. `elf-inheritance.json` records the inherited three
+byte-identical `cmp` verdicts, artifact SHA256s/sizes and accepted build
+receipts. The unchanged SBF/runtime/adversarial gates are not repeated.
+No binaries or objects are committed. No keys are created, read, unlinked
+or deleted; no deployment, transaction, merge or push occurs.
+
+The task stops at the demonstrated aggregate source-lowering obstruction,
+with the source caller identity, exact RExh cursor classification and
+universal source read completeness still open. The quotient release endpoint,
+strict weakening, complete constructed commitment-observable transport,
+sequential model decoder/fibre law and model count/budget instance are
+checked results, rather than proposed replacements for those missing source
+identifications. SourceIdentification, RustRuntimeJoin and
+PrivacyR1FinalRelease are untouched.
