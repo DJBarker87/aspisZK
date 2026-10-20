@@ -1,0 +1,47 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/GSScalarCallScheduleM10.lean:28:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+K : Type
+inst✝² : Field K
+inst✝¹ : BEq K
+inst✝ : LawfulBEq K
+f h : CPolynomial K
+q : ℕ
+⊢ (have d0 := f.gcdMonic h;
+      if proper d0 f = true then (some d0, [Call.gcd f h])
+      else
+        have a := CompPolyPolynomialBackendBridge.modPower h f (q / 2);
+        have d1 := f.gcdMonic (a - 1);
+        (if proper d1 f = true then some d1 else none, [Call.gcd f h, Call.power h f (q / 2), Call.gcd f (a - 1)])).1 =
+    have d0 := f.gcdMonic h;
+    if proper d0 f = true then some d0
+    else
+      have d1 := f.gcdMonic (CompPolyPolynomialBackendBridge.modPower h f (q / 2) - 1);
+      if proper d1 f = true then some d1 else none
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/GSScalarCallScheduleM10.lean:32:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+K : Type
+inst✝² : Field K
+inst✝¹ : BEq K
+inst✝ : LawfulBEq K
+f h : CPolynomial K
+q : ℕ
+⊢ (have d0 := f.gcdMonic h;
+        if proper d0 f = true then (some d0, [Call.gcd f h])
+        else
+          have a := CompPolyPolynomialBackendBridge.modPower h f (q / 2);
+          have d1 := f.gcdMonic (a - 1);
+          (if proper d1 f = true then some d1 else none,
+            [Call.gcd f h, Call.power h f (q / 2), Call.gcd f (a - 1)])).2.length ≤
+    3
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/GSScalarCallScheduleM10.lean:62:29: error: `simp` made no progress
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/GSScalarCallScheduleM10.lean:125:10: error: `dsimp` made no progress
+'AspisR1.GSScalarCallScheduleM10.trial_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GSScalarCallScheduleM10.trial_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GSScalarCallScheduleM10.retry_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GSScalarCallScheduleM10.retry_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GSScalarCallScheduleM10.factor_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GSScalarCallScheduleM10.factor_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
