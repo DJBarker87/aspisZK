@@ -325,3 +325,15 @@ dedup/padding composition to per-query executable path acceptance. R13
 stays OPEN on: the accepted-source-run implication (sorted-key/dedup and
 mutable-array simulation, source padding-scan correctness, whole-run read
 coverage, caller composition), and batch A (stage 1) on the S7 re-pin.
+
+## Addendum (2026-10-20): R12 conditional on the binary format
+
+Codex job cx-r12-words (7701a4dcb): five modules, 20 audits, standard
+axioms, ≤ 3.48 GiB (`design/R12-WORDS-20261020.md`). Proved conditionally:
+C1 (row 0) and folded (row 30) whole-word stability, accepted logged
+opening projections, the actual source-frame targets, the row-0/row-30
+literal constructors, and a stage-2 folded-leaf adapter. Row R12: PROVED
+(conditional), mirroring R11, on the Bin recovery modules. Remaining: the
+R10 composition and accounting, R13's source acceptance/decoding/read
+containment, the folded payload/checkpoint linkage, backend/conversion
+correspondence, caller re-pins and scalar transport.
