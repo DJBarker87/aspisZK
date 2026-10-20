@@ -1,0 +1,89 @@
+import R9QueryScanTransport
+import BinM9C3Closure
+
+/-! Exact C3 h_R9 transport and the binary M9 consumer, parameterized by the
+abstract source run rather than one frozen Aeneas package. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.R9C3Transport
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open R9TwoTransactionExperiment R9QueryScanTransport
+open RawCutProverCompiler RawCutTranscriptRun R1FinalSoundness
+open BinChecksAdaptiveFailureNoModel BinDecoderCompletionBoundary
+
+/-- The deployed failure number is defined by the two-transaction experiment,
+not supplied as a free rational with an asserted probabilistic meaning. -/
+def deployedFailure {C : Type} (tx1 : Program Bytes State (First C))
+    (tx2 : C → Program Bytes State Run) : ℚ :=
+  lazyMean (experiment tx1 tx2) emptyTable deployedMass
+
+/-- Exact replacement for C3's h_R9_transport. Source projection/order and
+byte/word backend correspondence are the remaining pointwise source facts.
+The decoder, adversary and extractor are precisely C3's parameters. -/
+theorem c3_transport {C Residual : Type} [Fintype Residual] [Nonempty Residual]
+    (tx1 : Program Bytes State (First C)) (tx2 : C → Program Bytes State Run)
+    (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover)
+    (hrefine : OrderedSourceRefinement (experiment tx1 tx2) (recorded D d P))
+    (hwords : QueryWordCorrespondence (experiment tx1 tx2) Residual) :
+    DeployedTransport D d P (deployedFailure tx1 tx2) :=
+  transport (experiment tx1 tx2) (recorded D d P) hrefine hwords
+
+/-- C3's evidence-indexed law, with its exact BoundaryEvidence quantifier.
+This can replace the original mass-transport assumption without editing C3. -/
+theorem c3_transport_obligation {C Residual : Type}
+    [Fintype Residual] [Nonempty Residual]
+    (tx1 : Program Bytes State (First C)) (tx2 : C → Program Bytes State Run)
+    (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover)
+    (s : BoundaryStatements)
+    (hrefine : BoundaryEvidence s →
+      OrderedSourceRefinement (experiment tx1 tx2) (recorded D d P))
+    (hwords : BoundaryEvidence s →
+      QueryWordCorrespondence (experiment tx1 tx2) Residual) :
+    BoundaryEvidence s → DeployedTransport D d P (deployedFailure tx1 tx2) := by
+  intro evidence
+  exact c3_transport tx1 tx2 D d P (hrefine evidence) (hwords evidence)
+
+/-- The binary failure theorem consumes the derived transport law. Binary
+completion/Checks and the two distinct query/start budgets remain exactly
+M9-binary's contracts, not new source probability hypotheses. -/
+theorem source_binary_failure_bound {C Residual : Type}
+    [Fintype Residual] [Nonempty Residual]
+    (tx1 : Program Bytes State (First C)) (tx2 : C → Program Bytes State Run)
+    (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (Q : Nat)
+    (hrefine : OrderedSourceRefinement (experiment tx1 tx2) (recorded D d P))
+    (hwords : QueryWordCorrespondence (experiment tx1 tx2) Residual)
+    (hQ : ∀ H : Bytes → State,
+      firstReads emptyTable (eval H (original D d P)).1 ≤ Q + 1161)
+    (htag : ∀ H : Bytes → State, (eval H (original D d P)).2.1.1.tag = 2)
+    (hchecks : CheckedAcceptance D d P)
+    (hknown : LiteralCompletion D d P (Q + 1161))
+    (hN : ∀ H : Bytes → State, DecodedFirstReadUnionBound.decoderFirstReads dec
+      emptyTable (eval H (recorded D d P)).1 ≤ 33) :
+    BinaryClean D d P (Q + 1161) ∧
+    deployedFailure tx1 tx2 ≤ R1FinalSoundnessNumeric.totalBound Q ∧
+    (Q ≤ R1FinalSoundnessNumeric.maxAdversaryQueries →
+      deployedFailure tx1 tx2 < 1 / (2 : ℚ)^100) := by
+  exact BinM9C3Closure.composed_binary_failure_bound_known_public
+    D d P Q (deployedFailure tx1 tx2) hQ htag hchecks hknown hN
+    (c3_transport tx1 tx2 D d P hrefine hwords)
+
+/-- A rejected stage 1 does not become an accepted failure, regardless of
+its ghost query padding or any hypothetical stage-2 continuation. -/
+theorem rejected_stage1 {C : Type}
+    (tx1 : Program Bytes State (First C)) (tx2 : C → Program Bytes State Run)
+    (H : Bytes → State) (h : (eval H tx1).2.checkpoint = none)
+    (coins : GSConcreteByteDecoderBank.RawCoins) :
+    ¬ failure (eval H (experiment tx1 tx2)) coins := by
+  simp [failure, experiment, eval_bind, h, eval]
+
+#print axioms c3_transport
+#print axioms c3_transport_obligation
+#print axioms source_binary_failure_bound
+#print axioms rejected_stage1
+end AspisR1.R9C3Transport
+end

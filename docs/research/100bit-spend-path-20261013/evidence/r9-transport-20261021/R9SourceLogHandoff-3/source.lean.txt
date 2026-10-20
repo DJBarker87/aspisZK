@@ -1,0 +1,32 @@
+import RawTx1Tx2ConsistentLog
+import R9TwoTransactionExperiment
+
+/-! R10 handoff in the tx1 generated environment. Stage 2 supplies the
+common certificate from its separately compiled embedding theorem; its
+conflicting generated package is deliberately not imported here. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.R9SourceLogHandoff
+open Aeneas Aeneas.Std
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisR1PublicPreparation
+
+/-- Direct consumer of LOG-TX2's conditional joint embedding. The reached
+predicates include all dynamic/backend calls. Their completeness and the
+chronological relation to R9.experiment remain source execution facts. -/
+theorem embedding {Hash : Type} (D : aspis_core.Digest32 Hash)
+    (H : Bytes → State) (backend : Tx1DigestLog.ByteOracleBackend D H)
+    (tr1 tr2 : List (Bytes × State))
+    (actual1 : ∀ q ∈ tr1, Tx1DigestLog.ActualPair D q)
+    (tx2Certificate : AspisR1DigestLogCarrier.Consistent H tr2)
+    (reached1 reached2 : Bytes × State → Prop)
+    (coverage1 : Tx1DigestLog.Tx1InventoryComplete reached1 tr1)
+    (coverage2 : Tx1DigestLog.Tx2EmbeddingObligation reached2 tr2) :
+    AspisR1DigestLogCarrier.Consistent H (tr1 ++ tr2) ∧
+      ∀ q, reached1 q ∨ reached2 q → q ∈ tr1 ++ tr2 ∧ q.2 = H q.1 :=
+  Tx1Tx2ConsistentLog.cross_transaction_assembly D H backend tr1 tr2
+    actual1 tx2Certificate reached1 reached2 coverage1 coverage2
+
+#print axioms embedding
+end AspisR1.R9SourceLogHandoff
+end

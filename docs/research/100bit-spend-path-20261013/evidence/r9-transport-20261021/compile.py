@@ -31,6 +31,9 @@ module = sys.argv[1]
 source = PACKET / 'lean' / (module + '.lean')
 baseline = json.loads((PACKET / 'evidence/c3-skeleton-20261020/manifest.json').read_text())
 path = ':'.join([str(OBJECTS), '/tmp/codex-cx-m9-binary-20261020-objects', '/tmp/codex-cx-log-tx2-20261020-objects', '/tmp/codex-cx-queryscan-20261020-objects', baseline['attempts'][-1]['lean_path']])
+if module == 'R9SourceLogHandoff':
+    log_path = json.loads((PACKET / 'evidence/log-tx2-20261020/joint-v1/command.json').read_text())['environment']['LEAN_PATH']
+    path = ':'.join(dict.fromkeys([str(OBJECTS)] + log_path.split(':')))
 imports = []
 for name in re.findall(r'^import (\S+)', source.read_text(), re.M):
     obj = next((Path(p) / (name.replace('.', '/') + '.olean')
@@ -39,12 +42,12 @@ for name in re.findall(r'^import (\S+)', source.read_text(), re.M):
     if obj is None:
         raise SystemExit('Missing cached import: ' + name)
     imports.append({'module': name, 'path': str(obj), 'sha256': sha(obj)})
-fp = hashlib.sha256(json.dumps(imports, sort_keys=True).encode()).hexdigest()
+fp = hashlib.sha256(json.dumps({'direct_imports': imports, 'lean_path': path}, sort_keys=True).encode()).hexdigest()
 manifest = HERE / 'manifest.json'
 data = json.loads(manifest.read_text()) if manifest.exists() else {
     'schema': 'focused-extractor-proof-packet-v1', 'attempts': [],
     'status': 'focused model packet; coherent frozen release replay remains separate'}
-if any(a['source_sha256'] == sha(source) and a['deps_fingerprint'] == fp
+if any(a['source_sha256'] == sha(source) and a['direct_imports'] == imports and a['lean_path'] == path
        for a in data['attempts']):
     raise SystemExit('Refused unchanged source/dependency retry')
 n = 1 + max([int(p.name.rsplit('-', 1)[1]) for p in HERE.glob(module + '-*') if p.is_dir()] or [0])
