@@ -1,0 +1,47 @@
+/Users/dominic/ZK/.worktrees/cx-r3-semantic/docs/research/100bit-spend-path-20261013/lean/R3SemanticRemainingJoins.lean:27:5: error(lean.unknownIdentifier): Unknown identifier `preZc`
+/Users/dominic/ZK/.worktrees/cx-r3-semantic/docs/research/100bit-spend-path-20261013/lean/R3SemanticRemainingJoins.lean:50:2: error: Type mismatch
+  (h view claim polys hopen hclaim hpolys).right
+has type
+  Polynomial.eval 0 (polys 0) + Polynomial.eval 1 (polys 0) = claim ∧
+    (∀ (j : Fin 9),
+        Polynomial.eval 0 (polys j.succ) + Polynomial.eval 1 (polys j.succ) =
+          Polynomial.eval ((fun j => (List.map Prod.snd view.semantic).getD (15 + ↑j) 0) j.castSucc)
+            (polys j.castSucc)) ∧
+      Polynomial.eval ((fun j => (List.map Prod.snd view.semantic).getD (15 + ↑j) 0) 9) (polys 9) =
+        terminalZ (maskClaimsR0 ConcretePackBasis.basis) (SpendDataMap.mapPublic (⇑ExactBaseProjection.embed) pub)
+          ((fun j => (List.map Prod.snd view.semantic).getD (↑j) 0) 0)
+          ((fun j => (List.map Prod.snd view.semantic).getD (↑j) 0) 1)
+          ((fun j => (List.map Prod.snd view.semantic).getD (↑j) 0) 2)
+          ((fun j => (List.map Prod.snd view.semantic).getD (↑j) 0) 13) ((List.map Prod.snd view.semantic).getD 14 0)
+          (R0P.SemSource.preZc fun j => (List.map Prod.snd view.semantic).getD (↑j) 0) ConcretePackBasis.basis
+          (fun j l => data.Y ⟨↑j, ⋯⟩ l) (data.Y 3) fun j => (List.map Prod.snd view.semantic).getD (15 + ↑j) 0
+but is expected to have type
+  Equations claim (terminal pub view data) (fun j => (List.map Prod.snd view.semantic).getD (15 + ↑j) 0) polys
+/Users/dominic/ZK/.worktrees/cx-r3-semantic/docs/research/100bit-spend-path-20261013/lean/R3SemanticRemainingJoins.lean:59:4: error: Application type mismatch: The argument
+  h view claim polys hopen hclaim hpolys
+has type
+  Equations claim (terminal pub view data) (fun j => (List.map Prod.snd view.semantic).getD (15 + ↑j) 0) polys
+but is expected to have type
+  Polynomial.eval 0 (polys 0) + Polynomial.eval 1 (polys 0) = claim ∧
+    (∀ (j : Fin 9),
+        Polynomial.eval 0 (polys j.succ) + Polynomial.eval 1 (polys j.succ) =
+          Polynomial.eval ((fun j => (List.map Prod.snd view.semantic).getD (15 + ↑j) 0) j.castSucc)
+            (polys j.castSucc)) ∧
+      Polynomial.eval ((fun j => (List.map Prod.snd view.semantic).getD (15 + ↑j) 0) 9) (polys 9) =
+        terminalZ (maskClaimsR0 ConcretePackBasis.basis) (SpendDataMap.mapPublic (⇑ExactBaseProjection.embed) pub)
+          ((fun j => (List.map Prod.snd view.semantic).getD (↑j) 0) 0)
+          ((fun j => (List.map Prod.snd view.semantic).getD (↑j) 0) 1)
+          ((fun j => (List.map Prod.snd view.semantic).getD (↑j) 0) 2)
+          ((fun j => (List.map Prod.snd view.semantic).getD (↑j) 0) 13) ((List.map Prod.snd view.semantic).getD 14 0)
+          (R0P.SemSource.preZc fun j => (List.map Prod.snd view.semantic).getD (↑j) 0) ConcretePackBasis.basis
+          (fun j l => data.Y ⟨↑j, ⋯⟩ l) (data.Y 3) fun j => (List.map Prod.snd view.semantic).getD (15 + ↑j) 0
+in the application
+  ⟨parsed_degrees rs view polys hopen hpolys, h view claim polys hopen hclaim hpolys⟩
+'AspisR1.R3SemanticRemainingJoins.equations_of_semantic' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.R3SemanticRemainingJoins.semantic_of_equations' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
