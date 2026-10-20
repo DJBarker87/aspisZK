@@ -53,7 +53,21 @@ transport; no limits were raised or concrete finite universes reduced.
 
 ## Endpoint signature and before/after
 
-Pending final statement audit. No unconditional replacement endpoint is claimed.
+The implemented endpoint is deliberately **not** the requested completely
+weakened theorem. The unchanged conclusion follows from two execution-only
+`ModelExecutionJoin`s, plus a retained `real_model_history_law`. The ideal
+mass law is discharged for the fixed `QueryScanIdealHistory.selectedBad`.
+The more general `privacy_R1_protocol_history_of_model_laws` adapter retains
+both model laws. Neither theorem hides a probability premise inside an
+execution definition.
+
+The old arbitrary-event ScanCoupling and a fixed-event ModelExecutionJoin
+cannot be asserted to have a strict logical weakening relationship. Event
+identification is additional execution content. Literal deletion is strictly
+weaker but vacuous, as the zero/one counterexample proves. Therefore no claim
+of the requested strict weakening or complete real-model discharge is made.
+All other retained binders and the entire conclusion are textually unchanged;
+`audit-history.py` checks this and the compiled source hashes.
 
 ## Stage 3: compiled shared-ROM obstruction
 
@@ -130,3 +144,160 @@ ideal join must still identify the same selectedBad events and prove the
 whole-observation agreement, including programmed-oracle, retry, failure and
 publication behavior. Such agreement mentions an arbitrary source experiment
 and cannot be a model-only theorem.
+
+## Exact signature diff
+
+```diff
+--- PrivacyR1FinalProtocol.privacy_R1_protocol
++++ PrivacyR1FinalProtocolHistory.privacy_R1_protocol_history
+@@ -1,3 +1,3 @@
+-theorem privacy_R1_protocol
++theorem privacy_R1_protocol_history
+     (seed : R1ProverP K CommitHandle Aux F
+       (wire base ((base.pubBytes x).length) h B outputs x).toWire)
+@@ -26,13 +26,16 @@
+     (observer_program : source.Adversary → View K CommitHandle Aux R1Bat →
+       List (List UInt8 × OracleAnswer) → OProg)
++    (realBad : source.Adversary → h.Instance → Fin 8 → (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide) (P_R1 h.transport B hB) (fun h' => VR1 h')).RealRand → Prop)
++    (real_model_history_law : ∀ adv w, h.public w = x.1 →
++      ∀ i, eventMass (realBad adv w i) ≤ scanProbability)
+     (R_wire_builder_checker_D75_retry : ∀ (adv : source.Adversary) (w : h.Instance),
+-      h.public w = x.1 → ScanCoupling
++      h.public w = x.1 → ModelExecutionJoin
+         (realTest h B outputs source adv x w)
+         (realTest h B outputs (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide)
+-          (P_R1 h.transport B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w))
+-    (G_sim_R_wire : ∀ adv : source.Adversary, ScanCoupling
++          (P_R1 h.transport B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w) (realBad adv w))
++    (G_sim_R_wire : ∀ adv : source.Adversary, ModelExecutionJoin
+       (idealTestS source adv x (simE h.transport B outputs x))
+       (idealTestS (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide) (P_R1 h.transport B hB) (fun h' => VR1 h'))
+-        (RomObserverBin.observerMap source observer_program adv) x (simE h.transport B outputs x))) :
++        (RomObserverBin.observerMap source observer_program adv) x (simE h.transport B outputs x)) (QueryScanIdealHistory.selectedBad)) :
+     ZK_FSS h B outputs source x (simE h.transport B outputs x)
+       (modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486) ∧
+
+```
+
+## Before: original coupling premises, verbatim
+
+```lean
+    (R_wire_builder_checker_D75_retry : ∀ (adv : source.Adversary) (w : h.Instance),
+      h.public w = x.1 → ScanCoupling
+        (realTest h B outputs source adv x w)
+        (realTest h B outputs (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide)
+          (P_R1 h.transport B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w))
+    (G_sim_R_wire : ∀ adv : source.Adversary, ScanCoupling
+      (idealTestS source adv x (simE h.transport B outputs x))
+      (idealTestS (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide) (P_R1 h.transport B hB) (fun h' => VR1 h'))
+        (RomObserverBin.observerMap source observer_program adv) x (simE h.transport B outputs x))) :
+```
+
+## After: implemented conditional endpoint, verbatim
+
+The following uses the same namespace opens and context as the original;
+`R1Z.QueryScanHistorySplit` is additionally open. It retains the real model
+law explicitly because the requested universal history argument is obstructed.
+
+```lean
+theorem privacy_R1_protocol_history
+    (seed : R1ProverP K CommitHandle Aux F
+      (wire base ((base.pubBytes x).length) h B outputs x).toWire)
+    (hB : R0Z.K4.PackField B) (hpub : PublicBase F x.1)
+    (builder_refinement_D46_D51 : R0Z.HonestValidity.BuilderSoundOn h B x)
+    (cF : ℕ)
+    (R_commit_equal_fibres : ∀ τ : Tape K F, (Finset.univ.filter
+      (fun e : (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ → OracleAnswer) × (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ → OracleAnswer) =>
+        ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).tapeOf e.1 e.2 = some τ)).card = cF)
+    (L₁ L₂ : ℕ) (R_commit_exhaustion : RExh (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂)
+    (R_commit_counter₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2^64) (R_commit_counter₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2^64)
+    (R_commit_stream₁ : 16 * L₁ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ * 8) (R_commit_stream₂ : 16 * L₂ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ * 8)
+    (R_wire_coin_carrier : ((wire base ((base.pubBytes x).length) h B outputs x).toWire).Cm ≃ (RIdx → OracleAnswer))
+    (R_wire_D80_batches : RWireBatches (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver)
+    (R_wire_D80_ordered_log : ∀ (w : h.Instance) (sec : SecP) (d : OracleAnswer)
+      (τ : Tape K F) (roots : Fin 3 → OracleAnswer) (rest : RIdx → OracleAnswer) (ch : Challenges K),
+      ((wire base ((base.pubBytes x).length) h B outputs x).toWire).comLog (R_wire_coin_carrier.symm rest) roots (view h B outputs x w ch τ) ch =
+        (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).openList ch).map (fun c =>
+          (gram (((wire base ((base.pubBytes x).length) h B outputs x).toWire).pubBytes x) ((wire base ((base.pubBytes x).length) h B outputs x).toWire).vtag (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).leafVal h w x τ ch) sec d rest
+            (cposOf (E₁ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁) (E₂ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂) c), ansC roots rest c)))
+    (R_commit_cell_count : RCommitCount L₁ L₂)
+    (R_commit_blocks₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2 * L₁) (R_commit_blocks₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2 * L₂)
+    (source : FSExperiments K CommitHandle Aux R1Bat F)
+    [Fintype source.RealRand] [Nonempty source.RealRand]
+    [Fintype source.IdealRand] [Nonempty source.IdealRand]
+    (observer_program : source.Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
+    (realBad : source.Adversary → h.Instance → Fin 8 → (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide) (P_R1 h.transport B hB) (fun h' => VR1 h')).RealRand → Prop)
+    (real_model_history_law : ∀ adv w, h.public w = x.1 →
+      ∀ i, eventMass (realBad adv w i) ≤ scanProbability)
+    (R_wire_builder_checker_D75_retry : ∀ (adv : source.Adversary) (w : h.Instance),
+      h.public w = x.1 → ModelExecutionJoin
+        (realTest h B outputs source adv x w)
+        (realTest h B outputs (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide)
+          (P_R1 h.transport B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w) (realBad adv w))
+    (G_sim_R_wire : ∀ adv : source.Adversary, ModelExecutionJoin
+      (idealTestS source adv x (simE h.transport B outputs x))
+      (idealTestS (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide) (P_R1 h.transport B hB) (fun h' => VR1 h'))
+        (RomObserverBin.observerMap source observer_program adv) x (simE h.transport B outputs x)) (QueryScanIdealHistory.selectedBad)) :
+    ZK_FSS h B outputs source x (simE h.transport B outputs x)
+      (modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486) ∧
+    modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454
+```
+
+## Stage 5: unconditional scan-subrun obstruction
+
+`QueryScanSharedHistoryMass` strengthens the counterexample without conditioning
+the oracle table: for every bound≥33, a scan **started at a fixed zero state**
+against a uniform table fails with mass at least `1 / card OracleAnswer`.
+The self-loop event has exactly this mass, by a generic coordinate projection.
+The retained symbolic `card_ans` theorem gives `card OracleAnswer = 2^256`;
+thus this lower bound is strictly greater than scanProbability≤2^-486.
+`uniform_shared_scan_not_independent_bound` is the compiled contradiction.
+This result concerns the query subrun at a fixed input state. It is **not**
+a lower bound for the complete release game's differently distributed starting
+state, nor a proof that every endpoint ScanCoupling is impossible. It rules
+out the proposed generic transfer from uniform shared-ROM tables to the
+independent scan bound without collision accounting.
+
+Env J 9821: exit 0, 2.28 s, peak RSS 4,047,480 KiB, swaps 0, eight standard
+axiom audits. 9820 encountered inferred byte-carrier instance reduction;
+the replacement factors evaluation/point-mass transport through generic
+carriers and reuses card_ans via Fintype subsingleton equality. No enumeration,
+cap increase, recursion override, or unchanged retry was used.
+
+## Exact remaining source and model facts
+
+| Obligation | Proven here / exact remaining fact |
+|---|---|
+| At most eight attempts per model side | Existing model uses `Fin 8`; new laws quantify each of those coordinates. Source cannot silently add attempts: the execution join must cover its complete run and publication. |
+| LE low-18-bit words, first 22 distinct, stop/failure | Retained byte-word bijection plus new MP projection and symbolic selected-stop/failure bridge. Source must identify its parsed words, masks, state updates, stable order, first stop, and error count with these exact functions. |
+| Ideal model mass | Proved for `selectedBad` on the exact constructed `fsR1P.IdealRand`, including arbitrary reached subevents. |
+| Real model mass | `real_model_history_law` remains explicit. Need a concrete definition of the real bad events and a valid unconditional bound, using fresh lazy words with collision/prior-read transport. The generic shared-ROM bound is false; a combined reduction must charge collisions once within its stated budget. |
+| Every history conditional bound | False as stated: inhabited self-loop histories have failure mass one. No source fact can repair this universal model claim while preserving shared-oracle repeated-read semantics. Restrict to fresh histories, use reached subevent masses, and charge the excluded events. |
+| Coupling maps | Source must supply genuine finite randomness and measure-preserving maps to this same constructed experiment. No Rust extraction/fixture is assumed to give these maps. |
+| Whole Boolean agreement off the union | Remains exactly `ModelExecutionJoin.agreement`. Source must preserve complete observations, retries, partial/failed query decoding, mask exhaustion, programmed/common backend answers, ordered logs, serialization, and failure publication. Model-only facts cannot establish an equality mentioning an arbitrary source observation. |
+| Event ownership | Source join must identify the selected model events or explicitly transported lazy events, not select arbitrary exceptional predicates. Literal mass-field erasure allows True everywhere and is insufficient. |
+
+The two fixed-event joins have **no probability fields**. The real law is a
+separate, plainly named input. This is an honest split and an ideal discharge,
+not the requested complete replacement by strictly weaker joins. The report's
+compiled counterexamples are the reason that item stops; independent ideal,
+parser, endpoint adapter, and evidence work continued through completion.
+
+## Endpoint and resource evidence
+
+`PrivacyR1FinalProtocolHistory.privacy_R1_protocol_history` retains exactly the
+original ZK_FSS conclusion and numerical error. It supplies the ideal selected
+failure law internally. The generic adapter also compiles. The new endpoint
+is independently audited by `#print axioms`; final receipt appears below.
+
+All attempts use run-joint.sh env J, Lean -M7000, MemoryHigh=5G,
+MemoryMax=7G, MemorySwapMax=0, and the launcher's aggregate reservation check.
+Only new modules and this branch's own snapshotted drafts/objects were written
+in the shared build tree. No existing dependency source/object was replaced.
+Protected endpoint, BuilderSource and SourceIdentification sources match base.
+No Rust harness, wallet, account key, production file, merge, push, SBF build,
+or unrelated full regression was touched. The focused endpoint is the final
+dependent bridge; no frozen certificate or manifest was changed, so no
+unchanged package-wide replay was run.
