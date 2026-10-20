@@ -1,0 +1,48 @@
+def Aeneas.Std.Usize.checked_sub : Usize → Usize → Option Usize :=
+fun x y => core.num.checked_sub_UScalar x y
+/Users/dominic/ZK/.worktrees/cx-r20-pool/docs/research/100bit-spend-path-20261013/lean/R20PoolHintStrip.lean:4:7: error(lean.unknownIdentifier): Unknown constant `UScalar.checked_sub`
+@[reducible] def Aeneas.Std.Slice.len.{u} : {α : Type u} → Slice α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+theorem Aeneas.Std.core.slice.Slice.split_at.spec : ∀ {T : Type} (s : Slice T) (n : Usize),
+  ↑n ≤ s.length →
+    core.slice.Slice.split_at s n ⦃ s0 s1 =>
+      s0.length = ↑n ∧ s1.length = s.length - ↑n ∧ ↑s0 = List.take ↑n ↑s ∧ ↑s1 = List.drop ↑n ↑s ⦄ :=
+fun {T} s n h =>
+  id
+    (Eq.mpr
+      (id
+        (Eq.trans
+          (Eq.trans
+            (congrFun' (congrArg WP.spec (dite_cond_eq_true (eq_true h)))
+              (WP.uncurry' fun s0 s1 =>
+                s0.length = ↑n ∧ s1.length = s.length - ↑n ∧ ↑s0 = List.take ↑n ↑s ∧ ↑s1 = List.drop ↑n ↑s))
+            (core.slice.Slice.split_at.spec._simp_1_1
+              (⟨(List.splitAt ↑n ↑s).1, core.slice.Slice.split_at._proof_3 s n⟩,
+                ⟨(List.splitAt ↑n ↑s).2, core.slice.Slice.split_at._proof_4 s n⟩)))
+          (WP.uncurry'_pair ⟨(List.splitAt ↑n ↑s).1, core.slice.Slice.split_at._proof_3 s n⟩
+            ⟨(List.splitAt ↑n ↑s).2, core.slice.Slice.split_at._proof_4 s n⟩ fun s0 s1 =>
+            s0.length = ↑n ∧ s1.length = s.length - ↑n ∧ ↑s0 = List.take ↑n ↑s ∧ ↑s1 = List.drop ↑n ↑s)))
+      ⟨of_eq_true
+          (Eq.trans
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq (Eq.trans (congrArg List.length (congrArg Prod.fst List.splitAt_eq)) List.length_take)) ↑n)
+              core.slice.Slice.split_at.spec._simp_1_2)
+            (eq_true h)),
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq (Eq.trans (congrArg List.length (congrArg Prod.snd List.splitAt_eq)) List.length_drop))
+                ((↑s).length - ↑n))
+              (eq_self ((↑s).length - ↑n))),
+          ⟨of_eq_true
+              (Eq.trans (congrFun' (congrArg Eq (congrArg Prod.fst List.splitAt_eq)) (List.take ↑n ↑s))
+                (eq_self (List.take ↑n ↑s))),
+            of_eq_true
+              (Eq.trans (congrFun' (congrArg Eq (congrArg Prod.snd List.splitAt_eq)) (List.drop ↑n ↑s))
+                (eq_self (List.drop ↑n ↑s)))⟩⟩⟩)

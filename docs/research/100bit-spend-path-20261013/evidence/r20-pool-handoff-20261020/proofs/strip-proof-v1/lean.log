@@ -1,0 +1,130 @@
+/Users/dominic/ZK/.worktrees/cx-r20-pool/docs/research/100bit-spend-path-20261013/lean/R20PoolHintStrip.lean:38:44: error: Type mismatch: After simplification, term
+  hv
+ has type
+  ↑n = (↑s).length - 4 ∧ 4 ≤ (↑s).length
+but is expected to have type
+  ↑n = (↑s).length - 4
+/Users/dominic/ZK/.worktrees/cx-r20-pool/docs/research/100bit-spend-path-20261013/lean/R20PoolHintStrip.lean:43:79: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  0 ≤ b ≤ 3
+  b - c ≤ 0
+  b ≥ 0
+  a ≥ 0
+  a - b + c ≥ 0
+where
+ a := ↑↑4#usize
+ b := ↑(s.length - ↑n)
+ c := ↑s.length
+/Users/dominic/ZK/.worktrees/cx-r20-pool/docs/research/100bit-spend-path-20261013/lean/R20PoolHintStrip.lean:45:84: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/cx-r20-pool/docs/research/100bit-spend-path-20261013/lean/R20PoolHintStrip.lean:46:84: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/cx-r20-pool/docs/research/100bit-spend-path-20261013/lean/R20PoolHintStrip.lean:47:84: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/cx-r20-pool/docs/research/100bit-spend-path-20261013/lean/R20PoolHintStrip.lean:48:84: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/cx-r20-pool/docs/research/100bit-spend-path-20261013/lean/R20PoolHintStrip.lean:59:4: error: Tactic `rfl` failed: The left-hand side
+  let (body, hints) := (body, tail)
+  do
+  let i1 ← hints.index_usize 0#usize
+  let i2 ← hints.index_usize 1#usize
+  let i3 ← hints.index_usize 2#usize
+  let i4 ← hints.index_usize 3#usize
+  ok
+      (core.result.Result.Ok
+        (body, { current_page := i1, next_page := i2, vault_authority := i3, vault_token_account := i4 }))
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok (body, hints))
+
+case refine_1
+s : Slice U8
+hlen : 4 ≤ (↑s).length
+n : UScalar UScalarTy.Usize
+hn : s.len - 4#usize = ok n
+hv : ↑n = ↑s.len - ↑4#usize ∧ ↑4#usize ≤ ↑s.len
+hv' : ↑n = (↑s).length - 4
+hsub : s.len.checked_sub 4#usize = some n
+body tail : Slice U8
+hsplit : core.slice.Slice.split_at s n = ok (body, tail)
+hb : body.length = ↑n
+htlen : tail.length = s.length - ↑n
+hbval : ↑body = List.take ↑n ↑s
+htval : ↑tail = List.drop ↑n ↑s
+htlen' : (↑tail).length = 4
+a b c d : U8
+ht : ↑tail = [a, b, c, d]
+v0 : U8
+h0 : tail.index_usize 0#usize = ok v0
+hv0 : v0 = (↑tail)[↑0#usize]
+v1 : U8
+h1 : tail.index_usize 1#usize = ok v1
+hv1 : v1 = (↑tail)[↑1#usize]
+v2 : U8
+h2 : tail.index_usize 2#usize = ok v2
+hv2 : v2 = (↑tail)[↑2#usize]
+v3 : U8
+h3 : tail.index_usize 3#usize = ok v3
+hv3 : v3 = (↑tail)[↑3#usize]
+hv0' : v0 = a
+hv1' : v1 = b
+hv2' : v2 = c
+hv3' : v3 = d
+hints : PoolV1PairForestTerminalBumpHintsV1 :=
+  { current_page := v0, next_page := v1, vault_authority := v2, vault_token_account := v3 }
+⊢ (let (body, hints) := (body, tail)
+    do
+    let i1 ← hints.index_usize 0#usize
+    let i2 ← hints.index_usize 1#usize
+    let i3 ← hints.index_usize 2#usize
+    let i4 ← hints.index_usize 3#usize
+    ok
+        (core.result.Result.Ok
+          (body, { current_page := i1, next_page := i2, vault_authority := i3, vault_token_account := i4 }))) =
+    ok (core.result.Result.Ok (body, hints))
+/Users/dominic/ZK/.worktrees/cx-r20-pool/docs/research/100bit-spend-path-20261013/lean/R20PoolHintStrip.lean:58:58: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [split_pair_forest_terminal_bump_hints_v1,
+       ̵ ̵POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES, lift, hsub,
+  ̵  ̵ ̵ ̵ ̵ ̵bind_tc_ok, core.option.Option.ok_or,
+       ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, hsplit, h0̵,̵h̵1, ̲h2, ̲h3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-r20-pool/docs/research/100bit-spend-path-20261013/lean/R20PoolHintStrip.lean:58:61: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp only [split_pair_forest_terminal_bump_hints_v1,
+       ̵ ̵POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES, lift, hsub,
+  ̵  ̵ ̵ ̵ ̵ ̵bind_tc_ok, core.option.Option.ok_or,
+       ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, hsplit, h0, ̲h1̵,̵h̵2, ̲h3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-r20-pool/docs/research/100bit-spend-path-20261013/lean/R20PoolHintStrip.lean:58:64: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp only [split_pair_forest_terminal_bump_hints_v1,
+       ̵ ̵POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES, lift, hsub,
+  ̵  ̵ ̵ ̵ ̵ ̵bind_tc_ok, core.option.Option.ok_or,
+       ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, hsplit, h0, ̲h1, ̲h2̵,̵h̵3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-r20-pool/docs/research/100bit-spend-path-20261013/lean/R20PoolHintStrip.lean:58:67: warning: This simp argument is unused:
+  h3
+
+Hint: Omit it from the simp argument list.
+  simp only [split_pair_forest_terminal_bump_hints_v1,
+       ̵ ̵POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES, lift, hsub,
+  ̵  ̵ ̵ ̵ ̵ ̵bind_tc_ok, core.option.Option.ok_or,
+       ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, hsplit, h0, ̲h1, ̲h2,̵h̵3̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'_private.R20PoolHintStrip.0.AspisR20Pool.HintStrip.list_four' depends on axioms: [propext]
+'AspisR20Pool.HintStrip.strip_total_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
