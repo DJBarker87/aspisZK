@@ -6991,3 +6991,20 @@ and typed-record membership, the builder/checker/retry coupling (D75), the
 simulator coupling (G-sim R-wire), and the query-word history/agreement off
 the scan events. Every one is a source-to-model refinement fact; none is a
 probability or rank fact. This list replaces D42.5 as the tracking list.
+
+### Lead acceptance of the builder refinement (2026-10-21); D83
+
+Codex job cx-builder-ref (ed85b028b..5b1a6582b) is cherry-picked. 39
+theorems in five R1Z modules (env J 8400–8446, standard axioms, 0 swaps):
+Rspend⁺ → ModelRel with the sentinel, digest, append-carry and PairRight
+obligations derived; canonical witness/public maps and base typing; all four
+`BuilderSoundOn` fields (baseTyped, lanes, helperSum, helperInactive) for the
+extracted merged builder; the fixed D18 transport; a conditional source
+identification handoff (`r1p-final/BUILDER-REFINEMENT-20261021.md`). The
+first row of the D82 checklist is reduced to the shipped-prover
+identification: Charon extracts both compile entry points; pinned Aeneas
+rejects `validate_forest_poseidon_rows` (labelled break to an outer loop,
+lines 158–197). Ruling: the prover is not frozen, so the break is
+restructured (early-return helper) under the byte-identical fixed-seed gate
+(job cx-builder-ref2), then the shipped records/public mapping, the Rust
+glue equality and the S2 transport complete SourceIdentification.
