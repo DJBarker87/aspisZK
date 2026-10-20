@@ -571,3 +571,19 @@ substitution. Ruling: port the recorded-run extractor to the Bin recovery
 modules (job cx-extractor-bin) and restate C3 over it; the M10 cost results
 carry over where the extractor's call structure is unchanged and are
 re-checked where recovery changes.
+
+## Addendum (2026-10-21): M10 ledger — statement fix
+
+Codex job cx-m10-ledger (68c3db39f..b4e44b246): 21 theorems, standard
+axioms (`design/M10-LEDGER-20261020.md`): exact branch-traced extractor
+output refinement, instrumented log scans, a size-restricted scan bound and
+a uniform polynomial envelope for bounded parameter families. Finding: C3's
+`LedgerRefinement` fixes the cost parameters across every accepted
+`RunView` without bounding the hash-log length, and checked counterexamples
+show no fixed parameters can hold then. **Ruling (statement fix):** the M10
+cost bound is stated polynomial in the log length, which is bounded by the
+adversary's query budget Q plus the verifier's 1,161 reads; `LedgerRefinement`
+is restated with that size invariant (the expected-polynomial-time reading of
+Decision 3 is polynomial in Q, so this matches the decision rather than
+weakening it). The restatement is done in the extractor port (cx-extractor-bin),
+since the extractor's recovery changes there anyway.
