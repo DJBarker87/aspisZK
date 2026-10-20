@@ -1,0 +1,5 @@
+# EbyE `from_wide` source bridge
+
+This focused theorem maps the EbyE cut's `WideExact` coordinates into the retained EbyK `WideExact` carrier, proves the mapping preserves all eight scalar limbs, and proves the copied source-shaped `to_limbs`/`Q::from_wide` sequence returns exactly the result of the checked `AspisR1EbyKPushWideToQ.fromWide` implementation. The source checker verifies the copied `to_limbs` body byte-semantically modulo whitespace and verifies the copied `from_wide` body after only the explicit `to_limbs` callee substitution.
+
+The green Lean run is attempt v3, with fresh 1 GiB high / 2 GiB max / zero swap admission. Attempts v1 and v2 are preserved: v1 had a missing import-root configuration; v2 had an incorrect runner source-directory layout and failed before proof elaboration. Neither is a theorem result. The generated external template is not imported. This closes the EbyE-to-EbyK `fromWide` value conversion for the selected carrier map; it does not prove complete `EbyEDot.push` function refinement or the Dot backend source link.

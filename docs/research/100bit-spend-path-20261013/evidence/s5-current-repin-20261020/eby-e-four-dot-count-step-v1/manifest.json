@@ -1,0 +1,586 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "packet": "eby-e-four-dot-count-step-v1",
+  "source_revision": "524d5a9620df09a276561d814a7b7200634e3c93; focused EbyEDot four-state step; v11 fixes source Dot to backend Dot field refinement",
+  "status": "PROVED: source-shaped four-Dot raw/count step; emitted-body equality and concrete fromWide binding remain open",
+  "scope": "From a successful parameterized four-Dot push step, derive successful raw calls in source order, returned state shape, and the count/range successor. This is not the complete emitted-function refinement.",
+  "modules": [
+    {
+      "module": "AspisR1EbyEFourDotSourceStepV1",
+      "source": "lean/EbyEFourDotSourceStepV1.lean",
+      "source_sha256": "9230db69ae7cf269d5146ac3d6f6c6f76ce515bb9010fe483e47344495a874df",
+      "object_sha256": "e91ee84e58bcf886a14b201f0266026f771915a0611e54d5325fd0fd020bfbf3",
+      "receipt": "lean/evidence/receipt.json",
+      "command": "lean/evidence/command.json",
+      "preflight": "lean/evidence/preflight.json",
+      "exit_status": 0,
+      "wall_seconds": 5.015,
+      "peak_process_rss_kib": 3940684,
+      "scope_memory_peak_bytes": 404705280,
+      "swap_bytes": 0,
+      "compiler_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "theorems": [
+        "AspisR1EbyEFourDotSourceStepV1.push_success_state_shape",
+        "AspisR1EbyEFourDotSourceStepV1.push_success_four_dot_raw",
+        "AspisR1EbyEFourDotSourceStepV1.four_dot_count_range_step",
+        "AspisR1EbyEFourDotSourceStepV1.successful_four_dot_count_bound"
+      ]
+    }
+  ],
+  "direct_import_source_map": {
+    "FinishDotCountBoundV3": {
+      "source": "dependencies/FinishDotCountBoundV3/sources/FinishDotCountBoundV3.lean",
+      "source_sha256": "2186a49e27b6bff9a688f09975a967b867ca357e3eb6da7e7c581bb7922d8be7",
+      "object_sha256": "976310b3ec4e8f26f7b8d70a004e94a984a34aecfe5f3767bc7d59a999873d30",
+      "producer_evidence": "dependencies/FinishDotCountBoundV3/"
+    },
+    "EbyKPushDotBackend": {
+      "source": "dependencies/EbyKPushDotBackend/sources/EbyKPushDotBackend.lean",
+      "source_sha256": "69eaa9bede52230ccd30794132c7deffc73c545a9f92866a921046b129dff52a",
+      "object_sha256": "1cccf360657a4da86a7dea1a5037b7e80d39a3fea2ec1652f24576218a4a8241",
+      "producer_evidence": "dependencies/EbyKPushDotBackend/"
+    },
+    "AspisR1EbyKPushWideToQ": {
+      "source": "dependencies/AspisR1EbyKPushWideToQ/sources/AspisR1EbyKPushWideToQ.lean",
+      "source_sha256": "f3413d59b58b3fce09518e4855f000f6f7bddf2540bd8aaa496300a0b4a6a017",
+      "object_sha256": "c2085438653449b93f542b6d78d76daeb2da807f9fe5019676ac9f0ec5794e82",
+      "producer_evidence": "dependencies/AspisR1EbyKPushWideToQ/"
+    },
+    "DotPushSuccessResidues": {
+      "source": "dependencies/DotPushSuccessResidues/sources/DotPushSuccessResidues.lean",
+      "source_sha256": "be66ebf84059ea3dd42cef9420ac9ce4d1cd870b5deb77ae81244527539343b0",
+      "object_sha256": "b93eb629e63a7245abe2d847b66e3e59f9419265add0ae953a30fce02b590775",
+      "producer_evidence": "dependencies/DotPushSuccessResidues/"
+    }
+  },
+  "evidence": {
+    "lean_config": "lean/config.json",
+    "admission": "lean/admission-proof.json",
+    "reservation": "lean/reservation-proof.json",
+    "command": "lean/evidence/command.json",
+    "preflight": "lean/evidence/preflight.json",
+    "lean_log": "lean/evidence/lean.log",
+    "time_log": "lean/evidence/time.log",
+    "receipt": "lean/evidence/receipt.json",
+    "extraction": "extraction/",
+    "extraction_note": "generated external template retained as provenance only; not imported or compiled"
+  },
+  "source_object_policy": "No compiled Lean objects or LLBC binary included. Direct imported owner source and producer evidence are included; exact object hashes are pinned above.",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 1240,
+      "sha256": "0e8bc6377f76f3a36eef58f64cbaa5a27b3a87aa71a8986129890064a70b9d48"
+    },
+    {
+      "path": "dependencies/AspisR1EbyKPushWideToQ/admission-proof.json",
+      "bytes": 146538,
+      "sha256": "4d4f67e78ba62eaaa7902d8b7a95da541c9ad39643206e56c51aa37574cce616"
+    },
+    {
+      "path": "dependencies/AspisR1EbyKPushWideToQ/attempt/proof-evidence/command.json",
+      "bytes": 10795,
+      "sha256": "7f9ee40f93538deddeda5934a627815476dca126d457b0fbe64a6a554be85c4a"
+    },
+    {
+      "path": "dependencies/AspisR1EbyKPushWideToQ/attempt/proof-evidence/lean.log",
+      "bytes": 105,
+      "sha256": "fe43fb827f8f57dececb489e003d26315c338318713204949c8a9e6bc125d98c"
+    },
+    {
+      "path": "dependencies/AspisR1EbyKPushWideToQ/attempt/proof-evidence/preflight.json",
+      "bytes": 11253,
+      "sha256": "1f4958940a12c2403e5131b83a778b9b65450e82a4f739fb9c609fa1abafecde"
+    },
+    {
+      "path": "dependencies/AspisR1EbyKPushWideToQ/attempt/proof-evidence/receipt.json",
+      "bytes": 530,
+      "sha256": "e5e92f80952df50860583126e8900f2066eef23e716d2bb18a5383d424351ea3"
+    },
+    {
+      "path": "dependencies/AspisR1EbyKPushWideToQ/attempt/proof-evidence/time.log",
+      "bytes": 11192,
+      "sha256": "59673212d0b9c9caa1d3d380d6dcce4e6962718207cca3bfc195b8593da889d7"
+    },
+    {
+      "path": "dependencies/AspisR1EbyKPushWideToQ/config.json",
+      "bytes": 12896,
+      "sha256": "bd7ac5bf7801aee375408827b9c29e3689b694af26d4783c8b511719c67fb1c8"
+    },
+    {
+      "path": "dependencies/AspisR1EbyKPushWideToQ/reservation-proof.json",
+      "bytes": 821,
+      "sha256": "7a1b54de480b5b6eb69078f5e6f41ae46956f7c6caca13f26469da0226e1e7ba"
+    },
+    {
+      "path": "dependencies/AspisR1EbyKPushWideToQ/run-admitted.py",
+      "bytes": 5086,
+      "sha256": "3cf98e05f9141ff4906eab3aaaa2853d2fcd636b0662a3d30d7dba3fc78f55e2"
+    },
+    {
+      "path": "dependencies/AspisR1EbyKPushWideToQ/run-stage.py",
+      "bytes": 4323,
+      "sha256": "61079dc0c9e552b2944fa54096c7d0929619026dfdd9c8907db9d34e2a0e3da3"
+    },
+    {
+      "path": "dependencies/AspisR1EbyKPushWideToQ/sources/AspisR1EbyKPushWideToQ.lean",
+      "bytes": 1669,
+      "sha256": "f3413d59b58b3fce09518e4855f000f6f7bddf2540bd8aaa496300a0b4a6a017"
+    },
+    {
+      "path": "dependencies/DotPushSuccessResidues/admission-proof.json",
+      "bytes": 143620,
+      "sha256": "47c70cb008599c0e4e24d808acb82263211300fcd03f88b19de4c171448967de"
+    },
+    {
+      "path": "dependencies/DotPushSuccessResidues/attempt/proof-evidence/command.json",
+      "bytes": 3091,
+      "sha256": "3d364a11821ca9d152010782f499ce5411c293ffa520330139e0ed43023483bf"
+    },
+    {
+      "path": "dependencies/DotPushSuccessResidues/attempt/proof-evidence/lean.log",
+      "bytes": 223,
+      "sha256": "89b9123fd69ad45a5d6672acdd745052c5a4eaae489f348523670880dd7d33c7"
+    },
+    {
+      "path": "dependencies/DotPushSuccessResidues/attempt/proof-evidence/preflight.json",
+      "bytes": 3819,
+      "sha256": "ebcc57f4fbbfeb380433bce901d6c41c4693f4b3332eb20d7607c259e3d23a4e"
+    },
+    {
+      "path": "dependencies/DotPushSuccessResidues/attempt/proof-evidence/receipt.json",
+      "bytes": 530,
+      "sha256": "8ea5c16a57b8ba18f95af111a8948567a20fefe23122ac802b48d064daf38fff"
+    },
+    {
+      "path": "dependencies/DotPushSuccessResidues/attempt/proof-evidence/time.log",
+      "bytes": 3469,
+      "sha256": "0845674362a45c129180ded928d09f9c8dd69fb3b45a8a4b09a54a8fdeebbe7d"
+    },
+    {
+      "path": "dependencies/DotPushSuccessResidues/config.json",
+      "bytes": 4604,
+      "sha256": "52aaa41fb6a64a8cfe8d6b37ba05712cdcc2ac20573c82e882473c0789c268d9"
+    },
+    {
+      "path": "dependencies/DotPushSuccessResidues/reservation-proof.json",
+      "bytes": 878,
+      "sha256": "5ddf4c078f67ef5c1e57e0171854beedf84eb83f03747f6e519a956e8bc05ca8"
+    },
+    {
+      "path": "dependencies/DotPushSuccessResidues/run-admitted.py",
+      "bytes": 5086,
+      "sha256": "3cf98e05f9141ff4906eab3aaaa2853d2fcd636b0662a3d30d7dba3fc78f55e2"
+    },
+    {
+      "path": "dependencies/DotPushSuccessResidues/run-stage.py",
+      "bytes": 4323,
+      "sha256": "61079dc0c9e552b2944fa54096c7d0929619026dfdd9c8907db9d34e2a0e3da3"
+    },
+    {
+      "path": "dependencies/DotPushSuccessResidues/sources/DotPushSuccessResidues.lean",
+      "bytes": 1953,
+      "sha256": "be66ebf84059ea3dd42cef9420ac9ce4d1cd870b5deb77ae81244527539343b0"
+    },
+    {
+      "path": "dependencies/EbyKPushDotBackend/admission-proof.json",
+      "bytes": 144336,
+      "sha256": "02aae851a375368b6be87f45182c3c7fa34117b2182f93c2e9a3275a46602f79"
+    },
+    {
+      "path": "dependencies/EbyKPushDotBackend/attempt/proof-evidence/command.json",
+      "bytes": 12342,
+      "sha256": "09ddcd5f172ba3e4464b79a7d61fb5ae1e9d9594a68de35d0d9429c7b66f1741"
+    },
+    {
+      "path": "dependencies/EbyKPushDotBackend/attempt/proof-evidence/lean.log",
+      "bytes": 222,
+      "sha256": "6d045eea674e6797e215a2a3c260c29de0ac34111ae5459233d2927e628ad0c9"
+    },
+    {
+      "path": "dependencies/EbyKPushDotBackend/attempt/proof-evidence/preflight.json",
+      "bytes": 13381,
+      "sha256": "80985d051933a67fb2a8bb38db953562cbed8f0e2a288d17ec51d0513d51e148"
+    },
+    {
+      "path": "dependencies/EbyKPushDotBackend/attempt/proof-evidence/receipt.json",
+      "bytes": 530,
+      "sha256": "34a6da094ac7a80d3c100f060ee94bd306451f81efd810b41a14711a205da288"
+    },
+    {
+      "path": "dependencies/EbyKPushDotBackend/attempt/proof-evidence/time.log",
+      "bytes": 12726,
+      "sha256": "43e92f60b364c3e097b9bdaeadab3e8a6614816f28281c782b4e453010a11b98"
+    },
+    {
+      "path": "dependencies/EbyKPushDotBackend/config.json",
+      "bytes": 27614,
+      "sha256": "7b4bed69565dc2ac5b285b2d6f241f94143ff7aef84b01b7ea9cfcdf9e619c21"
+    },
+    {
+      "path": "dependencies/EbyKPushDotBackend/reservation-proof.json",
+      "bytes": 869,
+      "sha256": "f9b14bc571125dbf479974461db860dd8055a5bf60ee0d16ba8aec9075d1baa0"
+    },
+    {
+      "path": "dependencies/EbyKPushDotBackend/run-admitted.py",
+      "bytes": 5086,
+      "sha256": "3cf98e05f9141ff4906eab3aaaa2853d2fcd636b0662a3d30d7dba3fc78f55e2"
+    },
+    {
+      "path": "dependencies/EbyKPushDotBackend/run-stage.py",
+      "bytes": 4323,
+      "sha256": "61079dc0c9e552b2944fa54096c7d0929619026dfdd9c8907db9d34e2a0e3da3"
+    },
+    {
+      "path": "dependencies/EbyKPushDotBackend/sources/EbyKPushDotBackend.lean",
+      "bytes": 3553,
+      "sha256": "69eaa9bede52230ccd30794132c7deffc73c545a9f92866a921046b129dff52a"
+    },
+    {
+      "path": "dependencies/FinishDotCountBoundV3/admission-proof.json",
+      "bytes": 153877,
+      "sha256": "17d3bd9c7b79f5ed22f1bb1017d31f9dcc534d0236019fd52db9e3ecb8656ea7"
+    },
+    {
+      "path": "dependencies/FinishDotCountBoundV3/attempt/proof-evidence/command.json",
+      "bytes": 20869,
+      "sha256": "46a082d783e861d5e442f6ba4b96e1f7733db62eacc93d977f52f1a0b05576a5"
+    },
+    {
+      "path": "dependencies/FinishDotCountBoundV3/attempt/proof-evidence/lean.log",
+      "bytes": 894,
+      "sha256": "a45a685cf478b0bafe52e5adb76e20db7650ff4e54464a9b82e3495fe30a01b7"
+    },
+    {
+      "path": "dependencies/FinishDotCountBoundV3/attempt/proof-evidence/preflight.json",
+      "bytes": 21278,
+      "sha256": "0f75742eaef085eec925a028b5a0f2e89c62e1579ec6ff220a7bd49057e3fe4f"
+    },
+    {
+      "path": "dependencies/FinishDotCountBoundV3/attempt/proof-evidence/receipt.json",
+      "bytes": 530,
+      "sha256": "54877db85c4857b046ab5bb191d7ca1a6d34e4602830c94151db709031aaae1a"
+    },
+    {
+      "path": "dependencies/FinishDotCountBoundV3/attempt/proof-evidence/time.log",
+      "bytes": 21256,
+      "sha256": "de026b831552c2782af56a9602b201986cd7a8e1114aa841d4fcfb346ed0d11a"
+    },
+    {
+      "path": "dependencies/FinishDotCountBoundV3/config.json",
+      "bytes": 90882,
+      "sha256": "98366ca246eeff14023d2b8521a7a327fed44b2d238a7f678197b0740b57d5f4"
+    },
+    {
+      "path": "dependencies/FinishDotCountBoundV3/reservation-proof.json",
+      "bytes": 854,
+      "sha256": "ce2e6e97391a86f5152b9c4012aadfab9bec98cefcbf97bd4fe306172b1b743c"
+    },
+    {
+      "path": "dependencies/FinishDotCountBoundV3/run-admitted.py",
+      "bytes": 5086,
+      "sha256": "3cf98e05f9141ff4906eab3aaaa2853d2fcd636b0662a3d30d7dba3fc78f55e2"
+    },
+    {
+      "path": "dependencies/FinishDotCountBoundV3/run-stage.py",
+      "bytes": 4323,
+      "sha256": "61079dc0c9e552b2944fa54096c7d0929619026dfdd9c8907db9d34e2a0e3da3"
+    },
+    {
+      "path": "dependencies/FinishDotCountBoundV3/sources/FinishDotCountBoundV2.lean",
+      "bytes": 5687,
+      "sha256": "1adeea39f09eef330bf83c33dabe4a35175b8a2efe5e3c19ba080adca4ffdcd1"
+    },
+    {
+      "path": "dependencies/FinishDotCountBoundV3/sources/FinishDotCountBoundV3.lean",
+      "bytes": 7478,
+      "sha256": "2186a49e27b6bff9a688f09975a967b867ca357e3eb6da7e7c581bb7922d8be7"
+    },
+    {
+      "path": "extraction/admission-aeneas.json",
+      "bytes": 147632,
+      "sha256": "9cb236180cdb85cfa5c8c5c8740d4378162bba4b4be93bb362e0b9088fc36fce"
+    },
+    {
+      "path": "extraction/admission-charon.json",
+      "bytes": 147649,
+      "sha256": "ad9ac3a286016598d221df5d94f84dcaa1c1a2ada7feafa30697835447aa7107"
+    },
+    {
+      "path": "extraction/cargo-check.log",
+      "bytes": 22463,
+      "sha256": "979840571e13072e5631bf7cbf129f38a9961e5a107c0ccff332bb131b2fa3e4"
+    },
+    {
+      "path": "extraction/check-source-cut.py",
+      "bytes": 1494,
+      "sha256": "cf122182d07c7f9fb1af9af3e4c44d45aa67bc8418b8902d98c6ef9e4aaa9e7c"
+    },
+    {
+      "path": "extraction/config.json",
+      "bytes": 2575,
+      "sha256": "921074e9e95dac6385175c124e56c8da0ba29acde7197e9c4508afc2a450c541"
+    },
+    {
+      "path": "extraction/generated/AspisR1EbyEDotCutV1/Funs.lean",
+      "bytes": 15195,
+      "sha256": "ee6dab7728ae7cbace20a6ec655175c350405165d7c4441f7b0203072e9cefe5"
+    },
+    {
+      "path": "extraction/generated/AspisR1EbyEDotCutV1/FunsExternal_Template.lean",
+      "bytes": 1381,
+      "sha256": "756c5c8add6bbce3ab48b44e65c5dfb7cc6de105109d99236c2c4f5236a325f8"
+    },
+    {
+      "path": "extraction/generated/AspisR1EbyEDotCutV1/Types.lean",
+      "bytes": 2086,
+      "sha256": "4c046d73643d247946676eed209ed02a5b6d546adf494fa270eda48f05deb25d"
+    },
+    {
+      "path": "extraction/generated/translation.json",
+      "bytes": 19011,
+      "sha256": "4fc62514008badd730073ddeccf722bec323fcf0aa8e87558787dae08f8b47c9"
+    },
+    {
+      "path": "extraction/input/Cargo.lock",
+      "bytes": 158,
+      "sha256": "ed9c7e95f35284348da36f76f007b2c903a874929df0a2e4ef504b23e8300afb"
+    },
+    {
+      "path": "extraction/input/Cargo.toml",
+      "bytes": 161,
+      "sha256": "fc04f3047e0b2fee14dab5c37ce3481681c567314785ac0eff30f45dbd0c304d"
+    },
+    {
+      "path": "extraction/input/fast_pairing_source.rs",
+      "bytes": 8977,
+      "sha256": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0"
+    },
+    {
+      "path": "extraction/input/field/wide_exact.rs",
+      "bytes": 21521,
+      "sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b"
+    },
+    {
+      "path": "extraction/input/field.rs",
+      "bytes": 121363,
+      "sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea"
+    },
+    {
+      "path": "extraction/input/lib.rs",
+      "bytes": 9876,
+      "sha256": "434dfa8803c64fbec531760aa9092bc4d8a7d71c13b23c48b4c68f2a2db55689"
+    },
+    {
+      "path": "extraction/input/source-pins.json",
+      "bytes": 1775,
+      "sha256": "e0b2bfdda41d4edd521ee6d598d1c90a87ebec66cfaf4e04af6643b04fa05632"
+    },
+    {
+      "path": "extraction/reservation-aeneas.json",
+      "bytes": 810,
+      "sha256": "69cddca2d01169704027e4f42aa89f380df54b7748a66dd3d073fdc37e1c548a"
+    },
+    {
+      "path": "extraction/reservation-charon.json",
+      "bytes": 810,
+      "sha256": "1d3c1f1bbdc7382b113269ff7fe6e3b708a6b8c217a9cba1f7801dd57687bb57"
+    },
+    {
+      "path": "extraction/run-admitted.py",
+      "bytes": 5086,
+      "sha256": "3cf98e05f9141ff4906eab3aaaa2853d2fcd636b0662a3d30d7dba3fc78f55e2"
+    },
+    {
+      "path": "extraction/run-host.py",
+      "bytes": 5605,
+      "sha256": "e989993fe05a4479a763a60407c7e4cc8b045ce962fbb2451273d41f1e6c239a"
+    },
+    {
+      "path": "extraction/run-stage.py",
+      "bytes": 192,
+      "sha256": "20fa73589f642d72ef3c031c849a8fba1153e897eb76afc3c2897d90828176f8"
+    },
+    {
+      "path": "extraction/runs/aeneas-a/command.json",
+      "bytes": 481,
+      "sha256": "3e3880cb956faf7e60ed112644ce4dfeac833b924c02f89485ad128df73e96cf"
+    },
+    {
+      "path": "extraction/runs/aeneas-a/environment.json",
+      "bytes": 301,
+      "sha256": "5b394d5125974c3afd7f3f283e4b79c83f2d5a9abd90dffc9ed337fccec62824"
+    },
+    {
+      "path": "extraction/runs/aeneas-a/input-snapshot/Cargo.lock",
+      "bytes": 158,
+      "sha256": "ed9c7e95f35284348da36f76f007b2c903a874929df0a2e4ef504b23e8300afb"
+    },
+    {
+      "path": "extraction/runs/aeneas-a/input-snapshot/Cargo.toml",
+      "bytes": 161,
+      "sha256": "fc04f3047e0b2fee14dab5c37ce3481681c567314785ac0eff30f45dbd0c304d"
+    },
+    {
+      "path": "extraction/runs/aeneas-a/input-snapshot/fast_pairing_source.rs",
+      "bytes": 8977,
+      "sha256": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0"
+    },
+    {
+      "path": "extraction/runs/aeneas-a/input-snapshot/field/wide_exact.rs",
+      "bytes": 21521,
+      "sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b"
+    },
+    {
+      "path": "extraction/runs/aeneas-a/input-snapshot/field.rs",
+      "bytes": 121363,
+      "sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea"
+    },
+    {
+      "path": "extraction/runs/aeneas-a/input-snapshot/lib.rs",
+      "bytes": 9876,
+      "sha256": "434dfa8803c64fbec531760aa9092bc4d8a7d71c13b23c48b4c68f2a2db55689"
+    },
+    {
+      "path": "extraction/runs/aeneas-a/input-snapshot/source-pins.json",
+      "bytes": 1775,
+      "sha256": "e0b2bfdda41d4edd521ee6d598d1c90a87ebec66cfaf4e04af6643b04fa05632"
+    },
+    {
+      "path": "extraction/runs/aeneas-a/receipt.json",
+      "bytes": 2777,
+      "sha256": "903e7229a8da27ebcfd4b2b3ebfacb0bbc4c8f82ace251df7838358f36c889fd"
+    },
+    {
+      "path": "extraction/runs/aeneas-a/stdout.log",
+      "bytes": 822,
+      "sha256": "a8832f2d806aa83eb61c06b32fa67cbd92b329a60272793f9a964150fbeae0fe"
+    },
+    {
+      "path": "extraction/runs/aeneas-a/time.log",
+      "bytes": 1120,
+      "sha256": "a77b5f3e8a020b377695c21e89c0f4ae305ad8e16e0832ff07bd72093584dd64"
+    },
+    {
+      "path": "extraction/runs/charon-a/command.json",
+      "bytes": 769,
+      "sha256": "f731664b9b6ac33d01a7f826cc6acd717eeb15eef54ba7a0cef8556d5ee7eacc"
+    },
+    {
+      "path": "extraction/runs/charon-a/environment.json",
+      "bytes": 301,
+      "sha256": "5b394d5125974c3afd7f3f283e4b79c83f2d5a9abd90dffc9ed337fccec62824"
+    },
+    {
+      "path": "extraction/runs/charon-a/input-snapshot/Cargo.lock",
+      "bytes": 158,
+      "sha256": "ed9c7e95f35284348da36f76f007b2c903a874929df0a2e4ef504b23e8300afb"
+    },
+    {
+      "path": "extraction/runs/charon-a/input-snapshot/Cargo.toml",
+      "bytes": 161,
+      "sha256": "fc04f3047e0b2fee14dab5c37ce3481681c567314785ac0eff30f45dbd0c304d"
+    },
+    {
+      "path": "extraction/runs/charon-a/input-snapshot/fast_pairing_source.rs",
+      "bytes": 8977,
+      "sha256": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0"
+    },
+    {
+      "path": "extraction/runs/charon-a/input-snapshot/field/wide_exact.rs",
+      "bytes": 21521,
+      "sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b"
+    },
+    {
+      "path": "extraction/runs/charon-a/input-snapshot/field.rs",
+      "bytes": 121363,
+      "sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea"
+    },
+    {
+      "path": "extraction/runs/charon-a/input-snapshot/lib.rs",
+      "bytes": 9876,
+      "sha256": "434dfa8803c64fbec531760aa9092bc4d8a7d71c13b23c48b4c68f2a2db55689"
+    },
+    {
+      "path": "extraction/runs/charon-a/input-snapshot/source-pins.json",
+      "bytes": 1775,
+      "sha256": "e0b2bfdda41d4edd521ee6d598d1c90a87ebec66cfaf4e04af6643b04fa05632"
+    },
+    {
+      "path": "extraction/runs/charon-a/receipt.json",
+      "bytes": 2641,
+      "sha256": "c953801e9da9340dc3957b9d47ea0b4df0e1e5bd5676afad212c7ddfb55aa147"
+    },
+    {
+      "path": "extraction/runs/charon-a/stdout.log",
+      "bytes": 22551,
+      "sha256": "7898ba12b23aa697879d863f0c092a8014106ee7a8c7d4945f407513eb6ce108"
+    },
+    {
+      "path": "extraction/runs/charon-a/time.log",
+      "bytes": 1321,
+      "sha256": "7135de1830428c4779783c730ec74344ccfb4bd5da3455fcd1a063fecfed925e"
+    },
+    {
+      "path": "lean/EbyEFourDotSourceStepV1.lean",
+      "bytes": 12740,
+      "sha256": "9230db69ae7cf269d5146ac3d6f6c6f76ce515bb9010fe483e47344495a874df"
+    },
+    {
+      "path": "lean/admission-proof.json",
+      "bytes": 148338,
+      "sha256": "cc2b70eb53fa4c88a52a2aa8a26be125e35f77afd6aea72e363338af8dca080b"
+    },
+    {
+      "path": "lean/config.json",
+      "bytes": 24012,
+      "sha256": "f8637e171beb0aa2fa995d659c0bd9bc624aea3a42f02886decc59d474f3e1f7"
+    },
+    {
+      "path": "lean/evidence/command.json",
+      "bytes": 20954,
+      "sha256": "ce714b9fb5edd42a8d2a5f065190e96a77dc9a3be2424b0bdf2f281d520e8428"
+    },
+    {
+      "path": "lean/evidence/lean.log",
+      "bytes": 479,
+      "sha256": "9a76970e3631d1292b90d90bf27b8507d87b76cd82f56fea21f8c6e232053189"
+    },
+    {
+      "path": "lean/evidence/preflight.json",
+      "bytes": 22235,
+      "sha256": "cc46d2ebc3a8af4b0416a91ebf961a204354e3af6089e9996c4e7578e43612fe"
+    },
+    {
+      "path": "lean/evidence/receipt.json",
+      "bytes": 530,
+      "sha256": "9ce5ad2a1ba07ce06d20e797182d4a8d680964a3be71242bdff7e3fdd30b2a5c"
+    },
+    {
+      "path": "lean/evidence/time.log",
+      "bytes": 21346,
+      "sha256": "a710fe06461e00b5568813c622e57abec01c72a6837f919a62fcc6d516ef8ffb"
+    },
+    {
+      "path": "lean/reservation-proof.json",
+      "bytes": 848,
+      "sha256": "43038dde3f03a2653b4c35bd4d0cd63da8a63090b5960a3832ab9f1a45d619de"
+    },
+    {
+      "path": "lean/run-admitted.py",
+      "bytes": 5086,
+      "sha256": "3cf98e05f9141ff4906eab3aaaa2853d2fcd636b0662a3d30d7dba3fc78f55e2"
+    },
+    {
+      "path": "lean/run-stage.py",
+      "bytes": 4323,
+      "sha256": "61079dc0c9e552b2944fa54096c7d0929619026dfdd9c8907db9d34e2a0e3da3"
+    }
+  ]
+}
