@@ -1,0 +1,7 @@
+# S3 pair-low callback proof packet
+
+This packet freezes the focused source-level callback facts only. It does not establish the complete `weights::pair` caller or Rust `array::from_fn` correspondence. The selected callback operations are explicit parameters, so no generated external-operation axioms are imported.
+
+Green checked results include the source-to-`lowStep` closure readback lemmas, operation maps to the actual WideExact multiplication owners, actual callback `%`/`/`, permutation, and array-read success facts, plus derived `<4`/array-length bounds for both reads and the exact current-reducer value of the callback scale (`quarter² = 134217728 mod (2^31−1)`). A failed attempt to compose these into the full projected callback equation is retained under `diagnostics/`; the immediate remaining issue is Lean reduction of the `closure` type alias when applying the pair-let lemma.
+
+Metrics, standard axiom reports, source/object hashes, and direct import pins are in `manifest.json`. The compiler is the local Lean 4.32 binary pinned in the manifest. Local `/usr/bin/time -l` records provide process RSS and swap; exact shell argv, cgroup metrics, and compile-time git revision were not retained. Source SHA is the authoritative input pin. A previously inherited Linux compiler hash was corrected and is not attributed to these runs. `PairLowCallTypesClean` has its exact selected source/object and parent-stage pin, but its separate producer time/RSS log was not recovered.

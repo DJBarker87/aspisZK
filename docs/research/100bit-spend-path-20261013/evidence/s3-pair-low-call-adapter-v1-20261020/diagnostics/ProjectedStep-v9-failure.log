@@ -1,0 +1,81 @@
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-pair-low-call-adapter-v1/sources/S3PairLowCallProjectedStepV1.lean:57:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  a.index_usize p
+in the target expression
+  (do
+      let (value, next) ←
+        let (a, a1) := (a, a1)
+          do
+          let we ← a.index_usize p
+          let i3 ← weights.PERM.index_usize d
+          let we1 ← a1.index_usize i3
+          let we2 ← actualFieldOps.wideMul we we1
+          let m ← actualFieldOps.m31Mul weights.QUARTER weights.QUARTER
+          let we3 ← actualFieldOps.wideMulM31 we2 m
+          ok (we3, a, a1)
+      ok (toActualS value, List.map generatedToPower ↑next.1, List.map generatedToPower ↑next.2)) =
+    lowStep s (List.map generatedToPower ↑a, List.map generatedToPower ↑a1) ↑i
+
+case mk
+i r d p q : Usize
+x y : field.WideExact
+s : field.M31
+hmod : UScalar.rem i 4#usize = ok r
+hdiv : UScalar.div i 4#usize = ok d
+hpermL : weights.PERM.index_usize r = ok p
+hpermR : weights.PERM.index_usize d = ok q
+hr : ↑r = ↑i % 4
+hd : ↑d = ↑i / 4
+hp : ↑p = lowPerm ↑r
+hq : ↑q = lowPerm ↑d
+hscale : actualFieldOps.m31Mul weights.QUARTER weights.QUARTER = ok s
+a a1 : Std.Array field.WideExact 4#usize
+hleft :
+  (closureToLowInputs (a, a1)).1.getD (lowPerm (↑i % 4)) AspisR1CurrentPowers.field.WideExact.ONE = generatedToPower x
+hright :
+  (closureToLowInputs (a, a1)).2.getD (lowPerm (↑i / 4)) AspisR1CurrentPowers.field.WideExact.ONE = generatedToPower y
+hreadL : a.index_usize p = ok x
+hreadR : a1.index_usize q = ok y
+⊢ (do
+      let (value, next) ←
+        let (a, a1) := (a, a1)
+          do
+          let we ← a.index_usize p
+          let i3 ← weights.PERM.index_usize d
+          let we1 ← a1.index_usize i3
+          let we2 ← actualFieldOps.wideMul we we1
+          let m ← actualFieldOps.m31Mul weights.QUARTER weights.QUARTER
+          let we3 ← actualFieldOps.wideMulM31 we2 m
+          ok (we3, a, a1)
+      ok (toActualS value, List.map generatedToPower ↑next.1, List.map generatedToPower ↑next.2)) =
+    lowStep s (List.map generatedToPower ↑a, List.map generatedToPower ↑a1) ↑i
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (a✝, a1✝)
+  has type
+    Std.Array field.WideExact 4#usize × Std.Array field.WideExact 4#usize
+  but is expected to have type
+    weights.s2_twofold_low_array.closure
+  in the application
+    (we3, a✝, a1✝)
+        4.73 real         0.96 user         1.23 sys
+          3220520960  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              223161  page reclaims
+               27505  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                8449  voluntary context switches
+               25712  involuntary context switches
+         20251460373  instructions retired
+          7773813718  cycles elapsed
+           467707352  peak memory footprint
+exit_status=1
+source_sha=0bf848ab83f04e182ad3529322bd2f477827cd5764846972322af57fc7005c8b  docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-pair-low-call-adapter-v1/sources/S3PairLowCallProjectedStepV1.lean

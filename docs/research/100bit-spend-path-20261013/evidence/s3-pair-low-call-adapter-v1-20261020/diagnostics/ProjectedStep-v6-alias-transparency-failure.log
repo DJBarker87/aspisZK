@@ -1,0 +1,41 @@
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-pair-low-call-adapter-v1/sources/S3PairLowCallProjectedStepV1.lean:47:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    c
+  has type
+    weights.s2_twofold_low_array.closure
+  but is expected to have type
+    Std.Array field.WideExact 4#usize × Std.Array field.WideExact 4#usize
+  in the application
+    let (a, a1) := c
+    do
+    let i_1 ← i % 4#usize
+    let i1 ← weights.PERM.index_usize i_1
+    let we ← a.index_usize i1
+    let i2 ← i / 4#usize
+    let i3 ← weights.PERM.index_usize i2
+    let we1 ← a1.index_usize i3
+    let we2 ← actualFieldOps.wideMul we we1
+    let m ← actualFieldOps.m31Mul weights.QUARTER weights.QUARTER
+    let we3 ← actualFieldOps.wideMulM31 we2 m
+    ok (we3, c)
+        6.36 real         1.05 user         1.40 sys
+          3217063936  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              212105  page reclaims
+               39884  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                6610  voluntary context switches
+               41176  involuntary context switches
+         20728197088  instructions retired
+          8640977008  cycles elapsed
+           468182488  peak memory footprint

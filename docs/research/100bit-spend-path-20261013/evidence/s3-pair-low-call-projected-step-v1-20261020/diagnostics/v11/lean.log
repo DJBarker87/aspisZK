@@ -1,0 +1,54 @@
+/tmp/root-s3-projected-v11-20261020/sources/S3PairLowCallProjectedStepRootV1.lean:58:48: error: unsolved goals
+c : weights.s2_twofold_low_array.closure
+i r d p q : Usize
+x y : field.WideExact
+s : field.M31
+hmod : UScalar.rem i 4#usize = ok r
+hdiv : UScalar.div i 4#usize = ok d
+hpermL : weights.PERM.index_usize r = ok p
+hpermR : weights.PERM.index_usize d = ok q
+hreadL : c.1.index_usize p = ok x
+hreadR : c.2.index_usize q = ok y
+hr : ↑r = ↑i % 4
+hd : ↑d = ↑i / 4
+hp : ↑p = lowPerm ↑r
+hq : ↑q = lowPerm ↑d
+hleft : (closureToLowInputs c).1.getD (lowPerm (↑i % 4)) AspisR1CurrentPowers.field.WideExact.ONE = generatedToPower x
+hright : (closureToLowInputs c).2.getD (lowPerm (↑i / 4)) AspisR1CurrentPowers.field.WideExact.ONE = generatedToPower y
+hscale : actualFieldOps.m31Mul weights.QUARTER weights.QUARTER = ok s
+⊢ (do
+      let x ← AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.mul (toActualS x) (toActualS y)
+      let x ←
+        AspisR1CurrentWide.field.wide_exact.WideExact.mul_m31
+            (AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.toE x) s
+      ok (AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.fromE x, closureToLowInputs c)) =
+    do
+    let x ←
+      AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.mul
+          (powerToS ((closureToLowInputs c).1[lowPerm (↑i % 4)]?.getD AspisR1CurrentPowers.field.WideExact.ONE))
+          (powerToS ((closureToLowInputs c).2[lowPerm (↑i / 4)]?.getD AspisR1CurrentPowers.field.WideExact.ONE))
+    let x ←
+      AspisR1CurrentWide.field.wide_exact.WideExact.mul_m31
+          (AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.toE x) s
+    ok (AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.fromE x, closureToLowInputs c)
+/tmp/root-s3-projected-v11-20261020/sources/S3PairLowCallProjectedStepRootV1.lean:63:4: warning: This simp argument is unused:
+  hleft
+
+Hint: Omit it from the simp argument list.
+  simp [lowStep, lowEntry, mulM31, actualFieldOps,
+  ̵  ̵ ̵ ̵hl̵e̵f̵t̵,̵ ̵h̵right, to_from_actual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s3-projected-v11-20261020/sources/S3PairLowCallProjectedStepRootV1.lean:63:11: warning: This simp argument is unused:
+  hright
+
+Hint: Omit it from the simp argument list.
+  simp [lowStep, lowEntry, mulM31, actualFieldOps,
+  ̵  ̵ ̵ ̵hleft, h̵r̵i̵g̵h̵t,̵ ̵t̵o_from_actual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1PairLowCallCut.call_mut_read_form' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1PairLowCallCut.projected_call_mut_eq_lowStep_of_reads' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
