@@ -11,6 +11,7 @@ if not src.exists():
     if not src.exists() and module.startswith('R1'):
         src = spend / (module[2:] + '.lean')
 assert src.is_file(), src
+source_digest = hashlib.sha256(src.read_bytes()).hexdigest()
 remote = 'dombarker@100.108.41.90'
 j = '/home/dombarker/project-offloads/aspis-joint-20261019'
 t = '/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence'
@@ -42,10 +43,11 @@ time = subprocess.check_output(['ssh', remote, f'cat {t}/time-{attempt}.log'], t
 def val(pat):
     m = re.search(pat, time)
     return m.group(1) if m else None
-r = dict(attempt=attempt, module=module, env='J', source_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),
+r = dict(attempt=attempt, module=module, env='J', source_sha256=source_digest,
          source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
          deps_fingerprint=fp, dependency_objects=deps.splitlines(), source_path=str(src),
          exit=int(re.search(r'exit=(\d+)', out)[1]), wall=val(r'Elapsed.*: (\S+)'),
          peak_rss_kib=val(r'Maximum resident set size \(kbytes\): (\d+)'), swaps=val(r'Swaps: (\d+)'),
          output=out, timing=time, launcher=p.stdout)
 with (root/'r1p-final/phase2-attempts-9400-9599.jsonl').open('a') as f: f.write(json.dumps(r)+'\n')
+raise SystemExit(r['exit'])

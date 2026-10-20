@@ -86,3 +86,52 @@ diagnostics remain in the evidence and are not counted as proof results.
 
 This closes message locality for the constructed model. It supplies no
 equality between that model and the final theorem's arbitrary `base`.
+
+## Stage 4: concrete sampler/parser and leaf joins in the Lean model
+
+`PhaseSamplerParserBin` fixes semantic sampling to the extracted spend-path
+`s1Spend` through the exact-tower algebraMap, fixes both circle blocks to the
+existing total fallback policies, and uses gammaNZ/ordinary for opening
+blocks. It supplies SemRows01, its exact s1Spend identity, DecodeLocal and
+nonzero gamma. A single shared scalar parameter cannot identify this decoder:
+semantic samples are QM31; opening samples are wide, and gamma is nonzero.
+The generic DecodeLocal interface supports the required distinct maps.
+
+Query candidates use the existing SamplerWords.words (eight LE u32s, low
+18 bits), and the existing Q22WordScan recurrence. Readiness is its actual
+Boolean completion signal, not just accepted.length=22. Completion on the
+eighth word is detected at the next nonempty block. The model chooses the
+first ready block or index7 on exhaustion. Proven: no earlier completion,
+parsed prefix ignores zero extension, candidate bounds, selected-prefix
+noninterference, and successful decoding equals the stable first 22 distinct
+word values. This identifies the Lean parser/policy; no Rust ordered-call or
+reached-history law is claimed. A failed finish is not asserted successful;
+its partial set is retained only as a total counterfactual decoder value.
+
+`PhaseCircleBlocksBin` isolates the small concrete circle adapter. Attempts
+9423/9425/9429/9430 hit elaborator typeclass reduction of the concrete wide
+alias; the focused 9427 diagnostic verified the adapter independently. Using
+literal type notation in the combined module removes that reduction without
+raising heartbeats or recursion limits. Its exact diagnostic source is
+retained as `circle-type-probe-9427.lean.txt`. 9433 and 9434 pass the final
+adapter/parser sources with standard axioms and zero swaps. Existing unchanged
+QueryScanModelFailure/QueryScanOrderedModel dependencies pass 9420/9421.
+
+`PhaseLeafEncodingBin` fixes all three LeafEncoding parameters. It uses
+D18/S2's involution, the existing exact initial-circle and folded-line domain
+evaluators, slot-major then lane-major ordering, 4-byte lanes 0..25, 16-byte
+lane28 and C2 lanes26/27, and the existing exact-wide/folded codecs. Data
+folded leaves are below 65536; all remaining leaves are 128 zero bytes.
+`extracted_s2_index` consumes BuilderTransport.reference_row_fin. `honest_leaves`
+identifies the constructor's three leaves with these model definitions;
+`c1_view`, `c2_view`, and `folded_view` identify their queried data with the
+actual HonestView.run cells (S2 transport explicit for C1/C2, FoldedOpen
+explicit for folded). This does not prove the Rust FFT implementation,
+its low-subfield guards, or leaf hash-call execution correspondence.
+
+9422/9424/9428 preserve intermediate diagnostics. 9426 and 9431 pass earlier
+subsets; 9435 passes the final 11-audit leaf source. Final parser and leaf
+attempts: 9434 = exit0, 2.83s, 4035060 KiB; 9435 = exit0, 3.99s,
+4002752 KiB. Both zero swaps and only standard axioms. The branch-specific
+runner now freezes the uploaded source digest before launching and exits
+nonzero on a Lean failure, after preserving the evidence.

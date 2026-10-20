@@ -1,0 +1,21 @@
+import R1Z.PhaseLocalityBin
+import R0P.CircleSampler
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PhaseCircleTypeProbeBin
+set_option pp.explicit true in
+set_option pp.fullNames true in
+#check R0P.SemSource.circleSample0
+
+def first (b : R0Z.FsStatement.OracleAnswer) :
+    AspisR0.ChordGeometry.Point AspisWideTower.WideExact := by
+  exact R0P.SemSource.circleSample0 (fun i => (b i).toFin)
+
+def select (i : Fin 2) (b : R0Z.FsStatement.OracleAnswer) :
+    AspisR0.ChordGeometry.Point AspisWideTower.WideExact := by
+  by_cases hi : i.val = 0
+  · exact first b
+  · exact R0P.SemSource.circleSample1 (fun j => (b j).toFin)
+#print axioms first
+#print axioms select
+end R1Z.PhaseCircleTypeProbeBin
