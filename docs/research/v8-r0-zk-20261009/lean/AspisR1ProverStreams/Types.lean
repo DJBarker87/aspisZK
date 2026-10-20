@@ -63,13 +63,25 @@ structure state_only_entropy.Profile21SourceExpander where
 /-- [aspis_prover::state_only_hiding::StateOnlyMaskBuildError]
     Source: 'crates/aspis-prover/src/state_only_hiding.rs', lines 51:0-57:1
     Visibility: public -/
-@[discriminant isize]
 inductive state_only_hiding.StateOnlyMaskBuildError where
 | ZeroPrivateEntropy : state_only_hiding.StateOnlyMaskBuildError
 | ReusedMaskNonce : state_only_hiding.StateOnlyMaskBuildError
 | MaskSampleExhausted : state_only_hiding.StateOnlyMaskBuildError
 | TraceShape : state_only_hiding.StateOnlyMaskBuildError
 | Layout : state_only_hiding.StateOnlyMaskBuildError
+
+-- Explicit expansion of the discriminant attribute, with a scoped instance name.
+def state_only_hiding.StateOnlyMaskBuildError.read_discriminant :
+    state_only_hiding.StateOnlyMaskBuildError → Isize
+  | .ZeroPrivateEntropy => 0#isize
+  | .ReusedMaskNonce => 1#isize
+  | .MaskSampleExhausted => 2#isize
+  | .TraceShape => 3#isize
+  | .Layout => 4#isize
+
+instance instStreamsMaskErrorDiscriminant :
+    Discriminant state_only_hiding.StateOnlyMaskBuildError Isize where
+  read_discriminant := state_only_hiding.StateOnlyMaskBuildError.read_discriminant
 
 /-- [aspis_prover::state_only_hiding::SeedExpander]
     Source: 'crates/aspis-prover/src/state_only_hiding.rs', lines 312:0-318:1 -/

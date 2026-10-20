@@ -1,0 +1,33 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSaltBytes.lean:16:2: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSaltBytes.lean:19:87: error: unsolved goals
+index : U32
+b0 : BitVec 32 := index.bv
+b1 : BitVec 24 := BitVec.setWidth 24 (b0 >>> 8)
+b2 : BitVec 16 := BitVec.setWidth 16 (b1 >>> 8)
+b3 : BitVec 8 := BitVec.setWidth 8 (b2 >>> 8)
+⊢ [(index.bv.toNat % 256).toUInt8, ((index.bv >>> 8).toNat % 16777216 % 256).toUInt8,
+      ((BitVec.setWidth 24 (index.bv >>> 8) >>> 8).toNat % 65536 % 256).toUInt8,
+      ((BitVec.setWidth 16 (BitVec.setWidth 24 (index.bv >>> 8) >>> 8) >>> 8).toNat % 256 % 256).toUInt8] =
+    [(index.bv.toNat % 256).toUInt8, (index.bv.toNat / 256 % 256).toUInt8, (index.bv.toNat / 65536 % 256).toUInt8,
+      (index.bv.toNat / 16777216 % 256).toUInt8]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSaltBytes.lean:41:4: warning: This simp argument is unused:
+  shift_byte
+
+Hint: Omit it from the simp argument list.
+  simp only [b0, b1, b2, b3, TranscriptR1.le32, UScalar.val,
+  ̵  ̵ ̵ ̵s̵h̵i̵f̵t̵_̵b̵y̵t̵e̵,̵ ̵BitVec.toNat_setWidth,
+  ̲  ̲ ̲ ̲Nat.div_div_eq_div_mul]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSaltBytes.lean:41:39: warning: This simp argument is unused:
+  Nat.div_div_eq_div_mul
+
+Hint: Omit it from the simp argument list.
+  simp only [b0, b1, b2, b3, TranscriptR1.le32, UScalar.val, shift_byte, B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵s̵e̵t̵W̵i̵d̵t̵h̵,̵ ̵N̵a̵t̵.̵d̵i̵v̵_̵d̵i̵v̵_̵e̵q̵_̵d̵i̵v̵_̵m̵u̵l̵]̵B̲i̲t̲V̲e̲c̲.̲t̲o̲N̲a̲t̲_̲s̲e̲t̲W̲i̲d̲t̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitSaltBytes.shift_byte' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSaltBytes.le32_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSaltBytes.salt_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

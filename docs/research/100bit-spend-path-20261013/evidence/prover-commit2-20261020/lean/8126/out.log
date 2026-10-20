@@ -1,0 +1,18 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSaltBytes.lean:18:87: error: unsolved goals
+index : U32
+b0 : BitVec 32 := index.bv
+b1 : BitVec 24 := BitVec.setWidth 24 (b0 >>> 8)
+b2 : BitVec 16 := BitVec.setWidth 16 (b1 >>> 8)
+b3 : BitVec 8 := BitVec.setWidth 8 (b2 >>> 8)
+h1 : b1.toNat = b0.toNat / 256
+h2 : b2.toNat = b1.toNat / 256
+h3 : b3.toNat = b2.toNat / 256
+⊢ [(b0.toNat % 256).toUInt8, (b0.toNat / 256 % 256).toUInt8, (b0.toNat / 65536 % 256).toUInt8,
+      (b0.toNat / 16777216 % 256).toUInt8] =
+    [(index.bv.toNat % 256).toUInt8, (index.bv.toNat / 256 % 256).toUInt8, (index.bv.toNat / 65536 % 256).toUInt8,
+      (index.bv.toNat / 16777216 % 256).toUInt8]
+'R1Z.ProverCommitSaltBytes.shift_byte' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSaltBytes.le32_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSaltBytes.salt_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
