@@ -864,9 +864,9 @@ The bounded recursive-call contracts alone do not establish that equality.
 | D89 builder soundness row | Removed at PrivacyR1FinalProtocolBuilder; supplied by builder_sound. At the source-facing endpoint it follows from RustRuntimeJoin. | Deployed identification remains open; no stronger assumption was substituted into PrivacyR1Final. |
 | D89 real builder/checker/retry row | Mathematical builder/public facts have their own proved handoff; the real source-to-model ScanCoupling retains its exact statement. | One real execution join still owes checker-input identity, P_chk/P_R1, no-pole/VR1, tape/retry/error/publication/serialization law and reached-query history. These cannot follow from builder soundness for arbitrary source FSExperiments. No history-worker-owned module was edited. |
 
-The final audit covers nine current Lean modules and 26 theorems (plus the
-sourceIdentification proof definition), with 21 retained env-J attempts
-9204–9224. Every final source hash and current direct-import object fingerprint
+The final audit covers ten current Lean modules and 27 theorems (plus the
+sourceIdentification proof definition), with 22 retained env-J attempts
+9204–9225. Every final source hash and current direct-import object fingerprint
 matches its successful receipt; all final axioms are subsets of propext,
 Classical.choice and Quot.sound; all attempts report zero swaps. The original
 PrivacyR1Final/PrivacyR1FinalProtocol files and all shipped crate files are
@@ -885,3 +885,13 @@ package/version and identical shared registry source/checksum identities.
 Historical inherited runner revision labels are retained and explicitly
 corrected by source-base plus exact per-run source/tool pins, not treated
 as source identification. No object, LLBC, executable, ELF or key is committed.
+
+
+The final typed adapter BuilderExtractedRecords explicitly converts every
+field of the actual extracted owned-reference RW/RP types to RustWitness /
+RustPublic (including the transfer flag and U64 index value). reference_trace
+then applies field normalization to those exact output types. It is not a
+new claim about the reference loops' admission checks: WitnessOk and PubCorr
+remain explicit. Env J 9225 passes (2.10 s, 4,016,576 KiB RSS, zero swaps,
+standard axioms). The next consumer is the concrete RuntimeJoin record-data
+instantiation, once successful-source admission and full glue are supplied.

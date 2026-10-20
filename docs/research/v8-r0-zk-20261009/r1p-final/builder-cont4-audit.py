@@ -5,7 +5,7 @@ HERE=pathlib.Path(__file__).resolve().parent
 ROOT=HERE.parents[3]
 E=HERE/'builder-cont4-evidence'
 mods=['BuilderProtocolInstance','BuilderRecordCanonical','BuilderPublicCanonical',
- 'BuilderRuntimeJoin','BuilderProtocolBounds','BuilderFieldNormalization','PrivacyR1FinalProtocolBuilder','BuilderPublicExtracted','BuilderPublicProjection']
+ 'BuilderRuntimeJoin','BuilderExtractedRecords','BuilderProtocolBounds','BuilderFieldNormalization','PrivacyR1FinalProtocolBuilder','BuilderPublicExtracted','BuilderPublicProjection']
 records=[json.loads(l) for l in (E/'attempts.jsonl').read_text().splitlines()]
 latest={r['module']:r for r in records}
 final={}; theorem_count=0
