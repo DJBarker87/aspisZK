@@ -1,0 +1,53 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr/docs/research/100bit-spend-path-20261013/lean/BinLeafListWork.lean:118:76: error: unsolved goals
+case isFalse.isTrue
+tag : Byte
+width : ℕ
+input : List Byte
+h✝¹ : ¬True
+h✝ :
+  (List.take width (List.drop 2 input)).length = width ∧
+    (List.drop (2 + width) input).length = 32 ∧
+      16 :: tag :: (List.take width (List.drop 2 input) ++ List.drop (2 + width) input) = input
+⊢ none = some (List.take width (List.drop 2 input), List.drop (2 + width) input)
+/Users/dominic/ZK/.worktrees/cx-m10-instr/docs/research/100bit-spend-path-20261013/lean/BinLeafListWork.lean:122:58: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp_all only [true_and, false_and, if_t̵r̵u̵e̵,̵ ̵i̵f_̵f̵alse]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr/docs/research/100bit-spend-path-20261013/lean/BinLeafListWork.lean:155:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  g ≥ 0
+  f ≥ 0
+  f ≥ 0
+  2*f - g ≥ -69
+  0 ≤ e ≤ 33
+  d ≥ 0
+  d - f ≤ 1
+  c ≥ 0
+  c - f ≤ 3
+  b ≥ 0
+  b - 2*f ≤ 1
+  0 ≤ a ≤ 3
+  a + b + c + d + e - 6*f + h ≥ 118
+where
+ a := ↑(drop 2 input).2
+ b := ↑(take width (drop 2 input).1).2
+ c := ↑(drop (2 + width) input).2
+ d := ↑(BinLeafBoundedLength.test width (take width (drop 2 input).1).1).2
+ e := ↑(BinLeafBoundedLength.test 32 (drop (2 + width) input).1).2
+ f := ↑(take width (drop 2 input).1).1.length
+ g := ↑(equal (16 :: tag :: ((take width (drop 2 input).1).1 ++ (drop (2 + width) input).1)) input).2
+ h := ↑(equal (16 :: tag :: (append (take width (drop 2 input).1).1 (drop (2 + width) input).1).1) input).2
+'AspisR1.BinLeafListWork.drop_value' depends on axioms: [propext]
+'AspisR1.BinLeafListWork.drop_work' depends on axioms: [propext]
+'AspisR1.BinLeafListWork.take_value' depends on axioms: [propext]
+'AspisR1.BinLeafListWork.take_work' depends on axioms: [propext, Quot.sound]
+'AspisR1.BinLeafListWork.append_value' depends on axioms: [propext]
+'AspisR1.BinLeafListWork.append_work' depends on axioms: [propext, Quot.sound]
+'AspisR1.BinLeafListWork.equal_value' depends on axioms: [propext]
+'AspisR1.BinLeafListWork.equal_work' depends on axioms: [propext, Quot.sound]
+'AspisR1.BinLeafListWork.parse_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.BinLeafListWork.parse_work' depends on axioms: [propext, sorryAx, Quot.sound]
