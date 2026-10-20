@@ -5,6 +5,7 @@ import difflib
 import hashlib
 import json
 import re
+import subprocess
 
 here = Path(__file__).resolve().parent
 packet = here.parent.parent
@@ -42,11 +43,37 @@ manifest = json.loads((here / 'manifest.json').read_text())
 for row in manifest['attempts']:
     for axioms in re.findall(r'depends on axioms: \[([^\]]*)\]', '\n'.join(row['axioms'])):
         assert set(axioms.replace('\n', '').replace(' ', '').split(',')) <= {'propext', 'Classical.choice', 'Quot.sound'}
+checks = []
+for name in new_modules:
+    source = lean / (name + '.lean')
+    current = [a for a in manifest['attempts'] if a['module'] == name and a['final_current']]
+    assert len(current) == 1
+    row = current[0]
+    assert row['exit'] == 0 and row['swaps'] == 0 and not row['errors']
+    assert hashlib.sha256(source.read_bytes()).hexdigest() == row['source_sha256']
+    assert (here / (name + '-' + str(row['attempt'])) / 'source.lean.txt').read_bytes() == source.read_bytes()
+    declarations = re.findall(r'^(?:private )?theorem (\w+)', source.read_text(), re.M)
+    prints = re.findall(r'^#print axioms (\w+)', source.read_text(), re.M)
+    assert sorted(declarations) == sorted(prints)
+    assert len(row['axioms']) == len(prints)
+    for obj in row['direct_imports']:
+        assert hashlib.sha256(Path(obj['path']).read_bytes()).hexdigest() == obj['sha256']
+    checks.append({'module': name, 'attempt': row['attempt'], 'exit': row['exit'],
+                   'wall_seconds': row['wall_seconds'], 'peak_rss_bytes': row['peak_rss_bytes'],
+                   'swaps': row['swaps'], 'axiom_reports': len(prints),
+                   'source_and_direct_import_hashes_match': True})
+changed = subprocess.check_output(['git', 'diff', '--name-only', '7dac4fa12', '--', str(lean)], text=True).splitlines()
+assert set(Path(p).name for p in changed) == {m + '.lean' for m in new_modules}
+for f in changed:
+    assert subprocess.run(['git', 'cat-file', '-e', '7dac4fa12:' + f], capture_output=True).returncode != 0
 report = {'base_endpoint': 'R1FinalSoundnessBinPerQueryRWire.final_soundness',
           'new_endpoint': 'R1FinalSoundnessBinPerQueryNoColl.final_soundness',
           'only_changes': rows, 'conclusion_verbatim_equal': True,
           'other_premises_verbatim_equal': True,
           'new_source_sha256': {m: hashlib.sha256((lean / (m + '.lean')).read_bytes()).hexdigest() for m in new_modules},
-          'standard_axioms_only_in_recorded_attempts': True}
+          'standard_axioms_only_in_recorded_attempts': True,
+          'compiled_source_revision': manifest.get('final_source_revision') or subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+          'only_new_lean_modules': True, 'focused_checks': checks,
+          'total_axiom_reports': sum(c['axiom_reports'] for c in checks)}
 (here / 'audit.json').write_text(json.dumps(report, indent=2) + '\n')
 print('Signature audit passed: exactly five guard insertions; unchanged conclusion and all other premises.')
