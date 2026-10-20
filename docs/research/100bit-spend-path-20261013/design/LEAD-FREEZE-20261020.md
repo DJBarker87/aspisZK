@@ -113,3 +113,23 @@ sizes (the repository already uses Kani for V5: `kani-verif/` on main), and
 Aeneas extracts the reference form for the Lean proofs. Kani's soundness on
 these harnesses joins premise P6 by name. The shipped bytes and CU are
 unchanged.
+
+## Candidate update (2026-10-21, prep6 — Kani)
+
+Branch codex/cx-freeze-prep-20261020 at 0e29da6a2: the compact-field
+expansion cone is CLOSED by the equivalence route — six Kani harnesses
+(Kani 0.67.0, bundled Kissat 4.0.1; main's V5 bundles pinned 4.0.4, the
+difference recorded) prove shipped ≡ reference for symbolic inputs with
+unwinding assertions, and the reference extracts with has_errors=false;
+default/devnet ELFs unchanged (f9ecbc27…/3f21a42f…). Still open on
+`Weights::new`: the constructor equivalence (bound 11 stopped at the
+ten-minute review under memory pressure, 6.4 GiB; not retried), the
+constructor reference's extraction (InterpBorrows 2731) and the broader
+caller (`prepared_claim`, Not_found), and allocation-failure equivalence
+(Kani's default allocator does not fail). Ruling for prep7: decompose the
+constructor proof (per-loop harnesses with Kani loop contracts or function
+contracts so no single harness unrolls the whole constructor), reshape the
+reference until it extracts, and treat allocation failure as abort-
+equivalent: on Solana a failed allocation aborts the transaction in both
+forms — stated as a named runtime fact under P2 with a host test of the
+abort path, not proved in Kani.
