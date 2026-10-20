@@ -47,8 +47,8 @@ for rel in new:
     code=re.sub(r'--[^\n]*','',code)
     if re.search(r'\b(sorry|admit|axiom|native_decide|maxRecDepth|maxHeartbeats)\b',code):
         errors.append('Forbidden source token: '+module)
-    names=re.findall(r'^(?:private\s+)?theorem\s+(\w+)',text,re.M)
-    prints=re.findall(r'^#print axioms (\w+)',text,re.M)
+    names=re.findall(r'^(?:private\s+)?theorem\s+(\w+)',code,re.M)
+    prints=re.findall(r'^#print axioms (\w+)',code,re.M)
     for name in names:
         if name not in prints: errors.append('Missing axiom command: '+module+'.'+name)
         if not any(re.search(r"\."+re.escape(name)+r"' ",line) for line in a['axioms']):

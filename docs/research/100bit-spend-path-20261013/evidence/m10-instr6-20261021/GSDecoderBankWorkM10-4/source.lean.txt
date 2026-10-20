@@ -1,0 +1,100 @@
+import GSInterpolationFullWorkM10
+import RRConcreteWriterM10
+import GSFixedInputDecoderFamily
+import SharedFiniteMaterializationM10
+
+/-! Static precharging of all 29+5 calls. The interpolation and traversal
+upper envelopes have already been checked generically; constructing a new
+dependent match on the concrete interpolation result is unnecessary for this
+upper-bound schedule. C and T remain explicit per-node/terminal tariffs.
+This module alone does not certify their field/bit adequacy. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.GSDecoderBankWorkM10
+open CompPoly GSFixedInputDecoderFamily
+variable {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K] [Fintype K]
+
+attribute [local irreducible] GSConcreteRootRecovery.initial GSConcreteRootRecovery.final
+  RRTraversalWriterM10.budget
+
+def stateTariff (M : Nat) : Nat := 100*(M+114)^2
+
+@[noinline, never_extract] def initialBudget (C T : Nat) : Nat :=
+  GSInterpolationFullWorkM10.budget 114689 1048576 6480098+
+    stateTariff 114689+RRTraversalWriterM10.budget 112 C T 1025
+
+def initial (q t C T : Nat) (points : Array (K × K)) (hs : points.size = 1048576)
+    (H : {i : Nat // i ∈ Finset.range (1025*112)} → Fin t → K × K) :
+    Option (List (List K)) × Nat :=
+  (GSConcreteRootRecovery.initial q t points hs H,initialBudget C T)
+
+theorem initial_value (q t C T : Nat) (points : Array (K × K)) (hs : points.size = 1048576)
+    (H : {i : Nat // i ∈ Finset.range (1025*112)} → Fin t → K × K) :
+    (initial q t C T points hs H).1 = GSConcreteRootRecovery.initial q t points hs H := rfl
+
+theorem initial_work (q t C T : Nat) (points : Array (K × K)) (hs : points.size = 1048576)
+    (H : {i : Nat // i ∈ Finset.range (1025*112)} → Fin t → K × K) :
+    (initial q t C T points hs H).2 ≤ initialBudget C T := Nat.le_refl _
+
+@[noinline, never_extract] def finalBudget (C T : Nat) : Nat :=
+  GSInterpolationFullWorkM10.budget 28673 262144 1626522+
+    stateTariff 28673+RRTraversalWriterM10.budget 112 C T 256
+
+def final (q t C T : Nat) (points : Array (K × K)) (hs : points.size = 262144)
+    (H : {i : Nat // i ∈ Finset.range (256*112)} → Fin t → K × K) :
+    Option (List (List K)) × Nat :=
+  (GSConcreteRootRecovery.final q t points hs H,finalBudget C T)
+
+theorem final_value (q t C T : Nat) (points : Array (K × K)) (hs : points.size = 262144)
+    (H : {i : Nat // i ∈ Finset.range (256*112)} → Fin t → K × K) :
+    (final q t C T points hs H).1 = GSConcreteRootRecovery.final q t points hs H := rfl
+
+theorem final_work (q t C T : Nat) (points : Array (K × K)) (hs : points.size = 262144)
+    (H : {i : Nat // i ∈ Finset.range (256*112)} → Fin t → K × K) :
+    (final q t C T points hs H).2 ≤ finalBudget C T := Nat.le_refl _
+
+def run (q t C T : Nat) (inputs : Inputs K 5) (H : InitialTape K t × FinalTape K t) :
+    Results K 5 × Nat :=
+  let a := SharedFiniteMaterializationM10.batch (fun i : Fin 29 =>
+    initial q t C T (inputs.initialPoints i) (inputs.initialSize i) H.1)
+  let b := SharedFiniteMaterializationM10.batch (fun i : Fin 5 =>
+    final q t C T (inputs.finalPoints i) (inputs.finalSize i) H.2)
+  ((a.1,b.1),a.2+b.2+2)
+
+attribute [local irreducible] SharedFiniteMaterializationM10.batch
+
+theorem run_value (q t C T : Nat) (inputs : Inputs K 5) (H : InitialTape K t × FinalTape K t) :
+    (run q t C T inputs H).1 = GSFixedInputDecoderFamily.run q t inputs H := by
+  unfold run GSFixedInputDecoderFamily.run
+  dsimp only
+  congr 1
+  · funext i
+    exact (SharedFiniteMaterializationM10.value _ i).trans (initial_value _ _ _ _ _ _ _)
+  · funext i
+    exact (SharedFiniteMaterializationM10.value _ i).trans (final_value _ _ _ _ _ _ _)
+
+@[noinline, never_extract] def bankBudget (C T : Nat) : Nat :=
+  29*(initialBudget C T+3)+5*(finalBudget C T+3)+4
+
+theorem add_batch (x y A B : Nat) (hx : x ≤ A+1) (hy : y ≤ B+1) :
+    x+y+2 ≤ A+B+4 := by omega
+
+theorem run_work (q t C T : Nat) (inputs : Inputs K 5)
+    (H : InitialTape K t × FinalTape K t) : (run q t C T inputs H).2 ≤ bankBudget C T := by
+  have ha := SharedFiniteMaterializationM10.work
+    (fun i : Fin 29 => initial q t C T (inputs.initialPoints i) (inputs.initialSize i) H.1)
+    (initialBudget C T) (fun i => initial_work _ _ _ _ _ _ _)
+  have hb := SharedFiniteMaterializationM10.work
+    (fun i : Fin 5 => final q t C T (inputs.finalPoints i) (inputs.finalSize i) H.2)
+    (finalBudget C T) (fun i => final_work _ _ _ _ _ _ _)
+  exact add_batch _ _ _ _ ha hb
+
+#print axioms initial_value
+#print axioms initial_work
+#print axioms final_value
+#print axioms final_work
+#print axioms run_value
+#print axioms add_batch
+#print axioms run_work
+end AspisR1.GSDecoderBankWorkM10
+end
