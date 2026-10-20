@@ -1,0 +1,24 @@
+{
+  "status": "OPEN: no premise removed or replaced",
+  "before": "(builder_refinement_D46_D51 : R0Z.HonestValidity.BuilderSoundOn h B x)",
+  "after": "identical to before",
+  "source_files": {
+    "docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1Final.lean": "73b730e45a4d8b9b3ab01133700d99c063e82bd9bb8f83e544945baa3cb58b67",
+    "docs/research/v8-r0-zk-20261009/lean/R1Z/BuilderSource.lean": "56ea8c7b519616f3cb5bcd14205c135dfb48f26a6cd5039001ec2b502afd8cd4"
+  },
+  "typed_boundary": "BuilderSource.SourceIdentification requires toInstance : source.Instance -> BuilderCanonical.Instance, plus public_eq, build_eq and transport_eq. The codomain Instance contains embedded RspendPlus; neither Kani records equality nor a translated external layer constructs this map.",
+  "reference_progress": "BuilderRecordsFields.fixed_fields projects output_value, change_value and asset from successful extracted owned-reference evaluation. It asserts neither shipped caller success nor RspendPlus, canonicality, or glue equality.",
+  "remaining": [
+    "successful shipped compiler -> embedded RspendPlus and semantic public map (including withdrawal recipient-zero convention and transfer change sentinel)",
+    "owned-record fields -> BuilderCanonical.rustWitness/rustPublic for all fields",
+    "actual Rust structural glue/banks -> mergedTrace, using the extracted writers",
+    "actual source HonestProver and complete SourceIdentification including array transport wrappers"
+  ],
+  "concurrent_worker_files": "Causal/phase-model sources were not edited.",
+  "component_status": "All 20 shipped records output fields equal the owned reference under named P6 soundness and pure-helper congruence; owned Poseidon layer reference equality is also checked. Both references translate and their generated definitions compile.",
+  "lean_attempt": 9203,
+  "axioms": [
+    "'R1Z.BuilderRecordsFields.bind_ok_inv' depends on axioms: [propext]",
+    "'R1Z.BuilderRecordsFields.fixed_fields' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ]
+}

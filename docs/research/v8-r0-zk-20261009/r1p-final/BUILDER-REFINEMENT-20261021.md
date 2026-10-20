@@ -385,3 +385,30 @@ privacy release or full source closure is claimed. The new generated modules
 were added to shared env J under worker-owned names; replacements were
 snapshotted, and their required dependent proof is compiled on the corrected
 records object.
+
+## Continuation 3, Stage 2: reference projections and exact remaining premise
+
+`R1Z.BuilderRecordsFields.fixed_fields` proves that successful evaluation of
+the extracted owned mapper preserves the explicit output value, change value
+and public asset. It consumes the corrected 9202 extraction. Attempt 9203
+compiles in env J (1.39 s, 2,527,912 KiB RSS, zero swaps); its two theorem
+audits use only standard axioms. This is an unconditional implication from
+successful reference evaluation, not a proof that the deployed compiler
+establishes RspendPlus. The generic bind inversion lemma has only propext.
+
+Stage 2 is still partial. No shipped source HonestProver/instance map, complete
+records-to-canonical mapping, or Rust glue/bank equality theorem is assembled.
+In particular, the codomain of `BuilderSource.SourceIdentification.toInstance`
+contains embedded RspendPlus. The component Kani equalities do not prove that
+a successful deployed compilation belongs to that subtype. They also do not
+supply the complete public projection, build_eq, or array transport wrappers.
+Existing canonical-builder soundness and the S2 row theorem remain available;
+they do not fill these missing fields automatically.
+
+`PrivacyR1Final.lean` is byte-unchanged. Before and after, its builder premise is
+`(builder_refinement_D46_D51 : R0Z.HonestValidity.BuilderSoundOn h B x)`.
+It was neither removed nor replaced with the stronger source-identification
+hypothesis. No strictly weaker sufficient premise has been proved for the
+actual source h, so no privacy-root replay or final-manifest replay is claimed.
+The exact before/after source hashes and outstanding typed boundary are in
+builder-cont3-evidence/premise-status.json. Causal/phase-model files are untouched.
