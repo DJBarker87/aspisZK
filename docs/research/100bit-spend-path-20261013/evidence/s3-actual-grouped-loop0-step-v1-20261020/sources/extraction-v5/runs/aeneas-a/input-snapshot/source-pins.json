@@ -1,0 +1,113 @@
+{
+  "revision": "8137980396719c48f71f743254644aaf0a3a8423",
+  "features": [
+    "r0",
+    "private-leaf-salts"
+  ],
+  "cuts": [
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start_byte": 1000,
+      "end_byte_exclusive": 1024,
+      "sha256": "0f603974e070feacec4d17e6529e2591708dfb371ea45bb5222c0e4f4b7faeef",
+      "file_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+      "anchor": "pub struct M31(pub u32);"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start_byte": 9062,
+      "end_byte_exclusive": 9113,
+      "sha256": "70788522ae518a81cf038cef9116d5bebc9dc6a097406a62c79f3635b8998d10",
+      "file_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+      "anchor": "pub struct CM31 {"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start_byte": 13734,
+      "end_byte_exclusive": 13789,
+      "sha256": "7602e05ad6f14b7feb141cb99aceceb0d24174c409e0ccca4ae3e1911dc247dd",
+      "file_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+      "anchor": "pub struct QM31 {"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "start_byte": 1267,
+      "end_byte_exclusive": 1319,
+      "sha256": "ab7cfdf32a34bde6f086dcd3d7e95c6d39eb8bdff0f22b8fc9a40ace373c15e5",
+      "file_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+      "anchor": "pub struct WideExact {"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "start_byte": 1661,
+      "end_byte_exclusive": 1743,
+      "sha256": "a27b0d8aa30d5ce5d71ed5e637a8223e17f1a553df03b5c4511dde429a4003fd",
+      "file_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+      "anchor": "pub const ONE: Self = Self {"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start_byte": 29237,
+      "end_byte_exclusive": 29425,
+      "sha256": "2ef8015b0fe4cc4b9bbd3d391a831e9e5ba51559c597ee1db8945b9d67393189",
+      "file_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+      "anchor": "pub const ZERO: QM31 = QM31 {"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start_byte": 29430,
+      "end_byte_exclusive": 29617,
+      "sha256": "f80470ca6cbfcc5c4fd9029af9eba06168486ce39e1172e4288f56471bb00d6e",
+      "file_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+      "anchor": "pub const ONE: QM31 = QM31 {"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/weights.rs",
+      "start_byte": 323,
+      "end_byte_exclusive": 433,
+      "sha256": "3919d83b539f8819c40251a84625b582ac88338fed2fa14b18951a69c0e1d018",
+      "file_sha256": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+      "anchor": "pub fn powers<const N:usize>"
+    }
+  ],
+  "opaque_paths": [
+    "crate::weights::field",
+    "crate::field::_::add",
+    "crate::field::_::mul"
+  ],
+  "kit_files": {
+    "Cargo.toml": "d6cf462876a66aacd35d23fded42db547878b2366dfba64cfdd9c3554ce159ec",
+    "lib.rs": "ad9173b6118d8ee367dfe42436753178c78c59bb9c9f8a5962f7f8b4bd19c66a",
+    "Cargo.lock": "9f7e6c34b37956720b2dc73492c83b40fce7e23b54f912ed992a76d58d755891"
+  },
+  "classification": "ACTUAL source-cut extraction of frozen s2_grouped_inactive_pair body plus copied actual M31/CM31/QM31/WideExact layouts and ZERO declarations. Exact f:&[u8] and field(f,j) call retained. Decoder/add/mul are explicit opaque cuts; no production source modified.",
+  "prior_diagnostic": "No prior actual-helper Charon/Aeneas attempt in this kit; preserve all outputs.",
+  "candidate_transform": {
+    "before": "pub fn powers<const N:usize>(x:E)->[E;N] { let mut p=E::ONE;core::array::from_fn(|_| {let a=p;p=p.mul(x);a}) }",
+    "after": "pub fn powers<const N:usize>(x:E)->[E;N]{\n let mut out=[E::ONE;N];\n let mut p=E::ONE;\n let mut i=0usize;\n while i<N {\n  out[i]=p;\n  p=p.mul(x);\n  i+=1;\n }\n out\n}",
+    "classification": "CANDIDATE explicit safe array loop; production source unchanged"
+  },
+  "source_cut": {
+    "path": "crates/aspis-r1-cost-probe/src/weights.rs",
+    "file_sha256": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+    "function_sha256": "830358d43d9adf98eade9c0c0e418b60c8d133db02103f279b86b0385a093783",
+    "function_text": "#[inline(never)]\npub fn s2_grouped_inactive_pair(f:&[u8],low:&[E;16])->E {\n    let mut coefficients=[E::ZERO;12];\n    for j in 0..64 {\n        let group=S2_INACTIVE_GROUPS[j] as usize;\n        coefficients[group]=coefficients[group].add(field(f,j));\n    }\n    let mut pair=E::ZERO;\n    for group in 0..12 {\n        let mut weight=E::ZERO;\n        for (bit,&challenge) in low.iter().enumerate() {\n            if S2_INACTIVE_MASKS[group]&(1<<bit)!=0 {weight=weight.add(challenge);}\n        }\n        pair=pair.add(coefficients[group].mul(weight));\n    }\n    pair\n}",
+    "start_byte": 1140,
+    "end_byte_exclusive": 1698
+  },
+  "carrier_cuts": {
+    "field.rs_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "wide_exact.rs_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+    "structs": [
+      "0d527c5eb97d93ea9929e5b7c06720d5a65a44e49749900f1c945250a9bb3a14",
+      "1852390063f785c54ad615420f90ae50b118bc57427c8def79a16399062e0965",
+      "c9760bd531590483c0c8258fc5ea8ff96068af130f13fd76c19bbb1e87dbb588",
+      "cdb08a3efa0bef666d826f2adc90bd6b8978e688f532afb59bce71be9e08e67b"
+    ],
+    "zero_decls": [
+      "9df41fb1933c29d9d11b516d55269fabb13934f14c37e13ee155c7c781089d6a",
+      "2ef8015b0fe4cc4b9bbd3d391a831e9e5ba51559c597ee1db8945b9d67393189",
+      "f5dff1e4289b472603f21589c418325e993b9252ce633ec8c9965a585166edd2"
+    ]
+  }
+}
