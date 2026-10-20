@@ -1,5 +1,6 @@
 import R1Z.ProverCommitOracleRefinement
 import R1Z.ProverCommitReferenceSource
+import R1Z.ProverCommitFibreScope
 import R1Z.PrivacyR1FinalProtocol
 
 #print axioms R1Z.ProverCommitOracleRefinement.cached_eq
@@ -14,3 +15,7 @@ import R1Z.PrivacyR1FinalProtocol
 #print axioms R1Z.ProverCommitReferenceSource.terminal
 #print axioms R1Z.ProverCommitReferenceSource.success_step
 #print axioms R1Z.PrivacyR1FinalProtocol.privacy_R1_protocol
+#print axioms R1Z.ProverCommitOracleRefinement.mask_block_rom
+#print axioms R1Z.ProverCommitOracleRefinement.source_block_rom
+
+#print axioms R1Z.ProverCommitFibreScope.zero_fill_not_equal_fibres

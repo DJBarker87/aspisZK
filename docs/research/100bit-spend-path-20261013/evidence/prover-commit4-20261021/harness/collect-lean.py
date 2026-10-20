@@ -4,7 +4,7 @@ from pathlib import Path
 E=Path(__file__).resolve().parent.parent
 p=E/'lean';p.mkdir(exist_ok=True)
 rows=[]
-for a in range(8144,8153):
+for a in range(8144,8158):
  for n in [f'out-{a}.log',f'time-{a}.log']:
   subprocess.run(['scp','dombarker@100.108.41.90:/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/'+n,str(p/n)],check=True)
  subprocess.run(['scp',f'dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-prover-commit4-20261021/lean-{a}.json',str(p)],check=True)

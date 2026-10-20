@@ -1,4 +1,5 @@
 import R1Z.ProverCommitGrammarSource
+import R1Z.RomFiniteBin
 
 /-! D92: byte-oracle-parametric callback refinement. This module identifies
 callback evaluation with a single arbitrary function of concatenated bytes.
@@ -117,6 +118,35 @@ theorem ordered_reads_refine (oracle : ByteOracle)
       model.map (fun input => (input, oracle input)) := by
   rw [same]
 
+/-- The exact finite-ROM lookup used by R1Z, with an explicit answer-carrier
+adapter. The adapter is a data parameter, not an assumed source bijection. -/
+noncomputable def romOracle (bound : ℕ)
+    (tab : RomFiniteBin.Address bound → R0Z.FsStatement.OracleAnswer)
+    (encodeAnswer : R0Z.FsStatement.OracleAnswer → Bytes32) : ByteOracle :=
+  fun input => encodeAnswer (RomFiniteBin.lookup bound tab input)
+
+theorem mask_block_rom (bound : ℕ)
+    (tab : RomFiniteBin.Address bound → R0Z.FsStatement.OracleAnswer)
+    (encodeAnswer : R0Z.FsStatement.OracleAnswer → Bytes32)
+    (seed : Bytes32) (counter : U64) :
+    AspisR1ProverStreams.state_only_hiding.state_only_mask_expander_block
+      (hashOf (romOracle bound tab encodeAnswer)) seed counter =
+      ok (encodeAnswer (RomFiniteBin.lookup bound tab
+        (R1Z.LayoutR1PBin.dExp1 ++ seed.val.map ProverCommitStreamBytes.byte ++
+          R1Z.LayoutR1PBin.le64 counter.val))) :=
+  mask_block_refines (romOracle bound tab encodeAnswer) seed counter
+
+theorem source_block_rom (bound : ℕ)
+    (tab : RomFiniteBin.Address bound → R0Z.FsStatement.OracleAnswer)
+    (encodeAnswer : R0Z.FsStatement.OracleAnswer → Bytes32)
+    (seed : Bytes32) (counter : U64) :
+    AspisR1ProverStreams.state_only_entropy.profile21_source_expander_block
+      (hashOf (romOracle bound tab encodeAnswer)) seed counter =
+      ok (encodeAnswer (RomFiniteBin.lookup bound tab
+        (R1Z.LayoutR1PBin.dExp2 ++ seed.val.map ProverCommitStreamBytes.byte ++
+          R1Z.LayoutR1PBin.le64 counter.val))) :=
+  source_block_refines (romOracle bound tab encodeAnswer) seed counter
+
 #print axioms cached_eq
 #print axioms cache_insert
 #print axioms arbitrary_fresh_extension
@@ -125,4 +155,6 @@ theorem ordered_reads_refine (oracle : ByteOracle)
 #print axioms leaf_refines
 #print axioms salt_refines
 #print axioms ordered_reads_refine
+#print axioms mask_block_rom
+#print axioms source_block_rom
 end R1Z.ProverCommitOracleRefinement
