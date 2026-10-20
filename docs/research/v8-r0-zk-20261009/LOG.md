@@ -7241,3 +7241,19 @@ raw canonicality. Lead action: check that the frozen verifier and Pool reject,
 or canonicalise, non-canonical public limbs, so that one statement cannot
 have two accepted encodings (nullifier or recipient malleability). A targeted
 job is open.
+
+## D97 — encoding uniqueness: no aliasing in the frozen verifier or Pool (2026-10-21, lead)
+
+Resolves the D96 follow-up. Landed from `codex/cx-encoding-inj-20261021`
+(`100bit-spend-path-20261013/design/ENCODING-UNIQUENESS-20261021.md`, moved by
+the lead from a stray root `design/`; harness in `tools/encoding-uniqueness/`).
+Every M31/QM31 public and checkpoint limb the frozen verifier and Pool decode
+rejects words ≥ p. Raw addresses and integer seeds keep their full values,
+and the nullifier-marker derivation rejects non-canonical encodings before
+hashing, so one statement has exactly one accepted encoding and one marker
+PDA. The Lean soundness and privacy statements are over field values. D96's
+private owner-word normalisation is prover-internal and creates no public
+parser alias. Native tests against frozen source: 7/7, including the saved
+tx1/tx2 proofs and checksum-repaired checkpoint mutations (20.6 s, 500 MB,
+zero swap). No shipped change, 0 CU. Optional: an off-chain witness
+canonicality check in the prover, which is not needed for soundness.
