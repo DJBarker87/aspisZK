@@ -76,12 +76,10 @@ const RELEASE_BINDING: [u8; 32] = [
 ];
 // Retained deployment data, never instruction immediates. The SBF linker merges
 // these named input sections into .rodata; the release audit pins both slots.
-#[used]
 #[link_section = ".rodata.aspis_pool_program_id"]
 static AUDIT_POOL_PROGRAM: [u8; 32] = deployment_ids::deployment_id(
     option_env!("ASPIS_R1_POOL_PROGRAM_ID"), [0x41; 32],
 );
-#[used]
 #[link_section = ".rodata.aspis_registry_program_id"]
 static AUDIT_REGISTRY_PROGRAM: [u8; 32] = deployment_ids::deployment_id(
     option_env!("ASPIS_R1_REGISTRY_PROGRAM_ID"), [0x44; 32],
