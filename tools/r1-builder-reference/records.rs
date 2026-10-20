@@ -8,54 +8,14 @@ use super::super::{
 
 fn records_reference(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&PoolV1OutputNoteWitnessV1>,
            chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31) -> (RW, RP) {
-    let input = *input;
-    let chg = *chg;
-    let snapshot = *snapshot;
-    let rec = rec.copied();
-    let pair = input.pair;
-    let other = if pair.selected_second { pair.pair_leaf.first_commitment } else { pair.pair_leaf.second_commitment };
-    let mut bits = [0u32; 24];
-    let mut sibs = [[0u32; 8]; 24];
-    for level in 0..24 {
-        let (bit, sib) = if level == 0 {
-            (u32::from(pair.selected_second), other)
-        } else if level <= 20 {
-            (((pair.membership.index >> (level - 1)) & 1) as u32, pair.membership.siblings[level - 1])
-        } else {
-            (u32::from(input.super_root_directions[level - 21]), input.super_root_siblings[level - 21])
-        };
-        bits[level] = bit;
-        sibs[level] = raw(&sib);
-    }
-    let empty = pair_empty_roots();
-    let w = RW {
-        input_value: pair.value,
-        output_value: out,
-        change_value: chg.value,
-        sk: raw(&pair.nullifier_key),
-        salt: raw(&pair.salt),
-        bits,
-        sibs,
-        pair_first: raw(&pair.pair_leaf.first_commitment),
-        pair_occupied: pair.pair_leaf.second_occupied.0,
-        pair_second: raw(&pair.pair_leaf.second_commitment),
-        pair_inverse: pair.pair_leaf.second_occupancy_inverse.0,
-        recipient_owner: rec.map(|r| raw(&r.owner_key)).unwrap_or(ZERO8),
-        recipient_salt: rec.map(|r| raw(&r.salt)).unwrap_or(ZERO8),
-        change_owner: raw(&chg.owner_key),
-        change_salt: raw(&chg.salt),
-    };
-    let p = RP {
-        transfer: rec.is_some(),
-        asset: asset.0,
-        next_pair_index: snapshot.next_pair_index,
-        frontier: core::array::from_fn(|l| raw(&snapshot.frontier[l])),
-        empty: core::array::from_fn(|l| raw(&empty[l])),
-    };
-    (w, p)
+    super::records_reference::records_reference_with_roots(*input, out, rec.copied(), *chg, *snapshot, asset, pair_empty_roots())
 }
 
-fn any_digest() -> Digest { kani::any::<[u32; 8]>().map(M31) }
+fn any_digest() -> Digest { [M31(kani::any()), M31(kani::any()), M31(kani::any()), M31(kani::any()), M31(kani::any()), M31(kani::any()), M31(kani::any()), M31(kani::any())] }
+
+fn any_digests_3() -> [Digest; 3] { [any_digest(), any_digest(), any_digest()] }
+fn any_digests_20() -> [Digest; 20] { [any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest()] }
+fn any_digests_21() -> [Digest; 21] { [any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest(), any_digest()] }
 fn any_output() -> PoolV1OutputNoteWitnessV1 {
     PoolV1OutputNoteWitnessV1 { owner_key: any_digest(), salt: any_digest(), value: kani::any() }
 }
@@ -72,10 +32,10 @@ fn records_equal_copied_reference() {
             },
             selected_second: kani::any(),
             membership: PoolV1MembershipWitnessV1 {
-                siblings: kani::any::<[[u32; 8]; 20]>().map(|d| d.map(M31)), index: kani::any(),
+                siblings: any_digests_20(), index: kani::any(),
             },
         },
-        super_root_siblings: kani::any::<[[u32; 8]; 3]>().map(|d| d.map(M31)),
+        super_root_siblings: any_digests_3(),
         super_root_directions: kani::any(),
     };
     let recipient = if kani::any() { Some(any_output()) } else { None };
@@ -83,7 +43,7 @@ fn records_equal_copied_reference() {
     let snapshot = PoolV1PairLiveSnapshotV1 {
         pool: kani::any(), deployment_domain: kani::any(), sequence: kani::any(),
         next_pair_index: kani::any(), current_root: any_digest(),
-        frontier: kani::any::<[[u32; 8]; 20]>().map(|d| d.map(M31)),
+        frontier: any_digests_20(),
     };
     let out = kani::any(); let asset = M31(kani::any());
     let (w, p) = records(&input, out, recipient.as_ref(), &change, &snapshot, asset);
@@ -120,6 +80,283 @@ fn shared_roots() -> [Digest; 21] { unsafe { SHARED_ROOTS } }
 #[kani::unwind(25)]
 #[kani::stub(crate::pool_v1::pair_trace::pair_empty_roots, shared_roots)]
 fn records_equal_parametric_roots() {
-    unsafe { SHARED_ROOTS = kani::any::<[[u32; 8]; 21]>().map(|d| d.map(M31)); }
+    unsafe { SHARED_ROOTS = any_digests_21(); }
     records_equal_copied_reference();
+}
+
+// Continuation 3: small universal projections, replacing the whole-record jobs.
+fn arbitrary_records() -> (RW, RP, RW, RP) {
+    let input = PoolV1PairForestInputNoteWitnessV1 {
+        pair: PoolV1PairInputNoteWitnessV1 {
+            nullifier_key: any_digest(), salt: any_digest(), value: kani::any(),
+            pair_leaf: PoolV1PairLeafWitnessV1 {
+                first_commitment: any_digest(), second_occupied: M31(kani::any()),
+                second_commitment: any_digest(), second_occupancy_inverse: M31(kani::any()),
+            },
+            selected_second: kani::any(),
+            membership: PoolV1MembershipWitnessV1 {
+                siblings: any_digests_20(), index: kani::any(),
+            },
+        },
+        super_root_siblings: any_digests_3(),
+        super_root_directions: kani::any(),
+    };
+    let recipient = if kani::any() { Some(any_output()) } else { None };
+    let change = any_output();
+    let snapshot = PoolV1PairLiveSnapshotV1 {
+        pool: kani::any(), deployment_domain: kani::any(), sequence: kani::any(),
+        next_pair_index: kani::any(), current_root: any_digest(),
+        frontier: any_digests_20(),
+    };
+    let out = kani::any(); let asset = M31(kani::any());
+    let (w, p) = records(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    let (v, q) = records_reference(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    (w, p, v, q)
+}
+
+#[kani::proof]
+#[kani::unwind(25)]
+#[kani::stub(crate::pool_v1::pair_trace::pair_empty_roots, shared_roots)]
+fn records_path_bit() {
+    unsafe { SHARED_ROOTS = any_digests_21(); }
+    let (w, p, v, q) = arbitrary_records();
+    let level: usize = kani::any(); kani::assume(level < 24);
+    assert_eq!(w.bits[level], v.bits[level]);
+}
+
+#[kani::proof]
+#[kani::unwind(25)]
+#[kani::stub(crate::pool_v1::pair_trace::pair_empty_roots, shared_roots)]
+fn records_path_sibling() {
+    unsafe { SHARED_ROOTS = any_digests_21(); }
+    let (w, p, v, q) = arbitrary_records();
+    let level: usize = kani::any(); let lane: usize = kani::any();
+    kani::assume(level < 24 && lane < 8);
+    assert_eq!(w.sibs[level][lane], v.sibs[level][lane]);
+}
+
+#[kani::proof]
+#[kani::unwind(25)]
+#[kani::stub(crate::pool_v1::pair_trace::pair_empty_roots, shared_roots)]
+fn records_scalars() {
+    unsafe { SHARED_ROOTS = any_digests_21(); }
+    let (w, p, v, q) = arbitrary_records();
+    assert_eq!(w.input_value, v.input_value);
+    assert_eq!(w.output_value, v.output_value);
+    assert_eq!(w.change_value, v.change_value);
+    assert_eq!(w.pair_occupied, v.pair_occupied);
+    assert_eq!(w.pair_inverse, v.pair_inverse);
+    assert_eq!(p.transfer, q.transfer);
+    assert_eq!(p.asset, q.asset);
+    assert_eq!(p.next_pair_index, q.next_pair_index);
+}
+
+#[kani::proof]
+#[kani::unwind(25)]
+#[kani::stub(crate::pool_v1::pair_trace::pair_empty_roots, shared_roots)]
+fn records_digest_cell() {
+    unsafe { SHARED_ROOTS = any_digests_21(); }
+    let (w, p, v, q) = arbitrary_records();
+    let lane: usize = kani::any(); kani::assume(lane < 8);
+    assert_eq!(w.sk[lane], v.sk[lane]);
+    assert_eq!(w.salt[lane], v.salt[lane]);
+    assert_eq!(w.pair_first[lane], v.pair_first[lane]);
+    assert_eq!(w.pair_second[lane], v.pair_second[lane]);
+    assert_eq!(w.recipient_owner[lane], v.recipient_owner[lane]);
+    assert_eq!(w.recipient_salt[lane], v.recipient_salt[lane]);
+    assert_eq!(w.change_owner[lane], v.change_owner[lane]);
+    assert_eq!(w.change_salt[lane], v.change_salt[lane]);
+}
+
+#[kani::proof]
+#[kani::unwind(25)]
+#[kani::stub(crate::pool_v1::pair_trace::pair_empty_roots, shared_roots)]
+fn records_public_cell() {
+    unsafe { SHARED_ROOTS = any_digests_21(); }
+    let (w, p, v, q) = arbitrary_records();
+    let level: usize = kani::any(); let lane: usize = kani::any();
+    kani::assume(level < 20 && lane < 8);
+    assert_eq!(p.frontier[level][lane], q.frontier[level][lane]);
+    assert_eq!(p.empty[level][lane], q.empty[level][lane]);
+}
+
+// Exact callee replacement, proved separately before use in caller proofs.
+fn raw_reference(d: &Digest) -> [u32; 8] {
+    [d[0].0, d[1].0, d[2].0, d[3].0, d[4].0, d[5].0, d[6].0, d[7].0]
+}
+
+#[kani::proof]
+#[kani::unwind(9)]
+fn raw_shipped_equals_reference() {
+    let d = any_digest();
+    let lane: usize = kani::any();
+    kani::assume(lane < 8);
+    assert_eq!(raw(&d)[lane], raw_reference(&d)[lane]);
+}
+
+// These static projections split the timed-out symbolic-index path proof.
+// The raw stub is the exact implementation established by the preceding leaf.
+#[kani::proof]
+#[kani::unwind(25)]
+#[kani::stub(crate::pool_v1::pair_trace::pair_empty_roots, shared_roots)]
+#[kani::stub(crate::pool_v1::pair_forest_copy_builder::raw, raw_reference)]
+fn records_selected_bit() {
+    unsafe { SHARED_ROOTS = any_digests_21(); }
+    let (w, _, v, _) = arbitrary_records();
+    assert_eq!(w.bits[0], v.bits[0]);
+}
+
+fn arbitrary_inputs() -> (PoolV1PairForestInputNoteWitnessV1, u32, Option<PoolV1OutputNoteWitnessV1>, PoolV1OutputNoteWitnessV1, PoolV1PairLiveSnapshotV1, M31) {
+    let input = PoolV1PairForestInputNoteWitnessV1 {
+        pair: PoolV1PairInputNoteWitnessV1 {
+            nullifier_key: any_digest(), salt: any_digest(), value: kani::any(),
+            pair_leaf: PoolV1PairLeafWitnessV1 {
+                first_commitment: any_digest(), second_occupied: M31(kani::any()),
+                second_commitment: any_digest(), second_occupancy_inverse: M31(kani::any()),
+            },
+            selected_second: kani::any(),
+            membership: PoolV1MembershipWitnessV1 {
+                siblings: any_digests_20(), index: kani::any(),
+            },
+        },
+        super_root_siblings: any_digests_3(),
+        super_root_directions: kani::any(),
+    };
+    let recipient = if kani::any() { Some(any_output()) } else { None };
+    let change = any_output();
+    let snapshot = PoolV1PairLiveSnapshotV1 {
+        pool: kani::any(), deployment_domain: kani::any(), sequence: kani::any(),
+        next_pair_index: kani::any(), current_root: any_digest(),
+        frontier: any_digests_20(),
+    };
+    let out = kani::any(); let asset = M31(kani::any());
+    (input, out, recipient, change, snapshot, asset)
+}
+
+#[kani::proof]
+#[kani::unwind(25)]
+#[kani::stub(crate::pool_v1::pair_trace::pair_empty_roots, shared_roots)]
+#[kani::stub(crate::pool_v1::pair_forest_copy_builder::raw, raw_reference)]
+fn records_selected_bit_direct_small_inputs() {
+    unsafe { SHARED_ROOTS = any_digests_21(); }
+    let (input, out, recipient, change, snapshot, asset) = arbitrary_inputs();
+    let (w, _) = records(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    assert_eq!(w.bits[0], u32::from(input.pair.selected_second));
+}
+
+
+// Scalar projection on the extracted owned reference, with straight-line arbitrary inputs.
+#[kani::proof]
+#[kani::unwind(25)]
+#[kani::stub(crate::pool_v1::pair_trace::pair_empty_roots, shared_roots)]
+#[kani::stub(crate::pool_v1::pair_forest_copy_builder::raw, raw_reference)]
+fn records_path_bit_indexed_reference() {
+    unsafe { SHARED_ROOTS = any_digests_21(); }
+    let (w, p, v, q) = arbitrary_records();
+    let level: usize = kani::any(); kani::assume(level < 24);
+    assert_eq!(w.bits[level], v.bits[level]);
+}
+
+
+// Scalar projection on the extracted owned reference, with straight-line arbitrary inputs.
+#[kani::proof]
+#[kani::unwind(25)]
+#[kani::stub(crate::pool_v1::pair_trace::pair_empty_roots, shared_roots)]
+#[kani::stub(crate::pool_v1::pair_forest_copy_builder::raw, raw_reference)]
+fn records_path_sibling_indexed_reference() {
+    unsafe { SHARED_ROOTS = any_digests_21(); }
+    let (w, p, v, q) = arbitrary_records();
+    let level: usize = kani::any(); let lane: usize = kani::any();
+    kani::assume(level < 24 && lane < 8);
+    assert_eq!(w.sibs[level][lane], v.sibs[level][lane]);
+}
+
+
+// Scalar projection on the extracted owned reference, with straight-line arbitrary inputs.
+#[kani::proof]
+#[kani::unwind(25)]
+#[kani::stub(crate::pool_v1::pair_trace::pair_empty_roots, shared_roots)]
+#[kani::stub(crate::pool_v1::pair_forest_copy_builder::raw, raw_reference)]
+fn records_scalars_indexed_reference() {
+    unsafe { SHARED_ROOTS = any_digests_21(); }
+    let (w, p, v, q) = arbitrary_records();
+    assert_eq!(w.input_value, v.input_value);
+    assert_eq!(w.output_value, v.output_value);
+    assert_eq!(w.change_value, v.change_value);
+    assert_eq!(w.pair_occupied, v.pair_occupied);
+    assert_eq!(w.pair_inverse, v.pair_inverse);
+    assert_eq!(p.transfer, q.transfer);
+    assert_eq!(p.asset, q.asset);
+    assert_eq!(p.next_pair_index, q.next_pair_index);
+}
+
+
+// Scalar projection on the extracted owned reference, with straight-line arbitrary inputs.
+#[kani::proof]
+#[kani::unwind(25)]
+#[kani::stub(crate::pool_v1::pair_trace::pair_empty_roots, shared_roots)]
+#[kani::stub(crate::pool_v1::pair_forest_copy_builder::raw, raw_reference)]
+fn records_digest_cell_indexed_reference() {
+    unsafe { SHARED_ROOTS = any_digests_21(); }
+    let (w, p, v, q) = arbitrary_records();
+    let lane: usize = kani::any(); kani::assume(lane < 8);
+    assert_eq!(w.sk[lane], v.sk[lane]);
+    assert_eq!(w.salt[lane], v.salt[lane]);
+    assert_eq!(w.pair_first[lane], v.pair_first[lane]);
+    assert_eq!(w.pair_second[lane], v.pair_second[lane]);
+    assert_eq!(w.recipient_owner[lane], v.recipient_owner[lane]);
+    assert_eq!(w.recipient_salt[lane], v.recipient_salt[lane]);
+    assert_eq!(w.change_owner[lane], v.change_owner[lane]);
+    assert_eq!(w.change_salt[lane], v.change_salt[lane]);
+}
+
+
+// Scalar projection on the extracted owned reference, with straight-line arbitrary inputs.
+#[kani::proof]
+#[kani::unwind(25)]
+#[kani::stub(crate::pool_v1::pair_trace::pair_empty_roots, shared_roots)]
+#[kani::stub(crate::pool_v1::pair_forest_copy_builder::raw, raw_reference)]
+fn records_public_cell_indexed_reference() {
+    unsafe { SHARED_ROOTS = any_digests_21(); }
+    let (w, p, v, q) = arbitrary_records();
+    let level: usize = kani::any(); let lane: usize = kani::any();
+    kani::assume(level < 20 && lane < 8);
+    assert_eq!(p.frontier[level][lane], q.frontier[level][lane]);
+    assert_eq!(p.empty[level][lane], q.empty[level][lane]);
+}
+
+// Final leaf pin with the straight-line arbitrary-input constructor.
+#[kani::proof]
+#[kani::unwind(9)]
+fn raw_word_shipped_equals_reference() {
+    let d = any_digest();
+    let lane: usize = kani::any();
+    kani::assume(lane < 8);
+    assert_eq!(raw(&d)[lane], raw_reference(&d)[lane]);
+}
+
+
+#[kani::proof]
+#[kani::unwind(25)]
+#[kani::stub(crate::pool_v1::pair_trace::pair_empty_roots, shared_roots)]
+#[kani::stub(crate::pool_v1::pair_forest_copy_builder::raw, raw_reference)]
+fn records_public_frontier_indexed_reference() {
+    unsafe { SHARED_ROOTS = any_digests_21(); }
+    let (w, p, v, q) = arbitrary_records();
+    let level: usize = kani::any(); let lane: usize = kani::any();
+    kani::assume(level < 20 && lane < 8);
+    assert_eq!(p.frontier[level][lane], q.frontier[level][lane]);
+}
+
+
+#[kani::proof]
+#[kani::unwind(25)]
+#[kani::stub(crate::pool_v1::pair_trace::pair_empty_roots, shared_roots)]
+#[kani::stub(crate::pool_v1::pair_forest_copy_builder::raw, raw_reference)]
+fn records_public_empty_indexed_reference() {
+    unsafe { SHARED_ROOTS = any_digests_21(); }
+    let (w, p, v, q) = arbitrary_records();
+    let level: usize = kani::any(); let lane: usize = kani::any();
+    kani::assume(level < 20 && lane < 8);
+    assert_eq!(p.empty[level][lane], q.empty[level][lane]);
 }

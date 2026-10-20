@@ -31,3 +31,29 @@ certificate without checking `BUILDER-REFINEMENT-20261021.md` and the exact
 Kani receipts. The shared-root experiment explicitly requires `-Z stubbing`;
 its scope is all possible returns of the common pure helper. It proves
 neither the helper's hash computation nor caller admission.
+
+
+Continuation 3 adds owned, cfg(kani)/cfg(aeneas_ref) record and external-layer
+references. Ordinary builds omit these modules; their declarations are appended
+to shipped files so existing source locations remain stable.
+
+Use the host-only `builder-projection-kani.py` launcher with named harnesses.
+The historical whole-record and early projection harnesses are retained as
+experiments; do not launch all harnesses together. Final fieldwise targets are
+`records_{path_bit,path_sibling,scalars,digest_cell,public_frontier,public_empty}_indexed_reference`.
+Their shared arbitrary empty-root table abstracts the identical pure helper
+call. The exact raw-word stub is separately checked by
+`raw_word_shipped_equals_reference`. All input words remain arbitrary, including
+noncanonical M31 representations. Straight-line construction avoids generic
+array-map initialization dominating symbolic execution.
+
+Poseidon uses `mat4_owned_equals_shipped` and
+`external_owned_call_trace_and_outputs`. The latter records all four callee
+inputs, checks equal reference inputs and call counts, and compares outputs
+for every shared arbitrary table of callee results. Composition uses the
+proved leaf and pure-call congruence under the named P6 Kani/CBMC soundness
+premise. The bounded proof is not a new Lean axiom.
+
+The generated Lean modules type-check after the documented env-J import
+adaptation (and distinct namespace for records). Translation alone proves
+neither the complete compiler nor its mapping to canonical semantic witnesses.

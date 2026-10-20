@@ -11,8 +11,10 @@ fields are proved for the canonical extracted composition on embedded
 Rspend⁺ instances. The shipped compile entry points do not yet have the
 source-identification certificate. D83's continuation removes the outer-loop
 break shape and advances the source work; the full compiler now reaches a
-separate borrow blocker in `records`. The focused validator cone also reaches
-an existing borrow blocker in the optimized Poseidon external layer.
+separate borrow blocker in `records`. Continuation 3 now supplies extracted
+owned references and decomposed, passing Kani equality gates for records and
+the optimized Poseidon external layer. The complete caller/public/glue source
+identification is still open.
 
 The continuation's exact results and gates are recorded below. Sections
 Stage 1 through the original stop reason describe the previous run; their
@@ -329,3 +331,57 @@ sets, deployment IDs, toolchain path, exit, wall time, RSS, swap, source revisio
 and no-swap cgroup limits. No source restructuring or D83 runtime rerun was needed.
 See builder-d83-evidence/frozen-source-check.json and
 builder-cont3-evidence/elf-rebuild.json.
+
+## Continuation 3, Stage 1: bounded reference route
+
+Both borrow frontiers now have owned reference forms that translate to Lean.
+The shipped functions remain unchanged. The only shipped-file edits are
+cfg(kani)/cfg(aeneas_ref) module declarations appended at EOF; reference bodies
+live under tools/r1-builder-reference. They are absent from ordinary builds.
+
+The optimized external layer is decomposed into the four-lane matrix leaf and
+the layer's call trace/aggregation. `mat4_owned_equals_shipped` proves the leaf
+for every u32 input. `external_owned_call_trace_and_outputs` checks every callee
+argument and exact call count, supplies a shared arbitrary result table, and
+compares every output. Thus pure-call congruence and the checked leaf compose
+the layer equality under the named P6 Kani/CBMC soundness premise. Unwind 5/17
+and unwinding assertions are explicit. The older direct full-layer harness
+stopped at 120 seconds without a verdict; its replacement is the decomposed
+proof, not a larger-cap retry. The mutable reference itself hit an Aeneas nested
+loop join blocker; the owned-array replacement translates successfully.
+
+The record reference takes owned inputs and a supplied empty-root table. Aeneas
+rejected the first borrowed/copying reference and then its indexed version;
+taking the arguments by value removes that borrow frontier. Explicit u32 shift
+counts avoid the port's Usize/U32 shift mismatch. The source change is in the
+reference, not a hand edit of the generated function. Generated records and
+Poseidon modules retain their generated options; adaptations are env-J imports
+and a separate records namespace. Env-J 9200 and 9202 compile; 9201 is the
+retained shift mismatch. No success is attributed to its error-produced sorry.
+
+Generic nested `array::map` arbitrary-input construction was itself expensive:
+whole-record, symbolic-path, static-path and single-caller experiments stopped
+without verdict. Replacing those input constructors by straight-line arbitrary
+words preserves all inputs and makes the focused gates practical. No memory
+cap was raised. Timeout parent RSS is explicitly incomplete; cgroup aggregate
+peaks, zero swaps and exit 124 are retained. Some launches were declined at the
+55 GiB reservation preflight; none bypassed it.
+
+The final six records projection harnesses all pass. They cover all 15 RW and
+5 RP fields (including withdrawal's zero recipient fields), for arbitrary input
+words and a shared arbitrary 21-root helper result. The raw-word leaf passes
+separately. Combined public-array equality timed out, so frontier and empty-root
+projections were split: each passes in under 90 seconds without changing caps.
+`records-field-coverage.json` checks that no output field is omitted. These are
+bounded universal component equalities, not a test sample and not the deployed
+relation or complete compiler theorem.
+
+Final accepted gates, source/tool hashes, generated import/namespace adaptations,
+exact commands, metrics and retained failures are indexed by
+builder-cont3-evidence/component-summary.json and kani-and-extraction.json.
+No production function body changed. No D83 runtime suite or full privacy
+manifest was replayed: the ordinary prover behavior is unchanged, and no final
+privacy release or full source closure is claimed. The new generated modules
+were added to shared env J under worker-owned names; replacements were
+snapshotted, and their required dependent proof is compiled on the corrected
+records object.

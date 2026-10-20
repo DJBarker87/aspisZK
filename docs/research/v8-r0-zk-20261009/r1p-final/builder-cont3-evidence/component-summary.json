@@ -1,0 +1,55 @@
+{
+  "status": "PASS: component-level shipped/reference equality under named P6 soundness; full caller identification remains OPEN",
+  "accepted_harnesses": [
+    "raw_word_shipped_equals_reference",
+    "mat4_owned_equals_shipped",
+    "external_owned_call_trace_and_outputs",
+    "records_path_bit_indexed_reference",
+    "records_path_sibling_indexed_reference",
+    "records_scalars_indexed_reference",
+    "records_digest_cell_indexed_reference",
+    "records_public_frontier_indexed_reference",
+    "records_public_empty_indexed_reference"
+  ],
+  "source_pins": {
+    "crates/aspis-core/src/field.rs": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "crates/aspis-statement/src/poseidon2.rs": "4563a7192a69748ab0a56ddc023a9f13f2d96d0064cd829dd17ac358bce1a740",
+    "crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs": "e1315ebd09abcb752e592081fbc6b4d5cf68404662a92173bc1139a5a34d88c0",
+    "tools/r1-builder-reference/records.rs": "9c03499f40105b90fcbcd301233d1c69082360e819fb83e4d3142bda7f1b0a11",
+    "tools/r1-builder-reference/records_reference.rs": "84714d8b6accde5a6fdaa758677a31017f088504f522bda120d6403314e51619",
+    "tools/r1-builder-reference/poseidon.rs": "2cd673d4c99f8fb8296c57118e46f0eb6e1a0dd8dad6472409ad774d69efd327"
+  },
+  "generated_adaptations": {
+    "docs/research/v8-r0-zk-20261009/lean/R1Z/BuilderPoseidonExtracted.lean": {
+      "raw_sha256": "30ae9904705212f04ace54e3f9180a0427d42b4b9c805b1a971fee5f116b2355",
+      "adapted_sha256": "261f78d241c02c63b30a47eb04e498cb7be29f72a500f5d2b9c98a6b0797d5a9",
+      "changes": "env-J imports"
+    },
+    "docs/research/v8-r0-zk-20261009/lean/R1Z/BuilderRecordsExtracted.lean": {
+      "raw_sha256": "7abd71d76a0960cb7c3dee0043a2718bacf4db05249f09141277d215c7ca7c90",
+      "adapted_sha256": "bb632e8a022328b364596ab3d76718be9b976893f3bbd32cf2a3dba09681f12f",
+      "changes": "env-J imports; records namespace only"
+    }
+  },
+  "proof_dependencies": [
+    "P6 Kani/CBMC soundness",
+    "pure-call congruence for identical pair_empty_roots calls",
+    "raw leaf equality for exact raw_reference stub",
+    "mat4 leaf equality plus asserted ordered input equality and call count for external abstraction"
+  ],
+  "scope": {
+    "records": "all 15 RW fields and all 5 RP fields, every input word arbitrary; indexed arrays universally observed at an arbitrary admitted cell",
+    "poseidon": "all u32 inputs; matrix leaf plus external ordered call trace/output equality for arbitrary intermediate tables"
+  },
+  "exact_commands": "kani-and-extraction.json",
+  "print_axioms": "N/A for bounded Kani proofs and generated definitions; Lean theorem audits are in attempts.jsonl",
+  "no_claims": [
+    "full compiler translation",
+    "deployed semantic admission/public map",
+    "records-to-canonical Lean mapping",
+    "Rust glue equality",
+    "complete SourceIdentification",
+    "PrivacyR1Final premise discharge"
+  ],
+  "source_pin_note": "These are final checkout pins. Exact per-run pins in kani-and-extraction.json are authoritative; later changes to records.rs only append independent proof harnesses after already-checked function bodies."
+}

@@ -376,3 +376,8 @@ pub(super) fn merge_banks(stable: &[Vec<M31>; 16], late: &[Vec<M31>; 16]) -> Opt
 #[cfg(kani)]
 #[path = "../../../../tools/r1-builder-reference/records.rs"]
 mod records_proofs;
+
+// Owned reference only for bounded proof/extraction builds.
+#[cfg(any(kani, aeneas_ref))]
+#[path = "../../../../tools/r1-builder-reference/records_reference.rs"]
+mod records_reference;
