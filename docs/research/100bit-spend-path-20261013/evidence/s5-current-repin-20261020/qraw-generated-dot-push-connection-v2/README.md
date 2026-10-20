@@ -1,0 +1,7 @@
+# Q.raw to generated Dot.push connection v2
+
+This strengthened packet connects the extracted actual `Q.raw` coefficient theorem to the emitted `Dot.push` loop adapter. Under the eight input bounds (`≤ P-1`), the Q.raw trace proof now returns eight explicit equalities tying its coefficient witnesses to the exact input array limbs. The consumer uses those indexed inputs in the four R22 raw coefficient formulae, then applies the checked generated-loop refinement. The proof no longer leaves the product operands existentially unrelated to the Q values.
+
+The emitted Dot.push connection remains conditional on successful `Q.raw` evaluation and the explicit limb bounds. Its source refinement is the accepted v3 original-loop packet at `../original-dot-push-loop-refinement-v3/`; this packet records the exact source/object/receipt pins. The coefficient derivation is the accepted v24 Q.raw proof, and its selected direct owners/source receipts are retained in `direct_import_source_map.json`. The changed coefficient owner and updated consumer have complete NUC command, preflight, admission/reservation, receipt, time and Lean logs under `evidence/qraw-coeff-v2/` and `evidence/connection-v2/`.
+
+Open boundaries: the EbyK caller still must establish the limb bounds; the original Rust `Array.map`/callback standard-library correspondence remains open; this is not full S5/S1 completion. No production source was modified. Compiled objects and LLBC binaries are excluded.
