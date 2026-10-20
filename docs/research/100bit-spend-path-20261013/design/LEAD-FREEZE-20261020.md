@@ -12,7 +12,7 @@ within PREREG-PROOF-SIZE-2 item 1 with minimum margins 281 CU (stage 1) and
 
 **Decision.** The verifier source at research b2727acd3 (verifier-crate file
 hashes, toolchains and ELF pins in
-`evidence/freeze-20261020/FREEZE.md`; default verifier ELF f11e40b4119578ee…)
+`evidence/freeze-20261020/FREEZE.md`; default verifier ELF dfc2a91a… (1,507,400 bytes), devnet-id build fb2fc048… (same size), stage-2 LLBC f11e40b4…)
 is the frozen R1 verifier for the soundness theorem (gap-map step 0,
 superseding LEAD-REVIEW-FORMAT-ADOPT-20261020.md and the two amendments).
 Every re-pin (S1–S10), the stage-2 refinement (R14), the tx1_finish
@@ -22,3 +22,5 @@ them and needs a new freeze decision.
 
 Launched on this freeze: cx-tx1-finish (R15), cx-cu-bound4 (final CU bound,
 same method as cu-bound3), cx-devnet3 (deployment with the devnet-id build).
+
+Note: the pin evidence was committed at the repository root (`evidence/freeze-20261020/`); it is to be relocated under `docs/research/100bit-spend-path-20261013/evidence/` once the jobs that cite the root path have landed.
