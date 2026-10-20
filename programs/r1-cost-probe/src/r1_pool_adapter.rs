@@ -74,8 +74,8 @@ const RELEASE_BINDING: [u8; 32] = [
     0xe2,0x94,0xaf,0xbc,0x14,0xef,0x6a,0xfe,0x76,0xb8,0x47,0xde,0xf4,0x44,0x52,0xf8,
     0x4c,0xc3,0x72,0x80,0x64,0x65,0x76,0x07,0xb5,0x44,0xa5,0x39,0xca,0x9b,0x32,0x3a,
 ];
-const AUDIT_POOL_PROGRAM: [u8; 32] = [0x41; 32];
-const AUDIT_REGISTRY_PROGRAM: [u8; 32] = [0x44; 32];
+const AUDIT_POOL_PROGRAM: [u8; 32] = deployment_ids::deployment_id(option_env!("ASPIS_R1_POOL_PROGRAM_ID"), [0x41; 32]);
+const AUDIT_REGISTRY_PROGRAM: [u8; 32] = deployment_ids::deployment_id(option_env!("ASPIS_R1_REGISTRY_PROGRAM_ID"), [0x44; 32]);
 const AUDIT_POLICY_BINDING: [u8; 32] = [7; 32];
 
 const PAIR_FOREST_MASTER_SEED: &[u8] = b"aspis-pair-forest-master-v1";
@@ -1028,3 +1028,6 @@ pub(super) fn process(
 #[cfg(all(test, feature = "private-leaf-salts"))]
 #[path = "r1_checkpoint_tests.rs"]
 mod checkpoint_tests;
+
+#[path = "deployment_ids.rs"]
+mod deployment_ids;
