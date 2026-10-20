@@ -1,0 +1,79 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unused attribute
+  --> canonical.rs:30:9
+   |
+30 |         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+   |         ^^^^^^^^^^^^^^^^^ help: remove this attribute
+   |
+note: attribute also specified here
+  --> canonical.rs:28:9
+   |
+28 |         #[inline(always)]
+   |         ^^^^^^^^^^^^^^^^^
+   = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+   = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+warning: type `multiproof::Arity` is more private than the item `multiproof::node_count`
+  --> multiproof.rs:26:1
+   |
+26 | pub fn node_count(arity: Arity, indices: &[u32]) -> Option<usize> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `multiproof::node_count` is reachable at visibility `pub(crate)`
+   |
+note: but type `multiproof::Arity` is only usable at visibility `pub(self)`
+  --> multiproof.rs:2:23
+   |
+ 2 | #[derive(Clone,Copy)] enum Arity {Two,Eight}
+   |                       ^^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+Checking harness canonical::canonical::scalar_add_canonical...
+CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-r22-overflow-20261021/generated/target/kani/x86_64-unknown-linux-gnu/debug/deps/r22_overflow_leaves-d03beb195e8340c8__RNvNtNtCsce0LJNirgKX_19r22_overflow_leaves9canonical9canonical20scalar_add_canonical.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 16 object bits, 48 offset bits (user-specified)
+Starting Bounded Model Checking
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs line 969 column 15 function std::option::Option::<u32>::expect thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs line 2184 column 5 function std::option::expect_failed thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs line 971 column 21 function std::option::Option::<u32>::expect thread 0
+Runtime Symex: 0.00731682s
+size of program expression: 375 steps
+slicing removed 169 assignments
+Generated 5 VCC(s), 5 remaining after simplification
+Runtime Postprocess Equation: 5.9232e-05s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.000786174s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 2.85e-06s
+Solving with CaDiCaL 2.0.0
+1037 variables, 2113 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 0.000401021s
+Runtime decision procedure: 0.00122709s
+
+** Results:
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs function core::num::<impl u32>::checked_add
+[core::num::<impl u32>::checked_add.arithmetic_overflow.1] line 658 attempt to compute `unchecked_add` which would overflow: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs function std::option::Option::<u32>::expect
+[std::option::Option::<u32>::expect.unreachable.1] line 969 unreachable code: SUCCESS
+[std::option::Option::<u32>::expect.sanity_check.1] line 971 Kani-internal sanity check: Unexpected return from Never function. Please report failures:
+https://github.com/model-checking/kani/issues/new?template=bug_report.md: SUCCESS
+
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs function std::option::expect_failed
+[std::option::expect_failed.assertion.1] line 2184 This is a placeholder message; Kani doesn't support message formatted at runtime: SUCCESS
+
+canonical.rs function canonical::canonical::add
+[canonical::canonical::add.assertion.1] line 15 attempt to subtract with overflow: SUCCESS
+
+canonical.rs function canonical::canonical::scalar_add_canonical
+[canonical::canonical::scalar_add_canonical.assertion.1] line 134 assertion failed: add(a,b)<P: SUCCESS
+
+** 0 of 6 failed (1 iterations)
+VERIFICATION SUCCESSFUL
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
