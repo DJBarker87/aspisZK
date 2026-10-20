@@ -1,0 +1,87 @@
+/home/dombarker/project-offloads/s3-zero-seed-meaning-v6/sources/S3ZeroSeedMeaningV1.lean:47:69: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/s3-zero-seed-meaning-v6/sources/S3ZeroSeedMeaningV1.lean:67:12: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/s3-zero-seed-meaning-v6/sources/S3ZeroSeedMeaningV1.lean:62:2: error: Type mismatch
+  grouped_success_implies_prefix bytes low out h (fun x => 0) (id zero_seed_meaning) fun k =>
+    id
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => Canonical _a)
+            (List.getElem_replicate
+              (of_eq_true
+                (Eq.trans
+                  (congrArg (LT.lt ↑k)
+                    (congrFun'
+                      (congrArg HAdd.hAdd
+                        (congrFun'
+                          (congrArg HAdd.hAdd
+                            (congrFun'
+                              (congrArg HAdd.hAdd
+                                (congrFun'
+                                  (congrArg HAdd.hAdd
+                                    (congrFun'
+                                      (congrArg HAdd.hAdd
+                                        (congrFun'
+                                          (congrArg HAdd.hAdd
+                                            (congrFun'
+                                              (congrArg HAdd.hAdd
+                                                (congrFun'
+                                                  (congrArg HAdd.hAdd
+                                                    (congrFun'
+                                                      (congrArg HAdd.hAdd
+                                                        (congrFun'
+                                                          (congrArg HAdd.hAdd
+                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                          1))
+                                                      1))
+                                                  1))
+                                              1))
+                                          1))
+                                      1))
+                                  1))
+                              1))
+                          1))
+                      1))
+                  (Fin.is_lt._simp_1 k))))))
+        zero_seed_canonical)
+has type
+  ∃ result,
+    weights.s2_grouped_inactive_pair_loop0 actualOperations { start := 0#usize, «end» := 64#usize } bytes
+          (Array.repeat 12#usize field.WideExact.ZERO) =
+        ok result ∧
+      DecodedMeaning result (PrefixMeaning (successfulInput bytes low out h) (fun x => 0) 64) ∧
+        CanonicalAccumulatorArray result ∧
+          ∀ n < 64,
+            ∃ j inputCoeff raw start next finish selected,
+              ↑j = n ∧
+                actualOperations.decodeField bytes j = ok inputCoeff ∧
+                  AspisR1WeightsFieldCurrent.weights.field AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes
+                        bytes j =
+                      ok raw ∧
+                    j * 32#usize = ok start ∧
+                      j + 1#usize = ok next ∧
+                        next * 32#usize = ok finish ∧
+                          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                                { start := start, «end» := finish } =
+                              ok selected ∧
+                            AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes selected = ok (some raw)
+but is expected to have type
+  ∃ result,
+    weights.s2_grouped_inactive_pair_loop0 actualOperations { start := 0#usize, «end» := 64#usize } bytes
+          (Array.repeat 12#usize field.WideExact.ZERO) =
+        ok result ∧
+      DecodedMeaning result (PrefixMeaning (successfulInput bytes low out h) (fun x => 0) 64) ∧
+        CanonicalAccumulatorArray result
+'AspisR1GroupedPairActualFieldOpsV3.ZeroSeedMeaning.zero_seed_canonical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1GroupedPairActualFieldOpsV3.ZeroSeedMeaning.zero_seed_decode' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1GroupedPairActualFieldOpsV3.ZeroSeedMeaning.grouped_success_implies_zero_seed_prefix' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
