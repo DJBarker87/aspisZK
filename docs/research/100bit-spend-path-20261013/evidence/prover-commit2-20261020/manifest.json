@@ -159,6 +159,51 @@
     },
     {
       "kind": "extraction-or-runtime",
+      "attempt": "carried-retry",
+      "command": [
+        "cargo",
+        "run",
+        "--release",
+        "--locked",
+        "--offline",
+        "-j",
+        "4",
+        "-p",
+        "aspis-r1-cost-probe",
+        "--features",
+        "r1p-check",
+        "--example",
+        "r1p_retry_gate",
+        "--",
+        "8",
+        "/home/dombarker/project-offloads/codex-cx-prover-commit2-20261020/retry-ledger",
+        "/home/dombarker/project-offloads/codex-cx-prover-commit2-20261020/retry.json"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-prover-commit2-20261020/src",
+      "expected_time": "Optimized compilation followed by named fixture proof generation / verification; no dense elimination",
+      "exit_status": 0,
+      "wall_seconds": 520.05,
+      "peak_rss_kib": 596304,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r7f1486a91063410cb78927a5ec115ce9.scope",
+      "limits": {
+        "memory.high": "3221225472",
+        "memory.max": "4294967296",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 679796736,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-prover-commit2-20261020/runtime-target",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null,
+        "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+      },
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "kind": "extraction-or-runtime",
       "attempt": "leaf-aeneas",
       "command": [
         "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static",
@@ -817,8 +862,8 @@
       "bytes": 970
     },
     "attempts.jsonl": {
-      "sha256": "284452086209957e3e0162b04c172d26bb109e90f225cb4eccd1b26e478590e4",
-      "bytes": 23865
+      "sha256": "a913258c8618bcb88db606ac1796fa3216b9cb5762101473c2b10550cbe2fbf9",
+      "bytes": 25100
     },
     "byte-identity.json": {
       "sha256": "7afef688a0c10592d76a3ae167afd8360f0332cee558cc25a2370c360a4780dd",
@@ -876,6 +921,22 @@
       "sha256": "742f3d513ff0ebcc301afe59e6200b2fade42449ab75ca6a163e4b9af924d641",
       "bytes": 852
     },
+    "carried-retry/receipt.json": {
+      "sha256": "aa141729a1ea4761a89cb1d65e95d289a6b628b19f19cf7c3fb848f412432e7e",
+      "bytes": 1249
+    },
+    "carried-retry/stderr.log": {
+      "sha256": "d63b00ac8c7f4430c2549d04cc94121af9cb37c9c24600021654fa3808e685c9",
+      "bytes": 72521
+    },
+    "carried-retry/stdout.log": {
+      "sha256": "6054bcc82505f1414ba7f92aa4cce6ee16eb2895ad81bebf3fe4e4f91e2fd199",
+      "bytes": 604
+    },
+    "carried-retry/time.log": {
+      "sha256": "af0bf72542c45b2127660d32e144b53259c85e0e56f5cf49e3fcabb48a2a98c5",
+      "bytes": 1013
+    },
     "carried.py": {
       "sha256": "7a2a21bbd5dde06aaacd77bd61c5c36019b60cd4e6f62d916520cb9d291d070e",
       "bytes": 782
@@ -896,21 +957,29 @@
       "sha256": "cc1f75af2244c1135bab19b07fb8e2683919935c14e22670be425f3dc2f003d9",
       "bytes": 3633
     },
+    "extract-streams-both-helper.py": {
+      "sha256": "325d07f2a18a34930250c72b290d7f991112158f2e492bd30c15b5655e0504ec",
+      "bytes": 4000
+    },
     "extract-streams-fields.py": {
-      "sha256": "ed4f6e2df356d1c4f50edb9788aa32df9bcf4d449c8fea23ca039e0b340c4253",
-      "bytes": 3833
+      "sha256": "baa0635c20c5126d5c32f53ee1bf4f788afc09e67d13513825f270aa604b6f60",
+      "bytes": 3936
+    },
+    "extract-streams-helper-typed.py": {
+      "sha256": "b959164a2c667e224aaf151097f652d02ce1475e43226aadc37852523004c688",
+      "bytes": 4006
     },
     "extract-streams-helper.py": {
-      "sha256": "ff4b0e1a1a22221a4bfa9e230fdd8082ac056666ddcedd250c167e3ef1a118de",
-      "bytes": 3833
+      "sha256": "bc2e54a3d4f71ff5eb2fb5fb74bcf663dd92a4152bf97794eeeced44e1cd8214",
+      "bytes": 3936
     },
     "extract-streams-owned-state.py": {
-      "sha256": "cd30229ef80dd368d7fe195b95108468a470b0cf6dd772b827791dcf78fb35fc",
-      "bytes": 3860
+      "sha256": "6f8c05d3b78a6764ec590a383afcd753fa8c2639f0dfb833279f06c94c3b2241",
+      "bytes": 3963
     },
     "extract-streams.py": {
-      "sha256": "d0a05df29702c42ab18920e96749492f42ec3b7adb3e4ec814c33d61fabfee0f",
-      "bytes": 3812
+      "sha256": "ea92fdd5e17f1c7fb165577974654632a66295a87cd272e000521b80fdef3157",
+      "bytes": 3915
     },
     "extract.py": {
       "sha256": "5b6799f3129bd592fef39b53febade43a80a8343400a27142b02ea0636981380",
@@ -1148,6 +1217,14 @@
       "sha256": "8dbab4fb817dbdec55fbd46ebe1a84f029ce667fc002107e5d2dcc5541ce1dfc",
       "bytes": 1558
     },
+    "retry-cap-reduced.txt": {
+      "sha256": "d7fcb971f83eac36b1256dbe18676766d8408b0ef4da87a898629e6848714bdc",
+      "bytes": 104
+    },
+    "retry.json": {
+      "sha256": "611aa929246c990a8c5f7cbd360451be78d4701ce31ff55784e5d0700579771a",
+      "bytes": 5441
+    },
     "runtime.py": {
       "sha256": "555859cb555408b8c6b9195d3b9fe30a3408cb3262498bced0a64be77563a833",
       "bytes": 2752
@@ -1159,6 +1236,10 @@
     "streams-helper.py": {
       "sha256": "9b0752c4fa2e1be6b006a8cda0344aeedd363bda8a924d1b402c603bf427d8fc",
       "bytes": 644
+    },
+    "streams-mask-helper.py": {
+      "sha256": "592cb4a554897a8bf515c321fe94663f8dd119216a1d98d8e04667dfdefb3abd",
+      "bytes": 599
     },
     "streams-owned-state.py": {
       "sha256": "048df0578b99584024cfea86dfb240fe95ba1aeafebf47529cc16c166090cb88",

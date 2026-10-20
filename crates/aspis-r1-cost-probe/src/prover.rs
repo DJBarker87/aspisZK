@@ -188,10 +188,16 @@ fn semantic_error(e:SError)->Error {
 
 fn derive_private_salts(reserved:&ReservedStateOnlyAttemptSecrets,context:StateOnlyHidingContext,hash:HashFn,tag:u8)->Result<PrivateSalts,Error> {
     let mut salts=Vec::new();salts.try_reserve_exact(aspis_core::r0::FIBRE_COUNT).map_err(|_|Error::Allocation)?;
-    for index in 0..aspis_core::r0::FIBRE_COUNT {
-        salts.push(reserved.derive_pool_v1_leaf_salt(hash,context,tag,index as u32).map_err(|_|Error::Semantic)?);
+    let mut result=Ok(salts);
+    let mut index=0usize;
+    while index<aspis_core::r0::FIBRE_COUNT {
+        result=match result {
+            Ok(salts)=>derive_private_salt_step(reserved,context,hash,tag,index as u32,salts),
+            Err(error)=>Err(error),
+        };
+        index+=1;
     }
-    Ok(PrivateSalts::new(salts))
+    result.map(PrivateSalts::new)
 }
 
 /// The R1 proof (PREREG-PROOF-SIZE-2, adopted 2026-10-19): binary trees (C1/C2
@@ -446,3 +452,9 @@ pub(crate) mod test_hooks {
 #[cfg(all(test,feature="r1p-check"))]
 #[path="prover_retry_tests.rs"]
 mod retry_tests;
+
+fn derive_private_salt_step(reserved:&ReservedStateOnlyAttemptSecrets,context:StateOnlyHidingContext,hash:HashFn,tag:u8,index:u32,mut salts:Vec<[u8;32]>)->Result<Vec<[u8;32]>,Error> {
+    let salt=reserved.derive_pool_v1_leaf_salt(hash,context,tag,index).map_err(|_|Error::Semantic)?;
+    salts.push(salt);
+    Ok(salts)
+}
