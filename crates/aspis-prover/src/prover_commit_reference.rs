@@ -41,3 +41,19 @@ pub(crate) fn limb(hash: HashFn, domain: &[u8], mut state: State)
     }
     (result, state)
 }
+
+/// One carried-result transition. Success is absorbing, including its state.
+#[cfg(kani)]
+pub(crate) fn try_step(hash: HashFn, domain: &[u8], state: State,
+    result: Result<M31, StateOnlyMaskBuildError>)
+    -> (Result<M31, StateOnlyMaskBuildError>, State)
+{
+    match result {
+        Ok(value) => (Ok(value), state),
+        Err(error) => {
+            let (word, after) = next(hash, domain, state);
+            let candidate = word & 0x7fff_ffff;
+            (if candidate < P { Ok(M31(candidate)) } else { Err(error) }, after)
+        }
+    }
+}

@@ -1532,6 +1532,44 @@ mod prover_commit_rom {
         assert_eq!(actual.word, slot + 1);
         assert_eq!(actual.seed, seed);
     }
+    // Exact m31 try body, with its return carried as an absorbing result.
+    // The source m31 body is pinned and checked by harness/check-step-source.py.
+    #[kani::proof]
+    #[kani::unwind(514)]
+    #[kani::stub(crate::host_hashv, rom::query)]
+    fn mask_try_step() {
+        rom::reset(2);
+        let seed: [u8; 32] = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8; 32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        let successful: bool = kani::any();
+        let value: u32 = kani::any();
+        kani::assume(value < aspis_core::field::P);
+        let result = if successful { Ok(aspis_core::field::M31(value)) }
+            else { Err(StateOnlyMaskBuildError::MaskSampleExhausted) };
+        let state = crate::prover_commit_reference::State { seed, counter, block, word };
+        let (expected, after) = crate::prover_commit_reference::try_step(
+            crate::HOST_HASH, b"aspis:state-only:private-mask-expand:v1", state, result);
+        let mut actual = SeedExpander { hash: crate::HOST_HASH, seed: seed, counter, block, word };
+        let observed = match result {
+            Ok(value) => Ok(value),
+            Err(_) => {
+                let candidate = actual.next_word() & 0x7fff_ffff;
+                if candidate < aspis_core::field::P {
+                    Ok(aspis_core::field::M31(candidate))
+                } else { Err(StateOnlyMaskBuildError::MaskSampleExhausted) }
+            }
+        };
+        assert_eq!(observed, expected);
+        assert_eq!(actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+        assert!(actual.word <= 8);
+    }
+
     #[kani::proof]
     #[kani::unwind(514)]
     #[kani::stub(crate::host_hashv, rom::query)]
