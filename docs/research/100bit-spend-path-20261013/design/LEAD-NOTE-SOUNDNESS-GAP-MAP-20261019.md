@@ -299,3 +299,17 @@ public rehash through the raw API); the caller-scoped statement replaces it,
 which matches the deployed entry (the adapter supplies the fixed-length
 public bytes, D79). Open: whole-tx2 log composition, the concrete
 leaf/conversion boundaries, and the full eCm/ROpen/RComLog discharge.
+
+## Addendum (2026-10-20): R22 stage 2 partial
+
+Codex job cx-overflow-s2 (4bb0fca91): inventory of the stage-2 cone's
+failing integer operations (`design/OVERFLOW-FREEDOM-S2-20261020.md`); six
+modules, 39 theorems, standard axioms: layout constants, checked
+arithmetic/control bounds, opening access, two array accessors, an
+unwrap-parametric reader. No admitted-input overflow found. The concrete
+reader proof exposed the `core.fmt.Formatter` axiom (the Aeneas opaque type
+already ruled non-release in D71.4); that receipt is rejected and the
+reader is kept parametric. Three direct-helper counterexamples show the
+cursor, geometry and residue-phase invariants are necessary; their
+reachability from tx2 is the composition still owed. R22 stage 2: partial,
+pending the concrete backends and loop invariants (R14 refinement).
