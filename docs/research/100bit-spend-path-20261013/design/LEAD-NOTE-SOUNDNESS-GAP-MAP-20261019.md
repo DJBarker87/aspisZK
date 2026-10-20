@@ -619,3 +619,19 @@ of h_M10_uniform remain open on complete resource instrumentation (checked
 counterexamples show distinct first reads alone do not bound the cost).
 **From here the tracking list is C3-BIN-20261021.md** (supersedes
 C3-SKELETON for the binary format).
+
+## Addendum (2026-10-21): R9 transport at the model level
+
+Codex job cx-r9-transport (7d7e6402a, 2863949bc, c974c90b7): five modules,
+17 audits, standard axioms (`design/R9-TRANSPORT-20261021.md`). The
+shared-oracle two-transaction failure experiment is defined; R10
+certificates are consumed; C3's transport inequality is derived and composed
+with the binary M9 bound. The preferred route narrows h_R9_transport to
+ordered same-statement source refinement plus rejection on scan exhaustion,
+and proves a stronger bound with no separate scan charge (an alternative
+derives the additive charge from explicit word correspondence). Open:
+frozen-source instantiation, complete execution coverage and order, scanner
+correspondence, runtime/provenance and decoder completion — the same
+source-side items as R10/R-wire. A declaration collision appears when this
+is combined with the R10 environment; each compiles separately (joins the
+candidate-freeze hygiene list).
