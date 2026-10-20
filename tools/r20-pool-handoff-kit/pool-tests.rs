@@ -14,14 +14,20 @@
         let mut variant = instruction.clone();
         variant[5] = aspis_statement::pool_v1::PoolV1TransitionKind::Withdrawal as u8;
         cases.push((fixture.clone(), variant, "outer variant with ASCP payload"));
-        let (body, hints) = split_pair_forest_terminal_bump_hints_v1(&instruction).unwrap();
-        let mut stale = decode_pool_v1_pair_forest_terminal_request_v1(body).unwrap();
-        if let PoolV1PairForestTerminalPaymentV1::PrivateTransfer(ref mut p) = stale.public {
-            p.anchor_root[0] = M31(p.anchor_root[0].0 + 1);
-        }
-        let stale = encode_pair_forest_terminal_instruction_data_v1(
-            &encode_pool_v1_pair_forest_terminal_request_v1(&stale).unwrap(), hints);
-        cases.push((fixture, stale, "stale anchor"));
+        // This original request was well-formed for checkpoint sequence 0.
+        // Supply a canonical newer checkpoint account, so the old statement
+        // is stale relative to the authenticated account, not merely a bad byte.
+        let mut newer = fixture;
+        let mut cp = aspis_statement::pool_v1::decode_pool_v1_pair_forest_checkpoint_v1(&newer[1].data).unwrap();
+        cp.checkpoint_sequence = 1;
+        let (key, bump) = pool_v1_pair_forest_checkpoint_address(&program_id, &newer[0].key, 1);
+        cp.bump = bump;
+        newer[1].key = key;
+        newer[1].data = encode_pool_v1_pair_forest_checkpoint_v1(&cp).unwrap().to_vec();
+        let mut m = aspis_statement::pool_v1::decode_pool_v1_pair_forest_master_v1(&newer[0].data).unwrap();
+        m.next_checkpoint_sequence = 2;
+        newer[0].data = encode_pool_v1_pair_forest_master_v1(&m).unwrap().to_vec();
+        cases.push((newer, instruction, "old sequence against newer supplied checkpoint"));
         for (mut accounts, bytes, label) in cases {
             let before: Vec<_> = accounts.iter().map(|a| (a.data.clone(), a.lamports)).collect();
             assert!(reject_before_cpi(&program_id, &mut accounts, &bytes).is_err(), "{label}");

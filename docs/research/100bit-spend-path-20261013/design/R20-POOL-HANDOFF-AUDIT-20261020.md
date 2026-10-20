@@ -124,7 +124,7 @@ The last two rows require the accepted-return/proof binding, not merely equal
 account keys. V:923–941 emits candidate and kind from its validated statement;
 Pool dispatch :367–381 requires selected return program, exact ASR8 length and
 decoding. Pool :1750–1760 validates against its reconstructed statement; the
-frozen candidate's direct-result feature instead uses :1567–1588, checking
+separate optional direct-result feature instead uses :1567–1588, checking
 kind, master, selected lane, lane ID, nullifier and checked next-index increment.
 `next_pair_forest_lane_v1` (:1382–1408) checks inactive frontier entries.
 Transfer copies the entire payment record including both commitments. Withdrawal
@@ -147,3 +147,28 @@ System CPI remains runtime P2; native no-CPI tests do not establish rollback.
 Neither path writes the master, retained checkpoint, registry, release entry,
 proof or verifier checkpoint during settlement. No keys are created or removed
 by this audit/test job.
+
+## Adopted feature selection
+
+The frozen Pool build uses exactly
+`r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit`
+(`evidence/freeze-20261020/receipts/build-pool/receipt.json`). It does **not**
+enable direct-result or the unrelated V7 aggregate. Thus :1750–1760 constructs
+and validates the full matching ASF8 on the accepted route. The source-invariant
+lane decoder at :546–628 checks exact image/header/reserve bytes, master/lane/PDA,
+canonical field words, bounds, inactive frontier and genesis root. The active
+root/frontier relationship uses the named inductive Pool-write invariant rather
+than recomputing it. The source-result encoder branch at :1593–1601 writes the
+canonical image from that authenticated result. This trust boundary is retained
+in P2/the source invariant, not erased by the field-copy Lean theorem.
+
+## Evidence status
+
+The companion [proof and premise report](R20-POOL-HANDOFF-20261020.md)
+separates the extracted strip theorem, conditional statement equality and
+account/codec audit. The final exact frozen-feature native library passed
+121 tests, including all four requested rejection shapes, successful transfer
+and withdrawal controls, and exact CPI bytes/order. The actual ASQ8 encoder's
+pinned Aeneas failure is retained rather than replaced by a model. Its byte map
+above remains audited. No AccountInfo extraction theorem or unconditional
+cross-transaction/public-digest preservation is claimed by this audit.
