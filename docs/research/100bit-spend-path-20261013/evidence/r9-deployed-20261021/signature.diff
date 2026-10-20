@@ -1,0 +1,28 @@
+--- R1FinalSoundnessBinPerQueryRWire.final_soundness
++++ R1FinalSoundnessBinPerQueryR9.final_soundness
+@@ -1,7 +1,7 @@
+ theorem final_soundness
+     (D : LiteralByteProtocol.Decoder)
+     (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover)
+-    (Q : Nat) (deployedFailure : ℚ)
++    (Q : Nat) (tx1 : Tx1) (poolTx2 : PoolTx2)
+     (hqueries : DecoderQueryAccounting.AdversaryQueries P Q)
+     (s : BoundaryStatements) (evidence : BoundaryEvidence s)
+     (source : (Bytes → State) → SourceInputs)
+@@ -37,7 +37,7 @@
+     (h_Rwire_tag : BoundaryEvidence s → RWireCompletion.InitialTag D d P (Q + 1161))
+     /- R9/R20: same statement, caller reachability and probability law,
+        including a single query-scan abort charge; owner Codex/lead-worker. -/
+-    (h_R9_transport : BoundaryEvidence s → DeployedTransport D d P deployedFailure)
++    (h_R9_transport : BoundaryEvidence s → DeployedTransport D d P (deployedFailureModel tx1 poolTx2))
+     (e : RawExtractorCostComposedBin.CostedExtractor) (p : Parameters)
+     /- Size-restricted M10 adequacy; length is independent of distinct reads. -/
+     (h_M10_ledger : RawExtractorCostComposedBin.LedgerRefinement e p Q)
+@@ -49,5 +49,5 @@
+         ((e.eval (eval H (recorded D d P)) coins).2.total : ℚ)) ≤ (p.attemptBudget : ℚ)) ∧
+     (∀ run coins w, (e.eval run coins).1 = some w → LiteralProtocol.relation run.2.1.1 w) ∧
+     (1 / (2 : ℚ)^126 + 1 / (2 : ℚ)^454 ≤ 1 / (2 : ℚ)^120) ∧
+-    (deployedFailure ≤ totalBound Q) ∧
+-    (Q ≤ Qmax → deployedFailure ≤ (Q+1 : ℚ) * (1/(2:ℚ)^100))
++    ((deployedFailureModel tx1 poolTx2) ≤ totalBound Q) ∧
++    (Q ≤ Qmax → (deployedFailureModel tx1 poolTx2) ≤ (Q+1 : ℚ) * (1/(2:ℚ)^100))
