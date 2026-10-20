@@ -1,0 +1,44 @@
+/Users/dominic/ZK/.worktrees/cx-r4-transport2/docs/research/100bit-spend-path-20261013/lean/R4Transport2WideReference.lean:31:4: error: unsolved goals
+case succ.refine_1
+n : ℕ
+ih :
+  ∀ (rank : Std.Array U32 8#usize),
+    ∃ ds out,
+      extractedRun n rank = ok (ds, out) ∧
+        ds = (SamplerRepeatedPass.run n (words rank).reverse).1 ∧
+          (words out).reverse = (SamplerRepeatedPass.run n (words rank).reverse).2
+rank q : Std.Array U32 8#usize
+d : U32
+hpass : sampler.qm31_div_pass rank = ok (q, d)
+hq : (words q).reverse = (machineProcess 0 (words rank).reverse).2
+hd : ↑d = (machineProcess 0 (words rank).reverse).1.toNat
+right✝ : ↑d < SamplerMachineBounds.P
+ds : List ℕ
+out : Std.Array U32 8#usize
+hexec : extractedRun n q = ok (ds, out)
+hds : ds = (SamplerRepeatedPass.run n (words q).reverse).1
+hout : (words out).reverse = (SamplerRepeatedPass.run n (words q).reverse).2
+⊢ (let (quotient, digit) := (q, d)
+    do
+    let (digits, remaining) ← extractedRun n quotient
+    ok (↑digit :: digits, remaining)) =
+    ok (↑d :: ds, out)
+/Users/dominic/ZK/.worktrees/cx-r4-transport2/docs/research/100bit-spend-path-20261013/lean/R4Transport2WideReference.lean:31:38: warning: This simp argument is unused:
+  hexec
+
+Hint: Omit it from the simp argument list.
+  simp only [extractedRun, hpass, h̵e̵x̵e̵c̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.R4Transport2WideReference.extractedRun_correct' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.R4Transport2WideReference.extractedRun_values' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.R4Transport2WideReference.eight_passes_byte_model' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

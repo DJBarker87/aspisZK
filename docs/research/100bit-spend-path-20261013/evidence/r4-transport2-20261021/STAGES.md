@@ -1,0 +1,27 @@
+# R4 transport continuation
+
+Base 54054b905; branch codex/cx-r4-transport2-20261021. Focused cached-object
+proofs, not a coherent frozen release replay. No endpoint premise is removed.
+
+## Stage 1: wide reference and source steps
+
+The exact optimized long-division limb and carry limb pass Kani under,
+respectively, remainder < P and canonical digit < P, addend <= 257.
+The complete shipped add_small_base_p passes against an indexed reference,
+including every output digit and the final carry. Library traversal checks
+show the eight reverse mutable visits and eight from_fn callback positions.
+All checks retain unwinding assertions and use the capped host scope.
+
+R4Transport2WideReference composes the *actual extracted* qm31_div_pass eight
+times, preserving the entire quotient array, and proves its low digits and
+remaining positional value equal the byte-rank Lean model. It has no
+pass-success hypothesis; byte-array decoding is an explicit input equality.
+All three top theorem audits are standard, zero swaps. Attempts 1 and 2
+failed on do-pattern reduction; attempt 3 changes the wrapper to projections
+and passes. No unchanged failed source was retried.
+
+The syntactic step checker identifies the identical divider in both optimized
+and indexed reference loops. This is not a kernel theorem about Rust's
+from_fn/iter_mut library implementations. A whole-helper compiler/extraction
+join, including the final quotient-array debug assertions and the connection
+of the indexed add reference to its existing extraction, remains explicit.

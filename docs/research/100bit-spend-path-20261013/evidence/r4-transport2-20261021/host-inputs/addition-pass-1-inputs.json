@@ -1,0 +1,29 @@
+{
+  "source_revision": "54054b9050c7ae8f124596cc5b1edcee2f1b60dc",
+  "source_sha256": "e95e582b27f3399636892a1b157206f074373c68457b327f4761d210dbb3763e",
+  "source_cut": {
+    "schema": "r4-step-source-splice-v1",
+    "sources": {
+      "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "crates/aspis-core/src/r0_transcript.rs": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1"
+    },
+    "crate_sha256": "e95e582b27f3399636892a1b157206f074373c68457b327f4761d210dbb3763e",
+    "steps": {
+      "division": "let dividend = (remainder << 32) | u64::from(*limb);\n*limb = (dividend / u64::from(P)) as u32;\nremainder = dividend % u64::from(P);",
+      "addition": "let sum = u64::from(*digit) + u64::from(addend);\n*digit = (sum % u64::from(P)) as u32;\naddend = (sum / u64::from(P)) as u32;",
+      "scan": "if self.accepted_len == QUERY_COUNT || self.draws == QUERY_MAX_DRAWS {\nreturn true;\n}\nself.draws += 1;\nif !self.accepted[..self.accepted_len].contains(&candidate) {\nself.accepted[self.accepted_len] = candidate;\nself.accepted_len += 1;\n}"
+    },
+    "checks": [
+      "division body exact in optimized helper and extracted indexed reference",
+      "addition body exact in optimized helper",
+      "complete scanner body equals eight-word iteration of exact single step"
+    ],
+    "qualification": "Syntactic decomposition plus Kani components. Not a compiler-certified whole-loop extraction equivalence."
+  },
+  "command": [
+    "cargo",
+    "kani",
+    "--harness",
+    "addition_pass"
+  ]
+}
