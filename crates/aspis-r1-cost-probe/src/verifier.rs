@@ -348,20 +348,6 @@ impl<'a> Reader<'a>{
 
 
 #[inline(always)]
-fn read_checkpoint_queries(bytes:&[u8],mut at:usize)->([u32;22],usize) {
-    let mut queries=[0u32;22];
-    let mut index=0;
-    while index<queries.len() {
-        let mut reader=Reader{bytes,at};
-        let value=u32::from_le_bytes(reader.raw());
-        at=reader.at;
-        queries[index]=value;
-        index+=1;
-    }
-    (queries,at)
-}
-
-#[inline(always)]
 fn validate_checkpoint_queries(queries:&[u32;22])->Result<(),Error> {
     let mut i=0;
     while i<queries.len() {
@@ -409,8 +395,30 @@ pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)
     if bytes[16..48]!=hash.digest(&[proof])||bytes[48..80]!=hash.digest(&[public])||bytes[end..]!=hash.digest(&[b"UNPROVED:R1:checkpoint",&bytes[..end]]) {return Err(Error::Checkpoint);}
     let mut r=Reader{bytes,at:80};let state=r.raw();let roots=[r.raw(),r.raw()];
     let gamma=r.e()?;let kappa=r.e()?;let alpha=[r.e()?,r.e()?];let rho=r.k()?;
-    let (queries,at)=read_checkpoint_queries(bytes,r.at);
-    r.at=at;
+    let queries=[
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+        u32::from_le_bytes(r.raw()),
+    ];
     validate_checkpoint_queries(&queries)?;
     let (semantic_alpha,at)=read_checkpoint_semantic_alpha(bytes,r.at)?;
     r.at=at;
