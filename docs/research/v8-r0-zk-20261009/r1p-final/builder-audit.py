@@ -6,7 +6,8 @@ ROOT = HERE.parents[3]
 HOST = 'dombarker@100.108.41.90'
 J = '/home/dombarker/project-offloads/aspis-joint-20261019'
 MODULES = ['R1Z.BuilderRefinement','R1Z.BuilderSemanticBridge',
-           'R1Z.BuilderSpendRelation','R1Z.BuilderCanonical','R1Z.BuilderSource']
+           'R1Z.BuilderSpendRelation','R1Z.BuilderCanonical','R1Z.BuilderSource',
+           'R1Z.BuilderTransportExtracted','R1Z.BuilderTransport']
 records = [json.loads(x) for x in (HERE/'attempts.jsonl').read_text().splitlines()
            if 8400 <= json.loads(x)['attempt'] <= 8599]
 latest = {r['module']:r for r in records}
@@ -18,8 +19,8 @@ for m in MODULES:
     s = p.read_text()
     assert r['exit'] == 0 and r['swaps'] == '0' and not r['errors'], m
     assert hashlib.sha256(p.read_bytes()).hexdigest() == r['source_sha256'], m
-    assert not re.search(r'\b(sorry|admit|axiom|native_decide)\b', '\n'.join(
-        l for l in s.splitlines() if not l.startswith('--'))), m
+    assert not re.search(r'\b(sorry|admit|axiom|native_decide)\b', re.sub(r'/\-.*?\-/', '', '\n'.join(
+        l for l in s.splitlines() if not l.startswith('--')), flags=re.S)), m
     for t in re.findall(r'^theorem (\w+)', s, re.M):
         assert any('.'+t+"'" in a for a in r['axioms']), (m,t)
         count += 1
@@ -53,9 +54,13 @@ for m,r in final.items():
     pins[m]['exit'] = r['exit']
     pins[m]['command'] = ['sh','/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh',str(r['attempt']),m.replace('.','/'),'J','7000','7',r['deps_fingerprint']]
 changed = subprocess.check_output(['git','diff','--name-only','9ba738457','--','crates','programs','docs/research/v8-r0-zk-20261009/lean','docs/research/100bit-spend-path-20261013/lean'],cwd=ROOT,text=True).splitlines()
-assert set(changed) == {'docs/research/v8-r0-zk-20261009/lean/'+m.replace('.','/')+'.lean' for m in MODULES}, changed
+authorized_rust = {'crates/aspis-statement/src/pool_v1/pair_forest_trace.rs',
+                   'crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs'}
+expected = {'docs/research/v8-r0-zk-20261009/lean/'+m.replace('.','/')+'.lean' for m in MODULES}
+# git diff omits new untracked files until staged.
+assert set(changed) <= expected | authorized_rust, changed
 result = dict(schema='builder-refinement-focused-v1',base='9ba738457',modules=pins,
-              theorem_count=count,standard_axioms_only=True,existing_sources_unchanged=True,
+              theorem_count=count,standard_axioms_only=True,existing_sources_unchanged=False,authorized_rust_changes=sorted(authorized_rust),
               frozen_manifest_replayed=False,scope=dict(MemoryHigh='5G',MemoryMax='7G',MemorySwapMax='0',TasksMax=128))
 (HERE/'builder-audit.json').write_text(json.dumps(result,indent=2)+'\n')
 print(json.dumps(dict(theorems=count,final_attempts={m:r['attempt'] for m,r in final.items()},standard_axioms_only=True),indent=2))

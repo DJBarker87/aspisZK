@@ -22,7 +22,7 @@ if existing:
     assert remote_sha == hashlib.sha256(src.read_bytes()).hexdigest(), 'shared source differs; refusing replacement'
 else:
     # Snapshots retained on host; never overwrite the first snapshot.
-    ssh(f'mkdir -p {J}/snapshots/codex-cx-builder-ref-20261021/{m.rsplit("/",1)[0]}; for p in sources/{m}.lean objects/{m}.olean; do if [ -f {J}/$p ]; then dest={J}/snapshots/codex-cx-builder-ref-20261021/$(basename $p); [ -e "$dest" ] || cp {J}/$p "$dest"; fi; done')
+    ssh(f'mkdir -p {J}/snapshots/codex-cx-builder-ref2-20261021/{m.rsplit("/",1)[0]}; for p in sources/{m}.lean objects/{m}.olean; do if [ -f {J}/$p ]; then dest={J}/snapshots/codex-cx-builder-ref2-20261021/$(basename $p); [ -e "$dest" ] || cp {J}/$p "$dest"; fi; done')
     subprocess.run(['scp','-q',str(src),f'{HOST}:{J}/sources/{m}.lean'],check=True)
 script='''import pathlib, hashlib, re, subprocess, json, datetime
 J=pathlib.Path(JJ); H=pathlib.Path(HH); T=pathlib.Path(TT); m=MM
@@ -33,7 +33,7 @@ def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest() if p.exists() else
 fp=hashlib.sha256(';'.join(f'{x}={sha(J/"objects"/(x.replace(".","/")+".olean"))}' for x in sorted(imports)).encode()).hexdigest()[:16]
 sent=(H/'evidence/sent.txt').read_text()
 used={int(x.split()[2]) for x in sent.splitlines() if len(x.split())>=3}
-a=next(n for n in range(8400,8600) if n not in used and not (T/f'evidence/out-{n}.log').exists())
+a=next(n for n in range(8450,8600) if n not in used and not (T/f'evidence/out-{n}.log').exists())
 r=subprocess.run(['sh',str(H/'tools/run-joint.sh'),str(a),m,'J','7000','7',fp],capture_output=True,text=True)
 out=(T/f'evidence/out-{a}.log').read_text() if (T/f'evidence/out-{a}.log').exists() else r.stdout+r.stderr
 t=(T/f'evidence/time-{a}.log').read_text() if (T/f'evidence/time-{a}.log').exists() else ''
