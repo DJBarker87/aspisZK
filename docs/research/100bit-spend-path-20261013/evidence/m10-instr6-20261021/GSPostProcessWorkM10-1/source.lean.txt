@@ -1,0 +1,156 @@
+import InitialEncoderScheduleM10
+import FiniteCandidateMergeWorkM10
+import GSByteJointSpendExtractor
+import GSBankOutputEnvelopeM10
+
+/-! Cached-message consumers, actual list filters, Cartesian merge/dedup and
+checked witness scan. The only remaining primitive interface is the public
+image inverse/check: it must return a retained 1024-word array and account
+for all of its arithmetic, control and allocated slots. Its bound is named
+PublicImageBound, restricted to the actual 1025-coefficient RR candidates.
+The interface is not a whole-extractor resource or scheduling premise. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.GSPostProcessWorkM10
+open CompPoly AspisWideTower AspisPool.AlgorithmicCircleDecoderV7
+open AspisWide.GSRuntimeInitialDistanceEncoderBridge
+open AspisWide.GSRuntimeInitialJointKeepCore
+open AspisWide.GSConcreteInitialRuntimeJointCandidates
+open AspisWide.InitialMessageForwardFilterV3
+open GSFixedInputDecoderFamily
+
+structure Message where
+  data : Array WideExact
+  size : data.size = 1024
+
+def Message.read (m : Message) (i : Fin 1024) : WideExact := m.data.getD i.val 0
+
+structure PublicImage where
+  eval : List WideExact → Option Message × Nat
+  value : ∀ cs, ((eval cs).1.map Message.read) = filterPublic (CPolynomial.ofArray cs.toArray)
+
+def PublicImageBound (image : PublicImage) (C : Nat) : Prop :=
+  ∀ cs, cs.length = 1025 → (image.eval cs).2 ≤ C
+
+def coordinate (m : InitialMessage WideExact) (i : Fin 1048576) : WideExact × Nat :=
+  let q := InitialEncoderScheduleM10.eval m
+  (((1+initialRuntimePoint i^2)^512)⁻¹*CPolynomial.eval (initialRuntimePoint i) q.1,
+    q.2+1000000000000+1030)
+
+theorem coordinate_value (m : InitialMessage WideExact) (i : Fin 1048576) :
+    (coordinate m i).1 = initialRuntimeEncoder m i := rfl
+
+def coordinateBudget : Nat := InitialEncoderScheduleM10.budget+1000000000000+1030
+
+theorem coordinate_work (m : InitialMessage WideExact) (i : Fin 1048576) :
+    (coordinate m i).2 ≤ coordinateBudget :=
+  Nat.add_le_add_right (Nat.add_le_add_right (InitialEncoderScheduleM10.work m) _) _
+
+-- A full agreement scan pays all coordinates even if a source predicate
+-- short-circuits. Cached word/message reads are bounded array accesses.
+def distanceBudget : Nat := 1048576*(coordinateBudget+1000)+1000
+
+def distance (W : InitialWord WideExact) (m : InitialMessage WideExact) : Bool × Nat :=
+  (decide (38230 ≤ agreementCount W (fun i => (coordinate m i).1)),distanceBudget)
+
+def close (image : PublicImage) (W : InitialWord WideExact)
+    (cs : List (List WideExact)) : List (InitialMessage WideExact) × Nat :=
+  let a := ExtractorListWorkM10.filterMap (fun xs =>
+    ((image.eval xs).1.map Message.read,(image.eval xs).2)) cs
+  let b := ExtractorListWorkM10.filter (distance W) a.1
+  (b.1,a.2+b.2)
+
+theorem close_value (image : PublicImage) (W : InitialWord WideExact)
+    (cs : List (List WideExact)) : (close image W cs).1 = initialRuntimeCloseList W cs := by
+  simp only [close,ExtractorListWorkM10.filter_value,ExtractorListWorkM10.filterMap_value,
+    distance,coordinate_value,initialRuntimeCloseList,AspisWide.GSInitialMessageCandidateFilter.filterCandidates,
+    image.value]
+
+theorem close_length (image : PublicImage) (W : InitialWord WideExact)
+    (cs : List (List WideExact)) : (close image W cs).1.length ≤ cs.length := by
+  rw [close_value]
+  exact (List.length_filter_le _ _).trans (List.length_filterMap_le _ _)
+
+def closeBudget (C B : Nat) : Nat := B*(C+2)+1+B*(distanceBudget+2)+1
+
+theorem close_work (image : PublicImage) (C B : Nat) (himage : PublicImageBound image C)
+    (W : InitialWord WideExact) (cs : List (List WideExact)) (hl : cs.length ≤ B)
+    (hs : ∀ xs ∈ cs, xs.length = 1025) :
+    (close image W cs).2 ≤ closeBudget C B := by
+  have ha := ExtractorListWorkM10.filterMap_work (fun xs =>
+    ((image.eval xs).1.map Message.read,(image.eval xs).2)) cs C (fun xs hx => himage xs (hs xs hx))
+  have hb := ExtractorListWorkM10.filter_work (distance W)
+    (ExtractorListWorkM10.filterMap (fun xs =>
+      ((image.eval xs).1.map Message.read,(image.eval xs).2)) cs).1 distanceBudget
+      (fun _ _ => Nat.le_refl _)
+  have hal := ExtractorListWorkM10.filterMap_length (fun xs =>
+    ((image.eval xs).1.map Message.read,(image.eval xs).2)) cs
+  have ha' := ha.trans (Nat.add_le_add_right (Nat.mul_le_mul_right (C+2) hl) 1)
+  have hb' := hb.trans (Nat.add_le_add_right (Nat.mul_le_mul_right (distanceBudget+2) (hal.trans hl)) 1)
+  exact Nat.add_le_add ha' hb'
+
+-- Selected support inspects at most 29 lanes at each of 2^20 coordinates.
+-- Each encoder evaluation is charged afresh, including all polynomial work.
+def keepBudget : Nat := 29*1048576*(coordinateBudget+1000)+1000
+-- Extensional tuple equality reads 29 arrays of 1024 fixed-width elements;
+-- the extra factor 100 includes all 29 nested update tests.
+def equalityBudget : Nat := 100*29*1024
+-- 24-level witness paths, fixed 16-word/64-round hash circuits and 30-bit
+-- value decoding. This is a fixed circuit tariff, including copied slots.
+def witnessBudget : Nat := 100000000000000000000
+def witnessLimit : Nat := witnessBudget*2^64
+
+def merge (W : Fin 29 → InitialWord WideExact)
+    (decoded : Fin 29 → List (InitialMessage WideExact)) :=
+  FiniteCandidateMergeWorkM10.run keepBudget equalityBudget
+    (runtimeKeep initialRuntimeEncoder W) decoded ∅ [0] (List.finRange 29)
+
+theorem merge_value (W : Fin 29 → InitialWord WideExact)
+    (decoded : Fin 29 → List (InitialMessage WideExact)) :
+    (merge W decoded).1 = jointCandidates W decoded :=
+  FiniteCandidateMergeWorkM10.run_value _ _ _ _ _ _ _
+
+theorem merge_work (B : Nat) (W : Fin 29 → InitialWord WideExact)
+    (decoded : Fin 29 → List (InitialMessage WideExact)) (h : ∀ i, (decoded i).length ≤ B) :
+    (merge W decoded).2 ≤ FiniteCandidateMergeWorkM10.budget keepBudget equalityBudget B 29 1 := by
+  simpa only [merge,List.length_finRange] using
+    FiniteCandidateMergeWorkM10.run_work keepBudget equalityBudget B 1
+      (runtimeKeep initialRuntimeEncoder W) decoded ∅ [0] (List.finRange 29) (by simp) h
+
+def scan (pub : R0P.Public AspisV8R15.ExactTowerBase.M31Exact)
+    (xs : List (ConcreteBinding.Tuple WideExact)) : Option SpendRelation.Wspend × Nat :=
+  ExtractorListWorkM10.findMap
+    (fun t => (TraceWitnessExtract.extract pub (CandidateListWitnessExtract.rows t),witnessBudget*(pub.nextPairIndex+1))) xs
+
+theorem scan_value (pub : R0P.Public AspisV8R15.ExactTowerBase.M31Exact)
+    (xs : List (ConcreteBinding.Tuple WideExact)) :
+    (scan pub xs).1 = CandidateListWitnessExtract.extract pub xs := by
+  rw [scan,ExtractorListWorkM10.findMap_value]
+  unfold CandidateListWitnessExtract.extract
+  induction xs with
+  | nil => rfl
+  | cons x xs ih =>
+    simp only [List.findSome?_cons,List.map_cons,ListWitnessExtract.extractList]
+    cases TraceWitnessExtract.extract pub (CandidateListWitnessExtract.rows x) <;> simp only [ih]
+
+theorem scan_work (pub : R0P.Public AspisV8R15.ExactTowerBase.M31Exact)
+    (xs : List (ConcreteBinding.Tuple WideExact)) (hl : xs.length ≤ 100)
+    (hi : pub.nextPairIndex < 2^64) :
+    (scan pub xs).2 ≤ 100*(witnessLimit+1)+1 := by
+  have hm := Nat.mul_le_mul_left witnessBudget (show pub.nextPairIndex+1 ≤ 2^64 by omega)
+  have hh := ExtractorListWorkM10.findMap_work
+    (fun t => (TraceWitnessExtract.extract pub (CandidateListWitnessExtract.rows t),
+      witnessBudget*(pub.nextPairIndex+1))) xs witnessLimit (fun _ _ => hm)
+  exact hh.trans (Nat.add_le_add_right (Nat.mul_le_mul_right (witnessLimit+1) hl) 1)
+
+#print axioms coordinate_value
+#print axioms coordinate_work
+#print axioms close_value
+#print axioms close_length
+#print axioms close_work
+#print axioms merge_value
+#print axioms merge_work
+#print axioms scan_value
+#print axioms scan_work
+end AspisR1.GSPostProcessWorkM10
+end

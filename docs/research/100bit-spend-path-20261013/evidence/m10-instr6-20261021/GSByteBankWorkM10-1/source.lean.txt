@@ -1,0 +1,59 @@
+import GSBankOutputEnvelopeM10
+import GSByteSamplerWorkM10
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.GSByteBankWorkM10
+open AspisWideTower GSFixedInputDecoderFamily GSDecoderTapeReindex
+open M31AcceptFiber M31RetryOutputFiber
+attribute [local irreducible] GSDecoderActualBankM10.run GSDecoderActualBankM10.bankBudget
+
+def reindexBudget : Nat := 1000*34*21377328
+
+def run (inputs : Inputs WideExact 5) (coins : GSConcreteByteDecoderBank.RawCoins) :
+    Option (Results WideExact 5) × Nat :=
+  let sampled := GSByteSamplerWorkM10.sample 21377328 coins
+  match sampled.1 with
+  | none => (none,sampled.2+1)
+  | some H =>
+    let b := GSDecoderActualBankM10.run (P31^8) 149 inputs
+      (flatBank WideExact (1025*112) (256*112) 149 H)
+    (some b.1,sampled.2+b.2+reindexBudget+1)
+
+theorem value (inputs : Inputs WideExact 5) (coins : GSConcreteByteDecoderBank.RawCoins) :
+    (run inputs coins).1 = GSConcreteByteDecoderBank.run inputs coins := by
+  simp only [run,GSByteSamplerWorkM10.value,GSConcreteByteDecoderBank.run,
+    GSRejectingSamplerDecoderBank.sampleAndRun]
+  split <;> simp only [Option.map_none,Option.map_some,GSDecoderActualBankM10.run_value]
+
+@[never_extract,noinline] def budget : Nat :=
+  1401091454450+GSDecoderActualBankM10.bankBudget (P31^8) 149+reindexBudget+1
+
+theorem work (inputs : Inputs WideExact 5) (coins : GSConcreteByteDecoderBank.RawCoins) :
+    (run inputs coins).2 ≤ budget := by
+  have hs := GSByteSamplerWorkM10.concrete_work coins
+  unfold run
+  split
+  · unfold budget
+    omega
+  · rename_i H hH
+    have hb := GSDecoderActualBankM10.run_work (P31^8) 149 inputs
+      GSConcreteByteDecoderBank.field_card (flatBank WideExact (1025*112) (256*112) 149 H)
+    exact Nat.add_le_add_right (Nat.add_le_add_right (Nat.add_le_add hs hb) reindexBudget) 1
+
+theorem bounded (inputs : Inputs WideExact 5) (coins : GSConcreteByteDecoderBank.RawCoins)
+    (out : Results WideExact 5) (ho : (run inputs coins).1 = some out) :
+    GSBankOutputEnvelopeM10.Bounded out := by
+  unfold run at ho
+  split at ho
+  · cases ho
+  · rename_i H hH
+    cases ho
+    exact GSBankOutputEnvelopeM10.actual_bounded (P31^8) 149 inputs
+      GSConcreteByteDecoderBank.field_card (flatBank WideExact (1025*112) (256*112) 149 H)
+
+#print axioms value
+#print axioms work
+#print axioms bounded
+end AspisR1.GSByteBankWorkM10
+end

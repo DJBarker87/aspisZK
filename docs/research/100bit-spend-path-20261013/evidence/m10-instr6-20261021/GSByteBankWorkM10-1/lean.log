@@ -1,0 +1,44 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSByteBankWorkM10.lean:24:73: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSByteBankWorkM10.lean:36:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+inputs : Inputs WideExact 5
+coins : GSConcreteByteDecoderBank.RawCoins
+hs : (GSByteSamplerWorkM10.sample 21377328 coins).2 ≤ 1401091454450
+⊢ (have sampled := GSByteSamplerWorkM10.sample 21377328 coins;
+      match sampled.1 with
+      | none => (none, sampled.2 + 1)
+      | some H =>
+        have b := GSDecoderActualBankM10.run (P31 ^ 8) 149 inputs ((flatBank WideExact (1025 * 112) (256 * 112) 149) H);
+        (some b.1, sampled.2 + b.2 + reindexBudget + 1)).2 ≤
+    budget
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSByteBankWorkM10.lean:48:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (have sampled := GSByteSamplerWorkM10.sample 21377328 coins;
+      match sampled.1 with
+      | none => (none, sampled.2 + 1)
+      | some H =>
+        have b := GSDecoderActualBankM10.run (P31 ^ 8) 149 inputs ((flatBank WideExact (1025 * 112) (256 * 112) 149) H);
+        (some b.1, sampled.2 + b.2 + reindexBudget + 1)).1 =
+    some out
+of `ho`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+inputs : Inputs WideExact 5
+coins : GSConcreteByteDecoderBank.RawCoins
+out : Results WideExact 5
+ho :
+  (have sampled := GSByteSamplerWorkM10.sample 21377328 coins;
+      match sampled.1 with
+      | none => (none, sampled.2 + 1)
+      | some H =>
+        have b := GSDecoderActualBankM10.run (P31 ^ 8) 149 inputs ((flatBank WideExact (1025 * 112) (256 * 112) 149) H);
+        (some b.1, sampled.2 + b.2 + reindexBudget + 1)).1 =
+    some out
+⊢ GSBankOutputEnvelopeM10.Bounded out
+'AspisR1.GSByteBankWorkM10.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GSByteBankWorkM10.work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GSByteBankWorkM10.bounded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
