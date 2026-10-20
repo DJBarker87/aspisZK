@@ -1,0 +1,44 @@
+/home/dombarker/project-offloads/root-finish-dot-loop-count-v1-20261020/sources/FinishDotLoopCount.lean:27:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  UScalar.add j 1#usize
+in the target expression
+  match j + 1#usize with
+  | ok z => ↑j + ↑1#usize < 2 ^ UScalarTy.Usize.numBits ∧ ↑z = ↑j + ↑1#usize ∧ z.bv = j.bv + 1#usize.bv
+  | fail e => ¬UScalar.inBounds UScalarTy.Usize (↑j + ↑1#usize)
+  | x => ⊥
+
+W : Type
+base : FinishOps W PushState
+rawFn : AspisR1EbyKPushDotBackend.RawFn
+fm : Slice U8
+ws : Slice aspis_core.field.QM31
+out : FinishE
+hrun : verifier.finish_query_dot (withConcreteDot base rawFn) fm ws = ok (core.result.Result.Ok out)
+initial final : PushState
+hnew : (withConcreteDot base rawFn).newDot = ok initial
+hchain : FinishCandidateDotTrace.Chain (withConcreteDot base rawFn) fm ws 0#usize initial final
+hfinish : (withConcreteDot base rawFn).finishDot final = ok out
+hzero : initial = EbyKNewToPushStateABI.pushZero
+Inv : ℕ → PushState → Prop := fun j s => ↑s.count = j
+hinitial : Inv 0 initial
+j j1 : Usize
+s s1 : PushState
+x : FinishCandidateDotTrace.E
+q : FinishCandidateDotTrace.K
+hactive : j < ws.len
+hread : (withConcreteDot base rawFn).field fm j = ok x
+hweight : ws.index_usize j = ok q
+hpush : (withConcreteDot base rawFn).pushDot s x q = ok (core.result.Result.Ok (), s1)
+hinc : j + 1#usize = ok j1
+hinv : Inv (↑j) s
+hcount : ↑s1.count = ↑s.count + 1
+hval :
+  match j + 1#usize with
+  | ok z => ↑j + ↑1#usize < 2 ^ UScalarTy.Usize.numBits ∧ ↑z = ↑j + ↑1#usize ∧ z.bv = j.bv + 1#usize.bv
+  | fail e => ¬UScalar.inBounds UScalarTy.Usize (↑j + ↑1#usize)
+  | x => ⊥
+hinc' : UScalar.add j 1#usize = ok j1
+⊢ Inv (↑j1) s1
+'AspisR1FinishDotConcreteOps.successful_concrete_query_dot_count' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
