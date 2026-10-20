@@ -1,0 +1,48 @@
+/Users/dominic/ZK/.worktrees/cx-repin-s8/docs/research/100bit-spend-path-20261013/lean/S8FrozenRow.lean:102:2: error: 'change' tactic failed, pattern
+  (do
+      let p ← UScalar.mul limb64 basis64
+      let s ← UScalar.add previous p
+      let r ← old.update j s
+      ok (cont (iterNext, r, basis))) =
+    ?m.551
+is not definitionally equal to target
+  (let (o, iter1) := (some j, iterNext)
+    match o with
+    | none => ok (done old)
+    | some j => do
+      let old_1 ← old.index_usize j
+      let limb ← limbs.index_usize j
+      let i ← lift (core.convert.num.FromU64U32.from limb)
+      let i2 ← i * basis64
+      let i3 ← old_1 + i2
+      let row1 ← old.update j i3
+      ok (cont (iter1, row1, basis))) =
+    ok (cont (iterNext, updated, basis))
+/Users/dominic/ZK/.worktrees/cx-repin-s8/docs/research/100bit-spend-path-20261013/lean/S8FrozenRow.lean:100:47: warning: This simp argument is unused:
+  hreadLimbs
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.update_residue_row_loop0.body, verifier.residue_limb_at,
+      verifier.power_limb_at, hnext, bind_tc_ok, hr̵e̵a̵d̵L̵i̵m̵b̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵limb64, hbasis64, hread]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-repin-s8/docs/research/100bit-spend-path-20261013/lean/S8FrozenRow.lean:101:4: warning: This simp argument is unused:
+  hlimb64
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.update_residue_row_loop0.body, verifier.residue_limb_at,
+      verifier.power_limb_at, hnext, bind_tc_ok, hreadLimbs,
+  ̵  ̵ ̵ ̵hl̵i̵m̵b6̵4̵,̵ ̵h̵b̵asis64, hread]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-repin-s8/docs/research/100bit-spend-path-20261013/lean/S8FrozenRow.lean:101:23: warning: This simp argument is unused:
+  hread
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.update_residue_row_loop0.body, verifier.residue_limb_at,
+      verifier.power_limb_at, hnext, bind_tc_ok, hreadLimbs,
+  ̵  ̵ ̵ ̵hlimb64, hbasis64,̵ ̵h̵r̵e̵a̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'S8FrozenRow.row_step_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

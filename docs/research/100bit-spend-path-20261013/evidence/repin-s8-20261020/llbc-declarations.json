@@ -1,0 +1,6037 @@
+[
+  {
+    "id": 0,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "tx2_authenticated",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 327,
+          "col": 0
+        },
+        "end": {
+          "line": 331,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub fn tx2_authenticated<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8], hash: H, obs: Observer) -> Result<(), Error> {\n    parse_shape(proof)?;\n    mark(obs, Phase::Parsed);\n    tx2_common(public_bytes, proof, checkpoint, hash, obs)\n}",
+    "has_body": true,
+    "declaration_sha256": "26693166704500ecf1e8679327d760ed7ad73d414b78e43bb41c093ba8f039f9"
+  },
+  {
+    "id": 1,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "tx2",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 335,
+          "col": 0
+        },
+        "end": {
+          "line": 340,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub fn tx2<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8], hash: H, obs: Observer) -> Result<(), Error> {\n    parse_shape(proof)?;\n    canonical_scan(proof)?;\n    mark(obs, Phase::Parsed);\n    tx2_common(public_bytes, proof, checkpoint, hash, obs)\n}",
+    "has_body": true,
+    "declaration_sha256": "860c6181db2d36168756bf622f2f6042f18de03c236158875dccd9ba6df78a74"
+  },
+  {
+    "id": 2,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "parse_shape",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 40,
+          "col": 0
+        },
+        "end": {
+          "line": 49,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub fn parse_shape(proof: &[u8]) -> Result<Variant, Error> {\n    if proof.len() != compact::PROOF_BYTES\n        || &proof[..8] != compact::MAGIC\n        || proof[8] != Variant::S2.tag()\n        || proof[9..16].iter().any(|&x| x != 0)\n    {\n        return Err(Error::Parse);\n    }\n    Ok(Variant::S2)\n}",
+    "has_body": true,
+    "declaration_sha256": "9b1ca0e7881072fb26f3c856e9415a457cd3ddf94d6a5df4c8c01f6e21ea079a"
+  },
+  {
+    "id": 4,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "mark",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 31,
+          "col": 0
+        },
+        "end": {
+          "line": 31,
+          "col": 60
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn mark(obs:Observer,p:Phase) { if let Some(f)=obs {f(p);} }",
+    "has_body": true,
+    "declaration_sha256": "d4d208dce37e27df488b79b85dfd9786c7b65d248ebbb407545a1d66930f4cbd"
+  },
+  {
+    "id": 5,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "tx2_common",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 294,
+          "col": 0
+        },
+        "end": {
+          "line": 322,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn tx2_common<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8], hash: H, obs: Observer) -> Result<(), Error> {\n    let (p, a) = resume(checkpoint, proof, public_bytes, Variant::S2, hash)?;\n    if a.next != SPLIT {\n        return Err(Error::Checkpoint);\n    }\n    let g = powers::<29>(p.gamma);\n    mark(obs, Phase::CheckpointRead);\n    let inactive = E::from_le_bytes(&proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]).ok_or(Error::Parse)?;\n    let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();\n    batch_merkle(proof, &p, &folded_root, 1, hash)?;\n    mark(obs, Phase::Merkle(SPLIT));\n    let geometry = QueryGeometry::for_range(&p.queries, a.next, 22)?;\n    let pending = BatchedWeights::new(&a.weights)?;\n    let (a, pending) = query_loop(proof, &p, a, &g, obs, &geometry, pending, 22)?;\n    // End the loop accumulator borrow before finishing its weights.\n    let Accumulator { mut weights, rhs, power, next } = a;\n    pending.finish(&mut weights);\n    let a = Accumulator { weights, rhs, power, next };\n    // Construct only the relation view after the last proof-consuming loop.\n    let v = View {\n        variant: Variant::S2, semantic: &[], y1: &[], inactive,\n        round0: &proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT],\n        folded_root: None,\n        round1: &proof[compact::OFF_ROUND1..compact::OFF_FINAL],\n        final_message: &proof[compact::OFF_FINAL..compact::OFF_OPENINGS],\n        query_bytes: &[],\n    };\n    finish_relation(&v, &p, &a, obs)\n}",
+    "has_body": true,
+    "declaration_sha256": "2193532a4506f2833d0fbe09b190d11849ffa323207e152616eb18dceaff6529"
+  },
+  {
+    "id": 7,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "canonical_scan",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 54,
+          "col": 0
+        },
+        "end": {
+          "line": 73,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn canonical_scan(proof: &[u8]) -> Result<(), Error> {\n    compact::check_values(&proof[compact::OFF_Y1..compact::OFF_INACTIVE])?;\n    echeck(&proof[compact::OFF_INACTIVE..compact::OFF_INACTIVE + 32], false)?;\n    echeck(&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT], false)?;\n    echeck(&proof[compact::OFF_ROUND1..compact::OFF_OPENINGS], false)?;\n    for i in 0..22 {\n        let q = opening(proof, i);\n        for s in 0..4 {\n            for l in 0..26 {\n                M31::from_le_bytes(q[s * 120 + l * 4..s * 120 + l * 4 + 4].try_into().unwrap()).ok_or(Error::Parse)?;\n            }\n            K::from_le_bytes(&q[s * 120 + 104..s * 120 + 120]).ok_or(Error::Parse)?;\n            for l in 0..2 {\n                K::from_le_bytes(&q[480 + s * 32 + l * 16..480 + s * 32 + l * 16 + 16]).ok_or(Error::Parse)?;\n            }\n        }\n        echeck(&q[672..800], false)?;\n    }\n    Ok(())\n}",
+    "has_body": true,
+    "declaration_sha256": "9a31dcc09e444d1706399cebd81900ec8cfb5bf3c4bac7a08cd4485c9519d09b"
+  },
+  {
+    "id": 15,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "resume",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 393,
+          "col": 0
+        },
+        "end": {
+          "line": 432,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)->Result<(Box<Prepared>,Accumulator),Error> {\n    if bytes.len()!=checkpoint_size(v)||&bytes[..8]!=b\"R1P2CKP2\"||bytes[8]!=v.tag()||bytes[9]>22||bytes[10]!=1||bytes[11..16].iter().any(|&b|b!=0) {return Err(Error::Checkpoint);}\n    let end=bytes.len()-32;\n    if bytes[16..48]!=hash.digest(&[proof])||bytes[48..80]!=hash.digest(&[public])||bytes[end..]!=hash.digest(&[b\"UNPROVED:R1:checkpoint\",&bytes[..end]]) {return Err(Error::Checkpoint);}\n    let mut r=Reader{bytes,at:80};let state=r.raw();let roots=[r.raw(),r.raw()];\n    let gamma=r.e()?;let kappa=r.e()?;let alpha=[r.e()?,r.e()?];let rho=r.k()?;\n    let queries=[\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n    ];\n    validate_checkpoint_queries(&queries)?;\n    let (semantic_alpha,at)=read_checkpoint_semantic_alpha(bytes,r.at)?;\n    r.at=at;\n    let z=[SecureCirclePoint{x:r.k()?,y:r.k()?},SecureCirclePoint{x:r.k()?,y:r.k()?}];\n    let claim=r.e()?;let rhs=r.e()?;let power=r.k()?;\n    let weights=aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;\n    let (weights,at)=read_checkpoint_weights(bytes,r.at,weights)?;\n    if at!=end {return Err(Error::Checkpoint);}\n    Ok((Box::new(Prepared{variant:v,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state}),Accumulator{weights,rhs,power,next:bytes[9] as usize}))\n}",
+    "has_body": true,
+    "declaration_sha256": "1f16e0b066960ba58099b3921f43a3a7179e5848a6fbff93ac111d517b72ed79"
+  },
+  {
+    "id": 21,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "batch_merkle",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 156,
+          "col": 0
+        },
+        "end": {
+          "line": 159,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn batch_merkle<H: Digest32>(proof: &[u8], p: &Prepared, folded_root: &[u8; 32], batch: usize, hash: H) -> Result<(), Error> {\n    let [root0, root1] = p.roots;\n    batch_merkle_values(proof, p.queries, [root0, root1, *folded_root], batch, hash)\n}",
+    "has_body": true,
+    "declaration_sha256": "90f0a4d02cfc1b86b1c722b83b333a5160ffcff497aa8c1d728a057649db8bc4"
+  },
+  {
+    "id": 22,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 148,
+          "col": 4
+        },
+        "end": {
+          "line": 177,
+          "col": 5
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn for_range(queries:&[u32;22],start:usize,end:usize)->Result<Self,Error> {\n        if start>end||end>queries.len(){return Err(Error::Query);}\n        let mut line_z_values=Vec::with_capacity(end-start);\n        let mut flat=Vec::with_capacity((end-start)*5);\n        for &query in &queries[start..end] {\n            let u=query as usize;\n            let fibre=domain::FibreIndex::new(u).map_err(|_|Error::Query)?;\n            let domain::Point{x:circle_x,y:circle_y}=crate::fast_domain::fibre_point(fibre);\n            let line_x=crate::fast_domain::line_node(domain::FibreIndex::new(u/4*4).map_err(|_|Error::Query)?);\n            let line_y=crate::fast_domain::line_node(domain::FibreIndex::new(u/4*4+3).map_err(|_|Error::Query)?);\n            let line_z=line_x.mul(line_x).double().sub(M31::ONE);\n            let values=[circle_x,circle_y,line_x,line_y,line_z];\n            if values.iter().any(|x|*x==M31::ZERO){return Err(Error::Query);}\n            flat.extend_from_slice(&values);\n            line_z_values.push(line_z);\n        }\n        if flat.is_empty(){return Ok(Self{start,inverses:Vec::new(),line_z:line_z_values});}\n        // Standard prefix-product/backward batch inversion. The only `inv`\n        // in this routine is applied to the product of all nonzero entries.\n        let (prefixes,product)=batch_prefix_products(&flat);\n        let mut suffix_inverse=product.inv();\n        let mut flat_inverse=Vec::with_capacity(flat.len());\n        flat_inverse.resize(flat.len(),M31::ZERO);\n        for i in (0..flat.len()).rev() {\n            flat_inverse[i]=suffix_inverse.mul(prefixes[i]);\n            suffix_inverse=suffix_inverse.mul(flat[i]);\n        }\n        let inverses=(0..line_z_values.len()).map(|i|core::array::from_fn(|j|flat_inverse[5*i+j])).collect();\n        Ok(Self{start,inverses,line_z:line_z_values})\n    }",
+    "has_body": true,
+    "declaration_sha256": "82969a45d37f12d667286f7dd739fa96348776af341ce4a7b19d8ecf1f16698d"
+  },
+  {
+    "id": 24,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2075
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "new",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 206,
+          "col": 4
+        },
+        "end": {
+          "line": 215,
+          "col": 5
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn new(weights:&[K])->Result<Self,Error> {\n        let mut raw=aspis_core::r0::heap::filled(weights.len(),[0u64;4]).map_err(|_|Error::Allocation)?;\n        let mut index=0;\n        while index<weights.len() {\n            let w=weights[index];\n            raw[index]=[w.c0.a.0 as u64,w.c0.b.0 as u64,w.c1.a.0 as u64,w.c1.b.0 as u64];\n            index+=1;\n        }\n        Ok(Self{raw,terms:0})\n    }",
+    "has_body": true,
+    "declaration_sha256": "e21c6ba78d6ae89367def0fc46f3a951d5b872c31c8b057666bb07d3824e2270"
+  },
+  {
+    "id": 25,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "query_loop",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 239,
+          "col": 0
+        },
+        "end": {
+          "line": 252,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn query_loop(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: BatchedWeights, end: usize) -> Result<(Accumulator, BatchedWeights), Error> {\n    let mut state = Ok((a, pending));\n    loop {\n        match state {\n            Err(error) => return Err(error),\n            Ok((a, pending)) => {\n                if a.next >= end {\n                    return Ok((a, pending));\n                }\n                state = query_values(proof, p, a, g, obs, geometry, pending);\n            }\n        }\n    }\n}",
+    "has_body": true,
+    "declaration_sha256": "8df9b304ef8147568f4db916a9d6a3dfbcd0d52f84d929f25a27ef07fac8bbe8"
+  },
+  {
+    "id": 27,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2075
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "finish",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 226,
+          "col": 4
+        },
+        "end": {
+          "line": 226,
+          "col": 101
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn finish(&self,weights:&mut[K]) {for (i,w) in weights.iter_mut().enumerate(){*w=self.value(i);}}",
+    "has_body": true,
+    "declaration_sha256": "1b6541e430b49d6c38e8f1c3a9fd4a8b214edac1e5c463d55c1da0c8ca56dc6f"
+  },
+  {
+    "id": 28,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "finish_relation",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 309,
+          "col": 0
+        },
+        "end": {
+          "line": 322,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Result<(),Error> {\n    let mut claim=p.claim;\n    claim=finish_relation_round(v.round0,p.alpha[0],claim,0)?;\n    if p.variant.folds()==2 {claim=finish_relation_round(v.round1,p.alpha[1],claim,1)?;}\n    let weights=Weights::new(p.variant,&p.semantic_alpha,&p.z)?;\n    let pair=weights.pair(&p.alpha[..p.variant.folds()],v.final_message,p.kappa)?;\n    crate::trace::value(16,0,pair);crate::trace::value(16,1,claim);\n    if pair!=claim {return Err(Error::Relation);}\n    mark(obs,Phase::Relation);\n    let actual=finish_query_dot(v.final_message,&a.weights)?;\n    crate::trace::value(17,0,actual);crate::trace::value(17,1,a.rhs);\n    if a.next!=22||actual!=a.rhs {return Err(Error::Query);}\n    mark(obs,Phase::Final);Ok(())\n}",
+    "has_body": true,
+    "declaration_sha256": "848b5d3409d749c549a828fb86098d220218e01ec24d7b8c015bfed9434f4f0f"
+  },
+  {
+    "id": 30,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "check_values",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 139,
+          "col": 0
+        },
+        "end": {
+          "line": 144,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub fn check_values(compact: &[u8]) -> Result<(), CodecError> {\n    for c in compact.chunks_exact(16) {\n        QM31::from_le_bytes(c).ok_or(CodecError::NonCanonical)?;\n    }\n    Ok(())\n}",
+    "has_body": true,
+    "declaration_sha256": "a62456a2522488db3418d560d265422e6455841f08c3a8507247f0977075254b"
+  },
+  {
+    "id": 31,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "echeck",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 39,
+          "col": 0
+        },
+        "end": {
+          "line": 42,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn echeck(b:&[u8],k:bool)->Result<(),Error> {\n    for c in b.chunks_exact(32) {let x=E::from_le_bytes(c).ok_or(Error::Parse)?;if k&&x.c1()!=K::ZERO {return Err(Error::Parse);}}\n    Ok(())\n}",
+    "has_body": true,
+    "declaration_sha256": "0663e236dbc6ade99209304ca338345c17a40d12cbf0e7009497686ddce32c71"
+  },
+  {
+    "id": 34,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "opening",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 29,
+          "col": 0
+        },
+        "end": {
+          "line": 32,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn opening(proof: &[u8], i: usize) -> &[u8] {\n    let at = compact::OFF_OPENINGS + i * OPENING;\n    &proof[at..at + OPENING]\n}",
+    "has_body": true,
+    "declaration_sha256": "4f5b9165a01dea94ddafd92aa72a59a37fdf21a1909beebe001086e4d39cb6b8"
+  },
+  {
+    "id": 37,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "parse_shape",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 3
+        }
+      },
+      {
+        "Ident": [
+          "call_once",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 44,
+          "col": 35
+        },
+        "end": {
+          "line": 44,
+          "col": 46
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|&x| x != 0",
+    "has_body": true,
+    "declaration_sha256": "cbf4a0d3208c775bf15529e7bb923e6f648298ca7663404af9e30bd86e5f5b2f"
+  },
+  {
+    "id": 38,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "parse_shape",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 4
+        }
+      },
+      {
+        "Ident": [
+          "call_mut",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 44,
+          "col": 35
+        },
+        "end": {
+          "line": 44,
+          "col": 46
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|&x| x != 0",
+    "has_body": true,
+    "declaration_sha256": "9e3c19210f554a209a3a4428caa5348eae0870b5d0eaff0953c511fe5a4a7912"
+  },
+  {
+    "id": 39,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "PROOF_BYTES",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 66,
+          "col": 0
+        },
+        "end": {
+          "line": 66,
+          "col": 41
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const PROOF_BYTES: usize = MAX_PROOF;",
+    "has_body": true,
+    "declaration_sha256": "f184d6a855fa490dbfd3c7e799cc898500db6adb4d3136da6f5a82a8b46107ba"
+  },
+  {
+    "id": 46,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "MAGIC",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 25,
+          "col": 0
+        },
+        "end": {
+          "line": 25,
+          "col": 40
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const MAGIC: &[u8; 8] = b\"R1P3CB18\";",
+    "has_body": true,
+    "declaration_sha256": "f29e892fce5cf1bbd2a071aaf7012cc02064008f8e763863af25b5f9876f0ed1"
+  },
+  {
+    "id": 151,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "checkpoint_size",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 32,
+          "col": 0
+        },
+        "end": {
+          "line": 32,
+          "col": 76
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub fn checkpoint_size(v:Variant)->usize {CHECKPOINT_FIXED+16*v.final_len()}",
+    "has_body": true,
+    "declaration_sha256": "cbd6642cf27128f8da11536e8373e74685644496d46c32936145bb6cc701706d"
+  },
+  {
+    "id": 152,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [
+                {
+                  "index": 0,
+                  "name": "'a",
+                  "mutability": "Unknown"
+                }
+              ],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 6050
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "raw",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 344,
+          "col": 4
+        },
+        "end": {
+          "line": 344,
+          "col": 116
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn raw<const N:usize>(&mut self)->[u8;N] {let b=self.bytes[self.at..self.at+N].try_into().unwrap();self.at+=N;b}",
+    "has_body": true,
+    "declaration_sha256": "bf2224b6a92b4334f1652e03cb790e61f00c481c6726fd59410c3d42dc15c6f5"
+  },
+  {
+    "id": 153,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [
+                {
+                  "index": 0,
+                  "name": "'a",
+                  "mutability": "Unknown"
+                }
+              ],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 6050
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "e",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 345,
+          "col": 4
+        },
+        "end": {
+          "line": 345,
+          "col": 98
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn e(&mut self)->Result<E,Error>{E::from_le_bytes(&self.raw::<32>()).ok_or(Error::Checkpoint)}",
+    "has_body": true,
+    "declaration_sha256": "f99f922a12f89d37d12daf42dbc8ffdc28a4e8ff9606067ffc38a6057c40c0d8"
+  },
+  {
+    "id": 154,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [
+                {
+                  "index": 0,
+                  "name": "'a",
+                  "mutability": "Unknown"
+                }
+              ],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 6050
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "k",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 347,
+          "col": 4
+        },
+        "end": {
+          "line": 347,
+          "col": 98
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn k(&mut self)->Result<K,Error>{K::from_le_bytes(&self.raw::<16>()).ok_or(Error::Checkpoint)}",
+    "has_body": true,
+    "declaration_sha256": "718f82255979c46b613ba0b540fa42ec3643e1acf53959e0502fce3b315e8db8"
+  },
+  {
+    "id": 156,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "validate_checkpoint_queries",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 352,
+          "col": 0
+        },
+        "end": {
+          "line": 360,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn validate_checkpoint_queries(queries:&[u32;22])->Result<(),Error> {\n    let mut i=0;\n    while i<queries.len() {\n        let q=queries[i];\n        if q>=1<<18||queries[..i].contains(&q){return Err(Error::Checkpoint);}\n        i+=1;\n    }\n    Ok(())\n}",
+    "has_body": true,
+    "declaration_sha256": "afd1742bdf40af88feee96e399557e63e62cd285486ab663a5cd8022237cffd1"
+  },
+  {
+    "id": 157,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "read_checkpoint_semantic_alpha",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 375,
+          "col": 0
+        },
+        "end": {
+          "line": 390,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn read_checkpoint_semantic_alpha(bytes:&[u8],at:usize)->Result<([K;10],usize),Error> {\n    let mut r=Reader{bytes,at};\n    let values=[\n        r.k()?,\n        r.k()?,\n        r.k()?,\n        r.k()?,\n        r.k()?,\n        r.k()?,\n        r.k()?,\n        r.k()?,\n        r.k()?,\n        r.k()?,\n    ];\n    Ok((values,r.at))\n}",
+    "has_body": true,
+    "declaration_sha256": "1b68ecf9f0d162f0302a49f37ee597d79539e88b6f562ed060ea3283e75dadfd"
+  },
+  {
+    "id": 161,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "read_checkpoint_weights",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 363,
+          "col": 0
+        },
+        "end": {
+          "line": 371,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn read_checkpoint_weights(bytes:&[u8],mut at:usize,mut weights:Vec<K>)->Result<(Vec<K>,usize),Error> {\n    for out in &mut weights {\n        let mut reader=Reader{bytes,at};\n        let value=reader.k()?;\n        at=reader.at;\n        *out=value;\n    }\n    Ok((weights,at))\n}",
+    "has_body": true,
+    "declaration_sha256": "37e52107be19bb5a81c9cf96e3adbfe476803fa3ad5b298f1da32308ea2ca41b"
+  },
+  {
+    "id": 165,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "SPLIT",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 27,
+          "col": 0
+        },
+        "end": {
+          "line": 27,
+          "col": 28
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const SPLIT: usize = 10;",
+    "has_body": true,
+    "declaration_sha256": "82be3da3d6347b0831265374c6b43a541280f8b57394103a9855cc5ea13966ba"
+  },
+  {
+    "id": 166,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "Accumulator",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 16
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 91,
+          "col": 0
+        },
+        "end": {
+          "line": 91,
+          "col": 82
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub struct Accumulator { pub weights:Vec<K>,pub rhs:E,pub power:K,pub next:usize }",
+    "has_body": true,
+    "declaration_sha256": "9e938fd3af52885e6898a6896a268ef32a83c2459f0c7b236de59dccd7408d0a"
+  },
+  {
+    "id": 168,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "OFF_INACTIVE",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 40,
+          "col": 0
+        },
+        "end": {
+          "line": 40,
+          "col": 52
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const OFF_INACTIVE: usize = OFF_Y1 + COMPACT_Y1;",
+    "has_body": true,
+    "declaration_sha256": "3cb5c1b4463d2da8ac232b283c9992417771aa7e977767d4bcc0a3068b2d4a97"
+  },
+  {
+    "id": 169,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "OFF_ROUND0",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 41,
+          "col": 0
+        },
+        "end": {
+          "line": 41,
+          "col": 48
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const OFF_ROUND0: usize = OFF_INACTIVE + 32;",
+    "has_body": true,
+    "declaration_sha256": "ed7367458a1c28e3f7f90adf34e50300b750a4c2bc2c0b6263917785813f21e2"
+  },
+  {
+    "id": 170,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "Error",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 18
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 20,
+          "col": 0
+        },
+        "end": {
+          "line": 27,
+          "col": 38
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub enum Error { Parse,Semantic,Transcript,Relation,Merkle,Query,Checkpoint,Allocation,\n    /// Host prover only (LOG D38.3): this attempt's challenges fail the public\n    /// P_R1 check. Carries no challenge and no conjunct.\n    #[cfg(feature=\"prover\")] Rejected,\n    /// Host prover only (D38.3): all N = 8 attempts were rejected; nothing is published.\n    #[cfg(feature=\"prover\")] AttemptsExhausted,\n    /// Host prover only: the operating-system entropy source failed.\n    #[cfg(feature=\"prover\")] Entropy }",
+    "has_body": true,
+    "declaration_sha256": "6561f6215e3e064e8354128a7a797bcbcdd3f32ad46f0042346124263742e563"
+  },
+  {
+    "id": 171,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "OFF_FOLDED_ROOT",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 42,
+          "col": 0
+        },
+        "end": {
+          "line": 42,
+          "col": 52
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const OFF_FOLDED_ROOT: usize = OFF_ROUND0 + 224;",
+    "has_body": true,
+    "declaration_sha256": "c43520778502870cad5ced8d4d1ba927cdea81eb11d57b35308155014e1aea2d"
+  },
+  {
+    "id": 172,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "OFF_ROUND1",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 43,
+          "col": 0
+        },
+        "end": {
+          "line": 43,
+          "col": 51
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const OFF_ROUND1: usize = OFF_FOLDED_ROOT + 32;",
+    "has_body": true,
+    "declaration_sha256": "f9268ad8197c574f678243704d3f257034618f9e6d8a933055dc9a3c67860694"
+  },
+  {
+    "id": 175,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "batch_merkle_values",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 162,
+          "col": 0
+        },
+        "end": {
+          "line": 170,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn batch_merkle_values<H: Digest32>(proof: &[u8], queries: [u32; 22], roots: [[u8; 32]; 3], batch: usize, hash: H) -> Result<(), Error> {\n    let mut idx = [0u32; multiproof::MAX_BATCH];\n    let mut val = [[0u8; 32]; multiproof::MAX_BATCH];\n    let [root0, root1, root2] = roots;\n    batch_tree(proof, queries, root0, batch, 0, &mut idx, &mut val, hash)?;\n    batch_tree(proof, queries, root1, batch, 1, &mut idx, &mut val, hash)?;\n    batch_tree(proof, queries, root2, batch, 2, &mut idx, &mut val, hash)?;\n    Ok(())\n}",
+    "has_body": true,
+    "declaration_sha256": "3533e11c1a10616c1497df1a43f15b5fed974a8a795fc3cbf920037e5e81b021"
+  },
+  {
+    "id": 182,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "batch_prefix_products",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 134,
+          "col": 0
+        },
+        "end": {
+          "line": 145,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn batch_prefix_products(flat:&[M31])->(Vec<M31>,M31) {\n    let mut prefixes=Vec::with_capacity(flat.len());\n    let mut product=M31::ONE;\n    let mut index=0;\n    while index<flat.len() {\n        let value=flat[index];\n        prefixes.push(product);\n        product=product.mul(value);\n        index+=1;\n    }\n    (prefixes,product)\n}",
+    "has_body": true,
+    "declaration_sha256": "85d93dd4c91edd2d9b6944fa9b8a0600d1bb57ddea728a4235e69bf2c9b70018"
+  },
+  {
+    "id": 196,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "QueryGeometry",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 23
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 131,
+          "col": 0
+        },
+        "end": {
+          "line": 131,
+          "col": 76
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "struct QueryGeometry { start:usize, inverses:Vec<[M31;5]>, line_z:Vec<M31> }",
+    "has_body": true,
+    "declaration_sha256": "2a3c7be25c8d87a441c045b4be2fef8f8c460fd8108ecfabe6177e4e7b2dc7c9"
+  },
+  {
+    "id": 197,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "BatchedWeights",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 25
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 204,
+          "col": 0
+        },
+        "end": {
+          "line": 204,
+          "col": 55
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "struct BatchedWeights { raw:Vec<[u64;4]>, terms:usize }",
+    "has_body": true,
+    "declaration_sha256": "3f9d546a3deee1bb4e87135157b1ee4e158a92ca33fd9081e951aa330ed1e9b7"
+  },
+  {
+    "id": 198,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "query_values",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 212,
+          "col": 0
+        },
+        "end": {
+          "line": 235,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn query_values(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, mut pending: BatchedWeights) -> Result<(Accumulator, BatchedWeights), Error> {\n    let i = a.next;\n    let u = p.queries[i] as usize;\n    let q = opening(proof, i);\n    let dots = crate::fast_dots::four_dots(q, g);\n    crate::trace::value(9, 4 * i, dots[0]);\n    crate::trace::value(9, 4 * i + 1, dots[1]);\n    crate::trace::value(9, 4 * i + 2, dots[2]);\n    crate::trace::value(9, 4 * i + 3, dots[3]);\n    let inverse = *geometry.for_query(i);\n    let folded = circle_fold_with_inverses(p.alpha[0], dots, &inverse);\n    crate::trace::value(10, 2 * i, folded);\n    let values = core::array::from_fn(|s| field(&q[672..800], s));\n    if folded != values[u % 4] {\n        return Err(Error::Query);\n    }\n    let folded = line_fold_with_inverses(p.alpha[1], values, &inverse);\n    crate::trace::value(10, 2 * i + 1, folded);\n    let z = geometry.line_z[i - geometry.start];\n    let node = z.mul(z).double().sub(M31::ONE);\n    accumulate_batched_with_node(p, &mut a, node, folded, &mut pending);\n    mark(obs, Phase::Query(i));\n    Ok((a, pending))\n}",
+    "has_body": true,
+    "declaration_sha256": "8dc923844d386c7ce0ed792215e17428e90d13155e0e23945fbfffaea8d0893a"
+  },
+  {
+    "id": 202,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2075
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "value",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 222,
+          "col": 4
+        },
+        "end": {
+          "line": 225,
+          "col": 5
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn value(&self,index:usize)->K {\n        let [a,b,c,d]=self.raw[index].map(M31::reduce_u64);\n        K{c0:aspis_core::field::CM31{a,b},c1:aspis_core::field::CM31{a:c,b:d}}\n    }",
+    "has_body": true,
+    "declaration_sha256": "66098441f897b8ab91647418dd5117755bbb3778420059c3b6a4b60924ad03b3"
+  },
+  {
+    "id": 203,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "OFF_FINAL",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 44,
+          "col": 0
+        },
+        "end": {
+          "line": 44,
+          "col": 46
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const OFF_FINAL: usize = OFF_ROUND1 + 224;",
+    "has_body": true,
+    "declaration_sha256": "7e18332dcfa2b5c8977c39eff8044c65d85a72d4c3edfe0579e269e81297fca5"
+  },
+  {
+    "id": 204,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "OFF_OPENINGS",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 46,
+          "col": 0
+        },
+        "end": {
+          "line": 46,
+          "col": 59
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const OFF_OPENINGS: usize = OFF_FINAL + FINAL_LEN * 32;",
+    "has_body": true,
+    "declaration_sha256": "f54e2d2a566817d5f393ba503101fb7746d43c04198c055aa919a8c6ddcb6195"
+  },
+  {
+    "id": 205,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "finish_relation_round",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 293,
+          "col": 0
+        },
+        "end": {
+          "line": 299,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn finish_relation_round(poly:&[u8],alpha:E,mut claim:E,round:usize)->Result<E,Error> {\n        let lhs=field(poly,0).add(field(poly,4));let rhs=claim.mul_m31(QUARTER);\n        crate::trace::value(15,3*round,lhs);crate::trace::value(15,3*round+1,rhs);\n        if lhs!=rhs {return Err(Error::Relation);}\n        claim=polynomial(poly,alpha);crate::trace::value(15,3*round+2,claim);\n    Ok(claim)\n}",
+    "has_body": true,
+    "declaration_sha256": "cf87c5531cf18697d384925cb9371b6608ed7a360d55f8bb7fde85922de5b1c3"
+  },
+  {
+    "id": 210,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "finish_query_dot",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 301,
+          "col": 0
+        },
+        "end": {
+          "line": 306,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn finish_query_dot(final_message:&[u8],weights:&[K])->Result<E,Error> {\n    let mut dot=crate::fast_pairing::EbyKDot::new();\n    let mut j=0;\n    while j<weights.len() {dot.push(field(final_message,j),weights[j]).map_err(|_|Error::Parse)?;j+=1;}\n    Ok(dot.finish())\n}",
+    "has_body": true,
+    "declaration_sha256": "db0f13226510ac0dd02d50b97dab6236e30a60eabb3d71ee3db69c79bdd231d1"
+  },
+  {
+    "id": 211,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "OFF_Y1",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 39,
+          "col": 0
+        },
+        "end": {
+          "line": 39,
+          "col": 58
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const OFF_Y1: usize = OFF_SEMANTIC + COMPACT_SEMANTIC;",
+    "has_body": true,
+    "declaration_sha256": "ad5a6d50c0c1069a5cc330e6d0e083c42a7ef71ab5d05536518b8bbbc1b8d82f"
+  },
+  {
+    "id": 214,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 28
+        }
+      },
+      {
+        "Ident": [
+          "from",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 23,
+          "col": 4
+        },
+        "end": {
+          "line": 25,
+          "col": 5
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn from(_: CodecError) -> Self {\n        Error::Parse\n    }",
+    "has_body": true,
+    "declaration_sha256": "a88ea50d2f04ca00b3c00d90a9ec8299721d2c1e943385b1b93fd233d6765d2a"
+  },
+  {
+    "id": 259,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "resume",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 35
+        }
+      },
+      {
+        "Ident": [
+          "call_once",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 394,
+          "col": 137
+        },
+        "end": {
+          "line": 394,
+          "col": 145
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|&b|b!=0",
+    "has_body": true,
+    "declaration_sha256": "1fe44533dcf4730931b66ae2bda391054f1c74c8f324c1faef55017bf5658848"
+  },
+  {
+    "id": 260,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "resume",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 36
+        }
+      },
+      {
+        "Ident": [
+          "call_mut",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 394,
+          "col": 137
+        },
+        "end": {
+          "line": 394,
+          "col": 145
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|&b|b!=0",
+    "has_body": true,
+    "declaration_sha256": "30a7d1e34614073bbd6cadf14d0cf1b76b5873ba1ef0572ed242a96aade63fb4"
+  },
+  {
+    "id": 261,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "resume",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 37
+        }
+      },
+      {
+        "Ident": [
+          "call_once",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 428,
+          "col": 76
+        },
+        "end": {
+          "line": 428,
+          "col": 96
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|_|Error::Allocation",
+    "has_body": true,
+    "declaration_sha256": "abbd86e2d00c0347abc8625bce16beafdb3708bb535821b2933181e87a1a9355"
+  },
+  {
+    "id": 270,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "resume",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          1
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 40
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 428,
+          "col": 76
+        },
+        "end": {
+          "line": 428,
+          "col": 96
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|_|Error::Allocation",
+    "has_body": true,
+    "declaration_sha256": "f5ca021c27c2353395041eed49c4aa4f372bfa3a839d545acc29db9b0266c890"
+  },
+  {
+    "id": 274,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "batch_tree",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 173,
+          "col": 0
+        },
+        "end": {
+          "line": 206,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], batch: usize, tree: usize, idx: &mut [u32; multiproof::MAX_BATCH], val: &mut [[u8; 32]; multiproof::MAX_BATCH], hash: H) -> Result<(), Error> {\n    let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };\n    let n = hi - lo;\n    let s = 3 * batch + tree;\n    let keys = sort_batch_keys(batch_keys(&queries, lo, n, tree), n);\n    let mut d = 0;\n    let mut key_position = 0;\n    while key_position < n {\n        let key = batch_key_at(&keys, key_position);\n        key_position += 1;\n        let index = (key >> 8) as u32;\n        let q = opening(proof, lo + (key & 0xff) as usize);\n        let leaf = batch_leaf(hash, tree, q);\n        if d > 0 && same_batch_index(idx, d - 1, index) {\n            if !same_batch_leaf(val, d - 1, leaf) {\n                return Err(Error::Merkle);\n            }\n            continue;\n        }\n        idx[d] = index;\n        val[d] = leaf;\n        d += 1;\n    }\n    let count = multiproof::node_count(Arity::Two, &idx[..d]).ok_or(Error::Merkle)?;\n    let nodes = slot(proof, s);\n    // Padding is whole 32-byte words: scan it 8 bytes at a time.\n    if count > SLOT_NODES[s] || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {\n        return Err(Error::Parse);\n    }\n    if !multiproof::verify_in_place(hash, Arity::Two, &root, idx, val, d, &nodes[..32 * count]) {\n        return Err(Error::Merkle);\n    }\n    Ok(())\n}",
+    "has_body": true,
+    "declaration_sha256": "b5126fb639310e681dda2c7b2c3365519e8a1e08d97f9e7cf09c9b1cc22f3aed"
+  },
+  {
+    "id": 275,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 42
+        }
+      },
+      {
+        "Ident": [
+          "call_once",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 154,
+          "col": 57
+        },
+        "end": {
+          "line": 154,
+          "col": 72
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|_|Error::Query",
+    "has_body": true,
+    "declaration_sha256": "8275a4eb1a50d8f5b35c9d168171f3a43eb3112a08e541f33584677596f42adb"
+  },
+  {
+    "id": 276,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 43
+        }
+      },
+      {
+        "Ident": [
+          "call_once",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 156,
+          "col": 92
+        },
+        "end": {
+          "line": 156,
+          "col": 107
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|_|Error::Query",
+    "has_body": true,
+    "declaration_sha256": "65424ec99217bdcb808ab3c2ef8efd64b24e800773160a392d3e882c9cf21e2a"
+  },
+  {
+    "id": 277,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 44
+        }
+      },
+      {
+        "Ident": [
+          "call_once",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 157,
+          "col": 94
+        },
+        "end": {
+          "line": 157,
+          "col": 109
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|_|Error::Query",
+    "has_body": true,
+    "declaration_sha256": "043de6b6881990a16fccd4d7604bb908352561a0c6341b97b0c99036c1b13411"
+  },
+  {
+    "id": 278,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 45
+        }
+      },
+      {
+        "Ident": [
+          "call_once",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 160,
+          "col": 33
+        },
+        "end": {
+          "line": 160,
+          "col": 49
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|x|*x==M31::ZERO",
+    "has_body": true,
+    "declaration_sha256": "45e5b87b33bb798be48fe3b2de7fcc29f303724618c986f3ec45174ad80e479a"
+  },
+  {
+    "id": 279,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 46
+        }
+      },
+      {
+        "Ident": [
+          "call_mut",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 160,
+          "col": 33
+        },
+        "end": {
+          "line": 160,
+          "col": 49
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|x|*x==M31::ZERO",
+    "has_body": true,
+    "declaration_sha256": "e3a25ebdefe5079ef8c2c1e268ec9285abb495b22906e0ba2d4d7c6e7ef3e2d2"
+  },
+  {
+    "id": 280,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 47
+        }
+      },
+      {
+        "Ident": [
+          "call_once",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 175,
+          "col": 50
+        },
+        "end": {
+          "line": 175,
+          "col": 97
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|i|core::array::from_fn(|j|flat_inverse[5*i+j])",
+    "has_body": true,
+    "declaration_sha256": "1541a5b7ad945cae825c93e4a4b2fe2af6f1098488cfe8d8f87b25121e1c70c8"
+  },
+  {
+    "id": 281,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 48
+        }
+      },
+      {
+        "Ident": [
+          "call_mut",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 175,
+          "col": 50
+        },
+        "end": {
+          "line": 175,
+          "col": 97
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|i|core::array::from_fn(|j|flat_inverse[5*i+j])",
+    "has_body": true,
+    "declaration_sha256": "420d575d2865079523e024e2bdb81c19fc160a9a0430a0dcd15b83612d12b692"
+  },
+  {
+    "id": 282,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 51
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 154,
+          "col": 57
+        },
+        "end": {
+          "line": 154,
+          "col": 72
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|_|Error::Query",
+    "has_body": true,
+    "declaration_sha256": "85ee3fb07cdf080e8805992e3387bc420bb2e4db47b4dc6945369c1fd4974b2b"
+  },
+  {
+    "id": 283,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          1
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 52
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 156,
+          "col": 92
+        },
+        "end": {
+          "line": 156,
+          "col": 107
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|_|Error::Query",
+    "has_body": true,
+    "declaration_sha256": "d7642d0dd775866cad5ef096dc792435138ec6ee41d0d75b7e587a9b45f7575a"
+  },
+  {
+    "id": 295,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          2
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 56
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 157,
+          "col": 94
+        },
+        "end": {
+          "line": 157,
+          "col": 109
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|_|Error::Query",
+    "has_body": true,
+    "declaration_sha256": "875666662ec6f41db0325d02074d1ea1ccefd5ac10fc21108bfe8269f93a8b8b"
+  },
+  {
+    "id": 310,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2075
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "new",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 63
+        }
+      },
+      {
+        "Ident": [
+          "call_once",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 207,
+          "col": 81
+        },
+        "end": {
+          "line": 207,
+          "col": 101
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|_|Error::Allocation",
+    "has_body": true,
+    "declaration_sha256": "728f0594fe672b0a63a183f345be782f00275bedc3a49930af2c04b1a7a97c1b"
+  },
+  {
+    "id": 311,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2075
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "new",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 66
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 207,
+          "col": 81
+        },
+        "end": {
+          "line": 207,
+          "col": 101
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|_|Error::Allocation",
+    "has_body": true,
+    "declaration_sha256": "1c68c8d85325fac6c8513fc92a0d392c42249e417fbdff9ef2a63841583a486c"
+  },
+  {
+    "id": 313,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_query",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 179,
+          "col": 4
+        },
+        "end": {
+          "line": 179,
+          "col": 80
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn for_query(&self,index:usize)->&[M31;5] {&self.inverses[index-self.start]}",
+    "has_body": true,
+    "declaration_sha256": "795feebdc7236587f32d87800c2e809f40a7fee53c39bca647d36b9ef81e890f"
+  },
+  {
+    "id": 314,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "circle_fold_with_inverses",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 182,
+          "col": 0
+        },
+        "end": {
+          "line": 189,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn circle_fold_with_inverses(alpha:E,a:[E;4],inverse:&[M31;5])->E {\n    let [ix,iy,_,_,_]=*inverse;let [a,b,c,d]=a;\n    let h0=a.add(b).add(c).add(d).mul_m31(QUARTER);\n    let h1=a.sub(b).sub(c).add(d).mul_m31(QUARTER.mul(iy));\n    let h2=a.add(b).sub(c).sub(d).mul_m31(QUARTER.mul(ix));\n    let h3=a.sub(b).add(c).sub(d).mul_m31(QUARTER.mul(ix).mul(iy));\n    h0.add(alpha.mul(h1.add(alpha.mul(h2.add(alpha.mul(h3))))))\n}",
+    "has_body": true,
+    "declaration_sha256": "eb3c4301d89cb10a7e67e8fc56a70686c8b72db6d0ad1a4b84b1916a8d553974"
+  },
+  {
+    "id": 316,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "line_fold_with_inverses",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 191,
+          "col": 0
+        },
+        "end": {
+          "line": 200,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn line_fold_with_inverses(alpha:E,a:[E;4],inverse:&[M31;5])->E {\n    let [_,_,ix,iy,iz]=*inverse;let half=M31(1073741824);let [a,b,c,d]=a;\n    let h0=a.add(b).add(c).add(d).mul_m31(QUARTER);\n    let h2=a.add(b).sub(c).sub(d).mul_m31(QUARTER.mul(iz));\n    let c0=a.sub(b).mul_m31(half.mul(ix));\n    let c1=d.sub(c).mul_m31(half.mul(iy));\n    let h1=c0.add(c1).mul_m31(half);\n    let h3=c0.sub(c1).mul_m31(half.mul(iz));\n    h0.add(alpha.mul(h1.add(alpha.mul(h2.add(alpha.mul(h3))))))\n}",
+    "has_body": true,
+    "declaration_sha256": "758b59aa77537e0a7289a5d69143fbbe802633263f36b2ffc53133cf594469c2"
+  },
+  {
+    "id": 317,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "accumulate_batched_with_node",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 277,
+          "col": 0
+        },
+        "end": {
+          "line": 290,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn accumulate_batched_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E,weights:&mut BatchedWeights) {\n    let width=a.weights.len();\n    let mut basis=[M31::ZERO;256];basis[0]=M31::ONE;let mut n=1;\n    while n<width {for j in 0..n {basis[n+j]=basis[j].mul(node);} node=node.mul(node).double().sub(M31::ONE);n*=2;}\n    for j in 0..width {\n        weights.push(j,a.power,basis_at(&basis,j));\n        #[cfg(feature=\"prover\")] {a.weights[j]=weights.value(j);}\n        crate::trace::value(12,a.next*width+j,E::from_qm31(accumulated_weight_at(&a.weights,j)));\n        crate::trace::value(13,a.next*width+j,E::from_m31(basis_at(&basis,j)));\n    }\n    weights.terms+=1;\n    a.rhs=a.rhs.add(value.mul_qm31(a.power));crate::trace::value(11,a.next,a.rhs);\n    a.power=a.power.mul(p.rho);a.next+=1;\n}",
+    "has_body": true,
+    "declaration_sha256": "68ab990cd5f1c5390dbe6228776e3404f33e569d86a3460e0c8807cedc15ffa2"
+  },
+  {
+    "id": 345,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "polynomial",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 292,
+          "col": 0
+        },
+        "end": {
+          "line": 292,
+          "col": 100
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub fn polynomial(bytes:&[u8],x:E)->E {(0..7).rev().fold(E::ZERO,|a,i|a.mul(x).add(field(bytes,i)))}",
+    "has_body": true,
+    "declaration_sha256": "f7dc6bed01872b4c8784a2f3363e5c0ce16ac5e36cb8d09d8cd346f9b0277aa5"
+  },
+  {
+    "id": 356,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "CodecError",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 71
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 72,
+          "col": 0
+        },
+        "end": {
+          "line": 76,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub enum CodecError {\n    Length,\n    NonZeroHigh,\n    NonCanonical,\n}",
+    "has_body": true,
+    "declaration_sha256": "de63195661775bd813637f7841dcf7652e5ff2c4efa7744c26772e262717fbe1"
+  },
+  {
+    "id": 368,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "OPENING",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 37,
+          "col": 0
+        },
+        "end": {
+          "line": 37,
+          "col": 58
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const OPENING: usize = 480 + 128 + 32 + 32 + 128 + 32;",
+    "has_body": true,
+    "declaration_sha256": "e60a2a8b6046a80eea458b963cf4b7692c1bb4c0a15320ca8f0bfb4c5cdccfb4"
+  },
+  {
+    "id": 369,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "parse_shape",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 75
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 44,
+          "col": 35
+        },
+        "end": {
+          "line": 44,
+          "col": 46
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|&x| x != 0",
+    "has_body": true,
+    "declaration_sha256": "171bc318612d0bb08e44b1fe7358f3572cafc593f507829cee9f54f39211dadb"
+  },
+  {
+    "id": 370,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "MAX_PROOF",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 52,
+          "col": 0
+        },
+        "end": {
+          "line": 52,
+          "col": 52
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const MAX_PROOF: usize = FIXED + 32 * MAX_NODES;",
+    "has_body": true,
+    "declaration_sha256": "52f974d52df3014770b18f3183eb1e49b9b14586b13fc3b21297fe64e2c6789d"
+  },
+  {
+    "id": 373,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "CHECKPOINT_FIXED",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 18,
+          "col": 0
+        },
+        "end": {
+          "line": 18,
+          "col": 73
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const CHECKPOINT_FIXED:usize=16+32*3+64+32*4+16+88+160+64+32*2+16+32;",
+    "has_body": true,
+    "declaration_sha256": "bacef4eede6bb1de77aadd4d7ae1475755f416fbe51aad6911b346343d9c4a32"
+  },
+  {
+    "id": 377,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "COMPACT_Y1",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 35,
+          "col": 0
+        },
+        "end": {
+          "line": 35,
+          "col": 38
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const COMPACT_Y1: usize = 29 * 16;",
+    "has_body": true,
+    "declaration_sha256": "9792608349987cb467736c8bfb0c759dff13d0b5a753c7df958b2578c65407f5"
+  },
+  {
+    "id": 378,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "batch_keys",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 92,
+          "col": 0
+        },
+        "end": {
+          "line": 100,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn batch_keys(queries: &[u32; 22], lo: usize, n: usize, tree: usize) -> [u64; multiproof::MAX_BATCH] {\n    let mut keys = [0u64; multiproof::MAX_BATCH];\n    for j in 0..n {\n        let u = queries[lo + j];\n        let index = if tree == 2 { u / 4 } else { u };\n        keys[j] = (u64::from(index) << 8) | j as u64;\n    }\n    keys\n}",
+    "has_body": true,
+    "declaration_sha256": "efde592a4e44b725df3f39ccc6c9700607f2c9771589b173f58f514d03dbecec"
+  },
+  {
+    "id": 379,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "sort_batch_keys",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 104,
+          "col": 0
+        },
+        "end": {
+          "line": 113,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn sort_batch_keys(mut keys: [u64; multiproof::MAX_BATCH], n: usize) -> [u64; multiproof::MAX_BATCH] {\n    for i in 1..n {\n        let mut j = i;\n        while j > 0 && batch_key_at(&keys, j - 1) > batch_key_at(&keys, j) {\n            keys.swap(j - 1, j);\n            j -= 1;\n        }\n    }\n    keys\n}",
+    "has_body": true,
+    "declaration_sha256": "2443954d49434c398d5bd45f492d4d4343884fe4e0cb1d81cffe84c2c07d1d61"
+  },
+  {
+    "id": 380,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "batch_key_at",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 148,
+          "col": 0
+        },
+        "end": {
+          "line": 150,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn batch_key_at(keys: &[u64; multiproof::MAX_BATCH], index: usize) -> u64 {\n    keys[index]\n}",
+    "has_body": true,
+    "declaration_sha256": "8257a399029d607c079be378c85edb4f72f60072c92c1f017a1c2cce30721083"
+  },
+  {
+    "id": 382,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "batch_leaf",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 117,
+          "col": 0
+        },
+        "end": {
+          "line": 132,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn batch_leaf<H: Digest32>(hash: H, tree: usize, q: &[u8]) -> [u8; 32] {\n    match tree {\n        0 => {\n            let salt: [u8; 32] = q[608..640].try_into().unwrap();\n            private_leaf_hash_with_digest(hash, merkle::C1_TAG, &q[..480], &salt)\n        }\n        1 => {\n            let salt: [u8; 32] = q[640..672].try_into().unwrap();\n            private_leaf_hash_with_digest(hash, merkle::C2_TAG, &q[480..608], &salt)\n        }\n        _ => {\n            let salt: [u8; 32] = q[800..832].try_into().unwrap();\n            private_leaf_hash_with_digest(hash, 0x72, &q[672..800], &salt)\n        }\n    }\n}",
+    "has_body": true,
+    "declaration_sha256": "610bcca8356c9431a1be20b3ba41b4d986e32474890bbc270378f4d0f1e8ba7d"
+  },
+  {
+    "id": 383,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "slot",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 34,
+          "col": 0
+        },
+        "end": {
+          "line": 36,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn slot(proof: &[u8], s: usize) -> &[u8] {\n    &proof[compact::slot_offset(s)..compact::slot_offset(s + 1)]\n}",
+    "has_body": true,
+    "declaration_sha256": "7fe28dbd5d575d370e409229de128f1da39372b6d6317d5545adfcecf92c9740"
+  },
+  {
+    "id": 384,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "same_batch_index",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 142,
+          "col": 0
+        },
+        "end": {
+          "line": 144,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn same_batch_index(values: &[u32; multiproof::MAX_BATCH], index: usize, expected: u32) -> bool {\n    values[index] == expected\n}",
+    "has_body": true,
+    "declaration_sha256": "73d9dc58b86e505a89b073cc46665cbb1c3ed9124fac0bd52838e3aeaa201211"
+  },
+  {
+    "id": 385,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "same_batch_leaf",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 136,
+          "col": 0
+        },
+        "end": {
+          "line": 138,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn same_batch_leaf(values: &[[u8; 32]; multiproof::MAX_BATCH], index: usize, leaf: [u8; 32]) -> bool {\n    values[index] == leaf\n}",
+    "has_body": true,
+    "declaration_sha256": "34faeafa27c8dfc013c9fd40734ac6f80b95f9801032c49c6d043a2bf8c5a9f3"
+  },
+  {
+    "id": 391,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "query_values",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 86
+        }
+      },
+      {
+        "Ident": [
+          "call_once",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 224,
+          "col": 38
+        },
+        "end": {
+          "line": 224,
+          "col": 64
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|s| field(&q[672..800], s)",
+    "has_body": true,
+    "declaration_sha256": "0dafe96ce175ac4e0fa0a3129a3e5e3b341c5b44c39feffc2e31913f20d1c598"
+  },
+  {
+    "id": 392,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "query_values",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 87
+        }
+      },
+      {
+        "Ident": [
+          "call_mut",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 224,
+          "col": 38
+        },
+        "end": {
+          "line": 224,
+          "col": 64
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|s| field(&q[672..800], s)",
+    "has_body": true,
+    "declaration_sha256": "364293ccb01a70b316d4f4c550bd5ab10bf7b3b0f8d73bb80fe42f7f87ff3907"
+  },
+  {
+    "id": 396,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "query_values",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 89
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 224,
+          "col": 38
+        },
+        "end": {
+          "line": 224,
+          "col": 64
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|s| field(&q[672..800], s)",
+    "has_body": true,
+    "declaration_sha256": "f10b29d8e6a17264db44949d26536fc4628a1e68fac57d87ef1182480ad0d8ea"
+  },
+  {
+    "id": 397,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "basis_at",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 272,
+          "col": 0
+        },
+        "end": {
+          "line": 272,
+          "col": 61
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn basis_at(basis:&[M31;256],index:usize)->M31 {basis[index]}",
+    "has_body": true,
+    "declaration_sha256": "7999447736f8f8d3f9257b9c29691625c05ea9cfc32412ce94e5c9cc35921388"
+  },
+  {
+    "id": 398,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2075
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "push",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 217,
+          "col": 4
+        },
+        "end": {
+          "line": 220,
+          "col": 5
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn push(&mut self,index:usize,power:K,basis:M31) {\n        let flush=self.terms&3==3;\n        update_residue_row(&mut self.raw[index],power,basis,flush);\n    }",
+    "has_body": true,
+    "declaration_sha256": "bbfe6a5c19cabd9156c91b575692101acd655fa508c44bd775aeddc0e6d522a7"
+  },
+  {
+    "id": 401,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "accumulated_weight_at",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 274,
+          "col": 0
+        },
+        "end": {
+          "line": 274,
+          "col": 70
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn accumulated_weight_at(weights:&[K],index:usize)->K {weights[index]}",
+    "has_body": true,
+    "declaration_sha256": "210244cba5dbe605d73a5983d1959788db53b050562b74efb8eab1ea7ed8e660"
+  },
+  {
+    "id": 405,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "FINAL_LEN",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 45,
+          "col": 0
+        },
+        "end": {
+          "line": 45,
+          "col": 32
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const FINAL_LEN: usize = 64;",
+    "has_body": true,
+    "declaration_sha256": "c9e955343e84b2b3b20f7527c41b01dae8ec8f2e613ab38277424bdf10b2cb6a"
+  },
+  {
+    "id": 408,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "finish_query_dot",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 92
+        }
+      },
+      {
+        "Ident": [
+          "call_once",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 304,
+          "col": 79
+        },
+        "end": {
+          "line": 304,
+          "col": 94
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|_|Error::Parse",
+    "has_body": true,
+    "declaration_sha256": "dd4cdce9d6e39c49ba547c35761e455293883eb21863b48d152dce8df9bdf1c0"
+  },
+  {
+    "id": 409,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "finish_query_dot",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 93
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 304,
+          "col": 79
+        },
+        "end": {
+          "line": 304,
+          "col": 94
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|_|Error::Parse",
+    "has_body": true,
+    "declaration_sha256": "d7629c864d9dc0fb4a68c49ecb719e3c90e28542343cdc8c1fda00a21ad8163a"
+  },
+  {
+    "id": 410,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "OFF_SEMANTIC",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 38,
+          "col": 0
+        },
+        "end": {
+          "line": 38,
+          "col": 39
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const OFF_SEMANTIC: usize = HEADER;",
+    "has_body": true,
+    "declaration_sha256": "e025f664ae3e88afad3e368819067871fae1597fb5267277734be870051f12c1"
+  },
+  {
+    "id": 411,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "COMPACT_SEMANTIC",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 34,
+          "col": 0
+        },
+        "end": {
+          "line": 34,
+          "col": 84
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const COMPACT_SEMANTIC: usize = LOGICAL_SEMANTIC - 16 * SEMANTIC_COMPACT_VALUES;",
+    "has_body": true,
+    "declaration_sha256": "f18ed85a4035b6aa60574e82dcf7509ebded143f285168254a505625922aeaa8"
+  },
+  {
+    "id": 415,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "resume",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 96
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 394,
+          "col": 137
+        },
+        "end": {
+          "line": 394,
+          "col": 145
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|&b|b!=0",
+    "has_body": true,
+    "declaration_sha256": "51ece043cf2fb2dedd1c901c0a0d325cb60f88e9f26eab4b46bad6615e45e085"
+  },
+  {
+    "id": 416,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "batch_tree",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 97
+        }
+      },
+      {
+        "Ident": [
+          "call_once",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 199,
+          "col": 72
+        },
+        "end": {
+          "line": 199,
+          "col": 122
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|w| u64::from_le_bytes(w.try_into().unwrap()) != 0",
+    "has_body": true,
+    "declaration_sha256": "b10827abc2d37f35d9ceba9ff9697e55451c6aeb1203794537fd8631dc30dd2f"
+  },
+  {
+    "id": 417,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "batch_tree",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 98
+        }
+      },
+      {
+        "Ident": [
+          "call_mut",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 199,
+          "col": 72
+        },
+        "end": {
+          "line": 199,
+          "col": 122
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|w| u64::from_le_bytes(w.try_into().unwrap()) != 0",
+    "has_body": true,
+    "declaration_sha256": "52ffcf8e605c104f990defaee237ab183aae56e6c06c9acc720704868a7d38aa"
+  },
+  {
+    "id": 428,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "slot_offset",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 56,
+          "col": 0
+        },
+        "end": {
+          "line": 64,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const fn slot_offset(slot: usize) -> usize {\n    let mut at = OFF_NODES;\n    let mut i = 0;\n    while i < slot {\n        at += 32 * SLOT_NODES[i];\n        i += 1;\n    }\n    at\n}",
+    "has_body": true,
+    "declaration_sha256": "469a20fd3339b7aee93f8d33acbf1d3ed94602166b0072265a40a41609a8a03d"
+  },
+  {
+    "id": 429,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "SLOT_NODES",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 54,
+          "col": 0
+        },
+        "end": {
+          "line": 54,
+          "col": 66
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const SLOT_NODES: [usize; 6] = [146, 146, 128, 172, 172, 150];",
+    "has_body": true,
+    "declaration_sha256": "d8defb84a290fab53a6bbdca19b3e5e6093e5dd0a7159c2bc1dfa63c205a4455"
+  },
+  {
+    "id": 437,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          3
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 99
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 160,
+          "col": 33
+        },
+        "end": {
+          "line": 160,
+          "col": 49
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|x|*x==M31::ZERO",
+    "has_body": true,
+    "declaration_sha256": "25a842098fff89a290bb60d5973a23116697b21c882e68854b831856094de410"
+  },
+  {
+    "id": 438,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          4
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 101
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 175,
+          "col": 50
+        },
+        "end": {
+          "line": 175,
+          "col": 97
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|i|core::array::from_fn(|j|flat_inverse[5*i+j])",
+    "has_body": true,
+    "declaration_sha256": "76ef1036235b5e2790178127a96f9bb120dfc53a68c0b8695499afdbe8325601"
+  },
+  {
+    "id": 439,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          4
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 102
+        }
+      },
+      {
+        "Ident": [
+          "call_once",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 175,
+          "col": 74
+        },
+        "end": {
+          "line": 175,
+          "col": 96
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|j|flat_inverse[5*i+j]",
+    "has_body": true,
+    "declaration_sha256": "c2238bd1746f9ef0d62de429839a653d0d3ca2b685b47d68e8e4d81feeb39911"
+  },
+  {
+    "id": 440,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          4
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 103
+        }
+      },
+      {
+        "Ident": [
+          "call_mut",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 175,
+          "col": 74
+        },
+        "end": {
+          "line": 175,
+          "col": 96
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|j|flat_inverse[5*i+j]",
+    "has_body": true,
+    "declaration_sha256": "19b364f653d62e62efc1baa63165cdf05d227ed6cbd34b30dfdbab78327f5c83"
+  },
+  {
+    "id": 441,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Ty": {
+            "params": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_clauses": [],
+              "regions_outlive": [],
+              "types_outlive": [],
+              "trait_type_constraints": []
+            },
+            "skip_binder": {
+              "Deduplicated": 2052
+            },
+            "kind": "InherentImplBlock"
+          }
+        }
+      },
+      {
+        "Ident": [
+          "for_range",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          4
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 104
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 175,
+          "col": 74
+        },
+        "end": {
+          "line": 175,
+          "col": 96
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|j|flat_inverse[5*i+j]",
+    "has_body": true,
+    "declaration_sha256": "2596c91c5c4134af60fe19bea52a598a49bd572c218d6f9768be5342e0abb121"
+  },
+  {
+    "id": 442,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "update_residue_row",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 235,
+          "col": 0
+        },
+        "end": {
+          "line": 245,
+          "col": 1
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn update_residue_row(row:&mut [u64;4],power:K,basis:M31,flush:bool) {\n    let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];\n    for j in 0..4 {\n        let old=residue_limb_at(row,j);\n        let limb=power_limb_at(&limbs,j);\n        row[j]=old+u64::from(limb)*u64::from(basis.0);\n    }\n    if flush {\n        for limb in row {*limb=(*limb&0x7fff_ffff)+(*limb>>31);}\n    }\n}",
+    "has_body": true,
+    "declaration_sha256": "a7ac083c4270cb2b43cc2c6bd1e24bb843ec1719b459e3a6af085f3afce2f2ab"
+  },
+  {
+    "id": 448,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "polynomial",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 106
+        }
+      },
+      {
+        "Ident": [
+          "call_once",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 292,
+          "col": 65
+        },
+        "end": {
+          "line": 292,
+          "col": 98
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|a,i|a.mul(x).add(field(bytes,i))",
+    "has_body": true,
+    "declaration_sha256": "2d090b24f7f5abc969fe049e6d35bd52a961a60506544031f0d15e1f50eace3b"
+  },
+  {
+    "id": 449,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "polynomial",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 107
+        }
+      },
+      {
+        "Ident": [
+          "call_mut",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 292,
+          "col": 65
+        },
+        "end": {
+          "line": 292,
+          "col": 98
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|a,i|a.mul(x).add(field(bytes,i))",
+    "has_body": true,
+    "declaration_sha256": "ef45e4ab6272b606f3c1ad0879b0d40b6ab3f0f1f8edcc9ffac42b3fe67927c4"
+  },
+  {
+    "id": 451,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "MAX_NODES",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 51,
+          "col": 0
+        },
+        "end": {
+          "line": 51,
+          "col": 59
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const MAX_NODES: usize = 2 * (146 + 172) + (128 + 150);",
+    "has_body": true,
+    "declaration_sha256": "5fba966b1860f32311ae17278a1fb911987bbf1dc826822eba8d80ee9c112262"
+  },
+  {
+    "id": 452,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "FIXED",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 49,
+          "col": 0
+        },
+        "end": {
+          "line": 49,
+          "col": 35
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const FIXED: usize = OFF_NODES;",
+    "has_body": true,
+    "declaration_sha256": "a9bcaf9983b678339886a7436fc95d0852160047e9b7e525b112e2a3a2452919"
+  },
+  {
+    "id": 468,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "residue_limb_at",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 231,
+          "col": 0
+        },
+        "end": {
+          "line": 231,
+          "col": 62
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn residue_limb_at(row:&[u64;4],index:usize)->u64 {row[index]}",
+    "has_body": true,
+    "declaration_sha256": "4f31ea576e6f2685aa9def4b6f2cd7ac15b1f3814f8285f41b6bced8a5e598ff"
+  },
+  {
+    "id": 469,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "power_limb_at",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 233,
+          "col": 0
+        },
+        "end": {
+          "line": 233,
+          "col": 64
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "fn power_limb_at(limbs:&[u32;4],index:usize)->u32 {limbs[index]}",
+    "has_body": true,
+    "declaration_sha256": "f404c2600dcfbfa3978a61f90348b61884a46f1ec20eea439eb3f106cbff139e"
+  },
+  {
+    "id": 474,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "HEADER",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 26,
+          "col": 0
+        },
+        "end": {
+          "line": 26,
+          "col": 29
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const HEADER: usize = 16;",
+    "has_body": true,
+    "declaration_sha256": "12575a5ab263dd3b89419b01d1e58aaaa72131ac5471a6badd9ce14616786491"
+  },
+  {
+    "id": 475,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "SEMANTIC_COMPACT_VALUES",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 33,
+          "col": 0
+        },
+        "end": {
+          "line": 33,
+          "col": 72
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const SEMANTIC_COMPACT_VALUES: usize = 1 + 10 * 28 + (87 + 29) + 29;",
+    "has_body": true,
+    "declaration_sha256": "072e808e8e5b9c6fcfa2757ead4afb1398c851ca7e2cd41bdb17803e934e7766"
+  },
+  {
+    "id": 476,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "LOGICAL_SEMANTIC",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 31,
+          "col": 0
+        },
+        "end": {
+          "line": 31,
+          "col": 68
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const LOGICAL_SEMANTIC: usize = crate::verifier::SEMANTIC_BYTES;",
+    "has_body": true,
+    "declaration_sha256": "f0241bb9fab1563c154b37cbcdd05dca7324381b2745075c9d5c2f315b5c1b51"
+  },
+  {
+    "id": 477,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "candidate",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "batch_tree",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 116
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 0,
+        "beg": {
+          "line": 199,
+          "col": 72
+        },
+        "end": {
+          "line": 199,
+          "col": 122
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|w| u64::from_le_bytes(w.try_into().unwrap()) != 0",
+    "has_body": true,
+    "declaration_sha256": "2f0af89b7274e23e539eb651d2bc8c6375cbc6d2c5069558292fd1d4cb4c3d43"
+  },
+  {
+    "id": 499,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "OFF_NODES",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 47,
+          "col": 0
+        },
+        "end": {
+          "line": 47,
+          "col": 62
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const OFF_NODES: usize = OFF_OPENINGS + QUERIES * OPENING;",
+    "has_body": true,
+    "declaration_sha256": "b6674e7ffa6a5a2fe159a890d2b6503ec9f908d759426e2a09f26311ccf7c4ea"
+  },
+  {
+    "id": 502,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "polynomial",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "closure",
+          0
+        ]
+      },
+      {
+        "Impl": {
+          "Trait": 126
+        }
+      },
+      {
+        "Ident": [
+          "drop_glue",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 292,
+          "col": 65
+        },
+        "end": {
+          "line": 292,
+          "col": 98
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "|a,i|a.mul(x).add(field(bytes,i))",
+    "has_body": true,
+    "declaration_sha256": "ece87e8fe7245a5949ccc93df75f95e6eebfa5a3abdf1b71ee667ba59b1eb915"
+  },
+  {
+    "id": 518,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "verifier",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "SEMANTIC_BYTES",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 1,
+        "beg": {
+          "line": 8,
+          "col": 0
+        },
+        "end": {
+          "line": 8,
+          "col": 43
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const SEMANTIC_BYTES:usize=12903+29*32;",
+    "has_body": true,
+    "declaration_sha256": "0e74a99e26e7a1029d071abc8ba052c6512676adfdb2030575115981803d2742"
+  },
+  {
+    "id": 521,
+    "name": [
+      {
+        "Ident": [
+          "aspis_r1_cost_probe",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "compact",
+          0
+        ]
+      },
+      {
+        "Ident": [
+          "QUERIES",
+          0
+        ]
+      }
+    ],
+    "span": {
+      "data": {
+        "file_id": 16,
+        "beg": {
+          "line": 28,
+          "col": 0
+        },
+        "end": {
+          "line": 28,
+          "col": 30
+        }
+      },
+      "generated_from_span": null
+    },
+    "opacity": "Transparent",
+    "source_text": "pub const QUERIES: usize = 22;",
+    "has_body": true,
+    "declaration_sha256": "9d7c793546f94e9b50587409dcea030e95da5d532e3e72d2910d78c1ce9a4661"
+  }
+]

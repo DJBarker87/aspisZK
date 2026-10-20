@@ -1,0 +1,79 @@
+/Users/dominic/ZK/.worktrees/cx-repin-s8/docs/research/100bit-spend-path-20261013/lean/S8FrozenRow.lean:54:50: error: unsolved goals
+limbs : Std.Array U32 4#usize
+iter : core.ops.range.Range Usize
+basis : aspis_core.field.M31
+j : Usize
+iterNext : core.ops.range.Range Usize
+limb : U32
+old : Std.Array U64 4#usize
+previous : U64
+terms : Usize
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some j, iterNext)
+hj : ↑j < 4
+hlimbRead : limbs.index_usize j = ok limb
+hlimbBound : ↑limb < AspisV8R17.RawReducer.P
+hbasis : ↑basis < AspisV8R17.RawReducer.P
+hraw : ↑previous < 2 ^ 34 + ↑terms % 4 * AspisR1BatchedAllPrefix.cap
+hread : old.index_usize j = ok previous
+h4 : ↑4#usize = 4
+hju : ↑j < ↑4#usize
+x : U32 := limb
+hx : ↑x < AspisV8R17.RawReducer.P
+hreadLimbs : limbs.index_usize j = ok x
+limb64 : U64 := core.convert.num.FromU64U32.from x
+basis64 : U64 := core.convert.num.FromU64U32.from basis
+hlimb64 : lift (core.convert.num.FromU64U32.from x) = ok limb64
+hbasis64 : lift (core.convert.num.FromU64U32.from basis) = ok basis64
+hprodLt : ↑limb64 * ↑basis64 < 2 ^ 64
+product : U64
+hmul : UScalar.mul limb64 basis64 = ok product
+hprodVal : ↑product = ↑limb64 * ↑basis64
+hP : AspisV8R17.RawReducer.P = 2147483647
+hcap : AspisR1BatchedAllPrefix.cap = 4611686009837453316
+hprodVal' : ↑product = ↑limb * ↑basis
+hprodBound : ↑product ≤ AspisR1BatchedAllPrefix.cap
+hsumLt : ↑previous + ↑product < 2 ^ 64
+sum : U64
+hadd : UScalar.add previous product = ok sum
+_hsumVal : ↑sum = ↑previous + ↑product
+hidx : ↑j < (↑old).length
+updated : Std.Array U64 4#usize
+hupdate : old.update j sum = ok updated
+_hset : updated = old.set j sum
+⊢ (do
+      let i2 ← limb64 * basis64
+      let i3 ← previous + i2
+      let row1 ← old.update j i3
+      ok (cont (iterNext, row1, basis))) =
+    ok (cont (iterNext, updated, basis))
+/Users/dominic/ZK/.worktrees/cx-repin-s8/docs/research/100bit-spend-path-20261013/lean/S8FrozenRow.lean:101:23: warning: This simp argument is unused:
+  hmul
+
+Hint: Omit it from the simp argument list.
+  simp [verifier.update_residue_row_loop0.body, verifier.residue_limb_at,
+  ̵  ̵ ̵ ̵verifier.power_limb_at,
+  ̲  ̲ ̲ ̲hnext, bind_tc_ok, hreadLimbs,
+  ̵  ̵ ̵ ̵hlimb64, hbasis64, hm̵u̵l̵,̵ ̵h̵read, hadd, hupdate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-repin-s8/docs/research/100bit-spend-path-20261013/lean/S8FrozenRow.lean:101:36: warning: This simp argument is unused:
+  hadd
+
+Hint: Omit it from the simp argument list.
+  simp [verifier.update_residue_row_loop0.body, verifier.residue_limb_at,
+  ̵  ̵ ̵ ̵verifier.power_limb_at,
+  ̲  ̲ ̲ ̲hnext, bind_tc_ok, hreadLimbs,
+  ̵  ̵ ̵ ̵hlimb64, hbasis64, hmul, hread, ha̵d̵d̵,̵ ̵h̵update]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-repin-s8/docs/research/100bit-spend-path-20261013/lean/S8FrozenRow.lean:101:42: warning: This simp argument is unused:
+  hupdate
+
+Hint: Omit it from the simp argument list.
+  simp [verifier.update_residue_row_loop0.body, verifier.residue_limb_at,
+  ̵  ̵ ̵ ̵verifier.power_limb_at,
+  ̲  ̲ ̲ ̲hnext, bind_tc_ok, hreadLimbs,
+  ̵  ̵ ̵ ̵hlimb64, hbasis64, hmul, hread, hadd,̵ ̵h̵u̵p̵d̵a̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'S8FrozenRow.row_step_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
