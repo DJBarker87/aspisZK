@@ -146,3 +146,23 @@ variation or violations (`evidence/cu-bound5-20261020/REPORT.md`). The
 adoption checklist's CU item is therefore satisfied for the candidate as it
 stands; a further source change (prep7's reference forms are cfg-gated and
 leave the ELFs unchanged) would need a re-check only if the ELF moves.
+
+## Candidate update (2026-10-21, prep7 — Weights::new)
+
+Branch codex/cx-freeze-prep-20261020 at d8578002f: the functional
+constructor reference now extracts (has_errors=false); nine supporting Kani
+harnesses pass (row-level pieces); allocation failure is tested through the
+shipped constructor and error mapper for all three variants (rollback stays
+the named P2 runtime fact); ELFs unchanged (f9ecbc27…/3f21a42f…). Open: the
+row equivalence and assembly/ownership composition of the constructor proof
+(resource-heavy attempts stopped, caps not raised), and the broader caller
+`prepared_claim`, which hits a pinned-Aeneas internal error
+(`Not_found`, InterpReduceCollapse.ml:1991) reached through `Weights::pair`.
+Ruling for prep8: (1) finish the constructor equivalence by composing the
+nine passing harnesses with Kani function contracts (`stub_verified`) so the
+assembly harness only reasons about the row-level contracts; (2) for
+`prepared_claim`, reduce the Aeneas internal error to the smallest
+reproducing Rust function, then either reshape a cfg-gated reference form
+around it (Kani-equivalent, as for the expansion) or record the minimal
+reproducer as a tool defect with the exact construct, for a decision on a
+tool upgrade.
