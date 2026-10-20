@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Focused local Lean attempts; private objects, shared lock, complete receipts."""
-import os,sys,json,time,hashlib,subprocess,pathlib
+import os,sys,json,time,hashlib,subprocess,pathlib,re
 root=pathlib.Path(__file__).resolve().parents[5]
 base=root/'docs/research/100bit-spend-path-20261013'
 ev=pathlib.Path(__file__).resolve().parent
@@ -24,7 +24,7 @@ lock=pathlib.Path('/tmp/aspis-local-lean.lock.d')
 while True:
  try:lock.mkdir()
  except FileExistsError:time.sleep(15);continue
- running=subprocess.run(['pgrep','-fl','lean'],text=True,capture_output=True).stdout
+ running=subprocess.run(['pgrep','-fl','/bin/lean '],text=True,capture_output=True).stdout
  if any('-M4400' in line for line in running.splitlines()):lock.rmdir();time.sleep(30);continue
  break
 try:
@@ -36,7 +36,7 @@ finally:lock.rmdir()
 log=(out/'lean.log').read_text(); timing=(out/'time.log').read_text()
 rss=next((int(x.split()[0]) for x in timing.splitlines() if 'maximum resident set size' in x),None)
 swap=next((int(x.split()[0]) for x in timing.splitlines() if 'swaps' in x),None)
-receipt={**cmd,'exit':result.returncode,'wall_seconds':wall,'peak_rss_bytes':rss,'swaps':swap,'axioms':[x for x in log.splitlines() if 'depends on axioms' in x or 'does not depend on any axioms' in x],'errors':log if result.returncode else []}
+receipt={**cmd,'exit':result.returncode,'wall_seconds':wall,'peak_rss_bytes':rss,'swaps':swap,'axioms':re.findall(r"'[^'\n]+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms)",log),'errors':log if result.returncode else []}
 (out/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
 manifest=ev/'manifest.json'
 data=json.loads(manifest.read_text()) if manifest.exists() else {'schema':'focused-extractor-proof-packet-v1','attempts':[]}

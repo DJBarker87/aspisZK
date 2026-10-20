@@ -1,0 +1,79 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-dec/docs/research/100bit-spend-path-20261013/lean/OracleDecisionFeasibilityCompiler.lean:70:6: error: Ambiguous term
+  experiment_eval
+Possible interpretations:
+  RawCutProverCompiler.experiment_eval : ∀ (P : Prover) (V : Public → Proof → Program Bytes State Bool)
+    (H : Bytes → State),
+    eval H (RawCutProverCompiler.experiment P V) =
+      ((eval H P).1 ++ (eval H (V (eval H P).2.1 (eval H P).2.2)).1, (eval H P).2,
+        (eval H (V (eval H P).2.1 (eval H P).2.2)).2)
+  
+  FS2.experiment_eval : ∀ (P : Program ?m.57 ?m.58 ?m.56) (V : ?m.55 → ?m.56 → Program ?m.57 ?m.58 Bool) (x : ?m.55)
+    (H : ?m.57 → ?m.58),
+    eval H (FS2.experiment P V x) =
+      ((eval H P).1 ++ (eval H (V x (eval H P).2)).1, (eval H P).2, (eval H (V x (eval H P).2)).2)
+  
+  FS.experiment_eval : ∀ (P : Program ?m.57 (Block ?m.58 ?m.59) ?m.56)
+    (V : ?m.55 → ?m.56 → Program ?m.57 (Block ?m.58 ?m.59) Bool) (x : ?m.55) (H : ?m.57 → Block ?m.58 ?m.59),
+    eval H (FS.experiment P V x) =
+      ((eval H P).1 ++ (eval H (V x (eval H P).2)).1, (eval H P).2, (eval H (V x (eval H P).2)).2)
+/Users/dominic/ZK/.worktrees/cx-oracle-dec/docs/research/100bit-spend-path-20261013/lean/OracleDecisionFeasibilityCompiler.lean:69:81: error: unsolved goals
+decoder : LiteralByteProtocol.Decoder
+d : Decision
+buildWords : RunView → Words
+P : Prover
+H : Bytes → State
+⊢ eval H
+      (RawCutProverCompiler.experiment (compiled decoder d buildWords P)
+        (OracleDecisionFeasibilityCore.verifier decoder d)) =
+    let v := eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier decoder d));
+    (v.1 ++ (eval H (OracleDecisionFeasibilityCore.verifier decoder d v.2.1.1 v.2.1.2)).1,
+      (v.2.1.1, proof (buildWords v) v.2.1.2), v.2.2)
+/Users/dominic/ZK/.worktrees/cx-oracle-dec/docs/research/100bit-spend-path-20261013/lean/OracleDecisionFeasibilityCompiler.lean:102:6: error: Ambiguous term
+  experiment_eval
+Possible interpretations:
+  RawCutProverCompiler.experiment_eval : ∀ (P : Prover) (V : Public → Proof → Program Bytes State Bool)
+    (H : Bytes → State),
+    eval H (RawCutProverCompiler.experiment P V) =
+      ((eval H P).1 ++ (eval H (V (eval H P).2.1 (eval H P).2.2)).1, (eval H P).2,
+        (eval H (V (eval H P).2.1 (eval H P).2.2)).2)
+  
+  FS2.experiment_eval : ∀ (P : Program ?m.31 ?m.32 ?m.30) (V : ?m.29 → ?m.30 → Program ?m.31 ?m.32 Bool) (x : ?m.29)
+    (H : ?m.31 → ?m.32),
+    eval H (FS2.experiment P V x) =
+      ((eval H P).1 ++ (eval H (V x (eval H P).2)).1, (eval H P).2, (eval H (V x (eval H P).2)).2)
+  
+  FS.experiment_eval : ∀ (P : Program ?m.31 (Block ?m.32 ?m.33) ?m.30)
+    (V : ?m.29 → ?m.30 → Program ?m.31 (Block ?m.32 ?m.33) Bool) (x : ?m.29) (H : ?m.31 → Block ?m.32 ?m.33),
+    eval H (FS.experiment P V x) =
+      ((eval H P).1 ++ (eval H (V x (eval H P).2)).1, (eval H P).2, (eval H (V x (eval H P).2)).2)
+/Users/dominic/ZK/.worktrees/cx-oracle-dec/docs/research/100bit-spend-path-20261013/lean/OracleDecisionFeasibilityCompiler.lean:100:108: error: unsolved goals
+decoder : LiteralByteProtocol.Decoder
+d : Decision
+buildWords : RunView → Words
+P : Prover
+H : Bytes → State
+⊢ firstReads emptyTable
+      (have v := eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier decoder d));
+        (v.1 ++ (eval H (OracleDecisionFeasibilityCore.verifier decoder d v.2.1.1 v.2.1.2)).1,
+          (v.2.1.1, proof (buildWords v) v.2.1.2), v.2.2)).1 =
+    firstReads emptyTable
+      (eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier decoder d))).1
+'AspisR1.OracleDecisionFeasibilityCompiler.verifierFrom_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionFeasibilityCompiler.verifier_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionFeasibilityCompiler.eval_compiled' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionFeasibilityCompiler.compiled_experiment_eval' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OracleDecisionFeasibilityCompiler.public_and_acceptance' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OracleDecisionFeasibilityCompiler.firstReads_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OracleDecisionFeasibilityCompiler.commitment_cut_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

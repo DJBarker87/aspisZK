@@ -1,0 +1,97 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-dec/docs/research/100bit-spend-path-20261013/lean/OracleDecisionFeasibilityBudget.lean:44:4: error: Tactic `apply` failed: could not unify the type of `Prod.ext ?m.274 rfl`
+  ?m.272 = ?m.272
+with the goal
+  ((eval H
+            (LiteralByteSampler.samp (33 - (n + 1))
+                ((LiteralByteProtocol.protocol D).transcript H pub pf (33 - (n + 1)))
+                (pf (33 - (n + 1)))).toProgram).1 ++
+        (let final := eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33));
+          ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H pub pf (33 - n + j)).toProgram).1)
+                  (List.range n)).flatten ++
+              final.1,
+            final.2)).1,
+      (let final := eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33));
+        ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H pub pf (33 - n + j)).toProgram).1)
+                (List.range n)).flatten ++
+            final.1,
+          final.2)).2) =
+    ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H pub pf (33 - (n + 1) + j)).toProgram).1)
+            (List.range (n + 1))).flatten ++
+        (eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33))).1,
+      (eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33))).2)
+
+case succ
+D : LiteralByteProtocol.Decoder
+dO : Decision
+H : Bytes → State
+pub : Public
+pf : Proof
+n : ℕ
+ih :
+  n ≤ 33 →
+    eval H
+        (OracleDecisionFeasibilityCore.verifierFrom D dO pf n
+          ((LiteralByteProtocol.protocol D).transcript H pub pf (33 - n))) =
+      let final := eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33));
+      ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H pub pf (33 - n + j)).toProgram).1)
+              (List.range n)).flatten ++
+          final.1,
+        final.2)
+hn : n + 1 ≤ 33
+hi : 33 - (n + 1) + 1 = 33 - n
+hstep :
+  ((LiteralByteProtocol.protocol D).transcript H pub pf (33 - (n + 1))).ext (pf (33 - (n + 1)))
+      (eval H
+          (LiteralByteSampler.samp (33 - (n + 1)) ((LiteralByteProtocol.protocol D).transcript H pub pf (33 - (n + 1)))
+              (pf (33 - (n + 1)))).toProgram).2 =
+    (LiteralByteProtocol.protocol D).transcript H pub pf (33 - n)
+⊢ ((eval H
+            (LiteralByteSampler.samp (33 - (n + 1))
+                ((LiteralByteProtocol.protocol D).transcript H pub pf (33 - (n + 1)))
+                (pf (33 - (n + 1)))).toProgram).1 ++
+        (let final := eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33));
+          ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H pub pf (33 - n + j)).toProgram).1)
+                  (List.range n)).flatten ++
+              final.1,
+            final.2)).1,
+      (let final := eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33));
+        ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H pub pf (33 - n + j)).toProgram).1)
+                (List.range n)).flatten ++
+            final.1,
+          final.2)).2) =
+    ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H pub pf (33 - (n + 1) + j)).toProgram).1)
+            (List.range (n + 1))).flatten ++
+        (eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33))).1,
+      (eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33))).2)
+/Users/dominic/ZK/.worktrees/cx-oracle-dec/docs/research/100bit-spend-path-20261013/lean/OracleDecisionFeasibilityBudget.lean:92:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  0 ≤ c ≤ 600
+  c - d ≥ -561
+  b ≥ 0
+  b + d - e ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - f ≤ -1162
+where
+ a := ↑Q
+ b := ↑(eval H P).1.length
+ c := ↑B
+ d := ↑(eval H (OracleDecisionFeasibilityCore.verifier D dO (eval H P).2.1 (eval H P).2.2)).1.length
+ e := ↑(firstReads emptyTable
+    ((eval H P).1 ++ (eval H (OracleDecisionFeasibilityCore.verifier D dO (eval H P).2.1 (eval H P).2.2)).1))
+ f := ↑(firstReads emptyTable
+    ((eval H P).1 ++ (eval H (OracleDecisionFeasibilityCore.verifier D dO (eval H P).2.1 (eval H P).2.2)).1,
+        (eval H P).2, (eval H (OracleDecisionFeasibilityCore.verifier D dO (eval H P).2.1 (eval H P).2.2)).2).1)
+'AspisR1.OracleDecisionFeasibilityBudget.from_eval' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionFeasibilityBudget.verifier_eval' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OracleDecisionFeasibilityBudget.queries' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionFeasibilityBudget.original_reads' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

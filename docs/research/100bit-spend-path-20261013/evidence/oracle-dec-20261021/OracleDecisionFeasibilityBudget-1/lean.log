@@ -1,0 +1,101 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-dec/docs/research/100bit-spend-path-20261013/lean/OracleDecisionFeasibilityBudget.lean:12:46: error: unexpected token '('; expected command
+/Users/dominic/ZK/.worktrees/cx-oracle-dec/docs/research/100bit-spend-path-20261013/lean/OracleDecisionFeasibilityBudget.lean:27:27: error: Invalid simp theorem: Expected a proposition, but found
+  LiteralByteProtocol.Decoder → Decision → Proof → ℕ → LiteralTranscript.Prefix → Program Bytes State Bool
+/Users/dominic/ZK/.worktrees/cx-oracle-dec/docs/research/100bit-spend-path-20261013/lean/OracleDecisionFeasibilityBudget.lean:27:9: error: unsolved goals
+case zero
+D : LiteralByteProtocol.Decoder
+dO : Decision
+H : Bytes → State
+pub : Public
+pf : Proof
+a✝ : 0 ≤ 33
+⊢ eval H
+      (OracleDecisionFeasibilityCore.verifierFrom D dO pf 0 ((LiteralByteProtocol.protocol D).transcript H pub pf 33)) =
+    eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33))
+/Users/dominic/ZK/.worktrees/cx-oracle-dec/docs/research/100bit-spend-path-20261013/lean/OracleDecisionFeasibilityBudget.lean:31:15: error: Ambiguous term
+  verifierFrom
+Possible interpretations:
+  OracleDecisionFeasibilityCore.verifierFrom : LiteralByteProtocol.Decoder →
+    Decision → Proof → ℕ → LiteralTranscript.Prefix → Program Bytes State Bool
+  
+  FS2.verifierFrom : FS2.Protocol ?m.141 ?m.142 ?m.143 ?m.144 ?m.145 ?m.146 ?m.147 →
+    (Prefix ?m.141 ?m.142 ?m.143 → ?m.142 → Bool) →
+      ?m.145 → ℕ → Prefix ?m.141 ?m.142 ?m.143 → Program ?m.146 ?m.147 Bool
+/Users/dominic/ZK/.worktrees/cx-oracle-dec/docs/research/100bit-spend-path-20261013/lean/OracleDecisionFeasibilityBudget.lean:32:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval ?H (AspisV8R19.OracleProgramOps.bind ?p ?next)
+in the target expression
+  eval H
+      (OracleDecisionFeasibilityCore.verifierFrom D dO pf (n + 1)
+        ((LiteralByteProtocol.protocol D).transcript H pub pf (33 - (n + 1)))) =
+    ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H pub pf (33 - (n + 1) + j)).toProgram).1)
+            (List.range (n + 1))).flatten ++
+        (eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33))).1,
+      (eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33))).2)
+
+case succ
+D : LiteralByteProtocol.Decoder
+dO : Decision
+H : Bytes → State
+pub : Public
+pf : Proof
+n : ℕ
+ih :
+  n ≤ 33 →
+    eval H
+        (OracleDecisionFeasibilityCore.verifierFrom D dO pf n
+          ((LiteralByteProtocol.protocol D).transcript H pub pf (33 - n))) =
+      let final := eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33));
+      ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H pub pf (33 - n + j)).toProgram).1)
+              (List.range n)).flatten ++
+          final.1,
+        final.2)
+hn : n + 1 ≤ 33
+hi : 33 - (n + 1) + 1 = 33 - n
+⊢ eval H
+      (OracleDecisionFeasibilityCore.verifierFrom D dO pf (n + 1)
+        ((LiteralByteProtocol.protocol D).transcript H pub pf (33 - (n + 1)))) =
+    ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H pub pf (33 - (n + 1) + j)).toProgram).1)
+            (List.range (n + 1))).flatten ++
+        (eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33))).1,
+      (eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33))).2)
+/Users/dominic/ZK/.worktrees/cx-oracle-dec/docs/research/100bit-spend-path-20261013/lean/OracleDecisionFeasibilityBudget.lean:86:6: error: Ambiguous term
+  experiment_eval
+Possible interpretations:
+  RawCutProverCompiler.experiment_eval : ∀ (P : Prover) (V : Public → Proof → Program Bytes State Bool)
+    (H : Bytes → State),
+    eval H (RawCutProverCompiler.experiment P V) =
+      ((eval H P).1 ++ (eval H (V (eval H P).2.1 (eval H P).2.2)).1, (eval H P).2,
+        (eval H (V (eval H P).2.1 (eval H P).2.2)).2)
+  
+  FS2.experiment_eval : ∀ (P : Program ?m.64 ?m.65 ?m.63) (V : ?m.62 → ?m.63 → Program ?m.64 ?m.65 Bool) (x : ?m.62)
+    (H : ?m.64 → ?m.65),
+    eval H (FS2.experiment P V x) =
+      ((eval H P).1 ++ (eval H (V x (eval H P).2)).1, (eval H P).2, (eval H (V x (eval H P).2)).2)
+  
+  FS.experiment_eval : ∀ (P : Program ?m.64 (Block ?m.65 ?m.66) ?m.63)
+    (V : ?m.62 → ?m.63 → Program ?m.64 (Block ?m.65 ?m.66) Bool) (x : ?m.62) (H : ?m.64 → Block ?m.65 ?m.66),
+    eval H (FS.experiment P V x) =
+      ((eval H P).1 ++ (eval H (V x (eval H P).2)).1, (eval H P).2, (eval H (V x (eval H P).2)).2)
+/Users/dominic/ZK/.worktrees/cx-oracle-dec/docs/research/100bit-spend-path-20261013/lean/OracleDecisionFeasibilityBudget.lean:84:69: error: unsolved goals
+D : LiteralByteProtocol.Decoder
+dO : Decision
+P : Prover
+Q B : ℕ
+H : Bytes → State
+hprover : (eval H P).1.length ≤ Q
+hdecision :
+  ∀ (pub : LiteralTranscript.Public) (pf : LiteralProtocol.Proof),
+    (eval H (onBytes dO ((LiteralByteProtocol.protocol D).transcript H pub pf 33) (pf 33))).1.length ≤ B
+hbudget : 561 + B ≤ 1161
+⊢ firstReads emptyTable (eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier D dO))).1 ≤
+    Q + 1161
+'AspisR1.OracleDecisionFeasibilityBudget.from_eval' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionFeasibilityBudget.verifier_eval' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OracleDecisionFeasibilityBudget.queries' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionFeasibilityBudget.original_reads' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
