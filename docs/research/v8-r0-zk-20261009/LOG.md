@@ -7204,3 +7204,19 @@ The current release privacy theorem is
 `PrivacyR1FinalProtocolHistoryReal`. The remaining premises are source
 execution joins (the ModelExecutionJoins and the builder/SourceIdentification
 rows of D89). 10 modules, 41 audits, zero swap.
+
+## D95 — prover commitment part 4: oracle-parametric refinement, sampler open (2026-10-20, lead)
+
+Landed from `codex/cx-prover-commit4-20261021` (`r1p-final/PROVER-COMMIT4-20261021.md`).
+The D92 oracle route works. Eleven focused Kani checks pass with a shared
+memoised symbolic oracle, including the `HOST_HASH` function-pointer route
+and the packed-leaf, reserved-salt and expander limb transitions. The
+callback refinement is proved in Lean parametric in the byte oracle and
+specialised to the ROM; 14 theorems, env J 8157, standard axioms. Shipped
+additions (cfg-gated, additions only in `state_only_{entropy,hiding}.rs`) were
+rebuilt and all three frozen ELFs are byte-identical. A checked theorem shows
+that zero-filling the unused H1 tape coordinates is not an equal-fibre
+adapter. Still open: both full 16-try sampler comparisons timed out at 600 s
+without a verdict (not rerun); a valid completion or quotient-tape
+construction; sampler composition; and the caller/carrier/exhaustion/count
+joins. All nine checklist rows stay open.
