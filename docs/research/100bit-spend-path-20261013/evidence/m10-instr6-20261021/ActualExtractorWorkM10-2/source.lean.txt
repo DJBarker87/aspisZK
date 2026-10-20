@@ -1,0 +1,113 @@
+import GSByteBankWorkM10
+import GSPointBatchWorkM10
+import GSPostProcessCompleteM10
+import BinPublicRecoverySharedStageM10
+import RawRecordedEagerExtractorReadsBin
+import OptionWorkBoundM10
+
+/-! Whole extractor work composition. Recovery/point arrays and the byte bank
+are eager; public failure and private aborts still have the same returned
+value. All later word reads use retained typed arrays. The sole component
+premise is the fixed-shape public image inverse/check bound. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.ActualExtractorWorkM10
+open AspisWideTower AspisV8R15.ExactTowerBase SpendRelation
+open AspisPool.AlgorithmicCircleDecoderV7
+open CanonicalCutEnrichedTranscript (Words)
+open RawRecordedEagerExtractorReadsBin (RunView Coins continueWithWords)
+open GSPostProcessWorkM10
+
+def received (words : Words) : Fin 29 → InitialWord WideExact :=
+  LiteralTypedWords.word ExactBaseProjection.embed (algebraMap QM31Exact WideExact) words.c1 words.c2
+
+def continuation (image : PublicImage) (pub : R0P.Public M31Exact) (words : Words) (coins : Coins) :
+    Option Wspend × Nat :=
+  let W := received words
+  let points := GSPointBatchWorkM10.inputs W (fun _ => words.final)
+  let bank := GSByteBankWorkM10.run points.1 coins
+  let post := PublicParserWork.bind (bank.1,0) (GSPostProcessCompleteM10.eval image pub W)
+  (post.1,points.2+bank.2+post.2+1000)
+
+attribute [local irreducible] GSPointBatchWorkM10.inputs GSByteBankWorkM10.run
+  GSPostProcessCompleteM10.eval
+
+theorem continuation_value (image : PublicImage) (pub : R0P.Public M31Exact) (words : Words) (coins : Coins) :
+    (continuation image pub words coins).1 = continueWithWords pub words coins := by
+  simp only [continuation,PublicParserWork.bind_value,GSPostProcessCompleteM10.value,
+    GSByteBankWorkM10.value,GSPointBatchWorkM10.inputs_value]
+  rfl
+
+@[never_extract,noinline] def continuationBudget (C : Nat) : Nat :=
+  GSPointBatchWorkM10.budget+(GSByteBankWorkM10.budget+1)+
+    (GSPostProcessCompleteM10.budget C+1)+1000
+
+theorem continuation_work (image : PublicImage) (C : Nat) (hi : PublicImageBound image C)
+    (pub : R0P.Public M31Exact) (hp : pub.nextPairIndex < 2^64) (words : Words) (coins : Coins) :
+    (continuation image pub words coins).2 ≤ continuationBudget C := by
+  let W := received words
+  let points := GSPointBatchWorkM10.inputs W (fun _ => words.final)
+  let bank := GSByteBankWorkM10.run points.1 coins
+  have hpw := GSPointBatchWorkM10.inputs_work W (fun _ => words.final)
+  have hbw := GSByteBankWorkM10.work points.1 coins
+  have hpost := OptionWorkBoundM10.bind_bound (bank.1,0)
+    (GSPostProcessCompleteM10.eval image pub W) 0 (GSPostProcessCompleteM10.budget C)
+    (Nat.le_refl _) (fun out ho =>
+      GSPostProcessCompleteM10.work image C hi pub hp W out
+        (GSByteBankWorkM10.bounded points.1 coins out ho))
+  exact Nat.add_le_add_right (Nat.add_le_add (Nat.add_le_add hpw hbw) hpost) 1000
+
+theorem parsed_index (bytes : List PublicPrimitiveDecoderWork.Byte) (pub : R0P.Public M31Exact)
+    (h : (PublicParserWork.parsePublic bytes).1 = some pub) : pub.nextPairIndex < 2^64 := by
+  rw [PublicParserWork.parsePublic_value] at h
+  cases hd : SemanticPublicWire.decode bytes with
+  | none => simp [SemanticPublicWire.parsePublic,hd] at h
+  | some wire =>
+    simp only [SemanticPublicWire.parsePublic,hd] at h
+    change (if PublicOptionShape.check (SemanticPublicWire.toPublic wire) = true
+      then some (SemanticPublicWire.toPublic wire) else none) = some pub at h
+    split at h
+    · cases h
+      exact SemanticPublicWire.toPublic_index_bound wire
+    · cases h
+
+def eval (image : PublicImage) (run : RunView) (coins : Coins) : Option Wspend × Nat :=
+  let words := BinPublicRecoverySharedStageM10.stage run
+  let post := PublicParserWork.bind (PublicParserWork.parsePublic run.2.1.1.pubBytes)
+    (fun pub => continuation image pub words.1 coins)
+  (post.1,words.2+post.2+1000)
+
+attribute [local irreducible] BinPublicRecoverySharedStageM10.stage continuation
+
+theorem value (image : PublicImage) (run : RunView) (coins : Coins) :
+    (eval image run coins).1 = RawRecordedPublicSpendExtractorBin.extract run coins := by
+  simp only [eval,PublicParserWork.bind_value,PublicParserWork.parsePublic_value,
+    continuation_value,BinPublicRecoverySharedStageM10.stage_value]
+  have hv := RawRecordedEagerExtractorReadsBin.value run coins
+  simpa only [RawRecordedEagerExtractorReadsBin.eval,RawRecordedEagerExtractorReadsBin.optionReads_value,
+    RawCutWordsFromRunPublicValidBin.runDecodedPublic] using hv
+
+@[never_extract,noinline] def workConstant (C : Nat) : Nat :=
+  4000000000000+110260+continuationBudget C+1+1000
+
+theorem work (image : PublicImage) (C : Nat) (hi : PublicImageBound image C) (run : RunView) (coins : Coins) :
+    (eval image run coins).2 ≤ workConstant C*(run.1.length+1) := by
+  have hw := BinPublicRecoverySharedStageM10.stage_work run
+  have hp := OptionWorkBoundM10.bind_bound (PublicParserWork.parsePublic run.2.1.1.pubBytes)
+    (fun pub => continuation image pub (BinPublicRecoverySharedStageM10.stage run).1 coins)
+    110260 (continuationBudget C) (PublicParserWork.parsePublic_work _)
+    (fun pub hpub => continuation_work image C hi pub (parsed_index _ pub hpub) _ coins)
+  have hc : 110260+continuationBudget C+1+1000 ≤
+      (110260+continuationBudget C+1+1000)*(run.1.length+1) :=
+    Nat.le_mul_of_pos_right _ (by omega)
+  change _+_+1000 ≤ _
+  unfold workConstant
+  nlinarith
+
+#print axioms continuation_value
+#print axioms continuation_work
+#print axioms parsed_index
+#print axioms value
+#print axioms work
+end AspisR1.ActualExtractorWorkM10
+end

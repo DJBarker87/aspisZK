@@ -1,0 +1,54 @@
+import GSPostProcessWorkM10
+import SharedFiniteMaterializationM10
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.GSPostProcessCompleteM10
+open AspisWideTower AspisPool.AlgorithmicCircleDecoderV7 GSFixedInputDecoderFamily
+open GSPostProcessWorkM10
+attribute [local irreducible] close merge scan SharedFiniteMaterializationM10.batch
+
+def eval (image : PublicImage) (pub : R0P.Public AspisV8R15.ExactTowerBase.M31Exact)
+    (W : Fin 29 → InitialWord WideExact) (out : Results WideExact 5) :
+    Option SpendRelation.Wspend × Nat :=
+  let a := SharedFiniteMaterializationM10.batch (fun lane => close image (W lane) ((out.1 lane).getD []))
+  let b := merge W a.1
+  let c := scan pub b.1
+  (c.1,a.2+b.2+c.2+1000)
+
+theorem value (image : PublicImage) (pub : R0P.Public AspisV8R15.ExactTowerBase.M31Exact)
+    (W : Fin 29 → InitialWord WideExact) (out : Results WideExact 5) :
+    (eval image pub W out).1 =
+      LiteralComputedCandidateExtract.extract pub W (GSByteJointSpendExtractor.decodedLists W out) := by
+  simp only [eval,scan_value,merge_value,SharedFiniteMaterializationM10.value,close_value,
+    LiteralComputedCandidateExtract.extract,GSByteJointSpendExtractor.decodedLists]
+
+@[never_extract,noinline] def budget (C : Nat) : Nat :=
+  29*(closeBudget C GSBankOutputEnvelopeM10.candidates+3)+1+
+    FiniteCandidateMergeWorkM10.budget keepBudget equalityBudget GSBankOutputEnvelopeM10.candidates 29 1+
+    (100*(witnessLimit+1)+1)+1000
+
+theorem work (image : PublicImage) (C : Nat) (hi : PublicImageBound image C)
+    (pub : R0P.Public AspisV8R15.ExactTowerBase.M31Exact) (hp : pub.nextPairIndex < 2^64)
+    (W : Fin 29 → InitialWord WideExact) (out : Results WideExact 5)
+    (hb : GSBankOutputEnvelopeM10.Bounded out) : (eval image pub W out).2 ≤ budget C := by
+  let a := SharedFiniteMaterializationM10.batch
+    (fun lane => close image (W lane) ((out.1 lane).getD []))
+  have ha := SharedFiniteMaterializationM10.work
+    (fun lane => close image (W lane) ((out.1 lane).getD []))
+    (closeBudget C GSBankOutputEnvelopeM10.candidates)
+    (fun lane => close_work image C _ hi (W lane) _ (hb lane).1 (hb lane).2)
+  have hl (lane : Fin 29) : (a.1 lane).length ≤ GSBankOutputEnvelopeM10.candidates := by
+    rw [SharedFiniteMaterializationM10.value]
+    exact (close_length image _ _).trans (hb lane).1
+  have hm := merge_work GSBankOutputEnvelopeM10.candidates W a.1 hl
+  have hlen : (merge W a.1).1.length ≤ 100 := by
+    rw [merge_value]
+    exact AspisWide.GSConcreteInitialRuntimeJointCandidates.jointCandidates_length_le_100 W a.1
+  have hs := scan_work pub (merge W a.1).1 hlen hp
+  exact Nat.add_le_add_right (Nat.add_le_add (Nat.add_le_add ha hm) hs) 1000
+
+#print axioms value
+#print axioms work
+end AspisR1.GSPostProcessCompleteM10
+end

@@ -1,0 +1,49 @@
+import GSByteBankWorkM10
+import GSPointBatchWorkM10
+import GSPostProcessCompleteM10
+import BinPublicRecoverySharedStageM10
+import RawRecordedEagerExtractorReadsBin
+import OptionWorkBoundM10
+import ExtractorStagesM10
+
+/-! Whole extractor work composition. Recovery/point arrays and the byte bank
+are eager; public failure and private aborts still have the same returned
+value. All later word reads use retained typed arrays. The sole component
+premise is the fixed-shape public image inverse/check bound. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.ActualContinuationValueM10
+open AspisWideTower AspisV8R15.ExactTowerBase SpendRelation
+open AspisPool.AlgorithmicCircleDecoderV7
+open CanonicalCutEnrichedTranscript (Words)
+open RawRecordedEagerExtractorReadsBin (RunView Coins continueWithWords)
+open GSPostProcessWorkM10
+
+def received (words : Words) : Fin 29 → InitialWord WideExact :=
+  LiteralTypedWords.word ExactBaseProjection.embed (algebraMap QM31Exact WideExact) words.c1 words.c2
+
+def continuation (image : PublicImage) (pub : R0P.Public M31Exact) (words : Words) (coins : Coins) :
+    Option Wspend × Nat :=
+  ExtractorStagesM10.continuation
+    (GSPointBatchWorkM10.inputs (received words) (fun _ => words.final))
+    (fun inputs => GSByteBankWorkM10.run inputs coins)
+    (GSPostProcessCompleteM10.eval image pub (received words))
+
+attribute [local irreducible] GSPointBatchWorkM10.inputs GSByteBankWorkM10.run
+  GSPostProcessCompleteM10.eval GSPointBatchWorkM10.budget GSByteBankWorkM10.budget
+  GSPostProcessCompleteM10.budget continueWithWords GSByteJointSpendExtractor.extract
+  GSConcreteByteDecoderBank.run BinEagerWordsReads.words
+  RawRecordedPublicSpendExtractorBin.extract RawCutWordsFromRunPublicValidBin.runDecodedPublic
+
+theorem continuation_value (image : PublicImage) (pub : R0P.Public M31Exact) (words : Words) (coins : Coins) :
+    (continuation image pub words coins).1 = continueWithWords pub words coins := by
+  unfold continuation
+  rw [ExtractorStagesM10.continuation_value]
+  simp only [GSPostProcessCompleteM10.value,GSByteBankWorkM10.value,GSPointBatchWorkM10.inputs_value]
+  unfold continueWithWords GSByteJointSpendExtractor.extract received
+  rfl
+
+
+#print axioms continuation_value
+end AspisR1.ActualContinuationValueM10
+end

@@ -1,0 +1,60 @@
+import InitialPublicImageWorkM10
+import WideExactNaturalBasisTriangularV8
+
+/-! Degree/stored-array justification for the fixed inverse primitive tariff.
+Parity construction truncates by index; Lagrange reconstruction is bounded by
+node count; every triangular cancellation preserves the same degree cap.
+Canonical CompPoly arrays then have at most degree+1 stored coefficients. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.InitialInverseDegreeEnvelopeM10
+open CompPoly Polynomial
+open AspisWide.InitialParityCBridgeV9 AspisWide.InitialInverseComputable
+open AspisWide.NaturalBasisTriangularV4
+variable {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K] [NeZero (2 : K)] [Fintype K]
+
+theorem parity (q : CPolynomial K) :
+    (evenC q).toPoly.natDegree ≤ 512 ∧ (oddC q).toPoly.natDegree ≤ 511 := by
+  constructor
+  · apply Polynomial.natDegree_le_iff_coeff_eq_zero.mpr
+    intro N hN
+    rw [evenC_coeff]
+    exact if_neg (by omega)
+  · apply Polynomial.natDegree_le_iff_coeff_eq_zero.mpr
+    intro N hN
+    rw [oddC_coeff]
+    exact if_neg (by omega)
+
+theorem lagrange (d : Nat) (nodes : Fin (d+1) → K) (hinj : Function.Injective nodes)
+    (q : CPolynomial K) : (decodeFractionalLiftC d nodes q).toPoly.natDegree ≤ d := by
+  rw [decodeFractionalLiftC_toPoly]
+  apply Polynomial.natDegree_le_of_degree_le
+  have hh := Polynomial.Lagrange.degree_interpolate_le
+    (s := Finset.univ) (v := nodes)
+    (r := fun i => q.toPoly.eval ((1-nodes i)/(1+nodes i))*((1+(1-nodes i)/(1+nodes i))^d)⁻¹)
+    (fun _ _ _ _ h => hinj h)
+  simpa only [Finset.card_univ,Fintype.card_fin,Nat.add_sub_cancel] using hh
+
+def residual (p : CPolynomial K) (n : Nat) : CPolynomial K :=
+  p-CPolynomial.C (p.coeff n/(basis (K := K) n).coeff n)*basis (K := K) n
+
+theorem residual_degree (p : CPolynomial K) (n D : Nat)
+    (hp : p.toPoly.natDegree ≤ D) (hn : n ≤ D) : (residual p n).toPoly.natDegree ≤ D := by
+  rw [residual,CPolynomial.toPoly_sub,CPolynomial.toPoly_mul,CPolynomial.C_toPoly]
+  apply (Polynomial.natDegree_sub_le _ _).trans
+  apply max_le hp
+  have hh := Polynomial.natDegree_C_mul_le (p.coeff n/(basis (K := K) n).coeff n)
+    (basis (K := K) n).toPoly
+  rw [basis_degree] at hh
+  exact hh.trans hn
+
+theorem residual_stored (p : CPolynomial K) (n D : Nat)
+    (hp : p.toPoly.natDegree ≤ D) (hn : n ≤ D) : (residual p n).val.size ≤ D+1 :=
+  GSScalarOperandEnvelopeM10.stored_size_of_degree _ D (residual_degree p n D hp hn)
+
+#print axioms parity
+#print axioms lagrange
+#print axioms residual_degree
+#print axioms residual_stored
+end AspisR1.InitialInverseDegreeEnvelopeM10
+end

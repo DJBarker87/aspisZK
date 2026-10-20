@@ -1,0 +1,51 @@
+import OptionWorkBoundM10
+
+/-! Generic eager stage composition, isolated from concrete large arrays and
+private-tape types. Kernel checking never needs to normalize a concrete point
+array merely to compare two stage-composition proof terms. -/
+set_option autoImplicit false
+namespace AspisR1.ExtractorStagesM10
+
+def continuation {A B C : Type} (points : A × Nat)
+    (bank : A → Option B × Nat) (post : B → Option C × Nat) : Option C × Nat :=
+  let b := bank points.1
+  let c := PublicParserWork.bind (b.1,0) post
+  (c.1,points.2+b.2+c.2+1000)
+
+theorem continuation_value {A B C : Type} (points : A × Nat)
+    (bank : A → Option B × Nat) (post : B → Option C × Nat) :
+    (continuation points bank post).1 = (bank points.1).1.bind (fun b => (post b).1) :=
+  PublicParserWork.bind_value _ _
+
+theorem continuation_work {A B C : Type} (points : A × Nat)
+    (bank : A → Option B × Nat) (post : B → Option C × Nat) (X Y Z : Nat)
+    (hx : points.2 ≤ X) (hy : (bank points.1).2 ≤ Y)
+    (hz : ∀ out, (bank points.1).1 = some out → (post out).2 ≤ Z) :
+    (continuation points bank post).2 ≤ X+Y+(Z+1)+1000 := by
+  have hh := OptionWorkBoundM10.bind_bound ((bank points.1).1,0) post 0 Z (Nat.le_refl _) hz
+  have h := Nat.add_le_add_right (Nat.add_le_add (Nat.add_le_add hx hy) hh) 1000
+  simpa only [continuation,Nat.zero_add] using h
+
+def publicStage {A B C : Type} (words : A × Nat) (parsed : Option B × Nat)
+    (post : B → A → Option C × Nat) : Option C × Nat :=
+  let c := PublicParserWork.bind parsed (fun pub => post pub words.1)
+  (c.1,words.2+c.2+1000)
+
+theorem public_value {A B C : Type} (words : A × Nat) (parsed : Option B × Nat)
+    (post : B → A → Option C × Nat) :
+    (publicStage words parsed post).1 = parsed.1.bind (fun pub => (post pub words.1).1) :=
+  PublicParserWork.bind_value _ _
+
+theorem public_work {A B C : Type} (words : A × Nat) (parsed : Option B × Nat)
+    (post : B → A → Option C × Nat) (X Y Z : Nat)
+    (hx : words.2 ≤ X) (hy : parsed.2 ≤ Y)
+    (hz : ∀ pub, parsed.1 = some pub → (post pub words.1).2 ≤ Z) :
+    (publicStage words parsed post).2 ≤ X+(Y+Z+1)+1000 := by
+  have hh := OptionWorkBoundM10.bind_bound parsed (fun pub => post pub words.1) Y Z hy hz
+  exact Nat.add_le_add_right (Nat.add_le_add hx hh) 1000
+
+#print axioms continuation_value
+#print axioms continuation_work
+#print axioms public_value
+#print axioms public_work
+end AspisR1.ExtractorStagesM10

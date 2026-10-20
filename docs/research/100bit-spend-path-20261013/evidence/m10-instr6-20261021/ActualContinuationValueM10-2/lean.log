@@ -1,0 +1,26 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/ActualContinuationValueM10.lean:40:2: error: Type mismatch
+  ExtractorStagesM10.continuation_refines (GSPointBatchWorkM10.inputs (received words) fun x => words.final)
+    (fun inputs => GSByteBankWorkM10.run inputs coins) (GSPostProcessCompleteM10.eval image pub (received words))
+    (AspisWide.GSConcreteReceivedWordInputs.fromWords (received words) fun x => words.final)
+    (fun inputs => GSConcreteByteDecoderBank.run inputs coins)
+    (fun out =>
+      LiteralComputedCandidateExtract.extract pub (received words)
+        (GSByteJointSpendExtractor.decodedLists (received words) out))
+    (GSPointBatchWorkM10.inputs_value (received words) fun x => words.final)
+    (fun inputs => GSByteBankWorkM10.value inputs coins) fun out =>
+    GSPostProcessCompleteM10.value image pub (received words) out
+has type
+  (ExtractorStagesM10.continuation (GSPointBatchWorkM10.inputs (received words) fun x => words.final)
+        (fun inputs => GSByteBankWorkM10.run inputs coins)
+        (GSPostProcessCompleteM10.eval image pub (received words))).1 =
+    (GSConcreteByteDecoderBank.run
+          (AspisWide.GSConcreteReceivedWordInputs.fromWords (received words) fun x => words.final) coins).bind
+      fun out =>
+      LiteralComputedCandidateExtract.extract pub (received words)
+        (GSByteJointSpendExtractor.decodedLists (received words) out)
+but is expected to have type
+  (continuation image pub words coins).1 = continueWithWords pub words coins
+'AspisR1.ActualContinuationValueM10.continuation_value' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

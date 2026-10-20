@@ -1,0 +1,114 @@
+import GSPostProcessWorkM10
+import BinTypedWordDemandWork
+
+/-! Fixed-shape public image inverse/check. A coordinate query conservatively
+repeats BOTH parity projections, both finite-node Lagrange reconstructions and
+the full triangular cancellation fuel. No sharing of those pure computations
+is assumed. Each finite-node reconstruction has <= d+1 terms and <= d+1
+linear factors per term; polynomial arithmetic is at the fixed degree-2048
+primitive envelope. The output message is explicitly retained as an array.
+This intentionally crude product-of-loop-bounds schedule replaces the narrow
+public-image premise for the concrete extractor. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.InitialPublicImageWorkM10
+open CompPoly AspisWideTower GSPostProcessWorkM10
+open AspisWide.InitialMessageForwardFilterV3
+open AspisWide.InitialMessageComputableV1
+
+def triangular : Nat → Nat
+  | 0 => InitialEncoderScheduleM10.natural 0+4
+  | n+1 => triangular n+InitialEncoderScheduleM10.natural (n+1)+4
+
+theorem triangular_bound (n N : Nat) (hn : n ≤ N) :
+    triangular n ≤ (n+1)*(InitialEncoderScheduleM10.naturalBudget N+4) := by
+  induction n with
+  | zero =>
+    have hh := InitialEncoderScheduleM10.natural_bound 0 N (by omega)
+    simpa only [triangular,Nat.zero_add,Nat.one_mul] using Nat.add_le_add_right hh 4
+  | succ n ih =>
+    have ht := ih (by omega)
+    have hh := InitialEncoderScheduleM10.natural_bound (n+1) N hn
+    simp only [triangular]
+    nlinarith
+
+attribute [local irreducible] triangular InitialEncoderScheduleM10.naturalBudget
+
+-- Includes evaluation of the 513-coefficient parity polynomial, fractional
+-- point generation, linear power fuel, basis products and outer accumulation.
+def lagrange (d : Nat) : Nat := (d+1)*(20*(d+1)+2048)
+
+def coordinateSchedule : Nat :=
+  3*(513+512)+lagrange 512+lagrange 511+2*triangular 511+1000
+
+def coordinateEnvelope : Nat :=
+  3*(513+512)+lagrange 512+lagrange 511+
+    2*(512*(InitialEncoderScheduleM10.naturalBudget 511+4))+1000
+
+theorem coordinate_schedule_bound : coordinateSchedule ≤ coordinateEnvelope := by
+  have hh := triangular_bound 511 511 (Nat.le_refl _)
+  exact Nat.add_le_add_right (Nat.add_le_add_left (Nat.mul_le_mul_left 2 hh) _) _
+
+def coordinateCost : Nat := coordinateSchedule*InitialEncoderScheduleM10.primitive
+
+def coordinateBudget : Nat := coordinateEnvelope*InitialEncoderScheduleM10.primitive
+
+def message (q : CPolynomial WideExact) : Message × Nat :=
+  let table := BinTypedWordDemandWork.materialize (fun i : Fin 1024 =>
+    (decodeMessage publicNodes0 publicNodes1 q i,coordinateCost))
+  (⟨table.1,BinTypedWordDemandWork.materialize_size _⟩,table.2)
+
+attribute [local irreducible] BinTypedWordDemandWork.materialize
+
+theorem message_value (q : CPolynomial WideExact) :
+    (message q).1.read = decodeMessage publicNodes0 publicNodes1 q := by
+  funext i
+  have hh := BinTypedWordDemandWork.materialize_value
+    (fun j : Fin 1024 => (decodeMessage publicNodes0 publicNodes1 q j,coordinateCost)) i
+  unfold BinTypedWordDemandWork.readMaterialized at hh
+  rw [Array.getElem_eq_getD 0] at hh
+  simpa only [message,Message.read] using hh
+
+theorem message_work (q : CPolynomial WideExact) :
+    (message q).2 ≤ 1024*(coordinateBudget+3)+1 :=
+  BinTypedWordDemandWork.materialize_work _ coordinateBudget
+    (fun _ => Nat.mul_le_mul_right _ coordinate_schedule_bound)
+
+def eval (cs : List WideExact) : Option Message × Nat :=
+  let q := CPolynomial.ofArray cs.toArray
+  let m := message q
+  let encoded := InitialEncoderScheduleM10.eval m.1.read
+  ((if encoded.1 == q then some m.1 else none),
+    5*cs.length+m.2+encoded.2+2*(cs.length+1025)+1000)
+
+attribute [local irreducible] message InitialEncoderScheduleM10.eval
+
+theorem value (cs : List WideExact) :
+    ((eval cs).1.map Message.read) = filterPublic (CPolynomial.ofArray cs.toArray) := by
+  simp only [eval,InitialEncoderScheduleM10.value,message_value,filterPublic,filterMessage]
+  split <;> simp only [Option.map_some,Option.map_none,message_value]
+
+@[never_extract,noinline] def budget : Nat :=
+  5*1025+(1024*(coordinateBudget+3)+1)+InitialEncoderScheduleM10.budget+2*(1025+1025)+1000
+
+theorem work (cs : List WideExact) (hs : cs.length = 1025) : (eval cs).2 ≤ budget := by
+  have hm := message_work (CPolynomial.ofArray cs.toArray)
+  have he := InitialEncoderScheduleM10.work (message (CPolynomial.ofArray cs.toArray)).1.read
+  change 5*cs.length+_+_+2*(cs.length+1025)+1000 ≤ _
+  rw [hs]
+  exact Nat.add_le_add_right (Nat.add_le_add_right
+    (Nat.add_le_add (Nat.add_le_add_left hm _) he) _) _
+
+def image : PublicImage := ⟨eval,value⟩
+
+theorem bounded : PublicImageBound image budget := work
+
+#print axioms triangular_bound
+#print axioms coordinate_schedule_bound
+#print axioms message_value
+#print axioms message_work
+#print axioms value
+#print axioms work
+#print axioms bounded
+end AspisR1.InitialPublicImageWorkM10
+end
