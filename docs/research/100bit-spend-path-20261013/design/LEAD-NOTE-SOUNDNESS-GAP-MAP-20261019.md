@@ -313,3 +313,15 @@ reader is kept parametric. Three direct-helper counterexamples show the
 cursor, geometry and residue-phase invariants are necessary; their
 reachability from tx2 is the composition still owed. R22 stage 2: partial,
 pending the concrete backends and loop invariants (R14 refinement).
+
+## Addendum (2026-10-20): R13 partial on the binary format
+
+Codex job cx-r13-refine (cd24eea6f): seven modules, 16 audits, standard
+axioms, ≤ 2.26 GiB (`design/R13-REFINE-20261020.md`). Proved on the
+stage-2 extraction: exact source leaf bytes/tags/salts under the named
+WIRE-TX2 laws, the binary byte-carrier transport, the exhausted terminal
+conditions, equality of the source read set with the Bin model's, and the
+dedup/padding composition to per-query executable path acceptance. R13
+stays OPEN on: the accepted-source-run implication (sorted-key/dedup and
+mutable-array simulation, source padding-scan correctness, whole-run read
+coverage, caller composition), and batch A (stage 1) on the S7 re-pin.
