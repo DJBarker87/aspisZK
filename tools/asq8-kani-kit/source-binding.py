@@ -9,14 +9,18 @@ sha=lambda b:hashlib.sha256(b).hexdigest()
 path='crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs'
 s=(R/path).read_text()
 a=s.index('#[cfg(any(test, kani, aeneas_ref))]\n#[path = "asq8_payment_reference.rs"]')
-b=s.index('pub fn decode_pool_v1_pair_forest_terminal_request_v1(',a)
+b=len(s)
 original=subprocess.check_output(['git','show',f'{BASE}:{path}'],cwd=R)
-assert (s[:a]+s[b:]).encode()==original, 'pre-existing statement source changed'
+assert s[:a].encode()==original, 'pre-existing statement bytes/line numbers changed'
+prior=subprocess.check_output(['git','show',f'3db4afca3:{path}'],cwd=R).decode()
+pa=prior.index('#[cfg(any(test, kani, aeneas_ref))]\n#[path = "asq8_payment_reference.rs"]')
+pb=prior.index('pub fn decode_pool_v1_pair_forest_terminal_request_v1(',pa)
+assert s[a:b]==prior[pa:pb], 'reference text changed during relocation'
 changed=subprocess.check_output(['git','diff','--name-only',BASE,'--','programs','crates'],cwd=R,text=True).splitlines()
 allowed={path,'crates/aspis-statement/src/pool_v1/asq8_kani.rs','crates/aspis-statement/src/pool_v1/asq8_payment_reference.rs'}
 assert set(changed)<=allowed, changed
 files=subprocess.check_output(['git','ls-files','.cargo','crates','programs','Cargo.toml','Cargo.lock','rust-toolchain.toml','docs/research/v8-r0-zk-20261009/refine'],cwd=R,text=True).splitlines()
 inputs={p:sha((R/p).read_bytes()) for p in files if (R/p).is_file()}
 (E/'source-inputs.json').write_text(json.dumps(inputs,indent=2)+'\n')
-(E/'source-binding.json').write_text(json.dumps(dict(base=BASE,revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),existing_terminal_source_unchanged=True,original_terminal_sha256=sha(original),gated_addition_sha256=sha(s[a:b].encode()),changed_rust_files=changed,production_pool_and_verifier_unchanged=True),indent=2)+'\n')
+(E/'source-binding.json').write_text(json.dumps(dict(base=BASE,revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),existing_terminal_source_unchanged=True,existing_terminal_is_exact_prefix=True,reference_text_unchanged_from='3db4afca3',original_terminal_sha256=sha(original),gated_addition_sha256=sha(s[a:b].encode()),changed_rust_files=changed,production_pool_and_verifier_unchanged=True),indent=2)+'\n')
 print(f'{len(inputs)} host inputs pinned; all existing statement, Pool and verifier source unchanged')
