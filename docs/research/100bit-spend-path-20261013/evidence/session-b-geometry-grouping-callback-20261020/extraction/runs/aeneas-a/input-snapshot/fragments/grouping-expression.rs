@@ -1,0 +1,1 @@
+(0..line_z_values.len()).map(|i|core::array::from_fn(|j|flat_inverse[5*i+j])).collect()
