@@ -1,0 +1,45 @@
+import R9DeployedBinaryExperiment
+
+/-! A logical storage codec for the finite output support of one oracle
+program. This is deliberately NOT the frozen 1768-byte checkpoint ABI.
+It makes byte handoff concrete without assuming an impossible encoding of
+arbitrary Lean functions. No finite universe is evaluated. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.R9PoolCheckpointCodec
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+variable {O : Type}
+attribute [local instance] Classical.propDecidable Classical.typeDecidableEq
+
+def support : Program Bytes State O → Finset O
+  | .done x => {x}
+  | .ask _ next => Finset.univ.biUnion (fun a => support (next a))
+
+theorem eval_mem (p : Program Bytes State O) (H : Bytes → State) :
+    (eval H p).2 ∈ support p := by
+  induction p with
+  | done x => exact Finset.mem_singleton_self x
+  | ask i next ih =>
+    exact Finset.mem_biUnion.mpr ⟨H i, Finset.mem_univ _, ih (H i)⟩
+
+def encode (p : Program Bytes State O) (x : O) : Bytes :=
+  List.replicate ((support p).toList.idxOf x) 0
+
+def decode (p : Program Bytes State O) (bytes : Bytes) : Option O :=
+  (support p).toList[bytes.length]?
+
+theorem decode_encode (p : Program Bytes State O) (x : O)
+    (hx : x ∈ support p) : decode p (encode p x) = some x := by
+  simp only [decode, encode, List.length_replicate]
+  exact List.getElem?_idxOf (Finset.mem_toList.mpr hx)
+
+theorem persisted_output (p : Program Bytes State O) (H : Bytes → State) :
+    decode p (encode p (eval H p).2) = some (eval H p).2 :=
+  decode_encode p _ (eval_mem p H)
+
+#print axioms eval_mem
+#print axioms decode_encode
+#print axioms persisted_output
+end AspisR1.R9PoolCheckpointCodec
+end
