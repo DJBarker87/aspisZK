@@ -1,0 +1,11 @@
+theorem no_nonvacuous_specialisation
+    (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool)
+    (s : BoundaryStatements) (evidence : BoundaryEvidence s)
+    (nonvacuous : ∃ (H : Bytes → State) (pub : LiteralTranscript.Public)
+      (pf : LiteralProtocol.Proof),
+      (eval H (RawCutProverCompiler.verifier D d pub pf)).2 = true) :
+    ¬ (∀ P : Prover, ∃ source : (Bytes → State) → SourceInputs,
+      BoundaryEvidence s → ∀ H,
+        FS2.accepts (eval H (original D d P)) →
+          InstanceFields D d P H (source H))

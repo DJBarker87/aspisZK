@@ -41,4 +41,16 @@ for a in manifest['attempts']:
 changes = subprocess.check_output(['git', 'diff', '--name-status', '418a4c9ea', '--'],
                                   cwd=ROOT, text=True)
 assert all(line.startswith('A\t') for line in changes.splitlines()), changes
-print(json.dumps({'status': 'passed', 'modules': results}, indent=2))
+
+expected = {'R16DecisionErasure', 'R16DecisionCheckpoint', 'R16DecisionQueryModel',
+            'R1FinalSoundnessBinPerQueryDecision'}
+assert {a['module'] for a in manifest['attempts'] if a['final_current']} == expected
+before = (HERE / 'signature-before.lean.txt').read_text()
+after = (HERE / 'signature-after.lean.txt').read_text()
+assert before == after
+headline = (PACKET / 'lean/R1FinalSoundnessBinPerQueryR19.lean').read_text()
+start = headline.index('theorem final_soundness')
+assert before == headline[start:headline.index(' :=', start)] + '\n'
+assert (HERE / 'signature.diff').read_text() == ''
+assert 'theorem final_soundness' not in (PACKET / 'lean/R1FinalSoundnessBinPerQueryDecision.lean').read_text()
+print(json.dumps({'status': 'passed', 'modules': results, 'headline': 'R19 unchanged; no premise removal claimed'}, indent=2))
