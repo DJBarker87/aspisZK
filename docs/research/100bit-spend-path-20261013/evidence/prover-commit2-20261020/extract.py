@@ -20,7 +20,7 @@ def reservation(memory_gib):
         (R/'reservation-hold.json').write_text(json.dumps(populated,indent=2)+'\n')
         raise SystemExit(f'RESERVATION HOLD: current populated caps plus {memory_gib} GiB exceed 55 GiB')
     return populated
-pins={'source_revision':'6bb2b9cb1f2517b51763ed09b16b8716d3226caa','tools':[pin(CHARON),pin(AENEAS)],'sources':[pin(R/'src'/p) for p in ['crates/aspis-r1-cost-probe/src/prover.rs','crates/aspis-prover/src/state_only_entropy.rs','crates/aspis-prover/src/state_only_hiding.rs','crates/aspis-core/src/state_only_hiding.rs','crates/aspis-core/src/state_only_private_merkle.rs','Cargo.lock']]}
+pins={'source_revision':'f2a598c6a','tools':[pin(CHARON),pin(AENEAS)],'sources':[pin(R/'src'/p) for p in ['crates/aspis-r1-cost-probe/src/prover.rs','crates/aspis-prover/src/state_only_entropy.rs','crates/aspis-prover/src/state_only_hiding.rs','crates/aspis-core/src/state_only_hiding.rs','crates/aspis-core/src/state_only_private_merkle.rs','Cargo.lock']]}
 (R/'source-pins.json').write_text(json.dumps(pins,indent=2)+'\n')
 def run(label,cmd,memory_gib=6):
     gate=reservation(memory_gib); (R/(label+'-reservation.json')).write_text(json.dumps(gate,indent=2)+'\n')

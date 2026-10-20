@@ -1,0 +1,32 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSaltSource.lean:30:26: error: unsolved goals
+self : Reserved
+hash : Hash
+context : Context
+tag : U8
+index : U32
+binding : Bytes32
+valid :
+  aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.validate_pool_v1_context self context =
+    ok (core.result.Result.Ok ())
+bound : aspis_prover.state_only_entropy.pool_v1_private_attempt_binding hash self.precommit_binding context = ok binding
+⊢ (do
+      let a1 ←
+        hash
+            (Array.make 6#usize
+                [aspis_prover.state_only_entropy.LEAF_SALT_DOMAIN, Array.to_slice binding, self.mask_nonce.to_slice,
+                  (Array.make 1#usize [tag] ⋯).to_slice, (core.num.U32.to_le_bytes index).to_slice,
+                  ⟨↑self.leaf_salt_seed, ⋯⟩]
+                ⋯).to_slice
+      ok (core.result.Result.Ok a1)) =
+    do
+    let answer ←
+      hash
+          (Array.make 6#usize
+              [aspis_prover.state_only_entropy.LEAF_SALT_DOMAIN, Array.to_slice binding, self.mask_nonce.to_slice,
+                (Array.make 1#usize [tag] ⋯).to_slice, (core.num.U32.to_le_bytes index).to_slice,
+                Array.to_slice self.leaf_salt_seed]
+              ⋯).to_slice
+    ok (core.result.Result.Ok answer)
+'R1Z.ProverCommitSaltSource.salt_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

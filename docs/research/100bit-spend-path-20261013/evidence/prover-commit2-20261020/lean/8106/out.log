@@ -1,0 +1,44 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSaltSource.lean:30:26: error: unsolved goals
+self : Reserved
+hash : Hash
+context : Context
+tag : U8
+index : U32
+binding : Bytes32
+valid :
+  aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.validate_pool_v1_context self context =
+    ok (core.result.Result.Ok ())
+bound : aspis_prover.state_only_entropy.pool_v1_private_attempt_binding hash self.precommit_binding context = ok binding
+⊢ (do
+      let s ← lift (Array.to_slice binding)
+      let s1 ← lift self.mask_nonce.to_slice
+      let s2 ← lift (Array.make 1#usize [tag] ⋯).to_slice
+      let a ← lift (core.num.U32.to_le_bytes index)
+      let s3 ← lift a.to_slice
+      let s4 ← Array.Insts.CoreConvertAsRefSlice.as_ref self.leaf_salt_seed
+      let s5 ←
+        lift (Array.make 6#usize [aspis_prover.state_only_entropy.LEAF_SALT_DOMAIN, s, s1, s2, s3, s4] ⋯).to_slice
+      let a1 ← hash s5
+      ok (core.result.Result.Ok a1)) =
+    do
+    let answer ←
+      hash
+          (Array.make 6#usize
+              [aspis_prover.state_only_entropy.LEAF_SALT_DOMAIN, Array.to_slice binding, self.mask_nonce.to_slice,
+                (Array.make 1#usize [tag] ⋯).to_slice, (core.num.U32.to_le_bytes index).to_slice,
+                Array.to_slice self.leaf_salt_seed]
+              ⋯).to_slice
+    ok (core.result.Result.Ok answer)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSaltSource.lean:34:4: warning: This simp argument is unused:
+  Array.Insts.CoreConvertAsRefSlice
+
+Hint: Omit it from the simp argument list.
+  simp [aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.derive_pool_v1_leaf_salt,
+  ̲  ̲ ̲ ̲valid, bound, saltSlices, core.result.Result.Insts.CoreOpsTry.branch,
+      z̵e̵r̵o̵i̵z̵e̵.̵Z̵e̵r̵o̵i̵z̵i̵n̵g̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵o̵n̵v̵e̵r̵t̵A̵s̵R̵e̵f̵.̵a̵s̵_̵r̵e̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵r̵r̵a̵y̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵o̵n̵v̵e̵r̵t̵A̵s̵R̵e̵f̵S̵l̵i̵c̵e̵]̵z̲e̲r̲o̲i̲z̲e̲.̲Z̲e̲r̲o̲i̲z̲i̲n̲g̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲C̲o̲n̲v̲e̲r̲t̲A̲s̲R̲e̲f̲.̲a̲s̲_̲r̲e̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitSaltSource.salt_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

@@ -1,3 +1,9 @@
+> Continuation on `codex/cx-prover-commit2-20261020`: the original stop below
+> is historical. A carried-result loop now translates with the pinned kit.
+> Detailed continuation evidence is under `evidence/prover-commit2-20261020/`.
+> Runtime qualification and source-to-model proofs are in progress; no full
+> checklist-row closure is claimed by this status update.
+
 # Prover commitment source closure — 2026-10-20
 
 Branch `codex/cx-prover-commit-20261020`; source revision
