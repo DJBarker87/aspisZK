@@ -1,0 +1,200 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/PublicParserWork.lean:65:32: error: ambiguous pattern, use fully qualified name, possible interpretations [@_root_.frontier,
+ PublicPrimitiveDecoderWork.frontier]
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/PublicParserWork.lean:70:86: error: unsolved goals
+a n : Digest
+asset : M31
+c : Digest
+xs : List Byte
+⊢ ((SemanticPublicWire.readIndex xs).bind fun a =>
+      (SemanticPublicWire.readFrontier a.2).bind fun a =>
+        (SemanticPublicWire.readDigest a.2).bind fun a => (SemanticPublicWire.readFrontier a.2).bind fun a => sorry.1) =
+    do
+    let __x ← SemanticPublicWire.readIndex xs
+    let __x_1 ← SemanticPublicWire.readFrontier __x.2
+    let __x_2 ← SemanticPublicWire.readDigest __x_1.2
+    let __x_3 ← SemanticPublicWire.readFrontier __x_2.2
+    if __x_3.2.isEmpty = true then
+        some
+          { anchor := a, nullifier := n, assetId := asset, change := c, nextPairIndex := __x.1,
+            snapshotFrontier := __x_1.1, nextRoot := __x_2.1, nextFrontier := __x_3.1 }
+      else none
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/PublicParserWork.lean:71:13: warning: declaration uses `sorry`
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/PublicParserWork.lean:74:8: warning: declaration uses `sorry`
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/PublicParserWork.lean:84:2: warning: 'exact Nat.le_refl _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/PublicParserWork.lean:107:68: error: unsolved goals
+xs : List Byte
+⊢ ((SemanticPublicWire.readDigest xs).bind fun a =>
+      (SemanticPublicWire.readDigest a.2).bind fun a_1 =>
+        (SemanticPublicWire.readField a_1.2).bind fun a_2 =>
+          (SemanticPublicWire.expect 1 a_2.2).bind fun a_3 =>
+            (SemanticPublicWire.readDigest a_3).bind fun a_4 =>
+              (SemanticPublicWire.readDigest a_4.2).bind fun a_5 =>
+                (SemanticPublicWire.expect 0 a_5.2).bind fun a_6 =>
+                  (SemanticPublicWire.decodeAfter a.1 a_1.1 a_2.1 a_5.1 a_6).bind fun a =>
+                    some (Wire.transfer a a_4.1)) =
+    do
+    let __x ← SemanticPublicWire.readDigest xs
+    let __x_1 ← SemanticPublicWire.readDigest __x.2
+    let __x_2 ← SemanticPublicWire.readField __x_1.2
+    let rest ← SemanticPublicWire.expect 1 __x_2.2
+    let __x_3 ← SemanticPublicWire.readDigest rest
+    let __x_4 ← SemanticPublicWire.readDigest __x_3.2
+    let rest ← SemanticPublicWire.expect 0 __x_4.2
+    let c ← SemanticPublicWire.decodeAfter __x.1 __x_1.1 __x_2.1 __x_4.1 rest
+    some (Wire.transfer c __x_3.1)
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/PublicParserWork.lean:112:72: error: unsolved goals
+xs : List Byte
+⊢ ((SemanticPublicWire.readDigest xs).bind fun a =>
+      (SemanticPublicWire.readDigest a.2).bind fun a_1 =>
+        (SemanticPublicWire.readField a_1.2).bind fun a_2 =>
+          (SemanticPublicWire.expect 0 a_2.2).bind fun a_3 =>
+            (SemanticPublicWire.readDigest a_3).bind fun a_4 =>
+              (SemanticPublicWire.expect 1 a_4.2).bind fun a_5 =>
+                (SemanticPublicWire.readField a_5).bind fun a_6 =>
+                  (SemanticPublicWire.decodeAfter a.1 a_1.1 a_2.1 a_4.1 a_6.2).bind fun a =>
+                    some (Wire.withdrawal a a_6.1)) =
+    do
+    let __x ← SemanticPublicWire.readDigest xs
+    let __x_1 ← SemanticPublicWire.readDigest __x.2
+    let __x_2 ← SemanticPublicWire.readField __x_1.2
+    let rest ← SemanticPublicWire.expect 0 __x_2.2
+    let __x_3 ← SemanticPublicWire.readDigest rest
+    let rest ← SemanticPublicWire.expect 1 __x_3.2
+    let __x_4 ← SemanticPublicWire.readField rest
+    let c ← SemanticPublicWire.decodeAfter __x.1 __x_1.1 __x_2.1 __x_3.1 __x_4.2
+    some (Wire.withdrawal c __x_4.1)
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/PublicParserWork.lean:121:6: error: Tactic `apply` failed: could not unify the conclusion of `bind_work (readDigest v.2) ?m.165 2325 ?m.168
+  (readDigest_work v.2)`
+  (bind (readDigest v.2) ?m.165).2 ≤ 2325 + ?m.168 + 1
+with the goal
+  (match v with
+      | (anchor, rest) =>
+        bind (readDigest rest) fun x =>
+          match x with
+          | (nullifier, rest) =>
+            bind (readField rest) fun x =>
+              match x with
+              | (asset, rest) =>
+                bind (expect 1 rest) fun rest =>
+                  bind (readDigest rest) fun x =>
+                    match x with
+                    | (recipient, rest) =>
+                      bind (readDigest rest) fun x =>
+                        match x with
+                        | (change, rest) =>
+                          bind (expect 0 rest) fun rest =>
+                            bind (decodeAfter anchor nullifier asset change rest) fun c =>
+                              pure (Wire.transfer c recipient)).2 ≤
+    107546
+
+Note: The full type of `bind_work (readDigest v.2) ?m.165 2325 ?m.168 (readDigest_work v.2)` is
+  (∀ (v : (Fin 8 → ExactLeafFieldCodec.M31Exact) × List Byte), (?m.165 v).2 ≤ ?m.168) →
+    (bind (readDigest v.2) ?m.165).2 ≤ 2325 + ?m.168 + 1
+
+xs : List Byte
+v : (Fin 8 → ExactLeafFieldCodec.M31Exact) × List Byte
+⊢ (match v with
+      | (anchor, rest) =>
+        bind (readDigest rest) fun x =>
+          match x with
+          | (nullifier, rest) =>
+            bind (readField rest) fun x =>
+              match x with
+              | (asset, rest) =>
+                bind (expect 1 rest) fun rest =>
+                  bind (readDigest rest) fun x =>
+                    match x with
+                    | (recipient, rest) =>
+                      bind (readDigest rest) fun x =>
+                        match x with
+                        | (change, rest) =>
+                          bind (expect 0 rest) fun rest =>
+                            bind (decodeAfter anchor nullifier asset change rest) fun c =>
+                              pure (Wire.transfer c recipient)).2 ≤
+    107546
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/PublicParserWork.lean:143:6: error: Tactic `apply` failed: could not unify the conclusion of `bind_work (readDigest v.2) ?m.165 2325 ?m.168
+  (readDigest_work v.2)`
+  (bind (readDigest v.2) ?m.165).2 ≤ 2325 + ?m.168 + 1
+with the goal
+  (match v with
+      | (anchor, rest) =>
+        bind (readDigest rest) fun x =>
+          match x with
+          | (nullifier, rest) =>
+            bind (readField rest) fun x =>
+              match x with
+              | (asset, rest) =>
+                bind (expect 0 rest) fun rest =>
+                  bind (readDigest rest) fun x =>
+                    match x with
+                    | (change, rest) =>
+                      bind (expect 1 rest) fun rest =>
+                        bind (readField rest) fun x =>
+                          match x with
+                          | (amount, rest) =>
+                            bind (decodeAfter anchor nullifier asset change rest) fun c =>
+                              pure (Wire.withdrawal c amount)).2 ≤
+    105498
+
+Note: The full type of `bind_work (readDigest v.2) ?m.165 2325 ?m.168 (readDigest_work v.2)` is
+  (∀ (v : (Fin 8 → ExactLeafFieldCodec.M31Exact) × List Byte), (?m.165 v).2 ≤ ?m.168) →
+    (bind (readDigest v.2) ?m.165).2 ≤ 2325 + ?m.168 + 1
+
+xs : List Byte
+v : (Fin 8 → ExactLeafFieldCodec.M31Exact) × List Byte
+⊢ (match v with
+      | (anchor, rest) =>
+        bind (readDigest rest) fun x =>
+          match x with
+          | (nullifier, rest) =>
+            bind (readField rest) fun x =>
+              match x with
+              | (asset, rest) =>
+                bind (expect 0 rest) fun rest =>
+                  bind (readDigest rest) fun x =>
+                    match x with
+                    | (change, rest) =>
+                      bind (expect 1 rest) fun rest =>
+                        bind (readField rest) fun x =>
+                          match x with
+                          | (amount, rest) =>
+                            bind (decodeAfter anchor nullifier asset change rest) fun c =>
+                              pure (Wire.withdrawal c amount)).2 ≤
+    105498
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/PublicParserWork.lean:180:11: error: Type mismatch
+  Nat.le_succ ?m.27
+has type
+  ?m.27 ≤ Nat.succ ?m.27
+but is expected to have type
+  (decode []).2 ≤ 110003
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/PublicParserWork.lean:195:62: error: unsolved goals
+xs : List Byte
+⊢ ((SemanticPublicWire.decode xs).bind fun a =>
+      if PublicOptionShape.check (SemanticPublicWire.toPublic a) = true then some (SemanticPublicWire.toPublic a)
+      else none) =
+    do
+    let a ← SemanticPublicWire.decode xs
+    if PublicOptionShape.check (SemanticPublicWire.toPublic a) = true then some (SemanticPublicWire.toPublic a)
+      else none
+'AspisR1.PublicParserWork.decodeTransfer_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.decodeWithdrawal_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.decode_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.parsePublic_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.parsePublic_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.bind_value' does not depend on any axioms
+'AspisR1.PublicParserWork.bind_work' depends on axioms: [propext, Quot.sound]
+'AspisR1.PublicParserWork.readDigest_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.readField_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.readIndex_value' depends on axioms: [propext, Quot.sound]
+'AspisR1.PublicParserWork.readFrontier_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.readDigest_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.readField_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.readIndex_work' depends on axioms: [propext, Quot.sound]
+'AspisR1.PublicParserWork.readFrontier_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.decodeAfter_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.decodeAfter_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.decodeTransfer_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.decodeWithdrawal_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.decode_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

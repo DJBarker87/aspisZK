@@ -1,0 +1,120 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/PublicParserWork.lean:124:6: error: Tactic `apply` failed: could not unify the conclusion of `bind_work (readDigest rest) ?m.181 2325 ?m.184
+  (readDigest_work rest)`
+  (bind (readDigest rest) ?m.181).2 ≤ 2325 + ?m.184 + 1
+with the goal
+  (match (anchor, rest) with
+      | (anchor, rest) =>
+        bind (readDigest rest) fun x =>
+          match x with
+          | (nullifier, rest) =>
+            bind (readField rest) fun x =>
+              match x with
+              | (asset, rest) =>
+                bind (expect 1 rest) fun rest =>
+                  bind (readDigest rest) fun x =>
+                    match x with
+                    | (recipient, rest) =>
+                      bind (readDigest rest) fun x =>
+                        match x with
+                        | (change, rest) =>
+                          bind (expect 0 rest) fun rest =>
+                            bind (decodeAfter anchor nullifier asset change rest) fun c =>
+                              pure (Wire.transfer c recipient)).2 ≤
+    107546
+
+Note: The full type of `bind_work (readDigest rest) ?m.181 2325 ?m.184 (readDigest_work rest)` is
+  (∀ (v : (Fin 8 → ExactLeafFieldCodec.M31Exact) × List Byte), (?m.181 v).2 ≤ ?m.184) →
+    (bind (readDigest rest) ?m.181).2 ≤ 2325 + ?m.184 + 1
+
+xs : List Byte
+anchor : Fin 8 → ExactLeafFieldCodec.M31Exact
+rest : List Byte
+⊢ (match (anchor, rest) with
+      | (anchor, rest) =>
+        bind (readDigest rest) fun x =>
+          match x with
+          | (nullifier, rest) =>
+            bind (readField rest) fun x =>
+              match x with
+              | (asset, rest) =>
+                bind (expect 1 rest) fun rest =>
+                  bind (readDigest rest) fun x =>
+                    match x with
+                    | (recipient, rest) =>
+                      bind (readDigest rest) fun x =>
+                        match x with
+                        | (change, rest) =>
+                          bind (expect 0 rest) fun rest =>
+                            bind (decodeAfter anchor nullifier asset change rest) fun c =>
+                              pure (Wire.transfer c recipient)).2 ≤
+    107546
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/PublicParserWork.lean:146:6: error: Tactic `apply` failed: could not unify the conclusion of `bind_work (readDigest rest) ?m.181 2325 ?m.184
+  (readDigest_work rest)`
+  (bind (readDigest rest) ?m.181).2 ≤ 2325 + ?m.184 + 1
+with the goal
+  (match (anchor, rest) with
+      | (anchor, rest) =>
+        bind (readDigest rest) fun x =>
+          match x with
+          | (nullifier, rest) =>
+            bind (readField rest) fun x =>
+              match x with
+              | (asset, rest) =>
+                bind (expect 0 rest) fun rest =>
+                  bind (readDigest rest) fun x =>
+                    match x with
+                    | (change, rest) =>
+                      bind (expect 1 rest) fun rest =>
+                        bind (readField rest) fun x =>
+                          match x with
+                          | (amount, rest) =>
+                            bind (decodeAfter anchor nullifier asset change rest) fun c =>
+                              pure (Wire.withdrawal c amount)).2 ≤
+    105498
+
+Note: The full type of `bind_work (readDigest rest) ?m.181 2325 ?m.184 (readDigest_work rest)` is
+  (∀ (v : (Fin 8 → ExactLeafFieldCodec.M31Exact) × List Byte), (?m.181 v).2 ≤ ?m.184) →
+    (bind (readDigest rest) ?m.181).2 ≤ 2325 + ?m.184 + 1
+
+xs : List Byte
+anchor : Fin 8 → ExactLeafFieldCodec.M31Exact
+rest : List Byte
+⊢ (match (anchor, rest) with
+      | (anchor, rest) =>
+        bind (readDigest rest) fun x =>
+          match x with
+          | (nullifier, rest) =>
+            bind (readField rest) fun x =>
+              match x with
+              | (asset, rest) =>
+                bind (expect 0 rest) fun rest =>
+                  bind (readDigest rest) fun x =>
+                    match x with
+                    | (change, rest) =>
+                      bind (expect 1 rest) fun rest =>
+                        bind (readField rest) fun x =>
+                          match x with
+                          | (amount, rest) =>
+                            bind (decodeAfter anchor nullifier asset change rest) fun c =>
+                              pure (Wire.withdrawal c amount)).2 ≤
+    105498
+'AspisR1.PublicParserWork.decodeTransfer_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.decodeWithdrawal_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.decode_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.parsePublic_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.parsePublic_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.bind_value' does not depend on any axioms
+'AspisR1.PublicParserWork.bind_work' depends on axioms: [propext, Quot.sound]
+'AspisR1.PublicParserWork.readDigest_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.readField_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.readIndex_value' depends on axioms: [propext, Quot.sound]
+'AspisR1.PublicParserWork.readFrontier_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.readDigest_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.readField_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.readIndex_work' depends on axioms: [propext, Quot.sound]
+'AspisR1.PublicParserWork.readFrontier_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.decodeAfter_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.decodeAfter_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.decodeTransfer_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.decodeWithdrawal_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicParserWork.decode_value' depends on axioms: [propext, Classical.choice, Quot.sound]
