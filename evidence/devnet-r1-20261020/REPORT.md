@@ -1,128 +1,195 @@
-# R1 public devnet attempt — 20 October 2026
+# R1 public devnet resumption — 20 October 2026
 
-Status: **BLOCKED; demo go/no-go is NO-GO on this evidence**. No program was
-deployed and no R1 transaction was submitted. This is not LiteSVM evidence.
+Status: **BLOCKED at the required release identity gate; NO-GO**. The payer
+is funded with **5 SOL**. No deployment, account initialization, proof upload,
+or spend was submitted. The data-only premise in the lead decision is false
+for the frozen ELF: its deployment IDs are SBF instruction immediates.
 
-Branch: `codex/cx-devnet-runner-20261020`; inspected source/base:
-`e90cf2f800f7177e5cca47aa7e5ba59a940130dd`. Host:
-`dombarker@100.108.41.90`; retained task directory:
-`/home/dombarker/project-offloads/codex-cx-devnet-20261020`.
+Branch: `codex/cx-devnet2-20261020`; implementation revision `30eb0519a`;
+base `0c614b660`. Host task directory:
+`dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-devnet-20261020`.
+The earlier blocked attempt remains in commits `4529498e6`, `8f416fb72`
+and the original receipts. This report supersedes its zero-balance status.
 
-## Stage 1 — fresh identities, funding and deploy preflight
+## Stage 1 — deployment constants and frozen/default reproduction
 
-Generated fresh devnet-only keypairs on the host. Directory `keys/` is 0700;
-each key file is 0600. All keys remain there, including unfunded program keys.
-No secret key material, ELF, mainnet identity or real funds were used or committed.
-`receipts/identities.txt` records the public identities and modes.
+`programs/r1-cost-probe/src/deployment_ids.rs` decodes base58 addresses at
+compile time through `option_env!`. The two constants in `r1_pool_adapter.rs`
+use `ASPIS_R1_POOL_PROGRAM_ID` and `ASPIS_R1_REGISTRY_PROGRAM_ID`;
+unset variables retain `[0x41;32]` and `[0x44;32]`. Empty, invalid, overflowing,
+or wrong-length addresses fail compilation. There is no runtime ID decoder,
+no dependency or lockfile change, and no change to admitted routes.
+Source inspection found no additional deployment-specific program ID on these
+routes; policy binding `[7;32]`, profile/release bindings and builtin program
+IDs remain as before.
 
-| Role | Public key (reserved; programs NOT deployed) |
+The final default rebuild is **byte-identical to the frozen ELF**, including
+`.text`: SHA-256 `8cf8d84ed0fe340a190b4f40a9f953f0e0523370299ba3ec8bbed9d65b88ace3`,
+1,405,680 bytes; whole-file and extracted-text `cmp` both exit 0.
+`receipts/build-default/` records the command, environment, revision,
+resource limits, exit, time and hash. `receipts/default-compare/` records the
+`llvm-objdump -h` section inventories and `cmp` results.
+
+## Stage 1 — devnet candidate: identity gate FAILED
+
+The env-supplied build uses the reserved Pool/registry IDs below and compiles
+successfully. Its SHA-256 is
+`a28ce7fd087570b7de3535d07de8c92dec0364197b9fb36c54db28c6632fbf5a`.
+This is a **rejected candidate**, not an admitted devnet release.
+
+| Measurement | Frozen/default | Devnet candidate |
+| --- | ---: | ---: |
+| ELF bytes | 1,405,680 | 1,405,904 |
+| `.text` bytes | 1,368,616 | 1,368,792 |
+| `.rodata` bytes | 20,560 | 20,592 |
+| `.data.rel.ro` bytes | 4,832 | 4,832 |
+| `.text` file offset | 288 (`0x120`) | 288 (`0x120`) |
+
+Extracted `.text` `cmp` exits **1**, first difference at section byte **101**
+(1-based). The Rust byte audit exits **1**: section tables differ, 646,260
+bytes differ over the common file extent, and **zero** contiguous 32-byte
+occurrences of either placeholder exist anywhere in the frozen ELF. There
+are no two 32-byte `.rodata`/`.data` offsets that satisfy the requested patch.
+The ELF has no plain `.data` section.
+
+`llvm-objdump -d` exposes these frozen instruction/file offsets (hex):
+
+| ID | `lddw` instruction offsets in frozen `.text` |
+| --- | --- |
+| Pool `0x4141414141414141` | `0x1b9f0`, `0x1ba20`, `0x20ac0`, `0x20af0` |
+| Registry `0x4444444444444444` | `0x1baa0`, `0x1bad0`, `0x1bc50`, `0x1ced8`, `0x1cf08` |
+
+Each 64-bit immediate occupies two four-byte fields at instruction offset
+`+4` and `+12`. For example, instructions at `0x20ac0` and `0x20af0` load
+Pool placeholder words; subsequent comparisons check all four words of the
+request's Pool ID. Keeping those instruction bytes fixes the authenticated
+ID to the audit placeholder. A data-only substitution cannot change it.
+
+Evidence: `receipts/deployment-identity/` (section inventories, `cmp`,
+instruction excerpts), `receipts/final-native-checks/audit.*` (final Rust
+byte comparison), and [artifacts-sha256.txt](artifacts-sha256.txt).
+The binding common rule says to stop an item whose target is false and
+record the obstruction. Therefore the candidate is retained but not deployed;
+the old CU bound is **not** claimed to carry over through `.text` identity.
+The lead must revise the data-only requirement before this deployment can
+be admitted and measured. No broader on-chain logic change was made here.
+
+## Stage 1 — build attempts, validation and resources
+
+All compilation ran on the host in capped scopes: `MemoryHigh=6G`,
+`MemoryMax=8G`, `MemorySwapMax=0`, `TasksMax=64`; optimized SBF/native,
+`-j 4` for Cargo. The populated reservation observed before the first build
+was three 8-GiB worker scopes plus this task's 8-GiB funding watcher; one
+8-GiB build scope brought the total to 40 GiB, below the 55-GiB limit.
+No other worker was modified or stopped. Expected work was incremental
+compilation, not proof generation or elimination. No Lean ran; `#print
+axioms` is **N/A** for every result here.
+
+Two linker failures are retained in `build-default-failed-linker/` and
+`build-default-failed-concatenated-flags/`: direct SBF `rust-lld` rejects
+`-Wl,--threads=4`, and cargo-build-sbf concatenates the native and target
+flags. Final SBF invocations remove native `RUSTFLAGS` only for that command
+and use `CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS='-C link-arg=--threads=4'`.
+Native checks keep the requested `RUSTFLAGS='-C link-arg=-Wl,--threads=4'`.
+
+An initial `build.rs` implementation compiled but reordered code and failed
+the default pin (`7b631436…`, same size). It was replaced with const evaluation;
+the discarded source is retained only on the host, and its receipts remain
+under `build-default-build-script/` and `default-compare-build-script/`.
+The `*-preformat/` receipts precede final formatting; final builds use the
+committed source and reproduce the same final hashes. These were source or
+linker-environment changes, not unchanged full regressions.
+
+Final focused native program tests pass **34/34**, including the new decoder
+and existing raw-buffer/checkpoint/authentication/route tests. The final byte
+audit deliberately exits **1** on the rejected devnet build. Receipt source
+hashes match revision `30eb0519a`. Final time/RSS/swap measurements are in
+`build-default/time.txt`, `build-devnet/time.txt`, and
+`final-native-checks/{test,audit-build,audit}.time`; each build also records
+cgroup peak memory separately. No full unrelated regression was run.
+
+| Final run at `30eb0519a` | Exit | Wall | Peak RSS KiB | Swaps | Cgroup peak bytes |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Default SBF build | 0 | 2.31 s | 202,748 | 0 | 137,592,832 |
+| Devnet SBF candidate build | 0 | 2.33 s | 202,900 | 0 | 125,394,944 |
+| Native program tests | 0 | 1.54 s | 245,844 | 0 | 160,768,000 (whole native-check scope) |
+| Compile Rust byte auditor | 0 | 0.28 s | 135,792 | 0 | same scope |
+| Byte identity gate | **1** | <0.01 s | 6,160 | 0 | same scope |
+
+SBF logs retain the pre-existing dependency stack diagnostics; successful
+compiler exits are not a claim of a new reachable-stack/CU release audit.
+
+## Stage 1 — funding and retained identities
+
+| Role | Retained public identity |
 | --- | --- |
 | Payer | Xjb7roDVPDSPoZpUmDVUW5SMx21x7oQEg16dhb5TDXD |
 | Verifier | Gk16spfMwbZ1wK1B8Y8upLd7y2DDJQz73iZKU5GEVyBA |
 | Pool | BmsNikL97uF7bb1hMnJxsas7a9LjjK8vvT5Q1b7W34Qs |
 | Registry | 9pWwAcBgwhnkA8JWSA6GvjpYqGzSibLF6GqGH8v6EC9Q |
 
-Confirmed devnet genesis `EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG`.
-Host Solana CLI is 2.3.0. Funding attempts:
+The eight-hour watcher started at **07:43:58 UTC**, verified the devnet
+genesis, and observed 0 lamports at finalized slot **513088749**. Its first
+hourly public `requestAirdrop` retry returned HTTP/RPC **429**, without a
+signature. At the next five-minute poll, **07:48:58 UTC**, it observed
+**5,000,000,000 lamports**, finalized context slot **513090011**, and exited
+successfully. The funding threshold was reached after five minutes; no
+further hourly retry or eight-hour timeout was needed. All requests,
+responses, exits, UTC starts, curl timings, RSS and swaps are preserved in
+`receipts/funding-watch-2/`. The watcher is inactive; it is not left running.
 
-1. `solana --url https://api.devnet.solana.com airdrop 5 --keypair keys/payer.json`:
-   exit 1, "Error: airdrop request failed. This can happen when the rate limit
-   is reached." Subsequent CLI balance: **0 SOL**. Original CLI wall time/RSS
-   were not instrumented; no timing is inferred.
-2. Raw `requestAirdrop` for 1,000,000,000 lamports to the same payer, finalized
-   commitment: curl exit **22**, HTTP/RPC **429**. Exact response in
-   `receipts/airdrop-1.json`: "You've either reached your airdrop limit today
-   or the airdrop faucet has run dry. Please visit https://faucet.solana.com
-   for alternate sources of test SOL". Wall/RSS/swap: `airdrop-1.time`.
+An incoming 5-SOL funding transfer (not signed or submitted by this worker)
+landed at slot **513088870**, with `meta.err=null`, **450 CU**, fee **5,495
+lamports**, and finalized status. Signature:
+[3iX3Lg7…oodirhe](https://explorer.solana.com/tx/3iX3Lg7BRLCF323DYdq9UyHcFDzgzeFFHjR53E8tquhLWeWQkKQtufhFnrR8rdm6YnuZ6HY6vuGkvwY55oodirhe?cluster=devnet).
+Its submission/confirmation wall time was not observed and is not inferred.
+`receipts/funding-source/` contains the signature lookup and transaction meta;
+`signatures.json` records it as external funding, never as an R1/deploy result.
 
-Neither returned a signature. There are no landing slots, CU measurements,
-uploads, or phase timings. Counts: deploys 0; R1 submissions 0; uploads 0.
-`signatures.json` deliberately contains an empty transaction list.
+Final account readback at finalized context slot **513091531** returns 5 SOL
+for the payer and **null for all three reserved program accounts**.
+`keys/` remains 0700 and all four JSON keys 0600. No funds were spent by this
+worker; no refund, key deletion, unlink, burn or authority cleanup occurred.
 
-### Pinned artifacts verified, not deployed
+Rent preflight is a second deployment constraint: RPC quotes **7.142871160
+SOL** for candidate verifier programdata (1,405,904 + 45 bytes), **3.077855160
+SOL** for Pool programdata (605,704 + 45), and **1.064021240 SOL** for registry
+programdata (209,280 + 45): **11.284747560 SOL total**, before program accounts,
+fees, setup or any temporary buffer requirements. Thus the requested 3-SOL
+resume threshold is met, but the 5-SOL balance cannot fund all three programs.
+No partial rent-consuming deployment was attempted while the required
+release identity gate was false. RPC requests/timings: `receipts/rent-preflight/`.
 
-Read-only SHA-256 checks on the retained host artifacts match the adoption pins:
+## Stage 2 — registry, master, lanes, pages, mint and vault
 
-| Program | Bytes | SHA-256 |
-| --- | ---: | --- |
-| Verifier | 1,405,680 | 8cf8d84ed0fe340a190b4f40a9f953f0e0523370299ba3ec8bbed9d65b88ace3 |
-| Pool | 605,704 | 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548 |
-| Registry | 209,280 | 7ad46f0d4b102a7c9699149d23bf6e065b6151feeaca95977d0a3146167d01ab |
+**Not started.** No admitted devnet verifier exists under the data-only
+release requirement. No registry was initialized or frozen, no mint or token
+account was created, and no pool state was initialized. No deployment or
+initialization signatures exist.
 
-Paths and hashes: `receipts/artifacts-source.sha256`. Authoritative build
-features/toolchains: `docs/research/100bit-spend-path-20261013/evidence/format-adopt-20261019/artifacts-sha256.txt`.
-Existing artifacts were inspected; no Rust/SBF build or Lean run was launched.
+## Stage 3 — note deposit, retrying proof, uploads and spend
 
-### Independent source obstruction — fresh program IDs cannot settle
+**Not started.** Deposits, P_R1 retrying proof generation, 3,763-byte TxV1
+uploads plus statement, checkpoint creation, transfer, withdrawal, stage 1
+and stage 2 all remain open. Their CU and wall times are **unmeasured**;
+upload count is **0**. No nullifier/lane/vault state exists to read back.
+A raw-buffer carrier and complete RPC driver are still required; the
+admitted verifier continues to exclude legacy upload tags 4/5/6. The
+compile-time constants change does not create an upload route.
 
-The pinned verifier's `programs/r1-cost-probe/src/r1_pool_adapter.rs`:
+## Stage 4 — negative checks
 
-- Lines 77–79 hardcode Pool `[0x41;32]`, registry `[0x44;32]`, policy `[7;32]`.
-  The program addresses are `5PjDJaGfSPJj4tFzMRCiuuAasKg5n8dJKXKenhuwZexx`
-  and `5bV6jUfhDHCQVA1WfKBUnXUsboJgoKgkzkKcxr3joew5`.
-- `validate_asq8` rejects `request.pool_program != AUDIT_POOL_PROGRAM`
-  with `InvalidInstructionData` before account authentication (line 880).
-- `authenticate_invariant_release_registry` (lines 517–523) requires those
-  Pool/registry identities, zero registry authority and the audit policy.
+**Not run on devnet.** There is no consumed-checkpoint replay or mutated
+proof stage-1 rejection signature. Native unit tests are explicitly not
+reported as these requested RPC outcomes.
 
-Consequently the requested fresh Pool/registry deployments cannot satisfy this
-ELF's settlement path. This is a source-level obstruction, not an observed
-devnet rejection. These three source files (`lib.rs`, `r1_pool_adapter.rs`,
-`pool_route.rs`) match the retained adoption build tree byte for byte, as
-recorded in the SHA receipt. No assumption that fresh keys control the audit
-program IDs is made. Changing these constants changes the verifier ELF and
-requires a new approved release pin and relevant Rust gates.
+## Stage 5 — reproducibility and remaining work
 
-Further, `lib.rs`'s release entrypoint guard calls `pool_route::admitted`, which
-admits only `[3,10]`, `[3,11]` and `ASQ8…`. Legacy upload opcodes 4/5/6 are
-unreachable. The harness's 3,767-byte lifecycle uploads therefore cannot simply
-be submitted to this pinned verifier. A supported writable buffer carrier is
-needed; stage 1 accepts raw buffers of any owner. No carrier was deployed here.
-
-V7 patterns were read using `git show origin/main:<path>` (public config,
-results summary/commands, registry child and lifecycle/simulation scripts).
-The historical V7 summary itself records an identity/artifact blocker; its
-finalized setup signatures are not evidence of any R1 deployment.
-
-## Remaining stages — not started
-
-Stage 1 is incomplete: fund the retained devnet payer, resolve the incompatible
-identity requirements, then deploy and read back matching program bytes with
-finalized signatures/slots. Do not spend rent deploying the incompatible set.
-
-Stages 2–4 remain entirely open: create mint and token accounts; initialize
-registry/master/lanes/pages/vault; deposit a spendable note; generate witnesses;
-prove with `prove_masked_retrying` and feature `r1p-check`; use a supported
-carrier for proof/statement uploads; create verifier checkpoint; transfer and
-withdraw via RPC; record finalized CU/wall measurements and account readbacks;
-test consumed-checkpoint replay and proof mutation rejection.
-
-Stage 5 (the complete spend driver) also remains open. No stub is presented as
-an end-to-end driver. The config and read-only preflight documented separately
-are resumption aids only. Funding alone will not resolve the identity mismatch.
-No refund or key cleanup was attempted; retain every task key.
-
-## Independent resumption tooling — read-only preflight
-
-Added `scripts/r1_devnet_preflight.sh` and public config
-`config/r1-devnet.template.json`; exact commands are in `README.md`.
-These are not the requested stage-3 spend driver and do not advance stage 2.
-Shell syntax validation passed. Host execution completed its observations and
-returned the documented non-readiness exit 4: **0.62 s**, peak **13,728 KiB**,
-**0 swaps** (`receipts/preflight.time`). All five RPC requests succeeded.
-Source revision for program inspection remains the base above; tooling SHA-256
-is recorded in `receipts/preflight-tooling.sha256`.
-
-Finalized account readback at context slot **513087061** returned null for all
-six accounts: payer, fresh verifier, fresh Pool, fresh registry, audit Pool,
-audit registry. Thus the payer has zero lamports, none of the reserved program
-IDs is deployed, and the hardcoded audit programs are also absent at that slot.
-No source-controlled address can be relabeled as a successful deployment.
-
-The TxV1 feature account is present, Feature-program-owned, non-executable,
-with nine-byte data `AQCmWh0AAAAA` (active tag 1); the RPC reports
-`solana-core: 4.4.0-beta.0`, feature set `1855282951`.
-`receipts/preflight/` preserves requests, raw responses, HTTP codes, curl wall
-times and exits. Summary: local ELF pins match **true**, configured IDs match
-pinned verifier **false**, spend ready **false**. Prove/upload/tx1/tx2 timings
-and CU remain **unmeasured**, not zero-valued successful phases.
+Build, byte-audit and bounded funding-watch commands are in [README.md](README.md).
+No partial utility is represented as an end-to-end spend driver. Needed next:
+revise the impossible frozen-text/data-only release decision; admit and
+validate the resulting artifact under that decision; provide sufficient
+funding; then implement/run the carrier and full RPC setup/spend driver,
+collect all phase meta/readbacks and both negative checks. Funding has
+arrived, so this is not the eight-hour funding-timeout fallback. The decisive
+stop is the false release-identity target, as required by the binding rules.

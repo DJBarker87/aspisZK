@@ -1,0 +1,12 @@
+source_revision=30eb0519a86c9c5196ff26489e3aa7f7951a0be9
+Expected time: incremental optimized native compilation and tiny tests/byte comparison; no proof generation.
+All commands in one systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64
+PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin
+RUSTFLAGS=-C link-arg=-Wl,--threads=4
+CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-cx-devnet-20261020/native-target
+cwd=/home/dombarker/project-offloads/codex-cx-devnet-20261020/src
+cargo test --release --offline --locked -j 4 -p aspis-r1-cost-probe-program --features pool-adapter,private-leaf-salts --lib
+rustc --edition=2021 -O -C link-arg=-Wl,--threads=4 scripts/r1_deployment_elf_check.rs -o ../elf-check
+cwd=/home/dombarker/project-offloads/codex-cx-devnet-20261020
+./elf-check /home/dombarker/project-offloads/codex-r1-format-adopt-20261019/artifacts/verifier/aspis_r1_cost_probe_program.so artifacts/devnet/aspis_r1_cost_probe_program.so BmsNikL97uF7bb1hMnJxsas7a9LjjK8vvT5Q1b7W34Qs 9pWwAcBgwhnkA8JWSA6GvjpYqGzSibLF6GqGH8v6EC9Q
+#print axioms: N/A (Rust only)
