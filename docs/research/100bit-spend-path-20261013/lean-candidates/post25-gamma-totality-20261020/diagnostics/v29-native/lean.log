@@ -1,0 +1,24 @@
+/home/dombarker/project-offloads/post25-gamma-scalar-fieldrank-from-block-v29-20261020/sources/GammaCandidateScalarFieldRankFromBlockV29.lean:16:8: error: Type mismatch
+  scalar_true_success_fieldRank D self after payload out hscalar
+has type
+  ∃ block absorbed nextState sample digits,
+    D.digest self.hash (TranscriptSuccess.absorbParts self.state 187#u8 payload) = ok absorbed ∧
+      D.digest self.hash (TranscriptSuccess.readParts absorbed 1#u8) = ok block ∧
+        D.digest self.hash (TranscriptSuccess.readParts absorbed 2#u8) = ok nextState ∧
+          after = { state := nextState, hash := self.hash } ∧
+            AspisR1GammaCaller.sampler.gamma_sample AspisR1GammaCaller.DigitsModel.candidateGammaHelpers block =
+                ok sample ∧
+              AspisR1GammaCaller.DigitsModel.Canonical digits ∧
+                AspisR1.SamplerAddDigits.digitsValue AspisR1.SamplerMachineBounds.P
+                      (AspisR1GammaCaller.DigitsModel.values digits) =
+                    AspisR1.SourceSamplerByteRank.rank block % (AspisR1.SamplerMachineBounds.P ^ 8 - 1) + 1 ∧
+                  OrdinaryCandidateSourceModel.decode out =
+                    R0C.ModuloField.fieldRank
+                      ⟨AspisR1.SourceSamplerByteRank.rank block % (AspisR1.SamplerMachineBounds.P ^ 8 - 1) + 1, ⋯⟩
+of sort `Prop` but is expected to have type
+  Prop
+of sort `Type`
+'AspisR1Post25Transcript.GammaCandidateSourceModel.scalar_true_block_success_fieldRank' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
