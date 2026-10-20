@@ -99,9 +99,32 @@ append/carry and sentinel, and their connection to success of the two
 complete public entry points. The new range/canonicality theorems do not
 silently discharge those obligations.
 
-## Stage 3: shipped runtime join
+## Stage 3: bank aggregation and runtime-join boundary
 
-Pending.
+`BuilderBankCells.copy_cell` identifies the actual extracted Parts dispatcher
+for all in-range rows. `BuilderBankMerge` proves the actual merge-copy and
+merge-check functions equal to the existing checked writers, by symbolic
+suffix induction. `BuilderBankRange` supplies checked iterator advances.
+`BuilderBankStep` proves one actual bank-fill step, including preservation
+of Parts and exact stable/late writes.
+
+`BuilderBankCollect.parts_blocks_length` derives 57 blocks from successful
+execution of actual `parts`, even with a partial closure: no cryptographic
+callee totality or array equality is assumed. `BuilderBankMaterialization`
+then proves every one of the 16,384 stable/late writes by one symbolic
+prefix induction. `banks_table` proves the actual full result has flag true,
+the exact stable/late model tables, and a merged table whose every cell is
+`BuilderBankCells.cell pt (k/1024) (k%1024)`. `BuilderRecordsBankStd.route_std_table`
+composes this with stage 1's P6 mapper route. The only Parts hypothesis is
+actual successful computation, not its size or a bank equality.
+
+This is full-bank equality with the std Parts-table model. It is not yet
+Parts-field equality with the old canonical `blockR/pathR/auxR` composition.
+That content correspondence, the final Vec-to-column wrapper, and the
+successful semantic admission frontier in stage 2 still prevent construction
+of a shipped RustRuntimeJoin. No subtype assuming RspendPlus, source h
+identified definitionally with the canonical h, or fabricated inhabitant is
+introduced. The original RuntimeJoin and release theorem are unchanged.
 
 ## Stage 4: real execution coupling and release endpoint
 
