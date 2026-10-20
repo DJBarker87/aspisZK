@@ -191,3 +191,17 @@ model is to be extended by these three (job cx-record-classes). Full
 deployed correspondence and the privacy premises eCm/ROpen/RComLog remain
 open on the caller, optimised-source (re-pin), compact-expansion and
 log-transport dependencies named in the report.
+
+## Addendum (2026-10-20): R19 stage-1 constant
+
+Codex job cx-qv-stage1 (26c7d8c49): `stage1Budget k = 43·k + 165`, hence
+595 distinct first reads at ten queries (115 transcript + 30 leaves + 447
+parents + 3 checkpoint hashes), proved conditionally for the binary format
+with the FS2 distinct-first-read bound and the binary cost embedding; three
+modules, 16 audits, standard axioms, ≤ 3.24 GiB
+(`design/QV-STAGE1-20261020.md`). Both measured stage-1 variants match the
+count. The old 328-call constant in `VerifierCallBudget` is for the retired
+eight-way format and cannot certify a 595-call trace; the new constant
+replaces it in the hQ instantiation. R19 stays open on: compact-source
+coverage via the re-pins, the privacy read-set transport, the stop-label
+refinement, the opaque `B.finish` (the R15 finding), and stage 2.
