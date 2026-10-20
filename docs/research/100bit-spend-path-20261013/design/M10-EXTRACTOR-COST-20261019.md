@@ -1,17 +1,21 @@
 # M10 extractor cost composition — 2026-10-19
 
-Status: **conditional composition draft; M10 remains OPEN.** The two new
-modules have not been type-checked: the binding local preflight requires
-10 GiB free + inactive memory; successive observations were approximately
-3.6–4.3 GiB. No Lean process was launched. `flock` is also absent from PATH
-and the usual Homebrew locations. See the packet's machine-readable receipts.
-Do not cite this draft as a checked proof or as a closed efficiency gap.
+Status: **checked conditional composition; M10 implementation obligations remain OPEN.**
+The resumed run compiles the arithmetic ledger and the repaired
+`RawExtractorCostComposedV2` composition with Lean 4.32, `-j1 -M4400
+-DElab.async=false`, a private object directory and the shared mkdir lock.
+See the packet manifest for measured exits, memory, swaps and axiom reports.
+The original composition is retained unchanged as failed historical source;
+its let-bound `run` was introduced as though it were the acceptance premise.
+V2 introduces both binders explicitly. Two missing arithmetic cache dependencies
+were compiled locally; the no-model predecessor's retained path supplied the
+missing terminal interface. Failed attempts are retained, not certified.
 
 ## Target and exact consumer interface
 
 The target is
-`AspisR1.RawExtractorCostComposed.recorded_extractor_cost_and_failure`
-(`lean/RawExtractorCostComposed.lean:124`). It uses the *same* decoder,
+`AspisR1.RawExtractorCostComposedV2.recorded_extractor_cost_and_failure`
+(`lean/RawExtractorCostComposedV2.lean:124`). It uses the *same* decoder,
 prover, compiled experiment, fixed tag, original first-read budget `Q`,
 decoded-start budget `N`, and acceptance-to-terminal-Checks premise as
 `RawChecksAdaptiveFailureNoModel.checked_acceptance_failure_bound_no_model`
@@ -72,7 +76,7 @@ about machine arithmetic. In particular `q` is not silently identified with
 
 `RawExtractorCostLedger.sum_charge_le` turns bounded occurrence lists into
 aggregate natural charges. `jobs_charge_le` composes the three arithmetic
-ledgers. `accepted_attempt_cost` (`lean/RawExtractorCostComposed.lean:98`)
+ledgers. `accepted_attempt_cost` (`lean/RawExtractorCostComposedV2.lean:98`)
 proves a deterministic bound on every tape, then uses `mean_mono` and
 `mean_const` to obtain the finite expectation. This is the counts-to-expectation
 bridge; it needs no independence assumption.
@@ -102,9 +106,11 @@ and fix uniform overhead constants/degree. These are explicit hypotheses,
 not new axioms. The actual instrumentation/overhead proof is substantial and
 cannot be recovered just by summing the supplied component theorems.
 
-Next validation: compile `RawExtractorCostLedger` first, then
-`RawExtractorCostComposed`, with the packet commands and private object dir,
-under the prescribed lock/memory gate. Audit the printed axioms after both
-pass. The complete frozen manifest is the lead's final release step; it was
-not run here. Until successful receipts exist, all statements above describe
-the intended draft interface only.
+Validation is recorded in `evidence/extractor-cost-composed-20261019/manifest.json`.
+The focused targets were compiled in dependency order; the successful outputs
+were audited through their source `#print axioms` commands. No package-wide or
+release-wide frozen replay was run: this packet is a conditional M10 result,
+not a formal release. No existing Lean source was edited. C3 must explicitly
+supply `CostedExtractor.value`, `LedgerRefinement`, the unchanged M9 premises,
+and uniformly fixed overhead constants/degree before claiming extractor
+implementation efficiency. This result does not close those obligations.
