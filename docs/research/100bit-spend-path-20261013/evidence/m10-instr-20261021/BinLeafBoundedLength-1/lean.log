@@ -1,0 +1,21 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr/docs/research/100bit-spend-path-20261013/lean/BinLeafBoundedLength.lean:54:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+tag : Byte
+width : ℕ
+input : List Byte
+hp : (test width (List.take width (List.drop 2 input))).2 ≤ width + 1
+hs : (test 32 (List.drop (2 + width) input)).2 ≤ 32 + 1
+⊢ (have data := (List.take width (List.drop 2 input), List.drop (2 + width) input);
+      have packed := test width data.1;
+      if packed.1 = true then
+        have salt := test 32 data.2;
+        (if salt.1 = true ∧ BinMerkle32Leaf.leafInput tag data.1 data.2 = input then some data else none,
+          packed.2 + salt.2)
+      else (none, packed.2)).2 ≤
+    width + 34
+'AspisR1.BinLeafBoundedLength.test_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BinLeafBoundedLength.test_cost' depends on axioms: [propext]
+'AspisR1.BinLeafBoundedLength.parse_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BinLeafBoundedLength.parse_length_test_cost' depends on axioms: [propext, sorryAx]
