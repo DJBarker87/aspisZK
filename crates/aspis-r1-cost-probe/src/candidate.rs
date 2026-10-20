@@ -160,17 +160,17 @@ fn batch_merkle<H: Digest32>(proof: &[u8], p: &Prepared, folded_root: &[u8; 32],
 
 #[inline(always)]
 fn batch_merkle_values<H: Digest32>(proof: &[u8], queries: [u32; 22], roots: [[u8; 32]; 3], batch: usize, hash: H) -> Result<(), Error> {
-    let idx = [0u32; multiproof::MAX_BATCH];
-    let val = [[0u8; 32]; multiproof::MAX_BATCH];
+    let mut idx = [0u32; multiproof::MAX_BATCH];
+    let mut val = [[0u8; 32]; multiproof::MAX_BATCH];
     let [root0, root1, root2] = roots;
-    let (idx, val) = batch_tree(proof, queries, root0, batch, 0, idx, val, hash)?;
-    let (idx, val) = batch_tree(proof, queries, root1, batch, 1, idx, val, hash)?;
-    batch_tree(proof, queries, root2, batch, 2, idx, val, hash)?;
+    batch_tree(proof, queries, root0, batch, 0, &mut idx, &mut val, hash)?;
+    batch_tree(proof, queries, root1, batch, 1, &mut idx, &mut val, hash)?;
+    batch_tree(proof, queries, root2, batch, 2, &mut idx, &mut val, hash)?;
     Ok(())
 }
 
 #[inline(always)]
-fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], batch: usize, tree: usize, mut idx: [u32; multiproof::MAX_BATCH], mut val: [[u8; 32]; multiproof::MAX_BATCH], hash: H) -> Result<([u32; multiproof::MAX_BATCH], [[u8; 32]; multiproof::MAX_BATCH]), Error> {
+fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], batch: usize, tree: usize, idx: &mut [u32; multiproof::MAX_BATCH], val: &mut [[u8; 32]; multiproof::MAX_BATCH], hash: H) -> Result<(), Error> {
     let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };
     let n = hi - lo;
     let s = 3 * batch + tree;
@@ -183,8 +183,8 @@ fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], bat
         let index = (key >> 8) as u32;
         let q = opening(proof, lo + (key & 0xff) as usize);
         let leaf = batch_leaf(hash, tree, q);
-        if d > 0 && same_batch_index(&idx, d - 1, index) {
-            if !same_batch_leaf(&val, d - 1, leaf) {
+        if d > 0 && same_batch_index(idx, d - 1, index) {
+            if !same_batch_leaf(val, d - 1, leaf) {
                 return Err(Error::Merkle);
             }
             continue;
@@ -199,10 +199,10 @@ fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], bat
     if count > SLOT_NODES[s] || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {
         return Err(Error::Parse);
     }
-    if !multiproof::verify_in_place(hash, Arity::Two, &root, &mut idx, &mut val, d, &nodes[..32 * count]) {
+    if !multiproof::verify_in_place(hash, Arity::Two, &root, idx, val, d, &nodes[..32 * count]) {
         return Err(Error::Merkle);
     }
-    Ok((idx, val))
+    Ok(())
 }
 
 /// The shipped per-query folding and accumulation, reading the candidate
