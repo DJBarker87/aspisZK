@@ -1,0 +1,5 @@
+# Ordinary sampler rank at Prepared row 28
+
+The accepted target proves that a successful candidate ordinary sampler callback returns the retained field rank for its exact 32-byte transcript block. The scalar theorem keeps the actual block result and returned transcript state. The prepared theorem specializes that result to row 28: the block is formed from the actual bytes encoding `v.inactive`, starting after row 27 and ending at the state used for row 28; `tail_concrete_run` identifies the resulting candidate value with `out.kappa`.
+
+The proof uses the pinned retained candidate sampler and its candidate-only field-rank bridge. It does not establish production-source adoption, sampler distribution, or full verifier execution equivalence. Green receipt is v12; v1-v11 diagnostics are retained separately and were not accepted. The target was compiled under Lean 4.32.0 in a fresh admitted host scope (`MemoryHigh=512 MiB`, `MemoryMax=1 GiB`, swap 0), with `-M4400 -j1`; standard-only theorem audits are recorded in `attempt/proof-evidence/lean.log`.
