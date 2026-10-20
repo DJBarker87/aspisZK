@@ -39,3 +39,19 @@ verbatim:
 
 No execution-refinement-only replacement is justified at this endpoint.
 Independent model joins follow below.
+
+## Stage 2: semantic and batched message prefixes
+
+`PhaseMessageDependenciesBin` proves roundPoint and the semantic polynomial
+and actual semantic coefficient cells depend only on semantic rows strictly
+before 15+j. It proves R1 round0 depends on semantic/circle values, gamma and
+kappa; round1 additionally uses alpha0; final uses gamma, alpha0 and alpha1
+and needs neither kappa nor circle/query answers. These are symbolic facts
+about the existing HonestView/Batched maps, not replacement polynomials.
+
+9401 and 9402 retain failed elaboration diagnostics (finite-index arithmetic,
+then simplification under the weights vector). 9403 passes all nine audits:
+exit 0, 2.27s, 3522128 KiB, zero swaps, only the standard three axioms.
+Replacing this branch's new shared module snapshots its source/object under
+`aspis-joint-20261019/snapshots/codex-cx-priv-phase2-20261021/<attempt>`;
+no pre-existing shared module is replaced.
