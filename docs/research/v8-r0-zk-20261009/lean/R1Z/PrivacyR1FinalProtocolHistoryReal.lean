@@ -1,8 +1,8 @@
 import R1Z.PrivacyR1FinalProtocolHistory
-import R1Z.QueryScanRealLazyJoin
+import R1Z.QueryScanFreshNumerics
 
-/-! Conservative honest-program collision endpoint. The real parser mass law
-is proved internally; the sharper scan-only entropy bound is not asserted. -/
+/-! Real-law-free endpoint with a proved scan-freshness numerical allowance.
+The conservative internal coupling budget is dominated by that allowance. -/
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PrivacyR1FinalProtocolHistoryReal
@@ -18,7 +18,7 @@ variable (base : R1Wire K CommitHandle Aux) (publicWidth : ℕ)
     (h : HonestProver K) (B : PackBasis F)
     (outputs : Statement K CommitHandle → Challenges K → Aux)
     (x : Statement K CommitHandle)
-theorem privacy_R1_protocol_history_real
+theorem privacy_R1_protocol_history_real_of_lazy_budget
     (seed : R1ProverP K CommitHandle Aux F
       (wire base ((base.pubBytes x).length) h B outputs x).toWire)
     (hB : R0Z.K4.PackField B) (hpub : PublicBase F x.1)
@@ -128,7 +128,7 @@ theorem privacy_R1_protocol_history_real
     calc _ ≤ ((QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr) + 8 / (2 : ℚ)^486) +
         modelError W Pr L₁ L₂) + 8 / (2 : ℚ)^486 :=
           t₂.trans (add_le_add (t₁.trans (add_le_add hr hmid)) hi)
-         _ = _ := by ring
+         _ = _ := QueryScanFreshNumerics.amount_identity _ _ _
   · have hbase : modelError W Pr L₁ L₂ + 16 / (2 : ℚ)^486 ≤
         1 / 2^109 + 1 / 2^137 + 1 / 2^454 := (add_le_add hn' query_error_le)
     have hcount := R1Z.GamesR1PBin.n1_le W Pr L₁ L₂
@@ -138,6 +138,71 @@ theorem privacy_R1_protocol_history_real
     have htotal := add_le_add hbase (le_refl (QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr)))
     exact ⟨htotal, htotal.trans_lt (QueryScanHistoryRealNumerics.total_lt_target
       (QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr)) hκ)⟩
+
+#print axioms privacy_R1_protocol_history_real_of_lazy_budget
+
+theorem privacy_R1_protocol_history_real
+    (seed : R1ProverP K CommitHandle Aux F
+      (wire base ((base.pubBytes x).length) h B outputs x).toWire)
+    (hB : R0Z.K4.PackField B) (hpub : PublicBase F x.1)
+    (builder_refinement_D46_D51 : R0Z.HonestValidity.BuilderSoundOn h B x)
+    (cF : ℕ)
+    (R_commit_equal_fibres : ∀ τ : Tape K F, (Finset.univ.filter
+      (fun e : (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ → OracleAnswer) × (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ → OracleAnswer) =>
+        ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).tapeOf e.1 e.2 = some τ)).card = cF)
+    (L₁ L₂ : ℕ) (R_commit_exhaustion : RExh (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂)
+    (R_commit_counter₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2^64) (R_commit_counter₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2^64)
+    (R_commit_stream₁ : 16 * L₁ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ * 8) (R_commit_stream₂ : 16 * L₂ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ * 8)
+    (R_wire_coin_carrier : ((wire base ((base.pubBytes x).length) h B outputs x).toWire).Cm ≃ (RIdx → OracleAnswer))
+    (R_wire_D80_batches : RWireBatches (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver)
+    (R_wire_D80_ordered_log : ∀ (w : h.Instance) (sec : SecP) (d : OracleAnswer)
+      (τ : Tape K F) (roots : Fin 3 → OracleAnswer) (rest : RIdx → OracleAnswer) (ch : Challenges K),
+      ((wire base ((base.pubBytes x).length) h B outputs x).toWire).comLog (R_wire_coin_carrier.symm rest) roots (view h B outputs x w ch τ) ch =
+        (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).openList ch).map (fun c =>
+          (gram (((wire base ((base.pubBytes x).length) h B outputs x).toWire).pubBytes x) ((wire base ((base.pubBytes x).length) h B outputs x).toWire).vtag (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).leafVal h w x τ ch) sec d rest
+            (cposOf (E₁ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁) (E₂ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂) c), ansC roots rest c)))
+    (R_commit_cell_count : RCommitCount L₁ L₂)
+    (R_commit_blocks₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2 * L₁) (R_commit_blocks₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2 * L₂)
+    (source : FSExperiments K CommitHandle Aux R1Bat F)
+    [Fintype source.RealRand] [Nonempty source.RealRand]
+    [Fintype source.IdealRand] [Nonempty source.IdealRand]
+    (observer_program : source.Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
+    (R_wire_builder_checker_D75_retry : ∀ (adv : source.Adversary) (w : h.Instance),
+      h.public w = x.1 → ModelExecutionJoin
+        (realTest h B outputs source adv x w)
+        (realTest h B outputs (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide)
+          (P_R1 h.transport B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w) (QueryScanRealLazyBound.realBad (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 h B outputs x w))
+    (G_sim_R_wire : ∀ adv : source.Adversary, ModelExecutionJoin
+      (idealTestS source adv x (simE h.transport B outputs x))
+      (idealTestS (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide) (P_R1 h.transport B hB) (fun h' => VR1 h'))
+        (RomObserverBin.observerMap source observer_program adv) x (simE h.transport B outputs x)) (QueryScanIdealHistory.selectedBad)) :
+    ZK_FSS h B outputs source x (simE h.transport B outputs x)
+      (modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1)) ∧
+    modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) ∧
+    modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) < 1 / 2^100 := by
+  let W := (wire base ((base.pubBytes x).length) h B outputs x).toWire
+  let Pr := (prover base ((base.pubBytes x).length) h B outputs x seed).toProver
+  have hz := privacy_R1_protocol_history_real_of_lazy_budget base h B outputs x seed hB hpub
+    builder_refinement_D46_D51 cF R_commit_equal_fibres L₁ L₂ R_commit_exhaustion
+    R_commit_counter₁ R_commit_counter₂ R_commit_stream₁ R_commit_stream₂
+    R_wire_coin_carrier R_wire_D80_batches R_wire_D80_ordered_log R_commit_cell_count
+    R_commit_blocks₁ R_commit_blocks₂ source observer_program
+    R_wire_builder_checker_D75_retry G_sim_R_wire
+  have hcount := R1Z.GamesR1PBin.n1_le W Pr L₁ L₂
+    R_commit_cell_count R_commit_blocks₁ R_commit_blocks₂
+  have hM : 8 * n1 W Pr ≤ 2^25 := by norm_num at hcount ⊢; omega
+  have hq : 8 * n1 W Pr + 1 ≤ 2^65 := by norm_num at hM ⊢; omega
+  have hκ := QueryScanFreshNumerics.lazy_budget_le_fresh hM
+    (Nat.succ_le_succ (Nat.zero_le (8 * n1 W Pr)))
+  have hinc := add_le_add (le_refl (modelError W Pr L₁ L₂ + 16 / (2 : ℚ)^486)) hκ
+  have hbase : modelError W Pr L₁ L₂ + 16 / (2 : ℚ)^486 ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 := le_of_add_le_add_right hz.2.1
+  have htotal := add_le_add hbase
+    (le_refl (QueryScanFreshUnion.freshBudget (8 * n1 W Pr + 1)))
+  exact ⟨(fun adv w hw => (hz.1 adv w hw).trans hinc), htotal,
+    htotal.trans_lt (QueryScanFreshNumerics.fresh_total_lt_target hq)⟩
 
 #print axioms privacy_R1_protocol_history_real
 end R1Z.PrivacyR1FinalProtocolHistoryReal

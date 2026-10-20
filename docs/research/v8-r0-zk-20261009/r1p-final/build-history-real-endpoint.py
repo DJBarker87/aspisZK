@@ -8,7 +8,7 @@ prefix=s[s.index('set_option'):s.index('theorem privacy_R1_protocol_history_of_m
 prefix=prefix.replace('namespace R1Z.PrivacyR1FinalProtocolHistory','namespace R1Z.PrivacyR1FinalProtocolHistoryReal')
 start=s.index('theorem privacy_R1_protocol_history\n')
 sig=s[start:s.index(' := by',start)]
-sig=sig.replace('theorem privacy_R1_protocol_history','theorem privacy_R1_protocol_history_real')
+sig=sig.replace('theorem privacy_R1_protocol_history','theorem privacy_R1_protocol_history_real_of_lazy_budget')
 a=sig.index('    (realBad :'); b=sig.index('    (R_wire_builder_checker',a)
 sig=sig[:a]+sig[b:]
 W='(wire base ((base.pubBytes x).length) h B outputs x).toWire'
@@ -87,7 +87,7 @@ body=''' := by
     calc _ ≤ ((QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr) + 8 / (2 : ℚ)^486) +
         modelError W Pr L₁ L₂) + 8 / (2 : ℚ)^486 :=
           t₂.trans (add_le_add (t₁.trans (add_le_add hr hmid)) hi)
-         _ = _ := by ring
+         _ = _ := QueryScanFreshNumerics.amount_identity _ _ _
   · have hbase : modelError W Pr L₁ L₂ + 16 / (2 : ℚ)^486 ≤
         1 / 2^109 + 1 / 2^137 + 1 / 2^454 := (add_le_add hn' query_error_le)
     have hcount := R1Z.GamesR1PBin.n1_le W Pr L₁ L₂
@@ -98,10 +98,37 @@ body=''' := by
     exact ⟨htotal, htotal.trans_lt (QueryScanHistoryRealNumerics.total_lt_target
       (QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr)) hκ)⟩
 
+#print axioms privacy_R1_protocol_history_real_of_lazy_budget
+'''
+fresh=f'QueryScanFreshUnion.freshBudget (8 * n1 {W} {Pr} + 1)'
+freshsig=sig.replace('privacy_R1_protocol_history_real_of_lazy_budget','privacy_R1_protocol_history_real').replace(budget,fresh)
+freshbody=""" := by
+  let W := (wire base ((base.pubBytes x).length) h B outputs x).toWire
+  let Pr := (prover base ((base.pubBytes x).length) h B outputs x seed).toProver
+  have hz := privacy_R1_protocol_history_real_of_lazy_budget base h B outputs x seed hB hpub
+    builder_refinement_D46_D51 cF R_commit_equal_fibres L₁ L₂ R_commit_exhaustion
+    R_commit_counter₁ R_commit_counter₂ R_commit_stream₁ R_commit_stream₂
+    R_wire_coin_carrier R_wire_D80_batches R_wire_D80_ordered_log R_commit_cell_count
+    R_commit_blocks₁ R_commit_blocks₂ source observer_program
+    R_wire_builder_checker_D75_retry G_sim_R_wire
+  have hcount := R1Z.GamesR1PBin.n1_le W Pr L₁ L₂
+    R_commit_cell_count R_commit_blocks₁ R_commit_blocks₂
+  have hM : 8 * n1 W Pr ≤ 2^25 := by norm_num at hcount ⊢; omega
+  have hq : 8 * n1 W Pr + 1 ≤ 2^65 := by norm_num at hM ⊢; omega
+  have hκ := QueryScanFreshNumerics.lazy_budget_le_fresh hM
+    (Nat.succ_le_succ (Nat.zero_le (8 * n1 W Pr)))
+  have hinc := add_le_add (le_refl (modelError W Pr L₁ L₂ + 16 / (2 : ℚ)^486)) hκ
+  have hbase : modelError W Pr L₁ L₂ + 16 / (2 : ℚ)^486 ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 := le_of_add_le_add_right hz.2.1
+  have htotal := add_le_add hbase
+    (le_refl (QueryScanFreshUnion.freshBudget (8 * n1 W Pr + 1)))
+  exact ⟨(fun adv w hw => (hz.1 adv w hw).trans hinc), htotal,
+    htotal.trans_lt (QueryScanFreshNumerics.fresh_total_lt_target hq)⟩
+
 #print axioms privacy_R1_protocol_history_real
 end R1Z.PrivacyR1FinalProtocolHistoryReal
-'''
-out='import R1Z.PrivacyR1FinalProtocolHistory\nimport R1Z.QueryScanRealLazyJoin\n\n/-! Conservative honest-program collision endpoint. The real parser mass law\nis proved internally; the sharper scan-only entropy bound is not asserted. -/\n'+prefix+sig+body
+"""
+out='import R1Z.PrivacyR1FinalProtocolHistory\nimport R1Z.QueryScanFreshNumerics\n\n/-! Real-law-free endpoint with a proved scan-freshness numerical allowance.\nThe conservative internal coupling budget is dominated by that allowance. -/\n'+prefix+sig+body+'\n'+freshsig+freshbody
 p=root/'lean/R1Z/PrivacyR1FinalProtocolHistoryReal.lean'
 if '--check' in sys.argv: assert p.read_text()==out
 else: p.write_text(out)
