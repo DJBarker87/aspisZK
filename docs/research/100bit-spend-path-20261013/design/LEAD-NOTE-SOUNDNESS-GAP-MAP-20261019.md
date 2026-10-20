@@ -159,3 +159,19 @@ transport, the source query-scan refinement (row 31 source side), the
 current CU re-pins (candidate 7), the global-log/full-prefix composition
 (R10), and the deployed public mapping; counterexamples record why
 unrestricted variants and free public tags cannot satisfy the laws.
+
+## Addendum (2026-10-20): R10 partial; R15 finding
+
+Codex job cx-ckpt-log (163ee546b): four modules, 12 audits, standard axioms,
+≤ 3.20 GiB (`design/CHECKPOINT-LOG-TX1-20261020.md`,
+`evidence/checkpoint-log-tx1-20261020/`). R10: the tx1 log assembly is
+proved conditionally, rows 0–24 composed with the sampler-suffix results
+through shared-oracle bridges; complete tx1 call coverage stays a named
+premise; the tx2 half and cross-transaction consistency wait on R14.
+**R15 finding:** the accepted stage-1 extraction exposes `finish`
+(`tx1_finish`, which writes the checkpoint) as an unconstrained function
+parameter — the checkpoint writer and the account write were never
+extracted; countermodel theorems show the boundary admits arbitrary output
+bytes. Ruling: `tx1_finish` and the checkpoint writer are extracted with the
+same pipeline as stage 2, pinned once at the combined freeze (after the
+stage-2 borrow fix lands), as job "cx-tx1-finish"; R15 then has both halves.
