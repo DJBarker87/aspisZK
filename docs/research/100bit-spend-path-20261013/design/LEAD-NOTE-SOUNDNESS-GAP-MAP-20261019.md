@@ -175,3 +175,19 @@ extracted; countermodel theorems show the boundary admits arbitrary output
 bytes. Ruling: `tx1_finish` and the checkpoint writer are extracted with the
 same pipeline as stage 2, pinned once at the combined freeze (after the
 stage-2 borrow fix lands), as job "cx-tx1-finish"; R15 then has both halves.
+
+## Addendum (2026-10-20): R-wire tx1 inventory; three more record classes
+
+Codex job cx-wire-tx1 (120424d31): inventory of all 31 syntactic tx1 digest
+sites with construction, length, tag and dependency
+(`design/WIRE-TX1-20261020.md`); three modules, 15 audits, standard axioms,
+≤ 3.31 GiB: parser-to-duplex framing, all 45 digest calls in `begin`, and
+the opening constructor/block facts under explicit width premises.
+Finding: the "typed records only" target as stated was false — tx1 also
+hashes the 57,607-byte compact proof, the 1,880-byte ASF8 account and a
+1,758-byte checkpoint checksum input. None of these lengths is 31 or 65, so
+the D79 separation extends to them; the record-class list in D79 and the Bin
+model is to be extended by these three (job cx-record-classes). Full
+deployed correspondence and the privacy premises eCm/ROpen/RComLog remain
+open on the caller, optimised-source (re-pin), compact-expansion and
+log-transport dependencies named in the report.
