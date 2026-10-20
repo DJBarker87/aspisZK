@@ -1,0 +1,44 @@
+{
+  "revision": "c8ea8dd49c81ab970b9dbee8d8b47718f9beb005",
+  "features": [
+    "r0",
+    "private-leaf-salts"
+  ],
+  "root_targets": [
+    "crate::dot_push_entry",
+    "crate::option_context_anchor"
+  ],
+  "opaque_paths": [
+    "crate::canonical::_::raw"
+  ],
+  "classification": "CANDIDATE local-array writeback and explicit temporary scopes in same Dot.push loop; raw opaque",
+  "scope": "Candidate-only mutable traversal extraction, raw arithmetic separate; no original source equivalence/adoption or caller claim",
+  "source_files": {
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0"
+  },
+  "cuts": [
+    {
+      "name": "original_raw",
+      "start_byte": 4024,
+      "end_byte_exclusive": 4745,
+      "sha256": "6b96ce4484913441ef7901593409c169bd48eeec9c34a54e4bd6991010a04ecf"
+    },
+    {
+      "name": "original_push",
+      "start_byte": 5640,
+      "end_byte_exclusive": 6030,
+      "sha256": "e7f1ef79f259f02fa2610669a8a5b65a680c116c55443222d5d9d31bd330d8fe"
+    }
+  ],
+  "transformations": [
+    "Copy self.sums to local sums before loop; all self.sums[j] reads/writes become sums[j]; write self.sums=sums once after loop. Original raw body retained opaque.",
+    "Materialize old accumulator/raw word and pure folded/updated words before the indexed assignment, keeping original evaluation order."
+  ],
+  "kit_files": {
+    "Cargo.toml": "7d4b7f0fc1b2e83d1d46298152df8d298695b6be4516100d7072bdc8124cbc3e",
+    "lib.rs": "d343c6b1169bbd004ab8e67132667d34a08a910096b20ee9823099c249a408eb",
+    "Cargo.lock": "41cc5b2f854cb8cd737ee4eec6bea1a1bb2f608f2593b701bccf62141fc401e6",
+    "candidate-push.rs.txt": "8094eb90a845a890c23b695841d49aca0d587d3184b795479000d15c9c3c7db0",
+    "original-push.rs.txt": "e7f1ef79f259f02fa2610669a8a5b65a680c116c55443222d5d9d31bd330d8fe"
+  }
+}

@@ -1,0 +1,9 @@
+pub fn push(&mut self,a:Q,b:Q) {
+            // Both enclosing public accumulators check the 4096-term bound.
+            // This private accumulator cannot be reached by raw callers.
+            let raw=a.raw(b);
+            for j in 0..4 {
+                self.sums[j]=self.sums[j].wrapping_add(
+                    (raw[j]&u64::from(P)).wrapping_add(raw[j]>>31));
+            }
+        }

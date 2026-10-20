@@ -1,0 +1,47 @@
+{
+  "revision": "c8ea8dd49c81ab970b9dbee8d8b47718f9beb005",
+  "features": [
+    "r0",
+    "private-leaf-salts"
+  ],
+  "root_targets": [
+    "crate::raw_entry"
+  ],
+  "opaque_paths": [],
+  "scope": "Preserves Array.map and raw arithmetic operation order; retains original local partial closure and changes only the two map function-item callbacks to capture-free closures. Original unchanged extraction/source correspondence remains open.",
+  "cuts": [
+    {
+      "name": "Q",
+      "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+      "sha256": "db52053310595989b966da1eda4ccee07fe8e059c2f401ab4ee816a650ebad5e",
+      "text": "    #[derive(Clone,Copy,Debug,PartialEq,Eq,Default)]\n    pub struct Q([u32;4]);"
+    },
+    {
+      "name": "Q::raw",
+      "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+      "start_byte": 4016,
+      "end_byte_exclusive": 4745,
+      "sha256": "042b9e2a14c3e07d5dc0a955210531264d174d76477bd2a58ce9c2643eadae40"
+    }
+  ],
+  "kit_files": {
+    "Cargo.toml": "7d4b7f0fc1b2e83d1d46298152df8d298695b6be4516100d7072bdc8124cbc3e",
+    "lib.rs": "9b2628b1ab7fbc4d959d3bd40f80e12d7f8e73fcd4715bc087714d4be6d9f37f",
+    "Cargo.lock": "41cc5b2f854cb8cd737ee4eec6bea1a1bb2f608f2593b701bccf62141fc401e6",
+    "fragments/limbs.rs": "6f3928e7f89192ce616d071031fa4a698752221e461c76bfe4bd220f8765a52a",
+    "fragments/q_raw.rs": "d49ef7b3c4ef5e4843009aef4ee9fb615390a05ba88e77d744f341b4096cd110",
+    "fragments/reduce.rs": "9bce7c72f3c50a648fff3c579a21844cc18ea081d303826eacd401fe9a799b1c",
+    "fragments/p.rs": "50d8bfee1b22e61b03a55f021c7ebd834cd17aecced6410d003828cd86746741",
+    "fragments/finish.rs": "764e4446d4d51f5509d14de7707d3d9c9c8f98d22c1b40e0f83158ba82bb791c",
+    "fragments/dot.rs": "c9e59c6486daa3040364a7514b87678412e0399786cd0d3b7387c13606775e6e",
+    "fragments/q.rs": "4c376c788e8b428031c952a18f1fc4e47424893c31c6d44371ba9479955cf0af"
+  },
+  "classification": "Diagnostic raw-only adapter: exact Q::raw body except `.map(u64::from)` callback rewritten to equivalent `.map(|x| u64::from(x))` for each operand array.",
+  "adapter_diff": {
+    "operations": [
+      "replace `.map(u64::from)` callback with `.map(|x| u64::from(x))` for each operand array"
+    ],
+    "original_raw_sha256": "042b9e2a14c3e07d5dc0a955210531264d174d76477bd2a58ce9c2643eadae40",
+    "transformed_lib_sha256": "9b2628b1ab7fbc4d959d3bd40f80e12d7f8e73fcd4715bc087714d4be6d9f37f"
+  }
+}
