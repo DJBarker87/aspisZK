@@ -1,0 +1,9 @@
+# Successful preparation gamma has the transcript block rank
+
+PROVED candidate source-model sampler/transcript binding. The fieldwise gamma-to-Public-to-Claim conversion decodes to the same retained exact field element as gammaWideToExact. Successful concrete candidateGammaPublic yields a retained fieldRank witness whose integer rank is rank(block) mod(P^8-1)+1. The existing checked gamma field-rank theorem and its symbolic bound are reused, not re-proved by concrete arithmetic reduction.
+
+Successful scalar(true) supplies its actual Transcript.block input/output bytes and returned next transcript, with no separately assumed sampler success. Successful specialized preparation then supplies its actual seeded transcript (new D hash sem.transcript.state variant), its row27 block using the same v.y1 bytes, and the exact fieldRank meaning of out.gamma. Gamma canonicality was already proved in the predecessor; this packet adds the actual rank/transcript link needed by the soundness sampler argument.
+
+OPEN: this is not yet an adaptive/random-oracle distribution theorem for the whole caller. Digest security, concrete caller/payload authentication, other sampler fields, gamma source-candidate adoption/equivalence, final freeze re-pins, runtime and global100-bit soundness remain separate. The source-model successful preparation remains a premise. No production Rust, ELF, CU or deployment changes.
+
+One focused target passed NUC Lean4.32 -j1 -M4400,2.508s,cgroup peak430010368B,swap0,only standard axioms. Max1GiB uses the previously measured same-import predecessor basis. Exact source/object/compiler/import/command/resource evidence retained. Rejected v1 had only a Fin-witness elaboration and tuple substitution scope error; its proof is not selected. No unchanged package replay or generated recurrence reduction.
