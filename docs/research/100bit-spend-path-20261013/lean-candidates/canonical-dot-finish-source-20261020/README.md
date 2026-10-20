@@ -1,0 +1,9 @@
+# Actual canonical reducer and Dot.finish with the retained array-map model
+
+PROVED: for every stored U64 input, the unchanged extracted private canonical::reduce succeeds and returns exactly input modulo P, strictly below P. The proof reuses the retained symbolic two-fold reducer; it explicitly handles the source difference of comparing/subtracting at U64 before narrowing, rather than narrowing before the conditional subtraction. No accumulator-range or canonical-input premise is needed.
+
+PROVED: actual emitted canonical::Dot::finish, with the existing checked state-threaded Array.map model replacing its only external library operation, succeeds for every four-U64 accumulator. Its returned four coordinates are exactly each input modulo P and are canonical. The complete typed entry wrapper returns the same array. There are no assumed reducer-operation laws or per-coordinate successful-call premises.
+
+Four focused NUC owners/seven standard-only theorem reports pass at -j1 -M4400, High1GiB/Max2GiB/Swap0. Charon and Aeneas extraction both pass; exact source fragments/byte spans/tool hashes/receipts are retained. The complete generated adapter removes resource-option lines and replaces only the Array.map external import with the retained concrete model; the raw axiom template is diagnostic and never imported. Existing imported reducer/model objects are pinned, not recompiled. Their historical source settings are not new option overrides. The selected reducer environment is the root canonical 16ed0514 object; the separate 5d2a R22 worker owner is not silently co-selected.
+
+OPEN: original Rust standard Array.map implementation correspondence, source Dot.push/raw-product arithmetic and loop traversal, complete EbyK finish/caller record ABI and source/runtime reachability. R22 global overflow-freedom remains lead-owned. No production code, binaries or full replay are included; the complete 100-bit theorem remains OPEN.

@@ -1,0 +1,35 @@
+/home/dombarker/project-offloads/root-canonical-dot-reduce-semantics-v1-20261020/sources/CanonicalDotReduceSemantics.lean:45:6: error: unsolved goals
+x first : U64
+hfirst : foldExecution x = ok first
+hfv : ↑first = foldBits ↑x
+second : U64
+hsecond : foldExecution first = ok second
+hsv : ↑second = foldBits ↑first
+hval : ↑second = foldBits (foldBits ↑x)
+hbound : ↑second < 2 ^ 32
+hraw : rawReduceU64 ↑x = condSubP ↑second
+hmod : rawReduceU64 ↑x = ↑x % P
+hcanon : rawReduceU64 ↑x < P
+h : ¬P ≤ ↑second
+hout : ↑(UScalar.cast UScalarTy.U32 second) = rawReduceU64 ↑x
+⊢ (if False then do
+      let remainder ← UScalar.sub second mask64
+      ok (UScalar.cast UScalarTy.U32 remainder)
+    else ok (UScalar.cast UScalarTy.U32 second)) =
+    ok (UScalar.cast UScalarTy.U32 second)
+/home/dombarker/project-offloads/root-canonical-dot-reduce-semantics-v1-20261020/sources/CanonicalDotReduceSemantics.lean:45:65: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [reduceBeforeCast, ̲hfirst, ̲hsecond, ̲bind_tc_ok, ̲h,̵i̵f̵_̵n̵e̵g̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1CanonicalDotFinish.Proof.canonical_reduce_source_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1CanonicalDotFinish.Proof.reduceBeforeCast_mod' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CanonicalDotFinish.Proof.canonical_reduce_mod' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

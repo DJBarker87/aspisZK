@@ -1,0 +1,1 @@
+        pub fn finish(self)->Q {Q(self.sums.map(reduce))}

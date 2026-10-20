@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/root-canonical-dot-finish-semantics-v1-20261020/sources/CanonicalDotFinishSemantics.lean:27:17: error: unsolved goals
+case cons
+x : U64
+xs : List U64
+ih :
+  AspisV8R19.TraversalRuntime.mapState (BuiltinFnMut U64 U32).call_mut xs canonical.reduce =
+    ok (List.map canonicalWord xs, canonical.reduce)
+⊢ (do
+      let __x ←
+        AspisV8R19.TraversalRuntime.mapState
+            (fun f x =>
+              match f x with
+              | ok y => ok (y, f)
+              | fail e => fail e
+              | div => div)
+            xs canonical.reduce
+      ok (canonicalWord x :: __x.1, __x.2)) =
+    ok (canonicalWord x :: List.map canonicalWord xs, canonical.reduce)
+/home/dombarker/project-offloads/root-canonical-dot-finish-semantics-v1-20261020/sources/CanonicalDotFinishSemantics.lean:29:56: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisV8R19.TraversalRuntime.mapState, ̲BuiltinFnMut,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵canonical_reduce_total,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok, ̲List.map_cons,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/root-canonical-dot-finish-semantics-v1-20261020/sources/CanonicalDotFinishSemantics.lean:38:68: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+'AspisR1CanonicalDotFinish.Proof.canonicalWord_val' depends on axioms: [propext]
+'AspisR1CanonicalDotFinish.Proof.canonical_reduce_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1CanonicalDotFinish.Proof.canonical_dot_finish_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CanonicalDotFinish.Proof.canonical_dot_finish_entry' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
