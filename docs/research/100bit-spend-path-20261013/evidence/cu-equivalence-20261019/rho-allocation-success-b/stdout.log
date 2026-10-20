@@ -1,0 +1,27 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoAllocationSuccess.lean:113:47: error: unexpected token '('; expected ')', ',' or ':'
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoAllocationSuccess.lean:112:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  InitAllocation
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoAllocationSuccess.lean:105:42: error: unsolved goals
+start len cursor : Usize
+future : ℕ
+weights : Slice field.QM31
+h64 : UScalarTy.Usize.numBits = 64
+hn : (↑weights).length ≤ 256
+hfree : ↑start + 8 + 32 * (↑weights).length + 7 + future ≤ ↑cursor
+this : HeapReserve := heapReserve (raw4Backend start len cursor)
+hcount : ↑weights.len = (↑weights).length
+raw : alloc.vec.Vec Raw4
+hfill :
+  r0.heap.source_filled (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU64) weights.len
+      (Array.repeat 4#usize 0#u64) =
+    ok (core.result.Result.Ok raw)
+⊢ verifier.BatchedWeights.new weights = ok (core.result.Result.Ok (initialState weights))
+'AspisR1.CuSavingsRhoAllocationSuccess.initializer_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CuSavingsRhoAllocationSuccess.reserve_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoAllocationSuccess.empty_reserve_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoAllocationSuccess.filled_success' depends on axioms: [propext, Classical.choice, Quot.sound]

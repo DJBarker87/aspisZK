@@ -1,0 +1,409 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCaller.lean:132:14: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (let (weights, rr2) := (restored, after)
+    if (rr2.at != begin.end) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+    else do
+      let i ← bytes.index_usize 9#usize
+      let i1 ← lift (UScalar.cast UScalarTy.Usize i)
+      ok
+          (core.result.Result.Ok
+            ({ variant := v, roots := begin.roots, gamma := begin.gamma, kappa := begin.kappa, alpha := begin.alpha,
+                rho := rho, queries := middle.queries, semantic_alpha := middle.semantic_alpha, z := middle.z,
+                claim := middle.claim, state := begin.state },
+              { weights := weights, rhs := middle.rhs, power := power, next := i1 }))) =
+    ok (core.result.Result.Ok (p, a))
+of `h`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case Ok.Ok.Ok.Ok.Ok.Ok
+inst✝ : ResumeCommon
+H : Type
+digest : aspis_core.Digest32 H
+bytes proof public1 : Slice U8
+v : transport.Variant
+hash : H
+p : verifier.Prepared
+a : verifier.Accumulator
+h✝⁵ :
+  (do
+      let r ← source_resume_begin digest bytes proof public1 v hash
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue rb => do
+          let r1 ← source_read_k rb.r
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue p =>
+              let (rho, rr) := p
+              do
+              let r2 ← source_resume_middle rr
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue rm => do
+                  let r3 ← source_read_k rm.r
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue p1 =>
+                      let (power, rr1) := p1
+                      do
+                      let r4 ← source_resume_allocate v
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val => do
+                          let r5 ← source_resume_weights val rr1
+                          let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                          match cf5 with
+                            | core.ops.control_flow.ControlFlow.Continue p2 =>
+                              let (weights, rr2) := p2
+                              if (rr2.at != rb.end) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+                              else do
+                                let i ← bytes.index_usize 9#usize
+                                let i1 ← lift (UScalar.cast UScalarTy.Usize i)
+                                ok
+                                    (core.result.Result.Ok
+                                      ({ variant := v, roots := rb.roots, gamma := rb.gamma, kappa := rb.kappa,
+                                          alpha := rb.alpha, rho := rho, queries := rm.queries,
+                                          semantic_alpha := rm.semantic_alpha, z := rm.z, claim := rm.claim,
+                                          state := rb.state },
+                                        { weights := weights, rhs := rm.rhs, power := power, next := i1 }))
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+begin : ResumeBegin
+left✝¹ : source_resume_begin digest bytes proof public1 v hash = ok (core.result.Result.Ok begin)
+h✝⁴ :
+  (do
+      let r1 ← source_read_k begin.r
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue p =>
+          let (rho, rr) := p
+          do
+          let r2 ← source_resume_middle rr
+          let cf2 ←
+            match r2 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue rm => do
+              let r3 ← source_read_k rm.r
+              let cf3 ←
+                match r3 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue p1 =>
+                  let (power, rr1) := p1
+                  do
+                  let r4 ← source_resume_allocate v
+                  let cf4 ←
+                    match r4 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      let r5 ← source_resume_weights val rr1
+                      let cf5 ←
+                        match r5 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf5 with
+                        | core.ops.control_flow.ControlFlow.Continue p2 =>
+                          let (weights, rr2) := p2
+                          if (rr2.at != begin.end) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+                          else do
+                            let i ← bytes.index_usize 9#usize
+                            let i1 ← lift (UScalar.cast UScalarTy.Usize i)
+                            ok
+                                (core.result.Result.Ok
+                                  ({ variant := v, roots := begin.roots, gamma := begin.gamma, kappa := begin.kappa,
+                                      alpha := begin.alpha, rho := rho, queries := rm.queries,
+                                      semantic_alpha := rm.semantic_alpha, z := rm.z, claim := rm.claim,
+                                      state := begin.state },
+                                    { weights := weights, rhs := rm.rhs, power := power, next := i1 }))
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+rho : aspis_core.field.QM31
+r : ResumeReader
+hr : source_read_k begin.r = ok (core.result.Result.Ok (rho, r))
+h✝³ :
+  (let (rho, rr) := (rho, r)
+    do
+    let r2 ← source_resume_middle rr
+    let cf2 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue rm => do
+        let r3 ← source_read_k rm.r
+        let cf3 ←
+          match r3 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf3 with
+          | core.ops.control_flow.ControlFlow.Continue p1 =>
+            let (power, rr1) := p1
+            do
+            let r4 ← source_resume_allocate v
+            let cf4 ←
+              match r4 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf4 with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let r5 ← source_resume_weights val rr1
+                let cf5 ←
+                  match r5 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf5 with
+                  | core.ops.control_flow.ControlFlow.Continue p2 =>
+                    let (weights, rr2) := p2
+                    if (rr2.at != begin.end) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+                    else do
+                      let i ← bytes.index_usize 9#usize
+                      let i1 ← lift (UScalar.cast UScalarTy.Usize i)
+                      ok
+                          (core.result.Result.Ok
+                            ({ variant := v, roots := begin.roots, gamma := begin.gamma, kappa := begin.kappa,
+                                alpha := begin.alpha, rho := rho, queries := rm.queries,
+                                semantic_alpha := rm.semantic_alpha, z := rm.z, claim := rm.claim,
+                                state := begin.state },
+                              { weights := weights, rhs := rm.rhs, power := power, next := i1 }))
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+hrho : Canonical rho
+middle : ResumeMiddle
+left✝ : source_resume_middle r = ok (core.result.Result.Ok middle)
+h✝² :
+  (do
+      let r3 ← source_read_k middle.r
+      let cf3 ←
+        match r3 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf3 with
+        | core.ops.control_flow.ControlFlow.Continue p1 =>
+          let (power, rr1) := p1
+          do
+          let r4 ← source_resume_allocate v
+          let cf4 ←
+            match r4 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf4 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let r5 ← source_resume_weights val rr1
+              let cf5 ←
+                match r5 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf5 with
+                | core.ops.control_flow.ControlFlow.Continue p2 =>
+                  let (weights, rr2) := p2
+                  if (rr2.at != begin.end) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+                  else do
+                    let i ← bytes.index_usize 9#usize
+                    let i1 ← lift (UScalar.cast UScalarTy.Usize i)
+                    ok
+                        (core.result.Result.Ok
+                          ({ variant := v, roots := begin.roots, gamma := begin.gamma, kappa := begin.kappa,
+                              alpha := begin.alpha, rho := rho, queries := middle.queries,
+                              semantic_alpha := middle.semantic_alpha, z := middle.z, claim := middle.claim,
+                              state := begin.state },
+                            { weights := weights, rhs := middle.rhs, power := power, next := i1 }))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+power : aspis_core.field.QM31
+r' : ResumeReader
+hp : source_read_k middle.r = ok (core.result.Result.Ok (power, r'))
+h✝¹ :
+  (let (power, rr1) := (power, r')
+    do
+    let r4 ← source_resume_allocate v
+    let cf4 ←
+      match r4 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf4 with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r5 ← source_resume_weights val rr1
+        let cf5 ←
+          match r5 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf5 with
+          | core.ops.control_flow.ControlFlow.Continue p2 =>
+            let (weights, rr2) := p2
+            if (rr2.at != begin.end) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+            else do
+              let i ← bytes.index_usize 9#usize
+              let i1 ← lift (UScalar.cast UScalarTy.Usize i)
+              ok
+                  (core.result.Result.Ok
+                    ({ variant := v, roots := begin.roots, gamma := begin.gamma, kappa := begin.kappa,
+                        alpha := begin.alpha, rho := rho, queries := middle.queries,
+                        semantic_alpha := middle.semantic_alpha, z := middle.z, claim := middle.claim,
+                        state := begin.state },
+                      { weights := weights, rhs := middle.rhs, power := power, next := i1 }))
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+hpower : Canonical power
+weights : alloc.vec.Vec aspis_core.field.QM31
+ha : source_resume_allocate v = ok (core.result.Result.Ok weights)
+h✝ :
+  (do
+      let r5 ← source_resume_weights weights r'
+      let cf5 ←
+        match r5 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf5 with
+        | core.ops.control_flow.ControlFlow.Continue p2 =>
+          let (weights, rr2) := p2
+          if (rr2.at != begin.end) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+          else do
+            let i ← bytes.index_usize 9#usize
+            let i1 ← lift (UScalar.cast UScalarTy.Usize i)
+            ok
+                (core.result.Result.Ok
+                  ({ variant := v, roots := begin.roots, gamma := begin.gamma, kappa := begin.kappa,
+                      alpha := begin.alpha, rho := rho, queries := middle.queries,
+                      semantic_alpha := middle.semantic_alpha, z := middle.z, claim := middle.claim,
+                      state := begin.state },
+                    { weights := weights, rhs := middle.rhs, power := power, next := i1 }))
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+hl : (↑weights).length ≤ 256
+restored : alloc.vec.Vec aspis_core.field.QM31
+after : ResumeReader
+hw : source_resume_weights weights r' = ok (core.result.Result.Ok (restored, after))
+h :
+  (let (weights, rr2) := (restored, after)
+    if (rr2.at != begin.end) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+    else do
+      let i ← bytes.index_usize 9#usize
+      let i1 ← lift (UScalar.cast UScalarTy.Usize i)
+      ok
+          (core.result.Result.Ok
+            ({ variant := v, roots := begin.roots, gamma := begin.gamma, kappa := begin.kappa, alpha := begin.alpha,
+                rho := rho, queries := middle.queries, semantic_alpha := middle.semantic_alpha, z := middle.z,
+                claim := middle.claim, state := begin.state },
+              { weights := weights, rhs := middle.rhs, power := power, next := i1 }))) =
+    ok (core.result.Result.Ok (p, a))
+hcanonical : CanonicalFrom restored 0
+hlen : (↑restored).length = (↑weights).length
+⊢ Canonical p.rho ∧ Canonical a.power ∧ CanonicalWeights a.weights ∧ ↑a.weights.len ≤ 256
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCaller.lean:101:17: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCaller.lean:109:19: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCaller.lean:114:21: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCaller.lean:122:23: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCaller.lean:128:25: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsRhoResumeCaller.read_success' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsRhoResumeCaller.weights_success' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsRhoResumeCaller.allocation_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoResumeCaller.source_inputs' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]

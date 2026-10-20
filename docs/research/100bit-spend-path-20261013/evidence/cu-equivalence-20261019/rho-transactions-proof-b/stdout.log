@@ -1,0 +1,348 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:42:0: warning: automatically included section variable(s) unused in theorem `AspisR1.CuSavingsRhoTransactions.tx1_finish_equivalence`:
+  [AspisR1RhoResumeCaller.ResumeCommon]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [AspisR1RhoResumeCaller.ResumeCommon] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:93:20: error: unsolved goals
+case ok.Ok.ok.ok.Ok
+inst✝³ : AspisR1RhoAccumulate.AccumulateCommon
+inst✝² : AspisR1RhoQuery.QueryCommon
+inst✝¹ : AspisR1RhoResumeCaller.ResumeCommon
+inst✝ : TxCommon
+H : Type
+digest : aspis_core.Digest32 H
+start len cursor : Usize
+future : ℕ
+h64 : UScalarTy.Usize.numBits = 64
+hfree : ↑start + 8 + 8199 + future ≤ ↑cursor
+public1 proof checkpoint1 : Slice U8
+hash : H
+obs : Option (verifier.Phase → Result Unit)
+this : AspisR1CuRho.HeapReserve := heapReserve (CuSavingsRhoAllocationSuccess.raw4Backend start len cursor)
+v : verifier.View
+hparse : verifier.View.parse proof = ok (core.result.Result.Ok v)
+unit : Unit
+hmark : verifier.mark obs verifier.Phase.Parsed = ok unit
+p : AspisR1RhoResumeCaller.verifier.Prepared
+a : AspisR1RhoResumeCaller.verifier.Accumulator
+hresume : source_resume digest checkpoint1 proof public1 v.variant hash = ok (core.result.Result.Ok (p, a))
+hr : Canonical p.rho
+hp : Canonical a.power
+hc : CuSavingsRhoResumeCaller.CanonicalWeights a.weights
+hl : ↑a.weights.len ≤ 256
+hs :
+  ∀ (g : Std.Array aspis_core.field.WideExact 29#usize) (geometry : AspisR1RhoStage.QueryGeometry),
+    stage_new digest v p a g hash obs geometry 22#usize = stage_old digest v p a g hash obs geometry 22#usize
+⊢ (let (p, a) := (p, a)
+    do
+    let g ← weights.powers 29#usize p.gamma
+    verifier.mark obs verifier.Phase.CheckpointRead
+    let r2 ← QueryGeometry.for_range p.queries a.next 22#usize
+    let cf2 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val1 => do
+        let r3 ← stage_new digest v p a g hash obs val1 22#usize
+        let cf3 ←
+          match r3 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf3 with
+          | core.ops.control_flow.ControlFlow.Continue val2 => finish_relation v p val2 obs
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+          (core.convert.FromSame verifier.Error) residual) =
+    let (p, a) := (p, a)
+    do
+    let g ← weights.powers 29#usize p.gamma
+    verifier.mark obs verifier.Phase.CheckpointRead
+    let r2 ← QueryGeometry.for_range p.queries a.next 22#usize
+    let cf2 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val1 => do
+        let r3 ← stage_old digest v p a g hash obs val1 22#usize
+        let cf3 ←
+          match r3 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf3 with
+          | core.ops.control_flow.ControlFlow.Continue val2 => finish_relation v p val2 obs
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+          (core.convert.FromSame verifier.Error) residual
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:84:11: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:73:25: warning: This simp argument is unused:
+  hparse
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵a̵r̵s̵e̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:74:22: warning: This simp argument is unused:
+  hparse
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵a̵r̵s̵e̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:76:15: warning: This simp argument is unused:
+  hparse
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵a̵r̵s̵e̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:82:29: warning: This simp argument is unused:
+  hmark
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵m̵a̵r̵k̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:83:26: warning: This simp argument is unused:
+  hmark
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵m̵a̵r̵k̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:85:19: warning: This simp argument is unused:
+  hmark
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵m̵a̵r̵k̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:87:31: warning: This simp argument is unused:
+  hresume
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵e̵s̵u̵m̵e̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:88:28: warning: This simp argument is unused:
+  hresume
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵e̵s̵u̵m̵e̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:90:21: warning: This simp argument is unused:
+  hresume
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵e̵s̵u̵m̵e̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:102:34: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵P̵r̵o̵d̵.̵c̵a̵s̵e̵s̵O̵n̵,̵h̵s̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲P̲r̲o̲d̲.̲c̲a̲s̲e̲s̲O̲n̲,̲ ̲h̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:102:77: warning: This simp argument is unused:
+  Prod.casesOn
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵P̵r̵o̵d̵.̵c̵a̵s̵e̵s̵O̵n̵,̵h̵s̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲h̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:102:90: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch, ̲Prod.casesOn,̵h̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsRhoTransactions.tx2_equivalence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:137:20: error: unsolved goals
+case ok.Ok.ok.ok.Ok
+inst✝³ : AspisR1RhoAccumulate.AccumulateCommon
+inst✝² : AspisR1RhoQuery.QueryCommon
+inst✝¹ : AspisR1RhoResumeCaller.ResumeCommon
+inst✝ : TxCommon
+H : Type
+digest : aspis_core.Digest32 H
+start len cursor : Usize
+future : ℕ
+h64 : UScalarTy.Usize.numBits = 64
+hfree : ↑start + 8 + 8199 + future ≤ ↑cursor
+public1 proof checkpoint1 : Slice U8
+hash : H
+obs : Option (verifier.Phase → Result Unit)
+this : AspisR1CuRho.HeapReserve := heapReserve (CuSavingsRhoAllocationSuccess.raw4Backend start len cursor)
+v : verifier.View
+hparse : View.parse_shape proof = ok (core.result.Result.Ok v)
+unit : Unit
+hmark : verifier.mark obs verifier.Phase.Parsed = ok unit
+p : AspisR1RhoResumeCaller.verifier.Prepared
+a : AspisR1RhoResumeCaller.verifier.Accumulator
+hresume : source_resume digest checkpoint1 proof public1 v.variant hash = ok (core.result.Result.Ok (p, a))
+hr : Canonical p.rho
+hp : Canonical a.power
+hc : CuSavingsRhoResumeCaller.CanonicalWeights a.weights
+hl : ↑a.weights.len ≤ 256
+hs :
+  ∀ (g : Std.Array aspis_core.field.WideExact 29#usize) (geometry : AspisR1RhoStage.QueryGeometry),
+    stage_new digest v p a g hash obs geometry 22#usize = stage_old digest v p a g hash obs geometry 22#usize
+⊢ (let (p, a) := (p, a)
+    do
+    let g ← weights.powers 29#usize p.gamma
+    verifier.mark obs verifier.Phase.CheckpointRead
+    let r2 ← QueryGeometry.for_range p.queries a.next 22#usize
+    let cf2 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val1 => do
+        let r3 ← stage_new digest v p a g hash obs val1 22#usize
+        let cf3 ←
+          match r3 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf3 with
+          | core.ops.control_flow.ControlFlow.Continue val2 => finish_relation v p val2 obs
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+          (core.convert.FromSame verifier.Error) residual) =
+    let (p, a) := (p, a)
+    do
+    let g ← weights.powers 29#usize p.gamma
+    verifier.mark obs verifier.Phase.CheckpointRead
+    let r2 ← QueryGeometry.for_range p.queries a.next 22#usize
+    let cf2 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val1 => do
+        let r3 ← stage_old digest v p a g hash obs val1 22#usize
+        let cf3 ←
+          match r3 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf3 with
+          | core.ops.control_flow.ControlFlow.Continue val2 => finish_relation v p val2 obs
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+          (core.convert.FromSame verifier.Error) residual
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:128:11: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:117:25: warning: This simp argument is unused:
+  hparse
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵a̵r̵s̵e̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:118:22: warning: This simp argument is unused:
+  hparse
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵a̵r̵s̵e̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:120:15: warning: This simp argument is unused:
+  hparse
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵a̵r̵s̵e̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:126:29: warning: This simp argument is unused:
+  hmark
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵m̵a̵r̵k̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:127:26: warning: This simp argument is unused:
+  hmark
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵m̵a̵r̵k̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:129:19: warning: This simp argument is unused:
+  hmark
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵m̵a̵r̵k̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:131:31: warning: This simp argument is unused:
+  hresume
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵e̵s̵u̵m̵e̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:132:28: warning: This simp argument is unused:
+  hresume
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵e̵s̵u̵m̵e̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:134:21: warning: This simp argument is unused:
+  hresume
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵e̵s̵u̵m̵e̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:146:34: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵P̵r̵o̵d̵.̵c̵a̵s̵e̵s̵O̵n̵,̵h̵s̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲P̲r̲o̲d̲.̲c̲a̲s̲e̲s̲O̲n̲,̲ ̲h̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:146:77: warning: This simp argument is unused:
+  Prod.casesOn
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵P̵r̵o̵d̵.̵c̵a̵s̵e̵s̵O̵n̵,̵h̵s̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲h̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoTransactions.lean:146:90: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch, ̲Prod.casesOn,̵h̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsRhoTransactions.tx2_authenticated_equivalence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsRhoTransactions.stage_equivalence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoTransactions.tx1_finish_equivalence' depends on axioms: [propext, Classical.choice, Quot.sound]

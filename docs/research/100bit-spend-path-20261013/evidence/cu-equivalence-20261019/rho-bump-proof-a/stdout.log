@@ -1,0 +1,21 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoBump.lean:15:45: error: Tactic `rfl` failed: The left-hand side
+  ↑sub
+is not definitionally equal to the right-hand side
+  ↑pos - ↑size
+
+start len pos size : Usize
+future : ℕ
+hpos : pos ≠ 0#usize
+hfree : ↑start + 8 + ↑size + 7 + future ≤ ↑pos
+sub : UScalar UScalarTy.Usize := UScalar.saturating_sub pos size
+out : UScalar UScalarTy.Usize := sub.and 7#usize.not
+⊢ ↑sub = ↑pos - ↑size
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoBump.lean:16:64: error: Application type mismatch: The argument
+  sub.bv
+has type
+  BitVec UScalarTy.Usize.numBits
+but is expected to have type
+  BitVec 64
+in the application
+  CuSavingsRhoAllocationBound.clear_low_three_bounds sub.bv
+'AspisR1.CuSavingsRhoBump.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,86 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoBump.lean:29:4: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoBump.lean:34:2: error: too many variable names provided
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoBump.lean:38:61: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  e ≥ 0
+  d ≥ 0
+  0 ≤ d - e ≤ 7
+  c ≥ 0
+  b ≥ 0
+  b + d ≥ 0
+  b + d - f ≤ -1
+  a ≥ 0
+  a - g ≥ -7
+  a + c - d ≤ -15
+  a + c - e ≤ -8
+where
+ a := ↑↑start
+ b := ↑↑size
+ c := ↑future
+ d := ↑(↑pos - ↑size)
+ e := ↑↑out
+ f := ↑2 ^ UScalarTy.Usize.numBits
+ g := ↑Usize.max
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoBump.lean:39:14: error: Application type mismatch: The argument
+  ?m.295
+has type
+  Usize
+but is expected to have type
+  Result (UScalar UScalarTy.Usize)
+in the application
+  start + 8#usize = ?m.295
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoBump.lean:39:30: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoBump.lean:39:30: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoBump.lean:39:79: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+start len pos size : Usize
+future : ℕ
+h64 : UScalarTy.Usize.numBits = 64
+hpos : pos ≠ 0#usize
+hfree : ↑start + 8 + ↑size + 7 + future ≤ ↑pos
+sub : UScalar UScalarTy.Usize := UScalar.saturating_sub pos size
+out : UScalar UScalarTy.Usize := sub.and 7#usize.not
+hs : ↑sub = ↑pos - ↑size
+helper : ∀ (n : ℕ), n = 64 → ∀ (x : BitVec n), (x &&& ~~~7).toNat ≤ x.toNat ∧ x.toNat ≤ (x &&& ~~~7).toNat + 7
+hbv : 7#usize.bv = 7
+hb' : ↑out ≤ ↑sub ∧ ↑sub ≤ ↑out + 7
+hz : ↑size ≤ ↑pos
+hsub : ↑pos - ↑size + ↑size = ↑pos
+hbound : ↑start + 8 + future ≤ ↑out
+hsum : ↑start + 8 ≤ Usize.max
+⊢ start + 8#usize = sorry
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoBump.lean:40:52: error: Application type mismatch: The argument
+  hsum
+has type
+  ↑start + 8 ≤ Usize.max
+but is expected to have type
+  ↑start + 8 < 2 ^ UScalarTy.numBits ?m.305
+in the application
+  UScalar.ofNatCore (↑start + 8) hsum
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoBump.lean:46:2: error: 'change' tactic failed, pattern
+  (do
+      let top ← start + 8#usize
+      if out < top then ok none else ok (some out)) =
+    ?m.360
+is not definitionally equal to target
+  (do
+      let pos2 ← lift (core.num.Usize.saturating_sub pos size)
+      let i ← lift (core.num.Usize.wrapping_sub 8#usize 1#usize)
+      let i1 ← lift (~~~i)
+      let pos3 ← lift (pos2 &&& i1)
+      let i2 ← core.mem.size_of (MutRawPtr U8)
+      let i3 ← start + i2
+      if pos3 < i3 then ok none else ok (some pos3)) =
+    ok (some out)
+'AspisR1.CuSavingsRhoBump.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

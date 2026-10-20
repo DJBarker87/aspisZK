@@ -1,0 +1,73 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoBump.lean:29:4: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+start len pos size : Usize
+future : ℕ
+h64 : UScalarTy.Usize.numBits = 64
+hpos : pos ≠ 0#usize
+hfree : ↑start + 8 + ↑size + 7 + future ≤ ↑pos
+sub : UScalar UScalarTy.Usize := UScalar.saturating_sub pos size
+out : UScalar UScalarTy.Usize := sub.and 7#usize.not
+hs : ↑sub = ↑pos - ↑size
+helper : ∀ (n : ℕ), n = 64 → ∀ (x : BitVec n), (x &&& ~~~7).toNat ≤ x.toNat ∧ x.toNat ≤ (x &&& ~~~7).toNat + 7
+hb : (sub.bv &&& ~~~7).toNat ≤ sub.bv.toNat ∧ sub.bv.toNat ≤ (sub.bv &&& ~~~7).toNat + 7
+⊢ 7#usize.bv.toNat = BitVec.toNat 7
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoBump.lean:39:61: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+start len pos size : Usize
+future : ℕ
+h64 : UScalarTy.Usize.numBits = 64
+hpos : pos ≠ 0#usize
+hfree : ↑start + 8 + ↑size + 7 + future ≤ ↑pos
+sub : UScalar UScalarTy.Usize := UScalar.saturating_sub pos size
+out : UScalar UScalarTy.Usize := sub.and 7#usize.not
+hs : ↑sub = ↑pos - ↑size
+helper : ∀ (n : ℕ), n = 64 → ∀ (x : BitVec n), (x &&& ~~~7).toNat ≤ x.toNat ∧ x.toNat ≤ (x &&& ~~~7).toNat + 7
+hbv : 7#usize.bv = 7
+hb' : ↑out ≤ ↑sub ∧ ↑sub ≤ ↑out + 7
+hz : ↑size ≤ ↑pos
+hsub : ↑pos - ↑size + ↑size = ↑pos
+hbound : ↑start + 8 + future ≤ ↑out
+hsum : ↑start + 8 < 2 ^ UScalarTy.Usize.numBits
+top : Usize := UScalar.ofNatCore (↑start + 8) hsum
+⊢ start + 8#usize = ok top
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoBump.lean:43:75: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+start len pos size : Usize
+future : ℕ
+h64 : UScalarTy.Usize.numBits = 64
+hpos : pos ≠ 0#usize
+hfree : ↑start + 8 + ↑size + 7 + future ≤ ↑pos
+sub : UScalar UScalarTy.Usize := UScalar.saturating_sub pos size
+out : UScalar UScalarTy.Usize := sub.and 7#usize.not
+hs : ↑sub = ↑pos - ↑size
+helper : ∀ (n : ℕ), n = 64 → ∀ (x : BitVec n), (x &&& ~~~7).toNat ≤ x.toNat ∧ x.toNat ≤ (x &&& ~~~7).toNat + 7
+hbv : 7#usize.bv = 7
+hb' : ↑out ≤ ↑sub ∧ ↑sub ≤ ↑out + 7
+hz : ↑size ≤ ↑pos
+hsub : ↑pos - ↑size + ↑size = ↑pos
+hbound : ↑start + 8 + future ≤ ↑out
+hsum : ↑start + 8 < 2 ^ UScalarTy.Usize.numBits
+top : Usize := UScalar.ofNatCore (↑start + 8) hsum
+hadd : start + 8#usize = ok top
+hlt : ¬out < top
+⊢ core.num.Usize.wrapping_sub 8#usize 1#usize = 7#usize
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoBump.lean:47:52: warning: This simp argument is unused:
+  pointerLayout
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵w̵r̵a̵p̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵m̵e̵m̵.̵s̵i̵z̵e̵_̵o̵f̵,̵p̵o̵i̵n̵t̵e̵r̵L̵a̵y̵o̵u̵t̵]̵[̲h̲w̲r̲a̲p̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲m̲e̲m̲.̲s̲i̲z̲e̲_̲o̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CuSavingsRhoBump.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

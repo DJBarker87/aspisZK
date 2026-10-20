@@ -1,0 +1,83 @@
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCaller.lean:91:42: error: Application type mismatch: The argument
+  h
+has type
+  (do
+      let r ← source_resume_begin digest bytes proof public1 v hash
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue rb => do
+          let r1 ← source_read_k rb.r
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue p =>
+              let (rho, rr) := p
+              do
+              let r2 ← source_resume_middle rr
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue rm => do
+                  let r3 ← source_read_k rm.r
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue p1 =>
+                      let (power, rr1) := p1
+                      do
+                      let r4 ← source_resume_allocate v
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val => do
+                          let r5 ← source_resume_weights val rr1
+                          let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                          match cf5 with
+                            | core.ops.control_flow.ControlFlow.Continue p2 =>
+                              let (weights, rr2) := p2
+                              if (rr2.at != rb.end) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+                              else do
+                                let i ← bytes.index_usize 9#usize
+                                let i1 ← lift (UScalar.cast UScalarTy.Usize i)
+                                ok
+                                    (core.result.Result.Ok
+                                      ({ variant := v, roots := rb.roots, gamma := rb.gamma, kappa := rb.kappa,
+                                          alpha := rb.alpha, rho := rho, queries := rm.queries,
+                                          semantic_alpha := rm.semantic_alpha, z := rm.z, claim := rm.claim,
+                                          state := rb.state },
+                                        { weights := weights, rhs := rm.rhs, power := power, next := i1 }))
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+but is expected to have type
+  sourceTry ?m.23 ?m.24 = ok (core.result.Result.Ok ?m.25)
+in the application
+  try_success ?m.23 ?m.24 ?m.25 h
+/home/dombarker/project-offloads/aspis-r1-cu-equivalence-20261019/sources/CuSavingsRhoResumeCaller.lean:93:22: error: Tactic `rcases` failed: `rhoPair : ?m.52 begin` is not an inductive datatype
+'AspisR1.CuSavingsRhoResumeCaller.read_success' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsRhoResumeCaller.weights_success' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]
+'AspisR1.CuSavingsRhoResumeCaller.allocation_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CuSavingsRhoResumeCaller.source_inputs' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ core.fmt.Formatter]

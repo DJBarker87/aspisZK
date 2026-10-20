@@ -1,3 +1,22 @@
+# Candidate 12 closed for the selected production source entrypoints
+
+Latest result: **RHO-CANDIDATE12-FINAL.md/json** and
+`CuSavingsRhoCandidate12.all_callers_equivalence`. Actual initialization,
+source accumulation/query/stage loops, caller-derived inputs and all three
+complete named transaction contexts now compose under the explicit numerical
+heap/ABI and existing runtime boundary. Ordered cryptographic trace projection
+is checked. No candidate-equivalence or allocation-success proposition remains.
+Candidate 12 joins candidate 6: **2 of 10 retained replacements closed** within
+the stated reference/source/runtime boundary. Other proofs and combined
+soundness/privacy transfer remain open. The next largest remaining measured
+saving is candidate 4 (62,101–62,184 combined CU); no new goal is created here.
+
+The earlier entries below are historical checkpoints and do not describe the
+current remaining work for candidate 12. See the final requirement audit for
+scope, standard-library/ABI boundaries, full receipts and re-pin inventory.
+
+---
+
 # Current goal: candidate 12, transaction-local rho residues
 
 User direction: prove the optimizations with the largest measured CU savings
