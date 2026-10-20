@@ -85,3 +85,43 @@ The task-owned copy of run-joint.sh retains env J, attempt allocation,
 reservation checking and slot locking; its scope uses MemoryHigh=6G,
 MemoryMax=8G, MemorySwapMax=0, TasksMax=64. The shared launcher is unchanged.
 No shipped Rust file changed in this stage; no ELF rebuild is required.
+
+## Bank std-model stage
+
+D96's rejected all-copy-crates bank extraction is now usable as an axiom-free
+Lean definition: `R1Z.BuilderBankExtracted`. `adapt-bank.py` pins the raw file
+and makes only the inventoried adaptations in `bank-adaptation.json`:
+
+- Supply `array.from_fn`, iterator map construction/next, and both range
+  membership functions from `BuilderStdModels`. Mutable closure state is
+  threaded in increasing-index order; None never calls the map closure;
+  comparisons short-circuit. Inclusive membership treats exhausted ranges
+  according to the pinned Rust RangeBounds implementation (exclusive end).
+- Remove the generated map/collect dictionary fields absent from the pinned
+  backend Iterator record. The caller already invokes their standalone
+  defaults explicitly; next and its closure/iterator arguments are retained.
+- Define the extracted core-field constant as its literal source value,
+  `2147483647#u32`.
+- Adapt two shift-count types to the pinned backend: `BuilderStdShift` proves
+  that truncating a usize count to u32 preserves its residue modulo 64;
+  literal 1i32 becomes 1u32. No admitted-domain bound is needed for that cast.
+
+The bank's complete `merged_banks` definition compiles and audits to only
+`propext`, `Classical.choice`, `Quot.sound` (9235; exit 0, 6.50 seconds,
+2,677,024 KiB peak RSS, 0 swaps). It contains no opaque source declaration.
+`bank-source-check.json` verifies 173 current source pins: all inherited
+core/statement .rs/.toml pins and all three copy-crate source files.
+No Rust source was modified and no new extraction success is claimed.
+
+`BuilderStdCollect` additionally proves the pinned Vec iterator collector
+preserves any finite next-result trace, including the pure map adapter's
+order. It uses symbolic induction, never enumerates 57 blocks or 16,384 bank
+cells. The five adapters have 9 checked specification theorems (9231), the
+shift adapter 3 (9234), and collection 3 (9238). Full per-attempt receipts,
+including failures and corrected sources, are in `release-attempts.jsonl`.
+
+This stage clears unsupported std declarations, not the remaining
+whole-bank equivalence theorem: the extracted Parts/loop/writer outputs
+still need pointwise identification with `R0Z.WriterRefine.copyCellMerged`.
+The raw mapper and full public projection also still need to be joined to
+successful compiler executions. RustRuntimeJoin is not claimed inhabited.
