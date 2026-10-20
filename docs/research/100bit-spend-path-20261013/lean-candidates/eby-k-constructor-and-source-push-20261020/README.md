@@ -1,0 +1,9 @@
+# EbyK constructor, checked conversion, and push state
+
+PROVED actual constructor cut: Dot::new and EbyKDot::new produce two zero four-limb accumulators and count zero. The exact generated constructor source has no opaque callees. A fieldwise ABI map connects that constructor's distinct generated type namespace to the source-shaped push state's zero value; the nominal owners are not silently identified.
+
+PROVED successful source-shaped push: the eight WideExact limbs split into the exact two ordered four-limb arrays passed to Dot; the scalar passed to both calls has exactly the four original QM31 limbs; the source count guard is below 4096; actual checked Usize addition gives new count = old count + 1; and both returned Dot states are stored in the exact corresponding output fields. Conversions, array reads, source branch/error order and checked count arithmetic are concrete. The checked-Q body exposes only Iterator.all; output identity holds for arbitrary all, so canonicality is deliberately not inferred from that premise.
+
+Ten selected focused NUC Lean owners pass with standard-only theorem reports, -j1 -M4400 and capped zero-swap scopes. Exact frozen field/wide/fast_pairing hashes and complete conversion/body adapter checks are included. Generated raw external templates remain non-imported diagnostic references. Immutable worker archives retain source and command/resource receipts. No production changes or binaries.
+
+OPEN: Dot.push arithmetic, Rust Iterator.all predicate semantics/canonicality, original Rust caller/reachability and whole source/runtime equivalence. R22 overflow-freedom is the lead's separate assignment and is not proved here. This is a checked source-shaped operation model/constructor packet, not a closed refinement of the actual full EbyKDot push caller or complete 100-bit soundness.
