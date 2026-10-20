@@ -51,7 +51,7 @@ pub fn run(q:&Value)->Result<Value>{
  "deposit"=>{
  let n=q["note"].as_u64().unwrap() as u32;let(k,salt,cm)=note(n);let lane=pool_v1_pair_forest_deposit_lane_v1(&cm).map_err(err)?;
  let page=pool_v1_root_page_address(&pool,&lanes[lane as usize],0).0;
- let mut a=vec![ro(master),rw(lanes[lane as usize]),rw(page),rw(pk(q,"source")),rw(vault),ro(mint),meta(pk(q,"token_owner"),true,false),ro(token)];
+ let mut a=vec![ro(master),rw(lanes[lane as usize]),rw(page),ro(mint),rw(pk(q,"source")),meta(pk(q,"token_owner"),true,false),rw(vault),ro(token)];
  if q["genesis"].as_bool().unwrap(){a.extend([meta(payer,true,true),ro(system)])}
  let d=encode_pair_forest_deposit_instruction_v1(&DepositRequestV1{owner_key:derive_owner_key(&k),amount:1000,salt,encrypted_note_payload:&[]}).map_err(err)?;
  let nf=pool_v1_nullifier(&k,&salt);let out=pool_v1_pair_forest_output_lane_v1(&nf).map_err(err)?;
