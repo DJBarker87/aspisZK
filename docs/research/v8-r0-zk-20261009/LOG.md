@@ -7307,3 +7307,16 @@ or a memory failure. The std blocker is cleared, but whole-bank refinement,
 successful-source admission, a concrete shipped RustRuntimeJoin and real
 checker/retry execution coupling are not proved. The canonical release
 composition is conditional on the same fixed-event execution joins as D94.
+
+## D99 — one release privacy theorem (2026-10-21, lead)
+
+Reviewed `codex/cx-builder-ref5-20261021`; the worker's entry is above.
+`PrivacyR1FinalRelease.privacy_R1_release` (D94 + D96 at the canonical
+instance, error including freshness < 2^-100, signature-audited against both)
+is now the single privacy reference, with the owner table in
+`r1p-final/PRIVACY-RELEASE-20261021.md`. Lead route for the remaining
+`records` blocker (Aeneas fails at `pair_forest_copy_builder.rs:230`): use the
+P6 pattern. D90 already proved all 20 `records` fields equal to an owned
+reference by Kani, and that reference translates, so cite Kani shipped =
+reference and Lean on the extracted reference, instead of extracting the
+shipped function.
