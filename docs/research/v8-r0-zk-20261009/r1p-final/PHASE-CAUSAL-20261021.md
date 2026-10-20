@@ -81,3 +81,33 @@ This is conditional on inhabiting the phase interface for the real encoding.
 It does not claim that the shipped prover inhabits that interface. No
 `R10_RWire_executes_phase_order` hypothesis is needed for this mathematical
 causality theorem; execution correspondence cannot substitute for locality.
+
+## Stage 4: existing-model leaf dependencies and construction
+
+`PhaseBuilderDependenciesBin` proves the dependency lemmas on the actual
+`HonestView.prepare`, `MaskLayout.applyAff`/`applyEligible`, and `Batched.q1`
+functions already used in the privacy experiment:
+
+- C1's 27 columns (0..25 and 28, matching host_commitment.rs:153–157)
+  are challenge independent. This includes the mask columns, not only the
+  sixteen semantic columns.
+- The prepared and masked trace depends only on semantic rows 0 and 1.
+- q1 depends only on gamma and alpha0 in addition to that trace. Thus the
+  folded coefficient word is fixed after row 29, irrespective of later
+  opening/query answers.
+
+`PhaseLeafConstructionBin` constructs leafVal from those functions, with
+separate encoder parameters for the 27 C1 columns, the two C2 columns (26,
+27), and the folded coefficient word. It constructs `R1PhaseProver` data
+with those leaves and proves `constructed_causal`. The remaining encoder
+parameters must implement S2 coefficient transport, evaluation, four-symbol
+fibre selection, field-to-byte serialization and folded padding as in
+host_commitment.rs and prover.rs:218–224. Their Rust equality is not proved.
+The encoder interfaces cannot receive any additional challenge or query.
+
+Final focused attempts: 9015 (dependency lemmas) and 9016 (leaf constructor),
+exit 0, standard axioms, zero swap. Attempts 9010–9012 isolate/fix namespace
+and simplifier issues; 9013 passes the initial leaf constructor; inspection
+of the Rust C1 list then expands its initial sixteen-column selector to all
+27 source C1 columns. 9014 fails a small inequality and 9015 supplies the
+symbolic arithmetic proof. Nothing evaluated a tree/position universe.
