@@ -111,3 +111,19 @@ and simplifier issues; 9013 passes the initial leaf constructor; inspection
 of the Rust C1 list then expands its initial sixteen-column selector to all
 27 source C1 columns. 9014 fails a small inequality and 9015 supplies the
 symbolic arithmetic proof. Nothing evaluated a tree/position universe.
+
+## Stage 5: prefix-dependent QueryScan construction
+
+`PhaseQueryScanBin` constructs a first-completion scan on the eight block
+indices. Readiness receives the endpoint and zero-extended observed prefix;
+block 7 is the exhaustion/default endpoint. Both the selected endpoint and
+decoded queries are proved invariant under changing blocks after that
+endpoint. `wireData` installs this scan and the component-local challenge
+decoder in an existing wire's other data. This supplies a concrete decoder
+and scan skeleton, while leaving the source readiness/parser, scalar/circle
+samplers and message locality to be identified. Only eight block indices
+are filtered/minimized, never the commitment position universe.
+
+9018 fails because `prefix` is a Lean keyword; 9019 passes after renaming;
+9020 adds and verifies the wire-data constructor and its decoder/scan
+properties (1.91s, 3518856 KiB, zero swap, nine standard-axiom audits).
