@@ -41,3 +41,17 @@ current freeze have landed; at adoption the lead re-runs the all-input CU
 bound, re-checks the re-pins whose cones the refactor touches (S8:
 tx1_finish) and the R19 constants (checklist in
 `evidence/freeze-prep-20261020/FREEZE-CANDIDATE.md`).
+
+## Candidate update (2026-10-20, prep2)
+
+Branch codex/cx-freeze-prep-20261020 now also carries the accumulation-path
+split (ba6ed8989: optional batch dispatch outside the loops, separate
+batched/unbatched helpers, copy-valued reads) that lets the candidate-7
+cone translate; re-gated (6306b3959): all gates pass, margins 119/134 CU,
+candidate pins default 73cf9fd5…, devnet ea9cb9cd…, `.text` identical.
+Pending on the candidate before adoption (prep3, one pass): the
+`compact::check_values` `chunks_exact` loop (S8), the `Iterator.any`
+interface gap (R13), and the two generated-name collisions
+(stage-1/stage-2; `Stage2ContinuationTypes` vs
+`AspisR1PublicPreparation.Types`), with every admitted-route cone extracted
+on the result.
