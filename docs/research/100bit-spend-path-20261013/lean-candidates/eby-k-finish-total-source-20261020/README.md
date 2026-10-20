@@ -1,0 +1,9 @@
+# Actual EbyKDot.finish: total, canonical, exact limb order
+
+PROVED: the unchanged extracted EbyKDot::finish and typed entry succeed for every stored two-half/four-U64 accumulator, regardless of count. Each half uses the actual emitted private Dot.finish. Its reducer/array model is connected by an explicit record ABI and function equality to the previously checked canonical dot finish; no nominal field type is silently identified.
+
+PROVED: the eight returned WideExact coordinates are exactly the canonical input residues modulo P, in c0 then c1 source order. Those actual eight values pass the actual full field WideExact::from_limbs source and unwrap. No input-range, canonicality, reducer-success, from_limbs-success or per-coordinate-success premise remains. A further explicit CM31/QM31/WideExact record map proves successful output satisfies the canonical predicate used by the current field/fold/finish proof closure.
+
+Five focused NUC owners/nine standard-only theorem reports pass at -j1 -M4400, High1GiB/Max2GiB/Swap0. Exact full frozen field/wide sources, selected fast_pairing record/body fragments, Charon/Aeneas receipts and reversible whole generated adapter are included. Only the raw Array.map external import is replaced with the retained concrete state-threaded model; the raw axiom template is diagnostic and excluded from accepted imports. Existing reducer and field proofs are reused without unchanged replay. No production changes or binaries.
+
+OPEN: Rust standard Array.map correspondence; actual raw-product/push-loop arithmetic and source traversal; whole dot_e_k/finish caller and runtime reachability. This proves final output canonicality and residue order, not that stored sums are the intended product sum (the push/loop proof must provide that). R22 global overflow-freedom remains lead-owned. The complete 100-bit soundness theorem remains OPEN.
