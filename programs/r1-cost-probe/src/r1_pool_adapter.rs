@@ -74,8 +74,28 @@ const RELEASE_BINDING: [u8; 32] = [
     0xe2,0x94,0xaf,0xbc,0x14,0xef,0x6a,0xfe,0x76,0xb8,0x47,0xde,0xf4,0x44,0x52,0xf8,
     0x4c,0xc3,0x72,0x80,0x64,0x65,0x76,0x07,0xb5,0x44,0xa5,0x39,0xca,0x9b,0x32,0x3a,
 ];
-const AUDIT_POOL_PROGRAM: [u8; 32] = deployment_ids::deployment_id(option_env!("ASPIS_R1_POOL_PROGRAM_ID"), [0x41; 32]);
-const AUDIT_REGISTRY_PROGRAM: [u8; 32] = deployment_ids::deployment_id(option_env!("ASPIS_R1_REGISTRY_PROGRAM_ID"), [0x44; 32]);
+// Retained deployment data, never instruction immediates. The SBF linker merges
+// these named input sections into .rodata; the release audit pins both slots.
+#[used]
+#[link_section = ".rodata.aspis_pool_program_id"]
+static AUDIT_POOL_PROGRAM: [u8; 32] = deployment_ids::deployment_id(
+    option_env!("ASPIS_R1_POOL_PROGRAM_ID"), [0x41; 32],
+);
+#[used]
+#[link_section = ".rodata.aspis_registry_program_id"]
+static AUDIT_REGISTRY_PROGRAM: [u8; 32] = deployment_ids::deployment_id(
+    option_env!("ASPIS_R1_REGISTRY_PROGRAM_ID"), [0x44; 32],
+);
+
+#[inline(always)]
+fn pool_program_id() -> [u8; 32] {
+    *core::hint::black_box(&AUDIT_POOL_PROGRAM)
+}
+
+#[inline(always)]
+fn registry_program_id() -> [u8; 32] {
+    *core::hint::black_box(&AUDIT_REGISTRY_PROGRAM)
+}
 const AUDIT_POLICY_BINDING: [u8; 32] = [7; 32];
 
 const PAIR_FOREST_MASTER_SEED: &[u8] = b"aspis-pair-forest-master-v1";
@@ -514,9 +534,9 @@ fn authenticate_invariant_release_registry(
     // Versioned, owner-authenticated registry images carry the canonical bumps
     // saved by their initializers. Address checks below perform one derivation;
     // they neither search for a bump nor establish canonicality independently.
-    if pool_program.to_bytes() != AUDIT_POOL_PROGRAM
+    if pool_program.to_bytes() != pool_program_id()
         || master.verifier_policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY == 0
-        || master.verifier_policy.registry_program != AUDIT_REGISTRY_PROGRAM
+        || master.verifier_policy.registry_program != registry_program_id()
         || master.verifier_policy.registry_authority != [0u8; 32]
         || master.verifier_policy.policy_binding != AUDIT_POLICY_BINDING
     {
@@ -524,7 +544,7 @@ fn authenticate_invariant_release_registry(
     }
     validate_verifier_policy_v1(&master.verifier_policy)
         .map_err(|_| ProgramError::InvalidAccountData)?;
-    let registry_program = Pubkey::new_from_array(AUDIT_REGISTRY_PROGRAM);
+    let registry_program = Pubkey::new_from_array(registry_program_id());
     require_readonly_account(registry_account, &registry_program)?;
     let immutable_deployment =
         master.verifier_policy.flags & POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT != 0;
@@ -877,7 +897,7 @@ fn validate_asq8(
         .map_err(|_| ProgramError::InvalidInstructionData)?;
     if request.verifier_profile != PROFILE_BINDING
         || request.verifier_release != RELEASE_BINDING
-        || request.pool_program != AUDIT_POOL_PROGRAM
+        || request.pool_program != pool_program_id()
     {
         return Err(ProgramError::InvalidInstructionData);
     }
