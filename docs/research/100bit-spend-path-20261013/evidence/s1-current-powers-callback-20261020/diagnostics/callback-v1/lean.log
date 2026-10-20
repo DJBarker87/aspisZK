@@ -1,0 +1,58 @@
+/home/dombarker/project-offloads/s1-current-powers-callback-v1-20261020/sources/CurrentPowersCallback.lean:36:28: warning: Variable name `N` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/s1-current-powers-callback-v1-20261020/sources/CurrentPowersCallback.lean:64:117: warning: Variable name `tupled_args` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/s1-current-powers-callback-v1-20261020/sources/CurrentPowersCallback.lean:94:49: error: unsolved goals
+mul : field.WideExact → field.WideExact → Result field.WideExact
+N : Usize
+p x next : field.WideExact
+i : Usize
+h : mul p x = ok next
+⊢ (let (_, we) := (p, x)
+    do
+    let (we1, c1, call_mut_back) ←
+      let (a, we) := (p, x)
+        do
+        let we1 ← mul a we
+        ok
+            (a, (we1, we), fun c1 =>
+              match c1 with
+              | (we2, snd) => (we2, we))
+    let (we2, _) := call_mut_back c1
+      ok (we1, we2, we)) =
+    ok (p, next, x)
+/home/dombarker/project-offloads/s1-current-powers-callback-v1-20261020/sources/CurrentPowersCallback.lean:97:4: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [weights.powers.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeWideExact.call_once,
+      weights.powers.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut,
+  ̵  ̵ ̵ ̵h̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/s1-current-powers-callback-v1-20261020/sources/CurrentPowersCallback.lean:97:7: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [weights.powers.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeWideExact.call_once,
+      weights.powers.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut,
+  ̵  ̵ ̵ ̵h,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/s1-current-powers-callback-v1-20261020/sources/CurrentPowersCallback.lean:115:20: error: Application type mismatch: The argument
+  hm
+has type
+  mul p x = ok product
+but is expected to have type
+  ok product = ok product
+in the application
+  And.intro hm
+'AspisR1CurrentPowers.call_once_of_mul' depends on axioms: [sorryAx]
+'AspisR1CurrentPowers.call_once_success_mul' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1CurrentPowers.call_once_index_independent' does not depend on any axioms
