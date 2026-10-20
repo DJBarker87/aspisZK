@@ -128,4 +128,71 @@ introduced. The original RuntimeJoin and release theorem are unchanged.
 
 ## Stage 4: real execution coupling and release endpoint
 
-Pending.
+`PrivacyR1FinalReleaseSource.privacy_R1_release_source` composes the release
+reduction for an arbitrary honest source builder with an explicit
+`R_source_records_admission_banks_transport : RustRuntimeJoin h`. It retains
+D94's exact fixed-event real/ideal execution joins and the freshness error,
+including the strict <2^-100 bound. The concrete shipped inhabitant and the
+real checker/retry coupling are not constructed. No remaining D99 release
+premise is removed. The endpoint is an honest conditional source-facing
+generalization, not a completed source release or a claim of a weaker
+assumption than the canonical theorem.
+
+`builder-cont6-signature-audit.py` verifies all other binders and the entire
+conclusion are byte-identical to PrivacyR1FinalRelease. It records the one
+added RuntimeJoin binder and the change from fixed canonical h to arbitrary
+h. The unified signature diff and complete verbatim before/after statements
+are appended to `PRIVACY-RELEASE-20261021.md`.
+
+`BuilderExecutionBoundary.constant_mismatch_forces_full_bad` proves that
+constant-zero versus constant-one observations can have a fixed-event
+ModelExecutionJoin only when the model bad-event union has mass one.
+`no_constant_mismatch_join` rules it out for any smaller union. This is a
+checked obstruction to inferring the current arbitrary-source execution
+premise from builder facts; it is not a claimed counterexample to the Rust
+prover. Actual source execution still needs its explicit observation map,
+uniform randomness coupling, checker-input/P_chk/P_R1 identity, no-pole/VR1,
+mask/retry/error/publication/serialization law, and reached-query history.
+In particular the source's `next_attempt(k)?` and non-Rejected error aborts
+must be accounted for by that observation map, rather than silently ignored.
+No runtime suite with unchanged covered sources was rerun.
+
+## Final verification and exact handoff
+
+The final source endpoint is env J 9307 (exit 0, 4.96 s,
+4,121,280 KiB peak RSS, zero swaps), with only propext, Classical.choice and
+Quot.sound. The final bank/records bridge is 9306 (exit 0, 1.68 s,
+4,002,564 KiB RSS, zero swaps); full bank materialization is 9305.
+The whole continuation has 23 current modules, 73 theorem audits and the
+actual validate_common definition audit (74 total). All final source hashes,
+current direct-import object fingerprints and resolved dependency-object
+SHA/size match successful receipts. Failures and their replacements remain
+in the attempts JSONL. No unchanged Lean target or full regression was rerun;
+there is no complete frozen-manifest replay claim.
+
+`builder-cont6-final-audit.json` pins the env-J configuration, Lean binary,
+task-owned capped launcher, each current source/object and import object.
+`builder-cont6-p6-certificate.json` retains the named P6 route, six earlier
+solver verdicts and exact current production pins. Extraction diagnostics
+and metadata/std adaptations are retained separately; rejected opaque or
+unsupported outputs are not kernel certificates.
+
+The four remaining source obligations are narrow and explicit:
+
+1. Forest successful-source semantic admission: digest and append checks,
+   exact public/empty-root/frontier mapping, embedded RspendPlus and D50
+   sentinel. The direct route currently reaches the isolated unsupported
+   higher-ranked callback lifetime, not records.
+2. Contents of successful Parts equal the canonical blockR/pathR/auxR
+   composition, plus the final Vec-to-column wrapper. Full bank iteration,
+   exact 57-block length and checked merge are now proved.
+3. A concrete successful-source HonestProver and the shipped RuntimeJoin
+   inhabitant assembled from those facts and the existing S2 P6 route.
+4. The real source execution coupling above; the ideal source coupling and
+   commitment premises retain their existing owners and statements.
+
+All shipped crate files and the original PrivacyR1Final, Protocol,
+HistoryReal, Release and BuilderRuntimeJoin files are byte-unchanged from
+5676c09df. No ELF rebuild is required; no SBF identity claim is newly measured.
+No quotient-worker file, key, binary, LLBC or object is changed/committed.
+No push or merge was performed.

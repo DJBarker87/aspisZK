@@ -905,3 +905,15 @@ with D90's six retained Kani verdicts in the named P6 route certificate.
 The exact route and remaining bank/admission boundary are documented in
 `BUILDER-CONT6-20261021.md`; receipts and source checks are in
 `builder-cont6-p6-certificate.json`. No shipped Rust changed.
+
+Continuation 6's final packet now covers 23 modules and 74 axiom audits:
+total owned-reference computation, the named P6 source route, successful
+common admission/range/canonicality, and actual full-bank materialization
+and checked merges. The final source-facing release endpoint is conditional
+on the explicit RuntimeJoin and unchanged execution joins; no remaining
+D99 release premise is claimed discharged. Direct forest admission reaches
+the isolated unsupported higher-ranked callback lifetime in derive_nullifier,
+with exact diagnostics retained. See `BUILDER-CONT6-20261021.md`,
+`builder-cont6-final-audit.json`, and the verbatim source-endpoint signature
+diff appended to `PRIVACY-RELEASE-20261021.md`. Original privacy roots and
+all shipped crate files remain unchanged from 5676c09df.
