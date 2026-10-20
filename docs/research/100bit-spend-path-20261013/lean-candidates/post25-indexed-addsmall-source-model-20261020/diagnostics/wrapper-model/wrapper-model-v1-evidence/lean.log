@@ -1,0 +1,22 @@
+/home/dombarker/project-offloads/post25-indexed-addsmall-wrapper-model-v2-20261020/sources/IndexedCandidateAddSmallWrapperNatModelV1.lean:44:17: error(lean.unknownIdentifier): Unknown identifier `addDigits_mod_div`
+/home/dombarker/project-offloads/post25-indexed-addsmall-wrapper-model-v2-20261020/sources/IndexedCandidateAddSmallWrapperNatModelV1.lean:41:76: error: unsolved goals
+digits : Digits
+carry : U32
+hcanon : Canonical digits
+hcarry : ↑carry ≤ 257
+outCarry : U32
+outDigits : Digits
+hrun : sampler.add_small_base_p digits carry = ok (outCarry != 0#u32, outDigits)
+hvalues : values outDigits = (addDigits P (↑carry) (values digits)).1
+hcarry' : ↑outCarry = (addDigits P (↑carry) (values digits)).2
+⊢ ∃ outCarry outDigits,
+    sampler.add_small_base_p digits carry = ok (outCarry != 0#u32, outDigits) ∧
+      digitsValue P (values outDigits) = (digitsValue P (values digits) + ↑carry) % P ^ 8 ∧
+        ↑outCarry = (digitsValue P (values digits) + ↑carry) / P ^ 8
+'AspisR1.ExtractedIndexedAddSmallWrapperNatModelV1.add_small_base_p_refines_addDigits' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.ExtractedIndexedAddSmallWrapperNatModelV1.add_small_base_p_model_value_quotient' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

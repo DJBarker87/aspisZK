@@ -1,0 +1,16 @@
+--- production/add_small_base_p
++++ candidate/add_small_base_p
+@@ -1,8 +1,10 @@
+ fn add_small_base_p(digits: &mut [u32; 8], mut addend: u32) -> bool {
+-    for digit in digits {
+-        let sum = u64::from(*digit) + u64::from(addend);
+-        *digit = (sum % u64::from(P)) as u32;
++    let mut i: usize = 0;
++    while i < 8 {
++        let sum = u64::from(digits[i]) + u64::from(addend);
++        digits[i] = (sum % u64::from(P)) as u32;
+         addend = (sum / u64::from(P)) as u32;
++        i += 1;
+     }
+     debug_assert!(addend <= 1);
+     addend != 0
