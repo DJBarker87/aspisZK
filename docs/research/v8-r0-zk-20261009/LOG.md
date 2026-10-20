@@ -7072,3 +7072,25 @@ from `JointView.view` with its dependency proofs, (2) sampler/parser identity,
 (3) leaf encoder identity with the shipped C1/C2/folded leaves, (4) execution
 refinement of the hash-call order. `PrivacyR1Final.lean` unchanged. Eight
 modules, 31 theorems, standard axioms, all attempts zero swap, RSS < 3.6 GB.
+
+## D88 — concrete phase model built; final theorem to be stated over it (2026-10-20, lead)
+
+Landed from `codex/cx-priv-phase2-20261021` (`r1p-final/PHASE2-JOINS-20261021.md`).
+A concrete Lean phase instance now exists: logical transcript encoding with
+frame/payload/final locality, symbolic semantic and batched message prefix
+lemmas, block samplers, first-22-distinct parsing, S2 leaf encoders and
+padding (`PhaseProtocolInstanceBin`). Its `causal_premise` proves D80
+causality at all answer vectors, and `endpoint_wire` shows its wire is
+definitionally `RomFiniteBin.wire (baseWire base) …` for the selected base.
+`PrivacyR1Final` is unchanged: its `base`/`Pr` are arbitrary, and the D85
+witness survives the ROM wrapper, so no execution-only premise can replace
+`R_causal_D80` at that generality.
+
+Lead ruling (consistent with "the proved Lean protocol is the spec"): the
+release privacy theorem is stated over the constructed protocol model.
+A new endpoint module specialises `PrivacyR1Final` to the constructed
+base/Pr and discharges `R_causal_D80` by `causal_premise`. The Rust-to-model
+correspondence (sampler, field-guard and rejection behaviour, FFT,
+serialisation, reached-query history, execution order) belongs with
+`SourceIdentification`/builder refinement as source joins, not with
+causality. Seven modules, 57 standard-axiom audits, zero swap.
