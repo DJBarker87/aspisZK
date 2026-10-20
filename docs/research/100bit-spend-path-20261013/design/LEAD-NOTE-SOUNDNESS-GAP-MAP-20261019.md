@@ -145,3 +145,17 @@ model half PROVED with explicit table-content premises; the source-execution
 half (the full `QueryGeometry` iterator/grouping path and runtime
 arithmetic, candidate 7) closes with the S7 re-pin and the stage-2
 extraction.
+
+## Addendum (2026-10-20): R4/R18 partial
+
+Codex job cx-sampler (4b5b3a6b2, 86fe4174f): four modules, 20 theorem
+audits, standard axioms, ≤ 3.27 GiB (`design/SAMPLER-ROWS-25-32-20261020.md`,
+`evidence/sampler-rows-25-32-20261020/`). Proved: source block/state
+correspondence for the circle rows (25–26) and the opening scalar rows
+(27–30), the row-26 reseed, the nonzero-γ handling, the model query law
+(row 31), and the tag and commitment-message formats conditional on the
+public mapping and `Checks`. Still open on R4/R18: scalar/circle output
+transport, the source query-scan refinement (row 31 source side), the
+current CU re-pins (candidate 7), the global-log/full-prefix composition
+(R10), and the deployed public mapping; counterexamples record why
+unrestricted variants and free public tags cannot satisfy the laws.
