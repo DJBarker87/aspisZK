@@ -58,6 +58,15 @@ pub fn run(q:&Value)->Result<Value>{
  Ok(json!({"instruction":ix(pool,a,d),"lane_id":lane,"lane":lanes[lane as usize].to_string(),"page":page.to_string(),"output_lane_id":out,"output_lane":lanes[out as usize].to_string(),"output_page":pool_v1_root_page_address(&pool,&lanes[out as usize],0).0.to_string()}))
  },
  "checkpoint"=>{let seq=q["sequence"].as_u64().unwrap();let cp=pool_v1_pair_forest_checkpoint_address(&pool,&master,seq).0;let mut a=vec![rw(master)];a.extend(lanes.iter().copied().map(ro));a.extend([rw(cp),meta(payer,true,true),ro(system)]);Ok(json!({"checkpoint":cp.to_string(),"instruction":ix(pool,a,encode_pair_forest_checkpoint_instruction_v1())}))},
+ "validate_settlement"=>{
+ let lane=decode_pool_v1_pair_forest_lane_state_v1(&bytes(q,"lane_bytes"),&POOL_V1_PAIR_EMPTY_ROOTS).map_err(err)?;
+ let marker=decode_pool_v1_nullifier_marker(&bytes(q,"marker_bytes")).map_err(err)?;
+ let after=decode_pool_v1_pair_verified_afterstate_v1(&bytes(q,"candidate_bytes")).map_err(err)?;
+ let(k,salt,_)=note(q["note"].as_u64().unwrap() as u32);
+ ensure!(lane.master==master.to_bytes()&&lane.tree.next_leaf_index==after.next_pair_index&&lane.tree.root==after.next_root&&lane.tree.frontier==after.next_frontier,"settled lane differs from proved afterstate");
+ ensure!(marker.pool==master.to_bytes()&&marker.deployment_domain==[5;32]&&marker.nullifier==pool_v1_nullifier(&k,&salt),"consumed marker identity differs");
+ Ok(json!({"marker_matches":true,"lane_matches":true,"next_pair_index":after.next_pair_index,"root":super::hex(&encode_digest_canonical(&after.next_root))}))
+ },
  "prove"=>prove(q,pool,master,&lanes,reg,entry,vault,authority,token,system),
  _=>Err(anyhow!("unknown action"))
  }

@@ -26,6 +26,8 @@ def send(name,ixs,keys=['keys/payer.json'],negative=False):
         old=json.load(open(done))
         if old.get('finalized'):return old
         raise RuntimeError(f'{name}: prior incomplete transaction; inspect attempt signatures before resuming')
+    if list(O.glob(name+'-attempt-*.json')):
+        raise RuntimeError(f'{name}: prior attempt receipts exist; reconcile their signatures before resuming')
     start=time.monotonic()
     for attempt in range(3):
         bh=rpc(URL,'getLatestBlockhash',[{'commitment':'confirmed'}])['value']
@@ -59,7 +61,10 @@ def send(name,ixs,keys=['keys/payer.json'],negative=False):
     raise RuntimeError(f'{name}: blockhash expiry attempt cap reached')
 def ix(program,accounts,data):return {'program':program,'accounts':accounts,'data':data.hex()}
 def create(name,address,owner,size,signer):
-    if account(address)['value'] is not None:return
+    existing=account(address)['value']
+    if existing is not None:
+        assert existing['owner']==owner and not existing['executable'] and len(base64.b64decode(existing['data'][0]))==size, f'{name}: unexpected existing account'
+        return
     rent=rpc(URL,'getMinimumBalanceForRentExemption',[size])
     data=(0).to_bytes(4,'little')+rent.to_bytes(8,'little')+size.to_bytes(8,'little')+b58(owner)
     return send(name,[ix(SYSTEM,[[C['payer'],True,True],[address,True,True]],data)],['keys/payer.json',signer])
@@ -121,12 +126,25 @@ for n,label in enumerate(['transfer','withdrawal']):
     send(label+'-stage1',[p['stage1']]);send(label+'-stage2',[p['settle']])
     readback={a:account(a) for a in [p['marker'],p['output_lane'],setup['vault'],dest,verifiercp]};write(label+'-readback',readback)
     assert readback[p['marker']]['value'] is not None,'settled nullifier marker missing'
-    send(label+'-replay',[p['settle']],negative=True)
+    validation=plan('validate_settlement',note=n,lane_bytes=base64.b64decode(readback[p['output_lane']]['value']['data'][0]).hex(),marker_bytes=base64.b64decode(readback[p['marker']]['value']['data'][0]).hex(),candidate_bytes=proof[:-57607].hex());write(label+'-settlement-validation',validation)
+    vault_amount=int.from_bytes(base64.b64decode(readback[setup['vault']]['value']['data'][0])[64:72],'little')
+    destination_amount=int.from_bytes(base64.b64decode(readback[dest]['value']['data'][0])[64:72],'little')
+    assert (vault_amount,destination_amount)==((2000,0) if n==0 else (1750,250)), 'settlement SPL balance mismatch'
+    write(label+'-token-balances',{'vault':vault_amount,'destination':destination_amount})
+    replay=send(label+'-replay',[p['settle']],negative=True)
+    assert replay['error']=={'InstructionError':[0,{'Custom':0x41532026}]},'replay did not reject as NullifierAlreadyConsumed'
+    after_replay={a:account(a) for a in readback}
+    assert all(readback[a]['value']==after_replay[a]['value'] for a in readback),'replay changed protected state'
+    write(label+'-replay-validation',{'error_name':'NullifierAlreadyConsumed','custom_code':0x41532026,'protected_accounts_unchanged':True})
     negkey,negcp=key(label+'-negative-checkpoint');create(label+'-negative-checkpoint-create',negcp,C['programs']['verifier'],1768,negkey)
     # Mutate the compact proof header, leaving candidate bytes intact, and use a fresh checkpoint.
     offset=len(proof)-57607
     send(label+'-mutate-proof',[ix(C['carrier'],[[proofaccount,True,True]],offset.to_bytes(4,'little')+bytes([proof[offset]^1]))],['keys/payer.json',proofkey])
     negstage=json.loads(json.dumps(p['stage1']));negstage['accounts'][2][0]=negcp
-    send(label+'-mutated-stage1',[negstage],negative=True)
+    negative_before=account(negcp)['value']
+    mutation=send(label+'-mutated-stage1',[negstage],negative=True)
+    assert mutation['error']=={'InstructionError':[0,'InvalidInstructionData']},'mutated proof failed for an unexpected reason'
+    assert account(negcp)['value']==negative_before,'mutated proof changed zero checkpoint'
+    write(label+'-mutation-validation',{'error_name':'InvalidInstructionData','fresh_checkpoint_unchanged':True})
     send(label+'-restore-proof',[ix(C['carrier'],[[proofaccount,True,True]],offset.to_bytes(4,'little')+proof[offset:offset+1])],['keys/payer.json',proofkey])
 write('complete',{'settled':['transfer','withdrawal'],'negative_checks':['transfer-replay','withdrawal-replay','transfer-mutated-stage1','withdrawal-mutated-stage1'],'mint':mint,'source':source,'destination':dest,'fixture_witnesses_public':True})

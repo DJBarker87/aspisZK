@@ -1,86 +1,147 @@
-# R1 devnet resume commands
+# Config-driven R1 devnet commands
 
-The frozen-source devnet build and data-only identity audit pass. Deployment
-is blocked by the task/lead decision naming the LLBC hash as the default ELF
-pin; see [REPORT.md](REPORT.md). No deploy/init/upload/spend ran.
+Run from this worktree and the retained Linux task workspace. No wallet key,
+ELF, proof binary or nonce ledger belongs in git. Keep every task key on the
+host, directory 0700 and files 0600, including loader buffers after failures.
+The [report](REPORT.md) distinguishes executed phases from pending phases.
 
-Source/base: `fa894d83d2f3ad6df34bc8493881c780621d553e`, branch
-`codex/cx-devnet3-20261020`. Host task directory:
+Host: `dombarker@100.108.41.90`; task:
 `/home/dombarker/project-offloads/codex-cx-devnet-20261020`.
-[Public config](../../config/r1-devnet.template.json) contains no secrets.
-Keys remain on the host (0700 directory, 0600 key files); never copy them
-into the repository or remove funded keys. No binary is committed.
+Public config: [r1-devnet.template.json](../../config/r1-devnet.template.json).
+The payer is `Xjb7roDVPDSPoZpUmDVUW5SMx21x7oQEg16dhb5TDXD`.
+The config has paths and public identities, never key material. The scripts
+resolve signer files from the host's retained `keys/` directory.
 
-## Source preparation and optimized build
+## Admission and source preparation
 
-Commands below describe the executed run. Receipt directories already exist;
-do not repeat an unchanged build. Inspect populated cgroup reservations first
-and keep total MemoryMax below the host's 55-GiB safe limit.
+The corrected default ELF pin is `dfc2a91a…`, devnet ELF `fb2fc048…`;
+`f11e40b4…` is Stage2.llbc. The corrected gate passed. Do not repeat the
+unchanged SBF verifier build; its `.text`/two-slot identity audit is retained.
 
-From this worktree, source synchronization used:
+For a new workspace, synchronize tracked sources and tooling, preserving its
+compiled cache and keys. From this worktree:
 
 ```sh
-git ls-files crates programs Cargo.toml Cargo.lock > /tmp/cx-devnet3-source-files.txt
+git ls-files crates programs tools/r1-cost-probe tools/r1-buffer-carrier \
+  Cargo.toml Cargo.lock > /tmp/cx-devnet3-source-files.txt
 rsync -a --files-from=/tmp/cx-devnet3-source-files.txt ./ \
   dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-devnet-20261020/src/
-scp scripts/r1_devnet_build.sh scripts/r1_devnet_receipt.sh \
-  scripts/r1_devnet_release_gate.py config/r1-devnet.template.json \
+scp scripts/r1_devnet_{receipt.sh,rpc.py,release_gate.py,deploy_paced.py,spend.py,collect.py,carrier_build.sh} \
+  config/r1-devnet.template.json \
   dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-devnet-20261020/
 ```
 
-On the host, expected time is incremental compilation, not proving:
+Use a new receipt directory and unit name for every attempt. Before each
+large job, inspect populated scopes and ensure aggregate MemoryMax remains
+below 55 GiB; preserve that inspection in receipts:
 
 ```sh
 cd /home/dombarker/project-offloads/codex-cx-devnet-20261020
-systemd-run --user --scope --unit=cx-devnet3-build \
-  -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
-  bash ./r1_devnet_build.sh "$PWD" devnet fa894d83d frozen
+systemctl --user list-units --type=scope --state=running --no-pager
+systemctl --user show '*.scope' -p Id -p MemoryMax -p MemoryCurrent -p MemorySwapMax
 ```
 
-This uses `pool-adapter,private-leaf-salts`, SBF 3.1.13/platform-tools v1.52,
-`--offline --locked -j 4`, and the retained task SBF cache. It reads the
-reserved Pool/registry IDs from the JSON config. Native commands retain
-`RUSTFLAGS='-C link-arg=-Wl,--threads=4'`; SBF removes that cc-driver spelling
-and passes `-C link-arg=--threads=4` directly to rust-lld.
-The optional fourth build argument names a receipt/artifact series so old
-attempts remain intact. This run produced `artifacts/frozen-devnet/` and
-`receipts/build-frozen-devnet/`.
+## Optimized host driver and separate carrier
 
-## Config-driven release gate
-
-On the host, expected time is byte comparison and read-only RPC:
+Expected time is compilation only. The driver feature enables the actual
+retrying prover with P_R1, fresh OS attempt secrets and a durable nonce store.
+The carrier is a separate bounded signed-write program; it does not modify
+the frozen verifier. Its artifact is pinned in the public config.
 
 ```sh
-cd /home/dombarker/project-offloads/codex-cx-devnet-20261020
-systemctl --user list-units --type=scope --state=running --no-pager \
-  > receipts/resume-reservations.txt
-systemd-run --user --scope --unit=cx-devnet3-preflight \
+systemd-run --user --scope --unit=cx-devnet3-driver-new \
   -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
-  bash r1_devnet_receipt.sh receipts/resume-preflight-run fa894d83d \
-  'Read-only ELF byte audit and finalized RPC reads; no proving or submission' \
-  python3 r1_devnet_release_gate.py r1-devnet.template.json receipts/resume-preflight
+  bash r1_devnet_receipt.sh receipts/driver-new SOURCE_REVISION \
+  'Optimized driver compilation; no proof execution' \
+  env CARGO_TARGET_DIR="$PWD/native-target" \
+  /home/dombarker/.cargo/bin/cargo build \
+  --manifest-path src/tools/r1-cost-probe/Cargo.toml \
+  --release --offline --locked -j 4 --features r1p-check --bin devnet_spend
+
+systemd-run --user --scope --unit=cx-devnet3-carrier-new \
+  -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
+  bash r1_devnet_receipt.sh receipts/carrier-new SOURCE_REVISION \
+  'Optimized carrier SBF compilation; no proving' bash r1_devnet_carrier_build.sh
 ```
 
-Executed exit: **4**, solely because `declared_default_elf_sha256` names
-`f11e40b4…`, the LLBC hash. Documented default ELF `dfc2a91a…`, rebuilt devnet
-ELF `fb2fc048…`, Pool and registry all match their inventory pins; section
-layouts, `.text`, both IDs and the exact two-slot patch pass. Genesis, TxV1
-activation and permanent rent coverage also pass. Each RPC request/response
-and attempt timing is retained. Read-only transient RPC errors have bounded
-retries; no signing, transaction submission or key access exists in this tool.
+The receipt wrapper records native
+`RUSTFLAGS='-C link-arg=-Wl,--threads=4'`. SBF invokes rust-lld directly and
+uses `-C link-arg=--threads=4` instead. Each receipt records command, source
+revision, exit, wall, peak RSS, swaps and cgroup limits/peak. No Lean runs.
 
-The config deliberately retains the disputed declared hash. After a lead
-correction, update that field and use new receipt directories for a new gate.
-Exit 0 would mean these listed preflight checks pass; it would not establish
-working uploads, proof acceptance or settlement.
+## Deploy the pinned artifacts
 
-## Work still required
+Deployment order is verifier, Pool, registry, carrier to fit transient rent.
+The first CLI attempt exhausted retries; the paced driver repairs only bytes
+that differ in the retained buffer. Loader writes use 900 bytes: a 3,763-byte
+loader instruction failed simulation. This loader limit is independent of
+3,763-byte uploads to the separate proof carrier.
 
-There is **no end-to-end RPC spend driver** in this result. The raw-buffer
-carrier, real setup/deposit, retrying live-state proofs, 3,763-byte uploads,
-checkpoint creation, tx1/tx2 confirmation/expiry handling, state readbacks,
-negative checks and phase measurements remain open after release admission.
-Do not use legacy verifier tags 4/5/6: the frozen entrypoint rejects them.
+```sh
+systemd-run --user --scope --unit=cx-devnet3-deploy-paced-new \
+  -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
+  bash r1_devnet_receipt.sh receipts/deploy-paced-new SOURCE_REVISION \
+  'Paced RPC deployment and byte readback; no proving' \
+  python3 r1_devnet_deploy_paced.py r1-devnet.template.json receipts/deploy-paced \
+  verifier pool registry carrier
+```
 
-[Prior commands](README-prior-cx-devnet2.md) and
-[prior report](REPORT-prior-cx-devnet2.md) describe superseded artifacts only.
+Each role uses `keys/ROLE.json` and `keys/ROLE-deploy-buffer.json`. Never
+regenerate an existing identity or remove a failed buffer key. The driver
+checks the full buffer and ProgramData payload against the pinned ELF. Only
+then does it make verifier/registry loader deployments immutable, as required
+by Registry V2. All keys remain retained. A role that already exists causes
+a stop for readback inspection, not an automatic upgrade; pass only the
+remaining roles when resuming.
+
+## Initialize and spend
+
+Expected time is RPC finality, then the named P_R1 check/proof generation,
+then 16 proof uploads plus one statement upload, stage 1 and Pool settlement
+for each operation. This is deliberately a fixture-witness demonstration;
+it is not a private wallet UX. Keys and nonce stores remain host-only.
+
+```sh
+systemd-run --user --scope --unit=cx-devnet3-spend-new \
+  -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
+  bash r1_devnet_receipt.sh receipts/spend-new SOURCE_REVISION \
+  'RPC setup; optimized retrying P_R1 proof; uploads; tx1; Pool tx2; negative checks' \
+  python3 r1_devnet_spend.py r1-devnet.template.json receipts/spend
+```
+
+The script creates the devnet SPL mint, source/destination accounts, registry
+release, master, eight lanes and vault, deposits two spendable notes and
+creates a forest checkpoint. It reconstructs the historical witness from
+those deposits and checks it against the finalized anchor; it reads the live
+output lane for each proof. Separate verifier-owned zero checkpoints are
+created through System Program. Proof/statement buffers are read-only during
+verification. The compact proof buffer contains candidate-afterstate bytes
+followed by the proof; the statement is exact ASF8. The carrier requires its
+buffer key to sign every bounded upload.
+
+The sender simulates each transaction, records each signed attempt before
+submission, queries history until finalized or demonstrably expired, and only
+then re-signs with a fresh blockhash (maximum three attempts). Finalized
+metadata supplies CU, fees and slot. A prior incomplete named transaction
+requires inspection before resumption. Existing completed names are reused;
+never blindly start a second spend over changed live state.
+
+The negative checks send a fresh-blockhash replay and a mutated proof with a
+fresh zero checkpoint, recording finalized errors and logs. The mutated
+header byte is restored afterward. Readbacks include marker, lane, vault,
+destination token account and verifier checkpoint.
+
+## Collect metadata and export evidence
+
+```sh
+systemd-run --user --scope --unit=cx-devnet3-collect-new \
+  -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
+  bash r1_devnet_receipt.sh receipts/collect-new SOURCE_REVISION \
+  'Read-only finalized transaction metadata; no proving' \
+  python3 r1_devnet_collect.py r1-devnet.template.json receipts receipts/metadata
+```
+
+The collector incrementally fetches missing finalized metadata and preserves
+signature, explorer link, slot, CU, fee, error and logs without embedding ELF
+upload bytes. Copy only public receipts; exclude `*-proof-private/`, binary
+files, nonce ledgers and every key. Keep old failed-attempt receipts intact.
