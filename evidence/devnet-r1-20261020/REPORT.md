@@ -101,3 +101,28 @@ Stage 5 (the complete spend driver) also remains open. No stub is presented as
 an end-to-end driver. The config and read-only preflight documented separately
 are resumption aids only. Funding alone will not resolve the identity mismatch.
 No refund or key cleanup was attempted; retain every task key.
+
+## Independent resumption tooling — read-only preflight
+
+Added `scripts/r1_devnet_preflight.sh` and public config
+`config/r1-devnet.template.json`; exact commands are in `README.md`.
+These are not the requested stage-3 spend driver and do not advance stage 2.
+Shell syntax validation passed. Host execution completed its observations and
+returned the documented non-readiness exit 4: **0.62 s**, peak **13,728 KiB**,
+**0 swaps** (`receipts/preflight.time`). All five RPC requests succeeded.
+Source revision for program inspection remains the base above; tooling SHA-256
+is recorded in `receipts/preflight-tooling.sha256`.
+
+Finalized account readback at context slot **513087061** returned null for all
+six accounts: payer, fresh verifier, fresh Pool, fresh registry, audit Pool,
+audit registry. Thus the payer has zero lamports, none of the reserved program
+IDs is deployed, and the hardcoded audit programs are also absent at that slot.
+No source-controlled address can be relabeled as a successful deployment.
+
+The TxV1 feature account is present, Feature-program-owned, non-executable,
+with nine-byte data `AQCmWh0AAAAA` (active tag 1); the RPC reports
+`solana-core: 4.4.0-beta.0`, feature set `1855282951`.
+`receipts/preflight/` preserves requests, raw responses, HTTP codes, curl wall
+times and exits. Summary: local ELF pins match **true**, configured IDs match
+pinned verifier **false**, spend ready **false**. Prove/upload/tx1/tx2 timings
+and CU remain **unmeasured**, not zero-valued successful phases.
