@@ -120,3 +120,15 @@ from arbitrary public-byte hashes is false (`verifier.rs:382` hashes public
 bytes verbatim); separation is proved under a length premise, to be
 discharged from the fixed public-statement length in R-wire. Source side
 (R12, R13, R14) continues in the stage-2 extraction.
+
+## Addendum (2026-10-20): R8 proved; R9 stated
+
+Codex job cx-bindings (690327fe0): the transfer-variant statement binding is
+proved over the pinned adapter extraction (metadata, asset, checkpoint and
+lane bindings, exact transfer payload, recipient/change commitments,
+payment-encoder success); two new modules, standard axioms, ≤ 3.27 GiB
+(`evidence/transfer-bindings-20261020/`, `design/TRANSFER-BINDINGS-20261020.md`).
+Row R8: PROVED. Row R9 (same statement across stages) is now stated
+precisely as named obligations with the conditional byte-equality and
+supplied-public parsing proofs done; transaction reachability and the
+checkpoint linkage (R15) remain open and wait on the stage-2 extraction.
