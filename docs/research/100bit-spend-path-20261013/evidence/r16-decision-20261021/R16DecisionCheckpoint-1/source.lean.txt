@@ -1,0 +1,107 @@
+import R15WriterModel
+import QvStage2Count
+
+/-! Construction-owned first-match checkpoint model. The typed checkpoint is
+its own logical storage format; frozen byte layout/refinement is not asserted.
+Checks are symbolic field equalities, never reduction over the leaf universe. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.R16DecisionCheckpoint
+open R15WriterModel
+abbrev Data := MatchingSupport.Data E
+abbrev Queries := Fin 22 → Fin 262144
+
+structure Checkpoint where
+  data : Data
+  queries : Queries
+  next : Nat
+
+/-- The writer saves the exact matching state, ordered queries and next=10. -/
+def write (data : Data) (q : Queries) : Checkpoint := ⟨data, q, 10⟩
+def resume (saved : Checkpoint) : Checkpoint := saved
+
+def tx1 (data : Data) (q : Queries) : Option Checkpoint :=
+  if Prefix data q 10 then some (write data q) else none
+
+def tx2 (saved : Checkpoint) : Bool :=
+  decide (saved.next = 10 ∧
+    ∀ j : Fin 22, 10 ≤ j.val → MatchingSupport.match0 saved.data (saved.queries j))
+
+def decision (data : Data) (q : Queries) : Bool :=
+  match tx1 data q with
+  | none => false
+  | some saved => tx2 (resume saved)
+
+theorem writer_preserves (data : Data) (q : Queries) :
+    FirstMatchState data (resume (write data q)).data :=
+  ⟨rfl, rfl, rfl, rfl⟩
+
+theorem writer_queries (data : Data) (q : Queries) :
+    (resume (write data q)).queries = q ∧
+      (resume (write data q)).next = 10 := ⟨rfl, rfl⟩
+
+theorem accepted_first_match (data : Data) (q : Queries)
+    (accepted : decision data q = true) :
+    ∀ j, MatchingSupport.match0 (resume (write data q)).data (q j) := by
+  unfold decision tx1 at accepted
+  split at accepted
+  · rename_i saved
+    have preserved := prefix_transport data (resume (write data q)).data
+      (writer_preserves data q) q 10 saved
+    have rest : ∀ j : Fin 22, 10 ≤ j.val →
+        MatchingSupport.match0 (resume (write data q)).data (q j) := by
+      exact (of_decide_eq_true accepted).2
+    exact saved_and_resumed _ q preserved rest
+  · cases accepted
+
+/-- An explicit first-match honest instance: choose V to be the first fold.
+Other data fields are unrestricted, as this model owns only first matching. -/
+def honestData : Data where
+  W := fun _ _ => 0
+  V := FirstFold.foldWord 0 (TwoFoldExtraction.batchedWord (fun _ _ => 0) 0)
+  F := fun _ => 0
+  F0 := 0
+  Y := fun _ _ => 0
+  c0 := 0
+  gamma := 0
+  kappa := 0
+  alpha0 := 0
+  alpha1 := 0
+  p0 := 0
+  p1 := 0
+  f := fun _ => 0
+
+def honestQueries : Queries := fun j => ⟨j.val, by omega⟩
+
+theorem honest_match (i : Fin 262144) : MatchingSupport.match0 honestData i := rfl
+
+theorem honest_accepts : decision honestData honestQueries = true := by
+  have saved : Prefix honestData honestQueries 10 := fun j _ => honest_match _
+  have rest : ∀ j : Fin 22, 10 ≤ j.val →
+      MatchingSupport.match0 honestData (honestQueries j) := fun j _ => honest_match _
+  unfold decision tx1
+  rw [if_pos saved]
+  change decide (10 = 10 ∧ ∀ j : Fin 22, 10 ≤ j.val →
+    MatchingSupport.match0 honestData (honestQueries j)) = true
+  exact decide_eq_true ⟨rfl, rest⟩
+
+theorem construction_nonvacuous :
+    ∃ data q, decision data q = true ∧
+      FirstMatchState data (resume (write data q)).data ∧
+      (resume (write data q)).next = 10 :=
+  ⟨honestData, honestQueries, honest_accepts, writer_preserves _ _, rfl⟩
+
+/-- This reuses the ten/twelve count-model split; source trace coverage stays
+separate from the writer's equality preservation. -/
+theorem schedule_budget : QvStage1.stage1Budget 10 + QvStage2.stage2Budget 12 = 1161 :=
+  QvStage2.verifierBudget_value
+
+#print axioms writer_preserves
+#print axioms writer_queries
+#print axioms accepted_first_match
+#print axioms honest_match
+#print axioms honest_accepts
+#print axioms construction_nonvacuous
+#print axioms schedule_budget
+end AspisR1.R16DecisionCheckpoint
+end
