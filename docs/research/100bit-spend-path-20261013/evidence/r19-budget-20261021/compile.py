@@ -89,6 +89,7 @@ log = (out / 'lean.log').read_text()
 receipt.update(peak_rss_bytes=int(re.search(r'(\d+)\s+maximum resident set size', timing)[1]),
                swaps=int(re.search(r'(\d+)\s+swaps', timing)[1]),
                axioms=re.findall(r"'[^']+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)", log),
+               errors=[line for line in log.splitlines() if 'error:' in line],
                log=str((out / 'lean.log').relative_to(ROOT)),
                time=str((out / 'time.log').relative_to(ROOT)),
                errors=[line for line in (log + '\n' + timing).splitlines() if 'error:' in line],
