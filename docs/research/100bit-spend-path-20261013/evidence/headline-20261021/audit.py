@@ -54,6 +54,8 @@ for suffix in ['', 'Row31','R18','R19','RWire','NoColl','Tag','R9','R9Pool']:
         before = before.replace('(Q : Nat) (tx1 : Tx1) (poolTx2 : PoolTx2)', '(Q : Nat) (tape : Tape) (policy : Policy)')
         before = before.replace('deployedFailureModel tx1 poolTx2', 'deployedFailureModel (tx1 D P tape) (poolTx2 D d P policy)')
     b, conclusion = binders(before)
+    assert conclusion == newresult, (name, conclusion, newresult)
+    (HERE/(name+'-specialized.diff')).write_text(''.join(difflib.unified_diff(before.splitlines(True), headline.splitlines(True), fromfile=name+' specialized', tofile='Headline')))
     changes = {}
     for k,v in new.items():
         if k == 'h_Rwire_tag' and k not in b and 'h_Rwire' in b:
@@ -69,7 +71,9 @@ for suffix in ['', 'Row31','R18','R19','RWire','NoColl','Tag','R9','R9Pool']:
         else: raise AssertionError((name,k,b[k],v))
     if 'h_Rwire' in b:
         changes['h_Rwire_tag'] = 'weaker: RWireCompletion.initialTag_of_completion then InitialTagDecision.checked_of_initialTag'
-    # h_Rwire_tag was absent on early signatures: handled separately below.
+    allowed_deleted = {'h_R4_row31','h_R18','h_R19','h_Rwire','h_R9_transport'}
+    assert set(b)-set(new) <= allowed_deleted, (name, set(b)-set(new))
+    assert 'hN' not in b and 'hN' not in new
     reports.append({'module':name, 'source_sha256':hashlib.sha256((L/(name+'.lean')).read_bytes()).hexdigest(), 'premises':changes, 'deleted':sorted(set(b)-set(new))})
 (HERE/'audit.json').write_text(json.dumps({'specialized_tag_deletion_only':True,'predecessors':reports},indent=2)+'\n')
 print('Signature audit passed:',len(reports),'predecessors; specialized Tag differs only by deleting h_R9_transport')
