@@ -10,6 +10,11 @@ T='/home/dombarker/project-offloads/aspis-fs-generic-20261006'
 m=sys.argv[1].replace('.','/')
 src=ROOT/'docs/research/v8-r0-zk-20261009/lean'/f'{m}.lean'
 if not src.exists(): src=ROOT/'docs/research/100bit-spend-path-20261013/lean'/f'{m}.lean'
+if not src.exists() and m.startswith('R1'):
+    src=ROOT/'docs/research/100bit-spend-path-20261013/lean'/f'{m[2:]}.lean'
+if not src.exists() and m.startswith('AspisFormal/'):
+    src=ROOT/'AspisFormal'/f'{m}.lean'
+assert src.exists(), src
 def ssh(s): return subprocess.check_output(['ssh',HOST,s],text=True)
 existing = '--existing' in sys.argv[2:]
 if existing:
@@ -41,6 +46,7 @@ for k,v in [('DIRTY',bool(subprocess.check_output(['git','status','--porcelain']
 r=subprocess.run(['ssh',HOST,'python3 -'],input=script,capture_output=True,text=True)
 if r.returncode: print(r.stderr);sys.exit(r.returncode)
 rec=json.loads(r.stdout)
+rec['repo_source']=str(src.relative_to(ROOT))
 with (HERE/'attempts.jsonl').open('a') as f:f.write(json.dumps(rec)+'\n')
 print(rec['attempt'],rec['module'],'exit',rec['exit'],rec['wall'],rec['peak_rss_kib']); print(rec['stdout'] if rec['exit'] else '\n'.join(rec['axioms']))
 sys.exit(0 if rec['exit'] in (0,67) else 1)

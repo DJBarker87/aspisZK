@@ -33,3 +33,22 @@ All axiom audits use only propext, Classical.choice and Quot.sound. The
 Attempt 8400 failed on a missing HelperInactive object; it was retried
 only after both missing helper dependencies were compiled (new fingerprint).
 The host snapshots retain any pre-existing source/object before upload.
+
+## Stage 2: semantic endpoints
+
+`R1Z.BuilderSemanticBridge` proves the block endpoint, owner, nullifier,
+three-chunk note, input, recipient, change, node and arbitrary membership
+prefix identities against R0P.Semantics. The node proof accounts for the
+M31 addition/subtraction tweak. No concrete Poseidon evaluation is used.
+Attempt 8438 passes (4.48 s, 3,262,736 KiB, 0 swaps), with all thirteen
+theorems axiom-audited. Earlier failed sources (8415, 8416, 8421, 8431)
+are retained in attempts.jsonl; the initial whnf timeout was replaced by
+explicit state/input projection lemmas and local irreducibility, not a limit
+increase.
+
+The canonical spend-relation source closure was absent from env J. It was
+compiled from the current repository's canonical lean/ files, using the
+existing R1-prefixed module names where their imports require them. The
+build receipts record `repo_source` for each promoted alias. The first
+AppendPair attempt (8422) exposed the missing V7PairLeafOccupancy object;
+8424 builds it and 8425 is the dependent retry with changed inputs.
