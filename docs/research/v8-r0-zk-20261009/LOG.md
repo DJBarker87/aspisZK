@@ -6908,3 +6908,20 @@ fail under the real hash, 36.4–38.4 s each, every programmed address read.
 `CORRESPONDENCE-G-SIM.txt` updated. PROOF-SIZE-OBLIGATIONS item 5 is closed.
 Remaining on the privacy side for the format: `TranscriptNodeLengths`
 (D77.2; job cx-wire-len) and the inherited source-refinement premises.
+
+### Lead acceptance of the wire-length separation (2026-10-20); D79
+
+Codex job cx-wire-len (d0920f9a5) is cherry-picked. The D77.2 premise
+`TranscriptNodeLengths` is discharged for the concrete R1 wire: the privacy
+module (env J attempt 6251, standard axioms) proves binary node preimages
+separate from the typed transcript records, the extracted semantic public
+bytes, the ASF8 request and the concrete privacy carrier. Lengths
+(`design/WIRE-LENGTHS-20261020.md`): semantic public bytes 1,455 (transfer)
+/ 1,427 (withdrawal), ASF8 1,880, ASQ8 320; none is 31 or 65. The same
+facts, in four soundness modules compiled locally (19 audits, standard
+axioms), discharge the Bin commitment model's public-byte length premise.
+What the separation does NOT cover: the unrestricted abstract literal
+message carrier still admits arbitrary lengths; the result applies through
+the typed records and the extracted parsers, so the R-wire execution
+correspondence (that the deployed transcript only ever hashes those
+records) remains the carrying obligation, with the ASQ8 decoder extraction.
