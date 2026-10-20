@@ -97,3 +97,105 @@ Accepted J 8202/8205/8208: observable/word/source-carrier, exit 0,
 All twelve audits use standard axioms only. Rejected local elaboration
 drafts are retained and excluded. These laws do not yet identify the Rust
 caller order or assert uniform successful fibres for the sequential stream.
+
+## Stage 4: sequential decoder law and model budget instance
+
+`ProverCommitSequentialFibres.sequential_equal_fibres` proves a generic
+consuming rejection decoder's equal fibres by induction on available words.
+One rejected head contributes `c₀` copies of the same target fibre with one
+fewer try; an accepted head contributes `c₁` copies of the tail target with
+16 fresh tries. Zero remaining limbs accept without inspecting the suffix.
+For M31, `c₀ = c₁ = 2`. The common fibre constant is a named symbolic
+recurrence; no large numeral or tape is evaluated. An early specialized
+proof exposed elaboration/finite-instance comparison issues. The replacement
+isolates the generic alphabet theorem and uses explicit finite-set transport;
+all failed drafts 8209–8221 are excluded, not release results.
+
+`ProverCommitSequentialArrays` transports that theorem to indexed arrays
+and two independent streams. `ProverCommitSourceDecoder` supplies the
+explicit quotient decoder on the **existing two block-answer carriers**:
+`inputEquiv = wordsE E₁ × wordsE E₂`, the exact M31 image field, the four
+stream-1 sample families, and the full 4096-limb D stream. Its
+`quotient_equal_fibres` derives `quotientFibreSize`, with **no assumed cF**.
+The index bijections are explicit mathematical enumerations. Matching them
+(up to a coordinate bijection) to the shipped caller is not inferred.
+
+`ProverCommitSourceCounts.source_counts/source_budgets` supplies a universal
+**coordinate-model** RCommitCount instance, both stream inequalities, both
+block upper bounds and both counter bounds. Eligible cells inject into
+16×1024 and free H1 rows inject into 1024; no registry enumeration is used.
+The actual source caller/read-completeness instance is still separate.
+`ProverCommitSourceFailure.quotient_failure` proves that packing adds no
+failures: exactly one of the two sequential array decoders must fail.
+This theorem does not equate their failures with `CommitReadsR1.Exhausted`.
+`ProverCommitSourceSuccess.decoder_has_success` gives a symbolic all-accepted
+word input, so the fibre law is not an all-failure construction.
+
+Accepted J 8222/8224/8229/8232/8235/8236: exit 0, respectively
+2.52/2.09/2.39/6.65/1.78/2.49 s; peak
+4,055,380/4,041,124/4,115,408/4,215,704/4,023,528/4,172,692 KiB;
+zero swaps, standard axioms only. No Rust, Aeneas or SBF job is run.
+
+## Demonstrated source obstruction and exact remaining equation
+
+`source-frontier.json` checks all four aggregate caller/balancing function
+bodies against the retained failed source extraction: they are unchanged.
+Both current Charon and Aeneas binaries also match the old pinned hashes.
+The original aggregate LLBC had iterator clause errors (`Enumerate` and
+`IterMut`); the original Aeneas replay exits 2 at the G loop
+(`InterpAbs.ml:191`). The carried variants retain their separate failed
+receipts, including the D-loop internal error and the clean-reference
+`Not_found`. None is a source certificate. The unchanged failing aggregate
+is not replayed. Single-try Kani and the proved sixteen-step scalar
+composition do not certify the unlowered aggregate callers.
+
+The precise next source obligation is an equation on **every** pair of
+actual block-answer vectors: project the successful shipped caller's raw
+pre-balance sample tape, and obtain the sequential `quotientDecoder`, with
+the M31 image field and source coordinate/cell bijections. Source material
+alone has already discarded dependent samples; reconstruction must use the
+consumed raw words. `quotient_premise_of_caller` states and checks the
+exact transfer once that equation exists. The equation is not installed as
+an axiom or silently discharged by the mathematical decoder.
+
+Still required independently: the exact source cursor/`wordsE` failure
+classification supplying RExh, and complete source read-log coverage for
+all tree/seed/salt/binding/expander calls. This is the demonstrated stopping
+frontier for the universal source caller/count/exhaustion instance. The new
+coordinate-model budget theorem is not advertised as that source instance.
+Consequently no **complete source checklist row** is marked discharged.
+
+`ProverCommitSourceCallerLaw.source_representative_not_full_fibres` also
+checks strictness on the **same two byte-block input carriers** used by the
+protocol. The nonvacuous sequential decoder followed by a deterministic
+zero-padding section satisfies the quotient law (by
+`representative_quotient` and `quotient_premise_of_caller`) and fails every
+full-tape equal-fibre law. Accepted J 8238: exit 0, 1.98 s,
+4,032,864 KiB peak RSS, zero swaps; all three audits standard.
+
+## Exact signature diff
+
+The full signatures are retained verbatim in `signature-before.txt` and
+`signature-after.txt`. `harness/signature.py` verifies the conclusion and
+all other binders byte-identical. The generated diff is:
+
+```diff
+--- PrivacyR1FinalProtocolHistoryReal
++++ PrivacyR1FinalProtocolQuotient
+@@ -1,12 +1,12 @@
+-theorem privacy_R1_protocol_history_real
++theorem privacy_R1_protocol_quotient
+     (seed : R1ProverP K CommitHandle Aux F
+       (wire base ((base.pubBytes x).length) h B outputs x).toWire)
+     (hB : R0Z.K4.PackField B) (hpub : PublicBase F x.1)
+     (builder_refinement_D46_D51 : R0Z.HonestValidity.BuilderSoundOn h B x)
+     (cF : ℕ)
+-    (R_commit_equal_fibres : ∀ τ : Tape K F, (Finset.univ.filter
++    (R_commit_quotient_fibres : ∀ τ : SourceTape K F, (Finset.univ.filter
+       (fun e : (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ → OracleAnswer) × (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ → OracleAnswer) =>
+-        ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).tapeOf e.1 e.2 = some τ)).card = cF)
++        quotientDecode (fun e => ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).tapeOf e.1 e.2) e = some τ)).card = cF)
+     (L₁ L₂ : ℕ) (R_commit_exhaustion : RExh (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂)
+     (R_commit_counter₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2^64) (R_commit_counter₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2^64)
+     (R_commit_stream₁ : 16 * L₁ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ * 8) (R_commit_stream₂ : 16 * L₂ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ * 8)
+```

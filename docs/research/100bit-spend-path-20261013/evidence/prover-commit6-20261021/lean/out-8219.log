@@ -1,0 +1,102 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSequentialFibres.lean:117:66: error: unsolved goals
+case e'_2
+W A : Type
+inst✝ : Fintype W
+d : W → Option A
+c₀ c₁ : ℕ
+hz : {w | d w = none}.card = c₀
+ha : ∀ (a : A), {w | d w = some a}.card = c₁
+n : ℕ
+ih :
+  ∀ (L r : ℕ) (out : Values A L), {ws | decodeWords d n L r ws = some out}.card = fibreSize (Fintype.card W) c₀ c₁ n L r
+L : ℕ
+out : Values A (L + 1)
+r : ℕ
+hc :
+  {x | decodeWords d (n + 1) (L + 1) (r + 1) x = some out}.card =
+    {x | step d (decodeWords d n (L + 1) r) (decodeWords d n L 16) x = some out}.card
+hs :
+  {bt | step d (decodeWords d n (L + 1) r) (decodeWords d n L 16) bt = some out}.card =
+    {b | d b = none}.card * {t | decodeWords d n (L + 1) r t = some out}.card +
+      {b | d b = some out.1}.card * {t | decodeWords d n L 16 t = some out.2}.card
+he :
+  ({w | d w = none}.card.mul {ws | decodeWords d n (L + 1) r ws = some out}.card).add
+      ({w | d w = some out.1}.card.mul {ws | decodeWords d n L 16 ws = some out.2}.card) =
+    (c₀.mul (fibreSize (Fintype.card W) c₀ c₁ n (L + 1) r)).add (c₁.mul (fibreSize (Fintype.card W) c₀ c₁ n L 16))
+⊢ {b | d b = none}.card * {t | decodeWords d n (L + 1) r t = some out}.card +
+      {b | d b = some out.1}.card * {t | decodeWords d n L 16 t = some out.2}.card =
+    ({w | d w = none}.card.mul {ws | decodeWords d n (L + 1) r ws = some out}.card).add
+      ({w | d w = some out.1}.card.mul {ws | decodeWords d n L 16 ws = some out.2}.card)
+
+case e'_3
+W A : Type
+inst✝ : Fintype W
+d : W → Option A
+c₀ c₁ : ℕ
+hz : {w | d w = none}.card = c₀
+ha : ∀ (a : A), {w | d w = some a}.card = c₁
+n : ℕ
+ih :
+  ∀ (L r : ℕ) (out : Values A L), {ws | decodeWords d n L r ws = some out}.card = fibreSize (Fintype.card W) c₀ c₁ n L r
+L : ℕ
+out : Values A (L + 1)
+r : ℕ
+hc :
+  {x | decodeWords d (n + 1) (L + 1) (r + 1) x = some out}.card =
+    {x | step d (decodeWords d n (L + 1) r) (decodeWords d n L 16) x = some out}.card
+hs :
+  {bt | step d (decodeWords d n (L + 1) r) (decodeWords d n L 16) bt = some out}.card =
+    {b | d b = none}.card * {t | decodeWords d n (L + 1) r t = some out}.card +
+      {b | d b = some out.1}.card * {t | decodeWords d n L 16 t = some out.2}.card
+he :
+  ({w | d w = none}.card.mul {ws | decodeWords d n (L + 1) r ws = some out}.card).add
+      ({w | d w = some out.1}.card.mul {ws | decodeWords d n L 16 ws = some out.2}.card) =
+    (c₀.mul (fibreSize (Fintype.card W) c₀ c₁ n (L + 1) r)).add (c₁.mul (fibreSize (Fintype.card W) c₀ c₁ n L 16))
+⊢ fibreSize (Fintype.card W) c₀ c₁ (n + 1) (L + 1) (r + 1) =
+    (c₀.mul (fibreSize (Fintype.card W) c₀ c₁ n (L + 1) r)).add (c₁.mul (fibreSize (Fintype.card W) c₀ c₁ n L 16))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSequentialFibres.lean:105:15: error: unsolved goals
+W A : Type
+inst✝ : Fintype W
+d : W → Option A
+c₀ c₁ : ℕ
+hz : {w | d w = none}.card = c₀
+ha : ∀ (a : A), {w | d w = some a}.card = c₁
+n : ℕ
+ih :
+  ∀ (L r : ℕ) (out : Values A L), {ws | decodeWords d n L r ws = some out}.card = fibreSize (Fintype.card W) c₀ c₁ n L r
+L : ℕ
+out : Values A (L + 1)
+r : ℕ
+hc :
+  {x | decodeWords d (n + 1) (L + 1) (r + 1) x = some out}.card =
+    {x | step d (decodeWords d n (L + 1) r) (decodeWords d n L 16) x = some out}.card
+hs :
+  {bt | step d (decodeWords d n (L + 1) r) (decodeWords d n L 16) bt = some out}.card =
+    {b | d b = none}.card * {t | decodeWords d n (L + 1) r t = some out}.card +
+      {b | d b = some out.1}.card * {t | decodeWords d n L 16 t = some out.2}.card
+he :
+  ({w | d w = none}.card.mul {ws | decodeWords d n (L + 1) r ws = some out}.card).add
+      ({w | d w = some out.1}.card.mul {ws | decodeWords d n L 16 ws = some out.2}.card) =
+    (c₀.mul (fibreSize (Fintype.card W) c₀ c₁ n (L + 1) r)).add (c₁.mul (fibreSize (Fintype.card W) c₀ c₁ n L 16))
+he' :
+  {b | d b = none}.card * {t | decodeWords d n (L + 1) r t = some out}.card +
+      {b | d b = some out.1}.card * {t | decodeWords d n L 16 t = some out.2}.card =
+    fibreSize (Fintype.card W) c₀ c₁ (n + 1) (L + 1) (r + 1)
+⊢ {ws | decodeWords d (n + 1) (L + 1) (r + 1) ws = some out}.card =
+    {x | decodeWords d (n + 1) (L + 1) (r + 1) x = some out}.card
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSequentialFibres.lean:101:55: warning: This simp argument is unused:
+  Fintype.card_fun
+
+Hint: Omit it from the simp argument list.
+  simp [decodeWords, fibreSize, F̵i̵n̵t̵y̵p̵e̵.̵c̵a̵r̵d̵_̵f̵u̵n̵,̵ ̵Fintype.card_fin]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitSequentialFibres.step_fibre_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSequentialFibres.wordTailEquiv' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitSequentialFibres.consumingFibreEquiv' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitSequentialFibres.sequential_equal_fibres' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

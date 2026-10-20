@@ -1,0 +1,45 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSourceSuccess.lean:25:24: error: unsolved goals
+W A : Type
+d : W → Option A
+w : W
+a : A
+hw : d w = some a
+n : ℕ
+ih : ∀ (L r : ℕ), L ≤ n → 0 < r → ∃ out, (decodeWords d n L r fun x => w) = some out
+L : ℕ
+hL : L + 1 ≤ n + 1
+out : Values A L
+hout : (decodeWords d n L 16 fun x => w) = some out
+r : ℕ
+hr : 0 < r + 1
+⊢ some (a, out) = some (a, out)
+'R1Z.ProverCommitSequentialFibres.constant_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSourceSuccess.lean:37:34: error: unsolved goals
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+a : ↥sourceBase := baseEquiv 0
+ha : accepted 0 = some a
+hL₁ : L₁ ≤ E₁ * 8
+hL₂ : L₂ ≤ E₂ * 8
+v₁ : Values (↥sourceBase) L₁
+h₁ : (decodeWords accepted (E₁ * 8) L₁ 16 fun x => 0) = some v₁
+v₂ : Values (↥sourceBase) L₂
+h₂ : (decodeWords accepted (E₂ * 8) L₂ 16 fun x => 0) = some v₂
+ws : (Fin (E₁ * 8) → CommitReadsR1.Word) × (Fin (E₂ * 8) → CommitReadsR1.Word) := (fun x => 0, fun x => 0)
+⊢ (Option.map ⇑arrayCarrierEquiv do
+      let a ← some ((valuesEquiv (↥sourceBase) L₁) v₁)
+      let b ← some ((valuesEquiv (↥sourceBase) L₂) v₂)
+      some (a, b)) =
+    some (arrayCarrierEquiv ((valuesEquiv (↥sourceBase) L₁) v₁, (valuesEquiv (↥sourceBase) L₂) v₂))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSourceSuccess.lean:50:33: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [quotientDecoder, Equiv.apply_symm_apply, pairDecode, arrayDecode, ws, h₁, h₂,
+  ̲  ̲ ̲ ̲Option.map_some, O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵ ̵pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitSourceDecoder.decoder_has_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -1,0 +1,125 @@
+import R1Z.ProverCommitWordCarrier
+
+/-! Exact successful fibres for a consuming rejection stream. Successful
+limbs consume only through their accepted word; no 16-word padding per limb. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitSequentialFibres
+open R1Z.CommitReadsR1 R1Z.ProverCommitWordCarrier
+attribute [local instance] Classical.propDecidable
+
+def step {B T A V : Type} (d : B → Option A) (more : T → Option (A × V))
+    (less : T → Option V) (bt : B × T) : Option (A × V) :=
+  match d bt.1 with
+  | none => more bt.2
+  | some a => (less bt.2).map (fun v => (a,v))
+
+theorem step_fibre_card {B T A V : Type} [Fintype B] [Fintype T]
+    (d : B → Option A) (more : T → Option (A × V)) (less : T → Option V) (out : A × V) :
+    (Finset.univ.filter (fun bt => step d more less bt = some out)).card =
+      (Finset.univ.filter (fun b => d b = none)).card *
+        (Finset.univ.filter (fun t => more t = some out)).card +
+      (Finset.univ.filter (fun b => d b = some out.1)).card *
+        (Finset.univ.filter (fun t => less t = some out.2)).card := by
+  have eq : (Finset.univ.filter (fun bt => step d more less bt = some out)) =
+      ((Finset.univ.filter (fun b => d b = none)) ×ˢ
+        (Finset.univ.filter (fun t => more t = some out))) ∪
+      ((Finset.univ.filter (fun b => d b = some out.1)) ×ˢ
+        (Finset.univ.filter (fun t => less t = some out.2))) := by
+    ext bt
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_union, Finset.mem_product]
+    rcases bt with ⟨b,t⟩
+    cases hd : d b with
+    | none => simp [step, hd]
+    | some a =>
+      cases hl : less t with
+      | none => simp [step, hd, hl]
+      | some v => simp [step, hd, hl, Prod.ext_iff]
+  rw [eq, Finset.card_union_of_disjoint, Finset.card_product, Finset.card_product]
+  apply Finset.disjoint_left.mpr
+  intro bt h₁ h₂
+  have hnone := (Finset.mem_filter.mp (Finset.mem_product.mp h₁).1).2
+  have hsome := (Finset.mem_filter.mp (Finset.mem_product.mp h₂).1).2
+  rw [hnone] at hsome
+  contradiction
+
+@[reducible] def Values (A : Type) : Nat → Type
+  | 0 => PUnit
+  | n+1 => A × Values A n
+instance {A : Type} [Fintype A] (n : Nat) : Fintype (Values A n) := by
+  induction n with
+  | zero => exact inferInstanceAs (Fintype PUnit)
+  | succ n ih => exact @instFintypeProd A (Values A n) _ ih
+
+variable {K : Type} [Field K] [Algebra (ZMod AspisCircleGroupOrder.P) K]
+local notation "A" => sourceBase (K := K)
+
+def decodeWords : (n L r : Nat) → (Fin n → Word) → Option (Values A L)
+  | 0, 0, _, _ => some PUnit.unit
+  | 0, _+1, _, _ => none
+  | _+1, 0, _, _ => some PUnit.unit
+  | _+1, _+1, 0, _ => none
+  | n+1, L+1, r+1, ws =>
+    step accepted (decodeWords n (L+1) r) (decodeWords n L 16)
+      (ws 0, fun j => ws j.succ)
+
+def wordTailEquiv (n : Nat) : (Fin (n+1) → Word) ≃ Word × (Fin n → Word) where
+  toFun ws := (ws 0, fun j => ws j.succ)
+  invFun bt := Fin.cons bt.1 bt.2
+  left_inv ws := by funext i; exact Fin.cases rfl (fun _ => rfl) i
+  right_inv bt := rfl
+
+def consumingFibreEquiv (n L r : Nat) (out : Values A (L+1)) :
+    {ws : Fin (n+1) → Word // decodeWords (n+1) (L+1) (r+1) ws = some out} ≃
+    {bt : Word × (Fin n → Word) //
+      step accepted (decodeWords n (L+1) r) (decodeWords n L 16) bt = some out} where
+  toFun ws := ⟨wordTailEquiv n ws.1, ws.2⟩
+  invFun bt := ⟨(wordTailEquiv n).symm bt.1, bt.2⟩
+  left_inv ws := Subtype.ext ((wordTailEquiv n).left_inv ws.1)
+  right_inv bt := Subtype.ext ((wordTailEquiv n).right_inv bt.1)
+
+def fibreSize : Nat → Nat → Nat → Nat
+  | 0, 0, _ => 1
+  | 0, _+1, _ => 0
+  | n+1, 0, _ => (2^32)^(n+1)
+  | _+1, _+1, 0 => 0
+  | n+1, L+1, r+1 => 2 * fibreSize n (L+1) r + 2 * fibreSize n L 16
+
+theorem rejected_fibre : (Finset.univ.filter (fun w : Word => accepted (K := K) w = none)).card = 2 := by
+  have eq : (Finset.univ.filter (fun w : Word => accepted (K := K) w = none)) =
+      (Finset.univ.filter (fun w => rejB w = true)) := by
+    ext w
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, accepted_failure]
+  rw [eq, card_rej]
+
+/-- Every finite output has the same successful fibre, with the actual
+variable-consumption recurrence. The constant may be zero for short inputs. -/
+theorem sequential_equal_fibres (n L r : Nat) (out : Values A L) :
+    (Finset.univ.filter (fun ws : Fin n → Word => decodeWords n L r ws = some out)).card =
+      fibreSize n L r := by
+  induction n generalizing L r with
+  | zero =>
+    cases L with
+    | zero => cases out; simp [decodeWords, fibreSize]
+    | succ L => simp [decodeWords, fibreSize]
+  | succ n ih =>
+    cases L with
+    | zero => cases out; simp [decodeWords, fibreSize, Fintype.card_fun, Fintype.card_fin]
+    | succ L =>
+      cases r with
+      | zero => simp [decodeWords, fibreSize]
+      | succ r =>
+        have hc := Fintype.card_congr (consumingFibreEquiv (K := K) n L r out)
+        simp only [Fintype.card_subtype] at hc
+        rw [hc]
+        exact (step_fibre_card (A := A) (V := Values A L) (accepted (K := K)) (decodeWords n (L+1) r) (decodeWords n L 16)
+          (show A × Values A L from out)).trans (by
+            rw [rejected_fibre, accepted_equal_fibres, ih, ih]
+            rfl)
+
+#print axioms step_fibre_card
+#print axioms wordTailEquiv
+#print axioms consumingFibreEquiv
+#print axioms rejected_fibre
+#print axioms sequential_equal_fibres
+end R1Z.ProverCommitSequentialFibres

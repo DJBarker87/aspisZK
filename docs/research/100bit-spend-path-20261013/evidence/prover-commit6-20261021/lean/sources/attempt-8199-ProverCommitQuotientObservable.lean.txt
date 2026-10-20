@@ -1,0 +1,74 @@
+import R1Z.PhaseProtocolInstanceBin
+import R1Z.ProverCommitQuotientView
+
+/-! All commitment addresses of the constructed protocol factor through the
+H1 quotient, including undisclosed leaves, not only the opened honest view. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitQuotientObservable
+open R0P R0Z R0Z.JointView R0Z.MaskLayout R0Z.FsStatement
+  R1Z.GamesR1 R1Z.GamesR1PBin R1Z.ProverCommitTapeCompletion
+attribute [local instance] Classical.propDecidable
+
+section General
+variable {K CommitHandle : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+
+theorem leaf_completion (enc : R1Z.PhaseLeafConstructionBin.LeafEncoding K)
+    (B : PackBasis F) (h : HonestProver K) (w : h.Instance)
+    (x : Statement K CommitHandle) (t : Tape K F) (p : Padding K F)
+    (ch : R0Z.HonestView.Challenges K) :
+    R1Z.PhaseLeafConstructionBin.leafVal enc B h w x (complete (project t) p) ch =
+      R1Z.PhaseLeafConstructionBin.leafVal enc B h w x t ch := by
+  funext T u
+  unfold R1Z.PhaseLeafConstructionBin.leafVal
+  change (if T.val = 0 then _ else if T.val = 1 then _ else _) = _
+  simp only [show (complete (project t) p).2 = t.2 from rfl]
+  split_ifs <;> rw [applyAff_completion]
+
+end General
+section Protocol
+local notation "K" => AspisWideTower.WideExact
+variable {CommitHandle Aux : Type} {F : Subfield K}
+variable (base : R1Wire K CommitHandle Aux) (publicWidth : ℕ)
+    (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → R0Z.HonestView.Challenges K → Aux)
+    (x : Statement K CommitHandle)
+open R1Z.PhaseProtocolInstanceBin
+local notation "W" => (wire base publicWidth h B outputs x).toWire
+variable (seed : R1ProverP K CommitHandle Aux F W)
+local notation "Pr" => (prover base publicWidth h B outputs x seed).toProver
+
+theorem commitment_completion (w : h.Instance) (sec : SecP) (d : OracleAnswer)
+    (t : Tape K F) (p : Padding K F) (rest : RIdx → OracleAnswer)
+    (ch : R0Z.HonestView.Challenges K) :
+    Pr.caddr h w x sec d (complete (project t) p) rest ch =
+      Pr.caddr h w x sec d t rest ch := by
+  change R1Z.LayoutR1PBin.gram _ _
+    (R1Z.PhaseLeafConstructionBin.leafVal R1Z.PhaseLeafEncodingBin.encoding B h w x
+      (complete (project t) p) ch) sec d rest = _
+  rw [leaf_completion]
+
+/-- The full view and complete commitment-address vector have the same law.
+This uses the actual selected encoders/grammar, with no invariance premise. -/
+theorem protocol_observable_mass (w : h.Instance) (sec : SecP) (d : OracleAnswer)
+    (rest : RIdx → OracleAnswer) (ch : R0Z.HonestView.Challenges K)
+    (choose : SourceTape K F → Padding K F)
+    (event : (View K CommitHandle Aux R1Z.Batched.R1Bat ×
+      (CPos Pr.E₁ Pr.E₂ → List UInt8)) → Prop) :
+    R0Z.FsAbortBounds.mass (fun s : SourceTape K F =>
+      event (view h B outputs x w ch (complete s (choose s)),
+        Pr.caddr h w x sec d (complete s (choose s)) rest ch)) =
+    R0Z.FsAbortBounds.mass (fun t : Tape K F =>
+      event (view h B outputs x w ch t, Pr.caddr h w x sec d t rest ch)) := by
+  apply observable_mass
+    (fun t => (view h B outputs x w ch t, Pr.caddr h w x sec d t rest ch))
+  intro t p
+  exact Prod.ext (view_completion h B outputs x w ch t p)
+    (commitment_completion base publicWidth h B outputs x seed w sec d t p rest ch)
+end Protocol
+
+#print axioms leaf_completion
+#print axioms commitment_completion
+#print axioms protocol_observable_mass
+end R1Z.ProverCommitQuotientObservable

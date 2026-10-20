@@ -1,0 +1,48 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSequentialFibres.lean:114:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  {bt | step ?d ?more ?less bt = some ?out}.card
+in the target expression
+  {x | step accepted (decodeWords n (L + 1) r) (decodeWords n L 16) x = some out}.card =
+    fibreSize (n + 1) (L + 1) (r + 1)
+
+case succ.succ.succ
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+n : ℕ
+ih : ∀ (L r : ℕ) (out : Values (↥sourceBase) L), {ws | decodeWords n L r ws = some out}.card = fibreSize n L r
+L : ℕ
+out : Values (↥sourceBase) (L + 1)
+r : ℕ
+hc :
+  {x | decodeWords (n + 1) (L + 1) (r + 1) x = some out}.card =
+    {x | step accepted (decodeWords n (L + 1) r) (decodeWords n L 16) x = some out}.card
+⊢ {x | step accepted (decodeWords n (L + 1) r) (decodeWords n L 16) x = some out}.card =
+    fibreSize (n + 1) (L + 1) (r + 1)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    decodeWords n (L + 1) r
+  has type
+    (Fin n → Word) → Option (Values (↥sourceBase) (L + 1))
+  but is expected to have type
+    (Fin n → Word) → Option (↥sourceBase × Values (↥sourceBase) L)
+  in the application
+    step accepted (decodeWords n (L + 1) r)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSequentialFibres.lean:107:55: warning: This simp argument is unused:
+  Fintype.card_fun
+
+Hint: Omit it from the simp argument list.
+  simp [decodeWords, fibreSize, F̵i̵n̵t̵y̵p̵e̵.̵c̵a̵r̵d̵_̵f̵u̵n̵,̵ ̵Fintype.card_fin]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitSequentialFibres.step_fibre_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSequentialFibres.wordTailEquiv' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitSequentialFibres.consumingFibreEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSequentialFibres.rejected_fibre' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSequentialFibres.sequential_equal_fibres' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

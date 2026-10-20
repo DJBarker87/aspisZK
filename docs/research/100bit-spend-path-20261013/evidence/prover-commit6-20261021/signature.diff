@@ -1,0 +1,18 @@
+--- PrivacyR1FinalProtocolHistoryReal
++++ PrivacyR1FinalProtocolQuotient
+@@ -1,12 +1,12 @@
+-theorem privacy_R1_protocol_history_real
++theorem privacy_R1_protocol_quotient
+     (seed : R1ProverP K CommitHandle Aux F
+       (wire base ((base.pubBytes x).length) h B outputs x).toWire)
+     (hB : R0Z.K4.PackField B) (hpub : PublicBase F x.1)
+     (builder_refinement_D46_D51 : R0Z.HonestValidity.BuilderSoundOn h B x)
+     (cF : ℕ)
+-    (R_commit_equal_fibres : ∀ τ : Tape K F, (Finset.univ.filter
++    (R_commit_quotient_fibres : ∀ τ : SourceTape K F, (Finset.univ.filter
+       (fun e : (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ → OracleAnswer) × (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ → OracleAnswer) =>
+-        ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).tapeOf e.1 e.2 = some τ)).card = cF)
++        quotientDecode (fun e => ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).tapeOf e.1 e.2) e = some τ)).card = cF)
+     (L₁ L₂ : ℕ) (R_commit_exhaustion : RExh (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂)
+     (R_commit_counter₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2^64) (R_commit_counter₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2^64)
+     (R_commit_stream₁ : 16 * L₁ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ * 8) (R_commit_stream₂ : 16 * L₂ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ * 8)
