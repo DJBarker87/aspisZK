@@ -1,0 +1,9 @@
+# One installed preparation model, one successful execution
+
+PROVED candidate source-model composition. installedBoundaries installs the checked gamma and ordinary wide samplers, the concrete accepted-query driver and the retained source QM31-to-wide embedding. Record-update commutation lemmas make the same installed boundaries usable with all existing preparation theorems.
+
+prepared_installed_meaning derives canonical gamma/kappa, the canonical alpha pair, the original payload claim equation and all 29 canonical gamma powers from one successful preparation. The remaining inactive-input canonicality premise is explicit. prepared_installed_query_rho derives the concrete 22-query materialized schedule and canonical exact-rank QM31 rho from the SAME installed boundaries and successful call; rho uses the returned query transcript state. The prior numerical, claim, array and query mathematics is reused, with no independent child-success or challenge-canonicality premises.
+
+OPEN: remaining boundary fields (including encoding and circle samplers), source/runtime and authenticated caller binding, candidate/source equivalence and adoption, final verifier re-pins, adaptive Fiat-Shamir distribution and the global100-bit theorem. The embedding callback inside the query model remains explicit. This composition does not claim implementation closure or upgrade local model proofs into a security theorem. No production code/ELF/deployment changes.
+
+Focused NUC Lean4.32 check passed -j1 -M4400,High1GiB/Max2GiB/Swap0 in3.311s,cgroup peak431144960B,standard axioms only. Earlier admission denial at56.375GiB started no Lean; later genuinely changed capacity34.375GiB permitted this check. Exact source/object/import/compiler/command/admission/resource evidence retained; no whole-package replay.
