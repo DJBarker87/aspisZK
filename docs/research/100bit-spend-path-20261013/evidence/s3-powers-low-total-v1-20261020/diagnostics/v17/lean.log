@@ -1,0 +1,93 @@
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v17/sources/S3PowersLowTotalV1.lean:30:29: error(lean.unknownIdentifier): Unknown identifier `generated_trace_lifts`
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v17/sources/S3PowersLowTotalV1.lean:30:9: error: Tactic `rcases` failed: `x✝ : ?m.101` is not an inductive datatype
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v17/sources/S3PowersLowTotalV1.lean:51:62: error: unsolved goals
+x : AspisR1CurrentWide.field.QM31
+s : AspisR1CurrentWide.field.M31
+old : AspisR1CurrentWide.Proof.Old.QM31 := AspisR1CurrentWide.Proof.toQM x
+a : AspisR1Qm31ArithmeticProbe.field.M31
+ha : old.c0.a.mul s = ok a
+left✝³ : ↑a = ↑old.c0.a * ↑s % AspisV8R17.RawReducer.P
+right✝³ : ↑a < AspisV8R17.RawReducer.P
+b : AspisR1Qm31ArithmeticProbe.field.M31
+hb : old.c0.b.mul s = ok b
+left✝² : ↑b = ↑old.c0.b * ↑s % AspisV8R17.RawReducer.P
+right✝² : ↑b < AspisV8R17.RawReducer.P
+c : AspisR1Qm31ArithmeticProbe.field.M31
+hc : old.c1.a.mul s = ok c
+left✝¹ : ↑c = ↑old.c1.a * ↑s % AspisV8R17.RawReducer.P
+right✝¹ : ↑c < AspisV8R17.RawReducer.P
+d : AspisR1Qm31ArithmeticProbe.field.M31
+hd : old.c1.b.mul s = ok d
+left✝ : ↑d = ↑old.c1.b * ↑s % AspisV8R17.RawReducer.P
+right✝ : ↑d < AspisV8R17.RawReducer.P
+out : AspisR1CurrentWide.field.QM31 := { c0 := { a := a, b := b }, c1 := { a := c, b := d } }
+haNew : x.c0.a.mul s = ok a
+hbNew : x.c0.b.mul s = ok b
+hcNew : x.c1.a.mul s = ok c
+hdNew : x.c1.b.mul s = ok d
+⊢ { c0 := { a := a, b := b }, c1 := { a := c, b := d } } = out
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v17/sources/S3PowersLowTotalV1.lean:109:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mulM31 product s
+in the target expression
+  (do
+      let product ← ok product
+      mulM31 product s) =
+    ok z
+
+x y : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.S
+s : AspisR1CurrentWide.field.M31
+hx : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.Canonical x
+hy : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.Canonical y
+product : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.S
+hproduct : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.mul x y = ok product
+hcan : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.Canonical product
+_hvalue :
+  AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.decode product =
+    AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.decode x *
+      AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.decode y
+z : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.S
+hz : mulM31 product s = ok z
+⊢ (do
+      let product ← ok product
+      mulM31 product s) =
+    ok z
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v17/sources/S3PowersLowTotalV1.lean:119:28: error: unsolved goals
+s : AspisR1CurrentWide.field.M31
+state : AspisR1S3PowersLowEntryCanonicalV1.LowInputs
+index : ℕ
+_hlen0 : state.1.length = 4
+_hlen1 : state.2.length = 4
+hcan0 : callbackCanonical state.1
+hcan1 : callbackCanonical state.2
+ix : ℕ := lowPerm (index % 4)
+iy : ℕ := lowPerm (index / 4)
+hx : AspisR1PowersConcreteMul.Canonical (state.1.getD ix AspisR1CurrentPowers.field.WideExact.ONE)
+hy : AspisR1PowersConcreteMul.Canonical (state.2.getD iy AspisR1CurrentPowers.field.WideExact.ONE)
+value : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.S
+hvalue :
+  lowEntry (powerToS (state.1.getD ix AspisR1CurrentPowers.field.WideExact.ONE))
+      (powerToS (state.2.getD iy AspisR1CurrentPowers.field.WideExact.ONE)) s =
+    ok value
+⊢ (do
+      let value ← ok value
+      ok (value, state)) =
+    ok (value, state)
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v17/sources/S3PowersLowTotalV1.lean:287:4: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v17/sources/S3PowersLowTotalV1.lean:291:4: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+'AspisR1S3PowersLowTotalV1.generated_power_array_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S3PowersLowTotalV1.wide_mul_m31_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1S3PowersLowTotalV1.low_entry_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1S3PowersLowTotalV1.low_step_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1S3PowersLowTotalV1.generated_low_trace_lifts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S3PowersLowTotalV1.generated_low_array_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S3PowersLowTotalV1.p6_total_canonical_low' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

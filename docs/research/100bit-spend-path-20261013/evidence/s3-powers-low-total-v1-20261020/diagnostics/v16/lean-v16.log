@@ -1,0 +1,138 @@
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v16/sources/S3PowersLowTotalV1.lean:30:29: error(lean.unknownIdentifier): Unknown identifier `generated_trace_lifts`
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v16/sources/S3PowersLowTotalV1.lean:30:9: error: Tactic `rcases` failed: `x✝ : ?m.101` is not an inductive datatype
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v16/sources/S3PowersLowTotalV1.lean:51:62: error: unsolved goals
+x : AspisR1CurrentWide.field.QM31
+s : AspisR1CurrentWide.field.M31
+old : AspisR1CurrentWide.Proof.Old.QM31 := AspisR1CurrentWide.Proof.toQM x
+a : AspisR1Qm31ArithmeticProbe.field.M31
+ha : old.c0.a.mul s = ok a
+left✝³ : ↑a = ↑old.c0.a * ↑s % AspisV8R17.RawReducer.P
+right✝³ : ↑a < AspisV8R17.RawReducer.P
+b : AspisR1Qm31ArithmeticProbe.field.M31
+hb : old.c0.b.mul s = ok b
+left✝² : ↑b = ↑old.c0.b * ↑s % AspisV8R17.RawReducer.P
+right✝² : ↑b < AspisV8R17.RawReducer.P
+c : AspisR1Qm31ArithmeticProbe.field.M31
+hc : old.c1.a.mul s = ok c
+left✝¹ : ↑c = ↑old.c1.a * ↑s % AspisV8R17.RawReducer.P
+right✝¹ : ↑c < AspisV8R17.RawReducer.P
+d : AspisR1Qm31ArithmeticProbe.field.M31
+hd : old.c1.b.mul s = ok d
+left✝ : ↑d = ↑old.c1.b * ↑s % AspisV8R17.RawReducer.P
+right✝ : ↑d < AspisV8R17.RawReducer.P
+out : AspisR1CurrentWide.field.QM31 := { c0 := { a := a, b := b }, c1 := { a := c, b := d } }
+haNew : x.c0.a.mul s = ok a
+hbNew : x.c0.b.mul s = ok b
+hcNew : x.c1.a.mul s = ok c
+hdNew : x.c1.b.mul s = ok d
+⊢ { c0 := { a := a, b := b }, c1 := { a := c, b := d } } = out
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v16/sources/S3PowersLowTotalV1.lean:109:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mulM31 product s
+in the target expression
+  (do
+      let product ← ok product
+      mulM31 product s) =
+    ok z
+
+x y : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.S
+s : AspisR1CurrentWide.field.M31
+hx : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.Canonical x
+hy : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.Canonical y
+product : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.S
+hproduct : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.mul x y = ok product
+hcan : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.Canonical product
+_hvalue :
+  AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.decode product =
+    AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.decode x *
+      AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.decode y
+z : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.S
+hz : mulM31 product s = ok z
+⊢ (do
+      let product ← ok product
+      mulM31 product s) =
+    ok z
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v16/sources/S3PowersLowTotalV1.lean:119:28: error: unsolved goals
+s : AspisR1CurrentWide.field.M31
+state : AspisR1S3PowersLowEntryCanonicalV1.LowInputs
+index : ℕ
+_hlen0 : state.1.length = 4
+_hlen1 : state.2.length = 4
+hcan0 : callbackCanonical state.1
+hcan1 : callbackCanonical state.2
+ix : ℕ := lowPerm (index % 4)
+iy : ℕ := lowPerm (index / 4)
+hx : AspisR1PowersConcreteMul.Canonical (state.1.getD ix AspisR1CurrentPowers.field.WideExact.ONE)
+hy : AspisR1PowersConcreteMul.Canonical (state.2.getD iy AspisR1CurrentPowers.field.WideExact.ONE)
+value : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.S
+hvalue :
+  lowEntry (powerToS (state.1.getD ix AspisR1CurrentPowers.field.WideExact.ONE))
+      (powerToS (state.2.getD iy AspisR1CurrentPowers.field.WideExact.ONE)) s =
+    ok value
+⊢ (do
+      let value ←
+        lowEntry (powerToS (state.1[lowPerm (index % 4)]?.getD AspisR1CurrentPowers.field.WideExact.ONE))
+            (powerToS (state.2[lowPerm (index / 4)]?.getD AspisR1CurrentPowers.field.WideExact.ONE)) s
+      ok (value, state)) =
+    ok (value, state)
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v16/sources/S3PowersLowTotalV1.lean:140:8: warning: This simp argument is unused:
+  ix
+
+Hint: Omit it from the simp argument list.
+  simp [̵i̵x̵,̵i̵y̵,̵h̵v̵a̵l̵u̵e̵]̵[̲i̲y̲,̲ ̲h̲v̲a̲l̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v16/sources/S3PowersLowTotalV1.lean:140:11: warning: This simp argument is unused:
+  iy
+
+Hint: Omit it from the simp argument list.
+  simp [̵i̵x̵,̵i̵y̵,̵h̵v̵a̵l̵u̵e̵]̵[̲i̲x̲,̲ ̲h̲v̲a̲l̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v16/sources/S3PowersLowTotalV1.lean:140:14: warning: This simp argument is unused:
+  hvalue
+
+Hint: Omit it from the simp argument list.
+  simp [̵i̵x̵,̵i̵y̵,̵h̵v̵a̵l̵u̵e̵]̵[̲i̲x̲,̲ ̲i̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v16/sources/S3PowersLowTotalV1.lean:188:20: error: Application type mismatch: The argument
+  StatefulFromFnTrace.done start (state, cursor)
+has type
+  StatefulFromFnTrace ?m.60 0 start (state, cursor) [] (state, cursor)
+but is expected to have type
+  StatefulFromFnTrace (fnMutStep (generatedLowCallback s)) 0 ↑cursor (state, cursor) [] (state, cursor)
+in the application
+  Exists.intro cursor (StatefulFromFnTrace.done start (state, cursor))
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v16/sources/S3PowersLowTotalV1.lean:227:4: error: Type mismatch: After simplification, term
+  hrun
+ has type
+  @Eq (Result (List S × AspisR1S3PowersLowActualCanonicalV1.LowInputs × Usize))
+    (statefulFromFnRun (fnMutStep (generatedLowCallback s)) 16 0 (inputs, 0#usize)) (ok (items, final, cursor))
+but is expected to have type
+  @Eq (Result (List S × AspisR1S3PowersLowActualCanonicalV1.LowInputs × Usize))
+    (statefulFromFnRun (fnMutStep (generatedLowCallback s)) (↑16#usize) 0 (inputs, 0#usize)) (ok (items, final, cursor))
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v16/sources/S3PowersLowTotalV1.lean:257:68: error: Application type mismatch: The argument
+  4#usize
+has type
+  UScalar UScalarTy.Usize
+but is expected to have type
+  AspisR1PowersConcreteMul.CallbackWide
+in the application
+  generated_power_array_total 4#usize
+docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020/s3-powers-low-entry-v16/sources/S3PowersLowTotalV1.lean:257:9: error: Tactic `rcases` failed: `x✝ : ?m.359` is not an inductive datatype
+'AspisR1S3PowersLowTotalV1.generated_power_array_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S3PowersLowTotalV1.wide_mul_m31_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1S3PowersLowTotalV1.low_entry_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1S3PowersLowTotalV1.low_step_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1S3PowersLowTotalV1.generated_low_trace_lifts' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S3PowersLowTotalV1.generated_low_array_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S3PowersLowTotalV1.p6_total_canonical_low' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

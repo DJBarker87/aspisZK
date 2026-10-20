@@ -1,0 +1,1 @@
+v17 was a focused failure before the v18 correction. It found the missing `AspisR1PowersP6GeneratedTotalV1` namespace opening, explicit result-bind reductions, and a constructor equality issue. This attempt is retained as diagnostic only; v18 is the accepted compile.
