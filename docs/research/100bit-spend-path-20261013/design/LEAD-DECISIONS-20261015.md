@@ -1,5 +1,11 @@
 # Lead decisions on the parallel R1 design proposals (2026-10-15)
 
+Dated note (2026-10-20): the [binary-multiproof ledger amendment](../../v8-r1-20261011/R1_SOUNDNESS.md#amendment-for-the-binary-multiproof-format-2026-10-20)
+records the adopted frozen format, binary collision allowance, verifier query
+budget, query-scan abort, privacy read budget and successful stage-1 route,
+with source and proof evidence. It preserves the earlier text as history and
+states the remaining refinement conditions.
+
 Inputs: `CLASSIFIER.txt`, `KNOWLEDGE.txt`, `TERMINAL-D3.txt`,
 `PARALLEL-REPORT-20261015.txt` (this directory), reviewed by the lead. The
 three proposals are **accepted as designs**; nothing in them is a proved

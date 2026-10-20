@@ -1,5 +1,11 @@
 # Candidate security and settlement path
 
+Dated note (2026-10-20): the [binary-multiproof ledger amendment](../v8-r1-20261011/R1_SOUNDNESS.md#amendment-for-the-binary-multiproof-format-2026-10-20)
+records the adopted frozen format, binary collision allowance, verifier query
+budget, query-scan abort, privacy read budget and successful stage-1 route,
+with source and proof evidence. It preserves the earlier text as history and
+states the remaining refinement conditions.
+
 This is a research candidate, not a released 100-bit private spend. The selected
 NUC k11 binary now fits two verification-and-settlement transactions for the
 tested ordinary and rollover Pool paths (13, 255 and 1,023 populated pairs).

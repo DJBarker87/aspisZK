@@ -314,3 +314,135 @@ build cache; no concurrency violation found.
    as closed.
 
 Privacy is tracked separately (privacy LOG; T2b-2b design running).
+
+## Amendment for the binary-multiproof format (2026-10-20)
+
+This amendment records the adopted format in [PREREG-PROOF-SIZE-2](../100bit-spend-path-20261013/design/PREREG-PROOF-SIZE-2-20261019.md)
+and its [adoption review](../100bit-spend-path-20261013/design/LEAD-REVIEW-FORMAT-ADOPT-20261020.md).
+The governing [freeze](../100bit-spend-path-20261013/design/LEAD-FREEZE-20261020.md)
+is revision `b2727acd3`; the parked candidate is not adopted. The preceding
+sections remain historical. Paths beginning `lean/`, `design/` or `evidence/`
+below are relative to `docs/research/100bit-spend-path-20261013/`. Rust
+basenames below refer to `crates/aspis-r1-cost-probe/src/` unless qualified.
+
+The commitment layer uses binary trees of depth 18 with parent input
+`0x12 || left || right` (`crates/aspis-r1-cost-probe/src/multiproof.rs:18`,
+`:21`, `:43`, `:49`). Each of C1, C2 and the padded folded tree has one
+multiproof per transaction batch: the first 10 queries in A and the remaining
+12 in B (`compact.rs:27`, `:28`; `candidate.rs:162`, `:174`). The six fixed
+node-slot capacities are [146,146,128,172,172,150], totaling 914 supplied
+sibling nodes in the worst case over both batches (`compact.rs:51`, `:54`).
+Unused slot bytes must be zero; only the index-determined consumed prefix
+enters multiproof verification (`candidate.rs:196`). These capacities are
+stored siblings, not additional hash invocations. The stored proof has fixed
+length 57,607 bytes (`compact.rs:66`, `:69`).
+
+Compact QM31 storage applies to semantic rows 14–26 and the 29 y1 values;
+the decoder rebuilds each logical WideExact value's zero high half before
+transcript hashing (`compact.rs:4`, `:127`, `:148`;
+`candidate.rs:255`). Logical message encodings retain their definitions;
+the changed binary trees produce the new root values. C1 remains in the
+initializer before row 0 (`r1_wire.rs:179`; `r1_semantic.rs:314`), C2 remains
+in semantic row 2 (`r1_wire.rs:390`; `r1_semantic.rs:292`), and the folded
+root remains in row 30 beside the second round polynomial (`verifier.rs:77`).
+Queries are row 31 and rho is row 32 (`verifier.rs:83`), as in
+`lean/LiteralClassifier.lean:24`; the earlier scaffold's tentative reversed
+query/rho labels are historical.
+
+The binary collision allowance is `κbin(Q) = 6·Q²/256³² = 6·Q²/2²⁵⁶`
+(`lean/BinCombinedMerkleCollision.lean:18`, `:23`). Its five target readers
+are the two binary children, the trailing root, the root at offset 38 and
+the state at offset zero (`lean/BinRawByteCollisionTargets.lean:29`, `:32`);
+the previous-output/IV component supplies the remaining count. This replaces
+the eight-way `12·Q²/256³²` allowance for the binary instantiation
+(`lean/RawAdaptiveDecoderInjection.lean:27`;
+[Bin model §3](../100bit-spend-path-20261013/design/BIN-COMMITMENT-MODEL-20261019.md)).
+Here Q bounds distinct first reads of the shared experiment, including the
+adversary. This collision κ is separate from the algebraic pairing challenge
+κ and its bad-set cap.
+
+The common row envelope stays `B = 15/2^109`, with `33·B < 2^-100`
+(`lean/PerAttemptEnvelope.lean:17`, `:54`). The binary ledger expression is
+`κbin(Q) + N·B + 2^-126`, with the same decoded-start budget N, after the
+binary event, recovery and first-read budget are instantiated. At N ≤ 33
+the row contribution remains below `2^-100`; the collision contribution is
+halved for a fixed Q. This is not an absolute bound for unbounded Q.
+The existing composed theorem still uses the eight-way κ and explicit
+`hQ`, `htag`, `hchecks`, `hN` (`lean/RawChecksAdaptiveFailureNoModel.lean:34`,
+`:65`). The Bin model supplies recovery and compiled-word stability
+(`lean/BinCanonicalCutWords.lean:17`;
+`lean/BinCompiledRunWordStability.lean:27`); it explicitly leaves downstream
+instantiation and source refinement owed ([Bin model §§3–4](../100bit-spend-path-20261013/design/BIN-COMMITMENT-MODEL-20261019.md)).
+This amendment does not report the binary ledger expression as an already
+composed deployed theorem.
+
+The verifier-core read allowance is `595 + 566 = 1,161` for the two
+transactions (`lean/QvStage1Count.lean:86`; `lean/QvStage2Count.lean:17`,
+`:75`). [QV-STAGE1](../100bit-spend-path-20261013/design/QV-STAGE1-20261020.md)
+derives `595 = 115 + 30 + 447 + 3` from transcript, leaf, parent and checkpoint
+calls. [QV-STAGE2](../100bit-spend-path-20261013/design/QV-STAGE2-20261020.md)
+derives `566 = 3 + 36 + 527` from resume, leaf and parent calls. Counting
+all calls bounds distinct first reads even with repeats. The combined bound
+requires complete counted traces (`lean/QvStage2Bridge.lean:37`); source-prefix
+coverage, trie/read-set transport and backend/runtime correspondence remain
+conditions in those reports. The designated-core experiment can use
+`Q = QA + 1,161` with symbolic adversary allowance QA after refinement;
+separately designated external reads require their own allowance
+(`lean/QvStage2Bridge.lean:48`).
+
+The query-scan exhaustion abort has model probability at most `2^-454`
+for 64 independent uniform draws from `2^18` positions failing to obtain
+22 distinct indices (`lean/QueryScanModelFailure.lean:45`, `:74`, `:89`).
+The source cap is 64 words in eight blocks, not 64 blocks
+(`crates/aspis-core/src/r0_transcript.rs:46`;
+`crates/aspis-r1-cost-probe/src/transcript.rs:35`). Failure returns
+`Error::Transcript` (`transcript.rs:54`).
+[QUERYSCAN, “Where the abort charges enter”](../100bit-spend-path-20261013/design/QUERYSCAN-20261020.md)
+requires QueryScanAbortCoupling at the source/game handoff. Conservative
+soundness coupling appends `δquery ≤ A·2^-454` beside the distinct bank-abort
+term `2^-126`, where A counts appropriately charged scans and is not N.
+One scan has the stated `2^-454` bound. Acceptance-preserving refinement can
+instead give zero accepted-failure contribution because exhaustion rejects.
+The uniform fresh-word/history and source-driver premises remain open.
+
+The privacy per-attempt read budget is `2^22`, replacing the old `2^21`:
+`115 + Mc ≤ 2^22`, with `Mc = 2,359,296 + E₁ + E₂`
+(`docs/research/v8-r0-zk-20261009/lean/R1Z/CommitReadsR1.lean:308`, `:316`;
+[privacy LOG D76](../v8-r0-zk-20261009/LOG.md#lead-acceptance-of-the-binary-format-read-budget-2026-10-19-d76)).
+D76 records the binary parent count `3·(2^18−1) = 786,429` and the unchanged
+privacy error at approximately `2^-109`, dominated by poles. The binary
+privacy root bounds the model error by `2^-109 + 2^-137` for eight attempts
+and adversary reads at most `2^64`, under its named premises
+(`docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacySimulatorBin.lean:20`).
+QUERYSCAN separately requires real/simulator source-abort couplings: with
+both eight-attempt history laws the conservative wrapper adds at most
+`2^-450`. This preserves the approximately `2^-109` scale and does not
+discharge the source/game premises.
+
+The admitted successful stage-1 route is `[3,10]` only. The entry filter
+also passes `[3,11]` (`programs/r1-cost-probe/src/pool_route.rs:3`), and the
+adapter forwards its second byte as the split
+(`programs/r1-cost-probe/src/r1_pool_adapter.rs:947`, `:981`), but the
+adopted `candidate::tx1` rejects `k != SPLIT` with `SPLIT = 10`
+(`crates/aspis-r1-cost-probe/src/candidate.rs:270`; `compact.rs:27`).
+Thus `[3,11]` is a rejected prefix, not another successful split. The
+[adapter write audit](../100bit-spend-path-20261013/design/R15-ADAPTER-WRITE-AUDIT-20261020.md)
+scopes its checkpoint write to `[3,10]`.
+
+The algebraic binding rows γ, pairing κ, α₀, α₁, q22 and rho retain their
+word-level obligations and bounds. `ConcreteBinding` takes typed words,
+functionals and polynomials, independently of the tree arity
+(`lean/ConcreteBinding.lean:26`, `:58`, `:67`, `:74`, `:84`, `:97`).
+The classifier and its byte-density theorem remain
+`lean/LiteralClassifier.lean:24`, `:72`. List decoding and the recorded-run
+extractor remain the same mathematical components; successful extraction
+still yields `LiteralProtocol.relation` for the recorded public bytes
+(`lean/RawRecordedPublicSpendExtractorReturnedRelation.lean:17`). The Bin
+compiler reuses the recording compiler with binary recovery
+([Bin model §4](../100bit-spend-path-20261013/design/BIN-COMMITMENT-MODEL-20261019.md)).
+The current conditional extractor cost result is recorded in the
+[M10 addendum](../100bit-spend-path-20261013/design/LEAD-NOTE-SOUNDNESS-GAP-MAP-20261019.md#addendum-2026-10-20-m10-composed-conditional).
+The [gap map](../100bit-spend-path-20261013/design/R1-SOUNDNESS-GAP-MAP-20261019.md)
+and [all lead addenda](../100bit-spend-path-20261013/design/LEAD-NOTE-SOUNDNESS-GAP-MAP-20261019.md)
+retain the source-to-model, re-pin, accounting and release-composition
+obligations. This format amendment closes none of those obligations.
