@@ -1,0 +1,68 @@
+import ActualExtractorResourcesM10
+import InitialPublicImageWorkM10
+
+/-! Fixed protocol specialization with no implementation premise. The public
+image inverse/check bound is instantiated by its retained-array schedule.
+The experiment's separate recorded-log-length premise is intentionally kept. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.ConcreteExtractorLedgerM10
+open RawExtractorCostComposedV2 RawExtractorCostComposedBin
+open RawRecordedEagerExtractorReadsBin (RunView Coins)
+
+abbrev imageConstant := InitialPublicImageWorkM10.budget
+
+def extractor : RawExtractorCostComposedBin.CostedExtractor :=
+  ActualExtractorResourcesM10.extractor InitialPublicImageWorkM10.image imageConstant
+
+def params (Q : Nat) : Parameters := ActualExtractorResourcesM10.params imageConstant Q
+
+theorem value (run : RunView) (coins : Coins) :
+    (extractor.eval run coins).1 = RawRecordedPublicSpendExtractorBin.extract run coins :=
+  ActualExtractorResourcesM10.value InitialPublicImageWorkM10.image imageConstant run coins
+
+theorem ledger (Q : Nat) : LedgerRefinement extractor (params Q) Q :=
+  ActualExtractorResourcesM10.ledger InitialPublicImageWorkM10.image imageConstant Q
+    InitialPublicImageWorkM10.bounded
+
+theorem uniform (Q : Nat) : RawExtractorParameterPolynomial.CoordinateBound (params Q)
+    (Q+RawExtractorFixedQuarticM10.slack (ActualExtractorResourcesM10.fixed imageConstant))
+    (ActualExtractorResourcesM10.fixed imageConstant).overheadConstant 4 :=
+  ActualExtractorResourcesM10.uniform imageConstant Q
+
+def costPolynomial : Polynomial Nat :=
+  RawExtractorFixedQuarticM10.budgetPolynomial (ActualExtractorResourcesM10.fixed imageConstant)
+
+theorem polynomial_eval (Q : Nat) : costPolynomial.eval Q = (params Q).attemptBudget :=
+  RawExtractorFixedQuarticM10.budget_eval _ Q
+
+theorem polynomial_degree : costPolynomial.natDegree ≤ 4 :=
+  RawExtractorFixedQuarticM10.budget_degree _
+
+theorem accepted_cost (Q : Nat) (run : RunView) (ha : run.2.2 = true)
+    (hlog : run.1.length ≤ Q+1161) :
+    (∀ coins, (extractor.eval run coins).2.total ≤ costPolynomial.eval Q) ∧
+    AspisV8R19.OracleResampling.mean (fun coins : Coins =>
+      ((extractor.eval run coins).2.total : ℚ)) ≤ (costPolynomial.eval Q : ℚ) := by
+  rw [polynomial_eval]
+  exact RawExtractorCostComposedBin.accepted_attempt_cost extractor (params Q) Q (ledger Q) run ha hlog
+
+/-- A smaller explicit quartic envelope than the ledger's full arithmetic
+budget polynomial; its coefficient is fixed independently of Q/run/tape. -/
+theorem direct_bound (Q : Nat) (run : RunView) (coins : Coins)
+    (hlog : run.1.length ≤ Q+1161) :
+    (extractor.eval run coins).2.total ≤
+      4*(ActualExtractorResourcesM10.scale imageConstant)^4*(Q+1162)^4 := by
+  have hh := ActualExtractorResourcesM10.total InitialPublicImageWorkM10.image imageConstant
+    InitialPublicImageWorkM10.bounded run coins
+  exact hh.trans (Nat.mul_le_mul_left _ (Nat.pow_le_pow_left (by omega) 4))
+
+#print axioms value
+#print axioms ledger
+#print axioms uniform
+#print axioms polynomial_eval
+#print axioms polynomial_degree
+#print axioms accepted_cost
+#print axioms direct_bound
+end AspisR1.ConcreteExtractorLedgerM10
+end

@@ -1,0 +1,20 @@
+Source: docs/research/100bit-spend-path-20261013/lean/R1FinalSoundnessBinPerQueryR19.lean
+SHA256: 02efd70c21ab3bfb530f5f6565e6574bce6501a42e1c3e726e3292db9aca1e5f
+
+BEFORE (verbatim R19):
+    (e : RawExtractorCostComposedBin.CostedExtractor) (p : Parameters)
+    /- Size-restricted M10 adequacy; length is independent of distinct reads. -/
+    (h_M10_ledger : RawExtractorCostComposedBin.LedgerRefinement e p Q)
+    (h_M10_log_length : BoundaryEvidence s → ∀ H,
+      (eval H (recorded D d P)).2.2 = true →
+        (eval H (recorded D d P)).1.length ≤ Q + 1161)
+
+AFTER: unchanged. No accepted final M10 endpoint or ledger deletion.
+
+Premises removed: none. Premises narrowed in an accepted endpoint: none.
+The independent h_M10_log_length remains unchanged.
+
+The accepted RawExtractorFixedQuarticM10.coordinates and budget_degree
+theorems prove the numerical fixed-family obligations (degree <= 4). They
+do not discharge the implementation side of h_M10_uniform for an accepted
+complete extractor.

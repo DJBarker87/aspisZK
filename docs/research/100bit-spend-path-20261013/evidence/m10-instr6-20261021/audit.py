@@ -61,6 +61,10 @@ for rel in new:
     counts+=len(names)
     pins.append({'module':module,'source':rel,'sha256':sha(src),'object_sha256':a.get('object_sha256'),'object_size':a.get('object_size')})
 result={'status':'pass' if not errors else 'fail','scope':'focused cached-object audit; not frozen release replay',
+ 'completion_status':data.get('completion_status','in progress'),
+ 'ledger_closed':data.get('ledger_closed',False),
+ 'final_soundness_endpoint':data.get('final_soundness_endpoint',False),
+ 'known_obstructions':data.get('known_obstructions',[]),
  'base':BASE,'revision':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
  'new_modules':len(new),'audited_theorems':counts,'attempts':len(data['attempts']),
  'accepted_targets':sum(a['exit']==0 for a in latest.values()),

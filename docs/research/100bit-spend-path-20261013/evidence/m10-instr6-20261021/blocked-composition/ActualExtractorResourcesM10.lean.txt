@@ -1,0 +1,155 @@
+import ActualExtractorWorkM10
+import ProtocolStorageEnvelopeM10
+import GSActualByteJobsM10
+import ExtractorReservedResourcesM10
+import RawExtractorFixedQuarticM10
+
+/-! Resources for the complete eager schedule. Each counted step reserves a
+full protocol object or a log-sized copy, including field-word slots and
+quadratic index bit work. Protocol constants cover dense matrix/basis storage,
+RR reachable rows, sampler/cache arrays and every merge intermediate. The
+public-image primitive's work includes its own allocated slots by contract.
+No claim about measured Lean runtime RSS is made by this abstract bit model. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.ActualExtractorResourcesM10
+open AspisWideTower AspisV8R15.ExactTowerBase RawExtractorCostComposedV2
+open RawExtractorCostLedger GSPostProcessWorkM10
+open RawRecordedEagerExtractorReadsBin (RunView Coins)
+open M31AcceptFiber
+attribute [local irreducible] ActualExtractorWorkM10.workConstant GSActualBankJobsM10.count
+  GSBankOutputEnvelopeM10.candidates
+
+@[never_extract,noinline] def footprint (C : Nat) : Nat :=
+  100*(GSBankOutputEnvelopeM10.candidates+1)^60*(29*1024+1000)+
+    (6291456+6480098+1)^4+(RRRecoveryWorkM10.cap 114689 112 1025+2)^4+
+    21377328*1024+C+1000000000000
+
+@[never_extract,noinline] def naturalConstant : Nat :=
+  2^(RRRecoveryWorkM10.cap 114689 112 1025+2)+(P31^8)+2^64
+
+@[never_extract,noinline] def naturalEnvelope (C : Nat) : Nat :=
+  footprint C+naturalConstant+ActualExtractorWorkM10.workConstant C+1
+
+@[never_extract,noinline] def scale (C : Nat) : Nat :=
+  ExtractorReservedResourcesM10.constant (ActualExtractorWorkM10.workConstant C)
+    (footprint C) (naturalEnvelope C)
+
+attribute [local irreducible] footprint naturalConstant naturalEnvelope
+
+def eval (image : PublicImage) (C : Nat) (run : RunView) (coins : Coins) :
+    Option SpendRelation.Wspend × Resources :=
+  let x := ActualExtractorWorkM10.eval image run coins
+  (x.1,ExtractorReservedResourcesM10.resources x.2 (BinEagerWordsReads.words run).2
+    run.1.length (footprint C) (naturalEnvelope C))
+
+def extractor (image : PublicImage) (C : Nat) (hvalue : ActualExtractorWorkM10.GSValueRefinement image) : RawExtractorCostComposedBin.CostedExtractor :=
+  ⟨eval image C,fun run coins => ActualExtractorWorkM10.value image hvalue run coins⟩
+
+theorem value (image : PublicImage) (C : Nat) (hvalue : ActualExtractorWorkM10.GSValueRefinement image) (run : RunView) (coins : Coins) :
+    (eval image C run coins).1 = RawRecordedPublicSpendExtractorBin.extract run coins :=
+  ActualExtractorWorkM10.value image hvalue run coins
+
+theorem total (image : PublicImage) (C : Nat) (hi : PublicImageBound image C)
+    (run : RunView) (coins : Coins) :
+    (eval image C run coins).2.total ≤ 4*(scale C)^4*(run.1.length+1)^4 :=
+  ExtractorReservedResourcesM10.total_bound _ _ _ _ _ _
+    (ActualExtractorWorkM10.work image C hi run coins) (BinEagerWordsReads.words_reads run)
+
+@[never_extract,noinline] def fixed (C : Nat) : Parameters where
+  n := 2000000
+  logSize := 1161
+  listSize := footprint C
+  b := P31^8+1
+  calls := GSActualBankJobsM10.count 149+1
+  depth := 1025
+  ell := 112
+  retries := 149
+  overheadConstant := 4*(scale C)^4
+  overheadDegree := 4
+
+def params (C Q : Nat) : Parameters := RawExtractorFixedQuarticM10.family (fixed C) Q
+
+theorem jobs_mono (j : Jobs WideExact) (n b count n' b' count' : Nat)
+    (h : j.Bounded n b count) (hn : n ≤ n') (hb : b ≤ b') (hc : count ≤ count') :
+    j.Bounded n' b' count' :=
+  ⟨h.gcd_count.trans hc,h.division_count.trans hc,h.power_count.trans hc,
+    fun pq hp => ⟨(h.gcd_sizes pq hp).1.trans hn,(h.gcd_sizes pq hp).2.trans hn⟩,
+    fun d hd => (h.division_sizes d hd).trans hn,
+    fun p hp => (h.power_bits p hp).trans hb⟩
+
+theorem count_le (C Q : Nat) : GSActualBankJobsM10.count 149 ≤ (params C Q).count := by
+  have h0 : GSActualBankJobsM10.count 149 ≤ GSActualBankJobsM10.count 149+1 := by omega
+  have h1 := Nat.le_mul_of_pos_right (GSActualBankJobsM10.count 149+1)
+    (show 1 ≤ 1025*112+1 by omega)
+  have h2 := Nat.le_mul_of_pos_right ((GSActualBankJobsM10.count 149+1)*(1025*112+1))
+    (show 1 ≤ 149+1 by omega)
+  have h3 := Nat.le_mul_of_pos_right (((GSActualBankJobsM10.count 149+1)*(1025*112+1))*(149+1))
+    (show 1 ≤ 112+1 by omega)
+  exact h0.trans (h1.trans (h2.trans h3))
+
+theorem total_overhead (image : PublicImage) (C Q : Nat) (hi : PublicImageBound image C)
+    (run : RunView) (coins : Coins) (hl : run.1.length ≤ Q+1161) :
+    (eval image C run coins).2.total ≤ (params C Q).overhead := by
+  have hh := total image C hi run coins
+  have hl' : run.1.length+1 ≤ (params C Q).n+(params C Q).logSize+
+      (params C Q).listSize+(params C Q).b+1 := by
+    change run.1.length+1 ≤ 2000000+(Q+1161)+footprint C+(P31^8+1)+1
+    omega
+  exact hh.trans (Nat.mul_le_mul_left _ (Nat.pow_le_pow_left hl' 4))
+
+theorem ledger (image : PublicImage) (C Q : Nat)
+    (hvalue : ActualExtractorWorkM10.GSValueRefinement image)
+    (h_M10_public_image : PublicImageBound image C) :
+    RawExtractorCostComposedBin.LedgerRefinement (extractor image C hvalue) (params C Q) Q := by
+  constructor
+  · exact Nat.le_refl _
+  · intro run coins ha hl
+    let words := (BinPublicRecoverySharedStageM10.stage run).1
+    let inputs := (GSPointBatchWorkM10.inputs (ActualExtractorWorkM10.received words)
+      (fun _ => words.final)).1
+    let j := GSActualByteJobsM10.jobs inputs coins
+    have hj := jobs_mono j 113 (P31^8+1) (GSActualBankJobsM10.count 149)
+      (params C Q).n (params C Q).b (params C Q).count
+      (GSActualByteJobsM10.jobs_bounded inputs coins) (by change 113 ≤ 2000000; omega)
+      (Nat.le_refl _) (count_le C Q)
+    refine ⟨j,hj,?_⟩
+    have ht := total_overhead image C Q h_M10_public_image run coins hl
+    have hf : (eval image C run coins).2.fieldOps ≤ (eval image C run coins).2.total := by
+      unfold Resources.total
+      omega
+    exact (hf.trans ht).trans (Nat.le_add_left _ _)
+  · intro run coins ha hl
+    have hh := (BinEagerWordsReads.words_reads run).trans (Nat.mul_le_mul_left 12976224 hl)
+    exact hh.trans (Nat.mul_le_mul_right (Q+1161) (show 12976224 ≤ 7*2000000 by omega))
+  · intro run coins ha hl
+    have ht := total_overhead image C Q h_M10_public_image run coins hl
+    have hb : (eval image C run coins).2.bits ≤ (eval image C run coins).2.total := by
+      unfold Resources.total
+      omega
+    have hf : 1 ≤ ((params C Q).b+1)^2 := by
+      have hh := Nat.pow_le_pow_left (show 1 ≤ (params C Q).b+1 by omega) 2
+      simpa only [one_pow] using hh
+    have hm := Nat.mul_le_mul
+      (show (params C Q).overhead ≤ (eval image C run coins).2.fieldOps+
+        (eval image C run coins).2.logReads+(params C Q).overhead by omega) hf
+    exact (hb.trans ht).trans (by simpa only [Nat.mul_one] using hm)
+
+theorem uniform (C Q : Nat) : RawExtractorParameterPolynomial.CoordinateBound (params C Q)
+    (Q+RawExtractorFixedQuarticM10.slack (fixed C)) (fixed C).overheadConstant 4 :=
+  RawExtractorFixedQuarticM10.coordinates (fixed C) Q
+
+theorem polynomial_degree (C : Nat) :
+    (RawExtractorFixedQuarticM10.budgetPolynomial (fixed C)).natDegree ≤ 4 :=
+  RawExtractorFixedQuarticM10.budget_degree (fixed C)
+
+#print axioms value
+#print axioms total
+#print axioms jobs_mono
+#print axioms count_le
+#print axioms total_overhead
+#print axioms ledger
+#print axioms uniform
+#print axioms polynomial_degree
+end AspisR1.ActualExtractorResourcesM10
+end
