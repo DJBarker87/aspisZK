@@ -1,0 +1,93 @@
+import R9DeployedBinaryExperiment
+
+/-! P2' alone does not connect a persisted checkpoint's caller to arbitrary
+D,d,P. This is a countermodel of that implication, not a Solana attack. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.R9DeployedPersistenceObstruction
+open FS FS2 RawCutTranscriptRun RawCutProverCompiler RecordedBinaryExperimentBin
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open AspisV8R19.CausalFirstHitUnionBound AspisV8R19.OracleResampling
+open R9TwoTransactionExperiment R9DeployedBinaryExperiment
+attribute [local instance] Classical.propDecidable
+
+/-- Empty public bytes fail the actual binary extractor's public parser. -/
+def badPublic : LiteralTranscript.Public := ⟨[], by decide, 2⟩
+def badProof : LiteralProtocol.Proof := fun _ => .payload ⟨[], by decide⟩
+def badRun : Run := ([], ((badPublic, badProof), true))
+def tx1 : Tx1 := .done ⟨some [], fun _ => 0⟩
+def poolTx2 : PoolTx2 := fun _ => .done badRun
+
+theorem bad_extract (coins : GSConcreteByteDecoderBank.RawCoins) :
+    RawRecordedPublicSpendExtractorBin.extract badRun coins = none := by
+  simp [RawRecordedPublicSpendExtractorBin.extract,
+    RawCutWordsFromRunPublicValidBin.runDecodedPublic, badRun, badPublic,
+    SemanticPublicWire.parsePublic, SemanticPublicWire.decode]
+
+/-- tx2 receives exactly the checkpoint tx1 wrote, without modification. -/
+theorem same_bytes (H : Bytes → State) :
+    eval H (deployed tx1 poolTx2) =
+      ([], ⟨⟨some [], fun _ => 0⟩, some badRun⟩) :=
+  arbitrary_resume [] (fun _ => 0) badRun H
+
+theorem deployed_failure_one : deployedFailureModel tx1 poolTx2 = 1 := by
+  change mass ([], ⟨⟨some [], fun _ => 0⟩, some badRun⟩) = 1
+  have he : ∀ coins, failure ([], ⟨⟨some [], fun _ => 0⟩, some badRun⟩) coins := by
+    intro coins
+    exact ⟨badRun, rfl, rfl, bad_extract coins⟩
+  unfold mass
+  simp only [indicator, if_pos (he _), mean_const]
+
+/-- The headline recording with the all-false decision rejects on every
+oracle, regardless of decoder and adversary. -/
+theorem recorded_rejects (D : LiteralByteProtocol.Decoder) (P : Prover)
+    (H : Bytes → State) :
+    (eval H (recorded D (fun _ _ => false) P)).2.2 = false := by
+  change (eval H (RawCutProverCompiler.experiment
+    (compiled D (fun _ _ => false) (BinCompiledRunWordStability.wordsFromRun D) P)
+    (verifier D (fun _ _ => false)))).2.2 = false
+  rw [compiled_experiment_eval, RawCutProverCompiler.experiment_eval]
+  simp only [RawCutProverCompiler.verifier, FS2.verifier_eval, decisionOnBytes]
+
+/-- The model's lazy-oracle accepted-failure probability is exactly zero. -/
+theorem recorded_failure_zero (D : LiteralByteProtocol.Decoder) (P : Prover) :
+    lazyMean (recorded D (fun _ _ => false) P) emptyTable
+      RawRecordedOracleExtractionMassBin.failureMass = 0 := by
+  have he : ∀ H : Bytes → State,
+      RawRecordedOracleExtractionMassBin.failureMass
+        (eval H (recorded D (fun _ _ => false) P)) = (0 : ℚ) := by
+    intro H
+    unfold RawRecordedOracleExtractionMassBin.failureMass
+    simp only [recorded_rejects D P H, Bool.false_eq_true, false_and,
+      indicator, if_false, mean_const]
+  have h := OracleProgramLawExt.lazyMean_eq_of_eval
+    (recorded D (fun _ _ => false) P) (Program.done () : Program Bytes State Unit)
+    RawRecordedOracleExtractionMassBin.failureMass (fun _ => 0) (fun H => he H)
+  exact h
+
+/-- A single scan allowance cannot conceal the missing caller law. -/
+theorem no_transport_from_persistence (D : LiteralByteProtocol.Decoder) (P : Prover) :
+    ¬ DeployedTransport D (fun _ _ => false) P
+      (deployedFailureModel tx1 poolTx2) := by
+  unfold DeployedTransport
+  rw [deployed_failure_one, recorded_failure_zero, zero_add]
+  have hsmall : QueryScanModelFailure.failureProbability (2^18) < 1 := by
+    apply QueryScanModelFailure.exhaustion_bound.trans_lt
+    exact (one_div_lt_one (by positivity : (0 : ℚ) < 2^454)).2 (by norm_num)
+  exact not_le_of_gt hsmall
+
+theorem no_caller_from_persistence (D : LiteralByteProtocol.Decoder) (P : Prover) :
+    ¬ CallerReachability tx1 poolTx2 D (fun _ _ => false) P := by
+  intro caller
+  exact no_transport_from_persistence D P (transport tx1 poolTx2 D _ P caller)
+
+#print axioms bad_extract
+#print axioms same_bytes
+#print axioms deployed_failure_one
+#print axioms recorded_rejects
+#print axioms recorded_failure_zero
+#print axioms no_transport_from_persistence
+#print axioms no_caller_from_persistence
+end AspisR1.R9DeployedPersistenceObstruction
+end
