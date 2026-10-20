@@ -2571,6 +2571,86 @@
       },
       "stdout_sha256": "f68bacc7041ddc67362b16ca09df5b4ecc729f7827ed075992625bfa981e6811",
       "stdout_bytes": 25320
+    },
+    {
+      "schema": "r22-kani-attempt-v1",
+      "attempt": "36-frozen-residue-row",
+      "module": [
+        "env",
+        "PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin",
+        "CARGO_BUILD_JOBS=4",
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "180s",
+        "/home/dombarker/.cargo/bin/cargo-kani",
+        "kani",
+        "--lib",
+        "--exact",
+        "--harness",
+        "residue::frozen_residue_row_phase_step",
+        "--no-assertion-reach-checks",
+        "--default-unwind",
+        "20",
+        "--output-format",
+        "old"
+      ],
+      "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+      "source_sha256": "4b5b72f24df80b13f31b8efa90b0c482bfda6483aaa676f6d2f0d347cdff973d",
+      "deps_fingerprint": "717032176e6ca0269f1fb12999491ed1b0051ad575d8551ee8976dfe427f7d21",
+      "command": [
+        "env",
+        "PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin",
+        "CARGO_BUILD_JOBS=4",
+        "timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "180s",
+        "/home/dombarker/.cargo/bin/cargo-kani",
+        "kani",
+        "--lib",
+        "--exact",
+        "--harness",
+        "residue::frozen_residue_row_phase_step",
+        "--no-assertion-reach-checks",
+        "--default-unwind",
+        "20",
+        "--output-format",
+        "old"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-r22-overflow-20261021/generated",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rb534df2b705a4ae8886fba96b37a37fe.scope",
+      "inputs": {
+        "residue.rs": "da4a40d9a60d1c8fe9ea760e774ace2875cacc026b6e6abe92b05e34f5bc1118",
+        "canonical.rs": "ebf1006382f82d1fbe8c05a9a9c3a4654151bfdd9550be659142deb2590d2b45",
+        "layout.rs": "c61c37be750985f9b15fb878ba899365ca7d1fb7c29de39e84b59ca054c63f18",
+        "lib.rs": "5d244e88344cfa9dc683db9c6cc83b51881c94d07fbac3a91c12ca230c4a9d60",
+        "multiproof.rs": "015b2eae6ba644fb595963e99ff9e9060ba4637d09c2c34181aa2e7b2a1a9306"
+      },
+      "print_axioms": "N/A: Kani proof, no Lean theorem",
+      "expected_time": "Compile isolated dependency-free harness, then CBMC bit-vector safety; no field elimination or certificate generation",
+      "kani_version": "cargo-kani 0.67.0",
+      "exit_status": 0,
+      "wall_seconds": 0.6654444539453834,
+      "peak_rss_kib": 169952,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 73621504,
+      "verification_success": true,
+      "errors": [
+        "[<usize as kani::rustc_intrinsics::ToISize>::to_isize.assertion.1] line 57 internal error: entered unreachable code: SUCCESS"
+      ],
+      "receipt_normalization": "verification_success parsed from VERIFICATION SUCCESSFUL (the first launcher looked for a colon/hyphen spelling); source proof logs retained by hash",
+      "checks_by_result": {
+        "SUCCESS": 210
+      },
+      "stdout_sha256": "8c90fa245fee443f2bd7c6111b983d142d2dc0319a5b5c32f1a94807b5fa200f",
+      "stdout_bytes": 44815
     }
   ]
 }

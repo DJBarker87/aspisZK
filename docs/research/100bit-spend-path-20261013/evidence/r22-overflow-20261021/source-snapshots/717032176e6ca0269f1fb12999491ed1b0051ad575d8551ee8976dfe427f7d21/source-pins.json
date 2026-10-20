@@ -1,0 +1,327 @@
+{
+  "compact_constants": [
+    {
+      "expression": "pub const MAGIC: &[u8; 8] = b\"R1P3CB18\";",
+      "sha256": "e4c2126be98c7a2f6be291349c809d4826d9e22af8020b6b7984a4cc1f68e38c"
+    },
+    {
+      "expression": "pub const HEADER: usize = 16;",
+      "sha256": "1bd88dd1c7d91361550e9fc76e70f0611018193f4359238d9bde047ff6e39adb"
+    },
+    {
+      "expression": "pub const SPLIT: usize = 10;",
+      "sha256": "bb100c5912fe7a6fe4a0f57dac197d87d2c4d748741eafe588a9ffb0559f306f"
+    },
+    {
+      "expression": "pub const QUERIES: usize = 22;",
+      "sha256": "5efd16f267be06e6b7c85a5a58f7048ce7a4ae8181c5decabd89c8ad54e7da18"
+    },
+    {
+      "expression": "pub const SEMANTIC_ROWS: u8 = 27;",
+      "sha256": "a8db12cbd5204cd9ef280beb497fff00ac1eb12c4ce4c9adaefe4fb14228aeb5"
+    },
+    {
+      "expression": "pub const LOGICAL_SEMANTIC: usize = crate::verifier::SEMANTIC_BYTES;",
+      "sha256": "272434a45f753dafcecd6af42a086c46f9bb871120c3e0e7ba83020a0da5af46"
+    },
+    {
+      "expression": "pub const SEMANTIC_COMPACT_VALUES: usize = 1 + 10 * 28 + (87 + 29) + 29;",
+      "sha256": "f7a8ae241ea00e8272c65754cf0abeb54be4055535b7ec52ff8db156939856f2"
+    },
+    {
+      "expression": "pub const COMPACT_SEMANTIC: usize = LOGICAL_SEMANTIC - 16 * SEMANTIC_COMPACT_VALUES;",
+      "sha256": "3257182a09e5b39935b966c61389b99e179dd79e4b135ec319d1338dc3217890"
+    },
+    {
+      "expression": "pub const COMPACT_Y1: usize = 29 * 16;",
+      "sha256": "695b41767eae496dcfc8c95ab99526ddb092c65a0b3bf5b07f3fe1cefea71fd0"
+    },
+    {
+      "expression": "pub const LOGICAL_Y1: usize = 29 * 32;",
+      "sha256": "b75c6b6ce8da46f327fe796148613bc6a78984badfe289212bcbec205bd7d816"
+    },
+    {
+      "expression": "pub const OPENING: usize = 480 + 128 + 32 + 32 + 128 + 32;",
+      "sha256": "4f6c31265507ea5f9b468478f2d2d20551b4146ee9f205dbf8e1bd091c396bae"
+    },
+    {
+      "expression": "pub const OFF_SEMANTIC: usize = HEADER;",
+      "sha256": "4ee52a9df917eae58f387b5ebaad84e2f24b67a3fbca723235d9221c546fdea0"
+    },
+    {
+      "expression": "pub const OFF_Y1: usize = OFF_SEMANTIC + COMPACT_SEMANTIC;",
+      "sha256": "31543bb264fc27976b74924e358027ff3714d371475133f4022388ffb7661204"
+    },
+    {
+      "expression": "pub const OFF_INACTIVE: usize = OFF_Y1 + COMPACT_Y1;",
+      "sha256": "a13707b2e15f93a939e67de79ea4519fd59cb46314c113a24510987f37d04e79"
+    },
+    {
+      "expression": "pub const OFF_ROUND0: usize = OFF_INACTIVE + 32;",
+      "sha256": "6c2749bf1e83d3348e5f0e8066418ecd0f36e73af3ada58c4b5c0daf18f3b8b9"
+    },
+    {
+      "expression": "pub const OFF_FOLDED_ROOT: usize = OFF_ROUND0 + 224;",
+      "sha256": "e3329e1baacd017946e0f48bf081db1efe4442e5b58a5ff3fd2e60dbbf93b00d"
+    },
+    {
+      "expression": "pub const OFF_ROUND1: usize = OFF_FOLDED_ROOT + 32;",
+      "sha256": "55900cf03b3088dc8fa811cbe8b168966e00db6f157c1cbd9ca8b500ec5330b3"
+    },
+    {
+      "expression": "pub const OFF_FINAL: usize = OFF_ROUND1 + 224;",
+      "sha256": "529f24c684422c63e68b9c345df71b7bfbcccc180130bb69a720a93c0b8b8688"
+    },
+    {
+      "expression": "pub const FINAL_LEN: usize = 64;",
+      "sha256": "dd1b7a0376e22f2b27e10c18564b5a0e3f9be3f4b3a4acf91695b85f3d4a5728"
+    },
+    {
+      "expression": "pub const OFF_OPENINGS: usize = OFF_FINAL + FINAL_LEN * 32;",
+      "sha256": "a4448e4df2992d158d72477b528d5ff0a718d8d4e634154e67ab4e944031723d"
+    },
+    {
+      "expression": "pub const OFF_NODES: usize = OFF_OPENINGS + QUERIES * OPENING;",
+      "sha256": "44c8b01bde05a3aa19ccd33dbe2a39a9a75694b53ebd564e52b586c6a419e9dc"
+    },
+    {
+      "expression": "pub const FIXED: usize = OFF_NODES;",
+      "sha256": "dd9de8593dd7e53659e61d2a6df427005fff472155d93d59a7810f4f2ad8c935"
+    },
+    {
+      "expression": "pub const MAX_NODES: usize = 2 * (146 + 172) + (128 + 150);",
+      "sha256": "aa00a6f68bbc92fc9905e5e7a18a6a89f7a38a1e0e8cd49f10915e1324dbadde"
+    },
+    {
+      "expression": "pub const MAX_PROOF: usize = FIXED + 32 * MAX_NODES;",
+      "sha256": "ef66be0cac04ea7fb8758b70d968bcc230578d87a56e20140b6bec4824c7b7a5"
+    },
+    {
+      "expression": "pub const SLOT_NODES: [usize; 6] = [146, 146, 128, 172, 172, 150];",
+      "sha256": "e1933ddaceabd57a9fb493cbc318d19953431044636125340cce14fc0a6dbb3e"
+    },
+    {
+      "expression": "pub const PROOF_BYTES: usize = MAX_PROOF;",
+      "sha256": "bcbcc0eb0070d9127d1d80ea01a5243f9e2dcff0775431ebaf20ab2d367d83c4"
+    }
+  ],
+  "declarations": [
+    {
+      "edit": "wrapping_add/sub renamed to r22_add/sub; checked_*().expect assertion; no other body edits",
+      "line": 10,
+      "original_sha256": "84135088843dca428fd58d6a8401e6a47171daea098000ef96466d041557ac7d",
+      "owner": "canonical::reduce",
+      "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs"
+    },
+    {
+      "edit": "wrapping_add/sub renamed to r22_add/sub; checked_*().expect assertion; no other body edits",
+      "line": 15,
+      "original_sha256": "60715efe091eb6cb28fbbce434687cfbfbad83f6f399ff7118bac77b769670fe",
+      "owner": "canonical::add",
+      "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs"
+    },
+    {
+      "edit": "wrapping_add/sub renamed to r22_add/sub; checked_*().expect assertion; no other body edits",
+      "line": 18,
+      "original_sha256": "426be19fe485ee624c20f4f78c150aa365efcc558a77e6d72526f53e9c4f8722",
+      "owner": "canonical::pair",
+      "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs"
+    },
+    {
+      "edit": "wrapping_add/sub renamed to r22_add/sub; checked_*().expect assertion; no other body edits",
+      "line": 19,
+      "original_sha256": "33439edd2e99508f957dd2ab55f9d3e867db283adaa0a60d1015afcf01860b29",
+      "owner": "canonical::reduce_pair",
+      "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs"
+    },
+    {
+      "edit": "wrapping_add/sub renamed to r22_add/sub; checked_*().expect assertion; no other body edits",
+      "line": 34,
+      "original_sha256": "59e83446e9a18f7306ffae581a6e13cf1a75398131aebe136d7db9c4546b7b3b",
+      "owner": "canonical::Q::add",
+      "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs"
+    },
+    {
+      "edit": "wrapping_add/sub renamed to r22_add/sub; checked_*().expect assertion; no other body edits",
+      "line": 39,
+      "original_sha256": "183c4412f0c36c8750d4aad24e781716294846ec478490c6ad6ec7422b62a2e9",
+      "owner": "canonical::Q::sub",
+      "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs"
+    },
+    {
+      "edit": "wrapping_add/sub renamed to r22_add/sub; checked_*().expect assertion; no other body edits",
+      "line": 44,
+      "original_sha256": "8f4f2ea4849d8eb16226d9a53c270ff028c9313b07e260645638a963deb61167",
+      "owner": "canonical::Q::half",
+      "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs"
+    },
+    {
+      "edit": "wrapping_add/sub renamed to r22_add/sub; checked_*().expect assertion; no other body edits",
+      "line": 47,
+      "original_sha256": "f3156907a6c5ca2d3731c09ba9bb380bbcf4e1f1d23202602ba4f7893a47a700",
+      "owner": "canonical::Q::half_pow",
+      "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs"
+    },
+    {
+      "edit": "none; declaration copied verbatim; namespace/import context only",
+      "line": 32,
+      "original_sha256": "8bd56f1e543354ce7ba9152ab83e6f6248b59f98217b51a9425a03107bb24e04",
+      "owner": "Arity::bits",
+      "path": "crates/aspis-r1-cost-probe/src/multiproof.rs"
+    },
+    {
+      "edit": "none; declaration copied verbatim; namespace/import context only",
+      "line": 39,
+      "original_sha256": "9530b09cfaf7893da9af948dbb285a70f96edc946aeea274a4300881441a0c42",
+      "owner": "Arity::width",
+      "path": "crates/aspis-r1-cost-probe/src/multiproof.rs"
+    },
+    {
+      "edit": "none; declaration copied verbatim; namespace/import context only",
+      "line": 43,
+      "original_sha256": "8f5e23817998bb43f3fda206e985d651038e23c392c3b80e1979634412c304d8",
+      "owner": "Arity::levels",
+      "path": "crates/aspis-r1-cost-probe/src/multiproof.rs"
+    },
+    {
+      "edit": "none; declaration copied verbatim; namespace/import context only",
+      "line": 54,
+      "original_sha256": "0f56ddcea55b5129e9c71b59112b68c6daebd2de707debe0c0e7e8d7a70e64fb",
+      "owner": "well_formed",
+      "path": "crates/aspis-r1-cost-probe/src/multiproof.rs"
+    },
+    {
+      "edit": "none; declaration copied verbatim; namespace/import context only",
+      "line": 62,
+      "original_sha256": "a4c3d00608db7c440100b34b0bbfa7e723ef0c259aba50f875129c852f3f675e",
+      "owner": "index_at",
+      "path": "crates/aspis-r1-cost-probe/src/multiproof.rs"
+    },
+    {
+      "edit": "none; declaration copied verbatim; namespace/import context only",
+      "line": 85,
+      "original_sha256": "439f6de5215a3cb53efaba6cf41658b9e32469ac808b3f42eb90a7022cbe323a",
+      "owner": "node_count",
+      "path": "crates/aspis-r1-cost-probe/src/multiproof.rs"
+    },
+    {
+      "edit": "none; declaration copied verbatim; namespace/import context only",
+      "line": 259,
+      "original_sha256": "3b38112b06a70366a3c2e2b4cc344e929ecc166b13b2dfcef93920acce3480a3",
+      "owner": "sort_dedup",
+      "path": "crates/aspis-r1-cost-probe/src/multiproof.rs"
+    },
+    {
+      "edit": "none; exact function in isolated namespace",
+      "line": 29,
+      "original_sha256": "f1553150d5cc530cac778ac2f8dbda9308dd3fd9760312eaad9d91c019f1b3f5",
+      "owner": "opening",
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "edit": "none; exact function in isolated namespace",
+      "line": 34,
+      "original_sha256": "50a01a7b2fdd9d8611f2c30ed36d33646c053683fe92546cc99c4503acd03618",
+      "owner": "slot",
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "edit": "none; exact function in isolated namespace",
+      "line": 92,
+      "original_sha256": "a9d17181d8b44c73585d26d1cc9c96ed62f9a00f881534b0536cddd9ef826476",
+      "owner": "batch_keys",
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "edit": "none; exact frozen body; isolated namespace context",
+      "line": 56,
+      "original_sha256": "c1f54c08de0e8683aa25ad18e5f1b8af1e5e69ee53b92790773904851e95554c",
+      "owner": "slot_offset",
+      "path": "crates/aspis-r1-cost-probe/src/compact.rs"
+    },
+    {
+      "edit": "none; exact frozen body; isolated namespace context",
+      "line": 344,
+      "original_sha256": "1dfd358e3d4fb3651e0254d7b1cefc4c80134b8f413060506cea75af7629dc4b",
+      "owner": "Reader<'a>::raw",
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs"
+    }
+  ],
+  "generated": {
+    "Cargo.toml": "c40ecb931c6c8f2bc95279925a4c7d72844af2407d9fb6d88a3f14786c8d31da",
+    "canonical.rs": "ebf1006382f82d1fbe8c05a9a9c3a4654151bfdd9550be659142deb2590d2b45",
+    "layout.rs": "c61c37be750985f9b15fb878ba899365ca7d1fb7c29de39e84b59ca054c63f18",
+    "lib.rs": "5d244e88344cfa9dc683db9c6cc83b51881c94d07fbac3a91c12ca230c4a9d60",
+    "multiproof.rs": "015b2eae6ba644fb595963e99ff9e9060ba4637d09c2c34181aa2e7b2a1a9306",
+    "residue.rs": "da4a40d9a60d1c8fe9ea760e774ace2875cacc026b6e6abe92b05e34f5bc1118"
+  },
+  "raw_expression_correspondence": [
+    {
+      "abstract_checked": "ae.r22_add(PP).r22_sub(bf).r22_add(2*u).r22_add(3*u64::from(P)).r22_sub(v)",
+      "coordinate": 0,
+      "original": "(a*e).wrapping_add(PP).wrapping_sub(b*f).wrapping_add(2*u).wrapping_add(3*u64::from(P)).wrapping_sub(v)",
+      "original_sha256": "a2003e9d1cb0c58c0f0e590e74d06b8125a1309b7160c5f99a356e5abd6ab25a",
+      "replacement": "Canonical limb products replaced by independent products <=(P-1)^2; u,v <=3P. Widened multiplication safety checked separately."
+    },
+    {
+      "abstract_checked": "af.r22_add(be).r22_add(u).r22_add(2*v)",
+      "coordinate": 1,
+      "original": "(a*f).wrapping_add(b*e).wrapping_add(u).wrapping_add(2*v)",
+      "original_sha256": "5e6ee30436570e202d1fb4b0330a8a29650fded2ea41298b5ccdf7e91d2d6a20",
+      "replacement": "Canonical limb products replaced by independent products <=(P-1)^2; u,v <=3P. Widened multiplication safety checked separately."
+    },
+    {
+      "abstract_checked": "ag.r22_add(ce).r22_add(2*PP).r22_sub(bh).r22_sub(df)",
+      "coordinate": 2,
+      "original": "(a*g).wrapping_add(c*e).wrapping_add(2*PP).wrapping_sub(b*h).wrapping_sub(d*f)",
+      "original_sha256": "a10e885a009db847fe8126f2f7461bc4e9ae042c3a6f1065c36c48e95aff1357",
+      "replacement": "Canonical limb products replaced by independent products <=(P-1)^2; u,v <=3P. Widened multiplication safety checked separately."
+    },
+    {
+      "abstract_checked": "ah.r22_add(bg).r22_add(cf).r22_add(de)",
+      "coordinate": 3,
+      "original": "(a*h).wrapping_add(b*g).wrapping_add(c*f).wrapping_add(d*e)",
+      "original_sha256": "bf7e1644487bc843f07b8239f142cf52e80518e696617cc5ea80a16f48c9a956",
+      "replacement": "Canonical limb products replaced by independent products <=(P-1)^2; u,v <=3P. Widened multiplication safety checked separately."
+    }
+  ],
+  "residue_row_abstraction": {
+    "justification": "Existing AspisR1BatchedFoldArithmetic.product_bound; overapproximation of canonical products. Original additions, loops, indexing and flush body copied exactly. Prior row phase bounds are explicit assumptions.",
+    "line": 235,
+    "original_product": "u64::from(limb)*u64::from(basis.0)",
+    "original_sha256": "c41e4a73f9e82be3deabe0d7fdcd4c91700079864b2b049a3a8e05f4f05a71d0",
+    "owner": "update_residue_row",
+    "parameter_edit": "extra products:[u64;4] parameter; shape-only local copies of M31/CM31/K; power and basis fields no longer constrain product correlations",
+    "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+    "replacement": "products[j], independent products<=C"
+  },
+  "scope": "Local checked-arithmetic leaf proofs, not accepted-run source-cone composition. Raw formula harnesses use independent bounded product overapproximation and existing Lean raw_ranges, not a replay of Q::mul.",
+  "source_files": {
+    "crates/aspis-r1-cost-probe/src/candidate.rs": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+    "crates/aspis-r1-cost-probe/src/compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs": "5a84d748e3ac495a664e6b476c0b91a4bfa47408e76661a2834726d40ff28ea0",
+    "crates/aspis-r1-cost-probe/src/multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+    "crates/aspis-r1-cost-probe/src/verifier.rs": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756"
+  },
+  "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "split_fragments": [
+    {
+      "fragment": "let parent = index_at(&level, i) >> arity.bits();\n            let mut j = i;\n            while j < n && index_at(&level, j) >> arity.bits() == parent {\n                j += 1;\n            }",
+      "owner": "node_count::parent_group",
+      "relation": "exact whitespace-normalized body fragment; loop setup/state invariant supplied by harness",
+      "sha256": "c7b731019a65071939f6a6309f2095c29d0b5d5159729d57cae313ec60fdb393"
+    },
+    {
+      "fragment": "let mut j = i;\n        while j > 0 && idx[j - 1] > idx[j] {\n            idx.swap(j - 1, j);\n            val.swap(j - 1, j);\n            j -= 1;\n        }",
+      "owner": "sort_dedup::insertion_inner",
+      "relation": "exact whitespace-normalized body fragment; loop setup/state invariant supplied by harness",
+      "sha256": "1ba9b5f652de97a36238c0efc7bd20225b2df37fdec0e146df1bc005983bdfd2"
+    },
+    {
+      "fragment": "if idx[i] == idx[w - 1] {\n            if val[i] != val[w - 1] {\n                return None;\n            }\n        } else {\n            idx[w] = idx[i];\n            val[w] = val[i];\n            w += 1;\n        }",
+      "owner": "sort_dedup::dedup_step",
+      "relation": "exact whitespace-normalized body fragment; loop setup/state invariant supplied by harness",
+      "sha256": "76a9fdbeab3e938d963ab3f622ce7822c8e9b2fa0fd5793fccf53d5439932668"
+    }
+  ]
+}

@@ -251,8 +251,9 @@
     "Cargo.toml": "c40ecb931c6c8f2bc95279925a4c7d72844af2407d9fb6d88a3f14786c8d31da",
     "canonical.rs": "ebf1006382f82d1fbe8c05a9a9c3a4654151bfdd9550be659142deb2590d2b45",
     "layout.rs": "c61c37be750985f9b15fb878ba899365ca7d1fb7c29de39e84b59ca054c63f18",
-    "lib.rs": "19ca0f64e2e5a5822e26a511d4c26252e127a4cddba861c8592beec888c72de7",
-    "multiproof.rs": "015b2eae6ba644fb595963e99ff9e9060ba4637d09c2c34181aa2e7b2a1a9306"
+    "lib.rs": "5d244e88344cfa9dc683db9c6cc83b51881c94d07fbac3a91c12ca230c4a9d60",
+    "multiproof.rs": "015b2eae6ba644fb595963e99ff9e9060ba4637d09c2c34181aa2e7b2a1a9306",
+    "residue.rs": "da4a40d9a60d1c8fe9ea760e774ace2875cacc026b6e6abe92b05e34f5bc1118"
   },
   "raw_expression_correspondence": [
     {
@@ -284,6 +285,16 @@
       "replacement": "Canonical limb products replaced by independent products <=(P-1)^2; u,v <=3P. Widened multiplication safety checked separately."
     }
   ],
+  "residue_row_abstraction": {
+    "justification": "Existing AspisR1BatchedFoldArithmetic.product_bound; overapproximation of canonical products. Original additions, loops, indexing and flush body copied exactly. Prior row phase bounds are explicit assumptions.",
+    "line": 235,
+    "original_product": "u64::from(limb)*u64::from(basis.0)",
+    "original_sha256": "c41e4a73f9e82be3deabe0d7fdcd4c91700079864b2b049a3a8e05f4f05a71d0",
+    "owner": "update_residue_row",
+    "parameter_edit": "extra products:[u64;4] parameter; shape-only local copies of M31/CM31/K; power and basis fields no longer constrain product correlations",
+    "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+    "replacement": "products[j], independent products<=C"
+  },
   "scope": "Local checked-arithmetic leaf proofs, not accepted-run source-cone composition. Raw formula harnesses use independent bounded product overapproximation and existing Lean raw_ranges, not a replay of Q::mul.",
   "source_files": {
     "crates/aspis-r1-cost-probe/src/candidate.rs": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",

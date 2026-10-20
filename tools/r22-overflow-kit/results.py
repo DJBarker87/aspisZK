@@ -24,16 +24,18 @@ def make():
         for n in walk(tree.root_node):
             if n.type in ('function_item','const_item','static_item'):
                 fnconst.add((path,owner(n,b),'constant' if n.type in ('const_item','static_item') else 'function'))
-            if n.type in ('binary_expression','compound_assignment_expr','index_expression','type_cast_expression','call_expression'):
+            if n.type in ('binary_expression','compound_assignment_expr','index_expression','type_cast_expression','call_expression','unary_expression','for_expression'):
                 meta[(path,n.start_point.row+1,n.start_point.column+1,n.type)]=attributes(n,b)
     constants={(p,o) for p,o,k in fnconst if k=='constant'}
     rows=[]
     for r in x['operations']:
-        p,o,k=r['path'],r['owner'],r['kind'];q=' '.join(meta.get((p,r['line'],r['column'],{'operator':'binary_expression','index':'index_expression','cast':'type_cast_expression','integer_method':'call_expression'}[k]),[]))
+        p,o,k=r['path'],r['owner'],r['kind'];q=' '.join(meta.get((p,r['line'],r['column'],{'operator':'binary_expression','index':'index_expression','cast':'type_cast_expression','integer_method':'call_expression','arithmetic_call':'call_expression','unary_operator':'unary_expression','iteration_boundary':'for_expression'}[k]),[]))
         if k=='operator' and not q:q=' '.join(meta.get((p,r['line'],r['column'],'compound_assignment_expr'),[]))
         status='OPEN';method='none';condition='typed receiver/range and default-cone membership need review; no safety claim'
         if re.search(r'#\[cfg\(test\)\]',q) or re.search(r'#\[cfg\(feature\s*=\s*"prover"\)\]',q):
             status='CFG_EXCLUDED';method='explicit ancestor cfg';condition=q
+        elif k=='iteration_boundary':
+            status='ITERATOR_BOUNDARY';method='implicit for iterator counter/step';condition='standard iterator contracts and source loop progress required; body sites indexed separately'
         elif k=='cast':
             status='TOTAL_CAST_RULE';method='Rust as / Aeneas total cast semantics';condition='cast itself only; later index/arithmetic use is separate; translation trust P6 retained'
         elif (p,o) in constants:
@@ -57,6 +59,8 @@ def make():
         if status not in ['CFG_EXCLUDED','CONST_EVAL_BOUNDARY'] and p.endswith('/multiproof.rs'):
             if o in ['sort_dedup','node_count']:
                 status='LOCAL_BODY_STEPS';method='Kani 18/21/29/32; R22OverflowWorkerControl';condition='live sorted prefix for node_count; w<=i<n<=16, nonempty group <=arity width and count/cursor budgets; full concrete loop propagation remains'
+        if status not in ['CFG_EXCLUDED','CONST_EVAL_BOUNDARY'] and p.endswith('/verifier.rs') and o in ['update_residue_row','residue_limb_at','power_limb_at']:
+            status='LOCAL_STEP_PROVED';method='Kani 36 copied frozen row body with independent bounded products';condition='prior lane <2^34+phase*(P-1)^2, phase<4, canonical power/basis; flush iff phase=3; shared caller terms/cadence not proved'
         if status not in ['CFG_EXCLUDED','CONST_EVAL_BOUNDARY'] and p.endswith('/verifier.rs') and o=="Reader<'a>::raw":
             status='LOCAL_PROVED';method='Kani 33/34/35 exact raw body; existing R22Stage2ReaderTotal';condition='N=4/16/32, cursor+N<=length<=4880; Kani uses zero contents, length/cursor arbitrary; data-independence is a source range argument'
         rows.append(dict(site=r['id'],owner=o,kind=k,result=status,proof_method=method,conditions=condition))

@@ -69,6 +69,13 @@ def build(basefiles,pins):
         rawpins.append(dict(coordinate=i,original=orig,abstract_checked=repl,original_sha256=sha(orig.encode()),replacement='Canonical limb products replaced by independent products <=(P-1)^2; u,v <=3P. Widened multiplication safety checked separately.'))
     pins['raw_expression_correspondence']=rawpins
     for p,b in [('crates/aspis-r1-cost-probe/src/compact.rs',compact),('crates/aspis-r1-cost-probe/src/candidate.rs',cand),('crates/aspis-r1-cost-probe/src/verifier.rs',verifier)]:pins['source_files'][p]=sha(b)
+    rowbody,rowline=fn(verifier,'update_residue_row')
+    product='u64::from(limb)*u64::from(basis.0)'
+    assert rowbody.count(product)==1
+    checkedrow=rowbody.replace('flush:bool)', 'flush:bool,products:[u64;4])').replace(product,'products[j]')
+    basefiles['residue.rs'] = "#[derive(Clone,Copy)] struct M31(u32);\n#[derive(Clone,Copy)] struct CM31{a:M31,b:M31}\n#[derive(Clone,Copy)] struct K{c0:CM31,c1:CM31}\n"+fn(verifier,'residue_limb_at')[0]+'\n'+fn(verifier,'power_limb_at')[0]+'\n'+checkedrow+'\n'+(KIT/'residue-harnesses.rs').read_text()
+    basefiles['lib.rs'] += 'mod residue;\n'
+    pins['residue_row_abstraction']=dict(path='crates/aspis-r1-cost-probe/src/verifier.rs',owner='update_residue_row',line=rowline,original_sha256=sha(rowbody.encode()),original_product=product,replacement='products[j], independent products<=C',parameter_edit='extra products:[u64;4] parameter; shape-only local copies of M31/CM31/K; power and basis fields no longer constrain product correlations',justification='Existing AspisR1BatchedFoldArithmetic.product_bound; overapproximation of canonical products. Original additions, loops, indexing and flush body copied exactly. Prior row phase bounds are explicit assumptions.')
     pins['generated']={k:sha(v.encode()) for k,v in basefiles.items()}
     return basefiles,pins
 if __name__=='__main__':

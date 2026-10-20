@@ -22,6 +22,7 @@ finite['layout.rs']=finite['layout.rs'].replace(b'#[kani::unwind(20)]\nfn batch_
     let mut r=Reader{bytes:&bytes,at};let _out=r.raw::<32>();
     assert_eq!(r.at,at+32);
 }''');sets.append(repin(finite))
+sets.append(old('a976feb5e'))
 sets.append({p.name:p.read_bytes() for p in (ROOT/PREFIX).iterdir() if p.suffix in ['.rs','.toml','.json']})
 byfp={sha(s['source-pins.json']):s for s in sets};rows=[]
 for receipt in sorted((OUT/'kani').glob('*/receipt.json')):

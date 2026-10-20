@@ -3,7 +3,7 @@
 import json,subprocess,sys
 from pathlib import Path
 BASE=Path('/home/dombarker/project-offloads/codex-cx-r22-overflow-20261021')
-CASES=[('32-parent-live-prefix','multiproof::parent_group_all_frontiers'),('33-reader4-dynamic','layout::dynamic_checkpoint_reader4'),('34-reader16-dynamic','layout::dynamic_checkpoint_reader16'),('35-reader32-dynamic','layout::dynamic_checkpoint_reader32')]
+CASES=[('36-frozen-residue-row','residue::frozen_residue_row_phase_step')]
 for attempt,harness in CASES:
     if len(sys.argv)>1 and attempt not in sys.argv[1:]:continue
     # Admission includes populated systemd app scopes; reserve <=55 GiB total.
