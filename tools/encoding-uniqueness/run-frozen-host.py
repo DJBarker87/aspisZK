@@ -14,6 +14,9 @@ for row in comparison['inputs']:
     name=row['path']; src=H/'src'/name
     expected=row['frozen_source_sha256']
     assert sha(F/name)==expected,name
+    if not src.exists():
+        src.parent.mkdir(parents=True,exist_ok=True)
+        src.write_bytes((F/name).read_bytes())
     if sha(src)!=expected:
         snapshot=H/'task-base-snapshot'/name
         snapshot.parent.mkdir(parents=True,exist_ok=True)
