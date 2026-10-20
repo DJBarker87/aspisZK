@@ -287,3 +287,15 @@ now; the collision is an extraction-hygiene item for the next freeze. R10
 stays conditional on: complete call coverage (R-wire tx1/tx2), backend
 correspondence, writer preservation/provenance (R15), ordering and
 first-read accounting (R19).
+
+## Addendum (2026-10-20): R-wire stage 2
+
+Codex job cx-wire-tx2 (da030f9cd): every stage-2 digest site inventoried,
+no record class beyond the D79 list; eight modules (resume inputs, binary
+parents, slice widths, conditional leaf-backend correspondence), 24 audits,
+standard axioms, ≤ 2.27 GiB (`design/WIRE-TX2-20261020.md`). The
+unrestricted API-level target is false (an empty public slice can reach the
+public rehash through the raw API); the caller-scoped statement replaces it,
+which matches the deployed entry (the adapter supplies the fixed-length
+public bytes, D79). Open: whole-tx2 log composition, the concrete
+leaf/conversion boundaries, and the full eCm/ROpen/RComLog discharge.
