@@ -1,0 +1,74 @@
+import BinMerkleRecordedLog
+
+/-! A partial instrumentation: only list cells visited by the two length
+checks in the actual leaf parser. Equality, drop/take and table work are
+excluded. In particular this is a lower bound component, not a full ledger. -/
+set_option autoImplicit false
+namespace AspisR1.BinLeafLengthWork
+open BinMerkle32Path
+open BinMerkleLeafRecovery (LeafData)
+
+def lengthWork {A : Type} : List A → Nat × Nat
+  | [] => (0, 0)
+  | _ :: xs => let r := lengthWork xs; (r.1 + 1, r.2 + 1)
+
+theorem lengthWork_exact {A : Type} (xs : List A) :
+    lengthWork xs = (xs.length, xs.length) := by
+  induction xs with
+  | nil => rfl
+  | cons x xs ih => simp only [lengthWork, ih, List.length_cons]
+
+/-- Follow the first short-circuit guard before demanding the salt length.
+The value is the actual parser, including its exact re-encoding guard. -/
+def parse (tag : Byte) (width : Nat) (input : List Byte) :
+    Option LeafData × Nat :=
+  let data := (input.drop 2 |>.take width, input.drop (2 + width))
+  let packed := lengthWork data.1
+  if packed.1 = width then
+    let salt := lengthWork data.2
+    (if salt.1 = 32 ∧ BinMerkle32Leaf.leafInput tag data.1 data.2 = input
+      then some data else none, packed.2 + salt.2)
+  else (none, packed.2)
+
+theorem parse_value (tag : Byte) (width : Nat) (input : List Byte) :
+    (parse tag width input).1 = BinMerkleLeafCodec.parse tag width input := by
+  simp only [parse, lengthWork_exact, BinMerkleLeafCodec.parse]
+  by_cases hp : ((input.drop 2).take width).length = width <;>
+    simp only [hp, if_true, if_false, true_and, false_and]
+
+/-- A fixed number of entries does not bound even this length-work component.
+No big concrete list is reduced: all lengths are handled symbolically. -/
+theorem parse_replicate_work (tag : Byte) (width m : Nat) :
+    (parse tag width (List.replicate (2 + width + m) (0 : Byte))).2 = width + m := by
+  simp [parse, lengthWork_exact, List.drop_replicate, List.take_replicate,
+    show 2 + width + m - 2 = width + m by omega,
+    show 2 + width + m - (2 + width) = m by omega,
+    show min width (width + m) = width by omega]
+
+def tableLengthWork (tag : Byte) (width : Nat) (log : BinMerkleRecordedLog.Log) : Nat :=
+  (log.map fun entry => (parse tag width entry.1).2).sum
+
+theorem singleton_unbounded (tag : Byte) (width bound : Nat) (digest : Digest) :
+    ∃ log : BinMerkleRecordedLog.Log, log.length = 1 ∧
+      bound < tableLengthWork tag width log := by
+  refine ⟨[(List.replicate (2 + width + (bound + 1)) 0, digest)], rfl, ?_⟩
+  simp only [tableLengthWork, List.map_cons, List.map_nil, List.sum_cons,
+    List.sum_nil, Nat.add_zero, parse_replicate_work]
+  omega
+
+theorem no_entry_count_bound (tag : Byte) (width : Nat) (digest : Digest)
+    (budget : Nat → Nat) :
+    ¬ (∀ log : BinMerkleRecordedLog.Log,
+      tableLengthWork tag width log ≤ budget log.length) := by
+  intro h
+  obtain ⟨log, hl, hb⟩ := singleton_unbounded tag width (budget 1) digest
+  have hs := h log
+  rw [hl] at hs
+  omega
+
+#print axioms lengthWork_exact
+#print axioms parse_value
+#print axioms parse_replicate_work
+#print axioms singleton_unbounded
+#print axioms no_entry_count_bound
+end AspisR1.BinLeafLengthWork
