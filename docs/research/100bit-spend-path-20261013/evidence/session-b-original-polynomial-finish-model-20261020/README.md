@@ -1,0 +1,11 @@
+# Original polynomial adapter through concrete Aeneas iteration to numeric finish equations
+
+PROVED: actual Aeneas Rev.next over Range[0,7) visits6..0 then none. A generic Result callback loop over those concrete operations equals the seven-bind current Wide polynomial for all outcomes, with no independent lookup success or canonicality hypotheses. The source-shaped original polynomial adapter uses that concrete loop, current mul/add, checked parsed fields and unchanged capture/seed. Its all-Result equality and success iff with the previous unrolled computation are proved.
+
+PROVED: the original-adapter polynomial backend and previous concrete backend give equal whole FinishOps records; the successful S2 finish candidate therefore retains both numeric guards, canonical claims, exact seven-coefficient traces and decoded Horner equations under the original-body adapter, plus the existing pair/dot comparison equalities and next=22.
+
+SOURCE PINNED: corrected worker provenance distinguishes frozen verifier.rs bytes[12595,12695) from assembled extraction-input bytes[33146,33246), checks identical100-byte function contents (ca19094c...), and retains full emitted function/callback/dataflow pins and adapter source. The concrete Aeneas iterator definitions and standard-library cache are pinned. Raw generated polynomial Funs has synthetic arithmetic stubs/external callee declarations and is diagnostic only, not imported.
+
+OPEN LIBRARY CORRESPONDENCE: Rust Range<usize>.rev().fold, as selected by the frozen emitted external call, must correspond to this Aeneas Rev.next operational transcription. These Lean results do not independently prove that Rust standard-library connection. They avoid a production polynomial-unroll adoption requirement once that library correspondence is supplied. Original finish_relation candidate equivalence/adoption, canonical input provenance, newWeights/pair/dot semantics, complete frozen caller and runtime remain OPEN. This is not a completed R14 or 100-bit result.
+
+Five selected focused NUC targets, standard-only axiom audits, -j1 -M4400/default resource options, High1GiB/Max2GiB/Swap0. Earlier native_decide and improperly capped exploratory targets are rejected and not selected. No binaries, production source change or full replay.
