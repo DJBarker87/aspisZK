@@ -1,0 +1,41 @@
+/home/dombarker/project-offloads/p6-stateful-array-from-fn-v3-20261020/sources/StatefulArrayFromFnModelV1.lean:78:67: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.453 = ?m.453
+but is expected to have type
+  statefulFromFnRun step count (start + 1) state' = ok (tail, final')
+in the application
+  (ih (start + 1) state' tail final').mp rfl
+/home/dombarker/project-offloads/p6-stateful-array-from-fn-v3-20261020/sources/StatefulArrayFromFnModelV1.lean:87:33: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  statefulFromFnRun step count (start + 1) state'
+in the target expression
+  (match (value, state') with
+    | (v, next) => do
+      let __x ← statefulFromFnRun step count (start + 1) next
+      match __x with
+        | (tail, final') => ok (v :: tail, final')) =
+    ok (value :: values, final)
+
+case succ.mpr.call
+S A : Type
+step : S → ℕ → Result (A × S)
+count : ℕ
+ih :
+  ∀ (start : ℕ) (state : S) (values : List A) (final : S),
+    statefulFromFnRun step count start state = ok (values, final) ↔
+      StatefulFromFnTrace step count start state values final
+start : ℕ
+state final state' : S
+value : A
+values : List A
+hstep : step state start = ok (value, state')
+htail : StatefulFromFnTrace step count (start + 1) state' values final
+hrun : statefulFromFnRun step count (start + 1) state' = ok (values, final)
+⊢ (match (value, state') with
+    | (v, next) => do
+      let __x ← statefulFromFnRun step count (start + 1) next
+      match __x with
+        | (tail, final') => ok (v :: tail, final')) =
+    ok (value :: values, final)
+'AspisR1FromFnP6.statefulFromFnRun_success_iff_trace' depends on axioms: [propext, sorryAx]
+'AspisR1FromFnP6.statefulFromFnTrace_length' depends on axioms: [propext]

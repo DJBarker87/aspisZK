@@ -1,0 +1,50 @@
+/home/dombarker/project-offloads/p6-stateful-array-from-fn-v1-20261020/sources/StatefulArrayFromFnModelV1.lean:70:12: error: `simp` made no progress
+/home/dombarker/project-offloads/p6-stateful-array-from-fn-v1-20261020/sources/StatefulArrayFromFnModelV1.lean:76:27: error: unsolved goals
+case succ.mpr.call
+S A : Type
+step : S → ℕ → Result (A × S)
+count : ℕ
+ih :
+  ∀ (start : ℕ) (state : S) (values : List A) (final : S),
+    statefulFromFnRun step count start state = ok (values, final) ↔
+      StatefulFromFnTrace step count start state values final
+start : ℕ
+state final state'✝ : S
+value✝ : A
+values✝ : List A
+hstep : step state start = ok (value✝, state'✝)
+htail : StatefulFromFnTrace step count (start + 1) state'✝ values✝ final
+hrun : statefulFromFnRun step count (start + 1) state'✝ = ok (values✝, final)
+⊢ (let (value, state') := (value✝, state'✝)
+    do
+    let (values, final) ← statefulFromFnRun step count (start + 1) state'
+    ok (value :: values, final)) =
+    ok (value✝ :: values✝, final)
+/home/dombarker/project-offloads/p6-stateful-array-from-fn-v1-20261020/sources/StatefulArrayFromFnModelV1.lean:78:21: warning: This simp argument is unused:
+  statefulFromFnRun
+
+Hint: Omit it from the simp argument list.
+  simp only [s̵t̵a̵t̵e̵f̵u̵l̵F̵r̵o̵m̵F̵n̵R̵u̵n̵,̵ ̵hstep, bind_tc_ok, hrun, bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/p6-stateful-array-from-fn-v1-20261020/sources/StatefulArrayFromFnModelV1.lean:78:59: warning: This simp argument is unused:
+  hrun
+
+Hint: Omit it from the simp argument list.
+  simp only [statefulFromFnRun, hstep, bind_tc_ok, h̵r̵u̵n̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/p6-stateful-array-from-fn-v1-20261020/sources/StatefulArrayFromFnModelV1.lean:96:13: error(lean.unknownIdentifier): Unknown constant `List.Forall.nil`
+
+Note: Inferred this name from the expected resulting type of `.nil`:
+  List.Forall valueOK []
+/home/dombarker/project-offloads/p6-stateful-array-from-fn-v1-20261020/sources/StatefulArrayFromFnModelV1.lean:96:13: error(lean.unknownIdentifier): Unknown constant `True.nil`
+
+Note: Inferred this name from the expected resulting type of `.nil`:
+  List.Forall valueOK []
+/home/dombarker/project-offloads/p6-stateful-array-from-fn-v1-20261020/sources/StatefulArrayFromFnModelV1.lean:104:18: error(lean.unknownIdentifier): Unknown constant `List.Forall.cons`
+
+Note: Inferred this name from the expected resulting type of `.cons`:
+  List.Forall valueOK (value✝ :: values✝)
+'AspisR1FromFnP6.statefulFromFnRun_success_iff_trace' depends on axioms: [propext, sorryAx]
+'AspisR1FromFnP6.statefulFromFnTrace_length' depends on axioms: [propext]
