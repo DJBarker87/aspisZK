@@ -1,0 +1,370 @@
+diff --git a/crates/aspis-statement/src/atomic_statement.rs b/crates/aspis-statement/src/atomic_statement.rs
+index dc03a0503..6f465c505 100644
+--- a/crates/aspis-statement/src/atomic_statement.rs
++++ b/crates/aspis-statement/src/atomic_statement.rs
+@@ -81,5 +81,7 @@ pub fn encode_digest_canonical(digest: &Digest) -> [u8; 32] {
+-pub fn decode_digest_canonical(bytes: &[u8; 32]) -> Result<Digest, AtomicStatementError> {
+-    let mut digest = [M31::ZERO; DIGEST_ELEMS];
+-    for (index, output) in digest.iter_mut().enumerate() {
+-        *output = M31::from_le_bytes(bytes[index * 4..index * 4 + 4].try_into().unwrap())
+-            .ok_or(AtomicStatementError::NonCanonicalDigest)?;
++/// Unwrap a fixed-width slice conversion after its enclosing length guard.
++/// Both payloads are Copy, so extraction needs no formatting or drop machinery.
++#[inline]
++pub(crate) fn unwrap_fixed_slice<T: Copy>(value: Result<T, core::array::TryFromSliceError>) -> T {
++    match value {
++        Ok(value) => value,
++        Err(_) => panic!("fixed-size slice conversion failed"),
+@@ -87 +89,21 @@ pub fn decode_digest_canonical(bytes: &[u8; 32]) -> Result<Digest, AtomicStateme
+-    Ok(digest)
++}
++
++pub fn decode_digest_canonical(bytes: &[u8; 32]) -> Result<Digest, AtomicStatementError> {
++    Ok([
++        M31::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]])
++            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
++        M31::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]])
++            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
++        M31::from_le_bytes([bytes[8], bytes[9], bytes[10], bytes[11]])
++            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
++        M31::from_le_bytes([bytes[12], bytes[13], bytes[14], bytes[15]])
++            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
++        M31::from_le_bytes([bytes[16], bytes[17], bytes[18], bytes[19]])
++            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
++        M31::from_le_bytes([bytes[20], bytes[21], bytes[22], bytes[23]])
++            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
++        M31::from_le_bytes([bytes[24], bytes[25], bytes[26], bytes[27]])
++            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
++        M31::from_le_bytes([bytes[28], bytes[29], bytes[30], bytes[31]])
++            .ok_or(AtomicStatementError::NonCanonicalDigest)?,
++    ])
+diff --git a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+index c2749cb69..fb9e98358 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -117,0 +118,14 @@ impl PoolV1PairForestTerminalStatementV1 {
++    #[cfg(feature = "r0")]
++    #[inline(always)]
++    pub fn semantic_public(&self) -> super::pair_forest_semantic_terminal::r0::Public<'_> {
++        use super::pair_forest_semantic_terminal::r0::Public;
++        match self {
++            Self::PrivateTransfer { common, public } => {
++                Public::Transfer(public, &common.lane_transition)
++            }
++            Self::Withdrawal { common, public } => {
++                Public::Withdrawal(public, &common.lane_transition)
++            }
++        }
++    }
++
+@@ -392 +406 @@ pub fn decode_pool_v1_pair_forest_terminal_statement_v1(
+-    if bytes[..4] != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC {
++    if bytes[..4] != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC[0..4] {
+diff --git a/crates/aspis-statement/src/pool_v1/pair_terminal.rs b/crates/aspis-statement/src/pool_v1/pair_terminal.rs
+index d3f3ef6d3..fd44ef790 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_terminal.rs
+@@ -167 +167 @@ pub fn decode_pool_v1_pair_verified_afterstate_v1(
+-    if bytes[..4] != POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC {
++    if bytes[..4] != POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC[0..4] {
+@@ -184,6 +184,42 @@ pub fn decode_pool_v1_pair_verified_afterstate_v1(
+-    let mut next_frontier = [[M31::ZERO; 8]; super::POOL_V1_PAIR_TREE_DEPTH];
+-    for (level, node) in next_frontier.iter_mut().enumerate() {
+-        let start = 48 + 32 * level;
+-        *node = decode_digest_canonical(&exact(&bytes[start..start + 32])?)
+-            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?;
+-    }
++    let next_frontier = [
++        decode_digest_canonical(&exact(&bytes[48..80])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[80..112])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[112..144])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[144..176])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[176..208])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[208..240])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[240..272])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[272..304])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[304..336])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[336..368])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[368..400])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[400..432])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[432..464])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[464..496])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[496..528])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[528..560])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[560..592])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[592..624])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[624..656])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++        decode_digest_canonical(&exact(&bytes[656..688])?)
++            .map_err(|_| PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)?,
++    ];
+diff --git a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+index 14b2ceed6..0e41b9dff 100644
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -506 +506 @@ pub fn decode_pool_v1_pair_live_snapshot_v1(
+-    if bytes[..8] != POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC {
++    if bytes[..8] != POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC[0..8] {
+@@ -512 +512,8 @@ pub fn decode_pool_v1_pair_live_snapshot_v1(
+-    if bytes[9..16].iter().any(|byte| *byte != 0) {
++    if bytes[9] != 0
++        || bytes[10] != 0
++        || bytes[11] != 0
++        || bytes[12] != 0
++        || bytes[13] != 0
++        || bytes[14] != 0
++        || bytes[15] != 0
++    {
+@@ -515 +522 @@ pub fn decode_pool_v1_pair_live_snapshot_v1(
+-    if bytes[16..48] != POOL_V1_PAIR_TREE_FORMAT_BINDING {
++    if bytes[16..48] != POOL_V1_PAIR_TREE_FORMAT_BINDING[0..32] {
+@@ -518,8 +525,86 @@ pub fn decode_pool_v1_pair_live_snapshot_v1(
+-    let current_root = decode_digest_canonical(bytes[128..160].try_into().unwrap())
+-        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?;
+-    let mut frontier = [[M31::ZERO; 8]; POOL_V1_PAIR_TREE_DEPTH];
+-    for (level, node) in frontier.iter_mut().enumerate() {
+-        let start = 160 + 32 * level;
+-        *node = decode_digest_canonical(bytes[start..start + 32].try_into().unwrap())
+-            .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?;
+-    }
++    let current_root = decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++        bytes[128..160].try_into(),
++    ))
++    .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?;
++    let frontier = [
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[160..192].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[192..224].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[224..256].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[256..288].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[288..320].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[320..352].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[352..384].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[384..416].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[416..448].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[448..480].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[480..512].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[512..544].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[544..576].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[576..608].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[608..640].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[640..672].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[672..704].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[704..736].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[736..768].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++        decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[768..800].try_into(),
++        ))
++        .map_err(|_| PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)?,
++    ];
+@@ -527,4 +612,8 @@ pub fn decode_pool_v1_pair_live_snapshot_v1(
+-        pool: bytes[48..80].try_into().unwrap(),
+-        deployment_domain: bytes[80..112].try_into().unwrap(),
+-        sequence: u64::from_le_bytes(bytes[112..120].try_into().unwrap()),
+-        next_pair_index: u64::from_le_bytes(bytes[120..128].try_into().unwrap()),
++        pool: crate::atomic_statement::unwrap_fixed_slice(bytes[48..80].try_into()),
++        deployment_domain: crate::atomic_statement::unwrap_fixed_slice(bytes[80..112].try_into()),
++        sequence: u64::from_le_bytes(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[112..120].try_into(),
++        )),
++        next_pair_index: u64::from_le_bytes(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[120..128].try_into(),
++        )),
+@@ -598 +687 @@ pub(crate) fn decode_pool_v1_pair_late_public_statement_boxed_v1(
+-    if bytes[..8] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC {
++    if bytes[..8] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC[0..8] {
+@@ -607 +696,3 @@ pub(crate) fn decode_pool_v1_pair_late_public_statement_boxed_v1(
+-    if u16::from_le_bytes(bytes[10..12].try_into().unwrap()) as usize
++    if u16::from_le_bytes(crate::atomic_statement::unwrap_fixed_slice(
++        bytes[10..12].try_into(),
++    )) as usize
+@@ -612 +703,3 @@ pub(crate) fn decode_pool_v1_pair_late_public_statement_boxed_v1(
+-    if u32::from_le_bytes(bytes[12..16].try_into().unwrap()) as usize
++    if u32::from_le_bytes(crate::atomic_statement::unwrap_fixed_slice(
++        bytes[12..16].try_into(),
++    )) as usize
+@@ -617 +710,3 @@ pub(crate) fn decode_pool_v1_pair_late_public_statement_boxed_v1(
+-    if u32::from_le_bytes(bytes[16..20].try_into().unwrap()) as usize
++    if u32::from_le_bytes(crate::atomic_statement::unwrap_fixed_slice(
++        bytes[16..20].try_into(),
++    )) as usize
+@@ -622 +717,3 @@ pub(crate) fn decode_pool_v1_pair_late_public_statement_boxed_v1(
+-    if u32::from_le_bytes(bytes[20..24].try_into().unwrap()) as usize
++    if u32::from_le_bytes(crate::atomic_statement::unwrap_fixed_slice(
++        bytes[20..24].try_into(),
++    )) as usize
+@@ -627 +724,9 @@ pub(crate) fn decode_pool_v1_pair_late_public_statement_boxed_v1(
+-    if bytes[24..32].iter().any(|byte| *byte != 0) {
++    if bytes[24] != 0
++        || bytes[25] != 0
++        || bytes[26] != 0
++        || bytes[27] != 0
++        || bytes[28] != 0
++        || bytes[29] != 0
++        || bytes[30] != 0
++        || bytes[31] != 0
++    {
+diff --git a/crates/aspis-statement/src/pool_v1/payment_relation.rs b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+index 42a288933..e9074f9a2 100644
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -326 +326 @@ fn require_header(
+-    if bytes[..4] != magic {
++    if bytes[..4] != magic[0..4] {
+@@ -347,5 +347,3 @@ fn decode_common(
+-    let asset = u32::from_le_bytes(
+-        bytes[ASSET_ID_OFFSET..AMOUNT_OR_RESERVED_OFFSET]
+-            .try_into()
+-            .unwrap(),
+-    );
++    let asset = u32::from_le_bytes(crate::atomic_statement::unwrap_fixed_slice(
++        bytes[ASSET_ID_OFFSET..AMOUNT_OR_RESERVED_OFFSET].try_into(),
++    ));
+@@ -356,10 +354,5 @@ fn decode_common(
+-        pool: bytes[POOL_OFFSET..DEPLOYMENT_DOMAIN_OFFSET]
+-            .try_into()
+-            .unwrap(),
+-        deployment_domain: bytes[DEPLOYMENT_DOMAIN_OFFSET..ANCHOR_SEQUENCE_OFFSET]
+-            .try_into()
+-            .unwrap(),
+-        anchor_sequence: u64::from_le_bytes(
+-            bytes[ANCHOR_SEQUENCE_OFFSET..ANCHOR_ROOT_OFFSET]
+-                .try_into()
+-                .unwrap(),
++        pool: crate::atomic_statement::unwrap_fixed_slice(
++            bytes[POOL_OFFSET..DEPLOYMENT_DOMAIN_OFFSET].try_into(),
++        ),
++        deployment_domain: crate::atomic_statement::unwrap_fixed_slice(
++            bytes[DEPLOYMENT_DOMAIN_OFFSET..ANCHOR_SEQUENCE_OFFSET].try_into(),
+@@ -367,5 +360,6 @@ fn decode_common(
+-        anchor_root: decode_digest_canonical(
+-            bytes[ANCHOR_ROOT_OFFSET..NULLIFIER_OFFSET]
+-                .try_into()
+-                .unwrap(),
+-        )
++        anchor_sequence: u64::from_le_bytes(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[ANCHOR_SEQUENCE_OFFSET..ANCHOR_ROOT_OFFSET].try_into(),
++        )),
++        anchor_root: decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[ANCHOR_ROOT_OFFSET..NULLIFIER_OFFSET].try_into(),
++        ))
+@@ -373,3 +367,3 @@ fn decode_common(
+-        nullifier: decode_digest_canonical(
+-            bytes[NULLIFIER_OFFSET..ASSET_ID_OFFSET].try_into().unwrap(),
+-        )
++        nullifier: decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[NULLIFIER_OFFSET..ASSET_ID_OFFSET].try_into(),
++        ))
+@@ -395 +389 @@ pub fn decode_pool_v1_private_transfer_public_v1(
+-        != POOL_V1_CANONICAL_FEE.to_le_bytes()
++        != POOL_V1_CANONICAL_FEE.to_le_bytes()[0..4]
+@@ -407,5 +401,3 @@ pub fn decode_pool_v1_private_transfer_public_v1(
+-        recipient_commitment: decode_digest_canonical(
+-            bytes[FIRST_OUTPUT_OR_DESTINATION_OFFSET..SECOND_OUTPUT_OFFSET]
+-                .try_into()
+-                .unwrap(),
+-        )
++        recipient_commitment: decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[FIRST_OUTPUT_OR_DESTINATION_OFFSET..SECOND_OUTPUT_OFFSET].try_into(),
++        ))
+@@ -413,3 +405,3 @@ pub fn decode_pool_v1_private_transfer_public_v1(
+-        change_commitment: decode_digest_canonical(
+-            bytes[SECOND_OUTPUT_OFFSET..].try_into().unwrap(),
+-        )
++        change_commitment: decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[SECOND_OUTPUT_OFFSET..].try_into(),
++        ))
+@@ -441,4 +433,5 @@ pub fn decode_pool_v1_withdrawal_public_v1(
+-        amount: u32::from_le_bytes(
+-            bytes[AMOUNT_OR_RESERVED_OFFSET..FIRST_OUTPUT_OR_DESTINATION_OFFSET]
+-                .try_into()
+-                .unwrap(),
++        amount: u32::from_le_bytes(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[AMOUNT_OR_RESERVED_OFFSET..FIRST_OUTPUT_OR_DESTINATION_OFFSET].try_into(),
++        )),
++        destination_token_account: crate::atomic_statement::unwrap_fixed_slice(
++            bytes[FIRST_OUTPUT_OR_DESTINATION_OFFSET..SECOND_OUTPUT_OFFSET].try_into(),
+@@ -446,6 +439,3 @@ pub fn decode_pool_v1_withdrawal_public_v1(
+-        destination_token_account: bytes[FIRST_OUTPUT_OR_DESTINATION_OFFSET..SECOND_OUTPUT_OFFSET]
+-            .try_into()
+-            .unwrap(),
+-        change_commitment: decode_digest_canonical(
+-            bytes[SECOND_OUTPUT_OFFSET..].try_into().unwrap(),
+-        )
++        change_commitment: decode_digest_canonical(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[SECOND_OUTPUT_OFFSET..].try_into(),
++        ))
