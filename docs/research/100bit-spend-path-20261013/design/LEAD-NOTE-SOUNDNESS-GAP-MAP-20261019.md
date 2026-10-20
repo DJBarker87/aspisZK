@@ -602,3 +602,20 @@ stops at a pinned-Aeneas borrow join; per the prep5 ruling it goes the Kani
 shipped-vs-reference route (job cx-asq8-kani). Remaining premise for R20:
 the AccountInfo/runtime and cross-transaction public/checkpoint
 correspondence, which is P2/P2′.
+
+## Addendum (2026-10-21): the binary C3 — R1FinalSoundnessBin
+
+Codex job cx-extractor-bin (53304dbd4, d29d4a96a, c3a2e746f): the recorded
+extractor is ported to the Bin recovery modules (Bin `returned_relation`;
+completeness from Checks + no hit + bank success; total extractor-word
+alignment; BinaryClean), and the final theorem is restated over it as
+`R1FinalSoundnessBin.final_soundness`; 23 modules, 50 theorems, standard
+axioms (`design/C3-BIN-20261021.md`). **h_R12_binary_words is discharged.**
+The numeric endpoint is unchanged: < 2^-100 per attempt up to
+22,482,956,455,467,539,568,187 adversary queries. M10's bounded-log
+statement fix is implemented, with conditional deterministic, expected-cost
+and uniform-polynomial bounds in Q; h_M10_ledger and the implementation side
+of h_M10_uniform remain open on complete resource instrumentation (checked
+counterexamples show distinct first reads alone do not bound the cost).
+**From here the tracking list is C3-BIN-20261021.md** (supersedes
+C3-SKELETON for the binary format).
