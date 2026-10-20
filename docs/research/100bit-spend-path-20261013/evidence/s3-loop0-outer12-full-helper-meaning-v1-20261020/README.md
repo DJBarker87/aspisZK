@@ -1,0 +1,5 @@
+# Actual S3 grouped-pair loop0 + outer12 composition
+
+`actual_grouped_success_supplies_fullpair_meaning` takes a successful execution of the actual `s2_grouped_inactive_pair` helper and explicit canonicality of its 16 low words. It derives the exact successful loop0 coefficient array and its canonicality from the successful call, shows that the same array is passed to the successful outer-12 loop, and derives the output canonicality plus the actual public outer-fold meaning `decode out = actualOuterPrefix low coefficients 12`.
+
+The new public-prefix owner is a namespace-only copy of the checked outer-loop proof with its recurrence functions made public, allowing the composition to name the exact fold without unfolding it. The packet contains sources and focused NUC receipts/logs only; compiled objects are omitted and pinned by object SHA/native paths. Both new targets used Lean 4.32 default options, `-M 4400`, 1GiB/2GiB/0-swap scopes and standard axioms only. The remaining caller boundary is `CanonicalLow low`.
