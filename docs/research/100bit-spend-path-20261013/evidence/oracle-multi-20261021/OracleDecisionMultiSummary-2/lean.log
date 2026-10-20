@@ -1,0 +1,43 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiSummary.lean:44:53: error: ambiguous identifier ``verifier`, possible interpretations: [FS2.verifier, AspisR1.OracleDecisionFeasibilityCore.verifier]
+/Users/dominic/ZK/.worktrees/cx-oracle-multi/docs/research/100bit-spend-path-20261013/lean/OracleDecisionMultiSummary.lean:61:4: error: Type mismatch
+  peak_accepts
+has type
+  (eval (fun x => 0) (terminal peak [] (List.replicate 6 []))).2 = true
+but is expected to have type
+  ((eval (fun x => 0) P).1 ++
+            (have final :=
+                eval (fun x => 0)
+                  (onBytes (decision peak [] (List.replicate 6 []))
+                    ((LiteralByteProtocol.protocol D).transcript (fun x => 0) (eval (fun x => 0) P).2.1
+                      (eval (fun x => 0) P).2.2 33)
+                    ((eval (fun x => 0) P).2.2 33));
+              ((List.map
+                      (fun j =>
+                        (eval (fun x => 0)
+                            ((LiteralByteProtocol.protocol D).chain (fun x => 0) (eval (fun x => 0) P).2.1
+                                (eval (fun x => 0) P).2.2 j).toProgram).1)
+                      (List.range 33)).flatten ++
+                  final.1,
+                final.2)).1,
+          (eval (fun x => 0) P).2,
+          (have final :=
+              eval (fun x => 0)
+                (onBytes (decision peak [] (List.replicate 6 []))
+                  ((LiteralByteProtocol.protocol D).transcript (fun x => 0) (eval (fun x => 0) P).2.1
+                    (eval (fun x => 0) P).2.2 33)
+                  ((eval (fun x => 0) P).2.2 33));
+            ((List.map
+                    (fun j =>
+                      (eval (fun x => 0)
+                          ((LiteralByteProtocol.protocol D).chain (fun x => 0) (eval (fun x => 0) P).2.1
+                              (eval (fun x => 0) P).2.2 j).toProgram).1)
+                    (List.range 33)).flatten ++
+                final.1,
+              final.2)).2).2.2 =
+    true
+'AspisR1.OracleDecisionMultiSummary.prerequisites' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiSummary.shapeProof_valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionMultiSummary.accepted_log_obstruction' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
