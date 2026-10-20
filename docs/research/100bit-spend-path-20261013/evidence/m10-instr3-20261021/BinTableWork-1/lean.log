@@ -1,0 +1,27 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr3/docs/research/100bit-spend-path-20261013/lean/BinTableWork.lean:28:23: error: unsolved goals
+case cons
+tag : Byte
+width : ℕ
+rest : List (List BinMerkleRecordedLog.Byte × Digest)
+ih : (tables tag width rest).1 = (BinRecordedRecoveryReads.tables tag width rest).1
+input : List BinMerkleRecordedLog.Byte
+digest : Digest
+⊢ (match BinMerkleNodeCodec.parse input with
+      | none => (BinRecordedRecoveryReads.tables tag width rest).1.1
+      | some cs => (cs, digest) :: (BinRecordedRecoveryReads.tables tag width rest).1.1,
+      match BinMerkleLeafCodec.parse tag width input with
+      | none => (BinRecordedRecoveryReads.tables tag width rest).1.2
+      | some data => (data, digest) :: (BinRecordedRecoveryReads.tables tag width rest).1.2) =
+    (match BinMerkleNodeCodec.parse input with
+      | none => (BinRecordedRecoveryReads.tables tag width rest).1.1
+      | some cs => (cs, digest) :: (BinRecordedRecoveryReads.tables tag width rest).1.1,
+      match BinMerkleLeafCodec.parse tag width input with
+      | none => (BinRecordedRecoveryReads.tables tag width rest).1.2
+      | some data => (data, digest) :: (BinRecordedRecoveryReads.tables tag width rest).1.2)
+/Users/dominic/ZK/.worktrees/cx-m10-instr3/docs/research/100bit-spend-path-20261013/lean/BinTableWork.lean:37:17: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'AspisR1.BinTableWork.tables_value' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.BinTableWork.tables_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.BinTableWork.allocated_bits_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.BinTableWork.fixed_width_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
