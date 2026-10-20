@@ -1,0 +1,96 @@
+/tmp/root-s4-limb-loop-exact-v2-20261020/sources/FourDotsActualLimbLoopExactRootV1.lean:15:20: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/root-s4-limb-loop-exact-v2-20261020/sources/FourDotsActualLimbLoopExactRootV1.lean:49:25: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [hs,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-limb-loop-exact-v2-20261020/sources/FourDotsActualLimbLoopExactRootV1.lean:54:25: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [hs,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-limb-loop-exact-v2-20261020/sources/FourDotsActualLimbLoopExactRootV1.lean:223:27: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (cell initial j + if _a then coeffCell coefficient j * ↑scalar else 0) =
+      cell initial j + if ↑j < ↑iter'.start then coeffCell coefficient j * ↑scalar else 0
+Error: Application type mismatch: The argument
+  (↑j).decLt ↑iter.start
+has type
+  Decidable (↑j < ↑iter.start)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite ℕ _a ((↑j).decLt ↑iter.start)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case neg
+ops : AspisR1FastDotsCurrent.FourDotsOps
+coefficient : Std.Array U32 8#usize
+initial : Std.Array U64 8#usize
+hcoeff : ∀ (j : Fin 8), coeffCell coefficient j < 2147483647
+hbase : ∀ (j : Fin 8), cell initial j ≤ 3 * cap
+out : Std.Array U64 8#usize
+m : ℕ
+ih :
+  ∀ m_1 < m,
+    ∀ (iter : Range) (sums : Std.Array U64 8#usize) (scalar : AspisR1FastDotsCurrent.aspis_core.field.M31),
+      ↑scalar < 2147483647 →
+        ↑iter.end = 8 →
+          (∀ (j : Fin 8),
+              cell sums j = cell initial j + if ↑j < ↑iter.start then coeffCell coefficient j * ↑scalar else 0) →
+            InnerLoop ops iter sums scalar coefficient = ok out →
+              ↑iter.end - ↑iter.start = m_1 →
+                ∀ (j : Fin 8), cell out j = cell initial j + coeffCell coefficient j * ↑scalar
+iter : Range
+sums : Std.Array U64 8#usize
+scalar : AspisR1FastDotsCurrent.aspis_core.field.M31
+hscalar : ↑scalar < 2147483647
+hend : ↑iter.end = 8
+hprefix :
+  ∀ (j : Fin 8), cell sums j = cell initial j + if ↑j < ↑iter.start then coeffCell coefficient j * ↑scalar else 0
+hm : ↑iter.end - ↑iter.start = m
+hloop : loop (innerStep ops coefficient) (iter, sums, scalar) = ok out
+iter' : Range
+sums' : Std.Array U64 8#usize
+scalar' : AspisR1FastDotsCurrent.aspis_core.field.M31
+hcont : innerStep ops coefficient (iter, sums, scalar) = ok (cont (iter', sums', scalar'))
+htail : loop (innerStep ops coefficient) (iter', sums', scalar') = ok out
+hb : InnerBody ops coefficient iter sums scalar = ok (cont (iter', sums', scalar'))
+hcurrent : ∀ (j : Fin 8), ↑j = ↑iter.start → cell sums j ≤ 3 * cap
+hadvance : ↑iter'.start = ↑iter.start + 1
+hendEq : iter'.end = iter.end
+hcells :
+  ∀ (j : Fin 8),
+    AspisR1FastDotsActualLimbExactStepRootV1.cell sums' j =
+      if ↑j = ↑iter.start then
+        AspisR1FastDotsActualLimbExactStepRootV1.cell sums j +
+          AspisR1FastDotsActualLimbExactStepRootV1.coeffCell coefficient j * ↑scalar
+      else AspisR1FastDotsActualLimbExactStepRootV1.cell sums j
+hscalarEq : scalar' = scalar
+hlt : ↑iter.start < ↑iter.end
+hdecrease : ↑iter.end - ↑iter'.start < m
+hscalar' : ↑scalar' < 2147483647
+hend' : ↑iter'.end = 8
+j : Fin 8
+hvalue : cell sums' j = if ↑j = ↑iter.start then cell sums j + coeffCell coefficient j * ↑scalar else cell sums j
+heq : ¬↑j = ↑iter.start
+hequiv : (↑j < ↑iter.start) = (↑j < ↑iter'.start)
+⊢ (cell initial j + if ↑j < ↑iter.start then coeffCell coefficient j * ↑scalar else 0) =
+    cell initial j + if ↑j < ↑iter'.start then coeffCell coefficient j * ↑scalar else 0
+'AspisR1FastDotsActualLimbLoopExactRootV1.actual_inner_loop_success_exact_invariant' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1FastDotsActualLimbLoopExactRootV1.actual_eight_limb_loop_success_exact' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
