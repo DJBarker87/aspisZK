@@ -117,6 +117,48 @@
     },
     {
       "kind": "extraction-or-runtime",
+      "attempt": "carried-lib",
+      "command": [
+        "cargo",
+        "test",
+        "--release",
+        "--locked",
+        "--offline",
+        "-j",
+        "4",
+        "-p",
+        "aspis-r1-cost-probe",
+        "--features",
+        "r1p-check",
+        "--lib",
+        "--",
+        "--test-threads=1"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-prover-commit2-20261020/src",
+      "expected_time": "Optimized compilation followed by named fixture proof generation / verification; no dense elimination",
+      "exit_status": 0,
+      "wall_seconds": 513.406,
+      "peak_rss_kib": 563432,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rf81d9855aaaa4241ad69aa32ecde85e9.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 635260928,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-prover-commit2-20261020/runtime-target",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null,
+        "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+      },
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "kind": "extraction-or-runtime",
       "attempt": "leaf-aeneas",
       "command": [
         "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static",
@@ -659,6 +701,114 @@
       "errors": [],
       "source_revision": "f2a598c6a",
       "environment": "J"
+    },
+    {
+      "kind": "lean",
+      "module": "AspisR1ProverLeaf/Types.lean",
+      "attempt": 8109,
+      "source_sha256": "6140b272407faeb0caf07119dc42cf5eeab082368ef3d197361f68030ded274f",
+      "deps": [
+        [
+          "Aeneas",
+          "d3bfce818c2409992274bc1852aa00280cb7a8139465ef0bab674498e4cdc69d"
+        ]
+      ],
+      "deps_fingerprint": "5ccd199a231e1ece23c3ec6a28dd0e4d7dba7b13efd832dc2f4b9604635e3c5c",
+      "exit_status": 0,
+      "wall": "0:01.82",
+      "peak_rss_kib": 2557284,
+      "swaps": 0,
+      "axioms": [],
+      "errors": [],
+      "source_revision": "f2a598c6a",
+      "environment": "J"
+    },
+    {
+      "kind": "lean",
+      "module": "AspisR1ProverLeaf/Funs.lean",
+      "attempt": 8110,
+      "source_sha256": "708f295b2322424992b68bb01c576c6f2b7879460a341df07b834dee595e95a1",
+      "deps": [
+        [
+          "Aeneas",
+          "d3bfce818c2409992274bc1852aa00280cb7a8139465ef0bab674498e4cdc69d"
+        ],
+        [
+          "AspisR1ProverLeaf.Types",
+          "5802aa5afb268fa9cb75347261c3d9d8f2ae17728f682ad9ec38f6b804d84ae8"
+        ]
+      ],
+      "deps_fingerprint": "abec16b21fb8bff0d2b4384288c6e8523cfc0c46c7382e15612f3fb868541f1f",
+      "exit_status": 0,
+      "wall": "0:01.64",
+      "peak_rss_kib": 2564632,
+      "swaps": 0,
+      "axioms": [],
+      "errors": [],
+      "source_revision": "f2a598c6a",
+      "environment": "J"
+    },
+    {
+      "kind": "lean",
+      "module": "R1Z/ProverCommitLeafSource.lean",
+      "attempt": 8111,
+      "source_sha256": "f20a63f0ed035dd53d569d5edc02ac9898d60628dd4841859ec48ad2deadcc31",
+      "deps": [
+        [
+          "AspisR1ProverLeaf.Funs",
+          "42f599ee7ad9f0bcefddd8abb09184fe635903c7c6e78c8912cc676584661111"
+        ],
+        [
+          "R1Z.SharedGrammarBridgeBin",
+          "4937377d1e64dec21a2003680ac7b1ce76cd81447632ed0498a2111baa5fcf6d"
+        ]
+      ],
+      "deps_fingerprint": "604c5fbad11c57ccc241fef5379695efe05307430b105908b555a0a276c9fdae",
+      "exit_status": 1,
+      "wall": "0:02.78",
+      "peak_rss_kib": 3990372,
+      "swaps": 0,
+      "axioms": [
+        "'R1Z.ProverCommitLeafSource.leaf_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'R1Z.ProverCommitLeafSource.tag_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'R1Z.ProverCommitLeafSource.leaf_shared' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+      ],
+      "errors": [
+        "/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitLeafSource.lean:29:2: error: Tactic `rfl` failed: The left-hand side",
+        "/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitLeafSource.lean:33:74: error: unsolved goals",
+        "/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitLeafSource.lean:43:52: error: unsolved goals"
+      ],
+      "source_revision": "f2a598c6a",
+      "environment": "J"
+    },
+    {
+      "kind": "lean",
+      "module": "R1Z/ProverCommitLeafSource.lean",
+      "attempt": 8112,
+      "source_sha256": "e168380bd66c411153e0f2dbc74f50edd20b38088071be1de0470a1f561d6239",
+      "deps": [
+        [
+          "AspisR1ProverLeaf.Funs",
+          "42f599ee7ad9f0bcefddd8abb09184fe635903c7c6e78c8912cc676584661111"
+        ],
+        [
+          "R1Z.SharedGrammarBridgeBin",
+          "4937377d1e64dec21a2003680ac7b1ce76cd81447632ed0498a2111baa5fcf6d"
+        ]
+      ],
+      "deps_fingerprint": "604c5fbad11c57ccc241fef5379695efe05307430b105908b555a0a276c9fdae",
+      "exit_status": 0,
+      "wall": "0:02.46",
+      "peak_rss_kib": 4012224,
+      "swaps": 0,
+      "axioms": [
+        "'R1Z.ProverCommitLeafSource.leaf_source' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.ProverCommitLeafSource.tag_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.ProverCommitLeafSource.leaf_shared' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "errors": [],
+      "source_revision": "f2a598c6a",
+      "environment": "J"
     }
   ],
   "artifacts": {
@@ -667,8 +817,8 @@
       "bytes": 970
     },
     "attempts.jsonl": {
-      "sha256": "1dd7a132fc8b05fcc7ada6d34ece0604c65376148c78ed381156a991372d5630",
-      "bytes": 19462
+      "sha256": "284452086209957e3e0162b04c172d26bb109e90f225cb4eccd1b26e478590e4",
+      "bytes": 23865
     },
     "byte-identity.json": {
       "sha256": "7afef688a0c10592d76a3ae167afd8360f0332cee558cc25a2370c360a4780dd",
@@ -710,6 +860,22 @@
       "sha256": "d1601a72c06d5d242fa3ab90adfcc6499748ad17c48887dcbc9563f1fba8faa1",
       "bytes": 1468
     },
+    "carried-lib/receipt.json": {
+      "sha256": "334860493da911c01c9f4fb35399a8aac5788afa451213651a0ff9132055744c",
+      "bytes": 1076
+    },
+    "carried-lib/stderr.log": {
+      "sha256": "531b7fd93bdbff1e37e65c0c1def28c52f494e49a8b690787d99fab079ad270b",
+      "bytes": 72865
+    },
+    "carried-lib/stdout.log": {
+      "sha256": "4fba48a0e54de099b70629dfc3ba6be933154f9e9623439a8e7ec079e29f0d9c",
+      "bytes": 2801
+    },
+    "carried-lib/time.log": {
+      "sha256": "742f3d513ff0ebcc301afe59e6200b2fade42449ab75ca6a163e4b9af924d641",
+      "bytes": 852
+    },
     "carried.py": {
       "sha256": "7a2a21bbd5dde06aaacd77bd61c5c36019b60cd4e6f62d916520cb9d291d070e",
       "bytes": 782
@@ -729,6 +895,18 @@
     "extract-owned.py": {
       "sha256": "cc1f75af2244c1135bab19b07fb8e2683919935c14e22670be425f3dc2f003d9",
       "bytes": 3633
+    },
+    "extract-streams-fields.py": {
+      "sha256": "ed4f6e2df356d1c4f50edb9788aa32df9bcf4d449c8fea23ca039e0b340c4253",
+      "bytes": 3833
+    },
+    "extract-streams-helper.py": {
+      "sha256": "ff4b0e1a1a22221a4bfa9e230fdd8082ac056666ddcedd250c167e3ef1a118de",
+      "bytes": 3833
+    },
+    "extract-streams-owned-state.py": {
+      "sha256": "cd30229ef80dd368d7fe195b95108468a470b0cf6dd772b827791dcf78fb35fc",
+      "bytes": 3860
     },
     "extract-streams.py": {
       "sha256": "d0a05df29702c42ab18920e96749492f42ec3b7adb3e4ec814c33d61fabfee0f",
@@ -878,8 +1056,56 @@
       "sha256": "6a22574146b55079af671de0baeef2be6f2b5c4b3c550484f8aa1cba6881e604",
       "bytes": 1220
     },
+    "lean/8109/meta.json": {
+      "sha256": "2687b6f19eac70076da024dbf6ded37c3633759ce0c5680c5e5420a02c1cea4b",
+      "bytes": 361
+    },
+    "lean/8109/out.log": {
+      "sha256": "1c9f5018dbdda614a51d75c733ec21bbfd8c83a84ee28a4834d1b276fb8dbcc7",
+      "bytes": 56
+    },
+    "lean/8109/time.log": {
+      "sha256": "79f4063b4bd30c4420aaf3a93f2c2c16791833f2ab703b85b48e00f9318c9774",
+      "bytes": 1217
+    },
+    "lean/8110/meta.json": {
+      "sha256": "e721a16a7a90c028d206993d4be1c43bfbc5d2cc213e6ce1f04d62452d63bf93",
+      "bytes": 479
+    },
+    "lean/8110/out.log": {
+      "sha256": "1c9f5018dbdda614a51d75c733ec21bbfd8c83a84ee28a4834d1b276fb8dbcc7",
+      "bytes": 56
+    },
+    "lean/8110/time.log": {
+      "sha256": "87699a2d5540f1946dae93c0818d3faa35dc78408035fc1fae724a30abeffc66",
+      "bytes": 1214
+    },
+    "lean/8111/meta.json": {
+      "sha256": "0c4034898d62bb4e40780fac2a546ea2de17af895f3bb581af6b5bcff6ed2f87",
+      "bytes": 502
+    },
+    "lean/8111/out.log": {
+      "sha256": "81d4ec6b25defc87ab61c69c16d156f106bf295e261653629a675fe8a8ab008b",
+      "bytes": 2030
+    },
+    "lean/8111/time.log": {
+      "sha256": "3a69870e6ab1759990d3bbeb13cbd9406cad5b36ff06f64e6eb0971ae0d7beb0",
+      "bytes": 1261
+    },
+    "lean/8112/meta.json": {
+      "sha256": "345cbad37e61908bacde04775278dec46e605d9b156d6f0be25349a6e5de82d8",
+      "bytes": 502
+    },
+    "lean/8112/out.log": {
+      "sha256": "076dbc59808c9d6ed9580363e97fc41a957c4f3ca9269f4718538cfbfdd421ef",
+      "bytes": 1615
+    },
+    "lean/8112/time.log": {
+      "sha256": "5efcee5a68fe6eb2292454f1860abe1367690ef51b7833e08609990931a2b637",
+      "bytes": 1221
+    },
     "lean.py": {
-      "sha256": "4688db6b39291b90880a82b0a8052944bd1f02df906fde2910e6d5e34e73c459",
+      "sha256": "45cb292445ccda5bb577dc34d6e493f46b1b0924f42eb1b2137097adff66685b",
       "bytes": 2322
     },
     "owned-aeneas/receipt.json": {
@@ -918,9 +1144,25 @@
       "sha256": "2cf547f5b05727e7a987528ad7c3d7767a46521d1a0049dea97c088df22f13b2",
       "bytes": 1048
     },
+    "resume-runtime.py": {
+      "sha256": "8dbab4fb817dbdec55fbd46ebe1a84f029ce667fc002107e5d2dcc5541ce1dfc",
+      "bytes": 1558
+    },
     "runtime.py": {
       "sha256": "555859cb555408b8c6b9195d3b9fe30a3408cb3262498bced0a64be77563a833",
       "bytes": 2752
+    },
+    "streams-fields.py": {
+      "sha256": "a75972633b10c71f505d3ac994496bda8c401a20584aec454f74b77f8fc7abf4",
+      "bytes": 700
+    },
+    "streams-helper.py": {
+      "sha256": "9b0752c4fa2e1be6b006a8cda0344aeedd363bda8a924d1b402c603bf427d8fc",
+      "bytes": 644
+    },
+    "streams-owned-state.py": {
+      "sha256": "048df0578b99584024cfea86dfb240fe95ba1aeafebf47529cc16c166090cb88",
+      "bytes": 1108
     },
     "while-aeneas/receipt.json": {
       "sha256": "dfc05cf9772b84195e7e5f2c7977f04e02a9bdddfd81710a41987d99293eb60e",

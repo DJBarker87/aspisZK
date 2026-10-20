@@ -35,9 +35,9 @@ for c in Path('/sys/fs/cgroup').rglob('memory.max'):
   v=c.read_text().strip()
   if v!='max' and (c.parent/'cgroup.procs').read_text().strip():caps.append(int(v))
  except OSError:pass
-assert sum(caps)+5*2**30<=55*2**30, ('reservation hold',sum(caps)/2**30)
+assert sum(caps)+4*2**30<=55*2**30, ('reservation hold',sum(caps)/2**30)
 fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest()
 (R/('lean-'+attempt+'.json')).write_text(json.dumps(dict(module=rel,attempt=int(attempt),source_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),deps=deps,deps_fingerprint=fp),indent=2)+'\\n')
-subprocess.run(['sh','/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh',attempt,rel[:-5],'J','7000','5',fp],check=True)
+subprocess.run(['sh','/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh',attempt,rel[:-5],'J','7000','4',fp],check=True)
 '''%(R,rel,attempt)
 subprocess.run(['ssh',host,'python3 -'],input=code,text=True,check=True)
