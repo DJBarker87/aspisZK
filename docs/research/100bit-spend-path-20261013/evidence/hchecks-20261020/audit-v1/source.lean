@@ -1,0 +1,9 @@
+import HchecksReaderComposition
+import HchecksPublicComposition
+import HchecksDecisionObstruction
+
+#print axioms AspisR1.HchecksAccumulator.residual_of_closed_sum
+#print axioms AspisR1.HchecksReaderComposition.matching_read_parsers
+#print axioms AspisR1.HchecksReaderComposition.hchecks_partial
+#print axioms AspisR1.HchecksPublicComposition.publicParsed_of_serializer
+#print axioms AspisR1.HchecksDecisionObstruction.free_decision_counterexample

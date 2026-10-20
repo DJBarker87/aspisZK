@@ -1,0 +1,66 @@
+/Users/dominic/ZK/.worktrees/cx-hchecks/docs/research/100bit-spend-path-20261013/lean/HchecksReaderComposition.lean:83:9: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+pub : LiteralTranscript.Public
+rs : TranscriptRounds
+decoded : R0P.Public SemanticPublicWire.M31
+data : MatchingSupport.Data E
+hpublic : SemanticPublicWire.parsePublic pub.pubBytes = some decoded
+hmatching : LiteralMatchingData.read rs = some data
+hpairing : LiteralPairingChecks.checks rs
+m31 : LiteralTranscript.Message
+queryBytes : List ℕ
+state31 : State
+m32 : LiteralTranscript.Message
+rho : E
+state32 : State
+h31 : rs[31]? = some (m31, TranscriptView.Value.queries (Except.ok queryBytes), state31)
+h32 : rs[32]? = some (m32, TranscriptView.Value.ordinary rho, state32)
+hv31 : LiteralTranscript.valid 31 m31
+hv32 : LiteralTranscript.valid 32 m32
+hq : queryBytes.Nodup ∧ queryBytes.length = 22 ∧ ∀ x ∈ queryBytes, x < 262144
+hfirst :
+  ∀ (q : Fin 22 → Fin 262144),
+    LiteralQueryRead.decode queryBytes = some q → ∀ (j : Fin 22), MatchingSupport.match0 data (q j)
+hbatch :
+  ∀ (q : Fin 22 → Fin 262144),
+    LiteralQueryRead.decode queryBytes = some q →
+      ∑ j, LiteralOpeningView.eK (SelectedChallengeMap.rhoOf rho) ^ ↑j * QueryResidualBridge.residuals data q j = 0
+hsemantic : SemanticEndpoint decoded rs data
+x✝ :
+  ∃ view claim polynomials,
+    LiteralOpeningView.read rs = some view ∧
+      claimOf (SelectedSemanticPrefixFacts.lift view.semantic) = some claim ∧
+        semPolysZ (SelectedSemanticPrefixFacts.lift view.semantic) = some polynomials
+⊢ Checks pub rs
+/Users/dominic/ZK/.worktrees/cx-hchecks/docs/research/100bit-spend-path-20261013/lean/HchecksReaderComposition.lean:57:0: error: type of theorem `AspisR1.HchecksReaderComposition.hchecks_partial` is not a proposition
+  (pub : LiteralTranscript.Public) →
+    (rs : TranscriptRounds) →
+      (decoded : R0P.Public SemanticPublicWire.M31) →
+        (data : MatchingSupport.Data E) →
+          SemanticPublicWire.parsePublic pub.pubBytes = some decoded →
+            LiteralMatchingData.read rs = some data →
+              LiteralPairingChecks.checks rs →
+                (m31 : LiteralTranscript.Message) →
+                  (queryBytes : List ℕ) →
+                    (state31 : State) →
+                      (m32 : LiteralTranscript.Message) →
+                        (rho : E) →
+                          (state32 : State) →
+                            rs[31]? = some (m31, TranscriptView.Value.queries (Except.ok queryBytes), state31) →
+                              rs[32]? = some (m32, TranscriptView.Value.ordinary rho, state32) →
+                                LiteralTranscript.valid 31 m31 →
+                                  LiteralTranscript.valid 32 m32 →
+                                    (queryBytes.Nodup ∧ queryBytes.length = 22 ∧ ∀ x ∈ queryBytes, x < 262144) →
+                                      (∀ (q : Fin 22 → Fin 262144),
+                                          LiteralQueryRead.decode queryBytes = some q →
+                                            ∀ (j : Fin 22), MatchingSupport.match0 data (q j)) →
+                                        (∀ (q : Fin 22 → Fin 262144),
+                                            LiteralQueryRead.decode queryBytes = some q →
+                                              ∑ j,
+                                                  LiteralOpeningView.eK (SelectedChallengeMap.rhoOf rho) ^ ↑j *
+                                                    QueryResidualBridge.residuals data q j =
+                                                0) →
+                                          SemanticEndpoint decoded rs data → Checks pub rs
+'AspisR1.HchecksReaderComposition.matching_read_parsers' depends on axioms: [propext, Classical.choice, Quot.sound]
+/Users/dominic/ZK/.worktrees/cx-hchecks/docs/research/100bit-spend-path-20261013/lean/HchecksReaderComposition.lean:104:14: error(lean.unknownIdentifier): Unknown constant `hchecks_partial`

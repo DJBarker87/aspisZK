@@ -1,0 +1,53 @@
+/Users/dominic/ZK/.worktrees/cx-hchecks/docs/research/100bit-spend-path-20261013/lean/HchecksReaderComposition.lean:104:4: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/Users/dominic/ZK/.worktrees/cx-hchecks/docs/research/100bit-spend-path-20261013/lean/HchecksReaderComposition.lean:89:32: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+pub : LiteralTranscript.Public
+rs : TranscriptRounds
+decoded : R0P.Public SemanticPublicWire.M31
+data : MatchingSupport.Data E
+hpublic : SemanticPublicWire.parsePublic pub.pubBytes = some decoded
+hmatching : LiteralMatchingData.read rs = some data
+hpairing : LiteralPairingChecks.checks rs
+m31 : LiteralTranscript.Message
+queryBytes : List ℕ
+state31 : State
+m32 : LiteralTranscript.Message
+rho : E
+state32 : State
+h31 : rs[31]? = some (m31, TranscriptView.Value.queries (Except.ok queryBytes), state31)
+h32 : rs[32]? = some (m32, TranscriptView.Value.ordinary rho, state32)
+hv31 : LiteralTranscript.valid 31 m31
+hv32 : LiteralTranscript.valid 32 m32
+hq : queryBytes.Nodup ∧ queryBytes.length = 22 ∧ ∀ x ∈ queryBytes, x < 262144
+hfirst :
+  ∀ (q : Fin 22 → Fin 262144),
+    LiteralQueryRead.decode queryBytes = some q → ∀ (j : Fin 22), MatchingSupport.match0 data (q j)
+haccum :
+  ∀ (q : Fin 22 → Fin 262144),
+    LiteralQueryRead.decode queryBytes = some q →
+      ∑ l,
+          data.f l *
+            LiteralOpeningView.eK (∑ j, SelectedChallengeMap.rhoOf rho ^ ↑j * QueryResidualBridge.basis q j l) =
+        ∑ j, LiteralOpeningView.eK (SelectedChallengeMap.rhoOf rho) ^ ↑j * QueryResidualBridge.values data q j
+hsemantic : SemanticEndpoint decoded rs data
+view : LiteralOpeningView.View
+claim : E
+polynomials : Fin 10 → Polynomial E
+hopen : LiteralOpeningView.read rs = some view
+hclaim : claimOf (SelectedSemanticPrefixFacts.lift view.semantic) = some claim
+hpolys : semPolysZ (SelectedSemanticPrefixFacts.lift view.semantic) = some polynomials
+queries : Fin 22 → Fin 262144 := ⋯
+hdecode : LiteralQueryRead.decode queryBytes = some queries
+⊢ ∑ j,
+      data.f j *
+        LiteralOpeningView.eK (∑ i, SelectedChallengeMap.rhoOf rho ^ ↑i * QueryResidualBridge.basis queries i j) =
+    ∑ i, LiteralOpeningView.eK (SelectedChallengeMap.rhoOf rho) ^ ↑i * QueryResidualBridge.values data queries i
+'AspisR1.HchecksReaderComposition.matching_read_parsers' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.HchecksReaderComposition.hchecks_partial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
