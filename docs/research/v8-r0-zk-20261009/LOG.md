@@ -7170,3 +7170,20 @@ the Kani route is a symbolic memoised oracle (fresh `kani::any` per new
 input, cached for repeats) shared by the shipped code and the reference. That
 gives equality for every oracle function on the queried points without
 postulating any property of SHA-256.
+
+## D93 — correction to D91: the collision event must be scan freshness only (2026-10-20, lead)
+
+Landed from `codex/cx-priv-history2-20261021` (`r1p-final/PRIVACY-HISTORY-REAL-20261021.md`).
+The D91 ruling was wrong as stated. An event covering all repeated reads in
+the whole run has mass one, since an admissible adversary may query the same
+input twice, and the compiled counterexample shows this. Adversarial repeats
+are not collisions. The job also proved the arithmetic κ(q) = 6q²/2^256 below
+the target for q ≤ 2^65.
+
+Corrected ruling: the excluded event is scan freshness failure only, where
+some input of the honest real-side scan query was already in the oracle table
+when the scan issued it, whether queried by the adversary, the prover, or an
+earlier scan step. Its mass is bounded through what makes the scan inputs
+unpredictable: fresh oracle outputs or fresh prover randomness in the scan
+state. The bound is about (scan queries) × q / 2^k, with k the min-entropy of
+that state, charged once. Adversarial repeats on other inputs cost nothing.
