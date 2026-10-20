@@ -88,3 +88,18 @@ M10: PROVED (conditional). Named implementation hypotheses still to
 discharge: output refinement, bounded arithmetic jobs, implementation
 overhead, log-read accounting, bit accounting, uniform overhead
 constants/degree. These join the source-side list (step 9 inputs).
+
+## Addendum (2026-10-20): R22 partial
+
+Codex job r1-overflow-free (a85e60cd0 after WIP 93f5025d9, 9d906cec2) landed:
+`design/OVERFLOW-FREEDOM-INVENTORY-20261019.md` and
+`evidence/overflow-freedom-20261019/` (36 focused targets, 50 theorem reports,
+standard axioms, ≤ 3.00 GiB). Proved: decoder value/loop totality, ρ
+push/value totality, control and index bounds, the field/semantic-loop/
+parser/folded-dot range proofs. No admitted-input overflow was found.
+R22 stays OPEN: the pinned stage-1 extractions predate the CU optimisations
+(weights, private pairing, fast dots have no extracted bodies yet), so their
+overflow proofs wait for the S1–S9 re-pins; then round/prepare composition,
+the outer decoder guards, the global ρ caller invariants and the
+deployed-to-checked bridge. Sequence: S1–S9 → R22 (stage 1) → R22 (stage 2,
+after R14).
