@@ -13,14 +13,17 @@ source-side job (section 6).
 
 ## Verification status
 
-**INCOMPLETE: unverified drafts.** The first focused local compile never
-started: the binding `local-lean.txt` memory precheck requires at least
-10 GiB free+inactive, and every observed check remained below that threshold.
-No Lean theorem or axiom result in this packet is certified. The evidence
-manifest lists the proposed compile order and source hashes with null
-receipt fields. The own waiting shell was stopped; no build is running.
-No memory override was assumed. Source/receipt tool syntax and provenance
-coverage were checked independently.
+All 25 modules compiled successfully on resume (106 theorem audits), locally
+in dependency order,
+using Lean 4.32.0, `-j1 -M4400 -DElab.async=false`, the shared mkdir lock,
+and this branch's own object directory. All successful axiom sets are subsets
+of {propext, Classical.choice, Quot.sound}. Total successful module wall time
+is 114.23 s; peak RSS 3,032,498,176 bytes; all process swaps zero. Receipts and
+a successful source/dependency/axiom coverage audit are in the manifest. The obsolete memory
+precheck that blocked the draft is historical evidence only.
+
+The false universal hash-input separation request remains an explicit
+obstruction (section 1). Source extraction is outside this model packet.
 
 ## 1. Grammar and domain separation
 
@@ -37,7 +40,7 @@ length/embedded framing, where justified.
 
 ## 2. Multiproof acceptance
 
-Draft modules `BinMerkleProgram`, `BinMultiproof`, `BinBatchDedup`.
+Modules `BinMerkleProgram`, `BinMultiproof`, `BinBatchDedup`.
 `Accept` is a small-step relational specification of the level-at-a-time
 verifier, not an extracted implementation of the mutable Rust arrays.
 `missing` sorts distinct parents, visits left then right, and supplies only
@@ -55,11 +58,11 @@ only `stored.take count` into acceptance; `padded_exact_count` rules out
 using extra supplied nodes. Depth is symbolic; `slots_length` applies at 18
 without constructing a tree or enumerating leaves.
 
-These are draft proof bodies pending local compilation.
+The focused compilation and axiom results are recorded in the manifest.
 
 ## 3. Binding and collision targets
 
-Draft binary leaf/path binding retains the exact same-index slot list.
+Binary leaf/path binding retains the exact same-index slot list.
 `BinOpeningBinding.openings_agree` combines its collision alternative with
 the single raw-byte collision exclusion and explicit read containment.
 `BinRawByteCollisionTargets.pred : Fin 5 → Bytes → Option State` has strict
@@ -72,7 +75,7 @@ explicit uniform first-read budget, not a measured runtime read count.
 Downstream soundness callers must instantiate this event and budget; their
 existing eight-way kappa definitions are untouched.
 
-These are draft proof bodies pending local compilation.
+The focused compilation and axiom results are recorded in the manifest.
 
 ## 4. Recovery and compiled-run word stability
 
@@ -101,14 +104,14 @@ the recorded view before and after replay, without assuming metadata equals
 a recovered word. The theorem concerns the existing literal protocol model,
 not the newly adopted Rust verifier.
 
-These are draft proof bodies pending local compilation.
+The focused compilation and axiom results are recorded in the manifest.
 
 ## 5. Theorem map against the eight-way model
 
 All paths below are relative to `lean/`. Line pins are at the branch base.
 Each same-named theorem is ported to binary children; none replaces or edits
-the old declaration in place. This table describes intended statements;
-compile status is exclusively the evidence manifest.
+the old declaration in place. This table describes the proved statements;
+exact source hashes and compile status are in the evidence manifest.
 
 | Binary theorem | Eight-way predecessor |
 |---|---|
@@ -284,3 +287,17 @@ and runtime/release gates are outside this model packet.
 The universal hash-input tag-disjointness assertion cannot be discharged
 by extraction: it is false for unrestricted public-byte hashes. Record that
 boundary in any downstream theorem rather than assuming it away.
+
+## 7. Resume repairs and evidence discipline
+
+The draft was rechecked from `d217103e1`, without trusting static checks.
+The mathematical statements were retained. Repairs resolve ambiguous `Byte`
+namespaces, rename a reserved local identifier, and unfold the symbolic slot
+list when simplifying dependent `Path` terms, and reduce local frame lets
+before rewriting compiler cuts. Failed elaborations are retained
+under the relevant module's `attempt-N/` evidence directory; their `sorryAx`
+output describes error recovery and is never accepted as a successful audit.
+The final manifest checks every theorem's axiom line, every source SHA, and
+every direct imported object's SHA. No unchanged successful Lean invocation
+is repeated merely to refresh evidence. Existing eight-way modules remain
+byte-for-byte unchanged relative to the branch base.

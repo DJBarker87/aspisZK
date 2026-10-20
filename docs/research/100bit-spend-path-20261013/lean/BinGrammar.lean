@@ -8,7 +8,8 @@ Arbitrary public-byte hashing has no domain separator; see the obstruction
 in the design document. No universal separation axiom is introduced. -/
 set_option autoImplicit false
 namespace AspisR1.BinGrammar
-open BinMerkle32Path BinMerkle32Leaf
+open BinMerkle32Path
+open BinMerkle32Leaf (leafInput)
 
 /-- Exact concatenation passed to `hash.digest` in multiproof.rs:49. -/
 theorem nodeInput_slices (cs : Children) :
@@ -74,7 +75,7 @@ theorem node_ne_length (cs : Children) (record : List Byte)
 /-- Public bytes are unrestricted in verifier.rs:382. They can literally be
 one of the Merkle preimages, independently of the oracle. -/
 theorem unrestricted_public_overlap (cs : Children) :
-    ∃ public : List Byte, public = nodeInput cs := ⟨nodeInput cs, rfl⟩
+    ∃ publicBytes : List Byte, publicBytes = nodeInput cs := ⟨nodeInput cs, rfl⟩
 
 #print axioms nodeInput_slices
 #print axioms node_ne_leaf

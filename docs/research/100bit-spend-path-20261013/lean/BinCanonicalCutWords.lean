@@ -15,19 +15,19 @@ open CanonicalCutEnrichedTranscript (Words wordsFromMaps)
 open BinMerkle32Path
 
 def rawC1Map (tr : List (Bytes × State)) (frame : Bytes) (root : State) :
-    Fin 262144 → Option (List Byte) := fun leaf =>
+    Fin 262144 → Option (List BinMerkle32Path.Byte) := fun leaf =>
   (BinRawByteCutStability.recoverAt 0x71 480
     (BinRawByteCutRecovery.cut tr frame)
     (BinMultiproof.slots 18 leaf.val) root).map Prod.fst
 
 def rawC2Map (tr : List (Bytes × State)) (frame : Bytes) (root : State) :
-    Fin 262144 → Option (List Byte) := fun leaf =>
+    Fin 262144 → Option (List BinMerkle32Path.Byte) := fun leaf =>
   (BinRawByteCutStability.recoverAt 0xf1 128
     (BinRawByteCutRecovery.cut tr frame)
     (BinMultiproof.slots 18 leaf.val) root).map Prod.fst
 
 def rawFoldedMap (tr : List (Bytes × State)) (frame : Bytes) (root : State) :
-    Fin 65536 → Option (List Byte) := fun leaf =>
+    Fin 65536 → Option (List BinMerkle32Path.Byte) := fun leaf =>
   (BinRawByteCutStability.recoverAt 0x72 128
     (BinRawByteCutRecovery.cut tr frame)
     (BinMultiproof.slots 18 leaf.val) root).map Prod.fst
@@ -55,17 +55,17 @@ def wordsFromCommitmentFrames (tr : List (Bytes × State))
 
 /-- Full-log packed maps for comparison with the first-read cut maps. -/
 def fullC1Map (tr : List (Bytes × State)) (root : State) :
-    Fin 262144 → Option (List Byte) := fun leaf =>
+    Fin 262144 → Option (List BinMerkle32Path.Byte) := fun leaf =>
   (BinRawByteCutStability.recoverAt 0x71 480 tr
     (BinMultiproof.slots 18 leaf.val) root).map Prod.fst
 
 def fullC2Map (tr : List (Bytes × State)) (root : State) :
-    Fin 262144 → Option (List Byte) := fun leaf =>
+    Fin 262144 → Option (List BinMerkle32Path.Byte) := fun leaf =>
   (BinRawByteCutStability.recoverAt 0xf1 128 tr
     (BinMultiproof.slots 18 leaf.val) root).map Prod.fst
 
 def fullFoldedMap (tr : List (Bytes × State)) (root : State) :
-    Fin 65536 → Option (List Byte) := fun leaf =>
+    Fin 65536 → Option (List BinMerkle32Path.Byte) := fun leaf =>
   (BinRawByteCutStability.recoverAt 0x72 128 tr
     (BinMultiproof.slots 18 leaf.val) root).map Prod.fst
 

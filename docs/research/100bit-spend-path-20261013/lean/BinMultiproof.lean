@@ -87,7 +87,7 @@ theorem accepted_path {H : List Byte → Digest} {root : Digest}
       intro i hi
       have he : i = 0 := by simpa using hi
       subst i
-      exact ⟨.nil, hroot, by simp [inputTrace]⟩
+      exact ⟨.nil, hroot, by simp [slots, inputTrace]⟩
   | @step depth active v cs supplied rest trace level tail ih =>
       intro i hi
       obtain ⟨path, hp, ht⟩ := ih (i / 2) (member_parent hi)
@@ -97,7 +97,7 @@ theorem accepted_path {H : List Byte → Digest} {root : Digest}
       refine ⟨.cons (cs (i / 2)) path, ?_, ?_⟩
       · simpa [slots, foldPath, hc, nextValues] using hp
       · intro input hin
-        simp only [inputTrace, hc, List.mem_cons] at hin
+        simp only [slots, inputTrace, hc, List.mem_cons] at hin
         rcases hin with he | hm
         · subst input
           apply List.mem_append_left

@@ -1,0 +1,93 @@
+/tmp/r1-commit-model-20261019-src/BinCompiledRunWordStability.lean:68:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  BinRawByteCutRecovery.cut annotated.1 (frameFromView decoder original 0)
+in the target expression
+  (have f0 := frameFromView decoder original 0;
+    have f2 := frameFromView decoder original 2;
+    have f30 := frameFromView decoder original 30;
+    CanonicalCutEnrichedTranscript.wordsFromMaps
+      (fun leaf =>
+        Option.map Prod.fst
+          (BinRawByteCutStability.recoverAt 113 480 (BinRawByteCutRecovery.cut annotated.1 f0)
+            (BinMultiproof.slots 18 ↑leaf) (rootFrom 8 f0)))
+      (fun leaf =>
+        Option.map Prod.fst
+          (BinRawByteCutStability.recoverAt 241 128 (BinRawByteCutRecovery.cut annotated.1 f2)
+            (BinMultiproof.slots 18 ↑leaf) (rootFrom 8 f2)))
+      fun leaf =>
+      Option.map Prod.fst
+        (BinRawByteCutStability.recoverAt 114 128 (BinRawByteCutRecovery.cut annotated.1 f30)
+          (BinMultiproof.slots 18 ↑leaf) (rootFrom 9 f30))) =
+    have f0 := frameFromView decoder original 0;
+    have f2 := frameFromView decoder original 2;
+    have f30 := frameFromView decoder original 30;
+    CanonicalCutEnrichedTranscript.wordsFromMaps
+      (fun leaf =>
+        Option.map Prod.fst
+          (BinRawByteCutStability.recoverAt 113 480 (BinRawByteCutRecovery.cut original.1 f0)
+            (BinMultiproof.slots 18 ↑leaf) (rootFrom 8 f0)))
+      (fun leaf =>
+        Option.map Prod.fst
+          (BinRawByteCutStability.recoverAt 241 128 (BinRawByteCutRecovery.cut original.1 f2)
+            (BinMultiproof.slots 18 ↑leaf) (rootFrom 8 f2)))
+      fun leaf =>
+      Option.map Prod.fst
+        (BinRawByteCutStability.recoverAt 114 128 (BinRawByteCutRecovery.cut original.1 f30)
+          (BinMultiproof.slots 18 ↑leaf) (rootFrom 9 f30))
+
+decoder : LiteralByteProtocol.Decoder
+d : RawCutTranscriptRun.ErasedPrefix → RawCutTranscriptRun.ErasedMessage → Bool
+P : Prover
+H : Bytes → State
+original : View Bytes State ((Public × Proof) × Bool) :=
+  eval H (RawCutProverCompiler.experiment P (RawCutProverCompiler.verifier decoder d))
+annotated : View Bytes State ((Public × Proof) × Bool) :=
+  eval H
+    (RawCutProverCompiler.experiment (compiled decoder d (wordsFromRun decoder) P)
+      (RawCutProverCompiler.verifier decoder d))
+hpub : annotated.2.1.1 = original.2.1.1
+hproof : annotated.2.1.2 = RawCutTranscriptRun.proof (wordsFromRun decoder original) original.2.1.2
+frames : ∀ row < 33, frameFromView decoder annotated row = frameFromView decoder original row
+cuts :
+  ∀ row < 33,
+    BinRawByteCutRecovery.cut annotated.1 (frameFromView decoder original row) =
+      BinRawByteCutRecovery.cut original.1 (frameFromView decoder original row)
+⊢ (have f0 := frameFromView decoder original 0;
+    have f2 := frameFromView decoder original 2;
+    have f30 := frameFromView decoder original 30;
+    CanonicalCutEnrichedTranscript.wordsFromMaps
+      (fun leaf =>
+        Option.map Prod.fst
+          (BinRawByteCutStability.recoverAt 113 480 (BinRawByteCutRecovery.cut annotated.1 f0)
+            (BinMultiproof.slots 18 ↑leaf) (rootFrom 8 f0)))
+      (fun leaf =>
+        Option.map Prod.fst
+          (BinRawByteCutStability.recoverAt 241 128 (BinRawByteCutRecovery.cut annotated.1 f2)
+            (BinMultiproof.slots 18 ↑leaf) (rootFrom 8 f2)))
+      fun leaf =>
+      Option.map Prod.fst
+        (BinRawByteCutStability.recoverAt 114 128 (BinRawByteCutRecovery.cut annotated.1 f30)
+          (BinMultiproof.slots 18 ↑leaf) (rootFrom 9 f30))) =
+    have f0 := frameFromView decoder original 0;
+    have f2 := frameFromView decoder original 2;
+    have f30 := frameFromView decoder original 30;
+    CanonicalCutEnrichedTranscript.wordsFromMaps
+      (fun leaf =>
+        Option.map Prod.fst
+          (BinRawByteCutStability.recoverAt 113 480 (BinRawByteCutRecovery.cut original.1 f0)
+            (BinMultiproof.slots 18 ↑leaf) (rootFrom 8 f0)))
+      (fun leaf =>
+        Option.map Prod.fst
+          (BinRawByteCutStability.recoverAt 241 128 (BinRawByteCutRecovery.cut original.1 f2)
+            (BinMultiproof.slots 18 ↑leaf) (rootFrom 8 f2)))
+      fun leaf =>
+      Option.map Prod.fst
+        (BinRawByteCutStability.recoverAt 114 128 (BinRawByteCutRecovery.cut original.1 f30)
+          (BinMultiproof.slots 18 ↑leaf) (rootFrom 9 f30))
+'AspisR1.BinCompiledRunWordStability.wordsFromRun_compiled_eq_original' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.BinCompiledRunWordStability.wordsFromRun_compiled_eq_retainedBuildWords' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

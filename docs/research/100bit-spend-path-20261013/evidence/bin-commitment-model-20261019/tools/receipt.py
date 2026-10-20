@@ -38,7 +38,7 @@ rec = {
   'started_utc': start, 'source_revision_parent': rev,
   'command': ['/usr/bin/time', '-l', '/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean',
               '-j1', '-M4400', '-DElab.async=false', '-o', str(objp), '/tmp/r1-commit-model-20261019-src/%s.lean' % m],
-  'lock': '/tmp/aspis-local-lean.lock', 'lean_path': lp,
+  'lock': '/tmp/aspis-local-lean.lock.d', 'lean_path': lp,
   'direct_imports': pins, 'deps_fingerprint': fp, 'axioms': axioms, 'errors': errors,
 }
 (out / 'receipt.json').write_text(json.dumps(rec, indent=2) + '\n')

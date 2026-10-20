@@ -65,6 +65,7 @@ theorem wordsFromRun_compiled_eq_original
   unfold BinCanonicalCutWords.wordsFromRawCuts
     BinCanonicalCutWords.rawC1Map BinCanonicalCutWords.rawC2Map
     BinCanonicalCutWords.rawFoldedMap
+  dsimp only
   rw [cuts 0 (by decide), cuts 2 (by decide), cuts 30 (by decide)]
 
 /-- The metadata builder retained by the actual generic compiler is exactly

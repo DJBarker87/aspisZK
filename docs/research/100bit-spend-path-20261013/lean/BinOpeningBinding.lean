@@ -17,7 +17,7 @@ theorem openings_agree
     (hcons : ∀ q ∈ tr, q.2 = H q.1) (hQ : firstReads emptyTable tr ≤ Q)
     (hout : ¬ hitsBad (AllAddressCollision.bad iv BinRawByteCollisionTargets.pred Q)
       emptyTable tr)
-    (depth index : Nat) (tag : Byte)
+    (depth index : Nat) (tag : BinMerkle32Path.Byte)
     (leftPath rightPath : Path (BinMultiproof.slots depth index))
     (leftPacked leftSalt rightPacked rightSalt : Bytes)
     (hwidth : leftPacked.length = rightPacked.length)

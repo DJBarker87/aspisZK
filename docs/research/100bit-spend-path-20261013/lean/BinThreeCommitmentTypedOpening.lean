@@ -19,7 +19,7 @@ theorem typed_opening_at_cut {A : Type}
     (hcons : ∀ q ∈ tr, q.2 = H q.1) (hQ : firstReads emptyTable tr ≤ Q)
     (hout : ¬ hitsBad (AllAddressCollision.bad iv BinRawByteCollisionTargets.pred Q)
       emptyTable tr)
-    (tag : Byte) (width : Nat) (packed salt : Bytes)
+    (tag : BinMerkle32Path.Byte) (width : Nat) (packed salt : Bytes)
     (hw : packed.length = width) (hs : salt.length = 32)
     {ss : List (Fin 2)} (path : Path ss) (root : State)
     (frame : Bytes) (j : Fin 5) (hframe : Read tr frame)
@@ -48,7 +48,7 @@ theorem typed_word_stable {I A : Type}
     (hcons : ∀ q ∈ tr, q.2 = H q.1) (hQ : firstReads emptyTable tr ≤ Q)
     (hout : ¬ hitsBad (AllAddressCollision.bad iv BinRawByteCollisionTargets.pred Q)
       emptyTable tr)
-    (tag : Byte) (width : Nat) (root : State) (frame : Bytes) (j : Fin 5)
+    (tag : BinMerkle32Path.Byte) (width : Nat) (root : State) (frame : Bytes) (j : Fin 5)
     (hframe : Read tr frame)
     (hpred : BinRawByteCollisionTargets.pred j frame = some root)
     (paths : I → List (Fin 2)) (decode : Bytes → Option A) :
