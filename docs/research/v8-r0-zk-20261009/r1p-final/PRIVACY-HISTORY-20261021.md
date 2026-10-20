@@ -54,3 +54,45 @@ transport; no limits were raised or concrete finite universes reduced.
 ## Endpoint signature and before/after
 
 Pending final statement audit. No unconditional replacement endpoint is claimed.
+
+## Stage 3: compiled shared-ROM obstruction
+
+`QueryScanSharedHistoryObstruction` uses the exact retained transcript grammar:
+`squeezeAddress s = ans s ++ [1]`, `advanceAddress s = ans s ++ [2]`.
+An advance self-loop `H (advanceAddress s) = s` forces every query state to s
+and every query block to the same answer. A symbolic scan induction proves
+that scanning repeated copies of one block can accept at most eight distinct
+words. Consequently `finish` fails even at the constructed parser's own
+`stop done` endpoint. There is no 64-word recurrence evaluation.
+
+`LoopHistory bound` is the existing finite ROM table conditioned on the
+advance answer at zero being zero. It is inhabited by the zero table.
+`reached_shared_history_failure_mass` proves failure mass **one** on this
+history; `reached_shared_history_not_bounded` contradicts the proposed
+`scanProbability` bound on every history. For bounds at least 33 this is an
+in-domain read, so the phenomenon does not depend on out-of-domain fallback.
+The generic `finite_rom_zero_history` induction proves the all-zero history
+is reachable in `LazyFrozen.runC` for *every* address program and every ROM
+bound, hence also the constructed protocol's full scheduled read program.
+
+This disproves the **conditional-on-every-history** demand, not the existing
+unconditional `ScanCoupling.R_rom_query_word_history` field. That field is
+only a bound on the mass of each chosen coupling-space event; it does not
+quantify conditional probabilities over histories. No claim is made here
+that every possible choice of endpoint ScanCoupling is impossible.
+
+The exact missing fact is a source/model join preserving first-read addresses
+and answers and identifying a **fresh** 64-word stream outside already charged
+collision/prior-read events, together with whole-observation agreement on
+those excluded histories or a reduction that pays for them. No Rust fact can
+make a retained shared-oracle repeated read fresh. A correct repair must
+separate the independent scan failure from collision/prior-read events and
+prove where their mass is charged; it cannot assign the entire conditional
+self-loop failure the independent-word bound. The existing collision budget
+in modelError may support a redesigned combined reduction; this packet does
+not silently charge it twice or change the endpoint's error.
+
+Env J attempt 9808: exit 0, wall 2.66 s, peak RSS 4,038,828 KiB, swaps 0;
+13 theorem audits, all standard or subsets. 9806 is a green predecessor;
+9804 was a variable-substitution elaboration failure. Only this branch's
+new module was replaced on the host, with its source/object snapshotted.
