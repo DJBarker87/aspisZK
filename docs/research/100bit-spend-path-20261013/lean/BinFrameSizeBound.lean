@@ -1,0 +1,54 @@
+import BinFrameReplayReads
+
+/-! The typed public/message carriers, rather than acceptance or a global
+log-byte bound, bound every address used by commitment frame recovery. -/
+set_option autoImplicit false
+namespace AspisR1.BinFrameSizeBound
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open RawCommitmentFrameReplay
+
+theorem publicInit_length (pub : Public) (root : State) :
+    (RawTranscriptFrameBytes.publicInit pub.pubBytes root).length ≤ 131072 := by
+  have h := pub.initFits
+  simp only [SelectedTranscriptParams.L] at h
+  simp only [RawTranscriptFrameBytes.publicInit, RawTranscriptFrameBytes.semanticDomain,
+    RawTranscriptFrameBytes.lengthBytes, List.length_append, List.length_cons,
+    List.length_nil, List.length_ofFn, bytes_length]
+  omega
+
+theorem absorb_length (state : State) (row : Nat)
+    (p : SelectedTranscriptParams.Message) :
+    (RawTranscriptFrameBytes.absorb state row p.val).length ≤ 131072 := by
+  have h := p.property
+  simp only [SelectedTranscriptParams.D] at h
+  simp only [RawTranscriptFrameBytes.absorb, List.length_append, bytes_length,
+    List.length_cons, List.length_nil]
+  omega
+
+theorem frameAt_length (pub : Public) (state : State) (row : Nat) (m : Message) :
+    (frameAt pub state row m).length ≤ 131072 := by
+  cases row with
+  | zero =>
+    cases m with
+    | initial root _ => exact publicInit_length pub root
+    | payload _ | c2 _ _ | second _ _ =>
+      simp only [frameAt, List.length_append, bytes_length,
+        List.length_cons, List.length_nil]
+      omega
+  | succ row =>
+    cases m with
+    | initial _ _ =>
+      simp only [frameAt, List.length_append, bytes_length,
+        List.length_cons, List.length_nil]
+      omega
+    | payload p | c2 p _ | second p _ => exact absorb_length state (row + 1) p
+
+theorem counted_frame_length (run : RawCutProverCompiler.RunView) (row : Nat) :
+    (BinFrameReplayReads.frameCount run row).1.length ≤ 131072 :=
+  frameAt_length _ _ _ _
+
+#print axioms publicInit_length
+#print axioms absorb_length
+#print axioms frameAt_length
+#print axioms counted_frame_length
+end AspisR1.BinFrameSizeBound
