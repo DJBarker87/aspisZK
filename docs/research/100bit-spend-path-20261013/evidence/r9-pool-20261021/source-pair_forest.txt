@@ -1,0 +1,159 @@
+1473: fn terminal_common_box_v1(
+1474:     master_account: &Pubkey,
+1475:     checkpoint_account: &Pubkey,
+1476:     lane_account: &Pubkey,
+1477:     master: &PoolV1PairForestMasterV1,
+1478:     checkpoint: &PoolV1PairForestCheckpointV1,
+1479:     lane: &PoolV1PairForestLaneStateV1,
+1480:     output_lane: u8,
+1481:     result: &aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
+1482: ) -> Box<PoolV1PairForestTerminalCommonV1> {
+1483:     Box::new(PoolV1PairForestTerminalCommonV1 {
+1484:         master_account: master_account.to_bytes(),
+1485:         checkpoint_account: checkpoint_account.to_bytes(),
+1486:         selected_lane_account: lane_account.to_bytes(),
+1487:         output_lane,
+1488:         checkpoint_sequence: checkpoint.checkpoint_sequence,
+1489:         historical_global_anchor: checkpoint.global_root,
+1490:         lane_transition: aspis_statement::pool_v1::PoolV1PairLatePublicStatementV1 {
+1491:             live_snapshot: aspis_statement::pool_v1::PoolV1PairLiveSnapshotV1 {
+1492:                 pool: master_account.to_bytes(),
+1493:                 deployment_domain: master.identity.deployment_domain,
+1494:                 sequence: lane.tree.next_leaf_index,
+1495:                 next_pair_index: lane.tree.next_leaf_index,
+1496:                 current_root: lane.tree.root,
+1497:                 frontier: lane.tree.frontier,
+1498:             },
+1499:             candidate_afterstate: result.verified_afterstate,
+1500:         },
+1501:     })
+1502: }
+
+1710:     // Reserve the exact nullifier marker immediately before verifier CPI.
+1711:     // Solana rolls this System CPI back with every later write if
+1712:     // verification or settlement fails. The master PDA (authenticated by its
+1713:     // stored bump) is the `create_with_seed` base and signs; the re-check
+1714:     // authenticates the resulting owner, size, zero image and rent reserve.
+1715:     let master_bump = [master.bump];
+1716:     let master_signer_seeds: &[&[u8]] = &[
+1717:         POOL_V1_PAIR_FOREST_MASTER_SEED,
+1718:         &master.identity.asset_mint,
+1719:         &master_bump,
+1720:     ];
+1721:     let ready_marker = create_pair_forest_nullifier_marker_if_needed_v1(
+1722:         runtime,
+1723:         program_id,
+1724:         master_account,
+1725:         master_signer_seeds,
+1726:         marker,
+1727:         payer,
+1728:         system_program_account,
+1729:         planned_marker,
+1730:         rent,
+1731:     )?;
+1732: 
+1733:     let authenticated = verify(
+1734:         program_id,
+1735:         master_account,
+1736:         checkpoint_account,
+1737:         lane_account,
+1738:         &master.verifier_policy,
+1739:         &accounts[layout.registry_start..layout.registry_start + 2],
+1740:         &accounts[layout.verifier_index],
+1741:         &accounts[layout.proof_index],
+1742:         layout
+1743:             .verifier_checkpoint_index
+1744:             .map(|index| &accounts[index]),
+1745:         &request,
+1746:         current_slot,
+1747:     )?;
+1748:     let result = authenticated.value();
+1749:     #[cfg(not(feature = "pair-forest-direct-result-audit"))]
+1750:     validate_authenticated_terminal_result_v1(
+1751:         master_account.key,
+1752:         checkpoint_account.key,
+1753:         lane_account.key,
+1754:         &master,
+1755:         &checkpoint,
+1756:         &lane,
+1757:         output_lane,
+1758:         &request,
+1759:         result,
+1760:     )?;
+1761:     #[cfg(feature = "pair-forest-direct-result-audit")]
+1762:     validate_pair_forest_terminal_result_direct_v1(
+1763:         &request,
+1764:         master_account.key,
+1765:         lane_account.key,
+1766:         output_lane,
+1767:         &lane,
+1768:         result,
+1769:     )?;
+1770:     let next_lane_image = next_lane_image_box_v1(&lane, result)?;
+1771:     #[cfg(not(feature = "pair-forest-direct-result-audit"))]
+1772:     let result_bytes = terminal_result_bytes_box_v1(result)?;
+1773:     #[cfg(feature = "pair-forest-direct-result-audit")]
+1774:     let result_bytes = authenticated.exact_bytes();
+1775: 
+1776:     let writable_page = match layout.page {
+1777:         PairForestSpendPageV1::Genesis | PairForestSpendPageV1::SamePage(_) => &accounts[3],
+1778:         PairForestSpendPageV1::Rollover { next_index, .. } => &accounts[next_index],
+1779:     };
+1780:     let mut lane_data = lane_account.try_borrow_mut_data()?;
+1781:     let mut page_data = writable_page.try_borrow_mut_data()?;
+
+1781:     let mut page_data = writable_page.try_borrow_mut_data()?;
+1782:     let mut marker_data = marker.try_borrow_mut_data()?;
+1783:     if let Some(plan) = withdrawal_plan {
+1784:         let token_accounts = &accounts[layout.token_start..layout.token_start + 5];
+1785:         let infos = exact_withdrawal_transfer_account_infos_v1(token_accounts)?;
+1786:         let bump = [plan.authority_bump];
+1787:         let seeds: &[&[u8]] = &[
+1788:             POOL_V1_VAULT_AUTHORITY_SEED,
+1789:             master_account.key.as_ref(),
+1790:             &bump,
+1791:         ];
+1792:         runtime.invoke_signed(&plan.instruction, &infos, &[seeds])?;
+1793:         validate_exact_withdrawal_delta_v1(token_accounts, &plan)?;
+1794:     }
+1795: 
+1796:     lane_data.copy_from_slice(next_lane_image.as_ref());
+1797:     match layout.page {
+1798:         PairForestSpendPageV1::Genesis => write_new_page_unchecked(
+1799:             &mut page_data,
+1800:             lane_account.key,
+1801:             0,
+1802:             0,
+1803:             &[lane.tree.root, result.verified_afterstate.next_root],
+1804:         ),
+1805:         PairForestSpendPageV1::SamePage(header) => append_roots_unchecked(
+1806:             &mut page_data,
+1807:             header,
+1808:             &[result.verified_afterstate.next_root],
+1809:         ),
+1810:         PairForestSpendPageV1::Rollover { page_number, .. } => write_new_page_unchecked(
+1811:             &mut page_data,
+1812:             lane_account.key,
+1813:             page_number,
+1814:             result.verified_afterstate.next_pair_index,
+1815:             &[result.verified_afterstate.next_root],
+1816:         ),
+1817:     }
+1818:     marker_data.copy_from_slice(&ready_marker.encoded_marker());
+1819:     set_return_data(result_bytes.as_ref());
+1820:     Ok(())
+1821: }
+1822: 
+1823: pub(crate) fn process_pair_forest_terminal_v1<'info, R: PoolCpiRuntimeV1>(
+1824:     program_id: &Pubkey,
+1825:     accounts: &[AccountInfo<'info>],
+1826:     instruction_data: &[u8],
+1827:     current_slot: u64,
+1828:     rent: &Rent,
+1829:     runtime: &mut R,
+1830: ) -> ProgramResult {
+1831:     process_pair_forest_terminal_with_verifier_v1(
+1832:         program_id,
+1833:         accounts,
+1834:         instruction_data,
+1835:         current_slot,

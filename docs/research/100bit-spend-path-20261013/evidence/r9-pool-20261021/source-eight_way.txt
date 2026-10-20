@@ -1,0 +1,63 @@
+108: fn tx1_finish<H:Digest32>(v:View<'_>,p:Box<Prepared>,mut a:Accumulator,g:[E;29],public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {
+109:     let geometry=QueryGeometry::for_range(&p.queries,0,k)?;
+110:     let mut pending=BatchedWeights::new(&a.weights)?;
+111:     while a.next<k {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry,Some(&mut pending))?;}
+112:     pending.finish(&mut a.weights);
+113:     let bytes=checkpoint(&p,&a,proof,public_bytes,hash);mark(obs,Phase::CheckpointWrite);Ok(bytes)
+114: }
+115: 
+116: #[inline(never)]
+117: fn tx1_prepare<H:Digest32>(public:Public<'_>,v:&View<'_>,hash:H,obs:Observer,g:&mut [E;29])->Result<(Box<[[K;29];3]>,Box<Prepared>),Error> {
+118:     let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;mark(obs,Phase::Semantic);
+119:     let p=Prepared::new(&sem,v,hash,g)?;
+120:     Ok((sem.claims,p))
+121: }
+122: 
+123: #[inline(never)]
+124: pub fn tx1<H:Digest32>(public:Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize,hash:H,obs:Observer)->Result<Vec<u8>,Error> {
+125:     if k>22 {return Err(Error::Parse);}
+126:     let v=View::parse(proof)?;mark(obs,Phase::Parsed);
+127:     let mut g=[E::ZERO;29];
+128:     let (_semantic_claims,p)=tx1_prepare(public,&v,hash,obs,&mut g)?;let a=Accumulator::new(v.variant)?;mark(obs,Phase::Prepare);
+129:     tx1_finish(v,p,a,g,public_bytes,proof,k,hash,obs)
+130: }
+131: /// Complete strict verification of an R1 proof and its checkpoint.
+132: ///
+133: /// Runtime precondition: the checkpoint must be an authentic output of `tx1`
+134: /// for the proof and public statement bound by its hashes. `resume` recomputes
+135: /// both hashes from the current buffers: changes reject except for a collision.
+136: /// The checkpoint checksum is an unkeyed hash, not a MAC, and
+137: /// does not establish checkpoint provenance by itself. This strict entrypoint
+138: /// repeats the full canonical scan of proof fields and query values.
+139: #[inline(never)]
+140: pub fn tx2<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,obs:Observer)->Result<(),Error> {
+141:     let v=View::parse(proof)?;mark(obs,Phase::Parsed);
+142:     let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);
+143:     let geometry=QueryGeometry::for_range(&p.queries,a.next,22)?;
+144:     let mut pending=BatchedWeights::new(&a.weights)?;
+145:     while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry,Some(&mut pending))?;}
+146:     pending.finish(&mut a.weights);
+147:     finish_relation(&v,&p,&a,obs)
+148: }
+149: 
+150: /// Complete verification using proof bytes whose checkpoint provenance was
+151: /// established by the caller.
+152: ///
+153: /// Runtime precondition: the checkpoint must be an authentic output of `tx1`
+154: /// for the proof and public statement bound by its hashes. This is also a
+155: /// precondition of strict `tx2`. `resume` recomputes the proof/public hashes;
+156: /// changed buffers reject except for a collision. The checkpoint checksum is
+157: /// an unkeyed hash, not a MAC, and does not
+158: /// establish checkpoint provenance by itself. This entrypoint only skips the
+159: /// redundant per-field canonical scan of the proof; use strict `tx2` when that
+160: /// scan is required.
+161: #[inline(never)]
+162: pub fn tx2_authenticated<H:Digest32>(public_bytes:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,obs:Observer)->Result<(),Error> {
+163:     let v=View::parse_shape(proof)?;mark(obs,Phase::Parsed);
+164:     let (p,mut a)=resume(checkpoint,proof,public_bytes,v.variant,hash)?;let g=powers::<29>(p.gamma);mark(obs,Phase::CheckpointRead);
+165:     let geometry=QueryGeometry::for_range(&p.queries,a.next,22)?;
+166:     let mut pending=BatchedWeights::new(&a.weights)?;
+167:     while a.next<22 {query_with_geometry(&v,&p,&mut a,&g,hash,obs,&geometry,Some(&mut pending))?;}
+168:     pending.finish(&mut a.weights);
+169:     finish_relation(&v,&p,&a,obs)
+170: }
