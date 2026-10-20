@@ -1,0 +1,26 @@
+/home/dombarker/project-offloads/root-gamma-caller-digits-model-v1-20261020/sources/GammaCallerDigitsModel.lean:60:68: error: Application type mismatch: The argument
+  h
+has type
+  (do
+      let (digits, quotient) ← ops.low block
+      let i ← quotient + 1#u32
+      let (wrapped, digits1) ← ops.add digits i
+      let digits2 ←
+        if wrapped = true then do
+            let (_, digits3) ← ops.add digits1 1#u32
+            ok digits3
+          else ok digits1
+      ops.decode digits2) =
+    ok out
+but is expected to have type
+  (do
+      let __x ← ops.low block
+      match __x with
+        | (a, b) => ?m.16 a b) =
+    ok ?m.17
+in the application
+  pair_bind_success (ops.low block) ?m.16 ?m.17 h
+'AspisR1GammaCaller.DigitsModel.gamma_digits_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

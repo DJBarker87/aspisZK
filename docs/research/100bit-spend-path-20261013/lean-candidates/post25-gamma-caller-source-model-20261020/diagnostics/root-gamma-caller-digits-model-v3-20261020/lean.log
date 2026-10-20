@@ -1,0 +1,21 @@
+/home/dombarker/project-offloads/root-gamma-caller-digits-model-v3-20261020/sources/GammaCallerDigitsModel.lean:91:8: error: Type mismatch: After simplification, term
+  h
+ has type
+  (let (wrapped, digits1) := (true, digits1)
+    do
+    let digits2 ←
+      if wrapped = true then do
+          let (_, digits3) ← ops.add digits1 1#u32
+          ok digits3
+        else ok digits1
+    ops.decode digits2) =
+    ok out
+but is expected to have type
+  (do
+      let pair ← ops.add digits1 1#u32
+      ops.decode pair.2) =
+    ok out
+'AspisR1GammaCaller.DigitsModel.gamma_digits_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

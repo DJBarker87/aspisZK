@@ -1,0 +1,103 @@
+import GammaCallerExplicitHelpers
+import R1SourceSamplerByteRank
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1GammaCaller.DigitsModel
+open AspisR1 AspisR1.SamplerNatModel AspisR1.SamplerMachineBounds
+open AspisR1.SamplerAddDigits AspisR1.SamplerAddBridge
+open AspisR1.SourceSamplerByteRank
+abbrev Digits := Array U32 8#usize
+abbrev Bytes32 := Array U8 32#usize
+
+def values (ds : Digits) : List Nat := ds.val.map UScalar.val
+def Canonical (ds : Digits) : Prop := ∀ d ∈ values ds, d < P
+
+structure HelpersRefine (ops : GammaHelpers) : Prop where
+  low : ∀ block ds q, ops.low block = .ok (ds,q) →
+    values ds = ordinaryDigits (rank block) ∧ q.val = rank block / P^8
+  add : ∀ ds n wrapped out, Canonical ds → n.val ≤ 257 →
+    ops.add ds n = .ok (wrapped,out) →
+      values out = (addDigits P n.val (values ds)).1 ∧
+      (wrapped = false ↔ (addDigits P n.val (values ds)).2 = 0)
+
+private theorem bind_success {α β : Type} (m : Result α) (k : α → Result β)
+    (v : β) (h : (do let x ← m; k x) = .ok v) :
+    ∃ x, m = .ok x ∧ k x = .ok v := by
+  cases m with
+  | ok x => exact ⟨x,rfl,h⟩
+  | fail e => simp only [bind_tc_fail] at h; cases h
+  | div => simp only [bind_tc_div] at h; cases h
+
+private theorem pair_bind_success {α β γ : Type} (m : Result (α × β))
+    (k : α → β → Result γ) (v : γ)
+    (h : (do let (a,b) ← m; k a b) = .ok v) :
+    ∃ a b, m = .ok (a,b) ∧ k a b = .ok v := by
+  cases m with
+  | ok pair => cases pair with | mk a b => exact ⟨a,b,rfl,h⟩
+  | fail e => simp only [bind_tc_fail] at h; cases h
+  | div => simp only [bind_tc_div] at h; cases h
+
+private theorem increment_value (q n : U32) (hq : q.val ≤ 256)
+    (h : (q + 1#u32 : Result U32) = .ok n) : n.val = q.val + 1 := by
+  have hs : (q + 1#u32 : Result U32) ⦃z => z.val = q.val + 1⦄ := by
+    apply UScalar.add_spec
+    change q.val + 1 ≤ UScalar.max UScalarTy.U32
+    have hc : 257 ≤ UScalar.max UScalarTy.U32 := by
+      rw [UScalar.max_UScalarTy_U32_eq]
+      norm_num [U32.max, U32.numBits]
+    omega
+  obtain ⟨n1,hn1,hv⟩ := WP.spec_imp_exists hs
+  have he : n1 = n := Result.ok.inj (hn1.symm.trans h)
+  subst n1
+  exact hv
+
+theorem gamma_digits_success (ops : GammaHelpers) (R : HelpersRefine ops)
+    (block : Bytes32) (out : field.WideExact)
+    (h : sampler.gamma_sample ops block = .ok out) :
+    ∃ ds : Digits,
+      ops.decode ds = .ok out ∧ values ds = gammaDigits (rank block) := by
+  unfold sampler.gamma_sample at h
+  obtain ⟨digits,q,hlow,h⟩ := pair_bind_success (ops.low block) _ _ h
+  obtain ⟨n,hn,h⟩ := bind_success (q + 1#u32) _ _ h
+  obtain ⟨wrapped,digits1,hadd,h⟩ := pair_bind_success (ops.add digits n) _ _ h
+  obtain ⟨hd,hq⟩ := R.low block digits q hlow
+  have hq256 : q.val ≤ 256 := by
+    rw [hq]
+    exact rank_div_P8_le_256 (rank_lt block)
+  have hnval := increment_value q n hq256 hn
+  have hn257 : n.val ≤ 257 := by omega
+  have Cdigits : Canonical digits := by
+    unfold Canonical
+    rw [hd]
+    exact lowDigits_canonical P_pos 8 (rank block)
+  obtain ⟨hfirst,hcarry⟩ := R.add digits n wrapped digits1 Cdigits hn257 hadd
+  have Cdigits1 : Canonical digits1 := by
+    unfold Canonical
+    rw [hfirst]
+    exact addDigits_output_digits_lt P _ _ P_pos
+  rw [hnval,hd,hq] at hfirst hcarry
+  cases wrapped with
+  | false =>
+      simp only [Bool.false_eq_true, if_false, bind_tc_ok] at h
+      refine ⟨digits1,h,?_⟩
+      have hz := hcarry.mp rfl
+      unfold gammaDigits endAround
+      rw [if_pos hz]
+      exact hfirst
+  | true =>
+      simp only [if_true] at h
+      obtain ⟨pair,hsecond,h⟩ := bind_success (ops.add digits1 1#u32) _ _ h
+      rcases pair with ⟨wrappedAgain,digits2⟩
+      simp only [bind_tc_ok] at h
+      obtain ⟨hsecondValue,_⟩ := R.add digits1 1#u32 wrappedAgain digits2 Cdigits1 (by decide) hsecond
+      have hz : (addDigits P (rank block / P^8 + 1) (ordinaryDigits (rank block))).2 ≠ 0 := by
+        intro hz
+        have hfalse := hcarry.mpr hz
+        cases hfalse
+      refine ⟨digits2,h,?_⟩
+      unfold gammaDigits endAround
+      rw [if_neg hz]
+      simpa only [show (1#u32).val = 1 by rfl,hfirst] using hsecondValue
+
+#print axioms gamma_digits_success
+end AspisR1GammaCaller.DigitsModel
