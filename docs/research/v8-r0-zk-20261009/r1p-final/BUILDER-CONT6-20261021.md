@@ -51,7 +51,53 @@ stage: all seven module names are new. No shipped crate file changed.
 
 ## Stage 2: successful-source admission
 
-Pending.
+The actual `pair_trace::validate_common` is now extracted and compiled in
+`BuilderAdmissionExtracted`. No production Rust or extracted function body
+was edited. The raw Aeneas enum/function identifier collision is resolved
+by a recorded identifier-metadata-only `PairLeaf` → `PairLeafCtor` rename
+in the LLBC, without changing bodies or types. The accepted extraction
+includes actual `aspis-core` functions. Its three missing std declarations
+are supplied by `BuilderAdmissionStd`: Result.map_err and short-circuit
+slice all/any, retaining consumed iterator index and mutable predicate state.
+The latter have symbolic list proofs; no external declaration remains.
+The imported discriminant attribute and a literal shift-count type are
+adapted to env J. The generated file's existing limits are retained.
+
+`BuilderAdmissionRanges.validate_common_ranges` derives input positivity,
+input < 2^30 and membership index < 2^20 from successful execution.
+`BuilderAdmissionCanonical` proves both actual canonical-digest validators
+and the membership-sibling scan. `BuilderAdmissionCommon.common_facts`
+derives canonical key, salt, all 20 membership siblings, both pair
+commitments, and successful pair validation. No Rspend or soundness premise
+is used. `BuilderAdmissionRecords.words_of_common_success` connects these
+facts to the exact owned-reference records and discharges WitnessOk from
+common success plus only output bounds and canonical super-root siblings.
+Those last two checks occur in the forest caller and remain explicit.
+
+Final focused attempts: 9265, 9267, 9269, 9274, 9280, 9282, 9284; 24 new
+theorem audits plus the actual validate_common definition audit, all with
+standard axioms and zero swaps. Exact commands/times/pins/errors are retained
+in `builder-cont6-attempts.jsonl`, `builder-cont6-extraction.json` and
+`builder-cont6-admission-adaptation.json`.
+
+Full successful-source semantic admission is **not closed**. A new focused
+forest-caller extraction leaves the shipped records body opaque, to be
+supplied by stage 1's P6 reference route (the collector checks its absent
+LLBC body), and likewise leaves the D90 certified lazy external layer opaque.
+Charon passes; Aeneas reaches a different error at `spend.rs:126:52–126:63`
+(`&mut hash_fields`), InterpUtils.ml:167. Isolating `derive_nullifier` with
+Charon monomorphization clears that route's first diagnostic-name printer
+assertion when the printer is disabled, then reaches the explicit unsupported
+higher-ranked-to-free lifetime constraint at `spend.rs:136–144`,
+TypesAnalysis.ml:970. No unchanged retry or cap increase was performed.
+This is the new extraction frontier; it is not the shipped-records borrow.
+The forest output with opaque declarations is not accepted as a certificate.
+
+The separate semantic obligations are still digest-check correspondence,
+public/frontier/empty-root correspondence, embedded RspendPlus including
+append/carry and sentinel, and their connection to success of the two
+complete public entry points. The new range/canonicality theorems do not
+silently discharge those obligations.
 
 ## Stage 3: shipped runtime join
 
