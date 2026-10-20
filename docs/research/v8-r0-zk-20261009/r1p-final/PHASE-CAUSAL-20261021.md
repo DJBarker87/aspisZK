@@ -58,3 +58,26 @@ New-module source/object replacements are snapshotted per attempt under
 `aspis-joint-20261019/snapshots/codex-cx-priv-phase-20261021/`. No pre-existing
 module's shared source or object has been replaced. Dependent targets use
 fresh object fingerprints after each dependency change.
+
+## Stage 3: universal causality for the refinement interface
+
+`PhaseTranscriptBin` proves every transcript coordinate is a strict stage
+predecessor (including all query-advance candidates before absR), both tape
+streams are available at transcript reads, and the messages' dependency
+contracts suffice for transcript noninterference. Attempt 9007 passes:
+3.63s, 3530696 KiB, zero swap, four standard-axiom audits. Earlier attempts
+9003/9004 failed on explicit dependent parameters and rewrite transparency;
+the final source fixes those without adding resource options.
+
+`PhaseCausalityBin` proves the commitment case by the binary grammar, seed,
+binding, salt, leaf and child predecessor inequalities. It then proves
+`phase_causal` (`RCausal` for every refined instance at all answer vectors)
+and `R_causal_D80` in exactly the position-indexed form used by the endpoint.
+There is no collision, successful-run or execution-trace assumption.
+9008 failed on a redundant tactic after an already solved goal; 9009 passes:
+3.47s, 3519168 KiB, zero swap, three standard-axiom audits.
+
+This is conditional on inhabiting the phase interface for the real encoding.
+It does not claim that the shipped prover inhabits that interface. No
+`R10_RWire_executes_phase_order` hypothesis is needed for this mathematical
+causality theorem; execution correspondence cannot substitute for locality.
