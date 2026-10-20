@@ -1,0 +1,142 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "job": "asq8-kani-20261021",
+  "base": "8138bc818",
+  "source_revision": "199909c952c202d0606bf12a930a288cd02677cf",
+  "admitted_request_bytes": 320,
+  "variants": [
+    "PrivateTransfer",
+    "Withdrawal"
+  ],
+  "P6": {
+    "kani_version": "0.67.0",
+    "harnesses": [
+      {
+        "name": "pool_v1::pair_forest_terminal::asq8_kani::transfer_encoder_equivalence",
+        "receipt": "receipts/kani-final-transfer_encoder_equivalence/receipt.json",
+        "source_revision": "199909c952c202d0606bf12a930a288cd02677cf",
+        "wall_seconds": 20.681,
+        "peak_rss_kib": 658180,
+        "swaps": 0
+      },
+      {
+        "name": "pool_v1::pair_forest_terminal::asq8_kani::withdrawal_encoder_equivalence",
+        "receipt": "receipts/kani-final-withdrawal_encoder_equivalence/receipt.json",
+        "source_revision": "199909c952c202d0606bf12a930a288cd02677cf",
+        "wall_seconds": 19.334,
+        "peak_rss_kib": 658020,
+        "swaps": 0
+      },
+      {
+        "name": "pool_v1::pair_forest_terminal::asq8_kani::accepted_request_reencodes_exactly",
+        "receipt": "receipts/kani-final-accepted_request_reencodes_exactly/receipt.json",
+        "source_revision": "199909c952c202d0606bf12a930a288cd02677cf",
+        "wall_seconds": 32.63,
+        "peak_rss_kib": 1112896,
+        "swaps": 0
+      },
+      {
+        "name": "pool_v1::pair_forest_terminal::asq8_kani::request_decoder_equivalence",
+        "receipt": "receipts/kani-final-request_decoder_equivalence/receipt.json",
+        "source_revision": "199909c952c202d0606bf12a930a288cd02677cf",
+        "wall_seconds": 56.542,
+        "peak_rss_kib": 1828964,
+        "swaps": 0
+      },
+      {
+        "name": "pool_v1::pair_forest_terminal::asq8_kani::shipped_pipeline_normalization_equivalence",
+        "receipt": "receipts/kani-final-shipped_pipeline_normalization_equivalence/receipt.json",
+        "source_revision": "199909c952c202d0606bf12a930a288cd02677cf",
+        "wall_seconds": 57.13,
+        "peak_rss_kib": 2139824,
+        "swaps": 0
+      },
+      {
+        "name": "pool_v1::pair_forest_terminal::asq8_kani::slice_array_header_comparison_model",
+        "receipt": "receipts/kani-final-slice_array_header_comparison_model/receipt.json",
+        "source_revision": "199909c952c202d0606bf12a930a288cd02677cf",
+        "wall_seconds": 7.241,
+        "peak_rss_kib": 179412,
+        "swaps": 0
+      }
+    ],
+    "header_model": "lean/AspisR20Request/FunsExternal.lean",
+    "proof_split": "Whole shipped decode/encode pipeline equivalent to fused normalizer in Kani; extracted fused normalization and exact Pool stripping composed in Lean"
+  },
+  "lean": [
+    {
+      "module": "AspisR20Request.Types",
+      "receipt": "proofs/types-v1/receipt.json",
+      "source_sha256": "a68e0404865bac977495880281519f653c1594e3206642a558ace6ba3facc519",
+      "source_revision": "51b4a009eae284d47549f32a1c77a4f22fbb5714",
+      "wall_seconds": 2.680350124835968,
+      "peak_rss_bytes": 2289664000,
+      "swaps": 0,
+      "print_axioms": []
+    },
+    {
+      "module": "AspisR20Request.FunsExternal",
+      "receipt": "proofs/external-v1/receipt.json",
+      "source_sha256": "e7e54c839a41d71fa6c9b09fd48ba6afe33b223df09e6fdeb1a10dbbaeb050c7",
+      "source_revision": "51b4a009eae284d47549f32a1c77a4f22fbb5714",
+      "wall_seconds": 1.6853829170577228,
+      "peak_rss_bytes": 2227486720,
+      "swaps": 0,
+      "print_axioms": [
+        "'Slice.Insts.CoreCmpPartialEqArray.eq' depends on axioms: [propext, Quot.sound]",
+        "'Slice.Insts.CoreCmpPartialEqArray.ne' depends on axioms: [propext, Quot.sound]"
+      ]
+    },
+    {
+      "module": "AspisR20Request.Funs",
+      "receipt": "proofs/funs-v1/receipt.json",
+      "source_sha256": "0df8fad30f00e2b6b4007e860a45ff8e197f44bbb9fb1134667f2958df230cd7",
+      "source_revision": "df70ab62bd4823a988595bdf6ddcf06759d9d75b",
+      "wall_seconds": 14.127670750021935,
+      "peak_rss_bytes": 2305343488,
+      "swaps": 0,
+      "print_axioms": []
+    },
+    {
+      "module": "ASQ8Normalization",
+      "receipt": "proofs/normalization-v2/receipt.json",
+      "source_sha256": "1e6667673162d4d5e452b2acced8f4fe6baefedeece7d181b5b3e3e6ed5f7679",
+      "source_revision": "df70ab62bd4823a988595bdf6ddcf06759d9d75b",
+      "wall_seconds": 4.835950499866158,
+      "peak_rss_bytes": 2247426048,
+      "swaps": 0,
+      "print_axioms": [
+        "'AspisR20Request.ASQ8Normalization.success_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR20Request.ASQ8Normalization.transfer_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR20Request.ASQ8Normalization.withdrawal_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR20Request.pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_request_reference_v1' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]",
+        "'AspisR20Request.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_request_reference_v1' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]",
+        "'AspisR20Request.pool_v1.pair_forest_terminal.normalize_pool_v1_pair_forest_terminal_request_reference_v1' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]"
+      ]
+    },
+    {
+      "module": "ASQ8PoolHandoff",
+      "receipt": "proofs/handoff-v1/receipt.json",
+      "source_sha256": "b2167c4f99cc95fed4db0c7676f7d6b2861c45e5bc8ec1b54bf43aebb3f9c063",
+      "source_revision": "42bc174d17c1e2d6861fad192f033694e01975c1",
+      "wall_seconds": 3.1296896249987185,
+      "peak_rss_bytes": 2245263360,
+      "swaps": 0,
+      "print_axioms": [
+        "'AspisR20Request.ASQ8PoolHandoff.handoff_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR20Request.ASQ8PoolHandoff.transfer_handoff' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR20Request.ASQ8PoolHandoff.withdrawal_handoff' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    }
+  ],
+  "pool": {
+    "sha256": "121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548",
+    "size": "605704 bytes",
+    "receipt": "receipts/pool-build-v2/receipt.json",
+    "source_revision": "42bc174d17c1e2d6861fad192f033694e01975c1",
+    "wall_seconds": 27.117,
+    "peak_rss_kib": 431116,
+    "swaps": 0
+  },
+  "remaining": "R20 sameSnapshot/full ASF8 account agreement and P2 runtime/CPI provenance; R9/R15 cross-transaction provenance; global P6 toolchain soundness"
+}

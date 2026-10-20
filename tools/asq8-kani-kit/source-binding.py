@@ -15,7 +15,7 @@ assert (s[:a]+s[b:]).encode()==original, 'pre-existing statement source changed'
 changed=subprocess.check_output(['git','diff','--name-only',BASE,'--','programs','crates'],cwd=R,text=True).splitlines()
 allowed={path,'crates/aspis-statement/src/pool_v1/asq8_kani.rs','crates/aspis-statement/src/pool_v1/asq8_payment_reference.rs'}
 assert set(changed)<=allowed, changed
-files=subprocess.check_output(['git','ls-files','crates','programs','Cargo.toml','Cargo.lock','rust-toolchain.toml','docs/research/v8-r0-zk-20261009/refine'],cwd=R,text=True).splitlines()
+files=subprocess.check_output(['git','ls-files','.cargo','crates','programs','Cargo.toml','Cargo.lock','rust-toolchain.toml','docs/research/v8-r0-zk-20261009/refine'],cwd=R,text=True).splitlines()
 inputs={p:sha((R/p).read_bytes()) for p in files if (R/p).is_file()}
 (E/'source-inputs.json').write_text(json.dumps(inputs,indent=2)+'\n')
 (E/'source-binding.json').write_text(json.dumps(dict(base=BASE,revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),existing_terminal_source_unchanged=True,original_terminal_sha256=sha(original),gated_addition_sha256=sha(s[a:b].encode()),changed_rust_files=changed,production_pool_and_verifier_unchanged=True),indent=2)+'\n')
