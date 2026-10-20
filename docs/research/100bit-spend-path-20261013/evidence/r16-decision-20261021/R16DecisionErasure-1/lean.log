@@ -1,0 +1,123 @@
+/Users/dominic/ZK/.worktrees/cx-r16-decision/docs/research/100bit-spend-path-20261013/lean/R16DecisionErasure.lean:40:25: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [retagProof,̵ ̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-r16-decision/docs/research/100bit-spend-path-20261013/lean/R16DecisionErasure.lean:76:9: error: ambiguous term, use fully qualified name, possible interpretations [RawCutProverCompiler.verifier, @FS2.verifier]
+/Users/dominic/ZK/.worktrees/cx-r16-decision/docs/research/100bit-spend-path-20261013/lean/R16DecisionErasure.lean:96:8: error: Ambiguous term
+  experiment_eval
+Possible interpretations:
+  RawCutProverCompiler.experiment_eval : ∀ (P : Prover) (V : Public → Proof → Program Bytes State Bool)
+    (H : Bytes → State),
+    eval H (RawCutProverCompiler.experiment P V) =
+      ((eval H P).1 ++ (eval H (V (eval H P).2.1 (eval H P).2.2)).1, (eval H P).2,
+        (eval H (V (eval H P).2.1 (eval H P).2.2)).2)
+  
+  FS2.experiment_eval : ∀ (P : Program ?m.40 ?m.41 ?m.39) (V : ?m.38 → ?m.39 → Program ?m.40 ?m.41 Bool) (x : ?m.38)
+    (H : ?m.40 → ?m.41),
+    eval H (FS2.experiment P V x) =
+      ((eval H P).1 ++ (eval H (V x (eval H P).2)).1, (eval H P).2, (eval H (V x (eval H P).2)).2)
+  
+  FS.experiment_eval : ∀ (P : Program ?m.40 (Block ?m.41 ?m.42) ?m.39)
+    (V : ?m.38 → ?m.39 → Program ?m.40 (Block ?m.41 ?m.42) Bool) (x : ?m.38) (H : ?m.40 → Block ?m.41 ?m.42),
+    eval H (FS.experiment P V x) =
+      ((eval H P).1 ++ (eval H (V x (eval H P).2)).1, (eval H P).2, (eval H (V x (eval H P).2)).2)
+/Users/dominic/ZK/.worktrees/cx-r16-decision/docs/research/100bit-spend-path-20261013/lean/R16DecisionErasure.lean:106:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval ?H
+    (RawCutProverCompiler.experiment (compiled ?decoder ?d ?buildWords ?P) (RawCutProverCompiler.verifier ?decoder ?d))
+in the target expression
+  (annotatedRun D d (Program.done (pub, retagProof pf)) H).2.1.2 =
+    proof (BinCompiledRunWordStability.wordsFromRun D (eval H (original D d (Program.done (pub, retagProof pf)))))
+      (retagProof pf)
+
+D : LiteralByteProtocol.Decoder
+d : ErasedPrefix → ErasedMessage → Bool
+H : Bytes → State
+pub : LiteralTranscript.Public
+pf : LiteralProtocol.Proof
+accepted : (eval H (RawCutProverCompiler.verifier D d pub pf)).2 = true
+i : SourceInputs
+fields : InstanceFields D d (Program.done (pub, retagProof pf)) H i
+hrow :
+  (compiledRows D d (Program.done (pub, retagProof pf)) H)[31]? =
+    some (i.m31, TranscriptView.Value.queries (Except.ok i.queryBytes), i.state31)
+⊢ (annotatedRun D d (Program.done (pub, retagProof pf)) H).2.1.2 =
+    proof (BinCompiledRunWordStability.wordsFromRun D (eval H (original D d (Program.done (pub, retagProof pf)))))
+      (retagProof pf)
+/Users/dominic/ZK/.worktrees/cx-r16-decision/docs/research/100bit-spend-path-20261013/lean/R16DecisionErasure.lean:109:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval ?H
+    (RawCutProverCompiler.experiment (compiled ?decoder ?d ?buildWords ?P) (RawCutProverCompiler.verifier ?decoder ?d))
+in the target expression
+  compiledPublic D d (Program.done (pub, retagProof pf)) H = pub
+
+D : LiteralByteProtocol.Decoder
+d : ErasedPrefix → ErasedMessage → Bool
+H : Bytes → State
+pub : LiteralTranscript.Public
+pf : LiteralProtocol.Proof
+accepted : (eval H (RawCutProverCompiler.verifier D d pub pf)).2 = true
+i : SourceInputs
+fields : InstanceFields D d (Program.done (pub, retagProof pf)) H i
+hrow :
+  (compiledRows D d (Program.done (pub, retagProof pf)) H)[31]? =
+    some (i.m31, TranscriptView.Value.queries (Except.ok i.queryBytes), i.state31)
+hcompiled :
+  (annotatedRun D d (Program.done (pub, retagProof pf)) H).2.1.2 =
+    proof (BinCompiledRunWordStability.wordsFromRun D (eval H (original D d (Program.done (pub, retagProof pf)))))
+      (retagProof pf)
+⊢ compiledPublic D d (Program.done (pub, retagProof pf)) H = pub
+/Users/dominic/ZK/.worktrees/cx-r16-decision/docs/research/100bit-spend-path-20261013/lean/R16DecisionErasure.lean:117:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (i.m31, TranscriptView.Value.queries (Except.ok i.queryBytes), i.state31).1
+in the target expression
+  LiteralTranscript.valid 31 i.m31
+
+case right
+D : LiteralByteProtocol.Decoder
+d : ErasedPrefix → ErasedMessage → Bool
+H : Bytes → State
+pub : LiteralTranscript.Public
+pf : LiteralProtocol.Proof
+accepted : (eval H (RawCutProverCompiler.verifier D d pub pf)).2 = true
+i : SourceInputs
+fields : InstanceFields D d (Program.done (pub, retagProof pf)) H i
+hrow :
+  (compiledRows D d (Program.done (pub, retagProof pf)) H)[31]? =
+    some (i.m31, TranscriptView.Value.queries (Except.ok i.queryBytes), i.state31)
+hcompiled :
+  (annotatedRun D d (Program.done (pub, retagProof pf)) H).2.1.2 =
+    proof (BinCompiledRunWordStability.wordsFromRun D (eval H (original D d (Program.done (pub, retagProof pf)))))
+      (retagProof pf)
+hp : compiledPublic D d (Program.done (pub, retagProof pf)) H = pub
+idx :
+  ((LiteralByteProtocol.protocol D).transcript H (compiledPublic D d (Program.done (pub, retagProof pf)) H)
+          (annotatedRun D d (Program.done (pub, retagProof pf)) H).2.1.2 33).rounds[31]? =
+    some
+      ((annotatedRun D d (Program.done (pub, retagProof pf)) H).2.1.2 31,
+        (eval H
+            (LiteralByteSampler.samp 31
+                ((LiteralByteProtocol.protocol D).transcript H
+                  (compiledPublic D d (Program.done (pub, retagProof pf)) H)
+                  (annotatedRun D d (Program.done (pub, retagProof pf)) H).2.1.2 31)
+                ((annotatedRun D d (Program.done (pub, retagProof pf)) H).2.1.2 31)).toProgram).2)
+hm :
+  (i.m31, TranscriptView.Value.queries (Except.ok i.queryBytes), i.state31).1 =
+    ((annotatedRun D d (Program.done (pub, retagProof pf)) H).2.1.2 31,
+        (eval H
+            (LiteralByteSampler.samp 31
+                ((LiteralByteProtocol.protocol D).transcript H
+                  (compiledPublic D d (Program.done (pub, retagProof pf)) H)
+                  (annotatedRun D d (Program.done (pub, retagProof pf)) H).2.1.2 31)
+                ((annotatedRun D d (Program.done (pub, retagProof pf)) H).2.1.2 31)).toProgram).2).1
+hv : LiteralTranscript.valid 31 i.m31
+⊢ False
+'AspisR1.R16DecisionErasure.erase_retag' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.R16DecisionErasure.erase_retagProof' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.R16DecisionErasure.retag_invalid31' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.R16DecisionErasure.erased_transcript_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.R16DecisionErasure.acceptance_retag' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.R16DecisionErasure.accepted_without_instance' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

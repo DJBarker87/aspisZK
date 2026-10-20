@@ -1,0 +1,49 @@
+/Users/dominic/ZK/.worktrees/cx-r16-decision/docs/research/100bit-spend-path-20261013/lean/R16DecisionErasure.lean:75:42: error: unsolved goals
+D : LiteralByteProtocol.Decoder
+d : ErasedPrefix → ErasedMessage → Bool
+H : Bytes → State
+pub : LiteralTranscript.Public
+pf : LiteralProtocol.Proof
+⊢ d (LiteralTranscript.erasePrefix ((LiteralByteProtocol.protocol D).transcript H pub pf 33))
+      (LiteralTranscript.erase (pf 33)) =
+    ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H pub pf j).toProgram).1)
+            (List.range (LiteralByteProtocol.protocol D).r)).flatten,
+        decisionOnBytes d ((LiteralByteProtocol.protocol D).transcript H pub pf (LiteralByteProtocol.protocol D).r)
+          ((LiteralByteProtocol.protocol D).msg pf (LiteralByteProtocol.protocol D).r)).2
+/Users/dominic/ZK/.worktrees/cx-r16-decision/docs/research/100bit-spend-path-20261013/lean/R16DecisionErasure.lean:108:6: error: Tactic `rfl` failed: The left-hand side
+  (have v :=
+          eval H
+            (RawCutProverCompiler.experiment (Program.done (pub, retagProof pf)) (RawCutProverCompiler.verifier D d));
+        (v.1 ++ (eval H (RawCutProverCompiler.verifier D d v.2.1.1 v.2.1.2)).1,
+          (v.2.1.1, proof (BinCompiledRunWordStability.wordsFromRun D v) v.2.1.2), v.2.2)).2.1.2
+is not definitionally equal to the right-hand side
+  proof (BinCompiledRunWordStability.wordsFromRun D (eval H (original D d (Program.done (pub, retagProof pf)))))
+    (retagProof pf)
+
+D : LiteralByteProtocol.Decoder
+d : ErasedPrefix → ErasedMessage → Bool
+H : Bytes → State
+pub : LiteralTranscript.Public
+pf : LiteralProtocol.Proof
+accepted : (eval H (RawCutProverCompiler.verifier D d pub pf)).2 = true
+i : SourceInputs
+fields : InstanceFields D d (Program.done (pub, retagProof pf)) H i
+hrow :
+  (compiledRows D d (Program.done (pub, retagProof pf)) H)[31]? =
+    some (i.m31, TranscriptView.Value.queries (Except.ok i.queryBytes), i.state31)
+⊢ (have v :=
+            eval H
+              (RawCutProverCompiler.experiment (Program.done (pub, retagProof pf)) (RawCutProverCompiler.verifier D d));
+          (v.1 ++ (eval H (RawCutProverCompiler.verifier D d v.2.1.1 v.2.1.2)).1,
+            (v.2.1.1, proof (BinCompiledRunWordStability.wordsFromRun D v) v.2.1.2), v.2.2)).2.1.2 =
+    proof (BinCompiledRunWordStability.wordsFromRun D (eval H (original D d (Program.done (pub, retagProof pf)))))
+      (retagProof pf)
+'AspisR1.R16DecisionErasure.erase_retag' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.R16DecisionErasure.erase_retagProof' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.R16DecisionErasure.retag_invalid31' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.R16DecisionErasure.erased_transcript_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.R16DecisionErasure.acceptance_retag' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.R16DecisionErasure.accepted_without_instance' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
