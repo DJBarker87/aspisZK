@@ -587,3 +587,18 @@ is restated with that size invariant (the expected-polynomial-time reading of
 Decision 3 is polynomial in Q, so this matches the decision rather than
 weakening it). The restatement is done in the extractor port (cx-extractor-bin),
 since the extractor's recovery changes there anyway.
+
+## Addendum (2026-10-21): R20 Pool handoff
+
+Codex job cx-r20-pool (03ae31363..53fa17d67): the exact four-byte hint-suffix
+strip is proved from the pinned extraction; statement/serialisation
+agreement for both variants is proved conditionally; every CPI byte,
+account, guard and reconstruction field is audited
+(`design/R20-POOL-HANDOFF-AUDIT-20261020.md`, `R20-POOL-HANDOFF-20261020.md`);
+121 tests pass with the frozen Pool features, including hint mutation,
+account reorder, variant swap and stale-sequence rejection. The ASQ8 encoder
+(`crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs:442–448`)
+stops at a pinned-Aeneas borrow join; per the prep5 ruling it goes the Kani
+shipped-vs-reference route (job cx-asq8-kani). Remaining premise for R20:
+the AccountInfo/runtime and cross-transaction public/checkpoint
+correspondence, which is P2/P2′.
