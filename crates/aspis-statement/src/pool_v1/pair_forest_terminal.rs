@@ -463,6 +463,55 @@ pub fn encode_pool_v1_pair_forest_terminal_request_v1(
     Ok(output)
 }
 
+// Reference-only ASQ8 encoder. Keeping the payment borrow inside each return
+// branch avoids the pinned Aeneas borrow-abstraction join in the shipped form.
+#[cfg(any(test, kani, aeneas_ref))]
+pub fn encode_pool_v1_pair_forest_terminal_request_reference_v1(
+    request: &PoolV1PairForestTerminalRequestV1,
+) -> Result<[u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES], PoolV1PairForestTerminalFormatErrorV1> {
+    if request.verifier_profile == [0u8; 32]
+        || request.verifier_release == [0u8; 32]
+        || request.pool_program == [0u8; 32]
+    {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);
+    }
+    match request.public {
+        PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public) => {
+            let payment = encode_pool_v1_private_transfer_public_v1(&public)
+                .map_err(PoolV1PairForestTerminalFormatErrorV1::Payment)?;
+            Ok(asq8_reference_envelope(request.verifier_profile, request.verifier_release,
+                request.pool_program, PoolV1TransitionKind::PrivateTransfer as u8, payment))
+        }
+        PoolV1PairForestTerminalPaymentV1::Withdrawal(public) => {
+            let payment = encode_pool_v1_withdrawal_public_v1(&public)
+                .map_err(PoolV1PairForestTerminalFormatErrorV1::Payment)?;
+            Ok(asq8_reference_envelope(request.verifier_profile, request.verifier_release,
+                request.pool_program, PoolV1TransitionKind::Withdrawal as u8, payment))
+        }
+    }
+}
+
+#[cfg(any(test, kani, aeneas_ref))]
+fn asq8_reference_envelope(
+    profile: [u8; 32], release: [u8; 32], program: [u8; 32], kind: u8,
+    payment: [u8; POOL_V1_PAYMENT_STATEMENT_BYTES],
+) -> [u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES] {
+    let mut output = [0u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES];
+    output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC);
+    output[4] = POOL_V1_PAIR_FOREST_TERMINAL_VERSION;
+    output[5] = kind;
+    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;
+    output[REQUEST_PROFILE_OFFSET..REQUEST_RELEASE_OFFSET].copy_from_slice(&profile);
+    output[REQUEST_RELEASE_OFFSET..REQUEST_POOL_PROGRAM_OFFSET].copy_from_slice(&release);
+    output[REQUEST_POOL_PROGRAM_OFFSET..REQUEST_PAYMENT_OFFSET].copy_from_slice(&program);
+    output[REQUEST_PAYMENT_OFFSET..].copy_from_slice(&payment);
+    output
+}
+
+#[cfg(kani)]
+#[path = "asq8_kani.rs"]
+mod asq8_kani;
+
 pub fn decode_pool_v1_pair_forest_terminal_request_v1(
     bytes: &[u8],
 ) -> Result<PoolV1PairForestTerminalRequestV1, PoolV1PairForestTerminalFormatErrorV1> {
