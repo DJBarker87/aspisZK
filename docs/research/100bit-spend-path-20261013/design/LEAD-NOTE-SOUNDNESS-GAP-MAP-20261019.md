@@ -382,3 +382,21 @@ finalisation, and R15 provenance. With this, every `Checks` field has
 either a supplying theorem or a named missing lemma (see
 DECODER-INSTANCE-20261020.md); the composition into R16 waits on the next
 freeze and the re-pins.
+
+## Addendum (2026-10-20): R15 adapter write audit
+
+Codex job cx-adapter-audit (82e3e6292): `design/R15-ADAPTER-WRITE-AUDIT-20261020.md`
+maps every account write on the admitted routes: stage 1 [3,10] makes one
+checkpoint copy after the ownership, distinctness, exact 1,768-byte size,
+all-zero and verification guards; stage 2 writes no account (return data
+only); lifecycle routes 4/5/6 are rejected by the release entrypoint. Three
+new host tests (37/37 passing) cover occupied/wrong-size rejection,
+unauthorised upload/sealing and release rejection of lifecycle attempts.
+**Close-authority finding:** there is no checkpoint-close instruction at
+all; tag 6 seals a legacy buffer and needs the recorded authority's
+signature. No arbitrary-close griefing path exists. Two product notes,
+outside (T): a blank checkpoint account has no creator reservation, and
+checkpoint rent (1,768 bytes) has no refund route — a wallet/lifecycle item
+to decide before release. With this audit beside P2, R15's account-write
+fact is discharged by source map; the writer facts remain on the parked
+freeze candidate.
