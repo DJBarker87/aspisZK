@@ -471,3 +471,17 @@ admitted-route cone — stage 1 including tx1_finish, stage 2, the
 candidate-7 and candidate-12 cones including `compact::check_values` — and
 fixes all remaining blockers in one gated pass, so the adopted freeze is
 fully translatable and no re-pin can stop on a borrow pattern again.
+
+## Addendum (2026-10-20): adapter read audit; the adapter premise is now one sentence
+
+Codex job cx-adapter-audit2 (eada5714e): `design/R15-ADAPTER-READ-AUDIT-20261020.md`
+maps the stage-1 and all seven stage-2 account reads with their guards and
+the exact slices handed to the extracted entries; stage 2 reconstructs the
+public bytes and has no public-buffer account. Two new host tests pass
+(proof/public mutation rejected at resume and authenticated tx2; wrong
+lengths and every duplicate-key pair rejected at stage 1 without a write).
+With the write audit, the whole adapter boundary that Aeneas cannot
+translate reduces to premise P2 plus one sentence: "the runtime presents the
+same account bytes to both transactions when the checkpoint digest
+matches." That sentence is to be stated as P2′ in the R1 premise
+re-acceptance (design/R1-PREMISES-REACCEPTANCE-20261020.md, step 9).
