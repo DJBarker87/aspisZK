@@ -1,0 +1,52 @@
+/home/dombarker/project-offloads/s1-loop-powers-early-steps-v1-20261020/sources/LoopPowersEarlySteps.lean:75:2: error: unsolved goals
+case pos
+N : Usize
+x p : field.WideExact
+a : Std.Array field.WideExact N
+i : Usize
+hi : ↑i < ↑N
+hx : Canonical x
+hp : Canonical p
+old : field.WideExact
+left✝ : old = (↑a)[↑i]
+hmut : a.index_mut_usize i = ok (old, a.set i)
+hNmax : ↑N ≤ Usize.max
+hiBound : ↑i + 1 ≤ Usize.max
+haddSpec : i + 1#usize ⦃ j => ↑j = ↑i + 1 ⦄
+i' : UScalar UScalarTy.Usize
+ha : i + 1#usize = ok i'
+hi' : ↑i' = ↑i + 1
+hlt : i < N
+he : i' = N
+⊢ (let (_, index_mut_back) := (old, a.set i)
+    ok (done (index_mut_back p))) =
+    ok (done (a.set i p))
+/home/dombarker/project-offloads/s1-loop-powers-early-steps-v1-20261020/sources/LoopPowersEarlySteps.lean:78:2: error: unsolved goals
+case neg
+N : Usize
+x p : field.WideExact
+a : Std.Array field.WideExact N
+i : Usize
+hi : ↑i < ↑N
+hx : Canonical x
+hp : Canonical p
+old : field.WideExact
+left✝ : old = (↑a)[↑i]
+hmut : a.index_mut_usize i = ok (old, a.set i)
+hNmax : ↑N ≤ Usize.max
+hiBound : ↑i + 1 ≤ Usize.max
+haddSpec : i + 1#usize ⦃ j => ↑j = ↑i + 1 ⦄
+i' : UScalar UScalarTy.Usize
+ha : i + 1#usize = ok i'
+hi' : ↑i' = ↑i + 1
+hlt : i < N
+he : ¬i' = N
+p' : field.WideExact
+hm : p.mul x = ok p'
+hc : Canonical p'
+hp' : decode p' = decode p * decode x
+⊢ (let (_, index_mut_back) := (old, a.set i)
+    ok (cont (index_mut_back p, p', i'))) =
+    ok (cont (a.set i p, p', i'))
+'AspisR1LoopPowers.early_body_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1LoopPowers.early_body_done' depends on axioms: [propext, Classical.choice, Quot.sound]
