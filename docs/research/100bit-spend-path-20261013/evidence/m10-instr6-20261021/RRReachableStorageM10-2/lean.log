@@ -1,0 +1,136 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/RRReachableStorageM10.lean:18:0: warning: automatically included section variable(s) unused in theorem `AspisR1.RRReachableStorageM10.bounded_mono`:
+  [Field K]
+  [BEq K]
+  [LawfulBEq K]
+  [DecidableEq K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Field K] [BEq K] [LawfulBEq K] [DecidableEq K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/RRReachableStorageM10.lean:30:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 0
+  a - b + c ≤ -2
+where
+ a := ↑D
+ b := ↑s.rows.length
+ c := ↑v
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/RRReachableStorageM10.lean:42:15: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b - c - d ≥ 2
+where
+ b := ↑{ rows := RRRuntimeNormalizedChildReconstruction.runtimeRows s.rows a s.maxX ell v,
+      maxX := s.maxX + ell - v }.maxX
+ c := ↑D
+ d := ↑ell
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/RRReachableStorageM10.lean:45:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c + d - e ≥ -1
+  b ≥ 0
+  b - d + e ≤ -2
+where
+ b := ↑D
+ c := ↑ell
+ d := ↑s.maxX
+ e := ↑v
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/RRReachableStorageM10.lean:49:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d + e ≤ -3
+  b ≥ 0
+  b + c - d ≥ -1
+where
+ b := ↑s.maxX
+ c := ↑ell
+ d := ↑r.length
+ e := ↑D
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/RRReachableStorageM10.lean:61:22: error: unsolved goals
+case e_a
+K : Type
+inst✝³ : Field K
+inst✝² : BEq K
+inst✝¹ : LawfulBEq K
+inst✝ : DecidableEq K
+ell D : ℕ
+s : RawState K
+h : BoundedRows D s
+n✝ : ℕ
+u✝ : RawState K
+n : ℕ
+u : RawState K
+hr : Reachable ell s n u
+a : K
+ih : BoundedRows (D + n * (ell + 1)) u
+hc : BoundedRows (D + n * (ell + 1) + ell + 1) (childRaw ell u a)
+⊢ D = D + n + n * ell + ell
+
+case e_a
+K : Type
+inst✝³ : Field K
+inst✝² : BEq K
+inst✝¹ : LawfulBEq K
+inst✝ : DecidableEq K
+ell D : ℕ
+s : RawState K
+h : BoundedRows D s
+n✝ : ℕ
+u✝ : RawState K
+n : ℕ
+u : RawState K
+hr : Reachable ell s n u
+a : K
+ih : BoundedRows (D + n * (ell + 1)) u
+hc : BoundedRows (D + n * (ell + 1) + ell + 1) (childRaw ell u a)
+⊢ 1 + n + n * ell + ell = 1
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/RRReachableStorageM10.lean:73:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  j ≥ 0
+  i ≥ 0
+  g ≥ 0
+  f ≥ 0
+  f - g ≤ -1
+  f - g + i - j ≥ 2
+  e ≥ 0
+  e + f - g ≤ -1
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+where
+ b := ↑d
+ c := ↑n
+ e := ↑n * ↑(ell + 1)
+ f := ↑ell
+ g := ↑(d + 1) * ↑(ell + 1)
+ i := ↑u.maxX
+ j := ↑D
+'AspisR1.RRReachableStorageM10.bounded_mono' depends on axioms: [propext, Quot.sound]
+'AspisR1.RRReachableStorageM10.initial_normalize' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.RRReachableStorageM10.child' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RRReachableStorageM10.reachable_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RRReachableStorageM10.normalization_tariff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RRReachableStorageM10.gsState_bounded' depends on axioms: [propext, Quot.sound]
+'AspisR1.RRReachableStorageM10.initial_bounded' depends on axioms: [propext, Quot.sound]
+'AspisR1.RRReachableStorageM10.final_bounded' depends on axioms: [propext, Quot.sound]

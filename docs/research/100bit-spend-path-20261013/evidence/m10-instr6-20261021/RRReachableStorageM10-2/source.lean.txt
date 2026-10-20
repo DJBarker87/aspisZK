@@ -1,0 +1,104 @@
+import RRNormalizationWorkM10
+import RRConcreteValidState
+import RRConcreteInitialValidStateFromFacts
+import GSConcreteInterpolation
+
+/-! A stored-shape invariant for all raw RR states reachable through child
+normalization, including the total fallback branch. No semantic degree bound
+is used as a bound on a padded coefficient-list representation. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.RRReachableStorageM10
+open CompPoly RRConcreteState RRConcreteChildrenProgram RRConcreteInitialValidStateFromFacts
+variable {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K]
+
+def BoundedRows (D : Nat) (s : RawState K) : Prop :=
+  s.maxX ≤ D ∧ s.rows.length ≤ D+1 ∧ ∀ r ∈ s.rows, r.length ≤ D+1
+
+theorem bounded_mono (D E : Nat) (s : RawState K) (h : BoundedRows D s) (hDE : D ≤ E) :
+    BoundedRows E s :=
+  ⟨h.1.trans hDE,h.2.1.trans (by omega),fun r hr => (h.2.2 r hr).trans (by omega)⟩
+
+theorem initial_normalize (D : Nat) (s : RawState K) (h : BoundedRows D s) :
+    BoundedRows D (initialNormalizeTotal s) := by
+  unfold initialNormalizeTotal
+  split
+  · exact h
+  · rename_i v row hv
+    refine ⟨(Nat.sub_le _ _).trans h.1,?_,?_⟩
+    · simp only [List.length_drop]
+      omega
+    · intro r hr
+      exact h.2.2 r (List.mem_of_mem_drop hr)
+
+theorem child (D ell : Nat) (s : RawState K) (a : K) (h : BoundedRows D s) :
+    BoundedRows (D+ell+1) (childRaw ell s a) := by
+  unfold childRaw normalizeChild?
+  split
+  · exact bounded_mono D (D+ell+1) s h (by omega)
+  · rename_i v row hv
+    change BoundedRows (D+ell+1)
+      ⟨RRRuntimeNormalizedChildReconstruction.runtimeRows s.rows a s.maxX ell v,s.maxX+ell-v⟩
+    refine ⟨by omega,?_,?_⟩
+    · simp only [RRRuntimeNormalizedChildReconstruction.runtimeRows, List.length_drop,
+        GSStoredRowsEnvelopeM10.rowsThrough_length]
+      omega
+    · intro r hr
+      have hh := GSStoredRowsEnvelopeM10.rowsThrough_width s.rows a s.maxX (s.maxX+ell) r
+        (List.mem_of_mem_drop hr)
+      omega
+
+inductive Reachable (ell : Nat) (s : RawState K) : Nat → RawState K → Prop
+  | initial : Reachable ell s 0 s
+  | next {n : Nat} {u : RawState K} (h : Reachable ell s n u) (a : K) :
+      Reachable ell s (n+1) (childRaw ell u a)
+
+theorem reachable_bound (ell D : Nat) (s : RawState K) (h : BoundedRows D s)
+    {n : Nat} {u : RawState K} (hr : Reachable ell s n u) :
+    BoundedRows (D+n*(ell+1)) u := by
+  induction hr with
+  | initial => simpa only [Nat.zero_mul,Nat.add_zero] using h
+  | @next n u hr a ih =>
+    have hc := child (D+n*(ell+1)) ell u a ih
+    convert hc using 1 <;> congr 1 <;> ring
+
+theorem normalization_tariff (ell D d : Nat) (s : RawState K) (h : BoundedRows D s)
+    {n : Nat} {u : RawState K} (hr : Reachable ell s n u) (hn : n ≤ d) (a : K) :
+    (RRNormalizationWorkM10.normalize (D+(d+1)*(ell+1)+1) ell u a).2 ≤
+      RRNormalizationWorkM10.budget (D+(d+1)*(ell+1)+1) := by
+  have hu := reachable_bound ell D s h hr
+  have hm := Nat.mul_le_mul_right (ell+1) hn
+  apply RRNormalizationWorkM10.normalize_work
+  · have hstep : d*(ell+1)+(ell+1) = (d+1)*(ell+1) := by ring
+    omega
+  · intro r hr
+    have hh := hu.2.2 r hr
+    have hstep : d*(ell+1)+(ell+1) = (d+1)*(ell+1) := by ring
+    omega
+
+theorem gsState_bounded (Q : CBivariate K) (M ell : Nat) (he : ell ≤ M) :
+    BoundedRows M (GSRawStateCoefficientBridge.gsState Q M ell) := by
+  change M ≤ M ∧ (GSRawStateCoefficientBridge.gsRows Q M ell).length ≤ M+1 ∧ _
+  refine ⟨Nat.le_refl _,(GSStoredRowsEnvelopeM10.gsRows_length Q M ell).le,?_⟩
+  intro r hr
+  rw [GSStoredRowsEnvelopeM10.gsRows_row_length Q M ell r hr]
+  omega
+
+theorem initial_bounded (Q : CBivariate K) :
+    BoundedRows 114689 (GSConcreteInterpolation.initialState Q) :=
+  gsState_bounded Q 114689 112 (by omega)
+
+theorem final_bounded (Q : CBivariate K) :
+    BoundedRows 28673 (GSConcreteInterpolation.finalState Q) :=
+  gsState_bounded Q 28673 112 (by omega)
+
+#print axioms bounded_mono
+#print axioms initial_normalize
+#print axioms child
+#print axioms reachable_bound
+#print axioms normalization_tariff
+#print axioms gsState_bounded
+#print axioms initial_bounded
+#print axioms final_bounded
+end AspisR1.RRReachableStorageM10
+end

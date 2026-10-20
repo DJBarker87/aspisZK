@@ -1,0 +1,185 @@
+import GSInterpolationFullWorkM10
+import RRConcreteWriterM10
+import GSFixedInputDecoderFamily
+import SharedFiniteMaterializationM10
+
+/-! Full interpolation and RR traversal, materialized over all 29+5 calls.
+The scalar/normalization C and terminal T tariffs remain explicit. Their
+implementation adequacy is not inferred just from this value equality. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.GSDecoderBankWorkM10
+open CompPoly GSFixedInputDecoderFamily
+variable {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K] [Fintype K]
+
+def stateTariff (M : Nat) : Nat := 100*(M+114)^2
+
+def initialInterpolation (points : Array (K × K)) : Option (CBivariate K) × Nat :=
+  GSInterpolationFullWorkM10.eval 114689
+    (AspisWide.GSInterpolationRowBasis.basis 1024 114689 112) points
+
+theorem initialInterpolation_value (points : Array (K × K)) :
+    (initialInterpolation points).1 = GSConcreteInterpolation.initial points :=
+  GSInterpolationFullWorkM10.value 114689 _ _ GSConcreteInterpolation.initialParams rfl
+
+def initial (q t C T : Nat) (points : Array (K × K)) (hs : points.size = 1048576)
+    (H : {i : Nat // i ∈ Finset.range (1025*112)} → Fin t → K × K) :
+    Option (List (List K)) × Nat :=
+  let r := initialInterpolation points
+  match h : r.1 with
+  | none => (none,r.2+stateTariff 114689)
+  | some Q =>
+    let hr : GSConcreteInterpolation.initial points = some Q :=
+      (initialInterpolation_value points).symm.trans h
+    let hc := GSConcreteInterpolation.initial_state_contract points hs Q hr
+    let out := RRConcreteWriterM10.recover 112 q t C T 1025
+      (GSConcreteInterpolation.initialState Q) hc.2.1 hc.2.2 H
+    (out.1,r.2+stateTariff 114689+out.2)
+
+theorem initial_value (q t C T : Nat) (points : Array (K × K)) (hs : points.size = 1048576)
+    (H : {i : Nat // i ∈ Finset.range (1025*112)} → Fin t → K × K) :
+    (initial q t C T points hs H).1 = GSConcreteRootRecovery.initial q t points hs H := by
+  simp only [initial]
+  split
+  · rename_i hr
+    have he : GSConcreteInterpolation.initial points = none :=
+      (initialInterpolation_value points).symm.trans hr
+    simp only [GSConcreteRootRecovery.initial,he,Option.pbind_none]
+  · rename_i Q hr
+    have he : GSConcreteInterpolation.initial points = some Q :=
+      (initialInterpolation_value points).symm.trans hr
+    rw [GSConcreteRootRecovery.initial_eq_recovery q t points hs Q he H]
+    exact RRConcreteWriterM10.recover_value _ _ _ _ _ _ _ _ _ _
+
+def initialBudget (C T : Nat) : Nat :=
+  GSInterpolationFullWorkM10.budget 114689 1048576
+    (AspisWide.GSInterpolationRowBasis.basis 1024 114689 112).size+
+    stateTariff 114689+RRTraversalWriterM10.budget 112 C T 1025
+
+theorem initial_work (q t C T : Nat) (points : Array (K × K)) (hs : points.size = 1048576)
+    (hq : q = Fintype.card K)
+    (H : {i : Nat // i ∈ Finset.range (1025*112)} → Fin t → K × K) :
+    (initial q t C T points hs H).2 ≤ initialBudget C T := by
+  have hi := GSInterpolationFullWorkM10.work 114689
+    (AspisWide.GSInterpolationRowBasis.basis 1024 114689 112) points
+  rw [hs] at hi
+  change (initialInterpolation points).2 ≤ _ at hi
+  simp only [initial]
+  split
+  · dsimp only; unfold initialBudget; omega
+  · rename_i Q hr
+    have he : GSConcreteInterpolation.initial points = some Q :=
+      (initialInterpolation_value points).symm.trans hr
+    have hc := GSConcreteInterpolation.initial_state_contract points hs Q he
+    have hw := RRConcreteWriterM10.recover_work 112 q t C T 1025
+      (GSConcreteInterpolation.initialState Q) hc.2.1 hc.2.2 hq H
+    dsimp only
+    unfold initialBudget
+    omega
+
+def finalInterpolation (points : Array (K × K)) : Option (CBivariate K) × Nat :=
+  GSInterpolationFullWorkM10.eval 28673
+    (AspisWide.GSInterpolationRowBasis.basis 255 28673 112) points
+
+theorem finalInterpolation_value (points : Array (K × K)) :
+    (finalInterpolation points).1 = GSConcreteInterpolation.final points :=
+  GSInterpolationFullWorkM10.value 28673 _ _ GSConcreteInterpolation.finalParams rfl
+
+def final (q t C T : Nat) (points : Array (K × K)) (hs : points.size = 262144)
+    (H : {i : Nat // i ∈ Finset.range (256*112)} → Fin t → K × K) :
+    Option (List (List K)) × Nat :=
+  let r := finalInterpolation points
+  match h : r.1 with
+  | none => (none,r.2+stateTariff 28673)
+  | some Q =>
+    let hr : GSConcreteInterpolation.final points = some Q :=
+      (finalInterpolation_value points).symm.trans h
+    let hc := GSConcreteInterpolation.final_state_contract points hs Q hr
+    let out := RRConcreteWriterM10.recover 112 q t C T 256
+      (GSConcreteInterpolation.finalState Q) hc.2.1 hc.2.2 H
+    (out.1,r.2+stateTariff 28673+out.2)
+
+theorem final_value (q t C T : Nat) (points : Array (K × K)) (hs : points.size = 262144)
+    (H : {i : Nat // i ∈ Finset.range (256*112)} → Fin t → K × K) :
+    (final q t C T points hs H).1 = GSConcreteRootRecovery.final q t points hs H := by
+  simp only [final]
+  split
+  · rename_i hr
+    have he : GSConcreteInterpolation.final points = none :=
+      (finalInterpolation_value points).symm.trans hr
+    simp only [GSConcreteRootRecovery.final,he,Option.pbind_none]
+  · rename_i Q hr
+    have he : GSConcreteInterpolation.final points = some Q :=
+      (finalInterpolation_value points).symm.trans hr
+    rw [GSConcreteRootRecovery.final_eq_recovery q t points hs Q he H]
+    exact RRConcreteWriterM10.recover_value _ _ _ _ _ _ _ _ _ _
+
+def finalBudget (C T : Nat) : Nat :=
+  GSInterpolationFullWorkM10.budget 28673 262144
+    (AspisWide.GSInterpolationRowBasis.basis 255 28673 112).size+
+    stateTariff 28673+RRTraversalWriterM10.budget 112 C T 256
+
+theorem final_work (q t C T : Nat) (points : Array (K × K)) (hs : points.size = 262144)
+    (hq : q = Fintype.card K)
+    (H : {i : Nat // i ∈ Finset.range (256*112)} → Fin t → K × K) :
+    (final q t C T points hs H).2 ≤ finalBudget C T := by
+  have hi := GSInterpolationFullWorkM10.work 28673
+    (AspisWide.GSInterpolationRowBasis.basis 255 28673 112) points
+  rw [hs] at hi
+  change (finalInterpolation points).2 ≤ _ at hi
+  simp only [final]
+  split
+  · dsimp only; unfold finalBudget; omega
+  · rename_i Q hr
+    have he : GSConcreteInterpolation.final points = some Q :=
+      (finalInterpolation_value points).symm.trans hr
+    have hc := GSConcreteInterpolation.final_state_contract points hs Q he
+    have hw := RRConcreteWriterM10.recover_work 112 q t C T 256
+      (GSConcreteInterpolation.finalState Q) hc.2.1 hc.2.2 hq H
+    dsimp only
+    unfold finalBudget
+    omega
+
+def run (q t C T : Nat) (inputs : Inputs K 5) (H : InitialTape K t × FinalTape K t) :
+    Results K 5 × Nat :=
+  let a := SharedFiniteMaterializationM10.batch (fun i : Fin 29 =>
+    initial q t C T (inputs.initialPoints i) (inputs.initialSize i) H.1)
+  let b := SharedFiniteMaterializationM10.batch (fun i : Fin 5 =>
+    final q t C T (inputs.finalPoints i) (inputs.finalSize i) H.2)
+  ((a.1,b.1),a.2+b.2+2)
+
+attribute [local irreducible] SharedFiniteMaterializationM10.batch
+
+theorem run_value (q t C T : Nat) (inputs : Inputs K 5) (H : InitialTape K t × FinalTape K t) :
+    (run q t C T inputs H).1 = GSFixedInputDecoderFamily.run q t inputs H := by
+  unfold run GSFixedInputDecoderFamily.run
+  congr 1
+  · funext i
+    exact (SharedFiniteMaterializationM10.value _ i).trans (initial_value _ _ _ _ _ _ _)
+  · funext i
+    exact (SharedFiniteMaterializationM10.value _ i).trans (final_value _ _ _ _ _ _ _)
+
+def bankBudget (C T : Nat) : Nat := 29*(initialBudget C T+3)+5*(finalBudget C T+3)+4
+
+theorem run_work (q t C T : Nat) (inputs : Inputs K 5) (hq : q = Fintype.card K)
+    (H : InitialTape K t × FinalTape K t) : (run q t C T inputs H).2 ≤ bankBudget C T := by
+  have ha := SharedFiniteMaterializationM10.work
+    (fun i : Fin 29 => initial q t C T (inputs.initialPoints i) (inputs.initialSize i) H.1)
+    (initialBudget C T) (fun i => initial_work _ _ _ _ _ _ hq _)
+  have hb := SharedFiniteMaterializationM10.work
+    (fun i : Fin 5 => final q t C T (inputs.finalPoints i) (inputs.finalSize i) H.2)
+    (finalBudget C T) (fun i => final_work _ _ _ _ _ _ hq _)
+  change _+_+2 ≤ _
+  unfold bankBudget
+  omega
+
+#print axioms initialInterpolation_value
+#print axioms initial_value
+#print axioms initial_work
+#print axioms finalInterpolation_value
+#print axioms final_value
+#print axioms final_work
+#print axioms run_value
+#print axioms run_work
+end AspisR1.GSDecoderBankWorkM10
+end

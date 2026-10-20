@@ -1,0 +1,109 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSInterpolationFullWorkM10.lean:35:12: error: Tactic `rfl` failed: The left-hand side
+  (none,
+      (GSInterpolationMatrixWorkM10.matrix D basis points).2 +
+            (GSDenseKernelResourcesM10.eval
+                  (interpolationConstraintMatrixOnBasis basis (interpolationConstraints points 3))).2.work +
+          (GSDenseKernelResourcesM10.eval
+                (interpolationConstraintMatrixOnBasis basis (interpolationConstraints points 3))).2.allocated +
+        1).1
+is not definitionally equal to the right-hand side
+  normalizeInterpolationPolynomialOnBasis? basis =<<
+    (interpolationConstraintMatrixOnBasis basis (interpolationConstraints points 3)).homogeneousWitness
+
+case h_1
+K : Type
+inst✝³ : Field K
+inst✝² : BEq K
+inst✝¹ : LawfulBEq K
+inst✝ : DecidableEq K
+D : ℕ
+basis : Array CBivariate.Monomial
+points : Array (K × K)
+p : GSInterpParams
+h : p.multiplicity = 3
+x✝ : Option (Array K)
+heq✝ : (interpolationConstraintMatrixOnBasis basis (interpolationConstraints points 3)).homogeneousWitness = none
+⊢ (none,
+        (GSInterpolationMatrixWorkM10.matrix D basis points).2 +
+              (GSDenseKernelResourcesM10.eval
+                    (interpolationConstraintMatrixOnBasis basis (interpolationConstraints points 3))).2.work +
+            (GSDenseKernelResourcesM10.eval
+                  (interpolationConstraintMatrixOnBasis basis (interpolationConstraints points 3))).2.allocated +
+          1).1 =
+    normalizeInterpolationPolynomialOnBasis? basis =<<
+      (interpolationConstraintMatrixOnBasis basis (interpolationConstraints points 3)).homogeneousWitness
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSInterpolationFullWorkM10.lean:35:12: error: Tactic `rfl` failed: The left-hand side
+  (normalizeInterpolationPolynomialOnBasis? basis v✝,
+      (GSInterpolationMatrixWorkM10.matrix D basis points).2 +
+              (GSDenseKernelResourcesM10.eval
+                    (interpolationConstraintMatrixOnBasis basis (interpolationConstraints points 3))).2.work +
+            (GSDenseKernelResourcesM10.eval
+                  (interpolationConstraintMatrixOnBasis basis (interpolationConstraints points 3))).2.allocated +
+          1 +
+        (GSInterpolationNormalizationWorkM10.normalize D basis v✝).2).1
+is not definitionally equal to the right-hand side
+  normalizeInterpolationPolynomialOnBasis? basis =<<
+    (interpolationConstraintMatrixOnBasis basis (interpolationConstraints points 3)).homogeneousWitness
+
+case h_2
+K : Type
+inst✝³ : Field K
+inst✝² : BEq K
+inst✝¹ : LawfulBEq K
+inst✝ : DecidableEq K
+D : ℕ
+basis : Array CBivariate.Monomial
+points : Array (K × K)
+p : GSInterpParams
+h : p.multiplicity = 3
+x✝ : Option (Array K)
+v✝ : Array K
+heq✝ : (interpolationConstraintMatrixOnBasis basis (interpolationConstraints points 3)).homogeneousWitness = some v✝
+⊢ (normalizeInterpolationPolynomialOnBasis? basis v✝,
+        (GSInterpolationMatrixWorkM10.matrix D basis points).2 +
+                (GSDenseKernelResourcesM10.eval
+                      (interpolationConstraintMatrixOnBasis basis (interpolationConstraints points 3))).2.work +
+              (GSDenseKernelResourcesM10.eval
+                    (interpolationConstraintMatrixOnBasis basis (interpolationConstraints points 3))).2.allocated +
+            1 +
+          (GSInterpolationNormalizationWorkM10.normalize D basis v✝).2).1 =
+    normalizeInterpolationPolynomialOnBasis? basis =<<
+      (interpolationConstraintMatrixOnBasis basis (interpolationConstraints points 3)).homogeneousWitness
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSInterpolationFullWorkM10.lean:68:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (GSInterpolationMatrixWorkM10.matrix ?D ?basis ?points).1.cols
+in the target expression
+  (GSInterpolationMatrixWorkM10.matrix D basis points).1.VectorWidth v
+
+case h_2
+K : Type
+inst✝³ : Field K
+inst✝² : BEq K
+inst✝¹ : LawfulBEq K
+inst✝ : DecidableEq K
+D : ℕ
+basis : Array CBivariate.Monomial
+points : Array (K × K)
+hM :
+  (GSInterpolationMatrixWorkM10.matrix D basis points).2 ≤
+    100 * (points.size + 1) ^ 2 + 6 * points.size * basis.size * (RRRowConstructionWorkM10.termTariff D + 6) + 2
+hk :
+  (GSDenseKernelResourcesM10.eval (GSInterpolationMatrixWorkM10.matrix D basis points).1).2.work ≤
+    kernelBudget (6 * points.size) basis.size
+ha :
+  (GSDenseKernelResourcesM10.eval (GSInterpolationMatrixWorkM10.matrix D basis points).1).2.allocated ≤
+    kernelBudget (6 * points.size) basis.size
+x✝ : Option (Array K)
+v : Array K
+hv : (GSDenseKernelResourcesM10.eval (GSInterpolationMatrixWorkM10.matrix D basis points).1).1 = some v
+hv' : (GSInterpolationMatrixWorkM10.matrix D basis points).1.homogeneousWitness = some v
+hs : (GSInterpolationMatrixWorkM10.matrix D basis points).1.VectorWidth v
+⊢ ((GSInterpolationNormalizationWorkM10.normalize D basis v).1,
+        (GSInterpolationMatrixWorkM10.matrix D basis points).2 +
+                (GSDenseKernelResourcesM10.eval (GSInterpolationMatrixWorkM10.matrix D basis points).1).2.work +
+              (GSDenseKernelResourcesM10.eval (GSInterpolationMatrixWorkM10.matrix D basis points).1).2.allocated +
+            1 +
+          (GSInterpolationNormalizationWorkM10.normalize D basis v).2).2 ≤
+    budget D points.size basis.size
+'AspisR1.GSInterpolationFullWorkM10.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GSInterpolationFullWorkM10.kernel_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GSInterpolationFullWorkM10.work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
