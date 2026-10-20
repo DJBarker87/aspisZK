@@ -1,0 +1,138 @@
+import R16DecisionErasure
+
+/-! Erasure-preserving retagging is total, but validity is conditional on
+initial-versus-payload shape. In particular it cannot repair arbitrary P. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.R16CanonReduction
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open RawCutProverCompiler RawCutTranscriptRun RecordedBinaryExperimentBin
+
+/-- Preserve every erased message, including malformed initial placement. -/
+def message (i : Nat) : LiteralTranscript.Message → LiteralTranscript.Message
+  | .initial root _ => .initial root (fun _ => 0)
+  | .payload b | .c2 b _ | .second b _ =>
+    if i = 2 then .c2 b (fun _ _ => 0)
+    else if i = 30 then .second b (fun _ => 0) else .payload b
+
+def proof (pf : LiteralProtocol.Proof) : LiteralProtocol.Proof := fun i => message i (pf i)
+def canon (P : Prover) : Prover := bind P (fun x => Program.done (x.1, proof x.2))
+
+theorem erase_message (i : Nat) (m : LiteralTranscript.Message) :
+    LiteralTranscript.erase (message i m) = LiteralTranscript.erase m := by
+  by_cases h2 : i = 2 <;> by_cases h30 : i = 30 <;>
+    cases m <;> simp [message, h2, h30, LiteralTranscript.erase]
+
+theorem erase_proof (pf : LiteralProtocol.Proof) (i : Nat) :
+    LiteralTranscript.erase (proof pf i) = LiteralTranscript.erase (pf i) :=
+  erase_message i (pf i)
+
+theorem eval_canon (P : Prover) (H : Bytes → State) :
+    eval H (canon P) = ((eval H P).1, ((eval H P).2.1, proof (eval H P).2.2)) := by
+  rw [canon, eval_bind]
+  simp only [eval, List.append_nil]
+
+theorem queries_canon (P : Prover) (Q : Nat)
+    (h : DecoderQueryAccounting.AdversaryQueries P Q) :
+    DecoderQueryAccounting.AdversaryQueries (canon P) Q := by
+  intro H
+  simpa only [eval_canon] using h H
+
+/-- Erasure congruence holds for the full verifier program, including calls. -/
+theorem verifier_congr (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (pub : LiteralTranscript.Public)
+    (pf pf' : LiteralProtocol.Proof)
+    (same : ∀ i, LiteralTranscript.erase (pf' i) = LiteralTranscript.erase (pf i)) :
+    verifier D d pub pf' = verifier D d pub pf := by
+  have aux (n : Nat) (a b : LiteralTranscript.Prefix)
+      (hp : LiteralTranscript.erasePrefix a = LiteralTranscript.erasePrefix b) :
+      FS2.verifierFrom (LiteralByteProtocol.protocol D) (decisionOnBytes d) pf' n a =
+      FS2.verifierFrom (LiteralByteProtocol.protocol D) (decisionOnBytes d) pf n b := by
+    induction n generalizing a b with
+    | zero =>
+      change Program.done (d (LiteralTranscript.erasePrefix a) (LiteralTranscript.erase (pf' 33))) =
+        Program.done (d (LiteralTranscript.erasePrefix b) (LiteralTranscript.erase (pf 33)))
+      rw [hp, same]
+    | succ n ih =>
+      change bind (LiteralByteSampler.samp (33 - (n+1)) a (pf' (33 - (n+1)))).toProgram _ =
+        bind (LiteralByteSampler.samp (33 - (n+1)) b (pf (33 - (n+1)))).toProgram _
+      have hs : LiteralByteSampler.samp (33 - (n+1)) a (pf' (33 - (n+1))) =
+          LiteralByteSampler.samp (33 - (n+1)) b (pf (33 - (n+1))) := by
+        unfold LiteralByteSampler.samp LiteralTranscript.samp
+        rw [hp, same]
+      rw [hs]
+      congr 1
+      funext c
+      apply ih
+      change LiteralTranscript.erasePrefix (a.ext (pf' (33 - (n+1))) c) =
+        LiteralTranscript.erasePrefix (b.ext (pf (33 - (n+1))) c)
+      rw [LiteralTranscript.erasePrefix_ext, LiteralTranscript.erasePrefix_ext, hp, same]
+  exact aux 33 _ _ rfl
+
+theorem original_canon (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (H : Bytes → State) :
+    eval H (original D d (canon P)) =
+      ((eval H (original D d P)).1,
+       (((eval H (original D d P)).2.1.1, proof (eval H P).2.2),
+        (eval H (original D d P)).2.2)) := by
+  rw [RawCutProverCompiler.experiment_eval, RawCutProverCompiler.experiment_eval, eval_canon]
+  dsimp only
+  rw [verifier_congr D d _ _ _ (erase_proof _)]
+
+/-- Exactly the weaker erased schedule needed by retagging, not strict parsing. -/
+def Shape (pf : LiteralProtocol.Proof) : Prop :=
+  ∀ i, i < 33 → UnifiedSampler.messageValid i (LiteralTranscript.erase (pf i))
+
+theorem valid_of_shape (pf : LiteralProtocol.Proof) (shape : Shape pf)
+    (i : Nat) (hi : i < 33) : LiteralTranscript.valid i (proof pf i) := by
+  have hs := shape i hi
+  by_cases h0 : i = 0
+  · subst i
+    cases hm : pf 0 <;>
+      simp [proof, message, hm, LiteralTranscript.valid,
+        LiteralTranscript.erase, UnifiedSampler.messageValid] at hs ⊢
+  · by_cases h2 : i = 2
+    · subst i
+      cases hm : pf 2 <;>
+        simp [proof, message, hm, LiteralTranscript.valid,
+          LiteralTranscript.erase, UnifiedSampler.messageValid] at hs ⊢
+    · by_cases h30 : i = 30
+      · subst i
+        cases hm : pf 30 <;>
+          simp [proof, message, hm, LiteralTranscript.valid,
+            LiteralTranscript.erase, UnifiedSampler.messageValid] at hs ⊢
+      · cases i with
+        | zero => exact False.elim (h0 rfl)
+        | succ i =>
+          cases hm : pf (i+1) <;>
+            simp [LiteralTranscript.erase, UnifiedSampler.messageValid, hm] at hs
+          all_goals simp [proof, message, hm, h2, h30, LiteralTranscript.valid, hi]
+
+/-- A valid row 31 cannot erase to an initial message, whatever the words. -/
+theorem valid31_not_initial (m : LiteralTranscript.Message)
+    (root : State) (valid : LiteralTranscript.valid 31 m) :
+    LiteralTranscript.erase m ≠ TranscriptView.Message.initial root := by
+  cases m <;> simp [LiteralTranscript.valid, LiteralTranscript.erase] at *
+
+/-- Compiled counterexample to a universally valid erasure-preserving lift. -/
+theorem no_total_valid_lift (root : State) :
+    ¬ ∃ lift : LiteralProtocol.Proof → LiteralProtocol.Proof,
+      (∀ pf i, LiteralTranscript.erase (lift pf i) = LiteralTranscript.erase (pf i)) ∧
+      (∀ pf i, i < 33 → LiteralTranscript.valid i (lift pf i)) := by
+  rintro ⟨lift, same, valid⟩
+  let pf : LiteralProtocol.Proof := fun _ => .initial root (fun _ => 0)
+  exact valid31_not_initial (lift pf 31) root (valid pf 31 (by decide)) (same pf 31)
+
+#print axioms erase_message
+#print axioms erase_proof
+#print axioms eval_canon
+#print axioms queries_canon
+#print axioms verifier_congr
+#print axioms original_canon
+#print axioms valid_of_shape
+#print axioms valid31_not_initial
+#print axioms no_total_valid_lift
+end AspisR1.R16CanonReduction
+end
