@@ -1,0 +1,530 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "packet": "s5-p6-original-serializer-output-20261020",
+  "status": "PROVED exact 32-byte output under corrected explicit P6 extraction-harness model; Rust std/extraction-ABI/runtime correspondence OPEN",
+  "source_revision": "V24 target source revision recorded by preflight: cb0af9a3600eaba2d25a9baafbd2b102b9bcc5b7; exact module hashes below are authoritative",
+  "modules": [
+    {
+      "module": "ToBytesP6OutputInvariantV1",
+      "source": "sources/ToBytesP6OutputInvariantV1.lean",
+      "source_sha256": "eb9dc36724af2f4678374c8eaec1c08e346064c15ec184d2d2ab403fdf958dba",
+      "object_sha256": "95694b67584286fc5629900839070ac06f663845fdfb52176700d9a8038ebaec",
+      "imports": [
+        "ToBytesP6StateInvariantV1",
+        "PaintSourceLimbsV1"
+      ],
+      "producer_receipt_status": "receipt included or retained by exact referenced packet",
+      "receipt": "evidence/v24/receipt.json",
+      "receipt_sha256": "f33ea408118a550165aed7d4686df9f4673976f7f51d83c9881b1c4ee46d320d",
+      "preflight": "evidence/v24/preflight.json",
+      "source_revision": "cb0af9a3600eaba2d25a9baafbd2b102b9bcc5b7",
+      "exit_status": 0,
+      "wall_seconds": 5.689,
+      "peak_rss_bytes": 2268938240,
+      "peak_aggregate_rss_bytes": 2244542464,
+      "swap_bytes": 0,
+      "theorems": [
+        "P6ToBytes.OutputInvariant.step_paints_prefix",
+        "P6ToBytes.OutputInvariant.painted_eq_generic",
+        "P6ToBytes.OutputInvariant.stateAt_paints",
+        "P6ToBytes.OutputInvariant.terminal_returns_back",
+        "P6ToBytes.OutputInvariant.loop_returns_final_back",
+        "P6ToBytes.OutputInvariant.source_loop_success",
+        "P6ToBytes.OutputInvariant.source_limbs_into_iter",
+        "P6ToBytes.OutputInvariant.loop_final_contents",
+        "P6ToBytes.OutputInvariant.array_from_slice_same_bytes",
+        "P6ToBytes.OutputInvariant.to_le_bytes_output_contents"
+      ]
+    }
+  ],
+  "direct_import_source_map": {
+    "ToBytesP6StateInvariantV1": {
+      "source": "sources/owners/ToBytesP6StateInvariantV1.lean",
+      "source_sha256": "25b7b4aa39aed559ad7bf546e72e2656c792f547b9425a336d374c3e78cdcaf3",
+      "object_sha256": "c1fd9c648e9911b8f8f5cd28c190d789202e4efe5958fc4f7fb4f261e6e9f20b",
+      "repository_path": "docs/research/100bit-spend-path-20261013/evidence/s5-p6-original-serializer-output-20261020/sources/owners/ToBytesP6StateInvariantV1.lean"
+    },
+    "PaintSourceLimbsV1": {
+      "source": "sources/owners/PaintSourceLimbsV1.lean",
+      "source_sha256": "8863098670f41c7c9406e72a5a797589a9dc4d963e26074c22434e86a539614d",
+      "object_sha256": "d36399295f6bf7c67df2d2edb47010aeb6675d3bb4ad847b9ba9d5922740cb81",
+      "repository_path": "docs/research/100bit-spend-path-20261013/evidence/s5-p6-original-serializer-output-20261020/sources/owners/PaintSourceLimbsV1.lean"
+    },
+    "Aeneas": {
+      "source": "docs/research/100bit-spend-path-20261013/evidence/stage2-generated-prefix-canonicality-formatter-repair-20261020/sources/Aeneas.lean",
+      "source_sha256": "1f5ebf36abfe52cbfa6e1edff1f9bc4e8aed1cebf8615bd97fcf8a9e6d0bde90",
+      "object_sha256": "d3bfce818c2409992274bc1852aa00280cb7a8139465ef0bab674498e4cdc69d",
+      "repository_path": "docs/research/100bit-spend-path-20261013/evidence/stage2-generated-prefix-canonicality-formatter-repair-20261020/sources/Aeneas.lean"
+    }
+  },
+  "theorem": {
+    "module": "ToBytesP6OutputInvariantV1",
+    "name": "P6ToBytes.OutputInvariant.to_le_bytes_output_contents",
+    "source_sha256": "eb9dc36724af2f4678374c8eaec1c08e346064c15ec184d2d2ab403fdf958dba",
+    "object_sha256": "95694b67584286fc5629900839070ac06f663845fdfb52176700d9a8038ebaec",
+    "exit_status": 0,
+    "wall_seconds": 5.689,
+    "peak_process_rss_bytes": 2268938240,
+    "scope_swap_bytes": 0,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "result": "for every WideExact x, the actual unchanged emitted outer to_le_bytes call succeeds and its returned slice contains the exact eight ordered source limbs encoded as little-endian U32 byte groups; the fixed 32-byte result equals this content"
+  },
+  "adapter_check": {
+    "script": "adapter-check/check_adapter.py",
+    "report": "adapter-check/report.json",
+    "result": "PASS exact reconstruction"
+  },
+  "source_extraction_producers": {
+    "packet": "../s5-to-bytes-source-cut-v1/manifest.json",
+    "charon_receipt": "evidence/original-extraction/charon-receipt.json",
+    "aeneas_receipt": "evidence/original-extraction/aeneas-receipt.json",
+    "llbc_sha256": "5e13162590786bb23a9ea282a1f43109ce1cbffbff4247c6cab1fdf7baf401a0"
+  },
+  "paint_producers": {
+    "PaintBlocksPrefixV1_receipt": "evidence/paint-blocks/receipt.json",
+    "PaintSourceLimbsV1_receipt": "evidence/paint-source/receipt.json"
+  },
+  "limitations": [
+    "Adapted generated Funs preserves original to_limbs and serializer/loop bodies exactly except the three enumerated iterator ABI substitutions; this is checked textually.",
+    "Corrected P6 ChunksExactMut model uses captured chunk start on writeback. The Rust standard-library source correspondence for this mutable iterator/zip ABI remains open.",
+    "Standalone producer receipts are unavailable for inherited adapted Funs/Types, P6 model, Steps, ActiveBody and StateInvariant source/object pairs; pins are recorded without asserting independent provenance receipts.",
+    "No production source change or adoption claim.",
+    "Root v22 trace-stop and v23 concrete-final-state WHNF timeout diagnostics are retained, not accepted. V24 abstracts finalBack and uses a generic slice lemma; no resource-option increase or dependency replay."
+  ],
+  "diagnostics": [
+    "diagnostics/command.json",
+    "diagnostics/lean.log",
+    "diagnostics/preflight.json",
+    "diagnostics/receipt.json",
+    "diagnostics/time.log"
+  ],
+  "aeneas_owner_receipt": "evidence/aeneas-owner/receipt.json",
+  "inherited_owners": [
+    {
+      "module": "ToBytesP6StateInvariantV1",
+      "source": "sources/owners/ToBytesP6StateInvariantV1.lean",
+      "source_sha256": "25b7b4aa39aed559ad7bf546e72e2656c792f547b9425a336d374c3e78cdcaf3",
+      "object_sha256": "c1fd9c648e9911b8f8f5cd28c190d789202e4efe5958fc4f7fb4f261e6e9f20b",
+      "imports": [
+        "ToBytesP6ActiveBodyV12"
+      ],
+      "producer_receipt_status": "standalone producer receipt not present in this packet"
+    },
+    {
+      "module": "ToBytesP6ActiveBodyV12",
+      "source": "sources/owners/ToBytesP6ActiveBodyV12.lean",
+      "source_sha256": "543df5ae3c4d369154a652e4ccca35e09fb0912a59e6e8ddcbefc16092c41dc0",
+      "object_sha256": "eae4b6cbb389a064d388daea690c06b93d5c072033fd248bb5a6455d2428b9b7",
+      "imports": [
+        "ToBytesP6StepsV3"
+      ],
+      "producer_receipt_status": "standalone producer receipt not present in this packet"
+    },
+    {
+      "module": "ToBytesP6StepsV3",
+      "source": "sources/owners/ToBytesP6StepsV3.lean",
+      "source_sha256": "52e517bad5e7c8c1a7ce5951256bb8545f214fb415d8eb91c90ca3964badbefd",
+      "object_sha256": "160c5c53a72fb4be6254a7db386b3e722b4c4a43c1f767403bda0681dd087703",
+      "imports": [
+        "AspisR1WideToBytesSource.Funs"
+      ],
+      "producer_receipt_status": "standalone producer receipt not present in this packet"
+    },
+    {
+      "module": "AspisR1WideToBytesSource.Funs",
+      "source": "sources/generated-adapted/Funs.lean",
+      "source_sha256": "2393993b30afb11fb04b3bd39422f73f15c54851ac6d41be12cd377fb3fa23a6",
+      "object_sha256": "7edcad30223ae84f9f0b59ad16f3ae4ec9841838b320316b362e8c443889792e",
+      "imports": [
+        "Aeneas",
+        "AspisR1WideToBytesSource.Types",
+        "AspisR1WideToBytesSource.FunsExternal"
+      ],
+      "producer_receipt_status": "standalone producer receipt not present in this packet"
+    },
+    {
+      "module": "AspisR1WideToBytesSource.Types",
+      "source": "sources/generated-adapted/Types.lean",
+      "source_sha256": "1a8da824e1685667cf42cb889ae61e749072057e04d03a883480238c5b40e236",
+      "object_sha256": "4b490f8799d9245e2169037acfc5d8df9d3baf422dc14fe897ff55c27d358534",
+      "imports": [
+        "Aeneas",
+        "AspisR1WideToBytesSource.TypesExternal"
+      ],
+      "producer_receipt_status": "standalone producer receipt not present in this packet"
+    },
+    {
+      "module": "AspisR1WideToBytesSource.FunsExternal",
+      "source": "sources/generated-adapted/FunsExternal.lean",
+      "source_sha256": "53732ecfb5220aa9f1cfcde8d7e412987d3b41a47c7e47347cf7540e227fdd00",
+      "object_sha256": "51c04e9fb529eb6e47a9d6d901b66e67457da9d226fc32c466769aa31a720b07",
+      "imports": [
+        "P6ChunksExactMutModelV3",
+        "AspisR1WideToBytesSource.Types"
+      ],
+      "producer_receipt_status": "standalone producer receipt not present in this packet"
+    },
+    {
+      "module": "AspisR1WideToBytesSource.TypesExternal",
+      "source": "sources/generated-adapted/TypesExternal.lean",
+      "source_sha256": "7b880aa3be7b0efd5f6ebb262c4078afc3e6961fc9352a0931e411a649befaa6",
+      "object_sha256": "a8152674ffa592aef98d3a361ec771bd72337dda02ef45bb5aa18ebbaa0a289a",
+      "imports": [
+        "P6ChunksExactMutModelV3"
+      ],
+      "producer_receipt_status": "standalone producer receipt not present in this packet"
+    },
+    {
+      "module": "P6ChunksExactMutModelV3",
+      "source": "sources/owners/P6ChunksExactMutModelV3.lean",
+      "source_sha256": "436bf3229b0981a27dcbbbac5708d5b2bda78b9dc3bb74c88a0528c7681d7596",
+      "object_sha256": "ebfae1eb7a88a44e0d0c7683868d41a55bcb17fe9de028a9b4c2589927a9f4a8",
+      "imports": [
+        "Aeneas"
+      ],
+      "producer_receipt_status": "standalone producer receipt not present in this packet"
+    },
+    {
+      "module": "PaintSourceLimbsV1",
+      "source": "sources/owners/PaintSourceLimbsV1.lean",
+      "source_sha256": "8863098670f41c7c9406e72a5a797589a9dc4d963e26074c22434e86a539614d",
+      "object_sha256": "d36399295f6bf7c67df2d2edb47010aeb6675d3bb4ad847b9ba9d5922740cb81",
+      "imports": [
+        "PaintBlocksPrefixV1",
+        "ToBytesP6StepsV3"
+      ],
+      "producer_receipt_status": "receipt included or retained by exact referenced packet"
+    },
+    {
+      "module": "PaintBlocksPrefixV1",
+      "source": "sources/owners/PaintBlocksPrefixV1.lean",
+      "source_sha256": "c37d3bb73b7838e38b43db1ef8d1ce7517efb08d5cd587a9d3588c53e9a8470e",
+      "object_sha256": "58749b7cbf88d333532d4977372ba3327ef5278e5fe82585d4cbfdaf6f87d389",
+      "imports": [
+        "Aeneas"
+      ],
+      "producer_receipt_status": "receipt included or retained by exact referenced packet"
+    },
+    {
+      "module": "Aeneas",
+      "source": "sources/owners/Aeneas.lean",
+      "source_sha256": "1f5ebf36abfe52cbfa6e1edff1f9bc4e8aed1cebf8615bd97fcf8a9e6d0bde90",
+      "object_sha256": "d3bfce818c2409992274bc1852aa00280cb7a8139465ef0bab674498e4cdc69d",
+      "imports": [
+        "Aeneas.Command",
+        "Aeneas.Data",
+        "Aeneas.Do",
+        "Aeneas.Extract",
+        "Aeneas.Std",
+        "Aeneas.Tactic"
+      ],
+      "producer_receipt_status": "source/object owner receipt included at evidence/aeneas-owner/receipt.json"
+    }
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "7b6669b48e6de801139d2d08807424543c1af09937c0b66aefb911f5f9c6aca0",
+      "size_bytes": 1805
+    },
+    {
+      "path": "adapter-check/check_adapter.py",
+      "sha256": "7bc7654d5a8998efb29902da0d2f7f5e1b46f0d526d2909a948cb3ba44037f27",
+      "size_bytes": 3080
+    },
+    {
+      "path": "adapter-check/report.json",
+      "sha256": "dcc7cd007d77e3f5bb23986972f4e24320a1b94f1e5426ea96162cded3eaf59a",
+      "size_bytes": 2500
+    },
+    {
+      "path": "check_packet.py",
+      "sha256": "732678e8a5f59a70fa37377bd37bd46aa472d48986417c319a26958c97525da6",
+      "size_bytes": 2098
+    },
+    {
+      "path": "diagnostics/command.json",
+      "sha256": "76ef0388eeb23eb7877ebf135392e5644df03ab4d52a40b9708d7494582cdbfa",
+      "size_bytes": 711
+    },
+    {
+      "path": "diagnostics/lean.log",
+      "sha256": "572b89cf8c040e9d64e3ed60dd59dbf7c4beca2641d8bd04af40512d6eaa8ab5",
+      "size_bytes": 14563
+    },
+    {
+      "path": "diagnostics/preflight.json",
+      "sha256": "dc0ea202dbbe91f7a760ed77361ca28a7fef89ac42b25795622c6725b7008a92",
+      "size_bytes": 1381
+    },
+    {
+      "path": "diagnostics/receipt.json",
+      "sha256": "640b13b1d65f4a33a66456a7d9f74d9236f08d877cbf5b9184362f4c12f88d98",
+      "size_bytes": 353
+    },
+    {
+      "path": "diagnostics/root-v22/command.json",
+      "sha256": "89798034fbd130eef612b8e978c5b541aa231c266d5e7312242569439fe125c4",
+      "size_bytes": 653
+    },
+    {
+      "path": "diagnostics/root-v22/lean.log",
+      "sha256": "4018003235b305af8a60938aed73b8fd6eec073ce8e64ec4534278de38acd3c3",
+      "size_bytes": 14772
+    },
+    {
+      "path": "diagnostics/root-v22/preflight.json",
+      "sha256": "00740b015ec894c8c12025b3b8e50f17ff834711d5f402c6c36a73a895c66169",
+      "size_bytes": 1231
+    },
+    {
+      "path": "diagnostics/root-v22/receipt.json",
+      "sha256": "881ccf5560f4463680a76a38017ad0f48edff63b3c486f8e7d3f0467633b80b5",
+      "size_bytes": 290
+    },
+    {
+      "path": "diagnostics/root-v22/rejected-source.lean",
+      "sha256": "3c73429df3b93f10fdbb25f8e78b79b5a6de86bee4a9b0b461ae6d9fbe5f5830",
+      "size_bytes": 11676
+    },
+    {
+      "path": "diagnostics/root-v22/time.log",
+      "sha256": "49db413bc9314be7d78d4d9278b45a00b7f640a357b8396a9810d406dacf37ca",
+      "size_bytes": 777
+    },
+    {
+      "path": "diagnostics/root-v23/command.json",
+      "sha256": "d3b31cd99a9d3fb0cb5b5b391fefeea9cfe8e1417f055e6a9f52c1b2df1b0b01",
+      "size_bytes": 653
+    },
+    {
+      "path": "diagnostics/root-v23/lean.log",
+      "sha256": "38a5c1759bb5d77cbcdcf12964ad2283c0ad0058d609c60f42eb572b7d48a220",
+      "size_bytes": 14817
+    },
+    {
+      "path": "diagnostics/root-v23/preflight.json",
+      "sha256": "c6cc239a0cc3df33fd5b578d6c28ae668da2b0ebfb15f789c16aaa3c1a06bcff",
+      "size_bytes": 1231
+    },
+    {
+      "path": "diagnostics/root-v23/receipt.json",
+      "sha256": "593243cf4bbf069da012fa10bff184390eaaf96830f5e61cf684c2a3b540d9b1",
+      "size_bytes": 291
+    },
+    {
+      "path": "diagnostics/root-v23/rejected-source.lean",
+      "sha256": "31cb89f1b176247541dfa0f48c9c06833cccf3dda5be54c2ea4d1a6506dce967",
+      "size_bytes": 12497
+    },
+    {
+      "path": "diagnostics/root-v23/time.log",
+      "sha256": "76fa8875a2f2b0c9788d02403df920ddd9bdaab59100874fd3d76f4af38288d4",
+      "size_bytes": 777
+    },
+    {
+      "path": "diagnostics/time.log",
+      "sha256": "ea112e0058a8af8ed69acd9d92ff753193d3a305cc3bd1a528439783d0e1439a",
+      "size_bytes": 777
+    },
+    {
+      "path": "evidence/aeneas-owner/receipt.json",
+      "sha256": "3ab610883f6f87165b030df2ba7057c8f385ca25031e154632cbe301daccc02c",
+      "size_bytes": 530
+    },
+    {
+      "path": "evidence/original-extraction/aeneas-receipt.json",
+      "sha256": "7d2730856032fda65c3943e19ad205ddd6c16df91d7c3f3c145227a8b4171290",
+      "size_bytes": 2639
+    },
+    {
+      "path": "evidence/original-extraction/charon-receipt.json",
+      "sha256": "a049a7b9ece463c979add056fc597cdedc7ea04051d4283095493525e5f3c535",
+      "size_bytes": 2165
+    },
+    {
+      "path": "evidence/original-extraction/command.json",
+      "sha256": "40487889eb6fb4389d67eca086bcb44862c1fef7434eb3273413b8a454975cbf",
+      "size_bytes": 539
+    },
+    {
+      "path": "evidence/original-extraction/source-pins.json",
+      "sha256": "be15f7e9d51e720e3ec2c9937c2aade8de80665711c33085475af56cca26dd07",
+      "size_bytes": 2680
+    },
+    {
+      "path": "evidence/original-extraction/time.log",
+      "sha256": "f3ec427e3059a402b02858dd49fca7f7a6e93df338945716117cd96bdd064c3a",
+      "size_bytes": 1178
+    },
+    {
+      "path": "evidence/original-extraction/tool-pins.json",
+      "sha256": "86c7382425e4e987665a134482e85ff8a92294d0a3bed397c8a9ae596300c6b4",
+      "size_bytes": 544
+    },
+    {
+      "path": "evidence/paint-blocks/command.json",
+      "sha256": "4296f1569efb843699e3e95b12a1b06f2ec3ad72931eb4a94a92d6b746b572f6",
+      "size_bytes": 622
+    },
+    {
+      "path": "evidence/paint-blocks/lean.log",
+      "sha256": "ff7075fd1b9424c437cbef0b2b052f5ee240c528c858787325ac2535bfd227cb",
+      "size_bytes": 640
+    },
+    {
+      "path": "evidence/paint-blocks/preflight.json",
+      "sha256": "3cdc6d28810ac1d2b70e3180d2f2d7de6724aff99b7ded3d66102bb37026a79e",
+      "size_bytes": 1001
+    },
+    {
+      "path": "evidence/paint-blocks/receipt.json",
+      "sha256": "bd60245954c57ed0be8c64dc009aa20f528b2ec2f144801f877e9b8e946b08f5",
+      "size_bytes": 352
+    },
+    {
+      "path": "evidence/paint-blocks/time.log",
+      "sha256": "6d854a86dbdfb6262564b47a8ce438ca5965fc245f77301993253a088d6bec9d",
+      "size_bytes": 777
+    },
+    {
+      "path": "evidence/paint-source/command.json",
+      "sha256": "9f04b55395708969b3d83b2478b873294b1044d13b73124ab5db25934a47f73f",
+      "size_bytes": 691
+    },
+    {
+      "path": "evidence/paint-source/lean.log",
+      "sha256": "ec78b558dfe9dbd2830899b97e09a4ffd984d92e9e7edf4e74e4e397b38cfdfb",
+      "size_bytes": 111
+    },
+    {
+      "path": "evidence/paint-source/preflight.json",
+      "sha256": "886502e7fa6686db28e1b48ad506bb52984c8ed06fb97f58c02e9881e792fc87",
+      "size_bytes": 1219
+    },
+    {
+      "path": "evidence/paint-source/receipt.json",
+      "sha256": "280410b30a915afbafcea63516dd7c17f9305ecd09cbf14147041fa9f5282072",
+      "size_bytes": 351
+    },
+    {
+      "path": "evidence/paint-source/time.log",
+      "sha256": "d7f8f6457770238110fb8e98dbf00d423b9b098d013d5d7fc148fe2381551657",
+      "size_bytes": 777
+    },
+    {
+      "path": "evidence/v24/command.json",
+      "sha256": "cd19ef50dfc78cf9232d223e367b051a98d0be64537067dd6a02cb6a753d044b",
+      "size_bytes": 653
+    },
+    {
+      "path": "evidence/v24/lean.log",
+      "sha256": "0f5f03b679ba2759762621656dbb3c99252b1bf91b5810cd0945e04ac492a8a6",
+      "size_bytes": 14086
+    },
+    {
+      "path": "evidence/v24/preflight.json",
+      "sha256": "20ca7c08d1d647e6b789045b738b1ae3dfb79b5b0687775376e6eb03fa65558b",
+      "size_bytes": 1231
+    },
+    {
+      "path": "evidence/v24/receipt.json",
+      "sha256": "f33ea408118a550165aed7d4686df9f4673976f7f51d83c9881b1c4ee46d320d",
+      "size_bytes": 352
+    },
+    {
+      "path": "evidence/v24/run-local.py",
+      "sha256": "59ebadcfe4a327a58b533e08f15aacbb91c5210b81d66c6922df5ebb2bdef137",
+      "size_bytes": 3996
+    },
+    {
+      "path": "evidence/v24/select-cache.py",
+      "sha256": "4dae779bf0d4591edbc0b95a9a80499b2719c059ff98d86106b62bba7c509834",
+      "size_bytes": 1975
+    },
+    {
+      "path": "evidence/v24/time.log",
+      "sha256": "f87622ceaca98b6b26557836e3ab6174ab1d9a9bf3dad060d86cb194b9e4cd77",
+      "size_bytes": 777
+    },
+    {
+      "path": "evidence/v24/warm-cache-closure.json",
+      "sha256": "7da5f382c1b5a85ea2200c9901466fba93b0e078900962accec11ee50eb4adb7",
+      "size_bytes": 1853222
+    },
+    {
+      "path": "sources/ToBytesP6OutputInvariantV1.lean",
+      "sha256": "eb9dc36724af2f4678374c8eaec1c08e346064c15ec184d2d2ab403fdf958dba",
+      "size_bytes": 12934
+    },
+    {
+      "path": "sources/generated-adapted/Funs.lean",
+      "sha256": "2393993b30afb11fb04b3bd39422f73f15c54851ac6d41be12cd377fb3fa23a6",
+      "size_bytes": 7840
+    },
+    {
+      "path": "sources/generated-adapted/FunsExternal.lean",
+      "sha256": "53732ecfb5220aa9f1cfcde8d7e412987d3b41a47c7e47347cf7540e227fdd00",
+      "size_bytes": 69
+    },
+    {
+      "path": "sources/generated-adapted/Types.lean",
+      "sha256": "1a8da824e1685667cf42cb889ae61e749072057e04d03a883480238c5b40e236",
+      "size_bytes": 1293
+    },
+    {
+      "path": "sources/generated-adapted/TypesExternal.lean",
+      "sha256": "7b880aa3be7b0efd5f6ebb262c4078afc3e6961fc9352a0931e411a649befaa6",
+      "size_bytes": 31
+    },
+    {
+      "path": "sources/generated-original/Funs.lean",
+      "sha256": "b70eb3e13200ad5adf1c03431d68546c516d6aeadaea24c31e1e42b57080461a",
+      "size_bytes": 7947
+    },
+    {
+      "path": "sources/generated-original/Types.lean",
+      "sha256": "6d1defc27dcfe92f6af95b4cc131777d516849eec4b7b286515d22873a1190fa",
+      "size_bytes": 1354
+    },
+    {
+      "path": "sources/owners/Aeneas.lean",
+      "sha256": "1f5ebf36abfe52cbfa6e1edff1f9bc4e8aed1cebf8615bd97fcf8a9e6d0bde90",
+      "size_bytes": 119
+    },
+    {
+      "path": "sources/owners/P6ChunksExactMutModelV3.lean",
+      "sha256": "436bf3229b0981a27dcbbbac5708d5b2bda78b9dc3bb74c88a0528c7681d7596",
+      "size_bytes": 6561
+    },
+    {
+      "path": "sources/owners/PaintBlocksPrefixV1.lean",
+      "sha256": "c37d3bb73b7838e38b43db1ef8d1ce7517efb08d5cd587a9d3588c53e9a8470e",
+      "size_bytes": 2303
+    },
+    {
+      "path": "sources/owners/PaintSourceLimbsV1.lean",
+      "sha256": "8863098670f41c7c9406e72a5a797589a9dc4d963e26074c22434e86a539614d",
+      "size_bytes": 952
+    },
+    {
+      "path": "sources/owners/ToBytesP6ActiveBodyV12.lean",
+      "sha256": "543df5ae3c4d369154a652e4ccca35e09fb0912a59e6e8ddcbefc16092c41dc0",
+      "size_bytes": 2440
+    },
+    {
+      "path": "sources/owners/ToBytesP6StateInvariantV1.lean",
+      "sha256": "25b7b4aa39aed559ad7bf546e72e2656c792f547b9425a336d374c3e78cdcaf3",
+      "size_bytes": 4947
+    },
+    {
+      "path": "sources/owners/ToBytesP6StepsV3.lean",
+      "sha256": "52e517bad5e7c8c1a7ce5951256bb8545f214fb415d8eb91c90ca3964badbefd",
+      "size_bytes": 2437
+    }
+  ]
+}
