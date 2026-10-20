@@ -1,0 +1,53 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/BinTypedCacheWork.lean:70:2: error: Tactic `rfl` failed: The left-hand side
+  (FixedWidthDecoder.decode (fun bs => ExactLeafFieldCodec.decodeM31 bs) 4 26 (List.take 104 xs)).bind fun a =>
+    Option.map (fun tail => (a, tail)) (ExactLeafFieldCodec.decodeQM31 (List.drop 104 xs))
+is not definitionally equal to the right-hand side
+  do
+    let words ← FixedWidthDecoder.decode ExactLeafFieldCodec.decodeM31 4 26 (List.take 104 xs)
+    let tail ← ExactLeafFieldCodec.decodeQM31 (List.drop 104 xs)
+    pure (words, tail)
+
+xs : List Byte
+⊢ ((FixedWidthDecoder.decode (fun bs => ExactLeafFieldCodec.decodeM31 bs) 4 26 (List.take 104 xs)).bind fun a =>
+      Option.map (fun tail => (a, tail)) (ExactLeafFieldCodec.decodeQM31 (List.drop 104 xs))) =
+    do
+    let words ← FixedWidthDecoder.decode ExactLeafFieldCodec.decodeM31 4 26 (List.take 104 xs)
+    let tail ← ExactLeafFieldCodec.decodeQM31 (List.drop 104 xs)
+    pure (words, tail)
+/Users/dominic/ZK/.worktrees/cx-m10-instr5/docs/research/100bit-spend-path-20261013/lean/BinTypedCacheWork.lean:129:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+A : Type
+n : ℕ
+d : List Byte → Option A × ℕ
+c : ℕ
+hd : ∀ (bs : List Byte), (d bs).2 ≤ c
+xs : List Leaf
+i : Fin n
+hr : (cached xs i).2 ≤ n + 2
+⊢ (have r := cached xs i;
+      match r.1 with
+      | none => (none, r.2 + 64)
+      | some bs =>
+        have t := d bs;
+        (t.1, r.2 + t.2 + 64)).2 ≤
+    n + c + 66
+'AspisR1.BinTypedCacheWork.lookup_value' depends on axioms: [propext]
+'AspisR1.BinTypedCacheWork.lookup_work' depends on axioms: [propext, Quot.sound]
+'AspisR1.BinTypedCacheWork.cached_value' depends on axioms: [propext]
+'AspisR1.BinTypedCacheWork.cached_work' depends on axioms: [propext, Quot.sound]
+'AspisR1.BinTypedCacheWork.qm31_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BinTypedCacheWork.wide_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BinTypedCacheWork.c1slot_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.BinTypedCacheWork.c1slot_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BinTypedCacheWork.c2slot_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BinTypedCacheWork.c2slot_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BinTypedCacheWork.c1_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.BinTypedCacheWork.c2_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BinTypedCacheWork.folded_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BinTypedCacheWork.c1_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BinTypedCacheWork.c2_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BinTypedCacheWork.folded_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BinTypedCacheWork.demand_value' depends on axioms: [propext]
+'AspisR1.BinTypedCacheWork.demand_work' depends on axioms: [propext, sorryAx, Quot.sound]
