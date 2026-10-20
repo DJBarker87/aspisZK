@@ -155,45 +155,66 @@ pub fn merge_pool_v1_pair_forest_trace_banks_v1(
 /// row-0/row-12 inputs with the production round equations, independently of
 /// the extracted writers that filled them (the forest counterpart of the
 /// legacy compiler's physical-row replay).
+fn validate_forest_poseidon_row(
+    columns: &[Vec<M31>; 16],
+    block: usize,
+    local_row: usize,
+    expected: [M31; 16],
+) -> Result<(), PoolV1PairTraceErrorV1> {
+    for lane in 0..16 {
+        if columns[lane][block * 16 + local_row] != expected[lane] {
+            return Err(PoolV1PairTraceErrorV1::BlockMismatch {
+                block: block as u8,
+                local_row: local_row as u8,
+                lane: lane as u8,
+            });
+        }
+    }
+    Ok(())
+}
+
+fn validate_forest_poseidon_block(
+    columns: &[Vec<M31>; 16],
+    block: usize,
+) -> Result<(), PoolV1PairTraceErrorV1> {
+    let base = block * 16;
+    let mut state = core::array::from_fn(|lane| columns[lane][base]);
+    for lane in 0..RATE {
+        state[lane] = state[lane].add(columns[lane][base + 12]);
+    }
+    let mut result = Ok(());
+    let mut local_row = 0;
+    while local_row < 11 && result.is_ok() {
+        match evaluate_trace_round_pair(state, local_row) {
+            Some((_, second)) => {
+                result = validate_forest_poseidon_row(columns, block, local_row + 1, second);
+                state = second;
+            }
+            None => result = Err(PoolV1PairTraceErrorV1::HashSchedule),
+        }
+        local_row += 1;
+    }
+    local_row = 13;
+    while local_row < 16 && result.is_ok() {
+        result = validate_forest_poseidon_row(columns, block, local_row, [M31::ZERO; 16]);
+        local_row += 1;
+    }
+    result
+}
+
 fn validate_forest_poseidon_rows(banks: &CopyBanks) -> Result<(), PoolV1PairTraceErrorV1> {
-    for block in 0..57 {
+    let mut result = Ok(());
+    let mut block = 0;
+    while block < 57 && result.is_ok() {
         let columns = if (34..54).contains(&block) {
             &banks.late
         } else {
             &banks.stable
         };
-        let base = block * 16;
-        let mut state = core::array::from_fn(|lane| columns[lane][base]);
-        for lane in 0..RATE {
-            state[lane] = state[lane].add(columns[lane][base + 12]);
-        }
-        for local_row in 0..11 {
-            let (_, second) = evaluate_trace_round_pair(state, local_row)
-                .ok_or(PoolV1PairTraceErrorV1::HashSchedule)?;
-            for lane in 0..16 {
-                if columns[lane][base + local_row + 1] != second[lane] {
-                    return Err(PoolV1PairTraceErrorV1::BlockMismatch {
-                        block: block as u8,
-                        local_row: (local_row + 1) as u8,
-                        lane: lane as u8,
-                    });
-                }
-            }
-            state = second;
-        }
-        for local_row in 13..16 {
-            for lane in 0..16 {
-                if columns[lane][base + local_row] != M31::ZERO {
-                    return Err(PoolV1PairTraceErrorV1::BlockMismatch {
-                        block: block as u8,
-                        local_row: local_row as u8,
-                        lane: lane as u8,
-                    });
-                }
-            }
-        }
+        result = validate_forest_poseidon_block(columns, block);
+        block += 1;
     }
-    Ok(())
+    result
 }
 
 /// The checked live append (blocks 34..53): the afterstate comes from the
