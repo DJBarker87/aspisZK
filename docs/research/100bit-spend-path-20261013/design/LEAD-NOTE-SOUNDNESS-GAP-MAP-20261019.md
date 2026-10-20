@@ -500,3 +500,19 @@ interface is missing from the extraction and a countermodel shows the
 abstract interface is insufficient — an extraction-hygiene item for the
 candidate freeze pass), whole-run read coverage, and the accepted-tx2
 composition; batch A on S7 (candidate freeze).
+
+## Addendum (2026-10-20): soundness environment S, first pass
+
+Codex job cx-soundness-env (61e11eb17): env S on the host holds 820
+current modules (516 compiled, 304 reused from J), 25/36 Bin roots current
+(23 audited standard-only), peak 4.40 GiB, 29 min, no swaps; 550 attempts
+used (`evidence/soundness-env-20261020/REPORT.md`). Not current: four
+modules (`AspisR1BatchedActualCounter`, `AspisR1BatchedReducerBridge`,
+`BatchedWeightsActualReducer` — retained-artifact staging; `R1LiteralTranscript`
+— missing transcript/sampler imports), 24 unresolved preflight imports, and
+a second generated-name collision (`instDiscriminantVariantIsize`,
+`Stage2ContinuationTypes` vs `AspisR1PublicPreparation.Types`); 454 modules
+skipped downstream, so the four terminal roots are not yet current in S.
+C2 stays open; the joint launcher range is extended to 9999 and the build
+continues (cx-soundness-env2). The collision joins the candidate-freeze
+hygiene list.
