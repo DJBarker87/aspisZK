@@ -1,7 +1,7 @@
 # Stage-2 refactor and extraction (2026-10-20)
 
 VERIFIER SOURCE CHANGE, authorized by LEAD-DECISION-STAGE2-REFACTOR-20261020.
-Stage 1 refactor runtime gates PASS. Extraction and first facts have not started.
+Stage 1 refactor runtime gates PASS (`7d4c136f0`). Stage 2 pinned Aeneas extraction FAILED. Stopped as instructed; stage 3 not attempted.
 
 ## Source change
 
@@ -13,7 +13,7 @@ Dedicated host workspace: /home/dombarker/project-offloads/codex-cx-stage2b-2026
 
 ## Remaining obligations
 
-Refactor runtime gates and the rebuilt verifier pin are complete. Full-cone extraction and first facts are pending. R13/R12 source/model/Checks refinement, R15 checkpoint provenance/canonicality, R19 all-input oracle bound and S8 re-pin remain open. No soundness claim.
+Refactor runtime gates and the rebuilt verifier pin are complete. Full-cone Aeneas extraction failed; all three first facts remain obligations. R13/R12 source/model/Checks refinement, R15 checkpoint provenance/canonicality, R19 all-input oracle bound and S8 re-pin remain open. No soundness claim.
 
 ## Refactor gate results
 
@@ -28,8 +28,25 @@ Refactor runtime gates and the rebuilt verifier pin are complete. Full-cone extr
 
 ## Input staging and harness failures
 
-No failed test result has been suppressed. Initial commands failed before testing because the reduced host source copy omitted `c3/build`, the generated writer glue, checkpoint include_bytes fixtures, and the historical eight-way teeth fixture. Each omission was corrected before a new uniquely named run. A harness-only preflight had an invalid dictionary key while adding the TasksMax receipt field; it launched no test and was fixed. Failed compiler receipts and the empty preflight directory are retained. These are environment-input changes, not unchanged regression reruns.
+No failed test result has been suppressed. Initial commands failed before testing because the reduced host source copy omitted `c3/build`, the generated writer glue, checkpoint include_bytes fixtures, and the historical eight-way teeth fixture. Each omission was corrected before a new uniquely named run. A harness-only preflight had an invalid dictionary key while adding the TasksMax receipt field; it launched no test and was fixed. Failed compiler receipts are retained; `receipts/harness-preflight-key-error/preflight.json` records the untimed preflight error (the original empty directory remains on the host). These are environment-input changes, not unchanged regression reruns.
 
 The scope wrapper records command, exit, wall, RSS, swap, cgroup caps and flags for each run. `pins/build-inputs.json` records 422 local build-input hashes, all checked against the host copy. The source revision is the publication base plus the two-file delta (and its exact SHA pins); the eventual refactor commit supplies the immutable extraction revision. `#print axioms`: not applicable to these Rust/SBF gates.
 
 The retry binary and its receipt completed successfully. The outer gates.sh shell subsequently exited 2 with an unterminated-quote message because another task-local harness edit changed that script while this shell was still reading it. The final script passes `sh -n`. The completed binary was not rerun: its exit-0 receipt and 8/8 JSON are retained. No claim relies on the wrapper exit.
+
+## Stage 2 extraction
+
+Refactor commit: `7d4c136f0`. Rooted at actual `crate::verifier::candidate::tx2_authenticated`, using the same pinned Charon (daad69be…), driver (efdbe5b8…) and extended-static Aeneas (4632746d…) as stage 1. No synthetic caller or helper-only body is substituted. The 78-declaration input inventory includes the adapter as a source pin; account/SDK adapter behavior remains outside the selected root. Field arithmetic, allocation, weights, dot kernels, domain arithmetic, observer trace and hashing are explicit backend frontiers. Charon succeeded with `has_errors=false`; Aeneas failed before Lean emission. No generated fact claimed.
+
+### Extraction gate failure and stop
+
+| Target | Exit | Wall s | Peak RSS KiB | Swaps |
+|---|---:|---:|---:|---:|
+| Actual refactored crate → Charon LLBC | 0 | 130.673 | 548,016 | 0 |
+| LLBC → pinned extended-static Aeneas | 2 | 1.191 | 124,960 | 0 |
+
+Source revision: `7d4c136f0` (full revision in the extraction input JSON and manifest). LLBC SHA-256 `1bb25f41eca431b098aef4160c9c1d10e0a86af8169b0f1bc577369ac7068df5`, 6,229,463 bytes, `has_errors=false`. `pins/llbc.json` indexes actual crate function bodies: the entry, common caller, resume, query loop body, accumulation, both finish helpers, finish_relation, polynomial, Merkle batch/node-count/verification and parser all have bodies, not opaque replacements. The LLBC stays on the host.
+
+Aeneas error (exact): **There should be no bottoms in the value**. Source: `crates/aspis-r1-cost-probe/src/candidate.rs`, span **237:20–237:22**, the `&a` argument of `finish_relation(&v, &p, &a, obs)`, after moving out the fields, finishing weights and reconstructing `a`. Compiler source: `interp/InterpExpressions.ml:55`. The move/reconstruction refactor therefore does **not** solve the pinned translator's post-finish accumulator problem. This failure is not memory pressure and was not rerun or retried with another tool/cap. See `receipts/extract-aeneas/{stdout,stderr}.log` and both phase input JSONs for commands and exact tools.
+
+Per the mandate, work stops at stage 2. No generated Lean files were emitted; no Lean compilation or `#print axioms` run occurred (N/A). Length equality, whole-resume proof-digest equality and the 12-query ordered-call theorem are all still obligations. Runtime traces supply regression evidence only. The stage-1 refactor is retained as a runtime-gated candidate, not an accepted whole-cone extraction or a formal source/model refinement. R13/R12, R15, R19 and S8 remain open.

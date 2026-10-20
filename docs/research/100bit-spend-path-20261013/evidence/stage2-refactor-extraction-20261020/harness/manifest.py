@@ -12,5 +12,9 @@ cu=json.loads((B/'cu.json').read_text());assert len(cu['rows'])==6 and all(r['st
 assert json.loads((B/'stack-audit.json').read_text())['gate_pass']
 files={str(p.relative_to(B)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(B.rglob('*')) if p.is_file() and p.name!='manifest.json'}
 m=dict(schema='stage2-refactor-extraction-v1',classification='VERIFIER SOURCE CHANGE',source_base_revision=json.loads((B/'pins/source-hashes.json').read_text())['base_revision'],refactor_required_gates=required,refactor_gates_pass=True,extraction_status='not started',first_facts_status='not started',runs=rows,files=files,print_axioms='N/A: no Lean compilation in refactor stage',open=['R13/R12 refinement','R15 checkpoint provenance/canonicality','R19 all-input oracle/first-read bound','S8 and analytical CU re-pin'])
+if (B/'manifest.json').exists():
+    prior=json.loads((B/'manifest.json').read_text())
+    for k in ['refactor_source_revision','extraction_status','first_facts_status','extraction']:
+        if k in prior:m[k]=prior[k]
 (B/'manifest.json').write_text(json.dumps(m,indent=2)+'\n')
 print('Refactor manifest checked:',len(required),'required successful runs')
