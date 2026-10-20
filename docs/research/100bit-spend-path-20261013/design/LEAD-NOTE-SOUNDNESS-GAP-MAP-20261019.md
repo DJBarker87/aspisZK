@@ -485,3 +485,18 @@ translate reduces to premise P2 plus one sentence: "the runtime presents the
 same account bytes to both transactions when the checkpoint digest
 matches." That sentence is to be stated as P2′ in the R1 premise
 re-acceptance (design/R1-PREMISES-REACCEPTANCE-20261020.md, step 9).
+
+## Addendum (2026-10-20): R13 closure pass
+
+Codex job cx-r13-close (7bf72ae88): eleven modules, 22 audits, standard
+axioms, ≤ 2.25 GiB (`design/R13-CLOSE-20261020.md`). Proved: the source
+sort preserves the occupied-prefix key support; each dedup step preserves
+exactly the prior pairs plus the current one; the complete binary inner
+level loop equals a functional fold of its buffer writes; padding chunk
+coverage, prefix slicing and tail divisibility. Still open on R13: the
+whole dedup-scan transport, the eighteen-level parent/sibling simulation,
+the zero-scan backend semantics (the generated `Iterator.any.default`
+interface is missing from the extraction and a countermodel shows the
+abstract interface is insufficient — an extraction-hygiene item for the
+candidate freeze pass), whole-run read coverage, and the accepted-tx2
+composition; batch A on S7 (candidate freeze).
