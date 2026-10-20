@@ -463,6 +463,10 @@ pub fn encode_pool_v1_pair_forest_terminal_request_v1(
     Ok(output)
 }
 
+#[cfg(any(test, kani, aeneas_ref))]
+#[path = "asq8_payment_reference.rs"]
+mod asq8_payment_reference;
+
 // Reference-only ASQ8 encoder. Keeping the payment borrow inside each return
 // branch avoids the pinned Aeneas borrow-abstraction join in the shipped form.
 #[cfg(any(test, kani, aeneas_ref))]
@@ -477,13 +481,13 @@ pub fn encode_pool_v1_pair_forest_terminal_request_reference_v1(
     }
     match request.public {
         PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public) => {
-            let payment = encode_pool_v1_private_transfer_public_v1(&public)
+            let payment = asq8_payment_reference::encode_pool_v1_private_transfer_public_v1(&public)
                 .map_err(PoolV1PairForestTerminalFormatErrorV1::Payment)?;
             Ok(asq8_reference_envelope(request.verifier_profile, request.verifier_release,
                 request.pool_program, PoolV1TransitionKind::PrivateTransfer as u8, payment))
         }
         PoolV1PairForestTerminalPaymentV1::Withdrawal(public) => {
-            let payment = encode_pool_v1_withdrawal_public_v1(&public)
+            let payment = asq8_payment_reference::encode_pool_v1_withdrawal_public_v1(&public)
                 .map_err(PoolV1PairForestTerminalFormatErrorV1::Payment)?;
             Ok(asq8_reference_envelope(request.verifier_profile, request.verifier_release,
                 request.pool_program, PoolV1TransitionKind::Withdrawal as u8, payment))

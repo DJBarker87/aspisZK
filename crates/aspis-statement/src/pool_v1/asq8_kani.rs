@@ -38,3 +38,14 @@ fn withdrawal_encoder_equivalence() {
     assert_eq!(encode_pool_v1_pair_forest_terminal_request_v1(&r),
         encode_pool_v1_pair_forest_terminal_request_reference_v1(&r));
 }
+
+// The Pool strips the four hint bytes before this fixed-size codec. This
+// harness covers the exact bytes subsequently supplied to verifier stage 2.
+#[kani::proof]
+#[kani::unwind(321)]
+fn accepted_request_reencodes_exactly() {
+    let bytes: [u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES] = kani::any();
+    if let Ok(r) = decode_pool_v1_pair_forest_terminal_request_v1(&bytes) {
+        assert_eq!(encode_pool_v1_pair_forest_terminal_request_reference_v1(&r), Ok(bytes));
+    }
+}
