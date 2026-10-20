@@ -132,3 +132,16 @@ Row R8: PROVED. Row R9 (same statement across stages) is now stated
 precisely as named obligations with the conditional byte-equality and
 supplied-public parsing proofs done; transaction reachability and the
 checkpoint linkage (R15) remain open and wait on the stage-2 extraction.
+
+## Addendum (2026-10-20): R17 model half proved
+
+Codex job cx-geometry (360512b5b): seven modules, 31 theorems, standard
+axioms, ≤ 3.76 GiB (`design/FOLD-GEOMETRY-20261020.md`,
+`evidence/fold-geometry-20261020/`): fold algebra, the optimised inverse
+formulas, child indices, quartet rotations, fourth powers, the stored
+x18/x16 geometry, natural-basis commutation and the D18 bitwise permutation
+equality; all 1,024 fast-domain constants validated independently. Row R17:
+model half PROVED with explicit table-content premises; the source-execution
+half (the full `QueryGeometry` iterator/grouping path and runtime
+arithmetic, candidate 7) closes with the S7 re-pin and the stage-2
+extraction.
