@@ -1,4 +1,7 @@
 import RawChecksAdaptiveFailureNoModelBin
+import RawRecordedExtractorBranchTraceBin
+import RawRecordedLogLengthBin
+import R1FinalSoundnessNumericBin
 
 /-! C3 over the genuinely binary recorded extractor and causal decoder.
 The source hypothesis names and external premise carriers match C3; binary
@@ -14,6 +17,8 @@ open AspisV8R19.CausalFirstHitUnionBound
 open RawCutProverCompiler RawCutTranscriptRun
 open RawRecordedOracleExtractionMassBin DecoderInstanceBoundaryBin
 open RecordedBinaryExperimentBin LiteralAcceptanceTerminal
+open RawExtractorCostComposedV2 (Parameters Coins)
+open RawExtractorCostComposedBin
 abbrev BoundaryStatements := R1FinalSoundness.BoundaryStatements
 abbrev BoundaryEvidence := R1FinalSoundness.BoundaryEvidence
 
@@ -71,8 +76,16 @@ theorem final_soundness
     /- Adversary experiment restriction, M9 hN: at most 33 recognized starts. -/
     (hN : ∀ H : Bytes → State, DecodedFirstReadUnionBound.decoderFirstReads dec
       emptyTable (eval H (recorded D d P)).1 ≤ 33)
-    :
-    (∀ run coins w, RawRecordedPublicSpendExtractorBin.extract run coins = some w → LiteralProtocol.relation run.2.1.1 w) ∧
+    (e : RawExtractorCostComposedBin.CostedExtractor) (p : Parameters)
+    /- Size-restricted M10 adequacy; length is independent of distinct reads. -/
+    (h_M10_ledger : RawExtractorCostComposedBin.LedgerRefinement e p Q)
+    (h_M10_log_length : BoundaryEvidence s → ∀ H,
+      (eval H (recorded D d P)).2.2 = true →
+        (eval H (recorded D d P)).1.length ≤ Q + 1161) :
+    (∀ H : Bytes → State, (eval H (recorded D d P)).2.2 = true →
+      AspisV8R19.OracleResampling.mean (fun coins : Coins =>
+        ((e.eval (eval H (recorded D d P)) coins).2.total : ℚ)) ≤ (p.attemptBudget : ℚ)) ∧
+    (∀ run coins w, (e.eval run coins).1 = some w → LiteralProtocol.relation run.2.1.1 w) ∧
     (1 / (2 : ℚ)^126 + 1 / (2 : ℚ)^454 ≤ 1 / (2 : ℚ)^120) ∧
     (deployedFailure ≤ R1FinalSoundnessNumeric.totalBound Q) ∧
     (Q ≤ R1FinalSoundnessNumeric.maxAdversaryQueries → deployedFailure < 1 / (2 : ℚ)^100) := by
@@ -114,11 +127,39 @@ theorem final_soundness
         add_le_add hb QueryScanModelFailure.exhaustion_bound
       _ = R1FinalSoundnessNumeric.totalBound Q := by
         rfl
-  exact ⟨RawRecordedPublicSpendExtractorBin.returned_relation,
+  have hcost : ∀ H : Bytes → State, (eval H (recorded D d P)).2.2 = true →
+      AspisV8R19.OracleResampling.mean (fun coins : Coins =>
+        ((e.eval (eval H (recorded D d P)) coins).2.total : ℚ)) ≤ (p.attemptBudget : ℚ) := by
+    intro H ha
+    exact (accepted_attempt_cost e p Q h_M10_ledger _ ha
+      (h_M10_log_length evidence H ha)).2
+  have hreturned : ∀ run coins w, (e.eval run coins).1 = some w →
+      LiteralProtocol.relation run.2.1.1 w := by
+    intro run coins w hw
+    exact RawRecordedPublicSpendExtractorBin.returned_relation run coins w
+      ((e.value run coins).symm.trans hw)
+  exact ⟨hcost, hreturned,
     R1FinalSoundnessNumeric.extractor_abort_allowance, hd,
     fun h => hd.trans_lt ((R1FinalSoundnessNumeric.numeric_iff Q).2 h)⟩
 
+/-- The same uniformly fixed polynomial bounds every size-restricted
+member of a Bin implementation family when its actual ledger and coordinate
+bounds have been supplied. Neither adequacy premise is inferred from value. -/
+theorem uniform_cost (family : Nat → RawExtractorCostComposedBin.CostedExtractor)
+    (params : Nat → Parameters) (a k c : Nat)
+    (h_M10_ledger : ∀ Q, RawExtractorCostComposedBin.LedgerRefinement
+      (family Q) (params Q) Q)
+    (h_M10_uniform : ∀ Q, RawExtractorParameterPolynomial.CoordinateBound
+      (params Q) (Q + c) a k)
+    (Q : Nat) (run : RunView) (ha : run.2.2 = true)
+    (hlog : run.1.length ≤ Q + 1161) :
+    AspisV8R19.OracleResampling.mean (fun coins : Coins =>
+      (((family Q).eval run coins).2.total : ℚ)) ≤
+      (Nat.cast ((queryPolynomial a k c).eval Q) : ℚ) :=
+  accepted_attempt_polynomial family params a k c h_M10_ledger h_M10_uniform Q run ha hlog
+
 #print axioms final_soundness
+#print axioms uniform_cost
 
 end AspisR1.R1FinalSoundnessBin
 end

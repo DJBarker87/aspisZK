@@ -1,0 +1,73 @@
+import RawRecordedInitialCutObstruction
+import RawCutRecordedWordsExecutableBin
+import BinCompiledRunWordStability
+
+/-! The repaired ledger's log invariant is separate from M9's first-read
+budget. The counterexample is about RunView's domain, not source reachability. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.RawRecordedLogLengthBin
+open FS FS2 FS2.Duplex AspisV8PairedCommitment
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open RawCutProverCompiler RawCutTranscriptRun RawRecordedLogCostObstruction
+
+/-- The existing scan instrumentation also implements the binary cut. -/
+theorem binary_cut_value (tr : List (Bytes × State)) (frame : Bytes) :
+    (cutBeforeWithReads tr frame).1 = BinRawByteCutRecovery.cut tr frame :=
+  (cutBeforeWithReads_value tr frame).trans
+    (RawCutRecordedWordsExecutableBin.cutBeforeExec_eq_cut tr frame)
+
+theorem bounded_binary_cut_batch (tr : List (Bytes × State)) (frames : List Bytes)
+    (n Q : Nat) (hlog : tr.length ≤ Q + 1161) (hcalls : frames.length ≤ 7*n) :
+    (frames.map (fun frame => (cutBeforeWithReads tr frame).2)).sum ≤
+      7*n*(Q + 1161) :=
+  RawRecordedInitialCutObstruction.bounded_cut_batch tr frames n (Q + 1161) hlog hcalls
+
+private theorem cached_repeated_reads (n : Nat) (entry : Bytes × State)
+    (t : Table Bytes State) (h : t entry.1 ≠ none) :
+    firstReads t (List.replicate n entry) = 0 := by
+  induction n generalizing t with
+  | zero => rfl
+  | succ n ih =>
+    rw [List.replicate_succ, firstReads, if_neg h]
+    have hp : (put t entry.1 entry.2) entry.1 ≠ none := by simp [put]
+    simpa using ih (put t entry.1 entry.2) hp
+
+/-- One address can occupy arbitrarily many entries; all answers agree. -/
+theorem repeated_first_reads (n : Nat) (entry : Bytes × State) :
+    firstReads emptyTable (List.replicate (n + 1) entry) = 1 := by
+  rw [List.replicate_succ, firstReads]
+  have hp : (put emptyTable entry.1 entry.2) entry.1 ≠ none := by simp [put]
+  rw [cached_repeated_reads n entry _ hp]
+  simp [emptyTable]
+
+theorem first_read_budget_does_not_bound_log (seed : RunView) (Q : Nat) :
+    ∃ run : RunView, run.2.2 = true ∧
+      firstReads emptyTable run.1 ≤ Q + 1161 ∧ Q + 1161 < run.1.length := by
+  refine ⟨(List.replicate (Q + 1162) ([], default), (seed.2.1, true)), rfl, ?_, ?_⟩
+  · have hr := repeated_first_reads (Q + 1161) ([], (default : State))
+    change firstReads emptyTable (List.replicate ((Q + 1161) + 1) ([], default)) ≤ _
+    rw [hr]
+    omega
+  · simp only [List.length_replicate]
+    omega
+
+/-- The compiler preserves distinct reads, but appends a verifier replay. -/
+theorem compiled_log_length (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (H : Bytes → State) :
+    let original := eval H (experiment P (verifier D d))
+    (eval H (experiment (compiled D d (BinCompiledRunWordStability.wordsFromRun D) P)
+      (verifier D d))).1.length = original.1.length +
+        (eval H (verifier D d original.2.1.1 original.2.1.2)).1.length := by
+  rw [compiled_experiment_eval]
+  exact List.length_append
+
+#print axioms binary_cut_value
+#print axioms bounded_binary_cut_batch
+#print axioms cached_repeated_reads
+#print axioms repeated_first_reads
+#print axioms first_read_budget_does_not_bound_log
+#print axioms compiled_log_length
+end AspisR1.RawRecordedLogLengthBin
+end
