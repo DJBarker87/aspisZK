@@ -68,3 +68,18 @@ fn shipped_pipeline_normalization_equivalence() {
         .and_then(|r| encode_pool_v1_pair_forest_terminal_request_v1(&r));
     assert_eq!(shipped, normalize_pool_v1_pair_forest_terminal_request_reference_v1(&bytes));
 }
+
+// P6 library-model evidence for the fixed four-byte slice/array header
+// comparisons in the extracted codec. All lengths up to the admitted ASQ8
+// input size are covered, not only successful four-byte comparisons.
+#[kani::proof]
+#[kani::unwind(321)]
+fn slice_array_header_comparison_model() {
+    let bytes: [u8; 320] = kani::any();
+    let header: [u8; 4] = kani::any();
+    let len: usize = kani::any();
+    kani::assume(len <= 320);
+    let slice = &bytes[..len];
+    assert_eq!(slice == header, slice == &header[..]);
+    assert_eq!(slice != header, slice != &header[..]);
+}
