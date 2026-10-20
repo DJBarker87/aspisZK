@@ -482,13 +482,13 @@ pub fn encode_pool_v1_pair_forest_terminal_request_reference_v1(
     match request.public {
         PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public) => {
             let payment = asq8_payment_reference::encode_pool_v1_private_transfer_public_v1(&public)
-                .map_err(PoolV1PairForestTerminalFormatErrorV1::Payment)?;
+                .map_err(|e| PoolV1PairForestTerminalFormatErrorV1::Payment(e))?;
             Ok(asq8_reference_envelope(request.verifier_profile, request.verifier_release,
                 request.pool_program, PoolV1TransitionKind::PrivateTransfer as u8, payment))
         }
         PoolV1PairForestTerminalPaymentV1::Withdrawal(public) => {
             let payment = asq8_payment_reference::encode_pool_v1_withdrawal_public_v1(&public)
-                .map_err(PoolV1PairForestTerminalFormatErrorV1::Payment)?;
+                .map_err(|e| PoolV1PairForestTerminalFormatErrorV1::Payment(e))?;
             Ok(asq8_reference_envelope(request.verifier_profile, request.verifier_release,
                 request.pool_program, PoolV1TransitionKind::Withdrawal as u8, payment))
         }
@@ -515,6 +515,61 @@ fn asq8_reference_envelope(
 #[cfg(kani)]
 #[path = "asq8_kani.rs"]
 mod asq8_kani;
+
+// Fixed-admitted-size parser reference: constructor closures avoid the pinned
+// translator's constructor-coercion name collision. Kani checks all 320 bytes.
+#[cfg(any(test, kani, aeneas_ref))]
+pub fn decode_pool_v1_pair_forest_terminal_request_reference_v1(
+    bytes: &[u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES],
+) -> Result<PoolV1PairForestTerminalRequestV1, PoolV1PairForestTerminalFormatErrorV1> {
+    if bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength);
+    }
+    if bytes[..4] != POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongMagic);
+    }
+    if bytes[4] != POOL_V1_PAIR_FOREST_TERMINAL_VERSION {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongVersion);
+    }
+    let kind = transition_kind(bytes[5])?;
+    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongDigestEncoding);
+    }
+    if bytes[7] != 0 {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);
+    }
+    let public = match kind {
+        PoolV1TransitionKind::PrivateTransfer => {
+            PoolV1PairForestTerminalPaymentV1::PrivateTransfer(
+                decode_pool_v1_private_transfer_public_v1(&bytes[REQUEST_PAYMENT_OFFSET..])
+                    .map_err(|e| PoolV1PairForestTerminalFormatErrorV1::Payment(e))?,
+            )
+        }
+        PoolV1TransitionKind::Withdrawal => PoolV1PairForestTerminalPaymentV1::Withdrawal(
+            decode_pool_v1_withdrawal_public_v1(&bytes[REQUEST_PAYMENT_OFFSET..])
+                .map_err(|e| PoolV1PairForestTerminalFormatErrorV1::Payment(e))?,
+        ),
+    };
+    let request = PoolV1PairForestTerminalRequestV1 {
+        verifier_profile: bytes[REQUEST_PROFILE_OFFSET..REQUEST_RELEASE_OFFSET]
+            .try_into()
+            .map_err(|_| PoolV1PairForestTerminalFormatErrorV1::WrongLength)?,
+        verifier_release: bytes[REQUEST_RELEASE_OFFSET..REQUEST_POOL_PROGRAM_OFFSET]
+            .try_into()
+            .map_err(|_| PoolV1PairForestTerminalFormatErrorV1::WrongLength)?,
+        pool_program: bytes[REQUEST_POOL_PROGRAM_OFFSET..REQUEST_PAYMENT_OFFSET]
+            .try_into()
+            .map_err(|_| PoolV1PairForestTerminalFormatErrorV1::WrongLength)?,
+        public,
+    };
+    if request.verifier_profile == [0u8; 32]
+        || request.verifier_release == [0u8; 32]
+        || request.pool_program == [0u8; 32]
+    {
+        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);
+    }
+    Ok(request)
+}
 
 pub fn decode_pool_v1_pair_forest_terminal_request_v1(
     bytes: &[u8],

@@ -49,3 +49,11 @@ fn accepted_request_reencodes_exactly() {
         assert_eq!(encode_pool_v1_pair_forest_terminal_request_reference_v1(&r), Ok(bytes));
     }
 }
+
+#[kani::proof]
+#[kani::unwind(321)]
+fn request_decoder_equivalence() {
+    let bytes: [u8; POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES] = kani::any();
+    assert_eq!(decode_pool_v1_pair_forest_terminal_request_v1(&bytes),
+        decode_pool_v1_pair_forest_terminal_request_reference_v1(&bytes));
+}
