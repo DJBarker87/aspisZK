@@ -38,3 +38,23 @@ dependencies. This must remain explicit in any final source handoff.
 ## Endpoint disposition
 
 Pending focused development. `PrivacyR1Final.lean` is unchanged.
+
+## Stage 2: dependency refinement interface
+
+`PhaseLocalityBin` defines `R1PhaseWire` with evaluated frame/payload/final
+noninterference fields and componentwise `DecodeLocal`; `R1PhaseProver`
+carries leaf noninterference and constructs both the shared binary grammar
+and symbolic order from the supplied data. The old data's arbitrary caddr
+and ord are discarded. `phaseDecode` constructs a block-local decoder and
+`phaseDecode_local` proves its component dependencies. This construction
+alone proves no sampling law or Rust decoder equality.
+
+Focused attempt 9006 passes (2.37s, 3527080 KiB, zero swap, standard axioms).
+9001 failed on a qualified circle-point type name; 9002 passed the initial
+interface; 9005 passed the additional decoder contracts. 9006 changes the
+prover projection to an abbreviation to expose its position types to Lean's
+rewrite transparency. Complete evidence includes all failed diagnostics.
+New-module source/object replacements are snapshotted per attempt under
+`aspis-joint-20261019/snapshots/codex-cx-priv-phase-20261021/`. No pre-existing
+module's shared source or object has been replaced. Dependent targets use
+fresh object fingerprints after each dependency change.
