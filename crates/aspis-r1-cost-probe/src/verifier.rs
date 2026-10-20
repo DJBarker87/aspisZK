@@ -362,13 +362,11 @@ fn validate_checkpoint_queries(queries:&[u32;22])->Result<(),Error> {
 
 #[inline(always)]
 fn read_checkpoint_weights(bytes:&[u8],mut at:usize,mut weights:Vec<K>)->Result<(Vec<K>,usize),Error> {
-    let mut index=0;
-    while index<weights.len() {
+    for out in &mut weights {
         let mut reader=Reader{bytes,at};
         let value=reader.k()?;
         at=reader.at;
-        weights[index]=value;
-        index+=1;
+        *out=value;
     }
     Ok((weights,at))
 }
