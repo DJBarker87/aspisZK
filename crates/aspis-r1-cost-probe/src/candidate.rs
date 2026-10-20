@@ -230,7 +230,10 @@ fn tx2_common<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8],
     while a.next < 22 {
         query_values(proof, &p, &mut a, &g, obs, &geometry, Some(&mut pending))?;
     }
-    pending.finish(&mut a.weights);
+    // End the loop accumulator borrow before finishing its weights.
+    let Accumulator { mut weights, rhs, power, next } = a;
+    pending.finish(&mut weights);
+    let a = Accumulator { weights, rhs, power, next };
     finish_relation(&v, &p, &a, obs)
 }
 

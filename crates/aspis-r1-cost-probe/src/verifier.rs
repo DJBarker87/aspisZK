@@ -235,24 +235,32 @@ fn accumulate_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E,mut 
     a.power=a.power.mul(p.rho);a.next+=1;
 }
 pub fn polynomial(bytes:&[u8],x:E)->E {(0..7).rev().fold(E::ZERO,|a,i|a.mul(x).add(field(bytes,i)))}
-#[inline(never)]
-pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Result<(),Error> {
-    let mut claim=p.claim;
-    for round in 0..p.variant.folds() {
-        let poly=if round==0 {v.round0}else{v.round1};
+fn finish_relation_round(poly:&[u8],alpha:E,mut claim:E,round:usize)->Result<E,Error> {
         let lhs=field(poly,0).add(field(poly,4));let rhs=claim.mul_m31(QUARTER);
         crate::trace::value(15,3*round,lhs);crate::trace::value(15,3*round+1,rhs);
         if lhs!=rhs {return Err(Error::Relation);}
-        claim=polynomial(poly,p.alpha[round]);crate::trace::value(15,3*round+2,claim);
-    }
+        claim=polynomial(poly,alpha);crate::trace::value(15,3*round+2,claim);
+    Ok(claim)
+}
+
+fn finish_query_dot(final_message:&[u8],weights:&[K])->Result<E,Error> {
+    let mut dot=crate::fast_pairing::EbyKDot::new();
+    let mut j=0;
+    while j<weights.len() {dot.push(field(final_message,j),weights[j]).map_err(|_|Error::Parse)?;j+=1;}
+    Ok(dot.finish())
+}
+
+#[inline(never)]
+pub fn finish_relation(v:&View<'_>,p:&Prepared,a:&Accumulator,obs:Observer)->Result<(),Error> {
+    let mut claim=p.claim;
+    claim=finish_relation_round(v.round0,p.alpha[0],claim,0)?;
+    if p.variant.folds()==2 {claim=finish_relation_round(v.round1,p.alpha[1],claim,1)?;}
     let weights=Weights::new(p.variant,&p.semantic_alpha,&p.z)?;
     let pair=weights.pair(&p.alpha[..p.variant.folds()],v.final_message,p.kappa)?;
     crate::trace::value(16,0,pair);crate::trace::value(16,1,claim);
     if pair!=claim {return Err(Error::Relation);}
     mark(obs,Phase::Relation);
-    let mut dot=crate::fast_pairing::EbyKDot::new();
-    for (j,w) in a.weights.iter().enumerate() {dot.push(field(v.final_message,j),*w).map_err(|_|Error::Parse)?;}
-    let actual=dot.finish();
+    let actual=finish_query_dot(v.final_message,&a.weights)?;
     crate::trace::value(17,0,actual);crate::trace::value(17,1,a.rhs);
     if a.next!=22||actual!=a.rhs {return Err(Error::Query);}
     mark(obs,Phase::Final);Ok(())
@@ -289,7 +297,9 @@ pub fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)
     if bytes[16..48]!=hash.digest(&[proof])||bytes[48..80]!=hash.digest(&[public])||bytes[end..]!=hash.digest(&[b"UNPROVED:R1:checkpoint",&bytes[..end]]) {return Err(Error::Checkpoint);}
     let mut r=Reader{bytes,at:80};let state=r.raw();let roots=[r.raw(),r.raw()];
     let gamma=r.e()?;let kappa=r.e()?;let alpha=[r.e()?,r.e()?];let rho=r.k()?;
-    let queries=core::array::from_fn(|_|u32::from_le_bytes(r.raw()));
+    let mut queries=[0u32;22];
+    let mut query_index=0;
+    while query_index<queries.len() {queries[query_index]=u32::from_le_bytes(r.raw());query_index+=1;}
     for (i,q) in queries.iter().enumerate(){if *q>=1<<18||queries[..i].contains(q){return Err(Error::Checkpoint);}}
     let mut semantic_alpha=[K::ZERO;10];for x in &mut semantic_alpha {*x=r.k()?;}
     let z=[SecureCirclePoint{x:r.k()?,y:r.k()?},SecureCirclePoint{x:r.k()?,y:r.k()?}];
