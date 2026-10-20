@@ -1,0 +1,44 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-prereq/docs/research/100bit-spend-path-20261013/lean/OracleDecisionPrereqPaths.lean:20:8: error: Ambiguous term
+  Byte
+Possible interpretations:
+  _root_.Byte : Type
+  
+  BinMerkle32Path.Byte : Type
+  
+  AspisV8R19.DuplexFrames.Byte : Type
+/Users/dominic/ZK/.worktrees/cx-oracle-prereq/docs/research/100bit-spend-path-20261013/lean/OracleDecisionPrereqPaths.lean:25:4: warning: declaration uses `sorry`
+/Users/dominic/ZK/.worktrees/cx-oracle-prereq/docs/research/100bit-spend-path-20261013/lean/OracleDecisionPrereqPaths.lean:49:17: error: unsolved goals
+case cons
+H : Bytes → State
+o : Opening
+os : List Opening
+ih : (eval H (checkAll os)).1.length = pathCalls os
+⊢ o.slots.length + 1 + pathCalls os = o.slots.length + 1 + (List.map (fun o => o.slots.length + 1) os).sum
+/Users/dominic/ZK/.worktrees/cx-oracle-prereq/docs/research/100bit-spend-path-20261013/lean/OracleDecisionPrereqPaths.lean:75:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a + b - c ≤ -2
+where
+ a := ↑depth
+ b := ↑os.length * ↑(depth + 1)
+ c := ↑(os.length + 1) * ↑(depth + 1)
+/Users/dominic/ZK/.worktrees/cx-oracle-prereq/docs/research/100bit-spend-path-20261013/lean/OracleDecisionPrereqPaths.lean:84:2: error: Type mismatch
+  OracleDecisionPrereqSampler.verifier_length D (decision os frames) H pub pf
+    (3 * queries * (depth + 1) + frames.length)
+    (id (Decidable.byContradiction fun a => verifier_budget._proof_1 os frames H queries depth ht a))
+has type
+  (eval H (OracleDecisionFeasibilityCore.verifier D (decision os frames) pub pf)).1.length ≤
+    115 + (3 * queries * (depth + 1) + frames.length)
+but is expected to have type
+  (eval H (OracleDecisionFeasibilityCore.verifier D (decision os frames) pub pf)).1.length ≤
+    B_V queries depth frames.length
+'AspisR1.OracleDecisionPrereqPaths.checkAll_length' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OracleDecisionPrereqPaths.readFrames_length' depends on axioms: [propext]
+'AspisR1.OracleDecisionPrereqPaths.terminal_length' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OracleDecisionPrereqPaths.pathCalls_uniform' depends on axioms: [propext, sorryAx]
+'AspisR1.OracleDecisionPrereqPaths.verifier_budget' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionPrereqPaths.independent_path_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionPrereqPaths.original_budget' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OracleDecisionPrereqPaths.frozen_terminal_count' depends on axioms: [propext, sorryAx, Quot.sound]
