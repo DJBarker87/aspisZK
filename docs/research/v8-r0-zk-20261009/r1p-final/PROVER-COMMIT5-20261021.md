@@ -198,3 +198,30 @@ is replayed. No certificate generation or expensive arithmetic gate runs.
 | R_commit_exhaustion | Every tapeOf failure implies one of the actual two 16-try little-endian stream-exhaustion events; exact source wordsE transport (P`R1Z/FinalR1PBin.lean:44,54`). |
 | R_commit_counter₁/₂, R_commit_stream₁/₂, R_commit_cell_count, R_commit_blocks₁/₂ | E≤2^64, 16L≤8E, RCommitCount cell bounds and E≤2L; universal source commitment read completeness. D76's fixture count alone is not this universal refinement. |
 ```
+
+
+## Evidence reproduction and scope details
+
+`harness/validate.py` checks all retained results without rerunning a
+compiler or solver. `elf-source-inventory.json` checks all 491 tracked
+crate/program inputs against the host workspace; base `a7b7621d9` has no
+Rust/program difference from the preceding frozen source baseline. Only
+this continuation's three cfg-only Rust additions differ. `source-release.json`
+and the per-attempt source revisions pin adopted Lean sources; rejected
+working-tree drafts are retained as text with matching SHA256.
+
+Lean uses the mandatory existing env J launcher, -M7000, with its smaller
+4 GiB MemoryMax / 2 GiB MemoryHigh, MemorySwapMax=0, and existing
+TasksMax=128. These inherited Lean limits differ from the requested Rust
+6G/8G/64 scope settings; the exact launcher commands and limits are recorded
+in `lean/attempts.jsonl`. Every Kani/SBF build uses the requested 6G/8G/64
+settings. No global launcher or peer configuration is modified, and no job
+is uncapped. The own-cone cache is reused and prior own source/object
+versions are snapshotted; no peer-owned source is overwritten.
+
+The next source work is a concrete quotient decoder with byte/field carrier
+and accepted-output law, then proof that the full commitment transcript
+factors through the quotient (or an actual measure-preserving padding
+coupling from the existing two streams), followed by the universal
+caller/count/exhaustion instance. The checked single-step and actual
+extracted-loop composition need no further full 16-body SAT run.
