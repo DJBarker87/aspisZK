@@ -1,0 +1,39 @@
+/Users/dominic/ZK/.worktrees/cx-r14-finish/docs/research/100bit-spend-path-20261013/lean/Stage2QueryChecks.lean:79:64: error: Application type mismatch: The argument
+  chain
+has type
+  Stage2ContinuationLoop.Chain (fun a => ↑a.next)
+    (Stage2ContinuationOwnedLoop.adapt fun a b => stage2QueryCall aops ops proof p a g obs geometry b) a b out bout 12
+but is expected to have type
+  Stage2ContinuationLoop.Chain UScalar.val ?m.72 ?m.73 ?m.75 out.next ?m.76 ?m.77
+in the application
+  chain_end UScalar.val ?m.72 chain
+/Users/dominic/ZK/.worktrees/cx-r14-finish/docs/research/100bit-spend-path-20261013/lean/Stage2QueryChecks.lean:77:38: error: unsolved goals
+aops : AccumulateOps
+ops : QueryOps
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array Stage2E 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geometry : verifier.QueryGeometry
+I : verifier.Accumulator → verifier.BatchedWeights → Prop
+step :
+  ∀ (a : verifier.Accumulator) (b : verifier.BatchedWeights) (a1 : verifier.Accumulator) (b1 : verifier.BatchedWeights),
+    ↑a.next < 22 →
+      Stage2ContinuationOwnedLoop.adapt (fun a b => stage2QueryCall aops ops proof p a g obs geometry b) a b =
+          ok (core.result.Result.Ok (), a1, b1) →
+        I a b → I a1 b1
+a out : verifier.Accumulator
+b bout : verifier.BatchedWeights
+start : ↑a.next = 10
+initial : I a b
+h :
+  verifier.candidate.query_loop (stage2QueryCall aops ops) proof p a g obs geometry b 22#usize =
+    ok (core.result.Result.Ok (out, bout))
+chain :
+  Stage2ContinuationLoop.Chain (fun a => ↑a.next)
+    (Stage2ContinuationOwnedLoop.adapt fun a b => stage2QueryCall aops ops proof p a g obs geometry b) a b out bout 12
+⊢ I out bout ∧ ↑out.next = 22
+'AspisR1Stage2.Stage2Finish.query_first_comparison' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1Stage2.Stage2Finish.chain_invariant' does not depend on any axioms
+'AspisR1Stage2.Stage2Finish.chain_end' does not depend on any axioms
+'AspisR1Stage2.Stage2Finish.twelve_calls_invariant' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

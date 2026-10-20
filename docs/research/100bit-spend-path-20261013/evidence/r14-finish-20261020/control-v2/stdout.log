@@ -1,0 +1,133 @@
+/Users/dominic/ZK/.worktrees/cx-r14-finish/docs/research/100bit-spend-path-20261013/lean/Stage2FinishControl.lean:87:62: error: Application type mismatch: The argument
+  h
+has type
+  (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r0
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let i ← ops.folds p.variant
+          if i = 2#usize then do
+              let we1 ← p.alpha.index_usize 1#usize
+              let r1 ← verifier.finishRelationRoundWithOps ops v.round1 we1 val 1#usize
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let r2 ← ops.newWeights p.variant p.semantic_alpha p.z
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      let s ←
+                        core.array.Array.index
+                            (core.ops.index.IndexSlice
+                              (core.slice.index.SliceIndexRangeToUsizeSlice aspis_core.field.wide_exact.WideExact))
+                            p.alpha { «end» := i }
+                      let r3 ← ops.pair val2 s v.final_message p.kappa
+                      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                      match cf3 with
+                        | core.ops.control_flow.ControlFlow.Continue val3 => do
+                          ops.trace 16#u16 0#usize val3
+                          ops.trace 16#u16 1#usize val1
+                          let b ← ops.ne val3 val1
+                          if b = true then ok (core.result.Result.Err verifier.Error.Relation)
+                            else do
+                              ops.mark obs verifier.Phase.Relation
+                              have s1 : Slice aspis_core.field.QM31 := a.weights.deref
+                              let r4 ← ops.dot v.final_message s1
+                              let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                              match cf4 with
+                                | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                  ops.trace 17#u16 0#usize val4
+                                  ops.trace 17#u16 1#usize a.rhs
+                                  if (a.next != 22#usize) = true then ok (core.result.Result.Err verifier.Error.Query)
+                                    else do
+                                      let b1 ← ops.ne val4 a.rhs
+                                      if b1 = true then ok (core.result.Result.Err verifier.Error.Query)
+                                        else do
+                                          ops.mark obs verifier.Phase.Final
+                                          ok (core.result.Result.Ok ())
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame verifier.Error) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+            else do
+              let r1 ← ops.newWeights p.variant p.semantic_alpha p.z
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let s ←
+                    core.array.Array.index
+                        (core.ops.index.IndexSlice
+                          (core.slice.index.SliceIndexRangeToUsizeSlice aspis_core.field.wide_exact.WideExact))
+                        p.alpha { «end» := i }
+                  let r2 ← ops.pair val1 s v.final_message p.kappa
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      ops.trace 16#u16 0#usize val2
+                      ops.trace 16#u16 1#usize val
+                      let b ← ops.ne val2 val
+                      if b = true then ok (core.result.Result.Err verifier.Error.Relation)
+                        else do
+                          ops.mark obs verifier.Phase.Relation
+                          have s1 : Slice aspis_core.field.QM31 := a.weights.deref
+                          let r3 ← ops.dot v.final_message s1
+                          let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                          match cf3 with
+                            | core.ops.control_flow.ControlFlow.Continue val3 => do
+                              ops.trace 17#u16 0#usize val3
+                              ops.trace 17#u16 1#usize a.rhs
+                              if (a.next != 22#usize) = true then ok (core.result.Result.Err verifier.Error.Query)
+                                else do
+                                  let b1 ← ops.ne val3 a.rhs
+                                  if b1 = true then ok (core.result.Result.Err verifier.Error.Query)
+                                    else do
+                                      ops.mark obs verifier.Phase.Final
+                                      ok (core.result.Result.Ok ())
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok ())
+but is expected to have type
+  (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r0
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue v => ?m.204 v
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok ())
+in the application
+  try_success r0 ?m.204 () h
+/Users/dominic/ZK/.worktrees/cx-r14-finish/docs/research/100bit-spend-path-20261013/lean/Stage2FinishControl.lean:89:50: error: Application type mismatch: The argument
+  h
+has type
+  ?m.236 (core.result.Result.Ok claim0) hr0 h✝ claim0 = ok (core.result.Result.Ok ())
+but is expected to have type
+  (do
+      let x ← ?m.258
+      ?m.259 x) =
+    ok ?m.260
+in the application
+  bind_success ?m.258 ?m.259 ?m.260 h
+'AspisR1Stage2.Stage2Finish.bind_success' depends on axioms: [propext]
+'AspisR1Stage2.Stage2Finish.guard_success' does not depend on any axioms
+'AspisR1Stage2.Stage2Finish.round_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1Stage2.Stage2Finish.try_success' depends on axioms: [propext, Quot.sound]
+'AspisR1Stage2.Stage2Finish.finish_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,31 @@
+import Stage2FinishChecks
+import Stage2AccumulatorStep
+import Stage2FinishGeometry
+import Stage2FinishReducer
+
+#print axioms AspisR1Stage2.Stage2Finish.bind_success
+#print axioms AspisR1Stage2.Stage2Finish.guard_success
+#print axioms AspisR1Stage2.Stage2Finish.round_success
+#print axioms AspisR1Stage2.Stage2Finish.try_success
+#print axioms AspisR1Stage2.Stage2Finish.finish_success
+#print axioms AspisR1Stage2.Stage2Finish.query_first_comparison
+#print axioms AspisR1Stage2.Stage2Finish.chain_invariant
+#print axioms AspisR1Stage2.Stage2Finish.chain_end
+#print axioms AspisR1Stage2.Stage2Finish.twelve_calls_invariant
+#print axioms AspisR1Stage2.Stage2Finish.accumulate_arithmetic
+#print axioms AspisR1Stage2.Stage2Finish.accumulate_decoded
+#print axioms AspisR1Stage2.Stage2Finish.shape_digest_facts
+#print axioms AspisR1.Stage2FinishPairing.round_refines
+#print axioms AspisR1.Stage2FinishPairing.finish_acceptedPairing
+#print axioms AspisR1.Stage2FinishPairing.finish_pairingChecks
+#print axioms AspisR1.Stage2FirstMatch.successful_query_match
+#print axioms AspisR1.Stage2FirstMatch.prefix_step
+#print axioms AspisR1.Stage2FirstMatch.twelve_queries_firstMatch
+#print axioms AspisR1.Stage2FinishAccumulator.finish_closedSum
+#print axioms AspisR1.Stage2FinishAccumulator.finish_residualBatch
+#print axioms AspisR1.Stage2FinishGeometry.line_with_inverse_tuple
+#print axioms AspisR1.Stage2FinishGeometry.circle_with_inverse_tuple
+#print axioms AspisR1.Stage2FinishReducer.canonical_after_repin
+#print axioms AspisR1.Stage2FinishReducer.residue_after_repin
+#print axioms AspisR1.Stage2FinishReducer.four_push_finish_after_repin
+#print axioms AspisR1.Stage2FinishChecks.finish_checks_fields
