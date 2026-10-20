@@ -1,0 +1,9 @@
+# Symbolic exact serializer byte layout
+
+PROVED: `paint_prefix` describes the reverse-order fixed-width writes performed by captured mutable-iterator continuations. With enough output space and k bytes per block, n writes return `(range n).flatMap block` followed by the untouched suffix starting at k*n. `paint_full` removes the suffix when the lengths agree. The proof is symbolic induction; it does not normalize field arithmetic or a large concrete recurrence. The older R144BeforeOodBytesBridge take/drop serialization proof shape is explicitly reused; its unrelated extraction dependencies are not rebuilt.
+
+PROVED specialization: `paint_eight_limbs_exact` applies the generic theorem to the current selected eight WideExact limbs and Rust U32 little-endian byte blocks. Painting the32-byte zero buffer equals exactly the source-limb-order flatMap of the eight4-byte encodings. The eight-element list/index simplification leaves U32 byte arithmetic opaque.
+
+OPEN: connection of the actual generated serializer's captured continuation to this paint model, complete std-library P6 correspondence and source/runtime/global100-bit closure. This packet does not claim the whole serializer or S5 closed. The serializer worker owns the continuation proof. ToBytesP6StepsV3 is a pinned pre-existing selected owner; its exact source is retained as a dependency, with no new compile/replay or whole-owner validation claimed here.
+
+Two focused local Lean4.32 -j1 -M4400 runs passed on warm objects,2.126s/1.970s, peak process2254094336B/2245033984B,zero swaps, standard axioms only. Atomic mkdir/live-Lean exclusion and7.5GiB watchdog retained; no dependency build. Exact source/object/import/command/resource pins and resolved warm object closure included. No binaries, production source, CU or artifact change.
