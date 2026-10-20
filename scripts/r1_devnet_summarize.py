@@ -39,6 +39,9 @@ for folder in receipts.glob('deploy-*'):
         if isinstance(v,dict) and v.get('signature'):
             sig=v['signature']
             if sig not in transactions:add(v,'deployment-signed-attempt',str(path.relative_to(root)))
+for path in (receipts/'spend').glob('*-attempt-[0-9].json'):
+    v=read(path,{})
+    if isinstance(v,dict) and v.get('signature') and v['signature'] not in transactions:add(v,path.stem,str(path.relative_to(root)))
 for v in transactions.values():
     v.setdefault('compute_units_consumed',None);v.setdefault('confirmation_status','recorded_attempt_not_in_finalized_history')
 phases={}

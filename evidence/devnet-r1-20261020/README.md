@@ -163,3 +163,18 @@ Generate the public signature and phase summary after exporting receipts:
 ```sh
 python3 scripts/r1_devnet_summarize.py evidence/devnet-r1-20261020
 ```
+
+For another independent spend run against the same deployed programs, use a
+fresh public key namespace and receipt directory. This creates a fresh mint,
+Pool, governed registry entry and notes while retaining every earlier key:
+
+```sh
+jq '.key_namespace="repeat02" | .mint=null | .accounts={}' \
+  r1-devnet.template.json > r1-devnet.repeat02.json
+# Use the same capped receipt wrapper, a new scope/run directory, and:
+python3 r1_devnet_spend.py r1-devnet.repeat02.json receipts/spend-repeat02
+```
+
+A completed receipt directory returns its recorded completion without new
+transactions. Do not repeat a successful measurement unless a new result is
+actually needed.

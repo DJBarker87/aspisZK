@@ -2,7 +2,7 @@
 """Config-driven R1 devnet setup and spends; wallet files stay in host keys/.
 Run inside r1_devnet_receipt.sh and the documented capped scope.
 """
-import base64,json,os,pathlib,subprocess,sys,time,hashlib
+import base64,json,os,pathlib,subprocess,sys,time,hashlib,re
 from concurrent.futures import ThreadPoolExecutor
 from r1_devnet_rpc import rpc
 C=json.load(open(sys.argv[1]));O=pathlib.Path(sys.argv[2]);O.mkdir(exist_ok=True,mode=0o700)
@@ -12,7 +12,9 @@ SYSTEM='11111111111111111111111111111111';TOKEN='TokenkegQfeZyiNwAJbNbGKPFXCWuBv
 def write(name,v):
     p=O/(name+'.json');p.write_text(json.dumps(v,indent=2)+'\n')
 def key(name):
-    p=pathlib.Path('keys')/(name+'.json')
+    namespace=C.get('key_namespace','')
+    assert re.fullmatch(r'[A-Za-z0-9_-]*',namespace), 'invalid key namespace'
+    p=pathlib.Path('keys')/((namespace+'-' if namespace else '')+name+'.json')
     if not p.exists():subprocess.run([str(CLI/'solana-keygen'),'new','--no-bip39-passphrase','--silent','-o',str(p)],stdout=subprocess.DEVNULL,check=True)
     os.chmod(p,0o600)
     return str(p),subprocess.check_output([str(CLI/'solana-keygen'),'pubkey',str(p)],text=True).strip()
@@ -93,6 +95,9 @@ def upload(label,address,path,body):
 assert subprocess.check_output([str(CLI/'solana-keygen'),'pubkey','keys/payer.json'],text=True).strip()==C['payer']
 assert rpc(URL,'getGenesisHash',[])==C['genesis_hash']
 assert 'carrier' in C,'deploy and pin the raw-buffer carrier before setup'
+if (O/'complete.json').exists():
+    completed=json.load(open(O/'complete.json'));assert completed['programs']==C['programs'] and completed['payer']==C['payer']
+    print('Recorded run already complete; use a fresh key_namespace and receipt directory for a new run.');sys.exit(0)
 mintkey,mint=key('spend-mint');sourcekey,source=key('spend-source');destkey,dest=key('spend-destination');govkey,gov=key('spend-governance')
 if C.get('mint'):assert C['mint']==mint, 'retained mint key does not match public config'
 for role,actual in [('source',source),('destination',dest),('token_owner',gov)]:
@@ -162,4 +167,4 @@ for n,label in enumerate(['transfer','withdrawal']):
     assert account(negcp)['value']==negative_before,'mutated proof changed zero checkpoint'
     write(label+'-mutation-validation',{'error_name':'InvalidInstructionData','fresh_checkpoint_unchanged':True})
     send(label+'-restore-proof',[ix(C['carrier'],[[proofaccount,True,True]],offset.to_bytes(4,'little')+proof[offset:offset+1])],['keys/payer.json',proofkey])
-write('complete',{'settled':['transfer','withdrawal'],'negative_checks':['transfer-replay','withdrawal-replay','transfer-mutated-stage1','withdrawal-mutated-stage1'],'mint':mint,'source':source,'destination':dest,'fixture_witnesses_public':True})
+write('complete',{'settled':['transfer','withdrawal'],'negative_checks':['transfer-replay','withdrawal-replay','transfer-mutated-stage1','withdrawal-mutated-stage1'],'mint':mint,'source':source,'destination':dest,'fixture_witnesses_public':True,'programs':C['programs'],'payer':C['payer'],'key_namespace':C.get('key_namespace','')})
