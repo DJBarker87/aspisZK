@@ -1,0 +1,167 @@
+import R17QueryValuesWholeBodyStoredV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace R17QueryValuesSlotsStored
+open AspisR1QueryGeometryActual AspisCircleGroupOrder
+open R17QueryValuesEntryActualV1 R17QueryPerItemValuesV2 R17FibrePointLineNodeActual
+open R17QueryValuesWholeBodyV21 R17QueryValuesWholeBodyStoredV1
+private theorem bind_ok_inv {α β : Type} {r : Result α} {f : α → Result β}
+    {x : β} (h : Bind.bind r f = .ok x) :
+    ∃ a, r = .ok a ∧ f a = .ok x := by
+  cases r with
+  | ok a => exact ⟨a,rfl,h⟩
+  | fail e => simp [Bind.bind] at h
+  | div => simp [Bind.bind] at h
+
+theorem cast32_to_usize_value (q : U32) : (UScalar.cast .Usize q).val=q.val := by
+  rw [UScalar.cast_val_eq]
+  apply Nat.mod_eq_of_lt
+  have hq : q.val<4294967296 := q.hBounds
+  have hw : 4294967296 ≤ 2^(UScalarTy.Usize.numBits) := by
+    cases System.Platform.numBits_eq <;> simp_all [UScalarTy.numBits]
+  exact lt_of_lt_of_le hq hw
+
+theorem successful_queryValuesEntry_core_with_cast
+    (q : Std.U32)
+    (anyCheck : core.slice.iter.Iter field.M31 →
+      Result (Bool × core.slice.iter.Iter field.M31))
+    (arr : Array field.M31 5#usize) (line_z : field.M31)
+    (h : queryValuesEntry q anyCheck = .ok (.Ok (arr, line_z))) :
+    ∃ u ix iy point line_x line_y,
+      lift (UScalar.cast UScalarTy.Usize q) = .ok u ∧
+      u.val < 262144 ∧ ix.val < 262144 ∧ iy.val < 262144 ∧
+      ix.val = (u.val / 4) * 4 ∧ iy.val = (u.val / 4) * 4 + 3 ∧
+      perQueryCore actualCMOps actualM31Ops u ix iy =
+        .ok (point, line_x, line_y, line_z) ∧
+      arr = Array.make 5#usize [point.x, point.y, line_x, line_y, line_z] ∧
+      ∃ it it', anyCheck it = .ok (false, it') := by
+  unfold queryValuesEntry at h
+  rcases bind_ok_inv h with ⟨u, hcast, hrest0⟩
+  rcases bind_ok_inv hrest0 with ⟨r0, hr0, hmatch0⟩
+  cases r0 with
+  | Err e =>
+    change ok (core.result.Result.Err QueryValuesError.Query) =
+      ok (core.result.Result.Ok (arr, line_z)) at hmatch0
+    cases Result.ok.inj hmatch0
+  | Ok val =>
+    obtain ⟨hval0, hu⟩ := fibreIndexNew_success_inv hr0
+    rcases bind_ok_inv hmatch0 with ⟨point, hpoint, hrest1⟩
+    rcases bind_ok_inv hrest1 with ⟨i, hdiv, hrest2⟩
+    rcases bind_ok_inv hrest2 with ⟨i1, hmul1, hrest3⟩
+    rcases bind_ok_inv hrest3 with ⟨r1, hr1, hmatch1⟩
+    cases r1 with
+    | Err e =>
+      change ok (core.result.Result.Err QueryValuesError.Query) =
+        ok (core.result.Result.Ok (arr, line_z)) at hmatch1
+      cases Result.ok.inj hmatch1
+    | Ok val1 =>
+      obtain ⟨hval1, hi1⟩ := fibreIndexNew_success_inv hr1
+      rcases bind_ok_inv hmatch1 with ⟨line_x, hlineX, hrest4⟩
+      rcases bind_ok_inv hrest4 with ⟨i2, hmul2, hrest5⟩
+      rcases bind_ok_inv hrest5 with ⟨i3, hadd, hrest6⟩
+      rcases bind_ok_inv hrest6 with ⟨r2, hr2, hmatch2⟩
+      cases r2 with
+      | Err e =>
+        change ok (core.result.Result.Err QueryValuesError.Query) =
+          ok (core.result.Result.Ok (arr, line_z)) at hmatch2
+        cases Result.ok.inj hmatch2
+      | Ok val2 =>
+        obtain ⟨hval2, hi2⟩ := fibreIndexNew_success_inv hr2
+        rcases bind_ok_inv hmatch2 with ⟨line_y, hlineY, hrest7⟩
+        rcases bind_ok_inv hrest7 with ⟨m, hm, hrest8⟩
+        rcases bind_ok_inv hrest8 with ⟨m1, hm1, hrest9⟩
+        rcases bind_ok_inv hrest9 with ⟨line_z0, hsub, hrest10⟩
+        rcases bind_ok_inv hrest10 with ⟨s, hs, hrest11⟩
+        rcases bind_ok_inv hrest11 with ⟨it, hit, hrest12⟩
+        rcases bind_ok_inv hrest12 with ⟨bi, hany, hif⟩
+        rcases bi with ⟨b, it'⟩
+        cases b with
+        | true =>
+          change ok (core.result.Result.Err QueryValuesError.Query) =
+            ok (core.result.Result.Ok (arr, line_z)) at hif
+          cases Result.ok.inj hif
+        | false =>
+          have hret : (Array.make 5#usize
+              [point.x, point.y, line_x, line_y, line_z0], line_z0) =
+              (arr, line_z) := by
+            change ok (core.result.Result.Ok
+                (Array.make 5#usize
+                  [point.x, point.y, line_x, line_y, line_z0], line_z0)) =
+              ok (core.result.Result.Ok (arr, line_z)) at hif
+            exact core.result.Result.Ok.inj (Result.ok.inj hif)
+          have harr : arr = Array.make 5#usize
+              [point.x, point.y, line_x, line_y, line_z0] :=
+            congrArg Prod.fst hret |>.symm
+          have hz : line_z0 = line_z := congrArg Prod.snd hret
+          have hi12 : i1 = i2 := Result.ok.inj (hmul1.symm.trans hmul2)
+          have hadd' := hadd
+          rw [← hi12] at hadd'
+          have hc : R17QueryIndexArithmeticV1.checkedLineIndices u = .ok (i1, i3) := by
+            unfold R17QueryIndexArithmeticV1.checkedLineIndices
+            simp [hdiv, hmul1, hadd']
+            change Bind.bind (ok i3) (fun y => pure (i1, y)) = ok (i1, i3)
+            rfl
+          obtain ⟨hix, hiy, _, _⟩ :=
+            R17QueryIndexArithmeticV1.successful_checkedLineIndices u i1 i3 hu hc
+          have hix' : val1.val = (u.val / 4) * 4 := by rw [hval1, hix]
+          have hiy' : val2.val = (u.val / 4) * 4 + 3 := by rw [hval2, hiy]
+          have hpoint' : fast_domain.fibre_point actualCMOps u = .ok point := by
+            simpa [hval0] using hpoint
+          have hlineX' : R17FibrePointLineNodeActual.line_node
+              actualCMOps actualM31Ops val1 = .ok line_x := hlineX
+          have hlineY' : R17FibrePointLineNodeActual.line_node
+              actualCMOps actualM31Ops val2 = .ok line_y := hlineY
+          have hcore : perQueryCore actualCMOps actualM31Ops u val1 val2 =
+              .ok (point, line_x, line_y, line_z) := by
+            unfold perQueryCore
+            simp [hpoint', hlineX', hlineY', hm, hm1, hsub, hz]
+            rfl
+          have hval1bound : val1.val < 262144 := by rw [hval1]; exact hi1
+          have hval2bound : val2.val < 262144 := by rw [hval2]; exact hi2
+          exact ⟨u, val1, val2, point, line_x, line_y, hcast, hu, hval1bound, hval2bound,
+            hix', hiy', hcore, by simpa [hz] using harr, it, it', hany⟩
+
+theorem emitted_success_slot_values
+    (q : U32)
+    (anyCheck : core.slice.iter.Iter field.M31 → Result (Bool × core.slice.iter.Iter field.M31))
+    (arr : Array field.M31 5#usize) (line_z : field.M31)
+    (h : emittedRawWithCallees actualSourceCallees anyCheck q = .ok (.Ok (arr,line_z))) :
+    ∃ (u ix iy : domain.FibreIndex) (hu : u.val<262144)
+      (hix : ix.val<262144) (hiy : iy.val<262144),
+      u.val=q.val ∧
+      ix.val=(u.val/4)*4 ∧ iy.val=(u.val/4)*4+3 ∧
+      arr.val.map R17CurrentM31Semantics.decode =
+        [(R17TableCirclePowerBridge.circleCoords
+           (AspisV7ExactOneFoldDomains.storedInitialFibrePoint20 ⟨u.val,hu⟩)).re,
+         (R17TableCirclePowerBridge.circleCoords
+           (AspisV7ExactOneFoldDomains.storedInitialFibrePoint20 ⟨u.val,hu⟩)).im,
+         AspisV7ExactOneFoldDomains.storedFirstLineX18 ⟨ix.val,hix⟩,
+         AspisV7ExactOneFoldDomains.storedFirstLineX18 ⟨iy.val,hiy⟩,
+         2*(AspisV7ExactOneFoldDomains.storedFirstLineX18 ⟨ix.val,hix⟩)^2-1] ∧
+      R17CurrentM31Semantics.decode line_z =
+        2*(AspisV7ExactOneFoldDomains.storedFirstLineX18 ⟨ix.val,hix⟩)^2-1 := by
+  have he := emittedRawWithCallees_eq_directWithCallees actualSourceCallees q anyCheck
+  have hd : directWithCallees actualSourceCallees q anyCheck = .ok (.Ok (arr,line_z)) := he.symm ▸ h
+  rw [direct_eq_queryValuesEntry q anyCheck] at hd
+  obtain ⟨u,ix,iy,point,x,y,hcast,hu,hix,hiy,hi,hj,hcore,harr,_⟩ :=
+    successful_queryValuesEntry_core_with_cast q anyCheck arr line_z hd
+  have hcu : UScalar.cast .Usize q=u := Result.ok.inj hcast
+  have huq : u.val=q.val := by rw [←hcu,cast32_to_usize_value]
+  obtain ⟨hp,hx,hy,hz⟩ := successful_perQueryCore_stored u ix iy hu hix hiy point x y line_z hcore
+  have hpx := congrArg R17TableBasePowerBridge.ZC.re hp
+  have hpy := congrArg R17TableBasePowerBridge.ZC.im hp
+  change R17CurrentM31Semantics.decode point.x = _ at hpx
+  change R17CurrentM31Semantics.decode point.y = _ at hpy
+  change R17CurrentM31Semantics.decode x = _ at hx
+  change R17CurrentM31Semantics.decode y = _ at hy
+  change R17CurrentM31Semantics.decode line_z = _ at hz
+  refine ⟨u,ix,iy,hu,hix,hiy,huq,hi,hj,?_,hz⟩
+  rw [harr]
+  change [R17CurrentM31Semantics.decode point.x,R17CurrentM31Semantics.decode point.y,
+    R17CurrentM31Semantics.decode x,R17CurrentM31Semantics.decode y,R17CurrentM31Semantics.decode line_z] = _
+  rw [hpx,hpy,hx,hy,hz]
+
+#print axioms cast32_to_usize_value
+#print axioms successful_queryValuesEntry_core_with_cast
+#print axioms emitted_success_slot_values
+end R17QueryValuesSlotsStored

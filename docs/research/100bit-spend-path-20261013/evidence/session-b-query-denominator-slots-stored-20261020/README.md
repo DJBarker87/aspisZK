@@ -1,0 +1,7 @@
+# Exact returned denominator slots reach stored geometry
+
+PROVED: successful full emitted per-query helper, instantiated with checked current domain/field operations, returns the exact ordered five stored field values: the input query's initial circle x/y, the two first-line nodes at floor(q/4)*4 and +3, and 2*lineX^2-1. This strengthens the earlier existential stored-coordinate statement by binding those coordinates to the actual returned array slots and binding the successful U32-to-Usize cast to that same input query. The returned separate line-z is the same fifth field value.
+
+The cast law covers both allowed platform widths and uses only propext. The stronger source inversion reuses the retained complete Result-chain proof, preserving its cast success witness rather than discarding it. No field computation, lookup success, or stored-coordinate equality is assumed independently. Iterator-any remains an explicit parameter; original geometry iterators/candidate adoption, whole grouping, canonical caller/input reachability and deployed/runtime correspondence remain OPEN.
+
+One focused NUC target, three standard-only axiom reports, -M4400/default proof options, High1GiB/Max2GiB/Swap0. Earlier coordinate-only v1 was green; an added cast proof initially tried decide on an abstract platform width, then used the retained platform-width case theorem symbolically. Only the final stronger selected source is released. No production change or binary artifacts.
