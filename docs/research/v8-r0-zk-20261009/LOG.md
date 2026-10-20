@@ -7336,3 +7336,19 @@ classification, and universal read coverage. No checklist row is closed yet.
 Note: this endpoint is built on `PrivacyR1FinalProtocolHistoryReal`, while
 builder part 6 builds on `PrivacyR1FinalRelease`; the two will be merged
 into one release endpoint once both land.
+
+## D101 — builder refinement part 6: records via P6 route, bank complete (2026-10-21, lead)
+
+Landed from `codex/cx-builder-ref6-20261021` (`r1p-final/BUILDER-CONT6-20261021.md`).
+Per D99, `records` is closed by the P6 route: total refinement of all 20 owned
+reference fields, composed with D90's Kani shipped = reference verdicts as a
+named P6 certificate. Also proved: actual common-validator refinement,
+complete bank materialisation (derived 57-block size), and checked merge
+equivalence. `PrivacyR1FinalReleaseSource` is the conditional source release
+endpoint with the remaining joins explicit. 23 modules, 74 standard-axiom
+audits, zero swap; no shipped change. Open: Aeneas reaches an unsupported
+higher-ranked lifetime constraint in `derive_nullifier_with`, which blocks
+full semantic admission; canonical Parts-content/column correspondence; the
+shipped `RustRuntimeJoin` inhabitant; and real checker/retry coupling. Next:
+P6 route for `derive_nullifier_with` too (Kani shipped = owned reference,
+where the reference avoids the HRTB closure).
