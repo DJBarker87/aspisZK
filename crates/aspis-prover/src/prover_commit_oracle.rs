@@ -106,3 +106,20 @@ fn private_leaf_folded() {
     bytes[130..].copy_from_slice(&salt);
     assert_eq!(actual, crate::HOST_HASH(&[&bytes]));
 }
+
+/// Check the actual global function-pointer route is replaced by the shared
+/// oracle, rather than merely checking the oracle through direct calls.
+#[kani::proof]
+#[kani::unwind(514)]
+#[kani::stub(crate::host_hashv, query)]
+fn callback_stub_is_active() {
+    reset(2);
+    let input: [u8; 32] = kani::any();
+    let callback: aspis_core::HashFn = crate::HOST_HASH;
+    let first = callback(&[&input]);
+    assert_eq!(first, query(&[&input]));
+    unsafe {
+        assert_eq!(ORACLE.calls, 2);
+        assert_eq!(ORACLE.used, 1);
+    }
+}
