@@ -163,6 +163,25 @@ These are exact rationals, from `PerAttemptEnvelope.B`, `BinCombinedMerkleCollis
 
 ## Validation
 
-One focused compile of the new module is scheduled after this signature audit. The compile uses the retained dependency cache, a private object directory, the shared local Lean mkdir lock, `-j1 -M4400 -DElab.async=false`, and `/usr/bin/time -l`. It performs no dependency rebuild or manifest replay. Final attempt results will be recorded below and in the evidence manifest.
+The focused validation of the new module uses the retained dependency cache, a private object directory, the shared local Lean mkdir lock, `-j1 -M4400 -DElab.async=false`, and `/usr/bin/time -l`. It performs no dependency rebuild or manifest replay. The import-loading failure and successful focused check are recorded below and in the evidence manifest; no source or environment was rerun unchanged.
 
 Attempt 1 failed at import loading (`unknown module prefix R9TwoTransactionExperiment`), before the theorem or its axioms command was checked. Exit 1, wall 3.8837475003674626 s, peak RSS 712294400 bytes, zero swaps; source revision `771f44d5e`, full source hash and command in the attempt receipt. The manually assembled search path omitted the R9 transport cache. The replacement uses the complete union of the successful Tag and Pool packet search paths, preserving their ordering, with a private object directory first. This is a corrected-environment attempt, not an unchanged-source/environment retry or a dependency rebuild. The environment path is now included in the dependency fingerprint. No axioms result exists for the import-loading failure.
+
+The corrected-environment focused compile succeeded. No proof change was needed. This is local focused composition evidence against the recorded cached objects, not a new coherent release-manifest replay.
+
+| Required field | Successful focused result |
+|---|---|
+| Exact target | `AspisR1.R1FinalSoundnessHeadline.final_soundness` in `lean/R1FinalSoundnessHeadline.lean`, attempt 2 |
+| Exit | 0 |
+| Wall time | 4.047768833581358 seconds (compiler invocation; excludes lock wait) |
+| Peak RSS | 3632939008 bytes |
+| Swaps | 0 |
+| Source revision | `2bae89f4270cee7ea36799f5f6b56d94c7e3cd63` |
+| Source SHA-256 | `4d33d863370d6cc276406e565f07512d411de298a93f4c2c0a477d08a67b253e` |
+| Dependency/environment fingerprint | `4f1fd58baf4188d2a33d1be4aace710d1378a28f1ce927f138017eef8492dfcf` |
+| Compiler | Lean 4.32.0, pinned local binary; `-j1 -M4400 -DElab.async=false` |
+| Complete axioms result | `'AspisR1.R1FinalSoundnessHeadline.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]` |
+
+The full argv, ordered search path, direct object hashes, exit, timing, errors and complete axioms output for **both** invocations are in `evidence/headline-20261021/manifest.json` and the `R1FinalSoundnessHeadline-{1,2}` receipts/logs. Object files remain outside the repository; only their size and SHA-256 are recorded. Only one invocation reached theorem checking; the earlier failed invocation is retained rather than omitted.
+
+Consolidation is complete. Remaining work belongs to the named source/model, runtime and M10 owners above; the oracle-decision port is not performed here. No existing Lean module, candidate re-pin, or concurrent M10 instrumentation file was edited.
