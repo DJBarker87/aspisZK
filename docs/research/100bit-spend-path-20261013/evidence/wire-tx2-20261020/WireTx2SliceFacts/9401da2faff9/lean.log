@@ -1,0 +1,11 @@
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.get : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Option (Slice T)) :=
+fun {T} r s => if r.start ≤ r.end ∧ ↑r.end ≤ s.length then ok (some ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩) else ok none
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Slice T) :=
+fun {T} r s => if r.start ≤ r.end ∧ ↑r.end ≤ s.length then ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩ else fail Error.panic
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index : {T : Type} →
+  core.ops.range.RangeTo Usize → Slice T → Result (Slice T) :=
+fun {T} r s => if ↑r.end ≤ s.length then ok ⟨List.slice 0 ↑r.end ↑s, ⋯⟩ else fail Error.panic
+@[reducible] def Aeneas.Std.Slice.slice.{u} : {α : Type u} → [Inhabited α] → Slice α → ℕ → ℕ → List α :=
+fun {α} [Inhabited α] s i j => List.slice i j ↑s

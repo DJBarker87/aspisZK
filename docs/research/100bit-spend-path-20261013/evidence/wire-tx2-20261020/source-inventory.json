@@ -1,0 +1,175 @@
+{
+  "source_revision": "8ced75478ded9fbac42ab4551e011e537cebd0ef",
+  "files": [
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/stage2-continuation-20261020/generated/AspisR1Stage2/Funs.lean",
+      "sha256": "b3aa665deadedac1f04233f5535bce0774cfed34e6ee7f979657982504d97c2b",
+      "size": 200526
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/stage2-continuation-20261020/generated/AspisR1Stage2/Types.lean",
+      "sha256": "e48b04f110817ce911f9f2471266a92a2244fa4f2154ef2b272359a49b52dd5b",
+      "size": 10394
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/Stage2ContinuationResumeBody.lean",
+      "sha256": "e42cc6e24597ba67f0c1206b30e71604956b9596533d13d6c41ea269a98894de",
+      "size": 29757
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+      "size": 14344
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+      "size": 25102
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/multiproof.rs",
+      "sha256": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+      "size": 12915
+    },
+    {
+      "path": "crates/aspis-core/src/state_only_private_merkle.rs",
+      "sha256": "6f9f030ea3add192358330f8012c81884a1f599e7dcd6b95ca837a5584ecd451",
+      "size": 4033
+    },
+    {
+      "path": "crates/aspis-core/src/r0/merkle.rs",
+      "sha256": "ad0f32108562607b9454ac911471a8bebe6306ce98c69eed742c8f8f3985c554",
+      "size": 3798
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/evidence/freeze-20261020/llbc-comparison.json",
+      "sha256": "dcf4c9cbc5676fcff0f03d568e87a329d6f4e69dd4e3721edc7f0830a83f87e8",
+      "size": 506
+    },
+    {
+      "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+      "sha256": "6a8e5799035458ed4c0093709da6da86fb29100303861ddd15212d3ad7dcdcfb",
+      "size": 41100
+    }
+  ],
+  "sites": [
+    {
+      "owner": "verifier.candidate.batch_leaf",
+      "line": 621,
+      "operation": "aspis_core.state_only_private_merkle.private_leaf_hash_with_digest",
+      "scope": "included",
+      "record_class": "leafC1",
+      "length": 514,
+      "tag": "0x10,0x71",
+      "construction": "q[..480] + q[608..640]",
+      "dependency": "batch_leaf_typed; LeafDigestLaw; tag operation"
+    },
+    {
+      "owner": "verifier.candidate.batch_leaf",
+      "line": 634,
+      "operation": "aspis_core.state_only_private_merkle.private_leaf_hash_with_digest",
+      "scope": "included",
+      "record_class": "leafSmall",
+      "length": 162,
+      "tag": "0x10,0xf1",
+      "construction": "q[480..608] + q[640..672]",
+      "dependency": "batch_leaf_typed; LeafDigestLaw; tag operation"
+    },
+    {
+      "owner": "verifier.candidate.batch_leaf",
+      "line": 646,
+      "operation": "aspis_core.state_only_private_merkle.private_leaf_hash_with_digest",
+      "scope": "included",
+      "record_class": "leafSmall",
+      "length": 162,
+      "tag": "0x10,0x72",
+      "construction": "q[672..800] + q[800..832]",
+      "dependency": "batch_leaf_typed; LeafDigestLaw"
+    },
+    {
+      "owner": "multiproof.sibling_binary_parent",
+      "line": 688,
+      "operation": "aspis_coredigestDigest32Inst.digest",
+      "scope": "included",
+      "record_class": "binaryNode",
+      "length": 65,
+      "tag": "0x12",
+      "construction": "current[32] + sibling[32]",
+      "dependency": "sibling_read_typed; get/add success"
+    },
+    {
+      "owner": "multiproof.sibling_binary_parent",
+      "line": 695,
+      "operation": "aspis_coredigestDigest32Inst.digest",
+      "scope": "included",
+      "record_class": "binaryNode",
+      "length": 65,
+      "tag": "0x12",
+      "construction": "sibling[32] + current[32]",
+      "dependency": "sibling_read_typed; get/add success"
+    },
+    {
+      "owner": "multiproof.occupied_binary_parent",
+      "line": 713,
+      "operation": "aspis_coredigestDigest32Inst.digest",
+      "scope": "included",
+      "record_class": "binaryNode",
+      "length": 65,
+      "tag": "0x12",
+      "construction": "occupied left[32] + occupied right[32]",
+      "dependency": "occupied_typed"
+    },
+    {
+      "owner": "multiproof.verify_in_place_loop0_loop0.body",
+      "line": 1096,
+      "operation": "aspis_core.r0.merkle.parent_with_digest",
+      "scope": "excluded-eight-way",
+      "record_class": "excluded-generic-eight-way",
+      "length": 257,
+      "tag": "0x18",
+      "construction": "eight children[32]",
+      "dependency": "adopted batch supplies Arity::Two"
+    },
+    {
+      "owner": "verifier.resume",
+      "line": 2613,
+      "operation": "aspis_coredigestDigest32Inst.digest",
+      "scope": "included",
+      "record_class": "binding.compactProof",
+      "length": 57607,
+      "tag": "no added prefix; stored proof magic R1P3CB18",
+      "construction": "whole proof singleton",
+      "dependency": "resume_typed; caller proof width"
+    },
+    {
+      "owner": "verifier.resume",
+      "line": 2625,
+      "operation": "aspis_coredigestDigest32Inst.digest",
+      "scope": "included",
+      "record_class": "binding.asf8Account",
+      "length": 1880,
+      "tag": "no added prefix; ASF8 envelope",
+      "construction": "supplied public singleton",
+      "dependency": "resume_typed; admitted serializer width"
+    },
+    {
+      "owner": "verifier.resume",
+      "line": 2649,
+      "operation": "aspis_coredigestDigest32Inst.digest",
+      "scope": "included",
+      "record_class": "binding.checkpointChecksum",
+      "length": 1758,
+      "tag": "UNPROVED:R1:checkpoint",
+      "construction": "domain[22] + bytes[..len-32][1736]",
+      "dependency": "resume_typed; S2 checkpoint width"
+    }
+  ],
+  "binary_helpers_exact": true,
+  "leaf_adapter_exact_modulo_named_operations_and_salt_conversion": true,
+  "finish_relation_has_no_hash_parameter_or_call": true,
+  "new_classes": [],
+  "exclusions": [
+    "generic eight-way parent branch; adopted batch fixes Arity::Two",
+    "arbitrary observer/backend callback effects are outside the Digest32 inventory"
+  ]
+}

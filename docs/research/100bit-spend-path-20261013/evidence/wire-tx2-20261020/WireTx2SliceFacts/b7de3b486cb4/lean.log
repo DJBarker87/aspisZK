@@ -1,0 +1,25 @@
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice : (T : Type) →
+  core.slice.index.SliceIndex (core.ops.range.Range Usize) (Slice T) (Slice T) :=
+fun T =>
+  { sealedInst := core.slice.index.private_slice_index.SealedRangeUsize,
+    get := core.slice.index.SliceIndexRangeUsizeSlice.get,
+    get_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_mut,
+    get_unchecked := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked,
+    get_unchecked_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked_mut,
+    index := core.slice.index.SliceIndexRangeUsizeSlice.index,
+    index_mut := core.slice.index.SliceIndexRangeUsizeSlice.index_mut }
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice : (T : Type) →
+  core.slice.index.SliceIndex (core.ops.range.RangeTo Usize) (Slice T) (Slice T) :=
+fun T =>
+  { sealedInst := core.slice.index.private_slice_index.SealedRangeToUsize,
+    get := core.slice.index.SliceIndexRangeToUsizeSlice.get,
+    get_mut := core.slice.index.SliceIndexRangeToUsizeSlice.get_mut,
+    get_unchecked := core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked,
+    get_unchecked_mut := core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked_mut,
+    index := core.slice.index.SliceIndexRangeToUsizeSlice.index,
+    index_mut := core.slice.index.SliceIndexRangeToUsizeSlice.index_mut }
+def Aeneas.Std.core.slice.Slice.get : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → Slice T → I → Result (Option Output) :=
+fun {T I Output} inst s i => inst.get i s
+/Users/dominic/ZK/.worktrees/cx-wire-tx2/docs/research/100bit-spend-path-20261013/lean/WireTx2SliceFacts.lean:7:7: error(lean.unknownIdentifier): Unknown constant `Slice.get_slice`
+/Users/dominic/ZK/.worktrees/cx-wire-tx2/docs/research/100bit-spend-path-20261013/lean/WireTx2SliceFacts.lean:8:7: error(lean.unknownIdentifier): Unknown constant `core.slice.index.RangeUsize.Insts.CoreSliceIndexSliceIndexSlice`
