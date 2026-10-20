@@ -1,0 +1,5 @@
+# Exact same-source batch contribution and fold update
+
+Successful actual BatchBody execution supplies one bounded list of its actual parsed contributions. The retained StepBy.next, add4, min26 and term-loop witnesses identify that batch. Its term sum is consumed by the same emitted fold-loop call, and every output limb equals the original limb plus fold(sum of those products). The contribution list has at most four terms and each product is bounded from the same canonical source-wide inputs. No separate batch-value or output-equation premise is introduced.
+
+The focused integration passed first check in5.878s, process RSS2,222,243,840B, zero swaps, standard axioms. This kernel check composes the existing term and fold owners under one selected import environment; equal generated FunsOps source pins are distinguished from differing producer object bytes. Outer seven-batch accumulation, semantic payload mapping, RustStd/P6, frozen caller and global soundness remain open. No production source or artifact changed.
