@@ -7220,3 +7220,24 @@ adapter. Still open: both full 16-try sampler comparisons timed out at 600 s
 without a verdict (not rerun); a valid completion or quotient-tape
 construction; sampler composition; and the caller/carrier/exhaustion/count
 joins. All nine checklist rows stay open.
+
+## D96 — builder refinement part 4: builder soundness removed at the canonical instance (2026-10-20, lead)
+
+Landed from `codex/cx-builder-ref4-20261021` (`r1p-final/BUILDER-REFINEMENT-20261021.md`).
+`PrivacyR1FinalProtocolBuilder` removes builder soundness and `hpub` at the
+canonical extracted builder instance. Proved: the shipped semantic public
+projections (extracted), lossless record reconstruction, field-normalised
+record mappings, and conditional `SourceIdentification` assembly through a
+single `RustRuntimeJoin`. 27 standard-axiom theorems and 81 Kani component
+verdicts, including the full empty-root helper certificate. No shipped file
+changed. Still open: successful-source admission, complete bank/glue equality
+(the bank extraction leaves five unsupported std externals and was rejected
+as a certificate), and real checker/retry execution coupling;
+`RustRuntimeJoin` is not yet inhabited for the shipped prover.
+
+Finding: the compile path accepts a non-canonical recipient-owner limb
+(an M31 storage word ≥ p). The handoff now uses field-trace equality, not
+raw canonicality. Lead action: check that the frozen verifier and Pool reject,
+or canonicalise, non-canonical public limbs, so that one statement cannot
+have two accepted encodings (nullifier or recipient malleability). A targeted
+job is open.
