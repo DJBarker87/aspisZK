@@ -28,10 +28,10 @@ pub(crate) fn query(parts: &[&[u8]]) -> [u8; 32] {
         let table = &mut *core::ptr::addr_of_mut!(ORACLE);
         assert!(table.calls < table.budget, "harness query budget");
         table.calls += 1;
-        for i in 0..table.used {
-            if table.entries[i].len == len {
+        for i in 0..POINTS {
+            if i < table.used && table.entries[i].len == len {
                 let mut equal = true;
-                for j in 0..len {
+                for j in 0..BYTES {
                     equal &= table.entries[i].input[j] == input[j];
                 }
                 if equal { return table.entries[i].digest; }

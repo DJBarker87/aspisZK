@@ -1293,11 +1293,12 @@ mod prover_commit_rom {
         rom::reset(2);
         let binding: [u8; 32] = kani::any();
         let context = StateOnlyHidingContext { statement_digest: kani::any(), mask_nonce: kani::any(), mask_layout_fingerprint: kani::any(), layout_factor_fingerprint: kani::any() };
-        let mut encoded = [0u8; 80];
-        encoded[..32].copy_from_slice(&context.statement_digest);
-        encoded[32..64].copy_from_slice(&context.mask_nonce);
-        encoded[64..72].copy_from_slice(&context.mask_layout_fingerprint.to_le_bytes());
-        encoded[72..80].copy_from_slice(&context.layout_factor_fingerprint.to_le_bytes());
+        let mut encoded = [0u8; 81];
+        encoded[0] = 1;
+        encoded[1..33].copy_from_slice(&context.statement_digest);
+        encoded[33..65].copy_from_slice(&context.mask_nonce);
+        encoded[65..73].copy_from_slice(&context.mask_layout_fingerprint.to_le_bytes());
+        encoded[73..81].copy_from_slice(&context.layout_factor_fingerprint.to_le_bytes());
         let expected = crate::HOST_HASH(&[
             b"aspis:state-only:pool-v1:private-attempt-binding:v1", &binding, &encoded,
             b"profile=pool-v1-tag73;generators=H26,G27,D28;factorD=0;rows=1024;c1=16;selected=28;theta=29;queries=16;first-cap=203",
