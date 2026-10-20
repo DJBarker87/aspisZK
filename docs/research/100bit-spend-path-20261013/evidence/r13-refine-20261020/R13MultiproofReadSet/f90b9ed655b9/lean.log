@@ -1,0 +1,84 @@
+/Users/dominic/ZK/.worktrees/cx-r13-refine/docs/research/100bit-spend-path-20261013/lean/R13MultiproofReadSet.lean:47:8: error: unsolved goals
+case right.hi
+H : List Byte → Digest
+root : Digest
+depth✝ : ℕ
+active✝ : Active
+v✝ : Values
+nodes : List Digest
+trace✝ : List (List Byte)
+depth : ℕ
+active : Active
+v : Values
+cs : ℕ → Children
+supplied rest : List Digest
+trace : List (List Byte)
+level : Level active v cs supplied
+tail : Accept H root depth (parents active) (nextValues H cs) rest trace
+ps : (i : ℕ) → i ∈ parents active → Path (slots depth i)
+hp :
+  ∀ (i : ℕ) (hi : i ∈ parents active),
+    foldPath H (ps i hi) (nextValues H cs i) = root ∧ inputTrace H (ps i hi) (nextValues H cs i) ⊆ trace
+cover :
+  ∀ (input : List Byte),
+    input ∈ trace ↔ ∃ i, ∃ (hi : i ∈ parents active), input ∈ inputTrace H (ps i hi) (nextValues H cs i)
+paths : (i : ℕ) → i ∈ active → Path (slots (depth + 1) i) := fun i hi => Path.cons (cs (i / 2)) (ps (i / 2) ⋯)
+hc : ∀ i ∈ active, fillChild (slot i) (cs (i / 2)) (v i) = cs (i / 2)
+path_trace :
+  ∀ (i : ℕ) (hi : i ∈ active),
+    inputTrace H (paths i hi) (v i) = nodeInput (cs (i / 2)) :: inputTrace H (ps (i / 2) ⋯) (nextValues H cs (i / 2))
+i : ℕ
+hi : i ∈ active
+⊢ i ∈ active
+/Users/dominic/ZK/.worktrees/cx-r13-refine/docs/research/100bit-spend-path-20261013/lean/R13MultiproofReadSet.lean:59:8: error: unsolved goals
+case step.mp.inl.hi
+H : List Byte → Digest
+root : Digest
+depth✝ : ℕ
+active✝ : Active
+v✝ : Values
+nodes : List Digest
+trace✝ : List (List Byte)
+depth : ℕ
+active : Active
+v : Values
+cs : ℕ → Children
+supplied rest : List Digest
+trace : List (List Byte)
+level : Level active v cs supplied
+tail : Accept H root depth (parents active) (nextValues H cs) rest trace
+ps : (i : ℕ) → i ∈ parents active → Path (slots depth i)
+hp :
+  ∀ (i : ℕ) (hi : i ∈ parents active),
+    foldPath H (ps i hi) (nextValues H cs i) = root ∧ inputTrace H (ps i hi) (nextValues H cs i) ⊆ trace
+cover :
+  ∀ (input : List Byte),
+    input ∈ trace ↔ ∃ i, ∃ (hi : i ∈ parents active), input ∈ inputTrace H (ps i hi) (nextValues H cs i)
+paths : (i : ℕ) → i ∈ active → Path (slots (depth + 1) i) := fun i hi => Path.cons (cs (i / 2)) (ps (i / 2) ⋯)
+hc : ∀ i ∈ active, fillChild (slot i) (cs (i / 2)) (v i) = cs (i / 2)
+path_trace :
+  ∀ (i : ℕ) (hi : i ∈ active),
+    inputTrace H (paths i hi) (v i) = nodeInput (cs (i / 2)) :: inputTrace H (ps (i / 2) ⋯) (nextValues H cs (i / 2))
+good :
+  ∀ (i : ℕ) (hi : i ∈ active),
+    foldPath H (paths i hi) (v i) = root ∧ inputTrace H (paths i hi) (v i) ⊆ levelInputs active cs ++ trace
+input : List Byte
+hin : input ∈ levelInputs active cs ++ trace
+hhead : input ∈ levelInputs active cs
+p : ℕ
+hparent : p ∈ Finset.sort (parents active) fun x1 x2 => x1 ≤ x2
+he : nodeInput (cs p) = input
+hparent' : p ∈ parents active
+i : ℕ
+hi : i ∈ active
+hip : i / 2 = p
+⊢ i ∈ active
+/Users/dominic/ZK/.worktrees/cx-r13-refine/docs/research/100bit-spend-path-20261013/lean/R13MultiproofReadSet.lean:70:10: error: Type mismatch: After simplification, term
+  hm
+ has type
+  input ∈ inputTrace H (ps p hparent) (nextValues H cs p)
+but is expected to have type
+  input ∈ inputTrace H (ps (i / 2) ⋯) (nextValues H cs p)
+'AspisR1.R13MultiproofReadSet.accepted_family' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.R13MultiproofReadSet.original_query_programs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.R13MultiproofReadSet.parent_geometry' depends on axioms: [propext]
