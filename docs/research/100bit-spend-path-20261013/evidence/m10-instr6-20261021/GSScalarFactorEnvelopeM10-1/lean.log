@@ -1,0 +1,89 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSScalarFactorEnvelopeM10.lean:44:34: error: Application type mismatch: The argument
+  hc
+has type
+  c ∈
+    (match some d with
+      | none => ((none, cursor + 1), (retry f q t (H cursor)).2)
+      | some d =>
+        match (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 1) (cursor + 1) d).1.1 with
+        | none =>
+          ((none, (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 1) (cursor + 1) d).1.2),
+            (retry f q t (H cursor)).2 ++
+              (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 1) (cursor + 1) d).2)
+        | some left =>
+          ((Option.map (fun rs => left ++ rs)
+                (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 2)
+                      (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 1) (cursor + 1) d).1.2
+                      (f.divByMonic d)).1.1,
+              (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 2)
+                    (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 1) (cursor + 1) d).1.2
+                    (f.divByMonic d)).1.2),
+            (retry f q t (H cursor)).2 ++
+                  (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 1) (cursor + 1) d).2 ++
+                [Call.division f d] ++
+              (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 2)
+                  (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 1) (cursor + 1) d).1.2
+                  (f.divByMonic d)).2)).2
+but is expected to have type
+  ?m.368 ∈ ?m.369 ++ ?m.370
+in the application
+  List.mem_append.mp hc
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSScalarFactorEnvelopeM10.lean:50:23: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  (match (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 1) (cursor + 1) d).1.1 with
+      | none =>
+        ((none, (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 1) (cursor + 1) d).1.2),
+          (retry f q t (H cursor)).2 ++
+            (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 1) (cursor + 1) d).2)
+      | some left =>
+        ((Option.map (fun rs => left ++ rs)
+              (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 2)
+                    (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 1) (cursor + 1) d).1.2
+                    (f.divByMonic d)).1.1,
+            (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 2)
+                  (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 1) (cursor + 1) d).1.2
+                  (f.divByMonic d)).1.2),
+          (retry f q t (H cursor)).2 ++
+                (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 1) (cursor + 1) d).2 ++
+              [Call.division f d] ++
+            (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 2)
+                (GSScalarSequentialScheduleM10.factor q t H fuel (2 * node + 1) (cursor + 1) d).1.2
+                (f.divByMonic d)).2)).2 =
+    c :: as✝
+at case `List.Mem.head`
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSScalarFactorEnvelopeM10.lean:23:50: warning: This simp argument is unused:
+  hz
+
+Hint: Omit it from the simp argument list.
+  simp [GSScalarSequentialScheduleM10.factor, hz̵,̵ ̵h̵o]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSScalarFactorEnvelopeM10.lean:49:19: warning: This simp argument is unused:
+  List.mem_append
+
+Hint: Omit it from the simp argument list.
+  simp only [List.mem_a̵p̵p̵e̵n̵d̵,̵ ̵L̵i̵s̵t̵.̵m̵e̵m̵_̵cons, List.not_mem_nil, or_false] at hc
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSScalarFactorEnvelopeM10.lean:49:36: warning: This simp argument is unused:
+  List.mem_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [List.mem_append, L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵,̵ ̵List.not_mem_nil, or_false] at hc
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSScalarFactorEnvelopeM10.lean:49:51: warning: This simp argument is unused:
+  List.not_mem_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [List.mem_append, List.mem_cons, L̵i̵s̵t̵.̵n̵o̵t̵_̵m̵e̵m̵_̵n̵i̵l̵,̵ ̵or_false] at hc
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr6/docs/research/100bit-spend-path-20261013/lean/GSScalarFactorEnvelopeM10.lean:49:69: warning: This simp argument is unused:
+  or_false
+
+Hint: Omit it from the simp argument list.
+  simp only [List.mem_append, List.mem_cons, List.not_mem_nil,̵ ̵o̵r̵_̵f̵a̵l̵s̵e̵] at hc
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.GSScalarFactorEnvelopeM10.factor_bounded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,163 @@
+import ExtractorProgramWorkM10
+import RRProgramTraversal
+
+/-! Work writer over the maintained short-circuit RR traversal. Candidate
+prefix construction and append visits are included, independently of asks.
+All reached aborts retain their accumulated work. -/
+set_option autoImplicit false
+namespace AspisR1.RRTraversalWriterM10
+open AspisV8R19.MemoizedProgramLaw
+open ExtractorProgramWorkM10 SequentialProgramInvariants
+variable {I A K S : Type}
+
+def walk (run : S → WorkProgram I A (Option (List (List K)))) :
+    List (K × S) → WorkProgram I A (Option (List (List K)))
+  | [] => pure (some []) 1
+  | (a,s)::tail => bind (run s) (fun out => match out with
+      | none => pure none 1
+      | some ys => bind (walk run tail) (fun out =>
+        pure (out.map (fun zs => ys.map (a::·)++zs)) (2*ys.length+3)))
+
+def collect (zeroTest : S → Bool)
+    (children : S → WorkProgram I A (Option (List (K × S)))) (terminal : Nat) :
+    Nat → S → WorkProgram I A (Option (List (List K)))
+  | 0, s => pure (some (if zeroTest s then [[]] else [])) terminal
+  | d+1, s => bind (children s) (fun out => match out with
+      | none => pure none 1
+      | some cs => walk (collect zeroTest children terminal d) cs)
+
+theorem erase_walk (run : S → WorkProgram I A (Option (List (List K))))
+    (xs : List (K × S)) :
+    erase (walk run xs) = RRProgramTraversal.walkChildren (fun s => erase (run s)) xs := by
+  induction xs with
+  | nil => rfl
+  | cons x xs ih =>
+    rcases x with ⟨a,s⟩
+    simp only [walk, erase_bind, RRProgramTraversal.walkChildren,
+      RRProgramTraversal.optionBind, RRProgramTraversal.mapOption]
+    congr 1
+    funext out
+    cases out with
+    | none => rfl
+    | some ys =>
+      rw [erase_bind, ih]
+      rfl
+
+theorem erase_collect (zeroTest : S → Bool)
+    (children : S → WorkProgram I A (Option (List (K × S)))) (terminal d : Nat)
+    (s : S) :
+    erase (collect zeroTest children terminal d s) =
+      RRProgramTraversal.collectProgram zeroTest (fun s => erase (children s)) d s := by
+  induction d generalizing s with
+  | zero => rfl
+  | succ d ih =>
+    simp only [collect, erase_bind, RRProgramTraversal.collectProgram,
+      RRProgramTraversal.optionBind]
+    congr 1
+    funext out
+    cases out with
+    | none => rfl
+    | some cs =>
+      rw [erase_walk]
+      have he : (fun s => erase (collect zeroTest children terminal d s)) =
+          RRProgramTraversal.collectProgram zeroTest (fun s => erase (children s)) d := by
+        funext s
+        exact ih s
+      rw [he]
+
+def length {X : Type} (o : Option (List X)) : Nat := (o.getD []).length
+
+theorem walk_bound (run : S → WorkProgram I A (Option (List (List K))))
+    (R N : Nat)
+    (h : ∀ s, AllOutcomes (run s) (fun r => length r.1 ≤ N ∧ r.2 ≤ R))
+    (xs : List (K × S)) :
+    AllOutcomes (walk run xs) (fun r =>
+      length r.1 ≤ xs.length*N ∧ r.2 ≤ xs.length*(R+2*N+4)+1) := by
+  induction xs with
+  | nil => simp [walk, pure, AllOutcomes, length]
+  | cons x xs ih =>
+    rcases x with ⟨a,s⟩
+    apply all_bind
+    apply all_mono _ (h s)
+    intro r hr
+    cases ho : r.1 with
+    | none =>
+      simp only [walk, ExtractorProgramWorkM10.bind, ho]
+      change AllOutcomes (ExtractorProgramWorkM10.map _ (pure none 1)) _
+      change length (none : Option (List (List K))) ≤ _ ∧ r.2+1 ≤ _
+      simp only [length, Option.getD_none, List.length_nil]
+      constructor
+      · exact Nat.zero_le _
+      · simp only [List.length_cons, Nat.add_mul, Nat.one_mul]
+        omega
+    | some ys =>
+      simp only [walk, ExtractorProgramWorkM10.bind, ho]
+      apply all_map
+      apply all_bind
+      apply all_mono _ ih
+      intro z hz
+      change length (z.1.map (fun zs => ys.map (a::·)++zs)) ≤ _ ∧
+        r.2+(z.2+(2*ys.length+3)) ≤ _
+      have hy : ys.length ≤ N := by simpa only [length, ho, Option.getD_some] using hr.1
+      have hl : length (z.1.map (fun zs => ys.map (a::·)++zs)) ≤ N+xs.length*N := by
+        cases hzv : z.1 with
+        | none => exact Nat.zero_le _
+        | some zs =>
+          simp only [length, hzv, Option.getD_some] at hz
+          simpa only [hzv, Option.map_some, length, Option.getD_some,
+            List.length_append, List.length_map] using Nat.add_le_add hy hz.1
+      constructor
+      · simpa only [List.length_cons, Nat.add_mul, Nat.one_mul, Nat.add_comm] using hl
+      · simp only [List.length_cons, Nat.add_mul, Nat.one_mul]
+        omega
+
+def count (B : Nat) : Nat → Nat
+  | 0 => 1
+  | d+1 => B*count B d
+
+def budget (B C T : Nat) : Nat → Nat
+  | 0 => T
+  | d+1 => C+B*(budget B C T d+2*count B d+4)+1
+
+theorem collect_bound (zeroTest : S → Bool)
+    (children : S → WorkProgram I A (Option (List (K × S)))) (B C T : Nat)
+    (h : ∀ s, AllOutcomes (children s) (fun r => length r.1 ≤ B ∧ r.2 ≤ C))
+    (d : Nat) (s : S) :
+    AllOutcomes (collect zeroTest children T d s) (fun r =>
+      length r.1 ≤ count B d ∧ r.2 ≤ budget B C T d) := by
+  induction d generalizing s with
+  | zero =>
+    change length (some (if zeroTest s then [[]] else [])) ≤ 1 ∧ T ≤ T
+    constructor
+    · cases zeroTest s <;> simp [length]
+    · exact Nat.le_refl _
+  | succ d ih =>
+    apply all_bind
+    apply all_mono _ (h s)
+    intro r hr
+    cases ho : r.1 with
+    | none =>
+      change AllOutcomes (ExtractorProgramWorkM10.map _ (pure none 1)) _
+      change length (none : Option (List (List K))) ≤ _ ∧ r.2+1 ≤ _
+      constructor
+      · exact Nat.zero_le _
+      · simp only [budget]; omega
+    | some cs =>
+      apply all_map
+      apply all_mono _ (walk_bound (collect zeroTest children T d)
+        (budget B C T d) (count B d) ih cs)
+      intro z hz
+      have hc : cs.length ≤ B := by simpa only [length, ho, Option.getD_some] using hr.1
+      have hl := hz.1.trans (Nat.mul_le_mul_right (count B d) hc)
+      have hw := hz.2.trans (Nat.add_le_add_right
+        (Nat.mul_le_mul_right (budget B C T d+2*count B d+4) hc) 1)
+      constructor
+      · exact hl
+      · change r.2+z.2 ≤ C+B*(budget B C T d+2*count B d+4)+1
+        omega
+
+#print axioms erase_walk
+#print axioms erase_collect
+#print axioms walk_bound
+#print axioms collect_bound
+end AspisR1.RRTraversalWriterM10

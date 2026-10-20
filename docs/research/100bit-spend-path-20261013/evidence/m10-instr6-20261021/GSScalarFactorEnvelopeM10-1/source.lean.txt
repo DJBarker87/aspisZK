@@ -1,0 +1,59 @@
+import GSScalarOperandEnvelopeM10
+
+/-! Every reached scalar factorization operand, including failed retry
+prefixes and the right-child quotient, stays in the same stored-size cap. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.GSScalarFactorEnvelopeM10
+open CompPoly Polynomial CompPolySplitFactorQuality
+open GSScalarOperandEnvelopeM10 GSScalarCallScheduleM10
+variable {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K] [Fintype K]
+
+theorem factor_bounded (q t : Nat) (H : Nat → Fin t → K × K)
+    (fuel node cursor D : Nat) (f : CPolynomial K)
+    (hf : f.toPoly.Monic) (hfd : f.toPoly.natDegree ≤ D) (hD : 1 ≤ D) :
+    ∀ c ∈ (GSScalarSequentialScheduleM10.factor q t H fuel node cursor f).2,
+      Bounded D q c := by
+  induction fuel generalizing node cursor f with
+  | zero => simp [GSScalarSequentialScheduleM10.factor]
+  | succ fuel ih =>
+    by_cases hz : f.natDegree = 0
+    · simp [GSScalarSequentialScheduleM10.factor, hz]
+    by_cases ho : f.natDegree = 1
+    · simp [GSScalarSequentialScheduleM10.factor, hz, ho]
+    have hr := retry_bounded f q t D (H cursor) hf hfd hD
+    simp only [GSScalarSequentialScheduleM10.factor, if_neg hz, if_neg ho]
+    cases hs : (GSScalarCallScheduleM10.retry f q t (H cursor)).1 with
+    | none => exact hr
+    | some d =>
+      have hs' : CompPolySplitRetries.retry f q t (H cursor) = some d :=
+        (retry_value f q t (H cursor)).symm.trans hs
+      have hd := retry_quality f d q t (H cursor) hf hs'
+      have he := complement_quality f d hf hd.1 hd.2
+      dsimp only at he
+      have hl := ih (2*node+1) (cursor+1) d hd.1 (he.2.2.2.1.le.trans hfd)
+      have hx := ih (2*node+2)
+        (GSScalarSequentialScheduleM10.factor q t H fuel (2*node+1) (cursor+1) d).1.2
+        (f.divByMonic d) he.2.1 (he.2.2.2.2.2.le.trans hfd)
+      have hdsize := stored_size_of_degree d D (he.2.2.2.1.le.trans hfd)
+      have hfsize := stored_size_of_degree f D hfd
+      cases hout : (GSScalarSequentialScheduleM10.factor q t H fuel (2*node+1)
+        (cursor+1) d).1.1 with
+      | none =>
+        intro c hc
+        rcases List.mem_append.mp hc with hc | hc
+        · exact hr c hc
+        · exact hl c hc
+      | some left =>
+        intro c hc
+        simp only [List.mem_append, List.mem_cons, List.not_mem_nil, or_false] at hc
+        rcases hc with (hc | hc) | hc | hc
+        · exact hr c hc
+        · exact hl c hc
+        · subst c
+          exact ⟨hfsize,hdsize,hd.1⟩
+        · exact hx c hc
+
+#print axioms factor_bounded
+end AspisR1.GSScalarFactorEnvelopeM10
+end

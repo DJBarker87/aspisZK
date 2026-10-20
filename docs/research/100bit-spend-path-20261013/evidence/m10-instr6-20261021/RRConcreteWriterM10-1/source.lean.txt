@@ -1,0 +1,96 @@
+import RRTraversalWriterM10
+import RRFixedTapeRecovery
+
+/-! Concrete RR value refinement and full traversal aggregation. C and T
+are explicit scalar/child and terminal tariffs, respectively; assigning a
+tariff is distinct from proving its field/allocation adequacy. The traversal
+theorem includes pure preparations, zero-ask paths and aborting branches. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.RRConcreteWriterM10
+open CompPoly RRConcreteState RRConcreteValidState RRConcreteTraversal
+open RRConcreteInitialValidStateFromFacts
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open SequentialProgramInvariants SequentialFreshProgram
+open ExtractorProgramWorkM10
+variable {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K] [Fintype K]
+
+def children (ell q t C : Nat) (s : ValidState ell K) :
+    WorkProgram Nat (Fin t → K × K) (Option (List (K × ValidState ell K))) :=
+  lift (RRConcreteTraversal.children ell s q t) C
+
+def run (ell q t C T d : Nat) (s : ValidState ell K) :
+    WorkProgram Nat (Fin t → K × K) (Option (List (List K))) :=
+  RRTraversalWriterM10.collect (fun s => zeroTest s.val) (children ell q t C) T d s
+
+theorem erase_run (ell q t C T d : Nat) (s : ValidState ell K) :
+    erase (run ell q t C T d s) = RRConcreteTraversal.run ell q t d s := by
+  rw [run, RRTraversalWriterM10.erase_collect]
+  simp only [children, erase_lift, RRConcreteTraversal.run]
+
+theorem children_length (ell q t : Nat) (s : ValidState ell K)
+    (hq : q = Fintype.card K) :
+    AllOutcomes (RRConcreteTraversal.children ell s q t)
+      (fun out => RRTraversalWriterM10.length out ≤ ell) := by
+  unfold RRConcreteTraversal.children
+  apply all_bind
+  apply all_mono _ (CompPolyGeneralRootsProgram.generalRoots_correct
+    (scalarPolynomial s.val) q t hq (scalar_nonzero ell s))
+  intro sampled hs
+  change RRTraversalWriterM10.length (sampled.1.map _) ≤ ell
+  cases ho : sampled.1 with
+  | none => exact Nat.zero_le _
+  | some roots =>
+    have hr := (hs.2 roots ho).2.2
+    have hd : (scalarPolynomial s.val).toPoly.natDegree ≤ ell := by
+      rw [scalarPolynomial_toPoly]
+      exact s.property.2 0 (Nat.zero_le _)
+    simpa only [ho, Option.map_some, RRTraversalWriterM10.length, Option.getD_some,
+      List.length_map] using hr.trans hd
+
+theorem run_bound (ell q t C T d : Nat) (s : ValidState ell K)
+    (hq : q = Fintype.card K) :
+    AllOutcomes (run ell q t C T d s) (fun r =>
+      RRTraversalWriterM10.length r.1 ≤ RRTraversalWriterM10.count ell d ∧
+      r.2 ≤ RRTraversalWriterM10.budget ell C T d) := by
+  apply RRTraversalWriterM10.collect_bound
+  intro s
+  apply all_map
+  apply all_mono _ (children_length ell q t s hq)
+  intro out ho
+  exact ⟨ho,Nat.le_refl _⟩
+
+def recover (ell q t C T d : Nat) (s : RawState K)
+    (hd : ∀ i ≤ s.maxX, (RRVectorRowPolynomialBridge.inputPolynomial s.rows i).natDegree ≤ ell)
+    (hn : model s ≠ 0)
+    (H : {i : Nat // i ∈ Finset.range (d*ell)} → Fin t → K × K) :
+    Option (List (List K)) × Nat :=
+  (eval (SequentialFiniteTapeLaw.extend (Finset.range (d*ell)) H (fun _ => (0,0)))
+    (sequential (run ell q t C T d (initialValidState ell s hd hn)) 0)).2.1
+
+theorem recover_value (ell q t C T d : Nat) (s : RawState K)
+    (hd : ∀ i ≤ s.maxX, (RRVectorRowPolynomialBridge.inputPolynomial s.rows i).natDegree ≤ ell)
+    (hn : model s ≠ 0)
+    (H : {i : Nat // i ∈ Finset.range (d*ell)} → Fin t → K × K) :
+    (recover ell q t C T d s hd hn H).1 =
+      (RRFixedTapeRecovery.recover ell q t d s hd hn H).1 := by
+  have hv := eval_value
+    (SequentialFiniteTapeLaw.extend (Finset.range (d*ell)) H (fun _ => (0,0)))
+    (run ell q t C T d (initialValidState ell s hd hn)) 0
+  rw [erase_run] at hv
+  exact (congrArg Prod.fst hv).symm
+
+theorem recover_work (ell q t C T d : Nat) (s : RawState K)
+    (hd : ∀ i ≤ s.maxX, (RRVectorRowPolynomialBridge.inputPolynomial s.rows i).natDegree ≤ ell)
+    (hn : model s ≠ 0) (hq : q = Fintype.card K)
+    (H : {i : Nat // i ∈ Finset.range (d*ell)} → Fin t → K × K) :
+    (recover ell q t C T d s hd hn H).2 ≤ RRTraversalWriterM10.budget ell C T d :=
+  eval_bound _ _ 0 _ (all_mono _ (run_bound ell q t C T d _ hq) (fun _ h => h.2))
+
+#print axioms erase_run
+#print axioms children_length
+#print axioms run_bound
+#print axioms recover_value
+#print axioms recover_work
+end AspisR1.RRConcreteWriterM10
+end
