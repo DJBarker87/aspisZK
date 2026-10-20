@@ -135,3 +135,63 @@ attempts: 9434 = exit0, 2.83s, 4035060 KiB; 9435 = exit0, 3.99s,
 4002752 KiB. Both zero swaps and only standard axioms. The branch-specific
 runner now freezes the uploaded source digest before launching and exits
 nonzero on a Lean failure, after preserving the evidence.
+
+## Stage 5: composed instance, endpoint specialization, final audit
+
+`PhaseProtocolInstanceBin` composes the exact-wide message encoder, concrete
+sampler/parser and S2 leaves into R1PhaseWire/R1PhaseProver. Residual tape
+coins/counters/opening data remain supplied by the existing prover-data type;
+leaf values, commitment grammar and phase order are constructed.
+`causal_premise` proves the exact universally quantified D80 condition for
+this composed model, without an execution-order premise, even on inconsistent
+answer vectors. `rows01`/`sampler_source` provide its sampler handoff.
+
+`baseWire` is the concrete message/decoder model to pass to the existing
+final theorem. `endpoint_wire` proves its phase wire is definitionally the
+same wire as `RomFiniteBin.wire (baseWire base) (RomGrammarBin.bound publicWidth)`.
+Thus there is a usable endpoint **specialization** for an explicitly selected
+base, not a universal conversion of the endpoint's still-arbitrary base.
+The original theorem is not silently rebound to this specialization.
+
+9436/9437/9439/9440 preserve failed dependent-parameter/section-notation
+elaboration diagnostics. 9441 passes the final composition: exit0, 5.55s,
+4042732 KiB, zero swaps, seven standard-axiom audits. The endpoint obstruction
+is strengthened with the direct noncausality corollary at the ROM-wrapped
+D85 witness (with its original late-C2 order condition); 9438 passes:
+exit0, 1.92s, 3513924 KiB, zero swaps, three standard-axiom audits.
+
+`audit-phase2-evidence.py` verifies all seven current source hashes have a
+successful focused compile, every new theorem has an axioms print, all 57
+final prints use only propext/Classical.choice/Quot.sound, no forbidden proof
+constructs/options occur, all attempt IDs are assigned, and all swaps are zero.
+Its output is `phase2-final-audit.json`. All 41 recorded attempt hashes were
+also compared to the launcher's independent sha-<attempt>.txt records; zero
+mismatches. 9404 was a dependency preflight only, not a compilation attempt.
+The largest recorded peak RSS was below 4.1 million KiB. Every launcher used
+7000 MB, MemoryHigh=5G, MemoryMax=7G, MemorySwapMax=0, and reported a populated
+reservation of 24 GiB plus the 7 GiB job. No uncapped build, local Lean compile,
+Rust gate, package-wide build or repeated unchanged regression was run.
+No frozen-manifest release replay is claimed: this is an additive model/source
+handoff with an explicitly stopped generic-endpoint target.
+
+## Exact remaining scope
+
+1. At the final theorem's generic base/Pr, no source identification with the
+constructed model is present. Its binding must be specialized (or the source
+wire/prover identified with the specialization) before consuming causal_premise.
+The allowed edit to PrivacyR1Final was only a strictly weaker premise; we made
+no such edit because an execution-only replacement is not justified there.
+The before/after causal premise quoted in stage1 and the entire file remain
+byte-identical (SHA in phase2-final-audit.json).
+2. Lean-model samplers, parser, framing, serialization and leaf evaluators are
+now explicit. Rust equality, field-guard/rejection behavior, FFT correspondence,
+and actual reached-query history coupling remain source joins. The extracted
+QM31 sampler and extracted S2 index are reused where already proved; no broader
+Rust identity is inferred. Source inventory hashes are read-only evidence.
+3. Execution refinement still needs addressed-call/answer preservation under
+permitted commutations, salt scheduling and unused query-block normalization.
+The mathematical model's causal theorem needs no such execution hypothesis.
+4. Existing builder/checker/real/ideal experiment handoffs in the final theorem
+remain as before; concurrent-worker-owned files and harnesses are untouched.
+
+No push or merge was performed. All work is confined to this worktree.
