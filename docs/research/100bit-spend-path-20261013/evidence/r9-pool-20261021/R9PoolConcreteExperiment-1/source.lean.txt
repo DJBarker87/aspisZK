@@ -1,0 +1,152 @@
+import R9PoolSavedTenModel
+
+/-! Byte-handoff instance of R9. Pool guards may only reject; only its nested
+resumed verifier may accept. The marker is reserved before that call, and
+settlement is committed only after acceptance. Physical source correspondence
+is not inferred from this logical control-flow construction. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.R9PoolConcreteExperiment
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open RawCutProverCompiler RawCutTranscriptRun RecordedBinaryExperimentBin
+open R9TwoTransactionExperiment R9DeployedBinaryExperiment
+open R9PoolSavedTenModel
+attribute [local instance] Classical.propDecidable
+
+structure PoolChecks where
+  authenticatedAccounts : Bool
+  selectedRelease : Bool
+  sameSnapshot : Bool
+  nullifierMarkerFree : Bool
+  poolOnlyVault : Bool
+  resultValid : Bool
+
+def admitted (checks : PoolChecks) : Bool :=
+  checks.authenticatedAccounts && checks.selectedRelease && checks.sameSnapshot &&
+    checks.nullifierMarkerFree && checks.poolOnlyVault && checks.resultValid
+
+abbrev Policy := Checkpoint → PoolChecks
+abbrev Tape := Raw → WordTape
+
+def rejectPublic : Public := ⟨[], by decide, 2⟩
+def rejectProof : Proof := fun _ => .payload ⟨[], by decide⟩
+def rejectRun : Run := ([], ((rejectPublic, rejectProof), false))
+
+def tx1 (D : LiteralByteProtocol.Decoder) (P : Prover) (tape : Tape) : Tx1 :=
+  bind (stage1 D P) fun saved => .done
+    ⟨saved.map (fun c => R9PoolCheckpointCodec.encode (stage1 D P) (some c)),
+     match saved with | none => fun _ => 0 | some c => tape c.raw⟩
+
+/-- The runtime model's persisted bytes are supplied as the function argument.
+Same-byte checkpoint handoff therefore introduces no additional interpreter reset. -/
+def poolTx2 (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (policy : Policy) : PoolTx2 :=
+  fun bytes => match R9PoolCheckpointCodec.decode (stage1 D P) bytes with
+  | some (some c) => if admitted (policy c) then resume D d c else .done rejectRun
+  | _ => .done rejectRun
+
+/-- Exact logical representation of checkpoint persistence on this boundary. The runtime may
+read accounts however it likes, provided a matching checkpoint presents the
+same bytes. Source ownership/provenance is separate. -/
+def SameCheckpointBytes (read : Bytes → Bytes) (written : Bytes) : Prop :=
+  read written = written
+
+theorem persisted_resume (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover) (policy : Policy)
+    (read : Bytes → Bytes) (written : Bytes) (hP2 : SameCheckpointBytes read written) :
+    poolTx2 D d P policy (read written) = poolTx2 D d P policy written := by
+  rw [hP2]
+
+/-- Pool's transaction-local reservation is rolled back on a failed nested
+call; a successful one commits the marker and settlement together. -/
+structure Settlement where
+  markerReservedBeforeCall : Bool
+  markerCommitted : Bool
+  settled : Bool
+
+def settlement (checks : PoolChecks) (verdict : Bool) : Settlement :=
+  ⟨admitted checks, admitted checks && verdict, admitted checks && verdict⟩
+
+theorem settlement_only_after_acceptance (checks : PoolChecks) (verdict : Bool)
+    (h : (settlement checks verdict).settled = true) :
+    verdict = true ∧ (settlement checks verdict).markerReservedBeforeCall = true ∧
+      checks.nullifierMarkerFree = true ∧ checks.poolOnlyVault = true := by
+  have hv := Bool.and_eq_true_iff.mp h
+  have hg := hv.1
+  simp only [admitted, Bool.and_eq_true] at hg
+  exact ⟨hv.2, hv.1, hg.1.1.2, hg.1.2⟩
+
+theorem caller (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover)
+    (tape : Tape) (policy : Policy) :
+    CallerReachability (tx1 D P tape) (poolTx2 D d P policy) D d P := by
+  intro H run hr ha
+  have he : (eval H (tx1 D P tape)).2 =
+      ⟨(eval H (stage1 D P)).2.map
+        (fun c => R9PoolCheckpointCodec.encode (stage1 D P) (some c)),
+       match (eval H (stage1 D P)).2 with | none => fun _ => 0 | some c => tape c.raw⟩ := by
+    simp only [tx1, eval_bind, eval]
+  cases hs : (eval H (stage1 D P)).2 with
+  | none =>
+    simp only [deployed, R9TwoTransactionExperiment.experiment, eval_bind, he, hs,
+      Option.map_none, eval] at hr
+    contradiction
+  | some c =>
+    have hdecode := R9PoolCheckpointCodec.persisted_output (stage1 D P) H
+    rw [hs] at hdecode
+    have hfirst : (eval H (tx1 D P tape)).2.checkpoint =
+        some (R9PoolCheckpointCodec.encode (stage1 D P) (some c)) := by
+      rw [he, hs]; rfl
+    have hexp := R9TwoTransactionExperiment.eval_success (tx1 D P tape)
+      (poolTx2 D d P policy) H _ hfirst
+    change (eval H (R9TwoTransactionExperiment.experiment _ _)).2.resumed = some run at hr
+    rw [hexp] at hr
+    have hp : (eval H (poolTx2 D d P policy
+        (R9PoolCheckpointCodec.encode (stage1 D P) (some c)))).2 = run :=
+      Option.some.inj hr
+    unfold poolTx2 at hp
+    rw [hdecode] at hp
+    by_cases hg : admitted (policy c) = true
+    · rw [if_pos hg] at hp
+      have hw : write (eval H (prepare D P)) = some c := by
+        rw [← stage1_eval D P H]; exact hs
+      rw [← hp]
+      exact resume_recorded D d P H c hw (by rw [hp]; exact ha)
+    · rw [if_neg hg] at hp
+      have hf : run.2.2 = false := by rw [← hp]; rfl
+      rw [hf] at ha
+      contradiction
+
+theorem deployed_transport (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover)
+    (tape : Tape) (policy : Policy) :
+    DeployedTransport D d P (deployedFailureModel (tx1 D P tape) (poolTx2 D d P policy)) :=
+  R9DeployedBinaryExperiment.transport _ _ D d P (caller D d P tape policy)
+
+/-- The remaining source join is equality of the designated resumed observation with
+this constructed control-flow model, including its designated recorded log. Physical checkpoint encodings and
+outer runtime-only calls are deliberately not compared.
+It is not a probability hypothesis and is not proved by P2′ alone. -/
+def RustPoolEqualsModel (rustTx1 : Tx1) (rustPoolTx2 : PoolTx2)
+    (D : LiteralByteProtocol.Decoder) (d : ErasedPrefix → ErasedMessage → Bool)
+    (P : Prover) (tape : Tape) (policy : Policy) : Prop :=
+  ∀ H, (eval H (deployed rustTx1 rustPoolTx2)).2.resumed =
+    (eval H (deployed (tx1 D P tape) (poolTx2 D d P policy))).2.resumed
+
+theorem source_caller (rustTx1 : Tx1) (rustPoolTx2 : PoolTx2)
+    (D : LiteralByteProtocol.Decoder) (d : ErasedPrefix → ErasedMessage → Bool)
+    (P : Prover) (tape : Tape) (policy : Policy)
+    (join : RustPoolEqualsModel rustTx1 rustPoolTx2 D d P tape policy) :
+    CallerReachability rustTx1 rustPoolTx2 D d P := by
+  intro H run hr ha
+  exact caller D d P tape policy H run (by rw [join H] at hr; exact hr) ha
+
+#print axioms persisted_resume
+#print axioms settlement_only_after_acceptance
+#print axioms caller
+#print axioms deployed_transport
+#print axioms source_caller
+end AspisR1.R9PoolConcreteExperiment
+end

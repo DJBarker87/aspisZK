@@ -1,0 +1,106 @@
+/Users/dominic/ZK/.worktrees/cx-r9-pool/docs/research/100bit-spend-path-20261013/lean/R9PoolConcreteExperiment.lean:112:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if admitted (policy c) = true then ?m.191 else ?m.192
+in the target expression
+  (eval H
+        (match some (some c) with
+        | some (some c) => if admitted (policy c) = true then resume D d c else Program.done rejectRun
+        | x => Program.done rejectRun)).2 =
+    run
+
+case pos
+D : LiteralByteProtocol.Decoder
+d : ErasedPrefix → ErasedMessage → Bool
+P : Prover
+tape : Tape
+policy : Policy
+H : Bytes → State
+run : Run
+ha : run.2.2 = true
+he :
+  (eval H (tx1 D P tape)).2 =
+    { checkpoint := Option.map (fun c => R9PoolCheckpointCodec.encode (stage1 D P) (some c)) (eval H (stage1 D P)).2,
+      words :=
+        match (eval H (stage1 D P)).2 with
+        | none => fun x => 0
+        | some c => tape c.raw }
+c : Checkpoint
+hs : (eval H (stage1 D P)).2 = some c
+hdecode : R9PoolCheckpointCodec.decode (stage1 D P) (R9PoolCheckpointCodec.encode (stage1 D P) (some c)) = some (some c)
+hfirst : (eval H (tx1 D P tape)).2.checkpoint = some (R9PoolCheckpointCodec.encode (stage1 D P) (some c))
+hexp :
+  eval H (R9TwoTransactionExperiment.experiment (tx1 D P tape) (poolTx2 D d P policy)) =
+    ((eval H (tx1 D P tape)).1 ++
+        (eval H (poolTx2 D d P policy (R9PoolCheckpointCodec.encode (stage1 D P) (some c)))).1,
+      { first := (eval H (tx1 D P tape)).2,
+        resumed := some (eval H (poolTx2 D d P policy (R9PoolCheckpointCodec.encode (stage1 D P) (some c)))).2 })
+hr :
+  ((eval H (tx1 D P tape)).1 ++ (eval H (poolTx2 D d P policy (R9PoolCheckpointCodec.encode (stage1 D P) (some c)))).1,
+          { first := (eval H (tx1 D P tape)).2,
+            resumed :=
+              some (eval H (poolTx2 D d P policy (R9PoolCheckpointCodec.encode (stage1 D P) (some c)))).2 }).2.resumed =
+    some run
+hp :
+  (eval H
+        (match some (some c) with
+        | some (some c) => if admitted (policy c) = true then resume D d c else Program.done rejectRun
+        | x => Program.done rejectRun)).2 =
+    run
+hg : admitted (policy c) = true
+⊢ run = eval H (recorded D d P)
+/Users/dominic/ZK/.worktrees/cx-r9-pool/docs/research/100bit-spend-path-20261013/lean/R9PoolConcreteExperiment.lean:117:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if admitted (policy c) = true then ?m.196 else ?m.197
+in the target expression
+  (eval H
+        (match some (some c) with
+        | some (some c) => if admitted (policy c) = true then resume D d c else Program.done rejectRun
+        | x => Program.done rejectRun)).2 =
+    run
+
+case neg
+D : LiteralByteProtocol.Decoder
+d : ErasedPrefix → ErasedMessage → Bool
+P : Prover
+tape : Tape
+policy : Policy
+H : Bytes → State
+run : Run
+ha : run.2.2 = true
+he :
+  (eval H (tx1 D P tape)).2 =
+    { checkpoint := Option.map (fun c => R9PoolCheckpointCodec.encode (stage1 D P) (some c)) (eval H (stage1 D P)).2,
+      words :=
+        match (eval H (stage1 D P)).2 with
+        | none => fun x => 0
+        | some c => tape c.raw }
+c : Checkpoint
+hs : (eval H (stage1 D P)).2 = some c
+hdecode : R9PoolCheckpointCodec.decode (stage1 D P) (R9PoolCheckpointCodec.encode (stage1 D P) (some c)) = some (some c)
+hfirst : (eval H (tx1 D P tape)).2.checkpoint = some (R9PoolCheckpointCodec.encode (stage1 D P) (some c))
+hexp :
+  eval H (R9TwoTransactionExperiment.experiment (tx1 D P tape) (poolTx2 D d P policy)) =
+    ((eval H (tx1 D P tape)).1 ++
+        (eval H (poolTx2 D d P policy (R9PoolCheckpointCodec.encode (stage1 D P) (some c)))).1,
+      { first := (eval H (tx1 D P tape)).2,
+        resumed := some (eval H (poolTx2 D d P policy (R9PoolCheckpointCodec.encode (stage1 D P) (some c)))).2 })
+hr :
+  ((eval H (tx1 D P tape)).1 ++ (eval H (poolTx2 D d P policy (R9PoolCheckpointCodec.encode (stage1 D P) (some c)))).1,
+          { first := (eval H (tx1 D P tape)).2,
+            resumed :=
+              some (eval H (poolTx2 D d P policy (R9PoolCheckpointCodec.encode (stage1 D P) (some c)))).2 }).2.resumed =
+    some run
+hp :
+  (eval H
+        (match some (some c) with
+        | some (some c) => if admitted (policy c) = true then resume D d c else Program.done rejectRun
+        | x => Program.done rejectRun)).2 =
+    run
+hg : ¬admitted (policy c) = true
+⊢ run = eval H (recorded D d P)
+'AspisR1.R9PoolConcreteExperiment.persisted_resume' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.R9PoolConcreteExperiment.settlement_only_after_acceptance' depends on axioms: [propext]
+'AspisR1.R9PoolConcreteExperiment.caller' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.R9PoolConcreteExperiment.deployed_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.R9PoolConcreteExperiment.source_caller' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
