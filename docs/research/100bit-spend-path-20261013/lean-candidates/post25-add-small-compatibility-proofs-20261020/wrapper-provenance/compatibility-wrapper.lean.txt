@@ -1,0 +1,11 @@
+def sampler.add_small_base_p
+  (digits : Array Std.U32 8#usize) (addend : Std.U32) :
+  Result (Bool × (Array Std.U32 8#usize))
+  := do
+  let (iter, into_iter_back) ←
+    MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter
+      digits
+  let (addend1, back) ←
+    sampler.add_small_base_p_loop iter (fun im => im) addend
+  let digits1 := into_iter_back (back iter)
+  ok (addend1 != 0#u32, digits1)
