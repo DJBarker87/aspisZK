@@ -18,3 +18,7 @@ Still OPEN, explicitly:
 The joined import initially exposed the existing generated discriminant instance collision. A reversible naming adapter and identical original/adapted constructor-code audits are in `lean-candidates/s5-stage2-dot-reader-backend-20261020/`. The final integration also exceeded Lean's internal -M4400 guard during imports: a distinct import-only diagnostic reproduced the failure before any theorem elaboration. A documented NUC-only -M6000 selected integration retained the same OS High1GiB/Max2GiB/Swap0 cap. There was no cgroup memory-pressure/OOM/swap event and no large-term reduction; local compile policy is unchanged.
 
 The mathematical result is proved for the named model/backend and explicit hypotheses. Frozen-caller installation and implementation-linked 100-bit closure are not proved by this packet.
+
+## Source comparison component
+
+The follow-on packet `lean-candidates/s5-stage2-source-comparison-residual-20261020/` additionally reuses checked `finish_eq_success_true` to supply the existing comparison law. Its `finish_residualBatch_with_source_dot_ne` no longer takes a complete-dot or comparison-law premise. Individual reader meanings, the accumulator invariant, two-fold route and actual frozen backend/caller installation remain open. No canonicality assumption is needed to infer decoded equality from raw source equality; this does not remove the separate arithmetic/range/canonicality obligations.
