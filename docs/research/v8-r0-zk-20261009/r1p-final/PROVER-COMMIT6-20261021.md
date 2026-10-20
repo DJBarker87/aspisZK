@@ -63,3 +63,37 @@ Signature diff (all other binders and the conclusion are byte-identical):
 at `card(Padding) * cF`; `quotient_law_strict` proves the converse false.
 The probability conclusion does not mention cF, so it changes neither the
 error nor the experiment.
+
+## Stage 3: commitment observable and field carriers
+
+`ProverCommitQuotientObservable` proves invariance of every selected leaf
+encoder and the entire commitment-address function of the actual constructed
+protocol instance. `protocol_observable_mass` transports the joint law of
+the full honest view and all commitment addresses, including unopened
+leaves, all tree positions, salts/bindings/seeds and expander addresses.
+It requires no new invariance hypothesis. The previous continuation's
+warning about arbitrary residual `leafVal`/`caddr` does not apply to the
+constructed `PhaseProtocolInstanceBin.prover`: those fields are overridden.
+This closes the commitment-observable transport sub-obligation, while
+identifying the shipped caller with that instance remains separate.
+
+`ProverCommitWordCarrier` selects the actual M31 image subfield as
+`(algebraMap (ZMod P) K).fieldRange`; `baseEquiv` is lossless. Rejection of
+the exact low-31-bit candidate agrees with `rejB`. Every accepted field
+value has exactly two 32-bit preimages, proved by an explicit two-element
+set, without enumeration.
+
+`ProverCommitSourceCarrier` constructs an explicit equivalence between the
+five **pre-balance** sample families (eligible noise, ten mask-only columns,
+G, inactive nonzero-row H1 and D) and `SourceTape`. Its `source_fibre_card`
+transports every individual successful fibre exactly. There is no assumed
+common fibre constant. The carrier deliberately retains the sampled values
+subsequently overwritten by balance in mask-only/G/D. Feeding the shipped
+post-balance material directly into this carrier would not recover those
+raw samples. They must be recovered from the actual consumed stream.
+
+Accepted J 8202/8205/8208: observable/word/source-carrier, exit 0,
+3.00/2.22/2.00 seconds, peak 4,062,896/4,041,536/3,529,980 KiB; zero swaps.
+All twelve audits use standard axioms only. Rejected local elaboration
+drafts are retained and excluded. These laws do not yet identify the Rust
+caller order or assert uniform successful fibres for the sequential stream.
