@@ -105,7 +105,7 @@ increase. The generic loop was checked before its concrete specialization.
 `BuilderPrimitiveDigests` supplies 46 identities between the actual aggregate
 and component block-writer/Poseidon extractions, including all recursive
 loops, round constants and full permutation. Recurrences use symbolic suffix
-induction with bounds 4, 8, 10, 15 or 16; no concrete permutation cell is
+induction with bounds 4, 8, 11 or 16; no concrete permutation cell is
 reduced. Its deterministic generator `--check` passes. J9347 passes in
 4.55 s, 3,791,660 KiB, zero swap; all 46 axioms audits use only the allowed
 standard axioms. This removes duplicated primitive computation as a source
@@ -125,7 +125,12 @@ both output occupancy records, the auxiliary callee and the full inherited
 Content.aux equation from successful actual Parts. It requires neither a
 transfer/withdrawal flag premise nor an assumed digest/inverse equality.
 J9359: 2.03 s, 4,013,772 KiB, zero swap, eight audits. All standard axioms.
-Path and block argument correspondence remain separate.
+`BuilderTreeArguments` identifies the full actual membership digest loop
+against `treeCurR`, including raw-word bit tests and totality (J9361, 1.96 s,
+4,018,700 KiB, zero swap). `BuilderPathContent` proves all four actual path
+array closures, their canonical arguments, and full Content.path from
+successful Parts (J9363, 3.11 s, 4,018,648 KiB, zero swap). Six and eight
+standard-axiom audits respectively. No path-array equality is assumed.
 
 ## Stages 4–5: runtime and checker/retry
 
