@@ -40,8 +40,13 @@ Each was byte-identical, every time.
    probability bridge (C7). Numbers: κ(Q+1161) and B unchanged; the start
    multiplier is Q+1080, so the per-query form (Q+1)·2^-100 holds for
    32 ≤ Q ≤ Qmax; extractor cost ≤ 4·scale³·(Q+2323)³. A second unmerged
-   draft, `codex/cx-rowaware-draft-20261021`, is working on a row-aware
-   decoder to bring the bound back to Q+34 for every Q. Design notes:
+   draft, `codex/cx-rowaware-draft-20261021`, tried a row-aware decoder to
+   bring the bound back to Q+34. It failed: a compiled counterexample shows a
+   frozen node can extend a fully cached row-zero prefix and add one fresh
+   start without a binary collision. So under the port the per-query form
+   needs Q ≥ 32; for Q < 32 the absolute bound is still about 2^-95, which is
+   equivalent to F ≤ max(Q+1, 33)·2^-100 for every Q. The current v3 headline
+   (no port) keeps Q+34 and holds for every Q. Design notes:
    `design/OraclePortContinuation7-20261021.md` on the draft branch, with
    its comparison against headline v3. 11 + earlier modules, standard
    axioms, zero swap.
