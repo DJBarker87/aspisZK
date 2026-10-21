@@ -23,12 +23,24 @@ Each root packet records compiler/source/object hashes, launch revision, command
 
 Adjacent integration: `88ecb5afb` adds concrete EbyK new/first-push/finish product semantics; `766e0ffec` installs the genuinely extracted current wide-QM multiplication into scalar-factor operations; `02af43782` adds ClaimPowers carrier transport and a typed tx2 powers-to-query-loop same-array cut. These do not close their explicit source/Std/caller boundaries.
 
-## Next head work and principal source blocker
+## Complete current-model execution now constructed
 
-1. Construct the N8 output reduction/packing call from the completed head limbs; reuse the existing canonical reducer and from-limbs proofs. Compose with committed full tail execution (`7505e9ce1`) and final current wide addition.
-2. Derive strict parser acceptances from the actual caller's admissible proof bytes, and connect its coefficient origin to the ClaimPowers array. The same-array carrier transport and tx2 cut are now checked, but whole caller operation identity remains open.
-3. **Shared P6/Std source correspondence remains a real blocker.** The actual Rust `array::from_fn` goes through `try_from_fn` and `try_from_fn_erased` over a mutable MaybeUninit buffer. Retained extraction attempts leave `try_from_fn` external or fail at `push_unchecked`; callback scheduling proofs for `from_fn_model` do not prove this buffer implementation. Worker Q is testing a candidate-only initialized-Copy-array bounded-while replacement for the smallest affected powers helper, with production and frozen sources untouched. No adoption, source equivalence, CU result, or frozen-endpoint proof is claimed for that candidate.
-4. Full accepted-run/source/runtime and final frozen artifact joins remain required. Do not call S4 or the 100-bit implementation theorem closed from these focused execution results.
+- `0636a676f`: generic bounded callback forward execution for the retained stateful P6 array model, including length and value predicates.
+- `5049c48e3`: actual generated N8 reducer callbacks succeed for arbitrary typed head limbs and produce canonical words.
+- `0203329cc`: every canonical eight-word array is accepted by the retained current from-limbs operation; full `HeadCore` initialization/loop/array/packing chain is constructed for one operations record.
+- `542fe958f`: the actual generated single dot callback executes head, three concrete tail pushes, finish and current wide addition, returning a canonical value. No child-call success is a premise.
+- `2db33fa95`: all four actual callbacks construct the N4 array with canonical outputs.
+- `b5390af4a`: complete generated `four_dots` executes through its actual608-byte slice/shared-array conversion and N4 callback array.
+
+The last theorem is `AspisR1FastDotsFunctionForwardRootV1.four_dots_forward`. Its remaining inputs are query length≥608, exact608-byte prefix array identity, canonical29-entry coefficients and `SlotInput` for each of four slots. `SlotInput` contains strict parser acceptances on the exact source-read bytes. It assumes no callback, loop, push, finish, array or addition success. Array construction is explicitly the retained P6 model, so this is **not** final Rust/frozen-source refinement or closure of S4.
+
+## Next source/semantic joins and principal extraction blocker
+
+1. Bind the exact prefix/SlotInput and coefficient premises to the frozen caller's source operations and admissible proof bytes. Reuse ClaimPowers coordinate transport and same-array tx2 cuts, without treating a typed cut as full current tx2 refinement.
+2. Connect the complete current-model forward execution with the existing same-call field-functional results and final accepted-run endpoint. Operation-record equality/irrelevance must be proved; do not identify separately obtained existential traces or inputs.
+3. **Shared P6/Std source correspondence remains real.** Actual Rust `array::from_fn` goes through `try_from_fn` / `try_from_fn_erased` and a mutable MaybeUninit buffer. Retained attempts leave the child external or fail at `push_unchecked`; callback scheduling proofs do not prove that buffer implementation.
+4. Candidate-only extraction has found alternatives. The retained exact initialized-loop powers candidate already has an all-N recurrence proof; fresh N29 extraction confirms feasibility (`db1632d37` packet). S4 candidate v8 successfully emits a nonempty full function after replacing from_fn with initialized arrays, a bounded outer loop/by-value Copy helper and explicit fixed-size inner operations. Its change list is larger than a two-call substitution. V9's dynamic final N8 array write still fails Aeneas borrow replay. Worker Q is preserving both results and preparing one optimized isolated SBF/CU feasibility check. **No candidate adopted, frozen source changed, equivalence proved or CU budget claimed.**
+5. Full accepted-run/source/runtime and final artifact joins remain required. Keep the global100-bit objective active.
 
 ## Cache and focused runner locations
 
@@ -37,3 +49,5 @@ Root sources/objects and exact evidence are under `/tmp/root-s4-head-limb-forwar
 Prepend the retained Formatter repair closure before other Aeneas cache owners; reject any audit containing `core.fmt.Formatter`. This repair is a retained P6 model, not a proof of Rust Std correspondence. Use exact Lean 4.32, `-j1 -M4400`, owned mkdir lock and a live-process admission check; preserve unrelated live worktree edits.
 
 Latest root warm objects: `/tmp/root-s4-head-batch-terms-forward-v2-20261021`, `/tmp/root-s4-limb-fold-forward-v5-20261021`, `/tmp/root-s4-limb-loop-forward-v2-20261021`, `/tmp/root-s4-head-batch-body-forward-v3-20261021`, `/tmp/root-s4-head-outer-forward-v3-20261021`, `/tmp/root-s4-seven-batches-forward-v1-20261021`, each under `objects/` with matching `sources/` and `evidence/`. No binary is committed.
+
+Latest root complete-execution sources/objects/evidence: `/tmp/root-s4-p6-array-forward-v3-20261021`, `/tmp/root-s4-n8-output-forward-v1-20261021`, `/tmp/root-s4-n8-pack-forward-v2-20261021`, `/tmp/root-s4-head-core-forward-v1-20261021`, `/tmp/root-s4-full-callback-forward-v3-20261021`, `/tmp/root-s4-four-callbacks-forward-v1-20261021`, `/tmp/root-s4-function-forward-v1-20261021`. All green targets audited to standard axioms, with no production mutation or manifest-wide replay.
