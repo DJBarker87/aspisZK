@@ -208,3 +208,26 @@ byte lookup, for subsequent aggregation. Final attempt 2 exits 0,
 standard (some use fewer than all three axioms). Attempt 1's redundant
 bound tactic and unexpanded multiplication identity are retained failures.
 It never evaluates the encoded checkpoint or a concrete vector.
+
+## Stage 9: exact query bytes
+
+CheckpointBytesWord.select_bytes proves the checked raw U32 selector returns
+exact little-endian bytes for every U32, without a canonical-word premise.
+It reuses the E selector's first four symbolic bytes. The remaining seven
+limbs are eliminated by structural prefix lookup, not normalization.
+CheckpointBytesQuery.query_bytes composes this with the actual sparse body
+query dispatch for every one of 22 query words and all four byte positions.
+It names no supplied call-success or field-decoder premise.
+
+Word attempt 4: exit 0, wall 10.125658875331283 s, RSS 3619700736 bytes,
+zero swaps, revision 335b96d88. Query attempt 1: exit 0,
+40.384850832633674 s, RSS 3604365312 bytes, zero swaps, revision 9439e4182.
+All four reports are standard. Word attempts 1..3 retain type-transparency,
+index-bound and conditional-rewrite failures. Explicit prefix rewrites
+replace broad simp. No limit is raised.
+
+The local byte equations now cover every source sparse interval: header,
+five digests/state arrays, six wide fields, rho/power, semantic and coordinate
+K vectors, all weights, and the query vector. This is **section-complete**,
+not a claimed aggregate body_byte/C5 source-state theorem. The independent
+18-block raw-field reference plus checksum composition is proved in stage 5.

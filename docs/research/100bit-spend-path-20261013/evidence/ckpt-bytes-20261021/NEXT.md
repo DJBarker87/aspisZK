@@ -21,10 +21,11 @@ create a theorem pretending that naming them discharges the missing source
 codec/reader/allocation implementation instances.
 
 Before that endpoint is instantiable, the exact next byte theorem is
-`body_byte_c5`: for every 0<=i<1736 on canonical S2/saved-ten source fields,
-body_byte succeeds and its byte equals the reference C5 body[i]. Compose its
-18 intervals symbolically (including query-byte arithmetic and weights),
-then transport the checksum input/output by congruence. Do not evaluate a
+`CheckpointBytesBody.body_byte_c5` (new aggregate, not yet proved): for every 0<=i<1736 on canonical S2/saved-ten source fields,
+body_byte succeeds and its byte equals the reference C5 body[i]. All local source intervals, including query-byte arithmetic and weights,
+are now proved by CheckpointBytesSparseE/SparseK/SparseDigest/Header/Query.
+Compose them with CheckpointBytesLookup and a concrete source-to-Fields
+interpretation; then transport the checksum input/output by congruence. Do not evaluate a
 1736-byte term or unfold 64 field writes in the kernel.
 
 For strict field decoder adoption, establish the exact-16 section width for
