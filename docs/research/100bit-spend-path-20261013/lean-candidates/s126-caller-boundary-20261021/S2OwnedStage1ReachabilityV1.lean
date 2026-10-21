@@ -39,12 +39,15 @@ theorem tail_success (ops : Ops) (checkpointIn data checkpointOut : Slice U8)
     (h : owned_stage1_tail ops checkpointIn data=ok (.Ok (),checkpointOut)) :
     ∃ (publicData proofData : alloc.vec.Vec U8) (statement : Statement)
       (pub : Public) (selectedProof : Slice U8)
-      (proofStart proofEnd : Usize) (splitByte : U8) (k : Usize)
+      (proofLength proofStart proofEnd : Usize) (checkedEnd : Option Usize) (splitByte : U8) (k : Usize)
       (checkpoint : alloc.vec.Vec U8),
       ops.op11=ok (.Ok publicData) ∧
       decode_public_statement_box ops (alloc.vec.Vec.deref publicData)=ok (.Ok statement) ∧
       ops.op12=ok (.Ok proofData) ∧
+      ops.op3=ok proofLength ∧
       ops.op6=ok proofStart ∧
+      lift (Usize.checked_add proofStart proofLength)=ok checkedEnd ∧
+      ops.op1 checkedEnd solana_program_error.ProgramError.InvalidAccountData=ok (.Ok proofEnd) ∧
       alloc.vec.Vec.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
         proofData {start:=proofStart,«end»:=proofEnd}=ok selectedProof ∧
       Slice.index_usize data 1#usize=ok splitByte ∧
@@ -133,8 +136,8 @@ theorem tail_success (ops : Ops) (checkpointIn data checkpointOut : Slice U8)
                       ·
                         obtain ⟨copied,hcopied,h⟩ := bind_success _ _ _ h
                         cases h
-                        exact ⟨publicReadValue,proofReadValue,decodedValue,pub,selected,proofStart,proofEndValue,splitByte,k,childValue,
-                          hpublicRead,hdecoded,hproofRead,hproofStart,hselected,hsplitByte,hk,hpub,hchild,
+                        exact ⟨publicReadValue,proofReadValue,decodedValue,pub,selected,proofLength,proofStart,proofEndValue,checkedEnd,splitByte,k,childValue,
+                          hpublicRead,hdecoded,hproofRead,hproofLength,hproofStart,hcheckedEnd,hproofEnd,hselected,hsplitByte,hk,hpub,hchild,
                           first_decoded_success ops pub _ _ k childValue hchild,hcopied⟩
 
 #print axioms first_decoded_success

@@ -18,7 +18,8 @@ def imports(path):
 
 B=Path(__file__).resolve().parents[2]/'docs/research/100bit-spend-path-20261013'
 E=B/'evidence/s126-current-caller-20261021'
-receipts=[json.loads(p.read_text()) for p in E.glob('*/receipt.json')]
+manifest=json.loads((E/'accepted-targets.json').read_text())
+receipts=[json.loads((E/row['receipt']).read_text()) for row in manifest['targets'].values()]
 accepted={}
 for r in receipts:
  if r['exit_status']==0:

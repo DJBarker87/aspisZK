@@ -6,9 +6,9 @@ I=Path(sys.argv[1]);O=Path(sys.argv[2]);O.mkdir(parents=True,exist_ok=True)
 raw=(I/'Types.lean').read_text();assert 'import AspisS2OwnedStage1.TypesExternal' not in raw
 t=re.sub(r'^set_option (maxHeartbeats|maxRecDepth) .*\n','',raw,flags=re.M)
 adapters=[]
-names=re.findall(r'^inductive ([A-Za-z0-9_.]+) where',t,re.M)
+names=re.findall(r'^inductive ([A-Za-z0-9_.]+)\s+where',t,re.M)
 for name in names:
- pat=r'(@\[[^\]]*\]\n)inductive '+re.escape(name)+r' where\n((?:\|[^\n]*\n(?:  [^\n]*\n)*)+)'
+ pat=r'(@\[[^\]]*\]\n)inductive '+re.escape(name)+r'\s+where\n((?:\|[^\n]*\n(?:  [^\n]*\n)*)+)'
  m=re.search(pat,t);assert m,name
  attr=m[1].replace('discriminant isize, ','').replace('@[discriminant isize]\n','')
  rows=[]

@@ -13,12 +13,21 @@ folders=[]
 for f in H.iterdir():
  if not f.is_dir() or not (f/'src/lib.rs').is_file():continue
  folders.append(f.name)
- for rel in ['src/lib.rs','Cargo.toml','Cargo.lock','source-cut.json']:
+ for rel in ['src/lib.rs','Cargo.toml','Cargo.lock','source-cut.json','voluntary-stop.json']:
   if (f/rel).is_file():copy(f/rel,Path('sources')/f.name/rel)
  for p in f.glob('*-input.json'):copy(p,Path('sources')/f.name/p.name)
  if f.name in ['owned-tail-v5','owned-tail-v6','owned-tail-v8']:
   for p in (f/'generated').rglob('*.lean'):
    copy(p,Path('sources')/f.name/(str(p.relative_to(f))+'.txt'))
+for folder in H.glob('sdk-*guard-context-v*'):
+ if not folder.is_dir():continue
+ for rel in ['step0.log','step1.log','cbmc-exit.json','properties-without-traces.json','voluntary-stop.json']:
+  if (folder/rel).is_file():copy(folder/rel,Path('diagnostics')/folder.name/rel)
+ raw=folder/'step2.log'
+ if raw.is_file():
+  dest=O/'diagnostics'/folder.name;dest.mkdir(parents=True,exist_ok=True)
+  (dest/'raw-log-pin.json').write_text(json.dumps(dict(path=str(raw),sha256=hashlib.sha256(raw.read_bytes()).hexdigest(),bytes=raw.stat().st_size,qualification='Raw CBMC text retained on build host. Large counterexample trace omitted from packet; complete property/status projection retained when solver completed.'),indent=2)+'\n')
+  if raw.stat().st_size<1024*1024:copy(raw,Path('diagnostics')/folder.name/raw.name)
 for p in (H/'kit').glob('*.py'):copy(p,Path('runner')/p.name)
 std=H/'kani-rust-slice-iter-macros.rs'
 if std.is_file():

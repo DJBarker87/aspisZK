@@ -280,3 +280,130 @@ SATISFIED and exit0. No exit1 run is accepted merely by interpreting its log.
 No unchanged full Lean replay, production verifier rewrite, SBF rebuild or
 security-contract reduction was performed. The 100-bit target is not yet
 established.
+
+
+### Continuation: concrete decoder/current verifier, owned scan and retained children
+
+This addendum supersedes the earlier remaining-deliverable item that still
+listed installing the decoder/current tx1. The source freeze is still
+`b2727acd3abf79315d18b754a260f58f4b1c6326`. No production source changed.
+The landed parser dependency is pinned to research `e5a601bea1d808531dbc296ae120b6886a4a9e68`;
+it was imported as source/hash evidence and a checked warm object, not rebuilt.
+`reused-parser/pin.json` records the exact source and matching attempt-6 receipt.
+
+`S2OwnedCurrentCarrierV1` supplies reversible complete statement/common,
+afterstate/payment and Public maps and constructor-preserving maps for all
+seven nested decoder-error enums. Both statement variants and all error
+payloads are retained. Naming generated discriminant instances was extended
+to all thirteen enums to avoid a collision with the actual decoder import;
+discriminant codes and carriers are unchanged.
+
+`S2OwnedSourceInstallationV1.install` now supplies nine of the thirteen
+emitted child operations: actual slice/array comparison, actual Option.ok_or,
+current compact tx1, proof-size constant, actual retained validator, actual
+retained decoder, afterstate-size constant, actual retained afterstate
+encoder, and digest clone. These use the source files already pinned by the
+S6 retained-source correspondence; the complete decoder/statement source
+files match, not merely their public function names. `decoder_validated`
+reuses the existing actual decoder success theorem to show it validated
+exactly the mapped returned statement. No independent validation premise is
+added, and validators/encoders remain in their original execution positions.
+
+Before this installation, `Reachability.tail_success` left the decoder,
+validator, encoder and current tx1 as Ops interpretations. After installation,
+`tail_current_first` takes one success of the same emitted owned tail and
+derives the actual same-byte decoder equation, exact proof range
+`688..58295`, original instruction-byte/cast equation, actual current
+`firstCurrent` success and exact checkpoint-copy equation. There is no
+independent decoder, selected Public, tx1-success or observer premise. The
+complete carrier, Result, error constructors and output are retained.
+`checked_end_total` and `tag_offset_total` prove the source checked additions.
+`S2OwnedDecoderLengthV1.actual_wrong_length` proves TOTAL actual WrongLength
+rejection for every other representable slice length; accepted decoding's
+1880-byte width is reused from `DecoderSuccess.decode_success`.
+
+`S2OwnedSnapshotTransportV1` imports the landed parser's `to_vec_bytes`, which
+is TOTAL for all representable lengths. Its complete Result transport and
+enclosing tail equality preserve errors, failure and divergence. This
+replaces the abandoned whole-58295-byte SDK copy check, which was stopped
+at about 6.1 GiB rather than rerun unchanged with a higher cap. It does not
+itself instantiate the ordered live SDK borrow operations.
+
+`S2CheckpointGuardTransportV1.owned_eq_std` combines the emitted loop's
+TOTAL theorem with the pinned std-any sequence model. `guard_eq` transports
+an arbitrary complete result/state/trace carrier through that exact guard.
+`S2OwnedGuardCompositionV1.guarded_current_first` composes this concrete owned
+scan and the installed tail: one guarded success derives all-zero input,
+actual decoder and actual same-byte current first execution. Its
+`nonzero_reject` also preserves the precise AccountAlreadyInitialized result
+and unchanged checkpoint on rejection. These are reference composition
+results. The actual SDK iterator representation and wrapper coupling must
+still be supplied; a sequence model is not asserted to be that instance.
+
+The strengthened actual SDK iterator step additionally preserves an arbitrary
+selected checkpoint byte. Its `sdk-buffer-next-frame-v2` certificate passed
+in 5.479 s, 367088 KiB RSS, swap0, with all cursor/end/continue/return cases.
+The actual SDK public owned-snapshot check passed in 13.755 s, 380356 KiB,
+swap0, with live shared aliases, exclusive rejection and guard release.
+Exact commands, source/tool/import hashes, exits, timings, RSS, swap and
+axioms audits are in the individual receipts; all current accepted Lean
+audits use only subsets of propext/Classical.choice/Quot.sound.
+
+**SDK diagnostic limits, not closures.** A direct GOTO parent check with only
+the pure std-any result abstracted reports 1159 ordinary assertions passing
+and one attainable reached-child cover in 20.511 s, 2307504 KiB, swap0.
+Raw CBMC exit10 is retained, and every property/status is exported without
+its large counterexample trace; the full raw log is hashed and retained on
+the host. No exit10 is mislabeled as cargo-kani exit0. This confirms a viable
+parent context under a named cut, not a concrete source equivalence result.
+The expanded all-alias/success parent timed out at 181.084 s, 6410252 KiB;
+the split alias diagnostic first exposed an insufficient memcmp unwind and
+then timed out after its bound was corrected. Those runs are excluded.
+The independent successful-parent diagnostic was stopped after resource
+review at 148.975 s, 6390320 KiB. All used fresh admission, explicit 6/8 GiB
+limits and MemorySwapMax=0. No unchanged larger rerun is planned: finish
+with verified blocks/steps and composition.
+
+**Exact outstanding scope:** the four remaining owned caller fields are the
+Solana digest operation, exact verifier error/log mapper, ordered SDK public
+read/snapshot and ordered SDK proof read/snapshot. Current verifier Ops also
+remain explicit and retain their separately owned source/security obligations.
+The missing S2 source theorem must concretely couple the frozen AccountInfo
+stage1 to this reference, including complete SDK alias/borrow semantics,
+retained guards, byte snapshots, errors, writeback and observable traces.
+S6's enclosing same-statement reuse is proved in the installed reference,
+but actual SDK execution still shares this S2 gap. S1 retains original nested
+prepared_claim and original from_fn/gamma-power source correspondence and
+its actual primitive/standard-library obligations. No S1/S2/S6 whole-cone
+closure or 100-bit release is claimed: **target not yet established**.
+All work is in the isolated branch. No new production/source-adoption decision
+is requested for these reference-only changes. Candidate adoption would still
+require complete source equivalence and a fresh release/artifact pin.
+
+
+The replacement SDK alias leaves now pass independently:
+`sdk-shared-alias-step-v1` (exit0, 12.682 s, 1333772 KiB RSS, swap0,
+0/483 failed, 2/2 covers) checks identical shared slice pointer/length/selected
+byte across every length0..58295 and all storage bytes. Thus one shared view
+cannot satisfy both accepted public/proof lengths. `sdk-exclusive-alias-step-v1`
+(exit0, 2.974 s, 366284 KiB, swap0) checks exact AccountBorrowFailed under the
+live exclusive guard and successful re-borrow after release. These are real
+SDK alias steps, not acceptance of the excluded whole-parent diagnostics.
+The generic SDK/runtime arbitrary-capacity RefCell counter boundary and the
+complete enclosing source composition are still required.
+
+The packet checker now rejects stale own direct-import hashes as well as
+stale source/object receipts. This found the carrier proof pre-dating the
+latest reachability object; that proof and its affected installation/guard/
+decoder-length dependents were recompiled, without replaying unchanged
+unrelated targets. The exact current closure is pinned after those checks.
+The debug-format error/log leaf was also probed, then stopped when both a
+symbolic enum root and a constant-Parse preflight retained about6.1GiB
+without a result. Neither is accepted; exact error/log interpretation is
+still in the remaining-field list. No resource cap was increased.
+
+Before this checkpoint, the main research worktree was inspected read-only at
+`b5b7c5ce32a5a7896db53ecc1d4ca98d1258532e`. Its current S6 re-pin and S1
+handoff still explicitly name frozen `b2727acd3`; the overnight handoff keeps
+the next-freeze candidate parked. No new freeze is inferred from intervening
+S3/S9 source-proof commits. This branch/worktree remains isolated.

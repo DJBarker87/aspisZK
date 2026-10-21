@@ -31,6 +31,13 @@ for src in S.glob('*.lean'):
  obj=Path('/tmp/s126-current-caller-20261021-objects')/(src.stem+'.olean')
  if obj.exists():rows=[(p,r) for p,r in rows if r.get('object_sha256')==sha(obj)]
  assert rows,'current cached object lacks matching receipt: '+src.name
+ def current_own_imports(row):
+  for imported,pin in row.get('direct_imports',{}).items():
+   own=Path('/tmp/s126-current-caller-20261021-objects')/(imported.replace('.','/')+'.olean')
+   if own.is_file() and Path(pin['path'])==own and sha(own)!=pin['sha256']:return False
+  return True
+ rows=[(p,r) for p,r in rows if current_own_imports(r)]
+ assert rows,('no receipt with current own direct imports',src.name)
  p,r=rows[-1]
  assert r['print_axioms'] and not any('sorryAx' in a or 'Formatter' in a for a in r['print_axioms']),p
  assert r['swaps']==0,p

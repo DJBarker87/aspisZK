@@ -264,10 +264,9 @@ instance _root_.AspisS2OwnedStage1.aspis_statement.pool_v1.incremental_merkle.Po
     Source: '/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs', lines 96:0-96:39
     Name pattern: [aspis_statement::pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1]
     Visibility: public -/
-@[discriminant isize, rust_type
+@[rust_type
   "aspis_statement::pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1"]
-inductive aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
-  where
+inductive aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1 where
 | WrongLength :
   aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
 | WrongMagic :
@@ -312,6 +311,34 @@ inductive aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountEr
   aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError →
   aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
 
+def aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.read_discriminant (x : aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1) : Isize :=
+  match x with
+  | .WrongLength => 0#isize
+  | .WrongMagic => 1#isize
+  | .WrongVersion => 2#isize
+  | .WrongLaneCount => 3#isize
+  | .WrongDigestEncoding => 4#isize
+  | .WrongDepth => 5#isize
+  | .WrongFormatBinding => 6#isize
+  | .NonZeroReserved => 7#isize
+  | .ZeroRequiredBinding => 8#isize
+  | .InvalidBoolean => 9#isize
+  | .InvalidMasterState => 10#isize
+  | .InvalidLane => 11#isize
+  | .LaneMasterMismatch => 12#isize
+  | .LaneOrderMismatch => 13#isize
+  | .LaneSequenceDecreased => 14#isize
+  | .DuplicateCheckpoint => 15#isize
+  | .CheckpointSequenceOverflow => 16#isize
+  | .NonCanonicalDigest => 17#isize
+  | .Identity => 18#isize
+  | .Policy => 19#isize
+  | .Tree _ => 20#isize
+
+instance _root_.AspisS2OwnedStage1.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.instDiscriminant :
+    Aeneas.Std.Discriminant aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1 Isize where
+  read_discriminant := aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.read_discriminant
+
 /-- [aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalCommonV1]
     Source: '/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 93:0-93:43
     Name pattern: [aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalCommonV1]
@@ -333,10 +360,9 @@ structure aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalC
     Source: '/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 106:0-106:44
     Name pattern: [aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalStatementV1]
     Visibility: public -/
-@[discriminant isize, rust_type
+@[rust_type
   "aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalStatementV1"]
-inductive aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
-  where
+inductive aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 where
 | PrivateTransfer :
   aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
     →
@@ -348,14 +374,22 @@ inductive aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalS
   aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 →
   aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
 
+def aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.read_discriminant (x : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1) : Isize :=
+  match x with
+  | .PrivateTransfer _ _ => 0#isize
+  | .Withdrawal _ _ => 1#isize
+
+instance _root_.AspisS2OwnedStage1.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.instDiscriminant :
+    Aeneas.Std.Discriminant aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 Isize where
+  read_discriminant := aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.read_discriminant
+
 /-- [aspis_statement::pool_v1::payment_relation::PoolV1PaymentStatementFormatError]
     Source: '/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src/crates/aspis-statement/src/pool_v1/payment_relation.rs', lines 128:0-128:42
     Name pattern: [aspis_statement::pool_v1::payment_relation::PoolV1PaymentStatementFormatError]
     Visibility: public -/
-@[discriminant isize, rust_type
+@[rust_type
   "aspis_statement::pool_v1::payment_relation::PoolV1PaymentStatementFormatError"]
-inductive aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError
-  where
+inductive aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError where
 | WrongLength :
   aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError
 | WrongMagic :
@@ -385,14 +419,34 @@ inductive aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatE
 | EnvelopeMismatch :
   aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError
 
+def aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.read_discriminant (x : aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError) : Isize :=
+  match x with
+  | .WrongLength => 0#isize
+  | .WrongMagic => 1#isize
+  | .WrongVersion => 2#isize
+  | .WrongTransitionKind => 3#isize
+  | .WrongDigestEncoding => 4#isize
+  | .NonZeroReserved => 5#isize
+  | .ZeroRequiredBinding => 6#isize
+  | .InvalidAnchorSequence => 7#isize
+  | .NonCanonicalDigest => 8#isize
+  | .NonCanonicalAssetId => 9#isize
+  | .InvalidWithdrawalAmount => 10#isize
+  | .InvalidDestination => 11#isize
+  | .InvalidEnvelope => 12#isize
+  | .EnvelopeMismatch => 13#isize
+
+instance _root_.AspisS2OwnedStage1.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.instDiscriminant :
+    Aeneas.Std.Discriminant aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError Isize where
+  read_discriminant := aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.read_discriminant
+
 /-- [aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLiveSnapshotErrorV1]
     Source: '/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs', lines 438:0-438:38
     Name pattern: [aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLiveSnapshotErrorV1]
     Visibility: public -/
-@[discriminant isize, rust_type
+@[rust_type
   "aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLiveSnapshotErrorV1"]
-inductive aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1
-  where
+inductive aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1 where
 | WrongLength :
   aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1
 | WrongMagic :
@@ -412,14 +466,29 @@ inductive aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV
 | NonCanonicalDigest :
   aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1
 
+def aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.read_discriminant (x : aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1) : Isize :=
+  match x with
+  | .WrongLength => 0#isize
+  | .WrongMagic => 1#isize
+  | .WrongVersion => 2#isize
+  | .WrongFormatBinding => 3#isize
+  | .NonZeroReserved => 4#isize
+  | .ZeroRequiredBinding => 5#isize
+  | .SequenceIndexMismatch => 6#isize
+  | .TreeFull => 7#isize
+  | .NonCanonicalDigest => 8#isize
+
+instance _root_.AspisS2OwnedStage1.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.instDiscriminant :
+    Aeneas.Std.Discriminant aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1 Isize where
+  read_discriminant := aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.read_discriminant
+
 /-- [aspis_statement::pool_v1::pair_terminal::PoolV1PairVerifierTransportErrorV1]
     Source: '/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src/crates/aspis-statement/src/pool_v1/pair_terminal.rs', lines 56:0-56:43
     Name pattern: [aspis_statement::pool_v1::pair_terminal::PoolV1PairVerifierTransportErrorV1]
     Visibility: public -/
-@[discriminant isize, rust_type
+@[rust_type
   "aspis_statement::pool_v1::pair_terminal::PoolV1PairVerifierTransportErrorV1"]
-inductive aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1
-  where
+inductive aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1 where
 | WrongLength :
   aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1
 | WrongMagic :
@@ -451,14 +520,35 @@ inductive aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportError
 | NonCanonicalAfterstate :
   aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1
 
+def aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.read_discriminant (x : aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) : Isize :=
+  match x with
+  | .WrongLength => 0#isize
+  | .WrongMagic => 1#isize
+  | .WrongVersion => 2#isize
+  | .WrongStatementVersion => 3#isize
+  | .WrongDigestEncoding => 4#isize
+  | .InvalidTransitionKind => 5#isize
+  | .WrongSuccessCode => 6#isize
+  | .WrongPairFormat => 7#isize
+  | .ZeroRequiredBinding => 8#isize
+  | .InvalidProofBodyLength => 9#isize
+  | .InvalidStatementPayloadLength => 10#isize
+  | .InvalidLiveSnapshotPayloadLength => 11#isize
+  | .NonCanonicalOutputPair => 12#isize
+  | .InvalidAfterstateIndex => 13#isize
+  | .NonCanonicalAfterstate => 14#isize
+
+instance _root_.AspisS2OwnedStage1.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.instDiscriminant :
+    Aeneas.Std.Discriminant aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1 Isize where
+  read_discriminant := aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.read_discriminant
+
 /-- [aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementErrorV1]
     Source: '/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs', lines 422:0-422:45
     Name pattern: [aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementErrorV1]
     Visibility: public -/
-@[discriminant isize, rust_type
+@[rust_type
   "aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementErrorV1"]
-inductive aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1
-  where
+inductive aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1 where
 | WrongLength :
   aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1
 | WrongMagic :
@@ -486,14 +576,32 @@ inductive aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatemen
 | AfterstateIndexMismatch :
   aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1
 
+def aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.read_discriminant (x : aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) : Isize :=
+  match x with
+  | .WrongLength => 0#isize
+  | .WrongMagic => 1#isize
+  | .WrongVersion => 2#isize
+  | .WrongItemCount => 3#isize
+  | .WrongHeaderLength => 4#isize
+  | .WrongSnapshotLength => 5#isize
+  | .WrongAfterstateLength => 6#isize
+  | .WrongTotalLength => 7#isize
+  | .NonZeroReserved => 8#isize
+  | .Snapshot _ => 9#isize
+  | .Afterstate _ => 10#isize
+  | .AfterstateIndexMismatch => 11#isize
+
+instance _root_.AspisS2OwnedStage1.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.instDiscriminant :
+    Aeneas.Std.Discriminant aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1 Isize where
+  read_discriminant := aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.read_discriminant
+
 /-- [aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1]
     Source: '/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 179:0-179:46
     Name pattern: [aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1]
     Visibility: public -/
-@[discriminant isize, rust_type
+@[rust_type
   "aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1"]
-inductive aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
-  where
+inductive aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1 where
 | WrongLength :
   aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
 | WrongMagic :
@@ -545,6 +653,35 @@ inductive aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalF
   aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
     →
   aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
+
+def aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.read_discriminant (x : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) : Isize :=
+  match x with
+  | .WrongLength => 0#isize
+  | .WrongMagic => 1#isize
+  | .WrongVersion => 2#isize
+  | .WrongDigestEncoding => 3#isize
+  | .InvalidTransitionKind => 4#isize
+  | .InvalidOutputLane => 5#isize
+  | .NonZeroBinding => 6#isize
+  | .NonCanonicalDigest => 7#isize
+  | .OutputLaneMismatch => 8#isize
+  | .MasterBindingMismatch => 9#isize
+  | .DeploymentBindingMismatch => 10#isize
+  | .HistoricalAnchorMismatch => 11#isize
+  | .CheckpointBindingMismatch => 12#isize
+  | .SelectedLaneBindingMismatch => 13#isize
+  | .LiveSnapshotMismatch => 14#isize
+  | .CandidateAfterstateMismatch => 15#isize
+  | .ResultBindingMismatch => 16#isize
+  | .WithdrawalDestinationMismatch => 17#isize
+  | .Payment _ => 18#isize
+  | .LaneTransition _ => 19#isize
+  | .Afterstate _ => 20#isize
+  | .Account _ => 21#isize
+
+instance _root_.AspisS2OwnedStage1.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.instDiscriminant :
+    Aeneas.Std.Discriminant aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1 Isize where
+  read_discriminant := aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.read_discriminant
 
 /-- [solana_program_error::ProgramError]
     Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-error-2.2.2/src/lib.rs', lines 33:0-33:21

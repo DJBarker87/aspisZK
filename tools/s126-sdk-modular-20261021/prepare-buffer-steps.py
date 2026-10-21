@@ -15,10 +15,12 @@ use solana_program::{account_info::AccountInfo,pubkey::Pubkey};
   let start:usize=kani::any();kani::assume(start<=1768);
   let account=AccountInfo::new(&key,false,true,&mut lamports,&mut bytes,&owner,false,0);
   let data=account.try_borrow_mut_data().unwrap();
+  let observed:usize=kani::any();kani::assume(observed<1768);let unchanged=data[observed];
   let mut iter=data[start..].iter();
   let before_ptr=iter.as_slice().as_ptr();let before_len=iter.len();
   // Exactly one body step of the pinned slice::Iter<u8>::any implementation.
   let outcome=match iter.next() {None=>None,Some(byte)=>Some(*byte!=0)};
+  assert_eq!(data[observed],unchanged);
   if start==1768 {
    assert!(outcome.is_none());assert_eq!(iter.len(),0);
    assert_eq!(iter.as_slice().as_ptr(),before_ptr);
