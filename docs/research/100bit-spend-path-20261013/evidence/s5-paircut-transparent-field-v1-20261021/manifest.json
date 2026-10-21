@@ -1,0 +1,114 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "packet": "s5-paircut-transparent-field-candidate-v1-20261021",
+  "status": "candidate extraction; not full current-source or Rust-Std refinement",
+  "source_revision": "54054b9050c7ae8f124596cc5b1edcee2f1b60dc",
+  "source_snapshot": {
+    "path": "source/source.rs",
+    "sha256": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca"
+  },
+  "harness_source": {
+    "path": "source/lib.rs",
+    "sha256": "db3b933b459cda2cd3a655ed9eb5a4f545682c6a680e6e02e5abe78784e13da9"
+  },
+  "candidate_scope": "Normalized v23 PairCut caller, exact weights.field body from source.rs:10, only WideExact.from_le_bytes supplied as opaque unreachable type stub.",
+  "harness_changes": {
+    "lib.rs_field_replacement": {
+      "old": "pub fn field(_bytes:&[u8],_i:usize)->E{unreachable!()}",
+      "new": "pub fn field(bytes:&[u8],i:usize)->E { E::from_le_bytes(&bytes[i*32..(i+1)*32]).unwrap() }"
+    },
+    "field_method_signature_stub": "pub fn from_le_bytes(_bytes:&[u8])->Option<Self>{unreachable!()}",
+    "opaque_change": "Removed crate::weights::field; added crate::aspis_core::field::_::from_le_bytes",
+    "source_identity_basis": "The replacement body is byte-identical to weights.rs:10 in source.rs; see source-pins frozen source SHA and external field-source-correspondence-v1 checker."
+  },
+  "opaque_paths": [
+    "crate::fast_pairing::_::new",
+    "crate::fast_pairing::_::push",
+    "crate::fast_pairing::_::finish",
+    "crate::field::M31::mul",
+    "crate::field::QM31::mul",
+    "crate::field::WideExact::add",
+    "crate::field::WideExact::mul",
+    "crate::field::WideExact::mul_m31",
+    "crate::field::WideExact::mul_qm31",
+    "crate::r0::heap::filled",
+    "crate::weights::Weights::dense_point_pair",
+    "crate::weights::Weights::raw",
+    "crate::weights::Weights::scalar_factor",
+    "crate::weights::Weights::tensor",
+    "crate::weights::factored_s2_libra_weights",
+    "crate::weights::grouped_inactive_pair",
+    "crate::weights::kpowers",
+    "crate::weights::powers",
+    "crate::weights::twofold_libra_weights",
+    "crate::aspis_core::field::_::from_le_bytes"
+  ],
+  "direct_import_source_map": {},
+  "extraction": {
+    "tools": {
+      "bin/aeneas": "959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3",
+      "charon-target/release/charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+      "charon-target/release/charon-driver": "efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45"
+    },
+    "runner_sha256": "a903835a925a5b524f72df53f2547720c18369a5da07d3ae65cb67cffcf6430a",
+    "config": "source/config.json",
+    "charon": {
+      "exit_status": 0,
+      "wall_seconds": 0.40679757203906775,
+      "peak_process_rss_kib": 200956,
+      "process_swaps": 0,
+      "cgroup_memory_peak_bytes": 159354880,
+      "limits": {
+        "memory.high": "2147483648",
+        "memory.max": "3221225472",
+        "memory.swap.max": "0"
+      },
+      "receipt": "receipts/runs/charon-v1/receipt.json",
+      "command": "receipts/runs/charon-v1/command.json",
+      "stdout": "receipts/runs/charon-v1/stdout.log",
+      "time": "receipts/runs/charon-v1/time.log"
+    },
+    "aeneas": {
+      "exit_status": 0,
+      "wall_seconds": 6.214054924901575,
+      "peak_process_rss_kib": 388256,
+      "process_swaps": 0,
+      "cgroup_memory_peak_bytes": 441982976,
+      "limits": {
+        "memory.high": "2147483648",
+        "memory.max": "3221225472",
+        "memory.swap.max": "0"
+      },
+      "receipt": "receipts/runs/aeneas-v1/receipt.json",
+      "command": "receipts/runs/aeneas-v1/command.json",
+      "stdout": "receipts/runs/aeneas-v1/stdout.log",
+      "time": "receipts/runs/aeneas-v1/time.log"
+    }
+  },
+  "llbc": {
+    "path": "remote-only; not committed",
+    "sha256": "f4d83fa5c58609382cfa55654fb6e1c2cc70742992c0debe6ee8c91dbfc27c75",
+    "size_bytes": 5231588,
+    "has_errors": false,
+    "type_decls": 76,
+    "fun_decls": 250,
+    "root": "aspis_r1_weights_pair_cut::weights::pair_root"
+  },
+  "generated": {
+    "module": "AspisR1WeightsPairCut",
+    "files": {
+      "Funs.lean": "55afbf00a81ff85231d835ad681e38f71bcd28203f0e3f22d5c22cb0b568bf18",
+      "Types.lean": "fecdfc4b901aaf37ff29a9a6c1f0eea74a9792bf0ca88c23fcb2bf27ed4c1b5f",
+      "FunsExternal_Template.lean": "b2a9504472f5706b42cce3b2e46524f970902155b2072f1f05bae7306c70a72d",
+      "TypesExternal_Template.lean": "44bf3d587ff54d79bd8f6b9e57e5037dfaad9331c66a461a2865e51aebe75ab4",
+      "translation.json": "f4b8157573309d1eff648f4c1ed12711310a19248f0e40a1485f462a27f73cba"
+    },
+    "scope": "weights.field is in Funs.lean (188 onward); from_le_bytes remains fail-panic opaque. push_byte_products loop body preserves read/index/push/map_err/Try/Continue-Break ordering."
+  },
+  "proof_status": {
+    "lean_theorem": "none in this packet",
+    "axiom_audit": "not applicable; this is Charon/Aeneas extraction evidence",
+    "source_std_linkage": "open",
+    "production_adoption": "none"
+  }
+}
