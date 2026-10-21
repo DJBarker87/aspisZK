@@ -9,6 +9,9 @@ module=sys.argv[2];source=B/'lean'/(module.replace('.', '/')+'.lean');E.mkdir(pa
 ref=json.loads((B/'evidence/transfer-bindings-20261020/ExtractedAdapterTransferBindings/command.json').read_text())
 objects=Path('/tmp/codex-cx-s7-kani-20261021-objects');objects.mkdir(exist_ok=True)
 env=dict(os.environ);env['LEAN_PATH']=str(objects)+':/tmp/r1-circle-pointwise-coalesced-local-v1/objects:/tmp/cx-geometry-20261020-objects:'+ ':/tmp/codex-cx-r20-pool-handoff-20261020-objects:/tmp/root-finish-prefix-deps-20261018:'+ref['environment']['LEAN_PATH']
+if module=='S7OwnedP6EndpointBoundaryAudit':
+ headline=json.loads((B/'evidence/headline-20261021/R1FinalSoundnessHeadline-2/command.json').read_text())
+ env['LEAN_PATH']=str(objects)+':'+headline['lean_path']+':'+env['LEAN_PATH']
 compiler='/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean'
 (objects/(module.replace('.', '/')+'.olean')).parent.mkdir(parents=True,exist_ok=True)
 cmd=[compiler,'-j1','-M4400','-DElab.async=false','-o',str(objects/(module.replace('.', '/')+'.olean')),str(source)]
