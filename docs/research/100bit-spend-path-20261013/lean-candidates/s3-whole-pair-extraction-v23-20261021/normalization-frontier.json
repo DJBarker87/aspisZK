@@ -1,0 +1,61 @@
+{
+  "schema": "s3-whole-pair-normalization-frontier-v1",
+  "source_pair": {
+    "frozen": "candidate/input/source.rs#Weights::pair bytes 7741..12428",
+    "candidate": "candidate/input/lib.rs#Weights::pair bytes 7280..9876",
+    "diff": "span-audit-pair.diff"
+  },
+  "source_order_summary": [
+    {
+      "frozen_source": "source.rs:193-206",
+      "candidate_source": "lib.rs:77-85,110-124",
+      "old_order": "iterate kind values [1,2,3,5,6], skip 1 and 3 iff shared, run one process_kind body per remaining kind",
+      "candidate_order": "process kind 1 iff not shared; then 2; kind 3 iff not shared; then 5; then 6",
+      "required_equality": "for every state and callback Result/effect semantics, iterator fold over [1,2,3,5,6] equals the direct sequence; each returned error stops later calls and all scratch/parts mutations match"
+    },
+    {
+      "frozen_source": "source.rs:195-205",
+      "candidate_source": "lib.rs:110-124,39-42",
+      "old_order": "dense branch or tensor; scale; optional second scale; new; n ordered field+push calls with push error mapped Parse; finish; assign parts[kind]",
+      "candidate_order": "same extracted process_kind body; only the push loop is called through push_byte_products",
+      "required_equality": "process_kind equals the in-loop row body and push_byte_products equals the original j=0..n push loop, including first failing field/push and no later event"
+    },
+    {
+      "frozen_source": "source.rs:207-230",
+      "candidate_source": "lib.rs:87-105,43-51",
+      "old_order": "from_fn common; for s=0..4, for j=0..16 field/push (Parse on failure), finish partial; then row (1,0), row (3,2), each high loop s=0..4, scale, finish, assign parts",
+      "candidate_order": "same common generation; partial_dot(0),(1),(2),(3) in order; high_dot row 0; scale0 and assign; high_dot row 2; scale2 and assign",
+      "required_equality": "partial_dot and high_dot are exact Result/state folds of the corresponding loops, preserving error cut-off; extraction must respect the original arithmetic/read order"
+    },
+    {
+      "frozen_source": "source.rs:240-246",
+      "candidate_source": "lib.rs:72-76",
+      "old_order": "for side=0..2: powers, scale, initialize power/pair, j=0..7 field\u2192mul_qm31\u2192add then power multiply, update parts",
+      "candidate_order": "same outer loop, same call location; onefold_extra_pair contains the exact seven-step body in same j order",
+      "required_equality": "inline accumulator loop equals onefold_extra_pair for every f,p,side including panic/error behavior and returned accumulator"
+    },
+    {
+      "frozen_source": "source.rs:252-253",
+      "candidate_source": "lib.rs:68-71",
+      "old_order": "variant S2 selects factored helper; otherwise selects twofold helper; then j=0..4 accumulates",
+      "candidate_order": "libra_for retains the same if and both helper calls; j loop unchanged",
+      "required_equality": "branch selection and helper result are identical, including only the chosen arm being evaluated"
+    },
+    {
+      "frozen_source": "source.rs:190-192",
+      "candidate_source": "lib.rs:53-67",
+      "old_order": "Variant==S2 && folds==2 && array-of-QM31 equality for factors rows d2 then d3",
+      "candidate_order": "nested condition checks; eq4 checks indices0..3; eq_k checks fields c0.a,c0.b,c1.a,c1.b in order",
+      "required_equality": "the existing derived PartialEq implementation is equivalent to the explicit fieldwise short-circuit chain; array lengths are statically4, and no read/effect/error is moved"
+    }
+  ],
+  "whole_equality_still_required": "For every source Weights state w, alpha, byte input f, kappa, and a concrete typed EbyKDotOps instance related to the actual source EbyK methods, prove `FrozenWeightsPairSemantics(w,alpha,f,kappa) = CandidatePairSemantics(wMap(w),alpha,f,kappa)` as Result values, with equal external-call event order and state/effect trace. In particular prove helper closures preserve scratch/parts updates and Result first-error behavior, and each source read occurs in the same order. Then separately instantiate non-EbyK externals and the Rust standard-library interfaces.",
+  "proved": false,
+  "blocked_frontier": "No theorem currently links the unchanged frozen method\u2019s loop/inline expressions to generated candidate helper calls. v26 only compiles the full extracted candidate under typed EbyK method slots. The actual EbyK Ops instance, non-EbyK external semantics, candidate Weight carrier map, std-library correspondence and above Result/effect equality remain open.",
+  "no_claims": [
+    "No production source refinement",
+    "No standard-axiom-only full caller theorem",
+    "No runtime or standard-library correspondence",
+    "No equivalence inferred solely from copied expression text"
+  ]
+}
