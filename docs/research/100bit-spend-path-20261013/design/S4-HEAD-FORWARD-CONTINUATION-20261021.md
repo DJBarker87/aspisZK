@@ -1038,3 +1038,28 @@ precise target for the arithmetic join. Focused exit0,23.614s,peak process
 RSS3,578,331,136 bytes,zero swaps; four standard-axiom reports. Source
 query geometry correspondence, arithmetic join and coherent release replay
 remain required. No production change or candidate adoption occurred.
+
+
+## Actual tail coefficient reads have their source-indexed gamma powers
+
+`evidence/s4-tail-source-coefficient-powers-v1-20261022` proves
+`S4TailCoefficientPowersV1.index_success_power`: an actual successful
+Array.index_usize read from the same29-entry powers array returns a value
+whose decode equals gamma to that exact index. The source read supplies its
+own index bound and value identity; no independent successful read or desired
+returned-value equation is assumed.
+
+`tail_trace_coefficient_powers` reuses the existing SourceMeaning projection
+of the actual checked tail-body trace. For every retained contribution c,
+it derives decoded coefficient = gamma^(26+c.term.val), using the same-array
+all29 power equations already supplied by the concrete resume/source-powers
+consumer. No extra tail term bound is needed for this step: the actual array
+read itself supplies the valid coefficient index. The general index lemma
+also covers the actual coefficient28 read. Scalar parser equality remains
+the tail worker's separate obligation.
+
+Focused exit0,6.695s,peak process RSS3,239,280,640 bytes,zero swaps; four
+standard-axiom reports. The rejected first attempt is retained: an ambiguous
+local Range alias and a scalar-literal simplification needed correction.
+No whole replay or source adoption occurred. The full arithmetic/model join
+and implementation-linked100-bit target remain open.
