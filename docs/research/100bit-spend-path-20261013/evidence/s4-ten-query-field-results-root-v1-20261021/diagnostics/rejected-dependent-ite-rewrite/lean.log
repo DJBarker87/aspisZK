@@ -1,0 +1,53 @@
+/tmp/root-s4-ten-query-field-results-v1-20261021/sources/S4TenQueryFieldResultsRootV1.lean:22:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (if _a then ok (done (core.result.Result.Ok (a, b)))
+      else do
+        let state1 ← call proof p a g obs geometry b
+        ok (cont state1)) =
+      if 22 ≤ ↑a.next + 12 then ok (done (core.result.Result.Ok (a, b)))
+      else do
+        let r ← (fun a b => call proof p a g obs geometry b) a b
+        ok (cont r)
+Error: Application type mismatch: The argument
+  Nat.decLe 10 ↑a.next
+has type
+  Decidable (10 ≤ ↑a.next)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite
+    (Result
+      (ControlFlow (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error)
+        (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error)))
+    _a (Nat.decLe 10 ↑a.next)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case Ok
+call : QueryCall
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array FullWide 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geometry : verifier.QueryGeometry
+a : verifier.Accumulator
+b : verifier.BatchedWeights
+htest : (10 ≤ ↑a.next) = (22 ≤ ↑a.next + 12)
+⊢ (if 10 ≤ ↑a.next then ok (done (core.result.Result.Ok (a, b)))
+    else do
+      let state1 ← call proof p a g obs geometry b
+      ok (cont state1)) =
+    if 22 ≤ ↑a.next + 12 then ok (done (core.result.Result.Ok (a, b)))
+    else do
+      let r ← (fun a b => call proof p a g obs geometry b) a b
+      ok (cont r)
+'_private.S4TenQueryFieldResultsRootV1.0.AspisR1S4TenQueryFieldResultsRootV1.shifted_body' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S4TenQueryFieldResultsRootV1.emitted_ten_ordered_calls' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
