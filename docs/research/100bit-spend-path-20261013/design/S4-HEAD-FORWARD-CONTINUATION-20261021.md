@@ -902,3 +902,23 @@ boundary. Same-source-array/strict-scan application and the decoded leaves'
 global recovered-word binding must still compose with the actual caller;
 the four-dot field equality and candidate-adoption boundaries are unchanged.
 These local claims do not close S4 or establish the100-bit target.
+
+
+## The same scanned source array now supplies the encoded opening identity
+
+`evidence/s4-scanned-source-opening-decode-v1-20261022` composes the existing
+strict-scan/opening canonicality owners with the new codec completeness.
+`S4ScannedOpeningDecodeV1.scanned_opening_decode` takes the same scanner
+success, exact source opening read, index <22, proof length57607 and
+`a.val = q.val.slice 0 608`. It returns successful C1/C2 decodes of the same
+actual array's raw-byte prefix and suffix, plus
+`a.val.map rawByte = encodeC1 c1 ++ encodeC2 c2`.
+There is no separate canonicality, decoder-success or desired byte-identity
+premise. The existing scanner proofs were reused without replay. Focused
+consumer exit0,14.275s,peak process RSS3,981,492,224 bytes,zero swaps,
+standard axioms. Exact source/compiled import hashes are in the packet.
+
+Thus the common byte interface for the head/tail projection workers is now
+derived from execution's scanner and opening read. Its identification with
+the global recovered Merkle words and the final width29 arithmetic join are
+still required; no commitment-source closure or candidate adoption is implied.
