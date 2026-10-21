@@ -48,7 +48,7 @@ constructs CallerLaw for precisely the fixed operational-reference prover
 of `PrivacyR1HeadlineOwned`, with no new hypothesis.
 
 Accepted focused attempts J8337, J8340, J8343, J8344, J8348 all exit 0,
-zero swaps, standard axioms. Their fourteen new theorem audits are recorded
+zero swaps, standard axioms. Their thirteen new theorem audits are recorded
 in the receipts. Excluded drafts have changed-source replacements; none
 failed from memory pressure. No shipped Rust source or ELF input changes.
 
@@ -57,3 +57,39 @@ This does not construct either shipped execution join, certify the actual
 outer material-building loops, or prove all-family shipped callback coverage.
 The existing headline is deliberately unchanged until those source gates
 are addressed.
+
+## Stage 3: bounded proof windows and premise deletion
+
+`ProverCommitOwnedWindow.scalarFinite_window` proves that the operational
+scalar computation depends only on the retained global answers at refill
+positions inside its remaining word interval. `scalar_window` applies this
+to all sixteen tries. `scalar_block_window` bounds that interval by three
+aligned blocks. This is a restriction of one global oracle, not a fresh
+independent ROM at each call. It gives the support condition a local Kani
+window must satisfy; it does not assert that a shipped outer caller has
+already supplied that condition. J8349 checks the three support lemmas;
+J8350 adds the block-count bound. Both pass, standard axioms, zero swaps.
+
+`PrivacyR1HeadlineOwnedClosed.privacy_headline_owned_closed` applies the
+proved reference CallerLaw to the same D112 specialization. All other
+premises, games, simulator, error and < 2^-100 conclusion are unchanged.
+The original endpoint remains available. J8351 passes both audits (the
+private CallerLaw application and the new headline), standard axioms,
+zero swaps. It does not certify either retained shipped execution join.
+
+The complete verbatim endpoint texts are `headline-before.lean.txt` and
+`headline-after.lean.txt`; `headline-deletions.diff` contains precisely two
+deleted lines and no additions. Both texts share the separately proved
+CallerLaw application, so the theorem body is literally unchanged.
+
+Before:
+
+```lean
+    (R_commit_caller : ProverCommitCallerInstance.CallerLaw
+      (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)))
+```
+
+After: the binder is absent. The argument name in the unchanged proof now
+resolves to the checked private theorem, rather than to a caller-supplied
+hypothesis. This is a deletion at the fixed operational-reference endpoint;
+no whole-shipped-execution certificate follows from this deletion alone.

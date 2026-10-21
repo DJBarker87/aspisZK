@@ -1,0 +1,64 @@
+import R1Z.ProverCommitOwnedCache
+set_option autoImplicit false
+namespace R1Z.ProverCommitOwnedDecoder
+open Aeneas Aeneas.Std Result AspisR1ProverStep8
+open R0Z.FsStatement
+open R1Z.ProverCommitStepLoop (State Hash scalarFinite)
+open R1Z.ProverCommitStreamSource (Bytes32 blockSlices)
+
+theorem next_local_support (left right : Hash) (domain : Slice U8) (state : State)
+    (same : state.word = 8#usize →
+      left (blockSlices domain state.seed state.counter) = right (blockSlices domain state.seed state.counter)) :
+    prover_commit_reference.next left domain state = prover_commit_reference.next right domain state := by
+  by_cases needed : state.word = 8#usize
+  · exact R1Z.ProverCommitReferenceReads.next_support left right domain state (same needed)
+  · simp only [prover_commit_reference.next, if_neg needed]
+
+/-- A bounded scalar run depends only on the global block answers whose refill
+positions fall inside its remaining word interval. A local proof window may
+therefore be rebased without resetting or changing the retained global oracle. -/
+theorem scalarFinite_window {blocks : Nat} (answers : Fin blocks → OracleAnswer)
+    (right : Hash) (domain : Slice U8) (capacity : blocks < 2^64)
+    (start finish r : Nat) (endbound : finish ≤ blocks*8)
+    (same : ∀ (seed : Bytes32) (counter : U64),
+      start ≤ 8*counter.val → 8*counter.val < finish →
+      blockHash answers (blockSlices domain seed counter) = right (blockSlices domain seed counter))
+    (state : State) (before : valid blocks state)
+    (lower : start ≤ position state) (upper : position state+r ≤ finish) :
+    scalarFinite (blockHash answers) domain r state = scalarFinite right domain r state := by
+  induction r generalizing state with
+  | zero => rfl
+  | succ r ih =>
+    obtain ⟨word, after, next⟩ := next_total answers domain state before (by omega)
+    have progress := next_progress answers domain state after word capacity before next
+    have eq := next_local_support (blockHash answers) right domain state (by
+      intro needed
+      have slot : state.word.val = 8 := by rw [needed]; scalar_tac
+      have pos : position state = 8*state.counter.val := by unfold position; rw [slot]; omega
+      apply same state.seed state.counter <;> omega)
+    rw [R1Z.ProverCommitStepLoop.scalarFinite_succ,
+      R1Z.ProverCommitStepLoop.scalarFinite_succ, ← eq, next]
+    simp only [bind_tc_ok, Aeneas.Std.uncurry_apply_pair]
+    split_ifs
+    · rfl
+    · exact ih after progress.1 (by omega) (by omega)
+
+/-- One full shipped-style scalar call can be checked in a bounded window;
+its local backend must agree with the retained global oracle on this interval. -/
+theorem scalar_window {blocks : Nat} (answers : Fin blocks → OracleAnswer)
+    (right : Hash) (domain : Slice U8) (capacity : blocks < 2^64)
+    (state : State) (before : valid blocks state)
+    (room : position state+16 ≤ blocks*8)
+    (same : ∀ (seed : Bytes32) (counter : U64),
+      position state ≤ 8*counter.val → 8*counter.val < position state+16 →
+      blockHash answers (blockSlices domain seed counter) = right (blockSlices domain seed counter)) :
+    prover_commit_reference.limb_caller (blockHash answers) domain state =
+      prover_commit_reference.limb_caller right domain state := by
+  rw [R1Z.ProverCommitStepLoop.caller_sixteen, R1Z.ProverCommitStepLoop.caller_sixteen]
+  exact scalarFinite_window answers right domain capacity (position state) (position state+16)
+    16 room same state before le_rfl le_rfl
+
+#print axioms next_local_support
+#print axioms scalarFinite_window
+#print axioms scalar_window
+end R1Z.ProverCommitOwnedDecoder
