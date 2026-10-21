@@ -1,5 +1,14 @@
 # Parser and multiproof source refinement
 
+**Current result (continuation 6):** the leaf/dedup, physical count, zero-padding,
+physical root and scratch-threaded two-triple composition is proved for the
+explicit instrumented/P6 source cut. Endpoint:
+`MultiproofConeFrozen2Stage.both_batches` against the named `dV_frozen2` batches.
+Final classification **(c)**; actual Rust carrier/caller lowering and the global
+verifier/annotation join remain open. The final continuation-6 section below
+supersedes the historical unfinished-obligation lists; historical receipts are
+retained.
+
 Current continuation branch: `codex/cx-multiproof-cone6-20261021`, base `26ed8e339` (prior continuation branches: cone2, cone3 and cone4; original packet: `codex/cx-multiproof-cone-20261021`). The oracle-decision port
 is approved for this work. Target: `OraclePortHeadlineFrozen` at
 `OraclePortFrozen2.dV_frozen2`, retaining the two transaction batches and checkpoint placement.
@@ -1102,3 +1111,43 @@ proof fields or called discharged. No headline premise is removed, and no
 100-bit release closure is claimed. No shipped or inherited/sibling Lean file
 changed, so no SBF/ELF rebuild is triggered or byte-identity result claimed.
 The final import/axiom audit is the next and last verification target.
+
+## Continuation 6 final focused audit and handoff
+
+Final target `lean/MultiproofConeBatchFreeze.lean`, attempt 1, exit 0,
+wall 23.103830 s, peak RSS 3559964672 bytes, zero swaps, source implementation
+revision `5248e9d92` (full SHA in receipt). It imports the completed batch-stage,
+fixed-slot adapter, prior physical closure and unchanged frozen2 headline.
+The complete `both_batches` statement is checked in its log. All eighteen
+final axiom reports use only propext, Classical.choice and Quot.sound.
+Exact source/dependency SHA-256s, command, reachable task-owned source/object
+closure, output and timing are retained in the receipt and manifest.
+
+`audit-batch.py` passes: eighteen additive modules, 75 current standard-axiom
+reports, current source snapshots/direct imports and recorded transitive
+closure, zero swaps, no banned proof shortcuts, unchanged inherited/sibling
+Lean and shipped crates. `generate.py --check` passes. The final Rust receipt
+pins the current three roots; no unrelated/full unchanged adversarial,
+runtime, Kani or frozen manifest suite was replayed. This is a focused
+compatible-cache audit, not a coherent whole-release rebuild.
+
+Reproduce the read-only packet audit with:
+
+```sh
+python3 -B tools/multiproof-cone-20261021/audit-batch.py
+```
+
+The final CONE-AUDIT Multiproof row is **(c)** for the complete accepted
+instrumented/P6 stage and retains **(d)** for the actual Rust source/caller
+instance. Its exact remaining obligations are callback/carrier identity and
+S2/S10 caller lowering, followed by other cones and runtime/annotation
+composition for global AcceptedRunJoin. All requested leaf/count/padding/root
+and two-triple mathematical compositions are supplied at this explicit cut.
+The scoped endpoint is not relabelled as the actual frozen Rust function.
+Zero headline premises are removed; the release security target is unchanged.
+
+No shipped file changed, so the conditional capped SBF rebuild/ELF comparison
+was not triggered; no frozen-ELF byte-identity measurement is claimed. No
+wallet/account key was touched. Work is committed locally with plain messages;
+no push or merge occurred. No Lean or host proof job remains running for this
+worker. The task's excluded caller lowering is left to S2.
