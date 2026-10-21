@@ -27,6 +27,23 @@ The source loops and bound remain unchanged. All three receipts are retained.
 This closes the source equality for the owned add-small reference; it does
 not by itself identify every caller or install the complete scalar policies.
 
+## Stage 2 — exact rejection product coupling
+
+`ProverCommitProduct25.swapEquiv` swaps a nonzero model coin with the first
+nonzero word of an independent tape, preserving both the rejected prefix and
+unused suffix. `swap_involution` proves it is a bijection. `raw_marginal`
+proves the reconstructed entire source tape is uniformly distributed;
+`model_marginal` proves the unchanged model coin law. `first_swap` gives the
+model answer outside precisely the original tape's all-zero exhaustion event.
+`coupling` constructs both exact marginals without a supplied law premise;
+`instances_marginal` lifts them to any finite number of searches.
+
+J7502 passes all six audits with only [propext, Classical.choice, Quot.sound]:
+exit 0, wall 1.92 s, peak 4037016 KiB, swaps 0. J7500/7501 are excluded
+elaboration/simplification failures, retained with exact source snapshots.
+This is a concrete rejection-component coupling, not yet the whole source
+oracle/caller coupling or either deployed WholeRunJoin.
+
 ## Product coupling and endpoint
 
 Not yet constructed. No refinement premise has been deleted.
