@@ -26,3 +26,17 @@ destination length <= raw length. All accepted axiom audits are standard.
 The mutable model is copied under new module names from the retained
 20261019 write-back model, with reuse provenance; no existing Lean module
 is edited. The remaining kernel join to the new reference outputs is next.
+
+Stage 3: `S8Kani2FinishReferenceJoin.finish_reference_simulation` now proves
+complete pointwise mutable-model/owned-reference agreement, with the raw
+read relation derived at each arbitrary index and no value-success premise.
+`S8Kani2CallerJoin.p6_certificate` is the named certificate;
+`finish_caller_join` transports the caller's exact raw congruence to all
+canonical finalized sum coordinates. Both compile with standard axioms.
+
+The P6 source step uses the real Rust iterator over a related suffix/cursor
+state. This is not a kernel extraction of Rust's unsafe pointer iterator;
+that model boundary is stated explicitly in source-binding.json. Global S8
+remains open until S7/R15 identify the actual reached vectors/sums and the
+headline interprets its free S8 proposition as the concrete certificate.
+No claim is made that a named certificate alone proves any arbitrary S8.
