@@ -652,3 +652,22 @@ are unchanged from this worktree's base. No frozen ELF rebuild was triggered
 or byte-identity measurement claimed. No keys or wallets were touched; no push
 or merge occurred. Source snapshots identify tested edits precisely even when
 the receipt's checkout revision predates their reporting commit.
+
+## Continuation 5, stage 1a: extracted digest writer provenance
+
+Branch `codex/cx-multiproof-cone5-20261021`. New additive module
+`MultiproofConePhysicalDigest.write_observed` proves that the actual extracted
+parent writer requests exactly `[0x12], left, right`, receives the witnessed
+digest from that very callback, and writes exactly that digest and index/2 at
+w. `set_digest` proves every other digest coordinate is unchanged. No desired
+Live relation, complete level equation, or successful-source hypothesis is
+assumed; HashTotal and w<16 are retained. This is a local writer fact, not the
+complete physical scratch-to-Live induction or a source log theorem.
+
+Focused attempt 3: exit 0, wall 11.525027 s, peak RSS 3660513280 bytes,
+zero swaps. All three individual axiom reports use only standard axioms.
+Exact revision, source/dependency hashes, command and logs are recorded in
+`MultiproofConePhysicalDigest-3/receipt.json` and `manifest.json`. Failed
+elaborations 1/2 are diagnostics, not accepted proofs. The new compile5
+launcher writes only into the continuation-5 private object directory and
+reuses prior caches. No shipped crate or inherited Lean module changed.

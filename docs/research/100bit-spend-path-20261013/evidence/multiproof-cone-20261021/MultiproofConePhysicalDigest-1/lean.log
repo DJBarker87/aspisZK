@@ -1,0 +1,116 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalDigest.lean:30:33: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+s : reference.Scratch
+left right : Std.Array U8 32#usize
+ni cursor : Usize
+index : U32
+w : Usize
+bound : ↑w < 16
+s1 : Slice U8
+_✝⁷ : [> let s1 ← lift (Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice <]
+s1_post : s1 = (Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice
+s2 : Slice U8
+_✝⁶ : [> let s2 ← lift left.to_slice <]
+s2_post : s2 = left.to_slice
+s3 : Slice U8
+_✝⁵ : [> let s3 ← lift right.to_slice <]
+s3_post : s3 = right.to_slice
+s4 : Slice (Slice U8)
+_✝⁴ : [> let s4 ← lift (Array.make 3#usize [s1, s2, s3] ⋯).to_slice <]
+digest : Std.Array U8 32#usize
+_✝³ : [> let digest ← D.digest hash s4 <]
+i : U32
+_✝² : [> let i ← index / 2#u32 <]
+a : Std.Array U32 16#usize
+_✝¹ : [> let a ← s.idx.update w i <]
+a1 : Std.Array (Std.Array U8 32#usize) 16#usize
+_✝ : [> let a1 ← s.val.update w digest <]
+i1 : Usize
+_ : [> let i1 ← w + 1#usize <]
+s4_post :
+  s4 =
+    (Array.make 3#usize
+        [(Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice, left.to_slice, right.to_slice]
+        ⋯).to_slice
+digest_post :
+  D.digest hash
+      (Array.make 3#usize
+          [(Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice, left.to_slice, right.to_slice]
+          ⋯).to_slice =
+    ok digest
+i_post : ↑i = ↑index / 2
+a_post : a = s.idx.set w i
+a1_post : a1 = s.val.set w digest
+i1_post : ↑i1 = ↑w + 1
+⊢ ∃ digest_1,
+    D.digest hash ⟨[⟨[18#u8], parts._proof_6⟩, ⟨↑left, ⋯⟩, ⟨↑right, ⋯⟩], ⋯⟩ = ok digest_1 ∧
+      ∃ x, ↑x = ↑index / 2 ∧ s.idx.set w i = s.idx.set w x ∧ s.val.set w digest = s.val.set w digest_1
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalDigest.lean:36:4: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+s : reference.Scratch
+w : Usize
+digest : Std.Array U8 32#usize
+bound : ↑w < 16
+j : ℕ
+jb : j < 16
+⊢ j < (↑(s.val.set w digest)).length
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalDigest.lean:39:2: error: unsolved goals
+case pos
+s : reference.Scratch
+w : Usize
+digest : Std.Array U8 32#usize
+bound : ↑w < 16
+len : (↑s.val).length = 16
+jb : ↑w < 16
+⊢ False
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalDigest.lean:42:2: error: unsolved goals
+case neg
+s : reference.Scratch
+w : Usize
+digest : Std.Array U8 32#usize
+bound : ↑w < 16
+j : ℕ
+jb : j < 16
+len : (↑s.val).length = 16
+eq : ¬j = ↑w
+⊢ ¬((↑s.val).set (↑w) digest)[j] = (↑s.val)[j]?.getD default
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalDigest.lean:40:27: warning: This simp argument is unused:
+  List.getElem!_eq_getElem?_getD
+
+Hint: Omit it from the simp argument list.
+  simp [̵A̵r̵r̵a̵y̵.̵s̵e̵t̵_̵v̵a̵l̵_̵e̵q̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵!̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵?̵_̵g̵e̵t̵D̵,̵[̲A̲r̲r̲a̲y̲.̲s̲e̲t̲_̲v̲a̲l̲_̲e̲q̲,̲ List.getElem?_set_self (by omega : w̵.̵v̵a̵l̵<̵s̵.̵v̵a̵l̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵)̵]̵w̲.̲v̲a̲l̲ ̲<̲ ̲s̲.̲v̲a̲l̲.̲v̲a̲l̲.̲l̲e̲n̲g̲t̲h̲)̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalDigest.lean:41:6: warning: This simp argument is unused:
+  List.getElem?_set_self (by omega : w.val < s.val.val.length)
+
+Hint: Omit it from the simp argument list.
+  simp [̵A̵r̵r̵a̵y̵.̵s̵e̵t̵_̵v̵a̵l̵_̵e̵q̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵!̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵?̵_̵g̵e̵t̵D̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵s̵e̵t̵_̵s̵e̵l̵f̵ ̵(̵b̵y̵ ̵o̵m̵e̵g̵a̵ ̵:̵ ̵w̵.̵v̵a̵l̵<̵s̵.̵v̵a̵l̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵)̵]̵[̲A̲r̲r̲a̲y̲.̲s̲e̲t̲_̲v̲a̲l̲_̲e̲q̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲!̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲?̲_̲g̲e̲t̲D̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalDigest.lean:43:6: warning: This simp argument is unused:
+  List.getElem?_set_ne (Ne.symm eq)
+
+Hint: Omit it from the simp argument list.
+  simp [̵A̵r̵r̵a̵y̵.̵s̵e̵t̵_̵v̵a̵l̵_̵e̵q̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵!̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵?̵_̵g̵e̵t̵D̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵s̵e̵t̵_̵n̵e̵ ̵(̵N̵e̵.̵s̵y̵m̵m̵ ̵e̵q̵)̵,̵e̵q̵]̵[̲A̲r̲r̲a̲y̲.̲s̲e̲t̲_̲v̲a̲l̲_̲e̲q̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲!̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲?̲_̲g̲e̲t̲D̲,̲ ̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConePhysicalDigest.observed_hash' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConePhysicalDigest.write_observed' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.MultiproofConePhysicalDigest.set_digest' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
