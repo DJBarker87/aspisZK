@@ -97,3 +97,12 @@ explicit unwinding checks remain enabled. It also uses CBMC's embedded
 CaDiCaL. No cap increase or unchanged aggregate extraction occurs. Timeout
 GNU-time parent RSS is incomplete; the recorded cgroup peak is authoritative.
 The source/D scalar and four-coordinate comparisons continue separately.
+
+The source/D whole-scalar comparison subsequently passes too: **342.491 s**,
+**2,222,956 KiB** peak RSS, zero swaps, exit 0. Its input source snapshot is
+identical to the accepted scalar-stage snapshot. Both shipped scalar
+methods are therefore compared directly, not inferred from a copied try
+body. The first four-coordinate trial was deliberately stopped after
+**68.969 s** (exit 143, excluded) to replace nested scalar unfolding with
+checked scalar summaries. Its receipt and the own-process orchestration
+record are retained; no peer job was stopped.
