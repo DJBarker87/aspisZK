@@ -87,6 +87,148 @@ not a proof that a source coupling with additional randomness is impossible.
 The generic complete_joint law does not by itself construct the two
 RunJoin marginal maps for the actual source experiment.
 
-## Concrete experiment and endpoint
+## Concrete experiment and endpoint — not constructed
 
-In progress. No premise-removal claim has yet been made.
+The requested shippedProverExperiment and both full RunJoins are still
+unconstructed. Therefore there is no sound deletion-only specialization and
+no new deployed endpoint with only TrustedStd and P6/P7. The new trusted
+record is consumed by the local map/TLS endpoints; it is **not yet a premise
+of a new deployed privacy endpoint**. This portion of item (1), and items
+(3)/(4), remain incomplete. No hidden source join is added to TrustedStd.
+
+There are two concrete obstructions to the immediately available adapters:
+
+1. The retained raw `sampler.add_small_base_p` wrapper applies
+   `into_iter_back back`. The external ABI expects an iterator state;
+   `back` is a state transformer. J7499's `#check_failure` reproduces that
+   type mismatch with the actual Aeneas IterMut type. `into_iter_back
+   (back iter)` is typed, but the retained packet labels that manual repair
+   a compatibility candidate and leaves whole traversal/source equivalence
+   open. The gamma/ordinary candidate theorems cannot be installed as
+   current frozen policies on that evidence. This is an obstruction to
+   reusing that packet, not a claim that frozen Rust gamma is incorrect or
+   impossible to verify. No Rust sampler was changed or adopted.
+2. `runJoin_not_model_function` formally rules out filling the extra retained
+   fuel Tape from model coins/seed. A different construction with additional
+   randomness and both proved marginals is needed. Generic adaptive-history
+   equality alone is not that construction.
+
+The current caller still needs unconditional, source-pinned gamma/ordinary/
+query policies, the circle caller and nominal carrier joins, classification
+of every internal prior hash address, retries/errors/serialization and native
+trace identification. The local bound proves counter room on good finite
+searches; it does not prove source-event containment or an independent model/
+seed/fuel factorization. The map library internals are no longer a proof
+obligation under D133, and no further B-tree gate was run.
+
+The next source deliverable is a typed current sampler adapter with a proved
+Std mutable-iterator/writeback instance (or a source-preserving equivalence
+to a verified owned helper), not an assertion of candidate equivalence. Then
+assemble the actual finite source experiment and its two marginal maps.
+The permitted std trust item does not discharge those source obligations.
+
+## Verbatim endpoint before/after
+
+No specialization occurred. Both statements below are the literal deployed
+fuel-endpoint definition and theorem signature. Their byte equality is
+checked by the final audit. The deletion-only diff is empty; it removes no
+premise and is **not** the requested successful specialization. Quantifiers,
+carriers, bad events and conclusion are unchanged.
+
+
+Before (`0b214bdbd`):
+
+```lean
+def RustProverRefinement : Prop :=
+  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
+      (realSeedQueries template outputs x rust observer_program adv w))) ∧
+  (∀ adv : rust.Adversary, Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
+                (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).ideal (simE (h).transport B outputs x) a x r
+                (v, (source).observe a v))
+      QueryScanIdealHistory.selectedBad
+      (idealSeedQueries template outputs x rust observer_program adv)))
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+After (this branch):
+
+```lean
+def RustProverRefinement : Prop :=
+  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
+      (realSeedQueries template outputs x rust observer_program adv w))) ∧
+  (∀ adv : rust.Adversary, Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
+                (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).ideal (simE (h).transport B outputs x) a x r
+                (v, (source).observe a v))
+      QueryScanIdealHistory.selectedBad
+      (idealSeedQueries template outputs x rust observer_program adv)))
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+## Final verification and evidence
+
+J7499 compiles `R1Z/ProverCommit24Audit.lean`: exit 0, wall 1.71 s,
+peak RSS 4095704 KiB, swaps 0, source revision `0ba397704` plus its exact
+additive audit source SHA-256/dependency fingerprint. All 24 complete axioms
+lines (22 new theorems and both unchanged deployed endpoints) use only
+[propext, Classical.choice, Quot.sound], or no axioms. The expected
+`#check_failure` prints the raw ABI diagnostic; it declares no theorem and
+introduces no axiom. The repaired expression's successful type check is not
+a source-equivalence certificate.
+
+Every attempt 7487–7499 has its exact source snapshot, SHA-256, transitive
+owned dependency-object fingerprint, source revision, exit, wall time, peak
+RSS, swap and complete axioms/error lines in the committed `lean/` receipts.
+All jobs ran on Env J with the global lock, one Lean job at a time, under
+6G/8G/no swap/64-task scopes and -M7000. No limit was raised. Only this
+worker's new modules/objects were updated; their consumers use the final
+objects. No source or object owned by the concurrent worker was changed.
+
+Only the final changed-cone audit ran once. A complete frozen release replay
+is withheld because the concrete source closure is not green. No Rust test,
+Aeneas regeneration, or ELF rebuild was run. Files under crates/ and programs/
+are unchanged from `0b214bdbd`; unchanged-source D129 ELF evidence is reused,
+without making a new binary equivalence claim. No key or wallet was touched.
+No binaries, objects or archives are committed. No push. All SSH calls
+completed well within the twenty-minute no-output limit.
+
+`harness/final-audit.py` checks the accepted/excluded receipts and exact
+source snapshots, all final axioms lines, unchanged endpoints, the verbatim
+report statements, resource launcher settings, sampler wrapper provenance
+and untouched shipped/concurrent-owner files. Its output is `final-audit.json`.
+
+The packet consumes 7487–7499. Next candidate: 7500, subject to receipt check.
+The release target is unchanged and **not yet established**.
