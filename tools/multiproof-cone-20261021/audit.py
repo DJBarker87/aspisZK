@@ -39,24 +39,35 @@ for a in manifest['attempts']:
  for dep in a['direct_imports']:assert sha(Path(dep['path']))==dep['sha256'],dep
  assert sha(Path(a['argv'][a['argv'].index('-o')+1]))==a['object_sha256']
  current[a['module']]=a
-required={'MultiproofConeRef.Types','MultiproofConeRef.Funs','MultiproofParserRef.Types','MultiproofParserRef.Funs','MultiproofConeCodec','MultiproofConeHeader','MultiproofConeWordScan','MultiproofConeEndian','MultiproofConeLeaf','MultiproofConeHeight','MultiproofConeFreeze'}
+required={p.stem for p in L.glob('MultiproofCone*.lean')}
+required.update({'MultiproofConeRef.Types','MultiproofConeRef.Funs','MultiproofParserRef.Types','MultiproofParserRef.Funs'})
 assert set(current)==required,(set(current),required)
-# The final source-binding checkpoint covers all remaining Kani roots.
-rec=json.loads((E/'host/receipts/final-local-cuts-1/receipt.json').read_text())
-assert rec['exit_status']==0 and rec['swaps']==0
-assert rec['limits']=={'memory.high':str(6*2**30),'memory.max':str(8*2**30),'memory.swap.max':'0','pids.max':'64'}
-roots=set(re.findall(r'--harness\s+([^\s]+)',' '.join(rec['target'])))
-assert len(roots)==18,roots
-log=(E/'host/receipts/final-local-cuts-1/stdout.log').read_text()
-assert '18 successfully verified harnesses, 0 failures, 18 total' in log
-for p,h in rec['source_sha256'].items():
- if p.endswith('.rs') or p.endswith('Cargo.toml') or p.endswith('Cargo.lock'):
-  assert sha(R/p)==h,p
-# Source is committed and byte-identical to the recorded Rust revision.
-for p,h in rec['source_sha256'].items():
- if not (p.endswith('.rs') or p.endswith('Cargo.toml') or p.endswith('Cargo.lock')):continue
- b=subprocess.check_output(['git','show',rec['source_revision']+':'+p],cwd=R)
- assert hashlib.sha256(b).hexdigest()==h,p
+# The expanded ordinary-root suite and separately selected verified-contract
+# root cover every current root without repeating the ordinary suite.
+receipts=['final-local-cuts-2','final-read32-contract-1']
+roots=set();records=[]
+for name in receipts:
+ rec=json.loads((E/'host/receipts'/name/'receipt.json').read_text())
+ records.append(rec)
+ assert rec['exit_status']==0 and rec['swaps']==0
+ assert rec['limits']=={'memory.high':str(6*2**30),'memory.max':str(8*2**30),'memory.swap.max':'0','pids.max':'64'}
+ selected=set(re.findall(r'--harness\s+([^\s]+)',' '.join(rec['target'])))
+ assert not roots.intersection(selected)
+ roots.update(selected)
+ log=(E/'host/receipts'/name/'stdout.log').read_text()
+ assert f'{len(selected)} successfully verified harnesses, 0 failures, {len(selected)} total' in log
+ assert log.count('VERIFICATION SUCCESSFUL')==len(selected) and 'VERIFICATION FAILED' not in log
+ for path,h in rec['source_sha256'].items():
+  if not (path.endswith('.rs') or path.endswith('Cargo.toml') or path.endswith('Cargo.lock')):continue
+  assert sha(R/path)==h,path
+  b=subprocess.check_output(['git','show',rec['source_revision']+':'+path],cwd=R)
+  assert hashlib.sha256(b).hexdigest()==h,path
+expected_roots={'proofs::'+name for name in re.findall(
+ r'#\[kani::(?:proof|proof_for_contract\([^)]*\))\](?:(?!#\[kani::(?:proof|proof_for_contract)).)*?fn (\w+)',
+ (T/'src/proofs.rs').read_text(),re.S)}
+assert roots==expected_roots and len(roots)==19,(roots,expected_roots)
+assert {r['source_revision'] for r in records}=={records[0]['source_revision']}
+rec=records[0]
 # Extraction used the same executable reference: only Kani-only contracts differ.
 raw=subprocess.check_output(['git','show','1158d679a:tools/multiproof-cone-20261021/src/reference.rs'],cwd=R)
 attrs=(T/'src/reference.rs').read_text()
@@ -76,6 +87,7 @@ changed=subprocess.check_output(['git','diff','--name-only',BASE,'--',str(L.rela
 for p in changed:
  exists=subprocess.run(['git','cat-file','-e',BASE+':'+p],cwd=R,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode==0
  assert not exists,('Existing Lean module changed',p)
-result=dict(status='PASS: focused local facts and 18 P6 cuts; both whole cones remain open',source_revision=current['MultiproofConeFreeze']['source_revision'],lean_modules=len(current),successful_axiom_reports=sum(len(a['axioms']) for a in current.values()),standard_axioms=sorted(allowed),peak_rss_bytes=max(a['peak_rss_bytes'] for a in current.values()),swaps=0,rust_source_revision=rec['source_revision'],kani_roots=len(roots),kani_wall_seconds=rec['wall_seconds'],kani_peak_rss_kib=rec['peak_rss_kib'],shipped_sources_unchanged=True,sibling_candidates_unchanged=True,complete_parser_cone=False,complete_multiproof_cone=False,accepted_run_join_constructed=False,coherent_frozen_release_replay=False)
+anchor='MultiproofConeParserFreeze' if 'MultiproofConeParserFreeze' in current else 'MultiproofConeFreeze'
+result=dict(status='PASS: focused reference facts and 19 P6 cuts; both whole source cones remain open',source_revision=current[anchor]['source_revision'],closure_anchor=anchor,audited_head_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),lean_modules=len(current),successful_axiom_reports=sum(len(a['axioms']) for a in current.values()),standard_axioms=sorted(allowed),peak_rss_bytes=max(a['peak_rss_bytes'] for a in current.values()),swaps=0,rust_source_revision=rec['source_revision'],kani_roots=len(roots),kani_wall_seconds=sum(r['wall_seconds'] for r in records),kani_peak_rss_kib=max(r['peak_rss_kib'] for r in records),shipped_sources_unchanged=True,sibling_candidates_unchanged=True,complete_parser_reference=('MultiproofConeParserTotal' in current),source_p6_loop_composition_constructed=False,complete_parser_cone=False,complete_multiproof_cone=False,accepted_run_join_constructed=False,coherent_frozen_release_replay=False,frozen_elf_rebuild_required=False,frozen_elf_identity_measured=False)
 (E/'audit-result.json').write_text(json.dumps(result,indent=2)+'\n')
 print(json.dumps(result,indent=2))

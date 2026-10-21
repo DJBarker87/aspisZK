@@ -579,6 +579,15 @@ pub(crate) fn same_batch_index(values: &[u32; multiproof::MAX_BATCH], index: usi
 pub(crate) fn batch_key_at(keys: &[u64; multiproof::MAX_BATCH], index: usize) -> u64 {
     keys[index]
 }
+pub(crate) fn sort_insert_step(mut keys:[u64;multiproof::MAX_BATCH],i:usize)->(bool,[u64;multiproof::MAX_BATCH],usize) {
+        let mut j = i;
+        if j > 0 && batch_key_at(&keys, j - 1) > batch_key_at(&keys, j) {
+            keys.swap(j - 1, j);
+            j -= 1;
+            (true,keys,j)
+        } else {(false,keys,j)}
+}
+
 pub(crate) fn leaf_insert(idx:&mut [u32;16],val:&mut [[u8;32];16],d:&mut usize,index:u32,leaf:[u8;32])->bool {
         if *d > 0 && same_batch_index(idx, *d - 1, index) {
             if !same_batch_leaf(val, *d - 1, leaf) {

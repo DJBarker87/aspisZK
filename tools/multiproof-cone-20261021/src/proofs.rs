@@ -150,3 +150,18 @@ impl Digest32 for LeafOracle {
  let expanded=r::expand_chunk(compact);
  assert_eq!(f::r1_wire::validate_record_fields(row,&expanded).is_ok(),r::canonical_qm(compact));
 }
+
+// Atomic while guard, swap and cursor update; recursion is proved in Lean.
+#[kani::proof] #[kani::unwind(34)] fn batch_sort_insert_step(){
+ let keys:[u64;16]=kani::any();let at:usize=kani::any();kani::assume(at<16);
+ let (continued,source,next_at)=f::batch::sort_insert_step(keys,at);
+ let j:usize=kani::any();kani::assume(j<16);
+ match super::sort_reference::insert_step(keys,at) {
+  super::sort_reference::InsertStep::Done(reference)=>{
+   assert!(!continued);assert_eq!(next_at,at);assert_eq!(source[j],reference[j]);
+  },
+  super::sort_reference::InsertStep::Next(reference,next)=>{
+   assert!(continued);assert_eq!(next_at,next);assert_eq!(source[j],reference[j]);
+  }
+ }
+}

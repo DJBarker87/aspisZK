@@ -22,6 +22,16 @@ compact=compact.replace('crate::verifier::SEMANTIC_BYTES','13_831')
 # Batch primitives, verbatim; leaf hashing itself remains a separate byte cut.
 markers=['fn batch_keys(','fn sort_batch_keys(','fn batch_leaf<','fn same_batch_leaf(','fn same_batch_index(','fn batch_key_at(']
 batch='\n'.join(item(base+'candidate.rs',m).replace('fn ','pub(crate) fn ',1) for m in markers)
+# Exact inner iteration of the frozen insertion sort; avoid whole-prefix BMC.
+sort_body=next(c['body'] for c in cuts if c['marker']=='fn sort_batch_keys(')
+sa=sort_body.index('        let mut j = i;')
+sb=sort_body.rfind('\n    }')
+sort_loop=sort_body[sa:sb]
+assert sort_loop.endswith('        }')
+sort_loop=sort_loop[:-len('        }')]+'            (true,keys,j)\n        } else {(false,keys,j)}'
+sort_loop=sort_loop.replace('while j > 0','if j > 0',1)
+sort_step='pub(crate) fn sort_insert_step(mut keys:[u64;multiproof::MAX_BATCH],i:usize)->(bool,[u64;multiproof::MAX_BATCH],usize) {\n'+sort_loop+'\n}\n'
+
 # The binary group is the exact source match arm plus its chronological writes.
 a=mp.index('                    if i + 1 < n');b=mp.index('\n                Arity::Eight =>',a)
 arm=mp[a:b];arm=arm[:arm.rfind('\n                }')]
@@ -64,11 +74,12 @@ pub mod batch {
 use super::multiproof;
 use aspis_core::{r0::merkle,Digest32};
 use aspis_core::state_only_private_merkle::private_leaf_hash_with_digest;
-'''+batch+'\n'+leaf+'\n}\n'+parser}
+'''+batch+'\n'+sort_step+'\n'+leaf+'\n}\n'+parser}
 ledger=dict(schema='frozen-parser-multiproof-cuts-v1',exact_items=cuts,substitutions=[
  'compact.rs: verifier::SEMANTIC_BYTES replaced by its pinned literal 13_831',
  'multiproof verifier prefix: private well_formed exposed pub(crate)',
  'batch helpers: private functions exposed pub(crate)',
+ 'sort atomic step: exact let-j/while guard and swap/decrement body; while becomes one if; return continuation flag, owned keys and cursor',
  'node-count group: fix Arity::Two; index_at(&level,...) becomes index_at(level,...) for the mutable-reference wrapper; exact parent/group/write/increment order',
  'binary group: extract Two match arm; i/at/w become mutable scalar references; false return preserved; exact parent/write order retained',
  'wire validate_record_fields: expose pub(crate) in the proof copy; body unchanged',

@@ -1,0 +1,29 @@
+import MultiproofSortRef.Funs
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeSortStep
+open Aeneas Aeneas.Std Result
+open MultiproofSortRef
+
+def StepPost (keys : Array U64 16#usize) (cursor : Usize) : sort_reference.InsertStep → Prop
+  | .Done out => out=keys ∧ (cursor.val=0 ∨ keys.val[cursor.val-1]!≤keys.val[cursor.val]!)
+  | .Next out lower => lower.val+1=cursor.val ∧
+      keys.val[lower.val]!>keys.val[cursor.val]! ∧
+      out=(keys.set lower keys.val[cursor.val]!).set cursor keys.val[lower.val]!
+
+/-- Full checked atomic poststate: stop reason, both overwritten cells and
+all untouched cells, and the strictly decreasing cursor. -/
+theorem insert_step_total (keys : Array U64 16#usize) (cursor : Usize) (bound : cursor.val<16) :
+    ∃ out, sort_reference.insert_step keys cursor=ok out ∧ StepPost keys cursor out := by
+  have length : keys.val.length=16 := keys.property
+  have leftBound : cursor.val-1<keys.val.length := by omega
+  have rightBound : cursor.val<keys.val.length := by omega
+  have getLeft := getElem!_pos keys.val (cursor.val-1) leftBound
+  have getRight := getElem!_pos keys.val cursor.val rightBound
+  have spec : sort_reference.insert_step keys cursor ⦃ out => StepPost keys cursor out ⦄ := by
+    unfold sort_reference.insert_step
+    step* <;> simp_all [StepPost,getLeft,getRight] <;> scalar_tac
+  exact WP.spec_imp_exists spec
+
+#print axioms insert_step_total
+end AspisR1.MultiproofConeSortStep

@@ -1,0 +1,13 @@
+//! Owned insertion/outer-row recursion for the exact frozen key sort.
+pub fn insert_rows(mut keys:[u64;16],at:usize)->[u64;16] {
+    if at==0 {return keys;}
+    let left=keys[at-1];let right=keys[at];
+    if left<=right {return keys;}
+    keys[at-1]=right;keys[at]=left;
+    insert_rows(keys,at-1)
+}
+pub fn sort_rows(keys:[u64;16],at:usize,n:usize)->[u64;16] {
+    if at>=n {return keys;}
+    let next=insert_rows(keys,at);
+    sort_rows(next,at+1,n)
+}
