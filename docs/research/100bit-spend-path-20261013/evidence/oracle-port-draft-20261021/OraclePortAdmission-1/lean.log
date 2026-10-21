@@ -1,0 +1,80 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortAdmission.lean:65:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval ?H (RawCutProverCompiler.experiment ?P ?V)
+in the target expression
+  (eval H (OracleDecisionFeasibilityCore.original D (admit core) P)).2.2 = true
+
+D : LiteralByteProtocol.Decoder
+core : Decision
+P : Prover
+H : Bytes → State
+ha : (eval H (OracleDecisionFeasibilityCore.original D (admit core) P)).2.2 = true
+⊢ (eval H
+        (admit core
+          (LiteralTranscript.erasePrefix
+            ((LiteralByteProtocol.protocol D).transcript H (eval H P).2.1 (eval H P).2.2 33))
+          (LiteralTranscript.erase ((eval H P).2.2 33)))).2 =
+    true
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortAdmission.lean:75:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval ?H (RawCutProverCompiler.experiment ?P ?V)
+in the target expression
+  (eval H (OracleDecisionFeasibilityCore.original D (admit core) P)).2.1.1.tag = 2
+
+D : LiteralByteProtocol.Decoder
+core : Decision
+P : Prover
+H : Bytes → State
+ha : FS2.accepts (eval H (original D (admit core) P))
+hg : (eval H P).2.1.tag = 2
+⊢ (eval H (OracleDecisionFeasibilityCore.original D (admit core) P)).2.1.1.tag = 2
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortAdmission.lean:143:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval ?H (OracleDecisionFeasibilityCore.original ?D ?d ?P)).2.1.2
+in the target expression
+  LiteralTranscript.valid row
+    ((eval H
+              (RawCutProverCompiler.experiment (R16CanonReduction.canon P)
+                (OracleDecisionFeasibilityCore.verifier D (admit core)))).2.1.2
+      row)
+
+D : LiteralByteProtocol.Decoder
+core : Decision
+P : Prover
+H : Bytes → State
+ha : FS2.accepts (eval H (original D (admit core) P))
+hg :
+  Guard (LiteralTranscript.erasePrefix ((LiteralByteProtocol.protocol D).transcript H (eval H P).2.1 (eval H P).2.2 33))
+i : SourceInputs
+fields :
+  D0InstanceAdmission.Fields
+    (LiteralTranscript.erasePrefix ((LiteralByteProtocol.protocol D).transcript H (eval H P).2.1 (eval H P).2.2 33)) i
+shape : R16CanonReduction.Shape (eval H P).2.2
+he :
+  LiteralTranscript.erasePrefix
+      ((LiteralByteProtocol.protocol D).transcript H (compiledPublic D (admit core) (R16CanonReduction.canon P) H)
+        (annotatedRun D (admit core) (R16CanonReduction.canon P) H).2.1.2 33) =
+    LiteralTranscript.erasePrefix
+      ((LiteralByteProtocol.protocol D).transcript H (eval H P).2.1 (R16CanonReduction.proof (eval H P).2.2) 33)
+hs :
+  LiteralTranscript.erasePrefix
+      ((LiteralByteProtocol.protocol D).transcript H (eval H P).2.1 (R16CanonReduction.proof (eval H P).2.2) 33) =
+    LiteralTranscript.erasePrefix ((LiteralByteProtocol.protocol D).transcript H (eval H P).2.1 (eval H P).2.2 33)
+hf :
+  D0InstanceAdmission.Fields
+    (LiteralTranscript.erasePrefix
+      ((LiteralByteProtocol.protocol D).transcript H (compiledPublic D (admit core) (R16CanonReduction.canon P) H)
+        (annotatedRun D (admit core) (R16CanonReduction.canon P) H).2.1.2 33))
+    i
+row : ℕ
+hr : row < 33
+⊢ LiteralTranscript.valid row
+    ((eval H
+              (RawCutProverCompiler.experiment (R16CanonReduction.canon P)
+                (OracleDecisionFeasibilityCore.verifier D (admit core)))).2.1.2
+      row)
+'AspisR1.OraclePortAdmission.accepted_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortAdmission.admission_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortAdmission.accepted_terminal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortAdmission.accepted_tag' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortAdmission.fields_to_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortAdmission.compiled_erasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortAdmission.accepted_instance' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortAdmission.h_R16_instance' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

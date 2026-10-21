@@ -1,0 +1,32 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortMultiKernel.lean:61:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval H (RawCutProverCompiler.experiment P (OraclePortExperiment.verifier D core))).2.1
+in the target expression
+  (have v := eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier D core));
+    (v.1 ++ (eval H (OracleDecisionFeasibilityCore.verifier D (admit core) v.2.1.1 v.2.1.2)).1,
+      (v.2.1.1, RawCutTranscriptRun.proof (BinCompiledRunWordStability.wordsFromRun D v) v.2.1.2), v.2.2)) =
+    have v := eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier D core));
+    (v.1 ++ (eval H (OracleDecisionFeasibilityCore.verifier D core v.2.1.1 v.2.1.2)).1,
+      (v.2.1.1, RawCutTranscriptRun.proof (BinCompiledRunWordStability.wordsFromRun D v) v.2.1.2), v.2.2)
+
+D : LiteralByteProtocol.Decoder
+core : Decision
+P : Prover
+H : Bytes → State
+ha : FS2.accepts (eval H (original D (admit core) P))
+hg :
+  Guard (LiteralTranscript.erasePrefix ((LiteralByteProtocol.protocol D).transcript H (eval H P).2.1 (eval H P).2.2 33))
+he :
+  eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier D (admit core))) =
+    eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier D core))
+hp : (eval H (RawCutProverCompiler.experiment P (OraclePortExperiment.verifier D core))).2.1 = (eval H P).2
+⊢ (have v := eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier D core));
+    (v.1 ++ (eval H (OracleDecisionFeasibilityCore.verifier D (admit core) v.2.1.1 v.2.1.2)).1,
+      (v.2.1.1, RawCutTranscriptRun.proof (BinCompiledRunWordStability.wordsFromRun D v) v.2.1.2), v.2.2)) =
+    have v := eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier D core));
+    (v.1 ++ (eval H (OracleDecisionFeasibilityCore.verifier D core v.2.1.1 v.2.1.2)).1,
+      (v.2.1.1, RawCutTranscriptRun.proof (BinCompiledRunWordStability.wordsFromRun D v) v.2.1.2), v.2.2)
+'AspisR1.OraclePortMultiKernel.budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortMultiKernel.admitted_verifier_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortMultiKernel.admitted_original_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortMultiKernel.admitted_recorded_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortMultiKernel.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]
