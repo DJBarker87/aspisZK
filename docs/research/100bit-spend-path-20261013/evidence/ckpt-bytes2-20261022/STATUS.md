@@ -107,3 +107,72 @@ single kernel theorem identifying extracted decode_k_spec/decode_e_spec with
 the C5 decoders for arbitrary bytes is still absent. Kani results are not
 silently imported as Lean hypotheses. Complete production resume/ResumeOps
 adoption remains a separate obligation for stage 4.
+
+## Stage 4 — source-success allocation facts; final source join remains open
+
+CheckpointBytesSuccess.source_allocation_succeeded derives the successful
+filled call, its actual returned allocation, the exact dependency on the
+subsequent readWeights call, and the checked final cursor directly from
+resumeWithOps success. No allocation-availability premise is introduced.
+successful_overwrite derives reserved=true and all returned content/index
+from a successful fallible mutable overwrite. It uses the inherited
+filled/iterator content model, not a physical allocator assumption.
+Final attempt 3: exit 0, wall 17.950891374610364 s,
+peak RSS 3600793600 bytes, swaps 0; both axiom reports
+[propext, Classical.choice, Quot.sound]. Attempts 1–2 preserve binder type/
+syntax errors. Source revision and exact command/pins are in the receipt.
+
+**Not closed:** the requested source-stage byte/decoder/allocator join at
+OraclePortCkptAbi5Stage.reached_stage via strictStage. The exact checked
+interface obstruction is that Stage2ContinuationResumeBody.ResumeOps leaves
+raw/readK/readE/filled/readSemanticAlpha/readWeights as arbitrary callbacks;
+OraclePortCkptAbiSourceFields.successful_fields binds outputs to those calls
+but does not identify their implementation. The reference byte inventory is
+in OraclePortCkptAbi2Extracted, whereas source Prepared/Accumulator are in
+AspisR1Stage2. No concrete source-to-reference operation/field instance is
+provided by the current endpoint. Scalar Kani gates do not manufacture that
+Lean implementation instance, nor a physical heap/Box refinement.
+
+The two intended final premises remain **S2S10CallerBinding** (retained
+proof/public/checkpoint carriers, exact Site/call and returned-state/error
+and account snapshot binding) and **S1S7S8StateProvenance** (actual Prepared,
+initial/saved/resumed RHS, power and all 64 weights recurrence states).
+Neither is asserted proved or replaced by a structure containing the missing
+codec/source observation equality. Adding an arbitrary raw_adoption or
+whole-checkpoint equality premise would fail the requested two-premise join.
+The unqualified roundtrip item is stopped by the explicit repeated-query
+counterexample; its reached/distinct-query variant remains the useful domain.
+
+**Exact next implementation consumer:** construct and prove the concrete
+AspisR1Stage2 ResumeOps source instance, transporting arbitrary successful
+readK/readE outputs and every rejection through the C5 scalar codecs, then
+semantic/weight section reads with actual filled/resize/Box content. Apply
+that instance to successful_fields, and combine with the two named caller/
+state provenance interfaces at reached_stage/strictStage. The existing six
+ordered digest observations must be preserved through decision_observation
+and dV_frozen2; the byte and success-conditioned allocation results here
+supply no permission to erase or replace those reads. No checkpoint ConeJoin,
+AcceptedRunJoin, headline premise removal or deployed security claim is made.
+
+## Final focused union and audit
+
+CheckpointBytes2Freeze attempt 1: exit 0, wall 23.184945290908217 s,
+peak RSS 3552641024 bytes, swaps 0, source revision
+07e0c1a58f1922f796f0da5b29c828ca23c281bd. Its 18 complete axiom reports cover every one of the
+16 new theorems plus reached_stage and decision_observation; all are standard.
+Seven final modules pass with exact source/import/private-object hashes.
+The maximum accepted local RSS is 3720691712 bytes; every final attempt has
+zero swaps. This is one focused union against pinned caches, not a coherent
+frozen release replay. No unchanged successful full regression was rerun.
+
+The final audit checks the generator, source identity/current-source Kani
+pins, independent section targets, cgroup limits/reservations, optimized
+compiler profile, all receipts and axiom lines, additive source scope and
+absence of binary/oversized JSON artifacts. audit-result.json explicitly
+records source_stage_join_closed=false. All failed attempts are retained;
+none of their compiler recovery reports counts as accepted proof evidence.
+No shipped/protected/existing-Lean source, wallet/key, root checkout or shared
+object changed. No ELF, runtime, adversarial or full release build ran.
+The conditional frozen-ELF rebuild trigger is absent. No local target was
+created, and all work is committed locally with plain messages, without push
+or merge. NEXT.md states the closed/remaining obligations and exact consumer.
