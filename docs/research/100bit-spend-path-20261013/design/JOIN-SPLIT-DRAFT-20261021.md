@@ -167,6 +167,34 @@ pinned in `ordering-source-pins.json`.
 
 ## Release boundary
 
+`OraclePortJoinSplitHeadline.final_soundness` is a distinctly named sibling
+endpoint consuming `executionJoin_of_cones`; `per_query` retains exactly
+the draft's numeric bound and domain `32 ≤ Q ≤ Qmax`. No M10 definition,
+cost, scan allowance or probability constant changes.
+
+The controlled before/after pair is
+`final_soundness_with_execution` / `final_soundness`. The before-signature
+**already contains every split premise**. Normalizing only the theorem name,
+`delete-redundant-execution.diff` removes exactly this line:
+
+```lean
+    (h_Rust_equals_dV : ExecutionJoin D rust)
+```
+
+`split-before.lean.txt`, `split-after.lean.txt` and
+`deleted-premise-verbatim.lean.txt` preserve the exact signatures/premise.
+This establishes redundancy **under the complete split**. Replacing the
+original C7 execution premise by the split is a conditional factorization,
+not an advertised strictly weaker or unconditional source theorem. No
+original endpoint premise is claimed discharged: R19, C7 and the execution/
+stored-binding definitions remain byte-identical to `3a01b2d6d`.
+
+Reproduce the signature check without Lean or a solver:
+
+```sh
+python3 -B tools/oracle-port-join-split/signatures.py
+```
+
 `StoredCarrierBinding D rust P runtime` is independent of the execution split
 and remains exactly as in C7. Total program equality alone does not establish
 checked arithmetic safety: R22 additionally requires outer Aeneas success
