@@ -101,4 +101,8 @@ for site,status in results:
                 field_negatives.append(dict(mode=site['mode'],address=site['address'],change=change))
 u=resource.getrusage(resource.RUSAGE_SELF)
 r=dict(target='tools/s10-inventory5-20261021/check-callbacks.py',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),exit_status=0,wall_seconds=time.monotonic()-start,peak_rss_bytes=u.ru_maxrss if sys.platform=='darwin' else u.ru_maxrss*1024,swaps=u.ru_nswap,print_axioms='N/A: compiler-flow evidence only',counts=dict(collections.Counter(status for _,status in results)),negative_controls=negative,field_negative_controls=field_negatives)
-(E/'callback-validation.json').write_text(json.dumps(r,indent=2,sort_keys=True)+'\n');print(json.dumps(dict(exit_status=0,counts=r['counts'],negative_checks=3*len(negative)+len(field_negatives))))
+if '--check' in sys.argv:
+    old=json.loads((E/'callback-validation.json').read_text())
+    for key in ['source_sha256','counts','negative_controls','field_negative_controls']:assert old[key]==r[key],key
+else:(E/'callback-validation.json').write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')
+print(json.dumps(dict(exit_status=0,counts=r['counts'],negative_checks=3*len(negative)+len(field_negatives))))

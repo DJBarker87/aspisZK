@@ -82,3 +82,70 @@ The std endpoint: exit 0, 15.554 s, peak 3,496,558,592 bytes. Combined
 Exact targets/commands/revisions, source/import SHA pins, resources and every
 new theorem's `#print axioms` line are in `manifest.json` and per-attempt
 receipts. This is a focused cached-object union, not a frozen release replay.
+
+## Stage 3: final inline correspondence attempt
+
+Two optimized, capped diagnostic builds enable full DWARF and then
+line-tables-only metadata in the selected aspis crates, retaining the frozen
+source/features/toolchain. These are diagnostic candidates, never adopted
+release ELFs. Full debug: exit 0, 36.042 s, peak 1,097,476 KiB. Line tables:
+exit 0, 29.368 s, peak 821,132 KiB. Both report zero swaps and actual
+6G/8G/zero-swap/64-task limits. The expected work was optimized SBF
+compilation/metadata emission, not an arithmetic gate. The source, commands,
+wrapper hashes, resource reservations, outputs and exact ELF SHA/size are
+retained in the build receipts and `debug-build-manifest.json`.
+
+**Location transfer is refused.** `debug-comparisons.json` compares every
+allocated section and relocation section, including bytes, virtual address,
+size, type, flags, alignment and entry width. Both candidates change `.text`
+and all subsequent loaded section addresses. Full debug increases `.text`
+by 784 bytes; line tables increase it by 832 bytes. Therefore DWARF from
+these builds cannot identify frozen final inline instances. No per-mode
+expansion is attempted after this failed default preflight. This is a retained
+failed correspondence approach, not a source exclusion certificate or an
+artifact re-pin. Original frozen ELF evidence remains unchanged. The modified
+debug flag and distinct diagnostic target justify the second build; no memory
+failure was rerun and no cap was raised. `#print axioms`: N/A.
+
+The pass-4 generic/inline observations remain usable only within their
+original compiler-evidence scope. Final inline completeness and concrete
+owner adoption are still open.
+
+## Final verification and concrete remainder
+
+`python3 -B tools/s10-inventory5-20261021/audit.py --gates` exits **0** for
+packet integrity. `validation.json` records the exact source revision, tool
+SHA, resources, nine successful formal results with complete standard-axiom
+lines, generator regeneration, all 189 callback negative checks, unchanged
+shipped/owned sources, host caps and refused debug transfer. All new code and
+Lean sources are pinned in `frozen-sources.json`. No new derived JSON exceeds
+5 MB; diagnostic ELFs remain SHA/size-only. No local target directory, key
+operation, push, merge, owner-module edit or protected candidate edit occurred.
+
+Both requested completeness gates ran once after the focused generic lemma,
+chunks, bridge and combined axioms audit:
+
+- `tools/s10-inventory2-20261021/reconcile.py --check --require-complete`: **2**.
+- `tools/s10-inventory3-20261021/reconcile.py --check --require-complete`: **2**.
+
+Exact commands/revisions/script hashes, wall/RSS/swap and full output are in
+`gates.json`. Their criteria and scripts were not weakened or changed. Packet
+integrity is separate from source completeness. No unchanged full Lean,
+runtime, adversarial or SBF release suite was rerun. The two different debug
+builds are explicitly failed *diagnostic correspondence* candidates, not a
+reproduction or adoption of the frozen release artifacts.
+
+**Target not yet established.** `remainder.json` fixes the exact missing
+interfaces. There is still no operational frozen source `Signature`/`Calls`
+lowering with complete mutation/errors/allocations; no source or model caller
+identity; no final source-coverage instance; no final instance/inline
+completeness; and no library/owner adoption or coherent release replay. The
+new std-aware two-transaction endpoint retains all these hypotheses. **Zero
+semantic caller identities and zero headline premises were discharged.**
+
+The source chronology facts and compiler target flows are established within
+their stated boundaries. They cannot be converted into the missing source
+semantics by renaming compiler observations or by defining a source interpreter
+to equal the model. The next concrete deliverable is the adopted mutable
+caller lowering and its path-to-execution relation; its required field/error
+carriers are enumerated in `remainder.json` and `stage-order.json`.
