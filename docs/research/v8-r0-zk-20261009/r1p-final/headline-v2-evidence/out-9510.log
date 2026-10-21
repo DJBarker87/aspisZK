@@ -1,0 +1,39 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PrivacyR1HeadlineV2.lean:95:4: error: Application type mismatch: The argument
+  ProverCommitCallerInstance.fibres
+    (prover base (base.pubBytes x).length h B outputs x
+        (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib opens)).toProver
+    R_commit_caller
+has type
+  ∀ (s : SourceTape AspisWideTower.WideExact ProverCommitWordCarrier.sourceBase),
+    {e |
+          quotientDecode
+              (fun e =>
+                (prover base (base.pubBytes x).length h B outputs x
+                        (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                          opens)).toProver.tapeOf
+                  e.1 e.2)
+              e =
+            some s}.card =
+      ProverCommitSourceDecoder.quotientFibreSize
+but is expected to have type
+  ∀ (τ : SourceTape K F),
+    {e |
+          quotientDecode
+              (fun e =>
+                (prover base (base.pubBytes x).length h B outputs x
+                        (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                          opens)).toProver.tapeOf
+                  e.1 e.2)
+              e =
+            some τ}.card =
+      ProverCommitSourceDecoder.quotientFibreSize
+in the application
+  privacy_headline_wire2 template input outputs x decode builder_premises ProverCommitSourceDecoder.quotientFibreSize
+    (ProverCommitCallerInstance.fibres
+      (prover base (base.pubBytes x).length h B outputs x
+          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib opens)).toProver
+      R_commit_caller)
+'R1Z.PrivacyR1HeadlineV2.privacy_headline_v2_fibres' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PrivacyR1HeadlineV2.privacy_headline_v2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

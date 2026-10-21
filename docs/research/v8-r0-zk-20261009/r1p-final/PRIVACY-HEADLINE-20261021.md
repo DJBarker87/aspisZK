@@ -443,3 +443,254 @@ and [receipts](wirelog-attempts-9720-9799.jsonl) for the precise remaining joins
 No deletion-only endpoint or altered privacy conclusion is claimed. The
 before and after D106 signatures are identical: both existing binders remain
 verbatim in `privacy_headline_acct`. No predecessor Lean file was edited.
+
+## Privacy headline v2: D110 caller law with D111 wire encoding (2026-10-21)
+
+The new module `R1Z/PrivacyR1HeadlineV2.lean` composes the current
+`PrivacyR1HeadlineWire2.privacy_headline_wire2` with
+`PrivacyR1FinalProtocolCaller.privacy_R1_protocol_caller`. It introduces two
+alternative endpoints:
+
+- `privacy_headline_v2`: one `ProverCommitCallerInstance.CallerLaw` replaces
+  the two decoder hypotheses and fixes `cF` to `quotientFibreSize`.
+- `privacy_headline_v2_fibres`: retains D111's original fibre/exhaustion
+  interface and conclusion verbatim, delegating directly to that theorem.
+
+The caller endpoint is a stronger source-refinement interface, not a
+premise-weakening replacement for the old endpoint. Neither endpoint establishes
+that the shipped Rust caller or serializer satisfies the logical model.
+No predecessor Lean source was edited and no shared imported object replaced.
+
+### Why the old hypotheses do not imply CallerLaw
+
+At this specialization `Pr.E₁ = E₁` and `Pr.E₂ = E₂` hold by construction.
+Those two `CallerLaw` fields are not the obstruction. Its remaining field is
+an existential **single fixed** equivalence `coordinates : SourceTape K F ≃
+SourceTape K F`, with the pointwise equation, for every input `e`,
+
+```lean
+quotientDecode (fun e => Pr.tapeOf e.1 e.2) e =
+  (quotientDecoder (inputsTransport Pr blocks₁ blocks₂ e)).map coordinates
+```
+
+This preserves the reference decoder's entire input partition: two inputs with
+one reference result must have one caller result, and reference failure is
+caller quotient failure in both directions. The old fibre hypothesis only
+counts each successful output's preimages. `RExh` only says full-tape failure
+implies word-stream exhaustion; it does not give that partition equation or
+its converse failure implication. There is no input transport in `CallerLaw`
+other than the canonical casts of the two block counts.
+
+A precise obstruction is a permutation of successful inputs that does not
+respect the reference partition. Write `q = quotientDecoder`. Choose successful
+inputs `a,b,c` with `q(a)=q(b)=some s`, `q(c)=some t`, `s ≠ t`, and `a ≠ b`.
+Swap `a,c` on the input side and leave all other inputs fixed. Decode the
+result `q(π(e))` to a full tape using `complete s 0`. Every successful fibre
+cardinality is unchanged, so the old fibre hypothesis holds with the same
+`quotientFibreSize`. The failure set is unchanged, so `quotient_exhausted`
+gives the old `RExh` hypothesis. But the new decoder sends `a` to `t` and
+`b` to `s` although `q(a)=q(b)`; no single output equivalence can do that.
+The sequential reference has multiple outputs and multiple successful inputs
+per output (its equal-fibre formula includes the two accepted word
+representatives), which is precisely the setting of this obstruction.
+This is a mathematical signature/partition audit, not a new Lean strictness
+certificate. No old-premises-to-CallerLaw theorem is claimed.
+
+Conversely, existing `ProverCommitCallerInstance.fibres` and `.exhaustion`
+prove CallerLaw implies both old premises, with `cF = quotientFibreSize`.
+V2 uses these unchanged proofs to obtain D111's numerical bounds. For the
+privacy clause it applies D110 directly, obtaining `hpub` and builder soundness
+from `builder_premises w hw` for each admissible witness. This preserves the
+old endpoint's vacuity when there is no witness, rather than strengthening
+`BuilderPremises` to unconditional public/builder claims.
+
+### Exact error and revised premise ownership
+
+With exactly the scope and data specialization below, let `W` be the displayed
+wire, `Pr` its prover, and `q = 8 * n1 W Pr + 1`. Both endpoints conclude
+
+```text
+ZK_FSS h B outputs source x (simE h.transport B outputs x) ε
+ε = modelError W Pr L₁ L₂ + 16 / 2^486 + freshBudget q
+ε ≤ 1 / 2^109 + 1 / 2^137 + 1 / 2^454 + freshBudget q
+ε < 1 / 2^100
+freshBudget q = 128 * q / 2^190  (rational arithmetic)
+```
+
+This is the same strict **< 2^-100** bound as D111, with the same simulator,
+finite binary-ROM source experiment and eight attempts. It is conditional
+classical-ROM privacy, not a claim of a source-complete or efficient simulator.
+
+| Obligation/data | V2 status | Owner / remaining join |
+|---|---|---|
+| `builder_premises : BuilderPremises h B x` | Retained verbatim, witness-indexed | Builder refinement owner: inhabit `BuilderRuntimeJoin.RustRuntimeJoin` for the shipped builder, or supply the existing protocol builder contract |
+| `R_commit_caller : CallerLaw Pr` | One named source refinement; implies fibres, exhaustion and budgets | Prover commitment owner / concurrent `cx-prover-commit8`: full caller transport and universal read coverage; not proved by this composition |
+| `R_commit_quotient_fibres`, `R_commit_exhaustion`, `cF` | Derived from CallerLaw in v2; retained in `privacy_headline_v2_fibres` | Existing D110 `.fibres`, `.exhaustion`; `cF := quotientFibreSize` |
+| Numerical read/cell/stream/block bounds, basis laws, coin carrier, finite/nonempty randomness carriers | Already fixed/proved at the D106 specialization; D110 also derives budgets from CallerLaw | Existing accounting/basis/carrier theorems; no replacement assumptions |
+| `R_wire_D80_batches`, `R_wire_D80_ordered_log` | Derived for the fixed logical encoding | D111 `PhaseWireLog2Bin.batches`, `.ordered_log` |
+| Rust bytes equal that complete logical encoding | Remains an external source obligation; not a newly introduced theorem binder | Wire/serialization owner: `PhaseWireLog2Bin.RustSerializationJoin`, including finite-set ordering and two-batch split |
+| `R_wire_builder_checker_D75_retry` | Retained verbatim | Prover/runtime owner: real execution, checker and retry coupling |
+| `G_sim_R_wire` | Retained verbatim | Simulator/ROM owner: ideal execution join; efficiency remains outside this theorem |
+| `decode`, `template`, `input`, `outputs`, `x`, `observer_program` | Retained data; no hidden correctness certificate | Caller, wire, builder and observer instantiation owners respectively |
+
+### Signature audit against both parents
+
+Against `PrivacyR1HeadlineWire2.privacy_headline_wire2`, the scope is identical:
+`K`, `F`, `B`, `hB`, `L₁`, `L₂`, `base`, `seed`, `h`, `log`, `fib`, `opens`,
+`source`, `coins` and all external data have the same meanings. The new module
+reuses the parent's `eight_pos` and its carrier instances rather than declaring
+new ones. The legacy endpoint's signature is an exact text copy except for the
+theorem name. V2's only signature change is
+
+```diff
+- (cF : ℕ)
+- (R_commit_quotient_fibres : ∀ τ, ... = cF)
+- (R_commit_exhaustion : RExh Pr L₁ L₂)
++ (R_commit_caller : ProverCommitCallerInstance.CallerLaw Pr)
+```
+
+Every other hypothesis and the complete conclusion are unchanged. This is
+**not** a deletion-only premise diff: the caller equation is stronger, hence
+retaining the alternative endpoint is essential.
+
+Against `PrivacyR1FinalProtocolCaller.privacy_R1_protocol_caller`, V2 fixes the
+wide field/source subfield, basis and packing laws to D106's concrete data;
+fixes `base`, `seed`, coin equivalence and finite source to D106/D111; specializes
+`h` to D111's S2 transport; and supplies both wire laws from D111. The same
+`CallerLaw` is applied to exactly the constructed `Pr`. D110's `hpub` and
+`builder_refinement_D46_D51` come from the existing witness-indexed
+`builder_premises` inside the privacy quantifier. The observer and both
+execution-join binders are passed unchanged. The result expression, simulator,
+error terms and strict target agree after these data substitutions. The
+unused `publicWidth` namespace variable is not an argument of D110's compiled
+theorem. No decoder, builder, retry, simulator or serialization source join is
+silently proved by a data specialization.
+
+### Verbatim v2 scope and statement
+
+The following scope and declaration (through its result type) are copied from
+`R1Z/PrivacyR1HeadlineV2.lean`. The alternative fibre endpoint, whose signature
+is identical to D111's, is omitted from this quotation only.
+
+```lean
+import R1Z.PrivacyR1HeadlineWire2
+import R1Z.PrivacyR1FinalProtocolCaller
+/-! D111 wire headline composed with D110 caller refinement.
+The caller equation is stronger than aggregate fibre/exhaustion laws; both
+interfaces are retained as alternative endpoints. No Rust join is discharged. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PrivacyR1HeadlineV2
+open R0P R0Z R0Z.JointView R0Z.FsStatement R0Z.FsAbort R0Z.FsGood R0Z.HvzkV R0Z.HvzkS R0Z.RefPayload
+  R1Z.Batched R1Z.PredicateR1 R1Z.MaskImageVR1 R1Z.PoleMassR1 R1Z.ModelsVR1 R1Z.SimulatorR1
+  R1Z.GamesR1 R1Z.Sem1UniformR1 R1Z.GamesR1PBin R1Z.CouplingR1PBin R1Z.EventsR1PBin R1Z.FinalR1PBin
+  R1Z.CommitReadsR1 R1Z.PremisesR1PBin R1Z.QueryScanPrivacyFinal R1Z.LayoutR1PBin
+attribute [local instance] Classical.propDecidable
+open R1Z.ProverCommitTapeCompletion
+open R1Z.PhaseProtocolInstanceBin R1Z.PrivacyR1Final R1Z.QueryScanHistorySplit
+open R1Z.PrivacyR1Headline
+local notation "K" => PrivacyR1AcctBasis.K
+local notation "F" => PrivacyR1AcctBasis.F
+local notation "B" => PrivacyR1AcctBasis.basis
+local notation "hB" => PrivacyR1AcctBasis.packing_laws
+local notation "L₁" => PrivacyR1AcctModel.L₁
+local notation "L₂" => PrivacyR1AcctModel.L₂
+attribute [local irreducible] ProverCommitSourceDecoder.L₁ ProverCommitSourceDecoder.L₂
+variable {CommitHandle Aux : Type}
+variable (template : R1Wire K CommitHandle Aux)
+
+local notation "log" => PhaseWireLog2Bin.log
+local notation "base" => PrivacyR1AcctModel.base template log
+variable (input : HonestProver K)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle)
+local notation "h" => PhaseWireLog2Bin.honest input
+variable (decode : (Fin PrivacyR1AcctModel.E₁ → OracleAnswer) →
+    (Fin PrivacyR1AcctModel.E₂ → OracleAnswer) → Option (Tape K F))
+
+local notation "fib" => PhaseWireLog2Bin.fib
+local notation "opens" => PhaseWireLog2Bin.opens
+local notation "seed" => PrivacyR1AcctModel.seed
+  (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) decode fib opens
+open R1Z.PrivacyR1HeadlineWire2
+local notation "source" => fsR1P
+  (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x))
+  (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed))
+  8 eight_pos (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h')
+local notation "coins" => PrivacyR1AcctModel.wire_coins template log h outputs x
+theorem privacy_headline_v2
+    (builder_premises : BuilderPremises h B x)
+    (R_commit_caller : ProverCommitCallerInstance.CallerLaw
+      (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)))
+    (observer_program : (source).Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
+    (R_wire_builder_checker_D75_retry : ∀ (adv : (source).Adversary) (w : (R0Z.ZkStatement.HonestProver.Instance h)),
+      (R0Z.ZkStatement.HonestProver.public h w) = x.1 → ModelExecutionJoin
+        (realTest h B outputs source adv x w)
+        (realTest h B outputs (fsR1P (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) 8 eight_pos
+          (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w) (QueryScanRealLazyBound.realBad (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) 8 h B outputs x w))
+    (G_sim_R_wire : ∀ adv : (source).Adversary, ModelExecutionJoin
+      (idealTestS source adv x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x))
+      (idealTestS (fsR1P (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) 8 eight_pos (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h'))
+        (RomObserverBin.observerMap source observer_program adv) x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)) (QueryScanIdealHistory.selectedBad)) :
+    ZK_FSS h B outputs source x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1)) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) < 1 / 2^100
+```
+
+### Focused verification and release evidence
+
+Exactly one module was compiled, on the build host through env J's existing
+`run-joint.sh`, with the retained dependency cache. The requested single
+attempt was exceeded: two failed changed-source elaboration attempts preceded
+one successful focused compile. No unchanged source was rerun, and no package,
+manifest, Rust, Aeneas or generated-certificate build was launched.
+
+| Attempt | Source revision | Exit | Wall | Peak RSS (KiB) | Swaps | Result |
+|---|---|---|---|---|---|---|
+| 9510 | `bfab92fee52773d96d8a69cd87f65306d1f8e8b4` | 1 | 0:09.49 | 4,143,008 | 0 | Fibre hypothesis instance mismatch; replaced by D110 normalization |
+| 9511 | `e624697f91dd07ee9fdf46694dbc51a47fde6806` | 1 | 0:08.14 | 4,145,536 | 0 | Normalization closed the goal; removed redundant final `rfl` |
+| 9512 | `07178541efb6dfc60ce80c7d867e46f47e563ee3` | 0 | 0:08.24 | 4,173,168 | 0 | Both endpoints green; no errors |
+
+Exact target: `R1Z/PrivacyR1HeadlineV2.lean`; successful source SHA-256:
+`0bb8dcc74e6d33492d386582c06836aca1ee35fc61ce898cc3afb8f6d1b20e16`. Full source hashes, dependency
+fingerprints, direct-import source/object hashes and sizes, source revisions,
+exact launcher/Lean argv, cap settings, resource results and complete axiom/error
+lines for all three attempts are in
+[headline-v2-evidence/attempts.jsonl](headline-v2-evidence/attempts.jsonl).
+Raw `out-9510` through `out-9512` and `time-*` logs, launcher/environment
+snapshots, submission records and the signature audit are adjacent.
+The successful object is identified by SHA-256 and size only; no binary is
+committed. Direct imports matched this worktree and remained unchanged during
+each attempt. The failed sources were snapshotted in the branch's own host
+scratch directory before replacing this worker's new source; no predecessor
+module or imported `.olean` was overwritten.
+
+The launcher reported 24 GiB populated reservation plus this job's 7 GiB,
+below the 55 GiB limit. It enforced `MemoryHigh=5G`, `MemoryMax=7G`,
+`MemorySwapMax=0`, `TasksMax=128`, Lean `-M7000 -j1`, and a 900 s timeout.
+`run2.py` invokes env J's pinned Lean directly with its retained `LEAN_PATH`
+(the existing launcher's equivalent of the focused `lake env lean` workflow).
+Both successful `#print axioms` results are verbatim:
+
+```text
+'R1Z.PrivacyR1HeadlineV2.privacy_headline_v2_fibres' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PrivacyR1HeadlineV2.privacy_headline_v2' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+The failed 9510 diagnostic's `sorryAx` is elaboration recovery, not an admitted
+source declaration; its exit is recorded as failure. Attempt 9511 also failed
+and is not release evidence despite its standard axiom lines. Only 9512 is
+the accepted result. No `sorry`, `axiom`, `admit`, `native_decide`, or new
+heartbeat/recursion override was introduced. Static signature equality,
+verbatim documentation and whitespace checks passed after the compile.
+
+Still open: the caller source refinement, builder source refinement, complete
+Rust serialization identity, real checker/retry execution join, ideal execution
+join, and efficient simulation. The old-premises-to-CallerLaw implication is
+not claimed; the old endpoint remains available for callers that only possess
+aggregate premises. Work is confined to `codex/cx-priv-headline2-20261021`;
+no push or merge was performed, and the concurrent prover worker's files were
+not edited.
