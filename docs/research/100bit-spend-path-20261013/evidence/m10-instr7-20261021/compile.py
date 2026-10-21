@@ -94,7 +94,7 @@ receipt.update(peak_rss_bytes=int(re.search(r'(\d+)\s+maximum resident set size'
                axioms=re.findall(r"'[^']+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)", log),
                log=str((out / 'lean.log').relative_to(ROOT)),
                time=str((out / 'time.log').relative_to(ROOT)),
-               errors=log if result.returncode else '',
+               errors=(log+timing) if result.returncode else '',
                final_current=result.returncode == 0)
 if result.returncode == 0:
     obj = OBJECTS / (module + '.olean')

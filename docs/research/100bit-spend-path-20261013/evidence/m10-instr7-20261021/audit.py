@@ -5,7 +5,7 @@ from pathlib import Path
 HERE=Path(__file__).resolve().parent
 PACKET=HERE.parent.parent
 ROOT=PACKET.parents[2]
-BASE='336305da1'
+BASE='d81c618d8f0ac6a209b36a226f681c2e894067a6'
 def sha(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 data=json.loads((HERE/'manifest.json').read_text())
 changes=subprocess.check_output(['git','diff','--name-status',BASE],text=True).splitlines()
@@ -24,7 +24,17 @@ for a in data['attempts']:
     seen.add(key)
     for k in ['argv','source_revision','source_sha256','deps_fingerprint','exit','wall_seconds','peak_rss_bytes','swaps','axioms','errors']:
         if k not in a: errors.append('Missing receipt field '+k+': '+a['module'])
+    if a['exit'] and not a['errors']: errors.append('Missing failure diagnostics: '+a['module'])
     if a['swaps'] != 0: errors.append('Nonzero swap: '+a['module'])
+# The single final packet root must import the complete additive source set.
+by_module={Path(rel).stem:ROOT/rel for rel in new}
+closure=set()
+def visit(module):
+    if module in closure or module not in by_module: return
+    closure.add(module)
+    for dep in re.findall(r'^import (\S+)',by_module[module].read_text(),re.M): visit(dep)
+visit('M10InstrumentationPacketM10')
+if closure!=set(by_module): errors.append('Final packet root misses '+str(sorted(set(by_module)-closure)))
 counts=0
 pins=[]
 for rel in new:
@@ -68,7 +78,8 @@ result={'status':'pass' if not errors else 'fail','scope':'focused cached-object
  'uniform_coordinates_closed':data.get('uniform_coordinates_closed',False),
  'final_soundness_endpoint':data.get('final_soundness_endpoint',False),
  'known_obstructions':data.get('known_obstructions',[]),
- 'base':BASE,'revision':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+ 'base':BASE,'requested_base':'336305da1','baseline_mismatch_record':'audit-baseline-mismatch.json','revision':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+ 'final_packet_import_closure':len(closure),
  'new_modules':len(new),'audited_theorems':counts,'attempts':len(data['attempts']),
  'accepted_targets':sum(a['exit']==0 for a in latest.values()),
  'retained_failures':sum(a['exit']!=0 for a in data['attempts']),
