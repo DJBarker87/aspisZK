@@ -48,7 +48,7 @@ time and cgroup peaks are in `host/receipts/*-v1/`; reservations are in
 `host/`. `#print axioms` is N/A for Rust gates. Lean commands, dependency
 hashes, revision, axiom output and resource metrics are in `manifest.json`.
 
-## Next stages
+## Roadmap recorded after stage 1
 
 Symbolic proof/public lengths; C5/extracted kernel identification and Rust
 reached-state provenance; std owned-iteration/physical allocation boundary;
@@ -120,3 +120,83 @@ Allocation; resume separately calls `Box::new`. These physical effects are
 absent from the inspected content model. Kani's standard no-malloc-failure
 model and a bounded-list theorem must not be promoted to physical allocator
 availability, capacity, deallocation or Drop semantics.
+
+## Stage 4 — caller/S10 audit and exact residual
+
+The S10 packet landed on research during this job. Its
+`OraclePortS10ModelInventory.lean`, `S10-INVENTORY-20261021.md` and final
+attempt-7 receipt were imported byte-for-byte from research. No S10 module
+was authored or edited here. The module supplies a five-site **model** tree;
+it explicitly excludes checkpoint resume, the outer Rust driver and Pool.
+`OraclePortCkptAbi3S10Boundary.no_checkpoint_site` kernel-checks that no Site
+with owner `.checkpointAbi`, for any declaration name, is in that inventory.
+Final boundary attempt 1: exit 0, 7.280634 seconds, peak RSS 3,629,137,920
+bytes, zero swaps, revision `81ee9fcab`, axiom report `[propext]`.
+The S10 worker's own standard-axiom receipt is reused, not rerun.
+
+The requested checkpoint-cone accepted-run join is **not discharged**.
+`driver-obligations.json` pins the exact tx1/tx2_common source spans and
+lists each missing source-to-model statement. In particular:
+
+- Instantiate the semantic section states/equalities and identify the
+  complete emitted resume caller with that composition, including ordinary
+  errors, field assembly, allocation and Box.
+- Prove the complete extracted four/eight-limb codec and sparse-byte layout
+  identification with all C5 blocks. The canonical-word lemma is a local
+  part, not that theorem.
+- Identify actual Rust `prepare`, `Accumulator::new`, `query_loop(0..10)` and
+  `pending.finish` with the precise `p,q,i` reached in `dV_frozen` and its
+  C3 saved-ten accumulator. Pass 2 supplies the model inputs and uniqueness;
+  its arbitrary Context is not Rust context provenance.
+- Supply the physical allocation and shared/mutable iteration source/std
+  boundary. Owned-iterator content is proved in the imported std model.
+- Construct the actual source checkpoint Site/Signature and both caller
+  joins, then the raw accepted-log and enriched two-pass join required by
+  `OraclePortFrozenOrderJoin.AcceptedRunJoin`. The landed model inventory
+  supplies none of that checkpoint source Site. The six authentic checkpoint
+  reads cannot simply be erased before an unchanged tail (pass-2 theorem).
+
+These are source/translation/caller obligations, not new cryptographic
+assumptions. No generic whole-reader or whole-driver premise was introduced
+to stand in for their discharge. Runtime P2/P2-prime snapshot/carrier binding
+remains separate. The CONE-AUDIT checkpoint row is updated and remains (d).
+No endpoint or headline premise is deleted. No frozen full manifest replay
+is launched while the concrete source/driver closure is incomplete.
+
+## Final focused audit
+
+`OraclePortCkptAbi3Freeze`, final attempt 2: exit 0, wall 9.865317 seconds,
+peak RSS 3,564,716,032 bytes, zero swaps, source revision `81ee9fcab`.
+Seventeen final `#print axioms` lines cover all eleven authored theorems,
+the drain definition, the pass-2 extracted byte function and the four landed
+S10 model theorems. Every report is a subset of `{propext, Classical.choice,
+Quot.sound}`. The earlier successful freeze predates the landed S10 import;
+adding that import and its boundary theorem is the source/environment change
+justifying the final focused union audit. It is not a full frozen replay.
+No shared object was overwritten; all authored objects remain in the private
+pass-3 cache and the S10 cached object is a read-only import.
+
+All eight Kani gates pass. Four unchanged codec contract checks are reused
+only after `reuse.py` verifies identical specs, helper/contract bodies and
+contract roots, and validates their historical source/receipt hashes.
+`source-pins.json` checks 197 local/host Rust/Cargo inputs, including builder
+writer dependencies, with zero mismatches. `host/toolchain.json` records Kani
+0.67.0 and executable hashes/sizes. Each root's historical source hash stays
+attached to that root; the audit checks the additive length-root include
+rather than relabelling the earlier section checks as a new source run.
+
+Recheck without rebuilding:
+
+```
+python3 -B tools/oracle-port-ckpt-abi3/generate.py --check
+python3 -B tools/oracle-port-ckpt-abi3/reuse.py
+python3 -B tools/oracle-port-ckpt-abi3/audit.py
+```
+
+For an explicit read-only remote snapshot comparison, run
+`python3 -B tools/oracle-port-ckpt-abi3/source-pins.py`. The S10 dependency
+snapshot and exact obligations can be refreshed with `dependencies.py`.
+No shipped crate/program, existing Lean module, protected lean-candidate,
+wallet/key or ELF changed. ELF rebuilds and runtime/adversarial suites are
+therefore not triggered. No local target directory, binary or object is
+committed. The target checkpoint-cone join is **not yet established**.

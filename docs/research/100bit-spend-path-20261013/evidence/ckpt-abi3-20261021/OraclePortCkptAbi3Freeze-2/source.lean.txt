@@ -1,0 +1,25 @@
+import OraclePortCkptAbi3Sections
+import OraclePortCkptAbi3Canonical
+import OraclePortCkptAbi3OwnedIter
+import OraclePortCkptAbi3S10Boundary
+import OraclePortCkptAbi2Freeze
+
+/-! Final focused union and axioms audit, not a frozen source release replay. -/
+#print axioms AspisR1.OraclePortCkptAbi3Sections.schedule_exact
+#print axioms AspisR1.OraclePortCkptAbi3Sections.raw_schedule_total
+#print axioms AspisR1.OraclePortCkptAbi3Sections.run_eq
+#print axioms AspisR1.OraclePortCkptAbi3Sections.fixed_composition
+#print axioms AspisR1.OraclePortCkptAbi3Canonical.canonical_word_bytes
+#print axioms AspisR1.OraclePortCkptAbi3Canonical.modulus_bytes_ne_zero
+#print axioms AspisR1.OraclePortCkptAbi3Canonical.not_all_words_canonicalized
+#print axioms AspisR1.OraclePortCkptAbi3OwnedIter.into_iter_exact
+#print axioms AspisR1.OraclePortCkptAbi3OwnedIter.drain_exact
+#print axioms AspisR1.OraclePortCkptAbi3OwnedIter.owned_contents
+#print axioms AspisR1.OraclePortCkptAbi3OwnedIter.drain
+#print axioms OraclePortCkptAbi2Extracted.body_byte
+
+#print axioms AspisR1.OraclePortCkptAbi3S10Boundary.no_checkpoint_site
+#print axioms AspisR1.OraclePortS10ModelInventory.covered
+#print axioms AspisR1.OraclePortS10ModelInventory.interpret_eq_frozen
+#print axioms AspisR1.OraclePortS10ModelInventory.inventory_nodup
+#print axioms AspisR1.OraclePortS10ModelInventory.model_S10Join

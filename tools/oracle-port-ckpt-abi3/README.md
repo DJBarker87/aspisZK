@@ -22,3 +22,10 @@ Hash argument identity is checked by fat-pointer equality, so the input
 content need not be traversed or bounded by the loop unwind. Unwind 70 still
 checks every actual writer/reader-prefix loop. Reader field helpers do not
 consume either length parameter. This is not a whole-resume certificate.
+
+`audit.py` validates the focused final union, every successful scoped Kani
+receipt, historical source snapshots, standard axiom reports, exact reuse,
+source pins and the byte-identical landed S10 import. `dependencies.py`
+records the concrete caller spans and exact unresolved implementation
+obligations. The cone remains open; neither script asserts a full reader,
+physical allocator theorem or AcceptedRunJoin.
